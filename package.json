@@ -1,0 +1,40 @@
+{
+  "name": "igrp-framework-nextjs",
+  "version": "1.0.0",
+  "private": true,
+  "workspaces": [
+    "packages/*",
+    "packages/**",
+    "templates/*",
+    "templates/**"
+  ],
+  "scripts": {
+    "build": "pnpm -r run build",
+    "build:framework": "pnpm --filter @igrp/framework/next build",
+    "build:cli": "pnpm --filter igrp-cli-next build",
+    "dev": "pnpm --filter demo dev",
+    "dev:detector": "pnpm --filter igrp-cli-next dev",
+    "dev:framework": "pnpm --filter @igrp/framework.next dev",
+    "lint": "pnpm -r run lint",
+    "clean": "pnpm -r run clean",
+    "test": "pnpm -r run test",
+    "detect": "pnpm --filter demo detect",
+    "detect:report": "pnpm --filter demo detect:report",
+    "detect:permissions": "pnpm --filter demo detect:permissions",
+    "detect:basic": "pnpm --filter demo detect:basic",
+    "detect:verbose": "pnpm --filter demo detect:verbose",
+    "detect:no-validation": "pnpm --filter demo detect:no-validation",
+    "detect:deployment": "pnpm --filter demo detect:deployment",
+    "detect:build": "pnpm --filter demo detect:build",
+    "generate:menus": "pnpm --filter demo generate:menus",
+    "publish:detector": "pnpm --filter igrp-cli-next publish",
+    "publish:framework": "pnpm --filter @igrp/framework.next publish"
+  },
+  "devDependencies": {
+    "eslint": "^9.28.0",
+    "typescript": "^5.8.3"
+  },
+  "engines": {
+    "node": ">=16.0.0"
+  }
+}

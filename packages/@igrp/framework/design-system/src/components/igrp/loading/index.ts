@@ -1,1 +1,0 @@
-export { IGRPLoadingSpinner } from './spiner';

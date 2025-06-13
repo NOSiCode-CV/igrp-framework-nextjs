@@ -1,9 +1,8 @@
-import React, { useState } from 'react';
-import { Header } from './Header';
-import { Sidebar } from './Sidebar';
-import { useHeaderData } from '../hooks/useHeaderData';
-import { useSidebarData } from '../hooks/useSidebarData';
-import { cn } from '../utils/cn';
+import { Header } from '@/components/_header';
+import { Sidebar } from './_sidebar';
+import { useHeaderData } from '../hooks/use-header-data';
+import { useSidebarData } from '../hooks/use-sidebar-data';
+import { cn } from '@/lib/utils'
 
 interface LayoutProps {
   children: React.ReactNode;
@@ -18,7 +17,7 @@ export function Layout({
   showHeader = true,
   showSidebar = true,
 }: LayoutProps) {
-  const [sidebarCollapsed, setSidebarCollapsed] = useState(false);
+  // const [sidebarCollapsed, setSidebarCollapsed] = useState(false);
   
   const { data: headerData, loading: headerLoading } = useHeaderData();
   const { data: sidebarData, loading: sidebarLoading } = useSidebarData();
@@ -37,7 +36,7 @@ export function Layout({
           <Sidebar
             data={sidebarData}
             loading={sidebarLoading}
-            onToggle={setSidebarCollapsed}
+            onToggle={undefined}
           />
         )}
         

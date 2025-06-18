@@ -23,7 +23,7 @@
     "lint": "eslint src --ext .ts,.tsx",
     "format": "prettier --write .",
     "clean": "rm -rf dist",
-    "publish": "pnpm publish --registry=https://sonatype.nosi.cv/repository/igrp/ --tag latest"
+    "deploy-to": "pnpm publish --registry=https://sonatype.nosi.cv/repository/igrp/ --tag latest"
   },
   "peerDependencies": {
     "react": "19.1.0",

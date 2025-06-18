@@ -1,6 +1,5 @@
 {
   "name": "@igrp/framework-next",
-  "private": true,
   "version": "0.0.1",
   "type": "module",
   "main": "./dist/index.cjs",

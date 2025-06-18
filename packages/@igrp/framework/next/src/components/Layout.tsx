@@ -9,7 +9,7 @@ import { Header } from '@/components/header';
 import { AppSidebar } from './app-sidebar';
 import type { HeaderData, SidebarData } from '@/types';
 
-interface LayoutProps {
+export interface LayoutProps {
   children: React.ReactNode;
   className?: string;
   showSidebar?: boolean;

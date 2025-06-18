@@ -1,5 +1,6 @@
 {
-  "compilerOptions": {
+   "extends": "../../tsconfig.base.json",
+   "compilerOptions": {
     "target": "ES2022",
     "lib": [
       "dom",
@@ -24,9 +25,8 @@
       }
     ],
     "paths": {
-      "@/*": [
-        "./src/*"
-      ]
+      "@/*": ["./src/*"],
+      "@igrp/framework-next": ["../../packages/@igrp/framework/next/src"]
     },
     "incremental": true
   },
@@ -34,9 +34,10 @@
     "next-env.d.ts",
     "**/*.ts",
     "**/*.tsx",
-    ".next/types/**/*.ts"
+    ".next/types/**/*.ts",
+    "../../packages/@igrp/framework/next/src"
   ],
   "exclude": [
     "node_modules"
-  ]
+  ],
 }

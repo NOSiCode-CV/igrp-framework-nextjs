@@ -10,7 +10,7 @@
     "build": "pnpm -r run build",
     "build:framework": "pnpm --filter @igrp/framework-next build",
     "build:cli": "pnpm --filter igrp-cli-next build",
-    "dev": "pnpm --filter admin dev",
+    "dev": "pnpm --filter templates-admin dev",
     "dev:detector": "pnpm --filter igrp-cli-next dev",
     "dev:framework": "pnpm --filter @igrp/framework-next dev",
     "lint": "pnpm -r run lint",

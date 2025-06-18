@@ -1,8 +1,6 @@
-import { SidebarData, MockDataProvider } from '../types';
-import { isPreviewMode, getMockDataProvider, getAppCode } from '../utils/config';
+import { type SidebarData } from '../types';
 
 export function useSidebarData() {
-  // Versão simplificada que retorna dados mock diretamente
   const mockData: SidebarData = {
     menuItems: [
       {
@@ -10,7 +8,7 @@ export function useSidebarData() {
         title: 'Dashboard',
         href: '/dashboard',
         icon: 'home',
-        isActive: true
+        isActive: true,
       },
       {
         id: 'pages',
@@ -21,36 +19,38 @@ export function useSidebarData() {
           {
             id: 'pages-list',
             title: 'Listar Páginas',
-            href: '/pages'
+            href: '/pages',
           },
           {
             id: 'pages-new',
             title: 'Nova Página',
-            href: '/pages/new'
-          }
-        ]
+            href: '/pages/new',
+          },
+        ],
       },
       {
         id: 'users',
         title: 'Utilizadores',
         href: '/users',
-        icon: 'users'
-      }
+        icon: 'users',
+      },
     ],
     collapsed: false,
     user: {
       id: '1',
       name: 'Demo User',
       email: 'demo@igrp.com',
-      avatar: '/api/placeholder/40/40',
+      image: '/api/placeholder/40/40',
       role: 'Administrator',
-      permissions: ['read', 'write', 'admin']
-    }
+      permissions: ['read', 'write', 'admin'],
+      fullname: 'Demo User',
+      username: 'demo.user',
+    },
   };
 
-  return { 
-    data: mockData, 
-    loading: false, 
-    error: null 
+  return {
+    data: mockData,
+    loading: false,
+    error: null,
   };
-} 
+}

@@ -34,8 +34,12 @@ initializeIGRPConfig({
   appCode: 'demo',
   previewMode: process.env.IGRP_PUBLIC_PREVIEW_MODE === 'true',
   mockDataProvider: () => ({
-    getHeaderData: async () => ({ /* seus dados mock */ }),
-    getSidebarData: async () => ({ /* seus dados mock */ }),
+    getHeaderData: async () => ({
+      /* seus dados mock */
+    }),
+    getSidebarData: async () => ({
+      /* seus dados mock */
+    }),
   }),
 });
 ```
@@ -67,13 +71,17 @@ export default function CustomLayout() {
   const { data: sidebarData, loading: sidebarLoading } = useSidebarData();
 
   return (
-    <div className="min-h-screen">
-      <Header data={headerData} loading={headerLoading} />
-      <div className="flex">
-        <Sidebar data={sidebarData} loading={sidebarLoading} />
-        <main className="flex-1">
-          {/* Conteúdo da página */}
-        </main>
+    <div className='min-h-screen'>
+      <Header
+        data={headerData}
+        loading={headerLoading}
+      />
+      <div className='flex'>
+        <Sidebar
+          data={sidebarData}
+          loading={sidebarLoading}
+        />
+        <main className='flex-1'>{/* Conteúdo da página */}</main>
       </div>
     </div>
   );
@@ -115,8 +123,11 @@ function MyComponent() {
 
   return (
     <nav>
-      {data?.menuItems.map(item => (
-        <a key={item.id} href={item.href}>
+      {data?.menuItems.map((item) => (
+        <a
+          key={item.id}
+          href={item.href}
+        >
           {item.title}
         </a>
       ))}
@@ -141,7 +152,7 @@ const mockDataProvider = {
       name: 'João Silva',
       email: 'joao@exemplo.com',
       role: 'Administrador',
-      permissions: ['read', 'write', 'admin']
+      permissions: ['read', 'write', 'admin'],
     },
     notifications: [
       {
@@ -150,17 +161,17 @@ const mockDataProvider = {
         message: 'O sistema foi atualizado com sucesso',
         type: 'success',
         timestamp: new Date(),
-        isRead: false
-      }
+        isRead: false,
+      },
     ],
     quickActions: [
       {
         id: '1',
         title: 'Nova Página',
         icon: 'plus',
-        href: '/pages/new'
-      }
-    ]
+        href: '/pages/new',
+      },
+    ],
   }),
   getSidebarData: async () => ({
     menuItems: [
@@ -169,16 +180,18 @@ const mockDataProvider = {
         title: 'Dashboard',
         href: '/dashboard',
         icon: 'home',
-        isActive: true
-      }
+        isActive: true,
+      },
     ],
     collapsed: false,
-    user: { /* dados do usuário */ }
-  })
+    user: {
+      /* dados do usuário */
+    },
+  }),
 };
 
 initializeIGRPConfig({
-  mockDataProvider: () => mockDataProvider
+  mockDataProvider: () => mockDataProvider,
 });
 ```
 
@@ -198,7 +211,7 @@ import type {
   User,
   HeaderData,
   SidebarData,
-  MockDataProvider
+  MockDataProvider,
 } from '@igrp/framework.next';
 ```
 
@@ -216,4 +229,4 @@ npm run build
 
 # Limpar build
 npm run clean
-``` 
+```

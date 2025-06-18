@@ -1,7 +1,7 @@
 {
   "compilerOptions": {
     "target": "ES2022",
-    "module": "commonjs",
+    "module": "esnext",
     "lib": ["ES2022"],
     "strict": true,
     "esModuleInterop": true,
@@ -12,11 +12,7 @@
     "declaration": true,
     "declarationMap": true,
     "sourceMap": true,
-    "composite": true
-  },
-  "references": [
-    // { "path": "./packages/igrp-cli-next" },
-    // { "path": "./templates/admin" },
-    // { "path": "./packages/design-system" }    
-  ]
+    "composite": true,
+    "moduleResolution": "bundler",
+  }
 }

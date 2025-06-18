@@ -1,51 +1,67 @@
-import { Header } from '@/components/_header';
-import { Sidebar } from './_sidebar';
-import { useHeaderData } from '../hooks/use-header-data';
-import { useSidebarData } from '../hooks/use-sidebar-data';
-import { cn } from '@/lib/utils'
+'use client';
+
+import { useState } from 'react';
+import { usePathname } from 'next/navigation';
+import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
+import { SidebarInset, SidebarProvider } from './primitives/sidebar';
+import { Toaster } from './primitives/sonner';
+import { Header } from '@/components/header';
+import { AppSidebar } from './app-sidebar';
+import type { HeaderData, SidebarData } from '@/types';
 
 interface LayoutProps {
   children: React.ReactNode;
   className?: string;
-  showHeader?: boolean;
   showSidebar?: boolean;
+  defaultOpen?: boolean;
+  showHeader?: boolean;
+  locale?: string;
+  showLanguageSelector?: boolean;
+  languageSelector?: React.ReactNode;
+  headerData?: HeaderData;
+  sidebarData?: SidebarData;
 }
 
 export function Layout({
   children,
-  className,
-  showHeader = true,
-  showSidebar = true,
+  showSidebar,
+  defaultOpen,
+  showHeader,
+  locale = 'pt',
+  showLanguageSelector = true,
+  languageSelector,
+  headerData,
+  sidebarData
+
 }: LayoutProps) {
-  // const [sidebarCollapsed, setSidebarCollapsed] = useState(false);
-  
-  const { data: headerData, loading: headerLoading } = useHeaderData();
-  const { data: sidebarData, loading: sidebarLoading } = useSidebarData();
+  const pathname = usePathname();
+  const [queryClient] = useState(() => new QueryClient()); 
+
+  const showBreadcrumbs = pathname !== `/${locale}`;
 
   return (
-    <div className={cn("min-h-screen bg-gray-50", className)}>
-      {showHeader && (
-        <Header
-          data={headerData}
-          loading={headerLoading}
-        />
-      )}
-      
-      <div className="flex flex-1">
-        {showSidebar && (
-          <Sidebar
-            data={sidebarData}
-            loading={sidebarLoading}
-            onToggle={undefined}
-          />
-        )}
-        
-        <main className="flex-1 flex flex-col min-h-0">
-          <div className="flex-1 p-6">
-            {children}
-          </div>
-        </main>
-      </div>
-    </div>
+    <>
+      <QueryClientProvider client={queryClient}>
+        <SidebarProvider defaultOpen={defaultOpen}>
+          {showSidebar && <AppSidebar data={sidebarData} />}
+
+          <SidebarInset>
+            {showHeader && (
+              <Header
+                data={headerData}
+                showBreadcrumbs={showBreadcrumbs}
+                showLanguageSelector={showLanguageSelector}
+                languageSelector={languageSelector}
+                locale={locale}
+              />
+            )}
+            <main className='flex flex-col flex-1 px-6 py-8'>
+              {children}
+            </main>
+          </SidebarInset>
+        </SidebarProvider>
+      </QueryClientProvider>
+      <Toaster richColors />
+    </>
   );
-} 
+}

@@ -1,6 +1,6 @@
 {
   "name": "igrp-framework-nextjs",
-  "version": "1.0.0",
+  "version": "0.0.1",
   "workspaces": [
     "packages/**",
     "templates/**"
@@ -8,25 +8,11 @@
   "scripts": {
     "build": "pnpm -r run build",
     "build:framework": "pnpm --filter @igrp/framework-next build",
-    "build:cli": "pnpm --filter igrp-cli-next build",
-    "dev": "pnpm --filter templates-admin dev",
-    "dev:detector": "pnpm --filter igrp-cli-next dev",
+    "dev": "pnpm --filter demo dev",
     "dev:framework": "pnpm --filter @igrp/framework-next dev",
     "lint": "pnpm -r run lint",
     "clean": "pnpm -r run clean",
-    "test": "pnpm -r run test",
-    "detect": "pnpm --filter admin detect",
-    "detect:report": "pnpm --filter admin detect:report",
-    "detect:permissions": "pnpm --filter admin detect:permissions",
-    "detect:basic": "pnpm --filter admin detect:basic",
-    "detect:verbose": "pnpm --filter admin detect:verbose",
-    "detect:no-validation": "pnpm --filter admin detect:no-validation",
-    "detect:deployment": "pnpm --filter admin detect:deployment",
-    "detect:build": "pnpm --filter admin detect:build",
-    "generate:menus": "pnpm --filter admin generate:menus",
-    "publish:detector": "pnpm --filter igrp-cli-next publish",
-    "publish:framework": "pnpm --filter @igrp/framework-next deploy-to",
-    "verify": "pnpm list --depth -1 --filter ./packages" 
+    "publish:framework": "pnpm --filter @igrp/framework-next deploy-to"
   },
   "devDependencies": {
     "eslint": "^9.29.0",

@@ -1,33 +1,29 @@
 /// <reference types="vite/client" />
 import { defineConfig } from 'vite';
-import path from 'path';
-import tailwindcss from '@tailwindcss/vite';
+import react from '@vitejs/plugin-react';
 import dts from 'vite-plugin-dts';
 import { libInjectCss } from 'vite-plugin-lib-inject-css';
+import path from 'path';
+import tailwindcss from '@tailwindcss/vite';
 import preserveUseClientDirective from 'rollup-plugin-preserve-use-client';
-import react from '@vitejs/plugin-react';
 import { peerDependencies } from './package.json';
-
 
 export default defineConfig({
   plugins: [
     react(),
     tailwindcss(),
-    preserveUseClientDirective(),
     libInjectCss(),
+    preserveUseClientDirective(),
     dts({
       include: ['src/**/*'],
-      exclude: ['**/*.test.*', '**/*.spec.*', '**/*.stories.*'],
+      exclude: ['**/*.stories.tsx', 'src/test', '**/*.test.tsx'],
     }),
-
   ],
   build: {
-    outDir: 'dist',
     emptyOutDir: true,
-    sourcemap: true,
     lib: {
       entry: path.resolve(__dirname, 'src/index.ts'),
-      name: '@igrp/framework-next',
+      name: '@igrp/framework-react',
       fileName: (format) => `index.${format}.js`,
       formats: ['cjs', 'es'],
     },

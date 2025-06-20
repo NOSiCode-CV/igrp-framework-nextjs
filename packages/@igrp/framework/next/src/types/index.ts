@@ -17,10 +17,8 @@ export interface MenuItem {
 export interface User {
   id: string;
   name: string;
-  fullname: string;
   email: string;
-  username: string;
-  image?: string;
+  avatar?: string;
   role: string;
   permissions: string[];
 }
@@ -56,4 +54,4 @@ export interface SidebarData {
 export interface MockDataProvider {
   getHeaderData: () => Promise<HeaderData>;
   getSidebarData: () => Promise<SidebarData>;
-}
+} 

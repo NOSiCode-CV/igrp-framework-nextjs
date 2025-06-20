@@ -2,20 +2,19 @@
   "compilerOptions": {
     "target": "ES2022",
     "useDefineForClassFields": true,
-    "lib": ["ES2020", "DOM", "DOM.Iterable"],
+    "lib": ["es2022", "DOM", "DOM.Iterable"],
     "module": "ESNext",
     "skipLibCheck": true,
     "esModuleInterop": true,
     "resolveJsonModule": true,
     "importHelpers": true,
-    /* Bundler mode */
+    "types": ["node"],
     "moduleResolution": "bundler",
-    "allowImportingTsExtensions": true,
+    "allowImportingTsExtensions": false,
     "verbatimModuleSyntax": true,
     "isolatedModules": true,
-    "noEmit": true,
+    "noEmit": false,
     "jsx": "react-jsx",
-    /* Linting */
     "strict": true,
     "noUnusedLocals": true,
     "noUnusedParameters": true,
@@ -24,13 +23,19 @@
     "noUncheckedSideEffectImports": true,
     "baseUrl": ".",
     "paths": {
-      "@/*": ["./src/*"],
+      "@/*": ["./src/*"]
     },
     "declaration": true,
     "declarationDir": "dist/types",
-    "outDir": "./dist",
-    "rootDir": "./src",
+    "composite": true,
+    "declarationMap": true,
+    "moduleDetection": "force",
+    "noUncheckedIndexedAccess": true, 
+    "outDir": "dist",
+    "allowJs": true,
+    "forceConsistentCasingInFileNames": true,
     "incremental": true,
+    "rootDir": "./src"
   },
   "include": ["src"],
   "exclude": ["src/**/__docs__", "src/**/__test__", "src/test", "node_modules"]

@@ -1,1 +1,1 @@
-export { Layout, type LayoutProps } from '@/components/layout';
+export { Layout } from "./components/Layout";

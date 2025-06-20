@@ -1,1 +1,1 @@
-export { Layout } from "./components/Layout";
+export { IGRPLayout } from "./components/layout";

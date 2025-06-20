@@ -1,13 +1,11 @@
 'use client';
 
-import { Layout } from "@igrp/framework-next";
+import { IGRPLayout } from "@igrp/framework-next";
 
 export default function Home() {
   return (
-    <main className="flex flex-col gap-[32px] row-start-2 items-center sm:items-start">
-      <Layout showHeader={false} showSidebar={false}>
-        <div>Hello world</div>
-      </Layout>
-    </main>
+    <IGRPLayout>
+      <div className="text-3xl font-bold">IGRP NEXT.js Template</div>
+    </IGRPLayout>
   );
 }

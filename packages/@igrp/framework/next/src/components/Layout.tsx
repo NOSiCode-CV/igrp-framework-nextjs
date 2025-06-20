@@ -1,54 +1,62 @@
-import React, { useState } from 'react';
-import { Header } from './Header';
-import { Sidebar } from './Sidebar';
-import { useHeaderData } from '../hooks/useHeaderData';
-import { useSidebarData } from '../hooks/useSidebarData';
-import { cn } from '@/lib/utils';
+"use client"
 
-interface LayoutProps {
+import { usePathname } from 'next/navigation';
+import { SidebarInset, SidebarProvider } from './primitives/sidebar';
+import { Toaster } from './primitives/sonner';
+import { IGRPHeader } from '@/components/header';
+import { IGRPAppSidebar } from './app-sidebar';
+import type { HeaderData, SidebarData } from '@/types';
+
+export interface IGRPLayoutProps {
   children: React.ReactNode;
   className?: string;
-  showHeader?: boolean;
   showSidebar?: boolean;
+  defaultOpen?: boolean;
+  showHeader?: boolean;
+  locale?: string;
+  showLanguageSelector?: boolean;
+  languageSelector?: React.ReactNode;
+  headerData?: HeaderData;
+  sidebarData?: SidebarData;
 }
 
-export function Layout({
+export function IGRPLayout({
   children,
-  className,
-  showHeader = true,
   showSidebar = true,
-}: LayoutProps) {
-  const [sidebarCollapsed, setSidebarCollapsed] = useState(false);
+  defaultOpen,
+  showHeader = true,
+  locale = 'pt',
+  showLanguageSelector = true,
+  languageSelector,
+  headerData,
+  sidebarData
 
-  console.log({sidebarCollapsed})
-  
-  const { data: headerData, loading: headerLoading } = useHeaderData();
-  const { data: sidebarData, loading: sidebarLoading } = useSidebarData();
+}: IGRPLayoutProps) {
+  const pathname = usePathname();
+
+  const showBreadcrumbs = pathname !== `/${locale}`;
 
   return (
-    <div className={cn("min-h-screen bg-gray-50", className)}>
-      {showHeader && (
-        <Header
-          data={headerData}
-          loading={headerLoading}
-        />
-      )}
-      
-      <div className="flex flex-1">
-        {showSidebar && (
-          <Sidebar
-            data={sidebarData}
-            loading={sidebarLoading}
-            onToggle={setSidebarCollapsed}
-          />
-        )}
-        
-        <main className="flex-1 flex flex-col min-h-0">
-          <div className="flex-1 p-6">
+    <>
+      <SidebarProvider defaultOpen={defaultOpen}>
+        {showSidebar && <IGRPAppSidebar data={sidebarData} />}
+
+        <SidebarInset>
+          {showHeader && (
+            <IGRPHeader
+              data={headerData}
+              showBreadcrumbs={showBreadcrumbs}
+              showLanguageSelector={showLanguageSelector}
+              languageSelector={languageSelector}
+              locale={locale}
+            />
+          )}
+          <main className='flex flex-col flex-1 px-6 py-8'>
             {children}
-          </div>
-        </main>
-      </div>
-    </div>
+          </main>
+        </SidebarInset>
+      </SidebarProvider>
+      <Toaster richColors />
+    </>
   );
-} 
+}

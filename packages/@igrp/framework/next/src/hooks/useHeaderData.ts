@@ -7,9 +7,11 @@ export function useHeaderData() {
       id: '1',
       name: 'Demo User',
       email: 'demo@igrp.com',
-      avatar: '/api/placeholder/40/40',
+      image: '/api/placeholder/40/40',
       role: 'Administrator',
-      permissions: ['read', 'write', 'admin']
+      permissions: ['read', 'write', 'admin'],
+      fullname: 'Demo User',
+      username: 'demo.user'
     },
     notifications: [
       {

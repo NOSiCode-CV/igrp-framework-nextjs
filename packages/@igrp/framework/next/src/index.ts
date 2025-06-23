@@ -1,7 +1,7 @@
-import './index.css'
+import './index.css';
 
-export { IGRPLayout } from "./components/layout";
+export { IGRPProtectedLayout, IGRPRootLocaleLayout } from './layouts';
 
-export { META_THEME_COLORS, useMetaColor } from "./hooks/use-meta-color";
+export { META_THEME_COLORS, useMetaColor } from './hooks/use-meta-color';
 
-export { IGRPRootLocaleLayout } from "./layouts/root-locale";
+export { IGRPThemeSelector } from './components/horizon/theme-selector';

@@ -1,40 +1,39 @@
 import type { SidebarData } from '../types';
 
 export function useSidebarData() {
-  // Versão simplificada que retorna dados mock diretamente
   const mockData: SidebarData = {
     menuItems: [
       {
         id: 'dashboard',
         title: 'Dashboard',
         href: '/dashboard',
-        icon: 'home',
-        isActive: true
+        icon: 'Home',
+        isActive: true,
       },
       {
         id: 'pages',
         title: 'Páginas',
         href: '/pages',
-        icon: 'file-text',
+        icon: 'FileText',
         children: [
           {
             id: 'pages-list',
             title: 'Listar Páginas',
-            href: '/pages'
+            href: '/pages',
           },
           {
             id: 'pages-new',
             title: 'Nova Página',
-            href: '/pages/new'
-          }
-        ]
+            href: '/pages/new',
+          },
+        ],
       },
       {
         id: 'users',
         title: 'Utilizadores',
         href: '/users',
-        icon: 'users'
-      }
+        icon: 'Users',
+      },
     ],
     collapsed: false,
     user: {
@@ -45,13 +44,21 @@ export function useSidebarData() {
       role: 'Administrator',
       permissions: ['read', 'write', 'admin'],
       fullname: 'Demo User',
-      username: 'demo.user'
-    }
+      username: 'demo.user',
+    },
+    footerItems: [
+      {
+        id: 'settings',
+        title: 'Settings',
+        href: '/system-settings',
+        icon: 'Settings2',
+      },
+    ],
   };
 
-  return { 
-    data: mockData, 
-    loading: false, 
-    error: null 
+  return {
+    data: mockData,
+    loading: false,
+    error: null,
   };
-} 
+}

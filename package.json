@@ -12,6 +12,7 @@
     "dev:framework": "pnpm --filter @igrp/framework-next dev",
     "lint": "pnpm -r run lint",
     "clean": "pnpm -r run clean",
+    "format:framework": "pnpm --filter @igrp/framework-next format",
     "publish:framework": "pnpm --filter @igrp/framework-next deploy-to"
   },
   "devDependencies": {

@@ -5,8 +5,8 @@ import Image from 'next/image';
 import { useTheme } from 'next-themes';
 import { GalleryVerticalEnd } from 'lucide-react';
 import { type MenuConfig } from '@/config/menu';
-import { DropdownMenu, DropdownMenuTrigger } from './primitives/dropdown-menu';
-import { SidebarMenu, SidebarMenuButton, SidebarMenuItem } from './primitives/sidebar';
+import { DropdownMenu, DropdownMenuTrigger } from '@/components/primitives/dropdown-menu';
+import { SidebarMenu, SidebarMenuButton, SidebarMenuItem } from '@/components/primitives/sidebar';
 
 type MenuTeam = MenuConfig['teams'];
 

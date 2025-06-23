@@ -1,7 +1,6 @@
 import type { HeaderData } from '../types';
 
 export function useHeaderData() {
-  // Versão simplificada que retorna dados mock diretamente
   const mockData: HeaderData = {
     user: {
       id: '1',
@@ -11,7 +10,7 @@ export function useHeaderData() {
       role: 'Administrator',
       permissions: ['read', 'write', 'admin'],
       fullname: 'Demo User',
-      username: 'demo.user'
+      username: 'demo.user',
     },
     notifications: [
       {
@@ -20,22 +19,22 @@ export function useHeaderData() {
         message: 'O sistema foi atualizado com sucesso',
         type: 'success',
         timestamp: new Date(),
-        isRead: false
-      }
+        isRead: false,
+      },
     ],
     quickActions: [
       {
         id: '1',
         title: 'Nova Página',
         icon: 'plus',
-        href: '/pages/new'
-      }
-    ]
+        href: '/pages/new',
+      },
+    ],
   };
 
-  return { 
-    data: mockData, 
-    loading: false, 
-    error: null 
+  return {
+    data: mockData,
+    loading: false,
+    error: null,
   };
-} 
+}

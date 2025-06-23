@@ -10,10 +10,10 @@ export function IGRPModeSwitcher() {
   const { setTheme, resolvedTheme } = useTheme();
   const { setMetaColor } = useMetaColor();
 
-  console.log('theme toggle render')
+  console.log('theme toggle render');
 
   const toggleTheme = useCallback(() => {
-    console.log('theme toogle')
+    console.log('theme toogle');
     setTheme(resolvedTheme === 'dark' ? 'light' : 'dark');
     setMetaColor(resolvedTheme === 'dark' ? META_THEME_COLORS.light : META_THEME_COLORS.dark);
   }, [resolvedTheme, setTheme, setMetaColor]);

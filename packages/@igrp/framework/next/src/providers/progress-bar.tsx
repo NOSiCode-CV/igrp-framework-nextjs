@@ -1,10 +1,10 @@
 import { ProgressProvider } from '@bprogress/next/app';
 
-export function IGRPProgressBar({ 
+export function IGRPProgressBar({
   children,
   height = '4px',
   color = 'primary',
-  ...args 
+  ...args
 }: React.ComponentProps<typeof ProgressProvider>) {
   return (
     <ProgressProvider

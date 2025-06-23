@@ -1,4 +1,4 @@
-import { Avatar, AvatarFallback, AvatarImage } from './primitives/avatar';
+import { Avatar, AvatarFallback, AvatarImage } from '@/components/primitives/avatar';
 
 interface UserAvatarProps {
   image?: string | null;

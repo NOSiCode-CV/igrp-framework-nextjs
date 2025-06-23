@@ -6,14 +6,18 @@ import { ChevronRight, Home } from 'lucide-react';
 import { cn } from '@/lib/utils';
 
 interface BreadcrumbsProps {
-  homeHref?: string;
   className?: string;
   locale: string;
 }
 
-export function Breadcrumbs({ homeHref = '/', className, locale }: BreadcrumbsProps) {
+// TODO: use breadcrumbs from shadcn-ui
+
+export function Breadcrumbs({ className, locale }: BreadcrumbsProps) {
+  const homeHref = '/';
   const pathname = usePathname();
   const pathWithoutLocale = pathname.replace(`/${locale}`, '') || '/';
+
+  if (pathWithoutLocale === homeHref) return null;
 
   const breadcrumbItems = pathWithoutLocale
     .split('/')

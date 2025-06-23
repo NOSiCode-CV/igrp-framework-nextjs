@@ -1,7 +1,7 @@
 'use client';
 
 import Link from 'next/link';
-import { ChevronsUpDown, LogOut, User as UserIcon } from 'lucide-react';
+import { Bell, ChevronsUpDown, LogOut, User as UserIcon } from 'lucide-react';
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -9,13 +9,13 @@ import {
   DropdownMenuLabel,
   DropdownMenuSeparator,
   DropdownMenuTrigger,
-} from './primitives/dropdown-menu';
-import { 
-  SidebarMenu, 
-  SidebarMenuButton, 
-  SidebarMenuItem, 
-  useSidebar 
-} from './primitives/sidebar';
+} from '@/components/primitives/dropdown-menu';
+import {
+  SidebarMenu,
+  SidebarMenuButton,
+  SidebarMenuItem,
+  useSidebar,
+} from '@/components/primitives/sidebar';
 import { IGRPUserAvatar } from './user-avatar';
 import { getInitials } from '@/lib/getInitials';
 import type { User } from '@/types';
@@ -86,16 +86,19 @@ export function IGRPNavUser({ user }: NavUserProps) {
             </DropdownMenuItem>
             <DropdownMenuSeparator />
 
-            {/* <DropdownMenuItem
+            <DropdownMenuItem
               asChild
-              className="cursor-pointer hover:bg-primary! hover:text-primary-foreground!"
+              className='cursor-pointer hover:bg-primary! hover:text-primary-foreground!'
             >
-              <Link href="/users/notifications">
-                <Bell className="mr-1 size-3.5 hover:text-primary-foreground!" strokeWidth={2} />
+              <Link href='/users/notifications'>
+                <Bell
+                  className='mr-1 size-3.5 hover:text-primary-foreground!'
+                  strokeWidth={2}
+                />
                 <span>Notifications</span>
               </Link>
             </DropdownMenuItem>
-            <DropdownMenuSeparator /> */}
+            <DropdownMenuSeparator />
 
             <DropdownMenuItem
               asChild

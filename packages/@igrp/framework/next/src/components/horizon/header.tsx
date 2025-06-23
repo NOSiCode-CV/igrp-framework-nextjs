@@ -1,10 +1,10 @@
-import { Separator } from './primitives/separator';
-import { SidebarTrigger } from './primitives/sidebar';
+import { Separator } from '@/components/primitives/separator';
+import { SidebarTrigger } from '@/components/primitives/sidebar';
 import { Breadcrumbs } from './breadcrumbs';
 import { IGRPCommandSearch } from './command-search';
 import { IGRPModeSwitcher } from './mode-switcher';
 import type { HeaderData } from '@/types';
-// import { Notifications } from './notifications';
+import { Notifications } from './notifications';
 
 interface HeaderProps {
   showBreadcrumbs?: boolean;
@@ -37,9 +37,9 @@ export function IGRPHeader({
       </div>
       <div className='flex items-center gap-2'>
         <IGRPCommandSearch />
-        {/* <span className='hidden md:block'>
+        <span className='hidden md:block'>
           <Notifications />
-        </span> */}
+        </span>
         <IGRPModeSwitcher />
         {showLanguageSelector && languageSelector}
       </div>

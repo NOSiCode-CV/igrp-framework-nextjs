@@ -18,12 +18,12 @@ type ThemeContextArgs = {
 
 const ThemeContext = createContext<ThemeContextArgs | undefined>(undefined);
 
-type IGRPActiveThemeProviderArgs = {
+export type IGRPActiveThemeProviderArgs = {
   children: ReactNode;
   initialTheme?: string;
-}
+};
 
-export function IGRPActiveThemeProvider({ children, initialTheme}: IGRPActiveThemeProviderArgs) {
+export function IGRPActiveThemeProvider({ children, initialTheme }: IGRPActiveThemeProviderArgs) {
   const [activeTheme, setActiveTheme] = useState<string>(() => initialTheme || DEFAULT_THEME);
 
   useEffect(() => {
@@ -49,6 +49,7 @@ export function IGRPActiveThemeProvider({ children, initialTheme}: IGRPActiveThe
   );
 }
 
+// eslint-disable-next-line react-refresh/only-export-components
 export function useIGRPThemeConfig() {
   const context = useContext(ThemeContext);
   if (context === undefined) {

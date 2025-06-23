@@ -2,18 +2,12 @@
   "compilerOptions": {
     "target": "ES2022",
     "useDefineForClassFields": true,
-    "lib": [
-      "es2022",
-      "DOM",
-      "DOM.Iterable"
-    ],
+    "lib": ["es2022", "DOM", "DOM.Iterable"],
     "skipLibCheck": true,
     "esModuleInterop": true,
     "resolveJsonModule": true,
     "importHelpers": true,
-    "types": [
-      "node"
-    ],
+    "types": ["node"],
     "module": "ESNext",
     "moduleResolution": "bundler",
     "allowImportingTsExtensions": false,
@@ -29,9 +23,7 @@
     "noUncheckedSideEffectImports": true,
     "baseUrl": ".",
     "paths": {
-      "@/*": [
-        "./src/*"
-      ]
+      "@/*": ["./src/*"]
     },
     "declaration": true,
     "declarationDir": "dist/types",
@@ -45,13 +37,6 @@
     "incremental": true,
     "rootDir": "./src"
   },
-  "include": [
-    "src"
-  ],
-  "exclude": [
-    "src/**/__docs__",
-    "src/**/__test__",
-    "src/test",
-    "node_modules"
-  ]
+  "include": ["src"],
+  "exclude": ["src/**/__docs__", "src/**/__test__", "src/test", "node_modules"]
 }

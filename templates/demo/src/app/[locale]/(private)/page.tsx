@@ -1,5 +1,5 @@
 export default function PrivatePage() {
   return (
-    <div className="text-3xl font-bold">Private Page</div>
+    <div className="text-3xl font-bold">IGRP NEXT.js Template</div>
   );
 }

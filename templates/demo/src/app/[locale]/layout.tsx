@@ -1,9 +1,7 @@
 import type { Metadata, Viewport } from 'next';
-import { cookies } from 'next/headers';
 import { notFound } from 'next/navigation';
-import { NextIntlClientProvider, hasLocale } from 'next-intl';
+import { hasLocale, NextIntlClientProvider } from 'next-intl';
 import { getLocale, getMessages, setRequestLocale } from 'next-intl/server';
-// import { serverSession } from '@/actions/auth';
 import { routing } from '@/i18n/routing';
 
 import './globals.css';
@@ -11,7 +9,6 @@ import './globals.css';
 import { META_THEME_COLORS, IGRPRootLocaleLayout } from '@igrp/framework-next';
 import { fontVariables } from '@/lib/fonts';
 import { getSession } from '@/actions/auth';
-import { get } from 'http';
 import { getTheme } from '@/actions/theme';
 
 export const metadata: Metadata = {
@@ -23,16 +20,16 @@ export const metadata: Metadata = {
 export const viewport: Viewport = {
   themeColor: META_THEME_COLORS.light,
 };
- 
+
 export function generateStaticParams() {
-  return routing.locales.map((locale) => ({locale}));
+  return routing.locales.map((locale) => ({ locale }));
 }
 
-export default async function RootLayout({ children }: Readonly<{ children: React.ReactNode }>) { 
+export default async function RootLayout({ children }: Readonly<{ children: React.ReactNode }>) {
   const locale = await getLocale();
   if (!hasLocale(routing.locales, locale)) notFound();
   setRequestLocale(locale);
-  
+
   const messages = await getMessages();
 
   const session = await getSession();
@@ -46,8 +43,9 @@ export default async function RootLayout({ children }: Readonly<{ children: Reac
       activeThemeValue={activeThemeValue}
       isScaled={isScaled}
       fontVariables={fontVariables}
+      // messages={messages}
     >
-      <NextIntlClientProvider messages={messages} locale={locale}>
+      <NextIntlClientProvider locale={locale} messages={messages}>
         {children}
       </NextIntlClientProvider>
     </IGRPRootLocaleLayout>

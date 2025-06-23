@@ -1,7 +1,7 @@
 'use server';
 
 import { getServerSession as getNextAuthServerSession } from "next-auth/next"
-import { authOptions } from '../lib/auth-options';
+import { authOptions } from '@/lib/auth-options';
 
 export async function serverSession() {
   try {

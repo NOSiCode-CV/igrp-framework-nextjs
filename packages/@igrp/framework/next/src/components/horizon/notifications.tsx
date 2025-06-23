@@ -2,8 +2,8 @@
 
 import { useState } from 'react';
 import { Bell } from 'lucide-react';
-import { Badge } from './primitives/badge';
-import { Button } from './primitives/button';
+import { Badge } from '@/components/primitives/badge';
+import { Button } from '@/components/primitives/button';
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -12,7 +12,7 @@ import {
   DropdownMenuLabel,
   DropdownMenuSeparator,
   DropdownMenuTrigger,
-} from './primitives/dropdown-menu';
+} from '@/components/primitives/dropdown-menu';
 
 export function Notifications() {
   const [notificationCount, setNotificationCount] = useState(3);
@@ -62,7 +62,10 @@ export function Notifications() {
           <span className='sr-only'>Notifications</span>
         </Button>
       </DropdownMenuTrigger>
-      <DropdownMenuContent align='end' className='max-w-80'>
+      <DropdownMenuContent
+        align='end'
+        className='max-w-80'
+      >
         <DropdownMenuLabel className='flex items-center justify-between'>
           <span>Notifications</span>
           {notificationCount > 0 && (

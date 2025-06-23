@@ -51,6 +51,7 @@ export interface SidebarData {
   menuItems: MenuItem[];
   collapsed: boolean;
   user: User;
+  footerItems: MenuItem[];
 }
 
 export interface MockDataProvider {

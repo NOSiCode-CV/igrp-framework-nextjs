@@ -1,13 +1,10 @@
-"use client"
-
-import { usePathname } from 'next/navigation';
-import { SidebarInset, SidebarProvider } from './primitives/sidebar';
-import { Toaster } from './primitives/sonner';
-import { IGRPHeader } from '@/components/header';
-import { IGRPAppSidebar } from './app-sidebar';
+import { SidebarInset, SidebarProvider } from '@/components/primitives/sidebar';
+import { Toaster } from '@/components/primitives/sonner';
+import { IGRPAppSidebar } from '@/components/horizon/app-sidebar';
+import { IGRPHeader } from '@/components/horizon/header';
 import type { HeaderData, SidebarData } from '@/types';
 
-export interface IGRPLayoutProps {
+export interface IGRPProtectedLayoutProps {
   children: React.ReactNode;
   className?: string;
   showSidebar?: boolean;
@@ -15,12 +12,12 @@ export interface IGRPLayoutProps {
   showHeader?: boolean;
   locale?: string;
   showLanguageSelector?: boolean;
-  languageSelector?: React.ReactNode;
   headerData?: HeaderData;
   sidebarData?: SidebarData;
+  languageSelector?: React.ReactNode;
 }
 
-export function IGRPLayout({
+export function IGRPProtectedLayout({
   children,
   showSidebar = true,
   defaultOpen,
@@ -29,13 +26,8 @@ export function IGRPLayout({
   showLanguageSelector = true,
   languageSelector,
   headerData,
-  sidebarData
-
-}: IGRPLayoutProps) {
-  const pathname = usePathname();
-
-  const showBreadcrumbs = pathname !== `/${locale}`;
-
+  sidebarData,
+}: IGRPProtectedLayoutProps) {
   return (
     <>
       <SidebarProvider defaultOpen={defaultOpen}>
@@ -45,15 +37,12 @@ export function IGRPLayout({
           {showHeader && (
             <IGRPHeader
               data={headerData}
-              showBreadcrumbs={showBreadcrumbs}
               showLanguageSelector={showLanguageSelector}
               languageSelector={languageSelector}
               locale={locale}
             />
           )}
-          <main className='flex flex-col flex-1 px-6 py-8'>
-            {children}
-          </main>
+          <main className='flex flex-col flex-1 px-6 py-8'>{children}</main>
         </SidebarInset>
       </SidebarProvider>
       <Toaster richColors />

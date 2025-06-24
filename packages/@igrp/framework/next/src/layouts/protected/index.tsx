@@ -2,7 +2,10 @@ import { SidebarInset, SidebarProvider } from '@/components/primitives/sidebar';
 import { Toaster } from '@/components/primitives/sonner';
 import { IGRPAppSidebar } from '@/components/horizon/app-sidebar';
 import { IGRPHeader } from '@/components/horizon/header';
-import type { HeaderData, SidebarData } from '@/types';
+import { IGRPConfigProvider } from '@/providers/config';
+import type { 
+  IGRPConfigClient,
+} from '@/types';
 
 export interface IGRPProtectedLayoutProps {
   children: React.ReactNode;
@@ -12,12 +15,11 @@ export interface IGRPProtectedLayoutProps {
   showHeader?: boolean;
   locale?: string;
   showLanguageSelector?: boolean;
-  headerData?: HeaderData;
-  sidebarData?: SidebarData;
   languageSelector?: React.ReactNode;
+  serverFunction: IGRPConfigClient;
 }
 
-export function IGRPProtectedLayout({
+export async function IGRPProtectedLayout({
   children,
   showSidebar = true,
   defaultOpen,
@@ -25,11 +27,17 @@ export function IGRPProtectedLayout({
   locale = 'pt',
   showLanguageSelector = true,
   languageSelector,
-  headerData,
-  sidebarData,
+  serverFunction,
 }: IGRPProtectedLayoutProps) {
+  const resolvedConfig = await serverFunction();
+
+  const {    
+    headerData,
+    sidebarData,
+  } = resolvedConfig;
+
   return (
-    <>
+    <IGRPConfigProvider value={resolvedConfig}>
       <SidebarProvider defaultOpen={defaultOpen}>
         {showSidebar && <IGRPAppSidebar data={sidebarData} />}
 
@@ -42,10 +50,10 @@ export function IGRPProtectedLayout({
               locale={locale}
             />
           )}
-          <main className='flex flex-col flex-1 px-6 py-8'>{children}</main>
+          <main className="flex flex-col flex-1 px-6 py-8">{children}</main>
         </SidebarInset>
       </SidebarProvider>
       <Toaster richColors />
-    </>
+    </IGRPConfigProvider>
   );
 }

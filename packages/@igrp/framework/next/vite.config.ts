@@ -15,16 +15,21 @@ export default defineConfig({
     libInjectCss(),
     preserveUseClientDirective(),
     dts({
-      include: ["src/**/*"],
+      include: ["src"],
       exclude: ["**/*.stories.tsx", "src/test", "**/*.test.tsx"],
+      // rollupTypes: true,
+      outDir: 'dist',
+      entryRoot: 'src',
     }),
   ],
   build: {
-    emptyOutDir: true,
     lib: {
-      entry: path.resolve(__dirname, "src/index.ts"),
-      name: "@igrp/framework-react",
-      fileName: (format) => `index.${format}.js`,
+      entry: {
+        index: path.resolve(__dirname, 'src/index.ts'),
+        server: path.resolve(__dirname, 'src/server.ts'),
+      },
+      name: "IGRPFrameworkNext",
+      fileName: (format, entryName) => `${entryName}.${format}.js`,
       formats: ["cjs", "es"],
     },
     rollupOptions: {

@@ -6,7 +6,8 @@ import { routing } from '@/i18n/routing';
 
 import './globals.css';
 
-import { META_THEME_COLORS, IGRPRootLocaleLayout } from '@igrp/framework-next';
+import { IGRPRootLocaleLayout } from '@igrp/framework-next/server';
+import { META_THEME_COLORS } from '@igrp/framework-next';
 import { fontVariables } from '@/lib/fonts';
 import { getSession } from '@/actions/auth';
 import { getTheme } from '@/actions/theme';
@@ -42,8 +43,7 @@ export default async function RootLayout({ children }: Readonly<{ children: Reac
       session={session}
       activeThemeValue={activeThemeValue}
       isScaled={isScaled}
-      fontVariables={fontVariables}
-      // messages={messages}
+      fontVariables={fontVariables}      
     >
       <NextIntlClientProvider locale={locale} messages={messages}>
         {children}

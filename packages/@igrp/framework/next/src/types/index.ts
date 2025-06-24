@@ -1,8 +1,20 @@
 export interface IGRPConfig {
   appCode: string;
   previewMode: boolean;
-  mockDataProvider?: () => void;
+  mockDataProvider?: {
+    getHeaderData: () => Promise<HeaderData>;
+    getSidebarData: () => Promise<SidebarData>;
+  };
 }
+
+export interface IGRPResolvedConfig {
+  appCode: string;
+  previewMode: boolean;
+  headerData?: HeaderData;
+  sidebarData?: SidebarData;
+}
+
+export type IGRPConfigClient = () => Promise<IGRPResolvedConfig>;
 
 export interface MenuItem {
   id: string;

@@ -13,17 +13,21 @@
   ],
   "author": "IGRP Team",
   "license": "MIT",
-  "main": "dist/index.js",
-  "types": "dist/index.d.ts",
   "exports": {
     ".": {
       "types": "./dist/index.d.ts",
-      "import": "./dist/index.es.js"
+      "import": "./dist/index.es.js",
+      "require": "./dist/index.cjs.js"
     },
-    "./types": {
-      "import": "./dist/types.d.ts"
+    "./server": {
+      "types": "./dist/server.d.ts",
+      "import": "./dist/server.es.js",
+      "require": "./dist/server.cjs.js"
     }
   },
+  "types": "dist/index.d.ts",
+  "main": "dist/index.cjs.js",
+  "module": "dist/index.es.js",
   "files": [
     "dist"
   ],
@@ -43,6 +47,7 @@
   "dependencies": {
     "@bprogress/next": "^3.2.12",
     "@hookform/resolvers": "^5.1.1",
+    "@igrp/platform-access-management-client-ts": "0.0.1-alpha.3",
     "@radix-ui/react-accordion": "^1.2.11",
     "@radix-ui/react-alert-dialog": "^1.1.14",
     "@radix-ui/react-aspect-ratio": "^1.1.7",

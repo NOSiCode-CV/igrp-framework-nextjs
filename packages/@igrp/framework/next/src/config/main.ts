@@ -4,9 +4,11 @@ import { type IGRPConfig } from '../types';
 let config: IGRPConfig | null = null;
 
 export function initializeIGRPConfig(customConfig?: Partial<IGRPConfig>): IGRPConfig {
+  if (config) return config;
+
   const defaultConfig: IGRPConfig = {
     appCode:
-      typeof window !== 'undefined' ? (window as any).IGRP_PUBLIC_APP_CODE || 'admin' : 'admin',
+      typeof window !== 'undefined' ? (window as any).IGRP_PUBLIC_APP_CODE || 'demo' : 'demo',
     previewMode:
       typeof window !== 'undefined' ? (window as any).IGRP_PUBLIC_PREVIEW_MODE === 'true' : false,
     mockDataProvider: undefined,
@@ -15,6 +17,7 @@ export function initializeIGRPConfig(customConfig?: Partial<IGRPConfig>): IGRPCo
   config = { ...defaultConfig, ...customConfig };
   return config;
 }
+
 
 export function getIGRPConfig(): IGRPConfig {
   if (!config) {

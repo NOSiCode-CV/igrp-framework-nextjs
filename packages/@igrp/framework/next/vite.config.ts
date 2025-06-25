@@ -5,7 +5,7 @@ import dts from "vite-plugin-dts";
 import { libInjectCss } from "vite-plugin-lib-inject-css";
 import path from "path";
 import tailwindcss from "@tailwindcss/vite";
-import preserveUseClientDirective from "rollup-plugin-preserve-use-client";
+// import preserveUseClientDirective from "rollup-plugin-preserve-use-client";
 import { peerDependencies } from "./package.json";
 
 export default defineConfig({
@@ -13,11 +13,11 @@ export default defineConfig({
     react(),
     tailwindcss(),
     libInjectCss(),
-    preserveUseClientDirective(),
+    // preserveUseClientDirective(),
     dts({
       include: ["src"],
       exclude: ["**/*.stories.tsx", "src/test", "**/*.test.tsx"],
-      // rollupTypes: true,
+      rollupTypes: true,
       outDir: 'dist',
       entryRoot: 'src',
     }),
@@ -38,6 +38,10 @@ export default defineConfig({
         "react/jsx-runtime",
         /^next\//,
       ],
+      output: {
+        preserveModules: true,
+        preserveModulesRoot: 'src',
+      },
     },
   },
   resolve: {

@@ -1,5 +1,5 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import { type IGRPConfig } from '../types';
+import { type IGRPConfig } from '../../types/globals';
 
 let config: IGRPConfig | null = null;
 

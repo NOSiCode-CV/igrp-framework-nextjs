@@ -18,7 +18,7 @@ import {
 } from '@/components/primitives/sidebar';
 import { IGRPUserAvatar } from './user-avatar';
 import { getInitials } from '@/lib/getInitials';
-import type { User } from '@/types';
+import type { User } from '@/types/globals';
 
 interface NavUserProps {
   user?: User;

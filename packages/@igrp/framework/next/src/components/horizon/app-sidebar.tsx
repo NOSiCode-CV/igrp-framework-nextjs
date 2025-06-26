@@ -16,7 +16,7 @@ import {
 } from '@/components/primitives/sidebar';
 // import { IGRPAppSwitcher } from './app-switcher';
 import { IGRPNavUser } from './nav-user';
-import type { SidebarData } from '@/types';
+import type { SidebarData } from '@/types/globals';
 // import { IGRPMenus } from './app-menus';
 
 interface IGRPAppSidebarProps extends React.ComponentProps<typeof Sidebar> {

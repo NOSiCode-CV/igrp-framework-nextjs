@@ -7,14 +7,7 @@ export interface IGRPConfig {
   };
 }
 
-export interface IGRPResolvedConfig {
-  appCode: string;
-  previewMode: boolean;
-  headerData?: HeaderData;
-  sidebarData?: SidebarData;
-}
-
-export type IGRPConfigClient = () => Promise<IGRPResolvedConfig>;
+export type IGRPConfigClient = () => Promise<IGRPConfig>;
 
 export interface MenuItem {
   id: string;

@@ -5,7 +5,7 @@ import dts from "vite-plugin-dts";
 import { libInjectCss } from "vite-plugin-lib-inject-css";
 import path from "path";
 import tailwindcss from "@tailwindcss/vite";
-// import preserveUseClientDirective from "rollup-plugin-preserve-use-client";
+import preserveUseClientDirective from "rollup-plugin-preserve-use-client";
 import { peerDependencies } from "./package.json";
 
 export default defineConfig({
@@ -13,23 +13,19 @@ export default defineConfig({
     react(),
     tailwindcss(),
     libInjectCss(),
-    // preserveUseClientDirective(),
+    preserveUseClientDirective(),
     dts({
       include: ["src"],
-      exclude: ["**/*.stories.tsx", "src/test", "**/*.test.tsx"],
-      rollupTypes: true,
+      exclude: ["**/*.stories.tsx", "src/test", "**/*.test.tsx",],
+      // rollupTypes: true,
       outDir: 'dist',
-      entryRoot: 'src',
     }),
   ],
   build: {
     lib: {
-      entry: {
-        index: path.resolve(__dirname, 'src/index.ts'),
-        server: path.resolve(__dirname, 'src/server.ts'),
-      },
-      name: "IGRPFrameworkNext",
-      fileName: (format, entryName) => `${entryName}.${format}.js`,
+      entry: path.resolve(__dirname, 'src/index.ts'),
+      name: "IGRPFrameworkNextClient",
+      fileName: (format) => `index.${format}.js`,
       formats: ["cjs", "es"],
     },
     rollupOptions: {
@@ -37,12 +33,12 @@ export default defineConfig({
         ...Object.keys(peerDependencies),
         "react/jsx-runtime",
         /^next\//,
-      ],
-      output: {
-        preserveModules: true,
-        preserveModulesRoot: 'src',
-      },
+      ],  
+       output: {
+        inlineDynamicImports: true,
+      },    
     },
+    outDir: 'dist',
   },
   resolve: {
     alias: {

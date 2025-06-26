@@ -1,7 +1,7 @@
 import { cn } from '@/lib/utils';
 import { IGRPRootProviders } from '@/providers';
+import type { IGRPConfigClient } from '@/types/globals';
 import type { Session } from 'next-auth';
-// import type { NextIntlClientProvider } from "next-intl";
 
 type IGRPRootLocaleLayoutArgs = {
   readonly locale: string;
@@ -10,36 +10,28 @@ type IGRPRootLocaleLayoutArgs = {
   readonly children: React.ReactNode;
   readonly isScaled?: boolean;
   readonly fontVariables: string;
-  // readonly messages?: React.ComponentProps<typeof NextIntlClientProvider>['messages'];
+  serverFunction: IGRPConfigClient;
 };
 
-export function IGRPRootLocaleLayout({
+export async function IGRPRootLayout({
   locale,
   session,
   activeThemeValue,
   children,
   isScaled,
   fontVariables,
-  // messages
+  serverFunction
 }: IGRPRootLocaleLayoutArgs) {
+
+  const config = await serverFunction();  
+  console.log({ config});
+  
   return (
     <html
       lang={locale}
       suppressHydrationWarning
       className={fontVariables}
-    >
-      <head>
-        <link
-          href='/favicon.ico'
-          rel='icon'
-          sizes='32x32'
-        />
-        <link
-          href='/favicon.svg'
-          rel='icon'
-          type='image/svg+xml'
-        />
-      </head>
+    >      
       <body
         className={cn(
           'bg-background overscroll-none h-screen font-sans antialiased',
@@ -49,9 +41,7 @@ export function IGRPRootLocaleLayout({
       >
         <IGRPRootProviders
           session={session}
-          activeThemeValue={activeThemeValue}
-          // locale={locale}
-          // messages={messages}
+          activeThemeValue={activeThemeValue}          
         >
           {children}
         </IGRPRootProviders>

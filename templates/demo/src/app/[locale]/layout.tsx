@@ -3,14 +3,17 @@ import { notFound } from 'next/navigation';
 import { hasLocale, NextIntlClientProvider } from 'next-intl';
 import { getLocale, getMessages, setRequestLocale } from 'next-intl/server';
 import { routing } from '@/i18n/routing';
+import { getSession } from '@/actions/auth';
+import { getTheme } from '@/actions/theme';
+import { META_THEME_COLORS } from '@igrp/framework-next';
 
 import './globals.css';
 
-import { IGRPRootLocaleLayout } from '@igrp/framework-next/server';
-import { META_THEME_COLORS } from '@igrp/framework-next';
+import { IGRPRootLayout, initializeIGRPConfig } from '@igrp/framework-next/server';
+import { IGRPConfigClient } from '@igrp/framework-next';
 import { fontVariables } from '@/lib/fonts';
-import { getSession } from '@/actions/auth';
-import { getTheme } from '@/actions/theme';
+import { igrpMockDataProvider } from '@/lib/mock-provider';
+
 
 export const metadata: Metadata = {
   title: 'IGRP',
@@ -26,6 +29,17 @@ export function generateStaticParams() {
   return routing.locales.map((locale) => ({ locale }));
 }
 
+  const serverFunction: IGRPConfigClient = async () => {
+    'use server';  
+  
+    return initializeIGRPConfig({
+      appCode: 'demo',
+      previewMode: true,
+      mockDataProvider: igrpMockDataProvider,
+    })
+  };
+  
+
 export default async function RootLayout({ children }: Readonly<{ children: React.ReactNode }>) {
   const locale = await getLocale();
   if (!hasLocale(routing.locales, locale)) notFound();
@@ -35,19 +49,20 @@ export default async function RootLayout({ children }: Readonly<{ children: Reac
 
   const session = await getSession();
 
-  const { activeThemeValue, isScaled } = await getTheme();
+  const { activeThemeValue, isScaled } = await getTheme(); 
 
   return (
-    <IGRPRootLocaleLayout
+    <IGRPRootLayout
       locale={locale}
       session={session}
       activeThemeValue={activeThemeValue}
       isScaled={isScaled}
-      fontVariables={fontVariables}      
+      fontVariables={fontVariables} 
+      serverFunction={serverFunction}   
     >
       <NextIntlClientProvider locale={locale} messages={messages}>
         {children}
       </NextIntlClientProvider>
-    </IGRPRootLocaleLayout>
+    </IGRPRootLayout>
   );
 }

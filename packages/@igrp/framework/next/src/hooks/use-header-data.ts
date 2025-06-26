@@ -1,4 +1,4 @@
-import type { HeaderData } from '../types';
+import type { HeaderData } from '../types/globals';
 
 export function useHeaderData() {
   const mockData: HeaderData = {

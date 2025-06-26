@@ -24,3 +24,9 @@
 
 #
 .npmrc
+
+# Deny shared chunks
+/dist/*-*.js
+/dist/*-*.cjs
+/dist/*-*.css
+/dist/*.map

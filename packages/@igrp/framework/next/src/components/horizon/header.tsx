@@ -3,7 +3,7 @@ import { SidebarTrigger } from '@/components/primitives/sidebar';
 import { Breadcrumbs } from './breadcrumbs';
 import { IGRPCommandSearch } from './command-search';
 import { IGRPModeSwitcher } from './mode-switcher';
-import type { HeaderData } from '@/types';
+import type { HeaderData } from '@/types/globals';
 import { Notifications } from './notifications';
 
 interface HeaderProps {

@@ -1,7 +1,7 @@
 import { cn } from '@/lib/utils';
-import { IGRPRootProviders } from '@/providers';
 import type { IGRPConfigClient } from '@/types/globals';
 import type { Session } from 'next-auth';
+import { IGRPRootProviders } from '@igrp/framework-next-ui';
 
 type IGRPRootLocaleLayoutArgs = {
   readonly locale: string;
@@ -41,7 +41,14 @@ export async function IGRPRootLayout({
       >
         <IGRPRootProviders
           session={session}
-          activeThemeValue={activeThemeValue}          
+          activeThemeValue={activeThemeValue} 
+          progressiveBarArgs={undefined} 
+          sessionArgs={undefined} 
+          themeArgs={undefined} 
+          defaultOpen={undefined} 
+          languageSelector={undefined} 
+          sidebarData={undefined} 
+          headerData={undefined}        
         >
           {children}
         </IGRPRootProviders>

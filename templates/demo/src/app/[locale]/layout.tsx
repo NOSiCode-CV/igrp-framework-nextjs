@@ -5,12 +5,11 @@ import { getLocale, getMessages, setRequestLocale } from 'next-intl/server';
 import { routing } from '@/i18n/routing';
 import { getSession } from '@/actions/auth';
 import { getTheme } from '@/actions/theme';
-import { META_THEME_COLORS } from '@igrp/framework-next';
+import { META_THEME_COLORS } from '@igrp/framework-next-ui';
 
 import './globals.css';
 
-import { IGRPRootLayout, initializeIGRPConfig } from '@igrp/framework-next/server';
-import { IGRPConfigClient } from '@igrp/framework-next';
+import { IGRPRootLayout, initializeIGRPConfig, IGRPConfigClient } from '@igrp/framework-next';
 import { fontVariables } from '@/lib/fonts';
 import { igrpMockDataProvider } from '@/lib/mock-provider';
 

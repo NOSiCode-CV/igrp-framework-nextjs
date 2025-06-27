@@ -1,3 +1,5 @@
+'use client'; 
+
 import type { Session } from 'next-auth';
 import { Toaster } from 'sonner';
 
@@ -10,7 +12,7 @@ import { IGRPAppSidebar } from '@/components/horizon/app-sidebar';
 import { IGRPHeader } from '@/components/horizon/header';
 import type { HeaderData, SidebarData } from '@/types/globals';
 
-type IGRPProvidersArgs = {
+export type IGRPRootProvidersArgs = {
   session?: Session | null;
   activeThemeValue?: string;
   children: React.ReactNode;
@@ -44,7 +46,7 @@ export function IGRPRootProviders({
   languageSelector,  
   sidebarData,
   headerData
-}: IGRPProvidersArgs) {
+}: IGRPRootProvidersArgs) {
   
   return (
     <IGRPSessionProvider

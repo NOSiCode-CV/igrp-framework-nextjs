@@ -1,6 +1,6 @@
 'use client';
 
-import { type ReactNode, createContext, useContext, useEffect, useState } from 'react';
+import * as React from 'react';
 
 const COOKIE_NAME = 'igrp_active_theme';
 const DEFAULT_THEME = 'default';
@@ -16,17 +16,17 @@ type ThemeContextArgs = {
   setActiveTheme: (theme: string) => void;
 };
 
-const ThemeContext = createContext<ThemeContextArgs | undefined>(undefined);
+const ThemeContext = React.createContext<ThemeContextArgs | undefined>(undefined);
 
 export type IGRPActiveThemeProviderArgs = {
-  children: ReactNode;
+  children: React.ReactNode;
   initialTheme?: string;
 };
 
 export function IGRPActiveThemeProvider({ children, initialTheme }: IGRPActiveThemeProviderArgs) {
-  const [activeTheme, setActiveTheme] = useState<string>(() => initialTheme || DEFAULT_THEME);
+  const [activeTheme, setActiveTheme] = React.useState<string>(() => initialTheme || DEFAULT_THEME);
 
-  useEffect(() => {
+  React.useEffect(() => {
     setThemeCookie(activeTheme);
 
     Array.from(document.body.classList)
@@ -51,7 +51,7 @@ export function IGRPActiveThemeProvider({ children, initialTheme }: IGRPActiveTh
 
 // eslint-disable-next-line react-refresh/only-export-components
 export function useIGRPThemeConfig() {
-  const context = useContext(ThemeContext);
+  const context = React.useContext(ThemeContext);
   if (context === undefined) {
     throw new Error('useThemeConfig must be used within an ActiveThemeProvider');
   }

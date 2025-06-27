@@ -1,6 +1,6 @@
 'use client';
 
-import { useState } from 'react';
+import * as React from 'react';
 import { Bell } from 'lucide-react';
 import { Badge } from '@/components/primitives/badge';
 import { Button } from '@/components/primitives/button';
@@ -15,7 +15,7 @@ import {
 } from '@/components/primitives/dropdown-menu';
 
 export function Notifications() {
-  const [notificationCount, setNotificationCount] = useState(3);
+  const [notificationCount, setNotificationCount] = React.useState(3);
 
   const notifications = [
     {

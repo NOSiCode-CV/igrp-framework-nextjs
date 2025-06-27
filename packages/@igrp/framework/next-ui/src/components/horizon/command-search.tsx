@@ -1,6 +1,6 @@
 'use client';
 
-import { useCallback, useEffect, useState } from 'react';
+import * as React from 'react';
 import { useRouter } from 'next/navigation';
 import { Home, Settings, User, FileText, LifeBuoy, LogOut, UserPlus, Search } from 'lucide-react';
 
@@ -18,10 +18,10 @@ import {
 // TODO: add messages, and the lis of search, with the respective url
 
 export function IGRPCommandSearch() {
-  const [open, setOpen] = useState(false);
+  const [open, setOpen] = React.useState(false);
   const router = useRouter();
 
-  useEffect(() => {
+  React.useEffect(() => {
     const controller = new AbortController();
     const signal = controller.signal;
 
@@ -38,7 +38,7 @@ export function IGRPCommandSearch() {
     };
   }, []);
 
-  const runCommand = useCallback((command: () => unknown) => {
+  const runCommand = React.useCallback((command: () => unknown) => {
     setOpen(false);
     command();
   }, []);

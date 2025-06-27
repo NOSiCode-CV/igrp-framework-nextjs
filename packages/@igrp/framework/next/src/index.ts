@@ -1,9 +1,5 @@
-import './index.css';
+export { IGRPRootLayout } from './layouts/root';
 
-export { META_THEME_COLORS, useMetaColor } from './hooks/use-meta-color';
-
-export { IGRPThemeSelector } from './components/horizon/theme-selector';
-
-export { IGRPRootProviders } from './providers'
+export { initializeIGRPConfig, getIGRPConfig, isPreviewMode, getAppCode, getMockDataProvider } from './layouts/root/initialize-igrp-config';
 
 export * from "./types/globals";

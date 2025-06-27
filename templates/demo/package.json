@@ -12,6 +12,7 @@
     "@bprogress/next": "^3.2.12",
     "@hookform/resolvers": "^5.1.1",
     "@igrp/framework-next": "workspace:*", 
+    "@igrp/framework-next-ui": "workspace:*", 
     "@radix-ui/react-dropdown-menu": "^2.1.15", 
     "@radix-ui/react-slot": "^1.2.3",  
     "class-variance-authority": "^0.7.1",

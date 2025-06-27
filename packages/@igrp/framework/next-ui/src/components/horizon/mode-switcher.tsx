@@ -1,6 +1,6 @@
 'use client';
 
-import { useCallback } from 'react';
+import * as React from 'react';
 import { MoonIcon, SunIcon } from 'lucide-react';
 import { useTheme } from 'next-themes';
 import { Button } from '@/components/primitives/button';
@@ -12,7 +12,7 @@ export function IGRPModeSwitcher() {
 
   console.log('theme toggle render');
 
-  const toggleTheme = useCallback(() => {
+  const toggleTheme = React.useCallback(() => {
     console.log('theme toogle');
     setTheme(resolvedTheme === 'dark' ? 'light' : 'dark');
     setMetaColor(resolvedTheme === 'dark' ? META_THEME_COLORS.light : META_THEME_COLORS.dark);

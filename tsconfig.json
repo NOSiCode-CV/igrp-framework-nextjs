@@ -17,6 +17,7 @@
   "references": [
     // { "path": "./packages/igrp-cli-next" },
     { "path": "./templates/demo" },
-    { "path": "./packages/@igrp/framework/next" }
+    { "path": "./packages/@igrp/framework/next" },
+    { "path": "./packages/@igrp/framework/next-ui" }
   ]
 }

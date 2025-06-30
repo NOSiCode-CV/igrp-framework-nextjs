@@ -1,9 +1,9 @@
-import { Separator } from '@/components/primitives/separator';
-import { SidebarTrigger } from '@/components/primitives/sidebar';
+import { Separator } from '../primitives/separator';
+import { SidebarTrigger } from '../primitives/sidebar';
 import { Breadcrumbs } from './breadcrumbs';
 import { IGRPCommandSearch } from './command-search';
 import { IGRPModeSwitcher } from './mode-switcher';
-import type { HeaderData } from '@/types/globals';
+import type { HeaderData } from '../../../types/globals';
 import { Notifications } from './notifications';
 
 interface HeaderProps {

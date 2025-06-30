@@ -1,6 +1,5 @@
 'use client';
 
-import { Label } from '@/components/primitives/label';
 import {
   Select,
   SelectContent,
@@ -10,8 +9,9 @@ import {
   SelectSeparator,
   SelectTrigger,
   SelectValue,
-} from '@/components/primitives/select';
-import { useIGRPThemeConfig } from '../../../../next-ui/src/providers/active-theme';
+} from '../primitives/select';
+import { useIGRPThemeConfig } from '../../providers/root/active-theme';
+import { Label } from '../primitives/label';
 
 const DEFAULT_THEMES = [
   {

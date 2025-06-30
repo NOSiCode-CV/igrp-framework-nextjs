@@ -1,17 +1,17 @@
 import type { Metadata, Viewport } from 'next';
 import { notFound } from 'next/navigation';
-import { hasLocale, NextIntlClientProvider } from 'next-intl';
+import { hasLocale } from 'next-intl';
 import { getLocale, getMessages, setRequestLocale } from 'next-intl/server';
 import { routing } from '@/i18n/routing';
 import { getSession } from '@/actions/auth';
 import { getTheme } from '@/actions/theme';
-import { META_THEME_COLORS } from '@igrp/framework-next-ui';
 
 import './globals.css';
 
 import { IGRPRootLayout, initializeIGRPConfig, IGRPConfigClient } from '@igrp/framework-next';
 import { fontVariables } from '@/lib/fonts';
 import { igrpMockDataProvider } from '@/lib/mock-provider';
+import { META_THEME_COLORS } from '@igrp/framework-next-ui';
 
 
 export const metadata: Metadata = {
@@ -21,8 +21,10 @@ export const metadata: Metadata = {
 };
 
 export const viewport: Viewport = {
-  themeColor: META_THEME_COLORS.light,
+  themeColor: META_THEME_COLORS?.light,
 };
+
+
 
 export function generateStaticParams() {
   return routing.locales.map((locale) => ({ locale }));
@@ -58,10 +60,15 @@ export default async function RootLayout({ children }: Readonly<{ children: Reac
       isScaled={isScaled}
       fontVariables={fontVariables} 
       serverFunction={serverFunction}   
+      messages={messages}
+      showSidebar={true}  
+      showHeader={true}
+      defaultOpen={true}
+      sidebarData={undefined}
+      headerData={undefined}
+      showLanguageSelector={true}
     >
-      <NextIntlClientProvider locale={locale} messages={messages}>
-        {children}
-      </NextIntlClientProvider>
+      {children}
     </IGRPRootLayout>
   );
 }

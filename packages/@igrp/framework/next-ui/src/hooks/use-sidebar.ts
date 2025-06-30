@@ -1,4 +1,4 @@
-import type { SidebarData } from '../types/globals';
+import type { SidebarData } from '../../types/globals';
 
 export function useSidebarData() {
   const mockData: SidebarData = {

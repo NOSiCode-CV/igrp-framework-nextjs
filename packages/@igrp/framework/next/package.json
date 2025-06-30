@@ -1,7 +1,6 @@
 {
   "name": "@igrp/framework-next",
   "version": "0.0.0",
-  "type": "module",
   "description": "IGRP Framework for Next.js - Layout components and data loading hooks",
   "keywords": [
     "igrp",
@@ -13,24 +12,15 @@
   ],
   "author": "IGRP Team",
   "license": "MIT",
-  "exports": {
-    ".": {
-      "types": "./dist/index.d.ts",
-      "import": "./dist/index.es.js",
-      "require": "./dist/index.cjs.js"
-    }    
-  },
-  "main": "dist/index.cjs.js",
-  "module": "dist/index.es.js",
-  "files": [
-    "dist"
-  ],
   "scripts": {
     "dev": "tsc --watch",
     "clean": "pnpm clean:dist && pnpm clean:packages",
     "clean:dist": "rimraf dist",
     "clean:packages": "rimraf node_modules",
-    "build": "tsc -b && vite build"
+    "build": "tsc -b && vite build",
+    "build:swc": "swc src -d dist",
+    "build:babel": "rm -rf dist_optimized && babel dist --out-dir dist_optimized --source-maps --extensions .ts,.js,.tsx,.jsx,.cjs,.mjs && rm -rf dist && mv dist_optimized dist"
+ 
   },
   "peerDependencies": {
     "next": "15.3.3",
@@ -92,8 +82,6 @@
   "devDependencies": {
     "@eslint/js": "^9.25.0",
     "@types/node": "^24.0.3",
-    "@types/react": "^19.1.2",
-    "@types/react-dom": "^19.1.2",
     "@vitejs/plugin-react": "^4.4.1",
     "cpx": "^1.5.0",
     "eslint": "^9.25.0",
@@ -104,11 +92,38 @@
     "rimraf": "^6.0.1",
     "rollup-plugin-preserve-use-client": "^3.0.1",
     "tw-animate-css": "^1.3.4",
-    "typescript": "~5.8.3",
     "typescript-eslint": "^8.30.1",
-    "vite": "^6.3.5",
-    "vite-plugin-dts": "4.5.4",
-    "vite-plugin-lib-inject-css": "2.2.2",
-    "vite-plugin-static-copy": "3.0.2"
-  }
+    "@swc/cli": "^0.3.0",
+    "@swc/core": "^1.4.0",
+    "@babel/cli": "^7.24.4",
+    "@babel/core": "^7.24.4",
+    "@babel/preset-env": "^7.24.4",
+    "@babel/preset-react": "^7.24.4",
+    "@babel/preset-typescript": "^7.24.4",
+    "@types/react": "^19.0.0",
+    "@types/react-dom": "^19.0.0",
+    "typescript": "~5.8.3",
+    "babel-plugin-react-compiler": "19.1.0-rc.2"
+  },
+  "sideEffects": [
+    "*.scss",
+    "*.css"
+  ],
+  "type": "module",
+  "publishConfig": {
+    "exports": {
+      ".": {
+        "import": "./dist/index.js",
+        "types": "./dist/index.d.ts",
+        "default": "./dist/index.js"
+      }
+    },
+    "main": "./dist/index.js",
+    "types": "./dist/index.d.ts"
+  },
+  "main": "./src/index.ts",
+  "types": "./src/index.ts",
+  "files": [
+    "dist"
+  ]
 }

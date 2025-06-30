@@ -9,16 +9,16 @@ import {
   DropdownMenuLabel,
   DropdownMenuSeparator,
   DropdownMenuTrigger,
-} from '@/components/primitives/dropdown-menu';
+} from '../primitives/dropdown-menu';
 import {
   SidebarMenu,
   SidebarMenuButton,
   SidebarMenuItem,
   useSidebar,
-} from '@/components/primitives/sidebar';
+} from '../primitives/sidebar';
 import { IGRPUserAvatar } from './user-avatar';
-import { getInitials } from '@/lib/getInitials';
-import type { User } from '@/types/globals';
+import { getInitials } from '../../lib/getInitials';
+import type { User } from '../../../types/globals';
 
 interface NavUserProps {
   user?: User;

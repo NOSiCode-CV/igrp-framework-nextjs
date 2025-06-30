@@ -3,8 +3,8 @@
 import * as React from 'react';
 import { MoonIcon, SunIcon } from 'lucide-react';
 import { useTheme } from 'next-themes';
-import { Button } from '@/components/primitives/button';
-import { META_THEME_COLORS, useMetaColor } from '@/hooks/use-meta-color';
+import { Button } from '../primitives/button';
+import { META_THEME_COLORS, useMetaColor } from '../../hooks/use-meta-color';
 
 export function IGRPModeSwitcher() {
   const { setTheme, resolvedTheme } = useTheme();

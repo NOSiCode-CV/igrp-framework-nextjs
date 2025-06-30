@@ -2,8 +2,8 @@
 
 import * as React from 'react';
 import { Bell } from 'lucide-react';
-import { Badge } from '@/components/primitives/badge';
-import { Button } from '@/components/primitives/button';
+import { Badge } from '../primitives/badge';
+import { Button } from '../primitives/button';
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -12,7 +12,7 @@ import {
   DropdownMenuLabel,
   DropdownMenuSeparator,
   DropdownMenuTrigger,
-} from '@/components/primitives/dropdown-menu';
+} from '../primitives/dropdown-menu';
 
 export function Notifications() {
   const [notificationCount, setNotificationCount] = React.useState(3);

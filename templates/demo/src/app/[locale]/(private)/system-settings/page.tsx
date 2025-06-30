@@ -1,10 +1,10 @@
-import { IGRPThemeSelector } from '@igrp/framework-next';
+import { IGRPThemeSelector } from '@igrp/framework-next-ui-swc';
 
 export default function SettingsPage() {
   return (
-    <section className='space-y-6 animate-fade-in'>
-      <div>System Settings</div>
+    <div className="container mx-auto p-6">
+      <h1 className="text-2xl font-bold mb-6">System Settings</h1>
       <IGRPThemeSelector />
-    </section>
+    </div>
   );
 }

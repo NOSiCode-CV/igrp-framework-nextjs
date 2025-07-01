@@ -1,7 +1,7 @@
 import { cn } from '@/lib/utils';
 import type { HeaderData, IGRPConfigClient, SidebarData } from '@/types/globals';
 import type { Session } from 'next-auth';
-import { IGRPRootProviders } from '@igrp/framework-next-ui';
+import { IGRPRootProviders, } from '@igrp/framework-next-ui';
 
 type IGRPRootLocaleLayoutArgs = {
   readonly locale: string;

@@ -1,4 +1,4 @@
-import { IGRPThemeSelector } from '@igrp/framework-next-ui-swc';
+import { IGRPThemeSelector } from '@igrp/framework-next-ui';
 
 export default function SettingsPage() {
   return (

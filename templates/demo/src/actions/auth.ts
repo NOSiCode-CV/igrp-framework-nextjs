@@ -1,7 +1,7 @@
 'use server';
 
 import { getServerSession as getNextAuthServerSession } from "next-auth/next"
-import { authOptions } from '@/lib/auth-options';
+import { authOptions } from "@/lib/auth-options";
 
 export async function serverSession() {
   try {
@@ -14,13 +14,13 @@ export async function serverSession() {
 
     if (!process.env.KEYCLOAK_CLIENT_ID || !process.env.KEYCLOAK_CLIENT_SECRET || !process.env.KEYCLOAK_ISSUER) {
       console.warn("Warning: One or more Keycloak environment variables are missing.")
-      return null
+      throw new Error("One or more Keycloak environment variables are missing.")
     }
 
     const session = await getNextAuthServerSession(authOptions)
     return session
   } catch (error) {
-    console.error("Error getting server session:", error)
+    console.error("::Error getting server session::", error)
     return null
   }
 }
@@ -30,7 +30,7 @@ export async function getSession() {
 
   if (process.env.NODE_ENV === 'production') {
     try {
-      // session = await serverSession()
+      session = await serverSession()
       session = null
     } catch (error) {
       console.error("Failed to get session in layout:", error)

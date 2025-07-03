@@ -1,7 +1,7 @@
 'use client';
 
 import Link from 'next/link';
-import { Bell, ChevronsUpDown, LogOut, User as UserIcon } from 'lucide-react';
+import { Bell, LogOut, User as UserIcon } from 'lucide-react';
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -14,7 +14,6 @@ import {
   SidebarMenu,
   SidebarMenuButton,
   SidebarMenuItem,
-  useSidebar,
 } from '../primitives/sidebar';
 import { IGRPUserAvatar } from './user-avatar';
 import { getInitials } from '../../lib/getInitials';
@@ -26,8 +25,7 @@ interface NavUserProps {
 
 // TODO: see when user is null or undefiened
 
-export function IGRPNavUser({ user }: NavUserProps) {
-  const { isMobile } = useSidebar();
+export function IGRPNavUserHeader({ user }: NavUserProps) {
 
   if (!user) return null;
 
@@ -37,7 +35,7 @@ export function IGRPNavUser({ user }: NavUserProps) {
         <DropdownMenu>
           <DropdownMenuTrigger asChild>
             <SidebarMenuButton
-              className='group data-[state=open]:bg-sidebar-accent data-[state=open]:text-sidebar-accent-foreground cursor-pointer group-data-[collapsible=icon]:pl-0! py-2!'
+              className='p-0 hover:p-0 hover:bg-transparent h-auto'
               tooltip={user.username}
               size='lg'
             >
@@ -47,20 +45,12 @@ export function IGRPNavUser({ user }: NavUserProps) {
                 fallbackContent={user && getInitials(user.username)}
                 fallbackClass='text-xs'
                 className='shadow-md'
-              />
-              <div className='grid flex-1 text-left text-sm leading-tight'>
-                <span className='truncate font-semibold'>{user.username || 'N/A'}</span>
-                <span className='truncate text-xs'>{user.email}</span>
-              </div>
-              <ChevronsUpDown
-                className='ml-auto size-3.5'
-                strokeWidth={2}
-              />
+              />              
             </SidebarMenuButton>
           </DropdownMenuTrigger>
           <DropdownMenuContent
             className='min-w-56 rounded-lg'
-            side={isMobile ? 'bottom' : 'right'}
+            side='bottom'
             align='end'
             sideOffset={4}
           >
@@ -74,7 +64,7 @@ export function IGRPNavUser({ user }: NavUserProps) {
 
             <DropdownMenuItem
               asChild
-              className='cursor-pointer hover:bg-primary! hover:text-primary-foreground!'
+              className='hover:bg-primary! hover:text-primary-foreground!'
             >
               <Link href='/users/profile'>
                 <UserIcon
@@ -88,7 +78,7 @@ export function IGRPNavUser({ user }: NavUserProps) {
 
             <DropdownMenuItem
               asChild
-              className='cursor-pointer hover:bg-primary! hover:text-primary-foreground!'
+              className='hover:bg-primary! hover:text-primary-foreground!'
             >
               <Link href='/users/notifications'>
                 <Bell
@@ -102,7 +92,7 @@ export function IGRPNavUser({ user }: NavUserProps) {
 
             <DropdownMenuItem
               asChild
-              className='cursor-pointer hover:bg-primary! hover:text-primary-foreground!'
+              className='hover:bg-primary! hover:text-primary-foreground!'
             >
               <Link href='/logout'>
                 <LogOut

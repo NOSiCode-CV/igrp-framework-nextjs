@@ -1,33 +1,70 @@
-export interface IGRPConfig {
+import type { Session } from 'next-auth';
+
+export type IGRPConfig = {
   appCode: string;
   previewMode: boolean;
-  mockDataProvider?: {
+  layoutMockData?: {
     getHeaderData: () => Promise<HeaderData>;
     getSidebarData: () => Promise<SidebarData>;
   };
+  font: string;
+  showSidebar?: boolean;
+  showHeader?: boolean;
+  defaultOpen?: boolean;
+  showLanguageSelector?: boolean;
+  layout: {
+    locale: string,
+    session: Session | null,
+    activeThemeValue?: string,
+    isScaled?: boolean,
+    messages?: Record<string, string>,
+  }
 }
 
 export type IGRPConfigClient = () => Promise<IGRPConfig>;
 
-export interface MenuItem {
-  id: string;
-  title: string;
-  href?: string;
-  icon?: string;
-  children?: MenuItem[];
-  isActive?: boolean;
-  permissions?: string[];
+export type IGRPLayoutConfig = {
+  locale: string,
+  session: Session | null,
+  activeThemeValue?: string,
+  isScaled?: boolean,
+  messages?: Record<string, string>,
 }
+
+
+export interface MenuItem {  
+  id: number;
+  name: string;
+  type: 'FOLDER' | 'MENU_PAGE' | 'EXTERNAL_PAGE';
+  position: number;
+  icon: string;
+  status: 'ACTIVE' | 'INACTIVE' | 'DELETED';
+  target: 'INTERNAL' | 'EXTERNAL';
+  url: string | null;
+  parentId: number | null;
+  applicationId: number;
+  resourceId: number | null;
+  createdBy: string;
+  createdDate: string;
+  lastModifiedBy: string;
+  lastModifiedDate: string;
+}
+
 
 export interface User {
   id: string;
-  name: string;
-  fullname: string;
-  email: string;
+  igrpUsername: string;
   username: string;
-  image?: string;
-  role: string;
-  permissions: string[];
+  fullname?: string | null;
+  name: string;
+  email: string;
+  roles?: string[];
+  departments?: string[];
+  apps?: string[];
+  status: 'ACTIVE' | 'INACTIVE';
+  signature?: string | null;
+  image?: string | null;
+  picture?: string | null;
 }
 
 export interface HeaderData {
@@ -59,7 +96,12 @@ export interface SidebarData {
   footerItems: MenuItem[];
 }
 
-export interface MockDataProvider {
+export interface IGRPMockDataAsync {
   getHeaderData: () => Promise<HeaderData>;
   getSidebarData: () => Promise<SidebarData>;
-} 
+}
+
+export type IGRPMockData = {
+  headerData: HeaderData;
+  sidebarData: SidebarData;
+};

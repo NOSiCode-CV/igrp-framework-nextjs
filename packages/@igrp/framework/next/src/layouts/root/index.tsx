@@ -1,51 +1,58 @@
 import { cn } from '@/lib/utils';
-import type { HeaderData, IGRPConfigClient, SidebarData } from '@/types/globals';
-import type { Session } from 'next-auth';
+import { mapHeaderData } from '../../services/header/mapper';
+import { mapSidebarData } from '../../services/sidebar/mapper';
+import type { HeaderData, IGRPConfig, SidebarData } from '@/types/globals';
 import { IGRPRootProviders, } from '@igrp/framework-next-ui';
 
 type IGRPRootLocaleLayoutArgs = {
-  readonly locale: string;
-  readonly session: Session | null;
-  readonly activeThemeValue?: string;
   readonly children: React.ReactNode;
-  readonly isScaled?: boolean;
-  readonly fontVariables: string;
-  serverFunction: IGRPConfigClient;
-  messages?: Record<string, string>;
-  showSidebar?: boolean;  
-  showHeader?: boolean;
-  defaultOpen?: boolean;
-  sidebarData?: SidebarData;
-  headerData?: HeaderData;
-  showLanguageSelector?: boolean;
+  // readonly serverFunction: IGRPConfigClient;  
+  languageSelector?: React.ReactNode;
+  readonly config: Promise<IGRPConfig>;
 };
 
-export async function IGRPRootLayout({
-  locale,
-  session,
-  activeThemeValue,
-  children,
-  isScaled,
-  fontVariables,
-  serverFunction,
-  messages,
-  showSidebar,
-  showHeader,
-  defaultOpen,
-  showLanguageSelector
-}: IGRPRootLocaleLayoutArgs) {
-  const config = await serverFunction();
-  console.log({ config, session });
-  const { mockDataProvider } = config;
 
-  const sidebarData = await mockDataProvider?.getSidebarData();
-  const headerData = await mockDataProvider?.getHeaderData();
+export async function IGRPRootLayout({
+  children,
+  languageSelector,
+  config
+}: IGRPRootLocaleLayoutArgs) {
+
+  const layoutConfig = await config;
+
+  const {
+    appCode,
+    previewMode,
+    layoutMockData,
+    font,
+    showSidebar,
+    showHeader,
+    defaultOpen,
+    showLanguageSelector,
+    layout,
+  } = layoutConfig;
+
+  const {
+    locale,
+    session,
+    activeThemeValue,
+    isScaled,
+    messages,
+  } = layout;
+
+  let headerData: HeaderData | undefined;
+  let sidebarData: SidebarData | undefined;
+
+  if (layoutMockData) {
+    headerData = await mapHeaderData(layoutMockData.getHeaderData);
+    sidebarData = await mapSidebarData(layoutMockData.getSidebarData);
+  }
 
   return (
     <html
       lang={locale}
       suppressHydrationWarning
-      className={fontVariables}
+      className={font}
     >
       <body
         className={cn(
@@ -61,7 +68,7 @@ export async function IGRPRootLayout({
           sessionArgs={undefined}
           themeArgs={undefined}
           defaultOpen={defaultOpen}
-          languageSelector={undefined}
+          languageSelector={languageSelector}
           sidebarData={sidebarData}
           headerData={headerData}
           locale={locale}

@@ -19,7 +19,8 @@
       }
     ],
     "paths": {
-      "@/*": ["./src/*"]
+      "@/*": ["./src/*"],
+      "@igrp-config": ["./src/igrp.config.ts"],
     },
     "composite": true,
   },

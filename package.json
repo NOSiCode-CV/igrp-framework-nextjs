@@ -9,7 +9,7 @@
     "build": "pnpm -r run build",
     "build:framework": "pnpm --filter @igrp/framework-next build:prod",
     "build:framework-ui": "pnpm --filter @igrp/framework-next-ui build:prod",
-    "dev": "pnpm --filter demo dev",
+    "dev:demo": "pnpm --filter demo dev",
     "dev:framework": "pnpm --filter @igrp/framework-next dev",
     "run:framework": "pnpm build:framework-ui && pnpm build:framework",
     "framework:prod": "pnpm build:framework-ui && pnpm build:framework",

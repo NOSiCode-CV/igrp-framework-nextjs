@@ -1,22 +1,14 @@
-import "./globals.css";
-import '@igrp/framework-next-ui/dist/output.css'
+import '@igrp/framework-next-ui/dist/styles.css';
+import "@/styles/globals.css";
 
 import type { Metadata, Viewport } from "next";
-import { notFound } from "next/navigation";
-import { hasLocale } from "next-intl";
-import { getLocale, getMessages, setRequestLocale } from "next-intl/server";
-import { routing } from "@/i18n/routing";
-import { getSession } from "@/actions/auth";
-import { getTheme } from "@/actions/theme";
-
-import {
-  IGRPRootLayout,
-  initializeIGRPConfig,
-  IGRPConfigClient,
-} from "@igrp/framework-next";
-import { fontVariables } from "@/lib/fonts";
-import { igrpMockDataProvider } from "@/lib/mock-provider";
+import { IGRPRootLayout } from "@igrp/framework-next";
 import { META_THEME_COLORS } from "@igrp/framework-next-ui";
+
+import { configLayout } from "@/actions/layout";
+import { LanguageSelector } from "@/components/language-selector";
+import { routing } from "@/i18n/routing";
+import { createConfig} from "@/igrp.config";
 
 export const metadata: Metadata = {
   title: "IGRP",
@@ -32,44 +24,28 @@ export function generateStaticParams() {
   return routing.locales.map((locale) => ({ locale }));
 }
 
-const serverFunction: IGRPConfigClient = async () => {
-  "use server";
+// const serverFunction: IGRPConfigClient = async () => {
+//   "use server";
 
-  return initializeIGRPConfig({
-    appCode: "demo",
-    previewMode: true,
-    mockDataProvider: igrpMockDataProvider,
-  });
-};
+//   return initializeIGRPConfig({
+//     appCode: process.env.IGRP_APP_CODE ? process.env.IGRP_APP_CODE : 'demoTestFDL',
+//     previewMode: process.env.IGRP_PREVIEW_MODE === 'true' ? true : false,
+//     layoutMockData: igrpMockDataProvider,
+//   });
+// };
 
 export default async function RootLayout({
   children,
 }: Readonly<{ children: React.ReactNode }>) {
-  const locale = await getLocale();
-  if (!hasLocale(routing.locales, locale)) notFound();
-  setRequestLocale(locale);
 
-  const messages = await getMessages();
-
-  const session = await getSession();
-
-  const { activeThemeValue, isScaled } = await getTheme();
+  const layoutConfig  = await configLayout();
+  const config = createConfig(layoutConfig);
 
   return (
-    <IGRPRootLayout
-      locale={locale}
-      session={session}
-      activeThemeValue={activeThemeValue}
-      isScaled={isScaled}
-      fontVariables={fontVariables}
-      serverFunction={serverFunction}
-      messages={messages}
-      showSidebar={true}
-      showHeader={true}
-      defaultOpen={true}
-      sidebarData={undefined}
-      headerData={undefined}
-      showLanguageSelector={true}
+    <IGRPRootLayout      
+      // serverFunction={serverFunction}
+      languageSelector={<LanguageSelector />}
+      config={config}
     >
       {children}
     </IGRPRootLayout>

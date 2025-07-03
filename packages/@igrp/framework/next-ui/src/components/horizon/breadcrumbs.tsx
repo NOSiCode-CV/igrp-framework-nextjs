@@ -2,8 +2,9 @@
 
 import { usePathname } from 'next/navigation';
 import Link from 'next/link';
-import { ChevronRight, Home } from 'lucide-react';
+import { ChevronRight } from 'lucide-react';
 import { cn } from '@/lib/utils';
+import { IGRPIcon } from '@igrp/igrp-framework-react-design-system';
 
 interface BreadcrumbsProps {
   className?: string;
@@ -42,10 +43,7 @@ export function Breadcrumbs({ className, locale }: BreadcrumbsProps) {
             href={homeHref}
             className='text-muted-foreground hover:text-foreground flex items-center gap-1 transition-colors'
           >
-            <Home
-              className='h-3 w-3'
-              strokeWidth={2}
-            />
+            <IGRPIcon iconName='Home' className='h-3 w-3' strokeWidth={2} />
             <span className='sr-only'>Home</span>
           </Link>
         </li>
@@ -54,7 +52,8 @@ export function Breadcrumbs({ className, locale }: BreadcrumbsProps) {
             key={index}
             className='flex items-center'
           >
-            <ChevronRight
+            <IGRPIcon 
+              iconName='ChevronRight' 
               className='h-3 w-3 text-muted-foreground'
               aria-hidden='true'
               strokeWidth={2}

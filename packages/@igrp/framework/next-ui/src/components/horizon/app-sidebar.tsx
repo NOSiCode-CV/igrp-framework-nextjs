@@ -1,7 +1,8 @@
 'use client';
 
-// import Link from 'next/link';
-// import { usePathname } from 'next/navigation';
+import Link from 'next/link';
+import { usePathname } from 'next/navigation';
+import { IGRPIcon } from "@igrp/igrp-framework-react-design-system"
 import {
   Sidebar,
   SidebarContent,
@@ -10,21 +11,21 @@ import {
   SidebarGroupContent,
   SidebarGroupLabel,
   SidebarHeader,
-  // SidebarMenu,
-  // SidebarMenuButton,
+  SidebarMenu,
+  SidebarMenuButton,
   SidebarRail,
 } from '../primitives/sidebar';
 // import { IGRPAppSwitcher } from './app-switcher';
 import { IGRPNavUser } from './nav-user';
-import type { SidebarData } from '../../../types/globals';
-// import { IGRPMenus } from './app-menus';
+import type { SidebarData } from '../../types/globals';
+import { IGRPMenus } from './app-menus';
 
 interface IGRPAppSidebarProps extends React.ComponentProps<typeof Sidebar> {
   data?: SidebarData;
 }
 
 export function IGRPAppSidebar({ data, ...props }: IGRPAppSidebarProps) {
-  // const pathname = usePathname();
+  const pathname = usePathname();
 
   const navFooter = data?.footerItems;
   const menus = data?.menuItems;
@@ -42,31 +43,30 @@ export function IGRPAppSidebar({ data, ...props }: IGRPAppSidebarProps) {
         <SidebarGroup>
           <SidebarGroupLabel>Main</SidebarGroupLabel>
           <SidebarGroupContent>
-            {/* <IGRPMenus /> */}
+            <IGRPMenus menus={menus} />
           </SidebarGroupContent>
         </SidebarGroup>
       </SidebarContent>
 
       <SidebarFooter>
-        <SidebarGroupContent>
-          {/* <SidebarMenu>
-            {navFooter.map(({ title, href, icon: Icon }) => (
-              <SidebarMenuButton
-                asChild
-                isActive={
-                  pathname === navFooter.href ||
-                  (navFooter.href !== '/' && pathname?.startsWith(navFooter.href))
-                }
-                tooltip={navFooter.title}
-              >
-                <Link href={navFooter.href}>
-                  {navFooter.icon && <navFooter.icon />}
-                  <span>{navFooter.title}</span>
-                </Link>
-              </SidebarMenuButton>
-            ))}
-          </SidebarMenu> */}
-        </SidebarGroupContent>
+        <SidebarMenu>
+          {navFooter?.map(({ name, url, icon }, index) => (
+            <SidebarMenuButton
+              asChild
+              isActive={
+                pathname === url ||
+                (url !== '/' && pathname?.startsWith(url || ''))
+              }
+              tooltip={name}
+              key={`footer-menu-${index}`}
+            >
+              <Link href={url || ''}>
+                {icon && <IGRPIcon iconName={icon} />}
+                <span>{name}</span>
+              </Link>
+            </SidebarMenuButton>
+          ))}
+        </SidebarMenu>
 
         <IGRPNavUser user={user} />
       </SidebarFooter>

@@ -1,5 +1,9 @@
+export { buildConfig } from "./config/build";
+
 export { IGRPRootLayout } from './layouts/root';
 
-export { initializeIGRPConfig, getIGRPConfig, isPreviewMode, getAppCode, getMockDataProvider } from './layouts/root/initialize-igrp-config';
+export { buildQueryString } from "./lib/build-query-string";
+
+export {  initializeIGRPConfig } from './lib/init';
 
 export * from "./types/globals";

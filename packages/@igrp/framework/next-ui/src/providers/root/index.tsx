@@ -1,4 +1,5 @@
 "use client";
+
 import type { Session } from "next-auth";
 import { NextIntlClientProvider } from "next-intl";
 

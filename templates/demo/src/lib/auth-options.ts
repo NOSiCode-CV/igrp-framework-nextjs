@@ -2,54 +2,6 @@ import type { NextAuthOptions, TokenSet } from "next-auth"
 import type { JWT } from 'next-auth/jwt';
 import KeycloakProvider from 'next-auth/providers/keycloak';
 
-export async function requestRefreshOfAccessToken(token: JWT) {
-  if (!process.env.KEYCLOAK_ISSUER || !process.env.KEYCLOAK_CLIENT_ID || !process.env.KEYCLOAK_CLIENT_SECRET) {
-    console.error("Keycloak environment variables are not set for token refresh.")
-    throw new Error("Missing Keycloak configuration for token refresh.")
-  }
-
-  if (!token.refreshToken) {
-    console.error("No refresh token available.")
-    throw new Error("Missing refresh token.")
-  }
-
-  return await fetch(`${process.env.KEYCLOAK_ISSUER}/protocol/openid-connect/token`, {
-    headers: {
-      'Content-Type': 'application/x-www-form-urlencoded',
-    },
-    body: new URLSearchParams({
-      client_id: process.env.KEYCLOAK_CLIENT_ID,
-      client_secret: process.env.KEYCLOAK_CLIENT_SECRET,
-      grant_type: 'refresh_token',
-      refresh_token: token.refreshToken! as string,
-    }),
-    method: 'POST',
-  });
-}
-
-export async function doFinalSignoutHandshake(jwt: JWT) {
-  const { idToken } = jwt;
-
-  if (idToken && process.env.KEYCLOAK_ISSUER) {
-    try {
-      const params = new URLSearchParams();
-      params.append('id_token_hint', idToken as string);
-
-      const response = await fetch(
-        `${process.env.KEYCLOAK_ISSUER}/protocol/openid-connect/logout?${params.toString()}`,
-        { method: 'GET' },
-      );
-
-      console.log('Completed post-logout handshake', response.status, response.statusText);
-    } catch (e) {
-      console.error('Unable to perform post-logout handshake', e instanceof Error ? e.message : String(e));
-    }
-  } else {
-    if (!idToken) console.warn("No idToken found for Keycloak post-logout handshake.")
-    if (!process.env.KEYCLOAK_ISSUER) console.warn("KEYCLOAK_ISSUER not set for post-logout handshake.")
-  }
-}
-
 export const authOptions: NextAuthOptions = {
   providers: [
     KeycloakProvider({
@@ -125,3 +77,51 @@ export const authOptions: NextAuthOptions = {
     },
   },
 };
+
+async function requestRefreshOfAccessToken(token: JWT) {
+  if (!process.env.KEYCLOAK_ISSUER || !process.env.KEYCLOAK_CLIENT_ID || !process.env.KEYCLOAK_CLIENT_SECRET) {
+    console.error("Keycloak environment variables are not set for token refresh.")
+    throw new Error("Missing Keycloak configuration for token refresh.")
+  }
+
+  if (!token.refreshToken) {
+    console.error("No refresh token available.")
+    throw new Error("Missing refresh token.")
+  }
+
+  return await fetch(`${process.env.KEYCLOAK_ISSUER}/protocol/openid-connect/token`, {
+    headers: {
+      'Content-Type': 'application/x-www-form-urlencoded',
+    },
+    body: new URLSearchParams({
+      client_id: process.env.KEYCLOAK_CLIENT_ID,
+      client_secret: process.env.KEYCLOAK_CLIENT_SECRET,
+      grant_type: 'refresh_token',
+      refresh_token: token.refreshToken! as string,
+    }),
+    method: 'POST',
+  });
+}
+
+async function doFinalSignoutHandshake(jwt: JWT) {
+  const { idToken } = jwt;
+
+  if (idToken && process.env.KEYCLOAK_ISSUER) {
+    try {
+      const params = new URLSearchParams();
+      params.append('id_token_hint', idToken as string);
+
+      const response = await fetch(
+        `${process.env.KEYCLOAK_ISSUER}/protocol/openid-connect/logout?${params.toString()}`,
+        { method: 'GET' },
+      );
+
+      console.log('Completed post-logout handshake', response.status, response.statusText);
+    } catch (e) {
+      console.error('Unable to perform post-logout handshake', e instanceof Error ? e.message : String(e));
+    }
+  } else {
+    if (!idToken) console.warn("No idToken found for Keycloak post-logout handshake.")
+    if (!process.env.KEYCLOAK_ISSUER) console.warn("KEYCLOAK_ISSUER not set for post-logout handshake.")
+  }
+}

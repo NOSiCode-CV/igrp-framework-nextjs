@@ -15,28 +15,28 @@ import {
   SidebarMenuButton,
   SidebarRail,
 } from '../primitives/sidebar';
-// import { IGRPAppSwitcher } from './app-switcher';
+import { IGRPAppSwitcher } from './app-switcher';
 import { IGRPNavUser } from './nav-user';
-import type { SidebarData } from '../../types/globals';
-import { IGRPMenus } from './app-menus';
+import type { IGRPSidebarDataArgs } from '../../types/globals';
+import { IGRPMenus } from './menus';
 
 interface IGRPAppSidebarProps extends React.ComponentProps<typeof Sidebar> {
-  data?: SidebarData;
+  data?: IGRPSidebarDataArgs;
 }
 
-export function IGRPAppSidebar({ data, ...props }: IGRPAppSidebarProps) {
+export function IGRPSidebar({ data, ...props }: IGRPAppSidebarProps) {
   const pathname = usePathname();
 
   const navFooter = data?.footerItems;
   const menus = data?.menuItems;
   const user = data?.user;
-
-  console.log({ data, menus, navFooter });
+  const showAppSwitcher = data?.showAppSwitcher;
+  const apps = data?.apps;
 
   return (
     <Sidebar collapsible='icon' {...props} variant='sidebar'>
       <SidebarHeader>
-        {/* <IGRPAppSwitcher app={menuConfig.teams} /> */}
+      {showAppSwitcher && <IGRPAppSwitcher apps={apps} currentApp={apps?.[0]} /> }
       </SidebarHeader>
 
       <SidebarContent>

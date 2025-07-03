@@ -9,9 +9,9 @@ import { IGRPActiveThemeProvider } from "./active-theme";
 import { IGRPProgressBar } from "./progress-bar";
 import { SidebarInset, SidebarProvider } from "../../components/primitives/sidebar";
 import { Toaster } from "../../components/primitives/sonner";
-import { IGRPAppSidebar } from "../../components/horizon/app-sidebar";
+import { IGRPSidebar } from "../../components/horizon/sidebar";
 import { IGRPHeader } from "../../components/horizon/header";
-import type { HeaderData, SidebarData } from "../../../types/globals";
+import type { IGRPHeaderDataArgs, IGRPSidebarDataArgs} from "../../types/globals";
 
 export type IGRPRootProvidersArgs = {
   session?: Session | null;
@@ -29,8 +29,8 @@ export type IGRPRootProvidersArgs = {
   messages?: Record<string, string>;
   showLanguageSelector?: boolean;
   languageSelector?: React.ReactNode;
-  sidebarData?: SidebarData;
-  headerData?: HeaderData;
+  sidebarData?: IGRPSidebarDataArgs;
+  headerData?: IGRPHeaderDataArgs;
 };
 
 export const IGRPRootProviders: React.FC<IGRPRootProvidersArgs> = ({
@@ -64,7 +64,7 @@ export const IGRPRootProviders: React.FC<IGRPRootProvidersArgs> = ({
           <IGRPProgressBar {...progressiveBarArgs}>
             <IGRPActiveThemeProvider initialTheme={activeThemeValue}>
               <SidebarProvider defaultOpen={defaultOpen}>
-                {showSidebar && <IGRPAppSidebar data={sidebarData} />}
+                {showSidebar && <IGRPSidebar data={sidebarData} />}
 
                 <SidebarInset>
                   {showHeader && (

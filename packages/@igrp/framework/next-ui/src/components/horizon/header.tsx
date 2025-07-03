@@ -1,15 +1,15 @@
 import { Separator } from '../primitives/separator';
 import { SidebarTrigger } from '../primitives/sidebar';
-import { Breadcrumbs } from './breadcrumbs';
+import { IGRPBreadcrumbs } from './breadcrumbs';
 import { IGRPCommandSearch } from './command-search';
 import { IGRPModeSwitcher } from './mode-switcher';
-import type { HeaderData } from '../../types/globals';
+import type { IGRPHeaderDataArgs } from '../../types/globals';
 import { Notifications } from './notifications';
 import { IGRPNavUserHeader } from './nav-user-header';
 
 interface HeaderProps {
   showBreadcrumbs?: boolean;
-  data?: HeaderData;
+  data?: IGRPHeaderDataArgs;
   className?: string;
   showLanguageSelector?: boolean;
   languageSelector?: React.ReactNode;
@@ -17,7 +17,7 @@ interface HeaderProps {
 }
 
 export function IGRPHeader({
-  showBreadcrumbs,
+  showBreadcrumbs = true,
   showLanguageSelector,
   languageSelector,
   locale = 'pt',
@@ -25,6 +25,7 @@ export function IGRPHeader({
 }: HeaderProps) {
 
   const user = data?.user;
+  
   return (
     <header className='bg-background sticky top-0 inset-x-0 isolate z-10 border-b flex items-center justify-between gap-2 px-4 py-2'>
       <div className='flex items-center gap-2 h-12'>
@@ -35,7 +36,7 @@ export function IGRPHeader({
               orientation='vertical'
               className='mr-2 data-[orientation=vertical]:h-4'
             />
-            <Breadcrumbs locale={locale} />
+            <IGRPBreadcrumbs locale={locale} />
           </>
         )}
       </div>

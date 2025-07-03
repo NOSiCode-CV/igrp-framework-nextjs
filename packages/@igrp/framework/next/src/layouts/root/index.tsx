@@ -1,14 +1,16 @@
-import { cn } from '@/lib/utils';
+import { IGRPRootProviders, } from '@igrp/framework-next-ui';
+
+import { cn } from '../../lib/utils';
 import { mapHeaderData } from '../../services/header/mapper';
 import { mapSidebarData } from '../../services/sidebar/mapper';
-import type { HeaderData, IGRPConfig, SidebarData } from '@/types/globals';
-import { IGRPRootProviders, } from '@igrp/framework-next-ui';
+import type { IGRPHeaderDataArgs, IGRPConfigArgs, IGRPSidebarDataArgs } from '@igrp/framework-next-types';
+
 
 type IGRPRootLocaleLayoutArgs = {
   readonly children: React.ReactNode;
   // readonly serverFunction: IGRPConfigClient;  
   languageSelector?: React.ReactNode;
-  readonly config: Promise<IGRPConfig>;
+  readonly config: Promise<IGRPConfigArgs>;
 };
 
 
@@ -27,7 +29,6 @@ export async function IGRPRootLayout({
     font,
     showSidebar,
     showHeader,
-    defaultOpen,
     showLanguageSelector,
     layout,
   } = layoutConfig;
@@ -40,8 +41,8 @@ export async function IGRPRootLayout({
     messages,
   } = layout;
 
-  let headerData: HeaderData | undefined;
-  let sidebarData: SidebarData | undefined;
+  let headerData: IGRPHeaderDataArgs | undefined;
+  let sidebarData: IGRPSidebarDataArgs | undefined;
 
   if (layoutMockData) {
     headerData = await mapHeaderData(layoutMockData.getHeaderData);
@@ -67,7 +68,7 @@ export async function IGRPRootLayout({
           progressiveBarArgs={undefined}
           sessionArgs={undefined}
           themeArgs={undefined}
-          defaultOpen={defaultOpen}
+          defaultOpen={true}
           languageSelector={languageSelector}
           sidebarData={sidebarData}
           headerData={headerData}

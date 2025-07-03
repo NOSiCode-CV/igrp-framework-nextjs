@@ -1,17 +1,16 @@
-import { buildConfig, IGRPLayoutConfig } from "@igrp/framework-next";
+import { buildConfig, IGRPLayoutConfigArgs } from "@igrp/framework-next";
 import { igrpMockDataProvider } from "@/lib/mock-provider";
 import { fontVariables } from "@/lib/fonts";
 
 
-export function createConfig(config: IGRPLayoutConfig) {
+export function createConfig(config: IGRPLayoutConfigArgs) {
   return buildConfig({
     appCode: process.env.IGRP_APP_CODE || 'demoTestFDL',
-    previewMode: process.env.IGRP_PREVIEW_MODE === 'true',
+    previewMode: process.env.IGRP_PREVIEW_MODE === 'true' ? true : false,
     layoutMockData: igrpMockDataProvider,
     font: fontVariables,
     showSidebar: true,
     showHeader: true,
-    defaultOpen: true,
     showLanguageSelector: true,
     layout: {
       ...config,

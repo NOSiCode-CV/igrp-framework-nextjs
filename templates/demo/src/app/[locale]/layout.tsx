@@ -5,10 +5,10 @@ import type { Metadata, Viewport } from "next";
 import { IGRPRootLayout } from "@igrp/framework-next";
 import { META_THEME_COLORS } from "@igrp/framework-next-ui";
 
-import { configLayout } from "@/actions/layout";
+import { configLayout } from "@/actions/igrp/layout";
 import { LanguageSelector } from "@/components/language-selector";
 import { routing } from "@/i18n/routing";
-import { createConfig} from "@/igrp.config";
+import { createConfig} from "@igrp/config";
 
 export const metadata: Metadata = {
   title: "IGRP",

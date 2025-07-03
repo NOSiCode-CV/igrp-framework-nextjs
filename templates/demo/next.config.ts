@@ -1,7 +1,21 @@
 import { NextConfig } from 'next';
 import createNextIntlPlugin from 'next-intl/plugin';
 
-const nextConfig: NextConfig = {};
+const nextConfig: NextConfig = {
+  output: 'standalone',
+  images: {
+    remotePatterns: [
+      {
+        protocol: 'https',
+        hostname: 'nosi.cv',
+      },
+      {
+        protocol: 'https',
+        hostname: 'img.youtube.com',
+      },
+    ],
+  },
+};
 
 const withNextIntl = createNextIntlPlugin();
 export default withNextIntl(nextConfig);

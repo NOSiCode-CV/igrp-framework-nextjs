@@ -1,5 +1,5 @@
-import type { HeaderData } from "@/types/globals";
+import type { IGRPHeaderDataArgs } from "@/types/globals";
 
-export async function mapHeaderData(getHeaderData: () => Promise<HeaderData>): Promise<HeaderData> {
+export async function mapHeaderData(getHeaderData: () => Promise<IGRPHeaderDataArgs>): Promise<IGRPHeaderDataArgs> {
   return await getHeaderData();
 }

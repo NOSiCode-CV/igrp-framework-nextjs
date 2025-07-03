@@ -1,10 +1,10 @@
 'use client';
 
-import { usePathname } from 'next/navigation';
 import Link from 'next/link';
-import { ChevronRight } from 'lucide-react';
-import { cn } from '@/lib/utils';
+import { usePathname } from 'next/navigation';
 import { IGRPIcon } from '@igrp/igrp-framework-react-design-system';
+
+import { cn } from '@/lib/utils';
 
 interface BreadcrumbsProps {
   className?: string;
@@ -13,7 +13,7 @@ interface BreadcrumbsProps {
 
 // TODO: use breadcrumbs from shadcn-ui
 
-export function Breadcrumbs({ className, locale }: BreadcrumbsProps) {
+export function IGRPBreadcrumbs({ className, locale }: BreadcrumbsProps) {
   const homeHref = '/';
   const pathname = usePathname();
   const pathWithoutLocale = pathname.replace(`/${locale}`, '') || '/';
@@ -43,7 +43,7 @@ export function Breadcrumbs({ className, locale }: BreadcrumbsProps) {
             href={homeHref}
             className='text-muted-foreground hover:text-foreground flex items-center gap-1 transition-colors'
           >
-            <IGRPIcon iconName='Home' className='h-3 w-3' strokeWidth={2} />
+            <IGRPIcon iconName='House' className='h-3 w-3' strokeWidth={2} />
             <span className='sr-only'>Home</span>
           </Link>
         </li>

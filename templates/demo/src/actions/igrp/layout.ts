@@ -35,4 +35,3 @@ export async function configLayout() {
 
   return { locale, session, activeThemeValue, isScaled };
 }
-

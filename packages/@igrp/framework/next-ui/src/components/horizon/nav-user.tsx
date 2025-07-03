@@ -18,10 +18,10 @@ import {
 } from '../primitives/sidebar';
 import { IGRPUserAvatar } from './user-avatar';
 import { getInitials } from '../../lib/getInitials';
-import type { User } from '../../types/globals';
+import type { IGRPUserArgs } from '../../types/globals';
 
 interface NavUserProps {
-  user?: User;
+  user?: IGRPUserArgs;
 }
 
 // TODO: see when user is null or undefiened

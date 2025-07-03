@@ -1,5 +1,5 @@
-import type { SidebarData } from "@/types/globals";
+import type { IGRPSidebarDataArgs } from "@/types/globals";
 
-export async function mapSidebarData(getSidebarData: () => Promise<SidebarData>): Promise<SidebarData> {
+export async function mapSidebarData(getSidebarData: () => Promise<IGRPSidebarDataArgs>): Promise<IGRPSidebarDataArgs> {
   return await getSidebarData();
 }

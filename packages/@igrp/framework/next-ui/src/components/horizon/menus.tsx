@@ -24,9 +24,9 @@ import {
   SidebarMenuSubItem,
 } from '../../components/primitives/sidebar';
 import { Alert, AlertDescription } from '../../components/primitives/alert';
-import { Skeleton } from '../../components/primitives/skeleton';
+// import { Skeleton } from '../../components/primitives/skeleton';
 import { isExternalUrl, normalizeUrl } from '../../lib/url';
-import type { MenuItem } from '../../types/globals';
+import type { IGRPMenuItemArgs } from '../../types/globals';
 
 export type IGRPMenuProps = {
   id: number;
@@ -39,7 +39,7 @@ export type IGRPMenuProps = {
 };
 
 type IGRPMenuArgs = {
-  menus: MenuItem[] | undefined
+  menus: IGRPMenuItemArgs[] | undefined
 }
 
 export function IGRPMenus({ menus }: IGRPMenuArgs) {

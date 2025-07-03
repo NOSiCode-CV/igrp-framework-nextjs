@@ -1,0 +1,26 @@
+{
+  "name": "@igrp/framework-next-types",
+  "version": "0.0.1",
+  "description": "IGRP Shared Types",
+  "author": "NOSI",
+  "type": "module",
+  "license": "MIT",
+  "main": "dist/index.ts",  
+  "types": "dist/index.d.ts",
+  "jest": {
+    "preset": "ts-jest",
+    "testEnvironment": "node"
+  },
+  "scripts": {
+    "build": "tsc -b",
+    "test": "jest",
+    "deploy": "yarn build && yarn publish --registry=https://sonatype.nosi.cv/repository/sisgb/"
+  },  
+  "devDependencies": {
+    "@types/jest": "^30.0.0",
+    "jest": "^30.0.4",
+    "ts-jest": "^29.4.0",
+    "typescript": "^5.8.3",
+    "next-auth": "^4.24.11"
+  }
+}

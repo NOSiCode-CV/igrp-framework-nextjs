@@ -1,4 +1,5 @@
-import { buildConfig, IGRPLayoutConfigArgs } from "@igrp/framework-next";
+import { buildConfig } from "@igrp/framework-next";
+import { IGRPLayoutConfigArgs } from '@igrp/framework-next-types';
 import { igrpMockDataProvider } from "@/lib/mock-provider";
 import { fontVariables } from "@/lib/fonts";
 

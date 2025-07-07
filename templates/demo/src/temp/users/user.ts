@@ -1,4 +1,4 @@
-import { IGRPUserArgs } from '@igrp/framework-next';
+import { IGRPUserArgs } from '@igrp/framework-next-types';
 
 export const IGRP_MOCK_USER: IGRPUserArgs = {
   id: 1,

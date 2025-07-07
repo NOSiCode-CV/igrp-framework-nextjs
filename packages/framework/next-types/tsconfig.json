@@ -7,13 +7,15 @@
     "skipLibCheck": true,
     "forceConsistentCasingInFileNames": true,
     "outDir": "./dist",
+    "rootDir": "./src",  
     "declaration": true,
     "declarationMap": true,
     "isolatedModules": true,
     "composite": true,
     "noEmit": false,
-    "moduleResolution": "node"
+    "emitDeclarationOnly": false,
+    "moduleResolution": "bundler"
   },
-  "include": ["src/**/*"],
+  "include": ["src"],
   "exclude": ["node_modules"]
 }

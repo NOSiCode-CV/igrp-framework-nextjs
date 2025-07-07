@@ -1,0 +1,27 @@
+{
+  "name": "@igrp/framework-next-types",
+  "version": "0.0.1",
+  "description": "IGRP Shared Types",
+  "author": "NOSI",
+  "type": "module",
+  "license": "MIT",
+   "main": "dist/index.js",
+  "module": "dist/index.es.js",
+  "types": "dist/index.d.ts",
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "import": "./dist/index.es.js"
+    }
+  },
+    "files": [
+    "dist"
+  ],
+  "scripts": {
+    "build": "tsc"
+  },  
+  "devDependencies": {
+    "typescript": "^5.8.3",
+    "next-auth": "^4.24.11"
+  }
+}

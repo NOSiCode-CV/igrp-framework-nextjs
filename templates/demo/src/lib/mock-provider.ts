@@ -2,7 +2,7 @@ import { useMockApps } from '@/temp/applications/use-mock-apps';
 import { useMockMenus } from '@/temp/menus/use-mock-menus';
 import { useMockMenusFooter } from '@/temp/menus/use-mock-menus-footer';
 import { useMockUser } from '@/temp/users/use-mock-user';
-import { IGRPMockDataAsync } from '@igrp/framework-next';
+import { IGRPMockDataAsync } from '@igrp/framework-next-types';
 
 export const igrpMockDataProvider: IGRPMockDataAsync = {
   getHeaderData: async () => ({

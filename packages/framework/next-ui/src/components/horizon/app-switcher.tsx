@@ -22,15 +22,20 @@ import type { IGRPApplicationArgs } from '../../types';
 
 interface AppSwitcherProps {
   apps?: IGRPApplicationArgs[],
-  currentApp?: IGRPApplicationArgs,
+  appCode?: number,
   appCenterUrl?: string
 }
 
 // TODO: Add messages 
 
-export function IGRPAppSwitcher({ apps, currentApp, appCenterUrl }: AppSwitcherProps) {
+export function IGRPAppSwitcher({ apps, appCode, appCenterUrl }: AppSwitcherProps) {
   const { isMobile } = useSidebar()
+
+  const currentApp = appCode ? apps?.find(item => item.id === appCode) : apps?.[0]
+  
   const [activeApp, setActiveApp] = useState(currentApp);
+  
+  const [listApps, setListApps] = useState(apps?.filter(item => item.id !== activeApp?.id));
 
   if (!activeApp) throw new Error("Active application not found");
 
@@ -40,9 +45,13 @@ export function IGRPAppSwitcher({ apps, currentApp, appCenterUrl }: AppSwitcherP
 
   const openAppCenter = () => {
     if (appCenterUrl) {
-      // console.log("Go to App Center")
       window.open(appCenterUrl, "_self", "noopener,noreferrer")
     }
+  }
+
+  const getApps = (app: IGRPApplicationArgs) => {
+    setActiveApp(app);
+    setListApps(apps?.filter(item => item.id !== app.id));
   }
 
   return (
@@ -82,16 +91,16 @@ export function IGRPAppSwitcher({ apps, currentApp, appCenterUrl }: AppSwitcherP
             side={isMobile ? "bottom" : "right"}
             sideOffset={4}
           >
-            {apps && apps.length > 0 && (
+            {listApps && listApps.length > 0 && (
               <>
                 <DropdownMenuLabel className="text-muted-foreground text-xs">
                   Apps
                 </DropdownMenuLabel>
 
-                {apps.map((app) => (
+                {listApps.map((app) => (
                   <DropdownMenuItem
                     key={app.code}
-                    onClick={() => setActiveApp(app)}
+                    onClick={() => getApps(app)}
                     className="gap-2 p-2"
                   >
                     <div className="flex size-6 items-center justify-center rounded-md border">

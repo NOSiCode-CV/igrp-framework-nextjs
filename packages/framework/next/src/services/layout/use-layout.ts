@@ -10,19 +10,20 @@ export async function fetchLayoutData(
   appCode: number | undefined
 ) {
 
-  if (!appCode) throw new Error("Applications Code not found");
-
   let headerData = await getHeaderData();
   let sidebarData = await getSidebarData();
 
-  if (!previewMode) { 
+  if (!previewMode) {
+
+    if (!appCode) throw new Error("Applications Code not found");
+
     const menuItems = await fetchMenus(appCode);
     const user = await fetchCurrentUser();
     const apps = await fetchAppsByUser(user.username);
 
     headerData = {
-      ...headerData,      
-      user      
+      ...headerData,
+      user
     }
 
     sidebarData = {

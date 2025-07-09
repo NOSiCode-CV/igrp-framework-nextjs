@@ -40,18 +40,13 @@ export function IGRPSidebar({ data, ...props }: IGRPAppSidebarProps) {
     appCenterUrl 
   } = data; 
 
-  console.log({ data })
-
-  const currentApp = apps.find(item => item.id === appCode);
-  const othersApps = apps.filter(item => item.id !== appCode);
-
   return (
     <Sidebar collapsible='icon' {...props} variant='sidebar'>
       <SidebarHeader>
       {showAppSwitcher && (
         <IGRPAppSwitcher 
-          apps={othersApps} 
-          currentApp={currentApp}
+          apps={apps}
+          appCode={appCode}           
           appCenterUrl={appCenterUrl} 
         /> 
       )}

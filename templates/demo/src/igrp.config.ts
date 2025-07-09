@@ -9,7 +9,7 @@ import { useMockUser } from '@/temp/users/use-mock-user';
 export function createConfig(config: IGRPLayoutConfigArgs) {
   return buildConfig({
     appCode: process.env.IGRP_APP_CODE || 'GWTEST',
-    previewMode: process.env.IGRP_PREVIEW_MODE === 'true' ? true : false,
+    previewMode: process.env.IGRP_PREVIEW_MODE === 'true' ? true : true,
     layoutMockData: {
       getHeaderData: async () => ({
         user: useMockUser().mockUser,

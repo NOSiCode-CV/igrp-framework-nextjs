@@ -40,31 +40,26 @@ export async function IGRPRootLayout({
     isScaled,
     messages,
   } = layout;
+  
+  let app;
+  let appId;
 
-  const _mockAcessToken = 'eyJhbGciOiJSUzI1NiIsInR5cCIgOiAiSldUIiwia2lkIiA6ICJPZGlURXFBa2tqTE9pNjR5S0hQOEc2aHBzN19qcDRSRTlSdnVIemQ1RElFIn0.eyJleHAiOjE3NTIwODkwNzQsImlhdCI6MTc1MjA2MDI3NCwiYXV0aF90aW1lIjoxNzUyMDYwMjcwLCJqdGkiOiJvbnJ0YWM6NDZkODM2M2EtYjI4Yy00NGY2LWI0ZTYtMzhkODA3MmJmOGVmIiwiaXNzIjoiaHR0cHM6Ly9hY2NvdW50cy1zdGFnZS5pbnNzLmd3L3JlYWxtcy9pZ3JwIiwic3ViIjoiYTY2N2Y2MjctNTYwMi00YWMyLTRhYzItMWZiNjA3MmM3MWM4IiwidHlwIjoiQmVhcmVyIiwiYXpwIjoiYWNjZXNzLW1hbmFnZW1lbnQiLCJzaWQiOiI2ZWJiYjY0YS05YzE5LTRiOGYtODg0Yi0wYWVjNGE2NWViYzMiLCJhY3IiOiIxIiwiYWxsb3dlZC1vcmlnaW5zIjpbImh0dHBzOi8vYXBwcy1zdGFnZS5pbnNzLmd3IiwiaHR0cDovL2xvY2FsaG9zdDozMDAwIl0sInNjb3BlIjoib3BlbmlkIHByb2ZpbGUgZW1haWwiLCJlbWFpbF92ZXJpZmllZCI6dHJ1ZSwibmFtZSI6ImlHUlAgU3VwZXIgQWRtaW4iLCJwcmVmZXJyZWRfdXNlcm5hbWUiOiJzdXBlcmFkbWluIiwiZ2l2ZW5fbmFtZSI6ImlHUlAgU3VwZXIiLCJmYW1pbHlfbmFtZSI6IkFkbWluIiwiZW1haWwiOiJzdXBlcmFkbWluQGlncnAuY3YifQ.WADC6kLW73zpQZSY93kzlg_8uukwjpR1cTAJUHoIda9mlbQ1euh4bVD9TqPqq2cv6Yqdr6Z9nKuw4a1Um7gc-n58hjb0GW0wFcIPsOmIbh9fipPAtnuUk2OFWlDTag3E2r8f4SNjkeK6Tt368J3HtLdu0QLlMas9B683cK00LQ-Lw_qRM0lahSxOit9ENJc7mf0E4shdcW9sapCLBgz3z0rBiiu6U8rK1UlT7WWyfjsc0yDVh9bfer-u34gl_RS3uxONGlMHtfelGYSJozeKZQqaNMPac3XFpbX1-Anm8MmY0JEnm1DwXcbKYEA89WBBYVgAKgJkIIgnvVlBYCjFzg'
+  if (!previewMode) {
+    setAccessClientConfig({
+      token: session?.accessToken || '',
+      baseUrl: apiManagementConfig?.baseUrl || '',
+    });
 
-
-  setAccessClientConfig({
-    token: session?.accessToken || _mockAcessToken,
-    baseUrl: apiManagementConfig?.baseUrl || '',
-  });
-
-  // DELETE CODE 
-
-  const app = await fetchAppByCode(appCode);
-
-  console.log(app);
-
-  const appId = app?.[0]?.id;
+    app = await fetchAppByCode(appCode);
+    appId = app?.[0]?.id;
+  }  
 
   const { headerData, sidebarData } = await fetchLayoutData(
     layoutMockData.getHeaderData,
     layoutMockData.getSidebarData,
     previewMode,
     appId
-  );
-
-  console.log({ headerData, sidebarData });
+  );  
 
   return (
     <html

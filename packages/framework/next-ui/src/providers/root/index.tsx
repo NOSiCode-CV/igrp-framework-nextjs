@@ -1,17 +1,17 @@
-"use client";
+'use client';
 
-import type { Session } from "next-auth";
-import { NextIntlClientProvider } from "next-intl";
+import type { Session } from 'next-auth';
+import { NextIntlClientProvider } from 'next-intl';
 
-import { IGRPSessionProvider } from "./session-provider";
-import { IGRPThemeProvider } from "./theme-provider";
-import { IGRPActiveThemeProvider } from "./active-theme";
-import { IGRPProgressBar } from "./progress-bar";
-import { SidebarInset, SidebarProvider } from "../../components/primitives/sidebar";
-import { Toaster } from "../../components/primitives/sonner";
-import { IGRPSidebar } from "../../components/horizon/sidebar";
-import { IGRPHeader } from "../../components/horizon/header";
-import type { IGRPHeaderDataArgs, IGRPSidebarDataArgs} from "../../types";
+import { IGRPSessionProvider } from './session-provider';
+import { IGRPThemeProvider } from './theme-provider';
+import { IGRPActiveThemeProvider } from './active-theme';
+import { IGRPProgressBar } from './progress-bar';
+import { SidebarInset, SidebarProvider } from '../../components/primitives/sidebar';
+import { Toaster } from '../../components/primitives/sonner';
+import { IGRPSidebar } from '../../components/horizon/sidebar';
+import { IGRPHeader } from '../../components/horizon/header';
+import type { IGRPHeaderDataArgs, IGRPSidebarDataArgs } from '../../types';
 
 export type IGRPRootProvidersArgs = {
   session?: Session | null;
@@ -69,14 +69,12 @@ export const IGRPRootProviders: React.FC<IGRPRootProvidersArgs> = ({
                 <SidebarInset>
                   {showHeader && (
                     <IGRPHeader
-                      data={headerData}                      
+                      data={headerData}
                       languageSelector={languageSelector}
                       locale={locale}
                     />
                   )}
-                  <main className="flex flex-col flex-1 px-6 py-8">
-                    {children}
-                  </main>
+                  <main className="flex flex-col flex-1 px-6 py-8">{children}</main>
                 </SidebarInset>
               </SidebarProvider>
               <Toaster richColors />

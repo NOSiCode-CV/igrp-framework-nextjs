@@ -2,7 +2,7 @@ const localization = {
   defaultLocale: 'pt',
   locales: [
     {
-      code: 'en',      
+      code: 'en',
       label: 'English (English)',
       flag: '🇬🇧',
     },
@@ -20,8 +20,8 @@ const localization = {
       code: 'es',
       label: 'Spanish (Español)',
       flag: '🇪🇸',
-    }  
+    },
   ],
-}
+};
 
-export default localization
+export default localization;

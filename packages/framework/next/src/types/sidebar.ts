@@ -1,4 +1,4 @@
-import type { IGRPApplicationArgs, IGRPMenuItemArgs, IGRPUserArgs } from "./igrp";
+import type { IGRPApplicationArgs, IGRPMenuItemArgs, IGRPUserArgs } from './igrp';
 
 export interface IGRPSidebarDataArgs {
   menuItems: IGRPMenuItemArgs[];

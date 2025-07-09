@@ -3,7 +3,7 @@
 import { useMemo, useCallback } from 'react';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
-import { IGRPIcon } from "@igrp/igrp-framework-react-design-system";
+import { IGRPIcon } from '@igrp/igrp-framework-react-design-system';
 
 import { Alert, AlertDescription } from '../../components/primitives/alert';
 import {
@@ -56,7 +56,7 @@ export function IGRPMenus({ menus = [] }: IGRPMenuArgs) {
     });
 
     childrenMap.forEach((children) =>
-      children.sort((a, b) => (a.position ?? 0) - (b.position ?? 0))
+      children.sort((a, b) => (a.position ?? 0) - (b.position ?? 0)),
     );
 
     return {
@@ -67,13 +67,13 @@ export function IGRPMenus({ menus = [] }: IGRPMenuArgs) {
 
   const getChildren = useCallback(
     (parentId: number): IGRPMenuItemArgs[] => childMap.get(parentId) || [],
-    [childMap]
+    [childMap],
   );
 
   if (menuData === undefined) {
     return (
-      <Alert variant='destructive'>
-        <IGRPIcon iconName='CircleAlert' />
+      <Alert variant="destructive">
+        <IGRPIcon iconName="CircleAlert" />
         <AlertDescription>
           Prototype mode is not enabled and no valid app ID provided.
         </AlertDescription>
@@ -83,15 +83,15 @@ export function IGRPMenus({ menus = [] }: IGRPMenuArgs) {
 
   if (menuData.length === 0) {
     return (
-      <Alert variant='default'>
-        <IGRPIcon iconName='Info' />
+      <Alert variant="default">
+        <IGRPIcon iconName="Info" />
         <AlertDescription>App has no menu items.</AlertDescription>
       </Alert>
     );
   }
 
   return (
-    <SidebarMenu role='navigation'>
+    <SidebarMenu role="navigation">
       {topLevelMenus?.map((menu) => (
         <MenuItemWithSubmenus
           key={`menu-${menu.id}`}
@@ -124,8 +124,8 @@ function MenuItemWithSubmenus({ menu, pathname, childMenus }: MenuItemWithSubmen
           {isExternal ? (
             <a
               href={normalizedUrl}
-              target='_blank'
-              rel='noopener noreferrer'
+              target="_blank"
+              rel="noopener noreferrer"
               aria-label={`${name} (opens in new tab)`}
             >
               {icon && <IGRPIcon iconName={icon} />}
@@ -145,24 +145,20 @@ function MenuItemWithSubmenus({ menu, pathname, childMenus }: MenuItemWithSubmen
   return (
     <>
       {/* Dropdown for collapsed sidebar */}
-      <SidebarMenuItem className='group'>
+      <SidebarMenuItem className="group">
         <DropdownMenu>
           <DropdownMenuTrigger asChild>
             <SidebarMenuButton
               tooltip={name}
-              className='hidden cursor-pointer group-data-[collapsible=icon]:flex'
+              className="hidden cursor-pointer group-data-[collapsible=icon]:flex"
               aria-label={`${name} menu`}
             >
               {icon && <IGRPIcon iconName={icon} />}
             </SidebarMenuButton>
           </DropdownMenuTrigger>
-          <DropdownMenuContent side='right' align='start' className='min-w-48'>
+          <DropdownMenuContent side="right" align="start" className="min-w-48">
             {childMenus.map((subMenu) => (
-              <SubMenuItem
-                key={`dropdown-${id}-${subMenu.id}`}
-                menu={subMenu}
-                variant='dropdown'
-              />
+              <SubMenuItem key={`dropdown-${id}-${subMenu.id}`} menu={subMenu} variant="dropdown" />
             ))}
           </DropdownMenuContent>
         </DropdownMenu>
@@ -170,22 +166,19 @@ function MenuItemWithSubmenus({ menu, pathname, childMenus }: MenuItemWithSubmen
 
       {/* Collapsible for expanded sidebar */}
       <SidebarMenuItem>
-        <Collapsible className='w-full group'>
-          <CollapsibleTrigger
-            className='flex w-full group-data-[collapsible=icon]:hidden'
-            asChild
-          >
+        <Collapsible className="w-full group">
+          <CollapsibleTrigger className="flex w-full group-data-[collapsible=icon]:hidden" asChild>
             <SidebarMenuButton
               tooltip={name}
-              className='w-full cursor-pointer'
+              className="w-full cursor-pointer"
               aria-label={`Toggle ${name} submenu`}
-              aria-expanded='false'
+              aria-expanded="false"
             >
               {icon && <IGRPIcon iconName={icon} />}
               <span>{name}</span>
               <IGRPIcon
-                iconName='ChevronRight'
-                className='ml-auto h-4 w-4 transition-transform duration-200 group-data-[state=open]:rotate-90'
+                iconName="ChevronRight"
+                className="ml-auto h-4 w-4 transition-transform duration-200 group-data-[state=open]:rotate-90"
                 strokeWidth={2}
               />
             </SidebarMenuButton>
@@ -196,7 +189,7 @@ function MenuItemWithSubmenus({ menu, pathname, childMenus }: MenuItemWithSubmen
                 <SubMenuItem
                   key={`collapse-${id}-${subMenu.id}`}
                   menu={subMenu}
-                  variant='collapsible'
+                  variant="collapsible"
                 />
               ))}
             </SidebarMenuSub>
@@ -243,14 +236,14 @@ function SubMenuItem({ menu, variant }: SubMenuItemProps) {
       <DropdownMenuItem
         asChild
         onSelect={(e) => e.preventDefault()}
-        className='cursor-pointer px-2 py-2.5'
+        className="cursor-pointer px-2 py-2.5"
       >
         {isExternal ? (
-          <a {...linkProps} className='w-full flex items-center'>
+          <a {...linkProps} className="w-full flex items-center">
             {linkContent}
           </a>
         ) : (
-          <Link {...linkProps} className='w-full flex items-center'>
+          <Link {...linkProps} className="w-full flex items-center">
             {linkContent}
           </Link>
         )}

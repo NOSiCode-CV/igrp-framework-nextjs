@@ -17,21 +17,10 @@ export function IGRPModeSwitcher() {
   }, [resolvedTheme, setTheme, setMetaColor]);
 
   return (
-    <Button
-      variant='ghost'
-      size='icon'
-      className='group/toggle size-6'
-      onClick={toggleTheme}
-    >
-      <SunIcon
-        className='hidden [html.dark_&]:block'
-        strokeWidth={2}
-      />
-      <MoonIcon
-        className='hidden [html.light_&]:block'
-        strokeWidth={2}
-      />
-      <span className='sr-only'>Toggle theme</span>
+    <Button variant="ghost" size="icon" className="group/toggle size-6" onClick={toggleTheme}>
+      <SunIcon className="hidden [html.dark_&]:block" strokeWidth={2} />
+      <MoonIcon className="hidden [html.light_&]:block" strokeWidth={2} />
+      <span className="sr-only">Toggle theme</span>
     </Button>
   );
 }

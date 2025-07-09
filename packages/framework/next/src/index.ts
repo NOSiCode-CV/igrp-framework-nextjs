@@ -1,9 +1,9 @@
-export { buildConfig } from "./config/build";
+export { buildConfig } from './config/build';
 
 export { IGRPRootLayout } from './layouts/root';
 
-export { buildQueryString } from "./lib/build-query-string";
+export { buildQueryString } from './lib/build-query-string';
 
-export {  initializeIGRPConfig } from './lib/init';
+export { initializeIGRPConfig } from './lib/init';
 
 export * from './types';

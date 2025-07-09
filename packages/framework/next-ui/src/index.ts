@@ -1,5 +1,4 @@
-
-export { META_THEME_COLORS, useMetaColor } from "./hooks/use-meta-color";
+export { META_THEME_COLORS, useMetaColor } from './hooks/use-meta-color';
 
 export { IGRPThemeSelector } from './components/horizon/theme-selector';
 

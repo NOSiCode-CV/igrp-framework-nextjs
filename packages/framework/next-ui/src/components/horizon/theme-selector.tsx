@@ -57,34 +57,25 @@ export function IGRPThemeSelector() {
   const { activeTheme, setActiveTheme } = useIGRPThemeConfig();
 
   return (
-    <div className='flex items-center gap-2'>
-      <Label
-        htmlFor='theme-selector'
-        className='sr-only'
-      >
+    <div className="flex items-center gap-2">
+      <Label htmlFor="theme-selector" className="sr-only">
         Theme
       </Label>
-      <Select
-        value={activeTheme}
-        onValueChange={setActiveTheme}
-      >
+      <Select value={activeTheme} onValueChange={setActiveTheme}>
         <SelectTrigger
-          id='theme-selector'
-          size='sm'
-          className='justify-start *:data-[slot=select-value]:w-12'
+          id="theme-selector"
+          size="sm"
+          className="justify-start *:data-[slot=select-value]:w-12"
         >
-          <span className='text-muted-foreground hidden sm:block'>Select a theme:</span>
-          <span className='text-muted-foreground block sm:hidden'>Theme</span>
-          <SelectValue placeholder='Select a theme' />
+          <span className="text-muted-foreground hidden sm:block">Select a theme:</span>
+          <span className="text-muted-foreground block sm:hidden">Theme</span>
+          <SelectValue placeholder="Select a theme" />
         </SelectTrigger>
-        <SelectContent align='end'>
+        <SelectContent align="end">
           <SelectGroup>
             <SelectLabel>Default</SelectLabel>
             {DEFAULT_THEMES.map((theme) => (
-              <SelectItem
-                key={theme.name}
-                value={theme.value}
-              >
+              <SelectItem key={theme.name} value={theme.value}>
                 {theme.name}
               </SelectItem>
             ))}
@@ -93,10 +84,7 @@ export function IGRPThemeSelector() {
           <SelectGroup>
             <SelectLabel>Scaled</SelectLabel>
             {SCALED_THEMES.map((theme) => (
-              <SelectItem
-                key={theme.name}
-                value={theme.value}
-              >
+              <SelectItem key={theme.name} value={theme.value}>
                 {theme.name}
               </SelectItem>
             ))}

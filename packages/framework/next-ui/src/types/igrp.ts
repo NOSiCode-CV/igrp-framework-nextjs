@@ -11,7 +11,6 @@ export interface IGRPApplicationArgs {
   slug?: string;
 }
 
-
 export interface IGRPUserArgs {
   id: number;
   igrpUsername: string;
@@ -34,7 +33,7 @@ export type IGRPItemStatus = 'ACTIVE' | 'INACTIVE' | 'DELETED';
 
 export type IGRPItemTarget = 'INTERNAL' | 'EXTERNAL';
 
-export type IGRPMenuItemArgs = {  
+export type IGRPMenuItemArgs = {
   id: number;
   name: string;
   type: IGRPMenuType;
@@ -45,5 +44,5 @@ export type IGRPMenuItemArgs = {
   url: string | null;
   parentId: number | null;
   applicationId: number;
-  resourceId: number | null;  
-}
+  resourceId: number | null;
+};

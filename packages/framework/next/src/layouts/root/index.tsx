@@ -1,4 +1,4 @@
-import { IGRPRootProviders, } from '@igrp/framework-next-ui';
+import { IGRPRootProviders } from '@igrp/framework-next-ui';
 
 import { setAccessClientConfig } from '../../lib/api-config';
 import { cn } from '../../lib/utils';
@@ -6,20 +6,17 @@ import type { IGRPConfigArgs } from '../../types';
 import { fetchAppByCode } from '../../services/applications/use-applications';
 import { fetchLayoutData } from '../../services/layout/use-layout';
 
-
 type IGRPRootLocaleLayoutArgs = {
   readonly children: React.ReactNode;
   languageSelector?: React.ReactNode;
   readonly config: Promise<IGRPConfigArgs>;
 };
 
-
 export async function IGRPRootLayout({
   children,
   languageSelector,
-  config
+  config,
 }: IGRPRootLocaleLayoutArgs) {
-
   const layoutConfig = await config;
 
   const {
@@ -28,19 +25,13 @@ export async function IGRPRootLayout({
     layoutMockData,
     font,
     showSidebar,
-    showHeader,    
+    showHeader,
     layout,
-    apiManagementConfig
+    apiManagementConfig,
   } = layoutConfig;
 
-  const {
-    locale,
-    session,
-    activeThemeValue,
-    isScaled,
-    messages,
-  } = layout;
-  
+  const { locale, session, activeThemeValue, isScaled, messages } = layout;
+
   let app;
   let appId;
 
@@ -52,14 +43,14 @@ export async function IGRPRootLayout({
 
     app = await fetchAppByCode(appCode);
     appId = app?.[0]?.id;
-  }  
+  }
 
   const { headerData, sidebarData } = await fetchLayoutData(
     layoutMockData.getHeaderData,
     layoutMockData.getSidebarData,
     previewMode,
-    appId
-  );  
+    appId,
+  );
 
   return (
     <html

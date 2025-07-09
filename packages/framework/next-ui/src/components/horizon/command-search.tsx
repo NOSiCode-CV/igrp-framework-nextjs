@@ -47,65 +47,62 @@ export function IGRPCommandSearch() {
     <>
       <Button
         onClick={() => setOpen(true)}
-        variant='outline'
-        size='lg'
-        className='justify-between focus-visible:outline-none focus-visible:ring-1 border-input px-3'
+        variant="outline"
+        size="lg"
+        className="justify-between focus-visible:outline-none focus-visible:ring-1 border-input px-3"
       >
-        <span className='flex items-center '>
-          <Search className='mr-1 size-3' />
-          <span className='hidden md:inline-block'>Search</span>
+        <span className="flex items-center ">
+          <Search className="mr-1 size-3" />
+          <span className="hidden md:inline-block">Search</span>
         </span>
-        <kbd className='pointer-events-none select-none flex items-center gap-1 rounded border px-1 py-1 font-mono text-[10px] font-medium'>
-          <span className='text-xs'>⌘</span>K
+        <kbd className="pointer-events-none select-none flex items-center gap-1 rounded border px-1 py-1 font-mono text-[10px] font-medium">
+          <span className="text-xs">⌘</span>K
         </kbd>
       </Button>
-      <CommandDialog
-        open={open}
-        onOpenChange={setOpen}
-      >
-        <CommandInput placeholder='Type a command or search...' />
+      <CommandDialog open={open} onOpenChange={setOpen}>
+        <CommandInput placeholder="Type a command or search..." />
         <CommandList>
           <CommandEmpty>No results found.</CommandEmpty>
-          <CommandGroup heading='Suggestions'>
+          <CommandGroup heading="Suggestions">
             <CommandItem onSelect={() => runCommand(() => router.push('/'))}>
-              <Home className='mr-2' />
+              <Home className="mr-2" />
               <span>Home</span>
             </CommandItem>
             <CommandItem onSelect={() => runCommand(() => router.push('/'))}>
-              <Home className='mr-2' />
+              <Home className="mr-2" />
               <span>Library</span>
             </CommandItem>
             <CommandItem onSelect={() => runCommand(() => router.push('/docs'))}>
-              <FileText className='mr-2' />
+              <FileText className="mr-2" />
               <span>Documentation</span>
             </CommandItem>
             <CommandItem onSelect={() => runCommand(() => router.push('/settings'))}>
-              <Settings className='mr-2' />
+              <Settings className="mr-2" />
               <span>Settings</span>
             </CommandItem>
           </CommandGroup>
           <CommandSeparator />
-          <CommandGroup heading='Team'>
+          <CommandGroup heading="Team">
             <CommandItem onSelect={() => runCommand(() => router.push('/team/invite'))}>
-              <UserPlus className='mr-2' />
+              <UserPlus className="mr-2" />
               <span>Invite Members</span>
             </CommandItem>
           </CommandGroup>
           <CommandSeparator />
-          <CommandGroup heading='Profile'>
+          <CommandGroup heading="Profile">
             <CommandItem onSelect={() => runCommand(() => router.push('/profile'))}>
-              <User className='mr-2' />
+              <User className="mr-2" />
               <span>Profile</span>
             </CommandItem>
             <CommandItem onSelect={() => runCommand(() => router.push('/logout'))}>
-              <LogOut className='mr-2' />
+              <LogOut className="mr-2" />
               <span>Logout</span>
             </CommandItem>
           </CommandGroup>
           <CommandSeparator />
-          <CommandGroup heading='Support'>
+          <CommandGroup heading="Support">
             <CommandItem onSelect={() => runCommand(() => router.push('/help'))}>
-              <LifeBuoy className='mr-2' />
+              <LifeBuoy className="mr-2" />
               <span>Help</span>
             </CommandItem>
           </CommandGroup>

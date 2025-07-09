@@ -33,42 +33,33 @@ export function IGRPBreadcrumbs({ className, locale }: BreadcrumbsProps) {
     });
 
   return (
-    <nav
-      aria-label='Breadcrumb'
-      className={cn('flex items-center text-xs', className)}
-    >
-      <ol className='flex items-center flex-wrap gap-1.5'>
-        <li className='flex items-center'>
+    <nav aria-label="Breadcrumb" className={cn('flex items-center text-xs', className)}>
+      <ol className="flex items-center flex-wrap gap-1.5">
+        <li className="flex items-center">
           <Link
             href={homeHref}
-            className='text-muted-foreground hover:text-foreground flex items-center gap-1 transition-colors'
+            className="text-muted-foreground hover:text-foreground flex items-center gap-1 transition-colors"
           >
-            <IGRPIcon iconName='House' className='h-3 w-3' strokeWidth={2} />
-            <span className='sr-only'>Home</span>
+            <IGRPIcon iconName="House" className="h-3 w-3" strokeWidth={2} />
+            <span className="sr-only">Home</span>
           </Link>
         </li>
         {breadcrumbItems.map((item, index) => (
-          <li
-            key={index}
-            className='flex items-center'
-          >
-            <IGRPIcon 
-              iconName='ChevronRight' 
-              className='h-3 w-3 text-muted-foreground'
-              aria-hidden='true'
+          <li key={index} className="flex items-center">
+            <IGRPIcon
+              iconName="ChevronRight"
+              className="h-3 w-3 text-muted-foreground"
+              aria-hidden="true"
               strokeWidth={2}
             />
             {index === breadcrumbItems.length - 1 || !item.href ? (
-              <span
-                className='ml-1.5 font-medium'
-                aria-current='page'
-              >
+              <span className="ml-1.5 font-medium" aria-current="page">
                 {item.label}
               </span>
             ) : (
               <Link
                 href={item.href}
-                className='ml-1.5 text-muted-foreground hover:text-foreground transition-colors'
+                className="ml-1.5 text-muted-foreground hover:text-foreground transition-colors"
               >
                 {item.label}
               </Link>

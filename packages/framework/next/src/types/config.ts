@@ -11,28 +11,28 @@ export type IGRPConfigArgs = {
   };
   font?: string;
   showSidebar?: boolean;
-  showHeader?: boolean;   
+  showHeader?: boolean;
   showLanguageSelector?: boolean;
   layout: {
-    locale: string,
-    session: Session | null,
-    activeThemeValue?: string,
-    isScaled?: boolean,
-    messages?: Record<string, string>,
-  },
+    locale: string;
+    session: Session | null;
+    activeThemeValue?: string;
+    isScaled?: boolean;
+    messages?: Record<string, string>;
+  };
   apiManagementConfig?: {
     baseUrl: string;
     timeout?: number;
     headers?: Record<string, string>;
-  }  
-}
+  };
+};
 
 export type IGRPConfigClient = () => Promise<IGRPConfigArgs>;
 
 export type IGRPLayoutConfigArgs = {
-  locale: string,
-  session: Session | null,
-  activeThemeValue?: string,
-  isScaled?: boolean,
-  messages?: Record<string, string>,
-}
+  locale: string;
+  session: Session | null;
+  activeThemeValue?: string;
+  isScaled?: boolean;
+  messages?: Record<string, string>;
+};

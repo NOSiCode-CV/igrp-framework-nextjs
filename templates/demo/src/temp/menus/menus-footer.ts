@@ -12,6 +12,6 @@ export const IGRP_DEFAULT_MENU_FOOTER: IGRPMenuItemArgs[] = [
     url: '/system-settings',
     parentId: 5,
     applicationId: 1,
-    resourceId: null,    
+    resourceId: null,
   },
 ];

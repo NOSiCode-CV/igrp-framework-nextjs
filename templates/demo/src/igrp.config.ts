@@ -1,6 +1,6 @@
-import { buildConfig } from "@igrp/framework-next";
+import { buildConfig } from '@igrp/framework-next';
 import { IGRPLayoutConfigArgs } from '@igrp/framework-next';
-import { fontVariables } from "@/lib/fonts";
+import { fontVariables } from '@/lib/fonts';
 import { useMockApps } from '@/temp/applications/use-mock-apps';
 import { useMockMenus } from '@/temp/menus/use-mock-menus';
 import { useMockMenusFooter } from '@/temp/menus/use-mock-menus-footer';
@@ -8,8 +8,8 @@ import { useMockUser } from '@/temp/users/use-mock-user';
 
 export function createConfig(config: IGRPLayoutConfigArgs) {
   return buildConfig({
-    appCode: process.env.IGRP_APP_CODE || 'GWTEST',
-    previewMode: process.env.IGRP_PREVIEW_MODE === 'true' ? true : true,
+    appCode: process.env.IGRP_APP_CODE || '',
+    previewMode: process.env.IGRP_PREVIEW_MODE === 'true' ? true : false,
     layoutMockData: {
       getHeaderData: async () => ({
         user: useMockUser().mockUser,
@@ -18,7 +18,7 @@ export function createConfig(config: IGRPLayoutConfigArgs) {
         showNotifications: true,
         showLanguageSelector: true,
         showUser: true,
-        showThemeSwitcher: true
+        showThemeSwitcher: true,
       }),
       getSidebarData: async () => ({
         menuItems: useMockMenus().mockMenus,
@@ -27,8 +27,8 @@ export function createConfig(config: IGRPLayoutConfigArgs) {
         defaultOpen: true,
         showAppSwitcher: true,
         apps: useMockApps().mockApps,
-        appCenterUrl: process.env.IGRP_APP_CENTER_URL || 'https://igrp.cv'
-      })
+        appCenterUrl: process.env.IGRP_APP_CENTER_URL || '',
+      }),
     },
     font: fontVariables,
     showSidebar: true,
@@ -38,7 +38,7 @@ export function createConfig(config: IGRPLayoutConfigArgs) {
       ...config,
     },
     apiManagementConfig: {
-      baseUrl: process.env.IGRP_APP_MANAGER_API || "https://api-gateway-stage.inss.gw/access-manager",
-    }    
+      baseUrl: process.env.IGRP_APP_MANAGER_API || '',
+    },
   });
 }

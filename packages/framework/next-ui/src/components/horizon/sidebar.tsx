@@ -2,7 +2,7 @@
 
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
-import { IGRPIcon } from "@igrp/igrp-framework-react-design-system"
+import { IGRPIcon } from '@igrp/igrp-framework-react-design-system';
 import {
   Sidebar,
   SidebarContent,
@@ -25,31 +25,18 @@ interface IGRPAppSidebarProps extends React.ComponentProps<typeof Sidebar> {
 }
 
 export function IGRPSidebar({ data, ...props }: IGRPAppSidebarProps) {
-
-  if (!data) throw new Error("Sidebar data is required");
+  if (!data) throw new Error('Sidebar data is required');
 
   const pathname = usePathname();
 
-  const { 
-    footerItems, 
-    menuItems,
-    user,
-    showAppSwitcher,
-    apps,
-    appCode,
-    appCenterUrl 
-  } = data; 
+  const { footerItems, menuItems, user, showAppSwitcher, apps, appCode, appCenterUrl } = data;
 
   return (
-    <Sidebar collapsible='icon' {...props} variant='sidebar'>
+    <Sidebar collapsible="icon" {...props} variant="sidebar">
       <SidebarHeader>
-      {showAppSwitcher && (
-        <IGRPAppSwitcher 
-          apps={apps}
-          appCode={appCode}           
-          appCenterUrl={appCenterUrl} 
-        /> 
-      )}
+        {showAppSwitcher && (
+          <IGRPAppSwitcher apps={apps} appCode={appCode} appCenterUrl={appCenterUrl} />
+        )}
       </SidebarHeader>
 
       <SidebarContent>
@@ -66,10 +53,7 @@ export function IGRPSidebar({ data, ...props }: IGRPAppSidebarProps) {
           {footerItems?.map(({ name, url, icon }, index) => (
             <SidebarMenuButton
               asChild
-              isActive={
-                pathname === url ||
-                (url !== '/' && pathname?.startsWith(url || ''))
-              }
+              isActive={pathname === url || (url !== '/' && pathname?.startsWith(url || ''))}
               tooltip={name}
               key={`footer-menu-${index}`}
             >

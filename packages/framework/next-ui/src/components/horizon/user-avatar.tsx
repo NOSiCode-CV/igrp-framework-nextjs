@@ -16,10 +16,7 @@ export function IGRPUserAvatar({
 }: UserAvatarProps) {
   return (
     <Avatar className={className}>
-      <AvatarImage
-        src={image || undefined}
-        alt={alt || 'Current User'}
-      />
+      <AvatarImage src={image || undefined} alt={alt || 'Current User'} />
       <AvatarFallback className={fallbackClass}>{fallbackContent}</AvatarFallback>
     </Avatar>
   );

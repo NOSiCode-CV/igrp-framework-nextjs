@@ -29,17 +29,12 @@ export function LanguageSelector() {
   return (
     <DropdownMenu>
       <DropdownMenuTrigger asChild>
-        <Button
-          variant='ghost'
-          size='icon'
-          className='size-6'
-          disabled={isPending}
-        >
+        <Button variant="ghost" size="icon" className="size-6" disabled={isPending}>
           <Globe strokeWidth={2} />
-          <span className='sr-only'>Select language</span>
+          <span className="sr-only">Select language</span>
         </Button>
       </DropdownMenuTrigger>
-      <DropdownMenuContent align='end'>
+      <DropdownMenuContent align="end">
         {localization.locales.map((lang) => (
           <DropdownMenuItem
             key={lang.code}
@@ -47,7 +42,7 @@ export function LanguageSelector() {
             className={lang.code === locale ? 'bg-accent' : ''}
             disabled={isPending || lang.code === locale}
           >
-            <span className='mr-1'>{lang.flag}</span>
+            <span className="mr-1">{lang.flag}</span>
             {lang.label}
           </DropdownMenuItem>
         ))}

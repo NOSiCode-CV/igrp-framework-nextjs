@@ -17,7 +17,7 @@ export const IGRP_MOCK_APPS_DATA: IGRPApplicationArgs[] = [
     lastModifiedBy: 'admin',
     lastModifiedDate: '2024-03-01T14:20:00Z',
   },
-  { 
+  {
     id: 2,
     code: 'APPIGRPDEMO2',
     name: 'IGRP Demo 2',
@@ -48,5 +48,5 @@ export const IGRP_MOCK_APPS_DATA: IGRPApplicationArgs[] = [
     createdDate: '2024-01-15T10:30:00Z',
     lastModifiedBy: 'admin',
     lastModifiedDate: '2024-03-01T14:20:00Z',
-  }
+  },
 ];

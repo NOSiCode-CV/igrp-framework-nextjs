@@ -1,18 +1,18 @@
 'use server';
 
-import { cookies } from "next/headers";
-import { notFound } from "next/navigation";
-import { hasLocale } from "next-intl";
-import { getLocale, getMessages, setRequestLocale } from "next-intl/server";
+import { cookies } from 'next/headers';
+import { notFound } from 'next/navigation';
+import { hasLocale } from 'next-intl';
+import { getLocale, getMessages, setRequestLocale } from 'next-intl/server';
 
-import { routing } from "@/i18n/routing";
-import { getSession } from "./auth";
+import { routing } from '@/i18n/routing';
+import { getSession } from './auth';
 
 export async function setLocale() {
   const locale = await getLocale();
   if (!hasLocale(routing.locales, locale)) notFound();
   setRequestLocale(locale);
-  return locale
+  return locale;
 }
 
 export async function getTheme() {

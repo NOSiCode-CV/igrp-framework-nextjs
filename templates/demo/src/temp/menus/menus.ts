@@ -12,7 +12,7 @@ export const IGRP_DEFAULT_MENU: IGRPMenuItemArgs[] = [
     url: null,
     parentId: null,
     applicationId: 1,
-    resourceId: null,    
+    resourceId: null,
   },
   {
     id: 2,
@@ -25,7 +25,7 @@ export const IGRP_DEFAULT_MENU: IGRPMenuItemArgs[] = [
     url: '/system-settings',
     parentId: 1,
     applicationId: 1,
-    resourceId: null,    
+    resourceId: null,
   },
   {
     id: 3,
@@ -38,7 +38,7 @@ export const IGRP_DEFAULT_MENU: IGRPMenuItemArgs[] = [
     url: '/users',
     parentId: 1,
     applicationId: 1,
-    resourceId: null,    
+    resourceId: null,
   },
   {
     id: 4,
@@ -51,7 +51,7 @@ export const IGRP_DEFAULT_MENU: IGRPMenuItemArgs[] = [
     url: '/roles',
     parentId: null,
     applicationId: 1,
-    resourceId: null,    
+    resourceId: null,
   },
   // {
   //   id: 9,
@@ -81,7 +81,7 @@ export const IGRP_DEFAULT_MENU: IGRPMenuItemArgs[] = [
     url: null,
     parentId: null,
     applicationId: 1,
-    resourceId: null,    
+    resourceId: null,
   },
   {
     id: 6,
@@ -94,6 +94,6 @@ export const IGRP_DEFAULT_MENU: IGRPMenuItemArgs[] = [
     url: '/system-settings',
     parentId: 5,
     applicationId: 1,
-    resourceId: null,    
+    resourceId: null,
   },
 ];

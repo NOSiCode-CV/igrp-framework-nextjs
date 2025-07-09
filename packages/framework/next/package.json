@@ -19,7 +19,9 @@
     "clean:packages": "rimraf node_modules",
     "build:swc": "swc ./src -d dist --config-file .swcrc --strip-leading-paths",
     "build:babel": "rimraf dist_optimized && babel dist --out-dir dist_optimized --source-maps --extensions .ts,.js,.tsx,.jsx,.cjs,.mjs && rimraf dist && move dist_optimized dist",
-    "build:prod": "pnpm build:swc && pnpm build:babel"
+    "build:prod": "pnpm build:swc && pnpm build:babel",
+    "deploy:next": "pnpm build && yarn publish --registry=https://sonatype.nosi.cv/repository/igrp/ --tag latest",
+    "format": "prettier --write ."
   },
   "peerDependencies": {
     "next": "15.3.3",
@@ -34,7 +36,7 @@
     "@igrp/framework-next-types": "workspace:*",
     "@igrp/platform-access-management-client-ts": "0.0.1-alpha.4",
     "clsx": "^2.1.1",
-    "dotenv": "^16.5.0",    
+    "dotenv": "^16.5.0",
     "next-intl": "^4.1.0",
     "next-themes": "^0.4.6",
     "tailwind-merge": "^3.3.1"

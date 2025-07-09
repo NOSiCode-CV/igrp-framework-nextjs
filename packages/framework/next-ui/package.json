@@ -6,7 +6,9 @@
     "build:babel": "rimraf dist_optimized && babel dist --out-dir dist_optimized --source-maps --extensions .ts,.js,.tsx,.jsx,.cjs,.mjs && rimraf dist && move dist_optimized dist && cpy  src/*.css dist/",
     "build:prod": "pnpm tailwind:build && pnpm build:swc && pnpm build:babel",
     "tailwind:watch": "pnpm dlx @tailwindcss/cli -i ./src/index.css -o ./src/styles.css --watch",
-    "tailwind:build": "pnpm dlx @tailwindcss/cli -i ./src/index.css -o ./src/styles.css"
+    "tailwind:build": "pnpm dlx @tailwindcss/cli -i ./src/index.css -o ./src/styles.css",
+    "deploy:next-ui": "pnpm build && yarn publish --registry=https://sonatype.nosi.cv/repository/igrp/ --tag latest",
+    "format": "prettier --write ."
   },
   "peerDependencies": {
     "next": "15.3.3",
@@ -74,8 +76,9 @@
     "rimraf": "^6.0.1",
     "tailwindcss": "^4.0.0",
     "tw-animate-css": "^1.3.4",
-    "typescript": "~5.8.3"
-  },  
+    "typescript": "^5.8.3",
+    "prettier": "^3.5.3"
+  },
   "type": "module",
   "publishConfig": {
     "exports": {

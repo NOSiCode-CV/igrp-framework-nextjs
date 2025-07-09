@@ -1,11 +1,11 @@
 import type { Session } from 'next-auth';
-import { IGRPHeaderDataArgs } from './header';
-import { IGRPSidebarDataArgs } from './sidebar';
+import type { IGRPHeaderDataArgs } from './header';
+import type { IGRPSidebarDataArgs } from './sidebar';
 
 export type IGRPConfigArgs = {
   appCode: string;
   previewMode: boolean;
-  layoutMockData?: {
+  layoutMockData: {
     getHeaderData: () => Promise<IGRPHeaderDataArgs>;
     getSidebarData: () => Promise<IGRPSidebarDataArgs>;
   };

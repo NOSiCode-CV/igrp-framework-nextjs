@@ -14,7 +14,13 @@
     "composite": true,
     "noEmit": false,
     "emitDeclarationOnly": false,
-    "moduleResolution": "bundler"
+    "moduleResolution": "bundler",
+    "baseUrl": ".",
+    "paths": {
+      "@/*": [
+        "./src/*"
+      ]
+    },
   },
   "include": ["src"],
   "exclude": ["node_modules"]

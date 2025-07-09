@@ -18,7 +18,7 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger
 } from '../primitives/dropdown-menu';
-import type { IGRPApplicationArgs } from '@/types/globals';
+import type { IGRPApplicationArgs } from '../../types';
 
 interface AppSwitcherProps {
   apps?: IGRPApplicationArgs[], // TODO: fetching from API

@@ -11,7 +11,7 @@ import { SidebarInset, SidebarProvider } from "../../components/primitives/sideb
 import { Toaster } from "../../components/primitives/sonner";
 import { IGRPSidebar } from "../../components/horizon/sidebar";
 import { IGRPHeader } from "../../components/horizon/header";
-import type { IGRPHeaderDataArgs, IGRPSidebarDataArgs} from "../../types/globals";
+import type { IGRPHeaderDataArgs, IGRPSidebarDataArgs} from "../../types";
 
 export type IGRPRootProvidersArgs = {
   session?: Session | null;
@@ -69,8 +69,7 @@ export const IGRPRootProviders: React.FC<IGRPRootProvidersArgs> = ({
                 <SidebarInset>
                   {showHeader && (
                     <IGRPHeader
-                      data={headerData}
-                      showLanguageSelector={showLanguageSelector}
+                      data={headerData}                      
                       languageSelector={languageSelector}
                       locale={locale}
                     />

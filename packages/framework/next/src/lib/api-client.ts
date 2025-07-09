@@ -1,51 +1,20 @@
-// 'use server';
+import { AccessManagementClient } from '@igrp/platform-access-management-client-ts';
+import { getAccessClientConfig } from './api-config';
 
-// import { serverSession } from '@/actions/auth';
-// import { redirect } from 'next/navigation';
+let clientInstance: AccessManagementClient | null = null;
 
-// interface ExtendedRequestInit extends RequestInit {
-//   isTextResponse?: boolean;
-// }
+export async function getAccessClient(): Promise<AccessManagementClient> {
+  if (clientInstance) return clientInstance;
 
-// export async function callApi<T>(endpoint: string, options: ExtendedRequestInit = {}): Promise<T> {
-//   const API_URL = process.env.APP_MANAGER_API ?? '';
-//   const session = await serverSession();
+  const { baseUrl, token, timeout = 45000 } = getAccessClientConfig();
 
-//   if (!session?.accessToken) {
-//     redirect('/login');
-//   }
+  clientInstance = AccessManagementClient.create({
+    baseUrl,
+    timeout,
+    headers: {
+      Authorization: `Bearer ${token}`,
+    },
+  });
 
-//   const url = `${API_URL}${endpoint}`;
-
-//   const baseHeaders: Record<string, string> = {
-//     'Content-Type': 'application/json',
-//     Authorization: `Bearer ${session.accessToken}`,
-//     ...((options.headers as Record<string, string>) || {}),
-//   };
-
-//   // Remove Content-Type for FormData
-//   if (options.body instanceof FormData) {
-//     delete baseHeaders['Content-Type'];
-//   }
-
-//   const response = await fetch(url, {
-//     ...options,
-//     headers: baseHeaders,
-//   });
-
-//   if (!response.ok) {
-//     const errorData = await response.json().catch(() => ({}));
-//     throw new Error(errorData.message || `API Error (${response.status})`);
-//   }
-
-//   if (options.isTextResponse) {
-//     return (await response.text()) as unknown as T;
-//   }
-
-//   // Handle 204 No Content (delete operations) or empty responses
-//   if (response.status === 204 || response.headers.get('content-length') === '0') {
-//     return {} as T;
-//   }
-
-//   return (await response.json()) as T;
-// }
+  return clientInstance;
+}

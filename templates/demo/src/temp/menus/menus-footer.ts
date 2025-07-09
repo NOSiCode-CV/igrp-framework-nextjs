@@ -1,4 +1,4 @@
-import { IGRPMenuItemArgs } from '@igrp/framework-next-types';
+import { IGRPMenuItemArgs } from '@igrp/framework-next';
 
 export const IGRP_DEFAULT_MENU_FOOTER: IGRPMenuItemArgs[] = [
   {
@@ -12,10 +12,6 @@ export const IGRP_DEFAULT_MENU_FOOTER: IGRPMenuItemArgs[] = [
     url: '/system-settings',
     parentId: 5,
     applicationId: 1,
-    resourceId: null,
-    createdBy: 'admin',
-    createdDate: '2022-01-01T12:00:00.000Z',
-    lastModifiedBy: 'admin',
-    lastModifiedDate: '2022-01-01T12:00:00.000Z',
+    resourceId: null,    
   },
 ];

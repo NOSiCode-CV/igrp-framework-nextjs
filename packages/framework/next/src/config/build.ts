@@ -1,4 +1,4 @@
-import type { IGRPConfigArgs } from "@/types/globals"
+import type { IGRPConfigArgs } from "../types"
 
 // TODO: create Sanitizer for config
 

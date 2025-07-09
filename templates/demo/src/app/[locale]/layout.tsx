@@ -43,7 +43,6 @@ export default async function RootLayout({
 
   return (
     <IGRPRootLayout      
-      // serverFunction={serverFunction}
       languageSelector={<LanguageSelector />}
       config={config}
     >

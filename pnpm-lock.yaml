@@ -1017,14 +1017,14 @@ packages:
   '@date-fns/tz@1.2.0':
     resolution: {integrity: sha512-LBrd7MiJZ9McsOgxqWX7AaxrDjcFVjWH/tIKJd7pnR7McaslGYOP1QmmiBXdJH/H/yLCT+rcQ7FaPBUxRGUtrg==}
 
-  '@emnapi/core@1.4.3':
-    resolution: {integrity: sha512-4m62DuCE07lw01soJwPiBGC0nAww0Q+RY70VZ+n49yDIO13yyinhbWCeNnaob0lakDtWQzSdtNWzJeOJt2ma+g==}
+  '@emnapi/core@1.4.4':
+    resolution: {integrity: sha512-A9CnAbC6ARNMKcIcrQwq6HeHCjpcBZ5wSx4U01WXCqEKlrzB9F9315WDNHkrs2xbx7YjjSxbUYxuN6EQzpcY2g==}
 
-  '@emnapi/runtime@1.4.3':
-    resolution: {integrity: sha512-pBPWdu6MLKROBX05wSNKcNb++m5Er+KQ9QkB+WVM+pW2Kx9hoSrVTnu3BdkI5eBLZoKu/J6mW/B6i6bJB2ytXQ==}
+  '@emnapi/runtime@1.4.4':
+    resolution: {integrity: sha512-hHyapA4A3gPaDCNfiqyZUStTMqIkKRshqPIuDOXv1hcBnD4U3l8cP0T1HMCfGRxQ6V64TGCcoswChANyOAwbQg==}
 
-  '@emnapi/wasi-threads@1.0.2':
-    resolution: {integrity: sha512-5n3nTJblwRi8LlXkJ9eBzu+kZR8Yxcc7ubakyQTFzPMtIhFpUBRbsnc2Dv88IZDIbCDlBiWrknhB4Lsz7mg6BA==}
+  '@emnapi/wasi-threads@1.0.3':
+    resolution: {integrity: sha512-8K5IFFsQqF9wQNJptGbS6FNKgUTsSRYnTqNCG1vPP8jFdjSv18n2mQfJpkt2Oibo9iBEzcDnDxNwKTzC7svlJw==}
 
   '@esbuild/aix-ppc64@0.25.5':
     resolution: {integrity: sha512-9o3TMmpmftaCMepOdA5k/yDw8SfInyzWWTjYTFCX3kPSDJMROQTb8jg+h9Cnwnmm1vOzvxN7gIfB5V2ewpjtGA==}
@@ -3217,8 +3217,8 @@ packages:
     resolution: {integrity: sha512-XgZ0pFcakEUlbwQEVNg3+QAis1FyTL3Qel9FYy8pSkQqoG3PNoT0bOCQtOXcOkur21r2Eq2kI+IE+gsmAEVlYw==}
     engines: {node: '>=0.10.0'}
 
-  core-js-compat@3.43.0:
-    resolution: {integrity: sha512-2GML2ZsCc5LR7hZYz4AXmjQw8zuy2T//2QntwdnpuYI7jteT6GVYJL7F6C2C57R7gSYrcqVW3lAALefdbhBLDA==}
+  core-js-compat@3.44.0:
+    resolution: {integrity: sha512-JepmAj2zfl6ogy34qfWtcE7nHKAJnKsQFRn++scjVS2bZFllwptzw61BZcZFYBPpUznLfAvh0LGhxKppk04ClA==}
 
   core-js@2.6.12:
     resolution: {integrity: sha512-Kb2wC0fvsWfQrgk8HU5lW6U/Lcs8+9aaYcy4ZFc6DDlo4nZ7n70dEgE5rtR0oG6ufKDUnrwfWL1mXR5ljDatrQ==}
@@ -6569,7 +6569,7 @@ snapshots:
       babel-plugin-polyfill-corejs2: 0.4.14(@babel/core@7.28.0)
       babel-plugin-polyfill-corejs3: 0.13.0(@babel/core@7.28.0)
       babel-plugin-polyfill-regenerator: 0.6.5(@babel/core@7.28.0)
-      core-js-compat: 3.43.0
+      core-js-compat: 3.44.0
       semver: 6.3.1
     transitivePeerDependencies:
       - supports-color
@@ -6655,18 +6655,18 @@ snapshots:
 
   '@date-fns/tz@1.2.0': {}
 
-  '@emnapi/core@1.4.3':
+  '@emnapi/core@1.4.4':
     dependencies:
-      '@emnapi/wasi-threads': 1.0.2
+      '@emnapi/wasi-threads': 1.0.3
       tslib: 2.8.1
     optional: true
 
-  '@emnapi/runtime@1.4.3':
+  '@emnapi/runtime@1.4.4':
     dependencies:
       tslib: 2.8.1
     optional: true
 
-  '@emnapi/wasi-threads@1.0.2':
+  '@emnapi/wasi-threads@1.0.3':
     dependencies:
       tslib: 2.8.1
     optional: true
@@ -7006,7 +7006,7 @@ snapshots:
 
   '@img/sharp-wasm32@0.34.2':
     dependencies:
-      '@emnapi/runtime': 1.4.3
+      '@emnapi/runtime': 1.4.4
     optional: true
 
   '@img/sharp-win32-arm64@0.34.2':
@@ -7132,8 +7132,8 @@ snapshots:
 
   '@napi-rs/wasm-runtime@0.2.11':
     dependencies:
-      '@emnapi/core': 1.4.3
-      '@emnapi/runtime': 1.4.3
+      '@emnapi/core': 1.4.4
+      '@emnapi/runtime': 1.4.4
       '@tybys/wasm-util': 0.9.0
     optional: true
 
@@ -8507,7 +8507,7 @@ snapshots:
     dependencies:
       '@babel/core': 7.28.0
       '@babel/helper-define-polyfill-provider': 0.6.5(@babel/core@7.28.0)
-      core-js-compat: 3.43.0
+      core-js-compat: 3.44.0
     transitivePeerDependencies:
       - supports-color
 
@@ -8783,7 +8783,7 @@ snapshots:
 
   copy-descriptor@0.1.1: {}
 
-  core-js-compat@3.43.0:
+  core-js-compat@3.44.0:
     dependencies:
       browserslist: 4.25.1
 

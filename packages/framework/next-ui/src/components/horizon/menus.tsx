@@ -1,6 +1,6 @@
 'use client';
 
-import { Fragment, useMemo, useCallback } from 'react';
+import { useMemo, useCallback } from 'react';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 import { IGRPIcon } from "@igrp/igrp-framework-react-design-system";
@@ -26,36 +26,27 @@ import {
 import { Alert, AlertDescription } from '../../components/primitives/alert';
 // import { Skeleton } from '../../components/primitives/skeleton';
 import { isExternalUrl, normalizeUrl } from '../../lib/url';
-import type { IGRPMenuItemArgs } from '../../types/globals';
+import type { IGRPMenuItemArgs } from '../../types';
 
-export type IGRPMenuProps = {
-  id: number;
-  name: string;
-  url: string | null;
-  parentId: number | null;
-  position: number;
-  icon: string;
-  children?: IGRPMenuProps[];
+export type IGRPMenuArgs = {
+  menus?: IGRPMenuItemArgs[];
 };
 
-type IGRPMenuArgs = {
-  menus: IGRPMenuItemArgs[] | undefined
-}
-
-export function IGRPMenus({ menus }: IGRPMenuArgs) {
-  const pathname = usePathname();  
+export function IGRPMenus({ menus = [] }: IGRPMenuArgs) {
+  const pathname = usePathname();
 
   const menuData = useMemo(() => {
-    return menus && menus.length > 0 ? menus : undefined;
+    return menus.length > 0 ? menus : undefined;
   }, [menus]);
 
   const { topLevelMenus, childMap } = useMemo(() => {
-    const topLevel = menuData?.filter((menu) => menu.parentId === null)
-      .sort((a, b) => a.position - b.position);
+    const topLevel = menuData
+      ?.filter((menu) => menu.parentId === null)
+      .sort((a, b) => (a.position ?? 0) - (b.position ?? 0));
 
-    const childrenMap = new Map<number, IGRPMenuProps[]>();
+    const childrenMap = new Map<number, IGRPMenuItemArgs[]>();
 
-    menus?.forEach((menu) => {
+    menuData?.forEach((menu) => {
       if (menu.parentId !== null) {
         if (!childrenMap.has(menu.parentId)) {
           childrenMap.set(menu.parentId, []);
@@ -64,24 +55,25 @@ export function IGRPMenus({ menus }: IGRPMenuArgs) {
       }
     });
 
-    childrenMap.forEach((children) => children.sort((a, b) => a.position - b.position));
+    childrenMap.forEach((children) =>
+      children.sort((a, b) => (a.position ?? 0) - (b.position ?? 0))
+    );
 
     return {
       topLevelMenus: topLevel,
       childMap: childrenMap,
     };
-  }, [menus]);
+  }, [menuData]);
 
   const getChildren = useCallback(
-    (parentId: number): IGRPMenuProps[] => childMap.get(parentId) || [],
-    [childMap],
+    (parentId: number): IGRPMenuItemArgs[] => childMap.get(parentId) || [],
+    [childMap]
   );
 
-  // TODO: check for prototype mode
-  if (menuData === undefined || menuData.length === 0) {
+  if (menuData === undefined) {
     return (
       <Alert variant='destructive'>
-        <IGRPIcon iconName='AlertCircle' />
+        <IGRPIcon iconName='CircleAlert' />
         <AlertDescription>
           Prototype mode is not enabled and no valid app ID provided.
         </AlertDescription>
@@ -89,29 +81,17 @@ export function IGRPMenus({ menus }: IGRPMenuArgs) {
     );
   }
 
-  // if (isLoading) {
-  //   return (
-  //     <SidebarMenu className={className}>
-  //       {Array.from({ length: 5 }).map((_, index) => (
-  //         <SidebarMenuItem key={`skeleton-${index}`}>
-  //           <Skeleton className='h-10 w-full' />
-  //         </SidebarMenuItem>
-  //       ))}
-  //     </SidebarMenu>
-  //   );
-  // }
-
-  // if (error) {
-  //   return (
-  //     <Alert variant='destructive'>
-  //       <AlertCircle className='h-4 w-4' />
-  //       <AlertDescription>Failed to load menu items. Please try again later.</AlertDescription>
-  //     </Alert>
-  //   );
-  // }
+  if (menuData.length === 0) {
+    return (
+      <Alert variant='default'>
+        <IGRPIcon iconName='Info' />
+        <AlertDescription>App has no menu items.</AlertDescription>
+      </Alert>
+    );
+  }
 
   return (
-    <SidebarMenu>
+    <SidebarMenu role='navigation'>
       {topLevelMenus?.map((menu) => (
         <MenuItemWithSubmenus
           key={`menu-${menu.id}`}
@@ -125,9 +105,9 @@ export function IGRPMenus({ menus }: IGRPMenuArgs) {
 }
 
 interface MenuItemWithSubmenusProps {
-  menu: IGRPMenuProps;
+  menu: IGRPMenuItemArgs;
   pathname: string;
-  childMenus: IGRPMenuProps[];
+  childMenus: IGRPMenuItemArgs[];
 }
 
 function MenuItemWithSubmenus({ menu, pathname, childMenus }: MenuItemWithSubmenusProps) {
@@ -139,15 +119,11 @@ function MenuItemWithSubmenus({ menu, pathname, childMenus }: MenuItemWithSubmen
 
   if (!hasChildren) {
     return (
-      <SidebarMenuItem key={`${id}-menu-no-children`}>
-        <SidebarMenuButton
-          asChild
-          tooltip={name}
-          isActive={isActive}
-        >
+      <SidebarMenuItem>
+        <SidebarMenuButton asChild tooltip={name} isActive={isActive}>
           {isExternal ? (
             <a
-              href={normalizedUrl || ''}
+              href={normalizedUrl}
               target='_blank'
               rel='noopener noreferrer'
               aria-label={`${name} (opens in new tab)`}
@@ -156,10 +132,7 @@ function MenuItemWithSubmenus({ menu, pathname, childMenus }: MenuItemWithSubmen
               <span>{name}</span>
             </a>
           ) : (
-            <Link
-              href={normalizedUrl || ''}
-              aria-label={name}
-            >
+            <Link href={normalizedUrl} aria-label={name}>
               {icon && <IGRPIcon iconName={icon} />}
               <span>{name}</span>
             </Link>
@@ -170,12 +143,9 @@ function MenuItemWithSubmenus({ menu, pathname, childMenus }: MenuItemWithSubmen
   }
 
   return (
-    <Fragment key={`${id}-menu-w-children`}>
-      {/* Dropdown variant for collapsed sidebar */}
-      <SidebarMenuItem
-        key={`${id}-dropdown-variant`}
-        className='group'
-      >
+    <>
+      {/* Dropdown for collapsed sidebar */}
+      <SidebarMenuItem className='group'>
         <DropdownMenu>
           <DropdownMenuTrigger asChild>
             <SidebarMenuButton
@@ -186,11 +156,7 @@ function MenuItemWithSubmenus({ menu, pathname, childMenus }: MenuItemWithSubmen
               {icon && <IGRPIcon iconName={icon} />}
             </SidebarMenuButton>
           </DropdownMenuTrigger>
-          <DropdownMenuContent
-            side='right'
-            align='start'
-            className='min-w-48'
-          >
+          <DropdownMenuContent side='right' align='start' className='min-w-48'>
             {childMenus.map((subMenu) => (
               <SubMenuItem
                 key={`dropdown-${id}-${subMenu.id}`}
@@ -202,8 +168,8 @@ function MenuItemWithSubmenus({ menu, pathname, childMenus }: MenuItemWithSubmen
         </DropdownMenu>
       </SidebarMenuItem>
 
-      {/* Collapsible variant for expanded sidebar */}
-      <SidebarMenuItem key={`${id}-collapsible-variant`}>
+      {/* Collapsible for expanded sidebar */}
+      <SidebarMenuItem>
         <Collapsible className='w-full group'>
           <CollapsibleTrigger
             className='flex w-full group-data-[collapsible=icon]:hidden'
@@ -213,11 +179,12 @@ function MenuItemWithSubmenus({ menu, pathname, childMenus }: MenuItemWithSubmen
               tooltip={name}
               className='w-full cursor-pointer'
               aria-label={`Toggle ${name} submenu`}
+              aria-expanded='false'
             >
               {icon && <IGRPIcon iconName={icon} />}
               <span>{name}</span>
-              <IGRPIcon 
-                iconName='ChevronRight' 
+              <IGRPIcon
+                iconName='ChevronRight'
                 className='ml-auto h-4 w-4 transition-transform duration-200 group-data-[state=open]:rotate-90'
                 strokeWidth={2}
               />
@@ -236,19 +203,19 @@ function MenuItemWithSubmenus({ menu, pathname, childMenus }: MenuItemWithSubmen
           </CollapsibleContent>
         </Collapsible>
       </SidebarMenuItem>
-    </Fragment>
+    </>
   );
 }
 
 interface SubMenuItemProps {
-  menu: IGRPMenuProps;
+  menu: IGRPMenuItemArgs;
   variant: 'dropdown' | 'collapsible';
 }
 
 function SubMenuItem({ menu, variant }: SubMenuItemProps) {
   const { name, url, icon } = menu;
   const isExternal = url ? isExternalUrl(url) : false;
-  const normalizedUrl = url ? normalizeUrl(url) : '';  
+  const normalizedUrl = url ? normalizeUrl(url) : '';
 
   const iconElement = icon && variant === 'dropdown' && <IGRPIcon iconName={icon} />;
 
@@ -261,13 +228,13 @@ function SubMenuItem({ menu, variant }: SubMenuItemProps) {
 
   const linkProps = isExternal
     ? {
-        href: normalizedUrl || '',
+        href: normalizedUrl,
         target: '_blank' as const,
         rel: 'noopener noreferrer' as const,
         'aria-label': `${name} (opens in new tab)`,
       }
     : {
-        href: normalizedUrl || '',
+        href: normalizedUrl,
         'aria-label': name,
       };
 
@@ -279,17 +246,11 @@ function SubMenuItem({ menu, variant }: SubMenuItemProps) {
         className='cursor-pointer px-2 py-2.5'
       >
         {isExternal ? (
-          <a
-            {...linkProps}
-            className='w-full flex items-center'
-          >
+          <a {...linkProps} className='w-full flex items-center'>
             {linkContent}
           </a>
         ) : (
-          <Link
-            {...linkProps}
-            className='w-full flex items-center'
-          >
+          <Link {...linkProps} className='w-full flex items-center'>
             {linkContent}
           </Link>
         )}

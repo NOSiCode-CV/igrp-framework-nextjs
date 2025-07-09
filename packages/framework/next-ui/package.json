@@ -7,7 +7,7 @@
     "build:prod": "pnpm tailwind:build && pnpm build:swc && pnpm build:babel",
     "tailwind:watch": "pnpm dlx @tailwindcss/cli -i ./src/index.css -o ./src/styles.css --watch",
     "tailwind:build": "pnpm dlx @tailwindcss/cli -i ./src/index.css -o ./src/styles.css",
-    "deploy:next-ui": "pnpm build && yarn publish --registry=https://sonatype.nosi.cv/repository/igrp/ --tag latest",
+    "deploy:next-ui": "yarn publish --registry=https://sonatype.nosi.cv/repository/igrp/ --tag latest",
     "format": "prettier --write ."
   },
   "peerDependencies": {

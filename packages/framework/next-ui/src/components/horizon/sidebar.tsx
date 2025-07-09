@@ -25,32 +25,50 @@ interface IGRPAppSidebarProps extends React.ComponentProps<typeof Sidebar> {
 }
 
 export function IGRPSidebar({ data, ...props }: IGRPAppSidebarProps) {
+
+  if (!data) throw new Error("Sidebar data is required");
+
   const pathname = usePathname();
 
-  const navFooter = data?.footerItems;
-  const menus = data?.menuItems;
-  const user = data?.user;
-  const showAppSwitcher = data?.showAppSwitcher;
-  const apps = data?.apps;
+  const { 
+    footerItems, 
+    menuItems,
+    user,
+    showAppSwitcher,
+    apps,
+    appCode,
+    appCenterUrl 
+  } = data; 
+
+  console.log({ data })
+
+  const currentApp = apps.find(item => item.id === appCode);
+  const othersApps = apps.filter(item => item.id !== appCode);
 
   return (
     <Sidebar collapsible='icon' {...props} variant='sidebar'>
       <SidebarHeader>
-      {showAppSwitcher && <IGRPAppSwitcher apps={apps} currentApp={apps?.[0]} /> }
+      {showAppSwitcher && (
+        <IGRPAppSwitcher 
+          apps={othersApps} 
+          currentApp={currentApp}
+          appCenterUrl={appCenterUrl} 
+        /> 
+      )}
       </SidebarHeader>
 
       <SidebarContent>
         <SidebarGroup>
           <SidebarGroupLabel>Main</SidebarGroupLabel>
           <SidebarGroupContent>
-            <IGRPMenus menus={menus} />
+            <IGRPMenus menus={menuItems} />
           </SidebarGroupContent>
         </SidebarGroup>
       </SidebarContent>
 
       <SidebarFooter>
         <SidebarMenu>
-          {navFooter?.map(({ name, url, icon }, index) => (
+          {footerItems?.map(({ name, url, icon }, index) => (
             <SidebarMenuButton
               asChild
               isActive={

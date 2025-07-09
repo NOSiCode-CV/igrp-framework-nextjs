@@ -1,4 +1,4 @@
-import { getAccessClient } from "@/lib/api-client";
+import { getAccessClient } from "../../lib/api-client";
 import { mapperUser } from "./mapper";
 
 export const fetchCurrentUser = async () => {

@@ -4,6 +4,8 @@ import { useMemo, useCallback } from 'react';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 import { IGRPIcon } from "@igrp/igrp-framework-react-design-system";
+
+import { Alert, AlertDescription } from '../../components/primitives/alert';
 import {
   Collapsible,
   CollapsibleContent,
@@ -23,8 +25,6 @@ import {
   SidebarMenuSubButton,
   SidebarMenuSubItem,
 } from '../../components/primitives/sidebar';
-import { Alert, AlertDescription } from '../../components/primitives/alert';
-// import { Skeleton } from '../../components/primitives/skeleton';
 import { isExternalUrl, normalizeUrl } from '../../lib/url';
 import type { IGRPMenuItemArgs } from '../../types';
 

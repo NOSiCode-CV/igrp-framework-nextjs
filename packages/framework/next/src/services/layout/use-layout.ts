@@ -1,13 +1,16 @@
-import type { IGRPHeaderDataArgs, IGRPSidebarDataArgs } from "../../types";
+import { fetchAppsByUser } from "../applications/use-applications";
 import { fetchCurrentUser } from "../users/use-user";
 import { fetchMenus } from "../menus/use-menus";
+import type { IGRPHeaderDataArgs, IGRPSidebarDataArgs } from "../../types";
 
 export async function fetchLayoutData(
   getHeaderData: () => Promise<IGRPHeaderDataArgs>,
   getSidebarData: () => Promise<IGRPSidebarDataArgs>,
   previewMode: boolean,
-  appCode: number
+  appCode: number | undefined
 ) {
+
+  if (!appCode) throw new Error("Applications Code not found");
 
   let headerData = await getHeaderData();
   let sidebarData = await getSidebarData();
@@ -15,16 +18,20 @@ export async function fetchLayoutData(
   if (!previewMode) { 
     const menuItems = await fetchMenus(appCode);
     const user = await fetchCurrentUser();
+    const apps = await fetchAppsByUser(user.username);
 
     headerData = {
-      ...headerData,
-      user
+      ...headerData,      
+      user      
     }
 
     sidebarData = {
       ...sidebarData,
       user,
-      menuItems
+      menuItems,
+      apps,
+      appCode,
+      showPreviewMode: previewMode
     }
   }
 

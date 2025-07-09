@@ -20,15 +20,17 @@ export function IGRPHeader({
   data,
 }: IGRPHeaderProps) {
 
-  console.log({ data })
+  if (!data) return null; 
 
-  const user = data?.user;
-  const showBreadcrumbs = data?.showBreadcrumb || true;
-  const showSearch = data?.showSearch || true;
-  const showLanguageSelector = data?.showLanguageSelector || true;
-  const showNotifications = data?.showNotifications || true;
-  const showThemeSwitcher = data?.showThemeSwitcher || true;
-  const showUser = data?.showUser || true;
+  const {
+    user,
+    showBreadcrumbs,
+    showSearch,
+    showLanguageSelector,
+    showNotifications,
+    showThemeSwitcher,
+    showUser    
+  } = data;  
 
   return (
     <header className='bg-background sticky top-0 inset-x-0 isolate z-10 border-b flex items-center justify-between gap-2 px-4 py-2'>

@@ -6,5 +6,8 @@ export interface IGRPSidebarDataArgs {
   user?: IGRPUserArgs;
   footerItems?: IGRPMenuItemArgs[];
   showAppSwitcher?: boolean;
-  apps?: IGRPApplicationArgs[];
+  apps: IGRPApplicationArgs[];
+  appCode?: number;
+  showPreviewMode?: boolean;
+  appCenterUrl: string;
 }

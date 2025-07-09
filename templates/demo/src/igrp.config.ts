@@ -9,7 +9,7 @@ import { useMockUser } from '@/temp/users/use-mock-user';
 export function createConfig(config: IGRPLayoutConfigArgs) {
   return buildConfig({
     appCode: process.env.IGRP_APP_CODE || 'GWTEST',
-    previewMode: process.env.IGRP_PREVIEW_MODE === 'true' ? true : true,
+    previewMode: process.env.IGRP_PREVIEW_MODE === 'true' ? true : false,
     layoutMockData: {
       getHeaderData: async () => ({
         user: useMockUser().mockUser,
@@ -26,7 +26,8 @@ export function createConfig(config: IGRPLayoutConfigArgs) {
         user: useMockUser().mockUser,
         defaultOpen: true,
         showAppSwitcher: true,
-        apps: useMockApps().mockApps
+        apps: useMockApps().mockApps,
+        appCenterUrl: process.env.IGRP_APP_CENTER_URL || 'https://igrp.cv'
       })
     },
     font: fontVariables,
@@ -38,6 +39,6 @@ export function createConfig(config: IGRPLayoutConfigArgs) {
     },
     apiManagementConfig: {
       baseUrl: process.env.IGRP_APP_MANAGER_API || "https://api-gateway-stage.inss.gw/access-manager",
-    }
+    }    
   });
 }

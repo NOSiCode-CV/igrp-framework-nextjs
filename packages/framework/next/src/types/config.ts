@@ -24,7 +24,7 @@ export type IGRPConfigArgs = {
     baseUrl: string;
     timeout?: number;
     headers?: Record<string, string>;
-  }
+  }  
 }
 
 export type IGRPConfigClient = () => Promise<IGRPConfigArgs>;

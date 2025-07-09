@@ -1,7 +1,7 @@
-import { getAccessClient } from "@/lib/api-client";
+import { getAccessClient } from "../../lib/api-client";
 import { mapperApplications } from "./mapper";
 
-export const fetchAppByCode = async (appCode: string) => {
+export async function fetchAppByCode(appCode: string) {
   try {
     if (!appCode) throw new Error("Applications Code not found");
 
@@ -16,13 +16,13 @@ export const fetchAppByCode = async (appCode: string) => {
   }
 }
 
-export const fetchAppsByUser = async (username: string) => {
+export async function fetchAppsByUser(username: string) {
   try {
     if (!username) throw new Error("User not found");
 
     const client = await getAccessClient();
     const result = await client.applications.getApplicationsByUser(username);
-    const apps = result.data.map(mapperApplications)
+    const apps = mapperApplications(result)
     return apps;
 
   } catch (error) {

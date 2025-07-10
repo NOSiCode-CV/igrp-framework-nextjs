@@ -1,6 +1,6 @@
 {
   "name": "@igrp/framework-next-types",
-  "version": "0.0.1-alpha.2",
+  "version": "0.0.0-alpha.3",
   "type": "module",
   "description": "IGRP Framework for Next.js - Types hared",
   "keywords": [
@@ -21,7 +21,7 @@
   ],
   "scripts": {
     "dev": "tsc --watch",
-    "build": "tsc --emitDeclarationOnly && vite build",
+    "build": "tsc && vite build",
     "release": "pnpm build && yarn publish --registry=https://sonatype.nosi.cv/repository/igrp/ --tag latest",
     "format": "prettier --write ."
   },

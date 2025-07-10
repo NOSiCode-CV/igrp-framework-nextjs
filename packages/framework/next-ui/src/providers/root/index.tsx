@@ -47,7 +47,6 @@ export const IGRPRootProviders: React.FC<IGRPRootProvidersArgs> = ({
   showHeader,
   sidebarData,
   headerData,
-  showLanguageSelector,
   languageSelector,
 }) => {
   return (

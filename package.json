@@ -1,6 +1,6 @@
 {
   "name": "igrp-framework-nextjs",
-  "version": "0.0.1",
+  "version": "0.0.0-alpha.3",
   "workspaces": [
     "packages/**",
     "templates/**"

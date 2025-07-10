@@ -1,4 +1,4 @@
-import type { IGRPConfigArgs } from '../types';
+import type { IGRPConfigArgs } from '@igrp/framework-next-types';
 
 // TODO: create Sanitizer for config
 

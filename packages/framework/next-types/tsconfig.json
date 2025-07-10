@@ -1,27 +1,28 @@
 {
   "compilerOptions": {
-    "target": "ES2023",
-    "module": "ESNext",
-    "strict": true,
+    "target": "esnext",
+    "module": "esnext",
+    "moduleResolution": "node",
+    "allowSyntheticDefaultImports": true,
     "esModuleInterop": true,
+    "allowJs": true,
+    "strict": true,
+    "noEmit": false,
+    "isolatedModules": true,
     "skipLibCheck": true,
     "forceConsistentCasingInFileNames": true,
-    "outDir": "./dist",
-    "rootDir": "./src",  
+    "resolveJsonModule": true,
     "declaration": true,
     "declarationMap": true,
-    "isolatedModules": true,
-    "composite": true,
-    "noEmit": false,
-    "emitDeclarationOnly": false,
-    "moduleResolution": "bundler",
+    "emitDeclarationOnly": true,
+    "outDir": "dist",
+    "rootDir": "src",
     "baseUrl": ".",
     "paths": {
-      "@/*": [
-        "./src/*"
-      ]
+      "@/*": ["./src/*"]
     },
+    "composite": true
   },
-  "include": ["src"],
-  "exclude": ["node_modules"]
+  "include": ["src/**/*"],
+  "exclude": ["node_modules", "dist"]
 }

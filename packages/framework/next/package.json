@@ -1,6 +1,6 @@
 {
   "name": "@igrp/framework-next",
-  "version": "0.0.0-alpha.1",
+  "version": "0.0.0-alpha.2",
   "description": "IGRP Framework for Next.js - Layout components and data loading hooks",
   "keywords": [
     "igrp",
@@ -20,7 +20,7 @@
     "build:swc": "swc ./src -d dist --config-file .swcrc --strip-leading-paths",
     "build:babel": "rimraf dist_optimized && babel dist --out-dir dist_optimized --source-maps --extensions .ts,.js,.tsx,.jsx,.cjs,.mjs && rimraf dist && move dist_optimized dist",
     "build:prod": "pnpm build:swc && pnpm build:babel",
-    "deploy:next": "yarn publish --registry=https://sonatype.nosi.cv/repository/igrp/ --tag latest",
+    "release": "yarn publish --registry=https://sonatype.nosi.cv/repository/igrp/ --tag latest",
     "format": "prettier --write ."
   },
   "peerDependencies": {
@@ -35,8 +35,7 @@
     "@igrp/framework-next-types": "workspace:*",
     "@igrp/framework-next-ui": "workspace:*",
     "@igrp/platform-access-management-client-ts": "0.0.1-alpha.4",
-    "clsx": "^2.1.1",
-    "dotenv": "^16.5.0",
+    "clsx": "^2.1.1",    
     "next-intl": "^4.1.0",
     "next-themes": "^0.4.6",
     "tailwind-merge": "^3.3.1"

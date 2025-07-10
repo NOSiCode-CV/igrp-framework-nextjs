@@ -1,5 +1,5 @@
-import type { IGRPUserArgs } from '../../types';
 import type { IGRPUserDTO } from '@igrp/platform-access-management-client-ts';
+import type { IGRPUserArgs } from '@igrp/framework-next-types';
 
 const mapUser = (user: IGRPUserDTO): IGRPUserArgs => ({
   id: user.id as number,

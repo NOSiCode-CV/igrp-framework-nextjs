@@ -1,11 +1,12 @@
+import type { IGRPHeaderDataArgs } from '@igrp/framework-next-types';
+
 import { Separator } from '../primitives/separator';
 import { SidebarTrigger } from '../primitives/sidebar';
 import { IGRPBreadcrumbs } from './breadcrumbs';
 import { IGRPCommandSearch } from './command-search';
 import { IGRPModeSwitcher } from './mode-switcher';
-import type { IGRPHeaderDataArgs } from '../../types';
-import { Notifications } from './notifications';
 import { IGRPNavUserHeader } from './nav-user-header';
+import { Notifications } from './notifications';
 
 interface IGRPHeaderProps {
   data?: IGRPHeaderDataArgs;

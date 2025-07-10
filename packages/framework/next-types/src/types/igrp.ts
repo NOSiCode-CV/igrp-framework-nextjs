@@ -3,16 +3,12 @@ export interface IGRPApplicationArgs {
   code: string;
   name: string;
   description?: string;
-  status: 'ACTIVE' | 'INACTIVE' | 'DELETED';
-  type: 'INTERNAL' | 'EXTERNAL';
-  owner: string;
+  status: IGRPItemStatus;
+  type: IGRPItemTarget;
+  owner?: string;
   picture?: string;
   url?: string | null;
   slug?: string;
-  createdBy?: string;
-  createdDate?: string;
-  lastModifiedBy?: string;
-  lastModifiedDate?: string;
 }
 
 export interface IGRPUserArgs {
@@ -31,20 +27,22 @@ export interface IGRPUserArgs {
   picture?: string | null;
 }
 
-export interface IGRPMenuItemArgs {  
+export type IGRPMenuType = 'FOLDER' | 'MENU_PAGE' | 'EXTERNAL_PAGE';
+
+export type IGRPItemStatus = 'ACTIVE' | 'INACTIVE' | 'DELETED';
+
+export type IGRPItemTarget = 'INTERNAL' | 'EXTERNAL';
+
+export type IGRPMenuItemArgs = {
   id: number;
   name: string;
-  type: 'FOLDER' | 'MENU_PAGE' | 'EXTERNAL_PAGE';
-  position: number;
-  icon: string;
-  status: 'ACTIVE' | 'INACTIVE' | 'DELETED';
-  target: 'INTERNAL' | 'EXTERNAL';
+  type: IGRPMenuType;
+  position: number | null;
+  icon: string | undefined;
+  status: IGRPItemStatus;
+  target: IGRPItemTarget;
   url: string | null;
   parentId: number | null;
   applicationId: number;
   resourceId: number | null;
-  createdBy: string;
-  createdDate: string;
-  lastModifiedBy: string;
-  lastModifiedDate: string;
-}
+};

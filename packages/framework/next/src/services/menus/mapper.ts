@@ -1,5 +1,5 @@
-import type { IGRPItemStatus, IGRPItemTarget, IGRPMenuItemArgs, IGRPMenuType } from '../../types';
 import type { MenuEntryDTO } from '@igrp/platform-access-management-client-ts';
+import type { IGRPItemStatus, IGRPItemTarget, IGRPMenuItemArgs, IGRPMenuType } from '@igrp/framework-next-types';
 
 const mapMenu = (menu: MenuEntryDTO): IGRPMenuItemArgs => ({
   id: menu.id as number,

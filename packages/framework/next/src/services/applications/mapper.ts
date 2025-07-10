@@ -1,4 +1,4 @@
-import type { IGRPApplicationArgs, IGRPItemStatus } from '../../types';
+import type { IGRPApplicationArgs, IGRPItemStatus } from '@igrp/framework-next-types';
 import type { ApplicationDTO } from '@igrp/platform-access-management-client-ts';
 
 const mapApplication = (app: ApplicationDTO): IGRPApplicationArgs => ({

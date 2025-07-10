@@ -2,16 +2,16 @@
 
 import type { Session } from 'next-auth';
 import { NextIntlClientProvider } from 'next-intl';
+import type { IGRPHeaderDataArgs, IGRPSidebarDataArgs } from '@igrp/framework-next-types';
 
-import { IGRPSessionProvider } from './session-provider';
-import { IGRPThemeProvider } from './theme-provider';
 import { IGRPActiveThemeProvider } from './active-theme';
 import { IGRPProgressBar } from './progress-bar';
+import { IGRPSessionProvider } from './session-provider';
+import { IGRPThemeProvider } from './theme-provider';
 import { SidebarInset, SidebarProvider } from '../../components/primitives/sidebar';
-import { Toaster } from '../../components/primitives/sonner';
-import { IGRPSidebar } from '../../components/horizon/sidebar';
 import { IGRPHeader } from '../../components/horizon/header';
-import type { IGRPHeaderDataArgs, IGRPSidebarDataArgs } from '../../types';
+import { IGRPSidebar } from '../../components/horizon/sidebar';
+import { Toaster } from '../../components/primitives/sonner';
 
 export type IGRPRootProvidersArgs = {
   session?: Session | null;

@@ -1,7 +1,7 @@
+import type { IGRPHeaderDataArgs, IGRPSidebarDataArgs } from '@igrp/framework-next-types';
 import { fetchAppsByUser } from '../applications/use-applications';
-import { fetchCurrentUser } from '../users/use-user';
 import { fetchMenus } from '../menus/use-menus';
-import type { IGRPHeaderDataArgs, IGRPSidebarDataArgs } from '../../types';
+import { fetchCurrentUser } from '../users/use-user';
 
 export async function fetchLayoutData(
   getHeaderData: () => Promise<IGRPHeaderDataArgs>,

@@ -24,16 +24,6 @@ export function generateStaticParams() {
   return routing.locales.map((locale) => ({ locale }));
 }
 
-// const serverFunction: IGRPConfigClient = async () => {
-//   "use server";
-
-//   return initializeIGRPConfig({
-//     appCode: process.env.IGRP_APP_CODE ? process.env.IGRP_APP_CODE : 'demoTestFDL',
-//     previewMode: process.env.IGRP_PREVIEW_MODE === 'true' ? true : false,
-//     layoutMockData: igrpMockDataProvider,
-//   });
-// };
-
 export default async function RootLayout({ children }: Readonly<{ children: React.ReactNode }>) {
   const layoutConfig = await configLayout();
   const config = createConfig(layoutConfig);

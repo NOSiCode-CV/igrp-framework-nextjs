@@ -3,8 +3,8 @@
 import { useState } from 'react';
 import Image from 'next/image';
 import { IGRPIcon } from '@igrp/igrp-framework-react-design-system';
+import type { IGRPApplicationArgs } from '@igrp/framework-next-types';
 
-import { SidebarMenu, SidebarMenuButton, SidebarMenuItem, useSidebar } from '../primitives/sidebar';
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -13,7 +13,8 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from '../primitives/dropdown-menu';
-import type { IGRPApplicationArgs } from '../../types';
+import { SidebarMenu, SidebarMenuButton, SidebarMenuItem, useSidebar } from '../primitives/sidebar';
+
 
 interface AppSwitcherProps {
   apps?: IGRPApplicationArgs[];

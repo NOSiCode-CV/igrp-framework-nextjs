@@ -2,9 +2,9 @@ import { IGRPRootProviders } from '@igrp/framework-next-ui';
 
 import { setAccessClientConfig } from '../../lib/api-config';
 import { cn } from '../../lib/utils';
-import type { IGRPConfigArgs } from '../../types';
 import { fetchAppByCode } from '../../services/applications/use-applications';
 import { fetchLayoutData } from '../../services/layout/use-layout';
+import type { IGRPConfigArgs } from '../../types/config';
 
 type IGRPRootLocaleLayoutArgs = {
   readonly children: React.ReactNode;
@@ -36,6 +36,10 @@ export async function IGRPRootLayout({
   let appId;
 
   if (!previewMode) {
+    if (!apiManagementConfig || !apiManagementConfig.baseUrl) {
+      throw new Error("Preview Mode is not enabled, when not enabled, API Management config is required.");
+    };
+
     setAccessClientConfig({
       token: session?.accessToken || '',
       baseUrl: apiManagementConfig?.baseUrl || '',

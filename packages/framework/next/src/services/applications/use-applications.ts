@@ -3,7 +3,9 @@ import { mapperApplications } from './mapper';
 
 export async function fetchAppByCode(appCode: string) {
   try {
-    if (!appCode) throw new Error('Applications Code not found');
+    if (!appCode) throw new Error(
+      'Preview Mode is not enabled, when not enabled, Applicattion code is required. Applications Code not found'
+    );
 
     const client = await getAccessClient();
     const result = await client.applications.getApplications({ code: appCode });

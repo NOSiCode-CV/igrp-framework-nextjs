@@ -3,11 +3,11 @@
 import { useMemo, useCallback } from 'react';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
+import type { IGRPMenuItemArgs } from '@igrp/framework-next-types';
 import { IGRPIcon } from '@igrp/igrp-framework-react-design-system';
 
 import { Alert, AlertDescription } from '../../components/primitives/alert';
-import {
-  Collapsible,
+import { Collapsible,
   CollapsibleContent,
   CollapsibleTrigger,
 } from '../../components/primitives/collapsible';
@@ -26,7 +26,6 @@ import {
   SidebarMenuSubItem,
 } from '../../components/primitives/sidebar';
 import { isExternalUrl, normalizeUrl } from '../../lib/url';
-import type { IGRPMenuItemArgs } from '../../types';
 
 export type IGRPMenuArgs = {
   menus?: IGRPMenuItemArgs[];

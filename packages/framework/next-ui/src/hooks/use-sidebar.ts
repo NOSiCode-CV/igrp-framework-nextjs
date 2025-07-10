@@ -1,7 +1,7 @@
-import type { SidebarData } from '../../types/globals';
+import type { IGRPSidebarDataArgs } from '@igrp/framework-next-types';
 
 export function useSidebarData() {
-  const mockData: SidebarData = {
+  const mockData: IGRPSidebarDataArgs = {
     menuItems: [
       {
         id: 'dashboard',

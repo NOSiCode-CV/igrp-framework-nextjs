@@ -2,6 +2,8 @@
 
 import Link from 'next/link';
 import { Bell, ChevronsUpDown, LogOut, User as UserIcon } from 'lucide-react';
+import type { IGRPUserArgs } from '@igrp/framework-next-types';
+
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -13,7 +15,6 @@ import {
 import { SidebarMenu, SidebarMenuButton, SidebarMenuItem, useSidebar } from '../primitives/sidebar';
 import { IGRPUserAvatar } from './user-avatar';
 import { getInitials } from '../../lib/getInitials';
-import type { IGRPUserArgs } from '../../types/globals';
 
 interface NavUserProps {
   user?: IGRPUserArgs;

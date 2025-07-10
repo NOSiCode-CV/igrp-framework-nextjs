@@ -1,11 +1,15 @@
-import { IGRPUserArgs } from "./igrp";
+import type { IGRPUserArgs } from './igrp';
 
 export interface IGRPHeaderDataArgs {
   user: IGRPUserArgs;
   notifications?: IGRPNotificationArgs[];
   quickActions?: IGRPQuickActionArgs[];
+  showBreadcrumbs?: boolean;
   showSearch?: boolean;
-  showBreadcrumb?: boolean;
+  showNotifications?: boolean;
+  showThemeSwitcher?: boolean;
+  showLanguageSelector?: boolean;
+  showUser?: boolean;
 }
 
 export interface IGRPNotificationArgs {

@@ -16,7 +16,7 @@
     "lint": "pnpm -r run lint",
     "clean": "pnpm -r run clean",
     "clean:framework": "pnpm --filter @igrp/framework-next clean",
-    "format:framework": "pnpm --filter @igrp/framework-next format",
+    "format": "pnpm -r run format",
     "publish:framework": "pnpm run:framework && pnpm --filter @igrp/framework-next deploy:next && pnpm --filter @igrp/framework-next-ui deploy:next-ui"
   },
   "devDependencies": {

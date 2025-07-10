@@ -3,6 +3,8 @@
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 import { IGRPIcon } from '@igrp/igrp-framework-react-design-system';
+import type { IGRPSidebarDataArgs } from '@igrp/framework-next-types';
+
 import {
   Sidebar,
   SidebarContent,
@@ -16,9 +18,8 @@ import {
   SidebarRail,
 } from '../primitives/sidebar';
 import { IGRPAppSwitcher } from './app-switcher';
-import { IGRPNavUser } from './nav-user';
-import type { IGRPSidebarDataArgs } from '../../types';
 import { IGRPMenus } from './menus';
+import { IGRPNavUser } from './nav-user';
 
 interface IGRPAppSidebarProps extends React.ComponentProps<typeof Sidebar> {
   data?: IGRPSidebarDataArgs;

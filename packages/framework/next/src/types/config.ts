@@ -1,6 +1,6 @@
+import type { IGRPHeaderDataArgs, IGRPSidebarDataArgs } from '@igrp/framework-next-types';
 import type { Session } from 'next-auth';
-import type { IGRPHeaderDataArgs } from './header';
-import type { IGRPSidebarDataArgs } from './sidebar';
+
 
 export type IGRPConfigArgs = {
   appCode: string;

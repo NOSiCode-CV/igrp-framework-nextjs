@@ -1,13 +1,12 @@
 'use client';
 
-import * as React from 'react';
+import { createContext, useContext, useEffect, useState } from "react";
 
 const COOKIE_NAME = 'igrp_active_theme';
 const DEFAULT_THEME = 'default';
 
 function setThemeCookie(theme: string) {
   if (typeof window === 'undefined') return;
-
   document.cookie = `${COOKIE_NAME}=${theme}; path=/; max-age=31536000; SameSite=Lax; ${window.location.protocol === 'https:' ? 'Secure;' : ''}`;
 }
 
@@ -16,7 +15,7 @@ type ThemeContextArgs = {
   setActiveTheme: (theme: string) => void;
 };
 
-const ThemeContext = React.createContext<ThemeContextArgs | undefined>(undefined);
+const ThemeContext = createContext<ThemeContextArgs | undefined>(undefined);
 
 export type IGRPActiveThemeProviderArgs = {
   children: React.ReactNode;
@@ -24,9 +23,9 @@ export type IGRPActiveThemeProviderArgs = {
 };
 
 export function IGRPActiveThemeProvider({ children, initialTheme }: IGRPActiveThemeProviderArgs) {
-  const [activeTheme, setActiveTheme] = React.useState<string>(() => initialTheme || DEFAULT_THEME);
+  const [activeTheme, setActiveTheme] = useState<string>(() => initialTheme || DEFAULT_THEME);
 
-  React.useEffect(() => {
+  useEffect(() => {
     setThemeCookie(activeTheme);
 
     Array.from(document.body.classList)
@@ -51,7 +50,7 @@ export function IGRPActiveThemeProvider({ children, initialTheme }: IGRPActiveTh
 
 // eslint-disable-next-line react-refresh/only-export-components
 export function useIGRPThemeConfig() {
-  const context = React.useContext(ThemeContext);
+  const context = useContext(ThemeContext);
   if (context === undefined) {
     throw new Error('useThemeConfig must be used within an ActiveThemeProvider');
   }

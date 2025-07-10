@@ -1,5 +1,5 @@
 import { buildConfig } from '@igrp/framework-next';
-import { IGRPLayoutConfigArgs } from '@igrp/framework-next-types';
+import { IGRPLayoutConfigArgs } from '@igrp/framework-next';
 import { fontVariables } from '@/lib/fonts';
 import { useMockApps } from '@/temp/applications/use-mock-apps';
 import { useMockMenus } from '@/temp/menus/use-mock-menus';

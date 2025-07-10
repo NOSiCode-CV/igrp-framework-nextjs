@@ -1,5 +1,5 @@
 import type { IGRPHeaderDataArgs, IGRPSidebarDataArgs } from '@igrp/framework-next-types';
-import type { Session } from 'next-uth';
+import type { Session } from 'next-auth';
 
 
 export type IGRPConfigArgs = {

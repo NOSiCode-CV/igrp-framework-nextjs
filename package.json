@@ -12,6 +12,8 @@
     "build:framework-types": "pnpm --filter @igrp/framework-next-types build",
     "dev:demo": "pnpm --filter demo dev",
     "dev:framework": "pnpm --filter @igrp/framework-next dev",
+    "build:demo": "pnpm --filter demo build",
+    "start:demo": "pnpm --filter demo start",
     "run:framework": "pnpm build:framework-types && pnpm build:framework-ui && pnpm build:framework",
     "lint": "pnpm -r run lint",
     "clean": "pnpm -r run clean",

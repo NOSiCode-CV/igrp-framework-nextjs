@@ -26,6 +26,7 @@
       "@/*": ["./src/*"]
     },
     "composite": true,
+    "typeRoots": ["./types", "./node_modules/@types"]
   },
   "include": ["src", "types"],
   "exclude": ["src/**/__docs__", "src/**/__test__", "src/test", "node_modules"]

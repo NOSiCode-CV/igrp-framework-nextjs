@@ -1,3 +1,9 @@
+import type { Session as DefaultSession, User as NextAuthUser } from "next-auth";
+import type { JWT as DefaultJWT } from "next-auth/jwt";
+import { IGRPHeaderDataArgs } from "./header";
+import { IGRPSidebarDataArgs } from "./sidebar";
+
+
 export interface IGRPApplicationArgs {
   id: number;
   code: string;
@@ -45,4 +51,60 @@ export type IGRPMenuItemArgs = {
   parentId: number | null;
   applicationId: number;
   resourceId: number | null;
+};
+
+export interface ExtendedSession extends DefaultSession {
+  accessToken?: string;
+  idToken?: string;
+  expiresAt?: number;
+  error?: string;
+  user?: {
+    id?: string;
+  } & DefaultSession["user"];
+}
+
+export interface ExtendedJWT extends DefaultJWT {
+  accessToken?: string;
+  refreshToken?: string;
+  idToken?: string;
+  expiresAt?: number;
+  error?: "RefreshAccessTokenError" | string;
+  user?: {
+    id?: string;
+  } & NextAuthUser;
+}
+
+export type IGRPConfigArgs = {
+  appCode: string;
+  previewMode: boolean;
+  layoutMockData: {
+    getHeaderData: () => Promise<IGRPHeaderDataArgs>;
+    getSidebarData: () => Promise<IGRPSidebarDataArgs>;
+  };
+  font?: string;
+  showSidebar?: boolean;
+  showHeader?: boolean;
+  showLanguageSelector?: boolean;
+  layout: {
+    locale: string;
+    session: ExtendedSession | null;
+    activeThemeValue?: string;
+    isScaled?: boolean;
+    messages?: Record<string, string>;
+  };
+  apiManagementConfig?: {
+    baseUrl: string;
+    timeout?: number;
+    headers?: Record<string, string>;
+  };
+};
+
+export type IGRPConfigClient = () => Promise<IGRPConfigArgs>;
+
+export type IGRPLayoutConfigArgs = {
+  locale: string;
+  session: ExtendedSession | null;
+  activeThemeValue?: string;
+  isScaled?: boolean;
+  messages?: Record<string, string>;
 };

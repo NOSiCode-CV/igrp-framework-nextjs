@@ -1,7 +1,8 @@
 import { IGRP_DEFAULT_MENU } from '@/temp/menus/menus';
 
-export const useMockMenus = (appCode?: string) => {
-  return {
+export const getMockMenus = (appCode?: string) => {
+   console.log({ appCode})
+   return {
     mockMenus: IGRP_DEFAULT_MENU,
   };
 };

@@ -4,7 +4,7 @@ import { setAccessClientConfig } from '../../lib/api-config';
 import { cn } from '../../lib/utils';
 import { fetchAppByCode } from '../../services/applications/use-applications';
 import { fetchLayoutData } from '../../services/layout/use-layout';
-import type { IGRPConfigArgs } from '../../types/config';
+import type { IGRPConfigArgs } from '@igrp/framework-next-types';
 
 type IGRPRootLocaleLayoutArgs = {
   readonly children: React.ReactNode;

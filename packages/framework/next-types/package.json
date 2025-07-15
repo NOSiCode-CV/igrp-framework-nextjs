@@ -27,6 +27,7 @@
   },
   "devDependencies": {
     "@types/node": "^24.0.12",
+    "next-auth": "^4.24.0",
     "typescript": "^5.8.3",
     "vite-plugin-dts": "4.5.4",
     "prettier": "^3.5.3"

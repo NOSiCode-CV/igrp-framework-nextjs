@@ -1,6 +1,6 @@
 import { create } from "zustand";
 
-import { DEFAULT_TAB, useControlsTabFromUrl } from "@/hooks/use-controls-tab-from-url";
+import { DEFAULT_TAB, useControlsTabFromUrl } from "../hooks/use-controls-tab-from-url";
 
 export type FocusColorId =
   | "background"

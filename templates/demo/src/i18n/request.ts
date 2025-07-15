@@ -1,20 +1,13 @@
+import { notFound } from 'next/navigation';
 import { getRequestConfig } from 'next-intl/server';
+import { hasLocale } from 'next-intl';
 import { routing } from './routing';
 
-import en from '../../messages/en.json';
-
-type Messages = typeof en;
-
-declare global {
-  interface IntlMessages extends Messages {}
-}
-
 export default getRequestConfig(async ({ requestLocale }) => {
-  let locale = await requestLocale;
+  const requested = await requestLocale;
+  const locale = hasLocale(routing.locales, requested) ? requested : routing.defaultLocale;
 
-  if (!locale || !routing.locales.includes(locale as any)) {
-    locale = routing.defaultLocale;
-  }
+  if (!routing.locales.includes(locale)) notFound();
 
   return {
     locale,

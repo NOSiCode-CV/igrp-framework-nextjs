@@ -1,18 +1,23 @@
 import { buildConfig } from '@igrp/framework-next';
-import { IGRPLayoutConfigArgs } from '@igrp/framework-next';
+import { IGRPLayoutConfigArgs } from '@igrp/framework-next-types';
 import { fontVariables } from '@/lib/fonts';
-import { useMockApps } from '@/temp/applications/use-mock-apps';
-import { useMockMenus } from '@/temp/menus/use-mock-menus';
-import { useMockMenusFooter } from '@/temp/menus/use-mock-menus-footer';
-import { useMockUser } from '@/temp/users/use-mock-user';
+import { getMockApps } from '@/temp/applications/use-mock-apps';
+import { getMockMenus } from '@/temp/menus/use-mock-menus';
+import { getMockMenusFooter } from '@/temp/menus/use-mock-menus-footer';
+import { getMockUser } from '@/temp/users/use-mock-user';
 
 export function createConfig(config: IGRPLayoutConfigArgs) {
+  const user = getMockUser().mockUser
+  const menu = getMockMenus().mockMenus
+  const footerMwnu = getMockMenusFooter().mockMenusFooter
+  const apps = getMockApps().mockApps
+
   return buildConfig({
     appCode: process.env.IGRP_APP_CODE || '',
     previewMode: process.env.IGRP_PREVIEW_MODE === 'true' ? true : false,
     layoutMockData: {
       getHeaderData: async () => ({
-        user: useMockUser().mockUser,
+        user: user,
         showBreadcrumb: true,
         showSearch: true,
         showNotifications: true,
@@ -21,12 +26,12 @@ export function createConfig(config: IGRPLayoutConfigArgs) {
         showThemeSwitcher: true,
       }),
       getSidebarData: async () => ({
-        menuItems: useMockMenus().mockMenus,
-        footerItems: useMockMenusFooter().mockMenusFooter,
-        user: useMockUser().mockUser,
+        menuItems: menu,
+        footerItems: footerMwnu,
+        user: user,
         defaultOpen: true,
         showAppSwitcher: true,
-        apps: useMockApps().mockApps,
+        apps: apps,
         appCenterUrl: process.env.IGRP_APP_CENTER_URL || '',
       }),
     },

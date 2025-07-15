@@ -11,9 +11,9 @@
   },
   "dependencies": {
     "@bprogress/next": "^3.2.12",
-    "@igrp/framework-next": "0.0.0-alpha.4",
-    "@igrp/framework-next-types": "0.0.0-alpha.4",
-    "@igrp/framework-next-ui": "0.0.0-alpha.4",
+    "@igrp/framework-next": "0.0.0-alpha.5",
+    "@igrp/framework-next-types": "0.0.0-alpha.5",
+    "@igrp/framework-next-ui": "0.0.0-alpha.5",
     "@igrp/igrp-framework-react-design-system": "0.0.0-alpha.219",
     "@radix-ui/react-dropdown-menu": "^2.1.15",
     "@radix-ui/react-slot": "^1.2.3",

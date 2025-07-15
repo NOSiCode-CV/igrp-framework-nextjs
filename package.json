@@ -1,25 +1,25 @@
 {
   "name": "igrp-framework-nextjs",
-  "version": "0.0.0-alpha.3",
+  "version": "0.0.0-alpha.4",
   "workspaces": [
     "packages/**",
     "templates/**"
   ],
   "scripts": {
     "build": "pnpm -r run build",
+    "lint": "pnpm -r run lint",
+    "clean": "pnpm -r run clean",
+    "format": "pnpm -r run format",
     "build:framework": "pnpm --filter @igrp/framework-next build:prod",
     "build:framework-ui": "pnpm --filter @igrp/framework-next-ui build:prod",
     "build:framework-types": "pnpm --filter @igrp/framework-next-types build",
-    "dev:demo": "pnpm --filter demo dev",
     "dev:framework": "pnpm --filter @igrp/framework-next dev",
-    "build:demo": "pnpm --filter demo build",
-    "start:demo": "pnpm --filter demo start",
     "run:framework": "pnpm build:framework-types && pnpm build:framework-ui && pnpm build:framework",
-    "lint": "pnpm -r run lint",
-    "clean": "pnpm -r run clean",
+    "release:framework": "pnpm run:framework && pnpm -r run release",
     "clean:framework": "pnpm --filter @igrp/framework-next clean",
-    "format": "pnpm -r run format",
-    "release:framework": "pnpm run:framework && pnpm -r run release"
+    "dev:demo": "pnpm --filter demo dev",
+    "build:demo": "pnpm --filter demo build",
+    "start:demo": "pnpm --filter demo start"    
   },
   "devDependencies": {
     "eslint": "^9.29.0",

@@ -1,1 +1,0 @@
-{"version":3,"file":"constants.js","names":["AI_PROMPT_CHARACTER_LIMIT","DEBOUNCE_DELAY"],"sources":["../../dist/lib/constants.js"],"sourcesContent":["// constants.ts\nexport const AI_PROMPT_CHARACTER_LIMIT = 500;\n// Constants\nexport const DEBOUNCE_DELAY = 50;\n"],"mappings":"AAAA;AACA,OAAO,MAAMA,yBAAyB,GAAG,GAAG;AAC5C;AACA,OAAO,MAAMC,cAAc,GAAG,EAAE","ignoreList":[]}

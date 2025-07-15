@@ -1,0 +1,1 @@
+{"version":3,"file":"use-theme-inspector.js","names":["useThemeInspector"],"sources":["../../dist/hooks/use-theme-inspector.js"],"sourcesContent":["export { useThemeInspector } from \"./inspector/use-theme-inspector\";\n"],"mappings":"AAAA,SAASA,iBAAiB,QAAQ,iCAAiC","ignoreList":[]}

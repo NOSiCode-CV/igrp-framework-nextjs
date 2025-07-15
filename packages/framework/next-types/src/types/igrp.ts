@@ -3,7 +3,6 @@ import type { JWT as DefaultJWT } from "next-auth/jwt";
 import { IGRPHeaderDataArgs } from "./header";
 import { IGRPSidebarDataArgs } from "./sidebar";
 
-
 export interface IGRPApplicationArgs {
   id: number;
   code: string;
@@ -85,13 +84,7 @@ export type IGRPConfigArgs = {
   showSidebar?: boolean;
   showHeader?: boolean;
   showLanguageSelector?: boolean;
-  layout: {
-    locale: string;
-    session: ExtendedSession | null;
-    activeThemeValue?: string;
-    isScaled?: boolean;
-    messages?: Record<string, string>;
-  };
+  layout: IGRPLayoutConfigArgs
   apiManagementConfig?: {
     baseUrl: string;
     timeout?: number;
@@ -102,9 +95,7 @@ export type IGRPConfigArgs = {
 export type IGRPConfigClient = () => Promise<IGRPConfigArgs>;
 
 export type IGRPLayoutConfigArgs = {
-  locale: string;
   session: ExtendedSession | null;
   activeThemeValue?: string;
   isScaled?: boolean;
-  messages?: Record<string, string>;
 };

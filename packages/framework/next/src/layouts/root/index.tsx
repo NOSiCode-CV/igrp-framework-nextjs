@@ -4,17 +4,15 @@ import { setAccessClientConfig } from '../../lib/api-config';
 import { cn } from '../../lib/utils';
 import { fetchAppByCode } from '../../services/applications/use-applications';
 import { fetchLayoutData } from '../../services/layout/use-layout';
-import type { IGRPConfigArgs } from '../../types/config';
+import type { IGRPConfigArgs } from '@igrp/framework-next-types';
 
 type IGRPRootLocaleLayoutArgs = {
   readonly children: React.ReactNode;
-  languageSelector?: React.ReactNode;
   readonly config: Promise<IGRPConfigArgs>;
 };
 
 export async function IGRPRootLayout({
   children,
-  languageSelector,
   config,
 }: IGRPRootLocaleLayoutArgs) {
   const layoutConfig = await config;
@@ -30,7 +28,7 @@ export async function IGRPRootLayout({
     apiManagementConfig,
   } = layoutConfig;
 
-  const { locale, session, activeThemeValue, isScaled, messages } = layout;
+  const { session, activeThemeValue, isScaled } = layout;
 
   let app;
   let appId;
@@ -58,7 +56,7 @@ export async function IGRPRootLayout({
 
   return (
     <html
-      lang={locale}
+      lang="pt"
       suppressHydrationWarning
       className={font}
     >
@@ -76,11 +74,8 @@ export async function IGRPRootLayout({
           sessionArgs={undefined}
           themeArgs={undefined}
           defaultOpen={true}
-          languageSelector={languageSelector}
           sidebarData={sidebarData}
           headerData={headerData}
-          locale={locale}
-          messages={messages}
           showSidebar={showSidebar}
           showHeader={showHeader}
         >

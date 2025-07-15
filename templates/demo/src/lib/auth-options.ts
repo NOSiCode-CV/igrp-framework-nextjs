@@ -1,4 +1,4 @@
-import type { NextAuthOptions, TokenSet } from 'next-auth';
+import type { Account, NextAuthOptions, Session, TokenSet } from 'next-auth';
 import type { JWT } from 'next-auth/jwt';
 import KeycloakProvider from 'next-auth/providers/keycloak';
 
@@ -16,7 +16,7 @@ export const authOptions: NextAuthOptions = {
     maxAge: 30 * 24 * 60 * 60, // 30 days
   },
   callbacks: {
-    async jwt({ token, account }: { token: JWT; account: any }) {
+    async jwt({ token, account }: { token: JWT; account: Account | null }) {
       if (account) {
         token.idToken = account.id_token;
         token.accessToken = account.access_token;
@@ -59,7 +59,7 @@ export const authOptions: NextAuthOptions = {
       }
     },
     async session({ session, token }) {
-      session.user = token.user as any;
+      session.user = token.user as Session["user"];
       session.accessToken = token.accessToken as string;
       session.error = token.error as string;
       session.idToken = token.idToken as string;
@@ -70,8 +70,7 @@ export const authOptions: NextAuthOptions = {
   },
   events: {
     async signOut({ token }) {
-      if (token) {
-        // Ensure token exists
+      if (token) {        
         await doFinalSignoutHandshake(token as JWT);
       }
     },

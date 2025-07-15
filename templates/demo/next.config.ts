@@ -1,8 +1,8 @@
 import { NextConfig } from 'next';
-import createNextIntlPlugin from 'next-intl/plugin';
 
 const nextConfig: NextConfig = {
-  output: 'standalone',
+  // output: 'standalone',
+  basePath: process.env.IGRP_APP_BASE_PATH || '/',
   images: {
     remotePatterns: [
       {
@@ -17,5 +17,4 @@ const nextConfig: NextConfig = {
   },
 };
 
-const withNextIntl = createNextIntlPlugin();
-export default withNextIntl(nextConfig);
+export default nextConfig;

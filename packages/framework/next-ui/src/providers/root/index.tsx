@@ -1,7 +1,6 @@
 'use client';
 
 import type { Session } from 'next-auth';
-import { NextIntlClientProvider } from 'next-intl';
 import type { IGRPHeaderDataArgs, IGRPSidebarDataArgs } from '@igrp/framework-next-types';
 
 import { IGRPActiveThemeProvider } from './active-theme';
@@ -26,9 +25,6 @@ export type IGRPRootProvidersArgs = {
   defaultOpen?: boolean;
   showHeader?: boolean;
   locale?: string;
-  messages?: Record<string, string>;
-  showLanguageSelector?: boolean;
-  languageSelector?: React.ReactNode;
   sidebarData?: IGRPSidebarDataArgs;
   headerData?: IGRPHeaderDataArgs;
 };
@@ -40,18 +36,14 @@ export const IGRPRootProviders: React.FC<IGRPRootProvidersArgs> = ({
   sessionArgs,
   themeArgs,
   children,
-  locale,
-  messages,
   defaultOpen,
   showSidebar,
   showHeader,
   sidebarData,
   headerData,
-  languageSelector,
 }) => {
   return (
     <IGRPSessionProvider session={session} {...sessionArgs}>
-      <NextIntlClientProvider locale={locale} messages={messages}>
         <IGRPThemeProvider
           attribute="class"
           defaultTheme="system"
@@ -69,8 +61,6 @@ export const IGRPRootProviders: React.FC<IGRPRootProvidersArgs> = ({
                   {showHeader && (
                     <IGRPHeader
                       data={headerData}
-                      languageSelector={languageSelector}
-                      locale={locale}
                     />
                   )}
                   <main className="flex flex-col flex-1 px-6 py-8">{children}</main>
@@ -80,7 +70,6 @@ export const IGRPRootProviders: React.FC<IGRPRootProvidersArgs> = ({
             </IGRPActiveThemeProvider>
           </IGRPProgressBar>
         </IGRPThemeProvider>
-      </NextIntlClientProvider>
     </IGRPSessionProvider>
   );
 };

@@ -31,6 +31,9 @@ export async function serverSession() {
 
 export async function getSession() {
   let session;
+  const isPreviewMode = process.env.IGRP_PREVIEW_MODE === 'true';
+
+  if (isPreviewMode) return session = null;
 
   if (process.env.NODE_ENV === 'production') {
     try {

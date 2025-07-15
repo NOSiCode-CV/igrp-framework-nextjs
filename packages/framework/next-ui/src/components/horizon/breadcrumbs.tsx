@@ -8,19 +8,17 @@ import { cn } from '@/lib/utils';
 
 interface BreadcrumbsProps {
   className?: string;
-  locale: string;
 }
 
 // TODO: use breadcrumbs from shadcn-ui
 
-export function IGRPBreadcrumbs({ className, locale }: BreadcrumbsProps) {
+export function IGRPBreadcrumbs({ className }: BreadcrumbsProps) {
   const homeHref = '/';
   const pathname = usePathname();
-  const pathWithoutLocale = pathname.replace(`/${locale}`, '') || '/';
 
-  if (pathWithoutLocale === homeHref) return null;
+  if (pathname === homeHref) return null;
 
-  const breadcrumbItems = pathWithoutLocale
+  const breadcrumbItems = pathname
     .split('/')
     .filter(Boolean)
     .map((segment, index, segments) => {

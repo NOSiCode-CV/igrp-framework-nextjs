@@ -1,13 +1,13 @@
-import { ProgressProvider } from '@bprogress/next/app';
+import { AppProgressProvider } from '@bprogress/next';
 
 export function IGRPProgressBar({
   children,
   height = '4px',
   color = 'primary',
   ...args
-}: React.ComponentProps<typeof ProgressProvider>) {
+}: React.ComponentProps<typeof AppProgressProvider>) {
   return (
-    <ProgressProvider
+    <AppProgressProvider
       height={height}
       color={color}
       options={{ showSpinner: false }}
@@ -15,6 +15,6 @@ export function IGRPProgressBar({
       {...args}
     >
       {children}
-    </ProgressProvider>
+    </AppProgressProvider>
   );
 }

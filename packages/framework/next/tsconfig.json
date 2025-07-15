@@ -1,32 +1,54 @@
 {
   "compilerOptions": {
-    "target": "ES2022",
+    "target": "ES2023",
     "useDefineForClassFields": true,
-    "lib": ["es2022", "DOM", "DOM.Iterable"],
+    "lib": [
+      "ES2023",
+      "DOM",
+      "DOM.Iterable"
+    ],
     "module": "ESNext",
     "skipLibCheck": true,
-    "esModuleInterop": true,
-    "resolveJsonModule": true,
-    "importHelpers": true,
-    "types": ["node"],
     "moduleResolution": "bundler",
     "allowImportingTsExtensions": false,
     "verbatimModuleSyntax": true,
-    "isolatedModules": true,
+    "moduleDetection": "force",
     "noEmit": false,
     "jsx": "react-jsx",
     "strict": true,
     "noUnusedLocals": true,
     "noUnusedParameters": true,
-    "erasableSyntaxOnly": true,
     "noFallthroughCasesInSwitch": true,
     "noUncheckedSideEffectImports": true,
+    "isolatedModules": true,
+    "composite": true,
+    "esModuleInterop": true,
+    "declaration": true,
+    "declarationMap": true,
+    "outDir": "./dist",
+    "rootDir": "./src",
+    "resolveJsonModule": true,
+    "importHelpers": true,
+    "types": [
+      "node"
+    ],    
     "baseUrl": ".",
     "paths": {
-      "@/*": ["./src/*"]
+      "@/*": [
+        "./src/*"
+      ]
     },
-    "composite": true,
+    // "typeRoots": ["./types", "./node_modules/@types"]
   },
-  "include": ["src", "types"],
-  "exclude": ["src/**/__docs__", "src/**/__test__", "src/test", "node_modules"]
+  "include": [
+    "src",
+    "types"
+  ],
+  "exclude": [
+    "src/**/__docs__",
+    "src/**/__test__",
+    "src/test",
+    "node_modules",
+    "dist"
+  ]
 }

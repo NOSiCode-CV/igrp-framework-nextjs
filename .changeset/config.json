@@ -9,11 +9,7 @@
       "@igrp/framework-next-types"
     ]
   ],
-  "linked": [[
-      "@igrp/framework-next",
-      "@igrp/framework-next-ui",
-      "@igrp/framework-next-types"
-    ]],
+  "linked": [],
   "access": "public",
   "baseBranch": "dev",
   "updateInternalDependencies": "patch",

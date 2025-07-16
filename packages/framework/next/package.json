@@ -1,6 +1,6 @@
 {
   "name": "@igrp/framework-next",
-  "version": "0.0.0-alpha.5",
+  "version": "0.0.0-alpha.7",
   "description": "IGRP Framework for Next.js - Layout components and data loading hooks",
   "keywords": [
     "igrp",
@@ -20,21 +20,21 @@
     "build:swc": "swc ./src -d dist --config-file .swcrc --strip-leading-paths",
     "build:babel": "rimraf dist_optimized && babel dist --out-dir dist_optimized --source-maps --extensions .ts,.js,.tsx,.jsx,.cjs,.mjs && rimraf dist && move dist_optimized dist",
     "build:prod": "pnpm build:swc && pnpm build:babel",
-    "release": "yarn publish --registry=https://sonatype.nosi.cv/repository/igrp/ --tag latest",
+    "release": "pnpm format && pnpm build:prod && yarn publish --registry=https://sonatype.nosi.cv/repository/igrp/ --tag latest",
     "format": "prettier --write ."
   },
   "peerDependencies": {
-    "next": "15.3.3",    
+    "next": "15.3.4",
     "react": "19.1.0",
     "react-dom": "19.1.0"
   },
   "dependencies": {
     "@bprogress/next": "^3.2.12",
-    "@hookform/resolvers": "^5.1.1",    
-    "@igrp/framework-next-types": "0.0.0-alpha.5",
-    "@igrp/framework-next-ui": "0.0.0-alpha.5",
+    "@hookform/resolvers": "^5.1.1",
+    "@igrp/framework-next-types": "latest",
+    "@igrp/framework-next-ui": "latest",
     "@igrp/platform-access-management-client-ts": "0.0.1-alpha.4",
-    "clsx": "^2.1.1",    
+    "clsx": "^2.1.1",
     "next-themes": "^0.4.6",
     "tailwind-merge": "^3.3.1"
   },

@@ -1,4 +1,4 @@
-import type { ThemeStyles } from "./theme";
+import type { ThemeStyles } from './theme';
 
 // Base interface for any editor's state
 export interface BaseEditorState {
@@ -18,7 +18,7 @@ export interface EditorPreviewProps {
 export interface ThemeEditorState extends BaseEditorState {
   preset?: string;
   styles: ThemeStyles;
-  currentMode: "light" | "dark";
+  currentMode: 'light' | 'dark';
   hslAdjustments?: {
     hueShift: number;
     saturationScale: number;
@@ -27,7 +27,7 @@ export interface ThemeEditorState extends BaseEditorState {
 }
 
 // Type for available editors
-export type EditorType = "button" | "input" | "card" | "dialog" | "theme";
+export type EditorType = 'button' | 'input' | 'card' | 'dialog' | 'theme';
 
 // Interface for editor configuration
 export interface EditorConfig {

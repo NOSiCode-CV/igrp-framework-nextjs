@@ -1,7 +1,7 @@
-import { TooltipWrapper } from "../horizon/tooltip-wrapper";
-import { Button } from "../primitives/button";
-import { cn } from "@/lib/utils";
-import { Loader2, Share2 } from "lucide-react";
+import { TooltipWrapper } from '../horizon/tooltip-wrapper';
+import { Button } from '../primitives/button';
+import { cn } from '../../lib/utils';
+import { Loader2, Share2 } from 'lucide-react';
 
 interface ShareButtonProps extends React.ComponentProps<typeof Button> {
   isSharing?: boolean;

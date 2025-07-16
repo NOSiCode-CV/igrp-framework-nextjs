@@ -1,13 +1,13 @@
-"use client";
+'use client';
 
-import { HoverCard, HoverCardContent, HoverCardTrigger } from "../primitives/hover-card";
-import { Separator } from "../primitives/separator";
-import { useClassNames } from "@/hooks/use-theme-inspector-classnames";
-import { cn } from "@/lib/utils";
-import { Inspect } from "lucide-react";
-import React from "react";
-import { createPortal } from "react-dom";
-import InspectorClassItem from "./inspector-class-item";
+import { HoverCard, HoverCardContent, HoverCardTrigger } from '../primitives/hover-card';
+import { Separator } from '../primitives/separator';
+import { useClassNames } from '../../hooks/use-theme-inspector-classnames';
+import { cn } from '../../lib/utils';
+import { Inspect } from 'lucide-react';
+import React from 'react';
+import { createPortal } from 'react-dom';
+import InspectorClassItem from './inspector-class-item';
 
 interface InspectorState {
   rect: DOMRect | null;
@@ -23,7 +23,7 @@ interface InspectorOverlayProps {
 const InspectorOverlay = ({ inspector, enabled, rootRef }: InspectorOverlayProps) => {
   const classNames = useClassNames(inspector.className);
 
-  if (!enabled || !inspector.rect || typeof window === "undefined" || !rootRef.current) {
+  if (!enabled || !inspector.rect || typeof window === 'undefined' || !rootRef.current) {
     return null;
   }
 
@@ -42,8 +42,8 @@ const InspectorOverlay = ({ inspector, enabled, rootRef }: InspectorOverlayProps
         <div
           data-inspector-overlay
           className={cn(
-            "ring-primary ring-offset-background/90 pointer-events-none absolute z-50 ring-3 ring-offset-2",
-            "transition-all duration-100 ease-in-out"
+            'ring-primary ring-offset-background/90 pointer-events-none absolute z-50 ring-3 ring-offset-2',
+            'transition-all duration-100 ease-in-out',
           )}
           style={{
             top: relativeRect.top,
@@ -59,7 +59,7 @@ const InspectorOverlay = ({ inspector, enabled, rootRef }: InspectorOverlayProps
         side="top"
         align="start"
         className={cn(
-          "bg-popover/85 text-popover-foreground pointer-events-auto relative w-auto max-w-[50vw] rounded-lg border p-0 shadow-xl backdrop-blur-lg"
+          'bg-popover/85 text-popover-foreground pointer-events-auto relative w-auto max-w-[50vw] rounded-lg border p-0 shadow-xl backdrop-blur-lg',
         )}
         sideOffset={8}
       >
@@ -75,13 +75,13 @@ const InspectorOverlay = ({ inspector, enabled, rootRef }: InspectorOverlayProps
         </div>
       </HoverCardContent>
     </HoverCard>,
-    rootRef.current
+    rootRef.current,
   );
 };
 
 const arePropsEqual = (
   prevProps: InspectorOverlayProps,
-  nextProps: InspectorOverlayProps
+  nextProps: InspectorOverlayProps,
 ): boolean => {
   if (prevProps.enabled !== nextProps.enabled) return false;
   if (prevProps.rootRef !== nextProps.rootRef) return false;

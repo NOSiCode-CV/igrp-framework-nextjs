@@ -16,17 +16,17 @@ export const areRectsEqual = (rect1: DOMRect | null, rect2: DOMRect | null): boo
 
 export const areInspectorStatesEqual = (
   state1: InspectorState,
-  state2: InspectorState
+  state2: InspectorState,
 ): boolean => {
   return areRectsEqual(state1.rect, state2.rect) && state1.className === state2.className;
 };
 
 export const createInspectorState = (rect: DOMRect, matches: string[]): InspectorState => ({
   rect,
-  className: matches.join(" "),
+  className: matches.join(' '),
 });
 
 export const getEmptyInspectorState = (): InspectorState => ({
   rect: null,
-  className: "",
+  className: '',
 });

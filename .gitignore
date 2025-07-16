@@ -105,4 +105,4 @@ jspm_packages/
 # Temporary folders
 tmp/
 
-templates/contribuicoes
+tsconfig.tsbuildinfo

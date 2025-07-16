@@ -4,4 +4,4 @@ export { IGRPThemeSelector } from './components/horizon/theme-selector';
 
 export { IGRPRootProviders } from './providers/root/index';
 
-export * from "./types"
+export * from './types';

@@ -1,10 +1,10 @@
-import { defaultThemeState } from "../config/theme";
-import type { ThemeStyles } from "../types/theme";
-import { useThemePresetStore } from "../store/theme-preset-store";
+import { defaultThemeState } from '../config/theme';
+import type { ThemeStyles } from '../types/theme';
+import { useThemePresetStore } from '../store/theme-preset-store';
 
 export function getPresetThemeStyles(name: string): ThemeStyles {
   const defaultTheme = defaultThemeState.styles;
-  if (name === "default") {
+  if (name === 'default') {
     return defaultTheme;
   }
 

@@ -1,9 +1,9 @@
-"use client";
+'use client';
 
-import type React from "react";
-import { cn } from "@/lib/utils";
-import { Button } from "../primitives/button";
-import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "../primitives/tooltip";
+import type React from 'react';
+import { cn } from '../../lib/utils';
+import { Button } from '../primitives/button';
+import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from '../primitives/tooltip';
 
 interface HslPresetButtonProps {
   label: string;
@@ -19,7 +19,7 @@ interface HslPresetButtonProps {
     color: string,
     hueShift: number,
     saturationScale: number,
-    lightnessScale: number
+    lightnessScale: number,
   ) => string;
 }
 
@@ -30,7 +30,7 @@ export const HslPresetButton: React.FC<HslPresetButtonProps> = ({
   lightnessScale,
   baseBg,
   basePrimary,
-  baseSecondary = "#888888",
+  baseSecondary = '#888888',
   onClick,
   selected,
   adjustColorByHsl,
@@ -41,7 +41,7 @@ export const HslPresetButton: React.FC<HslPresetButtonProps> = ({
     baseSecondary,
     hueShift,
     saturationScale,
-    lightnessScale
+    lightnessScale,
   );
 
   return (
@@ -54,9 +54,9 @@ export const HslPresetButton: React.FC<HslPresetButtonProps> = ({
             size="sm"
             variant="outline"
             className={cn(
-              "relative h-8 w-full overflow-hidden rounded-md p-0 shadow-sm transition-all duration-200",
-              "hover:scale-105 hover:shadow-md",
-              selected ? "ring-primary ring-1 ring-offset-1" : "border-border border"
+              'relative h-8 w-full overflow-hidden rounded-md p-0 shadow-sm transition-all duration-200',
+              'hover:scale-105 hover:shadow-md',
+              selected ? 'ring-primary ring-1 ring-offset-1' : 'border-border border',
             )}
             style={{ background: previewBg }}
           >

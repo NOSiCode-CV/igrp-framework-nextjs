@@ -1,5 +1,5 @@
-import { cn } from "../../lib/utils";
-import type { SVGProps } from "react";
+import { cn } from '../../lib/utils';
+import type { SVGProps } from 'react';
 
 export function TailwindCSS({ className, ...props }: SVGProps<SVGSVGElement>) {
   return (
@@ -7,7 +7,7 @@ export function TailwindCSS({ className, ...props }: SVGProps<SVGSVGElement>) {
       xmlns="http://www.w3.org/2000/svg"
       fill="none"
       viewBox="0 0 54 33"
-      className={cn("text-[#38bdf8]", className)}
+      className={cn('text-[#38bdf8]', className)}
       {...props}
     >
       <g clipPath="url(#a)">

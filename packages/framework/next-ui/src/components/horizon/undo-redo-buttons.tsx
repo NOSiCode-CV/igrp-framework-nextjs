@@ -1,7 +1,7 @@
-import { TooltipWrapper } from "./tooltip-wrapper";
-import { Button } from "../primitives/button";
-import { useEditorStore } from "@/store/editor-store";
-import { Redo, Undo } from "lucide-react";
+import { TooltipWrapper } from './tooltip-wrapper';
+import { Button } from '../primitives/button';
+import { useEditorStore } from '../../store/editor-store';
+import { Redo, Undo } from 'lucide-react';
 
 interface UndoRedoButtonsProps extends React.ComponentProps<typeof Button> {}
 

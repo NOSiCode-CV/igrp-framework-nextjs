@@ -1,6 +1,6 @@
 {
   "name": "@igrp/framework-next-types",
-  "version": "0.0.0-alpha.7",
+  "version": "0.0.0-alpha.8",
   "type": "module",
   "description": "IGRP Framework for Next.js - Types hared",
   "keywords": [

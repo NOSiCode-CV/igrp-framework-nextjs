@@ -1,12 +1,12 @@
-import { Label } from "../primitives/label";
-import { DEBOUNCE_DELAY } from "../../lib/constants";
-import { cn } from "../../lib/utils";
-import { useColorControlFocus } from "../../store/color-control-focus-store";
-import type { ColorPickerProps } from "../../types/settings";
-import { debounce } from "../../utils/debounce";
-import React, { useCallback, useContext, useEffect, useMemo, useRef, useState } from "react";
-import { ColorSelectorPopover } from "./color-selector-popover";
-import { SectionContext } from "./section-context";
+import { Label } from '../primitives/label';
+import { DEBOUNCE_DELAY } from '../../lib/constants';
+import { cn } from '../../lib/utils';
+import { useColorControlFocus } from '../../store/color-control-focus-store';
+import type { ColorPickerProps } from '../../types/settings';
+import { debounce } from '../../utils/debounce';
+import React, { useCallback, useContext, useEffect, useMemo, useRef, useState } from 'react';
+import { ColorSelectorPopover } from './color-selector-popover';
+import { SectionContext } from './section-context';
 
 const ColorPicker = ({ color, onChange, label, name }: ColorPickerProps) => {
   const [isOpen, setIsOpen] = useState(false);
@@ -35,7 +35,7 @@ const ColorPicker = ({ color, onChange, label, name }: ColorPickerProps) => {
       debounce((value: string) => {
         onChange(value);
       }, DEBOUNCE_DELAY),
-    [onChange]
+    [onChange],
   );
 
   const handleColorChange = useCallback(
@@ -43,7 +43,7 @@ const ColorPicker = ({ color, onChange, label, name }: ColorPickerProps) => {
       const newColor = e.target.value;
       debouncedOnChange(newColor);
     },
-    [debouncedOnChange]
+    [debouncedOnChange],
   );
 
   const handleTextInputChange = useCallback(
@@ -51,7 +51,7 @@ const ColorPicker = ({ color, onChange, label, name }: ColorPickerProps) => {
       const colorString = e.target.value;
       debouncedOnChange(colorString);
     },
-    [debouncedOnChange]
+    [debouncedOnChange],
   );
 
   useEffect(() => {
@@ -72,9 +72,9 @@ const ColorPicker = ({ color, onChange, label, name }: ColorPickerProps) => {
 
       setTimeout(
         () => {
-          rootRef.current?.scrollIntoView({ behavior: "smooth", block: "center" });
+          rootRef.current?.scrollIntoView({ behavior: 'smooth', block: 'center' });
         },
-        sectionCtx?.isExpanded ? 0 : 100
+        sectionCtx?.isExpanded ? 0 : 100,
       );
 
       animationTimerRef.current = setTimeout(() => {
@@ -97,13 +97,13 @@ const ColorPicker = ({ color, onChange, label, name }: ColorPickerProps) => {
     <div
       ref={rootRef}
       className={cn(
-        "mb-3 transition-all duration-300",
-        shouldAnimate && "bg-border/50 ring-primary -m-1.5 mb-1.5 rounded-sm p-1.5 ring-2"
+        'mb-3 transition-all duration-300',
+        shouldAnimate && 'bg-border/50 ring-primary -m-1.5 mb-1.5 rounded-sm p-1.5 ring-2',
       )}
     >
       <div className="mb-1.5 flex items-center justify-between">
         <Label
-          htmlFor={`color-${label.replace(/\s+/g, "-").toLowerCase()}`}
+          htmlFor={`color-${label.replace(/\s+/g, '-').toLowerCase()}`}
           className="text-xs font-medium"
         >
           {label}
@@ -117,7 +117,7 @@ const ColorPicker = ({ color, onChange, label, name }: ColorPickerProps) => {
         >
           <input
             type="color"
-            id={`color-${label.replace(/\s+/g, "-").toLowerCase()}`}
+            id={`color-${label.replace(/\s+/g, '-').toLowerCase()}`}
             value={color}
             onChange={handleColorChange}
             className="absolute inset-0 h-full w-full cursor-pointer opacity-0"

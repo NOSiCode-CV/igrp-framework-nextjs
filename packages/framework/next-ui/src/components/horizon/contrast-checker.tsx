@@ -1,7 +1,7 @@
-import { useState } from "react";
-import { useContrastChecker } from "../../hooks/use-contrast-checker";
-import type { ThemeStyleProps } from "@/types/theme";
-import { Button } from "../primitives/button";
+import { useState } from 'react';
+import { useContrastChecker } from '../../hooks/use-contrast-checker';
+import type { ThemeStyleProps } from '../../types/theme';
+import { Button } from '../primitives/button';
 import {
   Dialog,
   DialogContent,
@@ -9,14 +9,14 @@ import {
   DialogTitle,
   DialogTrigger,
   DialogDescription,
-} from "../primitives/dialog";
-import { Contrast, Check, AlertTriangle, /*Moon, Sun*/ } from "lucide-react";
-import { cn } from "@/lib/utils";
-import { Card, CardContent } from "../primitives/card";
-import { Badge } from "../primitives/badge";
-import { ScrollArea } from "../primitives/scroll-area";
-import { Separator } from "../primitives/separator";
-import { Tooltip, TooltipContent, TooltipTrigger } from "../primitives/tooltip";
+} from '../primitives/dialog';
+import { Contrast, Check, AlertTriangle /*Moon, Sun*/ } from 'lucide-react';
+import { cn } from '../../lib/utils';
+import { Card, CardContent } from '../primitives/card';
+import { Badge } from '../primitives/badge';
+import { ScrollArea } from '../primitives/scroll-area';
+import { Separator } from '../primitives/separator';
+import { Tooltip, TooltipContent, TooltipTrigger } from '../primitives/tooltip';
 
 type ContrastCheckerProps = {
   currentStyles: ThemeStyleProps;
@@ -24,7 +24,7 @@ type ContrastCheckerProps = {
 
 const MIN_CONTRAST_RATIO = 4.5;
 
-type ColorCategory = "content" | "interactive" | "functional";
+type ColorCategory = 'content' | 'interactive' | 'functional';
 
 type ColorPair = {
   id: string;
@@ -37,118 +37,118 @@ type ColorPair = {
 };
 
 const ContrastChecker = ({ currentStyles }: ContrastCheckerProps) => {
-  const [filter, setFilter] = useState<"all" | "issues">("all");
+  const [filter, setFilter] = useState<'all' | 'issues'>('all');
 
   const colorPairsToCheck: ColorPair[] = [
     // Content - Base, background, cards, containers
     {
-      id: "base",
-      foregroundId: "foreground",
-      backgroundId: "background",
-      foreground: currentStyles?.["foreground"],
-      background: currentStyles?.["background"],
-      label: "Base",
-      category: "content",
+      id: 'base',
+      foregroundId: 'foreground',
+      backgroundId: 'background',
+      foreground: currentStyles?.['foreground'],
+      background: currentStyles?.['background'],
+      label: 'Base',
+      category: 'content',
     },
     {
-      id: "card",
-      foregroundId: "card-foreground",
-      backgroundId: "card",
-      foreground: currentStyles?.["card-foreground"],
-      background: currentStyles?.["card"],
-      label: "Card",
-      category: "content",
+      id: 'card',
+      foregroundId: 'card-foreground',
+      backgroundId: 'card',
+      foreground: currentStyles?.['card-foreground'],
+      background: currentStyles?.['card'],
+      label: 'Card',
+      category: 'content',
     },
     {
-      id: "popover",
-      foregroundId: "popover-foreground",
-      backgroundId: "popover",
-      foreground: currentStyles?.["popover-foreground"],
-      background: currentStyles?.["popover"],
-      label: "Popover",
-      category: "content",
+      id: 'popover',
+      foregroundId: 'popover-foreground',
+      backgroundId: 'popover',
+      foreground: currentStyles?.['popover-foreground'],
+      background: currentStyles?.['popover'],
+      label: 'Popover',
+      category: 'content',
     },
     {
-      id: "muted",
-      foregroundId: "muted-foreground",
-      backgroundId: "muted",
-      foreground: currentStyles?.["muted-foreground"],
-      background: currentStyles?.["muted"],
-      label: "Muted",
-      category: "content",
+      id: 'muted',
+      foregroundId: 'muted-foreground',
+      backgroundId: 'muted',
+      foreground: currentStyles?.['muted-foreground'],
+      background: currentStyles?.['muted'],
+      label: 'Muted',
+      category: 'content',
     },
 
     // Interactive - Buttons, links, actions
     {
-      id: "primary",
-      foregroundId: "primary-foreground",
-      backgroundId: "primary",
-      foreground: currentStyles?.["primary-foreground"],
-      background: currentStyles?.["primary"],
-      label: "Primary",
-      category: "interactive",
+      id: 'primary',
+      foregroundId: 'primary-foreground',
+      backgroundId: 'primary',
+      foreground: currentStyles?.['primary-foreground'],
+      background: currentStyles?.['primary'],
+      label: 'Primary',
+      category: 'interactive',
     },
     {
-      id: "secondary",
-      foregroundId: "secondary-foreground",
-      backgroundId: "secondary",
-      foreground: currentStyles?.["secondary-foreground"],
-      background: currentStyles?.["secondary"],
-      label: "Secondary",
-      category: "interactive",
+      id: 'secondary',
+      foregroundId: 'secondary-foreground',
+      backgroundId: 'secondary',
+      foreground: currentStyles?.['secondary-foreground'],
+      background: currentStyles?.['secondary'],
+      label: 'Secondary',
+      category: 'interactive',
     },
     {
-      id: "accent",
-      foregroundId: "accent-foreground",
-      backgroundId: "accent",
-      foreground: currentStyles?.["accent-foreground"],
-      background: currentStyles?.["accent"],
-      label: "Accent",
-      category: "interactive",
+      id: 'accent',
+      foregroundId: 'accent-foreground',
+      backgroundId: 'accent',
+      foreground: currentStyles?.['accent-foreground'],
+      background: currentStyles?.['accent'],
+      label: 'Accent',
+      category: 'interactive',
     },
 
     // Functional - Sidebar, destructive, special purposes
     {
-      id: "destructive",
-      foregroundId: "destructive-foreground",
-      backgroundId: "destructive",
-      foreground: currentStyles?.["destructive-foreground"],
-      background: currentStyles?.["destructive"],
-      label: "Destructive",
-      category: "functional",
+      id: 'destructive',
+      foregroundId: 'destructive-foreground',
+      backgroundId: 'destructive',
+      foreground: currentStyles?.['destructive-foreground'],
+      background: currentStyles?.['destructive'],
+      label: 'Destructive',
+      category: 'functional',
     },
     {
-      id: "sidebar",
-      foregroundId: "sidebar-foreground",
-      backgroundId: "sidebar",
-      foreground: currentStyles?.["sidebar-foreground"],
-      background: currentStyles?.["sidebar"],
-      label: "Sidebar Base",
-      category: "functional",
+      id: 'sidebar',
+      foregroundId: 'sidebar-foreground',
+      backgroundId: 'sidebar',
+      foreground: currentStyles?.['sidebar-foreground'],
+      background: currentStyles?.['sidebar'],
+      label: 'Sidebar Base',
+      category: 'functional',
     },
     {
-      id: "sidebar-primary",
-      foregroundId: "sidebar-primary-foreground",
-      backgroundId: "sidebar-primary",
-      foreground: currentStyles?.["sidebar-primary-foreground"],
-      background: currentStyles?.["sidebar-primary"],
-      label: "Sidebar Primary",
-      category: "functional",
+      id: 'sidebar-primary',
+      foregroundId: 'sidebar-primary-foreground',
+      backgroundId: 'sidebar-primary',
+      foreground: currentStyles?.['sidebar-primary-foreground'],
+      background: currentStyles?.['sidebar-primary'],
+      label: 'Sidebar Primary',
+      category: 'functional',
     },
     {
-      id: "sidebar-accent",
-      foregroundId: "sidebar-accent-foreground",
-      backgroundId: "sidebar-accent",
-      foreground: currentStyles?.["sidebar-accent-foreground"],
-      background: currentStyles?.["sidebar-accent"],
-      label: "Sidebar Accent",
-      category: "functional",
+      id: 'sidebar-accent',
+      foregroundId: 'sidebar-accent-foreground',
+      backgroundId: 'sidebar-accent',
+      foreground: currentStyles?.['sidebar-accent-foreground'],
+      background: currentStyles?.['sidebar-accent'],
+      label: 'Sidebar Accent',
+      category: 'functional',
     },
   ];
 
   const validColorPairsToCheck = colorPairsToCheck.filter(
     (pair): pair is ColorPair & { foreground: string; background: string } =>
-      !!pair.foreground && !!pair.background
+      !!pair.foreground && !!pair.background,
   );
   const contrastResults = useContrastChecker(validColorPairsToCheck);
 
@@ -157,11 +157,11 @@ const ContrastChecker = ({ currentStyles }: ContrastCheckerProps) => {
   };
 
   const totalIssues = contrastResults?.filter(
-    (result) => result.contrastRatio < MIN_CONTRAST_RATIO
+    (result) => result.contrastRatio < MIN_CONTRAST_RATIO,
   ).length;
 
   const filteredPairs =
-    filter === "all"
+    filter === 'all'
       ? colorPairsToCheck
       : colorPairsToCheck.filter((pair) => {
           const result = getContrastResult(pair.id);
@@ -170,12 +170,12 @@ const ContrastChecker = ({ currentStyles }: ContrastCheckerProps) => {
 
   // Group color pairs by category
   const categoryLabels: Record<ColorCategory, string> = {
-    content: "Content & Containers",
-    interactive: "Interactive Elements",
-    functional: "Navigation & Functional",
+    content: 'Content & Containers',
+    interactive: 'Interactive Elements',
+    functional: 'Navigation & Functional',
   };
 
-  const categories: ColorCategory[] = ["content", "interactive", "functional"];
+  const categories: ColorCategory[] = ['content', 'interactive', 'functional'];
   const groupedPairs = categories
     .map((category) => ({
       category,
@@ -197,7 +197,7 @@ const ContrastChecker = ({ currentStyles }: ContrastCheckerProps) => {
           <DialogHeader>
             <DialogTitle>Contrast Checker</DialogTitle>
             <DialogDescription>
-              WCAG 2.0 AA requires a contrast ratio of at least {MIN_CONTRAST_RATIO}:1{" • "}
+              WCAG 2.0 AA requires a contrast ratio of at least {MIN_CONTRAST_RATIO}:1{' • '}
               <a
                 href="https://www.w3.org/TR/WCAG21/"
                 target="_blank"
@@ -229,18 +229,18 @@ const ContrastChecker = ({ currentStyles }: ContrastCheckerProps) => {
               </TooltipContent>
             </Tooltip>
             <Button
-              variant={filter === "all" ? "default" : "outline"}
+              variant={filter === 'all' ? 'default' : 'outline'}
               size="sm"
-              onClick={() => setFilter("all")}
+              onClick={() => setFilter('all')}
             >
               All
             </Button>
             <Button
-              variant={filter === "issues" ? "default" : "outline"}
+              variant={filter === 'issues' ? 'default' : 'outline'}
               size="sm"
-              onClick={() => setFilter("issues")}
+              onClick={() => setFilter('issues')}
             >
-              <AlertTriangle className={cn("mr-1 h-3 w-3")} />
+              <AlertTriangle className={cn('mr-1 h-3 w-3')} />
               Issues ({totalIssues})
             </Button>
           </div>
@@ -260,31 +260,31 @@ const ContrastChecker = ({ currentStyles }: ContrastCheckerProps) => {
                     const isValid =
                       result?.contrastRatio !== undefined &&
                       result?.contrastRatio >= MIN_CONTRAST_RATIO;
-                    const contrastRatio = result?.contrastRatio?.toFixed(2) ?? "N/A";
+                    const contrastRatio = result?.contrastRatio?.toFixed(2) ?? 'N/A';
 
                     return (
                       <Card
                         key={pair.id}
-                        className={cn("transition-all duration-200", !isValid && "border-dashed")}
+                        className={cn('transition-all duration-200', !isValid && 'border-dashed')}
                       >
                         <CardContent className="p-4">
                           <div className="mb-3 flex items-center justify-between">
                             <h3
                               className={cn(
-                                "flex items-center font-medium",
-                                !isValid && "text-destructive"
+                                'flex items-center font-medium',
+                                !isValid && 'text-destructive',
                               )}
                             >
                               {pair.label}
                               {!isValid && <AlertTriangle className="ml-1 size-3.5" />}
                             </h3>
                             <Badge
-                              variant={isValid ? "default" : "destructive"}
+                              variant={isValid ? 'default' : 'destructive'}
                               className={cn(
-                                "flex items-center gap-1 text-xs",
+                                'flex items-center gap-1 text-xs',
                                 isValid
-                                  ? "bg-muted text-muted-foreground"
-                                  : "bg-destructive text-destructive-foreground"
+                                  ? 'bg-muted text-muted-foreground'
+                                  : 'bg-destructive text-destructive-foreground',
                               )}
                             >
                               {isValid ? (
@@ -306,7 +306,7 @@ const ContrastChecker = ({ currentStyles }: ContrastCheckerProps) => {
                               <div className="flex w-full items-center gap-3">
                                 <div
                                   style={{
-                                    backgroundColor: pair.background ?? "#000000",
+                                    backgroundColor: pair.background ?? '#000000',
                                   }}
                                   className="h-12 w-12 flex-shrink-0 rounded-md border shadow-sm"
                                 ></div>
@@ -321,7 +321,7 @@ const ContrastChecker = ({ currentStyles }: ContrastCheckerProps) => {
                               <div className="flex w-full items-center gap-3">
                                 <div
                                   style={{
-                                    backgroundColor: pair.foreground ?? "#ffffff",
+                                    backgroundColor: pair.foreground ?? '#ffffff',
                                   }}
                                   className="h-12 w-12 flex-shrink-0 rounded-md border shadow-sm"
                                 ></div>
@@ -336,7 +336,7 @@ const ContrastChecker = ({ currentStyles }: ContrastCheckerProps) => {
 
                             <div
                               style={{
-                                backgroundColor: pair.background ?? "transparent",
+                                backgroundColor: pair.background ?? 'transparent',
                               }}
                               className="flex h-full min-h-[120px] flex-1 items-center justify-center overflow-hidden rounded-lg border shadow-sm"
                             >

@@ -1,4 +1,4 @@
-import { Separator } from "../primitives/separator";
+import { Separator } from '../primitives/separator';
 // import { useAIThemeGeneration } from "@/hooks/use-ai-theme-generation";
 // import { useEditorStore } from "../../store/editor-store";
 // import { useThemePresetStore } from "../../store/theme-preset-store";
@@ -9,9 +9,9 @@ import { Separator } from "../primitives/separator";
 // import { ResetButton } from "./reset-button";
 // import { SaveButton } from "./save-button";
 // import { ShareButton } from "./share-button";
-import { ThemeToggle } from "./theme-toggle";
+import { ThemeToggle } from './theme-toggle';
 // import { UndoRedoButtons } from "./undo-redo-buttons";
-// import { useAIChatStore } from "@/store/ai-chat-store";
+// import { useAIChatStore } from "../..//ai-chat-store";
 
 // interface ActionBarButtonsProps {
 //   onImportClick: () => void;

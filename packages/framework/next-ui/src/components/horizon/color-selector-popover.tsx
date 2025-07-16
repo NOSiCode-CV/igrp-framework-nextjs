@@ -1,24 +1,24 @@
-"use client";
+'use client';
 
-import TailwindCSS from "../icons/tailwind-css";
-import { TooltipWrapper } from "../horizon/tooltip-wrapper";
-import { Button } from "../primitives/button";
+import TailwindCSS from '../icons/tailwind-css';
+import { TooltipWrapper } from '../horizon/tooltip-wrapper';
+import { Button } from '../primitives/button';
 import {
   Command,
   CommandEmpty,
   CommandGroup,
   CommandInput,
   CommandItem,
-} from "../primitives/command";
-import { Popover, PopoverContent, PopoverTrigger } from "../primitives/popover";
-import { ScrollArea } from "../primitives/scroll-area";
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "../primitives/tabs";
-import { cn } from "@/lib/utils";
-import { type ColorSelectorTab, usePreferencesStore } from "../../store/preferences-store";
-import { TAILWIND_PALETTE } from "../../utils/registry/tailwind-colors";
-import { Check, LayoutGrid, List } from "lucide-react";
-import { useCallback } from "react";
-import { Separator } from "../primitives/separator";
+} from '../primitives/command';
+import { Popover, PopoverContent, PopoverTrigger } from '../primitives/popover';
+import { ScrollArea } from '../primitives/scroll-area';
+import { Tabs, TabsContent, TabsList, TabsTrigger } from '../primitives/tabs';
+import { cn } from '../../lib/utils';
+import { type ColorSelectorTab, usePreferencesStore } from '../../store/preferences-store';
+import { TAILWIND_PALETTE } from '../../utils/registry/tailwind-colors';
+import { Check, LayoutGrid, List } from 'lucide-react';
+import { useCallback } from 'react';
+import { Separator } from '../primitives/separator';
 
 type ColorSelectorPopoverProps = {
   currentColor: string;
@@ -30,7 +30,7 @@ export function ColorSelectorPopover({ currentColor, onChange }: ColorSelectorPo
     (color: string) => {
       onChange(color);
     },
-    [onChange]
+    [onChange],
   );
 
   const { setColorSelectorTab, colorSelectorTab } = usePreferencesStore();
@@ -39,14 +39,14 @@ export function ColorSelectorPopover({ currentColor, onChange }: ColorSelectorPo
     (value: string) => {
       setColorSelectorTab(value as ColorSelectorTab);
     },
-    [setColorSelectorTab]
+    [setColorSelectorTab],
   );
 
   const isColorSelected = useCallback(
     (color: string) => {
       return currentColor === color;
     },
-    [currentColor]
+    [currentColor],
   );
 
   return (
@@ -162,7 +162,7 @@ interface ColorSwatchProps extends React.HTMLAttributes<HTMLButtonElement> {
   isSelected: boolean;
   color: string;
   name: string;
-  size?: "sm" | "md" | "lg";
+  size?: 'sm' | 'md' | 'lg';
 }
 
 function ColorSwatch({
@@ -170,25 +170,25 @@ function ColorSwatch({
   name,
   className,
   isSelected,
-  size = "sm",
+  size = 'sm',
   ...props
 }: ColorSwatchProps) {
   const sizeClasses = {
-    sm: "size-5",
-    md: "size-6",
-    lg: "size-8",
+    sm: 'size-5',
+    md: 'size-6',
+    lg: 'size-8',
   };
   return (
     <button
       aria-label={`Select color ${name}`}
       title={name}
       className={cn(
-        "group relative cursor-pointer rounded-md border bg-(--color) transition-all hover:z-10 hover:scale-110 hover:shadow-lg",
+        'group relative cursor-pointer rounded-md border bg-(--color) transition-all hover:z-10 hover:scale-110 hover:shadow-lg',
         sizeClasses[size],
-        isSelected && "ring-2 ring-(--color)",
-        className
+        isSelected && 'ring-2 ring-(--color)',
+        className,
       )}
-      style={{ "--color": color } as React.CSSProperties}
+      style={{ '--color': color } as React.CSSProperties}
       {...props}
     >
       <div className="group-hover:ring-foreground/50 absolute inset-0 rounded-[inherit] ring-2 ring-transparent transition-all duration-200" />

@@ -1,5 +1,5 @@
-import { useState } from "react";
-import { toast } from "sonner";
+import { useState } from 'react';
+import { toast } from 'sonner';
 
 export function useCopyToClipboard() {
   const [isCopying, setIsCopying] = useState(false);
@@ -7,7 +7,7 @@ export function useCopyToClipboard() {
 
   const copyToClipboard = async (
     text: string,
-    successMessage?: { title?: string; description?: string }
+    successMessage?: { title?: string; description?: string },
   ) => {
     try {
       setIsCopying(true);
@@ -15,10 +15,8 @@ export function useCopyToClipboard() {
       setHasCopied(true);
 
       if (successMessage) {
-        toast(successMessage.title || "Copied to clipboard", {          
-          description:
-            successMessage.description ||
-            "Text has been copied to your clipboard",
+        toast(successMessage.title || 'Copied to clipboard', {
+          description: successMessage.description || 'Text has been copied to your clipboard',
         });
       }
 
@@ -27,9 +25,9 @@ export function useCopyToClipboard() {
         setHasCopied(false);
       }, 2000);
     } catch (error) {
-      console.error("Failed to copy:", error);
-      toast.error("Copy failed", {        
-        description: "Could not copy to clipboard",        
+      console.error('Failed to copy:', error);
+      toast.error('Copy failed', {
+        description: 'Could not copy to clipboard',
       });
     } finally {
       setIsCopying(false);

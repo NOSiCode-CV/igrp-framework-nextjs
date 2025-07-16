@@ -1,9 +1,9 @@
-"use client";
+'use client';
 
-import { useRef } from "react";
-import { useInspectorState } from "./use-inspector-state";
-import { useInspectorMouseEvents } from "./use-inspector-mouse-events";
-import { useInspectorScroll } from "./use-inspector-scroll";
+import { useRef } from 'react';
+import { useInspectorState } from './use-inspector-state';
+import { useInspectorMouseEvents } from './use-inspector-mouse-events';
+import { useInspectorScroll } from './use-inspector-scroll';
 
 export const useThemeInspector = () => {
   const rootRef = useRef<HTMLDivElement>(null);

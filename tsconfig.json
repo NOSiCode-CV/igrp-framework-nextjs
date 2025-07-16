@@ -1,9 +1,9 @@
 {
   "compilerOptions": {
-    "target": "ES2022",
+    "target": "ES2023",
     "module": "commonjs",
     "lib": [
-      "es2022"
+      "es2023"
     ],
     "strict": true,
     "esModuleInterop": true,
@@ -21,6 +21,7 @@
     // { "path": "./packages/igrp-cli-next" },
     { "path": "./templates/demo" },
     { "path": "./packages/framework/next" },    
+    { "path": "./packages/framework/next-ui" },    
     { "path": "./packages/framework/next-types" }
   ]
 }

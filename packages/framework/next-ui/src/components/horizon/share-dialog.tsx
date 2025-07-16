@@ -4,11 +4,11 @@ import {
   DialogDescription,
   DialogHeader,
   DialogTitle,
-} from "../primitives/dialog";
-import { Button } from "../primitives/button";
-import { Input } from "../primitives/input";
-import { useCopyToClipboard } from "../../hooks/use-copy-to-clipboard";
-import { Check, Copy } from "lucide-react";
+} from '../primitives/dialog';
+import { Button } from '../primitives/button';
+import { Input } from '../primitives/input';
+import { useCopyToClipboard } from '../../hooks/use-copy-to-clipboard';
+import { Check, Copy } from 'lucide-react';
 
 interface ShareDialogProps {
   open: boolean;
@@ -21,7 +21,7 @@ export function ShareDialog({ open, onOpenChange, url }: ShareDialogProps) {
 
   const handleCopy = async () => {
     await copyToClipboard(url, {
-      title: "Theme URL copied to clipboard!",
+      title: 'Theme URL copied to clipboard!',
     });
   };
 
@@ -41,17 +41,8 @@ export function ShareDialog({ open, onOpenChange, url }: ShareDialogProps) {
             className="flex-1"
             onClick={(e) => e.currentTarget.select()}
           />
-          <Button
-            size="icon"
-            disabled={isCopying}
-            onClick={handleCopy}
-            variant="outline"
-          >
-            {hasCopied ? (
-              <Check className="h-4 w-4" />
-            ) : (
-              <Copy className="h-4 w-4" />
-            )}
+          <Button size="icon" disabled={isCopying} onClick={handleCopy} variant="outline">
+            {hasCopied ? <Check className="h-4 w-4" /> : <Copy className="h-4 w-4" />}
           </Button>
         </div>
       </DialogContent>

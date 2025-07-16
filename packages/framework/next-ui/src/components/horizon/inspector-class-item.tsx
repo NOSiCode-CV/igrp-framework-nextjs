@@ -1,11 +1,11 @@
-"use client";
+'use client';
 
-import React, { memo, useCallback, useMemo } from "react";
-import { cn } from "@/lib/utils";
-import { SquarePen } from "lucide-react";
-import { type FocusColorId, useColorControlFocus } from "../../store/color-control-focus-store";
-import { segmentClassName } from "../../lib/inspector/segment-classname";
-import { useEditorStore } from "../../store/editor-store";
+import React, { memo, useCallback, useMemo } from 'react';
+import { cn } from '../../lib/utils';
+import { SquarePen } from 'lucide-react';
+import { type FocusColorId, useColorControlFocus } from '../../store/color-control-focus-store';
+import { segmentClassName } from '../../lib/inspector/segment-classname';
+import { useEditorStore } from '../../store/editor-store';
 
 interface InspectorClassItemProps {
   className: string;
@@ -26,7 +26,7 @@ const InspectorClassItem = memo(({ className }: InspectorClassItemProps) => {
         focusColor(color as FocusColorId);
       }
     },
-    [segments.value, focusColor]
+    [segments.value, focusColor],
   );
 
   const renderSegmentedClassName = useCallback((): React.ReactNode => {
@@ -36,7 +36,7 @@ const InspectorClassItem = memo(({ className }: InspectorClassItemProps) => {
       parts.push(
         <span key="selector" className="text-foreground/60">
           {segments.selector}:
-        </span>
+        </span>,
       );
     }
 
@@ -44,7 +44,7 @@ const InspectorClassItem = memo(({ className }: InspectorClassItemProps) => {
       parts.push(
         <span key="prefix" className="text-foreground">
           {segments.prefix}
-        </span>
+        </span>,
       );
     }
 
@@ -55,7 +55,7 @@ const InspectorClassItem = memo(({ className }: InspectorClassItemProps) => {
         </span>,
         <span key="value" className="text-foreground font-bold">
           {segments.value}
-        </span>
+        </span>,
       );
     }
 
@@ -66,7 +66,7 @@ const InspectorClassItem = memo(({ className }: InspectorClassItemProps) => {
         </span>,
         <span key="opacity" className="text-foreground/60">
           {segments.opacity}
-        </span>
+        </span>,
       );
     }
 
@@ -84,7 +84,7 @@ const InspectorClassItem = memo(({ className }: InspectorClassItemProps) => {
             backgroundColor: styles[segments.value as keyof typeof styles],
           }}
           className={cn(
-            "border-foreground ring-border block size-4 shrink-0 rounded-md border-1 ring-1"
+            'border-foreground ring-border block size-4 shrink-0 rounded-md border-1 ring-1',
           )}
         />
         <span className="font-mono text-xs">{renderSegmentedClassName()}</span>
@@ -94,6 +94,6 @@ const InspectorClassItem = memo(({ className }: InspectorClassItemProps) => {
   );
 });
 
-InspectorClassItem.displayName = "InspectorClassItem";
+InspectorClassItem.displayName = 'InspectorClassItem';
 
 export default InspectorClassItem;

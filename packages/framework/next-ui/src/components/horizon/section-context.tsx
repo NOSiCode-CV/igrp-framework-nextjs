@@ -1,4 +1,4 @@
-import { createContext } from "react";
+import { createContext } from 'react';
 
 interface SectionContextType {
   /** Whether the parent ControlSection is currently expanded */

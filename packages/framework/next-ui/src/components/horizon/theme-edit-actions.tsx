@@ -1,12 +1,12 @@
-import { Button } from "../primitives/button";
-import { Separator } from "../primitives/separator";
-import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "../primitives/tooltip";
-import { useEditorStore } from "@/store/editor-store";
+import { Button } from '../primitives/button';
+import { Separator } from '../primitives/separator';
+import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from '../primitives/tooltip';
+import { useEditorStore } from '../../store/editor-store';
 // import type { Theme } from "../../types/theme";
-import { Check, X } from "lucide-react";
-import { useRouter, useSearchParams } from "next/navigation";
-import { useState } from "react";
-import { ThemeSaveDialog } from "./theme-save-dialog";
+import { Check, X } from 'lucide-react';
+import { useRouter, useSearchParams } from 'next/navigation';
+import { useState } from 'react';
+import { ThemeSaveDialog } from './theme-save-dialog';
 
 interface ThemeEditActionsProps {
   // theme: Theme;
@@ -24,7 +24,7 @@ const ThemeEditActions: React.FC<ThemeEditActionsProps> = ({ /*theme,*/ disabled
   const handleThemeEditCancel = () => {
     // Keep the current search params for tab persistence
     router.push(mainEditorUrl);
-    applyThemePreset(themeState?.preset || "default");
+    applyThemePreset(themeState?.preset || 'default');
   };
 
   const handleSaveTheme = async (/*newName: string*/) => {
@@ -35,22 +35,18 @@ const ThemeEditActions: React.FC<ThemeEditActionsProps> = ({ /*theme,*/ disabled
     // } = {
     //   id: theme.id,
     // };
-
     // if (newName !== theme.name) {
     //   dataToUpdate.name = newName;
     // } else {
     //   dataToUpdate.name = theme.name;
     // }
-
     // if (themeState.styles) {
     //   dataToUpdate.styles = themeState.styles;
     // }
-
     // if (!dataToUpdate.name && !dataToUpdate.styles) {
     //   setIsNameDialogOpen(false);
     //   return;
     // }
-
     // try {
     //   const result = await updateThemeMutation.mutateAsync(dataToUpdate);
     //   if (result) {

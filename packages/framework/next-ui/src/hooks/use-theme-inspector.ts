@@ -1,1 +1,1 @@
-export { useThemeInspector } from "./inspector/use-theme-inspector";
+export { useThemeInspector } from './inspector/use-theme-inspector';

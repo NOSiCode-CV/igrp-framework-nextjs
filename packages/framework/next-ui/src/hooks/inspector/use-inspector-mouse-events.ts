@@ -1,6 +1,6 @@
-import { useCallback, useEffect, type MouseEvent } from "react";
-import { debounce } from "../../utils/debounce";
-import { findThemeClasses } from "../../lib/inspector/theme-class-finder";
+import { useCallback, useEffect, type MouseEvent } from 'react';
+import { debounce } from '../../utils/debounce';
+import { findThemeClasses } from '../../lib/inspector/theme-class-finder';
 
 interface UseInspectorMouseEventsProps {
   inspectorEnabled: boolean;
@@ -39,7 +39,7 @@ export const useInspectorMouseEvents = ({
 
       clearInspectorState();
     }, 20),
-    [rootRef, lastElementRef, updateInspectorState, clearInspectorState]
+    [rootRef, lastElementRef, updateInspectorState, clearInspectorState],
   );
 
   const handleMouseMove = useCallback(
@@ -49,7 +49,7 @@ export const useInspectorMouseEvents = ({
 
       debouncedInspectorUpdate(target);
     },
-    [inspectorEnabled, debouncedInspectorUpdate]
+    [inspectorEnabled, debouncedInspectorUpdate],
   );
 
   const handleMouseLeave = useCallback(() => {
@@ -69,7 +69,7 @@ export const useInspectorMouseEvents = ({
         return;
       }
 
-      if (target.closest("[data-inspector-overlay]")) {
+      if (target.closest('[data-inspector-overlay]')) {
         return;
       }
 
@@ -77,10 +77,10 @@ export const useInspectorMouseEvents = ({
       debouncedInspectorUpdate.cancel();
     };
 
-    document.addEventListener("mousemove", handleDocumentMouseMove, { passive: true });
+    document.addEventListener('mousemove', handleDocumentMouseMove, { passive: true });
 
     return () => {
-      document.removeEventListener("mousemove", handleDocumentMouseMove);
+      document.removeEventListener('mousemove', handleDocumentMouseMove);
     };
   }, [inspectorEnabled, clearInspectorState, debouncedInspectorUpdate, rootRef]);
 

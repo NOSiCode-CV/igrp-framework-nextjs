@@ -1,6 +1,6 @@
 {
   "name": "igrp-framework-nextjs",
-  "version": "0.0.0-alpha.3",
+  "version": "0.0.0",
   "license": "MIT",
   "workspaces": [
     "packages/**",
@@ -23,6 +23,7 @@
     "release:framework": "pnpm run:framework && pnpm -r run release"
   },
   "devDependencies": {
+    "@changesets/cli": "^2.29.5",
     "eslint": "^9.29.0",
     "typescript": "^5.8.3"
   },

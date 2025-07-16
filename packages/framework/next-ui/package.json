@@ -1,6 +1,6 @@
 {
   "name": "@igrp/framework-next-ui",
-  "version": "0.0.0-alpha.7",
+  "version": "0.0.0-alpha.8",
   "description": "IGRP Framework for Next.js - Layout components and data loading hooks",
   "keywords": [
     "igrp",
@@ -14,13 +14,17 @@
   "license": "MIT",
   "scripts": {
     "dev": "tsc --watch",
+    "clean": "pnpm clean:dist && pnpm clean:packages",
+    "clean:dist": "rimraf dist",
+    "clean:packages": "rimraf node_modules",
+    "build:types": "tsc --emitDeclarationOnly --outDir dist_types",
     "build:swc": "swc ./src -d dist --config-file .swcrc --strip-leading-paths && cpy src/*.css dist/",
-    "build:babel": "rimraf dist_optimized && babel dist --out-dir dist_optimized --source-maps --extensions .ts,.js,.tsx,.jsx,.cjs,.mjs && rimraf dist && move dist_optimized dist && cpy  src/*.css dist/",
-    "build:prod": "pnpm tailwind:build && pnpm build:swc && pnpm build:babel",
+    "build:babel": "rimraf dist_optimized && babel dist --out-dir dist_optimized --source-maps --extensions .js,.jsx,.ts,.tsx --ignore '**/*.d.ts' && rimraf dist && move dist_optimized dist && cpy src/*.css dist/",
+    "build:prod": "pnpm tailwind:build && pnpm build:types && pnpm build:swc && pnpm build:babel && cpy dist_types/**/*.d.ts dist/ && rimraf dist_types",
+    "format": "prettier --write .",
     "tailwind:watch": "pnpm dlx @tailwindcss/cli -i ./src/index.css -o ./src/styles.css --watch",
     "tailwind:build": "pnpm dlx @tailwindcss/cli -i ./src/index.css -o ./src/styles.css",
-    "release": "pnpm format && pnpm build:prod && yarn publish --registry=https://sonatype.nosi.cv/repository/igrp/ --tag latest",
-    "format": "prettier --write ."
+    "release": "pnpm format && pnpm build:prod && yarn publish --registry=https://sonatype.nosi.cv/repository/igrp/ --tag latest"
   },
   "peerDependencies": {
     "next": "15.3.4",

@@ -19,7 +19,8 @@
     "clean:framework": "pnpm --filter @igrp/framework-next clean",
     "dev:demo": "pnpm --filter demo dev",
     "build:demo": "pnpm --filter demo build",
-    "start:demo": "pnpm --filter demo start"    
+    "start:demo": "pnpm --filter demo start",
+    "dev:contribuicoes": "pnpm --filter demo-contribuicoes dev"    
   },
   "devDependencies": {
     "eslint": "^9.29.0",

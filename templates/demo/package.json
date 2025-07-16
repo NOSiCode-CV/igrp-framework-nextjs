@@ -11,7 +11,7 @@
   },
   "dependencies": {
     "@bprogress/next": "^3.2.12",
-    "@igrp/framework-next": "workspace:*",
+   "@igrp/framework-next": "workspace:*",
     "@igrp/framework-next-ui": "workspace:*",
     "@igrp/framework-next-types": "workspace:*",
     "@igrp/igrp-framework-react-design-system": "0.0.0-alpha.219",

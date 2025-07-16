@@ -20,6 +20,7 @@
   "references": [
     // { "path": "./packages/igrp-cli-next" },
     { "path": "./templates/demo" },
+    { "path": "./templates/contribuicoes" },
     { "path": "./packages/framework/next" },    
     { "path": "./packages/framework/next-types" }
   ]

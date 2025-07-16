@@ -110,7 +110,7 @@ export default function PageNovolancamentoComponent() {
     }
   }
 
-  function onCancel(): void { }
+  function onCancel(): void {}
 
   const { igrpToast } = useIGRPToast();
 

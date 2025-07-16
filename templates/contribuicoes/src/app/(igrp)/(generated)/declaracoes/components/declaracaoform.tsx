@@ -178,7 +178,7 @@ export default function Declaracaoform({
     }
   }
 
-  function onCancel(): void { }
+  function onCancel(): void {}
 
   const router = useRouter();
 

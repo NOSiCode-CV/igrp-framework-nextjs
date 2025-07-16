@@ -22,4 +22,4 @@ export async function PUT(request: NextRequest, { params }: { params: Promise<{ 
   } catch (error) {
     return handleApiError(error);
   }
-} 
+}

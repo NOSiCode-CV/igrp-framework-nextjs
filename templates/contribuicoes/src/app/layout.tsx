@@ -1,4 +1,4 @@
-import '@igrp/framework-next-ui/dist/styles.css';
+// import '@igrp/framework-next-ui/dist/styles.css';
 import '@/styles/globals.css';
 
 import type { Metadata, Viewport } from 'next';
@@ -22,9 +22,5 @@ export default async function RootLayout({ children }: Readonly<{ children: Reac
   const layoutConfig = await configLayout();
   const config = createConfig(layoutConfig);
 
-  return (
-    <IGRPRootLayout config={config}>
-      {children}
-    </IGRPRootLayout>
-  );
+  return <IGRPRootLayout config={config}>{children}</IGRPRootLayout>;
 }

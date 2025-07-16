@@ -5,7 +5,7 @@ export enum DeclaracaoStatus {
   SUBMETIDA = 'SUBMETIDA',
   VERIFICADA = 'VERIFICADA',
   PROCESSADA = 'PROCESSADA',
-  VALIDADA = 'VALIDADA'
+  VALIDADA = 'VALIDADA',
 }
 
 export interface Anexo {
@@ -42,5 +42,5 @@ export interface DeclaracaoFilter {
   numeroContribuinte?: string;
   numeroProcesso?: string;
   periodoReferencia?: string;
-  periodoEntrega?: DateRange | undefined
+  periodoEntrega?: DateRange | undefined;
 }

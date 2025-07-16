@@ -45,5 +45,5 @@ export default {
   types: ['types/declaracao', 'types/index'],
   actions: ['actions/common', 'actions/declaracao'],
   functions: [],
-  components: []
+  components: [],
 };

@@ -1,1 +1,579 @@
-{"type":"component","scope":"page","pagePath":"entregas","pageName":"entregas","description":"Delivery Modal Form","name":"DeliveryModalForm","id":"exdwtf7jts","args":[{"id":"1","name":"isOpen","type":"boolean","isList":false,"isOptional":false,"isInterface":false,"isFunction":false,"isState":false},{"id":"2","name":"setIsOpen","type":"void","isList":false,"isOptional":false,"isInterface":false,"isFunction":true,"isState":false,"functionParameters":[{"id":"1750435389204","name":"prompt","type":"boolean","isOptional":false,"isList":false,"isInterface":false,"isFunction":false,"isState":false}]},{"id":"3","name":"initialData","type":"any","isList":false,"isOptional":true,"isInterface":false,"isFunction":false,"isState":false}],"components":{"id":"component_0hkjfi","componentName":"component","label":"component","properties":{"variant":"default","commonProperties":{}},"children":[{"id":"main_content_grid","tag":"main_content_grid","componentName":"modalDialog","properties":{},"interactions":{"onOpenChange":{"type":"function","function":{"fnName":"setIsOpen"}}},"data":{"open":{"value":{"code":"isOpen"}}},"children":[{"id":"page_content_container","tag":"page_content_container","componentName":"modalDialogContent","properties":{"className":"col-span-5"},"children":[{"id":"modal_dialog_header","tag":"modal_dialog_header","componentName":"modalDialogHeader","children":[{"id":"modal_headline","tag":"modal_headline","componentName":"headline","properties":{"variant":"h5","title":"Nova Entrega"}}]},{"id":"main_content","tag":"main_content","componentName":"container","properties":{"className":"relative"},"children":[{"id":"form_declarations","tag":"form_declarations","componentName":"form","dataType":"Declaracao","properties":{"className":"space-y-6"},"children":[{"id":"basic_information_card","tag":"basic_information_card","componentName":"card","properties":{"className":"shadow-sm","commonProperties":{}},"children":[{"id":"basic_information_card_header","tag":"basic_information_card_header","componentName":"cardHeader","properties":{"className":"border-b flex flex-row items-center justify-between"},"children":[{"id":"basic_information_title_flex","tag":"basic_information_title_flex","componentName":"flex","properties":{"variant":"row","className":"justify-between"},"children":[{"id":"basic_information_icon_container","tag":"basic_information_icon_container","componentName":"container","properties":{"className":"py-3"},"children":[{"id":"basic_information_building_icon","tag":"basic_information_building_icon","componentName":"icon","properties":{"iconName":"Building","className":"h-6 w-6 text-muted-foreground"}}]},{"id":"basic_information_title_container","tag":"basic_information_title_container","componentName":"container","properties":{"className":"px-5"},"children":[{"id":"basic_information_headline","tag":"basic_information_headline","componentName":"headline","properties":{"variant":"h6","title":"Informações Básicas","description":"Dados principais da declaração"}}]}]},{"id":"basic_information_badge","tag":"basic_information_badge","componentName":"badge","properties":{"variant":"outline","color":"destructive","content":"Obrigatório (*)","badgeClassName":"font-normal text-xs text-red-800"}}]},{"id":"basic_information_card_content","tag":"basic_information_card_content","componentName":"cardContent","properties":{"className":"p-4"},"children":[{"id":"basic_information_form_grid","tag":"basic_information_form_grid","componentName":"grid","childProperties":{"className":"row-span-1"},"properties":{"variant":{"default":"rows2"},"className":"gap-2"},"children":[{"id":"nr_contribuinte","tag":"contribuinteId","componentName":"combobox","properties":{"label":"Nº de Contribuinte","placeholder":"Escolha o contribuinte","required":true,"showSearch":true},"data":{"options":{"state":{"id":"nr_contribuinte_opt_st","name":"comboboxContribuinteIdOptions","type":"IGRPOptionsProps[]","defaultValue":"[]","generate":true}}}},{"id":"mes_referencia","tag":"mesReferencia","componentName":"select","properties":{"label":"Mês de Referência","placeholder":"Escolha o mês de referência","required":true,"showSearch":true},"data":{"options":{"state":{"id":"mes_ref_opt_st","name":"selectMesReferenciaOptions","type":"IGRPOptionsProps[]","defaultValue":"[]","generate":true}}}}]}]}]}],"interactions":{"onSubmit":{"type":"function","function":{"fnCustomSet":"async (values) => await onSubmit(values)"}}},"data":{"defaultValues":{"state":{"id":"form_tax_payer_content_st","name":"contentForm{{id}}","type":"z.infer<{{type}}ZodType>","defaultValue":"init{{type}}","generate":true}}}}]},{"id":"modal_dialog_footer","tag":"modal_dialog_fotter","componentName":"modalDialogFooter","properties":{"className":"sm:flex justify-end"},"children":[{"id":"button_form_tax_payer_submit","tag":"button_form_tax_payer_submit","componentName":"button","properties":{"type":"submit","className":"min-w-[150px]"},"data":{"disabled":{"state":{"id":"is_submitting_st","name":"isSubmitting","type":"boolean","defaultValue":"false","generate":true}}},"children":[{"id":"processing_paragraph","tag":"processing_paragraph","componentName":"paragraph","properties":{"content":"Processando...","className":"animate-pulse"},"rules":[{"type":"visibility","condition":"isSubmitting"}]},{"id":"new_paragraph","tag":"new_paragraph","componentName":"paragraph","properties":{"content":"Salvar Entrega"},"rules":[{"type":"visibility","condition":"!isSubmitting"}]}],"interactions":{"onClick":{"formSubmit":{"targetForm":"form_declarations"},"type":"formSubmit"}}}]}]}]}],"tag":"component1","data":{},"interactions":{"onLoad":{"type":"function","function":{"type":"function","fnCustomCode":{"imports":[{"namespace":"import {useNewDeclaracaoParameterizations} from \"@/app/[locale]/(myapp)/hooks/use-parametrization\""}],"fnCode":"\n       \n  const router = useRouter()     \n       \n  const { isLoading } = useNewDeclaracaoParameterizations();\n\n  useEffect(() => {\n    \n    if (isLoading) return;\n    loadFormFields()\n    \n  }, [isLoading])\n\n  useEffect(() => {\n    if (initialData) {\n      setContentFormform_declarations(initialData)\n    }\n  },[initialData])\n          \n  const loadFormFields = async () => {\n   \n    setComboboxContribuinteIdOptions(await getContribuintes())\n    setSelectMesReferenciaOptions(await getMesesReferencia())\n    \n  }      \n        \n        "}}}},"childProperties":{}},"functions":[{"id":"form_submit_fn","name":"onSubmit","isAsync":true,"arguments":[{"id":"form_values","name":"values","type":"z.infer<any>","isOptional":false,"isList":false,"isFunction":false,"isState":false,"isInterface":false}],"imports":[{"id":"form_submit_fn_imp1","namespace":"import { createOrUpdateDeclaracao } from '@/app/[locale]/(myapp)/hooks/use-declaracao'"},{"id":"import_swoaPO","namespace":"import { useRouter } from \"next/navigation\";"}],"code":"\n      \n      const declaracao: any = {\n        ...values,\n        declaracaoId: initialData?.declaracaoId\n      };\n      \n      setIsSubmitting(true)\n\n      try {\n        await createOrUpdateDeclaracao(declaracao)\n        igrpToast({\n          title: \"Entrega adicionada\",\n          description: `Entrega ${values.declaracaoId} foi adicionada com sucesso.`,\n        })\n        router.push('/declaracoes');\n      } catch (error) {\n        igrpToast({\n          title: \"Erro\",\n          description: \"Ocorreu um erro ao processar o formulário.\",\n          type: \"error\",\n        })\n        console.log(error);\n      } finally {\n        setIsSubmitting(false)\n      }\n      \n      ","returnValue":{"type":"void","isNullable":false}},{"id":"on_cancel_fn","name":"onCancel","arguments":[],"imports":[],"code":"\n      \n      ","returnValue":{"type":"void","isNullable":false}}],"types":[{"componentId":"form_declarations","name":"DeclaracaoStatus","fields":[{"componentId":"","name":"POR_ENTREGAR","type":"string","isList":false,"required":true,"defaultValue":"POR_ENTREGAR"},{"componentId":"","name":"SUBMETIDA","type":"string","isList":false,"required":true,"defaultValue":"SUBMETIDA"},{"componentId":"","name":"VERIFICADA","type":"string","isList":false,"required":true,"defaultValue":"VERIFICADA"},{"componentId":"","name":"PROCESSADA","type":"string","isList":false,"required":true,"defaultValue":"PROCESSADA"},{"componentId":"","name":"VALIDADA","type":"string","isList":false,"required":true,"defaultValue":"VALIDADA"}],"isEnum":true,"path":"@/app/[locale]/(myapp)/types/declaracao"},{"componentId":"form_declarations","name":"Declaracao","fields":[{"componentId":"","name":"declaracaoId","type":"string","isList":false,"required":true,"defaultValue":""},{"componentId":"","name":"processoId","type":"string","isList":false,"required":true,"defaultValue":""},{"componentId":"","name":"contribuinteId","type":"string","isList":false,"required":true,"defaultValue":""},{"componentId":"","name":"nomeContribuinte","type":"string","isList":false,"required":true,"defaultValue":""},{"componentId":"","name":"numeroContribuinte","type":"string","isList":false,"required":true,"defaultValue":""},{"componentId":"","name":"data","type":"string","isList":false,"required":true,"defaultValue":""},{"componentId":"","name":"mesReferencia","type":"string","isList":false,"required":true,"defaultValue":""},{"componentId":"","name":"salario","type":"number","isList":false,"required":true,"defaultValue":"0"},{"componentId":"","name":"diasTrabalho","type":"number","isList":false,"required":true,"defaultValue":"0"},{"componentId":"","name":"outrasRemuneracoes","type":"number","isList":false,"required":true,"defaultValue":"0"},{"componentId":"","name":"valorSoat","type":"number","isList":false,"required":true,"defaultValue":"0"},{"componentId":"","name":"totalComparticipacao","type":"number","isList":false,"required":true,"defaultValue":"0"},{"componentId":"","name":"compRegimeGeral","type":"number","isList":false,"required":true,"defaultValue":"0"},{"componentId":"","name":"compSoat","type":"number","isList":false,"required":true,"defaultValue":"0"},{"componentId":"","name":"estadoDeclaracao","type":"DeclaracaoStatus","isList":false,"required":true,"defaultValue":"\"POR_ENTREGAR\""},{"componentId":"","name":"estadoDeclaracaoDesc","type":"string","isList":false,"required":true,"defaultValue":""},{"componentId":"","name":"observacao","type":"string","isList":false,"required":false,"defaultValue":""}],"path":"@/app/[locale]/(myapp)/types/declaracao"}],"states":[],"imports":[],"actions":[{"id":"action_1","code":"","name":"getContribuintes","arguments":[],"path":"@/app/[locale]/(myapp)/actions/mock-actions","returnValue":{"type":"IGRPOptionsProps","isList":true,"isNullable":false}},{"id":"action_2","code":"","name":"getMesesReferencia","arguments":[],"path":"@/app/[locale]/(myapp)/actions/mock-actions","returnValue":{"type":"IGRPOptionsProps","isList":true,"isNullable":false}}]}
+{
+  "type": "component",
+  "scope": "page",
+  "pagePath": "entregas",
+  "pageName": "entregas",
+  "description": "Delivery Modal Form",
+  "name": "DeliveryModalForm",
+  "id": "exdwtf7jts",
+  "args": [
+    {
+      "id": "1",
+      "name": "isOpen",
+      "type": "boolean",
+      "isList": false,
+      "isOptional": false,
+      "isInterface": false,
+      "isFunction": false,
+      "isState": false
+    },
+    {
+      "id": "2",
+      "name": "setIsOpen",
+      "type": "void",
+      "isList": false,
+      "isOptional": false,
+      "isInterface": false,
+      "isFunction": true,
+      "isState": false,
+      "functionParameters": [
+        {
+          "id": "1750435389204",
+          "name": "prompt",
+          "type": "boolean",
+          "isOptional": false,
+          "isList": false,
+          "isInterface": false,
+          "isFunction": false,
+          "isState": false
+        }
+      ]
+    },
+    {
+      "id": "3",
+      "name": "initialData",
+      "type": "any",
+      "isList": false,
+      "isOptional": true,
+      "isInterface": false,
+      "isFunction": false,
+      "isState": false
+    }
+  ],
+  "components": {
+    "id": "component_0hkjfi",
+    "componentName": "component",
+    "label": "component",
+    "properties": { "variant": "default", "commonProperties": {} },
+    "children": [
+      {
+        "id": "main_content_grid",
+        "tag": "main_content_grid",
+        "componentName": "modalDialog",
+        "properties": {},
+        "interactions": {
+          "onOpenChange": { "type": "function", "function": { "fnName": "setIsOpen" } }
+        },
+        "data": { "open": { "value": { "code": "isOpen" } } },
+        "children": [
+          {
+            "id": "page_content_container",
+            "tag": "page_content_container",
+            "componentName": "modalDialogContent",
+            "properties": { "className": "col-span-5" },
+            "children": [
+              {
+                "id": "modal_dialog_header",
+                "tag": "modal_dialog_header",
+                "componentName": "modalDialogHeader",
+                "children": [
+                  {
+                    "id": "modal_headline",
+                    "tag": "modal_headline",
+                    "componentName": "headline",
+                    "properties": { "variant": "h5", "title": "Nova Entrega" }
+                  }
+                ]
+              },
+              {
+                "id": "main_content",
+                "tag": "main_content",
+                "componentName": "container",
+                "properties": { "className": "relative" },
+                "children": [
+                  {
+                    "id": "form_declarations",
+                    "tag": "form_declarations",
+                    "componentName": "form",
+                    "dataType": "Declaracao",
+                    "properties": { "className": "space-y-6" },
+                    "children": [
+                      {
+                        "id": "basic_information_card",
+                        "tag": "basic_information_card",
+                        "componentName": "card",
+                        "properties": { "className": "shadow-sm", "commonProperties": {} },
+                        "children": [
+                          {
+                            "id": "basic_information_card_header",
+                            "tag": "basic_information_card_header",
+                            "componentName": "cardHeader",
+                            "properties": {
+                              "className": "border-b flex flex-row items-center justify-between"
+                            },
+                            "children": [
+                              {
+                                "id": "basic_information_title_flex",
+                                "tag": "basic_information_title_flex",
+                                "componentName": "flex",
+                                "properties": { "variant": "row", "className": "justify-between" },
+                                "children": [
+                                  {
+                                    "id": "basic_information_icon_container",
+                                    "tag": "basic_information_icon_container",
+                                    "componentName": "container",
+                                    "properties": { "className": "py-3" },
+                                    "children": [
+                                      {
+                                        "id": "basic_information_building_icon",
+                                        "tag": "basic_information_building_icon",
+                                        "componentName": "icon",
+                                        "properties": {
+                                          "iconName": "Building",
+                                          "className": "h-6 w-6 text-muted-foreground"
+                                        }
+                                      }
+                                    ]
+                                  },
+                                  {
+                                    "id": "basic_information_title_container",
+                                    "tag": "basic_information_title_container",
+                                    "componentName": "container",
+                                    "properties": { "className": "px-5" },
+                                    "children": [
+                                      {
+                                        "id": "basic_information_headline",
+                                        "tag": "basic_information_headline",
+                                        "componentName": "headline",
+                                        "properties": {
+                                          "variant": "h6",
+                                          "title": "Informações Básicas",
+                                          "description": "Dados principais da declaração"
+                                        }
+                                      }
+                                    ]
+                                  }
+                                ]
+                              },
+                              {
+                                "id": "basic_information_badge",
+                                "tag": "basic_information_badge",
+                                "componentName": "badge",
+                                "properties": {
+                                  "variant": "outline",
+                                  "color": "destructive",
+                                  "content": "Obrigatório (*)",
+                                  "badgeClassName": "font-normal text-xs text-red-800"
+                                }
+                              }
+                            ]
+                          },
+                          {
+                            "id": "basic_information_card_content",
+                            "tag": "basic_information_card_content",
+                            "componentName": "cardContent",
+                            "properties": { "className": "p-4" },
+                            "children": [
+                              {
+                                "id": "basic_information_form_grid",
+                                "tag": "basic_information_form_grid",
+                                "componentName": "grid",
+                                "childProperties": { "className": "row-span-1" },
+                                "properties": {
+                                  "variant": { "default": "rows2" },
+                                  "className": "gap-2"
+                                },
+                                "children": [
+                                  {
+                                    "id": "nr_contribuinte",
+                                    "tag": "contribuinteId",
+                                    "componentName": "combobox",
+                                    "properties": {
+                                      "label": "Nº de Contribuinte",
+                                      "placeholder": "Escolha o contribuinte",
+                                      "required": true,
+                                      "showSearch": true
+                                    },
+                                    "data": {
+                                      "options": {
+                                        "state": {
+                                          "id": "nr_contribuinte_opt_st",
+                                          "name": "comboboxContribuinteIdOptions",
+                                          "type": "IGRPOptionsProps[]",
+                                          "defaultValue": "[]",
+                                          "generate": true
+                                        }
+                                      }
+                                    }
+                                  },
+                                  {
+                                    "id": "mes_referencia",
+                                    "tag": "mesReferencia",
+                                    "componentName": "select",
+                                    "properties": {
+                                      "label": "Mês de Referência",
+                                      "placeholder": "Escolha o mês de referência",
+                                      "required": true,
+                                      "showSearch": true
+                                    },
+                                    "data": {
+                                      "options": {
+                                        "state": {
+                                          "id": "mes_ref_opt_st",
+                                          "name": "selectMesReferenciaOptions",
+                                          "type": "IGRPOptionsProps[]",
+                                          "defaultValue": "[]",
+                                          "generate": true
+                                        }
+                                      }
+                                    }
+                                  }
+                                ]
+                              }
+                            ]
+                          }
+                        ]
+                      }
+                    ],
+                    "interactions": {
+                      "onSubmit": {
+                        "type": "function",
+                        "function": { "fnCustomSet": "async (values) => await onSubmit(values)" }
+                      }
+                    },
+                    "data": {
+                      "defaultValues": {
+                        "state": {
+                          "id": "form_tax_payer_content_st",
+                          "name": "contentForm{{id}}",
+                          "type": "z.infer<{{type}}ZodType>",
+                          "defaultValue": "init{{type}}",
+                          "generate": true
+                        }
+                      }
+                    }
+                  }
+                ]
+              },
+              {
+                "id": "modal_dialog_footer",
+                "tag": "modal_dialog_fotter",
+                "componentName": "modalDialogFooter",
+                "properties": { "className": "sm:flex justify-end" },
+                "children": [
+                  {
+                    "id": "button_form_tax_payer_submit",
+                    "tag": "button_form_tax_payer_submit",
+                    "componentName": "button",
+                    "properties": { "type": "submit", "className": "min-w-[150px]" },
+                    "data": {
+                      "disabled": {
+                        "state": {
+                          "id": "is_submitting_st",
+                          "name": "isSubmitting",
+                          "type": "boolean",
+                          "defaultValue": "false",
+                          "generate": true
+                        }
+                      }
+                    },
+                    "children": [
+                      {
+                        "id": "processing_paragraph",
+                        "tag": "processing_paragraph",
+                        "componentName": "paragraph",
+                        "properties": { "content": "Processando...", "className": "animate-pulse" },
+                        "rules": [{ "type": "visibility", "condition": "isSubmitting" }]
+                      },
+                      {
+                        "id": "new_paragraph",
+                        "tag": "new_paragraph",
+                        "componentName": "paragraph",
+                        "properties": { "content": "Salvar Entrega" },
+                        "rules": [{ "type": "visibility", "condition": "!isSubmitting" }]
+                      }
+                    ],
+                    "interactions": {
+                      "onClick": {
+                        "formSubmit": { "targetForm": "form_declarations" },
+                        "type": "formSubmit"
+                      }
+                    }
+                  }
+                ]
+              }
+            ]
+          }
+        ]
+      }
+    ],
+    "tag": "component1",
+    "data": {},
+    "interactions": {
+      "onLoad": {
+        "type": "function",
+        "function": {
+          "type": "function",
+          "fnCustomCode": {
+            "imports": [
+              {
+                "namespace": "import {useNewDeclaracaoParameterizations} from \"@/app/[locale]/(myapp)/hooks/use-parametrization\""
+              }
+            ],
+            "fnCode": "\n       \n  const router = useRouter()     \n       \n  const { isLoading } = useNewDeclaracaoParameterizations();\n\n  useEffect(() => {\n    \n    if (isLoading) return;\n    loadFormFields()\n    \n  }, [isLoading])\n\n  useEffect(() => {\n    if (initialData) {\n      setContentFormform_declarations(initialData)\n    }\n  },[initialData])\n          \n  const loadFormFields = async () => {\n   \n    setComboboxContribuinteIdOptions(await getContribuintes())\n    setSelectMesReferenciaOptions(await getMesesReferencia())\n    \n  }      \n        \n        "
+          }
+        }
+      }
+    },
+    "childProperties": {}
+  },
+  "functions": [
+    {
+      "id": "form_submit_fn",
+      "name": "onSubmit",
+      "isAsync": true,
+      "arguments": [
+        {
+          "id": "form_values",
+          "name": "values",
+          "type": "z.infer<any>",
+          "isOptional": false,
+          "isList": false,
+          "isFunction": false,
+          "isState": false,
+          "isInterface": false
+        }
+      ],
+      "imports": [
+        {
+          "id": "form_submit_fn_imp1",
+          "namespace": "import { createOrUpdateDeclaracao } from '@/app/[locale]/(myapp)/hooks/use-declaracao'"
+        },
+        { "id": "import_swoaPO", "namespace": "import { useRouter } from \"next/navigation\";" }
+      ],
+      "code": "\n      \n      const declaracao: any = {\n        ...values,\n        declaracaoId: initialData?.declaracaoId\n      };\n      \n      setIsSubmitting(true)\n\n      try {\n        await createOrUpdateDeclaracao(declaracao)\n        igrpToast({\n          title: \"Entrega adicionada\",\n          description: `Entrega ${values.declaracaoId} foi adicionada com sucesso.`,\n        })\n        router.push('/declaracoes');\n      } catch (error) {\n        igrpToast({\n          title: \"Erro\",\n          description: \"Ocorreu um erro ao processar o formulário.\",\n          type: \"error\",\n        })\n        console.log(error);\n      } finally {\n        setIsSubmitting(false)\n      }\n      \n      ",
+      "returnValue": { "type": "void", "isNullable": false }
+    },
+    {
+      "id": "on_cancel_fn",
+      "name": "onCancel",
+      "arguments": [],
+      "imports": [],
+      "code": "\n      \n      ",
+      "returnValue": { "type": "void", "isNullable": false }
+    }
+  ],
+  "types": [
+    {
+      "componentId": "form_declarations",
+      "name": "DeclaracaoStatus",
+      "fields": [
+        {
+          "componentId": "",
+          "name": "POR_ENTREGAR",
+          "type": "string",
+          "isList": false,
+          "required": true,
+          "defaultValue": "POR_ENTREGAR"
+        },
+        {
+          "componentId": "",
+          "name": "SUBMETIDA",
+          "type": "string",
+          "isList": false,
+          "required": true,
+          "defaultValue": "SUBMETIDA"
+        },
+        {
+          "componentId": "",
+          "name": "VERIFICADA",
+          "type": "string",
+          "isList": false,
+          "required": true,
+          "defaultValue": "VERIFICADA"
+        },
+        {
+          "componentId": "",
+          "name": "PROCESSADA",
+          "type": "string",
+          "isList": false,
+          "required": true,
+          "defaultValue": "PROCESSADA"
+        },
+        {
+          "componentId": "",
+          "name": "VALIDADA",
+          "type": "string",
+          "isList": false,
+          "required": true,
+          "defaultValue": "VALIDADA"
+        }
+      ],
+      "isEnum": true,
+      "path": "@/app/[locale]/(myapp)/types/declaracao"
+    },
+    {
+      "componentId": "form_declarations",
+      "name": "Declaracao",
+      "fields": [
+        {
+          "componentId": "",
+          "name": "declaracaoId",
+          "type": "string",
+          "isList": false,
+          "required": true,
+          "defaultValue": ""
+        },
+        {
+          "componentId": "",
+          "name": "processoId",
+          "type": "string",
+          "isList": false,
+          "required": true,
+          "defaultValue": ""
+        },
+        {
+          "componentId": "",
+          "name": "contribuinteId",
+          "type": "string",
+          "isList": false,
+          "required": true,
+          "defaultValue": ""
+        },
+        {
+          "componentId": "",
+          "name": "nomeContribuinte",
+          "type": "string",
+          "isList": false,
+          "required": true,
+          "defaultValue": ""
+        },
+        {
+          "componentId": "",
+          "name": "numeroContribuinte",
+          "type": "string",
+          "isList": false,
+          "required": true,
+          "defaultValue": ""
+        },
+        {
+          "componentId": "",
+          "name": "data",
+          "type": "string",
+          "isList": false,
+          "required": true,
+          "defaultValue": ""
+        },
+        {
+          "componentId": "",
+          "name": "mesReferencia",
+          "type": "string",
+          "isList": false,
+          "required": true,
+          "defaultValue": ""
+        },
+        {
+          "componentId": "",
+          "name": "salario",
+          "type": "number",
+          "isList": false,
+          "required": true,
+          "defaultValue": "0"
+        },
+        {
+          "componentId": "",
+          "name": "diasTrabalho",
+          "type": "number",
+          "isList": false,
+          "required": true,
+          "defaultValue": "0"
+        },
+        {
+          "componentId": "",
+          "name": "outrasRemuneracoes",
+          "type": "number",
+          "isList": false,
+          "required": true,
+          "defaultValue": "0"
+        },
+        {
+          "componentId": "",
+          "name": "valorSoat",
+          "type": "number",
+          "isList": false,
+          "required": true,
+          "defaultValue": "0"
+        },
+        {
+          "componentId": "",
+          "name": "totalComparticipacao",
+          "type": "number",
+          "isList": false,
+          "required": true,
+          "defaultValue": "0"
+        },
+        {
+          "componentId": "",
+          "name": "compRegimeGeral",
+          "type": "number",
+          "isList": false,
+          "required": true,
+          "defaultValue": "0"
+        },
+        {
+          "componentId": "",
+          "name": "compSoat",
+          "type": "number",
+          "isList": false,
+          "required": true,
+          "defaultValue": "0"
+        },
+        {
+          "componentId": "",
+          "name": "estadoDeclaracao",
+          "type": "DeclaracaoStatus",
+          "isList": false,
+          "required": true,
+          "defaultValue": "\"POR_ENTREGAR\""
+        },
+        {
+          "componentId": "",
+          "name": "estadoDeclaracaoDesc",
+          "type": "string",
+          "isList": false,
+          "required": true,
+          "defaultValue": ""
+        },
+        {
+          "componentId": "",
+          "name": "observacao",
+          "type": "string",
+          "isList": false,
+          "required": false,
+          "defaultValue": ""
+        }
+      ],
+      "path": "@/app/[locale]/(myapp)/types/declaracao"
+    }
+  ],
+  "states": [],
+  "imports": [],
+  "actions": [
+    {
+      "id": "action_1",
+      "code": "",
+      "name": "getContribuintes",
+      "arguments": [],
+      "path": "@/app/[locale]/(myapp)/actions/mock-actions",
+      "returnValue": { "type": "IGRPOptionsProps", "isList": true, "isNullable": false }
+    },
+    {
+      "id": "action_2",
+      "code": "",
+      "name": "getMesesReferencia",
+      "arguments": [],
+      "path": "@/app/[locale]/(myapp)/actions/mock-actions",
+      "returnValue": { "type": "IGRPOptionsProps", "isList": true, "isNullable": false }
+    }
+  ]
+}

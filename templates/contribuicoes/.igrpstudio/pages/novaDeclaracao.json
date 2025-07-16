@@ -1,1 +1,179 @@
-{"id":"gb87Xk1rU1s0","imports":[],"states":[{"id":"state_BPXRrx","name":"shouldSubmit","type":"boolean","defaultValue":"false"},{"id":"is_submitting_st","name":"isSubmitting","type":"boolean","defaultValue":"false"}],"references":[],"types":[],"functions":[{"id":"handle_after_submit_fn","name":"handleAfterSubmit","arguments":[],"imports":[],"code":"\n      setShouldSubmit(false)\n      ","returnValue":{"type":"void  | undefined","isNullable":false}},{"id":"handle_button_submit_fn","name":"handleSubmit","arguments":[],"imports":[],"code":"\n      setShouldSubmit(true)\n      ","returnValue":{"type":"void  | undefined","isNullable":false}}],"actions":[],"type":"page","pageName":"novaDeclaracao","parentName":"declaracoes","path":"declaracoes/novo","components":{"id":"main_page","tag":"main_page","componentName":"page","interactions":{},"children":[{"id":"main_layout","tag":"main_layout","componentName":"flex","properties":{"variant":"col","className":"min-h-full"},"children":[{"id":"main_page_header","tag":"main_page_header","componentName":"pageHeader","properties":{"showBackButton":true,"urlBackButton":"/declaracoes","variant":"h3","title":"Nova Declaração","isSticky":true},"children":[{"id":"button_cancelar","tag":"button_cancelar","componentName":"button","properties":{"content":"Cancelar","size":"sm","variant":"outline","iconProperties":{}},"interactions":{"onClick":{"navigate":{"name":"handlebutton_cancelarNavigation","path":"/declaracoes"},"type":"navigate"}}},{"id":"button_save","tag":"button_save","componentName":"button","properties":{"size":"sm","iconProperties":{}},"children":[{"id":"processing_paragraph","tag":"processing_paragraph","componentName":"paragraph","properties":{"content":"Processando...","className":"animate-pulse"},"rules":[{"type":"visibility","condition":"isSubmitting"}]},{"id":"new_paragraph","tag":"new_paragraph","componentName":"paragraph","properties":{"content":"Salvar Declaração"},"rules":[{"type":"visibility","condition":"!isSubmitting"}]}],"interactions":{"onClick":{"function":{"fnName":"handleSubmit"},"type":"function"}},"data":{"disabled":{"state":{"id":"is_submitting_st","name":"isSubmitting"}}}}],"style":{"layout":{"type":"flex","flex":{"direction":"row","wrap":"nowrap","alignItems":"center","justifyContent":"space-between","gap":"2"},"grid":{"templateColumns":"4","templateRows":"1","gap":"2","justifyItems":"stretch","alignItems":"start","direction":"row","dense":false},"block":{}},"spacing":{"margin":{"top":{"value":"0","unit":"px"},"right":{"value":"0","unit":"px"},"bottom":{"value":"4","unit":"px"},"left":{"value":"0","unit":"px"}},"padding":{"top":{"value":"0","unit":"px"},"right":{"value":"0","unit":"px"},"bottom":{"value":"0","unit":"px"},"left":{"value":"0","unit":"px"}}}}},{"id":"declaracaoform_dgilcb","tag":"DeclaracaoForm1","componentName":"DeclaracaoForm","children":[],"interactions":{"onAfterSubmit":{"type":"function","function":{"fnCustomCode":{"imports":[]},"fnName":"handleAfterSubmit"}},"setIsSubmitting":{"type":"function","function":{"fnCustomCode":{"imports":[]},"fnName":"setIsSubmitting"}}},"data":{"shouldSubmit":{"state":{"id":"","name":"shouldSubmit","type":"","imports":[],"generate":false}},"isSubmitting":{"state":{"id":"","name":"isSubmitting","imports":[],"generate":false}}},"properties":{"customProperties":{"isEdit":false}},"childProperties":{}}]}]}}
+{
+  "id": "gb87Xk1rU1s0",
+  "imports": [],
+  "states": [
+    { "id": "state_BPXRrx", "name": "shouldSubmit", "type": "boolean", "defaultValue": "false" },
+    { "id": "is_submitting_st", "name": "isSubmitting", "type": "boolean", "defaultValue": "false" }
+  ],
+  "references": [],
+  "types": [],
+  "functions": [
+    {
+      "id": "handle_after_submit_fn",
+      "name": "handleAfterSubmit",
+      "arguments": [],
+      "imports": [],
+      "code": "\n      setShouldSubmit(false)\n      ",
+      "returnValue": { "type": "void  | undefined", "isNullable": false }
+    },
+    {
+      "id": "handle_button_submit_fn",
+      "name": "handleSubmit",
+      "arguments": [],
+      "imports": [],
+      "code": "\n      setShouldSubmit(true)\n      ",
+      "returnValue": { "type": "void  | undefined", "isNullable": false }
+    }
+  ],
+  "actions": [],
+  "type": "page",
+  "pageName": "novaDeclaracao",
+  "parentName": "declaracoes",
+  "path": "declaracoes/novo",
+  "components": {
+    "id": "main_page",
+    "tag": "main_page",
+    "componentName": "page",
+    "interactions": {},
+    "children": [
+      {
+        "id": "main_layout",
+        "tag": "main_layout",
+        "componentName": "flex",
+        "properties": { "variant": "col", "className": "min-h-full" },
+        "children": [
+          {
+            "id": "main_page_header",
+            "tag": "main_page_header",
+            "componentName": "pageHeader",
+            "properties": {
+              "showBackButton": true,
+              "urlBackButton": "/declaracoes",
+              "variant": "h3",
+              "title": "Nova Declaração",
+              "isSticky": true
+            },
+            "children": [
+              {
+                "id": "button_cancelar",
+                "tag": "button_cancelar",
+                "componentName": "button",
+                "properties": {
+                  "content": "Cancelar",
+                  "size": "sm",
+                  "variant": "outline",
+                  "iconProperties": {}
+                },
+                "interactions": {
+                  "onClick": {
+                    "navigate": {
+                      "name": "handlebutton_cancelarNavigation",
+                      "path": "/declaracoes"
+                    },
+                    "type": "navigate"
+                  }
+                }
+              },
+              {
+                "id": "button_save",
+                "tag": "button_save",
+                "componentName": "button",
+                "properties": { "size": "sm", "iconProperties": {} },
+                "children": [
+                  {
+                    "id": "processing_paragraph",
+                    "tag": "processing_paragraph",
+                    "componentName": "paragraph",
+                    "properties": { "content": "Processando...", "className": "animate-pulse" },
+                    "rules": [{ "type": "visibility", "condition": "isSubmitting" }]
+                  },
+                  {
+                    "id": "new_paragraph",
+                    "tag": "new_paragraph",
+                    "componentName": "paragraph",
+                    "properties": { "content": "Salvar Declaração" },
+                    "rules": [{ "type": "visibility", "condition": "!isSubmitting" }]
+                  }
+                ],
+                "interactions": {
+                  "onClick": { "function": { "fnName": "handleSubmit" }, "type": "function" }
+                },
+                "data": {
+                  "disabled": { "state": { "id": "is_submitting_st", "name": "isSubmitting" } }
+                }
+              }
+            ],
+            "style": {
+              "layout": {
+                "type": "flex",
+                "flex": {
+                  "direction": "row",
+                  "wrap": "nowrap",
+                  "alignItems": "center",
+                  "justifyContent": "space-between",
+                  "gap": "2"
+                },
+                "grid": {
+                  "templateColumns": "4",
+                  "templateRows": "1",
+                  "gap": "2",
+                  "justifyItems": "stretch",
+                  "alignItems": "start",
+                  "direction": "row",
+                  "dense": false
+                },
+                "block": {}
+              },
+              "spacing": {
+                "margin": {
+                  "top": { "value": "0", "unit": "px" },
+                  "right": { "value": "0", "unit": "px" },
+                  "bottom": { "value": "4", "unit": "px" },
+                  "left": { "value": "0", "unit": "px" }
+                },
+                "padding": {
+                  "top": { "value": "0", "unit": "px" },
+                  "right": { "value": "0", "unit": "px" },
+                  "bottom": { "value": "0", "unit": "px" },
+                  "left": { "value": "0", "unit": "px" }
+                }
+              }
+            }
+          },
+          {
+            "id": "declaracaoform_dgilcb",
+            "tag": "DeclaracaoForm1",
+            "componentName": "DeclaracaoForm",
+            "children": [],
+            "interactions": {
+              "onAfterSubmit": {
+                "type": "function",
+                "function": { "fnCustomCode": { "imports": [] }, "fnName": "handleAfterSubmit" }
+              },
+              "setIsSubmitting": {
+                "type": "function",
+                "function": { "fnCustomCode": { "imports": [] }, "fnName": "setIsSubmitting" }
+              }
+            },
+            "data": {
+              "shouldSubmit": {
+                "state": {
+                  "id": "",
+                  "name": "shouldSubmit",
+                  "type": "",
+                  "imports": [],
+                  "generate": false
+                }
+              },
+              "isSubmitting": {
+                "state": { "id": "", "name": "isSubmitting", "imports": [], "generate": false }
+              }
+            },
+            "properties": { "customProperties": { "isEdit": false } },
+            "childProperties": {}
+          }
+        ]
+      }
+    ]
+  }
+}

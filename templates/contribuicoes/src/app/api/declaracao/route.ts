@@ -13,7 +13,7 @@ export async function GET(req: NextRequest) {
 
     // If declaracaoId is provided, fetch specific contributor
     if (declaracaoId) {
-      console.log("DeclaracaoId: ", declaracaoId)
+      console.log('DeclaracaoId: ', declaracaoId);
       const response = await callGateway<Declaracao>(
         `${API_URL}/${SERVICE_ID}/api/v1/declaracoes/${declaracaoId}?${query}`,
         {

@@ -24,39 +24,30 @@ export function handleApiError(error: unknown): NextResponse {
   // Handle ErrorResponse from api-gateway
   if (isErrorResponse(error)) {
     return NextResponse.json(
-      { 
+      {
         message: error.details || error.message,
-        title: error.title 
+        title: error.title,
       },
-      { status: error.status }
+      { status: error.status },
     );
   }
 
   // Handle ApiError with status
   if (isApiError(error)) {
-    return NextResponse.json(
-      { message: error.message },
-      { status: error.status }
-    );
+    return NextResponse.json({ message: error.message }, { status: error.status });
   }
 
   // Handle generic Error
   if (error instanceof Error) {
-    return NextResponse.json(
-      { message: error.message },
-      { status: 500 }
-    );
+    return NextResponse.json({ message: error.message }, { status: 500 });
   }
 
   // Handle unknown errors
-  return NextResponse.json(
-    { message: 'An unexpected error occurred' },
-    { status: 500 }
-  );
+  return NextResponse.json({ message: 'An unexpected error occurred' }, { status: 500 });
 }
 
 export function createApiError(message: string, status: number = 500): ApiError {
   const error = new Error(message) as ApiError;
   error.status = status;
   return error;
-} 
+}

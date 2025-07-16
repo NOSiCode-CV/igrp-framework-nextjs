@@ -2,7 +2,9 @@ import { NextConfig } from 'next';
 
 const nextConfig: NextConfig = {
   // output: 'standalone',
-  basePath: process.env.IGRP_APP_BASE_PATH,
+
+  // use this if you are using a custom domain for igrp-ui or apps-center
+  // basePath: "/apps/appslug",
   images: {
     remotePatterns: [
       {

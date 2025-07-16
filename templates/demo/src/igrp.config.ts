@@ -7,14 +7,15 @@ import { getMockMenusFooter } from '@/temp/menus/use-mock-menus-footer';
 import { getMockUser } from '@/temp/users/use-mock-user';
 
 export function createConfig(config: IGRPLayoutConfigArgs) {
-  const user = getMockUser().mockUser
-  const menu = getMockMenus().mockMenus
-  const footerMwnu = getMockMenusFooter().mockMenusFooter
-  const apps = getMockApps().mockApps
+  const user = getMockUser().mockUser;
+  const menu = getMockMenus().mockMenus;
+  const footerMwnu = getMockMenusFooter().mockMenusFooter;
+  const apps = getMockApps().mockApps;
+  const previewModeEnv = process.env.IGRP_PREVIEW_MODE;
 
   return buildConfig({
     appCode: process.env.IGRP_APP_CODE || '',
-    previewMode: process.env.IGRP_PREVIEW_MODE === 'true' ? true : false,
+    previewMode: previewModeEnv === undefined || previewModeEnv.trim().toLowerCase() === 'true',
     layoutMockData: {
       getHeaderData: async () => ({
         user: user,

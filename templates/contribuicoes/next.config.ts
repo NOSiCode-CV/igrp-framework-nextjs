@@ -2,7 +2,7 @@ import { NextConfig } from 'next';
 
 const nextConfig: NextConfig = {
   // output: 'standalone',
-  basePath: process.env.IGRP_APP_BASE_PATH || '/',
+  basePath: '/apps/contribuicoes',
   images: {
     remotePatterns: [
       {

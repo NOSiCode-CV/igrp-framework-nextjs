@@ -3,7 +3,8 @@ import { useParams } from 'next/navigation';
 
 import {
   createDeclaracao,
-  fetchDeclaracoes, fetchEntregas,
+  fetchDeclaracoes,
+  fetchEntregas,
   getDeclaracaoByID,
   updateDeclaracao,
 } from '../actions/declaracao';
@@ -27,7 +28,7 @@ export const useDeclaracao = (filters: DeclaracaoFilter) => {
       verificados: content.filter((u) => u.estadoDeclaracao === DeclaracaoStatus.VERIFICADA).length,
       processados: content.filter((u) => u.estadoDeclaracao === DeclaracaoStatus.PROCESSADA).length,
       validados: content.filter((u) => u.estadoDeclaracao === DeclaracaoStatus.VALIDADA).length,
-      totalComparticipacao: `F CFA ${content.reduce((sum, c) => sum + (c.totalComparticipacao || 0), 0)}`
+      totalComparticipacao: `F CFA ${content.reduce((sum, c) => sum + (c.totalComparticipacao || 0), 0)}`,
     };
   }, [queryResult.data]);
 
@@ -38,7 +39,6 @@ export const useDeclaracao = (filters: DeclaracaoFilter) => {
 };
 
 export const useEntregas = (filters: DeclaracaoFilter) => {
-
   const queryResult = useQuery<PaginatedResponse<Declaracao>>({
     queryKey: ['declaracao', filters],
     queryFn: () => fetchEntregas(filters),
@@ -50,9 +50,10 @@ export const useEntregas = (filters: DeclaracaoFilter) => {
     const content = queryResult.data.content;
     return {
       entregues: content.filter((u) => u.estadoDeclaracao === DeclaracaoStatus.SUBMETIDA).length,
-      porEntregar: content.filter((u) => u.estadoDeclaracao === DeclaracaoStatus.POR_ENTREGAR).length,
+      porEntregar: content.filter((u) => u.estadoDeclaracao === DeclaracaoStatus.POR_ENTREGAR)
+        .length,
       totalContribuicoes: `F CFA ${content.reduce((sum, c) => sum + (c.totalComparticipacao || 0), 0)}`,
-      totalRemuneracoes: `F CFA ${content.reduce((sum, c) => sum + (c.totalComparticipacao || 0), 0)}` // TODO: change to remuneracao
+      totalRemuneracoes: `F CFA ${content.reduce((sum, c) => sum + (c.totalComparticipacao || 0), 0)}`, // TODO: change to remuneracao
     };
   }, [queryResult.data]);
 

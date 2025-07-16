@@ -1,55 +1,55 @@
 export interface Declaration {
-    id: string,
-    idContribuinte: string,
-    numero_contribuinte: string,
-    nome_contribuinte: string,
-    numero_processo: string,
-    periodo_referencia: string,
-    data_entrega: string,
-    total_remuneracao: number,
-    total_comparticipacao: number,
-    estado: string,
-    observacoes?: string
+  id: string;
+  idContribuinte: string;
+  numero_contribuinte: string;
+  nome_contribuinte: string;
+  numero_processo: string;
+  periodo_referencia: string;
+  data_entrega: string;
+  total_remuneracao: number;
+  total_comparticipacao: number;
+  estado: string;
+  observacoes?: string;
 }
 
 export interface Launch {
-  numeroBeneficiario: string,
-  nomeBeneficiario: string,
-  dataNascimento: string,
-  diasTrabalho: number,
-  salarioDiario: number,
-  outrasRemuneracoes: number,
-  totalMensal: number,
-  compSoat: number,
-  compRegimeGeral: number,
-  observacao?: string
+  numeroBeneficiario: string;
+  nomeBeneficiario: string;
+  dataNascimento: string;
+  diasTrabalho: number;
+  salarioDiario: number;
+  outrasRemuneracoes: number;
+  totalMensal: number;
+  compSoat: number;
+  compRegimeGeral: number;
+  observacao?: string;
 }
 
 export interface Attachment {
-  idDeclaracao: string,
-  tipo: string,
-  nome: string,
-  data: Date
+  idDeclaracao: string;
+  tipo: string;
+  nome: string;
+  data: Date;
 }
 
 export interface NewLaunchRequest {
-  lancamento: Launch[],
+  lancamento: Launch[];
 }
 
 export interface InfoDesconto {
-  soat: number,
-  regimeGeral: number
+  soat: number;
+  regimeGeral: number;
 }
 
 export interface NewDeclarationRequest {
-  declaracaoId: string,
-  contribuinteId: string,
-  mesReferencia: string,
-  diasTrabalho: number,
-  salario: number,
-  outrasRemuneracoes: number,
-  compRegimeGeral: number,
-  observacoes?: string
+  declaracaoId: string;
+  contribuinteId: string;
+  mesReferencia: string;
+  diasTrabalho: number;
+  salario: number;
+  outrasRemuneracoes: number;
+  compRegimeGeral: number;
+  observacoes?: string;
 }
 
 export interface CurrentAccount {
@@ -77,7 +77,7 @@ export interface CurrentAccountResponse {
 }
 
 export interface Contribuinte {
-  id: string,
-  numeroContribuinte: string,
-  nomeContribuinte: string
+  id: string;
+  numeroContribuinte: string;
+  nomeContribuinte: string;
 }

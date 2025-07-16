@@ -5,14 +5,18 @@ import {
   mockPeriodOptions,
   mockStatusOptions,
   mockCurrentAccountResponse,
-  mockContribuintes, mockDeclarationsAttachments, mockInfoDesconto,
+  mockContribuintes,
+  mockDeclarationsAttachments,
+  mockInfoDesconto,
 } from '@/app/(myapp)/data/mockData';
 
 import {
   Attachment,
   CurrentAccountResponse,
-  Declaration, InfoDesconto,
-  NewDeclarationRequest, NewLaunchRequest,
+  Declaration,
+  InfoDesconto,
+  NewDeclarationRequest,
+  NewLaunchRequest,
 } from '@/app/(myapp)/data/types';
 import { IGRPOptionsProps } from '@igrp/igrp-framework-react-design-system';
 
@@ -91,20 +95,22 @@ export async function onSubmitLaunchForm(values: NewLaunchRequest) {
 }
 
 export async function getDeclarationById(id: string): Promise<Declaration | undefined> {
-  return mockDeclarations.find((it) => it.id === id)
+  return mockDeclarations.find((it) => it.id === id);
 }
 
 export async function getDeclarationAttachmentById(id: string): Promise<Attachment[]> {
-  return mockDeclarationsAttachments.filter((it) => it.idDeclaracao === id)
+  return mockDeclarationsAttachments.filter((it) => it.idDeclaracao === id);
 }
 
-export async function getLatestDeclarationByContribuinte(id: string | undefined): Promise<Declaration | undefined> {
-  if (!id) return undefined
+export async function getLatestDeclarationByContribuinte(
+  id: string | undefined,
+): Promise<Declaration | undefined> {
+  if (!id) return undefined;
   return mockDeclarations
     .filter((it) => it.idContribuinte === id)
     .sort((a, b) => new Date(b.data_entrega).getTime() - new Date(a.data_entrega).getTime())[1];
 }
 
 export async function getInfoDesconto(): Promise<InfoDesconto> {
-  return mockInfoDesconto
+  return mockInfoDesconto;
 }

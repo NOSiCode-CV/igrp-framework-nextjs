@@ -13,7 +13,7 @@ export async function GET(req: NextRequest) {
 
     // If declaracaoId is provided, fetch specific contributor
     if (declaracaoId) {
-      console.log("DeclaracaoId: ", declaracaoId)
+      console.log('DeclaracaoId: ', declaracaoId);
       const response = await callGateway<Declaracao>(
         `${API_URL}/${SERVICE_ID}/api/v1/declaracoes/${declaracaoId}?${query}`,
         {
@@ -43,10 +43,13 @@ export async function POST(req: NextRequest) {
     const API_URL = process.env.NEXT_PUBLIC_API_GATEWAY ?? '';
     const SERVICE_ID = process.env.NEXT_PUBLIC_SERVICE_ID ?? '';
 
-    const response = await callGateway<Declaracao>(`${API_URL}/${SERVICE_ID}/api/v1/declaracoes/entrega/gerar`, {
-      method: 'POST',
-      body: JSON.stringify(body),
-    });
+    const response = await callGateway<Declaracao>(
+      `${API_URL}/${SERVICE_ID}/api/v1/declaracoes/entrega/gerar`,
+      {
+        method: 'POST',
+        body: JSON.stringify(body),
+      },
+    );
 
     console.log('response', response);
     return NextResponse.json(response);

@@ -59,7 +59,7 @@ export const authOptions: NextAuthOptions = {
       }
     },
     async session({ session, token }) {
-      session.user = token.user as Session["user"];
+      session.user = token.user as Session['user'];
       session.accessToken = token.accessToken as string;
       session.error = token.error as string;
       session.idToken = token.idToken as string;
@@ -70,7 +70,7 @@ export const authOptions: NextAuthOptions = {
   },
   events: {
     async signOut({ token }) {
-      if (token) {        
+      if (token) {
         await doFinalSignoutHandshake(token as JWT);
       }
     },

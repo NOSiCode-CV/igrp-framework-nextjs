@@ -29,7 +29,7 @@ export const createParameterizationHook = (endpoint: string) => {
 export const useNewDeclaracaoParameterizations = () => {
   const declaracaoStatus = useParameterization(PARAMETERIZATION_ENDPOINTS.ESTADO_DECLARACAO);
 
-  const isLoading = declaracaoStatus.isLoading
+  const isLoading = declaracaoStatus.isLoading;
 
   return {
     declaracaoStatus: declaracaoStatus.data,
@@ -45,5 +45,4 @@ export const useDeclaracaoParameterizations = () => {
     declaracaoStatus: declaracaoStatus.data,
     isLoading,
   };
-
 };

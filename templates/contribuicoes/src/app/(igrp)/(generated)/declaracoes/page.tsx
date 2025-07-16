@@ -140,7 +140,7 @@ export default function PageDeclaracoesComponent() {
     console.log('Handling Import');
   }
 
-  function handleRefreshClick(): void { }
+  function handleRefreshClick(): void {}
 
   const { data, stats, isLoading, error } = useDeclaracao({
     search: filterValue,

@@ -1,9 +1,9 @@
-import * as culori from "culori";
-import type { ColorFormat } from "../types";
-import { type Hsl } from "culori";
+import * as culori from 'culori';
+import type { ColorFormat } from '../types';
+import { type Hsl } from 'culori';
 
 export const formatNumber = (num?: number) => {
-  if (!num) return "0";
+  if (!num) return '0';
   return num % 1 === 0 ? num : num.toFixed(4);
 };
 
@@ -13,28 +13,28 @@ export const formatHsl = (hsl: Hsl) => {
 
 export const colorFormatter = (
   colorValue: string,
-  format: ColorFormat = "hsl",
-  tailwindVersion: "3" | "4" = "3"
+  format: ColorFormat = 'hsl',
+  tailwindVersion: '3' | '4' = '3',
 ): string => {
   try {
     const color = culori.parse(colorValue);
-    if (!color) throw new Error("Invalid color input");
+    if (!color) throw new Error('Invalid color input');
 
     switch (format) {
-      case "hsl": {
-        const hsl = culori.converter("hsl")(color);
-        if (tailwindVersion === "4") {
+      case 'hsl': {
+        const hsl = culori.converter('hsl')(color);
+        if (tailwindVersion === '4') {
           return formatHsl(hsl);
         }
         return `${formatNumber(hsl.h)} ${formatNumber(hsl.s * 100)}% ${formatNumber(hsl.l * 100)}%`;
       }
-      case "rgb":
+      case 'rgb':
         return culori.formatRgb(color); // e.g., "rgb(64, 128, 192)"
-      case "oklch": {
-        const oklch = culori.converter("oklch")(color);
+      case 'oklch': {
+        const oklch = culori.converter('oklch')(color);
         return `oklch(${formatNumber(oklch.l)} ${formatNumber(oklch.c)} ${formatNumber(oklch.h)})`;
       }
-      case "hex":
+      case 'hex':
         return culori.formatHex(color); // e.g., "#4080c0"
       default:
         return colorValue;
@@ -45,4 +45,4 @@ export const colorFormatter = (
   }
 };
 
-export const convertToHSL = (colorValue: string): string => colorFormatter(colorValue, "hsl");
+export const convertToHSL = (colorValue: string): string => colorFormatter(colorValue, 'hsl');

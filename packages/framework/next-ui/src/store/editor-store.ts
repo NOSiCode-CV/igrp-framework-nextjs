@@ -1,9 +1,9 @@
-import { create } from "zustand";
-import { persist } from "zustand/middleware";
-import type { ThemeEditorState } from "@/types/editor";
-import { defaultThemeState } from "@/config/theme";
-import { getPresetThemeStyles } from "../utils/theme-preset-helper";
-import { isDeepEqual } from "../utils/deep-equal";
+import { create } from 'zustand';
+import { persist } from 'zustand/middleware';
+import type { ThemeEditorState } from '../types/editor';
+import { defaultThemeState } from '@/config/theme';
+import { getPresetThemeStyles } from '../utils/theme-preset-helper';
+import { isDeepEqual } from '../utils/deep-equal';
 
 const MAX_HISTORY_COUNT = 30;
 const HISTORY_OVERRIDE_THRESHOLD_MS = 500; // 0.5 seconds
@@ -134,7 +134,7 @@ export const useEditorStore = create<EditorStore>()(
             future: [],
           });
         } else {
-          console.warn("No theme checkpoint available to restore to.");
+          console.warn('No theme checkpoint available to restore to.');
         }
       },
       hasThemeChangedFromCheckpoint: () => {
@@ -143,18 +143,18 @@ export const useEditorStore = create<EditorStore>()(
       },
       hasUnsavedChanges: () => {
         const themeState = get().themeState;
-        const presetThemeStyles = getPresetThemeStyles(themeState.preset ?? "default");
+        const presetThemeStyles = getPresetThemeStyles(themeState.preset ?? 'default');
         const stylesChanged = !isDeepEqual(themeState.styles, presetThemeStyles);
         const hslChanged = !isDeepEqual(
           themeState.hslAdjustments,
-          defaultThemeState.hslAdjustments
+          defaultThemeState.hslAdjustments,
         );
         return stylesChanged || hslChanged;
       },
       resetToCurrentPreset: () => {
         const currentThemeState = get().themeState;
 
-        const presetThemeStyles = getPresetThemeStyles(currentThemeState.preset ?? "default");
+        const presetThemeStyles = getPresetThemeStyles(currentThemeState.preset ?? 'default');
         const newThemeState: ThemeEditorState = {
           ...currentThemeState,
           styles: presetThemeStyles,
@@ -225,7 +225,7 @@ export const useEditorStore = create<EditorStore>()(
       canRedo: () => get().future.length > 0,
     }),
     {
-      name: "editor-storage",
-    }
-  )
+      name: 'editor-storage',
+    },
+  ),
 );

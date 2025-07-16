@@ -15,7 +15,6 @@ import {
 } from '../primitives/dropdown-menu';
 import { SidebarMenu, SidebarMenuButton, SidebarMenuItem, useSidebar } from '../primitives/sidebar';
 
-
 interface AppSwitcherProps {
   apps?: IGRPApplicationArgs[];
   appCode?: number;

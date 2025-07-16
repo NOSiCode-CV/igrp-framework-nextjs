@@ -1,8 +1,8 @@
-"use client";
+'use client';
 
-import { cn } from "@/lib/utils";
-import { type ComponentProps } from "react";
-import { Tooltip, TooltipContent, TooltipTrigger } from "../primitives/tooltip";
+import { cn } from '../../lib/utils';
+import { type ComponentProps } from 'react';
+import { Tooltip, TooltipContent, TooltipTrigger } from '../primitives/tooltip';
 
 export function TooltipWrapper({
   label,

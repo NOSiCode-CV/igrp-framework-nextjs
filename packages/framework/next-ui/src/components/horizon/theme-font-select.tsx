@@ -1,4 +1,4 @@
-import React, { useMemo } from "react";
+import React, { useMemo } from 'react';
 import {
   Select,
   SelectContent,
@@ -6,7 +6,7 @@ import {
   SelectItem,
   SelectTrigger,
   SelectValue,
-} from "../primitives/select";
+} from '../primitives/select';
 
 interface ThemeFontSelectProps {
   fonts: Record<string, string>;
@@ -21,11 +21,11 @@ const ThemeFontSelect: React.FC<ThemeFontSelectProps> = ({
   currentFont,
   onFontChange,
 }) => {
-  const fontNames = useMemo(() => ["System", ...Object.keys(fonts)], [fonts]);
-  const value = currentFont ? fonts[currentFont] ?? defaultValue : defaultValue;
+  const fontNames = useMemo(() => ['System', ...Object.keys(fonts)], [fonts]);
+  const value = currentFont ? (fonts[currentFont] ?? defaultValue) : defaultValue;
 
   return (
-    <Select value={value || ""} onValueChange={onFontChange}>
+    <Select value={value || ''} onValueChange={onFontChange}>
       <div className="flex gap-1 items-center w-full">
         <SelectTrigger className="w-full bg-secondary text-secondary-foreground">
           <SelectValue placeholder="Select theme font" />

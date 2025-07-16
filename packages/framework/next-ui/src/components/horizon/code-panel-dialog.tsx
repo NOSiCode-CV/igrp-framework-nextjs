@@ -1,6 +1,6 @@
-import { Dialog, DialogContent } from "../primitives/dialog";
-import CodePanel from "./code-panel";
-import type { ThemeEditorState } from "@/types/editor";
+import { Dialog, DialogContent } from '../primitives/dialog';
+import CodePanel from './code-panel';
+import type { ThemeEditorState } from '../../types/editor';
 
 interface CodePanelDialogProps {
   open: boolean;
@@ -8,11 +8,7 @@ interface CodePanelDialogProps {
   themeEditorState: ThemeEditorState;
 }
 
-export function CodePanelDialog({
-  open,
-  onOpenChange,
-  themeEditorState,
-}: CodePanelDialogProps) {
+export function CodePanelDialog({ open, onOpenChange, themeEditorState }: CodePanelDialogProps) {
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
       <DialogContent className="max-w-4xl h-[80vh] p-0 py-6 overflow-hidden rounded-lg border shadow-lg gap-6">

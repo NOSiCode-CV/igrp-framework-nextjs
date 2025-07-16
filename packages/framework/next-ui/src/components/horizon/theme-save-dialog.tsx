@@ -1,6 +1,6 @@
-"use client";
+'use client';
 
-import { Button } from "../primitives/button";
+import { Button } from '../primitives/button';
 import {
   Dialog,
   DialogContent,
@@ -8,24 +8,17 @@ import {
   DialogFooter,
   DialogHeader,
   DialogTitle,
-} from "../primitives/dialog";
-import { Input } from "../primitives/input";
-import { useEffect } from "react";
-import { Loader2 } from "lucide-react";
-import { zodResolver } from "@hookform/resolvers/zod";
-import { useForm } from "react-hook-form";
-import * as z from "zod";
-import {
-  Form,
-  FormControl,
-  FormField,
-  FormItem,
-  FormLabel,
-  FormMessage,
-} from "../primitives/form";
+} from '../primitives/dialog';
+import { Input } from '../primitives/input';
+import { useEffect } from 'react';
+import { Loader2 } from 'lucide-react';
+import { zodResolver } from '@hookform/resolvers/zod';
+import { useForm } from 'react-hook-form';
+import * as z from 'zod';
+import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from '../primitives/form';
 
 const formSchema = z.object({
-  themeName: z.string().min(1, "Theme name cannot be empty."),
+  themeName: z.string().min(1, 'Theme name cannot be empty.'),
 });
 
 interface ThemeSaveDialogProps {
@@ -44,10 +37,10 @@ export function ThemeSaveDialog({
   onOpenChange,
   onSave,
   isSaving = false,
-  initialThemeName = "",
-  ctaLabel = "Save Theme",
-  title = "Save Theme",
-  description = "Enter a name for your theme so you can find it later.",
+  initialThemeName = '',
+  ctaLabel = 'Save Theme',
+  title = 'Save Theme',
+  description = 'Enter a name for your theme so you can find it later.',
 }: ThemeSaveDialogProps) {
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
@@ -78,10 +71,7 @@ export function ThemeSaveDialog({
           <DialogDescription>{description}</DialogDescription>
         </DialogHeader>
         <Form {...form}>
-          <form
-            onSubmit={form.handleSubmit(onSubmit)}
-            className="space-y-6 px-6"
-          >
+          <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6 px-6">
             <FormField
               control={form.control}
               name="themeName"
@@ -109,11 +99,7 @@ export function ThemeSaveDialog({
             </Button>
             <Button
               type="submit"
-              disabled={
-                isSaving ||
-                !form.formState.isValid ||
-                form.formState.isSubmitting
-              }
+              disabled={isSaving || !form.formState.isValid || form.formState.isSubmitting}
               size="sm"
               onClick={form.handleSubmit(onSubmit)}
             >

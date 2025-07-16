@@ -44,32 +44,28 @@ export const IGRPRootProviders: React.FC<IGRPRootProvidersArgs> = ({
 }) => {
   return (
     <IGRPSessionProvider session={session} {...sessionArgs}>
-        <IGRPThemeProvider
-          attribute="class"
-          defaultTheme="system"
-          enableSystem
-          disableTransitionOnChange
-          enableColorScheme
-          {...themeArgs}
-        >
-          <IGRPProgressBar {...progressiveBarArgs}>
-            <IGRPActiveThemeProvider initialTheme={activeThemeValue}>
-              <SidebarProvider defaultOpen={defaultOpen}>
-                {showSidebar && <IGRPSidebar data={sidebarData} />}
+      <IGRPThemeProvider
+        attribute="class"
+        defaultTheme="system"
+        enableSystem
+        disableTransitionOnChange
+        enableColorScheme
+        {...themeArgs}
+      >
+        <IGRPProgressBar {...progressiveBarArgs}>
+          <IGRPActiveThemeProvider initialTheme={activeThemeValue}>
+            <SidebarProvider defaultOpen={defaultOpen}>
+              {showSidebar && <IGRPSidebar data={sidebarData} />}
 
-                <SidebarInset>
-                  {showHeader && (
-                    <IGRPHeader
-                      data={headerData}
-                    />
-                  )}
-                  <main className="flex flex-col flex-1 px-6 py-8">{children}</main>
-                </SidebarInset>
-              </SidebarProvider>
-              <Toaster richColors />
-            </IGRPActiveThemeProvider>
-          </IGRPProgressBar>
-        </IGRPThemeProvider>
+              <SidebarInset>
+                {showHeader && <IGRPHeader data={headerData} />}
+                <main className="flex flex-col flex-1 px-6 py-8">{children}</main>
+              </SidebarInset>
+            </SidebarProvider>
+            <Toaster richColors />
+          </IGRPActiveThemeProvider>
+        </IGRPProgressBar>
+      </IGRPThemeProvider>
     </IGRPSessionProvider>
   );
 };

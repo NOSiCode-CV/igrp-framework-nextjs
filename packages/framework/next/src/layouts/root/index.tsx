@@ -11,10 +11,7 @@ type IGRPRootLocaleLayoutArgs = {
   readonly config: Promise<IGRPConfigArgs>;
 };
 
-export async function IGRPRootLayout({
-  children,
-  config,
-}: IGRPRootLocaleLayoutArgs) {
+export async function IGRPRootLayout({ children, config }: IGRPRootLocaleLayoutArgs) {
   const layoutConfig = await config;
 
   const {
@@ -35,8 +32,10 @@ export async function IGRPRootLayout({
 
   if (!previewMode) {
     if (!apiManagementConfig || !apiManagementConfig.baseUrl) {
-      throw new Error("Preview Mode is not enabled, when not enabled, API Management config is required.");
-    };
+      throw new Error(
+        'Preview Mode is not enabled, when not enabled, API Management config is required.',
+      );
+    }
 
     setAccessClientConfig({
       token: session?.accessToken || '',
@@ -56,7 +55,7 @@ export async function IGRPRootLayout({
 
   return (
     <html
-      lang="pt"
+      lang='pt'
       suppressHydrationWarning
       className={font}
     >

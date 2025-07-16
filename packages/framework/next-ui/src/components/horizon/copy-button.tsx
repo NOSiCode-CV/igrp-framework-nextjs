@@ -1,11 +1,11 @@
-"use client";
+'use client';
 
-import { useCopyToClipboard } from "@/hooks/use-copy-to-clipboard";
-import { cn } from "@/lib/utils";
-import { Copy, CopyCheck } from "lucide-react";
-import { type ComponentProps } from "react";
-import { TooltipWrapper } from "./tooltip-wrapper";
-import { Button } from "../primitives/button";
+import { useCopyToClipboard } from '../../hooks/use-copy-to-clipboard';
+import { cn } from '../../lib/utils';
+import { Copy, CopyCheck } from 'lucide-react';
+import { type ComponentProps } from 'react';
+import { TooltipWrapper } from './tooltip-wrapper';
+import { Button } from '../primitives/button';
 
 interface CopyButtonProps extends ComponentProps<typeof Button> {
   textToCopy: string;
@@ -23,7 +23,7 @@ export function CopyButton({ textToCopy, successMessage, className, ...props }: 
       <Button
         size="icon"
         variant="ghost"
-        className={cn("size-6 [&>svg]:size-3.5", className)}
+        className={cn('size-6 [&>svg]:size-3.5', className)}
         onClick={() => copyToClipboard(textToCopy, successMessage)}
         {...props}
       >

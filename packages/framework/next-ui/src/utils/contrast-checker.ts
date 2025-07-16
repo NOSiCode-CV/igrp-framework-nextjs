@@ -1,4 +1,4 @@
-import * as culori from "culori";
+import * as culori from 'culori';
 
 /**
  * Calculates the luminance of a color according to WCAG standard
@@ -36,10 +36,7 @@ export function getContrastRatio(color1: string, color2: string): string {
     const ratio = (Math.max(lum1, lum2) + 0.05) / (Math.min(lum1, lum2) + 0.05);
     return ratio.toFixed(2);
   } catch (error) {
-    console.error(
-      `Error calculating contrast between ${color1} and ${color2}:`,
-      error
-    );
-    return "1.00"; // Fallback value indicating low contrast
+    console.error(`Error calculating contrast between ${color1} and ${color2}:`, error);
+    return '1.00'; // Fallback value indicating low contrast
   }
 }

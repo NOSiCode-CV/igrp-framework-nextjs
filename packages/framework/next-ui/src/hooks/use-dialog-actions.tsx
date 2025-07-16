@@ -9,8 +9,8 @@
 // import { useAIThemeGeneration } from "@/hooks/use-ai-theme-generation";
 // import { usePostLoginAction } from "@/hooks/use-post-login-action";
 // import { useCreateTheme } from "../hooks/themes";
-// import { authClient } from "@/lib/auth-client";
-// import { useAuthStore } from "@/store/auth-store";
+// import { authClient } from "../..//auth-client";
+// import { useAuthStore } from "../..//auth-store";
 // import { useEditorStore } from "../store/editor-store";
 // import { useThemePresetStore } from "../store/theme-preset-store";
 // import { parseCssInput } from "../utils/parse-css-input";
@@ -79,7 +79,7 @@
 //       styles,
 //     });
 
-//     toast("CSS imported", {      
+//     toast("CSS imported", {
 //       description: "Your custom CSS has been imported successfully",
 //     });
 //   };

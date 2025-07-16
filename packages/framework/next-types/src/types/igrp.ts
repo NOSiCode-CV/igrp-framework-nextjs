@@ -1,7 +1,7 @@
-import type { Session as DefaultSession, User as NextAuthUser } from "next-auth";
-import type { JWT as DefaultJWT } from "next-auth/jwt";
-import { IGRPHeaderDataArgs } from "./header";
-import { IGRPSidebarDataArgs } from "./sidebar";
+import type { Session as DefaultSession, User as NextAuthUser } from 'next-auth';
+import type { JWT as DefaultJWT } from 'next-auth/jwt';
+import { IGRPHeaderDataArgs } from './header';
+import { IGRPSidebarDataArgs } from './sidebar';
 
 export interface IGRPApplicationArgs {
   id: number;
@@ -59,7 +59,7 @@ export interface ExtendedSession extends DefaultSession {
   error?: string;
   user?: {
     id?: string;
-  } & DefaultSession["user"];
+  } & DefaultSession['user'];
 }
 
 export interface ExtendedJWT extends DefaultJWT {
@@ -67,7 +67,7 @@ export interface ExtendedJWT extends DefaultJWT {
   refreshToken?: string;
   idToken?: string;
   expiresAt?: number;
-  error?: "RefreshAccessTokenError" | string;
+  error?: 'RefreshAccessTokenError' | string;
   user?: {
     id?: string;
   } & NextAuthUser;
@@ -84,7 +84,7 @@ export type IGRPConfigArgs = {
   showSidebar?: boolean;
   showHeader?: boolean;
   showLanguageSelector?: boolean;
-  layout: IGRPLayoutConfigArgs
+  layout: IGRPLayoutConfigArgs;
   apiManagementConfig?: {
     baseUrl: string;
     timeout?: number;

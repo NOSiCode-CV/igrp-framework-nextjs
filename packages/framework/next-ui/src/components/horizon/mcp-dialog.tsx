@@ -4,13 +4,13 @@ import {
   DialogDescription,
   DialogHeader,
   DialogTitle,
-} from "../primitives/dialog";
-import { Button } from "../primitives/button";
-import { Tabs, TabsContent, TabsList } from "../primitives/tabs";
-import { useCopyToClipboard } from "@/hooks/use-copy-to-clipboard";
-import { Check, Copy } from "lucide-react";
-import { usePostHog } from "posthog-js/react";
-import TabsTriggerPill from "./tabs-trigger-pill";
+} from '../primitives/dialog';
+import { Button } from '../primitives/button';
+import { Tabs, TabsContent, TabsList } from '../primitives/tabs';
+import { useCopyToClipboard } from '../../hooks/use-copy-to-clipboard';
+import { Check, Copy } from 'lucide-react';
+import { usePostHog } from 'posthog-js/react';
+import TabsTriggerPill from './tabs-trigger-pill';
 
 interface MCPDialogProps {
   open: boolean;
@@ -20,10 +20,10 @@ interface MCPDialogProps {
 const mcpConfig = {
   mcpServers: {
     shadcn: {
-      command: "npx",
-      args: ["-y", "shadcn@canary", "registry:mcp"],
+      command: 'npx',
+      args: ['-y', 'shadcn@canary', 'registry:mcp'],
       env: {
-        REGISTRY_URL: "https://tweakcn.com/r/themes/registry.json",
+        REGISTRY_URL: 'https://tweakcn.com/r/themes/registry.json',
       },
     },
   },
@@ -35,7 +35,7 @@ export function MCPDialog({ open, onOpenChange }: MCPDialogProps) {
 
   const handleCopy = async (config: typeof mcpConfig) => {
     copyToClipboard(JSON.stringify(config, null, 2));
-    posthog.capture("COPY_MCP_SETUP");
+    posthog.capture('COPY_MCP_SETUP');
   };
 
   return (
@@ -58,7 +58,7 @@ export function MCPDialog({ open, onOpenChange }: MCPDialogProps) {
               <div className="flex-none flex justify-between items-center px-4 py-2 border-b bg-muted/50">
                 <TabsContent value="cursor" className="contents">
                   <p className="text-sm font-medium text-muted-foreground">
-                    Copy and paste the code into{" "}
+                    Copy and paste the code into{' '}
                     <span className="bg-muted rounded-md px-1 text-foreground">
                       .cursor/mcp.json
                     </span>
@@ -66,7 +66,7 @@ export function MCPDialog({ open, onOpenChange }: MCPDialogProps) {
                 </TabsContent>
                 <TabsContent value="windsurf" className="contents">
                   <p className="text-sm font-medium text-muted-foreground">
-                    Copy and paste the code into{" "}
+                    Copy and paste the code into{' '}
                     <span className="bg-muted rounded-md px-1 text-foreground">
                       .codeium/windsurf/mcp_config.json
                     </span>
@@ -78,7 +78,7 @@ export function MCPDialog({ open, onOpenChange }: MCPDialogProps) {
                   size="sm"
                   onClick={() => handleCopy(mcpConfig)}
                   className="h-8"
-                  aria-label={hasCopied ? "Copied to clipboard" : "Copy to clipboard"}
+                  aria-label={hasCopied ? 'Copied to clipboard' : 'Copy to clipboard'}
                 >
                   {hasCopied ? (
                     <>

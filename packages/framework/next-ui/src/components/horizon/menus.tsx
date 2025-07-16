@@ -7,7 +7,8 @@ import type { IGRPMenuItemArgs } from '@igrp/framework-next-types';
 import { IGRPIcon } from '@igrp/igrp-framework-react-design-system';
 
 import { Alert, AlertDescription } from '../../components/primitives/alert';
-import { Collapsible,
+import {
+  Collapsible,
   CollapsibleContent,
   CollapsibleTrigger,
 } from '../../components/primitives/collapsible';

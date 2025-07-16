@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState } from 'react';
 import {
   Dialog,
   DialogContent,
@@ -6,11 +6,11 @@ import {
   DialogFooter,
   DialogHeader,
   DialogTitle,
-} from "../primitives/dialog";
-import { Button } from "../primitives/button";
-import { Textarea } from "../primitives/textarea";
-import { Alert, AlertDescription } from "../primitives/alert";
-import { AlertCircle } from "lucide-react";
+} from '../primitives/dialog';
+import { Button } from '../primitives/button';
+import { Textarea } from '../primitives/textarea';
+import { Alert, AlertDescription } from '../primitives/alert';
+import { AlertCircle } from 'lucide-react';
 
 interface CssImportDialogProps {
   open: boolean;
@@ -18,42 +18,38 @@ interface CssImportDialogProps {
   onImport: (css: string) => void;
 }
 
-const CssImportDialog: React.FC<CssImportDialogProps> = ({
-  open,
-  onOpenChange,
-  onImport,
-}) => {
-  const [cssText, setCssText] = useState("");
+const CssImportDialog: React.FC<CssImportDialogProps> = ({ open, onOpenChange, onImport }) => {
+  const [cssText, setCssText] = useState('');
   const [error, setError] = useState<string | null>(null);
 
   const handleImport = () => {
     // Basic validation - check if the CSS contains some expected variables
     if (!cssText.trim()) {
-      setError("Please enter CSS content");
+      setError('Please enter CSS content');
       return;
     }
 
     try {
       // Here you would add more sophisticated CSS parsing validation
       // For now we'll just do a simple check
-      if (!cssText.includes("--") || !cssText.includes(":")) {
+      if (!cssText.includes('--') || !cssText.includes(':')) {
         setError(
-          "Invalid CSS format. CSS should contain variable definitions like --primary: #color"
+          'Invalid CSS format. CSS should contain variable definitions like --primary: #color',
         );
         return;
       }
 
       onImport(cssText);
-      setCssText("");
+      setCssText('');
       setError(null);
       onOpenChange(false);
     } catch {
-      setError("Failed to parse CSS. Please check your syntax.");
+      setError('Failed to parse CSS. Please check your syntax.');
     }
   };
 
   const handleClose = () => {
-    setCssText("");
+    setCssText('');
     setError(null);
     onOpenChange(false);
   };
@@ -62,21 +58,19 @@ const CssImportDialog: React.FC<CssImportDialogProps> = ({
     <Dialog open={open} onOpenChange={onOpenChange}>
       <DialogContent className="sm:max-w-[550px] max-h-[90vh] p-0 pt-6 overflow-hidden rounded-lg border shadow-lg gap-6">
         <DialogHeader className="px-6">
-          <DialogTitle>
-            Import Custom CSS
-          </DialogTitle>
+          <DialogTitle>Import Custom CSS</DialogTitle>
           <DialogDescription>
-            Paste your CSS file below to customize the theme colors. Make sure
-            to include variables like --primary, --background, etc.
+            Paste your CSS file below to customize the theme colors. Make sure to include variables
+            like --primary, --background, etc.
           </DialogDescription>
         </DialogHeader>
         <div className="grid gap-4 px-6">
-        {error && (
-          <Alert variant="destructive" className="mb-4">
-            <AlertCircle className="h-4 w-4 mr-2" />
-            <AlertDescription>{error}</AlertDescription>
-          </Alert>
-        )}
+          {error && (
+            <Alert variant="destructive" className="mb-4">
+              <AlertCircle className="h-4 w-4 mr-2" />
+              <AlertDescription>{error}</AlertDescription>
+            </Alert>
+          )}
           <Textarea
             placeholder={`:root {
   --background: 0 0% 100%;
@@ -101,14 +95,12 @@ const CssImportDialog: React.FC<CssImportDialogProps> = ({
         </div>
         <DialogFooter className="bg-muted/30 px-6 py-4 border-t gap-2">
           <div className="flex items-center justify-end w-full gap-2">
-            <Button
-              variant="ghost"
-              onClick={handleClose}
-              size="sm"
-              >
+            <Button variant="ghost" onClick={handleClose} size="sm">
               Cancel
             </Button>
-            <Button onClick={handleImport} size="sm">Import</Button>
+            <Button onClick={handleImport} size="sm">
+              Import
+            </Button>
           </div>
         </DialogFooter>
       </DialogContent>

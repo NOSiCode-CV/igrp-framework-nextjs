@@ -1,11 +1,11 @@
-import { useQueryState } from "nuqs";
+import { useQueryState } from 'nuqs';
 
-const TABS = ["colors", "typography", "other", "ai"] as const;
+const TABS = ['colors', 'typography', 'other', 'ai'] as const;
 export const DEFAULT_TAB = TABS[0];
 export type ControlTab = (typeof TABS)[number];
 
 export const useControlsTabFromUrl = () => {
-  const [tab, setTab] = useQueryState("tab", {
+  const [tab, setTab] = useQueryState('tab', {
     defaultValue: DEFAULT_TAB,
     parse: (value: string) => {
       // Synchronously validate the tab value, and if it's invalid, fallback to the default tab

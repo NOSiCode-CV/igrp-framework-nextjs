@@ -1,14 +1,14 @@
-"use client";
+'use client';
 
-import React from "react";
-import { Sliders } from "lucide-react";
+import React from 'react';
+import { Sliders } from 'lucide-react';
 
-import { ResizablePanelGroup, ResizablePanel, ResizableHandle } from "../primitives/resizable";
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "../primitives/tabs";
-import type { ThemeStyles } from "../../types/theme";
-import { useEditorStore } from "@/store/editor-store";
-import { ActionBar } from "./action-bar";
-import ThemeControlPanel from "./theme-control-panel";
+import { ResizablePanelGroup, ResizablePanel, ResizableHandle } from '../primitives/resizable';
+import { Tabs, TabsContent, TabsList, TabsTrigger } from '../primitives/tabs';
+import type { ThemeStyles } from '../../types/theme';
+import { useEditorStore } from '../../store/editor-store';
+import { ActionBar } from './action-bar';
+import ThemeControlPanel from './theme-control-panel';
 // import ThemePreviewPanel from "./theme-preview-panel";
 
 interface EditorProps {
@@ -36,7 +36,7 @@ const Editor: React.FC<EditorProps> = (/*{ themePromise }*/) => {
       const prev = useEditorStore.getState().themeState;
       setThemeState({ ...prev, styles: newStyles });
     },
-    [setThemeState]
+    [setThemeState],
   );
 
   // useEffect(() => {

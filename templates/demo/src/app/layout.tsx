@@ -1,4 +1,4 @@
-import '@igrp/framework-next-ui/dist/styles.css';
+// import '@igrp/framework-next-ui/dist/styles.css';
 import '@/styles/globals.css';
 
 import type { Metadata, Viewport } from 'next';

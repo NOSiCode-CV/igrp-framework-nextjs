@@ -1,16 +1,22 @@
-import { useMemo, useState } from "react";
-import { Button } from "../primitives/button";
-import { Copy, Check, Heart } from "lucide-react";
-import type { ThemeEditorState } from "@/types/editor";
-import { ScrollArea, ScrollBar } from "../primitives/scroll-area";
-import { Tabs, TabsList, TabsTrigger, TabsContent } from "../primitives/tabs";
-import type { ColorFormat } from "../../types";
-import { Select, SelectContent, SelectTrigger, SelectValue, SelectItem } from "../primitives/select";
-import { usePostHog } from "posthog-js/react";
-import { useEditorStore } from "../../store/editor-store";
-import { usePreferencesStore } from "../../store/preferences-store";
-import { generateThemeCode } from "../../utils/theme-style-generator";
-import { useThemePresetStore } from "@/store/theme-preset-store";
+import { useMemo, useState } from 'react';
+import { Button } from '../primitives/button';
+import { Copy, Check, Heart } from 'lucide-react';
+import type { ThemeEditorState } from '../../types/editor';
+import { ScrollArea, ScrollBar } from '../primitives/scroll-area';
+import { Tabs, TabsList, TabsTrigger, TabsContent } from '../primitives/tabs';
+import type { ColorFormat } from '../../types';
+import {
+  Select,
+  SelectContent,
+  SelectTrigger,
+  SelectValue,
+  SelectItem,
+} from '../primitives/select';
+import { usePostHog } from 'posthog-js/react';
+import { useEditorStore } from '../../store/editor-store';
+import { usePreferencesStore } from '../../store/preferences-store';
+import { generateThemeCode } from '../../utils/theme-style-generator';
+import { useThemePresetStore } from '../../store/theme-preset-store';
 // import { useDialogActions } from "../../hooks/use-dialog-actions";
 
 interface CodePanelProps {
@@ -33,7 +39,7 @@ const CodePanel: React.FC<CodePanelProps> = ({ themeEditorState }) => {
   const hasUnsavedChanges = useEditorStore((state) => state.hasUnsavedChanges);
 
   const isSavedPreset = useThemePresetStore(
-    (state) => preset && state.getPreset(preset)?.source === "SAVED"
+    (state) => preset && state.getPreset(preset)?.source === 'SAVED',
   );
   const getAvailableColorFormats = usePreferencesStore((state) => state.getAvailableColorFormats);
 
@@ -44,31 +50,31 @@ const CodePanel: React.FC<CodePanelProps> = ({ themeEditorState }) => {
       ? `https://tweakcn.com/r/themes/${preset}`
       : `https://tweakcn.com/r/themes/${preset}.json`;
     switch (packageManager) {
-      case "pnpm":
+      case 'pnpm':
         return `pnpm dlx shadcn@latest add ${url}`;
-      case "npm":
+      case 'npm':
         return `npx shadcn@latest add ${url}`;
-      case "yarn":
+      case 'yarn':
         return `yarn dlx shadcn@latest add ${url}`;
-      case "bun":
+      case 'bun':
         return `bunx shadcn@latest add ${url}`;
     }
   };
 
   const copyRegistryCommand = async () => {
     try {
-      await navigator.clipboard.writeText(getRegistryCommand(preset ?? "default"));
+      await navigator.clipboard.writeText(getRegistryCommand(preset ?? 'default'));
       setRegistryCopied(true);
       setTimeout(() => setRegistryCopied(false), 2000);
-      captureCopyEvent("COPY_REGISTRY_COMMAND");
+      captureCopyEvent('COPY_REGISTRY_COMMAND');
     } catch (err) {
-      console.error("Failed to copy text:", err);
+      console.error('Failed to copy text:', err);
     }
   };
 
   const captureCopyEvent = (event: string) => {
     posthog.capture(event, {
-      editorType: "theme",
+      editorType: 'theme',
       preset,
       colorFormat,
       tailwindVersion,
@@ -80,26 +86,26 @@ const CodePanel: React.FC<CodePanelProps> = ({ themeEditorState }) => {
       await navigator.clipboard.writeText(text);
       setCopied(true);
       setTimeout(() => setCopied(false), 2000);
-      captureCopyEvent("COPY_CODE");
+      captureCopyEvent('COPY_CODE');
     } catch (err) {
-      console.error("Failed to copy text:", err);
+      console.error('Failed to copy text:', err);
     }
   };
 
   const showRegistryCommand = useMemo(() => {
-    return preset && preset !== "default" && !hasUnsavedChanges();
+    return preset && preset !== 'default' && !hasUnsavedChanges();
   }, [preset, hasUnsavedChanges]);
 
   const PackageManagerHeader = ({ actionButton }: { actionButton: React.ReactNode }) => (
     <div className="flex border-b">
-      {(["pnpm", "npm", "yarn", "bun"] as const).map((pm) => (
+      {(['pnpm', 'npm', 'yarn', 'bun'] as const).map((pm) => (
         <button
           key={pm}
           onClick={() => setPackageManager(pm)}
           className={`px-3 py-1.5 text-sm font-medium ${
             packageManager === pm
-              ? "bg-muted text-foreground"
-              : "text-muted-foreground hover:text-foreground"
+              ? 'bg-muted text-foreground'
+              : 'text-muted-foreground hover:text-foreground'
           }`}
         >
           {pm}
@@ -124,7 +130,7 @@ const CodePanel: React.FC<CodePanelProps> = ({ themeEditorState }) => {
                   size="sm"
                   onClick={copyRegistryCommand}
                   className="ml-auto h-8"
-                  aria-label={registryCopied ? "Copied to clipboard" : "Copy to clipboard"}
+                  aria-label={registryCopied ? 'Copied to clipboard' : 'Copy to clipboard'}
                 >
                   {registryCopied ? <Check className="size-4" /> : <Copy className="size-4" />}
                 </Button>
@@ -161,10 +167,10 @@ const CodePanel: React.FC<CodePanelProps> = ({ themeEditorState }) => {
       <div className="mb-4 flex items-center gap-2">
         <Select
           value={tailwindVersion}
-          onValueChange={(value: "3" | "4") => {
+          onValueChange={(value: '3' | '4') => {
             setTailwindVersion(value);
-            if (value === "4" && colorFormat === "hsl") {
-              setColorFormat("oklch");
+            if (value === '4' && colorFormat === 'hsl') {
+              setColorFormat('oklch');
             }
           }}
         >
@@ -206,7 +212,7 @@ const CodePanel: React.FC<CodePanelProps> = ({ themeEditorState }) => {
               size="sm"
               onClick={() => copyToClipboard(code)}
               className="h-8"
-              aria-label={copied ? "Copied to clipboard" : "Copy to clipboard"}
+              aria-label={copied ? 'Copied to clipboard' : 'Copy to clipboard'}
             >
               {copied ? (
                 <>

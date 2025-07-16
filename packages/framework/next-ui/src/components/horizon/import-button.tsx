@@ -1,7 +1,7 @@
-import { TooltipWrapper } from "../horizon/tooltip-wrapper";
-import { Button } from "../primitives/button";
-import { cn } from "@/lib/utils";
-import { FileCode } from "lucide-react";
+import { TooltipWrapper } from '../horizon/tooltip-wrapper';
+import { Button } from '../primitives/button';
+import { cn } from '../../lib/utils';
+import { FileCode } from 'lucide-react';
 
 interface ImportButtonProps extends React.ComponentProps<typeof Button> {}
 

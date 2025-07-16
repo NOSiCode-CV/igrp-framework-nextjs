@@ -2,7 +2,7 @@ export const segmentClassName = (className: string) => {
   // Handle complex selectors with pseudo-classes, data attributes, etc.
   // Look for patterns like "focus-visible:", "hover:", "data-[state=open]:", etc.
   const selectorMatch = className.match(/^((?:[^:]+:)*)/);
-  let selector = "";
+  let selector = '';
   let remaining = className;
 
   if (selectorMatch && selectorMatch[1]) {
@@ -13,7 +13,7 @@ export const segmentClassName = (className: string) => {
   // Handle opacity modifier (e.g., "card/80")
   const opacityMatch = remaining.match(/^([^/]+)\/(.+)$/);
   let baseClass = remaining;
-  let opacity = "";
+  let opacity = '';
 
   if (opacityMatch) {
     baseClass = opacityMatch[1];
@@ -21,9 +21,9 @@ export const segmentClassName = (className: string) => {
   }
 
   // Split the base class into prefix and value
-  const dashIndex = baseClass.indexOf("-");
-  let prefix = "";
-  let value = "";
+  const dashIndex = baseClass.indexOf('-');
+  let prefix = '';
+  let value = '';
 
   if (dashIndex !== -1) {
     prefix = baseClass.slice(0, dashIndex);

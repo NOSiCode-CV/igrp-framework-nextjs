@@ -1,9 +1,9 @@
-import { TooltipWrapper } from "../horizon/tooltip-wrapper";
-import { Button } from "../primitives/button";
-import { cn } from "@/lib/utils";
-import { PenLine } from "lucide-react";
-import Link from "next/link";
-import { usePathname, useSearchParams } from "next/navigation";
+import { TooltipWrapper } from '../horizon/tooltip-wrapper';
+import { Button } from '../primitives/button';
+import { cn } from '../../lib/utils';
+import { PenLine } from 'lucide-react';
+import Link from 'next/link';
+import { usePathname, useSearchParams } from 'next/navigation';
 
 interface EditButtonProps extends React.ComponentProps<typeof Button> {
   themeId: string;

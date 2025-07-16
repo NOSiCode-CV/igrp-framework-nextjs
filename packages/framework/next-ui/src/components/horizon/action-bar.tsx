@@ -1,4 +1,4 @@
-"use client";
+'use client';
 
 // import { ActionBarButtons } from "./action-bar-buttons";
 // import { HorizontalScrollArea } from "./horizontal-scroll-area";

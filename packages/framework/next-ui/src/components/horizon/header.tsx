@@ -7,7 +7,7 @@ import { IGRPCommandSearch } from './command-search';
 import { IGRPModeSwitcher } from './mode-switcher';
 import { IGRPNavUserHeader } from './nav-user-header';
 import { Notifications } from './notifications';
-import { cn } from '@/lib/utils';
+import { cn } from '../../lib/utils';
 
 interface IGRPHeaderProps {
   data?: IGRPHeaderDataArgs;
@@ -17,20 +17,14 @@ interface IGRPHeaderProps {
 export function IGRPHeader({ data, className }: IGRPHeaderProps) {
   if (!data) return null;
 
-  const {
-    user,
-    showBreadcrumbs,
-    showSearch,
-    showNotifications,
-    showThemeSwitcher,
-    showUser,
-  } = data;
+  const { user, showBreadcrumbs, showSearch, showNotifications, showThemeSwitcher, showUser } =
+    data;
 
   return (
-    <header 
+    <header
       className={cn(
-        "bg-background sticky top-0 inset-x-0 isolate z-10 border-b flex items-center justify-between gap-2 px-4 py-2",
-        className
+        'bg-background sticky top-0 inset-x-0 isolate z-10 border-b flex items-center justify-between gap-2 px-4 py-2',
+        className,
       )}
     >
       <div className="flex items-center gap-2 h-12">
@@ -51,7 +45,7 @@ export function IGRPHeader({ data, className }: IGRPHeaderProps) {
           </span>
         )}
 
-        {showThemeSwitcher && <IGRPModeSwitcher />}       
+        {showThemeSwitcher && <IGRPModeSwitcher />}
 
         {showUser && <IGRPNavUserHeader user={user} />}
       </div>

@@ -1,6 +1,6 @@
 'use client';
 
-import { createContext, useContext, useEffect, useState } from "react";
+import { createContext, useContext, useEffect, useState } from 'react';
 
 const COOKIE_NAME = 'igrp_active_theme';
 const DEFAULT_THEME = 'default';

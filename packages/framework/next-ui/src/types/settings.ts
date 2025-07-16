@@ -1,4 +1,4 @@
-import type { FocusColorId } from "../store/color-control-focus-store";
+import type { FocusColorId } from '../store/color-control-focus-store';
 
 export type ControlSectionProps = {
   title: string;
@@ -50,17 +50,17 @@ export type ReadOnlyColorDisplayProps = {
   linkTo: string;
 };
 
-export type ColorFormat = "hex" | "rgb" | "hsl" | "oklch";
+export type ColorFormat = 'hex' | 'rgb' | 'hsl' | 'oklch';
 
 export type ValidTailwindShade =
-  | "50"
-  | "100"
-  | "200"
-  | "300"
-  | "400"
-  | "500"
-  | "600"
-  | "700"
-  | "800"
-  | "900"
-  | "950";
+  | '50'
+  | '100'
+  | '200'
+  | '300'
+  | '400'
+  | '500'
+  | '600'
+  | '700'
+  | '800'
+  | '900'
+  | '950';

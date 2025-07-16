@@ -1,33 +1,38 @@
-"use client";
+'use client';
 
-import { AlertCircle, Sparkles } from "lucide-react";
-import React from "react";
+import { AlertCircle, Sparkles } from 'lucide-react';
+import React from 'react';
 
-import { Label } from "../primitives/label";
-import { ScrollArea } from "../primitives/scroll-area";
-import { Separator } from "../primitives/separator";
-import { Tabs, TabsContent, TabsList } from "../primitives/tabs";
+import { Label } from '../primitives/label';
+import { ScrollArea } from '../primitives/scroll-area';
+import { Separator } from '../primitives/separator';
+import { Tabs, TabsContent, TabsList } from '../primitives/tabs';
 import {
   COMMON_STYLES,
   DEFAULT_FONT_MONO,
   DEFAULT_FONT_SANS,
   DEFAULT_FONT_SERIF,
   defaultThemeState,
-} from "@/config/theme";
-import { useControlsTabFromUrl, type ControlTab } from "../../hooks/use-controls-tab-from-url";
-import { useEditorStore } from "@/store/editor-store";
-import type { ThemeEditorControlsProps, ThemeStyleProps } from "../../types/theme";
-import { getAppliedThemeFont, monoFonts, sansSerifFonts, serifFonts } from "../../utils/theme-fonts";
-import { HorizontalScrollArea } from "./horizontal-scroll-area";
-import ColorPicker from "./color-picker";
-import ControlSection from "./control-section";
-import HslAdjustmentControls from "./hsl-adjustment-controls";
-import ShadowControl from "./shadow-control";
-import { SliderWithInput } from "./slider-with-input";
+} from '../../config/theme';
+import { useControlsTabFromUrl, type ControlTab } from '../../hooks/use-controls-tab-from-url';
+import { useEditorStore } from '../../store/editor-store';
+import type { ThemeEditorControlsProps, ThemeStyleProps } from '../../types/theme';
+import {
+  getAppliedThemeFont,
+  monoFonts,
+  sansSerifFonts,
+  serifFonts,
+} from '../../utils/theme-fonts';
+import { HorizontalScrollArea } from './horizontal-scroll-area';
+import ColorPicker from './color-picker';
+import ControlSection from './control-section';
+import HslAdjustmentControls from './hsl-adjustment-controls';
+import ShadowControl from './shadow-control';
+import { SliderWithInput } from './slider-with-input';
 // import ThemeEditActions from "./theme-edit-actions";
-import ThemeFontSelect from "./theme-font-select";
+import ThemeFontSelect from './theme-font-select';
 //  import ThemePresetSelect from "./theme-preset-select";
-import TabsTriggerPill from "./tabs-trigger-pill";
+import TabsTriggerPill from './tabs-trigger-pill';
 
 const ThemeControlPanel = ({
   styles,
@@ -44,7 +49,7 @@ const ThemeControlPanel = ({
       ...defaultThemeState.styles[currentMode],
       ...styles?.[currentMode],
     }),
-    [currentMode, styles]
+    [currentMode, styles],
   );
 
   const updateStyle = React.useCallback(
@@ -67,7 +72,7 @@ const ThemeControlPanel = ({
         },
       });
     },
-    [onChange, styles, currentMode, currentStyles]
+    [onChange, styles, currentMode, currentStyles],
   );
 
   // Ensure we have valid styles for the current mode
@@ -75,7 +80,7 @@ const ThemeControlPanel = ({
     return null; // Or some fallback UI
   }
 
-  const radius = parseFloat(currentStyles.radius.replace("rem", ""));
+  const radius = parseFloat(currentStyles.radius.replace('rem', ''));
 
   // const theme = use(themePromise);
 
@@ -117,13 +122,13 @@ const ThemeControlPanel = ({
                 <ColorPicker
                   name="primary"
                   color={currentStyles.primary}
-                  onChange={(color) => updateStyle("primary", color)}
+                  onChange={(color) => updateStyle('primary', color)}
                   label="Primary"
                 />
                 <ColorPicker
                   name="primary-foreground"
-                  color={currentStyles["primary-foreground"]}
-                  onChange={(color) => updateStyle("primary-foreground", color)}
+                  color={currentStyles['primary-foreground']}
+                  onChange={(color) => updateStyle('primary-foreground', color)}
                   label="Primary Foreground"
                 />
               </ControlSection>
@@ -132,13 +137,13 @@ const ThemeControlPanel = ({
                 <ColorPicker
                   name="secondary"
                   color={currentStyles.secondary}
-                  onChange={(color) => updateStyle("secondary", color)}
+                  onChange={(color) => updateStyle('secondary', color)}
                   label="Secondary"
                 />
                 <ColorPicker
                   name="secondary-foreground"
-                  color={currentStyles["secondary-foreground"]}
-                  onChange={(color) => updateStyle("secondary-foreground", color)}
+                  color={currentStyles['secondary-foreground']}
+                  onChange={(color) => updateStyle('secondary-foreground', color)}
                   label="Secondary Foreground"
                 />
               </ControlSection>
@@ -147,13 +152,13 @@ const ThemeControlPanel = ({
                 <ColorPicker
                   name="accent"
                   color={currentStyles.accent}
-                  onChange={(color) => updateStyle("accent", color)}
+                  onChange={(color) => updateStyle('accent', color)}
                   label="Accent"
                 />
                 <ColorPicker
                   name="accent-foreground"
-                  color={currentStyles["accent-foreground"]}
-                  onChange={(color) => updateStyle("accent-foreground", color)}
+                  color={currentStyles['accent-foreground']}
+                  onChange={(color) => updateStyle('accent-foreground', color)}
                   label="Accent Foreground"
                 />
               </ControlSection>
@@ -162,13 +167,13 @@ const ThemeControlPanel = ({
                 <ColorPicker
                   name="background"
                   color={currentStyles.background}
-                  onChange={(color) => updateStyle("background", color)}
+                  onChange={(color) => updateStyle('background', color)}
                   label="Background"
                 />
                 <ColorPicker
                   name="foreground"
                   color={currentStyles.foreground}
-                  onChange={(color) => updateStyle("foreground", color)}
+                  onChange={(color) => updateStyle('foreground', color)}
                   label="Foreground"
                 />
               </ControlSection>
@@ -177,13 +182,13 @@ const ThemeControlPanel = ({
                 <ColorPicker
                   name="card"
                   color={currentStyles.card}
-                  onChange={(color) => updateStyle("card", color)}
+                  onChange={(color) => updateStyle('card', color)}
                   label="Card Background"
                 />
                 <ColorPicker
                   name="card-foreground"
-                  color={currentStyles["card-foreground"]}
-                  onChange={(color) => updateStyle("card-foreground", color)}
+                  color={currentStyles['card-foreground']}
+                  onChange={(color) => updateStyle('card-foreground', color)}
                   label="Card Foreground"
                 />
               </ControlSection>
@@ -192,13 +197,13 @@ const ThemeControlPanel = ({
                 <ColorPicker
                   name="popover"
                   color={currentStyles.popover}
-                  onChange={(color) => updateStyle("popover", color)}
+                  onChange={(color) => updateStyle('popover', color)}
                   label="Popover Background"
                 />
                 <ColorPicker
                   name="popover-foreground"
-                  color={currentStyles["popover-foreground"]}
-                  onChange={(color) => updateStyle("popover-foreground", color)}
+                  color={currentStyles['popover-foreground']}
+                  onChange={(color) => updateStyle('popover-foreground', color)}
                   label="Popover Foreground"
                 />
               </ControlSection>
@@ -207,13 +212,13 @@ const ThemeControlPanel = ({
                 <ColorPicker
                   name="muted"
                   color={currentStyles.muted}
-                  onChange={(color) => updateStyle("muted", color)}
+                  onChange={(color) => updateStyle('muted', color)}
                   label="Muted"
                 />
                 <ColorPicker
                   name="muted-foreground"
-                  color={currentStyles["muted-foreground"]}
-                  onChange={(color) => updateStyle("muted-foreground", color)}
+                  color={currentStyles['muted-foreground']}
+                  onChange={(color) => updateStyle('muted-foreground', color)}
                   label="Muted Foreground"
                 />
               </ControlSection>
@@ -222,13 +227,13 @@ const ThemeControlPanel = ({
                 <ColorPicker
                   name="destructive"
                   color={currentStyles.destructive}
-                  onChange={(color) => updateStyle("destructive", color)}
+                  onChange={(color) => updateStyle('destructive', color)}
                   label="Destructive"
                 />
                 <ColorPicker
                   name="destructive-foreground"
-                  color={currentStyles["destructive-foreground"]}
-                  onChange={(color) => updateStyle("destructive-foreground", color)}
+                  color={currentStyles['destructive-foreground']}
+                  onChange={(color) => updateStyle('destructive-foreground', color)}
                   label="Destructive Foreground"
                 />
               </ControlSection>
@@ -237,19 +242,19 @@ const ThemeControlPanel = ({
                 <ColorPicker
                   name="border"
                   color={currentStyles.border}
-                  onChange={(color) => updateStyle("border", color)}
+                  onChange={(color) => updateStyle('border', color)}
                   label="Border"
                 />
                 <ColorPicker
                   name="input"
                   color={currentStyles.input}
-                  onChange={(color) => updateStyle("input", color)}
+                  onChange={(color) => updateStyle('input', color)}
                   label="Input"
                 />
                 <ColorPicker
                   name="ring"
                   color={currentStyles.ring}
-                  onChange={(color) => updateStyle("ring", color)}
+                  onChange={(color) => updateStyle('ring', color)}
                   label="Ring"
                 />
               </ControlSection>
@@ -257,32 +262,32 @@ const ThemeControlPanel = ({
               <ControlSection title="Chart Colors">
                 <ColorPicker
                   name="chart-1"
-                  color={currentStyles["chart-1"]}
-                  onChange={(color) => updateStyle("chart-1", color)}
+                  color={currentStyles['chart-1']}
+                  onChange={(color) => updateStyle('chart-1', color)}
                   label="Chart 1"
                 />
                 <ColorPicker
                   name="chart-2"
-                  color={currentStyles["chart-2"]}
-                  onChange={(color) => updateStyle("chart-2", color)}
+                  color={currentStyles['chart-2']}
+                  onChange={(color) => updateStyle('chart-2', color)}
                   label="Chart 2"
                 />
                 <ColorPicker
                   name="chart-3"
-                  color={currentStyles["chart-3"]}
-                  onChange={(color) => updateStyle("chart-3", color)}
+                  color={currentStyles['chart-3']}
+                  onChange={(color) => updateStyle('chart-3', color)}
                   label="Chart 3"
                 />
                 <ColorPicker
                   name="chart-4"
-                  color={currentStyles["chart-4"]}
-                  onChange={(color) => updateStyle("chart-4", color)}
+                  color={currentStyles['chart-4']}
+                  onChange={(color) => updateStyle('chart-4', color)}
                   label="Chart 4"
                 />
                 <ColorPicker
                   name="chart-5"
-                  color={currentStyles["chart-5"]}
-                  onChange={(color) => updateStyle("chart-5", color)}
+                  color={currentStyles['chart-5']}
+                  onChange={(color) => updateStyle('chart-5', color)}
                   label="Chart 5"
                 />
               </ControlSection>
@@ -291,49 +296,49 @@ const ThemeControlPanel = ({
                 <ColorPicker
                   name="sidebar"
                   color={currentStyles.sidebar}
-                  onChange={(color) => updateStyle("sidebar", color)}
+                  onChange={(color) => updateStyle('sidebar', color)}
                   label="Sidebar Background"
                 />
                 <ColorPicker
                   name="sidebar-foreground"
-                  color={currentStyles["sidebar-foreground"]}
-                  onChange={(color) => updateStyle("sidebar-foreground", color)}
+                  color={currentStyles['sidebar-foreground']}
+                  onChange={(color) => updateStyle('sidebar-foreground', color)}
                   label="Sidebar Foreground"
                 />
                 <ColorPicker
                   name="sidebar-primary"
-                  color={currentStyles["sidebar-primary"]}
-                  onChange={(color) => updateStyle("sidebar-primary", color)}
+                  color={currentStyles['sidebar-primary']}
+                  onChange={(color) => updateStyle('sidebar-primary', color)}
                   label="Sidebar Primary"
                 />
                 <ColorPicker
                   name="sidebar-primary-foreground"
-                  color={currentStyles["sidebar-primary-foreground"]}
-                  onChange={(color) => updateStyle("sidebar-primary-foreground", color)}
+                  color={currentStyles['sidebar-primary-foreground']}
+                  onChange={(color) => updateStyle('sidebar-primary-foreground', color)}
                   label="Sidebar Primary Foreground"
                 />
                 <ColorPicker
                   name="sidebar-accent"
-                  color={currentStyles["sidebar-accent"]}
-                  onChange={(color) => updateStyle("sidebar-accent", color)}
+                  color={currentStyles['sidebar-accent']}
+                  onChange={(color) => updateStyle('sidebar-accent', color)}
                   label="Sidebar Accent"
                 />
                 <ColorPicker
                   name="sidebar-accent-foreground"
-                  color={currentStyles["sidebar-accent-foreground"]}
-                  onChange={(color) => updateStyle("sidebar-accent-foreground", color)}
+                  color={currentStyles['sidebar-accent-foreground']}
+                  onChange={(color) => updateStyle('sidebar-accent-foreground', color)}
                   label="Sidebar Accent Foreground"
                 />
                 <ColorPicker
                   name="sidebar-border"
-                  color={currentStyles["sidebar-border"]}
-                  onChange={(color) => updateStyle("sidebar-border", color)}
+                  color={currentStyles['sidebar-border']}
+                  onChange={(color) => updateStyle('sidebar-border', color)}
                   label="Sidebar Border"
                 />
                 <ColorPicker
                   name="sidebar-ring"
-                  color={currentStyles["sidebar-ring"]}
-                  onChange={(color) => updateStyle("sidebar-ring", color)}
+                  color={currentStyles['sidebar-ring']}
+                  onChange={(color) => updateStyle('sidebar-ring', color)}
                   label="Sidebar Ring"
                 />
               </ControlSection>
@@ -347,14 +352,14 @@ const ThemeControlPanel = ({
                 <div className="text-muted-foreground text-sm">
                   <p>
                     To use custom fonts, embed them in your project. <br />
-                    See{" "}
+                    See{' '}
                     <a
                       href="https://tailwindcss.com/docs/font-family"
                       target="_blank"
                       className="hover:text-muted-foreground/90 underline underline-offset-2"
                     >
                       Tailwind docs
-                    </a>{" "}
+                    </a>{' '}
                     for details.
                   </p>
                 </div>
@@ -368,8 +373,8 @@ const ThemeControlPanel = ({
                   <ThemeFontSelect
                     fonts={{ ...sansSerifFonts, ...serifFonts, ...monoFonts }}
                     defaultValue={DEFAULT_FONT_SANS}
-                    currentFont={getAppliedThemeFont(themeState, "font-sans")}
-                    onFontChange={(value) => updateStyle("font-sans", value)}
+                    currentFont={getAppliedThemeFont(themeState, 'font-sans')}
+                    onFontChange={(value) => updateStyle('font-sans', value)}
                   />
                 </div>
 
@@ -382,8 +387,8 @@ const ThemeControlPanel = ({
                   <ThemeFontSelect
                     fonts={{ ...serifFonts, ...sansSerifFonts, ...monoFonts }}
                     defaultValue={DEFAULT_FONT_SERIF}
-                    currentFont={getAppliedThemeFont(themeState, "font-serif")}
-                    onFontChange={(value) => updateStyle("font-serif", value)}
+                    currentFont={getAppliedThemeFont(themeState, 'font-serif')}
+                    onFontChange={(value) => updateStyle('font-serif', value)}
                   />
                 </div>
 
@@ -395,16 +400,16 @@ const ThemeControlPanel = ({
                   <ThemeFontSelect
                     fonts={{ ...monoFonts, ...sansSerifFonts, ...serifFonts }}
                     defaultValue={DEFAULT_FONT_MONO}
-                    currentFont={getAppliedThemeFont(themeState, "font-mono")}
-                    onFontChange={(value) => updateStyle("font-mono", value)}
+                    currentFont={getAppliedThemeFont(themeState, 'font-mono')}
+                    onFontChange={(value) => updateStyle('font-mono', value)}
                   />
                 </div>
               </ControlSection>
 
               <ControlSection title="Letter Spacing" expanded>
                 <SliderWithInput
-                  value={parseFloat(currentStyles["letter-spacing"]?.replace("em", ""))}
-                  onChange={(value) => updateStyle("letter-spacing", `${value}em`)}
+                  value={parseFloat(currentStyles['letter-spacing']?.replace('em', ''))}
+                  onChange={(value) => updateStyle('letter-spacing', `${value}em`)}
                   min={-0.5}
                   max={0.5}
                   step={0.025}
@@ -424,7 +429,7 @@ const ThemeControlPanel = ({
               <ControlSection title="Radius" expanded>
                 <SliderWithInput
                   value={radius}
-                  onChange={(value) => updateStyle("radius", `${value}rem`)}
+                  onChange={(value) => updateStyle('radius', `${value}rem`)}
                   min={0}
                   max={5}
                   step={0.025}
@@ -435,8 +440,8 @@ const ThemeControlPanel = ({
 
               <ControlSection title="Spacing">
                 <SliderWithInput
-                  value={parseFloat(currentStyles.spacing?.replace("rem", ""))}
-                  onChange={(value) => updateStyle("spacing", `${value}rem`)}
+                  value={parseFloat(currentStyles.spacing?.replace('rem', ''))}
+                  onChange={(value) => updateStyle('spacing', `${value}rem`)}
                   min={0.15}
                   max={0.35}
                   step={0.01}
@@ -447,16 +452,16 @@ const ThemeControlPanel = ({
 
               <ControlSection title="Shadow">
                 <ShadowControl
-                  shadowColor={currentStyles["shadow-color"]}
-                  shadowOpacity={parseFloat(currentStyles["shadow-opacity"])}
-                  shadowBlur={parseFloat(currentStyles["shadow-blur"]?.replace("px", ""))}
-                  shadowSpread={parseFloat(currentStyles["shadow-spread"]?.replace("px", ""))}
-                  shadowOffsetX={parseFloat(currentStyles["shadow-offset-x"]?.replace("px", ""))}
-                  shadowOffsetY={parseFloat(currentStyles["shadow-offset-y"]?.replace("px", ""))}
+                  shadowColor={currentStyles['shadow-color']}
+                  shadowOpacity={parseFloat(currentStyles['shadow-opacity'])}
+                  shadowBlur={parseFloat(currentStyles['shadow-blur']?.replace('px', ''))}
+                  shadowSpread={parseFloat(currentStyles['shadow-spread']?.replace('px', ''))}
+                  shadowOffsetX={parseFloat(currentStyles['shadow-offset-x']?.replace('px', ''))}
+                  shadowOffsetY={parseFloat(currentStyles['shadow-offset-y']?.replace('px', ''))}
                   onChange={(key, value) => {
-                    if (key === "shadow-color") {
+                    if (key === 'shadow-color') {
                       updateStyle(key, value as string);
-                    } else if (key === "shadow-opacity") {
+                    } else if (key === 'shadow-opacity') {
                       updateStyle(key, value.toString());
                     } else {
                       updateStyle(key as keyof ThemeStyleProps, `${value}px`);

@@ -1,0 +1,13 @@
+{
+  "mode": "pre",
+  "tag": "alpha",
+  "initialVersions": {
+    "@igrp/framework-next": "0.0.0",
+    "@igrp/framework-next-types": "0.0.0",
+    "@igrp/framework-next-ui": "0.0.0",
+    "demo": "0.0.0"
+  },
+  "changesets": [
+    "some-mice-cough"
+  ]
+}

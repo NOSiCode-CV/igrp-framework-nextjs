@@ -1,5 +1,24 @@
 # demo
 
+## 0.0.1-alpha.1
+
+### Patch Changes
+
+- test alpha
+- Updated dependencies
+  - @igrp/framework-next-types@0.0.1-alpha.0
+  - @igrp/framework-next-ui@0.0.1-alpha.0
+  - @igrp/framework-next@0.0.1-alpha.0
+
+## 0.0.1-alpha.0
+
+### Patch Changes
+
+- Updated dependencies
+  - @igrp/framework-next@0.0.1-alpha.0
+  - @igrp/framework-next-types@0.0.1-alpha.0
+  - @igrp/framework-next-ui@0.0.1-alpha.0
+
 ## 0.0.3-alpha.1
 
 ### Patch Changes

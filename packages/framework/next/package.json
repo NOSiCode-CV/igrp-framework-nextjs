@@ -1,6 +1,6 @@
 {
   "name": "@igrp/framework-next",
-  "version": "0.0.0-alpha.7",
+  "version": "0.0.0-alpha.8",
   "description": "IGRP Framework for Next.js - Layout components and data loading hooks",
   "keywords": [
     "igrp",
@@ -12,6 +12,23 @@
   ],
   "author": "IGRP Team",
   "license": "MIT",
+  "type": "module",
+  "publishConfig": {
+    "exports": {
+      ".": {
+        "import": "./dist/index.js",
+        "types": "./dist/index.d.ts",
+        "default": "./dist/index.js"
+      }
+    },
+    "main": "./dist/index.js",
+    "types": "./dist/index.d.ts"
+  },
+  "main": "./src/index.ts",
+  "types": "./src/index.ts",
+  "files": [
+    "dist"
+  ],
   "scripts": {
     "dev": "tsc --watch",
     "clean": "pnpm clean:dist && pnpm clean:packages",
@@ -62,22 +79,5 @@
     "rimraf": "^6.0.1",
     "typescript": "~5.8.3",
     "typescript-eslint": "^8.30.1"
-  },
-  "type": "module",
-  "publishConfig": {
-    "exports": {
-      ".": {
-        "import": "./dist/index.js",
-        "types": "./dist/index.d.ts",
-        "default": "./dist/index.js"
-      }
-    },
-    "main": "./dist/index.js",
-    "types": "./dist/index.d.ts"
-  },
-  "main": "./src/index.ts",
-  "types": "./src/index.ts",
-  "files": [
-    "dist"
-  ]
+  }
 }

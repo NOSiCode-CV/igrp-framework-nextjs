@@ -1,6 +1,6 @@
 {
   "name": "@igrp/framework-next",
-  "version": "0.0.0-alpha.8",
+  "version": "0.0.0-alpha.9",
   "description": "IGRP Framework for Next.js - Layout components and data loading hooks",
   "keywords": [
     "igrp",
@@ -34,11 +34,12 @@
     "clean": "pnpm clean:dist && pnpm clean:packages",
     "clean:dist": "rimraf dist",
     "clean:packages": "rimraf node_modules",
+    "build:types": "tsc --emitDeclarationOnly --outDir dist_types",
     "build:swc": "swc ./src -d dist --config-file .swcrc --strip-leading-paths",
-    "build:babel": "rimraf dist_optimized && babel dist --out-dir dist_optimized --source-maps --extensions .ts,.js,.tsx,.jsx,.cjs,.mjs && rimraf dist && move dist_optimized dist",
-    "build:prod": "pnpm build:swc && pnpm build:babel",
-    "release": "pnpm format && pnpm build:prod && yarn publish --registry=https://sonatype.nosi.cv/repository/igrp/ --tag latest",
-    "format": "prettier --write ."
+    "build:babel": "rimraf dist_optimized && babel dist --out-dir dist_optimized --source-maps --extensions .js,.jsx,.ts,.tsx --ignore '**/*.d.ts' && rimraf dist && move dist_optimized dist",
+    "build:prod": "pnpm build:types && pnpm build:swc && pnpm build:babel && cpy dist_types/**/*.d.ts dist/ && rimraf dist_types",
+    "format": "prettier --write .",
+    "release": "pnpm format && pnpm build:prod && yarn publish --registry=https://sonatype.nosi.cv/repository/igrp/ --tag latest"
   },
   "peerDependencies": {
     "next": "15.3.4",

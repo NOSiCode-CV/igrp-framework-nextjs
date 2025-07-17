@@ -6,6 +6,7 @@ const nextConfig: NextConfig = {
 
   // use this if you are using a custom domain for igrp-ui or apps-center
   // basePath: "/apps/appslug",
+  // basePath: process.env.IGRP_APP_BASE_PATH || '',
   
   images: {
     remotePatterns: [

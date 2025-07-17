@@ -19,11 +19,7 @@
     ".": {
       "import": "./dist/index.js",
       "types": "./dist/index.d.ts"
-    },
-    "./css": {
-      "import": "./dist/styles.css"
-    },
-    "./index.css": "./dist/styles.css"
+    }    
   },
   "files": [
     "dist"

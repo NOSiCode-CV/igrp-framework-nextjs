@@ -22,8 +22,8 @@
   "scripts": {
     "dev": "tsc --watch",
     "build": "tsc && vite build",
-    "release": "pnpm format && pnpm build && yarn publish --registry=https://sonatype.nosi.cv/repository/igrp/ --tag latest",
-    "format": "prettier --write ."
+    "format": "prettier --write .",
+    "release": "pnpm format && pnpm build && yarn publish --registry=https://sonatype.nosi.cv/repository/igrp/ --tag latest"
   },
   "devDependencies": {
     "@types/node": "^24.0.12",

@@ -15,6 +15,7 @@ coverage/
 # production
 dist/
 dist_optimized
+dist_types
 build/
 
 # misc

@@ -83,7 +83,7 @@ export const authOptions: NextAuthOptions = {
         sameSite: "lax",
         path: "/",
         secure: true,
-        domain: process.env.NEXTAUTH_URL ?? "",
+        domain: process.env.IGRP_NEXTAUTH_CALLBACK ?? "",
       },
     },
   },

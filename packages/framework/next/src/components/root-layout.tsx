@@ -1,9 +1,9 @@
 import { IGRPRootProviders } from '@igrp/framework-next-ui';
 
-import { setAccessClientConfig } from '../../lib/api-config';
-import { cn } from '../../lib/utils';
-import { fetchAppByCode } from '../../services/applications/use-applications';
-import { fetchLayoutData } from '../../services/layout/use-layout';
+import { setAccessClientConfig } from '../lib/api-config';
+import { cn } from '../lib/utils';
+import { fetchAppByCode } from '../services/applications/use-applications';
+import { fetchLayoutData } from '../services/layout/use-layout';
 import type { IGRPConfigArgs } from '@igrp/framework-next-types';
 
 type IGRPRootLocaleLayoutArgs = {
@@ -46,7 +46,7 @@ export async function IGRPRootLayout({ children, config }: IGRPRootLocaleLayoutA
     });
 
     app = await fetchAppByCode(appCode);
-    appId = app?.[0]?.id;
+    appId = app?.id;
   }
 
   const { headerData, sidebarData } = await fetchLayoutData(

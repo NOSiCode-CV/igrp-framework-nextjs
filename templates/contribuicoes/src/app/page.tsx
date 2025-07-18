@@ -1,4 +1,4 @@
-import { redirect } from "next/navigation";
+import { redirect } from 'next/navigation';
 
 export default function Home() {
   const root = process.env.IGRP_APP_HOME_SLUG ?? process.env.IGRP_APP_HOME_SLUG ?? '/';

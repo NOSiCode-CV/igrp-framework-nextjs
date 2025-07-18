@@ -1,5 +1,5 @@
 export { buildConfig } from './config/build';
 
-export { IGRPRootLayout } from './layouts/root';
+export * from './components';
 
 export { buildQueryString } from './lib/build-query-string';

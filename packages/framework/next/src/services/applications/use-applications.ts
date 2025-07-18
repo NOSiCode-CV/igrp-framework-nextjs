@@ -11,7 +11,7 @@ export async function fetchAppByCode(appCode: string) {
     const client = await getAccessClient();
     const result = await client.applications.getApplications({ code: appCode });
     const app = mapperApplications(result);
-    return app;
+    return app[0];
   } catch (error) {
     console.error('Failed to fetch application data:', error);
     throw error;

@@ -1,20 +1,7 @@
-'use client';
+import { cn, IGRPButton } from "@igrp/igrp-framework-react-design-system";
+import { useEffect, useState } from "react";
 
-import { useEffect, useState } from 'react';
-import Image from 'next/image';
-import { IGRPButton } from '@igrp/igrp-framework-react-design-system';
-
-import { cn } from '@/lib/utils';
-
-// TODO: add messages
-
-export default function Error({
-  error,
-  reset,
-}: {
-  error: Error & { digest?: string };
-  reset: () => void;
-}) {
+export function IGRPGlobalError() {
   const [isResetting, setIsResetting] = useState(false);
   const [errorVisible, setErrorVisible] = useState(false);
 

@@ -8,7 +8,7 @@ const nextConfig: NextConfig = {
   // output: 'standalone',
 
   // use this if you are using a custom domain for igrp-applications-center
-  // basePath: "/apps/appslug",
+  basePath: "/apps/appslug",
   // basePath: process.env.IGRP_APP_BASE_PATH || '',
 
   images: {

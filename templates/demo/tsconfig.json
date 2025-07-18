@@ -20,7 +20,7 @@
     ],
     "paths": {
       "@/*": ["./src/*"],
-      "@igrp/config": ["./src/igrp.config.ts"]
+      "@igrp/template-config": ["./src/igrp.template.config.ts"]
     },
     "composite": true
   },

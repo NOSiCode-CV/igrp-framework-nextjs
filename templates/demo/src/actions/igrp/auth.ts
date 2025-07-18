@@ -33,7 +33,7 @@ export async function getSession() {
   let session;
   const isPreviewMode = process.env.IGRP_PREVIEW_MODE === 'true';
 
-  if (isPreviewMode) return session = null;
+  if (isPreviewMode) return (session = null);
 
   if (process.env.NODE_ENV === 'production') {
     try {
@@ -48,7 +48,7 @@ export async function getSession() {
   }
 
   console.log({ isPreviewMode });
-  console.log("NODE_ENV:::", process.env.NODE_ENV);
+  console.log('NODE_ENV:::', process.env.NODE_ENV);
   console.log({ session });
 
   return session;

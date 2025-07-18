@@ -24,6 +24,9 @@ interface AppSwitcherProps {
 // TODO: Add messages
 
 export function IGRPAppSwitcher({ apps, appCode, appCenterUrl }: AppSwitcherProps) {
+  console.log('::: UI APP SWITCHER :::');
+  console.log({ apps, appCode, appCenterUrl });
+
   const { isMobile } = useSidebar();
 
   const currentApp = appCode ? apps?.find((item) => item.id === appCode) : apps?.[0];

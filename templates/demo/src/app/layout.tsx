@@ -6,7 +6,7 @@ import { IGRPRootLayout } from '@igrp/framework-next';
 import { META_THEME_COLORS } from '@igrp/framework-next-ui';
 
 import { configLayout } from '@/actions/igrp/layout';
-import { createConfig } from '@igrp/config';
+import { createConfig } from '@igrp/template-config';
 
 export const metadata: Metadata = {
   title: 'IGRP',
@@ -22,9 +22,5 @@ export default async function RootLayout({ children }: Readonly<{ children: Reac
   const layoutConfig = await configLayout();
   const config = createConfig(layoutConfig);
 
-  return (
-    <IGRPRootLayout config={config}>
-      {children}
-    </IGRPRootLayout>
-  );
+  return <IGRPRootLayout config={config}>{children}</IGRPRootLayout>;
 }

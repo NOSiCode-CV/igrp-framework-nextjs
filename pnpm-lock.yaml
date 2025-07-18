@@ -28,10 +28,10 @@ importers:
         version: 5.1.1(react-hook-form@7.60.0(react@19.1.0))
       '@igrp/framework-next-types':
         specifier: latest
-        version: 0.0.1-alpha.2(@types/node@24.0.14)(jiti@2.4.2)(lightningcss@1.30.1)
+        version: 0.0.1-alpha.3(@types/node@24.0.14)(jiti@2.4.2)(lightningcss@1.30.1)
       '@igrp/framework-next-ui':
         specifier: latest
-        version: 0.0.1-alpha.2(@types/node@24.0.14)(@types/react-dom@19.1.6(@types/react@19.1.8))(@types/react@19.1.8)(jiti@2.4.2)(lightningcss@1.30.1)(next-auth@4.24.11(next@15.3.4(react-dom@19.1.0(react@19.1.0))(react@19.1.0))(react-dom@19.1.0(react@19.1.0))(react@19.1.0))(next@15.3.4(react-dom@19.1.0(react@19.1.0))(react@19.1.0))(react-dom@19.1.0(react@19.1.0))(react@19.1.0)(typescript@5.8.3)(use-sync-external-store@1.5.0(react@19.1.0))
+        version: 0.0.1-alpha.3(@types/node@24.0.14)(@types/react-dom@19.1.6(@types/react@19.1.8))(@types/react@19.1.8)(jiti@2.4.2)(lightningcss@1.30.1)(next-auth@4.24.11(next@15.3.4(react-dom@19.1.0(react@19.1.0))(react@19.1.0))(react-dom@19.1.0(react@19.1.0))(react@19.1.0))(next@15.3.4(react-dom@19.1.0(react@19.1.0))(react@19.1.0))(react-dom@19.1.0(react@19.1.0))(react@19.1.0)(typescript@5.8.3)(use-sync-external-store@1.5.0(react@19.1.0))
       '@igrp/platform-access-management-client-ts':
         specifier: 0.0.1-alpha.4
         version: 0.0.1-alpha.4(@types/node@24.0.14)(jiti@2.4.2)(lightningcss@1.30.1)
@@ -487,14 +487,14 @@ importers:
         specifier: ^3.2.12
         version: 3.2.12(next@15.3.4(react-dom@19.1.0(react@19.1.0))(react@19.1.0))(react-dom@19.1.0(react@19.1.0))(react@19.1.0)
       '@igrp/framework-next':
-        specifier: latest
-        version: 0.0.1-alpha.2(@types/node@24.0.14)(@types/react-dom@19.1.6(@types/react@19.1.8))(@types/react@19.1.8)(jiti@2.4.2)(lightningcss@1.30.1)(next-auth@4.24.11(next@15.3.4(react-dom@19.1.0(react@19.1.0))(react@19.1.0))(react-dom@19.1.0(react@19.1.0))(react@19.1.0))(next@15.3.4(react-dom@19.1.0(react@19.1.0))(react@19.1.0))(react-dom@19.1.0(react@19.1.0))(react-hook-form@7.60.0(react@19.1.0))(react@19.1.0)(typescript@5.8.3)(use-sync-external-store@1.5.0(react@19.1.0))
+        specifier: workspace:*
+        version: link:../../packages/framework/next
       '@igrp/framework-next-types':
-        specifier: latest
-        version: 0.0.1-alpha.2(@types/node@24.0.14)(jiti@2.4.2)(lightningcss@1.30.1)
+        specifier: workspace:*
+        version: link:../../packages/framework/next-types
       '@igrp/framework-next-ui':
-        specifier: latest
-        version: 0.0.1-alpha.2(@types/node@24.0.14)(@types/react-dom@19.1.6(@types/react@19.1.8))(@types/react@19.1.8)(jiti@2.4.2)(lightningcss@1.30.1)(next-auth@4.24.11(next@15.3.4(react-dom@19.1.0(react@19.1.0))(react@19.1.0))(react-dom@19.1.0(react@19.1.0))(react@19.1.0))(next@15.3.4(react-dom@19.1.0(react@19.1.0))(react@19.1.0))(react-dom@19.1.0(react@19.1.0))(react@19.1.0)(typescript@5.8.3)(use-sync-external-store@1.5.0(react@19.1.0))
+        specifier: workspace:*
+        version: link:../../packages/framework/next-ui
       '@igrp/igrp-framework-react-design-system':
         specifier: latest
         version: 0.0.0-alpha.221(@types/react-dom@19.1.6(@types/react@19.1.8))(@types/react@19.1.8)(next@15.3.4(react-dom@19.1.0(react@19.1.0))(react@19.1.0))(react-dom@19.1.0(react@19.1.0))(react@19.1.0)
@@ -1484,6 +1484,9 @@ packages:
   '@igrp/framework-next-types@0.0.1-alpha.2':
     resolution: {integrity: sha512-oJQb/Vaw0ppFchFrlzMhlHwTvQquRD6b9jL+gUYuJHsM3nbeMNgiGOcXzkbw33nSnyoKzDzjeh52A0GN1AjUng==}
 
+  '@igrp/framework-next-types@0.0.1-alpha.3':
+    resolution: {integrity: sha512-sUjy4QfjygHYCmQfM7GwZI1Z8vioXIrLvh7A0wpC4DOTmP35Ao1zVWzI8bMAS26+VUVJQJq1Qt50uBVPz9LL7Q==}
+
   '@igrp/framework-next-ui@0.0.1-alpha.1':
     resolution: {integrity: sha512-N56IaorpH0fbm26eduKWp5tFbVWWfaTyoPEhcQeaZ2tgIRzT8cLZjMEs7PQQien1eUCWsR/pPRYuK71cB+uZ7Q==}
     peerDependencies:
@@ -1492,8 +1495,8 @@ packages:
       react: 19.1.0
       react-dom: 19.1.0
 
-  '@igrp/framework-next-ui@0.0.1-alpha.2':
-    resolution: {integrity: sha512-naPiKSsreYs9+r6JFLzW8ZLVwilDqpAdVe3jAjhPJpC8BK6yGcd+wyfFQG9xQHr18JitK1gVmuPhD4rdeca5Pw==}
+  '@igrp/framework-next-ui@0.0.1-alpha.3':
+    resolution: {integrity: sha512-SQuMhvDPo+xOZn1VNkWj+vzQRiCbSSU0QIsy4KVZRFHAQ5Y4ypHICwDAC+e2l+18CK6eGbQ4FUTAX4UjZMW5/w==}
     peerDependencies:
       next: 15.3.4
       next-auth: ^4.24.11
@@ -1502,13 +1505,6 @@ packages:
 
   '@igrp/framework-next@0.0.1-alpha.1':
     resolution: {integrity: sha512-48Fy+UVihi+BwhAU2zZySwbwnraf5cfKVXJ8kRYSscF+F6ZVxMaYOoPZHScf1LfYSxM9N4W3LuVtA8v6CO8P7A==}
-    peerDependencies:
-      next: 15.3.4
-      react: 19.1.0
-      react-dom: 19.1.0
-
-  '@igrp/framework-next@0.0.1-alpha.2':
-    resolution: {integrity: sha512-+/vbW03MBqOhf04LmcuIvP1qrjKCUSq8YlSGMnMhvNfe5zJ6hj0iZZfAsVwUNunBCd2H9QmbCvIcUnC8xwSERw==}
     peerDependencies:
       next: 15.3.4
       react: 19.1.0
@@ -7687,11 +7683,27 @@ snapshots:
       - tsx
       - yaml
 
+  '@igrp/framework-next-types@0.0.1-alpha.3(@types/node@24.0.14)(jiti@2.4.2)(lightningcss@1.30.1)':
+    dependencies:
+      vite: 7.0.4(@types/node@24.0.14)(jiti@2.4.2)(lightningcss@1.30.1)
+    transitivePeerDependencies:
+      - '@types/node'
+      - jiti
+      - less
+      - lightningcss
+      - sass
+      - sass-embedded
+      - stylus
+      - sugarss
+      - terser
+      - tsx
+      - yaml
+
   '@igrp/framework-next-ui@0.0.1-alpha.1(@types/node@24.0.14)(@types/react-dom@19.1.6(@types/react@19.1.8))(@types/react@19.1.8)(jiti@2.4.2)(lightningcss@1.30.1)(next-auth@4.24.11(next@15.3.4(react-dom@19.1.0(react@19.1.0))(react@19.1.0))(react-dom@19.1.0(react@19.1.0))(react@19.1.0))(next@15.3.4(react-dom@19.1.0(react@19.1.0))(react@19.1.0))(react-dom@19.1.0(react@19.1.0))(react@19.1.0)(typescript@5.8.3)(use-sync-external-store@1.5.0(react@19.1.0))':
     dependencies:
       '@bprogress/next': 3.2.12(next@15.3.4(react-dom@19.1.0(react@19.1.0))(react@19.1.0))(react-dom@19.1.0(react@19.1.0))(react@19.1.0)
       '@hookform/resolvers': 5.1.1(react-hook-form@7.60.0(react@19.1.0))
-      '@igrp/framework-next-types': 0.0.1-alpha.2(@types/node@24.0.14)(jiti@2.4.2)(lightningcss@1.30.1)
+      '@igrp/framework-next-types': 0.0.1-alpha.3(@types/node@24.0.14)(jiti@2.4.2)(lightningcss@1.30.1)
       '@igrp/igrp-framework-react-design-system': 0.0.0-alpha.221(@types/react-dom@19.1.6(@types/react@19.1.8))(@types/react@19.1.8)(next@15.3.4(react-dom@19.1.0(react@19.1.0))(react@19.1.0))(react-dom@19.1.0(react@19.1.0))(react@19.1.0)
       '@radix-ui/react-accordion': 1.2.11(@types/react-dom@19.1.6(@types/react@19.1.8))(@types/react@19.1.8)(react-dom@19.1.0(react@19.1.0))(react@19.1.0)
       '@radix-ui/react-alert-dialog': 1.1.14(@types/react-dom@19.1.6(@types/react@19.1.8))(@types/react@19.1.8)(react-dom@19.1.0(react@19.1.0))(react@19.1.0)
@@ -7770,11 +7782,11 @@ snapshots:
       - use-sync-external-store
       - yaml
 
-  '@igrp/framework-next-ui@0.0.1-alpha.2(@types/node@24.0.14)(@types/react-dom@19.1.6(@types/react@19.1.8))(@types/react@19.1.8)(jiti@2.4.2)(lightningcss@1.30.1)(next-auth@4.24.11(next@15.3.4(react-dom@19.1.0(react@19.1.0))(react@19.1.0))(react-dom@19.1.0(react@19.1.0))(react@19.1.0))(next@15.3.4(react-dom@19.1.0(react@19.1.0))(react@19.1.0))(react-dom@19.1.0(react@19.1.0))(react@19.1.0)(typescript@5.8.3)(use-sync-external-store@1.5.0(react@19.1.0))':
+  '@igrp/framework-next-ui@0.0.1-alpha.3(@types/node@24.0.14)(@types/react-dom@19.1.6(@types/react@19.1.8))(@types/react@19.1.8)(jiti@2.4.2)(lightningcss@1.30.1)(next-auth@4.24.11(next@15.3.4(react-dom@19.1.0(react@19.1.0))(react@19.1.0))(react-dom@19.1.0(react@19.1.0))(react@19.1.0))(next@15.3.4(react-dom@19.1.0(react@19.1.0))(react@19.1.0))(react-dom@19.1.0(react@19.1.0))(react@19.1.0)(typescript@5.8.3)(use-sync-external-store@1.5.0(react@19.1.0))':
     dependencies:
       '@bprogress/next': 3.2.12(next@15.3.4(react-dom@19.1.0(react@19.1.0))(react@19.1.0))(react-dom@19.1.0(react@19.1.0))(react@19.1.0)
       '@hookform/resolvers': 5.1.1(react-hook-form@7.60.0(react@19.1.0))
-      '@igrp/framework-next-types': 0.0.1-alpha.2(@types/node@24.0.14)(jiti@2.4.2)(lightningcss@1.30.1)
+      '@igrp/framework-next-types': 0.0.1-alpha.3(@types/node@24.0.14)(jiti@2.4.2)(lightningcss@1.30.1)
       '@igrp/igrp-framework-react-design-system': 0.0.0-alpha.221(@types/react-dom@19.1.6(@types/react@19.1.8))(@types/react@19.1.8)(next@15.3.4(react-dom@19.1.0(react@19.1.0))(react@19.1.0))(react-dom@19.1.0(react@19.1.0))(react@19.1.0)
       '@radix-ui/react-accordion': 1.2.11(@types/react-dom@19.1.6(@types/react@19.1.8))(@types/react@19.1.8)(react-dom@19.1.0(react@19.1.0))(react@19.1.0)
       '@radix-ui/react-alert-dialog': 1.1.14(@types/react-dom@19.1.6(@types/react@19.1.8))(@types/react@19.1.8)(react-dom@19.1.0(react@19.1.0))(react@19.1.0)
@@ -7857,46 +7869,8 @@ snapshots:
     dependencies:
       '@bprogress/next': 3.2.12(next@15.3.4(react-dom@19.1.0(react@19.1.0))(react@19.1.0))(react-dom@19.1.0(react@19.1.0))(react@19.1.0)
       '@hookform/resolvers': 5.1.1(react-hook-form@7.60.0(react@19.1.0))
-      '@igrp/framework-next-types': 0.0.1-alpha.2(@types/node@24.0.14)(jiti@2.4.2)(lightningcss@1.30.1)
-      '@igrp/framework-next-ui': 0.0.1-alpha.2(@types/node@24.0.14)(@types/react-dom@19.1.6(@types/react@19.1.8))(@types/react@19.1.8)(jiti@2.4.2)(lightningcss@1.30.1)(next-auth@4.24.11(next@15.3.4(react-dom@19.1.0(react@19.1.0))(react@19.1.0))(react-dom@19.1.0(react@19.1.0))(react@19.1.0))(next@15.3.4(react-dom@19.1.0(react@19.1.0))(react@19.1.0))(react-dom@19.1.0(react@19.1.0))(react@19.1.0)(typescript@5.8.3)(use-sync-external-store@1.5.0(react@19.1.0))
-      '@igrp/platform-access-management-client-ts': 0.0.1-alpha.4(@types/node@24.0.14)(jiti@2.4.2)(lightningcss@1.30.1)
-      clsx: 2.1.1
-      next: 15.3.4(@babel/core@7.28.0)(babel-plugin-react-compiler@19.1.0-rc.2)(react-dom@19.1.0(react@19.1.0))(react@19.1.0)
-      next-themes: 0.4.6(react-dom@19.1.0(react@19.1.0))(react@19.1.0)
-      react: 19.1.0
-      react-dom: 19.1.0(react@19.1.0)
-      tailwind-merge: 3.3.1
-    transitivePeerDependencies:
-      - '@remix-run/react'
-      - '@rrweb/types'
-      - '@types/node'
-      - '@types/react'
-      - '@types/react-dom'
-      - immer
-      - jiti
-      - less
-      - lightningcss
-      - next-auth
-      - react-hook-form
-      - react-router
-      - react-router-dom
-      - rrweb-snapshot
-      - sass
-      - sass-embedded
-      - stylus
-      - sugarss
-      - terser
-      - tsx
-      - typescript
-      - use-sync-external-store
-      - yaml
-
-  '@igrp/framework-next@0.0.1-alpha.2(@types/node@24.0.14)(@types/react-dom@19.1.6(@types/react@19.1.8))(@types/react@19.1.8)(jiti@2.4.2)(lightningcss@1.30.1)(next-auth@4.24.11(next@15.3.4(react-dom@19.1.0(react@19.1.0))(react@19.1.0))(react-dom@19.1.0(react@19.1.0))(react@19.1.0))(next@15.3.4(react-dom@19.1.0(react@19.1.0))(react@19.1.0))(react-dom@19.1.0(react@19.1.0))(react-hook-form@7.60.0(react@19.1.0))(react@19.1.0)(typescript@5.8.3)(use-sync-external-store@1.5.0(react@19.1.0))':
-    dependencies:
-      '@bprogress/next': 3.2.12(next@15.3.4(react-dom@19.1.0(react@19.1.0))(react@19.1.0))(react-dom@19.1.0(react@19.1.0))(react@19.1.0)
-      '@hookform/resolvers': 5.1.1(react-hook-form@7.60.0(react@19.1.0))
-      '@igrp/framework-next-types': 0.0.1-alpha.2(@types/node@24.0.14)(jiti@2.4.2)(lightningcss@1.30.1)
-      '@igrp/framework-next-ui': 0.0.1-alpha.2(@types/node@24.0.14)(@types/react-dom@19.1.6(@types/react@19.1.8))(@types/react@19.1.8)(jiti@2.4.2)(lightningcss@1.30.1)(next-auth@4.24.11(next@15.3.4(react-dom@19.1.0(react@19.1.0))(react@19.1.0))(react-dom@19.1.0(react@19.1.0))(react@19.1.0))(next@15.3.4(react-dom@19.1.0(react@19.1.0))(react@19.1.0))(react-dom@19.1.0(react@19.1.0))(react@19.1.0)(typescript@5.8.3)(use-sync-external-store@1.5.0(react@19.1.0))
+      '@igrp/framework-next-types': 0.0.1-alpha.3(@types/node@24.0.14)(jiti@2.4.2)(lightningcss@1.30.1)
+      '@igrp/framework-next-ui': 0.0.1-alpha.3(@types/node@24.0.14)(@types/react-dom@19.1.6(@types/react@19.1.8))(@types/react@19.1.8)(jiti@2.4.2)(lightningcss@1.30.1)(next-auth@4.24.11(next@15.3.4(react-dom@19.1.0(react@19.1.0))(react@19.1.0))(react-dom@19.1.0(react@19.1.0))(react@19.1.0))(next@15.3.4(react-dom@19.1.0(react@19.1.0))(react@19.1.0))(react-dom@19.1.0(react@19.1.0))(react@19.1.0)(typescript@5.8.3)(use-sync-external-store@1.5.0(react@19.1.0))
       '@igrp/platform-access-management-client-ts': 0.0.1-alpha.4(@types/node@24.0.14)(jiti@2.4.2)(lightningcss@1.30.1)
       clsx: 2.1.1
       next: 15.3.4(@babel/core@7.28.0)(babel-plugin-react-compiler@19.1.0-rc.2)(react-dom@19.1.0(react@19.1.0))(react@19.1.0)

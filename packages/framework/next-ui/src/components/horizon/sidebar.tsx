@@ -28,6 +28,9 @@ interface IGRPAppSidebarProps extends React.ComponentProps<typeof Sidebar> {
 export function IGRPSidebar({ data, ...props }: IGRPAppSidebarProps) {
   if (!data) throw new Error('Sidebar data is required');
 
+  console.log('::: UI SIDEBAR :::');
+  console.log({ data });
+
   const pathname = usePathname();
 
   const { footerItems, menuItems, user, showAppSwitcher, apps, appCode, appCenterUrl } = data;

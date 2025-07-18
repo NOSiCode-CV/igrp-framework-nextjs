@@ -42,6 +42,19 @@ export const IGRPRootProviders: React.FC<IGRPRootProvidersArgs> = ({
   sidebarData,
   headerData,
 }) => {
+  console.log(':::: UI PROVIDERS ::::');
+  console.log({
+    session,
+    activeThemeValue,
+    progressiveBarArgs,
+    sessionArgs,
+    themeArgs,
+    defaultOpen,
+    showSidebar,
+    showHeader,
+    sidebarData,
+    headerData,
+  });
   return (
     <IGRPSessionProvider session={session} {...sessionArgs}>
       <IGRPThemeProvider

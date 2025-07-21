@@ -1,7 +1,23 @@
-import { cn, IGRPButton } from "@igrp/igrp-framework-react-design-system";
-import { useEffect, useState } from "react";
+'use client';
 
-export function IGRPGlobalError() {
+import { cn, IGRPButton } from "@igrp/igrp-framework-react-design-system";
+import { useEffect, useState } from "react";  
+import Image from "next/image";
+
+interface IGRPGlobalErrorProps {
+  error: Error & { digest?: string };
+  reset: () => void;
+  children?: React.ReactNode
+}
+
+export function IGRPGlobalError({
+  error,
+  reset,
+  children
+}: IGRPGlobalErrorProps) {
+
+  if (children) return (<>{children}</>)
+  
   const [isResetting, setIsResetting] = useState(false);
   const [errorVisible, setErrorVisible] = useState(false);
 

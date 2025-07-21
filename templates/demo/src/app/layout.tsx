@@ -1,5 +1,5 @@
-// import '@igrp/framework-next-ui/dist/styles.css';
 import '@/styles/globals.css';
+/// import '@igrp/framework-next-ui/dist/styles.css';
 
 import type { Metadata, Viewport } from 'next';
 import { IGRPRootLayout } from '@igrp/framework-next';

@@ -49,7 +49,7 @@ export function Notifications() {
           <Bell strokeWidth={2} />
           {notificationCount > 0 && (
             <Badge
-              className="absolute -top-1 -right-0.5 h-3 w-3 flex items-center justify-center p-0 text-[8px]"
+              className="absolute -top-1 -right-0.5 h-3 w-3 flex items-center justify-center p-1 text-xs"
               variant="destructive"
             >
               {notificationCount}

@@ -17,7 +17,7 @@ try {
 # === FINAL NEXUS TARGET ===
 $nexusRepo = "igrp-templates"
 $nexusBaseUrl = "https://sonatype.nosi.cv/repository"
-$groupPath = "com/igrp/igrp-next-template/$version"
+$groupPath = "@igrp/framework-next/$version"
 $nexusUploadUrl = "$nexusBaseUrl/$nexusRepo/$groupPath/$zipName"
 
 Write-Host "Zipping project for version: $version"

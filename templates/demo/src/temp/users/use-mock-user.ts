@@ -1,4 +1,4 @@
-import { IGRP_MOCK_USER } from '@/temp/users/user';
+import { IGRP_MOCK_USER } from './user';
 
 export const getMockUser = () => {
   return {

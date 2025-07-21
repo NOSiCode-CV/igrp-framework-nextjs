@@ -1,4 +1,4 @@
-import { IGRP_MOCK_APPS_DATA } from '@/temp/applications/apps';
+import { IGRP_MOCK_APPS_DATA } from './apps';
 
 export const getMockApps = (appCode?: string) => {
   console.log({ appCode });

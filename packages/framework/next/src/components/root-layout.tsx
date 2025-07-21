@@ -23,6 +23,7 @@ export async function IGRPRootLayout({ children, config }: IGRPRootLocaleLayoutA
     showHeader,
     layout,
     apiManagementConfig,
+    toasterConfig,
   } = layoutConfig;
 
   const { session, activeThemeValue, isScaled } = layout;
@@ -80,6 +81,7 @@ export async function IGRPRootLayout({ children, config }: IGRPRootLocaleLayoutA
           headerData={headerData}
           showSidebar={showSidebar}
           showHeader={showHeader}
+          toasterConfig={toasterConfig}
         >
           {children}
         </IGRPRootProviders>

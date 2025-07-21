@@ -1,7 +1,11 @@
 'use client';
 
 import type { Session } from 'next-auth';
-import type { IGRPHeaderDataArgs, IGRPSidebarDataArgs } from '@igrp/framework-next-types';
+import type {
+  IGRPConfigArgs,
+  IGRPHeaderDataArgs,
+  IGRPSidebarDataArgs,
+} from '@igrp/framework-next-types';
 
 import { IGRPActiveThemeProvider } from './active-theme';
 import { IGRPProgressBar } from './progress-bar';
@@ -27,9 +31,10 @@ export type IGRPRootProvidersArgs = {
   locale?: string;
   sidebarData?: IGRPSidebarDataArgs;
   headerData?: IGRPHeaderDataArgs;
+  toasterConfig?: IGRPConfigArgs['toasterConfig'];
 };
 
-export const IGRPRootProviders: React.FC<IGRPRootProvidersArgs> = ({
+export function IGRPRootProviders({
   session,
   activeThemeValue,
   progressiveBarArgs,
@@ -41,20 +46,17 @@ export const IGRPRootProviders: React.FC<IGRPRootProvidersArgs> = ({
   showHeader,
   sidebarData,
   headerData,
-}) => {
-  console.log(':::: UI PROVIDERS ::::');
-  console.log({
-    session,
-    activeThemeValue,
-    progressiveBarArgs,
-    sessionArgs,
-    themeArgs,
-    defaultOpen,
-    showSidebar,
-    showHeader,
-    sidebarData,
-    headerData,
-  });
+  toasterConfig,
+}: IGRPRootProvidersArgs) {
+  const {
+    showToaster = true,
+    position = 'bottom-right',
+    theme = 'system',
+    richColors = true,
+    expand = false,
+    duration = 3500,
+  } = toasterConfig ?? {};
+
   return (
     <IGRPSessionProvider session={session} {...sessionArgs}>
       <IGRPThemeProvider
@@ -72,8 +74,18 @@ export const IGRPRootProviders: React.FC<IGRPRootProvidersArgs> = ({
 
               <SidebarInset>
                 {showHeader && <IGRPHeader data={headerData} />}
+
                 <main className="flex flex-col flex-1 px-6 py-8">{children}</main>
-                <IGRPToaster richColors />
+
+                {showToaster && (
+                  <IGRPToaster
+                    position={position}
+                    theme={theme}
+                    richColors={richColors}
+                    expand={expand}
+                    duration={duration}
+                  />
+                )}
               </SidebarInset>
             </SidebarProvider>
           </IGRPActiveThemeProvider>
@@ -81,4 +93,4 @@ export const IGRPRootProviders: React.FC<IGRPRootProvidersArgs> = ({
       </IGRPThemeProvider>
     </IGRPSessionProvider>
   );
-};
+}

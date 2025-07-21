@@ -92,14 +92,14 @@ export type IGRPConfigArgs = {
     headers?: Record<string, string>;
   };
   toasterConfig: {
-    showToaster: boolean,
-    position?: IGRPToasterPosition,
-    theme?: 'light' | 'dark' | 'system',
-    richColors?: boolean,
-    expand?: boolean,
-    duration?: number,
-    closeButton?: boolean,
-  }
+    showToaster: boolean;
+    position?: IGRPToasterPosition;
+    theme?: 'light' | 'dark' | 'system';
+    richColors?: boolean;
+    expand?: boolean;
+    duration?: number;
+    closeButton?: boolean;
+  };
 };
 
 export type IGRPConfigClient = () => Promise<IGRPConfigArgs>;

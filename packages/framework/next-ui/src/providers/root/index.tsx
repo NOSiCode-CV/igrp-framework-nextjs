@@ -75,7 +75,7 @@ export const IGRPRootProviders: React.FC<IGRPRootProvidersArgs> = ({
                 <main className="flex flex-col flex-1 px-6 py-8">{children}</main>
                 <IGRPToaster richColors />
               </SidebarInset>
-            </SidebarProvider>            
+            </SidebarProvider>
           </IGRPActiveThemeProvider>
         </IGRPProgressBar>
       </IGRPThemeProvider>

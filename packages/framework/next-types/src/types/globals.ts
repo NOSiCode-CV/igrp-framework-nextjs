@@ -11,4 +11,10 @@ export type IGRPMockData = {
   sidebarData: IGRPSidebarDataArgs;
 };
 
-export type IGRPToasterPosition = 'top-left' | 'top-right' | 'bottom-left' | 'bottom-right' | 'top-center' | 'bottom-center';
+export type IGRPToasterPosition =
+  | 'top-left'
+  | 'top-right'
+  | 'bottom-left'
+  | 'bottom-right'
+  | 'top-center'
+  | 'bottom-center';

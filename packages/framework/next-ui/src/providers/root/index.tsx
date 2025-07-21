@@ -10,7 +10,7 @@ import { IGRPThemeProvider } from './theme-provider';
 import { SidebarInset, SidebarProvider } from '../../components/primitives/sidebar';
 import { IGRPHeader } from '../../components/horizon/header';
 import { IGRPSidebar } from '../../components/horizon/sidebar';
-import { Toaster } from '../../components/primitives/sonner';
+import { IGRPToaster } from '@igrp/igrp-framework-react-design-system';
 
 export type IGRPRootProvidersArgs = {
   session?: Session | null;
@@ -73,9 +73,9 @@ export const IGRPRootProviders: React.FC<IGRPRootProvidersArgs> = ({
               <SidebarInset>
                 {showHeader && <IGRPHeader data={headerData} />}
                 <main className="flex flex-col flex-1 px-6 py-8">{children}</main>
+                <IGRPToaster richColors />
               </SidebarInset>
-            </SidebarProvider>
-            <Toaster richColors />
+            </SidebarProvider>            
           </IGRPActiveThemeProvider>
         </IGRPProgressBar>
       </IGRPThemeProvider>

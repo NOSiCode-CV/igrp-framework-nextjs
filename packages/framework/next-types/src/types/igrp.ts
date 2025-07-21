@@ -2,6 +2,7 @@ import type { Session as DefaultSession, User as NextAuthUser } from 'next-auth'
 import type { JWT as DefaultJWT } from 'next-auth/jwt';
 import { IGRPHeaderDataArgs } from './header';
 import { IGRPSidebarDataArgs } from './sidebar';
+import { IGRPToasterPosition } from './globals';
 
 export interface IGRPApplicationArgs {
   id: number;
@@ -90,6 +91,15 @@ export type IGRPConfigArgs = {
     timeout?: number;
     headers?: Record<string, string>;
   };
+  toasterConfig: {
+    showToaster: boolean,
+    position?: IGRPToasterPosition,
+    theme?: 'light' | 'dark' | 'system',
+    richColors?: boolean,
+    expand?: boolean,
+    duration?: number,
+    closeButton?: boolean,
+  }
 };
 
 export type IGRPConfigClient = () => Promise<IGRPConfigArgs>;

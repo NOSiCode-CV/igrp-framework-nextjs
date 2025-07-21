@@ -46,5 +46,10 @@ export function createConfig(config: IGRPLayoutConfigArgs) {
     apiManagementConfig: {
       baseUrl: process.env.IGRP_APP_MANAGER_API || '',
     },
+    toasterConfig: {
+      showToaster: true,
+      position: 'bottom-right',
+      richColors: true,      
+    }
   });
 }

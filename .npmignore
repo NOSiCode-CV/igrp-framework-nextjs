@@ -30,3 +30,7 @@
 /dist/*-*.cjs
 /dist/*-*.css
 /dist/*.map
+
+# create template zip
+/create-template/nexus-auth.txt
+igrp-next-template.zip

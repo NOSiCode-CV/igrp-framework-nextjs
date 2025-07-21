@@ -106,4 +106,8 @@ jspm_packages/
 # Temporary folders
 tmp/
 
-tsconfig.tsbuildinfo
+*.tsbuildinfo
+
+# create template zip
+create-template/nexus-auth.txt
+igrp-next-template.zip

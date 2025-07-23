@@ -21,7 +21,7 @@
   ],
   "scripts": {
     "dev": "tsc --watch",
-    "build": "tsc -b && vite build",
+    "build": "tsc -b",
     "format": "prettier --write .",
     "release": "pnpm format && pnpm build && yarn publish --registry=https://sonatype.nosi.cv/repository/igrp/ --tag latest"
   },
@@ -29,10 +29,6 @@
     "@types/node": "^24.0.12",
     "next-auth": "^4.24.0",
     "prettier": "^3.5.3",
-    "typescript": "^5.8.3",
-    "vite-plugin-dts": "4.5.4"
-  },
-  "dependencies": {
-    "vite": "^7.0.3"
-  }
+    "typescript": "^5.8.3"
+  }  
 }

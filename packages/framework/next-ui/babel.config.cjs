@@ -12,7 +12,7 @@ const ReactCompilerConfig = {
     }
 
     // Skip files that might contain React context or other core React patterns
-    const skipPatterns = ['context', 'provider', 'createContext', 'useContext', 'exports', 'index'];
+    // const skipPatterns = ['context', 'provider', 'createContext', 'useContext', 'exports', 'index'];
 
     const filenameLower = filename.toLowerCase();
     if (skipPatterns.some((pattern) => filenameLower.includes(pattern))) {
@@ -36,13 +36,7 @@ module.exports = function (api) {
 
   return {
     plugins: [
-      ['babel-plugin-react-compiler', ReactCompilerConfig], // must run first!
-      /* [
-         'babel-plugin-transform-remove-imports',
-         {
-           test: '\\.(scss|css)$',
-         },
-       ],*/
+      ['babel-plugin-react-compiler', ReactCompilerConfig],      
     ],
   };
 };

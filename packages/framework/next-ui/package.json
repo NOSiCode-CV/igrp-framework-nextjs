@@ -12,33 +12,43 @@
   ],
   "author": "IGRP Team",
   "license": "MIT",
+  "sideEffects": [
+    "*.scss",
+    "*.css"
+  ],
   "type": "module",
-  "main": "./dist/index.js",
-  "types": "./dist/index.d.ts",
   "exports": {
     ".": {
-      "import": "./dist/index.js",
-      "types": "./dist/index.d.ts"
+      "import": "./src/index.ts",
+      "types": "./src/index.ts",
+      "default": "./src/index.ts"
     }
   },
+  "main": "./src/index.ts",
+  "types": "./src/indexts",
   "files": [
     "dist"
   ],
   "scripts": {
     "dev": "tsc --watch",
+    "build": "pnpm build:reactcompiler",
+    "build:babel": "rimraf dist_optimized && babel dist --out-dir dist_optimized --source-maps --extensions .ts,.js,.tsx,.jsx,.cjs,.mjs && rimraf dist && move dist_optimized dist && cpy src/*.css dist/",
+    "build:bundle-for-analysis": "rimraf dist && rimraf tsconfig.tsbuildinfo && pnpm build:swc && pnpm build:babel && pnpm copyfiles && pnpm build:esbuild esbuild --no-split",
+    "build:esbuild": "node bundle.js",
+    "build:reactcompiler": "rimraf dist esbuild && rimraf tsconfig.tsbuildinfo && pnpm tailwind:build && pnpm build:swc && pnpm build:babel && pnpm copyfiles && pnpm build:esbuild && pnpm build:types",
+    "build:swc": "swc ./src -d dist --config-file .swcrc --strip-leading-paths",
+    "build:types": "tsc --emitDeclarationOnly --outDir dist",
+    "build:without_reactcompiler": "rimraf dist && rimraf tsconfig.tsbuildinfo && pnpm copyfiles && pnpm build:types && pnpm build:swc",
     "clean": "pnpm clean:dist && pnpm clean:packages",
-    "clean:dist": "rimraf dist dist_optimized dist_types",
+    "clean:dist": "rimraf -g {dist,*.tsbuildinfo}",
     "clean:packages": "rimraf node_modules",
-    "build:types": "rimraf dist_types && tsc --emitDeclarationOnly --outDir dist_types",
-    "build:swc": "swc ./src -d dist --config-file .swcrc --strip-leading-paths && cpy src/*.css dist/",
-    "build:babel": "rimraf dist_optimized && babel dist --out-dir dist_optimized --source-maps --extensions .ts,.js,.tsx,.jsx,.cjs,.mjs --ignore '**/*.d.ts' && rimraf dist && move dist_optimized dist && cpy src/*.css dist/",
-    "build": "pnpm clean:dist && pnpm tailwind:build && pnpm build:types && pnpm build:swc && pnpm build:babel && cpy dist_types/**/*.d.ts dist/ && rimraf dist_types",
+    "copyfiles": "cpy -u 1 \"src/**/*.{html,css,scss,ttf,woff,woff2,eot,svg,jpg,png,json}\" dist/",
     "format": "prettier --write .",
-    "tailwind:build": "pnpm dlx @tailwindcss/cli -i ./src/index.css -o ./src/styles.css",
+    "tailwind:build": "npx @tailwindcss/cli -i ./src/index.css -o ./src/styles.css",
     "release": "pnpm format && pnpm build && yarn publish --registry=https://sonatype.nosi.cv/repository/igrp/ --tag latest"
   },
   "peerDependencies": {
-    "next": "15.3.4",
+    "next": "15.4.2",
     "next-auth": "^4.24.11",
     "react": "19.1.0",
     "react-dom": "19.1.0"
@@ -46,7 +56,7 @@
   "dependencies": {
     "@bprogress/next": "^3.2.12",
     "@hookform/resolvers": "^5.0.1",
-    "@igrp/framework-next-types": "latest",
+    "@igrp/framework-next-types": "workspace:*",
     "@igrp/igrp-framework-react-design-system": "latest",
     "@radix-ui/react-accordion": "^1.2.11",
     "@radix-ui/react-alert-dialog": "^1.1.14",
@@ -100,20 +110,22 @@
     "zustand": "^5.0.3"
   },
   "devDependencies": {
-    "@babel/cli": "^7.24.4",
-    "@babel/core": "^7.24.4",
-    "@babel/preset-env": "^7.24.4",
-    "@babel/preset-react": "^7.24.4",
-    "@babel/preset-typescript": "^7.24.4",
-    "@ngard/tiny-isequal": "^1.1.0",
-    "@swc/cli": "^0.3.0",
-    "@swc/core": "^1.4.0",
+    "@babel/cli": "^7.28.0",
+    "@babel/core": "^7.28.0",
+    "@babel/preset-env": "^7.28.0",
+    "@babel/preset-react": "^7.27.1",
+    "@babel/preset-typescript": "^7.27.1",
+    "@swc/cli": "^0.7.8",
+    "@swc/core": "^1.13.1",
+    "@tailwindcss/cli": "^4.1.11",
+    "@types/babel__preset-env": "7.10.0",
     "@types/culori": "^2.1.1",
     "@types/react": "^19.0.0",
-    "@types/react-dom": "^19.0.0",
-    "autoprefixer": "^10.4.21",
+    "@types/react-dom": "19.1.2",
     "babel-plugin-react-compiler": "19.1.0-rc.2",
-    "cpy-cli": "^5.0.0",
+    "cpy-cli": "^11.1.0",
+    "esbuild": "0.25.5",
+    "esbuild-sass-plugin": "3.3.1",
     "eslint-config-prettier": "10.1.5",
     "eslint-plugin-prettier": "5.5.1",
     "move-cli": "^2.0.0",

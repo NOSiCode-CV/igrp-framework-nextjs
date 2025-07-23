@@ -1,17 +1,25 @@
 {
+  "$schema": "https://json.schemastore.org/swcrc",
+  "sourceMaps": true,
   "jsc": {
+    "target": "esnext",
     "parser": {
       "syntax": "typescript",
-      "tsx": true
+      "tsx": true,
+      "dts": true
     },
     "transform": {
       "react": {
-        "runtime": "automatic"
+        "runtime": "automatic",
+        "pragmaFrag": "React.Fragment",
+        "throwIfNamespace": true,
+        "development": false,
+        "useBuiltins": true
       }
-    },
-    "target": "es2020"
+    },    
   },
   "module": {
     "type": "es6"
   }
 }
+

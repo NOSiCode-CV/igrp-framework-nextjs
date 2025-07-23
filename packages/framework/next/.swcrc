@@ -16,10 +16,9 @@
         "development": false,
         "useBuiltins": true
       }
-    },    
+    }
   },
   "module": {
     "type": "es6"
   }
 }
-

@@ -26,9 +26,9 @@
     "release": "pnpm build && yarn publish --registry=https://sonatype.nosi.cv/repository/igrp/ --tag latest"
   },
   "devDependencies": {
-    "@types/node": "^24.0.12",
+    "@types/node": "^24.1.0",
     "next-auth": "^4.24.0",
-    "prettier": "^3.5.3",
+    "prettier": "^3.6.2",
     "typescript": "^5.8.3"
   }
 }

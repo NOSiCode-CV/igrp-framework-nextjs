@@ -16,16 +16,15 @@
     "*.css"
   ],
   "type": "module",
-  
   "exports": {
     ".": {
-      "import": "./src/index.ts",
-      "types": "./src/index.ts",
-      "default": "./src/index.ts"
+      "import": "./dist/index.js",
+      "types": "./dist/index.d.ts",
+      "default": "./dist/index.js"
     }
   },
-  "main": "./src/index.ts",
-  "types": "./src/index.ts",
+  "main": "./dist/index.js",
+  "types": "./dist/index.d.ts",
   "files": [
     "dist"
   ],
@@ -34,20 +33,20 @@
     "clean": "pnpm clean:dist && pnpm clean:packages",
     "clean:dist": "rimraf -g {dist,*.tsbuildinfo}",
     "clean:packages": "rimraf node_modules",
-    "build": "pnpm build:reactcompiler",
+    "build": "pnpm format && pnpm build:reactcompiler",
     "build:babel": "rimraf dist_optimized && babel dist --out-dir dist_optimized --source-maps --extensions .ts,.js,.tsx,.jsx,.cjs,.mjs && rimraf dist && move dist_optimized dist",
     "build:reactcompiler": "rimraf dist && rimraf tsconfig.tsbuildinfo && pnpm build:swc && pnpm build:babel && pnpm cpy && pnpm build:types",
     "build:swc": "swc ./src -d dist --config-file .swcrc --strip-leading-paths",
     "build:types": "tsc --emitDeclarationOnly --outDir dist_types",
     "build:without_reactcompiler": "rimraf dist && rimraf tsconfig.tsbuildinfo && pnpm copyfiles && pnpm build:types && pnpm build:swc",
-    "copyfiles": "cpy -u 1 \"src/**/*.{html,css,scss,ttf,woff,woff2,eot,svg,jpg,png,json}\" dist/",    
+    "copyfiles": "cpy -u 1 \"src/**/*.{html,css,scss,ttf,woff,woff2,eot,svg,jpg,png,json}\" dist/",
     "format": "prettier --write .",
-    "release": "pnpm format && pnpm build && yarn publish --registry=https://sonatype.nosi.cv/repository/igrp/ --tag latest"
+    "release": "pnpm build && yarn publish --registry=https://sonatype.nosi.cv/repository/igrp/ --tag latest"
   },
   "peerDependencies": {
-    "next": "15.4.2",
+    "next": "15.4.3",
     "react": "19.1.0",
-    "react-dom": "19.1.0"    
+    "react-dom": "19.1.0"
   },
   "dependencies": {
     "@bprogress/next": "^3.2.12",
@@ -64,23 +63,23 @@
     "@babel/preset-env": "^7.28.0",
     "@babel/preset-react": "^7.27.1",
     "@babel/preset-typescript": "^7.27.1",
-    "@eslint/js": "^9.25.0",
+    "@eslint/js": "^9.31.0",
     "@next/eslint-plugin-next": "15.4.2",
     "@swc/cli": "0.7.8",
     "@swc/core": "^1.13.1",
-    "@types/node": "^24.0.3",
-    "@types/react": "19.1.0",
-    "@types/react-dom": "19.1.2",
+    "@types/node": "^24.1.0",
+    "@types/react": "19.1.8",
+    "@types/react-dom": "19.1.6",
     "babel-plugin-react-compiler": "19.1.0-rc.2",
-    "cpy": "^11.1.0",
-    "eslint": "^9.25.0",
-    "eslint-config-prettier": "10.1.5",
-    "eslint-plugin-prettier": "5.5.1",
+    "cpy-cli": "5.0.0",
+    "eslint": "^9.31.0",
+    "eslint-config-prettier": "10.1.8",
+    "eslint-plugin-prettier": "5.5.3",
     "eslint-plugin-react-hooks": "^5.2.0",
-    "eslint-plugin-react-refresh": "^0.4.19",
+    "eslint-plugin-react-refresh": "^0.4.20",
     "globals": "^16.0.0",
     "move-cli": "^2.0.0",
-    "prettier": "3.5.3",
+    "prettier": "3.6.2",
     "rimraf": "^6.0.1",
     "typescript": "~5.8.3",
     "typescript-eslint": "^8.30.1"

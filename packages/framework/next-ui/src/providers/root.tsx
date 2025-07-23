@@ -1,27 +1,27 @@
 'use client';
 
-import type { Session } from 'next-auth';
 import type {
   IGRPConfigArgs,
   IGRPHeaderDataArgs,
   IGRPSidebarDataArgs,
+  ExtendedSession
 } from '@igrp/framework-next-types';
-
-import { IGRPActiveThemeProvider } from './active-theme';
-import { IGRPProgressBar } from './progress-bar';
-import { IGRPSessionProvider } from './session-provider';
-import { IGRPThemeProvider } from './theme-provider';
-import { SidebarInset, SidebarProvider } from '../../components/primitives/sidebar';
-import { IGRPHeader } from '../../components/horizon/header';
-import { IGRPSidebar } from '../../components/horizon/sidebar';
 import { IGRPToaster } from '@igrp/igrp-framework-react-design-system';
 
+import { IGRPActiveThemeProvider } from './active-theme';
+import { IGRPProgressBarProvider } from './progress-bar';
+import { IGRPSessionProvider } from './session';
+import { IGRPThemeProvider } from './theme';
+import { SidebarInset, SidebarProvider } from '@/components/primitives/sidebar';
+import { IGRPHeader } from '@/components/horizon/header';
+import { IGRPSidebar } from '@/components/horizon/sidebar';
+
 export type IGRPRootProvidersArgs = {
-  session?: Session | null;
+  session?: ExtendedSession | null;
   activeThemeValue?: string;
   children: React.ReactNode;
   showProgressBar?: boolean;
-  progressiveBarArgs?: React.ComponentProps<typeof IGRPProgressBar>;
+  progressiveBarArgs?: React.ComponentProps<typeof IGRPProgressBarProvider>;
   sessionArgs?: React.ComponentProps<typeof IGRPSessionProvider>;
   themeArgs?: React.ComponentProps<typeof IGRPThemeProvider>;
   className?: string;
@@ -67,7 +67,7 @@ export function IGRPRootProviders({
         enableColorScheme
         {...themeArgs}
       >
-        <IGRPProgressBar {...progressiveBarArgs}>
+        <IGRPProgressBarProvider {...progressiveBarArgs}>
           <IGRPActiveThemeProvider initialTheme={activeThemeValue}>
             <SidebarProvider defaultOpen={defaultOpen}>
               {showSidebar && <IGRPSidebar data={sidebarData} />}
@@ -89,7 +89,7 @@ export function IGRPRootProviders({
               </SidebarInset>
             </SidebarProvider>
           </IGRPActiveThemeProvider>
-        </IGRPProgressBar>
+        </IGRPProgressBarProvider>
       </IGRPThemeProvider>
     </IGRPSessionProvider>
   );

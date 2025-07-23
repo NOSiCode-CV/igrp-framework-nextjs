@@ -11,9 +11,9 @@
   },
   "dependencies": {
     "@bprogress/next": "^3.2.12",
-    "@igrp/framework-next": "0.0.1-alpha.4",
-    "@igrp/framework-next-types": "0.0.1-alpha.4",
-    "@igrp/framework-next-ui": "0.0.1-alpha.4",
+    "@igrp/framework-next": "workspace:*",
+    "@igrp/framework-next-types": "workspace:*",
+    "@igrp/framework-next-ui": "workspace:*",
     "@igrp/igrp-framework-react-design-system": "latest",
     "class-variance-authority": "^0.7.1",
     "clsx": "^2.1.1",

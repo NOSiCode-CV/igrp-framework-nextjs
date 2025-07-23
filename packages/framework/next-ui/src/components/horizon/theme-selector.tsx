@@ -1,6 +1,6 @@
 'use client';
 
-import { Label } from '../primitives/label';
+import { Label } from '@/components/primitives/label';
 import {
   Select,
   SelectContent,
@@ -11,7 +11,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from '../primitives/select';
-import { useIGRPThemeConfig } from '../../providers/root/active-theme';
+import { useIGRPThemeConfig } from '@/providers/active-theme';
 
 const DEFAULT_THEMES = [
   {

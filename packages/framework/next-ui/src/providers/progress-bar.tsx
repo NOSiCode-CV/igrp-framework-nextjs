@@ -1,6 +1,6 @@
 import { AppProgressProvider } from '@bprogress/next';
 
-export function IGRPProgressBar({
+function IGRPProgressBarProvider({
   children,
   height = '4px',
   color = 'primary',
@@ -18,3 +18,5 @@ export function IGRPProgressBar({
     </AppProgressProvider>
   );
 }
+
+export { IGRPProgressBarProvider }

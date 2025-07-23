@@ -1,9 +1,14 @@
+'use client';
+
+import "./styles.css";
+
 export { META_THEME_COLORS, useMetaColor } from './hooks/use-meta-color';
 
 export { IGRPThemeSelector } from './components/horizon/theme-selector';
 
-export { IGRPRootProviders } from './providers/root/index';
+export { IGRPActiveThemeProvider, type IGRPActiveThemeProviderArgs } from "./providers/active-theme";
+export { IGRPProgressBarProvider } from "./providers/progress-bar";
+export { IGRPRootProviders } from './providers/root';
+export { IGRPSessionProvider } from "./providers/session";
 
-export * from './components/errors';
-
-export * from './types';
+export { IGRPGlobalError, type IGRPGlobalErrorProps }from './components/errors/global';

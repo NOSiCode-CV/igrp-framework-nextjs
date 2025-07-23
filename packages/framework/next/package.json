@@ -72,7 +72,7 @@
     "@types/react": "19.1.0",
     "@types/react-dom": "19.1.2",
     "babel-plugin-react-compiler": "19.1.0-rc.2",
-    "cpy-cli": "^11.1.0",
+    "cpy": "^11.1.0",
     "eslint": "^9.25.0",
     "eslint-config-prettier": "10.1.5",
     "eslint-plugin-prettier": "5.5.1",

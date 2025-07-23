@@ -17,12 +17,12 @@ type ThemeContextArgs = {
 
 const ThemeContext = createContext<ThemeContextArgs | undefined>(undefined);
 
-export type IGRPActiveThemeProviderArgs = {
+type IGRPActiveThemeProviderArgs = {
   children: React.ReactNode;
   initialTheme?: string;
 };
 
-export function IGRPActiveThemeProvider({ children, initialTheme }: IGRPActiveThemeProviderArgs) {
+function IGRPActiveThemeProvider({ children, initialTheme }: IGRPActiveThemeProviderArgs) {
   const [activeTheme, setActiveTheme] = useState<string>(() => initialTheme || DEFAULT_THEME);
 
   useEffect(() => {
@@ -56,3 +56,5 @@ export function useIGRPThemeConfig() {
   }
   return context;
 }
+
+export { IGRPActiveThemeProvider, type IGRPActiveThemeProviderArgs }

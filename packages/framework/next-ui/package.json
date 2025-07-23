@@ -19,30 +19,31 @@
   "type": "module",
   "exports": {
     ".": {
-      "import": "./src/index.ts",
-      "types": "./src/index.ts",
-      "default": "./src/index.ts"
+      "types": "./dist/index.d.ts",
+      "import": "./dist/index.js",
+      "default": "./dist/index.js"
+    },
+    "./css": {
+      "import": "./dist/styles.css",
+      "default": "./dist/styles.css"
     }
   },
-  "main": "./src/index.ts",
-  "types": "./src/indexts",
+  "main": "./dist/index.js",
+  "types": "./dist/index.d.ts",
   "files": [
     "dist"
   ],
   "scripts": {
     "dev": "tsc --watch",
     "build": "pnpm build:reactcompiler",
-    "build:babel": "rimraf dist_optimized && babel dist --out-dir dist_optimized --source-maps --extensions .ts,.js,.tsx,.jsx,.cjs,.mjs && rimraf dist && move dist_optimized dist && cpy src/*.css dist/",
-    "build:bundle-for-analysis": "rimraf dist && rimraf tsconfig.tsbuildinfo && pnpm build:swc && pnpm build:babel && pnpm copyfiles && pnpm build:esbuild esbuild --no-split",
-    "build:esbuild": "node bundle.js",
-    "build:reactcompiler": "rimraf dist esbuild && rimraf tsconfig.tsbuildinfo && pnpm tailwind:build && pnpm build:swc && pnpm build:babel && pnpm copyfiles && pnpm build:esbuild && pnpm build:types",
+    "build:babel": "rimraf dist_optimized && babel dist --out-dir dist_optimized --source-maps --extensions .ts,.js,.tsx,.jsx,.cjs,.mjs && rimraf dist && move dist_optimized dist",
+    "build:reactcompiler": "rimraf dist esbuild && rimraf tsconfig.tsbuildinfo && pnpm tailwind:build && pnpm build:swc && pnpm build:babel && cpy src/*.css dist/ && pnpm build:types",
     "build:swc": "swc ./src -d dist --config-file .swcrc --strip-leading-paths",
     "build:types": "tsc --emitDeclarationOnly --outDir dist",
-    "build:without_reactcompiler": "rimraf dist && rimraf tsconfig.tsbuildinfo && pnpm copyfiles && pnpm build:types && pnpm build:swc",
+    "build:without_reactcompiler": "rimraf dist && rimraf tsconfig.tsbuildinfo && cpy src/*.css dist/ && pnpm build:types && pnpm build:swc",
     "clean": "pnpm clean:dist && pnpm clean:packages",
     "clean:dist": "rimraf -g {dist,*.tsbuildinfo}",
     "clean:packages": "rimraf node_modules",
-    "copyfiles": "cpy -u 1 \"src/**/*.{html,css,scss,ttf,woff,woff2,eot,svg,jpg,png,json}\" dist/",
     "format": "prettier --write .",
     "tailwind:build": "npx @tailwindcss/cli -i ./src/index.css -o ./src/styles.css",
     "release": "pnpm format && pnpm build && yarn publish --registry=https://sonatype.nosi.cv/repository/igrp/ --tag latest"
@@ -115,15 +116,16 @@
     "@babel/preset-env": "^7.28.0",
     "@babel/preset-react": "^7.27.1",
     "@babel/preset-typescript": "^7.27.1",
+    "@hyrious/esbuild-plugin-commonjs": "0.2.6",
     "@swc/cli": "^0.7.8",
     "@swc/core": "^1.13.1",
     "@tailwindcss/cli": "^4.1.11",
     "@types/babel__preset-env": "7.10.0",
     "@types/culori": "^2.1.1",
     "@types/react": "^19.0.0",
-    "@types/react-dom": "19.1.2",
+    "@types/react-dom": "19.0.0",
     "babel-plugin-react-compiler": "19.1.0-rc.2",
-    "cpy-cli": "^11.1.0",
+    "cpy": "^11.1.0",
     "esbuild": "0.25.5",
     "esbuild-sass-plugin": "3.3.1",
     "eslint-config-prettier": "10.1.5",

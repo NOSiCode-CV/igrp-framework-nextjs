@@ -13,8 +13,8 @@ import { IGRPProgressBarProvider } from './progress-bar';
 import { IGRPSessionProvider } from './session';
 import { IGRPThemeProvider } from './theme';
 import { SidebarInset, SidebarProvider } from '../components/horizon/sidebar';
-import { IGRPHeader } from '../components/templates/header';
-import { IGRPSidebar } from '../components/templates/sidebar';
+import { IGRPTemplateHeader } from '../components/templates/header';
+import { IGRPTemplateSidebar } from '../components/templates/sidebar';
 
 export type IGRPRootProvidersArgs = {
   session?: ExtendedSession | null;
@@ -70,10 +70,10 @@ export function IGRPRootProviders({
         <IGRPProgressBarProvider {...progressiveBarArgs}>
           <IGRPActiveThemeProvider initialTheme={activeThemeValue}>
             <SidebarProvider defaultOpen={defaultOpen}>
-              {showSidebar && <IGRPSidebar data={sidebarData} />}
+              {showSidebar && <IGRPTemplateSidebar data={sidebarData} />}
 
               <SidebarInset>
-                {showHeader && <IGRPHeader data={headerData} />}
+                {showHeader && <IGRPTemplateHeader data={headerData} />}
 
                 <main className="flex flex-col flex-1 px-6 py-8">{children}</main>
 

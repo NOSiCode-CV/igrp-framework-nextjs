@@ -51,9 +51,7 @@ const SCALED_THEMES = [
   },
 ];
 
-// TODO: add messages
-
-export function IGRPThemeSelector() {
+function IGRPTemplateThemeSelector() {
   const { activeTheme, setActiveTheme } = useIGRPThemeConfig();
 
   return (
@@ -94,3 +92,5 @@ export function IGRPThemeSelector() {
     </div>
   );
 }
+
+export { IGRPTemplateThemeSelector }

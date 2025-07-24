@@ -28,11 +28,11 @@ import {
 } from '../../components/horizon/sidebar';
 import { igrpIsExternalUrl, igrpNormalizeUrl } from '../../lib/url';
 
-export type IGRPMenuArgs = {
+type IGRPTemplateMenuArgs = {
   menus?: IGRPMenuItemArgs[];
 };
 
-export function IGRPMenus({ menus = [] }: IGRPMenuArgs) {
+function IGRPTemplateMenus({ menus = [] }: IGRPTemplateMenuArgs) {
   const pathname = usePathname();
 
   const menuData = useMemo(() => {
@@ -267,3 +267,5 @@ function SubMenuItem({ menu, variant }: SubMenuItemProps) {
     </SidebarMenuSubItem>
   );
 }
+
+export { IGRPTemplateMenus, type IGRPTemplateMenuArgs };

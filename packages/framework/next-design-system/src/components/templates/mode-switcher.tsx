@@ -4,15 +4,16 @@ import * as React from 'react';
 import { Moon, Sun } from 'lucide-react';
 import { useTheme } from 'next-themes';
 import { Button } from '../horizon/button';
-import { META_THEME_COLORS, useMetaColor } from '../../hooks/use-meta-color';
+import { IGRP_META_THEME_COLORS, useIGRPMetaColor } from '../../hooks/use-meta-color';
 
-export function IGRPModeSwitcher() {
+
+function IGRPTemplateModeSwitcher() {
   const { theme, setTheme, resolvedTheme } = useTheme();
-  const { setMetaColor } = useMetaColor();
+  const { setMetaColor } = useIGRPMetaColor();
 
   const toggleTheme = React.useCallback(() => {
     setTheme(resolvedTheme === 'dark' ? 'light' : 'dark');
-    setMetaColor(resolvedTheme === 'dark' ? META_THEME_COLORS.light : META_THEME_COLORS.dark);
+    setMetaColor(resolvedTheme === 'dark' ? IGRP_META_THEME_COLORS.light : IGRP_META_THEME_COLORS.dark);
   }, [resolvedTheme, setTheme, setMetaColor]);
 
   return (
@@ -22,3 +23,5 @@ export function IGRPModeSwitcher() {
     </Button>
   );
 }
+
+export { IGRPTemplateModeSwitcher }

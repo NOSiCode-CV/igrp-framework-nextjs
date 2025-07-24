@@ -15,9 +15,8 @@ import {
   CommandSeparator,
 } from '../primitives/command';
 
-// TODO: add messages, and the lis of search, with the respective url
 
-export function IGRPCommandSearch() {
+function IGRPTemplateCommandSearch() {
   const [open, setOpen] = React.useState(false);
   const router = useRouter();
 
@@ -111,3 +110,5 @@ export function IGRPCommandSearch() {
     </>
   );
 }
+
+export { IGRPTemplateCommandSearch }

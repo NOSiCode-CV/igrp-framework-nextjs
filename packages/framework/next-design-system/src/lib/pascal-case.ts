@@ -1,4 +1,4 @@
-export function toPascalCase(input: string): string {
+export function igrpToPascalCase(input: string): string {
   return input
     .replace(/[^a-zA-Z0-9]+/g, ' ')
     .split(' ')

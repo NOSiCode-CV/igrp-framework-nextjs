@@ -1,19 +1,19 @@
 import { Avatar, AvatarImage, AvatarFallback } from '../primitives/avatar';
 
-interface UserAvatarProps {
+interface IGRPUserAvatarProps {
   image?: string | null;
   alt?: string;
   fallbackContent: React.ReactNode;
   className?: string;
   fallbackClass?: string;
 }
-export function IGRPUserAvatar({
+function IGRPUserAvatar({
   image,
   alt,
   fallbackContent,
   className,
   fallbackClass,
-}: UserAvatarProps) {
+}: IGRPUserAvatarProps) {
   return (
     <Avatar className={className}>
       <AvatarImage src={image || undefined} alt={alt || 'Current User'} />
@@ -21,3 +21,5 @@ export function IGRPUserAvatar({
     </Avatar>
   );
 }
+
+export { IGRPUserAvatar, type IGRPUserAvatarProps };

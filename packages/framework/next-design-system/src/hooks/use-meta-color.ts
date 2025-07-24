@@ -1,16 +1,16 @@
 import { useTheme } from 'next-themes';
 import { useCallback, useMemo } from 'react';
 
-export const META_THEME_COLORS = {
+export const IGRP_META_THEME_COLORS = {
   light: '#ffffff',
   dark: '#09090b',
 };
 
-export function useMetaColor() {
+export function useIGRPMetaColor() {
   const { resolvedTheme } = useTheme();
 
   const metaColor = useMemo(() => {
-    return resolvedTheme !== 'dark' ? META_THEME_COLORS.light : META_THEME_COLORS.dark;
+    return resolvedTheme !== 'dark' ? IGRP_META_THEME_COLORS.light : IGRP_META_THEME_COLORS.dark;
   }, [resolvedTheme]);
 
   const setMetaColor = useCallback((color: string) => {

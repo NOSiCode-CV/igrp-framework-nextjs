@@ -17,15 +17,15 @@ import {
   SidebarMenuButton,
   SidebarRail,
 } from '../horizon/sidebar';
-import { IGRPAppSwitcher } from './app-switcher';
-import { IGRPMenus } from './menus';
-import { IGRPNavUser } from './nav-user';
+import { IGRPTemplateAppSwitcher } from './app-switcher';
+import { IGRPTemplateMenus } from './menus';
+import { IGRPTemplateNavUser } from './nav-user';
 
-interface IGRPAppSidebarProps extends React.ComponentProps<typeof Sidebar> {
+interface IGRPTemplateSidebarProps extends React.ComponentProps<typeof Sidebar> {
   data?: IGRPSidebarDataArgs;
 }
 
-export function IGRPSidebar({ data, ...props }: IGRPAppSidebarProps) {
+function IGRPTemplateSidebar({ data, ...props }: IGRPTemplateSidebarProps) {
   if (!data) throw new Error('Sidebar data is required');
 
   console.log('::: UI SIDEBAR :::');
@@ -39,7 +39,7 @@ export function IGRPSidebar({ data, ...props }: IGRPAppSidebarProps) {
     <Sidebar collapsible="icon" {...props} variant="sidebar">
       <SidebarHeader>
         {showAppSwitcher && (
-          <IGRPAppSwitcher apps={apps} appCode={appCode} appCenterUrl={appCenterUrl} />
+          <IGRPTemplateAppSwitcher apps={apps} appCode={appCode} appCenterUrl={appCenterUrl} />
         )}
       </SidebarHeader>
 
@@ -47,7 +47,7 @@ export function IGRPSidebar({ data, ...props }: IGRPAppSidebarProps) {
         <SidebarGroup>
           <SidebarGroupLabel>Main</SidebarGroupLabel>
           <SidebarGroupContent>
-            <IGRPMenus menus={menuItems} />
+            <IGRPTemplateMenus menus={menuItems} />
           </SidebarGroupContent>
         </SidebarGroup>
       </SidebarContent>
@@ -69,10 +69,12 @@ export function IGRPSidebar({ data, ...props }: IGRPAppSidebarProps) {
           ))}
         </SidebarMenu>
 
-        <IGRPNavUser user={user} />
+        <IGRPTemplateNavUser user={user} />
       </SidebarFooter>
 
       <SidebarRail />
     </Sidebar>
   );
 }
+
+export { IGRPTemplateSidebar, type IGRPTemplateSidebarProps };

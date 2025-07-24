@@ -2,7 +2,6 @@
 
 import Link from 'next/link';
 import { Bell, LogOut, User as UserIcon } from 'lucide-react';
-import type { IGRPUserArgs } from '@igrp/framework-next-types';
 
 import {
   DropdownMenu,
@@ -13,16 +12,12 @@ import {
   DropdownMenuTrigger,
 } from '../primitives/dropdown-menu';
 import { SidebarMenu, SidebarMenuButton, SidebarMenuItem } from '../horizon/sidebar';
-import { IGRPUserAvatar } from './user-avatar';
-import { getInitials } from '../../lib/getInitials';
+import { IGRPUserAvatar } from '../custom/user-avatar';
+import { igrpGetnitials } from '../../lib/initials';
+import { IGRPTemplateNavUserProps } from './nav-user';
 
-interface NavUserProps {
-  user?: IGRPUserArgs;
-}
 
-// TODO: see when user is null or undefiened
-
-export function IGRPNavUserHeader({ user }: NavUserProps) {
+function IGRPTemplateNavUserHeader({ user }: IGRPTemplateNavUserProps) {
   if (!user) return null;
 
   return (
@@ -38,7 +33,7 @@ export function IGRPNavUserHeader({ user }: NavUserProps) {
               <IGRPUserAvatar
                 image={user.image}
                 alt={user.username}
-                fallbackContent={user && getInitials(user.username)}
+                fallbackContent={user && igrpGetnitials(user.username)}
                 fallbackClass="text-xs"
                 className="shadow-md"
               />
@@ -89,3 +84,5 @@ export function IGRPNavUserHeader({ user }: NavUserProps) {
     </SidebarMenu>
   );
 }
+
+export { IGRPTemplateNavUserHeader };

@@ -35,7 +35,7 @@ const notifications = [
   },
 ];
 
-export function Notifications() {
+function IGRPTemplateNotifications() {
   const [notificationCount, setNotificationCount] = React.useState(3);
 
   const markAsRead = () => {
@@ -87,3 +87,5 @@ export function Notifications() {
     </DropdownMenu>
   );
 }
+
+export { IGRPTemplateNotifications }

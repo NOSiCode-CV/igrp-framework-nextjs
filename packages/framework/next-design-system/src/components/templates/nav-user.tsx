@@ -13,16 +13,16 @@ import {
   DropdownMenuTrigger,
 } from '../primitives/dropdown-menu';
 import { SidebarMenu, SidebarMenuButton, SidebarMenuItem, useSidebar } from '../horizon/sidebar';
-import { IGRPUserAvatar } from './user-avatar';
-import { getInitials } from '../../lib/getInitials';
+import { IGRPUserAvatar } from '../custom/user-avatar';
+import { igrpGetnitials } from '../../lib/initials';
 
-interface NavUserProps {
+interface IGRPTemplateNavUserProps {
   user?: IGRPUserArgs;
 }
 
 // TODO: see when user is null or undefiened
 
-export function IGRPNavUser({ user }: NavUserProps) {
+function IGRPTemplateNavUser({ user }: IGRPTemplateNavUserProps) {
   const { isMobile } = useSidebar();
 
   if (!user) return null;
@@ -40,7 +40,7 @@ export function IGRPNavUser({ user }: NavUserProps) {
               <IGRPUserAvatar
                 image={user.image}
                 alt={user.username}
-                fallbackContent={user && getInitials(user.username)}
+                fallbackContent={user && igrpGetnitials(user.username)}
                 fallbackClass="text-xs"
                 className="shadow-md"
               />
@@ -105,3 +105,5 @@ export function IGRPNavUser({ user }: NavUserProps) {
     </SidebarMenu>
   );
 }
+
+export { IGRPTemplateNavUser, type IGRPTemplateNavUserProps };

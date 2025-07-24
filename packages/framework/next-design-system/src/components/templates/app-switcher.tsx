@@ -15,24 +15,16 @@ import {
 } from '../primitives/dropdown-menu';
 import { SidebarMenu, SidebarMenuButton, SidebarMenuItem, useSidebar } from '../horizon/sidebar';
 
-interface AppSwitcherProps {
+interface IGRPTemplateAppSwitcherProps {
   apps?: IGRPApplicationArgs[];
   appCode?: number;
   appCenterUrl?: string;
 }
 
-// TODO: Add messages
-
-export function IGRPAppSwitcher({ apps, appCode, appCenterUrl }: AppSwitcherProps) {
-  console.log('::: UI APP SWITCHER :::');
-  console.log({ apps, appCode, appCenterUrl });
-
+function IGRPTemplateAppSwitcher({ apps, appCode, appCenterUrl }: IGRPTemplateAppSwitcherProps) {
   const { isMobile } = useSidebar();
-
   const currentApp = appCode ? apps?.find((item) => item.id === appCode) : apps?.[0];
-
   const [activeApp, setActiveApp] = useState(currentApp);
-
   const [listApps, setListApps] = useState(apps?.filter((item) => item.id !== activeApp?.id));
 
   if (!activeApp) throw new Error('Active application not found');
@@ -134,3 +126,5 @@ export function IGRPAppSwitcher({ apps, appCode, appCenterUrl }: AppSwitcherProp
     </SidebarMenu>
   );
 }
+
+export { IGRPTemplateAppSwitcher, type IGRPTemplateAppSwitcherProps };

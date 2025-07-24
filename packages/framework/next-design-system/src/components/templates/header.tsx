@@ -2,19 +2,19 @@ import type { IGRPHeaderDataArgs } from '@igrp/framework-next-types';
 
 import { Separator } from '../primitives/separator';
 import { SidebarTrigger } from '../horizon/sidebar';
-import { IGRPBreadcrumbs } from './breadcrumbs';
-import { IGRPCommandSearch } from './command-search';
-import { IGRPModeSwitcher } from './mode-switcher';
-import { IGRPNavUserHeader } from './nav-user-header';
-import { Notifications } from './notifications';
+import { IGRPTemplateBreadcrumbs } from './breadcrumbs';
+import { IGRPTemplateCommandSearch } from './command-search';
+import { IGRPTemplateModeSwitcher } from './mode-switcher';
+import { IGRPTemplateNavUserHeader } from './nav-user-header';
+import { IGRPTemplateNotifications } from './notifications';
 import { cn } from '../../lib/utils';
 
-interface IGRPHeaderProps {
+interface IGRPTemplateHeaderProps {
   data?: IGRPHeaderDataArgs;
   className?: string;
 }
 
-export function IGRPHeader({ data, className }: IGRPHeaderProps) {
+function IGRPTemplateHeader({ data, className }: IGRPTemplateHeaderProps) {
   if (!data) return null;
 
   const { user, showBreadcrumbs, showSearch, showNotifications, showThemeSwitcher, showUser } =
@@ -32,23 +32,25 @@ export function IGRPHeader({ data, className }: IGRPHeaderProps) {
         {showBreadcrumbs && (
           <>
             <Separator orientation="vertical" className="mr-2 data-[orientation=vertical]:h-4" />
-            <IGRPBreadcrumbs />
+            <IGRPTemplateBreadcrumbs />
           </>
         )}
       </div>
       <div className="flex items-center gap-2">
-        {showSearch && <IGRPCommandSearch />}
+        {showSearch && <IGRPTemplateCommandSearch />}
 
         {showNotifications && (
           <span className="hidden md:block">
-            <Notifications />
+            <IGRPTemplateNotifications />
           </span>
         )}
 
-        {showThemeSwitcher && <IGRPModeSwitcher />}
+        {showThemeSwitcher && <IGRPTemplateModeSwitcher />}
 
-        {showUser && <IGRPNavUserHeader user={user} />}
+        {showUser && <IGRPTemplateNavUserHeader user={user} />}
       </div>
     </header>
   );
 }
+
+export { IGRPTemplateHeader }

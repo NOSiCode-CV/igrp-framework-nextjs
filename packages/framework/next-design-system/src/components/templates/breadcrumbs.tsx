@@ -6,13 +6,13 @@ import { IGRPIcon } from '@igrp/framework-next-design-system';
 
 import { cn } from '../../lib/utils';
 
-interface BreadcrumbsProps {
+interface IGRPTemplateBreadcrumbsProps {
   className?: string;
 }
 
 // TODO: use breadcrumbs from shadcn-ui
 
-export function IGRPBreadcrumbs({ className }: BreadcrumbsProps) {
+function IGRPTemplateBreadcrumbs({ className }: IGRPTemplateBreadcrumbsProps) {
   const homeHref = '/';
   const pathname = usePathname();
 
@@ -68,3 +68,5 @@ export function IGRPBreadcrumbs({ className }: BreadcrumbsProps) {
     </nav>
   );
 }
+
+export { IGRPTemplateBreadcrumbs, type IGRPTemplateBreadcrumbsProps };

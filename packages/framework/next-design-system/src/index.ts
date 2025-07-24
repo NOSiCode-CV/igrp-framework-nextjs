@@ -2,29 +2,103 @@
 
 import './styles.css';
 
+// custom components
 export { IGRPStatusBanner, type IGRPStatusBannerProps } from './components/custom/status-banner';
 export { IGRPStatsCardTopBorderColored } from './components/custom/stats-card-top-border-colored';
+export { IGRPUserAvatar, type IGRPUserAvatarProps } from "./components/custom/user-avatar";
 
-export { META_THEME_COLORS, useMetaColor } from './hooks/use-meta-color';
-
-export { IGRPThemeSelector } from './components/templates/theme-selector';
-
-export {
-  IGRPActiveThemeProvider,
-  type IGRPActiveThemeProviderArgs,
-} from './providers/active-theme';
-export { IGRPProgressBarProvider } from './providers/progress-bar';
-export { IGRPRootProviders } from './providers/root';
-export { IGRPSessionProvider } from './providers/session';
-
+// errs components
 export { IGRPGlobalError, type IGRPGlobalErrorProps } from './components/errors/global';
 
+// horizon and primitives components
+// export {
+//   AlertDialog,
+//   AlertDialogPortal,
+//   AlertDialogOverlay,
+//   AlertDialogTrigger,
+//   AlertDialogContent,
+//   AlertDialogHeader,
+//   AlertDialogFooter,
+//   AlertDialogTitle,
+//   AlertDialogDescription,
+//   AlertDialogAction,
+//   AlertDialogCancel,
+// } from './components/horizon/alert-dialog';
+// export { Button, buttonVariants } from './components/horizon/button';
+// export { Calendar } from './components/horizon/calendar';
+// export { 
+//   Card, 
+//   CardHeader, 
+//   CardFooter, 
+//   CardTitle, 
+//   CardAction, 
+//   CardDescription, 
+//   CardContent 
+// } from './components/horizon/card';
+// export {
+//   type CarouselApi,
+//   Carousel,
+//   CarouselContent,
+//   CarouselItem,
+//   CarouselPrevious,
+//   CarouselNext,
+// } from './components/horizon/carousel';
+// export { Checkbox } from './components/horizon/checkbox';
+// export {
+//   Dialog,
+//   DialogClose,
+//   DialogContent,
+//   DialogDescription,
+//   DialogFooter,
+//   DialogHeader,
+//   DialogOverlay,
+//   DialogPortal,
+//   DialogTitle,
+//   DialogTrigger,
+// } from './components/horizon/dialog';
+// export { Input } from './components/horizon/input';
+// export {
+//   Pagination,
+//   PaginationContent,
+//   PaginationLink,
+//   PaginationItem,
+//   PaginationPrevious,
+//   PaginationNext,
+//   PaginationEllipsis,
+// } from './components/horizon/pagination';
+// export { RadioGroup, RadioGroupItem, radioItemVariants } from './components/horizon/radio-group';
+// export {
+//   Sidebar,
+//   SidebarContent,
+//   SidebarFooter,
+//   SidebarGroup,
+//   SidebarGroupAction,
+//   SidebarGroupContent,
+//   SidebarGroupLabel,
+//   SidebarHeader,
+//   SidebarInput,
+//   SidebarInset,
+//   SidebarMenu,
+//   SidebarMenuAction,
+//   SidebarMenuBadge,
+//   SidebarMenuButton,
+//   SidebarMenuItem,
+//   SidebarMenuSkeleton,
+//   SidebarMenuSub,
+//   SidebarMenuSubButton,
+//   SidebarMenuSubItem,
+//   SidebarProvider,
+//   SidebarRail,
+//   SidebarSeparator,
+//   SidebarTrigger,
+//   // eslint-disable-next-line react-refresh/only-export-components
+//   useSidebar,
+// } from './components/horizon/sidebar';
+
+// igrp components
 export { IGRPAlert, type IGRPAlertProps } from './components/igrp/alert';
-
 export { IGRPAlertDialog, type IGRPAlertDialogProps } from './components/igrp/alert-dialog';
-
 export { IGRPBadge, type IGRPBadgeProps, igrpBadgeVariants } from './components/igrp/badge';
-
 export { IGRPButton, type IGRPButtonProps } from './components/igrp/button';
 
 export {
@@ -65,7 +139,6 @@ export type {
   IGRPRadialBarChartProps,
 } from './components/igrp/chart/types';
 export { IGRP_CHART_COLORS } from './components/igrp/chart/types';
-
 export {
   formatChartValue,
   getChartHeight,
@@ -90,17 +163,13 @@ export {
   IGRPCommandShortcut,
   IGRPCommandSeparator,
 } from './components/igrp/command';
-
 export { IGRPContainer } from './components/igrp/container';
-
 export { IGRPDataTable, type IGRPDataTableProps } from './components/igrp/data-table/data-table';
-
 export {
   IGRPDataTableButtonAlert,
   IGRPDataTableButtonLink,
   IGRPDataTableButtonModal,
 } from './components/igrp/data-table/action-button-icon';
-
 export {
   type IGRPDataTableDropdownProps,
   type IGRPDataTableActionDropdown,
@@ -112,7 +181,6 @@ export {
   IGRPDataTableDropdownMenuLink,
   IGRPDataTableDropdownMenu,
 } from './components/igrp/data-table/action-dropdown-menu';
-
 export {
   IGRPDataTableCellCheckbox,
   IGRPDataTableCellExpander,
@@ -124,13 +192,11 @@ export {
   type IGRPDataTableCellBadgeProps,
   type IGRPDataTableCellDateProps,
 } from './components/igrp/data-table/cell';
-
 export {
   IGRPDataTableClientFilter,
   type IGRPDataTableClientFilterListProps,
   type IGRPDataTableFilterClientProps,
 } from './components/igrp/data-table/client-filter';
-
 export {
   IGRPDataTableFilterDate,
   IGRPDataTableFilterDropdown,
@@ -139,32 +205,27 @@ export {
   IGRPDataTableFilterMinMax,
   IGRPDataTableFilterSelect,
 } from './components/igrp/data-table/filter';
-
 export {
   IGRPDataTableHeaderSortToggle,
   IGRPDataTableHeaderSortDropdown,
   IGRPDataTableHeaderRowsSelect,
   IGRPDataTableHeaderDefault,
 } from './components/igrp/data-table/header';
-
 export {
   IGRPDataTablePagination,
   IGRPDataTablePaginationNumeric,
   type IGRPDataTablePaginationProps,
 } from './components/igrp/data-table/pagination';
-
 export {
   IGRPDataTableRowAction,
   type IGRPDataTableActionProps,
   type IGRPDataTableDialogProps,
   type IGRPDataTableLinkProps,
 } from './components/igrp/data-table/row-actions';
-
 export {
   IGPRDataTableToggleVisibility,
   type IGPRDataTableVisibilityProps,
 } from './components/igrp/data-table/toggle-visibility';
-
 export {
   IGRPDataTableDateRangeFilterFn,
   IGRPDataTableFacetedFilterFn,
@@ -187,7 +248,6 @@ export {
   IGRPDropdownMenuSubTrigger,
   IGRPDropdownMenuSubContent,
 } from './components/igrp/dropdown-menu';
-
 export {
   type IGRPFormContextValue,
   useIGRPFormContext,
@@ -196,11 +256,9 @@ export {
 export { IGRPFormField, type IGRPFormFielProps } from './components/igrp/form/form-field';
 export { IGRPForm, type IGRPFormProps, type IGRPFormHandle } from './components/igrp/form/form';
 export { convertValuesToFormData } from './components/igrp/form/lib/utils';
-
 export { IGRPFormList, type IGRPFormListProps } from './components/igrp/form-list';
 
 export { IGRPIcon, type IGRPIconProps, type IGRPIconName } from './components/igrp/icon';
-
 export {
   IGRPInfoCard,
   type IGRPInfoCardProps,
@@ -236,7 +294,6 @@ export { IGRPRadioGroup, type IGRPRadioGroupProps } from './components/igrp/inpu
 export { IGRPInputAddOn, type IGRPInputAddOnProps } from './components/igrp/input/with-addons';
 
 export { IGRPLabel, type IGRPLabelProps } from './components/igrp/label';
-
 export { IGRPLoadingSpinner } from './components/igrp/loading/spiner';
 
 export {
@@ -269,9 +326,7 @@ export {
 } from './components/igrp/notification';
 
 export { IGRPPageFooter, type IGRPPageFooterProps } from './components/igrp/page-footer';
-
 export { IGRPPageHeader, type IGRPPageHeaderProps } from './components/igrp/page-header';
-
 export {
   IGRPPageHeaderBackButton,
   type IGRPPageHeaderBackButtonProps,
@@ -318,11 +373,8 @@ export {
 } from './components/igrp/sidebar';
 
 export { IGRPStatsCard, type IGRPStatsCardProps } from './components/igrp/stats-card';
-
 export { IGRPTable, type IGRPTableProps } from './components/igrp/table';
-
 export { IGRPTabs, type IGRPTabsProps, type IGRPTabItem } from './components/igrp/tabs';
-
 export { IGRPToaster, useIGRPToast, type IGRPToastProps } from './components/igrp/toaster';
 
 export {
@@ -330,9 +382,7 @@ export {
   type IGRPHeadlineProps,
   igrpHeadlineVariants,
 } from './components/igrp/typography/headline';
-
 export { IGRPLink, IGRPLinkVariants, type IGRPLinkProps } from './components/igrp/typography/link';
-
 export {
   IGRPTextList,
   type IGRPTextListProps,
@@ -343,5 +393,89 @@ export {
   igrpCreateListItem,
   igrpListItems,
 } from './components/igrp/typography/list';
-
 export { IGRPText, type IGRPTextProps, igrpTextVariants } from './components/igrp/typography/text';
+
+// templates
+export { 
+  IGRPTemplateAppSwitcher, 
+  type IGRPTemplateAppSwitcherProps 
+} from './components/templates/app-switcher';
+
+export { 
+  IGRPTemplateBreadcrumbs, 
+  type IGRPTemplateBreadcrumbsProps 
+} from './components/templates/breadcrumbs';
+
+export { IGRPTemplateCommandSearch } from './components/templates/command-search';
+
+export { IGRPTemplateHeader } from './components/templates/header';
+
+export { IGRPTemplateMenus, type IGRPTemplateMenuArgs } from './components/templates/menus';
+
+export { IGRPTemplateModeSwitcher } from './components/templates/mode-switcher';
+
+export { IGRPTemplateNavUser, type IGRPTemplateNavUserProps } from './components/templates/nav-user';
+
+export { 
+  IGRPTemplateNavUserHeader, 
+} from './components/templates/nav-user-header';
+
+export { IGRPTemplateNotifications } from './components/templates/notifications';
+
+export { IGRPTemplateThemeSelector } from './components/templates/theme-selector';
+
+
+// types
+export type {
+  IGRPPlacementProps,
+  IGRPBaseAttributes,
+  IGRPInputProps,
+  IGRPOptionsProps,
+  IGRPGridSize
+} from './types/globals';
+
+// hooks
+export { IGRP_META_THEME_COLORS, useIGRPMetaColor } from './hooks/use-meta-color';
+export { useIsMobile } from "./hooks/use-mobile";
+
+// libs
+export {
+  IGRPColors,
+  type IGRPColorType,
+  type IGRPColorRole,
+  type IGRPColorVariants,
+  IGRPColorObjectVariants,
+  IGRPColorObjectRole,
+  igrpColorText
+} from './lib/colors';
+export { igrpGridSizeClasses, igrpAlertIconMappings } from './lib/constants';
+export { igrpGetnitials } from './lib/initials';
+export { igrpToPascalCase } from './lib/pascal-case';
+export { igrpIsExternalUrl, igrpNormalizeUrl } from './lib/url';
+export { cn } from './lib/utils';
+
+// providers
+export { IGRPActiveThemeProvider, type IGRPActiveThemeProviderArgs } from './providers/active-theme';
+export { IGRPProgressBarProvider } from './providers/progress-bar';
+export { IGRPRootProviders } from './providers/root';
+export { IGRPSessionProvider } from './providers/session';
+
+// external dependencies
+
+export type {
+  Column,
+  ColumnDef,
+  ColumnFiltersState,
+  ExpandedState,
+  FilterFn,
+  PaginationState,
+  OnChangeFn,
+  Row,
+  RowSelectionState,
+  SortingState,
+  VisibilityState,
+} from '@tanstack/react-table';
+
+export type { DateRange } from 'react-day-picker';
+
+export * from 'zod';

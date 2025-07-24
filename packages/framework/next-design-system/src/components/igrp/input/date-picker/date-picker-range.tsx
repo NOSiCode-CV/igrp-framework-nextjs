@@ -20,7 +20,7 @@ import {
   type IGRPCalendarRangeProps,
 } from '../../../igrp/input/date-picker/calendar/calendar-range';
 import { IGRPLabel } from '../../../igrp/label';
-import { igrpGridSizeClasses } from '../../../../lib/constants';
+// import { igrpGridSizeClasses } from '../../../../lib/constants';
 import { cn } from '../../../../lib/utils';
 import { type IGRPDatePickerBaseProps } from './types';
 

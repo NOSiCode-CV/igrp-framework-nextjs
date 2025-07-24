@@ -1,9 +1,10 @@
 import { type VariantProps } from 'class-variance-authority';
-import { IGRPHeadline, igrpHeadlineVariants } from '@/components/igrp/typography/headline';
-import { cn } from '@/lib/utils';
-import { type IGRPBaseAttributes } from '@/types/globals';
+
 import { IGRPPageHeaderBackButton } from './back-button';
-import type { IGRPIconName } from '@/components/igrp/icon';
+import type { IGRPIconName } from '../icon';
+import { IGRPHeadline, igrpHeadlineVariants } from '../../../components/igrp/typography/headline';
+import { cn } from '../../../lib/utils';
+import { type IGRPBaseAttributes } from '../../../types/globals';
 
 type IGRPPageHeaderProps = {
   title: string;

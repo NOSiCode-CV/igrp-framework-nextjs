@@ -4,6 +4,7 @@ import type {
   ControllerRenderProps,
   FieldValues,
 } from 'react-hook-form';
+
 import {
   FormControl,
   FormDescription,
@@ -11,9 +12,9 @@ import {
   FormItem,
   FormLabel,
   FormMessage,
-} from '@/components/primitives/form';
-import { cn } from '@/lib/utils';
-import { type IGRPPlacementProps } from '@/types/globals';
+} from '../../../components/primitives/form';
+import { cn } from '../../../lib/utils';
+import { type IGRPPlacementProps } from '../../../types/globals';
 
 interface IGRPFormFielProps {
   name: string;

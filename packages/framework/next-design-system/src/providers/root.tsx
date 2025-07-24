@@ -12,7 +12,7 @@ import { IGRPActiveThemeProvider } from './active-theme';
 import { IGRPProgressBarProvider } from './progress-bar';
 import { IGRPSessionProvider } from './session';
 import { IGRPThemeProvider } from './theme';
-import { SidebarInset, SidebarProvider } from '../components/primitives/sidebar';
+import { SidebarInset, SidebarProvider } from '../components/horizon/sidebar';
 import { IGRPHeader } from '../components/templates/header';
 import { IGRPSidebar } from '../components/templates/sidebar';
 

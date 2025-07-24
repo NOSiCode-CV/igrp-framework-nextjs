@@ -1,6 +1,5 @@
 {
   "compilerOptions": {
-    /* Strictness */
     "strict": true,
     "noUncheckedIndexedAccess": true,
     "noImplicitOverride": true,
@@ -19,10 +18,8 @@
     "outDir": "./dist",
     "resolveJsonModule": true,
     "skipLibCheck": true,
-    // "emitDeclarationOnly": true,
     "sourceMap": true,
     "lib": ["DOM", "DOM.Iterable", "ES2023"],
-    // "types": ["node"],
     "incremental": true,
     "isolatedModules": true,
     "plugins": [

@@ -42,7 +42,7 @@
     "build:types": "tsc --emitDeclarationOnly --outDir dist",
     "build:without_reactcompiler": "rimraf dist && rimraf tsconfig.tsbuildinfo && cpy src/*.css dist/ && pnpm build:types && pnpm build:swc",
     "clean": "pnpm clean:dist && pnpm clean:packages",
-    "clean:dist": "rimraf -g {dist,*.tsbuildinfo}",
+    "clean:dist": "rimraf {dist,*.tsbuildinfo}",
     "clean:packages": "rimraf node_modules",
     "format": "prettier --write .",
     "tailwind:build": "npx @tailwindcss/cli -i ./src/index.css -o ./src/styles.css",

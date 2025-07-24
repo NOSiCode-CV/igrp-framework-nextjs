@@ -21,7 +21,7 @@
   ],
   "scripts": {
     "dev": "tsc --watch",
-    "clean": "rimraf -g {dist,*.tsbuildinfo}",
+    "clean": "rimraf {dist,*.tsbuildinfo}",
     "build": "pnpm clean && pnpm format && tsc -b",
     "format": "prettier --write .",
     "release": "pnpm build && yarn publish --registry=https://sonatype.nosi.cv/repository/igrp/ --tag latest"

@@ -36,7 +36,7 @@ function IGRPDataTableClientFilter<TData>({
   }, [cleanDates]);
 
   return (
-    <div className='flex md:items-center gap-2 flex-col md:flex-row'>
+    <div className="flex md:items-center gap-2 flex-col md:flex-row">
       {filterList.map(({ columnId, component }) => {
         const column = table.getColumn(columnId as string);
         return column && <Fragment key={columnId as string}>{component(column)}</Fragment>;
@@ -45,10 +45,10 @@ function IGRPDataTableClientFilter<TData>({
       {isFiltered && (
         <IGRPButton
           onClick={handleCleanFilter}
-          className='h-8 px-2 lg:px-3'
-          variant='ghost'
+          className="h-8 px-2 lg:px-3"
+          variant="ghost"
           showIcon={true}
-          iconName='X'
+          iconName="X"
         >
           {filterLabel}
         </IGRPButton>

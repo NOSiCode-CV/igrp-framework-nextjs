@@ -10,4 +10,4 @@ function IGRPSessionProvider(props: SessionProviderProps) {
   );
 }
 
-export { IGRPSessionProvider }
+export { IGRPSessionProvider };

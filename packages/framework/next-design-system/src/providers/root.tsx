@@ -4,7 +4,7 @@ import type {
   IGRPConfigArgs,
   IGRPHeaderDataArgs,
   IGRPSidebarDataArgs,
-  ExtendedSession
+  ExtendedSession,
 } from '@igrp/framework-next-types';
 import { IGRPToaster } from '@igrp/framework-next-design-system';
 

@@ -112,27 +112,23 @@ function IGRPMenuNavigation({
 
   return (
     <div className={cn(isStickyTop && 'sticky top-20', className)}>
-      <Card className='shadow-sm gap-0'>
-        <CardHeader className='border-b py-3 px-4 gap-0'>
-          <div className='flex items-center justify-between'>
-            <CardTitle className='font-medium text-sm'>{title}</CardTitle>
+      <Card className="shadow-sm gap-0">
+        <CardHeader className="border-b py-3 px-4 gap-0">
+          <div className="flex items-center justify-between">
+            <CardTitle className="font-medium text-sm">{title}</CardTitle>
             {badgeContent && (
-              <IGRPBadge
-                variant={badgeVariant}
-                color={badgeColor}
-                badgeClassName={badgeClassName}
-              >
+              <IGRPBadge variant={badgeVariant} color={badgeColor} badgeClassName={badgeClassName}>
                 {badgeContent}
               </IGRPBadge>
             )}
           </div>
         </CardHeader>
-        <CardContent className='p-0'>
-          <div className='divide-y'>
+        <CardContent className="p-0">
+          <div className="divide-y">
             {sections.map((section) => (
               <button
                 key={section.id}
-                type='button'
+                type="button"
                 onClick={() => handleSectionClick(section.id)}
                 disabled={section.disabled}
                 className={cn(
@@ -144,16 +140,13 @@ function IGRPMenuNavigation({
                     : 'hover:bg-muted/30 text-muted-foreground',
                 )}
               >
-                <div className='flex items-center gap-2'>
-                  <IGRPIcon
-                    iconName={section.icon}
-                    className='h-4 w-4 flex-shrink-0'
-                  />
-                  <span className='truncate'>{section.label}</span>
+                <div className="flex items-center gap-2">
+                  <IGRPIcon iconName={section.icon} className="h-4 w-4 flex-shrink-0" />
+                  <span className="truncate">{section.label}</span>
                 </div>
                 {showChevron && (
                   <IGRPIcon
-                    iconName='ChevronRight'
+                    iconName="ChevronRight"
                     className={cn(
                       'h-4 w-4 transition-colors flex-shrink-0',
                       activeSection === section.id ? 'text-primary' : 'text-muted-foreground',

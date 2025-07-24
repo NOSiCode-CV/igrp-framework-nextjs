@@ -140,7 +140,7 @@ function IGRPDataTable<TData, TValue>({
 
   return (
     <div className={cn('flex flex-col gap-4', className)}>
-      <div className='flex flex-col md:flex-row md:items-center md:justify-between md:flex-1 gap-3'>
+      <div className="flex flex-col md:flex-row md:items-center md:justify-between md:flex-1 gap-3">
         {showFilter &&
           (isServerSide ? (
             serverFilterComponent
@@ -189,13 +189,10 @@ function IGRPDataTable<TData, TValue>({
                   <TableRow
                     key={row.id}
                     data-state={row.getIsSelected() && 'selected'}
-                    className='border-0 [&:first-child>td:first-child]:rounded-tl-lg [&:first-child>td:last-child]:rounded-tr-lg [&:last-child>td:first-child]:rounded-bl-lg [&:last-child>td:last-child]:rounded-br-lg h-px hover:bg-accent/50'
+                    className="border-0 [&:first-child>td:first-child]:rounded-tl-lg [&:first-child>td:last-child]:rounded-tr-lg [&:last-child>td:first-child]:rounded-bl-lg [&:last-child>td:last-child]:rounded-br-lg h-px hover:bg-accent/50"
                   >
                     {row.getVisibleCells().map((cell) => (
-                      <TableCell
-                        key={cell.id}
-                        className='p-3 last:py-0 h-[inherit]'
-                      >
+                      <TableCell key={cell.id} className="p-3 last:py-0 h-[inherit]">
                         {flexRender(cell.column.columnDef.cell, cell.getContext())}
                       </TableCell>
                     ))}
@@ -211,20 +208,14 @@ function IGRPDataTable<TData, TValue>({
                 </Fragment>
               ))
             ) : (
-              <TableRow className='hover:bg-transparent [&:first-child>td:first-child]:rounded-tl-lg [&:first-child>td:last-child]:rounded-tr-lg [&:last-child>td:first-child]:rounded-bl-lg [&:last-child>td:last-child]:rounded-br-lg'>
-                <TableCell
-                  colSpan={columns.length}
-                  className='h-24 text-center font-semibold'
-                >
+              <TableRow className="hover:bg-transparent [&:first-child>td:first-child]:rounded-tl-lg [&:first-child>td:last-child]:rounded-tr-lg [&:last-child>td:first-child]:rounded-bl-lg [&:last-child>td:last-child]:rounded-br-lg">
+                <TableCell colSpan={columns.length} className="h-24 text-center font-semibold">
                   {notFoundLabel}
                 </TableCell>
               </TableRow>
             )}
           </TableBody>
-          <tbody
-            aria-hidden='true'
-            className='table-row h-1'
-          ></tbody>
+          <tbody aria-hidden="true" className="table-row h-1"></tbody>
         </Table>
       </div>
 

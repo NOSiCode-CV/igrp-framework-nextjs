@@ -68,33 +68,18 @@ function IGRPDropdownMenuLabel({
   inset,
   ...props
 }: React.ComponentProps<typeof DropdownMenuLabel>) {
-  return (
-    <DropdownMenuLabel
-      inset={inset}
-      {...props}
-    />
-  );
+  return <DropdownMenuLabel inset={inset} {...props} />;
 }
 
 function IGRPDropdownMenuSeparator({
   className,
   ...props
 }: React.ComponentProps<typeof DropdownMenuSeparator>) {
-  return (
-    <DropdownMenuSeparator
-      className={className}
-      {...props}
-    />
-  );
+  return <DropdownMenuSeparator className={className} {...props} />;
 }
 
 function IGRPDropdownMenuShortcut({ className, ...props }: React.ComponentProps<'span'>) {
-  return (
-    <DropdownMenuShortcut
-      className={className}
-      {...props}
-    />
-  );
+  return <DropdownMenuShortcut className={className} {...props} />;
 }
 
 function IGRPDropdownMenuSub({ ...props }: React.ComponentProps<typeof DropdownMenuSub>) {
@@ -108,11 +93,7 @@ function IGRPDropdownMenuSubTrigger({
   ...props
 }: React.ComponentProps<typeof DropdownMenuSubTrigger>) {
   return (
-    <DropdownMenuSubTrigger
-      inset={inset}
-      className={className}
-      {...props}
-    >
+    <DropdownMenuSubTrigger inset={inset} className={className} {...props}>
       {children}
     </DropdownMenuSubTrigger>
   );
@@ -122,12 +103,7 @@ function IGRPDropdownMenuSubContent({
   className,
   ...props
 }: React.ComponentProps<typeof DropdownMenuSubContent>) {
-  return (
-    <DropdownMenuSubContent
-      className={className}
-      {...props}
-    />
-  );
+  return <DropdownMenuSubContent className={className} {...props} />;
 }
 
 export {

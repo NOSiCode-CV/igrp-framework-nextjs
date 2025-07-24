@@ -9,18 +9,11 @@ import {
   AccordionContent,
 } from '../../primitives/accordion';
 import { Button } from '../../horizon/button';
-import {
-  Card,
-  CardContent,
-  CardHeader,
-  CardTitle,
-  CardDescription,
-} from '../../horizon/card';
+import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '../../horizon/card';
 import { IGRPBadge, type IGRPBadgeProps } from '../badge';
 import { IGRPIcon, type IGRPIconName } from '../icon';
 import { type IGRPBaseAttributes } from '../../../types/globals';
 import { cn } from '../../../lib/utils';
-
 
 interface IGRPFormListProps<TItem>
   extends Omit<IGRPBaseAttributes, 'name' | 'iconPlacement' | 'helperText'>,
@@ -73,13 +66,9 @@ function IGRPFormList<TItem>({
   }, [append, defaultItem, fields.length]);
 
   return (
-    <Card
-      className={cn('shadow-sm gap-0 rounded-md', className)}
-      ref={ref}
-      id={id}
-    >
-      <CardHeader className='py-3 px-4 border-b flex flex-row items-center justify-between'>
-        <div className='flex items-center gap-2'>
+    <Card className={cn('shadow-sm gap-0 rounded-md', className)} ref={ref} id={id}>
+      <CardHeader className="py-3 px-4 border-b flex flex-row items-center justify-between">
+        <div className="flex items-center gap-2">
           {showIcon && (
             <IGRPIcon
               iconName={iconName}
@@ -89,39 +78,34 @@ function IGRPFormList<TItem>({
           )}
           <div>
             <CardTitle className={cn('text-sm font-medium', labelClassName)}>{label}</CardTitle>
-            {description && <CardDescription className='text-xs'>{description}</CardDescription>}
+            {description && <CardDescription className="text-xs">{description}</CardDescription>}
           </div>
         </div>
         {badgeValue && (
-          <IGRPBadge
-            variant={variant}
-            color={color}
-            dot={dot}
-            badgeClassName={badgeClassName}
-          >
+          <IGRPBadge variant={variant} color={color} dot={dot} badgeClassName={badgeClassName}>
             {badgeValue}
           </IGRPBadge>
         )}
       </CardHeader>
 
-      <CardContent className='p-4'>
+      <CardContent className="p-4">
         <Accordion
-          type='single'
+          type="single"
           collapsible
           value={openItem}
           onValueChange={setOpenItem}
-          className='w-full'
+          className="w-full"
         >
           {fields.map((field: FieldArrayWithId<any, any>, index: number) => (
             <AccordionItem
               key={field.id}
               value={`item-${index}`}
-              className='border last:border-b rounded-sm mb-4'
+              className="border last:border-b rounded-sm mb-4"
             >
-              <div className='flex justify-between items-center px-4'>
-                <div className='flex-1'>
-                  <AccordionTrigger className='hover:no-underline'>
-                    <span className='font-medium text-sm'>
+              <div className="flex justify-between items-center px-4">
+                <div className="flex-1">
+                  <AccordionTrigger className="hover:no-underline">
+                    <span className="font-medium text-sm">
                       {computeLabel?.(values[index] ?? defaultItem, index) ??
                         `${label} ${index + 1}`}
                     </span>
@@ -130,25 +114,25 @@ function IGRPFormList<TItem>({
 
                 {fields.length > 1 && (
                   <Button
-                    type='button'
-                    variant='ghost'
-                    size='sm'
+                    type="button"
+                    variant="ghost"
+                    size="sm"
                     onClick={(e) => {
                       e.stopPropagation();
                       remove(index);
                     }}
-                    className='h-7 w-7 p-0 ml-2 shrink-0'
+                    className="h-7 w-7 p-0 ml-2 shrink-0"
                   >
                     <IGRPIcon
-                      iconName='Trash2'
-                      className='h-4 w-4 text-muted-foreground hover:text-destructive hover:bg-destructive/10'
+                      iconName="Trash2"
+                      className="h-4 w-4 text-muted-foreground hover:text-destructive hover:bg-destructive/10"
                       strokeWidth={2}
                     />
                   </Button>
                 )}
               </div>
 
-              <AccordionContent className='px-4 pb-4'>
+              <AccordionContent className="px-4 pb-4">
                 {renderItem(values[index] ?? defaultItem, index)}
               </AccordionContent>
             </AccordionItem>
@@ -156,19 +140,15 @@ function IGRPFormList<TItem>({
         </Accordion>
 
         <Button
-          type='button'
-          variant='outline'
+          type="button"
+          variant="outline"
           onClick={() => {
             append(defaultItem);
             setOpenItem(`item-${fields.length}`);
           }}
-          className='w-full'
+          className="w-full"
         >
-          <IGRPIcon
-            iconName={addButtonIconName}
-            className='h-4 w-4 mr-1'
-            strokeWidth={2}
-          />
+          <IGRPIcon iconName={addButtonIconName} className="h-4 w-4 mr-1" strokeWidth={2} />
           <span>
             {addButtonLabel} {label}
           </span>

@@ -41,12 +41,9 @@ function IGRPPageHeader({
       )}
       id={name}
     >
-      <div className='flex items-center gap-2'>
+      <div className="flex items-center gap-2">
         {showBackButton && (
-          <IGRPPageHeaderBackButton
-            url={urlBackButton}
-            iconName={iconBackButton}
-          />
+          <IGRPPageHeaderBackButton url={urlBackButton} iconName={iconBackButton} />
         )}
 
         <IGRPHeadline

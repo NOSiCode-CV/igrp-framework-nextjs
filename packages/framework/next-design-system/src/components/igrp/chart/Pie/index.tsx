@@ -153,8 +153,8 @@ function IGRPPieChart({
         x={x}
         y={y}
         textAnchor={textAnchor}
-        dominantBaseline='central'
-        className='fill-foreground text-xs'
+        dominantBaseline="central"
+        className="fill-foreground text-xs"
       >
         {content}
       </text>
@@ -165,17 +165,8 @@ function IGRPPieChart({
     if (!centerLabel.show || !viewBox || !('cx' in viewBox)) return null;
 
     return (
-      <text
-        x={viewBox.cx}
-        y={viewBox.cy}
-        textAnchor='middle'
-        dominantBaseline='middle'
-      >
-        <tspan
-          x={viewBox.cx}
-          y={viewBox.cy}
-          className='fill-foreground text-3xl font-bold'
-        >
+      <text x={viewBox.cx} y={viewBox.cy} textAnchor="middle" dominantBaseline="middle">
+        <tspan x={viewBox.cx} y={viewBox.cy} className="fill-foreground text-3xl font-bold">
           {formatValue(
             interactive && activeIndex >= 0 && activeIndex < data.length && pies[0]?.dataKey
               ? Number(data[activeIndex]?.[pies[0].dataKey] ?? 0)
@@ -183,11 +174,7 @@ function IGRPPieChart({
           )}
         </tspan>
         {centerLabel.text && (
-          <tspan
-            x={viewBox.cx}
-            y={(viewBox.cy || 0) + 24}
-            className='fill-muted-foreground'
-          >
+          <tspan x={viewBox.cx} y={(viewBox.cy || 0) + 24} className="fill-muted-foreground">
             {centerLabel.text}
           </tspan>
         )}
@@ -201,21 +188,15 @@ function IGRPPieChart({
       style={backgroundColor ? { backgroundColor } : undefined}
     >
       {(title || description) && (
-        <div className='pb-3'>
-          {title && <div className='text-xl font-semibold'>{title}</div>}
-          {description && <div className='text-sm text-muted-foreground'>{description}</div>}
+        <div className="pb-3">
+          {title && <div className="text-xl font-semibold">{title}</div>}
+          {description && <div className="text-sm text-muted-foreground">{description}</div>}
         </div>
       )}
 
-      <div className='overflow-hidden'>
-        <div
-          style={{ height: chartHeight, width: chartWidth }}
-          className='w-full overflow-hidden'
-        >
-          <ChartContainer
-            className='h-full w-full'
-            config={chartConfig}
-          >
+      <div className="overflow-hidden">
+        <div style={{ height: chartHeight, width: chartWidth }} className="w-full overflow-hidden">
+          <ChartContainer className="h-full w-full" config={chartConfig}>
             <PieChart
               margin={{
                 top: 20,
@@ -238,9 +219,9 @@ function IGRPPieChart({
                   layout={getLegendLayout(legendPosition)}
                   payload={legendPayload}
                   iconSize={10}
-                  iconType='square'
+                  iconType="square"
                   wrapperStyle={{ paddingTop: 10 }}
-                  className='text-xs fill-foreground'
+                  className="text-xs fill-foreground"
                 />
               )}
 
@@ -265,11 +246,11 @@ function IGRPPieChart({
                   label={
                     pie.showLabels
                       ? (props) =>
-                        renderCustomLabel({
-                          ...props,
-                          labelType: pie.labelType,
-                          labelPosition: pie.labelPosition,
-                        })
+                          renderCustomLabel({
+                            ...props,
+                            labelType: pie.labelType,
+                            labelPosition: pie.labelPosition,
+                          })
                       : false
                   }
                   labelLine={pie.labelLine}
@@ -290,9 +271,9 @@ function IGRPPieChart({
       </div>
 
       {footer && (
-        <div className='flex-col items-start gap-2 text-sm pt-4'>
+        <div className="flex-col items-start gap-2 text-sm pt-4">
           {footer.description && (
-            <div className='leading-none text-muted-foreground'>{footer.description}</div>
+            <div className="leading-none text-muted-foreground">{footer.description}</div>
           )}
         </div>
       )}

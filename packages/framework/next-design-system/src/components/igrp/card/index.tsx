@@ -14,70 +14,34 @@ interface IGRPCardProps extends React.ComponentProps<typeof Card> {
 }
 
 function IGRPCard({ className, name, ...props }: IGRPCardProps) {
-  return (
-    <Card
-      className={className}
-      id={name}
-      {...props}
-    />
-  );
+  return <Card className={className} id={name} {...props} />;
 }
 
 function IGRPCardHeader({ className, ...props }: React.ComponentProps<typeof CardHeader>) {
-  return (
-    <CardHeader
-      className={className}
-      {...props}
-    />
-  );
+  return <CardHeader className={className} {...props} />;
 }
 
 function IGRPCardTitle({ className, ...props }: React.ComponentProps<typeof CardTitle>) {
-  return (
-    <CardTitle
-      className={className}
-      {...props}
-    />
-  );
+  return <CardTitle className={className} {...props} />;
 }
 
 function IGRPCardDescription({
   className,
   ...props
 }: React.ComponentProps<typeof CardDescription>) {
-  return (
-    <CardDescription
-      className={className}
-      {...props}
-    />
-  );
+  return <CardDescription className={className} {...props} />;
 }
 
 function IGRPCardAction({ className, ...props }: React.ComponentProps<typeof CardAction>) {
-  return (
-    <CardAction
-      className={className}
-      {...props}
-    />
-  );
+  return <CardAction className={className} {...props} />;
 }
 
 function IGRPCardContent({ className, ...props }: React.ComponentProps<typeof CardContent>) {
-  return (
-    <CardContent
-      className={cn('py-3', className)}
-      {...props}
-    />
-  );
+  return <CardContent className={cn('py-3', className)} {...props} />;
 }
 
 function IGRPCardFooter({ className, ...props }: React.ComponentProps<typeof CardFooter>) {
-  return (
-    <CardFooter
-      className={className}
-      {...props}
-    />
-  );
+  return <CardFooter className={className} {...props} />;
 }
 
 export {

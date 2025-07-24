@@ -32,7 +32,7 @@ function RadioGroup({
 }: React.ComponentProps<typeof RadioGroupPrimitive.Root>) {
   return (
     <RadioGroupPrimitive.Root
-      data-slot='radio-group'
+      data-slot="radio-group"
       className={cn('grid gap-3', className)}
       {...props}
     />
@@ -55,13 +55,13 @@ function RadioGroupItem({
 
   return (
     <RadioGroupPrimitive.Item
-      data-slot='radio-group-item'
+      data-slot="radio-group-item"
       className={cn(radioItemVariants({ variant, size }), className)}
       {...props}
     >
       <RadioGroupPrimitive.Indicator
-        data-slot='radio-group-indicator'
-        className='relative flex items-center justify-center'
+        data-slot="radio-group-indicator"
+        className="relative flex items-center justify-center"
       >
         <CircleIcon
           className={cn(

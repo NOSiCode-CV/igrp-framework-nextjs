@@ -39,7 +39,7 @@ interface IGRPDataTableLinkProps
 }
 
 function IGRPDataTableRowAction({ children }: { children: ReactNode }) {
-  return <div className='flex items-center justify-end gap-2'>{children}</div>;
+  return <div className="flex items-center justify-end gap-2">{children}</div>;
 }
 
 export {

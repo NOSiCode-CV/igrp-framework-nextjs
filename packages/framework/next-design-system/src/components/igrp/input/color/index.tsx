@@ -58,15 +58,10 @@ function IGRPInputColor({
     return (
       <div className={cn('*:not-first:mt-2')}>
         {label && (
-          <IGRPLabel
-            label={label}
-            className={className}
-            required={required}
-            id={fieldName}
-          />
+          <IGRPLabel label={label} className={className} required={required} id={fieldName} />
         )}
 
-        <div className='flex items-center gap-3'>
+        <div className="flex items-center gap-3">
           <div
             className={cn(
               'relative rounded-md overflow-hidden border border-input shadow-sm w-9 h-9',
@@ -77,7 +72,7 @@ function IGRPInputColor({
             <Input
               id={fieldName}
               name={fieldName}
-              type='color'
+              type="color"
               required={required}
               aria-required={required}
               aria-invalid={!!error || !!props['aria-invalid']}
@@ -88,7 +83,7 @@ function IGRPInputColor({
               {...props}
             />
             <div
-              className='absolute inset-0 pointer-events-none'
+              className="absolute inset-0 pointer-events-none"
               style={{ backgroundColor: currentValue }}
             />
           </div>
@@ -108,20 +103,16 @@ function IGRPInputColor({
         {helperText && !error && (
           <p
             id={`${fieldName}-helper`}
-            className='text-muted-foreground mt-2 text-xs'
-            role='region'
-            aria-live='polite'
+            className="text-muted-foreground mt-2 text-xs"
+            role="region"
+            aria-live="polite"
           >
             {helperText}
           </p>
         )}
 
         {error && (
-          <p
-            id={`${fieldName}-error`}
-            className='text-destructive mt-2 text-xs'
-            role='alert'
-          >
+          <p id={`${fieldName}-error`} className="text-destructive mt-2 text-xs" role="alert">
             {error}
           </p>
         )}
@@ -142,17 +133,12 @@ function IGRPInputColor({
         };
 
         return (
-          <div className={cn('*:not-first:mt-2', /*gridSize*/)}>
+          <div className={cn('*:not-first:mt-2' /*gridSize*/)}>
             {label && (
-              <IGRPLabel
-                label={label}
-                className={className}
-                required={required}
-                id={fieldName}
-              />
+              <IGRPLabel label={label} className={className} required={required} id={fieldName} />
             )}
 
-            <div className='flex items-center gap-3'>
+            <div className="flex items-center gap-3">
               <div
                 className={cn(
                   'relative rounded-md overflow-hidden border border-input shadow-sm w-9 h-9',
@@ -163,7 +149,7 @@ function IGRPInputColor({
                 <Input
                   id={fieldName}
                   name={fieldName}
-                  type='color'
+                  type="color"
                   required={required}
                   aria-required={required}
                   aria-invalid={!!fieldState.error || !!error || !!props['aria-invalid']}
@@ -181,7 +167,7 @@ function IGRPInputColor({
                   {...props}
                 />
                 <div
-                  className='absolute inset-0 pointer-events-none'
+                  className="absolute inset-0 pointer-events-none"
                   style={{ backgroundColor: field.value || defaultValue }}
                 />
               </div>
@@ -201,20 +187,16 @@ function IGRPInputColor({
             {helperText && !error && !fieldState.error && (
               <p
                 id={`${fieldName}-helper`}
-                className='text-muted-foreground mt-2 text-xs'
-                role='region'
-                aria-live='polite'
+                className="text-muted-foreground mt-2 text-xs"
+                role="region"
+                aria-live="polite"
               >
                 {helperText}
               </p>
             )}
 
             {(error || fieldState.error) && (
-              <p
-                id={`${fieldName}-error`}
-                className='text-destructive mt-2 text-xs'
-                role='alert'
-              >
+              <p id={`${fieldName}-error`} className="text-destructive mt-2 text-xs" role="alert">
                 {error || fieldState.error?.message}
               </p>
             )}

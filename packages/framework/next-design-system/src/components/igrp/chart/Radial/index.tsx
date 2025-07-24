@@ -79,7 +79,6 @@ function IGRPRadialBarChart({
     }, 0);
   };
 
-
   const totalValue = calculateTotal();
   const formattedTotal = centerText.formatter
     ? centerText.formatter(totalValue)
@@ -142,21 +141,15 @@ function IGRPRadialBarChart({
       style={backgroundColor ? { backgroundColor } : undefined}
     >
       {(title || description) && (
-        <div className='pb-3'>
-          {title && <div className='text-xl font-semibold'>{title}</div>}
-          {description && <div className='text-sm text-muted-foreground'>{description}</div>}
+        <div className="pb-3">
+          {title && <div className="text-xl font-semibold">{title}</div>}
+          {description && <div className="text-sm text-muted-foreground">{description}</div>}
         </div>
       )}
 
-      <div className='overflow-hidden'>
-        <div
-          style={{ height: chartHeight, width: chartWidth }}
-          className='w-full overflow-hidden'
-        >
-          <ChartContainer
-            className='h-full w-full'
-            config={chartConfig}
-          >
+      <div className="overflow-hidden">
+        <div style={{ height: chartHeight, width: chartWidth }} className="w-full overflow-hidden">
+          <ChartContainer className="h-full w-full" config={chartConfig}>
             <RadialBarChart
               data={enhancedData}
               startAngle={startAngle}
@@ -185,15 +178,15 @@ function IGRPRadialBarChart({
                     const fill = item._fill;
 
                     return (
-                      <div className='rounded-lg border bg-background p-2 shadow-md'>
-                        <div className='flex flex-col gap-1'>
-                          <div className='text-sm font-medium'>{name}</div>
-                          <div className='flex items-center gap-2'>
+                      <div className="rounded-lg border bg-background p-2 shadow-md">
+                        <div className="flex flex-col gap-1">
+                          <div className="text-sm font-medium">{name}</div>
+                          <div className="flex items-center gap-2">
                             <div
-                              className='h-3 w-3 rounded-full'
+                              className="h-3 w-3 rounded-full"
                               style={{ backgroundColor: fill }}
                             />
-                            <span className='text-sm'>{formatValue(Number(value))}</span>
+                            <span className="text-sm">{formatValue(Number(value))}</span>
                           </div>
                         </div>
                       </div>
@@ -202,19 +195,10 @@ function IGRPRadialBarChart({
                 />
               )}
 
-              {showGrid && (
-                <PolarGrid
-                  gridType={gridType}
-                  stroke={gridColor}
-                />
-              )}
+              {showGrid && <PolarGrid gridType={gridType} stroke={gridColor} />}
 
               {showRadiusAxis && (
-                <PolarRadiusAxis
-                  tick
-                  tickFormatter={formatValue}
-                  stroke={gridColor}
-                >
+                <PolarRadiusAxis tick tickFormatter={formatValue} stroke={gridColor}>
                   {centerText.show && (
                     <Label
                       content={({ viewBox }) => {
@@ -223,13 +207,13 @@ function IGRPRadialBarChart({
                             <text
                               x={viewBox.cx}
                               y={viewBox.cy}
-                              textAnchor='middle'
-                              dominantBaseline='middle'
+                              textAnchor="middle"
+                              dominantBaseline="middle"
                             >
                               <tspan
                                 x={viewBox.cx}
                                 y={viewBox.cy}
-                                className='fill-foreground text-3xl font-bold'
+                                className="fill-foreground text-3xl font-bold"
                               >
                                 {formattedTotal}
                               </tspan>
@@ -237,7 +221,7 @@ function IGRPRadialBarChart({
                                 <tspan
                                   x={viewBox.cx}
                                   y={(viewBox.cy || 0) + 24}
-                                  className='fill-muted-foreground'
+                                  className="fill-muted-foreground"
                                 >
                                   {centerText.label}
                                 </tspan>
@@ -252,11 +236,7 @@ function IGRPRadialBarChart({
               )}
 
               {!showRadiusAxis && centerText.show && (
-                <PolarRadiusAxis
-                  tick={false}
-                  tickLine={false}
-                  axisLine={false}
-                >
+                <PolarRadiusAxis tick={false} tickLine={false} axisLine={false}>
                   <Label
                     content={({ viewBox }) => {
                       if (viewBox && 'cx' in viewBox && 'cy' in viewBox) {
@@ -264,13 +244,13 @@ function IGRPRadialBarChart({
                           <text
                             x={viewBox.cx}
                             y={viewBox.cy}
-                            textAnchor='middle'
-                            dominantBaseline='middle'
+                            textAnchor="middle"
+                            dominantBaseline="middle"
                           >
                             <tspan
                               x={viewBox.cx}
                               y={viewBox.cy}
-                              className='fill-foreground text-3xl font-bold'
+                              className="fill-foreground text-3xl font-bold"
                             >
                               {formattedTotal}
                             </tspan>
@@ -278,7 +258,7 @@ function IGRPRadialBarChart({
                               <tspan
                                 x={viewBox.cx}
                                 y={(viewBox.cy || 0) + 24}
-                                className='fill-muted-foreground'
+                                className="fill-muted-foreground"
                               >
                                 {centerText.label}
                               </tspan>
@@ -332,13 +312,13 @@ function IGRPRadialBarChart({
                   background={showBackground}
                   cornerRadius={bar.cornerRadius}
                   stackId={bar.stackId}
-                  className='stroke-transparent stroke-2'
+                  className="stroke-transparent stroke-2"
                 >
                   {bar.showLabels && (
                     <LabelList
                       dataKey={bar.labelType === 'name' ? nameKey : bar.dataKey}
                       position={bar.labelPosition || 'insideStart'}
-                      className='fill-white capitalize mix-blend-luminosity'
+                      className="fill-white capitalize mix-blend-luminosity"
                       fontSize={11}
                       style={bar.labelStyle}
                       formatter={(entry: { payload: any }) => {
@@ -357,9 +337,9 @@ function IGRPRadialBarChart({
                   layout={getLegendLayout(legendPosition)}
                   payload={legendPayload}
                   iconSize={10}
-                  iconType='square'
+                  iconType="square"
                   wrapperStyle={{ paddingTop: 10 }}
-                  className='text-xs fill-foreground'
+                  className="text-xs fill-foreground"
                 />
               )}
             </RadialBarChart>
@@ -368,9 +348,9 @@ function IGRPRadialBarChart({
       </div>
 
       {footer && (
-        <div className='flex-col items-start gap-2 text-sm pt-4'>
+        <div className="flex-col items-start gap-2 text-sm pt-4">
           {footer.description && (
-            <div className='leading-none text-muted-foreground'>{footer.description}</div>
+            <div className="leading-none text-muted-foreground">{footer.description}</div>
           )}
         </div>
       )}

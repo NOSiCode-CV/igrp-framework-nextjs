@@ -54,16 +54,16 @@ function IGRPCalendar({
   return (
     <DropdownCalendar
       {...props}
-      mode='single'
+      mode="single"
       id={id}
       selected={date}
       onSelect={onDateChange}
-      className='p-1'
+      className="p-1"
       classNames={{
         month_caption: 'mx-0',
         day_button: dayButtonClassName,
       }}
-      captionLayout='dropdown'
+      captionLayout="dropdown"
       month={month}
       onMonthChange={setMonth}
       defaultMonth={date || today}
@@ -71,7 +71,7 @@ function IGRPCalendar({
       endMonth={endDate}
       components={{
         DropdownNav: (props: DropdownNavProps) => {
-          return <div className='flex w-full items-center gap-2'>{props.children}</div>;
+          return <div className="flex w-full items-center gap-2">{props.children}</div>;
         },
         Dropdown: (props: DropdownProps) => {
           return (
@@ -83,7 +83,7 @@ function IGRPCalendar({
                 }
               }}
             >
-              <SelectTrigger className='h-8 w-fit font-medium first:grow'>
+              <SelectTrigger className="h-8 w-fit font-medium first:grow">
                 <SelectValue />
               </SelectTrigger>
               <SelectContent>

@@ -14,31 +14,13 @@ function IGRPInputHidden({ name, required = false, ...props }: Omit<IGRPInputPro
   const formContext = useFormContext();
 
   if (!formContext) {
-    return (
-      <Input
-        id={ref}
-        name={ref}
-        required={required}
-        type='hidden'
-        {...props}
-      />
-    );
+    return <Input id={ref} name={ref} required={required} type="hidden" {...props} />;
   }
 
   return (
-    <IGRPFormField
-      name={ref}
-      control={formContext.control}
-    >
+    <IGRPFormField name={ref} control={formContext.control}>
       {(field) => (
-        <Input
-          id={ref}
-          required={required}
-          type='hidden'
-          {...field}
-          {...props}
-          name={ref}
-        />
+        <Input id={ref} required={required} type="hidden" {...field} {...props} name={ref} />
       )}
     </IGRPFormField>
   );

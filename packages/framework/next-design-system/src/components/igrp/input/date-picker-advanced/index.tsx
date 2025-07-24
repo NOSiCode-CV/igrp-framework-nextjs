@@ -39,7 +39,7 @@ export function Component() {
   return (
     <div>
       <Calendar
-        mode='single'
+        mode="single"
         selected={date}
         onSelect={setDate}
         month={month}
@@ -47,18 +47,14 @@ export function Component() {
         defaultMonth={new Date()}
         startMonth={startDate}
         endMonth={endDate}
-        className='overflow-hidden rounded-md border p-2'
+        className="overflow-hidden rounded-md border p-2"
         classNames={{
           month_caption: 'ms-2.5 me-20 justify-start',
           nav: 'justify-end',
         }}
         components={{
           CaptionLabel: (props: CaptionLabelProps) => (
-            <CaptionLabel
-              isYearView={isYearView}
-              setIsYearView={setIsYearView}
-              {...props}
-            />
+            <CaptionLabel isYearView={isYearView} setIsYearView={setIsYearView} {...props} />
           ),
           MonthGrid: (props: MonthGridProps) => {
             return (
@@ -83,16 +79,16 @@ export function Component() {
         }}
       />
       <p
-        className='text-muted-foreground mt-4 text-center text-xs'
-        role='region'
-        aria-live='polite'
+        className="text-muted-foreground mt-4 text-center text-xs"
+        role="region"
+        aria-live="polite"
       >
         Advanced selection -{' '}
         <a
-          className='hover:text-foreground underline'
-          href='https://daypicker.dev/'
-          target='_blank'
-          rel='noreferrer noopener nofollow'
+          className="hover:text-foreground underline"
+          href="https://daypicker.dev/"
+          target="_blank"
+          rel="noreferrer noopener nofollow"
         >
           React DayPicker
         </a>
@@ -143,14 +139,11 @@ function MonthGrid({
   }, [isYearView]);
 
   return (
-    <div className='relative'>
+    <div className="relative">
       <table className={className}>{children}</table>
       {isYearView && (
-        <div className='bg-background absolute inset-0 z-20 -mx-2 -mb-2'>
-          <ScrollArea
-            ref={scrollAreaRef}
-            className='h-full'
-          >
+        <div className="bg-background absolute inset-0 z-20 -mx-2 -mb-2">
+          <ScrollArea ref={scrollAreaRef} className="h-full">
             {years.map((year) => {
               const months = eachMonthOfInterval({
                 start: startOfYear(year),
@@ -159,15 +152,9 @@ function MonthGrid({
               const isCurrentYear = year.getFullYear() === currentYear;
 
               return (
-                <div
-                  key={year.getFullYear()}
-                  ref={isCurrentYear ? currentYearRef : undefined}
-                >
-                  <CollapsibleYear
-                    title={year.getFullYear().toString()}
-                    open={isCurrentYear}
-                  >
-                    <div className='grid grid-cols-3 gap-2'>
+                <div key={year.getFullYear()} ref={isCurrentYear ? currentYearRef : undefined}>
+                  <CollapsibleYear title={year.getFullYear().toString()} open={isCurrentYear}>
+                    <div className="grid grid-cols-3 gap-2">
                       {months.map((month) => {
                         const isDisabled = isBefore(month, startDate) || isAfter(month, endDate);
                         const isCurrentMonth =
@@ -178,8 +165,8 @@ function MonthGrid({
                             key={month.getTime()}
                             ref={isCurrentMonth ? currentMonthButtonRef : undefined}
                             variant={isCurrentMonth ? 'default' : 'outline'}
-                            size='sm'
-                            className='h-7'
+                            size="sm"
+                            className="h-7"
                             disabled={isDisabled}
                             onClick={() => onMonthSelect(month)}
                           >
@@ -209,17 +196,17 @@ function CaptionLabel({
 } & React.HTMLAttributes<HTMLSpanElement>) {
   return (
     <Button
-      className='data-[state=open]:text-muted-foreground/80 -ms-2 flex items-center gap-2 text-sm font-medium hover:bg-transparent [&[data-state=open]>svg]:rotate-180'
-      variant='ghost'
-      size='sm'
+      className="data-[state=open]:text-muted-foreground/80 -ms-2 flex items-center gap-2 text-sm font-medium hover:bg-transparent [&[data-state=open]>svg]:rotate-180"
+      variant="ghost"
+      size="sm"
       onClick={() => setIsYearView((prev) => !prev)}
       data-state={isYearView ? 'open' : 'closed'}
     >
       {children}
       <ChevronDownIcon
         size={16}
-        className='text-muted-foreground/80 shrink-0 transition-transform duration-200'
-        aria-hidden='true'
+        className="text-muted-foreground/80 shrink-0 transition-transform duration-200"
+        aria-hidden="true"
       />
     </Button>
   );
@@ -235,25 +222,22 @@ function CollapsibleYear({
   open?: boolean;
 }) {
   return (
-    <Collapsible
-      className='border-t px-2 py-1.5'
-      defaultOpen={open}
-    >
+    <Collapsible className="border-t px-2 py-1.5" defaultOpen={open}>
       <CollapsibleTrigger asChild>
         <Button
-          className='flex w-full justify-start gap-2 text-sm font-medium hover:bg-transparent [&[data-state=open]>svg]:rotate-180'
-          variant='ghost'
-          size='sm'
+          className="flex w-full justify-start gap-2 text-sm font-medium hover:bg-transparent [&[data-state=open]>svg]:rotate-180"
+          variant="ghost"
+          size="sm"
         >
           <ChevronDownIcon
             size={16}
-            className='text-muted-foreground/80 shrink-0 transition-transform duration-200'
-            aria-hidden='true'
+            className="text-muted-foreground/80 shrink-0 transition-transform duration-200"
+            aria-hidden="true"
           />
           {title}
         </Button>
       </CollapsibleTrigger>
-      <CollapsibleContent className='data-[state=closed]:animate-collapsible-up data-[state=open]:animate-collapsible-down overflow-hidden px-3 py-1 text-sm transition-all'>
+      <CollapsibleContent className="data-[state=closed]:animate-collapsible-up data-[state=open]:animate-collapsible-down overflow-hidden px-3 py-1 text-sm transition-all">
         {children}
       </CollapsibleContent>
     </Collapsible>

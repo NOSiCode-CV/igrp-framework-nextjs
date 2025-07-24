@@ -13,10 +13,5 @@ export function ProgressIGRP({ className }: ProgressIGRPProps) {
     return () => clearTimeout(timer);
   }, []);
 
-  return (
-    <Progress
-      value={progress}
-      className={className || 'w-[60%]'}
-    />
-  );
+  return <Progress value={progress} className={className || 'w-[60%]'} />;
 }

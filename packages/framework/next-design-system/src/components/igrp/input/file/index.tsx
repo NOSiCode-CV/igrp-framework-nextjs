@@ -39,12 +39,7 @@ function IGRPInputFile({
     return (
       <div className={cn('*:not-first:mt-2')}>
         {label && (
-          <IGRPLabel
-            label={label}
-            className={className}
-            required={required}
-            id={fieldName}
-          />
+          <IGRPLabel label={label} className={className} required={required} id={fieldName} />
         )}
         <Input
           ref={inputRef}
@@ -55,7 +50,7 @@ function IGRPInputFile({
             error && 'border-destructive focus-visible:ring-destructive/20',
             className,
           )}
-          type='file'
+          type="file"
           disabled={disabled}
           accept={accept}
           multiple={multiple}
@@ -69,20 +64,16 @@ function IGRPInputFile({
         {helperText && !error && (
           <p
             id={`${fieldName}-helper`}
-            className='text-muted-foreground mt-2 text-xs'
-            role='region'
-            aria-live='polite'
+            className="text-muted-foreground mt-2 text-xs"
+            role="region"
+            aria-live="polite"
           >
             {helperText}
           </p>
         )}
 
         {error && (
-          <p
-            id={`${fieldName}-error`}
-            className='text-destructive mt-2 text-xs'
-            role='alert'
-          >
+          <p id={`${fieldName}-error`} className="text-destructive mt-2 text-xs" role="alert">
             {error}
           </p>
         )}
@@ -104,14 +95,9 @@ function IGRPInputFile({
         };
 
         return (
-          <div className={cn('*:not-first:mt-2'/*, gridSize*/)}>
+          <div className={cn('*:not-first:mt-2' /*, gridSize*/)}>
             {label && (
-              <IGRPLabel
-                label={label}
-                className={className}
-                required={required}
-                id={fieldName}
-              />
+              <IGRPLabel label={label} className={className} required={required} id={fieldName} />
             )}
             <Input
               ref={inputRef}
@@ -122,7 +108,7 @@ function IGRPInputFile({
                   'border-destructive focus-visible:ring-destructive/20',
                 className,
               )}
-              type='file'
+              type="file"
               disabled={disabled}
               accept={accept}
               multiple={multiple}
@@ -147,20 +133,16 @@ function IGRPInputFile({
             {helperText && !errorMessage && !fieldState.error && (
               <p
                 id={`${fieldName}-helper`}
-                className='text-muted-foreground mt-2 text-xs'
-                role='region'
-                aria-live='polite'
+                className="text-muted-foreground mt-2 text-xs"
+                role="region"
+                aria-live="polite"
               >
                 {helperText}
               </p>
             )}
 
             {(errorMessage || fieldState.error) && (
-              <p
-                id={`${fieldName}-error`}
-                className='text-destructive mt-2 text-xs'
-                role='alert'
-              >
+              <p id={`${fieldName}-error`} className="text-destructive mt-2 text-xs" role="alert">
                 {errorMessage || fieldState.error?.message}
               </p>
             )}

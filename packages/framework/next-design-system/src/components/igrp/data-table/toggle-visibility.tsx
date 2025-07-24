@@ -23,15 +23,11 @@ function IGPRDataTableToggleVisibility<TData>({
   return (
     <DropdownMenu>
       <DropdownMenuTrigger asChild>
-        <IGRPButton
-          variant='outline'
-          showIcon={true}
-          iconName='Columns3'
-        >
+        <IGRPButton variant="outline" showIcon={true} iconName="Columns3">
           {label}
         </IGRPButton>
       </DropdownMenuTrigger>
-      <DropdownMenuContent align='start'>
+      <DropdownMenuContent align="start">
         <DropdownMenuLabel>{optionsLabel}</DropdownMenuLabel>
         {table
           .getAllColumns()
@@ -40,7 +36,7 @@ function IGPRDataTableToggleVisibility<TData>({
             return (
               <DropdownMenuCheckboxItem
                 key={column.id}
-                className='capitalize'
+                className="capitalize"
                 checked={column.getIsVisible()}
                 onCheckedChange={(value) => column.toggleVisibility(!!value)}
                 onSelect={(e) => e.preventDefault()}

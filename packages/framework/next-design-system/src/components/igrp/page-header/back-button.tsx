@@ -13,12 +13,7 @@ function IGRPPageHeaderBackButton({
   ...props
 }: IGRPPageHeaderBackButtonProps) {
   return (
-    <Button
-      variant='outline'
-      size='icon'
-      asChild
-      {...props}
-    >
+    <Button variant="outline" size="icon" asChild {...props}>
       <Link href={url}>
         <IGRPIcon iconName={iconName} />
       </Link>

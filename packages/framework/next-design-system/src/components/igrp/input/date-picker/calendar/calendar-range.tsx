@@ -58,26 +58,26 @@ function IGRPCalendarRange({
   return (
     <DropdownCalendar
       {...props}
-      mode='range'
+      mode="range"
       id={id}
       selected={date}
       onSelect={onDateChange}
       numberOfMonths={2}
       required={required}
-      className='p-2'
+      className="p-2"
       classNames={{
         day_button: dayButtonClassName,
         months: 'sm:flex-col md:flex-row gap-8',
         month:
           'relative first-of-type:before:hidden before:absolute max-md:before:inset-x-2 max-md:before:h-px max-md:before:-top-4 md:before:inset-y-2 md:before:w-px before:bg-border md:before:-left-4',
       }}
-      captionLayout='dropdown'
+      captionLayout="dropdown"
       defaultMonth={date?.from ?? startDate ?? today}
       startMonth={startDate}
       endMonth={endDate}
       components={{
         DropdownNav: (props: DropdownNavProps) => {
-          return <div className='flex w-full items-center gap-2'>{props.children}</div>;
+          return <div className="flex w-full items-center gap-2">{props.children}</div>;
         },
         Dropdown: (props: DropdownProps) => {
           return (
@@ -89,7 +89,7 @@ function IGRPCalendarRange({
                 }
               }}
             >
-              <SelectTrigger className='h-8 w-fit font-medium first:grow'>
+              <SelectTrigger className="h-8 w-fit font-medium first:grow">
                 <SelectValue />
               </SelectTrigger>
               <SelectContent>

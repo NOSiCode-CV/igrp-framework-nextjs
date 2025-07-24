@@ -17,7 +17,7 @@ function IGRPPageFooter({ className, children, name, isSticky }: IGRPPageFooterP
       )}
       id={name}
     >
-      <div className='flex justify-between items-center w-full'>{children}</div>
+      <div className="flex justify-between items-center w-full">{children}</div>
     </div>
   );
 }

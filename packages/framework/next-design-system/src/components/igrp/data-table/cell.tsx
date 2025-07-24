@@ -20,7 +20,7 @@ function IGRPDataTableCellCheckbox<TData>({
       checked={row.getIsSelected()}
       disabled={!row.getCanSelect()}
       onCheckedChange={(value) => row.toggleSelected(!!value)}
-      aria-label='Select row'
+      aria-label="Select row"
       className={className}
       {...props}
     />
@@ -47,19 +47,9 @@ function IGRPDataTableCellExpander<TData>({ row, field }: IGRPDataTableCellExpan
       }}
     >
       {row.getIsExpanded() ? (
-        <IGRPIcon
-          iconName='ChevronDown'
-          className='opacity-60'
-          size={16}
-          strokeWidth={2}
-        />
+        <IGRPIcon iconName="ChevronDown" className="opacity-60" size={16} strokeWidth={2} />
       ) : (
-        <IGRPIcon
-          iconName='ChevronUp'
-          className='opacity-60'
-          size={16}
-          strokeWidth={2}
-        />
+        <IGRPIcon iconName="ChevronUp" className="opacity-60" size={16} strokeWidth={2} />
       )}
     </Button>
   ) : undefined;

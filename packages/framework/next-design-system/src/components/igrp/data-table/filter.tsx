@@ -66,11 +66,7 @@ function IGRPDataTableFilterDate<TData>({
   }, [dateRange]);
 
   return (
-    <IGRPDatePickerRange
-      date={dateRange}
-      onDateChange={setDateRange}
-      className={cn(className)}
-    />
+    <IGRPDatePickerRange date={dateRange} onDateChange={setDateRange} className={cn(className)} />
   );
 }
 
@@ -108,9 +104,9 @@ function IGRPDataTableFilterDropdown<TData>({
       <Popover>
         <PopoverTrigger asChild>
           <IGRPButton
-            variant='outline'
-            role='combobox'
-            size='sm'
+            variant="outline"
+            role="combobox"
+            size="sm"
             className={cn(
               'w-full justify-between',
               className,
@@ -118,20 +114,12 @@ function IGRPDataTableFilterDropdown<TData>({
             )}
           >
             <span>{selectedLabel}</span>
-            <IGRPIcon iconName='ChevronsUpDown' />
+            <IGRPIcon iconName="ChevronsUpDown" />
           </IGRPButton>
         </PopoverTrigger>
-        <PopoverContent
-          align='start'
-          className={cn('p-0', className)}
-        >
+        <PopoverContent align="start" className={cn('p-0', className)}>
           <Command>
-            {showFilter && (
-              <CommandInput
-                placeholder={placeholder}
-                className='h-8'
-              />
-            )}
+            {showFilter && <CommandInput placeholder={placeholder} className="h-8" />}
             <CommandList>
               <CommandEmpty>{notFoundText}</CommandEmpty>
               <CommandGroup>
@@ -143,7 +131,7 @@ function IGRPDataTableFilterDropdown<TData>({
                   >
                     <span className={opt.color}>{opt.label}</span>
                     <IGRPIcon
-                      iconName='Check'
+                      iconName="Check"
                       className={cn(
                         'ml-auto w-4 h-4',
                         selectedValue === opt.value ? 'opacity-100' : 'opacity-0',
@@ -206,32 +194,29 @@ function IGRPDataTableFilterFaceted<TData>({
       <Popover>
         <PopoverTrigger asChild>
           <IGRPButton
-            variant='outline'
+            variant="outline"
             className={cn(className)}
-            iconName='Plus'
-            iconClassName='-ms-1 opacity-60 rounded-full border border-muted-foreground p-0.5'
+            iconName="Plus"
+            iconClassName="-ms-1 opacity-60 rounded-full border border-muted-foreground p-0.5"
             showIcon
           >
             {placeholder}
             {selectedValues?.size > 0 && (
               <>
-                <Separator
-                  orientation='vertical'
-                  className='mx-2 h-4'
-                />
+                <Separator orientation="vertical" className="mx-2 h-4" />
                 <IGRPBadge
-                  variant='soft'
-                  color='secondary'
-                  badgeClassName='rounded-sm px-1 font-normal lg:hidden'
+                  variant="soft"
+                  color="secondary"
+                  badgeClassName="rounded-sm px-1 font-normal lg:hidden"
                 >
                   {selectedValues.size}
                 </IGRPBadge>
-                <div className='hidden space-x-1 lg:flex'>
+                <div className="hidden space-x-1 lg:flex">
                   {selectedValues.size > 2 ? (
                     <IGRPBadge
-                      variant='soft'
-                      color='secondary'
-                      badgeClassName='rounded-sm px-1 font-normal'
+                      variant="soft"
+                      color="secondary"
+                      badgeClassName="rounded-sm px-1 font-normal"
                     >
                       {selectedValues.size} selected
                     </IGRPBadge>
@@ -240,10 +225,10 @@ function IGRPDataTableFilterFaceted<TData>({
                       ?.filter((option) => selectedValues.has(option.value))
                       .map((option) => (
                         <IGRPBadge
-                          variant='soft'
-                          color='secondary'
+                          variant="soft"
+                          color="secondary"
                           key={option.value}
-                          badgeClassName='rounded-sm px-1 font-normal'
+                          badgeClassName="rounded-sm px-1 font-normal"
                         >
                           {option.label}
                         </IGRPBadge>
@@ -254,37 +239,26 @@ function IGRPDataTableFilterFaceted<TData>({
             )}
           </IGRPButton>
         </PopoverTrigger>
-        <PopoverContent
-          className='max-w-52 p-0'
-          align='start'
-        >
+        <PopoverContent className="max-w-52 p-0" align="start">
           <Command>
-            {showFilter && (
-              <CommandInput
-                placeholder={placeholder}
-                className='h-8'
-              />
-            )}
+            {showFilter && <CommandInput placeholder={placeholder} className="h-8" />}
             <CommandEmpty>{labelSearchField}</CommandEmpty>
             <CommandGroup>
               {options?.map((option, i) => {
                 return (
-                  <CommandItem
-                    className={cn('justify-between', className)}
-                    key={option.value}
-                  >
-                    <div className='flex items-center gap-2 cursor-pointer text-foreground'>
+                  <CommandItem className={cn('justify-between', className)} key={option.value}>
+                    <div className="flex items-center gap-2 cursor-pointer text-foreground">
                       <Checkbox
                         id={`${id}-${i}`}
                         checked={selectedValues.has(option.value)}
                         onCheckedChange={() => handleSelect(option.value)}
-                        className='cursor-pointer'
+                        className="cursor-pointer"
                       />
                     </div>
 
                     <span>{option.label}</span>
 
-                    <span className='ml-auto flex h-4 w-4 items-center justify-center font-mono text-xs'>
+                    <span className="ml-auto flex h-4 w-4 items-center justify-center font-mono text-xs">
                       {facets?.get(option.value) || 0}
                     </span>
                   </CommandItem>
@@ -295,11 +269,8 @@ function IGRPDataTableFilterFaceted<TData>({
               <>
                 <CommandSeparator />
                 <CommandGroup>
-                  <CommandItem
-                    onSelect={handleClear}
-                    className='cursor-pointer'
-                  >
-                    <IGRPIcon iconName='X' />
+                  <CommandItem onSelect={handleClear} className="cursor-pointer">
+                    <IGRPIcon iconName="X" />
                     {labelFilter}
                   </CommandItem>
                 </CommandGroup>
@@ -347,10 +318,10 @@ function IGRPDataTableFilterMinMax<TData>({
   const columnHeader = typeof column?.columnDef.header === 'string' ? column.columnDef.header : '';
 
   return (
-    <div className='flex gap-2'>
+    <div className="flex gap-2">
       <IGRPInputText
         id={`${id}-min`}
-        className='flex-1 rounded-e-none [-moz-appearance:_textfield] focus:z-10 [&::-webkit-inner-spin-button]:m-0 [&::-webkit-inner-spin-button]:appearance-none [&::-webkit-outer-spin-button]:m-0 [&::-webkit-outer-spin-button]:appearance-none'
+        className="flex-1 rounded-e-none [-moz-appearance:_textfield] focus:z-10 [&::-webkit-inner-spin-button]:m-0 [&::-webkit-inner-spin-button]:appearance-none [&::-webkit-outer-spin-button]:m-0 [&::-webkit-outer-spin-button]:appearance-none"
         value={columnFilterValue?.[0] ?? ''}
         onChange={(e) =>
           column?.setFilterValue((old: [number, number]) => [
@@ -359,12 +330,12 @@ function IGRPDataTableFilterMinMax<TData>({
           ])
         }
         placeholder={placeholderMin}
-        type='number'
+        type="number"
         aria-label={`${columnHeader} min`}
       />
       <IGRPInputText
         id={`${id}-range-2`}
-        className='-ms-px flex-1 rounded-s-none [-moz-appearance:_textfield] focus:z-10 [&::-webkit-inner-spin-button]:m-0 [&::-webkit-inner-spin-button]:appearance-none [&::-webkit-outer-spin-button]:m-0 [&::-webkit-outer-spin-button]:appearance-none'
+        className="-ms-px flex-1 rounded-s-none [-moz-appearance:_textfield] focus:z-10 [&::-webkit-inner-spin-button]:m-0 [&::-webkit-inner-spin-button]:appearance-none [&::-webkit-outer-spin-button]:m-0 [&::-webkit-outer-spin-button]:appearance-none"
         value={(columnFilterValue as [number, number])?.[1] ?? ''}
         onChange={(e) =>
           column?.setFilterValue((old: [number, number]) => [
@@ -373,7 +344,7 @@ function IGRPDataTableFilterMinMax<TData>({
           ])
         }
         placeholder={placeholderMax}
-        type='number'
+        type="number"
         aria-label={`${columnHeader} max`}
       />
     </div>
@@ -396,19 +367,13 @@ function IGRPDataTableFilterSelect<TData>({
         column?.setFilterValue(value === 'all' ? undefined : value);
       }}
     >
-      <SelectTrigger
-        id={`${id}-select`}
-        className={cn(className)}
-      >
+      <SelectTrigger id={`${id}-select`} className={cn(className)}>
         <SelectValue placeholder={placeholder} />
       </SelectTrigger>
       <SelectContent className={cn(className)}>
-        <SelectItem value='all'>{placeholder}</SelectItem>
+        <SelectItem value="all">{placeholder}</SelectItem>
         {options?.map((value) => (
-          <SelectItem
-            key={String(value)}
-            value={String(value)}
-          >
+          <SelectItem key={String(value)} value={String(value)}>
             {String(value)}
           </SelectItem>
         ))}

@@ -109,29 +109,21 @@ function IGRPInputUrl({
     return (
       <div className={cn('*:not-first:mt-2')}>
         {label && (
-          <IGRPLabel
-            label={label}
-            className={className}
-            required={required}
-            id={fieldName}
-          />
+          <IGRPLabel label={label} className={className} required={required} id={fieldName} />
         )}
 
-        <div className='flex rounded-md shadow-xs'>
+        <div className="flex rounded-md shadow-xs">
           <Select
             value={localProtocol}
             onValueChange={handleStandaloneProtocolChange}
             disabled={props.disabled}
           >
-            <SelectTrigger className='border-0 shadow-none border-l border-b border-t rounded-l-2xl rounded-none min-w-[100px]'>
+            <SelectTrigger className="border-0 shadow-none border-l border-b border-t rounded-l-2xl rounded-none min-w-[100px]">
               <SelectValue placeholder={defaultProtocol} />
             </SelectTrigger>
             <SelectContent>
               {protocols.map((option) => (
-                <SelectItem
-                  key={option.value}
-                  value={option.value}
-                >
+                <SelectItem key={option.value} value={option.value}>
                   {option.label}
                 </SelectItem>
               ))}
@@ -159,20 +151,16 @@ function IGRPInputUrl({
         {helperText && !error && (
           <p
             id={`${fieldName}-helper`}
-            className='text-muted-foreground mt-2 text-xs'
-            role='region'
-            aria-live='polite'
+            className="text-muted-foreground mt-2 text-xs"
+            role="region"
+            aria-live="polite"
           >
             {helperText}
           </p>
         )}
 
         {error && (
-          <p
-            id={`${fieldName}-error`}
-            className='text-destructive mt-2 text-xs'
-            role='alert'
-          >
+          <p id={`${fieldName}-error`} className="text-destructive mt-2 text-xs" role="alert">
             {error}
           </p>
         )}
@@ -204,32 +192,24 @@ function IGRPInputUrl({
         };
 
         return (
-          <div className={cn('*:not-first:mt-2'/*, igrpGridSizeClasses[gridSize]*/)}>
+          <div className={cn('*:not-first:mt-2' /*, igrpGridSizeClasses[gridSize]*/)}>
             {label && (
-              <IGRPLabel
-                label={label}
-                className={className}
-                required={required}
-                id={fieldName}
-              />
+              <IGRPLabel label={label} className={className} required={required} id={fieldName} />
             )}
 
-            <div className='flex rounded-md shadow-xs'>
+            <div className="flex rounded-md shadow-xs">
               <Select
                 value={fieldProtocol}
                 onValueChange={handleProtocolChange}
                 disabled={props.disabled}
                 onOpenChange={() => field.onBlur()}
               >
-                <SelectTrigger className='border-0 shadow-none border-l border-b border-t rounded-l-2xl rounded-none min-w-[100px]'>
+                <SelectTrigger className="border-0 shadow-none border-l border-b border-t rounded-l-2xl rounded-none min-w-[100px]">
                   <SelectValue placeholder={defaultProtocol} />
                 </SelectTrigger>
                 <SelectContent>
                   {protocols.map((option) => (
-                    <SelectItem
-                      key={option.value}
-                      value={option.value}
-                    >
+                    <SelectItem key={option.value} value={option.value}>
                       {option.label}
                     </SelectItem>
                   ))}
@@ -261,20 +241,16 @@ function IGRPInputUrl({
             {helperText && !error && !fieldState.error && (
               <p
                 id={`${fieldName}-helper`}
-                className='text-muted-foreground mt-2 text-xs'
-                role='region'
-                aria-live='polite'
+                className="text-muted-foreground mt-2 text-xs"
+                role="region"
+                aria-live="polite"
               >
                 {helperText}
               </p>
             )}
 
             {(error || fieldState.error) && (
-              <p
-                id={`${fieldName}-error`}
-                className='text-destructive mt-2 text-xs'
-                role='alert'
-              >
+              <p id={`${fieldName}-error`} className="text-destructive mt-2 text-xs" role="alert">
                 {error || fieldState.error?.message}
               </p>
             )}

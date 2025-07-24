@@ -3,7 +3,6 @@ import Image from 'next/image';
 import { cn } from '../../lib/utils';
 import { IGRPButton } from '../igrp/button';
 
-
 interface IGRPGlobalErrorProps {
   error: Error & { digest?: string };
   reset: () => void;

@@ -42,11 +42,7 @@ function IGRPDataTableHeaderSortToggle<T>({
       {...props}
     >
       {canSort ? (
-        <Button
-          variant='ghost'
-          onClick={handleToggleSorting}
-          className='flex items-center gap-2'
-        >
+        <Button variant="ghost" onClick={handleToggleSorting} className="flex items-center gap-2">
           <span>{title}</span>
           <ArrowUpDown className={cn('ml-2 h-4 w-4', !isSorted && 'text-gray-500')} />
         </Button>
@@ -79,8 +75,8 @@ function IGRPDataTableHeaderSortDropdown<T>({
         <DropdownMenu>
           <DropdownMenuTrigger asChild>
             <Button
-              variant='ghost'
-              size='sm'
+              variant="ghost"
+              size="sm"
               className={cn(
                 '-ml-3 h-8 flex items-center space-x-2',
                 'data-[state=open]:bg-accent data-[state=open]:border-accent',
@@ -96,19 +92,13 @@ function IGRPDataTableHeaderSortDropdown<T>({
               )}
             </Button>
           </DropdownMenuTrigger>
-          <DropdownMenuContent align='start'>
-            <DropdownMenuItem
-              onClick={handleSortAsc}
-              aria-label='Sort ascending'
-            >
-              <ArrowUp className='h-3.5 w-3.5 text-muted-foreground/70' />
+          <DropdownMenuContent align="start">
+            <DropdownMenuItem onClick={handleSortAsc} aria-label="Sort ascending">
+              <ArrowUp className="h-3.5 w-3.5 text-muted-foreground/70" />
               Asc
             </DropdownMenuItem>
-            <DropdownMenuItem
-              onClick={handleSortDesc}
-              aria-label='Sort descending'
-            >
-              <ArrowDown className='h-3.5 w-3.5 text-muted-foreground/70' />
+            <DropdownMenuItem onClick={handleSortDesc} aria-label="Sort descending">
+              <ArrowDown className="h-3.5 w-3.5 text-muted-foreground/70" />
               Desc
             </DropdownMenuItem>
             <DropdownMenuSeparator />
@@ -132,7 +122,7 @@ function IGRPDataTableHeaderRowsSelect<T>({
         table.getIsAllPageRowsSelected() || (table.getIsSomePageRowsSelected() && 'indeterminate')
       }
       onCheckedChange={(value) => table.toggleAllRowsSelected?.(!!value)}
-      aria-label='Select all'
+      aria-label="Select all"
       className={className}
       {...props}
     />
@@ -145,10 +135,7 @@ function IGRPDataTableHeaderDefault<T>({
   ...props
 }: Omit<IGRPDataTableHeaderProps<T>, 'column' | 'table'> & React.ComponentProps<'span'>) {
   return (
-    <span
-      className={cn(className)}
-      {...props}
-    >
+    <span className={cn(className)} {...props}>
       {title}
     </span>
   );

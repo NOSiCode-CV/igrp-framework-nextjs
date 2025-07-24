@@ -59,15 +59,10 @@ function IGRPInputPassword({
     return (
       <div className={cn('*:not-first:mt-2')}>
         {label && (
-          <IGRPLabel
-            label={label}
-            className={className}
-            required={required}
-            id={fieldName}
-          />
+          <IGRPLabel label={label} className={className} required={required} id={fieldName} />
         )}
 
-        <div className='relative'>
+        <div className="relative">
           <Input
             id={fieldName}
             name={fieldName}
@@ -90,16 +85,16 @@ function IGRPInputPassword({
 
           {showPasswordToggle && (
             <IGRPButton
-              type='button'
-              variant='ghost'
-              size='sm'
-              className='absolute right-0 top-0 h-full px-3 py-2 text-muted-foreground hover:text-foreground'
+              type="button"
+              variant="ghost"
+              size="sm"
+              className="absolute right-0 top-0 h-full px-3 py-2 text-muted-foreground hover:text-foreground"
               onClick={togglePasswordVisibility}
               tabIndex={-1}
               aria-label={showPassword ? 'Hide password' : 'Show password'}
               showIcon
               iconName={showPassword ? 'EyeOff' : 'Eye'}
-              name='toggle-password-visibility'
+              name="toggle-password-visibility"
             />
           )}
         </div>
@@ -107,20 +102,16 @@ function IGRPInputPassword({
         {helperText && !error && (
           <p
             id={`${fieldName}-helper`}
-            className='text-muted-foreground mt-2 text-xs'
-            role='region'
-            aria-live='polite'
+            className="text-muted-foreground mt-2 text-xs"
+            role="region"
+            aria-live="polite"
           >
             {helperText}
           </p>
         )}
 
         {error && (
-          <p
-            id={`${fieldName}-errror`}
-            className='text-destructive mt-2 text-xs'
-            role='alert'
-          >
+          <p id={`${fieldName}-errror`} className="text-destructive mt-2 text-xs" role="alert">
             {error}
           </p>
         )}
@@ -134,17 +125,12 @@ function IGRPInputPassword({
       control={formContext.control}
       defaultValue={defaultValue || ''}
       render={({ field, fieldState }) => (
-        <div className={cn('*:not-first:mt-2'/*, igrpGridSizeClasses[gridSize]*/)}>
+        <div className={cn('*:not-first:mt-2' /*, igrpGridSizeClasses[gridSize]*/)}>
           {label && (
-            <IGRPLabel
-              label={label}
-              className={className}
-              required={required}
-              id={fieldName}
-            />
+            <IGRPLabel label={label} className={className} required={required} id={fieldName} />
           )}
 
-          <div className='relative'>
+          <div className="relative">
             <Input
               id={fieldName}
               type={showPassword ? 'text' : 'password'}
@@ -172,10 +158,10 @@ function IGRPInputPassword({
 
             {showPasswordToggle && (
               <IGRPButton
-                type='button'
-                variant='ghost'
-                size='sm'
-                className='absolute right-0 top-0 h-full px-3 py-2 text-muted-foreground hover:text-foreground'
+                type="button"
+                variant="ghost"
+                size="sm"
+                className="absolute right-0 top-0 h-full px-3 py-2 text-muted-foreground hover:text-foreground"
                 onClick={togglePasswordVisibility}
                 tabIndex={-1}
                 aria-label={showPassword ? 'Hide password' : 'Show password'}
@@ -188,20 +174,16 @@ function IGRPInputPassword({
           {helperText && !error && !fieldState.error && (
             <p
               id={`${fieldName}-helper`}
-              className='text-muted-foreground mt-2 text-xs'
-              role='region'
-              aria-live='polite'
+              className="text-muted-foreground mt-2 text-xs"
+              role="region"
+              aria-live="polite"
             >
               {helperText}
             </p>
           )}
 
           {(error || fieldState.error) && (
-            <p
-              id={`${fieldName}-helper`}
-              className='text-destructive mt-2 text-xs'
-              role='alert'
-            >
+            <p id={`${fieldName}-helper`} className="text-destructive mt-2 text-xs" role="alert">
               {error || fieldState.error?.message}
             </p>
           )}

@@ -68,11 +68,11 @@ function IGRPAlert({
             iconName={alertIcon}
             className={cn('shrink-0', iconClassName)}
             size={16}
-            aria-hidden='true'
+            aria-hidden="true"
           />
         )}
-        <div className='flex grow justify-between gap-3'>
-          <div className='grow space-y-1'>{children}</div>
+        <div className="flex grow justify-between gap-3">
+          <div className="grow space-y-1">{children}</div>
 
           {showLink && (
             <IGRPLink
@@ -80,7 +80,7 @@ function IGRPAlert({
               iconPlacement={iconPlacement}
               href={linkUrl || ''}
               showIcon
-              size='default'
+              size="default"
             >
               {label}
             </IGRPLink>

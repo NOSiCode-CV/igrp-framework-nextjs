@@ -19,17 +19,17 @@ function IGRPStatsCardTopBorderColored({
       className={className}
       iconClassName={iconClassName}
       iconName={iconName}
-      cardBorder='rounded-lg'
-      cardBorderPosition='top'
+      cardBorder="rounded-lg"
+      cardBorderPosition="top"
       cardVariant={cardVariant}
-      iconPlacement='end'
-      itemPlacement='start'
-      iconBackground='rounded'
+      iconPlacement="end"
+      itemPlacement="start"
+      iconBackground="rounded"
       showIconBackground={true}
-      iconSize='sm'
-      titleClassName='text-muted-foreground'
-      titleSize='xs'
-      valueSize='2xl'
+      iconSize="sm"
+      titleClassName="text-muted-foreground"
+      titleSize="xs"
+      valueSize="2xl"
     />
   );
 }

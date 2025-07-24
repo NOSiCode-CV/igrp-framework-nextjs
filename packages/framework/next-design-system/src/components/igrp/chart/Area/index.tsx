@@ -67,21 +67,15 @@ function IGRPAreaChart({
       style={backgroundColor ? { backgroundColor } : undefined}
     >
       {(title || description) && (
-        <div className='pb-3'>
-          {title && <div className='text-xl font-semibold'>{title}</div>}
-          {description && <div className='text-sm text-muted-foreground'>{description}</div>}
+        <div className="pb-3">
+          {title && <div className="text-xl font-semibold">{title}</div>}
+          {description && <div className="text-sm text-muted-foreground">{description}</div>}
         </div>
       )}
 
-      <div className='overflow-hidden'>
-        <div
-          style={{ height: chartHeight, width: chartWidth }}
-          className='w-full overflow-hidden'
-        >
-          <ChartContainer
-            className='h-full w-full'
-            config={chartConfig}
-          >
+      <div className="overflow-hidden">
+        <div style={{ height: chartHeight, width: chartWidth }} className="w-full overflow-hidden">
+          <ChartContainer className="h-full w-full" config={chartConfig}>
             <AreaChart
               accessibilityLayer
               data={data}
@@ -93,16 +87,11 @@ function IGRPAreaChart({
               }}
               stackOffset={expanded ? 'expand' : stacked ? 'none' : undefined}
             >
-              {showGrid && (
-                <CartesianGrid
-                  stroke={gridColor}
-                  vertical={false}
-                />
-              )}
+              {showGrid && <CartesianGrid stroke={gridColor} vertical={false} />}
 
               <XAxis
                 dataKey={categoryKey}
-                type='category'
+                type="category"
                 tickFormatter={labelFormatter}
                 hide={hideAxis || hideXAxis}
                 stroke={axisColor}
@@ -113,7 +102,7 @@ function IGRPAreaChart({
 
               {!hideAxis && !hideYAxis && (
                 <YAxis
-                  type='number'
+                  type="number"
                   domain={valueDomain || (hasNegativeDataValues ? ['auto', 'auto'] : [0, 'auto'])}
                   tickFormatter={formatValue}
                   hide={hideAxis || hideYAxis}
@@ -125,10 +114,7 @@ function IGRPAreaChart({
               )}
 
               {showReferenceZero && hasNegativeDataValues && (
-                <ReferenceLine
-                  y={0}
-                  stroke={referenceLineColor}
-                />
+                <ReferenceLine y={0} stroke={referenceLineColor} />
               )}
 
               {showTooltip && (
@@ -152,7 +138,7 @@ function IGRPAreaChart({
                   verticalAlign={getLegendVerticalAlign(legendPosition)}
                   align={getLegendHorizontalAlign(legendPosition)}
                   layout={getLegendLayout(legendPosition)}
-                  content={<ChartLegendContent className='text-xs' />}
+                  content={<ChartLegendContent className="text-xs" />}
                 />
               )}
 
@@ -163,18 +149,18 @@ function IGRPAreaChart({
                     <linearGradient
                       key={`fill${area.dataKey}`}
                       id={`fill${area.dataKey}`}
-                      x1='0'
-                      y1='0'
-                      x2='0'
-                      y2='1'
+                      x1="0"
+                      y1="0"
+                      x2="0"
+                      y2="1"
                     >
                       <stop
-                        offset='5%'
+                        offset="5%"
                         stopColor={`var(--color-${area.dataKey})`}
                         stopOpacity={0.8}
                       />
                       <stop
-                        offset='95%'
+                        offset="95%"
                         stopColor={`var(--color-${area.dataKey})`}
                         stopOpacity={0.1}
                       />
@@ -220,9 +206,9 @@ function IGRPAreaChart({
       </div>
 
       {footer && (
-        <div className='flex-col items-start gap-2 text-sm pt-4'>
+        <div className="flex-col items-start gap-2 text-sm pt-4">
           {footer.description && (
-            <div className='leading-none text-muted-foreground'>{footer.description}</div>
+            <div className="leading-none text-muted-foreground">{footer.description}</div>
           )}
         </div>
       )}

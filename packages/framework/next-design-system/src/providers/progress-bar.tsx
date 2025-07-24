@@ -19,4 +19,4 @@ function IGRPProgressBarProvider({
   );
 }
 
-export { IGRPProgressBarProvider }
+export { IGRPProgressBarProvider };

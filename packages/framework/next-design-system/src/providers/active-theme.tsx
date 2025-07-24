@@ -57,4 +57,4 @@ export function useIGRPThemeConfig() {
   return context;
 }
 
-export { IGRPActiveThemeProvider, type IGRPActiveThemeProviderArgs }
+export { IGRPActiveThemeProvider, type IGRPActiveThemeProviderArgs };

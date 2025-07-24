@@ -19,18 +19,10 @@ function IGRPIcon({
 
   if (!LucideIcon) {
     console.log('Invalid icon::', { iconName });
-    return <AlertCircle className='text-destructive' />;
+    return <AlertCircle className="text-destructive" />;
   }
 
-  return (
-    <LucideIcon
-      className={className}
-      id={iconName}
-      color={color}
-      size={size}
-      {...props}
-    />
-  );
+  return <LucideIcon className={className} id={iconName} color={color} size={size} {...props} />;
 }
 
 export { IGRPIcon, type IGRPIconProps, type IGRPIconName };

@@ -74,13 +74,13 @@ function IGRPDatePicker({
     >
       <IGRPButton
         id={fieldName}
-        variant='outline'
-        className='underline-offset-0 hover:no-underline border-0 bg-transparent hover:bg-transparent shadow-none'
+        variant="outline"
+        className="underline-offset-0 hover:no-underline border-0 bg-transparent hover:bg-transparent shadow-none"
         disabled={disabledPicker}
-        iconName='Calendar'
-        iconClassName='text-muted-foreground/80 group-hover:text-foreground shrink-0 transition-colors'
+        iconName="Calendar"
+        iconClassName="text-muted-foreground/80 group-hover:text-foreground shrink-0 transition-colors"
         showIcon={localDate ? false : true}
-        iconPlacement='end'
+        iconPlacement="end"
       >
         <span className={cn('truncate', !value && 'text-muted-foreground')}>
           {getDisplayDate(value)}
@@ -96,17 +96,14 @@ function IGRPDatePicker({
     <>
       <Popover>
         <PopoverTrigger asChild>{DateButton(fieldValue)}</PopoverTrigger>
-        <PopoverContent
-          className='w-auto p-2'
-          align='start'
-        >
+        <PopoverContent className="w-auto p-2" align="start">
           <IGRPCalendar
             id={fieldName}
             date={fieldValue}
             onDateChange={onChange}
             startDate={startDate}
             endDate={endDate}
-            mode='single'
+            mode="single"
           />
         </PopoverContent>
       </Popover>
@@ -116,10 +113,10 @@ function IGRPDatePicker({
             setLocalDate(undefined);
             onDateChange?.(undefined);
           }}
-          variant='link'
-          className='size-2 absolute right-2 top-1/2 h-3 w-3 -translate-y-1/2 text-muted-foreground z-100'
-          size='icon'
-          iconName='X'
+          variant="link"
+          className="size-2 absolute right-2 top-1/2 h-3 w-3 -translate-y-1/2 text-muted-foreground z-100"
+          size="icon"
+          iconName="X"
           iconSize={10}
           disabled={disabledPicker}
           showIcon={localDate ? true : false}
@@ -153,7 +150,7 @@ function IGRPDatePicker({
             </FormControl>
 
             {helperText && !fieldState.error && <FormDescription>{helperText}</FormDescription>}
-            <FormMessage className='text-xs' />
+            <FormMessage className="text-xs" />
           </FormItem>
         )}
       />
@@ -163,14 +160,9 @@ function IGRPDatePicker({
   return (
     <div className={cn('*:not-first:mt-2', /*igrpGridSizeClasses[gridSize],*/ className)}>
       {label && (
-        <IGRPLabel
-          label={label}
-          className={labelClassName}
-          required={required}
-          id={name}
-        />
+        <IGRPLabel label={label} className={labelClassName} required={required} id={name} />
       )}
-      <div className='relative'>
+      <div className="relative">
         {renderPicker(localDate, (val) => {
           setLocalDate(val);
           onDateChange?.(val);
@@ -180,20 +172,16 @@ function IGRPDatePicker({
       {helperText && !error && (
         <p
           id={`${fieldName}-helper`}
-          className='text-muted-foreground mt-2 text-xs'
-          role='region'
-          aria-live='polite'
+          className="text-muted-foreground mt-2 text-xs"
+          role="region"
+          aria-live="polite"
         >
           {helperText}
         </p>
       )}
 
       {error && (
-        <p
-          id={`${fieldName}-helper`}
-          className='text-destructive mt-2 text-xs'
-          role='alert'
-        >
+        <p id={`${fieldName}-helper`} className="text-destructive mt-2 text-xs" role="alert">
           {error}
         </p>
       )}

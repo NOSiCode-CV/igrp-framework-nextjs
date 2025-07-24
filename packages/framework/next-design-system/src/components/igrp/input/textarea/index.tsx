@@ -37,15 +37,10 @@ function IGRPTextarea({
     return (
       <div className={cn('*:not-first:mt-2')}>
         {label && (
-          <IGRPLabel
-            label={label}
-            className={className}
-            required={required}
-            id={fieldName}
-          />
+          <IGRPLabel label={label} className={className} required={required} id={fieldName} />
         )}
 
-        <div className='relative'>
+        <div className="relative">
           <Textarea
             id={fieldName}
             name={fieldName}
@@ -66,20 +61,16 @@ function IGRPTextarea({
         {helperText && !error && (
           <p
             id={`${fieldName}-helper`}
-            className='text-muted-foreground mt-2 text-xs'
-            role='region'
-            aria-live='polite'
+            className="text-muted-foreground mt-2 text-xs"
+            role="region"
+            aria-live="polite"
           >
             {helperText}
           </p>
         )}
 
         {error && (
-          <p
-            id={`${fieldName}-error`}
-            className='text-destructive mt-2 text-xs'
-            role='alert'
-          >
+          <p id={`${fieldName}-error`} className="text-destructive mt-2 text-xs" role="alert">
             {error}
           </p>
         )}
@@ -95,17 +86,12 @@ function IGRPTextarea({
       name={fieldName}
       control={formContext.control}
       render={({ field, fieldState }) => (
-        <div className={cn('*:not-first:mt-2'/*, igrpGridSizeClasses[gridSize]*/)}>
+        <div className={cn('*:not-first:mt-2' /*, igrpGridSizeClasses[gridSize]*/)}>
           {label && (
-            <IGRPLabel
-              label={label}
-              className={className}
-              required={required}
-              id={fieldName}
-            />
+            <IGRPLabel label={label} className={className} required={required} id={fieldName} />
           )}
 
-          <div className='relative'>
+          <div className="relative">
             <Textarea
               id={fieldName}
               name={fieldName}
@@ -130,20 +116,16 @@ function IGRPTextarea({
           {helperText && !errorMessage && !fieldState.error && (
             <p
               id={`${fieldName}-helper`}
-              className='text-muted-foreground mt-2 text-xs'
-              role='region'
-              aria-live='polite'
+              className="text-muted-foreground mt-2 text-xs"
+              role="region"
+              aria-live="polite"
             >
               {helperText}
             </p>
           )}
 
           {(errorMessage || fieldState.error) && (
-            <p
-              id={`${fieldName}-error`}
-              className='text-destructive mt-2 text-xs'
-              role='alert'
-            >
+            <p id={`${fieldName}-error`} className="text-destructive mt-2 text-xs" role="alert">
               {errorMessage || fieldState.error?.message}
             </p>
           )}

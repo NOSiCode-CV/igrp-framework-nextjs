@@ -108,7 +108,7 @@ export function IGRPDropzone({
   };
 
   return (
-    <div className='space-y-4'>
+    <div className="space-y-4">
       <Card
         {...getRootProps()}
         className={cn(
@@ -129,8 +129,8 @@ export function IGRPDropzone({
             isDragReject && 'text-destructive',
           )}
         />
-        <div className='space-y-1'>
-          <p className='text-sm font-medium'>
+        <div className="space-y-1">
+          <p className="text-sm font-medium">
             {isDragActive
               ? isDragReject
                 ? 'Alguns arquivos serão rejeitados'
@@ -139,7 +139,7 @@ export function IGRPDropzone({
                 ? 'Arraste arquivos aqui ou clique para enviar vários'
                 : 'Arraste um arquivo aqui ou clique para enviar'}
           </p>
-          <p className='text-xs text-muted-foreground'>
+          <p className="text-xs text-muted-foreground">
             {accept && <span>Tipos aceitos: {formatAcceptedTypes()}</span>}
             {maxSize && accept && <span> · </span>}
             {maxSize && <span>Tamanho máx: {formatFileSize(maxSize)}</span>}
@@ -150,25 +150,18 @@ export function IGRPDropzone({
       </Card>
 
       {rejectedFiles.length > 0 && (
-        <Alert variant='destructive'>
-          <AlertCircle className='h-4 w-4' />
+        <Alert variant="destructive">
+          <AlertCircle className="h-4 w-4" />
           <AlertTitle>Erro no upload</AlertTitle>
           <AlertDescription>
-            <ul className='mt-2 text-sm list-disc pl-5 space-y-1'>
+            <ul className="mt-2 text-sm list-disc pl-5 space-y-1">
               {rejectedFiles.map((item, index) => (
-                <li
-                  key={index}
-                  className='flex items-center justify-between'
-                >
+                <li key={index} className="flex items-center justify-between">
                   <span>
                     {item.file.name} - {item.errors.map((e) => e.message).join(', ')}
                   </span>
-                  <Button
-                    size='icon'
-                    variant='ghost'
-                    onClick={() => removeRejectedFile(index)}
-                  >
-                    <X className='h-4 w-4' />
+                  <Button size="icon" variant="ghost" onClick={() => removeRejectedFile(index)}>
+                    <X className="h-4 w-4" />
                   </Button>
                 </li>
               ))}
@@ -178,34 +171,19 @@ export function IGRPDropzone({
       )}
 
       {files.length > 0 && (
-        <div className='space-y-2'>
+        <div className="space-y-2">
           {files.map((item, index) => (
-            <div
-              key={index}
-              className='flex items-center justify-between border rounded-md p-2'
-            >
-              <div className='flex-1'>
-                <p className='text-sm font-medium'>{item.file.name}</p>
-                <Progress
-                  value={item.progress}
-                  className='h-1 mt-1'
-                />
+            <div key={index} className="flex items-center justify-between border rounded-md p-2">
+              <div className="flex-1">
+                <p className="text-sm font-medium">{item.file.name}</p>
+                <Progress value={item.progress} className="h-1 mt-1" />
               </div>
-              <Button
-                size='icon'
-                variant='ghost'
-                onClick={() => removeFile(item.file)}
-              >
-                <X className='h-4 w-4' />
+              <Button size="icon" variant="ghost" onClick={() => removeFile(item.file)}>
+                <X className="h-4 w-4" />
               </Button>
             </div>
           ))}
-          <Button
-            variant='outline'
-            size='sm'
-            onClick={removeAllFiles}
-            className='w-full'
-          >
+          <Button variant="outline" size="sm" onClick={removeAllFiles} className="w-full">
             Remover todos os arquivos
           </Button>
         </div>

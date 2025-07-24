@@ -54,7 +54,7 @@ function IGRPInputText({
         control={formContext.control}
       >
         {(field, fieldState) => (
-          <div className='relative'>
+          <div className="relative">
             <Input
               id={fieldName}
               name={fieldName}
@@ -76,11 +76,7 @@ function IGRPInputText({
             />
             {showIcon && (
               <div className={cn('absolute inset-y-0 flex items-center', positionIcon)}>
-                <IGRPIcon
-                  iconName={iconName}
-                  size={iconSize}
-                  className={iconClassName}
-                />
+                <IGRPIcon iconName={iconName} size={iconSize} className={iconClassName} />
               </div>
             )}
           </div>
@@ -92,12 +88,7 @@ function IGRPInputText({
   return (
     <div className={cn('*:not-first:mt-2', className)}>
       {label && (
-        <IGRPLabel
-          label={label}
-          className={labelClassName}
-          required={required}
-          id={fieldName}
-        />
+        <IGRPLabel label={label} className={labelClassName} required={required} id={fieldName} />
       )}
 
       <div className={cn('relative')}>
@@ -119,11 +110,7 @@ function IGRPInputText({
         />
         {showIcon && (
           <div className={cn('absolute inset-y-0 flex items-center', positionIcon)}>
-            <IGRPIcon
-              iconName={iconName}
-              size={iconSize}
-              className={iconClassName}
-            />
+            <IGRPIcon iconName={iconName} size={iconSize} className={iconClassName} />
           </div>
         )}
       </div>
@@ -131,20 +118,16 @@ function IGRPInputText({
       {helperText && !error && (
         <p
           id={`${fieldName}-helper`}
-          className='text-muted-foreground mt-2 text-xs'
-          role='region'
-          aria-live='polite'
+          className="text-muted-foreground mt-2 text-xs"
+          role="region"
+          aria-live="polite"
         >
           {helperText}
         </p>
       )}
 
       {error && (
-        <p
-          id={`${fieldName}-error`}
-          className='text-destructive mt-2 text-xs'
-          role='alert'
-        >
+        <p id={`${fieldName}-error`} className="text-destructive mt-2 text-xs" role="alert">
           {error}
         </p>
       )}

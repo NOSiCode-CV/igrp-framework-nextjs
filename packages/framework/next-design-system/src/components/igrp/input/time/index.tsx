@@ -44,19 +44,14 @@ function IGRPInputTime({
     return (
       <div className={cn('*:not-first:mt-2')}>
         {label && (
-          <IGRPLabel
-            label={label}
-            className={className}
-            required={required}
-            id={fieldName}
-          />
+          <IGRPLabel label={label} className={className} required={required} id={fieldName} />
         )}
 
-        <div className='relative'>
+        <div className="relative">
           <Input
             id={fieldName}
             name={fieldName}
-            type='time'
+            type="time"
             required={required}
             aria-required={required}
             aria-invalid={!!error || !!props['aria-invalid']}
@@ -76,20 +71,16 @@ function IGRPInputTime({
         {helperText && !error && (
           <p
             id={`${fieldName}-helper`}
-            className='text-muted-foreground mt-2 text-xs'
-            role='region'
-            aria-live='polite'
+            className="text-muted-foreground mt-2 text-xs"
+            role="region"
+            aria-live="polite"
           >
             {helperText}
           </p>
         )}
 
         {error && (
-          <p
-            id={`${fieldName}-error`}
-            className='text-destructive mt-2 text-xs'
-            role='alert'
-          >
+          <p id={`${fieldName}-error`} className="text-destructive mt-2 text-xs" role="alert">
             {error}
           </p>
         )}
@@ -103,21 +94,16 @@ function IGRPInputTime({
       control={formContext.control}
       defaultValue={defaultValue || ''}
       render={({ field, fieldState }) => (
-        <div className={cn('*:not-first:mt-2'/*, igrpGridSizeClasses[gridSize]*/)}>
+        <div className={cn('*:not-first:mt-2' /*, igrpGridSizeClasses[gridSize]*/)}>
           {label && (
-            <IGRPLabel
-              label={label}
-              className={className}
-              required={required}
-              id={fieldName}
-            />
+            <IGRPLabel label={label} className={className} required={required} id={fieldName} />
           )}
 
-          <div className='relative'>
+          <div className="relative">
             <Input
               id={fieldName}
               name={fieldName}
-              type='time'
+              type="time"
               required={required}
               aria-required={required}
               aria-invalid={!!fieldState.error || !!error || !!props['aria-invalid']}
@@ -141,20 +127,16 @@ function IGRPInputTime({
           {helperText && !error && !fieldState.error && (
             <p
               id={`${fieldName}-helper`}
-              className='text-muted-foreground mt-2 text-xs'
-              role='region'
-              aria-live='polite'
+              className="text-muted-foreground mt-2 text-xs"
+              role="region"
+              aria-live="polite"
             >
               {helperText}
             </p>
           )}
 
           {(error || fieldState.error) && (
-            <p
-              id={`${fieldName}-error`}
-              className='text-destructive mt-2 text-xs'
-              role='alert'
-            >
+            <p id={`${fieldName}-error`} className="text-destructive mt-2 text-xs" role="alert">
               {error || fieldState.error?.message}
             </p>
           )}

@@ -111,16 +111,13 @@ function IGRPCombobox({
     }
 
     return (
-      <div className='flex gap-1 flex-wrap'>
+      <div className="flex gap-1 flex-wrap">
         {currentValue.map((val) => {
           const selected = options?.find((opt) => opt.value === val);
           if (!selected) return null;
 
           return (
-            <span
-              key={val}
-              className='flex items-center bg-gray-100 px-2 py-1 rounded-md gap-1'
-            >
+            <span key={val} className="flex items-center bg-gray-100 px-2 py-1 rounded-md gap-1">
               {showStatus && selected.status && (
                 <IGRPCircleFull className={igrpColorText(selected.status)} />
               )}
@@ -130,7 +127,7 @@ function IGRPCombobox({
               <span className={selected.color}>{selected.label}</span>
 
               <IGRPButton
-                className='ml-1 text-gray-400 hover:text-red-400 rounded-full size-5'
+                className="ml-1 text-gray-400 hover:text-red-400 rounded-full size-5"
                 onKeyDown={(e) => {
                   if (e.key === 'Enter') {
                     e.preventDefault();
@@ -142,11 +139,11 @@ function IGRPCombobox({
                   e.stopPropagation();
                 }}
                 onClick={() => removeValue(val)}
-                iconName='X'
+                iconName="X"
                 iconSize={12}
-                size='icon'
+                size="icon"
                 showIcon
-                variant='outline'
+                variant="outline"
               />
             </span>
           );
@@ -205,9 +202,9 @@ function IGRPCombobox({
             <CommandItem
               key={`${groupName}-${value}`}
               onSelect={() => onSelectHandler(value)}
-              className='flex items-center justify-between cursor-pointer'
+              className="flex items-center justify-between cursor-pointer"
             >
-              <div className='flex items-center gap-2'>
+              <div className="flex items-center gap-2">
                 {showStatus && status && <IGRPCircleFull className={igrpColorText(status)} />}
 
                 {showIcon && <IGRPIcon iconName={icon ?? 'CornerDownRight'} />}
@@ -216,7 +213,7 @@ function IGRPCombobox({
               </div>
 
               <IGRPIcon
-                iconName='Check'
+                iconName="Check"
                 className={cn(
                   'ml-auto w-4 h-4 opacity-0',
                   isSelected(value, currentValue) && 'opacity-100',
@@ -232,44 +229,31 @@ function IGRPCombobox({
     currentValue: string | string[],
     onChangeHandler: (value: string | string[]) => void,
   ) => (
-    <Popover
-      open={open}
-      onOpenChange={setOpen}
-      modal
-    >
-      <PopoverTrigger
-        asChild
-        className='w-full'
-      >
+    <Popover open={open} onOpenChange={setOpen} modal>
+      <PopoverTrigger asChild className="w-full">
         <IGRPButton
           name={fieldName}
-          variant='outline'
-          role='combobox'
+          variant="outline"
+          role="combobox"
           aria-expanded={open}
           className={cn(
             'w-full justify-between',
             className,
             disabled && 'cursor-not-allowed pointer-events-none opacity-50',
           )}
-          iconName='ChevronsUpDown'
-          iconPlacement='end'
-          iconClassName='ml-2 h-4 w-4 shrink-0 opacity-50'
+          iconName="ChevronsUpDown"
+          iconPlacement="end"
+          iconClassName="ml-2 h-4 w-4 shrink-0 opacity-50"
           showIcon
         >
           {setSelectValue(currentValue)}
         </IGRPButton>
       </PopoverTrigger>
-      <PopoverContent
-        className={cn('p-0', selectClassName)}
-        align='start'
-      >
+      <PopoverContent className={cn('p-0', selectClassName)} align="start">
         <Command>
           {showSearch && (
-            <div className='relative p-2'>
-              <CommandInput
-                placeholder={searchText}
-                className='h-8'
-              />
+            <div className="relative p-2">
+              <CommandInput placeholder={searchText} className="h-8" />
               <CommandEmpty>{selectLabel}</CommandEmpty>
             </div>
           )}
@@ -295,7 +279,7 @@ function IGRPCombobox({
         control={formContext.control}
       >
         {(field) => (
-          <div className='relative'>
+          <div className="relative">
             {renderCombobox(field.value, (val) => {
               field.onChange(val);
               onChange?.(val);
@@ -307,17 +291,9 @@ function IGRPCombobox({
   }
 
   return (
-    <div
-      className='*:not-first:mt-2'
-      id={name}
-    >
+    <div className="*:not-first:mt-2" id={name}>
       {label && (
-        <IGRPLabel
-          label={label}
-          className={labelClassName}
-          required={required}
-          id={fieldName}
-        />
+        <IGRPLabel label={label} className={labelClassName} required={required} id={fieldName} />
       )}
 
       {renderCombobox(localValue, (newValue) => {
@@ -325,10 +301,7 @@ function IGRPCombobox({
         onChange?.(newValue);
       })}
 
-      <IGRPFieldDescription
-        error={errorText}
-        helperText={helperText}
-      />
+      <IGRPFieldDescription error={errorText} helperText={helperText} />
     </div>
   );
 }

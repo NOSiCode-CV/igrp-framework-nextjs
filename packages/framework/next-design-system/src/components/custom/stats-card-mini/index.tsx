@@ -54,14 +54,14 @@ function StatsCardMini({
       image={image}
       imageAlt={imageAlt}
       showIconBackground={false}
-      iconPlacement='start'
-      iconBackground='square'
+      iconPlacement="start"
+      iconBackground="square"
       showIconBorder={true}
-      iconVariant='primary'
+      iconVariant="primary"
       iconClassName={cn('border', 'border-solid', 'rounded-md', color.text, iconClassName)}
-      cardBorder='rounded-xl'
-      cardBorderPosition='none'
-      cardVariant='primary'
+      cardBorder="rounded-xl"
+      cardBorderPosition="none"
+      cardVariant="primary"
     />
   );
 }

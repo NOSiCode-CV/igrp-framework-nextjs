@@ -72,25 +72,22 @@ function IGRPTable<T>({
               <TableHead key={column.accessorKey.toString()}>{column.header}</TableHead>
             ))}
             {actions && (
-              <TableHead className=''>
-                <span className='sr-only'>Actions</span>
+              <TableHead className="">
+                <span className="sr-only">Actions</span>
               </TableHead>
             )}
           </TableRow>
         </TableHeader>
         <TableBody className={cn(tBodyClass)}>
           {content?.map((row, rowIndex) => (
-            <TableRow
-              className={cn(tBodyRowClass, stripeClass)}
-              key={rowIndex}
-            >
+            <TableRow className={cn(tBodyRowClass, stripeClass)} key={rowIndex}>
               {columns.map((column) => (
                 <TableCell key={column.accessorKey.toString()}>
                   {renderCell(row[column.accessorKey], column.render)}
                 </TableCell>
               ))}
               {actions && (
-                <TableCell className='text-right'>{actions({ original: row })}</TableCell>
+                <TableCell className="text-right">{actions({ original: row })}</TableCell>
               )}
             </TableRow>
           ))}
@@ -99,10 +96,7 @@ function IGRPTable<T>({
           <TableFooter className={cn(tFootClass)}>
             <TableRow className={cn(tFootRowClass)}>
               {columns.map((column) => (
-                <TableCell
-                  key={column.accessorKey.toString()}
-                  className='font-medium'
-                >
+                <TableCell key={column.accessorKey.toString()} className="font-medium">
                   {footerColumn === column.accessorKey ? footerContent : ''}
                 </TableCell>
               ))}

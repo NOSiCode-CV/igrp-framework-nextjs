@@ -62,21 +62,9 @@ function Calendar({
       orientation?: 'left' | 'right' | 'up' | 'down';
     }) => {
       if (props.orientation === 'left') {
-        return (
-          <ChevronLeftIcon
-            size={16}
-            {...props}
-            aria-hidden='true'
-          />
-        );
+        return <ChevronLeftIcon size={16} {...props} aria-hidden="true" />;
       }
-      return (
-        <ChevronRightIcon
-          size={16}
-          {...props}
-          aria-hidden='true'
-        />
-      );
+      return <ChevronRightIcon size={16} {...props} aria-hidden="true" />;
     },
   };
 

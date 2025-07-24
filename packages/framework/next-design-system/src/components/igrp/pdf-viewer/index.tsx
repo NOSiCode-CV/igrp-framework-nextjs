@@ -73,20 +73,9 @@ function IGRPPdfViewer({
 
   if (!document) {
     return (
-      <div
-        className='flex items-center gap-3'
-        id={name}
-      >
-        <IGRPIcon
-          iconName='FileX2'
-          className={IGRPColors.solid.destructive.text}
-        />
-        <IGRPText
-          as='p'
-          size='default'
-          weight='semibold'
-          spacing='none'
-        >
+      <div className="flex items-center gap-3" id={name}>
+        <IGRPIcon iconName="FileX2" className={IGRPColors.solid.destructive.text} />
+        <IGRPText as="p" size="default" weight="semibold" spacing="none">
           {notFoundLabel}
         </IGRPText>
       </div>
@@ -94,7 +83,7 @@ function IGRPPdfViewer({
   }
 
   return (
-    <div className='flex flex-col'>
+    <div className="flex flex-col">
       {displayMode === 'inline' && (
         <IGRPPdfViewerInline
           document={document}
@@ -137,20 +126,13 @@ function IGRPPdfViewerCard({ document, onView, clickable = true }: IGRPPdfViewer
       className={`transition-all py-3 ${clickable ? 'cursor-pointer hover:shadow-md' : ''}`}
       onClick={clickable ? () => onView(document) : undefined}
     >
-      <CardHeader className='gap-0'>
-        <div className='flex items-start justify-between'>
-          <div className='flex items-center gap-2'>
-            <IGRPIcon
-              iconName='FileText'
-              className='text-muted-foreground'
-            />
-            <CardTitle className='text-sm font-medium leading-tight'>{document.title}</CardTitle>
+      <CardHeader className="gap-0">
+        <div className="flex items-start justify-between">
+          <div className="flex items-center gap-2">
+            <IGRPIcon iconName="FileText" className="text-muted-foreground" />
+            <CardTitle className="text-sm font-medium leading-tight">{document.title}</CardTitle>
           </div>
-          <IGRPBadge
-            variant='soft'
-            color='destructive'
-            badgeClassName='px-3'
-          >
+          <IGRPBadge variant="soft" color="destructive" badgeClassName="px-3">
             PDF
           </IGRPBadge>
         </div>
@@ -178,38 +160,29 @@ function IGRPPdfViewerInline({
   };
 
   return (
-    <div className='flex flex-col gap-2'>
-      <div className='flex flex-col'>
-        <div className='flex items-center justify-between'>
+    <div className="flex flex-col gap-2">
+      <div className="flex flex-col">
+        <div className="flex items-center justify-between">
           <div>
-            <IGRPHeadline
-              variant='h6'
-              title={title}
-            />
-            <div className='flex items-center gap-2 text-sm text-muted-foreground'>
-              <div className='flex items-center gap-1 text-xs'>
-                <IGRPIcon
-                  iconName='User'
-                  className='text-primary'
-                />
+            <IGRPHeadline variant="h6" title={title} />
+            <div className="flex items-center gap-2 text-sm text-muted-foreground">
+              <div className="flex items-center gap-1 text-xs">
+                <IGRPIcon iconName="User" className="text-primary" />
                 {author}
               </div>
-              <div className='flex items-center gap-1 text-xs'>
-                <IGRPIcon
-                  iconName='Calendar'
-                  className='text-primary'
-                />
+              <div className="flex items-center gap-1 text-xs">
+                <IGRPIcon iconName="Calendar" className="text-primary" />
                 {format(new Date(date), 'dd/MM/yyyy')}
               </div>
             </div>
           </div>
 
           <IGRPButton
-            variant='default'
+            variant="default"
             onClick={openDocNewTab}
             showIcon
-            iconName='ExternalLink'
-            size='sm'
+            iconName="ExternalLink"
+            size="sm"
           >
             {labelButtonNewTab}
           </IGRPButton>
@@ -219,10 +192,10 @@ function IGRPPdfViewerInline({
       <div className={`w-full bg-gray-100 rounded-lg overflow-hidden h-[${height}]`}>
         <iframe
           src={iframeSrc}
-          className='w-full h-full border-0'
+          className="w-full h-full border-0"
           title={`PDF Viewer - ${title}`}
           aria-label={`PDF Viewer for ${title}`}
-          loading='lazy'
+          loading="lazy"
         />
       </div>
     </div>
@@ -254,56 +227,39 @@ function IGRPPdfViewerModal({
   };
 
   return (
-    <Dialog
-      open={open}
-      onOpenChange={onClose}
-    >
-      <DialogContent className='sm:max-w-6xl w-[95vw] max-h-[95vh] overflow-auto flex flex-col gap-0'>
+    <Dialog open={open} onOpenChange={onClose}>
+      <DialogContent className="sm:max-w-6xl w-[95vw] max-h-[95vh] overflow-auto flex flex-col gap-0">
         <DialogHeader>
-          <DialogTitle className='text-xl font-semibold'>{title}</DialogTitle>
-          <DialogDescription className='flex items-center gap-4 mt-1'>
-            <div className='flex items-center gap-1'>
-              <IGRPIcon
-                iconName='User'
-                className='text-primary'
-              />
+          <DialogTitle className="text-xl font-semibold">{title}</DialogTitle>
+          <DialogDescription className="flex items-center gap-4 mt-1">
+            <div className="flex items-center gap-1">
+              <IGRPIcon iconName="User" className="text-primary" />
               {author}
             </div>
-            <div className='flex items-center gap-1'>
-              <IGRPIcon
-                iconName='Calendar'
-                className='text-primary'
-              />
+            <div className="flex items-center gap-1">
+              <IGRPIcon iconName="Calendar" className="text-primary" />
               {format(new Date(date), 'dd/MM/yyyy')}
             </div>
           </DialogDescription>
         </DialogHeader>
 
-        <div className='flex-1 mt-4'>
-          <div className='w-full h-[60vh] bg-gray-100 rounded-lg overflow-hidden'>
+        <div className="flex-1 mt-4">
+          <div className="w-full h-[60vh] bg-gray-100 rounded-lg overflow-hidden">
             <iframe
               src={iframeSrc}
-              className='w-full h-full border-0'
+              className="w-full h-full border-0"
               title={`PDF Viewer - ${title}`}
               aria-label={`PDF Viewer for ${title}`}
-              loading='lazy'
+              loading="lazy"
             />
           </div>
         </div>
 
-        <DialogFooter className='mt-4'>
-          <IGRPButton
-            variant='default'
-            onClick={() => onClose(false)}
-          >
+        <DialogFooter className="mt-4">
+          <IGRPButton variant="default" onClick={() => onClose(false)}>
             {labelButtonCancel}
           </IGRPButton>
-          <IGRPButton
-            variant='secondary'
-            onClick={openDocNewTab}
-            showIcon
-            iconName='ExternalLink'
-          >
+          <IGRPButton variant="secondary" onClick={openDocNewTab} showIcon iconName="ExternalLink">
             {labelButtonNewTab}
           </IGRPButton>
         </DialogFooter>

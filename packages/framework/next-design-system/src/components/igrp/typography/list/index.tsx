@@ -82,18 +82,10 @@ const getDefaultIcon = (type: IGRPTextListType, iconColor?: IGRPColorVariants, i
   switch (type) {
     case 'checklist':
       return (
-        <IGRPIcon
-          iconName='Check'
-          className={IGRPColors.solid[iconColor || 'success'].text}
-        />
+        <IGRPIcon iconName="Check" className={IGRPColors.solid[iconColor || 'success'].text} />
       );
     case 'features':
-      return (
-        <IGRPIcon
-          iconName='Star'
-          className={IGRPColors.solid[iconColor || 'warning'].text}
-        />
-      );
+      return <IGRPIcon iconName="Star" className={IGRPColors.solid[iconColor || 'warning'].text} />;
     case 'steps':
       return (
         <div
@@ -120,7 +112,7 @@ const getDefaultIcon = (type: IGRPTextListType, iconColor?: IGRPColorVariants, i
     case 'unordered':
       return (
         <IGRPIcon
-          iconName='Circle'
+          iconName="Circle"
           className={cn(
             IGRPColors.outline[iconColor || 'secondary'].textBadge,
             'h-1.5 w-1.5 fill-current',
@@ -130,7 +122,7 @@ const getDefaultIcon = (type: IGRPTextListType, iconColor?: IGRPColorVariants, i
     default:
       return (
         <IGRPIcon
-          iconName='ArrowRight'
+          iconName="ArrowRight"
           className={cn(IGRPColors.outline[iconColor || 'secondary'].textBadge)}
         />
       );
@@ -230,11 +222,11 @@ function IGRPTextList({
           onClick={handleItemClick}
         >
           {/* Icon */}
-          <div className='flex-shrink-0 mt-0.5'>{itemIcon}</div>
+          <div className="flex-shrink-0 mt-0.5">{itemIcon}</div>
 
           {/* Content */}
-          <div className='flex-1 min-w-0'>
-            <div className='flex items-center gap-2'>
+          <div className="flex-1 min-w-0">
+            <div className="flex items-center gap-2">
               <div className={cn('flex-1', item.variant && IGRPColors.solid[item.variant].text)}>
                 {item.content}
               </div>
@@ -244,8 +236,8 @@ function IGRPTextList({
                 <IGRPBadge
                   variant={item.badgeVariant || 'soft'}
                   color={item.badgeColor || 'secondary'}
-                  size='sm'
-                  badgeClassName='px-2 py-1'
+                  size="sm"
+                  badgeClassName="px-2 py-1"
                 >
                   {item.badgeText}
                 </IGRPBadge>
@@ -260,7 +252,7 @@ function IGRPTextList({
                   )}
                 >
                   <IGRPIcon
-                    iconName='ArrowRight'
+                    iconName="ArrowRight"
                     className={cn(IGRPColors.outline.secondary.textBadge)}
                   />
                 </div>

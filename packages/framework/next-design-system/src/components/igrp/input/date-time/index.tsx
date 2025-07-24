@@ -97,12 +97,7 @@ function IGRPDateTimeInput({
     return (
       <div className={cn('*:not-first:mt-2')}>
         {label && (
-          <IGRPLabel
-            label={label}
-            className={className}
-            required={required}
-            id={fieldName}
-          />
+          <IGRPLabel label={label} className={className} required={required} id={fieldName} />
         )}
 
         <Input
@@ -127,20 +122,16 @@ function IGRPDateTimeInput({
         {helperText && !error && (
           <p
             id={`${fieldName}-helper`}
-            className='text-muted-foreground mt-2 text-xs'
-            role='region'
-            aria-live='polite'
+            className="text-muted-foreground mt-2 text-xs"
+            role="region"
+            aria-live="polite"
           >
             {helperText}
           </p>
         )}
 
         {error && (
-          <p
-            id={`${fieldName}-helper`}
-            className='text-destructive mt-2 text-xs'
-            role='alert'
-          >
+          <p id={`${fieldName}-helper`} className="text-destructive mt-2 text-xs" role="alert">
             {error}
           </p>
         )}
@@ -176,14 +167,9 @@ function IGRPDateTimeInput({
         };
 
         return (
-          <div className={cn('*:not-first:mt-2'/*, igrpGridSizeClasses[gridSize]*/)}>
+          <div className={cn('*:not-first:mt-2' /*, igrpGridSizeClasses[gridSize]*/)}>
             {label && (
-              <IGRPLabel
-                label={label}
-                className={className}
-                required={required}
-                id={fieldName}
-              />
+              <IGRPLabel label={label} className={className} required={required} id={fieldName} />
             )}
 
             <Input
@@ -210,20 +196,16 @@ function IGRPDateTimeInput({
             {helperText && !error && !fieldState.error && (
               <p
                 id={`${fieldName}-helper`}
-                className='text-muted-foreground mt-2 text-xs'
-                role='region'
-                aria-live='polite'
+                className="text-muted-foreground mt-2 text-xs"
+                role="region"
+                aria-live="polite"
               >
                 {helperText}
               </p>
             )}
 
             {(error || fieldState.error) && (
-              <p
-                id={`${fieldName}-error`}
-                className='text-destructive mt-2 text-xs'
-                role='alert'
-              >
+              <p id={`${fieldName}-error`} className="text-destructive mt-2 text-xs" role="alert">
                 {error || fieldState.error?.message}
               </p>
             )}

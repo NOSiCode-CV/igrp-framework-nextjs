@@ -12,7 +12,6 @@ import { IGRPLabel } from '../../../igrp/label';
 import { cn } from '../../../../lib/utils';
 import type { IGRPInputProps, IGRPGridSize } from '../../../../types/globals';
 
-
 interface IGRPInputPhoneProps extends Omit<IGRPInputProps, 'onChange' | 'ref'> {
   name: string;
   description?: string;
@@ -30,7 +29,7 @@ interface IGRPInputPhoneProps extends Omit<IGRPInputProps, 'onChange' | 'ref'> {
 function PhoneInput({ className, ...props }: React.ComponentProps<'input'>) {
   return (
     <Input
-      data-slot='phone-input'
+      data-slot="phone-input"
       className={cn('-ms-px rounded-s-none shadow-none focus-visible:z-10', className)}
       {...props}
     />
@@ -50,44 +49,27 @@ function CountrySelect({ disabled, value, onChange, options }: CountrySelectProp
   };
 
   return (
-    <div className='border-input bg-background text-muted-foreground focus-within:border-ring focus-within:ring-ring/50 hover:bg-accent hover:text-foreground has-aria-invalid:border-destructive/60 has-aria-invalid:ring-destructive/20 dark:has-aria-invalid:ring-destructive/40 relative inline-flex items-center self-stretch rounded-s-md border py-2 ps-3 pe-2 transition-[color,box-shadow] outline-none focus-within:z-10 focus-within:ring-[3px] has-disabled:pointer-events-none has-disabled:opacity-50'>
-      <div
-        className='inline-flex items-center gap-1'
-        aria-hidden='true'
-      >
-        <FlagComponent
-          country={value}
-          countryName={value}
-          aria-hidden='true'
-        />
-        <span className='text-muted-foreground/80'>
-          <IGRPIcon
-            iconName='ChevronDown'
-            size={16}
-            aria-hidden='true'
-          />
+    <div className="border-input bg-background text-muted-foreground focus-within:border-ring focus-within:ring-ring/50 hover:bg-accent hover:text-foreground has-aria-invalid:border-destructive/60 has-aria-invalid:ring-destructive/20 dark:has-aria-invalid:ring-destructive/40 relative inline-flex items-center self-stretch rounded-s-md border py-2 ps-3 pe-2 transition-[color,box-shadow] outline-none focus-within:z-10 focus-within:ring-[3px] has-disabled:pointer-events-none has-disabled:opacity-50">
+      <div className="inline-flex items-center gap-1" aria-hidden="true">
+        <FlagComponent country={value} countryName={value} aria-hidden="true" />
+        <span className="text-muted-foreground/80">
+          <IGRPIcon iconName="ChevronDown" size={16} aria-hidden="true" />
         </span>
       </div>
       <select
         disabled={disabled}
         value={value}
         onChange={handleSelect}
-        className='absolute inset-0 text-sm opacity-0'
-        aria-label='Select country'
+        className="absolute inset-0 text-sm opacity-0"
+        aria-label="Select country"
       >
-        <option
-          key='default'
-          value=''
-        >
+        <option key="default" value="">
           Select a country
         </option>
         {options
           .filter((x) => x.value)
           .map((option, i) => (
-            <option
-              key={option.value ?? `empty-${i}`}
-              value={option.value}
-            >
+            <option key={option.value ?? `empty-${i}`} value={option.value}>
               {option.label} {option.value && `+${RPNInput.getCountryCallingCode(option.value)}`}
             </option>
           ))}
@@ -99,15 +81,11 @@ function CountrySelect({ disabled, value, onChange, options }: CountrySelectProp
 function FlagComponent({ country, countryName }: RPNInput.FlagProps) {
   const Flag = flags[country];
   return (
-    <span className='w-5 overflow-hidden rounded-sm'>
+    <span className="w-5 overflow-hidden rounded-sm">
       {Flag ? (
         <Flag title={countryName} />
       ) : (
-        <IGRPIcon
-          iconName='Phone'
-          size={16}
-          aria-hidden='true'
-        />
+        <IGRPIcon iconName="Phone" size={16} aria-hidden="true" />
       )}
     </span>
   );
@@ -151,21 +129,13 @@ function IGRPInputPhone({
 
   if (!formContext) {
     return (
-      <div
-        className={cn('*:not-first:mt-2', className)}
-        dir={dir}
-      >
+      <div className={cn('*:not-first:mt-2', className)} dir={dir}>
         {label && (
-          <IGRPLabel
-            label={label}
-            className={className}
-            required={required}
-            id={fieldName}
-          />
+          <IGRPLabel label={label} className={className} required={required} id={fieldName} />
         )}
 
         <RPNInput.default
-          className='flex rounded-md shadow-xs'
+          className="flex rounded-md shadow-xs"
           international={international}
           flagComponent={FlagComponent}
           countrySelectComponent={CountrySelect}
@@ -181,10 +151,10 @@ function IGRPInputPhone({
         />
 
         {(description || helperText) && !error && (
-          <p className='text-xs text-muted-foreground'>{description || helperText}</p>
+          <p className="text-xs text-muted-foreground">{description || helperText}</p>
         )}
 
-        {error && <p className='text-xs text-destructive'>{error}</p>}
+        {error && <p className="text-xs text-destructive">{error}</p>}
       </div>
     );
   }
@@ -200,16 +170,11 @@ function IGRPInputPhone({
           dir={dir}
         >
           {label && (
-            <IGRPLabel
-              label={label}
-              className={className}
-              required={required}
-              id={fieldName}
-            />
+            <IGRPLabel label={label} className={className} required={required} id={fieldName} />
           )}
 
           <RPNInput.default
-            className='flex rounded-md shadow-xs'
+            className="flex rounded-md shadow-xs"
             international={international}
             flagComponent={FlagComponent}
             countrySelectComponent={CountrySelect}
@@ -229,11 +194,11 @@ function IGRPInputPhone({
           />
 
           {(description || helperText) && !error && !fieldState.error && (
-            <p className='text-xs text-muted-foreground'>{description || helperText}</p>
+            <p className="text-xs text-muted-foreground">{description || helperText}</p>
           )}
 
           {(error || fieldState.error) && (
-            <p className='text-xs text-destructive'>{error || fieldState.error?.message}</p>
+            <p className="text-xs text-destructive">{error || fieldState.error?.message}</p>
           )}
         </div>
       )}

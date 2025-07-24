@@ -11,7 +11,6 @@ import { Form } from '../../primitives/form';
 import { cn } from '../../../lib/utils';
 import { IGRPFormContext } from './form-context';
 
-
 type IGRPFormHandle<TSchema extends z.ZodTypeAny> = UseFormReturn<z.infer<TSchema>> & {
   submit: () => Promise<void>;
   reset: (values?: Partial<z.infer<TSchema>>) => void;
@@ -135,13 +134,9 @@ function IGRPForm<TSchema extends z.ZodType>({
   return (
     <IGRPFormContext.Provider value={{ form, isSubmitting, formError }}>
       <Form {...form}>
-        <form
-          className={className}
-          onSubmit={handleSubmit}
-          noValidate
-        >
+        <form className={className} onSubmit={handleSubmit} noValidate>
           {formError && (
-            <div className='mb-4 p-3 border border-destructive bg-destructive/10 rounded-md text-destructive text-sm'>
+            <div className="mb-4 p-3 border border-destructive bg-destructive/10 rounded-md text-destructive text-sm">
               {formError}
             </div>
           )}

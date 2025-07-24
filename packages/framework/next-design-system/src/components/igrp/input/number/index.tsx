@@ -144,14 +144,9 @@ function IGRPInputNumber({
     const displayValue = getDisplayValue(value);
 
     return (
-      <div className='*:not-first:mt-2'>
+      <div className="*:not-first:mt-2">
         {label && (
-          <IGRPLabel
-            label={label}
-            className={className}
-            required={required}
-            id={fieldName}
-          />
+          <IGRPLabel label={label} className={className} required={required} id={fieldName} />
         )}
         <div
           className={cn(
@@ -165,7 +160,7 @@ function IGRPInputNumber({
           <Input
             id={fieldName}
             name={fieldName}
-            type='text'
+            type="text"
             value={displayValue}
             onChange={(e) => {
               if (onChange) {
@@ -203,36 +198,36 @@ function IGRPInputNumber({
             }}
             onFocus={() => setIsFocused(true)}
             onBlur={() => setIsFocused(false)}
-            className='bg-background text-foreground flex-1 px-3 py-2 tabular-nums outline-none border-none focus-visible:outline-none focus-visible:ring-ring/0 focus-visible:ring-0 rounded-none'
+            className="bg-background text-foreground flex-1 px-3 py-2 tabular-nums outline-none border-none focus-visible:outline-none focus-visible:ring-ring/0 focus-visible:ring-0 rounded-none"
             disabled={disabled}
             readOnly={readOnly}
             aria-invalid={!!(error || validationError || fieldError)}
             aria-valuenow={value}
             aria-valuemin={min}
             aria-valuemax={max}
-            role='spinbutton'
+            role="spinbutton"
             {...props}
           />
           {!readOnly && (
-            <div className='flex h-full flex-col border-l'>
+            <div className="flex h-full flex-col border-l">
               <IGRPButton
-                type='button'
+                type="button"
                 onClick={() => increment(value, onChange)}
                 disabled={disabled || (max !== undefined && value >= max)}
-                className='bg-background text-muted-foreground/80 hover:bg-accent hover:text-foreground flex h-1/2 w-8 items-center justify-center border-b text-xs transition-colors rounded-none'
-                aria-label='Increment'
-                iconName='ChevronUp'
-                size='icon'
+                className="bg-background text-muted-foreground/80 hover:bg-accent hover:text-foreground flex h-1/2 w-8 items-center justify-center border-b text-xs transition-colors rounded-none"
+                aria-label="Increment"
+                iconName="ChevronUp"
+                size="icon"
                 iconSize={10}
               />
               <IGRPButton
-                type='button'
+                type="button"
                 onClick={() => decrement(value, onChange)}
                 disabled={disabled || (min !== undefined && value <= min)}
-                className='bg-background text-muted-foreground/80 hover:bg-accent hover:text-foreground flex h-1/2 w-8 items-center justify-center text-xs transition-colors rounded-none'
-                aria-label='Decrement'
-                iconName='ChevronDown'
-                size='icon'
+                className="bg-background text-muted-foreground/80 hover:bg-accent hover:text-foreground flex h-1/2 w-8 items-center justify-center text-xs transition-colors rounded-none"
+                aria-label="Decrement"
+                iconName="ChevronDown"
+                size="icon"
                 iconSize={10}
               />
             </div>
@@ -250,20 +245,13 @@ function IGRPInputNumber({
         {renderNumberInput(localValue)}
 
         {helperOrDescription && !error && !validationError && (
-          <p
-            className='text-muted-foreground mt-2 text-xs'
-            role='region'
-            aria-live='polite'
-          >
+          <p className="text-muted-foreground mt-2 text-xs" role="region" aria-live="polite">
             {helperOrDescription}
           </p>
         )}
 
         {(error || validationError) && (
-          <p
-            className='text-destructive mt-2 text-xs'
-            role='alert'
-          >
+          <p className="text-destructive mt-2 text-xs" role="alert">
             {error || errorMessage}
           </p>
         )}
@@ -288,20 +276,13 @@ function IGRPInputNumber({
           )}
 
           {helperOrDescription && !error && !fieldState.error && !validationError && (
-            <p
-              className='text-muted-foreground mt-2 text-xs'
-              role='region'
-              aria-live='polite'
-            >
+            <p className="text-muted-foreground mt-2 text-xs" role="region" aria-live="polite">
               {helperOrDescription}
             </p>
           )}
 
           {(error || fieldState.error || validationError) && (
-            <p
-              className='text-destructive mt-2 text-xs'
-              role='alert'
-            >
+            <p className="text-destructive mt-2 text-xs" role="alert">
               {error || fieldState.error?.message || errorMessage}
             </p>
           )}

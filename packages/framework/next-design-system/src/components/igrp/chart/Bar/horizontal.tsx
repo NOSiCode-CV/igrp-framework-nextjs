@@ -67,32 +67,26 @@ function IGRPHorizontalBarChart({
       style={backgroundColor ? { backgroundColor } : undefined}
     >
       {(title || description) && (
-        <div className='pb-3'>
-          {title && <div className='text-xl font-semibold'>{title}</div>}
-          {description && <div className='text-sm text-muted-foreground'>{description}</div>}
+        <div className="pb-3">
+          {title && <div className="text-xl font-semibold">{title}</div>}
+          {description && <div className="text-sm text-muted-foreground">{description}</div>}
         </div>
       )}
 
-      <div className='overflow-hidden'>
-        <div
-          style={{ height: chartHeight, width: chartWidth }}
-          className='w-full overflow-hidden'
-        >
-          <ChartContainer
-            className='h-full w-full'
-            config={chartConfig}
-          >
+      <div className="overflow-hidden">
+        <div style={{ height: chartHeight, width: chartWidth }} className="w-full overflow-hidden">
+          <ChartContainer className="h-full w-full" config={chartConfig}>
             <BarChart
               accessibilityLayer
               data={data}
-              layout='horizontal'
+              layout="horizontal"
               margin={{ top: 10, right: 10, left: 10, bottom: 10 }}
               barCategoryGap={barCategoryGap}
               barGap={barGap}
             >
               {showGrid && (
                 <CartesianGrid
-                  strokeDasharray='3 3'
+                  strokeDasharray="3 3"
                   stroke={gridColor}
                   horizontal={true}
                   vertical={false}
@@ -101,7 +95,7 @@ function IGRPHorizontalBarChart({
 
               <XAxis
                 dataKey={categoryKey}
-                type='category'
+                type="category"
                 tickLine={false}
                 tickMargin={10}
                 axisLine={false}
@@ -112,7 +106,7 @@ function IGRPHorizontalBarChart({
               />
 
               <YAxis
-                type='number'
+                type="number"
                 domain={valueDomain || (hasNegativeDataValues ? ['auto', 'auto'] : [0, 'auto'])}
                 tickFormatter={formatValue}
                 hide={hideAxis || hideYAxis}
@@ -122,10 +116,7 @@ function IGRPHorizontalBarChart({
               />
 
               {showReferenceZero && hasNegativeDataValues && (
-                <ReferenceLine
-                  y={0}
-                  stroke={referenceLineColor}
-                />
+                <ReferenceLine y={0} stroke={referenceLineColor} />
               )}
 
               {showTooltip && (
@@ -149,7 +140,7 @@ function IGRPHorizontalBarChart({
                   verticalAlign={getLegendVerticalAlign(legendPosition)}
                   align={getLegendHorizontalAlign(legendPosition)}
                   layout={getLegendLayout(legendPosition)}
-                  content={<ChartLegendContent className='text-xs' />}
+                  content={<ChartLegendContent className="text-xs" />}
                 />
               )}
 
@@ -180,9 +171,9 @@ function IGRPHorizontalBarChart({
       </div>
 
       {footer && (
-        <div className='flex-col items-start gap-2 text-sm pt-4'>
+        <div className="flex-col items-start gap-2 text-sm pt-4">
           {footer.description && (
-            <div className='leading-none text-muted-foreground'>{footer.description}</div>
+            <div className="leading-none text-muted-foreground">{footer.description}</div>
           )}
         </div>
       )}

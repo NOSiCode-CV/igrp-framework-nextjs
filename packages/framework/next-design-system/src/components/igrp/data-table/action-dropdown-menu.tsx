@@ -24,7 +24,6 @@ import { cn } from '../../../lib/utils';
 import { type IGRPPlacementProps } from '../../../types/globals';
 import { type IGRPDataTableDialogProps, type IGRPDataTableLinkProps } from './row-actions';
 
-
 interface IGRPDataTableDropdownProps {
   showIcon?: boolean;
   iconPlacement?: IGRPPlacementProps;
@@ -72,10 +71,7 @@ function IGRPDataTableDropdownMenuAlert({
   };
 
   return (
-    <AlertDialog
-      open={open}
-      onOpenChange={setOpen}
-    >
+    <AlertDialog open={open} onOpenChange={setOpen}>
       <AlertDialogTrigger asChild>
         <IGRPDataTableDropdownMenuItem
           showIcon={showIcon}
@@ -141,32 +137,20 @@ function IGRPDataTableDropdownMenuLink({
   const renderContent = () => (
     <>
       {showIcon && (
-        <IGRPIcon
-          iconName={icon}
-          className={cn('text-muted-foreground', iconClassName)}
-        />
+        <IGRPIcon iconName={icon} className={cn('text-muted-foreground', iconClassName)} />
       )}
       <span>{labelTrigger}</span>
     </>
   );
 
   return href ? (
-    <DropdownMenuItem
-      onSelect={(e) => e.preventDefault()}
-      asChild
-    >
-      <Link
-        href={href}
-        className={customClss}
-      >
+    <DropdownMenuItem onSelect={(e) => e.preventDefault()} asChild>
+      <Link href={href} className={customClss}>
         {renderContent()}
       </Link>
     </DropdownMenuItem>
   ) : (
-    <DropdownMenuItem
-      className={customClss}
-      onSelect={handlerAction}
-    >
+    <DropdownMenuItem className={customClss} onSelect={handlerAction}>
       {renderContent()}
     </DropdownMenuItem>
   );
@@ -197,10 +181,7 @@ function IGRPDataTableDropdownMenuCustom({
       onSelect={handlerAction}
     >
       {showIcon && (
-        <IGRPIcon
-          iconName={icon}
-          className={cn('text-muted-foreground', iconClassName)}
-        />
+        <IGRPIcon iconName={icon} className={cn('text-muted-foreground', iconClassName)} />
       )}
       <span>{labelTrigger}</span>
     </DropdownMenuItem>
@@ -234,10 +215,7 @@ function IGRPDataTableDropdownMenuItem({
       }}
     >
       {showIcon && (
-        <IGRPIcon
-          iconName={icon}
-          className={cn('text-muted-foreground', iconClassName)}
-        />
+        <IGRPIcon iconName={icon} className={cn('text-muted-foreground', iconClassName)} />
       )}
       <span>{labelTrigger}</span>
     </DropdownMenuItem>
@@ -257,21 +235,12 @@ type IGRPDataTableActionDropdown =
 function IGRPDataTableDropdownMenu({ items }: { items: IGRPDataTableActionDropdown[] }) {
   return (
     <DropdownMenu>
-      <DropdownMenuTrigger
-        className='flex items-center justify-center'
-        aria-label='Open actions'
-      >
-        <IGRPIcon
-          iconName='Ellipsis'
-          className='shadow-none'
-        />
+      <DropdownMenuTrigger className="flex items-center justify-center" aria-label="Open actions">
+        <IGRPIcon iconName="Ellipsis" className="shadow-none" />
       </DropdownMenuTrigger>
-      <DropdownMenuContent align='end'>
+      <DropdownMenuContent align="end">
         {items.map(({ component: Component, props }, index) => (
-          <Component
-            key={index}
-            {...props}
-          />
+          <Component key={index} {...props} />
         ))}
       </DropdownMenuContent>
     </DropdownMenu>

@@ -81,7 +81,7 @@ function IGRPInfoCard({
           {title}
         </CardTitle>
       </CardHeader>
-      <CardContent className='space-y-4'>
+      <CardContent className="space-y-4">
         {sections.map((section, sectionIndex) => (
           <Fragment key={sectionIndex}>
             {section.items.map((item, itemIndex) => (
@@ -124,14 +124,11 @@ function IGRPInfoField({
         // igrpInfoCardVariants({ size, weight, spacing }),
       )}
     >
-      <span className='text-sm font-medium'>{item.label}</span>
-      <div className='flex items-center gap-2'>
+      <span className="text-sm font-medium">{item.label}</span>
+      <div className="flex items-center gap-2">
         {item.showIcon && item.icon && (
-          <div className='flex items-center gap-2'>
-            <IGRPIcon
-              iconName={item.icon}
-              className={item.iconClassName}
-            />
+          <div className="flex items-center gap-2">
+            <IGRPIcon iconName={item.icon} className={item.iconClassName} />
           </div>
         )}
         <span>{item.text}</span>

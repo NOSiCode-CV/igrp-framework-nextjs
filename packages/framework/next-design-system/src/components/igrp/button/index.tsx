@@ -44,26 +44,18 @@ function IGRPButton({
 
   if (size === 'icon') {
     return (
-      <Button
-        {...props}
-        className={className}
-        disabled={disabled || loading}
-        type={type}
-      >
+      <Button {...props} className={className} disabled={disabled || loading} type={type}>
         {loading ? (
           <>
-            <Loader2
-              className='h-4 w-4 animate-spin'
-              aria-hidden='true'
-            />
-            <span className='sr-only'>{loadingText}</span>
+            <Loader2 className="h-4 w-4 animate-spin" aria-hidden="true" />
+            <span className="sr-only">{loadingText}</span>
           </>
         ) : (
           <IGRPIcon
             iconName={iconName}
             className={iconClassName}
             size={computedIconSize}
-            aria-hidden='true'
+            aria-hidden="true"
           />
         )}
       </Button>
@@ -80,10 +72,7 @@ function IGRPButton({
       type={type}
     >
       {loading && iconPlacement === 'start' ? (
-        <Loader2
-          className='mr-2 h-4 w-4 animate-spin'
-          aria-hidden='true'
-        />
+        <Loader2 className="mr-2 h-4 w-4 animate-spin" aria-hidden="true" />
       ) : (
         showIcon &&
         iconPlacement === 'start' && (
@@ -91,7 +80,7 @@ function IGRPButton({
             iconName={iconName}
             className={cn('mr-2', iconClassName)}
             size={computedIconSize}
-            aria-hidden='true'
+            aria-hidden="true"
           />
         )
       )}
@@ -103,15 +92,12 @@ function IGRPButton({
           iconName={iconName}
           className={cn('ml-2', iconClassName)}
           size={computedIconSize}
-          aria-hidden='true'
+          aria-hidden="true"
         />
       )}
 
       {loading && iconPlacement === 'end' && (
-        <Loader2
-          className='ml-2 h-4 w-4 animate-spin'
-          aria-hidden='true'
-        />
+        <Loader2 className="ml-2 h-4 w-4 animate-spin" aria-hidden="true" />
       )}
     </Button>
   );

@@ -5,12 +5,7 @@ interface IGRPSeparatorProps extends React.ComponentProps<typeof Separator> {
 }
 
 function IGRPSeparator({ name, ...props }: IGRPSeparatorProps) {
-  return (
-    <Separator
-      id={name}
-      {...props}
-    />
-  );
+  return <Separator id={name} {...props} />;
 }
 
 export { IGRPSeparator };

@@ -7,7 +7,7 @@ import { Button } from '../horizon/button';
 import { META_THEME_COLORS, useMetaColor } from '../../hooks/use-meta-color';
 
 export function IGRPModeSwitcher() {
-  const { theme,setTheme, resolvedTheme } = useTheme();
+  const { theme, setTheme, resolvedTheme } = useTheme();
   const { setMetaColor } = useMetaColor();
 
   const toggleTheme = React.useCallback(() => {
@@ -16,7 +16,7 @@ export function IGRPModeSwitcher() {
   }, [resolvedTheme, setTheme, setMetaColor]);
 
   return (
-    <Button variant="ghost" size="icon" className="group/toggle size-6" onClick={toggleTheme}>      
+    <Button variant="ghost" size="icon" className="group/toggle size-6" onClick={toggleTheme}>
       {theme === 'dark' ? <Sun strokeWidth={2} /> : <Moon strokeWidth={2} />}
       <span className="sr-only">Toggle theme</span>
     </Button>

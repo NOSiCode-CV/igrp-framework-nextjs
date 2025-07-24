@@ -338,7 +338,7 @@ function IGRPStatsCard({
       onKeyDown={handleKeyDown}
       {...props}
     >
-      <div className='flex flex-col flex-1 mx-4'>
+      <div className="flex flex-col flex-1 mx-4">
         {title && (
           <p
             className={cn(
@@ -406,21 +406,10 @@ function IGRPStatsCardIcon({
 
   const content = () => {
     if (image) {
-      return (
-        <Image
-          src={image}
-          alt={imageAlt || ''}
-          className='h-full w-full object-cover'
-        />
-      );
+      return <Image src={image} alt={imageAlt || ''} className="h-full w-full object-cover" />;
     }
     if (showIcon && iconName) {
-      return (
-        <IGRPIcon
-          iconName={iconName}
-          className='h-6 w-6'
-        />
-      );
+      return <IGRPIcon iconName={iconName} className="h-6 w-6" />;
     }
     return null;
   };

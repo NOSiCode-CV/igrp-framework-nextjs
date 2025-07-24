@@ -27,7 +27,6 @@ import { cn } from '../../../lib/utils';
 import { igrpModalDialogContentVariants } from '../modal-dialog';
 import { type IGRPDataTableDialogProps, type IGRPDataTableLinkProps } from './row-actions';
 
-
 function IGRPDataTableButtonAlert({
   labelTrigger,
   classNameTrigger,
@@ -52,7 +51,7 @@ function IGRPDataTableButtonAlert({
       <AlertDialogTrigger asChild>
         <IGRPButton
           variant={variant}
-          size='icon'
+          size="icon"
           className={cn('h-8 w-8 flex justify-center items-center', classNameTrigger)}
           title={labelTrigger}
           iconName={icon}
@@ -107,28 +106,20 @@ function IGRPDataTableButtonLink({
   className,
 }: IGRPDataTableLinkProps) {
   return href ? (
-    <Button
-      variant={variant}
-      size='icon'
-      className={cn('cursor-pointer', className)}
-      asChild
-    >
-      <Link
-        href={href}
-        className='flex items-center'
-      >
+    <Button variant={variant} size="icon" className={cn('cursor-pointer', className)} asChild>
+      <Link href={href} className="flex items-center">
         <IGRPIcon iconName={icon} />
-        <span className='sr-only'>{labelTrigger}</span>
+        <span className="sr-only">{labelTrigger}</span>
       </Link>
     </Button>
   ) : (
     <IGRPButton
       variant={variant}
-      size='icon'
+      size="icon"
       className={className}
       onClick={action}
       iconName={icon}
-      iconClassName='size-4'
+      iconClassName="size-4"
       title={labelTrigger}
     />
   );
@@ -157,8 +148,8 @@ function IGRPDataTableButtonModal({
       <DialogTrigger asChild>
         <IGRPButton
           variant={variant}
-          size='icon'
-          className='h-8 w-8 flex justify-center items-center'
+          size="icon"
+          className="h-8 w-8 flex justify-center items-center"
           title={labelTrigger}
           iconName={icon}
         />
@@ -170,7 +161,7 @@ function IGRPDataTableButtonModal({
           className,
         )}
       >
-        <DialogHeader className='contents space-y-0 text-left'>
+        <DialogHeader className="contents space-y-0 text-left">
           <DialogTitle className={cn(modalTitle && 'border-b px-6 py-4 text-base')}>
             {modalTitle}
           </DialogTitle>
@@ -179,7 +170,7 @@ function IGRPDataTableButtonModal({
             <DialogDescription asChild>{children}</DialogDescription>
 
             {(showCancel || showConfirm) && (
-              <DialogFooter className='px-6 pb-6 sm:justify-start mt-4'>
+              <DialogFooter className="px-6 pb-6 sm:justify-start mt-4">
                 <DialogClose
                   className={cn(
                     buttonVariants({ variant: variantCancel }),

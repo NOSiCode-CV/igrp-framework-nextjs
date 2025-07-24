@@ -38,7 +38,7 @@ function IGRPSheet({
     <Sheet open={openSheet}>
       {useTrigger && (
         <SheetTrigger asChild>
-          <Button variant='default'>{labelTrigger}</Button>
+          <Button variant="default">{labelTrigger}</Button>
         </SheetTrigger>
       )}
       <SheetContent

@@ -78,15 +78,12 @@ function IGRPChat({ apiEndpoint, labelDescription = 'Ask me anything!' }: IGRPCh
   }, [apiEndpoint, input, isLoading, messages]);
 
   return (
-    <div className='flex flex-col h-full'>
-      <ScrollArea className='pr-4 h-[80%]'>
-        <div className='space-y-4'>
+    <div className="flex flex-col h-full">
+      <ScrollArea className="pr-4 h-[80%]">
+        <div className="space-y-4">
           {messages.length === 0 && (
-            <div className='flex flex-col items-center justify-center h-40 text-muted-foreground'>
-              <IGRPIcon
-                iconName='Bot'
-                className='h-12 w-12 mb-2 opacity-20'
-              />
+            <div className="flex flex-col items-center justify-center h-40 text-muted-foreground">
+              <IGRPIcon iconName="Bot" className="h-12 w-12 mb-2 opacity-20" />
               <p>{labelDescription}</p>
             </div>
           )}
@@ -105,33 +102,23 @@ function IGRPChat({ apiEndpoint, labelDescription = 'Ask me anything!' }: IGRPCh
                 )}
               >
                 {message.role === 'user' ? (
-                  <IGRPIcon
-                    iconName='User'
-                    className='h-4 w-4 text-primary-foreground'
-                  />
+                  <IGRPIcon iconName="User" className="h-4 w-4 text-primary-foreground" />
                 ) : (
-                  <IGRPIcon
-                    iconName='Bot'
-                    className='h-4 w-4'
-                  />
+                  <IGRPIcon iconName="Bot" className="h-4 w-4" />
                 )}
               </div>
 
-              <div className='rounded-lg px-4 py-2 max-w-[80%] bg-muted'>
+              <div className="rounded-lg px-4 py-2 max-w-[80%] bg-muted">
                 {message.type === 'text' && <p>{message.content} </p>}
                 {message.type === 'image' && (
-                  <img
-                    src={message.content}
-                    alt='Sent content'
-                    className='max-w-full rounded'
-                  />
+                  <img src={message.content} alt="Sent content" className="max-w-full rounded" />
                 )}
                 {message.type === 'link' && (
                   <a
                     href={message.content}
-                    className='text-blue-500 underline'
-                    target='_blank'
-                    rel='noopener noreferrer'
+                    className="text-blue-500 underline"
+                    target="_blank"
+                    rel="noopener noreferrer"
                   >
                     {message.content}
                   </a>
@@ -149,20 +136,20 @@ function IGRPChat({ apiEndpoint, labelDescription = 'Ask me anything!' }: IGRPCh
           e.preventDefault();
           sendMessage();
         }}
-        className='flex gap-2 mt-4 pt-4 border-t'
+        className="flex gap-2 mt-4 pt-4 border-t"
       >
         <IGRPInputText
           value={input}
           onChange={(e) => setInput(e.target.value)}
-          placeholder='Type your message...'
+          placeholder="Type your message..."
           disabled={isLoading}
-          className='flex-1'
-          type='text'
+          className="flex-1"
+          type="text"
         />
         <IGRPButton
-          type='submit'
+          type="submit"
           disabled={isLoading}
-          size='icon'
+          size="icon"
           iconName={isLoading ? 'Loader' : 'Send'}
           iconClassName={isLoading ? 'animate-spin h-4 w-4' : 'h-4 w-4'}
         />

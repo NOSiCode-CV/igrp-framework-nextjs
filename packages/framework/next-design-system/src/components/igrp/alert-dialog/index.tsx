@@ -72,13 +72,10 @@ function IGRPAlertDialog({
   };
 
   return (
-    <AlertDialog
-      open={open}
-      onOpenChange={onOpenChange}
-    >
+    <AlertDialog open={open} onOpenChange={onOpenChange}>
       <AlertDialogContent className={className}>
         {showIcon && iconPlacement === 'center' && (
-          <div className='flex justify-center -mt-2'>
+          <div className="flex justify-center -mt-2">
             <AlertIcon
               iconName={iconName || iconDefault}
               bgClass={softColors.bg}
@@ -101,7 +98,7 @@ function IGRPAlertDialog({
               iconPlacement={iconPlacement}
             />
           )}
-          <div className='flex-1'>
+          <div className="flex-1">
             <AlertDialogHeader className={cn(iconPlacement === 'center' && 'items-center')}>
               {title && <AlertDialogTitle className={cn(titleClassName)}>{title}</AlertDialogTitle>}
               {description && (
@@ -124,10 +121,7 @@ function IGRPAlertDialog({
               )}
             >
               {showCancel && (
-                <AlertDialogCancel
-                  onClick={handleCancel}
-                  {...cancelProps}
-                >
+                <AlertDialogCancel onClick={handleCancel} {...cancelProps}>
                   {cancelLabel}
                 </AlertDialogCancel>
               )}
@@ -162,10 +156,7 @@ function AlertIcon({ bgClass, iconPlacement, iconName, textClass }: AlertIconPro
         iconPlacement === 'center' && 'mx-auto',
       )}
     >
-      <IGRPIcon
-        iconName={iconName}
-        className={cn('h-6 w-6', textClass)}
-      />
+      <IGRPIcon iconName={iconName} className={cn('h-6 w-6', textClass)} />
     </div>
   );
 }

@@ -77,13 +77,13 @@ function IGRPDatePickerRange({
     >
       <IGRPButton
         id={fieldName}
-        variant='link'
-        className='underline-offset-0 hover:no-underline'
+        variant="link"
+        className="underline-offset-0 hover:no-underline"
         disabled={disabledPicker}
-        iconName='Calendar'
-        iconClassName='text-muted-foreground/80 group-hover:text-foreground shrink-0 transition-colors'
+        iconName="Calendar"
+        iconClassName="text-muted-foreground/80 group-hover:text-foreground shrink-0 transition-colors"
         showIcon={localDate ? false : true}
-        iconPlacement='end'
+        iconPlacement="end"
       >
         <span className={cn('truncate', !value && 'text-muted-foreground')}>
           {getDisplayDate(value)}
@@ -99,7 +99,7 @@ function IGRPDatePickerRange({
     <>
       <Popover>
         <PopoverTrigger asChild>{DateButton(fieldValue)}</PopoverTrigger>
-        <PopoverContent className='p-0 w-auto bg-popover'>
+        <PopoverContent className="p-0 w-auto bg-popover">
           <IGRPCalendarRange
             {...props}
             id={id}
@@ -120,10 +120,10 @@ function IGRPDatePickerRange({
             setLocalDate(undefined);
             onDateChange?.(undefined);
           }}
-          variant='link'
-          className='size-2 absolute right-2 top-1/2 h-3 w-3 -translate-y-1/2 text-muted-foreground z-100'
-          size='icon'
-          iconName='X'
+          variant="link"
+          className="size-2 absolute right-2 top-1/2 h-3 w-3 -translate-y-1/2 text-muted-foreground z-100"
+          size="icon"
+          iconName="X"
           iconSize={10}
           disabled={disabledPicker}
           showIcon={localDate ? true : false}
@@ -161,16 +161,11 @@ function IGRPDatePickerRange({
   return (
     <div className={cn('*:not-first:mt-2', /*igrpGridSizeClasses[gridSize],*/ className)}>
       {label && (
-        <IGRPLabel
-          label={label}
-          required={required}
-          id={name}
-          className={labelClassName}
-        />
+        <IGRPLabel label={label} required={required} id={name} className={labelClassName} />
       )}
-      <div className='relative'>{renderPicker(localDate, onDateChange)}</div>
-      {helperText && !error && <p className='text-sm text-muted-foreground mt-1'>{helperText}</p>}
-      {error && <p className='text-sm text-destructive mt-1'>{error}</p>}
+      <div className="relative">{renderPicker(localDate, onDateChange)}</div>
+      {helperText && !error && <p className="text-sm text-muted-foreground mt-1">{helperText}</p>}
+      {error && <p className="text-sm text-destructive mt-1">{error}</p>}
     </div>
   );
 }

@@ -15,28 +15,28 @@ import {
 } from '../primitives/dropdown-menu';
 
 const notifications = [
-    {
-      id: 1,
-      title: 'New user registered',
-      description: 'A new user has registered to the platform.',
-      time: '2 minutes ago',
-    },
-    {
-      id: 2,
-      title: 'System update completed',
-      description: 'The system update has been successfully completed.',
-      time: '1 hour ago',
-    },
-    {
-      id: 3,
-      title: 'Maintenance scheduled',
-      description: 'System maintenance scheduled for tomorrow at 2 AM.',
-      time: '3 hours ago',
-    },
-  ];
+  {
+    id: 1,
+    title: 'New user registered',
+    description: 'A new user has registered to the platform.',
+    time: '2 minutes ago',
+  },
+  {
+    id: 2,
+    title: 'System update completed',
+    description: 'The system update has been successfully completed.',
+    time: '1 hour ago',
+  },
+  {
+    id: 3,
+    title: 'Maintenance scheduled',
+    description: 'System maintenance scheduled for tomorrow at 2 AM.',
+    time: '3 hours ago',
+  },
+];
 
 export function Notifications() {
-  const [notificationCount, setNotificationCount] = React.useState(3);  
+  const [notificationCount, setNotificationCount] = React.useState(3);
 
   const markAsRead = () => {
     setNotificationCount(0);

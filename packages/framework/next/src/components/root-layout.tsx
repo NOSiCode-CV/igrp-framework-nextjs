@@ -1,4 +1,4 @@
-import { IGRPRootProviders } from '@igrp/framework-next-ui';
+import { IGRPRootProviders } from '@igrp/framework-next-design-system';
 
 import { setAccessClientConfig } from '../lib/api-config';
 import { cn } from '../lib/utils';

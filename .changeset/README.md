@@ -12,7 +12,7 @@ This monorepo uses [Changesets](https://github.com/changesets/changesets) for co
 packages/
   framework/
     next/         → @igrp/framework-next
-    next-ui/      → @igrp/framework-next-ui
+    next-ui/      → @igrp/framework-next-design-system
     next-types/   → @igrp/framework-next-types
 apps/
   ...
@@ -45,7 +45,7 @@ Update `.changeset/config.json` like this:
   "fixed": [
     [
       "@igrp/framework-next",
-      "@igrp/framework-next-ui",
+      "@igrp/framework-next-design-system",
       "@igrp/framework-next-types"
     ]
   ],

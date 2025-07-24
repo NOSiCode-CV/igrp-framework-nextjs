@@ -12,7 +12,7 @@
     "clean": "pnpm -r run clean",
     "format": "pnpm -r run format",
     "build:framework": "pnpm --filter @igrp/framework-next build",
-    "build:framework-ui": "pnpm --filter @igrp/framework-next-ui build",
+    "build:framework-ui": "pnpm --filter @igrp/framework-next-design-system build",
     "build:framework-types": "pnpm --filter @igrp/framework-next-types build",
     "dev:framework": "pnpm --filter @igrp/framework-next dev",
     "run:framework": "pnpm build:framework-types && pnpm build:framework-ui && pnpm build:framework",

@@ -1,5 +1,6 @@
 export { buildConfig } from './config/build';
 
-export * from './components';
+export { IGRPRootLayout } from './components/root-layout';
+export { IGRPGlobalLoading } from './components/glabal-loading';
 
 export { buildQueryString } from './lib/build-query-string';

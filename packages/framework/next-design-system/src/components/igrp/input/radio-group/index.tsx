@@ -5,7 +5,7 @@ import { useFormContext } from 'react-hook-form';
 import { type VariantProps } from 'class-variance-authority';
 
 import { RadioGroup, RadioGroupItem, radioItemVariants } from '../../../horizon/radio-group';
-import { IGRPFormField } from '../../../igrp/form';
+import { IGRPFormField } from '../../../igrp/form/form-field';
 import { IGRPLabel } from '../../../igrp/label';
 // import { igrpGridSizeClasses } from '../../../../lib/constants';
 import { cn } from '../../../../lib/utils';

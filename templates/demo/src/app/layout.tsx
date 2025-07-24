@@ -2,7 +2,7 @@ import '@/styles/globals.css';
 
 import type { Metadata, Viewport } from 'next';
 import { IGRPRootLayout } from '@igrp/framework-next';
-import { META_THEME_COLORS } from '@igrp/framework-next-design-system';
+import { IGRP_META_THEME_COLORS } from '@igrp/framework-next-design-system';
 
 import { configLayout } from '@/actions/igrp/layout';
 import { createConfig } from '@igrp/template-config';
@@ -14,7 +14,7 @@ export const metadata: Metadata = {
 };
 
 export const viewport: Viewport = {
-  themeColor: META_THEME_COLORS.light,
+  themeColor: IGRP_META_THEME_COLORS.light,
 };
 
 export default async function RootLayout({ children }: Readonly<{ children: React.ReactNode }>) {

@@ -1,4 +1,4 @@
-type ClientRuntimeConfig = {
+export type ClientRuntimeConfig = {
   token: string;
   baseUrl: string;
   timeout?: number;

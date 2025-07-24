@@ -15,7 +15,7 @@ import {
 import { Popover, PopoverContent, PopoverTrigger } from '../../../primitives/popover';
 import { IGRPButton } from '../../../igrp/button';
 import { IGRPFieldDescription } from '../../../igrp/field-description';
-import { IGRPFormField } from '../../../igrp/form';
+import { IGRPFormField } from '../../../igrp/form/form-field';
 import { IGRPLabel } from '../../../igrp/label';
 import { IGRPIcon } from '../../../igrp/icon';
 import { IGRPCircleFull } from '../../../igrp/icon/custom';

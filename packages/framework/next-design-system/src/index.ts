@@ -480,5 +480,3 @@ export type {
 } from '@tanstack/react-table';
 
 export type { DateRange } from 'react-day-picker';
-
-export * from 'zod';

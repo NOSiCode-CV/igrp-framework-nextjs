@@ -2,11 +2,12 @@
 
 import { useId } from 'react';
 import { useFormContext, Controller } from 'react-hook-form';
-import { Textarea } from '@/components/primitives/textarea';
-import { IGRPLabel } from '@/components/igrp/label';
-import { cn } from '@/lib/utils';
-import type { IGRPInputProps, IGRPGridSize } from '@/types/globals';
-import { igrpGridSizeClasses } from '@/lib/constants';
+
+import { Textarea } from '../../../primitives/textarea';
+import { IGRPLabel } from '../../../igrp/label';
+// import { igrpGridSizeClasses } from '../../../../lib/constants';
+import { cn } from '../../../../lib/utils';
+import type { IGRPInputProps, IGRPGridSize } from '../../../../types/globals';
 
 interface IGRPTextareaProps
   extends React.ComponentProps<'textarea'>,
@@ -94,7 +95,7 @@ function IGRPTextarea({
       name={fieldName}
       control={formContext.control}
       render={({ field, fieldState }) => (
-        <div className={cn('*:not-first:mt-2', igrpGridSizeClasses[gridSize])}>
+        <div className={cn('*:not-first:mt-2'/*, igrpGridSizeClasses[gridSize]*/)}>
           {label && (
             <IGRPLabel
               label={label}

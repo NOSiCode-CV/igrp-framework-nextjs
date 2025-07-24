@@ -1,11 +1,12 @@
 import { type ReactNode } from 'react';
 import { type VariantProps } from 'class-variance-authority';
-import { buttonVariants } from '@/components/horizon/button';
-import { type IGRPIconName } from '@/components/igrp/icon';
-import type { igrpModalDialogContentVariants } from '@/components/igrp/modal-dialog';
+
+import { buttonVariants } from '../../horizon/button';
+import { type IGRPIconName } from '../../igrp/icon';
+import type { igrpModalDialogContentVariants } from '../../igrp/modal-dialog';
 
 interface IGRPDataTableActionProps {
-  labelTrigger: string;
+  labelTrigger?: string;
   classNameTrigger?: string;
   icon?: IGRPIconName | string;
   iconClassName?: string;

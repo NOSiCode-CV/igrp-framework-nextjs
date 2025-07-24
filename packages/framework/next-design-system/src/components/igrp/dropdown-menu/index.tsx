@@ -14,7 +14,7 @@ import {
   DropdownMenuSub,
   DropdownMenuSubTrigger,
   DropdownMenuSubContent,
-} from '@/components/primitives/dropdown-menu';
+} from '../../primitives/dropdown-menu';
 
 function IGRPDropdownMenu({ ...props }: React.ComponentProps<typeof DropdownMenu>) {
   return <DropdownMenu {...props} />;

@@ -1,4 +1,4 @@
-export function isExternalUrl(url: string): boolean {
+export function igrpIsExternalUrl(url: string): boolean {
   if (!url) return false;
 
   try {
@@ -9,7 +9,7 @@ export function isExternalUrl(url: string): boolean {
   }
 }
 
-export function normalizeUrl(url: string): string {
+export function igrpNormalizeUrl(url: string): string {
   if (!url) return '';
 
   if (url.startsWith('http://') || url.startsWith('https://')) return url;

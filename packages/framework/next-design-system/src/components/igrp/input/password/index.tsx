@@ -3,12 +3,12 @@
 import { useId, useState, useEffect } from 'react';
 import { useFormContext, Controller } from 'react-hook-form';
 
-import { Input } from '@/components/horizon/input';
-import { IGRPButton } from '@/components/igrp/button';
-import { IGRPLabel } from '@/components/igrp/label';
-import type { IGRPInputProps, IGRPGridSize } from '@/types/globals';
-import { cn } from '@/lib/utils';
-import { igrpGridSizeClasses } from '@/lib/constants';
+import { Input } from '../../../horizon/input';
+import { IGRPButton } from '../../../igrp/button';
+import { IGRPLabel } from '../../../igrp/label';
+// import { igrpGridSizeClasses } from '../../../../lib/constants';
+import { cn } from '../../../../lib/utils';
+import type { IGRPInputProps, IGRPGridSize } from '../../../../types/globals';
 
 interface IGRPInputPasswordProps extends Omit<IGRPInputProps, 'onChange'> {
   name: string;
@@ -134,7 +134,7 @@ function IGRPInputPassword({
       control={formContext.control}
       defaultValue={defaultValue || ''}
       render={({ field, fieldState }) => (
-        <div className={cn('*:not-first:mt-2', igrpGridSizeClasses[gridSize])}>
+        <div className={cn('*:not-first:mt-2'/*, igrpGridSizeClasses[gridSize]*/)}>
           {label && (
             <IGRPLabel
               label={label}

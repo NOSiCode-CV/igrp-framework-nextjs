@@ -11,6 +11,8 @@ import {
   type Dispatch,
 } from 'react';
 import { useFormContext } from 'react-hook-form';
+import { Circle } from 'lucide-react';
+
 import {
   FormControl,
   FormDescription,
@@ -18,7 +20,7 @@ import {
   FormItem,
   FormLabel,
   FormMessage,
-} from '@/components/primitives/form';
+} from '../../..//primitives/form';
 import {
   Select,
   SelectContent,
@@ -27,15 +29,15 @@ import {
   SelectLabel,
   SelectTrigger,
   SelectValue,
-} from '@/components/primitives/select';
-import { Input } from '@/components/horizon/input';
-import { IGRPButton } from '@/components/igrp/button';
-import { IGRPIcon } from '@/components/igrp/icon';
-import { IGRPLabel } from '@/components/igrp/label';
-import { Circle } from 'lucide-react';
-import { cn, igrpColorText } from '@/lib/utils';
-import type { IGRPBaseAttributes, IGRPGridSize, IGRPOptionsProps } from '@/types/globals';
-import { igrpGridSizeClasses } from '@/lib/constants';
+} from '../../..//primitives/select';
+import { Input } from '../../..//horizon/input';
+import { IGRPButton } from '../../..//igrp/button';
+import { IGRPIcon } from '../../..//igrp/icon';
+import { IGRPLabel } from '../../..//igrp/label';
+import { igrpColorText } from '../../../../lib/colors';
+// import { igrpGridSizeClasses } from '../../../../lib/constants';
+import { cn } from '../../../../lib/utils';
+import type { IGRPBaseAttributes, IGRPGridSize, IGRPOptionsProps } from '../../../../types/globals';
 
 type SelectState = {
   selected: string;
@@ -66,7 +68,7 @@ function selectReducer(state: SelectState, action: SelectAction): SelectState {
 
 interface IGRPSelectProps
   extends Omit<IGRPBaseAttributes, 'ref'>,
-    React.ComponentProps<typeof Select> {
+  React.ComponentProps<typeof Select> {
   options: IGRPOptionsProps[];
   placeholder?: string;
   className?: string;
@@ -204,7 +206,7 @@ function IGRPSelect({
       control={formContext.control}
       name={fieldName}
       render={({ field, fieldState }) => (
-        <FormItem className={cn('space-y-2', igrpGridSizeClasses[gridSize], className)}>
+        <FormItem className={cn('space-y-2', /*igrpGridSizeClasses[gridSize],*/ className)}>
           {label && (
             <FormLabel
               className={cn(
@@ -335,28 +337,28 @@ const IGRPSelectContent = memo(
         )}
         {showGroup && groups.length > 0
           ? groups.map((group) => (
-              <Fragment key={group}>
-                <SelectGroup>
-                  <SelectLabel className='text-xs text-muted-foreground px-2'>{group}</SelectLabel>
-                  {filteredOptions
-                    .filter((opt) => opt.group === group)
-                    .map((opt) => (
-                      <IGRPSelectItem
-                        key={opt.value}
-                        item={opt}
-                        showStatus={showStatus}
-                      />
-                    ))}
-                </SelectGroup>
-              </Fragment>
-            ))
+            <Fragment key={group}>
+              <SelectGroup>
+                <SelectLabel className='text-xs text-muted-foreground px-2'>{group}</SelectLabel>
+                {filteredOptions
+                  .filter((opt) => opt.group === group)
+                  .map((opt) => (
+                    <IGRPSelectItem
+                      key={opt.value}
+                      item={opt}
+                      showStatus={showStatus}
+                    />
+                  ))}
+              </SelectGroup>
+            </Fragment>
+          ))
           : filteredOptions.map((opt) => (
-              <IGRPSelectItem
-                key={opt.value}
-                item={opt}
-                showStatus={showStatus}
-              />
-            ))}
+            <IGRPSelectItem
+              key={opt.value}
+              item={opt}
+              showStatus={showStatus}
+            />
+          ))}
       </SelectContent>
     );
   },

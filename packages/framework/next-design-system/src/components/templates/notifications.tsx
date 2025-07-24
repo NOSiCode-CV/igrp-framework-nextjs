@@ -3,7 +3,7 @@
 import * as React from 'react';
 import { Bell } from 'lucide-react';
 import { Badge } from '../primitives/badge';
-import { Button } from '../primitives/button';
+import { Button } from '../horizon/button';
 import {
   DropdownMenu,
   DropdownMenuContent,

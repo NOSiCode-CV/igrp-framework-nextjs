@@ -1,30 +1,29 @@
 'use client';
 
-import type React from 'react';
 import { createContext, useCallback, useContext, useEffect, useMemo, useState } from 'react';
 import { Slot } from '@radix-ui/react-slot';
 import { type VariantProps, cva } from 'class-variance-authority';
 import { AlignLeft } from 'lucide-react';
 
-import { useIsMobile } from '@/hooks/use-mobile';
-import { cn } from '@/lib/utils';
-import { Button } from '@/components/horizon/button';
-import { Input } from '@/components/horizon/input';
-import { Separator } from '@/components/primitives/separator';
+import { useIsMobile } from '../../hooks/use-mobile';
+import { cn } from '../../lib/utils';
+import { Button } from './button';
+import { Input } from './input';
+import { Separator } from '../primitives/separator';
 import {
   Sheet,
   SheetContent,
   SheetDescription,
   SheetHeader,
   SheetTitle,
-} from '@/components/primitives/sheet';
-import { Skeleton } from '@/components/primitives/skeleton';
+} from '../primitives/sheet';
+import { Skeleton } from '../primitives/skeleton';
 import {
   Tooltip,
   TooltipContent,
   TooltipProvider,
   TooltipTrigger,
-} from '@/components/primitives/tooltip';
+} from '../primitives/tooltip';
 
 const SIDEBAR_COOKIE_NAME = 'sidebar_state';
 const SIDEBAR_COOKIE_MAX_AGE = 60 * 60 * 24 * 7;

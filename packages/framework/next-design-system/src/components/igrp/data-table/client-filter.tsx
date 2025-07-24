@@ -3,7 +3,7 @@
 import { Fragment, type JSX, useEffect, useState } from 'react';
 import { type Column, type Table } from '@tanstack/react-table';
 
-import { IGRPButton } from '@/components/igrp/button';
+import { IGRPButton } from '../button';
 
 interface IGRPDataTableClientFilterListProps<TData> {
   columnId: keyof TData;

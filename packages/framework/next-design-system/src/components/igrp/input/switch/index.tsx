@@ -1,11 +1,12 @@
 import { useId } from 'react';
 import { useFormContext } from 'react-hook-form';
-import { Switch } from '@/components/primitives/switch';
-import { IGRPFormField } from '@/components/igrp/form/form-field';
-import { IGRPLabel } from '@/components/igrp/label';
-import { igrpGridSizeClasses } from '@/lib/constants';
-import { cn } from '@/lib/utils';
-import type { IGRPBaseAttributes, IGRPGridSize } from '@/types/globals';
+
+import { Switch } from '../../../primitives/switch';
+import { IGRPFormField } from '../../../igrp/form/form-field';
+import { IGRPLabel } from '../../../igrp/label';
+// import { igrpGridSizeClasses } from '../../../../lib/constants';
+import { cn } from '../../../../lib/utils';
+import type { IGRPBaseAttributes, IGRPGridSize } from '../../../../types/globals';
 
 interface IGRPSwitchProps
   extends Omit<React.ComponentProps<typeof Switch>, 'name'>,
@@ -89,7 +90,7 @@ function IGRPSwitch({
       name={fielName}
       label={label}
       helperText={helperText}
-      size={igrpGridSizeClasses[gridSize]}
+      // size={igrpGridSizeClasses[gridSize]}
       required={required}
       control={formContext.control}
       labelPlacement='end'

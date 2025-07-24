@@ -2,10 +2,11 @@
 'use client';
 
 import React, { useState } from 'react';
+
 import { Pie, PieChart, Sector, Cell, Label, Legend, type LegendType } from 'recharts';
 import type { PieSectorDataItem } from 'recharts/types/polar/Pie';
-import { ChartContainer, ChartTooltip, ChartTooltipContent } from '@/components/primitives/chart';
-import type { IGRPPieChartProps } from '@/components/igrp/chart/types';
+import { ChartContainer, ChartTooltip, ChartTooltipContent } from '../../../primitives/chart';
+import type { IGRPPieChartProps } from '../types';
 import {
   createChartConfig,
   formatChartValue,
@@ -14,7 +15,7 @@ import {
   getLegendHorizontalAlign,
   getLegendLayout,
   getLegendVerticalAlign,
-} from '@/components/igrp/chart/lib';
+} from '../lib';
 
 function IGRPPieChart({
   data,
@@ -44,7 +45,12 @@ function IGRPPieChart({
 
   const totalValue = React.useMemo(() => {
     if (!centerLabel.show || !pies.length || !data.length) return 0;
-    return data.reduce((sum, entry) => sum + Number(entry[pies[0].dataKey]), 0);
+
+    return data.reduce((sum, entry) => {
+      const key = pies[0]?.dataKey;
+      if (!key) return 0;
+      return sum + Number(entry[key] ?? 0);
+    }, 0);
   }, [centerLabel.show, data, pies]);
 
   const legendPayload = React.useMemo(() => {
@@ -54,7 +60,7 @@ function IGRPPieChart({
       return data.map((entry, index) => ({
         value: entry[nameKey] || `Item ${index + 1}`,
         type: 'square' as LegendType,
-        color: pies[0].color || `var(--chart-${(index % 8) + 1})`,
+        color: pies[0]?.color || `var(--chart-${(index % 8) + 1})`,
         payload: { ...entry, strokeDasharray: '' },
       }));
     }
@@ -171,8 +177,8 @@ function IGRPPieChart({
           className='fill-foreground text-3xl font-bold'
         >
           {formatValue(
-            interactive && activeIndex >= 0 && activeIndex < data.length
-              ? Number(data[activeIndex][pies[0].dataKey])
+            interactive && activeIndex >= 0 && activeIndex < data.length && pies[0]?.dataKey
+              ? Number(data[activeIndex]?.[pies[0].dataKey] ?? 0)
               : totalValue,
           )}
         </tspan>
@@ -259,11 +265,11 @@ function IGRPPieChart({
                   label={
                     pie.showLabels
                       ? (props) =>
-                          renderCustomLabel({
-                            ...props,
-                            labelType: pie.labelType,
-                            labelPosition: pie.labelPosition,
-                          })
+                        renderCustomLabel({
+                          ...props,
+                          labelType: pie.labelType,
+                          labelPosition: pie.labelPosition,
+                        })
                       : false
                   }
                   labelLine={pie.labelLine}

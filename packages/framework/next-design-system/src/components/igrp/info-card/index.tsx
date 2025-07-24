@@ -1,10 +1,11 @@
 import { Fragment } from 'react';
 // import { cva, type VariantProps } from "class-variance-authority"
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/horizon/card';
-import { Separator } from '@/components/primitives/separator';
-import { IGRPIcon, type IGRPIconName } from '@/components/igrp/icon';
-import { IGRPColors, type IGRPColorRole, type IGRPColorVariants } from '@/lib/colors';
-import { cn } from '@/lib/utils';
+
+import { Card, CardContent, CardHeader, CardTitle } from '../../horizon/card';
+import { Separator } from '../../primitives/separator';
+import { IGRPIcon, type IGRPIconName } from '../icon';
+import { IGRPColors, type IGRPColorRole, type IGRPColorVariants } from '../../../lib/colors';
+import { cn } from '../../../lib/utils';
 
 // const igrpInfoCardVariants = cva('', {
 //   variants: {

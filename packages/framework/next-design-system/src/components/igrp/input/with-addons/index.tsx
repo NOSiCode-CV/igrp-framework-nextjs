@@ -1,7 +1,8 @@
 'use client';
 
 import { useEffect, useId, useMemo } from 'react';
-import { Input } from '@/components/horizon/input';
+
+import { Input } from '../../../horizon/input';
 import {
   Select,
   SelectContent,
@@ -10,10 +11,10 @@ import {
   SelectLabel,
   SelectTrigger,
   SelectValue,
-} from '@/components/primitives/select';
-import { IGRPLabel } from '@/components/igrp/label';
-import { cn } from '@/lib/utils';
-import type { IGRPInputProps, IGRPOptionsProps } from '@/types/globals';
+} from '../../../primitives/select';
+import { IGRPLabel } from '../../../igrp/label';
+import { cn } from '../../../../lib/utils';
+import type { IGRPInputProps, IGRPOptionsProps } from '../../../../types/globals';
 
 interface IGRPInputAddOnProps
   extends Omit<

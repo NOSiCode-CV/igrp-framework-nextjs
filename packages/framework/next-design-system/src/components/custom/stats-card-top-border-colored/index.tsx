@@ -1,4 +1,4 @@
-import { IGRPStatsCard, type IGRPStatsCardProps } from '@/components/igrp';
+import { IGRPStatsCard, type IGRPStatsCardProps } from '../../igrp/stats-card';
 
 function IGRPStatsCardTopBorderColored({
   cardVariant,

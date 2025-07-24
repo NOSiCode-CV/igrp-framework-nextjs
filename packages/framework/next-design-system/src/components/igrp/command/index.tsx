@@ -10,7 +10,7 @@ import {
   CommandList,
   CommandSeparator,
   CommandShortcut,
-} from '@/components/primitives/command';
+} from '../../primitives/command';
 
 function IGRPCommand({ className, ...props }: React.ComponentProps<typeof Command>) {
   return (

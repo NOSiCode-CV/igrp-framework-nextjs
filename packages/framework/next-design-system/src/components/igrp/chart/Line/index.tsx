@@ -16,8 +16,8 @@ import {
   ChartTooltipContent,
   ChartLegend,
   ChartLegendContent,
-} from '@/components/primitives/chart';
-import type { IGRPChartProps, IGRPSeriesConfig } from '@/components/igrp/chart/types';
+} from '../../../primitives/chart';
+import type { IGRPChartProps, IGRPSeriesConfig } from '../types';
 import {
   createChartConfig,
   formatChartValue,
@@ -27,7 +27,7 @@ import {
   getLegendLayout,
   getLegendVerticalAlign,
   hasNegativeValues,
-} from '@/components/igrp/chart/lib';
+} from '../lib';
 
 export interface LineConfig extends IGRPSeriesConfig {
   type?: 'linear' | 'monotone' | 'step' | 'basis' | 'natural';

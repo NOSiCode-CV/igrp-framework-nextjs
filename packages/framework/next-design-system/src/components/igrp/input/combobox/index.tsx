@@ -2,6 +2,7 @@
 
 import { useEffect, useId, useMemo, useState } from 'react';
 import { useFormContext } from 'react-hook-form';
+
 import {
   Command,
   CommandEmpty,
@@ -10,17 +11,18 @@ import {
   CommandItem,
   CommandList,
   CommandSeparator,
-} from '@/components/primitives/command';
-import { Popover, PopoverContent, PopoverTrigger } from '@/components/primitives/popover';
-import { IGRPButton } from '@/components/igrp/button';
-import { IGRPFieldDescription } from '@/components/igrp/field-description';
-import { IGRPFormField } from '@/components/igrp/form';
-import { IGRPLabel } from '@/components/igrp/label';
-import { IGRPIcon } from '@/components/igrp/icon';
-import { IGRPCircleFull } from '@/components/igrp/icon/custom';
-import { igrpGridSizeClasses } from '@/lib/constants';
-import { cn, igrpColorText } from '@/lib/utils';
-import type { IGRPBaseAttributes, IGRPOptionsProps, IGRPGridSize } from '@/types/globals';
+} from '../../../primitives/command';
+import { Popover, PopoverContent, PopoverTrigger } from '../../../primitives/popover';
+import { IGRPButton } from '../../../igrp/button';
+import { IGRPFieldDescription } from '../../../igrp/field-description';
+import { IGRPFormField } from '../../../igrp/form';
+import { IGRPLabel } from '../../../igrp/label';
+import { IGRPIcon } from '../../../igrp/icon';
+import { IGRPCircleFull } from '../../../igrp/icon/custom';
+// import { igrpGridSizeClasses } from '../../../../lib/constants';
+import { cn } from '../../../../lib/utils';
+import { igrpColorText } from '../../../../lib/colors';
+import type { IGRPBaseAttributes, IGRPOptionsProps, IGRPGridSize } from '../../../../types/globals';
 
 interface IGRPComboboxProps extends IGRPBaseAttributes {
   variant?: 'single' | 'multiple';
@@ -288,7 +290,7 @@ function IGRPCombobox({
         label={label}
         helperText={helperText}
         className={className}
-        size={igrpGridSizeClasses[gridSize]}
+        // size={igrpGridSizeClasses[gridSize]}
         required={required}
         control={formContext.control}
       >

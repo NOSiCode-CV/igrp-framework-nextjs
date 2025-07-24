@@ -4,8 +4,8 @@ import { createContext, useCallback, useContext, useEffect, useState } from 'rea
 import useEmblaCarousel, { type UseEmblaCarouselType } from 'embla-carousel-react';
 import { ArrowLeft, ArrowRight } from 'lucide-react';
 
-import { cn } from '@/lib/utils';
-import { Button } from '@/components/horizon/button';
+import { cn } from '../../lib/utils';
+import { Button } from './button';
 
 type CarouselApi = UseEmblaCarouselType[1];
 type UseCarouselParameters = Parameters<typeof useEmblaCarousel>;

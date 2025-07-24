@@ -2,18 +2,19 @@
 
 import { useId, useState, useEffect, useCallback } from 'react';
 import { useFormContext, Controller } from 'react-hook-form';
-import { Input } from '@/components/horizon/input';
-import { IGRPLabel } from '@/components/igrp/label';
+
+import { Input } from '../../../horizon/input';
+import { IGRPLabel } from '../../../igrp/label';
 import {
   Select,
   SelectContent,
   SelectItem,
   SelectTrigger,
   SelectValue,
-} from '@/components/primitives/select';
-import { cn } from '@/lib/utils';
-import type { IGRPOptionsProps, IGRPGridSize } from '@/types/globals';
-import { igrpGridSizeClasses } from '@/lib/constants';
+} from '../../../primitives/select';
+// import { igrpGridSizeClasses } from '../../../../lib/constants';
+import { cn } from '../../../../lib/utils';
+import type { IGRPOptionsProps, IGRPGridSize } from '../../../../types/globals';
 
 interface IGRPInputUrlProps
   extends Omit<React.InputHTMLAttributes<HTMLInputElement>, 'type' | 'onChange'> {
@@ -203,7 +204,7 @@ function IGRPInputUrl({
         };
 
         return (
-          <div className={cn('*:not-first:mt-2', igrpGridSizeClasses[gridSize])}>
+          <div className={cn('*:not-first:mt-2'/*, igrpGridSizeClasses[gridSize]*/)}>
             {label && (
               <IGRPLabel
                 label={label}

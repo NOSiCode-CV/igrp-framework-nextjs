@@ -3,12 +3,13 @@
 import { useId } from 'react';
 import { useFormContext } from 'react-hook-form';
 import { type VariantProps } from 'class-variance-authority';
-import { RadioGroup, RadioGroupItem, radioItemVariants } from '@/components/horizon/radio-group';
-import { IGRPFormField } from '@/components/igrp/form';
-import { IGRPLabel } from '@/components/igrp/label';
-import { igrpGridSizeClasses } from '@/lib/constants';
-import { cn } from '@/lib/utils';
-import type { IGRPBaseAttributes, IGRPGridSize } from '@/types/globals';
+
+import { RadioGroup, RadioGroupItem, radioItemVariants } from '../../../horizon/radio-group';
+import { IGRPFormField } from '../../../igrp/form';
+import { IGRPLabel } from '../../../igrp/label';
+// import { igrpGridSizeClasses } from '../../../../lib/constants';
+import { cn } from '../../../../lib/utils';
+import type { IGRPBaseAttributes, IGRPGridSize } from '../../../../types/globals';
 
 type IGRPRadioOption = {
   value: string;
@@ -120,7 +121,7 @@ function IGRPRadioGroup({
         label={label}
         helperText={helperText}
         className={className}
-        size={igrpGridSizeClasses[gridSize]}
+        // size={igrpGridSizeClasses[gridSize]}
         required={required}
         control={formContext.control}
       >

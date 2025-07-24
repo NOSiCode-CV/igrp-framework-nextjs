@@ -7,7 +7,7 @@ import {
   ChartTooltipContent,
   ChartLegend,
   ChartLegendContent,
-} from '@/components/primitives/chart';
+} from '../../../primitives/chart';
 import {
   formatChartValue,
   getChartHeight,
@@ -17,8 +17,8 @@ import {
   getLegendHorizontalAlign,
   hasNegativeValues,
   createChartConfig,
-} from '@/components/igrp/chart/lib';
-import type { IGRPVerticalBarChartProps } from '@/components/igrp/chart/types';
+} from '../lib';
+import type { IGRPVerticalBarChartProps } from '../types';
 
 function IGRPVerticalBarChart({
   data,

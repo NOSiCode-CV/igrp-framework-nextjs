@@ -13,7 +13,7 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from '../primitives/dropdown-menu';
-import { SidebarMenu, SidebarMenuButton, SidebarMenuItem, useSidebar } from '../primitives/sidebar';
+import { SidebarMenu, SidebarMenuButton, SidebarMenuItem, useSidebar } from '../horizon/sidebar';
 
 interface AppSwitcherProps {
   apps?: IGRPApplicationArgs[];

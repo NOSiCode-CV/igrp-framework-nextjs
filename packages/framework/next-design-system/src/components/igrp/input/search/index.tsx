@@ -2,16 +2,17 @@
 
 import { useId, useState, useEffect, useCallback } from 'react';
 import { useFormContext } from 'react-hook-form';
-import { Input } from '@/components/horizon/input';
-import { IGRPButton } from '@/components/igrp/button';
-import { IGRPFieldDescription } from '@/components/igrp/field-description';
-import { IGRPFormField } from '@/components/igrp/form/form-field';
-import { IGRPIcon, type IGRPIconName } from '@/components/igrp/icon';
-import { IGRPLabel } from '@/components/igrp/label';
-import { igrpGridSizeClasses } from '@/lib/constants';
-import { cn } from '@/lib/utils';
-import { type IGRPInputProps } from '@/types/globals';
 import type { VariantProps } from 'class-variance-authority';
+
+import { Input } from '../../../horizon/input';
+import { IGRPButton } from '../../../igrp/button';
+import { IGRPFieldDescription } from '../../../igrp/field-description';
+import { IGRPFormField } from '../../../igrp/form/form-field';
+import { IGRPIcon, type IGRPIconName } from '../../../igrp/icon';
+import { IGRPLabel } from '../../../igrp/label';
+// import { igrpGridSizeClasses } from '../../../../lib/constants';
+import { cn } from '../../../../lib/utils';
+import { type IGRPInputProps } from '../../../../types/globals';
 
 interface IGRPInputSearchProps extends Omit<IGRPInputProps, 'value' | 'defaultValue'> {
   value?: string;
@@ -155,7 +156,7 @@ function IGRPInputSearch({
         label={label}
         helperText={helperText}
         className={className}
-        size={igrpGridSizeClasses[gridSize]}
+        // size={igrpGridSizeClasses[gridSize]}
         required={required}
         control={formContext.control}
       >

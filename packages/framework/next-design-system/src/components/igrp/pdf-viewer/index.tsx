@@ -2,7 +2,8 @@
 
 import { useCallback, useEffect, useState } from 'react';
 import { format } from 'date-fns';
-import { Card, CardHeader, CardTitle } from '@/components/horizon/card';
+
+import { Card, CardHeader, CardTitle } from '../../horizon/card';
 import {
   Dialog,
   DialogContent,
@@ -10,13 +11,13 @@ import {
   DialogFooter,
   DialogHeader,
   DialogTitle,
-} from '@/components/horizon/dialog';
-import { IGRPBadge } from '@/components/igrp/badge';
-import { IGRPButton } from '@/components/igrp/button';
-import { IGRPIcon } from '@/components/igrp/icon';
-import { IGRPLoadingSpinner } from '@/components/igrp/loading';
-import { IGRPHeadline, IGRPText } from '@/components/igrp/typography';
-import { IGRPColors } from '@/lib/colors';
+} from '../../horizon/dialog';
+import { IGRPBadge } from '../badge';
+import { IGRPButton } from '../button';
+import { IGRPIcon } from '../icon';
+import { IGRPLoadingSpinner } from '../loading';
+import { IGRPHeadline, IGRPText } from '../typography';
+import { IGRPColors } from '../../../lib/colors';
 
 type IGRPDocumentItem = {
   id: number;

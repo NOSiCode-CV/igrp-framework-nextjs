@@ -1,6 +1,8 @@
 import { useEffect, useState } from 'react';
-import { cn, IGRPButton } from '@igrp/igrp-framework-react-design-system';
 import Image from 'next/image';
+import { cn } from '../../lib/utils';
+import { IGRPButton } from '../igrp/button';
+
 
 interface IGRPGlobalErrorProps {
   error: Error & { digest?: string };

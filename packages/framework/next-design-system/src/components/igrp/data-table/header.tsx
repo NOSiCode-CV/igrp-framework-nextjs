@@ -4,17 +4,17 @@ import { useCallback } from 'react';
 import { type Column, type Table } from '@tanstack/react-table';
 import { ArrowDown, ArrowUp, ArrowUpDown, ChevronsUpDown } from 'lucide-react';
 
-import { Button } from '@/components/horizon/button';
-import { Checkbox } from '@/components/horizon/checkbox';
+import { Button } from '../../horizon/button';
+import { Checkbox } from '../../horizon/checkbox';
 import {
   DropdownMenu,
   DropdownMenuContent,
   DropdownMenuItem,
   DropdownMenuSeparator,
   DropdownMenuTrigger,
-} from '@/components/primitives/dropdown-menu';
+} from '../../primitives/dropdown-menu';
 
-import { cn } from '@/lib/utils';
+import { cn } from '../../../lib/utils';
 
 interface IGRPDataTableHeaderProps<T> {
   table: Table<T>;

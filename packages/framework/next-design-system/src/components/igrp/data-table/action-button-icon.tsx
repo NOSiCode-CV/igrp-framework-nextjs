@@ -9,8 +9,8 @@ import {
   AlertDialogHeader,
   AlertDialogTitle,
   AlertDialogTrigger,
-} from '@/components/horizon/alert-dialog';
-import { Button, buttonVariants } from '@/components/horizon/button';
+} from '../../horizon/alert-dialog';
+import { Button, buttonVariants } from '../../horizon/button';
 import {
   Dialog,
   DialogClose,
@@ -20,13 +20,13 @@ import {
   DialogHeader,
   DialogTitle,
   DialogTrigger,
-} from '@/components/horizon/dialog';
-import { IGRPButton } from '@/components/igrp/button';
-import { IGRPIcon } from '@/components/igrp/icon';
+} from '../../horizon/dialog';
+import { IGRPButton } from '../../igrp/button';
+import { IGRPIcon } from '../../igrp/icon';
+import { cn } from '../../../lib/utils';
+import { igrpModalDialogContentVariants } from '../modal-dialog';
 import { type IGRPDataTableDialogProps, type IGRPDataTableLinkProps } from './row-actions';
 
-import { cn } from '@/lib/utils';
-import { igrpModalDialogContentVariants } from '../modal-dialog';
 
 function IGRPDataTableButtonAlert({
   labelTrigger,

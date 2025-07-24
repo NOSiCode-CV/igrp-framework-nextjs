@@ -4,7 +4,7 @@ import * as React from 'react';
 import { useRouter } from 'next/navigation';
 import { Home, Settings, User, FileText, LifeBuoy, LogOut, UserPlus, Search } from 'lucide-react';
 
-import { Button } from '../primitives/button';
+import { Button } from '../horizon/button';
 import {
   CommandDialog,
   CommandEmpty,

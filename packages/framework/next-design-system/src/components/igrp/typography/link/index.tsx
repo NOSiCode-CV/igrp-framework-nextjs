@@ -1,10 +1,13 @@
 import type { ReactNode } from 'react';
 import Link, { type LinkProps } from 'next/link';
 import { cva, type VariantProps } from 'class-variance-authority';
-import { IGRPIcon, type IGRPIconName } from '@/components/igrp/icon';
-import { IGRPColors, type IGRPColorRole, type IGRPColorVariants } from '@/lib/colors';
-import { cn, igrpColorText, igrpIsExternalUrl } from '@/lib/utils';
-import type { IGRPBaseAttributes, IGRPPlacementProps } from '@/types/globals';
+
+import { IGRPIcon, type IGRPIconName } from '../../icon';
+import { IGRPColors, type IGRPColorRole, type IGRPColorVariants } from '../../../../lib/colors';
+import { igrpColorText } from '../../../../lib/colors';
+import { igrpIsExternalUrl } from '../../../../lib/url';
+import { cn } from '../../../../lib/utils';
+import type { IGRPBaseAttributes, IGRPPlacementProps } from '../../../../types/globals';
 
 const IGRPLinkVariants = cva(
   'transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2',

@@ -2,12 +2,12 @@
 
 import { useId } from 'react';
 import { useFormContext } from 'react-hook-form';
-import { Checkbox } from '@/components/horizon/checkbox';
-import { IGRPFormField } from '@/components/igrp/form/form-field';
-import { IGRPLabel } from '@/components/igrp/label';
-import { cn } from '@/lib/utils';
-import { igrpGridSizeClasses } from '@/lib/constants';
-import type { IGRPBaseAttributes, IGRPGridSize } from '@/types/globals';
+import { Checkbox } from '../../../horizon/checkbox';
+import { IGRPFormField } from '../../../igrp/form/form-field';
+import { IGRPLabel } from '../../../igrp/label';
+import { cn } from '../../../../lib/utils';
+// import { igrpGridSizeClasses } from '../../../../lib/constants';
+import type { IGRPBaseAttributes, IGRPGridSize } from '../../../../types/globals';
 
 interface IGRPCheckboxProps
   extends React.ComponentProps<typeof Checkbox>,
@@ -91,7 +91,7 @@ function IGRPCheckbox({
       name={fieldName}
       label={label}
       helperText={helperText}
-      size={igrpGridSizeClasses[gridSize]}
+      // size={igrpGridSizeClasses[gridSize]}
       required={required}
       control={formContext.control}
       labelPlacement='end'

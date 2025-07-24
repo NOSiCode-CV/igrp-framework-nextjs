@@ -3,23 +3,24 @@
 import { useId } from 'react';
 import { type Table } from '@tanstack/react-table';
 import { ChevronFirst, ChevronLast, ChevronLeft, ChevronRight } from 'lucide-react';
-import { Button } from '@/components/horizon/button';
-import { Label } from '@/components/primitives/label';
+
+import { Label } from '../../primitives/label';
+import { Button } from '../../horizon/button';
 import {
   Pagination,
   PaginationContent,
   PaginationEllipsis,
   PaginationItem,
-} from '@/components/horizon/pagination';
+} from '../../horizon/pagination';
 import {
   Select,
   SelectContent,
   SelectItem,
   SelectTrigger,
   SelectValue,
-} from '@/components/primitives/select';
+} from '../../primitives/select';
 import { usePagination } from './hooks/use-pagination';
-import { cn } from '@/lib/utils';
+import { cn } from '../../../lib/utils';
 
 interface IGRPDataTablePaginationProps<TData> {
   table: Table<TData>;

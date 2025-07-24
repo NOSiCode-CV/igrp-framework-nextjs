@@ -2,12 +2,13 @@
 
 import { useCallback, useState } from 'react';
 import { useDropzone } from 'react-dropzone';
-import { cn } from '@/lib/utils';
 import { AlertCircle, UploadCloud, X } from 'lucide-react';
-import { Card } from '@/components/horizon/card';
-import { Button } from '@/components/horizon/button';
-import { Alert, AlertDescription, AlertTitle } from '@/components/primitives/alert';
-import { Progress } from '@/components/primitives/progress';
+
+import { cn } from '../../../lib/utils';
+import { Card } from '../../horizon/card';
+import { Button } from '../../horizon/button';
+import { Alert, AlertDescription, AlertTitle } from '../../primitives/alert';
+import { Progress } from '../../primitives/progress';
 
 export type FileWithProgress = {
   file: File;

@@ -2,10 +2,11 @@
 
 import { useId } from 'react';
 import { cva, type VariantProps } from 'class-variance-authority';
-import { IGRPIcon } from '@/components/igrp/icon';
-import { type IGRPColorRole, type IGRPColorVariants, IGRPColors } from '@/lib/colors';
-import { cn } from '@/lib/utils';
-import type { IGRPBaseAttributes } from '@/types/globals';
+
+import { IGRPIcon } from '../../icon';
+import { type IGRPColorRole, type IGRPColorVariants, IGRPColors } from '../../../../lib/colors';
+import { cn } from '../../../../lib/utils';
+import type { IGRPBaseAttributes } from '../../../../types/globals';
 
 const igrpHeadlineVariants = cva('scroll-m-20 font-bold tracking-tight text-balance', {
   variants: {

@@ -1,11 +1,12 @@
 import { useState } from 'react';
 import Link from 'next/link';
+
 import {
   DropdownMenu,
   DropdownMenuContent,
   DropdownMenuItem,
   DropdownMenuTrigger,
-} from '@/components/primitives/dropdown-menu';
+} from '../../primitives/dropdown-menu';
 import {
   AlertDialog,
   AlertDialogAction,
@@ -16,12 +17,13 @@ import {
   AlertDialogHeader,
   AlertDialogTitle,
   AlertDialogTrigger,
-} from '@/components/horizon/alert-dialog';
-import { buttonVariants } from '@/components/horizon/button';
-import { IGRPIcon } from '@/components/igrp/icon';
+} from '../../horizon/alert-dialog';
+import { buttonVariants } from '../../horizon/button';
+import { IGRPIcon } from '../../igrp/icon';
+import { cn } from '../../../lib/utils';
+import { type IGRPPlacementProps } from '../../../types/globals';
 import { type IGRPDataTableDialogProps, type IGRPDataTableLinkProps } from './row-actions';
-import { cn } from '@/lib/utils';
-import { type IGRPPlacementProps } from '@/types/globals';
+
 
 interface IGRPDataTableDropdownProps {
   showIcon?: boolean;
@@ -205,76 +207,6 @@ function IGRPDataTableDropdownMenuCustom({
   );
 }
 
-// function IGRPDataTableDropdownMenuModal({
-//   labelTrigger,
-//   className,
-//   icon = 'ArrowRight',
-//   children,
-//   modalTitle = '',
-//   showCancel = true,
-//   labelCancel = 'Cancel',
-//   classNameCancel,
-//   variantCancel,
-//   showConfirm = true,
-//   labelConfirm = 'Confirm',
-//   classNameConfirm,
-//   variantConfirm,
-//   onClickConfirm,
-//   showIcon,
-//   iconPlacement = 'start',
-//   iconClassName,
-//   size = 'lg',
-// }: IGRPDataTableDropdownMenuDialogProps) {
-//   return (
-//     <Dialog modal>
-//       <DialogTrigger asChild>
-//         <IGRPDataTableDropdownMenuItem
-//           showIcon={showIcon}
-//           iconPlacement={iconPlacement}
-//           iconClassName={iconClassName}
-//           icon={icon}
-//           labelTrigger={labelTrigger}
-//         />
-//       </DialogTrigger>
-//       <DialogContent
-//         className={cn(
-//           'flex flex-col gap-0 p-0 sm:max-h-[min(640px,90vh)] [&>button:last-child]:top-3.5',
-//           igrpModalDialogContentVariants({ size }),
-//           className,
-//         )}
-//       >
-//         <DialogHeader className='contents space-y-0 text-left'>
-//           <DialogTitle className={cn(modalTitle && 'border-b px-6 py-4 text-base')}>
-//             {modalTitle}
-//           </DialogTitle>
-
-//           <div className={cn('overflow-y-auto', !modalTitle && 'mt-4')}>
-//             <DialogDescription asChild>{children}</DialogDescription>
-
-//             {(showCancel || showConfirm) && (
-//               <DialogFooter className='px-6 pb-6 sm:justify-start'>
-//                 <DialogClose
-//                   className={cn(buttonVariants({ variant: variantCancel }), classNameCancel)}
-//                 >
-//                   {labelCancel}
-//                 </DialogClose>
-
-//                 <IGRPButton
-//                   variant={variantConfirm}
-//                   className={classNameConfirm}
-//                   onClick={onClickConfirm}
-//                 >
-//                   {labelConfirm}
-//                 </IGRPButton>
-//               </DialogFooter>
-//             )}
-//           </div>
-//         </DialogHeader>
-//       </DialogContent>
-//     </Dialog>
-//   );
-// }
-
 interface IGRPDataTableDropdownMenuItemProps
   extends IGRPDataTableDropdownProps,
     Pick<IGRPDataTableDropdownMenuDialogProps, 'icon' | 'labelTrigger' | 'iconClassName'> {
@@ -321,10 +253,6 @@ type IGRPDataTableActionDropdown =
       component: typeof IGRPDataTableDropdownMenuAlert;
       props: IGRPDataTableDropdownMenuDialogProps;
     };
-// | {
-//     component: typeof IGRPDataTableDropdownMenuModal;
-//     props: IGRPDataTableDropdownMenuDialogProps;
-//   };
 
 function IGRPDataTableDropdownMenu({ items }: { items: IGRPDataTableActionDropdown[] }) {
   return (
@@ -356,7 +284,6 @@ export {
   type IGRPDataTableDropdownMenuDialogProps,
   type IGRPDataTableDropdownMenuLinkProps,
   IGRPDataTableDropdownMenuAlert,
-  // IGRPDataTableDropdownMenuModal,
   IGRPDataTableDropdownMenuCustom,
   IGRPDataTableDropdownMenuLink,
   IGRPDataTableDropdownMenu,

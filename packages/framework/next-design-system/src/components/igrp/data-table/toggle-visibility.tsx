@@ -1,12 +1,13 @@
 import { type Table } from '@tanstack/react-table';
+
 import {
   DropdownMenu,
   DropdownMenuCheckboxItem,
   DropdownMenuContent,
   DropdownMenuLabel,
   DropdownMenuTrigger,
-} from '@/components/primitives/dropdown-menu';
-import { IGRPButton } from '@/components/igrp/button';
+} from '../../primitives/dropdown-menu';
+import { IGRPButton } from '../../igrp/button';
 
 type IGPRDataTableVisibilityProps<TData> = {
   table: Table<TData>;

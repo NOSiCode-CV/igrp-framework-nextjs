@@ -1,4 +1,4 @@
-import { Separator } from '@/components/primitives/separator';
+import { Separator } from '../../primitives/separator';
 
 interface IGRPSeparatorProps extends React.ComponentProps<typeof Separator> {
   name?: string;

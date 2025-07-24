@@ -1,5 +1,6 @@
 import { toast, type ExternalToast } from 'sonner';
-import { Toaster } from '@/components/primitives/sonner';
+
+import { Toaster } from '../../primitives/sonner';
 
 function IGRPToaster(props: React.ComponentProps<typeof Toaster>) {
   return <Toaster {...props} />;

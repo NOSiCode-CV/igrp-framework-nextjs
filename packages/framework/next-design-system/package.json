@@ -58,7 +58,6 @@
     "@bprogress/next": "^3.2.12",
     "@hookform/resolvers": "5.0.1",
     "@igrp/framework-next-types": "workspace:*",
-    "@igrp/framework-next-design-system": "latest",
     "@radix-ui/react-accordion": "^1.2.11",
     "@radix-ui/react-alert-dialog": "^1.1.14",
     "@radix-ui/react-aspect-ratio": "^1.1.7",

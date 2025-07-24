@@ -30,7 +30,7 @@
   ],
   "scripts": {
     "dev": "tsc --watch",
-    "clean": "pnpm clean:packages",    
+    "clean": "pnpm clean:packages",
     "clean:packages": "rimraf node_modules",
     "build": "pnpm format && pnpm build:reactcompiler",
     "build:babel": "rimraf dist_optimized && babel dist --out-dir dist_optimized --source-maps --extensions .ts,.js,.tsx,.jsx,.cjs,.mjs && rimraf dist && move dist_optimized dist",

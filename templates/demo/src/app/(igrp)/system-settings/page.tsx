@@ -11,7 +11,7 @@ export default function SettingsPage() {
     igrpToast({
       type: 'info',
       title: 'Info!',
-      description: <span className='text-foreground'>'This is a info message.'</span>,
+      description: <span className='text-foreground'>This is a info message.</span>,
       action: {
         label: 'Undo',
         onClick: () => console.log('Undo'),

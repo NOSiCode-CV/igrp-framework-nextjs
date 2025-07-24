@@ -14,10 +14,7 @@ import {
   DropdownMenuTrigger,
 } from '../primitives/dropdown-menu';
 
-export function Notifications() {
-  const [notificationCount, setNotificationCount] = React.useState(3);
-
-  const notifications = [
+const notifications = [
     {
       id: 1,
       title: 'New user registered',
@@ -37,6 +34,9 @@ export function Notifications() {
       time: '3 hours ago',
     },
   ];
+
+export function Notifications() {
+  const [notificationCount, setNotificationCount] = React.useState(3);  
 
   const markAsRead = () => {
     setNotificationCount(0);

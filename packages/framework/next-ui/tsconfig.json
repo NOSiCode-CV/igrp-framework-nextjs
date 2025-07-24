@@ -29,11 +29,7 @@
       {
         "name": "next"
       }
-    ],
-    "baseUrl": ".",
-    "paths": {
-      "@/*": ["./src/*"]
-    }
+    ]    
   },
   "include": ["src","types"],
   "exclude": ["dist", "build", "temp", "**/*.spec.ts", "node_modules"]

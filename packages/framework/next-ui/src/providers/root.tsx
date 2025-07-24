@@ -12,9 +12,9 @@ import { IGRPActiveThemeProvider } from './active-theme';
 import { IGRPProgressBarProvider } from './progress-bar';
 import { IGRPSessionProvider } from './session';
 import { IGRPThemeProvider } from './theme';
-import { SidebarInset, SidebarProvider } from '@/components/primitives/sidebar';
-import { IGRPHeader } from '@/components/horizon/header';
-import { IGRPSidebar } from '@/components/horizon/sidebar';
+import { SidebarInset, SidebarProvider } from '../components/primitives/sidebar';
+import { IGRPHeader } from '../components/horizon/header';
+import { IGRPSidebar } from '../components/horizon/sidebar';
 
 export type IGRPRootProvidersArgs = {
   session?: ExtendedSession | null;

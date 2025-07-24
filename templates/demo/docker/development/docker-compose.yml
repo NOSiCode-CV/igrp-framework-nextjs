@@ -4,6 +4,6 @@ services:
       context: ../../
       dockerfile: docker/development/Dockerfile
 
-    image: demo-ui-development
+    image: igrp-next-template-development
     ports:
       - '3001:3000'

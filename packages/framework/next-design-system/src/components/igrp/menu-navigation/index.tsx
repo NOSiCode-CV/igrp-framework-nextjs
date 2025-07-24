@@ -1,11 +1,12 @@
 'use client';
 
 import { useRef, useState, useCallback, createContext, useContext } from 'react';
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/horizon/card';
-import { IGRPBadge } from '@/components/igrp/badge';
-import { IGRPIcon } from '@/components/igrp/icon';
-import type { IGRPColorRole, IGRPColorVariants } from '@/lib/colors';
-import { cn } from '@/lib/utils';
+
+import { Card, CardContent, CardHeader, CardTitle } from '../../horizon/card';
+import { IGRPBadge } from '../../igrp/badge';
+import { IGRPIcon } from '../../igrp/icon';
+import type { IGRPColorRole, IGRPColorVariants } from '../../../lib/colors';
+import { cn } from '../../../lib/utils';
 
 interface IGRPMenuNavigationItem {
   id: string;

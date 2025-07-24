@@ -2,7 +2,7 @@
 
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
-import { IGRPIcon } from '@igrp/igrp-framework-react-design-system';
+import { IGRPIcon } from '@igrp/framework-next-design-system';
 
 import { cn } from '../../lib/utils';
 

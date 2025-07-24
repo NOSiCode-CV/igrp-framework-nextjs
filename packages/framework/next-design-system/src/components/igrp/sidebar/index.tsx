@@ -23,7 +23,7 @@ import {
   SidebarSeparator,
   SidebarTrigger,
   useSidebar as useIGRPSidebar,
-} from '@/components/horizon/sidebar';
+} from '../../horizon/sidebar';
 
 function IGRPSidebarProvider({ ...props }: React.ComponentProps<typeof SidebarProvider>) {
   return <SidebarProvider {...props} />;

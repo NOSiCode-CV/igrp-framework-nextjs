@@ -7,13 +7,13 @@ import {
   AlertDialogFooter,
   AlertDialogHeader,
   AlertDialogTitle,
-} from '@/components/horizon/alert-dialog';
-import { type IGRPButtonProps } from '@/components/igrp/button';
-import { IGRPIcon, type IGRPIconName } from '@/components/igrp/icon';
-import { IGRPColors, type IGRPColorVariants } from '@/lib/colors';
-import { igrpAlertIconMappings } from '@/lib/constants';
-import { cn } from '@/lib/utils';
-import { type IGRPBaseAttributes } from '@/types/globals';
+} from '../../horizon/alert-dialog';
+import { type IGRPButtonProps } from '../button';
+import { IGRPIcon, type IGRPIconName } from '../icon';
+import { IGRPColors, type IGRPColorVariants } from '../../../lib/colors';
+import { igrpAlertIconMappings } from '../../../lib/constants';
+import { cn } from '../../../lib/utils';
+import { type IGRPBaseAttributes } from '../../../types/globals';
 
 interface IGRPAlertDialogProps extends Omit<IGRPBaseAttributes, 'ref'> {
   open?: boolean;

@@ -2,7 +2,7 @@
 
 import { useState } from 'react';
 import Image from 'next/image';
-import { IGRPIcon } from '@igrp/igrp-framework-react-design-system';
+import { IGRPIcon } from '@igrp/framework-next-design-system';
 import type { IGRPApplicationArgs } from '@igrp/framework-next-types';
 
 import {
@@ -13,7 +13,7 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from '../primitives/dropdown-menu';
-import { SidebarMenu, SidebarMenuButton, SidebarMenuItem, useSidebar } from '../primitives/sidebar';
+import { SidebarMenu, SidebarMenuButton, SidebarMenuItem, useSidebar } from '../horizon/sidebar';
 
 interface AppSwitcherProps {
   apps?: IGRPApplicationArgs[];

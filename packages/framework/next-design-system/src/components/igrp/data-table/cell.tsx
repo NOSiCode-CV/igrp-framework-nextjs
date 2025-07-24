@@ -1,9 +1,10 @@
 import { type Row } from '@tanstack/react-table';
 import { format } from 'date-fns';
-import { IGRPBadge, type IGRPBadgeProps } from '@/components/igrp/badge';
-import { Button } from '@/components/horizon/button';
-import { Checkbox } from '@/components/horizon/checkbox';
-import { IGRPIcon } from '@/components/igrp/icon';
+
+import { IGRPBadge, type IGRPBadgeProps } from '../badge';
+import { IGRPIcon } from '../icon';
+import { Button } from '../../horizon/button';
+import { Checkbox } from '../../horizon/checkbox';
 
 interface IGRPDataTableCellCheckboxProps<TData> extends React.ComponentProps<typeof Checkbox> {
   row: Row<TData>;

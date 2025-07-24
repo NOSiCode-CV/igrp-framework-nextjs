@@ -1,24 +1,26 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
+import { useEffect, useState } from 'react';
 import { useFieldArray, useWatch, type FieldArrayWithId } from 'react-hook-form';
+
 import {
   Accordion,
   AccordionItem,
   AccordionTrigger,
   AccordionContent,
-} from '@/components/primitives/accordion';
-import { Button } from '@/components/horizon/button';
+} from '../../primitives/accordion';
+import { Button } from '../../horizon/button';
 import {
   Card,
   CardContent,
   CardHeader,
   CardTitle,
   CardDescription,
-} from '@/components/horizon/card';
-import { IGRPBadge, type IGRPBadgeProps } from '@/components/igrp/badge';
-import { IGRPIcon, type IGRPIconName } from '@/components/igrp/icon';
-import { type IGRPBaseAttributes } from '@/types/globals';
-import { cn } from '@/lib/utils';
-import { useEffect, useState } from 'react';
+} from '../../horizon/card';
+import { IGRPBadge, type IGRPBadgeProps } from '../badge';
+import { IGRPIcon, type IGRPIconName } from '../icon';
+import { type IGRPBaseAttributes } from '../../../types/globals';
+import { cn } from '../../../lib/utils';
+
 
 interface IGRPFormListProps<TItem>
   extends Omit<IGRPBaseAttributes, 'name' | 'iconPlacement' | 'helperText'>,

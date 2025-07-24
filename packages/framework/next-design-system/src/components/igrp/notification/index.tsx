@@ -1,9 +1,8 @@
 import { cva, type VariantProps } from 'class-variance-authority';
-import { IGRPButton } from '@/components/igrp/button';
-import { IGRPIcon, type IGRPIconName } from '@/components/igrp/icon';
 
-import { cn } from '@/lib/utils';
-import type React from 'react';
+import { IGRPButton } from '../button';
+import { IGRPIcon, type IGRPIconName } from '../icon';
+import { cn } from '../../../lib/utils';
 
 const IGRPNotificationVariants = cva('bg-background z-50 rounded-md p-4 shadow-lg', {
   variants: {

@@ -23,6 +23,7 @@ import {
   useReactTable,
   type Row,
 } from '@tanstack/react-table';
+
 import {
   Table,
   TableBody,
@@ -30,14 +31,14 @@ import {
   TableHead,
   TableHeader,
   TableRow,
-} from '@/components/primitives/table';
+} from '../../primitives/table';
 import {
   type IGRPDataTableClientFilterListProps,
   IGRPDataTableClientFilter,
 } from './client-filter';
 import { IGRPDataTablePagination, IGRPDataTablePaginationNumeric } from './pagination';
 import { IGPRDataTableToggleVisibility } from './toggle-visibility';
-import { cn } from '@/lib/utils';
+import { cn } from '../../../lib/utils';
 
 interface IGRPDataTableProps<TData, TValue> {
   columns: ColumnDef<TData, TValue>[];
@@ -94,7 +95,7 @@ function IGRPDataTable<TData, TValue>({
   const [columnVisibility, setColumnVisibility] = useState<VisibilityState>({});
   const [pagination, setPagination] = useState<PaginationState>({
     pageIndex: 0,
-    pageSize: pageSizePagination ? pageSizePagination[0] : 50,
+    pageSize: pageSizePagination?.[0] ?? 50,
   });
 
   const [sorting, setSorting] = useState<SortingState>([]);

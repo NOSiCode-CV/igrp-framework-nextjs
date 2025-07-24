@@ -13,7 +13,8 @@ import {
   Cell,
   type LegendType,
 } from 'recharts';
-import { ChartContainer, ChartTooltip } from '@/components/primitives/chart';
+
+import { ChartContainer, ChartTooltip } from '../../../primitives/chart';
 import {
   createChartConfig,
   formatChartValue,
@@ -22,8 +23,8 @@ import {
   getLegendHorizontalAlign,
   getLegendLayout,
   getLegendVerticalAlign,
-} from '@/components/igrp/chart/lib';
-import { type IGRPRadialBarChartProps } from '@/components/igrp/chart/types';
+} from '../lib';
+import { type IGRPRadialBarChartProps } from '../types';
 
 function IGRPRadialBarChart({
   data,
@@ -64,12 +65,20 @@ function IGRPRadialBarChart({
       return Number(centerText.value);
     }
 
+    const firstRow = data[0];
+    if (!firstRow) return 0;
+
     if (bars.length === 1) {
-      return Number(data[0][bars[0].dataKey]);
-    } else {
-      return bars.reduce((sum, bar) => sum + Number(data[0][bar.dataKey]), 0);
+      const key = bars[0]?.dataKey;
+      return Number(firstRow?.[key ?? ''] ?? 0);
     }
+
+    return bars.reduce((sum, bar) => {
+      const key = bar?.dataKey;
+      return sum + Number(firstRow?.[key ?? ''] ?? 0);
+    }, 0);
   };
+
 
   const totalValue = calculateTotal();
   const formattedTotal = centerText.formatter
@@ -123,7 +132,7 @@ function IGRPRadialBarChart({
   const enhancedData = React.useMemo(() => {
     return data.map((item, index) => ({
       ...item,
-      _fill: bars[0].color || `var(--chart-${(index % 8) + 1})`,
+      _fill: bars[0]?.color || `var(--chart-${(index % 8) + 1})`,
     }));
   }, [data, bars]);
 
@@ -170,8 +179,8 @@ function IGRPRadialBarChart({
                       return null;
                     }
 
-                    const item = props.payload[0].payload;
-                    const value = props.payload[0].value;
+                    const item = props.payload[0]?.payload;
+                    const value = props.payload[0]?.value;
                     const name = item[nameKey];
                     const fill = item._fill;
 
@@ -282,35 +291,37 @@ function IGRPRadialBarChart({
                 </PolarRadiusAxis>
               )}
 
-              <RadialBar
-                dataKey={bars[0].dataKey}
-                background={showBackground}
-                cornerRadius={bars[0].cornerRadius}
-                stackId={bars[0].stackId}
-                className='stroke-transparent stroke-2'
-                name={bars[0].name || bars[0].dataKey}
-              >
-                {data.map((_, index) => (
-                  <Cell
-                    key={`cell-${index}`}
-                    fill={bars[0].color || `var(--chart-${(index % 8) + 1})`}
-                  />
-                ))}
+              {bars[0] && (
+                <RadialBar
+                  dataKey={bars[0].dataKey}
+                  background={showBackground}
+                  cornerRadius={bars[0].cornerRadius}
+                  stackId={bars[0].stackId}
+                  className="stroke-transparent stroke-2"
+                  name={bars[0].name || bars[0].dataKey}
+                >
+                  {data.map((_, index) => (
+                    <Cell
+                      key={`cell-${index}`}
+                      fill={bars[0]?.color || `var(--chart-${(index % 8) + 1})`}
+                    />
+                  ))}
 
-                {bars[0].showLabels && (
-                  <LabelList
-                    dataKey={bars[0].labelType === 'name' ? nameKey : bars[0].dataKey}
-                    position={bars[0].labelPosition || 'insideStart'}
-                    className='fill-white capitalize mix-blend-luminosity'
-                    fontSize={11}
-                    style={bars[0].labelStyle}
-                    formatter={(entry: { payload: any }) => {
-                      if (!entry || !entry.payload) return '';
-                      return formatLabel(entry.payload, bars[0].dataKey, bars[0].labelType);
-                    }}
-                  />
-                )}
-              </RadialBar>
+                  {bars[0].showLabels && (
+                    <LabelList
+                      dataKey={bars[0].labelType === 'name' ? nameKey : bars[0].dataKey}
+                      position={bars[0].labelPosition || 'insideStart'}
+                      className="fill-white capitalize mix-blend-luminosity"
+                      fontSize={11}
+                      style={bars[0].labelStyle}
+                      formatter={(entry: { payload: any }) => {
+                        if (!entry?.payload) return '';
+                        return formatLabel(entry.payload, bars[0]!.dataKey, bars[0]?.labelType);
+                      }}
+                    />
+                  )}
+                </RadialBar>
+              )}
 
               {bars.slice(1).map((bar, index) => (
                 <RadialBar

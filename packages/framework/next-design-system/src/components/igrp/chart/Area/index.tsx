@@ -7,8 +7,8 @@ import {
   ChartTooltipContent,
   ChartLegend,
   ChartLegendContent,
-} from '@/components/primitives/chart';
-import type { IGRPAreaChartProps } from '@/components/igrp/chart/types';
+} from '../../../primitives/chart';
+import type { IGRPAreaChartProps } from '../types';
 import {
   createChartConfig,
   formatChartValue,
@@ -18,7 +18,7 @@ import {
   getLegendLayout,
   getLegendVerticalAlign,
   hasNegativeValues,
-} from '@/components/igrp/chart/lib';
+} from '../lib';
 
 // TODO: check to assign areas props default value
 

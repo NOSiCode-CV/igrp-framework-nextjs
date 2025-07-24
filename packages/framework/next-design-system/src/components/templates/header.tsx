@@ -1,7 +1,7 @@
 import type { IGRPHeaderDataArgs } from '@igrp/framework-next-types';
 
 import { Separator } from '../primitives/separator';
-import { SidebarTrigger } from '../primitives/sidebar';
+import { SidebarTrigger } from '../horizon/sidebar';
 import { IGRPBreadcrumbs } from './breadcrumbs';
 import { IGRPCommandSearch } from './command-search';
 import { IGRPModeSwitcher } from './mode-switcher';

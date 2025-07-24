@@ -1,6 +1,7 @@
 import Link from 'next/link';
-import { Button } from '@/components/horizon/button';
-import { IGRPIcon, type IGRPIconName } from '@/components/igrp/icon';
+
+import { Button } from '../../horizon/button';
+import { IGRPIcon, type IGRPIconName } from '../icon';
 
 interface IGRPPageHeaderBackButtonProps extends React.ComponentProps<typeof Button> {
   url?: string;

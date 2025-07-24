@@ -1,9 +1,9 @@
 'use client';
 
-import { IGRPStatsCard, type IGRPStatsCardProps } from '@/components/igrp/stats-card';
-import type { IGRPColorVariants } from '@/lib/colors';
-import { IGRPColors } from '@/lib/colors';
-import { cn } from '@/lib/utils';
+import { IGRPStatsCard, type IGRPStatsCardProps } from '../../igrp/stats-card';
+import type { IGRPColorVariants } from '../../../lib/colors';
+import { IGRPColors } from '../../../lib/colors';
+import { cn } from '../../../lib/utils';
 
 interface StatsCardMiniProps
   extends Omit<

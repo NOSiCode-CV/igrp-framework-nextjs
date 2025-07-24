@@ -6,9 +6,11 @@ import { type Mode, useForm, type UseFormReturn } from 'react-hook-form';
 import { toast } from 'sonner';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { z } from 'zod';
-import { Form } from '@/components/primitives/form';
+
+import { Form } from '../../primitives/form';
+import { cn } from '../../../lib/utils';
 import { IGRPFormContext } from './form-context';
-import { cn } from '@/lib/utils';
+
 
 type IGRPFormHandle<TSchema extends z.ZodTypeAny> = UseFormReturn<z.infer<TSchema>> & {
   submit: () => Promise<void>;

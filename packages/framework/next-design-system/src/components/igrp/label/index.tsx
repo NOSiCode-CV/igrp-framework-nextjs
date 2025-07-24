@@ -1,7 +1,7 @@
 'use client';
 
-import { Label } from '@/components/primitives/label';
-import { cn } from '@/lib/utils';
+import { Label } from '../../primitives/label';
+import { cn } from '../../../lib/utils';
 
 type IGRPLabelProps = React.ComponentProps<typeof Label> & {
   label?: string;

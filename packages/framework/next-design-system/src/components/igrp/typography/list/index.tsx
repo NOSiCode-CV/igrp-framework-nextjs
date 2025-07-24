@@ -3,10 +3,11 @@
 
 import { useEffect, useState } from 'react';
 import { cva, type VariantProps } from 'class-variance-authority';
-import { IGRPBadge } from '@/components/igrp/badge';
-import { IGRPIcon, type IGRPIconName } from '@/components/igrp/icon';
-import { IGRPColors, type IGRPColorRole, type IGRPColorVariants } from '@/lib/colors';
-import { cn } from '@/lib/utils';
+
+import { IGRPBadge } from '../../badge';
+import { IGRPIcon, type IGRPIconName } from '../../icon';
+import { IGRPColors, type IGRPColorRole, type IGRPColorVariants } from '../../../../lib/colors';
+import { cn } from '../../../../lib/utils';
 
 const igrpTextlistVariants = cva('', {
   variants: {

@@ -1,7 +1,6 @@
 'use client';
 
 import type React from 'react';
-
 import { useEffect, useRef, useState } from 'react';
 import {
   eachMonthOfInterval,
@@ -15,14 +14,14 @@ import {
 import { ChevronDownIcon } from 'lucide-react';
 import type { CaptionLabelProps, MonthGridProps } from 'react-day-picker';
 
-import { Button } from '@/components/horizon/button';
-import { Calendar } from '@/components/horizon/calendar';
+import { Button } from '../../../horizon/button';
+import { Calendar } from '../../../horizon/calendar';
 import {
   Collapsible,
   CollapsibleContent,
   CollapsibleTrigger,
-} from '@/components/primitives/collapsible';
-import { ScrollArea } from '@/components/primitives/scroll-area';
+} from '../../../primitives/collapsible';
+import { ScrollArea } from '../../../primitives/scroll-area';
 
 export function Component() {
   const today = new Date();

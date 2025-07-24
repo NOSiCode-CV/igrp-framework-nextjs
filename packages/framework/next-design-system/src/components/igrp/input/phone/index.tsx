@@ -4,12 +4,14 @@ import { useId, useState, useEffect } from 'react';
 import * as RPNInput from 'react-phone-number-input';
 import flags from 'react-phone-number-input/flags';
 import { useFormContext, Controller } from 'react-hook-form';
-import { Input } from '@/components/horizon/input';
-import { IGRPIcon } from '@/components/igrp/icon';
-import { IGRPLabel } from '@/components/igrp/label';
-import { cn } from '@/lib/utils';
-import type { IGRPInputProps, IGRPGridSize } from '@/types/globals';
-import { igrpGridSizeClasses } from '@/lib/constants';
+
+import { Input } from '../../../horizon/input';
+import { IGRPIcon } from '../../../igrp/icon';
+import { IGRPLabel } from '../../../igrp/label';
+// import { igrpGridSizeClasses } from '../../../../lib/constants';
+import { cn } from '../../../../lib/utils';
+import type { IGRPInputProps, IGRPGridSize } from '../../../../types/globals';
+
 
 interface IGRPInputPhoneProps extends Omit<IGRPInputProps, 'onChange' | 'ref'> {
   name: string;
@@ -194,7 +196,7 @@ function IGRPInputPhone({
       defaultValue={defaultValue || ''}
       render={({ field, fieldState }) => (
         <div
-          className={cn('*:not-first:mt-2', igrpGridSizeClasses[gridSize], className)}
+          className={cn('*:not-first:mt-2', /*igrpGridSizeClasses[gridSize],*/ className)}
           dir={dir}
         >
           {label && (

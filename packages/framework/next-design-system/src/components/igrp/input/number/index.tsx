@@ -3,12 +3,12 @@
 import { useState, useEffect, useId } from 'react';
 import { useFormContext, Controller } from 'react-hook-form';
 
-import { Input } from '@/components/horizon/input';
-import { IGRPLabel } from '@/components/igrp/label';
-import { IGRPButton } from '@/components/igrp/button';
-import { cn } from '@/lib/utils';
-import type { IGRPInputProps, IGRPGridSize } from '@/types/globals';
-import { igrpGridSizeClasses } from '@/lib/constants';
+import { Input } from '../../..//horizon/input';
+import { IGRPLabel } from '../../..//igrp/label';
+import { IGRPButton } from '../../..//igrp/button';
+// import { igrpGridSizeClasses } from '../../../../lib/constants';
+import { cn } from '../../../../lib/utils';
+import type { IGRPInputProps, IGRPGridSize } from '../../../../types/globals';
 
 interface IGRPInputNumberProps extends Omit<IGRPInputProps, 'onChange'> {
   name: string;
@@ -277,7 +277,7 @@ function IGRPInputNumber({
       control={formContext.control}
       defaultValue={defaultValue}
       render={({ field, fieldState }) => (
-        <div className={cn('w-full', igrpGridSizeClasses[gridSize], className)}>
+        <div className={cn('w-full', /*igrpGridSizeClasses[gridSize],*/ className)}>
           {renderNumberInput(
             parseFloat(field.value) || defaultValue,
             (newValue) => {

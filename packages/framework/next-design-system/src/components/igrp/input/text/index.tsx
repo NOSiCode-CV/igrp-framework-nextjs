@@ -2,13 +2,14 @@
 
 import { useId } from 'react';
 import { useFormContext } from 'react-hook-form';
-import { Input } from '@/components/horizon/input';
-import { IGRPFormField } from '@/components/igrp/form/form-field';
-import { IGRPIcon } from '@/components/igrp/icon';
-import { IGRPLabel } from '@/components/igrp/label';
-import { igrpGridSizeClasses } from '@/lib/constants';
-import { cn } from '@/lib/utils';
-import type { IGRPInputProps, IGRPGridSize } from '@/types/globals';
+
+import { Input } from '../../../horizon/input';
+import { IGRPFormField } from '../../form/form-field';
+import { IGRPIcon } from '../../icon';
+import { IGRPLabel } from '../../label';
+// import { igrpGridSizeClasses } from '../../../../lib/constants';
+import { cn } from '../../../../lib/utils';
+import type { IGRPInputProps, IGRPGridSize } from '../../../../types/globals';
 
 interface IGRPInputTextProps extends IGRPInputProps {
   type?: 'text' | 'email' | 'number';
@@ -48,7 +49,7 @@ function IGRPInputText({
         label={label}
         helperText={helperText}
         className={className}
-        size={igrpGridSizeClasses[gridSize]}
+        // size={igrpGridSizeClasses[gridSize]}
         required={required}
         control={formContext.control}
       >

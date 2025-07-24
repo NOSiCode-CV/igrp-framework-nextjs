@@ -6,8 +6,8 @@ import {
   CardFooter,
   CardHeader,
   CardTitle,
-} from '@/components/horizon/card';
-import { cn } from '@/lib/utils';
+} from '../../horizon/card';
+import { cn } from '../../../lib/utils';
 
 interface IGRPCardProps extends React.ComponentProps<typeof Card> {
   name?: string;

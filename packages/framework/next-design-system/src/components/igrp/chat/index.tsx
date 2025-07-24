@@ -2,12 +2,11 @@
 
 import { useState, useEffect, useRef, useCallback } from 'react';
 
-import { ScrollArea } from '@/components/primitives/scroll-area';
-import { IGRPButton } from '@/components/igrp/button';
-import { IGRPInputText } from '@/components/igrp/input';
-import { IGRPIcon } from '@/components/igrp/icon';
-
-import { cn } from '@/lib/utils';
+import { ScrollArea } from '../../primitives/scroll-area';
+import { IGRPButton } from '../button';
+import { IGRPInputText } from '../input';
+import { IGRPIcon } from '../icon';
+import { cn } from '../../../lib/utils';
 
 interface IGRPChatMessage {
   role: 'user' | 'assistant' | 'system';

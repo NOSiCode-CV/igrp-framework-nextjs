@@ -2,9 +2,10 @@
 
 import { useState } from 'react';
 import { cva, type VariantProps } from 'class-variance-authority';
-import { Tabs, TabsList, TabsTrigger, TabsContent } from '@/components/primitives/tabs';
-import { IGRPIcon, type IGRPIconName } from '@/components/igrp/icon';
-import { cn } from '@/lib/utils';
+
+import { Tabs, TabsList, TabsTrigger, TabsContent } from '../../primitives/tabs';
+import { IGRPIcon, type IGRPIconName } from '../icon';
+import { cn } from '../../../lib/utils';
 
 const tabListVariants = cva('gap-1.5', {
   variants: {

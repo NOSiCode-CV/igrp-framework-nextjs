@@ -5,14 +5,15 @@ import type {
   PropsBase,
   PropsRange,
 } from 'react-day-picker';
-import { Calendar as DropdownCalendar } from '@/components/horizon/calendar';
+
+import { Calendar as DropdownCalendar } from '../../../../horizon/calendar';
 import {
   Select,
   SelectContent,
   SelectItem,
   SelectTrigger,
   SelectValue,
-} from '@/components/primitives/select';
+} from '../../../../primitives/select';
 
 type IGRPCalendarRangeProps = {
   date?: DateRange;

@@ -3,6 +3,7 @@
 import { useId, useState, useEffect } from 'react';
 import { format } from 'date-fns';
 import { useFormContext } from 'react-hook-form';
+
 import {
   FormControl,
   FormDescription,
@@ -10,16 +11,16 @@ import {
   FormItem,
   FormLabel,
   FormMessage,
-} from '@/components/primitives/form';
-import { Popover, PopoverContent, PopoverTrigger } from '@/components/primitives/popover';
-import { IGRPButton } from '@/components/igrp/button';
+} from '../../../primitives/form';
+import { Popover, PopoverContent, PopoverTrigger } from '../../../primitives/popover';
+import { IGRPButton } from '../../../igrp/button';
 import {
   IGRPCalendar,
   type IGRPCalendarProps,
-} from '@/components/igrp/input/date-picker/calendar/calendar';
-import { IGRPLabel } from '@/components/igrp/label';
-import { igrpGridSizeClasses } from '@/lib/constants';
-import { cn } from '@/lib/utils';
+} from '../../../igrp/input/date-picker/calendar/calendar';
+import { IGRPLabel } from '../../../igrp/label';
+import { igrpGridSizeClasses } from '../../../../lib/constants';
+import { cn } from '../../../../lib/utils';
 import { type IGRPDatePickerBaseProps } from './types';
 
 type IGRPDatePickerProps = IGRPCalendarProps & IGRPDatePickerBaseProps;
@@ -133,7 +134,7 @@ function IGRPDatePicker({
         control={formContext.control}
         name={fieldName}
         render={({ field, fieldState }) => (
-          <FormItem className={cn(igrpGridSizeClasses[gridSize], className)}>
+          <FormItem className={cn(/*igrpGridSizeClasses[gridSize],*/ className)}>
             {label && (
               <FormLabel
                 className={cn(
@@ -160,7 +161,7 @@ function IGRPDatePicker({
   }
   console.log({ required });
   return (
-    <div className={cn('*:not-first:mt-2', igrpGridSizeClasses[gridSize], className)}>
+    <div className={cn('*:not-first:mt-2', /*igrpGridSizeClasses[gridSize],*/ className)}>
       {label && (
         <IGRPLabel
           label={label}

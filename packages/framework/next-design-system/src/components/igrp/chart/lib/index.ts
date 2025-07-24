@@ -1,3 +1,4 @@
+import type { ChartConfig as ShadCNChartConfig } from '../../../primitives/chart';
 import {
   IGRP_CHART_COLORS,
   type IGRPChartDataItem,
@@ -5,7 +6,6 @@ import {
   type IGRPChartSize,
   type IGRPSeriesConfig,
 } from '../types';
-import type { ChartConfig as ShadCNChartConfig } from '@/components/primitives/chart';
 
 export const formatChartValue = (
   value: number,

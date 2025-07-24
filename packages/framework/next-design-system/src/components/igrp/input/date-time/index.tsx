@@ -2,11 +2,11 @@
 
 import { useId, useState, useEffect } from 'react';
 import { useFormContext, Controller } from 'react-hook-form';
-import { Input } from '@/components/horizon/input';
-import { IGRPLabel } from '@/components/igrp/label';
-import { cn } from '@/lib/utils';
-import type { IGRPInputProps, IGRPGridSize } from '@/types/globals';
-import { igrpGridSizeClasses } from '@/lib/constants';
+import { Input } from '../../../horizon/input';
+import { IGRPLabel } from '../../../igrp/label';
+// import { igrpGridSizeClasses } from '../../../../lib/constants';
+import { cn } from '../../../../lib/utils';
+import type { IGRPInputProps, IGRPGridSize } from '../../../../types/globals';
 
 interface IGRPDateTimeInputProps
   extends Omit<IGRPInputProps, 'onChange' | 'defaultValue' | 'value'> {
@@ -176,7 +176,7 @@ function IGRPDateTimeInput({
         };
 
         return (
-          <div className={cn('*:not-first:mt-2', igrpGridSizeClasses[gridSize])}>
+          <div className={cn('*:not-first:mt-2'/*, igrpGridSizeClasses[gridSize]*/)}>
             {label && (
               <IGRPLabel
                 label={label}

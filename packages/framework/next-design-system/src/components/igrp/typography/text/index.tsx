@@ -2,8 +2,9 @@
 
 import { useEffect, useState } from 'react';
 import { cva, type VariantProps } from 'class-variance-authority';
-import { IGRPColors, type IGRPColorVariants } from '@/lib/colors';
-import { cn } from '@/lib/utils';
+
+import { IGRPColors, type IGRPColorVariants } from '../../../../lib/colors';
+import { cn } from '../../../../lib/utils';
 
 const igrpTextVariants = cva('transition-all duration-300 ease-in-out', {
   variants: {

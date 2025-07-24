@@ -1,7 +1,8 @@
 import { useCallback, useEffect, useId, useMemo, useState } from 'react';
 import { type Column, type Table } from '@tanstack/react-table';
 import { type DateRange } from 'react-day-picker';
-import { Checkbox } from '@/components/horizon/checkbox';
+
+import { Checkbox } from '../../horizon/checkbox';
 import {
   Command,
   CommandEmpty,
@@ -10,23 +11,23 @@ import {
   CommandItem,
   CommandList,
   CommandSeparator,
-} from '@/components/primitives/command';
-import { Popover, PopoverContent, PopoverTrigger } from '@/components/primitives/popover';
+} from '../../primitives/command';
+import { Popover, PopoverContent, PopoverTrigger } from '../../primitives/popover';
 import {
   Select,
   SelectContent,
   SelectItem,
   SelectTrigger,
   SelectValue,
-} from '@/components/primitives/select';
-import { Separator } from '@/components/primitives/separator';
-import { IGRPBadge } from '@/components/igrp/badge';
-import { IGRPIcon } from '@/components/igrp/icon';
-import { IGRPButton } from '@/components/igrp/button';
-import { IGRPDatePickerRange } from '@/components/igrp/input/date-picker/date-picker-range';
-import { IGRPInputText } from '@/components/igrp/input/text';
-import type { IGRPInputProps, IGRPOptionsProps } from '@/types/globals';
-import { cn } from '@/lib/utils';
+} from '../../primitives/select';
+import { Separator } from '../../primitives/separator';
+import { IGRPButton } from '../../igrp/button';
+import { IGRPBadge } from '../../igrp/badge';
+import { IGRPIcon } from '../../igrp/icon';
+import { IGRPDatePickerRange } from '../../igrp/input/date-picker/date-picker-range';
+import { IGRPInputText } from '../../igrp/input/text';
+import type { IGRPInputProps, IGRPOptionsProps } from '../../../types/globals';
+import { cn } from '../../../lib/utils';
 
 interface IGRPDataTableFilterProps<TData> {
   column?: Column<TData, unknown>;

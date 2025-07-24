@@ -3,9 +3,9 @@
 import { useId } from 'react';
 import { useFormContext } from 'react-hook-form';
 
-import { Input } from '@/components/horizon/input';
-import { IGRPFormField } from '@/components/igrp/form/form-field';
-import type { IGRPInputProps } from '@/types/globals';
+import { Input } from '../../..//horizon/input';
+import { IGRPFormField } from '../../..//igrp/form/form-field';
+import type { IGRPInputProps } from '../../../../types/globals';
 
 function IGRPInputHidden({ name, required = false, ...props }: Omit<IGRPInputProps, 'showIcon'>) {
   const id = useId();

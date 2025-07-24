@@ -1,6 +1,7 @@
-import { IGRPAlert, IGRPBadge } from '@/components/igrp';
-import type { IGRPColorRole, IGRPColorVariants } from '@/lib/colors';
-import { cn } from '@/lib/utils';
+import { IGRPAlert } from '../../igrp/alert';
+import { IGRPBadge } from '../../igrp/badge';
+import type { IGRPColorRole, IGRPColorVariants } from '../../../lib/colors';
+import { cn } from '../../../lib/utils';
 
 interface IGRPStatusBannerProps {
   variant?: IGRPColorRole;

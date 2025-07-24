@@ -2,10 +2,11 @@
 
 import { useId, useRef } from 'react';
 import { useFormContext, Controller } from 'react-hook-form';
-import { Input } from '@/components/horizon/input';
-import { IGRPLabel } from '@/components/igrp/label';
-import { cn } from '@/lib/utils';
-import type { IGRPInputProps, IGRPGridSize } from '@/types/globals';
+
+import { Input } from '../../../horizon/input';
+import { IGRPLabel } from '../../../igrp/label';
+import { cn } from '../../../../lib/utils';
+import type { IGRPInputProps, IGRPGridSize } from '../../../../types/globals';
 
 interface IGRPInputFileProps extends IGRPInputProps {
   name: string;
@@ -103,7 +104,7 @@ function IGRPInputFile({
         };
 
         return (
-          <div className={cn('*:not-first:mt-2', gridSize)}>
+          <div className={cn('*:not-first:mt-2'/*, gridSize*/)}>
             {label && (
               <IGRPLabel
                 label={label}

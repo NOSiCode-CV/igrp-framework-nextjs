@@ -3,10 +3,11 @@
 import type { ReactNode } from 'react';
 import type { VariantProps } from 'class-variance-authority';
 import { Loader2 } from 'lucide-react';
-import { Button, buttonVariants } from '@/components/horizon/button';
-import { IGRPIcon } from '@/components/igrp/icon';
-import { cn } from '@/lib/utils';
-import type { IGRPBaseAttributes } from '@/types/globals';
+
+import { Button, buttonVariants } from '../../horizon/button';
+import { IGRPIcon } from '../icon';
+import { cn } from '../../../lib/utils';
+import type { IGRPBaseAttributes } from '../../../types/globals';
 
 interface IGRPButtonProps
   extends Omit<React.ComponentProps<'button'>, 'name'>,

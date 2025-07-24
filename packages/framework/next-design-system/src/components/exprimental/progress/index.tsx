@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { Progress } from '@/components/primitives/progress';
+import { Progress } from '../../primitives/progress';
 
 interface ProgressIGRPProps {
   className?: string;

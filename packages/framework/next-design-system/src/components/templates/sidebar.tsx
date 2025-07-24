@@ -2,7 +2,7 @@
 
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
-import { IGRPIcon } from '@igrp/igrp-framework-react-design-system';
+import { IGRPIcon } from '@igrp/framework-next-design-system';
 import type { IGRPSidebarDataArgs } from '@igrp/framework-next-types';
 
 import {
@@ -16,7 +16,7 @@ import {
   SidebarMenu,
   SidebarMenuButton,
   SidebarRail,
-} from '../primitives/sidebar';
+} from '../horizon/sidebar';
 import { IGRPAppSwitcher } from './app-switcher';
 import { IGRPMenus } from './menus';
 import { IGRPNavUser } from './nav-user';

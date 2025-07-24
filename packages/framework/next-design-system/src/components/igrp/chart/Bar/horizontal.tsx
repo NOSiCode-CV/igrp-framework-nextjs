@@ -7,7 +7,7 @@ import {
   ChartTooltipContent,
   ChartLegend,
   ChartLegendContent,
-} from '@/components/primitives/chart';
+} from '../../../primitives/chart';
 import {
   formatChartValue,
   getChartHeight,

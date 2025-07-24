@@ -12,7 +12,7 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from '../primitives/dropdown-menu';
-import { SidebarMenu, SidebarMenuButton, SidebarMenuItem } from '../primitives/sidebar';
+import { SidebarMenu, SidebarMenuButton, SidebarMenuItem } from '../horizon/sidebar';
 import { IGRPUserAvatar } from './user-avatar';
 import { getInitials } from '../../lib/getInitials';
 

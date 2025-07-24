@@ -11,8 +11,8 @@ import {
   DialogContent,
   DialogFooter,
   DialogHeader,
-} from '@/components/horizon/dialog';
-import { cn } from '@/lib/utils';
+} from '../../horizon/dialog';
+import { cn } from '../../../lib/utils';
 
 const igrpModalDialogContentVariants = cva('w-full sm:max-w-lg max-h-[90vh] overflow-auto', {
   variants: {

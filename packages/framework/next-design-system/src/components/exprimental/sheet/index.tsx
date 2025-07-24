@@ -7,11 +7,9 @@ import {
   SheetHeader,
   SheetTitle,
   SheetTrigger,
-} from '@/components/primitives/sheet';
-import { Button } from '@/components/horizon/button';
-
-import { cn } from '@/lib/utils';
-import type React from 'react';
+} from '../../primitives/sheet';
+import { Button } from '../../horizon/button';
+import { cn } from '../../../lib/utils';
 
 type IGRPSheetSideProps = 'top' | 'right' | 'bottom' | 'left';
 

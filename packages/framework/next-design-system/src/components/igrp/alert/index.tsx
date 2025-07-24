@@ -1,9 +1,9 @@
-import { IGRPIcon, type IGRPIconName } from '@/components/igrp/icon';
-import { IGRPLink } from '@/components/igrp/typography/link';
-import { IGRPColors, type IGRPColorRole, type IGRPColorVariants } from '@/lib/colors';
-import { igrpAlertIconMappings } from '@/lib/constants';
-import { cn } from '@/lib/utils';
-import type { IGRPBaseAttributes } from '@/types/globals';
+import { IGRPIcon, type IGRPIconName } from '../icon';
+import { IGRPLink } from '../typography/link';
+import { IGRPColors, type IGRPColorRole, type IGRPColorVariants } from '../../../lib/colors';
+import { igrpAlertIconMappings } from '../../../lib/constants';
+import { cn } from '../../../lib/utils';
+import type { IGRPBaseAttributes } from '../../../types/globals';
 
 interface IGRPAlertProps
   extends Pick<

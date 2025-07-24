@@ -6,7 +6,7 @@ import type {
   IGRPSidebarDataArgs,
   ExtendedSession
 } from '@igrp/framework-next-types';
-import { IGRPToaster } from '@igrp/igrp-framework-react-design-system';
+import { IGRPToaster } from '@igrp/framework-next-design-system';
 
 import { IGRPActiveThemeProvider } from './active-theme';
 import { IGRPProgressBarProvider } from './progress-bar';

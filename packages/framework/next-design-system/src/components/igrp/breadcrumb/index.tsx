@@ -3,15 +3,16 @@
 import * as React from 'react';
 import { Slot } from '@radix-ui/react-slot';
 import { cva, type VariantProps } from 'class-variance-authority';
-import { cn } from '@/lib/utils';
-import { IGRPIcon } from '@/components/igrp/icon';
+import { icons } from 'lucide-react';
+
+import { cn } from '../../../lib/utils';
+import { IGRPIcon } from '../icon';
 import {
   DropdownMenu,
   DropdownMenuContent,
   DropdownMenuItem,
   DropdownMenuTrigger,
-} from '@/components/primitives/dropdown-menu';
-import { icons } from 'lucide-react';
+} from '../../primitives/dropdown-menu';
 
 const breadcrumbVariants = cva('flex flex-wrap items-center', {
   variants: {
@@ -126,10 +127,10 @@ const IGRPBreadcrumb = React.forwardRef<
       return (
         <>
           <IGRPBreadcrumbItem
-            showIcon={firstItem.showIcon}
-            iconName={firstItem.iconName}
+            showIcon={firstItem?.showIcon}
+            iconName={firstItem?.iconName}
           >
-            <IGRPBreadcrumbLink href={firstItem.href || '#'}>{firstItem.label}</IGRPBreadcrumbLink>
+            <IGRPBreadcrumbLink href={firstItem?.href || '#'}>{firstItem?.label}</IGRPBreadcrumbLink>
           </IGRPBreadcrumbItem>
           <IGRPBreadcrumbSeparator />
           <IGRPBreadcrumbItem>

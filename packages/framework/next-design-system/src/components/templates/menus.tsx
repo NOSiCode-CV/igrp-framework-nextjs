@@ -4,7 +4,7 @@ import { useMemo, useCallback } from 'react';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 import type { IGRPMenuItemArgs } from '@igrp/framework-next-types';
-import { IGRPIcon } from '@igrp/igrp-framework-react-design-system';
+import { IGRPIcon } from '@igrp/framework-next-design-system';
 
 import { Alert, AlertDescription } from '../../components/primitives/alert';
 import {
@@ -25,8 +25,8 @@ import {
   SidebarMenuSub,
   SidebarMenuSubButton,
   SidebarMenuSubItem,
-} from '../../components/primitives/sidebar';
-import { isExternalUrl, normalizeUrl } from '../../lib/url';
+} from '../../components/horizon/sidebar';
+import { igrpIsExternalUrl, igrpNormalizeUrl } from '../../lib/url';
 
 export type IGRPMenuArgs = {
   menus?: IGRPMenuItemArgs[];
@@ -114,8 +114,8 @@ function MenuItemWithSubmenus({ menu, pathname, childMenus }: MenuItemWithSubmen
   const { id, name, url, icon } = menu;
   const isActive = pathname === url;
   const hasChildren = childMenus.length > 0;
-  const isExternal = url ? isExternalUrl(url) : false;
-  const normalizedUrl = url ? normalizeUrl(url) : '';
+  const isExternal = url ? igrpIsExternalUrl(url) : false;
+  const normalizedUrl = url ? igrpNormalizeUrl(url) : '';
 
   if (!hasChildren) {
     return (
@@ -207,8 +207,8 @@ interface SubMenuItemProps {
 
 function SubMenuItem({ menu, variant }: SubMenuItemProps) {
   const { name, url, icon } = menu;
-  const isExternal = url ? isExternalUrl(url) : false;
-  const normalizedUrl = url ? normalizeUrl(url) : '';
+  const isExternal = url ? igrpIsExternalUrl(url) : false;
+  const normalizedUrl = url ? igrpNormalizeUrl(url) : '';
 
   const iconElement = icon && variant === 'dropdown' && <IGRPIcon iconName={icon} />;
 

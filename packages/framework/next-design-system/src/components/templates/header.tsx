@@ -53,4 +53,4 @@ function IGRPTemplateHeader({ data, className }: IGRPTemplateHeaderProps) {
   );
 }
 
-export { IGRPTemplateHeader }
+export { IGRPTemplateHeader };

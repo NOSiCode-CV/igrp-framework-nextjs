@@ -5,7 +5,7 @@ import './styles.css';
 // custom components
 export { IGRPStatusBanner, type IGRPStatusBannerProps } from './components/custom/status-banner';
 export { IGRPStatsCardTopBorderColored } from './components/custom/stats-card-top-border-colored';
-export { IGRPUserAvatar, type IGRPUserAvatarProps } from "./components/custom/user-avatar";
+export { IGRPUserAvatar, type IGRPUserAvatarProps } from './components/custom/user-avatar';
 
 // errs components
 export { IGRPGlobalError, type IGRPGlobalErrorProps } from './components/errors/global';
@@ -26,14 +26,14 @@ export { IGRPGlobalError, type IGRPGlobalErrorProps } from './components/errors/
 // } from './components/horizon/alert-dialog';
 // export { Button, buttonVariants } from './components/horizon/button';
 // export { Calendar } from './components/horizon/calendar';
-// export { 
-//   Card, 
-//   CardHeader, 
-//   CardFooter, 
-//   CardTitle, 
-//   CardAction, 
-//   CardDescription, 
-//   CardContent 
+// export {
+//   Card,
+//   CardHeader,
+//   CardFooter,
+//   CardTitle,
+//   CardAction,
+//   CardDescription,
+//   CardContent
 // } from './components/horizon/card';
 // export {
 //   type CarouselApi,
@@ -396,14 +396,14 @@ export {
 export { IGRPText, type IGRPTextProps, igrpTextVariants } from './components/igrp/typography/text';
 
 // templates
-export { 
-  IGRPTemplateAppSwitcher, 
-  type IGRPTemplateAppSwitcherProps 
+export {
+  IGRPTemplateAppSwitcher,
+  type IGRPTemplateAppSwitcherProps,
 } from './components/templates/app-switcher';
 
-export { 
-  IGRPTemplateBreadcrumbs, 
-  type IGRPTemplateBreadcrumbsProps 
+export {
+  IGRPTemplateBreadcrumbs,
+  type IGRPTemplateBreadcrumbsProps,
 } from './components/templates/breadcrumbs';
 
 export { IGRPTemplateCommandSearch } from './components/templates/command-search';
@@ -414,16 +414,16 @@ export { IGRPTemplateMenus, type IGRPTemplateMenuArgs } from './components/templ
 
 export { IGRPTemplateModeSwitcher } from './components/templates/mode-switcher';
 
-export { IGRPTemplateNavUser, type IGRPTemplateNavUserProps } from './components/templates/nav-user';
+export {
+  IGRPTemplateNavUser,
+  type IGRPTemplateNavUserProps,
+} from './components/templates/nav-user';
 
-export { 
-  IGRPTemplateNavUserHeader, 
-} from './components/templates/nav-user-header';
+export { IGRPTemplateNavUserHeader } from './components/templates/nav-user-header';
 
 export { IGRPTemplateNotifications } from './components/templates/notifications';
 
 export { IGRPTemplateThemeSelector } from './components/templates/theme-selector';
-
 
 // types
 export type {
@@ -431,12 +431,12 @@ export type {
   IGRPBaseAttributes,
   IGRPInputProps,
   IGRPOptionsProps,
-  IGRPGridSize
+  IGRPGridSize,
 } from './types/globals';
 
 // hooks
 export { IGRP_META_THEME_COLORS, useIGRPMetaColor } from './hooks/use-meta-color';
-export { useIsMobile } from "./hooks/use-mobile";
+export { useIsMobile } from './hooks/use-mobile';
 
 // libs
 export {
@@ -446,7 +446,7 @@ export {
   type IGRPColorVariants,
   IGRPColorObjectVariants,
   IGRPColorObjectRole,
-  igrpColorText
+  igrpColorText,
 } from './lib/colors';
 export { igrpGridSizeClasses, igrpAlertIconMappings } from './lib/constants';
 export { igrpGetnitials } from './lib/initials';
@@ -455,7 +455,10 @@ export { igrpIsExternalUrl, igrpNormalizeUrl } from './lib/url';
 export { cn } from './lib/utils';
 
 // providers
-export { IGRPActiveThemeProvider, type IGRPActiveThemeProviderArgs } from './providers/active-theme';
+export {
+  IGRPActiveThemeProvider,
+  type IGRPActiveThemeProviderArgs,
+} from './providers/active-theme';
 export { IGRPProgressBarProvider } from './providers/progress-bar';
 export { IGRPRootProviders } from './providers/root';
 export { IGRPSessionProvider } from './providers/session';

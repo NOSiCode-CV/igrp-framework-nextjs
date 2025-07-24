@@ -15,7 +15,6 @@ import {
   CommandSeparator,
 } from '../primitives/command';
 
-
 function IGRPTemplateCommandSearch() {
   const [open, setOpen] = React.useState(false);
   const router = useRouter();
@@ -111,4 +110,4 @@ function IGRPTemplateCommandSearch() {
   );
 }
 
-export { IGRPTemplateCommandSearch }
+export { IGRPTemplateCommandSearch };

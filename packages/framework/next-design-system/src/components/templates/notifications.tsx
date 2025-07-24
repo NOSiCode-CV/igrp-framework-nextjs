@@ -88,4 +88,4 @@ function IGRPTemplateNotifications() {
   );
 }
 
-export { IGRPTemplateNotifications }
+export { IGRPTemplateNotifications };

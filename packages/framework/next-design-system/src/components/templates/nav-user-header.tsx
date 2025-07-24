@@ -16,7 +16,6 @@ import { IGRPUserAvatar } from '../custom/user-avatar';
 import { igrpGetnitials } from '../../lib/initials';
 import { IGRPTemplateNavUserProps } from './nav-user';
 
-
 function IGRPTemplateNavUserHeader({ user }: IGRPTemplateNavUserProps) {
   if (!user) return null;
 

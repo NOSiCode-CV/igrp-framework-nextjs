@@ -93,4 +93,4 @@ function IGRPTemplateThemeSelector() {
   );
 }
 
-export { IGRPTemplateThemeSelector }
+export { IGRPTemplateThemeSelector };

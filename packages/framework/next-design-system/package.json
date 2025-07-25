@@ -1,6 +1,6 @@
 {
   "name": "@igrp/framework-next-design-system",
-  "version": "0.0.1-alpha.18",
+  "version": "0.0.1-alpha.19",
   "description": "IGRP Framework for Next.js - Layout components and data loading hooks",
   "keywords": [
     "igrp",

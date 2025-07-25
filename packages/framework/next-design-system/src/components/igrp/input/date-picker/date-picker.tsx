@@ -19,7 +19,7 @@ import {
   type IGRPCalendarProps,
 } from '../../../igrp/input/date-picker/calendar/calendar';
 import { IGRPLabel } from '../../../igrp/label';
-import { igrpGridSizeClasses } from '../../../../lib/constants';
+// import { igrpGridSizeClasses } from '../../../../lib/constants';
 import { cn } from '../../../../lib/utils';
 import { type IGRPDatePickerBaseProps } from './types';
 
@@ -39,7 +39,7 @@ function IGRPDatePicker({
   required = false,
   disabledPicker = false,
   disabled,
-  gridSize = 'default',
+  // gridSize = 'default',
   dateFormat = 'dd/MM/yyyy',
   placeholder = 'Pick a date',
 }: IGRPDatePickerProps) {

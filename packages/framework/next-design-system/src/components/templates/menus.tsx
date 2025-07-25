@@ -4,7 +4,7 @@ import { useMemo, useCallback } from 'react';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 import type { IGRPMenuItemArgs } from '@igrp/framework-next-types';
-import { IGRPIcon } from '@igrp/framework-next-design-system';
+import { IGRPIcon } from '../igrp/icon';
 
 import { Alert, AlertDescription } from '../../components/primitives/alert';
 import {

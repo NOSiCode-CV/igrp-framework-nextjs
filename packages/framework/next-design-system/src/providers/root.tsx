@@ -5,7 +5,7 @@ import type {
   IGRPHeaderDataArgs,
   IGRPSidebarDataArgs,
 } from '@igrp/framework-next-types';
-import { IGRPToaster } from '@igrp/framework-next-design-system';
+import { IGRPToaster } from '../components/igrp/toaster';
 
 import { IGRPActiveThemeProvider } from './active-theme';
 import { IGRPProgressBarProvider } from './progress-bar';
@@ -14,7 +14,7 @@ import { IGRPThemeProvider } from './theme';
 import { SidebarInset, SidebarProvider } from '../components/horizon/sidebar';
 import { IGRPTemplateHeader } from '../components/templates/header';
 import { IGRPTemplateSidebar } from '../components/templates/sidebar';
-import { ExtendedSession } from '../types/globals';
+import { type ExtendedSession } from '../types/globals';
 
 export type IGRPRootProvidersArgs = {
   session?: ExtendedSession | null;

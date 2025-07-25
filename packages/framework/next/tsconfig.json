@@ -14,21 +14,21 @@
     "checkJs": false,
     "esModuleInterop": true,
     "forceConsistentCasingInFileNames": true,
-    "jsx": "preserve",
+    "jsx": "react-jsx",
     "outDir": "./dist",
     "resolveJsonModule": true,
     "skipLibCheck": true,
     "sourceMap": true,
     "lib": [
+      "ES2023",
       "DOM",
-      "DOM.Iterable",
-      "ES2023"
+      "DOM.Iterable"      
     ],
     "incremental": true,
     "isolatedModules": true,    
   },
   "include": [
-    "src"
+    "src" 
   ],
   "exclude": [
     "dist",

@@ -2,7 +2,7 @@
 
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
-import { IGRPIcon } from '@igrp/framework-next-design-system';
+import { IGRPIcon } from '../igrp/icon';
 import type { IGRPSidebarDataArgs } from '@igrp/framework-next-types';
 
 import {

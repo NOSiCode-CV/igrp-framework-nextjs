@@ -2,7 +2,7 @@
 
 import { useState } from 'react';
 import Image from 'next/image';
-import { IGRPIcon } from '@igrp/framework-next-design-system';
+import { IGRPIcon } from '../igrp/icon';
 import type { IGRPApplicationArgs } from '@igrp/framework-next-types';
 
 import {

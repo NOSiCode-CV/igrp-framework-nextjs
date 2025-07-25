@@ -67,7 +67,7 @@ function IGRPCombobox({
   showStatus,
   showIcon = false,
   iconName = 'CornerDownRight',
-  gridSize = 'default',
+  // gridSize = 'default',
 }: IGRPComboboxProps) {
   const id = useId();
   const fieldName = name ?? id;

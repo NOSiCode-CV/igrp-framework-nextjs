@@ -24,11 +24,11 @@ importers:
         specifier: ^3.2.12
         version: 3.2.12(next@15.4.3(react-dom@19.1.0(react@19.1.0))(react@19.1.0))(react-dom@19.1.0(react@19.1.0))(react@19.1.0)
       '@igrp/framework-next-design-system':
-        specifier: 0.0.1-alpha.26
-        version: 0.0.1-alpha.26(@types/react-dom@19.1.6(@types/react@19.1.8))(@types/react@19.1.8)(next-auth@4.24.11(next@15.4.3(react-dom@19.1.0(react@19.1.0))(react@19.1.0))(react-dom@19.1.0(react@19.1.0))(react@19.1.0))(next@15.4.3(react-dom@19.1.0(react@19.1.0))(react@19.1.0))(react-dom@19.1.0(react@19.1.0))(react@19.1.0)(typescript@5.8.3)
+        specifier: workspace:*
+        version: link:../next-design-system
       '@igrp/framework-next-types':
-        specifier: 0.0.1-alpha.26
-        version: 0.0.1-alpha.26
+        specifier: workspace:*
+        version: link:../next-types
       '@igrp/platform-access-management-client-ts':
         specifier: 0.0.1-alpha.5
         version: 0.0.1-alpha.5
@@ -133,8 +133,8 @@ importers:
         specifier: 5.0.1
         version: 5.0.1(react-hook-form@7.61.1(react@19.1.0))
       '@igrp/framework-next-types':
-        specifier: 0.0.1-alpha.26
-        version: 0.0.1-alpha.26
+        specifier: workspace:*
+        version: link:../next-types
       '@radix-ui/react-accordion':
         specifier: ^1.2.11
         version: 1.2.11(@types/react-dom@19.1.6(@types/react@19.1.8))(@types/react@19.1.8)(react-dom@19.1.0(react@19.1.0))(react@19.1.0)
@@ -245,7 +245,7 @@ importers:
         version: 4.24.11(next@15.4.3(react-dom@19.1.0(react@19.1.0))(react@19.1.0))(react-dom@19.1.0(react@19.1.0))(react@19.1.0)
       next-intl:
         specifier: ^4.1.0
-        version: 4.3.4(next@15.4.3(react-dom@19.1.0(react@19.1.0))(react@19.1.0))(react@19.1.0)(typescript@5.8.3)
+        version: 4.3.4(next@15.4.3(@babel/core@7.27.3)(babel-plugin-react-compiler@19.1.0-rc.2)(react-dom@19.1.0(react@19.1.0))(react@19.1.0))(react@19.1.0)(typescript@5.8.3)
       next-themes:
         specifier: 0.4.6
         version: 0.4.6(react-dom@19.1.0(react@19.1.0))(react@19.1.0)
@@ -377,14 +377,14 @@ importers:
         specifier: ^3.2.12
         version: 3.2.12(next@15.4.3(react-dom@19.1.0(react@19.1.0))(react@19.1.0))(react-dom@19.1.0(react@19.1.0))(react@19.1.0)
       '@igrp/framework-next':
-        specifier: 0.0.1-alpha.26
-        version: 0.0.1-alpha.26(@types/react-dom@19.1.6(@types/react@19.1.8))(@types/react@19.1.8)(next-auth@4.24.11(next@15.4.3(react-dom@19.1.0(react@19.1.0))(react@19.1.0))(react-dom@19.1.0(react@19.1.0))(react@19.1.0))(next@15.4.3(react-dom@19.1.0(react@19.1.0))(react@19.1.0))(react-dom@19.1.0(react@19.1.0))(react@19.1.0)(typescript@5.8.3)
+        specifier: workspace:*
+        version: link:../../packages/framework/next
       '@igrp/framework-next-design-system':
-        specifier: 0.0.1-alpha.26
-        version: 0.0.1-alpha.26(@types/react-dom@19.1.6(@types/react@19.1.8))(@types/react@19.1.8)(next-auth@4.24.11(next@15.4.3(react-dom@19.1.0(react@19.1.0))(react@19.1.0))(react-dom@19.1.0(react@19.1.0))(react@19.1.0))(next@15.4.3(react-dom@19.1.0(react@19.1.0))(react@19.1.0))(react-dom@19.1.0(react@19.1.0))(react@19.1.0)(typescript@5.8.3)
+        specifier: workspace:*
+        version: link:../../packages/framework/next-design-system
       '@igrp/framework-next-types':
-        specifier: 0.0.1-alpha.26
-        version: 0.0.1-alpha.26
+        specifier: workspace:*
+        version: link:../../packages/framework/next-types
       class-variance-authority:
         specifier: ^0.7.1
         version: 0.7.1
@@ -392,8 +392,8 @@ importers:
         specifier: ^2.1.1
         version: 2.1.1
       lucide-react:
-        specifier: ^0.518.0
-        version: 0.518.0(react@19.1.0)
+        specifier: ^0.525.0
+        version: 0.525.0(react@19.1.0)
       next:
         specifier: 15.4.3
         version: 15.4.3(@babel/core@7.27.3)(babel-plugin-react-compiler@19.1.0-rc.2)(react-dom@19.1.0(react@19.1.0))(react@19.1.0)
@@ -1194,24 +1194,6 @@ packages:
   '@humanwhocodes/retry@0.4.3':
     resolution: {integrity: sha512-bV0Tgo9K4hfPCek+aMAn81RppFKv2ySDQeMoSZuvTASywNTnVJCArCZE2FWqpvIatKu7VMRLWlR1EazvVhDyhQ==}
     engines: {node: '>=18.18'}
-
-  '@igrp/framework-next-design-system@0.0.1-alpha.26':
-    resolution: {integrity: sha512-KC5nMuZ21hbljDxIbE4f2vRzeSQKadosPty5jN47Jz32Jm8ZOHFsOV0Rx8Hkv/uy+8RasHbpODtRYQiZxrgb4A==}
-    peerDependencies:
-      next: 15.4.3
-      next-auth: ^4.24.11
-      react: 19.1.0
-      react-dom: 19.1.0
-
-  '@igrp/framework-next-types@0.0.1-alpha.26':
-    resolution: {integrity: sha512-PoLBAXK03C01ggghydHECQT8kUyHEd73BrxOnBlACbZiKeJg0aQz2OGNTHVQlOGIUJFvK1qtk4HHCr7PewxyhA==}
-
-  '@igrp/framework-next@0.0.1-alpha.26':
-    resolution: {integrity: sha512-xin/eS0HRfkXZnt9G4wy6agI4RoSb6x8Da6icG9hrzXFB/0rizcl45g04yEYQ5ysmPAzwrTqoQ3nf2G5ToKiIw==}
-    peerDependencies:
-      next: 15.4.3
-      react: 19.1.0
-      react-dom: 19.1.0
 
   '@igrp/platform-access-management-client-ts@0.0.1-alpha.5':
     resolution: {integrity: sha512-GAzpYcccOZfu4vNIpF5gNKyN2VpiC22Qw1c7mHPAOgrnGdvxaGiBTjvEf59g1qh4GqM+/Qt9glDB1+Qf96+49A==}
@@ -4116,11 +4098,6 @@ packages:
     resolution: {integrity: sha512-Jo6dJ04CmSjuznwJSS3pUeWmd/H0ffTlkXXgwZi+eq1UCmqQwCh+eLsYOYCwY991i2Fah4h1BEMCx4qThGbsiA==}
     engines: {node: '>=10'}
 
-  lucide-react@0.518.0:
-    resolution: {integrity: sha512-kFg34uQqnVl/7HwAiigxPSpj//43VIVHQbMygQPtS1yT4btMXHCWUipHcgcXHD2pm1Z2nUBA/M+Vnh/YmWXQUw==}
-    peerDependencies:
-      react: ^16.5.1 || ^17.0.0 || ^18.0.0 || ^19.0.0
-
   lucide-react@0.525.0:
     resolution: {integrity: sha512-Tm1txJ2OkymCGkvwoHt33Y2JpN5xucVq1slHcgE6Lk0WjDfjgKWor5CdVER8U6DvcfMwh4M8XxmpTiyzfmfDYQ==}
     peerDependencies:
@@ -6294,86 +6271,6 @@ snapshots:
   '@humanwhocodes/retry@0.3.1': {}
 
   '@humanwhocodes/retry@0.4.3': {}
-
-  '@igrp/framework-next-design-system@0.0.1-alpha.26(@types/react-dom@19.1.6(@types/react@19.1.8))(@types/react@19.1.8)(next-auth@4.24.11(next@15.4.3(react-dom@19.1.0(react@19.1.0))(react@19.1.0))(react-dom@19.1.0(react@19.1.0))(react@19.1.0))(next@15.4.3(react-dom@19.1.0(react@19.1.0))(react@19.1.0))(react-dom@19.1.0(react@19.1.0))(react@19.1.0)(typescript@5.8.3)':
-    dependencies:
-      '@bprogress/next': 3.2.12(next@15.4.3(react-dom@19.1.0(react@19.1.0))(react@19.1.0))(react-dom@19.1.0(react@19.1.0))(react@19.1.0)
-      '@hookform/resolvers': 5.0.1(react-hook-form@7.61.1(react@19.1.0))
-      '@igrp/framework-next-types': 0.0.1-alpha.26
-      '@radix-ui/react-accordion': 1.2.11(@types/react-dom@19.1.6(@types/react@19.1.8))(@types/react@19.1.8)(react-dom@19.1.0(react@19.1.0))(react@19.1.0)
-      '@radix-ui/react-alert-dialog': 1.1.14(@types/react-dom@19.1.6(@types/react@19.1.8))(@types/react@19.1.8)(react-dom@19.1.0(react@19.1.0))(react@19.1.0)
-      '@radix-ui/react-aspect-ratio': 1.1.7(@types/react-dom@19.1.6(@types/react@19.1.8))(@types/react@19.1.8)(react-dom@19.1.0(react@19.1.0))(react@19.1.0)
-      '@radix-ui/react-avatar': 1.1.10(@types/react-dom@19.1.6(@types/react@19.1.8))(@types/react@19.1.8)(react-dom@19.1.0(react@19.1.0))(react@19.1.0)
-      '@radix-ui/react-checkbox': 1.3.2(@types/react-dom@19.1.6(@types/react@19.1.8))(@types/react@19.1.8)(react-dom@19.1.0(react@19.1.0))(react@19.1.0)
-      '@radix-ui/react-collapsible': 1.1.11(@types/react-dom@19.1.6(@types/react@19.1.8))(@types/react@19.1.8)(react-dom@19.1.0(react@19.1.0))(react@19.1.0)
-      '@radix-ui/react-context-menu': 2.2.15(@types/react-dom@19.1.6(@types/react@19.1.8))(@types/react@19.1.8)(react-dom@19.1.0(react@19.1.0))(react@19.1.0)
-      '@radix-ui/react-dialog': 1.1.14(@types/react-dom@19.1.6(@types/react@19.1.8))(@types/react@19.1.8)(react-dom@19.1.0(react@19.1.0))(react@19.1.0)
-      '@radix-ui/react-dropdown-menu': 2.1.15(@types/react-dom@19.1.6(@types/react@19.1.8))(@types/react@19.1.8)(react-dom@19.1.0(react@19.1.0))(react@19.1.0)
-      '@radix-ui/react-hover-card': 1.1.14(@types/react-dom@19.1.6(@types/react@19.1.8))(@types/react@19.1.8)(react-dom@19.1.0(react@19.1.0))(react@19.1.0)
-      '@radix-ui/react-label': 2.1.7(@types/react-dom@19.1.6(@types/react@19.1.8))(@types/react@19.1.8)(react-dom@19.1.0(react@19.1.0))(react@19.1.0)
-      '@radix-ui/react-menubar': 1.1.15(@types/react-dom@19.1.6(@types/react@19.1.8))(@types/react@19.1.8)(react-dom@19.1.0(react@19.1.0))(react@19.1.0)
-      '@radix-ui/react-navigation-menu': 1.2.13(@types/react-dom@19.1.6(@types/react@19.1.8))(@types/react@19.1.8)(react-dom@19.1.0(react@19.1.0))(react@19.1.0)
-      '@radix-ui/react-popover': 1.1.14(@types/react-dom@19.1.6(@types/react@19.1.8))(@types/react@19.1.8)(react-dom@19.1.0(react@19.1.0))(react@19.1.0)
-      '@radix-ui/react-progress': 1.1.7(@types/react-dom@19.1.6(@types/react@19.1.8))(@types/react@19.1.8)(react-dom@19.1.0(react@19.1.0))(react@19.1.0)
-      '@radix-ui/react-radio-group': 1.3.7(@types/react-dom@19.1.6(@types/react@19.1.8))(@types/react@19.1.8)(react-dom@19.1.0(react@19.1.0))(react@19.1.0)
-      '@radix-ui/react-scroll-area': 1.2.9(@types/react-dom@19.1.6(@types/react@19.1.8))(@types/react@19.1.8)(react-dom@19.1.0(react@19.1.0))(react@19.1.0)
-      '@radix-ui/react-select': 2.2.5(@types/react-dom@19.1.6(@types/react@19.1.8))(@types/react@19.1.8)(react-dom@19.1.0(react@19.1.0))(react@19.1.0)
-      '@radix-ui/react-separator': 1.1.7(@types/react-dom@19.1.6(@types/react@19.1.8))(@types/react@19.1.8)(react-dom@19.1.0(react@19.1.0))(react@19.1.0)
-      '@radix-ui/react-slider': 1.3.5(@types/react-dom@19.1.6(@types/react@19.1.8))(@types/react@19.1.8)(react-dom@19.1.0(react@19.1.0))(react@19.1.0)
-      '@radix-ui/react-slot': 1.2.3(@types/react@19.1.8)(react@19.1.0)
-      '@radix-ui/react-switch': 1.2.5(@types/react-dom@19.1.6(@types/react@19.1.8))(@types/react@19.1.8)(react-dom@19.1.0(react@19.1.0))(react@19.1.0)
-      '@radix-ui/react-tabs': 1.1.12(@types/react-dom@19.1.6(@types/react@19.1.8))(@types/react@19.1.8)(react-dom@19.1.0(react@19.1.0))(react@19.1.0)
-      '@radix-ui/react-toggle': 1.1.9(@types/react-dom@19.1.6(@types/react@19.1.8))(@types/react@19.1.8)(react-dom@19.1.0(react@19.1.0))(react@19.1.0)
-      '@radix-ui/react-toggle-group': 1.1.10(@types/react-dom@19.1.6(@types/react@19.1.8))(@types/react@19.1.8)(react-dom@19.1.0(react@19.1.0))(react@19.1.0)
-      '@radix-ui/react-tooltip': 1.2.7(@types/react-dom@19.1.6(@types/react@19.1.8))(@types/react@19.1.8)(react-dom@19.1.0(react@19.1.0))(react@19.1.0)
-      '@tanstack/react-table': 8.21.3(react-dom@19.1.0(react@19.1.0))(react@19.1.0)
-      class-variance-authority: 0.7.1
-      clsx: 2.1.1
-      cmdk: 1.1.1(@types/react-dom@19.1.6(@types/react@19.1.8))(@types/react@19.1.8)(react-dom@19.1.0(react@19.1.0))(react@19.1.0)
-      date-fns: 4.1.0
-      embla-carousel-react: 8.6.0(react@19.1.0)
-      input-otp: 1.4.2(react-dom@19.1.0(react@19.1.0))(react@19.1.0)
-      lucide-react: 0.525.0(react@19.1.0)
-      next: 15.4.3(@babel/core@7.27.3)(babel-plugin-react-compiler@19.1.0-rc.2)(react-dom@19.1.0(react@19.1.0))(react@19.1.0)
-      next-auth: 4.24.11(next@15.4.3(react-dom@19.1.0(react@19.1.0))(react@19.1.0))(react-dom@19.1.0(react@19.1.0))(react@19.1.0)
-      next-intl: 4.3.4(next@15.4.3(react-dom@19.1.0(react@19.1.0))(react@19.1.0))(react@19.1.0)(typescript@5.8.3)
-      next-themes: 0.4.6(react-dom@19.1.0(react@19.1.0))(react@19.1.0)
-      react: 19.1.0
-      react-day-picker: 9.8.0(react@19.1.0)
-      react-dom: 19.1.0(react@19.1.0)
-      react-dropzone: 14.3.8(react@19.1.0)
-      react-hook-form: 7.61.1(react@19.1.0)
-      react-phone-number-input: 3.4.12(react-dom@19.1.0(react@19.1.0))(react@19.1.0)
-      react-resizable-panels: 2.1.9(react-dom@19.1.0(react@19.1.0))(react@19.1.0)
-      recharts: 2.15.4(react-dom@19.1.0(react@19.1.0))(react@19.1.0)
-      sonner: 2.0.6(react-dom@19.1.0(react@19.1.0))(react@19.1.0)
-      tailwind-merge: 3.3.1
-      vaul: 1.1.2(@types/react-dom@19.1.6(@types/react@19.1.8))(@types/react@19.1.8)(react-dom@19.1.0(react@19.1.0))(react@19.1.0)
-      zod: 3.25.76
-    transitivePeerDependencies:
-      - '@types/react'
-      - '@types/react-dom'
-      - typescript
-
-  '@igrp/framework-next-types@0.0.1-alpha.26': {}
-
-  '@igrp/framework-next@0.0.1-alpha.26(@types/react-dom@19.1.6(@types/react@19.1.8))(@types/react@19.1.8)(next-auth@4.24.11(next@15.4.3(react-dom@19.1.0(react@19.1.0))(react@19.1.0))(react-dom@19.1.0(react@19.1.0))(react@19.1.0))(next@15.4.3(react-dom@19.1.0(react@19.1.0))(react@19.1.0))(react-dom@19.1.0(react@19.1.0))(react@19.1.0)(typescript@5.8.3)':
-    dependencies:
-      '@bprogress/next': 3.2.12(next@15.4.3(react-dom@19.1.0(react@19.1.0))(react@19.1.0))(react-dom@19.1.0(react@19.1.0))(react@19.1.0)
-      '@igrp/framework-next-design-system': 0.0.1-alpha.26(@types/react-dom@19.1.6(@types/react@19.1.8))(@types/react@19.1.8)(next-auth@4.24.11(next@15.4.3(react-dom@19.1.0(react@19.1.0))(react@19.1.0))(react-dom@19.1.0(react@19.1.0))(react@19.1.0))(next@15.4.3(react-dom@19.1.0(react@19.1.0))(react@19.1.0))(react-dom@19.1.0(react@19.1.0))(react@19.1.0)(typescript@5.8.3)
-      '@igrp/framework-next-types': 0.0.1-alpha.26
-      '@igrp/platform-access-management-client-ts': 0.0.1-alpha.5
-      clsx: 2.1.1
-      next: 15.4.3(@babel/core@7.27.3)(babel-plugin-react-compiler@19.1.0-rc.2)(react-dom@19.1.0(react@19.1.0))(react@19.1.0)
-      next-themes: 0.4.6(react-dom@19.1.0(react@19.1.0))(react@19.1.0)
-      react: 19.1.0
-      react-dom: 19.1.0(react@19.1.0)
-      tailwind-merge: 3.3.1
-    transitivePeerDependencies:
-      - '@types/react'
-      - '@types/react-dom'
-      - next-auth
-      - typescript
 
   '@igrp/platform-access-management-client-ts@0.0.1-alpha.5': {}
 
@@ -9358,10 +9255,6 @@ snapshots:
     dependencies:
       yallist: 4.0.0
 
-  lucide-react@0.518.0(react@19.1.0):
-    dependencies:
-      react: 19.1.0
-
   lucide-react@0.525.0(react@19.1.0):
     dependencies:
       react: 19.1.0
@@ -9494,7 +9387,7 @@ snapshots:
       react-dom: 19.1.0(react@19.1.0)
       uuid: 8.3.2
 
-  next-intl@4.3.4(next@15.4.3(react-dom@19.1.0(react@19.1.0))(react@19.1.0))(react@19.1.0)(typescript@5.8.3):
+  next-intl@4.3.4(next@15.4.3(@babel/core@7.27.3)(babel-plugin-react-compiler@19.1.0-rc.2)(react-dom@19.1.0(react@19.1.0))(react@19.1.0))(react@19.1.0)(typescript@5.8.3):
     dependencies:
       '@formatjs/intl-localematcher': 0.5.10
       negotiator: 1.0.0

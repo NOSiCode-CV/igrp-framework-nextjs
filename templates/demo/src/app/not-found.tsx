@@ -1,11 +1,9 @@
-import Link from 'next/link';
+import { IGRPTemplateNotFound } from '@igrp/framework-next-design-system'
 
 export default function NotFound() {
+  const appCode = process.env.IGRP_APP_CODE || ''
+
   return (
-    <div>
-      <h2>Not Found for /apps/contribuicoes</h2>
-      <p>Could not find requested resource</p>
-      <Link href="/">Return Home</Link>
-    </div>
+    <IGRPTemplateNotFound appCode={appCode} />
   );
 }

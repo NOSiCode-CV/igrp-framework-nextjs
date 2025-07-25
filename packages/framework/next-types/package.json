@@ -13,7 +13,7 @@
   ],
   "author": "IGRP Team",
   "license": "MIT",
-  "main": "./dist/index.umd.cjs",
+  "main": "./dist/index.js",
   "module": "./dist/index.js",
   "types": "./dist/index.d.ts",
   "files": [

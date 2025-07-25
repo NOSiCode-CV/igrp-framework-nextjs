@@ -1,6 +1,9 @@
-'use client';
-
+/* eslint-disable perfectionist/sort-exports */
 import './styles.css';
+'use client'
+
+// IMPORTANT: this file cannot use any wildcard exports because it is wrapped in a `use client` boundary
+// IMPORTANT: do _not_ alias any of the exports in this file, this will cause a mismatch between the unbundled exports
 
 // custom components
 export { IGRPStatusBanner, type IGRPStatusBannerProps } from './components/custom/status-banner';
@@ -11,89 +14,6 @@ export { IGRPUserAvatar, type IGRPUserAvatarProps } from './components/custom/us
 export { IGRPGlobalError, type IGRPGlobalErrorProps } from './components/errors/global';
 
 // horizon and primitives components
-// export {
-//   AlertDialog,
-//   AlertDialogPortal,
-//   AlertDialogOverlay,
-//   AlertDialogTrigger,
-//   AlertDialogContent,
-//   AlertDialogHeader,
-//   AlertDialogFooter,
-//   AlertDialogTitle,
-//   AlertDialogDescription,
-//   AlertDialogAction,
-//   AlertDialogCancel,
-// } from './components/horizon/alert-dialog';
-// export { Button, buttonVariants } from './components/horizon/button';
-// export { Calendar } from './components/horizon/calendar';
-// export {
-//   Card,
-//   CardHeader,
-//   CardFooter,
-//   CardTitle,
-//   CardAction,
-//   CardDescription,
-//   CardContent
-// } from './components/horizon/card';
-// export {
-//   type CarouselApi,
-//   Carousel,
-//   CarouselContent,
-//   CarouselItem,
-//   CarouselPrevious,
-//   CarouselNext,
-// } from './components/horizon/carousel';
-// export { Checkbox } from './components/horizon/checkbox';
-// export {
-//   Dialog,
-//   DialogClose,
-//   DialogContent,
-//   DialogDescription,
-//   DialogFooter,
-//   DialogHeader,
-//   DialogOverlay,
-//   DialogPortal,
-//   DialogTitle,
-//   DialogTrigger,
-// } from './components/horizon/dialog';
-// export { Input } from './components/horizon/input';
-// export {
-//   Pagination,
-//   PaginationContent,
-//   PaginationLink,
-//   PaginationItem,
-//   PaginationPrevious,
-//   PaginationNext,
-//   PaginationEllipsis,
-// } from './components/horizon/pagination';
-// export { RadioGroup, RadioGroupItem, radioItemVariants } from './components/horizon/radio-group';
-// export {
-//   Sidebar,
-//   SidebarContent,
-//   SidebarFooter,
-//   SidebarGroup,
-//   SidebarGroupAction,
-//   SidebarGroupContent,
-//   SidebarGroupLabel,
-//   SidebarHeader,
-//   SidebarInput,
-//   SidebarInset,
-//   SidebarMenu,
-//   SidebarMenuAction,
-//   SidebarMenuBadge,
-//   SidebarMenuButton,
-//   SidebarMenuItem,
-//   SidebarMenuSkeleton,
-//   SidebarMenuSub,
-//   SidebarMenuSubButton,
-//   SidebarMenuSubItem,
-//   SidebarProvider,
-//   SidebarRail,
-//   SidebarSeparator,
-//   SidebarTrigger,
-//   // eslint-disable-next-line react-refresh/only-export-components
-//   useSidebar,
-// } from './components/horizon/sidebar';
 
 // igrp components
 export { IGRPAlert, type IGRPAlertProps } from './components/igrp/alert';

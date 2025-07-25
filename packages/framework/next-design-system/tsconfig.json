@@ -14,20 +14,24 @@
     "checkJs": false,
     "esModuleInterop": true,
     "forceConsistentCasingInFileNames": true,
-    "jsx": "react-jsx",
+    "jsx": "preserve",
     "outDir": "./dist",
     "resolveJsonModule": true,
     "skipLibCheck": true,
     "sourceMap": true,
-    "lib": ["DOM", "DOM.Iterable", "ES2023"],
+    "lib": [
+      "DOM",
+      "DOM.Iterable",
+      "ES2023"
+    ],
     "incremental": true,
-    "isolatedModules": true,
-    "plugins": [
-      {
-        "name": "next"
-      }
-    ]    
+    "isolatedModules": true,    
   },
-  "include": ["src","types"],
-  "exclude": ["dist", "build", "temp", "**/*.spec.ts", "node_modules"]
+  "include": [
+    "src"
+  ],
+  "exclude": [
+    "dist",
+    "node_modules"
+  ]
 }

@@ -1,4 +1,5 @@
 import '@/styles/globals.css';
+// import '@igrp/framework-next-design-system/dist/styles.css';
 
 import type { Metadata, Viewport } from 'next';
 import { IGRPRootLayout } from '@igrp/framework-next';
@@ -19,7 +20,7 @@ export const viewport: Viewport = {
 
 export default async function RootLayout({ children }: Readonly<{ children: React.ReactNode }>) {
   const layoutConfig = await configLayout();
-  const config = createConfig(layoutConfig);
+  const config = await createConfig(layoutConfig);
 
-  return <IGRPRootLayout config={config}>{children}</IGRPRootLayout>;
+  return <IGRPRootLayout config={config}>{children}</IGRPRootLayout>;  
 }

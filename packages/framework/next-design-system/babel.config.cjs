@@ -11,6 +11,15 @@ const ReactCompilerConfig = {
       return false;
     }
 
+    // Skip files that might contain React context or other core React patterns
+    const skipPatterns = ['context', 'provider', 'createContext', 'useContext', 'exports', 'index'];
+
+    const filenameLower = filename.toLowerCase();
+    if (skipPatterns.some((pattern) => filenameLower.includes(pattern))) {
+      console.log('React compiler - skipping file (contains core React patterns): ' + filename);
+      return false;
+    }
+
     // Only compile files with 'use client' directives. We do not want to
     // accidentally compile React Server Components
     const file = fs.readFileSync(filename, 'utf8');
@@ -26,6 +35,8 @@ module.exports = function (api) {
   api.cache(false);
 
   return {
-    plugins: [['babel-plugin-react-compiler', ReactCompilerConfig]],
+    plugins: [
+      ['babel-plugin-react-compiler', ReactCompilerConfig],
+    ],
   };
 };

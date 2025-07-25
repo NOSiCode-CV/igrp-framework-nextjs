@@ -1,4 +1,19 @@
-export * from './types/globals';
-export * from './types/header';
-export * from './types/igrp';
-export * from './types/sidebar';
+export type { IGRPMockDataAsync, IGRPMockData, IGRPToasterPosition } from './types/globals';
+
+export type { IGRPHeaderDataArgs, IGRPNotificationArgs, IGRPQuickActionArgs } from './types/header';
+
+export type {
+  IGRPApplicationArgs,
+  IGRPUserArgs,
+  IGRPMenuType,
+  IGRPItemStatus,
+  IGRPItemTarget,
+  IGRPMenuItemArgs,
+  ExtendedSession,
+  ExtendedJWT,
+  IGRPConfigArgs,
+  IGRPConfigClient,
+  IGRPLayoutConfigArgs,
+} from './types/igrp';
+
+export type { IGRPSidebarDataArgs } from './types/sidebar';

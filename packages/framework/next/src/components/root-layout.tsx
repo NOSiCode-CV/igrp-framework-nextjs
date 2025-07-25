@@ -1,18 +1,18 @@
 import { IGRPRootProviders } from '@igrp/framework-next-design-system';
+import type { IGRPConfigArgs } from '@igrp/framework-next-types';
 
 import { setAccessClientConfig } from '../lib/api-config';
-import { cn } from '../lib/utils';
 import { fetchAppByCode } from '../services/applications/use-applications';
 import { fetchLayoutData } from '../services/layout/use-layout';
-import type { IGRPConfigArgs } from '@igrp/framework-next-types';
+import { cn } from '../lib/utils';
 
 type IGRPRootLocaleLayoutArgs = {
   readonly children: React.ReactNode;
-  readonly config: Promise<IGRPConfigArgs>;
+  readonly config: IGRPConfigArgs;
 };
 
 export async function IGRPRootLayout({ children, config }: IGRPRootLocaleLayoutArgs) {
-  const layoutConfig = await config;
+  const layoutConfig = config;
 
   const {
     appCode,

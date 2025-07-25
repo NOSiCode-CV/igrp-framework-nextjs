@@ -4629,12 +4629,12 @@
   }
   .data-\[state\=closed\]\:animate-accordion-up {
     &[data-state="closed"] {
-      animation: accordion-up var(--tw-animation-duration,var(--tw-duration,.2s))ease-out;
+      animation: accordion-up var(--tw-animation-duration,var(--tw-duration,.2s))var(--tw-ease,ease-out)var(--tw-animation-delay,0s)var(--tw-animation-iteration-count,1)var(--tw-animation-direction,normal)var(--tw-animation-fill-mode,none);
     }
   }
   .data-\[state\=closed\]\:animate-collapsible-up {
     &[data-state="closed"] {
-      animation: collapsible-up var(--tw-animation-duration,var(--tw-duration,.2s))ease-out;
+      animation: collapsible-up var(--tw-animation-duration,var(--tw-duration,.2s))var(--tw-ease,ease-out)var(--tw-animation-delay,0s)var(--tw-animation-iteration-count,1)var(--tw-animation-direction,normal)var(--tw-animation-fill-mode,none);
     }
   }
   .data-\[state\=closed\]\:animate-out {
@@ -4725,12 +4725,12 @@
   }
   .data-\[state\=open\]\:animate-accordion-down {
     &[data-state="open"] {
-      animation: accordion-down var(--tw-animation-duration,var(--tw-duration,.2s))ease-out;
+      animation: accordion-down var(--tw-animation-duration,var(--tw-duration,.2s))var(--tw-ease,ease-out)var(--tw-animation-delay,0s)var(--tw-animation-iteration-count,1)var(--tw-animation-direction,normal)var(--tw-animation-fill-mode,none);
     }
   }
   .data-\[state\=open\]\:animate-collapsible-down {
     &[data-state="open"] {
-      animation: collapsible-down var(--tw-animation-duration,var(--tw-duration,.2s))ease-out;
+      animation: collapsible-down var(--tw-animation-duration,var(--tw-duration,.2s))var(--tw-ease,ease-out)var(--tw-animation-delay,0s)var(--tw-animation-iteration-count,1)var(--tw-animation-direction,normal)var(--tw-animation-fill-mode,none);
     }
   }
   .data-\[state\=open\]\:animate-in {

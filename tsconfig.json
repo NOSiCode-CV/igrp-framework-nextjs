@@ -1,8 +1,10 @@
 {
   "compilerOptions": {
-    "target": "ES2022",
+    "target": "ES2023",
     "module": "commonjs",
-    "lib": ["es2022"],
+    "lib": [
+      "es2023"
+    ],
     "strict": true,
     "esModuleInterop": true,
     "skipLibCheck": true,
@@ -11,13 +13,15 @@
     "allowJs": true,
     "declaration": true,
     "declarationMap": true,
+    "isolatedModules": true,
     "sourceMap": true,
     "composite": true
   },
   "references": [
     // { "path": "./packages/igrp-cli-next" },
     { "path": "./templates/demo" },
-    { "path": "./packages/@igrp/framework/next" },
-    { "path": "./packages/@igrp/framework/next-ui" }
-  ]
+    { "path": "./packages/framework/next" },    
+    { "path": "./packages/framework/next-design-system" },    
+    { "path": "./packages/framework/next-types" }
+  ],
 }

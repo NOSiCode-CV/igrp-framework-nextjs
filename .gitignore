@@ -14,6 +14,8 @@ coverage/
 
 # production
 dist/
+dist_optimized
+dist_types
 build/
 
 # misc
@@ -103,4 +105,9 @@ jspm_packages/
 
 # Temporary folders
 tmp/
-temp/
+
+*.tsbuildinfo
+
+# create template zip
+create-template/nexus-auth.txt
+igrp-next-template.zip

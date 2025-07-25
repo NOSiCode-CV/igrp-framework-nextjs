@@ -1,0 +1,4 @@
+Create nexus-auth.txt file with the credencials from sonatype to upload the igrp-template.zip
+
+username=YOUR_USER_NAME
+password=YOUR_PASSWORD

@@ -1,0 +1,35 @@
+{
+  "name": "@igrp/framework-next-types",
+  "version": "0.0.1-alpha.26",
+  "type": "module",
+  "description": "IGRP Framework for Next.js - Types hared",
+  "keywords": [
+    "igrp",
+    "framework",
+    "nextjs",
+    "admin",
+    "layout",
+    "components"
+  ],
+  "author": "IGRP Team",
+  "license": "MIT",
+  "main": "./dist/index.js",
+  "module": "./dist/index.js",
+  "types": "./dist/index.d.ts",
+  "files": [
+    "dist"
+  ],
+  "scripts": {
+    "dev": "tsc --watch",
+    "build": "rimraf dist && rimraf tsconfig.tsbuildinfo && pnpm format && tsc -b",
+    "format": "prettier --write .",
+    "release": "pnpm build && yarn publish --registry=https://sonatype.nosi.cv/repository/igrp/ --tag latest"
+  },
+  "devDependencies": {
+    "@types/node": "^24.1.0",
+    "next-auth": "^4.24.0",
+    "prettier": "^3.6.2",
+    "rimraf": "^6.0.1",
+    "typescript": "^5.8.3"
+  }
+}

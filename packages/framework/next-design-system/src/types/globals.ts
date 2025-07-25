@@ -1,6 +1,8 @@
 import { type IGRPIconName } from '../components/igrp/icon';
 import { igrpGridSizeClasses } from '../lib/constants';
 import type { IGRPColorVariants } from '../lib/colors';
+import type { Session as DefaultSession, User as NextAuthUser } from 'next-auth';
+import type { JWT as DefaultJWT } from 'next-auth/jwt';
 
 export type IGRPPlacementProps = 'start' | 'end' | 'center';
 

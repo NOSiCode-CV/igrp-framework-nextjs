@@ -14,9 +14,10 @@ import { IGRPThemeProvider } from './theme';
 import { SidebarInset, SidebarProvider } from '../components/horizon/sidebar';
 import { IGRPTemplateHeader } from '../components/templates/header';
 import { IGRPTemplateSidebar } from '../components/templates/sidebar';
+import { ExtendedSession } from '../types/globals';
 
 export type IGRPRootProvidersArgs = {
-  session?: Session | null;
+  session?: ExtendedSession | null;
   activeThemeValue?: string;
   children: React.ReactNode;
   showProgressBar?: boolean;

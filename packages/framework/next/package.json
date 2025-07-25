@@ -1,6 +1,6 @@
 {
   "name": "@igrp/framework-next",
-  "version": "0.0.1-alpha.21",
+  "version": "0.0.1-alpha.22",
   "description": "IGRP Framework for Next.js - Layout components and data loading hooks",
   "keywords": [
     "igrp",
@@ -48,8 +48,8 @@
   },
   "dependencies": {
     "@bprogress/next": "^3.2.12",
-    "@igrp/framework-next-design-system": "0.0.1-alpha.21",
-    "@igrp/framework-next-types": "0.0.1-alpha.21",
+    "@igrp/framework-next-design-system": "0.0.1-alpha.22",
+    "@igrp/framework-next-types": "0.0.1-alpha.22",
     "@igrp/platform-access-management-client-ts": "0.0.1-alpha.5",
     "clsx": "^2.1.1",
     "next-themes": "^0.4.6",

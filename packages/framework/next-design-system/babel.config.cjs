@@ -35,8 +35,6 @@ module.exports = function (api) {
   api.cache(false);
 
   return {
-    plugins: [
-      ['babel-plugin-react-compiler', ReactCompilerConfig],
-    ],
+    plugins: [['babel-plugin-react-compiler', ReactCompilerConfig]],
   };
 };

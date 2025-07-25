@@ -4,7 +4,6 @@ import type {
   IGRPConfigArgs,
   IGRPHeaderDataArgs,
   IGRPSidebarDataArgs,
-  ExtendedSession,
 } from '@igrp/framework-next-types';
 import { IGRPToaster } from '@igrp/framework-next-design-system';
 
@@ -17,7 +16,7 @@ import { IGRPTemplateHeader } from '../components/templates/header';
 import { IGRPTemplateSidebar } from '../components/templates/sidebar';
 
 export type IGRPRootProvidersArgs = {
-  session?: ExtendedSession | null;
+  session?: Session | null;
   activeThemeValue?: string;
   children: React.ReactNode;
   showProgressBar?: boolean;

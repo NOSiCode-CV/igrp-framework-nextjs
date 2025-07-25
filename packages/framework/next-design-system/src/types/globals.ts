@@ -38,6 +38,27 @@ export type IGRPOptionsProps = {
 
 export type IGRPGridSize = keyof typeof igrpGridSizeClasses;
 
+export interface ExtendedSession extends DefaultSession {
+  accessToken?: string;
+  idToken?: string;
+  expiresAt?: number;
+  error?: string;
+  user?: {
+    id?: string;
+  } & DefaultSession['user'];
+}
+
+export interface ExtendedJWT extends DefaultJWT {
+  accessToken?: string;
+  refreshToken?: string;
+  idToken?: string;
+  expiresAt?: number;
+  error?: 'RefreshAccessTokenError' | string;
+  user?: {
+    id?: string;
+  } & NextAuthUser;
+}
+
 export type {
   Column,
   ColumnDef,

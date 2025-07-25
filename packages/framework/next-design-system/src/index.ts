@@ -1,6 +1,7 @@
 /* eslint-disable perfectionist/sort-exports */
+'use client';
+
 import './styles.css';
-'use client'
 
 // IMPORTANT: this file cannot use any wildcard exports because it is wrapped in a `use client` boundary
 // IMPORTANT: do _not_ alias any of the exports in this file, this will cause a mismatch between the unbundled exports

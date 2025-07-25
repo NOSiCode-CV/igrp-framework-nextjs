@@ -1,5 +1,6 @@
 "use client"
-import { IGRPThemeSelector } from '@igrp/framework-next-design-system';
+
+import { IGRPTemplateThemeSelector } from '@igrp/framework-next-design-system';
 import { IGRPButton, useIGRPToast } from '@igrp/framework-next-design-system';
 
 export default function SettingsPage() {
@@ -19,11 +20,10 @@ export default function SettingsPage() {
     })
   }
 
-
   return (
     <div className="container mx-auto p-6">
       <h1 className="text-2xl font-bold mb-6">System Settings</h1>
-      <IGRPThemeSelector />
+      <IGRPTemplateThemeSelector />
       <IGRPButton onClick={() => handlerButton()}>
         Info
       </IGRPButton>

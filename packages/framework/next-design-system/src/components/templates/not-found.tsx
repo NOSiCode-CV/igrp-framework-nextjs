@@ -1,19 +1,18 @@
 import Link from 'next/link';
 
 interface IGRPTemplateNotFoundProps {
-  title?: string
-  description?: string
-  image?: string
-  imageAlt?: string
-  imageWidth?: number
-  imageHeight?: number
-  imageClassName?: string
-  appCode?: string
-}   
+  title?: string;
+  description?: string;
+  image?: string;
+  imageAlt?: string;
+  imageWidth?: number;
+  imageHeight?: number;
+  imageClassName?: string;
+  appCode?: string;
+}
 
 function IGRPTemplateNotFound({ appCode }: IGRPTemplateNotFoundProps) {
-
-  console.log({ appCode })
+  console.log({ appCode });
   return (
     <div>
       <h1>404</h1>

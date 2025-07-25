@@ -342,7 +342,10 @@ export {
 
 export { IGRPTemplateNavUserHeader } from './components/templates/nav-user-header';
 
-export { IGRPTemplateNotFound, type IGRPTemplateNotFoundProps } from './components/templates/not-found';
+export {
+  IGRPTemplateNotFound,
+  type IGRPTemplateNotFoundProps,
+} from './components/templates/not-found';
 
 export { IGRPTemplateNotifications } from './components/templates/notifications';
 

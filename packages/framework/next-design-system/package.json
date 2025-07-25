@@ -1,6 +1,6 @@
 {
   "name": "@igrp/framework-next-design-system",
-  "version": "0.0.1-alpha.21",
+  "version": "0.0.1-alpha.22",
   "description": "IGRP Framework for Next.js - Layout components and data loading hooks",
   "keywords": [
     "igrp",
@@ -57,7 +57,7 @@
   "dependencies": {
     "@bprogress/next": "^3.2.12",
     "@hookform/resolvers": "5.0.1",
-    "@igrp/framework-next-types": "0.0.1-alpha.21",
+    "@igrp/framework-next-types": "0.0.1-alpha.22",
     "@radix-ui/react-accordion": "^1.2.11",
     "@radix-ui/react-alert-dialog": "^1.1.14",
     "@radix-ui/react-aspect-ratio": "^1.1.7",
@@ -83,7 +83,7 @@
     "@radix-ui/react-tabs": "^1.1.12",
     "@radix-ui/react-toggle": "^1.1.9",
     "@radix-ui/react-toggle-group": "^1.1.10",
-    "@radix-ui/react-tooltip": "^1.2.7",    
+    "@radix-ui/react-tooltip": "^1.2.7",
     "@tanstack/react-table": "^8.21.3",
     "class-variance-authority": "^0.7.1",
     "clsx": "^2.1.1",

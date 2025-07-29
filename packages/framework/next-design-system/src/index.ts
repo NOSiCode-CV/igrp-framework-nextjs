@@ -329,6 +329,8 @@ export { IGRPTemplateCommandSearch } from './components/templates/command-search
 
 export { IGRPTemplateHeader } from './components/templates/header';
 
+export { IGRPTemplateLoading, type IGRPTemplateLoadingProps } from './components/templates/loading';
+
 export { IGRPTemplateMenus, type IGRPTemplateMenuArgs } from './components/templates/menus';
 
 export { IGRPTemplateModeSwitcher } from './components/templates/mode-switcher';
@@ -339,6 +341,11 @@ export {
 } from './components/templates/nav-user';
 
 export { IGRPTemplateNavUserHeader } from './components/templates/nav-user-header';
+
+export {
+  IGRPTemplateNotFound,
+  type IGRPTemplateNotFoundProps,
+} from './components/templates/not-found';
 
 export { IGRPTemplateNotifications } from './components/templates/notifications';
 
@@ -377,10 +384,10 @@ export { cn } from './lib/utils';
 export {
   IGRPActiveThemeProvider,
   type IGRPActiveThemeProviderArgs,
-} from './providers/active-theme';
-export { IGRPProgressBarProvider } from './providers/progress-bar';
-export { IGRPRootProviders } from './providers/root';
-export { IGRPSessionProvider } from './providers/session';
+} from './components/providers/active-theme';
+export { IGRPProgressBarProvider } from './components/providers/progress-bar';
+export { IGRPRootProviders } from './components/providers/root';
+export { IGRPSessionProvider } from './components/providers/session';
 
 // external dependencies
 

@@ -1,6 +1,13 @@
 {
   "name": "igrp-framework-nextjs",
-  "version": "0.0.0",
+  "version": "0.0.1",
+  "description": "IGRP Framework for Next.js",
+   "keywords": [
+    "igrp",
+    "framework",
+    "nextjs"
+  ],
+  "author": "IGRP Team",
   "license": "MIT",
   "workspaces": [
     "packages/**",
@@ -11,18 +18,15 @@
     "lint": "pnpm -r run lint",
     "clean": "pnpm -r run clean",
     "format": "pnpm -r run format",
-    "build:framework": "pnpm --filter @igrp/framework-next build",
-    "build:framework-ui": "pnpm --filter @igrp/framework-next-design-system build",
-    "build:framework-types": "pnpm --filter @igrp/framework-next-types build",
-    "dev:framework": "pnpm --filter @igrp/framework-next dev",
-    "run:framework": "pnpm build:framework-types && pnpm build:framework-ui && pnpm build:framework",
-    "release:framework": "pnpm run:framework && pnpm -r run release",
-    "clean:framework": "pnpm --filter @igrp/framework-next clean",
+    "release:framework": "pnpm build:framework && pnpm -r run release","build:next": "pnpm --filter @igrp/framework-next build",
+    "build:next-ds": "pnpm --filter @igrp/framework-next-design-system build",
+    "build:next-types": "pnpm --filter @igrp/framework-next-types build",
+    "dev:next": "pnpm --filter @igrp/framework-next dev",
+    "build:framework": "pnpm build:nextjs-types && pnpm build:next-ui && pnpm build:next",
     "dev:demo": "pnpm --filter @igrp/framenwork-next-template dev",
     "build:demo": "pnpm --filter @igrp/framenwork-next-template build",
     "start:demo": "pnpm --filter @igrp/framenwork-next-template start",
-    "publish:demo": "pnpm --filter @igrp/framenwork-next-template publish:template",
-    "dev:contribuicoes": "pnpm --filter demo-contribuicoes dev"    
+    "release:demo": "pnpm --filter @igrp/framenwork-next-template publish:template"
   },
   "devDependencies": {
     "@changesets/cli": "^2.29.5",

@@ -11,7 +11,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from '../primitives/select';
-import { useIGRPThemeConfig } from '../../providers/active-theme';
+import { useIGRPThemeConfig } from '../providers/active-theme';
 
 const DEFAULT_THEMES = [
   {

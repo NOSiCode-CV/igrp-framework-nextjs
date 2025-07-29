@@ -1,5 +1,9 @@
-export default function Loading() {  
-  // const root = process.env.IGRP_APP_CODE ?? process.env.IGRP_APP_CODE ?? 'IGRP';
+import { IGRPTemplateLoading } from '@igrp/framework-next-design-system'
 
-  return <p>Loading...</p>
+export default function Loading() {
+  const appCode = process.env.IGRP_APP_CODE || ''
+
+  return (
+    <IGRPTemplateLoading appCode={appCode} />
+  )
 }

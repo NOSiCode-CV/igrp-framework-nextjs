@@ -1,14 +1,14 @@
 {
   "name": "@igrp/framework-next-design-system",
-  "version": "0.0.1-alpha.26",
-  "description": "IGRP Framework for Next.js - Layout components and data loading hooks",
+  "version": "0.0.1-alpha.27",
+  "description": "IGRP Framework for Next.js | Design System components",
   "keywords": [
     "igrp",
     "framework",
     "nextjs",
-    "admin",
     "layout",
-    "components"
+    "components",
+    "client side"
   ],
   "author": "IGRP Team",
   "license": "MIT",
@@ -36,7 +36,7 @@
   "dependencies": {
     "@bprogress/next": "^3.2.12",
     "@hookform/resolvers": "5.0.1",
-    "@igrp/framework-next-types": "0.0.1-alpha.26",
+    "@igrp/framework-next-types": "0.0.1-alpha.27",
     "@radix-ui/react-accordion": "^1.2.11",
     "@radix-ui/react-alert-dialog": "^1.1.14",
     "@radix-ui/react-aspect-ratio": "^1.1.7",
@@ -124,12 +124,15 @@
         "import": "./dist/index.css",
         "default": "./dist/index.css"
       },
-      "./styles.css": "./dist/styles.css"
+      "./styles.css": "./dist/styles.css"      
     }
   },
   "main": "./dist/index.js",
   "types": "./dist/index.d.ts",
   "files": [
     "dist"
-  ]
+  ],
+  "engines": {
+    "node": ">=20.x.x"
+  }
 }

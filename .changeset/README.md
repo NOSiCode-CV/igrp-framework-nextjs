@@ -90,21 +90,21 @@ npx changeset publish
 
 This publishes all changed packages to npm.
 
-## 🔬 Prerelease: `0.0.0-alpha.x`
+## 🔬 Prerelease: `0.0.0-beta.x`
 
 If you're publishing prereleases (e.g., for internal testing):
 
-### 1. Set all packages to `0.0.0`
+### 1. Set all packages to `0.0.1`
 
 ```json
 // in each package.json
-"version": "0.0.0"
+"version": "0.0.1"
 ```
 
 ### 2. Enter pre mode
 
 ```bash
-npx changeset pre enter alpha
+npx changeset pre enter beta
 ```
 
 ### 3. Create patch changeset
@@ -114,7 +114,7 @@ npx changeset
 ```
 
 - Choose `patch`
-- Add a small message (e.g., `start alpha cycle`)
+- Add a small message (e.g., `start beta cycle`)
 
 ### 4. Apply version
 
@@ -122,7 +122,7 @@ npx changeset
 npx changeset version
 ```
 
-➡️ This creates `0.0.0-alpha.0`, `alpha.1`, etc.
+➡️ This creates `0.0.0-beta.0`, `beta.1`, etc.
 
 ### 5. Publish
 
@@ -133,7 +133,7 @@ npx changeset publish
 Install it in consumers with:
 
 ```bash
-pnpm add @igrp/framework-next@alpha
+pnpm add @igrp/framework-next@beta
 ```
 
 ### 6. Exit prerelease mode (optional)
@@ -146,7 +146,7 @@ This reverts back to stable version bumps.
 
 ## 🧹 Troubleshooting
 
-- **Getting `0.0.1-alpha.0` instead of `0.0.0-alpha.1`?**
+- **Getting `0.0.1-beta.0` instead of `0.0.0-beta.1`?**
   - Make sure you selected `patch`, not `minor`
   - Set `version: 0.0.0` in all `package.json`s **before** `pre enter`
 
@@ -160,7 +160,7 @@ This reverts back to stable version bumps.
 | Start a release | `npx changeset` |
 | Apply version changes | `npx changeset version` |
 | Publish | `npx changeset publish` |
-| Enter prerelease mode | `npx changeset pre enter alpha` |
+| Enter prerelease mode | `npx changeset pre enter beta` |
 | Exit prerelease mode | `npx changeset pre exit` |
 
 ## 🧠 Notes

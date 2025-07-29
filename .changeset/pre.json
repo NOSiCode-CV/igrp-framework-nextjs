@@ -1,14 +1,11 @@
 {
   "mode": "pre",
-  "tag": "alpha",
+  "tag": "beta",
   "initialVersions": {
-    "@igrp/framework-next": "0.0.0",
-    "@igrp/framework-next-types": "0.0.0",
-    "@igrp/framework-next-design-system": "0.0.0",
-    "demo": "0.0.0"
+    "@igrp/framework-next": "0.0.1",
+    "@igrp/framework-next-types": "0.0.1",
+    "@igrp/framework-next-design-system": "0.0.1",
+    "demo": "0.0.1"
   },
-  "changesets": [
-    "fresh-crabs-bet",
-    "some-mice-cough"
-  ]
+  "changesets": []
 }

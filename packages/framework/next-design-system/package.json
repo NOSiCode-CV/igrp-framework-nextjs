@@ -1,14 +1,14 @@
 {
   "name": "@igrp/framework-next-design-system",
   "version": "0.0.1-alpha.27",
-  "description": "IGRP Framework for Next.js - Layout components and data loading hooks",
+  "description": "IGRP Framework for Next.js | Design System components",
   "keywords": [
     "igrp",
     "framework",
     "nextjs",
-    "admin",
     "layout",
-    "components"
+    "components",
+    "client side"
   ],
   "author": "IGRP Team",
   "license": "MIT",
@@ -124,12 +124,15 @@
         "import": "./dist/index.css",
         "default": "./dist/index.css"
       },
-      "./styles.css": "./dist/styles.css"
+      "./styles.css": "./dist/styles.css"      
     }
   },
   "main": "./dist/index.js",
   "types": "./dist/index.d.ts",
   "files": [
     "dist"
-  ]
+  ],
+  "engines": {
+    "node": ">=20.x.x"
+  }
 }

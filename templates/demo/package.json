@@ -1,6 +1,15 @@
 {
   "name": "@igrp/framenwork-next-template",
   "version": "0.0.1-alpha.27",
+  "description": "IGRP Framework for Next.js | Default Template",
+   "keywords": [
+    "igrp",
+    "framework",
+    "nextjs",
+    "template"
+  ],
+  "author": "IGRP Team",
+  "license": "MIT",
   "scripts": {
     "dev": "next dev --turbopack",
     "build": "next build",
@@ -39,5 +48,8 @@
     "tw-animate-css": "^1.3.4",
     "typescript": "^5.8.3",
     "prettier": "^3.6.2"
+  },
+  "engines": {
+    "node": ">=20.x.x"
   }
 }

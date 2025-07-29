@@ -1,4 +1,4 @@
-import { IGRPTemplateNotFound } from '@igrp/framework-next-design-system'
+import { IGRPTemplateNotFound } from '@igrp/framework-next-ui'
 
 export default function NotFound() {
   const appCode = process.env.IGRP_APP_CODE || ''

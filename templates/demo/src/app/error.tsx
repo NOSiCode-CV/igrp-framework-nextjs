@@ -1,6 +1,6 @@
 "use client";
 
-import { IGRPGlobalError } from "@igrp/framework-next-design-system";
+import { IGRPGlobalError } from "@igrp/framework-next-ui";
 
 export default function Error({
   error,

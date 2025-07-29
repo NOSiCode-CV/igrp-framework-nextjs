@@ -1,9 +1,10 @@
 import '@/styles/globals.css';
-import '@igrp/framework-next-design-system/dist/styles.css';
+import '@igrp/framework-next-ui/dist/styles.css';
+import '@igrp/igrp-framework-react-design-system/dist/styles.css';
 
 import type { Metadata, Viewport } from 'next';
 import { IGRPRootLayout } from '@igrp/framework-next';
-import { IGRP_META_THEME_COLORS } from '@igrp/framework-next-design-system';
+import { IGRP_META_THEME_COLORS } from '@igrp/igrp-framework-react-design-system';
 
 import { configLayout } from '@/actions/igrp/layout';
 import { createConfig } from '@igrp/template-config';

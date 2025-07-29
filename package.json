@@ -19,7 +19,7 @@
     "clean": "pnpm -r run clean",
     "format": "pnpm -r run format",
     "release:framework": "pnpm build:framework && pnpm -r run release","build:next": "pnpm --filter @igrp/framework-next build",
-    "build:next-ds": "pnpm --filter @igrp/framework-next-design-system build",
+    "build:next-ui": "pnpm --filter @igrp/framework-next-ui build",
     "build:next-types": "pnpm --filter @igrp/framework-next-types build",
     "dev:next": "pnpm --filter @igrp/framework-next dev",
     "build:framework": "pnpm build:nextjs-types && pnpm build:next-ui && pnpm build:next",

@@ -5,7 +5,7 @@
   "fixed": [
     [
       "@igrp/framework-next",
-      "@igrp/framework-next-design-system",
+      "@igrp/framework-next-ui",
       "@igrp/framework-next-types"
     ]
   ],

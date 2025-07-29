@@ -1,7 +1,7 @@
 "use client"
 
-import { IGRPTemplateThemeSelector } from '@igrp/framework-next-design-system';
-import { IGRPButton, useIGRPToast } from '@igrp/framework-next-design-system';
+import { IGRPTemplateThemeSelector } from '@igrp/framework-next-ui';
+import { IGRPButton, useIGRPToast } from '@igrp/igrp-framework-react-design-system';
 
 export default function SettingsPage() {
 

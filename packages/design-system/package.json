@@ -1,6 +1,6 @@
 {
   "name": "@igrp/igrp-framework-react-design-system",
-  "version": "0.0.1-alpha.27",
+  "version": "0.0.1-alpha.29",
   "description": "IGRP Design System components",
   "keywords": [
     "igrp",
@@ -28,8 +28,8 @@
     "release": "pnpm format && pnpm build && yarn publish --registry=https://sonatype.nosi.cv/repository/igrp/ --tag latest"
   },
   "peerDependencies": {
-    "react": "19.1.0",
-    "react-dom": "19.1.0"
+    "react": "19.1.1",
+    "react-dom": "19.1.1"
   },
   "dependencies": {
     "@hookform/resolvers": "5.0.1",
@@ -80,17 +80,17 @@
     "zod": "^3.25.67"
   },
   "devDependencies": {
-    "@babel/cli": "7.27.2",
-    "@babel/core": "7.27.3",
-    "@babel/preset-env": "7.27.2",
+    "@babel/cli": "7.28.0",
+    "@babel/core": "7.28.0",
+    "@babel/preset-env": "7.28.0",
     "@babel/preset-react": "7.27.1",
     "@babel/preset-typescript": "7.27.1",
     "@swc/cli": "^0.7.8",
     "@swc/core": "^1.13.1",
     "@tailwindcss/cli": "^4.1.11",
     "@types/babel__preset-env": "7.10.0",
-    "@types/react": "^19.1.8",
-    "@types/react-dom": "19.1.6",
+    "@types/react": "^19.1.9",
+    "@types/react-dom": "19.1.7",
     "babel-plugin-react-compiler": "19.1.0-rc.2",
     "cpy-cli": "5.0.0",
     "eslint-config-prettier": "10.1.8",
@@ -118,7 +118,7 @@
         "import": "./dist/index.css",
         "default": "./dist/index.css"
       },
-      "./styles.css": "./dist/styles.css"      
+      "./styles.css": "./dist/styles.css"
     }
   },
   "main": "./dist/index.js",

@@ -47,9 +47,5 @@ export async function getSession() {
     session = null;
   }
 
-  console.log({ isPreviewMode });
-  console.log('NODE_ENV:::', process.env.NODE_ENV);
-  console.log({ session });
-
   return session;
 }

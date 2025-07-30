@@ -11,6 +11,7 @@ import {
   IGRPDropdownMenuLabelPrimitive,
   IGRPDropdownMenuSeparatorPrimitive,
   IGRPDropdownMenuTriggerPrimitive,
+  IGRPIcon,
 } from '@igrp/igrp-framework-react-design-system';
 
 const notifications = [
@@ -45,7 +46,7 @@ function IGRPTemplateNotifications() {
     <IGRPDropdownMenuPrimitive>
       <IGRPDropdownMenuTriggerPrimitive asChild>
         <IGRPButtonPrimitive variant="ghost" size="icon" className="size-6 relative">
-          {/* <Bell strokeWidth={2} /> */}
+          <IGRPIcon iconName="Bell" strokeWidth={2} />
           {notificationCount > 0 && (
             <IGRPBadgePrimitive
               className="absolute -top-1 -right-0.5 h-3 w-3 flex items-center justify-center p-1 text-xs"
@@ -61,7 +62,12 @@ function IGRPTemplateNotifications() {
         <IGRPDropdownMenuLabelPrimitive className="flex items-center justify-between">
           <span>Notifications</span>
           {notificationCount > 0 && (
-            <IGRPButtonPrimitive variant="ghost" size="sm" onClick={markAsRead} className="h-auto text-xs">
+            <IGRPButtonPrimitive
+              variant="ghost"
+              size="sm"
+              onClick={markAsRead}
+              className="h-auto text-xs"
+            >
               Mark all as read
             </IGRPButtonPrimitive>
           )}
@@ -70,7 +76,10 @@ function IGRPTemplateNotifications() {
         <IGRPDropdownMenuGroupPrimitive className="max-h-72 overflow-auto">
           {notifications.length > 0 ? (
             notifications.map((notification) => (
-              <IGRPDropdownMenuItemPrimitive key={notification.id} className="flex flex-col items-start p-4">
+              <IGRPDropdownMenuItemPrimitive
+                key={notification.id}
+                className="flex flex-col items-start p-4"
+              >
                 <div className="font-medium">{notification.title}</div>
                 <div className="text-sm text-muted-foreground">{notification.description}</div>
                 <div className="text-xs text-muted-foreground mt-1">{notification.time}</div>
@@ -81,7 +90,9 @@ function IGRPTemplateNotifications() {
           )}
         </IGRPDropdownMenuGroupPrimitive>
         <IGRPDropdownMenuSeparatorPrimitive />
-        <IGRPDropdownMenuItemPrimitive className="justify-center">View all notifications</IGRPDropdownMenuItemPrimitive>
+        <IGRPDropdownMenuItemPrimitive className="justify-center">
+          View all notifications
+        </IGRPDropdownMenuItemPrimitive>
       </IGRPDropdownMenuContentPrimitive>
     </IGRPDropdownMenuPrimitive>
   );

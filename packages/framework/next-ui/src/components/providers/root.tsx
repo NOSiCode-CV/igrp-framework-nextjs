@@ -5,10 +5,10 @@ import type {
   IGRPHeaderDataArgs,
   IGRPSidebarDataArgs,
 } from '@igrp/framework-next-types';
-import { 
-  IGRPToaster, 
-  IGRPSidebarInsetPrimitive, 
-  IGRPSidebarProviderPrimitive 
+import {
+  IGRPToaster,
+  IGRPSidebarInsetPrimitive,
+  IGRPSidebarProviderPrimitive,
 } from '@igrp/igrp-framework-react-design-system';
 
 import { IGRPActiveThemeProvider } from './active-theme';
@@ -32,8 +32,8 @@ export type IGRPRootProvidersArgs = {
   defaultOpen?: boolean;
   showHeader?: boolean;
   locale?: string;
-  sidebarData?: IGRPSidebarDataArgs;
-  headerData?: IGRPHeaderDataArgs;
+  sidebarData: IGRPSidebarDataArgs;
+  headerData: IGRPHeaderDataArgs;
   toasterConfig?: IGRPConfigArgs['toasterConfig'];
 };
 
@@ -58,7 +58,7 @@ export function IGRPRootProviders({
     richColors = true,
     expand = false,
     duration = 3500,
-  } = toasterConfig ?? {};
+  } = toasterConfig ?? {}; 
 
   return (
     <IGRPSessionProvider session={session} {...sessionArgs}>

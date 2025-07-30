@@ -57,8 +57,7 @@ function IGRPForm<TSchema extends z.ZodType>({
   });
 
   useEffect(() => {
-    if (defaultValues) {
-      console.log({ defaultValues });
+    if (defaultValues) {      
       form.reset(defaultValues as never);
     }
   }, [form, defaultValues]);

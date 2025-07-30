@@ -8,11 +8,11 @@ import {
   IGRPDropdownMenuLabelPrimitive,
   IGRPDropdownMenuSeparatorPrimitive,
   IGRPDropdownMenuTriggerPrimitive,
-  IGRPSidebarMenuPrimitive, 
-  IGRPSidebarMenuButtonPrimitive, 
+  IGRPSidebarMenuPrimitive,
+  IGRPSidebarMenuButtonPrimitive,
   IGRPSidebarMenuItemPrimitive,
   igrpGetnitials,
-  IGRPUserAvatar
+  IGRPUserAvatar,
 } from '@igrp/igrp-framework-react-design-system';
 
 import { type IGRPTemplateNavUserProps } from './nav-user';
@@ -53,7 +53,10 @@ function IGRPTemplateNavUserHeader({ user }: IGRPTemplateNavUserProps) {
             </IGRPDropdownMenuLabelPrimitive>
             <IGRPDropdownMenuSeparatorPrimitive />
 
-            <IGRPDropdownMenuItemPrimitive asChild className="hover:bg-primary! hover:text-primary-foreground!">
+            <IGRPDropdownMenuItemPrimitive
+              asChild
+              className="hover:bg-primary! hover:text-primary-foreground!"
+            >
               <Link href="/users/profile">
                 {/* <UserIcon
                   className="mr-1 size-3.5 hover:text-primary-foreground!"
@@ -64,7 +67,10 @@ function IGRPTemplateNavUserHeader({ user }: IGRPTemplateNavUserProps) {
             </IGRPDropdownMenuItemPrimitive>
             <IGRPDropdownMenuSeparatorPrimitive />
 
-            <IGRPDropdownMenuItemPrimitive asChild className="hover:bg-primary! hover:text-primary-foreground!">
+            <IGRPDropdownMenuItemPrimitive
+              asChild
+              className="hover:bg-primary! hover:text-primary-foreground!"
+            >
               <Link href="/users/notifications">
                 {/* <Bell className="mr-1 size-3.5 hover:text-primary-foreground!" strokeWidth={2} /> */}
                 <span>Notifications</span>
@@ -72,7 +78,10 @@ function IGRPTemplateNavUserHeader({ user }: IGRPTemplateNavUserProps) {
             </IGRPDropdownMenuItemPrimitive>
             <IGRPDropdownMenuSeparatorPrimitive />
 
-            <IGRPDropdownMenuItemPrimitive asChild className="hover:bg-primary! hover:text-primary-foreground!">
+            <IGRPDropdownMenuItemPrimitive
+              asChild
+              className="hover:bg-primary! hover:text-primary-foreground!"
+            >
               <Link href="/logout">
                 {/* <LogOut className="mr-1 size-3.5 hover:text-primary-foreground!" strokeWidth={2} /> */}
                 <span>Log out</span>

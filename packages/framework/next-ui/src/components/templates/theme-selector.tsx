@@ -9,7 +9,7 @@ import {
   IGRPSelectLabelPrimitive,
   IGRPSelectSeparatorPrimitive,
   IGRPSelectTriggerPrimitive,
-  IGRPSelectValuePrimitive,  
+  IGRPSelectValuePrimitive,
 } from '@igrp/igrp-framework-react-design-system';
 
 import { useIGRPThemeConfig } from '../providers/active-theme';

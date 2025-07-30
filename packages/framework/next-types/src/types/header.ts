@@ -1,15 +1,13 @@
 import type { IGRPUserArgs } from './igrp';
 
 export interface IGRPHeaderDataArgs {
-  user: IGRPUserArgs;
+  user?: IGRPUserArgs;
   notifications?: IGRPNotificationArgs[];
-  quickActions?: IGRPQuickActionArgs[];
-  showBreadcrumbs?: boolean;
-  showSearch?: boolean;
-  showNotifications?: boolean;
-  showThemeSwitcher?: boolean;
-  showLanguageSelector?: boolean;
-  showUser?: boolean;
+  showBreadcrumb: boolean;
+  showSearch: boolean;
+  showNotifications: boolean;
+  showThemeSwitcher: boolean;
+  showUser: boolean;
 }
 
 export interface IGRPNotificationArgs {
@@ -19,11 +17,4 @@ export interface IGRPNotificationArgs {
   type: 'info' | 'warning' | 'error' | 'success';
   timestamp: Date;
   isRead: boolean;
-}
-
-export interface IGRPQuickActionArgs {
-  id: string;
-  title: string;
-  icon: string;
-  href: string;
 }

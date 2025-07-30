@@ -2,11 +2,11 @@
 
 import { useCallback } from 'react';
 import { useTheme } from 'next-themes';
-import { 
-  IGRPButton,
+import {
+  IGRPButtonPrimitive,
   IGRP_META_THEME_COLORS,
   useIGRPMetaColor,
-  IGRPIcon 
+  IGRPIcon,
 } from '@igrp/igrp-framework-react-design-system';
 
 function IGRPTemplateModeSwitcher() {
@@ -21,13 +21,14 @@ function IGRPTemplateModeSwitcher() {
   }, [resolvedTheme, setTheme, setMetaColor]);
 
   return (
-    <IGRPButton variant="ghost" size="icon" className="group/toggle size-6" onClick={toggleTheme}>
-      {theme === 'dark' 
-        ? (<IGRPIcon iconName="Sun" strokeWidth={2} />)
-        : (<IGRPIcon iconName="Moon" strokeWidth={2} />)
-      }
+    <IGRPButtonPrimitive variant="ghost" size="icon" className="group/toggle size-6" onClick={toggleTheme}>
+      {theme === 'dark' ? (
+        <IGRPIcon iconName="Sun" strokeWidth={2} />
+      ) : (
+        <IGRPIcon iconName="Moon" strokeWidth={2} />
+      )}
       <span className="sr-only">Toggle theme</span>
-    </IGRPButton>
+    </IGRPButtonPrimitive>
   );
 }
 

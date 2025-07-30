@@ -48,7 +48,6 @@ function IGRPActiveThemeProvider({ children, initialTheme }: IGRPActiveThemeProv
   );
 }
 
-// eslint-disable-next-line react-refresh/only-export-components
 export function useIGRPThemeConfig() {
   const context = useContext(ThemeContext);
   if (context === undefined) {

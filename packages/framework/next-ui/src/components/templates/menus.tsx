@@ -5,9 +5,9 @@ import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 import type { IGRPMenuItemArgs } from '@igrp/framework-next-types';
 
-import { 
+import {
   IGRPIcon,
-  IGRPAlertPrimitive, 
+  IGRPAlertPrimitive,
   IGRPAlertDescriptionPrimitive,
   IGRPCollapsiblePrimitive,
   IGRPCollapsibleContentPrimitive,
@@ -22,10 +22,9 @@ import {
   IGRPSidebarMenuSubPrimitive,
   IGRPSidebarMenuSubButtonPrimitive,
   IGRPSidebarMenuSubItemPrimitive,
-  igrpIsExternalUrl, 
-  igrpNormalizeUrl
+  igrpIsExternalUrl,
+  igrpNormalizeUrl,
 } from '@igrp/igrp-framework-react-design-system';
-
 
 type IGRPTemplateMenuArgs = {
   menus?: IGRPMenuItemArgs[];
@@ -166,7 +165,10 @@ function MenuItemWithSubmenus({ menu, pathname, childMenus }: MenuItemWithSubmen
       {/* Collapsible for expanded sidebar */}
       <IGRPSidebarMenuItemPrimitive>
         <IGRPCollapsiblePrimitive className="w-full group">
-          <IGRPCollapsibleTriggerPrimitive className="flex w-full group-data-[collapsible=icon]:hidden" asChild>
+          <IGRPCollapsibleTriggerPrimitive
+            className="flex w-full group-data-[collapsible=icon]:hidden"
+            asChild
+          >
             <IGRPSidebarMenuButtonPrimitive
               tooltip={name}
               className="w-full cursor-pointer"

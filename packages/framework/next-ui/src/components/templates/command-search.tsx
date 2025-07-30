@@ -11,9 +11,8 @@ import {
   IGRPCommandInputPrimitive,
   IGRPCommandItemPrimitive,
   IGRPCommandListPrimitive,
-  IGRPCommandSeparatorPrimitive
+  IGRPCommandSeparatorPrimitive,
 } from '@igrp/igrp-framework-react-design-system';
-
 
 function IGRPTemplateCommandSearch() {
   const [open, setOpen] = useState(false);
@@ -89,7 +88,9 @@ function IGRPTemplateCommandSearch() {
           </IGRPCommandGroupPrimitive>
           <IGRPCommandSeparatorPrimitive />
           <IGRPCommandGroupPrimitive heading="Team">
-            <IGRPCommandItemPrimitive onSelect={() => runCommand(() => router.push('/team/invite'))}>
+            <IGRPCommandItemPrimitive
+              onSelect={() => runCommand(() => router.push('/team/invite'))}
+            >
               {/* <UserPlus className="mr-2" /> */}
               <IGRPIcon iconName="Home" className="mr-2" />
 

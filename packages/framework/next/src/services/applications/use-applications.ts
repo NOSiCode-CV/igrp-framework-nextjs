@@ -19,7 +19,6 @@ export async function fetchAppByCode(appCode: string) {
 }
 
 export async function fetchAppsByUser(username: string) {
-  console.log({ username });
   try {
     if (!username) throw new Error('User not found');
 

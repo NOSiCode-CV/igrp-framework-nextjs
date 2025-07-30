@@ -3,8 +3,12 @@ interface IGRPTemplateLoadingProps {
 }
 
 function IGRPTemplateLoading({ appCode }: IGRPTemplateLoadingProps) {
-  console.log({ appCode });
-  return <div>Loading...</div>;
+  return (
+   <>
+    <div>Loading...</div>
+    <span className="hidden">{appCode}</span>
+   </>
+  )
 }
 
 export { IGRPTemplateLoading, type IGRPTemplateLoadingProps };

@@ -1,4 +1,4 @@
-'use client'
+'use client';
 
 import { useCallback, useEffect, useId, useMemo, useState } from 'react';
 import { type Column, type Table } from '@tanstack/react-table';

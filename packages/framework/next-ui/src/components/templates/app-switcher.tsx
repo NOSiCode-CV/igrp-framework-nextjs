@@ -2,7 +2,7 @@
 
 import { useState } from 'react';
 import Image from 'next/image';
-import { 
+import {
   IGRPIcon,
   IGRPDropdownMenuPrimitive,
   IGRPDropdownMenuContentPrimitive,
@@ -10,10 +10,10 @@ import {
   IGRPDropdownMenuLabelPrimitive,
   IGRPDropdownMenuSeparatorPrimitive,
   IGRPDropdownMenuTriggerPrimitive,
-  IGRPSidebarMenuPrimitive, 
-  IGRPSidebarMenuButtonPrimitive, 
-  IGRPSidebarMenuItemPrimitive, 
-  useIGRPSidebarPrimitive
+  IGRPSidebarMenuPrimitive,
+  IGRPSidebarMenuButtonPrimitive,
+  IGRPSidebarMenuItemPrimitive,
+  useIGRPSidebarPrimitive,
 } from '@igrp/igrp-framework-react-design-system';
 import type { IGRPApplicationArgs } from '@igrp/framework-next-types';
 

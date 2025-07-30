@@ -28,9 +28,6 @@ export async function IGRPRootLayout({ children, config }: IGRPRootLocaleLayoutA
 
   const { session, activeThemeValue, isScaled } = layout;
 
-  console.log({ appCode, previewMode, showHeader, showSidebar });
-  console.log({ session, activeThemeValue, isScaled });
-
   let app;
   let appId;
 

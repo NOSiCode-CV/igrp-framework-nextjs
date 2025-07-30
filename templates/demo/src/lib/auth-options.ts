@@ -131,7 +131,7 @@ async function doFinalSignoutHandshake(jwt: JWT) {
         { method: 'GET' },
       );
 
-      console.log('Completed post-logout handshake', response.status, response.statusText);
+      console.info('Completed post-logout handshake', response.status, response.statusText);
     } catch (e) {
       console.error(
         'Unable to perform post-logout handshake',

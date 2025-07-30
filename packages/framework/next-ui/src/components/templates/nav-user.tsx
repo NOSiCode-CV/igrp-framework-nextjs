@@ -9,12 +9,12 @@ import {
   IGRPDropdownMenuLabelPrimitive,
   IGRPDropdownMenuSeparatorPrimitive,
   IGRPDropdownMenuTriggerPrimitive,
-  IGRPSidebarMenuPrimitive, 
-  IGRPSidebarMenuButtonPrimitive, 
-  IGRPSidebarMenuItemPrimitive, 
+  IGRPSidebarMenuPrimitive,
+  IGRPSidebarMenuButtonPrimitive,
+  IGRPSidebarMenuItemPrimitive,
   useIGRPSidebar,
   IGRPUserAvatar,
-  igrpGetnitials
+  igrpGetnitials,
 } from '@igrp/igrp-framework-react-design-system';
 
 interface IGRPTemplateNavUserProps {

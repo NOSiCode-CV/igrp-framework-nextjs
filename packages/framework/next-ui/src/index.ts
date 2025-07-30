@@ -44,7 +44,6 @@ export { IGRPTemplateNotifications } from './components/templates/notifications'
 
 export { IGRPTemplateThemeSelector } from './components/templates/theme-selector';
 
-
 // providers
 export {
   IGRPActiveThemeProvider,

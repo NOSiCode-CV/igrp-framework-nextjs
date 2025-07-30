@@ -10,11 +10,11 @@ export { IGRPStatsCardTopBorderColored } from './components/custom/stats-card-to
 export { IGRPUserAvatar, type IGRPUserAvatarProps } from './components/custom/user-avatar';
 
 // primitives components
-export { 
-  Accordion as IGRPAccordionPrimitive, 
-  AccordionItem as IGRPAccordionItemPrimitive, 
-  AccordionTrigger as IGRPAccordionTriggerPrimitive, 
-  AccordionContent as IGRPAccordionContentPrimitive 
+export {
+  Accordion as IGRPAccordionPrimitive,
+  AccordionItem as IGRPAccordionItemPrimitive,
+  AccordionTrigger as IGRPAccordionTriggerPrimitive,
+  AccordionContent as IGRPAccordionContentPrimitive,
 } from './components/primitives/accordion';
 
 export {
@@ -31,20 +31,20 @@ export {
   AlertDialogCancel as IGRPAlertDialogCancelPrimitive,
 } from './components/primitives/alert-dialog';
 
-export { 
+export {
   Alert as IGRPAlertPrimitive,
-  AlertTitle as IGRPAlertTitlePrimitive, 
-  AlertDescription as IGRPAlertDescriptionPrimitive 
+  AlertTitle as IGRPAlertTitlePrimitive,
+  AlertDescription as IGRPAlertDescriptionPrimitive,
 } from './components/primitives/alert';
 
-export { 
-  Avatar as IGRPUserAvatarPrimitive, 
-  AvatarImage as IGRPUserAvatarImagePrimitive, 
-  AvatarFallback as IGRPUserAvatarFallbackPrimitive 
+export {
+  Avatar as IGRPUserAvatarPrimitive,
+  AvatarImage as IGRPUserAvatarImagePrimitive,
+  AvatarFallback as IGRPUserAvatarFallbackPrimitive,
 } from './components/primitives/avatar';
 
-export { 
-  Badge as IGRPBadgePrimitive, 
+export {
+  Badge as IGRPBadgePrimitive,
   badgeVariants as IGRPBadgeVariantPrimitive,
 } from './components/primitives/badge';
 
@@ -58,32 +58,32 @@ export {
   BreadcrumbEllipsis as IGRPBreadcrumbEllipsisPrimitive,
 } from './components/primitives/breadcrumb';
 
-export { 
-  Button as IGRPButtonPrimitive, 
-  buttonVariants as IGRPButtonVariantPrimitive 
+export {
+  Button as IGRPButtonPrimitive,
+  buttonVariants as IGRPButtonVariantPrimitive,
 } from './components/primitives/button';
 
-export { 
-  Card as IGRPCardPrimitive, 
-  CardHeader as IGRPCardHeaderPrimitive, 
-  CardFooter as IGRPCardFooterPrimitive, 
-  CardTitle as IGRPCardTitlePrimitive, 
-  CardAction as IGRPCardActionPrimitive, 
-  CardDescription as IGRPCardDescriptionPrimitive, 
-  CardContent as IGRPCardContentPrimitive 
+export {
+  Card as IGRPCardPrimitive,
+  CardHeader as IGRPCardHeaderPrimitive,
+  CardFooter as IGRPCardFooterPrimitive,
+  CardTitle as IGRPCardTitlePrimitive,
+  CardAction as IGRPCardActionPrimitive,
+  CardDescription as IGRPCardDescriptionPrimitive,
+  CardContent as IGRPCardContentPrimitive,
 } from './components/primitives/card';
 
-export { 
-  Collapsible as IGRPCollapsiblePrimitive, 
-  CollapsibleTrigger as IGRPCollapsibleTriggerPrimitive, 
-  CollapsibleContent as IGRPCollapsibleContentPrimitive
+export {
+  Collapsible as IGRPCollapsiblePrimitive,
+  CollapsibleTrigger as IGRPCollapsibleTriggerPrimitive,
+  CollapsibleContent as IGRPCollapsibleContentPrimitive,
 } from './components/primitives/collapsible';
 
 export {
   Command as IGRPCommandPrimitive,
   CommandDialog as IGRPCommandDialogPrimitive,
   CommandInput as IGRPCommandInputPrimitive,
-  CommandList as IGRPCommandListPrimitive, 
+  CommandList as IGRPCommandListPrimitive,
   CommandEmpty as IGRPCommandEmptyPrimitive,
   CommandGroup as IGRPCommandGroupPrimitive,
   CommandItem as IGRPCommandItemPrimitive,
@@ -114,7 +114,7 @@ export {
   DropdownMenuItem as IGRPDropdownMenuItemPrimitive,
   DropdownMenuCheckboxItem as IGRPDropdownMenuCheckboxItemPrimitive,
   DropdownMenuRadioGroup as IGRPDropdownMenuRadioGroupPrimitive,
-  DropdownMenuRadioItem as IGRPDropdownMenuRadioItemPrimitive ,
+  DropdownMenuRadioItem as IGRPDropdownMenuRadioItemPrimitive,
   DropdownMenuSeparator as IGRPDropdownMenuSeparatorPrimitive,
   DropdownMenuShortcut as IGRPDropdownMenuShortcutPrimitive,
   DropdownMenuSub as IGRPDropdownMenuSubPrimitive,
@@ -134,17 +134,17 @@ export {
 } from './components/primitives/form';
 
 export { Input as IGRPInputPrimitive } from './components/primitives/input';
-export { Label as IGRPLabelPrimitive } from "./components/primitives/label";
+export { Label as IGRPLabelPrimitive } from './components/primitives/label';
 
-export { 
-  RadioGroup as IGRPRadioGroupPrimitive, 
-  RadioGroupItem as IGRPRadioGroupItemPrimitive, 
-  radioItemVariants as IGRPRadioGroupVariantPrimitive 
+export {
+  RadioGroup as IGRPRadioGroupPrimitive,
+  RadioGroupItem as IGRPRadioGroupItemPrimitive,
+  radioItemVariants as IGRPRadioGroupVariantPrimitive,
 } from './components/primitives/radio-group';
 
-export { 
-  ScrollArea as IGRPScrollAreaPrimitive, 
-  ScrollBar as IGRPScrollBarPrimitive
+export {
+  ScrollArea as IGRPScrollAreaPrimitive,
+  ScrollBar as IGRPScrollBarPrimitive,
 } from './components/primitives/scroll-area';
 
 export {
@@ -160,7 +160,7 @@ export {
   SelectValue as IGRPSelectValuePrimitive,
 } from './components/primitives/select';
 
-export { Separator as IGRPSeparatorPrimitive } from "./components/primitives/separator";
+export { Separator as IGRPSeparatorPrimitive } from './components/primitives/separator';
 
 export {
   Sheet as IGRPCSheetPrimitive,
@@ -202,31 +202,29 @@ export {
 
 export { Skeleton as IGRPSkeletonPrimitive } from './components/primitives/skeleton';
 
-export { Toaster as IGRPToasterPrimitive } from "./components/primitives/sonner";
+export { Toaster as IGRPToasterPrimitive } from './components/primitives/sonner';
 
-export { Switch as IGRPSwitchPrimitive } from "./components/primitives/switch";
+export { Switch as IGRPSwitchPrimitive } from './components/primitives/switch';
 
-export { 
-  Table as IGRPTablePrimitive, 
-  TableHeader as IGRPTableHeaderPrimitive, 
-  TableBody as IGRPTableBodyPrimitive, 
-  TableFooter as IGRPTableFooterPrimitive, 
-  TableHead as IGRPTableHeadPrimitive, 
-  TableRow as IGRPTableRowPrimitive, 
+export {
+  Table as IGRPTablePrimitive,
+  TableHeader as IGRPTableHeaderPrimitive,
+  TableBody as IGRPTableBodyPrimitive,
+  TableFooter as IGRPTableFooterPrimitive,
+  TableHead as IGRPTableHeadPrimitive,
+  TableRow as IGRPTableRowPrimitive,
   TableCell as IGRPTableCellPrimitive,
-  TableCaption as IGRPTableCaptionPrimitive 
+  TableCaption as IGRPTableCaptionPrimitive,
 } from './components/primitives/table';
 
-export { Textarea as IGRPTextAreaPrimitive } from "./components/primitives/textarea";
+export { Textarea as IGRPTextAreaPrimitive } from './components/primitives/textarea';
 
-export { 
-  Tooltip as IGRPTooltipPrimitive, 
+export {
+  Tooltip as IGRPTooltipPrimitive,
   TooltipTrigger as IGRPTooltipTriggerPrimitive,
-  TooltipContent as IGRPTooltipContentPrimitive, 
-  TooltipProvider as IGRPTooltipProviderPrimitive
+  TooltipContent as IGRPTooltipContentPrimitive,
+  TooltipProvider as IGRPTooltipProviderPrimitive,
 } from './components/primitives/tooltip';
-
-
 
 // horizon components
 export { IGRPAlert, type IGRPAlertProps } from './components/horizon/alert';
@@ -410,11 +408,17 @@ export {
   IGRPDatePickerRange,
   type IGRPDatePickerRangeProps,
 } from './components/horizon/input/date-picker/date-picker-range';
-export { IGRPDateTimeInput, type IGRPDateTimeInputProps } from './components/horizon/input/date-time';
+export {
+  IGRPDateTimeInput,
+  type IGRPDateTimeInputProps,
+} from './components/horizon/input/date-time';
 export { IGRPInputFile, type IGRPInputFileProps } from './components/horizon/input/file';
 export { IGRPInputHidden } from './components/horizon/input/hidden';
 export { IGRPInputNumber, type IGRPInputNumberProps } from './components/horizon/input/number';
-export { IGRPInputPassword, type IGRPInputPasswordProps } from './components/horizon/input/password';
+export {
+  IGRPInputPassword,
+  type IGRPInputPasswordProps,
+} from './components/horizon/input/password';
 export { IGRPInputPhone, type IGRPInputPhoneProps } from './components/horizon/input/phone';
 export { IGRPInputSearch, type IGRPInputSearchProps } from './components/horizon/input/search';
 export { IGRPSelect, type IGRPSelectProps } from './components/horizon/input/select';
@@ -516,7 +520,11 @@ export {
   igrpHeadlineVariants,
 } from './components/horizon/typography/headline';
 
-export { IGRPLink, IGRPLinkVariants, type IGRPLinkProps } from './components/horizon/typography/link';
+export {
+  IGRPLink,
+  IGRPLinkVariants,
+  type IGRPLinkProps,
+} from './components/horizon/typography/link';
 
 export {
   IGRPTextList,
@@ -529,10 +537,10 @@ export {
   igrpListItems,
 } from './components/horizon/typography/list';
 
-export { 
-  IGRPText, 
-  type IGRPTextProps, 
-  igrpTextVariants 
+export {
+  IGRPText,
+  type IGRPTextProps,
+  igrpTextVariants,
 } from './components/horizon/typography/text';
 
 // types

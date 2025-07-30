@@ -1,8 +1,8 @@
 import type { IGRPHeaderDataArgs } from '@igrp/framework-next-types';
-import { 
-  cn, 
-  IGRPSeparatorPrimitive, 
-  IGRPSidebarTriggerPrimitive 
+import {
+  cn,
+  IGRPSeparatorPrimitive,
+  IGRPSidebarTriggerPrimitive,
 } from '@igrp/igrp-framework-react-design-system';
 
 import { IGRPTemplateBreadcrumbs } from './breadcrumbs';
@@ -12,15 +12,24 @@ import { IGRPTemplateNavUserHeader } from './nav-user-header';
 import { IGRPTemplateNotifications } from './notifications';
 
 interface IGRPTemplateHeaderProps {
-  data?: IGRPHeaderDataArgs;
+  data: IGRPHeaderDataArgs;
   className?: string;
 }
 
 function IGRPTemplateHeader({ data, className }: IGRPTemplateHeaderProps) {
-  if (!data) return null;
+  if (!data) {
+    console.info("IGRP Header não tem dados, revisar src/igrp.template.config.")
+    return null;
+  }
 
-  const { user, showBreadcrumbs, showSearch, showNotifications, showThemeSwitcher, showUser } =
-    data;
+  const {
+    user,
+    showBreadcrumb,
+    showSearch,
+    showNotifications,
+    showThemeSwitcher,
+    showUser
+  } = data;
 
   return (
     <header
@@ -31,9 +40,12 @@ function IGRPTemplateHeader({ data, className }: IGRPTemplateHeaderProps) {
     >
       <div className="flex items-center gap-2 h-12">
         <IGRPSidebarTriggerPrimitive />
-        {showBreadcrumbs && (
+        {showBreadcrumb && (
           <>
-            <IGRPSeparatorPrimitive orientation="vertical" className="mr-2 data-[orientation=vertical]:h-4" />
+            <IGRPSeparatorPrimitive
+              orientation="vertical"
+              className="mr-2 data-[orientation=vertical]:h-4"
+            />
             <IGRPTemplateBreadcrumbs />
           </>
         )}

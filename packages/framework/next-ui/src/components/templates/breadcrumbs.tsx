@@ -4,7 +4,6 @@ import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 import { IGRPIcon, cn } from '@igrp/igrp-framework-react-design-system';
 
-
 interface IGRPTemplateBreadcrumbsProps {
   className?: string;
 }

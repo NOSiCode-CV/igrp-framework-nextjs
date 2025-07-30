@@ -18,7 +18,7 @@ function IGRPIcon({
   const LucideIcon = icons[iconName as IGRPIconName];
 
   if (!LucideIcon) {
-    console.log('Invalid icon::', { iconName });
+    console.warn('Invalid icon::', { iconName });
     return <AlertCircle className="text-destructive" />;
   }
 

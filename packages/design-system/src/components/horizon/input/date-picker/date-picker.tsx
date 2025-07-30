@@ -14,10 +14,7 @@ import {
 } from '../../../primitives/form';
 import { Popover, PopoverContent, PopoverTrigger } from '../../../primitives/popover';
 import { IGRPButton } from '../../button';
-import {
-  IGRPCalendar,
-  type IGRPCalendarProps,
-} from './calendar/calendar';
+import { IGRPCalendar, type IGRPCalendarProps } from './calendar/calendar';
 import { IGRPLabel } from '../../label';
 // import { igrpGridSizeClasses } from '../../../../lib/constants';
 import { cn } from '../../../../lib/utils';
@@ -156,7 +153,7 @@ function IGRPDatePicker({
       />
     );
   }
-  console.log({ required });
+  
   return (
     <div className={cn('*:not-first:mt-2', /*igrpGridSizeClasses[gridSize],*/ className)}>
       {label && (

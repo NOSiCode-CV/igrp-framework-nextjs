@@ -12,13 +12,13 @@ interface IGRPTemplateNotFoundProps {
 }
 
 function IGRPTemplateNotFound({ appCode }: IGRPTemplateNotFoundProps) {
-  console.log({ appCode });
   return (
     <div>
       <h1>404</h1>
       <h2>Página não encontrada</h2>
       <p>Desculpe, a página que você procurou não foi encontrada.</p>
       <Link href="/">Voltar à Página Inicial</Link>
+      <span className='hidden'>{appCode}</span>
     </div>
   );
 }

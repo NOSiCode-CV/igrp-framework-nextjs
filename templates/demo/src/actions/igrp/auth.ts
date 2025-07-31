@@ -38,7 +38,6 @@ export async function getSession() {
   if (process.env.NODE_ENV === 'production') {
     try {
       session = await serverSession();
-      session = null;
     } catch (error) {
       console.error('Failed to get session in layout:', error);
       session = null;

@@ -1,4 +1,4 @@
-import { IGRPRootProviders } from '@igrp/framework-next-design-system';
+import { IGRPRootProviders } from '@igrp/framework-next-ui';
 import type { IGRPConfigArgs } from '@igrp/framework-next-types';
 
 import { setAccessClientConfig } from '../lib/api-config';
@@ -27,9 +27,6 @@ export async function IGRPRootLayout({ children, config }: IGRPRootLocaleLayoutA
   } = layoutConfig;
 
   const { session, activeThemeValue, isScaled } = layout;
-
-  console.log({ appCode, previewMode, showHeader, showSidebar });
-  console.log({ session, activeThemeValue, isScaled });
 
   let app;
   let appId;

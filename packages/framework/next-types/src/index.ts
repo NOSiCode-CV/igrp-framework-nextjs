@@ -1,6 +1,6 @@
 export type { IGRPMockDataAsync, IGRPMockData, IGRPToasterPosition } from './types/globals';
 
-export type { IGRPHeaderDataArgs, IGRPNotificationArgs, IGRPQuickActionArgs } from './types/header';
+export type { IGRPHeaderDataArgs, IGRPNotificationArgs } from './types/header';
 
 export type {
   IGRPApplicationArgs,

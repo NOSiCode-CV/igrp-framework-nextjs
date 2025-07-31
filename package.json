@@ -2,7 +2,7 @@
   "name": "igrp-framework-nextjs",
   "version": "0.0.1",
   "description": "IGRP Framework for Next.js",
-   "keywords": [
+  "keywords": [
     "igrp",
     "framework",
     "nextjs"
@@ -18,11 +18,11 @@
     "lint": "pnpm -r run lint",
     "clean": "pnpm -r run clean",
     "format": "pnpm -r run format",
-    "release:framework": "pnpm build:framework && pnpm -r run release","build:next": "pnpm --filter @igrp/framework-next build",
-    "build:next-ds": "pnpm --filter @igrp/framework-next-design-system build",
+    "build:next": "pnpm --filter @igrp/framework-next build",
+    "build:next-ui": "pnpm --filter @igrp/framework-next-ui build",
     "build:next-types": "pnpm --filter @igrp/framework-next-types build",
-    "dev:next": "pnpm --filter @igrp/framework-next dev",
-    "build:framework": "pnpm build:nextjs-types && pnpm build:next-ui && pnpm build:next",
+    "build:ds": "pnpm --filter @igrp/igrp-framework-react-design-system build",
+    "build:framework": "pnpm build:next-types && pnpm build:ds && pnpm build:next-ui && pnpm build:next",
     "dev:demo": "pnpm --filter @igrp/framenwork-next-template dev",
     "build:demo": "pnpm --filter @igrp/framenwork-next-template build",
     "start:demo": "pnpm --filter @igrp/framenwork-next-template start",

@@ -22,7 +22,6 @@ export function createConfig(config: IGRPLayoutConfigArgs) {
         showBreadcrumb: true,
         showSearch: true,
         showNotifications: true,
-        showLanguageSelector: true,
         showUser: true,
         showThemeSwitcher: true,
       }),

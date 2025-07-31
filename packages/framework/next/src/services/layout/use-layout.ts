@@ -17,9 +17,6 @@ export async function fetchLayoutData(
 
     const menuItems = await fetchMenus(appCode);
     const user = await fetchCurrentUser();
-
-    console.log({ user });
-
     const apps = await fetchAppsByUser(user.username);
 
     headerData = {

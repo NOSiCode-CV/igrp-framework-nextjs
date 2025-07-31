@@ -35,8 +35,8 @@
   },
   "dependencies": {
     "@bprogress/next": "^3.2.12",
-    "@igrp/framework-next-types": "0.0.1-alpha.32",
-    "@igrp/igrp-framework-react-design-system": "0.0.1-alpha.32",
+    "@igrp/framework-next-types": "workspace:*",
+    "@igrp/igrp-framework-react-design-system": "workspace:*",
     "class-variance-authority": "^0.7.1",
     "clsx": "^2.1.1",
     "next-intl": "^4.1.0",

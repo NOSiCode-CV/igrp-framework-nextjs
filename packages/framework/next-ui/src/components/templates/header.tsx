@@ -18,18 +18,11 @@ interface IGRPTemplateHeaderProps {
 
 function IGRPTemplateHeader({ data, className }: IGRPTemplateHeaderProps) {
   if (!data) {
-    console.info("IGRP Header não tem dados, revisar src/igrp.template.config.")
+    console.info('IGRP Header não tem dados, revisar src/igrp.template.config.');
     return null;
   }
 
-  const {
-    user,
-    showBreadcrumb,
-    showSearch,
-    showNotifications,
-    showThemeSwitcher,
-    showUser
-  } = data;
+  const { user, showBreadcrumb, showSearch, showNotifications, showThemeSwitcher, showUser } = data;
 
   return (
     <header

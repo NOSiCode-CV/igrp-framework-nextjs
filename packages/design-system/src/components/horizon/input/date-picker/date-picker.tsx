@@ -153,7 +153,7 @@ function IGRPDatePicker({
       />
     );
   }
-  
+
   return (
     <div className={cn('*:not-first:mt-2', /*igrpGridSizeClasses[gridSize],*/ className)}>
       {label && (

@@ -49,7 +49,6 @@ function IGRPTemplateCommandSearch() {
         className="justify-between focus-visible:outline-none focus-visible:ring-1 border-input px-3"
       >
         <span className="flex items-center ">
-          {/* <Search className="mr-1 size-3" />  use IGRPIcon */}
           <IGRPIcon iconName="Search" className="mr-1 size-3" />
           <span className="hidden md:inline-block">Search</span>
         </span>
@@ -63,26 +62,19 @@ function IGRPTemplateCommandSearch() {
           <IGRPCommandEmptyPrimitive>No results found.</IGRPCommandEmptyPrimitive>
           <IGRPCommandGroupPrimitive heading="Suggestions">
             <IGRPCommandItemPrimitive onSelect={() => runCommand(() => router.push('/'))}>
-              {/* <Home className="mr-2" /> */}
-              <IGRPIcon iconName="Home" className="mr-2" />
+              <IGRPIcon iconName="House" className="mr-2" />
               <span>Home</span>
             </IGRPCommandItemPrimitive>
             <IGRPCommandItemPrimitive onSelect={() => runCommand(() => router.push('/'))}>
-              {/* <Home className="mr-2" /> */}
-              <IGRPIcon iconName="Home" className="mr-2" />
-
+              <IGRPIcon iconName="House" className="mr-2" />
               <span>Library</span>
             </IGRPCommandItemPrimitive>
             <IGRPCommandItemPrimitive onSelect={() => runCommand(() => router.push('/docs'))}>
-              {/* <FileText className="mr-2" /> */}
-              <IGRPIcon iconName="Home" className="mr-2" />
-
+              <IGRPIcon iconName="FileText" className="mr-2" />
               <span>Documentation</span>
             </IGRPCommandItemPrimitive>
             <IGRPCommandItemPrimitive onSelect={() => runCommand(() => router.push('/settings'))}>
-              {/* <Settings className="mr-2" /> */}
-              <IGRPIcon iconName="Home" className="mr-2" />
-
+              <IGRPIcon iconName="Settings" className="mr-2" />
               <span>Settings</span>
             </IGRPCommandItemPrimitive>
           </IGRPCommandGroupPrimitive>
@@ -91,33 +83,25 @@ function IGRPTemplateCommandSearch() {
             <IGRPCommandItemPrimitive
               onSelect={() => runCommand(() => router.push('/team/invite'))}
             >
-              {/* <UserPlus className="mr-2" /> */}
-              <IGRPIcon iconName="Home" className="mr-2" />
-
+              <IGRPIcon iconName="UserPlus" className="mr-2" />
               <span>Invite Members</span>
             </IGRPCommandItemPrimitive>
           </IGRPCommandGroupPrimitive>
           <IGRPCommandSeparatorPrimitive />
           <IGRPCommandGroupPrimitive heading="Profile">
             <IGRPCommandItemPrimitive onSelect={() => runCommand(() => router.push('/profile'))}>
-              {/* <User className="mr-2" /> */}
-              <IGRPIcon iconName="Home" className="mr-2" />
-
+              <IGRPIcon iconName="User" className="mr-2" />
               <span>Profile</span>
             </IGRPCommandItemPrimitive>
             <IGRPCommandItemPrimitive onSelect={() => runCommand(() => router.push('/logout'))}>
-              {/* <LogOut className="mr-2" /> */}
-              <IGRPIcon iconName="Home" className="mr-2" />
-
+              <IGRPIcon iconName="LogOut" className="mr-2" />
               <span>Logout</span>
             </IGRPCommandItemPrimitive>
           </IGRPCommandGroupPrimitive>
           <IGRPCommandSeparatorPrimitive />
           <IGRPCommandGroupPrimitive heading="Support">
             <IGRPCommandItemPrimitive onSelect={() => runCommand(() => router.push('/help'))}>
-              {/* <LifeBuoy className="mr-2" /> */}
-              <IGRPIcon iconName="Home" className="mr-2" />
-
+              <IGRPIcon iconName="LifeBuoy" className="mr-2" />
               <span>Help</span>
             </IGRPCommandItemPrimitive>
           </IGRPCommandGroupPrimitive>

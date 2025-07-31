@@ -1,6 +1,6 @@
 {
   "name": "@igrp/framenwork-next-template",
-  "version": "0.0.1-alpha.28",
+  "version": "0.0.1-alpha.32",
   "description": "IGRP Framework for Next.js | Default Template",
    "keywords": [
     "igrp",
@@ -12,7 +12,7 @@
   "license": "MIT",
   "scripts": {
     "dev": "next dev --turbopack",
-    "build": "next build",
+    "build": "pnpm format && next build",
     "start": "next start",
     "lint": "next lint",
     "format": "prettier --write .",
@@ -20,10 +20,10 @@
   },
   "dependencies": {
     "@bprogress/next": "^3.2.12",
-    "@igrp/framework-next": "workspace:*",
-    "@igrp/framework-next-types": "workspace:*",
-    "@igrp/framework-next-ui": "workspace:*",
-    "@igrp/igrp-framework-react-design-system": "workspace:*",
+    "@igrp/framework-next": "0.0.1-alpha.32",
+    "@igrp/framework-next-types": "0.0.1-alpha.32",
+    "@igrp/framework-next-ui": "0.0.1-alpha.32",
+    "@igrp/igrp-framework-react-design-system": "0.0.1-alpha.32",
     "class-variance-authority": "^0.7.1",
     "clsx": "^2.1.1",
     "next": "15.4.5",

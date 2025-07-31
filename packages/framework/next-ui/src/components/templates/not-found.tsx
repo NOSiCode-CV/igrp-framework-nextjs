@@ -18,7 +18,7 @@ function IGRPTemplateNotFound({ appCode }: IGRPTemplateNotFoundProps) {
       <h2>Página não encontrada</h2>
       <p>Desculpe, a página que você procurou não foi encontrada.</p>
       <Link href="/">Voltar à Página Inicial</Link>
-      <span className='hidden'>{appCode}</span>
+      <span className="hidden">{appCode}</span>
     </div>
   );
 }

@@ -21,7 +21,12 @@ function IGRPTemplateModeSwitcher() {
   }, [resolvedTheme, setTheme, setMetaColor]);
 
   return (
-    <IGRPButtonPrimitive variant="ghost" size="icon" className="group/toggle size-6" onClick={toggleTheme}>
+    <IGRPButtonPrimitive
+      variant="ghost"
+      size="icon"
+      className="group/toggle size-6"
+      onClick={toggleTheme}
+    >
       {theme === 'dark' ? (
         <IGRPIcon iconName="Sun" strokeWidth={2} />
       ) : (

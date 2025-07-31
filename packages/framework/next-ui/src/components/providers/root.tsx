@@ -58,7 +58,7 @@ export function IGRPRootProviders({
     richColors = true,
     expand = false,
     duration = 3500,
-  } = toasterConfig ?? {}; 
+  } = toasterConfig ?? {};
 
   return (
     <IGRPSessionProvider session={session} {...sessionArgs}>

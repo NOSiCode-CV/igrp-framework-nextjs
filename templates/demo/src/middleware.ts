@@ -1,4 +1,4 @@
-import { NextRequest, NextResponse } from 'next/server';
+import { NextResponse } from 'next/server';
 
 // ::: REDIRECT localhost:3000/ -> localhost:3000/IGRP_APP_BASE_PATH :::
 
@@ -14,5 +14,8 @@ export default async function middleware() {
 }
 
 export const config = {
-  matcher: ['/', '/((?!api|_next/static|_next/image|favicon.ico|.*\\..*).*)'],
+  matcher: [
+    '/', 
+    '/((?!api|_next/static|_next/image|favicon.ico|.*\\..*).*)'
+  ],
 };

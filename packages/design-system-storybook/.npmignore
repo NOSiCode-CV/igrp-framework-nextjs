@@ -21,20 +21,3 @@
 /npm-debug.log*
 /yarn-debug.log*
 /yarn-error.log*
-
-#
-.npmrc
-
-# Deny shared chunks
-/dist/*-*.js
-/dist/*-*.cjs
-/dist/*-*.css
-/dist/*.map
-
-# create template zip
-/create-template/nexus-auth.txt
-igrp-next-template.zip
-
-# Storybook
-/storybook-static
-*storybook.log

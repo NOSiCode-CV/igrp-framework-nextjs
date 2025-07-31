@@ -20,7 +20,8 @@
   "references": [
     // { "path": "./packages/igrp-cli-next" },
     { "path": "./templates/demo" },
-    { "path": "./packages/design-system" },    
+    { "path": "./packages/design-system" },
+    { "path": "./packages/design-system-storybook" },
     { "path": "./packages/framework/next" },    
     { "path": "./packages/framework/next-types" }
   ],

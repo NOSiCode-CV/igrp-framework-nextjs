@@ -1,4 +1,5 @@
 import { useState } from 'react';
+import Link from 'next/link';
 
 import {
   DropdownMenu,
@@ -144,9 +145,9 @@ function IGRPDataTableDropdownMenuLink({
 
   return href ? (
     <DropdownMenuItem onSelect={(e) => e.preventDefault()} asChild>
-      <a href={href} className={customClss}>
+      <Link href={href} className={customClss}>
         {renderContent()}
-      </a>
+      </Link>
     </DropdownMenuItem>
   ) : (
     <DropdownMenuItem className={customClss} onSelect={handlerAction}>

@@ -34,3 +34,7 @@
 # create template zip
 /create-template/nexus-auth.txt
 igrp-next-template.zip
+
+# Storybook
+/storybook-static
+*storybook.log

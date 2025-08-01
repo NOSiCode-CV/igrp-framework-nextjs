@@ -103,11 +103,12 @@ jspm_packages/
 # Stores VSCode versions used for testing VSCode extensions
 .vscode-test
 
-# Temporary folders
-tmp/
-
 *.tsbuildinfo
 
 # create template zip
-create-template/nexus-auth.txt
+/create-template/nexus-auth.txt
 igrp-next-template.zip
+
+# Storybook
+/storybook-static
+*storybook.log

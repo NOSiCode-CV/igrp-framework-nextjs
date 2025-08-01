@@ -1,4 +1,5 @@
 import type { ReactNode } from 'react';
+import Link, { type LinkProps } from 'next/link';
 import { cva, type VariantProps } from 'class-variance-authority';
 
 import { IGRPIcon, type IGRPIconName } from '../../icon';
@@ -31,7 +32,8 @@ const IGRPLinkVariants = cva(
 );
 
 interface IGRPLinkProps
-  extends React.ComponentProps<'a'>,
+  extends Omit<React.ComponentProps<'a'>, 'href'>,
+    Omit<LinkProps, 'href'>,
     Omit<IGRPBaseAttributes, 'ref'>,
     VariantProps<typeof IGRPLinkVariants> {
   href: string;
@@ -72,7 +74,7 @@ function IGRPLink({
         href={href}
         className={linkClass}
         target={target || '_blank'}
-        rel="noopener noreferrer"
+        rel='noopener noreferrer'
         onClick={onClick}
         {...props}
       >
@@ -90,7 +92,13 @@ function IGRPLink({
   }
 
   return (
-    <a href={href} className={linkClass} target={target} onClick={onClick} {...props}>
+    <Link
+      href={href}
+      className={linkClass}
+      target={target}
+      onClick={onClick}
+      {...props}
+    >
       <IGRPLinkRender
         iconName={iconName}
         iconClassName={iconClassName}
@@ -100,7 +108,7 @@ function IGRPLink({
       >
         {children}
       </IGRPLinkRender>
-    </a>
+    </Link>
   );
 }
 
@@ -145,3 +153,4 @@ function IGRPLinkRender({
 }
 
 export { IGRPLink, IGRPLinkVariants, type IGRPLinkProps };
+

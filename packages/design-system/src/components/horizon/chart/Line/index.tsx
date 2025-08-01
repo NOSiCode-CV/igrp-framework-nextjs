@@ -29,7 +29,7 @@ import {
   hasNegativeValues,
 } from '../lib';
 
-export interface LineConfig extends IGRPSeriesConfig {
+interface LineConfig extends IGRPSeriesConfig {
   type?: 'linear' | 'monotone' | 'step' | 'basis' | 'natural';
   strokeWidth?: number;
   strokeDasharray?: string;
@@ -40,7 +40,7 @@ export interface LineConfig extends IGRPSeriesConfig {
   labelOffset?: number;
 }
 
-export interface IGRPLineChartProps extends IGRPChartProps {
+interface IGRPLineChartProps extends IGRPChartProps {
   lines: LineConfig[];
 }
 
@@ -232,4 +232,4 @@ function IGRPLineChart({
   );
 }
 
-export { IGRPLineChart };
+export { IGRPLineChart, type LineConfig,  type IGRPLineChartProps };

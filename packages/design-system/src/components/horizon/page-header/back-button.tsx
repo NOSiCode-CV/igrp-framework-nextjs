@@ -1,3 +1,5 @@
+import Link from 'next/link';
+
 import { Button } from '../../primitives/button';
 import { IGRPIcon, type IGRPIconName } from '../icon';
 
@@ -12,9 +14,9 @@ function IGRPPageHeaderBackButton({
 }: IGRPPageHeaderBackButtonProps) {
   return (
     <Button variant="outline" size="icon" asChild {...props}>
-      <a href={url}>
+      <Link href={url}>
         <IGRPIcon iconName={iconName} />
-      </a>
+      </Link>
     </Button>
   );
 }

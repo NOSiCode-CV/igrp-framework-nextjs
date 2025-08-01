@@ -245,7 +245,11 @@ export {
 export { IGRPAreaChart } from './components/horizon/chart/Area';
 export { IGRPHorizontalBarChart } from './components/horizon/chart/Bar/horizontal';
 export { IGRPVerticalBarChart } from './components/horizon/chart/Bar/vertical';
-export { IGRPLineChart, type LineConfig,  type IGRPLineChartProps } from './components/horizon/chart/Line';
+export {
+  IGRPLineChart,
+  type LineConfig,
+  type IGRPLineChartProps,
+} from './components/horizon/chart/Line';
 export { IGRPPieChart } from './components/horizon/chart/Pie';
 export { IGRPRadarChart } from './components/horizon/chart/Radar';
 export { IGRPRadialBarChart } from './components/horizon/chart/Radial';
@@ -389,11 +393,11 @@ export { IGRPForm, type IGRPFormProps, type IGRPFormHandle } from './components/
 export { convertValuesToFormData } from './components/horizon/form/lib/utils';
 export { IGRPFormList, type IGRPFormListProps } from './components/horizon/form-list';
 
-export { 
-  IGRPIcon, 
-  IGRPIconObject, 
-  type IGRPIconProps, 
-  type IGRPIconName 
+export {
+  IGRPIcon,
+  IGRPIconObject,
+  type IGRPIconProps,
+  type IGRPIconName,
 } from './components/horizon/icon';
 
 export {
@@ -406,8 +410,14 @@ export {
 export { IGRPCheckbox, type IGRPCheckboxProps } from './components/horizon/input/checkbox';
 export { IGRPInputColor, type IGRPInputColorProps } from './components/horizon/input/color';
 export { IGRPCombobox, type IGRPComboboxProps } from './components/horizon/input/combobox';
-export { IGRPCalendar, type IGRPCalendarProps } from "./components/horizon/input/date-picker/calendar/calendar";
-export { IGRPCalendarRange, type IGRPCalendarRangeProps } from "./components/horizon/input/date-picker/calendar/calendar-range";
+export {
+  IGRPCalendar,
+  type IGRPCalendarProps,
+} from './components/horizon/input/date-picker/calendar/calendar';
+export {
+  IGRPCalendarRange,
+  type IGRPCalendarRangeProps,
+} from './components/horizon/input/date-picker/calendar/calendar-range';
 export {
   IGRPDatePicker,
   type IGRPDatePickerProps,

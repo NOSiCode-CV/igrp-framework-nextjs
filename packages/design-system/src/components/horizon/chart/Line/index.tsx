@@ -232,4 +232,4 @@ function IGRPLineChart({
   );
 }
 
-export { IGRPLineChart, type LineConfig,  type IGRPLineChartProps };
+export { IGRPLineChart, type LineConfig, type IGRPLineChartProps };

@@ -39,6 +39,7 @@
     "release": "pnpm format && pnpm build && yarn publish --registry=https://sonatype.nosi.cv/repository/igrp/ --tag latest"
   },
   "peerDependencies": {
+    "next": "15.4.5",
     "react": "19.1.1",
     "react-dom": "19.1.1"
   },

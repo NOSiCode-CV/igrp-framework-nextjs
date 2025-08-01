@@ -125,6 +125,9 @@ importers:
       lucide-react:
         specifier: ^0.535.0
         version: 0.535.0(react@19.1.1)
+      next:
+        specifier: 15.4.5
+        version: 15.4.5(@babel/core@7.28.0)(babel-plugin-react-compiler@19.1.0-rc.2)(react-dom@19.1.1(react@19.1.1))(react@19.1.1)
       next-themes:
         specifier: 0.4.6
         version: 0.4.6(react-dom@19.1.1(react@19.1.1))(react@19.1.1)

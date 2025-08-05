@@ -1,7 +1,7 @@
 'use client';
 
 import { useState } from 'react';
-import type { Meta, StoryObj } from '@storybook/react-vite';
+import type { Meta, StoryObj } from '@storybook/nextjs-vite';
 import {
   IGRPAlertDialog,
   type IGRPAlertDialogProps,

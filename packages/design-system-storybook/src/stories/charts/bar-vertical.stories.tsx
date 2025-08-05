@@ -1,4 +1,4 @@
-import type { StoryFn, StoryObj } from '@storybook/react-vite';
+import type { StoryFn, StoryObj } from '@storybook/nextjs-vite';
 import {
   IGRPVerticalBarChart,
   type IGRPVerticalBarChartProps,

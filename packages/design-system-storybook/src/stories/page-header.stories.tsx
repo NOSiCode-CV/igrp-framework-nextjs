@@ -1,4 +1,4 @@
-import type { Meta, StoryObj } from '@storybook/react-vite';
+import type { Meta, StoryObj } from '@storybook/nextjs-vite';
 import { IGRPPageHeader, type IGRPPageHeaderProps } from '@igrp/igrp-framework-react-design-system';
 
 const meta = {

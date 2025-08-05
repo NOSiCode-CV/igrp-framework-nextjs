@@ -4,7 +4,7 @@ import React from 'react';
 import { useForm, FormProvider } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import * as z from 'zod';
-import type { Meta, StoryObj } from '@storybook/react-vite';
+import type { Meta, StoryObj } from '@storybook/nextjs-vite';
 import { IGRPRadioGroup, IGRPButton } from '@igrp/igrp-framework-react-design-system';
 
 type IGRPRadioGroupProps = React.ComponentProps<typeof IGRPRadioGroup>;

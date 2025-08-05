@@ -1,4 +1,4 @@
-import type { Meta, StoryFn, StoryObj } from '@storybook/react-vite';
+import type { Meta, StoryFn, StoryObj } from '@storybook/nextjs-vite';
 import { IGRPInputFile, type IGRPInputFileProps } from '@igrp/igrp-framework-react-design-system';
 
 export default {

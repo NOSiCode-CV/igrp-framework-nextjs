@@ -1,6 +1,6 @@
 'use client';
 
-import type { Meta, StoryObj } from '@storybook/react-vite';
+import type { Meta, StoryObj } from '@storybook/nextjs-vite';
 import { IGRPStatsCard, type IGRPStatsCardProps } from '@igrp/igrp-framework-react-design-system';
 import { action } from 'storybook/actions';
 

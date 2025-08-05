@@ -1,6 +1,6 @@
 import { useRef } from 'react';
 import z from 'zod';
-import type { Meta, StoryObj } from '@storybook/react-vite';
+import type { Meta, StoryObj } from '@storybook/nextjs-vite';
 import {
   IGRPFormList,
   IGRPInputText,

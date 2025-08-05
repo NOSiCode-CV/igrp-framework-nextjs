@@ -1,6 +1,6 @@
 import { useRef, useState } from 'react';
 import { type JSX } from 'react/jsx-runtime';
-import type { Meta, StoryObj } from '@storybook/react-vite';
+import type { Meta, StoryObj } from '@storybook/nextjs-vite';
 import {
   IGRPCombobox,
   type IGRPComboboxProps,

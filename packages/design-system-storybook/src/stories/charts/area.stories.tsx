@@ -1,4 +1,4 @@
-import type { Meta, StoryFn, StoryObj } from '@storybook/react-vite';
+import type { Meta, StoryFn, StoryObj } from '@storybook/nextjs-vite';
 import { IGRPAreaChart, type IGRPAreaChartProps } from '@igrp/igrp-framework-react-design-system';
 
 const meta: Meta<IGRPAreaChartProps> = {

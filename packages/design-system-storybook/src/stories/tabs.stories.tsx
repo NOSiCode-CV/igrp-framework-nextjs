@@ -1,6 +1,6 @@
 'use client';
 
-import type { Meta, StoryFn, StoryObj } from '@storybook/react-vite';
+import type { Meta, StoryFn, StoryObj } from '@storybook/nextjs-vite';
 import type { JSX } from 'react/jsx-runtime';
 import {
   IGRPTabs,

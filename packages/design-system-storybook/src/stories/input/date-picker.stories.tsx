@@ -1,4 +1,4 @@
-import type { Meta, StoryFn, StoryObj } from '@storybook/react-vite';
+import type { Meta, StoryFn, StoryObj } from '@storybook/nextjs-vite';
 import { IGRPDatePicker } from '@igrp/igrp-framework-react-design-system';
 import type { DateBefore } from 'react-day-picker';
 import { useForm, FormProvider } from 'react-hook-form';

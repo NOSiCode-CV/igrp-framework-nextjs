@@ -1,4 +1,4 @@
-import type { Meta, StoryObj } from '@storybook/react-vite';
+import type { Meta, StoryObj } from '@storybook/nextjs-vite';
 import { IGRPLabel, type IGRPLabelProps } from '@igrp/igrp-framework-react-design-system';
 
 const meta: Meta<typeof IGRPLabel> = {

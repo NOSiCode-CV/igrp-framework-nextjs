@@ -74,7 +74,7 @@ function IGRPLink({
         href={href}
         className={linkClass}
         target={target || '_blank'}
-        rel='noopener noreferrer'
+        rel="noopener noreferrer"
         onClick={onClick}
         {...props}
       >
@@ -92,13 +92,7 @@ function IGRPLink({
   }
 
   return (
-    <Link
-      href={href}
-      className={linkClass}
-      target={target}
-      onClick={onClick}
-      {...props}
-    >
+    <Link href={href} className={linkClass} target={target} onClick={onClick} {...props}>
       <IGRPLinkRender
         iconName={iconName}
         iconClassName={iconClassName}
@@ -153,4 +147,3 @@ function IGRPLinkRender({
 }
 
 export { IGRPLink, IGRPLinkVariants, type IGRPLinkProps };
-

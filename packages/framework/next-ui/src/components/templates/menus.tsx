@@ -39,17 +39,18 @@ function IGRPTemplateMenus({ menus = [] }: IGRPTemplateMenuArgs) {
 
   const { topLevelMenus, childMap } = useMemo(() => {
     const topLevel = menuData
-      ?.filter((menu) => menu.parentId === null)
+      ?.filter((menu) => menu.parentName === null || menu.parentName === undefined)
       .sort((a, b) => (a.position ?? 0) - (b.position ?? 0));
 
-    const childrenMap = new Map<number, IGRPMenuItemArgs[]>();
+    const childrenMap = new Map<string, IGRPMenuItemArgs[]>();
 
     menuData?.forEach((menu) => {
-      if (menu.parentId !== null) {
-        if (!childrenMap.has(menu.parentId)) {
-          childrenMap.set(menu.parentId, []);
+      const parentName = menu.parentName;
+      if (parentName !== null && parentName !== undefined) {
+        if (!childrenMap.has(parentName)) {
+          childrenMap.set(parentName, []);
         }
-        childrenMap.get(menu.parentId)?.push(menu);
+        childrenMap.get(parentName)?.push(menu);
       }
     });
 
@@ -64,7 +65,7 @@ function IGRPTemplateMenus({ menus = [] }: IGRPTemplateMenuArgs) {
   }, [menuData]);
 
   const getChildren = useCallback(
-    (parentId: number): IGRPMenuItemArgs[] => childMap.get(parentId) || [],
+    (parentName: string): IGRPMenuItemArgs[] => childMap.get(parentName) || [],
     [childMap],
   );
 
@@ -95,7 +96,7 @@ function IGRPTemplateMenus({ menus = [] }: IGRPTemplateMenuArgs) {
           key={`menu-${menu.id}`}
           menu={menu}
           pathname={pathname}
-          childMenus={getChildren(menu.id)}
+          childMenus={getChildren(menu.parentName?? '')}
         />
       ))}
     </IGRPSidebarMenuPrimitive>

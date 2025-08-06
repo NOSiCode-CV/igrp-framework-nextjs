@@ -10,8 +10,7 @@ export function createConfig(config: IGRPLayoutConfigArgs) {
   const user = getMockUser().mockUser;
   const menu = getMockMenus().mockMenus;
   const footerMwnu = getMockMenusFooter().mockMenusFooter;
-  const apps = getMockApps().mockApps;
-  const previewModeEnv = process.env.IGRP_PREVIEW_MODE;
+  const apps = getMockApps().mockApps;  
 
   return buildConfig({
     appCode: process.env.IGRP_APP_CODE || '',
@@ -49,6 +48,8 @@ export function createConfig(config: IGRPLayoutConfigArgs) {
       showToaster: true,
       position: 'bottom-right',
       richColors: true,      
-    }
+    },
+    loginUrl: process.env.IGRP_LOGIN_URL || '',
+    logoutUrl: process.env.IGRP_LOGOUT_URL || '',
   });
 }

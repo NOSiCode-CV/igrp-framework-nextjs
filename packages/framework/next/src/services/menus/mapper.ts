@@ -15,9 +15,9 @@ const mapMenu = (menu: MenuEntryDTO): IGRPMenuItemArgs => ({
   status: menu.status as IGRPItemStatus,
   target: menu.target as IGRPItemTarget,
   url: menu.url || null,
-  parentId: menu.parentId || null,
-  applicationId: menu.applicationId as number,
-  resourceId: menu.resourceId || null,
+  parentName: menu.parentName,
+  applicationCode: menu.applicationCode,
+  permissions: menu.permissions,
 });
 
 export const mapperMenus = (menus: any): IGRPMenuItemArgs[] => {

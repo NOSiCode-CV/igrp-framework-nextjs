@@ -48,9 +48,9 @@ export type IGRPMenuItemArgs = {
   status: IGRPItemStatus;
   target: IGRPItemTarget;
   url: string | null;
-  parentId: number | null;
-  applicationId: number;
-  resourceId: number | null;
+  parentName?: string;
+  applicationCode?: string;
+  permissions: string[];
 };
 
 export interface ExtendedSession extends DefaultSession {
@@ -100,6 +100,8 @@ export type IGRPConfigArgs = {
     duration?: number;
     closeButton?: boolean;
   };
+  loginUrl?: string;
+  logoutUrl?: string;
 };
 
 export type IGRPConfigClient = () => Promise<IGRPConfigArgs>;

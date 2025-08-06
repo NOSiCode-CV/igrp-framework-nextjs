@@ -4,7 +4,6 @@ import type { IGRPConfigArgs } from '@igrp/framework-next-types';
 
 import { setAccessClientConfig } from '../lib/api-config';
 import { cn } from '../lib/utils';
-
 import { fetchAppByCode } from '../services/applications/use-applications';
 import { fetchLayoutData } from '../services/layout/use-layout';
 
@@ -31,7 +30,6 @@ export async function IGRPRootLayout({ children, config }: IGRPRootLocaleLayoutA
   const { session, activeThemeValue, isScaled } = layout;
 
   let app;
-  let appId;
 
   if (!previewMode) {
     if (!apiManagementConfig || !apiManagementConfig.baseUrl) {
@@ -45,15 +43,15 @@ export async function IGRPRootLayout({ children, config }: IGRPRootLocaleLayoutA
       baseUrl: apiManagementConfig?.baseUrl || '',
     });
 
+
     app = await fetchAppByCode(appCode);
-    appId = app?.id;
   }
 
   const { headerData, sidebarData } = await fetchLayoutData(
     layoutMockData.getHeaderData,
     layoutMockData.getSidebarData,
     previewMode,
-    appId,
+    appCode,
   );
 
   return (

@@ -7,7 +7,7 @@ export async function fetchLayoutData(
   getHeaderData: () => Promise<IGRPHeaderDataArgs>,
   getSidebarData: () => Promise<IGRPSidebarDataArgs>,
   previewMode: boolean,
-  appCode: number | undefined,
+  appCode: string | undefined,
 ) {
   let headerData = await getHeaderData();
   let sidebarData = await getSidebarData();

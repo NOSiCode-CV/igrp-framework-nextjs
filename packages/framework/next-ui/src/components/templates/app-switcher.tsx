@@ -19,13 +19,13 @@ import type { IGRPApplicationArgs } from '@igrp/framework-next-types';
 
 interface IGRPTemplateAppSwitcherProps {
   apps?: IGRPApplicationArgs[];
-  appCode?: number;
+  appCode?: string;
   appCenterUrl?: string;
 }
 
 function IGRPTemplateAppSwitcher({ apps, appCode, appCenterUrl }: IGRPTemplateAppSwitcherProps) {
   const { isMobile } = useIGRPSidebarPrimitive();
-  const currentApp = appCode ? apps?.find((item) => item.id === appCode) : apps?.[0];
+  const currentApp = appCode ? apps?.find((item) => item.code === appCode) : apps?.[0];
   const [activeApp, setActiveApp] = useState(currentApp);
   const [listApps, setListApps] = useState(apps?.filter((item) => item.id !== activeApp?.id));
 

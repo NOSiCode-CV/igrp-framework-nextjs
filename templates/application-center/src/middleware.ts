@@ -23,7 +23,7 @@ export async function middleware(request: NextRequest) {
 
   if (isPublicPath(pathname)) {
     return NextResponse.next();
-  }
+  }  
 
   // Get session token
   const token = await getToken({

@@ -1,10 +1,12 @@
+import { Suspense } from 'react';
 import { IGRPRootProviders } from '@igrp/framework-next-ui';
 import type { IGRPConfigArgs } from '@igrp/framework-next-types';
 
 import { setAccessClientConfig } from '../lib/api-config';
+import { cn } from '../lib/utils';
+
 import { fetchAppByCode } from '../services/applications/use-applications';
 import { fetchLayoutData } from '../services/layout/use-layout';
-import { cn } from '../lib/utils';
 
 type IGRPRootLocaleLayoutArgs = {
   readonly children: React.ReactNode;
@@ -67,21 +69,23 @@ export async function IGRPRootLayout({ children, config }: IGRPRootLocaleLayoutA
           isScaled && 'theme-scaled',
         )}
       >
-        <IGRPRootProviders
-          session={session}
-          activeThemeValue={activeThemeValue}
-          progressiveBarArgs={undefined}
-          sessionArgs={undefined}
-          themeArgs={undefined}
-          defaultOpen={true}
-          sidebarData={sidebarData}
-          headerData={headerData}
-          showSidebar={showSidebar}
-          showHeader={showHeader}
-          toasterConfig={toasterConfig}
-        >
-          {children}
-        </IGRPRootProviders>
+        <Suspense fallback={<div>Loading API Data...</div>}>
+          <IGRPRootProviders
+            session={session}
+            activeThemeValue={activeThemeValue}
+            progressiveBarArgs={undefined}
+            sessionArgs={undefined}
+            themeArgs={undefined}
+            defaultOpen={true}
+            sidebarData={sidebarData}
+            headerData={headerData}
+            showSidebar={showSidebar}
+            showHeader={showHeader}
+            toasterConfig={toasterConfig}
+          >
+            {children}
+          </IGRPRootProviders>
+        </Suspense>
       </body>
     </html>
   );

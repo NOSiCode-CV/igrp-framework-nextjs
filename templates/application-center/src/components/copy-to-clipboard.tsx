@@ -1,11 +1,16 @@
 'use client';
 
 import { useState } from 'react';
-import { Check, Copy } from 'lucide-react';
-import { toast } from 'sonner';
-import { IGRPButtonPrimitive } from '@igrp/igrp-framework-react-design-system';
+import { 
+  IGRPButtonPrimitive,
+  IGRPTooltipPrimitive, 
+  IGRPTooltipContentPrimitive, 
+  IGRPTooltipProviderPrimitive, 
+  IGRPTooltipTriggerPrimitive, 
+  IGRPIcon,
+  useIGRPToast
+} from '@igrp/igrp-framework-react-design-system';
 import { cn } from '@/lib/utils';
-import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from '@/components/ui/tooltip';
 
 interface CopyToClipboardProps {
   value: string;
@@ -14,6 +19,7 @@ interface CopyToClipboardProps {
 
 export function CopyToClipboard({ value }: CopyToClipboardProps) {
   const [copied, setCopied] = useState(false);
+  const { igrpToast } = useIGRPToast();
 
   const handleCopy = async () => {
     try {
@@ -21,13 +27,17 @@ export function CopyToClipboard({ value }: CopyToClipboardProps) {
       const displayValue = value.length > 50 ? `${value.substring(0, 47)}...` : value;
 
       setCopied(true);
-      toast.success('Copied to clipboard', {
+      igrpToast({
+        type: 'success',
+        title:'Copied to clipboard',
         description: displayValue,
         duration: 1500,
       });
       setTimeout(() => setCopied(false), 1500);
     } catch (error) {
-      toast.error('Failed to copy to clipboard', {
+      igrpToast({
+        type: "error",
+        title: 'Failed to copy to clipboard',
         description: error instanceof Error ? error.message : 'Unknown error occurred',
         duration: 2000,
       });
@@ -35,10 +45,10 @@ export function CopyToClipboard({ value }: CopyToClipboardProps) {
   };
 
   return (
-    <TooltipProvider delayDuration={350}>
-      <Tooltip>
-        <TooltipTrigger asChild>
-          <Button
+    <IGRPTooltipProviderPrimitive delayDuration={350}>
+      <IGRPTooltipPrimitive>
+        <IGRPTooltipTriggerPrimitive asChild>
+          <IGRPButtonPrimitive
             variant='ghost'
             size='icon'
             className='disabled:opacity-100 size-7'
@@ -52,7 +62,8 @@ export function CopyToClipboard({ value }: CopyToClipboardProps) {
                 copied ? 'scale-100 opacity-100' : 'scale-0 opacity-0',
               )}
             >
-              <Check
+              <IGRPIcon 
+                iconName='Check'
                 className='stroke-primary size'
                 aria-hidden='true'
                 strokeWidth={2}
@@ -64,16 +75,19 @@ export function CopyToClipboard({ value }: CopyToClipboardProps) {
                 copied ? 'scale-0 opacity-0' : 'scale-100 opacity-100',
               )}
             >
-              <Copy
+              <IGRPIcon 
+                iconName='Copy'
                 aria-hidden='true'
                 strokeWidth={2}
                 className='size-3'
               />
             </div>
-          </Button>
-        </TooltipTrigger>
-        <TooltipContent className='px-2 py-1 text-xs'>Click to copy</TooltipContent>
-      </Tooltip>
-    </TooltipProvider>
+          </IGRPButtonPrimitive>
+        </IGRPTooltipTriggerPrimitive>
+        <IGRPTooltipContentPrimitive className='px-2 py-1 text-xs'>
+          Click to copy
+        </IGRPTooltipContentPrimitive>
+      </IGRPTooltipPrimitive>
+    </IGRPTooltipProviderPrimitive>
   );
 }

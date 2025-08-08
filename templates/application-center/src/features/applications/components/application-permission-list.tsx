@@ -1,16 +1,9 @@
 'use client';
 
 import { useState } from 'react';
-import { Search, Filter, Plus } from 'lucide-react';
-import { IGRPButtonPrimitive } from '@igrp/igrp-framework-react-design-system';
-import {
-  DropdownMenu,
-  DropdownMenuContent,
-  DropdownMenuCheckboxItem,
-  DropdownMenuTrigger,
-} from '@/components/ui/dropdown-menu';
+import { IGRPButtonPrimitive, IGRPCardContentPrimitive, IGRPCardDescriptionPrimitive, IGRPCardHeaderPrimitive, IGRPCardPrimitive, IGRPCardTitlePrimitive, IGRPDropdownMenuContentPrimitive, IGRPDropdownMenuPrimitive, IGRPDropdownMenuTriggerPrimitive, IGRPIcon } from '@igrp/igrp-framework-react-design-system';
 import { IGRPInputPrimitive } from '@igrp/igrp-framework-react-design-system';
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
+
 import { PermissionTable } from '@/features/permission/components/table';
 import { PermissionCreateDialog } from '@/features/permission/components/create-dialog';
 import { usePermissionsByApplication } from '@/features/permission/hooks/use-permission';
@@ -39,12 +32,12 @@ export function ApplicationPermissionList({
 
   if (isLoading) {
     return (
-      <Card>
-        <CardHeader>
-          <CardTitle>Application Permissions</CardTitle>
-          <CardDescription>Loading permissions for {applicationName}...</CardDescription>
-        </CardHeader>
-        <CardContent>
+      <IGRPCardPrimitive>
+        <IGRPCardHeaderPrimitive>
+          <IGRPCardTitlePrimitive>Application Permissions</IGRPCardTitlePrimitive>
+          <IGRPCardDescriptionPrimitive>Loading permissions for {applicationName}...</IGRPCardDescriptionPrimitive>
+        </IGRPCardHeaderPrimitive>
+        <IGRPCardContentPrimitive>
           <div className='grid gap-4 animate-pulse'>
             {Array.from({ length: 3 }).map((_, i) => (
               <div
@@ -53,8 +46,8 @@ export function ApplicationPermissionList({
               />
             ))}
           </div>
-        </CardContent>
-      </Card>
+        </IGRPCardContentPrimitive>
+      </IGRPCardPrimitive>
     );
   }
 
@@ -77,26 +70,26 @@ export function ApplicationPermissionList({
   };
 
   return (
-    <Card>
-      <CardHeader>
+    <IGRPCardPrimitive>
+      <IGRPCardHeaderPrimitive>
         <div className='flex items-center justify-between'>
           <div>
-            <CardTitle>Application Permissions</CardTitle>
-            <CardDescription>
+            <IGRPCardTitlePrimitive>Application Permissions</IGRPCardTitlePrimitive>
+            <IGRPCardDescriptionPrimitive>
               Manage permissions for {applicationName} ({filteredPermissions.length} permissions)
-            </CardDescription>
+            </IGRPCardDescriptionPrimitive>
           </div>
-          <Button onClick={() => setCreateDialogOpen(true)}>
-            <Plus className='mr-2 h-4 w-4' />
+          <IGRPButtonPrimitive onClick={() => setCreateDialogOpen(true)}>
+            <IGRPIcon iconName='Plus' className='mr-2' />
             New Permission
-          </Button>
+          </IGRPButtonPrimitive>
         </div>
-      </CardHeader>
-      <CardContent className='space-y-4'>
+      </IGRPCardHeaderPrimitive>
+      <IGRPCardContentPrimitive className='space-y-4'>
         <div className='flex flex-col sm:flex-row gap-2'>
           <div className='relative flex-1'>
-            <Search className='absolute left-2.5 top-2.5 h-4 w-4 text-muted-foreground' />
-            <Input
+            <IGRPIcon iconName='Search' className='absolute left-2.5 top-2.5 h-4 w-4 text-muted-foreground' />
+            <IGRPInputPrimitive
               type='search'
               placeholder='Search permissions...'
               className='w-full bg-background pl-8'
@@ -104,17 +97,17 @@ export function ApplicationPermissionList({
               onChange={(e) => setSearchTerm(e.target.value)}
             />
           </div>
-          <DropdownMenu>
-            <DropdownMenuTrigger asChild>
-              <Button
+          <IGRPDropdownMenuPrimitive>
+            <IGRPDropdownMenuTriggerPrimitive asChild>
+              <IGRPButtonPrimitive
                 variant='outline'
                 className='gap-2'
               >
-                <Filter className='h-4 w-4' />
+                <IGRPIcon iconName='Filter' />
                 Status {statusFilter.length > 0 && `(${statusFilter.length})`}
-              </Button>
-            </DropdownMenuTrigger>
-            <DropdownMenuContent
+              </IGRPButtonPrimitive>
+            </IGRPDropdownMenuTriggerPrimitive>
+            <IGRPDropdownMenuContentPrimitive
               align='end'
               className='w-40'
             >
@@ -133,8 +126,8 @@ export function ApplicationPermissionList({
                   {status}
                 </DropdownMenuCheckboxItem>
               ))}
-            </DropdownMenuContent>
-          </DropdownMenu>
+            </IGRPDropdownMenuContentPrimitive>
+          </IGRPDropdownMenuPrimitive>
         </div>
 
         {filteredPermissions.length === 0 ? (
@@ -169,7 +162,7 @@ export function ApplicationPermissionList({
           onSuccess={handlePermissionCreated}
           defaultApplicationId={applicationId}
         />
-      </CardContent>
-    </Card>
+      </IGRPCardContentPrimitive>
+    </IGRPCardPrimitive>
   );
 }

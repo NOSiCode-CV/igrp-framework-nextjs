@@ -8,6 +8,8 @@ import { IGRP_META_THEME_COLORS } from '@igrp/igrp-framework-react-design-system
 
 import { configLayout } from '@/actions/igrp/layout';
 import { createConfig } from '@igrp/template-config';
+import { redirect } from 'next/navigation';
+import { headers } from 'next/headers';
 
 export const metadata: Metadata = {
   title: 'IGRP | Applications Center',
@@ -23,5 +25,22 @@ export default async function RootLayout({ children }: Readonly<{ children: Reac
   const layoutConfig = await configLayout();
   const config = await createConfig(layoutConfig);
 
-  return <IGRPRootLayout config={config}>{children}</IGRPRootLayout>;  
+  const { layout, previewMode, loginUrl } = config;
+  const { session } = layout ?? {};
+
+  const headersList = await headers();
+  const currentPath =
+    headersList.get('x-pathname') ||
+    headersList.get('x-next-url') ||
+    headersList.get('referer') ||
+    '';
+
+  const loginPath = new URL(loginUrl || '/', 'http://localhost').pathname;
+  const isAlreadyOnLogin = currentPath.startsWith(loginPath);
+
+  if (!previewMode && session === null && loginUrl && !isAlreadyOnLogin) {
+    redirect(loginUrl);
+  }
+
+  return <IGRPRootLayout config={config}>{children}</IGRPRootLayout>;
 }

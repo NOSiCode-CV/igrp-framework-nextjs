@@ -9,7 +9,7 @@ import {
   DropdownMenuCheckboxItem,
   DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu';
-import { IGRPInputPrimitive  } from '@igrp/igrp-framework-react-design-system';
+import { IGRPInputPrimitive } from '@igrp/igrp-framework-react-design-system';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { PermissionTable } from '@/features/permission/components/table';
 import { PermissionCreateDialog } from '@/features/permission/components/create-dialog';

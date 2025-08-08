@@ -1,23 +1,35 @@
 import Link from 'next/link';
-import { LucideProps } from 'lucide-react';
-import { IGRPButtonPrimitive } from '@igrp/igrp-framework-react-design-system';
-import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from '@/components/ui/tooltip';
+import {
+  IGRPButtonPrimitive,
+  IGRPTooltipPrimitive,
+  IGRPTooltipContentPrimitive,
+  IGRPTooltipProviderPrimitive,
+  IGRPTooltipTriggerPrimitive,
+  IGRPIcon
+} from '@igrp/igrp-framework-react-design-system';
+
 import { cn } from '@/lib/utils';
 
 interface ButtonTooltipProps {
   href: string;
-  icon: React.ElementType<LucideProps>;
+  icon: React.ComponentProps<typeof IGRPIcon>['iconName'];
   label: string;
   className?: string;
 }
 // TODO: aria accessibility
 // TODO: messages
-export function ButtonTooltip({ href, icon: Icon, label, className }: ButtonTooltipProps) {
+export function ButtonTooltip({
+  href,
+  icon,
+  label,
+  className
+}: ButtonTooltipProps) {
+  
   return (
-    <TooltipProvider>
-      <Tooltip>
-        <TooltipTrigger asChild>
-          <Button
+    <IGRPTooltipProviderPrimitive>
+      <IGRPTooltipPrimitive>
+        <IGRPTooltipTriggerPrimitive asChild>
+          <IGRPButtonPrimitive
             variant='ghost'
             size='icon'
             className={cn(
@@ -27,14 +39,14 @@ export function ButtonTooltip({ href, icon: Icon, label, className }: ButtonTool
             asChild
           >
             <Link href={href}>
-              <Icon strokeWidth={2} />
+              <IGRPIcon iconName={icon} strokeWidth={2} />
             </Link>
-          </Button>
-        </TooltipTrigger>
-        <TooltipContent>
+          </IGRPButtonPrimitive>
+        </IGRPTooltipTriggerPrimitive>
+        <IGRPTooltipContentPrimitive>
           <p>{label}</p>
-        </TooltipContent>
-      </Tooltip>
-    </TooltipProvider>
+        </IGRPTooltipContentPrimitive>
+      </IGRPTooltipPrimitive>
+    </IGRPTooltipProviderPrimitive>
   );
 }

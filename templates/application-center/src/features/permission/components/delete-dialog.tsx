@@ -1,10 +1,17 @@
 'use client';
 
 import { useState } from 'react';
-import { IGRPDialogPrimitive,  IGRPDialogContentPrimitive, IGRPDialogDescriptionPrimitive, IGRPDialogFooterPrimitive, IGRPDialogHeaderPrimitive, IGRPDialogTitlePrimitive } from '@igrp/igrp-framework-react-design-system';
+import {
+  IGRPDialogPrimitive,
+  IGRPDialogContentPrimitive,
+  IGRPDialogDescriptionPrimitive,
+  IGRPDialogFooterPrimitive,
+  IGRPDialogHeaderPrimitive,
+  IGRPDialogTitlePrimitive,
+} from '@igrp/igrp-framework-react-design-system';
 import { IGRPButtonPrimitive } from '@igrp/igrp-framework-react-design-system';
-import { IGRPInputPrimitive  } from '@igrp/igrp-framework-react-design-system';
-import { IGRPLabelPrimitive} from '@igrp/igrp-framework-react-design-system'
+import { IGRPInputPrimitive } from '@igrp/igrp-framework-react-design-system';
+import { IGRPLabelPrimitive } from '@igrp/igrp-framework-react-design-system';
 
 interface PermissionDeleteDialogProps {
   open: boolean;

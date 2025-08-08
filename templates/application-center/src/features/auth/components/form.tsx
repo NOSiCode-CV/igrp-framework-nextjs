@@ -4,11 +4,11 @@ import { useEffect, useState } from 'react';
 import Image from 'next/image';
 import { useTheme } from 'next-themes';
 import { signIn } from 'next-auth/react';
-import { 
-  IGRPAlertPrimitive, 
+import {
+  IGRPAlertPrimitive,
   IGRPAlertDescriptionPrimitive,
-  IGRPButtonPrimitive, 
-  IGRPIcon
+  IGRPButtonPrimitive,
+  IGRPIcon,
 } from '@igrp/igrp-framework-react-design-system';
 import { IGRPTemplateModeSwitcher } from '@igrp/framework-next-ui';
 
@@ -65,8 +65,8 @@ export function AuthForm() {
               variant='destructive'
               className='animate-in fade-in-50 slide-in-from-top-5'
             >
-              <IGRPIcon 
-                iconName="AlertCircle"
+              <IGRPIcon
+                iconName='AlertCircle'
                 className='h-4 w-4'
                 strokeWidth={2}
               />
@@ -95,8 +95,8 @@ export function AuthForm() {
           >
             {isLoading ? (
               <>
-                <IGRPIcon 
-                  iconName="Loader2"
+                <IGRPIcon
+                  iconName='Loader2'
                   className='mr-2 animate-spin'
                   strokeWidth={2}
                 />
@@ -105,8 +105,8 @@ export function AuthForm() {
             ) : (
               <>
                 Authenticate
-                <IGRPIcon 
-                  iconName="ShieldCheck"
+                <IGRPIcon
+                  iconName='ShieldCheck'
                   className='mr-2 size-6'
                   strokeWidth={2}
                 />

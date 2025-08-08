@@ -20,18 +20,26 @@ export default function Home() {
             variant='outline'
           >
             <Link href='/applications'>
-              <IGRPIcon iconName="AppWindow" strokeWidth={2} /> Manage Applications
+              <IGRPIcon
+                iconName='AppWindow'
+                strokeWidth={2}
+              />{' '}
+              Manage Applications
             </Link>
           </IGRPButtonPrimitive>
           <IGRPButtonPrimitive asChild>
             <Link href='/applications/new'>
-              <IGRPIcon iconName="Grid2X2Plus" strokeWidth={2} /> New Application
+              <IGRPIcon
+                iconName='Grid2X2Plus'
+                strokeWidth={2}
+              />{' '}
+              New Application
             </Link>
           </IGRPButtonPrimitive>
         </>
       </PageHeader>
 
-      <ApplicationsListHome />            
+      <ApplicationsListHome />
     </div>
   );
 }

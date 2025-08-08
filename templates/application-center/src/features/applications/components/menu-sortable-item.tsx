@@ -2,7 +2,7 @@ import { useState } from 'react';
 import { useSortable } from '@dnd-kit/sortable';
 import { CSS } from '@dnd-kit/utilities';
 import { ChevronDown, ChevronRight, Edit, GripVertical, MoreHorizontal, Trash } from 'lucide-react';
-import { IGRPBadgePrimitive } from '@igrp/igrp-framework-react-design-system'
+import { IGRPBadgePrimitive } from '@igrp/igrp-framework-react-design-system';
 import { IGRPButtonPrimitive } from '@igrp/igrp-framework-react-design-system';
 import {
   DropdownMenu,

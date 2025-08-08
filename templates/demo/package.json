@@ -26,7 +26,7 @@
     "@igrp/igrp-framework-react-design-system": "workspace:*",
     "class-variance-authority": "^0.7.1",
     "clsx": "^2.1.1",
-    "next": "15.4.5",
+    "next": "15.4.6",
     "next-auth": "^4.24.11",
     "next-themes": "^0.4.6",
     "react": "^19.1.1",
@@ -42,12 +42,12 @@
     "@types/react": "^19.1.9",
     "@types/react-dom": "^19.1.7",
     "eslint": "^9.32.0",
-    "eslint-config-next": "15.4.5",
+    "eslint-config-next": "15.4.6",
     "eslint-config-prettier": "10.1.8",
-    "eslint-plugin-prettier": "5.5.3",
+    "eslint-plugin-prettier": "5.5.4",
     "prettier": "^3.6.2",
     "tailwindcss": "^4.1.11",    
-    "typescript": "^5.8.3"
+    "typescript": "^5.9.2"
   },
   "engines": {
     "node": ">=20.x.x"

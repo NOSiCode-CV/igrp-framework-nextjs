@@ -4,7 +4,7 @@ import { useState } from 'react';
 import Link from 'next/link';
 import { ListFilter, Search, Trash2, UserRoundPlus, X } from 'lucide-react';
 import { toast } from 'sonner';
-import { IGRPBadgePrimitive } from '@igrp/igrp-framework-react-design-system'
+import { IGRPBadgePrimitive } from '@igrp/igrp-framework-react-design-system';
 import { IGRPButtonPrimitive } from '@igrp/igrp-framework-react-design-system';
 import {
   DropdownMenu,
@@ -14,13 +14,15 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu';
-import { IGRPInputPrimitive  } from '@igrp/igrp-framework-react-design-system';
-import {  IGRPTablePrimitive,
+import { IGRPInputPrimitive } from '@igrp/igrp-framework-react-design-system';
+import {
+  IGRPTablePrimitive,
   IGRPTableBodyPrimitive,
   IGRPTableCellPrimitive,
   IGRPTableHeadPrimitive,
   IGRPTableHeaderPrimitive,
-  IGRPTableRowPrimitive,  } from '@igrp/igrp-framework-react-design-system';
+  IGRPTableRowPrimitive,
+} from '@igrp/igrp-framework-react-design-system';
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from '@/components/ui/tooltip';
 import { UserDeleteDialog } from '@/features/users/components/delete-dialog';
 import { UserInviteDialog } from '@/features/users/components/invite-dialog';

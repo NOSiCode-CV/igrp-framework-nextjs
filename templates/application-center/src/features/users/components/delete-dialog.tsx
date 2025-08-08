@@ -2,9 +2,16 @@
 
 import { useState } from 'react';
 import { IGRPButtonPrimitive } from '@igrp/igrp-framework-react-design-system';
-import { IGRPDialogPrimitive,  IGRPDialogContentPrimitive, IGRPDialogDescriptionPrimitive, IGRPDialogFooterPrimitive, IGRPDialogHeaderPrimitive, IGRPDialogTitlePrimitive } from '@igrp/igrp-framework-react-design-system';
-import { IGRPInputPrimitive  } from '@igrp/igrp-framework-react-design-system';
-import { IGRPLabelPrimitive} from '@igrp/igrp-framework-react-design-system'
+import {
+  IGRPDialogPrimitive,
+  IGRPDialogContentPrimitive,
+  IGRPDialogDescriptionPrimitive,
+  IGRPDialogFooterPrimitive,
+  IGRPDialogHeaderPrimitive,
+  IGRPDialogTitlePrimitive,
+} from '@igrp/igrp-framework-react-design-system';
+import { IGRPInputPrimitive } from '@igrp/igrp-framework-react-design-system';
+import { IGRPLabelPrimitive } from '@igrp/igrp-framework-react-design-system';
 
 interface MenuDeleteDialogProps {
   open: boolean;

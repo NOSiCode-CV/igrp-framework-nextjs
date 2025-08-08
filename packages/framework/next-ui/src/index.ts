@@ -4,7 +4,7 @@
 // IMPORTANT: this file cannot use any wildcard exports because it is wrapped in a `use client` boundary
 // IMPORTANT: do _not_ alias any of the exports in this file, this will cause a mismatch between the unbundled exports
 
-// errs components
+// erros components
 export { IGRPGlobalError, type IGRPGlobalErrorProps } from './components/errors/global';
 
 // templates
@@ -49,6 +49,11 @@ export {
   IGRPActiveThemeProvider,
   type IGRPActiveThemeProviderArgs,
 } from './components/providers/active-theme';
+
 export { IGRPProgressBarProvider } from './components/providers/progress-bar';
+
+export { IGRPNestedProviders, type IGRPNestedProvidersArgs } from './components/providers/nested'
+
 export { IGRPRootProviders } from './components/providers/root';
+
 export { IGRPSessionProvider } from './components/providers/session';

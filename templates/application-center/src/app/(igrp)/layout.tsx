@@ -36,9 +36,10 @@ export default async function RootLayout({ children }: Readonly<{ children: Reac
     '';
 
   const loginPath = new URL(loginUrl || '/', 'http://localhost').pathname;
-  const isAlreadyOnLogin = currentPath.startsWith(loginPath);
+  const isAlreadyOnLogin = currentPath.startsWith(loginPath);  
 
   if (!previewMode && session === null && loginUrl && !isAlreadyOnLogin) {
+    console.log(" IN ROOT LAYOUT");
     redirect(loginUrl);
   }
 

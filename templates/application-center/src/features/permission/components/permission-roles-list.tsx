@@ -2,15 +2,24 @@
 
 import { useState } from 'react';
 import { IGRPButtonPrimitive, IGRPIcon } from '@igrp/igrp-framework-react-design-system';
-import { IGRPInputPrimitive  } from '@igrp/igrp-framework-react-design-system';
-import {  IGRPTablePrimitive,
+import { IGRPInputPrimitive } from '@igrp/igrp-framework-react-design-system';
+import {
+  IGRPTablePrimitive,
   IGRPTableBodyPrimitive,
   IGRPTableCellPrimitive,
   IGRPTableHeadPrimitive,
   IGRPTableHeaderPrimitive,
-  IGRPTableRowPrimitive,  } from '@igrp/igrp-framework-react-design-system';
-import { IGRPBadgePrimitive } from '@igrp/igrp-framework-react-design-system'
-import { IGRPDialogPrimitive,  IGRPDialogContentPrimitive, IGRPDialogDescriptionPrimitive, IGRPDialogFooterPrimitive, IGRPDialogHeaderPrimitive, IGRPDialogTitlePrimitive } from '@igrp/igrp-framework-react-design-system';
+  IGRPTableRowPrimitive,
+} from '@igrp/igrp-framework-react-design-system';
+import { IGRPBadgePrimitive } from '@igrp/igrp-framework-react-design-system';
+import {
+  IGRPDialogPrimitive,
+  IGRPDialogContentPrimitive,
+  IGRPDialogDescriptionPrimitive,
+  IGRPDialogFooterPrimitive,
+  IGRPDialogHeaderPrimitive,
+  IGRPDialogTitlePrimitive,
+} from '@igrp/igrp-framework-react-design-system';
 import { PermissionRole } from '../types';
 
 interface PermissionRolesListProps {
@@ -36,9 +45,9 @@ export function PermissionRolesList({ permissionRoles }: PermissionRolesListProp
     <div className='space-y-4'>
       <div className='flex justify-between items-center'>
         <div className='relative w-full max-w-sm'>
-          <IGRPIcon 
-            iconName="Search" 
-            className='absolute left-2.5 top-2.5 h-4 w-4 text-muted-foreground' 
+          <IGRPIcon
+            iconName='Search'
+            className='absolute left-2.5 top-2.5 h-4 w-4 text-muted-foreground'
           />
           <IGRPInputPrimitive
             type='search'
@@ -56,7 +65,9 @@ export function PermissionRolesList({ permissionRoles }: PermissionRolesListProp
           <IGRPDialogContentPrimitive>
             <IGRPDialogHeaderPrimitive>
               <IGRPDialogTitlePrimitive>Role Details</IGRPDialogTitlePrimitive>
-              <IGRPDialogDescriptionPrimitive>Details for role assignment</IGRPDialogDescriptionPrimitive>
+              <IGRPDialogDescriptionPrimitive>
+                Details for role assignment
+              </IGRPDialogDescriptionPrimitive>
             </IGRPDialogHeaderPrimitive>
             <div className='py-4'>
               <h3 className='font-medium'>Permission ID</h3>
@@ -69,7 +80,9 @@ export function PermissionRolesList({ permissionRoles }: PermissionRolesListProp
               <p className='text-sm text-muted-foreground mb-4'>{selectedRole?.permission.name}</p>
 
               <h3 className='font-medium'>Permission Status</h3>
-              <IGRPBadgePrimitive variant={selectedRole?.permission.status === 'ACTIVE' ? 'default' : 'outline'}>
+              <IGRPBadgePrimitive
+                variant={selectedRole?.permission.status === 'ACTIVE' ? 'default' : 'outline'}
+              >
                 {selectedRole?.permission.status}
               </IGRPBadgePrimitive>
             </div>
@@ -106,10 +119,14 @@ export function PermissionRolesList({ permissionRoles }: PermissionRolesListProp
             <IGRPTableBodyPrimitive>
               {filteredRoles.map((role) => (
                 <IGRPTableRowPrimitive key={role.id}>
-                  <IGRPTableCellPrimitive className='font-medium'>{role.roleId}</IGRPTableCellPrimitive>
+                  <IGRPTableCellPrimitive className='font-medium'>
+                    {role.roleId}
+                  </IGRPTableCellPrimitive>
                   <IGRPTableCellPrimitive>{role.permission.name}</IGRPTableCellPrimitive>
                   <IGRPTableCellPrimitive>
-                    <IGRPBadgePrimitive variant={role.permission.status === 'ACTIVE' ? 'default' : 'outline'}>
+                    <IGRPBadgePrimitive
+                      variant={role.permission.status === 'ACTIVE' ? 'default' : 'outline'}
+                    >
                       {role.permission.status}
                     </IGRPBadgePrimitive>
                   </IGRPTableCellPrimitive>
@@ -120,7 +137,10 @@ export function PermissionRolesList({ permissionRoles }: PermissionRolesListProp
                       onClick={() => handleViewRole(role)}
                       className='h-8 w-8'
                     >
-                      <IGRPIcon iconName="Eye" className='h-4 w-4' />
+                      <IGRPIcon
+                        iconName='Eye'
+                        className='h-4 w-4'
+                      />
                       <span className='sr-only'>View</span>
                     </IGRPButtonPrimitive>
                   </IGRPTableCellPrimitive>

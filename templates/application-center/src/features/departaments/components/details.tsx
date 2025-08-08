@@ -2,10 +2,10 @@
 
 import Link from 'next/link';
 import { Edit } from 'lucide-react';
-import { IGRPBadgePrimitive } from '@igrp/igrp-framework-react-design-system'
+import { IGRPBadgePrimitive } from '@igrp/igrp-framework-react-design-system';
 import { IGRPButtonPrimitive } from '@igrp/igrp-framework-react-design-system';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
-import { IGRPSeparatorPrimitive, } from '@igrp/igrp-framework-react-design-system'
+import { IGRPSeparatorPrimitive } from '@igrp/igrp-framework-react-design-system';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { PageHeader } from '@/components/page-header';
 import { RolesList } from '@/features/roles/components/role-create-dialog';

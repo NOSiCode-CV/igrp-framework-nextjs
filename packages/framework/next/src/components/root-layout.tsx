@@ -1,5 +1,5 @@
 import { Suspense } from 'react';
-import { IGRPRootProviders } from '@igrp/framework-next-ui';
+import { IGRPNestedProviders, IGRPRootProviders } from '@igrp/framework-next-ui';
 import type { IGRPConfigArgs } from '@igrp/framework-next-types';
 
 import { setAccessClientConfig } from '../lib/api-config';
@@ -7,12 +7,12 @@ import { cn } from '../lib/utils';
 import { fetchAppByCode } from '../services/applications/use-applications';
 import { fetchLayoutData } from '../services/layout/use-layout';
 
-type IGRPRootLocaleLayoutArgs = {
+type IGRPRootLayoutArgs = {
   readonly children: React.ReactNode;
   readonly config: IGRPConfigArgs;
 };
 
-export async function IGRPRootLayout({ children, config }: IGRPRootLocaleLayoutArgs) {
+export async function IGRPRootLayout({ children, config }: IGRPRootLayoutArgs) {
   const layoutConfig = config;
 
   const {
@@ -43,7 +43,6 @@ export async function IGRPRootLayout({ children, config }: IGRPRootLocaleLayoutA
       baseUrl: apiManagementConfig?.baseUrl || '',
     });
 
-
     app = await fetchAppByCode(appCode);
   }
 
@@ -68,21 +67,24 @@ export async function IGRPRootLayout({ children, config }: IGRPRootLocaleLayoutA
         )}
       >
         <Suspense fallback={<div>Loading API Data...</div>}>
-          <IGRPRootProviders
+          <IGRPNestedProviders
             session={session}
             activeThemeValue={activeThemeValue}
             progressiveBarArgs={undefined}
             sessionArgs={undefined}
             themeArgs={undefined}
-            defaultOpen={true}
-            sidebarData={sidebarData}
-            headerData={headerData}
-            showSidebar={showSidebar}
-            showHeader={showHeader}
-            toasterConfig={toasterConfig}
           >
-            {children}
-          </IGRPRootProviders>
+            <IGRPRootProviders
+              defaultOpen={true}
+              sidebarData={sidebarData}
+              headerData={headerData}
+              showSidebar={showSidebar}
+              showHeader={showHeader}
+              toasterConfig={toasterConfig}
+            >
+              {children}
+            </IGRPRootProviders>
+          </IGRPNestedProviders>
         </Suspense>
       </body>
     </html>

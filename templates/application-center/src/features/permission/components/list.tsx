@@ -9,7 +9,7 @@ import {
   DropdownMenuCheckboxItem,
   DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu';
-import { IGRPInputPrimitive  } from '@igrp/igrp-framework-react-design-system';
+import { IGRPInputPrimitive } from '@igrp/igrp-framework-react-design-system';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { PermissionCreateDialog } from '@/features/permission/components/create-dialog';
 import { PermissionTable } from '@/features/permission/components/table';

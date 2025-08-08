@@ -1,18 +1,13 @@
 'use client';
 
+import { useEffect, useState } from 'react';
 import { useSession, signOut } from 'next-auth/react';
 import Cookies from 'js-cookie';
-import { Toaster } from '@/components/ui/sonner';
-import { useEffect, useState } from 'react';
 import { usePathname } from 'next/navigation';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
-import { SidebarInset, SidebarProvider } from '@/components/ui/sidebar';
-import { AppSidebar } from '@/components/app-sidebar';
-import { Header } from '@/components/header';
 
-export default function LocaleLayout({ children }: Readonly<{ children: React.ReactNode }>) {
+export default function MyAppLayout({ children }: Readonly<{ children: React.ReactNode }>) {
   const pathname = usePathname();
-  const defaultOpen = Cookies.get('sidebar_state') === 'true';
   const [queryClient] = useState(() => new QueryClient());
   const [hasMounted, setHasMounted] = useState(false);
 
@@ -54,20 +49,5 @@ export default function LocaleLayout({ children }: Readonly<{ children: React.Re
 
   if (!hasMounted) return null;
 
-  const showBreadcrumbs = pathname !== '/';
-
-  return (
-    <>
-      <QueryClientProvider client={queryClient}>
-        <SidebarProvider defaultOpen={defaultOpen}>
-          <AppSidebar />
-          <SidebarInset>
-            <Header showBreadcrumbs={showBreadcrumbs} />
-            <main className='flex flex-col flex-1 px-6 lg:px-10 py-8'>{children}</main>
-          </SidebarInset>
-        </SidebarProvider>
-      </QueryClientProvider>
-      <Toaster richColors />
-    </>
-  );
+  return <QueryClientProvider client={queryClient}>{children}</QueryClientProvider>;
 }

@@ -12,7 +12,7 @@ import {
   DropdownMenuSeparator,
   DropdownMenuItem,
 } from '@/components/ui/dropdown-menu';
-import { IGRPInputPrimitive  } from '@igrp/igrp-framework-react-design-system';
+import { IGRPInputPrimitive } from '@igrp/igrp-framework-react-design-system';
 import { ApplicationCard } from '@/features/applications/components/card';
 import { useApplications } from '@/features/applications/hooks/use-applications';
 

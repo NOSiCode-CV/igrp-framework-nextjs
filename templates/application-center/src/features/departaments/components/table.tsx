@@ -5,7 +5,7 @@ import { toast } from 'sonner';
 import Link from 'next/link';
 import { Edit, MoreHorizontal, Trash, Eye } from 'lucide-react';
 
-import { IGRPBadgePrimitive } from '@igrp/igrp-framework-react-design-system'
+import { IGRPBadgePrimitive } from '@igrp/igrp-framework-react-design-system';
 import { IGRPButtonPrimitive } from '@igrp/igrp-framework-react-design-system';
 import {
   DropdownMenu,
@@ -15,12 +15,14 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu';
-import {  IGRPTablePrimitive,
+import {
+  IGRPTablePrimitive,
   IGRPTableBodyPrimitive,
   IGRPTableCellPrimitive,
   IGRPTableHeadPrimitive,
   IGRPTableHeaderPrimitive,
-  IGRPTableRowPrimitive,  } from '@igrp/igrp-framework-react-design-system';
+  IGRPTableRowPrimitive,
+} from '@igrp/igrp-framework-react-design-system';
 import { DepartmentDeleteDialog } from './delete-dialog';
 import { Department } from '../types';
 import { useDeleteDepartment } from '../hooks/use-departments';

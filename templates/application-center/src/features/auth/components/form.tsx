@@ -96,7 +96,7 @@ export function AuthForm() {
             {isLoading ? (
               <>
                 <IGRPIcon
-                  iconName='Loader2'
+                  iconName='Loader'
                   className='mr-2 animate-spin'
                   strokeWidth={2}
                 />

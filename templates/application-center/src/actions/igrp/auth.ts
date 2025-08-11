@@ -2,7 +2,7 @@
 
 import { getServerSession as getNextAuthServerSession } from 'next-auth/next';
 import { authOptions } from '@/lib/auth-options';
-import { ExtendedSession } from '@igrp/framework-next-types';
+import { Session } from 'next-auth';
 
 export async function serverSession() {
   try {
@@ -31,19 +31,18 @@ export async function serverSession() {
 }
 
 export async function getSession() {
-  let session: ExtendedSession | null;
+  let session: Session | null;
   const isPreviewMode = process.env.IGRP_PREVIEW_MODE === 'true';
+
+  console.log({ isPreviewMode });
 
   if (isPreviewMode) return (session = null);
 
-  if (process.env.NODE_ENV === 'production') {
-    try {
-      session = await serverSession();
-    } catch (error) {
-      console.error('Failed to get session in layout:', error);
-      session = null;
-    }
-  } else {
+  try {
+    session = await serverSession();
+    console.log({ session })
+  } catch (error) {
+    console.error('Failed to get session in layout:', error);
     session = null;
   }
 

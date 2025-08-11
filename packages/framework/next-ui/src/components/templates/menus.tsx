@@ -4,7 +4,6 @@ import { useMemo, useCallback } from 'react';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 import type { IGRPMenuItemArgs } from '@igrp/framework-next-types';
-
 import {
   IGRPIcon,
   IGRPAlertPrimitive,
@@ -16,6 +15,9 @@ import {
   IGRPDropdownMenuContentPrimitive,
   IGRPDropdownMenuItemPrimitive,
   IGRPDropdownMenuTriggerPrimitive,
+  IGRPSidebarGroupPrimitive,
+  IGRPSidebarGroupLabelPrimitive,
+  IGRPSidebarGroupContentPrimitive,
   IGRPSidebarMenuPrimitive,
   IGRPSidebarMenuButtonPrimitive,
   IGRPSidebarMenuItemPrimitive,
@@ -33,40 +35,38 @@ type IGRPTemplateMenuArgs = {
 function IGRPTemplateMenus({ menus = [] }: IGRPTemplateMenuArgs) {
   const pathname = usePathname();
 
-  const menuData = useMemo(() => {
-    return menus.length > 0 ? menus : undefined;
-  }, [menus]);
+  const menuData = useMemo(() => (menus.length > 0 ? menus : undefined), [menus]);
 
-  const { topLevelMenus, childMap } = useMemo(() => {
-    const topLevel = menuData
-      ?.filter((menu) => menu.parentName === null || menu.parentName === undefined)
-      .sort((a, b) => (a.position ?? 0) - (b.position ?? 0));
+  console.log({ menuData });
 
-    const childrenMap = new Map<string, IGRPMenuItemArgs[]>();
+  const { groups, childrenByParentCode } = useMemo(() => {
+    if (!menuData) return { groups: [], childrenByParentCode: new Map<string, IGRPMenuItemArgs[]>() };
 
-    menuData?.forEach((menu) => {
-      const parentName = menu.parentName;
-      if (parentName !== null && parentName !== undefined) {
-        if (!childrenMap.has(parentName)) {
-          childrenMap.set(parentName, []);
-        }
-        childrenMap.get(parentName)?.push(menu);
+  console.log({ groups, childrenByParentCode })
+
+    // Index children by parentCode
+    const map = new Map<string, IGRPMenuItemArgs[]>();
+    menuData.forEach((item) => {
+      const parentCode = (item as any).parentCode ?? null;
+      if (parentCode) {
+        if (!map.has(parentCode)) map.set(parentCode, []);
+        map.get(parentCode)!.push(item);
       }
     });
+    // Sort children by position
+    map.forEach((arr) => arr.sort((a, b) => (a.position ?? 0) - (b.position ?? 0)));
 
-    childrenMap.forEach((children) =>
-      children.sort((a, b) => (a.position ?? 0) - (b.position ?? 0)),
-    );
+    // Groups are items with type === 'GROUP'
+    const groupItems = menuData
+      .filter((i: any) => i.type === 'GROUP')
+      .sort((a, b) => (a.position ?? 0) - (b.position ?? 0));
 
-    return {
-      topLevelMenus: topLevel,
-      childMap: childrenMap,
-    };
+    return { groups: groupItems, childrenByParentCode: map };
   }, [menuData]);
 
   const getChildren = useCallback(
-    (parentName: string): IGRPMenuItemArgs[] => childMap.get(parentName) || [],
-    [childMap],
+    (parentCode: string): IGRPMenuItemArgs[] => childrenByParentCode.get(parentCode) || [],
+    [childrenByParentCode],
   );
 
   if (menuData === undefined) {
@@ -74,7 +74,7 @@ function IGRPTemplateMenus({ menus = [] }: IGRPTemplateMenuArgs) {
       <IGRPAlertPrimitive variant="destructive">
         <IGRPIcon iconName="CircleAlert" />
         <IGRPAlertDescriptionPrimitive>
-          Prototype mode is not enabled and no valid app ID provided.
+          O modo de protótipo não está habilitado e nenhum código de aplicação válido foi encontrado.
         </IGRPAlertDescriptionPrimitive>
       </IGRPAlertPrimitive>
     );
@@ -84,22 +84,53 @@ function IGRPTemplateMenus({ menus = [] }: IGRPTemplateMenuArgs) {
     return (
       <IGRPAlertPrimitive variant="default">
         <IGRPIcon iconName="Info" />
-        <IGRPAlertDescriptionPrimitive>App has no menu items.</IGRPAlertDescriptionPrimitive>
+        <IGRPAlertDescriptionPrimitive>Aplicação não tem menu.</IGRPAlertDescriptionPrimitive>
       </IGRPAlertPrimitive>
     );
   }
 
+  // Optional fallback: if there are no GROUP items, treat root-level (no parentCode) as a single section
+  // const hasGroups = groups.length > 0;
+  // const fallbackSection = !hasGroups
+  //   ? [
+  //       {
+  //         code: '__FALLBACK__',
+  //         name: 'Main',
+  //       } as unknown as IGRPMenuItemArgs,
+  //     ]
+  //   : [];
+
+  const sections = groups.length > 0 ? groups : [];
+
   return (
-    <IGRPSidebarMenuPrimitive role="navigation">
-      {topLevelMenus?.map((menu) => (
-        <MenuItemWithSubmenus
-          key={`menu-${menu.id}`}
-          menu={menu}
-          pathname={pathname}
-          childMenus={getChildren(menu.parentName?? '')}
-        />
-      ))}
-    </IGRPSidebarMenuPrimitive>
+    <>
+      {sections.map((section) => {
+        const sectionCode = section.code;
+        const sectionLabel = section.name;
+
+        // Top-level entries inside this section are the children whose parentCode === section.code
+        const topLevel = getChildren(sectionCode);
+
+        return (
+          <IGRPSidebarGroupPrimitive key={`grp-${sectionCode}`}>
+            <IGRPSidebarGroupLabelPrimitive className='text-red-600'>{sectionLabel}</IGRPSidebarGroupLabelPrimitive>
+            <IGRPSidebarGroupContentPrimitive>
+              <IGRPSidebarMenuPrimitive role="navigation">
+                {topLevel.map((menu) => (
+                  <MenuItemWithSubmenus
+                    key={`menu-${menu.id}`}
+                    menu={menu}
+                    pathname={pathname}
+                    // Sub-children of each top-level item (e.g., FOLDER -> SYSTEM_PAGE)
+                    childMenus={getChildren((menu as any).code)}
+                  />
+                ))}
+              </IGRPSidebarMenuPrimitive>
+            </IGRPSidebarGroupContentPrimitive>
+          </IGRPSidebarGroupPrimitive>
+        );
+      })}
+    </>
   );
 }
 
@@ -111,10 +142,14 @@ interface MenuItemWithSubmenusProps {
 
 function MenuItemWithSubmenus({ menu, pathname, childMenus }: MenuItemWithSubmenusProps) {
   const { id, name, url, icon } = menu;
-  const isActive = pathname === url;
+  const isActive = pathname === url || (!!url && pathname.startsWith(url));
   const hasChildren = childMenus.length > 0;
-  const isExternal = url ? igrpIsExternalUrl(url) : false;
-  const normalizedUrl = url ? igrpNormalizeUrl(url) : '';
+
+  // Prefer explicit url; fallback to pageSlug if present
+  const pageSlug = (menu as any).pageSlug as string | undefined;
+  const rawUrl = url ?? (pageSlug ? `/${pageSlug}` : '');
+  const isExternal = rawUrl ? igrpIsExternalUrl(rawUrl) : false;
+  const normalizedUrl = rawUrl ? igrpNormalizeUrl(rawUrl) : '';
 
   if (!hasChildren) {
     return (
@@ -209,8 +244,10 @@ interface SubMenuItemProps {
 
 function SubMenuItem({ menu, variant }: SubMenuItemProps) {
   const { name, url, icon } = menu;
-  const isExternal = url ? igrpIsExternalUrl(url) : false;
-  const normalizedUrl = url ? igrpNormalizeUrl(url) : '';
+  const pageSlug = (menu as any).pageSlug as string | undefined;
+  const rawUrl = url ?? (pageSlug ? `/${pageSlug}` : '');
+  const isExternal = rawUrl ? igrpIsExternalUrl(rawUrl) : false;
+  const normalizedUrl = rawUrl ? igrpNormalizeUrl(rawUrl) : '';
 
   const iconElement = icon && variant === 'dropdown' && <IGRPIcon iconName={icon} />;
 
@@ -256,15 +293,7 @@ function SubMenuItem({ menu, variant }: SubMenuItemProps) {
   return (
     <IGRPSidebarMenuSubItemPrimitive>
       <IGRPSidebarMenuSubButtonPrimitive asChild>
-        {isExternal ? (
-          <a {...linkProps}>
-            <span>{name}</span>
-          </a>
-        ) : (
-          <Link {...linkProps}>
-            <span>{name}</span>
-          </Link>
-        )}
+        {isExternal ? <a {...linkProps}>{linkContent}</a> : <Link {...linkProps}>{linkContent}</Link>}
       </IGRPSidebarMenuSubButtonPrimitive>
     </IGRPSidebarMenuSubItemPrimitive>
   );

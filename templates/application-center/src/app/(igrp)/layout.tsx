@@ -1,9 +1,5 @@
-import '@/styles/globals.css';
-import '@igrp/framework-next-ui/dist/styles.css';
-import '@igrp/igrp-framework-react-design-system/dist/styles.css';
-
 import type { Metadata, Viewport } from 'next';
-import { IGRPRootLayout } from '@igrp/framework-next';
+import { IGRPLayout } from '@igrp/framework-next';
 import { IGRP_META_THEME_COLORS } from '@igrp/igrp-framework-react-design-system';
 
 import { configLayout } from '@/actions/igrp/layout';
@@ -43,5 +39,5 @@ export default async function RootLayout({ children }: Readonly<{ children: Reac
     redirect(loginUrl);
   }
 
-  return <IGRPRootLayout config={config}>{children}</IGRPRootLayout>;
+  return <IGRPLayout config={config}>{children}</IGRPLayout>;
 }

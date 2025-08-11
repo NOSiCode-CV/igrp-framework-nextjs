@@ -46,9 +46,10 @@ export type IGRPMenuItemArgs = {
   position: number | null;
   icon: string | undefined;
   status: IGRPItemStatus;
-  target: IGRPItemTarget;
+  target: string;
   url: string | null;
   parentName?: string;
+  code: string;
   applicationCode?: string;
   permissions: string[];
 };

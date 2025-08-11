@@ -8,13 +8,15 @@ import type {
 
 const mapMenu = (menu: MenuEntryDTO): IGRPMenuItemArgs => ({
   id: menu.id as number,
+  code: menu.code,
   name: menu.name,
   type: menu.type as IGRPMenuType,
   position: menu.position || null,
   icon: menu.icon || undefined,
   status: menu.status as IGRPItemStatus,
-  target: menu.target as IGRPItemTarget,
+  target: menu.target || '_self',
   url: menu.url || null,
+  pageSlug: menu.pageSlug,
   parentName: menu.parentName,
   applicationCode: menu.applicationCode,
   permissions: menu.permissions,

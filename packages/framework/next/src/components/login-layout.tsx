@@ -3,12 +3,12 @@ import type { IGRPConfigArgs } from '@igrp/framework-next-types';
 
 import { cn } from '../lib/utils';
 
-type IGRPLoginLayoutArgs = {
+export type IGRPLoginLayoutArgs = {
   readonly children: React.ReactNode;
   readonly config: IGRPConfigArgs;
 };
 
-export async function IGRPLoginLayout({ children, config }: IGRPLoginLayoutArgs) {
+export function IGRPLoginLayout({ children, config }: IGRPLoginLayoutArgs) {
   const layoutConfig = config;
 
   const { font, layout } = layoutConfig;

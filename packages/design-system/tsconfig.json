@@ -10,7 +10,7 @@
     "rootDir": "./src",
     "module": "esnext",
     "moduleResolution": "bundler",
-    "allowJs": true,
+    // "allowJs": true,
     "checkJs": false,
     "esModuleInterop": true,
     "forceConsistentCasingInFileNames": true,

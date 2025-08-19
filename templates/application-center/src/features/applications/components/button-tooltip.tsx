@@ -5,7 +5,7 @@ import {
   IGRPTooltipContentPrimitive,
   IGRPTooltipProviderPrimitive,
   IGRPTooltipTriggerPrimitive,
-  IGRPIcon
+  IGRPIcon,
 } from '@igrp/igrp-framework-react-design-system';
 
 import { cn } from '@/lib/utils';
@@ -18,13 +18,7 @@ interface ButtonTooltipProps {
 }
 // TODO: aria accessibility
 // TODO: messages
-export function ButtonTooltip({
-  href,
-  icon,
-  label,
-  className
-}: ButtonTooltipProps) {
-  
+export function ButtonTooltip({ href, icon, label, className }: ButtonTooltipProps) {
   return (
     <IGRPTooltipProviderPrimitive>
       <IGRPTooltipPrimitive>
@@ -39,7 +33,10 @@ export function ButtonTooltip({
             asChild
           >
             <Link href={href}>
-              <IGRPIcon iconName={icon} strokeWidth={2} />
+              <IGRPIcon
+                iconName={icon}
+                strokeWidth={2}
+              />
             </Link>
           </IGRPButtonPrimitive>
         </IGRPTooltipTriggerPrimitive>

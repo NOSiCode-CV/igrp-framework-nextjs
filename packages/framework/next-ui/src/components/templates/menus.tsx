@@ -32,41 +32,68 @@ type IGRPTemplateMenuArgs = {
   menus?: IGRPMenuItemArgs[];
 };
 
-function IGRPTemplateMenus({ menus = [] }: IGRPTemplateMenuArgs) {
+export function IGRPTemplateMenus({ menus = [] }: IGRPTemplateMenuArgs) {
   const pathname = usePathname();
 
   const menuData = useMemo(() => (menus.length > 0 ? menus : undefined), [menus]);
 
-  console.log({ menuData });
+  const { groups, childrenByParentKey, keyOf } = useMemo(() => {
+    if (!menuData) {
+      return {
+        groups: [] as IGRPMenuItemArgs[],
+        childrenByParentKey: new Map<string, IGRPMenuItemArgs[]>(),
+        keyOf: (_: any) => '__none__',
+      };
+    }
 
-  const { groups, childrenByParentCode } = useMemo(() => {
-    if (!menuData) return { groups: [], childrenByParentCode: new Map<string, IGRPMenuItemArgs[]>() };
+    const keyOf = (item: any) =>
+      (item.code && String(item.code)) || `${item.type}-${item.id}`;
 
-  console.log({ groups, childrenByParentCode })
+    const groups: IGRPMenuItemArgs[] = [];
+    const childrenByParentKey = new Map<string, IGRPMenuItemArgs[]>();
 
-    // Index children by parentCode
-    const map = new Map<string, IGRPMenuItemArgs[]>();
-    menuData.forEach((item) => {
-      const parentCode = (item as any).parentCode ?? null;
-      if (parentCode) {
-        if (!map.has(parentCode)) map.set(parentCode, []);
-        map.get(parentCode)!.push(item);
+    let currentGroupKey: string | null = null;
+    let currentFolderKey: string | null = null;
+
+    const pushChild = (parentKey: string, item: IGRPMenuItemArgs) => {
+      if (!childrenByParentKey.has(parentKey)) childrenByParentKey.set(parentKey, []);
+      childrenByParentKey.get(parentKey)!.push(item);
+    };
+
+    (menuData as any[]).forEach((raw) => {
+      const item = raw as IGRPMenuItemArgs & { type: string; parentCode?: string | null };
+
+      if (item.type === 'GROUP') {
+        groups.push(item);
+        currentGroupKey = keyOf(item);
+        currentFolderKey = null;
+        return;
       }
+
+      if (item.type === 'FOLDER') {
+        const parentKey = (item.parentCode as any) ?? currentGroupKey ?? 'root';
+        pushChild(String(parentKey), item);
+        currentFolderKey = keyOf(item);
+        return;
+      }
+
+      // SYSTEM_PAGE (or others)
+      const parentKey =
+        (item.parentCode as any) ?? currentFolderKey ?? currentGroupKey ?? 'root';
+      pushChild(String(parentKey), item);
     });
-    // Sort children by position
-    map.forEach((arr) => arr.sort((a, b) => (a.position ?? 0) - (b.position ?? 0)));
 
-    // Groups are items with type === 'GROUP'
-    const groupItems = menuData
-      .filter((i: any) => i.type === 'GROUP')
-      .sort((a, b) => (a.position ?? 0) - (b.position ?? 0));
+    groups.sort((a: any, b: any) => (a.position ?? 0) - (b.position ?? 0));
+    childrenByParentKey.forEach((arr) =>
+      arr.sort((a: any, b: any) => (a.position ?? 0) - (b.position ?? 0)),
+    );
 
-    return { groups: groupItems, childrenByParentCode: map };
+    return { groups, childrenByParentKey, keyOf };
   }, [menuData]);
 
   const getChildren = useCallback(
-    (parentCode: string): IGRPMenuItemArgs[] => childrenByParentCode.get(parentCode) || [],
-    [childrenByParentCode],
+    (parentKey: string) => childrenByParentKey.get(parentKey) || [],
+    [childrenByParentKey],
   );
 
   if (menuData === undefined) {
@@ -89,31 +116,20 @@ function IGRPTemplateMenus({ menus = [] }: IGRPTemplateMenuArgs) {
     );
   }
 
-  // Optional fallback: if there are no GROUP items, treat root-level (no parentCode) as a single section
-  // const hasGroups = groups.length > 0;
-  // const fallbackSection = !hasGroups
-  //   ? [
-  //       {
-  //         code: '__FALLBACK__',
-  //         name: 'Main',
-  //       } as unknown as IGRPMenuItemArgs,
-  //     ]
-  //   : [];
-
   const sections = groups.length > 0 ? groups : [];
 
   return (
     <>
       {sections.map((section) => {
-        const sectionCode = section.code;
+        const sectionKey = keyOf(section as any);
         const sectionLabel = section.name;
-
-        // Top-level entries inside this section are the children whose parentCode === section.code
-        const topLevel = getChildren(sectionCode);
+        const topLevel = getChildren(sectionKey);
 
         return (
-          <IGRPSidebarGroupPrimitive key={`grp-${sectionCode}`}>
-            <IGRPSidebarGroupLabelPrimitive className='text-red-600'>{sectionLabel}</IGRPSidebarGroupLabelPrimitive>
+          <IGRPSidebarGroupPrimitive key={`grp-${sectionKey}`}>
+            <IGRPSidebarGroupLabelPrimitive>
+              {sectionLabel}
+            </IGRPSidebarGroupLabelPrimitive>
             <IGRPSidebarGroupContentPrimitive>
               <IGRPSidebarMenuPrimitive role="navigation">
                 {topLevel.map((menu) => (
@@ -121,8 +137,7 @@ function IGRPTemplateMenus({ menus = [] }: IGRPTemplateMenuArgs) {
                     key={`menu-${menu.id}`}
                     menu={menu}
                     pathname={pathname}
-                    // Sub-children of each top-level item (e.g., FOLDER -> SYSTEM_PAGE)
-                    childMenus={getChildren((menu as any).code)}
+                    childMenus={getChildren(keyOf(menu as any))}
                   />
                 ))}
               </IGRPSidebarMenuPrimitive>
@@ -141,15 +156,14 @@ interface MenuItemWithSubmenusProps {
 }
 
 function MenuItemWithSubmenus({ menu, pathname, childMenus }: MenuItemWithSubmenusProps) {
-  const { id, name, url, icon } = menu;
-  const isActive = pathname === url || (!!url && pathname.startsWith(url));
-  const hasChildren = childMenus.length > 0;
-
-  // Prefer explicit url; fallback to pageSlug if present
+  const { id, name, url, icon } = menu as any;
   const pageSlug = (menu as any).pageSlug as string | undefined;
   const rawUrl = url ?? (pageSlug ? `/${pageSlug}` : '');
   const isExternal = rawUrl ? igrpIsExternalUrl(rawUrl) : false;
   const normalizedUrl = rawUrl ? igrpNormalizeUrl(rawUrl) : '';
+
+  const isActive = !!normalizedUrl && (pathname === normalizedUrl || pathname.startsWith(normalizedUrl));
+  const hasChildren = childMenus.length > 0;
 
   if (!hasChildren) {
     return (
@@ -166,7 +180,7 @@ function MenuItemWithSubmenus({ menu, pathname, childMenus }: MenuItemWithSubmen
               <span>{name}</span>
             </a>
           ) : (
-            <Link href={normalizedUrl} aria-label={name}>
+            <Link href={normalizedUrl || '#'} aria-label={name}>
               {icon && <IGRPIcon iconName={icon} />}
               <span>{name}</span>
             </Link>
@@ -201,10 +215,7 @@ function MenuItemWithSubmenus({ menu, pathname, childMenus }: MenuItemWithSubmen
       {/* Collapsible for expanded sidebar */}
       <IGRPSidebarMenuItemPrimitive>
         <IGRPCollapsiblePrimitive className="w-full group">
-          <IGRPCollapsibleTriggerPrimitive
-            className="flex w-full group-data-[collapsible=icon]:hidden"
-            asChild
-          >
+          <IGRPCollapsibleTriggerPrimitive className="flex w-full group-data-[collapsible=icon]:hidden" asChild>
             <IGRPSidebarMenuButtonPrimitive
               tooltip={name}
               className="w-full cursor-pointer"
@@ -223,11 +234,7 @@ function MenuItemWithSubmenus({ menu, pathname, childMenus }: MenuItemWithSubmen
           <IGRPCollapsibleContentPrimitive>
             <IGRPSidebarMenuSubPrimitive>
               {childMenus.map((subMenu) => (
-                <SubMenuItem
-                  key={`collapse-${id}-${subMenu.id}`}
-                  menu={subMenu}
-                  variant="collapsible"
-                />
+                <SubMenuItem key={`collapse-${id}-${subMenu.id}`} menu={subMenu} variant="collapsible" />
               ))}
             </IGRPSidebarMenuSubPrimitive>
           </IGRPCollapsibleContentPrimitive>
@@ -243,7 +250,7 @@ interface SubMenuItemProps {
 }
 
 function SubMenuItem({ menu, variant }: SubMenuItemProps) {
-  const { name, url, icon } = menu;
+  const { name, url, icon } = menu as any;
   const pageSlug = (menu as any).pageSlug as string | undefined;
   const rawUrl = url ?? (pageSlug ? `/${pageSlug}` : '');
   const isExternal = rawUrl ? igrpIsExternalUrl(rawUrl) : false;
@@ -251,7 +258,7 @@ function SubMenuItem({ menu, variant }: SubMenuItemProps) {
 
   const iconElement = icon && variant === 'dropdown' && <IGRPIcon iconName={icon} />;
 
-  const linkContent = (
+  const content = (
     <>
       {iconElement}
       <span>{name}</span>
@@ -266,7 +273,7 @@ function SubMenuItem({ menu, variant }: SubMenuItemProps) {
         'aria-label': `${name} (opens in new tab)`,
       }
     : {
-        href: normalizedUrl,
+        href: normalizedUrl || '#',
         'aria-label': name,
       };
 
@@ -279,11 +286,11 @@ function SubMenuItem({ menu, variant }: SubMenuItemProps) {
       >
         {isExternal ? (
           <a {...linkProps} className="w-full flex items-center">
-            {linkContent}
+            {content}
           </a>
         ) : (
           <Link {...linkProps} className="w-full flex items-center">
-            {linkContent}
+            {content}
           </Link>
         )}
       </IGRPDropdownMenuItemPrimitive>
@@ -293,10 +300,10 @@ function SubMenuItem({ menu, variant }: SubMenuItemProps) {
   return (
     <IGRPSidebarMenuSubItemPrimitive>
       <IGRPSidebarMenuSubButtonPrimitive asChild>
-        {isExternal ? <a {...linkProps}>{linkContent}</a> : <Link {...linkProps}>{linkContent}</Link>}
+        {isExternal ? <a {...linkProps}>{content}</a> : <Link {...linkProps}>{content}</Link>}
       </IGRPSidebarMenuSubButtonPrimitive>
     </IGRPSidebarMenuSubItemPrimitive>
   );
 }
 
-export { IGRPTemplateMenus, type IGRPTemplateMenuArgs };
+export type { IGRPTemplateMenuArgs };

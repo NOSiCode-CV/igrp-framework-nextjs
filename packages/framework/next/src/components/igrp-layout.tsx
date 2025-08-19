@@ -2,7 +2,7 @@ import { Suspense } from 'react';
 import { IGRPRootProviders } from '@igrp/framework-next-ui';
 import type { IGRPConfigArgs } from '@igrp/framework-next-types';
 
-import { setAccessClientConfig } from '../lib/api-config';
+import { setIGRPAccessClientConfig } from '../lib/api-config';
 import { fetchAppByCode } from '../services/applications/use-applications';
 import { fetchLayoutData } from '../services/layout/use-layout';
 
@@ -38,7 +38,7 @@ export async function IGRPLayout({ children, config }: IGRPLayoutArgs) {
       );
     }
 
-    setAccessClientConfig({
+    setIGRPAccessClientConfig({
       token: session?.accessToken || '',
       baseUrl: apiManagementConfig?.baseUrl || '',
     });

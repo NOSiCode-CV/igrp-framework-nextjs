@@ -1,9 +1,11 @@
 export const STATUS_OPTIONS = [
-  { value: 'ACTIVE', label: 'Active' },
-  { value: 'INACTIVE', label: 'Inactive' },
+  { value: 'ACTIVE', label: 'Ativo' },
+  { value: 'INACTIVE', label: 'Inativo' },
 ] as const;
 
-export const APPLICATIONS_TYPES = [
-  { value: 'EXTERNAL', label: 'External' },
-  { value: 'INTERNAL', label: 'Internal' },
-] as const;
+export const STATUS_TYPES = ['ACTIVE', 'INACTIVE', 'DELETED'] as const;
+
+export const ROUTES = {
+  APPS: '/apps',
+  NEW_APPS: '/apps/novo',
+} as const;

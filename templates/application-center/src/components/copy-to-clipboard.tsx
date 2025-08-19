@@ -1,14 +1,14 @@
 'use client';
 
 import { useState } from 'react';
-import { 
+import {
   IGRPButtonPrimitive,
-  IGRPTooltipPrimitive, 
-  IGRPTooltipContentPrimitive, 
-  IGRPTooltipProviderPrimitive, 
-  IGRPTooltipTriggerPrimitive, 
+  IGRPTooltipPrimitive,
+  IGRPTooltipContentPrimitive,
+  IGRPTooltipProviderPrimitive,
+  IGRPTooltipTriggerPrimitive,
   IGRPIcon,
-  useIGRPToast
+  useIGRPToast,
 } from '@igrp/igrp-framework-react-design-system';
 import { cn } from '@/lib/utils';
 
@@ -29,14 +29,14 @@ export function CopyToClipboard({ value }: CopyToClipboardProps) {
       setCopied(true);
       igrpToast({
         type: 'success',
-        title:'Copied to clipboard',
+        title: 'Copied to clipboard',
         description: displayValue,
         duration: 1500,
       });
       setTimeout(() => setCopied(false), 1500);
     } catch (error) {
       igrpToast({
-        type: "error",
+        type: 'error',
         title: 'Failed to copy to clipboard',
         description: error instanceof Error ? error.message : 'Unknown error occurred',
         duration: 2000,
@@ -62,7 +62,7 @@ export function CopyToClipboard({ value }: CopyToClipboardProps) {
                 copied ? 'scale-100 opacity-100' : 'scale-0 opacity-0',
               )}
             >
-              <IGRPIcon 
+              <IGRPIcon
                 iconName='Check'
                 className='stroke-primary size'
                 aria-hidden='true'
@@ -75,7 +75,7 @@ export function CopyToClipboard({ value }: CopyToClipboardProps) {
                 copied ? 'scale-0 opacity-0' : 'scale-100 opacity-100',
               )}
             >
-              <IGRPIcon 
+              <IGRPIcon
                 iconName='Copy'
                 aria-hidden='true'
                 strokeWidth={2}

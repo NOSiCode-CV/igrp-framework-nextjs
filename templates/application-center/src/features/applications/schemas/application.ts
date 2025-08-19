@@ -1,27 +1,32 @@
 import { z } from 'zod';
+import { APPLICATIONS_TYPES } from '../lib/utils';
+import { STATUS_TYPES } from '@/lib/constants';
 
 export const applicationSchema = z
   .object({
-    owner: z.string().min(3, 'Owner is required'),
-    name: z.string().min(3, 'Name is required'),
+    owner: z.string().min(3, 'Proprietário é obrigatório'),
+    name: z.string().min(3, 'Nome é obrigatório'),
     code: z
       .string()
-      .regex(/^[A-Z0-9_]+$/, 'Code must only contain letters, numbers, and underscores')
-      .min(2, 'Code is required'),
-    type: z.enum(['INTERNAL', 'EXTERNAL']),
+      .regex(/^[A-Z0-9_]+$/, 'O código deve conter apenas letras, números e sublinhados')
+      .min(2, 'Código é obrigatório'),
+    type: z.enum(APPLICATIONS_TYPES),
     slug: z.string().optional(),
     url: z.string().optional(),
     description: z.string().optional(),
-    status: z.enum(['ACTIVE', 'INACTIVE']),
-    picture: z.string().optional(),
-    userPermissions: z.array(z.string()).optional(),
+    status: z.enum(STATUS_TYPES),
+    departmentCode: z.string().min(3, 'Departamento é obrigatório'),
+    picture: z
+      .instanceof(File, { message: 'Selecione uma imagem' })
+      .refine((file) => file.type.startsWith('image/'), 'Apenas imagens são permitidas')
+      .refine((file) => file.size <= 1 * 1024 * 1024, 'Máximo 1MB'),
   })
   .superRefine((data, ctx) => {
     if (data.type === 'INTERNAL' && !data.slug) {
       ctx.addIssue({
         path: ['slug'],
         code: z.ZodIssueCode.custom,
-        message: 'Slug is required',
+        message: 'URL Relativo é obrigatório',
       });
     }
 
@@ -30,7 +35,7 @@ export const applicationSchema = z
         ctx.addIssue({
           path: ['url'],
           code: z.ZodIssueCode.custom,
-          message: 'URL is required',
+          message: 'URL é obrigatório',
         });
       } else {
         try {
@@ -39,11 +44,11 @@ export const applicationSchema = z
           ctx.addIssue({
             path: ['url'],
             code: z.ZodIssueCode.custom,
-            message: 'Invalid URL',
+            message: 'URL inválida',
           });
         }
       }
     }
   });
 
-export type ApplicationProps = z.infer<typeof applicationSchema>;
+export type IGRPApplicationDTO = z.infer<typeof applicationSchema>;

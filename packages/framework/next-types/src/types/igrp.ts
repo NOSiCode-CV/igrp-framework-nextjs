@@ -33,7 +33,7 @@ export interface IGRPUserArgs {
   picture?: string | null;
 }
 
-export type IGRPMenuType = 'FOLDER' | 'MENU_PAGE' | 'EXTERNAL_PAGE';
+export type IGRPMenuType = 'FOLDER' | 'MENU_PAGE' | 'EXTERNAL_PAGE' | 'GROUP' | 'SYSTEM_PAGE';
 
 export type IGRPItemStatus = 'ACTIVE' | 'INACTIVE' | 'DELETED';
 
@@ -48,7 +48,7 @@ export type IGRPMenuItemArgs = {
   status: IGRPItemStatus;
   target: string;
   url: string | null;
-  parentName?: string;
+  pageSlug?: string;
   code: string;
   applicationCode?: string;
   permissions: string[];

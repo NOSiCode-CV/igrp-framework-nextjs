@@ -1,21 +1,9 @@
-import type { Metadata, Viewport } from 'next';
 import { IGRPLayout } from '@igrp/framework-next';
-import { IGRP_META_THEME_COLORS } from '@igrp/igrp-framework-react-design-system';
-
-import { configLayout } from '@/actions/igrp/layout';
-import { createConfig } from '@igrp/template-config';
 import { redirect } from 'next/navigation';
 import { headers } from 'next/headers';
 
-export const metadata: Metadata = {
-  title: 'IGRP | Applications Center',
-  description: 'IGRP | Applications Center',
-  icons: { icon: '/igrp/logo-no-text.png' },
-};
-
-export const viewport: Viewport = {
-  themeColor: IGRP_META_THEME_COLORS.light,
-};
+import { configLayout } from '@/actions/igrp/layout';
+import { createConfig } from '@igrp/template-config';
 
 export default async function RootLayout({ children }: Readonly<{ children: React.ReactNode }>) {
   const layoutConfig = await configLayout();
@@ -31,11 +19,12 @@ export default async function RootLayout({ children }: Readonly<{ children: Reac
     headersList.get('referer') ||
     '';
 
-  const loginPath = new URL(loginUrl || '/', 'http://localhost').pathname;
-  const isAlreadyOnLogin = currentPath.startsWith(loginPath);  
+  const baseUrl = process.env.NEXTAUTH_URL;
+
+  const loginPath = new URL(loginUrl || '/', baseUrl).pathname;
+  const isAlreadyOnLogin = currentPath.startsWith(loginPath);
 
   if (!previewMode && session === null && loginUrl && !isAlreadyOnLogin) {
-    console.log(" IN ROOT LAYOUT");
     redirect(loginUrl);
   }
 

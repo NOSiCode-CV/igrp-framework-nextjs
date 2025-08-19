@@ -6,10 +6,7 @@ import {
   IGRPIcon,
   IGRPSidebarPrimitive,
   IGRPSidebarContentPrimitive,
-  IGRPSidebarFooterPrimitive,
-  IGRPSidebarGroupPrimitive,
-  IGRPSidebarGroupContentPrimitive,
-  IGRPSidebarGroupLabelPrimitive,
+  IGRPSidebarFooterPrimitive, 
   IGRPSidebarHeaderPrimitive,
   IGRPSidebarMenuPrimitive,
   IGRPSidebarMenuButtonPrimitive,
@@ -39,13 +36,8 @@ function IGRPTemplateSidebar({ data, ...props }: IGRPTemplateSidebarProps) {
         )}
       </IGRPSidebarHeaderPrimitive>
 
-      <IGRPSidebarContentPrimitive>
-        <IGRPSidebarGroupPrimitive>
-          <IGRPSidebarGroupLabelPrimitive>Main</IGRPSidebarGroupLabelPrimitive>
-          <IGRPSidebarGroupContentPrimitive>
-            <IGRPTemplateMenus menus={menuItems} />
-          </IGRPSidebarGroupContentPrimitive>
-        </IGRPSidebarGroupPrimitive>
+      <IGRPSidebarContentPrimitive>        
+        <IGRPTemplateMenus menus={menuItems} />          
       </IGRPSidebarContentPrimitive>
 
       <IGRPSidebarFooterPrimitive>

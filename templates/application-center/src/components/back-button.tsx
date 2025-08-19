@@ -30,7 +30,10 @@ export function BackButton({ href, label, className }: BackButtonProps) {
       onClick={handleClick}
       aria-label={label || 'Go back'}
     >
-      <IGRPIcon iconName='ArrowLeft' strokeWidth={2} />
+      <IGRPIcon
+        iconName='ArrowLeft'
+        strokeWidth={2}
+      />
       {label && <span>{label}</span>}
     </IGRPButtonPrimitive>
   );

@@ -1,4 +1,4 @@
-import type { IGRPUserDTO } from '@igrp/platform-access-management-client-ts';
+import type { ApiResponse, IGRPUserDTO } from '@igrp/platform-access-management-client-ts';
 import type { IGRPUserArgs } from '@igrp/framework-next-types';
 
 const mapUser = (user: IGRPUserDTO): IGRPUserArgs => ({
@@ -10,7 +10,7 @@ const mapUser = (user: IGRPUserDTO): IGRPUserArgs => ({
   status: 'ACTIVE',
 });
 
-export const mapperUser = (user: IGRPUserDTO): IGRPUserArgs => {
-  if (!user) throw new Error('User not found');
-  return mapUser(user);
+export const mapperUser = (user: ApiResponse<IGRPUserDTO>): IGRPUserArgs => {
+  if (!user.data) throw new Error('[igrp-framewor-next]: Utilizador não encontrado');
+  return mapUser(user.data);
 };

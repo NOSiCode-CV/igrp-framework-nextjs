@@ -1,7 +1,18 @@
 'use client';
 
 import { useState } from 'react';
-import { IGRPButtonPrimitive, IGRPCardContentPrimitive, IGRPCardDescriptionPrimitive, IGRPCardHeaderPrimitive, IGRPCardPrimitive, IGRPCardTitlePrimitive, IGRPDropdownMenuContentPrimitive, IGRPDropdownMenuPrimitive, IGRPDropdownMenuTriggerPrimitive, IGRPIcon } from '@igrp/igrp-framework-react-design-system';
+import {
+  IGRPButtonPrimitive,
+  IGRPCardContentPrimitive,
+  IGRPCardDescriptionPrimitive,
+  IGRPCardHeaderPrimitive,
+  IGRPCardPrimitive,
+  IGRPCardTitlePrimitive,
+  IGRPDropdownMenuContentPrimitive,
+  IGRPDropdownMenuPrimitive,
+  IGRPDropdownMenuTriggerPrimitive,
+  IGRPIcon,
+} from '@igrp/igrp-framework-react-design-system';
 import { IGRPInputPrimitive } from '@igrp/igrp-framework-react-design-system';
 
 import { PermissionTable } from '@/features/permission/components/table';
@@ -35,7 +46,9 @@ export function ApplicationPermissionList({
       <IGRPCardPrimitive>
         <IGRPCardHeaderPrimitive>
           <IGRPCardTitlePrimitive>Application Permissions</IGRPCardTitlePrimitive>
-          <IGRPCardDescriptionPrimitive>Loading permissions for {applicationName}...</IGRPCardDescriptionPrimitive>
+          <IGRPCardDescriptionPrimitive>
+            Loading permissions for {applicationName}...
+          </IGRPCardDescriptionPrimitive>
         </IGRPCardHeaderPrimitive>
         <IGRPCardContentPrimitive>
           <div className='grid gap-4 animate-pulse'>
@@ -80,7 +93,10 @@ export function ApplicationPermissionList({
             </IGRPCardDescriptionPrimitive>
           </div>
           <IGRPButtonPrimitive onClick={() => setCreateDialogOpen(true)}>
-            <IGRPIcon iconName='Plus' className='mr-2' />
+            <IGRPIcon
+              iconName='Plus'
+              className='mr-2'
+            />
             New Permission
           </IGRPButtonPrimitive>
         </div>
@@ -88,7 +104,10 @@ export function ApplicationPermissionList({
       <IGRPCardContentPrimitive className='space-y-4'>
         <div className='flex flex-col sm:flex-row gap-2'>
           <div className='relative flex-1'>
-            <IGRPIcon iconName='Search' className='absolute left-2.5 top-2.5 h-4 w-4 text-muted-foreground' />
+            <IGRPIcon
+              iconName='Search'
+              className='absolute left-2.5 top-2.5 h-4 w-4 text-muted-foreground'
+            />
             <IGRPInputPrimitive
               type='search'
               placeholder='Search permissions...'

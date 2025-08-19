@@ -1,16 +1,19 @@
 export interface Application {
   id: number;
-  type: 'INTERNAL' | 'EXTERNAL';
-  owner: string;
+  code: string;
   name: string;
   description?: string;
-  code: string;
+  status: 'ACTIVE' | 'INACTIVE' | 'DELETED';
+  type: 'INTERNAL' | 'EXTERNAL' | 'SYSTEM';
+  owner: string;
+  picture?: string;
   url?: string | null;
   slug?: string;
-  creationDate: string;
-  status: 'ACTIVE' | 'INACTIVE';
-  picture?: string;
-  userPermissions?: string[];
+  departmentCode: string;
+  createdBy?: string;
+  createdDate?: string;
+  lastModifiedBy?: string;
+  lastModifiedDate?: string;
 }
 
 export interface FolderRef {

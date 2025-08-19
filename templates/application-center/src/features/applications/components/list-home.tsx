@@ -1,16 +1,18 @@
 'use client';
 
 import { Fragment } from 'react';
+
+import { ApplicationNotFound } from '@/components/not-found';
+import { AppCenterLoading } from '@/components/loading';
 import { ApplicationCard } from '@/features/applications/components/card';
 import { useApplications } from '@/features/applications/hooks/use-applications';
 
-// TODO: use recent applications and messages
 export function ApplicationsListHome() {
   const { data: applications, isLoading, error } = useApplications();
 
-  if (isLoading && !error) return <div>Loading applications...</div>;
+  if (isLoading && !error) return <AppCenterLoading descrption="Carregando aplicações..." />;
   if (error) throw error;
-  if (!applications || applications.length === 0) return <div>No applications found.</div>;
+  if (!applications || applications.length === 0) return <ApplicationNotFound />;
 
   const activeApps = applications.filter((app) => app.status === 'ACTIVE').slice(0, 6);
 

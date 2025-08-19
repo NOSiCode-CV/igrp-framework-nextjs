@@ -2,12 +2,18 @@
 
 // import Image from 'next/image'
 import Link from 'next/link';
-import { Edit } from 'lucide-react';
-import { IGRPBadgePrimitive } from '@igrp/igrp-framework-react-design-system';
-import { IGRPButtonPrimitive } from '@igrp/igrp-framework-react-design-system';
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
-import { IGRPSeparatorPrimitive } from '@igrp/igrp-framework-react-design-system';
-import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
+import {
+  IGRPBadgePrimitive,
+  IGRPButtonPrimitive,
+  IGRPSeparatorPrimitive,
+  IGRPCardPrimitive,
+  IGRPCardContentPrimitive,
+  IGRPCardDescriptionPrimitive,
+  IGRPCardHeaderPrimitive,
+  IGRPCardTitlePrimitive,
+  IGRPTabs,
+  IGRPIcon,
+} from '@igrp/igrp-framework-react-design-system';
 import { CopyToClipboard } from '@/components/copy-to-clipboard';
 import { PageHeader } from '@/components/page-header';
 import { MenuList } from '@/features/applications/components/menu-list';
@@ -28,7 +34,7 @@ export function ApplicationDetails({ code }: { code: string }) {
 
   if (!app) return <span>App dont exist...</span>;
 
-  const { name, owner, type, slug, url, creationDate, description, status } = app;
+  const { name, owner, type, slug, url, createdDate, description, status } = app;
 
   const slugLbl = type === 'INTERNAL' ? 'Slug' : 'Url';
   const slugValue = type === 'INTERNAL' ? slug : url;
@@ -42,22 +48,24 @@ export function ApplicationDetails({ code }: { code: string }) {
             showBackButton
             linkBackButton='/applications'
           >
-            <Button asChild>
+            <IGRPButtonPrimitive asChild>
               <Link href={`/applications/${code}/edit`}>
-                <Edit /> Edit Application
+                <IGRPIcon iconName='EditPencil' /> Editar Applicação
               </Link>
-            </Button>
+            </IGRPButtonPrimitive>
           </PageHeader>
         </div>
 
         <div className='flex flex-col gap-8 animate-fade-in motion-reduce:hidden'>
-          <Card className='overflow-hidden card-hover gap-3'>
-            <CardHeader>
-              <CardTitle>Application Information</CardTitle>
-              <CardDescription>Detailed information about this application.</CardDescription>
-              <Separator className='my-2' />
-            </CardHeader>
-            <CardContent>
+          <IGRPCardPrimitive className='overflow-hidden card-hover gap-3'>
+            <IGRPCardHeaderPrimitive>
+              <IGRPCardTitlePrimitive>Application Information</IGRPCardTitlePrimitive>
+              <IGRPCardDescriptionPrimitive>
+                Detailed information about this application.
+              </IGRPCardDescriptionPrimitive>
+              <IGRPSeparatorPrimitive className='my-2' />
+            </IGRPCardHeaderPrimitive>
+            <IGRPCardContentPrimitive>
               <div className='grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4 text-sm'>
                 <div className='flex items-center gap-4'>
                   <div>
@@ -79,7 +87,9 @@ export function ApplicationDetails({ code }: { code: string }) {
                 </div>
                 <div>
                   <h3 className='font-normal text-muted-foreground'>Status</h3>
-                  <Badge className={statusClass(status || 'ACTIVE')}>{status}</Badge>
+                  <IGRPBadgePrimitive className={statusClass(status || 'ACTIVE')}>
+                    {status}
+                  </IGRPBadgePrimitive>
                 </div>
                 <div className='flex items-center gap-4'>
                   <div>
@@ -91,7 +101,7 @@ export function ApplicationDetails({ code }: { code: string }) {
                 <div>
                   <div>
                     <h3 className='font-normal text-muted-foreground'>Created At</h3>
-                    <p>{formatDate(creationDate || new Date().toISOString())}</p>
+                    <p>{formatDate(createdDate || new Date().toISOString())}</p>
                   </div>
                 </div>
                 <div className='sm:col-span-2 md:col-span-3'>
@@ -99,28 +109,28 @@ export function ApplicationDetails({ code }: { code: string }) {
                   <p>{description || 'No description provided.'}</p>
                 </div>
               </div>
-            </CardContent>
-          </Card>
+            </IGRPCardContentPrimitive>
+          </IGRPCardPrimitive>
         </div>
       </div>
 
-      <Tabs
+      {/* <IGRPTabsPrimitive
         defaultValue='menus'
         className='space-y-4'
       >
-        <TabsList>
-          <TabsTrigger value='menus'>Menus</TabsTrigger>
-          <TabsTrigger value='permissions'>Permissions</TabsTrigger>
-        </TabsList>
+        <IGRPTabsListPrimitive>
+          <IGRPTabsTriggerPrimitive value='menus'>Menus</IGRPTabsTriggerPrimitive>
+          <IGRPTabsTriggerPrimitive value='permissions'>Permissions</IGRPTabsTriggerPrimitive>
+        </IGRPTabsListPrimitive>
 
-        <TabsContent
+        <IGRPTabsContentPrimitive
           value='menus'
           className='space-y-4'
         >
           <MenuList app={app} />
-        </TabsContent>
+        </IGRPTabsContentPrimitive>
 
-        <TabsContent
+        <IGRPTabsContentPrimitive
           value='permissions'
           className='space-y-4'
         >
@@ -128,8 +138,8 @@ export function ApplicationDetails({ code }: { code: string }) {
             applicationId={app.id}
             applicationName={app.name}
           />
-        </TabsContent>
-      </Tabs>
+        </IGRPTabsContentPrimitive>
+      </IGRPTabsPrimitive> */}
     </section>
   );
 }

@@ -1,18 +1,15 @@
 'use client';
 
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
-import { toast } from 'sonner';
 import { useRouter } from 'next/navigation';
-import { IGRPButtonPrimitive } from '@igrp/igrp-framework-react-design-system';
 import {
+  IGRPButtonPrimitive,
   IGRPCardPrimitive,
   IGRPCardContentPrimitive,
   IGRPCardFooterPrimitive,
   IGRPSelectTriggerPrimitive,
-} from '@igrp/igrp-framework-react-design-system';
-import {
   IGRPFormPrimitive,
   IGRPFormFieldPrimitive,
   IGRPFormItemPrimitive,
@@ -20,31 +17,36 @@ import {
   IGRPFormControlPrimitive,
   IGRPFormMessagePrimitive,
   IGRPFormDescriptionPrimitive,
-} from '@igrp/igrp-framework-react-design-system';
-import { IGRPInputPrimitive } from '@igrp/igrp-framework-react-design-system';
-import {
+  IGRPInputPrimitive,
   IGRPSelectPrimitive,
   IGRPSelectContentPrimitive,
   IGRPSelectItemPrimitive,
   IGRPSelectValuePrimitive,
+  IGRPTextAreaPrimitive,
+  useIGRPToast,
 } from '@igrp/igrp-framework-react-design-system';
-import { IGRPTextAreaPrimitive } from '@igrp/igrp-framework-react-design-system';
+
 import {
   useAddApplication,
   useUpdateApplication,
 } from '@/features/applications/hooks/use-applications';
-import { APPLICATIONS_TYPES } from '@/lib/constants';
 import { useAllUsers } from '@/features/users/hooks/use-users';
-import { ApplicationProps, applicationSchema } from '@/features/applications/schemas/application';
+import { IGRPApplicationDTO, applicationSchema } from '@/features/applications/schemas/application';
 import { Application } from '@/features/applications/types';
+import { APPLICATIONS_TYPES_FILTERED } from '../lib/utils';
+import { ROUTES } from '@/lib/constants';
+import { handleImageUpload } from '@/lib/image-upload';
 
 export function ApplicationForm({ application }: { application?: Application }) {
   const router = useRouter();
+  const [imageError, setImageError] = useState<string | null>(null);
+
+  const { igrpToast } = useIGRPToast();
   const { data: users, isLoading: userLoading, error: userError } = useAllUsers();
   const { mutateAsync: addApplication, isPending: isAdding } = useAddApplication();
   const { mutateAsync: updateApplication, isPending: isUpdating } = useUpdateApplication();
 
-  const form = useForm<ApplicationProps>({
+  const form = useForm<IGRPApplicationDTO>({
     resolver: zodResolver(applicationSchema),
     defaultValues: {
       name: '',
@@ -54,9 +56,9 @@ export function ApplicationForm({ application }: { application?: Application }) 
       description: '',
       code: '',
       url: '',
-      userPermissions: ['whole-api'],
       picture: '',
       status: 'ACTIVE',
+      departmentCode: '',
     },
     mode: 'onChange',
   });
@@ -65,7 +67,7 @@ export function ApplicationForm({ application }: { application?: Application }) 
 
   useEffect(() => {
     if (application) {
-      const defaultValues: Partial<ApplicationProps> = {
+      const defaultValues: Partial<IGRPApplicationDTO> = {
         name: application.name || '',
         owner: application.owner || '',
         code: application.code || '',
@@ -73,8 +75,9 @@ export function ApplicationForm({ application }: { application?: Application }) 
         url: application.url || '',
         description: application.description || '',
         type: application.type || 'INTERNAL',
-        picture: application.picture || 'AppWindow',
+        picture: application.picture || '',
         status: application.status || 'ACTIVE',
+        departmentCode: application.departmentCode || '',
       };
 
       form.reset(defaultValues);
@@ -94,7 +97,30 @@ export function ApplicationForm({ application }: { application?: Application }) 
     }
   };
 
-  const onSubmit = async (values: ApplicationProps) => {
+  function handleChange(e: React.ChangeEvent<HTMLInputElement>) {
+    const file = e.target.files?.[0];
+    if (!file) return;
+
+    if (!file.type.startsWith('image/')) {
+      setImageError('Apenas são permitidos ficheiros de imagem.');
+      e.target.value = '';
+      return;
+    }
+
+    // optional: validate extension
+    const validExtensions = ['jpg', 'jpeg', 'png', 'gif', 'webp', 'svg'];
+    const ext = file.name.split('.').pop()?.toLowerCase();
+    if (!ext || !validExtensions.includes(ext)) {
+      setImageError('Extensão de ficheiro inválida.');
+      e.target.value = '';
+      return;
+    }
+
+    setImageError(null);
+    console.log('✅ Valid image:', file);
+  }
+
+  const onSubmit = async (values: IGRPApplicationDTO) => {
     const payload = { ...values };
     if (payload.type === 'INTERNAL') delete payload.url;
     if (payload.type === 'EXTERNAL') delete payload.slug;
@@ -107,7 +133,9 @@ export function ApplicationForm({ application }: { application?: Application }) 
         form.reset();
       }
 
-      toast.success(application ? 'Application updated' : 'Application created', {
+      igrpToast({
+        type: 'success',
+        title: application ? 'Application updated' : 'Application created',
         description: application
           ? 'Your application has been updated successfully.'
           : 'Your application has been created successfully.',
@@ -115,10 +143,12 @@ export function ApplicationForm({ application }: { application?: Application }) 
       });
 
       setTimeout(() => {
-        router.replace(`/applications/${payload.code}`);
+        router.replace(`/apps/${payload.code}`);
       }, 2000);
     } catch (error) {
-      toast.error('Something went wrong', {
+      igrpToast({
+        type: 'error',
+        title: 'Something went wrong',
         description: error instanceof Error ? error.message : 'Unknown error',
       });
     }
@@ -126,7 +156,7 @@ export function ApplicationForm({ application }: { application?: Application }) 
 
   const isLoading = isAdding || isUpdating || userLoading || !users;
 
-  if (isLoading) return <span>Loading...</span>;
+  if (isLoading) return <span>Carregando...</span>;
   if (userError) throw userError;
 
   const userOptions = users.map((user) => {
@@ -145,230 +175,298 @@ export function ApplicationForm({ application }: { application?: Application }) 
       : 'Create Application';
 
   return (
-    <Card>
-      <Form {...form}>
+    <IGRPCardPrimitive className='py-6'>
+      <IGRPFormPrimitive {...form}>
         <form onSubmit={form.handleSubmit(onSubmit)}>
-          <CardContent className='pt-3 pb-4'>
+          <IGRPCardContentPrimitive>
             <div className='grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6'>
-              <FormField
+              <IGRPFormFieldPrimitive
                 control={form.control}
                 name='name'
                 render={({ field }) => (
-                  <FormItem>
-                    <FormLabel>Name</FormLabel>
-                    <FormControl>
-                      <Input
-                        placeholder='Application name'
+                  <IGRPFormItemPrimitive>
+                    <IGRPFormLabelPrimitive className='after:content-["*"] after:text-destructive'>
+                      Nome
+                    </IGRPFormLabelPrimitive>
+                    <IGRPFormControlPrimitive>
+                      <IGRPInputPrimitive
+                        placeholder='Nome da Aplicação'
                         {...field}
                         onChange={handleNameChange}
                         required
+                        className='placeholder:truncate border-primary/30 focus-visible:ring-[2px] focus-visible:ring-primary/30 focus-visible:border-primary/30'
                       />
-                    </FormControl>
-                    <FormDescription>The display name of your application.</FormDescription>
-                    <FormMessage />
-                  </FormItem>
+                    </IGRPFormControlPrimitive>
+                    <IGRPFormDescriptionPrimitive>
+                      O nome da sua aplicação.
+                    </IGRPFormDescriptionPrimitive>
+                    <IGRPFormMessagePrimitive />
+                  </IGRPFormItemPrimitive>
                 )}
               />
 
-              <FormField
+              <IGRPFormFieldPrimitive
                 control={form.control}
                 name='code'
                 render={({ field }) => (
-                  <FormItem>
-                    <FormLabel>Code</FormLabel>
-                    <FormControl>
-                      <Input
+                  <IGRPFormItemPrimitive>
+                    <IGRPFormLabelPrimitive className='after:content-["*"] after:text-destructive'>
+                      Código
+                    </IGRPFormLabelPrimitive>
+                    <IGRPFormControlPrimitive>
+                      <IGRPInputPrimitive
                         placeholder='APP_CODE'
                         {...field}
                         pattern='^[A-Z0-9_]+$'
                         onFocus={() => form.trigger('code')}
+                        className='placeholder:truncate border-primary/30 focus-visible:ring-[2px] focus-visible:ring-primary/30 focus-visible:border-primary/30'
                       />
-                    </FormControl>
-                    <FormDescription>
-                      Only uppercase letters, numbers, and underscores are allowed.
-                    </FormDescription>
-                    <FormMessage />
-                  </FormItem>
+                    </IGRPFormControlPrimitive>
+                    <IGRPFormDescriptionPrimitive>
+                      Apenas letras maiúsculas, números e sublinhados são permitidos.
+                    </IGRPFormDescriptionPrimitive>
+                    <IGRPFormMessagePrimitive />
+                  </IGRPFormItemPrimitive>
                 )}
               />
 
-              <FormField
+              <IGRPFormFieldPrimitive
                 control={form.control}
                 name='owner'
                 render={({ field }) => (
-                  <FormItem>
-                    <FormLabel>Owner</FormLabel>
-                    <Select
+                  <IGRPFormItemPrimitive>
+                    <IGRPFormLabelPrimitive className='after:content-["*"] after:text-destructive'>
+                      Proprietário
+                    </IGRPFormLabelPrimitive>
+                    <IGRPSelectPrimitive
                       onValueChange={field.onChange}
                       defaultValue={field.value}
                     >
-                      <FormControl>
-                        <SelectTrigger className='w-full'>
-                          <SelectValue placeholder='Select application owner' />
-                        </SelectTrigger>
-                      </FormControl>
-                      <SelectContent>
+                      <IGRPFormControlPrimitive>
+                        <IGRPSelectTriggerPrimitive className='w-full truncate'>
+                          <IGRPSelectValuePrimitive placeholder='Selecione o proprietário' />
+                        </IGRPSelectTriggerPrimitive>
+                      </IGRPFormControlPrimitive>
+                      <IGRPSelectContentPrimitive>
                         {userOptions.map((user) => (
-                          <SelectItem
+                          <IGRPSelectItemPrimitive
                             key={user.value}
                             value={user.value}
                           >
                             {user.label}
-                          </SelectItem>
+                          </IGRPSelectItemPrimitive>
                         ))}
-                      </SelectContent>
-                    </Select>
-                    <FormDescription>Select the responsible user.</FormDescription>
-                    <FormMessage />
+                      </IGRPSelectContentPrimitive>
+                    </IGRPSelectPrimitive>
+                    <IGRPFormDescriptionPrimitive>
+                      O Responsável pela criação.
+                    </IGRPFormDescriptionPrimitive>
+                    <IGRPFormMessagePrimitive />
                     {userError && <p className='text-red-500'>{userError}</p>}
-                  </FormItem>
+                  </IGRPFormItemPrimitive>
                 )}
               />
 
-              <FormField
+              <IGRPFormFieldPrimitive
                 control={form.control}
-                name='type'
+                name='departmentCode'
                 render={({ field }) => (
-                  <FormItem>
-                    <FormLabel>Type</FormLabel>
-                    <Select
+                  <IGRPFormItemPrimitive>
+                    <IGRPFormLabelPrimitive className='after:content-["*"] after:text-destructive'>
+                      Departamento
+                    </IGRPFormLabelPrimitive>
+                    <IGRPSelectPrimitive
                       onValueChange={field.onChange}
                       defaultValue={field.value}
                     >
-                      <FormControl>
-                        <SelectTrigger
-                          className='w-full'
+                      <IGRPFormControlPrimitive>
+                        <IGRPSelectTriggerPrimitive className='w-full truncate'>
+                          <IGRPSelectValuePrimitive placeholder='Selecione o departamento' />
+                        </IGRPSelectTriggerPrimitive>
+                      </IGRPFormControlPrimitive>
+                      <IGRPSelectContentPrimitive>
+                        {userOptions.map((user) => (
+                          <IGRPSelectItemPrimitive
+                            key={user.value}
+                            value={user.value}
+                          >
+                            {user.label}
+                          </IGRPSelectItemPrimitive>
+                        ))}
+                      </IGRPSelectContentPrimitive>
+                    </IGRPSelectPrimitive>
+                    <IGRPFormDescriptionPrimitive>
+                      Departemento para aplicação.
+                    </IGRPFormDescriptionPrimitive>
+                    <IGRPFormMessagePrimitive />
+                    {userError && <p className='text-red-500'>{userError}</p>}
+                  </IGRPFormItemPrimitive>
+                )}
+              />
+
+              <IGRPFormFieldPrimitive
+                control={form.control}
+                name='type'
+                render={({ field }) => (
+                  <IGRPFormItemPrimitive>
+                    <IGRPFormLabelPrimitive className='after:content-["*"] after:text-destructive'>
+                      Tipo
+                    </IGRPFormLabelPrimitive>
+                    <IGRPSelectPrimitive
+                      onValueChange={field.onChange}
+                      defaultValue={field.value}
+                    >
+                      <IGRPFormControlPrimitive>
+                        <IGRPSelectTriggerPrimitive
+                          className='w-full truncate'
                           disabled={disabledFields}
                         >
-                          <SelectValue placeholder='Select application type' />
-                        </SelectTrigger>
-                      </FormControl>
-                      <SelectContent>
-                        {APPLICATIONS_TYPES.map((opt, index) => (
-                          <SelectItem
+                          <IGRPSelectValuePrimitive placeholder='Selecione o tipo de aplicação' />
+                        </IGRPSelectTriggerPrimitive>
+                      </IGRPFormControlPrimitive>
+                      <IGRPSelectContentPrimitive>
+                        {APPLICATIONS_TYPES_FILTERED.map((opt, index) => (
+                          <IGRPSelectItemPrimitive
                             key={index}
                             value={opt.value}
                           >
                             {opt.label}
-                          </SelectItem>
+                          </IGRPSelectItemPrimitive>
                         ))}
-                      </SelectContent>
-                    </Select>
-                    <FormDescription>The type of application.</FormDescription>
-                    <FormMessage />
-                  </FormItem>
+                      </IGRPSelectContentPrimitive>
+                    </IGRPSelectPrimitive>
+                    <IGRPFormDescriptionPrimitive>
+                      O tipo de aplicação.
+                    </IGRPFormDescriptionPrimitive>
+                    <IGRPFormMessagePrimitive />
+                  </IGRPFormItemPrimitive>
                 )}
               />
 
               {type === 'INTERNAL' && (
-                <FormField
+                <IGRPFormFieldPrimitive
                   control={form.control}
                   name='slug'
                   render={({ field }) => (
-                    <FormItem>
-                      <FormLabel>Slug</FormLabel>
-                      <FormControl>
-                        <Input
-                          placeholder='application-slug'
+                    <IGRPFormItemPrimitive>
+                      <IGRPFormLabelPrimitive className='after:content-["*"] after:text-destructive'>
+                        URL Relativo
+                      </IGRPFormLabelPrimitive>
+                      <IGRPFormControlPrimitive>
+                        <IGRPInputPrimitive
+                          placeholder='app-exemplo'
                           {...field}
                           disabled={disabledFields}
+                          className='placeholder:truncate border-primary/30 focus-visible:ring-[2px] focus-visible:ring-primary/30 focus-visible:border-primary/30'
                         />
-                      </FormControl>
-                      <FormDescription>The internal URL identifier.</FormDescription>
-                      <FormMessage />
-                    </FormItem>
+                      </IGRPFormControlPrimitive>
+                      <IGRPFormDescriptionPrimitive>
+                        O identificador de URL interno.
+                      </IGRPFormDescriptionPrimitive>
+                      <IGRPFormMessagePrimitive />
+                    </IGRPFormItemPrimitive>
                   )}
                 />
               )}
 
               {type === 'EXTERNAL' && (
-                <FormField
+                <IGRPFormFieldPrimitive
                   control={form.control}
                   name='url'
                   render={({ field }) => (
-                    <FormItem>
-                      <FormLabel>URL</FormLabel>
-                      <FormControl>
-                        <Input
-                          placeholder='https://example.com'
+                    <IGRPFormItemPrimitive>
+                      <IGRPFormLabelPrimitive className='after:content-["*"] after:text-destructive'>
+                        URL
+                      </IGRPFormLabelPrimitive>
+                      <IGRPFormControlPrimitive>
+                        <IGRPInputPrimitive
+                          placeholder='https://exemplo.com'
                           {...field}
                           disabled={disabledFields}
+                          className='placeholder:truncate border-primary/30 focus-visible:ring-[2px] focus-visible:ring-primary/30 focus-visible:border-primary/30'
                         />
-                      </FormControl>
-                      <FormDescription>The external application URL.</FormDescription>
-                      <FormMessage />
-                    </FormItem>
+                      </IGRPFormControlPrimitive>
+                      <IGRPFormDescriptionPrimitive>
+                        URL da aplicação externa.
+                      </IGRPFormDescriptionPrimitive>
+                      <IGRPFormMessagePrimitive />
+                    </IGRPFormItemPrimitive>
                   )}
                 />
               )}
 
-              <FormField
-                control={form.control}
-                name='description'
-                render={({ field }) => (
-                  <FormItem className='col-span-3'>
-                    <FormLabel>Description</FormLabel>
-                    <FormControl>
-                      <Textarea
-                        placeholder='Describe your application'
-                        className='resize-none'
-                        value={field.value}
-                        onChange={field.onChange}
-                        onBlur={field.onBlur}
-                        name={field.name}
-                        ref={field.ref}
-                      />
-                    </FormControl>
-                    <FormDescription>A brief description of your application.</FormDescription>
-                    <FormMessage />
-                  </FormItem>
-                )}
-              />
-
-              {/* // TODO: add update picture for application */}
-              {/* <FormField
+              <IGRPFormFieldPrimitive
                 control={form.control}
                 name='picture'
                 render={({ field }) => (
-                  <FormItem className='col-span-3'>
-                    <FormLabel>Description</FormLabel>
-                    <FormControl>
-                      <Textarea
-                        placeholder='Describe your application'
-                        className='resize-none'
+                  <IGRPFormItemPrimitive>
+                    <IGRPFormLabelPrimitive>Imagem</IGRPFormLabelPrimitive>
+                    <IGRPFormControlPrimitive>
+                      <IGRPInputPrimitive
+                        placeholder='Selecionar uma imagem para a sua aplicação'
+                        onChange={(e) => handleImageUpload(e, field, form)}
+                        onBlur={field.onBlur}
+                        name={field.name}
+                        ref={field.ref}
+                        type='file'
+                        accept='image/*'
+                        className='placeholder:truncate border-primary/30 focus-visible:ring-[2px] focus-visible:ring-primary/30 focus-visible:border-primary/30'
+                      />
+                    </IGRPFormControlPrimitive>
+                    <IGRPFormDescriptionPrimitive>
+                      A imagem da aplicação.
+                    </IGRPFormDescriptionPrimitive>
+                    <IGRPFormMessagePrimitive />
+                  </IGRPFormItemPrimitive>
+                )}
+              />
+
+              <IGRPFormFieldPrimitive
+                control={form.control}
+                name='description'
+                render={({ field }) => (
+                  <IGRPFormItemPrimitive className='sm:col-span-2'>
+                    <IGRPFormLabelPrimitive>Descrição</IGRPFormLabelPrimitive>
+                    <IGRPFormControlPrimitive>
+                      <IGRPTextAreaPrimitive
+                        placeholder='Descreva a sua aplicação'
+                        rows={2}
                         value={field.value}
                         onChange={field.onChange}
                         onBlur={field.onBlur}
                         name={field.name}
                         ref={field.ref}
+                        className='resize-none placeholder:truncate border-primary/30 focus-visible:ring-[2px] focus-visible:ring-primary/30 focus-visible:border-primary/30'
                       />
-                    </FormControl>
-                    <FormDescription>A brief description of your application.</FormDescription>
-                    <FormMessage />
-                  </FormItem>
+                    </IGRPFormControlPrimitive>
+                    <IGRPFormDescriptionPrimitive>
+                      Uma breve descrição da sua aplicação.
+                    </IGRPFormDescriptionPrimitive>
+                    <IGRPFormMessagePrimitive />
+                  </IGRPFormItemPrimitive>
                 )}
-              /> */}
+              />
             </div>
-          </CardContent>
+          </IGRPCardContentPrimitive>
 
-          <CardFooter className='flex justify-end gap-2 px-6'>
-            <Button
+          <IGRPCardFooterPrimitive className='flex justify-end gap-2 mt-4'>
+            <IGRPButtonPrimitive
               variant='outline'
-              onClick={() => router.push('/applications')}
+              onClick={() => router.push(ROUTES.APPS)}
               disabled={isLoading}
               type='button'
             >
-              Cancel
-            </Button>
-            <Button
+              Cancelar
+            </IGRPButtonPrimitive>
+            <IGRPButtonPrimitive
               type='submit'
               disabled={disabledBtn}
             >
               {submitLblBtn}
-            </Button>
-          </CardFooter>
+            </IGRPButtonPrimitive>
+          </IGRPCardFooterPrimitive>
         </form>
-      </Form>
-    </Card>
+      </IGRPFormPrimitive>
+    </IGRPCardPrimitive>
   );
 }

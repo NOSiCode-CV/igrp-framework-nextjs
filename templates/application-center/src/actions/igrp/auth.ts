@@ -40,7 +40,7 @@ export async function getSession() {
 
   try {
     session = await serverSession();
-    console.log({ session })
+    console.log({ session });
   } catch (error) {
     console.error('Failed to get session in layout:', error);
     session = null;

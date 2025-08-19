@@ -1,20 +1,21 @@
-export type ClientRuntimeConfig = {
+export type IGRPClientRuntimeConfig = {
   token: string;
   baseUrl: string;
   timeout?: number;
 };
 
-let runtimeConfig: ClientRuntimeConfig | null = null;
+let runtimeConfig: IGRPClientRuntimeConfig | null = null;
 
-export function setAccessClientConfig(config: ClientRuntimeConfig) {
+export function setIGRPAccessClientConfig(config: IGRPClientRuntimeConfig) {
   runtimeConfig = config;
 }
 
-export function getAccessClientConfig(): ClientRuntimeConfig {
-  if (!runtimeConfig) throw new Error('Access client config not set.');
+export function getIGRPAccessClientConfig(): IGRPClientRuntimeConfig {
+  if (!runtimeConfig)
+    throw new Error('[igrp-framework-next] a configuração do cliente de acesso nao foi definida.');
   return runtimeConfig;
 }
 
-export function resetAccessClientConfig() {
+export function resetIGRPAccessClientConfig() {
   runtimeConfig = null;
 }

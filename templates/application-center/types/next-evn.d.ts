@@ -1,4 +1,3 @@
-// env.d.ts
 namespace NodeJS {
   interface ProcessEnv {
     KEYCLOAK_CLIENT_ID: string;
@@ -11,5 +10,7 @@ namespace NodeJS {
     IGRP_NEXTAUTH_CALLBACK: string;
     IGRP_LOGIN_URL: string;
     IGRP_LOGOUT_URL: string;
+    IGRP_APP_NAME_DESCRIPTION: string;
+    IGRP_MINIO_URL: string;
   }
 }

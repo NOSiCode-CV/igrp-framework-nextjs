@@ -65,11 +65,15 @@ interface ExtendedRequestInit extends RequestInit {
 }
 
 export async function callApi<T>(endpoint: string, options: ExtendedRequestInit = {}): Promise<T> {
-  const API_URL = process.env.APP_MANAGER_API ?? '';
+  const API_URL = process.env.IGRP_APP_MANAGER_API ?? '';
   const session = await serverSession();
 
   if (!session?.accessToken) {
     redirect('/login');
+  }
+
+  if (!API_URL) {
+    throw new Error('[app-center] API_URL não esta definido.');
   }
 
   const url = `${API_URL}${endpoint}`;

@@ -3,8 +3,8 @@ import { IGRPRootProviders } from '@igrp/framework-next-ui';
 import type { IGRPConfigArgs } from '@igrp/framework-next-types';
 
 import { setIGRPAccessClientConfig } from '../lib/api-config';
-import { fetchAppByCode } from '../services/applications/use-applications';
-import { fetchLayoutData } from '../services/layout/use-layout';
+import { fetchAppByCode } from '../hooks/use-applications';
+import { fetchLayoutData } from '../hooks/use-layout';
 
 export type IGRPLayoutArgs = {
   readonly children: React.ReactNode;
@@ -34,7 +34,7 @@ export async function IGRPLayout({ children, config }: IGRPLayoutArgs) {
   if (!previewMode) {
     if (!apiManagementConfig || !apiManagementConfig.baseUrl) {
       throw new Error(
-        'Preview Mode is not enabled, when not enabled, API Management config is required.',
+        '[igrp-layout]: Modo de pré-visualização desativado. É necessária a configuração da gestão da API.',
       );
     }
 

@@ -2,7 +2,7 @@
 
 import { Fragment } from 'react';
 
-import { ApplicationNotFound } from '@/components/not-found';
+import { AppCenterNotFound } from '@/components/not-found';
 import { AppCenterLoading } from '@/components/loading';
 import { ApplicationCard } from '@/features/applications/components/card';
 import { useApplications } from '@/features/applications/hooks/use-applications';
@@ -10,9 +10,19 @@ import { useApplications } from '@/features/applications/hooks/use-applications'
 export function ApplicationsListHome() {
   const { data: applications, isLoading, error } = useApplications();
 
-  if (isLoading && !error) return <AppCenterLoading descrption="Carregando aplicações..." />;
+  if (isLoading && !error) return <AppCenterLoading descrption='Carregando aplicações...' />;
   if (error) throw error;
-  if (!applications || applications.length === 0) return <ApplicationNotFound />;
+  if (!applications || applications.length === 0) {
+    return (
+      <AppCenterNotFound
+        iconName='AppWindow'
+        title='Nenhuma aplicação encontrada.'
+      >
+        Clique em &nbsp;
+        <span className='font-semibold'>“Nova Aplicação”</span>
+      </AppCenterNotFound>
+    );
+  }
 
   const activeApps = applications.filter((app) => app.status === 'ACTIVE').slice(0, 6);
 

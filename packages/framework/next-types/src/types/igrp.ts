@@ -4,56 +4,6 @@ import { IGRPHeaderDataArgs } from './header';
 import { IGRPSidebarDataArgs } from './sidebar';
 import { IGRPToasterPosition } from './globals';
 
-export interface IGRPApplicationArgs {
-  id: number;
-  code: string;
-  name: string;
-  description?: string;
-  status: IGRPItemStatus;
-  type: IGRPItemTarget;
-  owner?: string;
-  picture?: string;
-  url?: string | null;
-  slug?: string;
-}
-
-export interface IGRPUserArgs {
-  id: number;
-  igrpUsername: string;
-  username: string;
-  fullname?: string | null;
-  name: string;
-  email: string;
-  roles?: string[];
-  departments?: string[];
-  apps?: string[];
-  status: 'ACTIVE' | 'INACTIVE';
-  signature?: string | null;
-  image?: string | null;
-  picture?: string | null;
-}
-
-export type IGRPMenuType = 'FOLDER' | 'MENU_PAGE' | 'EXTERNAL_PAGE' | 'GROUP' | 'SYSTEM_PAGE';
-
-export type IGRPItemStatus = 'ACTIVE' | 'INACTIVE' | 'DELETED';
-
-export type IGRPItemTarget = 'INTERNAL' | 'EXTERNAL';
-
-export type IGRPMenuItemArgs = {
-  id: number;
-  name: string;
-  type: IGRPMenuType;
-  position: number | null;
-  icon: string | undefined;
-  status: IGRPItemStatus;
-  target: string;
-  url: string | null;
-  pageSlug?: string;
-  code: string;
-  applicationCode?: string;
-  permissions: string[];
-};
-
 export interface ExtendedSession extends DefaultSession {
   accessToken?: string;
   idToken?: string;

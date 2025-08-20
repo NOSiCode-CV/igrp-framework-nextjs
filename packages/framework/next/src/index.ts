@@ -19,3 +19,9 @@ export {
 } from './lib/api-config';
 
 export { igrpBuildQueryString } from './lib/build-query-string';
+
+export { mapperApplications } from './mappers/mapperApplications';
+
+export { mapperMenus } from './mappers/mapperMenus';
+
+export { mapperUser } from './mappers/mapperUsers';

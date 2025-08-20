@@ -2,11 +2,17 @@
 
 import Image from 'next/image';
 import Link from 'next/link';
-import { Shield, UserPen } from 'lucide-react';
-import { IGRPButtonPrimitive } from '@igrp/igrp-framework-react-design-system';
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
-import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
-import { UserAvatar } from '@/components/user-avatar';
+import {
+  IGRPButtonPrimitive,
+  IGRPCardPrimitive,
+  IGRPCardContentPrimitive,
+  // CardDescription,
+  // CardHeader,
+  // CardTitle,
+  // Tabs,
+  IGRPUserAvatar,
+  IGRPIcon,
+} from '@igrp/igrp-framework-react-design-system';
 import {
   useCurrentUser,
   useUserImage,
@@ -15,6 +21,7 @@ import {
 } from '@/features/users/hooks/use-users';
 import { getInitials } from '@/lib/utils';
 import { PageHeader } from '@/components/page-header';
+import { ROUTES } from '@/lib/constants';
 
 export function ProfileList() {
   const { data: user, isLoading, error: userError } = useCurrentUser();
@@ -29,17 +36,17 @@ export function ProfileList() {
   return (
     <div className='flex flex-col gap-6 animate-fade-in motion-reduce:hidden'>
       <PageHeader
-        title='User Profile'
+        title='Perfil do Utilizador'
         showBackButton
-        linkBackButton='/users'
+        linkBackButton={ROUTES.USERS}
       />
 
       <div className='space-y-6'>
-        <Card className='py-4'>
-          <CardContent>
+        <IGRPCardPrimitive className='py-4'>
+          <IGRPCardContentPrimitive>
             <div className='flex flex-col sm:flex-row sm:justify-between sm:items-center gap-4'>
               <div className='flex gap-2 items-center'>
-                <UserAvatar
+                <IGRPUserAvatar
                   image={getImage?.link}
                   alt={user.username}
                   fallbackContent={user && getInitials(user.username)}
@@ -53,17 +60,20 @@ export function ProfileList() {
                 </div>
               </div>
 
-              <Button asChild>
+              <IGRPButtonPrimitive asChild>
                 <Link href='/users/profile/edit'>
-                  <UserPen className='mr-1' />
+                  <IGRPIcon
+                    iconName='UserPen'
+                    className='mr-1'
+                  />
                   Edit
                 </Link>
-              </Button>
+              </IGRPButtonPrimitive>
             </div>
-          </CardContent>
-        </Card>
+          </IGRPCardContentPrimitive>
+        </IGRPCardPrimitive>
 
-        <div className='space-y-6'>
+        {/* <div className='space-y-6'>
           <Tabs
             defaultValue='overview'
             className='w-full'
@@ -172,7 +182,7 @@ export function ProfileList() {
               </TabsContent>
             )}
           </Tabs>
-        </div>
+        </div> */}
       </div>
     </div>
   );

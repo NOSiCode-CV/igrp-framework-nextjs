@@ -5,28 +5,27 @@ import { useEffect } from 'react';
 import { useRouter } from 'next/navigation';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
-import { Loader } from 'lucide-react';
-import { toast } from 'sonner';
 import * as z from 'zod';
-import { IGRPButtonPrimitive } from '@igrp/igrp-framework-react-design-system';
 import {
+  IGRPButtonPrimitive,
   IGRPCardPrimitive,
   IGRPCardContentPrimitive,
-  IGRPCardContentPrimitive,
+  IGRPCardDescriptionPrimitive,
   IGRPCardFooterPrimitive,
   IGRPCardHeaderPrimitive,
   IGRPCardTitlePrimitive,
-} from '@igrp/igrp-framework-react-design-system';
-
-import {
   IGRPFormPrimitive,
   IGRPFormControlPrimitive,
   IGRPFormDescriptionPrimitive,
   IGRPFormFieldPrimitive,
   IGRPFormItemPrimitive,
   IGRPFormLabelPrimitive,
+  IGRPFormMessagePrimitive,
+  IGRPInputPrimitive,
+  IGRPIcon,
+  useIGRPToast,
 } from '@igrp/igrp-framework-react-design-system';
-import { IGRPInputPrimitive } from '@igrp/igrp-framework-react-design-system';
+
 import { BackButton } from '@/components/back-button';
 import {
   useCurrentUser,
@@ -38,9 +37,11 @@ import { userSchema } from '@/features/users/schemas/user';
 import { UserProps } from '@/features/users/types';
 import { ProfileImageUpload } from '@/features/users/components/profile-image-upload';
 import { ProfileSignature } from '@/features/users/components/profile-signature';
+import { ROUTES } from '@/lib/constants';
 
 export function ProfileUserForm() {
   const router = useRouter();
+  const { igrpToast } = useIGRPToast();
 
   const { data: user, isLoading, error } = useCurrentUser();
   const { mutateAsync: updateUser } = useUpdateUser();
@@ -84,12 +85,14 @@ export function ProfileUserForm() {
 
     await updateUser(formData);
 
-    toast.success('User updated', {
+    igrpToast({
+      type: 'success',
+      title: 'User updated',
       description: 'The user has been updated successfully.',
       duration: 2000,
     });
 
-    router.push('/users/profile');
+    router.push(ROUTES.USER_PROFILE);
     router.refresh();
   }
 
@@ -102,119 +105,132 @@ export function ProfileUserForm() {
         </div>
       </div>
 
-      <Card>
-        <CardHeader className='mb-3'>
-          <CardTitle>Detailed information about this user.</CardTitle>
-          <CardDescription>Manage your personal information and account settings.</CardDescription>
-        </CardHeader>
-        <Form {...form}>
+      <IGRPCardPrimitive>
+        <IGRPCardHeaderPrimitive className='mb-3'>
+          <IGRPCardTitlePrimitive>Detailed information about this user.</IGRPCardTitlePrimitive>
+          <IGRPCardDescriptionPrimitive>
+            Manage your personal information and account settings.
+          </IGRPCardDescriptionPrimitive>
+        </IGRPCardHeaderPrimitive>
+        <IGRPFormPrimitive {...form}>
           <form onSubmit={form.handleSubmit(onSubmit)}>
-            <CardContent className='flex flex-col gap-8'>
+            <IGRPCardContentPrimitive className='flex flex-col gap-8'>
               <div className='grid sm:grid-cols-2 gap-6'>
-                <FormField
+                <IGRPFormFieldPrimitive
                   control={form.control}
                   name='fullname'
                   render={({ field }) => (
-                    <FormItem>
-                      <FormLabel>Full Name</FormLabel>
-                      <FormControl>
-                        <Input
+                    <IGRPFormItemPrimitive>
+                      <IGRPFormLabelPrimitive>Full Name</IGRPFormLabelPrimitive>
+                      <IGRPFormControlPrimitive>
+                        <IGRPInputPrimitive
                           placeholder='johndoe'
                           {...field}
                           value={field.value ?? ''}
                         />
-                      </FormControl>
-                      <FormDescription>The user full name.</FormDescription>
-                      <FormMessage />
-                    </FormItem>
+                      </IGRPFormControlPrimitive>
+                      <IGRPFormDescriptionPrimitive>
+                        The user full name.
+                      </IGRPFormDescriptionPrimitive>
+                      <IGRPFormMessagePrimitive />
+                    </IGRPFormItemPrimitive>
                   )}
                 />
 
-                <FormField
+                <IGRPFormFieldPrimitive
                   control={form.control}
                   name='igrpUsername'
                   render={({ field }) => (
-                    <FormItem>
-                      <FormLabel>Username</FormLabel>
-                      <FormControl>
-                        <Input
+                    <IGRPFormItemPrimitive>
+                      <IGRPFormLabelPrimitive>Username</IGRPFormLabelPrimitive>
+                      <IGRPFormControlPrimitive>
+                        <IGRPInputPrimitive
                           {...field}
                           value={field.value ?? ''}
                         />
-                      </FormControl>
-                      <FormDescription>The user login username.</FormDescription>
-                      <FormMessage />
-                    </FormItem>
+                      </IGRPFormControlPrimitive>
+                      <IGRPFormDescriptionPrimitive>
+                        The user login username.
+                      </IGRPFormDescriptionPrimitive>
+                      <IGRPFormMessagePrimitive />
+                    </IGRPFormItemPrimitive>
                   )}
                 />
               </div>
 
               <div className='grid md:grid-cols-2 gap-6'>
-                <FormField
+                <IGRPFormFieldPrimitive
                   control={form.control}
                   name='image'
                   render={({ field }) => (
-                    <FormItem>
-                      <FormLabel>Profile Image</FormLabel>
-                      <FormControl>
+                    <IGRPFormItemPrimitive>
+                      <IGRPFormLabelPrimitive>Profile Image</IGRPFormLabelPrimitive>
+                      <IGRPFormControlPrimitive>
                         <ProfileImageUpload
                           value={field.value}
                           onChange={field.onChange}
                         />
-                      </FormControl>
-                      <FormDescription>Upload a profile picture for this user.</FormDescription>
-                      <FormMessage />
-                    </FormItem>
+                      </IGRPFormControlPrimitive>
+                      <IGRPFormDescriptionPrimitive>
+                        Upload a profile picture for this user.
+                      </IGRPFormDescriptionPrimitive>
+                      <IGRPFormMessagePrimitive />
+                    </IGRPFormItemPrimitive>
                   )}
                 />
 
-                <FormField
+                <IGRPFormFieldPrimitive
                   control={form.control}
                   name='signature'
                   render={({ field }) => (
-                    <FormItem>
-                      <FormLabel>Signature</FormLabel>
-                      <FormControl>
+                    <IGRPFormItemPrimitive>
+                      <IGRPFormLabelPrimitive>Signature</IGRPFormLabelPrimitive>
+                      <IGRPFormControlPrimitive>
                         <ProfileSignature
                           value={field.value}
                           onChange={field.onChange}
                         />
-                      </FormControl>
-                      <FormDescription>The user&apos;s digital signature.</FormDescription>
-                      <FormMessage />
-                    </FormItem>
+                      </IGRPFormControlPrimitive>
+                      <IGRPFormDescriptionPrimitive>
+                        The user&apos;s digital signature.
+                      </IGRPFormDescriptionPrimitive>
+                      <IGRPFormMessagePrimitive />
+                    </IGRPFormItemPrimitive>
                   )}
                 />
               </div>
-            </CardContent>
-            <CardFooter className='flex justify-end gap-2 pt-6'>
-              <Button
+            </IGRPCardContentPrimitive>
+            <IGRPCardHeaderPrimitive className='flex justify-end gap-2 pt-6'>
+              <IGRPButtonPrimitive
                 variant='outline'
                 onClick={() => router.back()}
                 disabled={isLoading}
                 type='button'
               >
-                Cancel
-              </Button>
-              <Button
+                Cancelar
+              </IGRPButtonPrimitive>
+              <IGRPButtonPrimitive
                 type='submit'
                 disabled={isLoading}
               >
                 {isLoading ? (
                   <span>
-                    <Loader className='mr-2 animate-spin' />
-                    Saving...
+                    <IGRPIcon
+                      iconName='Loader'
+                      className='mr-2 animate-spin'
+                    />
+                    Guardarndo...
                   </span>
                 ) : user ? (
-                  'Update User'
+                  'Atualizar Utilizador'
                 ) : (
-                  'Create User'
+                  'Criar Utilizador'
                 )}
-              </Button>
-            </CardFooter>
+              </IGRPButtonPrimitive>
+            </IGRPCardHeaderPrimitive>
           </form>
-        </Form>
-      </Card>
+        </IGRPFormPrimitive>
+      </IGRPCardPrimitive>
     </div>
   );
 }

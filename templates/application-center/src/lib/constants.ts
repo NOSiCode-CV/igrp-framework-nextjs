@@ -8,4 +8,6 @@ export const STATUS_TYPES = ['ACTIVE', 'INACTIVE', 'DELETED'] as const;
 export const ROUTES = {
   APPS: '/apps',
   NEW_APPS: '/apps/novo',
+  USERS: '/users',
+  USER_PROFILE: '/users/profile',
 } as const;

@@ -1,6 +1,4 @@
-import Link from 'next/link';
-import { IGRPButtonPrimitive, IGRPIcon } from '@igrp/igrp-framework-react-design-system';
-
+import { ButtonLink } from '@/components/button-link';
 import { PageHeader } from '@/components/page-header';
 import { ApplicationsListHome } from '@/features/applications/components/list-home';
 import { ROUTES } from '@/lib/constants';
@@ -14,18 +12,18 @@ export default function Home() {
         title={`Bem-vindo ao ${appName}`}
         showActions
       >
-        <IGRPButtonPrimitive asChild variant='outline'>
-          <Link href={ROUTES.APPS}>
-            <IGRPIcon iconName='AppWindow'strokeWidth={2} />
-            Gerir Aplicações
-          </Link>
-        </IGRPButtonPrimitive>
-        <IGRPButtonPrimitive asChild>
-          <Link href={ROUTES.NEW_APPS}>
-            <IGRPIcon iconName='LayoutGrid' strokeWidth={2} />
-            Nova Applicação
-          </Link>
-        </IGRPButtonPrimitive>
+        <ButtonLink
+          href={ROUTES.APPS}
+          label='Gerir Aplicação'
+          iconName='AppWindow'
+          variant='outline'
+        />
+
+        <ButtonLink
+          href={ROUTES.NEW_APPS}
+          label='Nova Aplicação'
+          iconName='LayoutGrid'
+        />
       </PageHeader>
 
       <ApplicationsListHome />

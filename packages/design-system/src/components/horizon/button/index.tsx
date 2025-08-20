@@ -47,7 +47,7 @@ function IGRPButton({
       <Button {...props} className={className} disabled={disabled || loading} type={type}>
         {loading ? (
           <>
-            <Loader2 className="h-4 w-4 animate-spin" aria-hidden="true" />
+            <Loader2 className="size-4 animate-spin" aria-hidden="true" />
             <span className="sr-only">{loadingText}</span>
           </>
         ) : (
@@ -72,13 +72,13 @@ function IGRPButton({
       type={type}
     >
       {loading && iconPlacement === 'start' ? (
-        <Loader2 className="mr-2 h-4 w-4 animate-spin" aria-hidden="true" />
+        <Loader2 className="mr-1 size-4 animate-spin" aria-hidden="true" />
       ) : (
         showIcon &&
         iconPlacement === 'start' && (
           <IGRPIcon
             iconName={iconName}
-            className={cn('mr-2', iconClassName)}
+            className={cn('mr-1', iconClassName)}
             size={computedIconSize}
             aria-hidden="true"
           />
@@ -90,14 +90,14 @@ function IGRPButton({
       {!loading && showIcon && iconPlacement === 'end' && (
         <IGRPIcon
           iconName={iconName}
-          className={cn('ml-2', iconClassName)}
+          className={cn('ml-1', iconClassName)}
           size={computedIconSize}
           aria-hidden="true"
         />
       )}
 
       {loading && iconPlacement === 'end' && (
-        <Loader2 className="ml-2 h-4 w-4 animate-spin" aria-hidden="true" />
+        <Loader2 className="ml-1 size-4 animate-spin" aria-hidden="true" />
       )}
     </Button>
   );

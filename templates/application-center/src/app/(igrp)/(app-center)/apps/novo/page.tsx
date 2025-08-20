@@ -1,14 +1,17 @@
-import { AppsCenterWrapper } from '@/components/wrapper';
+import { PageHeader } from '@/components/page-header';
 import { ApplicationForm } from '@/features/applications/components/form';
 import { ROUTES } from '@/lib/constants';
 
 export default function NewApplicationPage() {
   return (
-    <AppsCenterWrapper
-      title='Criar Aplicação'
-      backHref={ROUTES.APPS}
-    >
+    <div className='space-y-10 animate-fade-in'>
+      <PageHeader
+        title='Criar Aplicação'
+        showBackButton
+        linkBackButton={ROUTES.APPS}
+      />
+
       <ApplicationForm />
-    </AppsCenterWrapper>
+    </div>
   );
 }

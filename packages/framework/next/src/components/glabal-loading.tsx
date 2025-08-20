@@ -1,4 +1,4 @@
-import { fetchAppByCode } from '../services/applications/use-applications';
+import { fetchAppByCode } from '../hooks/use-applications';
 
 export async function IGRPGlobalLoading({ appCode }: { appCode: string }) {
   if (!appCode || appCode === 'IGRP') {

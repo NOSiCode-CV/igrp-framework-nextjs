@@ -1,7 +1,7 @@
 import type { IGRPHeaderDataArgs, IGRPSidebarDataArgs } from '@igrp/framework-next-types';
-import { fetchAppsByUser } from '../applications/use-applications';
-import { fetchMenus } from '../menus/use-menus';
-import { fetchCurrentUser } from '../users/use-user';
+import { fetchAppsByUser } from './use-applications';
+import { fetchMenus } from './use-menus';
+import { fetchCurrentUser } from './use-user';
 
 export async function fetchLayoutData(
   getHeaderData: () => Promise<IGRPHeaderDataArgs>,
@@ -13,7 +13,7 @@ export async function fetchLayoutData(
   let sidebarData = await getSidebarData();
 
   if (!previewMode) {
-    if (!appCode) throw new Error('Applications Code not found');
+    if (!appCode) throw new Error('[igrp-layout]: Código da aplicação não encontrado.');
 
     const menuItems = await fetchMenus(appCode);
     const user = await fetchCurrentUser();

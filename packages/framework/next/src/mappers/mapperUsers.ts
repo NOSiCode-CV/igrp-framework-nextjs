@@ -11,6 +11,6 @@ const mapUser = (user: IGRPUserDTO): IGRPUserArgs => ({
 });
 
 export const mapperUser = (user: ApiResponse<IGRPUserDTO>): IGRPUserArgs => {
-  if (!user.data) throw new Error('[igrp-framewor-next]: Utilizador não encontrado');
+  if (!user.data) throw new Error('[igrp-users]: O utilizador não foi encontrado.');
   return mapUser(user.data);
 };

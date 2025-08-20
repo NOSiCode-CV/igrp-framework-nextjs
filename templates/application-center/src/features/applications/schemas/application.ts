@@ -1,6 +1,7 @@
 import { z } from 'zod';
 import { APPLICATIONS_TYPES } from '../lib/utils';
 import { STATUS_TYPES } from '@/lib/constants';
+import { fileWithPreviewSchema } from '@/schemas/file';
 
 export const applicationSchema = z
   .object({
@@ -16,10 +17,8 @@ export const applicationSchema = z
     description: z.string().optional(),
     status: z.enum(STATUS_TYPES),
     departmentCode: z.string().min(3, 'Departamento é obrigatório'),
-    picture: z
-      .instanceof(File, { message: 'Selecione uma imagem' })
-      .refine((file) => file.type.startsWith('image/'), 'Apenas imagens são permitidas')
-      .refine((file) => file.size <= 1 * 1024 * 1024, 'Máximo 1MB'),
+    picture: z.string().optional(),
+    image: fileWithPreviewSchema.nullable(),
   })
   .superRefine((data, ctx) => {
     if (data.type === 'INTERNAL' && !data.slug) {
@@ -51,4 +50,4 @@ export const applicationSchema = z
     }
   });
 
-export type IGRPApplicationDTO = z.infer<typeof applicationSchema>;
+export type ApplicationType = z.infer<typeof applicationSchema>;

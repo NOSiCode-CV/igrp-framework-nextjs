@@ -12,7 +12,7 @@ export function setIGRPAccessClientConfig(config: IGRPClientRuntimeConfig) {
 
 export function getIGRPAccessClientConfig(): IGRPClientRuntimeConfig {
   if (!runtimeConfig)
-    throw new Error('[igrp-framework-next] a configuração do cliente de acesso nao foi definida.');
+    throw new Error('[access-client]: Configuração do cliente de acesso não definida.');
   return runtimeConfig;
 }
 

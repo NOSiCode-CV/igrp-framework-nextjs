@@ -387,7 +387,7 @@ importers:
         version: link:../next-ui
       '@igrp/platform-access-management-client-ts':
         specifier: latest
-        version: 0.1.0-beta.7(@types/node@24.2.0)(jiti@2.5.1)(lightningcss@1.30.1)
+        version: 0.1.0-beta.8(@types/node@24.2.0)(jiti@2.5.1)(lightningcss@1.30.1)
       clsx:
         specifier: ^2.1.1
         version: 2.1.1
@@ -641,7 +641,7 @@ importers:
         version: link:../../packages/design-system
       '@igrp/platform-access-management-client-ts':
         specifier: latest
-        version: 0.1.0-beta.7(@types/node@24.2.0)(jiti@2.5.1)(lightningcss@1.30.1)
+        version: 0.1.0-beta.8(@types/node@24.2.0)(jiti@2.5.1)(lightningcss@1.30.1)
       '@tanstack/react-query':
         specifier: ^5.84.2
         version: 5.85.0(react@19.1.1)
@@ -654,6 +654,9 @@ importers:
       js-cookie:
         specifier: ^3.0.5
         version: 3.0.5
+      nanoid:
+        specifier: ^5.1.5
+        version: 5.1.5
       next:
         specifier: 15.4.6
         version: 15.4.6(react-dom@19.1.1(react@19.1.1))(react@19.1.1)
@@ -1766,8 +1769,8 @@ packages:
     resolution: {integrity: sha512-bV0Tgo9K4hfPCek+aMAn81RppFKv2ySDQeMoSZuvTASywNTnVJCArCZE2FWqpvIatKu7VMRLWlR1EazvVhDyhQ==}
     engines: {node: '>=18.18'}
 
-  '@igrp/platform-access-management-client-ts@0.1.0-beta.7':
-    resolution: {integrity: sha512-Dz5H8jrcQ1YYL24vT9DoripUKfChQrpB85cFqFeNMM6qQPOavT5mY+Zx0E/6kT8DlDZ9Go3okqcIWDVnZ+5qag==}
+  '@igrp/platform-access-management-client-ts@0.1.0-beta.8':
+    resolution: {integrity: sha512-ryQaMDi4esZI2qd+kWYzla66biLVVFVgAXgTPurCGNmL8ySsgkhfPf6oQfc+4EGjqduX9gVTQq1ZlV8GL9S8+g==}
 
   '@img/sharp-darwin-arm64@0.34.3':
     resolution: {integrity: sha512-ryFMfvxxpQRsgZJqBd4wsttYQbCxsJksrv9Lw/v798JcQ8+w84mBWuXwl+TT0WJ/WrYOLaYpwQXi3sA9nTIaIg==}
@@ -5408,6 +5411,11 @@ packages:
     engines: {node: ^10 || ^12 || ^13.7 || ^14 || >=15.0.1}
     hasBin: true
 
+  nanoid@5.1.5:
+    resolution: {integrity: sha512-Ir/+ZpE9fDsNH0hQ3C68uyThDXzYcim2EqcZ8zn8Chtt1iylPT9xXJB0kPCnqzgcEGikO9RxSrh63MsmVCU7Fw==}
+    engines: {node: ^18 || >=20}
+    hasBin: true
+
   napi-postinstall@0.3.3:
     resolution: {integrity: sha512-uTp172LLXSxuSYHv/kou+f6KW3SMppU9ivthaVTXian9sOt3XM/zHYHpRZiLgQoxeWfYUnslNWQHF1+G71xcow==}
     engines: {node: ^12.20.0 || ^14.18.0 || >=16.0.0}
@@ -7942,7 +7950,7 @@ snapshots:
 
   '@humanwhocodes/retry@0.4.3': {}
 
-  '@igrp/platform-access-management-client-ts@0.1.0-beta.7(@types/node@24.2.0)(jiti@2.5.1)(lightningcss@1.30.1)':
+  '@igrp/platform-access-management-client-ts@0.1.0-beta.8(@types/node@24.2.0)(jiti@2.5.1)(lightningcss@1.30.1)':
     dependencies:
       vite: 6.3.5(@types/node@24.2.0)(jiti@2.5.1)(lightningcss@1.30.1)
     transitivePeerDependencies:
@@ -11754,6 +11762,8 @@ snapshots:
       rimraf: 2.4.5
 
   nanoid@3.3.11: {}
+
+  nanoid@5.1.5: {}
 
   napi-postinstall@0.3.3: {}
 

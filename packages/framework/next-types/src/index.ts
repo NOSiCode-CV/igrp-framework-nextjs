@@ -1,14 +1,27 @@
+export type {
+  IGRPMenuType,
+  IGRPStatus,
+  IGRPTargetType,
+  IGRPConfigurationType,
+  IGRPApplicationArgs,
+  IGRPMenuItemArgs,
+  IGRPRoleArgs,
+  IGRPRoleUserArgs,
+  IGRPDepartmentArgs,
+  IGRPGlobalConfigurationArgs,
+  IGRPFileUrlArgs,
+  IGRPPermissionArgs,
+  IGRPResourceType,
+  IGRPResourceItem,
+  IGRPResourceArgs,
+  IGRPUserArgs,
+} from './types/access-management';
+
 export type { IGRPMockDataAsync, IGRPMockData, IGRPToasterPosition } from './types/globals';
 
 export type { IGRPHeaderDataArgs, IGRPNotificationArgs } from './types/header';
 
 export type {
-  IGRPApplicationArgs,
-  IGRPUserArgs,
-  IGRPMenuType,
-  IGRPItemStatus,
-  IGRPItemTarget,
-  IGRPMenuItemArgs,
   ExtendedSession,
   ExtendedJWT,
   IGRPConfigArgs,

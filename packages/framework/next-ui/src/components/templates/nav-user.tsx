@@ -38,8 +38,7 @@ function IGRPTemplateNavUser({ user }: IGRPTemplateNavUserProps) {
               tooltip={user.username}
               size="lg"
             >
-              <IGRPUserAvatar
-                image={user.image}
+              <IGRPUserAvatar                
                 alt={user.username}
                 fallbackContent={user && igrpGetnitials(user.username)}
                 fallbackClass="text-xs"
@@ -60,7 +59,7 @@ function IGRPTemplateNavUser({ user }: IGRPTemplateNavUserProps) {
           >
             <IGRPDropdownMenuLabelPrimitive className="font-normal">
               <div className="flex flex-col space-y-1">
-                <p className="text-sm font-medium leading-none">{user.fullname}</p>
+                <p className="text-sm font-medium leading-none">{user.name}</p>
                 <p className="text-xs leading-none text-muted-foreground">{user.email}</p>
               </div>
             </IGRPDropdownMenuLabelPrimitive>

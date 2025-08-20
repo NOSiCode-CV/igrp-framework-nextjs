@@ -1,4 +1,4 @@
-import type { IGRPUserArgs } from './igrp';
+import type { IGRPUserArgs } from './access-management';
 
 export interface IGRPHeaderDataArgs {
   user?: IGRPUserArgs;

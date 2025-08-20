@@ -1,55 +1,122 @@
 export type IGRPMenuType = 'FOLDER' | 'MENU_PAGE' | 'EXTERNAL_PAGE' | 'GROUP' | 'SYSTEM_PAGE';
 
-export type IGRPItemStatus = 'ACTIVE' | 'INACTIVE' | 'DELETED';
+export type IGRPStatus = 'ACTIVE' | 'INACTIVE' | 'DELETED';
 
-export type IGRPItemTarget = 'INTERNAL' | 'EXTERNAL' | 'SYSTEM';
+export type IGRPTargetType = 'INTERNAL' | 'EXTERNAL' | 'SYSTEM';
+
+export type IGRPConfigurationType = 'CLUSTER' | 'ORGANIZATION';
 
 export interface IGRPApplicationArgs {
   id: number;
   code: string;
   name: string;
   description?: string;
-  status: IGRPItemStatus;
-  type: IGRPItemTarget;
-  owner: string;
+  status: IGRPStatus;
+  type: IGRPTargetType;
+  owner?: string;
   picture?: string;
-  url?: string | null;
+  url?: string;
   slug?: string;
+  departmentCode: string;
   createdBy?: string;
   createdDate?: string;
   lastModifiedBy?: string;
   lastModifiedDate?: string;
+}
+
+export interface IGRPMenuItemArgs {
+  id: number;
+  code: string;
+  name: string;
+  type: IGRPMenuType;
+  position?: number;
+  icon?: string;
+  status: IGRPStatus;
+  target?: string;
+  url?: string;
+  pageSlug?: string;
+  parentCode?: string;
+  applicationCode?: string;
+  createdBy?: string;
+  createdDate?: string;
+  lastModifiedBy?: string;
+  lastModifiedDate?: string;
+  permissions: string[];
+}
+
+export interface IGRPRoleArgs {
+  id: number;
+  name: string;
+  description?: string;
   departmentCode: string;
+  parentName?: string;
+  status: IGRPStatus;
+}
+
+export interface IGRPRoleUserArgs {
+  userName: string;
+  roleName: string;
+}
+
+export interface IGRPDepartmentArgs {
+  id: number;
+  code: string;
+  name: string;
+  description?: string;
+  status?: IGRPStatus;
+  parent_code?: string;
+}
+
+export interface IGRPGlobalConfigurationArgs {
+  config: string;
+  type: IGRPConfigurationType;
+}
+
+export interface IGRPFileUrlArgs {
+  url: string;
+  expiration: Date;
+}
+
+export interface IGRPPermissionArgs {
+  id: number;
+  name: string;
+  description?: string;
+  status: IGRPStatus;
+  applicationCode: string;
+}
+
+export type IGRPResourceType = 'API' | 'UI';
+
+export interface IGRPResourceItem {
+  id: number;
+  name: string;
+  url?: string;
+  permissionName?: string;
+  resourceName: string;
+  createdBy?: string;
+  createdDate?: string;
+  lastModifiedBy?: string;
+  lastModifiedDate?: string;
+}
+
+export interface IGRPResourceArgs {
+  id: number;
+  name: string;
+  description?: string;
+  type: IGRPResourceType;
+  status: IGRPStatus;
+  applicationCode: string;
+  items?: IGRPResourceItem[];
+  externalId?: string;
+  createdBy?: string;
+  createdDate?: string;
+  lastModifiedBy?: string;
+  lastModifiedDate?: string;
 }
 
 export interface IGRPUserArgs {
   id: number;
-  igrpUsername: string;
+  name: string;
   username: string;
-  fullname?: string | null;
-  name: string;
   email: string;
-  roles?: string[];
-  departments?: string[];
-  apps?: string[];
-  status: IGRPItemStatus;
-  signature?: string | null;
-  image?: string | null;
-  picture?: string | null;
 }
-
-export type IGRPMenuItemArgs = {
-  id: number;
-    code: string;
-
-  name: string;
-  type: IGRPMenuType;
-  position: number;
-  icon: string | null;
-  status: IGRPItemStatus;
-  target: string;
-  url: string | null;
-  pageSlug: string | null;
-  applicationCode?: string;
-  permissions: string[];
-};

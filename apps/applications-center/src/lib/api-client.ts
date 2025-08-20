@@ -11,6 +11,8 @@ export async function callApi<T>(endpoint: string, options: ExtendedRequestInit 
   const API_URL = process.env.IGRP_APP_MANAGER_API ?? '';
   const session = await serverSession();
 
+  console.log({ sessionAPI: session})
+
   if (!session?.accessToken) {
     redirect('/login');
   }

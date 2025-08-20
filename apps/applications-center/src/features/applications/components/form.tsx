@@ -25,22 +25,28 @@ import {
   useIGRPToast,
   IGRPButton,
 } from '@igrp/igrp-framework-react-design-system';
+import { IGRPApplicationArgs } from '@igrp/framework-next-types';
 
+import { FileUploadField } from '@/components/file-upload-field';
+import { AppCenterLoading } from '@/components/loading';
+import { ROUTES } from '@/lib/constants';
+import { urlToFileWithPreview } from '@/lib/file-adapters';
 import {
   useAddApplication,
   useUpdateApplication,
 } from '@/features/applications/hooks/use-applications';
-import { useAllUsers } from '@/features/users/hooks/use-users';
 import { ApplicationType, applicationSchema } from '@/features/applications/schemas/application';
-import { Application } from '@/features/applications/types';
+import { useAllUsers } from '@/features/users/hooks/use-users';
 import { APPLICATIONS_TYPES_FILTERED } from '../lib/utils';
-import { ROUTES } from '@/lib/constants';
-import { FileUploadField } from '@/components/file-upload-field';
-import { urlToFileWithPreview } from '@/lib/file-adapters';
-import { AppCenterLoading } from '@/components/loading';
 
-export function ApplicationForm({ application }: { application?: Application }) {
+import { useSession } from "next-auth/react"
+
+
+export function ApplicationForm({ application }: { application?: IGRPApplicationArgs }) {
   const router = useRouter();
+  const { data: session, status } = useSession()
+
+  console.log({ sessionClient: session })
 
   const { igrpToast } = useIGRPToast();
   const { data: users, isLoading: userLoading, error: userError } = useAllUsers();
@@ -459,7 +465,7 @@ export function ApplicationForm({ application }: { application?: Application }) 
               showIcon
               iconPlacement='end'
               loading={isLoading}
-              iconName='Grid2x2Check'
+              iconName='Save'
               className='gap-1'      
             >
               {submitLblBtn}

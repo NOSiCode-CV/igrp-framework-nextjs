@@ -7,17 +7,17 @@ import {
   getApplications,
   updateApplication,
 } from '@/actions/applications';
-import { Application } from '@/features/applications/types';
+import { IGRPApplicationArgs } from '@igrp/framework-next-types';
 
 export const useApplications = () => {
-  return useQuery<Application[]>({
+  return useQuery<IGRPApplicationArgs[]>({
     queryKey: ['applications'],
     queryFn: () => getApplications(),
   });
 };
 
 export const useApplicationById = (id: number) => {
-  return useQuery<Application>({
+  return useQuery<IGRPApplicationArgs>({
     queryKey: ['applications', id],
     queryFn: () => getApplicationById(id),
   });
@@ -38,7 +38,7 @@ export const useUpdateApplication = () => {
   const queryClient = useQueryClient();
 
   return useMutation({
-    mutationFn: async ({ id, data }: { id: number; data: Partial<Application> }) =>
+    mutationFn: async ({ id, data }: { id: number; data: Partial<IGRPApplicationArgs> }) =>
       updateApplication(id, data),
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['applications'] });

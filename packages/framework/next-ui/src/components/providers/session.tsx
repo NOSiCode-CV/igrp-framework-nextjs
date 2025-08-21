@@ -1,6 +1,6 @@
 'use client';
 
-import { SessionProvider, type SessionProviderProps } from 'next-auth/react';
+import { SessionProvider, type SessionProviderProps } from '@igrp/framework-next-auth/client';
 
 function IGRPSessionProvider(props: SessionProviderProps) {
   return (

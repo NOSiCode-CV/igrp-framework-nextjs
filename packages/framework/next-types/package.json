@@ -23,9 +23,12 @@
     "format": "prettier --write .",
     "release": "pnpm build && yarn publish --registry=https://sonatype.nosi.cv/repository/igrp/ --tag latest"
   },
+  "peerDependencies": {
+    "next-auth": "^4.24.11"
+  },
   "devDependencies": {
     "@types/node": "^24.2.0",
-    "next-auth": "^4.24.0",
+    "next-auth": "^4.24.11",
     "prettier": "^3.6.2",
     "rimraf": "^6.0.1",
     "typescript": "^5.9.2"

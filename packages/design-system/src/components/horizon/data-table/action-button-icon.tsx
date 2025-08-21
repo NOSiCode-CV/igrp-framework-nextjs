@@ -105,6 +105,8 @@ function IGRPDataTableButtonLink({
   href,
   className,
 }: IGRPDataTableLinkProps) {
+  if (!href && !action) return null;
+  
   return href ? (
     <Button variant={variant} size="icon" className={cn('cursor-pointer', className)} asChild>
       <Link href={href} className="flex items-center">

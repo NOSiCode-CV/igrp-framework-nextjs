@@ -28,14 +28,14 @@
     "release": "pnpm format && pnpm build && yarn publish --registry=https://sonatype.nosi.cv/repository/igrp/ --tag latest"
   },
   "peerDependencies": {
-    
-  },
-  "dependencies": {
     "next": "15.4.6",
     "next-auth": "^4.24.11",
     "react": "19.1.1",
-    "react-dom": "19.1.1",
+    "react-dom": "19.1.1"
+  },
+  "dependencies": {    
     "@bprogress/next": "^3.2.12",
+    "@igrp/framework-next-auth": "workspace:*",
     "@igrp/framework-next-types": "workspace:*",
     "@igrp/igrp-framework-react-design-system": "workspace:*",
     "class-variance-authority": "^0.7.1",
@@ -46,6 +46,10 @@
     "zod": "^3.25.67"
   },
   "devDependencies": {
+    "next": "15.4.6",
+    "next-auth": "^4.24.11",
+    "react": "19.1.1",
+    "react-dom": "19.1.1",
     "@babel/cli": "7.28.0",
     "@babel/core": "7.28.0",
     "@babel/preset-env": "7.28.0",

@@ -26,6 +26,9 @@
   "peerDependencies": {
     "next-auth": "^4.24.11"
   },
+  "dependencies": {
+    "@igrp/framework-next-auth": "workspace:*"
+  },
   "devDependencies": {
     "@types/node": "^24.2.0",
     "next-auth": "^4.24.11",

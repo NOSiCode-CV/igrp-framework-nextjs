@@ -20,6 +20,7 @@
     "@dnd-kit/utilities": "^3.2.2",
     "@hookform/resolvers": "^5.1.1",
     "@igrp/framework-next": "workspace:*",
+    "@igrp/framework-next-auth": "workspace:*",
     "@igrp/framework-next-types": "workspace:*",
     "@igrp/framework-next-ui": "workspace:*",
     "@igrp/igrp-framework-react-design-system": "workspace:*",

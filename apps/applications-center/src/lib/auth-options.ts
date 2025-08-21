@@ -1,5 +1,5 @@
-import type { NextAuthOptions, Session, TokenSet } from 'next-auth';
-import type { JWT } from 'next-auth/jwt';
+import type { NextAuthOptions, Session, TokenSet } from '@igrp/framework-next-auth';
+import type { JWT } from '@igrp/framework-next-auth/jwt';
 import KeycloakProvider from 'next-auth/providers/keycloak';
 
 export const authOptions: NextAuthOptions = {

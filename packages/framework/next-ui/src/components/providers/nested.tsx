@@ -1,14 +1,15 @@
 'use client';
 
+import { type Session } from '@igrp/framework-next-auth';
+
+import {  } from '../templates/header';
 import { IGRPActiveThemeProvider } from './active-theme';
 import { IGRPProgressBarProvider } from './progress-bar';
 import { IGRPSessionProvider } from './session';
 import { IGRPThemeProvider } from './theme';
-import {  } from '../templates/header';
-import { type ExtendedSession } from '../../types/globals';
 
 export type IGRPNestedProvidersArgs = {
-  session?: ExtendedSession | null;
+  session?: Session | null;
   activeThemeValue?: string;
   children: React.ReactNode;
   showProgressBar?: boolean;

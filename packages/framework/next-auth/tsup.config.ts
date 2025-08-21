@@ -7,7 +7,7 @@ export default defineConfig({
     server: 'src/server.ts',
     session: 'src/session.ts',
     jwt: 'src/jwt.ts',
-    middleware: 'src/middleware.ts',
+    middleware: 'src/middleware.ts'
   },
   format: ['esm'],
   dts: false, 

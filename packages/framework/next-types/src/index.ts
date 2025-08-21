@@ -21,12 +21,6 @@ export type { IGRPMockDataAsync, IGRPMockData, IGRPToasterPosition } from './typ
 
 export type { IGRPHeaderDataArgs, IGRPNotificationArgs } from './types/header';
 
-export type {
-  ExtendedSession,
-  ExtendedJWT,
-  IGRPConfigArgs,
-  IGRPConfigClient,
-  IGRPLayoutConfigArgs,
-} from './types/igrp';
+export type { IGRPConfigArgs, IGRPConfigClient, IGRPLayoutConfigArgs } from './types/igrp';
 
 export type { IGRPSidebarDataArgs } from './types/sidebar';

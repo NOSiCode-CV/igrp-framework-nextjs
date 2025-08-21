@@ -1,7 +1,7 @@
 'use client';
 
 import { useEffect } from 'react';
-import { signOut } from 'next-auth/react';
+import { signOut } from '@igrp/framework-next-auth/client';
 import Cookies from 'js-cookie';
 
 export default function LogoutPage() {

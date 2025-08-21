@@ -41,6 +41,9 @@ importers:
       '@igrp/framework-next':
         specifier: workspace:*
         version: link:../../packages/framework/next
+      '@igrp/framework-next-auth':
+        specifier: workspace:*
+        version: link:../../packages/framework/next-auth
       '@igrp/framework-next-types':
         specifier: workspace:*
         version: link:../../packages/framework/next-types
@@ -627,6 +630,10 @@ importers:
         version: 5.9.2
 
   packages/framework/next-types:
+    dependencies:
+      '@igrp/framework-next-auth':
+        specifier: workspace:*
+        version: link:../next-auth
     devDependencies:
       '@types/node':
         specifier: ^24.2.0

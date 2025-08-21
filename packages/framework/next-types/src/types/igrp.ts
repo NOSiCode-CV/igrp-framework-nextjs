@@ -1,29 +1,8 @@
-import type { Session as DefaultSession, User as NextAuthUser } from 'next-auth';
-import type { JWT as DefaultJWT } from 'next-auth/jwt';
+import { Session } from '@igrp/framework-next-auth';
+
 import { IGRPHeaderDataArgs } from './header';
 import { IGRPSidebarDataArgs } from './sidebar';
 import { IGRPToasterPosition } from './globals';
-
-export interface ExtendedSession extends DefaultSession {
-  accessToken?: string;
-  idToken?: string;
-  expiresAt?: number;
-  error?: string;
-  user?: {
-    id?: string;
-  } & DefaultSession['user'];
-}
-
-export interface ExtendedJWT extends DefaultJWT {
-  accessToken?: string;
-  refreshToken?: string;
-  idToken?: string;
-  expiresAt?: number;
-  error?: 'RefreshAccessTokenError' | string;
-  user?: {
-    id?: string;
-  } & NextAuthUser;
-}
 
 export type IGRPConfigArgs = {
   appCode: string;
@@ -58,7 +37,7 @@ export type IGRPConfigArgs = {
 export type IGRPConfigClient = () => Promise<IGRPConfigArgs>;
 
 export type IGRPLayoutConfigArgs = {
-  session: ExtendedSession | null;
+  session: Session | null;
   activeThemeValue?: string;
   isScaled?: boolean;
 };

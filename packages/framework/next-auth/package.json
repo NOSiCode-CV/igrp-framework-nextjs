@@ -28,7 +28,7 @@
     "./middleware": {
       "types": "./dist/middleware.d.ts",
       "import": "./dist/middleware.js"
-    },
+    },    
     "./package.json": "./package.json"
   },
   "files": ["dist", "README.md", "LICENSE"],

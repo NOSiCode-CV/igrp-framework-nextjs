@@ -3,7 +3,7 @@
 import { useEffect, useState } from 'react';
 import Image from 'next/image';
 import { useTheme } from 'next-themes';
-import { signIn } from 'next-auth/react';
+import { signIn } from '@igrp/framework-next-auth/client';
 import {
   IGRPAlertPrimitive,
   IGRPAlertDescriptionPrimitive,

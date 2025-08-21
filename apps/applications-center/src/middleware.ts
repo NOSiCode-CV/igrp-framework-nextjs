@@ -1,4 +1,4 @@
-import { getToken } from 'next-auth/jwt';
+import { getToken } from '@igrp/framework-next-auth/jwt';
 import { NextResponse, type NextRequest } from 'next/server';
 
 // Public paths that don’t require authentication

@@ -1,8 +1,8 @@
 'use server';
 
-import { getServerSession as getNextAuthServerSession } from 'next-auth/next';
+import { getServerSession as getNextAuthServerSession } from '@igrp/framework-next-auth';
 import { authOptions } from '@/lib/auth-options';
-import { Session } from 'next-auth';
+import { Session } from '@igrp/framework-next-auth';
 
 export async function serverSession() {
   try {

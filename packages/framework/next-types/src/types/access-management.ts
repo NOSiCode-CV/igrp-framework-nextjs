@@ -2,7 +2,9 @@ export type IGRPMenuType = 'FOLDER' | 'MENU_PAGE' | 'EXTERNAL_PAGE' | 'GROUP' | 
 
 export type IGRPStatus = 'ACTIVE' | 'INACTIVE' | 'DELETED';
 
-export type IGRPTargetType = 'INTERNAL' | 'EXTERNAL' | 'SYSTEM';
+export type IGRPTargetType = 'INTERNAL' | 'EXTERNAL';
+
+export type IGRPTargetFilteredType = 'INTERNAL' | 'EXTERNAL';
 
 export type IGRPConfigurationType = 'CLUSTER' | 'ORGANIZATION';
 
@@ -64,7 +66,7 @@ export interface IGRPDepartmentArgs {
   name: string;
   description?: string;
   status?: IGRPStatus;
-  parent_code?: string;
+  parentCode?: string;
 }
 
 export interface IGRPGlobalConfigurationArgs {

@@ -43,14 +43,14 @@
   },
   "peerDependencies": {
     "next-auth": "^4.24.11",
-    "react": "^19",
-    "next": "^15"
+    "react": "19.1.1",    
+    "next": "15.4.6"
   },
   "peerDependenciesMeta": {
     "next-auth": { "optional": false }
   },
-  "devDependencies": {
-    "@types/node": "^24",
+  "devDependencies": {    
+    "@types/node": "24.3.0",
     "next-auth": "^4.24.11",
     "prettier": "^3.6.2",
     "rimraf": "^6.0.1",

@@ -8,17 +8,16 @@ import {
   IGRPCardTitlePrimitive,
   IGRPCardDescriptionPrimitive,
 } from '@igrp/igrp-framework-react-design-system';
+import { IGRPApplicationArgs } from '@igrp/framework-next-types';
 
 import { cn, statusClass } from '@/lib/utils';
-
 import { ButtonTooltip } from '@/features/applications/components/button-tooltip';
-import { Application } from '@/features/applications/types';
 import { formatSlug } from '@/features/applications/lib/utils';
+import { ROUTES } from '@/lib/constants';
 
-// TODO: review the external badge colors, review icons
-// TODO: Messages
+// TODO: see picture if exists
 
-export function ApplicationCard({ app }: { app: Application }) {
+export function ApplicationCard({ app }: { app: IGRPApplicationArgs }) {
   const { name, code, status, description, slug, url } = app;
   const href = slug ? formatSlug(slug) : url;
 
@@ -57,12 +56,12 @@ export function ApplicationCard({ app }: { app: Application }) {
         </div>
         <div className='flex items-center gap-1'>
           <ButtonTooltip
-            href={`/applications/${code}`}
+            href={`${ROUTES.APPS}/${code}`}
             icon='Eye'
             label='Ver'
           />
           <ButtonTooltip
-            href={`/applications/${code}/edit`}
+            href={`${ROUTES.APPS}/${code}/edit`}
             icon='SquarePen'
             label='Editar'
           />

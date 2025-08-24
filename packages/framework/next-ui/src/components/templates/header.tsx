@@ -25,6 +25,7 @@ function IGRPTemplateHeader({ data, className }: IGRPTemplateHeaderProps) {
     igrpToast({
       type: "info",
       description: '[header-template] Cabeçalho do IGRP não tem dados, define os dados no src/igrp.template.config.',
+      duration: 6000,
       
     })
     return null;

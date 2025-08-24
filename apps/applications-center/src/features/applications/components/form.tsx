@@ -32,25 +32,22 @@ import { AppCenterLoading } from '@/components/loading';
 import { ROUTES } from '@/lib/constants';
 import { urlToFileWithPreview } from '@/lib/file-adapters';
 import {
-  useAddApplication,
+  useCreateApplication,
   useUpdateApplication,
 } from '@/features/applications/hooks/use-applications';
 import { ApplicationType, applicationSchema } from '@/features/applications/schemas/application';
 import { useAllUsers } from '@/features/users/hooks/use-users';
+import { useDepartments } from '@/features/departments/hooks/use-departments';
 import { APPLICATIONS_TYPES_FILTERED } from '../lib/utils';
-
-import { useSession } from "next-auth/react"
-
 
 export function ApplicationForm({ application }: { application?: IGRPApplicationArgs }) {
   const router = useRouter();
-  const { data: session, status } = useSession()
-
-  console.log({ sessionClient: session })
-
   const { igrpToast } = useIGRPToast();
+
   const { data: users, isLoading: userLoading, error: userError } = useAllUsers();
-  const { mutateAsync: addApplication, } = useAddApplication();
+  const { data: departments, isLoading: departmentLoading, error: departmentError } = useDepartments();
+  
+  const { mutateAsync: addApplication, } = useCreateApplication();
   const { mutateAsync: updateApplication } = useUpdateApplication();
 
   const form = useForm<ApplicationType>({
@@ -93,11 +90,11 @@ export function ApplicationForm({ application }: { application?: IGRPApplication
     form.reset(defaultValues);
 
     (async () => {
-    if (application.picture) {
-      const fw = await urlToFileWithPreview(application.picture);
-      form.setValue('image', fw, { shouldDirty: false, shouldValidate: false });
-    }
-  })();
+      if (application.picture) {
+        const fw = await urlToFileWithPreview(application.picture);
+        form.setValue('image', fw, { shouldDirty: false, shouldValidate: false });
+      }
+    })();
   }, [application, form]);
 
 
@@ -128,9 +125,9 @@ export function ApplicationForm({ application }: { application?: IGRPApplication
 
     if (payload.type === 'INTERNAL') delete payload.url;
     if (payload.type === 'EXTERNAL') delete payload.slug;
+    delete payload.image;
 
     console.log({ payload });
-
     try {
       if (application) {
         await updateApplication({ id: application.id, data: payload });
@@ -158,10 +155,11 @@ export function ApplicationForm({ application }: { application?: IGRPApplication
     }
   };
 
-  const isLoading = userLoading || !users;
+  const isLoading = userLoading || !users || !departments || departmentLoading;
 
   if (isLoading) return <AppCenterLoading descrption='A preparar dados da aplicação...' />;
   if (userError) throw userError;
+  if (departmentError) throw departmentError;
 
   const userOptions = users.map((user) => {
     return {
@@ -170,9 +168,22 @@ export function ApplicationForm({ application }: { application?: IGRPApplication
     };
   });
 
+  const departmentOptions = departments.map((department) => {
+    return {
+      value: department.code,
+      label: department.name,
+    };
+  });
+
   const disabledFields = application ? true : false;
-  const disabledBtn = form.formState.isSubmitting || isLoading || userLoading || userError !== null;
-  const submitLblBtn = form.formState.isSubmitting ? 'A guardar...' : 'Guardar';  
+  const disabledBtn = form.formState.isSubmitting 
+    || isLoading 
+    || userLoading 
+    || userError !== null
+    || departmentLoading
+    || departmentError !== null
+
+  const submitLblBtn = form.formState.isSubmitting ? 'Em processamento...' : 'Guardar';
 
   return (
     <IGRPCardPrimitive className='py-6'>
@@ -291,18 +302,18 @@ export function ApplicationForm({ application }: { application?: IGRPApplication
                         </IGRPSelectTriggerPrimitive>
                       </IGRPFormControlPrimitive>
                       <IGRPSelectContentPrimitive>
-                        {userOptions.map((user) => (
+                        {departmentOptions.map((department) => (
                           <IGRPSelectItemPrimitive
-                            key={user.value}
-                            value={user.value}
+                            key={department.value}
+                            value={department.value}
                           >
-                            {user.label}
+                            {department.label}
                           </IGRPSelectItemPrimitive>
                         ))}
                       </IGRPSelectContentPrimitive>
                     </IGRPSelectPrimitive>
-                    {userError ? (
-                      <p className='text-destructive'>{userError}</p>
+                    {departmentError ? (
+                      <p className='text-destructive'>{departmentError}</p>
                     ) : (
                       <>
                         <IGRPFormDescriptionPrimitive>
@@ -402,16 +413,16 @@ export function ApplicationForm({ application }: { application?: IGRPApplication
                     </IGRPFormItemPrimitive>
                   )}
                 />
-              )}              
+              )}
 
               <IGRPFormFieldPrimitive
                 control={form.control}
                 name="image"
                 render={({ field }) => (
-                  <FileUploadField                               
-                    value={field.value ?? null}        
+                  <FileUploadField
+                    value={field.value ?? null}
                     onChange={field.onChange}
-                    maxSizeMB={1}                    
+                    maxSizeMB={1}
                     disabled={form.formState.isSubmitting}
                     btnLabel='Selecionar Logo'
                     placeholder='Arraste seu logo aqui'
@@ -423,13 +434,16 @@ export function ApplicationForm({ application }: { application?: IGRPApplication
                 control={form.control}
                 name='description'
                 render={({ field }) => (
-                  <IGRPFormItemPrimitive className='sm:col-span-2'>
-                    <IGRPFormLabelPrimitive>Descrição</IGRPFormLabelPrimitive>
+                  <IGRPFormItemPrimitive className='md:col-span-2'>
+                    <IGRPFormLabelPrimitive className='after:content-["*"] after:text-destructive'>
+                      Descrição
+                    </IGRPFormLabelPrimitive>
                     <IGRPFormControlPrimitive>
                       <IGRPTextAreaPrimitive
                         placeholder='Descreva a sua aplicação'
+                        required={true}
                         rows={2}
-                        value={field.value}
+                        value={field.value ?? ''}
                         onChange={field.onChange}
                         onBlur={field.onBlur}
                         name={field.name}
@@ -447,15 +461,15 @@ export function ApplicationForm({ application }: { application?: IGRPApplication
             </div>
           </IGRPCardContentPrimitive>
 
-          <IGRPCardFooterPrimitive className='flex justify-end gap-2 mt-4'>
+          <IGRPCardFooterPrimitive className='justify-end pt-6 gap-3 flex-col sm:flex-row'>
             <IGRPButton
               variant='outline'
-              onClick={() => router.push(ROUTES.APPS)}              
+              onClick={() => router.push(ROUTES.APPS)}
               type='button'
               showIcon
-              iconPlacement='start'              
-              iconName='Undo2'    
-              className='gap-1'       
+              iconPlacement='start'
+              iconName='Undo2'
+              className='gap-1 w-full sm:max-w-36'
             >
               Cancelar
             </IGRPButton>
@@ -466,7 +480,7 @@ export function ApplicationForm({ application }: { application?: IGRPApplication
               iconPlacement='end'
               loading={isLoading}
               iconName='Save'
-              className='gap-1'      
+              className='gap-1 w-full sm:max-w-36'
             >
               {submitLblBtn}
             </IGRPButton>

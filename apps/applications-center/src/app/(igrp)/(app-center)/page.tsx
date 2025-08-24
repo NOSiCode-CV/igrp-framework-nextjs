@@ -15,14 +15,14 @@ export default function Home() {
         <ButtonLink
           href={ROUTES.APPS}
           label='Gerir Aplicação'
-          iconName='AppWindow'
+          icon='AppWindow'
           variant='outline'
         />
 
         <ButtonLink
           href={ROUTES.NEW_APPS}
           label='Nova Aplicação'
-          iconName='LayoutGrid'
+          icon='LayoutGrid'
         />
       </PageHeader>
 

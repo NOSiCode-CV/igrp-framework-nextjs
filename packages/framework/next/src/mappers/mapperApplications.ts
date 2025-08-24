@@ -13,9 +13,18 @@ const mapApplication = (app: ApplicationDTO): IGRPApplicationArgs => ({
   url: app.url || undefined,
   slug: app.slug || undefined,
   departmentCode: app.departmentCode,
+  createdBy: app.createdBy || undefined,
+  createdDate: app.createdDate || undefined,
+  lastModifiedBy: app.lastModifiedBy || undefined,
+  lastModifiedDate: app.lastModifiedDate || undefined,
 });
 
 export const mapperApplications = (apps: ApiResponse<ApplicationDTO[]>): IGRPApplicationArgs[] => {
   if (!apps.data) return [];
   return apps.data.map(mapApplication);
+};
+
+export const mapperCreateApplication = (app: ApiResponse<ApplicationDTO>): IGRPApplicationArgs => {
+  if (!app.data) return {} as IGRPApplicationArgs;
+  return mapApplication(app.data);
 };

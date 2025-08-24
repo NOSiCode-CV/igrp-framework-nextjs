@@ -1,7 +1,8 @@
 'use server';
 
-import { serverSession } from '@/actions/auth';
+import { getIGRPAccessClient } from '@igrp/framework-next';
 import { redirect } from 'next/navigation';
+import { serverSession } from '@/actions/auth';
 
 interface ExtendedRequestInit extends RequestInit {
   isTextResponse?: boolean;
@@ -10,16 +11,16 @@ interface ExtendedRequestInit extends RequestInit {
 export async function callApi<T>(endpoint: string, options: ExtendedRequestInit = {}): Promise<T> {
   const API_URL = process.env.IGRP_APP_MANAGER_API ?? '';
   const session = await serverSession();
-
-  console.log({ sessionAPI: session})
-
+  
   if (!session?.accessToken) {
-    redirect('/login');
+    redirect('/logout');
   }
 
   if (!API_URL) {
-    throw new Error('[app-center] API_URL não esta definido.');
+    throw new Error('[apps-center]: A variável de ambiente IGRP_APP_MANAGER_API não está definida.');
   }
+
+  const client = await getIGRPAccessClient();  
 
   const url = `${API_URL}${endpoint}`;
 

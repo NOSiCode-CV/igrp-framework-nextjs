@@ -34,13 +34,10 @@ export async function getSession() {
   let session: Session | null;
   const isPreviewMode = process.env.IGRP_PREVIEW_MODE === 'true';
 
-  console.log({ isPreviewMode });
-
   if (isPreviewMode) return (session = null);
 
   try {
     session = await serverSession();
-    console.log({ session });
   } catch (error) {
     console.error('Failed to get session in layout:', error);
     session = null;

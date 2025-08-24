@@ -30,6 +30,8 @@ export function formatSlug(slug: string): string {
 
 export const APPLICATIONS_TYPES = ['EXTERNAL', 'INTERNAL', 'SYSTEM'] as const;
 
+export const APPLICATIONS_TYPES_EXCLUDE = ['EXTERNAL', 'INTERNAL',] as const;
+
 export const APPLICATIONS_TYPES_FILTERED = [
   { value: 'EXTERNAL', label: 'External' },
   { value: 'INTERNAL', label: 'Internal' },

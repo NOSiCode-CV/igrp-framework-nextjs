@@ -9,7 +9,7 @@ export default async function RootLayout({ children }: Readonly<{ children: Reac
   const layoutConfig = await configLayout();
   const config = await createConfig(layoutConfig);
 
-  const { layout, previewMode, loginUrl } = config;
+  const { layout, previewMode, loginUrl, logoutUrl, apiManagementConfig } = config;
   const { session } = layout ?? {};
 
   const headersList = await headers();
@@ -25,7 +25,7 @@ export default async function RootLayout({ children }: Readonly<{ children: Reac
   const isAlreadyOnLogin = currentPath.startsWith(loginPath);
 
   if (!previewMode && session === null && loginUrl && !isAlreadyOnLogin) {
-    redirect(loginUrl);
+    redirect(logoutUrl || loginUrl);
   }
 
   return <IGRPLayout config={config}>{children}</IGRPLayout>;

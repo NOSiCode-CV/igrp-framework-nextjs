@@ -19,6 +19,7 @@ import type {
   UserPropsImage,
 } from '@/features/users/types';
 import { OptionsProps } from '@/types/global';
+import { IGRPDepartmentArgs } from '@igrp/framework-next-types';
 
 export const useAllUsers = () => {
   return useQuery<UserProps[]>({
@@ -52,13 +53,6 @@ export const useApps = () => {
   });
 };
 
-export const useDepartments = (appCode?: string) => {
-  return useQuery<DepartmentProps[]>({
-    queryKey: ['user-department', appCode],
-    queryFn: () => getDepartment(appCode),
-    enabled: !!appCode,
-  });
-};
 export const useRoles = (appCode?: string, departmentCode?: string) => {
   return useQuery<string[]>({
     queryKey: ['user-roles', appCode, departmentCode],

@@ -9,17 +9,17 @@ type IGRPBtnProps = React.ComponentProps<typeof IGRPButtonPrimitive>
 
 export interface ButtonLinkProps extends React.ComponentProps<typeof Link> {
   label?: string,
-  iconName: IGRPIconProps['iconName'],
+  icon: IGRPIconProps['iconName'],
   iconClassName?: string,
   variant?: IGRPBtnProps['variant']
 }
 
 export function ButtonLink(props: ButtonLinkProps) {
-  const { label, iconName, iconClassName, variant } = props
+  const { label, icon, iconClassName, variant } = props
   return (
      <IGRPButtonPrimitive asChild variant={variant || 'default'}>
       <Link {...props}>
-        <LinkLoadingIndicator iconName={iconName} iconClassName={iconClassName} />
+        <LinkLoadingIndicator iconName={icon} iconClassName={iconClassName} />
         {label}
       </Link>
     </IGRPButtonPrimitive>

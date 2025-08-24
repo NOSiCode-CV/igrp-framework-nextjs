@@ -3,7 +3,7 @@ import {
   createApplication,
   deleteApplication,
   getAppImage,
-  getApplicationById,
+  getApplicationByCode,
   getApplications,
   updateApplication,
 } from '@/actions/applications';
@@ -16,14 +16,14 @@ export const useApplications = () => {
   });
 };
 
-export const useApplicationById = (id: number) => {
+export const useApplicationById = (code: string) => {
   return useQuery<IGRPApplicationArgs>({
-    queryKey: ['applications', id],
-    queryFn: () => getApplicationById(id),
+    queryKey: ['applications', code],
+    queryFn: () => getApplicationByCode(code),
   });
 };
 
-export const useAddApplication = () => {
+export const useCreateApplication = () => {
   const queryClient = useQueryClient();
 
   return useMutation({

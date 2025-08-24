@@ -1,5 +1,5 @@
 import { z } from 'zod';
-import { APPLICATIONS_TYPES } from '../lib/utils';
+import { APPLICATIONS_TYPES_EXCLUDE } from '../lib/utils';
 import { STATUS_TYPES } from '@/lib/constants';
 import { fileWithPreviewSchema } from '@/schemas/file';
 
@@ -11,14 +11,14 @@ export const applicationSchema = z
       .string()
       .regex(/^[A-Z0-9_]+$/, 'O código deve conter apenas letras, números e sublinhados')
       .min(2, 'Código é obrigatório'),
-    type: z.enum(APPLICATIONS_TYPES),
+    type: z.enum(APPLICATIONS_TYPES_EXCLUDE),
     slug: z.string().optional(),
     url: z.string().optional(),
-    description: z.string().optional(),
+    description: z.string().min(5, 'Descrição é obrigatória'),
     status: z.enum(STATUS_TYPES),
     departmentCode: z.string().min(3, 'Departamento é obrigatório'),
     picture: z.string().optional(),
-    image: fileWithPreviewSchema.nullable(),
+    image: fileWithPreviewSchema.nullable().optional(),
   })
   .superRefine((data, ctx) => {
     if (data.type === 'INTERNAL' && !data.slug) {

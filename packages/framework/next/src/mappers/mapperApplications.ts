@@ -1,5 +1,11 @@
 import type { IGRPApplicationArgs, IGRPStatus } from '@igrp/framework-next-types';
-import type { ApiResponse, ApplicationDTO } from '@igrp/platform-access-management-client-ts';
+import type {
+  ApiResponse,
+  ApplicationDTO,
+  ApplicationType,
+  Status,
+  UpdateApplicationRequest,
+} from '@igrp/platform-access-management-client-ts';
 
 const mapApplication = (app: ApplicationDTO): IGRPApplicationArgs => ({
   id: app.id as number,
@@ -24,7 +30,19 @@ export const mapperApplications = (apps: ApiResponse<ApplicationDTO[]>): IGRPApp
   return apps.data.map(mapApplication);
 };
 
-export const mapperCreateApplication = (app: ApiResponse<ApplicationDTO>): IGRPApplicationArgs => {
+export const mapperActionsApplication = (app: ApiResponse<ApplicationDTO>): IGRPApplicationArgs => {
   if (!app.data) return {} as IGRPApplicationArgs;
   return mapApplication(app.data);
 };
+
+export const mapperUpdateApplication = (payload: any): UpdateApplicationRequest => ({
+  code: payload.code,
+  name: payload.name,
+  description: payload.description,
+  status: payload.status as Status,
+  type: payload.type as ApplicationType,
+  owner: payload.owner,
+  picture: payload.picture,
+  url: payload.url,
+  slug: payload.slug,
+});

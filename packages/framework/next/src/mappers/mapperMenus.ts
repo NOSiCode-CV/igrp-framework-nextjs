@@ -21,3 +21,8 @@ export const mapperMenus = (menus: ApiResponse<MenuEntryDTO[]>): IGRPMenuItemArg
   if (!menus.data) return [];
   return menus.data.map(mapMenu);
 };
+
+export const mapperMenu = (menus: ApiResponse<MenuEntryDTO>): IGRPMenuItemArgs => {
+  if (!menus.data) return {} as IGRPMenuItemArgs;
+  return mapMenu(menus.data);
+};

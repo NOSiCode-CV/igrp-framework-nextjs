@@ -1,6 +1,7 @@
 import { toast, type ExternalToast } from 'sonner';
 
 import { Toaster } from '../../primitives/sonner';
+import type React from 'react';
 
 function IGRPToaster(props: React.ComponentProps<typeof Toaster>) {
   return <Toaster {...props} />;
@@ -14,7 +15,7 @@ interface IGRPToastProps<T> extends ExternalToast {
   promise?: Promise<T>;
   loading?: React.ReactNode;
   success?: string | ((data: T) => string);
-  error?: React.ReactNode;
+  error?: string | React.ReactNode | ((data: T) => string);
 }
 
 function useIGRPToast<T>() {

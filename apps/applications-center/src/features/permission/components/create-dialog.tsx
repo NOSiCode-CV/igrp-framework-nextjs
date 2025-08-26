@@ -3,9 +3,7 @@
 import { useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
-import { toast } from 'sonner';
 import { z } from 'zod';
-
 import {
   IGRPDialogPrimitive,
   IGRPDialogContentPrimitive,
@@ -13,24 +11,23 @@ import {
   IGRPDialogFooterPrimitive,
   IGRPDialogHeaderPrimitive,
   IGRPDialogTitlePrimitive,
-} from '@igrp/igrp-framework-react-design-system';
-import { IGRPButtonPrimitive } from '@igrp/igrp-framework-react-design-system';
-import {
+  IGRPButtonPrimitive,
   IGRPFormPrimitive,
   IGRPFormControlPrimitive,
   IGRPFormDescriptionPrimitive,
   IGRPFormFieldPrimitive,
   IGRPFormItemPrimitive,
   IGRPFormLabelPrimitive,
-} from '@igrp/igrp-framework-react-design-system';
-import { IGRPInputPrimitive } from '@igrp/igrp-framework-react-design-system';
-import { IGRPTextAreaPrimitive } from '@igrp/igrp-framework-react-design-system';
-import {
+  IGRPInputPrimitive,
+  IGRPTextAreaPrimitive,
   IGRPSelectPrimitive,
   IGRPSelectContentPrimitive,
   IGRPSelectItemPrimitive,
   IGRPSelectTriggerPrimitive,
   IGRPSelectValuePrimitive,
+  IGRPDialogTriggerPrimitive,
+  IGRPFormMessagePrimitive,
+  useIGRPToast,
 } from '@igrp/igrp-framework-react-design-system';
 import { useApplications } from '@/features/applications/hooks/use-applications';
 import { useAddPermission } from '../hooks/use-permission';
@@ -59,11 +56,15 @@ export function PermissionCreateDialog({
   defaultApplicationId,
 }: PermissionCreateDialogProps) {
   const [internalOpen, setInternalOpen] = useState(false);
-  const isControlled = controlledOpen !== undefined;
-  const open = isControlled ? controlledOpen : internalOpen;
-  const setOpen = isControlled ? controlledOnOpenChange || (() => {}) : setInternalOpen;
+
   const { data: applications, isLoading: isLoadingApps } = useApplications();
   const { mutateAsync: createPermission, isPending: isCreating } = useAddPermission();
+
+  const { igrpToast } = useIGRPToast();
+
+  const isControlled = controlledOpen !== undefined;
+  const open = isControlled ? controlledOpen : internalOpen;
+  const setOpen = isControlled ? controlledOnOpenChange || (() => {}) : setInternalOpen;   
 
   const form = useForm<PermissionFormValues>({
     resolver: zodResolver(permissionSchema),
@@ -91,9 +92,12 @@ export function PermissionCreateDialog({
 
       await createPermission(payload);
 
-      toast.success('Permission created', {
+      igrpToast({
+        type: "success",
+        title: 'Permission created',
         description: 'Permission has been created successfully.',
-      });
+        duration: 4000,
+      })
 
       form.reset();
       setOpen(false);
@@ -102,170 +106,173 @@ export function PermissionCreateDialog({
         onSuccess();
       }
     } catch (error) {
-      toast.error('Failed to create permission', {
+       igrpToast({
+        type: "error",
+        title: 'Failed to create permission',
         description: error instanceof Error ? error.message : 'An unknown error occurred',
+        duration: 4000,
       });
     }
   };
 
   return (
-    <Dialog
+    <IGRPDialogPrimitive
       open={open}
       onOpenChange={setOpen}
     >
       {!isControlled && (
-        <DialogTrigger asChild>
+        <IGRPDialogTriggerPrimitive asChild>
           <IGRPButtonPrimitive>Create Permission</IGRPButtonPrimitive>
-        </DialogTrigger>
+        </IGRPDialogTriggerPrimitive>
       )}
-      <DialogContent className='sm:max-w-[500px]'>
-        <DialogHeader>
-          <DialogTitle>Create New Permission</DialogTitle>
-          <DialogDescription>
+      <IGRPDialogContentPrimitive className=''>
+        <IGRPDialogHeaderPrimitive>
+          <IGRPDialogTitlePrimitive>Create New Permission</IGRPDialogTitlePrimitive>
+          <IGRPDialogDescriptionPrimitive>
             Create a new permission and associate it with an application.
-          </DialogDescription>
-        </DialogHeader>
+          </IGRPDialogDescriptionPrimitive>
+        </IGRPDialogHeaderPrimitive>
 
-        <Form {...form}>
+        <IGRPFormPrimitive {...form}>
           <form
             onSubmit={form.handleSubmit(onSubmit)}
             className='space-y-4'
           >
-            <FormField
+            <IGRPFormFieldPrimitive
               control={form.control}
               name='name'
               render={({ field }) => (
-                <FormItem>
-                  <FormLabel>Permission Name</FormLabel>
-                  <FormControl>
-                    <Input
+                <IGRPFormItemPrimitive>
+                  <IGRPFormLabelPrimitive>Permission Name</IGRPFormLabelPrimitive>
+                  <IGRPFormControlPrimitive>
+                    <IGRPInputPrimitive
                       placeholder='Enter permission name'
                       {...field}
                       onChange={handleNameChange}
                     />
-                  </FormControl>
-                  <FormDescription>
+                  </IGRPFormControlPrimitive>
+                  <IGRPFormDescriptionPrimitive>
                     The name of the permission (e.g., user.create, post.edit)
-                  </FormDescription>
-                  <FormMessage />
-                </FormItem>
+                  </IGRPFormDescriptionPrimitive>
+                  <IGRPFormMessagePrimitive />
+                </IGRPFormItemPrimitive>
               )}
             />
 
-            <FormField
+            <IGRPFormFieldPrimitive
               control={form.control}
               name='description'
               render={({ field }) => (
-                <FormItem>
-                  <FormLabel>Description</FormLabel>
-                  <FormControl>
-                    <Textarea
+                <IGRPFormItemPrimitive>
+                  <IGRPFormLabelPrimitive>Description</IGRPFormLabelPrimitive>
+                  <IGRPFormControlPrimitive>
+                    <IGRPTextAreaPrimitive
                       placeholder='Enter permission description'
                       {...field}
                     />
-                  </FormControl>
-                  <FormDescription>
+                  </IGRPFormControlPrimitive>
+                  <IGRPFormDescriptionPrimitive>
                     Optional description of what this permission allows
-                  </FormDescription>
-                  <FormMessage />
-                </FormItem>
+                  </IGRPFormDescriptionPrimitive>
+                  <IGRPFormMessagePrimitive />
+                </IGRPFormItemPrimitive>
               )}
             />
 
-            <FormField
+            <IGRPFormFieldPrimitive
               control={form.control}
               name='applicationId'
               render={({ field }) => (
-                <FormItem>
-                  <FormLabel>Application</FormLabel>
-                  <Select
+                <IGRPFormItemPrimitive>
+                  <IGRPFormLabelPrimitive>Applicação</IGRPFormLabelPrimitive>
+                  <IGRPSelectPrimitive
                     onValueChange={(value) => field.onChange(parseInt(value))}
                     defaultValue={field.value?.toString()}
                   >
-                    <FormControl>
-                      <SelectTrigger>
-                        <SelectValue placeholder='Select application' />
-                      </SelectTrigger>
-                    </FormControl>
-                    <SelectContent>
+                    <IGRPFormControlPrimitive>
+                      <IGRPSelectTriggerPrimitive>
+                        <IGRPSelectValuePrimitive placeholder='Select application' />
+                      </IGRPSelectTriggerPrimitive>
+                    </IGRPFormControlPrimitive>
+                    <IGRPSelectContentPrimitive>
                       {isLoadingApps ? (
-                        <SelectItem
+                        <IGRPSelectItemPrimitive
                           value='loading'
                           disabled
                         >
-                          Loading applications...
-                        </SelectItem>
+                          Carregando Aplicações...
+                        </IGRPSelectItemPrimitive>
                       ) : applications && applications.length > 0 ? (
                         applications.map((app) => (
-                          <SelectItem
+                          <IGRPSelectItemPrimitive
                             key={app.id}
                             value={app.id.toString()}
                           >
                             {app.name}
-                          </SelectItem>
+                          </IGRPSelectItemPrimitive>
                         ))
                       ) : (
-                        <SelectItem
+                        <IGRPSelectItemPrimitive
                           value='none'
                           disabled
                         >
-                          No applications found
-                        </SelectItem>
+                          Aplcações não encontradas
+                        </IGRPSelectItemPrimitive>
                       )}
-                    </SelectContent>
-                  </Select>
-                  <FormDescription>
-                    Select the application this permission belongs to
-                  </FormDescription>
-                  <FormMessage />
-                </FormItem>
+                    </IGRPSelectContentPrimitive>
+                  </IGRPSelectPrimitive>
+                  <IGRPFormDescriptionPrimitive>
+                    Seleionar a aplicação para essa permissão
+                  </IGRPFormDescriptionPrimitive>
+                  <IGRPFormMessagePrimitive />
+                </IGRPFormItemPrimitive>
               )}
             />
 
-            <FormField
+            <IGRPFormFieldPrimitive
               control={form.control}
               name='status'
               render={({ field }) => (
-                <FormItem>
-                  <FormLabel>Status</FormLabel>
-                  <Select
+                <IGRPFormItemPrimitive>
+                  <IGRPFormLabelPrimitive>Estado</IGRPFormLabelPrimitive>
+                  <IGRPSelectPrimitive
                     onValueChange={field.onChange}
                     defaultValue={field.value}
                   >
-                    <FormControl>
-                      <SelectTrigger>
-                        <SelectValue placeholder='Select status' />
-                      </SelectTrigger>
-                    </FormControl>
-                    <SelectContent>
-                      <SelectItem value='ACTIVE'>Active</SelectItem>
-                      <SelectItem value='INACTIVE'>Inactive</SelectItem>
-                    </SelectContent>
-                  </Select>
-                  <FormDescription>Set the permission status</FormDescription>
-                  <FormMessage />
-                </FormItem>
+                    <IGRPFormControlPrimitive>
+                      <IGRPSelectTriggerPrimitive>
+                        <IGRPSelectValuePrimitive placeholder='Select status' />
+                      </IGRPSelectTriggerPrimitive>
+                    </IGRPFormControlPrimitive>
+                    <IGRPSelectContentPrimitive>
+                      <IGRPSelectItemPrimitive value='ACTIVE'>Ativo</IGRPSelectItemPrimitive>
+                      <IGRPSelectItemPrimitive value='INACTIVE'>Inativo</IGRPSelectItemPrimitive>
+                    </IGRPSelectContentPrimitive>
+                  </IGRPSelectPrimitive>
+                  <IGRPFormDescriptionPrimitive>Definir o estado da permissão.</IGRPFormDescriptionPrimitive>
+                  <IGRPFormMessagePrimitive />
+                </IGRPFormItemPrimitive>
               )}
             />
 
-            <DialogFooter>
-              <Button
+            <IGRPDialogFooterPrimitive>
+              <IGRPButtonPrimitive
                 type='button'
                 variant='outline'
                 onClick={() => setOpen(false)}
               >
-                Cancel
-              </Button>
-              <Button
+                Cancelar
+              </IGRPButtonPrimitive>
+              <IGRPButtonPrimitive
                 type='submit'
                 disabled={isCreating}
               >
-                {isCreating ? 'Creating...' : 'Create Permission'}
-              </Button>
-            </DialogFooter>
+                {isCreating ? 'Criando...' : 'Criar Permissões'}
+              </IGRPButtonPrimitive>
+            </IGRPDialogFooterPrimitive>
           </form>
-        </Form>
-      </DialogContent>
-    </Dialog>
+        </IGRPFormPrimitive>
+      </IGRPDialogContentPrimitive>
+    </IGRPDialogPrimitive>
   );
 }

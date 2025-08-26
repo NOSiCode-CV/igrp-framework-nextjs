@@ -24,7 +24,9 @@ import {
   IGRPTextAreaPrimitive,
   useIGRPToast,
   IGRPButton,
+  cn,
 } from '@igrp/igrp-framework-react-design-system';
+import { mapperUpdateApplication } from '@igrp/framework-next';
 import { IGRPApplicationArgs } from '@igrp/framework-next-types';
 
 import { FileUploadField } from '@/components/file-upload-field';
@@ -130,7 +132,8 @@ export function ApplicationForm({ application }: { application?: IGRPApplication
     console.log({ payload });
     try {
       if (application) {
-        await updateApplication({ id: application.id, data: payload });
+        const payloadData = mapperUpdateApplication(payload)
+        await updateApplication({ code: application.code, data: payloadData });
       } else {
         await addApplication(payload);
         form.reset();
@@ -140,12 +143,12 @@ export function ApplicationForm({ application }: { application?: IGRPApplication
         type: 'success',
         title: `${application ? ' Atualização' : 'Criação'} concluída`,
         description: `A aplicação foi ${application ? ' atualizada' : 'criada'} com sucesso!`,
-        duration: 2000,
+        duration: 3500,
       });
 
       setTimeout(() => {
-        router.replace(`${ROUTES.APPS}/${payload.code}`);
-      }, 2500);
+        router.push(`${ROUTES.APPS}/${payload.code}`);
+      }, 4000);
     } catch (error) {
       igrpToast({
         type: 'error',
@@ -176,6 +179,7 @@ export function ApplicationForm({ application }: { application?: IGRPApplication
   });
 
   const disabledFields = application ? true : false;
+  
   const disabledBtn = form.formState.isSubmitting 
     || isLoading 
     || userLoading 
@@ -183,7 +187,7 @@ export function ApplicationForm({ application }: { application?: IGRPApplication
     || departmentLoading
     || departmentError !== null
 
-  const submitLblBtn = form.formState.isSubmitting ? 'Em processamento...' : 'Guardar';
+  const submitLblBtn = form.formState.isSubmitting ? 'Guardando...' : 'Guardar';
 
   return (
     <IGRPCardPrimitive className='py-6'>
@@ -297,7 +301,7 @@ export function ApplicationForm({ application }: { application?: IGRPApplication
                       defaultValue={field.value}
                     >
                       <IGRPFormControlPrimitive>
-                        <IGRPSelectTriggerPrimitive className='w-full truncate'>
+                        <IGRPSelectTriggerPrimitive className='w-full truncate' disabled={disabledFields}>
                           <IGRPSelectValuePrimitive placeholder='Selecione o departamento' />
                         </IGRPSelectTriggerPrimitive>
                       </IGRPFormControlPrimitive>
@@ -434,7 +438,7 @@ export function ApplicationForm({ application }: { application?: IGRPApplication
                 control={form.control}
                 name='description'
                 render={({ field }) => (
-                  <IGRPFormItemPrimitive className='md:col-span-2'>
+                  <IGRPFormItemPrimitive className='lg:col-span-2'>
                     <IGRPFormLabelPrimitive className='after:content-["*"] after:text-destructive'>
                       Descrição
                     </IGRPFormLabelPrimitive>
@@ -466,6 +470,7 @@ export function ApplicationForm({ application }: { application?: IGRPApplication
               variant='outline'
               onClick={() => router.push(ROUTES.APPS)}
               type='button'
+              disabled={disabledBtn}
               showIcon
               iconPlacement='start'
               iconName='Undo2'

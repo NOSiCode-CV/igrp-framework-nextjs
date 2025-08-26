@@ -59,11 +59,11 @@ export const useDeleteResource = () => {
 };
 
 // Hook para resources por aplicação
-export const useResourcesByApplication = (applicationId: number) => {
+export const useResourcesByApplication = (appCode: string) => {
   return useQuery<Resource[]>({
-    queryKey: ['resources', 'application', applicationId],
+    queryKey: ['resources', 'application', appCode],
     queryFn: getAllResources,
-    select: (data) => data?.filter((resource) => resource.applicationId === applicationId),
-    enabled: !!applicationId,
+    select: (data) => data?.filter((resource) => resource.applicationCode === appCode),
+    enabled: !!appCode,
   });
 };

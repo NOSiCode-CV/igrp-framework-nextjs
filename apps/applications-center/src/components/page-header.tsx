@@ -2,6 +2,7 @@ import { BackButton } from '@/components/back-button';
 
 interface PageHeaderProps {
   title: string;
+  description?: string;
   showBackButton?: boolean;
   linkBackButton?: string;
   showActions?: boolean;
@@ -10,6 +11,7 @@ interface PageHeaderProps {
 
 export function PageHeader({
   title,
+  description,
   showBackButton = false,
   linkBackButton = '/',
   showActions = false,
@@ -21,7 +23,15 @@ export function PageHeader({
         <div className='flex items-center gap-2'>
           {showBackButton && <BackButton href={linkBackButton} />}
 
-          <h2 className='text-2xl font-bold tracking-tight'>{title}</h2>
+          <div className='flex flex-col'>
+            <h2 className='text-2xl font-bold tracking-tight'>{
+              title}
+            </h2>
+
+            {description && (
+              <p className='text-muted-foreground text-sm'>{description}</p>
+            )}
+          </div>  
         </div>
       </div>
       {showActions && (

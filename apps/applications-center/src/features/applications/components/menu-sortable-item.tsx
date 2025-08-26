@@ -1,28 +1,29 @@
 import { useState } from 'react';
 import { useSortable } from '@dnd-kit/sortable';
 import { CSS } from '@dnd-kit/utilities';
-import { ChevronDown, ChevronRight, Edit, GripVertical, MoreHorizontal, Trash } from 'lucide-react';
-import { IGRPBadgePrimitive } from '@igrp/igrp-framework-react-design-system';
-import { IGRPButtonPrimitive } from '@igrp/igrp-framework-react-design-system';
-import {
-  DropdownMenu,
-  DropdownMenuContent,
-  DropdownMenuItem,
-  DropdownMenuSeparator,
-  DropdownMenuTrigger,
-} from '@/components/ui/dropdown-menu';
+import { 
+  IGRPButtonPrimitive,
+  IGRPBadgePrimitive,
+  IGRPDropdownMenuPrimitive,
+  IGRPDropdownMenuContentPrimitive,
+  IGRPDropdownMenuItemPrimitive,
+  IGRPDropdownMenuSeparatorPrimitive,
+  IGRPDropdownMenuTriggerPrimitive,
+  IGRPIcon,
+} from '@igrp/igrp-framework-react-design-system';
+
 import { cn } from '@/lib/utils';
-import { MenuFormData } from '../types';
+import { IGRPMenuItemArgs } from '@igrp/framework-next-types';
 
 interface SortableItemProps {
   menuId: number | undefined;
-  menu: MenuFormData;
+  menu: IGRPMenuItemArgs;
   code: string;
-  onEdit: (menu: MenuFormData) => void;
-  onDelete: (id: number, name: string) => void;
+  onEdit: (menu: IGRPMenuItemArgs) => void;
+  onDelete?: (id: number, name: string) => void;
   depth?: number;
   isChild?: boolean;
-  subMenus?: MenuFormData[];
+  subMenus?: IGRPMenuItemArgs[];
 }
 
 export function SortableItem({
@@ -39,7 +40,7 @@ export function SortableItem({
     id: menuId as number,
     data: {
       type: 'menu-item',
-      parent: menu.folderRef?.id,
+      parent: menu.parentCode,
       isChild,
     },
   });
@@ -59,11 +60,11 @@ export function SortableItem({
           'flex items-center justify-between p-3 border-b last:border-0',
           isChild && 'pl-6 bg-muted/20',
         )}
-        data-parent={menu.folderRef?.id}
+        data-parent={menu.parentCode}
       >
         <div className='flex items-center gap-2'>
           {!isChild && (
-            <Button
+            <IGRPButtonPrimitive
               variant='ghost'
               size='icon'
               className={cn('h-6 w-6 p-0 invisible', subMenus && subMenus.length > 0 && 'visible')}
@@ -71,22 +72,23 @@ export function SortableItem({
                 subMenus && subMenus.length > 0 ? () => setIsExpanded(!isExpanded) : undefined
               }
             >
-              {isExpanded ? <ChevronDown strokeWidth={2} /> : <ChevronRight strokeWidth={2} />}
-            </Button>
+              <IGRPIcon iconName={isExpanded ? 'ChevronDown' : 'ChevronRight'} strokeWidth={2} />
+            </IGRPButtonPrimitive>
           )}
 
-          <Button
+          <IGRPButtonPrimitive
             {...attributes}
             {...listeners}
             className='cursor-grab active:cursor-grabbing p-1 rounded-md hover:bg-muted'
             variant='ghost'
             size='icon'
           >
-            <GripVertical
+            <IGRPIcon 
+              iconName='GripVertical'
               className='size-4 text-primary'
               strokeWidth={2}
             />
-          </Button>
+          </IGRPButtonPrimitive>
 
           <div>
             <div className='font-medium'>{menu.name}</div>
@@ -95,7 +97,7 @@ export function SortableItem({
         </div>
 
         <div className='flex items-center gap-4'>
-          <Badge
+          <IGRPBadgePrimitive
             variant='secondary'
             className={
               menu.type === 'FOLDER'
@@ -104,41 +106,43 @@ export function SortableItem({
             }
           >
             {menu.type}
-          </Badge>
-          <DropdownMenu>
-            <DropdownMenuTrigger asChild>
-              <Button
+          </IGRPBadgePrimitive>
+          <IGRPDropdownMenuPrimitive>
+            <IGRPDropdownMenuTriggerPrimitive asChild>
+              <IGRPButtonPrimitive
                 variant='ghost'
                 className='h-7 w-7 p-0'
               >
                 <span className='sr-only'>Open menu</span>
-                <MoreHorizontal strokeWidth={2} />
-              </Button>
-            </DropdownMenuTrigger>
-            <DropdownMenuContent align='end'>
-              <DropdownMenuItem
+                <IGRPIcon iconName='MoreHorizontal' strokeWidth={2} />
+              </IGRPButtonPrimitive>
+            </IGRPDropdownMenuTriggerPrimitive>
+            <IGRPDropdownMenuContentPrimitive align='end'>
+              <IGRPDropdownMenuItemPrimitive
                 onClick={() => onEdit(menu)}
                 className='cursor-pointer'
               >
-                <Edit
+                <IGRPIcon 
+                  iconName='Edit'
                   className='mr-1 h-4 w-4'
                   strokeWidth={2}
-                />{' '}
-                Edit
-              </DropdownMenuItem>
-              <DropdownMenuSeparator />
-              <DropdownMenuItem
+                />
+                Editar
+              </IGRPDropdownMenuItemPrimitive>
+              <IGRPDropdownMenuSeparatorPrimitive />
+              <IGRPDropdownMenuItemPrimitive
                 className='text-destructive focus:text-destructive cursor-pointer bg-destructive/10'
                 onClick={() => onDelete(menu.id as number, menu.name)}
               >
-                <Trash
+                <IGRPIcon 
+                  iconName='Trash'
                   className='mr-1 h-4 w-4 text-destructive'
                   strokeWidth={2}
-                />{' '}
-                Delete
-              </DropdownMenuItem>
-            </DropdownMenuContent>
-          </DropdownMenu>
+                />
+                Eliminar
+              </IGRPDropdownMenuItemPrimitive>
+            </IGRPDropdownMenuContentPrimitive>
+          </IGRPDropdownMenuPrimitive>
         </div>
       </div>
       {isExpanded && subMenus && subMenus.length > 0 && (

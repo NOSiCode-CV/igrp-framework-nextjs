@@ -30,24 +30,24 @@ export function MenuDeleteDialog({
   const isConfirmed = confirmation === menuName;
 
   return (
-    <Dialog
+    <IGRPDialogPrimitive
       open={open}
       onOpenChange={onOpenChange}
     >
-      <DialogContent>
-        <DialogHeader>
-          <DialogTitle>Delete Menu</DialogTitle>
-          <DialogDescription>
+      <IGRPDialogContentPrimitive>
+        <IGRPDialogHeaderPrimitive>
+          <IGRPDialogTitlePrimitive>Delete Menu</IGRPDialogTitlePrimitive>
+          <IGRPDialogDescriptionPrimitive>
             This action cannot be undone. This will permanently delete the menu and all its data.
-          </DialogDescription>
-        </DialogHeader>
+          </IGRPDialogDescriptionPrimitive>
+        </IGRPDialogHeaderPrimitive>
         <div className='space-y-4 py-2'>
           <p>
             To confirm, type <span className='font-medium'>{menuName}</span> below:
           </p>
           <div className='space-y-2'>
-            <Label htmlFor='confirmation'>Confirmation</Label>
-            <Input
+            <IGRPLabelPrimitive htmlFor='confirmation'>Confirmation</IGRPLabelPrimitive>
+            <IGRPInputPrimitive
               id='confirmation'
               value={confirmation}
               onChange={(e) => setConfirmation(e.target.value)}
@@ -56,23 +56,23 @@ export function MenuDeleteDialog({
             />
           </div>
         </div>
-        <DialogFooter>
-          <Button
+        <IGRPDialogFooterPrimitive>
+          <IGRPButtonPrimitive
             variant='outline'
             onClick={() => onOpenChange(false)}
             type='button'
           >
             Cancel
-          </Button>
-          <Button
+          </IGRPButtonPrimitive>
+          <IGRPButtonPrimitive
             variant='destructive'
             onClick={onDelete}
             disabled={!isConfirmed}
           >
             Delete
-          </Button>
-        </DialogFooter>
-      </DialogContent>
-    </Dialog>
+          </IGRPButtonPrimitive>
+        </IGRPDialogFooterPrimitive>
+      </IGRPDialogContentPrimitive>
+    </IGRPDialogPrimitive>
   );
 }

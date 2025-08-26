@@ -29,16 +29,16 @@ export function CopyToClipboard({ value }: CopyToClipboardProps) {
       setCopied(true);
       igrpToast({
         type: 'success',
-        title: 'Copied to clipboard',
+        title: 'Copiado para a área de transferência',
         description: displayValue,
-        duration: 1500,
+        duration: 2000,
       });
-      setTimeout(() => setCopied(false), 1500);
+      setTimeout(() => setCopied(false), 2000);
     } catch (error) {
       igrpToast({
         type: 'error',
-        title: 'Failed to copy to clipboard',
-        description: error instanceof Error ? error.message : 'Unknown error occurred',
+        title: 'Não foi possível copiar para a área de transferência',
+        description: error instanceof Error ? error.message : 'Ocorreu um erro desconhecido.',
         duration: 2000,
       });
     }
@@ -53,7 +53,7 @@ export function CopyToClipboard({ value }: CopyToClipboardProps) {
             size='icon'
             className='disabled:opacity-100 size-7'
             onClick={handleCopy}
-            aria-label={copied ? 'Copied' : 'Copy to clipboard'}
+            aria-label={copied ? 'Copiado' : 'Copiar para a área de transferênciawwwww'}
             disabled={copied}
           >
             <div
@@ -85,7 +85,7 @@ export function CopyToClipboard({ value }: CopyToClipboardProps) {
           </IGRPButtonPrimitive>
         </IGRPTooltipTriggerPrimitive>
         <IGRPTooltipContentPrimitive className='px-2 py-1 text-xs'>
-          Click to copy
+          Clique para copiar
         </IGRPTooltipContentPrimitive>
       </IGRPTooltipPrimitive>
     </IGRPTooltipProviderPrimitive>

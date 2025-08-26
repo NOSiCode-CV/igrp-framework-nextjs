@@ -20,10 +20,14 @@ export {
 
 export { igrpBuildQueryString } from './lib/build-query-string';
 
-export { mapperApplications, mapperCreateApplication } from './mappers/mapperApplications';
+export {
+  mapperApplications,
+  mapperActionsApplication,
+  mapperUpdateApplication,
+} from './mappers/mapperApplications';
 
 export { mapperDepartments, mapperCreateDepartment } from './mappers/departments';
 
-export { mapperMenus } from './mappers/mapperMenus';
+export { mapperMenus, mapperMenu } from './mappers/mapperMenus';
 
 export { mapperUser } from './mappers/mapperUsers';

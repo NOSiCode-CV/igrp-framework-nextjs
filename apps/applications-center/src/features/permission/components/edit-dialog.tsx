@@ -3,9 +3,7 @@
 import { useEffect } from 'react';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
-import { toast } from 'sonner';
 import { z } from 'zod';
-
 import {
   IGRPDialogPrimitive,
   IGRPDialogContentPrimitive,
@@ -13,28 +11,27 @@ import {
   IGRPDialogFooterPrimitive,
   IGRPDialogHeaderPrimitive,
   IGRPDialogTitlePrimitive,
-} from '@igrp/igrp-framework-react-design-system';
-import { IGRPButtonPrimitive } from '@igrp/igrp-framework-react-design-system';
-import {
+  IGRPButtonPrimitive,
   IGRPFormPrimitive,
   IGRPFormControlPrimitive,
   IGRPFormDescriptionPrimitive,
   IGRPFormFieldPrimitive,
   IGRPFormItemPrimitive,
   IGRPFormLabelPrimitive,
-} from '@igrp/igrp-framework-react-design-system';
-import { IGRPInputPrimitive } from '@igrp/igrp-framework-react-design-system';
-import { IGRPTextAreaPrimitive } from '@igrp/igrp-framework-react-design-system';
-import {
+  IGRPInputPrimitive,
+  IGRPTextAreaPrimitive,  
   IGRPSelectPrimitive,
   IGRPSelectContentPrimitive,
   IGRPSelectItemPrimitive,
   IGRPSelectTriggerPrimitive,
   IGRPSelectValuePrimitive,
+  IGRPFormMessagePrimitive,
+  useIGRPToast,
 } from '@igrp/igrp-framework-react-design-system';
+
 import { useUpdatePermission } from '../hooks/use-permission';
 import { Permission } from '../types';
-import { Application } from '@/features/applications/types';
+import { IGRPApplicationArgs } from '@igrp/framework-next-types';
 
 const permissionSchema = z.object({
   name: z.string().min(3, 'Permission name is required'),
@@ -49,7 +46,7 @@ interface PermissionEditDialogProps {
   open: boolean;
   onOpenChange: (open: boolean) => void;
   permission: Permission | null;
-  applications: Application[];
+  applications: IGRPApplicationArgs[];
   onSuccess?: () => void;
 }
 
@@ -61,6 +58,8 @@ export function PermissionEditDialog({
   onSuccess,
 }: PermissionEditDialogProps) {
   const { mutateAsync: updatePermission, isPending: isUpdating } = useUpdatePermission();
+
+  const { igrpToast } = useIGRPToast();
 
   const form = useForm<PermissionFormValues>({
     resolver: zodResolver(permissionSchema),
@@ -97,8 +96,11 @@ export function PermissionEditDialog({
         },
       });
 
-      toast.success('Permission updated', {
+      igrpToast({
+        type: 'success',
+        title: 'Permission updated',
         description: 'Permission has been updated successfully.',
+        duration: 4000,     
       });
 
       if (onSuccess) {
@@ -107,129 +109,142 @@ export function PermissionEditDialog({
 
       onOpenChange(false);
     } catch (error) {
-      toast.error('Failed to update permission', {
-        description: error instanceof Error ? error.message : 'An unknown error occurred',
-      });
+      igrpToast({ 
+        type: 'error', 
+        title: 'Failed to update permission', 
+        description: error instanceof Error ? error.message : 'An unknown error occurred', 
+        duration: 4000, 
+      })
     }
   };
 
   return (
-    <Dialog
+    <IGRPDialogPrimitive
       open={open}
       onOpenChange={onOpenChange}
     >
-      <DialogContent className='sm:max-w-[500px]'>
-        <DialogHeader>
-          <DialogTitle>Edit Permission</DialogTitle>
-          <DialogDescription>Update permission information.</DialogDescription>
-        </DialogHeader>
+      <IGRPDialogContentPrimitive className='sm:max-w-[500px]'>
+        <IGRPDialogHeaderPrimitive>
+          <IGRPDialogTitlePrimitive>Edit Permission</IGRPDialogTitlePrimitive>
+          <IGRPDialogDescriptionPrimitive>
+            Update permission information.
+          </IGRPDialogDescriptionPrimitive>
+        </IGRPDialogHeaderPrimitive>
 
         {permission && (
-          <Form {...form}>
+          <IGRPFormPrimitive {...form}>
             <form
               onSubmit={form.handleSubmit(onSubmit)}
               className='space-y-4'
             >
-              <FormField
+              <IGRPFormFieldPrimitive
                 control={form.control}
                 name='name'
                 render={({ field }) => (
-                  <FormItem>
-                    <FormLabel>Permission Name</FormLabel>
-                    <FormControl>
-                      <Input {...field} />
-                    </FormControl>
-                    <FormDescription>The name of the permission</FormDescription>
-                    <FormMessage />
-                  </FormItem>
+                  <IGRPFormItemPrimitive>
+                    <IGRPFormLabelPrimitive>
+                      Permission Name
+                    </IGRPFormLabelPrimitive>
+                    <IGRPFormControlPrimitive>
+                      <IGRPInputPrimitive {...field} />
+                    </IGRPFormControlPrimitive>
+                    <IGRPFormDescriptionPrimitive>
+                      The name of the permission
+                    </IGRPFormDescriptionPrimitive>
+                    <IGRPFormMessagePrimitive />
+                  </IGRPFormItemPrimitive>
                 )}
               />
 
-              <FormField
+              <IGRPFormFieldPrimitive
                 control={form.control}
                 name='description'
                 render={({ field }) => (
-                  <FormItem>
-                    <FormLabel>Description</FormLabel>
-                    <FormControl>
-                      <Textarea {...field} />
-                    </FormControl>
-                    <FormDescription>Optional description of the permission</FormDescription>
-                    <FormMessage />
-                  </FormItem>
+                  <IGRPFormItemPrimitive>
+                    <IGRPFormLabelPrimitive>
+                      Description
+                    </IGRPFormLabelPrimitive>
+                    <IGRPFormControlPrimitive>
+                      <IGRPTextAreaPrimitive {...field} />
+                    </IGRPFormControlPrimitive>
+                    <IGRPFormDescriptionPrimitive>
+                      Optional description of the permission
+                    </IGRPFormDescriptionPrimitive>
+                    <IGRPFormMessagePrimitive />
+                  </IGRPFormItemPrimitive>
                 )}
               />
 
-              <FormField
+              <IGRPFormFieldPrimitive
                 control={form.control}
                 name='applicationId'
                 render={({ field }) => (
-                  <FormItem>
-                    <FormLabel>Application</FormLabel>
-                    <Select
+                  <IGRPFormItemPrimitive>
+                    <IGRPFormLabelPrimitive>Application</IGRPFormLabelPrimitive>
+                    <IGRPSelectPrimitive
                       onValueChange={(value) => field.onChange(parseInt(value))}
                       defaultValue={field.value?.toString()}
                     >
-                      <FormControl>
-                        <SelectTrigger>
-                          <SelectValue placeholder='Select application' />
-                        </SelectTrigger>
-                      </FormControl>
-                      <SelectContent>
+                      <IGRPFormControlPrimitive>
+                        <IGRPSelectTriggerPrimitive>
+                          <IGRPSelectValuePrimitive placeholder='IGRPSelect application' />
+                        </IGRPSelectTriggerPrimitive>
+                      </IGRPFormControlPrimitive>
+                      <IGRPSelectContentPrimitive>
                         {applications && applications.length > 0 ? (
                           applications.map((app) => (
-                            <SelectItem
+                            <IGRPSelectItemPrimitive
                               key={app.id}
                               value={app.id.toString()}
                             >
                               {app.name}
-                            </SelectItem>
+                            </IGRPSelectItemPrimitive>
                           ))
                         ) : (
-                          <SelectItem
+                          <IGRPSelectItemPrimitive
                             value='none'
                             disabled
                           >
                             No applications found
-                          </SelectItem>
+                          </IGRPSelectItemPrimitive>
                         )}
-                      </SelectContent>
-                    </Select>
-                    <FormDescription>
-                      Select the application this permission belongs to
-                    </FormDescription>
-                    <FormMessage />
-                  </FormItem>
+                      </IGRPSelectContentPrimitive>
+                    </IGRPSelectPrimitive>
+                    <IGRPFormDescriptionPrimitive>
+                      IGRPSelect the application this permission belongs to
+                    </IGRPFormDescriptionPrimitive>
+                    <IGRPFormMessagePrimitive />
+                  </IGRPFormItemPrimitive>
                 )}
               />
 
-              <FormField
+              <IGRPFormFieldPrimitive
                 control={form.control}
                 name='status'
                 render={({ field }) => (
-                  <FormItem>
-                    <FormLabel>Status</FormLabel>
-                    <Select
+                  <IGRPFormItemPrimitive>
+                    <IGRPFormLabelPrimitive>Status</IGRPFormLabelPrimitive>
+                    <IGRPSelectPrimitive
                       onValueChange={field.onChange}
                       defaultValue={field.value}
                     >
-                      <FormControl>
-                        <SelectTrigger>
-                          <SelectValue placeholder='Select status' />
-                        </SelectTrigger>
-                      </FormControl>
-                      <SelectContent>
-                        <SelectItem value='ACTIVE'>Active</SelectItem>
-                        <SelectItem value='INACTIVE'>Inactive</SelectItem>
-                      </SelectContent>
-                    </Select>
-                    <FormDescription>Set the permission status</FormDescription>
-                    <FormMessage />
-                  </FormItem>
+                      <IGRPFormControlPrimitive>
+                        <IGRPSelectTriggerPrimitive>
+                          <IGRPSelectValuePrimitive placeholder='IGRPSelect status' />
+                        </IGRPSelectTriggerPrimitive>
+                      </IGRPFormControlPrimitive>
+                      <IGRPSelectContentPrimitive>
+                        <IGRPSelectItemPrimitive value='ACTIVE'>Active</IGRPSelectItemPrimitive>
+                        <IGRPSelectItemPrimitive value='INACTIVE'>Inactive</IGRPSelectItemPrimitive>
+                      </IGRPSelectContentPrimitive>
+                    </IGRPSelectPrimitive>
+                    <IGRPFormDescriptionPrimitive>Set the permission status</IGRPFormDescriptionPrimitive>
+                    <IGRPFormMessagePrimitive />
+                  </IGRPFormItemPrimitive>
                 )}
               />
 
-              <DialogFooter>
+              <IGRPDialogFooterPrimitive>
                 <IGRPButtonPrimitive
                   type='button'
                   variant='outline'
@@ -244,11 +259,11 @@ export function PermissionEditDialog({
                 >
                   {isUpdating ? 'Updating...' : 'Update Permission'}
                 </IGRPButtonPrimitive>
-              </DialogFooter>
+              </IGRPDialogFooterPrimitive>
             </form>
-          </Form>
+          </IGRPFormPrimitive>
         )}
-      </DialogContent>
-    </Dialog>
+      </IGRPDialogContentPrimitive>
+    </IGRPDialogPrimitive>
   );
 }

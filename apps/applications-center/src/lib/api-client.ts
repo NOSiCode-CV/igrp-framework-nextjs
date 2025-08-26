@@ -2,7 +2,8 @@
 
 import { getIGRPAccessClient } from '@igrp/framework-next';
 import { redirect } from 'next/navigation';
-import { serverSession } from '@/actions/auth';
+
+import { serverSession } from '@/actions/igrp/auth';
 
 interface ExtendedRequestInit extends RequestInit {
   isTextResponse?: boolean;

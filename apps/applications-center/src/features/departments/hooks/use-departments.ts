@@ -1,10 +1,10 @@
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import {
-  createDepartment,
-  deleteDepartment,
+  // createDepartment,
+  // deleteDepartment,
   getDepartments,
-  getDepartment,
-  updateDepartment,
+  // getDepartment,
+  // updateDepartment,
 } from '@/actions/departaments';
 import { IGRPDepartmentArgs } from '@igrp/framework-next-types';
 

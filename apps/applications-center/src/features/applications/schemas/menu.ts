@@ -1,49 +1,67 @@
 import { z } from 'zod';
+import { 
+  CreateMenuRequest, 
+  MenuType, 
+  Status, 
+  UpdateMenuRequest 
+} from '@igrp/platform-access-management-client-ts';
+
+export const menuTypeSchema = z.enum(['GROUP','FOLDER', 'EXTERNAL_PAGE', 'MENU_PAGE']);
+
+export const menuStatusSchema = z.enum(['ACTIVE', 'INACTIVE', 'DELETED']);
+
+export const menuTargetSchema = z.enum(['INTERNAL', 'EXTERNAL']);
 
 export const menuSchema = z.object({
-  id: z.number().optional(),
-  name: z.string().min(1, 'Name is required'),
-  type: z.enum(['FOLDER', 'EXTERNAL_PAGE', 'MENU_PAGE']),
+  id: z.number(),
+  name: z.string().min(1, 'Nome é obrigatório.'),
+  type: z.string(menuTypeSchema).default('MENU_PAGE'),
   position: z.number().min(0),
-  icon: z.string().min(1, 'Icon is required'),
-  status: z.enum(['ACTIVE', 'INACTIVE', 'DELETED']),
-  target: z.enum(['INTERNAL', 'EXTERNAL']).optional(),
+  icon: z.string().min(1, 'Icone é obrigatório.'),
+  status: z.string(menuStatusSchema).default('ACTIVE'),
+  target: z.string(menuTargetSchema).default('INTERNAL'),
   url: z.string().optional(),
-  parentId: z.number().nullable().optional(),
-  applicationId: z.number().min(1, 'Application ID is required'),
-  resourceId: z.number().nullable().optional(),
+  parentCode: z.string().nullable().optional(),
+  pageSlug: z.string().nullable().optional(),
+  applicationCode: z.string().min(1, 'Aplicação é obrigatória.'),
   createdBy: z.string().optional(),
   createdDate: z.string().optional(),
   lastModifiedBy: z.string().optional(),
   lastModifiedDate: z.string().optional(),
+  permissions: z.array(z.string()).optional().nullable()
 });
 
-export const baseMenySchema = z.object({
-  name: z.string().min(1, 'Name is required'),
-  type: z.enum(['FOLDER', 'EXTERNAL_PAGE', 'MENU_PAGE']),
+export const baseMenuSchema = z.object({
+  name: z.string().min(1, 'Nome é obrigatório.'),
+  type: z.string(menuTypeSchema),
   position: z.number().min(0),
-  icon: z.string().min(1, 'Icon is required'),
-  status: z.enum(['ACTIVE', 'INACTIVE', 'DELETED']),
-  parentId: z.number().nullable().optional(),
-  applicationId: z.number().min(1, 'Application ID is required'),
+  icon: z.string().min(1, 'Icone é obrigatório.'),
+  status: z.string(menuStatusSchema).default('ACTIVE'),
+  parentCode: z.string().nullable().optional(),
+  applicationCode: z.string().min(6, 'Código de aolicação é obrigatório'),
 });
 
-export const folderMenuSchema = baseMenySchema.extend({
+export const groupMenuSchema = baseMenuSchema.extend({
+  type: z.literal('GROUP'),
+});
+
+export const folderMenuSchema = baseMenuSchema.extend({
   type: z.literal('FOLDER'),
 });
 
-export const menuPageSchema = baseMenySchema.extend({
+export const menuPageSchema = baseMenuSchema.extend({
   type: z.literal('MENU_PAGE'),
-  resourceId: z.number().min(1, 'Resource is required'),
+  pageSlug: z.string().min(3, 'Url Relativo é obrigatório'),
 });
 
-export const externalPageSchema = baseMenySchema.extend({
+export const externalPageSchema = baseMenuSchema.extend({
   type: z.literal('EXTERNAL_PAGE'),
-  url: z.string().min(1, 'URL is required'),
-  target: z.enum(['INTERNAL', 'EXTERNAL']),
+  url: z.string().min(1, 'URL Completo é obrigatório'),
+  target: z.literal('EXTERNAL'),
 });
 
 export const createMenuSchema = z.discriminatedUnion('type', [
+  groupMenuSchema,
   folderMenuSchema,
   menuPageSchema,
   externalPageSchema,
@@ -65,9 +83,8 @@ export const createMenuPayload = (values: z.infer<typeof createMenuSchema>) => {
       position: values.position,
       icon: values.icon,
       status: values.status,
-      applicationId: values.applicationId,
-      ...(values.parentId !== null &&
-        values.parentId !== undefined && { parentId: values.parentId }),
+      applicationCode: values.applicationCode,
+      ...(values.parentCode !== undefined && { parentCode: values.parentCode }),
     };
   } else if (values.type === 'MENU_PAGE') {
     return {
@@ -76,10 +93,8 @@ export const createMenuPayload = (values: z.infer<typeof createMenuSchema>) => {
       position: values.position,
       icon: values.icon,
       status: values.status,
-      applicationId: values.applicationId,
-      resourceId: values.resourceId,
-      ...(values.parentId !== null &&
-        values.parentId !== undefined && { parentId: values.parentId }),
+      applicationCode: values.applicationCode,      
+      ...(values.parentCode !== undefined && { parentCode: values.parentCode }),
     };
   } else if (values.type === 'EXTERNAL_PAGE') {
     return {
@@ -88,66 +103,61 @@ export const createMenuPayload = (values: z.infer<typeof createMenuSchema>) => {
       position: values.position,
       icon: values.icon,
       status: values.status,
-      applicationId: values.applicationId,
+      applicationCode: values.applicationCode,
       url: values.url,
       target: values.target,
-      ...(values.parentId !== null &&
-        values.parentId !== undefined && { parentId: values.parentId }),
+      ...(values.parentCode !== undefined && { parentCode: values.parentCode }),
     };
   }
 
-  throw new Error('Invalid menu type');
+  throw new Error('Tipo invalido');
 };
 
 export const normalizeMenuValues = (
   values: z.infer<typeof createMenuSchema> | z.infer<typeof updateMenuSchema>,
-): Partial<MenuFormData> => {
+): CreateMenuRequest | UpdateMenuRequest => {
   if (values.type === 'FOLDER') {
     return {
       name: values.name,
-      type: values.type,
+      type: values.type as MenuType,
       position: values.position,
       icon: values.icon || '',
-      status: values.status,
-      applicationId: values.applicationId,
-      ...(values.parentId !== null &&
-        values.parentId !== undefined && { parentId: values.parentId }),
+      status: values.status as Status,
+      applicationCode: values.applicationCode,
+      ...(values.parentCode !== undefined && { parentCode: values.parentCode }),
     };
   } else if (values.type === 'MENU_PAGE') {
     return {
       name: values.name,
-      type: values.type,
+      type: values.type as MenuType,
       position: values.position,
       icon: values.icon || '',
-      status: values.status,
-      applicationId: values.applicationId,
-      resourceId: values.resourceId,
-      ...(values.parentId !== null &&
-        values.parentId !== undefined && { parentId: values.parentId }),
+      status: values.status as Status,
+      applicationCode: values.applicationCode,
+      ...(values.parentCode !== undefined && { parentCode: values.parentCode }),
     };
   } else if (values.type === 'EXTERNAL_PAGE') {
     return {
       name: values.name,
-      type: values.type,
+      type: values.type as MenuType,
       position: values.position,
       icon: values.icon || '',
-      status: values.status,
-      applicationId: values.applicationId,
+      status: values.status as Status,
+      applicationCode: values.applicationCode,
       url: values.url,
       target: values.target || 'INTERNAL',
-      ...(values.parentId !== null &&
-        values.parentId !== undefined && { parentId: values.parentId }),
+      ...(values.parentCode !== undefined && { parentCode: values.parentCode }),
     };
   }
 
   return {
     name: values.name,
-    type: values.type,
+    type: values.type as MenuType,
     position: values.position,
     icon: values.icon || '',
-    status: values.status,
-    applicationId: values.applicationId,
-    ...(values.parentId !== null && values.parentId !== undefined && { parentId: values.parentId }),
+    status: values.status as Status,
+    applicationCode: values.applicationCode,
+    ...(values.parentCode !== undefined && { parentCode: values.parentCode }),
   };
 };
 

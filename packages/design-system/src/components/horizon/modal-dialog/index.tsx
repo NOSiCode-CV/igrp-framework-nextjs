@@ -6,11 +6,12 @@ import {
   Dialog as IGRPModalDialog,
   DialogClose as IGRPModalDialogClose,
   DialogDescription as IGRPModalDialogDescription,
-  DialogTitle as IGRPModalDialogTitle,
+  //DialogTitle as IGRPModalDialogTitle,
   DialogTrigger as IGRPModalDialogTrigger,
   DialogContent,
   DialogFooter,
   DialogHeader,
+  DialogTitle,
 } from '../../primitives/dialog';
 import { cn } from '../../../lib/utils';
 
@@ -104,6 +105,14 @@ function IGRPModalDialogFooter({ className, stickyFooter, ...props }: IGRPModalD
       {...props}
     />
   );
+}
+
+function IGRPModalDialogTitle({
+  className,
+  name,
+  ...props
+}: React.ComponentProps<typeof DialogTitle> & { name?: string }) {
+  return <DialogTitle className={cn(className)} {...props}></DialogTitle>;
 }
 
 export {

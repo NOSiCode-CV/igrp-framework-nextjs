@@ -29,7 +29,8 @@
     "build:demo": "pnpm --filter @igrp/framenwork-next-template build",
     "start:demo": "pnpm --filter @igrp/framenwork-next-template start",
     "release:demo": "pnpm --filter @igrp/framenwork-next-template publish:template",
-    "dev:app-center": "pnpm --filter @igrp/applications-center dev"
+    "dev:app-center": "pnpm --filter @igrp/applications-center dev",
+    "clean-all": "pnpm -r run clean-all"
   },
   "devDependencies": {
     "@changesets/cli": "^2.29.5",

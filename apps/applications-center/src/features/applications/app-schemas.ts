@@ -1,5 +1,5 @@
 import { z } from 'zod';
-import { APPLICATIONS_TYPES_EXCLUDE } from '../lib/utils';
+import { APPLICATIONS_TYPES_EXCLUDE } from './app-utils';
 import { STATUS_TYPES } from '@/lib/constants';
 import { fileWithPreviewSchema } from '@/schemas/file';
 

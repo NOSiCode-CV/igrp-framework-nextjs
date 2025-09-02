@@ -32,7 +32,7 @@ import {
   IGRPSelectTriggerPrimitive,
   IGRPSelectValuePrimitive,
 } from '@igrp/igrp-framework-react-design-system';
-import { useApplications } from '@/features/applications/hooks/use-applications';
+import { useApplications } from '@/features/applications/use-applications';
 import { useAddDepartment } from '../hooks/use-departments';
 
 const departmentSchema = z.object({

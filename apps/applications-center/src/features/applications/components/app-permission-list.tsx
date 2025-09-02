@@ -8,6 +8,7 @@ import {
   IGRPCardHeaderPrimitive,
   IGRPCardPrimitive,
   IGRPCardTitlePrimitive,
+  IGRPDropdownMenuCheckboxItemPrimitive,
   IGRPDropdownMenuContentPrimitive,
   IGRPDropdownMenuPrimitive,
   IGRPDropdownMenuTriggerPrimitive,
@@ -131,7 +132,7 @@ export function ApplicationPermissionList({
               className='w-40'
             >
               {statuses.map((status) => (
-                <DropdownMenuCheckboxItem
+                <IGRPDropdownMenuCheckboxItemPrimitive
                   key={status}
                   checked={statusFilter.includes(status)}
                   onCheckedChange={(checked) => {
@@ -143,7 +144,7 @@ export function ApplicationPermissionList({
                   }}
                 >
                   {status}
-                </DropdownMenuCheckboxItem>
+                </IGRPDropdownMenuCheckboxItemPrimitive>
               ))}
             </IGRPDropdownMenuContentPrimitive>
           </IGRPDropdownMenuPrimitive>
@@ -154,13 +155,13 @@ export function ApplicationPermissionList({
             {permissions?.length === 0 ? (
               <div>
                 <p className='mb-2'>No permissions found for this application.</p>
-                <Button
+                <IGRPButtonPrimitive
                   onClick={() => setCreateDialogOpen(true)}
                   variant='outline'
                 >
-                  <Plus className='mr-2 h-4 w-4' />
+                  <IGRPIcon iconName='Plus' className='mr-2 size-4' />
                   Create First Permission
-                </Button>
+                </IGRPButtonPrimitive>
               </div>
             ) : (
               'No permissions match your search criteria.'

@@ -14,7 +14,7 @@ import {
 } from '../../../primitives/select';
 import { IGRPLabel } from '../../label';
 import { cn } from '../../../../lib/utils';
-import type { IGRPInputProps, IGRPOptionsProps } from '../../../../types/globals';
+import type { IGRPInputProps, IGRPOptionsProps } from '../../../../types';
 
 interface IGRPInputAddOnProps
   extends Omit<

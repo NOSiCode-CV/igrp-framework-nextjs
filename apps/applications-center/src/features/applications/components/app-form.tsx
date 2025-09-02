@@ -26,7 +26,6 @@ import {
   IGRPButton,
   cn,
 } from '@igrp/igrp-framework-react-design-system';
-import { mapperUpdateApplication } from '@igrp/framework-next';
 import { IGRPApplicationArgs } from '@igrp/framework-next-types';
 
 import { FileUploadField } from '@/components/file-upload-field';
@@ -36,11 +35,12 @@ import { urlToFileWithPreview } from '@/lib/file-adapters';
 import {
   useCreateApplication,
   useUpdateApplication,
-} from '@/features/applications/hooks/use-applications';
-import { ApplicationType, applicationSchema } from '@/features/applications/schemas/application';
+} from '@/features/applications/use-applications';
+import { ApplicationType, applicationSchema } from '@/features/applications/app-schemas';
 import { useAllUsers } from '@/features/users/hooks/use-users';
 import { useDepartments } from '@/features/departments/hooks/use-departments';
-import { APPLICATIONS_TYPES_FILTERED } from '../lib/utils';
+import { APPLICATIONS_TYPES_FILTERED } from '../app-utils';
+import { mapperUpdateApplication } from '../app-mapper';
 
 export function ApplicationForm({ application }: { application?: IGRPApplicationArgs }) {
   const router = useRouter();

@@ -1,5 +1,5 @@
 import { getIGRPAccessClient } from '../lib/api-client';
-import { mapperMenus } from '../mappers/mapperMenus';
+import { mapperMenus } from '../mappers/menus-mapper';
 
 export const fetchMenus = async (appCode: string) => {
   try {

@@ -28,7 +28,7 @@ import { IGRPBadge } from '../badge';
 import { IGRPIcon } from '../icon';
 import { IGRPDatePickerRange } from '../input/date-picker/date-picker-range';
 import { IGRPInputText } from '../input/text';
-import type { IGRPInputProps, IGRPOptionsProps } from '../../../types/globals';
+import type { IGRPInputProps, IGRPOptionsProps } from '../../../types';
 import { cn } from '../../../lib/utils';
 
 interface IGRPDataTableFilterProps<TData> {

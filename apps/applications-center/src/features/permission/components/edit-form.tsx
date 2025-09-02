@@ -34,7 +34,7 @@ import {
 } from '@igrp/igrp-framework-react-design-system';
 import { BackButton } from '@/components/back-button';
 import { useCurrentPermission, useUpdatePermission } from '../hooks/use-permission';
-import { useApplications } from '@/features/applications/hooks/use-applications';
+import { useApplications } from '@/features/applications/use-applications';
 
 const permissionSchema = z.object({
   name: z.string().min(3, 'Permission name is required'),

@@ -37,7 +37,7 @@ import { IGRPLabel } from '../../label';
 import { igrpColorText } from '../../../../lib/colors';
 // import { igrpGridSizeClasses } from '../../../../lib/constants';
 import { cn } from '../../../../lib/utils';
-import type { IGRPBaseAttributes, IGRPGridSize, IGRPOptionsProps } from '../../../../types/globals';
+import type { IGRPBaseAttributes, IGRPGridSize, IGRPOptionsProps } from '../../../../types';
 
 type SelectState = {
   selected: string;

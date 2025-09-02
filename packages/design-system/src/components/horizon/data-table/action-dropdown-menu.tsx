@@ -21,7 +21,7 @@ import {
 import { buttonVariants } from '../../primitives/button';
 import { IGRPIcon } from '../icon';
 import { cn } from '../../../lib/utils';
-import { type IGRPPlacementProps } from '../../../types/globals';
+import { type IGRPPlacementProps } from '../../../types';
 import { type IGRPDataTableDialogProps, type IGRPDataTableLinkProps } from './row-actions';
 
 interface IGRPDataTableDropdownProps {

@@ -9,7 +9,7 @@ import { IGRPFormField } from '../../form/form-field';
 import { IGRPLabel } from '../../label';
 // import { igrpGridSizeClasses } from '../../../../lib/constants';
 import { cn } from '../../../../lib/utils';
-import type { IGRPBaseAttributes, IGRPGridSize } from '../../../../types/globals';
+import type { IGRPBaseAttributes, IGRPGridSize } from '../../../../types';
 
 type IGRPRadioOption = {
   value: string;

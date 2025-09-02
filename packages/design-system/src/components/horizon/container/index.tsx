@@ -1,5 +1,5 @@
 import { cn } from '../../../lib/utils';
-import type { IGRPBaseAttributes } from '../../../types/globals';
+import type { IGRPBaseAttributes } from '../../../types';
 
 function IGRPContainer({
   className,

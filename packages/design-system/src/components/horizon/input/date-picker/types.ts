@@ -1,4 +1,4 @@
-import type { IGRPBaseAttributes, IGRPGridSize } from '../../../../types/globals';
+import type { IGRPBaseAttributes, IGRPGridSize } from '../../../../types';
 
 export type IGRPDatePickerBaseProps = {
   error?: string;

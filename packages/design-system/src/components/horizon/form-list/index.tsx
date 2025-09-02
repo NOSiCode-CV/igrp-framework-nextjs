@@ -14,7 +14,7 @@ import { Button } from '../../primitives/button';
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '../../primitives/card';
 import { IGRPBadge, type IGRPBadgeProps } from '../badge';
 import { IGRPIcon, type IGRPIconName } from '../icon';
-import { type IGRPBaseAttributes } from '../../../types/globals';
+import { type IGRPBaseAttributes } from '../../../types';
 import { cn } from '../../../lib/utils';
 
 interface IGRPFormListProps<TItem>

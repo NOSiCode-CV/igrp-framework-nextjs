@@ -1,5 +1,5 @@
 import { getIGRPAccessClient } from '../lib/api-client';
-import { mapperApplications } from '../mappers/mapperApplications';
+import { mapperApplications } from '../mappers/applications-mapper';
 
 export async function fetchAppByCode(appCode: string) {
   try {

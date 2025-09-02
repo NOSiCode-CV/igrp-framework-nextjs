@@ -3,7 +3,7 @@ import { IGRPLink } from '../typography/link';
 import { IGRPColors, type IGRPColorRole, type IGRPColorVariants } from '../../../lib/colors';
 import { igrpAlertIconMappings } from '../../../lib/constants';
 import { cn } from '../../../lib/utils';
-import type { IGRPBaseAttributes } from '../../../types/globals';
+import type { IGRPBaseAttributes } from '../../../types';
 
 interface IGRPAlertProps
   extends Pick<

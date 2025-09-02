@@ -4,8 +4,8 @@ import { Fragment } from 'react';
 
 import { AppCenterNotFound } from '@/components/not-found';
 import { AppCenterLoading } from '@/components/loading';
-import { ApplicationCard } from '@/features/applications/components/card';
-import { useApplications } from '@/features/applications/hooks/use-applications';
+import { ApplicationCard } from '@/features/applications/components/app-card';
+import { useApplications } from '@/features/applications/use-applications';
 
 export function ApplicationsListHome() {
   const { data: applications, isLoading, error } = useApplications();

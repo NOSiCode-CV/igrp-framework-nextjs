@@ -7,7 +7,7 @@ import { IGRPFormField } from '../../form/form-field';
 import { IGRPLabel } from '../../label';
 import { cn } from '../../../../lib/utils';
 // import { igrpGridSizeClasses } from '../../../../lib/constants';
-import type { IGRPBaseAttributes, IGRPGridSize } from '../../../../types/globals';
+import type { IGRPBaseAttributes, IGRPGridSize } from '../../../../types';
 
 interface IGRPCheckboxProps
   extends React.ComponentProps<typeof Checkbox>,

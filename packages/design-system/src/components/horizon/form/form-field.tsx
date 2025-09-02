@@ -14,7 +14,7 @@ import {
   FormMessage,
 } from '../../primitives/form';
 import { cn } from '../../../lib/utils';
-import { type IGRPPlacementProps } from '../../../types/globals';
+import { type IGRPPlacementProps } from '../../../types';
 
 interface IGRPFormFielProps {
   name: string;

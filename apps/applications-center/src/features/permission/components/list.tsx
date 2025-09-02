@@ -14,7 +14,7 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { PermissionCreateDialog } from '@/features/permission/components/create-dialog';
 import { PermissionTable } from '@/features/permission/components/table';
 import { useAllPermissions } from '@/features/permission/hooks/use-permission';
-import { useApplications } from '@/features/applications/hooks/use-applications';
+import { useApplications } from '@/features/applications/use-applications';
 
 export function PermissionList() {
   const [searchTerm, setSearchTerm] = useState('');

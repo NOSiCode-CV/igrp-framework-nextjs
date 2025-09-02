@@ -5,7 +5,7 @@ import { useFormContext } from 'react-hook-form';
 
 import { Input } from '../../../primitives/input';
 import { IGRPFormField } from '../../form/form-field';
-import type { IGRPInputProps } from '../../../../types/globals';
+import type { IGRPInputProps } from '../../../../types';
 
 function IGRPInputHidden({ name, required = false, ...props }: Omit<IGRPInputProps, 'showIcon'>) {
   const id = useId();

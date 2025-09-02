@@ -1,21 +1,22 @@
 'use server';
 
-import { callApi } from '@/lib/api-client';
-import { getIGRPAccessClient, mapperDepartments } from '@igrp/framework-next';
+import { getIGRPAccessClient } from '@igrp/framework-next';
+
+import { mapperDepartments } from '@/features/departments/department-mapper';
+import { refreshAccessClient } from './igrp/auth';
 
 export async function getDepartments() {
-  // return callApi<Department[]>('/api/departments', {
-  //   method: 'GET',
-  // });
-  try {   
-      const client = await getIGRPAccessClient();
-      const result = await client.departments.getDepartments();
-      const departments = mapperDepartments(result);
-      return departments;
-    } catch (error) {
-      console.error('[departments] Não foi possível obter lista de dados dos departamentos:', error);
-      throw error;
-    }
+  await refreshAccessClient();
+  const client = await getIGRPAccessClient();
+
+  try {
+    const result = await client.departments.getDepartments();
+    const departments = mapperDepartments(result);
+    return departments;
+  } catch (error) {
+    console.error('[departments] Não foi possível obter lista de dados dos departamentos:', error);
+    throw error;
+  }
 }
 
 // export async function getDepartment(id: number) {

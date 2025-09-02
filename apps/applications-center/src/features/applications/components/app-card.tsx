@@ -11,8 +11,8 @@ import {
 import { IGRPApplicationArgs } from '@igrp/framework-next-types';
 
 import { cn, statusClass } from '@/lib/utils';
-import { ButtonTooltip } from '@/features/applications/components/button-tooltip';
-import { formatSlug } from '@/features/applications/lib/utils';
+import { ButtonTooltip } from '@/components/button-tooltip';
+import { formatSlug } from '@/features/applications/app-utils';
 import { ROUTES } from '@/lib/constants';
 
 // TODO: see picture if exists

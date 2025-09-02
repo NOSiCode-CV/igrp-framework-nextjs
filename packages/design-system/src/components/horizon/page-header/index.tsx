@@ -4,7 +4,7 @@ import { IGRPPageHeaderBackButton } from './back-button';
 import type { IGRPIconName } from '../icon';
 import { IGRPHeadline, igrpHeadlineVariants } from '../typography/headline';
 import { cn } from '../../../lib/utils';
-import { type IGRPBaseAttributes } from '../../../types/globals';
+import { type IGRPBaseAttributes } from '../../../types';
 
 type IGRPPageHeaderProps = {
   title: string;

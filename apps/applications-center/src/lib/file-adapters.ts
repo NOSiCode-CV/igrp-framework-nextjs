@@ -16,7 +16,7 @@ export async function urlToFileWithPreview(url: string): Promise<FileWithPreview
 
   return {
     id: nanoid(),
-    file,          // REQUIRED (File)
-    preview,       // OPTIONAL
+    file,          
+    preview,
   };
 }

@@ -1,10 +1,13 @@
 export type {
   IGRPMenuType,
+  IGRPMenuTypeCRUD,
   IGRPStatus,
   IGRPTargetType,
+  IGRPApplicationType,
   IGRPConfigurationType,
   IGRPApplicationArgs,
   IGRPMenuItemArgs,
+  IGRPMenuCRUDArgs,
   IGRPRoleArgs,
   IGRPRoleUserArgs,
   IGRPDepartmentArgs,

@@ -1,4 +1,4 @@
-import { ApplicationDetails } from '@/features/applications/components/details';
+import { ApplicationDetails } from '@/features/applications/components/app-details';
 
 // export const dynamic = 'force-dynamic';
 

@@ -6,7 +6,7 @@ import { useFormContext, Controller } from 'react-hook-form';
 import { Input } from '../../../primitives/input';
 import { IGRPLabel } from '../../label';
 import { cn } from '../../../../lib/utils';
-import type { IGRPInputProps, IGRPGridSize } from '../../../../types/globals';
+import type { IGRPInputProps, IGRPGridSize } from '../../../../types';
 
 interface IGRPInputColorProps extends Omit<IGRPInputProps, 'onChange' | 'value' | 'defaultValue'> {
   name: string;

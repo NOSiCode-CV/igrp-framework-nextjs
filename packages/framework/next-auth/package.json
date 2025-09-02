@@ -39,7 +39,8 @@
     "format": "prettier --write .",
     "build:types": "tsc -p tsconfig.build.json --emitDeclarationOnly --outDir dist",
     "build:js": "tsup",
-    "build": "pnpm clean && pnpm build:js && pnpm build:types"    
+    "build": "pnpm clean && pnpm build:js && pnpm build:types",
+    "clean-all": "rimraf node_modules && rimraf dist && rimraf tsconfig.tsbuildinfo"
   },
   "peerDependencies": {
     "next-auth": "^4.24.11",

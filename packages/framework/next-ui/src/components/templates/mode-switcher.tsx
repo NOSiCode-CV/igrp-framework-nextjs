@@ -1,6 +1,6 @@
 'use client';
 
-import { useCallback } from 'react';
+import { useCallback, useEffect, useState } from 'react';
 import { useTheme } from 'next-themes';
 import {
   IGRPButtonPrimitive,
@@ -10,15 +10,19 @@ import {
 } from '@igrp/igrp-framework-react-design-system';
 
 function IGRPTemplateModeSwitcher() {
-  const { theme, setTheme, resolvedTheme } = useTheme();
+  const { setTheme, resolvedTheme } = useTheme();
   const { setMetaColor } = useIGRPMetaColor();
 
+  const [mounted, setMounted] = useState(false);
+  useEffect(() => setMounted(true), []);
+
+  const isDark = resolvedTheme === 'dark';
+
   const toggleTheme = useCallback(() => {
-    setTheme(resolvedTheme === 'dark' ? 'light' : 'dark');
-    setMetaColor(
-      resolvedTheme === 'dark' ? IGRP_META_THEME_COLORS.light : IGRP_META_THEME_COLORS.dark,
-    );
-  }, [resolvedTheme, setTheme, setMetaColor]);
+    const next = isDark ? 'light' : 'dark';
+    setTheme(next);
+    setMetaColor(next === 'dark' ? IGRP_META_THEME_COLORS.dark : IGRP_META_THEME_COLORS.light);
+  }, [isDark, setTheme, setMetaColor]);
 
   return (
     <IGRPButtonPrimitive
@@ -26,12 +30,13 @@ function IGRPTemplateModeSwitcher() {
       size="icon"
       className="group/toggle size-6"
       onClick={toggleTheme}
+      aria-label="Toggle theme"
     >
-      {theme === 'dark' ? (
+      {mounted && (isDark ? (
         <IGRPIcon iconName="Sun" strokeWidth={2} />
       ) : (
         <IGRPIcon iconName="Moon" strokeWidth={2} />
-      )}
+      ))}
       <span className="sr-only">Toggle theme</span>
     </IGRPButtonPrimitive>
   );

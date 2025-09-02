@@ -22,7 +22,7 @@ import { IGRPCircleFull } from '../../icon/custom';
 // import { igrpGridSizeClasses } from '../../../../lib/constants';
 import { cn } from '../../../../lib/utils';
 import { igrpColorText } from '../../../../lib/colors';
-import type { IGRPBaseAttributes, IGRPOptionsProps, IGRPGridSize } from '../../../../types/globals';
+import type { IGRPBaseAttributes, IGRPOptionsProps, IGRPGridSize } from '../../../../types';
 
 interface IGRPComboboxProps extends IGRPBaseAttributes {
   variant?: 'single' | 'multiple';

@@ -7,7 +7,7 @@ import { Loader2 } from 'lucide-react';
 import { Button, buttonVariants } from '../../primitives/button';
 import { IGRPIcon } from '../icon';
 import { cn } from '../../../lib/utils';
-import type { IGRPBaseAttributes } from '../../../types/globals';
+import type { IGRPBaseAttributes } from '../../../types';
 
 interface IGRPButtonProps
   extends Omit<React.ComponentProps<'button'>, 'name'>,

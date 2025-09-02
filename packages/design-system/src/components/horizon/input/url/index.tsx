@@ -14,7 +14,7 @@ import {
 } from '../../../primitives/select';
 // import { igrpGridSizeClasses } from '../../../../lib/constants';
 import { cn } from '../../../../lib/utils';
-import type { IGRPOptionsProps, IGRPGridSize } from '../../../../types/globals';
+import type { IGRPOptionsProps, IGRPGridSize } from '../../../../types';
 
 interface IGRPInputUrlProps
   extends Omit<React.InputHTMLAttributes<HTMLInputElement>, 'type' | 'onChange'> {

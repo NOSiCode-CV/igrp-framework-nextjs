@@ -7,7 +7,7 @@ import { IGRPColors, type IGRPColorRole, type IGRPColorVariants } from "../../..
 import { igrpColorText } from "../../../../lib/colors";
 import { igrpIsExternalUrl } from "../../../../lib/url";
 import { cn } from "../../../../lib/utils";
-import type { IGRPBaseAttributes, IGRPPlacementProps } from "../../../../types/globals";
+import type { IGRPBaseAttributes, IGRPPlacementProps } from "../../../../types";
 
 const IGRPLinkVariants = cva(
   "transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2",

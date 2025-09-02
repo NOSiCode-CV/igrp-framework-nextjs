@@ -25,7 +25,8 @@
     "clean:packages": "rimraf node_modules",
     "format": "prettier --write .",
     "tailwind:build": "npx @tailwindcss/cli -i ./src/index.css -o ./src/styles.css",
-    "release": "pnpm format && pnpm build && yarn publish --registry=https://sonatype.nosi.cv/repository/igrp/ --tag latest"
+    "release": "pnpm format && pnpm build && yarn publish --registry=https://sonatype.nosi.cv/repository/igrp/ --tag latest",
+    "clean-all": "rimraf node_modules && rimraf dist && rimraf tsconfig.tsbuildinfo"
   },
   "peerDependencies": {
     "next": "15.4.6",

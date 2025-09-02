@@ -29,7 +29,7 @@ import {
   IGRPFormMessagePrimitive,
   useIGRPToast,
 } from '@igrp/igrp-framework-react-design-system';
-import { useApplications } from '@/features/applications/hooks/use-applications';
+import { useApplications } from '@/features/applications/use-applications';
 import { useAddPermission } from '../hooks/use-permission';
 import { Permission } from '../types';
 

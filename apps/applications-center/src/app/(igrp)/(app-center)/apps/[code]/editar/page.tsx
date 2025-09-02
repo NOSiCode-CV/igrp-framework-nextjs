@@ -3,8 +3,8 @@
 import { use } from 'react';
 
 import { PageHeader } from '@/components/page-header';
-import { ApplicationForm } from '@/features/applications/components/form';
-import { useApplicationByCode } from '@/features/applications/hooks/use-applications';
+import { ApplicationForm } from '@/features/applications/components/app-form';
+import { useApplicationByCode } from '@/features/applications/use-applications';
 import { ROUTES } from '@/lib/constants';
 import { AppCenterLoading } from '@/components/loading';
 import { AppCenterNotFound } from '@/components/not-found';

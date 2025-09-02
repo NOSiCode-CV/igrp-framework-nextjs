@@ -13,8 +13,8 @@ import {
   IGRPIcon,
 } from '@igrp/igrp-framework-react-design-system';
 
-import { ApplicationCard } from '@/features/applications/components/card';
-import { useApplications } from '@/features/applications/hooks/use-applications';
+import { ApplicationCard } from '@/features/applications/components/app-card';
+import { useApplications } from '@/features/applications/use-applications';
 import { STATUS_OPTIONS } from '@/lib/constants';
 import { AppCenterLoading } from '@/components/loading';
 import { AppCenterNotFound } from '@/components/not-found';

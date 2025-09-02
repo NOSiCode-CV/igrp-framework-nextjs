@@ -12,7 +12,7 @@ import {
   useCurrentPermission,
   usePermissionRoles,
 } from '@/features/permission/hooks/use-permission';
-import { useApplications } from '@/features/applications/hooks/use-applications';
+import { useApplications } from '@/features/applications/use-applications';
 import { PermissionRolesList } from './permission-roles-list';
 
 export function PermissionDetails({ id }: { id: number }) {

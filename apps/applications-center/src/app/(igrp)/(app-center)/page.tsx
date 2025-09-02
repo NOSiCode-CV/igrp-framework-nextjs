@@ -1,6 +1,6 @@
 import { ButtonLink } from '@/components/button-link';
 import { PageHeader } from '@/components/page-header';
-import { ApplicationsListHome } from '@/features/applications/components/list-home';
+import { ApplicationsListHome } from '@/features/applications/components/app-list-home';
 import { ROUTES } from '@/lib/constants';
 
 const appName = process.env.IGRP_APP_NAME_DESCRIPTION || 'IGRP';

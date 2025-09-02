@@ -1,3 +1,5 @@
+'use client';
+
 import type { IGRPHeaderDataArgs } from '@igrp/framework-next-types';
 import {
   cn,

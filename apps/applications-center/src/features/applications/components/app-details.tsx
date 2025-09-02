@@ -17,11 +17,11 @@ import {
 } from '@igrp/igrp-framework-react-design-system';
 import { CopyToClipboard } from '@/components/copy-to-clipboard';
 import { PageHeader } from '@/components/page-header';
-import { MenuList } from '@/features/applications/components/menu-list';
-import { useApplicationByCode, useApplications /*useGetAppImage*/ } from '@/features/applications/hooks/use-applications';
-import { formatDate } from '@/features/applications/lib/utils';
+import { MenuList } from '@/features/menus/components/menu-list';
+import { useApplicationByCode, useApplications /*useGetAppImage*/ } from '@/features/applications/use-applications';
+import { formatDate } from '@/features/applications/app-utils';
 import { statusClass } from '@/lib/utils';
-import { ApplicationPermissionList } from './application-permission-list';
+import { ApplicationPermissionList } from './app-permission-list';
 import { ROUTES } from '@/lib/constants';
 import { AppCenterLoading } from '@/components/loading';
 import { AppCenterNotFound } from '@/components/not-found';

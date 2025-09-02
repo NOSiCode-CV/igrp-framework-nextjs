@@ -12,7 +12,7 @@ import { IGRPIcon, type IGRPIconName } from '../../icon';
 import { IGRPLabel } from '../../label';
 // import { igrpGridSizeClasses } from '../../../../lib/constants';
 import { cn } from '../../../../lib/utils';
-import { type IGRPInputProps } from '../../../../types/globals';
+import { type IGRPInputProps } from '../../../../types';
 
 interface IGRPInputSearchProps extends Omit<IGRPInputProps, 'value' | 'defaultValue'> {
   value?: string;

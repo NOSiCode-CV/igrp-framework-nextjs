@@ -8,7 +8,7 @@ import { IGRPButton } from '../../button';
 import { IGRPLabel } from '../../label';
 // import { igrpGridSizeClasses } from '../../../../lib/constants';
 import { cn } from '../../../../lib/utils';
-import type { IGRPInputProps, IGRPGridSize } from '../../../../types/globals';
+import type { IGRPInputProps, IGRPGridSize } from '../../../../types';
 
 interface IGRPInputPasswordProps extends Omit<IGRPInputProps, 'onChange'> {
   name: string;

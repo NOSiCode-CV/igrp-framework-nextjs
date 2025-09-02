@@ -23,7 +23,9 @@
     "serve-storybook": "serve storybook-static",
     "test-storybook": "test-storybook",
     "lint": "eslint . --ext .ts,.tsx",
-    "format": "prettier --write ."
+    "format": "prettier --write .",
+    "clean-all": "rimraf node_modules && rimraf dist && rimraf tsconfig.tsbuildinfo"
+
   },
   "dependencies": {
     "@hookform/resolvers": "5.0.1",

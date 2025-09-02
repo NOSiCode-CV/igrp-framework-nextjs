@@ -1,21 +1,19 @@
 'use server';
 
-import {
-  getIGRPAccessClient,
-  mapperApplications,
-  mapperActionsApplication
-} from '@igrp/framework-next';
+import { getIGRPAccessClient, mapperApplications } from '@igrp/framework-next';
 import {
   CreateApplicationRequest,
   UpdateApplicationRequest
 } from '@igrp/platform-access-management-client-ts';
+
 import { refreshAccessClient } from './igrp/auth';
+import { mapperActionsApplication } from '@/features/applications/app-mapper';
 
 export async function getApplications() {
   await refreshAccessClient();
+  const client = await getIGRPAccessClient();
 
-  try {
-    const client = await getIGRPAccessClient();
+  try {    
     const result = await client.applications.getApplications();
     const app = mapperApplications(result);
     return app;
@@ -27,9 +25,9 @@ export async function getApplications() {
 
 export async function getApplicationByCode(appCode: string) {
   await refreshAccessClient();
+  const client = await getIGRPAccessClient();
 
-  try {
-    const client = await getIGRPAccessClient();
+  try {   
     const result = await client.applications.getApplications({ code: appCode });
     const app = mapperApplications(result);
     return app[0];
@@ -41,9 +39,9 @@ export async function getApplicationByCode(appCode: string) {
 
 export async function createApplication(application: CreateApplicationRequest) {
   await refreshAccessClient();
+  const client = await getIGRPAccessClient();
 
-  try {
-    const client = await getIGRPAccessClient();
+  try {    
     const result = await client.applications.createApplication(application);
     const app = mapperActionsApplication(result);
     return app;
@@ -55,9 +53,9 @@ export async function createApplication(application: CreateApplicationRequest) {
 
 export async function updateApplication(code: string, updated: UpdateApplicationRequest) {
   await refreshAccessClient();
+  const client = await getIGRPAccessClient();
 
-  try {
-    const client = await getIGRPAccessClient();
+  try {    
     const result = await client.applications.updateApplication(code, updated);
     const app = mapperActionsApplication(result);
     return app;

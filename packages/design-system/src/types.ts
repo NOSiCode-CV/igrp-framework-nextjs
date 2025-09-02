@@ -1,6 +1,6 @@
-import { type IGRPIconName } from '../components/horizon/icon';
-import { igrpGridSizeClasses } from '../lib/constants';
-import type { IGRPColorVariants } from '../lib/colors';
+import { type IGRPIconName } from './components/horizon/icon';
+import { igrpGridSizeClasses } from './lib/constants';
+import type { IGRPColorVariants } from './lib/colors';
 
 export type IGRPPlacementProps = 'start' | 'end' | 'center';
 

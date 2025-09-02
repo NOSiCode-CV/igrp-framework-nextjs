@@ -578,7 +578,7 @@ export type {
   IGRPInputProps,
   IGRPOptionsProps,
   IGRPGridSize,
-} from './types/globals';
+} from './types';
 
 // hooks
 export { IGRP_META_THEME_COLORS, useIGRPMetaColor } from './hooks/use-meta-color';

@@ -12,24 +12,27 @@ import {
   IGRPIcon,
 } from '@igrp/igrp-framework-react-design-system';
 
-import { cn } from '@/lib/utils';
-import { IGRPMenuItemArgs } from '@igrp/framework-next-types';
+import { cn, lowerCaseWithSpace } from '@/lib/utils';
+import { IGRPMenuCRUDArgs } from '@igrp/framework-next-types';
+import { menuTypeSchema } from '../menu-schemas';
 
 interface SortableItemProps {
-  menuId: number | undefined;
-  menu: IGRPMenuItemArgs;
+  menuCode: string;
+  menu: IGRPMenuCRUDArgs;
   code: string;
-  onEdit: (menu: IGRPMenuItemArgs) => void;
-  onDelete?: (id: number, name: string) => void;
+  onView: (menu: IGRPMenuCRUDArgs) => void;
+  onEdit: (menu: IGRPMenuCRUDArgs) => void;
+  onDelete?: (code: string, name: string) => void;
   depth?: number;
   isChild?: boolean;
-  subMenus?: IGRPMenuItemArgs[];
+  subMenus?: IGRPMenuCRUDArgs[];
 }
 
 export function SortableItem({
-  menuId,
+  menuCode,
   menu,
   code,
+  onView,
   onEdit,
   onDelete,
   depth = 0,
@@ -37,7 +40,7 @@ export function SortableItem({
   subMenus,
 }: SortableItemProps) {
   const { attributes, listeners, setNodeRef, transform, transition } = useSortable({
-    id: menuId as number,
+    id: menuCode,
     data: {
       type: 'menu-item',
       parent: menu.parentCode,
@@ -92,7 +95,12 @@ export function SortableItem({
 
           <div>
             <div className='font-medium'>{menu.name}</div>
-            <div className='text-sm text-muted-foreground'>{menu.icon}</div>
+            <div className='text-sm text-muted-foreground'>
+              {menu.pageSlug ?? menu.url}
+            </div>
+            <div className='text-sm text-muted-foreground'>
+              {menu.pageSlug ?? menu.url}
+            </div>
           </div>
         </div>
 
@@ -100,12 +108,12 @@ export function SortableItem({
           <IGRPBadgePrimitive
             variant='secondary'
             className={
-              menu.type === 'FOLDER'
+              menu.type === menuTypeSchema.enum.FOLDER
                 ? 'text-secondary bg-secondary-foreground'
                 : 'text-muted bg-muted-foreground'
             }
           >
-            {menu.type}
+            {lowerCaseWithSpace(menu.type)}
           </IGRPBadgePrimitive>
           <IGRPDropdownMenuPrimitive>
             <IGRPDropdownMenuTriggerPrimitive asChild>
@@ -113,30 +121,40 @@ export function SortableItem({
                 variant='ghost'
                 className='h-7 w-7 p-0'
               >
-                <span className='sr-only'>Open menu</span>
-                <IGRPIcon iconName='MoreHorizontal' strokeWidth={2} />
+                <span className='sr-only'>Abrir menu</span>
+                <IGRPIcon iconName='Ellipsis' strokeWidth={2} />
               </IGRPButtonPrimitive>
             </IGRPDropdownMenuTriggerPrimitive>
             <IGRPDropdownMenuContentPrimitive align='end'>
               <IGRPDropdownMenuItemPrimitive
-                onClick={() => onEdit(menu)}
-                className='cursor-pointer'
+                onClick={() => onView(menu)}                
               >
                 <IGRPIcon 
-                  iconName='Edit'
-                  className='mr-1 h-4 w-4'
+                  iconName='Eye'
+                  className='size-4 mr-0.5'
+                  strokeWidth={2}
+                />
+                Ver
+              </IGRPDropdownMenuItemPrimitive>
+              <IGRPDropdownMenuItemPrimitive
+                onClick={() => onEdit(menu)}               
+              >
+                <IGRPIcon 
+                  iconName='Pencil'
+                  className='size-4 mr-0.5'
                   strokeWidth={2}
                 />
                 Editar
               </IGRPDropdownMenuItemPrimitive>
               <IGRPDropdownMenuSeparatorPrimitive />
               <IGRPDropdownMenuItemPrimitive
-                className='text-destructive focus:text-destructive cursor-pointer bg-destructive/10'
-                onClick={() => onDelete(menu.id as number, menu.name)}
+                variant='destructive'
+                className=''
+                onClick={() => onDelete?.(menu.code, menu.name)}
               >
                 <IGRPIcon 
                   iconName='Trash'
-                  className='mr-1 h-4 w-4 text-destructive'
+                  className='size-4 mr-0.5'
                   strokeWidth={2}
                 />
                 Eliminar
@@ -149,14 +167,15 @@ export function SortableItem({
         <div className='border-l-2 ml-8 pl-2'>
           {subMenus.map((child) => (
             <SortableItem
-              key={child.id}
-              menuId={child.id}
+              key={`${child.id}-${child.code}`}
+              menuCode={child.code}
               menu={child}
               code={code}
               onEdit={onEdit}
               onDelete={onDelete}
               depth={depth + 1}
-              isChild={true}
+              isChild={true} 
+              onView={onView}            
             />
           ))}
         </div>

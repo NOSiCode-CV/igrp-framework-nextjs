@@ -1,7 +1,9 @@
 import { z } from 'zod';
 import { APPLICATIONS_TYPES_EXCLUDE } from './app-utils';
-import { STATUS_TYPES } from '@/lib/constants';
 import { fileWithPreviewSchema } from '@/schemas/file';
+import { statusSchema } from '@/schemas/global';
+
+export const appTypeCrud = z.enum(APPLICATIONS_TYPES_EXCLUDE);
 
 export const applicationSchema = z
   .object({
@@ -10,18 +12,18 @@ export const applicationSchema = z
     code: z
       .string()
       .regex(/^[A-Z0-9_]+$/, 'O código deve conter apenas letras, números e sublinhados')
-      .min(2, 'Código é obrigatório'),
-    type: z.enum(APPLICATIONS_TYPES_EXCLUDE),
+      .min(3, 'Código é obrigatório'),
+    type: appTypeCrud,
     slug: z.string().optional(),
     url: z.string().optional(),
     description: z.string().min(5, 'Descrição é obrigatória'),
-    status: z.enum(STATUS_TYPES),
+    status: statusSchema,
     departmentCode: z.string().min(3, 'Departamento é obrigatório'),
     picture: z.string().optional(),
     image: fileWithPreviewSchema.nullable().optional(),
   })
   .superRefine((data, ctx) => {
-    if (data.type === 'INTERNAL' && !data.slug) {
+    if (data.type === appTypeCrud.enum.INTERNAL && !data.slug) {
       ctx.addIssue({
         path: ['slug'],
         code: z.ZodIssueCode.custom,
@@ -29,7 +31,7 @@ export const applicationSchema = z
       });
     }
 
-    if (data.type === 'EXTERNAL') {
+    if (data.type === appTypeCrud.enum.EXTERNAL) {
       if (!data.url) {
         ctx.addIssue({
           path: ['url'],

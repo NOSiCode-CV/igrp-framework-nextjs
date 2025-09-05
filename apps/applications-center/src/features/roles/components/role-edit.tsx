@@ -25,11 +25,7 @@ import {
 import { IGRPInputPrimitive } from '@igrp/igrp-framework-react-design-system';
 import { IGRPTextAreaPrimitive } from '@igrp/igrp-framework-react-design-system';
 import { IIGRPCheckboxPrimitive } from '@igrp/igrp-framework-react-design-system';
-import {
-  useRolePermissions,
-  useAddRolePermissions,
-  useRemoveRolePermissions,
-} from '@/features/roles/hooks/use-roles';
+import { useRolePermissions, useAddRolePermissions, useRemoveRolePermissions } from '../use-roles';
 
 const roleEditSchema = z.object({
   name: z.string().min(2, 'Role name is required'),

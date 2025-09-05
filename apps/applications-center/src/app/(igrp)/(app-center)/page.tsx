@@ -7,7 +7,7 @@ const appName = process.env.IGRP_APP_NAME_DESCRIPTION || 'IGRP';
 
 export default function Home() {
   return (
-    <div className='space-y-10 animate-fade-in'>
+    <div className='flex flex-col gap-10 animate-fade-in'>
       <PageHeader
         title={`Bem-vindo ao ${appName}`}
         showActions

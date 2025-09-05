@@ -22,11 +22,7 @@ interface MenuDeleteDialogProps {
   menuToDelete: { code: string; name: string };
 }
 
-export function MenuDeleteDialog({
-  open,
-  onOpenChange,
-  menuToDelete,
-}: MenuDeleteDialogProps) {
+export function MenuDeleteDialog({ open, onOpenChange, menuToDelete }: MenuDeleteDialogProps) {
   const [confirmation, setConfirmation] = useState('');
   const { igrpToast } = useIGRPToast();
 
@@ -35,8 +31,6 @@ export function MenuDeleteDialog({
   const isConfirmed = confirmation === menuToDelete.name;
 
   async function confirmDelete() {
-    if (!menuToDelete) return;
-
     try {
       await deleteMenuAsync(menuToDelete.code);
 
@@ -55,9 +49,9 @@ export function MenuDeleteDialog({
     } finally {
       setTimeout(() => {
         onOpenChange(false);
-      }, 4000);
+      }, 2000);
     }
-  };
+  }
 
   return (
     <IGRPDialogPrimitive
@@ -69,22 +63,25 @@ export function MenuDeleteDialog({
           <IGRPDialogHeaderPrimitive className='flex flex-col gap-4'>
             <div className='flex flex-col items-center gap-1'>
               <div
-                className="flex size-9 shrink-0 items-center justify-center"
-                aria-hidden="true"
+                className='flex size-9 shrink-0 items-center justify-center'
+                aria-hidden='true'
               >
                 <IGRPIcon
                   iconName='CircleAlertIcon'
-                  className="opacity-80 size-4"
+                  className='opacity-80 size-4'
                 />
               </div>
-              <IGRPDialogTitlePrimitive>
-                Confirmação
-              </IGRPDialogTitlePrimitive>
+              <IGRPDialogTitlePrimitive>Confirmação</IGRPDialogTitlePrimitive>
             </div>
-            <IGRPDialogDescriptionPrimitive className="sm:text-center text-base text-balance ">
-              <span>Esta ação é irreversível. O menu e todos os seus dados serão eliminados permanentemente. Para confirmar, escreva</span>
-              {' '}
-              <span className='font-semibold bg-emerald-50bg-destructive/20 dark:bg-destructive/50 dark:text-white p-0.5 rounded-sm '>&nbsp;{menuToDelete.name}&nbsp;</span> abaixo:
+            <IGRPDialogDescriptionPrimitive className='sm:text-center text-base text-balance '>
+              <span>
+                Esta ação é irreversível. O menu e todos os seus dados serão eliminados
+                permanentemente. Para confirmar, escreva
+              </span>{' '}
+              <span className='font-semibold bg-emerald-50bg-destructive/20 dark:bg-destructive/50 dark:text-white p-0.5 rounded-sm '>
+                &nbsp;{menuToDelete.name}&nbsp;
+              </span>{' '}
+              abaixo:
             </IGRPDialogDescriptionPrimitive>
           </IGRPDialogHeaderPrimitive>
         </div>
@@ -108,7 +105,10 @@ export function MenuDeleteDialog({
         <IGRPDialogFooterPrimitive className='flex flex-col'>
           <IGRPButtonPrimitive
             variant='outline'
-            onClick={() => onOpenChange(false)}
+            onClick={() => {
+              onOpenChange(false);
+              setConfirmation('');
+            }}
             type='button'
           >
             Cancelar
@@ -122,6 +122,6 @@ export function MenuDeleteDialog({
           </IGRPButtonPrimitive>
         </IGRPDialogFooterPrimitive>
       </IGRPDialogContentPrimitive>
-    </IGRPDialogPrimitive >
+    </IGRPDialogPrimitive>
   );
 }

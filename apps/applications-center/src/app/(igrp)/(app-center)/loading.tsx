@@ -5,5 +5,5 @@ export default function Loading() {
 
   // return <IGRPTemplateLoading appCode={appCode} />;
 
-  return <div>Loading Test App Center</div>
+  return <div>Loading Test App Center</div>;
 }

@@ -41,8 +41,8 @@ import {
   IGRPPopoverContentPrimitive,
 } from '@igrp/igrp-framework-react-design-system';
 import { IGRPSeparatorPrimitive } from '@igrp/igrp-framework-react-design-system';
-import { useApps, useDepartments, useInviteUser, useRoles } from '@/features/users/hooks/use-users';
-import { formSchema } from '@/features/users/schemas/user';
+import { useApps, useDepartments, useInviteUser, useRoles } from '@/features/users/use-users';
+import { formSchema } from '@/features/users/user';
 import { cn } from '@/lib/utils';
 
 interface UserInviteDialogProps {

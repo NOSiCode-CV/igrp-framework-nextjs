@@ -17,28 +17,37 @@ export function getInitials(username: string) {
 }
 
 export function formatIconString(input: string): string {
-  return input    
-    .replace(/([A-Z])/g, " $1")    
-    .replace(/([0-9]+)/g, " $1")    
-    .trim()    
+  return input
+    .replace(/([A-Z])/g, ' $1')
+    .replace(/([0-9]+)/g, ' $1')
+    .trim()
     .replace(/\b\w/g, (char) => char.toUpperCase());
 }
 
 export function formatConstanttoLabel(value: string): string {
   return value
     .toLowerCase()
-    .split("_")
-    .map(word => word.charAt(0).toUpperCase() + word.slice(1))
-    .join(" ");
+    .split('_')
+    .map((word) => word.charAt(0).toUpperCase() + word.slice(1))
+    .join(' ');
 }
 
 export const nullIfEmpty = (v: string | null | undefined): string | null =>
   typeof v === 'string' && v.trim().length === 0 ? null : (v ?? null);
 
 export function lowerCaseWithSpace(v: string | null | undefined) {
-  if ( v == null || v === undefined ) return null;
+  if (v == null || v === undefined) return null;
 
   return typeof v === 'string' ? v.toLowerCase().replace(/_/g, ' ') : (v ?? null);
 }
 
-
+export const formatDate = (dateString: string) => {
+  const date = new Date(dateString);
+  return new Intl.DateTimeFormat('pt-PT', {
+    year: 'numeric',
+    month: 'long',
+    day: 'numeric',
+    hour: '2-digit',
+    minute: '2-digit',
+  }).format(date);
+};

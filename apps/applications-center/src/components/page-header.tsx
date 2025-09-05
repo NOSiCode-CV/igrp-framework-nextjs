@@ -24,14 +24,10 @@ export function PageHeader({
           {showBackButton && <BackButton href={linkBackButton} />}
 
           <div className='flex flex-col'>
-            <h2 className='text-2xl font-bold tracking-tight'>{
-              title}
-            </h2>
+            <h2 className='text-2xl font-bold tracking-tight'>{title}</h2>
 
-            {description && (
-              <p className='text-muted-foreground text-sm'>{description}</p>
-            )}
-          </div>  
+            {description && <p className='text-muted-foreground text-sm'>{description}</p>}
+          </div>
         </div>
       </div>
       {showActions && (

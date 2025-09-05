@@ -2,7 +2,7 @@
 
 import { useState } from 'react';
 import Link from 'next/link';
-import { 
+import {
   IGRPBadgePrimitive,
   IGRPButtonPrimitive,
   IGRPDropdownMenuPrimitive,
@@ -10,7 +10,7 @@ import {
   IGRPDropdownMenuItemPrimitive,
   IGRPDropdownMenuLabelPrimitive,
   IGRPDropdownMenuSeparatorPrimitive,
-  IGRPDropdownMenuTriggerPrimitive, 
+  IGRPDropdownMenuTriggerPrimitive,
   IGRPTablePrimitive,
   IGRPTableBodyPrimitive,
   IGRPTableCellPrimitive,
@@ -29,18 +29,16 @@ import { PermissionDeleteDialog } from './delete-dialog';
 
 interface PermissionTableProps {
   permissions: Permission[];
-  applications: IGRPApplicationArgs[];
   onRefresh?: () => void;
   hideApplicationColumn?: boolean;
 }
-type PermissionToDelete = { 
-  id: number; 
-  name: string
-}
+type PermissionToDelete = {
+  id: number;
+  name: string;
+};
 
 export function PermissionTable({
   permissions,
-  applications,
   onRefresh,
   hideApplicationColumn = false,
 }: PermissionTableProps) {
@@ -65,18 +63,18 @@ export function PermissionTable({
   const confirmDelete = async () => {
     if (!permissionToDelete) return;
 
-    const promise = deletePermission(permissionToDelete.id);    
+    const promise = deletePermission(permissionToDelete.id);
     igrpToast({
       promise: promise,
       loading: 'Deleting permission...',
       success: `Permission '${permissionToDelete.name}' deleted successfully.`,
       error: (err) => `Failed to delete: ${(err as Error).message}`,
-      duration: 4000, 
-    })
+      duration: 4000,
+    });
 
-    try {      
+    try {
       await promise;
-      if (onRefresh){
+      if (onRefresh) {
         onRefresh();
       }
     } finally {
@@ -89,10 +87,6 @@ export function PermissionTable({
 
   const handleEditSuccess = () => {
     if (onRefresh) onRefresh();
-  };
-
-  const getAppName = (appId: number) => {
-    return applications?.find((app) => app.id === appId)?.name || `App ${appId}`;
   };
 
   return (
@@ -119,16 +113,10 @@ export function PermissionTable({
                     {perm.name}
                   </Link>
                 </IGRPTableCellPrimitive>
-                <IGRPTableCellPrimitive>{perm.description || 'No description'}</IGRPTableCellPrimitive>
-                {!hideApplicationColumn && (
-                  <IGRPTableCellPrimitive>
-                    {perm.applicationId ? (
-                      <IGRPBadgePrimitive variant='secondary'>{getAppName(perm.applicationId)}</IGRPBadgePrimitive>
-                    ) : (
-                      <span className='text-muted-foreground text-sm'>None</span>
-                    )}
-                  </IGRPTableCellPrimitive>
-                )}
+                <IGRPTableCellPrimitive>
+                  {perm.description || 'No description'}
+                </IGRPTableCellPrimitive>
+
                 <IGRPTableCellPrimitive>
                   <IGRPBadgePrimitive variant={perm.status === 'ACTIVE' ? 'default' : 'outline'}>
                     {perm.status}
@@ -142,25 +130,40 @@ export function PermissionTable({
                         className='h-8 w-8 p-0'
                       >
                         <span className='sr-only'>Open menu</span>
-                        <IGRPIcon iconName='MoreHorizontal' className='size-4' />
+                        <IGRPIcon
+                          iconName='MoreHorizontal'
+                          className='size-4'
+                        />
                       </IGRPButtonPrimitive>
                     </IGRPDropdownMenuTriggerPrimitive>
                     <IGRPDropdownMenuContentPrimitive align='end'>
                       <IGRPDropdownMenuLabelPrimitive>Ações</IGRPDropdownMenuLabelPrimitive>
                       <IGRPDropdownMenuItemPrimitive asChild>
                         <Link href={`/permissions/${perm.id}`}>
-                          <IGRPIcon iconName='Eye' className='mr-2 size-4' /> Ver
+                          <IGRPIcon
+                            iconName='Eye'
+                            className='mr-2 size-4'
+                          />{' '}
+                          Ver
                         </Link>
                       </IGRPDropdownMenuItemPrimitive>
                       <IGRPDropdownMenuItemPrimitive onClick={() => handleEdit(perm)}>
-                        <IGRPIcon iconName='Edit' className='mr-2 h-4 w-4' /> Editar
+                        <IGRPIcon
+                          iconName='Edit'
+                          className='mr-2 h-4 w-4'
+                        />{' '}
+                        Editar
                       </IGRPDropdownMenuItemPrimitive>
                       <IGRPDropdownMenuSeparatorPrimitive />
                       <IGRPDropdownMenuItemPrimitive
                         className='text-destructive focus:text-destructive cursor-pointer'
                         onClick={() => handleDelete(perm.id, perm.name)}
                       >
-                        <IGRPIcon iconName='Trash' className='mr-2 size-4' /> Eliminar
+                        <IGRPIcon
+                          iconName='Trash'
+                          className='mr-2 size-4'
+                        />{' '}
+                        Eliminar
                       </IGRPDropdownMenuItemPrimitive>
                     </IGRPDropdownMenuContentPrimitive>
                   </IGRPDropdownMenuPrimitive>
@@ -185,7 +188,6 @@ export function PermissionTable({
           open={editDialogOpen}
           onOpenChange={setEditDialogOpen}
           permission={permissionToEdit}
-          applications={applications}
           onSuccess={handleEditSuccess}
         />
       )}

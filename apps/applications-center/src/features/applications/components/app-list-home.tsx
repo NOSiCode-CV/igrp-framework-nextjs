@@ -11,7 +11,7 @@ export function ApplicationsListHome() {
   const { data: applications, isLoading, error } = useApplications();
 
   if (isLoading && !error) return <AppCenterLoading descrption='Carregando aplicações...' />;
-  
+
   if (error) throw error;
 
   if (!applications || applications.length === 0) {

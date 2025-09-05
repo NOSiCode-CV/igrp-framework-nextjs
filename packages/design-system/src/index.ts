@@ -73,6 +73,8 @@ export {
   CardContent as IGRPCardContentPrimitive,
 } from './components/primitives/card';
 
+export { Checkbox as IGRPCheckboxPrimitive } from './components/primitives/checkbox';
+
 export {
   Collapsible as IGRPCollapsiblePrimitive,
   CollapsibleTrigger as IGRPCollapsibleTriggerPrimitive,

@@ -1,10 +1,7 @@
 'use client';
 
-// import Image from 'next/image'
-import Link from 'next/link';
 import {
   IGRPBadgePrimitive,
-  IGRPButtonPrimitive,
   IGRPSeparatorPrimitive,
   IGRPCardPrimitive,
   IGRPCardContentPrimitive,
@@ -12,28 +9,31 @@ import {
   IGRPCardHeaderPrimitive,
   IGRPCardTitlePrimitive,
   IGRPTabs,
-  IGRPIcon,
   IGRPTabItem,
 } from '@igrp/igrp-framework-react-design-system';
-import { CopyToClipboard } from '@/components/copy-to-clipboard';
-import { PageHeader } from '@/components/page-header';
-import { MenuList } from '@/features/menus/components/menu-list';
-import { useApplicationByCode, useApplications /*useGetAppImage*/ } from '@/features/applications/use-applications';
-import { formatDate } from '@/features/applications/app-utils';
-import { statusClass } from '@/lib/utils';
-import { ApplicationPermissionList } from './app-permission-list';
-import { ROUTES } from '@/lib/constants';
-import { AppCenterLoading } from '@/components/loading';
-import { AppCenterNotFound } from '@/components/not-found';
+
 import { ButtonLink } from '@/components/button-link';
+import { CopyToClipboard } from '@/components/copy-to-clipboard';
+import { AppCenterLoading } from '@/components/loading';
+import { PageHeader } from '@/components/page-header';
+import { AppCenterNotFound } from '@/components/not-found';
+import { useApplicationByCode } from '@/features/applications/use-applications';
+import { MenuList } from '@/features/menus/components/menu-list';
+import { PermissionAppList } from '@/features/permission/components/permission-app-list';
+import { ROUTES } from '@/lib/constants';
+import { formatDate, statusClass } from '@/lib/utils';
+
+// TOD: implement upload app image
 
 export function ApplicationDetails({ code }: { code: string }) {
   const { data: app, isLoading, error } = useApplicationByCode(code);
-  // const { data: image } = useGetAppImage(id)
 
-  if (isLoading && !error) return <AppCenterLoading descrption='A carregar aplicação através do código...' />;
+  if (isLoading) {
+    return <AppCenterLoading descrption='A carregar aplicação através do código...' />;
+  }
 
   if (error) throw error;
+
   if (!app) {
     return (
       <AppCenterNotFound
@@ -54,12 +54,12 @@ export function ApplicationDetails({ code }: { code: string }) {
       value: 'menus',
       content: <MenuList app={app} />,
     },
-    {
-      label: 'Permissões',
-      value: 'permissions',
-      content: <ApplicationPermissionList applicationId={app.id}  applicationName={app.name} />,
-    }
-  ]
+    // {
+    //   label: 'Permissões',
+    //   value: 'permissions',
+    //   content: <PermissionAppList appCode={app.code}  appName={app.name} />,
+    // }
+  ];
 
   return (
     <section className='space-y-10'>
@@ -74,7 +74,7 @@ export function ApplicationDetails({ code }: { code: string }) {
               href={`${ROUTES.APPS}/${code}/editar`}
               label='Editar Aplicação'
               icon='EditPencil'
-            />   
+            />
           </PageHeader>
         </div>
 
@@ -136,9 +136,9 @@ export function ApplicationDetails({ code }: { code: string }) {
 
       <IGRPTabs
         defaultValue='menus'
-        className='space-y-4' 
-        items={tabItems}      
-      />        
+        className='flex flex-col gap-4'
+        items={tabItems}
+      />
     </section>
   );
 }

@@ -1,86 +1,97 @@
 'use server';
 
-import { Permission, Role } from '@/features/roles/types';
-import { callApi } from '@/lib/api-client';
+import { refreshAccessClient } from './igrp/auth';
+import { getIGRPAccessClient } from '@igrp/framework-next';
+import { CreateRoleRequest, RoleFilters, UpdateRoleRequest } from '@igrp/platform-access-management-client-ts';
+import { RoleArgs } from '@/features/roles/role-schemas';
 
-export async function getAllRoles() {
-  return callApi<Role[]>('/api/roles');
+export async function getRoles(params: RoleFilters) {
+  await refreshAccessClient();
+  const client = await getIGRPAccessClient();
+
+  try {
+    const result = await client.roles.getRoles(params);
+    return result.data as RoleArgs[];
+  } catch (error) {
+    console.error('[roles] Não foi possível obter lista de dados dos perfis:', error);
+    throw error;
+  }
 }
 
-export async function getRole(id: number) {
-  if (!id) {
-    throw new Error('Role ID is required');
-  }
 
-  return callApi<Role>(`/api/roles/${id}`);
+export async function createRole(roleData: CreateRoleRequest) {
+  await refreshAccessClient();
+  const client = await getIGRPAccessClient();
+
+  try {
+    const result = await client.roles.createRole(roleData);
+    return (result.data) as RoleArgs;
+  } catch (error) {
+    console.error('[create-roles] Não foi possível criar perfil:', error);
+    throw error;
+  }
 }
 
-export async function createRole(roleData: Partial<Role>) {
-  if (!roleData.name || !roleData.departmentId) {
-    throw new Error('Name and department ID are required');
-  }
+export async function updateRole(name: string, roleData: UpdateRoleRequest) {
+  await refreshAccessClient();
+  const client = await getIGRPAccessClient();
 
-  return callApi<Role>('/api/roles', {
-    method: 'POST',
-    body: JSON.stringify(roleData),
-  });
+  try {
+    const result = await client.roles.updateRole(name, roleData);
+    return (result.data) as RoleArgs;
+  } catch (error) {
+    console.error('[update-roles] Não foi possível atualizar perfil:', error);
+    throw error;
+  }
 }
 
-export async function updateRole(id: number, roleData: Partial<Role>) {
-  if (!id) {
-    throw new Error('Role ID is required');
-  }
+export async function deleteRole(name: string) {
+   await refreshAccessClient();
+  const client = await getIGRPAccessClient();
 
-  return callApi<Role>(`/api/roles/${id}`, {
-    method: 'PUT',
-    body: JSON.stringify(roleData),
-  });
+  try {
+    const result = await client.roles.deleteRole(name);
+    return result.data;
+  } catch (error) {
+    console.error('[delete-role] Não foi possível eliminar perfil:', error);
+    throw error;
+  }
 }
 
-export async function deleteRole(id: number) {
-  if (!id) {
-    throw new Error('Role ID is required');
-  }
+// export async function getRolePermissions(roleId: number) {
+//   if (!roleId) {
+//     throw new Error('Role ID is required');
+//   }
 
-  return callApi<void>(`/api/roles/${id}`, {
-    method: 'DELETE',
-  });
-}
+//   return callApi<Permission[]>(`/api/roles/${roleId}/permissions`);
+// }
 
-export async function getRolePermissions(roleId: number) {
-  if (!roleId) {
-    throw new Error('Role ID is required');
-  }
+// export async function addRolePermissions(roleId: number, permissions: string[]) {
+//   if (!roleId) {
+//     throw new Error('Role ID is required');
+//   }
 
-  return callApi<Permission[]>(`/api/roles/${roleId}/permissions`);
-}
+//   if (!permissions || permissions.length === 0) {
+//     throw new Error('Permissions are required');
+//   }
 
-export async function addRolePermissions(roleId: number, permissions: string[]) {
-  if (!roleId) {
-    throw new Error('Role ID is required');
-  }
+//   return callApi<void>(`/api/roles/${roleId}/addPermissions`, {
+//     method: 'POST',
+//     body: JSON.stringify(permissions),
+//   });
+// }
 
-  if (!permissions || permissions.length === 0) {
-    throw new Error('Permissions are required');
-  }
+// export async function removeRolePermissions(roleId: number, permissions: string[]) {
+//   if (!roleId) {
+//     throw new Error('Role ID is required');
+//   }
 
-  return callApi<void>(`/api/roles/${roleId}/addPermissions`, {
-    method: 'POST',
-    body: JSON.stringify(permissions),
-  });
-}
+//   if (!permissions || permissions.length === 0) {
+//     throw new Error('Permissions are required');
+//   }
 
-export async function removeRolePermissions(roleId: number, permissions: string[]) {
-  if (!roleId) {
-    throw new Error('Role ID is required');
-  }
-
-  if (!permissions || permissions.length === 0) {
-    throw new Error('Permissions are required');
-  }
-
-  return callApi<void>(`/api/roles/${roleId}/removePermissions`, {
-    method: 'POST',
-    body: JSON.stringify(permissions),
-  });
-}
+//   return callApi<void>(`/api/roles/${roleId}/removePermissions`, {
+//     method: 'POST',
+//     body: JSON.stringify(permissions),
+//   });
+// }

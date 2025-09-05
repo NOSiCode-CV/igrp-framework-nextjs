@@ -12,7 +12,6 @@ import {
 
 import type { FileWithPreview, FileMetadata } from '@/schemas/file';
 
-
 // export type FileMetadata = {
 //   name: string;
 //   size: number;
@@ -70,9 +69,7 @@ export const useFileUpload = (
   } = options;
 
   const [state, setState] = useState<FileUploadState>({
-    file: initialFile
-      ? { file: initialFile, id: initialFile.id, preview: initialFile.url }
-      : null,
+    file: initialFile ? { file: initialFile, id: initialFile.id, preview: initialFile.url } : null,
     isDragging: false,
     errors: [],
   });
@@ -87,10 +84,9 @@ export const useFileUpload = (
         return `Ficheiro "${file.name}" excede o tamanho máximo de ${formatBytes(maxSize)}.`;
       }
 
-
       if (accept !== '*') {
         const acceptedTypes = accept.split(',').map((type) => type.trim());
-        const fileType = file instanceof File ? (file.type || '') : file.type;
+        const fileType = file instanceof File ? file.type || '' : file.type;
         const fileName = file instanceof File ? file.name : file.name;
         const fileExtension = `.${fileName.split('.').pop() ?? ''}`.toLowerCase();
 
@@ -148,7 +144,11 @@ export const useFileUpload = (
         return;
       }
 
-      const next: FileWithPreview = { file, id: generateUniqueId(file), preview: createPreview(file) };
+      const next: FileWithPreview = {
+        file,
+        id: generateUniqueId(file),
+        preview: createPreview(file),
+      };
 
       setState((prev) => {
         // Clean old preview if needed

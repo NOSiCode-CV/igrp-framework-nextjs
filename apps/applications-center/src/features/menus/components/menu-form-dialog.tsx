@@ -4,6 +4,7 @@ import { useEffect, useMemo, useRef, useState } from 'react';
 import { useForm } from 'react-hook-form';
 import z from 'zod';
 import { zodResolver } from '@hookform/resolvers/zod';
+import { useVirtualizer } from '@tanstack/react-virtual';
 import {
   IGRPButtonPrimitive,
   IGRPCommandPrimitive,
@@ -40,34 +41,32 @@ import {
   IGRPCommandSeparatorPrimitive,
 } from '@igrp/igrp-framework-react-design-system';
 import { IGRPMenuItemArgs } from '@igrp/framework-next-types';
+import { IGRPMenuCRUDArgs } from '@igrp/framework-next-types';
 
-import { cn, formatIconString } from '@/lib/utils';
+import { MENU_VIEW, menuTargetOptions, menuTypeOptions } from '@/features/menus/menu-constants';
 import {
   createMenuSchema,
   MenuArgs,
-  menuStatusSchema,
   menuTargetSchema,
   menuTypeSchema,
   CreateMenu,
   OnSaveMenu,
   normalizeMenu,
-  UpdateMenu
+  UpdateMenu,
 } from '@/features/menus/menu-schemas';
-import { useVirtualizer } from '@tanstack/react-virtual';
-import { MENU_VIEW, menuStatusOptions, menuTargetOptions, menuTypeOptions } from '../menu-constants';
-import { IGRPMenuCRUDArgs } from '@igrp/framework-next-types';
-import { useCreateMenu, useUpdateMenu } from '../use-menus';
+import { useCreateMenu, useUpdateMenu } from '@/features/menus/use-menus';
+import { OPEN_TYPE_VIEW, STATUS_OPTIONS } from '@/lib/constants';
+import { cn, formatIconString } from '@/lib/utils';
+import { statusSchema } from '@/schemas/global';
 
-export const LUCIDE_ICON_OPTIONS: IGRPOptionsProps[] =
-  (Object.keys(IGRPIconList) as IGRPIconName[])
-    .sort((a, b) => a.localeCompare(b))
-    .map((name) => ({ value: name, label: formatIconString(name) }));
-
+export const LUCIDE_ICON_OPTIONS: IGRPOptionsProps[] = (Object.keys(IGRPIconList) as IGRPIconName[])
+  .sort((a, b) => a.localeCompare(b))
+  .map((name) => ({ value: name, label: formatIconString(name) }));
 
 interface MenuFormDialogProps {
   open: boolean;
   onOpenChange: (open: boolean) => void;
-  setMenus: React.Dispatch<React.SetStateAction<IGRPMenuCRUDArgs[]>>
+  setMenus: React.Dispatch<React.SetStateAction<IGRPMenuCRUDArgs[]>>;
   menu?: IGRPMenuCRUDArgs;
   onSave?: (values: OnSaveMenu, code?: string) => void;
   parentMenus: IGRPMenuItemArgs[];
@@ -84,19 +83,17 @@ export function MenuFormDialog({
   parentMenus,
   appCode,
   openType,
-  setMenus
+  setMenus,
 }: MenuFormDialogProps) {
   const [isLoading, setIsLoading] = useState(false);
   const [openIconPicker, setOpenIconPicker] = useState(false);
   const [ready, setReady] = useState(false);
   const [query, setQuery] = useState('');
 
-  const { mutateAsync: createMenuAsync } = useCreateMenu();
-
-  const { mutate: updateMenu } = useUpdateMenu();
-  
-
   const { igrpToast } = useIGRPToast();
+
+  const { mutateAsync: createMenuAsync } = useCreateMenu();
+  const { mutate: updateMenu } = useUpdateMenu();
 
   const baseDefaults = {
     name: '',
@@ -104,7 +101,7 @@ export function MenuFormDialog({
     type: menuTypeSchema.enum.MENU_PAGE,
     position: 0,
     icon: 'AppWindow',
-    status: menuStatusSchema.enum.ACTIVE,
+    status: statusSchema.enum.ACTIVE,
     target: menuTargetSchema.enum._self,
     url: '',
     parentCode: '',
@@ -127,7 +124,7 @@ export function MenuFormDialog({
         type: menu.type ?? menuTypeSchema.enum.MENU_PAGE,
         position: menu.position ?? 0,
         icon: menu.icon ?? 'AppWindow',
-        status: menu.status ?? menuStatusSchema.enum.ACTIVE,
+        status: menu.status ?? statusSchema.enum.ACTIVE,
         target: menu.target ?? menuTargetSchema.enum._self,
         url: menu.url ?? '',
         parentCode: menu.parentCode ?? '',
@@ -165,9 +162,8 @@ export function MenuFormDialog({
   const filtered = useMemo(() => {
     const q = query.trim().toLowerCase();
     if (!q) return items;
-    return items.filter(o =>
-      o.value.toLowerCase().includes(q) ||
-      o.label.toLowerCase().includes(q)
+    return items.filter(
+      (o) => o.value.toLowerCase().includes(q) || o.label.toLowerCase().includes(q),
     );
   }, [query, items]);
 
@@ -180,8 +176,7 @@ export function MenuFormDialog({
   });
 
   async function onSubmit(values: MenuArgs) {
-
-    const payload: OnSaveMenu = { ...values, applicationCode: appCode }
+    const payload: OnSaveMenu = { ...values, applicationCode: appCode };
     const code = menu?.code ?? '';
     console.log({ payload });
 
@@ -194,18 +189,15 @@ export function MenuFormDialog({
         updateMenu({ code, data: update });
 
         setMenus((prevMenus) =>
-          prevMenus.map((menu) =>
-            menu.code === code ? ({ ...menu, ...update }) : menu,
-          ),
+          prevMenus.map((menu) => (menu.code === code ? { ...menu, ...update } : menu)),
         );
 
         igrpToast({
           type: 'success',
           title: 'Menu Atualizado',
           description: 'O menu foi atualizado com sucesso.',
-          duration: 4000
+          duration: 4000,
         });
-
       } else {
         try {
           const create = normalizeMenu(payload as CreateMenu);
@@ -216,37 +208,42 @@ export function MenuFormDialog({
             type: 'success',
             title: 'Criação de Menu',
             description: 'Menu criado com sucesso.',
-            duration: 4000
-          })
+            duration: 4000,
+          });
         } catch (err) {
           igrpToast({
             type: 'error',
             title: 'Falha na criação de menu.',
             description: (err as Error).message,
-            duration: 4000
+            duration: 4000,
           });
         }
       }
+
+      form.reset();
     } catch (err) {
       igrpToast({
         type: 'error',
         title: 'Algo correu mal. Por favor, tente novamente',
-        description: err instanceof Error ? err.message : 'Algo correu mal. Por favor, tente novamente',
+        description:
+          err instanceof Error ? err.message : 'Algo correu mal. Por favor, tente novamente',
+        duration: 4000,
       });
     } finally {
       setIsLoading(false);
       setTimeout(() => {
         onOpenChange(false);
-      }, 4000);
+      }, 2500);
     }
   }
-
 
   const isMenuPage = form.watch('type') === menuTypeSchema.enum.MENU_PAGE;
   const isExternalPage = form.watch('type') === menuTypeSchema.enum.EXTERNAL_PAGE;
   const selectedIcon = form.watch('icon');
 
-  const currentIcon = useMemo(() => LUCIDE_ICON_OPTIONS.find((icon) => icon.value === selectedIcon), [selectedIcon]
+  const currentIcon = useMemo(
+    () => LUCIDE_ICON_OPTIONS.find((icon) => icon.value === selectedIcon),
+    [selectedIcon],
   );
 
   const setDefaultFromName = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -280,11 +277,13 @@ export function MenuFormDialog({
       <IGRPDialogContentPrimitive className='py-4 px-0 sm:min-w-3/4 lg:min-w-1/2'>
         <IGRPDialogHeaderPrimitive className='px-4'>
           <IGRPDialogTitlePrimitive>
-            {menu ? openType === MENU_VIEW ? 'Detalhes do Menu' : 'Editar Menu' : 'Criar Menu'}
+            {menu ? (openType === MENU_VIEW ? 'Detalhes do Menu' : 'Editar Menu') : 'Criar Menu'}
           </IGRPDialogTitlePrimitive>
           <IGRPDialogDescriptionPrimitive>
             {menu
-              ? openType === MENU_VIEW ? 'Detalhes do item menu' : 'Atualizar os detalhes deste item de menu.'
+              ? openType === MENU_VIEW
+                ? 'Detalhes do item menu'
+                : 'Atualizar os detalhes deste item de menu.'
               : 'Adicionar um novo item de menu à aplicação.'}
           </IGRPDialogDescriptionPrimitive>
         </IGRPDialogHeaderPrimitive>
@@ -293,7 +292,7 @@ export function MenuFormDialog({
           <IGRPFormPrimitive {...form}>
             <form
               onSubmit={form.handleSubmit(onSubmit)}
-              className='flex flex-col gap-5 p-2'
+              className='flex flex-col gap-4 p-2'
             >
               <div className='grid grid-cols-1 md:grid-cols-2 gap-6'>
                 <IGRPFormFieldPrimitive
@@ -301,9 +300,7 @@ export function MenuFormDialog({
                   name='name'
                   render={({ field }) => (
                     <IGRPFormItemPrimitive>
-                      <IGRPFormLabelPrimitive
-                        className='after:content-["*"] after:text-destructive gap-0.5 mb-1'
-                      >
+                      <IGRPFormLabelPrimitive className='after:content-["*"] after:text-destructive gap-0.5 mb-1'>
                         Nome
                       </IGRPFormLabelPrimitive>
                       <IGRPFormControlPrimitive>
@@ -348,9 +345,7 @@ export function MenuFormDialog({
                   name='type'
                   render={({ field }) => (
                     <IGRPFormItemPrimitive>
-                      <IGRPFormLabelPrimitive
-                        className='after:content-["*"] after:text-destructive gap-0.5 mb-1'
-                      >
+                      <IGRPFormLabelPrimitive className='after:content-["*"] after:text-destructive gap-0.5 mb-1'>
                         Tipo
                       </IGRPFormLabelPrimitive>
                       <IGRPFormControlPrimitive>
@@ -386,9 +381,7 @@ export function MenuFormDialog({
                   name='status'
                   render={({ field }) => (
                     <IGRPFormItemPrimitive>
-                      <IGRPFormLabelPrimitive
-                        className='after:content-["*"] after:text-destructive gap-0.5'
-                      >
+                      <IGRPFormLabelPrimitive className='after:content-["*"] after:text-destructive gap-0.5'>
                         Estado
                       </IGRPFormLabelPrimitive>
                       <IGRPFormControlPrimitive>
@@ -398,7 +391,7 @@ export function MenuFormDialog({
                           orientation='vertical'
                           disabled={openType === MENU_VIEW}
                         >
-                          {menuStatusOptions.map(({ value, label }) => (
+                          {STATUS_OPTIONS.map(({ value, label }) => (
                             <IGRPFormItemPrimitive className='flex items-center'>
                               <IGRPFormControlPrimitive>
                                 <IGRPRadioGroupItemPrimitive
@@ -425,9 +418,7 @@ export function MenuFormDialog({
                       name='pageSlug'
                       render={({ field }) => (
                         <IGRPFormItemPrimitive>
-                          <IGRPFormLabelPrimitive
-                            className='after:content-["*"] after:text-destructive gap-0.5'
-                          >
+                          <IGRPFormLabelPrimitive className='after:content-["*"] after:text-destructive gap-0.5'>
                             URL Relátivo
                           </IGRPFormLabelPrimitive>
                           <IGRPFormControlPrimitive>
@@ -451,9 +442,7 @@ export function MenuFormDialog({
                       name='target'
                       render={({ field }) => (
                         <IGRPFormItemPrimitive>
-                          <IGRPFormLabelPrimitive
-                            className='after:content-["*"] after:text-destructive gap-0.5'
-                          >
+                          <IGRPFormLabelPrimitive className='after:content-["*"] after:text-destructive gap-0.5'>
                             Abrir em
                           </IGRPFormLabelPrimitive>
                           <IGRPFormControlPrimitive>
@@ -461,7 +450,7 @@ export function MenuFormDialog({
                               onValueChange={field.onChange}
                               value={field.value}
                               className='flex flex-row'
-                              disabled={openType === MENU_VIEW}
+                              disabled={openType === OPEN_TYPE_VIEW}
                             >
                               {menuTargetOptions.map(({ value, label }) => (
                                 <IGRPFormItemPrimitive className='flex items-center'>
@@ -492,9 +481,7 @@ export function MenuFormDialog({
                       name='url'
                       render={({ field }) => (
                         <IGRPFormItemPrimitive>
-                          <IGRPFormLabelPrimitive
-                            className='after:content-["*"] after:text-destructive gap-0.5'
-                          >
+                          <IGRPFormLabelPrimitive className='after:content-["*"] after:text-destructive gap-0.5'>
                             URL
                           </IGRPFormLabelPrimitive>
                           <IGRPFormControlPrimitive>
@@ -504,7 +491,9 @@ export function MenuFormDialog({
                               ref={field.ref}
                               onBlur={field.onBlur}
                               value={field.value ?? ''}
-                              onChange={(e) => field.onChange(e.target.value === '' ? null : e.target.value)}
+                              onChange={(e) =>
+                                field.onChange(e.target.value === '' ? null : e.target.value)
+                              }
                               disabled={openType === MENU_VIEW}
                             />
                           </IGRPFormControlPrimitive>
@@ -515,7 +504,7 @@ export function MenuFormDialog({
                   </>
                 )}
 
-                {((isExternalPage || isMenuPage) && parentMenus.length > 0) && (
+                {(isExternalPage || isMenuPage) && parentMenus.length > 0 && (
                   <IGRPFormFieldPrimitive
                     control={form.control}
                     name='parentCode'
@@ -523,7 +512,10 @@ export function MenuFormDialog({
                       <IGRPFormItemPrimitive className='flex flex-col'>
                         <IGRPFormLabelPrimitive>Selecionar Grupo</IGRPFormLabelPrimitive>
                         <IGRPPopoverPrimitive>
-                          <IGRPPopoverTriggerPrimitive asChild disabled={openType === MENU_VIEW}>
+                          <IGRPPopoverTriggerPrimitive
+                            asChild
+                            disabled={openType === MENU_VIEW}
+                          >
                             <IGRPFormControlPrimitive>
                               <IGRPButtonPrimitive
                                 variant='outline'
@@ -536,7 +528,10 @@ export function MenuFormDialog({
                                 {field.value
                                   ? parentMenus.find((menu) => menu.code === field.value)?.name
                                   : 'Selecionar Grupo...'}
-                                <IGRPIcon iconName='ChevronsUpDown' className='opacity-50' />
+                                <IGRPIcon
+                                  iconName='ChevronsUpDown'
+                                  className='opacity-50'
+                                />
                               </IGRPButtonPrimitive>
                             </IGRPFormControlPrimitive>
                           </IGRPPopoverTriggerPrimitive>
@@ -550,7 +545,9 @@ export function MenuFormDialog({
                                 className='h-9'
                               />
                               <IGRPCommandListPrimitive className='px-3 oy-2'>
-                                <IGRPCommandEmptyPrimitive>Nenhum Grupo encontrado.</IGRPCommandEmptyPrimitive>
+                                <IGRPCommandEmptyPrimitive>
+                                  Nenhum Grupo encontrado.
+                                </IGRPCommandEmptyPrimitive>
                                 <IGRPCommandGroupPrimitive>
                                   <IGRPCommandItemPrimitive
                                     value='none'
@@ -567,7 +564,7 @@ export function MenuFormDialog({
                                       )}
                                     />
                                   </IGRPCommandItemPrimitive>
-                                  <IGRPCommandSeparatorPrimitive className='my-2'/>
+                                  <IGRPCommandSeparatorPrimitive className='my-2' />
                                   {parentMenus.map((menu) => (
                                     <IGRPCommandItemPrimitive
                                       value={menu.id?.toString() || ''}
@@ -607,7 +604,10 @@ export function MenuFormDialog({
                         open={openIconPicker}
                         onOpenChange={setOpenIconPicker}
                       >
-                        <IGRPPopoverTriggerPrimitive asChild disabled={openType === MENU_VIEW}>
+                        <IGRPPopoverTriggerPrimitive
+                          asChild
+                          disabled={openType === MENU_VIEW}
+                        >
                           <IGRPFormControlPrimitive>
                             <IGRPButtonPrimitive
                               variant='outline'
@@ -619,13 +619,19 @@ export function MenuFormDialog({
                             >
                               {currentIcon ? (
                                 <div className='flex items-center gap-2'>
-                                  <IGRPIcon iconName={currentIcon.value} className='size-4' />
+                                  <IGRPIcon
+                                    iconName={currentIcon.value}
+                                    className='size-4'
+                                  />
                                   <span>{currentIcon.label}</span>
                                 </div>
                               ) : (
                                 'Select menu icon...'
                               )}
-                              <IGRPIcon iconName='ChevronsUpDown' className='opacity-50' />
+                              <IGRPIcon
+                                iconName='ChevronsUpDown'
+                                className='opacity-50'
+                              />
                             </IGRPButtonPrimitive>
                           </IGRPFormControlPrimitive>
                         </IGRPPopoverTriggerPrimitive>
@@ -634,28 +640,40 @@ export function MenuFormDialog({
                           className='w-[--radix-popover-trigger-width] p-0'
                           align='start'
                         >
-                          <IGRPCommandPrimitive onValueChange={setQuery} filter={() => 1}>
+                          <IGRPCommandPrimitive
+                            onValueChange={setQuery}
+                            filter={() => 1}
+                          >
                             {/* Input with loading indicator */}
-                            <div className="relative">
-                              <IGRPCommandInputPrimitive placeholder="Procurar ícone..." />
+                            <div className='relative'>
+                              <IGRPCommandInputPrimitive placeholder='Procurar ícone...' />
                               {!ready && (
-                                <div className="pointer-events-none absolute right-2 top-1/2 -translate-y-1/2">
-                                  <IGRPIcon iconName='Loader' className="size-4 animate-spin opacity-60" />
+                                <div className='pointer-events-none absolute right-2 top-1/2 -translate-y-1/2'>
+                                  <IGRPIcon
+                                    iconName='Loader'
+                                    className='size-4 animate-spin opacity-60'
+                                  />
                                 </div>
                               )}
                             </div>
 
                             {!ready ? (
-                              <IGRPCommandListPrimitive className="max-h-80">
+                              <IGRPCommandListPrimitive className='max-h-80'>
                                 <IGRPCommandGroupPrimitive>
                                   {Array.from({ length: 10 }).map((_, i) => (
-                                    <div key={i} className="h-9 animate-pulse rounded-sm bg-foreground/5 mx-2 my-1" />
+                                    <div
+                                      key={i}
+                                      className='h-9 animate-pulse rounded-sm bg-foreground/5 mx-2 my-1'
+                                    />
                                   ))}
                                 </IGRPCommandGroupPrimitive>
                               </IGRPCommandListPrimitive>
                             ) : (
                               // Ready: render virtualized list
-                              <IGRPCommandListPrimitive ref={parentRef} className="max-h-80 overflow-auto">
+                              <IGRPCommandListPrimitive
+                                ref={parentRef}
+                                className='max-h-80 overflow-auto'
+                              >
                                 {filtered.length === 0 ? (
                                   <IGRPCommandEmptyPrimitive>
                                     Nenhum ícone encontrado.
@@ -692,7 +710,7 @@ export function MenuFormDialog({
                                               }}
                                               className='py-2.5 gap-3'
                                             >
-                                              <div className="flex gap-2">
+                                              <div className='flex gap-2'>
                                                 {/* Keep the SVG small; this component should be memoized */}
                                                 <IGRPIcon iconName={iconData.value} />
                                                 <span>{iconData.label}</span>
@@ -701,7 +719,7 @@ export function MenuFormDialog({
                                                 iconName='Check'
                                                 className={cn(
                                                   'ml-auto size-4 opacity-0',
-                                                  iconData.value === field.value && 'opacity-100'
+                                                  iconData.value === field.value && 'opacity-100',
                                                 )}
                                               />
                                             </IGRPCommandItemPrimitive>
@@ -709,7 +727,6 @@ export function MenuFormDialog({
                                         );
                                       })}
                                     </div>
-
                                   </IGRPCommandGroupPrimitive>
                                 )}
                               </IGRPCommandListPrimitive>
@@ -727,9 +744,7 @@ export function MenuFormDialog({
                   name='position'
                   render={({ field }) => (
                     <IGRPFormItemPrimitive>
-                      <IGRPFormLabelPrimitive>
-                        Position
-                      </IGRPFormLabelPrimitive>
+                      <IGRPFormLabelPrimitive>Posição</IGRPFormLabelPrimitive>
                       <IGRPFormControlPrimitive>
                         <IGRPInputPrimitive
                           type='number'
@@ -747,7 +762,6 @@ export function MenuFormDialog({
                     </IGRPFormItemPrimitive>
                   )}
                 />
-
               </div>
               <IGRPDialogFooterPrimitive>
                 <IGRPButtonPrimitive
@@ -755,14 +769,13 @@ export function MenuFormDialog({
                   variant='outline'
                   onClick={() => {
                     form.reset();
-                    onOpenChange(false)
-                  }
-                  }
+                    onOpenChange(false);
+                  }}
                   disabled={isLoading}
                 >
                   Cancelar
                 </IGRPButtonPrimitive>
-                {openType !== MENU_VIEW && (
+                {openType !== OPEN_TYPE_VIEW && (
                   <IGRPButtonPrimitive
                     type='submit'
                     disabled={isLoading}

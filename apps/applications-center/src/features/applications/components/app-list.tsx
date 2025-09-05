@@ -21,7 +21,7 @@ import { AppCenterNotFound } from '@/components/not-found';
 
 export function ApplicationList() {
   const [searchTerm, setSearchTerm] = useState('');
-  const [statusFilters, setStatusFilters] = useState<string[]>([]);
+  const [statusFilter, setStatusFilter] = useState<string[]>([]);
 
   const { data: applications, isLoading, error } = useApplications();
 
@@ -34,7 +34,7 @@ export function ApplicationList() {
       <AppCenterNotFound
         iconName='AppWindow'
         title='Nenhuma aplicação encontrada.'
-      />       
+      />
     );
   }
 
@@ -44,13 +44,13 @@ export function ApplicationList() {
       app.description?.toLowerCase().includes(searchTerm.toLowerCase()) ||
       app.code?.toLowerCase().includes(searchTerm.toLowerCase());
 
-    const matchesStatus = statusFilters.length === 0 || statusFilters.includes(app.status);
+    const matchesStatus = statusFilter.length === 0 || statusFilter.includes(app.status);
 
     return matchesSearch && matchesStatus;
   });
 
   return (
-    <div className='flex flex-col gap-6 rounded-xl'>
+    <div className='flex flex-col gap-6'>
       <div className='flex flex-col sm:flex-row items-start gap-4 w-full'>
         <div className='relative w-full max-w-sm'>
           <IGRPIcon
@@ -60,7 +60,7 @@ export function ApplicationList() {
           />
           <IGRPInputPrimitive
             type='search'
-            placeholder='Search applications...'
+            placeholder='Pesquisar aplicações...'
             className='w-full bg-background pl-8'
             value={searchTerm}
             onChange={(e) => setSearchTerm(e.target.value)}
@@ -77,7 +77,7 @@ export function ApplicationList() {
                   iconName='ListFilter'
                   strokeWidth={2}
                 />
-                Estado {statusFilters.length > 0 && `(${statusFilters.length})`}
+                Estado {statusFilter.length > 0 && `(${statusFilter.length})`}
               </IGRPButtonPrimitive>
             </IGRPDropdownMenuTriggerPrimitive>
             <IGRPDropdownMenuContentPrimitive
@@ -85,26 +85,24 @@ export function ApplicationList() {
               className='w-40'
             >
               <IGRPDropdownMenuSeparatorPrimitive />
-              {STATUS_OPTIONS.map((status) => (
+              {STATUS_OPTIONS.map(({ value, label }) => (
                 <IGRPDropdownMenuCheckboxItemPrimitive
-                  key={status.value}
-                  checked={statusFilters.includes(status.value)}
+                  key={value}
+                  checked={statusFilter.includes(value)}
                   onCheckedChange={(checked) => {
-                    setStatusFilters(
-                      checked
-                        ? [...statusFilters, status.value]
-                        : statusFilters.filter((s) => s !== status.value),
+                    setStatusFilter(
+                      checked ? [...statusFilter, value] : statusFilter.filter((s) => s !== value),
                     );
                   }}
                 >
-                  <span className='capitalize'>{status.label.toLowerCase()}</span>
+                  {label}
                 </IGRPDropdownMenuCheckboxItemPrimitive>
               ))}
-              {statusFilters.length > 0 && (
+              {statusFilter.length > 0 && (
                 <>
                   <IGRPDropdownMenuSeparatorPrimitive />
                   <IGRPDropdownMenuItemPrimitive
-                    onClick={() => setStatusFilters([])}
+                    onClick={() => setStatusFilter([])}
                     className='cursor-pointer hover:bg-primary hover:text-primary-foreground'
                   >
                     <IGRPIcon

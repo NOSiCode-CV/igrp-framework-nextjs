@@ -4,7 +4,7 @@ import { ROUTES } from '@/lib/constants';
 
 export default function NewApplicationPage() {
   return (
-    <div className='space-y-10 animate-fade-in'>
+    <div className='flex flex-col gap-10 animate-fade-in'>
       <PageHeader
         title='Criar Aplicação'
         showBackButton

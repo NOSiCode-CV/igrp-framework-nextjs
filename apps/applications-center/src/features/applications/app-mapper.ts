@@ -7,6 +7,8 @@ import type {
   UpdateApplicationRequest,
 } from '@igrp/platform-access-management-client-ts';
 
+// TODO: refactor the type from the accessmanagement-client-ts to match IGRPApplicationArgs
+
 const mapApplication = (app: ApplicationDTO): IGRPApplicationArgs => ({
   id: app.id as number,
   code: app.code,

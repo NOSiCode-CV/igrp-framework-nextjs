@@ -7,18 +7,18 @@ export async function getAllPermissions() {
   // return callApi<Permission[]>('/api/permissions', {
   //   method: 'GET',
   // });
-  return []
+  return [];
 }
 
-export async function getPermissionsByApplication(applicationId: number) {
-  if (!applicationId) {
+export async function getPermissionsByApplication(appCode: string) {
+  if (!appCode) {
     throw new Error('Application ID is required');
   }
 
   // return callApi<Permission[]>(`/api/permissions?applicationId=${applicationId}`, {
   //   method: 'GET',
   // });
-  return []
+  return [];
 }
 
 export async function getPermission(id: number) {
@@ -29,7 +29,7 @@ export async function getPermission(id: number) {
   // return callApi<Permission>(`/api/permissions/${id}`, {
   //   method: 'GET',
   // });
-  return {} as Permission
+  return {} as Permission;
 }
 
 export async function getPermissionRoles(permissionId: number) {
@@ -40,7 +40,7 @@ export async function getPermissionRoles(permissionId: number) {
   // return callApi<PermissionRole[]>(`/api/permissions/${permissionId}/roles`, {
   //   method: 'GET',
   // });
-  return []
+  return [];
 }
 
 export async function createPermission(permissionData: Partial<Permission>) {
@@ -52,7 +52,7 @@ export async function createPermission(permissionData: Partial<Permission>) {
   //   method: 'POST',
   //   body: JSON.stringify(permissionData),
   // });
-  return {} as Permission
+  return {} as Permission;
 }
 
 export async function updatePermission(id: number, permissionData: Partial<Permission>) {
@@ -64,7 +64,7 @@ export async function updatePermission(id: number, permissionData: Partial<Permi
   //   method: 'PUT',
   //   body: JSON.stringify(permissionData),
   // });
-  return {} as Permission
+  return {} as Permission;
 }
 
 export async function deletePermission(id: number) {
@@ -75,5 +75,5 @@ export async function deletePermission(id: number) {
   // return callApi<void>(`/api/permissions/${id}`, {
   //   method: 'DELETE',
   // });
-  return null
+  return null;
 }

@@ -12,16 +12,18 @@ interface ExtendedRequestInit extends RequestInit {
 export async function callApi<T>(endpoint: string, options: ExtendedRequestInit = {}): Promise<T> {
   const API_URL = process.env.IGRP_APP_MANAGER_API ?? '';
   const session = await serverSession();
-  
+
   if (!session?.accessToken) {
     redirect('/logout');
   }
 
   if (!API_URL) {
-    throw new Error('[apps-center]: A variável de ambiente IGRP_APP_MANAGER_API não está definida.');
+    throw new Error(
+      '[apps-center]: A variável de ambiente IGRP_APP_MANAGER_API não está definida.',
+    );
   }
 
-  const client = await getIGRPAccessClient();  
+  const client = await getIGRPAccessClient();
 
   const url = `${API_URL}${endpoint}`;
 

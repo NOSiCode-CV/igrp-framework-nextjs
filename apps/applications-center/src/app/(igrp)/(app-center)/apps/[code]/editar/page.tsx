@@ -24,12 +24,12 @@ export default function EditApplicationPage({ params }: { params: Promise<{ code
       <AppCenterNotFound
         iconName='AppWindow'
         title='Nenhuma aplicação encontrada.'
-      />      
+      />
     );
   }
 
   return (
-    <div className='space-y-10 animate-fade-in'>
+    <div className='flex flex-col gap-10 animate-fade-in'>
       <PageHeader
         title='Editar Aplicação'
         showBackButton

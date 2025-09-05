@@ -3,7 +3,6 @@
 import { useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
-import { z } from 'zod';
 import {
   IGRPDialogPrimitive,
   IGRPDialogContentPrimitive,
@@ -29,31 +28,28 @@ import {
   IGRPFormMessagePrimitive,
   useIGRPToast,
 } from '@igrp/igrp-framework-react-design-system';
+
 import { useApplications } from '@/features/applications/use-applications';
-import { useAddPermission } from '../hooks/use-permission';
-import { Permission } from '../types';
-
-const permissionSchema = z.object({
-  name: z.string().min(3, 'Permission name is required'),
-  description: z.string().optional(),
-  applicationId: z.number().min(1, 'Application is required'),
-  status: z.enum(['ACTIVE', 'INACTIVE']),
-});
-
-type PermissionFormValues = z.infer<typeof permissionSchema>;
+import { useAddPermission } from '@/features/permission/hooks/use-permission';
+import {
+  CreatePermissionType,
+  PermissionFormValues,
+  permissionFormSchema,
+  permissionStatusSchema,
+} from '@/features/permission/permissions-schemas';
 
 interface PermissionCreateDialogProps {
   open?: boolean;
   onOpenChange?: (open: boolean) => void;
   onSuccess?: () => void;
-  defaultApplicationId?: number;
+  defaultAppCode?: string;
 }
 
 export function PermissionCreateDialog({
   open: controlledOpen,
   onOpenChange: controlledOnOpenChange,
   onSuccess,
-  defaultApplicationId,
+  defaultAppCode,
 }: PermissionCreateDialogProps) {
   const [internalOpen, setInternalOpen] = useState(false);
 
@@ -64,15 +60,15 @@ export function PermissionCreateDialog({
 
   const isControlled = controlledOpen !== undefined;
   const open = isControlled ? controlledOpen : internalOpen;
-  const setOpen = isControlled ? controlledOnOpenChange || (() => {}) : setInternalOpen;   
+  const setOpen = isControlled ? controlledOnOpenChange || (() => {}) : setInternalOpen;
 
   const form = useForm<PermissionFormValues>({
-    resolver: zodResolver(permissionSchema),
+    resolver: zodResolver(permissionFormSchema),
     defaultValues: {
       name: '',
       description: '',
-      applicationId: defaultApplicationId || 0,
-      status: 'ACTIVE',
+      applicationCode: defaultAppCode,
+      status: permissionStatusSchema.enum.ACTIVE,
     },
   });
 
@@ -83,21 +79,20 @@ export function PermissionCreateDialog({
 
   const onSubmit = async (values: PermissionFormValues) => {
     try {
-      const payload: Partial<Permission> = {
+      const payload: CreatePermissionType = {
         name: values.name,
         description: values.description || '',
-        applicationId: values.applicationId,
-        status: values.status,
+        applicationCode: values.applicationCode,
       };
 
       await createPermission(payload);
 
       igrpToast({
-        type: "success",
-        title: 'Permission created',
-        description: 'Permission has been created successfully.',
+        type: 'success',
+        title: 'Permissão Criada',
+        description: 'Permissão criada com sucesso.',
         duration: 4000,
-      })
+      });
 
       form.reset();
       setOpen(false);
@@ -106,10 +101,10 @@ export function PermissionCreateDialog({
         onSuccess();
       }
     } catch (error) {
-       igrpToast({
-        type: "error",
-        title: 'Failed to create permission',
-        description: error instanceof Error ? error.message : 'An unknown error occurred',
+      igrpToast({
+        type: 'error',
+        title: 'Não foi possível criar a permissão.',
+        description: error instanceof Error ? error.message : 'Ocorreu um erro desconhecido.',
         duration: 4000,
       });
     }
@@ -122,12 +117,12 @@ export function PermissionCreateDialog({
     >
       {!isControlled && (
         <IGRPDialogTriggerPrimitive asChild>
-          <IGRPButtonPrimitive>Create Permission</IGRPButtonPrimitive>
+          <IGRPButtonPrimitive>Criar Permissões</IGRPButtonPrimitive>
         </IGRPDialogTriggerPrimitive>
       )}
       <IGRPDialogContentPrimitive className=''>
         <IGRPDialogHeaderPrimitive>
-          <IGRPDialogTitlePrimitive>Create New Permission</IGRPDialogTitlePrimitive>
+          <IGRPDialogTitlePrimitive>Criar Nova Permissão</IGRPDialogTitlePrimitive>
           <IGRPDialogDescriptionPrimitive>
             Create a new permission and associate it with an application.
           </IGRPDialogDescriptionPrimitive>
@@ -143,7 +138,7 @@ export function PermissionCreateDialog({
               name='name'
               render={({ field }) => (
                 <IGRPFormItemPrimitive>
-                  <IGRPFormLabelPrimitive>Permission Name</IGRPFormLabelPrimitive>
+                  <IGRPFormLabelPrimitive>Nome</IGRPFormLabelPrimitive>
                   <IGRPFormControlPrimitive>
                     <IGRPInputPrimitive
                       placeholder='Enter permission name'
@@ -151,9 +146,9 @@ export function PermissionCreateDialog({
                       onChange={handleNameChange}
                     />
                   </IGRPFormControlPrimitive>
-                  <IGRPFormDescriptionPrimitive>
+                  {/* <IGRPFormDescriptionPrimitive>
                     The name of the permission (e.g., user.create, post.edit)
-                  </IGRPFormDescriptionPrimitive>
+                  </IGRPFormDescriptionPrimitive> */}
                   <IGRPFormMessagePrimitive />
                 </IGRPFormItemPrimitive>
               )}
@@ -164,16 +159,16 @@ export function PermissionCreateDialog({
               name='description'
               render={({ field }) => (
                 <IGRPFormItemPrimitive>
-                  <IGRPFormLabelPrimitive>Description</IGRPFormLabelPrimitive>
+                  <IGRPFormLabelPrimitive>Descrição</IGRPFormLabelPrimitive>
                   <IGRPFormControlPrimitive>
                     <IGRPTextAreaPrimitive
                       placeholder='Enter permission description'
                       {...field}
                     />
                   </IGRPFormControlPrimitive>
-                  <IGRPFormDescriptionPrimitive>
+                  {/* <IGRPFormDescriptionPrimitive>
                     Optional description of what this permission allows
-                  </IGRPFormDescriptionPrimitive>
+                  </IGRPFormDescriptionPrimitive> */}
                   <IGRPFormMessagePrimitive />
                 </IGRPFormItemPrimitive>
               )}
@@ -181,7 +176,7 @@ export function PermissionCreateDialog({
 
             <IGRPFormFieldPrimitive
               control={form.control}
-              name='applicationId'
+              name='applicationCode'
               render={({ field }) => (
                 <IGRPFormItemPrimitive>
                   <IGRPFormLabelPrimitive>Applicação</IGRPFormLabelPrimitive>
@@ -249,7 +244,9 @@ export function PermissionCreateDialog({
                       <IGRPSelectItemPrimitive value='INACTIVE'>Inativo</IGRPSelectItemPrimitive>
                     </IGRPSelectContentPrimitive>
                   </IGRPSelectPrimitive>
-                  <IGRPFormDescriptionPrimitive>Definir o estado da permissão.</IGRPFormDescriptionPrimitive>
+                  <IGRPFormDescriptionPrimitive>
+                    Definir o estado da permissão.
+                  </IGRPFormDescriptionPrimitive>
                   <IGRPFormMessagePrimitive />
                 </IGRPFormItemPrimitive>
               )}

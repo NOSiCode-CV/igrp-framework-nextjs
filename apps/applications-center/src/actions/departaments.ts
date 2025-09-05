@@ -1,9 +1,13 @@
 'use server';
 
 import { getIGRPAccessClient } from '@igrp/framework-next';
+import {
+  CreateDepartmentRequest,
+  UpdateDepartmentRequest,
+} from '@igrp/platform-access-management-client-ts';
 
-import { mapperDepartments } from '@/features/departments/department-mapper';
 import { refreshAccessClient } from './igrp/auth';
+import { DepartmentArgs } from '@/features/departments/dept-schemas';
 
 export async function getDepartments() {
   await refreshAccessClient();
@@ -11,52 +15,64 @@ export async function getDepartments() {
 
   try {
     const result = await client.departments.getDepartments();
-    const departments = mapperDepartments(result);
-    return departments;
+    return result.data as DepartmentArgs[];
   } catch (error) {
     console.error('[departments] Não foi possível obter lista de dados dos departamentos:', error);
     throw error;
   }
 }
 
-// export async function getDepartment(id: number) {
-//   if (!id) {
-//     throw new Error('Department ID is required');
-//   }
+export async function createDepartment(departmentData: CreateDepartmentRequest) {
+  await refreshAccessClient();
+  const client = await getIGRPAccessClient();
 
-//   return callApi<Department>(`/api/departments/${id}`, {
-//     method: 'GET',
-//   });
-// }
+  try {
+    const result = await client.departments.createDepartment(departmentData);
+    return result.data;
+  } catch (error) {
+    console.error('[create-department] Não foi possível criar departamento:', error);
+    throw error;
+  }
+}
 
-// export async function createDepartment(departmentData: Partial<Department>) {
-//   if (!departmentData.name || !departmentData.code) {
-//     throw new Error('Name and code are required');
-//   }
+export async function updateDepartment(code: string, data: UpdateDepartmentRequest) {
+  await refreshAccessClient();
+  const client = await getIGRPAccessClient();
 
-//   return callApi<Department>('/api/department', {
-//     method: 'POST',
-//     body: JSON.stringify(departmentData),
-//   });
-// }
+  try {
+    const result = await client.departments.updateDepartment(code, data);
+    return result.data;
+  } catch (error) {
+    console.error('[update-department] Não foi possível eliminar departamento:', error);
+    throw error;
+  }
+}
 
-// export async function updateDepartment(id: number, departmentData: Partial<Department>) {
-//   if (!id) {
-//     throw new Error('Department ID is required');
-//   }
+export async function deleteDepartment(code: string) {
+  await refreshAccessClient();
+  const client = await getIGRPAccessClient();
 
-//   return callApi<Department>(`/api/departments/${id}`, {
-//     method: 'PUT',
-//     body: JSON.stringify(departmentData),
-//   });
-// }
+  try {
+    const result = await client.departments.deleteDepartment(code);
+    return result.data;
+  } catch (error) {
+    console.error('[delete-department] Não foi possível eliminar departamento:', error);
+    throw error;
+  }
+}
 
-// export async function deleteDepartment(id: number) {
-//   if (!id) {
-//     throw new Error('Department ID is required');
-//   }
+export async function getDepartmentByCode(code: string) {
+  await refreshAccessClient();
+  const client = await getIGRPAccessClient();
 
-//   return callApi<void>(`/api/departments/${id}`, {
-//     method: 'DELETE',
-//   });
-// }
+  try {
+    const result = await client.departments.getDepartmentByCode(code);
+    return result.data as DepartmentArgs;
+  } catch (error) {
+    console.error(
+      '[department-by-code] Não foi possível obter lista de dados dos departamentos:',
+      error,
+    );
+    throw error;
+  }
+}

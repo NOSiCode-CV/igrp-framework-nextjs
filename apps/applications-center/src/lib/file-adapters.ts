@@ -8,15 +8,14 @@ export async function urlToFileWithPreview(url: string): Promise<FileWithPreview
 
   const blob = await res.blob();
 
-  const filename =
-    decodeURIComponent((url.split('/').pop() || 'file').split('?')[0]) || 'file';
+  const filename = decodeURIComponent((url.split('/').pop() || 'file').split('?')[0]) || 'file';
 
   const file = new File([blob], filename, { type: blob.type || 'application/octet-stream' });
   const preview = URL.createObjectURL(file);
 
   return {
     id: nanoid(),
-    file,          
+    file,
     preview,
   };
 }

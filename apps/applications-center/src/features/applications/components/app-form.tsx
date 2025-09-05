@@ -24,7 +24,6 @@ import {
   IGRPTextAreaPrimitive,
   useIGRPToast,
   IGRPButton,
-  cn,
 } from '@igrp/igrp-framework-react-design-system';
 import { IGRPApplicationArgs } from '@igrp/framework-next-types';
 
@@ -36,20 +35,29 @@ import {
   useCreateApplication,
   useUpdateApplication,
 } from '@/features/applications/use-applications';
-import { ApplicationType, applicationSchema } from '@/features/applications/app-schemas';
-import { useAllUsers } from '@/features/users/hooks/use-users';
-import { useDepartments } from '@/features/departments/hooks/use-departments';
+import {
+  ApplicationType,
+  appTypeCrud,
+  applicationSchema,
+} from '@/features/applications/app-schemas';
+import { useAllUsers } from '@/features/users/use-users';
+import { useDepartments } from '@/features/departments/use-departments';
 import { APPLICATIONS_TYPES_FILTERED } from '../app-utils';
 import { mapperUpdateApplication } from '../app-mapper';
+import { statusSchema } from '@/schemas/global';
 
 export function ApplicationForm({ application }: { application?: IGRPApplicationArgs }) {
   const router = useRouter();
   const { igrpToast } = useIGRPToast();
 
   const { data: users, isLoading: userLoading, error: userError } = useAllUsers();
-  const { data: departments, isLoading: departmentLoading, error: departmentError } = useDepartments();
-  
-  const { mutateAsync: addApplication, } = useCreateApplication();
+  const {
+    data: departments,
+    isLoading: departmentLoading,
+    error: departmentError,
+  } = useDepartments();
+
+  const { mutateAsync: addApplication } = useCreateApplication();
   const { mutateAsync: updateApplication } = useUpdateApplication();
 
   const form = useForm<ApplicationType>({
@@ -57,13 +65,13 @@ export function ApplicationForm({ application }: { application?: IGRPApplication
     defaultValues: {
       name: '',
       slug: '',
-      type: 'INTERNAL',
+      type: appTypeCrud.enum.INTERNAL,
       owner: '',
       description: '',
       code: '',
       url: '',
       picture: '',
-      status: 'ACTIVE',
+      status: statusSchema.enum.ACTIVE,
       departmentCode: '',
       image: null,
     },
@@ -82,9 +90,9 @@ export function ApplicationForm({ application }: { application?: IGRPApplication
       slug: application.slug || '',
       url: application.url || '',
       description: application.description || '',
-      type: application.type || 'INTERNAL',
+      type: application.type || appTypeCrud.enum.INTERNAL,
       picture: application.picture || '',
-      status: application.status || 'ACTIVE',
+      status: application.status || statusSchema.enum.ACTIVE,
       departmentCode: application.departmentCode || '',
       image: null,
     };
@@ -98,7 +106,6 @@ export function ApplicationForm({ application }: { application?: IGRPApplication
       }
     })();
   }, [application, form]);
-
 
   const handleNameChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const name = e.target.value;
@@ -124,15 +131,14 @@ export function ApplicationForm({ application }: { application?: IGRPApplication
     //       ? file.file
     //       : undefined;
 
-
-    if (payload.type === 'INTERNAL') delete payload.url;
-    if (payload.type === 'EXTERNAL') delete payload.slug;
+    if (payload.type === appTypeCrud.enum.INTERNAL) delete payload.url;
+    if (payload.type === appTypeCrud.enum.EXTERNAL) delete payload.slug;
     delete payload.image;
 
     console.log({ payload });
     try {
       if (application) {
-        const payloadData = mapperUpdateApplication(payload)
+        const payloadData = mapperUpdateApplication(payload);
         await updateApplication({ code: application.code, data: payloadData });
       } else {
         await addApplication(payload);
@@ -171,6 +177,8 @@ export function ApplicationForm({ application }: { application?: IGRPApplication
     };
   });
 
+  console.log({ departments });
+
   const departmentOptions = departments.map((department) => {
     return {
       value: department.code,
@@ -179,13 +187,14 @@ export function ApplicationForm({ application }: { application?: IGRPApplication
   });
 
   const disabledFields = application ? true : false;
-  
-  const disabledBtn = form.formState.isSubmitting 
-    || isLoading 
-    || userLoading 
-    || userError !== null
-    || departmentLoading
-    || departmentError !== null
+
+  const disabledBtn =
+    form.formState.isSubmitting ||
+    isLoading ||
+    userLoading ||
+    userError !== null ||
+    departmentLoading ||
+    departmentError !== null;
 
   const submitLblBtn = form.formState.isSubmitting ? 'Guardando...' : 'Guardar';
 
@@ -301,7 +310,10 @@ export function ApplicationForm({ application }: { application?: IGRPApplication
                       defaultValue={field.value}
                     >
                       <IGRPFormControlPrimitive>
-                        <IGRPSelectTriggerPrimitive className='w-full truncate' disabled={disabledFields}>
+                        <IGRPSelectTriggerPrimitive
+                          className='w-full truncate'
+                          disabled={disabledFields}
+                        >
                           <IGRPSelectValuePrimitive placeholder='Selecione o departamento' />
                         </IGRPSelectTriggerPrimitive>
                       </IGRPFormControlPrimitive>
@@ -421,7 +433,7 @@ export function ApplicationForm({ application }: { application?: IGRPApplication
 
               <IGRPFormFieldPrimitive
                 control={form.control}
-                name="image"
+                name='image'
                 render={({ field }) => (
                   <FileUploadField
                     value={field.value ?? null}
@@ -484,7 +496,7 @@ export function ApplicationForm({ application }: { application?: IGRPApplication
               showIcon
               iconPlacement='end'
               loading={isLoading}
-              iconName='Save'
+              iconName='Check'
               className='gap-1 w-full sm:max-w-36'
             >
               {submitLblBtn}

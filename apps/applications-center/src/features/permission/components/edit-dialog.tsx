@@ -19,7 +19,7 @@ import {
   IGRPFormItemPrimitive,
   IGRPFormLabelPrimitive,
   IGRPInputPrimitive,
-  IGRPTextAreaPrimitive,  
+  IGRPTextAreaPrimitive,
   IGRPSelectPrimitive,
   IGRPSelectContentPrimitive,
   IGRPSelectItemPrimitive,
@@ -46,7 +46,6 @@ interface PermissionEditDialogProps {
   open: boolean;
   onOpenChange: (open: boolean) => void;
   permission: Permission | null;
-  applications: IGRPApplicationArgs[];
   onSuccess?: () => void;
 }
 
@@ -54,7 +53,6 @@ export function PermissionEditDialog({
   open,
   onOpenChange,
   permission,
-  applications,
   onSuccess,
 }: PermissionEditDialogProps) {
   const { mutateAsync: updatePermission, isPending: isUpdating } = useUpdatePermission();
@@ -100,7 +98,7 @@ export function PermissionEditDialog({
         type: 'success',
         title: 'Permission updated',
         description: 'Permission has been updated successfully.',
-        duration: 4000,     
+        duration: 4000,
       });
 
       if (onSuccess) {
@@ -109,12 +107,12 @@ export function PermissionEditDialog({
 
       onOpenChange(false);
     } catch (error) {
-      igrpToast({ 
-        type: 'error', 
-        title: 'Failed to update permission', 
-        description: error instanceof Error ? error.message : 'An unknown error occurred', 
-        duration: 4000, 
-      })
+      igrpToast({
+        type: 'error',
+        title: 'Failed to update permission',
+        description: error instanceof Error ? error.message : 'An unknown error occurred',
+        duration: 4000,
+      });
     }
   };
 
@@ -142,9 +140,7 @@ export function PermissionEditDialog({
                 name='name'
                 render={({ field }) => (
                   <IGRPFormItemPrimitive>
-                    <IGRPFormLabelPrimitive>
-                      Permission Name
-                    </IGRPFormLabelPrimitive>
+                    <IGRPFormLabelPrimitive>Permission Name</IGRPFormLabelPrimitive>
                     <IGRPFormControlPrimitive>
                       <IGRPInputPrimitive {...field} />
                     </IGRPFormControlPrimitive>
@@ -161,9 +157,7 @@ export function PermissionEditDialog({
                 name='description'
                 render={({ field }) => (
                   <IGRPFormItemPrimitive>
-                    <IGRPFormLabelPrimitive>
-                      Description
-                    </IGRPFormLabelPrimitive>
+                    <IGRPFormLabelPrimitive>Description</IGRPFormLabelPrimitive>
                     <IGRPFormControlPrimitive>
                       <IGRPTextAreaPrimitive {...field} />
                     </IGRPFormControlPrimitive>
@@ -190,25 +184,6 @@ export function PermissionEditDialog({
                           <IGRPSelectValuePrimitive placeholder='IGRPSelect application' />
                         </IGRPSelectTriggerPrimitive>
                       </IGRPFormControlPrimitive>
-                      <IGRPSelectContentPrimitive>
-                        {applications && applications.length > 0 ? (
-                          applications.map((app) => (
-                            <IGRPSelectItemPrimitive
-                              key={app.id}
-                              value={app.id.toString()}
-                            >
-                              {app.name}
-                            </IGRPSelectItemPrimitive>
-                          ))
-                        ) : (
-                          <IGRPSelectItemPrimitive
-                            value='none'
-                            disabled
-                          >
-                            No applications found
-                          </IGRPSelectItemPrimitive>
-                        )}
-                      </IGRPSelectContentPrimitive>
                     </IGRPSelectPrimitive>
                     <IGRPFormDescriptionPrimitive>
                       IGRPSelect the application this permission belongs to
@@ -238,7 +213,9 @@ export function PermissionEditDialog({
                         <IGRPSelectItemPrimitive value='INACTIVE'>Inactive</IGRPSelectItemPrimitive>
                       </IGRPSelectContentPrimitive>
                     </IGRPSelectPrimitive>
-                    <IGRPFormDescriptionPrimitive>Set the permission status</IGRPFormDescriptionPrimitive>
+                    <IGRPFormDescriptionPrimitive>
+                      Set the permission status
+                    </IGRPFormDescriptionPrimitive>
                     <IGRPFormMessagePrimitive />
                   </IGRPFormItemPrimitive>
                 )}

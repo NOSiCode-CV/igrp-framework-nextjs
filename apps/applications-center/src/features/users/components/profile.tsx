@@ -18,7 +18,7 @@ import {
   useUserImage,
   useUserSignature,
   useRolesFromUser,
-} from '@/features/users/hooks/use-users';
+} from '@/features/users/use-users';
 import { getInitials } from '@/lib/utils';
 import { PageHeader } from '@/components/page-header';
 import { ROUTES } from '@/lib/constants';

@@ -15,6 +15,6 @@ export async function getTheme() {
 export async function configLayout() {
   const session = await getSession();
   const { activeThemeValue, isScaled } = await getTheme();
-  
+
   return { session, activeThemeValue, isScaled };
 }

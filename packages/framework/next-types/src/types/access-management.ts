@@ -71,7 +71,7 @@ export interface IGRPDepartmentArgs {
   code: string;
   name: string;
   description?: string;
-  status?: IGRPStatus;
+  status: IGRPStatus;
   parentCode?: string;
 }
 

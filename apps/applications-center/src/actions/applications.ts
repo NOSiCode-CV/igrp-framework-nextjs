@@ -3,7 +3,7 @@
 import { getIGRPAccessClient, mapperApplications } from '@igrp/framework-next';
 import {
   CreateApplicationRequest,
-  UpdateApplicationRequest
+  UpdateApplicationRequest,
 } from '@igrp/platform-access-management-client-ts';
 
 import { refreshAccessClient } from './igrp/auth';
@@ -13,7 +13,7 @@ export async function getApplications() {
   await refreshAccessClient();
   const client = await getIGRPAccessClient();
 
-  try {    
+  try {
     const result = await client.applications.getApplications();
     const app = mapperApplications(result);
     return app;
@@ -27,7 +27,7 @@ export async function getApplicationByCode(appCode: string) {
   await refreshAccessClient();
   const client = await getIGRPAccessClient();
 
-  try {   
+  try {
     const result = await client.applications.getApplications({ code: appCode });
     const app = mapperApplications(result);
     return app[0];
@@ -41,7 +41,7 @@ export async function createApplication(application: CreateApplicationRequest) {
   await refreshAccessClient();
   const client = await getIGRPAccessClient();
 
-  try {    
+  try {
     const result = await client.applications.createApplication(application);
     const app = mapperActionsApplication(result);
     return app;
@@ -55,7 +55,7 @@ export async function updateApplication(code: string, updated: UpdateApplication
   await refreshAccessClient();
   const client = await getIGRPAccessClient();
 
-  try {    
+  try {
     const result = await client.applications.updateApplication(code, updated);
     const app = mapperActionsApplication(result);
     return app;

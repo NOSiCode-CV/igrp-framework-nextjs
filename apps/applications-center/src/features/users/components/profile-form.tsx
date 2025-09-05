@@ -32,8 +32,8 @@ import {
   useUpdateUser,
   // useUserImage,
   // useUserSignature
-} from '@/features/users/hooks/use-users';
-import { userSchema } from '@/features/users/schemas/user';
+} from '@/features/users/use-users';
+import { userSchema } from '@/features/users/user';
 import { UserProps } from '@/features/users/types';
 import { ProfileImageUpload } from '@/features/users/components/profile-image-upload';
 import { ProfileSignature } from '@/features/users/components/profile-signature';

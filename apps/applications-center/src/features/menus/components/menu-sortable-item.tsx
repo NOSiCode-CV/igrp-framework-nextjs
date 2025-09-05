@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import { useSortable } from '@dnd-kit/sortable';
 import { CSS } from '@dnd-kit/utilities';
-import { 
+import {
   IGRPButtonPrimitive,
   IGRPBadgePrimitive,
   IGRPDropdownMenuPrimitive,
@@ -75,7 +75,10 @@ export function SortableItem({
                 subMenus && subMenus.length > 0 ? () => setIsExpanded(!isExpanded) : undefined
               }
             >
-              <IGRPIcon iconName={isExpanded ? 'ChevronDown' : 'ChevronRight'} strokeWidth={2} />
+              <IGRPIcon
+                iconName={isExpanded ? 'ChevronDown' : 'ChevronRight'}
+                strokeWidth={2}
+              />
             </IGRPButtonPrimitive>
           )}
 
@@ -86,7 +89,7 @@ export function SortableItem({
             variant='ghost'
             size='icon'
           >
-            <IGRPIcon 
+            <IGRPIcon
               iconName='GripVertical'
               className='size-4 text-primary'
               strokeWidth={2}
@@ -95,12 +98,8 @@ export function SortableItem({
 
           <div>
             <div className='font-medium'>{menu.name}</div>
-            <div className='text-sm text-muted-foreground'>
-              {menu.pageSlug ?? menu.url}
-            </div>
-            <div className='text-sm text-muted-foreground'>
-              {menu.pageSlug ?? menu.url}
-            </div>
+            <div className='text-sm text-muted-foreground'>{menu.pageSlug ?? menu.url}</div>
+            <div className='text-sm text-muted-foreground'>{menu.pageSlug ?? menu.url}</div>
           </div>
         </div>
 
@@ -122,24 +121,23 @@ export function SortableItem({
                 className='h-7 w-7 p-0'
               >
                 <span className='sr-only'>Abrir menu</span>
-                <IGRPIcon iconName='Ellipsis' strokeWidth={2} />
+                <IGRPIcon
+                  iconName='Ellipsis'
+                  strokeWidth={2}
+                />
               </IGRPButtonPrimitive>
             </IGRPDropdownMenuTriggerPrimitive>
             <IGRPDropdownMenuContentPrimitive align='end'>
-              <IGRPDropdownMenuItemPrimitive
-                onClick={() => onView(menu)}                
-              >
-                <IGRPIcon 
+              <IGRPDropdownMenuItemPrimitive onClick={() => onView(menu)}>
+                <IGRPIcon
                   iconName='Eye'
                   className='size-4 mr-0.5'
                   strokeWidth={2}
                 />
                 Ver
               </IGRPDropdownMenuItemPrimitive>
-              <IGRPDropdownMenuItemPrimitive
-                onClick={() => onEdit(menu)}               
-              >
-                <IGRPIcon 
+              <IGRPDropdownMenuItemPrimitive onClick={() => onEdit(menu)}>
+                <IGRPIcon
                   iconName='Pencil'
                   className='size-4 mr-0.5'
                   strokeWidth={2}
@@ -152,7 +150,7 @@ export function SortableItem({
                 className=''
                 onClick={() => onDelete?.(menu.code, menu.name)}
               >
-                <IGRPIcon 
+                <IGRPIcon
                   iconName='Trash'
                   className='size-4 mr-0.5'
                   strokeWidth={2}
@@ -174,8 +172,8 @@ export function SortableItem({
               onEdit={onEdit}
               onDelete={onDelete}
               depth={depth + 1}
-              isChild={true} 
-              onView={onView}            
+              isChild={true}
+              onView={onView}
             />
           ))}
         </div>

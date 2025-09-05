@@ -26,7 +26,7 @@ import {
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from '@/components/ui/tooltip';
 import { UserDeleteDialog } from '@/features/users/components/delete-dialog';
 import { UserInviteDialog } from '@/features/users/components/invite-dialog';
-import { useAllUsers, useDeleteUser, useCurrentUser } from '@/features/users/hooks/use-users';
+import { useAllUsers, useDeleteUser, useCurrentUser } from '@/features/users/use-users';
 
 export function UserList() {
   const { data: users, isLoading, error } = useAllUsers();

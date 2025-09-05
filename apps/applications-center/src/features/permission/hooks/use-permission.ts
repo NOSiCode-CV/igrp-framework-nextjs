@@ -17,11 +17,11 @@ export const useAllPermissions = () => {
   });
 };
 
-export const usePermissionsByApplication = (applicationId: number) => {
+export const usePermissionsByApplication = (appCode: string) => {
   return useQuery<Permission[]>({
-    queryKey: ['permissions', 'application', applicationId],
-    queryFn: () => getPermissionsByApplication(applicationId),
-    enabled: !!applicationId,
+    queryKey: ['permissions', 'application', appCode],
+    queryFn: () => getPermissionsByApplication(appCode),
+    enabled: !!appCode,
   });
 };
 

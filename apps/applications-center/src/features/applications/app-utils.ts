@@ -6,16 +6,6 @@ export const formattedName = (userName: string) =>
     .join(' ');
 
 // TDOD: add locale
-export const formatDate = (dateString: string) => {
-  const date = new Date(dateString);
-  return new Intl.DateTimeFormat('pt-PT', {
-    year: 'numeric',
-    month: 'long',
-    day: 'numeric',
-    hour: '2-digit',
-    minute: '2-digit',
-  }).format(date);
-};
 
 export const typeClass = (type: string) =>
   type === 'INTERNAL' ? 'bg-primary/10 text-primary' : 'bg-muted-foreground text-muted';
@@ -30,7 +20,7 @@ export function formatSlug(slug: string): string {
 
 export const APPLICATIONS_TYPES = ['EXTERNAL', 'INTERNAL', 'SYSTEM'] as const;
 
-export const APPLICATIONS_TYPES_EXCLUDE = ['EXTERNAL', 'INTERNAL',] as const;
+export const APPLICATIONS_TYPES_EXCLUDE = ['EXTERNAL', 'INTERNAL'] as const;
 
 export const APPLICATIONS_TYPES_FILTERED = [
   { value: 'EXTERNAL', label: 'External' },

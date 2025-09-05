@@ -2,28 +2,15 @@ import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import { IGRPMenuCRUDArgs } from '@igrp/framework-next-types';
 import { MenuFilters, UpdateMenuRequest } from '@igrp/platform-access-management-client-ts';
 
-import {
-  createMenu,
-  deleteMenu,
-  // getMenuByCode,
-  getMenus,
-  // getMenusByApplication,
-  // getSubMenus,
-  updateMenu,
-  // updateMenuStatus,
-} from '@/actions/menus';
-
+import { createMenu, deleteMenu, getMenus, updateMenu } from '@/actions/menus';
 
 export const useMenus = (params?: MenuFilters) => {
-  const key = [
-    'menus',
-    params?.applicationCode ?? null,
-  ] as const;
+  const key = ['menus', params?.applicationCode ?? null] as const;
 
   return useQuery<IGRPMenuCRUDArgs[]>({
     queryKey: key,
     queryFn: () => getMenus(params),
-    enabled: !!(params?.applicationCode),
+    enabled: !!params?.applicationCode,
   });
 };
 
@@ -52,7 +39,8 @@ export const useUpdateMenu = () => {
   const queryClient = useQueryClient();
 
   return useMutation({
-    mutationFn: ({ code, data }: { code: string; data: UpdateMenuRequest }) => updateMenu(code, data),
+    mutationFn: ({ code, data }: { code: string; data: UpdateMenuRequest }) =>
+      updateMenu(code, data),
     onSuccess: (updatedMenu, { code }) => {
       queryClient.invalidateQueries({ queryKey: ['menus'] });
       queryClient.invalidateQueries({ queryKey: ['menus', code] });
@@ -132,7 +120,6 @@ export const useDeleteMenu = () => {
 //     },
 //   });
 // };
-
 
 // export const useUpdateMenu = () => {
 //   const queryClient = useQueryClient();

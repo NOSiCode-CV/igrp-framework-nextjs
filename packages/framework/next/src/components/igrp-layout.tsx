@@ -29,6 +29,8 @@ export async function IGRPLayout({ children, config }: IGRPLayoutArgs) {
 
   let app;
 
+  console.log({ previewMode });
+
   if (!previewMode) {
     if (!apiManagementConfig || !apiManagementConfig.baseUrl) {
       throw new Error(

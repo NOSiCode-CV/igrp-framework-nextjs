@@ -5,7 +5,7 @@ export { IGRPGlobalLoading } from './components/glabal-loading';
 
 export { IGRPLayout, type IGRPLayoutArgs } from './components/igrp-layout';
 
-export { IGRPRootLayout, type IGRPRootLayoutArgs } from './components/root-layout';
+export { IGRPRootLayout, type IGRPRootLayoutArgs } from './components/igrp-root-layout';
 
 export { buildConfig } from './config/build';
 

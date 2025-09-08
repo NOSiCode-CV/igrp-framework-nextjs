@@ -1,21 +1,51 @@
-import { NextResponse } from 'next/server';
+// import { getToken } from '@igrp/framework-next-auth/jwt';
+import { NextResponse, type NextRequest } from 'next/server';
 
-// ::: REDIRECT localhost:3000/ -> localhost:3000/IGRP_APP_BASE_PATH :::
+// Public paths that don’t require authentication
+const publicPaths = ['/api/auth'];
 
-// export default async function middleware(request: NextRequest) {
-//   const { pathname } = request.nextUrl;
-//   console.log({ pathname });
+// Check if path is public
+function isPublicPath(pathname: string): boolean {
+  return publicPaths.some(
+    (p) =>
+      pathname === p ||
+      (p.endsWith('/') && pathname.startsWith(p)) ||
+      pathname.startsWith('/api/auth/') ||
+      pathname.startsWith('/_next/') ||
+      pathname.startsWith('/static/') ||
+      pathname.includes('.'),
+  );
+}
 
-//   return NextResponse.next();
-// }
+// Main middleware
+export async function middleware(request: NextRequest) {
+  const { pathname } = request.nextUrl;
 
-export default async function middleware() {
+  if (isPublicPath(pathname)) {
+    return NextResponse.next();
+  }
+
+  // Get session token
+  // const token = await getToken({
+  //   req: request,
+  //   secret: process.env.NEXTAUTH_SECRET,
+  //   cookieName: 'next-auth.session-token',
+  // });
+
+  // if (!token) {
+  //   const loginUrl = new URL('/login', request.url);
+  //   loginUrl.searchParams.set('callbackUrl', request.url);
+  //   return NextResponse.redirect(loginUrl);
+  // }
+
+  // Redirect on token refresh failure
+  // if (token.error === 'RefreshAccessTokenError') {
+  //   return NextResponse.redirect(new URL('/logout', request.url));
+  // }
+
   return NextResponse.next();
 }
 
 export const config = {
-  matcher: [
-    '/', 
-    '/((?!api|_next/static|_next/image|favicon.ico|.*\\..*).*)'
-  ],
+  matcher: ['/', '/((?!api|apps|health|_next|favicon.ico|.*\\..*).*)'],
 };

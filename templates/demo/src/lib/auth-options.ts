@@ -1,5 +1,5 @@
-import type { Account, NextAuthOptions, Session, TokenSet } from 'next-auth';
-import type { JWT } from 'next-auth/jwt';
+import type { NextAuthOptions, Session, TokenSet } from '@igrp/framework-next-auth';
+import type { JWT } from '@igrp/framework-next-auth/jwt';
 import KeycloakProvider from 'next-auth/providers/keycloak';
 
 export const authOptions: NextAuthOptions = {
@@ -15,8 +15,22 @@ export const authOptions: NextAuthOptions = {
     strategy: 'jwt',
     maxAge: 4 * 60 * 60, // 4 hours
   },
+  // useSecureCookies: process.env.NODE_ENV === 'production',
+  cookies: {
+    sessionToken: {
+      name: `next-auth.session-token`,
+      options: {
+        httpOnly: true,
+        sameSite: 'lax',
+        path: '/',
+        // secure: process.env.NODE_ENV === 'production',
+        secure: true,
+        domain: process.env.IGRP_NEXTAUTH_CALLBACK ?? '',
+      },
+    },
+  },
   callbacks: {
-    async jwt({ token, account }: { token: JWT; account: Account | null }) {
+    async jwt({ token, account }) {
       if (account) {
         token.idToken = account.id_token;
         token.accessToken = account.access_token;
@@ -60,11 +74,10 @@ export const authOptions: NextAuthOptions = {
     },
     async session({ session, token }) {
       session.user = token.user as Session['user'];
-      session.accessToken = token.accessToken as string;
-      session.error = token.error as string;
-      session.idToken = token.idToken as string;
+      session.accessToken = token.accessToken;
+      session.error = token.error;
+      session.idToken = token.idToken;
       session.expiresAt = token.expiresAt;
-
       return session;
     },
   },
@@ -73,21 +86,6 @@ export const authOptions: NextAuthOptions = {
       if (token) {
         await doFinalSignoutHandshake(token as JWT);
       }
-    },
-  },
-  cookies: {
-    sessionToken: {
-      name: `next-auth.session-token`,
-      options: {
-        httpOnly: true,
-        sameSite: 'lax',
-        path: '/',
-        secure: process.env.NODE_ENV === 'production',      
-        ...(process.env.NODE_ENV === 'production' && process.env.IGRP_NEXTAUTH_CALLBACK
-          ? { domain: process.env.IGRP_NEXTAUTH_CALLBACK }
-          : {}
-        ),
-      },
     },
   },
 };
@@ -133,7 +131,6 @@ async function doFinalSignoutHandshake(jwt: JWT) {
         `${process.env.KEYCLOAK_ISSUER}/protocol/openid-connect/logout?${params.toString()}`,
         { method: 'GET' },
       );
-
       console.log('Completed post-logout handshake', response.status, response.statusText);
     } catch (e) {
       console.error(

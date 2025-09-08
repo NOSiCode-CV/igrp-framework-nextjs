@@ -3,7 +3,7 @@ import { AlertCircle, type LucideProps, icons } from 'lucide-react';
 type IGRPIconName = keyof typeof icons;
 
 const IGRPIconObject = Object.keys(icons).sort();
-const IGRPIconList = icons
+const IGRPIconList = icons;
 
 interface IGRPIconProps extends Omit<LucideProps, 'ref'> {
   iconName: IGRPIconName | string;
@@ -26,4 +26,11 @@ function IGRPIcon({
   return <LucideIcon className={className} id={iconName} color={color} size={size} {...props} />;
 }
 
-export { IGRPIcon, IGRPIconObject, type IGRPIconProps, type IGRPIconName, type LucideProps, IGRPIconList };
+export {
+  IGRPIcon,
+  IGRPIconObject,
+  type IGRPIconProps,
+  type IGRPIconName,
+  type LucideProps,
+  IGRPIconList,
+};

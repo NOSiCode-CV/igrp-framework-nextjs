@@ -139,11 +139,11 @@ export { Input as IGRPInputPrimitive } from './components/primitives/input';
 
 export { Label as IGRPLabelPrimitive } from './components/primitives/label';
 
-export { 
-  Popover as IGRPPopoverPrimitive, 
-  PopoverTrigger as IGRPPopoverTriggerPrimitive, 
-  PopoverContent as IGRPPopoverContentPrimitive, 
-  PopoverAnchor as IGRPPopoverAnchorPrimitive 
+export {
+  Popover as IGRPPopoverPrimitive,
+  PopoverTrigger as IGRPPopoverTriggerPrimitive,
+  PopoverContent as IGRPPopoverContentPrimitive,
+  PopoverAnchor as IGRPPopoverAnchorPrimitive,
 } from './components/primitives/popover';
 
 export {
@@ -409,7 +409,7 @@ export {
   type IGRPIconProps,
   type IGRPIconName,
   type LucideProps,
-  IGRPIconList
+  IGRPIconList,
 } from './components/horizon/icon';
 
 export {

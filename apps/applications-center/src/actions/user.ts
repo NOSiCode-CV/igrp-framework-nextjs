@@ -2,16 +2,22 @@
 
 import { getIGRPAccessClient } from '@igrp/framework-next';
 import { refreshAccessClient } from './igrp/auth';
+import { UserFilters } from '@igrp/platform-access-management-client-ts';
 
-interface UserQueryParams {
-  applicationId?: number;
-  departmentId?: number;
-  name?: string;
-  username?: string;
-  email?: string;
+export async function getUsers(params?: UserFilters) {
+  await refreshAccessClient();
+  const client = await getIGRPAccessClient();
+
+  try {
+    const result = await client.users.getUsers(params);
+    return result.data;
+  } catch (error) {
+    console.error('[igrp-users] Erro ao carregar lista de utilizadores.:', error);
+    throw error;
+  }
 }
 
-export const getCurrentUser = async () => {
+export async function getCurrentUser() {
   await refreshAccessClient();
   const client = await getIGRPAccessClient();
 
@@ -22,7 +28,7 @@ export const getCurrentUser = async () => {
     console.error('[igrp-user] Erro ao carregar os dados do utilizador atual.:', error);
     throw error;
   }
-};
+}
 
 // function buildQueryString(params: Record<string, string | number | undefined>): string {
 //   const validParams = Object.entries(params)

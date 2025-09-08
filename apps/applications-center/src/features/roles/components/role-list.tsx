@@ -1,55 +1,53 @@
 'use client';
 
 import { useState } from 'react';
-import { useForm } from 'react-hook-form';
-import { zodResolver } from '@hookform/resolvers/zod';
+// import { useForm } from 'react-hook-form';
+// import { zodResolver } from '@hookform/resolvers/zod';
 import {
   IGRPButtonPrimitive,
   IGRPInputPrimitive,
-  IGRPLabelPrimitive,
+  // IGRPLabelPrimitive,
   IGRPTablePrimitive,
   IGRPTableBodyPrimitive,
   IGRPTableCellPrimitive,
   IGRPTableHeadPrimitive,
   IGRPTableHeaderPrimitive,
   IGRPTableRowPrimitive,
-  IGRPBadgePrimitive,
-  IGRPDialogPrimitive,
-  IGRPDialogContentPrimitive,
-  IGRPDialogDescriptionPrimitive,
-  IGRPDialogFooterPrimitive,
-  IGRPDialogHeaderPrimitive,
-  IGRPDialogTitlePrimitive,
+  // IGRPBadgePrimitive,
+  // IGRPDialogPrimitive,
+  // IGRPDialogContentPrimitive,
+  // IGRPDialogDescriptionPrimitive,
+  // IGRPDialogFooterPrimitive,
+  // IGRPDialogHeaderPrimitive,
+  // IGRPDialogTitlePrimitive,
   IGRPDropdownMenuPrimitive,
-  IGRPDropdownMenuContentPrimitive,
-  IGRPDropdownMenuItemPrimitive,
-  IGRPDropdownMenuLabelPrimitive,
-  IGRPDropdownMenuSeparatorPrimitive,
+  // IGRPDropdownMenuContentPrimitive,
+  // IGRPDropdownMenuItemPrimitive,
+  // IGRPDropdownMenuLabelPrimitive,
+  // IGRPDropdownMenuSeparatorPrimitive,
   IGRPDropdownMenuTriggerPrimitive,
-  IGRPFormPrimitive,
-  IGRPFormControlPrimitive,
-  IGRPFormDescriptionPrimitive,
-  IGRPFormFieldPrimitive,
-  IGRPFormItemPrimitive,
-  IGRPFormLabelPrimitive,
-  useIGRPToast,
+  // IGRPFormPrimitive,
+  // IGRPFormControlPrimitive,
+  // IGRPFormDescriptionPrimitive,
+  // IGRPFormFieldPrimitive,
+  // IGRPFormItemPrimitive,
+  // IGRPFormLabelPrimitive,
+  // useIGRPToast,
   IGRPIcon,
-  IGRPDialogTriggerPrimitive,
-  IGRPFormMessagePrimitive,
+  // IGRPDialogTriggerPrimitive,
+  // IGRPFormMessagePrimitive,
   IGRPCardPrimitive,
   IGRPCardHeaderPrimitive,
   IGRPCardTitlePrimitive,
   IGRPCardDescriptionPrimitive,
   IGRPCardContentPrimitive,
 } from '@igrp/igrp-framework-react-design-system';
-import {
-  useRoles,
-} from '../use-roles';
-import { RoleEditDialog } from './role-edit';
+import { useRoles } from '../use-roles';
+// import { RoleEditDialog } from './role-edit';
 import { ButtonLink } from '@/components/button-link';
 import { AppCenterLoading } from '@/components/loading';
-import { useCurrentUser } from '@/features/users/use-users';
-import { IGRPUserDTO } from '@igrp/platform-access-management-client-ts';
+// import { useCurrentUser } from '@/features/users/use-users';
+// import { IGRPUserDTO } from '@igrp/platform-access-management-client-ts';
 import { RoleFormDialog } from './role-form-dialog';
 
 interface RolesListProps {
@@ -60,11 +58,10 @@ interface RolesListProps {
 export function RolesList({ departmentCode, username }: RolesListProps) {
   const [searchTerm, setSearchTerm] = useState('');
   const [openFormDialog, setOpenFormDialog] = useState(false);
-  const [deleteDialogOpen, setDeleteDialogOpen] = useState(false);
+  // const [deleteDialogOpen, setDeleteDialogOpen] = useState(false);
   // const [selectedRole, setSelectedRole] = useState<Role | null>(null);
   // const [roleToDelete, setRoleToDelete] = useState<Role | null>(null);
-  const [deleteConfirmation, setDeleteConfirmation] = useState('');
-
+  // const [deleteConfirmation, setDeleteConfirmation] = useState('');
 
   const { data: roles, isLoading, error: error } = useRoles({ departmentCode, username });
 
@@ -72,9 +69,6 @@ export function RolesList({ departmentCode, username }: RolesListProps) {
 
   // const { mutateAsync: deleteRole, isPending: isDeletingRole } = useDeleteRole();
   // const { mutateAsync: addRolePermissions } = useAddRolePermissions();
-
-
-
 
   // const handleDeleteClick = (role: Role) => {
   //   setRoleToDelete(role);
@@ -403,8 +397,8 @@ export function RolesList({ departmentCode, username }: RolesListProps) {
       <RoleFormDialog
         open={openFormDialog}
         onOpenChange={setOpenFormDialog}
-        departmentCode={departmentCode}  
-        roles={roles}      
+        departmentCode={departmentCode}
+        roles={roles}
       />
     </>
   );

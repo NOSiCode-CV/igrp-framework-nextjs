@@ -1,5 +1,5 @@
 import { z } from 'zod';
-import { statusSchema } from '@/schemas/global';
+import { emptyToNull, statusSchema } from '@/schemas/global';
 import { Status } from '@igrp/platform-access-management-client-ts';
 
 export const roleSchema = z.object({
@@ -13,23 +13,26 @@ export const roleSchema = z.object({
 
 export type RoleArgs = z.infer<typeof roleSchema>;
 
-export const createRoleSchema = roleSchema.omit({ id: true });
+export const createRoleSchema = roleSchema.omit({ id: true }).extend({
+  description: emptyToNull.optional(),
+  parentName: emptyToNull.optional(),
+});
 
 export type CreateRoleArgs = z.infer<typeof createRoleSchema>;
 
-export const updateRoleSchema = roleSchema
-.omit({ id: true })
-.partial();
+export const updateRoleSchema = roleSchema.omit({ id: true }).partial().extend({
+  description: emptyToNull.optional(),
+  parentName: emptyToNull.optional(),
+});
 
 export type UpdateRoleArgs = z.infer<typeof updateRoleSchema>;
 
-
-export const normalizeRole = (data: RoleArgs) => {
+export const normalizeRole = (data: CreateRoleArgs) => {
   return {
     name: data.name.trim(),
     departmentCode: data.departmentCode,
     parentName: data.parentName ?? null,
     description: data.description ?? null,
-    status: data.status,
+    status: data.status as Status,
   };
 };

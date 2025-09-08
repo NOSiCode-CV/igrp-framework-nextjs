@@ -18,13 +18,13 @@ import { useDepartmentByCode } from '../use-departments';
 import { AppCenterLoading } from '@/components/loading';
 import { AppCenterNotFound } from '@/components/not-found';
 import { CopyToClipboard } from '@/components/copy-to-clipboard';
-import { PermissionAppList } from '@/features/permission/components/permission-app-list';
-import { useCurrentUser } from '@/features/users/use-users';
+// import { PermissionAppList } from '@/features/permission/components/permission-app-list';
+// import { useCurrentUser } from '@/features/users/use-users';
 
 // TODO: See user to create a conetext for get the user all time the user is login
 export function DepartmentDetails({ code }: { code: string }) {
   const { data: department, isLoading, error } = useDepartmentByCode(code);
-  const { data: currentUser, isLoading: userLoading, error: userError } = useCurrentUser();
+  // const { data: currentUser, isLoading: userLoading, error: userError } = useCurrentUser();
 
   if (isLoading) return <AppCenterLoading descrption='A carregar departamento...' />;
 
@@ -39,18 +39,18 @@ export function DepartmentDetails({ code }: { code: string }) {
     );
   }
 
-  if (userLoading) return <AppCenterLoading descrption='A carregar utilizador...' />;
+  // if (userLoading) return <AppCenterLoading descrption='A carregar utilizador...' />;
 
-  if (userError) throw userError;
+  // if (userError) throw userError;
 
-  if (!currentUser) {
-    return (
-      <AppCenterNotFound
-        iconName='AppWindow'
-        title='Utilizador não encontrado.'
-      />
-    );
-  }
+  // if (!currentUser) {
+  //   return (
+  //     <AppCenterNotFound
+  //       iconName='AppWindow'
+  //       title='Utilizador não encontrado.'
+  //     />
+  //   );
+  // }
 
   const { name, description, status, parent_code: parent } = department;
 
@@ -63,21 +63,21 @@ export function DepartmentDetails({ code }: { code: string }) {
   }
 
   const tabs: IGRPTabItem[] = [
-    {
-      label: 'Perfis (Roles)',
-      value: 'roles',
-      content: (
-        <RolesList
-          departmentCode={code}
-          username={currentUser.username}
-        />
-      ),
-    },
-    {
-      label: 'Permissões',
-      value: 'permissions',
-      content: <PermissionAppList departmentCode={code} />,
-    },
+    // {
+    //   label: 'Perfis (Roles)',
+    //   value: 'roles',
+    //   content: (
+    //     <RolesList
+    //       departmentCode={code}
+    //       username={currentUser.username}
+    //     />
+    //   ),
+    // },
+    // {
+    //   label: 'Permissões',
+    //   value: 'permissions',
+    //   content: <PermissionAppList departmentCode={code} />,
+    // },
   ];
 
   return (

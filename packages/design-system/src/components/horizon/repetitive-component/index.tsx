@@ -14,12 +14,11 @@ function IGRPRepetitiveComponent<T>({
   return (
     <>
       {items.map((item) => (
-        <Fragment key={keyExtractor(item)}>
-          {children(item)}
-        </Fragment>
-      ))};
+        <Fragment key={keyExtractor(item)}>{children(item)}</Fragment>
+      ))}
+      ;
     </>
-  )
+  );
 }
 
 export { IGRPRepetitiveComponent, type IGRPRepetitiveComponentProps };

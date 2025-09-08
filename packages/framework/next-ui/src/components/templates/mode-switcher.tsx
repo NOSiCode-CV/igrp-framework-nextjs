@@ -32,11 +32,12 @@ function IGRPTemplateModeSwitcher() {
       onClick={toggleTheme}
       aria-label="Toggle theme"
     >
-      {mounted && (isDark ? (
-        <IGRPIcon iconName="Sun" strokeWidth={2} />
-      ) : (
-        <IGRPIcon iconName="Moon" strokeWidth={2} />
-      ))}
+      {mounted &&
+        (isDark ? (
+          <IGRPIcon iconName="Sun" strokeWidth={2} />
+        ) : (
+          <IGRPIcon iconName="Moon" strokeWidth={2} />
+        ))}
       <span className="sr-only">Toggle theme</span>
     </IGRPButtonPrimitive>
   );

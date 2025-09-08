@@ -46,8 +46,7 @@ export function IGRPTemplateMenus({ menus = [] }: IGRPTemplateMenuArgs) {
       };
     }
 
-    const keyOf = (item: any) =>
-      (item.code && String(item.code)) || `${item.type}-${item.id}`;
+    const keyOf = (item: any) => (item.code && String(item.code)) || `${item.type}-${item.id}`;
 
     const groups: IGRPMenuItemArgs[] = [];
     const childrenByParentKey = new Map<string, IGRPMenuItemArgs[]>();
@@ -78,8 +77,7 @@ export function IGRPTemplateMenus({ menus = [] }: IGRPTemplateMenuArgs) {
       }
 
       // SYSTEM_PAGE (or others)
-      const parentKey =
-        (item.parentCode as any) ?? currentFolderKey ?? currentGroupKey ?? 'root';
+      const parentKey = (item.parentCode as any) ?? currentFolderKey ?? currentGroupKey ?? 'root';
       pushChild(String(parentKey), item);
     });
 
@@ -101,7 +99,8 @@ export function IGRPTemplateMenus({ menus = [] }: IGRPTemplateMenuArgs) {
       <IGRPAlertPrimitive variant="destructive">
         <IGRPIcon iconName="CircleAlert" />
         <IGRPAlertDescriptionPrimitive>
-          O modo de protótipo não está habilitado e nenhum código de aplicação válido foi encontrado.
+          O modo de protótipo não está habilitado e nenhum código de aplicação válido foi
+          encontrado.
         </IGRPAlertDescriptionPrimitive>
       </IGRPAlertPrimitive>
     );
@@ -127,9 +126,7 @@ export function IGRPTemplateMenus({ menus = [] }: IGRPTemplateMenuArgs) {
 
         return (
           <IGRPSidebarGroupPrimitive key={`grp-${sectionKey}`}>
-            <IGRPSidebarGroupLabelPrimitive>
-              {sectionLabel}
-            </IGRPSidebarGroupLabelPrimitive>
+            <IGRPSidebarGroupLabelPrimitive>{sectionLabel}</IGRPSidebarGroupLabelPrimitive>
             <IGRPSidebarGroupContentPrimitive>
               <IGRPSidebarMenuPrimitive role="navigation">
                 {topLevel.map((menu) => (
@@ -162,7 +159,8 @@ function MenuItemWithSubmenus({ menu, pathname, childMenus }: MenuItemWithSubmen
   const isExternal = rawUrl ? igrpIsExternalUrl(rawUrl) : false;
   const normalizedUrl = rawUrl ? igrpNormalizeUrl(rawUrl) : '';
 
-  const isActive = !!normalizedUrl && (pathname === normalizedUrl || pathname.startsWith(normalizedUrl));
+  const isActive =
+    !!normalizedUrl && (pathname === normalizedUrl || pathname.startsWith(normalizedUrl));
   const hasChildren = childMenus.length > 0;
 
   if (!hasChildren) {
@@ -215,7 +213,10 @@ function MenuItemWithSubmenus({ menu, pathname, childMenus }: MenuItemWithSubmen
       {/* Collapsible for expanded sidebar */}
       <IGRPSidebarMenuItemPrimitive>
         <IGRPCollapsiblePrimitive className="w-full group">
-          <IGRPCollapsibleTriggerPrimitive className="flex w-full group-data-[collapsible=icon]:hidden" asChild>
+          <IGRPCollapsibleTriggerPrimitive
+            className="flex w-full group-data-[collapsible=icon]:hidden"
+            asChild
+          >
             <IGRPSidebarMenuButtonPrimitive
               tooltip={name}
               className="w-full cursor-pointer"
@@ -234,7 +235,11 @@ function MenuItemWithSubmenus({ menu, pathname, childMenus }: MenuItemWithSubmen
           <IGRPCollapsibleContentPrimitive>
             <IGRPSidebarMenuSubPrimitive>
               {childMenus.map((subMenu) => (
-                <SubMenuItem key={`collapse-${id}-${subMenu.id}`} menu={subMenu} variant="collapsible" />
+                <SubMenuItem
+                  key={`collapse-${id}-${subMenu.id}`}
+                  menu={subMenu}
+                  variant="collapsible"
+                />
               ))}
             </IGRPSidebarMenuSubPrimitive>
           </IGRPCollapsibleContentPrimitive>

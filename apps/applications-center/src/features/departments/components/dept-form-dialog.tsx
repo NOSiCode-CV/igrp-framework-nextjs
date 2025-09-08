@@ -95,8 +95,6 @@ export function DepartmentCreateDialog({
   const isLoading = isCreating || isUpdating;
 
   const onSubmit = async (values: DepartmentArgs) => {
-    console.log({ values });
-
     try {
       if (department) {
         const paylod = normalizeDeptartment(values);

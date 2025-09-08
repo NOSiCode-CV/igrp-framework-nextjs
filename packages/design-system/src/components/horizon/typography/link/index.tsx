@@ -1,43 +1,43 @@
-import type { ReactNode } from "react";
-import Link, { type LinkProps } from "next/link";
-import { cva, type VariantProps } from "class-variance-authority";
+import type { ReactNode } from 'react';
+import Link, { type LinkProps } from 'next/link';
+import { cva, type VariantProps } from 'class-variance-authority';
 
-import { IGRPIcon, type IGRPIconName } from "../../icon";
-import { IGRPColors, type IGRPColorRole, type IGRPColorVariants } from "../../../../lib/colors";
-import { igrpColorText } from "../../../../lib/colors";
-import { igrpIsExternalUrl } from "../../../../lib/url";
-import { cn } from "../../../../lib/utils";
-import type { IGRPBaseAttributes, IGRPPlacementProps } from "../../../../types";
+import { IGRPIcon, type IGRPIconName } from '../../icon';
+import { IGRPColors, type IGRPColorRole, type IGRPColorVariants } from '../../../../lib/colors';
+import { igrpColorText } from '../../../../lib/colors';
+import { igrpIsExternalUrl } from '../../../../lib/url';
+import { cn } from '../../../../lib/utils';
+import type { IGRPBaseAttributes, IGRPPlacementProps } from '../../../../types';
 
 const IGRPLinkVariants = cva(
-  "transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2",
+  'transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2',
   {
     variants: {
       size: {
-        default: "text-base",
-        sm: "text-sm",
-        lg: "text-lg",
+        default: 'text-base',
+        sm: 'text-sm',
+        lg: 'text-lg',
       },
       underline: {
-        none: "no-underline",
-        hover: "no-underline hover:underline underline-offset-3",
-        always: "underline underline-offset-3 hover:no-underline",
+        none: 'no-underline',
+        hover: 'no-underline hover:underline underline-offset-3',
+        always: 'underline underline-offset-3 hover:no-underline',
       },
     },
     defaultVariants: {
-      size: "default",
-      underline: "hover",
+      size: 'default',
+      underline: 'hover',
     },
-  }
+  },
 );
 
 type AnchorProps = React.AnchorHTMLAttributes<HTMLAnchorElement>;
-type NextLinkProps = Omit<LinkProps, "href"> & { href: string };
+type NextLinkProps = Omit<LinkProps, 'href'> & { href: string };
 
 interface IGRPLinkProps
-  extends Omit<AnchorProps, "href">,
-    Omit<NextLinkProps, "as">,
-    Omit<IGRPBaseAttributes, "ref">,
+  extends Omit<AnchorProps, 'href'>,
+    Omit<NextLinkProps, 'as'>,
+    Omit<IGRPBaseAttributes, 'ref'>,
     VariantProps<typeof IGRPLinkVariants> {
   href: string;
   children: ReactNode;
@@ -62,25 +62,25 @@ function IGRPLink({
   size,
   underline,
   showIcon = true,
-  iconName = "ArrowRight",
-  iconPlacement = "start",
+  iconName = 'ArrowRight',
+  iconPlacement = 'start',
   iconClassName,
   iconSize,
   variant,
-  color = "primary",
+  color = 'primary',
   ...props
 }: IGRPLinkProps) {
   const isExternal = igrpIsExternalUrl(href);
   const colorLink = variant ? IGRPColors[variant][color] : igrpColorText(color);
   const linkClass = cn(IGRPLinkVariants({ size, underline }), colorLink, className);
-  const getIconSize = iconSize || (size === "lg" ? 20 : size === "default" ? 16 : 14);
+  const getIconSize = iconSize || (size === 'lg' ? 20 : size === 'default' ? 16 : 14);
 
   if (isExternal) {
     return (
       <a
         href={href}
         className={linkClass}
-        target={target || "_blank"}
+        target={target || '_blank'}
         rel="noopener noreferrer"
         onClick={onClick}
         {...props}
@@ -133,16 +133,16 @@ function IGRPLinkRender({
   return (
     <div
       className={cn(
-        "group flex gap-1 items-center whitespace-nowrap",
-        iconPlacement === "end" && "flex-row-reverse"
+        'group flex gap-1 items-center whitespace-nowrap',
+        iconPlacement === 'end' && 'flex-row-reverse',
       )}
     >
       {showIcon && iconName && (
         <IGRPIcon
           iconName={iconName}
           className={cn(
-            "inline-flex opacity-60 transition-transform group-hover:translate-x-0.5",
-            iconClassName
+            'inline-flex opacity-60 transition-transform group-hover:translate-x-0.5',
+            iconClassName,
           )}
           size={sizeIcon}
         />

@@ -36,7 +36,7 @@ import {
   useUpdateApplication,
 } from '@/features/applications/use-applications';
 import {
-  ApplicationType,
+  ApplicationArgs,
   appTypeCrud,
   applicationSchema,
 } from '@/features/applications/app-schemas';
@@ -60,7 +60,7 @@ export function ApplicationForm({ application }: { application?: IGRPApplication
   const { mutateAsync: addApplication } = useCreateApplication();
   const { mutateAsync: updateApplication } = useUpdateApplication();
 
-  const form = useForm<ApplicationType>({
+  const form = useForm<ApplicationArgs>({
     resolver: zodResolver(applicationSchema),
     defaultValues: {
       name: '',
@@ -83,7 +83,7 @@ export function ApplicationForm({ application }: { application?: IGRPApplication
   useEffect(() => {
     if (!application) return;
 
-    const defaultValues: Partial<ApplicationType> = {
+    const defaultValues: Partial<ApplicationArgs> = {
       name: application.name || '',
       owner: application.owner || '',
       code: application.code || '',
@@ -120,7 +120,7 @@ export function ApplicationForm({ application }: { application?: IGRPApplication
     }
   };
 
-  const onSubmit = async (values: ApplicationType) => {
+  const onSubmit = async (values: ApplicationArgs) => {
     const payload = { ...values };
 
     // const file = values.image?.file;

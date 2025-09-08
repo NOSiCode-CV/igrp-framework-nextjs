@@ -1,6 +1,6 @@
 import { ApplicationDetails } from '@/features/applications/components/app-details';
 
-// export const dynamic = 'force-dynamic';
+export const dynamic = 'force-dynamic';
 
 export default async function ApplicationPage({ params }: { params: Promise<{ code: string }> }) {
   const { code } = await params;

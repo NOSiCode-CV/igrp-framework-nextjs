@@ -71,7 +71,8 @@ export function RoleFormDialog({
       status: statusSchema.enum.ACTIVE,
     },
   });
-  ~useEffect(() => {
+
+  useEffect(() => {
     if (!open) return;
 
     if (role) {

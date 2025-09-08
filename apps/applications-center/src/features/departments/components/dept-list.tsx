@@ -33,7 +33,7 @@ import { DepartmentCreateDialog } from './dept-form-dialog';
 import { DepartmentDeleteDialog } from './dept-delete-dialog';
 import { useDepartments } from '../use-departments';
 import { DepartmentArgs } from '../dept-schemas';
-import { useCurrentUser } from '@/features/users/use-users';
+// import { useCurrentUser } from '@/features/users/use-users';
 
 export function DepartmentList() {
   const [searchTerm, setSearchTerm] = useState('');

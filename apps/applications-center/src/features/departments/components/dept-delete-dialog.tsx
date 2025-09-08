@@ -30,7 +30,7 @@ export function DepartmentDeleteDialog({
   const [confirmation, setConfirmation] = useState('');
   const { igrpToast } = useIGRPToast();
 
-  const { mutateAsync: deleteDepartment, isPending } = useDeleteDepartment();
+  const { mutateAsync: deleteDepartment } = useDeleteDepartment();
 
   const isConfirmed = confirmation === deptToDelete.name;
 

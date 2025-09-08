@@ -9,7 +9,7 @@ import { ROUTES } from '@/lib/constants';
 import { AppCenterLoading } from '@/components/loading';
 import { AppCenterNotFound } from '@/components/not-found';
 
-// export const dynamic = 'force-dynamic';
+export const dynamic = 'force-dynamic';
 
 export default function EditApplicationPage({ params }: { params: Promise<{ code: string }> }) {
   const { code } = use(params);

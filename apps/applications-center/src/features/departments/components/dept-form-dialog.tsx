@@ -90,7 +90,7 @@ export function DepartmentCreateDialog({
       const code = `DEPT_${raw.replace(/\s+/g, '_').toUpperCase()}`.slice(0, 30);
       form.setValue('code', code, { shouldValidate: true, shouldDirty: false });
     }
-  }, [watchedName, form]);
+  }, [watchedName, form, department]);
 
   const isLoading = isCreating || isUpdating;
 

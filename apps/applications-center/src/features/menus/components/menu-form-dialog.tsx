@@ -137,7 +137,7 @@ export function MenuFormDialog({
         applicationCode: appCode,
       } as FormValues);
     }
-  }, [open, menu, appCode, form]);
+  }, [open, menu, appCode, form, baseDefaults]);
 
   useEffect(() => {
     if (openIconPicker) {
@@ -149,7 +149,7 @@ export function MenuFormDialog({
         if ('cancelIdleCallback' in window) {
           window.cancelIdleCallback(id);
         } else {
-          clearTimeout(id as any);
+          clearTimeout(id);
         }
       };
     } else {
@@ -356,7 +356,10 @@ export function MenuFormDialog({
                           disabled={openType === MENU_VIEW}
                         >
                           {menuTypeOptions.map(({ value, label }) => (
-                            <IGRPFormItemPrimitive className='flex'>
+                            <IGRPFormItemPrimitive
+                              className='flex'
+                              key={value}
+                            >
                               <IGRPFormControlPrimitive>
                                 <IGRPRadioGroupItemPrimitive
                                   value={value}
@@ -392,7 +395,10 @@ export function MenuFormDialog({
                           disabled={openType === MENU_VIEW}
                         >
                           {STATUS_OPTIONS.map(({ value, label }) => (
-                            <IGRPFormItemPrimitive className='flex items-center'>
+                            <IGRPFormItemPrimitive
+                              className='flex items-center'
+                              key={value}
+                            >
                               <IGRPFormControlPrimitive>
                                 <IGRPRadioGroupItemPrimitive
                                   value={value}
@@ -453,7 +459,10 @@ export function MenuFormDialog({
                               disabled={openType === OPEN_TYPE_VIEW}
                             >
                               {menuTargetOptions.map(({ value, label }) => (
-                                <IGRPFormItemPrimitive className='flex items-center'>
+                                <IGRPFormItemPrimitive
+                                  className='flex items-center'
+                                  key={value}
+                                >
                                   <IGRPFormControlPrimitive>
                                     <IGRPRadioGroupItemPrimitive
                                       value={value}

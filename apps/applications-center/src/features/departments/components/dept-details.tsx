@@ -24,6 +24,11 @@ import { CopyToClipboard } from '@/components/copy-to-clipboard';
 // TODO: See user to create a conetext for get the user all time the user is login
 export function DepartmentDetails({ code }: { code: string }) {
   const { data: department, isLoading, error } = useDepartmentByCode(code);
+  const {
+    data: parentDept,
+    isLoading: loadingParentDept,
+    error: parentDeptError,
+  } = useDepartmentByCode(code);
   // const { data: currentUser, isLoading: userLoading, error: userError } = useCurrentUser();
 
   if (isLoading) return <AppCenterLoading descrption='A carregar departamento...' />;
@@ -55,12 +60,10 @@ export function DepartmentDetails({ code }: { code: string }) {
   const { name, description, status, parent_code: parent } = department;
 
   let parentName;
-  if (parent) {
-    const { data: department, isLoading, error } = useDepartmentByCode(parent);
-    if (isLoading) parentName = 'A carregar...';
-    if (error) parentName = 'Erro ao carregar Departamento Pai.';
-    parentName = department?.name;
-  }
+
+  if (loadingParentDept) parentName = 'A carregar...';
+  if (parentDeptError) parentName = 'Erro ao carregar Departamento Pai.';
+  parentName = parentDept?.name;
 
   const tabs: IGRPTabItem[] = [
     // {

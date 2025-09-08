@@ -15,6 +15,7 @@ import {
 import { useFileUpload } from '@/hooks/use-file-upload';
 
 import type { FileWithPreview, FileMetadata } from '@/schemas/file';
+import Image from 'next/image';
 
 export interface FileUploadFieldProps {
   value?: FileWithPreview | null;
@@ -126,7 +127,7 @@ export function FileUploadField(props: FileUploadFieldProps) {
 
               {previewUrl ? (
                 <div className='absolute inset-0 flex items-center justify-center p-4'>
-                  <img
+                  <Image
                     src={previewUrl || '/igrp/placeholder.svg'}
                     alt={fileName || 'Atualizar imagem'}
                     className='mx-auto max-h-full rounded object-contain'

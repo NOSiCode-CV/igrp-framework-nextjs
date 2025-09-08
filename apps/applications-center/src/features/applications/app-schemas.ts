@@ -52,4 +52,4 @@ export const applicationSchema = z
     }
   });
 
-export type ApplicationType = z.infer<typeof applicationSchema>;
+export type ApplicationArgs = z.infer<typeof applicationSchema>;

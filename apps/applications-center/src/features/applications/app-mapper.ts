@@ -6,6 +6,7 @@ import type {
   Status,
   UpdateApplicationRequest,
 } from '@igrp/platform-access-management-client-ts';
+import { ApplicationArgs } from './app-schemas';
 
 // TODO: refactor the type from the accessmanagement-client-ts to match IGRPApplicationArgs
 
@@ -37,7 +38,7 @@ export const mapperActionsApplication = (app: ApiResponse<ApplicationDTO>): IGRP
   return mapApplication(app.data);
 };
 
-export const mapperUpdateApplication = (payload: any): UpdateApplicationRequest => ({
+export const mapperUpdateApplication = (payload: ApplicationArgs): UpdateApplicationRequest => ({
   code: payload.code,
   name: payload.name,
   description: payload.description,

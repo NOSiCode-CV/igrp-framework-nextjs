@@ -34,7 +34,6 @@ export function IGRPRootProviders({
   headerData,
   toasterConfig,
 }: IGRPRootProvidersArgs) {
-
   const {
     showToaster = true,
     position = 'bottom-right',

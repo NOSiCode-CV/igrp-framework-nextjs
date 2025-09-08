@@ -109,9 +109,9 @@ function FormDescription({ className, ...props }: React.ComponentProps<'p'>) {
   const { error, formDescriptionId } = useFormField();
 
   if (error) {
-    return null
+    return null;
   }
-  
+
   return (
     <p
       data-slot="form-description"

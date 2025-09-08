@@ -5,7 +5,7 @@ import {
   cn,
   IGRPSeparatorPrimitive,
   IGRPSidebarTriggerPrimitive,
-  useIGRPToast
+  useIGRPToast,
 } from '@igrp/igrp-framework-react-design-system';
 
 import { IGRPTemplateBreadcrumbs } from './breadcrumbs';
@@ -23,13 +23,15 @@ function IGRPTemplateHeader({ data, className }: IGRPTemplateHeaderProps) {
   const { igrpToast } = useIGRPToast();
 
   if (!data) {
-    console.info('[header-template] Cabeçalho do IGRP não tem dados, define os dados no src/igrp.template.config.');
+    console.info(
+      '[header-template] Cabeçalho do IGRP não tem dados, define os dados no src/igrp.template.config.',
+    );
     igrpToast({
-      type: "info",
-      description: '[header-template] Cabeçalho do IGRP não tem dados, define os dados no src/igrp.template.config.',
+      type: 'info',
+      description:
+        '[header-template] Cabeçalho do IGRP não tem dados, define os dados no src/igrp.template.config.',
       duration: 6000,
-      
-    })
+    });
     return null;
   }
 

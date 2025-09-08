@@ -40,7 +40,7 @@ import {
   appTypeCrud,
   applicationSchema,
 } from '@/features/applications/app-schemas';
-import { useAllUsers } from '@/features/users/use-users';
+import { useUsers } from '@/features/users/use-users';
 import { useDepartments } from '@/features/departments/use-departments';
 import { APPLICATIONS_TYPES_FILTERED } from '../app-utils';
 import { mapperUpdateApplication } from '../app-mapper';
@@ -50,7 +50,7 @@ export function ApplicationForm({ application }: { application?: IGRPApplication
   const router = useRouter();
   const { igrpToast } = useIGRPToast();
 
-  const { data: users, isLoading: userLoading, error: userError } = useAllUsers();
+  const { data: users, isLoading: userLoading, error: userError } = useUsers();
   const {
     data: departments,
     isLoading: departmentLoading,

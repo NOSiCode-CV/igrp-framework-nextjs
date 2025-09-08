@@ -38,7 +38,7 @@ function IGRPTemplateNavUser({ user }: IGRPTemplateNavUserProps) {
               tooltip={user.username}
               size="lg"
             >
-              <IGRPUserAvatar                
+              <IGRPUserAvatar
                 alt={user.username}
                 fallbackContent={user && igrpGetnitials(user.username)}
                 fallbackClass="text-xs"

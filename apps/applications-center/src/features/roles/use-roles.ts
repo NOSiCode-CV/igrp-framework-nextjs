@@ -1,10 +1,5 @@
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
-import {
-  getRoles,
-  createRole,
-  updateRole,
-  deleteRole,
-} from '@/actions/roles';
+import { getRoles, createRole, updateRole, deleteRole } from '@/actions/roles';
 import { RoleArgs } from './role-schemas';
 import { RoleFilters, UpdateRoleRequest } from '@igrp/platform-access-management-client-ts';
 
@@ -34,8 +29,8 @@ export const useUpdateRole = () => {
     mutationFn: async ({ name, data }: { name: string; data: UpdateRoleRequest }) =>
       updateRole(name, data),
     onSuccess: async () => {
-      await queryClient.invalidateQueries({ queryKey: ['departments'] });
-      await queryClient.refetchQueries({ queryKey: ['departments'], exact: true });
+      await queryClient.invalidateQueries({ queryKey: ['roles'] });
+      await queryClient.refetchQueries({ queryKey: ['roles'], exact: true });
     },
   });
 };

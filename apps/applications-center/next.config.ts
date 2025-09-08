@@ -1,6 +1,9 @@
 import { NextConfig } from 'next';
 
 const nextConfig: NextConfig = {
+  // uncomment this line when you build this build,
+  // output: 'standalone',
+
   images: {
     remotePatterns: [
       {

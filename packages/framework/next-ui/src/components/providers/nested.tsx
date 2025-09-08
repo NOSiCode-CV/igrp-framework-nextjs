@@ -2,7 +2,7 @@
 
 import { type Session } from '@igrp/framework-next-auth';
 
-import {  } from '../templates/header';
+import {} from '../templates/header';
 import { IGRPActiveThemeProvider } from './active-theme';
 import { IGRPProgressBarProvider } from './progress-bar';
 import { IGRPSessionProvider } from './session';
@@ -25,7 +25,7 @@ export function IGRPNestedProviders({
   progressiveBarArgs,
   sessionArgs,
   themeArgs,
-  children, 
+  children,
 }: IGRPNestedProvidersArgs) {
   return (
     <IGRPSessionProvider session={session} {...sessionArgs}>
@@ -37,11 +37,9 @@ export function IGRPNestedProviders({
         enableColorScheme
         {...themeArgs}
       >
-      <IGRPActiveThemeProvider initialTheme={activeThemeValue}>
-        <IGRPProgressBarProvider {...progressiveBarArgs}>          
-           {children}
-        </IGRPProgressBarProvider>
-      </IGRPActiveThemeProvider>
+        <IGRPActiveThemeProvider initialTheme={activeThemeValue}>
+          <IGRPProgressBarProvider {...progressiveBarArgs}>{children}</IGRPProgressBarProvider>
+        </IGRPActiveThemeProvider>
       </IGRPThemeProvider>
     </IGRPSessionProvider>
   );

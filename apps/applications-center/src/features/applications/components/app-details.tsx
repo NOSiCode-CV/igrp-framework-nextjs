@@ -19,7 +19,7 @@ import { PageHeader } from '@/components/page-header';
 import { AppCenterNotFound } from '@/components/not-found';
 import { useApplicationByCode } from '@/features/applications/use-applications';
 import { MenuList } from '@/features/menus/components/menu-list';
-import { PermissionAppList } from '@/features/permission/components/permission-app-list';
+// import { PermissionAppList } from '@/features/permission/components/permission-app-list';
 import { ROUTES } from '@/lib/constants';
 import { formatDate, statusClass } from '@/lib/utils';
 

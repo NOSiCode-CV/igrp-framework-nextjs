@@ -1,23 +1,21 @@
+import { useEffect } from 'react';
+import { useForm } from 'react-hook-form';
+import { zodResolver } from '@hookform/resolvers/zod';
+
 import {
   IGRPButtonPrimitive,
-  IGRPCheckboxPrimitive,
   IGRPDialogContentPrimitive,
-  IGRPDialogDescriptionPrimitive,
   IGRPDialogFooterPrimitive,
   IGRPDialogHeaderPrimitive,
   IGRPDialogPrimitive,
   IGRPDialogTitlePrimitive,
-  IGRPDialogTriggerPrimitive,
   IGRPFormControlPrimitive,
-  IGRPFormDescriptionPrimitive,
   IGRPFormFieldPrimitive,
   IGRPFormItemPrimitive,
   IGRPFormLabelPrimitive,
   IGRPFormMessagePrimitive,
   IGRPFormPrimitive,
   IGRPInputPrimitive,
-  IGRPRadioGroupItemPrimitive,
-  IGRPRadioGroupPrimitive,
   IGRPSelectContentPrimitive,
   IGRPSelectItemPrimitive,
   IGRPSelectPrimitive,
@@ -26,13 +24,16 @@ import {
   IGRPTextAreaPrimitive,
   useIGRPToast,
 } from '@igrp/igrp-framework-react-design-system';
-import { CreateRoleArgs, normalizeRole, RoleArgs, roleSchema } from '../role-schemas';
-import { useForm } from 'react-hook-form';
-import { zodResolver } from '@hookform/resolvers/zod';
+import { STATUS_OPTIONS } from '@/lib/constants';
 import { statusSchema } from '@/schemas/global';
-import { useEffect, useState } from 'react';
-import { OPEN_TYPE_VIEW, STATUS_OPTIONS } from '@/lib/constants';
-import { useCreateMenu, useUpdateMenu } from '@/features/menus/use-menus';
+import {
+  CreateRoleArgs,
+  createRoleSchema,
+  normalizeRole,
+  RoleArgs,
+  UpdateRoleArgs,
+  updateRoleSchema,
+} from '../role-schemas';
 import { useCreateRole, useUpdateRole } from '../use-roles';
 
 interface RoleFormDialogProps {
@@ -50,59 +51,75 @@ export function RoleFormDialog({
   departmentCode,
   role,
   openType,
-  roles
+  roles,
 }: RoleFormDialogProps) {
-
-  const [isLoading, setIsLoading] = useState(false);
-
   const { igrpToast } = useIGRPToast();
 
   const { mutateAsync: createRole, isPending: isAddingRole } = useCreateRole();
   const { mutate: updateRole, isPending: isUpdatingRole } = useUpdateRole();
 
-  const form = useForm<RoleArgs>({
-    resolver: zodResolver(roleSchema),
+  const isView = openType === 'view';
+  const isEdit = !!role && !isView;
+
+  const form = useForm<CreateRoleArgs>({
+    resolver: zodResolver(createRoleSchema),
     defaultValues: {
       name: '',
-      description: '',
+      description: null,
       departmentCode: departmentCode,
       parentName: '',
       status: statusSchema.enum.ACTIVE,
     },
-  }); ~
+  });
+  ~useEffect(() => {
+    if (!open) return;
 
-    useEffect(() => {
-      if (!open) return;
+    if (role) {
+      form.reset({
+        name: role.name ?? '',
+        description: role.description ?? null,
+        departmentCode: departmentCode ?? '',
+        parentName: role.parentName ?? null,
+        status: role.status ?? statusSchema.enum.ACTIVE,
+      } as CreateRoleArgs);
+    } else {
+      form.reset({
+        name: '',
+        description: null,
+        departmentCode,
+        parentName: null,
+        status: statusSchema.enum.ACTIVE,
+      } as CreateRoleArgs);
+    }
+  }, [open, role, departmentCode, form]);
 
-      if (role) {
-        form.reset({
-          name: role.name ?? '',
-          description: role.description ?? '',
-          departmentCode: departmentCode ?? '',
-          parentName: role.parentName ?? '',
-          status: role.status ?? statusSchema.enum.ACTIVE,
-
-        } as RoleArgs);
-      }
-    }, [open, role, departmentCode, form]);
-
-
-  const onSubmit = async (values: RoleArgs) => {
-
-    console.log({ values })
-    
+  const onSubmit = async (values: CreateRoleArgs) => {
     try {
-      const payload = normalizeRole(values as CreateRoleArgs);
+      if (isEdit && role) {
+        const parsed = updateRoleSchema.parse({
+          ...values,
+        } as UpdateRoleArgs);
 
-      await createRole(payload)
-      igrpToast({
-        type: 'success',
-        title: 'Adicionar Perfil',
-        description: 'Perfil foi adicionado com sucesso.',
-      });
+        const payload = normalizeRole(parsed as RoleArgs);
 
-      form.reset();
-      onOpenChange(false);
+        await updateRole({ name: role.name, data: payload });
+
+        igrpToast({
+          type: 'success',
+          title: 'Atualizar Perfil',
+          description: 'Perfil foi atualizado com sucesso.',
+        });
+      } else {
+        const payload = normalizeRole(values);
+        console.log({ payload });
+
+        await createRole(payload);
+        igrpToast({
+          type: 'success',
+          title: 'Adicionar Perfil',
+          description: 'Perfil foi adicionado com sucesso.',
+        });
+      }
     } catch (error) {
       console.error('Falha ao adicionar perfil:', error);
       igrpToast({
@@ -110,6 +127,9 @@ export function RoleFormDialog({
         title: 'Falha ao adicionar perfil',
         description: `Tente novamente. ${error}`,
       });
+    } finally {
+      form.reset();
+      onOpenChange(false);
     }
   };
 
@@ -121,7 +141,9 @@ export function RoleFormDialog({
     >
       <IGRPDialogContentPrimitive>
         <IGRPDialogHeaderPrimitive>
-          <IGRPDialogTitlePrimitive>Adicionar Perfil</IGRPDialogTitlePrimitive>
+          <IGRPDialogTitlePrimitive>
+            {isView ? 'Ver Perfil' : isEdit ? 'Editar Perfil' : 'Adicionar Perfil'}
+          </IGRPDialogTitlePrimitive>
         </IGRPDialogHeaderPrimitive>
 
         <IGRPFormPrimitive {...form}>
@@ -141,6 +163,7 @@ export function RoleFormDialog({
                     <IGRPInputPrimitive
                       placeholder='Identificador único do perfil'
                       required
+                      disabled={isView}
                       className='placeholder:truncate border-primary/30 focus-visible:ring-[2px] focus-visible:ring-primary/30 focus-visible:border-primary/30'
                       {...field}
                     />
@@ -164,6 +187,7 @@ export function RoleFormDialog({
                       onBlur={field.onBlur}
                       name={field.name}
                       ref={field.ref}
+                      disabled={isView}
                       className='resize-none placeholder:truncate border-primary/30 focus-visible:ring-[2px] focus-visible:ring-primary/30 focus-visible:border-primary/30'
                     />
                   </IGRPFormControlPrimitive>
@@ -178,12 +202,11 @@ export function RoleFormDialog({
                 name='parentName'
                 render={({ field }) => (
                   <IGRPFormItemPrimitive>
-                    <IGRPFormLabelPrimitive className='after:content-["*"] after:text-destructive'>
-                      Perfil Pai
-                    </IGRPFormLabelPrimitive>
+                    <IGRPFormLabelPrimitive>Perfil Pai</IGRPFormLabelPrimitive>
                     <IGRPSelectPrimitive
-                      onValueChange={field.onChange}
-                      defaultValue={field.value}
+                      onValueChange={(v) => field.onChange(v === '' ? null : v)}
+                      value={field.value ?? ''}
+                      disabled={isView}
                     >
                       <IGRPFormControlPrimitive>
                         <IGRPSelectTriggerPrimitive className='w-full truncate'>
@@ -191,12 +214,12 @@ export function RoleFormDialog({
                         </IGRPSelectTriggerPrimitive>
                       </IGRPFormControlPrimitive>
                       <IGRPSelectContentPrimitive>
-                        {roles.map((role) => (
+                        {roles.map((r) => (
                           <IGRPSelectItemPrimitive
-                            key={role.name}
-                            value={role.name}
+                            key={r.name}
+                            value={r.name}
                           >
-                            {role.description ?? role.name}
+                            {r.description ?? r.name}
                           </IGRPSelectItemPrimitive>
                         ))}
                       </IGRPSelectContentPrimitive>
@@ -217,7 +240,7 @@ export function RoleFormDialog({
                     <IGRPSelectPrimitive
                       onValueChange={field.onChange}
                       value={field.value}
-                      disabled={openType === OPEN_TYPE_VIEW}
+                      disabled={isView}
                     >
                       <IGRPFormControlPrimitive>
                         <IGRPSelectTriggerPrimitive className='w-full truncate'>
@@ -251,9 +274,17 @@ export function RoleFormDialog({
               </IGRPButtonPrimitive>
               <IGRPButtonPrimitive
                 type='submit'
-                disabled={isAddingRole}
+                disabled={isView || isAddingRole || isUpdatingRole}
               >
-                {isAddingRole ? 'Guardando...' : 'Adicionar'}
+                {isView
+                  ? 'Fechar'
+                  : isEdit
+                    ? isUpdatingRole
+                      ? 'Atualizando...'
+                      : 'Atualizar'
+                    : isAddingRole
+                      ? 'Guardando...'
+                      : 'Adicionar'}
               </IGRPButtonPrimitive>
             </IGRPDialogFooterPrimitive>
           </form>

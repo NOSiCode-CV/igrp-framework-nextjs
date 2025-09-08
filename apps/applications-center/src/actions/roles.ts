@@ -2,7 +2,11 @@
 
 import { refreshAccessClient } from './igrp/auth';
 import { getIGRPAccessClient } from '@igrp/framework-next';
-import { CreateRoleRequest, RoleFilters, UpdateRoleRequest } from '@igrp/platform-access-management-client-ts';
+import {
+  CreateRoleRequest,
+  RoleFilters,
+  UpdateRoleRequest,
+} from '@igrp/platform-access-management-client-ts';
 import { RoleArgs } from '@/features/roles/role-schemas';
 
 export async function getRoles(params: RoleFilters) {
@@ -18,14 +22,13 @@ export async function getRoles(params: RoleFilters) {
   }
 }
 
-
 export async function createRole(roleData: CreateRoleRequest) {
   await refreshAccessClient();
   const client = await getIGRPAccessClient();
 
   try {
     const result = await client.roles.createRole(roleData);
-    return (result.data) as RoleArgs;
+    return result.data as RoleArgs;
   } catch (error) {
     console.error('[create-roles] Não foi possível criar perfil:', error);
     throw error;
@@ -38,7 +41,7 @@ export async function updateRole(name: string, roleData: UpdateRoleRequest) {
 
   try {
     const result = await client.roles.updateRole(name, roleData);
-    return (result.data) as RoleArgs;
+    return result.data as RoleArgs;
   } catch (error) {
     console.error('[update-roles] Não foi possível atualizar perfil:', error);
     throw error;
@@ -46,7 +49,7 @@ export async function updateRole(name: string, roleData: UpdateRoleRequest) {
 }
 
 export async function deleteRole(name: string) {
-   await refreshAccessClient();
+  await refreshAccessClient();
   const client = await getIGRPAccessClient();
 
   try {

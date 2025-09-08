@@ -1,9 +1,9 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 'use client';
 
-import React, { useState } from 'react';
-
+import React, { useState, type SVGAttributes } from 'react';
 import { Pie, PieChart, Sector, Cell, Label, Legend, type LegendType } from 'recharts';
+
 import type { PieSectorDataItem } from 'recharts/types/polar/Pie';
 import { ChartContainer, ChartTooltip, ChartTooltipContent } from '../../../primitives/chart';
 import type { IGRPPieChartProps } from '../types';
@@ -120,7 +120,7 @@ function IGRPPieChart({
     const RADIAN = Math.PI / 180;
 
     let radius = 0;
-    let textAnchor = 'middle';
+    let textAnchor: SVGAttributes<SVGTextElement>['textAnchor'] = 'middle';
 
     if (labelPosition === 'outside') {
       radius = (outerRadius || 0) + 30;

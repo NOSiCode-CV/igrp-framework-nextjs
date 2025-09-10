@@ -25,7 +25,7 @@ export const authOptions: NextAuthOptions = {
         path: '/',
         // secure: process.env.NODE_ENV === 'production',
         secure: true,
-        domain: process.env.IGRP_NEXTAUTH_CALLBACK ?? '',
+        domain: process.env.IGRP_NEXTAUTH_CALLBACK || '',
       },
     },
   },

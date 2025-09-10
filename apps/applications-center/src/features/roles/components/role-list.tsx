@@ -21,10 +21,10 @@ import {
   // IGRPDialogHeaderPrimitive,
   // IGRPDialogTitlePrimitive,
   IGRPDropdownMenuPrimitive,
-  // IGRPDropdownMenuContentPrimitive,
-  // IGRPDropdownMenuItemPrimitive,
-  // IGRPDropdownMenuLabelPrimitive,
-  // IGRPDropdownMenuSeparatorPrimitive,
+  IGRPDropdownMenuContentPrimitive,
+  IGRPDropdownMenuItemPrimitive,
+  IGRPDropdownMenuLabelPrimitive,
+  IGRPDropdownMenuSeparatorPrimitive,
   IGRPDropdownMenuTriggerPrimitive,
   // IGRPFormPrimitive,
   // IGRPFormControlPrimitive,
@@ -355,7 +355,7 @@ export function RolesList({ departmentCode, username }: RolesListProps) {
                               />
                             </IGRPButtonPrimitive>
                           </IGRPDropdownMenuTriggerPrimitive>
-                          {/* <IGRPDropdownMenuContentPrimitive align='end'>
+                          <IGRPDropdownMenuContentPrimitive align='end'>
                           <IGRPDropdownMenuLabelPrimitive>Ações</IGRPDropdownMenuLabelPrimitive>
                           <IGRPDropdownMenuItemPrimitive onClick={() => handleViewRole(role)}>
                             <IGRPIcon
@@ -382,7 +382,7 @@ export function RolesList({ departmentCode, username }: RolesListProps) {
                             />{' '}
                             Eliminar
                           </IGRPDropdownMenuItemPrimitive>
-                        </IGRPDropdownMenuContentPrimitive> */}
+                        </IGRPDropdownMenuContentPrimitive>
                         </IGRPDropdownMenuPrimitive>
                       </IGRPTableCellPrimitive>
                     </IGRPTableRowPrimitive>

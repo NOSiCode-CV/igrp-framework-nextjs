@@ -2,12 +2,29 @@
 'use client';
 
 // IMPORTANT: this file cannot use any wildcard exports because it is wrapped in a `use client` boundary
-// IMPORTANT: do _not_ alias any of the exports in this file, this will cause a mismatch between the unbundled exports
+// IMPORTANT: do not alias any of the exports in this file, this will cause a mismatch between the unbundled exports
+
+// Auth components
+
+export {
+  IGRPAuthCarousel,
+  type IGRPAuthCarouselProps,
+  type IGRPCarousel,
+} from './components/auths/carousel';
+
+export {
+  IGRPAuthForm,
+  type IGRPAuthFormProps,
+  type IGRPLoginTexts,
+  type IGRPSiteLogo,
+} from './components/auths/form';
 
 // erros components
+
 export { IGRPGlobalError, type IGRPGlobalErrorProps } from './components/errors/global';
 
 // templates
+
 export {
   IGRPTemplateAppSwitcher,
   type IGRPTemplateAppSwitcherProps,
@@ -45,6 +62,7 @@ export { IGRPTemplateNotifications } from './components/templates/notifications'
 export { IGRPTemplateThemeSelector } from './components/templates/theme-selector';
 
 // providers
+
 export {
   IGRPActiveThemeProvider,
   type IGRPActiveThemeProviderArgs,

@@ -12,6 +12,7 @@ export const IGRP_MOCK_APPS_DATA: IGRPApplicationArgs[] = [
     picture: 'https://nosi.cv/o/nosi-sober-theme/images/favicon.ico',
     url: 'https://igrp.cv',
     slug: 'user-management',
+    departmentCode: 'DEPT_TEST',
   },
   {
     id: 2,
@@ -23,7 +24,8 @@ export const IGRP_MOCK_APPS_DATA: IGRPApplicationArgs[] = [
     owner: 'igrp@nosi.cv',
     picture: 'https://nosi.cv/o/nosi-sober-theme/images/favicon.ico',
     url: 'https://nosi.cv',
-    slug: 'user-management',
+    slug: 'user',
+    departmentCode: 'DEPT_TEST',
   },
   {
     id: 3,
@@ -36,5 +38,6 @@ export const IGRP_MOCK_APPS_DATA: IGRPApplicationArgs[] = [
     picture: 'https://nosi.cv/o/nosi-sober-theme/images/favicon.ico',
     url: 'https://igrp.cv',
     slug: 'user-management',
+    departmentCode: 'DEPT_TEST',
   },
 ];

@@ -12,8 +12,6 @@ export const loginConfig = {
   sliderPosition: 'left' as 'left' | 'right',
 };
 
-export type LoginConfig = typeof loginConfig;
-
 export const carouselItems = [
   {
     image: '/igrp/placeholder-carousel.png',
@@ -31,5 +29,3 @@ export const carouselItems = [
     description: 'Work together seamlessly with your team in real-time.',
   },
 ];
-
-export type CarouselLoginType = (typeof carouselItems)[number];

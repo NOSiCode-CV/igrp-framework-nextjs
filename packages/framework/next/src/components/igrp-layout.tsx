@@ -1,4 +1,3 @@
-import { Suspense } from 'react';
 import { IGRPRootProviders } from '@igrp/framework-next-ui';
 import type { IGRPConfigArgs } from '@igrp/framework-next-types';
 
@@ -27,9 +26,9 @@ export async function IGRPLayout({ children, config }: IGRPLayoutArgs) {
 
   const { session } = layout;
 
-  let app;
+  console.log({ appCode, previewMode, session });
 
-  console.log({ previewMode });
+  let app;
 
   if (!previewMode) {
     if (!apiManagementConfig || !apiManagementConfig.baseUrl) {
@@ -54,17 +53,15 @@ export async function IGRPLayout({ children, config }: IGRPLayoutArgs) {
   );
 
   return (
-    <Suspense fallback={<div>Loading API Data...</div>}>
-      <IGRPRootProviders
-        defaultOpen={true}
-        sidebarData={sidebarData}
-        headerData={headerData}
-        showSidebar={showSidebar}
-        showHeader={showHeader}
-        toasterConfig={toasterConfig}
-      >
-        {children}
-      </IGRPRootProviders>
-    </Suspense>
+    <IGRPRootProviders
+      defaultOpen={true}
+      sidebarData={sidebarData}
+      headerData={headerData}
+      showSidebar={showSidebar}
+      showHeader={showHeader}
+      toasterConfig={toasterConfig}
+    >
+      {children}
+    </IGRPRootProviders>
   );
 }

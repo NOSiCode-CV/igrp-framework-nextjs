@@ -8,10 +8,9 @@ export const IGRP_DEFAULT_MENU_FOOTER: IGRPMenuItemArgs[] = [
     position: 1,
     icon: 'Settings2',
     status: 'ACTIVE',
-    target: 'INTERNAL',
     url: '/system-settings',
-    parentId: 5,
-    applicationId: 1,
-    resourceId: null,
+    applicationCode: 'APPIGRPDEMO2',
+    code: 'AAAAA',
+    permissions: [],
   },
 ];

@@ -9,10 +9,5 @@ export default function Error({
   error: Error & { digest?: string };
   reset: () => void;
 }) {
-  return (
-    <IGRPGlobalError
-      error={error}
-      reset={reset}
-    />
-  );
+  return <IGRPGlobalError error={error} reset={reset} />;
 }

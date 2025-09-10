@@ -120,7 +120,7 @@ function IGRPTemplateAppSwitcher({ apps, appCode, appCenterUrl }: IGRPTemplateAp
               <div className="flex size-6 items-center justify-center rounded-md border bg-transparent">
                 <IGRPIcon iconName="Plus" className="size-4" />
               </div>
-              <div className="text-muted-foreground font-medium">Go to App Center</div>
+              <div className="text-muted-foreground font-medium">Ir ao Apps Center</div>
             </IGRPDropdownMenuItemPrimitive>
           </IGRPDropdownMenuContentPrimitive>
         </IGRPDropdownMenuPrimitive>

@@ -23,11 +23,12 @@ export default async function Layout({ children }: Readonly<{ children: React.Re
 
   const baseUrl = process.env.NEXTAUTH_URL;
 
-  const loginPath = new URL(loginUrl || '/', baseUrl).pathname;
+  const login = loginUrl || '/';
+  const loginPath = new URL(login, baseUrl).pathname;
   const isAlreadyOnLogin = currentPath.startsWith(loginPath);
 
-  if (!previewMode && session === null && loginUrl && !isAlreadyOnLogin) {
-    redirect(logoutUrl || loginUrl);
+  if (!previewMode && session === null && login && !isAlreadyOnLogin) {
+    redirect(logoutUrl || login);
   }
 
   return <IGRPLayout config={config}>{children}</IGRPLayout>;

@@ -14,12 +14,12 @@ export interface IGRPApplicationArgs {
   id: number;
   code: string;
   name: string;
-  description?: string;
+  description?: string | null;
   status: IGRPStatus;
   type: IGRPApplicationType;
   owner?: string;
-  picture?: string;
-  url?: string;
+  picture?: string | null;
+  url?: string | null;
   slug?: string;
   departmentCode: string;
   createdBy?: string;

@@ -84,8 +84,8 @@ export function DepartmentDetails({ code }: { code: string }) {
   ];
 
   return (
-    <div className="flex-1 p-4 min-w-0 overflow-x-hidden">
-      <section className="space-y-10 max-w-full">
+    <div className='flex-1 p-4 min-w-0 overflow-x-hidden'>
+      <section className='space-y-10 max-w-full'>
         <div className='flex flex-col gap-6'>
           <div className='flex flex-col md:flex-row md:items-center md:justify-between gap-4'>
             <PageHeader

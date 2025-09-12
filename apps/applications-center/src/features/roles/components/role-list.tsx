@@ -1,55 +1,35 @@
 'use client';
 
 import { useState } from 'react';
-// import { useForm } from 'react-hook-form';
-// import { zodResolver } from '@hookform/resolvers/zod';
+import { useRouter } from 'next/navigation';
 import {
   IGRPButtonPrimitive,
   IGRPInputPrimitive,
-  // IGRPLabelPrimitive,
   IGRPTablePrimitive,
   IGRPTableBodyPrimitive,
   IGRPTableCellPrimitive,
   IGRPTableHeadPrimitive,
   IGRPTableHeaderPrimitive,
   IGRPTableRowPrimitive,
-  // IGRPBadgePrimitive,
-  // IGRPDialogPrimitive,
-  // IGRPDialogContentPrimitive,
-  // IGRPDialogDescriptionPrimitive,
-  // IGRPDialogFooterPrimitive,
-  // IGRPDialogHeaderPrimitive,
-  // IGRPDialogTitlePrimitive,
   IGRPDropdownMenuPrimitive,
   IGRPDropdownMenuContentPrimitive,
   IGRPDropdownMenuItemPrimitive,
   IGRPDropdownMenuLabelPrimitive,
   IGRPDropdownMenuSeparatorPrimitive,
   IGRPDropdownMenuTriggerPrimitive,
-  // IGRPFormPrimitive,
-  // IGRPFormControlPrimitive,
-  // IGRPFormDescriptionPrimitive,
-  // IGRPFormFieldPrimitive,
-  // IGRPFormItemPrimitive,
-  // IGRPFormLabelPrimitive,
-  // useIGRPToast,
-  IGRPIcon,
-  // IGRPDialogTriggerPrimitive,
-  // IGRPFormMessagePrimitive,
-  IGRPCardPrimitive,
-  IGRPCardHeaderPrimitive,
-  IGRPCardTitlePrimitive,
-  IGRPCardDescriptionPrimitive,
-  IGRPCardContentPrimitive,
+  IGRPIcon,  
+  IGRPDropdownMenuCheckboxItemPrimitive,
+  IGRPBadge,
+  IGRPBadgePrimitive,
+  cn,
 } from '@igrp/igrp-framework-react-design-system';
 import { useRoles } from '../use-roles';
 import { ButtonLink } from '@/components/button-link';
-import { AppCenterLoading } from '@/components/loading';
-// import { useCurrentUser } from '@/features/users/use-users';
-// import { IGRPUserDTO } from '@igrp/platform-access-management-client-ts';
 import { RoleFormDialog } from './role-form-dialog';
 import { RoleDeleteDialog } from './role-delete-dialog';
 import { RoleArgs } from '../role-schemas';
+import { ROUTES, STATUS_OPTIONS } from '@/lib/constants';
+import { showStatus, statusClass } from '@/lib/utils';
 
 interface RolesListProps {
   departmentCode: string;
@@ -62,6 +42,9 @@ export function RolesList({ departmentCode, username }: RolesListProps) {
   const [openDeleteDialog, setOpenDeleteDialog] = useState(false);
   const [selectedRole, setSelectedRole] = useState<RoleArgs | undefined>(undefined);
   const [roleToDelete, setRoleToDelete] = useState<{ name: string } | null>(null);
+  const [statusFilter, setStatusFilter] = useState<string[]>([]);
+
+  const router = useRouter();
 
   const { data: roles, isLoading, error: error } = useRoles({ departmentCode, username });
 
@@ -73,13 +56,17 @@ export function RolesList({ departmentCode, username }: RolesListProps) {
   const handleDelete = (name: string) => {
     setRoleToDelete({ name });
     setOpenDeleteDialog(true);
-  };  
+  };
 
   const handleEdit = (role: RoleArgs) => {
     setSelectedRole(role);
     setRoleToDelete(null);
     setOpenFormDialog(true);
   };
+  
+  const handlePermissions = (name: string) => {
+    router.push(`${ROUTES.DEPARTMENTS}/${departmentCode}/${ROUTES.DEPARTMENTS_ROLE}/${name}`);
+  }
 
   if (error) {
     return (
@@ -90,11 +77,15 @@ export function RolesList({ departmentCode, username }: RolesListProps) {
     );
   }
 
-  const filteredRoles = roles?.filter(
-    (role) =>
+  const filteredRoles = roles?.filter((role) => {
+    const matchesSearch =
       role.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
-      (role.description && role.description.toLowerCase().includes(searchTerm.toLowerCase())),
-  );
+      (role.description && role.description.toLowerCase().includes(searchTerm.toLowerCase()));
+
+    const matchesStatus = statusFilter.length === 0 || statusFilter.includes(role.status);
+
+    return matchesSearch && matchesStatus;
+  });
 
   const roleEmpty = roles && roles.length === 0;
 
@@ -105,9 +96,7 @@ export function RolesList({ departmentCode, username }: RolesListProps) {
           <div className='flex items-center justify-between'>
             <div>
               <div className='leading-none font-semibold'>Perfis</div>
-              <div className='text-muted-foreground text-sm'>
-                Gerir e reorganizar os perfis.
-              </div>
+              <div className='text-muted-foreground text-sm'>Gerir e reorganizar os perfis.</div>
             </div>
             {!roleEmpty && (
               <div className='flex justify-end'>
@@ -123,7 +112,7 @@ export function RolesList({ departmentCode, username }: RolesListProps) {
         </div>
 
         <div className='flex flex-col gap-6'>
-          <div className='flex justify-between items-center'>
+          <div className='flex flex-col sm:flex-row items-start gap-4 w-full min-w-0'>
             <div className='relative w-full max-w-sm'>
               <IGRPIcon
                 iconName='Search'
@@ -137,17 +126,70 @@ export function RolesList({ departmentCode, username }: RolesListProps) {
                 onChange={(e) => setSearchTerm(e.target.value)}
               />
             </div>
+            <div className='flex flex-wrap gap-2 flex-shirnk-0'>
+              <IGRPDropdownMenuPrimitive>
+                <IGRPDropdownMenuTriggerPrimitive asChild>
+                  <IGRPButtonPrimitive
+                    variant='outline'
+                    className='gap-2'
+                  >
+                    <IGRPIcon
+                      iconName='ListFilter'
+                      strokeWidth={2}
+                    />
+                    Estado {statusFilter.length > 0 && `(${statusFilter.length})`}
+                  </IGRPButtonPrimitive>
+                </IGRPDropdownMenuTriggerPrimitive>
+                <IGRPDropdownMenuContentPrimitive
+                  align='start'
+                  className='w-40'
+                >
+                  <IGRPDropdownMenuSeparatorPrimitive />
+                  {STATUS_OPTIONS.map(({ value, label }) => (
+                    <IGRPDropdownMenuCheckboxItemPrimitive
+                      key={value}
+                      checked={statusFilter.includes(value)}
+                      onCheckedChange={(checked) => {
+                        setStatusFilter(
+                          checked
+                            ? [...statusFilter, value]
+                            : statusFilter.filter((s) => s !== value),
+                        );
+                      }}
+                    >
+                      {label}
+                    </IGRPDropdownMenuCheckboxItemPrimitive>
+                  ))}
+                  {statusFilter.length > 0 && (
+                    <>
+                      <IGRPDropdownMenuSeparatorPrimitive />
+                      <IGRPDropdownMenuItemPrimitive
+                        onClick={() => setStatusFilter([])}
+                        className='cursor-pointer hover:bg-primary hover:text-primary-foreground'
+                      >
+                        <IGRPIcon
+                          iconName='X'
+                          className='mr-1'
+                          strokeWidth={2}
+                        />
+                        Limpar
+                      </IGRPDropdownMenuItemPrimitive>
+                    </>
+                  )}
+                </IGRPDropdownMenuContentPrimitive>
+              </IGRPDropdownMenuPrimitive>
+            </div>
           </div>
 
           {isLoading ? (
             <div className='grid gap-4 animate-pulse'>
-        {Array.from({ length: 5 }).map((_, i) => (
-          <div
-            key={i}
-            className='h-12 rounded-lg bg-muted'
-          />
-        ))}
-      </div>
+              {Array.from({ length: 5 }).map((_, i) => (
+                <div
+                  key={i}
+                  className='h-12 rounded-lg bg-muted'
+                />
+              ))}
+            </div>
           ) : roleEmpty ? (
             <div className='text-center py-6 text-muted-foreground'>
               Nenhum perfil encontrado{' '}
@@ -158,18 +200,31 @@ export function RolesList({ departmentCode, username }: RolesListProps) {
               <IGRPTablePrimitive>
                 <IGRPTableHeaderPrimitive>
                   <IGRPTableRowPrimitive>
-                    <IGRPTableHeadPrimitive>Perfil</IGRPTableHeadPrimitive>
-                    <IGRPTableHeadPrimitive>Descrição</IGRPTableHeadPrimitive>
+                    <IGRPTableHeadPrimitive className='whitespace-nowrap'>
+                      Perfil
+                    </IGRPTableHeadPrimitive>
+                    <IGRPTableHeadPrimitive className='whitespace-nowrap'>
+                      Descrição
+                    </IGRPTableHeadPrimitive>
+                    <IGRPTableHeadPrimitive className='whitespace-nowrap'>
+                      Estado
+                    </IGRPTableHeadPrimitive>
                     <IGRPTableHeadPrimitive className='w-24' />
                   </IGRPTableRowPrimitive>
                 </IGRPTableHeaderPrimitive>
                 <IGRPTableBodyPrimitive>
-                  {filteredRoles?.map((role, i) => (
-                    <IGRPTableRowPrimitive key={role.id || i}>
+                  {filteredRoles?.map((role) => (
+                    <IGRPTableRowPrimitive key={role.id}>
                       <IGRPTableCellPrimitive className='font-medium'>
                         {role.name}
                       </IGRPTableCellPrimitive>
                       <IGRPTableCellPrimitive>{role.description || 'N/A'}</IGRPTableCellPrimitive>
+                      <IGRPTableCellPrimitive className='whitespace-nowrap'>
+                        <IGRPBadgePrimitive className={cn(statusClass(role.status), 'capitalize')}>
+            {showStatus(role.status)}
+            
+          </IGRPBadgePrimitive>
+                      </IGRPTableCellPrimitive>
                       <IGRPTableCellPrimitive>
                         <IGRPDropdownMenuPrimitive>
                           <IGRPDropdownMenuTriggerPrimitive asChild>
@@ -186,18 +241,14 @@ export function RolesList({ departmentCode, username }: RolesListProps) {
                           </IGRPDropdownMenuTriggerPrimitive>
                           <IGRPDropdownMenuContentPrimitive align='end'>
                             <IGRPDropdownMenuLabelPrimitive>Ações</IGRPDropdownMenuLabelPrimitive>
-                            <IGRPDropdownMenuItemPrimitive
-                              onSelect={() => handleEdit(role)}
-                            >
+                            <IGRPDropdownMenuItemPrimitive onSelect={() => handleEdit(role)}>
                               <IGRPIcon
                                 iconName='Pencil'
                                 className='mr-1 size-4'
                               />
                               Editar
                             </IGRPDropdownMenuItemPrimitive>
-                            <IGRPDropdownMenuItemPrimitive 
-                              onSelect={() => void(0)}
-                            >
+                            <IGRPDropdownMenuItemPrimitive onSelect={() => handlePermissions(role.name)}>
                               <IGRPIcon
                                 iconName='ShieldCheck'
                                 className='mr-1 size-4'
@@ -231,7 +282,7 @@ export function RolesList({ departmentCode, username }: RolesListProps) {
         open={openFormDialog}
         onOpenChange={setOpenFormDialog}
         departmentCode={departmentCode}
-        role={selectedRole}        
+        role={selectedRole}
       />
 
       {roleToDelete && (

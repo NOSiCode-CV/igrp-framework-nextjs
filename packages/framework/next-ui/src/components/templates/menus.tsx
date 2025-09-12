@@ -33,6 +33,9 @@ type IGRPTemplateMenuArgs = {
 };
 
 export function IGRPTemplateMenus({ menus = [] }: IGRPTemplateMenuArgs) {
+
+  console.log({ menus })
+  
   const pathname = usePathname();
 
   const menuData = useMemo(() => (menus.length > 0 ? menus : undefined), [menus]);
@@ -117,31 +120,51 @@ export function IGRPTemplateMenus({ menus = [] }: IGRPTemplateMenuArgs) {
 
   const sections = groups.length > 0 ? groups : [];
 
-  return (
-    <>
-      {sections.map((section) => {
-        const sectionKey = keyOf(section as any);
-        const sectionLabel = section.name;
-        const topLevel = getChildren(sectionKey);
+  console.log({ sections })
 
-        return (
-          <IGRPSidebarGroupPrimitive key={`grp-${sectionKey}`}>
-            <IGRPSidebarGroupLabelPrimitive>{sectionLabel}</IGRPSidebarGroupLabelPrimitive>
-            <IGRPSidebarGroupContentPrimitive>
-              <IGRPSidebarMenuPrimitive role="navigation">
-                {topLevel.map((menu) => (
-                  <MenuItemWithSubmenus
-                    key={`menu-${menu.id}`}
-                    menu={menu}
-                    pathname={pathname}
-                    childMenus={getChildren(keyOf(menu as any))}
-                  />
-                ))}
-              </IGRPSidebarMenuPrimitive>
-            </IGRPSidebarGroupContentPrimitive>
-          </IGRPSidebarGroupPrimitive>
-        );
-      })}
+ return (
+    <>
+      {sections.length > 0 ? (
+        sections.map((section) => {
+          const sectionKey = keyOf(section as any);
+          const sectionLabel = section.name;
+          const topLevel = getChildren(sectionKey);
+
+          return (
+            <IGRPSidebarGroupPrimitive key={`grp-${sectionKey}`}>
+              <IGRPSidebarGroupLabelPrimitive>{sectionLabel}</IGRPSidebarGroupLabelPrimitive>
+              <IGRPSidebarGroupContentPrimitive>
+                <IGRPSidebarMenuPrimitive role="navigation">
+                  {topLevel.map((menu) => (
+                    <MenuItemWithSubmenus
+                      key={`menu-${menu.id}`}
+                      menu={menu}
+                      pathname={pathname}
+                      childMenus={getChildren(keyOf(menu as any))}
+                    />
+                  ))}
+                </IGRPSidebarMenuPrimitive>
+              </IGRPSidebarGroupContentPrimitive>
+            </IGRPSidebarGroupPrimitive>
+          );
+        })
+      ) : (       
+        <IGRPSidebarGroupPrimitive key="grp-root">
+          {/* no label for root */}
+          <IGRPSidebarGroupContentPrimitive>
+            <IGRPSidebarMenuPrimitive role="navigation">
+              {getChildren('root').map((menu) => (
+                <MenuItemWithSubmenus
+                  key={`menu-${menu.id}`}
+                  menu={menu}
+                  pathname={pathname}
+                  childMenus={getChildren(keyOf(menu as any))}
+                />
+              ))}
+            </IGRPSidebarMenuPrimitive>
+          </IGRPSidebarGroupContentPrimitive>
+        </IGRPSidebarGroupPrimitive>
+      )}
     </>
   );
 }

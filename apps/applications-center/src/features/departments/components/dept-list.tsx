@@ -5,7 +5,6 @@ import Link from 'next/link';
 import {
   IGRPDropdownMenuCheckboxItemPrimitive,
   IGRPInputPrimitive,
-  IGRPBadgePrimitive,
   IGRPButtonPrimitive,
   IGRPTablePrimitive,
   IGRPTableBodyPrimitive,
@@ -21,18 +20,20 @@ import {
   IGRPDropdownMenuLabelPrimitive,
   IGRPDropdownMenuTriggerPrimitive,
   IGRPBadge,
+  IGRPBadgePrimitive,
+  cn,
 } from '@igrp/igrp-framework-react-design-system';
 
 import { ButtonLink } from '@/components/button-link';
 import { AppCenterLoading } from '@/components/loading';
 import { PageHeader } from '@/components/page-header';
 import { ROUTES, STATUS_OPTIONS } from '@/lib/constants';
-import { statusSchema } from '@/schemas/global';
 
 import { DepartmentCreateDialog } from './dept-form-dialog';
 import { DepartmentDeleteDialog } from './dept-delete-dialog';
 import { useDepartments } from '../use-departments';
 import { DepartmentArgs } from '../dept-schemas';
+import { showStatus, statusClass } from '@/lib/utils';
 // import { useCurrentUser } from '@/features/users/use-users';
 
 export function DepartmentList() {
@@ -207,11 +208,11 @@ export function DepartmentList() {
                     </IGRPTableCellPrimitive>
                     <IGRPTableCellPrimitive>{dept.description || 'N/A'}</IGRPTableCellPrimitive>
                     <IGRPTableCellPrimitive>
-                      <IGRPBadgePrimitive
-                        variant={dept.status === statusSchema.enum.ACTIVE ? 'default' : 'outline'}
-                      >
-                        {dept.status}
-                      </IGRPBadgePrimitive>
+
+                      <IGRPBadgePrimitive className={cn(statusClass(dept.status), 'capitalize')}>
+            {showStatus(dept.status)}
+            
+          </IGRPBadgePrimitive>
                     </IGRPTableCellPrimitive>
                     <IGRPTableCellPrimitive>
                       <IGRPDropdownMenuPrimitive>
@@ -235,7 +236,8 @@ export function DepartmentList() {
                               <IGRPIcon
                                 iconName='Eye'
                                 className='mr-1 size-4'
-                              />Ver
+                              />
+                              Ver
                             </Link>
                           </IGRPDropdownMenuItemPrimitive>
                           <IGRPDropdownMenuItemPrimitive
@@ -247,7 +249,8 @@ export function DepartmentList() {
                             <IGRPIcon
                               iconName='Pencil'
                               className='mr-1 size-4'
-                            />Editar
+                            />
+                            Editar
                           </IGRPDropdownMenuItemPrimitive>
                           <IGRPDropdownMenuSeparatorPrimitive />
                           <IGRPDropdownMenuItemPrimitive
@@ -257,7 +260,8 @@ export function DepartmentList() {
                             <IGRPIcon
                               iconName='Trash'
                               className='mr-1 size-4'
-                            />Eliminar
+                            />
+                            Eliminar
                           </IGRPDropdownMenuItemPrimitive>
                         </IGRPDropdownMenuContentPrimitive>
                       </IGRPDropdownMenuPrimitive>

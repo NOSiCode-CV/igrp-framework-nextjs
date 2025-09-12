@@ -1,3 +1,9 @@
-## New application
+role create
+role update
+role delete ---nop
 
---> add department, fetch department and show name and code when parent_code is null
+role edit remove the name from edit
+
+permission create
+permission update --nop
+permission delete --nop

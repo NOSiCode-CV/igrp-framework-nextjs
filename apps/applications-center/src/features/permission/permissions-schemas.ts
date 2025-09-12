@@ -1,49 +1,41 @@
+import { trimmed } from '@/schemas/global';
+import { Status } from '@igrp/platform-access-management-client-ts';
 import { z } from 'zod';
 
 export const permissionStatusSchema = z.enum(['ACTIVE', 'INACTIVE']);
 
-// Keep this as a ZodString so .min() works
-const trimmed = z.string().trim();
-
-// For description we DO want a transform ("" -> null)
-const emptyToNull = z
-  .string()
-  .trim()
-  .transform((s) => (s.length === 0 ? null : s))
-  .nullable();
-
 export const permissionFormSchema = z
   .object({
-    id: z.number().int().nonnegative().optional(),
-    name: trimmed.min(3, 'Nome da permissão é obrigatório'),
-    description: emptyToNull.optional(), // "" -> null
-    applicationCode: trimmed.min(3, 'Aplicação é obrigatória'),
+    id: z.number().optional(),
+    name: z.string()
+      .min(3, 'Nome é obrigatório (min 3 carateres)')
+      .regex(/^[a-z0-9_-]+$/, "Apenas são permitidas letras minúsculas, números, underscore (_) e hífen (-)."),
+    description: z.string().optional().nullable(),
+    departmentCode: z.string().min(5, 'Código de departamento é obrigatório (min 4 carateres)'),
     status: permissionStatusSchema,
   })
-  .strict();
 
-export type PermissionFormValues = z.infer<typeof permissionFormSchema>;
+export type PermissionArgs = z.infer<typeof permissionFormSchema>;
 
-export const createPermissionSchema = z
-  .object({
-    name: trimmed.min(3, 'O nome é obrigatório.'),
-    description: emptyToNull.optional(),
-    applicationCode: trimmed.min(3, 'Código da aplicação é obrigatório.'),
-  })
-  .strict();
+export const createPermissionSchema = permissionFormSchema.omit({ id: true })
 
-export type CreatePermissionType = z.infer<typeof createPermissionSchema>;
+export type CreatePermissionArgs = z.infer<typeof createPermissionSchema>;
 
-export const updatePermissionSchema = z
-  .object({
-    name: trimmed.min(3).optional(),
-    description: emptyToNull.optional(),
-    status: permissionStatusSchema.optional(),
-    applicationCode: trimmed.min(3).optional(),
-  })
-  .strict()
+export const updatePermissionSchema = permissionFormSchema
+  .omit({ id: true })
+  .partial()
   .refine((val) => Object.keys(val).length > 0, {
     message: 'É necessário fornecer pelo menos um campo para atualização.',
   });
 
-export type UpdatePermissionType = z.infer<typeof updatePermissionSchema>;
+export type UpdatePermissionArgs = z.infer<typeof updatePermissionSchema>;
+
+export const normalizePermission = (data: PermissionArgs) => {
+  return {
+    name: data.name.trim(),
+    departmentCode: data.departmentCode,
+    description: data.description ?? null,
+    status: data.status as Status,
+  };
+};
+

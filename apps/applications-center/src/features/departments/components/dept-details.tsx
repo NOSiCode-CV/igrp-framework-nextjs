@@ -18,7 +18,7 @@ import { useDepartmentByCode } from '../use-departments';
 import { AppCenterLoading } from '@/components/loading';
 import { AppCenterNotFound } from '@/components/not-found';
 import { CopyToClipboard } from '@/components/copy-to-clipboard';
-import { PermissionAppList } from '@/features/permission/components/permission-app-list';
+import { PermissionList } from '@/features/permission/components/permission-list';
 import { useCurrentUser } from '@/features/users/use-users';
 
 // TODO: See user to create a conetext for get the user all time the user is login
@@ -76,85 +76,88 @@ export function DepartmentDetails({ code }: { code: string }) {
         />
       ),
     },
-    // {
-    //   label: 'Permissões',
-    //   value: 'permissions',
-    //   content: <PermissionAppList departmentCode={code} />,
-    // },
+    {
+      label: 'Permissões',
+      value: 'permissions',
+      content: <PermissionList departmentCode={code} />,
+    },
   ];
 
   return (
-    <section className='space-y-10'>
-      <div className='flex flex-col gap-6'>
-        <div className='flex flex-col md:flex-row md:items-center md:justify-between gap-4'>
-          <PageHeader
-            title={name}
-            showBackButton
-            linkBackButton={ROUTES.DEPARTMENTS}
-          ></PageHeader>
-        </div>
+    <div className="flex-1 p-4 min-w-0 overflow-x-hidden">
+      <section className="space-y-10 max-w-full">
+        <div className='flex flex-col gap-6'>
+          <div className='flex flex-col md:flex-row md:items-center md:justify-between gap-4'>
+            <PageHeader
+              title={name}
+              showBackButton
+              linkBackButton={ROUTES.DEPARTMENTS}
+            />
+          </div>
 
-        <div className='flex flex-col gap-8 animate-fade-in motion-reduce:hidden'>
-          <IGRPCardPrimitive className='overflow-hidden card-hover gap-3 py-6'>
-            <IGRPCardHeaderPrimitive>
-              <IGRPCardTitlePrimitive>Informação de Departamento</IGRPCardTitlePrimitive>
-              <IGRPCardDescriptionPrimitive>
-                Informações detalhadas do departamento.
-              </IGRPCardDescriptionPrimitive>
-              <IGRPSeparatorPrimitive className='my-2' />
-            </IGRPCardHeaderPrimitive>
-            <IGRPCardContentPrimitive>
-              <div className='grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4 text-sm'>
-                <div className='flex items-center gap-4'>
-                  <div className='flex flex-col'>
-                    <h3 className='font-normal text-muted-foreground'>Nome</h3>
-                    <p className='font-medium text-base'>{name}</p>
+          <div className='flex flex-col gap-8 animate-fade-in motion-reduce:hidden'>
+            <IGRPCardPrimitive className='overflow-hidden card-hover gap-3 py-6'>
+              <IGRPCardHeaderPrimitive>
+                <IGRPCardTitlePrimitive>Informação de Departamento</IGRPCardTitlePrimitive>
+                <IGRPCardDescriptionPrimitive>
+                  Informações detalhadas do departamento.
+                </IGRPCardDescriptionPrimitive>
+                <IGRPSeparatorPrimitive className='my-2' />
+              </IGRPCardHeaderPrimitive>
+              <IGRPCardContentPrimitive>
+                <div className='grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4 text-sm'>
+                  <div className='flex items-center gap-4'>
+                    <div className='flex flex-col'>
+                      <h3 className='font-normal text-muted-foreground'>Nome</h3>
+                      <p className='font-medium text-base'>{name}</p>
+                    </div>
+                    <CopyToClipboard value={name} />
                   </div>
-                  <CopyToClipboard value={name} />
-                </div>
 
-                <div className='flex items-center gap-4'>
-                  <div>
-                    <h3 className='font-normal text-muted-foreground'>Código</h3>
-                    <p className='font-medium'>{code}</p>
-                  </div>
-                  <CopyToClipboard value={code} />
-                </div>
-
-                <div>
-                  <h3 className='font-normal text-muted-foreground'>Estado</h3>
-                  <IGRPBadge
-                    variant='solid'
-                    color={status === 'ACTIVE' ? 'success' : 'destructive'}
-                  >
-                    {status}
-                  </IGRPBadge>
-                </div>
-
-                {parentName && (
                   <div className='flex items-center gap-4'>
                     <div>
-                      <h3 className='font-normal text-muted-foreground'>Departamento Pai</h3>
-                      <p className='font-medium'>{parentName}</p>
+                      <h3 className='font-normal text-muted-foreground'>Código</h3>
+                      <p className='font-medium'>{code}</p>
                     </div>
+                    <CopyToClipboard value={code} />
                   </div>
-                )}
 
-                <div className='sm:col-span-2 md:col-span-3'>
-                  <h3 className='font-normal text-muted-foreground'>Descrição</h3>
-                  <p>{description || 'N/A'}</p>
+                  <div>
+                    <h3 className='font-normal text-muted-foreground'>Estado</h3>
+                    <IGRPBadge
+                      variant='solid'
+                      color={status === 'ACTIVE' ? 'success' : 'destructive'}
+                    >
+                      {status}
+                    </IGRPBadge>
+                  </div>
+
+                  {parentName && (
+                    <div className='flex items-center gap-4'>
+                      <div>
+                        <h3 className='font-normal text-muted-foreground'>Departamento Pai</h3>
+                        <p className='font-medium'>{parentName}</p>
+                      </div>
+                    </div>
+                  )}
+
+                  <div className='sm:col-span-2 md:col-span-3'>
+                    <h3 className='font-normal text-muted-foreground'>Descrição</h3>
+                    <p>{description || 'N/A'}</p>
+                  </div>
                 </div>
-              </div>
-            </IGRPCardContentPrimitive>
-          </IGRPCardPrimitive>
+              </IGRPCardContentPrimitive>
+            </IGRPCardPrimitive>
+          </div>
         </div>
-      </div>
 
-      <IGRPTabs
-        defaultValue='roles'
-        items={tabs}
-        tabContentClassName='px-0'
-      />
-    </section>
+        <IGRPTabs
+          defaultValue='roles'
+          items={tabs}
+          className='min-w-0'
+          tabContentClassName='px-0'
+        />
+      </section>
+    </div>
   );
 }

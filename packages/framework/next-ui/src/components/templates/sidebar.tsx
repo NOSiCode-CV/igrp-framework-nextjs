@@ -29,7 +29,10 @@ function IGRPTemplateSidebar({ data, ...props }: IGRPTemplateSidebarProps) {
   const { footerItems, menuItems, user, showAppSwitcher, apps, appCode, appCenterUrl } = data;
 
   return (
-    <IGRPSidebarPrimitive collapsible="icon" {...props} variant="sidebar">
+    <IGRPSidebarPrimitive 
+      collapsible='icon'      
+      {...props}
+    >
       <IGRPSidebarHeaderPrimitive>
         {showAppSwitcher && (
           <IGRPTemplateAppSwitcher apps={apps} appCode={appCode} appCenterUrl={appCenterUrl} />

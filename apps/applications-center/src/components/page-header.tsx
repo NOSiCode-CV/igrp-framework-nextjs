@@ -20,11 +20,13 @@ export function PageHeader({
   return (
     <div className='flex flex-col md:flex-row md:items-center md:justify-between gap-4'>
       <div className='flex flex-col gap-1'>
-        <div className='flex items-center gap-2'>
+        <div className='flex items-center gap-2 min-w-0'>
           {showBackButton && <BackButton href={linkBackButton} />}
 
-          <div className='flex flex-col'>
-            <h2 className='text-2xl font-bold tracking-tight'>{title}</h2>
+          <div className='flex flex-col min-w-0'>
+            <h2 className='text-2xl font-bold tracking-tight truncate'>
+              {title}
+            </h2>
 
             {description && <p className='text-muted-foreground text-sm'>{description}</p>}
           </div>

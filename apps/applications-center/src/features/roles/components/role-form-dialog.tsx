@@ -50,16 +50,14 @@ export function RoleFormDialog({
   onOpenChange,
   departmentCode,
   role,
-  openType,
   roles,
 }: RoleFormDialogProps) {
   const { igrpToast } = useIGRPToast();
 
-  const { mutateAsync: createRole, isPending: isAddingRole } = useCreateRole();
-  const { mutate: updateRole, isPending: isUpdatingRole } = useUpdateRole();
+  const { mutateAsync: createRole, isPending: isCreating } = useCreateRole();
+  const { mutateAsync: updateRole, isPending: isUpdating } = useUpdateRole();
 
-  const isView = openType === 'view';
-  const isEdit = !!role && !isView;
+  const isEdit = !!role
 
   const form = useForm<CreateRoleArgs>({
     resolver: zodResolver(createRoleSchema),
@@ -112,7 +110,6 @@ export function RoleFormDialog({
         });
       } else {
         const payload = normalizeRole(values);
-        console.log({ payload });
 
         await createRole(payload);
         igrpToast({
@@ -140,10 +137,10 @@ export function RoleFormDialog({
       onOpenChange={onOpenChange}
       modal
     >
-      <IGRPDialogContentPrimitive>
+      <IGRPDialogContentPrimitive className='md:min-w-2xl'>
         <IGRPDialogHeaderPrimitive>
           <IGRPDialogTitlePrimitive>
-            {isView ? 'Ver Perfil' : isEdit ? 'Editar Perfil' : 'Adicionar Perfil'}
+            {isEdit ? 'Editar Perfil' : 'Adicionar Perfil'}
           </IGRPDialogTitlePrimitive>
         </IGRPDialogHeaderPrimitive>
 
@@ -163,8 +160,7 @@ export function RoleFormDialog({
                   <IGRPFormControlPrimitive>
                     <IGRPInputPrimitive
                       placeholder='Identificador único do perfil'
-                      required
-                      disabled={isView}
+                      required                      
                       className='placeholder:truncate border-primary/30 focus-visible:ring-[2px] focus-visible:ring-primary/30 focus-visible:border-primary/30'
                       {...field}
                     />
@@ -181,14 +177,13 @@ export function RoleFormDialog({
                   <IGRPFormLabelPrimitive>Descrição</IGRPFormLabelPrimitive>
                   <IGRPFormControlPrimitive>
                     <IGRPTextAreaPrimitive
-                      placeholder=' Breve descrição do perfil'
+                      placeholder='Breve descrição do perfil'
                       rows={2}
                       value={field.value ?? ''}
                       onChange={field.onChange}
                       onBlur={field.onBlur}
                       name={field.name}
-                      ref={field.ref}
-                      disabled={isView}
+                      ref={field.ref}                      
                       className='resize-none placeholder:truncate border-primary/30 focus-visible:ring-[2px] focus-visible:ring-primary/30 focus-visible:border-primary/30'
                     />
                   </IGRPFormControlPrimitive>
@@ -206,8 +201,7 @@ export function RoleFormDialog({
                     <IGRPFormLabelPrimitive>Perfil Pai</IGRPFormLabelPrimitive>
                     <IGRPSelectPrimitive
                       onValueChange={(v) => field.onChange(v === '' ? null : v)}
-                      value={field.value ?? ''}
-                      disabled={isView}
+                      value={field.value ?? ''}                      
                     >
                       <IGRPFormControlPrimitive>
                         <IGRPSelectTriggerPrimitive className='w-full truncate'>
@@ -240,8 +234,7 @@ export function RoleFormDialog({
                     <IGRPFormLabelPrimitive>Estado</IGRPFormLabelPrimitive>
                     <IGRPSelectPrimitive
                       onValueChange={field.onChange}
-                      value={field.value}
-                      disabled={isView}
+                      value={field.value}                      
                     >
                       <IGRPFormControlPrimitive>
                         <IGRPSelectTriggerPrimitive className='w-full truncate'>
@@ -275,17 +268,16 @@ export function RoleFormDialog({
               </IGRPButtonPrimitive>
               <IGRPButtonPrimitive
                 type='submit'
-                disabled={isView || isAddingRole || isUpdatingRole}
+                disabled={isCreating || isUpdating}
               >
-                {isView
-                  ? 'Fechar'
-                  : isEdit
-                    ? isUpdatingRole
-                      ? 'Atualizando...'
-                      : 'Atualizar'
-                    : isAddingRole
-                      ? 'Guardando...'
-                      : 'Adicionar'}
+                {isEdit
+                  ? isUpdating
+                    ? 'Atualizando...'
+                    : 'Atualizar'
+                  : isCreating
+                    ? 'Guardando...'
+                    : 'Adicionar'
+                }
               </IGRPButtonPrimitive>
             </IGRPDialogFooterPrimitive>
           </form>

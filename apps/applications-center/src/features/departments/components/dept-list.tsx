@@ -130,8 +130,8 @@ export function DepartmentList() {
                 >
                   <IGRPIcon
                     iconName='ListFilter'
-                    className='size-4'
-                  />{' '}
+                    className='size-4 mr-1'
+                  />
                   Estados
                 </IGRPButtonPrimitive>
               </IGRPDropdownMenuTriggerPrimitive>
@@ -182,7 +182,7 @@ export function DepartmentList() {
                   <IGRPTableHeadPrimitive>Código</IGRPTableHeadPrimitive>
                   <IGRPTableHeadPrimitive>Descrição</IGRPTableHeadPrimitive>
                   <IGRPTableHeadPrimitive>Estado</IGRPTableHeadPrimitive>
-                  <IGRPTableHeadPrimitive className='w-[100px]' />
+                  <IGRPTableHeadPrimitive className='w-24' />
                 </IGRPTableRowPrimitive>
               </IGRPTableHeaderPrimitive>
               <IGRPTableBodyPrimitive>
@@ -234,9 +234,8 @@ export function DepartmentList() {
                             <Link href={`${ROUTES.DEPARTMENTS}/${dept.code}`}>
                               <IGRPIcon
                                 iconName='Eye'
-                                className='mr-0.5 size-4'
-                              />{' '}
-                              Ver
+                                className='mr-1 size-4'
+                              />Ver
                             </Link>
                           </IGRPDropdownMenuItemPrimitive>
                           <IGRPDropdownMenuItemPrimitive
@@ -247,9 +246,8 @@ export function DepartmentList() {
                           >
                             <IGRPIcon
                               iconName='Pencil'
-                              className='mr-0.5 size-4'
-                            />{' '}
-                            Editar
+                              className='mr-1 size-4'
+                            />Editar
                           </IGRPDropdownMenuItemPrimitive>
                           <IGRPDropdownMenuSeparatorPrimitive />
                           <IGRPDropdownMenuItemPrimitive
@@ -258,9 +256,8 @@ export function DepartmentList() {
                           >
                             <IGRPIcon
                               iconName='Trash'
-                              className='mr-0.5 size-4'
-                            />{' '}
-                            Eliminar
+                              className='mr-1 size-4'
+                            />Eliminar
                           </IGRPDropdownMenuItemPrimitive>
                         </IGRPDropdownMenuContentPrimitive>
                       </IGRPDropdownMenuPrimitive>

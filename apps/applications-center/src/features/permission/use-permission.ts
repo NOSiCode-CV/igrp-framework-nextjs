@@ -1,43 +1,40 @@
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
-import {
-  getAllPermissions,
-  getPermission,
-  deletePermission,
-  createPermission,
-  updatePermission,
-  getPermissionsByApplication,
-  getPermissionRoles,
-} from '@/actions/permission';
-import { Permission, PermissionRole } from '../types';
+import { PermissionArgs } from './permissions-schemas';
+import { PermissionFilters, UpdatePermissionRequest } from '@igrp/platform-access-management-client-ts';
+import { createPermission, deletePermission, getPermissions, getRolesByPermissionName, updatePermission } from '@/actions/permission';
+import { RoleArgs } from '../roles/role-schemas';
 
-export const useAllPermissions = () => {
-  return useQuery<Permission[]>({
+
+export const usePermissions = (params: PermissionFilters) => {
+  return useQuery<PermissionArgs[]>({
     queryKey: ['permissions'],
-    queryFn: () => getAllPermissions(),
+    queryFn: () => getPermissions(params),
   });
 };
 
-export const usePermissionsByApplication = (appCode: string) => {
-  return useQuery<Permission[]>({
-    queryKey: ['permissions', 'application', appCode],
-    queryFn: () => getPermissionsByApplication(appCode),
-    enabled: !!appCode,
+export const useCreatePermission = () => {
+  const queryClient = useQueryClient();
+
+  return useMutation({
+    mutationFn: createPermission,
+    onSuccess: async () => {
+      await queryClient.invalidateQueries({ queryKey: ['permissions'], exact: true });
+      await queryClient.refetchQueries({ queryKey: ['permissions'], exact: true });
+    },
   });
 };
 
-export const useCurrentPermission = (id: number) => {
-  return useQuery<Permission>({
-    queryKey: ['current-permission', id],
-    queryFn: () => getPermission(id),
-    enabled: !!id,
-  });
-};
 
-export const usePermissionRoles = (permissionId: number) => {
-  return useQuery<PermissionRole[]>({
-    queryKey: ['permission-roles', permissionId],
-    queryFn: () => getPermissionRoles(permissionId),
-    enabled: !!permissionId,
+export const useUpdatePermission = () => {
+  const queryClient = useQueryClient();
+
+  return useMutation({
+    mutationFn: async ({ name, data }: { name: string; data: UpdatePermissionRequest }) =>
+      updatePermission(name, data),
+    onSuccess: async () => {
+      await queryClient.invalidateQueries({ queryKey: ['permissions'], exact: true });
+      await queryClient.refetchQueries({ queryKey: ['permissions'], exact: true });
+    },
   });
 };
 
@@ -45,42 +42,17 @@ export const useDeletePermission = () => {
   const queryClient = useQueryClient();
 
   return useMutation({
-    mutationFn: async (id: number) => deletePermission(id),
-    onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ['permissions'] });
+    mutationFn: async (name: string) => deletePermission(name),
+    onSuccess: async () => {
+      await queryClient.invalidateQueries({ queryKey: ['permissions'] });
+      await queryClient.refetchQueries({ queryKey: ['permissions'], exact: true });
     },
   });
 };
 
-export const useAddPermission = () => {
-  const queryClient = useQueryClient();
-
-  return useMutation({
-    mutationFn: createPermission,
-    onSuccess: (newPermission) => {
-      queryClient.invalidateQueries({ queryKey: ['permissions'] });
-      if (newPermission.applicationId) {
-        queryClient.invalidateQueries({
-          queryKey: ['permissions', 'application', newPermission.applicationId],
-        });
-      }
-    },
+export const useRolesPermission = (name: string) => {
+  return useQuery<RoleArgs[]>({
+    queryKey: ['permissions'],
+    queryFn: () => getRolesByPermissionName(name),
   });
-};
-
-export const useUpdatePermission = () => {
-  const queryClient = useQueryClient();
-
-  return useMutation({
-    mutationFn: async ({ id, data }: { id: number; data: Partial<Permission> }) =>
-      updatePermission(id, data),
-    onSuccess: (updatedPermission) => {
-      queryClient.invalidateQueries({ queryKey: ['permissions'] });
-      if (updatedPermission.applicationId) {
-        queryClient.invalidateQueries({
-          queryKey: ['permissions', 'application', updatedPermission.applicationId],
-        });
-      }
-    },
-  });
-};
+}

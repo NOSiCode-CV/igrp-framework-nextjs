@@ -33,9 +33,8 @@ type IGRPTemplateMenuArgs = {
 };
 
 export function IGRPTemplateMenus({ menus = [] }: IGRPTemplateMenuArgs) {
+  console.log({ menus });
 
-  console.log({ menus })
-  
   const pathname = usePathname();
 
   const menuData = useMemo(() => (menus.length > 0 ? menus : undefined), [menus]);
@@ -120,9 +119,9 @@ export function IGRPTemplateMenus({ menus = [] }: IGRPTemplateMenuArgs) {
 
   const sections = groups.length > 0 ? groups : [];
 
-  console.log({ sections })
+  console.log({ sections });
 
- return (
+  return (
     <>
       {sections.length > 0 ? (
         sections.map((section) => {
@@ -148,7 +147,7 @@ export function IGRPTemplateMenus({ menus = [] }: IGRPTemplateMenuArgs) {
             </IGRPSidebarGroupPrimitive>
           );
         })
-      ) : (       
+      ) : (
         <IGRPSidebarGroupPrimitive key="grp-root">
           {/* no label for root */}
           <IGRPSidebarGroupContentPrimitive>

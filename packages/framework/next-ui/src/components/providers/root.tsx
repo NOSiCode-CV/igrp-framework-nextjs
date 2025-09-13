@@ -46,12 +46,12 @@ export function IGRPRootProviders({
   return (
     <IGRPSidebarProviderPrimitive defaultOpen={defaultOpen}>
       {showSidebar && (
-        <div className='z-45'>
+        <div className="z-45">
           <IGRPTemplateSidebar data={sidebarData} />
         </div>
-      )}     
+      )}
 
-      <IGRPSidebarInsetPrimitive className='min-w-0'>
+      <IGRPSidebarInsetPrimitive className="min-w-0">
         {showHeader && <IGRPTemplateHeader data={headerData} />}
 
         <div className="p-4">{children}</div>

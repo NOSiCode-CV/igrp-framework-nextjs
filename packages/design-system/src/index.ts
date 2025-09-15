@@ -461,7 +461,7 @@ export { IGRPRadioGroup, type IGRPRadioGroupProps } from './components/horizon/i
 export { IGRPInputAddOn, type IGRPInputAddOnProps } from './components/horizon/input/with-addons';
 
 export { IGRPLabel, type IGRPLabelProps } from './components/horizon/label';
-export { IGRPLoadingSpinner } from './components/horizon/loading/spiner';
+export { IGRPLoadingSpinner } from './components/horizon/loading-spiner';
 
 export {
   IGRPMenuNavigationProvider,
@@ -504,6 +504,12 @@ export {
   type IGRPPdfViewerProps,
   type IGRPDocumentItem,
 } from './components/horizon/pdf-viewer';
+
+export {
+  IGRPStepperProcess,
+  type IGRPStepperProcessProps,
+  type IGRPStepProcessProps,
+} from './components/horizon/proccess/stepper';
 
 export {
   IGRPRepetitiveComponent,

@@ -1,4 +1,4 @@
-// import { getToken } from '@igrp/framework-next-auth/jwt';
+import { getToken } from '@igrp/framework-next-auth/jwt';
 import { NextResponse, type NextRequest } from 'next/server';
 
 // Public paths that don’t require authentication
@@ -26,22 +26,22 @@ export async function middleware(request: NextRequest) {
   }
 
   // Get session token
-  // const token = await getToken({
-  //   req: request,
-  //   secret: process.env.NEXTAUTH_SECRET,
-  //   cookieName: 'next-auth.session-token',
-  // });
+  const token = await getToken({
+    req: request,
+    secret: process.env.NEXTAUTH_SECRET,
+    cookieName: 'next-auth.session-token',
+  });
 
-  // if (!token) {
-  //   const loginUrl = new URL('/login', request.url);
-  //   loginUrl.searchParams.set('callbackUrl', request.url);
-  //   return NextResponse.redirect(loginUrl);
-  // }
+  if (!token) {
+    const loginUrl = new URL('/login', request.url);
+    loginUrl.searchParams.set('callbackUrl', request.url);
+    return NextResponse.redirect(loginUrl);
+  }
 
   // Redirect on token refresh failure
-  // if (token.error === 'RefreshAccessTokenError') {
-  //   return NextResponse.redirect(new URL('/logout', request.url));
-  // }
+  if (token.error === 'RefreshAccessTokenError') {
+    return NextResponse.redirect(new URL('/logout', request.url));
+  }
 
   return NextResponse.next();
 }

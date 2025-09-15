@@ -54,8 +54,8 @@ importers:
         specifier: workspace:*
         version: link:../../packages/design-system
       '@igrp/platform-access-management-client-ts':
-        specifier: 0.1.0-beta.19
-        version: 0.1.0-beta.19
+        specifier: 0.1.0-beta.21
+        version: 0.1.0-beta.21
       '@tanstack/react-query':
         specifier: ^5.84.2
         version: 5.87.4(react@19.1.1)
@@ -71,6 +71,9 @@ importers:
       js-cookie:
         specifier: ^3.0.5
         version: 3.0.5
+      nanoid:
+        specifier: ^5.1.5
+        version: 5.1.5
       next:
         specifier: 15.5.2
         version: 15.5.2(react-dom@19.1.1(react@19.1.1))(react@19.1.1)
@@ -507,8 +510,8 @@ importers:
         specifier: 0.1.0-beta.6
         version: 0.1.0-beta.6(@types/react-dom@19.1.9(@types/react@19.1.12))(@types/react@19.1.12)(next-auth@4.24.11(next@15.5.2(@babel/core@7.28.4)(babel-plugin-react-compiler@19.1.0-rc.3)(react-dom@19.1.1(react@19.1.1))(react@19.1.1))(react-dom@19.1.1(react@19.1.1))(react@19.1.1))(next@15.5.2(@babel/core@7.28.4)(babel-plugin-react-compiler@19.1.0-rc.3)(react-dom@19.1.1(react@19.1.1))(react@19.1.1))(react-dom@19.1.1(react@19.1.1))(react@19.1.1)(typescript@5.9.2)
       '@igrp/platform-access-management-client-ts':
-        specifier: 0.1.0-beta.19
-        version: 0.1.0-beta.19
+        specifier: 0.1.0-beta.21
+        version: 0.1.0-beta.21
       clsx:
         specifier: ^2.1.1
         version: 2.1.1
@@ -790,8 +793,8 @@ importers:
         specifier: 0.1.0-beta.6
         version: 0.1.0-beta.6(@types/react-dom@19.1.9(@types/react@19.1.12))(@types/react@19.1.12)(next@15.5.2(react-dom@19.1.1(react@19.1.1))(react@19.1.1))(react-dom@19.1.1(react@19.1.1))(react@19.1.1)
       '@igrp/platform-access-management-client-ts':
-        specifier: 0.1.0-beta.19
-        version: 0.1.0-beta.19
+        specifier: 0.1.0-beta.21
+        version: 0.1.0-beta.21
       class-variance-authority:
         specifier: ^0.7.1
         version: 0.7.1
@@ -801,6 +804,9 @@ importers:
       js-cookie:
         specifier: ^3.0.5
         version: 3.0.5
+      nanoid:
+        specifier: ^5.1.5
+        version: 5.1.5
       next:
         specifier: 15.5.2
         version: 15.5.2(react-dom@19.1.1(react@19.1.1))(react@19.1.1)
@@ -1866,7 +1872,10 @@ packages:
       react-dom: 19.1.1
 
   '@igrp/platform-access-management-client-ts@0.1.0-beta.19':
-    resolution: {integrity: sha512-OvyT0Ra6hqrIhtzFaQIruV1BizL+EI9Iu0Rw836JIqIxDXNFOZBjscQlMDigWDuujY79cHsxczIpyMUFJV3J/g==}
+    resolution: {integrity: sha512-gLCkGBG0OrxIWYuwC48Jf3hVpOhSe+H/aB6L3r4YdMcCJeTk8+a6wIWY1wOQ/YQVhxxCFhkbzI5pmBIq73Camg==}
+
+  '@igrp/platform-access-management-client-ts@0.1.0-beta.21':
+    resolution: {integrity: sha512-+vI2G1v+/bwcpQXf9GZ4XAVL5EQ5lkVUvc62UXNoYYwwSf44DJgtNdqw80Hye0Y3HeS1DWru9+1ICF4ZxcazeQ==}
 
   '@img/sharp-darwin-arm64@0.34.3':
     resolution: {integrity: sha512-ryFMfvxxpQRsgZJqBd4wsttYQbCxsJksrv9Lw/v798JcQ8+w84mBWuXwl+TT0WJ/WrYOLaYpwQXi3sA9nTIaIg==}
@@ -5559,6 +5568,11 @@ packages:
     engines: {node: ^10 || ^12 || ^13.7 || ^14 || >=15.0.1}
     hasBin: true
 
+  nanoid@5.1.5:
+    resolution: {integrity: sha512-Ir/+ZpE9fDsNH0hQ3C68uyThDXzYcim2EqcZ8zn8Chtt1iylPT9xXJB0kPCnqzgcEGikO9RxSrh63MsmVCU7Fw==}
+    engines: {node: ^18 || >=20}
+    hasBin: true
+
   napi-postinstall@0.3.3:
     resolution: {integrity: sha512-uTp172LLXSxuSYHv/kou+f6KW3SMppU9ivthaVTXian9sOt3XM/zHYHpRZiLgQoxeWfYUnslNWQHF1+G71xcow==}
     engines: {node: ^12.20.0 || ^14.18.0 || >=16.0.0}
@@ -8326,6 +8340,8 @@ snapshots:
       - '@types/react-dom'
 
   '@igrp/platform-access-management-client-ts@0.1.0-beta.19': {}
+
+  '@igrp/platform-access-management-client-ts@0.1.0-beta.21': {}
 
   '@img/sharp-darwin-arm64@0.34.3':
     optionalDependencies:
@@ -12132,6 +12148,8 @@ snapshots:
       thenify-all: 1.6.0
 
   nanoid@3.3.11: {}
+
+  nanoid@5.1.5: {}
 
   napi-postinstall@0.3.3: {}
 

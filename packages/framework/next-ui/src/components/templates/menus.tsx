@@ -33,7 +33,6 @@ type IGRPTemplateMenuArgs = {
 };
 
 export function IGRPTemplateMenus({ menus = [] }: IGRPTemplateMenuArgs) {
-  
   const pathname = usePathname();
   const menuData = useMemo(() => (menus.length > 0 ? menus : undefined), [menus]);
 
@@ -98,9 +97,7 @@ export function IGRPTemplateMenus({ menus = [] }: IGRPTemplateMenuArgs) {
     return (
       <IGRPAlertPrimitive variant="destructive">
         <IGRPIcon iconName="CircleAlert" />
-        <IGRPAlertDescriptionPrimitive>
-          Applicação sem menus.
-        </IGRPAlertDescriptionPrimitive>
+        <IGRPAlertDescriptionPrimitive>Applicação sem menus.</IGRPAlertDescriptionPrimitive>
       </IGRPAlertPrimitive>
     );
   }

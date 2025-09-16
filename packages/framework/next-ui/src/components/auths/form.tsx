@@ -37,12 +37,7 @@ interface IGRPAuthFormProps {
   callbackUrl?: string;
 }
 
-function IGRPAuthForm({ 
-  texts, 
-  logo, 
-  name,
-  callbackUrl = '/' 
-}: IGRPAuthFormProps) {
+function IGRPAuthForm({ texts, logo, name, callbackUrl = '/' }: IGRPAuthFormProps) {
   const { theme, resolvedTheme } = useTheme();
   const [isLoading, setIsLoading] = useState(false);
   const [authError, setAuthError] = useState<string | null>(null);

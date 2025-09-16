@@ -7,11 +7,15 @@ import { cn } from '@/lib/utils';
 const { sliderPosition, texts } = loginConfig;
 const { logo, name } = siteConfig;
 
-export default async function AuthPage({ searchParams }: { searchParams: PageProps<'/login'>['searchParams'] }) {
-  const { callbackUrl } = await searchParams
+export default async function AuthPage({
+  searchParams,
+}: {
+  searchParams: PageProps<'/login'>['searchParams'];
+}) {
+  const { callbackUrl } = await searchParams;
 
   return (
-    <section className='flex min-h-screen flex-col md:flex-row'>
+    <section className="flex min-h-screen flex-col md:flex-row">
       <div
         className={cn(
           'relative hidden w-full md:block md:w-1/2',
@@ -21,12 +25,7 @@ export default async function AuthPage({ searchParams }: { searchParams: PagePro
       >
         <IGRPAuthCarousel carouselItems={carouselItems} />
       </div>
-      <IGRPAuthForm
-        texts={texts}
-        logo={logo}
-        name={name}
-        callbackUrl={callbackUrl as string}
-      />
+      <IGRPAuthForm texts={texts} logo={logo} name={name} callbackUrl={callbackUrl as string} />
     </section>
   );
 }

@@ -4,4 +4,4 @@ export function getMockMenus() {
   return {
     mockMenus: IGRP_DEFAULT_MENU,
   };
-};
+}

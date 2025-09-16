@@ -46,21 +46,34 @@ export default async function AuthPage({
 
 ### action auth
 
-  - **File:** `src/actions/igrp/auth.ts`
-    - Replace nullish coalescing with logical OR for environment variable fallback
- 
+- **File:** `src/actions/igrp/auth.ts`
+  - Replace nullish coalescing with logical OR for environment variable fallback
+
 ```tsx
+const apiManagement = process.env.IGRP_APP_MANAGER_API ?? '';
 
-  const apiManagement = process.env.IGRP_APP_MANAGER_API ?? '';
-
-  const apiManagement = process.env.IGRP_APP_MANAGER_API || '';
-
+const apiManagement = process.env.IGRP_APP_MANAGER_API || '';
 ```
 
-### middleware 
+### middleware
 
-  - **File:** `src/middleware.ts`
-    - Update this file `copy` -> `paste`
+- **File:** `src/middleware.ts`
+  - Update this file `copy` -> `paste`
+
+---
+
+### auth options
+
+- **File:** `src/lib/auth-options.ts`
+  - Update this file `copy` -> `paste`
+  - Is set to maxAge 60 just for test
 
 ```tsx
 
+  session: {
+    strategy: 'jwt',
+    // maxAge: 4 * 60 * 60, // 4 hours
+    maxAge: 60,
+  },
+
+```

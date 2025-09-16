@@ -27,6 +27,7 @@
     "@igrp/igrp-framework-react-design-system": "workspace:*",
     "@igrp/platform-access-management-client-ts": "0.1.0-beta.22",
     "@tanstack/react-query": "^5.84.2",
+    "@tanstack/react-table": "^8.21.3",
     "@tanstack/react-virtual": "^3.13.12",
     "class-variance-authority": "^0.7.1",
     "clsx": "^2.1.1",

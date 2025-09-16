@@ -11,6 +11,7 @@ interface IGRPStatusBannerProps {
   badgeColor?: IGRPColorVariants;
   badgeText?: string;
   name?: string;
+  className?: string;
 }
 
 function IGRPStatusBanner({
@@ -21,6 +22,7 @@ function IGRPStatusBanner({
   badgeColor = 'primary',
   badgeText = 'Badge Text',
   name,
+  className
 }: IGRPStatusBannerProps) {
   return (
     <IGRPAlert
@@ -28,7 +30,7 @@ function IGRPStatusBanner({
       color={color}
       iconName="Circle"
       iconClassName={cn('h-3 w-3 fill-current')}
-      className="p-4 rounded-lg items-center"
+      className={cn("p-4 rounded-lg items-center", className)}
       alignment="center"
       name={name}
     >

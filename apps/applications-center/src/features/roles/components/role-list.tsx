@@ -17,7 +17,7 @@ import {
   IGRPDropdownMenuLabelPrimitive,
   IGRPDropdownMenuSeparatorPrimitive,
   IGRPDropdownMenuTriggerPrimitive,
-  IGRPIcon,  
+  IGRPIcon,
   IGRPDropdownMenuCheckboxItemPrimitive,
   IGRPBadge,
   IGRPBadgePrimitive,
@@ -30,6 +30,7 @@ import { RoleDeleteDialog } from './role-delete-dialog';
 import { RoleArgs } from '../role-schemas';
 import { ROUTES, STATUS_OPTIONS } from '@/lib/constants';
 import { showStatus, statusClass } from '@/lib/utils';
+import { RoleDetails } from './role-permissions-dialog';
 
 interface RolesListProps {
   departmentCode: string;
@@ -39,9 +40,10 @@ interface RolesListProps {
 export function RolesList({ departmentCode, username }: RolesListProps) {
   const [searchTerm, setSearchTerm] = useState('');
   const [openFormDialog, setOpenFormDialog] = useState(false);
+  const [openDetailsDialog, setOpenDetailsDialog] = useState(false);
   const [openDeleteDialog, setOpenDeleteDialog] = useState(false);
   const [selectedRole, setSelectedRole] = useState<RoleArgs | undefined>(undefined);
-  const [roleToDelete, setRoleToDelete] = useState<{ name: string } | null>(null);
+  const [roleToDelete, setRoleToDelete] = useState<string | null>(null);
   const [statusFilter, setStatusFilter] = useState<string[]>([]);
 
   const router = useRouter();
@@ -50,23 +52,28 @@ export function RolesList({ departmentCode, username }: RolesListProps) {
 
   const handleNewRole = () => {
     setSelectedRole(undefined);
+    setOpenDetailsDialog(false);
     setOpenFormDialog(true);
   };
 
   const handleDelete = (name: string) => {
-    setRoleToDelete({ name });
+    setRoleToDelete(name);
     setOpenDeleteDialog(true);
   };
 
   const handleEdit = (role: RoleArgs) => {
     setSelectedRole(role);
     setRoleToDelete(null);
+    setOpenDetailsDialog(false);
     setOpenFormDialog(true);
   };
-  
-  const handlePermissions = (name: string) => {
-    router.push(`${ROUTES.DEPARTMENTS}/${departmentCode}/${ROUTES.DEPARTMENTS_ROLE}/${name}`);
-  }
+
+  const handlePermissions = (role: RoleArgs) => {
+    setSelectedRole(role);
+    setRoleToDelete(null);
+    setOpenFormDialog(false);
+    setOpenDetailsDialog(true);
+  };
 
   if (error) {
     return (
@@ -221,9 +228,8 @@ export function RolesList({ departmentCode, username }: RolesListProps) {
                       <IGRPTableCellPrimitive>{role.description || 'N/A'}</IGRPTableCellPrimitive>
                       <IGRPTableCellPrimitive className='whitespace-nowrap'>
                         <IGRPBadgePrimitive className={cn(statusClass(role.status), 'capitalize')}>
-            {showStatus(role.status)}
-            
-          </IGRPBadgePrimitive>
+                          {showStatus(role.status)}
+                        </IGRPBadgePrimitive>
                       </IGRPTableCellPrimitive>
                       <IGRPTableCellPrimitive>
                         <IGRPDropdownMenuPrimitive>
@@ -248,7 +254,9 @@ export function RolesList({ departmentCode, username }: RolesListProps) {
                               />
                               Editar
                             </IGRPDropdownMenuItemPrimitive>
-                            <IGRPDropdownMenuItemPrimitive onSelect={() => handlePermissions(role.name)}>
+                            <IGRPDropdownMenuItemPrimitive
+                              onSelect={() => handlePermissions(role)}
+                            >
                               <IGRPIcon
                                 iconName='ShieldCheck'
                                 className='mr-1 size-4'
@@ -290,6 +298,15 @@ export function RolesList({ departmentCode, username }: RolesListProps) {
           open={openDeleteDialog}
           onOpenChange={setOpenDeleteDialog}
           roleToDelete={roleToDelete}
+        />
+      )}
+
+      {selectedRole && (
+        <RoleDetails
+          departmentCode={departmentCode}
+          role={selectedRole}
+          open={openDetailsDialog}
+          onOpenChange={setOpenDetailsDialog}
         />
       )}
     </>

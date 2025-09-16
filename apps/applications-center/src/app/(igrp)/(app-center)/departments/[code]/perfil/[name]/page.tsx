@@ -1,7 +1,6 @@
-import { RoleDetails } from '@/features/roles/components/role-deatils';
+import { RoleDetails } from '../../../../../../../features/roles/components/role-permissions-dialog';
 
 export const dynamic = 'force-dynamic';
-
 
 export default async function DepartmentRolePage({
   params,
@@ -9,5 +8,10 @@ export default async function DepartmentRolePage({
   params: { code: string; name: string };
 }) {
   const { code, name } = await params;
-  return <RoleDetails name={name} departmentCode={code} />;
+  return (
+    <RoleDetails
+      name={name}
+      departmentCode={code}
+    />
+  );
 }

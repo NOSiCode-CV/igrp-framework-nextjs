@@ -52,7 +52,6 @@ export function ApplicationCard({ app }: { app: IGRPApplicationArgs }) {
         <div className='flex items-center'>
           <IGRPBadgePrimitive className={cn(statusClass(status), 'capitalize')}>
             {showStatus(status)}
-            
           </IGRPBadgePrimitive>
         </div>
         <div className='flex items-center gap-1'>

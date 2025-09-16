@@ -32,6 +32,7 @@ export type IGRPConfigArgs = {
   };
   loginUrl?: string;
   logoutUrl?: string;
+  showSettings?: boolean;
 };
 
 export type IGRPConfigClient = () => Promise<IGRPConfigArgs>;

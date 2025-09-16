@@ -67,7 +67,7 @@ export async function getRoleByName(name: string) {
 
   try {
     const result = await client.roles.getRoleByName(name);
-    return (result.data) as RoleArgs;
+    return result.data as RoleArgs;
   } catch (error) {
     console.error('[role-by-name] Não foi possível obter dado do perfil.:', error);
     throw error;

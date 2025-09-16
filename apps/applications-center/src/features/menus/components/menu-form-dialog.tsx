@@ -178,7 +178,6 @@ export function MenuFormDialog({
   async function onSubmit(values: MenuArgs) {
     const payload: OnSaveMenu = { ...values, applicationCode: appCode };
     const code = menu?.code ?? '';
-    console.log({ payload });
 
     setIsLoading(true);
 

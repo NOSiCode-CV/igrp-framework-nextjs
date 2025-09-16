@@ -10,6 +10,7 @@ export { IGRPStatsCardTopBorderColored } from './components/custom/stats-card-to
 export { IGRPUserAvatar, type IGRPUserAvatarProps } from './components/custom/user-avatar';
 
 // primitives components
+
 export {
   Accordion as IGRPAccordionPrimitive,
   AccordionItem as IGRPAccordionItemPrimitive,
@@ -140,6 +141,16 @@ export { Input as IGRPInputPrimitive } from './components/primitives/input';
 export { Label as IGRPLabelPrimitive } from './components/primitives/label';
 
 export {
+  Pagination as IGRPPaginationPrimitive,
+  PaginationContent as IGRPPaginationContentPrimitive,
+  PaginationLink as IGRPPaginationLinkPrimitive,
+  PaginationItem as IGRPPaginationItemPrimitive,
+  PaginationPrevious as IGRPPaginationPreviousPrimitive,
+  PaginationNext as IGRPPaginationNextPrimitive,
+  PaginationEllipsis as IGRPPaginationEllipsisPrimitive,
+} from './components/primitives/pagination';
+
+export {
   Popover as IGRPPopoverPrimitive,
   PopoverTrigger as IGRPPopoverTriggerPrimitive,
   PopoverContent as IGRPPopoverContentPrimitive,
@@ -237,6 +248,7 @@ export {
 } from './components/primitives/tooltip';
 
 // horizon components
+
 export { IGRPAlert, type IGRPAlertProps } from './components/horizon/alert';
 export { IGRPAlertDialog, type IGRPAlertDialogProps } from './components/horizon/alert-dialog';
 export { IGRPBadge, type IGRPBadgeProps, igrpBadgeVariants } from './components/horizon/badge';

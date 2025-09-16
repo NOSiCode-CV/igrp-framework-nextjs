@@ -1,0 +1,38 @@
+### igrp.templates.config.ts
+
+- **File:** `src/igrp.templates.config.ts`
+  - Rename `buildConfig` → `igrpBuildConfig`
+  - Add `showSettings` option for the settings menu
+
+---
+
+### login
+
+- **File:** `src/(auth)/login/page.tsx`
+  - Update `AuthPage` signature to accept `searchParams`
+  - Extract `callbackUrl` from `searchParams`
+  - Pass `callbackUrl` into `<IGRPAuthForm />`
+
+```tsx
+// before
+export default async function AuthPage() {
+  ...
+}
+
+// after
+export default async function AuthPage({
+  searchParams,
+}: {
+  searchParams: PageProps<'/login'>['searchParams'];
+}) {
+  const { callbackUrl } = await searchParams;
+
+  return (
+    <IGRPAuthForm
+      texts={texts}
+      logo={logo}
+      name={name}
+      callbackUrl={callbackUrl as string}
+    />
+  );
+}

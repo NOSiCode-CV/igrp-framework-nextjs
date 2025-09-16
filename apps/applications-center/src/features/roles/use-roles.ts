@@ -49,9 +49,8 @@ export const useDeleteRole = () => {
 
 export const useRoleByName = (name: string) => {
   return useQuery<RoleArgs>({
-    queryKey: ['roleByName', name.toLowerCase()] as const, 
+    queryKey: ['roleByName', name.toLowerCase()] as const,
     queryFn: () => getRoleByName(name),
-    enabled: !!name,   
-  })     
+    enabled: !!name,
+  });
 };
-

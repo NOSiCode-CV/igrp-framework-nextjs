@@ -4,11 +4,9 @@ import { getIGRPAccessClientConfig } from './api-config';
 let clientInstance: AccessManagementClient | null = null;
 
 export async function getIGRPAccessClient(): Promise<AccessManagementClient> {
-  // console.log({ clientInstance });
-
   if (clientInstance) return clientInstance;
 
-  const { baseUrl, token, timeout = 45000 } = getIGRPAccessClientConfig();
+  const { baseUrl, token, timeout = 10000 } = getIGRPAccessClientConfig();
 
   clientInstance = AccessManagementClient.create({
     baseUrl,

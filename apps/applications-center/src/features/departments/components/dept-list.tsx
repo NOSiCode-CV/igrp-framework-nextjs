@@ -208,11 +208,9 @@ export function DepartmentList() {
                     </IGRPTableCellPrimitive>
                     <IGRPTableCellPrimitive>{dept.description || 'N/A'}</IGRPTableCellPrimitive>
                     <IGRPTableCellPrimitive>
-
                       <IGRPBadgePrimitive className={cn(statusClass(dept.status), 'capitalize')}>
-            {showStatus(dept.status)}
-            
-          </IGRPBadgePrimitive>
+                        {showStatus(dept.status)}
+                      </IGRPBadgePrimitive>
                     </IGRPTableCellPrimitive>
                     <IGRPTableCellPrimitive>
                       <IGRPDropdownMenuPrimitive>

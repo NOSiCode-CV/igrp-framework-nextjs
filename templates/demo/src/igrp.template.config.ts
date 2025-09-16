@@ -1,4 +1,4 @@
-import { buildConfig } from '@igrp/framework-next';
+import { igrpBuildConfig } from '@igrp/framework-next';
 import { IGRPLayoutConfigArgs } from '@igrp/framework-next-types';
 import { fontVariables } from '@/lib/fonts';
 import { getMockApps } from '@/temp/applications/use-mock-apps';
@@ -14,7 +14,7 @@ export function createConfig(config: IGRPLayoutConfigArgs) {
 
   const previewModeEnv = process.env.IGRP_PREVIEW_MODE;
 
-  return buildConfig({
+  return igrpBuildConfig({
     appCode: process.env.IGRP_APP_CODE || '',
     previewMode: previewModeEnv === undefined || previewModeEnv.trim().toLowerCase() === 'true',
     layoutMockData: {
@@ -53,5 +53,6 @@ export function createConfig(config: IGRPLayoutConfigArgs) {
     },
     loginUrl: process.env.IGRP_LOGIN_URL || '',
     logoutUrl: process.env.IGRP_LOGOUT_URL || '',
+    showSettings: true,
   });
 }

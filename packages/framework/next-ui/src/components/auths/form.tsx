@@ -34,9 +34,15 @@ interface IGRPAuthFormProps {
   texts: IGRPLoginTexts;
   logo: IGRPSiteLogo;
   name: string;
+  callbackUrl?: string;
 }
 
-function IGRPAuthForm({ texts, logo, name }: IGRPAuthFormProps) {
+function IGRPAuthForm({ 
+  texts, 
+  logo, 
+  name,
+  callbackUrl = '/' 
+}: IGRPAuthFormProps) {
   const { theme, resolvedTheme } = useTheme();
   const [isLoading, setIsLoading] = useState(false);
   const [authError, setAuthError] = useState<string | null>(null);
@@ -58,7 +64,7 @@ function IGRPAuthForm({ texts, logo, name }: IGRPAuthFormProps) {
 
     try {
       await signIn('keycloak', {
-        callbackUrl: '/',
+        callbackUrl,
       });
     } catch (error) {
       console.error('Authentication error:', error);

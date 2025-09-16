@@ -26,14 +26,12 @@ export async function IGRPLayout({ children, config }: IGRPLayoutArgs) {
 
   const { session } = layout;
 
-  console.log({ appCode, previewMode, session });
-
-  let app;
+  // let app;
 
   if (!previewMode) {
     if (!apiManagementConfig || !apiManagementConfig.baseUrl) {
       throw new Error(
-        '[igrp-layout]: Modo de pré-visualização desativado. É necessária a configuração da gestão da API.',
+        '[igrp-layout]: Modo de pré-visualização desativado. É necessária a configuração da gestão de acesso',
       );
     }
 
@@ -42,7 +40,7 @@ export async function IGRPLayout({ children, config }: IGRPLayoutArgs) {
       baseUrl: apiManagementConfig?.baseUrl || '',
     });
 
-    app = await fetchAppByCode(appCode);
+    // app = await fetchAppByCode(appCode);
   }
 
   const { headerData, sidebarData } = await fetchLayoutData(

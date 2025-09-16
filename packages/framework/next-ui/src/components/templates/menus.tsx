@@ -33,10 +33,8 @@ type IGRPTemplateMenuArgs = {
 };
 
 export function IGRPTemplateMenus({ menus = [] }: IGRPTemplateMenuArgs) {
-  console.log({ menus });
-
+  
   const pathname = usePathname();
-
   const menuData = useMemo(() => (menus.length > 0 ? menus : undefined), [menus]);
 
   const { groups, childrenByParentKey, keyOf } = useMemo(() => {
@@ -101,8 +99,7 @@ export function IGRPTemplateMenus({ menus = [] }: IGRPTemplateMenuArgs) {
       <IGRPAlertPrimitive variant="destructive">
         <IGRPIcon iconName="CircleAlert" />
         <IGRPAlertDescriptionPrimitive>
-          O modo de protótipo não está habilitado e nenhum código de aplicação válido foi
-          encontrado.
+          Applicação sem menus.
         </IGRPAlertDescriptionPrimitive>
       </IGRPAlertPrimitive>
     );
@@ -118,8 +115,6 @@ export function IGRPTemplateMenus({ menus = [] }: IGRPTemplateMenuArgs) {
   }
 
   const sections = groups.length > 0 ? groups : [];
-
-  console.log({ sections });
 
   return (
     <>

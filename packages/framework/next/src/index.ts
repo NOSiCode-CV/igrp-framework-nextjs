@@ -7,7 +7,7 @@ export { IGRPLayout, type IGRPLayoutArgs } from './components/igrp-layout';
 
 export { IGRPRootLayout, type IGRPRootLayoutArgs } from './components/igrp-root-layout';
 
-export { buildConfig } from './config/build';
+export { igrpBuildConfig } from './config/build';
 
 export { getIGRPAccessClient } from './lib/api-client';
 

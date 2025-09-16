@@ -3,7 +3,6 @@
 import { useState } from 'react';
 import {
   cn,
-  IGRPBadge,
   IGRPBadgePrimitive,
   IGRPButtonPrimitive,
   IGRPDropdownMenuCheckboxItemPrimitive,
@@ -228,10 +227,11 @@ export function PermissionList({ departmentCode }: PermissionListProps) {
                           {permssion.description || 'N/A'}
                         </IGRPTableCellPrimitive>
                         <IGRPTableCellPrimitive className='whitespace-nowrap'>
-                          <IGRPBadgePrimitive className={cn(statusClass(permssion.status), 'capitalize')}>
-            {showStatus(permssion.status)}
-            
-          </IGRPBadgePrimitive>
+                          <IGRPBadgePrimitive
+                            className={cn(statusClass(permssion.status), 'capitalize')}
+                          >
+                            {showStatus(permssion.status)}
+                          </IGRPBadgePrimitive>
                         </IGRPTableCellPrimitive>
                         <IGRPTableCellPrimitive className='whitespace-nowrap'>
                           {permssion.description || 'N/A'}

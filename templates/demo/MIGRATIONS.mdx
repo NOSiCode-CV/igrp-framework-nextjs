@@ -36,3 +36,31 @@ export default async function AuthPage({
     />
   );
 }
+
+```
+
+- **File:** `src/(auth)/layout.tsx`
+  - Remove this file
+
+---
+
+### action auth
+
+  - **File:** `src/actions/igrp/auth.ts`
+    - Replace nullish coalescing with logical OR for environment variable fallback
+ 
+```tsx
+
+  const apiManagement = process.env.IGRP_APP_MANAGER_API ?? '';
+
+  const apiManagement = process.env.IGRP_APP_MANAGER_API || '';
+
+```
+
+### middleware 
+
+  - **File:** `src/middleware.ts`
+    - Update this file `copy` -> `paste`
+
+```tsx
+

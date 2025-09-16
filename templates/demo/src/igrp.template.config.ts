@@ -1,22 +1,20 @@
 import { igrpBuildConfig } from '@igrp/framework-next';
-import { IGRPLayoutConfigArgs } from '@igrp/framework-next-types';
+import { IGRPConfigArgs, IGRPLayoutConfigArgs } from '@igrp/framework-next-types';
 import { fontVariables } from '@/lib/fonts';
 import { getMockApps } from '@/temp/applications/use-mock-apps';
 import { getMockMenus } from '@/temp/menus/use-mock-menus';
 import { getMockMenusFooter } from '@/temp/menus/use-mock-menus-footer';
 import { getMockUser } from '@/temp/users/use-mock-user';
 
-export function createConfig(config: IGRPLayoutConfigArgs) {
+export function createConfig(config: IGRPLayoutConfigArgs): Promise<IGRPConfigArgs> {
   const user = getMockUser().mockUser;
   const menu = getMockMenus().mockMenus;
   const footerMwnu = getMockMenusFooter().mockMenusFooter;
   const apps = getMockApps().mockApps;
 
-  const previewModeEnv = process.env.IGRP_PREVIEW_MODE;
-
   return igrpBuildConfig({
     appCode: process.env.IGRP_APP_CODE || '',
-    previewMode: previewModeEnv === undefined || previewModeEnv.trim().toLowerCase() === 'true',
+    previewMode: false,
     layoutMockData: {
       getHeaderData: async () => ({
         user: user,
@@ -50,6 +48,7 @@ export function createConfig(config: IGRPLayoutConfigArgs) {
       showToaster: true,
       position: 'bottom-right',
       richColors: true,
+      closeButton: true,
     },
     loginUrl: process.env.IGRP_LOGIN_URL || '',
     logoutUrl: process.env.IGRP_LOGOUT_URL || '',

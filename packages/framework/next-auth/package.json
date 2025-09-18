@@ -1,6 +1,6 @@
 {
   "name": "@igrp/framework-next-auth",
-  "version": "0.1.0-beta.8",
+  "version": "0.1.0-beta.11-5",
   "description": "IGRP Framework for Next.js | Auth",
   "type": "module",
   "sideEffects": false,
@@ -46,13 +46,13 @@
   "peerDependencies": {
     "next-auth": "^4.24.11",
     "react": "19.1.1",    
-    "next": "15.5.2"
+    "next": "15.5.3"
   },
   "peerDependenciesMeta": {
     "next-auth": { "optional": false }
   },
   "devDependencies": {    
-    "@types/node": "24.3.1",
+    "@types/node": "24.5.1",
     "next-auth": "^4.24.11",
     "prettier": "^3.6.2",
     "rimraf": "^6.0.1",

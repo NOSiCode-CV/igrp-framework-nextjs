@@ -59,6 +59,8 @@ export {
 
 export { IGRPTemplateNotifications } from './components/templates/notifications';
 
+export { IGRPSessionWatcher } from './components/templates/session-watcher';
+
 export { IGRPTemplateThemeSelector } from './components/templates/theme-selector';
 
 // providers

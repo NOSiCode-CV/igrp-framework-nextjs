@@ -254,9 +254,7 @@ export function RolesList({ departmentCode, username }: RolesListProps) {
                               />
                               Editar
                             </IGRPDropdownMenuItemPrimitive>
-                            <IGRPDropdownMenuItemPrimitive
-                              onSelect={() => handlePermissions(role)}
-                            >
+                            <IGRPDropdownMenuItemPrimitive onSelect={() => handlePermissions(role)}>
                               <IGRPIcon
                                 iconName='ShieldCheck'
                                 className='mr-1 size-4'

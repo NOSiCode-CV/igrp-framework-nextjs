@@ -20,6 +20,8 @@ export {
 
 export { igrpBuildQueryString } from './lib/build-query-string';
 
+export { igrpDeleteAuthCookies } from './lib/delete-auth-cookies';
+
 export { mapperApplications } from './mappers/applications-mapper';
 
 export { mapperMenus, mapperMenu } from './mappers/menus-mapper';

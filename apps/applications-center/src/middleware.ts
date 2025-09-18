@@ -5,7 +5,7 @@ const PUBLIC_PATHS = ['/login', '/logout', '/api/auth'];
 
 function isPublicPath(pathname: string) {
   return (
-    PUBLIC_PATHS.some(p => pathname === p || pathname.startsWith(p + '/')) ||
+    PUBLIC_PATHS.some((p) => pathname === p || pathname.startsWith(p + '/')) ||
     pathname.startsWith('/api/auth/') ||
     pathname.startsWith('/_next/') ||
     pathname.startsWith('/static/') ||
@@ -18,10 +18,7 @@ export async function middleware(request: NextRequest) {
 
   if (isPublicPath(pathname)) return NextResponse.next();
 
-  const possibleCookieNames = [
-    '__Secure-next-auth.session-token',
-    'next-auth.session-token',
-  ];
+  const possibleCookieNames = ['__Secure-next-auth.session-token', 'next-auth.session-token'];
 
   let token = null;
   for (const name of possibleCookieNames) {
@@ -41,11 +38,23 @@ export async function middleware(request: NextRequest) {
 
   const now = Math.floor(Date.now() / 1000);
   const skew = 60;
-  const nextAuthExp = typeof token.exp === 'number' ? token.exp : undefined;
-  const providerExp = typeof token.expiresAt === 'number' ? token.expiresAt : undefined;
 
-  const sessionExpired = nextAuthExp !== undefined && nextAuthExp <= now + skew;
-  const providerExpired = providerExp !== undefined && providerExp <= now + skew;
+  const n = now + skew;
+  
+  const nextAuthExp = typeof token.exp === 'number' ? token.exp : undefined;
+  console.log({ nextAuthExp });
+  console.log({ tokenExp: token.exp });
+  console.log({ validNow: n });
+  const providerExp = typeof token.expiresAt === 'number' ? token.expiresAt : undefined;
+  console.log({ providerExp });
+  console.log({ tokenExpiresAt: token.expiresAt });
+
+  const sessionExpired = nextAuthExp !== undefined && nextAuthExp < now + skew;
+  console.log({ sessionExpired });
+
+  const providerExpired = providerExp !== undefined && providerExp < now + skew;
+  console.log({ providerExpired });
+
   const refreshFailed = token.error === 'RefreshAccessTokenError';
 
   if (sessionExpired || providerExpired || refreshFailed) {

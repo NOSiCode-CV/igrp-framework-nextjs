@@ -676,9 +676,6 @@
   .text-muted-foreground {
     color: var(--muted-foreground);
   }
-  .text-sidebar-primary-foreground {
-    color: var(--sidebar-primary-foreground);
-  }
   .text-slate-200 {
     color: var(--color-slate-200);
   }

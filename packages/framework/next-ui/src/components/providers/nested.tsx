@@ -7,6 +7,7 @@ import { IGRPActiveThemeProvider } from './active-theme';
 import { IGRPProgressBarProvider } from './progress-bar';
 import { IGRPSessionProvider } from './session';
 import { IGRPThemeProvider } from './theme';
+import { IGRPSessionWatcher } from '../templates/session-watcher';
 
 export type IGRPNestedProvidersArgs = {
   session?: Session | null;
@@ -29,6 +30,7 @@ export function IGRPNestedProviders({
 }: IGRPNestedProvidersArgs) {
   return (
     <IGRPSessionProvider session={session} {...sessionArgs}>
+      <IGRPSessionWatcher />
       <IGRPThemeProvider
         attribute="class"
         defaultTheme="system"

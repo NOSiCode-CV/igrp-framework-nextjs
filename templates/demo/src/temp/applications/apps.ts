@@ -1,6 +1,6 @@
 import { IGRPApplicationArgs } from '@igrp/framework-next-types';
 
-export const IGRP_MOCK_APPS_DATA: IGRPApplicationArgs[] = [  
+export const IGRP_MOCK_APPS_DATA: IGRPApplicationArgs[] = [
   {
     id: 35,
     code: 'APP_TEST_1',
@@ -26,5 +26,5 @@ export const IGRP_MOCK_APPS_DATA: IGRPApplicationArgs[] = [
     url: null,
     slug: 'test-2',
     departmentCode: 'DEPT_IGRP',
-  }  
+  },
 ];

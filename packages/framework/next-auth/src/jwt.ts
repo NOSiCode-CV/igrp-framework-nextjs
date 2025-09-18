@@ -7,9 +7,8 @@ export interface JWT extends DefaultJWT {
   idToken?: string;
   expiresAt?: number;
   error?: 'RefreshAccessTokenError' | string;
-  user?: {
-    id?: string;
-  } & NextAuthUser;
+  forceLogout?: boolean;
+  user?: NextAuthUser;
 }
 
 export { getToken, decode, encode } from 'next-auth/jwt';

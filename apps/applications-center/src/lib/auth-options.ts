@@ -28,7 +28,7 @@ export const authOptions: NextAuthOptions = {
       options: {
         httpOnly: true,
         sameSite: 'lax',
-        path: '/',        
+        path: '/',
         secure: isProd,
         ...(cookieDomain ? { domain: cookieDomain } : {}),
       },
@@ -40,24 +40,16 @@ export const authOptions: NextAuthOptions = {
       if (account) {
         if (user && !('user' in token)) {
           token.user = {
-            id:
-              token.sub ??
-              user.id ??
-              undefined,
-            name:
-              user.name ??
-              profile?.name ??
-              null,
-            email:
-              user.email ??
-              profile?.email ??
-              null,
+            id: token.sub ?? user.id ?? undefined,
+            name: user.name ?? profile?.name ?? null,
+            email: user.email ?? profile?.email ?? null,
           };
         }
         token.idToken = account.id_token;
         token.accessToken = account.access_token;
         token.refreshToken = account.refresh_token;
         token.expiresAt = account.expires_at;
+        
         delete token.error;
         return token;
       }
@@ -94,7 +86,7 @@ export const authOptions: NextAuthOptions = {
         console.error('Error refreshing access token', error);
         return { ...token, error: 'RefreshAccessTokenError' };
       }
-    },    
+    },
     async session({ session, token }) {
       session.user = token.user as Session['user'];
       session.accessToken = token.accessToken;
@@ -136,9 +128,8 @@ async function requestRefreshOfAccessToken(token: JWT) {
       client_id: process.env.KEYCLOAK_CLIENT_ID!,
       client_secret: process.env.KEYCLOAK_CLIENT_SECRET!,
       grant_type: 'refresh_token',
-      refresh_token: String(token.refreshToken)
+      refresh_token: String(token.refreshToken),
     }),
-    
   });
 }
 
@@ -148,8 +139,8 @@ async function doFinalSignoutHandshake(jwt: JWT) {
 
   if (idToken && issuer) {
     const postLogoutRedirectUri = process.env.NEXTAUTH_URL
-    ? `${process.env.NEXTAUTH_URL}/login`
-    : undefined;
+      ? `${process.env.NEXTAUTH_URL}/login`
+      : undefined;
 
     try {
       const body = new URLSearchParams({ id_token_hint: idToken });
@@ -160,7 +151,7 @@ async function doFinalSignoutHandshake(jwt: JWT) {
       const params = new URLSearchParams();
       params.append('id_token_hint', idToken as string);
 
-      const response = await fetch(`${issuer}/protocol/openid-connect/logout`, {        
+      const response = await fetch(`${issuer}/protocol/openid-connect/logout`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
       });

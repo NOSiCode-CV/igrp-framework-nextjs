@@ -55,7 +55,7 @@ function IGRPTemplateAppSwitcher({ apps, appCode, appCenterUrl }: IGRPTemplateAp
               size="lg"
               className="data-[state=open]:bg-sidebar-accent data-[state=open]:text-sidebar-accent-foreground"
             >
-              <div className="text-sidebar-primary-foreground flex aspect-square size-8 items-center justify-center rounded-lg">
+              <div className="flex aspect-square size-8 items-center justify-center rounded-lg">
                 {activeApp.picture ? (
                   <Image
                     src={activeApp.picture}

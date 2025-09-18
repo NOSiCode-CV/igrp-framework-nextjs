@@ -70,8 +70,6 @@ export {
   type IGRPActiveThemeProviderArgs,
 } from './components/providers/active-theme';
 
-export { IGRPProgressBarProvider } from './components/providers/progress-bar';
-
 export { IGRPNestedProviders, type IGRPNestedProvidersArgs } from './components/providers/nested';
 
 export { IGRPRootProviders } from './components/providers/root';

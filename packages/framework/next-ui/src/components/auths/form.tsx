@@ -1,8 +1,7 @@
 'use client';
 
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 import Image from 'next/image';
-import { useTheme } from 'next-themes';
 import { signIn } from '@igrp/framework-next-auth/client';
 import {
   IGRPAlertPrimitive,
@@ -25,7 +24,6 @@ interface IGRPLoginTexts {
 
 interface IGRPSiteLogo {
   src: string;
-  srcDark: string;
   width: number;
   height: number;
 }
@@ -37,30 +35,21 @@ interface IGRPAuthFormProps {
   callbackUrl?: string;
 }
 
-function IGRPAuthForm({ texts, logo, name, callbackUrl = '/' }: IGRPAuthFormProps) {
-  const { theme, resolvedTheme } = useTheme();
+function IGRPAuthForm({ 
+  texts, 
+  logo, 
+  name, 
+  callbackUrl = '/' 
+}: IGRPAuthFormProps) {
   const [isLoading, setIsLoading] = useState(false);
-  const [authError, setAuthError] = useState<string | null>(null);
-  const [mounted, setMounted] = useState(false);
-
-  useEffect(() => {
-    setMounted(true);
-  }, []);
-
-  const imgSrc = mounted
-    ? theme === 'dark' || resolvedTheme === 'dark'
-      ? logo.srcDark
-      : logo.src
-    : logo.src;
+  const [authError, setAuthError] = useState<string | null>(null);  
 
   async function onSubmit() {
     setIsLoading(true);
     setAuthError(null);
 
     try {
-      await signIn('keycloak', {
-        callbackUrl,
-      });
+      await signIn('keycloak', { callbackUrl });
     } catch (error) {
       console.error('Authentication error:', error);
       setAuthError(error instanceof Error ? error.message : 'Failed to sign in. Please try again.');
@@ -88,7 +77,7 @@ function IGRPAuthForm({ texts, logo, name, callbackUrl = '/' }: IGRPAuthFormProp
           )}
           <div className="flex flex-col items-center">
             <Image
-              src={imgSrc}
+              src={logo.src}
               alt={name}
               width={logo.width}
               height={logo.height}

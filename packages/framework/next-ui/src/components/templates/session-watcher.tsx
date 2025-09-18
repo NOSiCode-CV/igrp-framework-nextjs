@@ -6,13 +6,9 @@ import { useSafeSession } from '@igrp/framework-next-auth/client';
 
 export function IGRPSessionWatcher() {
   const { session, status } = useSafeSession();
-  const router = useRouter();
-
-  console.log('::: SESSION WATCHER :::');
-  console.log({ session, status });
-
+  const router = useRouter(); 
   useEffect(() => {
-    if ((status === 'authenticated' && session?.forceLogout) || status === 'unauthenticated') {
+    if (status === 'authenticated' && session?.forceLogout) {
       router.push('/logout');
     }
   }, [status, session, router]);

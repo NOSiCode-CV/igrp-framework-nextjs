@@ -8,6 +8,7 @@ interface IGRPGlobalErrorProps {
   children?: React.ReactNode;
 }
 
+// TODO: check the image
 function IGRPGlobalError({ error, reset, children }: IGRPGlobalErrorProps) {
   if (children) return <>{children}</>;
 

@@ -2,15 +2,15 @@ import { IGRPMenuItemArgs } from '@igrp/framework-next-types';
 
 export const IGRP_DEFAULT_MENU_FOOTER: IGRPMenuItemArgs[] = [
   {
-    id: 152,
+    id: 102025,
     name: 'Settings',
     type: 'MENU_PAGE',
-    position: 1,
+    position: 0,
     icon: 'Settings2',
     status: 'ACTIVE',
     url: '/system-settings',
-    applicationCode: 'APPIGRPDEMO2',
-    code: 'AAAAA',
+    applicationCode: 'APP_IGRP_CENTER',
+    code: 'MENU_IGRP_SETTINGS',
     permissions: [],
   },
 ];

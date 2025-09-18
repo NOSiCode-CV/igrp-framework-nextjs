@@ -41,7 +41,7 @@ function IGRPAuthCarousel({ carouselItems }: IGRPAuthCarouselProps) {
             )}
           >
             <Image
-              src={item.image || '/placeholder.svg'}
+              src={item.image}
               alt={item.title}
               fill
               priority={index === 0}

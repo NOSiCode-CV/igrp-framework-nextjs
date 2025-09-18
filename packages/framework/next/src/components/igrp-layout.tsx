@@ -1,8 +1,7 @@
 import { IGRPRootProviders } from '@igrp/framework-next-ui';
 import type { IGRPConfigArgs } from '@igrp/framework-next-types';
 
-import { setIGRPAccessClientConfig } from '../lib/api-config';
-import { fetchAppByCode } from '../hooks/use-applications';
+import { igrpSetAccessClientConfig } from '../lib/api-config';
 import { fetchLayoutData } from '../hooks/use-layout';
 
 export type IGRPLayoutArgs = {
@@ -26,8 +25,6 @@ export async function IGRPLayout({ children, config }: IGRPLayoutArgs) {
 
   const { session } = layout;
 
-  // let app;
-
   if (!previewMode) {
     if (!apiManagementConfig || !apiManagementConfig.baseUrl) {
       throw new Error(
@@ -35,12 +32,10 @@ export async function IGRPLayout({ children, config }: IGRPLayoutArgs) {
       );
     }
 
-    setIGRPAccessClientConfig({
+    igrpSetAccessClientConfig({
       token: session?.accessToken || '',
       baseUrl: apiManagementConfig?.baseUrl || '',
     });
-
-    // app = await fetchAppByCode(appCode);
   }
 
   const { headerData, sidebarData } = await fetchLayoutData(

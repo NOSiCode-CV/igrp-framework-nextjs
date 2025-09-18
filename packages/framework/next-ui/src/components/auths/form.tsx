@@ -35,14 +35,9 @@ interface IGRPAuthFormProps {
   callbackUrl?: string;
 }
 
-function IGRPAuthForm({ 
-  texts, 
-  logo, 
-  name, 
-  callbackUrl = '/' 
-}: IGRPAuthFormProps) {
+function IGRPAuthForm({ texts, logo, name, callbackUrl = '/' }: IGRPAuthFormProps) {
   const [isLoading, setIsLoading] = useState(false);
-  const [authError, setAuthError] = useState<string | null>(null);  
+  const [authError, setAuthError] = useState<string | null>(null);
 
   async function onSubmit() {
     setIsLoading(true);

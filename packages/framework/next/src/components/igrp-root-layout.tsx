@@ -31,7 +31,6 @@ export function IGRPRootLayout({ children, config }: IGRPRootLayoutArgs) {
         <IGRPNestedProviders
           session={session}
           activeThemeValue={activeThemeValue}
-          progressiveBarArgs={undefined}
           sessionArgs={undefined}
           themeArgs={undefined}
         >

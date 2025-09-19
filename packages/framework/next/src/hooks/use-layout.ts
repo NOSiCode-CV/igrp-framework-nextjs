@@ -16,8 +16,11 @@ export async function fetchLayoutData(
     if (!appCode) throw new Error('[igrp-layout]: Código da aplicação não encontrada.');
 
     const menuItems = await fetchMenus(appCode);
+    console.log({ menuItems });
     const user = await fetchCurrentUser();
+    console.log({ user });
     const apps = await fetchAppsByUser(user.username);
+    console.log({ apps });
 
     headerData = {
       ...headerData,

@@ -10,7 +10,7 @@ export function igrpResetAccessClient() {
 
 export async function igrpGetAccessClient(): Promise<AccessManagementClient> {
   const { baseUrl, token, timeout = 10000 } = igrpGetAccessClientConfig();
-
+  
   clientInstance = AccessManagementClient.create({
     baseUrl,
     timeout,

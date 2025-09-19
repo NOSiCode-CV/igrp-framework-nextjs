@@ -1,8 +1,8 @@
 'use client';
 
-import React from 'react';
 import { IGRPButtonPrimitive, IGRPIconProps } from '@igrp/igrp-framework-react-design-system';
 import Link from 'next/link';
+
 import { LinkLoadingIndicator } from './link-loading-indicator';
 
 type IGRPBtnProps = React.ComponentProps<typeof IGRPButtonPrimitive>;

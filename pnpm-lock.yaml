@@ -635,8 +635,8 @@ importers:
   packages/framework/next-types:
     dependencies:
       '@igrp/framework-next-auth':
-        specifier: 0.1.0-beta.13
-        version: 0.1.0-beta.13(next-auth@4.24.11(next@15.5.3(react-dom@19.1.1(react@19.1.1))(react@19.1.1))(react-dom@19.1.1(react@19.1.1))(react@19.1.1))(next@15.5.3(react-dom@19.1.1(react@19.1.1))(react@19.1.1))(react@19.1.1)
+        specifier: workspace:*
+        version: link:../next-auth
     devDependencies:
       '@types/node':
         specifier: ^24.5.1
@@ -657,14 +657,14 @@ importers:
   packages/framework/next-ui:
     dependencies:
       '@igrp/framework-next-auth':
-        specifier: 0.1.0-beta.13
-        version: 0.1.0-beta.13(next-auth@4.24.11(next@15.5.3(@babel/core@7.28.4)(babel-plugin-react-compiler@19.1.0-rc.3)(react-dom@19.1.1(react@19.1.1))(react@19.1.1))(react-dom@19.1.1(react@19.1.1))(react@19.1.1))(next@15.5.3(@babel/core@7.28.4)(babel-plugin-react-compiler@19.1.0-rc.3)(react-dom@19.1.1(react@19.1.1))(react@19.1.1))(react@19.1.1)
+        specifier: workspace:*
+        version: link:../next-auth
       '@igrp/framework-next-types':
-        specifier: 0.1.0-beta.13
-        version: 0.1.0-beta.13(next-auth@4.24.11(next@15.5.3(@babel/core@7.28.4)(babel-plugin-react-compiler@19.1.0-rc.3)(react-dom@19.1.1(react@19.1.1))(react@19.1.1))(react-dom@19.1.1(react@19.1.1))(react@19.1.1))(next@15.5.3(@babel/core@7.28.4)(babel-plugin-react-compiler@19.1.0-rc.3)(react-dom@19.1.1(react@19.1.1))(react@19.1.1))(react@19.1.1)
+        specifier: workspace:*
+        version: link:../next-types
       '@igrp/igrp-framework-react-design-system':
-        specifier: 0.1.0-beta.13
-        version: 0.1.0-beta.13(@types/react-dom@19.1.9(@types/react@19.1.13))(@types/react@19.1.13)(next@15.5.3(@babel/core@7.28.4)(babel-plugin-react-compiler@19.1.0-rc.3)(react-dom@19.1.1(react@19.1.1))(react@19.1.1))(react-dom@19.1.1(react@19.1.1))(react@19.1.1)
+        specifier: workspace:*
+        version: link:../../design-system
       class-variance-authority:
         specifier: ^0.7.1
         version: 0.7.1
@@ -8115,12 +8115,6 @@ snapshots:
     dependencies:
       next: 15.5.3(@babel/core@7.28.4)(babel-plugin-react-compiler@19.1.0-rc.3)(react-dom@19.1.1(react@19.1.1))(react@19.1.1)
       next-auth: 4.24.11(next@15.5.3(@babel/core@7.28.4)(babel-plugin-react-compiler@19.1.0-rc.3)(react-dom@19.1.1(react@19.1.1))(react@19.1.1))(react-dom@19.1.1(react@19.1.1))(react@19.1.1)
-      react: 19.1.1
-
-  '@igrp/framework-next-auth@0.1.0-beta.13(next-auth@4.24.11(next@15.5.3(react-dom@19.1.1(react@19.1.1))(react@19.1.1))(react-dom@19.1.1(react@19.1.1))(react@19.1.1))(next@15.5.3(react-dom@19.1.1(react@19.1.1))(react@19.1.1))(react@19.1.1)':
-    dependencies:
-      next: 15.5.3(react-dom@19.1.1(react@19.1.1))(react@19.1.1)
-      next-auth: 4.24.11(next@15.5.3(react-dom@19.1.1(react@19.1.1))(react@19.1.1))(react-dom@19.1.1(react@19.1.1))(react@19.1.1)
       react: 19.1.1
 
   '@igrp/framework-next-types@0.1.0-beta.11(next-auth@4.24.11(next@15.5.3(react-dom@19.1.1(react@19.1.1))(react@19.1.1))(react-dom@19.1.1(react@19.1.1))(react@19.1.1))(next@15.5.3(react-dom@19.1.1(react@19.1.1))(react@19.1.1))(react@19.1.1)':

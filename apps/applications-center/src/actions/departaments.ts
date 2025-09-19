@@ -1,16 +1,15 @@
 'use server';
 
-import { igrpGetAccessClient } from '@igrp/framework-next';
 import {
   CreateDepartmentRequest,
   UpdateDepartmentRequest,
 } from '@igrp/platform-access-management-client-ts';
 
 import { DepartmentArgs } from '@/features/departments/dept-schemas';
+import { getClientAccess } from './access-client';
 
 export async function getDepartments() {
-  // igrpResetAccessClient();
-  const client = await igrpGetAccessClient();
+  const client = await getClientAccess();
 
   try {
     const result = await client.departments.getDepartments();
@@ -22,8 +21,7 @@ export async function getDepartments() {
 }
 
 export async function createDepartment(departmentData: CreateDepartmentRequest) {
-  // igrpResetAccessClient();
-  const client = await igrpGetAccessClient();
+  const client = await getClientAccess();
 
   try {
     const result = await client.departments.createDepartment(departmentData);
@@ -35,8 +33,7 @@ export async function createDepartment(departmentData: CreateDepartmentRequest) 
 }
 
 export async function updateDepartment(code: string, data: UpdateDepartmentRequest) {
-  // igrpResetAccessClient();
-  const client = await igrpGetAccessClient();
+  const client = await getClientAccess();
 
   try {
     const result = await client.departments.updateDepartment(code, data);
@@ -48,8 +45,7 @@ export async function updateDepartment(code: string, data: UpdateDepartmentReque
 }
 
 export async function deleteDepartment(code: string) {
-  // igrpResetAccessClient();
-  const client = await igrpGetAccessClient();
+  const client = await getClientAccess();
 
   try {
     const result = await client.departments.deleteDepartment(code);
@@ -61,8 +57,7 @@ export async function deleteDepartment(code: string) {
 }
 
 export async function getDepartmentByCode(code: string) {
-  // igrpResetAccessClient();
-  const client = await igrpGetAccessClient();
+  const client = await getClientAccess();
 
   try {
     const result = await client.departments.getDepartmentByCode(code);

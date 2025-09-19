@@ -18,8 +18,7 @@ export const authOptions: NextAuthOptions = {
 
   session: {
     strategy: 'jwt',
-    // maxAge: 4 * 60 * 60, // 4 hours
-    maxAge: 60,
+    maxAge: 8 * 60 * 60, // 8 hours
   },
 
   cookies: {
@@ -36,6 +35,10 @@ export const authOptions: NextAuthOptions = {
   },
 
   callbacks: {
+    async redirect({ url, baseUrl }) {      
+      const forced = process.env.NEXTAUTH_URL ?? baseUrl;
+      return forced;     
+    },
     async jwt({ token, user, account, profile }) {
       if (account) {
         if (user && !('user' in token)) {
@@ -78,7 +81,7 @@ export const authOptions: NextAuthOptions = {
           idToken: tokens.id_token,
           accessToken: tokens.access_token,
           expiresAt: Math.floor(Date.now() / 1000 + Number(tokens.expires_in)),
-          refreshToken: tokens.refresh_token ?? token.refreshToken,
+          refreshToken: tokens.refresh_token || token.refreshToken,
           error: undefined,
         };
         return updatedToken;
@@ -95,7 +98,7 @@ export const authOptions: NextAuthOptions = {
       session.expiresAt = token.expiresAt;
       return session;
     },
-  },  
+  },
 };
 
 export async function requestRefreshOfAccessToken(token: JWT) {
@@ -127,7 +130,7 @@ export async function requestRefreshOfAccessToken(token: JWT) {
 
 export function buildKeycloakEndSessionUrl(jwt: JWT) {
   const issuer = process.env.KEYCLOAK_ISSUER;
-  if (!issuer) throw new Error("KEYCLOAK_ISSUER not set");
+  if (!issuer) throw new Error('KEYCLOAK_ISSUER not set');
 
   const idToken = jwt?.idToken as string | undefined;
   const postLogoutRedirectUri = process.env.NEXTAUTH_URL
@@ -135,9 +138,9 @@ export function buildKeycloakEndSessionUrl(jwt: JWT) {
     : undefined;
 
   const url = new URL(`${issuer}/protocol/openid-connect/logout`);
-  if (idToken) url.searchParams.set("id_token_hint", idToken);
+  if (idToken) url.searchParams.set('id_token_hint', idToken);
   if (postLogoutRedirectUri)
-    url.searchParams.set("post_logout_redirect_uri", postLogoutRedirectUri);
+    url.searchParams.set('post_logout_redirect_uri', postLogoutRedirectUri);
 
   return url.toString();
 }

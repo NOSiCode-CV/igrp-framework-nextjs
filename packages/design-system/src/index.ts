@@ -95,6 +95,24 @@ export {
 } from './components/primitives/command';
 
 export {
+  ContextMenu as IGRPContextMenuPrimitive,
+  ContextMenuTrigger as IGRPContextMenuTriggerPrimitive,
+  ContextMenuContent as IGRPContextMenuContentPrimitive,
+  ContextMenuItem as IGRPContextMenuItemPrimitive,
+  ContextMenuCheckboxItem as IGRPContextMenuCheckboxItemPrimitive,
+  ContextMenuRadioItem as IGRPContextMenuRadioItemPrimitive,
+  ContextMenuLabel as IGRPContextMenuLabelPrimitive,
+  ContextMenuSeparator as IGRPContextMenuSeparatorPrimitive,
+  ContextMenuShortcut as IGRPContextMenuShortcutPrimitive,
+  ContextMenuGroup as IGRPContextMenuGroupPrimitive,
+  ContextMenuPortal as IGRPContextMenuPortalPrimitive,
+  ContextMenuSub as IGRPContextMenuSubPrimitive,
+  ContextMenuSubContent as IGRPContextMenuSubContentPrimitive,
+  ContextMenuSubTrigger as IGRPContextMenuSubTriggerPrimitive,
+  ContextMenuRadioGroup as IGRPContextMenuRadioGroupPrimitive,
+} from './components/primitives/context-menu';
+
+export {
   Dialog as IGRPDialogPrimitive,
   DialogClose as IGRPDialogClosePrimitive,
   DialogContent as IGRPDialogContentPrimitive,
@@ -135,6 +153,12 @@ export {
   FormMessage as IGRPFormMessagePrimitive,
   FormField as IGRPFormFieldPrimitive,
 } from './components/primitives/form';
+
+export {
+  HoverCard as IGRPHoverCardPrimitive,
+  HoverCardTrigger as IGRPHoverCardTriggerPrimitive,
+  HoverCardContent as IGRPHoverCardContentPrimitive,
+} from './components/primitives/hover-card';
 
 export { Input as IGRPInputPrimitive } from './components/primitives/input';
 
@@ -223,8 +247,6 @@ export {
 
 export { Skeleton as IGRPSkeletonPrimitive } from './components/primitives/skeleton';
 
-export { Toaster as IGRPToasterPrimitive } from './components/primitives/sonner';
-
 export { Switch as IGRPSwitchPrimitive } from './components/primitives/switch';
 
 export {
@@ -238,7 +260,21 @@ export {
   TableCaption as IGRPTableCaptionPrimitive,
 } from './components/primitives/table';
 
+export {
+  Tabs as IGRPTabsPrimitive,
+  TabsList as IGRPTabsListPrimitive,
+  TabsTrigger as IGRPTabsTriggerPrimitive,
+  TabsContent as IGRPTabsContentPrimitive,
+} from './components/primitives/tabs';
+
 export { Textarea as IGRPTextAreaPrimitive } from './components/primitives/textarea';
+
+export { Toaster as IGRPToasterPrimitive } from './components/primitives/sonner';
+
+export {
+  Toggle as IGRPTogglePrimitive,
+  toggleVariants as IGRPToggleVariantPrimitive,
+} from './components/primitives/toggle';
 
 export {
   Tooltip as IGRPTooltipPrimitive,

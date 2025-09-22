@@ -56,12 +56,12 @@ export function ApplicationCard({ app }: { app: IGRPApplicationArgs }) {
         </div>
         <div className='flex items-center gap-1'>
           <ButtonTooltip
-            href={`${ROUTES.APPS}/${code}`}
+            href={`${ROUTES.APPLICATIONS}/${code}`}
             icon='Eye'
             label='Ver'
           />
           <ButtonTooltip
-            href={`${ROUTES.APPS}/${code}/editar`}
+            href={`${ROUTES.APPLICATIONS}/${code}/editar`}
             icon='SquarePen'
             label='Editar'
           />

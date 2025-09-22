@@ -152,7 +152,7 @@ export function ApplicationForm({ application }: { application?: IGRPApplication
       });
 
       setTimeout(() => {
-        router.push(`${ROUTES.APPS}/${payload.code}`);
+        router.push(`${ROUTES.APPLICATIONS}/${payload.code}`);
       }, 4000);
     } catch (error) {
       igrpToast({
@@ -477,7 +477,7 @@ export function ApplicationForm({ application }: { application?: IGRPApplication
           <IGRPCardFooterPrimitive className='justify-end pt-6 gap-3 flex-col sm:flex-row'>
             <IGRPButton
               variant='outline'
-              onClick={() => router.push(ROUTES.APPS)}
+              onClick={() => router.push(ROUTES.APPLICATIONS)}
               type='button'
               disabled={disabledBtn}
               showIcon

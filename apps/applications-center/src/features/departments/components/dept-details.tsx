@@ -19,7 +19,6 @@ import { AppCenterLoading } from '@/components/loading';
 import { AppCenterNotFound } from '@/components/not-found';
 import { CopyToClipboard } from '@/components/copy-to-clipboard';
 import { PermissionList } from '@/features/permission/components/permission-list';
-import { useCurrentUser } from '@/features/users/use-users';
 
 // TODO: See user to create a conetext for get the user all time the user is login
 export function DepartmentDetails({ code }: { code: string }) {
@@ -29,7 +28,6 @@ export function DepartmentDetails({ code }: { code: string }) {
     isLoading: loadingParentDept,
     error: parentDeptError,
   } = useDepartmentByCode(code);
-  const { data: currentUser, isLoading: userLoading, error: userError } = useCurrentUser();
 
   if (isLoading) return <AppCenterLoading descrption='A carregar departamento...' />;
 
@@ -40,19 +38,6 @@ export function DepartmentDetails({ code }: { code: string }) {
       <AppCenterNotFound
         iconName='AppWindow'
         title='Nenhum departamento encontrada.'
-      />
-    );
-  }
-
-  if (userLoading) return <AppCenterLoading descrption='A carregar utilizador...' />;
-
-  if (userError) throw userError;
-
-  if (!currentUser) {
-    return (
-      <AppCenterNotFound
-        iconName='AppWindow'
-        title='Utilizador não encontrado.'
       />
     );
   }
@@ -71,8 +56,7 @@ export function DepartmentDetails({ code }: { code: string }) {
       value: 'roles',
       content: (
         <RolesList
-          departmentCode={code}
-          username={currentUser.username}
+          departmentCode={code}          
         />
       ),
     },

@@ -7,9 +7,12 @@ import {
 } from '@igrp/platform-access-management-client-ts';
 import { RoleArgs } from '@/features/roles/role-schemas';
 import { getClientAccess } from './access-client';
+import { PermissionArgs } from '@/features/permission/permissions-schemas';
 
 export async function getRoles(params: RoleFilters) {
   const client = await getClientAccess();
+
+  console.log({ params})
 
   try {
     const result = await client.roles.getRoles(params);
@@ -64,6 +67,30 @@ export async function getRoleByName(name: string) {
     return result.data as RoleArgs;
   } catch (error) {
     console.error('[role-by-name] Não foi possível obter dado do perfil.:', error);
+    throw error;
+  }
+}
+
+export async function addPermissionsToRole(name: string, permissionNames: string[]) {
+  const client = await getClientAccess();
+
+  try {
+    const result = await client.roles.addPermissionsToRole(name, permissionNames);
+    return result.data as RoleArgs;
+  } catch (error) {
+    console.error('[add-permissions-role] Não foi possível adicionar permissões a perfís:', error);
+    throw error;
+  }
+}
+
+export async function getPermissionsByRoleName(name: string) {
+  const client = await getClientAccess();
+
+  try {
+    const result = await client.roles.getPermissionsByRoleName(name);
+    return result.data as PermissionArgs[];
+  } catch (error) {
+    console.error(`[role-by-name] Não foi possível obter dados de permissões de perfil ${name}:`, error);
     throw error;
   }
 }

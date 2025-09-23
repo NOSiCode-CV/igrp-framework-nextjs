@@ -1,5 +1,5 @@
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
-import { getRoles, createRole, updateRole, deleteRole, getRoleByName } from '@/actions/roles';
+import { getRoles, createRole, updateRole, deleteRole, getRoleByName, addPermissionsToRole } from '@/actions/roles';
 import { RoleArgs } from './role-schemas';
 import { RoleFilters, UpdateRoleRequest } from '@igrp/platform-access-management-client-ts';
 
@@ -54,3 +54,18 @@ export const useRoleByName = (name: string) => {
     enabled: !!name,
   });
 };
+
+export const useAddPermissionsToRole = () => {
+  const queryClient = useQueryClient();
+
+  return useMutation({
+    mutationFn: async ({ name, permissionNames }: { name: string; permissionNames: string[] }) =>
+      addPermissionsToRole(name, permissionNames),
+    onSuccess: async () => {
+      await queryClient.invalidateQueries({ queryKey: ['roles'] });
+      await queryClient.refetchQueries({ queryKey: ['roles'], exact: true });
+    },
+  });    
+};
+
+

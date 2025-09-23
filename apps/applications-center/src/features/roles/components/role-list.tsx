@@ -31,11 +31,10 @@ import { showStatus, statusClass } from '@/lib/utils';
 import { RoleDetails } from './role-permissions-dialog';
 
 interface RolesListProps {
-  departmentCode: string;
-  username: string;
+  departmentCode: string;  
 }
 
-export function RolesList({ departmentCode, username }: RolesListProps) {
+export function RolesList({ departmentCode }: RolesListProps) {
   const [searchTerm, setSearchTerm] = useState('');
   const [openFormDialog, setOpenFormDialog] = useState(false);
   const [openDetailsDialog, setOpenDetailsDialog] = useState(false);
@@ -44,7 +43,7 @@ export function RolesList({ departmentCode, username }: RolesListProps) {
   const [roleToDelete, setRoleToDelete] = useState<string | null>(null);
   const [statusFilter, setStatusFilter] = useState<string[]>([]);
 
-  const { data: roles, isLoading, error: error } = useRoles({ departmentCode, username });
+  const { data: roles, isLoading, error: error } = useRoles({ departmentCode });
 
   const handleNewRole = () => {
     setSelectedRole(undefined);

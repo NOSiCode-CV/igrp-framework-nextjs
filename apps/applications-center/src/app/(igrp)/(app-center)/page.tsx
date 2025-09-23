@@ -3,13 +3,14 @@ import { PageHeader } from '@/components/page-header';
 import { ApplicationsListHome } from '@/features/applications/components/app-list-home';
 import { ROUTES } from '@/lib/constants';
 
-const appName = process.env.IGRP_APP_NAME_DESCRIPTION || 'IGRP';
+// TODO: use the settings from the backend
+// const appName = process.env.IGRP_APP_NAME_DESCRIPTION || 'IGRP';
 
 export default function Home() {
   return (
     <div className='flex flex-col gap-10 animate-fade-in'>
       <PageHeader
-        title={`Bem-vindo ao ${appName}`}
+        title="Bem-vindo ao IGRP"
         showActions
       >
         <ButtonLink

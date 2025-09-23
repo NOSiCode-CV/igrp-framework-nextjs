@@ -17,6 +17,10 @@ export async function middleware(request: NextRequest) {
 
   if (isPublicPath(pathname)) return NextResponse.next();
 
+  const isPreview = process.env.IGRP_PREVIEW_MODE ? process.env.IGRP_PREVIEW_MODE === 'true' : false;
+
+  if (isPreview) return NextResponse.next();
+
   const possibleCookieNames = ['__Secure-next-auth.session-token', 'next-auth.session-token'];
 
   let token = null;

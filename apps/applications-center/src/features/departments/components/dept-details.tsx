@@ -133,15 +133,13 @@ export function DepartmentDetails({ code }: { code: string }) {
                   </div>
 
                   {parentName && (
-                    <div className='flex items-center gap-4'>
-                      <div>
-                        <h3 className='font-normal text-muted-foreground'>Departamento Pai</h3>
-                        <p className='font-medium'>{parentName}</p>
-                      </div>
+                    <div>                      
+                      <h3 className='font-normal text-muted-foreground'>Departamento Pai</h3>
+                      <p className='font-medium'>{parentName}</p>                      
                     </div>
                   )}
 
-                  <div className='sm:col-span-2 md:col-span-3'>
+                  <div>
                     <h3 className='font-normal text-muted-foreground'>Descrição</h3>
                     <p>{description || 'N/A'}</p>
                   </div>

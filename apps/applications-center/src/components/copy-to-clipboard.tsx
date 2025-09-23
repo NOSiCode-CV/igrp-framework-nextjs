@@ -17,11 +17,13 @@ interface CopyToClipboardProps {
   className?: string;
 }
 
+// TODO: Move to design-system package
+
 export function CopyToClipboard({ value }: CopyToClipboardProps) {
   const [copied, setCopied] = useState(false);
   const { igrpToast } = useIGRPToast();
 
-  const handleCopy = async () => {
+  async function handleCopy() {
     try {
       await navigator.clipboard.writeText(value);
       const displayValue = value.length > 50 ? `${value.substring(0, 47)}...` : value;

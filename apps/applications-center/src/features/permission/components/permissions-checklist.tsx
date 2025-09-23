@@ -9,6 +9,7 @@ import {
   getCoreRowModel,
   getPaginationRowModel,
   getSortedRowModel,
+  getFilteredRowModel,
   PaginationState,
   useReactTable,
 } from '@tanstack/react-table';
@@ -41,9 +42,13 @@ import { usePermissions } from '../use-permission';
 
 const multiColumnFilterFn: FilterFn<PermissionArgs> = (row, columnId, filterValue) => {
   console.log({ row, columnId, filterValue })
-  const searchableRowContent = row.original.name.toLowerCase()
-  const searchTerm = (filterValue ?? "").toLowerCase()
-  return searchableRowContent.includes(searchTerm)
+  const term = String(filterValue ?? '').toLowerCase().trim();
+  if (!term) return true;
+
+  const name = String(row.original?.name ?? '').toLowerCase();
+  const desc = String(row.original?.description ?? '').toLowerCase();
+
+  return name.includes(term) || desc.includes(term);
 }
 
 const columns: ColumnDef<PermissionArgs>[] = [
@@ -71,9 +76,9 @@ const columns: ColumnDef<PermissionArgs>[] = [
     enableSorting: false,
   },
   {
-    header: 'Name',
+    header: 'Nome',
     accessorKey: 'name',
-    cell: ({ row }) => <div className='font-medium'>{row.getValue('name')}</div>,
+    cell: ({ row }) => <div>{row.getValue('name')}</div>,
     enableSorting: false,
     filterFn: multiColumnFilterFn,
     enableColumnFilter: true
@@ -112,9 +117,10 @@ export function PermissionsCheckList({ departmentCode }: { departmentCode: strin
   const table = useReactTable({
     data,
     columns,
+    enableSortingRemoval: false,
     getCoreRowModel: getCoreRowModel(),
     getSortedRowModel: getSortedRowModel(),
-    enableSortingRemoval: false,
+    getFilteredRowModel: getFilteredRowModel(),
     getPaginationRowModel: getPaginationRowModel(),
     onPaginationChange: setPagination,
     onColumnFiltersChange: setColumnFilters,

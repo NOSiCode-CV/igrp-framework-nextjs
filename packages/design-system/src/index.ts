@@ -633,6 +633,7 @@ export {
 } from './components/horizon/typography/text';
 
 // types
+
 export type {
   IGRPPlacementProps,
   IGRPBaseAttributes,
@@ -642,10 +643,12 @@ export type {
 } from './types';
 
 // hooks
+
 export { IGRP_META_THEME_COLORS, useIGRPMetaColor } from './hooks/use-meta-color';
 export { useIsMobile } from './hooks/use-mobile';
 
 // libs
+
 export {
   IGRPColors,
   type IGRPColorType,

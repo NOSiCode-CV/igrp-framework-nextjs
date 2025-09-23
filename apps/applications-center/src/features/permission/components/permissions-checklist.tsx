@@ -1,8 +1,10 @@
 'use client';
 
-import { useEffect, useId, useState } from 'react';
+import { useEffect, useId, useRef, useState } from 'react';
 import {
   ColumnDef,
+  ColumnFiltersState,
+  FilterFn,
   flexRender,
   getCoreRowModel,
   getPaginationRowModel,
@@ -16,6 +18,7 @@ import {
   IGRPButtonPrimitive,
   IGRPCheckboxPrimitive,
   IGRPIcon,
+  IGRPInputPrimitive,
   IGRPLabelPrimitive,
   IGRPPaginationContentPrimitive,
   IGRPPaginationItemPrimitive,
@@ -35,6 +38,13 @@ import {
 import { showStatus, statusClass } from '@/lib/utils';
 import { PermissionArgs } from '../permissions-schemas';
 import { usePermissions } from '../use-permission';
+
+const multiColumnFilterFn: FilterFn<PermissionArgs> = (row, columnId, filterValue) => {
+  console.log({ row, columnId, filterValue })
+  const searchableRowContent = row.original.name.toLowerCase()
+  const searchTerm = (filterValue ?? "").toLowerCase()
+  return searchableRowContent.includes(searchTerm)
+}
 
 const columns: ColumnDef<PermissionArgs>[] = [
   {
@@ -65,6 +75,8 @@ const columns: ColumnDef<PermissionArgs>[] = [
     accessorKey: 'name',
     cell: ({ row }) => <div className='font-medium'>{row.getValue('name')}</div>,
     enableSorting: false,
+    filterFn: multiColumnFilterFn,
+    enableColumnFilter: true
   },
   {
     header: 'Descrição',
@@ -92,6 +104,8 @@ export function PermissionsCheckList({ departmentCode }: { departmentCode: strin
     pageSize: 5,
   });
   const [data, setData] = useState<PermissionArgs[]>([]);
+  const inputRef = useRef<HTMLInputElement>(null)
+  const [columnFilters, setColumnFilters] = useState<ColumnFiltersState>([])
 
   const { data: permissions, isLoading, error } = usePermissions({ departmentCode });
 
@@ -103,8 +117,10 @@ export function PermissionsCheckList({ departmentCode }: { departmentCode: strin
     enableSortingRemoval: false,
     getPaginationRowModel: getPaginationRowModel(),
     onPaginationChange: setPagination,
+    onColumnFiltersChange: setColumnFilters,
     state: {
       pagination,
+      columnFilters,
     },
   });
 
@@ -122,7 +138,40 @@ export function PermissionsCheckList({ departmentCode }: { departmentCode: strin
   }
 
   return (
-    <div className='space-y-4'>
+    <div className='flex flex-col gap-4'>     
+      <div className="relative px-3">
+        <IGRPInputPrimitive
+          id={`${id}-input`}
+          ref={inputRef}
+          className={cn(
+            "peer ps-9 border-foreground/30 focus-visible:ring-[2px] focus-visible:ring-foreground/30 focus-visible:border-foreground/30",
+            Boolean(table.getColumn("name")?.getFilterValue()) && "pe-9"
+          )}
+
+          value={(table.getColumn("name")?.getFilterValue() ?? "") as string}
+          onChange={(e) => table.getColumn("name")?.setFilterValue(e.target.value)}
+          placeholder="Filtar por nome..."
+          type="text"
+          aria-label="Filtar por nome"
+        />
+        <div className="text-muted-foreground/80 pointer-events-none absolute inset-y-0 start-2 flex items-center justify-center ps-3 peer-disabled:opacity-50">
+          <IGRPIcon iconName='ListFilter' />
+        </div>
+        {Boolean(table.getColumn("name")?.getFilterValue()) && (
+          <button
+            className="text-muted-foreground/80 hover:text-foreground focus-visible:border-ring focus-visible:ring-ring/50 absolute inset-y-0 end-2 flex h-full w-9 items-center justify-center rounded-e-md transition-[color,box-shadow] outline-none focus:z-10 focus-visible:ring-[3px] disabled:pointer-events-none disabled:cursor-not-allowed disabled:opacity-50"
+            aria-label="Clear filter"
+            onClick={() => {
+              table.getColumn("name")?.setFilterValue("")
+              if (inputRef.current) {
+                inputRef.current.focus()
+              }
+            }}
+          >
+            <IGRPIcon iconName='CircleX' />
+          </button>
+        )}
+      </div>
       {isLoading ? (
         <div className='grid gap-4 animate-pulse'>
           {Array.from({ length: 5 }).map((_, i) => (
@@ -186,12 +235,10 @@ export function PermissionsCheckList({ departmentCode }: { departmentCode: strin
             </IGRPTablePrimitive>
           </div>
 
-          {/* Pagination */}
           <div className='flex items-center justify-between gap-8'>
-            {/* Results per page */}
             <div className='flex items-center gap-3'>
               <IGRPLabelPrimitive
-                htmlFor={id}
+                htmlFor={`${id}-per-page`}
                 className='max-sm:sr-only'
               >
                 Rows per page
@@ -203,7 +250,7 @@ export function PermissionsCheckList({ departmentCode }: { departmentCode: strin
                 }}
               >
                 <IGRPSelectTriggerPrimitive
-                  id={id}
+                  id={`${id}-per-page`}
                   className='w-fit whitespace-nowrap'
                 >
                   <IGRPSelectValuePrimitive placeholder='Select number of results' />
@@ -220,7 +267,6 @@ export function PermissionsCheckList({ departmentCode }: { departmentCode: strin
                 </IGRPSelectContentPrimitive>
               </IGRPSelectPrimitive>
             </div>
-            {/* Page number information */}
             <div className='text-muted-foreground flex grow justify-end text-sm whitespace-nowrap'>
               <p
                 className='text-muted-foreground text-sm whitespace-nowrap'
@@ -232,7 +278,7 @@ export function PermissionsCheckList({ departmentCode }: { departmentCode: strin
                   {Math.min(
                     Math.max(
                       table.getState().pagination.pageIndex * table.getState().pagination.pageSize +
-                        table.getState().pagination.pageSize,
+                      table.getState().pagination.pageSize,
                       0,
                     ),
                     table.getRowCount(),
@@ -241,11 +287,9 @@ export function PermissionsCheckList({ departmentCode }: { departmentCode: strin
                 of <span className='text-foreground'>{table.getRowCount().toString()}</span>
               </p>
             </div>
-            {/* Pagination IGRPbuttonPrimitives */}
             <div>
               <IGRPPaginationPrimitive>
                 <IGRPPaginationContentPrimitive>
-                  {/* First page IGRPbuttonPrimitive */}
                   <IGRPPaginationItemPrimitive>
                     <IGRPButtonPrimitive
                       size='icon'
@@ -258,7 +302,6 @@ export function PermissionsCheckList({ departmentCode }: { departmentCode: strin
                       <IGRPIcon iconName='ChevronFirst' />
                     </IGRPButtonPrimitive>
                   </IGRPPaginationItemPrimitive>
-                  {/* Previous page IGRPbuttonPrimitive */}
                   <IGRPPaginationItemPrimitive>
                     <IGRPButtonPrimitive
                       size='icon'
@@ -271,7 +314,6 @@ export function PermissionsCheckList({ departmentCode }: { departmentCode: strin
                       <IGRPIcon iconName='ChevronLeft' />
                     </IGRPButtonPrimitive>
                   </IGRPPaginationItemPrimitive>
-                  {/* Next page IGRPbuttonPrimitive */}
                   <IGRPPaginationItemPrimitive>
                     <IGRPButtonPrimitive
                       size='icon'
@@ -284,7 +326,6 @@ export function PermissionsCheckList({ departmentCode }: { departmentCode: strin
                       <IGRPIcon iconName='ChevronRight' />
                     </IGRPButtonPrimitive>
                   </IGRPPaginationItemPrimitive>
-                  {/* Last page IGRPbuttonPrimitive */}
                   <IGRPPaginationItemPrimitive>
                     <IGRPButtonPrimitive
                       size='icon'

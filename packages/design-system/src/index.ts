@@ -277,6 +277,11 @@ export {
 } from './components/primitives/toggle';
 
 export {
+  ToggleGroup as IGRPToggleGroupPrimitive,
+  ToggleGroupItem as IGRPToggleGroupItemPrimitive,
+} from './components/primitives/toggle-group';
+
+export {
   Tooltip as IGRPTooltipPrimitive,
   TooltipTrigger as IGRPTooltipTriggerPrimitive,
   TooltipContent as IGRPTooltipContentPrimitive,

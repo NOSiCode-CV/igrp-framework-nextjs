@@ -287,14 +287,6 @@ export function RolesList({ departmentCode, username }: RolesListProps) {
         role={selectedRole}
       />
 
-      {roleToDelete && (
-        <RoleDeleteDialog
-          open={openDeleteDialog}
-          onOpenChange={setOpenDeleteDialog}
-          roleToDelete={roleToDelete}
-        />
-      )}
-
       {selectedRole && (
         <RoleDetails
           departmentCode={departmentCode}
@@ -303,6 +295,14 @@ export function RolesList({ departmentCode, username }: RolesListProps) {
           onOpenChange={setOpenDetailsDialog}
         />
       )}
+
+      {roleToDelete && (
+        <RoleDeleteDialog
+          open={openDeleteDialog}
+          onOpenChange={setOpenDeleteDialog}
+          roleToDelete={roleToDelete}
+        />
+      )}      
     </>
   );
 }

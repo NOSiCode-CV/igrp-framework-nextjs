@@ -192,7 +192,7 @@ export function DepartmentList() {
                     <IGRPTableCellPrimitive>
                       <ButtonLink
                         href={`${ROUTES.DEPARTMENTS}/${dept.code}`}
-                        className='cursor-pointer hover:underline text-primary'
+                        className='cursor-pointer hover:underline !text-foreground'
                         icon={''}
                         variant='link'
                         label={dept.name}

@@ -2,7 +2,7 @@ import { statusSchema } from '@/schemas/global';
 
 export const ROUTES = {
   APPLICATIONS: '/applications',
-  // APPS: '/apps',
+  APPS: '/apps',
   NEW_APPS: '/applications/novo',
   USERS: '/utilizadores',
   USER_ACCOUNT: '/utilizadores/conta',

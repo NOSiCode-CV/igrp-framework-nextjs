@@ -1,9 +1,9 @@
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
-import { PermissionArgs } from './permissions-schemas';
 import {
   PermissionFilters,
   UpdatePermissionRequest,
 } from '@igrp/platform-access-management-client-ts';
+
 import {
   createPermission,
   deletePermission,
@@ -12,6 +12,7 @@ import {
   updatePermission,
 } from '@/actions/permission';
 import { RoleArgs } from '../roles/role-schemas';
+import { PermissionArgs } from './permissions-schemas';
 
 export const usePermissions = (params: PermissionFilters) => {
   return useQuery<PermissionArgs[]>({

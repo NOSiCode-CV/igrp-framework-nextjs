@@ -1,6 +1,6 @@
 'use client';
 
-import { useEffect, useId, useRef, useState } from 'react';
+import { useEffect, useId, useMemo, useRef, useState } from 'react';
 import {
   ColumnDef,
   ColumnFiltersState,
@@ -40,14 +40,21 @@ import {
   IGRPTableHeadPrimitive,
   IGRPTablePrimitive,
   IGRPTableRowPrimitive,
-  useIGRPToast
+  useIGRPToast,
+  IGRPBadge
 } from '@igrp/igrp-framework-react-design-system';
 
 import { showStatus, statusClass } from '@/lib/utils';
 import { RoleArgs } from '@/features/roles/role-schemas';
 import { PermissionArgs } from '@/features/permission/permissions-schemas';
 import { usePermissions } from '@/features/permission/use-permission';
-import { useAddPermissionsToRole, useRoleByName } from '../use-roles';
+import {
+  useAddPermissionsToRole,
+  useRemovePermissionsFromRole,
+  usePermissionsByRoleByName
+} from '../use-roles';
+import { PermissionLoading } from '@/features/permission/components/permission-loading';
+
 
 const multiColumnFilterFn: FilterFn<PermissionArgs> = (row, _columnId, filterValue) => {
   const term = String(filterValue ?? '').toLowerCase().trim();
@@ -106,6 +113,28 @@ const columns: ColumnDef<PermissionArgs>[] = [
   },
 ];
 
+
+const norm = (s: string) => s.trim().toLowerCase();
+
+function diffPermissions(
+  selected: PermissionArgs[],
+  existing: PermissionArgs[]
+) {
+  const selectedNorm = new Set(selected.map(p => norm(p.name)));
+  const existingNorm = new Set(existing.map(p => norm(p.name)));
+
+  const toAddNorm = Array.from(selectedNorm).filter(n => !existingNorm.has(n));
+  const toRemoveNorm = Array.from(existingNorm).filter(n => !selectedNorm.has(n));
+
+  const selectedByNorm = new Map(selected.map(p => [norm(p.name), p.name]));
+  const existingByNorm = new Map(existing.map(p => [norm(p.name), p.name]));
+
+  return {
+    toAdd: toAddNorm.map(n => selectedByNorm.get(n)!).filter(Boolean),
+    toRemove: toRemoveNorm.map(n => existingByNorm.get(n)!).filter(Boolean),
+  };
+}
+
 interface RoleDetailsProps {
   departmentCode: string;
   role: RoleArgs;
@@ -114,26 +143,44 @@ interface RoleDetailsProps {
 }
 
 export function RoleDetails({ departmentCode, role, open, onOpenChange }: RoleDetailsProps) {
-
   const id = useId();
+  const inputRef = useRef<HTMLInputElement>(null);
+  const { igrpToast } = useIGRPToast();
 
   const [data, setData] = useState<PermissionArgs[]>([]);
-  const inputRef = useRef<HTMLInputElement>(null);
-
   const [pagination, setPagination] = useState<PaginationState>({ pageIndex: 0, pageSize: 5 });
   const [columnFilters, setColumnFilters] = useState<ColumnFiltersState>([]);
   const [rowSelection, setRowSelection] = useState<RowSelectionState>({});
 
   const { data: permissions, isLoading, error } = usePermissions({ departmentCode });
-  const { data: permissionByRole, isLoading : isLoadingPermissionsByRole, error: errorPermissionsByRole } = useRoleByName(role.name);
-  const { mutateAsync: addPermissions, isPending: isAdding } = useAddPermissionsToRole();
+  const { data: permissionByRole, isLoading: isLoadingPermissionsByRole, error: errorPermissionsByRole } =
+    usePermissionsByRoleByName(role.name);
 
-  const { igrpToast } = useIGRPToast();
+  const { mutateAsync: addPermissions, isPending: isAdding } = useAddPermissionsToRole();
+  const { mutateAsync: removePermissions, isPending: isRemoving } = useRemovePermissionsFromRole();
+
+  const getRowKey = (r: PermissionArgs) => String(r.id ?? r.name);
+
+  const preselectedKeys = useMemo(() => {
+    const list = Array.isArray(permissionByRole) ? permissionByRole : [];
+    return new Set<string>(list.map((p) => getRowKey(p)));
+  }, [permissionByRole]);
 
   useEffect(() => {
     setData(permissions ?? []);
     setRowSelection({});
   }, [permissions, departmentCode]);
+
+  useEffect(() => {
+    if (!data?.length) return;
+
+    const next: RowSelectionState = {};
+    for (const row of data) {
+      const key = getRowKey(row);
+      if (preselectedKeys.has(key)) next[key] = true;
+    }
+    setRowSelection(next);
+  }, [data, preselectedKeys]);
 
   const table = useReactTable({
     data,
@@ -144,7 +191,7 @@ export function RoleDetails({ departmentCode, role, open, onOpenChange }: RoleDe
     getFilteredRowModel: getFilteredRowModel(),
     getPaginationRowModel: getPaginationRowModel(),
 
-    getRowId: (row) => String((row as any).id ?? row.name),
+    getRowId: (row) => getRowKey(row),
 
     enableRowSelection: true,
     onRowSelectionChange: setRowSelection,
@@ -164,96 +211,71 @@ export function RoleDetails({ departmentCode, role, open, onOpenChange }: RoleDe
 
   const selectedRows = table.getSelectedRowModel().rows;
   const selectedData = selectedRows.map((r) => r.original);
+  const existing = permissionByRole ?? [];
 
-  async function onSubmit(values: PermissionArgs[]) {
+  const { toAdd, toRemove } = useMemo(
+    () => diffPermissions(selectedData, existing),
+    [selectedData, existing]
+  );
 
-    console.log({ values })
+  const hasChanges = toAdd.length > 0 || toRemove.length > 0;
 
-    const permissionNames: string[] = values.map(p => p.name);
+  async function onSubmit() {
+    if (!hasChanges) {
+      igrpToast({
+        type: 'info',
+        title: 'Sem alterações',
+        description: 'Nada para adicionar ou remover.',
+      });
+      return;
+    }
 
-    console.log({ permissionNames })
-
-
-    try {
-      const payload = { name: role.name, permissionNames };
-
-      await addPermissions(payload);
+    try {      
+      if (toAdd.length) {
+        console.log({ toAdd: toAdd.length });
+        await addPermissions({ name: role.name, permissionNames: toAdd });
+      }
+      if (toRemove.length) {
+        console.log({ toRemove: toRemove.length });
+        await removePermissions({ name: role.name, permissionNames: toRemove });
+      }      
 
       igrpToast({
         type: 'success',
-        title: 'Permissões Adicionados',
-        description: 'Permissões Adicionados com sucesso.',
+        title: 'Permissões atualizadas',
+        description: `+${toAdd.length} adicionada(s), -${toRemove.length} removida(s).`,
       });
+
+      onOpenChange(false);
     } catch (error) {
       igrpToast({
         type: 'error',
-        title: 'Não foi possível adicionar permissões.',
+        title: 'Falha ao atualizar permissões',
         description: error instanceof Error ? error.message : 'Ocorreu um erro desconhecido.',
       });
-    } finally {
-      setRowSelection({})
-      onOpenChange(false);
     }
-  };
+  }
+
+  if (errorPermissionsByRole) {
+    igrpToast({
+      type: 'error',
+      title: 'Perfil tem permissões associadas, mas não foram carregadas.',
+    });
+    return <PermissionLoading />;
+  }
 
   return (
-    <IGRPDialogPrimitive
-      open={open}
-      onOpenChange={onOpenChange}
-      modal
-    >
-      <IGRPDialogContentPrimitive className='md:min-w-2xl max-h-[95vh]'>
+    <IGRPDialogPrimitive open={open} onOpenChange={onOpenChange} modal>
+      <IGRPDialogContentPrimitive className="md:min-w-2xl max-h-[95vh]">
         <IGRPDialogHeaderPrimitive>
-          <IGRPDialogTitlePrimitive>Adicionar ou Remover Permissões de <span className='text-primary italic'>{role.name}</span></IGRPDialogTitlePrimitive>
+          <IGRPDialogTitlePrimitive className='text-base'>
+            Adicionar ou Remover Permissões de{' '}
+            <IGRPBadge>{role.name}</IGRPBadge>
+          </IGRPDialogTitlePrimitive>
         </IGRPDialogHeaderPrimitive>
 
-        <div className='flex-1 min-w-0 overflow-x-hidden'>
-          <section className='space-y-10 max-w-full'>
-            {/* <div className='flex flex-col gap-6'>
-              <div className='flex flex-col gap-8 animate-fade-in motion-reduce:hidden'>
-                <IGRPCardPrimitive className='overflow-hidden gap-3 py-6'>
-                  <IGRPCardContentPrimitive>
-                    <div className='grid grid-cols-1 sm:grid-cols-2 gap-4 text-sm'>
-                      <div className='flex items-center gap-4'>
-                        <div className='flex flex-col'>
-                          <h3 className='font-normal text-muted-foreground'>Nome</h3>
-                          <p className='font-medium text-base'>{name}</p>
-                        </div>
-                      </div>
-
-                      <div>
-                        <h3 className='font-normal text-muted-foreground'>Descrição</h3>
-                        <p>{description || 'N/A'}</p>
-                      </div>
-
-                      <div className='flex items-center gap-4'>
-                        <div>
-                          <h3 className='font-normal text-muted-foreground'>Código departamento</h3>
-                          <p className='font-medium'>{departmentCode}</p>
-                        </div>
-                      </div>
-
-                      {parentName && (
-                        <div className='flex items-center gap-4'>
-                          <div>
-                            <h3 className='font-normal text-muted-foreground'>Perfil Pai</h3>
-                            <p className='font-medium'>{parentName}</p>
-                          </div>
-                        </div>
-                      )}
-
-                      <div>
-                        <h3 className='font-normal text-muted-foreground'>Estado</h3>
-                        <IGRPBadgePrimitive className={cn(statusClass(status), 'capitalize')}>
-                          {showStatus(status)}
-                        </IGRPBadgePrimitive>
-                      </div>
-                    </div>
-                  </IGRPCardContentPrimitive>
-                </IGRPCardPrimitive>
-              </div>
-            </div> */}
-
+        <div className="flex-1 min-w-0 overflow-x-hidden">
+          <section className="space-y-10 max-w-full">
             <div className="flex flex-col gap-4">
               <div className="relative px-3 py-4">
                 <IGRPInputPrimitive
@@ -292,18 +314,18 @@ export function RoleDetails({ departmentCode, role, open, onOpenChange }: RoleDe
                 <div className="flex gap-2">
                   <IGRPButtonPrimitive
                     variant="default"
-                    onClick={() => onSubmit(selectedData)}
-                    disabled={selectedRows.length === 0 || isAdding}
-                    size='sm'
+                    onClick={onSubmit}
+                    disabled={!hasChanges || isAdding || isRemoving}
+                    size="sm"
                   >
-                    Adicionar
+                    Guardar
                   </IGRPButtonPrimitive>
 
                   <IGRPButtonPrimitive
                     variant="outline"
                     disabled={selectedRows.length === 0}
                     onClick={() => setRowSelection({})}
-                    size='sm'
+                    size="sm"
                     className={selectedRows.length === 0 ? 'hidden' : 'inline-flex'}
                   >
                     Limpar seleção
@@ -311,14 +333,11 @@ export function RoleDetails({ departmentCode, role, open, onOpenChange }: RoleDe
                 </div>
               </div>
 
-              {isLoading ? (
-                <div className="grid gap-4 animate-pulse">
-                  {Array.from({ length: 5 }).map((_, i) => (
-                    <div key={i} className="h-12 rounded-lg bg-muted" />
-                  ))}
-                </div>
+              {(isLoading || isLoadingPermissionsByRole) ? (
+                <PermissionLoading />
               ) : (
                 <>
+                  {/* Table */}
                   <div className="bg-background overflow-hidden rounded-md border">
                     <IGRPTablePrimitive className="table-fixed">
                       <IGRPTableHeaderPrimitive>
@@ -364,8 +383,9 @@ export function RoleDetails({ departmentCode, role, open, onOpenChange }: RoleDe
                     </IGRPTablePrimitive>
                   </div>
 
+                  {/* Pagination */}
                   <div className="flex items-center justify-between gap-8">
-                    <div className="flex items-center justify-end gap-3" >
+                    <div className="flex items-center justify-end gap-3">
                       <IGRPLabelPrimitive htmlFor={`${id}-per-page`} className="max-sm:sr-only">
                         Rows per page
                       </IGRPLabelPrimitive>
@@ -394,7 +414,7 @@ export function RoleDetails({ departmentCode, role, open, onOpenChange }: RoleDe
                           {Math.min(
                             Math.max(
                               table.getState().pagination.pageIndex * table.getState().pagination.pageSize +
-                              table.getState().pagination.pageSize,
+                                table.getState().pagination.pageSize,
                               0
                             ),
                             table.getRowCount()

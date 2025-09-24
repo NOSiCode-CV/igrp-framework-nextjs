@@ -37,18 +37,17 @@ export async function POST(req: NextRequest) {
         'Content-Type': 'application/x-www-form-urlencoded',
       },
       body: new URLSearchParams({
-        'client_id': clientId,
-        'client_secret': clientSecret,
-        'refresh_token': token.refreshToken,
+        client_id: clientId,
+        client_secret: clientSecret,
+        refresh_token: token.refreshToken,
       }),
     });
 
-    if (response.ok) {      
-      console.log("Successfully logged out of Keycloak via POST.");
+    if (response.ok) {
+      console.log('Successfully logged out of Keycloak via POST.');
     } else {
-      console.error("Keycloak POST logout failed:", await response.text());
+      console.error('Keycloak POST logout failed:', await response.text());
     }
-
   } catch (error) {
     console.error('Keycloak POST logout failed:', error);
   }
@@ -56,4 +55,3 @@ export async function POST(req: NextRequest) {
   const logoutUrl = new URL('/api/auth/signout?callbackUrl=/', req.url);
   return NextResponse.redirect(logoutUrl);
 }
-

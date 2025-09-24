@@ -17,7 +17,9 @@ export async function middleware(request: NextRequest) {
 
   if (isPublicPath(pathname)) return NextResponse.next();
 
-  const isPreview = process.env.IGRP_PREVIEW_MODE ? process.env.IGRP_PREVIEW_MODE === 'true' : false;
+  const isPreview = process.env.IGRP_PREVIEW_MODE
+    ? process.env.IGRP_PREVIEW_MODE === 'true'
+    : false;
 
   if (isPreview) return NextResponse.next();
 
@@ -37,7 +39,7 @@ export async function middleware(request: NextRequest) {
     const loginUrl = new URL('/login', request.url);
     loginUrl.searchParams.set('callbackUrl', request.url);
     return NextResponse.redirect(loginUrl);
-  }    
+  }
 
   if (token.error === 'RefreshAccessTokenError') {
     return NextResponse.redirect(new URL('/logout', request.url));

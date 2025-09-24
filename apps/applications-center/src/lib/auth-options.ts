@@ -38,7 +38,7 @@ export const authOptions: NextAuthOptions = {
   callbacks: {
     async redirect({ url, baseUrl }) {
       const NEXTAUTH_URL = process.env.NEXTAUTH_URL;
-      const forced = NEXTAUTH_URL ?? baseUrl;     
+      const forced = NEXTAUTH_URL ?? baseUrl;
 
       if (url.startsWith('/')) {
         const u = new URL(url, forced).toString();
@@ -155,7 +155,7 @@ export function buildKeycloakEndSessionUrl(jwt: JWT) {
   const url = new URL(`${issuer}/protocol/openid-connect/logout`);
   if (!idToken) {
     console.error('No your or not login, available for logout.');
-    const loginUrl = process.env.IGRP_LOGIN_URL || '/login'
+    const loginUrl = process.env.IGRP_LOGIN_URL || '/login';
     nextRedirect(loginUrl);
   }
   url.searchParams.set('id_token_hint', idToken);

@@ -41,7 +41,7 @@ import {
   IGRPTablePrimitive,
   IGRPTableRowPrimitive,
   useIGRPToast,
-  IGRPBadge
+  IGRPBadge,
 } from '@igrp/igrp-framework-react-design-system';
 
 import { showStatus, statusClass } from '@/lib/utils';
@@ -51,13 +51,14 @@ import { usePermissions } from '@/features/permission/use-permission';
 import {
   useAddPermissionsToRole,
   useRemovePermissionsFromRole,
-  usePermissionsByRoleByName
+  usePermissionsByRoleByName,
 } from '../use-roles';
 import { PermissionLoading } from '@/features/permission/components/permission-loading';
 
-
 const multiColumnFilterFn: FilterFn<PermissionArgs> = (row, _columnId, filterValue) => {
-  const term = String(filterValue ?? '').toLowerCase().trim();
+  const term = String(filterValue ?? '')
+    .toLowerCase()
+    .trim();
   if (!term) return true;
   const name = String(row.original?.name ?? '').toLowerCase();
   const desc = String(row.original?.description ?? '').toLowerCase();
@@ -69,18 +70,20 @@ const columns: ColumnDef<PermissionArgs>[] = [
     id: 'select',
     header: ({ table }) => (
       <IGRPCheckboxPrimitive
-        checked={table.getIsAllPageRowsSelected() || (table.getIsSomePageRowsSelected() && 'indeterminate')}
+        checked={
+          table.getIsAllPageRowsSelected() || (table.getIsSomePageRowsSelected() && 'indeterminate')
+        }
         onCheckedChange={(value) => table.toggleAllPageRowsSelected(!!value)}
-        aria-label="Select all"
-        className="ring ring-current/50"
+        aria-label='Select all'
+        className='ring ring-current/50'
       />
     ),
     cell: ({ row }) => (
       <IGRPCheckboxPrimitive
         checked={row.getIsSelected()}
         onCheckedChange={(value) => row.toggleSelected(!!value)}
-        aria-label="Select row"
-        className="ring ring-current/50"
+        aria-label='Select row'
+        className='ring ring-current/50'
       />
     ),
     size: 28,
@@ -89,7 +92,7 @@ const columns: ColumnDef<PermissionArgs>[] = [
   {
     header: 'Nome',
     accessorKey: 'name',
-    cell: ({ row }) => <div className="font-medium">{row.getValue('name')}</div>,
+    cell: ({ row }) => <div className='font-medium'>{row.getValue('name')}</div>,
     enableSorting: false,
     filterFn: multiColumnFilterFn,
     enableColumnFilter: true,
@@ -113,25 +116,21 @@ const columns: ColumnDef<PermissionArgs>[] = [
   },
 ];
 
-
 const norm = (s: string) => s.trim().toLowerCase();
 
-function diffPermissions(
-  selected: PermissionArgs[],
-  existing: PermissionArgs[]
-) {
-  const selectedNorm = new Set(selected.map(p => norm(p.name)));
-  const existingNorm = new Set(existing.map(p => norm(p.name)));
+function diffPermissions(selected: PermissionArgs[], existing: PermissionArgs[]) {
+  const selectedNorm = new Set(selected.map((p) => norm(p.name)));
+  const existingNorm = new Set(existing.map((p) => norm(p.name)));
 
-  const toAddNorm = Array.from(selectedNorm).filter(n => !existingNorm.has(n));
-  const toRemoveNorm = Array.from(existingNorm).filter(n => !selectedNorm.has(n));
+  const toAddNorm = Array.from(selectedNorm).filter((n) => !existingNorm.has(n));
+  const toRemoveNorm = Array.from(existingNorm).filter((n) => !selectedNorm.has(n));
 
-  const selectedByNorm = new Map(selected.map(p => [norm(p.name), p.name]));
-  const existingByNorm = new Map(existing.map(p => [norm(p.name), p.name]));
+  const selectedByNorm = new Map(selected.map((p) => [norm(p.name), p.name]));
+  const existingByNorm = new Map(existing.map((p) => [norm(p.name), p.name]));
 
   return {
-    toAdd: toAddNorm.map(n => selectedByNorm.get(n)!).filter(Boolean),
-    toRemove: toRemoveNorm.map(n => existingByNorm.get(n)!).filter(Boolean),
+    toAdd: toAddNorm.map((n) => selectedByNorm.get(n)!).filter(Boolean),
+    toRemove: toRemoveNorm.map((n) => existingByNorm.get(n)!).filter(Boolean),
   };
 }
 
@@ -153,8 +152,11 @@ export function RoleDetails({ departmentCode, role, open, onOpenChange }: RoleDe
   const [rowSelection, setRowSelection] = useState<RowSelectionState>({});
 
   const { data: permissions, isLoading, error } = usePermissions({ departmentCode });
-  const { data: permissionByRole, isLoading: isLoadingPermissionsByRole, error: errorPermissionsByRole } =
-    usePermissionsByRoleByName(role.name);
+  const {
+    data: permissionByRole,
+    isLoading: isLoadingPermissionsByRole,
+    error: errorPermissionsByRole,
+  } = usePermissionsByRoleByName(role.name);
 
   const { mutateAsync: addPermissions, isPending: isAdding } = useAddPermissionsToRole();
   const { mutateAsync: removePermissions, isPending: isRemoving } = useRemovePermissionsFromRole();
@@ -202,9 +204,9 @@ export function RoleDetails({ departmentCode, role, open, onOpenChange }: RoleDe
 
   if (error) {
     return (
-      <div className="rounded-md border py-6">
-        <p className="text-center">Ocorreu um erro ao carregar permissões.</p>
-        <p className="text-center">{error.message}</p>
+      <div className='rounded-md border py-6'>
+        <p className='text-center'>Ocorreu um erro ao carregar permissões.</p>
+        <p className='text-center'>{error.message}</p>
       </div>
     );
   }
@@ -215,7 +217,7 @@ export function RoleDetails({ departmentCode, role, open, onOpenChange }: RoleDe
 
   const { toAdd, toRemove } = useMemo(
     () => diffPermissions(selectedData, existing),
-    [selectedData, existing]
+    [selectedData, existing],
   );
 
   const hasChanges = toAdd.length > 0 || toRemove.length > 0;
@@ -230,7 +232,7 @@ export function RoleDetails({ departmentCode, role, open, onOpenChange }: RoleDe
       return;
     }
 
-    try {      
+    try {
       if (toAdd.length) {
         console.log({ toAdd: toAdd.length });
         await addPermissions({ name: role.name, permissionNames: toAdd });
@@ -238,7 +240,7 @@ export function RoleDetails({ departmentCode, role, open, onOpenChange }: RoleDe
       if (toRemove.length) {
         console.log({ toRemove: toRemove.length });
         await removePermissions({ name: role.name, permissionNames: toRemove });
-      }      
+      }
 
       igrpToast({
         type: 'success',
@@ -265,67 +267,70 @@ export function RoleDetails({ departmentCode, role, open, onOpenChange }: RoleDe
   }
 
   return (
-    <IGRPDialogPrimitive open={open} onOpenChange={onOpenChange} modal>
-      <IGRPDialogContentPrimitive className="md:min-w-2xl max-h-[95vh]">
+    <IGRPDialogPrimitive
+      open={open}
+      onOpenChange={onOpenChange}
+      modal
+    >
+      <IGRPDialogContentPrimitive className='md:min-w-2xl max-h-[95vh]'>
         <IGRPDialogHeaderPrimitive>
           <IGRPDialogTitlePrimitive className='text-base'>
-            Adicionar ou Remover Permissões de{' '}
-            <IGRPBadge>{role.name}</IGRPBadge>
+            Adicionar ou Remover Permissões de <IGRPBadge>{role.name}</IGRPBadge>
           </IGRPDialogTitlePrimitive>
         </IGRPDialogHeaderPrimitive>
 
-        <div className="flex-1 min-w-0 overflow-x-hidden">
-          <section className="space-y-10 max-w-full">
-            <div className="flex flex-col gap-4">
-              <div className="relative px-3 py-4">
+        <div className='flex-1 min-w-0 overflow-x-hidden'>
+          <section className='space-y-10 max-w-full'>
+            <div className='flex flex-col gap-4'>
+              <div className='relative px-3 py-4'>
                 <IGRPInputPrimitive
                   id={`${id}-input`}
                   ref={inputRef}
                   className={cn(
                     'peer ps-9 border-foreground/30 focus-visible:ring-[2px] focus-visible:ring-foreground/30 focus-visible:border-foreground/30',
-                    Boolean(table.getColumn('name')?.getFilterValue()) && 'pe-9'
+                    Boolean(table.getColumn('name')?.getFilterValue()) && 'pe-9',
                   )}
                   value={(table.getColumn('name')?.getFilterValue() ?? '') as string}
                   onChange={(e) => table.getColumn('name')?.setFilterValue(e.target.value)}
-                  placeholder="Filtar por nome..."
-                  type="text"
-                  aria-label="Filtar por nome"
+                  placeholder='Filtar por nome...'
+                  type='text'
+                  aria-label='Filtar por nome'
                 />
-                <div className="text-muted-foreground/80 pointer-events-none absolute inset-y-0 start-2 flex items-center justify-center ps-3 peer-disabled:opacity-50">
-                  <IGRPIcon iconName="ListFilter" />
+                <div className='text-muted-foreground/80 pointer-events-none absolute inset-y-0 start-2 flex items-center justify-center ps-3 peer-disabled:opacity-50'>
+                  <IGRPIcon iconName='ListFilter' />
                 </div>
                 {Boolean(table.getColumn('name')?.getFilterValue()) && (
                   <button
-                    className="text-muted-foreground/80 hover:text-foreground focus-visible:border-ring focus-visible:ring-ring/50 absolute inset-y-0 end-2 flex h-full w-9 items-center justify-center rounded-e-md transition-[color,box-shadow] outline-none focus:z-10 focus-visible:ring-[3px] disabled:pointer-events-none disabled:cursor-not-allowed disabled:opacity-50"
-                    aria-label="Clear filter"
+                    className='text-muted-foreground/80 hover:text-foreground focus-visible:border-ring focus-visible:ring-ring/50 absolute inset-y-0 end-2 flex h-full w-9 items-center justify-center rounded-e-md transition-[color,box-shadow] outline-none focus:z-10 focus-visible:ring-[3px] disabled:pointer-events-none disabled:cursor-not-allowed disabled:opacity-50'
+                    aria-label='Clear filter'
                     onClick={() => {
                       table.getColumn('name')?.setFilterValue('');
                       inputRef.current?.focus();
                     }}
                   >
-                    <IGRPIcon iconName="CircleX" />
+                    <IGRPIcon iconName='CircleX' />
                   </button>
                 )}
               </div>
 
-              <div className="flex items-center justify-between gap-3 px-3">
+              <div className='flex items-center justify-between gap-3 px-3'>
                 <IGRPBadgePrimitive>{selectedRows.length} selecionado(s)</IGRPBadgePrimitive>
 
-                <div className="flex gap-2">
+                <div className='flex gap-2'>
                   <IGRPButtonPrimitive
-                    variant="default"
+                    variant='default'
                     onClick={onSubmit}
                     disabled={!hasChanges || isAdding || isRemoving}
-                    size="sm"
+                    size='sm'
                   >
                     Guardar
                   </IGRPButtonPrimitive>
 
                   <IGRPButtonPrimitive
-                    variant="outline"
+                    variant='outline'
                     disabled={selectedRows.length === 0}
                     onClick={() => setRowSelection({})}
-                    size="sm"
+                    size='sm'
                     className={selectedRows.length === 0 ? 'hidden' : 'inline-flex'}
                   >
                     Limpar seleção
@@ -333,21 +338,23 @@ export function RoleDetails({ departmentCode, role, open, onOpenChange }: RoleDe
                 </div>
               </div>
 
-              {(isLoading || isLoadingPermissionsByRole) ? (
+              {isLoading || isLoadingPermissionsByRole ? (
                 <PermissionLoading />
               ) : (
                 <>
-                  {/* Table */}
-                  <div className="bg-background overflow-hidden rounded-md border">
-                    <IGRPTablePrimitive className="table-fixed">
+                  <div className='bg-background overflow-hidden rounded-md border'>
+                    <IGRPTablePrimitive className='table-fixed'>
                       <IGRPTableHeaderPrimitive>
                         {table.getHeaderGroups().map((headerGroup) => (
-                          <IGRPTableRowPrimitive key={headerGroup.id} className="hover:bg-transparent">
+                          <IGRPTableRowPrimitive
+                            key={headerGroup.id}
+                            className='hover:bg-transparent'
+                          >
                             {headerGroup.headers.map((header) => (
                               <IGRPTableHeadPrimitive
                                 key={header.id}
                                 style={{ width: `${header.getSize()}px` }}
-                                className="h-12"
+                                className='h-12'
                               >
                                 {header.isPlaceholder
                                   ? null
@@ -374,7 +381,10 @@ export function RoleDetails({ departmentCode, role, open, onOpenChange }: RoleDe
                           ))
                         ) : (
                           <IGRPTableRowPrimitive>
-                            <IGRPTableCellPrimitive colSpan={columns.length} className="h-24 text-center">
+                            <IGRPTableCellPrimitive
+                              colSpan={columns.length}
+                              className='h-24 text-center'
+                            >
                               Sem resultados!
                             </IGRPTableCellPrimitive>
                           </IGRPTableRowPrimitive>
@@ -383,22 +393,30 @@ export function RoleDetails({ departmentCode, role, open, onOpenChange }: RoleDe
                     </IGRPTablePrimitive>
                   </div>
 
-                  {/* Pagination */}
-                  <div className="flex items-center justify-between gap-8">
-                    <div className="flex items-center justify-end gap-3">
-                      <IGRPLabelPrimitive htmlFor={`${id}-per-page`} className="max-sm:sr-only">
+                  <div className='flex items-center justify-between gap-8'>
+                    <div className='flex items-center justify-end gap-3'>
+                      <IGRPLabelPrimitive
+                        htmlFor={`${id}-per-page`}
+                        className='max-sm:sr-only'
+                      >
                         Rows per page
                       </IGRPLabelPrimitive>
                       <IGRPSelectPrimitive
                         value={table.getState().pagination.pageSize.toString()}
                         onValueChange={(value) => table.setPageSize(Number(value))}
                       >
-                        <IGRPSelectTriggerPrimitive id={`${id}-per-page`} className="w-fit whitespace-nowrap">
-                          <IGRPSelectValuePrimitive placeholder="Select number of results" />
+                        <IGRPSelectTriggerPrimitive
+                          id={`${id}-per-page`}
+                          className='w-fit whitespace-nowrap'
+                        >
+                          <IGRPSelectValuePrimitive placeholder='Select number of results' />
                         </IGRPSelectTriggerPrimitive>
-                        <IGRPSelectContentPrimitive className="[&_*[role=option]]:ps-2 [&_*[role=option]]:pe-8 [&_*[role=option]>span]:start-auto [&_*[role=option]>span]:end-2">
+                        <IGRPSelectContentPrimitive className='[&_*[role=option]]:ps-2 [&_*[role=option]]:pe-8 [&_*[role=option]>span]:start-auto [&_*[role=option]>span]:end-2'>
                           {[5, 10].map((pageSize) => (
-                            <IGRPSelectItemPrimitive key={pageSize} value={pageSize.toString()}>
+                            <IGRPSelectItemPrimitive
+                              key={pageSize}
+                              value={pageSize.toString()}
+                            >
                               {pageSize}
                             </IGRPSelectItemPrimitive>
                           ))}
@@ -406,21 +424,27 @@ export function RoleDetails({ departmentCode, role, open, onOpenChange }: RoleDe
                       </IGRPSelectPrimitive>
                     </div>
 
-                    <div className="text-muted-foreground flex grow justify-end text-sm whitespace-nowrap">
-                      <p className="text-muted-foreground text-sm whitespace-nowrap" aria-live="polite">
-                        <span className="text-foreground">
-                          {table.getState().pagination.pageIndex * table.getState().pagination.pageSize + 1}
+                    <div className='text-muted-foreground flex grow justify-end text-sm whitespace-nowrap'>
+                      <p
+                        className='text-muted-foreground text-sm whitespace-nowrap'
+                        aria-live='polite'
+                      >
+                        <span className='text-foreground'>
+                          {table.getState().pagination.pageIndex *
+                            table.getState().pagination.pageSize +
+                            1}
                           -
                           {Math.min(
                             Math.max(
-                              table.getState().pagination.pageIndex * table.getState().pagination.pageSize +
+                              table.getState().pagination.pageIndex *
+                                table.getState().pagination.pageSize +
                                 table.getState().pagination.pageSize,
-                              0
+                              0,
                             ),
-                            table.getRowCount()
+                            table.getRowCount(),
                           )}
                         </span>{' '}
-                        of <span className="text-foreground">{table.getRowCount().toString()}</span>
+                        of <span className='text-foreground'>{table.getRowCount().toString()}</span>
                       </p>
                     </div>
 
@@ -429,50 +453,50 @@ export function RoleDetails({ departmentCode, role, open, onOpenChange }: RoleDe
                         <IGRPPaginationContentPrimitive>
                           <IGRPPaginationItemPrimitive>
                             <IGRPButtonPrimitive
-                              size="icon"
-                              variant="outline"
-                              className="disabled:pointer-events-none disabled:opacity-50"
+                              size='icon'
+                              variant='outline'
+                              className='disabled:pointer-events-none disabled:opacity-50'
                               onClick={() => table.firstPage()}
                               disabled={!table.getCanPreviousPage()}
-                              aria-label="Go to first page"
+                              aria-label='Go to first page'
                             >
-                              <IGRPIcon iconName="ChevronFirst" />
+                              <IGRPIcon iconName='ChevronFirst' />
                             </IGRPButtonPrimitive>
                           </IGRPPaginationItemPrimitive>
                           <IGRPPaginationItemPrimitive>
                             <IGRPButtonPrimitive
-                              size="icon"
-                              variant="outline"
-                              className="disabled:pointer-events-none disabled:opacity-50"
+                              size='icon'
+                              variant='outline'
+                              className='disabled:pointer-events-none disabled:opacity-50'
                               onClick={() => table.previousPage()}
                               disabled={!table.getCanPreviousPage()}
-                              aria-label="Go to previous page"
+                              aria-label='Go to previous page'
                             >
-                              <IGRPIcon iconName="ChevronLeft" />
+                              <IGRPIcon iconName='ChevronLeft' />
                             </IGRPButtonPrimitive>
                           </IGRPPaginationItemPrimitive>
                           <IGRPPaginationItemPrimitive>
                             <IGRPButtonPrimitive
-                              size="icon"
-                              variant="outline"
-                              className="disabled:pointer-events-none disabled:opacity-50"
+                              size='icon'
+                              variant='outline'
+                              className='disabled:pointer-events-none disabled:opacity-50'
                               onClick={() => table.nextPage()}
                               disabled={!table.getCanNextPage()}
-                              aria-label="Go to next page"
+                              aria-label='Go to next page'
                             >
-                              <IGRPIcon iconName="ChevronRight" />
+                              <IGRPIcon iconName='ChevronRight' />
                             </IGRPButtonPrimitive>
                           </IGRPPaginationItemPrimitive>
                           <IGRPPaginationItemPrimitive>
                             <IGRPButtonPrimitive
-                              size="icon"
-                              variant="outline"
-                              className="disabled:pointer-events-none disabled:opacity-50"
+                              size='icon'
+                              variant='outline'
+                              className='disabled:pointer-events-none disabled:opacity-50'
                               onClick={() => table.lastPage()}
                               disabled={!table.getCanNextPage()}
-                              aria-label="Go to last page"
+                              aria-label='Go to last page'
                             >
-                              <IGRPIcon iconName="ChevronLast" />
+                              <IGRPIcon iconName='ChevronLast' />
                             </IGRPButtonPrimitive>
                           </IGRPPaginationItemPrimitive>
                         </IGRPPaginationContentPrimitive>

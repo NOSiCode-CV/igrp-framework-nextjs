@@ -30,7 +30,7 @@ export function ApplicationsListHome() {
   const activeApps = applications.filter((app) => app.status === 'ACTIVE').slice(0, 6);
 
   return (
-     <div className="grid grid-cols-1 gap-4 md:grid-cols-2 lg:grid-cols-3 *:data-[slot=card]:from-primary/5 *:data-[slot=card]:to-card dark:*:data-[slot=card]:bg-card *:data-[slot=card]:bg-gradient-to-t">
+    <div className='grid grid-cols-1 gap-4 md:grid-cols-2 lg:grid-cols-3 *:data-[slot=card]:from-primary/5 *:data-[slot=card]:to-card dark:*:data-[slot=card]:bg-card *:data-[slot=card]:bg-gradient-to-t'>
       {activeApps.map((app) => {
         return (
           <Fragment key={app.id}>

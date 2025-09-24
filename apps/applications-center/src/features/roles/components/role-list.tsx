@@ -31,7 +31,7 @@ import { showStatus, statusClass } from '@/lib/utils';
 import { RoleDetails } from './role-permissions-dialog';
 
 interface RolesListProps {
-  departmentCode: string;  
+  departmentCode: string;
 }
 
 export function RolesList({ departmentCode }: RolesListProps) {
@@ -301,7 +301,7 @@ export function RolesList({ departmentCode }: RolesListProps) {
           onOpenChange={setOpenDeleteDialog}
           roleToDelete={roleToDelete}
         />
-      )}      
+      )}
     </>
   );
 }

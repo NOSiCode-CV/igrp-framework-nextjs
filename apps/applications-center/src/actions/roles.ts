@@ -72,13 +72,16 @@ export async function getRoleByName(name: string) {
 export async function addPermissionsToRole(name: string, permissionNames: string[]) {
   const client = await getClientAccess();
 
-  console.log("::: Add Permissões :::");
+  console.log('::: Add Permissões :::');
   console.log({ name, permissionNames });
   try {
     const result = await client.roles.addPermissionsToRole(name, permissionNames);
     return result.data as RoleArgs;
   } catch (error) {
-    console.error(`[add-permissions-role] Não foi possível adicionar permissões a perfíl ${name}:`, error);
+    console.error(
+      `[add-permissions-role] Não foi possível adicionar permissões a perfíl ${name}:`,
+      error,
+    );
     throw error;
   }
 }
@@ -86,14 +89,17 @@ export async function addPermissionsToRole(name: string, permissionNames: string
 export async function removePermissionsFromRole(name: string, permissionNames: string[]) {
   const client = await getClientAccess();
 
-  console.log("::: Remove Permissões :::");
+  console.log('::: Remove Permissões :::');
   console.log({ name, permissionNames });
 
   try {
     const result = await client.roles.removePermissionsFromRole(name, permissionNames);
     return result.data as RoleArgs;
   } catch (error) {
-    console.error(`[remove-permissions-role] Não foi possível remover permissões a perfíl ${name}:`, error);
+    console.error(
+      `[remove-permissions-role] Não foi possível remover permissões a perfíl ${name}:`,
+      error,
+    );
     throw error;
   }
 }
@@ -105,7 +111,10 @@ export async function getPermissionsByRoleName(name: string) {
     const result = await client.roles.getPermissionsByRoleName(name);
     return result.data as PermissionArgs[];
   } catch (error) {
-    console.error(`[role-by-name] Não foi possível obter dados de permissões de perfil ${name}:`, error);
+    console.error(
+      `[role-by-name] Não foi possível obter dados de permissões de perfil ${name}:`,
+      error,
+    );
     throw error;
   }
 }

@@ -44,7 +44,7 @@ export function CopyToClipboard({ value }: CopyToClipboardProps) {
         duration: 2000,
       });
     }
-  };
+  }
 
   return (
     <IGRPTooltipProviderPrimitive delayDuration={350}>

@@ -10,7 +10,7 @@ export default function Home() {
   return (
     <div className='flex flex-col gap-10 animate-fade-in'>
       <PageHeader
-        title="Bem-vindo ao IGRP"
+        title='Bem-vindo ao IGRP'
         showActions
       >
         <ButtonLink

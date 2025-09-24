@@ -54,11 +54,7 @@ export function DepartmentDetails({ code }: { code: string }) {
     {
       label: 'Perfis (Roles)',
       value: 'roles',
-      content: (
-        <RolesList
-          departmentCode={code}          
-        />
-      ),
+      content: <RolesList departmentCode={code} />,
     },
     {
       label: 'Permissões',
@@ -117,9 +113,9 @@ export function DepartmentDetails({ code }: { code: string }) {
                   </div>
 
                   {parentName && (
-                    <div>                      
+                    <div>
                       <h3 className='font-normal text-muted-foreground'>Departamento Pai</h3>
-                      <p className='font-medium'>{parentName}</p>                      
+                      <p className='font-medium'>{parentName}</p>
                     </div>
                   )}
 

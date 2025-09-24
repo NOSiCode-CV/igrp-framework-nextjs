@@ -38,6 +38,8 @@ export {
   AlertDescription as IGRPAlertDescriptionPrimitive,
 } from './components/primitives/alert';
 
+export { AspectRatio as IGRPAspectRatioPrimitive } from './components/primitives/aspect-ratio';
+
 export {
   Avatar as IGRPUserAvatarPrimitive,
   AvatarImage as IGRPUserAvatarImagePrimitive,
@@ -64,6 +66,8 @@ export {
   buttonVariants as IGRPButtonVariantPrimitive,
 } from './components/primitives/button';
 
+export { Calendar as IGRPCalendarPrimitive } from './components/primitives/calendar';
+
 export {
   Card as IGRPCardPrimitive,
   CardHeader as IGRPCardHeaderPrimitive,
@@ -73,6 +77,24 @@ export {
   CardDescription as IGRPCardDescriptionPrimitive,
   CardContent as IGRPCardContentPrimitive,
 } from './components/primitives/card';
+
+export {
+  type CarouselApi as IGRPCarouselApi,
+  Carousel as IGRPCarouselPrimitive,
+  CarouselContent as IGRPCarouselContentPrimitive,
+  CarouselItem as IGRPCarouselItemPrimitive,
+  CarouselPrevious as IGRPCarouselPreviousPrimitive,
+  CarouselNext as IGRPCarouselNextPrimitive,
+} from './components/primitives/carousel';
+
+export {
+  ChartContainer as IGRPChartContainerPrimitive,
+  ChartTooltip as IGRPChartTooltipPrimitive,
+  ChartTooltipContent as IGRPChartTooltipContentPrimitive,
+  ChartLegend as IGRPChartLegendPrimitive,
+  ChartLegendContent as IGRPChartLegendContentPrimitive,
+  ChartStyle as IGRPChartStylePrimitive,
+} from './components/primitives/chart';
 
 export { Checkbox as IGRPCheckboxPrimitive } from './components/primitives/checkbox';
 
@@ -126,6 +148,19 @@ export {
 } from './components/primitives/dialog';
 
 export {
+  Drawer as IGRPDrawerPrimitive,
+  DrawerPortal as IGRPDrawerPortalPrimitive,
+  DrawerOverlay as IGRPDrawerOverlayPrimitive,
+  DrawerTrigger as IGRPDrawerTriggerPrimitive,
+  DrawerClose as IGRPDrawerClosePrimitive,
+  DrawerContent as IGRPDrawerContentPrimitive,
+  DrawerHeader as IGRPDrawerHeaderPrimitive,
+  DrawerFooter as IGRPDrawerFooterPrimitive,
+  DrawerTitle as IGRPDrawerTitlePrimitive,
+  DrawerDescription as IGRPDrawerDescriptionPrimitive,
+} from './components/primitives/drawer';
+
+export {
   DropdownMenu as IGRPDropdownMenuPrimitive,
   DropdownMenuPortal as IGRPDropdownMenuPortalPrimitive,
   DropdownMenuTrigger as IGRPDropdownMenuTriggerPrimitive,
@@ -160,9 +195,47 @@ export {
   HoverCardContent as IGRPHoverCardContentPrimitive,
 } from './components/primitives/hover-card';
 
+export {
+  InputOTP as IGRPInputOTPPrimitive,
+  InputOTPGroup as IGRPInputOTPGroupPrimitive,
+  InputOTPSlot as IGRPInputOTPSlotPrimitive,
+  InputOTPSeparator as IGRPInputOTPSeparatorPrimitive,
+} from './components/primitives/input-otp';
+
 export { Input as IGRPInputPrimitive } from './components/primitives/input';
 
 export { Label as IGRPLabelPrimitive } from './components/primitives/label';
+
+export {
+  Menubar as IGRPMenubarPrimitive,
+  MenubarPortal as IGRPMenubarPortalPrimitive,
+  MenubarMenu as IGRPMenubarMenuPrimitive,
+  MenubarTrigger as IGRPMenubarTriggerPrimitive,
+  MenubarContent as IGRPMenubarContentPrimitive,
+  MenubarGroup as IGRPMenubarGroupPrimitive,
+  MenubarSeparator as IGRPMenubarSeparatorPrimitive,
+  MenubarLabel as IGRPMenubarLabelPrimitive,
+  MenubarItem as IGRPMenubarItemPrimitive,
+  MenubarShortcut as IGRPMenubarShortcutPrimitive,
+  MenubarCheckboxItem as IGRPMenubarCheckboxItemPrimitive,
+  MenubarRadioGroup as IGRPMenubarRadioGroupPrimitive,
+  MenubarRadioItem as IGRPMenubarRadioItemPrimitive,
+  MenubarSub as IGRPMenubarSubPrimitive,
+  MenubarSubTrigger as IGRPMenubarSubTriggerPrimitive,
+  MenubarSubContent as IGRPMenubarSubContentPrimitive,
+} from './components/primitives/menubar';
+
+export {
+  NavigationMenu as IGRPNavigationMenuPrimitive,
+  NavigationMenuList as IGRPNavigationMenuListPrimitive,
+  NavigationMenuItem as IGRPNavigationMenuItemPrimitive,
+  NavigationMenuContent as IGRPNavigationMenuContentPrimitive,
+  NavigationMenuTrigger as IGRPNavigationMenuTriggerPrimitive,
+  NavigationMenuLink as IGRPNavigationMenuLinkPrimitive,
+  NavigationMenuIndicator as IGRPNavigationMenuIndicatorPrimitive,
+  NavigationMenuViewport as IGRPNavigationMenuViewportPrimitive,
+  navigationMenuTriggerStyle as IGRPNavigationMenuTriggerStyle,
+} from './components/primitives/navigation-menu';
 
 export {
   Pagination as IGRPPaginationPrimitive,
@@ -181,11 +254,19 @@ export {
   PopoverAnchor as IGRPPopoverAnchorPrimitive,
 } from './components/primitives/popover';
 
+export { Progress } from './components/primitives/progress';
+
 export {
   RadioGroup as IGRPRadioGroupPrimitive,
   RadioGroupItem as IGRPRadioGroupItemPrimitive,
   radioItemVariants as IGRPRadioGroupVariantPrimitive,
 } from './components/primitives/radio-group';
+
+export {
+  ResizablePanelGroup as IGRPResizablePanelGroupPrimitive,
+  ResizablePanel as IGRPResizablePanelPrimitive,
+  ResizableHandle as IGRPResizableHandlePrimitive,
+} from './components/primitives/resizable';
 
 export {
   ScrollArea as IGRPScrollAreaPrimitive,
@@ -247,6 +328,18 @@ export {
 
 export { Skeleton as IGRPSkeletonPrimitive } from './components/primitives/skeleton';
 
+export { Slider as IGRPSLiderPrimitive } from './components/primitives/slider';
+
+export {
+  Stepper as IGRPStepperPrimitive,
+  StepperDescription as IGRPStepperDescriptionPrimitive,
+  StepperIndicator as IGRPStepperIndicatorPrimitive,
+  StepperItem as IGRPStepperItemPrimitive,
+  StepperSeparator as IGRPStepperSeparatorPrimitive,
+  StepperTitle as IGRPStepperTitlePrimitive,
+  StepperTrigger as IGRPStepperTriggerPrimitive,
+} from './components/primitives/stepper';
+
 export { Switch as IGRPSwitchPrimitive } from './components/primitives/switch';
 
 export {
@@ -272,14 +365,14 @@ export { Textarea as IGRPTextAreaPrimitive } from './components/primitives/texta
 export { Toaster as IGRPToasterPrimitive } from './components/primitives/sonner';
 
 export {
-  Toggle as IGRPTogglePrimitive,
-  toggleVariants as IGRPToggleVariantPrimitive,
-} from './components/primitives/toggle';
-
-export {
   ToggleGroup as IGRPToggleGroupPrimitive,
   ToggleGroupItem as IGRPToggleGroupItemPrimitive,
 } from './components/primitives/toggle-group';
+
+export {
+  Toggle as IGRPTogglePrimitive,
+  toggleVariants as IGRPToggleVariantPrimitive,
+} from './components/primitives/toggle';
 
 export {
   Tooltip as IGRPTooltipPrimitive,

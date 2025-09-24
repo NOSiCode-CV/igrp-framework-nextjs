@@ -1,5 +1,13 @@
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
-import { getRoles, createRole, updateRole, deleteRole, getRoleByName, addPermissionsToRole, getPermissionsByRoleName } from '@/actions/roles';
+import {
+  getRoles,
+  createRole,
+  updateRole,
+  deleteRole,
+  getRoleByName,
+  addPermissionsToRole,
+  getPermissionsByRoleName,
+} from '@/actions/roles';
 import { RoleArgs } from './role-schemas';
 import { RoleFilters, UpdateRoleRequest } from '@igrp/platform-access-management-client-ts';
 import { PermissionArgs } from '../permission/permissions-schemas';
@@ -66,7 +74,7 @@ export const useAddPermissionsToRole = () => {
       await queryClient.invalidateQueries({ queryKey: ['roles'] });
       await queryClient.refetchQueries({ queryKey: ['roles'], exact: true });
     },
-  });    
+  });
 };
 
 export const useRemovePermissionsFromRole = () => {
@@ -79,9 +87,8 @@ export const useRemovePermissionsFromRole = () => {
       await queryClient.invalidateQueries({ queryKey: ['roles'] });
       await queryClient.refetchQueries({ queryKey: ['roles'], exact: true });
     },
-  });    
+  });
 };
-
 
 export const usePermissionsByRoleByName = (name: string) => {
   return useQuery<PermissionArgs[]>({
@@ -90,6 +97,3 @@ export const usePermissionsByRoleByName = (name: string) => {
     enabled: !!name,
   });
 };
-
-
-

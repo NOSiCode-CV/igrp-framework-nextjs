@@ -32,8 +32,6 @@ export async function IGRPLayout({ children, config }: IGRPLayoutArgs) {
       );
     }
 
-    console.log({ token: session?.accessToken });
-
     igrpSetAccessClientConfig({
       token: session?.accessToken || '',
       baseUrl: apiManagementConfig?.baseUrl || '',

@@ -12,14 +12,22 @@ export interface ButtonLinkProps extends React.ComponentProps<typeof Link> {
   icon: IGRPIconProps['iconName'];
   iconClassName?: string;
   variant?: IGRPBtnProps['variant'];
+  btnClassName?: string;
 }
 
-export function ButtonLink(props: ButtonLinkProps) {
-  const { label, icon, iconClassName, variant } = props;
+export function ButtonLink({
+  label, 
+  icon, 
+  iconClassName, 
+  variant,
+  btnClassName,
+  ...props
+}: ButtonLinkProps) {  
   return (
     <IGRPButtonPrimitive
       asChild
       variant={variant || 'default'}
+      className={btnClassName}
     >
       <Link {...props}>
         <LinkLoadingIndicator

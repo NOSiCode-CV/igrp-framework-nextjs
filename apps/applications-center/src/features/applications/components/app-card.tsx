@@ -22,7 +22,7 @@ export function ApplicationCard({ app }: { app: IGRPApplicationArgs }) {
   const href = slug ? formatSlug(slug) : url;
 
   return (
-    <IGRPCardPrimitive className='@container/card overflow-hidden card-hover gap-3 pt-4 pb-2 justify-between'>
+    <IGRPCardPrimitive className='@container/card overflow-hidden card-hover gap-3 py-4 justify-between'>
       <IGRPCardHeaderPrimitive className='px-4 pb-0'>
         <div className='flex items-start justify-between'>
           <div className='flex items-start'>

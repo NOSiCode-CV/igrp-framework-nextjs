@@ -1,498 +1,540 @@
-// 'use client';
+'use client';
 
-// import { useEffect, useState } from 'react';
-// import { zodResolver } from '@hookform/resolvers/zod';
-// import { useFieldArray, useForm } from 'react-hook-form';
-// import * as z from 'zod';
-// import {
-//   IGRPButtonPrimitive,
-//   IGRPCardPrimitives,
-//   IGRPCardContentPrimitives,
-// } from '@igrp/igrp-framework-react-design-system';
-// import {
-//   IGRPCommandPrimitive,
-//   IGRPCommandEmptyPrimitive,
-//   IGRPCommandGroupPrimitive,
-//   IGRPCommandInputPrimitive,
-//   IGRPCommandItemPrimitive,
-//   IGRPCommandListPrimitive,
-// } from '@igrp/igrp-framework-react-design-system';
+import { useEffect, useState } from 'react';
+import {
+  IGRPCardContentPrimitive,
+  IGRPCardPrimitive,
+  IGRPIcon,
+  IGRPInputPrimitive,
+  IGRPPopoverTriggerPrimitive,
+  useIGRPToast,
+} from '@igrp/igrp-framework-react-design-system';
+import {
+  IGRPButtonPrimitive,
+  IGRPCommandPrimitive,
+  IGRPCommandEmptyPrimitive,
+  IGRPCommandGroupPrimitive,
+  IGRPCommandInputPrimitive,
+  IGRPCommandItemPrimitive,
+  IGRPCommandListPrimitive,
+  IGRPDialogPrimitive,
+  IGRPDialogContentPrimitive,
+  IGRPDialogDescriptionPrimitive,
+  IGRPDialogFooterPrimitive,
+  IGRPDialogHeaderPrimitive,
+  IGRPDialogTitlePrimitive,
+  IGRPFormPrimitive,
+  IGRPFormControlPrimitive,
+  IGRPFormFieldPrimitive,
+  IGRPFormItemPrimitive,
+  IGRPFormLabelPrimitive,
+  IGRPFormMessagePrimitive,
+  IGRPPopoverPrimitive,
+  IGRPPopoverContentPrimitive,
+  IGRPSeparatorPrimitive,
+} from '@igrp/igrp-framework-react-design-system';
+import { cn } from '@/lib/utils';
+import { useInviteUser, useAddUserRole } from '../use-users';
+import { useFieldArray, useForm } from 'react-hook-form';
+import { CreateUserArgs, formSchema, FormSchema, FormUserArgs } from '../user-schema';
+import { zodResolver } from '@hookform/resolvers/zod';
+import { useDepartments } from '@/features/departments/use-departments';
+import { useRoles } from '@/features/roles/use-roles';
 
-// import {
-//   IGRPDialogPrimitive,
-//   IGRPDialogContentPrimitive,
-//   IGRPDialogDescriptionPrimitive,
-//   IGRPDialogFooterPrimitive,
-//   IGRPDialogHeaderPrimitive,
-//   IGRPDialogTitlePrimitive,
-// } from '@igrp/igrp-framework-react-design-system';
-// import {
-//   IGRPFormPrimitive,
-//   IGRPFormControlPrimitive,
-//   IGRPFormFieldPrimitive,
-//   IGRPFormItemPrimitive,
-//   IGRPFormLabelPrimitive,
-//   IGRPFormMessagePrimitive,
-// } from '@igrp/igrp-framework-react-design-system';
+interface UserInviteDialogProps {
+  open: boolean;
+  onOpenChange: (open: boolean) => void;
+}
 
-// import { IGRPInputPrimitive } from '@igrp/igrp-framework-react-design-system';
-// import {
-//   IGRPPopoverPrimitive,
-//   IGRPPopoverContentPrimitive,
-// } from '@igrp/igrp-framework-react-design-system';
-// import { IGRPSeparatorPrimitive } from '@igrp/igrp-framework-react-design-system';
-// import { useApps, useDepartments, useInviteUser, useRoles } from '@/features/users/use-users';
-// import { formSchema } from '@/features/users/user';
-// import { cn } from '@/lib/utils';
+const EMPTY_USER: FormUserArgs = { name: '', email: '' };
 
-// interface UserInviteDialogProps {
-//   open: boolean;
-//   onOpenChange: (open: boolean) => void;
-// }
+function deriveUsernameFromEmail(email: string) {
+  const local = email.split('@')[0].trim();
+  return local.slice(0, 50);
+}
 
-// // TODO: messages
+export function UserInviteDialog({ open, onOpenChange }: UserInviteDialogProps) {
+  const [openDepts, setOpenDepts] = useState(false);
+  const [openRoles, setOpenRoles] = useState(false);
+  const { igrpToast } = useIGRPToast();
 
-// export function UserInviteDialog({ open, onOpenChange }: UserInviteDialogProps) {
-//   const [openApps, setOpenApps] = useState(false);
-//   const [openDepts, setOpenDepts] = useState(false);
-//   const [openRoles, setOpenRoles] = useState(false);
+  const { mutateAsync: userInvite, isPending: isInviting } = useInviteUser();
+  const { mutateAsync: addUserRole } = useAddUserRole();
 
-//   const { mutateAsync: userInvite } = useInviteUser();
+  const form = useForm<FormSchema>({
+    resolver: zodResolver(formSchema),
+    mode: 'onChange',
+    defaultValues: {
+      users: [EMPTY_USER],
+      departmentCode: undefined,
+      roleNames: [],
+    },
+  });
 
-//   const form = useForm<z.infer<typeof formSchema>>({
-//     resolver: zodResolver(formSchema),
-//     defaultValues: {
-//       emails: [{ email: '' }],
-//       applicationId: undefined,
-//       departmentId: undefined,
-//       roleId: '',
-//     },
-//   });
+  const { fields, append, remove } = useFieldArray({
+    control: form.control,
+    name: 'users',
+  });
 
-//   const { fields, append, remove } = useFieldArray({
-//     control: form.control,
-//     name: 'emails',
-//   });
+  useEffect(() => {
+    if (open) {
+      form.reset({
+        users: [EMPTY_USER],
+        departmentCode: undefined,
+        roleNames: [],
+      });
+    }
+  }, [open, form]);
 
-//   useEffect(() => {
-//     if (open) {
-//       form.reset({
-//         emails: [{ email: '' }],
-//         applicationId: undefined,
-//         departmentId: undefined,
-//         roleId: '',
-//       });
-//     }
-//   }, [open, form]);
+  const selectedDeptCode = form.watch('departmentCode');
 
-//   const selectedAppId = form.watch('applicationId');
-//   const selectedDeptId = form.watch('departmentId');
+  const { data: depts, isLoading: deptLoading, error: deptError } = useDepartments();
+  const {
+    data: roles,
+    isLoading: rolesLoading,
+    error: rolesError,
+  } = useRoles({ departmentCode: selectedDeptCode });
 
-//   const { data: apps, isLoading: appsLoading, error: appsError } = useApps();
-//   const {
-//     data: depts = [],
-//     isLoading: deptLoading,
-//     error: deptError,
-//   } = useDepartments(selectedAppId);
-//   const { data: roles = [], isLoading: rolesLoading } = useRoles(selectedAppId, selectedDeptId);
+  const isValid = form.formState.isValid;
+  const isSubmitting = form.formState.isSubmitting;
+  const btnDisabled = !isValid || isSubmitting || isInviting;
 
-//   const isLoading = appsLoading || !apps;
-//   if (isLoading) return <div>Loading Apps...</div>;
-//   if (appsError) throw appsError;
+  const handleAddRow = async () => {
+    const lastIndex = fields.length - 1;
+    const ok =
+      lastIndex < 0
+        ? true
+        : await form.trigger([`users.${lastIndex}.name`, `users.${lastIndex}.email`]);
+    if (ok) {
+      append({ ...EMPTY_USER });
+    } else {
+      igrpToast({
+        type: 'warning',
+        title: 'Complete o utilizador atual antes de adicionar outro.',
+      });
+    }
+  };
 
-//   const isValid = form.formState.isValid;
-//   const isSubmitting = form.formState.isSubmitting;
-//   const btnDisabled = !isValid || isSubmitting || isLoading;
+ const onSubmit = async (values: FormSchema) => {
+  const { users, roleNames } = values;
 
-//   const onSubmit = async (data: z.infer<typeof formSchema>) => {
-//     const { emails, applicationId, departmentId, roleId } = data;
-//     const inviteAll = Promise.all(
-//       emails.map(({ email }) =>
-//         userInvite({
-//           email,
-//           appCode: applicationId,
-//           departmentCode: departmentId,
-//           roles: roleId,
-//         }),
-//       ),
-//     );
+  const inviteAll = Promise.all(
+    users.map(async (raw) => {
+      const username = deriveUsernameFromEmail(raw.email);
 
-//     toast.promise(inviteAll, {
-//       loading: `Inviting ${emails.length} user${emails.length > 1 ? 's' : ''}...`,
-//       success: `Successfully invited ${emails.length} user${emails.length > 1 ? 's' : ''}!`,
-//       error: (err) => `Failed to invite user${emails.length > 1 ? 's' : ''}: ${err.message}`,
-//     });
+      const userPayload: CreateUserArgs = {
+        name: raw.name.trim(),
+        username,                  
+        email: raw.email.trim(),
+      };
 
-//     try {
-//       await inviteAll;
-//       form.reset();
-//       onOpenChange(false);
-//     } catch (error) {
-//       console.warn(error);
-//     }
-//   };
+      const created = await userInvite({ user: userPayload });
+      const finalUsername = (created as any)?.username ?? username;
 
-//   return (
-//     <Dialog
-//       open={open}
-//       onOpenChange={onOpenChange}
-//     >
-//       <DialogContent className='sm:max-w-[600px] max-h-[90vh] overflow-y-auto'>
-//         <DialogHeader>
-//           <DialogTitle>Invite Users</DialogTitle>
-//           <DialogDescription>
-//             Send invitation emails to new users. All users will be assigned to the same application,
-//             department, and roles.
-//           </DialogDescription>
-//         </DialogHeader>
-//         <Form {...form}>
-//           <form
-//             onSubmit={form.handleSubmit(onSubmit)}
-//             className='space-y-6'
-//           >
-//             <div className='space-y-4'>
-//               <Card>
-//                 <CardContent className='space-y-4'>
-//                   <h3 className='text-sm font-medium'>Email Addresses</h3>
-//                   <p className='text-sm text-muted-foreground mb-4'>
-//                     Add email addresses for users you want to invite. All users will receive the
-//                     same permissions.
-//                   </p>
+      if (finalUsername && roleNames?.length) {
+        await addUserRole({ username: finalUsername, roleNames });
+      }
+      return finalUsername;
+    })
+  );
+;
 
-//                   {fields.map((field, index) => (
-//                     <div
-//                       key={field.id}
-//                       className='flex gap-2'
-//                     >
-//                       <FormField
-//                         control={form.control}
-//                         name={`emails.${index}.email`}
-//                         render={({ field }) => (
-//                           <FormItem className='flex-1'>
-//                             <FormControl>
-//                               <Input
-//                                 placeholder='user@example.com'
-//                                 {...field}
-//                               />
-//                             </FormControl>
-//                             <FormMessage />
-//                           </FormItem>
-//                         )}
-//                       />
-//                       <Button
-//                         type='button'
-//                         variant='outline'
-//                         size='icon'
-//                         onClick={() => remove(index)}
-//                         disabled={fields.length === 1}
-//                         className='hover:text-destructive hover:border-destructive'
-//                       >
-//                         <Trash2 strokeWidth={2} />
-//                         <span className='sr-only'>Remove</span>
-//                       </Button>
-//                     </div>
-//                   ))}
+    igrpToast({
+      promise: inviteAll,
+      loading: `A convidar ${users.length} utilizador${users.length > 1 ? 'es' : ''}...`,
+      success: `Convite enviado para ${users.length} utilizador${users.length > 1 ? 'es' : ''}!`,
+      error: (err) => `Falha ao convidar: ${String(err)}`,
+    });
 
-//                   <Button
-//                     type='button'
-//                     variant='outline'
-//                     size='sm'
-//                     onClick={async () => {
-//                       const lastIndex = fields.length - 1;
-//                       const isValid = await form.trigger(`emails.${lastIndex}.email`);
-//                       if (isValid) {
-//                         append({ email: '' });
-//                       } else {
-//                         toast.warning('Please enter a valid email before adding another.');
-//                       }
-//                     }}
-//                     className='mt-2'
-//                   >
-//                     <CirclePlus
-//                       className='text-primary'
-//                       strokeWidth={2}
-//                     />
-//                     Add Another Email
-//                   </Button>
-//                 </CardContent>
-//               </Card>
+    try {
+      await inviteAll;
+      form.reset({ users: [EMPTY_USER], departmentCode: undefined, roleNames: [] });
+      onOpenChange(false);
+    } catch (error) {
+      console.warn(error);
+    }
+  };
 
-//               <Separator />
+  return (
+    <IGRPDialogPrimitive
+      open={open}
+      onOpenChange={onOpenChange}
+    >
+      <IGRPDialogContentPrimitive className='sm:min-w-2xl max-h-[90vh] overflow-y-auto'>
+        <IGRPDialogHeaderPrimitive>
+          <IGRPDialogTitlePrimitive>Convidar Utilizador(es)</IGRPDialogTitlePrimitive>
+          <IGRPDialogDescriptionPrimitive>
+            Envie convites para múltiplos utilizadores. Todos poderão partilhar o mesmo departamento
+            e os mesmos roles atribuídos.
+          </IGRPDialogDescriptionPrimitive>
+        </IGRPDialogHeaderPrimitive>
 
-//               <Card>
-//                 <CardContent className='space-y-4'>
-//                   <h3 className='text-sm font-medium'>Permissions</h3>
-//                   <p className='text-sm text-muted-foreground mb-4'>
-//                     Select the application, department, and roles for all invited users.
-//                   </p>
+        <IGRPFormPrimitive {...form}>
+          <form
+            onSubmit={form.handleSubmit(onSubmit)}
+            className='flex flex-col gap-6'
+          >
+            <div className='flex flex-col gap-4'>
+              <IGRPCardPrimitive>
+                <IGRPCardContentPrimitive className='flex flex-col gap-4'>
+                  <h3 className='text-sm font-medium'>Utilizador(es)</h3>
+                  {fields.map((field, index) => (
+                    <div
+                      key={field.id}
+                      className='flex gap-2'
+                    >
+                      <IGRPFormFieldPrimitive
+                        control={form.control}
+                        name={`users.${index}.name`}
+                        render={({ field }) => (
+                          <IGRPFormItemPrimitive className='flex flex-col'>
+                            <IGRPFormLabelPrimitive>Nome</IGRPFormLabelPrimitive>
+                            <IGRPFormControlPrimitive>
+                              <IGRPInputPrimitive
+                                placeholder='Nome completo'
+                                {...field}
+                                value={field.value ?? ''}
+                              />
+                            </IGRPFormControlPrimitive>
+                            <IGRPFormMessagePrimitive />
+                          </IGRPFormItemPrimitive>
+                        )}
+                      />
 
-//                   <FormField
-//                     control={form.control}
-//                     name='applicationId'
-//                     render={({ field }) => (
-//                       <FormItem className='flex flex-col'>
-//                         <FormLabel>Application</FormLabel>
-//                         <Popover
-//                           open={openApps}
-//                           onOpenChange={setOpenApps}
-//                         >
-//                           <PopoverTrigger asChild>
-//                             <FormControl>
-//                               <Button
-//                                 variant='outline'
-//                                 role='combobox'
-//                                 className={cn(
-//                                   'w-full justify-between',
-//                                   !field.value && 'text-muted-foreground',
-//                                 )}
-//                               >
-//                                 {field.value
-//                                   ? apps.find((app) => app.value === field.value)?.value
-//                                   : 'Select application'}
-//                                 <ChevronsUpDown
-//                                   className='ml-2 shrink-0 opacity-50'
-//                                   strokeWidth={2}
-//                                 />
-//                               </Button>
-//                             </FormControl>
-//                           </PopoverTrigger>
-//                           <PopoverContent
-//                             className='w-[--radix-popover-trigger-width] p-0'
-//                             align='start'
-//                           >
-//                             <Command>
-//                               <CommandInput placeholder='Search application...' />
-//                               <CommandList>
-//                                 <CommandEmpty>No application found.</CommandEmpty>
-//                                 <CommandGroup>
-//                                   {apps.map((app, index) => (
-//                                     <CommandItem
-//                                       value={app.value}
-//                                       key={index}
-//                                       onSelect={() => {
-//                                         form.setValue('applicationId', app.value);
-//                                         // Clear department and roles when application changes
-//                                         form.setValue('departmentId', undefined);
-//                                         form.setValue('roleId', '');
-//                                         setOpenApps(false);
-//                                       }}
-//                                     >
-//                                       <Check
-//                                         strokeWidth={2}
-//                                         className={cn(
-//                                           'mr-2 h-4 w-4 opacity-0',
-//                                           app.value === field.value && 'opacity-100',
-//                                         )}
-//                                       />
-//                                       {app.label}
-//                                     </CommandItem>
-//                                   ))}
-//                                 </CommandGroup>
-//                               </CommandList>
-//                             </Command>
-//                           </PopoverContent>
-//                         </Popover>
-//                         <FormMessage />
-//                       </FormItem>
-//                     )}
-//                   />
+                      <IGRPFormFieldPrimitive
+                        control={form.control}
+                        name={`users.${index}.email`}
+                        render={({ field }) => (
+                          <IGRPFormItemPrimitive className='flex flex-col'>
+                            <IGRPFormLabelPrimitive>Email</IGRPFormLabelPrimitive>
+                            <IGRPFormControlPrimitive>
+                              <IGRPInputPrimitive
+                                placeholder='user@example.com'
+                                {...field}
+                                value={field.value ?? ''}
+                              />
+                            </IGRPFormControlPrimitive>
+                            <IGRPFormMessagePrimitive />
+                          </IGRPFormItemPrimitive>
+                        )}
+                      />
 
-//                   <FormField
-//                     control={form.control}
-//                     name='departmentId'
-//                     render={({ field }) => {
-//                       const isDeptDisabled =
-//                         !selectedAppId || deptLoading || !!deptError || depts.length === 0;
+                      {/* Remove */}
+                      <div className='flex flex-col gap-2'>
+                        <IGRPFormLabelPrimitive className='invisible'>
+                          Remover
+                        </IGRPFormLabelPrimitive>
+                        <IGRPButtonPrimitive
+                          type='button'
+                          variant='destructive'
+                          size='icon'
+                          onClick={() => remove(index)}
+                          disabled={fields.length === 1}
+                          aria-label='Remover utilizador'
+                          title='Remover utilizador'
+                        >
+                          <IGRPIcon
+                            iconName='Trash2'
+                            strokeWidth={2}
+                          />
+                        </IGRPButtonPrimitive>
+                      </div>
+                    </div>
+                  ))}
 
-//                       return (
-//                         <FormItem className='flex flex-col'>
-//                           <FormLabel>Department</FormLabel>
-//                           <Popover
-//                             open={openDepts}
-//                             onOpenChange={setOpenDepts}
-//                           >
-//                             <PopoverTrigger asChild>
-//                               <FormControl>
-//                                 <Button
-//                                   variant='outline'
-//                                   role='combobox'
-//                                   disabled={isDeptDisabled}
-//                                   className={cn(
-//                                     'w-full justify-between',
-//                                     !field.value && 'text-muted-foreground',
-//                                   )}
-//                                 >
-//                                   {deptLoading ? (
-//                                     <span className='flex items-center gap-2'>
-//                                       <Loader2
-//                                         className='animate-spin h-4 w-4 mr-2'
-//                                         strokeWidth={2}
-//                                       />
-//                                       Loading departments...
-//                                     </span>
-//                                   ) : field.value ? (
-//                                     depts.find((dept) => dept.code === field.value)?.departmentName
-//                                   ) : deptError ? (
-//                                     'Error loading departments'
-//                                   ) : isDeptDisabled ? (
-//                                     'Select an application first'
-//                                   ) : (
-//                                     'Select department'
-//                                   )}
-//                                   {!deptLoading && (
-//                                     <ChevronsUpDown
-//                                       className='ml-2 h-4 w-4 shrink-0 opacity-50'
-//                                       strokeWidth={2}
-//                                     />
-//                                   )}
-//                                 </Button>
-//                               </FormControl>
-//                             </PopoverTrigger>
-//                             <PopoverContent className='w-[--radix-popover-trigger-width] p-0'>
-//                               <Command>
-//                                 <CommandInput placeholder='Search department...' />
-//                                 <CommandList>
-//                                   <CommandEmpty>No department found.</CommandEmpty>
-//                                   <CommandGroup>
-//                                     {depts.map((dept) => (
-//                                       <CommandItem
-//                                         value={dept.code}
-//                                         key={dept.departmentName}
-//                                         onSelect={() => {
-//                                           form.setValue('departmentId', dept.code);
-//                                           form.setValue('roleId', '');
-//                                           setOpenDepts(false);
-//                                         }}
-//                                       >
-//                                         <Check
-//                                           className={cn(
-//                                             'mr-2 h-4 w-4',
-//                                             dept.code === field.value ? 'opacity-100' : 'opacity-0',
-//                                           )}
-//                                         />
-//                                         {dept.departmentName}
-//                                       </CommandItem>
-//                                     ))}
-//                                   </CommandGroup>
-//                                 </CommandList>
-//                               </Command>
-//                             </PopoverContent>
-//                           </Popover>
-//                           <FormMessage>{deptError ? deptError.message : null}</FormMessage>
-//                         </FormItem>
-//                       );
-//                     }}
-//                   />
+                  <IGRPButtonPrimitive
+                    type='button'
+                    variant='outline'
+                    size='sm'
+                    onClick={handleAddRow}
+                    className='mt-2'
+                  >
+                    <IGRPIcon
+                      iconName='CirclePlus'
+                      className='text-primary'
+                      strokeWidth={2}
+                    />
+                    Adicionar utilizador
+                  </IGRPButtonPrimitive>
+                </IGRPCardContentPrimitive>
+              </IGRPCardPrimitive>
 
-//                   <FormField
-//                     control={form.control}
-//                     name='roleId'
-//                     render={({ field }) => {
-//                       const isDisabled = !selectedDeptId || roles.length === 0;
+              <IGRPSeparatorPrimitive />
 
-//                       // Find the selected role name
-//                       const selectedRole = field.value
-//                         ? roles.find((r) => r === field.value)
-//                         : null;
+              <IGRPCardPrimitive>
+                <IGRPCardContentPrimitive className='space-y-4'>
+                  <h3 className='text-sm font-medium'>Permissões</h3>
+                  <p className='text-sm text-muted-foreground mb-4'>
+                    Selecione o departamento e roles para todos os convidados.
+                  </p>
 
-//                       return (
-//                         <FormItem className='flex flex-col'>
-//                           <FormLabel>Role</FormLabel>
-//                           <Popover
-//                             open={openRoles}
-//                             onOpenChange={setOpenRoles}
-//                           >
-//                             <PopoverTrigger asChild>
-//                               <FormControl>
-//                                 <Button
-//                                   variant='outline'
-//                                   role='combobox'
-//                                   disabled={isDisabled}
-//                                   className={cn(
-//                                     'w-full justify-between',
-//                                     !field.value && 'text-muted-foreground',
-//                                   )}
-//                                 >
-//                                   {rolesLoading ? (
-//                                     <span className='flex items-center gap-2'>
-//                                       <Loader2 className='animate-spin h-4 w-4' />
-//                                       Loading roles...
-//                                     </span>
-//                                   ) : field.value ? (
-//                                     selectedRole
-//                                   ) : isDisabled ? (
-//                                     'Select a department first'
-//                                   ) : (
-//                                     'Select a role'
-//                                   )}
-//                                   <ChevronsUpDown
-//                                     className='ml-2 shrink-0 opacity-50'
-//                                     strokeWidth={2}
-//                                   />
-//                                 </Button>
-//                               </FormControl>
-//                             </PopoverTrigger>
-//                             <PopoverContent
-//                               className='w-[--radix-popover-trigger-width] p-0'
-//                               align='start'
-//                             >
-//                               <Command>
-//                                 <CommandInput placeholder='Search roles...' />
-//                                 <CommandList>
-//                                   <CommandEmpty>No roles found.</CommandEmpty>
-//                                   <CommandGroup>
-//                                     {roles.map((role) => (
-//                                       <CommandItem
-//                                         value={role}
-//                                         key={role}
-//                                         onSelect={() => {
-//                                           // Simply set the value to the selected role
-//                                           form.setValue('roleId', role);
-//                                           setOpenRoles(false);
-//                                         }}
-//                                       >
-//                                         <Check
-//                                           className={cn(
-//                                             'mr-2 h-4 w-4',
-//                                             field.value === role ? 'opacity-100' : 'opacity-0',
-//                                           )}
-//                                         />
-//                                         {role}
-//                                       </CommandItem>
-//                                     ))}
-//                                   </CommandGroup>
-//                                 </CommandList>
-//                               </Command>
-//                             </PopoverContent>
-//                           </Popover>
-//                           <FormMessage />
-//                         </FormItem>
-//                       );
-//                     }}
-//                   />
-//                 </CardContent>
-//               </Card>
-//             </div>
+                  <IGRPFormFieldPrimitive
+                    control={form.control}
+                    name='departmentCode'
+                    render={({ field }) => {
+                      const isDeptDisabled =
+                        deptLoading || !!deptError || (depts?.length ?? 0) === 0;
+                      return (
+                        <IGRPFormItemPrimitive className='flex flex-col'>
+                          <IGRPFormLabelPrimitive>Departamento</IGRPFormLabelPrimitive>
+                          <IGRPPopoverPrimitive
+                            open={openDepts}
+                            onOpenChange={setOpenDepts}
+                          >
+                            <IGRPPopoverTriggerPrimitive asChild>
+                              <IGRPFormControlPrimitive>
+                                <IGRPButtonPrimitive
+                                  variant='outline'
+                                  role='combobox'
+                                  disabled={isDeptDisabled}
+                                  className={cn(
+                                    'w-full justify-between',
+                                    !field.value && 'text-muted-foreground',
+                                  )}
+                                >
+                                  {deptLoading ? (
+                                    <span className='flex items-center gap-2'>
+                                      <IGRPIcon
+                                        iconName='Loader'
+                                        className='animate-spin h-4 w-4 mr-2'
+                                        strokeWidth={2}
+                                      />
+                                      A carregar departamentos...
+                                    </span>
+                                  ) : field.value ? (
+                                    depts?.find((d) => d.code === field.value)?.name
+                                  ) : deptError ? (
+                                    'Erro ao carregar departamentos'
+                                  ) : isDeptDisabled ? (
+                                    'Sem departamentos'
+                                  ) : (
+                                    'Selecionar departamento'
+                                  )}
+                                  {!deptLoading && (
+                                    <IGRPIcon
+                                      iconName='ChevronsUpDown'
+                                      className='ml-2 shrink-0 opacity-50'
+                                      strokeWidth={2}
+                                    />
+                                  )}
+                                </IGRPButtonPrimitive>
+                              </IGRPFormControlPrimitive>
+                            </IGRPPopoverTriggerPrimitive>
+                            <IGRPPopoverContentPrimitive className='w-[--radix-popover-trigger-width] p-0'>
+                              <IGRPCommandPrimitive>
+                                <IGRPCommandInputPrimitive placeholder='Procurar departamento...' />
+                                <IGRPCommandListPrimitive>
+                                  <IGRPCommandEmptyPrimitive>
+                                    Nenhum departamento encontrado.
+                                  </IGRPCommandEmptyPrimitive>
+                                  <IGRPCommandGroupPrimitive>
+                                    {depts?.map((dept) => (
+                                      <IGRPCommandItemPrimitive
+                                        value={dept.code}
+                                        key={dept.code}
+                                        onSelect={() => {
+                                          form.setValue('departmentCode', dept.code, {
+                                            shouldValidate: true,
+                                          });
+                                          form.setValue('roleNames', [], { shouldValidate: true });
+                                          setOpenDepts(false);
+                                        }}
+                                      >
+                                        <IGRPIcon
+                                          iconName='Check'
+                                          className={cn(
+                                            'mr-2',
+                                            dept.code === field.value ? 'opacity-100' : 'opacity-0',
+                                          )}
+                                        />
+                                        {dept.name}
+                                      </IGRPCommandItemPrimitive>
+                                    ))}
+                                  </IGRPCommandGroupPrimitive>
+                                </IGRPCommandListPrimitive>
+                              </IGRPCommandPrimitive>
+                            </IGRPPopoverContentPrimitive>
+                          </IGRPPopoverPrimitive>
+                          <IGRPFormMessagePrimitive>
+                            {deptError ? deptError.message : null}
+                          </IGRPFormMessagePrimitive>
+                        </IGRPFormItemPrimitive>
+                      );
+                    }}
+                  />
 
-//             <DialogFooter>
-//               <Button
-//                 variant='outline'
-//                 onClick={() => onOpenChange(false)}
-//                 disabled={isLoading}
-//                 type='button'
-//               >
-//                 Cancel
-//               </Button>
-//               <Button
-//                 type='submit'
-//                 disabled={btnDisabled}
-//               >
-//                 {isLoading ? 'Sending Invitations...' : 'Send Invitations'}
-//               </Button>
-//             </DialogFooter>
-//           </form>
-//         </Form>
-//       </DialogContent>
-//     </Dialog>
-//   );
-// }
+                  {/* Roles (multi-select) */}
+                  <IGRPFormFieldPrimitive
+                    control={form.control}
+                    name='roleNames'
+                    render={({ field }) => {
+                      const isDisabled = !selectedDeptCode || (roles?.length ?? 0) === 0;
+                      const selected = new Set(field.value ?? ([] as string[]));
+
+                      const toggle = (name: string) => {
+                        const next = new Set(selected);
+                        if (next.has(name)) next.delete(name);
+                        else next.add(name);
+                        form.setValue('roleNames', Array.from(next), {
+                          shouldValidate: true,
+                          shouldDirty: true,
+                        });
+                      };
+
+                      const clearAll = () => {
+                        form.setValue('roleNames', [], {
+                          shouldValidate: true,
+                          shouldDirty: true,
+                        });
+                      };
+
+                      const label =
+                        selected.size === 0
+                          ? isDisabled
+                            ? 'Selecione um departamento'
+                            : 'Selecionar roles'
+                          : selected.size === 1
+                            ? Array.from(selected)[0]
+                            : `${selected.size} roles selecionados`;
+
+                      return (
+                        <IGRPFormItemPrimitive className='flex flex-col'>
+                          <IGRPFormLabelPrimitive>Perfís</IGRPFormLabelPrimitive>
+                          <IGRPPopoverPrimitive
+                            open={openRoles}
+                            onOpenChange={setOpenRoles}
+                          >
+                            <IGRPPopoverTriggerPrimitive asChild>
+                              <IGRPFormControlPrimitive>
+                                <IGRPButtonPrimitive
+                                  variant='outline'
+                                  role='combobox'
+                                  disabled={isDisabled}
+                                  className={cn(
+                                    'w-full justify-between',
+                                    selected.size === 0 && 'text-muted-foreground',
+                                  )}
+                                >
+                                  <span className='truncate'>{label}</span>
+                                  <IGRPIcon
+                                    iconName='ChevronsUpDown'
+                                    className='ml-2 shrink-0 opacity-50'
+                                    strokeWidth={2}
+                                  />
+                                </IGRPButtonPrimitive>
+                              </IGRPFormControlPrimitive>
+                            </IGRPPopoverTriggerPrimitive>
+
+                            <IGRPPopoverContentPrimitive
+                              className='w-[--radix-popover-trigger-width] p-0'
+                              align='start'
+                            >
+                              <IGRPCommandPrimitive>
+                                <IGRPCommandInputPrimitive placeholder='Procurar perfil...' />
+                                <IGRPCommandListPrimitive>
+                                  <IGRPCommandEmptyPrimitive>
+                                    Nenhum perfil encontrado.
+                                  </IGRPCommandEmptyPrimitive>
+                                  <IGRPCommandGroupPrimitive>
+                                    {roles?.map((role) => {
+                                      const checked = selected.has(role.name);
+                                      return (
+                                        <IGRPCommandItemPrimitive
+                                          key={role.name}
+                                          value={role.name}
+                                          onSelect={(val) => {
+                                            toggle(val);
+                                          }}
+                                        >
+                                          <IGRPIcon
+                                            iconName='Check'
+                                            className={cn(
+                                              'mr-2',
+                                              checked ? 'opacity-100' : 'opacity-0',
+                                            )}
+                                          />
+                                          {role.name}
+                                        </IGRPCommandItemPrimitive>
+                                      );
+                                    })}
+                                  </IGRPCommandGroupPrimitive>
+
+                                  <div className='flex items-center justify-between px-2 py-2 border-t'>
+                                    <IGRPButtonPrimitive
+                                      type='button'
+                                      variant='ghost'
+                                      size='icon'
+                                      onClick={() => setOpenRoles(false)}
+                                      disabled={selected.size === 0}
+                                    >
+                                      <IGRPIcon iconName='CirclePlus' />
+                                    </IGRPButtonPrimitive>
+                                    <IGRPButtonPrimitive
+                                      type='button'
+                                      variant='ghost'
+                                      size='icon'
+                                      onClick={clearAll}
+                                    >
+                                      <IGRPIcon iconName='CircleX' />
+                                    </IGRPButtonPrimitive>
+                                  </div>
+                                </IGRPCommandListPrimitive>
+                              </IGRPCommandPrimitive>
+                            </IGRPPopoverContentPrimitive>
+                          </IGRPPopoverPrimitive>
+
+                          <IGRPFormMessagePrimitive>
+                            {rolesError ? rolesError.message : null}
+                          </IGRPFormMessagePrimitive>
+
+                          {selected.size > 0 && (
+                            <div className='mt-2 flex flex-wrap gap-2'>
+                              {Array.from(selected).map((r) => (
+                                <span
+                                  key={r}
+                                  className='inline-flex items-center gap-1 rounded-full border px-2 py-0.5 text-xs'
+                                >
+                                  {r}
+                                  <button
+                                    type='button'
+                                    className='opacity-60 hover:opacity-100'
+                                    onClick={() => toggle(r)}
+                                    aria-label={`Remover ${r}`}
+                                    title={`Remover ${r}`}
+                                  >
+                                    ×
+                                  </button>
+                                </span>
+                              ))}
+                            </div>
+                          )}
+                        </IGRPFormItemPrimitive>
+                      );
+                    }}
+                  />
+                </IGRPCardContentPrimitive>
+              </IGRPCardPrimitive>
+            </div>
+
+            <IGRPDialogFooterPrimitive>
+              <IGRPButtonPrimitive
+                variant='outline'
+                onClick={() => onOpenChange(false)}
+                disabled={isInviting}
+                type='button'
+              >
+                Cancelar
+              </IGRPButtonPrimitive>
+              <IGRPButtonPrimitive
+                type='submit'
+                disabled={btnDisabled}
+              >
+                {isInviting ? 'A enviar convites...' : 'Enviar convites'}
+              </IGRPButtonPrimitive>
+            </IGRPDialogFooterPrimitive>
+          </form>
+        </IGRPFormPrimitive>
+      </IGRPDialogContentPrimitive>
+    </IGRPDialogPrimitive>
+  );
+}

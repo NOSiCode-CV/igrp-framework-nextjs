@@ -10,6 +10,8 @@ import { getClientAccess } from './access-client';
 import { PermissionArgs } from '@/features/permission/permissions-schemas';
 
 export async function getRoles(params: RoleFilters) {
+  console.log({ RoleFilters: params });
+  
   const client = await getClientAccess();
 
   try {

@@ -16,8 +16,7 @@ interface ButtonTooltipProps {
   label: string;
   className?: string;
 }
-// TODO: aria accessibility
-// TODO: messages
+// TODO: instead to use ButtonPrimitive to use ButtonLink
 export function ButtonTooltip({ href, icon, label, className }: ButtonTooltipProps) {
   return (
     <IGRPTooltipProviderPrimitive>

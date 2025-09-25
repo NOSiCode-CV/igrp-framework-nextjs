@@ -1,22 +1,16 @@
 'use client';
 
 import { useEffect, useId, useRef, useState } from 'react';
-
-// import { UserDeleteDialog } from '@/features/users/components/delete-dialog';
-// import { UserInviteDialog } from '@/features/users/components/invite-dialog';
-import { useUsers, useCurrentUser } from '@/features/users/use-users';
 import {
   cn,
   ColumnDef,
   ColumnFiltersState,
   FilterFn,
-  IGRPBadge,
   IGRPBadgePrimitive,
   IGRPButtonPrimitive,
-  IGRPCheckboxPrimitive,
-  IGRPDropdownMenuCheckboxItemPrimitive,
   IGRPDropdownMenuContentPrimitive,
   IGRPDropdownMenuItemPrimitive,
+  IGRPDropdownMenuLabelPrimitive,
   IGRPDropdownMenuPrimitive,
   IGRPDropdownMenuSeparatorPrimitive,
   IGRPDropdownMenuTriggerPrimitive,
@@ -42,16 +36,28 @@ import {
   IGRPTooltipProviderPrimitive,
   IGRPTooltipTriggerPrimitive,
   PaginationState,
-  RowSelectionState,
   useIGRPToast,
 } from '@igrp/igrp-framework-react-design-system';
-import { ROUTES } from '@/lib/constants';
-import { ButtonLink } from '@/components/button-link';
-import { PageHeader } from '@/components/page-header';
-import { AppCenterLoading } from '@/components/loading';
-import { showStatus, statusClass } from '@/lib/utils';
 import { IGRPUserDTO } from '@igrp/platform-access-management-client-ts';
-import { flexRender, getCoreRowModel, getFilteredRowModel, getPaginationRowModel, getSortedRowModel, useReactTable } from '@tanstack/react-table';
+import {
+  flexRender,
+  getCoreRowModel,
+  getFilteredRowModel,
+  getPaginationRowModel,
+  getSortedRowModel,
+  Row,
+  useReactTable,
+} from '@tanstack/react-table';
+
+import { ButtonLink } from '@/components/button-link';
+import { AppCenterLoading } from '@/components/loading';
+import { PageHeader } from '@/components/page-header';
+import { ROUTES } from '@/lib/constants';
+import { useUsers, useCurrentUser } from '@/features/users/use-users';
+// import { UserDeleteDialog } from '@/features/users/components/delete-dialog';
+import { UserInviteDialog } from '@/features/users/components/user-invite-dialog';
+import { UserRolesDialog } from './user-role-dialog';
+import { useRouter } from 'next/navigation';
 
 const multiColumnFilterFn: FilterFn<IGRPUserDTO> = (row, _columnId, filterValue) => {
   const term = String(filterValue ?? '')
@@ -63,57 +69,27 @@ const multiColumnFilterFn: FilterFn<IGRPUserDTO> = (row, _columnId, filterValue)
   return name.includes(term) || desc.includes(term);
 };
 
-const columns: ColumnDef<IGRPUserDTO>[] = [
-  {
-    header: 'UserName',
-    accessorKey: 'username',
-    cell: ({ row }) => <div><IGRPTooltipProviderPrimitive>
-      <IGRPTooltipPrimitive>
-        <IGRPTooltipTriggerPrimitive asChild>
-          <ButtonLink
-            href={ROUTES.USER_PROFILE}
-            className='underline underline-offset-2 hover:text-primary hover:no-underline'
-            label={row.getValue('username')}
-            icon={''}
-            variant='link'
-          />
-        </IGRPTooltipTriggerPrimitive>
-        <IGRPTooltipContentPrimitive className='px-2 py-1 text-xs'>
-          Ver Perfil
-        </IGRPTooltipContentPrimitive>
-      </IGRPTooltipPrimitive>
-    </IGRPTooltipProviderPrimitive></div>,
-    enableSorting: false,
-    filterFn: multiColumnFilterFn,
-    enableColumnFilter: true,
-  },
-  {
-    header: 'Email',
-    accessorKey: 'email',
-    cell: ({ row }) => <div>{row.getValue('email') || 'N/A'}</div>,
-    enableSorting: false,
-  },
-  {
-    header: 'Nome',
-    accessorKey: 'name',
-    cell: ({ row }) => <div>{row.getValue('name') || 'N/A'}</div>,
-    enableSorting: false,
-  },
-];
-
 export function UserList() {
   const id = useId();
   const inputRef = useRef<HTMLInputElement>(null);
 
-  const [searchTerm, setSearchTerm] = useState('');
-  const [statusFilters, setStatusFilters] = useState<string[]>([]);
   const [inviteDialogOpen, setInviteDialogOpen] = useState(false);
-  const [userToDelete, setUserToDelete] = useState<{ username: string; email: string } | null>(null);
+  const [userToDelete, setUserToDelete] = useState<{ username: string; email: string } | null>(
+    null,
+  );
   const [deleteDialogOpen, setDeleteDialogOpen] = useState(false);
+
+  const [assignRolesFor, setAssignRolesFor] = useState<{
+    open: boolean;
+    username: string | null;
+    email: string | null;
+  }>(() => ({ open: false, username: null, email: null }));
 
   const [data, setData] = useState<IGRPUserDTO[]>([]);
   const [pagination, setPagination] = useState<PaginationState>({ pageIndex: 0, pageSize: 5 });
   const [columnFilters, setColumnFilters] = useState<ColumnFiltersState>([]);
+
+  const router = useRouter();
 
   const { data: users, isLoading, error } = useUsers();
   const { data: currentUser, isLoading: currentUserLoading } = useCurrentUser();
@@ -125,6 +101,115 @@ export function UserList() {
   useEffect(() => {
     setData(users ?? []);
   }, [users]);
+
+  const columns: ColumnDef<IGRPUserDTO>[] = [
+    {
+      header: 'UserName',
+      accessorKey: 'username',
+      cell: ({ row }) => {
+        const email = String(row.getValue('email'));
+        const username = String(row.getValue('username'));
+
+        return (
+          <div>
+            {isCurrentUser(email) ? (
+              <IGRPTooltipProviderPrimitive>
+                <IGRPTooltipPrimitive>
+                  <IGRPTooltipTriggerPrimitive asChild>
+                    <ButtonLink
+                      href={ROUTES.USER_PROFILE}
+                      className='underline underline-offset-2 hover:text-primary hover:no-underline'
+                      btnClassName='px-0'
+                      label={username}
+                      icon={''}
+                      variant='link'
+                    />
+                  </IGRPTooltipTriggerPrimitive>
+                  <IGRPTooltipContentPrimitive className='px-2 py-1 text-xs'>
+                    Ver Perfil
+                  </IGRPTooltipContentPrimitive>
+                </IGRPTooltipPrimitive>
+              </IGRPTooltipProviderPrimitive>
+            ) : (
+              username
+            )}
+          </div>
+        );
+      },
+      enableSorting: false,
+      enableColumnFilter: true,
+    },
+    {
+      header: 'Email',
+      accessorKey: 'email',
+      cell: ({ row }) => <div>{row.getValue('email') || 'N/A'}</div>,
+      enableSorting: false,
+    },
+    {
+      header: 'Nome',
+      accessorKey: 'name',
+      cell: ({ row }) => <div>{row.getValue('name') || 'N/A'}</div>,
+      enableSorting: false,
+    },
+    {
+      id: 'actions',
+      header: () => <span className='sr-only'>Actions</span>,
+      cell: ({ row }) => <RowActions row={row} />,
+      size: 60,
+      enableHiding: false,
+    },
+  ];
+
+  function RowActions({ row }: { row: Row<IGRPUserDTO> }) {
+    const email = String(row.getValue('email'));
+    const username = String(row.getValue('username'));
+
+    if (isCurrentUser(email)) {
+      return <IGRPBadgePrimitive>{`It's you`}</IGRPBadgePrimitive>;
+    }
+
+    return (
+      <IGRPDropdownMenuPrimitive>
+        <IGRPDropdownMenuTriggerPrimitive asChild>
+          <IGRPButtonPrimitive variant="outline" size="icon" className="size-7" aria-label="Ações">
+            <IGRPIcon iconName="MoreVertical" />
+          </IGRPButtonPrimitive>
+        </IGRPDropdownMenuTriggerPrimitive>
+
+        <IGRPDropdownMenuContentPrimitive align="end" className="min-w-44">
+          <IGRPDropdownMenuLabelPrimitive>Utilizador</IGRPDropdownMenuLabelPrimitive>
+
+          <IGRPDropdownMenuItemPrimitive
+            onSelect={() => { router.push(`${ROUTES.USER_PROFILE}/${username}`) }}
+          >
+            <IGRPIcon iconName="Pencil" />
+            Editar
+          </IGRPDropdownMenuItemPrimitive>
+
+          <IGRPDropdownMenuItemPrimitive
+            onSelect={() =>
+              setAssignRolesFor({ open: true, username, email })
+            }
+          >
+            <IGRPIcon iconName="UserPlus" />
+            Adicionar perfis
+          </IGRPDropdownMenuItemPrimitive>
+
+          <IGRPDropdownMenuSeparatorPrimitive />
+
+          <IGRPDropdownMenuItemPrimitive
+            className="text-destructive focus:text-destructive"
+            onSelect={() => handleDelete(username, email)}
+            variant='destructive'
+          >
+            <IGRPIcon iconName="Trash2" />
+            Remover
+          </IGRPDropdownMenuItemPrimitive>
+        </IGRPDropdownMenuContentPrimitive>
+      </IGRPDropdownMenuPrimitive>
+    );
+  }
+
 
   const table = useReactTable({
     data,
@@ -140,13 +225,11 @@ export function UserList() {
     state: { pagination, columnFilters },
   });
 
-
   if (isLoading || !users) {
     return <AppCenterLoading descrption='Carregando utilizadores...' />;
   }
 
   if (error) throw error;
-
 
   const handleDelete = (username: string, email: string) => {
     setUserToDelete({ username, email });
@@ -177,18 +260,13 @@ export function UserList() {
     }
   };
 
-  const filteredUsers = users.filter((user) =>
-    user.email?.toLowerCase().includes(searchTerm.toLowerCase()) ||
-    user.username?.toLowerCase().includes(searchTerm.toLowerCase())
-  );
-
   const isCurrentUser = (email: string) => {
     if (currentUser?.email === email) return true;
     return false;
   };
 
   return (
-    <div className='flex flex-col gap-10 animate-fade-in'>
+    <div className='flex flex-col gap-5 animate-fade-in'>
       <PageHeader
         title='Gestão de Utilizadores'
         description='Ver e gerir todos os utilizadores do sistema.'
@@ -217,7 +295,7 @@ export function UserList() {
             )}
             value={(table.getColumn('name')?.getFilterValue() ?? '') as string}
             onChange={(e) => table.getColumn('name')?.setFilterValue(e.target.value)}
-            placeholder='Filtar por nome...'
+            placeholder='Filtar por nome ou username...'
             type='text'
             aria-label='Filtar por nome'
           />
@@ -240,7 +318,10 @@ export function UserList() {
         <IGRPTablePrimitive>
           <IGRPTableHeaderPrimitive className='bg-muted'>
             {table.getHeaderGroups().map((headerGroup) => (
-              <IGRPTableRowPrimitive key={headerGroup.id} className='border-b dark:border-slate-800/60'>
+              <IGRPTableRowPrimitive
+                key={headerGroup.id}
+                className='border-b dark:border-slate-800/60'
+              >
                 {headerGroup.headers.map((header) => (
                   <IGRPTableHeadPrimitive
                     key={header.id}
@@ -248,12 +329,10 @@ export function UserList() {
                   >
                     {header.isPlaceholder
                       ? null
-                      : flexRender(header.column.columnDef.header, header.getContext())
-                    }
+                      : flexRender(header.column.columnDef.header, header.getContext())}
                   </IGRPTableHeadPrimitive>
                 ))}
               </IGRPTableRowPrimitive>
-
             ))}
           </IGRPTableHeaderPrimitive>
 
@@ -265,7 +344,10 @@ export function UserList() {
                   className='border-b dark:border-slate-800/60'
                 >
                   {row.getVisibleCells().map((cell) => (
-                    <IGRPTableCellPrimitive key={cell.id} className='p-4'>
+                    <IGRPTableCellPrimitive
+                      key={cell.id}
+                      className='p-4'
+                    >
                       {flexRender(cell.column.columnDef.cell, cell.getContext())}
                     </IGRPTableCellPrimitive>
                   ))}
@@ -281,162 +363,118 @@ export function UserList() {
                 </IGRPTableCellPrimitive>
               </IGRPTableRowPrimitive>
             )}
-            
-              {/* <IGRPTableCellPrimitive className='p-4 text-base'>
-                {isCurrentUser(user.email) ? (
-                  <IGRPTooltipProviderPrimitive>
-                    <IGRPTooltipPrimitive>
-                      <IGRPTooltipTriggerPrimitive asChild>
-                        <ButtonLink
-                          href={ROUTES.USER_PROFILE}
-                          className='underline underline-offset-2 hover:text-primary hover:no-underline'
-                          label={user.username}
-                          icon={''}
-                          variant='link'
-                        />
-                      </IGRPTooltipTriggerPrimitive>
-                      <IGRPTooltipContentPrimitive className='px-2 py-1 text-xs'>
-                        Ver Perfil
-                      </IGRPTooltipContentPrimitive>
-                    </IGRPTooltipPrimitive>
-                  </IGRPTooltipProviderPrimitive>
-                ) : (
-                  user.username
-                )}
-              </IGRPTableCellPrimitive>
-              
-              <IGRPTableCellPrimitive className='p-4'>
-                {isCurrentUser(user.email) ? (
-                  <IGRPBadge>{`It's you`}</IGRPBadge>
-                ) : (
-                  <IGRPButtonPrimitive
-                    variant='destructive'
-                    size='icon'
-                    className='size-7 text-destructive bg-transparent hover:text-white dark:text-white hover:bg-destructive/60 dark:focus-visible:ring-destructive/40 dark:bg-destructive/60'
-                    onClick={() => handleDelete(user.username, user.email)}
-                  >
-                    <IGRPIcon
-                      iconName='Trash2'
-                      strokeWidth={2}
-                    />
-                  </IGRPButtonPrimitive>
-                )}
-              </IGRPTableCellPrimitive> */} 
-            
           </IGRPTableBodyPrimitive>
         </IGRPTablePrimitive>
       </div>
 
-      <div className='flex items-center justify-between gap-8'>
-        <div className='flex items-center justify-end gap-3'>
-          <IGRPLabelPrimitive
-            htmlFor={`${id}-per-page`}
-            className='max-sm:sr-only'
-          >
-            Rows per page
-          </IGRPLabelPrimitive>
-          <IGRPSelectPrimitive
-            value={table.getState().pagination.pageSize.toString()}
-            onValueChange={(value) => table.setPageSize(Number(value))}
-          >
-            <IGRPSelectTriggerPrimitive
-              id={`${id}-per-page`}
-              className='w-fit whitespace-nowrap'
+      {table.getRowCount() > 10 && (
+        <div className='flex items-center justify-between gap-8'>
+          <div className='flex items-center justify-end gap-3'>
+            <IGRPLabelPrimitive
+              htmlFor={`${id}-per-page`}
+              className='max-sm:sr-only'
             >
-              <IGRPSelectValuePrimitive placeholder='Select number of results' />
-            </IGRPSelectTriggerPrimitive>
-            <IGRPSelectContentPrimitive className='[&_*[role=option]]:ps-2 [&_*[role=option]]:pe-8 [&_*[role=option]>span]:start-auto [&_*[role=option]>span]:end-2'>
-              {[5, 10, 25, 50].map((pageSize) => (
-                <IGRPSelectItemPrimitive
-                  key={pageSize}
-                  value={pageSize.toString()}
-                >
-                  {pageSize}
-                </IGRPSelectItemPrimitive>
-              ))}
-            </IGRPSelectContentPrimitive>
-          </IGRPSelectPrimitive>
-        </div>
+              Rows per page
+            </IGRPLabelPrimitive>
+            <IGRPSelectPrimitive
+              value={table.getState().pagination.pageSize.toString()}
+              onValueChange={(value) => table.setPageSize(Number(value))}
+            >
+              <IGRPSelectTriggerPrimitive
+                id={`${id}-per-page`}
+                className='w-fit whitespace-nowrap'
+              >
+                <IGRPSelectValuePrimitive placeholder='Select number of results' />
+              </IGRPSelectTriggerPrimitive>
+              <IGRPSelectContentPrimitive className='[&_*[role=option]]:ps-2 [&_*[role=option]]:pe-8 [&_*[role=option]>span]:start-auto [&_*[role=option]>span]:end-2'>
+                {[10, 25, 50].map((pageSize) => (
+                  <IGRPSelectItemPrimitive
+                    key={pageSize}
+                    value={pageSize.toString()}
+                  >
+                    {pageSize}
+                  </IGRPSelectItemPrimitive>
+                ))}
+              </IGRPSelectContentPrimitive>
+            </IGRPSelectPrimitive>
+          </div>
 
-        <div className='text-muted-foreground flex grow justify-end text-sm whitespace-nowrap'>
-          <p
-            className='text-muted-foreground text-sm whitespace-nowrap'
-            aria-live='polite'
-          >
-            <span className='text-foreground'>
-              {table.getState().pagination.pageIndex *
-                table.getState().pagination.pageSize +
-                1}
-              -
-              {Math.min(
-                Math.max(
-                  table.getState().pagination.pageIndex *
-                  table.getState().pagination.pageSize +
-                  table.getState().pagination.pageSize,
-                  0,
-                ),
-                table.getRowCount(),
-              )}
-            </span>{' '}
-            of <span className='text-foreground'>{table.getRowCount().toString()}</span>
-          </p>
-        </div>
+          <div className='text-muted-foreground flex grow justify-end text-sm whitespace-nowrap'>
+            <p
+              className='text-muted-foreground text-sm whitespace-nowrap'
+              aria-live='polite'
+            >
+              <span className='text-foreground'>
+                {table.getState().pagination.pageIndex * table.getState().pagination.pageSize + 1}-
+                {Math.min(
+                  Math.max(
+                    table.getState().pagination.pageIndex * table.getState().pagination.pageSize +
+                    table.getState().pagination.pageSize,
+                    0,
+                  ),
+                  table.getRowCount(),
+                )}
+              </span>{' '}
+              of <span className='text-foreground'>{table.getRowCount().toString()}</span>
+            </p>
+          </div>
 
-        <div>
-          <IGRPPaginationPrimitive>
-            <IGRPPaginationContentPrimitive>
-              <IGRPPaginationItemPrimitive>
-                <IGRPButtonPrimitive
-                  size='icon'
-                  variant='outline'
-                  className='disabled:pointer-events-none disabled:opacity-50'
-                  onClick={() => table.firstPage()}
-                  disabled={!table.getCanPreviousPage()}
-                  aria-label='Go to first page'
-                >
-                  <IGRPIcon iconName='ChevronFirst' />
-                </IGRPButtonPrimitive>
-              </IGRPPaginationItemPrimitive>
-              <IGRPPaginationItemPrimitive>
-                <IGRPButtonPrimitive
-                  size='icon'
-                  variant='outline'
-                  className='disabled:pointer-events-none disabled:opacity-50'
-                  onClick={() => table.previousPage()}
-                  disabled={!table.getCanPreviousPage()}
-                  aria-label='Go to previous page'
-                >
-                  <IGRPIcon iconName='ChevronLeft' />
-                </IGRPButtonPrimitive>
-              </IGRPPaginationItemPrimitive>
-              <IGRPPaginationItemPrimitive>
-                <IGRPButtonPrimitive
-                  size='icon'
-                  variant='outline'
-                  className='disabled:pointer-events-none disabled:opacity-50'
-                  onClick={() => table.nextPage()}
-                  disabled={!table.getCanNextPage()}
-                  aria-label='Go to next page'
-                >
-                  <IGRPIcon iconName='ChevronRight' />
-                </IGRPButtonPrimitive>
-              </IGRPPaginationItemPrimitive>
-              <IGRPPaginationItemPrimitive>
-                <IGRPButtonPrimitive
-                  size='icon'
-                  variant='outline'
-                  className='disabled:pointer-events-none disabled:opacity-50'
-                  onClick={() => table.lastPage()}
-                  disabled={!table.getCanNextPage()}
-                  aria-label='Go to last page'
-                >
-                  <IGRPIcon iconName='ChevronLast' />
-                </IGRPButtonPrimitive>
-              </IGRPPaginationItemPrimitive>
-            </IGRPPaginationContentPrimitive>
-          </IGRPPaginationPrimitive>
+          <div>
+            <IGRPPaginationPrimitive>
+              <IGRPPaginationContentPrimitive>
+                <IGRPPaginationItemPrimitive>
+                  <IGRPButtonPrimitive
+                    size='icon'
+                    variant='outline'
+                    className='disabled:pointer-events-none disabled:opacity-50'
+                    onClick={() => table.firstPage()}
+                    disabled={!table.getCanPreviousPage()}
+                    aria-label='Go to first page'
+                  >
+                    <IGRPIcon iconName='ChevronFirst' />
+                  </IGRPButtonPrimitive>
+                </IGRPPaginationItemPrimitive>
+                <IGRPPaginationItemPrimitive>
+                  <IGRPButtonPrimitive
+                    size='icon'
+                    variant='outline'
+                    className='disabled:pointer-events-none disabled:opacity-50'
+                    onClick={() => table.previousPage()}
+                    disabled={!table.getCanPreviousPage()}
+                    aria-label='Go to previous page'
+                  >
+                    <IGRPIcon iconName='ChevronLeft' />
+                  </IGRPButtonPrimitive>
+                </IGRPPaginationItemPrimitive>
+                <IGRPPaginationItemPrimitive>
+                  <IGRPButtonPrimitive
+                    size='icon'
+                    variant='outline'
+                    className='disabled:pointer-events-none disabled:opacity-50'
+                    onClick={() => table.nextPage()}
+                    disabled={!table.getCanNextPage()}
+                    aria-label='Go to next page'
+                  >
+                    <IGRPIcon iconName='ChevronRight' />
+                  </IGRPButtonPrimitive>
+                </IGRPPaginationItemPrimitive>
+                <IGRPPaginationItemPrimitive>
+                  <IGRPButtonPrimitive
+                    size='icon'
+                    variant='outline'
+                    className='disabled:pointer-events-none disabled:opacity-50'
+                    onClick={() => table.lastPage()}
+                    disabled={!table.getCanNextPage()}
+                    aria-label='Go to last page'
+                  >
+                    <IGRPIcon iconName='ChevronLast' />
+                  </IGRPButtonPrimitive>
+                </IGRPPaginationItemPrimitive>
+              </IGRPPaginationContentPrimitive>
+            </IGRPPaginationPrimitive>
+          </div>
         </div>
-      </div>
+      )}
 
       {/* {userToDelete && (
         <UserDeleteDialog
@@ -445,14 +483,20 @@ export function UserList() {
           userName={userToDelete.username}
           onDelete={confirmDelete}
         />
-      )}
+      )}*/}
 
       {inviteDialogOpen && (
         <UserInviteDialog
           open={inviteDialogOpen}
           onOpenChange={setInviteDialogOpen}
         />
-      )} */}
+      )}
+
+      <UserRolesDialog
+        open={assignRolesFor.open}
+        username={assignRolesFor.username}
+        onClose={() => setAssignRolesFor({ open: false, username: null, email: null })}
+      />
     </div>
   );
 }

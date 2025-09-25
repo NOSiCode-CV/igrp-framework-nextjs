@@ -3,11 +3,11 @@ import { statusSchema } from '@/schemas/global';
 export const ROUTES = {
   APPLICATIONS: '/applications',
   APPS: '/apps',
-  NEW_APPS: '/applications/novo',
+  NEW_APPS: '/applications/new',
   USERS: '/user',
-  USER_PROFILE: '/user/perfil',
+  USER_PROFILE: '/user/profile',
   DEPARTMENTS: '/departments',
-  DEPARTMENTS_ROLE: 'perfil',
+  DEPARTMENTS_ROLE: 'roles',
   EDIT: '/editar',
 } as const;
 

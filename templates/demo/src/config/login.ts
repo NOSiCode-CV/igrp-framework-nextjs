@@ -1,6 +1,6 @@
 export const loginConfig = {
   texts: {
-    welcome: 'Benvindo ao IGRP',
+    welcome: 'Bem-vindo ao IGRP',
     description: 'Introduza as suas credenciais para aceder.',
     loginButton: 'Login Now',
     copyright: 'Desenvolvido por',
@@ -11,6 +11,8 @@ export const loginConfig = {
   },
   sliderPosition: 'left' as 'left' | 'right',
 };
+
+export type LoginConfig = typeof loginConfig;
 
 export const carouselItems = [
   {
@@ -29,3 +31,5 @@ export const carouselItems = [
     description: 'Work together seamlessly with your team in real-time.',
   },
 ];
+
+export type CarouselLoginType = (typeof carouselItems)[number];

@@ -5,12 +5,11 @@ import { headers } from 'next/headers';
 import { configLayout } from '@/actions/igrp/layout';
 import { createConfig } from '@igrp/template-config';
 
-export default async function Layout({ children }: Readonly<{ children: React.ReactNode }>) {
+export default async function RootLayout({ children }: Readonly<{ children: React.ReactNode }>) {
   const layoutConfig = await configLayout();
   const config = await createConfig(layoutConfig);
 
-  /*** use this when use session from next-auth and use login ***/
-
+  // TDOD: see to move this to the root-layout
   const { layout, previewMode, loginUrl, logoutUrl } = config;
   const { session } = layout ?? {};
 
@@ -23,12 +22,15 @@ export default async function Layout({ children }: Readonly<{ children: React.Re
 
   const baseUrl = process.env.NEXTAUTH_URL;
 
-  const login = loginUrl || '/';
-  const loginPath = new URL(login, baseUrl).pathname;
+  const urlLogin = loginUrl ?? '/login';
+  const urlLogout = logoutUrl ?? '/logout';
+
+  const loginPath = new URL(loginUrl || '/', baseUrl).pathname;
+
   const isAlreadyOnLogin = currentPath.startsWith(loginPath);
 
-  if (!previewMode && session === null && login && !isAlreadyOnLogin) {
-    redirect(logoutUrl || login);
+  if (!previewMode && session === null && urlLogin && !isAlreadyOnLogin) {
+    redirect(urlLogin || urlLogout);
   }
 
   return <IGRPLayout config={config}>{children}</IGRPLayout>;

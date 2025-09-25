@@ -12,11 +12,16 @@ function isPublicPath(pathname: string) {
     pathname.includes('.')
   );
 }
-
 export async function middleware(request: NextRequest) {
   const { pathname } = request.nextUrl;
 
   if (isPublicPath(pathname)) return NextResponse.next();
+
+  const isPreview = process.env.IGRP_PREVIEW_MODE
+    ? process.env.IGRP_PREVIEW_MODE === 'true'
+    : false;
+
+  if (isPreview) return NextResponse.next();
 
   const possibleCookieNames = ['__Secure-next-auth.session-token', 'next-auth.session-token'];
 
@@ -36,16 +41,7 @@ export async function middleware(request: NextRequest) {
     return NextResponse.redirect(loginUrl);
   }
 
-  const now = Math.floor(Date.now() / 1000);
-  const skew = 60;
-  const nextAuthExp = typeof token.exp === 'number' ? token.exp : undefined;
-  const providerExp = typeof token.expiresAt === 'number' ? token.expiresAt : undefined;
-
-  const sessionExpired = nextAuthExp !== undefined && nextAuthExp <= now + skew;
-  const providerExpired = providerExp !== undefined && providerExp <= now + skew;
-  const refreshFailed = token.error === 'RefreshAccessTokenError';
-
-  if (sessionExpired || providerExpired || refreshFailed) {
+  if (token.error === 'RefreshAccessTokenError') {
     return NextResponse.redirect(new URL('/logout', request.url));
   }
 

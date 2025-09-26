@@ -4,8 +4,8 @@ import { NextConfig } from 'next';
 const basePath = process.env.IGRP_APP_BASE_PATH || '';
 
 const nextConfig: NextConfig = {
-  // uncomment this line when you build to production,
-  // output: 'standalone',
+  // uncomment this line when you build with docker,
+  output: 'standalone',
 
   // use this if you are using a custom domain for igrp-applications-center
   basePath: basePath,

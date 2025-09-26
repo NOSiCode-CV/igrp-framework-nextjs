@@ -36,3 +36,15 @@ export const normalizeRole = (data: CreateRoleArgs) => {
     status: data.status as Status,
   };
 };
+
+export const RoleFiltersSchema = z.object({
+  departmentCode: z.string().trim().optional(),
+  username: z.string().trim().optional(),
+  fetchAllWhenNoDept: z.boolean().default(false),
+  enabled: z.boolean().optional(),
+});
+
+export type RoleFiltersArgs = z.infer<typeof RoleFiltersSchema>;
+
+
+

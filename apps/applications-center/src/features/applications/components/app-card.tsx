@@ -11,7 +11,7 @@ import {
 import { IGRPApplicationArgs } from '@igrp/framework-next-types';
 
 import { cn, showStatus, statusClass } from '@/lib/utils';
-import { ButtonTooltip } from '@/components/button-tooltip';
+import { ButtonLinkTooltip } from '@/components/button-link-tooltip';
 import { formatSlug } from '@/features/applications/app-utils';
 import { ROUTES } from '@/lib/constants';
 
@@ -55,17 +55,17 @@ export function ApplicationCard({ app }: { app: IGRPApplicationArgs }) {
           </IGRPBadgePrimitive>
         </div>
         <div className='flex items-center gap-1'>
-          <ButtonTooltip
+          <ButtonLinkTooltip
             href={`${ROUTES.APPLICATIONS}/${code}`}
             icon='Eye'
             label='Ver'
           />
-          <ButtonTooltip
+          <ButtonLinkTooltip
             href={`${ROUTES.APPLICATIONS}/${code}/editar`}
             icon='SquarePen'
             label='Editar'
           />
-          <ButtonTooltip
+          <ButtonLinkTooltip
             href={href || ''}
             icon='ExternalLink'
             label='Abrir'

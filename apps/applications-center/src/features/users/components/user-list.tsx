@@ -5,14 +5,11 @@ import {
   cn,
   ColumnDef,
   ColumnFiltersState,
-  FilterFn,
   IGRPBadgePrimitive,
   IGRPButtonPrimitive,
   IGRPDropdownMenuContentPrimitive,
   IGRPDropdownMenuItemPrimitive,
-  IGRPDropdownMenuLabelPrimitive,
   IGRPDropdownMenuPrimitive,
-  IGRPDropdownMenuSeparatorPrimitive,
   IGRPDropdownMenuTriggerPrimitive,
   IGRPIcon,
   IGRPInputPrimitive,
@@ -54,20 +51,10 @@ import { AppCenterLoading } from '@/components/loading';
 import { PageHeader } from '@/components/page-header';
 import { ROUTES } from '@/lib/constants';
 import { useUsers, useCurrentUser } from '@/features/users/use-users';
-// import { UserDeleteDialog } from '@/features/users/components/delete-dialog';
 import { UserInviteDialog } from '@/features/users/components/user-invite-dialog';
 import { UserRolesDialog } from './user-role-dialog';
 import { useRouter } from 'next/navigation';
 
-const multiColumnFilterFn: FilterFn<IGRPUserDTO> = (row, _columnId, filterValue) => {
-  const term = String(filterValue ?? '')
-    .toLowerCase()
-    .trim();
-  if (!term) return true;
-  const name = String(row.original?.name ?? '').toLowerCase();
-  const desc = String(row.original?.username ?? '').toLowerCase();
-  return name.includes(term) || desc.includes(term);
-};
 
 export function UserList() {
   const id = useId();
@@ -94,8 +81,6 @@ export function UserList() {
   const { data: users, isLoading, error } = useUsers();
   const { data: currentUser, isLoading: currentUserLoading } = useCurrentUser();
 
-  // const { mutateAsync: deleteUser } = useDeleteUser();
-
   const { igrpToast } = useIGRPToast();
 
   useEffect(() => {
@@ -111,29 +96,32 @@ export function UserList() {
         const username = String(row.getValue('username'));
 
         return (
-          <div>
+          <>
             {isCurrentUser(email) ? (
-              <IGRPTooltipProviderPrimitive>
-                <IGRPTooltipPrimitive>
-                  <IGRPTooltipTriggerPrimitive asChild>
-                    <ButtonLink
-                      href={ROUTES.USER_PROFILE}
-                      className='underline underline-offset-2 hover:text-primary hover:no-underline'
-                      btnClassName='px-0'
-                      label={username}
-                      icon={''}
-                      variant='link'
-                    />
-                  </IGRPTooltipTriggerPrimitive>
-                  <IGRPTooltipContentPrimitive className='px-2 py-1 text-xs'>
-                    Ver Perfil
-                  </IGRPTooltipContentPrimitive>
-                </IGRPTooltipPrimitive>
-              </IGRPTooltipProviderPrimitive>
+              <div className='flex items-center gap-3'>
+                <IGRPTooltipProviderPrimitive>
+                  <IGRPTooltipPrimitive>
+                    <IGRPTooltipTriggerPrimitive asChild>
+                      <ButtonLink
+                        href={ROUTES.USER_PROFILE}
+                        className='underline underline-offset-2 hover:text-primary hover:no-underline'
+                        btnClassName='px-0'
+                        label={username}
+                        icon={''}
+                        variant='link'
+                      />
+                    </IGRPTooltipTriggerPrimitive>
+                    <IGRPTooltipContentPrimitive className='px-2 py-1 text-xs'>
+                      Ver Perfil
+                    </IGRPTooltipContentPrimitive>
+                  </IGRPTooltipPrimitive>
+                </IGRPTooltipProviderPrimitive>
+                <IGRPBadgePrimitive>{`It's you`}</IGRPBadgePrimitive>
+              </div>
             ) : (
               username
             )}
-          </div>
+          </>
         );
       },
       enableSorting: false,
@@ -162,54 +150,43 @@ export function UserList() {
 
   function RowActions({ row }: { row: Row<IGRPUserDTO> }) {
     const email = String(row.getValue('email'));
-    const username = String(row.getValue('username'));
-
-    if (isCurrentUser(email)) {
-      return <IGRPBadgePrimitive>{`It's you`}</IGRPBadgePrimitive>;
-    }
+    const username = String(row.getValue('username'));    
 
     return (
       <IGRPDropdownMenuPrimitive>
-        <IGRPDropdownMenuTriggerPrimitive asChild>
-          <IGRPButtonPrimitive variant="outline" size="icon" className="size-7" aria-label="Ações">
-            <IGRPIcon iconName="MoreVertical" />
-          </IGRPButtonPrimitive>
+        <IGRPDropdownMenuTriggerPrimitive className='p-1 rounded-sm'>
+          <IGRPIcon iconName="Ellipsis" />
         </IGRPDropdownMenuTriggerPrimitive>
 
-        <IGRPDropdownMenuContentPrimitive align="end" className="min-w-44">
-          <IGRPDropdownMenuLabelPrimitive>Utilizador</IGRPDropdownMenuLabelPrimitive>
-
-          <IGRPDropdownMenuItemPrimitive
-            onSelect={() => { router.push(`${ROUTES.USER_PROFILE}/${username}`) }}
-          >
-            <IGRPIcon iconName="Pencil" />
-            Editar
-          </IGRPDropdownMenuItemPrimitive>
-
+        <IGRPDropdownMenuContentPrimitive align="end" className="min-w-44">   
           <IGRPDropdownMenuItemPrimitive
             onSelect={() =>
               setAssignRolesFor({ open: true, username, email })
             }
           >
             <IGRPIcon iconName="UserPlus" />
-            Adicionar perfis
+            Adicionar perfís
           </IGRPDropdownMenuItemPrimitive>
 
-          <IGRPDropdownMenuSeparatorPrimitive />
+          {/* {!isCurrentUser(email) && (
+            <>
+              <IGRPDropdownMenuSeparatorPrimitive />
 
-          <IGRPDropdownMenuItemPrimitive
-            className="text-destructive focus:text-destructive"
-            onSelect={() => handleDelete(username, email)}
-            variant='destructive'
-          >
-            <IGRPIcon iconName="Trash2" />
-            Remover
-          </IGRPDropdownMenuItemPrimitive>
+              <IGRPDropdownMenuItemPrimitive
+                className="text-destructive focus:text-destructive"
+                onSelect={() => handleDelete(username, email)}
+                variant='destructive'
+              >
+                <IGRPIcon iconName="Trash2" />
+                Remover
+              </IGRPDropdownMenuItemPrimitive>
+            </>
+          )} */}
+
         </IGRPDropdownMenuContentPrimitive>
       </IGRPDropdownMenuPrimitive>
     );
   }
-
 
   const table = useReactTable({
     data,
@@ -234,30 +211,6 @@ export function UserList() {
   const handleDelete = (username: string, email: string) => {
     setUserToDelete({ username, email });
     setDeleteDialogOpen(true);
-  };
-
-  const confirmDelete = async () => {
-    if (!userToDelete) return;
-
-    try {
-      // await deleteUser(userToDelete.username);
-
-      igrpToast({
-        type: 'success',
-        title: 'Elinimar Utilizador',
-        description: `Utilizador '${userToDelete.email}' eliminado com sucesso`,
-      });
-    } catch (error) {
-      console.error('Falha ao eliminar utilizador:', error);
-      igrpToast({
-        type: 'error',
-        title: 'Falha ao eliminar utilizador',
-        description: `Tente novamente. ${error}`,
-      });
-    } finally {
-      setDeleteDialogOpen(false);
-      setUserToDelete(null);
-    }
   };
 
   const isCurrentUser = (email: string) => {
@@ -346,7 +299,7 @@ export function UserList() {
                   {row.getVisibleCells().map((cell) => (
                     <IGRPTableCellPrimitive
                       key={cell.id}
-                      className='p-4'
+                      className='p-4 truncate'
                     >
                       {flexRender(cell.column.columnDef.cell, cell.getContext())}
                     </IGRPTableCellPrimitive>
@@ -476,15 +429,6 @@ export function UserList() {
         </div>
       )}
 
-      {/* {userToDelete && (
-        <UserDeleteDialog
-          open={deleteDialogOpen}
-          onOpenChange={setDeleteDialogOpen}
-          userName={userToDelete.username}
-          onDelete={confirmDelete}
-        />
-      )}*/}
-
       {inviteDialogOpen && (
         <UserInviteDialog
           open={inviteDialogOpen}
@@ -494,8 +438,8 @@ export function UserList() {
 
       <UserRolesDialog
         open={assignRolesFor.open}
-        username={assignRolesFor.username}
-        onClose={() => setAssignRolesFor({ open: false, username: null, email: null })}
+        onOpenChange={(open) => setAssignRolesFor({ open, username: null, email: null })}
+        username={assignRolesFor.username as string}
       />
     </div>
   );

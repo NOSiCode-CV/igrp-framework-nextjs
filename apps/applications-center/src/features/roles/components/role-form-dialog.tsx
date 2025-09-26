@@ -110,8 +110,8 @@ export function RoleFormDialog({
         });
       } else {
         const payload = normalizeRole(values);
-
         await createRole(payload);
+        
         igrpToast({
           type: 'success',
           title: 'Adicionar Perfil',

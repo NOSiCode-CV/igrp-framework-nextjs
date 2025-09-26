@@ -1,6 +1,6 @@
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
-import { addRolesToUser, getCurrentUser, getUsers, inviteUser } from '@/actions/user';
-import { CreateUserRequest, IGRPUserDTO } from '@igrp/platform-access-management-client-ts';
+import { addRolesToUser, getCurrentUser, getUserRoles, getUsers, inviteUser } from '@/actions/user';
+import { CreateUserRequest, IGRPUserDTO, RoleDTO } from '@igrp/platform-access-management-client-ts';
 
 export const useUsers = () => {
   return useQuery<IGRPUserDTO[]>({
@@ -38,5 +38,25 @@ export const useAddUserRole = () => {
       await queryClient.invalidateQueries({ queryKey: ['users'] });
       await queryClient.refetchQueries({ queryKey: ['users'], exact: true });
     },
+  });
+};
+
+export const useRemoveUserRole = () => {
+  const queryClient = useQueryClient();
+
+  return useMutation({
+    mutationFn: async ({ username, roleNames }: { username: string; roleNames: string[] }) =>
+      addRolesToUser(username, roleNames),
+    onSuccess: async () => {
+      await queryClient.invalidateQueries({ queryKey: ['users'] });
+      await queryClient.refetchQueries({ queryKey: ['users'], exact: true });
+    },
+  });
+};
+
+export const useUserRoles = (username: string) => {
+  return useQuery<RoleDTO[]>({
+    queryKey: ['users'],
+    queryFn: () => getUserRoles(username),
   });
 };

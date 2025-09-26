@@ -12,10 +12,20 @@ import { RoleArgs } from './role-schemas';
 import { RoleFilters, UpdateRoleRequest } from '@igrp/platform-access-management-client-ts';
 import { PermissionArgs } from '../permission/permissions-schemas';
 
-export const useRoles = (params: RoleFilters) => {
-  return useQuery<RoleArgs[]>({
-    queryKey: ['roles'],
-    queryFn: () => getRoles(params),
+type RoleFiltersArgs = RoleFilters & {
+  enabled?: boolean;
+};
+export function useRoles({ departmentCode, enabled = true }:RoleFiltersArgs) {
+  return useQuery({
+    queryKey: ["roles", departmentCode],
+    queryFn: () => {
+      if (!departmentCode) {
+        return [];
+      }
+      return getRoles({ departmentCode })
+    },
+    enabled: enabled && !!departmentCode,
+    // staleTime: 60_000,
   });
 };
 

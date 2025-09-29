@@ -40,6 +40,8 @@ export async function inviteUser(user: CreateUserRequest) {
 export async function addRolesToUser(username: string, roleNames: string[]) {
   const client = await getClientAccess();
 
+  console.log({ username, roleNames });
+
   try {
     const result = await client.users.addRolesToUser(username, roleNames);
     return result.data;
@@ -61,9 +63,11 @@ export async function removeRolesFromUser(username: string, roleNames: string[])
   }
 }
 
+// TODO: remove the applicationCode
 export async function getUserRoles(username: string) {
   const client = await getClientAccess();
-  const applicationCode = '';
+  const applicationCode = '1';
+
   try {
     const result = await client.users.getUserRoles(username, applicationCode);
     return result.data;

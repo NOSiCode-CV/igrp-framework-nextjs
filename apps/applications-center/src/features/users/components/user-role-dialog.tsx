@@ -59,11 +59,6 @@ import { useRoles } from '@/features/roles/use-roles';
 import { useDepartments } from '@/features/departments/use-departments';
 import { useUserRoles, useAddUserRole, useRemoveUserRole } from '@/features/users/use-users';
 
-type Props = {
-  open: boolean;
-  onOpenChange: (open: boolean) => void;
-  username: string;
-};
 
 const norm = (s: string) => s.trim().toLowerCase();
 
@@ -140,7 +135,13 @@ function diffRoles(selected: RoleArgs[], existing: RoleArgs[]) {
   };
 }
 
-export function UserRolesDialog({ open, onOpenChange, username }: Props) {
+type UserRolesDialogProps = {
+  open: boolean;
+  onOpenChange: (open: boolean) => void;
+  username: string;
+};
+
+export function UserRolesDialog({ open, onOpenChange, username }: UserRolesDialogProps) {
   const id = useId();
   const inputRef = useRef<HTMLInputElement>(null);
   const { igrpToast } = useIGRPToast();

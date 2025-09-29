@@ -27,8 +27,8 @@ export const useCreatePermission = () => {
   return useMutation({
     mutationFn: createPermission,
     onSuccess: async () => {
-      await queryClient.invalidateQueries({ queryKey: ['permissions'], exact: true });
-      await queryClient.refetchQueries({ queryKey: ['permissions'], exact: true });
+      await queryClient.invalidateQueries({ queryKey: ['permissions'] });
+      await queryClient.refetchQueries({ queryKey: ['permissions'] });
     },
   });
 };
@@ -40,8 +40,8 @@ export const useUpdatePermission = () => {
     mutationFn: async ({ name, data }: { name: string; data: UpdatePermissionRequest }) =>
       updatePermission(name, data),
     onSuccess: async () => {
-      await queryClient.invalidateQueries({ queryKey: ['permissions'], exact: true });
-      await queryClient.refetchQueries({ queryKey: ['permissions'], exact: true });
+      await queryClient.invalidateQueries({ queryKey: ['permissions'] });
+      await queryClient.refetchQueries({ queryKey: ['permissions'] });
     },
   });
 };
@@ -53,7 +53,7 @@ export const useDeletePermission = () => {
     mutationFn: async (name: string) => deletePermission(name),
     onSuccess: async () => {
       await queryClient.invalidateQueries({ queryKey: ['permissions'] });
-      await queryClient.refetchQueries({ queryKey: ['permissions'], exact: true });
+      await queryClient.refetchQueries({ queryKey: ['permissions'] });
     },
   });
 };

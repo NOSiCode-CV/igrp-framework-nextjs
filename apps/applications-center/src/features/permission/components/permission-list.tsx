@@ -80,10 +80,6 @@ export function PermissionList({ departmentCode }: PermissionListProps) {
     setOpenFormDialog(true);
   };
 
-  // const handleRoleCount = (name: string) => {
-  //   const { data: permissions, isLoading, error } = useRolesPermission(name);
-  // };
-
   const permissionEmpty = permissions?.length === 0;
 
   return (
@@ -191,11 +187,18 @@ export function PermissionList({ departmentCode }: PermissionListProps) {
             </div>
           ) : permissionEmpty ? (
             <div className='text-center py-6 text-muted-foreground'>
-              Nenhum perfil encontrado{' '}
+              <div>Nenhuma permissão encontrada{' '}</div>
               {searchTerm
                 ? 'Tente ajustar a sua pesquisa.'
-                : 'Adicione uma permissão para começar.'}
-            </div>
+                : <ButtonLink
+                  onClick={handleNewpermssion}
+                  icon='UserLock'
+                  href='#'
+                  label='Nova Permissão'
+                  variant='outline'
+                />
+              }
+            </div>            
           ) : (
             <div className='w-full min-w-0'>
               <div className='rounded-md border overflow-x-auto'>

@@ -17,7 +17,6 @@ import {
   IGRPDropdownMenuItemPrimitive,
   IGRPDropdownMenuContentPrimitive,
   IGRPDropdownMenuSeparatorPrimitive,
-  IGRPDropdownMenuLabelPrimitive,
   IGRPDropdownMenuTriggerPrimitive,
   IGRPBadge,
   IGRPBadgePrimitive,
@@ -65,6 +64,7 @@ export function DepartmentList() {
   const emptyList = departments.length === 0;
 
   const handleOpen = () => {
+    // TODO: review this
     refetch();
     setDeptToDelete(null);
   };

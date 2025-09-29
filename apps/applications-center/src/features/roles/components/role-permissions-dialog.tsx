@@ -234,11 +234,9 @@ export function RoleDetails({ departmentCode, role, open, onOpenChange }: RoleDe
 
     try {
       if (toAdd.length) {
-        console.log({ toAdd: toAdd.length });
         await addPermissions({ name: role.name, permissionNames: toAdd });
       }
       if (toRemove.length) {
-        console.log({ toRemove: toRemove.length });
         await removePermissions({ name: role.name, permissionNames: toRemove });
       }
 

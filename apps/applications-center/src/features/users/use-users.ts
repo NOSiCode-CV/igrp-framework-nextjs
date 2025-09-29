@@ -23,7 +23,7 @@ export const useInviteUser = () => {
     mutationFn: async ({ user }: { user: CreateUserRequest }) => inviteUser(user),
     onSuccess: async () => {
       await queryClient.invalidateQueries({ queryKey: ['users'] });
-      await queryClient.refetchQueries({ queryKey: ['users'], exact: true });
+      await queryClient.refetchQueries({ queryKey: ['users'] });
     },
   });
 };
@@ -36,7 +36,7 @@ export const useAddUserRole = () => {
       addRolesToUser(username, roleNames),
     onSuccess: async () => {
       await queryClient.invalidateQueries({ queryKey: ['users'] });
-      await queryClient.refetchQueries({ queryKey: ['users'], exact: true });
+      await queryClient.refetchQueries({ queryKey: ['users'] });
     },
   });
 };
@@ -49,14 +49,17 @@ export const useRemoveUserRole = () => {
       addRolesToUser(username, roleNames),
     onSuccess: async () => {
       await queryClient.invalidateQueries({ queryKey: ['users'] });
-      await queryClient.refetchQueries({ queryKey: ['users'], exact: true });
+      await queryClient.refetchQueries({ queryKey: ['users'] });
     },
   });
 };
 
-export const useUserRoles = (username: string) => {
+
+// TODO: this is not working
+export const useUserRoles = (username?: string) => {
   return useQuery<RoleDTO[]>({
-    queryKey: ['users'],
-    queryFn: () => getUserRoles(username),
+    queryKey: ['userRoles', username],
+    queryFn: () => getUserRoles(username!),
+    enabled: !!username,
   });
 };

@@ -53,7 +53,6 @@ import { ROUTES } from '@/lib/constants';
 import { useUsers, useCurrentUser } from '@/features/users/use-users';
 import { UserInviteDialog } from '@/features/users/components/user-invite-dialog';
 import { UserRolesDialog } from './user-role-dialog';
-import { useRouter } from 'next/navigation';
 
 
 export function UserList() {
@@ -75,8 +74,6 @@ export function UserList() {
   const [data, setData] = useState<IGRPUserDTO[]>([]);
   const [pagination, setPagination] = useState<PaginationState>({ pageIndex: 0, pageSize: 5 });
   const [columnFilters, setColumnFilters] = useState<ColumnFiltersState>([]);
-
-  const router = useRouter();
 
   const { data: users, isLoading, error } = useUsers();
   const { data: currentUser, isLoading: currentUserLoading } = useCurrentUser();
@@ -151,6 +148,8 @@ export function UserList() {
   function RowActions({ row }: { row: Row<IGRPUserDTO> }) {
     const email = String(row.getValue('email'));
     const username = String(row.getValue('username'));    
+
+    console.log({ email, username });
 
     return (
       <IGRPDropdownMenuPrimitive>
@@ -436,11 +435,13 @@ export function UserList() {
         />
       )}
 
-      <UserRolesDialog
-        open={assignRolesFor.open}
-        onOpenChange={(open) => setAssignRolesFor({ open, username: null, email: null })}
-        username={assignRolesFor.username as string}
-      />
+      {assignRolesFor.open && (
+        <UserRolesDialog
+          open={assignRolesFor.open}
+          onOpenChange={(open) => setAssignRolesFor({ ...assignRolesFor, open })}
+          username={assignRolesFor.username as string}
+        />
+      )}      
     </div>
   );
 }

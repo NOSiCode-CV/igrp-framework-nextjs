@@ -35,8 +35,8 @@ export const useCreateRole = () => {
   return useMutation({
     mutationFn: createRole,
     onSuccess: async () => {
-      await queryClient.invalidateQueries({ queryKey: ['roles'], exact: true });
-      await queryClient.refetchQueries({ queryKey: ['roles'], exact: true });
+      await queryClient.invalidateQueries({ queryKey: ['roles'] });
+      await queryClient.refetchQueries({ queryKey: ['roles'] });
     },
   });
 };
@@ -49,7 +49,7 @@ export const useUpdateRole = () => {
       updateRole(name, data),
     onSuccess: async () => {
       await queryClient.invalidateQueries({ queryKey: ['roles'] });
-      await queryClient.refetchQueries({ queryKey: ['roles'], exact: true });
+      await queryClient.refetchQueries({ queryKey: ['roles'] });
     },
   });
 };
@@ -61,7 +61,7 @@ export const useDeleteRole = () => {
     mutationFn: (name: string) => deleteRole(name),
     onSuccess: async () => {
       await queryClient.invalidateQueries({ queryKey: ['roles'] });
-      await queryClient.refetchQueries({ queryKey: ['roles'], exact: true });
+      await queryClient.refetchQueries({ queryKey: ['roles'] });
     },
   });
 };
@@ -82,7 +82,7 @@ export const useAddPermissionsToRole = () => {
       addPermissionsToRole(name, permissionNames),
     onSuccess: async () => {
       await queryClient.invalidateQueries({ queryKey: ['roles'] });
-      await queryClient.refetchQueries({ queryKey: ['roles'], exact: true });
+      await queryClient.refetchQueries({ queryKey: ['roles'] });
     },
   });
 };
@@ -95,7 +95,7 @@ export const useRemovePermissionsFromRole = () => {
       addPermissionsToRole(name, permissionNames),
     onSuccess: async () => {
       await queryClient.invalidateQueries({ queryKey: ['roles'] });
-      await queryClient.refetchQueries({ queryKey: ['roles'], exact: true });
+      await queryClient.refetchQueries({ queryKey: ['roles'] });
     },
   });
 };

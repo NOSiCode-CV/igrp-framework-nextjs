@@ -5,7 +5,6 @@ import {
   cn,
   ColumnDef,
   ColumnFiltersState,
-  IGRPBadgePrimitive,
   IGRPButtonPrimitive,
   IGRPDropdownMenuContentPrimitive,
   IGRPDropdownMenuItemPrimitive,
@@ -32,6 +31,7 @@ import {
   IGRPTooltipPrimitive,
   IGRPTooltipProviderPrimitive,
   IGRPTooltipTriggerPrimitive,
+  IGRPUserAvatar,
   PaginationState,
   useIGRPToast,
 } from '@igrp/igrp-framework-react-design-system';
@@ -50,10 +50,10 @@ import { ButtonLink } from '@/components/button-link';
 import { AppCenterLoading } from '@/components/loading';
 import { PageHeader } from '@/components/page-header';
 import { ROUTES } from '@/lib/constants';
-import { useUsers, useCurrentUser } from '@/features/users/use-users';
+import { useUsers, useCurrentUser, useUserRoles } from '@/features/users/use-users';
 import { UserInviteDialog } from '@/features/users/components/user-invite-dialog';
 import { UserRolesDialog } from './user-role-dialog';
-
+import { getInitials } from '@/lib/utils';
 
 export function UserList() {
   const id = useId();
@@ -72,13 +72,13 @@ export function UserList() {
   }>(() => ({ open: false, username: null, email: null }));
 
   const [data, setData] = useState<IGRPUserDTO[]>([]);
-  const [pagination, setPagination] = useState<PaginationState>({ pageIndex: 0, pageSize: 5 });
+  const [pagination, setPagination] = useState<PaginationState>({ pageIndex: 0, pageSize: 10 });
   const [columnFilters, setColumnFilters] = useState<ColumnFiltersState>([]);
 
   const { data: users, isLoading, error } = useUsers();
   const { data: currentUser, isLoading: currentUserLoading } = useCurrentUser();
 
-  const { igrpToast } = useIGRPToast();
+  // const { igrpToast } = useIGRPToast();
 
   useEffect(() => {
     setData(users ?? []);
@@ -86,7 +86,38 @@ export function UserList() {
 
   const columns: ColumnDef<IGRPUserDTO>[] = [
     {
-      header: 'UserName',
+      header: 'Nome',
+      accessorKey: 'name',
+      cell: ({ row }) => {
+        const email = String(row.getValue('email'));
+        const name = String(row.getValue('name'));
+
+        return (
+          <div className='flex items-center gap-3'>
+            <IGRPUserAvatar
+              alt={name}
+              fallbackContent={getInitials(name)}
+              className='size-12 bg-white/50'
+              fallbackClass='text-base'
+            />
+            <div>
+              <div className='font-medium'>{name}</div>
+              <span className='text-muted-foreground mt-0.5 text-xs'>{email}</span>
+            </div>
+          </div>
+        );
+      },
+      enableSorting: false,
+      enableColumnFilter: true,
+    },
+    {
+      header: 'Email',
+      accessorKey: 'email',
+      cell: ({ row }) => <div>{row.getValue('email') || 'N/A'}</div>,
+      enableSorting: false,
+    },
+    {
+      header: 'Username',
       accessorKey: 'username',
       cell: ({ row }) => {
         const email = String(row.getValue('email'));
@@ -102,9 +133,9 @@ export function UserList() {
                       <ButtonLink
                         href={ROUTES.USER_PROFILE}
                         className='underline underline-offset-2 hover:text-primary hover:no-underline'
-                        btnClassName='px-0'
+                        btnClassName='px-0 gap-1'
                         label={username}
-                        icon={''}
+                        icon='UserCheck'
                         variant='link'
                       />
                     </IGRPTooltipTriggerPrimitive>
@@ -113,7 +144,6 @@ export function UserList() {
                     </IGRPTooltipContentPrimitive>
                   </IGRPTooltipPrimitive>
                 </IGRPTooltipProviderPrimitive>
-                <IGRPBadgePrimitive>{`It's you`}</IGRPBadgePrimitive>
               </div>
             ) : (
               username
@@ -122,20 +152,14 @@ export function UserList() {
         );
       },
       enableSorting: false,
-      enableColumnFilter: true,
     },
     {
-      header: 'Email',
-      accessorKey: 'email',
-      cell: ({ row }) => <div>{row.getValue('email') || 'N/A'}</div>,
+      id: 'roles',
+      header: () => <span>Perfís</span>,
+      cell: ({ row }) => <RolesCountCell username={String(row.getValue('username'))} />,
       enableSorting: false,
     },
-    {
-      header: 'Nome',
-      accessorKey: 'name',
-      cell: ({ row }) => <div>{row.getValue('name') || 'N/A'}</div>,
-      enableSorting: false,
-    },
+
     {
       id: 'actions',
       header: () => <span className='sr-only'>Actions</span>,
@@ -147,24 +171,23 @@ export function UserList() {
 
   function RowActions({ row }: { row: Row<IGRPUserDTO> }) {
     const email = String(row.getValue('email'));
-    const username = String(row.getValue('username'));    
-
-    console.log({ email, username });
+    const username = String(row.getValue('username'));
 
     return (
       <IGRPDropdownMenuPrimitive>
         <IGRPDropdownMenuTriggerPrimitive className='p-1 rounded-sm'>
-          <IGRPIcon iconName="Ellipsis" />
+          <IGRPIcon iconName='Ellipsis' />
         </IGRPDropdownMenuTriggerPrimitive>
 
-        <IGRPDropdownMenuContentPrimitive align="end" className="min-w-44">   
+        <IGRPDropdownMenuContentPrimitive
+          align='end'
+          className='min-w-44'
+        >
           <IGRPDropdownMenuItemPrimitive
-            onSelect={() =>
-              setAssignRolesFor({ open: true, username, email })
-            }
+            onSelect={() => setAssignRolesFor({ open: true, username, email })}
           >
-            <IGRPIcon iconName="UserPlus" />
-            Adicionar perfís
+            <IGRPIcon iconName='ShieldUser' />
+            Perfís
           </IGRPDropdownMenuItemPrimitive>
 
           {/* {!isCurrentUser(email) && (
@@ -181,9 +204,45 @@ export function UserList() {
               </IGRPDropdownMenuItemPrimitive>
             </>
           )} */}
-
         </IGRPDropdownMenuContentPrimitive>
       </IGRPDropdownMenuPrimitive>
+    );
+  }
+
+  function RolesCountCell({ username }: { username: string }) {
+    const { data, isLoading, isError } = useUserRoles(username);
+
+    if (isLoading) return <div>…</div>;
+    if (isError) return <div>—</div>;
+
+    const roles = data ?? [];
+    const names = roles.map((r) => r.name);
+
+    if (roles.length === 0) {
+      return <div className='text-center'>0</div>;
+    }
+
+    return (
+      <IGRPTooltipProviderPrimitive>
+        <IGRPTooltipPrimitive>
+          <IGRPTooltipTriggerPrimitive asChild>
+            <div className='text-center cursor-default'>{roles.length}</div>
+          </IGRPTooltipTriggerPrimitive>
+
+          <IGRPTooltipContentPrimitive className='text-sm p-4'>
+            <div className='flex max-w-64 max-h-48 flex-col gap-2 overflow-auto'>
+              {names.map((n, i) => (
+                <div
+                  key={`${username}-${n}-${i}`}
+                  className='truncate'
+                >
+                  {n}
+                </div>
+              ))}
+            </div>
+          </IGRPTooltipContentPrimitive>
+        </IGRPTooltipPrimitive>
+      </IGRPTooltipProviderPrimitive>
     );
   }
 
@@ -320,26 +379,28 @@ export function UserList() {
       </div>
 
       {table.getRowCount() > 10 && (
-        <div className='flex items-center justify-between gap-8'>
-          <div className='flex items-center justify-end gap-3'>
+        <div className='flex items-center gap-6 px-2'>
+          <div className='flex items-center gap-3 grow justify-end '>
             <IGRPLabelPrimitive
-              htmlFor={`${id}-per-page`}
+              htmlFor={id}
               className='max-sm:sr-only'
             >
-              Rows per page
+              Registo por página
             </IGRPLabelPrimitive>
             <IGRPSelectPrimitive
               value={table.getState().pagination.pageSize.toString()}
-              onValueChange={(value) => table.setPageSize(Number(value))}
+              onValueChange={(value) => {
+                table.setPageSize(Number(value));
+              }}
             >
               <IGRPSelectTriggerPrimitive
-                id={`${id}-per-page`}
+                id={id}
                 className='w-fit whitespace-nowrap'
               >
-                <IGRPSelectValuePrimitive placeholder='Select number of results' />
+                <IGRPSelectValuePrimitive />
               </IGRPSelectTriggerPrimitive>
               <IGRPSelectContentPrimitive className='[&_*[role=option]]:ps-2 [&_*[role=option]]:pe-8 [&_*[role=option]>span]:start-auto [&_*[role=option]>span]:end-2'>
-                {[10, 25, 50].map((pageSize) => (
+                {[10, 25, 50, 100].map((pageSize) => (
                   <IGRPSelectItemPrimitive
                     key={pageSize}
                     value={pageSize.toString()}
@@ -351,7 +412,7 @@ export function UserList() {
             </IGRPSelectPrimitive>
           </div>
 
-          <div className='text-muted-foreground flex grow justify-end text-sm whitespace-nowrap'>
+          <div className='text-muted-foreground text-sm whitespace-nowrap'>
             <p
               className='text-muted-foreground text-sm whitespace-nowrap'
               aria-live='polite'
@@ -361,13 +422,13 @@ export function UserList() {
                 {Math.min(
                   Math.max(
                     table.getState().pagination.pageIndex * table.getState().pagination.pageSize +
-                    table.getState().pagination.pageSize,
+                      table.getState().pagination.pageSize,
                     0,
                   ),
                   table.getRowCount(),
                 )}
               </span>{' '}
-              of <span className='text-foreground'>{table.getRowCount().toString()}</span>
+              de <span className='text-foreground'>{table.getRowCount().toString()}</span>
             </p>
           </div>
 
@@ -441,7 +502,7 @@ export function UserList() {
           onOpenChange={(open) => setAssignRolesFor({ ...assignRolesFor, open })}
           username={assignRolesFor.username as string}
         />
-      )}      
+      )}
     </div>
   );
 }

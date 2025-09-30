@@ -187,18 +187,19 @@ export function PermissionList({ departmentCode }: PermissionListProps) {
             </div>
           ) : permissionEmpty ? (
             <div className='text-center py-6 text-muted-foreground'>
-              <div>Nenhuma permissão encontrada{' '}</div>
-              {searchTerm
-                ? 'Tente ajustar a sua pesquisa.'
-                : <ButtonLink
+              <div>Nenhuma permissão encontrada </div>
+              {searchTerm ? (
+                'Tente ajustar a sua pesquisa.'
+              ) : (
+                <ButtonLink
                   onClick={handleNewpermssion}
                   icon='UserLock'
                   href='#'
                   label='Nova Permissão'
                   variant='outline'
                 />
-              }
-            </div>            
+              )}
+            </div>
           ) : (
             <div className='w-full min-w-0'>
               <div className='rounded-md border overflow-x-auto'>

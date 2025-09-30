@@ -194,17 +194,18 @@ export function RolesList({ departmentCode }: RolesListProps) {
             </div>
           ) : roleEmpty ? (
             <div className='text-center py-6 text-muted-foreground'>
-              <div>Nenhum perfil encontrado{' '}</div>
-              {searchTerm 
-                ? 'Tente ajustar a sua pesquisa.' 
-                : <ButtonLink
+              <div>Nenhum perfil encontrado </div>
+              {searchTerm ? (
+                'Tente ajustar a sua pesquisa.'
+              ) : (
+                <ButtonLink
                   onClick={handleNewRole}
                   icon='UserLock'
                   href='#'
                   label='Novo Perfil'
                   variant='outline'
                 />
-              }
+              )}
             </div>
           ) : (
             <div className='rounded-md border'>

@@ -1,7 +1,11 @@
 'use client';
 
 import Link, { useLinkStatus } from 'next/link';
-import { IGRPButtonPrimitive, IGRPIconProps, IGRPIcon } from '@igrp/igrp-framework-react-design-system';
+import {
+  IGRPButtonPrimitive,
+  IGRPIconProps,
+  IGRPIcon,
+} from '@igrp/igrp-framework-react-design-system';
 import { cn } from '@/lib/utils';
 
 type IGRPBtnProps = React.ComponentProps<typeof IGRPButtonPrimitive>;
@@ -15,13 +19,13 @@ export interface ButtonLinkProps extends React.ComponentProps<typeof Link> {
 }
 
 export function ButtonLink({
-  label, 
-  icon, 
-  iconClassName, 
+  label,
+  icon,
+  iconClassName,
   variant,
   btnClassName,
   ...props
-}: ButtonLinkProps) {  
+}: ButtonLinkProps) {
   return (
     <IGRPButtonPrimitive
       asChild
@@ -69,4 +73,3 @@ function LinkLoadingIndicator({ iconName, iconClassName }: LinkLoadingIndicatorP
     </>
   );
 }
-

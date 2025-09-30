@@ -15,19 +15,19 @@ import { PermissionArgs } from '../permission/permissions-schemas';
 type RoleFiltersArgs = RoleFilters & {
   enabled?: boolean;
 };
-export function useRoles({ departmentCode, enabled = true }:RoleFiltersArgs) {
+export function useRoles({ departmentCode, enabled = true }: RoleFiltersArgs) {
   return useQuery({
-    queryKey: ["roles", departmentCode],
+    queryKey: ['roles', departmentCode],
     queryFn: () => {
       if (!departmentCode) {
         return [];
       }
-      return getRoles({ departmentCode })
+      return getRoles({ departmentCode });
     },
     enabled: enabled && !!departmentCode,
     // staleTime: 60_000,
   });
-};
+}
 
 export const useCreateRole = () => {
   const queryClient = useQueryClient();

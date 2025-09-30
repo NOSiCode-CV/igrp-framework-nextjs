@@ -124,33 +124,35 @@ function IGRPDatePicker({
 
   if (formContext) {
     return (
-      <FormField
-        control={formContext.control}
-        name={fieldName}
-        render={({ field, fieldState }) => (
-          <FormItem className={cn(/*igrpGridSizeClasses[gridSize],*/ className)}>
-            {label && (
-              <FormLabel
-                className={cn(
-                  labelClassName,
-                  required && 'after:content-["*"] after:text-destructive',
-                )}
-              >
-                {label}
-              </FormLabel>
-            )}
-            <FormControl>
-              {renderPicker(field.value, (val) => {
-                field.onChange(val);
-                onDateChange?.(val);
-              })}
-            </FormControl>
+      <div className={cn('*:not-first:mt-2', /*igrpGridSizeClasses[gridSize],*/ className)}>
+        <FormField
+          control={formContext.control}
+          name={fieldName}
+          render={({ field, fieldState }) => (
+            <FormItem>
+              {label && (
+                <FormLabel
+                  className={cn(
+                    labelClassName,
+                    required && 'after:content-["*"] after:text-destructive',
+                  )}
+                >
+                  {label}
+                </FormLabel>
+              )}
+              <FormControl>
+                {renderPicker(field.value, (val) => {
+                  field.onChange(val);
+                  onDateChange?.(val);
+                })}
+              </FormControl>
 
-            {helperText && !fieldState.error && <FormDescription>{helperText}</FormDescription>}
-            <FormMessage className="text-xs" />
-          </FormItem>
-        )}
-      />
+              {helperText && !fieldState.error && <FormDescription>{helperText}</FormDescription>}
+              <FormMessage className="text-xs" />
+            </FormItem>
+          )}
+        />
+      </div>
     );
   }
 

@@ -18,7 +18,7 @@ export const departmentSchema = z
 
 export type DepartmentArgs = z.infer<typeof departmentSchema>;
 
-export const createDepartmentSchema = departmentSchema.omit({ id: true, status: true })
+export const createDepartmentSchema = departmentSchema.omit({ id: true, status: true });
 
 export type CreateDepartment = z.infer<typeof createDepartmentSchema>;
 

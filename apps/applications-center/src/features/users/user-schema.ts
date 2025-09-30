@@ -12,15 +12,15 @@ export const UserSchema = z.object({
 });
 
 export const CreateUserSchema = UserSchema.omit({ id: true });
-export const UpdateUserSchema = CreateUserSchema.partial();
+export const UpdateUserSchema = UserSchema.omit({ id: true, username: true }).partial();
 
 export type UserArgs = z.infer<typeof UserSchema>;
 export type CreateUserArgs = z.infer<typeof CreateUserSchema>;
-export type UpdateUserArgs = z.infer<typeof CreateUserSchema>;
+export type UpdateUserArgs = z.infer<typeof UpdateUserSchema>;
 
 export const FormUserSchema = z.object({
   name: NameSchema,
-  username: UsernameSchema.optional(), 
+  username: UsernameSchema.optional(),
   email: EmailSchema,
 });
 export type FormUserArgs = z.infer<typeof FormUserSchema>;

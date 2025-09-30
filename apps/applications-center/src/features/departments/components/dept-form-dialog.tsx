@@ -107,17 +107,17 @@ export function DepartmentCreateDialog({
       igrpToast({
         type: 'success',
         title: 'Departamento',
-        description: `O departamento foi ${department ? 'atualizado' : 'criado'} com sucesso.`
+        description: `O departamento foi ${department ? 'atualizado' : 'criado'} com sucesso.`,
       });
     } catch (error) {
       igrpToast({
         type: 'error',
         title: `Não foi possível ${department ? 'atualizar' : 'criar'} departamento.`,
-        description: error instanceof Error ? error.message : 'Ocorreu um erro desconhecido.'       
+        description: error instanceof Error ? error.message : 'Ocorreu um erro desconhecido.',
       });
-    } finally {     
+    } finally {
       form.reset();
-      onOpenChange(false);     
+      onOpenChange(false);
     }
   };
 

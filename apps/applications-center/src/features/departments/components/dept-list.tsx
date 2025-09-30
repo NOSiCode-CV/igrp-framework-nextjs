@@ -226,7 +226,7 @@ export function DepartmentList() {
                             />
                           </IGRPButtonPrimitive>
                         </IGRPDropdownMenuTriggerPrimitive>
-                        <IGRPDropdownMenuContentPrimitive align='end'>                          
+                        <IGRPDropdownMenuContentPrimitive align='end'>
                           <IGRPDropdownMenuSeparatorPrimitive className='my-1' />
                           <IGRPDropdownMenuItemPrimitive asChild>
                             <Link href={`${ROUTES.DEPARTMENTS}/${dept.code}`}>

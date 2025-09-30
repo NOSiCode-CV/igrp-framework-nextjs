@@ -115,30 +115,28 @@ export function UserInviteDialog({ open, onOpenChange }: UserInviteDialogProps) 
     }
   };
 
- const onSubmit = async (values: FormSchema) => {
-  const { users, roleNames } = values;
+  const onSubmit = async (values: FormSchema) => {
+    const { users, roleNames } = values;
 
-  const inviteAll = Promise.all(
-    users.map(async (raw) => {
-      const username = deriveUsernameFromEmail(raw.email);
+    const inviteAll = Promise.all(
+      users.map(async (raw) => {
+        const username = deriveUsernameFromEmail(raw.email);
 
-      const userPayload: CreateUserArgs = {
-        name: raw.name.trim(),
-        username,                  
-        email: raw.email.trim(),
-      };
+        const userPayload: CreateUserArgs = {
+          name: raw.name.trim(),
+          username,
+          email: raw.email.trim(),
+        };
 
-      const created = await userInvite({ user: userPayload });
-      const finalUsername = (created as any)?.username ?? username;
+        const created = await userInvite({ user: userPayload });
+        const finalUsername = (created as any)?.username ?? username;
 
-      if (finalUsername && roleNames?.length) {
-        await addUserRole({ username: finalUsername, roleNames });
-      }
-      return finalUsername;
-    })
-  );
-;
-
+        if (finalUsername && roleNames?.length) {
+          await addUserRole({ username: finalUsername, roleNames });
+        }
+        return finalUsername;
+      }),
+    );
     igrpToast({
       promise: inviteAll,
       loading: `A convidar ${users.length} utilizador${users.length > 1 ? 'es' : ''}...`,

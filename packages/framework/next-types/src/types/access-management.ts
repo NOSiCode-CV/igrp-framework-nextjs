@@ -21,7 +21,7 @@ export interface IGRPApplicationArgs {
   picture?: string | null;
   url?: string | null;
   slug?: string;
-  departmentCode: string;
+  departments: string[];
   createdBy?: string;
   createdDate?: string;
   lastModifiedBy?: string;
@@ -45,7 +45,7 @@ export interface IGRPMenuItemArgs {
   createdDate?: string;
   lastModifiedBy?: string;
   lastModifiedDate?: string;
-  permissions: string[];
+  roles: string[];
 }
 
 export type IGRPMenuCRUDArgs = Omit<IGRPMenuItemArgs, 'type'> & {

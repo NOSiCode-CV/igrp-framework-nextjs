@@ -63,13 +63,11 @@ export async function removeRolesFromUser(username: string, roleNames: string[])
   }
 }
 
-// TODO: remove the applicationCode
 export async function getUserRoles(username: string) {
   const client = await getClientAccess();
-  const applicationCode = '1';
 
   try {
-    const result = await client.users.getUserRoles(username, applicationCode);
+    const result = await client.users.getUserRoles(username);
     return result.data;
   } catch (error) {
     console.error('[user-role] Erro ao obter perfís de utilizador:', error);

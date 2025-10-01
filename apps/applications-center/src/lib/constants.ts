@@ -1,9 +1,8 @@
 import { statusSchema } from '@/schemas/global';
 
 export const ROUTES = {
-  APPLICATIONS: '/apps',
-  APPS: '/apps',
-  NEW_APPS: '/apps/new',
+  APPLICATIONS: '/applications',
+  NEW_APPS: '/applications/new',
   USERS: '/users',
   USER_PROFILE: '/users/profile',
   DEPARTMENTS: '/departments',

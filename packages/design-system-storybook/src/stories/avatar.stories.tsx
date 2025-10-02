@@ -1,18 +1,25 @@
 import type { Meta, StoryFn, StoryObj } from '@storybook/nextjs-vite';
-import { IGRPAvatar, type IGRPAvatarProps ,IGRPIconObject} from '@igrp/igrp-framework-react-design-system';
+import {
+  IGRPAvatar,
+  type IGRPAvatarProps,
+  IGRPIconObject,
+} from '@igrp/igrp-framework-react-design-system';
 import { IGRPButtonPrimitive } from '@igrp/igrp-framework-react-design-system';
 
 const avatars = [
-  { src: "https://originui.com/avatar-80-04.jpg", fallback: "A" },
-  { src: "https://originui.com/avatar-80-05.jpg", fallback: "B" },
-  { src: "https://originui.com/avatar-80-06.jpg", fallback: "C" },
-  { src: "https://originui.com/avatar-80-07.jpg", fallback: "D" },
-  { src: "https://originui.com/avatar-80-08.jpg", fallback: "E" }
+  { src: 'https://originui.com/avatar-80-04.jpg', fallback: 'A' },
+  { src: 'https://originui.com/avatar-80-05.jpg', fallback: 'B' },
+  { src: 'https://originui.com/avatar-80-06.jpg', fallback: 'C' },
+  { src: 'https://originui.com/avatar-80-07.jpg', fallback: 'D' },
+  { src: 'https://originui.com/avatar-80-08.jpg', fallback: 'E' },
 ];
 
 const maxVisible = 4;
 const visibleAvatars = avatars.slice(0, maxVisible);
 const remaining = avatars.length - maxVisible;
+
+type Story = StoryObj<typeof IGRPAvatar>;
+
 
 export default {
   title: 'Components/Avatar',
@@ -21,68 +28,72 @@ export default {
     layout: 'centered',
   },
   argTypes: {
-    src:{
+    src: {
       control: 'text',
       description: 'Specifies the path to the image file',
     },
-    size:{
+    size: {
       control: 'number',
       description: 'Avatar size',
     },
-    fallback: { 
+    fallback: {
       control: 'text',
       description: 'Simplified version of a user`s primary avatar when it cannot be shown ',
-     },
-    hasStatus: { 
+    },
+    hasStatus: {
       control: 'boolean',
-      options: [true,false],
+      options: [true, false],
       description: 'Avatar has State',
       defaultValue: 'False',
-     },
-    status: {  
-      control: 'select',
-      description:'Avatar current state',
-      options: ['primary', 'success','destructive','warning','info','secondary','indigo'],
     },
-    showIcon: { 
+    status: {
+      control: 'select',
+      description: 'Avatar current state',
+      options: ['primary', 'success', 'destructive', 'warning', 'info', 'secondary', 'indigo'],
+    },
+    showIcon: {
       control: 'boolean',
-      options: [true,false],
+      options: [true, false],
       description: 'If Avatar has Icon',
       defaultValue: 'False',
-     },
-    className: { 
+    },
+    className: {
       control: 'text',
       description: 'If Avatar has Icon',
-     },
-    imageClassName: { control: 'text' },
+    },
+    imageClassName: { 
+      control: 'text',
+      description: 'Image class' 
+    },
     iconName: {
       control: 'select',
       options: IGRPIconObject,
       description: 'Select an icon',
-      defaultValue:'Circle'
+      defaultValue: 'Check',
     },
-    iconSize : { control: 'number' },
-    iconPlacement: {
-      control: 'select',
-      options: ['start', 'end'],
-    },
-    iconClassName: { control: 'text' },
-
-    showBadge: { control: 'boolean' },
-    badgeNumber : { control: 'number' },
-    fallbackIcon : {
+    iconClassName: { 
+      control: 'text',
+      description: 'Icon class' 
+     },
+    showBadge: { control: 'boolean',
+      description: 'If has Badge' 
+     },
+    badgeNumber: { 
+      control: 'number',
+      description: 'Number inside the Badge' 
+     },
+    fallbackIcon: {
       control: 'select',
       options: IGRPIconObject,
       description: 'Select an icon as Fallback',
-      defaultValue:'User'
+      defaultValue: 'User',
     },
-    hasFallbackIcon : { 
+    hasFallbackIcon: {
       control: 'boolean',
-      options: [true,false],
+      options: [true, false],
       description: 'If Avatar has Icon',
       defaultValue: 'False',
-     },
-
+    },
   },
 } as Meta;
 
@@ -96,9 +107,14 @@ export const Default: StoryObj<IGRPAvatarProps> = {
   render: Template,
   args: {
     src: 'https://originui.com/avatar-80-04.jpg',
-    fallback:'Avatar Aang',
-    iconName:'Circle',
-    status:'success',
+    fallback: 'Avatar Aang',
+    iconName: 'Check',
+    size: 30,
+    hasStatus:false,
+    hasFallbackIcon:false,
+    showIcon:false,
+    status:"success",
+    imageClassName:"rounded-full"
   },
 };
 
@@ -106,25 +122,25 @@ export const AvatarShape: StoryObj<IGRPAvatarProps> = {
   render: Template,
   args: {
     src: 'https://originui.com/avatar-80-04.jpg',
-    fallback:'AV',
-    imageClassName:'rounded-md',
-    iconName:'Circle',
-    status:'success',
+    fallback: 'AV',
+    imageClassName: 'rounded-md',
+    iconName: 'Check',
+    status: 'success',
   },
 };
 
 export const FallBackText: StoryObj<IGRPAvatarProps> = {
   render: Template,
   args: {
-    fallback:'AVasas',
+    fallback: 'AVasas',
   },
 };
 
 export const FallBackIcon: StoryObj<IGRPAvatarProps> = {
   render: Template,
   args: {
-    hasFallbackIcon:true,
-    fallbackIcon:'User',
+    hasFallbackIcon: true,
+    fallbackIcon: 'User',
   },
 };
 
@@ -132,19 +148,20 @@ export const Status: StoryObj<IGRPAvatarProps> = {
   render: Template,
   args: {
     src: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcR6SGvshARHJ5GYSH_Kig8-cYNw5rO3nWn7mA&s',
-    hasStatus:true,
-    status:'success',
-    className:'overflow-visible',
+    hasStatus: true,
+    status: 'success',
+    className: 'overflow-visible',
     imageClassName: 'rounded-full',
   },
 };
+
 export const Size: StoryObj<IGRPAvatarProps> = {
   render: Template,
   args: {
     src: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcR6SGvshARHJ5GYSH_Kig8-cYNw5rO3nWn7mA&s',
-    className:'overflow-visible',
+    className: 'overflow-visible',
     imageClassName: 'rounded-full',
-    size:120
+    size: 120,
   },
 };
 
@@ -152,9 +169,9 @@ export const HasIcon: StoryObj<IGRPAvatarProps> = {
   render: Template,
   args: {
     src: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcR6SGvshARHJ5GYSH_Kig8-cYNw5rO3nWn7mA&s',
-    showIcon:true,
-    iconName:'Apple',
-    className:'overflow-visible',
+    showIcon: true,
+    iconName: 'Check',
+    className: 'overflow-visible',
   },
 };
 
@@ -162,135 +179,115 @@ export const HasBadge: StoryObj<IGRPAvatarProps> = {
   render: Template,
   args: {
     src: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcR6SGvshARHJ5GYSH_Kig8-cYNw5rO3nWn7mA&s',
-    showBadge:true,
-    iconName:'Circle',
-    className:'overflow-visible',
-    badgeNumber :6
+    showBadge: true,
+    iconName: 'Check',
+    className: 'overflow-visible',
+    badgeNumber: 6,
   },
-  
 };
 
-type Story = StoryObj<typeof IGRPAvatar>;
-
+//TODO doutght multiple avatar must be in the Default example
 export const MultipleBadge: Story = {
-  
   render: () => (
-
-      <div className="flex -space-x-3">
-        {visibleAvatars.map((avatar, index) => (
-          <IGRPAvatar
-            key={index}
-            src={avatar.src}
-            iconName="Circle"
-            className="overflow-visible ring-background ring-2"
-            imageClassName="rounded-full"
-            fallback={avatar.fallback}
-            hasStatus={false}
-            status="primary"
-            showIcon={false}
-            iconSize={0}
-            showBadge={false}
-            badgeNumber={0}
-            multiple={0}
-          />
-        ))}
-
-        {remaining > 0 && (
-            <IGRPButtonPrimitive
-            
-            className="bg-secondary text-muted-foreground ring-background hover:bg-secondary hover:text-foreground flex size-10 items-center justify-center rounded-full text-xs ring-2"
-            size="icon"
-          >
-            +3s
-          </IGRPButtonPrimitive>
-
-        )}
-          
-      </div>      
+    <div className='flex -space-x-3'>
+      {visibleAvatars.map((avatar, index) => (
+        <IGRPAvatar
+          key={index}
+          src={avatar.src}
+          iconName='Check'
+          className='overflow-visible ring-background ring-2'
+          imageClassName='rounded-full'
+          fallback={avatar.fallback}
+          hasStatus={false}
+          status='primary'
+          showIcon={false}
+          iconSize={0}
+          showBadge={false}
+          badgeNumber={0}
+          multiple={0}
+        />
+      ))}
+      {remaining > 0 && (
+        <IGRPButtonPrimitive
+          className='bg-secondary text-muted-foreground ring-background hover:bg-secondary hover:text-foreground flex size-10 items-center justify-center rounded-full text-xs ring-2'
+          size='icon'
+        >
+          +3s
+        </IGRPButtonPrimitive>
+      )}
+    </div>
   ),
 };
 
 export const MultipleBadgeWithText: Story = {
-  
   render: () => (
-
-      <div className="flex -space-x-3 rounded-full border bg-gray-100">
-        {visibleAvatars.map((avatar, index) => (
-          <IGRPAvatar
-            key={index}
-            src={avatar.src}
-            iconName="Circle"
-            className="overflow-visible ring-background ring-2"
-            imageClassName="rounded-full"
-            fallback={avatar.fallback}
-            hasStatus={false}
-            status="primary"
-            showIcon={false}
-            iconSize={0}
-            showBadge={false}
-            badgeNumber={0}
-            multiple={0}
-          />
-        ))}
-
-        {remaining > 0 && (
-            <p
-            
-            className="flex items-center justify-center px-3"
-
-          >
-            Trusted by 60K+ developers.
-          </p>
-
-        )}
-          
-      </div>      
+    <div className='flex -space-x-3 rounded-full border bg-gray-100'>
+      {visibleAvatars.map((avatar, index) => (
+        <IGRPAvatar
+          key={index}
+          src={avatar.src}
+          iconName='Check'
+          className='overflow-visible ring-background ring-2'
+          imageClassName='rounded-full'
+          fallback={avatar.fallback}
+          hasStatus={false}
+          status='primary'
+          showIcon={false}
+          iconSize={0}
+          showBadge={false}
+          badgeNumber={0}
+          multiple={0}
+        />
+      ))}
+      {remaining > 0 && (
+        <p className='flex items-center justify-center px-3'>Trusted by 60K+ developers.</p>
+      )}
+    </div>
   ),
 };
 
-
 // export const MultipleBadge2: Story = {
-  
+
 //   render: (args) => (
 //       <div className="flex -space-x-3">
-//        <IGRPAvatar 
+//        <IGRPAvatar
 //             src='https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcR6SGvshARHJ5GYSH_Kig8-cYNw5rO3nWn7mA&s'
-//             iconName='Circle'
+//             iconName='Check'
 //             className='overflow-visible ring-background rounded-full ring-1'
-//             imageClassName='rounded-full' 
+//             imageClassName='rounded-full'
 //             fallback=''
-//             hasStatus={false} 
-//             status={'primary'} 
-//             showIcon={false} 
-//             iconSize={0} 
-//             showBadge={false} 
-//             badgeNumber={args.badgeNumber}  
+//             hasStatus={false}
+//             status={'primary'}
+//             showIcon={false}
+//             iconSize={0}
+//             showBadge={false}
+//             badgeNumber={args.badgeNumber}
 
 //           />
-//           <IGRPAvatar 
+//           <IGRPAvatar
 //             src='https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcR6SGvshARHJ5GYSH_Kig8-cYNw5rO3nWn7mA&s'
-//             iconName='Circle'
+//             iconName='Check'
 //             className='overflow-visible ring-background rounded-full ring-1'
-//             imageClassName='rounded-full' 
-//             hasStatus={false} 
-//             status={'primary'} 
-//             showIcon={false} 
-//             iconSize={0} 
-//             showBadge={false} 
-//             badgeNumber={0} 
+//             imageClassName='rounded-full'
+//             hasStatus={false}
+//             status={'primary'}
+//             showIcon={false}
+//             iconSize={0}
+//             showBadge={false}
+//             badgeNumber={0}
 
 //           />
-//           <IGRPAvatar 
+//           <IGRPAvatar
 //             src='https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcR6SGvshARHJ5GYSH_Kig8-cYNw5rO3nWn7mA&s'
-//             iconName='Circle'
+//             iconName='Check'
 //             className='overflow-visible ring-background rounded-full ring-1'
-//             imageClassName='rounded-full'  
-//             hasStatus={false} 
-//             status={'primary'} 
-//             showIcon={false} 
-//             iconSize={0} 
-//             showBadge={false} 
-//             badgeNumber={0} 
+//             imageClassName='rounded-full'
+//             hasStatus={false}
+//             status={'primary'}
+//             showIcon={false}
+//             iconSize={0}
+//             showBadge={false}
+//             badgeNumber={0}
 //             multiple={0}
 //           />
 //             <IGRPButtonPrimitive
@@ -300,8 +297,7 @@ export const MultipleBadgeWithText: Story = {
 //       >
 //         {remaining}
 //       </IGRPButtonPrimitive>
-//       </div>      
+//       </div>
 //   ),
-  
-  
+
 // };

@@ -31,36 +31,34 @@ function IGRPAvatar({
   showBadge = false,
   status = 'primary',
   showIcon,
-  iconName = 'Circle',
+  iconName = 'Check',
   className,
-  iconPlacement = 'start',
   iconClassName,
   imageClassName,
   badgeNumber =  6,
   size = 32,
   fallbackIcon = 'User',
   hasFallbackIcon = false,
-  // multiple = 2
+  iconSize = 16
 }: IGRPAvatarProps) {
   const colorClasses = IGRPColors['solid'][status];
-  const positionIcon = iconPlacement === 'start' ? 'start-0' : 'end-0 pe-3';
+ // const positionIcon = iconPlacement === 'start' ? 'start-0' : 'end-0 pe-3';
   const upperFallBack = fallback ?  
     fallback.split(" ")
     .slice(0,2)                  
     .map(word => word.charAt(0))
     .join("")        
-    .toUpperCase() : " " ;
- 
+    .toUpperCase() : " " ; 
   
   //const positionParentIcon = iconPlacement === 'start' ? 'ps-9' : 'pe-9';
   return (
-    <div className='flex items-center justify-center rounded-full p-1 w-10 h-10'>
+    <div className='flex items-center justify-center  p-1 w-10 h-10'>
       <Avatar className={cn('overflow-visible', className)}  
         style={{
           height:size,
           width:size,
         }} >
-        <AvatarImage src={src} className={cn('rounded-full', imageClassName)} alt="avatar"  />
+        <AvatarImage src={src} className={cn('', imageClassName)} alt="avatar"  />
         <AvatarFallback>
           {hasFallbackIcon && (
           <IGRPIcon iconName={fallbackIcon}   
@@ -80,7 +78,7 @@ function IGRPAvatar({
               width: size * 0.375,
             }} 
             className={cn(
-              'border-background absolute -end-0.5 -bottom-0.5 size-3 rounded-full border-2 bg-emerald-500',
+              'border-background absolute -end-0.5 -bottom-0.5 size-3  border-2 bg-emerald-500',
               colorClasses.bgForeground ? colorClasses.bgForeground : '',
             )}
           >
@@ -88,21 +86,20 @@ function IGRPAvatar({
           </span>
         )}
         {showIcon && (
-          <div className={cn('absolute -top-2 left-5  rounded-full border-2 bg-white', positionIcon)}>
+          <div className={cn('absolute -top-2 left-5   border-2 bg-white')}>
           <IGRPIcon iconName={iconName} className={iconClassName}  
               style={{
-                height:size * 0.625,
-                width:size * 0.625,
+                height: iconSize, //size * 0.625,
+                width:iconSize, //,size * 0.625,
                 top: `${size * 0.05}px`,   // 5% from top
                 left: `${size * 0.05}px`,  // 5% from left
               }} 
             />
           </div>
         )}
-        {showBadge && (
-          <div className={cn('inline-flex items-center justify-center rounded-full border text-xs font-medium w-fit whitespace-nowrap shrink-0 gap-1 focus-visible:border-ring focus-visible:ring-ring/50 focus-visible:ring-[3px] transition-[color,box-shadow] leading-normal bg-primary text-primary-foreground [a&]:hover:bg-primary/90 border-background absolute -top-2 left-full min-w-5 -translate-x-3 px-1', positionIcon)}>
+        {showBadge && !showIcon && (
+          <div className={cn('inline-flex items-center justify-center  border text-xs font-medium w-fit whitespace-nowrap shrink-0 gap-1 focus-visible:border-ring focus-visible:ring-ring/50 focus-visible:ring-[3px] transition-[color,box-shadow] leading-normal bg-primary text-primary-foreground [a&]:hover:bg-primary/90 border-background absolute -top-2 left-full min-w-5 -translate-x-3 px-1')}>
             {badgeNumber}
-           {/* <span className={cn('absolute -top-0.5 left-1 text-sm', positionIcon)}>{badgeNumber}</span>  */}
           </div>
         )}
       </Avatar>

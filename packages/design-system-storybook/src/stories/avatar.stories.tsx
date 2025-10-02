@@ -113,8 +113,13 @@ export const Default: StoryObj<IGRPAvatarProps> = {
     hasStatus:false,
     hasFallbackIcon:false,
     showIcon:false,
-    status:"success",
-    imageClassName:"rounded-full"
+    showBadge	:false,
+    status:'success',
+    imageClassName:'rounded-full',
+    iconClassName:'rounded-full',
+    className: 'overflow-visible',
+    badgeNumber: 6,
+    fallbackIcon:'User'
   },
 };
 
@@ -172,6 +177,8 @@ export const HasIcon: StoryObj<IGRPAvatarProps> = {
     showIcon: true,
     iconName: 'Check',
     className: 'overflow-visible',
+    imageClassName:'rounded-full',
+    iconClassName:'rounded-full',
   },
 };
 
@@ -183,6 +190,8 @@ export const HasBadge: StoryObj<IGRPAvatarProps> = {
     iconName: 'Check',
     className: 'overflow-visible',
     badgeNumber: 6,
+    imageClassName:'rounded-full',
+    iconClassName:'rounded-full',
   },
 };
 
@@ -249,7 +258,7 @@ export const MultipleBadgeWithText: Story = {
 // export const MultipleBadge2: Story = {
 
 //   render: (args) => (
-//       <div className="flex -space-x-3">
+//       <div className='flex -space-x-3'>
 //        <IGRPAvatar
 //             src='https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcR6SGvshARHJ5GYSH_Kig8-cYNw5rO3nWn7mA&s'
 //             iconName='Check'
@@ -291,9 +300,9 @@ export const MultipleBadgeWithText: Story = {
 //             multiple={0}
 //           />
 //             <IGRPButtonPrimitive
-//         variant="secondary"
-//         className="bg-secondary text-muted-foreground ring-background hover:bg-secondary hover:text-foreground flex size-10 items-center justify-center rounded-full text-xs ring-2"
-//         size="icon"
+//         variant='secondary'
+//         className='bg-secondary text-muted-foreground ring-background hover:bg-secondary hover:text-foreground flex size-10 items-center justify-center rounded-full text-xs ring-2'
+//         size='icon'
 //       >
 //         {remaining}
 //       </IGRPButtonPrimitive>

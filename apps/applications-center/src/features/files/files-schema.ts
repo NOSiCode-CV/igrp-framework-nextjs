@@ -10,7 +10,7 @@ export const fileMetadataSchema = z.object({
 
 export const fileWithPreviewSchema = z.object({
   id: z.string(),
-  file: z.union([z.instanceof(File), fileMetadataSchema]), // REQUIRED
+  file: z.union([z.instanceof(File), fileMetadataSchema]),
   preview: z.string().optional(),
 });
 

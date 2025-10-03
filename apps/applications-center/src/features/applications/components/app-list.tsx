@@ -1,5 +1,5 @@
 'use client';
-
+import Image from 'next/image';
 import { useState } from 'react';
 import {
   IGRPButtonPrimitive,
@@ -18,12 +18,14 @@ import { useApplications } from '@/features/applications/use-applications';
 import { STATUS_OPTIONS } from '@/lib/constants';
 import { AppCenterLoading } from '@/components/loading';
 import { AppCenterNotFound } from '@/components/not-found';
+import { useFiles } from '@/features/files/use-files';
 
 export function ApplicationList() {
   const [searchTerm, setSearchTerm] = useState('');
   const [statusFilter, setStatusFilter] = useState<string[]>([]);
 
   const { data: applications, isLoading, error } = useApplications();
+
 
   if (isLoading && !error) return <AppCenterLoading descrption='Carregando aplicações...' />;
 
@@ -38,6 +40,9 @@ export function ApplicationList() {
     );
   }
 
+
+  
+
   // const allApps = applications.filter((app) => app.type !== 'SYSTEM');
 
   const filteredApps = applications.filter((app) => {
@@ -49,6 +54,8 @@ export function ApplicationList() {
     const matchesStatus = statusFilter.length === 0 || statusFilter.includes(app.status);
 
     return matchesSearch && matchesStatus;
+
+
   });
 
   return (
@@ -126,15 +133,12 @@ export function ApplicationList() {
           Nenhuma aplicação encontrada. Tente ajustar a sua pesquisa ou filtros.
         </div>
       ) : (
-        <div className='grid gap-4 sm:grid-cols-2 lg:grid-cols-3'>
+        <div className='grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 *:data-[slot=card]:from-primary/5 *:data-[slot=card]:to-card dark:*:data-[slot=card]:bg-card *:data-[slot=card]:bg-gradient-to-t'>
           {filteredApps.map((app) => (
-            <ApplicationCard
-              key={app.id}
-              app={app}
-            />
+            <ApplicationCard key={app.id} app={app} />
           ))}
         </div>
-      )}
+      )}      
     </div>
   );
 }

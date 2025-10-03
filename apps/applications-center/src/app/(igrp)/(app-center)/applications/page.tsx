@@ -6,6 +6,7 @@ import { ROUTES } from '@/lib/constants';
 export const dynamic = 'force-dynamic';
 
 export default function ApplicationsPage() {
+
   return (
     <div className='flex flex-col gap-10 animate-fade-in'>
       <PageHeader

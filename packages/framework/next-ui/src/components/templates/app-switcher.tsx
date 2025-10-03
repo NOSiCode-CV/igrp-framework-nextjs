@@ -14,8 +14,10 @@ import {
   IGRPSidebarMenuButtonPrimitive,
   IGRPSidebarMenuItemPrimitive,
   useIGRPSidebarPrimitive,
+  cn,
 } from '@igrp/igrp-framework-react-design-system';
 import type { IGRPApplicationArgs } from '@igrp/framework-next-types';
+import Link from 'next/link';
 
 interface IGRPTemplateAppSwitcherProps {
   apps?: IGRPApplicationArgs[];
@@ -30,16 +32,6 @@ function IGRPTemplateAppSwitcher({ apps, appCode, appCenterUrl }: IGRPTemplateAp
   const [listApps, setListApps] = useState(apps?.filter((item) => item.id !== activeApp?.id));
 
   if (!activeApp) throw new Error('Active application not found');
-
-  if (!appCenterUrl) {
-    console.warn('::: Missing APP_CENTER_URL :::');
-  }
-
-  const openAppCenter = () => {
-    if (appCenterUrl) {
-      window.open(appCenterUrl, '_self', 'noopener,noreferrer');
-    }
-  };
 
   const getApps = (app: IGRPApplicationArgs) => {
     setActiveApp(app);
@@ -116,11 +108,17 @@ function IGRPTemplateAppSwitcher({ apps, appCode, appCenterUrl }: IGRPTemplateAp
             )}
 
             <IGRPDropdownMenuSeparatorPrimitive />
-            <IGRPDropdownMenuItemPrimitive className="gap-2 p-2" onClick={() => openAppCenter()}>
+            <IGRPDropdownMenuItemPrimitive 
+              className={cn("gap-2 p-2", !appCenterUrl && 'pointer-events-none opacity-50')}
+             asChild
+            >
+            <Link href={appCenterUrl || '#'}>
               <div className="flex size-6 items-center justify-center rounded-md border bg-transparent">
                 <IGRPIcon iconName="Plus" className="size-4" />
               </div>
               <div className="text-muted-foreground font-medium">Ir ao Apps Center</div>
+            </Link>
+              
             </IGRPDropdownMenuItemPrimitive>
           </IGRPDropdownMenuContentPrimitive>
         </IGRPDropdownMenuPrimitive>

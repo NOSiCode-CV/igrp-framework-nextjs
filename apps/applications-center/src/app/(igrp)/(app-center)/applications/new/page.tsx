@@ -12,7 +12,6 @@ export default function NewApplicationPage() {
         showBackButton
         linkBackButton={ROUTES.APPLICATIONS}
       />
-
       <ApplicationForm />
     </div>
   );

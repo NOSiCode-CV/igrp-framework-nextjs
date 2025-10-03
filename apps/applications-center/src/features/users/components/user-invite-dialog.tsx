@@ -40,6 +40,7 @@ import { CreateUserArgs, formSchema, FormSchema, FormUserArgs } from '../user-sc
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useDepartments } from '@/features/departments/use-departments';
 import { useRoles } from '@/features/roles/use-roles';
+import { statusSchema } from '@/schemas/global';
 
 interface UserInviteDialogProps {
   open: boolean;
@@ -126,6 +127,7 @@ export function UserInviteDialog({ open, onOpenChange }: UserInviteDialogProps) 
           name: raw.name.trim(),
           username,
           email: raw.email.trim(),
+          status: statusSchema.enum.ACTIVE
         };
 
         const created = await userInvite({ user: userPayload });

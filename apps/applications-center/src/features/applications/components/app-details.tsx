@@ -71,7 +71,7 @@ export function ApplicationDetails({ code }: { code: string }) {
             linkBackButton={ROUTES.APPLICATIONS}
           >
             <ButtonLink
-              href={`${ROUTES.APPLICATIONS}/${code}/editar`}
+              href={`${ROUTES.APPLICATIONS}/${code}/${ROUTES.EDIT}`}
               label='Editar Aplicação'
               icon='EditPencil'
             />

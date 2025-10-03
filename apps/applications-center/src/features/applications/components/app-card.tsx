@@ -61,7 +61,7 @@ export function ApplicationCard({ app }: { app: IGRPApplicationArgs }) {
             label='Ver'
           />
           <ButtonLinkTooltip
-            href={`${ROUTES.APPLICATIONS}/${code}/editar`}
+            href={`${ROUTES.APPLICATIONS}/${code}/${ROUTES.EDIT}`}
             icon='SquarePen'
             label='Editar'
           />

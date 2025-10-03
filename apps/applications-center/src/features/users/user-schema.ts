@@ -1,4 +1,5 @@
 import { z } from 'zod';
+import { statusSchema } from '../../schemas/global';
 
 const NameSchema = z.string().trim().min(3, 'Nome deve ter mínimo 3 caracteres').max(120);
 const UsernameSchema = z.string().trim().min(3, 'Username deve ter mínimo 3 caracteres').max(50);
@@ -9,6 +10,9 @@ export const UserSchema = z.object({
   name: NameSchema,
   username: UsernameSchema,
   email: EmailSchema,
+  status: statusSchema.optional(),
+  picture: z.string().optional(),
+  signature: z.string().optional()
 });
 
 export const CreateUserSchema = UserSchema.omit({ id: true });

@@ -169,12 +169,12 @@ function IGRPDataTableFilterFaceted<TData>({
 }: IGRPDataTableFilterFacetedProps<TData>) {
   const id = useId();
   const facets = column?.getFacetedUniqueValues();
-  const [selectedValues, setSelectedValues] = useState<Set<string>>(
+  const [selectedValues, setSelectedValues] = useState<Set<string | number>>(
     useMemo(() => new Set(column?.getFilterValue() as string[]), [column]),
   );
 
   const handleSelect = useCallback(
-    (value: string) => {
+    (value: string | number) => {
       if (selectedValues.has(value)) {
         selectedValues.delete(value);
       } else {

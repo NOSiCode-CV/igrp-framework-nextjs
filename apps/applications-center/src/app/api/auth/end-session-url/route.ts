@@ -11,7 +11,9 @@ export async function GET() {
     return NextResponse.json({ url });
   } catch (e) {
     console.error(e);
-    return NextResponse.json({ url: `${process.env.NEXTAUTH_URL || ''}/login` }, { status: 200 });
+    const NEXTAUTH_URL = process.env.NEXTAUTH_URL || ''
+    const loginUrl ='/login';
+    return NextResponse.json({ url: `${NEXTAUTH_URL}${loginUrl}` }, { status: 200 });
   }
 }
 

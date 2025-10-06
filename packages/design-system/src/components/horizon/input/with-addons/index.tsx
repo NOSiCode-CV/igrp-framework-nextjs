@@ -46,7 +46,7 @@ function IGRPInputAddOn({
 
   useEffect(() => {
     if (defaultValue && !selectValue) {
-      onSelectValueChange(defaultValue);
+      onSelectValueChange(String(defaultValue));
     }
   }, [defaultValue, selectValue, onSelectValueChange]);
 
@@ -78,7 +78,7 @@ function IGRPInputAddOn({
               {options?.map((option, index) => (
                 <SelectItem
                   key={index}
-                  value={option.value}
+                  value={String(option.value)}
                   className={cn('cursor-pointer font-semibold', option.color)}
                 >
                   {option.label}

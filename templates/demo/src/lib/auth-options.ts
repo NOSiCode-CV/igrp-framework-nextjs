@@ -4,7 +4,9 @@ import KeycloakProvider from 'next-auth/providers/keycloak';
 import { redirect as nextRedirect } from 'next/navigation';
 
 const isProd = process.env.NODE_ENV === 'production';
-const cookieDomain = process.env.IGRP_NEXTAUTH_CALLBACK || undefined;
+const baseUrl = process.env.NEXTAUTH_URL ?? '';
+const url = new URL(baseUrl);
+const cookieDomain = isProd && url.hostname !== 'localhost' ? url.hostname : undefined;
 
 export const authOptions: NextAuthOptions = {
   providers: [
@@ -148,14 +150,14 @@ export function buildKeycloakEndSessionUrl(jwt: JWT) {
   if (!issuer) throw new Error('KEYCLOAK_ISSUER not set');
 
   const idToken = jwt?.idToken as string | undefined;
+  const loginUrl = '/login';
   const postLogoutRedirectUri = process.env.NEXTAUTH_URL
-    ? `${process.env.NEXTAUTH_URL}/login`
+    ? `${process.env.NEXTAUTH_URL}${loginUrl}`
     : undefined;
 
   const url = new URL(`${issuer}/protocol/openid-connect/logout`);
   if (!idToken) {
-    console.error('No your or not login, available for logout.');
-    const loginUrl = process.env.IGRP_LOGIN_URL || '/login';
+    console.error('No your or not login, available for logout.');    
     nextRedirect(loginUrl);
   }
   url.searchParams.set('id_token_hint', idToken);

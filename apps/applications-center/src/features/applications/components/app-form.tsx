@@ -53,7 +53,6 @@ import {
 import { useUsers } from '@/features/users/use-users';
 import { useDepartments } from '@/features/departments/use-departments';
 import { APPLICATIONS_TYPES_FILTERED } from '../app-utils';
-import { mapperUpdateApplication } from '../app-mapper';
 import { statusSchema } from '@/schemas/global';
 
 export function ApplicationForm({ application }: { application?: IGRPApplicationArgs }) {

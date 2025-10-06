@@ -37,7 +37,7 @@ function IGRPPageHeader({
   return (
     <div
       className={cn(
-        'flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 space-y-2 sm:space-y-0 px-4',
+        'flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4',
         isSticky && 'sticky top-0 z-10 bg-background pt-6 pb-4',
         className,
       )}

@@ -11,7 +11,7 @@ export default async function RootLayout({ children }: Readonly<{ children: Reac
 
   // TDOD: see to move this to the root-layout
   const { layout, previewMode, loginUrl, logoutUrl } = config;
-  const { session } = layout ?? {};
+  const { session } = layout || {};
 
   const headersList = await headers();
   const currentPath =
@@ -22,8 +22,8 @@ export default async function RootLayout({ children }: Readonly<{ children: Reac
 
   const baseUrl = process.env.NEXTAUTH_URL;
 
-  const urlLogin = loginUrl ?? '/login';
-  const urlLogout = logoutUrl ?? '/logout';
+  const urlLogin = loginUrl || '/login';
+  const urlLogout = logoutUrl || '/logout';
 
   const loginPath = new URL(loginUrl || '/', baseUrl).pathname;
 

@@ -262,7 +262,7 @@ const IGRPSelectSearch = memo(
 
 const IGRPSelectItem = memo(
   ({ item, showStatus }: { item: IGRPOptionsProps; showStatus: boolean }) => (
-    <SelectItem value={item.value} className="flex items-center gap-2 truncate">
+    <SelectItem value={String(item.value)} className="flex items-center gap-2 truncate">
       <div className="flex items-center gap-2 w-full">
         {showStatus && (
           <Circle className={cn('h-2 w-2 fill-current', igrpColorText(item.status || 'primary'))} />

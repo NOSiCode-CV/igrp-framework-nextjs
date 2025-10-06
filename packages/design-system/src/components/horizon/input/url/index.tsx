@@ -65,11 +65,11 @@ function IGRPInputUrl({
 
   const extractUrlParts = useCallback(
     (url: string) => {
-      const protocolMatch = protocols.find((p) => url.startsWith(p.value));
+      const protocolMatch = protocols.find((p) => url.startsWith(String(p.value)));
       if (protocolMatch) {
         return {
           protocol: protocolMatch.value,
-          address: url.substring(protocolMatch.value.length),
+          address: url.substring(String(protocolMatch.value).length),
         };
       }
       return {
@@ -89,7 +89,7 @@ function IGRPInputUrl({
       const initialValue = value !== undefined ? value : defaultValue;
       const { protocol: extractedProtocol, address: extractedAddress } =
         extractUrlParts(initialValue);
-      setLocalProtocol(extractedProtocol);
+      setLocalProtocol(String(extractedProtocol));
       setLocalAddress(extractedAddress);
     }
   }, [value, defaultValue, formContext, extractUrlParts]);
@@ -123,7 +123,7 @@ function IGRPInputUrl({
             </SelectTrigger>
             <SelectContent>
               {protocols.map((option) => (
-                <SelectItem key={option.value} value={option.value}>
+                <SelectItem key={option.value} value={String(option.value)}>
                   {option.label}
                 </SelectItem>
               ))}
@@ -186,7 +186,7 @@ function IGRPInputUrl({
 
         const handleAddressChange = (e: React.ChangeEvent<HTMLInputElement>) => {
           const newAddress = e.target.value;
-          const newValue = combineUrl(fieldProtocol, newAddress);
+          const newValue = combineUrl(String(fieldProtocol), newAddress);
           field.onChange(newValue);
           onChange?.(newValue);
         };
@@ -199,7 +199,7 @@ function IGRPInputUrl({
 
             <div className="flex rounded-md shadow-xs">
               <Select
-                value={fieldProtocol}
+                value={String(fieldProtocol)}
                 onValueChange={handleProtocolChange}
                 disabled={props.disabled}
                 onOpenChange={() => field.onBlur()}
@@ -209,7 +209,7 @@ function IGRPInputUrl({
                 </SelectTrigger>
                 <SelectContent>
                   {protocols.map((option) => (
-                    <SelectItem key={option.value} value={option.value}>
+                    <SelectItem key={option.value} value={String(option.value)}>
                       {option.label}
                     </SelectItem>
                   ))}

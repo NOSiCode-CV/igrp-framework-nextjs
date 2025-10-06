@@ -26,7 +26,7 @@ export type IGRPInputProps = {
 
 export type IGRPOptionsProps = {
   label: string;
-  value: string;
+  value: string | number;
   color?: string;
   status?: IGRPColorVariants;
   icon?: IGRPIconName | string;

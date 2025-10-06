@@ -5,12 +5,12 @@ import { cva, type VariantProps } from 'class-variance-authority';
 import {
   Dialog as IGRPModalDialog,
   DialogClose as IGRPModalDialogClose,
-  DialogDescription as IGRPModalDialogDescription,
   DialogTrigger as IGRPModalDialogTrigger,
   DialogContent,
   DialogFooter,
   DialogHeader,
   DialogTitle,
+  DialogDescription,
 } from '../primitives/dialog';
 import { cn } from '../../lib/utils';
 
@@ -112,6 +112,14 @@ function IGRPModalDialogTitle({
   ...props
 }: React.ComponentProps<typeof DialogTitle> & { name?: string }) {
   return <DialogTitle className={cn(className)} {...props}></DialogTitle>;
+}
+
+function IGRPModalDialogDescription({
+  className,
+  name,
+  ...props
+}: React.ComponentProps<typeof DialogDescription> & { name?: string }) {
+  return <DialogDescription className={cn(className)} {...props}></DialogDescription>;
 }
 
 export {

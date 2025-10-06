@@ -16,7 +16,6 @@ function IGRPRepetitiveComponent<T>({
       {items.map((item) => (
         <Fragment key={keyExtractor(item)}>{children(item)}</Fragment>
       ))}
-      ;
     </>
   );
 }

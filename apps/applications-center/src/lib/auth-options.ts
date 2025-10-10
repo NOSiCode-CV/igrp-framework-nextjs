@@ -56,15 +56,8 @@ export const authOptions: NextAuthOptions = {
         return forced;
       }
     },
-    async jwt({ token, user, account, profile }) {
-      if (account) {
-        if (user && !('user' in token)) {
-          token.user = {
-            id: token.sub ?? user.id ?? undefined,
-            name: user.name ?? profile?.name ?? null,
-            email: user.email ?? profile?.email ?? null,
-          };
-        }
+    async jwt({ token, account }) {
+      if (account) {        
         token.idToken = account.id_token;
         token.accessToken = account.access_token;
         token.refreshToken = account.refresh_token;

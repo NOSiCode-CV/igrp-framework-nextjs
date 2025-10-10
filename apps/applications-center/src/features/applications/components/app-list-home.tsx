@@ -1,7 +1,5 @@
 'use client';
 
-import { Fragment } from 'react';
-
 import { AppCenterNotFound } from '@/components/not-found';
 import { AppCenterLoading } from '@/components/loading';
 import { ApplicationCard } from '@/features/applications/components/app-card';
@@ -26,13 +24,16 @@ export function ApplicationsListHome() {
     );
   }
 
-  // const filteredApps = applications.filter((app) => app.type !== 'SYSTEM');
-  const activeApps = applications.filter((app) => app.status === 'ACTIVE').slice(0, 6);
+  const filteredApps = applications.filter((app) => app.type !== 'SYSTEM');
+  const activeApps = filteredApps.filter((app) => app.status === 'ACTIVE').slice(0, 6);
 
   return (
     <div className='grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 *:data-[slot=card]:from-primary/5 *:data-[slot=card]:to-card dark:*:data-[slot=card]:bg-card *:data-[slot=card]:bg-gradient-to-t'>
-      {activeApps.map((app) => (  
-        <ApplicationCard key={app.id} app={app} />  
+      {activeApps.map((app) => (
+        <ApplicationCard
+          key={app.id}
+          app={app}
+        />
       ))}
     </div>
   );

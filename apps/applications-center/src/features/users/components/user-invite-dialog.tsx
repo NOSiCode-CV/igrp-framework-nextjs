@@ -127,7 +127,7 @@ export function UserInviteDialog({ open, onOpenChange }: UserInviteDialogProps) 
           name: raw.name.trim(),
           username,
           email: raw.email.trim(),
-          status: statusSchema.enum.ACTIVE
+          status: statusSchema.enum.ACTIVE,
         };
 
         const created = await userInvite({ user: userPayload });

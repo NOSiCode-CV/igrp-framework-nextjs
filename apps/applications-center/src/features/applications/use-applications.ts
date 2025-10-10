@@ -4,22 +4,21 @@ import { IGRPApplicationArgs } from '@igrp/framework-next-types';
 
 import {
   createApplication,
-  // deleteApplication,
-  // getAppImage,
   getApplicationByCode,
   getApplications,
   updateApplication,
 } from '@/actions/applications';
+import { ApplicationArgs } from './app-schemas';
 
 export const useApplications = () => {
-  return useQuery<IGRPApplicationArgs[]>({
+  return useQuery<ApplicationArgs[]>({
     queryKey: ['applications'],
     queryFn: () => getApplications(),
   });
 };
 
 export const useApplicationByCode = (code: string) => {
-  return useQuery<IGRPApplicationArgs>({
+  return useQuery<ApplicationArgs>({
     queryKey: ['applications', code],
     queryFn: () => getApplicationByCode(code),
   });
@@ -47,22 +46,3 @@ export const useUpdateApplication = () => {
     },
   });
 };
-
-// export const useDeleteApplication = () => {
-//   const queryClient = useQueryClient();
-
-//   return useMutation({
-//     mutationFn: deleteApplication,
-//     onSuccess: () => {
-//       queryClient.invalidateQueries({ queryKey: ['applications'] });
-//     },
-//   });
-// };
-
-// export const useGetAppImage = (appId: number) => {
-//   return useQuery<string>({
-//     queryKey: ['applications', appId],
-//     queryFn: () => getAppImage(appId),
-//     enabled: !!appId,
-//   });
-// };

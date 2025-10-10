@@ -1,6 +1,6 @@
 'use client';
 
-import { useEffect, useMemo, useState } from 'react';
+import { useMemo, useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useRouter } from 'next/navigation';
@@ -34,28 +34,31 @@ import {
   IGRPBadgePrimitive,
   IGRPButtonPrimitive,
   IGRPIcon,
+  cn,
 } from '@igrp/igrp-framework-react-design-system';
-import { IGRPApplicationArgs } from '@igrp/framework-next-types';
+import { Control, FieldPath } from 'react-hook-form';
 
 import { FileUploadField } from '@/components/file-upload-field';
 import { AppCenterLoading } from '@/components/loading';
-import { ROUTES } from '@/lib/constants';
-import { urlToFileWithPreview } from '@/lib/file-adapters';
+import { ROUTES, STATUS_OPTIONS } from '@/lib/constants';
 import {
   useCreateApplication,
   useUpdateApplication,
 } from '@/features/applications/use-applications';
 import {
   ApplicationArgs,
+  FormSchema,
+  FormVals,
   appTypeCrud,
-  applicationSchema,
+  normalizeApplication,
 } from '@/features/applications/app-schemas';
 import { useUsers } from '@/features/users/use-users';
 import { useDepartments } from '@/features/departments/use-departments';
 import { APPLICATIONS_TYPES_FILTERED } from '../app-utils';
 import { statusSchema } from '@/schemas/global';
+import { useUploadPrivateFiles } from '@/features/files/use-files';
 
-export function ApplicationForm({ application }: { application?: IGRPApplicationArgs }) {
+export function ApplicationForm({ application }: { application?: ApplicationArgs }) {
   const router = useRouter();
   const { igrpToast } = useIGRPToast();
 
@@ -68,72 +71,55 @@ export function ApplicationForm({ application }: { application?: IGRPApplication
 
   const { mutateAsync: addApplication } = useCreateApplication();
   const { mutateAsync: updateApplication } = useUpdateApplication();
-  
 
-  const form = useForm<ApplicationArgs>({
-    resolver: zodResolver(applicationSchema),
-    defaultValues: {
-      name: '',
-      slug: '',
-      type: appTypeCrud.enum.INTERNAL,
-      owner: '',
-      description: '',
-      code: '',
-      url: '',
-      picture: '',
-      status: statusSchema.enum.ACTIVE,
-      departments: [],
-      image: null,
-    },
-    mode: 'onChange',
+  const { mutateAsync: uploadPrivateFile } = useUploadPrivateFiles();
+
+  const isEdit = !!application;
+
+  const form = useForm<FormVals>({
+    resolver: zodResolver(FormSchema),
+    defaultValues: isEdit
+      ? ({
+        name: application?.name ?? "",
+        owner: application?.owner ?? "",
+        code: application?.code ?? "",
+        slug: application?.slug ?? "",
+        url: application?.url ?? undefined,
+        description: application?.description ?? "",
+        type: application?.type ?? appTypeCrud.enum.INTERNAL,
+        status: application.status,
+        picture: application?.picture ?? "",
+        departments: application?.departments ?? [],
+        image: null,
+      } as Partial<FormVals>)
+      : ({
+        name: "",
+        owner: "",
+        code: "",
+        type: appTypeCrud.enum.INTERNAL,
+        slug: "",
+        url: "",
+        description: "",
+        picture: "",
+        status: statusSchema.enum.ACTIVE,
+        departments: [],
+        image: null,
+      } as FormVals),
+    mode: "onBlur",
+    reValidateMode: "onChange",
   });
 
-  const type = form.watch('type');
+  const type = form.watch('type');  
 
-  useEffect(() => {
-    if (!application) return;
-
-    const defaultValues: Partial<ApplicationArgs> = {
-      name: application.name || '',
-      owner: application.owner || '',
-      code: application.code || '',
-      slug: application.slug || '',
-      url: application.url || '',
-      description: application.description || '',
-      type: application.type || appTypeCrud.enum.INTERNAL,
-      picture: application.picture || '',
-      status: application.status || statusSchema.enum.ACTIVE,
-      departments: application.departments || [],
-      image: null,
-    };
-
-    form.reset(defaultValues);
-
-  //     const { data: file } = useFiles('public/igrptest/superadmin/5bc7168c-e664-44c4-9672-964e186b6486_transferir.svg');
-
-  //   const getFile = () => {
-  //   const result = file
-  //   console.log({ result })
-  //   return result?.url || '/igrp/placeholder-carousel.png'
-  // }
-
-    (async () => {
-      if (application.picture) {
-        const fw = await urlToFileWithPreview(application.picture);
-        form.setValue('image', fw, { shouldDirty: false, shouldValidate: false });
-      }
-    })();
-  }, [application, form]);
-
-  // add near the top (anywhere in the file)
   const toggleInArray = (arr: string[] | undefined, value: string) => {
     const set = new Set(arr ?? []);
     set.has(value) ? set.delete(value) : set.add(value);
     return Array.from(set);
   };
-  const removeFromArray = (arr: string[] | undefined, value: string) =>
-    (arr ?? []).filter(v => v !== value);
 
+  const removeFromArray = (arr: string[] | undefined, value: string) => {
+    return (arr ?? []).filter((v) => v !== value);
+  };
 
   const handleNameChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const name = e.target.value;
@@ -145,50 +131,6 @@ export function ApplicationForm({ application }: { application?: IGRPApplication
         .replace(/[^\w\s-]/g, '')
         .replace(/\s+/g, '-');
       form.setValue('slug', slug);
-    }
-  };
-
-  const onSubmit = async (values: ApplicationArgs) => {
-    const payload = { ...values };
-
-    const file = values.image?.file;
-    console.log({ file })
-    // const imageFile =
-    //   file instanceof File
-    //     ? file
-    //     : file?.file instanceof File
-    //       ? file.file
-    //       : undefined;
-
-    if (payload.type === appTypeCrud.enum.INTERNAL) delete payload.url;
-    if (payload.type === appTypeCrud.enum.EXTERNAL) delete payload.slug;
-    delete payload.image;
-
-    try {
-      // if (application) {
-      //   const payloadData = mapperUpdateApplication(payload);
-      //   await updateApplication({ code: application.code, data: payloadData });
-      // } else {
-      //   await addApplication(payload);
-      //   form.reset();
-      // }
-
-      igrpToast({
-        type: 'success',
-        title: `${application ? ' Atualização' : 'Criação'} concluída`,
-        description: `A aplicação foi ${application ? ' atualizada' : 'criada'} com sucesso!`,
-        duration: 3500,
-      });      
-    } catch (error) {
-      igrpToast({
-        type: 'error',
-        title: 'Não foi possível concluir a operação.',
-        description: error instanceof Error ? error.message : 'Ocorreu um erro desconhecido.',
-      });
-    } finally {
-      // setTimeout(() => {
-      //   router.push(`${ROUTES.APPLICATIONS}/${payload.code}`);
-      // }, 5000);
     }
   };
 
@@ -218,16 +160,66 @@ export function ApplicationForm({ application }: { application?: IGRPApplication
     form.formState.isSubmitting ||
     isLoading ||
     userLoading ||
-    userError !== null ||
+    !!userError ||
     departmentLoading ||
-    departmentError !== null;
+    !!departmentError;
 
   const submitLblBtn = form.formState.isSubmitting ? 'Guardando...' : 'Guardar';
+
+  const onSubmit = async (values: FormVals) => {
+    const payload = { ...values };
+
+    console.log({ values });
+
+    const file = values.image?.file as File;
+
+    if (file) {
+      const options = { folder: values.code as string };
+      const result = await uploadPrivateFile({ file, options, filename: 'logo' });
+      payload.picture = result;
+    }
+
+    if (payload.type === appTypeCrud.enum.INTERNAL) delete payload.url;
+    if (payload.type === appTypeCrud.enum.EXTERNAL) delete payload.slug;
+    delete payload.image;
+
+    console.log({ payload });
+
+    try {
+      if (isEdit) {
+        await updateApplication({ code: application.code, data: normalizeApplication(payload, true) });
+      } else {
+        await addApplication(normalizeApplication(payload, false));
+        form.reset();
+      }
+
+      igrpToast({
+        type: 'success',
+        title: `${application ? ' Atualização' : 'Criação'} concluída`,
+        description: `A aplicação foi ${application ? ' atualizada' : 'criada'} com sucesso!`,
+      });
+
+      router.push(`${ROUTES.APPLICATIONS}/${payload.code}`);
+    } catch (error) {
+      igrpToast({
+        type: 'error',
+        title: 'Não foi possível concluir a operação.',
+        description: error instanceof Error ? error.message : 'Ocorreu um erro desconhecido.',
+      });
+    }
+  };
 
   return (
     <IGRPCardPrimitive className='py-6'>
       <IGRPFormPrimitive {...form}>
-        <form onSubmit={form.handleSubmit(onSubmit)}>
+        <form onSubmit={form.handleSubmit(onSubmit, (errors) => {
+          console.log('INVALID FORM ERRORS', errors);
+          igrpToast({
+            type: 'error',
+            title: 'Corrija os campos obrigatórios',
+            description: 'Existem erros de validação no formulário.',
+          });
+        })}>
           <IGRPCardContentPrimitive>
             <div className='grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6'>
               <IGRPFormFieldPrimitive
@@ -235,13 +227,16 @@ export function ApplicationForm({ application }: { application?: IGRPApplication
                 name='name'
                 render={({ field }) => (
                   <IGRPFormItemPrimitive>
-                    <IGRPFormLabelPrimitive className='after:content-["*"] after:text-destructive'>
+                    <IGRPFormLabelPrimitive className='after:content-["*"] after:text-destructive gap-0.5'>
                       Nome
                     </IGRPFormLabelPrimitive>
                     <IGRPFormControlPrimitive>
                       <IGRPInputPrimitive
                         placeholder='Nome da Aplicação'
-                        {...field}
+                        value={field.value ?? ""}
+                        onBlur={field.onBlur}
+                        name={field.name}
+                        ref={field.ref}
                         onChange={handleNameChange}
                         required
                         className='placeholder:truncate border-primary/30 focus-visible:ring-[2px] focus-visible:ring-primary/30 focus-visible:border-primary/30'
@@ -257,16 +252,23 @@ export function ApplicationForm({ application }: { application?: IGRPApplication
                 name='code'
                 render={({ field }) => (
                   <IGRPFormItemPrimitive>
-                    <IGRPFormLabelPrimitive className='after:content-["*"] after:text-destructive'>
+                    <IGRPFormLabelPrimitive className='after:content-["*"] after:text-destructive gap-0.5'>
                       Código
                     </IGRPFormLabelPrimitive>
                     <IGRPFormControlPrimitive>
                       <IGRPInputPrimitive
                         placeholder='APP_CODE'
-                        {...field}
+                        onChange={(e) => {
+                          const v = e.target.value.toUpperCase().replace(/[^A-Z0-9_]/g, "");
+                          field.onChange(v);
+                        }}
+                        onBlur={field.onBlur}
                         pattern='^[A-Z0-9_]+$'
-                        onFocus={() => form.trigger('code')}
-                        className='placeholder:truncate border-primary/30 focus-visible:ring-[2px] focus-visible:ring-primary/30 focus-visible:border-primary/30'
+                        name={field.name}
+                        ref={field.ref}
+                        value={field.value ?? ""}
+                        required
+                        className='placeholder:truncate border-primary/30 focus-visible:ring-[2px] focus-visible:ring-primary/30 focus-visible:border-primary/30 uppercase'
                       />
                     </IGRPFormControlPrimitive>
                     <IGRPFormMessagePrimitive />
@@ -279,12 +281,12 @@ export function ApplicationForm({ application }: { application?: IGRPApplication
                 name='owner'
                 render={({ field }) => (
                   <IGRPFormItemPrimitive>
-                    <IGRPFormLabelPrimitive className='after:content-["*"] after:text-destructive'>
+                    <IGRPFormLabelPrimitive className='after:content-["*"] after:text-destructive gap-0.5'>
                       Proprietário
                     </IGRPFormLabelPrimitive>
                     <IGRPSelectPrimitive
                       onValueChange={field.onChange}
-                      defaultValue={field.value}
+                      value={field.value ?? ""}
                     >
                       <IGRPFormControlPrimitive>
                         <IGRPSelectTriggerPrimitive className='w-full truncate'>
@@ -310,145 +312,26 @@ export function ApplicationForm({ application }: { application?: IGRPApplication
                     )}
                   </IGRPFormItemPrimitive>
                 )}
-              />
+              />             
 
-              <IGRPFormFieldPrimitive
+              {/* Depatments */}
+              <DepartamentField
                 control={form.control}
-                name="departments"
-                render={({ field }) => {
-                  const [open, setOpen] = useState(false);
-
-                  // Current selection set for O(1) lookups
-                  const selected = useMemo(() => new Set(field.value ?? []), [field.value]);
-
-                  // Pretty label for any department code
-                  const getLabel = (code: string) =>
-                    departmentOptions.find(o => o.value === code)?.label ?? code;
-
-                  const count = field.value?.length ?? 0;
-
-                  return (
-                    <IGRPFormItemPrimitive>
-                      <IGRPFormLabelPrimitive className='after:content-["*"] after:text-destructive'>
-                        Departamentos
-                      </IGRPFormLabelPrimitive>
-
-                      {/* Selected badges */}
-                      <div className="flex flex-wrap gap-2 mb-2">
-                        {count > 0 ? (
-                          field.value!.map(code => (
-                            <IGRPBadgePrimitive key={code} variant="outline" className="gap-1">
-                              {getLabel(code)}
-                              <button
-                                type="button"
-                                aria-label="Remover departamento"
-                                className="ml-1 inline-flex items-center"
-                                onClick={() => field.onChange(removeFromArray(field.value, code))}
-                                disabled={disabledFields}
-                              >
-                                <IGRPIcon iconName="X" className="h-3 w-3" />
-                              </button>
-                            </IGRPBadgePrimitive>
-                          ))
-                        ) : (
-                          <span className="text-muted-foreground text-sm">Nenhum selecionado</span>
-                        )}
-                      </div>
-
-                      {/* Popover trigger */}
-                      <IGRPPopoverPrimitive open={open} onOpenChange={setOpen}>
-                        <IGRPPopoverTriggerPrimitive asChild>
-                          <IGRPButtonPrimitive
-                            type="button"
-                            variant="outline"
-                            disabled={disabledFields}
-                            className="w-full justify-between"
-                          >
-                            <span>
-                              {count > 0
-                                ? `Selecionados (${count})`
-                                : "Selecionar departamentos"}
-                            </span>
-                            <IGRPIcon iconName={open ? "ChevronUp" : "ChevronDown"} />
-                          </IGRPButtonPrimitive>
-                        </IGRPPopoverTriggerPrimitive>
-
-                        {/* Command + searchable list */}
-                        <IGRPPopoverContentPrimitive className="p-0 w-[--radix-popover-trigger-width] min-w-64" align="start">
-                          <IGRPCommandPrimitive>
-                            <IGRPCommandInputPrimitive placeholder="Procurar departamento..." />
-                            <IGRPCommandListPrimitive className="max-h-64">
-                              <IGRPCommandGroupPrimitive heading="Departamentos">
-                                {departmentOptions.map(opt => {
-                                  const isSelected = selected.has(opt.value);
-                                  return (
-                                    <IGRPCommandItemPrimitive
-                                      key={opt.value}
-                                      // @note: CommandItem gives us onSelect(label)
-                                      // we rely on the option.value via closure
-                                      onSelect={() => {
-                                        const next = toggleInArray(field.value, opt.value);
-                                        field.onChange(next);
-                                      }}
-                                      className="flex items-center gap-2 cursor-pointer"
-                                    >
-                                      {/* Checkmark indicator */}
-                                      <IGRPIcon
-                                        iconName={isSelected ? "Check" : "Circle"}
-                                        className="h-4 w-4 opacity-70"
-                                      />
-                                      <span className="truncate">{opt.label}</span>
-                                    </IGRPCommandItemPrimitive>
-                                  );
-                                })}
-                              </IGRPCommandGroupPrimitive>
-                            </IGRPCommandListPrimitive>
-
-                            {/* Footer actions (optional) */}
-                            <div className="flex items-center justify-between p-2 border-t">
-                              <IGRPButtonPrimitive
-                                type="button"
-                                variant="ghost"
-                                className="text-xs"
-                                onClick={() => field.onChange([])}
-                                disabled={disabledFields || count === 0}
-                              >
-                                Limpar seleção
-                              </IGRPButtonPrimitive>
-                              <IGRPButtonPrimitive
-                                type="button"
-                                size="sm"
-                                onClick={() => setOpen(false)}
-                              >
-                                Concluir
-                              </IGRPButtonPrimitive>
-                            </div>
-                          </IGRPCommandPrimitive>
-                        </IGRPPopoverContentPrimitive>
-                      </IGRPPopoverPrimitive>
-
-                      {departmentError ? (
-                        <p className="text-destructive">{String(departmentError)}</p>
-                      ) : (
-                        <IGRPFormMessagePrimitive />
-                      )}
-                    </IGRPFormItemPrimitive>
-                  );
-                }}
+                options={departmentOptions}
+                disabled={disabledFields}
               />
-
 
               <IGRPFormFieldPrimitive
                 control={form.control}
                 name='type'
                 render={({ field }) => (
                   <IGRPFormItemPrimitive>
-                    <IGRPFormLabelPrimitive className='after:content-["*"] after:text-destructive'>
+                    <IGRPFormLabelPrimitive className='after:content-["*"] after:text-destructive gap-0.5'>
                       Tipo
                     </IGRPFormLabelPrimitive>
                     <IGRPSelectPrimitive
                       onValueChange={field.onChange}
-                      defaultValue={field.value}
+                      value={field.value ?? ''}
                     >
                       <IGRPFormControlPrimitive>
                         <IGRPSelectTriggerPrimitive
@@ -474,20 +357,24 @@ export function ApplicationForm({ application }: { application?: IGRPApplication
                 )}
               />
 
-              {type === 'INTERNAL' && (
+              {type === appTypeCrud.enum.INTERNAL && (
                 <IGRPFormFieldPrimitive
                   control={form.control}
                   name='slug'
                   render={({ field }) => (
                     <IGRPFormItemPrimitive>
-                      <IGRPFormLabelPrimitive className='after:content-["*"] after:text-destructive'>
+                      <IGRPFormLabelPrimitive className='after:content-["*"] after:text-destructive gap-0.5'>
                         URL Relativo
                       </IGRPFormLabelPrimitive>
                       <IGRPFormControlPrimitive>
                         <IGRPInputPrimitive
                           placeholder='app-exemplo'
-                          {...field}
-                          disabled={disabledFields}
+                          value={field.value ?? undefined}
+                          onChange={field.onChange}
+                          onBlur={field.onBlur}
+                          name={field.name}
+                          ref={field.ref}
+                          disabled={disabledFields && type !== appTypeCrud.enum.INTERNAL}
                           className='placeholder:truncate border-primary/30 focus-visible:ring-[2px] focus-visible:ring-primary/30 focus-visible:border-primary/30'
                         />
                       </IGRPFormControlPrimitive>
@@ -497,20 +384,24 @@ export function ApplicationForm({ application }: { application?: IGRPApplication
                 />
               )}
 
-              {type === 'EXTERNAL' && (
+              {type === appTypeCrud.enum.EXTERNAL && (
                 <IGRPFormFieldPrimitive
                   control={form.control}
                   name='url'
                   render={({ field }) => (
                     <IGRPFormItemPrimitive>
-                      <IGRPFormLabelPrimitive className='after:content-["*"] after:text-destructive'>
+                      <IGRPFormLabelPrimitive className='after:content-["*"] after:text-destructive gap-0.5'>
                         URL
                       </IGRPFormLabelPrimitive>
                       <IGRPFormControlPrimitive>
                         <IGRPInputPrimitive
                           placeholder='https://exemplo.com'
-                          {...field}
-                          disabled={disabledFields}
+                          value={field.value ?? undefined}
+                          onChange={field.onChange}
+                          onBlur={field.onBlur}
+                          name={field.name}
+                          ref={field.ref}
+                          disabled={disabledFields && type !== appTypeCrud.enum.EXTERNAL}
                           className='placeholder:truncate border-primary/30 focus-visible:ring-[2px] focus-visible:ring-primary/30 focus-visible:border-primary/30'
                         />
                       </IGRPFormControlPrimitive>
@@ -520,7 +411,40 @@ export function ApplicationForm({ application }: { application?: IGRPApplication
                 />
               )}
 
-             <IGRPFormFieldPrimitive
+              {isEdit && (
+                <IGRPFormFieldPrimitive
+                  control={form.control}
+                  name='status'
+                  render={({ field }) => (
+                    <IGRPFormItemPrimitive>
+                      <IGRPFormLabelPrimitive>Estado</IGRPFormLabelPrimitive>
+                      <IGRPSelectPrimitive
+                        onValueChange={field.onChange}
+                        value={field.value}
+                      >
+                        <IGRPFormControlPrimitive>
+                          <IGRPSelectTriggerPrimitive className='w-full truncate'>
+                            <IGRPSelectValuePrimitive placeholder='Selecionar estado' />
+                          </IGRPSelectTriggerPrimitive>
+                        </IGRPFormControlPrimitive>
+                        <IGRPSelectContentPrimitive>
+                          {STATUS_OPTIONS.map((status) => (
+                            <IGRPSelectItemPrimitive
+                              key={status.value}
+                              value={status.value}
+                            >
+                              {status.label}
+                            </IGRPSelectItemPrimitive>
+                          ))}
+                        </IGRPSelectContentPrimitive>
+                      </IGRPSelectPrimitive>
+                      <IGRPFormMessagePrimitive />
+                    </IGRPFormItemPrimitive>
+                  )}
+                />
+              )}
+
+              <IGRPFormFieldPrimitive
                 control={form.control}
                 name='image'
                 render={({ field }) => (
@@ -533,14 +457,19 @@ export function ApplicationForm({ application }: { application?: IGRPApplication
                     placeholder='Arraste seu logo aqui'
                   />
                 )}
-              />              
+              />
 
               <IGRPFormFieldPrimitive
                 control={form.control}
                 name='description'
                 render={({ field }) => (
-                  <IGRPFormItemPrimitive className='lg:col-span-2'>
-                    <IGRPFormLabelPrimitive className='after:content-["*"] after:text-destructive'>
+                  <IGRPFormItemPrimitive 
+                    className={cn(
+                      'lg:col-span-2',
+                      isEdit && 'sm:col-span-2 lg:col-span-3'                      
+                    )}
+                  >
+                    <IGRPFormLabelPrimitive className='after:content-["*"] after:text-destructive gap-0.5'>
                       Descrição
                     </IGRPFormLabelPrimitive>
                     <IGRPFormControlPrimitive>
@@ -591,5 +520,141 @@ export function ApplicationForm({ application }: { application?: IGRPApplication
         </form>
       </IGRPFormPrimitive>
     </IGRPCardPrimitive>
+  );
+}
+
+type DepartmentOption = { value: string; label: string };
+
+type Props = {
+  control: Control<FormVals>;
+  name?: FieldPath<FormVals>; 
+  options: DepartmentOption[];
+  disabled?: boolean;
+  errorText?: string | null; 
+};
+
+function DepartamentField({
+  control,
+  name = 'departments',
+  options,
+  disabled = false,
+  errorText = null,
+}: Props) {
+  const asStringArray = (v: unknown): string[] => (Array.isArray(v) ? (v as string[]) : []);
+
+  const toggleInArray = (arr: readonly string[] | undefined, value: string): string[] => {
+    const set = new Set(arr ?? []);
+    set.has(value) ? set.delete(value) : set.add(value);
+    return Array.from(set);
+  };
+
+  const removeFromArray = (arr: readonly string[] | undefined, value: string): string[] =>
+    (arr ?? []).filter((v) => v !== value);
+
+  const getLabel = (code: string) =>
+    options.find((o) => o.value === code)?.label ?? code;
+
+  return (
+    <IGRPFormFieldPrimitive
+      control={control}
+      name={name}
+      render={({ field }) => {
+        const value = asStringArray(field.value);
+        const [open, setOpen] = useState(false);
+        const selected = useMemo(() => new Set(value), [value]);
+        const count = value.length;
+
+        return (
+          <IGRPFormItemPrimitive>
+            <IGRPFormLabelPrimitive className='after:content-["*"] after:text-destructive gap-0.5'>
+              Departamentos
+            </IGRPFormLabelPrimitive>
+
+            <div className='flex flex-wrap gap-2 mb-2'>
+              {count > 0 ? (
+                value.map((code) => (
+                  <IGRPBadgePrimitive key={code} variant='outline' className='gap-1'>
+                    {getLabel(code)}
+                    <button
+                      type='button'
+                      aria-label='Remover departamento'
+                      className='ml-1 inline-flex items-center'
+                      onClick={() => field.onChange(removeFromArray(value, code))}
+                      disabled={disabled}
+                    >
+                      <IGRPIcon iconName='X' className='h-3 w-3' />
+                    </button>
+                  </IGRPBadgePrimitive>
+                ))
+              ) : (
+                <span className='text-muted-foreground text-sm'>Nenhum selecionado</span>
+              )}
+            </div>
+
+            <IGRPPopoverPrimitive open={open} onOpenChange={setOpen}>
+              <IGRPPopoverTriggerPrimitive asChild>
+                <IGRPButtonPrimitive
+                  type='button'
+                  variant='outline'                  
+                  className='w-full justify-between'
+                >
+                  <span>{count > 0 ? `Selecionados (${count})` : 'Selecionar departamentos'}</span>
+                  <IGRPIcon iconName={open ? 'ChevronUp' : 'ChevronDown'} />
+                </IGRPButtonPrimitive>
+              </IGRPPopoverTriggerPrimitive>
+
+              <IGRPPopoverContentPrimitive
+                className='p-0 w-[--radix-popover-trigger-width] min-w-64'
+                align='start'
+              >
+                <IGRPCommandPrimitive>
+                  <IGRPCommandInputPrimitive placeholder='Procurar departamento...' />
+                  <IGRPCommandListPrimitive className='max-h-64'>
+                    <IGRPCommandGroupPrimitive heading='Departamentos'>
+                      {options.map((opt) => {
+                        const isSelected = selected.has(opt.value);
+                        return (
+                          <IGRPCommandItemPrimitive
+                            key={opt.value}
+                            onSelect={() => {
+                              const next = toggleInArray(value, opt.value);
+                              field.onChange(next);                       
+                            }}
+                            className='flex items-center gap-2 cursor-pointer'
+                          >
+                            <IGRPIcon
+                              iconName={isSelected ? 'Check' : 'Circle'}
+                              className='h-4 w-4 opacity-70'
+                            />
+                            <span className='truncate'>{opt.label}</span>
+                          </IGRPCommandItemPrimitive>
+                        );
+                      })}
+                    </IGRPCommandGroupPrimitive>
+                  </IGRPCommandListPrimitive>
+
+                  <div className='flex items-center justify-between p-2 border-t'>
+                    <IGRPButtonPrimitive
+                      type='button'
+                      variant='ghost'
+                      className='text-xs'
+                      onClick={() => field.onChange([])}
+                      disabled={disabled || count === 0}
+                    >
+                      Limpar seleção
+                    </IGRPButtonPrimitive>
+                    <IGRPButtonPrimitive type='button' size='sm' onClick={() => setOpen(false)}>
+                      Concluir
+                    </IGRPButtonPrimitive>
+                  </div>
+                </IGRPCommandPrimitive>
+              </IGRPPopoverContentPrimitive>
+            </IGRPPopoverPrimitive>
+
+            {errorText ? <p className='text-destructive text-sm'>{errorText}</p> : <IGRPFormMessagePrimitive />}
+          </IGRPFormItemPrimitive>
+        );
+      }}
+    />
   );
 }

@@ -108,17 +108,16 @@ function IGRPTemplateAppSwitcher({ apps, appCode, appCenterUrl }: IGRPTemplateAp
             )}
 
             <IGRPDropdownMenuSeparatorPrimitive />
-            <IGRPDropdownMenuItemPrimitive 
-              className={cn("gap-2 p-2", !appCenterUrl && 'pointer-events-none opacity-50')}
-             asChild
+            <IGRPDropdownMenuItemPrimitive
+              className={cn('gap-2 p-2', !appCenterUrl && 'pointer-events-none opacity-50')}
+              asChild
             >
-            <Link href={appCenterUrl || '#'}>
-              <div className="flex size-6 items-center justify-center rounded-md border bg-transparent">
-                <IGRPIcon iconName="Plus" className="size-4" />
-              </div>
-              <div className="text-muted-foreground font-medium">Ir ao Apps Center</div>
-            </Link>
-              
+              <Link href={appCenterUrl || '#'}>
+                <div className="flex size-6 items-center justify-center rounded-md border bg-transparent">
+                  <IGRPIcon iconName="Plus" className="size-4" />
+                </div>
+                <div className="text-muted-foreground font-medium">Ir ao Apps Center</div>
+              </Link>
             </IGRPDropdownMenuItemPrimitive>
           </IGRPDropdownMenuContentPrimitive>
         </IGRPDropdownMenuPrimitive>

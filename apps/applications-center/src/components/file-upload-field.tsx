@@ -10,7 +10,7 @@ import {
   IGRPIcon,
 } from '@igrp/igrp-framework-react-design-system';
 
-import { useFileUpload, type FileWithPreview  } from '@/hooks/use-file-upload';
+import { useFileUpload, type FileWithPreview } from '../features/files/use-file-upload';
 
 import Image from 'next/image';
 import { useEffect, useMemo } from 'react';
@@ -40,8 +40,8 @@ export function FileUploadField(props: FileUploadFieldProps) {
     btnLabel = 'Selecionar Imagem',
   } = props;
 
-  const maxSize = maxSizeMB * 1024 * 1024
-  
+  const maxSize = maxSizeMB * 1024 * 1024;
+
   const [
     { files, isDragging, errors },
     {
@@ -52,12 +52,12 @@ export function FileUploadField(props: FileUploadFieldProps) {
       openFileDialog,
       removeFile,
       getInputProps,
-      clearFiles
+      clearFiles,
     },
   ] = useFileUpload({
     accept,
     maxSize,
-  })
+  });
 
   const current = useMemo<FileWithPreview | null>(() => {
     if (value) return value;
@@ -71,8 +71,8 @@ export function FileUploadField(props: FileUploadFieldProps) {
       : null;
   }, [value, files]);
 
-  const previewUrl = files[0]?.preview || null
-  const fileName = files[0]?.file.name || null  
+  const previewUrl = files[0]?.preview || null;
+  const fileName = files[0]?.file.name || null;
 
   useEffect(() => {
     if (!onChange) return;
@@ -102,7 +102,7 @@ export function FileUploadField(props: FileUploadFieldProps) {
     }
   }, [value, clearFiles]);
 
-   const handleRemove = () => {
+  const handleRemove = () => {
     // Remove from hook (if present)
     if (files[0]?.id) removeFile(files[0].id);
     // Also clear controlled value
@@ -138,7 +138,7 @@ export function FileUploadField(props: FileUploadFieldProps) {
                     src={previewUrl || '/igrp/placeholder.svg'}
                     alt={fileName || 'Atualizar Imagem'}
                     className='mx-auto max-h-full rounded object-contain'
-                    sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
+                    sizes='(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw'
                     fill
                   />
                 </div>
@@ -155,8 +155,8 @@ export function FileUploadField(props: FileUploadFieldProps) {
                   </div>
                   <p className='mb-1.5 text-sm font-medium'>{placeholder}</p>
                   <p className='text-muted-foreground text-xs'>
-                    {accept.includes('image') ? 'SVG, PNG, JPG, GIF ou WEBP' : 'Selecionar imagem'} (max.{' '}
-                    {maxSizeMB} MB)
+                    {accept.includes('image') ? 'SVG, PNG, JPG, GIF ou WEBP' : 'Selecionar imagem'}{' '}
+                    (max. {maxSizeMB} MB)
                   </p>
                   <IGRPButtonPrimitive
                     type='button'
@@ -186,7 +186,7 @@ export function FileUploadField(props: FileUploadFieldProps) {
                 >
                   <IGRPIcon
                     iconName='X'
-                    className='size-4'                    
+                    className='size-4'
                   />
                 </button>
               </div>

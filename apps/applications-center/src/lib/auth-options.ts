@@ -157,7 +157,7 @@ export function buildKeycloakEndSessionUrl(jwt: JWT) {
 
   const url = new URL(`${issuer}/protocol/openid-connect/logout`);
   if (!idToken) {
-    console.error('No your or not login, available for logout.');    
+    console.error('No your or not login, available for logout.');
     nextRedirect(loginUrl);
   }
   url.searchParams.set('id_token_hint', idToken);

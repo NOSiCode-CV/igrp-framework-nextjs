@@ -11,7 +11,7 @@ export type IGRPRootLayoutArgs = {
 export function IGRPRootLayout({ children, config }: IGRPRootLayoutArgs) {
   const layoutConfig = config;
 
-  const { font, layout } = layoutConfig;
+  const { font, layout, sessionArgs } = layoutConfig;
 
   const { session, activeThemeValue, isScaled } = layout;
 
@@ -31,7 +31,7 @@ export function IGRPRootLayout({ children, config }: IGRPRootLayoutArgs) {
         <IGRPNestedProviders
           session={session}
           activeThemeValue={activeThemeValue}
-          sessionArgs={undefined}
+          sessionArgs={sessionArgs}
           themeArgs={undefined}
         >
           {children}

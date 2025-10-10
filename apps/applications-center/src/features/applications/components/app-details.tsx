@@ -49,11 +49,11 @@ export function ApplicationDetails({ code }: { code: string }) {
   const slugValue = type === 'INTERNAL' ? slug : url;
 
   const tabItems: IGRPTabItem[] = [
-    {
-      label: 'Menus',
-      value: 'menus',
-      content: <MenuList app={app} />,
-    },
+    // {
+    //   label: 'Menus',
+    //   value: 'menus',
+    //   content: <MenuList app={app} />,
+    // },
     // {
     //   label: 'Permissões',
     //   value: 'permissions',
@@ -62,21 +62,22 @@ export function ApplicationDetails({ code }: { code: string }) {
   ];
 
   return (
-    <section className='space-y-10'>
+    <section className='flex flex-col gap-10 animate-fade-in'>
       <div className='flex flex-col gap-6'>
-        <div className='flex flex-col md:flex-row md:items-center md:justify-between gap-4'>
-          <PageHeader
-            title={app.name}
-            showBackButton
-            linkBackButton={ROUTES.APPLICATIONS}
-          >
-            <ButtonLink
-              href={`${ROUTES.APPLICATIONS}/${code}/${ROUTES.EDIT}`}
-              label='Editar Aplicação'
-              icon='EditPencil'
-            />
-          </PageHeader>
-        </div>
+
+        <PageHeader
+          title={app.name}
+          showBackButton
+          linkBackButton={ROUTES.APPLICATIONS}
+          showActions
+        >
+          <ButtonLink
+            href={`${ROUTES.APPLICATIONS}/${code}/${ROUTES.EDIT}`}
+            label='Editar Aplicação'
+            icon='Pencil'
+          />
+        </PageHeader>
+
 
         <div className='flex flex-col gap-8 animate-fade-in motion-reduce:hidden'>
           <IGRPCardPrimitive className='overflow-hidden card-hover gap-3 py-6'>

@@ -115,8 +115,7 @@ export function MenuList({ app }: { app: IGRPApplicationArgs }) {
       igrpToast({
         type: 'warning',
         title: 'Ordenação invalida',
-        description: 'Não pode mover itens entre diferentes grupos.',
-        duration: 4000,
+        description: 'Não pode mover itens entre diferentes grupos.'        
       });
       return;
     }
@@ -130,7 +129,6 @@ export function MenuList({ app }: { app: IGRPApplicationArgs }) {
         type: 'success',
         title: 'Ordem de menu atualizada',
         description: 'The menu order has been successfully updated.',
-        duration: 34000,
       });
     } catch (error) {
       setMenus(menus);

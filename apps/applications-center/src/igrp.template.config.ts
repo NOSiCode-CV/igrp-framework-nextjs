@@ -1,5 +1,6 @@
 import { igrpBuildConfig } from '@igrp/framework-next';
 import { IGRPConfigArgs, IGRPLayoutConfigArgs } from '@igrp/framework-next-types';
+
 import { fontVariables } from '@/lib/fonts';
 import { getMockApps } from '@/temp/applications/use-mock-apps';
 import { getMockMenus } from '@/temp/menus/use-mock-menus';
@@ -11,6 +12,17 @@ export function createConfig(config: IGRPLayoutConfigArgs): Promise<IGRPConfigAr
   const menu = getMockMenus().mockMenus;
   const footerMwnu = getMockMenusFooter().mockMenusFooter;
   const apps = getMockApps().mockApps;
+
+  function basePath(bp: string) {
+    if (!bp) return '/api/auth';
+
+    console.log({ bp });
+
+    if (bp.startsWith('/') && bp.endsWith('/')) return `${bp}api/auth`;
+    if (bp.startsWith('/') && !bp.endsWith('/')) return `${bp}/api/auth/`;
+    if (!bp.startsWith('/') && bp.endsWith('/')) return `/${bp}api/auth`;
+    return `${bp}/api/auth`;
+  }
 
   return igrpBuildConfig({
     appCode: process.env.IGRP_APP_CODE || '',
@@ -49,7 +61,12 @@ export function createConfig(config: IGRPLayoutConfigArgs): Promise<IGRPConfigAr
       position: 'bottom-right',
       richColors: true,
       closeButton: true,
-    },    
+    },
     showSettings: true,
+    sessionArgs: {
+      refetchInterval: 5 * 60,
+      refetchOnWindowFocus: true,
+      basePath: basePath(process.env.IGRP_APP_BASE_PATH || ''),
+    },
   });
 }

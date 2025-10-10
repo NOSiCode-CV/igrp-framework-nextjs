@@ -49,7 +49,12 @@ export function createConfig(config: IGRPLayoutConfigArgs): Promise<IGRPConfigAr
       position: 'bottom-right',
       richColors: true,
       closeButton: true,
-    },    
+    },
     showSettings: true,
+    sessionArgs: {
+      refetchInterval: 5 * 60,
+      refetchOnWindowFocus: true,
+      basePath: '/',
+    },
   });
 }

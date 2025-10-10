@@ -2,12 +2,10 @@
 
 import { SessionProvider, type SessionProviderProps } from '@igrp/framework-next-auth/client';
 
-function IGRPSessionProvider(props: SessionProviderProps) {
-  return (
-    <SessionProvider {...props} refetchInterval={4 * 60}>
-      {props.children}
-    </SessionProvider>
-  );
+function IGRPSessionProvider(props: SessionProviderProps) { 
+  console.log(":: Session DEBUG ::");
+  console.log({ props });
+  return <SessionProvider {...props}>{props.children}</SessionProvider>;
 }
 
 export { IGRPSessionProvider };

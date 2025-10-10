@@ -12,7 +12,7 @@ export const UserSchema = z.object({
   email: EmailSchema,
   status: statusSchema.optional(),
   picture: z.string().optional(),
-  signature: z.string().optional()
+  signature: z.string().optional(),
 });
 
 export const CreateUserSchema = UserSchema.omit({ id: true });

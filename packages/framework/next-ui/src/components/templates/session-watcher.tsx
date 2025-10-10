@@ -2,16 +2,16 @@
 
 import { useEffect } from 'react';
 import { useRouter } from 'next/navigation';
-import { useSafeSession } from '@igrp/framework-next-auth/client';
+import { useSession } from '@igrp/framework-next-auth/client';
 
-export function IGRPSessionWatcher() {
-  const { session, status } = useSafeSession();
+export function IGRPSessionWatcher({ children }: { children: React.ReactNode }) {
+  const { data: session, status } = useSession();
   const router = useRouter();
   useEffect(() => {
-    if (status === 'authenticated' && session?.forceLogout) {
-      router.push('/logout');
+    if (status === 'unauthenticated') {
+      router.push('/login');
     }
   }, [status, session, router]);
 
-  return null;
+  return children;
 }

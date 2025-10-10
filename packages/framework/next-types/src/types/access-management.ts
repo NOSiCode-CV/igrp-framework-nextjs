@@ -6,7 +6,7 @@ export type IGRPStatus = 'ACTIVE' | 'INACTIVE' | 'DELETED';
 
 export type IGRPTargetType = '_self' | '_blank';
 
-export type IGRPApplicationType = 'INTERNAL' | 'EXTERNAL';
+export type IGRPApplicationType = 'INTERNAL' | 'EXTERNAL' | 'SYSTEM';
 
 export type IGRPConfigurationType = 'CLUSTER' | 'ORGANIZATION';
 

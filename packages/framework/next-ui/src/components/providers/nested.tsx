@@ -1,16 +1,18 @@
 'use client';
 
 import { type Session } from '@igrp/framework-next-auth';
+import type { SessionProviderProps } from '@igrp/framework-next-auth/client';
 
 import { IGRPActiveThemeProvider } from './active-theme';
 import { IGRPSessionProvider } from './session';
 import { IGRPThemeProvider } from './theme';
+import { IGRPSessionWatcher } from '../templates/session-watcher';
 
 export type IGRPNestedProvidersArgs = {
   session?: Session | null;
   activeThemeValue?: string;
   children: React.ReactNode;
-  sessionArgs?: React.ComponentProps<typeof IGRPSessionProvider>;
+  sessionArgs?: Partial<SessionProviderProps>;
   themeArgs?: React.ComponentProps<typeof IGRPThemeProvider>;
   className?: string;
 };
@@ -23,7 +25,7 @@ export function IGRPNestedProviders({
   children,
 }: IGRPNestedProvidersArgs) {
   return (
-    <IGRPSessionProvider session={session} {...sessionArgs}>
+    <IGRPSessionProvider {...sessionArgs} session={session}>
       <IGRPThemeProvider
         attribute="class"
         defaultTheme="system"
@@ -33,7 +35,7 @@ export function IGRPNestedProviders({
         {...themeArgs}
       >
         <IGRPActiveThemeProvider initialTheme={activeThemeValue}>
-          {children}
+          <IGRPSessionWatcher>{children}</IGRPSessionWatcher>
         </IGRPActiveThemeProvider>
       </IGRPThemeProvider>
     </IGRPSessionProvider>

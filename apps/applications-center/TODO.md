@@ -7,3 +7,7 @@
 --> icon of apps manager 'Blocks'
 --> search provider by shadcn-admin app
 --> add context layout to change the layout
+
+## MENUS
+
+--> not shown thirth level

@@ -161,7 +161,7 @@ function IGRPDataTable<TData, TValue>({
       </div>
 
       <div className={cn('overflow-auto rounded-md border', tableClassName)}>
-        <Table>
+        <Table className='table-fixed'>
           <TableHeader className={cn('bg-muted', tableHeaderClassName)}>
             {table.getHeaderGroups().map((headerGroup) => (
               <TableRow key={headerGroup.id}>
@@ -182,14 +182,19 @@ function IGRPDataTable<TData, TValue>({
             ))}
           </TableHeader>
 
-          <TableBody className={cn('**:data-[slot=table-cell]:first:w-8', tableBodyClassName)}>
+          <TableBody className={cn(tableBodyClassName)}>
             {table.getRowModel().rows?.length ? (
               table.getRowModel().rows.map((row) => (
                 <Fragment key={row.id}>
                   <TableRow
                     key={row.id}
                     data-state={row.getIsSelected() && 'selected'}
-                    className="border-0 [&:first-child>td:first-child]:rounded-tl-lg [&:first-child>td:last-child]:rounded-tr-lg [&:last-child>td:first-child]:rounded-bl-lg [&:last-child>td:last-child]:rounded-br-lg h-px hover:bg-accent/50"
+                    className={cn(
+                      "border-0 [&:first-child>td:first-child]:rounded-tl-lg",
+                      "[&:first-child>td:last-child]:rounded-tr-lg",
+                      "[&:last-child>td:first-child]:rounded-bl-lg", 
+                      "[&:last-child>td:last-child]:rounded-br-lg h-px hover:bg-accent/50"
+                    )}                  
                   >
                     {row.getVisibleCells().map((cell) => (
                       <TableCell key={cell.id} className="p-3 last:py-0 h-[inherit]">
@@ -208,7 +213,14 @@ function IGRPDataTable<TData, TValue>({
                 </Fragment>
               ))
             ) : (
-              <TableRow className="hover:bg-transparent [&:first-child>td:first-child]:rounded-tl-lg [&:first-child>td:last-child]:rounded-tr-lg [&:last-child>td:first-child]:rounded-bl-lg [&:last-child>td:last-child]:rounded-br-lg">
+              <TableRow 
+                className={cn(
+                  "hover:bg-transparent [&:first-child>td:first-child]:rounded-tl-lg",
+                  "[&:first-child>td:last-child]:rounded-tr-lg",
+                  "[&:last-child>td:first-child]:rounded-bl-lg",
+                  "[&:last-child>td:last-child]:rounded-br-lg"
+                )}
+              >
                 <TableCell colSpan={columns.length} className="h-24 text-center font-semibold">
                   {notFoundLabel}
                 </TableCell>

@@ -478,6 +478,7 @@ export {
   IGRPDataTableCellAmount,
   IGRPDataTableCellBadge,
   IGRPDataTableCellDate,
+  IGRPDataTableCellLink,
   type IGRPDataTableCellExpanderProps,
   type IGRPDataTableCellAmountProps,
   type IGRPDataTableCellBadgeProps,

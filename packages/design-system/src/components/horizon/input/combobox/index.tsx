@@ -152,10 +152,10 @@ function IGRPCombobox({
     );
   };
 
-  const isSelected = (optValue: string | number, currentValue: string | string[]) => {
+  const isSelected = (optValue: string, currentValue: string | string[]) => {
     if (variant === 'single') return currentValue === optValue;
 
-    return Array.isArray(currentValue) && currentValue.includes(String(optValue));
+    return Array.isArray(currentValue) && currentValue.includes(optValue);
   };
 
   const groupedOptions = useMemo(() => {
@@ -172,26 +172,26 @@ function IGRPCombobox({
   }, [showGroup, options]);
 
   const onOptionsChangeHandler = (
-    selectedValue: string | number,
+    selectedValue: string,
     currentValue: string | string[],
     onChangeHandler: (value: string | string[]) => void,
   ) => {
     if (variant === 'single') {
       const newValue = selectedValue === currentValue ? '' : selectedValue;
-      onChangeHandler(String(newValue));
+      onChangeHandler(newValue);
       setOpen(false);
     } else {
       const currentValues = Array.isArray(currentValue) ? currentValue : [];
-      const updatedValues = currentValues.includes(String(selectedValue))
+      const updatedValues = currentValues.includes(selectedValue)
         ? currentValues.filter((val) => val !== selectedValue)
         : [...currentValues, selectedValue];
-      onChangeHandler(String(updatedValues));
+      onChangeHandler(updatedValues);
     }
   };
 
   const renderOptionsList = (
     currentValue: string | string[],
-    onSelectHandler: (value: string | number) => void,
+    onSelectHandler: (value: string) => void,
   ) =>
     Object.entries(groupedOptions).map(([groupName, groupOptions], index) => (
       <div key={groupName}>

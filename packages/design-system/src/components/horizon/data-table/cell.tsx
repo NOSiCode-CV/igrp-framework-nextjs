@@ -1,10 +1,11 @@
 import { type Row } from '@tanstack/react-table';
 import { format } from 'date-fns';
 
-import { IGRPBadge, type IGRPBadgeProps } from '../badge';
-import { IGRPIcon } from '../icon';
 import { Button } from '../../primitives/button';
 import { Checkbox } from '../../primitives/checkbox';
+import { IGRPBadge, type IGRPBadgeProps } from '../badge';
+import { IGRPIcon } from '../icon';
+import { IGRPLink, type IGRPLinkProps } from '../typography/link';
 
 interface IGRPDataTableCellCheckboxProps<TData> extends React.ComponentProps<typeof Checkbox> {
   row: Row<TData>;
@@ -108,14 +109,39 @@ interface IGRPDataTableCellDateProps {
 
 function IGRPDataTableCellDate({ date, dateFormat = 'dd/MM/yyyy' }: IGRPDataTableCellDateProps) {
   if (!date) return null;
-  // if (date instanceof Date) return <span>{format(new Date(date), dateFormat)}</span>
-  // if (typeof date === 'string') {
-  //   const dateParse = parse(date, dateFormat, new Date())
-  //   return <span>{format(dateParse, dateFormat)}</span>
-  // }
-
   return <span>{format(new Date(date), dateFormat)}</span>;
 }
+
+function IGRPDataTableCellLink({
+	href,
+	children,
+	target,
+	showIcon,
+	rel,
+	className,
+	iconName,
+	iconClassName,
+	iconPlacement,
+	...props
+}: IGRPLinkProps) {
+	return (
+		<IGRPLink
+			href={href}		
+			target={target}
+			showIcon={showIcon}
+			rel={rel}
+			className={className}
+			iconName={iconName}
+			iconClassName={iconClassName}
+			iconPlacement={iconPlacement}
+			{...props}
+		>	
+			{children}
+		</IGRPLink>
+	)
+}
+
+// TDOD row expander
 
 export {
   IGRPDataTableCellCheckbox,
@@ -123,6 +149,7 @@ export {
   IGRPDataTableCellAmount,
   IGRPDataTableCellBadge,
   IGRPDataTableCellDate,
+  IGRPDataTableCellLink,
   type IGRPDataTableCellExpanderProps,
   type IGRPDataTableCellAmountProps,
   type IGRPDataTableCellBadgeProps,

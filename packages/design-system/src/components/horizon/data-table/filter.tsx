@@ -296,8 +296,7 @@ function IGRPDataTableFilterInput<TData>({
 }: IGRPDataTableFilterInputProps<TData>) {
   const id = useId();
 
-  console.log({ column })
-  
+  console.log({ column });
 
   return (
     <IGRPInputText

@@ -113,32 +113,32 @@ function IGRPDataTableCellDate({ date, dateFormat = 'dd/MM/yyyy' }: IGRPDataTabl
 }
 
 function IGRPDataTableCellLink({
-	href,
-	children,
-	target,
-	showIcon,
-	rel,
-	className,
-	iconName,
-	iconClassName,
-	iconPlacement,
-	...props
+  href,
+  children,
+  target,
+  showIcon,
+  rel,
+  className,
+  iconName,
+  iconClassName,
+  iconPlacement,
+  ...props
 }: IGRPLinkProps) {
-	return (
-		<IGRPLink
-			href={href}		
-			target={target}
-			showIcon={showIcon}
-			rel={rel}
-			className={className}
-			iconName={iconName}
-			iconClassName={iconClassName}
-			iconPlacement={iconPlacement}
-			{...props}
-		>	
-			{children}
-		</IGRPLink>
-	)
+  return (
+    <IGRPLink
+      href={href}
+      target={target}
+      showIcon={showIcon}
+      rel={rel}
+      className={className}
+      iconName={iconName}
+      iconClassName={iconClassName}
+      iconPlacement={iconPlacement}
+      {...props}
+    >
+      {children}
+    </IGRPLink>
+  );
 }
 
 // TDOD row expander

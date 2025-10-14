@@ -28,17 +28,11 @@ export const useUploadPrivateFiles = () => {
   const queryClient = useQueryClient();
 
   return useMutation({
-    mutationFn: async ({ file, options, filename }: { file: File | Blob; options: UploadFileOptions, filename?: string }) => {
-      const fd = new FormData()
-      fd.append('file', file)                           
-      fd.append('folder', options.folder ?? '')   
-      fd.append('filename', filename ?? '')   
-
-      return await uploadPrivateFile(fd)
-    },
+    mutationFn: async ({ file, options }: { file: File | Blob; options: UploadFileOptions }) =>
+      uploadPrivateFile(file, options),
     onSuccess: async () => {
-      await queryClient.invalidateQueries({ queryKey: ['public-files-private'] })
-      await queryClient.refetchQueries({ queryKey: ['public-files-private'] })
+      await queryClient.invalidateQueries({ queryKey: ['public-files-private'] });
+      await queryClient.refetchQueries({ queryKey: ['public-files-private'] });
     },
-  })
+  });
 };

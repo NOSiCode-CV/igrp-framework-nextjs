@@ -175,7 +175,7 @@ export function ApplicationForm({ application }: { application?: ApplicationArgs
 
     if (file) {
       const options = { folder: values.code as string };
-      const result = await uploadPrivateFile({ file, options, filename: 'logo' });
+      const result = await uploadPrivateFile({ file, options });
       payload.picture = result;
     }
 

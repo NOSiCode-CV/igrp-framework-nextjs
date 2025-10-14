@@ -296,10 +296,13 @@ function IGRPDataTableFilterInput<TData>({
 }: IGRPDataTableFilterInputProps<TData>) {
   const id = useId();
 
+  console.log({ column })
+  
+
   return (
     <IGRPInputText
       placeholder={placeholder}
-      value={(column?.getFilterValue() as string) ?? ''}
+      value={(column?.getFilterValue() ?? '') as string}
       onChange={(e) => column?.setFilterValue(e.target.value)}
       className={className}
       inputClassName={inputClassName}

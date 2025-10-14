@@ -17,8 +17,6 @@ interface IGRPButtonProps
   asChild?: boolean;
   loading?: boolean;
   loadingText?: string;
-  iconSpacing?: number;
-  wrapperClassName?: string;
 }
 
 function IGRPButton({
@@ -28,12 +26,10 @@ function IGRPButton({
   iconPlacement = 'start',
   iconClassName,
   iconSize = 14,
-  // iconSpacing = 2,
   className,
   loading = false,
   loadingText = 'Loading...',
   disabled,
-  // wrapperClassName,
   type = 'button',
   ...props
 }: IGRPButtonProps) {
@@ -42,9 +38,14 @@ function IGRPButton({
   const computedIconSize =
     iconSize || (size === 'sm' ? 14 : size === 'lg' ? 20 : size === 'icon' ? 18 : 16);
 
-  if (size === 'icon') {
+  if (size === 'icon' || size === 'icon-sm' || size === 'icon-lg') {
     return (
-      <Button {...props} className={className} disabled={disabled || loading} type={type}>
+      <Button 
+        {...props} 
+        className={cn( loading && 'cursor-wait', className)} 
+        disabled={disabled || loading} 
+        type={type}
+      >
         {loading ? (
           <>
             <Loader2 className="size-4 animate-spin" aria-hidden="true" />
@@ -60,9 +61,7 @@ function IGRPButton({
         )}
       </Button>
     );
-  }
-
-  // const spacingClass = `space-x-${iconSpacing}`;
+  }  
 
   return (
     <Button

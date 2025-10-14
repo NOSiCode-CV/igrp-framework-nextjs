@@ -1,3 +1,7 @@
+/* eslint-disable react-refresh/only-export-components */
+
+// THIS COMPONENT IS CHANGED FROM THE ORIGINAL
+
 import * as RadioGroupPrimitive from '@radix-ui/react-radio-group';
 import { CircleIcon } from 'lucide-react';
 import { cva, type VariantProps } from 'class-variance-authority';
@@ -48,7 +52,7 @@ function RadioGroupItem({
   const indicatorSizes: Record<NonNullable<typeof size>, string> = {
     sm: 'size-1.5',
     md: 'size-2',
-    lg: 'size-2.55',
+    lg: 'size-2.5',
   };
 
   const indicatorSize = size ? indicatorSizes[size] : 'size-2';
@@ -74,5 +78,4 @@ function RadioGroupItem({
   );
 }
 
-// eslint-disable-next-line react-refresh/only-export-components
 export { RadioGroup, RadioGroupItem, radioItemVariants };

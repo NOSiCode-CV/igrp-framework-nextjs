@@ -1,6 +1,6 @@
 {
   "name": "@igrp/applications-center",
-  "version": "0.1.0-beta.18",
+  "version": "0.1.0-beta.22",
   "private": true,
   "author": "IGRP Team | NOSi E.P.E - Núcleo Operacional Para a Sociedade de Informação",
   "license": "MIT",
@@ -24,7 +24,7 @@
     "@igrp/framework-next-types": "workspace:*",
     "@igrp/framework-next-ui": "workspace:*",
     "@igrp/igrp-framework-react-design-system": "workspace:*",
-    "@igrp/platform-access-management-client-ts": "0.1.0-beta.37-1",
+    "@igrp/platform-access-management-client-ts": "0.1.0-beta.39",
     "@tanstack/react-query": "^5.84.2",
     "@tanstack/react-table": "^8.21.3",
     "@tanstack/react-virtual": "^3.13.12",

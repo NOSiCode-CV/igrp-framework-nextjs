@@ -1,16 +1,18 @@
 // import { Badge } from 'lucide-react';
 import type { IGRPBaseAttributes } from '../../types';
 import { Avatar, AvatarImage, AvatarFallback } from '../primitives/avatar';
-import { IGRPColors, type IGRPColorVariants } from '../../lib/colors';
+import { IGRPColors, type IGRPColorRole, type IGRPColorVariants } from '../../lib/colors';
 import { cn } from '../../lib/utils';
 import { IGRPIcon } from './icon';
 import { Button } from '../primitives/button';
+import {  IGRPBadge } from './badge';
 
 interface IGRPAvatarProps extends IGRPBaseAttributes  {
   src?: string;
-  size?:number;
+  size?:string;
   alt?: string;
   fallback?: string;
+  fallbackClassName?: string;
   fallbackIcon?: string;
   hasFallbackIcon?: boolean;
   hasStatus?: boolean;
@@ -19,10 +21,14 @@ interface IGRPAvatarProps extends IGRPBaseAttributes  {
   iconName?: string;
   showBadge?: boolean;
   className?: string,
-  imageClassName?: string,
   badgeNumber?: number;
-  iconNumber?: number;
+  iconNumber?: string;
   multiple?: number;
+  badgeColor: IGRPColorVariants;
+  badgeVariant?: IGRPColorRole;
+  badgeShowIcon?: boolean;
+  badgeIconName ?: string;
+  differentRadius?: string;
 }
 function IGRPAvatar({
   src ="igrp",
@@ -34,73 +40,97 @@ function IGRPAvatar({
   iconName = 'Check',
   className,
   iconClassName,
-  imageClassName,
-  badgeNumber =  6,
-  size = 32,
+  size ='md',
   fallbackIcon = 'User',
   hasFallbackIcon = false,
-  iconSize = 16
+  fallbackClassName,
+  badgeColor = 'primary',
+  badgeVariant = 'solid',
+  badgeNumber =  6,
+  badgeShowIcon = false,
+  badgeIconName = 'Info',
+  differentRadius = 'rounded-full',
 }: IGRPAvatarProps) {
   const colorClasses = IGRPColors['solid'][status];
- // const positionIcon = iconPlacement === 'start' ? 'start-0' : 'end-0 pe-3';
   const upperFallBack = fallback ?  
     fallback.split(" ")
     .slice(0,2)                  
     .map(word => word.charAt(0))
     .join("")        
     .toUpperCase() : " " ; 
+
+    const sizeClasses = {
+      sm: 'h-8 w-8 text-xs',
+      md: 'h-12 w-12 text-sm',
+      lg: 'h-16 w-16 text-base',
+      xl: 'h-24 w-24 text-lg',
+    }[size]
   
-  //const positionParentIcon = iconPlacement === 'start' ? 'ps-9' : 'pe-9';
+    const iconSize = {
+      sm: 'h-3 w-3',
+      md: 'h-5 w-5',
+      lg: 'h-6 w-6',
+      xl: 'h-10 w-10',
+    }[size]
+
+    const iconPosition ={
+       sm: '-top-1 left-5',
+       md: '-top-1 left-8',
+       lg: '-top-3 left-11',
+       xl: '-top-4 left-16',
+    }[size]
+
+    const statusPosition ={
+       sm: '-top-1 left-5',
+       md: '-top-1 left-8',
+       lg: '-top-3 left-11',
+       xl: '-top-4 -end-2.5',
+    }[size]
+
+  
   return (
-    <div className='flex items-center justify-center rounded-full p-1 w-10 h-10'>
-      <Avatar className={cn('overflow-visible', className)}  
-        style={{
-          height:size,
-          width:size,
-        }} >
-        <AvatarImage src={src} className={cn(' ', imageClassName)} alt="avatar"  />
-        <AvatarFallback>
+    <div className={cn('flex items-center justify-center rounded-full p-1 w-10 h-10')}>
+      <Avatar className={cn('overflow-visible', className,sizeClasses)}>
+        <AvatarImage src={src} className={cn(' ',differentRadius)} alt="avatar"  />
+        <AvatarFallback 
+        //  style={{ '--size': `${size}px` } as React.CSSProperties}
+           className={cn('',differentRadius)}
+        >
           {hasFallbackIcon && (
-          <IGRPIcon iconName={fallbackIcon}   
-              style={{
-                height:size * 0.625,
-                width:size * 0.625,
-                top: `${size * 0.05}px`,   // 5% from top
-                left: `${size * 0.05}px`,  // 5% from left
-              }} 
+          <IGRPIcon iconName={fallbackIcon}    
+            // style={{ '--size': `${size}px` } as React.CSSProperties}
+            className={cn(sizeClasses,fallbackClassName)} //'top-[calc(var(size)*0.05)] left-[calc(var(size)*0.05)]'
+ 
             />)}
             {!hasFallbackIcon && upperFallBack}
         </AvatarFallback>
         {hasStatus && (
           <span
-            style={{
-              height:size * 0.375,
-              width: size * 0.375,
-            }} 
             className={cn(
               'border-background absolute -end-0.5 -bottom-0.5 size-3 rounded-full border-2 bg-emerald-500',
-              colorClasses.bgForeground ? colorClasses.bgForeground : '',
+              colorClasses.bgForeground ? colorClasses.bgForeground : '',iconSize
             )}
           >
             <span className="sr-only"></span>
           </span>
         )}
         {showIcon && (
-          <div className={cn('absolute -top-2 left-5 border-2 bg-white',iconClassName)}>
-          <IGRPIcon iconName={iconName} className={iconClassName}  
-              style={{
-                height: iconSize, //size * 0.625,
-                width:iconSize, //,size * 0.625,
-                top: `${size * 0.05}px`,   // 5% from top
-                left: `${size * 0.05}px`,  // 5% from left
-              }} 
+          <div className={cn('absolute border-2 bg-white',iconPosition,iconClassName)}>
+            <IGRPIcon iconName={iconName} className={cn(iconSize,iconClassName  )}
+              style={{ '--size': `${size}px` } as React.CSSProperties}
             />
           </div>
-        )}
+        )}  
         {showBadge && !showIcon && (
-          <div className={cn('inline-flex items-center justify-center rounded-full border text-xs font-medium w-fit whitespace-nowrap shrink-0 gap-1 focus-visible:border-ring focus-visible:ring-ring/50 focus-visible:ring-[3px] transition-[color,box-shadow] leading-normal bg-primary text-primary-foreground [a&]:hover:bg-primary/90 border-background absolute -top-2 left-full min-w-5 -translate-x-3 px-1')}>
-            {badgeNumber}
-          </div>
+          <IGRPBadge
+              badgeClassName={cn('absolute -top-2 left-full min-w-5 -translate-x-3 px-1',iconSize)}
+              color={badgeColor}
+              variant={badgeVariant}
+              showIcon={badgeShowIcon}
+              iconName={badgeIconName}
+            >
+              {badgeNumber}
+          </IGRPBadge>
         )}
       </Avatar>
     </div>

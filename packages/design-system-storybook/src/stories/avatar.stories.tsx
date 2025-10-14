@@ -2,16 +2,17 @@ import type { Meta, StoryFn, StoryObj } from '@storybook/nextjs-vite';
 import {
   IGRPAvatar,
   type IGRPAvatarProps,
-  IGRPIconObject,
+  IGRPIconObject
 } from '@igrp/igrp-framework-react-design-system';
 import { IGRPButtonPrimitive } from '@igrp/igrp-framework-react-design-system';
+import { findAllByTestId } from 'storybook/internal/test';
 
 const avatars = [
-  { src: 'https://originui.com/avatar-80-04.jpg', fallback: 'A' },
-  { src: 'https://originui.com/avatar-80-05.jpg', fallback: 'B' },
-  { src: 'https://originui.com/avatar-80-06.jpg', fallback: 'C' },
-  { src: 'https://originui.com/avatar-80-07.jpg', fallback: 'D' },
-  { src: 'https://originui.com/avatar-80-08.jpg', fallback: 'E' },
+  { src: 'https://cdn-icons-png.flaticon.com/512/168/168726.png', fallback: 'A' },
+  { src: 'https://cdn-icons-png.flaticon.com/512/168/168726.png', fallback: 'B' },
+  { src: 'https://cdn-icons-png.flaticon.com/512/168/168726.png', fallback: 'C' },
+  { src: 'https://cdn-icons-png.flaticon.com/512/168/168726.png', fallback: 'D' },
+  { src: 'https://cdn-icons-png.flaticon.com/512/168/168726.png', fallback: 'E' },
 ];
 
 const maxVisible = 4;
@@ -33,7 +34,8 @@ export default {
       description: 'Specifies the path to the image file',
     },
     size: {
-      control: 'number',
+      control: 'select',
+      options: ['sm' , 'md' , 'lg' , 'xl'],
       description: 'Avatar size',
     },
     fallback: {
@@ -61,10 +63,6 @@ export default {
       control: 'text',
       description: 'If Avatar has Icon',
     },
-    imageClassName: { 
-      control: 'text',
-      description: 'Image class' 
-    },
     iconName: {
       control: 'select',
       options: IGRPIconObject,
@@ -82,6 +80,27 @@ export default {
       control: 'number',
       description: 'Number inside the Badge' 
      },
+    badgeVariant: {
+      control: 'select',
+      options: ['solid', 'outline', 'ghost'] ,
+      description: 'Select Badge Color',
+      defaultValue: 'User',
+    },
+    badgeColor: {
+      control: 'select',
+      options: ['primary', 'success', 'destructive', 'warning', 'info', 'secondary', 'indigo'],
+      description: 'Select Badge Color',
+      defaultValue: 'User',
+    },
+    badgeShowIcon: {
+      control: 'boolean',
+      description: 'Whether to show an icon',
+    },
+    badgeIconName: {
+      control: 'select',
+      options: IGRPIconObject,
+      description: 'Select an icon',
+    },
     fallbackIcon: {
       control: 'select',
       options: IGRPIconObject,
@@ -93,6 +112,17 @@ export default {
       options: [true, false],
       description: 'If Avatar has Icon',
       defaultValue: 'False',
+    },
+    fallbackClassName: {
+      control: 'text',
+      description: 'Fallback Class Name',
+      defaultValue: 'False',
+    },
+    differentRadius: {
+      control: 'select',
+      description: 'Radius',
+      options: ['rounded-none', 'rounded-sm', 'rounded', 'rounded-md', 'rounded-lg', 'rounded-xl', 'rounded-2xl', 'rounded-3xl', 'rounded-full'],
+      defaultValue: 'rounded-none',
     },
   },
 } as Meta;
@@ -106,20 +136,22 @@ const Template: StoryFn<IGRPAvatarProps> = (args) => (
 export const Default: StoryObj<IGRPAvatarProps> = {
   render: Template,
   args: {
-    src: 'https://originui.com/avatar-80-04.jpg',
+    src: 'https://cdn-icons-png.flaticon.com/512/168/168726.png',
+    className: 'overflow-visible',
     fallback: 'Avatar Aang',
     iconName: 'Check',
-    size: 30,
-    hasStatus:false,
-    hasFallbackIcon:false,
-    showIcon:false,
-    showBadge	:false,
-    status:'success',
-    imageClassName:'rounded-full',
+    size: 'xl',
+    hasStatus:true,
+    hasFallbackIcon:true,
+    showIcon:false,    
+    fallbackIcon:'User',
     iconClassName:'rounded-full',
-    className: 'overflow-visible',
+    showBadge	:false,
+    badgeColor:'destructive',
+    badgeVariant:'solid',
     badgeNumber: 6,
-    fallbackIcon:'User'
+    status:'success',
+    differentRadius:'rounded-full'
   },
 };
 
@@ -128,7 +160,7 @@ export const AvatarShape: StoryObj<IGRPAvatarProps> = {
   args: {
     src: 'https://originui.com/avatar-80-04.jpg',
     fallback: 'AV',
-    imageClassName: 'rounded-md',
+
     iconName: 'Check',
     status: 'success',
   },
@@ -156,7 +188,6 @@ export const Status: StoryObj<IGRPAvatarProps> = {
     hasStatus: true,
     status: 'success',
     className: 'overflow-visible',
-    imageClassName: 'rounded-full',
   },
 };
 
@@ -165,8 +196,6 @@ export const Size: StoryObj<IGRPAvatarProps> = {
   args: {
     src: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcR6SGvshARHJ5GYSH_Kig8-cYNw5rO3nWn7mA&s',
     className: 'overflow-visible',
-    imageClassName: 'rounded-full',
-    size: 120,
   },
 };
 
@@ -177,7 +206,6 @@ export const HasIcon: StoryObj<IGRPAvatarProps> = {
     showIcon: true,
     iconName: 'Check',
     className: 'overflow-visible',
-    imageClassName:'rounded-full',
     iconClassName:'rounded-full',
   },
 };
@@ -190,12 +218,11 @@ export const HasBadge: StoryObj<IGRPAvatarProps> = {
     iconName: 'Check',
     className: 'overflow-visible',
     badgeNumber: 6,
-    imageClassName:'rounded-full',
     iconClassName:'rounded-full',
   },
 };
 
-//TODO doutght multiple avatar must be in the Default example
+//TODO doubt multiple avatar must be in the Default example
 export const MultipleBadge: Story = {
   render: () => (
     <div className='flex -space-x-3'>
@@ -205,7 +232,6 @@ export const MultipleBadge: Story = {
           src={avatar.src}
           iconName='Check'
           className='overflow-visible ring-background ring-2'
-          imageClassName='rounded-full'
           fallback={avatar.fallback}
           hasStatus={false}
           status='primary'
@@ -214,6 +240,7 @@ export const MultipleBadge: Story = {
           showBadge={false}
           badgeNumber={0}
           multiple={0}
+          badgeColor={'destructive'}          
         />
       ))}
       {remaining > 0 && (
@@ -237,7 +264,6 @@ export const MultipleBadgeWithText: Story = {
           src={avatar.src}
           iconName='Check'
           className='overflow-visible ring-background ring-2'
-          imageClassName='rounded-full'
           fallback={avatar.fallback}
           hasStatus={false}
           status='primary'
@@ -246,67 +272,12 @@ export const MultipleBadgeWithText: Story = {
           showBadge={false}
           badgeNumber={0}
           multiple={0}
+          badgeColor={'destructive'}
         />
       ))}
       {remaining > 0 && (
-        <p className='flex items-center justify-center px-3'>Trusted by 60K+ developers.</p>
+        <p className='flex items-center justify-center mx-4'>Trusted by 60K+ developers.</p>
       )}
     </div>
   ),
 };
-
-// export const MultipleBadge2: Story = {
-
-//   render: (args) => (
-//       <div className='flex -space-x-3'>
-//        <IGRPAvatar
-//             src='https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcR6SGvshARHJ5GYSH_Kig8-cYNw5rO3nWn7mA&s'
-//             iconName='Check'
-//             className='overflow-visible ring-background rounded-full ring-1'
-//             imageClassName='rounded-full'
-//             fallback=''
-//             hasStatus={false}
-//             status={'primary'}
-//             showIcon={false}
-//             iconSize={0}
-//             showBadge={false}
-//             badgeNumber={args.badgeNumber}
-
-//           />
-//           <IGRPAvatar
-//             src='https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcR6SGvshARHJ5GYSH_Kig8-cYNw5rO3nWn7mA&s'
-//             iconName='Check'
-//             className='overflow-visible ring-background rounded-full ring-1'
-//             imageClassName='rounded-full'
-//             hasStatus={false}
-//             status={'primary'}
-//             showIcon={false}
-//             iconSize={0}
-//             showBadge={false}
-//             badgeNumber={0}
-
-//           />
-//           <IGRPAvatar
-//             src='https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcR6SGvshARHJ5GYSH_Kig8-cYNw5rO3nWn7mA&s'
-//             iconName='Check'
-//             className='overflow-visible ring-background rounded-full ring-1'
-//             imageClassName='rounded-full'
-//             hasStatus={false}
-//             status={'primary'}
-//             showIcon={false}
-//             iconSize={0}
-//             showBadge={false}
-//             badgeNumber={0}
-//             multiple={0}
-//           />
-//             <IGRPButtonPrimitive
-//         variant='secondary'
-//         className='bg-secondary text-muted-foreground ring-background hover:bg-secondary hover:text-foreground flex size-10 items-center justify-center rounded-full text-xs ring-2'
-//         size='icon'
-//       >
-//         {remaining}
-//       </IGRPButtonPrimitive>
-//       </div>
-//   ),
-
-// };

@@ -31,15 +31,15 @@ const IGRPLinkVariants = cva(
   },
 );
 
-type AnchorProps = React.AnchorHTMLAttributes<HTMLAnchorElement>;
-type NextLinkProps = Omit<LinkProps, 'href'> & { href: string };
+type AnchorProps = Omit<React.AnchorHTMLAttributes<HTMLAnchorElement>, 'href'>;
+type NextLinkProps = Omit<LinkProps, 'href' | 'as'>;
 
 interface IGRPLinkProps
-  extends Omit<AnchorProps, 'href'>,
-    Omit<NextLinkProps, 'as'>,
+  extends AnchorProps,
+    NextLinkProps,
     Omit<IGRPBaseAttributes, 'ref'>,
     VariantProps<typeof IGRPLinkVariants> {
-  href: string;
+  href?: string;
   children: ReactNode;
   className?: string;
   target?: string;
@@ -99,7 +99,7 @@ function IGRPLink({
   }
 
   return (
-    <Link href={href} {...props} className={linkClass} onClick={onClick} target={target}>
+    <Link href={href || ''} {...props} className={linkClass} onClick={onClick} target={target}>
       <IGRPLinkRender
         iconName={iconName}
         iconClassName={iconClassName}

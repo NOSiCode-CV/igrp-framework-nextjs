@@ -1,12 +1,9 @@
 import { useState } from 'react';
 import Link from 'next/link';
 
-import {
-  DropdownMenu,
-  DropdownMenuContent,
-  DropdownMenuItem,
-  DropdownMenuTrigger,
-} from '../../primitives/dropdown-menu';
+import { cn } from '../../../lib/utils';
+import { type IGRPPlacementProps } from '../../../types';
+
 import {
   AlertDialog,
   AlertDialogAction,
@@ -18,10 +15,15 @@ import {
   AlertDialogTitle,
   AlertDialogTrigger,
 } from '../../primitives/alert-dialog';
+
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuTrigger,
+} from '../../primitives/dropdown-menu';
 import { buttonVariants } from '../../primitives/button';
-import { IGRPIcon } from '../icon';
-import { cn } from '../../../lib/utils';
-import { type IGRPPlacementProps } from '../../../types';
+import { IGRPIcon, type IGRPIconName } from '../icon';
 import { type IGRPDataTableDialogProps, type IGRPDataTableLinkProps } from './row-actions';
 
 interface IGRPDataTableDropdownProps {
@@ -124,7 +126,7 @@ function IGRPDataTableDropdownMenuLink({
   classNameItem,
 }: IGRPDataTableDropdownMenuLinkProps) {
   const iconClass = iconPlacement === 'end' ? 'flex-row-reverse' : '';
-  const customClss = cn('flex items-center justify-between gap-2 w-full', iconClass, classNameItem);
+  const customClss = cn('flex items-center gap-2 w-full', iconClass, classNameItem);
 
   const handlerAction = () => {
     if (typeof action === 'function') {
@@ -177,7 +179,7 @@ function IGRPDataTableDropdownMenuCustom({
 
   return (
     <DropdownMenuItem
-      className={cn('flex items-center justify-between gap-2 w-full', iconClass, classNameItem)}
+      className={cn('flex items-center gap-2 w-full', iconClass, classNameItem)}
       onSelect={handlerAction}
     >
       {showIcon && (
@@ -209,7 +211,7 @@ function IGRPDataTableDropdownMenuItem({
   return (
     <DropdownMenuItem
       onClick={onClick}
-      className={cn('flex items-center justify-between w-full gap-2', iconClass, classNameItem)}
+      className={cn('flex items-center w-full gap-2', iconClass, classNameItem)}
       onSelect={(e) => {
         e.preventDefault();
       }}
@@ -232,11 +234,19 @@ type IGRPDataTableActionDropdown =
       props: IGRPDataTableDropdownMenuDialogProps;
     };
 
-function IGRPDataTableDropdownMenu({ items }: { items: IGRPDataTableActionDropdown[] }) {
+type IGRPDataTableDropdownMenuProps = {
+  items: IGRPDataTableActionDropdown[];
+  iconName?: IGRPIconName | string;
+};
+
+function IGRPDataTableDropdownMenu({
+  items,
+  iconName = 'Ellipsis',
+}: IGRPDataTableDropdownMenuProps) {
   return (
     <DropdownMenu>
       <DropdownMenuTrigger className="flex items-center justify-center" aria-label="Open actions">
-        <IGRPIcon iconName="Ellipsis" className="shadow-none" />
+        <IGRPIcon iconName={iconName} className="shadow-none" />
       </DropdownMenuTrigger>
       <DropdownMenuContent align="end">
         {items.map(({ component: Component, props }, index) => (
@@ -252,6 +262,7 @@ export {
   type IGRPDataTableActionDropdown,
   type IGRPDataTableDropdownMenuDialogProps,
   type IGRPDataTableDropdownMenuLinkProps,
+  type IGRPDataTableDropdownMenuProps,
   IGRPDataTableDropdownMenuAlert,
   IGRPDataTableDropdownMenuCustom,
   IGRPDataTableDropdownMenuLink,

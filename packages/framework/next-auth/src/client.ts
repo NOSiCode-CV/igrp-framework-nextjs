@@ -1,7 +1,7 @@
 'use client';
 
 import { useSession as useSessionBase } from 'next-auth/react';
-import type { Session } from './session'
+import type { Session } from './session';
 
 export {
   SessionProvider,
@@ -10,8 +10,8 @@ export {
   signIn,
   signOut,
   getCsrfToken,
-  getProviders,  
-  getSession
+  getProviders,
+  getSession,
 } from 'next-auth/react';
 
 export type { User } from 'next-auth';

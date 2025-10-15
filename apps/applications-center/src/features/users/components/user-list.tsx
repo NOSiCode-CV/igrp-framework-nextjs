@@ -1,6 +1,6 @@
-'use client';
+"use client";
 
-import { useEffect, useId, useRef, useState } from 'react';
+import { useEffect, useId, useRef, useState } from "react";
 import {
   cn,
   ColumnDef,
@@ -34,8 +34,8 @@ import {
   IGRPUserAvatar,
   PaginationState,
   useIGRPToast,
-} from '@igrp/igrp-framework-react-design-system';
-import { IGRPUserDTO } from '@igrp/platform-access-management-client-ts';
+} from "@igrp/igrp-framework-react-design-system";
+import { IGRPUserDTO } from "@igrp/platform-access-management-client-ts";
 import {
   flexRender,
   getCoreRowModel,
@@ -44,25 +44,30 @@ import {
   getSortedRowModel,
   Row,
   useReactTable,
-} from '@tanstack/react-table';
+} from "@tanstack/react-table";
 
-import { ButtonLink } from '@/components/button-link';
-import { AppCenterLoading } from '@/components/loading';
-import { PageHeader } from '@/components/page-header';
-import { ROUTES } from '@/lib/constants';
-import { useUsers, useCurrentUser, useUserRoles } from '@/features/users/use-users';
-import { UserInviteDialog } from '@/features/users/components/user-invite-dialog';
-import { UserRolesDialog } from './user-role-dialog';
-import { getInitials } from '@/lib/utils';
+import { ButtonLink } from "@/components/button-link";
+import { AppCenterLoading } from "@/components/loading";
+import { PageHeader } from "@/components/page-header";
+import { ROUTES } from "@/lib/constants";
+import {
+  useUsers,
+  useCurrentUser,
+  useUserRoles,
+} from "@/features/users/use-users";
+import { UserInviteDialog } from "@/features/users/components/user-invite-dialog";
+import { UserRolesDialog } from "./user-role-dialog";
+import { getInitials } from "@/lib/utils";
 
 export function UserList() {
   const id = useId();
   const inputRef = useRef<HTMLInputElement>(null);
 
   const [inviteDialogOpen, setInviteDialogOpen] = useState(false);
-  const [userToDelete, setUserToDelete] = useState<{ username: string; email: string } | null>(
-    null,
-  );
+  const [userToDelete, setUserToDelete] = useState<{
+    username: string;
+    email: string;
+  } | null>(null);
   const [deleteDialogOpen, setDeleteDialogOpen] = useState(false);
 
   const [assignRolesFor, setAssignRolesFor] = useState<{
@@ -72,7 +77,10 @@ export function UserList() {
   }>(() => ({ open: false, username: null, email: null }));
 
   const [data, setData] = useState<IGRPUserDTO[]>([]);
-  const [pagination, setPagination] = useState<PaginationState>({ pageIndex: 0, pageSize: 10 });
+  const [pagination, setPagination] = useState<PaginationState>({
+    pageIndex: 0,
+    pageSize: 10,
+  });
   const [columnFilters, setColumnFilters] = useState<ColumnFiltersState>([]);
 
   const { data: users, isLoading, error } = useUsers();
@@ -86,23 +94,25 @@ export function UserList() {
 
   const columns: ColumnDef<IGRPUserDTO>[] = [
     {
-      header: 'Nome',
-      accessorKey: 'name',
+      header: "Nome",
+      accessorKey: "name",
       cell: ({ row }) => {
-        const email = String(row.getValue('email'));
-        const name = String(row.getValue('name'));
+        const email = String(row.getValue("email"));
+        const name = String(row.getValue("name"));
 
         return (
-          <div className='flex items-center gap-3'>
+          <div className="flex items-center gap-3">
             <IGRPUserAvatar
               alt={name}
               fallbackContent={getInitials(name)}
-              className='size-12 bg-white/50'
-              fallbackClass='text-base'
+              className="size-12 bg-white/50"
+              fallbackClass="text-base"
             />
             <div>
-              <div className='font-medium'>{name}</div>
-              <span className='text-muted-foreground mt-0.5 text-xs'>{email}</span>
+              <div className="font-medium">{name}</div>
+              <span className="text-muted-foreground mt-0.5 text-xs">
+                {email}
+              </span>
             </div>
           </div>
         );
@@ -111,35 +121,35 @@ export function UserList() {
       enableColumnFilter: true,
     },
     {
-      header: 'Email',
-      accessorKey: 'email',
-      cell: ({ row }) => <div>{row.getValue('email') || 'N/A'}</div>,
+      header: "Email",
+      accessorKey: "email",
+      cell: ({ row }) => <div>{row.getValue("email") || "N/A"}</div>,
       enableSorting: false,
     },
     {
-      header: 'Username',
-      accessorKey: 'username',
+      header: "Username",
+      accessorKey: "username",
       cell: ({ row }) => {
-        const email = String(row.getValue('email'));
-        const username = String(row.getValue('username'));
+        const email = String(row.getValue("email"));
+        const username = String(row.getValue("username"));
 
         return (
           <>
             {isCurrentUser(email) ? (
-              <div className='flex items-center gap-3'>
+              <div className="flex items-center gap-3">
                 <IGRPTooltipProviderPrimitive>
                   <IGRPTooltipPrimitive>
                     <IGRPTooltipTriggerPrimitive asChild>
                       <ButtonLink
                         href={ROUTES.USER_PROFILE}
-                        className='underline underline-offset-2 hover:text-primary hover:no-underline'
-                        btnClassName='px-0 gap-1'
+                        className="underline underline-offset-2 hover:text-primary hover:no-underline"
+                        btnClassName="px-0 gap-1"
                         label={username}
-                        icon='UserCheck'
-                        variant='link'
+                        icon="UserCheck"
+                        variant="link"
                       />
                     </IGRPTooltipTriggerPrimitive>
-                    <IGRPTooltipContentPrimitive className='px-2 py-1 text-xs'>
+                    <IGRPTooltipContentPrimitive className="px-2 py-1 text-xs">
                       Ver Perfil
                     </IGRPTooltipContentPrimitive>
                   </IGRPTooltipPrimitive>
@@ -154,15 +164,17 @@ export function UserList() {
       enableSorting: false,
     },
     {
-      id: 'roles',
+      id: "roles",
       header: () => <span>Perfís</span>,
-      cell: ({ row }) => <RolesCountCell username={String(row.getValue('username'))} />,
+      cell: ({ row }) => (
+        <RolesCountCell username={String(row.getValue("username"))} />
+      ),
       enableSorting: false,
     },
 
     {
-      id: 'actions',
-      header: () => <span className='sr-only'>Actions</span>,
+      id: "actions",
+      header: () => <span className="sr-only">Actions</span>,
       cell: ({ row }) => <RowActions row={row} />,
       size: 60,
       enableHiding: false,
@@ -170,23 +182,20 @@ export function UserList() {
   ];
 
   function RowActions({ row }: { row: Row<IGRPUserDTO> }) {
-    const email = String(row.getValue('email'));
-    const username = String(row.getValue('username'));
+    const email = String(row.getValue("email"));
+    const username = String(row.getValue("username"));
 
     return (
       <IGRPDropdownMenuPrimitive>
-        <IGRPDropdownMenuTriggerPrimitive className='p-1 rounded-sm'>
-          <IGRPIcon iconName='Ellipsis' />
+        <IGRPDropdownMenuTriggerPrimitive className="p-1 rounded-sm">
+          <IGRPIcon iconName="Ellipsis" />
         </IGRPDropdownMenuTriggerPrimitive>
 
-        <IGRPDropdownMenuContentPrimitive
-          align='end'
-          className='min-w-44'
-        >
+        <IGRPDropdownMenuContentPrimitive align="end" className="min-w-44">
           <IGRPDropdownMenuItemPrimitive
             onSelect={() => setAssignRolesFor({ open: true, username, email })}
           >
-            <IGRPIcon iconName='ShieldUser' />
+            <IGRPIcon iconName="ShieldUser" />
             Perfís
           </IGRPDropdownMenuItemPrimitive>
 
@@ -219,23 +228,20 @@ export function UserList() {
     const names = roles.map((r) => r.name);
 
     if (roles.length === 0) {
-      return <div className='text-center'>0</div>;
+      return <div className="text-center">0</div>;
     }
 
     return (
       <IGRPTooltipProviderPrimitive>
         <IGRPTooltipPrimitive>
           <IGRPTooltipTriggerPrimitive asChild>
-            <div className='text-center cursor-default'>{roles.length}</div>
+            <div className="text-center cursor-default">{roles.length}</div>
           </IGRPTooltipTriggerPrimitive>
 
-          <IGRPTooltipContentPrimitive className='text-sm p-4'>
-            <div className='flex max-w-64 max-h-48 flex-col gap-2 overflow-auto'>
+          <IGRPTooltipContentPrimitive className="text-sm p-4">
+            <div className="flex max-w-64 max-h-48 flex-col gap-2 overflow-auto">
               {names.map((n, i) => (
-                <div
-                  key={`${username}-${n}-${i}`}
-                  className='truncate'
-                >
+                <div key={`${username}-${n}-${i}`} className="truncate">
                   {n}
                 </div>
               ))}
@@ -261,7 +267,7 @@ export function UserList() {
   });
 
   if (isLoading || !users) {
-    return <AppCenterLoading descrption='Carregando utilizadores...' />;
+    return <AppCenterLoading descrption="Carregando utilizadores..." />;
   }
 
   if (error) throw error;
@@ -277,70 +283,75 @@ export function UserList() {
   };
 
   return (
-    <div className='flex flex-col gap-5 animate-fade-in'>
+    <div className="flex flex-col gap-5 animate-fade-in">
       <PageHeader
-        title='Gestão de Utilizadores'
-        description='Ver e gerir todos os utilizadores do sistema.'
+        title="Gestão de Utilizadores"
+        description="Ver e gerir todos os utilizadores do sistema."
         showActions
       >
         <ButtonLink
           onClick={() => setInviteDialogOpen(true)}
-          icon='UserRoundPlus'
-          href='#'
-          label='Convidar Utilizador'
+          icon="UserRoundPlus"
+          href="#"
+          label="Convidar Utilizador"
         />
       </PageHeader>
 
-      <div className='flex flex-col sm:flex-row gap-2 mt-4'>
-        <div className='relative w-full max-w-sm'>
+      <div className="flex flex-col sm:flex-row gap-2 mt-4">
+        <div className="relative w-full max-w-sm">
           <IGRPIcon
-            iconName='Search'
-            className='absolute left-2.5 top-2.5 h-4 w-4 text-muted-foreground'
+            iconName="Search"
+            className="absolute left-2.5 top-2.5 h-4 w-4 text-muted-foreground"
           />
           <IGRPInputPrimitive
             id={`${id}-input`}
             ref={inputRef}
             className={cn(
-              'peer ps-9 border-foreground/30 focus-visible:ring-[2px] focus-visible:ring-foreground/30 focus-visible:border-foreground/30',
-              Boolean(table.getColumn('name')?.getFilterValue()) && 'pe-9',
+              "peer ps-9 border-foreground/30 focus-visible:ring-[2px] focus-visible:ring-foreground/30 focus-visible:border-foreground/30",
+              Boolean(table.getColumn("name")?.getFilterValue()) && "pe-9",
             )}
-            value={(table.getColumn('name')?.getFilterValue() ?? '') as string}
-            onChange={(e) => table.getColumn('name')?.setFilterValue(e.target.value)}
-            placeholder='Filtar por nome ou username...'
-            type='text'
-            aria-label='Filtar por nome'
+            value={(table.getColumn("name")?.getFilterValue() ?? "") as string}
+            onChange={(e) =>
+              table.getColumn("name")?.setFilterValue(e.target.value)
+            }
+            placeholder="Filtar por nome ou username..."
+            type="text"
+            aria-label="Filtar por nome"
           />
-          {Boolean(table.getColumn('name')?.getFilterValue()) && (
+          {Boolean(table.getColumn("name")?.getFilterValue()) && (
             <button
-              className='text-muted-foreground/80 hover:text-foreground focus-visible:border-ring focus-visible:ring-ring/50 absolute inset-y-0 end-2 flex h-full w-9 items-center justify-center rounded-e-md transition-[color,box-shadow] outline-none focus:z-10 focus-visible:ring-[3px] disabled:pointer-events-none disabled:cursor-not-allowed disabled:opacity-50'
-              aria-label='Clear filter'
+              className="text-muted-foreground/80 hover:text-foreground focus-visible:border-ring focus-visible:ring-ring/50 absolute inset-y-0 end-2 flex h-full w-9 items-center justify-center rounded-e-md transition-[color,box-shadow] outline-none focus:z-10 focus-visible:ring-[3px] disabled:pointer-events-none disabled:cursor-not-allowed disabled:opacity-50"
+              aria-label="Clear filter"
               onClick={() => {
-                table.getColumn('name')?.setFilterValue('');
+                table.getColumn("name")?.setFilterValue("");
                 inputRef.current?.focus();
               }}
             >
-              <IGRPIcon iconName='CircleX' />
+              <IGRPIcon iconName="CircleX" />
             </button>
           )}
         </div>
       </div>
 
-      <div className='border rounded-md'>
+      <div className="border rounded-md">
         <IGRPTablePrimitive>
-          <IGRPTableHeaderPrimitive className='bg-muted'>
+          <IGRPTableHeaderPrimitive className="bg-muted">
             {table.getHeaderGroups().map((headerGroup) => (
               <IGRPTableRowPrimitive
                 key={headerGroup.id}
-                className='border-b dark:border-slate-800/60'
+                className="border-b dark:border-slate-800/60"
               >
                 {headerGroup.headers.map((header) => (
                   <IGRPTableHeadPrimitive
                     key={header.id}
-                    className='px-4 py-3 font-semibold'
+                    className="px-4 py-3 font-semibold"
                   >
                     {header.isPlaceholder
                       ? null
-                      : flexRender(header.column.columnDef.header, header.getContext())}
+                      : flexRender(
+                          header.column.columnDef.header,
+                          header.getContext(),
+                        )}
                   </IGRPTableHeadPrimitive>
                 ))}
               </IGRPTableRowPrimitive>
@@ -352,14 +363,17 @@ export function UserList() {
               table.getRowModel().rows.map((row) => (
                 <IGRPTableRowPrimitive
                   key={row.id}
-                  className='border-b dark:border-slate-800/60'
+                  className="border-b dark:border-slate-800/60"
                 >
                   {row.getVisibleCells().map((cell) => (
                     <IGRPTableCellPrimitive
                       key={cell.id}
-                      className='p-4 truncate'
+                      className="p-4 truncate"
                     >
-                      {flexRender(cell.column.columnDef.cell, cell.getContext())}
+                      {flexRender(
+                        cell.column.columnDef.cell,
+                        cell.getContext(),
+                      )}
                     </IGRPTableCellPrimitive>
                   ))}
                 </IGRPTableRowPrimitive>
@@ -368,7 +382,7 @@ export function UserList() {
               <IGRPTableRowPrimitive>
                 <IGRPTableCellPrimitive
                   colSpan={columns.length}
-                  className='h-24 text-center'
+                  className="h-24 text-center"
                 >
                   Nenhum utilizador encontrado.
                 </IGRPTableCellPrimitive>
@@ -379,12 +393,9 @@ export function UserList() {
       </div>
 
       {table.getRowCount() > 10 && (
-        <div className='flex items-center gap-6 px-2'>
-          <div className='flex items-center gap-3 grow justify-end '>
-            <IGRPLabelPrimitive
-              htmlFor={id}
-              className='max-sm:sr-only'
-            >
+        <div className="flex items-center gap-6 px-2">
+          <div className="flex items-center gap-3 grow justify-end ">
+            <IGRPLabelPrimitive htmlFor={id} className="max-sm:sr-only">
               Registo por página
             </IGRPLabelPrimitive>
             <IGRPSelectPrimitive
@@ -395,11 +406,11 @@ export function UserList() {
             >
               <IGRPSelectTriggerPrimitive
                 id={id}
-                className='w-fit whitespace-nowrap'
+                className="w-fit whitespace-nowrap"
               >
                 <IGRPSelectValuePrimitive />
               </IGRPSelectTriggerPrimitive>
-              <IGRPSelectContentPrimitive className='[&_*[role=option]]:ps-2 [&_*[role=option]]:pe-8 [&_*[role=option]>span]:start-auto [&_*[role=option]>span]:end-2'>
+              <IGRPSelectContentPrimitive className="[&_*[role=option]]:ps-2 [&_*[role=option]]:pe-8 [&_*[role=option]>span]:start-auto [&_*[role=option]>span]:end-2">
                 {[10, 25, 50, 100].map((pageSize) => (
                   <IGRPSelectItemPrimitive
                     key={pageSize}
@@ -412,23 +423,30 @@ export function UserList() {
             </IGRPSelectPrimitive>
           </div>
 
-          <div className='text-muted-foreground text-sm whitespace-nowrap'>
+          <div className="text-muted-foreground text-sm whitespace-nowrap">
             <p
-              className='text-muted-foreground text-sm whitespace-nowrap'
-              aria-live='polite'
+              className="text-muted-foreground text-sm whitespace-nowrap"
+              aria-live="polite"
             >
-              <span className='text-foreground'>
-                {table.getState().pagination.pageIndex * table.getState().pagination.pageSize + 1}-
+              <span className="text-foreground">
+                {table.getState().pagination.pageIndex *
+                  table.getState().pagination.pageSize +
+                  1}
+                -
                 {Math.min(
                   Math.max(
-                    table.getState().pagination.pageIndex * table.getState().pagination.pageSize +
+                    table.getState().pagination.pageIndex *
+                      table.getState().pagination.pageSize +
                       table.getState().pagination.pageSize,
                     0,
                   ),
                   table.getRowCount(),
                 )}
-              </span>{' '}
-              de <span className='text-foreground'>{table.getRowCount().toString()}</span>
+              </span>{" "}
+              de{" "}
+              <span className="text-foreground">
+                {table.getRowCount().toString()}
+              </span>
             </p>
           </div>
 
@@ -437,50 +455,50 @@ export function UserList() {
               <IGRPPaginationContentPrimitive>
                 <IGRPPaginationItemPrimitive>
                   <IGRPButtonPrimitive
-                    size='icon'
-                    variant='outline'
-                    className='disabled:pointer-events-none disabled:opacity-50'
+                    size="icon"
+                    variant="outline"
+                    className="disabled:pointer-events-none disabled:opacity-50"
                     onClick={() => table.firstPage()}
                     disabled={!table.getCanPreviousPage()}
-                    aria-label='Go to first page'
+                    aria-label="Go to first page"
                   >
-                    <IGRPIcon iconName='ChevronFirst' />
+                    <IGRPIcon iconName="ChevronFirst" />
                   </IGRPButtonPrimitive>
                 </IGRPPaginationItemPrimitive>
                 <IGRPPaginationItemPrimitive>
                   <IGRPButtonPrimitive
-                    size='icon'
-                    variant='outline'
-                    className='disabled:pointer-events-none disabled:opacity-50'
+                    size="icon"
+                    variant="outline"
+                    className="disabled:pointer-events-none disabled:opacity-50"
                     onClick={() => table.previousPage()}
                     disabled={!table.getCanPreviousPage()}
-                    aria-label='Go to previous page'
+                    aria-label="Go to previous page"
                   >
-                    <IGRPIcon iconName='ChevronLeft' />
+                    <IGRPIcon iconName="ChevronLeft" />
                   </IGRPButtonPrimitive>
                 </IGRPPaginationItemPrimitive>
                 <IGRPPaginationItemPrimitive>
                   <IGRPButtonPrimitive
-                    size='icon'
-                    variant='outline'
-                    className='disabled:pointer-events-none disabled:opacity-50'
+                    size="icon"
+                    variant="outline"
+                    className="disabled:pointer-events-none disabled:opacity-50"
                     onClick={() => table.nextPage()}
                     disabled={!table.getCanNextPage()}
-                    aria-label='Go to next page'
+                    aria-label="Go to next page"
                   >
-                    <IGRPIcon iconName='ChevronRight' />
+                    <IGRPIcon iconName="ChevronRight" />
                   </IGRPButtonPrimitive>
                 </IGRPPaginationItemPrimitive>
                 <IGRPPaginationItemPrimitive>
                   <IGRPButtonPrimitive
-                    size='icon'
-                    variant='outline'
-                    className='disabled:pointer-events-none disabled:opacity-50'
+                    size="icon"
+                    variant="outline"
+                    className="disabled:pointer-events-none disabled:opacity-50"
                     onClick={() => table.lastPage()}
                     disabled={!table.getCanNextPage()}
-                    aria-label='Go to last page'
+                    aria-label="Go to last page"
                   >
-                    <IGRPIcon iconName='ChevronLast' />
+                    <IGRPIcon iconName="ChevronLast" />
                   </IGRPButtonPrimitive>
                 </IGRPPaginationItemPrimitive>
               </IGRPPaginationContentPrimitive>
@@ -499,7 +517,9 @@ export function UserList() {
       {assignRolesFor.open && (
         <UserRolesDialog
           open={assignRolesFor.open}
-          onOpenChange={(open) => setAssignRolesFor({ ...assignRolesFor, open })}
+          onOpenChange={(open) =>
+            setAssignRolesFor({ ...assignRolesFor, open })
+          }
           username={assignRolesFor.username as string}
         />
       )}

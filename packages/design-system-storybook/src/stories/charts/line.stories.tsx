@@ -1,6 +1,10 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import type { Meta, StoryFn, StoryObj } from '@storybook/nextjs-vite';
-import { IGRPIcon, IGRPLineChart, type IGRPLineChartProps } from '@igrp/igrp-framework-react-design-system';
+import {
+  IGRPIcon,
+  IGRPLineChart,
+  type IGRPLineChartProps,
+} from '@igrp/igrp-framework-react-design-system';
 
 const meta: Meta<IGRPLineChartProps> = {
   title: 'Components/Charts/Line',
@@ -163,8 +167,8 @@ export const LineChartCustomDots: StoryObj<IGRPLineChartProps> = {
         dot: ({ cx, cy, payload }: any) => {
           const r = 24;
           return (
-            <IGRPIcon 
-              iconName="GitCommitVertical"
+            <IGRPIcon
+              iconName='GitCommitVertical'
               key={payload.mes}
               x={cx - r / 2}
               y={cy - r / 2}

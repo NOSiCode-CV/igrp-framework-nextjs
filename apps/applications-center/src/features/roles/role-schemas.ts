@@ -1,12 +1,14 @@
-import { z } from 'zod';
-import { emptyToNull, statusSchema } from '@/schemas/global';
-import { Status } from '@igrp/platform-access-management-client-ts';
+import { z } from "zod";
+import { emptyToNull, statusSchema } from "@/schemas/global";
+import { Status } from "@igrp/platform-access-management-client-ts";
 
 export const roleSchema = z.object({
   id: z.number().optional(),
-  name: z.string().min(3, 'Nome é obrigatório (min 3 carateres)'),
+  name: z.string().min(3, "Nome é obrigatório (min 3 carateres)"),
   description: z.string().optional().nullable(),
-  departmentCode: z.string().min(4, 'Código de departamento é obrigatório (min 4 carateres)'),
+  departmentCode: z
+    .string()
+    .min(4, "Código de departamento é obrigatório (min 4 carateres)"),
   parentName: z.string().optional().nullable(),
   status: statusSchema,
 });

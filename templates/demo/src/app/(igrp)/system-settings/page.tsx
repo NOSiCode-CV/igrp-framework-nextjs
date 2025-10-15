@@ -1,8 +1,8 @@
-'use client';
+"use client";
 
-import { IGRPTemplateThemeSelector } from '@igrp/framework-next-ui';
+import { IGRPTemplateThemeSelector } from "@igrp/framework-next-ui";
 
-export const dynamic = 'force-dynamic';
+export const dynamic = "force-dynamic";
 
 export default function SettingsPage() {
   return (

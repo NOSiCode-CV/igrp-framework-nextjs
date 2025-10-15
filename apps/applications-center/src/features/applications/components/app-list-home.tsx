@@ -1,11 +1,23 @@
-'use client';
+"use client";
 
-import { AppCenterNotFound } from '@/components/not-found';
-import { AppCenterLoading } from '@/components/loading';
-import { ApplicationCard } from '@/features/applications/components/app-card';
-import { useApplications } from '@/features/applications/use-applications';
-import { cn, IGRPDataTable, IGRPDataTableButtonLink, IGRPDataTableCellBadge, IGRPDataTableDropdownMenu, IGRPDataTableDropdownMenuAlert, IGRPDataTableDropdownMenuCustom, IGRPDataTableFacetedFilterFn, IGRPDataTableFilterDropdown, IGRPDataTableFilterInput, IGRPDataTableRowAction } from '@igrp/igrp-framework-react-design-system';
-import { ApplicationArgs } from '../app-schemas';
+import { AppCenterNotFound } from "@/components/not-found";
+import { AppCenterLoading } from "@/components/loading";
+import { ApplicationCard } from "@/features/applications/components/app-card";
+import { useApplications } from "@/features/applications/use-applications";
+import {
+  cn,
+  IGRPDataTable,
+  IGRPDataTableButtonLink,
+  IGRPDataTableCellBadge,
+  IGRPDataTableDropdownMenu,
+  IGRPDataTableDropdownMenuAlert,
+  IGRPDataTableDropdownMenuCustom,
+  IGRPDataTableFacetedFilterFn,
+  IGRPDataTableFilterDropdown,
+  IGRPDataTableFilterInput,
+  IGRPDataTableRowAction,
+} from "@igrp/igrp-framework-react-design-system";
+import { ApplicationArgs } from "../app-schemas";
 
 type Table1 = {
   title: string;
@@ -20,24 +32,27 @@ type Table1 = {
 export function ApplicationsListHome() {
   const { data: applications, isLoading, error } = useApplications();
 
-  if (isLoading && !error) return <AppCenterLoading descrption='Carregando aplicações...' />;
+  if (isLoading && !error)
+    return <AppCenterLoading descrption="Carregando aplicações..." />;
 
   if (error) throw error;
 
   if (!applications || applications.length === 0) {
     return (
       <AppCenterNotFound
-        iconName='AppWindow'
-        title='Nenhuma aplicação encontrada.'
+        iconName="AppWindow"
+        title="Nenhuma aplicação encontrada."
       >
         Clique em &nbsp;
-        <span className='font-semibold'>“Nova Aplicação”</span>
+        <span className="font-semibold">“Nova Aplicação”</span>
       </AppCenterNotFound>
     );
   }
 
-  const filteredApps = applications.filter((app) => app.type !== 'SYSTEM');
-  const activeApps = filteredApps.filter((app) => app.status === 'ACTIVE').slice(0, 6);
+  const filteredApps = applications.filter((app) => app.type !== "SYSTEM");
+  const activeApps = filteredApps
+    .filter((app) => app.status === "ACTIVE")
+    .slice(0, 6);
 
   const contentTabletable1: Table1[] = [
     {
@@ -47,45 +62,44 @@ export function ApplicationsListHome() {
       description: "",
       version: "10",
       statusDesc: "Publicado",
-      deploymentDate: "01/09/2025"
+      deploymentDate: "01/09/2025",
     },
     {
       processDefinitionId: "a654641c-ca90-4f81-bc9d-e34fe05c5aab",
       processKey: "FALECIMENTO",
       title: "Falecimento",
-      description: '',
-      version: '9',
-      statusDesc: 'Publicado',
-      deploymentDate: '27/08/2025',
-
+      description: "",
+      version: "9",
+      statusDesc: "Publicado",
+      deploymentDate: "27/08/2025",
     },
     {
-      processDefinitionId: '3cb565b4-6676-4f18-b839-7279bde7cfc3',
-      processKey: 'SUSP',
-      title: '',
-      description: '',
-      version: '3',
-      statusDesc: 'Rascunho',
-      deploymentDate: '07/08/2025',
+      processDefinitionId: "3cb565b4-6676-4f18-b839-7279bde7cfc3",
+      processKey: "SUSP",
+      title: "",
+      description: "",
+      version: "3",
+      statusDesc: "Rascunho",
+      deploymentDate: "07/08/2025",
     },
     {
-      processDefinitionId: 'b20a7bf5-eeb5-4927-9f4b-42dee70f55a4',
-      processKey: 'SUSP',
-      title: 'Suspender Contribuinte',
-      description: '',
-      version: '1',
-      statusDesc: 'Rascunho',
-      deploymentDate: '07/08/2025',
+      processDefinitionId: "b20a7bf5-eeb5-4927-9f4b-42dee70f55a4",
+      processKey: "SUSP",
+      title: "Suspender Contribuinte",
+      description: "",
+      version: "1",
+      statusDesc: "Rascunho",
+      deploymentDate: "07/08/2025",
     },
     {
-      processDefinitionId: 'b0194d44-3f15-4191-b162-1abf81671cbe',
-      processKey: 'registar-contribuinte',
-      title: 'Registar Contribuinte',
-      description: '',
-      version: '',
-      statusDesc: 'Rascunho',
-      deploymentDate: '',
-    }
+      processDefinitionId: "b0194d44-3f15-4191-b162-1abf81671cbe",
+      processKey: "registar-contribuinte",
+      title: "Registar Contribuinte",
+      description: "",
+      version: "",
+      statusDesc: "Rascunho",
+      deploymentDate: "",
+    },
   ];
 
   return (
@@ -99,7 +113,7 @@ export function ApplicationsListHome() {
         ))}
       </div> */}
 
-      <div className={cn(' border rounded-lg p-3')}>
+      <div className={cn(" border rounded-lg p-3")}>
         <IGRPDataTable<Table1, Table1>
           showFilter={true}
           showPagination={true}
@@ -107,32 +121,32 @@ export function ApplicationsListHome() {
           className={cn()}
           columns={[
             {
-              header: 'Process Name',
-              accessorKey: 'title',
+              header: "Process Name",
+              accessorKey: "title",
               cell: ({ row }) => {
-                return row.getValue('title');
-              },              
+                return row.getValue("title");
+              },
               enableColumnFilter: true,
             },
             {
-              header: 'Process Key',
-              accessorKey: 'processKey',
+              header: "Process Key",
+              accessorKey: "processKey",
               cell: ({ row }) => {
-                return row.getValue('processKey');
+                return row.getValue("processKey");
               },
               filterFn: IGRPDataTableFacetedFilterFn,
             },
             {
-              header: 'Deployment Date',
-              accessorKey: 'deploymentDate',
+              header: "Deployment Date",
+              accessorKey: "deploymentDate",
               cell: ({ row }) => {
-                return row.getValue('deploymentDate');
+                return row.getValue("deploymentDate");
               },
               filterFn: IGRPDataTableFacetedFilterFn,
             },
             {
-              header: 'Version',
-              accessorKey: 'version',
+              header: "Version",
+              accessorKey: "version",
               cell: ({ row }) => {
                 const rowData = row.original;
 
@@ -147,8 +161,8 @@ export function ApplicationsListHome() {
               filterFn: IGRPDataTableFacetedFilterFn,
             },
             {
-              header: 'Status',
-              accessorKey: 'statusDesc',
+              header: "Status",
+              accessorKey: "statusDesc",
               cell: ({ row }) => {
                 const rowData = row.original;
 
@@ -163,7 +177,7 @@ export function ApplicationsListHome() {
               filterFn: IGRPDataTableFacetedFilterFn,
             },
             {
-              id: 'tableActionListCell1',
+              id: "tableActionListCell1",
               enableHiding: false,
               cell: ({ row }) => {
                 const rowData = row.original;
@@ -176,7 +190,7 @@ export function ApplicationsListHome() {
                       variant={`ghost`}
                       icon={`Workflow`}
                       className={cn()}
-                      action={() => { }}
+                      action={() => {}}
                     ></IGRPDataTableButtonLink>
                     <IGRPDataTableDropdownMenu
                       items={[
@@ -203,7 +217,9 @@ export function ApplicationsListHome() {
                             labelConfirm: `Confirm`,
                             variantConfirm: `destructive`,
                             onClickConfirm: () => {},
-                            children: <>Do you want delete this process definition?</>,
+                            children: (
+                              <>Do you want delete this process definition?</>
+                            ),
                           },
                         },
                       ]}
@@ -218,10 +234,10 @@ export function ApplicationsListHome() {
             {
               columnId: `title`,
               component: (column) => {
-                console.log({ column2: column })
-                return <IGRPDataTableFilterInput column={column} />
+                console.log({ column2: column });
+                return <IGRPDataTableFilterInput column={column} />;
               },
-            },            
+            },
           ]}
           data={contentTabletable1}
         />

@@ -1,18 +1,18 @@
-import { NextConfig } from 'next';
+import { NextConfig } from "next";
 
 const nextConfig: NextConfig = {
-  basePath: process.env.IGRP_APP_BASE_PATH || '',
-  output: 'standalone',
+  basePath: process.env.IGRP_APP_BASE_PATH || "",
+  output: "standalone",
 
   images: {
     remotePatterns: [
       {
-        protocol: 'https',
-        hostname: 'nosi.cv',
+        protocol: "https",
+        hostname: "nosi.cv",
       },
       {
-        protocol: 'https',
-        hostname: 'img.youtube.com',
+        protocol: "https",
+        hostname: "img.youtube.com",
       },
     ],
   },

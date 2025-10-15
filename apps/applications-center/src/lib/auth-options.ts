@@ -1,12 +1,17 @@
-import type { NextAuthOptions, Session, TokenSet } from '@igrp/framework-next-auth';
-import type { JWT } from '@igrp/framework-next-auth/jwt';
-import KeycloakProvider from 'next-auth/providers/keycloak';
-import { redirect as nextRedirect } from 'next/navigation';
+import type {
+  NextAuthOptions,
+  Session,
+  TokenSet,
+} from "@igrp/framework-next-auth";
+import type { JWT } from "@igrp/framework-next-auth/jwt";
+import KeycloakProvider from "next-auth/providers/keycloak";
+import { redirect as nextRedirect } from "next/navigation";
 
-const isProd = process.env.NODE_ENV === 'production';
-const baseUrl = process.env.NEXTAUTH_URL ?? '';
+const isProd = process.env.NODE_ENV === "production";
+const baseUrl = process.env.NEXTAUTH_URL ?? "";
 const url = new URL(baseUrl);
-const cookieDomain = isProd && url.hostname !== 'localhost' ? url.hostname : undefined;
+const cookieDomain =
+  isProd && url.hostname !== "localhost" ? url.hostname : undefined;
 
 export const authOptions: NextAuthOptions = {
   providers: [
@@ -20,17 +25,19 @@ export const authOptions: NextAuthOptions = {
   secret: process.env.NEXTAUTH_SECRET,
 
   session: {
-    strategy: 'jwt',
+    strategy: "jwt",
     maxAge: 4 * 60 * 60, // 4 hours
   },
 
   cookies: {
     sessionToken: {
-      name: isProd ? '__Secure-next-auth.session-token' : 'next-auth.session-token',
+      name: isProd
+        ? "__Secure-next-auth.session-token"
+        : "next-auth.session-token",
       options: {
         httpOnly: true,
-        sameSite: 'lax',
-        path: '/',
+        sameSite: "lax",
+        path: "/",
         secure: isProd,
         ...(cookieDomain ? { domain: cookieDomain } : {}),
       },
@@ -42,7 +49,7 @@ export const authOptions: NextAuthOptions = {
       const NEXTAUTH_URL = process.env.NEXTAUTH_URL;
       const forced = NEXTAUTH_URL ?? baseUrl;
 
-      if (url.startsWith('/')) {
+      if (url.startsWith("/")) {
         const u = new URL(url, forced).toString();
         return u;
       }
@@ -57,7 +64,7 @@ export const authOptions: NextAuthOptions = {
       }
     },
     async jwt({ token, account }) {
-      if (account) {        
+      if (account) {
         token.idToken = account.id_token;
         token.accessToken = account.access_token;
         token.refreshToken = account.refresh_token;
@@ -73,15 +80,18 @@ export const authOptions: NextAuthOptions = {
 
       try {
         if (!token.refreshToken) {
-          console.error('No refresh token available for refresh.');
-          return { ...token, error: 'RefreshAccessTokenError' };
+          console.error("No refresh token available for refresh.");
+          return { ...token, error: "RefreshAccessTokenError" };
         }
 
         const response = await requestRefreshOfAccessToken(token);
         const tokens: TokenSet = await response.json();
 
         if (!response.ok) {
-          console.error('Error refreshing access token, response not ok:', tokens);
+          console.error(
+            "Error refreshing access token, response not ok:",
+            tokens,
+          );
           throw tokens;
         }
 
@@ -96,12 +106,12 @@ export const authOptions: NextAuthOptions = {
         };
         return updatedToken;
       } catch (error) {
-        console.error('Error refreshing access token', error);
-        return { ...token, error: 'RefreshAccessTokenError' };
+        console.error("Error refreshing access token", error);
+        return { ...token, error: "RefreshAccessTokenError" };
       }
     },
     async session({ session, token }) {
-      session.user = token.user as Session['user'];
+      session.user = token.user as Session["user"];
       session.accessToken = token.accessToken;
       session.error = token.error;
       session.idToken = token.idToken;
@@ -117,45 +127,50 @@ export async function requestRefreshOfAccessToken(token: JWT) {
     !process.env.KEYCLOAK_CLIENT_ID ||
     !process.env.KEYCLOAK_CLIENT_SECRET
   ) {
-    console.error('Keycloak environment variables are not set for token refresh.');
-    throw new Error('Missing Keycloak configuration for token refresh.');
+    console.error(
+      "Keycloak environment variables are not set for token refresh.",
+    );
+    throw new Error("Missing Keycloak configuration for token refresh.");
   }
 
   if (!token.refreshToken) {
-    console.error('No refresh token available.');
-    throw new Error('Missing refresh token.');
+    console.error("No refresh token available.");
+    throw new Error("Missing refresh token.");
   }
 
-  return await fetch(`${process.env.KEYCLOAK_ISSUER}/protocol/openid-connect/token`, {
-    method: 'POST',
-    headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
-    body: new URLSearchParams({
-      client_id: process.env.KEYCLOAK_CLIENT_ID!,
-      client_secret: process.env.KEYCLOAK_CLIENT_SECRET!,
-      grant_type: 'refresh_token',
-      refresh_token: String(token.refreshToken),
-    }),
-  });
+  return await fetch(
+    `${process.env.KEYCLOAK_ISSUER}/protocol/openid-connect/token`,
+    {
+      method: "POST",
+      headers: { "Content-Type": "application/x-www-form-urlencoded" },
+      body: new URLSearchParams({
+        client_id: process.env.KEYCLOAK_CLIENT_ID!,
+        client_secret: process.env.KEYCLOAK_CLIENT_SECRET!,
+        grant_type: "refresh_token",
+        refresh_token: String(token.refreshToken),
+      }),
+    },
+  );
 }
 
 export function buildKeycloakEndSessionUrl(jwt: JWT) {
   const issuer = process.env.KEYCLOAK_ISSUER;
-  if (!issuer) throw new Error('KEYCLOAK_ISSUER not set');
+  if (!issuer) throw new Error("KEYCLOAK_ISSUER not set");
 
   const idToken = jwt?.idToken as string | undefined;
-  const loginUrl = '/login';
+  const loginUrl = "/login";
   const postLogoutRedirectUri = process.env.NEXTAUTH_URL
     ? `${process.env.NEXTAUTH_URL}${loginUrl}`
     : undefined;
 
   const url = new URL(`${issuer}/protocol/openid-connect/logout`);
   if (!idToken) {
-    console.error('No your or not login, available for logout.');
+    console.error("No your or not login, available for logout.");
     nextRedirect(loginUrl);
   }
-  url.searchParams.set('id_token_hint', idToken);
+  url.searchParams.set("id_token_hint", idToken);
   if (postLogoutRedirectUri)
-    url.searchParams.set('post_logout_redirect_uri', postLogoutRedirectUri);
+    url.searchParams.set("post_logout_redirect_uri", postLogoutRedirectUri);
 
   return url.toString();
 }

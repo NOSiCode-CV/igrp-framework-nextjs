@@ -28,10 +28,14 @@
     "./middleware": {
       "types": "./dist/middleware.d.ts",
       "import": "./dist/middleware.js"
-    },    
+    },
     "./package.json": "./package.json"
   },
-  "files": ["dist", "README.md", "LICENSE"],
+  "files": [
+    "dist",
+    "README.md",
+    "LICENSE"
+  ],
   "main": "./dist/index.js",
   "types": "./dist/index.d.ts",
   "scripts": {
@@ -45,22 +49,29 @@
   },
   "peerDependencies": {
     "next-auth": "^4.24.11",
-    "react": "19.2.0",    
+    "react": "19.2.0",
     "next": "15.5.5"
   },
   "peerDependenciesMeta": {
-    "next-auth": { "optional": false }
+    "next-auth": {
+      "optional": false
+    }
   },
-  "devDependencies": {    
+  "devDependencies": {
     "@types/node": "24.7.2",
     "next-auth": "^4.24.11",
     "prettier": "^3.6.2",
     "rimraf": "^6.0.1",
     "tsup": "^8.0.0",
     "typescript": "^5.9.2"
-  },  
+  },
   "publishConfig": {
     "access": "public"
   },
-  "keywords": ["igrp", "framework", "nextjs", "auth"]
+  "keywords": [
+    "igrp",
+    "framework",
+    "nextjs",
+    "auth"
+  ]
 }

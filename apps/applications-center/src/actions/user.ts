@@ -1,7 +1,10 @@
-'use server';
+"use server";
 
-import { CreateUserRequest, UserFilters } from '@igrp/platform-access-management-client-ts';
-import { getClientAccess } from './access-client';
+import {
+  CreateUserRequest,
+  UserFilters,
+} from "@igrp/platform-access-management-client-ts";
+import { getClientAccess } from "./access-client";
 
 export async function getUsers(params?: UserFilters) {
   const client = await getClientAccess();
@@ -10,7 +13,7 @@ export async function getUsers(params?: UserFilters) {
     const result = await client.users.getUsers(params);
     return result.data;
   } catch (error) {
-    console.error('[users] Erro ao carregar lista de utilizadores.:', error);
+    console.error("[users] Erro ao carregar lista de utilizadores.:", error);
     throw error;
   }
 }
@@ -21,7 +24,10 @@ export async function getCurrentUser() {
     const result = await client.users.getCurrentUser();
     return result.data;
   } catch (error) {
-    console.error('[user-current] Erro ao carregar os dados do utilizador atual.:', error);
+    console.error(
+      "[user-current] Erro ao carregar os dados do utilizador atual.:",
+      error,
+    );
     throw error;
   }
 }
@@ -32,7 +38,10 @@ export async function inviteUser(user: CreateUserRequest) {
     const result = await client.users.inviteUser(user);
     return result.data;
   } catch (error) {
-    console.error('[user-invite] Erro ao enviar convite ao ultilizador(es).:', error);
+    console.error(
+      "[user-invite] Erro ao enviar convite ao ultilizador(es).:",
+      error,
+    );
     throw error;
   }
 }
@@ -46,19 +55,25 @@ export async function addRolesToUser(username: string, roleNames: string[]) {
     const result = await client.users.addRolesToUser(username, roleNames);
     return result.data;
   } catch (error) {
-    console.error('[user-invite] Erro ao carregar adicionar perfis ao utilizador:', error);
+    console.error(
+      "[user-invite] Erro ao carregar adicionar perfis ao utilizador:",
+      error,
+    );
     throw error;
   }
 }
 
-export async function removeRolesFromUser(username: string, roleNames: string[]) {
+export async function removeRolesFromUser(
+  username: string,
+  roleNames: string[],
+) {
   const client = await getClientAccess();
 
   try {
     const result = await client.users.removeRolesFromUser(username, roleNames);
     return result.data;
   } catch (error) {
-    console.error('[user-invite] Erro ao remover perfis ao utilizador:', error);
+    console.error("[user-invite] Erro ao remover perfis ao utilizador:", error);
     throw error;
   }
 }
@@ -70,7 +85,7 @@ export async function getUserRoles(username: string) {
     const result = await client.users.getUserRoles(username);
     return result.data;
   } catch (error) {
-    console.error('[user-role] Erro ao obter perfís de utilizador:', error);
+    console.error("[user-role] Erro ao obter perfís de utilizador:", error);
     throw error;
   }
 }

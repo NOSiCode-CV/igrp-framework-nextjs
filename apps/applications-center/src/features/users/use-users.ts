@@ -1,21 +1,32 @@
-import { useMutation, useQueries, useQuery, useQueryClient } from '@tanstack/react-query';
-import { addRolesToUser, getCurrentUser, getUserRoles, getUsers, inviteUser } from '@/actions/user';
+import {
+  useMutation,
+  useQueries,
+  useQuery,
+  useQueryClient,
+} from "@tanstack/react-query";
+import {
+  addRolesToUser,
+  getCurrentUser,
+  getUserRoles,
+  getUsers,
+  inviteUser,
+} from "@/actions/user";
 import {
   CreateUserRequest,
   IGRPUserDTO,
   RoleDTO,
-} from '@igrp/platform-access-management-client-ts';
+} from "@igrp/platform-access-management-client-ts";
 
 export const useUsers = () => {
   return useQuery<IGRPUserDTO[]>({
-    queryKey: ['users'],
+    queryKey: ["users"],
     queryFn: () => getUsers(),
   });
 };
 
 export const useCurrentUser = () => {
   return useQuery<IGRPUserDTO>({
-    queryKey: ['current-user'],
+    queryKey: ["current-user"],
     queryFn: async () => getCurrentUser(),
   });
 };
@@ -24,10 +35,11 @@ export const useInviteUser = () => {
   const queryClient = useQueryClient();
 
   return useMutation({
-    mutationFn: async ({ user }: { user: CreateUserRequest }) => inviteUser(user),
+    mutationFn: async ({ user }: { user: CreateUserRequest }) =>
+      inviteUser(user),
     onSuccess: async () => {
-      await queryClient.invalidateQueries({ queryKey: ['users'] });
-      await queryClient.refetchQueries({ queryKey: ['users'] });
+      await queryClient.invalidateQueries({ queryKey: ["users"] });
+      await queryClient.refetchQueries({ queryKey: ["users"] });
     },
   });
 };
@@ -36,11 +48,16 @@ export const useAddUserRole = () => {
   const queryClient = useQueryClient();
 
   return useMutation({
-    mutationFn: async ({ username, roleNames }: { username: string; roleNames: string[] }) =>
-      addRolesToUser(username, roleNames),
+    mutationFn: async ({
+      username,
+      roleNames,
+    }: {
+      username: string;
+      roleNames: string[];
+    }) => addRolesToUser(username, roleNames),
     onSuccess: async () => {
-      await queryClient.invalidateQueries({ queryKey: ['users'] });
-      await queryClient.refetchQueries({ queryKey: ['users'] });
+      await queryClient.invalidateQueries({ queryKey: ["users"] });
+      await queryClient.refetchQueries({ queryKey: ["users"] });
     },
   });
 };
@@ -49,11 +66,16 @@ export const useRemoveUserRole = () => {
   const queryClient = useQueryClient();
 
   return useMutation({
-    mutationFn: async ({ username, roleNames }: { username: string; roleNames: string[] }) =>
-      addRolesToUser(username, roleNames),
+    mutationFn: async ({
+      username,
+      roleNames,
+    }: {
+      username: string;
+      roleNames: string[];
+    }) => addRolesToUser(username, roleNames),
     onSuccess: async () => {
-      await queryClient.invalidateQueries({ queryKey: ['users', 'userRoles'] });
-      await queryClient.refetchQueries({ queryKey: ['users', 'userRoles'] });
+      await queryClient.invalidateQueries({ queryKey: ["users", "userRoles"] });
+      await queryClient.refetchQueries({ queryKey: ["users", "userRoles"] });
     },
   });
 };
@@ -61,7 +83,7 @@ export const useRemoveUserRole = () => {
 // TODO: this is not working
 export const useUserRoles = (username?: string) => {
   return useQuery<RoleDTO[]>({
-    queryKey: ['userRoles', username],
+    queryKey: ["userRoles", username],
     queryFn: () => getUserRoles(username!),
     enabled: !!username,
   });
@@ -70,7 +92,7 @@ export const useUserRoles = (username?: string) => {
 export const useUserRolesMulti = (usernames: string[]) => {
   return useQueries({
     queries: usernames.map((u) => ({
-      queryKey: ['userRoles', u],
+      queryKey: ["userRoles", u],
       queryFn: () => getUserRoles(u),
       enabled: !!u,
     })),

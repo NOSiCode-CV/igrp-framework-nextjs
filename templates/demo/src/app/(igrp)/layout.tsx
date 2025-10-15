@@ -1,11 +1,13 @@
-import { IGRPLayout } from '@igrp/framework-next';
-import { redirect } from 'next/navigation';
-import { headers } from 'next/headers';
+import { IGRPLayout } from "@igrp/framework-next";
+import { createConfig } from "@igrp/template-config";
+import { headers } from "next/headers";
+import { redirect } from "next/navigation";
 
-import { configLayout } from '@/actions/igrp/layout';
-import { createConfig } from '@igrp/template-config';
+import { configLayout } from "@/actions/igrp/layout";
 
-export default async function RootLayout({ children }: Readonly<{ children: React.ReactNode }>) {
+export default async function RootLayout({
+  children,
+}: Readonly<{ children: React.ReactNode }>) {
   const layoutConfig = await configLayout();
   const config = await createConfig(layoutConfig);
 
@@ -15,17 +17,17 @@ export default async function RootLayout({ children }: Readonly<{ children: Reac
 
   const headersList = await headers();
   const currentPath =
-    headersList.get('x-pathname') ||
-    headersList.get('x-next-url') ||
-    headersList.get('referer') ||
-    '';
+    headersList.get("x-pathname") ||
+    headersList.get("x-next-url") ||
+    headersList.get("referer") ||
+    "";
 
   const baseUrl = process.env.NEXTAUTH_URL;
 
-  const urlLogin = loginUrl || '/login';
-  const urlLogout = logoutUrl || '/logout';
+  const urlLogin = loginUrl || "/login";
+  const urlLogout = logoutUrl || "/logout";
 
-  const loginPath = new URL(loginUrl || '/', baseUrl).pathname;
+  const loginPath = new URL(loginUrl || "/", baseUrl).pathname;
 
   const isAlreadyOnLogin = currentPath.startsWith(loginPath);
 

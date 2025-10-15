@@ -25,7 +25,6 @@
     "lint": "eslint . --ext .ts,.tsx",
     "format": "prettier --write .",
     "clean-all": "rimraf node_modules && rimraf dist && rimraf tsconfig.tsbuildinfo"
-
   },
   "dependencies": {
     "@hookform/resolvers": "5.2.2",

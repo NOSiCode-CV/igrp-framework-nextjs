@@ -1,26 +1,38 @@
-import { NextConfig } from 'next';
+import type { NextConfig } from "next";
+import type { RemotePattern } from "next/dist/shared/lib/image-config";
 
-// use this if you are using a custom domain for igrp-applications-center
-const basePath = process.env.IGRP_APP_BASE_PATH || '';
+const basePath = process.env.IGRP_APP_BASE_PATH || "";
+
+// Função para parsear domains de variável de ambiente
+const getRemotePatterns = () => {
+  const patterns: Array<{
+    protocol: RemotePattern["protocol"];
+    hostname: RemotePattern["hostname"];
+  }> = [];
+
+  // Adicionar domains extras via env (separados por vírgula)
+  // Ex: NEXT_PUBLIC_ALLOWED_DOMAINS=example.com,cdn.example.com
+  const extraDomains =
+    process.env.NEXT_PUBLIC_ALLOWED_DOMAINS?.split(",") || [];
+
+  extraDomains.forEach((domain) => {
+    const trimmedDomain = domain.trim();
+    if (trimmedDomain) {
+      patterns.push({
+        protocol: "https" as const,
+        hostname: trimmedDomain,
+      });
+    }
+  });
+
+  return patterns;
+};
 
 const nextConfig: NextConfig = {
-  // uncomment this line when you build with docker,
-  // output: 'standalone',
-
-  // use this if you are using a custom domain for igrp-applications-center
+  // output: "standalone",
   basePath: basePath,
-
   images: {
-    remotePatterns: [
-      {
-        protocol: 'https',
-        hostname: 'nosi.cv',
-      },
-      {
-        protocol: 'https',
-        hostname: 'img.youtube.com',
-      },
-    ],
+    remotePatterns: getRemotePatterns(),
   },
 };
 

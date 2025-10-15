@@ -3,50 +3,62 @@ import { z } from "zod";
 import { APPLICATIONS_TYPES, APPLICATIONS_TYPES_EXCLUDE } from "./app-utils";
 import { emptyToNull, statusSchema } from "@/schemas/global";
 import { fileWithPreviewSchema } from "@/features/files/files-schema";
-import { ApplicationType, Status } from "@igrp/platform-access-management-client-ts";
+import {
+  ApplicationType,
+  Status,
+} from "@igrp/platform-access-management-client-ts";
 
 export const appTypeCrud = z.enum(APPLICATIONS_TYPES_EXCLUDE);
 export const types = z.enum(APPLICATIONS_TYPES);
 
-const BaseApp = z.object({
-  id: z.number().int().positive(),
-  code: z
-    .string()
-    .regex(/^[A-Z0-9_]+$/, "Deve conter apenas maiúsculas, números e sublinhados")
-    .min(4, "Código deve ter no mínimo 4 caracteres"),
-  name: z.string().min(3, "Nome é obrigatório"),
-  status: statusSchema,
-  owner: z.string().min(3, "Proprietário é obrigatório"),
-  description: z.string().optional(),
-  picture: z.string().optional(),
-  type: types,
-  url: z.string().url().optional(),
-  slug: z.string().optional(),
-  departments: z.array(z.string()).min(1, "Departamento é obrigatório"),
-  createdBy: z.string().optional(),
-  createdDate: z.string().optional(),
-  lastModifiedBy: z.string().optional(),
-  lastModifiedDate: z.string().optional(),
-  image: fileWithPreviewSchema.nullable().optional(),
-}).strict();
+const BaseApp = z
+  .object({
+    id: z.number().int().positive(),
+    code: z
+      .string()
+      .regex(
+        /^[A-Z0-9_]+$/,
+        "Deve conter apenas maiúsculas, números e sublinhados",
+      )
+      .min(4, "Código deve ter no mínimo 4 caracteres"),
+    name: z.string().min(3, "Nome é obrigatório"),
+    status: statusSchema,
+    owner: z.string().min(3, "Proprietário é obrigatório"),
+    description: z.string().optional(),
+    picture: z.string().optional(),
+    type: types,
+    url: z.string().url().optional(),
+    slug: z.string().optional(),
+    departments: z.array(z.string()).min(1, "Departamento é obrigatório"),
+    createdBy: z.string().optional(),
+    createdDate: z.string().optional(),
+    lastModifiedBy: z.string().optional(),
+    lastModifiedDate: z.string().optional(),
+    image: fileWithPreviewSchema.nullable().optional(),
+  })
+  .strict();
 
-const InternalSpecific = z.object({
-  type: z.literal(appTypeCrud.enum.INTERNAL),
-  slug: z.string().min(1, "URL Relativo é obrigatório"),
-}).extend({
-  description: emptyToNull.optional(),
-  picture: emptyToNull.optional(),
-  url: emptyToNull.optional(),
-});;
+const InternalSpecific = z
+  .object({
+    type: z.literal(appTypeCrud.enum.INTERNAL),
+    slug: z.string().min(1, "URL Relativo é obrigatório"),
+  })
+  .extend({
+    description: emptyToNull.optional(),
+    picture: emptyToNull.optional(),
+    url: emptyToNull.optional(),
+  });
 
-const ExternalSpecific = z.object({
-  type: z.literal(appTypeCrud.enum.EXTERNAL),
-  url: z.string().url("URL inválida"),
-}).extend({
-  description: emptyToNull.optional(),
-  picture: emptyToNull.optional(),
-  slug: emptyToNull.optional(),
-});
+const ExternalSpecific = z
+  .object({
+    type: z.literal(appTypeCrud.enum.EXTERNAL),
+    url: z.string().url("URL inválida"),
+  })
+  .extend({
+    description: emptyToNull.optional(),
+    picture: emptyToNull.optional(),
+    slug: emptyToNull.optional(),
+  });
 
 const InternalApp = BaseApp.merge(InternalSpecific);
 const ExternalApp = BaseApp.merge(ExternalSpecific);
@@ -59,7 +71,7 @@ const ExternalApp = BaseApp.merge(ExternalSpecific);
 export type ApplicationArgs = z.infer<typeof BaseApp>;
 
 const createOmit = {
-  id: true, 
+  id: true,
   createdBy: true,
   createdDate: true,
   lastModifiedBy: true,
@@ -86,14 +98,14 @@ const PartialInternal = PartialBase.merge(
   z.object({
     type: z.literal(appTypeCrud.enum.INTERNAL).optional(),
     slug: z.string().optional(),
-  })
+  }),
 );
 
 const PartialExternal = PartialBase.merge(
   z.object({
     type: z.literal(appTypeCrud.enum.EXTERNAL).optional(),
     url: z.string().url("URL inválida").optional(),
-  })
+  }),
 );
 
 export const UpdateApplicationSchema = z
@@ -117,13 +129,15 @@ export const UpdateApplicationSchema = z
 
 export type UpdateApplicationArgs = z.infer<typeof UpdateApplicationSchema>;
 
-export const FormSchema = z.union([CreateApplicationSchema, UpdateApplicationSchema]);
+export const FormSchema = z.union([
+  CreateApplicationSchema,
+  UpdateApplicationSchema,
+]);
 export type FormVals = z.input<typeof FormSchema>;
 export type FormValsParsed = z.output<typeof FormSchema>;
 
-export function normalizeApplication(values: FormVals, isEdit: boolean) { 
-
-  console.log({ values })
+export function normalizeApplication(values: FormVals, isEdit: boolean) {
+  console.log({ values });
   const base = {
     code: values.code!,
     name: values.name!,

@@ -1,18 +1,18 @@
-import { statusSchema } from '@/schemas/global';
+import { statusSchema } from "@/schemas/global";
 
 export const ROUTES = {
-  APPLICATIONS: '/applications',
-  NEW_APPS: '/applications/new',
-  USERS: '/users',
-  USER_PROFILE: '/users/profile',
-  DEPARTMENTS: '/departments',
-  DEPARTMENTS_ROLE: 'roles',
-  EDIT: '/edit',
+  APPLICATIONS: "/applications",
+  NEW_APPS: "/applications/new",
+  USERS: "/users",
+  USER_PROFILE: "/users/profile",
+  DEPARTMENTS: "/departments",
+  DEPARTMENTS_ROLE: "roles",
+  EDIT: "/edit",
 } as const;
 
 export const STATUS_OPTIONS = [
-  { value: statusSchema.enum.ACTIVE, label: 'Ativo' },
-  { value: statusSchema.enum.INACTIVE, label: 'Inativo' },
+  { value: statusSchema.enum.ACTIVE, label: "Ativo" },
+  { value: statusSchema.enum.INACTIVE, label: "Inativo" },
 ] as const;
 
-export const OPEN_TYPE_VIEW = 'view';
+export const OPEN_TYPE_VIEW = "view";

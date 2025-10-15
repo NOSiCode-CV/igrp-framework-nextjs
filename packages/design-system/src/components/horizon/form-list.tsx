@@ -1,7 +1,7 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 'use client';
 
-import { useEffect, useState } from 'react';
+import { useCallback, useEffect, useState } from 'react';
 import { useFieldArray, useWatch, type FieldArrayWithId } from 'react-hook-form';
 
 import {
@@ -19,7 +19,7 @@ import { cn } from '../../lib/utils';
 
 interface IGRPFormListProps<TItem>
   extends Omit<IGRPBaseAttributes, 'name' | 'iconPlacement' | 'helperText'>,
-    Partial<IGRPBadgeProps> {
+  Partial<IGRPBadgeProps> {
   id: string;
   name: string;
   defaultItem: TItem;
@@ -60,16 +60,21 @@ function IGRPFormList<TItem>({
   const { fields, append, remove } = useFieldArray({ name });
   const values = useWatch({ name }) ?? [];
 
-  useEffect(() => {
+  const handleAppendAndSetOpenItem = useCallback(() => {
     if (fields.length === 0) {
       append(defaultItem);
-      setOpenItem('item-0');
     }
   }, [append, defaultItem, fields.length]);
 
+  useEffect(() => {
+    if (fields.length === 0) {
+      handleAppendAndSetOpenItem();
+    }
+  }, [fields.length, handleAppendAndSetOpenItem]);
+
   return (
     <Card className={cn('shadow-sm gap-0 rounded-md', className)} ref={ref} id={id}>
-      <CardHeader className="py-3 px-4 border-b flex flex-row items-center justify-between">
+      <CardHeader className="py-3 border-b flex flex-row items-center justify-between">
         <div className="flex items-center gap-2">
           {showIcon && (
             <IGRPIcon

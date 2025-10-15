@@ -5,6 +5,10 @@ export const convertValuesToFormData = <TSchema extends z.ZodTypeAny>(
 ): FormData => {
   const formData = new FormData();
 
+  if (!values) {
+    return formData;
+  }
+
   Object.entries(values).forEach(([key, value]) => {
     if (value !== undefined && value !== null) {
       if (Array.isArray(value)) {

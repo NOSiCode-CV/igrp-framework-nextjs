@@ -28,7 +28,7 @@
 
   },
   "dependencies": {
-    "@hookform/resolvers": "5.0.1",
+    "@hookform/resolvers": "5.2.2",
     "@igrp/igrp-framework-react-design-system": "workspace:*",
     "@tailwindcss/postcss": "^4.1.11",
     "next": "15.5.5",
@@ -40,7 +40,7 @@
     "recharts": "^2.15.2",
     "tailwind-merge": "3.3.1",
     "tailwindcss": "^4.1.11",
-    "zod": "3.25.67"
+    "zod": "^4.1.12"
   },
   "devDependencies": {
     "@chromatic-com/storybook": "^5.0.0-next.1",
@@ -59,8 +59,8 @@
     "eslint": "9.37.0",
     "eslint-config-prettier": "10.1.8",
     "eslint-plugin-prettier": "5.5.4",
-    "eslint-plugin-react-hooks": "5.2.0",
-    "eslint-plugin-react-refresh": "0.4.23",
+    "eslint-plugin-react-hooks": "^7.0.0",
+    "eslint-plugin-react-refresh": "0.4.24",
     "eslint-plugin-storybook": "^9.1.1",
     "globals": "16.4.0",
     "playwright": "^1.55.0",

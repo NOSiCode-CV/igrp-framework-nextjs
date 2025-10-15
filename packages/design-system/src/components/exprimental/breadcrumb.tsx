@@ -6,13 +6,16 @@ import { cva, type VariantProps } from 'class-variance-authority';
 import { icons } from 'lucide-react';
 
 import { cn } from '../../lib/utils';
-import { IGRPIcon } from './icon';
+import { IGRPIcon } from '../horizon/icon';
 import {
   DropdownMenu,
   DropdownMenuContent,
   DropdownMenuItem,
   DropdownMenuTrigger,
 } from '../primitives/dropdown-menu';
+
+// TODO: Review this component
+// see: https://coss.com/origin/breadcrumb
 
 const breadcrumbVariants = cva('flex flex-wrap items-center', {
   variants: {

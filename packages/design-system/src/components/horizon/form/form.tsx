@@ -3,12 +3,7 @@
 
 import type React from 'react';
 import { useCallback, useEffect, useRef, useState } from 'react';
-import {
-  type Mode,
-  useForm,
-  type UseFormReturn,
-  type Resolver,
-} from 'react-hook-form';
+import { type Mode, useForm, type UseFormReturn, type Resolver } from 'react-hook-form';
 import { toast } from 'sonner';
 import { z } from 'zod';
 import { zodResolver } from '@hookform/resolvers/zod';
@@ -21,17 +16,23 @@ type AnyZod = z.ZodType<any, any, any>;
 type InputOf<T extends AnyZod> = z.input<T>;
 type OutputOf<T extends AnyZod> = z.output<T>;
 
-type ResetFn<TSchema extends AnyZod> =
-  UseFormReturn<InputOf<TSchema>, any, OutputOf<TSchema>>['reset'];
+type ResetFn<TSchema extends AnyZod> = UseFormReturn<
+  InputOf<TSchema>,
+  any,
+  OutputOf<TSchema>
+>['reset'];
 
-export type IGRPFormHandle<TSchema extends AnyZod> =
-  UseFormReturn<InputOf<TSchema>, any, OutputOf<TSchema>> & {
-    submit: () => Promise<void>;
-    reset: ResetFn<TSchema>;               
-    setGlobalError: (message: string) => void;
-    clearGlobalError: () => void;
-    isSubmitting: boolean;
-  };
+export type IGRPFormHandle<TSchema extends AnyZod> = UseFormReturn<
+  InputOf<TSchema>,
+  any,
+  OutputOf<TSchema>
+> & {
+  submit: () => Promise<void>;
+  reset: ResetFn<TSchema>;
+  setGlobalError: (message: string) => void;
+  clearGlobalError: () => void;
+  isSubmitting: boolean;
+};
 
 export interface IGRPFormProps<TSchema extends AnyZod> {
   schema: TSchema;
@@ -105,10 +106,22 @@ function IGRPForm<TSchema extends AnyZod>({
         setIsSubmitting(false);
       }
     },
-    [clearGlobalError, onSubmit, resetAfterSubmit, form, defaultValues, setGlobalError, showToastOnError, onError],
+    [
+      clearGlobalError,
+      onSubmit,
+      resetAfterSubmit,
+      form,
+      defaultValues,
+      setGlobalError,
+      showToastOnError,
+      onError,
+    ],
   );
 
-  const submitForm = useCallback(async () => form.handleSubmit(handleSubmit)(), [form, handleSubmit]);
+  const submitForm = useCallback(
+    async () => form.handleSubmit(handleSubmit)(),
+    [form, handleSubmit],
+  );
 
   useEffect(() => {
     const handle: IGRPFormHandle<TSchema> = {

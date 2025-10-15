@@ -19,7 +19,7 @@ import { cn } from '../../lib/utils';
 
 interface IGRPFormListProps<TItem>
   extends Omit<IGRPBaseAttributes, 'name' | 'iconPlacement' | 'helperText'>,
-  Partial<IGRPBadgeProps> {
+    Partial<IGRPBadgeProps> {
   id: string;
   name: string;
   defaultItem: TItem;

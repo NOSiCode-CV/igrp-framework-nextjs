@@ -1,23 +1,17 @@
-"use client"
+'use client';
 
 // TODO: Use `@origin-space/image-cropper`
 // see: https://coss.com/origin/image-cropper
 
+import { useState } from 'react';
 
-import { useState } from "react"
+import { Slider } from '../primitives/slider';
 
-import { Slider } from '../primitives/slider'
+import { Cropper, CropperCropArea, CropperDescription, CropperImage } from '../primitives/cropper';
 
-import {
-  Cropper,
-  CropperCropArea,
-  CropperDescription,
-  CropperImage,
-} from "../primitives/cropper"
+import { useCallback, useEffect } from 'react';
 
-import { useCallback, useEffect } from "react"
-
-import { Button } from '../primitives/button'
+import { Button } from '../primitives/button';
 
 export function Component() {
   return (
@@ -32,12 +26,8 @@ export function Component() {
         <CropperCropArea />
       </Cropper>
 
-      <p
-        aria-live="polite"
-        role="region"
-        className="mt-2 text-xs text-muted-foreground"
-      >
-        Cropper with aspect ratio 16:9 ∙{" "}
+      <p aria-live="polite" role="region" className="mt-2 text-xs text-muted-foreground">
+        Cropper with aspect ratio 16:9 ∙{' '}
         <a
           href="https://github.com/origin-space/image-cropper"
           className="underline hover:text-foreground"
@@ -47,9 +37,8 @@ export function Component() {
         </a>
       </p>
     </div>
-  )
+  );
 }
-
 
 export function Component2() {
   return (
@@ -63,12 +52,8 @@ export function Component2() {
         <CropperCropArea className="rounded-full" />
       </Cropper>
 
-      <p
-        aria-live="polite"
-        role="region"
-        className="mt-2 text-xs text-muted-foreground"
-      >
-        Cropper with full-rounded mask ∙{" "}
+      <p aria-live="polite" role="region" className="mt-2 text-xs text-muted-foreground">
+        Cropper with full-rounded mask ∙{' '}
         <a
           href="https://github.com/origin-space/image-cropper"
           className="underline hover:text-foreground"
@@ -78,12 +63,11 @@ export function Component2() {
         </a>
       </p>
     </div>
-  )
+  );
 }
 
-
 export default function Component3() {
-  const [zoom, setZoom] = useState(1)
+  const [zoom, setZoom] = useState(1);
 
   return (
     <div className="flex flex-col items-center gap-2">
@@ -114,12 +98,8 @@ export default function Component3() {
         </div>
       </div>
 
-      <p
-        aria-live="polite"
-        role="region"
-        className="mt-2 text-xs text-muted-foreground"
-      >
-        Cropper with zoom slider ∙{" "}
+      <p aria-live="polite" role="region" className="mt-2 text-xs text-muted-foreground">
+        Cropper with zoom slider ∙{' '}
         <a
           href="https://github.com/origin-space/image-cropper"
           className="underline hover:text-foreground"
@@ -129,40 +109,40 @@ export default function Component3() {
         </a>
       </p>
     </div>
-  )
+  );
 }
 
 // Define type for pixel crop area
-type Area = { x: number; y: number; width: number; height: number }
+type Area = { x: number; y: number; width: number; height: number };
 
 // --- Start: Copied Helper Functions ---
 const createImage = (url: string): Promise<HTMLImageElement> =>
   new Promise((resolve, reject) => {
-    const image = new Image()
-    image.addEventListener("load", () => resolve(image))
-    image.addEventListener("error", (error) => reject(error))
-    image.setAttribute("crossOrigin", "anonymous") // Needed for canvas Tainted check
-    image.src = url
-  })
+    const image = new Image();
+    image.addEventListener('load', () => resolve(image));
+    image.addEventListener('error', (error) => reject(error));
+    image.setAttribute('crossOrigin', 'anonymous'); // Needed for canvas Tainted check
+    image.src = url;
+  });
 
 async function getCroppedImg(
   imageSrc: string,
   pixelCrop: Area,
   outputWidth: number = pixelCrop.width, // Optional: specify output size
-  outputHeight: number = pixelCrop.height
+  outputHeight: number = pixelCrop.height,
 ): Promise<Blob | null> {
   try {
-    const image = await createImage(imageSrc)
-    const canvas = document.createElement("canvas")
-    const ctx = canvas.getContext("2d")
+    const image = await createImage(imageSrc);
+    const canvas = document.createElement('canvas');
+    const ctx = canvas.getContext('2d');
 
     if (!ctx) {
-      return null
+      return null;
     }
 
     // Set canvas size to desired output size
-    canvas.width = outputWidth
-    canvas.height = outputHeight
+    canvas.width = outputWidth;
+    canvas.height = outputHeight;
 
     // Draw the cropped image onto the canvas
     ctx.drawImage(
@@ -174,82 +154,79 @@ async function getCroppedImg(
       0,
       0,
       outputWidth, // Draw onto the output size
-      outputHeight
-    )
+      outputHeight,
+    );
 
     // Convert canvas to blob
     return new Promise((resolve) => {
       canvas.toBlob((blob) => {
-        resolve(blob)
-      }, "image/jpeg") // Specify format and quality if needed
-    })
+        resolve(blob);
+      }, 'image/jpeg'); // Specify format and quality if needed
+    });
   } catch (error) {
-    console.error("Error in getCroppedImg:", error)
-    return null
+    console.error('Error in getCroppedImg:', error);
+    return null;
   }
 }
 // --- End: Copied Helper Functions ---
 
 const ORIGINAL_IMAGE_URL =
-  "https://raw.githubusercontent.com/origin-space/origin-images/refs/heads/main/cropper-10_k24zxk.jpg"
+  'https://raw.githubusercontent.com/origin-space/origin-images/refs/heads/main/cropper-10_k24zxk.jpg';
 
 export function Component4() {
-  const [croppedAreaPixels, setCroppedAreaPixels] = useState<Area | null>(null)
-  const [croppedImageUrl, setCroppedImageUrl] = useState<string | null>(null)
+  const [croppedAreaPixels, setCroppedAreaPixels] = useState<Area | null>(null);
+  const [croppedImageUrl, setCroppedImageUrl] = useState<string | null>(null);
 
   // Callback to update crop area state
   const handleCropChange = useCallback((pixels: Area | null) => {
-    setCroppedAreaPixels(pixels)
-  }, [])
+    setCroppedAreaPixels(pixels);
+  }, []);
 
   // Function to handle the crop button click
   const handleCrop = async () => {
     if (!croppedAreaPixels) {
-      console.error("No crop area selected.")
-      return
+      console.error('No crop area selected.');
+      return;
     }
 
     try {
-      const croppedBlob = await getCroppedImg(
-        ORIGINAL_IMAGE_URL,
-        croppedAreaPixels
-      )
+      const croppedBlob = await getCroppedImg(ORIGINAL_IMAGE_URL, croppedAreaPixels);
       if (!croppedBlob) {
-        throw new Error("Failed to generate cropped image blob.")
+        throw new Error('Failed to generate cropped image blob.');
       }
 
       // Create a new object URL
-      const newCroppedUrl = URL.createObjectURL(croppedBlob)
+      const newCroppedUrl = URL.createObjectURL(croppedBlob);
 
       // Revoke the old URL if it exists
       if (croppedImageUrl) {
-        URL.revokeObjectURL(croppedImageUrl)
+        URL.revokeObjectURL(croppedImageUrl);
       }
 
       // Set the new URL
-      setCroppedImageUrl(newCroppedUrl)
+      setCroppedImageUrl(newCroppedUrl);
     } catch (error) {
-      console.error("Error during cropping:", error)
+      console.error('Error during cropping:', error);
       // Optionally: Clear the old image URL on error
       if (croppedImageUrl) {
-        URL.revokeObjectURL(croppedImageUrl)
+        URL.revokeObjectURL(croppedImageUrl);
       }
-      setCroppedImageUrl(null)
+      setCroppedImageUrl(null);
     }
-  }
+  };
 
   // Effect for cleaning up the object URL
   useEffect(() => {
     // This is the cleanup function that runs when the component unmounts
     // or when croppedImageUrl changes before the next effect runs.
-    const currentUrl = croppedImageUrl
+    const currentUrl = croppedImageUrl;
     return () => {
-      if (currentUrl && currentUrl.startsWith("blob:")) {
-        URL.revokeObjectURL(currentUrl)
-        console.log("Revoked URL:", currentUrl) // Optional: for debugging
+      if (currentUrl && currentUrl.startsWith('blob:')) {
+        URL.revokeObjectURL(currentUrl);
+        console.log('Revoked URL:', currentUrl); // Optional: for debugging
       }
-    }
-  }, [croppedImageUrl]) // Dependency array ensures cleanup runs when URL changes
+    };
+  }, [croppedImageUrl]); // Dependency array ensures cleanup runs when URL changes
 
   return (
     <div className="flex flex-col items-center gap-2">
@@ -284,12 +261,8 @@ export function Component4() {
         </div>
       </div>
 
-      <p
-        aria-live="polite"
-        role="region"
-        className="mt-2 text-xs text-muted-foreground"
-      >
-        Cropper with image preview ∙{" "}
+      <p aria-live="polite" role="region" className="mt-2 text-xs text-muted-foreground">
+        Cropper with image preview ∙{' '}
         <a
           href="https://github.com/origin-space/image-cropper"
           className="underline hover:text-foreground"
@@ -300,8 +273,5 @@ export function Component4() {
         </a>
       </p>
     </div>
-  )
+  );
 }
-
-
-

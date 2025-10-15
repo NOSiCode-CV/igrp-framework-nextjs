@@ -1,42 +1,42 @@
-"use client"
+'use client';
 
-import { useState } from "react"
-import { format } from "date-fns"
+import { useState } from 'react';
+import { format } from 'date-fns';
 
-import { Button } from '../primitives/button'
-import { Calendar } from '../primitives/calendar'
-import { ScrollArea } from '../primitives/scroll-area'
+import { Button } from '../primitives/button';
+import { Calendar } from '../primitives/calendar';
+import { ScrollArea } from '../primitives/scroll-area';
 
 // TODO: create this compnent
 // see: https://v0.app/chat/open-in-v0-UHnalf55ucu
 // see: https://ui.shadcn.com/blocks/calendar
 
 export function Component() {
-  const today = new Date()
-  const [date, setDate] = useState<Date>(today)
-  const [time, setTime] = useState<string | null>(null)
+  const today = new Date();
+  const [date, setDate] = useState<Date>(today);
+  const [time, setTime] = useState<string | null>(null);
 
   // Mock time slots data
   const timeSlots = [
-    { time: "09:00", available: false },
-    { time: "09:30", available: false },
-    { time: "10:00", available: true },
-    { time: "10:30", available: true },
-    { time: "11:00", available: true },
-    { time: "11:30", available: true },
-    { time: "12:00", available: false },
-    { time: "12:30", available: true },
-    { time: "13:00", available: true },
-    { time: "13:30", available: true },
-    { time: "14:00", available: true },
-    { time: "14:30", available: false },
-    { time: "15:00", available: false },
-    { time: "15:30", available: true },
-    { time: "16:00", available: true },
-    { time: "16:30", available: true },
-    { time: "17:00", available: true },
-    { time: "17:30", available: true },
-  ]
+    { time: '09:00', available: false },
+    { time: '09:30', available: false },
+    { time: '10:00', available: true },
+    { time: '10:30', available: true },
+    { time: '11:00', available: true },
+    { time: '11:30', available: true },
+    { time: '12:00', available: false },
+    { time: '12:30', available: true },
+    { time: '13:00', available: true },
+    { time: '13:30', available: true },
+    { time: '14:00', available: true },
+    { time: '14:30', available: false },
+    { time: '15:00', available: false },
+    { time: '15:30', available: true },
+    { time: '16:00', available: true },
+    { time: '16:30', available: true },
+    { time: '17:00', available: true },
+    { time: '17:30', available: true },
+  ];
 
   return (
     <div>
@@ -47,8 +47,8 @@ export function Component() {
             selected={date}
             onSelect={(newDate) => {
               if (newDate) {
-                setDate(newDate)
-                setTime(null)
+                setDate(newDate);
+                setTime(null);
               }
             }}
             className="p-2 sm:pe-5"
@@ -61,15 +61,13 @@ export function Component() {
               <ScrollArea className="h-full sm:border-s">
                 <div className="space-y-3">
                   <div className="flex h-5 shrink-0 items-center px-5">
-                    <p className="text-sm font-medium">
-                      {format(date, "EEEE, d")}
-                    </p>
+                    <p className="text-sm font-medium">{format(date, 'EEEE, d')}</p>
                   </div>
                   <div className="grid gap-1.5 px-5 max-sm:grid-cols-2">
                     {timeSlots.map(({ time: timeSlot, available }) => (
                       <Button
                         key={timeSlot}
-                        variant={time === timeSlot ? "default" : "outline"}
+                        variant={time === timeSlot ? 'default' : 'outline'}
                         size="sm"
                         className="w-full"
                         onClick={() => setTime(timeSlot)}
@@ -90,7 +88,7 @@ export function Component() {
         role="region"
         aria-live="polite"
       >
-        Appointment picker -{" "}
+        Appointment picker -{' '}
         <a
           className="underline hover:text-foreground"
           href="https://daypicker.dev/"
@@ -101,5 +99,5 @@ export function Component() {
         </a>
       </p>
     </div>
-  )
+  );
 }

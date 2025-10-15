@@ -40,10 +40,10 @@ function IGRPButton({
 
   if (size === 'icon' || size === 'icon-sm' || size === 'icon-lg') {
     return (
-      <Button 
-        {...props} 
-        className={cn( loading && 'cursor-wait', className)} 
-        disabled={disabled || loading} 
+      <Button
+        {...props}
+        className={cn(loading && 'cursor-wait', className)}
+        disabled={disabled || loading}
         type={type}
       >
         {loading ? (
@@ -61,7 +61,7 @@ function IGRPButton({
         )}
       </Button>
     );
-  }  
+  }
 
   return (
     <Button

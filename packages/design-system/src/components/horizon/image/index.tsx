@@ -6,8 +6,10 @@ import { cn } from '../../../lib/utils';
 interface IGRPImageProps extends IGRPImageAttributes {
     src: string; 
     alt: string;
-    labelClassName:string;
-    ratio:number;
+    labelClassName: string;
+    ratio: number;
+    width: number;
+    height: number;
     borderRadius?: 'rounded-none' | 'rounded-sm' | 'rounded' | 'rounded-md' | 'rounded-lg' | 'rounded-xl' | 'rounded-2xl' | 'rounded-3xl' | 'rounded-full';
 }
 
@@ -16,7 +18,9 @@ function IGRPImage({
     alt,
     labelClassName,
     ratio,
-    borderRadius
+    borderRadius,
+    width,
+    height
 
 }:IGRPImageProps){
     const ratioNumber = {
@@ -26,10 +30,36 @@ function IGRPImage({
         '21/9':21/9,
       }[ratio]
 
+    var useFill=!width
+
+    const Img = useFill ? (
+        <Image
+          src={src}
+          alt={alt}
+          fill
+          className={cn('object-cover object-center', borderRadius, labelClassName)}
+        />
+      ) : (
+        <Image
+          src={src}
+          alt={alt}
+          width={width}
+          height={height}
+          className={cn('object-cover object-center', borderRadius, labelClassName)}
+        />
+      );
+
 return(
-    <AspectRatio ratio={ratioNumber}>
-        <Image src={src} alt={alt} fill className={cn('h-full w-full object-cover',borderRadius ,labelClassName)}/>
-    </AspectRatio>
+    <div className='flex justify-center'> 
+        {ratio ? 
+            (<AspectRatio ratio={ratioNumber}>
+                {Img}
+            </AspectRatio>
+            ):(
+                Img
+            ) 
+        }       
+    </div>
 )
 }
 export { IGRPImage,type IGRPImageProps }

@@ -11,7 +11,7 @@ export default {
     height: { control: 'number' },
     labelClassName: { control: 'text' },
     ratio: { control: 'select',
-      options: ['1/1', '4/3', '16/9', '21/9'],
+      options: ['1/1', '4/3', '16/9', '21/9',undefined],
       description: 'Image ratio',
       default: '16/9',
      },
@@ -34,7 +34,32 @@ const Template: StoryFn<IGRPImageProps> = (args) => (
 export const Default: StoryObj<IGRPImageProps> = {
   render: Template,
   args: {
-    src: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQf_HNkqoUPKhNV0qukwpQFXeBap9onZrkNRA&s',
-    ratio:1/1,
+    src: 'src/stories/assets/gradient.png',
+    width:200,
+    height:200,
+  },
+};
+export const LabelClassName: StoryObj<IGRPImageProps> = {
+  render: Template,
+  args: {
+    src: 'src/stories/assets/gradient.png',
+    width:200,
+    height:200,
+    labelClassName: 'mask-t-from-50%'
+  },
+};
+export const Ratio: StoryObj<IGRPImageProps> = {
+  render: Template,
+  args: {
+    src: 'src/stories/assets/gradient.png',
+    ratio:4/3,
+  },
+};
+export const BorderRadius: StoryObj<IGRPImageProps> = {
+  render: Template,
+  args: {
+    src: 'src/stories/assets/gradient.png',
+    ratio:21/9,
+    borderRadius:'rounded-3xl'
   },
 };

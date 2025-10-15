@@ -441,6 +441,9 @@ export {
   IGRPDropdownMenuSubTrigger,
   IGRPDropdownMenuSubContent,
 } from './components/horizon/dropdown-menu';
+
+export { type IGRPEmbedVideoProps, IGRPEmbedVideo } from './components/horizon/embed-video'
+
 export {
   type IGRPFormContextValue,
   useIGRPFormContext,

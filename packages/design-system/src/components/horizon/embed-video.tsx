@@ -3,37 +3,71 @@ import { cn } from '../../lib/utils';
 import { IGRPCard,IGRPCardContent } from './card';
 
 interface IGRPEmbedVideoProps {
-  displayMode?: 'aspect-video' | 'aspect-square ' | 'aspect-auto' | 'aspect-3/2';
+  displayMode?:string;
   src: string;
   title: string;
+  loading?: "eager" | "lazy" | undefined;
+  allow?: string;
+  allowFullScreen: boolean;
+  allowTransparency: boolean;
+  autoplay?: boolean;
+  muted?: boolean;
+  controls?: boolean;
+  loop?: boolean
 }
-function convertYouTubeLink(url: string) {
-    // Extrai o ID do vídeo (após "v=")
-    const match = url.match(/v=([^&]+)/);
-    if (match && match[1]) {
-      return `https://www.youtube.com/embed/${match[1]}`;
-    }
-    return url; // se não for link válido, devolve o original
-  }
 
 
 function IGRPEmbedVideo({
-    displayMode='aspect-auto',
-    src = 'string',
-    title= 'Video'
+    displayMode = 'aspect-auto',
+    src,
+    title,
+    loading = undefined,
+    allow,
+    allowFullScreen,
+    allowTransparency,
+    autoplay = false,
+    muted = false,
+    controls = true,
+    loop = false,
 }:IGRPEmbedVideoProps){
-    const srcembed = convertYouTubeLink(src);
+
+  const baseUrl = src.split('?')[0];
+
+  const allowValue = Array.isArray(allow) ? allow.join(' ') : allow;
+  console.log(allow)
+  console.log(allowValue)
+
+  const params = new URLSearchParams({
+    autoplay: autoplay ? '1' : '0',
+    mute: muted ? '1' : '0',
+    controls: controls ? '1' : '0',
+    loop: loop ? '1' : '0',
+  });
+
+  const finalSrc = `${baseUrl}?${params.toString()}`;
+
+  const displayNumber = {
+    '1/1':'aspect-square',
+    '4/3':'aspect-[4/3]',
+    '16/9':'aspect-16/9',
+    '21/9':'aspect-21/9',
+    '3/2':'aspect-3/2',
+    'auto':'aspect-auto',
+  }[displayMode]
     return <>
     <IGRPCard>
-            <IGRPCardContent> 
-            <iframe
-                src={srcembed}
-                className={cn("w-full h-full border-0",displayMode)}        
-                title={title}
-                loading="lazy"
-                allowFullScreen
-                />
-            </IGRPCardContent>
+      <IGRPCardContent> 
+        <iframe
+          key={`${src}-${allowFullScreen}-${allow}-${allowTransparency}-${loading}`}
+            src={finalSrc}
+            className={cn("w-full h-full border-0",displayNumber)}        
+            title={title}
+            loading={loading}
+            allowFullScreen={allowFullScreen}
+            allowTransparency={allowTransparency}
+            allow={allowValue}
+            />
+      </IGRPCardContent>
     </IGRPCard>
     </>
 }

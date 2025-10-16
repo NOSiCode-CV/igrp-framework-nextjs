@@ -3,35 +3,115 @@ import type { IGRPBaseAttributes } from '../../types';
 import { Avatar, AvatarImage, AvatarFallback } from '../primitives/avatar';
 import { IGRPColors, type IGRPColorRole, type IGRPColorVariants } from '../../lib/colors';
 import { cn } from '../../lib/utils';
-import { IGRPIcon } from './icon';
+import { IGRPIcon, type IGRPIconName } from './icon';
 import { Button } from '../primitives/button';
-import {  IGRPBadge } from './badge';
+import { IGRPBadge } from './badge';
+import { cva } from 'class-variance-authority';
 
-interface IGRPAvatarProps extends IGRPBaseAttributes  {
+function convertFallback(fallback?: string) {
+  var upperFallback = fallback
+    ? fallback
+        .split(' ')
+        .slice(0, 2)
+        .map((word) => word.charAt(0))
+        .join('')
+        .toUpperCase()
+    : ' ';
+  return upperFallback;
+}
+
+const sizeClasses = cva('',{
+  variants: {
+    size: {
+      sm: 'h-8 w-8 text-xs',
+      md: 'h-12 w-12 text-sm',
+      lg: 'h-16 w-16 text-base',
+      xl: 'h-24 w-24 text-lg',
+    },
+  },
+  defaultVariants: {
+    size: 'md',
+  },
+});
+
+const iconSize = cva('',{
+  variants: {
+    size: {
+      sm: 'h-3 w-3 text-xs',
+      md: 'h-5 w-5 text-sm',
+      lg: 'h-6 w-6 text-base',
+      xl: 'h-10 w-10 text-lg',
+    },
+  },
+  defaultVariants: {
+    size: 'md',
+  },
+});
+
+const iconPosition = cva('',{
+  variants: {
+    size: {
+      sm: '-top-1 left-5',
+      md: '-top-1 left-8',
+      lg: '-top-3 left-11',
+      xl: '-top-4 left-16',
+    },
+  },
+  defaultVariants: {
+    size: 'md',
+  },
+});
+
+const statusPosition = cva('',{
+  variants: {
+    size: {
+      sm: 'left-5',
+      md: 'left-8',
+      lg: 'left-11',
+      xl: '-end-2.5',
+    },
+  },
+  defaultVariants: {
+    size: 'md',
+  },
+});
+
+
+interface IGRPAvatarProps extends IGRPBaseAttributes {
   src?: string;
-  size?:string;
+  size?: 'sm' | 'md' | 'lg' | 'xl';
   alt?: string;
   fallback?: string;
   fallbackClassName?: string;
-  fallbackIcon?: string;
+  fallbackIcon?: IGRPIconName;
   hasFallbackIcon?: boolean;
   hasStatus?: boolean;
   status: IGRPColorVariants;
   showIcon?: boolean;
-  iconName?: string;
+  iconName?: IGRPIconName;
   showBadge?: boolean;
-  className?: string,
+  className?: string;
   badgeNumber?: number;
   iconNumber?: string;
   multiple?: number;
   badgeColor: IGRPColorVariants;
+  iconColor: string
   badgeVariant?: IGRPColorRole;
   badgeShowIcon?: boolean;
-  badgeIconName ?: string;
-  differentRadius?: string;
+  badgeIconName?: string;
+  differentRadius?:
+    | 'rounded-none'
+    | 'rounded-sm'
+    | 'rounded'
+    | 'rounded-md'
+    | 'rounded-lg'
+    | 'rounded-xl'
+    | 'rounded-2xl'
+    | 'rounded-3xl'
+    | 'rounded-full';
 }
 function IGRPAvatar({
-  src ="igrp",
+  src = 'igrp',
   fallback,
   hasStatus = false,
   showBadge = false,
@@ -40,100 +120,66 @@ function IGRPAvatar({
   iconName = 'Check',
   className,
   iconClassName,
-  size ='md',
+  size = 'md',
   fallbackIcon = 'User',
   hasFallbackIcon = false,
   fallbackClassName,
   badgeColor = 'primary',
   badgeVariant = 'solid',
-  badgeNumber =  6,
+  badgeNumber = 6,
   badgeShowIcon = false,
   badgeIconName = 'Info',
   differentRadius = 'rounded-full',
+  iconColor = '#000000',
 }: IGRPAvatarProps) {
   const colorClasses = IGRPColors['solid'][status];
-  const upperFallBack = fallback ?  
-    fallback.split(" ")
-    .slice(0,2)                  
-    .map(word => word.charAt(0))
-    .join("")        
-    .toUpperCase() : " " ; 
-
-    const sizeClasses = {
-      sm: 'h-8 w-8 text-xs',
-      md: 'h-12 w-12 text-sm',
-      lg: 'h-16 w-16 text-base',
-      xl: 'h-24 w-24 text-lg',
-    }[size]
-  
-    const iconSize = {
-      sm: 'h-3 w-3',
-      md: 'h-5 w-5',
-      lg: 'h-6 w-6',
-      xl: 'h-10 w-10',
-    }[size]
-
-    const iconPosition ={
-       sm: '-top-1 left-5',
-       md: '-top-1 left-8',
-       lg: '-top-3 left-11',
-       xl: '-top-4 left-16',
-    }[size]
-
-    const statusPosition ={
-       sm: '-top-1 left-5',
-       md: '-top-1 left-8',
-       lg: '-top-3 left-11',
-       xl: '-top-4 -end-2.5',
-    }[size]
-
+  const upperFallBack = convertFallback(fallback);
   
   return (
     <div className={cn('flex items-center justify-center rounded-full p-1 w-10 h-10')}>
-      <Avatar className={cn('overflow-visible', className,sizeClasses)}>
-        <AvatarImage src={src} className={cn(' ',differentRadius)} alt="avatar"  />
-        <AvatarFallback 
-        //  style={{ '--size': `${size}px` } as React.CSSProperties}
-           className={cn('',differentRadius)}
-        >
+      <Avatar className={cn('overflow-visible', className, sizeClasses({ size }))}>
+        <AvatarImage src={src} className={cn(' ', differentRadius)} alt="avatar" />
+        <AvatarFallback className={cn('', differentRadius)}>
           {hasFallbackIcon && (
-          <IGRPIcon iconName={fallbackIcon}    
-            // style={{ '--size': `${size}px` } as React.CSSProperties}
-            className={cn(sizeClasses,fallbackClassName)} //'top-[calc(var(size)*0.05)] left-[calc(var(size)*0.05)]'
- 
-            />)}
-            {!hasFallbackIcon && upperFallBack}
+            <IGRPIcon iconName={fallbackIcon} className={cn(sizeClasses({ size }), fallbackClassName)} />
+          )}
+          {!hasFallbackIcon && upperFallBack}
         </AvatarFallback>
         {hasStatus && (
           <span
             className={cn(
-              'border-background absolute -end-0.5 -bottom-0.5 size-3 rounded-full border-2 bg-emerald-500',
-              colorClasses.bgForeground ? colorClasses.bgForeground : '',iconSize
+              'border-background absolute -end-0.5 -bottom-0.5 size-3 rounded-full border-2',
+              statusPosition({ size }),
+              iconSize({ size }),
+              colorClasses.bgForeground ? colorClasses.bgForeground : '',
             )}
           >
             <span className="sr-only"></span>
           </span>
         )}
         {showIcon && (
-          <div className={cn('absolute border-2 bg-white',iconPosition,iconClassName)}>
-            <IGRPIcon iconName={iconName} className={cn(iconSize,iconClassName  )}
-              style={{ '--size': `${size}px` } as React.CSSProperties}
+          <div className={cn('absolute border-2 bg-white',iconSize({ size }), iconPosition({ size }), iconClassName)}>
+            <IGRPIcon
+              iconName={iconName}
+              color={iconColor}
+              size={iconSize({ size })}
+              className={cn(iconClassName)}
             />
           </div>
-        )}  
+        )}
         {showBadge && !showIcon && (
           <IGRPBadge
-              badgeClassName={cn('absolute -top-2 left-full min-w-5 -translate-x-3 px-1',iconSize)}
-              color={badgeColor}
-              variant={badgeVariant}
-              showIcon={badgeShowIcon}
-              iconName={badgeIconName}
-            >
-              {badgeNumber}
+            badgeClassName={cn('absolute -top-2 left-full min-w-5 -translate-x-3 px-1',iconPosition({ size }), iconSize({ size }))}
+            color={badgeColor}
+            variant={badgeVariant}
+            showIcon={badgeShowIcon}
+            iconName={badgeIconName}
+          >
+            {badgeNumber}
           </IGRPBadge>
         )}
       </Avatar>
     </div>
   );
 }
-export { IGRPAvatar, type IGRPAvatarProps ,Button};
+export { IGRPAvatar, type IGRPAvatarProps, Button };

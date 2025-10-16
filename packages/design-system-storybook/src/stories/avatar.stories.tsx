@@ -5,7 +5,6 @@ import {
   IGRPIconObject
 } from '@igrp/igrp-framework-react-design-system';
 import { IGRPButtonPrimitive } from '@igrp/igrp-framework-react-design-system';
-import { findAllByTestId } from 'storybook/internal/test';
 
 const avatars = [
   { src: 'https://cdn-icons-png.flaticon.com/512/168/168726.png', fallback: 'A' },
@@ -66,7 +65,7 @@ export default {
     iconName: {
       control: 'select',
       options: IGRPIconObject,
-      description: 'Select an icon',
+      description: 'Select an icon as Fallback',
       defaultValue: 'Check',
     },
     iconClassName: { 
@@ -84,13 +83,13 @@ export default {
       control: 'select',
       options: ['solid', 'outline', 'ghost'] ,
       description: 'Select Badge Color',
-      defaultValue: 'User',
+      defaultValue: 'solid',
     },
     badgeColor: {
       control: 'select',
       options: ['primary', 'success', 'destructive', 'warning', 'info', 'secondary', 'indigo'],
       description: 'Select Badge Color',
-      defaultValue: 'User',
+      defaultValue: 'primary',
     },
     badgeShowIcon: {
       control: 'boolean',
@@ -112,6 +111,10 @@ export default {
       options: [true, false],
       description: 'If Avatar has Icon',
       defaultValue: 'False',
+    },
+    iconColor: {
+      control: 'color' ,
+      description: 'Select Badge Color',
     },
     fallbackClassName: {
       control: 'text',
@@ -140,14 +143,15 @@ export const Default: StoryObj<IGRPAvatarProps> = {
     className: 'overflow-visible',
     fallback: 'Avatar Aang',
     iconName: 'Check',
-    size: 'xl',
+    size: 'md',
     hasStatus:true,
-    hasFallbackIcon:true,
-    showIcon:false,    
+    hasFallbackIcon:false,
+    showIcon:true,    
     fallbackIcon:'User',
     iconClassName:'rounded-full',
     showBadge	:false,
     badgeColor:'destructive',
+    iconColor:'#000000',
     badgeVariant:'solid',
     badgeNumber: 6,
     status:'success',
@@ -160,9 +164,9 @@ export const AvatarShape: StoryObj<IGRPAvatarProps> = {
   args: {
     src: 'https://originui.com/avatar-80-04.jpg',
     fallback: 'AV',
-
     iconName: 'Check',
     status: 'success',
+    differentRadius:'rounded-lg',
   },
 };
 
@@ -235,6 +239,7 @@ export const MultipleBadge: Story = {
           fallback={avatar.fallback}
           hasStatus={false}
           status='primary'
+          iconColor='primary'
           showIcon={false}
           iconSize={0}
           showBadge={false}
@@ -245,10 +250,11 @@ export const MultipleBadge: Story = {
       ))}
       {remaining > 0 && (
         <IGRPButtonPrimitive
-          className='bg-secondary text-muted-foreground ring-background hover:bg-secondary hover:text-foreground flex size-10 items-center justify-center rounded-full text-xs ring-2'
+          className='bg-secondary text-muted-foreground ring-background hover:bg-secondary hover:text-foreground flex size-10 items-center justify-center rounded-full text-md ring-2 ps-3'
+          variant='ghost'
           size='icon'
         >
-          +3s
+          +3
         </IGRPButtonPrimitive>
       )}
     </div>
@@ -267,6 +273,7 @@ export const MultipleBadgeWithText: Story = {
           fallback={avatar.fallback}
           hasStatus={false}
           status='primary'
+          iconColor='primary'
           showIcon={false}
           iconSize={0}
           showBadge={false}

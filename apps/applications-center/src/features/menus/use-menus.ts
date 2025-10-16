@@ -1,9 +1,9 @@
-import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
-import { IGRPMenuCRUDArgs } from "@igrp/framework-next-types";
-import {
+import type { IGRPMenuCRUDArgs } from "@igrp/framework-next-types";
+import type {
   MenuFilters,
   UpdateMenuRequest,
 } from "@igrp/platform-access-management-client-ts";
+import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 
 import { createMenu, deleteMenu, getMenus, updateMenu } from "@/actions/menus";
 

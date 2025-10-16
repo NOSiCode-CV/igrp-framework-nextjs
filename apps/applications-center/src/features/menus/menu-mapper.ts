@@ -1,12 +1,12 @@
 import type {
+  IGRPMenuCRUDArgs,
+  IGRPStatus,
+  IGRPTargetType,
+} from "@igrp/framework-next-types";
+import type {
   ApiResponse,
   MenuEntryDTO,
 } from "@igrp/platform-access-management-client-ts";
-import type {
-  IGRPStatus,
-  IGRPMenuCRUDArgs,
-  IGRPTargetType,
-} from "@igrp/framework-next-types";
 
 const mapMenuCRUD = (menu: MenuEntryDTO): IGRPMenuCRUDArgs => ({
   id: menu.id as number,

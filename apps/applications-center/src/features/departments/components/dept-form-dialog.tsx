@@ -1,43 +1,41 @@
 "use client";
 
-import { useEffect } from "react";
-import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
-
 import {
-  IGRPDialogPrimitive,
+  IGRPButton,
+  IGRPButtonPrimitive,
   IGRPDialogContentPrimitive,
   IGRPDialogDescriptionPrimitive,
   IGRPDialogFooterPrimitive,
   IGRPDialogHeaderPrimitive,
+  IGRPDialogPrimitive,
   IGRPDialogTitlePrimitive,
-  IGRPButtonPrimitive,
-  IGRPFormPrimitive,
   IGRPFormControlPrimitive,
   IGRPFormFieldPrimitive,
   IGRPFormItemPrimitive,
   IGRPFormLabelPrimitive,
+  IGRPFormMessagePrimitive,
+  IGRPFormPrimitive,
+  IGRPIcon,
   IGRPInputPrimitive,
-  IGRPTextAreaPrimitive,
-  IGRPSelectPrimitive,
   IGRPSelectContentPrimitive,
   IGRPSelectItemPrimitive,
+  IGRPSelectPrimitive,
   IGRPSelectTriggerPrimitive,
   IGRPSelectValuePrimitive,
+  IGRPTextAreaPrimitive,
   useIGRPToast,
-  IGRPFormMessagePrimitive,
-  IGRPButton,
-  IGRPIcon,
 } from "@igrp/igrp-framework-react-design-system";
-
+import { useEffect } from "react";
+import { useForm } from "react-hook-form";
+import { STATUS_OPTIONS } from "@/lib/constants";
+import { statusSchema } from "@/schemas/global";
 import {
-  DepartmentArgs,
+  type DepartmentArgs,
   departmentSchema,
   normalizeDeptartment,
 } from "../dept-schemas";
-import { statusSchema } from "@/schemas/global";
 import { useCreateDepartment, useUpdateDepartment } from "../use-departments";
-import { STATUS_OPTIONS } from "@/lib/constants";
 
 interface DepartmentCreateDialogProps {
   open: boolean;

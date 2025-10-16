@@ -1,6 +1,6 @@
+import type { Status } from "@igrp/platform-access-management-client-ts";
 import { z } from "zod";
 import { emptyToNull, statusSchema } from "@/schemas/global";
-import { Status } from "@igrp/platform-access-management-client-ts";
 
 export const roleSchema = z.object({
   id: z.number().optional(),

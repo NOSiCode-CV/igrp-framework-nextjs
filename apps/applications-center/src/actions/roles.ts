@@ -1,13 +1,13 @@
 "use server";
 
-import {
+import type {
   CreateRoleRequest,
   RoleFilters,
   UpdateRoleRequest,
 } from "@igrp/platform-access-management-client-ts";
-import { RoleArgs } from "@/features/roles/role-schemas";
+import type { PermissionArgs } from "@/features/permission/permissions-schemas";
+import type { RoleArgs } from "@/features/roles/role-schemas";
 import { getClientAccess } from "./access-client";
-import { PermissionArgs } from "@/features/permission/permissions-schemas";
 
 export async function getRoles(params: RoleFilters) {
   console.log({ RoleFilters: params });

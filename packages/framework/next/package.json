@@ -36,7 +36,7 @@
     "@igrp/framework-next-types": "0.1.0-beta.23",
     "@igrp/framework-next-ui": "0.1.0-beta.23",
     "@igrp/framework-next-auth": "0.1.0-beta.23",
-    "@igrp/platform-access-management-client-ts": "0.1.0-beta.39",
+    "@igrp/platform-access-management-client-ts": "0.1.0-beta.40",
     "clsx": "^2.1.1",
     "next-themes": "^0.4.6",
     "tailwind-merge": "^3.3.1"

@@ -1,9 +1,9 @@
 import {
-  IGRPTooltipPrimitive,
+  IGRPButton,
   IGRPTooltipContentPrimitive,
+  IGRPTooltipPrimitive,
   IGRPTooltipProviderPrimitive,
   IGRPTooltipTriggerPrimitive,
-  IGRPButton,
 } from "@igrp/igrp-framework-react-design-system";
 
 type ButtonTooltipProps = React.ComponentProps<typeof IGRPButton> & {

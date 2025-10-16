@@ -1,6 +1,6 @@
+import type { DepartmentStatus } from "@igrp/platform-access-management-client-ts";
 import { z } from "zod";
 import { emptyToNull, statusSchema, trimmed } from "@/schemas/global";
-import { DepartmentStatus } from "@igrp/platform-access-management-client-ts";
 
 export const departmentSchema = z
   .object({

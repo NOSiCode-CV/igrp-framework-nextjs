@@ -1,6 +1,6 @@
-import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
-import { UpdateApplicationRequest } from "@igrp/platform-access-management-client-ts";
-import { IGRPApplicationArgs } from "@igrp/framework-next-types";
+// import type { IGRPApplicationArgs } from "@igrp/framework-next-types";
+import type { UpdateApplicationRequest } from "@igrp/platform-access-management-client-ts";
+import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 
 import {
   createApplication,
@@ -8,7 +8,7 @@ import {
   getApplications,
   updateApplication,
 } from "@/actions/applications";
-import { ApplicationArgs } from "./app-schemas";
+import type { ApplicationArgs } from "./app-schemas";
 
 export const useApplications = () => {
   return useQuery<ApplicationArgs[]>({

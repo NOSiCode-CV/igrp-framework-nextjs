@@ -1,24 +1,24 @@
 "use client";
 
 import {
-  IGRPCardPrimitive,
+  IGRPBadge,
   IGRPCardContentPrimitive,
   IGRPCardDescriptionPrimitive,
   IGRPCardHeaderPrimitive,
+  IGRPCardPrimitive,
   IGRPCardTitlePrimitive,
   IGRPSeparatorPrimitive,
-  IGRPBadge,
+  type IGRPTabItem,
   IGRPTabs,
-  IGRPTabItem,
 } from "@igrp/igrp-framework-react-design-system";
-import { PageHeader } from "@/components/page-header";
-import { RolesList } from "../../roles/components/role-list";
-import { ROUTES } from "@/lib/constants";
-import { useDepartmentByCode } from "../use-departments";
+import { CopyToClipboard } from "@/components/copy-to-clipboard";
 import { AppCenterLoading } from "@/components/loading";
 import { AppCenterNotFound } from "@/components/not-found";
-import { CopyToClipboard } from "@/components/copy-to-clipboard";
+import { PageHeader } from "@/components/page-header";
 import { PermissionList } from "@/features/permission/components/permission-list";
+import { ROUTES } from "@/lib/constants";
+import { RolesList } from "../../roles/components/role-list";
+import { useDepartmentByCode } from "../use-departments";
 
 // TODO: See user to create a conetext for get the user all time the user is login
 export function DepartmentDetails({ code }: { code: string }) {
@@ -45,7 +45,7 @@ export function DepartmentDetails({ code }: { code: string }) {
 
   const { name, description, status } = department;
 
-  let parentName;
+  let parentName: string | undefined;
 
   if (loadingParentDept) parentName = "A carregar...";
   if (parentDeptError) parentName = "Erro ao carregar Departamento Pai.";

@@ -1,6 +1,6 @@
 import { IGRPAuthCarousel, IGRPAuthForm } from "@igrp/framework-next-ui";
 
-import { loginConfig, carouselItems } from "@/config/login";
+import { carouselItems, loginConfig } from "@/config/login";
 import { siteConfig } from "@/config/site";
 import { cn } from "@/lib/utils";
 

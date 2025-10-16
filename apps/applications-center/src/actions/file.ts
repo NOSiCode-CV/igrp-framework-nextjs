@@ -1,6 +1,6 @@
 "use server";
 
-import { UploadFileOptions } from "@igrp/platform-access-management-client-ts";
+import type { UploadFileOptions } from "@igrp/platform-access-management-client-ts";
 import { getClientAccess } from "./access-client";
 
 export async function getFileUrl(path: string) {

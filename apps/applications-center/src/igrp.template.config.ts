@@ -1,9 +1,8 @@
 import { igrpBuildConfig } from "@igrp/framework-next";
-import {
+import type {
   IGRPConfigArgs,
   IGRPLayoutConfigArgs,
 } from "@igrp/framework-next-types";
-
 import { fontVariables } from "@/lib/fonts";
 import { getMockApps } from "@/temp/applications/use-mock-apps";
 import { getMockMenus } from "@/temp/menus/use-mock-menus";
@@ -21,8 +20,6 @@ export function createConfig(
   function basePath(bp: string) {
     if (!bp) return "/api/auth";
 
-    console.log({ bp });
-
     if (bp.startsWith("/") && bp.endsWith("/")) return `${bp}api/auth`;
     if (bp.startsWith("/") && !bp.endsWith("/")) return `${bp}/api/auth/`;
     if (!bp.startsWith("/") && bp.endsWith("/")) return `/${bp}api/auth`;
@@ -31,7 +28,7 @@ export function createConfig(
 
   return igrpBuildConfig({
     appCode: process.env.IGRP_APP_CODE || "",
-    previewMode: process.env.IGRP_PREVIEW_MODE === "true" ? true : false,
+    previewMode: process.env.IGRP_PREVIEW_MODE === "true",
     layoutMockData: {
       getHeaderData: async () => ({
         user: user,

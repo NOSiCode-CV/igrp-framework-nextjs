@@ -1,6 +1,6 @@
 import {
   IGRPIcon,
-  IGRPIconProps,
+  type IGRPIconProps,
 } from "@igrp/igrp-framework-react-design-system";
 
 export interface AppCenterNotFoundProps {

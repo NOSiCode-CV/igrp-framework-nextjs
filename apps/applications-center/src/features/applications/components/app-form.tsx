@@ -1,62 +1,61 @@
 "use client";
 
-import { useMemo, useState } from "react";
-import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { useRouter } from "next/navigation";
 import {
-  IGRPCardPrimitive,
+  cn,
+  IGRPBadgePrimitive,
+  IGRPButton,
+  IGRPButtonPrimitive,
   IGRPCardContentPrimitive,
   IGRPCardFooterPrimitive,
-  IGRPSelectTriggerPrimitive,
-  IGRPFormPrimitive,
+  IGRPCardPrimitive,
+  IGRPCommandGroupPrimitive,
+  IGRPCommandInputPrimitive,
+  IGRPCommandItemPrimitive,
+  IGRPCommandListPrimitive,
+  IGRPCommandPrimitive,
+  IGRPFormControlPrimitive,
   IGRPFormFieldPrimitive,
   IGRPFormItemPrimitive,
   IGRPFormLabelPrimitive,
-  IGRPFormControlPrimitive,
   IGRPFormMessagePrimitive,
+  IGRPFormPrimitive,
+  IGRPIcon,
   IGRPInputPrimitive,
-  IGRPSelectPrimitive,
+  IGRPPopoverContentPrimitive,
+  IGRPPopoverPrimitive,
+  IGRPPopoverTriggerPrimitive,
   IGRPSelectContentPrimitive,
   IGRPSelectItemPrimitive,
+  IGRPSelectPrimitive,
+  IGRPSelectTriggerPrimitive,
   IGRPSelectValuePrimitive,
   IGRPTextAreaPrimitive,
   useIGRPToast,
-  IGRPButton,
-  IGRPPopoverPrimitive,
-  IGRPPopoverTriggerPrimitive,
-  IGRPPopoverContentPrimitive,
-  IGRPCommandPrimitive,
-  IGRPCommandInputPrimitive,
-  IGRPCommandListPrimitive,
-  IGRPCommandGroupPrimitive,
-  IGRPCommandItemPrimitive,
-  IGRPBadgePrimitive,
-  IGRPButtonPrimitive,
-  IGRPIcon,
-  cn,
 } from "@igrp/igrp-framework-react-design-system";
-import { Control, FieldPath } from "react-hook-form";
+import { useRouter } from "next/navigation";
+import { useMemo, useState } from "react";
+import { type Control, type FieldPath, useForm } from "react-hook-form";
 
 import { FileUploadField } from "@/components/file-upload-field";
 import { AppCenterLoading } from "@/components/loading";
-import { ROUTES, STATUS_OPTIONS } from "@/lib/constants";
+import {
+  type ApplicationArgs,
+  appTypeCrud,
+  FormSchema,
+  type FormVals,
+  normalizeApplication,
+} from "@/features/applications/app-schemas";
 import {
   useCreateApplication,
   useUpdateApplication,
 } from "@/features/applications/use-applications";
-import {
-  ApplicationArgs,
-  FormSchema,
-  FormVals,
-  appTypeCrud,
-  normalizeApplication,
-} from "@/features/applications/app-schemas";
-import { useUsers } from "@/features/users/use-users";
 import { useDepartments } from "@/features/departments/use-departments";
-import { APPLICATIONS_TYPES_FILTERED } from "../app-utils";
-import { statusSchema } from "@/schemas/global";
 import { useUploadPrivateFiles } from "@/features/files/use-files";
+import { useUsers } from "@/features/users/use-users";
+import { ROUTES, STATUS_OPTIONS } from "@/lib/constants";
+import { statusSchema } from "@/schemas/global";
+import { APPLICATIONS_TYPES_FILTERED } from "../app-utils";
 
 export function ApplicationForm({
   application,
@@ -115,16 +114,6 @@ export function ApplicationForm({
 
   const type = form.watch("type");
 
-  const toggleInArray = (arr: string[] | undefined, value: string) => {
-    const set = new Set(arr ?? []);
-    set.has(value) ? set.delete(value) : set.add(value);
-    return Array.from(set);
-  };
-
-  const removeFromArray = (arr: string[] | undefined, value: string) => {
-    return (arr ?? []).filter((v) => v !== value);
-  };
-
   const handleNameChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const name = e.target.value;
     form.setValue("name", name);
@@ -138,14 +127,14 @@ export function ApplicationForm({
     }
   };
 
-  const isLoading = userLoading || !users || !departments || departmentLoading;
+  const isLoading = userLoading || !departments || departmentLoading;
 
-  if (isLoading)
+  if (isLoading )
     return <AppCenterLoading descrption="A preparar dados da aplicação..." />;
   if (userError) throw userError;
   if (departmentError) throw departmentError;
 
-  const userOptions = users.map((user) => {
+  const userOptions = users?.map((user) => {
     return {
       value: user.username,
       label: user.name,
@@ -159,7 +148,7 @@ export function ApplicationForm({
     };
   });
 
-  const disabledFields = application ? true : false;
+  const disabledFields = !!application;
 
   const disabledBtn =
     form.formState.isSubmitting ||
@@ -309,7 +298,7 @@ export function ApplicationForm({
                         </IGRPSelectTriggerPrimitive>
                       </IGRPFormControlPrimitive>
                       <IGRPSelectContentPrimitive>
-                        {userOptions.map((user) => (
+                        {userOptions?.map((user) => (
                           <IGRPSelectItemPrimitive
                             key={user.value}
                             value={user.value}
@@ -357,9 +346,9 @@ export function ApplicationForm({
                         </IGRPSelectTriggerPrimitive>
                       </IGRPFormControlPrimitive>
                       <IGRPSelectContentPrimitive>
-                        {APPLICATIONS_TYPES_FILTERED.map((opt, index) => (
+                        {APPLICATIONS_TYPES_FILTERED.map((opt) => (
                           <IGRPSelectItemPrimitive
-                            key={index}
+                            key={opt.value}
                             value={opt.value}
                           >
                             {opt.label}

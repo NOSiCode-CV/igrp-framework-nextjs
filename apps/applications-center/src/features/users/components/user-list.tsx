@@ -1,10 +1,9 @@
 "use client";
 
-import { useEffect, useId, useRef, useState } from "react";
 import {
+  type ColumnDef,
+  type ColumnFiltersState,
   cn,
-  ColumnDef,
-  ColumnFiltersState,
   IGRPButtonPrimitive,
   IGRPDropdownMenuContentPrimitive,
   IGRPDropdownMenuItemPrimitive,
@@ -32,32 +31,33 @@ import {
   IGRPTooltipProviderPrimitive,
   IGRPTooltipTriggerPrimitive,
   IGRPUserAvatar,
-  PaginationState,
-  useIGRPToast,
+  type PaginationState,
+  // useIGRPToast,
 } from "@igrp/igrp-framework-react-design-system";
-import { IGRPUserDTO } from "@igrp/platform-access-management-client-ts";
+import type { IGRPUserDTO } from "@igrp/platform-access-management-client-ts";
 import {
   flexRender,
   getCoreRowModel,
   getFilteredRowModel,
   getPaginationRowModel,
   getSortedRowModel,
-  Row,
+  type Row,
   useReactTable,
 } from "@tanstack/react-table";
+import { useEffect, useId, useRef, useState } from "react";
 
 import { ButtonLink } from "@/components/button-link";
 import { AppCenterLoading } from "@/components/loading";
 import { PageHeader } from "@/components/page-header";
-import { ROUTES } from "@/lib/constants";
+import { UserInviteDialog } from "@/features/users/components/user-invite-dialog";
 import {
-  useUsers,
   useCurrentUser,
   useUserRoles,
+  useUsers,
 } from "@/features/users/use-users";
-import { UserInviteDialog } from "@/features/users/components/user-invite-dialog";
-import { UserRolesDialog } from "./user-role-dialog";
+import { ROUTES } from "@/lib/constants";
 import { getInitials } from "@/lib/utils";
+import { UserRolesDialog } from "./user-role-dialog";
 
 export function UserList() {
   const id = useId();
@@ -240,8 +240,8 @@ export function UserList() {
 
           <IGRPTooltipContentPrimitive className="text-sm p-4">
             <div className="flex max-w-64 max-h-48 flex-col gap-2 overflow-auto">
-              {names.map((n, i) => (
-                <div key={`${username}-${n}-${i}`} className="truncate">
+              {names.map((n) => (
+                <div key={`${username}-${n}-${n}`} className="truncate">
                   {n}
                 </div>
               ))}
@@ -326,6 +326,7 @@ export function UserList() {
                 table.getColumn("name")?.setFilterValue("");
                 inputRef.current?.focus();
               }}
+              type="button"
             >
               <IGRPIcon iconName="CircleX" />
             </button>

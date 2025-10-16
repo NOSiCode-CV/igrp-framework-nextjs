@@ -1,4 +1,3 @@
-/* eslint-disable perfectionist/sort-exports */
 'use client';
 
 // IMPORTANT: this file cannot use any wildcard exports because it is wrapped in a `use client` boundary
@@ -695,7 +694,11 @@ export {
 export { IGRPStatsCard, type IGRPStatsCardProps } from './components/horizon/stats-card';
 export { IGRPTable, type IGRPTableProps } from './components/horizon/table';
 export { IGRPTabs, type IGRPTabsProps, type IGRPTabItem } from './components/horizon/tabs';
-export { IGRPToaster, useIGRPToast, type IGRPToastProps } from './components/horizon/toaster';
+export { type IGRPPromiseToastProps, 
+  type PlainToastProps,
+  useIGRPToast,
+  IGRPToaster
+} from './components/horizon/toaster';
 
 export {
   IGRPHeadline,

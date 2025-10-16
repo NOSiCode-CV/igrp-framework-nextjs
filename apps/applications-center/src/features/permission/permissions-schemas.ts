@@ -1,4 +1,4 @@
-import { Status } from "@igrp/platform-access-management-client-ts";
+import type { Status } from "@igrp/platform-access-management-client-ts";
 import { z } from "zod";
 
 export const permissionStatusSchema = z.enum(["ACTIVE", "INACTIVE"]);

@@ -1,5 +1,5 @@
-import { NextRequest, NextResponse } from "next/server";
 import { getServerSession, getToken } from "@igrp/framework-next-auth";
+import { type NextRequest, NextResponse } from "next/server";
 import { authOptions, buildKeycloakEndSessionUrl } from "@/lib/auth-options";
 
 export async function GET() {

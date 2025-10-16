@@ -1,7 +1,4 @@
-import { useEffect } from "react";
-import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
-
 import {
   IGRPButtonPrimitive,
   IGRPDialogContentPrimitive,
@@ -24,14 +21,16 @@ import {
   IGRPTextAreaPrimitive,
   useIGRPToast,
 } from "@igrp/igrp-framework-react-design-system";
+import { useEffect } from "react";
+import { useForm } from "react-hook-form";
 import { STATUS_OPTIONS } from "@/lib/constants";
 import { statusSchema } from "@/schemas/global";
 import {
-  CreateRoleArgs,
+  type CreateRoleArgs,
   createRoleSchema,
   normalizeRole,
-  RoleArgs,
-  UpdateRoleArgs,
+  type RoleArgs,
+  type UpdateRoleArgs,
   updateRoleSchema,
 } from "../role-schemas";
 import { useCreateRole, useUpdateRole } from "../use-roles";

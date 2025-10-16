@@ -1,11 +1,11 @@
 "use client";
 
-import Link, { useLinkStatus } from "next/link";
 import {
   IGRPButtonPrimitive,
-  IGRPIconProps,
   IGRPIcon,
+  type IGRPIconProps,
 } from "@igrp/igrp-framework-react-design-system";
+import Link, { useLinkStatus } from "next/link";
 import { cn } from "@/lib/utils";
 
 type IGRPBtnProps = React.ComponentProps<typeof IGRPButtonPrimitive>;

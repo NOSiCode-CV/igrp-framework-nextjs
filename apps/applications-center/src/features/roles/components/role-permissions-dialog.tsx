@@ -1,27 +1,14 @@
 "use client";
 
-import { useEffect, useId, useMemo, useRef, useState } from "react";
-import {
-  ColumnDef,
-  ColumnFiltersState,
-  FilterFn,
-  flexRender,
-  getCoreRowModel,
-  getPaginationRowModel,
-  getSortedRowModel,
-  getFilteredRowModel,
-  PaginationState,
-  RowSelectionState,
-  useReactTable,
-} from "@tanstack/react-table";
 import {
   cn,
+  IGRPBadge,
   IGRPBadgePrimitive,
   IGRPButtonPrimitive,
   IGRPCheckboxPrimitive,
-  IGRPDialogPrimitive,
   IGRPDialogContentPrimitive,
   IGRPDialogHeaderPrimitive,
+  IGRPDialogPrimitive,
   IGRPDialogTitlePrimitive,
   IGRPIcon,
   IGRPInputPrimitive,
@@ -41,19 +28,31 @@ import {
   IGRPTablePrimitive,
   IGRPTableRowPrimitive,
   useIGRPToast,
-  IGRPBadge,
 } from "@igrp/igrp-framework-react-design-system";
-
-import { showStatus, statusClass } from "@/lib/utils";
-import { RoleArgs } from "@/features/roles/role-schemas";
-import { PermissionArgs } from "@/features/permission/permissions-schemas";
+import {
+  type ColumnDef,
+  type ColumnFiltersState,
+  type FilterFn,
+  flexRender,
+  getCoreRowModel,
+  getFilteredRowModel,
+  getPaginationRowModel,
+  getSortedRowModel,
+  type PaginationState,
+  type RowSelectionState,
+  useReactTable,
+} from "@tanstack/react-table";
+import { useEffect, useId, useMemo, useRef, useState } from "react";
+import { PermissionLoading } from "@/features/permission/components/permission-loading";
+import type { PermissionArgs } from "@/features/permission/permissions-schemas";
 import { usePermissions } from "@/features/permission/use-permission";
+import type { RoleArgs } from "@/features/roles/role-schemas";
+import { showStatus, statusClass } from "@/lib/utils";
 import {
   useAddPermissionsToRole,
-  useRemovePermissionsFromRole,
   usePermissionsByRoleByName,
+  useRemovePermissionsFromRole,
 } from "../use-roles";
-import { PermissionLoading } from "@/features/permission/components/permission-loading";
 
 const multiColumnFilterFn: FilterFn<PermissionArgs> = (
   row,
@@ -145,7 +144,7 @@ function diffPermissions(
   const existingByNorm = new Map(existing.map((p) => [norm(p.name), p.name]));
 
   return {
-    toAdd: toAddNorm.map((n) => selectedByNorm.get(n)!).filter(Boolean),
+    toAdd: toAddNorm.map((n) => selectedByNorm.get(n)).filter(Boolean),
     toRemove: toRemoveNorm.map((n) => existingByNorm.get(n)!).filter(Boolean),
   };
 }
@@ -201,7 +200,7 @@ export function RoleDetails({
   useEffect(() => {
     setData(permissions ?? []);
     setRowSelection({});
-  }, [permissions, departmentCode]);
+  }, [permissions]);
 
   useEffect(() => {
     if (!data?.length) return;
@@ -232,15 +231,6 @@ export function RoleDetails({
     state: { pagination, columnFilters, rowSelection },
   });
 
-  if (error) {
-    return (
-      <div className="rounded-md border py-6">
-        <p className="text-center">Ocorreu um erro ao carregar permissões.</p>
-        <p className="text-center">{error.message}</p>
-      </div>
-    );
-  }
-
   const selectedRows = table.getSelectedRowModel().rows;
   const selectedData = selectedRows.map((r) => r.original);
   const existing = permissionByRole ?? [];
@@ -251,6 +241,15 @@ export function RoleDetails({
   );
 
   const hasChanges = toAdd.length > 0 || toRemove.length > 0;
+
+  if (error) {
+    return (
+      <div className="rounded-md border py-6">
+        <p className="text-center">Ocorreu um erro ao carregar permissões.</p>
+        <p className="text-center">{error.message}</p>
+      </div>
+    );
+  }
 
   async function onSubmit() {
     if (!hasChanges) {
@@ -340,6 +339,7 @@ export function RoleDetails({
                       table.getColumn("name")?.setFilterValue("");
                       inputRef.current?.focus();
                     }}
+                    type="button"
                   >
                     <IGRPIcon iconName="CircleX" />
                   </button>

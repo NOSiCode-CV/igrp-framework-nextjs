@@ -1,16 +1,18 @@
 "use server";
 
-import {
+import type {
   CreateUserRequest,
   UserFilters,
 } from "@igrp/platform-access-management-client-ts";
 import { getClientAccess } from "./access-client";
 
-export async function getUsers(params?: UserFilters) {
+export async function getUsers(params?: UserFilters, ids?: number[]) {
   const client = await getClientAccess();
 
+  console.log({ params, ids });
+
   try {
-    const result = await client.users.getUsers(params);
+    const result = await client.users.getUsers(params, ids );
     return result.data;
   } catch (error) {
     console.error("[users] Erro ao carregar lista de utilizadores.:", error);

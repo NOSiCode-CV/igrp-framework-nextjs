@@ -1,27 +1,20 @@
 "use client";
 
-import { useEffect, useId, useMemo, useRef, useState } from "react";
-import {
-  ColumnDef,
-  ColumnFiltersState,
-  FilterFn,
-  flexRender,
-  getCoreRowModel,
-  getFilteredRowModel,
-  getPaginationRowModel,
-  getSortedRowModel,
-  PaginationState,
-  RowSelectionState,
-  useReactTable,
-} from "@tanstack/react-table";
 import {
   cn,
+  IGRPBadge,
   IGRPBadgePrimitive,
   IGRPButtonPrimitive,
   IGRPCheckboxPrimitive,
-  IGRPDialogPrimitive,
+  IGRPCommandEmptyPrimitive,
+  IGRPCommandGroupPrimitive,
+  IGRPCommandInputPrimitive,
+  IGRPCommandItemPrimitive,
+  IGRPCommandListPrimitive,
+  IGRPCommandPrimitive,
   IGRPDialogContentPrimitive,
   IGRPDialogHeaderPrimitive,
+  IGRPDialogPrimitive,
   IGRPDialogTitlePrimitive,
   IGRPIcon,
   IGRPInputPrimitive,
@@ -29,6 +22,9 @@ import {
   IGRPPaginationContentPrimitive,
   IGRPPaginationItemPrimitive,
   IGRPPaginationPrimitive,
+  IGRPPopoverContentPrimitive,
+  IGRPPopoverPrimitive,
+  IGRPPopoverTriggerPrimitive,
   IGRPSelectContentPrimitive,
   IGRPSelectItemPrimitive,
   IGRPSelectPrimitive,
@@ -41,27 +37,30 @@ import {
   IGRPTablePrimitive,
   IGRPTableRowPrimitive,
   useIGRPToast,
-  IGRPBadge,
-  IGRPPopoverPrimitive,
-  IGRPPopoverTriggerPrimitive,
-  IGRPPopoverContentPrimitive,
-  IGRPCommandPrimitive,
-  IGRPCommandInputPrimitive,
-  IGRPCommandListPrimitive,
-  IGRPCommandGroupPrimitive,
-  IGRPCommandItemPrimitive,
-  IGRPCommandEmptyPrimitive,
 } from "@igrp/igrp-framework-react-design-system";
-
-import { showStatus, statusClass } from "@/lib/utils";
-import { RoleArgs } from "@/features/roles/role-schemas";
-import { useRoles } from "@/features/roles/use-roles";
-import { useDepartments } from "@/features/departments/use-departments";
 import {
-  useUserRoles,
+  type ColumnDef,
+  type ColumnFiltersState,
+  type FilterFn,
+  flexRender,
+  getCoreRowModel,
+  getFilteredRowModel,
+  getPaginationRowModel,
+  getSortedRowModel,
+  type PaginationState,
+  type RowSelectionState,
+  useReactTable,
+} from "@tanstack/react-table";
+import { useEffect, useId, useMemo, useRef, useState } from "react";
+import { useDepartments } from "@/features/departments/use-departments";
+import type { RoleArgs } from "@/features/roles/role-schemas";
+import { useRoles } from "@/features/roles/use-roles";
+import {
   useAddUserRole,
   useRemoveUserRole,
+  useUserRoles,
 } from "@/features/users/use-users";
+import { showStatus, statusClass } from "@/lib/utils";
 
 const norm = (s: string) => s.trim().toLowerCase();
 

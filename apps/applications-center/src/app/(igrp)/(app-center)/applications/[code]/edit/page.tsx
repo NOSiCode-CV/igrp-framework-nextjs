@@ -1,13 +1,12 @@
 "use client";
 
 import { use } from "react";
-
+import { AppCenterLoading } from "@/components/loading";
+import { AppCenterNotFound } from "@/components/not-found";
 import { PageHeader } from "@/components/page-header";
 import { ApplicationForm } from "@/features/applications/components/app-form";
 import { useApplicationByCode } from "@/features/applications/use-applications";
 import { ROUTES } from "@/lib/constants";
-import { AppCenterLoading } from "@/components/loading";
-import { AppCenterNotFound } from "@/components/not-found";
 
 export const dynamic = "force-dynamic";
 

@@ -1,33 +1,34 @@
 "use client";
 
-import { useState } from "react";
 import {
+  cn,
+  IGRPBadgePrimitive,
   IGRPButtonPrimitive,
-  IGRPInputPrimitive,
-  IGRPTablePrimitive,
-  IGRPTableBodyPrimitive,
-  IGRPTableCellPrimitive,
-  IGRPTableHeadPrimitive,
-  IGRPTableHeaderPrimitive,
-  IGRPTableRowPrimitive,
-  IGRPDropdownMenuPrimitive,
+  IGRPDropdownMenuCheckboxItemPrimitive,
   IGRPDropdownMenuContentPrimitive,
   IGRPDropdownMenuItemPrimitive,
   IGRPDropdownMenuLabelPrimitive,
+  IGRPDropdownMenuPrimitive,
   IGRPDropdownMenuSeparatorPrimitive,
   IGRPDropdownMenuTriggerPrimitive,
   IGRPIcon,
-  IGRPDropdownMenuCheckboxItemPrimitive,
-  IGRPBadgePrimitive,
-  cn,
+  IGRPInputPrimitive,
+  IGRPSkeletonPrimitive,
+  IGRPTableBodyPrimitive,
+  IGRPTableCellPrimitive,
+  IGRPTableHeaderPrimitive,
+  IGRPTableHeadPrimitive,
+  IGRPTablePrimitive,
+  IGRPTableRowPrimitive,
 } from "@igrp/igrp-framework-react-design-system";
-import { useRoles } from "../use-roles";
+import { useState } from "react";
 import { ButtonLink } from "@/components/button-link";
-import { RoleFormDialog } from "./role-form-dialog";
-import { RoleDeleteDialog } from "./role-delete-dialog";
-import { RoleArgs } from "../role-schemas";
 import { STATUS_OPTIONS } from "@/lib/constants";
 import { showStatus, statusClass } from "@/lib/utils";
+import type { RoleArgs } from "../role-schemas";
+import { useRoles } from "../use-roles";
+import { RoleDeleteDialog } from "./role-delete-dialog";
+import { RoleFormDialog } from "./role-form-dialog";
 import { RoleDetails } from "./role-permissions-dialog";
 
 interface RolesListProps {
@@ -45,7 +46,7 @@ export function RolesList({ departmentCode }: RolesListProps) {
   const [roleToDelete, setRoleToDelete] = useState<string | null>(null);
   const [statusFilter, setStatusFilter] = useState<string[]>([]);
 
-  const { data: roles, isLoading, error: error } = useRoles({ departmentCode });
+  const { data: roles, isLoading, error } = useRoles({ departmentCode });
 
   const handleNewRole = () => {
     setSelectedRole(undefined);
@@ -84,8 +85,7 @@ export function RolesList({ departmentCode }: RolesListProps) {
   const filteredRoles = roles?.filter((role) => {
     const matchesSearch =
       role.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
-      (role.description &&
-        role.description.toLowerCase().includes(searchTerm.toLowerCase()));
+      role.description?.toLowerCase().includes(searchTerm.toLowerCase());
 
     const matchesStatus =
       statusFilter.length === 0 || statusFilter.includes(role.status);
@@ -187,7 +187,7 @@ export function RolesList({ departmentCode }: RolesListProps) {
           {isLoading ? (
             <div className="grid gap-4 animate-pulse">
               {Array.from({ length: 5 }).map((_, i) => (
-                <div key={i} className="h-12 rounded-lg bg-muted" />
+                <IGRPSkeletonPrimitive key={i} className="h-12 rounded-lg bg-muted" />
               ))}
             </div>
           ) : roleEmpty ? (

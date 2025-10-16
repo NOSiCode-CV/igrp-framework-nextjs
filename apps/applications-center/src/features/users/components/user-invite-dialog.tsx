@@ -1,51 +1,49 @@
 "use client";
 
-import { useEffect, useState } from "react";
-import {
-  IGRPCardContentPrimitive,
-  IGRPCardPrimitive,
-  IGRPIcon,
-  IGRPInputPrimitive,
-  IGRPPopoverTriggerPrimitive,
-  useIGRPToast,
-} from "@igrp/igrp-framework-react-design-system";
+import { zodResolver } from "@hookform/resolvers/zod";
 import {
   IGRPButtonPrimitive,
-  IGRPCommandPrimitive,
+  IGRPCardContentPrimitive,
+  IGRPCardPrimitive,
   IGRPCommandEmptyPrimitive,
   IGRPCommandGroupPrimitive,
   IGRPCommandInputPrimitive,
   IGRPCommandItemPrimitive,
   IGRPCommandListPrimitive,
-  IGRPDialogPrimitive,
+  IGRPCommandPrimitive,
   IGRPDialogContentPrimitive,
   IGRPDialogDescriptionPrimitive,
   IGRPDialogFooterPrimitive,
   IGRPDialogHeaderPrimitive,
+  IGRPDialogPrimitive,
   IGRPDialogTitlePrimitive,
-  IGRPFormPrimitive,
   IGRPFormControlPrimitive,
   IGRPFormFieldPrimitive,
   IGRPFormItemPrimitive,
   IGRPFormLabelPrimitive,
   IGRPFormMessagePrimitive,
-  IGRPPopoverPrimitive,
+  IGRPFormPrimitive,
+  IGRPIcon,
+  IGRPInputPrimitive,
   IGRPPopoverContentPrimitive,
+  IGRPPopoverPrimitive,
+  IGRPPopoverTriggerPrimitive,
   IGRPSeparatorPrimitive,
+  useIGRPToast,
 } from "@igrp/igrp-framework-react-design-system";
-import { cn } from "@/lib/utils";
-import { useInviteUser, useAddUserRole } from "../use-users";
+import { useEffect, useState } from "react";
 import { useFieldArray, useForm } from "react-hook-form";
-import {
-  CreateUserArgs,
-  formSchema,
-  FormSchema,
-  FormUserArgs,
-} from "../user-schema";
-import { zodResolver } from "@hookform/resolvers/zod";
 import { useDepartments } from "@/features/departments/use-departments";
 import { useRoles } from "@/features/roles/use-roles";
+import { cn } from "@/lib/utils";
 import { statusSchema } from "@/schemas/global";
+import { useAddUserRole, useInviteUser } from "../use-users";
+import {
+  type CreateUserArgs,
+  type FormSchema,
+  type FormUserArgs,
+  formSchema,
+} from "../user-schema";
 
 interface UserInviteDialogProps {
   open: boolean;
@@ -104,7 +102,7 @@ export function UserInviteDialog({
   } = useDepartments();
   const {
     data: roles,
-    isLoading: rolesLoading,
+    // isLoading: rolesLoading,
     error: rolesError,
   } = useRoles({ departmentCode: selectedDeptCode });
 

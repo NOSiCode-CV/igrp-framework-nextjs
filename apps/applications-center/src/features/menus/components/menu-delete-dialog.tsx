@@ -1,19 +1,19 @@
 "use client";
 
-import { useState } from "react";
 import {
-  IGRPDialogPrimitive,
+  IGRPButtonPrimitive,
   IGRPDialogContentPrimitive,
   IGRPDialogDescriptionPrimitive,
   IGRPDialogFooterPrimitive,
   IGRPDialogHeaderPrimitive,
+  IGRPDialogPrimitive,
   IGRPDialogTitlePrimitive,
   IGRPIcon,
+  IGRPInputPrimitive,
+  IGRPLabelPrimitive,
   useIGRPToast,
 } from "@igrp/igrp-framework-react-design-system";
-import { IGRPButtonPrimitive } from "@igrp/igrp-framework-react-design-system";
-import { IGRPInputPrimitive } from "@igrp/igrp-framework-react-design-system";
-import { IGRPLabelPrimitive } from "@igrp/igrp-framework-react-design-system";
+import { useState } from "react";
 import { useDeleteMenu } from "../use-menus";
 
 interface MenuDeleteDialogProps {

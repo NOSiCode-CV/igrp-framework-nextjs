@@ -1,6 +1,5 @@
 "use client";
 
-import { useState } from "react";
 import {
   cn,
   IGRPBadgePrimitive,
@@ -14,6 +13,7 @@ import {
   IGRPDropdownMenuTriggerPrimitive,
   IGRPIcon,
   IGRPInputPrimitive,
+  IGRPSkeletonPrimitive,
   IGRPTableBodyPrimitive,
   IGRPTableCellPrimitive,
   IGRPTableHeaderPrimitive,
@@ -21,14 +21,15 @@ import {
   IGRPTablePrimitive,
   IGRPTableRowPrimitive,
 } from "@igrp/igrp-framework-react-design-system";
+import { useState } from "react";
 
 import { ButtonLink } from "@/components/button-link";
-import { usePermissions } from "../use-permission";
 import { STATUS_OPTIONS } from "@/lib/constants";
-import { PermissionArgs } from "../permissions-schemas";
-import { PermissionFormDialog } from "./permisssion-form-dialog";
-import { PermissionDeleteDialog } from "./permisssion-delete-dialog";
 import { showStatus, statusClass } from "@/lib/utils";
+import type { PermissionArgs } from "../permissions-schemas";
+import { usePermissions } from "../use-permission";
+import { PermissionDeleteDialog } from "./permisssion-delete-dialog";
+import { PermissionFormDialog } from "./permisssion-form-dialog";
 
 interface PermissionListProps {
   departmentCode: string;
@@ -181,7 +182,7 @@ export function PermissionList({ departmentCode }: PermissionListProps) {
           {isLoading ? (
             <div className="grid gap-4 animate-pulse">
               {Array.from({ length: 5 }).map((_, i) => (
-                <div key={i} className="h-12 rounded-lg bg-muted" />
+                <IGRPSkeletonPrimitive key={i} className="h-12 rounded-lg bg-muted" />
               ))}
             </div>
           ) : permissionEmpty ? (

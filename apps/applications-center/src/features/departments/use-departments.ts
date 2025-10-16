@@ -1,4 +1,5 @@
-import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
+import type { UpdateDepartmentRequest } from "@igrp/platform-access-management-client-ts";
+import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import {
   createDepartment,
   deleteDepartment,
@@ -6,8 +7,7 @@ import {
   getDepartments,
   updateDepartment,
 } from "@/actions/departaments";
-import { DepartmentArgs } from "./dept-schemas";
-import { UpdateDepartmentRequest } from "@igrp/platform-access-management-client-ts";
+import type { DepartmentArgs } from "./dept-schemas";
 
 export const useDepartments = () => {
   return useQuery<DepartmentArgs[]>({

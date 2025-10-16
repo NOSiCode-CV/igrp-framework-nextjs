@@ -1,10 +1,10 @@
 "use client";
 
-import { useRouter } from "next/navigation";
 import {
   IGRPButtonPrimitive,
   IGRPIcon,
 } from "@igrp/igrp-framework-react-design-system";
+import { useRouter } from "next/navigation";
 
 import { cn } from "@/lib/utils";
 

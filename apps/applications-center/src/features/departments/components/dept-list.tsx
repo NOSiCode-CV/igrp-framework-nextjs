@@ -1,38 +1,37 @@
 "use client";
 
-import { useState } from "react";
-import Link from "next/link";
 import {
-  IGRPDropdownMenuCheckboxItemPrimitive,
-  IGRPInputPrimitive,
-  IGRPButtonPrimitive,
-  IGRPTablePrimitive,
-  IGRPTableBodyPrimitive,
-  IGRPTableCellPrimitive,
-  IGRPTableHeadPrimitive,
-  IGRPTableHeaderPrimitive,
-  IGRPTableRowPrimitive,
-  IGRPIcon,
-  IGRPDropdownMenuPrimitive,
-  IGRPDropdownMenuItemPrimitive,
-  IGRPDropdownMenuContentPrimitive,
-  IGRPDropdownMenuSeparatorPrimitive,
-  IGRPDropdownMenuTriggerPrimitive,
+  cn,
   IGRPBadge,
   IGRPBadgePrimitive,
-  cn,
+  IGRPButtonPrimitive,
+  IGRPDropdownMenuCheckboxItemPrimitive,
+  IGRPDropdownMenuContentPrimitive,
+  IGRPDropdownMenuItemPrimitive,
+  IGRPDropdownMenuPrimitive,
+  IGRPDropdownMenuSeparatorPrimitive,
+  IGRPDropdownMenuTriggerPrimitive,
+  IGRPIcon,
+  IGRPInputPrimitive,
+  IGRPTableBodyPrimitive,
+  IGRPTableCellPrimitive,
+  IGRPTableHeaderPrimitive,
+  IGRPTableHeadPrimitive,
+  IGRPTablePrimitive,
+  IGRPTableRowPrimitive,
 } from "@igrp/igrp-framework-react-design-system";
+import Link from "next/link";
+import { useState } from "react";
 
 import { ButtonLink } from "@/components/button-link";
 import { AppCenterLoading } from "@/components/loading";
 import { PageHeader } from "@/components/page-header";
 import { ROUTES, STATUS_OPTIONS } from "@/lib/constants";
-
-import { DepartmentCreateDialog } from "./dept-form-dialog";
-import { DepartmentDeleteDialog } from "./dept-delete-dialog";
-import { useDepartments } from "../use-departments";
-import { DepartmentArgs } from "../dept-schemas";
 import { showStatus, statusClass } from "@/lib/utils";
+import type { DepartmentArgs } from "../dept-schemas";
+import { useDepartments } from "../use-departments";
+import { DepartmentDeleteDialog } from "./dept-delete-dialog";
+import { DepartmentCreateDialog } from "./dept-form-dialog";
 // import { useCurrentUser } from '@/features/users/use-users';
 
 export function DepartmentList() {

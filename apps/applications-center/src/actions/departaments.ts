@@ -1,11 +1,11 @@
 "use server";
 
-import {
+import type {
   CreateDepartmentRequest,
   UpdateDepartmentRequest,
 } from "@igrp/platform-access-management-client-ts";
 
-import { DepartmentArgs } from "@/features/departments/dept-schemas";
+import type { DepartmentArgs } from "@/features/departments/dept-schemas";
 import { getClientAccess } from "./access-client";
 
 export async function getDepartments() {

@@ -1,12 +1,12 @@
-import Link from "next/link";
 import {
   IGRPButtonPrimitive,
-  IGRPTooltipPrimitive,
+  IGRPIcon,
   IGRPTooltipContentPrimitive,
+  IGRPTooltipPrimitive,
   IGRPTooltipProviderPrimitive,
   IGRPTooltipTriggerPrimitive,
-  IGRPIcon,
 } from "@igrp/igrp-framework-react-design-system";
+import Link from "next/link";
 
 import { cn } from "@/lib/utils";
 

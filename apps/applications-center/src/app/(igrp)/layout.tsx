@@ -1,8 +1,7 @@
 import { IGRPLayout } from "@igrp/framework-next";
-import { redirect } from "next/navigation";
-
-import { configLayout } from "@/actions/igrp/layout";
 import { createConfig } from "@igrp/template-config";
+import { redirect } from "next/navigation";
+import { configLayout } from "@/actions/igrp/layout";
 
 export default async function IGRPRootLayout({
   children,

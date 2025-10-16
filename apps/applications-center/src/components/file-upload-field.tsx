@@ -1,6 +1,7 @@
 "use client";
 
 import {
+  cn,
   IGRPButtonPrimitive,
   IGRPFormControlPrimitive,
   IGRPFormDescriptionPrimitive,
@@ -9,14 +10,12 @@ import {
   IGRPFormMessagePrimitive,
   IGRPIcon,
 } from "@igrp/igrp-framework-react-design-system";
-
-import {
-  useFileUpload,
-  type FileWithPreview,
-} from "../features/files/use-file-upload";
-
 import Image from "next/image";
 import { useEffect, useMemo } from "react";
+import {
+  type FileWithPreview,
+  useFileUpload,
+} from "../features/files/use-file-upload";
 
 export interface FileUploadFieldProps {
   value?: FileWithPreview | null;
@@ -74,14 +73,12 @@ export function FileUploadField(props: FileUploadFieldProps) {
       : null;
   }, [value, files]);
 
-  const previewUrl = files[0]?.preview || null;
-  const fileName = files[0]?.file.name || null;
+  const previewUrl = current?.preview || null;
+  const fileName = current?.file.name || null;
 
   useEffect(() => {
     if (!onChange) return;
-    // If the form already controls a value, we only emit when the user selected
-    // something new from the hook (files[0]).
-    const f = files[0];
+    const f = current;
     if (f) {
       onChange({
         id: f.id,
@@ -89,10 +86,8 @@ export function FileUploadField(props: FileUploadFieldProps) {
         preview: f.preview,
       } as FileWithPreview);
     }
-    // If there are no files and no external value, emit null
     if (!f && !value) onChange(null);
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [files]); // intentionally not depending on value/onChange to avoid loops
+  }, [current, value, onChange]);
 
   // 2) When the external form value is cleared (e.g. reset), clear the hook UI
   useEffect(() => {
@@ -126,7 +121,13 @@ export function FileUploadField(props: FileUploadFieldProps) {
               onDrop={disabled ? undefined : handleDrop}
               data-dragging={isDragging || undefined}
               data-disabled={disabled || undefined}
-              className="border-input data-[dragging=true]:bg-accent/50 data-[disabled=true]:opacity-50 data-[disabled=true]:cursor-not-allowed has-[input:focus]:border-ring has-[input:focus]:ring-ring/50 relative flex flex-col items-center justify-center overflow-hidden rounded-xl border border-dashed transition-colors has-[input:focus]:ring-[2px] min-h-25"
+              className={cn(
+                "border-input data-[dragging=true]:bg-accent/50 data-[disabled=true]:opacity-50",
+                "data-[disabled=true]:cursor-not-allowed has-[input:focus]:border-ring",
+                "has-[input:focus]:ring-ring/50 relative flex flex-col items-center justify-center",
+                "overflow-hidden rounded-xl border border-dashed transition-colors",
+                "has-[input:focus]:ring-[2px] min-h-25",
+              )}
             >
               <input
                 {...getInputProps()}

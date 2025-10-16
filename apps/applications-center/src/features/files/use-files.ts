@@ -1,4 +1,4 @@
-import { UploadFileOptions } from "@igrp/platform-access-management-client-ts";
+import type { UploadFileOptions } from "@igrp/platform-access-management-client-ts";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 
 import {

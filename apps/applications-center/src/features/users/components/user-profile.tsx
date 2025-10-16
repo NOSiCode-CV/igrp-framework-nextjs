@@ -2,30 +2,30 @@
 
 import {
   IGRPButtonPrimitive,
-  IGRPCardPrimitive,
   IGRPCardContentPrimitive,
-  IGRPUserAvatar,
-  IGRPIcon,
-  IGRPTabsPrimitive,
-  IGRPTabsContentPrimitive,
-  IGRPCardHeaderPrimitive,
-  IGRPCardTitlePrimitive,
   IGRPCardDescriptionPrimitive,
-  IGRPTabsTriggerPrimitive,
+  IGRPCardHeaderPrimitive,
+  IGRPCardPrimitive,
+  IGRPCardTitlePrimitive,
+  IGRPIcon,
+  IGRPTabsContentPrimitive,
   IGRPTabsListPrimitive,
+  IGRPTabsPrimitive,
+  IGRPTabsTriggerPrimitive,
+  IGRPUserAvatar,
   useIGRPToast,
 } from "@igrp/igrp-framework-react-design-system";
+import { ButtonLink } from "@/components/button-link";
+import { AppCenterLoading } from "@/components/loading";
+import { AppCenterNotFound } from "@/components/not-found";
+import { PageHeader } from "@/components/page-header";
 import {
   useCurrentUser,
   useRemoveUserRole,
   useUserRoles,
 } from "@/features/users/use-users";
-import { getInitials } from "@/lib/utils";
-import { PageHeader } from "@/components/page-header";
 import { ROUTES } from "@/lib/constants";
-import { AppCenterLoading } from "@/components/loading";
-import { ButtonLink } from "@/components/button-link";
-import { AppCenterNotFound } from "@/components/not-found";
+import { getInitials } from "@/lib/utils";
 
 export function UserProfile() {
   const { data: user, isLoading, error: userError } = useCurrentUser();
@@ -177,9 +177,9 @@ export function UserProfile() {
                   <IGRPCardPrimitive className="py-3">
                     <IGRPCardContentPrimitive>
                       <div className="space-y-4">
-                        {userRoles.map((role, index) => (
+                        {userRoles.map((role) => (
                           <div
-                            key={index}
+                            key={role.id}
                             className="flex items-center justify-between rounded-lg border-b p-4"
                           >
                             <div className="flex items-center gap-4">

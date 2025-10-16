@@ -1,19 +1,19 @@
-import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
-import {
-  getRoles,
-  createRole,
-  updateRole,
-  deleteRole,
-  getRoleByName,
-  addPermissionsToRole,
-  getPermissionsByRoleName,
-} from "@/actions/roles";
-import { RoleArgs } from "./role-schemas";
-import {
+import type {
   RoleFilters,
   UpdateRoleRequest,
 } from "@igrp/platform-access-management-client-ts";
-import { PermissionArgs } from "../permission/permissions-schemas";
+import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
+import {
+  addPermissionsToRole,
+  createRole,
+  deleteRole,
+  getPermissionsByRoleName,
+  getRoleByName,
+  getRoles,
+  updateRole,
+} from "@/actions/roles";
+import type { PermissionArgs } from "../permission/permissions-schemas";
+import type { RoleArgs } from "./role-schemas";
 
 type RoleFiltersArgs = RoleFilters & {
   enabled?: boolean;

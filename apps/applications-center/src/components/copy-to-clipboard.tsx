@@ -1,15 +1,15 @@
 "use client";
 
-import { useState } from "react";
 import {
   IGRPButtonPrimitive,
-  IGRPTooltipPrimitive,
+  IGRPIcon,
   IGRPTooltipContentPrimitive,
+  IGRPTooltipPrimitive,
   IGRPTooltipProviderPrimitive,
   IGRPTooltipTriggerPrimitive,
-  IGRPIcon,
   useIGRPToast,
 } from "@igrp/igrp-framework-react-design-system";
+import { useState } from "react";
 import { cn } from "@/lib/utils";
 
 interface CopyToClipboardProps {

@@ -1,12 +1,11 @@
-import { z } from "zod";
-
-import { APPLICATIONS_TYPES, APPLICATIONS_TYPES_EXCLUDE } from "./app-utils";
-import { emptyToNull, statusSchema } from "@/schemas/global";
-import { fileWithPreviewSchema } from "@/features/files/files-schema";
-import {
+import type {
   ApplicationType,
   Status,
 } from "@igrp/platform-access-management-client-ts";
+import { z } from "zod";
+import { fileWithPreviewSchema } from "@/features/files/files-schema";
+import { emptyToNull, statusSchema } from "@/schemas/global";
+import { APPLICATIONS_TYPES, APPLICATIONS_TYPES_EXCLUDE } from "./app-utils";
 
 export const appTypeCrud = z.enum(APPLICATIONS_TYPES_EXCLUDE);
 export const types = z.enum(APPLICATIONS_TYPES);
@@ -137,13 +136,12 @@ export type FormVals = z.input<typeof FormSchema>;
 export type FormValsParsed = z.output<typeof FormSchema>;
 
 export function normalizeApplication(values: FormVals, isEdit: boolean) {
-  console.log({ values });
   const base = {
-    code: values.code!,
-    name: values.name!,
+    code: values.code as string,
+    name: values.name as string,
     type: values.type as ApplicationType,
     description: values.description ?? null,
-    owner: values.owner!,
+    owner: values.owner as string,
     picture: values.picture ?? null,
     departments: values.departments ?? [],
     ...(isEdit && "status" in values && values.status

@@ -2,23 +2,23 @@
 
 import {
   IGRPBadgePrimitive,
-  IGRPSeparatorPrimitive,
-  IGRPCardPrimitive,
   IGRPCardContentPrimitive,
   IGRPCardDescriptionPrimitive,
   IGRPCardHeaderPrimitive,
+  IGRPCardPrimitive,
   IGRPCardTitlePrimitive,
+  IGRPSeparatorPrimitive,
+  type IGRPTabItem,
   IGRPTabs,
-  IGRPTabItem,
 } from "@igrp/igrp-framework-react-design-system";
 
 import { ButtonLink } from "@/components/button-link";
 import { CopyToClipboard } from "@/components/copy-to-clipboard";
 import { AppCenterLoading } from "@/components/loading";
-import { PageHeader } from "@/components/page-header";
 import { AppCenterNotFound } from "@/components/not-found";
+import { PageHeader } from "@/components/page-header";
 import { useApplicationByCode } from "@/features/applications/use-applications";
-import { MenuList } from "@/features/menus/components/menu-list";
+// import { MenuList } from "@/features/menus/components/menu-list";
 // import { PermissionAppList } from '@/features/permission/components/permission-app-list';
 import { ROUTES } from "@/lib/constants";
 import { formatDate, statusClass } from "@/lib/utils";

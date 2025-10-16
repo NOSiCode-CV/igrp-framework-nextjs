@@ -1,47 +1,49 @@
 "use client";
 
-import { useEffect, useMemo, useRef, useState } from "react";
-import { useForm } from "react-hook-form";
-import z from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { useVirtualizer } from "@tanstack/react-virtual";
+import type {
+  IGRPMenuCRUDArgs,
+  IGRPMenuItemArgs,
+} from "@igrp/framework-next-types";
 import {
   IGRPButtonPrimitive,
-  IGRPCommandPrimitive,
   IGRPCommandEmptyPrimitive,
   IGRPCommandGroupPrimitive,
   IGRPCommandInputPrimitive,
   IGRPCommandItemPrimitive,
   IGRPCommandListPrimitive,
-  IGRPDialogPrimitive,
+  IGRPCommandPrimitive,
+  IGRPCommandSeparatorPrimitive,
   IGRPDialogContentPrimitive,
   IGRPDialogDescriptionPrimitive,
   IGRPDialogFooterPrimitive,
   IGRPDialogHeaderPrimitive,
+  IGRPDialogPrimitive,
   IGRPDialogTitlePrimitive,
-  IGRPFormPrimitive,
   IGRPFormControlPrimitive,
   IGRPFormDescriptionPrimitive,
   IGRPFormFieldPrimitive,
   IGRPFormItemPrimitive,
   IGRPFormLabelPrimitive,
+  IGRPFormMessagePrimitive,
+  IGRPFormPrimitive,
+  IGRPIcon,
+  IGRPIconList,
+  type IGRPIconName,
   IGRPInputPrimitive,
+  type IGRPOptionsProps,
+  IGRPPopoverContentPrimitive,
   IGRPPopoverPrimitive,
   IGRPPopoverTriggerPrimitive,
-  IGRPPopoverContentPrimitive,
-  IGRPRadioGroupPrimitive,
   IGRPRadioGroupItemPrimitive,
+  IGRPRadioGroupPrimitive,
   IGRPScrollAreaPrimitive,
   useIGRPToast,
-  IGRPFormMessagePrimitive,
-  IGRPIcon,
-  IGRPIconName,
-  IGRPIconList,
-  IGRPOptionsProps,
-  IGRPCommandSeparatorPrimitive,
 } from "@igrp/igrp-framework-react-design-system";
-import { IGRPMenuItemArgs } from "@igrp/framework-next-types";
-import { IGRPMenuCRUDArgs } from "@igrp/framework-next-types";
+import { useVirtualizer } from "@tanstack/react-virtual";
+import { useEffect, useMemo, useRef, useState } from "react";
+import { useForm } from "react-hook-form";
+import type z from "zod";
 
 import {
   MENU_VIEW,
@@ -49,14 +51,14 @@ import {
   menuTypeOptions,
 } from "@/features/menus/menu-constants";
 import {
+  type CreateMenu,
   createMenuSchema,
-  MenuArgs,
+  type MenuArgs,
   menuTargetSchema,
   menuTypeSchema,
-  CreateMenu,
-  OnSaveMenu,
   normalizeMenu,
-  UpdateMenu,
+  type OnSaveMenu,
+  type UpdateMenu,
 } from "@/features/menus/menu-schemas";
 import { useCreateMenu, useUpdateMenu } from "@/features/menus/use-menus";
 import { OPEN_TYPE_VIEW, STATUS_OPTIONS } from "@/lib/constants";
@@ -500,35 +502,33 @@ export function MenuFormDialog({
                 )}
 
                 {isExternalPage && (
-                  <>
-                    <IGRPFormFieldPrimitive
-                      control={form.control}
-                      name="url"
-                      render={({ field }) => (
-                        <IGRPFormItemPrimitive>
-                          <IGRPFormLabelPrimitive className='after:content-["*"] after:text-destructive gap-0.5'>
-                            URL
-                          </IGRPFormLabelPrimitive>
-                          <IGRPFormControlPrimitive>
-                            <IGRPInputPrimitive
-                              placeholder="https://example.com"
-                              name={field.name}
-                              ref={field.ref}
-                              onBlur={field.onBlur}
-                              value={field.value ?? ""}
-                              onChange={(e) =>
-                                field.onChange(
-                                  e.target.value === "" ? null : e.target.value,
-                                )
-                              }
-                              disabled={openType === MENU_VIEW}
-                            />
-                          </IGRPFormControlPrimitive>
-                          <IGRPFormMessagePrimitive />
-                        </IGRPFormItemPrimitive>
-                      )}
-                    />
-                  </>
+                  <IGRPFormFieldPrimitive
+                    control={form.control}
+                    name="url"
+                    render={({ field }) => (
+                      <IGRPFormItemPrimitive>
+                        <IGRPFormLabelPrimitive className='after:content-["*"] after:text-destructive gap-0.5'>
+                          URL
+                        </IGRPFormLabelPrimitive>
+                        <IGRPFormControlPrimitive>
+                          <IGRPInputPrimitive
+                            placeholder="https://example.com"
+                            name={field.name}
+                            ref={field.ref}
+                            onBlur={field.onBlur}
+                            value={field.value ?? ""}
+                            onChange={(e) =>
+                              field.onChange(
+                                e.target.value === "" ? null : e.target.value,
+                              )
+                            }
+                            disabled={openType === MENU_VIEW}
+                          />
+                        </IGRPFormControlPrimitive>
+                        <IGRPFormMessagePrimitive />
+                      </IGRPFormItemPrimitive>
+                    )}
+                  />
                 )}
 
                 {(isExternalPage || isMenuPage) && parentMenus.length > 0 && (
@@ -795,7 +795,7 @@ export function MenuFormDialog({
                           placeholder="0"
                           {...field}
                           onChange={(e) =>
-                            field.onChange(parseInt(e.target.value) || 0)
+                            field.onChange(parseInt(e.target.value, 10) || 0)
                           }
                           disabled={openType === MENU_VIEW}
                         />

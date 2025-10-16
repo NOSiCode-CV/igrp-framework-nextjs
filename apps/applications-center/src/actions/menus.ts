@@ -1,12 +1,10 @@
 "use server";
 
-import {
+import type {
   CreateMenuRequest,
   MenuFilters,
   UpdateMenuRequest,
 } from "@igrp/platform-access-management-client-ts";
-
-import {} from "./igrp/auth";
 import {
   mapperListMenusCRUD,
   mapperMenuCRUD,

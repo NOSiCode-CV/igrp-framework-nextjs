@@ -1,12 +1,11 @@
 "use server";
 
-import {
+import type {
   CreateApplicationRequest,
   UpdateApplicationRequest,
 } from "@igrp/platform-access-management-client-ts";
-
+import type { ApplicationArgs } from "@/features/applications/app-schemas";
 import { getClientAccess } from "./access-client";
-import { ApplicationArgs } from "@/features/applications/app-schemas";
 
 export async function getApplications(): Promise<ApplicationArgs[]> {
   const client = await getClientAccess();

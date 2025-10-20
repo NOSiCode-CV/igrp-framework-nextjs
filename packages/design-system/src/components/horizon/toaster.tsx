@@ -42,12 +42,9 @@ function createToast<T>(props: IGRPPromiseToastProps<T> | PlainToastProps) {
     return toast.promise(promise, {
       loading: loading ?? 'Processing...',
       success:
-        success ??
-        ((data: T) => (typeof data === 'string' ? data : 'Operation successful!')),
+        success ?? ((data: T) => (typeof data === 'string' ? data : 'Operation successful!')),
       error:
-        error ??
-        ((err: unknown) =>
-          err instanceof Error ? err.message : 'Something went wrong!'),
+        error ?? ((err: unknown) => (err instanceof Error ? err.message : 'Something went wrong!')),
       ...rest,
     });
   }
@@ -72,7 +69,7 @@ function createToast<T>(props: IGRPPromiseToastProps<T> | PlainToastProps) {
 function useIGRPToast<T = unknown>() {
   const igrpToast = useCallback(
     (props: IGRPPromiseToastProps<T> | PlainToastProps) => createToast<T>(props as any),
-    []
+    [],
   );
 
   const helpers = useMemo(() => {
@@ -89,9 +86,4 @@ function useIGRPToast<T = unknown>() {
   return { igrpToast, ...helpers };
 }
 
-export { 
-  type IGRPPromiseToastProps, 
-  type PlainToastProps,
-  useIGRPToast,
-  IGRPToaster
-};
+export { type IGRPPromiseToastProps, type PlainToastProps, useIGRPToast, IGRPToaster };

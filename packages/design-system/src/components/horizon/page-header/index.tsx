@@ -19,7 +19,8 @@ type IGRPPageHeaderProps = {
   iconBackButton?: IGRPIconName | string;
 } & Pick<IGRPBaseAttributes, 'name'>;
 
-// TODO: see back btn chabge variant and add text
+// TODO: see back btn change variant and add text
+// TODO: see PageHeader of the igrp-applications
 
 function IGRPPageHeader({
   title,

@@ -3,6 +3,8 @@ import { format } from 'date-fns';
 
 import { Button } from '../../primitives/button';
 import { Checkbox } from '../../primitives/checkbox';
+import { Tooltip, TooltipTrigger, TooltipContent, TooltipProvider } from '../../primitives/tooltip';
+
 import { IGRPBadge, type IGRPBadgeProps } from '../badge';
 import { IGRPIcon } from '../icon';
 import { IGRPLink, type IGRPLinkProps } from '../typography/link';
@@ -48,9 +50,9 @@ function IGRPDataTableCellExpander<TData>({ row, field }: IGRPDataTableCellExpan
       }}
     >
       {row.getIsExpanded() ? (
-        <IGRPIcon iconName="ChevronDown" className="opacity-60" size={16} strokeWidth={2} />
+        <IGRPIcon iconName="ChevronUp" className="opacity-60" />
       ) : (
-        <IGRPIcon iconName="ChevronUp" className="opacity-60" size={16} strokeWidth={2} />
+        <IGRPIcon iconName="ChevronDown" className="opacity-60" />
       )}
     </Button>
   ) : undefined;
@@ -141,6 +143,33 @@ function IGRPDataTableCellLink({
   );
 }
 
+type IGRPDataTableCellTooltipProps = {
+  text: string;
+  side?: 'top' | 'bottom' | 'left' | 'right';
+  align?: 'start' | 'center' | 'end';
+};
+
+function IGRPDataTableCellTooltip({
+  text,
+  side = 'top',
+  align = 'start',
+}: IGRPDataTableCellTooltipProps) {
+  return (
+    <TooltipProvider delayDuration={200}>
+      <Tooltip>
+        <TooltipTrigger asChild>
+          <div className="cursor-help">
+            <span>{text}</span>
+          </div>
+        </TooltipTrigger>
+        <TooltipContent side={side} align={align} sideOffset={4} className="max-w-sm">
+          {text}
+        </TooltipContent>
+      </Tooltip>
+    </TooltipProvider>
+  );
+}
+
 // TDOD row expander
 
 export {
@@ -150,8 +179,10 @@ export {
   IGRPDataTableCellBadge,
   IGRPDataTableCellDate,
   IGRPDataTableCellLink,
+  IGRPDataTableCellTooltip,
   type IGRPDataTableCellExpanderProps,
   type IGRPDataTableCellAmountProps,
   type IGRPDataTableCellBadgeProps,
   type IGRPDataTableCellDateProps,
+  type IGRPDataTableCellTooltipProps,
 };

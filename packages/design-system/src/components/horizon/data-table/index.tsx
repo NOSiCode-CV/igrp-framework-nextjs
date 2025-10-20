@@ -22,6 +22,7 @@ import {
   type VisibilityState,
   useReactTable,
   type Row,
+  type TableOptions,
 } from '@tanstack/react-table';
 
 import {
@@ -62,7 +63,7 @@ interface IGRPDataTableProps<TData, TValue> {
   notFoundLabel?: string;
   // rowSelection?: RowSelectionState
   // onRowSelectionChange?: OnChangeFn<RowSelectionState>
-  getRowCanExpand?: (row: Row<TData>) => boolean;
+  getRowCanExpand?: TableOptions<TData>['getRowCanExpand'];
   renderSubComponent?: (props: { row: Row<TData> }) => React.ReactElement | undefined;
 }
 
@@ -75,7 +76,7 @@ function IGRPDataTable<TData, TValue>({
   isServerSide = false,
   showFilter = false,
   clientFilters,
-  clientClearLabel = 'Clear',
+  clientClearLabel = 'Limpar',
   showToggleColumn = false,
   toggleLabel,
   toggleOptionsLabel,
@@ -85,7 +86,7 @@ function IGRPDataTable<TData, TValue>({
   tableBodyClassName,
   paginationClassName,
   serverFilterComponent,
-  notFoundLabel = 'No data found',
+  notFoundLabel = 'Nenhum registo encontrado.',
   // rowSelection,
   // onRowSelectionChange,
   getRowCanExpand = () => false,
@@ -95,7 +96,7 @@ function IGRPDataTable<TData, TValue>({
   const [columnVisibility, setColumnVisibility] = useState<VisibilityState>({});
   const [pagination, setPagination] = useState<PaginationState>({
     pageIndex: 0,
-    pageSize: pageSizePagination?.[0] ?? 50,
+    pageSize: pageSizePagination?.[0] || 50,
   });
 
   const [sorting, setSorting] = useState<SortingState>([]);
@@ -115,7 +116,7 @@ function IGRPDataTable<TData, TValue>({
     getFacetedMinMaxValues: getFacetedMinMaxValues(),
     getFacetedRowModel: getFacetedRowModel(),
     getFacetedUniqueValues: getFacetedUniqueValues(),
-    getRowCanExpand,
+    getRowCanExpand: getRowCanExpand,
 
     onColumnFiltersChange: setColumnFilters,
     onColumnVisibilityChange: setColumnVisibility,
@@ -160,17 +161,18 @@ function IGRPDataTable<TData, TValue>({
         )}
       </div>
 
-      <div className={cn('overflow-auto rounded-md border', tableClassName)}>
-        <Table className="table-fixed">
-          <TableHeader className={cn('bg-muted', tableHeaderClassName)}>
+      <div className={cn('overflow-auto border')}>
+        <Table className={tableClassName}>
+          <TableHeader className={tableHeaderClassName}>
             {table.getHeaderGroups().map((headerGroup) => (
-              <TableRow key={headerGroup.id}>
+              <TableRow key={headerGroup.id} className="border-b dark:border-slate-800/60">
                 {headerGroup.headers.map((header) => {
                   return (
                     <TableHead
                       key={header.id}
                       colSpan={header.colSpan}
                       style={{ width: `${header.getSize()}px` }}
+                      className="px-4 py-3 font-semibold"
                     >
                       {header.isPlaceholder
                         ? null
@@ -184,34 +186,40 @@ function IGRPDataTable<TData, TValue>({
 
           <TableBody className={cn(tableBodyClassName)}>
             {table.getRowModel().rows?.length ? (
-              table.getRowModel().rows.map((row) => (
-                <Fragment key={row.id}>
-                  <TableRow
-                    key={row.id}
-                    data-state={row.getIsSelected() && 'selected'}
-                    className={cn(
-                      'border-0 [&:first-child>td:first-child]:rounded-tl-lg',
-                      '[&:first-child>td:last-child]:rounded-tr-lg',
-                      '[&:last-child>td:first-child]:rounded-bl-lg',
-                      '[&:last-child>td:last-child]:rounded-br-lg h-px hover:bg-accent/50',
-                    )}
-                  >
-                    {row.getVisibleCells().map((cell) => (
-                      <TableCell key={cell.id} className="p-3 last:py-0 h-[inherit]">
-                        {flexRender(cell.column.columnDef.cell, cell.getContext())}
-                      </TableCell>
-                    ))}
-                  </TableRow>
-
-                  {row.getIsExpanded() && (
-                    <TableRow key={`${row.id}-expanded`}>
-                      <TableCell colSpan={row.getVisibleCells().length}>
-                        {renderSubComponent && renderSubComponent({ row })}
-                      </TableCell>
+              table.getRowModel().rows.map((row) => {
+                console.log({ getIsExpanded: row.getIsExpanded() });
+                return (
+                  <Fragment key={row.id}>
+                    <TableRow
+                      key={row.id}
+                      data-state={row.getIsSelected() && 'selected'}
+                      className={cn(
+                        'border-0 [&:first-child>td:first-child]:rounded-tl-lg',
+                        '[&:first-child>td:last-child]:rounded-tr-lg',
+                        '[&:last-child>td:first-child]:rounded-bl-lg',
+                        '[&:last-child>td:last-child]:rounded-br-lg h-px hover:bg-accent/50',
+                      )}
+                    >
+                      {row.getVisibleCells().map((cell) => (
+                        <TableCell
+                          key={cell.id}
+                          className="truncate p-3 h-[inherit] [&:has([aria-expanded])]:w-px [&:has([aria-expanded])]:py-0 [&:has([aria-expanded])]:pr-0"
+                        >
+                          {flexRender(cell.column.columnDef.cell, cell.getContext())}
+                        </TableCell>
+                      ))}
                     </TableRow>
-                  )}
-                </Fragment>
-              ))
+
+                    {row.getIsExpanded() && (
+                      <TableRow key={`${row.id}-expanded`}>
+                        <TableCell colSpan={row.getVisibleCells().length}>
+                          {renderSubComponent && renderSubComponent({ row })}
+                        </TableCell>
+                      </TableRow>
+                    )}
+                  </Fragment>
+                );
+              })
             ) : (
               <TableRow
                 className={cn(

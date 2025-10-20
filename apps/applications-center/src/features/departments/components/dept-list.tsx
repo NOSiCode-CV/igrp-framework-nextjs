@@ -2,26 +2,24 @@
 
 import {
   cn,
-  IGRPBadge,
+  ColumnDef,
   IGRPBadgePrimitive,
-  IGRPButtonPrimitive,
-  IGRPDropdownMenuCheckboxItemPrimitive,
-  IGRPDropdownMenuContentPrimitive,
-  IGRPDropdownMenuItemPrimitive,
-  IGRPDropdownMenuPrimitive,
-  IGRPDropdownMenuSeparatorPrimitive,
-  IGRPDropdownMenuTriggerPrimitive,
-  IGRPIcon,
-  IGRPInputPrimitive,
-  IGRPTableBodyPrimitive,
-  IGRPTableCellPrimitive,
-  IGRPTableHeaderPrimitive,
-  IGRPTableHeadPrimitive,
-  IGRPTablePrimitive,
-  IGRPTableRowPrimitive,
+  IGRPDataTable,
+  IGRPDataTableCellBadge,
+  IGRPDataTableCellExpander,
+  IGRPDataTableCellTooltip,
+  IGRPDataTableClientFilterListProps,
+  IGRPDataTableDropdownMenu,
+  IGRPDataTableDropdownMenuLink,
+  IGRPDataTableFacetedFilterFn,
+  IGRPDataTableFilterFaceted,
+  IGRPDataTableFilterInput,
+  IGRPDataTableHeaderSortToggle,
+  IGRPDataTableRowAction,
+  IGRPIcon,  
+  Row,
 } from "@igrp/igrp-framework-react-design-system";
-import Link from "next/link";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 
 import { ButtonLink } from "@/components/button-link";
 import { AppCenterLoading } from "@/components/loading";
@@ -35,8 +33,8 @@ import { DepartmentCreateDialog } from "./dept-form-dialog";
 // import { useCurrentUser } from '@/features/users/use-users';
 
 export function DepartmentList() {
-  const [searchTerm, setSearchTerm] = useState("");
-  const [statusFilter, setStatusFilter] = useState<string[]>([]);
+  const [data, setData] = useState<DepartmentArgs[]>([]);
+
   const [openFormDialog, setOpenFormDialog] = useState(false);
   const [openDeleteDialog, setOpenDeleteDialog] = useState(false);
   const [currentDept, setCurrentDept] = useState<DepartmentArgs | undefined>(
@@ -49,22 +47,161 @@ export function DepartmentList() {
 
   const { data: departments, isLoading, error, refetch } = useDepartments();
 
+  useEffect(() => {
+    setData(departments ?? []);
+  }, [departments]);
+
+  const columns: ColumnDef<DepartmentArgs>[] = [
+    {
+      id: "expander",
+      header: '-',
+      cell: ({ row }) => (
+        <IGRPDataTableCellExpander
+          row={row}
+          field={row.original.name}
+        />
+      ),
+      size: 30
+    },
+    {
+      header: ({ column }) => (
+        <IGRPDataTableHeaderSortToggle 
+          column={column} 
+          title='Nome'
+        />
+      ),      
+      accessorKey: "name",
+      cell: ({ row }) => {
+        const code = String(row.getValue("code"));
+        const name = String(row.getValue("name"));
+        return (
+          <ButtonLink
+            href={`${ROUTES.DEPARTMENTS}/${code}`}
+            btnClassName="cursor-pointer hover:underline px-0"
+            icon={""}
+            variant="link"
+            label={name}
+          />
+        )
+      }
+    },
+    {
+      header: "Código",
+      accessorKey: "code",
+      cell: ({ row }) => (
+        <IGRPDataTableCellBadge
+          color="primary"
+          variant="soft"
+          label={row.getValue("code")}
+        />
+      )
+    },
+    {
+      header: "Descrição",
+      accessorKey: "description",
+      cell: ({ row }) => {
+        const description = String(row.getValue("description"));
+        return (
+          <IGRPDataTableCellTooltip
+            text={description}
+          />
+        )
+      },
+
+    },
+    {
+      header: "Estado",
+      accessorKey: "status",
+      cell: ({ row }) => {
+        const status = String(row.getValue("status"));
+        return (
+          <IGRPBadgePrimitive className={cn(statusClass(status), "capitalize")}>
+            {showStatus(status)}
+          </IGRPBadgePrimitive>
+        )
+      },
+      filterFn: IGRPDataTableFacetedFilterFn,
+      size: 70,
+    },
+    {
+      id: "actions",
+      header: () => <span className="sr-only">Ações</span>,
+      cell: ({ row }) => <RowActions row={row} />,
+      size: 50,
+      enableHiding: false,
+    },
+  ];
+
+  function RowActions({ row }: { row: Row<DepartmentArgs> }) {
+    const code = String(row.getValue("code"));
+    const name = String(row.getValue("name"));
+    return (
+      <IGRPDataTableRowAction>
+        <IGRPDataTableDropdownMenu
+          iconName="EllipsisVertical"
+          items={[
+            {
+              component: IGRPDataTableDropdownMenuLink,
+              props: {
+                labelTrigger: 'Ver',
+                icon: 'Eye',
+                showIcon: true,
+                href: `${ROUTES.DEPARTMENTS}/${code}`,
+              },
+            },
+            {
+              component: IGRPDataTableDropdownMenuLink,
+              props: {
+                labelTrigger: 'Editar',
+                icon: 'Pencil',
+                showIcon: true,
+                action: () => {
+                  setCurrentDept(row.original);
+                  setOpenFormDialog(true);
+                }
+              },
+            },
+            {
+              component: IGRPDataTableDropdownMenuLink,
+              props: {
+                labelTrigger: 'Eliminar',
+                icon: 'Trash',
+                showIcon: true,
+                action: () => {
+                  handleDelete(code, name)
+                },
+                variant: 'destructive'
+              },
+            },
+          ]
+          }
+        />
+      </IGRPDataTableRowAction>
+    );
+  }
+
+  const filters: IGRPDataTableClientFilterListProps<DepartmentArgs>[] = [
+    {
+      columnId: "name",
+      component: (column) => <IGRPDataTableFilterInput column={column} />,
+    },
+    {
+      columnId: "status",
+      component: (column) => (
+        <IGRPDataTableFilterFaceted
+          column={column}
+          options={STATUS_OPTIONS}
+          placeholder="Estado"
+        />
+      ),
+    }
+  ];
+
   if (isLoading || !departments) {
     return <AppCenterLoading descrption="Carregando departamentos..." />;
   }
 
   if (error) throw error;
-
-  const filteredDepartments = departments.filter((dept) => {
-    const matchesSearch =
-      dept.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
-      dept.code.toLowerCase().includes(searchTerm.toLowerCase());
-
-    const matchesStatus =
-      statusFilter.length === 0 || statusFilter.includes(dept.status);
-
-    return matchesSearch && matchesStatus;
-  });
 
   const emptyList = departments.length === 0;
 
@@ -96,167 +233,26 @@ export function DepartmentList() {
         )}
       </PageHeader>
 
-      {emptyList ? (
-        <div className="rounded-md border">
-          <div className="text-center py-8 text-muted-foreground">
-            <p className="mb-2">Nenhum departamento encontrado.</p>
-            <IGRPButtonPrimitive
-              onClick={() => setOpenFormDialog(true)}
-              variant="outline"
+      <IGRPDataTable<DepartmentArgs, DepartmentArgs>
+        showFilter
+        showPagination
+        tableClassName="table-fixed"
+        columns={columns}
+        data={data}
+        clientFilters={filters}
+        getRowCanExpand={(row) => Boolean((row.original.description))}
+        renderSubComponent={({ row }) => (
+          <div className="flex items-start py-2 text-primary/80 text-balance">
+            <span
+              className="me-3 mt-0.5 flex w-7 shrink-0 justify-center"
+              aria-hidden="true"
             >
-              <IGRPIcon iconName="Plus" className="mr-1 size-4" />
-              Criar novo Departamento
-            </IGRPButtonPrimitive>
+              <IGRPIcon iconName="Info" className="opacity-60" />
+            </span>
+            <p className="text-sm">{row.original.description}</p>
           </div>
-        </div>
-      ) : (
-        <>
-          <div className="flex flex-col sm:flex-row gap-2 mt-4">
-            <div className="relative w-full max-w-sm">
-              <IGRPIcon
-                iconName="Search"
-                className="absolute left-2.5 top-2.5 h-4 w-4 text-muted-foreground"
-              />
-              <IGRPInputPrimitive
-                type="search"
-                placeholder="Pesquisar departamentos..."
-                className="w-full bg-background pl-8"
-                value={searchTerm}
-                onChange={(e) => setSearchTerm(e.target.value)}
-              />
-            </div>
-            <IGRPDropdownMenuPrimitive>
-              <IGRPDropdownMenuTriggerPrimitive asChild>
-                <IGRPButtonPrimitive variant="outline" className="gap-2">
-                  <IGRPIcon iconName="ListFilter" className="size-4 mr-1" />
-                  Estados
-                </IGRPButtonPrimitive>
-              </IGRPDropdownMenuTriggerPrimitive>
-              <IGRPDropdownMenuContentPrimitive align="end" className="w-40">
-                {STATUS_OPTIONS.map(({ value, label }) => (
-                  <IGRPDropdownMenuCheckboxItemPrimitive
-                    key={value}
-                    checked={statusFilter.includes(value)}
-                    onCheckedChange={(checked) => {
-                      setStatusFilter(
-                        checked
-                          ? [...statusFilter, value]
-                          : statusFilter.filter((s) => s !== value),
-                      );
-                    }}
-                  >
-                    {label}
-                  </IGRPDropdownMenuCheckboxItemPrimitive>
-                ))}
-                {statusFilter.length > 0 && (
-                  <>
-                    <IGRPDropdownMenuSeparatorPrimitive />
-                    <IGRPDropdownMenuItemPrimitive
-                      onClick={() => setStatusFilter([])}
-                      className="cursor-pointer hover:bg-primary hover:text-primary-foreground"
-                    >
-                      <IGRPIcon iconName="X" className="mr-1" strokeWidth={2} />
-                      Limpar
-                    </IGRPDropdownMenuItemPrimitive>
-                  </>
-                )}
-              </IGRPDropdownMenuContentPrimitive>
-            </IGRPDropdownMenuPrimitive>
-          </div>
-
-          <div className="rounded-md border">
-            <IGRPTablePrimitive>
-              <IGRPTableHeaderPrimitive>
-                <IGRPTableRowPrimitive>
-                  <IGRPTableHeadPrimitive>Nome</IGRPTableHeadPrimitive>
-                  <IGRPTableHeadPrimitive>Código</IGRPTableHeadPrimitive>
-                  <IGRPTableHeadPrimitive>Descrição</IGRPTableHeadPrimitive>
-                  <IGRPTableHeadPrimitive>Estado</IGRPTableHeadPrimitive>
-                  <IGRPTableHeadPrimitive className="w-24" />
-                </IGRPTableRowPrimitive>
-              </IGRPTableHeaderPrimitive>
-              <IGRPTableBodyPrimitive>
-                {filteredDepartments.map((dept) => (
-                  <IGRPTableRowPrimitive key={dept.id}>
-                    <IGRPTableCellPrimitive>
-                      <ButtonLink
-                        href={`${ROUTES.DEPARTMENTS}/${dept.code}`}
-                        className="cursor-pointer hover:underline !text-foreground"
-                        icon={""}
-                        variant="link"
-                        label={dept.name}
-                      />
-                    </IGRPTableCellPrimitive>
-                    <IGRPTableCellPrimitive>
-                      <IGRPBadge color="primary" variant="soft">
-                        {dept.code}
-                      </IGRPBadge>
-                    </IGRPTableCellPrimitive>
-                    <IGRPTableCellPrimitive>
-                      {dept.description || "N/A"}
-                    </IGRPTableCellPrimitive>
-                    <IGRPTableCellPrimitive>
-                      <IGRPBadgePrimitive
-                        className={cn(statusClass(dept.status), "capitalize")}
-                      >
-                        {showStatus(dept.status)}
-                      </IGRPBadgePrimitive>
-                    </IGRPTableCellPrimitive>
-                    <IGRPTableCellPrimitive>
-                      <IGRPDropdownMenuPrimitive>
-                        <IGRPDropdownMenuTriggerPrimitive asChild>
-                          <IGRPButtonPrimitive
-                            variant="ghost"
-                            className="h-8 w-8 p-0"
-                          >
-                            <span className="sr-only">Open menu</span>
-                            <IGRPIcon iconName="Ellipsis" className="size-4" />
-                          </IGRPButtonPrimitive>
-                        </IGRPDropdownMenuTriggerPrimitive>
-                        <IGRPDropdownMenuContentPrimitive align="end">
-                          <IGRPDropdownMenuSeparatorPrimitive className="my-1" />
-                          <IGRPDropdownMenuItemPrimitive asChild>
-                            <Link href={`${ROUTES.DEPARTMENTS}/${dept.code}`}>
-                              <IGRPIcon
-                                iconName="Eye"
-                                className="mr-1 size-4"
-                              />
-                              Ver
-                            </Link>
-                          </IGRPDropdownMenuItemPrimitive>
-                          <IGRPDropdownMenuItemPrimitive
-                            onSelect={() => {
-                              setCurrentDept(dept);
-                              setOpenFormDialog(true);
-                            }}
-                          >
-                            <IGRPIcon
-                              iconName="Pencil"
-                              className="mr-1 size-4"
-                            />
-                            Editar
-                          </IGRPDropdownMenuItemPrimitive>
-                          <IGRPDropdownMenuSeparatorPrimitive />
-                          <IGRPDropdownMenuItemPrimitive
-                            variant="destructive"
-                            onClick={() => handleDelete(dept.code, dept.name)}
-                          >
-                            <IGRPIcon
-                              iconName="Trash"
-                              className="mr-1 size-4"
-                            />
-                            Eliminar
-                          </IGRPDropdownMenuItemPrimitive>
-                        </IGRPDropdownMenuContentPrimitive>
-                      </IGRPDropdownMenuPrimitive>
-                    </IGRPTableCellPrimitive>
-                  </IGRPTableRowPrimitive>
-                ))}
-              </IGRPTableBodyPrimitive>
-            </IGRPTablePrimitive>
-          </div>
-        </>
-      )}
+        )}
+      />
 
       <DepartmentCreateDialog
         open={openFormDialog}

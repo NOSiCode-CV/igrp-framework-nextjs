@@ -71,9 +71,11 @@ function IGRPLink({
   ...props
 }: IGRPLinkProps) {
   const isExternal = igrpIsExternalUrl(href);
-  const colorLink = variant ? IGRPColors[variant][color] : igrpColorText(color);
-  const linkClass = cn(IGRPLinkVariants({ size, underline }), colorLink, className);
+  const colorLink = variant ? IGRPColors[variant][color].text : igrpColorText(color);
+  const linkClass = cn(IGRPLinkVariants({ size, underline }), className);
   const getIconSize = iconSize || (size === 'lg' ? 20 : size === 'default' ? 16 : 14);
+
+  console.log({ isExternal, colorLink, linkClass, getIconSize });
 
   if (isExternal) {
     return (

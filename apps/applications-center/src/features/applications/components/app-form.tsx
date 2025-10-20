@@ -37,7 +37,7 @@ import { useRouter } from "next/navigation";
 import { useMemo, useState } from "react";
 import { type Control, type FieldPath, useForm } from "react-hook-form";
 
-import { FileUploadField } from "@/components/file-upload-field";
+// import { FileUploadField } from "@/components/file-upload-field";
 import { AppCenterLoading } from "@/components/loading";
 import {
   type ApplicationArgs,
@@ -51,11 +51,13 @@ import {
   useUpdateApplication,
 } from "@/features/applications/use-applications";
 import { useDepartments } from "@/features/departments/use-departments";
-import { useUploadPrivateFiles } from "@/features/files/use-files";
+// import { useUploadPublicFiles } from "@/features/files/use-files";
 import { useUsers } from "@/features/users/use-users";
 import { ROUTES, STATUS_OPTIONS } from "@/lib/constants";
 import { statusSchema } from "@/schemas/global";
 import { APPLICATIONS_TYPES_FILTERED } from "../app-utils";
+
+// TDOD: implement picture 
 
 export function ApplicationForm({
   application,
@@ -75,7 +77,7 @@ export function ApplicationForm({
   const { mutateAsync: addApplication } = useCreateApplication();
   const { mutateAsync: updateApplication } = useUpdateApplication();
 
-  const { mutateAsync: uploadPrivateFile } = useUploadPrivateFiles();
+  // const { mutateAsync: uploadPrivateFile } = useUploadPublicFiles();
 
   const isEdit = !!application;
 
@@ -168,8 +170,9 @@ export function ApplicationForm({
     const file = values.image?.file as File;
 
     if (file) {
-      const options = { folder: values.code as string };
-      const result = await uploadPrivateFile({ file, options });
+      // const options = { folder: values.code as string };
+      // const result = await uploadPrivateFile({ file, options });
+      const result = null;
       payload.picture = result;
     }
 
@@ -209,7 +212,7 @@ export function ApplicationForm({
     }
   };
 
-  return (
+  return (    
     <IGRPCardPrimitive className="py-6">
       <IGRPFormPrimitive {...form}>
         <form
@@ -452,7 +455,7 @@ export function ApplicationForm({
                 />
               )}
 
-              <IGRPFormFieldPrimitive
+              {/* <IGRPFormFieldPrimitive
                 control={form.control}
                 name="image"
                 render={({ field }) => (
@@ -465,7 +468,7 @@ export function ApplicationForm({
                     placeholder="Arraste seu logo aqui"
                   />
                 )}
-              />
+              /> */}
 
               <IGRPFormFieldPrimitive
                 control={form.control}
@@ -474,7 +477,7 @@ export function ApplicationForm({
                   <IGRPFormItemPrimitive
                     className={cn(
                       "lg:col-span-2",
-                      isEdit && "sm:col-span-2 lg:col-span-3",
+                      isEdit && "sm:col-span-2",
                     )}
                   >
                     <IGRPFormLabelPrimitive className='after:content-["*"] after:text-destructive gap-0.5'>

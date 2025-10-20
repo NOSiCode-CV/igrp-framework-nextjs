@@ -1,7 +1,7 @@
 'use client';
 
-import { Fragment, type JSX, useEffect, useState } from 'react';
 import { type Column, type Table } from '@tanstack/react-table';
+import { Fragment, type JSX } from 'react';
 
 import { IGRPButton } from '../button';
 
@@ -22,18 +22,10 @@ function IGRPDataTableClientFilter<TData>({
   filterLabel,
 }: IGRPDataTableFilterClientProps<TData>) {
   const isFiltered = table.getState().columnFilters.length > 0;
-  const [cleanDates, setCleanDates] = useState(false); // TODO: check this render from daterangepicker
 
   const handleCleanFilter = () => {
     table.resetColumnFilters();
-    setCleanDates(true);
   };
-
-  useEffect(() => {
-    if (cleanDates) {
-      setCleanDates(false);
-    }
-  }, [cleanDates]);
 
   return (
     <div className="flex md:items-center gap-2 flex-col md:flex-row">
@@ -57,5 +49,8 @@ function IGRPDataTableClientFilter<TData>({
   );
 }
 
-export { IGRPDataTableClientFilter };
-export type { IGRPDataTableClientFilterListProps, IGRPDataTableFilterClientProps };
+export {
+  IGRPDataTableClientFilter,
+  type IGRPDataTableFilterClientProps,
+  type IGRPDataTableClientFilterListProps,
+};

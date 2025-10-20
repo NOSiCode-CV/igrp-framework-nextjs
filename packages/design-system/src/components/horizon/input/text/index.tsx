@@ -31,7 +31,7 @@ function IGRPInputText({
   labelClassName,
   required,
   inputClassName,
-  gridSize = 'default',
+  // gridSize = 'default',
   error,
   ...props
 }: IGRPInputTextProps) {

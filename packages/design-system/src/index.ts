@@ -454,7 +454,7 @@ export {
   IGRPCommandSeparator,
 } from './components/horizon/command';
 export { IGRPContainer } from './components/horizon/container';
-export { IGRPDataTable, type IGRPDataTableProps } from './components/horizon/data-table/data-table';
+export { IGRPDataTable, type IGRPDataTableProps } from './components/horizon/data-table';
 export {
   IGRPDataTableButtonAlert,
   IGRPDataTableButtonLink,
@@ -478,10 +478,12 @@ export {
   IGRPDataTableCellBadge,
   IGRPDataTableCellDate,
   IGRPDataTableCellLink,
+  IGRPDataTableCellTooltip,
   type IGRPDataTableCellExpanderProps,
   type IGRPDataTableCellAmountProps,
   type IGRPDataTableCellBadgeProps,
   type IGRPDataTableCellDateProps,
+  type IGRPDataTableCellTooltipProps,
 } from './components/horizon/data-table/cell';
 export {
   IGRPDataTableClientFilter,
@@ -694,10 +696,11 @@ export {
 export { IGRPStatsCard, type IGRPStatsCardProps } from './components/horizon/stats-card';
 export { IGRPTable, type IGRPTableProps } from './components/horizon/table';
 export { IGRPTabs, type IGRPTabsProps, type IGRPTabItem } from './components/horizon/tabs';
-export { type IGRPPromiseToastProps, 
+export {
+  type IGRPPromiseToastProps,
   type PlainToastProps,
   useIGRPToast,
-  IGRPToaster
+  IGRPToaster,
 } from './components/horizon/toaster';
 
 export {

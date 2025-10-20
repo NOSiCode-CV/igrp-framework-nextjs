@@ -135,7 +135,7 @@ export function ApplicationDetails({ code }: { code: string }) {
                   <p>{formatDate(createdDate || new Date().toISOString())}</p>
                 </div>
               </div>
-              <div>
+              <div className="sm:col-span-2 lg:col-span-3">
                 <h3 className="font-normal text-muted-foreground">Descrição</h3>
                 <p>{description || "Sem descrição."}</p>
               </div>

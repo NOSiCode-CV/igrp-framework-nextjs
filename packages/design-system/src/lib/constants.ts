@@ -20,3 +20,17 @@ export const igrpAlertIconMappings: Record<IGRPColorVariants, IGRPIconName> = {
   info: 'Info',
   indigo: 'Sparkles',
 };
+
+export const igrpSize = { sm: "sm", md: 'md', lg: 'lg', xl: 'xl' };
+
+export const igrpRoundSize = {
+  'rounded-none': 'rounded-none',
+  'rounded-sm': 'rounded-sm',
+  'rounded': 'rounded',
+  'rounded-md': 'rounded-md',
+  'rounded-lg': 'rounded-lg',
+  'rounded-xl': 'rounded-xl',
+  'rounded-2xl': 'rounded-2xl',
+  'rounded-3xl': 'rounded-3xl',
+  'rounded-full': 'rounded-full'
+}

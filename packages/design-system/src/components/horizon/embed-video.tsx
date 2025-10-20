@@ -1,13 +1,18 @@
 import { cn } from '../../lib/utils';
 
-import { IGRPCard,IGRPCardContent } from './card';
+type AllowFeature = 
+  | 'autoplay'
+  | 'clipboard-write'
+  | 'encrypted-media'
+  | 'gyroscope'
+  | 'picture-in-picture';
 
 interface IGRPEmbedVideoProps {
   displayMode?:string;
   src: string;
   title: string;
   loading?: "eager" | "lazy" | undefined;
-  allow?: string;
+  allow?: AllowFeature[] | string;
   allowFullScreen: boolean;
   allowTransparency: boolean;
   autoplay?: boolean;
@@ -34,8 +39,6 @@ function IGRPEmbedVideo({
   const baseUrl = src.split('?')[0];
 
   const allowValue = Array.isArray(allow) ? allow.join(' ') : allow;
-  console.log(allow)
-  console.log(allowValue)
 
   const params = new URLSearchParams({
     autoplay: autoplay ? '1' : '0',
@@ -54,22 +57,18 @@ function IGRPEmbedVideo({
     '3/2':'aspect-3/2',
     'auto':'aspect-auto',
   }[displayMode]
-    return <>
-    <IGRPCard>
-      <IGRPCardContent> 
-        <iframe
-          key={`${src}-${allowFullScreen}-${allow}-${allowTransparency}-${loading}`}
-            src={finalSrc}
-            className={cn("w-full h-full border-0",displayNumber)}        
-            title={title}
-            loading={loading}
-            allowFullScreen={allowFullScreen}
-            allowTransparency={allowTransparency}
-            allow={allowValue}
-            />
-      </IGRPCardContent>
-    </IGRPCard>
-    </>
+    return <div className='w-full overflow-hidden'>   
+      <iframe
+        key={`${src}-${allowFullScreen}-${allow}-${allowTransparency}-${loading}`}
+        src={finalSrc}
+        className={cn("w-full h-full border-0",displayNumber)}        
+        title={title}
+        loading={loading}
+        allowFullScreen={allowFullScreen}
+        allowTransparency={allowTransparency}
+        allow={allowValue}
+      />
+    </div>
 }
 
 

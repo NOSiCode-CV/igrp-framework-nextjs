@@ -1,7 +1,6 @@
 import { IGRPEmbedVideo,type IGRPEmbedVideoProps } from "@igrp/igrp-framework-react-design-system";
 import type { Meta, StoryObj } from "@storybook/nextjs-vite";
 
-
 const meta: Meta<typeof IGRPEmbedVideo> = {
     title: 'Components/EmbedVideo',
     component: IGRPEmbedVideo,
@@ -143,7 +142,7 @@ export const AllowFullScreen: Story = {
     src: 'https://www.youtube.com/embed/FbT5E8DdxTQ?si=wrXPTY1Q8Sq2_fNm',
     title: 'Embed Video',
     loading: 'lazy',
-    allow: 'autoplay encrypted-media', //TODO not working as espected
+    allow: 'autoplay', //TODO not working as espected
     allowFullScreen: true,
     allowTransparency: true,
     autoplay:true,

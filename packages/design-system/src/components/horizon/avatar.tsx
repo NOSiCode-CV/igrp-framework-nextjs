@@ -1,15 +1,13 @@
-// import { Badge } from 'lucide-react';
-import type { IGRPBaseAttributes } from '../../types';
+import { cva } from 'class-variance-authority';
+import { IGRPBadge } from './badge';
+import { IGRPIcon, type IGRPIconName } from './icon';
 import { Avatar, AvatarImage, AvatarFallback } from '../primitives/avatar';
 import { IGRPColors, type IGRPColorRole, type IGRPColorVariants } from '../../lib/colors';
 import { cn } from '../../lib/utils';
-import { IGRPIcon, type IGRPIconName } from './icon';
-import { Button } from '../primitives/button';
-import { IGRPBadge } from './badge';
-import { cva } from 'class-variance-authority';
+import type { IGRPBaseAttributes,IGRPSize, IGRPRoundSize } from '../../types';
 
 function convertFallback(fallback?: string) {
-  var upperFallback = fallback
+  const upperFallback = fallback
     ? fallback
         .split(' ')
         .slice(0, 2)
@@ -76,10 +74,9 @@ const statusPosition = cva('',{
   },
 });
 
-
 interface IGRPAvatarProps extends IGRPBaseAttributes {
   src?: string;
-  size?: 'sm' | 'md' | 'lg' | 'xl';
+  size?: IGRPSize;
   alt?: string;
   fallback?: string;
   fallbackClassName?: string;
@@ -99,19 +96,11 @@ interface IGRPAvatarProps extends IGRPBaseAttributes {
   badgeVariant?: IGRPColorRole;
   badgeShowIcon?: boolean;
   badgeIconName?: string;
-  differentRadius?:
-    | 'rounded-none'
-    | 'rounded-sm'
-    | 'rounded'
-    | 'rounded-md'
-    | 'rounded-lg'
-    | 'rounded-xl'
-    | 'rounded-2xl'
-    | 'rounded-3xl'
-    | 'rounded-full';
+  borderRadius?: IGRPRoundSize;
 }
 function IGRPAvatar({
   src = 'igrp',
+  alt = 'avatar',
   fallback,
   hasStatus = false,
   showBadge = false,
@@ -120,7 +109,7 @@ function IGRPAvatar({
   iconName = 'Check',
   className,
   iconClassName,
-  size = 'md',
+  size = "md",
   fallbackIcon = 'User',
   hasFallbackIcon = false,
   fallbackClassName,
@@ -129,7 +118,7 @@ function IGRPAvatar({
   badgeNumber = 6,
   badgeShowIcon = false,
   badgeIconName = 'Info',
-  differentRadius = 'rounded-full',
+  borderRadius = 'rounded-full',
   iconColor = '#000000',
 }: IGRPAvatarProps) {
   const colorClasses = IGRPColors['solid'][status];
@@ -138,8 +127,8 @@ function IGRPAvatar({
   return (
     <div className={cn('flex items-center justify-center rounded-full p-1 w-10 h-10')}>
       <Avatar className={cn('overflow-visible', className, sizeClasses({ size }))}>
-        <AvatarImage src={src} className={cn(' ', differentRadius)} alt="avatar" />
-        <AvatarFallback className={cn('', differentRadius)}>
+        <AvatarImage src={src} className={cn(' ', borderRadius)} alt={alt} />
+        <AvatarFallback className={cn('', borderRadius)}>
           {hasFallbackIcon && (
             <IGRPIcon iconName={fallbackIcon} className={cn(sizeClasses({ size }), fallbackClassName)} />
           )}
@@ -182,4 +171,4 @@ function IGRPAvatar({
     </div>
   );
 }
-export { IGRPAvatar, type IGRPAvatarProps, Button };
+export { IGRPAvatar, type IGRPAvatarProps };

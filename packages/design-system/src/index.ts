@@ -635,6 +635,8 @@ export type {
   IGRPInputProps,
   IGRPOptionsProps,
   IGRPGridSize,
+  IGRPSize,
+  IGRPRoundSize,
 } from './types';
 
 // hooks

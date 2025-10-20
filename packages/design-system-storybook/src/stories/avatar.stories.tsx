@@ -6,6 +6,7 @@ import {
 } from '@igrp/igrp-framework-react-design-system';
 import { IGRPButtonPrimitive } from '@igrp/igrp-framework-react-design-system';
 
+
 const avatars = [
   { src: 'https://cdn-icons-png.flaticon.com/512/168/168726.png', fallback: 'A' },
   { src: 'https://cdn-icons-png.flaticon.com/512/168/168726.png', fallback: 'B' },
@@ -31,6 +32,10 @@ export default {
     src: {
       control: 'text',
       description: 'Specifies the path to the image file',
+    },
+    alt: {
+      control: 'text',
+      description: 'Alternative text for the avatar image',
     },
     size: {
       control: 'select',
@@ -121,7 +126,7 @@ export default {
       description: 'Fallback Class Name',
       defaultValue: 'False',
     },
-    differentRadius: {
+    borderRadius: {
       control: 'select',
       description: 'Radius',
       options: ['rounded-none', 'rounded-sm', 'rounded', 'rounded-md', 'rounded-lg', 'rounded-xl', 'rounded-2xl', 'rounded-3xl', 'rounded-full'],
@@ -155,7 +160,7 @@ export const Default: StoryObj<IGRPAvatarProps> = {
     badgeVariant:'solid',
     badgeNumber: 6,
     status:'success',
-    differentRadius:'rounded-full'
+    borderRadius:'rounded-full'
   },
 };
 
@@ -166,7 +171,7 @@ export const AvatarShape: StoryObj<IGRPAvatarProps> = {
     fallback: 'AV',
     iconName: 'Check',
     status: 'success',
-    differentRadius:'rounded-lg',
+    borderRadius:'rounded-lg',
   },
 };
 

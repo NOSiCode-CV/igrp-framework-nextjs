@@ -15,7 +15,7 @@ import { CopyToClipboard } from "@/components/copy-to-clipboard";
 import { AppCenterLoading } from "@/components/loading";
 import { AppCenterNotFound } from "@/components/not-found";
 import { PageHeader } from "@/components/page-header";
-import { PermissionList } from "@/features/permission/components/permission-list";
+import { PermissionList } from "@/features/permissions/components/permission-list";
 import { ROUTES } from "@/lib/constants";
 import { RolesList } from "../../roles/components/role-list";
 import { useDepartmentByCode } from "../use-departments";

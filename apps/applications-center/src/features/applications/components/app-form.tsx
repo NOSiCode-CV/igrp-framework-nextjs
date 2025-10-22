@@ -162,10 +162,7 @@ export function ApplicationForm({
 
   const submitLblBtn = form.formState.isSubmitting ? "Guardando..." : "Guardar";
 
-  const title = application ? "Editar Aplicação" : "Nova Aplicação";
-  const linkBackButton = application 
-    ? `${ROUTES.APPLICATIONS}/${application.code}` 
-    : ROUTES.APPLICATIONS;
+  const title = application ? "Editar Aplicação" : "Nova Aplicação"; 
 
   const onSubmit = async (values: FormVals) => {
     const payload = { ...values };
@@ -205,6 +202,7 @@ export function ApplicationForm({
       });
 
       router.push(`${ROUTES.APPLICATIONS}/${payload.code}`);
+
     } catch (error) {
       igrpToast({
         type: "error",
@@ -222,20 +220,12 @@ export function ApplicationForm({
       <PageHeader
         title={title}
         showBackButton
-        linkBackButton={linkBackButton}
+        linkBackButton={ROUTES.APPLICATIONS}
       />
 
       <IGRPCardPrimitive className="py-6">
         <IGRPFormPrimitive {...form}>
-          <form
-            onSubmit={form.handleSubmit(onSubmit, (errors) => {
-              console.log("INVALID FORM ERRORS", errors);
-              igrpToast({
-                type: "error",
-                title: "Corrija os campos obrigatórios",
-                description: "Existem erros de validação no formulário.",
-              });
-            })}
+          <form onSubmit={form.handleSubmit(onSubmit)}
           >
             <IGRPCardContentPrimitive>
               <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
@@ -256,7 +246,7 @@ export function ApplicationForm({
                           ref={field.ref}
                           onChange={handleNameChange}
                           required
-                          className="placeholder:truncate border-primary/30 focus-visible:ring-[2px] focus-visible:ring-primary/30 focus-visible:border-primary/30"
+                          className="placeholder:truncate border-primary/30 focus-visible:ring-2 focus-visible:ring-primary/30 focus-visible:border-primary/30"
                         />
                       </IGRPFormControlPrimitive>
                       <IGRPFormMessagePrimitive />
@@ -287,7 +277,7 @@ export function ApplicationForm({
                           ref={field.ref}
                           value={field.value ?? ""}
                           required
-                          className="placeholder:truncate border-primary/30 focus-visible:ring-[2px] focus-visible:ring-primary/30 focus-visible:border-primary/30 uppercase"
+                          className="placeholder:truncate border-primary/30 focus-visible:ring-2 focus-visible:ring-primary/30 focus-visible:border-primary/30 uppercase"
                         />
                       </IGRPFormControlPrimitive>
                       <IGRPFormMessagePrimitive />
@@ -396,7 +386,7 @@ export function ApplicationForm({
                             disabled={
                               disabledFields && type !== appTypeCrud.enum.INTERNAL
                             }
-                            className="placeholder:truncate border-primary/30 focus-visible:ring-[2px] focus-visible:ring-primary/30 focus-visible:border-primary/30"
+                            className="placeholder:truncate border-primary/30 focus-visible:ring-2 focus-visible:ring-primary/30 focus-visible:border-primary/30"
                           />
                         </IGRPFormControlPrimitive>
                         <IGRPFormMessagePrimitive />
@@ -425,7 +415,7 @@ export function ApplicationForm({
                             disabled={
                               disabledFields && type !== appTypeCrud.enum.EXTERNAL
                             }
-                            className="placeholder:truncate border-primary/30 focus-visible:ring-[2px] focus-visible:ring-primary/30 focus-visible:border-primary/30"
+                            className="placeholder:truncate border-primary/30 focus-visible:ring-2 focus-visible:ring-primary/30 focus-visible:border-primary/30"
                           />
                         </IGRPFormControlPrimitive>
                         <IGRPFormMessagePrimitive />
@@ -502,7 +492,7 @@ export function ApplicationForm({
                           onBlur={field.onBlur}
                           name={field.name}
                           ref={field.ref}
-                          className="resize-none placeholder:truncate border-primary/30 focus-visible:ring-[2px] focus-visible:ring-primary/30 focus-visible:border-primary/30"
+                          className="resize-none placeholder:truncate border-primary/30 focus-visible:ring-2 focus-visible:ring-primary/30 focus-visible:border-primary/30"
                         />
                       </IGRPFormControlPrimitive>
                       <IGRPFormMessagePrimitive />

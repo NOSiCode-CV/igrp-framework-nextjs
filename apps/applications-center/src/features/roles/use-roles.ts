@@ -12,7 +12,7 @@ import {
   getRoles,
   updateRole,
 } from "@/actions/roles";
-import type { PermissionArgs } from "../permission/permissions-schemas";
+import type { PermissionArgs } from "../permissions/permissions-schemas";
 import type { RoleArgs } from "./role-schemas";
 
 type RoleFiltersArgs = RoleFilters & {

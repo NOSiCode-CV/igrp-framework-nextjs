@@ -2,7 +2,7 @@ import { DepartmentDetails } from "@/features/departments/components/dept-detail
 
 export const dynamic = "force-dynamic";
 
-export default async function DepartmentPage({
+export default async function DepartmentDetailsPage({
   params,
 }: {
   params: Promise<{ code: string }>;

@@ -2,7 +2,7 @@ import { ApplicationDetails } from "@/features/applications/components/app-detai
 
 export const dynamic = "force-dynamic";
 
-export default async function ApplicationPage({
+export default async function ApplicationDetailsPage({
   params,
 }: {
   params: Promise<{ code: string }>;

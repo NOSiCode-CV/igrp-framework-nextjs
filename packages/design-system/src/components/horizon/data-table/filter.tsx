@@ -201,15 +201,15 @@ function IGRPDataTableFilterFaceted<TData>({
       <Popover>
         <PopoverTrigger asChild>
           <Button variant="outline">
-            <IGRPIcon iconName={iconName} className="-ms-1 opacity-60" />
+            <IGRPIcon iconName={iconName} />
             {placeholder}
             {selectedValues?.size > 0 && (
               <>
-                <Separator orientation="vertical" className="mx-2 h-4" />
+                <Separator orientation="vertical" className="h-2" />
                 <IGRPBadge
                   variant="soft"
-                  color="secondary"
-                  badgeClassName="rounded-sm px-1 font-normal lg:hidden"
+                  color="primary"
+                  badgeClassName="rounded-sm px-1 font-normal"
                 >
                   {selectedValues.size}
                 </IGRPBadge>
@@ -230,7 +230,7 @@ function IGRPDataTableFilterFaceted<TData>({
                         id={`${id}-${i}`}
                         checked={selectedValues.has(option.value)}
                         onCheckedChange={() => handleSelect(option.value)}
-                        className="border-foreground data-[state=checked]:text-foreground! dark:data-[state=checked]:bg-input!"
+                        className="border-foreground"
                       />
                     </div>
 

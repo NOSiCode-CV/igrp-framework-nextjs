@@ -56,6 +56,7 @@ import { useUsers } from "@/features/users/use-users";
 import { ROUTES, STATUS_OPTIONS } from "@/lib/constants";
 import { statusSchema } from "@/schemas/global";
 import { APPLICATIONS_TYPES_FILTERED } from "../app-utils";
+import { DepartmentOption, DEPT_OPTIONS } from "@/features/departments/dept-lib";
 
 // TDOD: implement picture 
 
@@ -143,12 +144,7 @@ export function ApplicationForm({
     };
   });
 
-  const departmentOptions = departments.map((department) => {
-    return {
-      value: department.code,
-      label: department.name,
-    };
-  });
+  const departmentOptions = DEPT_OPTIONS(departments);
 
   const disabledFields = !!application;
 
@@ -533,8 +529,6 @@ export function ApplicationForm({
     </IGRPCardPrimitive>
   );
 }
-
-type DepartmentOption = { value: string; label: string };
 
 type Props = {
   control: Control<FormVals>;

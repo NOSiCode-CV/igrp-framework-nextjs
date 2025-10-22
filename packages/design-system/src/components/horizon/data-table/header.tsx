@@ -50,7 +50,7 @@ function IGRPDataTableHeaderSortToggle<T>({
         <Button
           variant="ghost"
           onClick={(e) => column.toggleSorting(undefined, e.shiftKey)}
-          className="flex items-center gap-2"
+          className="flex items-center gap-2 px-0 py-0 has-[>svg]:px-0"
           title="Ordenar"
         >
           <span>{title}</span>

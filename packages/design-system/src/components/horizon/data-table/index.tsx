@@ -40,6 +40,7 @@ import {
 import { IGRPDataTablePagination, IGRPDataTablePaginationNumeric } from './pagination';
 import { IGPRDataTableToggleVisibility } from './toggle-visibility';
 import { cn } from '../../../lib/utils';
+import { IGRPIcon } from '../icon';
 
 interface IGRPDataTableProps<TData, TValue> {
   columns: ColumnDef<TData, TValue>[];
@@ -64,7 +65,7 @@ interface IGRPDataTableProps<TData, TValue> {
   // rowSelection?: RowSelectionState
   // onRowSelectionChange?: OnChangeFn<RowSelectionState>
   getRowCanExpand?: TableOptions<TData>['getRowCanExpand'];
-  renderSubComponent?: (props: { row: Row<TData> }) => React.ReactElement | undefined;
+  renderSubComponent?: (row: Row<TData>) => React.ReactElement | undefined;
 }
 
 function IGRPDataTable<TData, TValue>({
@@ -139,6 +140,13 @@ function IGRPDataTable<TData, TValue>({
     enableSortingRemoval: false,
   });
 
+  const NotFoundRowSubComponent = (
+    <div className="flex items-center gap-2 p-3">
+      <IGRPIcon iconName="OctagonAlert" />
+      <span>N/A</span>
+    </div>
+  );
+
   return (
     <div className={cn('flex flex-col gap-4', className)}>
       <div className="flex flex-col md:flex-row md:items-center md:justify-between md:flex-1 gap-3">
@@ -186,8 +194,7 @@ function IGRPDataTable<TData, TValue>({
 
           <TableBody className={cn(tableBodyClassName)}>
             {table.getRowModel().rows?.length ? (
-              table.getRowModel().rows.map((row) => {
-                console.log({ getIsExpanded: row.getIsExpanded() });
+              table.getRowModel().rows.map((row) => {                
                 return (
                   <Fragment key={row.id}>
                     <TableRow
@@ -213,7 +220,7 @@ function IGRPDataTable<TData, TValue>({
                     {row.getIsExpanded() && (
                       <TableRow key={`${row.id}-expanded`}>
                         <TableCell colSpan={row.getVisibleCells().length}>
-                          {renderSubComponent && renderSubComponent({ row })}
+                          {renderSubComponent ? renderSubComponent(row) : NotFoundRowSubComponent}
                         </TableCell>
                       </TableRow>
                     )}

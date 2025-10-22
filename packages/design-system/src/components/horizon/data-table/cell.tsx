@@ -158,7 +158,7 @@ function IGRPDataTableCellTooltip({
     <TooltipProvider delayDuration={200}>
       <Tooltip>
         <TooltipTrigger asChild>
-          <div className="cursor-help">
+          <div className="cursor-help whitespace-nowrap truncate">
             <span>{text}</span>
           </div>
         </TooltipTrigger>

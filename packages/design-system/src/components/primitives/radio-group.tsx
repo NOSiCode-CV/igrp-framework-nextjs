@@ -1,6 +1,6 @@
 /* eslint-disable react-refresh/only-export-components */
 
-// THIS COMPONENT IS CHANGED FROM THE ORIGINAL
+// IGRP CUSTOM: THIS COMPONENT IS CHANGED FROM THE ORIGINAL
 
 import * as RadioGroupPrimitive from '@radix-ui/react-radio-group';
 import { CircleIcon } from 'lucide-react';

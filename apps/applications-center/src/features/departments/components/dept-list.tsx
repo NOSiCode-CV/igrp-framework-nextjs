@@ -6,7 +6,6 @@ import {
   IGRPBadgePrimitive,
   IGRPDataTable,
   IGRPDataTableCellBadge,
-  IGRPDataTableCellExpander,
   IGRPDataTableCellTooltip,
   IGRPDataTableClientFilterListProps,
   IGRPDataTableDropdownMenu,
@@ -16,10 +15,9 @@ import {
   IGRPDataTableFilterInput,
   IGRPDataTableHeaderSortToggle,
   IGRPDataTableRowAction,
-  IGRPIcon,  
   Row,
 } from "@igrp/igrp-framework-react-design-system";
-import { useEffect, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 
 import { ButtonLink } from "@/components/button-link";
 import { AppCenterLoading } from "@/components/loading";
@@ -29,7 +27,7 @@ import { showStatus, statusClass } from "@/lib/utils";
 import type { DepartmentArgs } from "../dept-schemas";
 import { useDepartments } from "../use-departments";
 import { DepartmentDeleteDialog } from "./dept-delete-dialog";
-import { DepartmentCreateDialog } from "./dept-form-dialog";
+import { DepartmentFormDialog } from "./dept-form-dialog";
 // import { useCurrentUser } from '@/features/users/use-users';
 
 export function DepartmentList() {
@@ -37,32 +35,19 @@ export function DepartmentList() {
 
   const [openFormDialog, setOpenFormDialog] = useState(false);
   const [openDeleteDialog, setOpenDeleteDialog] = useState(false);
-  const [currentDept, setCurrentDept] = useState<DepartmentArgs | undefined>(
-    undefined,
-  );
+  const [currentDept, setCurrentDept] = useState<DepartmentArgs | null>(null);
   const [deptToDelete, setDeptToDelete] = useState<{
     code: string;
     name: string;
   } | null>(null);
 
-  const { data: departments, isLoading, error, refetch } = useDepartments();
+  const { data: departments, isLoading, error } = useDepartments();
 
   useEffect(() => {
     setData(departments ?? []);
   }, [departments]);
 
-  const columns: ColumnDef<DepartmentArgs>[] = [
-    {
-      id: "expander",
-      header: '-',
-      cell: ({ row }) => (
-        <IGRPDataTableCellExpander
-          row={row}
-          field={row.original.name}
-        />
-      ),
-      size: 30
-    },
+  const columns = useMemo<ColumnDef<DepartmentArgs>[]>(() => [    
     {
       header: ({ column }) => (
         <IGRPDataTableHeaderSortToggle 
@@ -130,7 +115,7 @@ export function DepartmentList() {
       size: 50,
       enableHiding: false,
     },
-  ];
+  ], []);
 
   function RowActions({ row }: { row: Row<DepartmentArgs> }) {
     const code = String(row.getValue("code"));
@@ -156,6 +141,7 @@ export function DepartmentList() {
                 icon: 'Pencil',
                 showIcon: true,
                 action: () => {
+                  setDeptToDelete(null);
                   setCurrentDept(row.original);
                   setOpenFormDialog(true);
                 }
@@ -180,7 +166,7 @@ export function DepartmentList() {
     );
   }
 
-  const filters: IGRPDataTableClientFilterListProps<DepartmentArgs>[] = [
+  const filters = useMemo<IGRPDataTableClientFilterListProps<DepartmentArgs>[]>(() => [
     {
       columnId: "name",
       component: (column) => <IGRPDataTableFilterInput column={column} />,
@@ -195,7 +181,7 @@ export function DepartmentList() {
         />
       ),
     }
-  ];
+  ], []);
 
   if (isLoading || !departments) {
     return <AppCenterLoading descrption="Carregando departamentos..." />;
@@ -205,16 +191,18 @@ export function DepartmentList() {
 
   const emptyList = departments.length === 0;
 
-  const handleOpen = () => {
-    // TODO: review this
-    refetch();
-    setDeptToDelete(null);
+  const handleDelete = (code: string, name: string) => {
+    setOpenFormDialog(false);
+    setCurrentDept(null);
+    setDeptToDelete({ code, name });
+    setOpenDeleteDialog(true);    
   };
 
-  const handleDelete = (code: string, name: string) => {
-    setDeptToDelete({ code, name });
-    setOpenDeleteDialog(true);
-  };
+  const handleOpenCreate = () => {
+    setCurrentDept(null);
+    setDeptToDelete(null);
+    setOpenFormDialog(true);    
+  }
 
   return (
     <div className="flex flex-col gap-10 animate-fade-in">
@@ -225,7 +213,7 @@ export function DepartmentList() {
       >
         {!emptyList && (
           <ButtonLink
-            onClick={() => setOpenFormDialog(true)}
+            onClick={() => handleOpenCreate() }
             icon="GlobeLock"
             href="#"
             label="Novo Departamento"
@@ -241,23 +229,12 @@ export function DepartmentList() {
         data={data}
         clientFilters={filters}
         getRowCanExpand={(row) => Boolean((row.original.description))}
-        renderSubComponent={({ row }) => (
-          <div className="flex items-start py-2 text-primary/80 text-balance">
-            <span
-              className="me-3 mt-0.5 flex w-7 shrink-0 justify-center"
-              aria-hidden="true"
-            >
-              <IGRPIcon iconName="Info" className="opacity-60" />
-            </span>
-            <p className="text-sm">{row.original.description}</p>
-          </div>
-        )}
+        
       />
 
-      <DepartmentCreateDialog
+      <DepartmentFormDialog
         open={openFormDialog}
-        onOpenChange={(open) => setOpenFormDialog(open)}
-        handleOpenForm={handleOpen}
+        onOpenChange={setOpenFormDialog}        
         department={currentDept}
       />
 

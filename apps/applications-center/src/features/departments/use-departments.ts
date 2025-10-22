@@ -70,9 +70,10 @@ export const useDeleteDepartment = () => {
   });
 };
 
-export const useDepartmentByCode = (code: string) => {
+export const useDepartmentByCode = (code?: string) => {
   return useQuery<DepartmentArgs>({
     queryKey: ["department-by-code", code],
-    queryFn: () => getDepartmentByCode(code),
+    queryFn: () => getDepartmentByCode(code!),
+    enabled: !!code,
   });
 };

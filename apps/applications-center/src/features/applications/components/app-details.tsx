@@ -99,6 +99,7 @@ export function ApplicationDetails({ code }: { code: string }) {
                 </div>
                 <CopyToClipboard value={name} />
               </div>
+
               <div className="flex items-center gap-4">
                 <div>
                   <h3 className="font-normal text-muted-foreground">Código</h3>
@@ -136,7 +137,7 @@ export function ApplicationDetails({ code }: { code: string }) {
                 </div>
               </div>
               <div className="sm:col-span-2 lg:col-span-3">
-                <h3 className="font-normal text-muted-foreground">Descrição</h3>
+                <h3 className="font-normal text-muted-foreground text-balance">Descrição</h3>
                 <p>{description || "Sem descrição."}</p>
               </div>
             </IGRPCardContentPrimitive>

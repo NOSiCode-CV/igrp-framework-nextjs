@@ -46,8 +46,7 @@ function IGRPBadge({
 }: IGRPBadgeProps) {
   const colorClasses = IGRPColors[variant][color];
   const isIconOnly = (!children || children === '') && (showIcon || iconName);
-  const isNumberOnly =
-    typeof children === 'string' && children.length === 1 && !showIcon && !iconName && !dot;
+  const isNumberOnly = typeof children === 'number' && !showIcon && !iconName && !dot;
   const isCircular = isIconOnly || isNumberOnly;
 
   const getCircularSizeClass = () => {

@@ -1,6 +1,11 @@
 import { zodResolver } from "@hookform/resolvers/zod";
 import {
   IGRPButtonPrimitive,
+  IGRPCommandEmptyPrimitive,
+  IGRPCommandInputPrimitive,
+  IGRPCommandItemPrimitive,
+  IGRPCommandListPrimitive,
+  IGRPCommandPrimitive,
   IGRPDialogContentPrimitive,
   IGRPDialogFooterPrimitive,
   IGRPDialogHeaderPrimitive,
@@ -12,7 +17,11 @@ import {
   IGRPFormLabelPrimitive,
   IGRPFormMessagePrimitive,
   IGRPFormPrimitive,
+  IGRPIcon,
   IGRPInputPrimitive,
+  IGRPPopoverContentPrimitive,
+  IGRPPopoverPrimitive,
+  IGRPPopoverTriggerPrimitive,
   IGRPSelectContentPrimitive,
   IGRPSelectItemPrimitive,
   IGRPSelectPrimitive,
@@ -21,7 +30,7 @@ import {
   IGRPTextAreaPrimitive,
   useIGRPToast,
 } from "@igrp/igrp-framework-react-design-system";
-import { useEffect } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { useForm } from "react-hook-form";
 import { STATUS_OPTIONS } from "@/lib/constants";
 import { statusSchema } from "@/schemas/global";
@@ -51,22 +60,26 @@ export function RoleFormDialog({
   role,
   roles,
 }: RoleFormDialogProps) {
-  const { igrpToast } = useIGRPToast();
+  const [parentOpen, setParentOpen] = useState(false);
 
   const { mutateAsync: createRole, isPending: isCreating } = useCreateRole();
   const { mutateAsync: updateRole, isPending: isUpdating } = useUpdateRole();
 
+  const { igrpToast } = useIGRPToast();
+
   const isEdit = !!role;
+
+  const defaultValues = {
+    name: "",
+    description: null,
+    departmentCode: departmentCode,
+    parentName: "",
+    status: statusSchema.enum.ACTIVE,
+  }
 
   const form = useForm<CreateRoleArgs>({
     resolver: zodResolver(createRoleSchema),
-    defaultValues: {
-      name: "",
-      description: null,
-      departmentCode: departmentCode,
-      parentName: "",
-      status: statusSchema.enum.ACTIVE,
-    },
+    defaultValues: defaultValues
   });
 
   useEffect(() => {
@@ -81,15 +94,18 @@ export function RoleFormDialog({
         status: role.status ?? statusSchema.enum.ACTIVE,
       } as CreateRoleArgs);
     } else {
-      form.reset({
-        name: "",
-        description: null,
-        departmentCode,
-        parentName: null,
-        status: statusSchema.enum.ACTIVE,
-      } as CreateRoleArgs);
+      form.reset(defaultValues as CreateRoleArgs);
     }
   }, [open, role, departmentCode, form]);
+
+  const isLoading = isCreating || isUpdating || form.formState.isSubmitting;
+
+  const parentValue = form.watch("parentName");
+
+  const parentSelected = useMemo(
+    () => roles?.find(o => o.name === parentValue) ?? null,
+    [parentValue, roles]
+  );
 
   const onSubmit = async (values: CreateRoleArgs) => {
     try {
@@ -117,6 +133,10 @@ export function RoleFormDialog({
           description: "Perfil foi adicionado com sucesso.",
         });
       }
+
+      form.reset(defaultValues);
+      onOpenChange(false);
+
     } catch (error) {
       console.error("Falha ao adicionar perfil:", error);
       igrpToast({
@@ -124,15 +144,12 @@ export function RoleFormDialog({
         title: "Falha ao adicionar perfil",
         description: `Tente novamente. ${error}`,
       });
-    } finally {
-      form.reset();
-      onOpenChange(false);
     }
   };
 
   return (
     <IGRPDialogPrimitive open={open} onOpenChange={onOpenChange} modal>
-      <IGRPDialogContentPrimitive className="md:min-w-2xl">
+      <IGRPDialogContentPrimitive>
         <IGRPDialogHeaderPrimitive>
           <IGRPDialogTitlePrimitive>
             {isEdit ? "Editar Perfil" : "Adicionar Perfil"}
@@ -156,6 +173,7 @@ export function RoleFormDialog({
                     <IGRPInputPrimitive
                       placeholder="Identificador único do perfil"
                       required
+                      disabled={isLoading}
                       className="placeholder:truncate border-primary/30 focus-visible:ring-[2px] focus-visible:ring-primary/30 focus-visible:border-primary/30"
                       {...field}
                     />
@@ -179,6 +197,7 @@ export function RoleFormDialog({
                       onBlur={field.onBlur}
                       name={field.name}
                       ref={field.ref}
+                      disabled={isLoading}
                       className="resize-none placeholder:truncate border-primary/30 focus-visible:ring-[2px] focus-visible:ring-primary/30 focus-visible:border-primary/30"
                     />
                   </IGRPFormControlPrimitive>
@@ -191,29 +210,95 @@ export function RoleFormDialog({
               <IGRPFormFieldPrimitive
                 control={form.control}
                 name="parentName"
-                render={({ field }) => (
-                  <IGRPFormItemPrimitive>
-                    <IGRPFormLabelPrimitive>Perfil Pai</IGRPFormLabelPrimitive>
-                    <IGRPSelectPrimitive
-                      onValueChange={(v) => field.onChange(v === "" ? null : v)}
-                      value={field.value ?? ""}
-                    >
-                      <IGRPFormControlPrimitive>
-                        <IGRPSelectTriggerPrimitive className="w-full truncate">
-                          <IGRPSelectValuePrimitive placeholder="Selecione o perfil pai" />
-                        </IGRPSelectTriggerPrimitive>
-                      </IGRPFormControlPrimitive>
-                      <IGRPSelectContentPrimitive>
-                        {roles.map((r) => (
-                          <IGRPSelectItemPrimitive key={r.name} value={r.name}>
-                            {r.description ?? r.name}
-                          </IGRPSelectItemPrimitive>
-                        ))}
-                      </IGRPSelectContentPrimitive>
-                    </IGRPSelectPrimitive>
-                    <IGRPFormMessagePrimitive />
-                  </IGRPFormItemPrimitive>
-                )}
+                render={({ field }) => {
+                  const placeholder = "Selecionar departamento…";
+
+                  return (
+                    <IGRPFormItemPrimitive>
+                      <IGRPFormLabelPrimitive>
+                        Perfil Pai
+                      </IGRPFormLabelPrimitive>
+
+                      <IGRPPopoverPrimitive
+                        open={parentOpen}
+                        onOpenChange={(next) => {
+                          if (isLoading) return;
+                          setParentOpen(next);
+                        }}
+                      >
+                        <IGRPPopoverTriggerPrimitive asChild>
+                          <IGRPButtonPrimitive
+                            type="button"
+                            variant="outline"
+                            className="w-full justify-between"
+                            aria-expanded={parentOpen}
+                            disabled={isLoading}
+                          >
+                            <span className="truncate">
+                              {parentSelected ? parentSelected.name : placeholder}
+                            </span>
+                            <IGRPIcon iconName={parentOpen ? "ChevronUp" : "ChevronDown"} />
+                          </IGRPButtonPrimitive>
+                        </IGRPPopoverTriggerPrimitive>
+
+                        <IGRPPopoverContentPrimitive
+                          className="p-0 w-[--radix-popover-trigger-width] min-w-64"
+                          align="start"
+                        >
+                          <IGRPCommandPrimitive>
+                            <IGRPCommandInputPrimitive placeholder="Procurar departamento..." />
+                            <IGRPCommandListPrimitive className="max-h-64">
+                              <IGRPCommandEmptyPrimitive className="py-4 text-center text-sm text-foreground">
+                                Departamento não encontrado.
+                              </IGRPCommandEmptyPrimitive>
+
+                              <IGRPCommandItemPrimitive
+                                key="__none__"
+                                onSelect={() => { field.onChange(""); setParentOpen(false); }}
+                                aria-selected={!field.value}
+                                className="flex items-center gap-2"
+                              >
+                                {!field.value ? <IGRPIcon iconName="Check" className="size-4 shrink-0" /> : <span className="w-4" />}
+                                <span className="truncate">Nenhum</span>
+                              </IGRPCommandItemPrimitive>
+
+                              {roles.map(opt => (
+                                <IGRPCommandItemPrimitive
+                                  key={opt.name}
+                                  onSelect={() => { field.onChange(opt.name); setParentOpen(false); }}
+                                  aria-selected={field.value === opt.name}
+                                  className="flex items-center gap-2"
+                                >
+                                  {field.value === opt.name ? (
+                                    <IGRPIcon iconName="Check" className="size-4 shrink-0" />
+                                  ) : (
+                                    <span className="w-4" />
+                                  )}
+                                  <span className="truncate">{opt.name}</span>
+                                </IGRPCommandItemPrimitive>
+                              ))}
+
+                            </IGRPCommandListPrimitive>
+
+                            <div className="flex items-center justify-between px-2 py-3 border-t">
+                              <IGRPButtonPrimitive
+                                type="button"
+                                className="text-xs"
+                                onClick={() => field.onChange("")}
+                                disabled={!field.value}
+                              >
+                                Limpar
+                              </IGRPButtonPrimitive>
+
+                            </div>
+                          </IGRPCommandPrimitive>
+                        </IGRPPopoverContentPrimitive>
+                      </IGRPPopoverPrimitive>
+
+                      <IGRPFormMessagePrimitive />
+                    </IGRPFormItemPrimitive>
+                  );
+                }}
               />
             )}
 

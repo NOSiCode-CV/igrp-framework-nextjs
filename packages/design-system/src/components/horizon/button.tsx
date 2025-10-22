@@ -2,7 +2,6 @@
 
 import type { ReactNode } from 'react';
 import type { VariantProps } from 'class-variance-authority';
-import { Loader2 } from 'lucide-react';
 
 import { Button, buttonVariants } from '../primitives/button';
 import { IGRPIcon } from './icon';
@@ -38,6 +37,10 @@ function IGRPButton({
   const computedIconSize =
     iconSize || (size === 'sm' ? 14 : size === 'lg' ? 20 : size === 'icon' ? 18 : 16);
 
+  const LoadingIcon = (
+    <IGRPIcon iconName="LoaderCircle" className="animate-spin" aria-hidden="true" />
+  );
+
   if (size === 'icon' || size === 'icon-sm' || size === 'icon-lg') {
     return (
       <Button
@@ -48,16 +51,11 @@ function IGRPButton({
       >
         {loading ? (
           <>
-            <Loader2 className="size-4 animate-spin" aria-hidden="true" />
+            {LoadingIcon}
             <span className="sr-only">{loadingText}</span>
           </>
         ) : (
-          <IGRPIcon
-            iconName={iconName}
-            className={iconClassName}
-            size={computedIconSize}
-            aria-hidden="true"
-          />
+          <IGRPIcon iconName={iconName} className={iconClassName} aria-hidden="true" />
         )}
       </Button>
     );
@@ -70,34 +68,30 @@ function IGRPButton({
       disabled={disabled || loading}
       type={type}
     >
-      {loading && iconPlacement === 'start' ? (
-        <Loader2 className="mr-1 size-4 animate-spin" aria-hidden="true" />
-      ) : (
-        showIcon &&
-        iconPlacement === 'start' && (
-          <IGRPIcon
-            iconName={iconName}
-            className={cn('mr-1', iconClassName)}
-            size={computedIconSize}
-            aria-hidden="true"
-          />
-        )
-      )}
+      {loading && iconPlacement === 'start'
+        ? LoadingIcon
+        : showIcon &&
+          iconPlacement === 'start' && (
+            <IGRPIcon
+              iconName={iconName}
+              className={iconClassName}
+              size={computedIconSize}
+              aria-hidden="true"
+            />
+          )}
 
       {loading && loadingText ? loadingText : children}
 
       {!loading && showIcon && iconPlacement === 'end' && (
         <IGRPIcon
           iconName={iconName}
-          className={cn('ml-1', iconClassName)}
+          className={iconClassName}
           size={computedIconSize}
           aria-hidden="true"
         />
       )}
 
-      {loading && iconPlacement === 'end' && (
-        <Loader2 className="ml-1 size-4 animate-spin" aria-hidden="true" />
-      )}
+      {loading && iconPlacement === 'end' && LoadingIcon}
     </Button>
   );
 }

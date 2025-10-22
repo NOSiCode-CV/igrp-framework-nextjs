@@ -65,7 +65,7 @@ function IGRPDataTablePagination<TData>({
         </Select>
       </div>
 
-      <div className="flex grow justify-end text-sm whitespace-nowrap text-muted-foreground">
+      <div className="text-sm whitespace-nowrap text-muted-foreground">
         <p className="whitespace-nowrap text-sm text-muted-foreground" aria-live="polite">
           <span className="text-foreground">
             {start}-{end}

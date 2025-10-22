@@ -130,15 +130,7 @@ function IGRPDataTableDropdownMenuLink({
   const iconClass = iconPlacement === 'end' ? 'flex-row-reverse' : '';
   const customClss = cn('flex items-center gap-2 w-full', iconClass, classNameItem);
 
-  const handlerAction = () => {
-    if (typeof action === 'function') {
-      action();
-    } else {
-      console.warn('No action function provided');
-    }
-  };
-
-  const renderContent = () => (
+  const RenderContent = (
     <>
       {showIcon && (
         <IGRPIcon iconName={icon} className={cn('text-muted-foreground', iconClassName)} />
@@ -147,15 +139,26 @@ function IGRPDataTableDropdownMenuLink({
     </>
   );
 
-  return href ? (
-    <DropdownMenuItem onSelect={(e) => e.preventDefault()} asChild variant={variant}>
-      <Link href={href} className={customClss}>
-        {renderContent()}
-      </Link>
-    </DropdownMenuItem>
-  ) : (
-    <DropdownMenuItem className={customClss} onSelect={handlerAction} variant={variant}>
-      {renderContent()}
+  if (href) {
+    return (
+      <DropdownMenuItem onSelect={(e) => e.preventDefault()} asChild variant={variant}>
+        <Link href={href} className={customClss}>
+          {RenderContent}
+        </Link>
+      </DropdownMenuItem>
+    )
+  } 
+  
+  return (
+    <DropdownMenuItem 
+      className={customClss}
+      variant={variant}
+      onSelect={() => {
+        if (!action) return;
+        action();
+      }}    
+    >
+      {RenderContent}
     </DropdownMenuItem>
   );
 }

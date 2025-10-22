@@ -21,7 +21,7 @@ export async function uploadPublicFile(
 ) {
   const client = await getClientAccess();
 
-  console.log({ file, options });
+  // console.log({ file, options });
 
   try {
     const result = await client.files.uploadPublicFile(file, options);
@@ -40,8 +40,8 @@ export async function uploadPrivateFile(
 ) {
   const client = await getClientAccess();
 
-  console.log({ file, options });
-  
+  // console.log({ file, options });
+
   try {
     const result = await client.files.uploadPrivateFile(file, options);
     return result.data;

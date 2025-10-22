@@ -146,17 +146,17 @@ function IGRPDataTableDropdownMenuLink({
           {RenderContent}
         </Link>
       </DropdownMenuItem>
-    )
-  } 
-  
+    );
+  }
+
   return (
-    <DropdownMenuItem 
+    <DropdownMenuItem
       className={customClss}
       variant={variant}
       onSelect={() => {
         if (!action) return;
         action();
-      }}    
+      }}
     >
       {RenderContent}
     </DropdownMenuItem>

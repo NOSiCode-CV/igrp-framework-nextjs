@@ -14,7 +14,7 @@ function PopoverTrigger({ ...props }: React.ComponentProps<typeof PopoverPrimiti
   return <PopoverPrimitive.Trigger data-slot="popover-trigger" {...props} />;
 }
 
-interface IGRPPopoverContentProps extends React.ComponentProps<typeof PopoverPrimitive.Content> {  
+interface IGRPPopoverContentProps extends React.ComponentProps<typeof PopoverPrimitive.Content> {
   container?: React.ComponentProps<typeof PopoverPrimitive.Portal>['container'];
 }
 

@@ -9,10 +9,10 @@ import { getClientAccess } from "./access-client";
 export async function getUsers(params?: UserFilters, ids?: number[]) {
   const client = await getClientAccess();
 
-  console.log({ params, ids });
+  // console.log({ params, ids });
 
   try {
-    const result = await client.users.getUsers(params, ids );
+    const result = await client.users.getUsers(params, ids);
     return result.data;
   } catch (error) {
     console.error("[users] Erro ao carregar lista de utilizadores.:", error);
@@ -51,7 +51,7 @@ export async function inviteUser(user: CreateUserRequest) {
 export async function addRolesToUser(username: string, roleNames: string[]) {
   const client = await getClientAccess();
 
-  console.log({ username, roleNames });
+  // console.log({ username, roleNames });
 
   try {
     const result = await client.users.addRolesToUser(username, roleNames);

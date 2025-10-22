@@ -8,9 +8,7 @@ export const resourceItemSchema = z.object({
 
 export const resourceSchema = z.object({
   name: z.string().min(1, "Resource name is required"),
-  type: z.enum(["API", "PAGE", "COMPONENT"], {
-    required_error: "Resource type is required",
-  }),
+  type: z.enum(["API", "PAGE", "COMPONENT"]),
   status: z.enum(["ACTIVE", "INACTIVE"]).default("ACTIVE"),
   applicationId: z.number().min(1, "Application ID is required"),
   items: z.array(resourceItemSchema).optional().default([]),

@@ -262,12 +262,12 @@ export function RoleDetails({
     }
 
     try {
-      if (toAdd.length) {
-        await addPermissions({ name: role.name, permissionNames: toAdd });
-      }
-      if (toRemove.length) {
-        await removePermissions({ name: role.name, permissionNames: toRemove });
-      }
+      // if (toAdd.length) {
+      //   await addPermissions({ name: role.name, permissionNames: toAdd });
+      // }
+      // if (toRemove.length) {
+      //   await removePermissions({ name: role.name, permissionNames: toRemove });
+      // }
 
       igrpToast({
         type: "success",

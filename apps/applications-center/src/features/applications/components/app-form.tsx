@@ -56,9 +56,12 @@ import { useUsers } from "@/features/users/use-users";
 import { ROUTES, STATUS_OPTIONS } from "@/lib/constants";
 import { statusSchema } from "@/schemas/global";
 import { APPLICATIONS_TYPES_FILTERED } from "../app-utils";
-import { DepartmentOption, DEPT_OPTIONS } from "@/features/departments/dept-lib";
+import {
+  DepartmentOption,
+  DEPT_OPTIONS,
+} from "@/features/departments/dept-lib";
 
-// TDOD: implement picture 
+// TDOD: implement picture
 
 export function ApplicationForm({
   application,
@@ -132,7 +135,7 @@ export function ApplicationForm({
 
   const isLoading = userLoading || !departments || departmentLoading;
 
-  if (isLoading )
+  if (isLoading)
     return <AppCenterLoading descrption="A preparar dados da aplicação..." />;
   if (userError) throw userError;
   if (departmentError) throw departmentError;
@@ -161,7 +164,7 @@ export function ApplicationForm({
   const onSubmit = async (values: FormVals) => {
     const payload = { ...values };
 
-    console.log({ values });
+    // console.log({ values });
 
     const file = values.image?.file as File;
 
@@ -176,7 +179,7 @@ export function ApplicationForm({
     if (payload.type === appTypeCrud.enum.EXTERNAL) delete payload.slug;
     delete payload.image;
 
-    console.log({ payload });
+    // console.log({ payload });
 
     try {
       if (isEdit) {
@@ -208,7 +211,7 @@ export function ApplicationForm({
     }
   };
 
-  return (    
+  return (
     <IGRPCardPrimitive className="py-6">
       <IGRPFormPrimitive {...form}>
         <form
@@ -471,10 +474,7 @@ export function ApplicationForm({
                 name="description"
                 render={({ field }) => (
                   <IGRPFormItemPrimitive
-                    className={cn(
-                      "lg:col-span-2",
-                      isEdit && "sm:col-span-2",
-                    )}
+                    className={cn("lg:col-span-2", isEdit && "sm:col-span-2")}
                   >
                     <IGRPFormLabelPrimitive className='after:content-["*"] after:text-destructive gap-0.5'>
                       Descrição

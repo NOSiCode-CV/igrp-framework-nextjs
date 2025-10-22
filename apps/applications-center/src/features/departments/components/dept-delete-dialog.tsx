@@ -30,7 +30,6 @@ export function DepartmentDeleteDialog({
       });
 
       onOpenChange(false);
-
     } catch (error) {
       igrpToast({
         type: "error",
@@ -48,6 +47,6 @@ export function DepartmentDeleteDialog({
       toDelete={deptToDelete}
       confirmDelete={confirmDelete}
       label="Nome Departamento"
-    />    
+    />
   );
 }

@@ -1,13 +1,24 @@
-import { IGRPDialogPrimitive, IGRPDialogContentPrimitive, IGRPDialogHeaderPrimitive, IGRPIcon, IGRPDialogTitlePrimitive, IGRPDialogDescriptionPrimitive, IGRPLabelPrimitive, IGRPInputPrimitive, IGRPDialogFooterPrimitive, IGRPButtonPrimitive } from "@igrp/igrp-framework-react-design-system";
+import {
+  IGRPDialogPrimitive,
+  IGRPDialogContentPrimitive,
+  IGRPDialogHeaderPrimitive,
+  IGRPIcon,
+  IGRPDialogTitlePrimitive,
+  IGRPDialogDescriptionPrimitive,
+  IGRPLabelPrimitive,
+  IGRPInputPrimitive,
+  IGRPDialogFooterPrimitive,
+  IGRPButtonPrimitive,
+} from "@igrp/igrp-framework-react-design-system";
 import { useId, useState } from "react";
 
 interface IGRPDialogDeleteProps {
   open: boolean;
   onOpenChange: (open: boolean) => void;
   toDelete: { code?: string; name: string };
-  confirmDelete(): Promise<void>
-  description?: string
-  label?: string
+  confirmDelete(): Promise<void>;
+  description?: string;
+  label?: string;
 }
 
 function IGRPDialogDelete({
@@ -16,7 +27,7 @@ function IGRPDialogDelete({
   toDelete,
   confirmDelete,
   description,
-  label = 'Escreva'
+  label = "Escreva",
 }: IGRPDialogDeleteProps) {
   const id = useId();
   const [confirmation, setConfirmation] = useState("");
@@ -24,11 +35,14 @@ function IGRPDialogDelete({
   const isConfirmed = confirmation === toDelete.name;
 
   const RenderDes = (
-    <span>Esta ação é irreversível. Todos os dados serão eliminados permanentemente. 
+    <span>
+      Esta ação é irreversível. Todos os dados serão eliminados permanentemente.
       Para confirmar, escreva{" "}
-      <span className="text-destructive focus:bg-destructive/10 dark:focus:bg-destructive/20 focus:text-destructive">{toDelete.name}.</span>
+      <span className="text-destructive focus:bg-destructive/10 dark:focus:bg-destructive/20 focus:text-destructive">
+        {toDelete.name}.
+      </span>
     </span>
-  )
+  );
 
   return (
     <IGRPDialogPrimitive open={open} onOpenChange={onOpenChange}>
@@ -92,7 +106,7 @@ function IGRPDialogDelete({
         </IGRPDialogFooterPrimitive>
       </IGRPDialogContentPrimitive>
     </IGRPDialogPrimitive>
-  )
+  );
 }
 
-export { IGRPDialogDelete, type IGRPDialogDeleteProps }
+export { IGRPDialogDelete, type IGRPDialogDeleteProps };

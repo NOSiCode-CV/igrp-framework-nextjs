@@ -10,7 +10,7 @@ import type { RoleArgs } from "@/features/roles/role-schemas";
 import { getClientAccess } from "./access-client";
 
 export async function getRoles(params: RoleFilters) {
-  console.log({ RoleFilters: params });
+  // console.log({ RoleFilters: params });
 
   const client = await getClientAccess();
 
@@ -89,8 +89,8 @@ export async function addPermissionsToRole(
 ) {
   const client = await getClientAccess();
 
-  console.log("::: Add Permissões :::");
-  console.log({ name, permissionNames });
+  // console.log("::: Add Permissões :::");
+  // console.log({ name, permissionNames });
   try {
     const result = await client.roles.addPermissionsToRole(
       name,
@@ -112,8 +112,8 @@ export async function removePermissionsFromRole(
 ) {
   const client = await getClientAccess();
 
-  console.log("::: Remove Permissões :::");
-  console.log({ name, permissionNames });
+  // console.log("::: Remove Permissões :::");
+  // console.log({ name, permissionNames });
 
   try {
     const result = await client.roles.removePermissionsFromRole(

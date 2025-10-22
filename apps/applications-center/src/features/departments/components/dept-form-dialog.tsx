@@ -43,7 +43,11 @@ import {
   departmentSchema,
   normalizeDeptartment,
 } from "../dept-schemas";
-import { useCreateDepartment, useUpdateDepartment, useDepartments } from "../use-departments";
+import {
+  useCreateDepartment,
+  useUpdateDepartment,
+  useDepartments,
+} from "../use-departments";
 import { DEPT_OPTIONS } from "../dept-lib";
 
 interface DepartmentCreateDialogProps {
@@ -57,19 +61,14 @@ export function DepartmentFormDialog({
   onOpenChange,
   department,
 }: DepartmentCreateDialogProps) {
-
   const { igrpToast } = useIGRPToast();
 
   const [parentOpen, setParentOpen] = useState(false);
 
-  const {
-    mutateAsync: createDepartment,
-    isPending: isCreating
-  } = useCreateDepartment();
-  const {
-    mutateAsync: updateDepartment,
-    isPending: isUpdating
-  } = useUpdateDepartment();
+  const { mutateAsync: createDepartment, isPending: isCreating } =
+    useCreateDepartment();
+  const { mutateAsync: updateDepartment, isPending: isUpdating } =
+    useUpdateDepartment();
 
   const defaultValues = {
     name: "",
@@ -77,7 +76,7 @@ export function DepartmentFormDialog({
     description: "",
     status: statusSchema.enum.ACTIVE,
     parent_code: "",
-  }
+  };
 
   const {
     data: departments,
@@ -87,11 +86,11 @@ export function DepartmentFormDialog({
 
   const form = useForm<DepartmentArgs>({
     resolver: zodResolver(departmentSchema),
-    defaultValues: defaultValues
+    defaultValues: defaultValues,
   });
 
   useEffect(() => {
-    if (!open) return;    
+    if (!open) return;
 
     if (department) {
       form.reset({
@@ -103,7 +102,7 @@ export function DepartmentFormDialog({
       });
     } else {
       form.reset(defaultValues);
-    }    
+    }
   }, [open, department, form]);
 
   const watchedName = form.watch("name");
@@ -126,19 +125,22 @@ export function DepartmentFormDialog({
 
   const isLoading = isCreating || isUpdating || departmentLoading;
 
-  const errorText = departmentError && "Ocorreu um erro ao carregar os departamentos."
+  const errorText =
+    departmentError && "Ocorreu um erro ao carregar os departamentos.";
 
   const departmentOptions = useMemo(
     () =>
-      DEPT_OPTIONS((departments ?? []).filter(d => d.code !== department?.code)),
-    [departments, department]
+      DEPT_OPTIONS(
+        (departments ?? []).filter((d) => d.code !== department?.code),
+      ),
+    [departments, department],
   );
 
   const parentValue = form.watch("parent_code");
 
   const parentSelected = useMemo(
-    () => departmentOptions.find(o => o.value === parentValue) ?? null,
-    [parentValue, departmentOptions]
+    () => departmentOptions.find((o) => o.value === parentValue) ?? null,
+    [parentValue, departmentOptions],
   );
 
   const onSubmit = async (values: DepartmentArgs) => {
@@ -159,7 +161,6 @@ export function DepartmentFormDialog({
 
       form.reset();
       onOpenChange(false);
-
     } catch (error) {
       igrpToast({
         type: "error",
@@ -300,9 +301,13 @@ export function DepartmentFormDialog({
                           disabled={isLoading}
                         >
                           <span className="truncate">
-                            {parentSelected ? parentSelected.label : placeholder}
+                            {parentSelected
+                              ? parentSelected.label
+                              : placeholder}
                           </span>
-                          <IGRPIcon iconName={parentOpen ? "ChevronUp" : "ChevronDown"} />
+                          <IGRPIcon
+                            iconName={parentOpen ? "ChevronUp" : "ChevronDown"}
+                          />
                         </IGRPButtonPrimitive>
                       </IGRPPopoverTriggerPrimitive>
 
@@ -319,30 +324,45 @@ export function DepartmentFormDialog({
 
                             <IGRPCommandItemPrimitive
                               key="__none__"
-                              onSelect={() => { field.onChange(""); setParentOpen(false); }}
+                              onSelect={() => {
+                                field.onChange("");
+                                setParentOpen(false);
+                              }}
                               aria-selected={!field.value}
                               className="flex items-center gap-2"
                             >
-                              {!field.value ? <IGRPIcon iconName="Check" className="size-4 shrink-0" /> : <span className="w-4" />}
+                              {!field.value ? (
+                                <IGRPIcon
+                                  iconName="Check"
+                                  className="size-4 shrink-0"
+                                />
+                              ) : (
+                                <span className="w-4" />
+                              )}
                               <span className="truncate">Nenhum</span>
                             </IGRPCommandItemPrimitive>
 
-                            {departmentOptions.map(opt => (
+                            {departmentOptions.map((opt) => (
                               <IGRPCommandItemPrimitive
                                 key={opt.value}
-                                onSelect={() => { field.onChange(opt.value); setParentOpen(false); }}
+                                onSelect={() => {
+                                  field.onChange(opt.value);
+                                  setParentOpen(false);
+                                }}
                                 aria-selected={field.value === opt.value}
                                 className="flex items-center gap-2"
                               >
                                 {field.value === opt.value ? (
-                                  <IGRPIcon iconName="Check" className="size-4 shrink-0" />
+                                  <IGRPIcon
+                                    iconName="Check"
+                                    className="size-4 shrink-0"
+                                  />
                                 ) : (
                                   <span className="w-4" />
                                 )}
                                 <span className="truncate">{opt.label}</span>
                               </IGRPCommandItemPrimitive>
                             ))}
-
                           </IGRPCommandListPrimitive>
 
                           <div className="flex items-center justify-between px-2 py-3 border-t">
@@ -354,7 +374,6 @@ export function DepartmentFormDialog({
                             >
                               Limpar
                             </IGRPButtonPrimitive>
-
                           </div>
                         </IGRPCommandPrimitive>
                       </IGRPPopoverContentPrimitive>

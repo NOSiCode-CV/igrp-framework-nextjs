@@ -130,46 +130,41 @@ export function UserInviteDialog({
   };
 
   const onSubmit = async (values: FormSchema) => {
-    const { users, roleNames } = values;
-
-    const inviteAll = Promise.all(
-      users.map(async (raw) => {
-        const username = deriveUsernameFromEmail(raw.email);
-
-        const userPayload: CreateUserArgs = {
-          name: raw.name.trim(),
-          username,
-          email: raw.email.trim(),
-          status: statusSchema.enum.ACTIVE,
-        };
-
-        const created = await userInvite({ user: userPayload });
-        const finalUsername = (created as any)?.username ?? username;
-
-        if (finalUsername && roleNames?.length) {
-          await addUserRole({ username: finalUsername, roleNames });
-        }
-        return finalUsername;
-      }),
-    );
-    igrpToast({
-      promise: inviteAll,
-      loading: `A convidar ${users.length} utilizador${users.length > 1 ? "es" : ""}...`,
-      success: `Convite enviado para ${users.length} utilizador${users.length > 1 ? "es" : ""}!`,
-      error: (err) => `Falha ao convidar: ${String(err)}`,
-    });
-
-    try {
-      await inviteAll;
-      form.reset({
-        users: [EMPTY_USER],
-        departmentCode: undefined,
-        roleNames: [],
-      });
-      onOpenChange(false);
-    } catch (error) {
-      console.warn(error);
-    }
+    // const { users, roleNames } = values;
+    // const inviteAll = Promise.all(
+    //   users.map(async (raw) => {
+    //     const username = deriveUsernameFromEmail(raw.email);
+    //     const userPayload: CreateUserArgs = {
+    //       name: raw.name.trim(),
+    //       username,
+    //       email: raw.email.trim(),
+    //       status: statusSchema.enum.ACTIVE,
+    //     };
+    //     const created = await userInvite({ user: userPayload });
+    //     const finalUsername = (created as any)?.username ?? username;
+    //     if (finalUsername && roleNames?.length) {
+    //       await addUserRole({ username: finalUsername, roleNames });
+    //     }
+    //     return finalUsername;
+    //   }),
+    // );
+    // igrpToast({
+    //   promise: inviteAll,
+    //   loading: `A convidar ${users.length} utilizador${users.length > 1 ? "es" : ""}...`,
+    //   success: `Convite enviado para ${users.length} utilizador${users.length > 1 ? "es" : ""}!`,
+    //   error: (err) => `Falha ao convidar: ${String(err)}`,
+    // });
+    // try {
+    //   await inviteAll;
+    //   form.reset({
+    //     users: [EMPTY_USER],
+    //     departmentCode: undefined,
+    //     roleNames: [],
+    //   });
+    //   onOpenChange(false);
+    // } catch (error) {
+    //   console.warn(error);
+    // }
   };
 
   return (

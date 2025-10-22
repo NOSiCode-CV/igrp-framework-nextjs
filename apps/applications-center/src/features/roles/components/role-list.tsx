@@ -138,14 +138,10 @@ export function RolesList({ departmentCode }: RolesListProps) {
               <IGRPDropdownMenuTriggerPrimitive asChild>
                 <IGRPButtonPrimitive variant="outline" className="gap-2">
                   <IGRPIcon iconName="ListFilter" strokeWidth={2} />
-                  Estado{" "}
-                  {statusFilter.length > 0 && `(${statusFilter.length})`}
+                  Estado {statusFilter.length > 0 && `(${statusFilter.length})`}
                 </IGRPButtonPrimitive>
               </IGRPDropdownMenuTriggerPrimitive>
-              <IGRPDropdownMenuContentPrimitive
-                align="start"
-                className="w-40"
-              >
+              <IGRPDropdownMenuContentPrimitive align="start" className="w-40">
                 <IGRPDropdownMenuSeparatorPrimitive />
                 {STATUS_OPTIONS.map(({ value, label }) => (
                   <IGRPDropdownMenuCheckboxItemPrimitive
@@ -169,11 +165,7 @@ export function RolesList({ departmentCode }: RolesListProps) {
                       onClick={() => setStatusFilter([])}
                       className="cursor-pointer hover:bg-primary hover:text-primary-foreground"
                     >
-                      <IGRPIcon
-                        iconName="X"
-                        className="mr-1"
-                        strokeWidth={2}
-                      />
+                      <IGRPIcon iconName="X" className="mr-1" strokeWidth={2} />
                       Limpar
                     </IGRPDropdownMenuItemPrimitive>
                   </>
@@ -186,7 +178,10 @@ export function RolesList({ departmentCode }: RolesListProps) {
         {isLoading ? (
           <div className="grid gap-4 animate-pulse">
             {Array.from({ length: 5 }).map((_, i) => (
-              <IGRPSkeletonPrimitive key={i} className="h-12 rounded-lg bg-muted" />
+              <IGRPSkeletonPrimitive
+                key={i}
+                className="h-12 rounded-lg bg-muted"
+              />
             ))}
           </div>
         ) : roleEmpty ? (
@@ -245,10 +240,7 @@ export function RolesList({ departmentCode }: RolesListProps) {
                             className="size-8 p-0"
                           >
                             <span className="sr-only">Abrir Menu</span>
-                            <IGRPIcon
-                              iconName="Ellipsis"
-                              className="size-4"
-                            />
+                            <IGRPIcon iconName="Ellipsis" className="size-4" />
                           </IGRPButtonPrimitive>
                         </IGRPDropdownMenuTriggerPrimitive>
                         <IGRPDropdownMenuContentPrimitive align="end">

@@ -182,7 +182,10 @@ export function PermissionList({ departmentCode }: PermissionListProps) {
           {isLoading ? (
             <div className="grid gap-4 animate-pulse">
               {Array.from({ length: 5 }).map((_, i) => (
-                <IGRPSkeletonPrimitive key={i} className="h-12 rounded-lg bg-muted" />
+                <IGRPSkeletonPrimitive
+                  key={i}
+                  className="h-12 rounded-lg bg-muted"
+                />
               ))}
             </div>
           ) : permissionEmpty ? (

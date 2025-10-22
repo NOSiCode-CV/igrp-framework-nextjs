@@ -194,7 +194,7 @@ function IGRPDataTable<TData, TValue>({
 
           <TableBody className={cn(tableBodyClassName)}>
             {table.getRowModel().rows?.length ? (
-              table.getRowModel().rows.map((row) => {                
+              table.getRowModel().rows.map((row) => {
                 return (
                   <Fragment key={row.id}>
                     <TableRow

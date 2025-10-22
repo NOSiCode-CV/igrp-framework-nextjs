@@ -75,11 +75,11 @@ export function RoleFormDialog({
     departmentCode: departmentCode,
     parentName: "",
     status: statusSchema.enum.ACTIVE,
-  }
+  };
 
   const form = useForm<CreateRoleArgs>({
     resolver: zodResolver(createRoleSchema),
-    defaultValues: defaultValues
+    defaultValues: defaultValues,
   });
 
   useEffect(() => {
@@ -103,8 +103,8 @@ export function RoleFormDialog({
   const parentValue = form.watch("parentName");
 
   const parentSelected = useMemo(
-    () => roles?.find(o => o.name === parentValue) ?? null,
-    [parentValue, roles]
+    () => roles?.find((o) => o.name === parentValue) ?? null,
+    [parentValue, roles],
   );
 
   const onSubmit = async (values: CreateRoleArgs) => {
@@ -136,7 +136,6 @@ export function RoleFormDialog({
 
       form.reset(defaultValues);
       onOpenChange(false);
-
     } catch (error) {
       console.error("Falha ao adicionar perfil:", error);
       igrpToast({
@@ -235,9 +234,15 @@ export function RoleFormDialog({
                             disabled={isLoading}
                           >
                             <span className="truncate">
-                              {parentSelected ? parentSelected.name : placeholder}
+                              {parentSelected
+                                ? parentSelected.name
+                                : placeholder}
                             </span>
-                            <IGRPIcon iconName={parentOpen ? "ChevronUp" : "ChevronDown"} />
+                            <IGRPIcon
+                              iconName={
+                                parentOpen ? "ChevronUp" : "ChevronDown"
+                              }
+                            />
                           </IGRPButtonPrimitive>
                         </IGRPPopoverTriggerPrimitive>
 
@@ -254,30 +259,45 @@ export function RoleFormDialog({
 
                               <IGRPCommandItemPrimitive
                                 key="__none__"
-                                onSelect={() => { field.onChange(""); setParentOpen(false); }}
+                                onSelect={() => {
+                                  field.onChange("");
+                                  setParentOpen(false);
+                                }}
                                 aria-selected={!field.value}
                                 className="flex items-center gap-2"
                               >
-                                {!field.value ? <IGRPIcon iconName="Check" className="size-4 shrink-0" /> : <span className="w-4" />}
+                                {!field.value ? (
+                                  <IGRPIcon
+                                    iconName="Check"
+                                    className="size-4 shrink-0"
+                                  />
+                                ) : (
+                                  <span className="w-4" />
+                                )}
                                 <span className="truncate">Nenhum</span>
                               </IGRPCommandItemPrimitive>
 
-                              {roles.map(opt => (
+                              {roles.map((opt) => (
                                 <IGRPCommandItemPrimitive
                                   key={opt.name}
-                                  onSelect={() => { field.onChange(opt.name); setParentOpen(false); }}
+                                  onSelect={() => {
+                                    field.onChange(opt.name);
+                                    setParentOpen(false);
+                                  }}
                                   aria-selected={field.value === opt.name}
                                   className="flex items-center gap-2"
                                 >
                                   {field.value === opt.name ? (
-                                    <IGRPIcon iconName="Check" className="size-4 shrink-0" />
+                                    <IGRPIcon
+                                      iconName="Check"
+                                      className="size-4 shrink-0"
+                                    />
                                   ) : (
                                     <span className="w-4" />
                                   )}
                                   <span className="truncate">{opt.name}</span>
                                 </IGRPCommandItemPrimitive>
                               ))}
-
                             </IGRPCommandListPrimitive>
 
                             <div className="flex items-center justify-between px-2 py-3 border-t">
@@ -289,7 +309,6 @@ export function RoleFormDialog({
                               >
                                 Limpar
                               </IGRPButtonPrimitive>
-
                             </div>
                           </IGRPCommandPrimitive>
                         </IGRPPopoverContentPrimitive>

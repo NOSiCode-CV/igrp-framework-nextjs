@@ -1,5 +1,5 @@
 ### UX/UI
-
+--> see (https://shadcn-admin.netlify.app/)
 --> buttons icons in the end
 --> add paginations to the menu list and tables
 --> upload and get files
@@ -8,6 +8,24 @@
 --> search provider by shadcn-admin app
 --> add context layout to change the layout
 
-## MENUS
+## next-ui package
+--> SIDEBAR component app-switch
 
---> not shown thirth level
+## HOME
+--> Dashboards
+--> ...
+
+## MENUS
+--> Review Menu (Create, Edit and Delete)
+--> Remove drag and drop
+--> Add Pagination
+--> (new) Add Roles
+
+## USERS
+--> Review Users (List, Invite)
+--> (new) Disable User
+--> Review Edit Profile
+--> Review Revoke Roles
+
+## CUSSTOMIZATION
+--> All (https://tweakcn.com/)

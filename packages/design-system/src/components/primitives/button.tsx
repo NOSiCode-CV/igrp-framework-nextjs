@@ -1,3 +1,5 @@
+/* eslint-disable react-refresh/only-export-components */
+
 // IGRP CUSTOM: THIS COMPONENT IS CHANGED FROM THE ORIGINAL
 
 import { Slot } from '@radix-ui/react-slot';

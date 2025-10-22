@@ -50,9 +50,9 @@ function IGRPDataTableCellExpander<TData>({ row, field }: IGRPDataTableCellExpan
       }}
     >
       {row.getIsExpanded() ? (
-        <IGRPIcon iconName="ChevronUp" className="opacity-60" />
+        <IGRPIcon iconName="ChevronUp" className="text-muted-foreground/70" />
       ) : (
-        <IGRPIcon iconName="ChevronDown" className="opacity-60" />
+        <IGRPIcon iconName="ChevronDown" className="text-muted-foreground/70" />
       )}
     </Button>
   ) : undefined;

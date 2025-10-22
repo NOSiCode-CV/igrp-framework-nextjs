@@ -180,7 +180,7 @@ function IGRPDataTable<TData, TValue>({
                       key={header.id}
                       colSpan={header.colSpan}
                       style={{ width: `${header.getSize()}px` }}
-                      className="px-4 py-3 font-semibold"
+                      className="font-semibold"
                     >
                       {header.isPlaceholder
                         ? null
@@ -210,7 +210,7 @@ function IGRPDataTable<TData, TValue>({
                       {row.getVisibleCells().map((cell) => (
                         <TableCell
                           key={cell.id}
-                          className="truncate p-3 h-[inherit] [&:has([aria-expanded])]:w-px [&:has([aria-expanded])]:py-0 [&:has([aria-expanded])]:pr-0"
+                          className="truncate p-2 h-[inherit] [&:has([aria-expanded])]:w-px [&:has([aria-expanded])]:py-0 [&:has([aria-expanded])]:pr-0"
                         >
                           {flexRender(cell.column.columnDef.cell, cell.getContext())}
                         </TableCell>

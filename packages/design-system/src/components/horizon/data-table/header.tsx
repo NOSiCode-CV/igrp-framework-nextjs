@@ -50,17 +50,18 @@ function IGRPDataTableHeaderSortToggle<T>({
         <Button
           variant="ghost"
           onClick={(e) => column.toggleSorting(undefined, e.shiftKey)}
-          className="flex items-center gap-2 px-0 py-0 has-[>svg]:px-0"
+          className="px-0 py-0 has-[>svg]:px-0 data-[state=open]:bg-accent -ms-3"
           title="Ordenar"
+          size="sm"
         >
           <span>{title}</span>
 
           {isSorted === 'asc' ? (
-            <ChevronUp />
+            <ChevronUp className='ms-2 text-muted-foreground/70' />
           ) : isSorted === 'desc' ? (
-            <ChevronDown />
+            <ChevronDown className='ms-2 text-muted-foreground/70' />
           ) : (
-            <ArrowUpDown className="opacity-60 text-gray-500" />
+            <ArrowUpDown className="ms-2 text-muted-foreground/70" />
           )}
         </Button>
       ) : (
@@ -95,27 +96,26 @@ function IGRPDataTableHeaderSortDropdown<T>({
               variant="ghost"
               size="sm"
               className={cn(
-                '-ml-3 h-8 flex items-center space-x-2',
-                'data-[state=open]:bg-accent data-[state=open]:border-accent',
+                '-ms-3 data-[state=open]:bg-accent data-[state=open]:border-accent',
               )}
             >
               <span>{title}</span>
               {isSorted === 'desc' ? (
-                <ArrowDown />
+                <ArrowDown className='ms-2 text-muted-foreground/70' />
               ) : isSorted === 'asc' ? (
-                <ArrowUp />
+                <ArrowUp className='ms-2 text-muted-foreground/70' />
               ) : (
-                <ChevronsUpDown />
+                <ChevronsUpDown className='ms-2 text-muted-foreground/70' />
               )}
             </Button>
           </DropdownMenuTrigger>
           <DropdownMenuContent align="start">
             <DropdownMenuItem onClick={handleSortAsc} aria-label="Sort ascending">
-              <ArrowUp className="h-3.5 w-3.5 text-muted-foreground/70" />
+              <ArrowUp className="text-muted-foreground/70 size-3.5" />
               Asc
             </DropdownMenuItem>
             <DropdownMenuItem onClick={handleSortDesc} aria-label="Sort descending">
-              <ArrowDown className="h-3.5 w-3.5 text-muted-foreground/70" />
+              <ArrowDown className="text-muted-foreground/70 size-3.5" />
               Desc
             </DropdownMenuItem>
             <DropdownMenuSeparator />

@@ -47,72 +47,69 @@ export function DepartmentList() {
     setData(departments ?? []);
   }, [departments]);
 
-  const columns = useMemo<ColumnDef<DepartmentArgs>[]>(
-    () => [
-      {
-        header: ({ column }) => (
-          <IGRPDataTableHeaderSortToggle column={column} title="Nome" />
-        ),
-        accessorKey: "name",
-        cell: ({ row }) => {
-          const code = String(row.getValue("code"));
-          const name = String(row.getValue("name"));
-          return (
-            <ButtonLink
-              href={`${ROUTES.DEPARTMENTS}/${code}`}
-              btnClassName="cursor-pointer hover:underline px-0"
-              icon={""}
-              variant="link"
-              label={name}
-            />
-          );
-        },
-      },
-      {
-        header: "Código",
-        accessorKey: "code",
-        cell: ({ row }) => (
-          <IGRPDataTableCellBadge
-            color="primary"
-            variant="soft"
-            label={row.getValue("code")}
+  const columns: ColumnDef<DepartmentArgs>[] = [
+    {
+      header: ({ column }) => (
+        <IGRPDataTableHeaderSortToggle column={column} title="Nome" />
+      ),
+      accessorKey: "name",
+      cell: ({ row }) => {
+        const code = String(row.getValue("code"));
+        const name = String(row.getValue("name"));
+        return (
+          <ButtonLink
+            href={`${ROUTES.DEPARTMENTS}/${code}`}
+            btnClassName="cursor-pointer hover:underline px-0"
+            icon={""}
+            variant="link"
+            label={name}
           />
-        ),
+        );
       },
-      {
-        header: "Descrição",
-        accessorKey: "description",
-        cell: ({ row }) => {
-          const description = String(row.getValue("description"));
-          return <IGRPDataTableCellTooltip text={description} />;
-        },
+    },
+    {
+      header: "Código",
+      accessorKey: "code",
+      cell: ({ row }) => (
+        <IGRPDataTableCellBadge
+          color="primary"
+          variant="soft"
+          label={row.getValue("code")}
+        />
+      ),
+    },
+    {
+      header: "Descrição",
+      accessorKey: "description",
+      cell: ({ row }) => {
+        const description = String(row.getValue("description"));
+        return <IGRPDataTableCellTooltip text={description} />;
       },
-      {
-        header: "Estado",
-        accessorKey: "status",
-        cell: ({ row }) => {
-          const status = String(row.getValue("status"));
-          return (
-            <IGRPBadgePrimitive
-              className={cn(statusClass(status), "capitalize")}
-            >
-              {showStatus(status)}
-            </IGRPBadgePrimitive>
-          );
-        },
-        filterFn: IGRPDataTableFacetedFilterFn,
-        size: 70,
+    },
+    {
+      header: "Estado",
+      accessorKey: "status",
+      cell: ({ row }) => {
+        const status = String(row.getValue("status"));
+        return (
+          <IGRPBadgePrimitive
+            className={cn(statusClass(status), "capitalize")}
+          >
+            {showStatus(status)}
+          </IGRPBadgePrimitive>
+        );
       },
-      {
-        id: "actions",
-        header: () => <span className="sr-only">Ações</span>,
-        cell: ({ row }) => <RowActions row={row} />,
-        size: 50,
-        enableHiding: false,
-      },
-    ],
-    [],
-  );
+      filterFn: IGRPDataTableFacetedFilterFn,
+      size: 70,
+    },
+    {
+      id: "actions",
+      header: () => <span className="sr-only">Ações</span>,
+      cell: ({ row }) => <RowActions row={row} />,
+      size: 50,
+      enableHiding: false,
+    },
+  ];
 
   function RowActions({ row }: { row: Row<DepartmentArgs> }) {
     const code = String(row.getValue("code"));
@@ -162,25 +159,22 @@ export function DepartmentList() {
     );
   }
 
-  const filters = useMemo<IGRPDataTableClientFilterListProps<DepartmentArgs>[]>(
-    () => [
-      {
-        columnId: "name",
-        component: (column) => <IGRPDataTableFilterInput column={column} />,
-      },
-      {
-        columnId: "status",
-        component: (column) => (
-          <IGRPDataTableFilterFaceted
-            column={column}
-            options={STATUS_OPTIONS}
-            placeholder="Estado"
-          />
-        ),
-      },
-    ],
-    [],
-  );
+  const filters: IGRPDataTableClientFilterListProps<DepartmentArgs>[] = [
+    {
+      columnId: "name",
+      component: (column) => <IGRPDataTableFilterInput column={column} />,
+    },
+    {
+      columnId: "status",
+      component: (column) => (
+        <IGRPDataTableFilterFaceted
+          column={column}
+          options={STATUS_OPTIONS}
+          placeholder="Estado"
+        />
+      ),
+    },
+  ];
 
   if (isLoading || !departments) {
     return <AppCenterLoading descrption="Carregando departamentos..." />;
@@ -227,7 +221,6 @@ export function DepartmentList() {
         columns={columns}
         data={data}
         clientFilters={filters}
-        getRowCanExpand={(row) => Boolean(row.original.description)}
       />
 
       <DepartmentFormDialog

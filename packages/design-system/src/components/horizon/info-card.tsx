@@ -73,7 +73,7 @@ function IGRPInfoCard({
   const infoCardClass = IGRPColors[variantSection][colorSection];
 
   return (
-    <Card className={cn('py-6', infoCardClass, className)}>
+    <Card className={cn(infoCardClass, className)}>
       <CardHeader>
         <CardTitle
           className={cn('text-2xl font-semibold leading-none tracking-tight', titleClassName)}

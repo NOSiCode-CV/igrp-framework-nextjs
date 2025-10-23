@@ -72,8 +72,8 @@ function IGRPBadge({
     >
       {dot && <div className={cn('size-1.5 rounded-full', colorClasses.bgForeground)} />}
 
-      <div className="flex items-center gap-1">
-        {showIcon && <IGRPIcon iconName={iconName} size={12} strokeWidth={2} />}
+      <div className={cn("flex items-center", (children && showIcon) && 'gap-1')}>
+        {showIcon && <IGRPIcon iconName={iconName} strokeWidth={2} />}
 
         <div className={cn(iconPlacement === 'end' && 'order-first')}>{children}</div>
       </div>

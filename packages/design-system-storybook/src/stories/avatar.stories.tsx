@@ -39,7 +39,7 @@ export default {
     },
     size: {
       control: 'select',
-      options: ['sm' , 'md' , 'lg' , 'xl'],
+      options: ['sm', 'md', 'lg', 'xl'],
       description: 'Avatar size',
     },
     fallback: {
@@ -48,7 +48,6 @@ export default {
     },
     hasStatus: {
       control: 'boolean',
-      options: [true, false],
       description: 'Avatar has State',
       defaultValue: 'False',
     },
@@ -59,7 +58,6 @@ export default {
     },
     showIcon: {
       control: 'boolean',
-      options: [true, false],
       description: 'If Avatar has Icon',
       defaultValue: 'False',
     },
@@ -73,20 +71,21 @@ export default {
       description: 'Select an icon as Fallback',
       defaultValue: 'Check',
     },
-    iconClassName: { 
+    iconClassName: {
       control: 'text',
-      description: 'Icon class' 
-     },
-    showBadge: { control: 'boolean',
-      description: 'If has Badge' 
-     },
-    badgeNumber: { 
+      description: 'Icon class'
+    },
+    showBadge: {
+      control: 'boolean',
+      description: 'If has Badge'
+    },
+    badgeNumber: {
       control: 'number',
-      description: 'Number inside the Badge' 
-     },
+      description: 'Number inside the Badge'
+    },
     badgeVariant: {
       control: 'select',
-      options: ['solid', 'outline', 'ghost'] ,
+      options: ['solid', 'outline', 'ghost'],
       description: 'Select Badge Color',
       defaultValue: 'solid',
     },
@@ -113,12 +112,11 @@ export default {
     },
     hasFallbackIcon: {
       control: 'boolean',
-      options: [true, false],
       description: 'If Avatar has Icon',
       defaultValue: 'False',
     },
     iconColor: {
-      control: 'color' ,
+      control: 'color',
       description: 'Select Badge Color',
     },
     fallbackClassName: {
@@ -136,31 +134,25 @@ export default {
 } as Meta;
 
 const Template: StoryFn<IGRPAvatarProps> = (args) => (
-  <div className='container my-10 mx-auto p-4 border rounded-lg shadow-sm'>
-    <IGRPAvatar {...args} />
-  </div>
+  <IGRPAvatar {...args} />
 );
 
 export const Default: StoryObj<IGRPAvatarProps> = {
   render: Template,
   args: {
     src: 'https://cdn-icons-png.flaticon.com/512/168/168726.png',
-    className: 'overflow-visible',
-    fallback: 'Avatar Aang',
+    fallback: 'User User',
     iconName: 'Check',
     size: 'md',
-    hasStatus:true,
-    hasFallbackIcon:false,
-    showIcon:true,    
-    fallbackIcon:'User',
-    iconClassName:'rounded-full',
-    showBadge	:false,
-    badgeColor:'destructive',
-    iconColor:'#000000',
-    badgeVariant:'solid',
+    hasStatus: true,
+    hasFallbackIcon: false,
+    showIcon: false,
+    fallbackIcon: 'User',
+    showBadge: false,
+    badgeColor: 'success',
+    badgeVariant: 'solid',
     badgeNumber: 6,
-    status:'success',
-    borderRadius:'rounded-full'
+    status: 'success',
   },
 };
 
@@ -171,7 +163,7 @@ export const AvatarShape: StoryObj<IGRPAvatarProps> = {
     fallback: 'AV',
     iconName: 'Check',
     status: 'success',
-    borderRadius:'rounded-lg',
+    borderRadius: 'lg',
   },
 };
 
@@ -215,7 +207,7 @@ export const HasIcon: StoryObj<IGRPAvatarProps> = {
     showIcon: true,
     iconName: 'Check',
     className: 'overflow-visible',
-    iconClassName:'rounded-full',
+    iconClassName: 'rounded-full',
   },
 };
 
@@ -225,9 +217,8 @@ export const HasBadge: StoryObj<IGRPAvatarProps> = {
     src: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcR6SGvshARHJ5GYSH_Kig8-cYNw5rO3nWn7mA&s',
     showBadge: true,
     iconName: 'Check',
-    className: 'overflow-visible',
     badgeNumber: 6,
-    iconClassName:'rounded-full',
+    iconClassName: 'rounded-full',
   },
 };
 
@@ -244,13 +235,12 @@ export const MultipleBadge: Story = {
           fallback={avatar.fallback}
           hasStatus={false}
           status='primary'
-          iconColor='primary'
           showIcon={false}
           iconSize={0}
           showBadge={false}
           badgeNumber={0}
           multiple={0}
-          badgeColor={'destructive'}          
+          badgeColor={'destructive'}
         />
       ))}
       {remaining > 0 && (
@@ -278,13 +268,12 @@ export const MultipleBadgeWithText: Story = {
           fallback={avatar.fallback}
           hasStatus={false}
           status='primary'
-          iconColor='primary'
           showIcon={false}
           iconSize={0}
           showBadge={false}
           badgeNumber={0}
           multiple={0}
-          badgeColor={'destructive'}
+          badgeColor='destructive'
         />
       ))}
       {remaining > 0 && (

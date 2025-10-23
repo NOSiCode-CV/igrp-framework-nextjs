@@ -5,7 +5,7 @@ import {
   type IGRPChartLegendPosition,
   type IGRPChartSize,
   type IGRPSeriesConfig,
-} from '../types';
+} from '../types/types';
 
 export const formatChartValue = (
   value: number,

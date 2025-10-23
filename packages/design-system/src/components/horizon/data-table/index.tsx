@@ -73,7 +73,7 @@ function IGRPDataTable<TData, TValue>({
   data,
   showPagination = false,
   isNumericPagination = false,
-  pageSizePagination,
+  pageSizePagination = [50, 100, 150, 200],
   isServerSide = false,
   showFilter = false,
   clientFilters,
@@ -169,7 +169,7 @@ function IGRPDataTable<TData, TValue>({
         )}
       </div>
 
-      <div className={cn('overflow-auto border')}>
+      <div className={cn('overflow-hidden rounded-md border')}>
         <Table className={tableClassName}>
           <TableHeader className={tableHeaderClassName}>
             {table.getHeaderGroups().map((headerGroup) => (
@@ -180,7 +180,7 @@ function IGRPDataTable<TData, TValue>({
                       key={header.id}
                       colSpan={header.colSpan}
                       style={{ width: `${header.getSize()}px` }}
-                      className="font-semibold"
+                      className="font-semibold px-3"
                     >
                       {header.isPlaceholder
                         ? null
@@ -200,17 +200,17 @@ function IGRPDataTable<TData, TValue>({
                     <TableRow
                       key={row.id}
                       data-state={row.getIsSelected() && 'selected'}
-                      className={cn(
-                        'border-0 [&:first-child>td:first-child]:rounded-tl-lg',
-                        '[&:first-child>td:last-child]:rounded-tr-lg',
-                        '[&:last-child>td:first-child]:rounded-bl-lg',
-                        '[&:last-child>td:last-child]:rounded-br-lg h-px hover:bg-accent/50',
-                      )}
+                    // className={cn(
+                    //   'border-0 [&:first-child>td:first-child]:rounded-tl-lg',
+                    //   '[&:first-child>td:last-child]:rounded-tr-lg',
+                    //   '[&:last-child>td:first-child]:rounded-bl-lg',
+                    //   '[&:last-child>td:last-child]:rounded-br-lg h-px hover:bg-accent/50',
+                    // )}
                     >
                       {row.getVisibleCells().map((cell) => (
                         <TableCell
                           key={cell.id}
-                          className="truncate p-2 h-[inherit] [&:has([aria-expanded])]:w-px [&:has([aria-expanded])]:py-0 [&:has([aria-expanded])]:pr-0"
+                          className="p-3 truncate h-[inherit] [&:has([aria-expanded])]:w-px [&:has([aria-expanded])]:py-0 [&:has([aria-expanded])]:pr-0"
                         >
                           {flexRender(cell.column.columnDef.cell, cell.getContext())}
                         </TableCell>
@@ -229,12 +229,12 @@ function IGRPDataTable<TData, TValue>({
               })
             ) : (
               <TableRow
-                className={cn(
-                  'hover:bg-transparent [&:first-child>td:first-child]:rounded-tl-lg',
-                  '[&:first-child>td:last-child]:rounded-tr-lg',
-                  '[&:last-child>td:first-child]:rounded-bl-lg',
-                  '[&:last-child>td:last-child]:rounded-br-lg',
-                )}
+              // className={cn(
+              //   'hover:bg-transparent [&:first-child>td:first-child]:rounded-tl-lg',
+              //   '[&:first-child>td:last-child]:rounded-tr-lg',
+              //   '[&:last-child>td:first-child]:rounded-bl-lg',
+              //   '[&:last-child>td:last-child]:rounded-br-lg',
+              // )}
               >
                 <TableCell colSpan={columns.length} className="h-24 text-center font-semibold">
                   {notFoundLabel}
@@ -244,9 +244,9 @@ function IGRPDataTable<TData, TValue>({
           </TableBody>
           <tbody aria-hidden="true" className="table-row h-1"></tbody>
         </Table>
-      </div>
+      </div>      
 
-      {showPagination &&
+      {pagination.pageSize > table.getRowCount() && showPagination &&
         (isNumericPagination ? (
           <IGRPDataTablePaginationNumeric
             table={table}

@@ -5,8 +5,8 @@ import React, { useState, type SVGAttributes } from 'react';
 import { Pie, PieChart, Sector, Cell, Label, Legend, type LegendType } from 'recharts';
 
 import type { PieSectorDataItem } from 'recharts/types/polar/Pie';
-import { ChartContainer, ChartTooltip, ChartTooltipContent } from '../../../primitives/chart';
-import type { IGRPPieChartProps } from '../types';
+import { ChartContainer, ChartTooltip, ChartTooltipContent } from '../../primitives/chart';
+import type { IGRPPieChartProps } from './types';
 import {
   createChartConfig,
   formatChartValue,
@@ -15,7 +15,7 @@ import {
   getLegendHorizontalAlign,
   getLegendLayout,
   getLegendVerticalAlign,
-} from '../lib';
+} from '../lib/lib';
 
 function IGRPPieChart({
   data,

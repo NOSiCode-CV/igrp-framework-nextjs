@@ -17,7 +17,7 @@ import {
   getLegendHorizontalAlign,
   hasNegativeValues,
   createChartConfig,
-} from '../lib';
+} from '../lib/lib';
 import type { IGRPVerticalBarChartProps } from '../types';
 
 function IGRPVerticalBarChart({

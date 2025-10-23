@@ -50,7 +50,7 @@ function IGRPDataTableHeaderSortToggle<T>({
         <Button
           variant="ghost"
           onClick={(e) => column.toggleSorting(undefined, e.shiftKey)}
-          className="px-0 py-0 has-[>svg]:px-0 data-[state=open]:bg-accent -ms-3"
+          className="px-0 py-0 has-[>svg]:px-0 data-[state=open]:bg-accent"
           title="Ordenar"
           size="sm"
         >
@@ -95,9 +95,7 @@ function IGRPDataTableHeaderSortDropdown<T>({
             <Button
               variant="ghost"
               size="sm"
-              className={cn(
-                '-ms-3 data-[state=open]:bg-accent data-[state=open]:border-accent',
-              )}
+              className={cn('data-[state=open]:bg-accent data-[state=open]:border-accent')}
             >
               <span>{title}</span>
               {isSorted === 'desc' ? (

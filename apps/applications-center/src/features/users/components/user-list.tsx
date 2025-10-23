@@ -76,12 +76,12 @@ export function UserList() {
             <IGRPUserAvatar
               alt={name}
               fallbackContent={getInitials(name)}
-              className="size-12 bg-primary text-primary-foreground"
-              fallbackClass="text-base"
+              className="size-10"
+              fallbackClass="text-base bg-primary text-primary-foreground"
             />
             <div>
-              <div className="font-medium">{name}</div>
-              <span className="text-muted-foreground mt-0.5 text-xs">
+              <div className="text-sm leading-none">{name}</div>
+              <span className="text-muted-foreground text-xs">
                 {email}
               </span>
             </div>

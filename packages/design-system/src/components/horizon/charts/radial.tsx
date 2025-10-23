@@ -14,7 +14,7 @@ import {
   type LegendType,
 } from 'recharts';
 
-import { ChartContainer, ChartTooltip } from '../../../primitives/chart';
+import { ChartContainer, ChartTooltip } from '../../primitives/chart';
 import {
   createChartConfig,
   formatChartValue,
@@ -23,8 +23,8 @@ import {
   getLegendHorizontalAlign,
   getLegendLayout,
   getLegendVerticalAlign,
-} from '../lib';
-import { type IGRPRadialBarChartProps } from '../types';
+} from '../lib/lib';
+import { type IGRPRadialBarChartProps } from './types';
 
 function IGRPRadialBarChart({
   data,

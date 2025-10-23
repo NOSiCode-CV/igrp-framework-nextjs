@@ -17,7 +17,7 @@ import {
   IGRPDataTableRowAction,
   Row,
 } from "@igrp/igrp-framework-react-design-system";
-import { useEffect, useMemo, useState } from "react";
+import { useEffect, useState } from "react";
 
 import { ButtonLink } from "@/components/button-link";
 import { AppCenterLoading } from "@/components/loading";

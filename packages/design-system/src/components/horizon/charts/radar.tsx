@@ -7,7 +7,7 @@ import {
   ChartTooltipContent,
   ChartLegend,
   ChartLegendContent,
-} from '../../../primitives/chart';
+} from '../../primitives/chart';
 import {
   createChartConfig,
   formatChartValue,
@@ -16,8 +16,8 @@ import {
   getLegendHorizontalAlign,
   getLegendLayout,
   getLegendVerticalAlign,
-} from '../lib';
-import { type IGRPRadarChartProps } from '../types';
+} from '../lib/lib';
+import { type IGRPRadarChartProps } from './types';
 
 function IGRPRadarChart({
   data,

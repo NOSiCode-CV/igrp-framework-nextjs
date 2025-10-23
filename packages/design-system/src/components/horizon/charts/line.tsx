@@ -1,14 +1,23 @@
 'use client';
 
-import { Area, AreaChart, CartesianGrid, Legend, XAxis, YAxis, ReferenceLine } from 'recharts';
+import {
+  Line,
+  LineChart,
+  CartesianGrid,
+  Legend,
+  XAxis,
+  YAxis,
+  ReferenceLine,
+  LabelList,
+} from 'recharts';
 import {
   ChartContainer,
   ChartTooltip,
   ChartTooltipContent,
   ChartLegend,
   ChartLegendContent,
-} from '../../../primitives/chart';
-import type { IGRPAreaChartProps } from '../types';
+} from '../../primitives/chart';
+import type { IGRPChartProps, IGRPSeriesConfig } from './types';
 import {
   createChartConfig,
   formatChartValue,
@@ -18,13 +27,26 @@ import {
   getLegendLayout,
   getLegendVerticalAlign,
   hasNegativeValues,
-} from '../lib';
+} from './lib';
 
-// TODO: check to assign areas props default value
+interface LineConfig extends IGRPSeriesConfig {
+  type?: 'linear' | 'monotone' | 'step' | 'basis' | 'natural';
+  strokeWidth?: number;
+  strokeDasharray?: string;
+  dot?: boolean | object;
+  activeDot?: object;
+  showLabels?: boolean;
+  labelPosition?: 'top' | 'bottom' | 'right' | 'left' | 'center';
+  labelOffset?: number;
+}
 
-function IGRPAreaChart({
+interface IGRPLineChartProps extends IGRPChartProps {
+  lines: LineConfig[];
+}
+
+function IGRPLineChart({
   data,
-  areas,
+  lines,
   categoryKey,
   title,
   description,
@@ -40,26 +62,24 @@ function IGRPAreaChart({
   size = 'md',
   height,
   width,
-  stacked = false,
-  expanded = false,
   className,
   valueFormatter,
-  labelFormatter = (value) => (typeof value === 'string' ? value : String(value)),
+  labelFormatter = (value) => value,
   gridColor = '#e5e7eb',
   backgroundColor,
   referenceLineColor = '#e5e7eb',
   axisColor = '#d1d5db',
   tooltipIndicator = 'line',
   footer,
-}: IGRPAreaChartProps) {
+}: IGRPLineChartProps) {
   const chartHeight = getChartHeight(size, data, height);
   const chartWidth = getChartWidth(width);
   const formatValue = (value: number) => formatChartValue(value, valueFormatter);
   const hasNegativeDataValues = hasNegativeValues(
     data,
-    areas.map((a) => a.dataKey),
+    lines.map((l) => l.dataKey),
   );
-  const chartConfig = createChartConfig(areas);
+  const chartConfig = createChartConfig(lines);
 
   return (
     <div
@@ -76,16 +96,15 @@ function IGRPAreaChart({
       <div className="overflow-hidden">
         <div style={{ height: chartHeight, width: chartWidth }} className="w-full overflow-hidden">
           <ChartContainer className="h-full w-full" config={chartConfig}>
-            <AreaChart
+            <LineChart
               accessibilityLayer
               data={data}
               margin={{
-                top: 10,
-                right: 5,
-                left: 5,
+                top: 20,
+                right: 12,
+                left: 12,
                 bottom: 5,
               }}
-              stackOffset={expanded ? 'expand' : stacked ? 'none' : undefined}
             >
               {showGrid && <CartesianGrid stroke={gridColor} vertical={false} />}
 
@@ -142,65 +161,62 @@ function IGRPAreaChart({
                 />
               )}
 
-              <defs>
-                {areas
-                  .filter((area) => area.gradient === true)
-                  .map((area) => (
-                    <linearGradient
-                      key={`fill${area.dataKey}`}
-                      id={`fill${area.dataKey}`}
-                      x1="0"
-                      y1="0"
-                      x2="0"
-                      y2="1"
-                    >
-                      <stop
-                        offset="5%"
-                        stopColor={`var(--color-${area.dataKey})`}
-                        stopOpacity={0.8}
-                      />
-                      <stop
-                        offset="95%"
-                        stopColor={`var(--color-${area.dataKey})`}
-                        stopOpacity={0.1}
-                      />
-                    </linearGradient>
-                  ))}
-              </defs>
-
-              {areas.map((area) =>
-                area.render ? (
-                  area.render({
-                    key: area.dataKey,
-                    dataKey: area.dataKey,
-                    name: area.name || area.dataKey,
-                    stackId: stacked || expanded ? 'stack1' : undefined,
-                    fill:
-                      area.gradient === true
-                        ? `url(#fill${area.dataKey})`
-                        : `var(--color-${area.dataKey})`,
-                    fillOpacity: area.fillOpacity || 0.6,
-                    stroke: `var(--color-${area.dataKey})`,
-                    type: area.type || 'monotone',
+              {lines.map((line) =>
+                line.render ? (
+                  line.render({
+                    key: line.dataKey,
+                    dataKey: line.dataKey,
+                    name: line.name || line.dataKey,
+                    stroke: line.color
+                      ? line.color
+                      : `var(--chart-${(lines.indexOf(line) % 8) + 1})`,
+                    strokeWidth: line.strokeWidth || 2,
+                    strokeDasharray: line.strokeDasharray,
+                    type: line.type || 'monotone',
+                    dot:
+                      line.dot !== undefined
+                        ? line.dot
+                        : {
+                            fill: line.color
+                              ? line.color
+                              : `var(--chart-${(lines.indexOf(line) % 8) + 1})`,
+                          },
+                    activeDot: line.activeDot || { r: 6 },
                   })
                 ) : (
-                  <Area
-                    key={area.dataKey}
-                    dataKey={area.dataKey}
-                    name={area.name || area.dataKey}
-                    stackId={stacked || expanded ? 'stack1' : undefined}
-                    fill={
-                      area.gradient === true
-                        ? `url(#fill${area.dataKey})`
-                        : `var(--color-${area.dataKey})`
+                  <Line
+                    key={line.dataKey}
+                    dataKey={line.dataKey}
+                    name={line.name || line.dataKey}
+                    stroke={
+                      line.color ? line.color : `var(--chart-${(lines.indexOf(line) % 8) + 1})`
                     }
-                    fillOpacity={area.fillOpacity || 0.4}
-                    stroke={`var(--color-${area.dataKey})`}
-                    type={area.type || 'monotone'}
-                  />
+                    strokeWidth={line.strokeWidth || 2}
+                    strokeDasharray={line.strokeDasharray}
+                    type={line.type || 'monotone'}
+                    dot={
+                      line.dot !== undefined
+                        ? line.dot
+                        : {
+                            fill: line.color
+                              ? line.color
+                              : `var(--chart-${(lines.indexOf(line) % 8) + 1})`,
+                          }
+                    }
+                    activeDot={line.activeDot || { r: 6 }}
+                  >
+                    {line.showLabels && (
+                      <LabelList
+                        position={line.labelPosition || 'top'}
+                        offset={line.labelOffset || 12}
+                        className="fill-foreground"
+                        fontSize={12}
+                      />
+                    )}
+                  </Line>
                 ),
               )}
-            </AreaChart>
+            </LineChart>
           </ChartContainer>
         </div>
       </div>
@@ -216,4 +232,4 @@ function IGRPAreaChart({
   );
 }
 
-export { IGRPAreaChart };
+export { IGRPLineChart, type LineConfig, type IGRPLineChartProps };

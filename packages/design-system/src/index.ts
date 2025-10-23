@@ -397,17 +397,17 @@ export {
   IGRPCardFooter,
 } from './components/horizon/card';
 
-export { IGRPAreaChart } from './components/horizon/chart/Area';
-export { IGRPHorizontalBarChart } from './components/horizon/chart/Bar/horizontal';
-export { IGRPVerticalBarChart } from './components/horizon/chart/Bar/vertical';
+export { IGRPAreaChart } from './components/horizon/charts/Area';
+export { IGRPHorizontalBarChart } from './components/horizon/charts/_Bar/horizontal';
+export { IGRPVerticalBarChart } from './components/horizon/charts/_Bar/vertical';
 export {
   IGRPLineChart,
   type LineConfig,
   type IGRPLineChartProps,
-} from './components/horizon/chart/Line';
-export { IGRPPieChart } from './components/horizon/chart/Pie';
-export { IGRPRadarChart } from './components/horizon/chart/Radar';
-export { IGRPRadialBarChart } from './components/horizon/chart/Radial';
+} from './components/horizon/charts/line';
+export { IGRPPieChart } from './components/horizon/charts/pie';
+export { IGRPRadarChart } from './components/horizon/charts/radar';
+export { IGRPRadialBarChart } from './components/horizon/charts/radial';
 export type {
   IGRPChartDataItem,
   IGRPChartSize,
@@ -427,8 +427,8 @@ export type {
   IGRPRadarChartProps,
   RadialBarConfig,
   IGRPRadialBarChartProps,
-} from './components/horizon/chart/types';
-export { IGRP_CHART_COLORS } from './components/horizon/chart/types';
+} from './components/horizon/charts/types';
+export { IGRP_CHART_COLORS } from './components/horizon/charts/types';
 export {
   formatChartValue,
   getChartHeight,
@@ -438,7 +438,7 @@ export {
   getLegendHorizontalAlign,
   hasNegativeValues,
   createChartConfig,
-} from './components/horizon/chart/lib';
+} from './components/horizon/charts/lib/lib';
 
 export { IGRPChat, type IGRPChatProps, type IGRPChatMessage } from './components/horizon/chat';
 

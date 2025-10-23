@@ -28,7 +28,6 @@ import type { DepartmentArgs } from "../dept-schemas";
 import { useDepartments } from "../use-departments";
 import { DepartmentDeleteDialog } from "./dept-delete-dialog";
 import { DepartmentFormDialog } from "./dept-form-dialog";
-// import { useCurrentUser } from '@/features/users/use-users';
 
 export function DepartmentList() {
   const [data, setData] = useState<DepartmentArgs[]>([]);
@@ -36,6 +35,7 @@ export function DepartmentList() {
   const [openFormDialog, setOpenFormDialog] = useState(false);
   const [openDeleteDialog, setOpenDeleteDialog] = useState(false);
   const [currentDept, setCurrentDept] = useState<DepartmentArgs | null>(null);
+  const [parentDeptId, setParentDeptId] = useState<string | null>(null);
   const [deptToDelete, setDeptToDelete] = useState<{
     code: string;
     name: string;
@@ -139,7 +139,22 @@ export function DepartmentList() {
                 showIcon: true,
                 action: () => {
                   setDeptToDelete(null);
+                  setParentDeptId(null);
                   setCurrentDept(row.original);
+                  setOpenFormDialog(true);
+                },
+              },
+            },
+            {
+              component: IGRPDataTableDropdownMenuLink,
+              props: {
+                labelTrigger: "Criar sub departamento",
+                icon: "FolderPlus",
+                showIcon: true,
+                action: () => {
+                  setDeptToDelete(null);
+                  setCurrentDept(null);
+                  setParentDeptId(code);
                   setOpenFormDialog(true);
                 },
               },
@@ -193,6 +208,7 @@ export function DepartmentList() {
   const handleDelete = (code: string, name: string) => {
     setOpenFormDialog(false);
     setCurrentDept(null);
+    setParentDeptId(null);
     setDeptToDelete({ code, name });
     setOpenDeleteDialog(true);
   };
@@ -200,6 +216,7 @@ export function DepartmentList() {
   const handleOpenCreate = () => {
     setCurrentDept(null);
     setDeptToDelete(null);
+    setParentDeptId(null);
     setOpenFormDialog(true);
   };
 
@@ -234,6 +251,7 @@ export function DepartmentList() {
         open={openFormDialog}
         onOpenChange={setOpenFormDialog}
         department={currentDept}
+        parentDeptId={parentDeptId}
       />
 
       {deptToDelete && (

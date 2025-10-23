@@ -43,6 +43,7 @@ export function RolesList({ departmentCode }: RolesListProps) {
   const [selectedRole, setSelectedRole] = useState<RoleArgs | undefined>(
     undefined,
   );
+  const [parentRoleName, setParentRoleName] = useState<string | null>(null);
   const [roleToDelete, setRoleToDelete] = useState<string | null>(null);
   const [statusFilter, setStatusFilter] = useState<string[]>([]);
 
@@ -50,6 +51,7 @@ export function RolesList({ departmentCode }: RolesListProps) {
 
   const handleNewRole = () => {
     setSelectedRole(undefined);
+    setParentRoleName(null);
     setOpenDetailsDialog(false);
     setOpenFormDialog(true);
   };
@@ -61,6 +63,15 @@ export function RolesList({ departmentCode }: RolesListProps) {
 
   const handleEdit = (role: RoleArgs) => {
     setSelectedRole(role);
+    setParentRoleName(null);
+    setRoleToDelete(null);
+    setOpenDetailsDialog(false);
+    setOpenFormDialog(true);
+  };
+
+  const handleNewSubRole = (role: RoleArgs) => {
+    setSelectedRole(undefined);
+    setParentRoleName(role.name);
     setRoleToDelete(null);
     setOpenDetailsDialog(false);
     setOpenFormDialog(true);
@@ -257,6 +268,15 @@ export function RolesList({ departmentCode }: RolesListProps) {
                             Editar
                           </IGRPDropdownMenuItemPrimitive>
                           <IGRPDropdownMenuItemPrimitive
+                            onSelect={() => handleNewSubRole(role)}
+                          >
+                            <IGRPIcon
+                              iconName="Plus"
+                              className="mr-1 size-4"
+                            />
+                            Criar sub perfil
+                          </IGRPDropdownMenuItemPrimitive>
+                          <IGRPDropdownMenuItemPrimitive
                             onSelect={() => handlePermissions(role)}
                           >
                             <IGRPIcon
@@ -291,6 +311,7 @@ export function RolesList({ departmentCode }: RolesListProps) {
         open={openFormDialog}
         onOpenChange={setOpenFormDialog}
         departmentCode={departmentCode}
+        parentRoleName={parentRoleName}
         role={selectedRole}
       />
 

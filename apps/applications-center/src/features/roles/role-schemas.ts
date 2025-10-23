@@ -4,7 +4,15 @@ import { emptyToNull, statusSchema } from "@/schemas/global";
 
 export const roleSchema = z.object({
   id: z.number().optional(),
-  name: z.string().min(3, "Nome é obrigatório (min 3 carateres)"),
+  name: z
+    .string()
+    .min(3, "Nome é obrigatório (min 3 caracteres)")
+    .max(50, "Nome deve ter no máximo 50 caracteres")
+    .regex(
+      /^[A-Za-z0-9_-]+$/,
+      "Nome deve conter apenas letras, números, hífens e underscores"
+    ),
+
   description: z.string().optional().nullable(),
   departmentCode: z
     .string()

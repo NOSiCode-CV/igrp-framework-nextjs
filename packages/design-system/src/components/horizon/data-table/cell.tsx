@@ -170,8 +170,6 @@ function IGRPDataTableCellTooltip({
   );
 }
 
-// TDOD row expander
-
 export {
   IGRPDataTableCellCheckbox,
   IGRPDataTableCellExpander,

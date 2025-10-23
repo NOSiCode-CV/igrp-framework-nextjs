@@ -9,7 +9,7 @@ export default {
     alt: { control: 'text' },
     width: { control: 'number' },
     height: { control: 'number' },
-    labelClassName: { control: 'text' },
+    className: { control: 'text' },
     ratio: { control: 'select',
       options: ['1/1', '4/3', '16/9', '21/9',undefined],
       description: 'Image ratio',
@@ -35,8 +35,6 @@ export const Default: StoryObj<IGRPImageProps> = {
   render: Template,
   args: {
     src: 'src/stories/assets/gradient.png',
-    width:200,
-    height:200,
   },
 };
 export const LabelClassName: StoryObj<IGRPImageProps> = {

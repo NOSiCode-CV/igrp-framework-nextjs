@@ -42,7 +42,7 @@ function IGRPDataTableHeaderSortToggle<T>({
   return (
     <div
       aria-label={`Ordenar por ${title}`}
-      className={cn('flex items-center gap-2', className)}
+      className={cn('flex items-center gap-2 w-full', className)}
       aria-sort={ariaSort as React.AriaAttributes['aria-sort']}
       {...props}
     >

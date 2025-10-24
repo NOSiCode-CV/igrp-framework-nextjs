@@ -1,4 +1,3 @@
-/* eslint-disable @typescript-eslint/no-explicit-any */
 import type { Preview } from '@storybook/nextjs-vite';
 import '../src/index.css';
 

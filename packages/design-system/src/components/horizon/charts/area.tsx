@@ -1,6 +1,7 @@
 'use client';
 
 import { Area, AreaChart, CartesianGrid, Legend, XAxis, YAxis, ReferenceLine } from 'recharts';
+
 import {
   ChartContainer,
   ChartTooltip,
@@ -8,7 +9,6 @@ import {
   ChartLegend,
   ChartLegendContent,
 } from '../../primitives/chart';
-import type { IGRPAreaChartProps } from './types';
 import {
   createChartConfig,
   formatChartValue,
@@ -19,8 +19,15 @@ import {
   getLegendVerticalAlign,
   hasNegativeValues,
 } from './lib';
+import type { IGRPAreaConfig, IGRPChartProps } from './types';
+
 
 // TODO: check to assign areas props default value
+
+interface IGRPAreaChartProps extends IGRPChartProps {
+  areas: IGRPAreaConfig[];
+  expanded?: boolean;
+}
 
 function IGRPAreaChart({
   data,
@@ -216,4 +223,4 @@ function IGRPAreaChart({
   );
 }
 
-export { IGRPAreaChart };
+export { IGRPAreaChart, type IGRPAreaChartProps };

@@ -6,7 +6,7 @@ import {
   IGRPDropdownMenuItemPrimitive,
   IGRPDropdownMenuPrimitive,
   IGRPDropdownMenuTriggerPrimitive,
-  IGRPIcon,  
+  IGRPIcon,
   IGRPTooltipContentPrimitive,
   IGRPTooltipPrimitive,
   IGRPTooltipProviderPrimitive,
@@ -41,7 +41,7 @@ export function UserList() {
   const [data, setData] = useState<IGRPUserDTO[]>([]);
 
   const [inviteDialogOpen, setInviteDialogOpen] = useState(false);
-  
+
   const [deleteDialogOpen, setDeleteDialogOpen] = useState(false);
   const [userToDelete, setUserToDelete] = useState<{
     username: string;
@@ -52,7 +52,7 @@ export function UserList() {
     open: boolean;
     username: string | null;
     email: string | null;
-  }>(() => ({ open: false, username: null, email: null }));  
+  }>(() => ({ open: false, username: null, email: null }));
 
   const { data: users, isLoading, error } = useUsers();
   const { data: currentUser, isLoading: currentUserLoading } = useCurrentUser();
@@ -87,7 +87,7 @@ export function UserList() {
             </div>
           </div>
         );
-      },      
+      },
     },
     {
       header: "Email",
@@ -128,7 +128,13 @@ export function UserList() {
             )}
           </>
         );
-      },
+      }
+    },
+    {
+      header: "Estado",
+      accessorKey: "status",
+      cell: ({ row }) => <span>{row.getValue("status")}</span>
+
     },
     {
       id: "roles",
@@ -160,7 +166,7 @@ export function UserList() {
             onSelect={() => setAssignRolesFor({ open: true, username, email })}
           >
             <IGRPIcon iconName="ShieldUser" />
-            Perfís
+            <span>Associar Perfís</span>
           </IGRPDropdownMenuItemPrimitive>
 
           {!isCurrentUser(email) && (
@@ -231,7 +237,7 @@ export function UserList() {
         />
       ),
     },
-  ];  
+  ];
 
   if (isLoading || !users) {
     return <AppCenterLoading descrption="Carregando utilizadores..." />;
@@ -262,7 +268,7 @@ export function UserList() {
           href="#"
           label="Convidar Utilizador"
         />
-      </PageHeader>     
+      </PageHeader>
 
       <IGRPDataTable<IGRPUserDTO, IGRPUserDTO>
         showFilter
@@ -271,7 +277,7 @@ export function UserList() {
         columns={columns}
         data={data}
         clientFilters={filters}
-      />      
+      />
 
       {inviteDialogOpen && (
         <UserInviteDialog

@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 'use client';
 
 import { RadarChart, Radar, PolarGrid, PolarAngleAxis, PolarRadiusAxis, Legend } from 'recharts';
@@ -16,8 +17,23 @@ import {
   getLegendHorizontalAlign,
   getLegendLayout,
   getLegendVerticalAlign,
-} from '../lib/lib';
-import { type IGRPRadarChartProps } from './types';
+} from './lib';
+import { type IGRPChartProps, type IGRPRadarConfig } from './types';
+
+interface IGRPRadarChartProps extends IGRPChartProps {
+  radars: IGRPRadarConfig[];
+  angleAxisKey: string;
+  polarGridType?: 'polygon' | 'circle';
+  polarGridLineType?: 'solid' | 'dashed' | 'dotted';
+  showPolarGrid?: boolean;
+  showRadiusAxis?: boolean;
+  radiusAxisDomain?: [number | string, number | string];
+  radiusAxisAngle?: number;
+  customAngleAxisTick?: any;
+  showGridLines?: boolean;
+  showRadiusLines?: boolean;
+  gridFilled?: boolean;
+}
 
 function IGRPRadarChart({
   data,
@@ -162,4 +178,4 @@ function IGRPRadarChart({
   );
 }
 
-export { IGRPRadarChart };
+export { IGRPRadarChart, type IGRPRadarChartProps, };

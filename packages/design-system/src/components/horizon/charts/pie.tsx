@@ -1,12 +1,12 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 'use client';
 
-import React, { useState, type SVGAttributes } from 'react';
 import { Pie, PieChart, Sector, Cell, Label, Legend, type LegendType } from 'recharts';
-
 import type { PieSectorDataItem } from 'recharts/types/polar/Pie';
+import React, { useState, type SVGAttributes } from 'react';
+
 import { ChartContainer, ChartTooltip, ChartTooltipContent } from '../../primitives/chart';
-import type { IGRPPieChartProps } from './types';
+import type { IGRPChartProps, PieConfig } from './types';
 import {
   createChartConfig,
   formatChartValue,
@@ -15,7 +15,17 @@ import {
   getLegendHorizontalAlign,
   getLegendLayout,
   getLegendVerticalAlign,
-} from '../lib/lib';
+} from './lib';
+
+interface IGRPPieChartProps extends IGRPChartProps {
+  pies: PieConfig[];
+  nameKey: string;
+  centerLabel?: {
+    show: boolean;
+    text?: string;
+  };
+  interactive?: boolean;
+}
 
 function IGRPPieChart({
   data,
@@ -281,4 +291,4 @@ function IGRPPieChart({
   );
 }
 
-export { IGRPPieChart };
+export { IGRPPieChart, type IGRPPieChartProps };

@@ -397,17 +397,33 @@ export {
   IGRPCardFooter,
 } from './components/horizon/card';
 
-export { IGRPAreaChart } from './components/horizon/charts/Area';
-export { IGRPHorizontalBarChart } from './components/horizon/charts/_Bar/horizontal';
-export { IGRPVerticalBarChart } from './components/horizon/charts/_Bar/vertical';
+export { IGRPAreaChart, type IGRPAreaChartProps } from './components/horizon/charts/area';
+
+export { 
+  IGRPHorizontalBarChart, 
+  type IGRPHorizontalBarChartProps 
+} from './components/horizon/charts/bars/horizontal';
+
+export { 
+  IGRPVerticalBarChart, 
+  type IGRPVerticalBarChartProps 
+} from './components/horizon/charts/bars/vertical';
+
 export {
   IGRPLineChart,
   type LineConfig,
   type IGRPLineChartProps,
 } from './components/horizon/charts/line';
-export { IGRPPieChart } from './components/horizon/charts/pie';
-export { IGRPRadarChart } from './components/horizon/charts/radar';
-export { IGRPRadialBarChart } from './components/horizon/charts/radial';
+
+export { IGRPPieChart, type IGRPPieChartProps } from './components/horizon/charts/pie';
+
+export { IGRPRadarChart, type IGRPRadarChartProps } from './components/horizon/charts/radar';
+
+export { 
+  IGRPRadialBarChart, 
+  type IGRPRadialBarChartProps 
+} from './components/horizon/charts/radial';
+
 export type {
   IGRPChartDataItem,
   IGRPChartSize,
@@ -418,17 +434,11 @@ export type {
   IGRPBarConfig,
   IGRPChartFooter,
   IGRPChartProps,
-  IGRPAreaChartProps,
-  IGRPVerticalBarChartProps,
-  IGRPHorizontalBarChartProps,
-  PieConfig,
-  IGRPPieChartProps,
-  IGRPRadarConfig,
-  IGRPRadarChartProps,
+  PieConfig,  
+  IGRPRadarConfig,  
   RadialBarConfig,
-  IGRPRadialBarChartProps,
 } from './components/horizon/charts/types';
-export { IGRP_CHART_COLORS } from './components/horizon/charts/types';
+
 export {
   formatChartValue,
   getChartHeight,
@@ -438,7 +448,8 @@ export {
   getLegendHorizontalAlign,
   hasNegativeValues,
   createChartConfig,
-} from './components/horizon/charts/lib/lib';
+  IGRP_CHART_COLORS
+} from './components/horizon/charts/lib';
 
 export { IGRPChat, type IGRPChatProps, type IGRPChatMessage } from './components/horizon/chat';
 
@@ -609,6 +620,7 @@ export { IGRPRadioGroup, type IGRPRadioGroupProps } from './components/horizon/i
 export { IGRPInputAddOn, type IGRPInputAddOnProps } from './components/horizon/input/with-addons';
 
 export { IGRPLabel, type IGRPLabelProps } from './components/horizon/label';
+
 export { IGRPLoadingSpinner } from './components/horizon/loading-spiner';
 
 export {

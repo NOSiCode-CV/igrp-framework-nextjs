@@ -23,8 +23,28 @@ import {
   getLegendHorizontalAlign,
   getLegendLayout,
   getLegendVerticalAlign,
-} from '../lib/lib';
-import { type IGRPRadialBarChartProps } from './types';
+} from './lib';
+import { type IGRPChartProps, type RadialBarConfig } from './types';
+
+interface IGRPRadialBarChartProps extends IGRPChartProps {
+  bars: RadialBarConfig[];
+  nameKey: string;
+  startAngle?: number;
+  endAngle?: number;
+  innerRadius?: number | string;
+  outerRadius?: number | string;
+  barSize?: number;
+  showGrid?: boolean;
+  gridType?: 'polygon' | 'circle';
+  showBackground?: boolean;
+  showRadiusAxis?: boolean;
+  centerText?: {
+    show: boolean;
+    value?: string | number;
+    label?: string;
+    formatter?: (value: number) => string;
+  };
+}
 
 function IGRPRadialBarChart({
   data,
@@ -358,4 +378,4 @@ function IGRPRadialBarChart({
   );
 }
 
-export { IGRPRadialBarChart };
+export { IGRPRadialBarChart, type IGRPRadialBarChartProps };

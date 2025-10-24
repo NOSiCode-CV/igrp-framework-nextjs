@@ -1,6 +1,7 @@
 'use client';
 
 import { Bar, BarChart, CartesianGrid, Legend, XAxis, YAxis, ReferenceLine } from 'recharts';
+
 import {
   ChartContainer,
   ChartTooltip,
@@ -17,8 +18,16 @@ import {
   getLegendHorizontalAlign,
   hasNegativeValues,
   createChartConfig,
-} from '../lib/lib';
-import type { IGRPHorizontalBarChartProps } from '../types';
+} from '../lib';
+import type { IGRPBarConfig, IGRPChartProps } from '../types';
+
+interface IGRPHorizontalBarChartProps extends IGRPChartProps {
+  bars: IGRPBarConfig[];
+  barRadius?: number;
+  barGap?: number;
+  barCategoryGap?: string | number;
+  showXAxis?: boolean;
+}
 
 function IGRPHorizontalBarChart({
   data,
@@ -30,6 +39,7 @@ function IGRPHorizontalBarChart({
   legendPosition = 'none',
   customLegend,
   showTooltip = true,
+  showXAxis = false,
   hideAxis = false,
   hideXAxis = false,
   hideYAxis = false,
@@ -41,7 +51,7 @@ function IGRPHorizontalBarChart({
   stacked = false,
   className,
   valueFormatter,
-  labelFormatter = (value) => (typeof value === 'string' ? value.slice(0, 3) : String(value)),
+  labelFormatter = (value) => (typeof value === 'string' ? value : String(value)),
   barRadius = 5,
   barGap = 8,
   barCategoryGap = '30%',
@@ -52,7 +62,7 @@ function IGRPHorizontalBarChart({
   tooltipIndicator = 'line',
   footer,
 }: IGRPHorizontalBarChartProps) {
-  const chartHeight = getChartHeight(size, [], height);
+  const chartHeight = getChartHeight(size, data, height);
   const chartWidth = getChartWidth(width);
   const formatValue = (value: number) => formatChartValue(value, valueFormatter);
   const hasNegativeDataValues = hasNegativeValues(
@@ -60,6 +70,17 @@ function IGRPHorizontalBarChart({
     bars.map((b) => b.dataKey),
   );
   const chartConfig = createChartConfig(bars);
+
+  const getLeftMargin = () => {
+    const maxLabelLength = Math.max(
+      ...data.map((item) => {
+        const label = String(item[categoryKey]);
+        return label.length;
+      }),
+    );
+
+    return Math.max(maxLabelLength * 7, 80);
+  };
 
   return (
     <div
@@ -78,9 +99,9 @@ function IGRPHorizontalBarChart({
           <ChartContainer className="h-full w-full" config={chartConfig}>
             <BarChart
               accessibilityLayer
+              layout="vertical"
               data={data}
-              layout="horizontal"
-              margin={{ top: 10, right: 10, left: 10, bottom: 10 }}
+              margin={{ top: 5, right: 10, left: getLeftMargin(), bottom: 5 }}
               barCategoryGap={barCategoryGap}
               barGap={barGap}
             >
@@ -88,12 +109,22 @@ function IGRPHorizontalBarChart({
                 <CartesianGrid
                   strokeDasharray="3 3"
                   stroke={gridColor}
-                  horizontal={true}
-                  vertical={false}
+                  horizontal={false}
+                  vertical={true}
                 />
               )}
 
               <XAxis
+                type="number"
+                domain={valueDomain || (hasNegativeDataValues ? ['auto', 'auto'] : [0, 'auto'])}
+                tickFormatter={formatValue}
+                hide={hideAxis || hideXAxis || !showXAxis}
+                stroke={axisColor}
+                tickLine={false}
+                axisLine={false}
+              />
+
+              <YAxis
                 dataKey={categoryKey}
                 type="category"
                 tickLine={false}
@@ -101,22 +132,13 @@ function IGRPHorizontalBarChart({
                 axisLine={false}
                 tickFormatter={labelFormatter}
                 interval={0}
-                hide={hideAxis || hideXAxis}
-                stroke={axisColor}
-              />
-
-              <YAxis
-                type="number"
-                domain={valueDomain || (hasNegativeDataValues ? ['auto', 'auto'] : [0, 'auto'])}
-                tickFormatter={formatValue}
                 hide={hideAxis || hideYAxis}
+                width={100}
                 stroke={axisColor}
-                tickLine={false}
-                axisLine={false}
               />
 
               {showReferenceZero && hasNegativeDataValues && (
-                <ReferenceLine y={0} stroke={referenceLineColor} />
+                <ReferenceLine x={0} stroke={referenceLineColor} />
               )}
 
               {showTooltip && (
@@ -181,4 +203,4 @@ function IGRPHorizontalBarChart({
   );
 }
 
-export { IGRPHorizontalBarChart };
+export { IGRPHorizontalBarChart, type IGRPHorizontalBarChartProps };

@@ -1,4 +1,4 @@
-import { DepartmentListTree } from "@/features/departments/components/departament-list-tree";
+import { DepartmentListTree } from "@/features/departments/components/dept-list-tree";
 import { DepartmentList } from "@/features/departments/components/dept-list";
 
 export const dynamic = "force-dynamic";

@@ -149,9 +149,8 @@ export function DepartmentListTree() {
       label: "Menus",
       value: "menus",
       content: (
-        <div className="p-4 text-sm text-muted-foreground">
-          Gestão de menus ainda não implementada.
-        </div>
+        <div></div>
+        
       ),
     }
   ];

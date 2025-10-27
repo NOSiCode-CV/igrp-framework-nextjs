@@ -3,6 +3,7 @@ import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import {
   createDepartment,
   deleteDepartment,
+  getAvailableMenus,
   getDepartmentByCode,
   getDepartments,
   updateDepartment,
@@ -77,3 +78,12 @@ export const useDepartmentByCode = (code?: string) => {
     enabled: !!code,
   });
 };
+
+
+export const useDepartmentAvailableMenus = (code?: string) => {
+  return useQuery<{ code: string; name: string }[]>({
+    queryKey: ["department-available-menus", code],
+    queryFn: () => getAvailableMenus(code!),
+    enabled: !!code,
+  });
+}

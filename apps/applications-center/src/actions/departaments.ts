@@ -7,6 +7,7 @@ import type {
 
 import type { DepartmentArgs } from "@/features/departments/dept-schemas";
 import { getClientAccess } from "./access-client";
+import { MenuArgs } from "@/features/menus/menu-schemas";
 
 export async function getDepartments() {
   const client = await getClientAccess();
@@ -82,6 +83,22 @@ export async function getDepartmentByCode(code: string) {
   } catch (error) {
     console.error(
       "[department-by-code] Não foi possível obter lista de dados dos departamentos:",
+      error,
+    );
+    throw error;
+  }
+}
+
+
+export async function getAvailableMenus(code: string) {
+  const client = await getClientAccess();
+
+  try {
+    const result = await client.departments.getAvailableMenus(code);
+    return result.data as MenuArgs[];
+  } catch (error) {
+    console.error(
+      "[department-available-menus] Não foi possível obter lista de menus dos departamentos:",
       error,
     );
     throw error;

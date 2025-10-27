@@ -148,11 +148,11 @@ function IGRPDataTableHeaderDefault<T>({
   title,
   className,
   ...props
-}: Omit<IGRPDataTableHeaderProps<T>, 'column' | 'table'> & React.ComponentProps<'span'>) {
+}: Omit<IGRPDataTableHeaderProps<T>, 'column' | 'table'> & React.ComponentProps<'div'>) {
   return (
-    <span className={cn(className)} {...props}>
+    <div className={cn(className)} {...props}>
       {title}
-    </span>
+    </div>
   );
 }
 

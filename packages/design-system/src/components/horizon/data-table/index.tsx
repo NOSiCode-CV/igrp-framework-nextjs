@@ -145,7 +145,7 @@ function IGRPDataTable<TData, TValue>({
       <IGRPIcon iconName="OctagonAlert" />
       <span>N/A</span>
     </div>
-  );
+  );  
 
   return (
     <div className={cn('flex flex-col gap-4', className)}>
@@ -246,7 +246,7 @@ function IGRPDataTable<TData, TValue>({
         </Table>
       </div>      
 
-      {pagination.pageSize > table.getRowCount() && showPagination &&
+      {(table.getRowCount() > pagination.pageSize) && showPagination &&
         (isNumericPagination ? (
           <IGRPDataTablePaginationNumeric
             table={table}

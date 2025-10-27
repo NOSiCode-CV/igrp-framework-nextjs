@@ -23,7 +23,7 @@ import { ButtonLink } from "@/components/button-link";
 import { AppCenterLoading } from "@/components/loading";
 import { PageHeader } from "@/components/page-header";
 import { ROUTES, STATUS_OPTIONS } from "@/lib/constants";
-import { showStatus, statusClass } from "@/lib/utils";
+import { showStatus, getStatusColor } from "@/lib/utils";
 import type { DepartmentArgs } from "../dept-schemas";
 import { useDepartments } from "../use-departments";
 import { DepartmentDeleteDialog } from "./dept-delete-dialog";
@@ -93,7 +93,7 @@ export function DepartmentList() {
         const status = String(row.getValue("status"));
         return (
           <IGRPBadgePrimitive
-            className={cn(statusClass(status), "capitalize")}
+            className={cn(getStatusColor(status), "capitalize")}
           >
             {showStatus(status)}
           </IGRPBadgePrimitive>

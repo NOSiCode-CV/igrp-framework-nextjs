@@ -24,7 +24,7 @@ import {
 import { useState } from "react";
 import { ButtonLink } from "@/components/button-link";
 import { STATUS_OPTIONS } from "@/lib/constants";
-import { showStatus, statusClass } from "@/lib/utils";
+import { showStatus, getStatusColor } from "@/lib/utils";
 import type { RoleArgs } from "../role-schemas";
 import { useRoles } from "../use-roles";
 import { RoleDeleteDialog } from "./role-delete-dialog";
@@ -227,7 +227,7 @@ export function RolesList({ departmentCode }: RolesListProps) {
                     </IGRPTableCellPrimitive>
                     <IGRPTableCellPrimitive className="whitespace-nowrap">
                       <IGRPBadgePrimitive
-                        className={cn(statusClass(role.status), "capitalize")}
+                        className={cn(getStatusColor(role.status), "capitalize")}
                       >
                         {showStatus(role.status)}
                       </IGRPBadgePrimitive>

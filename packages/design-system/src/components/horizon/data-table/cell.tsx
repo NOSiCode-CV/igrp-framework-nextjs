@@ -39,23 +39,23 @@ function IGRPDataTableCellExpander<TData>({ row, field }: IGRPDataTableCellExpan
   return row.getCanExpand() ? (
     <Button
       {...{
-        className: 'size-7 shadow-none text-muted-foreground',
+        className: 'shadow-none text-muted-foreground',
         onClick: row.getToggleExpandedHandler(),
         'aria-expanded': row.getIsExpanded(),
         'aria-label': row.getIsExpanded()
           ? `Collapse details for ${field}`
           : `Expand details for ${field}`,
-        size: 'icon',
+        size: 'sm',
         variant: 'ghost',
       }}
     >
       {row.getIsExpanded() ? (
-        <IGRPIcon iconName="ChevronUp" className="text-muted-foreground/70" />
+        <IGRPIcon iconName="ChevronDown" />
       ) : (
-        <IGRPIcon iconName="ChevronDown" className="text-muted-foreground/70" />
+        <IGRPIcon iconName="ChevronRight" />
       )}
     </Button>
-  ) : undefined;
+  ) : null;
 }
 
 interface IGRPDataTableCellAmountProps {

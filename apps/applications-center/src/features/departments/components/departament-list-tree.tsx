@@ -3,7 +3,6 @@
 import {
   cn,
   IGRPBadge,
-  IGRPBadgePrimitive,
   IGRPIcon,
   IGRPInputPrimitive,
   IGRPTabItem,
@@ -17,10 +16,10 @@ import type { DepartmentArgs } from "../dept-schemas";
 import { useDepartments, useDepartmentByCode } from "../use-departments";
 import { DepartmentDeleteDialog } from "./dept-delete-dialog";
 import { DepartmentFormDialog } from "./dept-form-dialog";
-import { PageHeader } from "@/components/page-header";
 import DepartmentTreeItem from "./dept-tree-item";
-import { RolesList } from "@/features/roles/components/role-list";
 import { PermissionList } from "@/features/permissions/components/permission-list";
+import { CopyToClipboard } from "@/components/copy-to-clipboard";
+import { RolesListTree } from "@/features/roles/components/role-tree-list";
 
 export type DepartmentWithChildren = DepartmentArgs & {
   children?: DepartmentWithChildren[];
@@ -40,12 +39,7 @@ export function DepartmentListTree() {
   const [searchTerm, setSearchTerm] = useState("");
 
   const { data: departments, isLoading, error } = useDepartments();
-  const { data: selectedDepartment } = useDepartmentByCode(
-    selectedDeptCode || ""
-  );
-  //   const { data: parentDept } = useDepartmentByCode(
-  //     selectedDepartment?.parent_code || ""
-  //   );
+  const { data: selectedDepartment, isLoading: isLoadSelectedDep } = useDepartmentByCode(selectedDeptCode || "");
 
   const buildTree = (depts: DepartmentArgs[]): DepartmentWithChildren[] => {
     const map = new Map<string, DepartmentWithChildren>();
@@ -136,73 +130,10 @@ export function DepartmentListTree() {
 
   const tabs: IGRPTabItem[] = [
     {
-      label: "Departamentos",
-      value: "departments",
-      content: (
-        <div className="space-y-6">
-          <div className="bg-card rounded-lg border border-border p-6">
-            <h3 className="text-sm font-semibold uppercase tracking-wide text-muted-foreground mb-4">
-              Informação do Departamento
-            </h3>
-
-            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 text-sm">
-              <div>
-                <h4 className="font-normal text-muted-foreground mb-1">Nome</h4>
-                <p className="font-medium text-base">
-                  {selectedDepartment?.name}
-                </p>
-              </div>
-
-              <div>
-                <h4 className="font-normal text-muted-foreground mb-1">
-                  Código
-                </h4>
-                <p className="font-medium font-mono">
-                  {selectedDepartment?.code}
-                </p>
-              </div>
-
-              <div>
-                <h4 className="font-normal text-muted-foreground mb-1">
-                  Estado
-                </h4>
-                <span
-                  className={cn(
-                    "inline-flex px-2.5 py-1 rounded-md text-xs font-medium",
-                    selectedDepartment?.status === "ACTIVE"
-                      ? "bg-green-100 text-green-700"
-                      : "bg-red-100 text-red-700"
-                  )}
-                >
-                  {selectedDepartment?.status}
-                </span>
-              </div>
-
-              <div>
-                <h4 className="font-normal text-muted-foreground mb-1">
-                  Departamento Pai
-                </h4>
-                <p className="font-medium">
-                  {selectedDepartment?.parent_code || "N/A"}
-                </p>
-              </div>
-
-              <div className="sm:col-span-2 lg:col-span-3">
-                <h4 className="font-normal text-muted-foreground mb-1">
-                  Descrição
-                </h4>
-                <p>{selectedDepartment?.description || "Sem descrição."}</p>
-              </div>
-            </div>
-          </div>
-        </div>
-      ),
-    },
-    {
       label: "Perfis (Roles)",
       value: "roles",
       content: (
-        <RolesList departmentCode={selectedDepartment?.parent_code || ""} />
+        <RolesListTree departmentCode={selectedDeptCode ?? ""} />
       ),
     },
     {
@@ -210,31 +141,37 @@ export function DepartmentListTree() {
       value: "permissions",
       content: (
         <PermissionList
-          departmentCode={selectedDepartment?.parent_code || ""}
+          departmentCode={selectedDeptCode ?? ""}
         />
       ),
     },
+    {
+      label: "Menus",
+      value: "menus",
+      content: (
+        <div className="p-4 text-sm text-muted-foreground">
+          Gestão de menus ainda não implementada.
+        </div>
+      ),
+    }
   ];
 
   return (
     <div className="flex flex-col h-screen  overflow-hidden">
-      <PageHeader
-        title="Gestão de Departamentos"
-        description="Ver e gerir todos os departamentos do sistema."
-        showActions
-      >
-        <ButtonLink
-          onClick={() => handleOpenCreate}
-          icon="Plus"
-          href="#"
-          label="Novo Departamento"
-        />
-      </PageHeader>
 
-      <div className="flex mt-5 h-screen">
+      <div className="flex h-screen">
         <div className="w-80 flex flex-col">
-          <div className="">
-            <div className="flex items-center justify-between mb-3"></div>
+
+          <div className="flex flex-col min-w-0">
+            <h2 className="text-2xl font-bold tracking-tight truncate">
+              Gestão de Departamentos
+            </h2>
+
+            <p className="text-muted-foreground text-sm">Ver e gerir todos os departamentos do sistema.</p>
+          </div>
+
+          <div className="mt-4">
+            <div className="flex items-center justify-between"></div>
 
             <div className="relative">
               <IGRPIcon
@@ -251,7 +188,7 @@ export function DepartmentListTree() {
             </div>
           </div>
 
-          <div className="flex-1 overflow-y-auto">
+          <div className="flex-1 mt-3 overflow-y-auto">
             {filteredTree.map((dept) => (
               <DepartmentTreeItem
                 expandedDepts={expandedDepts}
@@ -269,11 +206,20 @@ export function DepartmentListTree() {
         </div>
 
         <div className="flex-1 overflow-y-auto">
-          {selectedDepartment ? (
-            <div className="container mx-auto p-6">
+          { isLoadSelectedDep &&
+            <AppCenterLoading descrption="Carregando departamentos..." />
+          }
+          {!isLoadSelectedDep && selectedDepartment ? (
+            <div className="container mx-auto px-6">
               <div className="flex items-start justify-between mb-6">
                 <div>
-                  <div className="flex items-center gap-3 mb-2">
+                  <div className="flex items-center">
+                    <span className="text-muted-foreground text-xs">
+                      #{selectedDepartment.code}
+                    </span>
+                    <CopyToClipboard value={selectedDepartment?.code || ""} />
+                  </div>
+                  <div className="flex items-center gap-3">
                     <h1 className="text-2xl font-bold">
                       {selectedDepartment.name}
                     </h1>
@@ -305,14 +251,11 @@ export function DepartmentListTree() {
                       </span>
                     )}
                   </div>
-                  <div className="flex items-center gap-4 text-sm text-muted-foreground">
-                    <span className="font-mono">
-                      #{selectedDepartment.code}
-                    </span>
-                  </div>
+                  
+                  <p className="text-muted-foreground text-sm">{selectedDepartment?.description || "Sem descrição."}</p>
                 </div>
 
-                {/* <div className="flex gap-2">
+                <div className="flex flex-col justify-between gap-2">
                   <ButtonLink
                     onClick={() => handleEdit(selectedDepartment)}
                     icon="Pencil"
@@ -320,13 +263,15 @@ export function DepartmentListTree() {
                     label="Editar"
                     variant="outline"
                   />
-                  <ButtonLink
-                    onClick={() => handleCreateSubDept(selectedDepartment.code)}
-                    icon="Plus"
-                    href="#"
-                    label="Adicionar"
-                  />
-                </div> */}
+                  <div>
+                    <h4 className="text-xs text-muted-foreground mb-1">
+                      Departamento Pai
+                    </h4>
+                    <p className="text-xs font-medium">
+                      {selectedDepartment?.parent_code || "N/A"}
+                    </p>
+                  </div>
+                </div>
               </div>
 
               <IGRPTabs
@@ -343,7 +288,7 @@ export function DepartmentListTree() {
                 className="w-16 h-16 mx-auto mb-4 opacity-50"
               />
               <div className="py-2">
-                Escolha um departamento na lista para ver os detalhes{" "}
+                Escolha um departamento na lista para ver os detalhes
               </div>
 
               <ButtonLink

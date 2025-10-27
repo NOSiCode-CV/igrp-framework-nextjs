@@ -1,12 +1,16 @@
-import { 
-  cn, 
-  IGRPIcon, 
-  IGRPDropdownMenuPrimitive, 
-  IGRPDropdownMenuTriggerPrimitive, 
-  IGRPDropdownMenuContentPrimitive, 
-  IGRPDropdownMenuItemPrimitive, 
-  IGRPDropdownMenuSeparatorPrimitive, 
-  IGRPButtonPrimitive 
+import {
+  cn,
+  IGRPIcon,
+  IGRPDropdownMenuPrimitive,
+  IGRPDropdownMenuTriggerPrimitive,
+  IGRPDropdownMenuContentPrimitive,
+  IGRPDropdownMenuItemPrimitive,
+  IGRPDropdownMenuSeparatorPrimitive,
+  IGRPButtonPrimitive,
+  IGRPTooltipPrimitive,
+  IGRPTooltipTriggerPrimitive,
+  IGRPTooltipContentPrimitive,
+  IGRPTooltipProviderPrimitive
 } from "@igrp/igrp-framework-react-design-system";
 
 import React, { useState } from "react";
@@ -64,7 +68,7 @@ const DepartmentTreeItem = ({
           onClick={() => {
             if (hasChildren) toggleExpand(dept.code);
           }}
-          className="w-4 h-4 flex items-center justify-center flex-shrink-0"
+          className="w-4 h-4 flex items-center justify-center shrink-0"
         >
           {hasChildren ? (
             <IGRPIcon
@@ -84,17 +88,35 @@ const DepartmentTreeItem = ({
           onClick={() => setSelectedDeptCode(dept.code)}
           className="flex items-center gap-2 flex-1 min-w-0"
         >
-          <IGRPIcon iconName="FolderTree" className="w-4 h-4 flex-shrink-0" strokeWidth={2} />
+          <IGRPIcon iconName="FolderTree" className="w-4 h-4 shrink-0" strokeWidth={2} />
           <span className="flex-1 text-left truncate font-medium">
             {dept.name}
           </span>
         </button>
 
         <div className="opacity-0 group-hover:opacity-100 transition-opacity">
+          <IGRPTooltipProviderPrimitive delayDuration={350}>
+            <IGRPTooltipPrimitive>
+              <IGRPTooltipTriggerPrimitive asChild>
+                <IGRPButtonPrimitive
+                  variant="ghost"
+                  className="h-6 w-6 p-0"
+                  onClick={() => handleCreateSubDept(dept.code)}
+                >
+                  <span className="sr-only">Criar Sub-departamento</span>
+                  <IGRPIcon iconName="Plus" className="w-4 h-4" strokeWidth={2} />
+                </IGRPButtonPrimitive>
+              </IGRPTooltipTriggerPrimitive>
+              <IGRPTooltipContentPrimitive className="px-2 py-1 text-xs">
+                Criar Sub-departamento
+              </IGRPTooltipContentPrimitive>
+            </IGRPTooltipPrimitive>
+          </IGRPTooltipProviderPrimitive>
+
           <IGRPDropdownMenuPrimitive>
             <IGRPDropdownMenuTriggerPrimitive asChild>
-              <IGRPButtonPrimitive 
-                variant="ghost" 
+              <IGRPButtonPrimitive
+                variant="ghost"
                 className="h-6 w-6 p-0"
                 onClick={(e: React.MouseEvent) => e.stopPropagation()}
               >
@@ -102,21 +124,21 @@ const DepartmentTreeItem = ({
                 <IGRPIcon iconName="EllipsisVertical" className="w-4 h-4" strokeWidth={2} />
               </IGRPButtonPrimitive>
             </IGRPDropdownMenuTriggerPrimitive>
-            
+
             <IGRPDropdownMenuContentPrimitive align="end">
               <IGRPDropdownMenuItemPrimitive onClick={() => handleEdit(dept)}>
                 <IGRPIcon iconName="Pencil" className="w-4 h-4 mr-2" strokeWidth={2} />
                 Editar
               </IGRPDropdownMenuItemPrimitive>
-              
+
               <IGRPDropdownMenuItemPrimitive onClick={() => handleCreateSubDept(dept.code)}>
                 <IGRPIcon iconName="FolderPlus" className="w-4 h-4 mr-2" strokeWidth={2} />
                 Criar Sub-departamento
               </IGRPDropdownMenuItemPrimitive>
-              
+
               <IGRPDropdownMenuSeparatorPrimitive />
-              
-              <IGRPDropdownMenuItemPrimitive 
+
+              <IGRPDropdownMenuItemPrimitive
                 variant="destructive"
                 onClick={() => handleDelete(dept.code, dept.name)}
               >
@@ -128,7 +150,8 @@ const DepartmentTreeItem = ({
         </div>
       </div>
 
-      {hasChildren &&
+      {
+        hasChildren &&
         isExpanded &&
         dept.children?.map((child) => (
           <DepartmentTreeItem
@@ -143,8 +166,9 @@ const DepartmentTreeItem = ({
             expandedDepts={expandedDepts}
             setExpandedDepts={setExpandedDepts}
           />
-        ))}
-    </div>
+        ))
+      }
+    </div >
   );
 };
 

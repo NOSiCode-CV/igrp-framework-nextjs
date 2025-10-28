@@ -1,10 +1,10 @@
 import type { Meta, StoryFn, StoryObj } from '@storybook/nextjs-vite';
-import { IGRPDatePickerRange } from '@igrp/igrp-framework-react-design-system';
+import { IGRPDatePickerInputSingle } from '@igrp/igrp-framework-react-design-system';
 import { useForm, FormProvider } from 'react-hook-form';
 
-const meta: Meta<typeof IGRPDatePickerRange> = {
-  title: 'Components/Input/DatePicker/Range',
-  component: IGRPDatePickerRange,  
+const meta: Meta<typeof IGRPDatePickerInputSingle> = {
+  title: 'Components/Input/DatePickerInput/Single',
+  component: IGRPDatePickerInputSingle,  
   argTypes: {
     onDateChange: { action: 'onDateChange' },
   },
@@ -12,13 +12,13 @@ const meta: Meta<typeof IGRPDatePickerRange> = {
 
 export default meta;
 
-type Story = StoryObj<typeof IGRPDatePickerRange>;
+type Story = StoryObj<typeof IGRPDatePickerInputSingle>;
 
-const Demo: StoryFn<typeof IGRPDatePickerRange> = (args) => { 
+const Demo: StoryFn<typeof IGRPDatePickerInputSingle> = (args) => { 
 
   return (
     <div className='container mx-auto px-4 py-10'>
-      <IGRPDatePickerRange
+      <IGRPDatePickerInputSingle
         {...args}
       />
     </div>
@@ -29,8 +29,7 @@ export const Default: Story = {
   args: {
     label: 'Date of Birth',
     helperText: 'Select your date of birth',
-    required: true,
-    disableBefore: new Date(2019, 1, 2),
+    required: true,    
   },
   render: Demo,
 };
@@ -55,7 +54,7 @@ export const WithForm: Story = {
           onSubmit={onSubmit}
           className='space-y-4 max-w-md p-4'
         >
-          <IGRPDatePickerRange {...args} />
+          <IGRPDatePickerInputSingle {...args} />
           <button
             type='submit'
             className='bg-primary text-white px-4 py-2 rounded-md'

@@ -1,9 +1,12 @@
 'use client';
 
 import { useId, useState, useEffect } from 'react';
-import { format } from 'date-fns';
 import { useFormContext } from 'react-hook-form';
+import { CalendarIcon } from 'lucide-react';
 
+import { cn } from '../../../../lib/utils';
+import { type IGRPDatePickerBaseProps } from '../../../../types';
+import { Button } from '../../../primitives/button';
 import {
   FormControl,
   FormDescription,
@@ -12,37 +15,35 @@ import {
   FormLabel,
   FormMessage,
 } from '../../../primitives/form';
+import { Input } from '../../../primitives/input';
 import { Popover, PopoverContent, PopoverTrigger } from '../../../primitives/popover';
 import { IGRPButton } from '../../button';
-import { IGRPCalendar, type IGRPCalendarProps } from './calendar/calendar';
+import { IGRPCalendarRange, type IGRPCalendarRangeProps } from '../../calendar/range';
 import { IGRPLabel } from '../../label';
-// import { igrpGridSizeClasses } from '../../../../lib/constants';
-import { cn } from '../../../../lib/utils';
-import { type IGRPDatePickerBaseProps } from './types';
+import type { DateRange } from 'react-day-picker';
+import { formatDateRange } from '../../../../lib/calendar-utils';
 
-type IGRPDatePickerProps = IGRPCalendarProps & IGRPDatePickerBaseProps;
+type IGRPDatePickerInputRangeProps = IGRPCalendarRangeProps & IGRPDatePickerBaseProps;
 
-function IGRPDatePicker({
+function IGRPDatePickerInputRange({
   name,
   date,
   onDateChange,
-  startDate = new Date(1850, 0),
-  endDate = new Date(2150, 11),
   label,
   labelClassName,
   helperText,
   className,
-  error,
   required = false,
   disabledPicker = false,
-  disabled,
-  // gridSize = 'default',
   dateFormat = 'dd/MM/yyyy',
-  placeholder = 'Pick a date',
-}: IGRPDatePickerProps) {
+  ...props
+}: IGRPDatePickerInputRangeProps) {
   const id = useId();
   const fieldName = name ?? id;
-  const [localDate, setLocalDate] = useState<Date | undefined>(date);
+  const [localDate, setLocalDate] = useState<DateRange | undefined>(date);
+  const [value, setValue] = useState(formatDateRange(date, dateFormat));
+  const [open, setOpen] = useState(false)
+
   const formContext = useFormContext();
 
   useEffect(() => {
@@ -55,52 +56,51 @@ function IGRPDatePicker({
     }
   }, [formContext, onDateChange]);
 
-  const getDisplayDate = (date: Date | undefined) => {
-    return date ? format(date, dateFormat) : placeholder;
-  };
-
-  const DateButton = (value: Date | undefined) => (
-    <div
-      className={cn(
-        'flex gap-2 items-center relative',
-        'group bg-background hover:bg-accent border border-input hover:text-accent-foreground w-full justify-between font-normal outline-offset-0 outline-none focus-visible:outline-[3px] rounded-md shadow-xs dark:bg-input/30 dark:border-input dark:hover:bg-input/50',
-        !value && 'text-muted-foreground',
-        error && 'border-destructive focus-visible:ring-destructive/20',
-        disabled && 'opacity-50 cursor-not-allowed',
-      )}
-    >
-      <IGRPButton
-        id={fieldName}
-        variant="outline"
-        className="underline-offset-0 hover:no-underline border-0 bg-transparent hover:bg-transparent shadow-none"
-        disabled={disabledPicker}
-        iconName="Calendar"
-        iconClassName="text-muted-foreground/80 group-hover:text-foreground shrink-0 transition-colors"
-        showIcon={localDate ? false : true}
-        iconPlacement="end"
-      >
-        <span className={cn('truncate', !value && 'text-muted-foreground')}>
-          {getDisplayDate(value)}
-        </span>
-      </IGRPButton>
-    </div>
-  );
 
   const renderPicker = (
-    fieldValue: Date | undefined,
-    onChange: (date: Date | undefined) => void,
+    fieldValue: DateRange | undefined,
+    onChange: (date: DateRange | undefined) => void,
   ) => (
-    <>
-      <Popover>
-        <PopoverTrigger asChild>{DateButton(fieldValue)}</PopoverTrigger>
-        <PopoverContent className="w-auto p-2" align="start">
-          <IGRPCalendar
+    <div className="relative flex gap-2">
+      <Input
+        id="date"
+        value={value}
+        placeholder={dateFormat}
+        className="bg-background pr-10"        
+        onKeyDown={(e) => {
+          if (e.key === "ArrowDown") {
+            e.preventDefault()
+            setOpen(true)
+          }
+        }}
+      />
+      <Popover open={open} onOpenChange={setOpen}>
+        <PopoverTrigger asChild>
+        {!localDate && (
+          <Button
+            id="date-picker"
+            variant="ghost"
+            className="absolute top-1/2 right-2 size-6 -translate-y-1/2"
+          >
+            <CalendarIcon className="size-3.5" />
+            <span className="sr-only">Selecionar Data</span>
+          </Button>
+        )}          
+        </PopoverTrigger>
+        <PopoverContent className="p-0 w-auto shadow-none" align="start">
+          <IGRPCalendarRange
+            {...props}
             id={fieldName}
             date={fieldValue}
-            onDateChange={onChange}
-            startDate={startDate}
-            endDate={endDate}
-            mode="single"
+            onDateChange={(range) => {
+              setLocalDate(range)
+              setValue(formatDateRange(range, dateFormat))
+              onChange?.(range)
+              if (range?.from && range?.to) {
+                setOpen(false)
+              }
+            }}
+            captionLayout="dropdown"            
           />
         </PopoverContent>
       </Popover>
@@ -109,6 +109,7 @@ function IGRPDatePicker({
           onClick={() => {
             setLocalDate(undefined);
             onDateChange?.(undefined);
+            setValue('');
           }}
           variant="link"
           className="size-2 absolute right-2 top-1/2 h-3 w-3 -translate-y-1/2 text-muted-foreground z-100"
@@ -119,12 +120,12 @@ function IGRPDatePicker({
           showIcon={localDate ? true : false}
         />
       )}
-    </>
+    </div>
   );
 
   if (formContext) {
     return (
-      <div className={cn('*:not-first:mt-2', /*igrpGridSizeClasses[gridSize],*/ className)}>
+      <div className={cn('*:not-first:mt-2', className)}>
         <FormField
           control={formContext.control}
           name={fieldName}
@@ -157,7 +158,7 @@ function IGRPDatePicker({
   }
 
   return (
-    <div className={cn('*:not-first:mt-2', /*igrpGridSizeClasses[gridSize],*/ className)}>
+    <div className={cn('*:not-first:mt-2', className)}>
       {label && (
         <IGRPLabel label={label} className={labelClassName} required={required} id={name} />
       )}
@@ -168,7 +169,7 @@ function IGRPDatePicker({
         })}
       </div>
 
-      {helperText && !error && (
+      {helperText && (
         <p
           id={`${fieldName}-helper`}
           className="text-muted-foreground mt-2 text-xs"
@@ -177,15 +178,9 @@ function IGRPDatePicker({
         >
           {helperText}
         </p>
-      )}
-
-      {error && (
-        <p id={`${fieldName}-helper`} className="text-destructive mt-2 text-xs" role="alert">
-          {error}
-        </p>
-      )}
+      )}      
     </div>
   );
 }
 
-export { IGRPDatePicker, type IGRPDatePickerProps };
+export { IGRPDatePickerInputRange, type IGRPDatePickerInputRangeProps };

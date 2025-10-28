@@ -477,12 +477,6 @@
   .-mx-1 {
     margin-inline: calc(var(--spacing) * -1);
   }
-  .-mx-2 {
-    margin-inline: calc(var(--spacing) * -2);
-  }
-  .mx-0 {
-    margin-inline: calc(var(--spacing) * 0);
-  }
   .mx-1 {
     margin-inline: calc(var(--spacing) * 1);
   }
@@ -519,9 +513,6 @@
   .my-4 {
     margin-block: calc(var(--spacing) * 4);
   }
-  .-ms-2 {
-    margin-inline-start: calc(var(--spacing) * -2);
-  }
   .-ms-px {
     margin-inline-start: -1px;
   }
@@ -531,17 +522,11 @@
   .ms-2 {
     margin-inline-start: calc(var(--spacing) * 2);
   }
-  .ms-2\.5 {
-    margin-inline-start: calc(var(--spacing) * 2.5);
-  }
   .-me-2 {
     margin-inline-end: calc(var(--spacing) * -2);
   }
   .me-3 {
     margin-inline-end: calc(var(--spacing) * 3);
-  }
-  .me-20 {
-    margin-inline-end: calc(var(--spacing) * 20);
   }
   .-mt-0\.5 {
     margin-top: calc(var(--spacing) * -0.5);
@@ -584,9 +569,6 @@
   }
   .mr-2 {
     margin-right: calc(var(--spacing) * 2);
-  }
-  .-mb-2 {
-    margin-bottom: calc(var(--spacing) * -2);
   }
   .mb-0 {
     margin-bottom: calc(var(--spacing) * 0);
@@ -1185,11 +1167,11 @@
   .list-none {
     list-style-type: none;
   }
+  .appearance-none {
+    appearance: none;
+  }
   .auto-rows-min {
     grid-auto-rows: min-content;
-  }
-  .grid-cols-3 {
-    grid-template-columns: repeat(3, minmax(0, 1fr));
   }
   .grid-cols-\[0_1fr\] {
     grid-template-columns: 0 1fr;
@@ -1274,9 +1256,6 @@
   }
   .gap-7 {
     gap: calc(var(--spacing) * 7);
-  }
-  .gap-8 {
-    gap: calc(var(--spacing) * 8);
   }
   .space-y-0 {
     :where(& > :not(:last-child)) {
@@ -3506,11 +3485,6 @@
       }
     }
   }
-  .first\:grow {
-    &:first-child {
-      flex-grow: 1;
-    }
-  }
   .first\:rounded-l-md {
     &:first-child {
       border-top-left-radius: calc(var(--radius) - 2px);
@@ -3551,14 +3525,6 @@
       background-color: var(--muted);
       @supports (color: color-mix(in lab, red, red)) {
         background-color: color-mix(in oklab, var(--muted) 50%, transparent);
-      }
-    }
-  }
-  .first-of-type\:before\:hidden {
-    &:first-of-type {
-      &::before {
-        content: var(--tw-content);
-        display: none;
       }
     }
   }
@@ -4014,6 +3980,12 @@
       outline-width: 1px;
     }
   }
+  .focus-visible\:outline-2 {
+    &:focus-visible {
+      outline-style: var(--tw-outline-style);
+      outline-width: 2px;
+    }
+  }
   .focus-visible\:outline-\[3px\] {
     &:focus-visible {
       outline-style: var(--tw-outline-style);
@@ -4064,6 +4036,16 @@
   .in-data-\[side\=right\]\:cursor-e-resize {
     :where(*[data-side="right"]) & {
       cursor: e-resize;
+    }
+  }
+  .in-data-\[slot\=card-content\]\:bg-transparent {
+    :where(*[data-slot="card-content"]) & {
+      background-color: transparent;
+    }
+  }
+  .in-data-\[slot\=popover-content\]\:bg-transparent {
+    :where(*[data-slot="popover-content"]) & {
+      background-color: transparent;
     }
   }
   .in-\[\[data-slot\=cropper\]\:focus-visible\]\:ring-\[3px\] {
@@ -4924,11 +4906,6 @@
       animation: accordion-up var(--tw-animation-duration,var(--tw-duration,.2s))var(--tw-ease,ease-out)var(--tw-animation-delay,0s)var(--tw-animation-iteration-count,1)var(--tw-animation-direction,normal)var(--tw-animation-fill-mode,none);
     }
   }
-  .data-\[state\=closed\]\:animate-collapsible-up {
-    &[data-state="closed"] {
-      animation: collapsible-up var(--tw-animation-duration,var(--tw-duration,.2s))var(--tw-ease,ease-out)var(--tw-animation-delay,0s)var(--tw-animation-iteration-count,1)var(--tw-animation-direction,normal)var(--tw-animation-fill-mode,none);
-    }
-  }
   .data-\[state\=closed\]\:animate-out {
     &[data-state="closed"] {
       animation: exit var(--tw-animation-duration,var(--tw-duration,.15s))var(--tw-ease,ease)var(--tw-animation-delay,0s)var(--tw-animation-iteration-count,1)var(--tw-animation-direction,normal)var(--tw-animation-fill-mode,none);
@@ -5030,11 +5007,6 @@
       animation: accordion-down var(--tw-animation-duration,var(--tw-duration,.2s))var(--tw-ease,ease-out)var(--tw-animation-delay,0s)var(--tw-animation-iteration-count,1)var(--tw-animation-direction,normal)var(--tw-animation-fill-mode,none);
     }
   }
-  .data-\[state\=open\]\:animate-collapsible-down {
-    &[data-state="open"] {
-      animation: collapsible-down var(--tw-animation-duration,var(--tw-duration,.2s))var(--tw-ease,ease-out)var(--tw-animation-delay,0s)var(--tw-animation-iteration-count,1)var(--tw-animation-direction,normal)var(--tw-animation-fill-mode,none);
-    }
-  }
   .data-\[state\=open\]\:animate-in {
     &[data-state="open"] {
       animation: enter var(--tw-animation-duration,var(--tw-duration,.15s))var(--tw-ease,ease)var(--tw-animation-delay,0s)var(--tw-animation-iteration-count,1)var(--tw-animation-direction,normal)var(--tw-animation-fill-mode,none);
@@ -5071,14 +5043,6 @@
   .data-\[state\=open\]\:text-muted-foreground {
     &[data-state="open"] {
       color: var(--muted-foreground);
-    }
-  }
-  .data-\[state\=open\]\:text-muted-foreground\/80 {
-    &[data-state="open"] {
-      color: var(--muted-foreground);
-      @supports (color: color-mix(in lab, red, red)) {
-        color: color-mix(in oklab, var(--muted-foreground) 80%, transparent);
-      }
     }
   }
   .data-\[state\=open\]\:opacity-100 {
@@ -5383,30 +5347,6 @@
       flex-wrap: wrap;
     }
   }
-  .max-md\:before\:inset-x-2 {
-    @media (width < 48rem) {
-      &::before {
-        content: var(--tw-content);
-        inset-inline: calc(var(--spacing) * 2);
-      }
-    }
-  }
-  .max-md\:before\:-top-4 {
-    @media (width < 48rem) {
-      &::before {
-        content: var(--tw-content);
-        top: calc(var(--spacing) * -4);
-      }
-    }
-  }
-  .max-md\:before\:h-px {
-    @media (width < 48rem) {
-      &::before {
-        content: var(--tw-content);
-        height: 1px;
-      }
-    }
-  }
   .max-sm\:sr-only {
     @media (width < 40rem) {
       position: absolute;
@@ -5516,11 +5456,6 @@
   .sm\:max-w-sm {
     @media (width >= 40rem) {
       max-width: var(--container-sm);
-    }
-  }
-  .sm\:flex-col {
-    @media (width >= 40rem) {
-      flex-direction: column;
     }
   }
   .sm\:flex-row {
@@ -5719,30 +5654,6 @@
         &:is(:where(.peer)[data-state="collapsed"] ~ *) {
           margin-left: calc(var(--spacing) * 2);
         }
-      }
-    }
-  }
-  .md\:before\:inset-y-2 {
-    @media (width >= 48rem) {
-      &::before {
-        content: var(--tw-content);
-        inset-block: calc(var(--spacing) * 2);
-      }
-    }
-  }
-  .md\:before\:-left-4 {
-    @media (width >= 48rem) {
-      &::before {
-        content: var(--tw-content);
-        left: calc(var(--spacing) * -4);
-      }
-    }
-  }
-  .md\:before\:w-px {
-    @media (width >= 48rem) {
-      &::before {
-        content: var(--tw-content);
-        width: 1px;
       }
     }
   }
@@ -6341,6 +6252,16 @@
       flex: none;
     }
   }
+  .\[\&\:\:-webkit-calendar-picker-indicator\]\:hidden {
+    &::-webkit-calendar-picker-indicator {
+      display: none;
+    }
+  }
+  .\[\&\:\:-webkit-calendar-picker-indicator\]\:appearance-none {
+    &::-webkit-calendar-picker-indicator {
+      appearance: none;
+    }
+  }
   .\[\&\:\:-webkit-inner-spin-button\]\:m-0 {
     &::-webkit-inner-spin-button {
       margin: calc(var(--spacing) * 0);
@@ -6858,16 +6779,6 @@
       cursor: w-resize;
     }
   }
-  .\[\[data-slot\=card-content\]_\&\]\:bg-transparent {
-    [data-slot=card-content] & {
-      background-color: transparent;
-    }
-  }
-  .\[\[data-slot\=popover-content\]_\&\]\:bg-transparent {
-    [data-slot=popover-content] & {
-      background-color: transparent;
-    }
-  }
   .\[\[data-slot\=tooltip-content\]_\&\]\:bg-background\/20 {
     [data-slot=tooltip-content] & {
       background-color: var(--background);
@@ -7371,22 +7282,6 @@
 @keyframes accordion-up {
   from {
     height: var(--radix-accordion-content-height,var(--bits-accordion-content-height,var(--reka-accordion-content-height,var(--kb-accordion-content-height,var(--ngp-accordion-content-height,auto)))));
-  }
-  to {
-    height: 0;
-  }
-}
-@keyframes collapsible-down {
-  from {
-    height: 0;
-  }
-  to {
-    height: var(--radix-collapsible-content-height,var(--bits-collapsible-content-height,var(--reka-collapsible-content-height,var(--kb-collapsible-content-height,auto))));
-  }
-}
-@keyframes collapsible-up {
-  from {
-    height: var(--radix-collapsible-content-height,var(--bits-collapsible-content-height,var(--reka-collapsible-content-height,var(--kb-collapsible-content-height,auto))));
   }
   to {
     height: 0;

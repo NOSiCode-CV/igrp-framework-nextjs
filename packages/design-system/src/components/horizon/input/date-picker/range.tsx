@@ -5,6 +5,8 @@ import { format } from 'date-fns';
 import { useFormContext } from 'react-hook-form';
 import { type DateRange } from 'react-day-picker';
 
+import { cn } from '../../../../lib/utils';
+import type { IGRPDatePickerBaseProps } from '../../../../types';
 import {
   FormControl,
   FormDescription,
@@ -15,11 +17,8 @@ import {
 } from '../../../primitives/form';
 import { Popover, PopoverContent, PopoverTrigger } from '../../../primitives/popover';
 import { IGRPButton } from '../../button';
-import { IGRPCalendarRange, type IGRPCalendarRangeProps } from './calendar/calendar-range';
 import { IGRPLabel } from '../../label';
-// import { igrpGridSizeClasses } from '../../../../lib/constants';
-import { cn } from '../../../../lib/utils';
-import { type IGRPDatePickerBaseProps } from './types';
+import { IGRPCalendarRange, type IGRPCalendarRangeProps } from '../../calendar/range';
 
 type IGRPDatePickerRangeProps = IGRPCalendarRangeProps & IGRPDatePickerBaseProps;
 
@@ -31,11 +30,9 @@ function IGRPDatePickerRange({
   labelClassName,
   helperText,
   className,
-  error,
   required = false,
   disabledPicker = false,
   disabled,
-  gridSize = 'default',
   dateFormat = 'dd/MM/yyyy',
   placeholder = 'Pick a date',
   ...props
@@ -68,7 +65,6 @@ function IGRPDatePickerRange({
         'flex gap-2 items-center relative',
         'group bg-background hover:bg-background border border-input w-full justify-between px-3 font-normal outline-offset-0 outline-none focus-visible:outline-[3px] h-10 rounded-md',
         !value && 'text-muted-foreground',
-        error && 'border-destructive focus-visible:ring-destructive/20',
         disabledPicker && 'opacity-50 cursor-not-allowed',
       )}
     >
@@ -96,7 +92,7 @@ function IGRPDatePickerRange({
     <>
       <Popover>
         <PopoverTrigger asChild>{DateButton(fieldValue)}</PopoverTrigger>
-        <PopoverContent className="p-0 w-auto bg-popover">
+        <PopoverContent className="p-0 w-auto shadow-none" align="start">
           <IGRPCalendarRange
             {...props}
             id={id}
@@ -135,7 +131,7 @@ function IGRPDatePickerRange({
         control={formContext.control}
         name={fieldName}
         render={({ field, fieldState }) => (
-          <FormItem className={cn(/*igrpGridSizeClasses[gridSize],*/ className)}>
+          <FormItem className={className}>
             {label && (
               <FormLabel
                 className={cn(
@@ -146,8 +142,13 @@ function IGRPDatePickerRange({
                 {label}
               </FormLabel>
             )}
-            <FormControl>{renderPicker(field.value, field.onChange)}</FormControl>
-            {helperText && !fieldState.error && <FormDescription>{helperText}</FormDescription>}
+            <FormControl>
+              {renderPicker(field.value, field.onChange)}
+            </FormControl>
+
+            {helperText && !fieldState.error && (
+              <FormDescription>{helperText}</FormDescription>
+            )}
             <FormMessage />
           </FormItem>
         )}
@@ -156,13 +157,20 @@ function IGRPDatePickerRange({
   }
 
   return (
-    <div className={cn('*:not-first:mt-2', /*igrpGridSizeClasses[gridSize],*/ className)}>
+    <div className={cn('*:not-first:mt-2', className)}>
       {label && (
         <IGRPLabel label={label} required={required} id={name} className={labelClassName} />
       )}
-      <div className="relative">{renderPicker(localDate, onDateChange)}</div>
-      {helperText && !error && <p className="text-sm text-muted-foreground mt-1">{helperText}</p>}
-      {error && <p className="text-sm text-destructive mt-1">{error}</p>}
+
+      <div className="relative">
+        {renderPicker(localDate, onDateChange)
+      }</div>
+
+      {helperText && (
+        <p className="text-sm text-muted-foreground mt-1">
+          {helperText}
+        </p>
+      )}
     </div>
   );
 }

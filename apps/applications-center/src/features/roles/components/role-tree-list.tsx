@@ -91,8 +91,8 @@ export function RolesListTree({ departmentCode }: RolesListProps) {
     setOpenFormDialog(true);
   };
 
-  const handleDelete = (name: string) => {
-    setRoleToDelete(name);
+  const handleDelete = (code: string) => {
+    setRoleToDelete(code);
     setOpenDeleteDialog(true);
   };
 
@@ -228,7 +228,7 @@ export function RolesListTree({ departmentCode }: RolesListProps) {
                 </IGRPDropdownMenuItemPrimitive>
                 <IGRPDropdownMenuSeparatorPrimitive />
                 <IGRPDropdownMenuItemPrimitive
-                  onClick={() => handleDelete(role.name)}
+                  onClick={() => handleDelete(role.code)}
                   variant="destructive"
                 >
                   <IGRPIcon
@@ -278,7 +278,7 @@ export function RolesListTree({ departmentCode }: RolesListProps) {
   const roleEmpty = roles && roles.length === 0;
 
   return (
-    <div className="flex flex-col gap-3 overflow-hidden py-4 px-3 animate-fade-in">
+    <div className="flex flex-col gap-3 overflow-hidden animate-fade-in">
       <div>
         <div className="flex items-center justify-between">
           <div>

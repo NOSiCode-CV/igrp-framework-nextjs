@@ -27,6 +27,7 @@ import { useApplicationAvailableMenus } from "@/features/applications/use-applic
 import { MenuEntryDTO } from "@igrp/platform-access-management-client-ts";
 import { useRoles } from "@/features/roles/use-roles";
 import { useAddRolesToMenu, useRemoveRolesFromMenu } from "@/features/menus/use-menus";
+import { ButtonLink } from "@/components/button-link";
 
 interface MenuPermissionsProps {
   departmentCode: string;
@@ -197,15 +198,6 @@ export function MenuPermissions({
     const isExpanded = expandedMenus.has(menu.code);
     const assignedRoles = menuRoleAssignments.get(menu.code) || new Set<string>();
 
-    const getMenuTypeLabel = (type: string) => {
-      switch(type) {
-        case "MENU_PAGE": return "Página";
-        case "EXTERNAL_PAGE": return "Externa";
-        case "FOLDER": return "Pasta";
-        default: return type;
-      }
-    };
-
     const getMenuIcon = (type: string) => {
       switch(type) {
         case "FOLDER": return "Folder";
@@ -258,15 +250,6 @@ export function MenuPermissions({
             </div>
           </IGRPTableCellPrimitive>
           
-          <IGRPTableCellPrimitive>
-            <IGRPBadgePrimitive
-              variant={menu.type === "FOLDER" ? "secondary" : "default"}
-              className="text-xs"
-            >
-              {getMenuTypeLabel(menu.type)}
-            </IGRPBadgePrimitive>
-          </IGRPTableCellPrimitive>
-          
           {roles?.map((role) => (
             <IGRPTableCellPrimitive key={role.name} className="text-center">
               <div className="flex items-center justify-center">
@@ -307,8 +290,9 @@ export function MenuPermissions({
 
   return (
     <div className="flex flex-col gap-6 animate-fade-in">
-      <div>
-        <div className="leading-none font-semibold mb-1">Permissões de Menu</div>
+      <div className="flex justify-between">
+        <div>
+          <div className="leading-none font-semibold mb-1">Permissões de Menu</div>
         <div className="text-muted-foreground text-sm">
           {isChildDepartment ? (
             <>
@@ -319,6 +303,15 @@ export function MenuPermissions({
             "Atribua perfis aos menus disponíveis do departamento."
           )}
         </div>
+        </div>
+
+        <ButtonLink
+          //onClick={() => handleAddMenu(selectedDepartment)}
+          icon="Menu"
+          href="#"
+          label="Adicionar Menus"
+          variant="outline"
+        />
       </div>
 
       <div className="flex flex-col sm:flex-row gap-4">
@@ -356,7 +349,6 @@ export function MenuPermissions({
 
         {showMenus && menus.length > 0 && (
           <div className="flex-1">
-            <label className="text-sm font-medium mb-2 block">Pesquisar menu</label>
             <div className="relative">
               <IGRPIcon
                 iconName="Search"
@@ -364,7 +356,7 @@ export function MenuPermissions({
               />
               <IGRPInputPrimitive
                 type="search"
-                placeholder="Pesquisar..."
+                placeholder="Pesquisar menu"
                 className="pl-8"
                 value={searchTerm}
                 onChange={(e) => setSearchTerm(e.target.value)}
@@ -403,13 +395,9 @@ export function MenuPermissions({
             <IGRPTablePrimitive>
               <IGRPTableHeaderPrimitive>
                 <IGRPTableRowPrimitive>
-                  <IGRPTableHeadPrimitive className="whitespace-nowrap min-w-[320px]">
+                  <IGRPTableHeadPrimitive className="whitespace-nowrap">
                     Menu
                   </IGRPTableHeadPrimitive>
-                  <IGRPTableHeadPrimitive className="whitespace-nowrap w-28">
-                    Tipo
-                  </IGRPTableHeadPrimitive>
-                  
                   {roles?.map((role) => (
                     <IGRPTableHeadPrimitive 
                       key={role.name} 

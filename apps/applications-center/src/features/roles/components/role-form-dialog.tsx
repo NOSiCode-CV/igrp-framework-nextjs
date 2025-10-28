@@ -1,11 +1,6 @@
 import { zodResolver } from "@hookform/resolvers/zod";
 import {
   IGRPButtonPrimitive,
-  IGRPCommandEmptyPrimitive,
-  IGRPCommandInputPrimitive,
-  IGRPCommandItemPrimitive,
-  IGRPCommandListPrimitive,
-  IGRPCommandPrimitive,
   IGRPDialogContentPrimitive,
   IGRPDialogFooterPrimitive,
   IGRPDialogHeaderPrimitive,
@@ -19,9 +14,6 @@ import {
   IGRPFormPrimitive,
   IGRPIcon,
   IGRPInputPrimitive,
-  IGRPPopoverContentPrimitive,
-  IGRPPopoverPrimitive,
-  IGRPPopoverTriggerPrimitive,
   IGRPSelectContentPrimitive,
   IGRPSelectItemPrimitive,
   IGRPSelectPrimitive,
@@ -30,7 +22,7 @@ import {
   IGRPTextAreaPrimitive,
   useIGRPToast,
 } from "@igrp/igrp-framework-react-design-system";
-import { useEffect, useMemo, useState } from "react";
+import { useEffect, useMemo } from "react";
 import { useForm } from "react-hook-form";
 import { STATUS_OPTIONS } from "@/lib/constants";
 import { statusSchema } from "@/schemas/global";
@@ -61,8 +53,6 @@ export function RoleFormDialog({
   parentRoleName,
   roles,
 }: RoleFormDialogProps) {
-  const [parentOpen, setParentOpen] = useState(false);
-
   const { mutateAsync: createRole, isPending: isCreating } = useCreateRole();
   const { mutateAsync: updateRole, isPending: isUpdating } = useUpdateRole();
 
@@ -75,7 +65,8 @@ export function RoleFormDialog({
     name: "",
     description: null,
     departmentCode: departmentCode,
-    parentName: "",
+    parentCode: "",
+    code: "",
     status: statusSchema.enum.ACTIVE,
   };
 
@@ -92,25 +83,19 @@ export function RoleFormDialog({
         name: role.name ?? "",
         description: role.description ?? null,
         departmentCode: departmentCode ?? "",
-        parentName: role.parentName ?? null,
+        parentCode: role.parentCode ?? null,
+        code: role.code ?? "",
         status: role.status ?? statusSchema.enum.ACTIVE,
       } as CreateRoleArgs);
     } else {
       form.reset({
         ...defaultValues,
-        parentName: parentRoleName ?? "",
+        parentCode: parentRoleName ?? "",
       } as CreateRoleArgs);
     }
   }, [open, role, parentRoleName, departmentCode, form]);
 
   const isLoading = isCreating || isUpdating || form.formState.isSubmitting;
-
-  const parentValue = form.watch("parentName");
-
-  const parentSelected = useMemo(
-    () => roles?.find((o) => o.name === parentValue) ?? null,
-    [parentValue, roles],
-  );
 
   const onSubmit = async (values: CreateRoleArgs) => {
     try {
@@ -151,6 +136,19 @@ export function RoleFormDialog({
     }
   };
 
+  const setDefaultFromName = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const name = e.target.value;
+    form.setValue("name", name);
+
+    if (!role || form.getValues("code") === "") {
+      const code = name
+        .toUpperCase()
+        .replace(/[^\w\s-]/g, "")
+        .replace(/\s+/g, "_");
+      form.setValue("code", code);
+    }
+  };
+
   const titleText = isEdit
     ? "Editar Perfil"
     : isSubRole
@@ -179,10 +177,35 @@ export function RoleFormDialog({
                   </IGRPFormLabelPrimitive>
                   <IGRPFormControlPrimitive>
                     <IGRPInputPrimitive
+                      {...field}
                       placeholder="Identificador único do perfil"
                       required
+                      onChange={setDefaultFromName}
                       disabled={isLoading}
-                      className="placeholder:truncate border-primary/30 focus-visible:ring-[2px] focus-visible:ring-primary/30 focus-visible:border-primary/30"
+                      className="placeholder:truncate border-primary/30 focus-visible:ring-2 focus-visible:ring-primary/30 focus-visible:border-primary/30"
+                      
+                    />
+                  </IGRPFormControlPrimitive>
+                  <IGRPFormMessagePrimitive />
+                </IGRPFormItemPrimitive>
+              )}
+            />
+
+            <IGRPFormFieldPrimitive
+              control={form.control}
+              name="code"
+              render={({ field }) => (
+                <IGRPFormItemPrimitive>
+                  <IGRPFormLabelPrimitive className='after:content-["*"] after:text-destructive'>
+                    Código
+                  </IGRPFormLabelPrimitive>
+                  <IGRPFormControlPrimitive>
+                    <IGRPInputPrimitive
+                      placeholder="CODIGO_ROLE"
+                      required
+                      pattern="^[A-Z0-9_]+$"
+                      disabled={isLoading}
+                      className="placeholder:truncate border-primary/30 focus-visible:ring-2 focus-visible:ring-primary/30 focus-visible:border-primary/30"
                       {...field}
                     />
                   </IGRPFormControlPrimitive>
@@ -218,7 +241,7 @@ export function RoleFormDialog({
             {isSubRole && (
               <IGRPFormFieldPrimitive
                 control={form.control}
-                name="parentName"
+                name="parentCode"
                 render={({ field }) => (
                   <IGRPFormItemPrimitive>
                     <IGRPFormLabelPrimitive>

@@ -3,6 +3,10 @@
 import {
   cn,
   IGRPBadge,
+  IGRPBreadcrumbItemPrimitive,
+  IGRPBreadcrumbListPrimitive,
+  IGRPBreadcrumbPrimitive,
+  IGRPBreadcrumbSeparatorPrimitive,
   IGRPIcon,
   IGRPInputPrimitive,
   IGRPTabItem,
@@ -159,6 +163,7 @@ export function DepartmentListTree() {
     }
   ];
 
+
   return (
     <div className="flex flex-col h-screen  overflow-hidden">
 
@@ -170,7 +175,14 @@ export function DepartmentListTree() {
               Gestão de Departamentos
             </h2>
 
-            <p className="text-muted-foreground text-sm">Ver e gerir todos os departamentos do sistema.</p>
+            <p className="text-muted-foreground text-sm mb-4">Ver e gerir todos os departamentos do sistema.</p>
+
+            <ButtonLink
+                onClick={handleOpenCreate}
+                icon="Plus"
+                href="#"
+                label="Novo Departamento"
+              />
           </div>
 
           <div className="mt-4">
@@ -214,18 +226,36 @@ export function DepartmentListTree() {
           }
           {!isLoadSelectedDep && selectedDepartment ? (
             <div className="container mx-auto px-6">
+              <IGRPBreadcrumbPrimitive>
+                  <IGRPBreadcrumbListPrimitive>
+                    <IGRPBreadcrumbItemPrimitive>
+                      Departamentos
+                    </IGRPBreadcrumbItemPrimitive>
+                    {selectedDepartment?.parent_code && (
+                      <>
+                    <IGRPBreadcrumbSeparatorPrimitive />
+                      <IGRPBreadcrumbItemPrimitive>
+                        {selectedDepartment.parent_code}
+                      </IGRPBreadcrumbItemPrimitive>
+                      </>
+                    )}
+                    <IGRPBreadcrumbSeparatorPrimitive />
+                    <IGRPBreadcrumbItemPrimitive>
+                      {selectedDepartment.name}
+                    </IGRPBreadcrumbItemPrimitive>
+                    
+                    
+                  </IGRPBreadcrumbListPrimitive>
+                </IGRPBreadcrumbPrimitive>
               <div className="flex items-start justify-between mb-6">
+                
                 <div>
-                  <div className="flex items-center">
-                    <span className="text-muted-foreground text-xs">
-                      #{selectedDepartment.code}
-                    </span>
-                    <CopyToClipboard value={selectedDepartment?.code || ""} />
-                  </div>
+                  
                   <div className="flex items-center gap-3">
                     <h1 className="text-2xl font-bold">
                       {selectedDepartment.name}
                     </h1>
+                    
                     {IGRPBadge ? (
                       <IGRPBadge
                         variant="solid"
@@ -253,6 +283,21 @@ export function DepartmentListTree() {
                           : "Inativo"}
                       </span>
                     )}
+
+                    {!selectedDepartment?.parent_code && (
+                      <IGRPBadge
+                        variant="outline"
+                        color="primary"
+                      >
+                        Departamento Pai
+                      </IGRPBadge>
+                    )}
+                  </div>
+                  <div className="flex items-center">
+                    <span className="text-muted-foreground text-xs">
+                      #{selectedDepartment.code}
+                    </span>
+                    <CopyToClipboard value={selectedDepartment?.code || ""} />
                   </div>
                   
                   <p className="text-muted-foreground text-sm">{selectedDepartment?.description || "Sem descrição."}</p>
@@ -266,14 +311,7 @@ export function DepartmentListTree() {
                     label="Editar"
                     variant="outline"
                   />
-                  <div>
-                    <h4 className="text-xs text-muted-foreground mb-1">
-                      Departamento Pai
-                    </h4>
-                    <p className="text-xs text-end font-medium">
-                      {selectedDepartment?.parent_code || "N/A"}
-                    </p>
-                  </div>
+                  
                 </div>
               </div>
 

@@ -92,7 +92,7 @@ export function PermissionList({ departmentCode }: PermissionListProps) {
 
   return (
     <>
-      <div className="flex flex-col gap-6 py-4 px-3 min-w-0">
+      <div className="flex flex-col gap-6 min-w-0">
         <div>
           <div className="flex items-center justify-between">
             <div className="min-w-0">

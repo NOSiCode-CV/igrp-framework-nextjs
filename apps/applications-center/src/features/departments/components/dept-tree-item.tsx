@@ -57,19 +57,17 @@ const DepartmentTreeItem = ({
     <div>
       <div
         className={cn(
-          "group flex items-center gap-2 px-3 py-2.5 text-sm transition-all cursor-pointer",
+          "group flex items-center gap-2 px-3 py-2.5 my-1.5 rounded-sm border border-accent text-sm transition-all cursor-pointer",
           isSelected
             ? "bg-primary/10 text-primary font-medium"
             : "text-foreground hover:bg-accent/50"
         )}
-        style={{ paddingLeft: `${level * 1.5 + 0.75}rem` }}
-      >
-        <button
-          onClick={() => {
+        onClick={() => {
             if (hasChildren) toggleExpand(dept.code);
           }}
-          className="w-4 h-4 flex items-center justify-center shrink-0"
-        >
+        style={{ paddingLeft: `${level * 1.5 + 0.75}rem` }}
+      >
+        <button className="w-4 h-4 flex items-center justify-center shrink-0">
           {hasChildren ? (
             <IGRPIcon
               iconName="ChevronRight"
@@ -88,7 +86,7 @@ const DepartmentTreeItem = ({
           onClick={() => setSelectedDeptCode(dept.code)}
           className="flex items-center gap-2 flex-1 min-w-0"
         >
-          {hasChildren && <IGRPIcon iconName={isExpanded ? "FolderOpen" : "Folder" } className="w-4 h-4 shrink-0" strokeWidth={2} /> }
+          <IGRPIcon iconName={isExpanded ? "FolderOpen" : "Folder" } className="w-4 h-4 shrink-0" strokeWidth={2} />
           <span className="flex-1 text-left truncate font-medium">
             {dept.name}
           </span>

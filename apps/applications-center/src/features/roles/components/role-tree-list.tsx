@@ -53,15 +53,14 @@ export function RolesListTree({ departmentCode }: RolesListProps) {
   const buildRoleTree = (roles: RoleArgs[]): RoleWithChildren[] => {
     const map = new Map<string, RoleWithChildren>();
     const roots: RoleWithChildren[] = [];
-
     roles.forEach((role) => {
       map.set(role.name, { ...role, children: [] });
     });
 
     roles.forEach((role) => {
       const node = map.get(role.name)!;
-      if (role.parentName) {
-        const parent = map.get(role.parentName);
+      if (role.parentCode) {
+        const parent = map.get(role.parentCode);
         if (parent) {
           parent.children!.push(node);
         } else {

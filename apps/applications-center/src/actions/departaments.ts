@@ -8,6 +8,8 @@ import type {
 import type { DepartmentArgs } from "@/features/departments/dept-schemas";
 import { getClientAccess } from "./access-client";
 import { MenuArgs } from "@/features/menus/menu-schemas";
+import App from "next/app";
+import { ApplicationArgs } from "@/features/applications/app-schemas";
 
 export async function getDepartments() {
   const client = await getClientAccess();
@@ -99,6 +101,21 @@ export async function getAvailableMenus(code: string) {
   } catch (error) {
     console.error(
       "[department-available-menus] Não foi possível obter lista de menus dos departamentos:",
+      error,
+    );
+    throw error;
+  }
+}
+
+
+export async function getAvailableApplications(code: string) {
+  const client = await getClientAccess();
+  try {
+    const result = await client.departments.getAvailableApplications(code);
+    return result.data as ApplicationArgs[];
+  } catch (error) {
+    console.error(
+      "[department-available-menus-for-roles] Não foi possível obter lista de apps dos departamentos para roles:",
       error,
     );
     throw error;

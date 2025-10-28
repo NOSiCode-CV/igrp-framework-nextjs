@@ -88,7 +88,7 @@ const DepartmentTreeItem = ({
           onClick={() => setSelectedDeptCode(dept.code)}
           className="flex items-center gap-2 flex-1 min-w-0"
         >
-          <IGRPIcon iconName="FolderTree" className="w-4 h-4 shrink-0" strokeWidth={2} />
+          {hasChildren && <IGRPIcon iconName={isExpanded ? "FolderOpen" : "Folder" } className="w-4 h-4 shrink-0" strokeWidth={2} /> }
           <span className="flex-1 text-left truncate font-medium">
             {dept.name}
           </span>

@@ -1,14 +1,19 @@
-import type { UpdateDepartmentRequest } from "@igrp/platform-access-management-client-ts";
+import type { ApplicationDTO, UpdateDepartmentRequest } from "@igrp/platform-access-management-client-ts";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import {
   createDepartment,
   deleteDepartment,
+  getAvailableApplications,
   getAvailableMenus,
   getDepartmentByCode,
   getDepartments,
   updateDepartment,
 } from "@/actions/departaments";
 import type { DepartmentArgs } from "./dept-schemas";
+import { RoleArgs } from "../roles/role-schemas";
+import App from "next/app";
+import { MenuArgs } from "../menus/menu-schemas";
+import { ApplicationArgs } from "../applications/app-schemas";
 
 export const useDepartments = () => {
   return useQuery<DepartmentArgs[]>({
@@ -81,9 +86,17 @@ export const useDepartmentByCode = (code?: string) => {
 
 
 export const useDepartmentAvailableMenus = (code?: string) => {
-  return useQuery<{ code: string; name: string }[]>({
+  return useQuery<MenuArgs[]>({
     queryKey: ["department-available-menus", code],
     queryFn: () => getAvailableMenus(code!),
+    enabled: !!code,
+  });
+}
+
+export const useDepartmentAvailableApps = (code?: string) => {
+  return useQuery<ApplicationArgs[]>({
+    queryKey: ["department-available-menus-for-roles", code],
+    queryFn: () => getAvailableApplications(code!),
     enabled: !!code,
   });
 }

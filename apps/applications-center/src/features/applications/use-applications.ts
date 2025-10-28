@@ -6,9 +6,11 @@ import {
   createApplication,
   getApplicationByCode,
   getApplications,
+  getAvailableMenus,
   updateApplication,
 } from "@/actions/applications";
 import type { ApplicationArgs } from "./app-schemas";
+import { MenuArgs } from "../menus/menu-schemas";
 
 export const useApplications = () => {
   return useQuery<ApplicationArgs[]>({
@@ -51,3 +53,12 @@ export const useUpdateApplication = () => {
     },
   });
 };
+
+
+export const useApplicationAvailableMenus = (code?: string) => {
+  return useQuery<MenuArgs[]>({
+    queryKey: ["application-available-menus", code],
+    queryFn: () => getAvailableMenus(code!),
+    enabled: !!code,
+  });
+}

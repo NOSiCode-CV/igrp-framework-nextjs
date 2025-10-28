@@ -20,6 +20,8 @@ import DepartmentTreeItem from "./dept-tree-item";
 import { PermissionList } from "@/features/permissions/components/permission-list";
 import { CopyToClipboard } from "@/components/copy-to-clipboard";
 import { RolesListTree } from "@/features/roles/components/role-tree-list";
+import { MenuPermissions } from "./dept-menu";
+import { useRoles } from "@/features/roles/use-roles";
 
 export type DepartmentWithChildren = DepartmentArgs & {
   children?: DepartmentWithChildren[];
@@ -40,7 +42,7 @@ export function DepartmentListTree() {
 
   const { data: departments, isLoading, error } = useDepartments();
   const { data: selectedDepartment, isLoading: isLoadSelectedDep } = useDepartmentByCode(selectedDeptCode || "");
-
+  
   const buildTree = (depts: DepartmentArgs[]): DepartmentWithChildren[] => {
     const map = new Map<string, DepartmentWithChildren>();
     const roots: DepartmentWithChildren[] = [];
@@ -149,8 +151,10 @@ export function DepartmentListTree() {
       label: "Menus",
       value: "menus",
       content: (
-        <div></div>
-        
+        <MenuPermissions 
+          departmentCode={selectedDeptCode ?? ""}
+          parentDepartmentCode={selectedDepartment?.parent_code}
+        />
       ),
     }
   ];
@@ -159,7 +163,7 @@ export function DepartmentListTree() {
     <div className="flex flex-col h-screen  overflow-hidden">
 
       <div className="flex h-screen">
-        <div className="w-80 flex flex-col">
+        <div className="w-80 flex border-r  pr-2 border-gray-900 flex-col">
 
           <div className="flex flex-col min-w-0">
             <h2 className="text-2xl font-bold tracking-tight truncate">
@@ -266,7 +270,7 @@ export function DepartmentListTree() {
                     <h4 className="text-xs text-muted-foreground mb-1">
                       Departamento Pai
                     </h4>
-                    <p className="text-xs font-medium">
+                    <p className="text-xs text-end font-medium">
                       {selectedDepartment?.parent_code || "N/A"}
                     </p>
                   </div>

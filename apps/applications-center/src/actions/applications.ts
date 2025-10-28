@@ -6,6 +6,7 @@ import type {
 } from "@igrp/platform-access-management-client-ts";
 import type { ApplicationArgs } from "@/features/applications/app-schemas";
 import { getClientAccess } from "./access-client";
+import { MenuArgs } from "@/features/menus/menu-schemas";
 
 export async function getApplications(): Promise<ApplicationArgs[]> {
   const client = await getClientAccess();
@@ -60,6 +61,21 @@ export async function updateApplication(
   } catch (error) {
     console.error(
       "[app-update] Não foi possível atualizar à aplicação:",
+      error,
+    );
+    throw error;
+  }
+}
+
+export async function getAvailableMenus(appCode: string) {
+  const client = await getClientAccess();
+
+  try {
+    const result = await client.applications.getAvailableMenus(appCode);
+    return result.data as MenuArgs[];
+  } catch (error) {
+    console.error(
+      "[app-available-menus] Não foi possível obter os menus:",
       error,
     );
     throw error;

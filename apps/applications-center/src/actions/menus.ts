@@ -2,6 +2,7 @@
 
 import type {
   CreateMenuRequest,
+  MenuEntryDTO,
   MenuFilters,
   UpdateMenuRequest,
 } from "@igrp/platform-access-management-client-ts";
@@ -10,6 +11,7 @@ import {
   mapperMenuCRUD,
 } from "@/features/menus/menu-mapper";
 import { getClientAccess } from "./access-client";
+import { MenuArgs } from "@/features/menus/menu-schemas";
 
 export async function getMenus(params?: MenuFilters) {
   const client = await getClientAccess();
@@ -61,6 +63,41 @@ export async function deleteMenu(code: string) {
     return result;
   } catch (error) {
     console.error("[menu-update] Não foi possível eleiminar menu:", error);
+    throw error;
+  }
+}
+
+export async function removeRolesFromMenu(
+  menuCode: string,
+  roleCodes: string[],
+): Promise<MenuEntryDTO> {
+  const client = await getClientAccess();
+  try {
+    const { data } = await client.menus.removeRolesFromMenu(menuCode, roleCodes);
+    return data;
+  } catch (error) {
+    console.error(
+      "[menu-remove-roles] Não foi possível remover os papéis do menu:",
+      error,
+    );
+    throw error;
+  }
+}
+
+export async function addRolesToMenu(
+  menuCode: string,
+  roleCodes: string[],
+): Promise<MenuEntryDTO> {
+  const client = await getClientAccess();
+  try {
+    const {data} = await client.menus.addRolesToMenu(menuCode, roleCodes);
+    return data;
+  }
+  catch (error) {
+    console.error(
+      "[menu-assign-roles] Não foi possível atribuir os papéis ao menu:",
+      error,
+    );
     throw error;
   }
 }

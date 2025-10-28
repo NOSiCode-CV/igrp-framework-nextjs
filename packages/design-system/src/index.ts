@@ -286,6 +286,7 @@ export {
 // horizon components
 
 export { IGRPAlert, type IGRPAlertProps } from './components/horizon/alert';
+export { IGRPAccordion, type IGRPAccordionProps } from './components/horizon/accordion';
 export { IGRPAlertDialog, type IGRPAlertDialogProps } from './components/horizon/alert-dialog';
 export { IGRPBadge, type IGRPBadgeProps, igrpBadgeVariants } from './components/horizon/badge';
 export { IGRPButton, type IGRPButtonProps } from './components/horizon/button';

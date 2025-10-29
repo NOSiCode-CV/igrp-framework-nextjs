@@ -1,6 +1,7 @@
 import type { Meta, StoryFn, StoryObj } from '@storybook/nextjs-vite';
 import { IGRPDatePickerSingle } from '@igrp/igrp-framework-react-design-system';
 import { useForm, FormProvider } from 'react-hook-form';
+import { useState } from 'react';
 
 const meta: Meta<typeof IGRPDatePickerSingle> = {
   title: 'Components/Input/DatePicker/Single',
@@ -15,12 +16,16 @@ export default meta;
 type Story = StoryObj<typeof IGRPDatePickerSingle>;
 
 const Demo: StoryFn<typeof IGRPDatePickerSingle> = (args) => { 
-
+  const [selectedDate, setSelectedDate] = useState<Date | undefined>(args.date);
+  
   return (
     <div className='container mx-auto px-4 py-10'>
       <IGRPDatePickerSingle
         {...args}
+        date={selectedDate}
+        onDateChange={setSelectedDate} 
       />
+      <p className='text-xs text-center'>Debug | Selected Date: {selectedDate?.toDateString()}</p>
     </div>
   );
 };

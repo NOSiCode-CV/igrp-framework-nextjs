@@ -617,11 +617,10 @@ export { IGRPInputColor, type IGRPInputColorProps } from './components/horizon/i
 
 export { IGRPCombobox, type IGRPComboboxProps } from './components/horizon/input/combobox';
 
-
-export { 
-  IGRPDatePickerInputRange, 
-  type IGRPDatePickerInputRangeProps 
-} from './components/horizon/input/date-picker/input-range';
+// export { 
+//   IGRPDatePickerInputRange, 
+//   type IGRPDatePickerInputRangeProps 
+// } from './components/horizon/input/date-picker/input-range';
 
 export { 
   IGRPDatePickerInputSingle, 

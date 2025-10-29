@@ -7,6 +7,7 @@ import { IGRPLabel } from '../../label';
 // import { igrpGridSizeClasses } from '../../../../lib/constants';
 import { cn } from '../../../../lib/utils';
 import type { IGRPInputProps, IGRPGridSize } from '../../../../types';
+import { DD_MM_YYYY } from '../../../../lib/constants';
 
 interface IGRPDateTimeInputProps
   extends Omit<IGRPInputProps, 'onChange' | 'defaultValue' | 'value'> {
@@ -26,7 +27,7 @@ function IGRPDateTimeInput({
   disabled = false,
   value: controlledValue,
   defaultValue = '',
-  placeholder = 'dd/mm/yyyy, --:--',
+  placeholder = `${DD_MM_YYYY}, --:--`,
   gridSize = 'default',
   className,
   inputClassName,

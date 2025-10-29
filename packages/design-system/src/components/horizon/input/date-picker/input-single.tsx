@@ -2,11 +2,19 @@
 
 import { useId, useState, useEffect } from 'react';
 import { useFormContext } from 'react-hook-form';
-import { CalendarIcon } from 'lucide-react';
+import { CalendarIcon, XIcon } from 'lucide-react';
 
+import { 
+  formatDateToString, 
+  getDisabledDays, 
+  isValidDate, 
+  parseStringToDate 
+} from '../../../../lib/calendar-utils';
+import { DD_MM_YYYY } from '../../../../lib/constants';
 import { cn } from '../../../../lib/utils';
 import { type IGRPDatePickerBaseProps } from '../../../../types';
 import { Button } from '../../../primitives/button';
+import { Calendar } from '../../../primitives/calendar';
 import {
   FormControl,
   FormDescription,
@@ -17,10 +25,8 @@ import {
 } from '../../../primitives/form';
 import { Input } from '../../../primitives/input';
 import { Popover, PopoverContent, PopoverTrigger } from '../../../primitives/popover';
-import { IGRPButton } from '../../button';
-import { IGRPCalendarSingle, type IGRPCalendarSingleProps } from '../../calendar/single';
+import { type IGRPCalendarSingleProps } from '../../calendar/single';
 import { IGRPLabel } from '../../label';
-import { formatDate, isValidDate } from '../../../../lib/calendar-utils';
 
 type IGRPDatePickerInputSingleProps = IGRPCalendarSingleProps & IGRPDatePickerBaseProps;
 
@@ -34,18 +40,27 @@ function IGRPDatePickerInputSingle({
   className,
   required = false,
   disabledPicker = false,
-  dateFormat = 'dd/MM/yyyy',
+  dateFormat = DD_MM_YYYY,
+  disableBefore,
+  disableAfter,
+  disableDayOfWeek,
+  ...calendarProps
 }: IGRPDatePickerInputSingleProps) {
   const id = useId();
   const fieldName = name ?? id;
-  const [localDate, setLocalDate] = useState<Date | undefined>(date);
-  const [value, setValue] = useState(formatDate(date, dateFormat));
-  const [open, setOpen] = useState(false)
 
   const formContext = useFormContext();
 
+  const [localDate, setLocalDate] = useState<Date | undefined>(date);
+  const [month, setMonth] = useState<Date | undefined>(localDate)
+  const [value, setValue] = useState(formatDateToString(date, dateFormat));
+  const [open, setOpen] = useState(false)
+
   useEffect(() => {
-    if (!formContext) setLocalDate(date);
+    if (!formContext) {
+      setLocalDate(date);
+      setValue(formatDateToString(date, dateFormat));
+    }
   }, [date, formContext]);
 
   useEffect(() => {
@@ -54,74 +69,88 @@ function IGRPDatePickerInputSingle({
     }
   }, [formContext, onDateChange]);
 
+  const disabled = getDisabledDays({ disableBefore, disableAfter, disableDayOfWeek });
 
-  const renderPicker = (
-    fieldValue: Date | undefined,
-    onChange: (date: Date | undefined) => void,
-  ) => (
+  const renderPicker = (onChange: (date: Date | undefined) => void) => (
     <div className="relative flex gap-2">
       <Input
-        id="date"
+        id={fieldName}
+        name={fieldName}
         value={value}
         placeholder={dateFormat}
         className="bg-background pr-10"
+        disabled={disabledPicker}
         onChange={(e) => {
-          const date = new Date(e.target.value)
+          const parsedDate = parseStringToDate(e.target.value, dateFormat)
           setValue(e.target.value)
-          if (isValidDate(date)) {
-            onChange?.(date)
+          if (isValidDate(parsedDate)) {
+            setLocalDate(parsedDate);
+            setMonth(parsedDate)
+            onChange?.(parsedDate);
+            onDateChange?.(parsedDate);            
           }
         }}
         onKeyDown={(e) => {
-          if (e.key === "ArrowDown") {
+          if (e.key === "ArrowDown" && !disabledPicker) {
             e.preventDefault()
             setOpen(true)
           }
         }}
       />
-      <Popover open={open} onOpenChange={setOpen}>
+
+      {localDate && (
+        <Button
+          id={`${fieldName}-clean`}
+          variant="ghost"
+          className="absolute top-1/2 right-8 size-6 -translate-y-1/2"
+          disabled={disabledPicker}
+          aria-label="Open Calendar"
+          onClick={() => {            
+            setLocalDate(undefined)
+            setMonth(undefined)
+            setValue('')
+            onDateChange?.(undefined)
+            onChange?.(undefined);
+          }}
+        >
+          <XIcon className="size-3.5" />
+          <span className="sr-only">Remover Data</span>
+        </Button>
+      )}
+
+      <Popover open={open} onOpenChange={(v) => !disabledPicker && setOpen(v)}>
         <PopoverTrigger asChild>
           {!localDate && (
-            <Button
-              id="date-picker"
-              variant="ghost"
-              className="absolute top-1/2 right-2 size-6 -translate-y-1/2"
-            >
-              <CalendarIcon className="size-3.5" />
-              <span className="sr-only">Selecionar Data</span>
-            </Button>
-          )}
+          <Button
+            id={`date-picker-btn-${fieldName}`}
+            variant="ghost"
+            className="absolute top-1/2 right-2 size-6 -translate-y-1/2"
+          >
+            <CalendarIcon className="size-3.5" />
+            <span className="sr-only">Selecionar Data</span>
+          </Button>
+        )} 
         </PopoverTrigger>
-        <PopoverContent className="p-0 w-auto shadow-none" align="start">
-          <IGRPCalendarSingle
-            id={fieldName}
-            date={fieldValue}
-            onDateChange={(date) => {
-              setLocalDate(date)
-              setValue(formatDate(date, dateFormat))
-              setOpen(false)
-              onChange?.(date)
-            }}
+        <PopoverContent className="p-0 w-auto shadow-none" align="start" alignOffset={-8} sideOffset={10}>
+          <Calendar
+            mode="single"
+            id={name || id}
+            selected={localDate}
             captionLayout="dropdown"
+            month={month}
+            onMonthChange={setMonth}
+            onSelect={(date) => {
+              setLocalDate(date);
+              setValue(formatDateToString(date, dateFormat));
+              onDateChange?.(date);
+              setOpen(false)
+            }}
+            disabled={disabled}
+            className={cn("rounded-lg border shadow-sm", className)}
+            {...calendarProps}
           />
         </PopoverContent>
       </Popover>
-      {localDate && (
-        <IGRPButton
-          onClick={() => {
-            setLocalDate(undefined);
-            onDateChange?.(undefined);
-            setValue('');
-          }}
-          variant="link"
-          className="size-2 absolute right-2 top-1/2 h-3 w-3 -translate-y-1/2 text-muted-foreground z-100"
-          size="icon"
-          iconName="X"
-          iconSize={10}
-          disabled={disabledPicker}
-          showIcon={localDate ? true : false}
-        />
-      )}
     </div>
   );
 
@@ -135,6 +164,7 @@ function IGRPDatePickerInputSingle({
             <FormItem>
               {label && (
                 <FormLabel
+                  htmlFor={fieldName}
                   className={cn(
                     labelClassName,
                     required && 'after:content-["*"] after:text-destructive',
@@ -144,7 +174,7 @@ function IGRPDatePickerInputSingle({
                 </FormLabel>
               )}
               <FormControl>
-                {renderPicker(field.value, (val) => {
+                {renderPicker((val) => {
                   field.onChange(val);
                   onDateChange?.(val);
                 })}
@@ -164,12 +194,11 @@ function IGRPDatePickerInputSingle({
       {label && (
         <IGRPLabel label={label} className={labelClassName} required={required} id={name} />
       )}
-      <div className="relative">
-        {renderPicker(localDate, (val) => {
-          setLocalDate(val);
-          onDateChange?.(val);
-        })}
-      </div>
+
+      {renderPicker((val) => {
+        setLocalDate(val);
+        onDateChange?.(val);
+      })}
 
       {helperText && (
         <p

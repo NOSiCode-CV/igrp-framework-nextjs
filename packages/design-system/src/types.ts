@@ -45,7 +45,6 @@ export type IGRPCalendarProps = Omit<React.ComponentProps<typeof Calendar>, 'mod
   disableBefore?: Date;
   disableAfter?: Date;
   disableDayOfWeek?: number | number[];
-  formatCaption?: string;
 }
 
 export type IGRPCalendarTimeProps = {

@@ -18,6 +18,7 @@ import { Popover, PopoverContent, PopoverTrigger } from '../../../primitives/pop
 import { IGRPButton } from '../../button';
 import { IGRPCalendarSingle, type IGRPCalendarSingleProps } from '../../calendar/single';
 import { IGRPLabel } from '../../label';
+import { DD_MM_YYYY } from '../../../../lib/constants';
 
 type IGRPDatePickerSingleProps = IGRPCalendarSingleProps & IGRPDatePickerBaseProps;
 
@@ -32,8 +33,9 @@ function IGRPDatePickerSingle({
   required = false,
   disabledPicker = false,
   disabled,
-  dateFormat = 'dd/MM/yyyy',
+  dateFormat = DD_MM_YYYY,
   placeholder = 'Pick a date',
+  ...calendarProps
 }: IGRPDatePickerSingleProps) {
   const id = useId();
   const fieldName = name ?? id;
@@ -95,6 +97,7 @@ function IGRPDatePickerSingle({
             date={fieldValue}
             onDateChange={onChange}
             captionLayout="dropdown"
+            {...calendarProps}
           />
         </PopoverContent>
       </Popover>

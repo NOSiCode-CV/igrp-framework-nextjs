@@ -18,6 +18,7 @@ import { Popover, PopoverContent, PopoverTrigger } from '../../../primitives/pop
 import { IGRPButton } from '../../button';
 import { IGRPLabel } from '../../label';
 import { IGRPCalendarMultiple, type IGRPCalendarMultipleProps } from '../../calendar/multiple';
+import { DD_MM_YYYY } from '../../../../lib/constants';
 
 type IGRPDatePickerMultipleProps = IGRPCalendarMultipleProps & IGRPDatePickerBaseProps;
 
@@ -32,7 +33,7 @@ function IGRPDatePickerMultiple({
   required = false,
   disabledPicker = false,
   disabled,
-  dateFormat = 'dd/MM/yyyy',
+  dateFormat = DD_MM_YYYY,
   placeholder = 'Pick a date',
   ...props
 }: IGRPDatePickerMultipleProps) {

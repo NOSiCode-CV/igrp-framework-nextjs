@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { getDisabledDays } from '../../../lib/calendar-utils';
 import { cn } from '../../../lib/utils';
 import type { IGRPCalendarProps } from '../../../types';
@@ -19,18 +19,19 @@ function IGRPCalendarSingle({
   disableBefore,
   disableAfter,
   disableDayOfWeek, 
-  formatCaption,
   ...props
 }: IGRPCalendarSingleProps) {
   const [ownDate, setOwnDate] = useState<Date | undefined>(date)
   const disabled = getDisabledDays({ disableBefore, disableAfter, disableDayOfWeek });
 
+  useEffect(() => {
+    setOwnDate(date);
+  }, [date]);
+
   return (
-    <Calendar
-      {...props}
+    <Calendar      
       mode="single"
       id={name || id}
-      defaultMonth={defaultMonth || ownDate}
       selected={ownDate}
       onSelect={(date) => {
         setOwnDate(date); 
@@ -38,6 +39,7 @@ function IGRPCalendarSingle({
       }} 
       disabled={disabled}
       className={cn("rounded-lg border shadow-sm", className)}
+      {...props}
     />
   );
 }

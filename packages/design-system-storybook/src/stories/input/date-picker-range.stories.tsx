@@ -1,10 +1,11 @@
 import type { Meta, StoryFn, StoryObj } from '@storybook/nextjs-vite';
-import { IGRPDatePickerRange } from '@igrp/igrp-framework-react-design-system';
+import { IGRPDatePickerRange, type DateRange } from '@igrp/igrp-framework-react-design-system';
 import { useForm, FormProvider } from 'react-hook-form';
+import { useState } from 'react';
 
 const meta: Meta<typeof IGRPDatePickerRange> = {
   title: 'Components/Input/DatePicker/Range',
-  component: IGRPDatePickerRange,  
+  component: IGRPDatePickerRange,
   argTypes: {
     onDateChange: { action: 'onDateChange' },
   },
@@ -14,13 +15,25 @@ export default meta;
 
 type Story = StoryObj<typeof IGRPDatePickerRange>;
 
-const Demo: StoryFn<typeof IGRPDatePickerRange> = (args) => { 
+const Demo: StoryFn<typeof IGRPDatePickerRange> = (args) => {
+  const [dateRange, setDateRange] = useState<DateRange | undefined>({
+    from: args.date?.from,
+    to: args.date?.to,
+  })
 
   return (
-    <div className='container mx-auto px-4 py-10'>
+    <div className='flex flex-col gap-4 m-10'>
       <IGRPDatePickerRange
         {...args}
+        date={dateRange}
+        onDateChange={setDateRange}
       />
+      <p className='text-xs'>
+        Debug | Selected Date:
+      </p>
+      <p className='text-xs'>
+        {dateRange?.from?.toDateString()} - {dateRange?.to?.toDateString()}
+      </p>
     </div>
   );
 };

@@ -1,4 +1,4 @@
-import { format } from "date-fns";
+import { lightFormat, parse } from "date-fns";
 import type { DateAfter, DateBefore, DateRange, DayOfWeek } from "react-day-picker";
 import type { IGRPCalendarProps } from "../types";
 
@@ -30,20 +30,47 @@ export function isValidDate(date: Date | undefined) {
 
 export function formatDateRange(range: DateRange | undefined, dateFormat: string) {
   if (!range?.from) {
-    return ""
+    return ''
   }
 
-  const fromDate = formatDate(range.from, dateFormat)
+  const fromDate = formatDateToString(range.from, dateFormat)
 
   if (!range.to) {
     return fromDate
   }
 
-  const toDate = formatDate(range.from, dateFormat)
+  const toDate = formatDateToString(range.from, dateFormat)
 
-  return `${fromDate} - ${toDate}`
+  return `${fromDate} / ${toDate}`
 }
 
-export function formatDate(date: Date | undefined, dateFormat: string) {
-  return date ? format(date, dateFormat) : dateFormat;
+export function formatDateToString(date: Date | undefined, dateFormat: string) {
+  return date ? lightFormat(date, dateFormat) : '';
 };
+
+export function parseStringToDate(dateString: string, dateFormat: string) {
+  if (dateString.length !== dateFormat.length) return
+  
+  const parsedDate = parse(dateString, dateFormat, new Date());
+
+  if (isValidDate(parsedDate)) {
+    return parsedDate;
+  }
+}
+
+export function parseStringToRange(rangeString: string, dateFormat: string) {
+  const [from, to] = (rangeString.trim()).split('/')
+
+  if (!from || from.length !== dateFormat.length) return { from: undefined, to: undefined }
+  
+  const parsedFrom = parse(from, dateFormat, new Date());
+
+  if (!to || to.length !== dateFormat.length) return { from: parsedFrom, to: undefined }
+
+  const parsedDate = {
+    from: parsedFrom, 
+    to:parse(to, dateFormat, new Date())
+  }
+
+  return parsedDate
+}

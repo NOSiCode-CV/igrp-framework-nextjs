@@ -19,6 +19,7 @@ import { Popover, PopoverContent, PopoverTrigger } from '../../../primitives/pop
 import { IGRPButton } from '../../button';
 import { IGRPLabel } from '../../label';
 import { IGRPCalendarRange, type IGRPCalendarRangeProps } from '../../calendar/range';
+import { DD_MM_YYYY } from '../../../../lib/constants';
 
 type IGRPDatePickerRangeProps = IGRPCalendarRangeProps & IGRPDatePickerBaseProps;
 
@@ -33,13 +34,14 @@ function IGRPDatePickerRange({
   required = false,
   disabledPicker = false,
   disabled,
-  dateFormat = 'dd/MM/yyyy',
+  dateFormat = DD_MM_YYYY,
   placeholder = 'Pick a date',
   ...props
 }: IGRPDatePickerRangeProps) {
   const id = useId();
   const fieldName = name ?? id;
   const [localDate, setLocalDate] = useState<DateRange | undefined>(date);
+  const [open, setOpen] = useState(false)
   const formContext = useFormContext();
 
   useEffect(() => {
@@ -90,17 +92,19 @@ function IGRPDatePickerRange({
     onChange?: (val: DateRange | undefined) => void,
   ) => (
     <>
-      <Popover>
-        <PopoverTrigger asChild>{DateButton(fieldValue)}</PopoverTrigger>
+      <Popover open={open} onOpenChange={setOpen}>
+        <PopoverTrigger asChild>
+          {DateButton(fieldValue)}
+        </PopoverTrigger>
         <PopoverContent className="p-0 w-auto shadow-none" align="start">
           <IGRPCalendarRange
             {...props}
             id={id}
             date={fieldValue}
             onDateChange={(val) => {
-              setLocalDate(val);
-              onDateChange?.(val);
-              onChange?.(val);
+              setLocalDate(val)              
+              onChange?.(val)
+              setOpen(false)
             }}
             disabled={disabled}
           />

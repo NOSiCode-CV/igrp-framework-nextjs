@@ -21,7 +21,6 @@ import {
 } from './lib';
 import type { IGRPAreaConfig, IGRPChartProps } from './types';
 
-
 // TODO: check to assign areas props default value
 
 interface IGRPAreaChartProps extends IGRPChartProps {

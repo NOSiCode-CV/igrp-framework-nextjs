@@ -19,6 +19,7 @@ import { IGRPLoadingSpinner } from './loading-spiner';
 import { IGRPHeadline } from './typography/headline';
 import { IGRPText } from './typography/text';
 import { IGRPColors } from '../../lib/colors';
+import { DD_MM_YYYY } from '../../lib/constants';
 
 type IGRPDocumentItem = {
   id: number;
@@ -173,7 +174,7 @@ function IGRPPdfViewerInline({
               </div>
               <div className="flex items-center gap-1 text-xs">
                 <IGRPIcon iconName="Calendar" className="text-primary" />
-                {format(new Date(date), 'dd/MM/yyyy')}
+                {format(new Date(date), DD_MM_YYYY)}
               </div>
             </div>
           </div>
@@ -239,7 +240,7 @@ function IGRPPdfViewerModal({
             </div>
             <div className="flex items-center gap-1">
               <IGRPIcon iconName="Calendar" className="text-primary" />
-              {format(new Date(date), 'dd/MM/yyyy')}
+              {format(new Date(date), DD_MM_YYYY)}
             </div>
           </DialogDescription>
         </DialogHeader>

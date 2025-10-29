@@ -2,6 +2,7 @@ import type {
   CreateUserRequest,
   IGRPUserDTO,
   RoleDTO,
+  UpdateUserRequest,
   UserFilters,
 } from "@igrp/platform-access-management-client-ts";
 import {
@@ -16,6 +17,7 @@ import {
   getUserRoles,
   getUsers,
   inviteUser,
+  updateUser,
 } from "@/actions/user";
 
 export const useUsers = (params?: UserFilters, ids?: number[]) => {
@@ -40,7 +42,7 @@ export const useInviteUser = () => {
       inviteUser(user),
     onSuccess: async () => {
       await queryClient.invalidateQueries({ queryKey: ["users"] });
-      await queryClient.refetchQueries({ queryKey: ["users"] });
+      await queryClient.refetchQueries({ queryKey: ["users"] });  
     },
   });
 };
@@ -99,3 +101,22 @@ export const useUserRolesMulti = (usernames: string[]) => {
     })),
   });
 };
+
+export const useUpdateUser = () => {
+  const queryClient = useQueryClient();
+
+  return useMutation({
+    mutationFn: async ({
+      username,
+      user,
+    }: {
+      username: string;
+      user: UpdateUserRequest;
+    }) => updateUser(username, user),
+    onSuccess: async () => {
+      await queryClient.invalidateQueries({ queryKey: ["users"] });
+      await queryClient.refetchQueries({queryKey: ["users"] });
+    },
+  });
+};
+

@@ -20,7 +20,7 @@ export const UserSchema = z.object({
   name: NameSchema,
   username: UsernameSchema,
   email: EmailSchema,
-  status: statusSchema.optional(),
+  status: statusSchema,
   picture: z.string().optional(),
   signature: z.string().optional(),
 });

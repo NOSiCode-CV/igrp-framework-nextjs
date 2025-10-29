@@ -8,6 +8,7 @@ import { Tooltip, TooltipTrigger, TooltipContent, TooltipProvider } from '../../
 import { IGRPBadge, type IGRPBadgeProps } from '../badge';
 import { IGRPIcon } from '../icon';
 import { IGRPLink, type IGRPLinkProps } from '../typography/link';
+import { DD_MM_YYYY } from '../../../lib/constants';
 
 interface IGRPDataTableCellCheckboxProps<TData> extends React.ComponentProps<typeof Checkbox> {
   row: Row<TData>;
@@ -39,23 +40,23 @@ function IGRPDataTableCellExpander<TData>({ row, field }: IGRPDataTableCellExpan
   return row.getCanExpand() ? (
     <Button
       {...{
-        className: 'size-7 shadow-none text-muted-foreground',
+        className: 'shadow-none text-muted-foreground',
         onClick: row.getToggleExpandedHandler(),
         'aria-expanded': row.getIsExpanded(),
         'aria-label': row.getIsExpanded()
           ? `Collapse details for ${field}`
           : `Expand details for ${field}`,
-        size: 'icon',
+        size: 'sm',
         variant: 'ghost',
       }}
     >
       {row.getIsExpanded() ? (
-        <IGRPIcon iconName="ChevronUp" className="text-muted-foreground/70" />
+        <IGRPIcon iconName="ChevronDown" />
       ) : (
-        <IGRPIcon iconName="ChevronDown" className="text-muted-foreground/70" />
+        <IGRPIcon iconName="ChevronRight" />
       )}
     </Button>
-  ) : undefined;
+  ) : null;
 }
 
 interface IGRPDataTableCellAmountProps {
@@ -109,7 +110,7 @@ interface IGRPDataTableCellDateProps {
   dateFormat?: string;
 }
 
-function IGRPDataTableCellDate({ date, dateFormat = 'dd/MM/yyyy' }: IGRPDataTableCellDateProps) {
+function IGRPDataTableCellDate({ date, dateFormat = DD_MM_YYYY }: IGRPDataTableCellDateProps) {
   if (!date) return null;
   return <span>{format(new Date(date), dateFormat)}</span>;
 }

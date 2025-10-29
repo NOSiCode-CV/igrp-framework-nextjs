@@ -18,8 +18,11 @@ import {
   IGRPDataTableFilterInput,
   IGRPDataTableHeaderSortToggle,
   IGRPDropdownMenuSeparatorPrimitive,
-  type Row
-  // useIGRPToast,
+  type Row,
+  IGRPBadgePrimitive,
+  IGRPDataTableFacetedFilterFn,
+  IGRPDataTableCellExpander,
+  IGRPDataTableHeaderDefault,
 } from "@igrp/igrp-framework-react-design-system";
 import type { IGRPUserDTO } from "@igrp/platform-access-management-client-ts";
 import { useEffect, useState } from "react";
@@ -34,8 +37,11 @@ import {
   useUsers,
 } from "@/features/users/use-users";
 import { ROUTES, STATUS_OPTIONS } from "@/lib/constants";
-import { getInitials } from "@/lib/utils";
+import { cn, getInitials, showStatus, getStatusColor } from "@/lib/utils";
 import { UserRolesDialog } from "./user-role-dialog";
+import { UserRolesList } from "./user-roles-list";
+import { ButtonLinkTooltip } from "@/components/button-link-tooltip";
+import { UserDeleteDialog } from "./user-delete-dialog";
 
 export function UserList() {
   const [data, setData] = useState<IGRPUserDTO[]>([]);
@@ -43,10 +49,8 @@ export function UserList() {
   const [inviteDialogOpen, setInviteDialogOpen] = useState(false);
 
   const [deleteDialogOpen, setDeleteDialogOpen] = useState(false);
-  const [userToDelete, setUserToDelete] = useState<{
-    username: string;
-    email: string;
-  } | null>(null);
+  const [userToDelete, setUserToDelete] = useState<IGRPUserDTO | undefined>(undefined)
+
 
   const [assignRolesFor, setAssignRolesFor] = useState<{
     open: boolean;
@@ -57,13 +61,17 @@ export function UserList() {
   const { data: users, isLoading, error } = useUsers();
   const { data: currentUser, isLoading: currentUserLoading } = useCurrentUser();
 
-  // const { igrpToast } = useIGRPToast();
-
   useEffect(() => {
     setData(users ?? []);
   }, [users]);
 
   const columns: ColumnDef<IGRPUserDTO>[] = [
+    {
+      id: "expander",
+      header: () => null,
+      cell: ({ row }) => <IGRPDataTableCellExpander row={row} field="name" />,
+      size: 50
+    },
     {
       header: ({ column }) => <IGRPDataTableHeaderSortToggle column={column} title="Nome" />,
       accessorKey: "name",
@@ -90,11 +98,6 @@ export function UserList() {
       },
     },
     {
-      header: "Email",
-      accessorKey: "email",
-      cell: ({ row }) => <div>{row.getValue("email") || "N/A"}</div>,
-    },
-    {
       header: "Username",
       accessorKey: "username",
       cell: ({ row }) => {
@@ -108,10 +111,10 @@ export function UserList() {
                 <IGRPTooltipProviderPrimitive>
                   <IGRPTooltipPrimitive>
                     <IGRPTooltipTriggerPrimitive asChild>
-                      <ButtonLink
+                      <ButtonLinkTooltip
                         href={ROUTES.USER_PROFILE}
                         className="underline underline-offset-2 hover:text-primary hover:no-underline"
-                        btnClassName="px-0 gap-1"
+                        btnClassName="px-0 py-0 gap-1"
                         label={username}
                         icon="UserCheck"
                         variant="link"
@@ -131,20 +134,37 @@ export function UserList() {
       }
     },
     {
-      header: "Estado",
+      header: "Email",
+      accessorKey: "email",
+      cell: ({ row }) => <div>{row.getValue("email") || "N/A"}</div>,
+    },
+    {
+      header: () => <IGRPDataTableHeaderDefault title="Estado" className="text-center" />,
       accessorKey: "status",
-      cell: ({ row }) => <span>{row.getValue("status")}</span>
+      cell: ({ row }) => {
+        const status = String(row.getValue("status"));
+        return (
+          <div className="text-center">
+            <IGRPBadgePrimitive
+              className={cn(getStatusColor(status), "capitalize")}
+            >
+              {showStatus(status)}
+            </IGRPBadgePrimitive>
+          </div>
+        );
+      },
+      filterFn: IGRPDataTableFacetedFilterFn,
+      size: 70,
 
     },
     {
       id: "roles",
-      header: 'Perfís',
+      header: () => <IGRPDataTableHeaderDefault title="Perfís" className="text-center" />,
       cell: ({ row }) => <RolesCountCell username={String(row.getValue("username"))} />,
     },
-
     {
       id: "actions",
-      header: () => <span className="sr-only">Actions</span>,
+      header: () => <span className="sr-only">Ações</span>,
       cell: ({ row }) => <RowActions row={row} />,
       size: 60,
       enableHiding: false,
@@ -175,11 +195,11 @@ export function UserList() {
 
               <IGRPDropdownMenuItemPrimitive
                 className="text-destructive focus:text-destructive"
-                onSelect={() => handleDelete(username, email)}
+                onSelect={() => handleDelete(row.original)}
                 variant='destructive'
               >
                 <IGRPIcon iconName="CircleOff" />
-                Remover
+                Desativar
               </IGRPDropdownMenuItemPrimitive>
             </>
           )}
@@ -195,7 +215,6 @@ export function UserList() {
     if (isError) return <div>—</div>;
 
     const roles = data ?? [];
-    const names = roles.map((r) => r.name);
 
     if (roles.length === 0) {
       return <div className="text-center">0</div>;
@@ -205,21 +224,14 @@ export function UserList() {
       <IGRPTooltipProviderPrimitive>
         <IGRPTooltipPrimitive>
           <IGRPTooltipTriggerPrimitive asChild>
-            <div className="text-center cursor-default">{roles.length}</div>
+            <div className="text-center cursor-help">{roles.length} Perfís</div>
           </IGRPTooltipTriggerPrimitive>
-
-          <IGRPTooltipContentPrimitive className="text-sm p-4">
-            <div className="flex max-w-64 max-h-48 flex-col gap-2 overflow-auto">
-              {names.map((n) => (
-                <div key={`${username}-${n}-${n}`} className="truncate">
-                  {n}
-                </div>
-              ))}
-            </div>
+          <IGRPTooltipContentPrimitive>
+            Expande o registo para mais informações
           </IGRPTooltipContentPrimitive>
         </IGRPTooltipPrimitive>
       </IGRPTooltipProviderPrimitive>
-    );
+    )
   }
 
   const filters: IGRPDataTableClientFilterListProps<IGRPUserDTO>[] = [
@@ -245,8 +257,9 @@ export function UserList() {
 
   if (error) throw error;
 
-  const handleDelete = (username: string, email: string) => {
-    setUserToDelete({ username, email });
+  const handleDelete = (row: IGRPUserDTO) => {
+    setInviteDialogOpen(false);
+    setUserToDelete(row);
     setDeleteDialogOpen(true);
   };
 
@@ -277,6 +290,8 @@ export function UserList() {
         columns={columns}
         data={data}
         clientFilters={filters}
+        getRowCanExpand={(row) => Boolean(row.getValue("name"))}
+        renderSubComponent={(row) => <UserRolesList username={row.original.username} />}
       />
 
       {inviteDialogOpen && (
@@ -289,10 +304,16 @@ export function UserList() {
       {assignRolesFor.open && (
         <UserRolesDialog
           open={assignRolesFor.open}
-          onOpenChange={(open) =>
-            setAssignRolesFor({ ...assignRolesFor, open })
-          }
+          onOpenChange={(open) => setAssignRolesFor({ ...assignRolesFor, open })}
           username={assignRolesFor.username as string}
+        />
+      )}
+
+      {deleteDialogOpen && userToDelete && (
+        <UserDeleteDialog
+          open={deleteDialogOpen}
+          onOpenChange={setDeleteDialogOpen}
+          userToDelete={userToDelete}
         />
       )}
     </div>

@@ -26,7 +26,7 @@ import { Separator } from '../../primitives/separator';
 import { IGRPButton } from '../button';
 import { IGRPBadge } from '../badge';
 import { IGRPIcon, type IGRPIconName } from '../icon';
-import { IGRPDatePickerRange } from '../input/date-picker/date-picker-range';
+// import { IGRPDatePickerRange } from '../input/date-picker/date-picker-range';
 import type { IGRPOptionsProps } from '../../../types';
 import { cn } from '../../../lib/utils';
 import { Input } from '../../primitives/input';
@@ -49,7 +49,7 @@ function IGRPDataTableFilterDate<TData>({
   column,
   // placeholder = 'Selecionar datas...', // TODO : Add this to DateRangePicker
   clearDates, // TODO: review how to implement it
-  className,
+  // className,
 }: Omit<IGRPDataTableFilterProps<TData>, 'options' | 'placeholderMax'>) {
   const [dateRange, setDateRange] = useState<DateRange | undefined>();
 
@@ -71,7 +71,8 @@ function IGRPDataTableFilterDate<TData>({
   }, [dateRange]);
 
   return (
-    <IGRPDatePickerRange date={dateRange} onDateChange={setDateRange} className={cn(className)} />
+    // <IGRPDatePickerRange date={dateRange} onDateChange={setDateRange} className={cn(className)} />
+    null
   );
 }
 

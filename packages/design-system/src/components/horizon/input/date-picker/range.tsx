@@ -41,7 +41,7 @@ function IGRPDatePickerRange({
   const id = useId();
   const fieldName = name ?? id;
   const [localDate, setLocalDate] = useState<DateRange | undefined>(date);
-  const [open, setOpen] = useState(false)
+  const [open, setOpen] = useState(false);
   const formContext = useFormContext();
 
   useEffect(() => {
@@ -93,18 +93,16 @@ function IGRPDatePickerRange({
   ) => (
     <>
       <Popover open={open} onOpenChange={setOpen}>
-        <PopoverTrigger asChild>
-          {DateButton(fieldValue)}
-        </PopoverTrigger>
+        <PopoverTrigger asChild>{DateButton(fieldValue)}</PopoverTrigger>
         <PopoverContent className="p-0 w-auto shadow-none" align="start">
           <IGRPCalendarRange
             {...props}
             id={id}
             date={fieldValue}
             onDateChange={(val) => {
-              setLocalDate(val)              
-              onChange?.(val)
-              setOpen(false)
+              setLocalDate(val);
+              onChange?.(val);
+              setOpen(false);
             }}
             disabled={disabled}
           />
@@ -146,13 +144,9 @@ function IGRPDatePickerRange({
                 {label}
               </FormLabel>
             )}
-            <FormControl>
-              {renderPicker(field.value, field.onChange)}
-            </FormControl>
+            <FormControl>{renderPicker(field.value, field.onChange)}</FormControl>
 
-            {helperText && !fieldState.error && (
-              <FormDescription>{helperText}</FormDescription>
-            )}
+            {helperText && !fieldState.error && <FormDescription>{helperText}</FormDescription>}
             <FormMessage />
           </FormItem>
         )}
@@ -166,15 +160,9 @@ function IGRPDatePickerRange({
         <IGRPLabel label={label} required={required} id={name} className={labelClassName} />
       )}
 
-      <div className="relative">
-        {renderPicker(localDate, onDateChange)
-      }</div>
+      <div className="relative">{renderPicker(localDate, onDateChange)}</div>
 
-      {helperText && (
-        <p className="text-sm text-muted-foreground mt-1">
-          {helperText}
-        </p>
-      )}
+      {helperText && <p className="text-sm text-muted-foreground mt-1">{helperText}</p>}
     </div>
   );
 }

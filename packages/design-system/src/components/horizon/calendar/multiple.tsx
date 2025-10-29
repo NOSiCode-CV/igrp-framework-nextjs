@@ -8,8 +8,8 @@ import { useState } from 'react';
 
 type IGRPCalendarMultipleProps = {
   date?: Date[];
-  onDateChange?: (date: Date[] | undefined) => void;  
-} & Omit<IGRPCalendarProps, 'mode'>
+  onDateChange?: (date: Date[] | undefined) => void;
+} & Omit<IGRPCalendarProps, 'mode'>;
 
 function IGRPCalendarMultiple({
   name,
@@ -22,23 +22,23 @@ function IGRPCalendarMultiple({
   disableAfter,
   disableDayOfWeek,
   ...props
-}: IGRPCalendarMultipleProps) { 
-  const [ownDate, setOwnDate] = useState<Date[] | undefined>(date)  
+}: IGRPCalendarMultipleProps) {
+  const [ownDate, setOwnDate] = useState<Date[] | undefined>(date);
   const disabled = getDisabledDays({ disableBefore, disableAfter, disableDayOfWeek });
-  
+
   return (
     <Calendar
       {...props}
-      mode="multiple"  
-      id={name || id}          
+      mode="multiple"
+      id={name || id}
       defaultMonth={defaultMonth || ownDate?.[0] || new Date()}
       selected={date}
       onSelect={(date) => {
-        setOwnDate(date); 
+        setOwnDate(date);
         onDateChange?.(date);
-      }}    
-      disabled={disabled}  
-      className={cn("rounded-lg border shadow-sm", className)}
+      }}
+      disabled={disabled}
+      className={cn('rounded-lg border shadow-sm', className)}
     />
   );
 }

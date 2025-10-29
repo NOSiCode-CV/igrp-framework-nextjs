@@ -50,19 +50,13 @@ function IGRPInfoCard({
           {title}
         </CardTitle>
       </CardHeader>
-      <CardContent 
-        className={cn(
-          "flex gap-4",
-          orientation === 'vertical' ? 'flex-col' : 'flex-row'
-        )}
+      <CardContent
+        className={cn('flex gap-4', orientation === 'vertical' ? 'flex-col' : 'flex-row')}
       >
         {sections.map((section, sectionIndex) => (
           <Fragment key={sectionIndex}>
             {section.items.map((item, itemIndex) => (
-              <IGRPInfoField
-                key={itemIndex}
-                item={item}                
-              />
+              <IGRPInfoField key={itemIndex} item={item} />
             ))}
             {sectionIndex < sections.length - 1 && <Separator />}
           </Fragment>
@@ -76,9 +70,7 @@ interface IGRPInfoFieldProps {
   item: IGRPInfoItem;
 }
 
-function IGRPInfoField({
-  item,  
-}: IGRPInfoFieldProps) {
+function IGRPInfoField({ item }: IGRPInfoFieldProps) {
   const colorClass = IGRPColors[item.variantItem || 'solid'][item.colorItem || 'primary'];
 
   return (
@@ -96,9 +88,4 @@ function IGRPInfoField({
   );
 }
 
-export { 
-  IGRPInfoCard, 
-  type IGRPInfoCardProps, 
-  type IGRPInfoItem, 
-  type IGRPInfoSection 
-};
+export { IGRPInfoCard, type IGRPInfoCardProps, type IGRPInfoItem, type IGRPInfoSection };

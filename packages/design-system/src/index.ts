@@ -390,34 +390,34 @@ export { IGRPBadge, type IGRPBadgeProps, igrpBadgeVariants } from './components/
 
 export { IGRPButton, type IGRPButtonProps } from './components/horizon/button';
 
-export { 
-  IGRPCalendarSingle, 
-  type IGRPCalendarSingleProps 
+export {
+  IGRPCalendarSingle,
+  type IGRPCalendarSingleProps,
 } from './components/horizon/calendar/single';
 
-export { 
-  IGRPCalendarSingleTime, 
-  type IGRPCalendarSingleTimeProps 
+export {
+  IGRPCalendarSingleTime,
+  type IGRPCalendarSingleTimeProps,
 } from './components/horizon/calendar/single-time';
 
-export { 
-  IGRPCalendarRange, 
-  type IGRPCalendarRangeProps 
+export {
+  IGRPCalendarRange,
+  type IGRPCalendarRangeProps,
 } from './components/horizon/calendar/range';
 
-export { 
-  IGRPCalendarRangeTime, 
-  type IGRPCalendarRangeTimeProps 
+export {
+  IGRPCalendarRangeTime,
+  type IGRPCalendarRangeTimeProps,
 } from './components/horizon/calendar/range-time';
 
-export { 
-  IGRPCalendarMultiple, 
-  type IGRPCalendarMultipleProps 
+export {
+  IGRPCalendarMultiple,
+  type IGRPCalendarMultipleProps,
 } from './components/horizon/calendar/multiple';
 
-export { 
-  IGRPCalendarMultipleTime, 
-  type IGRPCalendarMultipleTimeProps 
+export {
+  IGRPCalendarMultipleTime,
+  type IGRPCalendarMultipleTimeProps,
 } from './components/horizon/calendar/multiple-time';
 
 export {
@@ -432,14 +432,14 @@ export {
 
 export { IGRPAreaChart, type IGRPAreaChartProps } from './components/horizon/charts/area';
 
-export { 
-  IGRPHorizontalBarChart, 
-  type IGRPHorizontalBarChartProps 
+export {
+  IGRPHorizontalBarChart,
+  type IGRPHorizontalBarChartProps,
 } from './components/horizon/charts/bars/horizontal';
 
-export { 
-  IGRPVerticalBarChart, 
-  type IGRPVerticalBarChartProps 
+export {
+  IGRPVerticalBarChart,
+  type IGRPVerticalBarChartProps,
 } from './components/horizon/charts/bars/vertical';
 
 export {
@@ -452,9 +452,9 @@ export { IGRPPieChart, type IGRPPieChartProps } from './components/horizon/chart
 
 export { IGRPRadarChart, type IGRPRadarChartProps } from './components/horizon/charts/radar';
 
-export { 
-  IGRPRadialBarChart, 
-  type IGRPRadialBarChartProps 
+export {
+  IGRPRadialBarChart,
+  type IGRPRadialBarChartProps,
 } from './components/horizon/charts/radial';
 
 export type {
@@ -467,8 +467,8 @@ export type {
   IGRPBarConfig,
   IGRPChartFooter,
   IGRPChartProps,
-  PieConfig,  
-  IGRPRadarConfig,  
+  PieConfig,
+  IGRPRadarConfig,
   RadialBarConfig,
 } from './components/horizon/charts/types';
 
@@ -481,7 +481,7 @@ export {
   getLegendHorizontalAlign,
   hasNegativeValues,
   createChartConfig,
-  IGRP_CHART_COLORS
+  IGRP_CHART_COLORS,
 } from './components/horizon/charts/lib';
 
 export { IGRPChat, type IGRPChatProps, type IGRPChatMessage } from './components/horizon/chat';
@@ -617,29 +617,29 @@ export { IGRPInputColor, type IGRPInputColorProps } from './components/horizon/i
 
 export { IGRPCombobox, type IGRPComboboxProps } from './components/horizon/input/combobox';
 
-// export { 
-//   IGRPDatePickerInputRange, 
-//   type IGRPDatePickerInputRangeProps 
+// export {
+//   IGRPDatePickerInputRange,
+//   type IGRPDatePickerInputRangeProps
 // } from './components/horizon/input/date-picker/input-range';
 
-export { 
-  IGRPDatePickerInputSingle, 
-  type IGRPDatePickerInputSingleProps 
+export {
+  IGRPDatePickerInputSingle,
+  type IGRPDatePickerInputSingleProps,
 } from './components/horizon/input/date-picker/input-single';
 
-export { 
-  IGRPDatePickerMultiple, 
-  type IGRPDatePickerMultipleProps 
+export {
+  IGRPDatePickerMultiple,
+  type IGRPDatePickerMultipleProps,
 } from './components/horizon/input/date-picker/multiple';
 
-export { 
-  IGRPDatePickerRange, 
-  type IGRPDatePickerRangeProps 
+export {
+  IGRPDatePickerRange,
+  type IGRPDatePickerRangeProps,
 } from './components/horizon/input/date-picker/range';
 
-export { 
-  IGRPDatePickerSingle, 
-  type IGRPDatePickerSingleProps 
+export {
+  IGRPDatePickerSingle,
+  type IGRPDatePickerSingleProps,
 } from './components/horizon/input/date-picker/single';
 
 export {

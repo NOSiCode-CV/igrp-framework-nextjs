@@ -52,27 +52,27 @@ function IGRPDatePickerMultiple({
     }
   }, [formContext, onDateChange]);
 
- const getDisplayDate = (value: Date[] | undefined) => {
-    if (!value?.length) return placeholder
+  const getDisplayDate = (value: Date[] | undefined) => {
+    if (!value?.length) return placeholder;
 
     if (value.length === 1) {
-      return format(value[0]!, dateFormat)
+      return format(value[0]!, dateFormat);
     }
 
     if (value.length === 2) {
-      const from = format(value[0]!, dateFormat)
-      const to = format(value[1]!, dateFormat)
-      return `${from} - ${to}`
+      const from = format(value[0]!, dateFormat);
+      const to = format(value[1]!, dateFormat);
+      return `${from} - ${to}`;
     }
 
     if (value.length > 2) {
-      const from = format(value[0]!, dateFormat)
-      const to = format(value[value.length - 1]!, dateFormat)
-      return `${from} - ${to}`
+      const from = format(value[0]!, dateFormat);
+      const to = format(value[value.length - 1]!, dateFormat);
+      return `${from} - ${to}`;
     }
 
-    return placeholder
-  }
+    return placeholder;
+  };
 
   const DateButton = (value: Date[] | undefined) => (
     <div
@@ -100,10 +100,7 @@ function IGRPDatePickerMultiple({
     </div>
   );
 
-  const renderPicker = (
-    fieldValue?: Date[],
-    onChange?: (val: Date[] | undefined) => void,
-  ) => (
+  const renderPicker = (fieldValue?: Date[], onChange?: (val: Date[] | undefined) => void) => (
     <>
       <Popover>
         <PopoverTrigger asChild>{DateButton(fieldValue)}</PopoverTrigger>
@@ -157,13 +154,9 @@ function IGRPDatePickerMultiple({
                 {label}
               </FormLabel>
             )}
-            <FormControl>
-              {renderPicker(field.value, field.onChange)}
-            </FormControl>
+            <FormControl>{renderPicker(field.value, field.onChange)}</FormControl>
 
-            {helperText && !fieldState.error && (
-              <FormDescription>{helperText}</FormDescription>
-            )}
+            {helperText && !fieldState.error && <FormDescription>{helperText}</FormDescription>}
             <FormMessage />
           </FormItem>
         )}
@@ -177,15 +170,9 @@ function IGRPDatePickerMultiple({
         <IGRPLabel label={label} required={required} id={name} className={labelClassName} />
       )}
 
-      <div className="relative">
-        {renderPicker(localDate, onDateChange)
-      }</div>
+      <div className="relative">{renderPicker(localDate, onDateChange)}</div>
 
-      {helperText && (
-        <p className="text-sm text-muted-foreground mt-1">
-          {helperText}
-        </p>
-      )}
+      {helperText && <p className="text-sm text-muted-foreground mt-1">{helperText}</p>}
     </div>
   );
 }

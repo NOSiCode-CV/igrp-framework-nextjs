@@ -9,7 +9,7 @@ import { useState } from 'react';
 type IGRPCalendarRangeProps = {
   date?: DateRange;
   onDateChange?: (date: DateRange | undefined) => void;
-} & Omit<IGRPCalendarProps, 'mode'>
+} & Omit<IGRPCalendarProps, 'mode'>;
 
 function IGRPCalendarRange({
   name,
@@ -23,8 +23,8 @@ function IGRPCalendarRange({
   disableDayOfWeek,
   ...props
 }: IGRPCalendarRangeProps) {
-  const [range, setRange] = useState<DateRange | undefined>(date)
-  const disabled = getDisabledDays({ disableBefore, disableAfter, disableDayOfWeek })
+  const [range, setRange] = useState<DateRange | undefined>(date);
+  const disabled = getDisabledDays({ disableBefore, disableAfter, disableDayOfWeek });
 
   return (
     <Calendar
@@ -34,11 +34,11 @@ function IGRPCalendarRange({
       defaultMonth={defaultMonth || range?.from}
       selected={date}
       onSelect={(date) => {
-        setRange(date) 
-        onDateChange?.(date)
+        setRange(date);
+        onDateChange?.(date);
       }}
       disabled={disabled}
-      className={cn("rounded-lg border shadow-sm", className)}
+      className={cn('rounded-lg border shadow-sm', className)}
     />
   );
 }

@@ -5,10 +5,10 @@
 // import { useFormContext } from 'react-hook-form';
 // import type { DateRange } from 'react-day-picker';
 
-// import { 
-//   formatDateRange, 
-//   getDisabledDays, 
-//   isValidDate, 
+// import {
+//   formatDateRange,
+//   getDisabledDays,
+//   isValidDate,
 //   parseStringToRange
 // } from '../../../../lib/calendar-utils';
 // import { DD_MM_YYYY } from '../../../../lib/constants';
@@ -82,7 +82,7 @@
 //         className="bg-background pr-10"
 //         disabled={disabledPicker}
 //         onChange={(e) => {
-//           const parsedDate = parseStringToRange(e.target.value, dateFormat)          
+//           const parsedDate = parseStringToRange(e.target.value, dateFormat)
 //           setValue(e.target.value)
 //           if (isValidDate(parsedDate.from)) {
 //             setLocalDate(parsedDate);
@@ -121,7 +121,7 @@
 
 //       <Popover open={open} onOpenChange={(v) => !disabledPicker && setOpen(v)}>
 //         <PopoverTrigger asChild>
-          
+
 //             <Button
 //               id={`date-picker-btn-${fieldName}`}
 //               variant="ghost"
@@ -130,7 +130,7 @@
 //               <CalendarIcon className="size-3.5" />
 //               <span className="sr-only">Selecionar Data</span>
 //             </Button>
-          
+
 //         </PopoverTrigger>
 //         <PopoverContent
 //           className="p-0 w-auto shadow-none"
@@ -149,9 +149,9 @@
 //               if (range?.from && range?.to) {
 //                 setLocalDate(range);
 //                 setValue(formatDateRange(range, dateFormat));
-//                 onDateChange?.(range);              
+//                 onDateChange?.(range);
 //                 setOpen(false)
-//               }              
+//               }
 //             }}
 //             disabled={disabled}
 //             className={cn("rounded-lg border shadow-sm", className)}

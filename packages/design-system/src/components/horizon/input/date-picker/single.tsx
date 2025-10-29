@@ -174,7 +174,7 @@ function IGRPDatePickerSingle({
         >
           {helperText}
         </p>
-      )}      
+      )}
     </div>
   );
 }

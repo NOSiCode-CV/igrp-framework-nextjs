@@ -57,9 +57,9 @@ function IGRPDataTableHeaderSortToggle<T>({
           <span>{title}</span>
 
           {isSorted === 'asc' ? (
-            <ChevronUp className='ms-2 text-muted-foreground/70' />
+            <ChevronUp className="ms-2 text-muted-foreground/70" />
           ) : isSorted === 'desc' ? (
-            <ChevronDown className='ms-2 text-muted-foreground/70' />
+            <ChevronDown className="ms-2 text-muted-foreground/70" />
           ) : (
             <ArrowUpDown className="ms-2 text-muted-foreground/70" />
           )}
@@ -99,11 +99,11 @@ function IGRPDataTableHeaderSortDropdown<T>({
             >
               <span>{title}</span>
               {isSorted === 'desc' ? (
-                <ArrowDown className='ms-2 text-muted-foreground/70' />
+                <ArrowDown className="ms-2 text-muted-foreground/70" />
               ) : isSorted === 'asc' ? (
-                <ArrowUp className='ms-2 text-muted-foreground/70' />
+                <ArrowUp className="ms-2 text-muted-foreground/70" />
               ) : (
-                <ChevronsUpDown className='ms-2 text-muted-foreground/70' />
+                <ChevronsUpDown className="ms-2 text-muted-foreground/70" />
               )}
             </Button>
           </DropdownMenuTrigger>

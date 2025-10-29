@@ -3,7 +3,6 @@ import { igrpGridSizeClasses } from './lib/constants';
 import type { IGRPColorVariants } from './lib/colors';
 import { Calendar } from './components/primitives/calendar';
 
-
 export type IGRPPlacementProps = 'start' | 'end' | 'center';
 
 export type IGRPBaseAttributes = {
@@ -45,18 +44,18 @@ export type IGRPCalendarProps = Omit<React.ComponentProps<typeof Calendar>, 'mod
   disableBefore?: Date;
   disableAfter?: Date;
   disableDayOfWeek?: number | number[];
-}
+};
 
 export type IGRPCalendarTimeProps = {
-  onStartTime?: (value: string | undefined) => void
-  onEndTime?: (value: string | undefined) => void
+  onStartTime?: (value: string | undefined) => void;
+  onEndTime?: (value: string | undefined) => void;
   hideEndTimePicker?: boolean;
   startTimePlaceholder?: string;
   endTimePlaceholder?: string;
   startTimeLabel?: string;
   endTimeLabel?: string;
   showTimeIndicator?: boolean;
-}
+};
 
 export type IGRPDatePickerBaseProps = {
   required?: boolean;

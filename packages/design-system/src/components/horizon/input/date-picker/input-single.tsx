@@ -4,11 +4,11 @@ import { useId, useState, useEffect } from 'react';
 import { useFormContext } from 'react-hook-form';
 import { CalendarIcon, XIcon } from 'lucide-react';
 
-import { 
-  formatDateToString, 
-  getDisabledDays, 
-  isValidDate, 
-  parseStringToDate 
+import {
+  formatDateToString,
+  getDisabledDays,
+  isValidDate,
+  parseStringToDate,
 } from '../../../../lib/calendar-utils';
 import { DD_MM_YYYY } from '../../../../lib/constants';
 import { cn } from '../../../../lib/utils';
@@ -52,9 +52,9 @@ function IGRPDatePickerInputSingle({
   const formContext = useFormContext();
 
   const [localDate, setLocalDate] = useState<Date | undefined>(date);
-  const [month, setMonth] = useState<Date | undefined>(localDate)
+  const [month, setMonth] = useState<Date | undefined>(localDate);
   const [value, setValue] = useState(formatDateToString(date, dateFormat));
-  const [open, setOpen] = useState(false)
+  const [open, setOpen] = useState(false);
 
   useEffect(() => {
     if (!formContext) {
@@ -81,19 +81,19 @@ function IGRPDatePickerInputSingle({
         className="bg-background pr-10"
         disabled={disabledPicker}
         onChange={(e) => {
-          const parsedDate = parseStringToDate(e.target.value, dateFormat)
-          setValue(e.target.value)
+          const parsedDate = parseStringToDate(e.target.value, dateFormat);
+          setValue(e.target.value);
           if (isValidDate(parsedDate)) {
             setLocalDate(parsedDate);
-            setMonth(parsedDate)
+            setMonth(parsedDate);
             onChange?.(parsedDate);
-            onDateChange?.(parsedDate);            
+            onDateChange?.(parsedDate);
           }
         }}
         onKeyDown={(e) => {
-          if (e.key === "ArrowDown" && !disabledPicker) {
-            e.preventDefault()
-            setOpen(true)
+          if (e.key === 'ArrowDown' && !disabledPicker) {
+            e.preventDefault();
+            setOpen(true);
           }
         }}
       />
@@ -105,11 +105,11 @@ function IGRPDatePickerInputSingle({
           className="absolute top-1/2 right-8 size-6 -translate-y-1/2"
           disabled={disabledPicker}
           aria-label="Open Calendar"
-          onClick={() => {            
-            setLocalDate(undefined)
-            setMonth(undefined)
-            setValue('')
-            onDateChange?.(undefined)
+          onClick={() => {
+            setLocalDate(undefined);
+            setMonth(undefined);
+            setValue('');
+            onDateChange?.(undefined);
             onChange?.(undefined);
           }}
         >
@@ -121,17 +121,22 @@ function IGRPDatePickerInputSingle({
       <Popover open={open} onOpenChange={(v) => !disabledPicker && setOpen(v)}>
         <PopoverTrigger asChild>
           {!localDate && (
-          <Button
-            id={`date-picker-btn-${fieldName}`}
-            variant="ghost"
-            className="absolute top-1/2 right-2 size-6 -translate-y-1/2"
-          >
-            <CalendarIcon className="size-3.5" />
-            <span className="sr-only">Selecionar Data</span>
-          </Button>
-        )} 
+            <Button
+              id={`date-picker-btn-${fieldName}`}
+              variant="ghost"
+              className="absolute top-1/2 right-2 size-6 -translate-y-1/2"
+            >
+              <CalendarIcon className="size-3.5" />
+              <span className="sr-only">Selecionar Data</span>
+            </Button>
+          )}
         </PopoverTrigger>
-        <PopoverContent className="p-0 w-auto shadow-none" align="start" alignOffset={-8} sideOffset={10}>
+        <PopoverContent
+          className="p-0 w-auto shadow-none"
+          align="start"
+          alignOffset={-8}
+          sideOffset={10}
+        >
           <Calendar
             mode="single"
             id={name || id}
@@ -143,10 +148,10 @@ function IGRPDatePickerInputSingle({
               setLocalDate(date);
               setValue(formatDateToString(date, dateFormat));
               onDateChange?.(date);
-              setOpen(false)
+              setOpen(false);
             }}
             disabled={disabled}
-            className={cn("rounded-lg border shadow-sm", className)}
+            className={cn('rounded-lg border shadow-sm', className)}
             {...calendarProps}
           />
         </PopoverContent>

@@ -178,4 +178,4 @@ function IGRPRadarChart({
   );
 }
 
-export { IGRPRadarChart, type IGRPRadarChartProps, };
+export { IGRPRadarChart, type IGRPRadarChartProps };

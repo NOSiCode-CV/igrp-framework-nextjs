@@ -6,7 +6,7 @@ import type { IGRPCalendarTimeProps } from '../../../types';
 import { IGRPCalendarMultiple, type IGRPCalendarMultipleProps } from './multiple';
 import { DEFAULT_HIDE_TIME_INDICATOR } from '../../../lib/constants';
 
-interface IGRPCalendarMultipleTimeProps extends IGRPCalendarMultipleProps, IGRPCalendarTimeProps { }
+interface IGRPCalendarMultipleTimeProps extends IGRPCalendarMultipleProps, IGRPCalendarTimeProps {}
 
 function IGRPCalendarMultipleTime({
   onStartTime,
@@ -20,22 +20,22 @@ function IGRPCalendarMultipleTime({
   name,
   ...props
 }: IGRPCalendarMultipleTimeProps) {
-  const [startTime, setStartTime] = useState<string>("")
-  const [endTime, setEndTime] = useState<string>("")
+  const [startTime, setStartTime] = useState<string>('');
+  const [endTime, setEndTime] = useState<string>('');
 
-  const classHide = showTimeIndicator ? DEFAULT_HIDE_TIME_INDICATOR : ''
+  const classHide = showTimeIndicator ? DEFAULT_HIDE_TIME_INDICATOR : '';
 
   const handleStartTimeChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const value = e.target.value
-    setStartTime(value)
-    onStartTime?.(value || undefined)
-  }
+    const value = e.target.value;
+    setStartTime(value);
+    onStartTime?.(value || undefined);
+  };
 
   const handleEndTimeChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const value = e.target.value
-    setEndTime(value)
-    onEndTime?.(value || undefined)
-  }
+    const value = e.target.value;
+    setEndTime(value);
+    onEndTime?.(value || undefined);
+  };
 
   return (
     <div id={name}>
@@ -44,9 +44,7 @@ function IGRPCalendarMultipleTime({
 
         <div className="space-y-4 pt-4 border-t">
           <div className="space-y-2">
-            <Label htmlFor={`${name}-start-time`}>
-              {startTimeLabel}
-            </Label>
+            <Label htmlFor={`${name}-start-time`}>{startTimeLabel}</Label>
             <Input
               id={`${name}-start-time`}
               type="time"
@@ -60,9 +58,7 @@ function IGRPCalendarMultipleTime({
 
           {!hideEndTimePicker && (
             <div className="space-y-2">
-              <Label htmlFor={`${name}-end-time`}>
-                {endTimeLabel}
-              </Label>
+              <Label htmlFor={`${name}-end-time`}>{endTimeLabel}</Label>
               <Input
                 id={`${name}-end-time`}
                 type="time"

@@ -21,6 +21,7 @@ export const igrpAlertIconMappings: Record<IGRPColorVariants, IGRPIconName> = {
   indigo: 'Sparkles',
 };
 
-export const DEFAULT_HIDE_TIME_INDICATOR = 'appearance-none [&::-webkit-calendar-picker-indicator]:hidden [&::-webkit-calendar-picker-indicator]:appearance-none'
+export const DEFAULT_HIDE_TIME_INDICATOR =
+  'appearance-none [&::-webkit-calendar-picker-indicator]:hidden [&::-webkit-calendar-picker-indicator]:appearance-none';
 
 export const DD_MM_YYYY = 'dd-MM-yyyy';

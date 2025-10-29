@@ -7,7 +7,7 @@ import { Calendar } from '../../primitives/calendar';
 type IGRPCalendarSingleProps = {
   date?: Date;
   onDateChange?: (date: Date | undefined) => void;
-} & Omit<IGRPCalendarProps, 'mode'>
+} & Omit<IGRPCalendarProps, 'mode'>;
 
 function IGRPCalendarSingle({
   name,
@@ -18,10 +18,10 @@ function IGRPCalendarSingle({
   defaultMonth,
   disableBefore,
   disableAfter,
-  disableDayOfWeek, 
+  disableDayOfWeek,
   ...props
 }: IGRPCalendarSingleProps) {
-  const [ownDate, setOwnDate] = useState<Date | undefined>(date)
+  const [ownDate, setOwnDate] = useState<Date | undefined>(date);
   const disabled = getDisabledDays({ disableBefore, disableAfter, disableDayOfWeek });
 
   useEffect(() => {
@@ -29,16 +29,16 @@ function IGRPCalendarSingle({
   }, [date]);
 
   return (
-    <Calendar      
+    <Calendar
       mode="single"
       id={name || id}
       selected={ownDate}
       onSelect={(date) => {
-        setOwnDate(date); 
+        setOwnDate(date);
         onDateChange?.(date);
-      }} 
+      }}
       disabled={disabled}
-      className={cn("rounded-lg border shadow-sm", className)}
+      className={cn('rounded-lg border shadow-sm', className)}
       {...props}
     />
   );

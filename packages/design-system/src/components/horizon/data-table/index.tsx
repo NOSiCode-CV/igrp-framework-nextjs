@@ -145,7 +145,7 @@ function IGRPDataTable<TData, TValue>({
       <IGRPIcon iconName="OctagonAlert" />
       <span>N/A</span>
     </div>
-  );  
+  );
 
   return (
     <div className={cn('flex flex-col gap-4', className)}>
@@ -200,12 +200,12 @@ function IGRPDataTable<TData, TValue>({
                     <TableRow
                       key={row.id}
                       data-state={row.getIsSelected() && 'selected'}
-                    // className={cn(
-                    //   'border-0 [&:first-child>td:first-child]:rounded-tl-lg',
-                    //   '[&:first-child>td:last-child]:rounded-tr-lg',
-                    //   '[&:last-child>td:first-child]:rounded-bl-lg',
-                    //   '[&:last-child>td:last-child]:rounded-br-lg h-px hover:bg-accent/50',
-                    // )}
+                      // className={cn(
+                      //   'border-0 [&:first-child>td:first-child]:rounded-tl-lg',
+                      //   '[&:first-child>td:last-child]:rounded-tr-lg',
+                      //   '[&:last-child>td:first-child]:rounded-bl-lg',
+                      //   '[&:last-child>td:last-child]:rounded-br-lg h-px hover:bg-accent/50',
+                      // )}
                     >
                       {row.getVisibleCells().map((cell) => (
                         <TableCell
@@ -244,9 +244,10 @@ function IGRPDataTable<TData, TValue>({
           </TableBody>
           <tbody aria-hidden="true" className="table-row h-1"></tbody>
         </Table>
-      </div>      
+      </div>
 
-      {(table.getRowCount() > pagination.pageSize) && showPagination &&
+      {table.getRowCount() > pagination.pageSize &&
+        showPagination &&
         (isNumericPagination ? (
           <IGRPDataTablePaginationNumeric
             table={table}

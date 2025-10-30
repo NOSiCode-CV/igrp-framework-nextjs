@@ -19,10 +19,9 @@ import { IGRPFormField } from '../../form/form-field';
 import { IGRPLabel } from '../../label';
 import { IGRPIcon } from '../../icon';
 import { IGRPCircleFull } from '../../icon/custom';
-// import { igrpGridSizeClasses } from '../../../../lib/constants';
 import { cn } from '../../../../lib/utils';
 import { igrpColorText } from '../../../../lib/colors';
-import type { IGRPBaseAttributes, IGRPOptionsProps, IGRPGridSize } from '../../../../types';
+import type { IGRPBaseAttributes, IGRPOptionsProps } from '../../../../types';
 
 interface IGRPComboboxProps extends IGRPBaseAttributes {
   variant?: 'single' | 'multiple';
@@ -42,7 +41,6 @@ interface IGRPComboboxProps extends IGRPBaseAttributes {
   showGroup?: boolean;
   showStatus?: boolean;
   showIcon?: boolean;
-  gridSize?: IGRPGridSize;
 }
 
 function IGRPCombobox({
@@ -67,7 +65,6 @@ function IGRPCombobox({
   showStatus,
   showIcon = false,
   iconName = 'CornerDownRight',
-  // gridSize = 'default',
 }: IGRPComboboxProps) {
   const id = useId();
   const fieldName = name ?? id;
@@ -230,7 +227,7 @@ function IGRPCombobox({
     onChangeHandler: (value: string | string[]) => void,
   ) => (
     <Popover open={open} onOpenChange={setOpen} modal>
-      <PopoverTrigger asChild className="w-full">
+      <PopoverTrigger asChild>
         <IGRPButton
           name={fieldName}
           variant="outline"
@@ -249,7 +246,11 @@ function IGRPCombobox({
           {setSelectValue(currentValue)}
         </IGRPButton>
       </PopoverTrigger>
-      <PopoverContent className={cn('p-0', selectClassName)} align="start">
+      <PopoverContent 
+        className={cn('p-0', selectClassName)} 
+        align="start"
+        side='bottom'
+      >
         <Command>
           {showSearch && (
             <div className="relative p-2">
@@ -274,7 +275,6 @@ function IGRPCombobox({
         label={label}
         helperText={helperText}
         className={className}
-        // size={igrpGridSizeClasses[gridSize]}
         required={required}
         control={formContext.control}
       >

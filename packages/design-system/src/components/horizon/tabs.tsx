@@ -34,7 +34,7 @@ const tabTriggerVariants = cva('px-4 py-1.5', {
       default: '',
       outline: 'data-[state=active]:bg-muted data-[state=active]:shadow-none',
       pills:
-        'data-[state=active]:bg-primary data-[state=active]:text-primary-foreground rounded-full data-[state=active]:shadow-none',
+        'data-[state=active]:bg-primary data-[state=active]:text-muted-foreground rounded-full data-[state=active]:shadow-none',
       underline:
         'hover:bg-accent hover:text-foreground data-[state=active]:after:bg-primary data-[state=active]:hover:bg-accent relative after:absolute after:inset-x-0 after:bottom-0 after:-mb-1 after:h-0.5 data-[state=active]:bg-transparent data-[state=active]:shadow-none',
       cards:

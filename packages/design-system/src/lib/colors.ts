@@ -120,7 +120,7 @@ export const IGRPColors = {
       textDark: '',
       border: 'border-primary',
       bgForeground: 'bg-primary',
-      textBadge: 'text-primary-foreground',
+      textBadge: 'text-muted-foreground',
       bgBadge: 'bg-primary',
       borderBadge: 'border-primary',
       textCard: 'text-primary',

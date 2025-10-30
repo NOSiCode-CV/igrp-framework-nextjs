@@ -47,10 +47,10 @@ export type IGRPSize =
 export type IGRPRoundSize =
   'none' |
   'sm' |
-  'default' |
   'md' |
   'lg' |
   'xl' |
   '2xl' |
   '3xl' |
+  '4xl' |
   'full';

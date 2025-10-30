@@ -2,10 +2,9 @@ import { cva } from 'class-variance-authority';
 import { IGRPBadge } from './badge';
 import { IGRPIcon, type IGRPIconName } from './icon';
 import { Avatar, AvatarImage, AvatarFallback } from '../primitives/avatar';
-import { IGRPColors, type IGRPColorRole, type IGRPColorVariants } from '../../lib/colors';
+import { IGRPColors, type IGRPColorVariants } from '../../lib/colors';
 import { cn } from '../../lib/utils';
 import type { IGRPBaseAttributes,IGRPSize, IGRPRoundSize } from '../../types';
-import { igrpRoundedSizeMapping } from '../../lib/constants';
 
 function convertFallback(fallback?: string) {
   const upperFallback = fallback
@@ -15,17 +14,17 @@ function convertFallback(fallback?: string) {
         .map((word) => word.charAt(0))
         .join('')
         .toUpperCase()
-    : ' ';
+    : 'AA';
   return upperFallback;
 }
 
-const sizeClasses = cva('',{
+const avatarVariants = cva('', {
   variants: {
     size: {
-      sm: 'h-8 w-8 text-xs',
-      md: 'h-12 w-12 text-sm',
-      lg: 'h-16 w-16 text-base',
-      xl: 'h-24 w-24 text-lg',
+      sm: 'size-8 text-xs',
+      md: 'size-12 text-sm',
+      lg: 'size-16 text-base',
+      xl: 'size-24 text-lg',
     },
   },
   defaultVariants: {
@@ -33,13 +32,48 @@ const sizeClasses = cva('',{
   },
 });
 
-const iconSize = cva('',{
+const avatarRounded = cva('', {
+  variants: {
+    rounded: {
+      none: 'rounded-none',
+      sm: 'rounded-sm',
+      md: 'rounded-md',
+      lg: 'rounded-lg',
+      xl: 'rounded-xl',
+      '2xl': 'rounded-2xl',
+      '3xl': 'rounded-3xl',
+      '4xl': 'rounded-4xl',
+      full: 'rounded-full',
+    },
+  },
+  defaultVariants: {
+    rounded: 'md',
+  },
+});
+
+const iconVariants = cva(
+  'absolute flex items-center justify-center rounded-full border-2 border-background bg-background', 
+  {
+    variants: {
+      size: {
+        sm: 'size-4 -bottom-0.5 -right-0.5',
+        md: 'size-5 -bottom-1 -right-1',
+        lg: 'size-6 -bottom-1 -right-1"',
+        xl: 'size-8 -bottom-1.5 -right-1.5',
+      },
+    },
+    defaultVariants: {
+      size: 'md',
+    },
+});
+
+const statusVariants = cva('absolute rounded-full border-2 border-background',{
   variants: {
     size: {
-      sm: 'h-3 w-3 text-xs',
-      md: 'h-5 w-5 text-sm',
-      lg: 'h-6 w-6 text-base',
-      xl: 'h-10 w-10 text-lg',
+      sm: 'size-2 bottom-0 right-0',
+      md: 'size-3 bottom-0 right-0',
+      lg: 'size-4 bottom-0 right-0',
+      xl: 'size-5 bottom-0.5 right-0.5',
     },
   },
   defaultVariants: {
@@ -47,33 +81,22 @@ const iconSize = cva('',{
   },
 });
 
-const iconPosition = cva('',{
-  variants: {
-    size: {
-      sm: '-top-1 left-5',
-      md: '-top-1 left-8',
-      lg: '-top-3 left-11',
-      xl: '-top-4 left-16',
+const badgeVariants = cva(
+  "absolute flex items-center justify-center rounded-full border-2 text-[10px] font-medium px-0",
+  {
+    variants: {
+      size: {
+        sm: "size-4 -top-1 -right-1",
+        md: "size-5 -top-1.5 -right-1.5",
+        lg: "size-6 -top-2 -right-2",
+        xl: "size-8 -top-2 -right-2",
+      },
+    },
+    defaultVariants: {
+      size: "md",
     },
   },
-  defaultVariants: {
-    size: 'md',
-  },
-});
-
-const statusPosition = cva('',{
-  variants: {
-    size: {
-      sm: 'left-5',
-      md: 'left-8',
-      lg: 'left-11',
-      xl: '-end-2.5',
-    },
-  },
-  defaultVariants: {
-    size: 'md',
-  },
-});
+)
 
 interface IGRPAvatarProps extends IGRPBaseAttributes {
   src?: string;
@@ -81,7 +104,7 @@ interface IGRPAvatarProps extends IGRPBaseAttributes {
   alt?: string;
   fallback?: string;
   fallbackClassName?: string;
-  fallbackIcon?: IGRPIconName;
+  fallbackIcon?: IGRPIconName | string;
   hasFallbackIcon?: boolean;
   hasStatus?: boolean;
   status: IGRPColorVariants;
@@ -91,13 +114,11 @@ interface IGRPAvatarProps extends IGRPBaseAttributes {
   className?: string;
   badgeNumber?: number;
   iconNumber?: string;
-  multiple?: number;
   badgeColor: IGRPColorVariants;
   iconColor: string
-  badgeVariant?: IGRPColorRole;
   badgeShowIcon?: boolean;
   badgeIconName?: string;
-  borderRadius?: IGRPRoundSize;
+  roundedSize?: IGRPRoundSize;
 }
 function IGRPAvatar({
   src = 'igrp',
@@ -106,7 +127,7 @@ function IGRPAvatar({
   hasStatus = false,
   showBadge = false,
   status = 'primary',
-  showIcon,
+  showIcon = false,
   iconName = 'Check',
   className,
   iconClassName,
@@ -115,62 +136,65 @@ function IGRPAvatar({
   hasFallbackIcon = false,
   fallbackClassName,
   badgeColor = 'primary',
-  badgeVariant = 'solid',
   badgeNumber = 6,
   badgeShowIcon = false,
   badgeIconName = 'Info',
-  borderRadius = 'full',
+  roundedSize = 'full',
   iconColor = '#000000',
 }: IGRPAvatarProps) {
-  const colorClasses = IGRPColors['solid'][status];
+  const colorClasses = IGRPColors['solid'][status]
   const upperFallBack = convertFallback(fallback);
-  const br = igrpRoundedSizeMapping[borderRadius];
   
   return (
-    <div className={cn('flex items-center justify-center rounded-full p-1 w-10 h-10')}>
-      <Avatar className={cn('overflow-visible', className, sizeClasses({ size }))}>
-        <AvatarImage src={src} className={cn(' ', br)} alt={alt} />
-        <AvatarFallback className={cn('', br)}>
-          {hasFallbackIcon && (
-            <IGRPIcon iconName={fallbackIcon} className={cn(sizeClasses({ size }), fallbackClassName)} />
+    <div className="relative inline-block">
+      <Avatar 
+        className={cn(
+          avatarVariants({ size }), 
+          avatarRounded({ rounded: roundedSize }), 
+          className
+        )}
+      >
+        <AvatarImage src={src} alt={alt} />
+        <AvatarFallback 
+          className={cn(
+            avatarRounded({ rounded: roundedSize }), 
+            'p-2', 
+            fallbackClassName
           )}
-          {!hasFallbackIcon && upperFallBack}
+        >
+          {hasFallbackIcon 
+            ? <IGRPIcon iconName={fallbackIcon} className={cn(avatarVariants({ size }))} />
+            : upperFallBack
+          }
         </AvatarFallback>
+      </Avatar>
         {hasStatus && (
-          <span
-            className={cn(
-              'border-background absolute -end-0.5 -bottom-0.5 size-3 rounded-full border-2',
-              statusPosition({ size }),
-              iconSize({ size }),
-              colorClasses.bgForeground ? colorClasses.bgForeground : '',
-            )}
-          >
-            <span className="sr-only"></span>
-          </span>
+          <span 
+            className={cn(statusVariants({ size }), colorClasses.bgForeground)}
+            aria-label="Status indicator"
+          />          
         )}
         {showIcon && (
-          <div className={cn('absolute border-2 bg-white',iconSize({ size }), iconPosition({ size }), iconClassName)}>
+          <span className={cn(iconVariants({ size }), iconClassName)} aria-label="Icon indicator">
             <IGRPIcon
               iconName={iconName}
-              color={iconColor}
-              size={iconSize({ size })}
-              className={cn(iconClassName)}
+              color={iconColor}   
             />
-          </div>
+          </span>
         )}
-        {showBadge && !showIcon && (
+        {showBadge && (
           <IGRPBadge
-            badgeClassName={cn('absolute -top-2 left-full min-w-5 -translate-x-3 px-1',iconPosition({ size }), iconSize({ size }))}
+            badgeClassName={cn(badgeVariants({ size }))}
             color={badgeColor}
-            variant={badgeVariant}
+            variant="solid"
             showIcon={badgeShowIcon}
             iconName={badgeIconName}
           >
             {badgeNumber}
           </IGRPBadge>
-        )}
-      </Avatar>
+        )}     
     </div>
   );
 }
+
 export { IGRPAvatar, type IGRPAvatarProps };

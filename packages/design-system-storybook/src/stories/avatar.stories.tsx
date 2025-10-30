@@ -44,12 +44,12 @@ export default {
     },
     fallback: {
       control: 'text',
-      description: 'Simplified version of a user`s primary avatar when it cannot be shown ',
+      description: 'Simplified version of a user`s primary avatar when it cannot be shown',
     },
     hasStatus: {
       control: 'boolean',
       description: 'Avatar has State',
-      defaultValue: 'False',
+      defaultValue: false,
     },
     status: {
       control: 'select',
@@ -59,7 +59,7 @@ export default {
     showIcon: {
       control: 'boolean',
       description: 'If Avatar has Icon',
-      defaultValue: 'False',
+      defaultValue: false,
     },
     className: {
       control: 'text',
@@ -82,13 +82,7 @@ export default {
     badgeNumber: {
       control: 'number',
       description: 'Number inside the Badge'
-    },
-    badgeVariant: {
-      control: 'select',
-      options: ['solid', 'outline', 'ghost'],
-      description: 'Select Badge Color',
-      defaultValue: 'solid',
-    },
+    },    
     badgeColor: {
       control: 'select',
       options: ['primary', 'success', 'destructive', 'warning', 'info', 'secondary', 'indigo'],
@@ -113,7 +107,7 @@ export default {
     hasFallbackIcon: {
       control: 'boolean',
       description: 'If Avatar has Icon',
-      defaultValue: 'False',
+      defaultValue: false,
     },
     iconColor: {
       control: 'color',
@@ -122,13 +116,13 @@ export default {
     fallbackClassName: {
       control: 'text',
       description: 'Fallback Class Name',
-      defaultValue: 'False',
+      defaultValue: '',
     },
-    borderRadius: {
+    roundedSize: {
       control: 'select',
       description: 'Radius',
-      options: ['rounded-none', 'rounded-sm', 'rounded', 'rounded-md', 'rounded-lg', 'rounded-xl', 'rounded-2xl', 'rounded-3xl', 'rounded-full'],
-      defaultValue: 'rounded-none',
+      options: ['none', 'sm', 'md', 'lg', 'xl', '2xl', '3xl', '4xl','full'],
+      defaultValue: 'full',
     },
   },
 } as Meta;
@@ -163,7 +157,7 @@ export const AvatarShape: StoryObj<IGRPAvatarProps> = {
     fallback: 'AV',
     iconName: 'Check',
     status: 'success',
-    borderRadius: 'lg',
+    roundedSize: 'lg',
   },
 };
 
@@ -240,7 +234,8 @@ export const MultipleBadge: Story = {
           showBadge={false}
           badgeNumber={0}
           multiple={0}
-          badgeColor={'destructive'}
+          badgeColor={'destructive'} 
+          iconColor={''}        
         />
       ))}
       {remaining > 0 && (
@@ -273,7 +268,8 @@ export const MultipleBadgeWithText: Story = {
           showBadge={false}
           badgeNumber={0}
           multiple={0}
-          badgeColor='destructive'
+          badgeColor='destructive' 
+          iconColor={''}        
         />
       ))}
       {remaining > 0 && (

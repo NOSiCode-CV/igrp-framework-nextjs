@@ -65,19 +65,13 @@ function IGRPHeadline({
         iconPlacement === 'end' && 'flex-row-reverse justify-between',
         className,
       )}
-      {...props}      
+      {...props}
     >
       {showIcon && (
-        <IGRPIcon 
-          iconName={iconName} 
-          size={iconSize} 
-          className={cn('mt-1', iconClassName)} 
-        />
+        <IGRPIcon iconName={iconName} size={iconSize} className={cn('mt-1', iconClassName)} />
       )}
       <div className="flex flex-col gap-1">
-        <Tag className={cn(igrpHeadlineVariants({ variant }))}>
-          {title}
-        </Tag>
+        <Tag className={cn(igrpHeadlineVariants({ variant }))}>{title}</Tag>
         <p className="text-sm">{description}</p>
       </div>
     </div>

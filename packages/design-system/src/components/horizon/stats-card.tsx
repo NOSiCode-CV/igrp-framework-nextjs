@@ -8,7 +8,6 @@ import { cn } from '../../lib/utils';
 import type { IGRPBaseAttributes } from '../../types';
 import { IGRPIcon, type IGRPIconName } from './icon';
 
-
 const igrpStatsCardVariants = cva(
   'flex items-center p-4 bg-card shadow-sm text-card-foreground transition-all overflow-hidden',
   {
@@ -108,7 +107,7 @@ const igrpStstaCardIconVariants = cva('flex items-center justify-center shrink-0
       indigo: '',
     },
   },
-  compoundVariants: [    
+  compoundVariants: [
     {
       showBackground: true,
       background: ['rounded', 'square'],

@@ -1,6 +1,5 @@
 import type { Meta, StoryFn, StoryObj } from '@storybook/nextjs-vite';
-import { IGRPImage, type IGRPImageProps } from '@igrp/igrp-framework-react-design-system';
-
+import { IGRPImage } from '@igrp/igrp-framework-react-design-system';
 
 export default {
   title: 'Components/Image',
@@ -15,7 +14,7 @@ export default {
       description: 'Image ratio',
       default: '16/9',
      },
-     borderRadius: {
+     rounded: {
       control: 'select',
       description: 'Radius',
       options: ['rounded-none', 'rounded-sm', 'rounded', 'rounded-md', 'rounded-lg', 'rounded-xl', 'rounded-2xl', 'rounded-3xl', 'rounded-full'],
@@ -25,39 +24,41 @@ export default {
   },
 } as Meta;
 
-const Template: StoryFn<IGRPImageProps> = (args) => (
+
+
+const Template: StoryFn<typeof IGRPImage> = (args) => (
   <div className='container my-10 mx-auto p-4 border rounded-lg shadow-sm'>
-    <IGRPImage {...args} />
+    <IGRPImage       
+      {...args} 
+    />
   </div>
 );
 
-export const Default: StoryObj<IGRPImageProps> = {
+export const Default: StoryObj<typeof IGRPImage> = {
   render: Template,
   args: {
     src: 'src/stories/assets/gradient.png',
   },
 };
-export const LabelClassName: StoryObj<IGRPImageProps> = {
+export const LabelClassName: StoryObj<typeof IGRPImage> = {
   render: Template,
   args: {
     src: 'src/stories/assets/gradient.png',
     width:200,
     height:200,
-    labelClassName: 'mask-t-from-50%'
   },
 };
-export const Ratio: StoryObj<IGRPImageProps> = {
+export const Ratio: StoryObj<typeof IGRPImage> = {
   render: Template,
   args: {
     src: 'src/stories/assets/gradient.png',
-    ratio:4/3,
+    ratio: '4/3',
   },
 };
-export const BorderRadius: StoryObj<IGRPImageProps> = {
+export const BorderRadius: StoryObj<typeof IGRPImage> = {
   render: Template,
   args: {
     src: 'src/stories/assets/gradient.png',
-    ratio:21/9,
-    borderRadius:'rounded-3xl'
+    ratio: '21/9',
   },
 };

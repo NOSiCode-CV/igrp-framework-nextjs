@@ -36,15 +36,6 @@ export type IGRPOptionsProps = {
   flag?: string;
 };
 
-export type IGRPImageAttributes = {
-  src: string;
-  alt?: string;
-  width: number;
-  height: number;
-  size?: string;
-  labelClassName?: string;
-};
-
 export type IGRPGridSize = keyof typeof igrpGridSizeClasses;
 
 export type IGRPRoundSize = 

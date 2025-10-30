@@ -58,7 +58,7 @@ export function MenuTreeRow({
   const toggleRoleForMenu = (menuCode: string, roleName: string) => {
     setMenuRoleAssignments((prev) => {
       const newMap = new Map(prev);
-      const menuRoles = new Set(newMap.get(menuCode) || new Set<string>()); // ✅ Criar NOVO Set
+      const menuRoles = new Set(newMap.get(menuCode) || new Set<string>());
       
       if (menuRoles.has(roleName)) {
         menuRoles.delete(roleName);

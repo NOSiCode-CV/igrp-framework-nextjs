@@ -3531,14 +3531,6 @@
       }
     }
   }
-  .first-of-type\:before\:hidden {
-    &:first-of-type {
-      &::before {
-        content: var(--tw-content);
-        display: none;
-      }
-    }
-  }
   .focus-within\:z-10 {
     &:focus-within {
       z-index: 10;
@@ -5048,14 +5040,6 @@
   .data-\[state\=open\]\:text-muted-foreground {
     &[data-state="open"] {
       color: var(--muted-foreground);
-    }
-  }
-  .data-\[state\=open\]\:text-muted-foreground\/80 {
-    &[data-state="open"] {
-      color: var(--muted-foreground);
-      @supports (color: color-mix(in lab, red, red)) {
-        color: color-mix(in oklab, var(--muted-foreground) 80%, transparent);
-      }
     }
   }
   .data-\[state\=open\]\:opacity-100 {

@@ -166,7 +166,7 @@ const DepartmentTreeItem = ({
           />
         ))
       }
-    </div >
+    </div>
   );
 };
 

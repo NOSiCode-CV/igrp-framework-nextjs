@@ -7,6 +7,7 @@ import {
   IGRPBreadcrumbListPrimitive,
   IGRPBreadcrumbPrimitive,
   IGRPBreadcrumbSeparatorPrimitive,
+  IGRPButtonPrimitive,
   IGRPIcon,
   IGRPInputPrimitive,
   IGRPTabItem,
@@ -168,7 +169,7 @@ export function DepartmentListTree() {
     <div className="flex flex-col h-screen  overflow-hidden">
 
       <div className="flex h-screen">
-        <div className="w-80 flex border-r  pr-2 border-gray-900 flex-col">
+        <div className="w-80 flex border-r pr-2 border-accent flex-col">
 
           <div className="flex flex-col min-w-0">
             <h2 className="text-2xl font-bold tracking-tight truncate">
@@ -301,14 +302,24 @@ export function DepartmentListTree() {
                   <p className="text-muted-foreground text-sm">{selectedDepartment?.description || "Sem descrição."}</p>
                 </div>
 
-                <div className="flex flex-col justify-between gap-2">
-                  <ButtonLink
+                <div className="flex flex-row justify-between gap-2">
+                  <IGRPButtonPrimitive
                     onClick={() => handleEdit(selectedDepartment)}
-                    icon="Pencil"
-                    href="#"
-                    label="Editar"
                     variant="outline"
-                  />
+                  >
+                    <IGRPIcon iconName="AppWindow" className="w-4 h-4" strokeWidth={2} />
+                    Editar
+                  </IGRPButtonPrimitive>
+
+                  <IGRPButtonPrimitive
+                    variant="outline"
+                    //onClick={() => setShowAppsModal(true)}
+                    className="gap-2"
+                  >
+                    <IGRPIcon iconName="AppWindow" className="w-4 h-4" strokeWidth={2} />
+                    Gerenciar Apps
+                  </IGRPButtonPrimitive>
+                  
                   
                 </div>
               </div>

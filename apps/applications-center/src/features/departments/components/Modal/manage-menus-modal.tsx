@@ -30,6 +30,7 @@ import { useState, useEffect, useMemo } from "react";
 import { useAddMenusToDepartment, useDepartmentAvailableMenus, useRemoveMenusFromDepartment } from "../../use-departments";
 import { useDepartmentMenus } from "@/features/menus/use-menus";
 import { MenuEntryDTO } from "@igrp/platform-access-management-client-ts";
+import { buildMenuTree } from "../../dept-lib";
 
 interface ManageMenusModalProps {
   departmentCode: string;
@@ -84,30 +85,7 @@ export function ManageMenusModal({
     ? (availableMenus || []).filter(menu => menu.applicationCode === selectedApp)
     : (availableMenus || []);
 
-  const buildMenuTree = (menus: MenuEntryDTO[]): MenuWithChildren[] => {
-    const map = new Map<string, MenuWithChildren>();
-    const roots: MenuWithChildren[] = [];
 
-    menus.forEach((menu) => {
-      map.set(menu.code, { ...menu, children: [] });
-    });
-
-    menus.forEach((menu) => {
-      const node = map.get(menu.code)!;
-      if (menu.parentCode) {
-        const parent = map.get(menu.parentCode);
-        if (parent) {
-          parent.children!.push(node);
-        } else {
-          roots.push(node);
-        }
-      } else {
-        roots.push(node);
-      }
-    });
-
-    return roots;
-  };
 
   const toggleExpand = (menuCode: string) => {
     setExpandedMenus(prev => {

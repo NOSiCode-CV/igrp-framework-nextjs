@@ -25,8 +25,9 @@ import {
 import { MenuEntryDTO } from "@igrp/platform-access-management-client-ts";
 import { useState, useEffect } from "react";
 import { ManageAppsModal } from "./Modal/manage-apps-modal";
-import { ManageMenusModal } from "./Modal/manage-menus-modal";
 import { MenuTreeRow } from "./dept-menu-tree";
+import { buildMenuTree } from "../dept-lib";
+import { ManageMenusModal } from "./Modal/manage-menus-modal";
 
 interface MenuPermissionsProps {
   departmentCode: string;
@@ -66,31 +67,6 @@ export function MenuPermissions({
       setMenuRoleAssignments(initialAssignments);
     }
   }, [menus]);
-
-  const buildMenuTree = (menus: MenuEntryDTO[]): MenuWithChildren[] => {
-    const map = new Map<string, MenuWithChildren>();
-    const roots: MenuWithChildren[] = [];
-
-    menus.forEach((menu) => {
-      map.set(menu.code, { ...menu, children: [] });
-    });
-
-    menus.forEach((menu) => {
-      const node = map.get(menu.code)!;
-      if (menu.parentCode) {
-        const parent = map.get(menu.parentCode);
-        if (parent) {
-          parent.children!.push(node);
-        } else {
-          roots.push(node);
-        }
-      } else {
-        roots.push(node);
-      }
-    });
-
-    return roots;
-  };
 
   const handleSave = async () => {
     try {
@@ -182,38 +158,46 @@ export function MenuPermissions({
       <div className="flex flex-col gap-6">
         <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
           <div>
-            <div className="leading-none font-semibold mb-1">Permissões de Menu</div>
+            <div className="leading-none font-semibold mb-1"> Menus</div>
             <div className="text-muted-foreground text-sm">
               Gerencie aplicações, menus e perfis do departamento.
             </div>
           </div>
 
           <div className="flex gap-2">
-            <IGRPButtonPrimitive
-              variant="outline"
-              onClick={() => setShowAppsModal(true)}
-              className="gap-2"
-            >
-              <IGRPIcon iconName="AppWindow" className="w-4 h-4" strokeWidth={2} />
-              <span className="hidden sm:inline">Gerenciar</span> Apps
-            </IGRPButtonPrimitive>
-
+            
             <IGRPButtonPrimitive
               variant="outline"
               onClick={() => setShowMenusModal(true)}
               className="gap-2"
             >
               <IGRPIcon iconName="Menu" className="w-4 h-4" strokeWidth={2} />
-              <span className="hidden sm:inline">Gerenciar</span> Menus
+              <span className="">Gerenciar Menus</span>
             </IGRPButtonPrimitive>
           </div>
         </div>
 
-        <div className="flex flex-col sm:flex-row gap-4">
-          {assignedApps?.length !== 0 && <div className="w-full sm:w-80">
-            <label className="text-sm font-medium mb-2 block">
-              Filtrar por aplicação
-            </label>
+        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+          {!loading && menus && menus.length > 0 && (
+            <div className="w-9/12">
+              <div className="relative">
+                <IGRPIcon
+                  iconName="Search"
+                  className="absolute left-2.5 top-2.5 size-4 text-muted-foreground"
+                />
+                <IGRPInputPrimitive
+                  type="search"
+                  placeholder="Pesquisar menu..."
+                  className="pl-8"
+                  value={searchTerm}
+                  onChange={(e) => setSearchTerm(e.target.value)}
+                />
+              </div>
+            </div>
+          )}
+
+          {assignedApps?.length !== 0 && 
+          <div className="w-3/12">
             <IGRPSelectPrimitive 
               value={selectedApp} 
               onValueChange={setSelectedApp}
@@ -236,23 +220,7 @@ export function MenuPermissions({
           </div>
           }
 
-          {!loading && menus && menus.length > 0 && (
-            <div className="">
-              <div className="relative">
-                <IGRPIcon
-                  iconName="Search"
-                  className="absolute left-2.5 top-2.5 size-4 text-muted-foreground"
-                />
-                <IGRPInputPrimitive
-                  type="search"
-                  placeholder="Pesquisar menu..."
-                  className="pl-8"
-                  value={searchTerm}
-                  onChange={(e) => setSearchTerm(e.target.value)}
-                />
-              </div>
-            </div>
-          )}
+          
         </div>
 
         {loading || isLoadingRoles ? (
@@ -274,19 +242,19 @@ export function MenuPermissions({
             <div className="flex gap-2">
               <IGRPButtonPrimitive
                 variant="outline"
-                onClick={() => setShowAppsModal(true)}
-                className="gap-2"
-              >
-                <IGRPIcon iconName="AppWindow" className="w-4 h-4" strokeWidth={2} />
-                Gerenciar Apps
-              </IGRPButtonPrimitive>
-              <IGRPButtonPrimitive
-                variant="outline"
                 onClick={() => setShowMenusModal(true)}
                 className="gap-2"
               >
                 <IGRPIcon iconName="Menu" className="w-4 h-4" strokeWidth={2} />
                 Gerenciar Menus
+              </IGRPButtonPrimitive>
+              <IGRPButtonPrimitive
+                variant="outline"
+                onClick={() => setShowAppsModal(true)}
+                className="gap-2"
+              >
+                <IGRPIcon iconName="AppWindow" className="w-4 h-4" strokeWidth={2} />
+                Gerenciar Apps
               </IGRPButtonPrimitive>
             </div>
           </div>
@@ -334,13 +302,13 @@ export function MenuPermissions({
                 <IGRPTableBodyPrimitive>
                   {menuTree.map((menu) => (
                     <MenuTreeRow 
-                    key={menu.code} 
-                    menu={menu} 
-                    menuRoleAssignments={menuRoleAssignments}
-                    setMenuRoleAssignments={setMenuRoleAssignments}
-                    roles={roles || []}
-                    expandedMenus={expandedMenus} 
-                    setExpandedMenus={setExpandedMenus}
+                      key={menu.code} 
+                      menu={menu} 
+                      menuRoleAssignments={menuRoleAssignments}
+                      setMenuRoleAssignments={setMenuRoleAssignments}
+                      roles={roles || []}
+                      expandedMenus={expandedMenus} 
+                      setExpandedMenus={setExpandedMenus}
                     />
                   ))}
                 </IGRPTableBodyPrimitive>

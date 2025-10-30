@@ -2,9 +2,19 @@
 
 import {
   type ColumnDef,
+  IGRPBadgePrimitive,
+  IGRPDataTable,
+  IGRPDataTableCellExpander,
+  type IGRPDataTableClientFilterListProps,
+  IGRPDataTableFacetedFilterFn,
+  IGRPDataTableFilterFaceted,
+  IGRPDataTableFilterInput,
+  IGRPDataTableHeaderDefault,
+  IGRPDataTableHeaderSortToggle,
   IGRPDropdownMenuContentPrimitive,
   IGRPDropdownMenuItemPrimitive,
   IGRPDropdownMenuPrimitive,
+  IGRPDropdownMenuSeparatorPrimitive,
   IGRPDropdownMenuTriggerPrimitive,
   IGRPIcon,
   IGRPTooltipContentPrimitive,
@@ -12,22 +22,13 @@ import {
   IGRPTooltipProviderPrimitive,
   IGRPTooltipTriggerPrimitive,
   IGRPUserAvatar,
-  IGRPDataTable,
-  IGRPDataTableClientFilterListProps,
-  IGRPDataTableFilterFaceted,
-  IGRPDataTableFilterInput,
-  IGRPDataTableHeaderSortToggle,
-  IGRPDropdownMenuSeparatorPrimitive,
   type Row,
-  IGRPBadgePrimitive,
-  IGRPDataTableFacetedFilterFn,
-  IGRPDataTableCellExpander,
-  IGRPDataTableHeaderDefault,
 } from "@igrp/igrp-framework-react-design-system";
 import type { IGRPUserDTO } from "@igrp/platform-access-management-client-ts";
 import { useEffect, useState } from "react";
 
 import { ButtonLink } from "@/components/button-link";
+import { ButtonLinkTooltip } from "@/components/button-link-tooltip";
 import { AppCenterLoading } from "@/components/loading";
 import { PageHeader } from "@/components/page-header";
 import { UserInviteDialog } from "@/features/users/components/user-invite-dialog";
@@ -37,11 +38,10 @@ import {
   useUsers,
 } from "@/features/users/use-users";
 import { ROUTES, STATUS_OPTIONS } from "@/lib/constants";
-import { cn, getInitials, showStatus, getStatusColor } from "@/lib/utils";
+import { cn, getInitials, getStatusColor, showStatus } from "@/lib/utils";
+import { UserDeleteDialog } from "./user-delete-dialog";
 import { UserRolesDialog } from "./user-role-dialog";
 import { UserRolesList } from "./user-roles-list";
-import { ButtonLinkTooltip } from "@/components/button-link-tooltip";
-import { UserDeleteDialog } from "./user-delete-dialog";
 
 export function UserList() {
   const [data, setData] = useState<IGRPUserDTO[]>([]);
@@ -49,8 +49,9 @@ export function UserList() {
   const [inviteDialogOpen, setInviteDialogOpen] = useState(false);
 
   const [deleteDialogOpen, setDeleteDialogOpen] = useState(false);
-  const [userToDelete, setUserToDelete] = useState<IGRPUserDTO | undefined>(undefined)
-
+  const [userToDelete, setUserToDelete] = useState<IGRPUserDTO | undefined>(
+    undefined,
+  );
 
   const [assignRolesFor, setAssignRolesFor] = useState<{
     open: boolean;
@@ -70,10 +71,12 @@ export function UserList() {
       id: "expander",
       header: () => null,
       cell: ({ row }) => <IGRPDataTableCellExpander row={row} field="name" />,
-      size: 50
+      size: 50,
     },
     {
-      header: ({ column }) => <IGRPDataTableHeaderSortToggle column={column} title="Nome" />,
+      header: ({ column }) => (
+        <IGRPDataTableHeaderSortToggle column={column} title="Nome" />
+      ),
       accessorKey: "name",
       cell: ({ row }) => {
         const email = String(row.getValue("email"));
@@ -89,9 +92,7 @@ export function UserList() {
             />
             <div>
               <div className="text-sm leading-none">{name}</div>
-              <span className="text-muted-foreground text-xs">
-                {email}
-              </span>
+              <span className="text-muted-foreground text-xs">{email}</span>
             </div>
           </div>
         );
@@ -131,7 +132,7 @@ export function UserList() {
             )}
           </>
         );
-      }
+      },
     },
     {
       header: "Email",
@@ -139,7 +140,9 @@ export function UserList() {
       cell: ({ row }) => <div>{row.getValue("email") || "N/A"}</div>,
     },
     {
-      header: () => <IGRPDataTableHeaderDefault title="Estado" className="text-center" />,
+      header: () => (
+        <IGRPDataTableHeaderDefault title="Estado" className="text-center" />
+      ),
       accessorKey: "status",
       cell: ({ row }) => {
         const status = String(row.getValue("status"));
@@ -155,12 +158,15 @@ export function UserList() {
       },
       filterFn: IGRPDataTableFacetedFilterFn,
       size: 70,
-
     },
     {
       id: "roles",
-      header: () => <IGRPDataTableHeaderDefault title="Perfís" className="text-center" />,
-      cell: ({ row }) => <RolesCountCell username={String(row.getValue("username"))} />,
+      header: () => (
+        <IGRPDataTableHeaderDefault title="Perfís" className="text-center" />
+      ),
+      cell: ({ row }) => (
+        <RolesCountCell username={String(row.getValue("username"))} />
+      ),
     },
     {
       id: "actions",
@@ -196,7 +202,7 @@ export function UserList() {
               <IGRPDropdownMenuItemPrimitive
                 className="text-destructive focus:text-destructive"
                 onSelect={() => handleDelete(row.original)}
-                variant='destructive'
+                variant="destructive"
               >
                 <IGRPIcon iconName="CircleOff" />
                 Desativar
@@ -231,7 +237,7 @@ export function UserList() {
           </IGRPTooltipContentPrimitive>
         </IGRPTooltipPrimitive>
       </IGRPTooltipProviderPrimitive>
-    )
+    );
   }
 
   const filters: IGRPDataTableClientFilterListProps<IGRPUserDTO>[] = [
@@ -291,7 +297,9 @@ export function UserList() {
         data={data}
         clientFilters={filters}
         getRowCanExpand={(row) => Boolean(row.getValue("name"))}
-        renderSubComponent={(row) => <UserRolesList username={row.original.username} />}
+        renderSubComponent={(row) => (
+          <UserRolesList username={row.original.username} />
+        )}
       />
 
       {inviteDialogOpen && (
@@ -304,7 +312,9 @@ export function UserList() {
       {assignRolesFor.open && (
         <UserRolesDialog
           open={assignRolesFor.open}
-          onOpenChange={(open) => setAssignRolesFor({ ...assignRolesFor, open })}
+          onOpenChange={(open) =>
+            setAssignRolesFor({ ...assignRolesFor, open })
+          }
           username={assignRolesFor.username as string}
         />
       )}

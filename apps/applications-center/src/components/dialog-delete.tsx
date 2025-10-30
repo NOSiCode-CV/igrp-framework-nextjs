@@ -1,14 +1,13 @@
 import {
-  IGRPDialogPrimitive,
-  IGRPDialogContentPrimitive,
-  IGRPDialogHeaderPrimitive,
-  IGRPIcon,
-  IGRPDialogTitlePrimitive,
-  IGRPDialogDescriptionPrimitive,
-  IGRPLabelPrimitive,
-  IGRPInputPrimitive,
-  IGRPDialogFooterPrimitive,
   IGRPButtonPrimitive,
+  IGRPDialogContentPrimitive,
+  IGRPDialogDescriptionPrimitive,
+  IGRPDialogFooterPrimitive,
+  IGRPDialogHeaderPrimitive,
+  IGRPDialogPrimitive,
+  IGRPIcon,
+  IGRPInputPrimitive,
+  IGRPLabelPrimitive,
 } from "@igrp/igrp-framework-react-design-system";
 import { useId, useState } from "react";
 
@@ -33,7 +32,7 @@ function IGRPDialogDelete({
   label = "Escreva",
   labelBtnCancel = "Cancelar",
   labelBtnDelete = "Eliminar",
-  textHeader = "Confirmação Final"
+  textHeader = "Confirmação Final",
 }: IGRPDialogDeleteProps) {
   const id = useId();
   const [confirmation, setConfirmation] = useState("");
@@ -44,9 +43,7 @@ function IGRPDialogDelete({
     <span>
       Esta ação é irreversível. Todos os dados serão eliminados permanentemente.
       Para confirmar, escreva{" "}
-      <span className="font-semibold">
-        {toDelete.name}.
-      </span>
+      <span className="font-semibold">{toDelete.name}.</span>
     </span>
   );
 
@@ -61,7 +58,7 @@ function IGRPDialogDelete({
             />
             <span>{textHeader}</span>
           </div>
-          <IGRPDialogHeaderPrimitive>            
+          <IGRPDialogHeaderPrimitive>
             <IGRPDialogDescriptionPrimitive className="text-foreground text-base">
               {description ? description : RenderDes}
             </IGRPDialogDescriptionPrimitive>

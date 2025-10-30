@@ -7,24 +7,29 @@ import {
 
 import { ButtonLink } from "./button-link";
 
-interface ButtonLinkTooltipProps extends React.ComponentProps<typeof ButtonLink> {}
+interface ButtonLinkTooltipProps
+  extends React.ComponentProps<typeof ButtonLink> {}
 
 export function ButtonLinkTooltip({
   href,
   label,
   size,
- ...props
+  ...props
 }: ButtonLinkTooltipProps) {
   return (
     <IGRPTooltipProviderPrimitive>
       <IGRPTooltipPrimitive>
         <IGRPTooltipTriggerPrimitive asChild>
-          <ButtonLink 
-            href={href} 
-            label={(size === 'icon' || size === 'icon-lg' || size === 'icon-sm') ? '' : label} 
+          <ButtonLink
+            href={href}
+            label={
+              size === "icon" || size === "icon-lg" || size === "icon-sm"
+                ? ""
+                : label
+            }
             size={size}
-            {...props}  
-          />    
+            {...props}
+          />
         </IGRPTooltipTriggerPrimitive>
         <IGRPTooltipContentPrimitive>
           <p>{label}</p>

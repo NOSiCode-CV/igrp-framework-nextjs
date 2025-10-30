@@ -1,4 +1,4 @@
-import { DepartmentArgs } from "./dept-schemas";
+import type { DepartmentArgs } from "./dept-schemas";
 
 export type DepartmentOption = { value: string; label: string };
 

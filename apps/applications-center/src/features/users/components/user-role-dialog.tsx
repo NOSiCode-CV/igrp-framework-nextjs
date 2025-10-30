@@ -60,7 +60,7 @@ import {
   useRemoveUserRole,
   useUserRoles,
 } from "@/features/users/use-users";
-import { showStatus, getStatusColor } from "@/lib/utils";
+import { getStatusColor, showStatus } from "@/lib/utils";
 
 const norm = (s: string) => s.trim().toLowerCase();
 
@@ -343,7 +343,10 @@ export function UserRolesDialog({
       <IGRPDialogContentPrimitive className="md:min-w-2xl max-h-[95vh]">
         <IGRPDialogHeaderPrimitive>
           <IGRPDialogTitlePrimitive className="text-base">
-            Adicionar ou Remover Perfis de <IGRPBadge variant="solid" color="primary">{username}</IGRPBadge>
+            Adicionar ou Remover Perfis de{" "}
+            <IGRPBadge variant="solid" color="primary">
+              {username}
+            </IGRPBadge>
           </IGRPDialogTitlePrimitive>
         </IGRPDialogHeaderPrimitive>
 

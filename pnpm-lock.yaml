@@ -51,8 +51,8 @@ importers:
         specifier: workspace:*
         version: link:../../packages/design-system
       '@igrp/platform-access-management-client-ts':
-        specifier: 0.1.0-beta.43
-        version: 0.1.0-beta.43
+        specifier: 0.1.0-beta.44
+        version: 0.1.0-beta.44
       '@tanstack/react-query':
         specifier: ^5.84.2
         version: 5.90.5(react@19.2.0)
@@ -407,7 +407,7 @@ importers:
         specifier: ^4.1.16
         version: 4.1.16
       zod:
-        specifier: ^4.1.12
+        specifier: ^ 4.1.12
         version: 4.1.12
     devDependencies:
       '@chromatic-com/storybook':
@@ -507,8 +507,8 @@ importers:
         specifier: workspace:*
         version: link:../next-ui
       '@igrp/platform-access-management-client-ts':
-        specifier: 0.1.0-beta.43
-        version: 0.1.0-beta.43
+        specifier: 0.1.0-beta.44
+        version: 0.1.0-beta.44
       clsx:
         specifier: ^2.1.1
         version: 2.1.1
@@ -781,8 +781,8 @@ importers:
         specifier: 0.1.0-beta.29
         version: 0.1.0-beta.29(@types/react-dom@19.2.2(@types/react@19.2.2))(@types/react@19.2.2)(next@15.5.6(react-dom@19.2.0(react@19.2.0))(react@19.2.0))(react-dom@19.2.0(react@19.2.0))(react@19.2.0)
       '@igrp/platform-access-management-client-ts':
-        specifier: 0.1.0-beta.43
-        version: 0.1.0-beta.43
+        specifier: 0.1.0-beta.44
+        version: 0.1.0-beta.44
       class-variance-authority:
         specifier: ^0.7.1
         version: 0.7.1
@@ -1851,8 +1851,8 @@ packages:
   '@igrp/platform-access-management-client-ts@0.1.0-beta.40':
     resolution: {integrity: sha512-jdqP9NexKb4pTVGROZFabpbuqcmY6/LHehYXd9YhRu0Cudut7CAxW+WkjfpBEwAndxUemLHSSNDa+glz6EJFWQ==}
 
-  '@igrp/platform-access-management-client-ts@0.1.0-beta.43':
-    resolution: {integrity: sha512-tL4V8nLiBAkdlyqm9VvpPiZ9O9SzFc5lKr7FleV50xEQtYqLZDIgGNI8Dq+x+8rWcewlYiAIvJJQ7j4154zJOg==}
+  '@igrp/platform-access-management-client-ts@0.1.0-beta.44':
+    resolution: {integrity: sha512-EMi4x4Riordq0ksorFCOOkK7WAR7ZbabWfS4d+AnbohvMrafMTFhl2yDWMzw1IuurKNJJ/pXeV+CKH+Qgst1cQ==}
 
   '@img/colour@1.0.0':
     resolution: {integrity: sha512-A5P/LfWGFSl6nsckYtjw9da+19jB8hkJ6ACTGcDfEJ0aE+l2n2El7dsVM7UVHZQ9s2lmYMWlrS21YLy2IR1LUw==}
@@ -7577,7 +7577,7 @@ snapshots:
 
   '@igrp/platform-access-management-client-ts@0.1.0-beta.40': {}
 
-  '@igrp/platform-access-management-client-ts@0.1.0-beta.43': {}
+  '@igrp/platform-access-management-client-ts@0.1.0-beta.44': {}
 
   '@img/colour@1.0.0':
     optional: true

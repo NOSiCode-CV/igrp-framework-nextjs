@@ -1,13 +1,13 @@
 "use client";
 
 import {
+  type ColumnDef,
   cn,
-  ColumnDef,
   IGRPBadgePrimitive,
   IGRPDataTable,
   IGRPDataTableCellBadge,
   IGRPDataTableCellTooltip,
-  IGRPDataTableClientFilterListProps,
+  type IGRPDataTableClientFilterListProps,
   IGRPDataTableDropdownMenu,
   IGRPDataTableDropdownMenuLink,
   IGRPDataTableFacetedFilterFn,
@@ -15,7 +15,7 @@ import {
   IGRPDataTableFilterInput,
   IGRPDataTableHeaderSortToggle,
   IGRPDataTableRowAction,
-  Row,
+  type Row,
 } from "@igrp/igrp-framework-react-design-system";
 import { useEffect, useState } from "react";
 
@@ -23,7 +23,7 @@ import { ButtonLink } from "@/components/button-link";
 import { AppCenterLoading } from "@/components/loading";
 import { PageHeader } from "@/components/page-header";
 import { ROUTES, STATUS_OPTIONS } from "@/lib/constants";
-import { showStatus, getStatusColor } from "@/lib/utils";
+import { getStatusColor, showStatus } from "@/lib/utils";
 import type { DepartmentArgs } from "../dept-schemas";
 import { useDepartments } from "../use-departments";
 import { DepartmentDeleteDialog } from "./dept-delete-dialog";

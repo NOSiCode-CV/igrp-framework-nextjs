@@ -2,11 +2,12 @@
 
 import { useRef, useState, useCallback, createContext, useContext } from 'react';
 
+import type { IGRPColorRole, IGRPColorVariants } from '../../lib/colors';
+import { cn } from '../../lib/utils';
 import { Card, CardContent, CardHeader, CardTitle } from '../primitives/card';
 import { IGRPBadge } from './badge';
 import { IGRPIcon } from './icon';
-import type { IGRPColorRole, IGRPColorVariants } from '../../lib/colors';
-import { cn } from '../../lib/utils';
+
 
 interface IGRPMenuNavigationItem {
   id: string;
@@ -141,14 +142,14 @@ function IGRPMenuNavigation({
                 )}
               >
                 <div className="flex items-center gap-2">
-                  <IGRPIcon iconName={section.icon} className="h-4 w-4 flex-shrink-0" />
+                  <IGRPIcon iconName={section.icon} className="size-4 shrink-0" />
                   <span className="truncate">{section.label}</span>
                 </div>
                 {showChevron && (
                   <IGRPIcon
                     iconName="ChevronRight"
                     className={cn(
-                      'h-4 w-4 transition-colors flex-shrink-0',
+                      'size-4 transition-colors shrink-0',
                       activeSection === section.id ? 'text-primary' : 'text-muted-foreground',
                     )}
                   />

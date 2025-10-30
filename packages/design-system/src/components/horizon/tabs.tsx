@@ -1,11 +1,11 @@
 'use client';
 
-import { useState } from 'react';
 import { cva, type VariantProps } from 'class-variance-authority';
+import { useState } from 'react';
 
+import { cn } from '../../lib/utils';
 import { Tabs, TabsList, TabsTrigger, TabsContent } from '../primitives/tabs';
 import { IGRPIcon, type IGRPIconName } from './icon';
-import { cn } from '../../lib/utils';
 
 const tabListVariants = cva('gap-1.5', {
   variants: {

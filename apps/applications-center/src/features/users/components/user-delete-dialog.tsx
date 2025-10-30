@@ -1,10 +1,13 @@
 "use client";
 
 import { useIGRPToast } from "@igrp/igrp-framework-react-design-system";
-import { IGRPUserDTO, Status } from "@igrp/platform-access-management-client-ts";
+import type {
+  IGRPUserDTO,
+  Status,
+} from "@igrp/platform-access-management-client-ts";
 import { IGRPDialogDelete } from "@/components/dialog-delete";
-import { useUpdateUser } from "../use-users";
 import { statusSchema } from "@/schemas/global";
+import { useUpdateUser } from "../use-users";
 
 interface UserDeleteDialogProps {
   open: boolean;
@@ -22,16 +25,16 @@ export function UserDeleteDialog({
 
   async function confirmDelete() {
     const username = userToDelete.username;
-    const payload = { 
-      ...userToDelete, 
-      status: statusSchema.enum.INACTIVE as Status
+    const payload = {
+      ...userToDelete,
+      status: statusSchema.enum.INACTIVE as Status,
     };
     try {
       await removeUser({ username, user: payload });
       igrpToast({
         type: "success",
         title: "Utilizador Desativado",
-        description: `Utilizador '${userToDelete.username}' foi desativado com sucesso.`,        
+        description: `Utilizador '${userToDelete.username}' foi desativado com sucesso.`,
       });
 
       onOpenChange(false);

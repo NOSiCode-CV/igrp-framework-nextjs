@@ -96,7 +96,7 @@ export function RoleFormDialog({
     } else {
       form.reset(defaultValues as CreateRoleArgs);
     }
-  }, [open, role, departmentCode, form]);
+  }, [open, role, departmentCode, form, defaultValues]);
 
   const isLoading = isCreating || isUpdating || form.formState.isSubmitting;
 

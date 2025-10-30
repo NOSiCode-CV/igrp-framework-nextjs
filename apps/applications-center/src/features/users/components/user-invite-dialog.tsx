@@ -30,6 +30,10 @@ import {
   IGRPPopoverTriggerPrimitive,
   useIGRPToast,
 } from "@igrp/igrp-framework-react-design-system";
+import type {
+  CreateUserRequest,
+  Status,
+} from "@igrp/platform-access-management-client-ts";
 import { useEffect, useMemo, useState } from "react";
 import { useFieldArray, useForm } from "react-hook-form";
 import { useDepartments } from "@/features/departments/use-departments";
@@ -43,7 +47,6 @@ import {
   type FormUserArgs,
   formSchema,
 } from "../user-schema";
-import { CreateUserRequest, Status } from "@igrp/platform-access-management-client-ts";
 
 interface UserInviteDialogProps {
   open: boolean;
@@ -116,25 +119,26 @@ export function UserInviteDialog({
       lastIndex < 0
         ? true
         : await form.trigger([
-          `users.${lastIndex}.name`,
-          `users.${lastIndex}.email`,
-        ]);
+            `users.${lastIndex}.name`,
+            `users.${lastIndex}.email`,
+          ]);
     if (ok) {
       append({ ...EMPTY_USER });
     } else {
       igrpToast({
         type: "warning",
-        title: "Complete as informações do utilizador atual antes de adicionar outro.",
+        title:
+          "Complete as informações do utilizador atual antes de adicionar outro.",
       });
     }
   };
 
   const parentValue = form.watch("departmentCode");
-  
-    const parentSelected = useMemo(
-      () => depts?.find((o) => o.code === parentValue) ?? null,
-      [parentValue, depts],
-    );
+
+  const parentSelected = useMemo(
+    () => depts?.find((o) => o.code === parentValue) ?? null,
+    [parentValue, depts],
+  );
 
   const onSubmit = async (values: FormSchema) => {
     const { users, roleNames } = values;
@@ -148,7 +152,7 @@ export function UserInviteDialog({
           status: statusSchema.enum.ACTIVE as Status,
         };
 
-        console.log({ userPayload })
+        console.log({ userPayload });
         const created = await userInvite({ user: userPayload });
         const finalUsername = (created as any)?.username ?? username;
         if (finalUsername && roleNames?.length) {
@@ -282,7 +286,7 @@ export function UserInviteDialog({
                     <p className="text-sm text-muted-foreground mb-4">
                       Selecione o departamento e roles para todos os convidados.
                     </p>
-                  </div>                 
+                  </div>
 
                   <IGRPFormFieldPrimitive
                     control={form.control}
@@ -302,7 +306,7 @@ export function UserInviteDialog({
 
                           <IGRPPopoverPrimitive
                             open={openDepts}
-                            onOpenChange={(next) => {                              
+                            onOpenChange={(next) => {
                               setOpenDepts(next);
                             }}
                           >
@@ -312,9 +316,9 @@ export function UserInviteDialog({
                                 variant="outline"
                                 disabled={isDeptDisabled}
                                 className={cn(
-                                    "w-full justify-between",
-                                    !field.value && "text-muted-foreground",
-                                  )}
+                                  "w-full justify-between",
+                                  !field.value && "text-muted-foreground",
+                                )}
                                 aria-expanded={openDepts}
                               >
                                 <span className="truncate">
@@ -323,7 +327,9 @@ export function UserInviteDialog({
                                     : placeholder}
                                 </span>
                                 <IGRPIcon
-                                  iconName={openDepts ? "ChevronUp" : "ChevronDown"}
+                                  iconName={
+                                    openDepts ? "ChevronUp" : "ChevronDown"
+                                  }
                                 />
                               </IGRPButtonPrimitive>
                             </IGRPPopoverTriggerPrimitive>
@@ -363,18 +369,18 @@ export function UserInviteDialog({
                                     <IGRPCommandItemPrimitive
                                       key={opt.code}
                                       onSelect={() => {
-                                          form.setValue(
-                                            "departmentCode",
-                                            opt.code,
-                                            {
-                                              shouldValidate: true,
-                                            },
-                                          );
-                                          form.setValue("roleNames", [], {
+                                        form.setValue(
+                                          "departmentCode",
+                                          opt.code,
+                                          {
                                             shouldValidate: true,
-                                          });
-                                          setOpenDepts(false);
-                                        }}
+                                          },
+                                        );
+                                        form.setValue("roleNames", [], {
+                                          shouldValidate: true,
+                                        });
+                                        setOpenDepts(false);
+                                      }}
                                       aria-selected={field.value === opt.code}
                                       className="flex items-center gap-2"
                                     >
@@ -386,7 +392,9 @@ export function UserInviteDialog({
                                       ) : (
                                         <span className="w-4" />
                                       )}
-                                      <span className="truncate">{opt.name}</span>
+                                      <span className="truncate">
+                                        {opt.name}
+                                      </span>
                                     </IGRPCommandItemPrimitive>
                                   ))}
                                 </IGRPCommandListPrimitive>
@@ -407,12 +415,11 @@ export function UserInviteDialog({
 
                           <IGRPFormMessagePrimitive>
                             {deptError ? deptError.message : null}
-                          </IGRPFormMessagePrimitive>                          
+                          </IGRPFormMessagePrimitive>
                         </IGRPFormItemPrimitive>
                       );
                     }}
                   />
-
 
                   {/* Roles (multi-select) */}
                   <IGRPFormFieldPrimitive
@@ -467,7 +474,7 @@ export function UserInviteDialog({
                                   className={cn(
                                     "w-full justify-between",
                                     selected.size === 0 &&
-                                    "text-muted-foreground",
+                                      "text-muted-foreground",
                                   )}
                                 >
                                   <span className="truncate">{label}</span>

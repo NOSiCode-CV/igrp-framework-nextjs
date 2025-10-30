@@ -47,18 +47,17 @@ export function ButtonLink({
 interface LinkLoadingIndicatorProps {
   iconName: IGRPIconProps["iconName"];
   iconClassName?: string;
-  customIcon?: React.ReactNode;
+  //                      customIcon?: React.ReactNode;
 }
 
 function LinkLoadingIndicator({
   iconName,
   iconClassName,
-  customIcon = undefined
+  // customIcon = undefined,
 }: LinkLoadingIndicatorProps) {
   const { pending } = useLinkStatus();
 
   const valid = iconName !== null && iconName !== undefined && iconName !== "";
-
 
   return (
     <>

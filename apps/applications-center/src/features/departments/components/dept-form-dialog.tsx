@@ -34,10 +34,11 @@ import {
   IGRPTextAreaPrimitive,
   useIGRPToast,
 } from "@igrp/igrp-framework-react-design-system";
-import { useEffect, useMemo, useRef, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { useForm } from "react-hook-form";
 import { STATUS_OPTIONS } from "@/lib/constants";
 import { statusSchema } from "@/schemas/global";
+import { DEPT_OPTIONS } from "../dept-lib";
 import {
   type DepartmentArgs,
   departmentSchema,
@@ -45,10 +46,9 @@ import {
 } from "../dept-schemas";
 import {
   useCreateDepartment,
-  useUpdateDepartment,
   useDepartments,
+  useUpdateDepartment,
 } from "../use-departments";
-import { DEPT_OPTIONS } from "../dept-lib";
 
 interface DepartmentCreateDialogProps {
   open: boolean;
@@ -103,7 +103,7 @@ export function DepartmentFormDialog({
     } else {
       form.reset(defaultValues);
     }
-  }, [open, department, form]);
+  }, [open, department, form, defaultValues]);
 
   const watchedName = form.watch("name");
 

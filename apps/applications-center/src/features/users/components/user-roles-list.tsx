@@ -1,39 +1,43 @@
-"use client"
+"use client";
 
-import { IGRPBadgePrimitive, IGRPButtonPrimitive, IGRPIcon } from "@igrp/igrp-framework-react-design-system"
-import { RoleDTO } from "@igrp/platform-access-management-client-ts"
-import { useState, useMemo } from "react"
-import { cn, getStatusColor, showStatus } from "@/lib/utils"
-import { useUserRoles } from "../use-users"
+import {
+  IGRPBadgePrimitive,
+  IGRPButtonPrimitive,
+  IGRPIcon,
+} from "@igrp/igrp-framework-react-design-system";
+import type { RoleDTO } from "@igrp/platform-access-management-client-ts";
+import { useMemo, useState } from "react";
+import { cn, getStatusColor, showStatus } from "@/lib/utils";
+import { useUserRoles } from "../use-users";
 
 interface RoleNode extends RoleDTO {
-  children: RoleNode[]
+  children: RoleNode[];
 }
 
 function buildRoleHierarchy(roles: RoleDTO[]): RoleNode[] {
-  const roleMap = new Map<string, RoleNode>()
-  const rootRoles: RoleNode[] = []
+  const roleMap = new Map<string, RoleNode>();
+  const rootRoles: RoleNode[] = [];
 
   roles.forEach((role) => {
-    roleMap.set(role.name, { ...role, children: [] })
-  })
+    roleMap.set(role.code, { ...role, children: [] });
+  });
 
   roles.forEach((role) => {
-    const node = roleMap.get(role.name)!
+    const node = roleMap.get(role.code)!;
     if (role.parentName && roleMap.has(role.parentName)) {
-      const parent = roleMap.get(role.parentName)!
-      parent.children.push(node)
+      const parent = roleMap.get(role.parentName)!;
+      parent.children.push(node);
     } else {
-      rootRoles.push(node)
+      rootRoles.push(node);
     }
-  })
+  });
 
-  return rootRoles
+  return rootRoles;
 }
 
 interface RolesListProps {
-  username: string
-  level?: number
+  username: string;
+  level?: number;
 }
 
 export function UserRolesList({ username, level = 0 }: RolesListProps) {
@@ -44,7 +48,7 @@ export function UserRolesList({ username, level = 0 }: RolesListProps) {
 
   const roles = data ?? [];
 
-  const hierarchy = useMemo(() => buildRoleHierarchy(roles), [roles])
+  const hierarchy = useMemo(() => buildRoleHierarchy(roles), [roles]);
 
   if (roles.length === 0) {
     return (
@@ -52,10 +56,12 @@ export function UserRolesList({ username, level = 0 }: RolesListProps) {
         <IGRPIcon iconName="AlertCircle" className="h-5 w-5 shrink-0" />
         <div>
           <p className="text-sm font-medium">Sem perfís atribuídos</p>
-          <p className="text-xs">Este utilizador ainda não tem perfís atribuídos.</p>
+          <p className="text-xs">
+            Este utilizador ainda não tem perfís atribuídos.
+          </p>
         </div>
       </div>
-    )
+    );
   }
 
   return (
@@ -64,17 +70,17 @@ export function UserRolesList({ username, level = 0 }: RolesListProps) {
         <UserRoleItem key={role.id} role={role} level={level} />
       ))}
     </div>
-  )
+  );
 }
 
 interface UserRoleItemProps {
-  role: RoleNode
-  level: number
+  role: RoleNode;
+  level: number;
 }
 
 function UserRoleItem({ role, level }: UserRoleItemProps) {
-  const [isExpanded, setIsExpanded] = useState(false)
-  const hasChildren = role.children && role.children.length > 0
+  const [isExpanded, setIsExpanded] = useState(false);
+  const hasChildren = role.children && role.children.length > 0;
 
   return (
     <div className="flex flex-col gap-1">
@@ -92,9 +98,11 @@ function UserRoleItem({ role, level }: UserRoleItemProps) {
             onClick={() => setIsExpanded(!isExpanded)}
             className="h-6 w-6 p-0 shrink-0"
           >
-            {isExpanded
-              ? <IGRPIcon iconName="ChevronUp" />
-              : <IGRPIcon iconName="ChevronRight" />}
+            {isExpanded ? (
+              <IGRPIcon iconName="ChevronUp" />
+            ) : (
+              <IGRPIcon iconName="ChevronRight" />
+            )}
           </IGRPButtonPrimitive>
         ) : (
           <div className="h-6 w-6 shrink-0" />
@@ -104,7 +112,9 @@ function UserRoleItem({ role, level }: UserRoleItemProps) {
           <div
             className={cn(
               "rounded-md p-2 shrink-0",
-              level === 0 ? "bg-primary/10 text-primary" : "bg-muted text-muted-foreground",
+              level === 0
+                ? "bg-primary/10 text-primary"
+                : "bg-muted text-muted-foreground",
             )}
           >
             <IGRPIcon iconName="Shield" className="h-4 w-4" />
@@ -121,7 +131,11 @@ function UserRoleItem({ role, level }: UserRoleItemProps) {
               </IGRPBadgePrimitive>
             </div>
 
-            {role.description && <p className="text-sm text-muted-foreground">{role.description}</p>}
+            {role.description && (
+              <p className="text-sm text-muted-foreground">
+                {role.description}
+              </p>
+            )}
 
             <div className="flex items-center gap-3 text-xs text-muted-foreground">
               <div className="flex items-center gap-1">
@@ -131,12 +145,14 @@ function UserRoleItem({ role, level }: UserRoleItemProps) {
               <div className="flex items-center gap-1">
                 <IGRPIcon iconName="Shield" className="h-3 w-3" />
                 <span>
-                  {role.permissions.length} {role.permissions.length === 1 ? "permissão" : "permissões"}
+                  {role.permissions.length}{" "}
+                  {role.permissions.length === 1 ? "permissão" : "permissões"}
                 </span>
               </div>
               {role.parentName && (
                 <div className="text-xs">
-                  Associados: <span className="font-mono">{role.parentName}</span>
+                  Associados:{" "}
+                  <span className="font-mono">{role.parentName}</span>
                 </div>
               )}
             </div>
@@ -153,10 +169,7 @@ function UserRoleItem({ role, level }: UserRoleItemProps) {
                   </IGRPBadgePrimitive>
                 ))}
                 {role.permissions.length > 3 && (
-                  <IGRPBadgePrimitive
-                    variant="secondary"
-                    className="text-xs"
-                  >
+                  <IGRPBadgePrimitive variant="secondary" className="text-xs">
                     +{role.permissions.length - 3} more
                   </IGRPBadgePrimitive>
                 )}
@@ -174,5 +187,5 @@ function UserRoleItem({ role, level }: UserRoleItemProps) {
         </div>
       )}
     </div>
-  )
+  );
 }

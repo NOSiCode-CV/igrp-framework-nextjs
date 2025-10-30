@@ -42,7 +42,7 @@ export const useInviteUser = () => {
       inviteUser(user),
     onSuccess: async () => {
       await queryClient.invalidateQueries({ queryKey: ["users"] });
-      await queryClient.refetchQueries({ queryKey: ["users"] });  
+      await queryClient.refetchQueries({ queryKey: ["users"] });
     },
   });
 };
@@ -115,8 +115,7 @@ export const useUpdateUser = () => {
     }) => updateUser(username, user),
     onSuccess: async () => {
       await queryClient.invalidateQueries({ queryKey: ["users"] });
-      await queryClient.refetchQueries({queryKey: ["users"] });
+      await queryClient.refetchQueries({ queryKey: ["users"] });
     },
   });
 };
-

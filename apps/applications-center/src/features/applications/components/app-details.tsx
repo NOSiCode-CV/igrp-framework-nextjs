@@ -52,10 +52,10 @@ export function ApplicationDetails({ code }: { code: string }) {
 
   const tabItems: IGRPTabItem[] = [
     {
-      label: 'Menus',
-      value: 'menus',
+      label: "Menus",
+      value: "menus",
       content: <MenuList app={app} />,
-    },    
+    },
   ];
 
   return (
@@ -109,7 +109,9 @@ export function ApplicationDetails({ code }: { code: string }) {
               </div>
               <div>
                 <h3 className="font-normal text-muted-foreground">Estado</h3>
-                <IGRPBadgePrimitive className={getStatusColor(status || "ACTIVE")}>
+                <IGRPBadgePrimitive
+                  className={getStatusColor(status || "ACTIVE")}
+                >
                   {status}
                 </IGRPBadgePrimitive>
               </div>

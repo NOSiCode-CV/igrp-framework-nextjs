@@ -124,7 +124,6 @@ function IGRPText({
       className={cn(
         igrpTextVariants({ size, weight, align, spacing }),
         colorClass.text,
-        colorClass.textDark,
         animate && !isVisible && 'opacity-0 translate-y-4',
         animate && isVisible && 'opacity-100 translate-y-0',
         className,

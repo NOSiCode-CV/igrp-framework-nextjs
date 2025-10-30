@@ -1,5 +1,6 @@
 import { type ReactNode } from 'react';
 
+import { cn } from '../../lib/utils';
 import {
   Table,
   TableBody,
@@ -9,7 +10,6 @@ import {
   TableHeader,
   TableRow,
 } from '../primitives/table';
-import { cn } from '../../lib/utils';
 
 type IGRPTableProps<T> = {
   content: T[];

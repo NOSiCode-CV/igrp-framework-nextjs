@@ -12,7 +12,7 @@ import {
 import { ButtonLinkTooltip } from "@/components/button-link-tooltip";
 import { formatSlug } from "@/features/applications/app-utils";
 import { ROUTES } from "@/lib/constants";
-import { cn, showStatus, getStatusColor } from "@/lib/utils";
+import { cn, getStatusColor, showStatus } from "@/lib/utils";
 
 // TODO: see picture if exists
 
@@ -46,7 +46,9 @@ export function ApplicationCard({ app }: { app: IGRPApplicationArgs }) {
       </IGRPCardContentPrimitive>
       <IGRPCardFooterPrimitive className="flex items-center justify-between px-4">
         <div className="flex items-center">
-          <IGRPBadgePrimitive className={cn(getStatusColor(status), "capitalize")}>
+          <IGRPBadgePrimitive
+            className={cn(getStatusColor(status), "capitalize")}
+          >
             {showStatus(status)}
           </IGRPBadgePrimitive>
         </div>

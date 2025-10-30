@@ -211,7 +211,7 @@ export function MenuFormDialog({
         igrpToast({
           type: "success",
           title: "Menu Atualizado",
-          description: "O menu foi atualizado com sucesso."
+          description: "O menu foi atualizado com sucesso.",
         });
       } else {
         try {
@@ -222,20 +222,19 @@ export function MenuFormDialog({
           igrpToast({
             type: "success",
             title: "Criação de Menu",
-            description: "Menu criado com sucesso."            
+            description: "Menu criado com sucesso.",
           });
         } catch (err) {
           igrpToast({
             type: "error",
             title: "Falha na criação de menu.",
-            description: (err as Error).message
+            description: (err as Error).message,
           });
         }
       }
 
       form.reset();
       onOpenChange(false);
-
     } catch (err) {
       igrpToast({
         type: "error",
@@ -249,11 +248,13 @@ export function MenuFormDialog({
   }
 
   const isMenuPage = form.watch("type") === menuTypeSchema.enum.MENU_PAGE;
-  const isExternalPage = form.watch("type") === menuTypeSchema.enum.EXTERNAL_PAGE;
+  const isExternalPage =
+    form.watch("type") === menuTypeSchema.enum.EXTERNAL_PAGE;
   const selectedIcon = form.watch("icon");
 
-  const currentIcon = useMemo(() => LUCIDE_ICON_OPTIONS
-    .find((icon) => icon.value === selectedIcon), [selectedIcon],
+  const currentIcon = useMemo(
+    () => LUCIDE_ICON_OPTIONS.find((icon) => icon.value === selectedIcon),
+    [selectedIcon],
   );
 
   const setDefaultFromName = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -784,7 +785,7 @@ export function MenuFormDialog({
                           }
                           disabled={openType === MENU_VIEW}
                         />
-                      </IGRPFormControlPrimitive>                      
+                      </IGRPFormControlPrimitive>
                       <IGRPFormMessagePrimitive />
                     </IGRPFormItemPrimitive>
                   )}

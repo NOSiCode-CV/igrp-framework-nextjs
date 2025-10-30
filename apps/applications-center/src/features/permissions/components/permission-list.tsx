@@ -25,7 +25,7 @@ import { useState } from "react";
 
 import { ButtonLink } from "@/components/button-link";
 import { STATUS_OPTIONS } from "@/lib/constants";
-import { showStatus, getStatusColor } from "@/lib/utils";
+import { getStatusColor, showStatus } from "@/lib/utils";
 import type { PermissionArgs } from "../permissions-schemas";
 import { usePermissions } from "../use-permission";
 import { PermissionDeleteDialog } from "./permisssion-delete-dialog";

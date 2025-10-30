@@ -5,7 +5,7 @@ import type {
 } from "@igrp/platform-access-management-client-ts";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 
-import { addRolesToMenu, createMenu, deleteMenu, getMenus, removeRolesFromMenu, updateMenu } from "@/actions/menus";
+import { addDepartamentsToMenu, addRolesToMenu, createMenu, deleteMenu, getMenus, getMenusByDepartment, removeDepartamentsFromMenu, removeRolesFromMenu, updateMenu } from "@/actions/menus";
 
 export const useMenus = (params?: MenuFilters) => {
   const key = ["menus", params?.applicationCode ?? null] as const;
@@ -75,8 +75,6 @@ export const useDeleteMenu = () => {
   });
 };
 
-
-
 export function useAddRolesToMenu() {
   const queryClient = useQueryClient();
 
@@ -121,3 +119,37 @@ export function useRemoveRolesFromMenu() {
     },
   });
 }
+
+export const useAddDepartmentsToMenu = () => {
+  const queryClient = useQueryClient();
+
+  return useMutation({
+    mutationFn: ({ menuCode, departmentIds }: { menuCode: string; departmentIds: string[] }) =>
+      addDepartamentsToMenu(menuCode, departmentIds),
+    onSuccess: (_, { menuCode }) => {
+      queryClient.invalidateQueries({ queryKey: ["menus"] });
+      queryClient.invalidateQueries({ queryKey: ["menus", menuCode] });
+    },
+  });
+};
+
+export const useRemoveDepartmentsFromMenu = () => {
+  const queryClient = useQueryClient();
+
+  return useMutation({
+    mutationFn: ({ menuCode, departmentIds }: { menuCode: string; departmentIds: string[] }) =>
+      removeDepartamentsFromMenu(menuCode, departmentIds),
+    onSuccess: (_, { menuCode }) => {
+      queryClient.invalidateQueries({ queryKey: ["menus"] });
+      queryClient.invalidateQueries({ queryKey: ["menus", menuCode] });
+    },
+  });
+};
+
+export const useDepartmentMenus = (departmentCode?: string) => {
+  return useQuery<IGRPMenuCRUDArgs[]>({
+    queryKey: ["department-menus", departmentCode],
+    queryFn: () => getMenusByDepartment(departmentCode!),
+    enabled: !!departmentCode,
+  });
+};

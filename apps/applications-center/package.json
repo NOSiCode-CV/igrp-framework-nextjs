@@ -24,7 +24,7 @@
     "@igrp/framework-next-types": "0.1.0-beta.29",
     "@igrp/framework-next-ui": "0.1.0-beta.29",
     "@igrp/igrp-framework-react-design-system": "0.1.0-beta.29",
-    "@igrp/platform-access-management-client-ts": "0.1.0-beta.43",
+    "@igrp/platform-access-management-client-ts": "0.1.0-beta.44",
     "@tanstack/react-query": "^5.90.5",
     "@tanstack/react-table": "^8.21.3",
     "@tanstack/react-virtual": "^3.13.12",

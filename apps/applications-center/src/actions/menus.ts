@@ -11,7 +11,6 @@ import {
   mapperMenuCRUD,
 } from "@/features/menus/menu-mapper";
 import { getClientAccess } from "./access-client";
-import { MenuArgs } from "@/features/menus/menu-schemas";
 
 export async function getMenus(params?: MenuFilters) {
   const client = await getClientAccess();
@@ -96,6 +95,56 @@ export async function addRolesToMenu(
   catch (error) {
     console.error(
       "[menu-assign-roles] Não foi possível atribuir os papéis ao menu:",
+      error,
+    );
+    throw error;
+  }
+}
+
+export async function addDepartamentsToMenu(
+  menuCode: string,
+  departmentIds: string[],
+): Promise<MenuEntryDTO> {
+  const client = await getClientAccess();
+  try {
+    const {data} = await client.menus.addDepartmentsToMenu(menuCode, departmentIds);
+    return data;
+  } catch (error) {
+    console.error(
+      "[menu-assign-departments] Não foi possível atribuir os departamentos ao menu:",
+      error,
+    );
+    throw error;
+  }
+}
+
+export async function removeDepartamentsFromMenu(
+  menuCode: string,
+  departmentIds: string[],
+): Promise<MenuEntryDTO> {
+  const client = await getClientAccess();
+  try {
+    const {data} = await client.menus.removeDepartmentsFromMenu(menuCode, departmentIds);
+    return data;
+  } catch (error) {
+    console.error(
+      "[menu-remove-departments] Não foi possível remover os departamentos do menu:",
+      error,
+    );
+    throw error;
+  }
+}
+
+export async function getMenusByDepartment(departmentCode: string) {
+  const client = await getClientAccess();
+
+  try {
+    const result = await client.menus.getMenus({departmentCode: departmentCode});
+    const menus = mapperListMenusCRUD(result);
+    return menus;
+  } catch (error) {
+    console.error(
+      "[menus-by-department] Erro ao carregar os menus da aplicação.:",
       error,
     );
     throw error;

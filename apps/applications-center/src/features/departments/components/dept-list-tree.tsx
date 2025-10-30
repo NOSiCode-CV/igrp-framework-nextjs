@@ -228,31 +228,29 @@ export function DepartmentListTree() {
             <div className="container mx-auto px-6">
               <IGRPBreadcrumbPrimitive>
                   <IGRPBreadcrumbListPrimitive>
-                    <IGRPBreadcrumbItemPrimitive>
+                    <IGRPBreadcrumbItemPrimitive className="text-xs">
                       Departamentos
                     </IGRPBreadcrumbItemPrimitive>
                     {selectedDepartment?.parent_code && (
                       <>
                     <IGRPBreadcrumbSeparatorPrimitive />
-                      <IGRPBreadcrumbItemPrimitive>
+                      <IGRPBreadcrumbItemPrimitive className="text-xs">
                         {selectedDepartment.parent_code}
                       </IGRPBreadcrumbItemPrimitive>
                       </>
                     )}
                     <IGRPBreadcrumbSeparatorPrimitive />
-                    <IGRPBreadcrumbItemPrimitive>
+                    <IGRPBreadcrumbItemPrimitive className="text-xs">
                       {selectedDepartment.name}
                     </IGRPBreadcrumbItemPrimitive>
-                    
                     
                   </IGRPBreadcrumbListPrimitive>
                 </IGRPBreadcrumbPrimitive>
               <div className="flex items-start justify-between mb-6">
                 
                 <div>
-                  
                   <div className="flex items-center gap-3">
-                    <h1 className="text-2xl font-bold">
+                    <h1 className="text-2xl mt-2 font-bold">
                       {selectedDepartment.name}
                     </h1>
                     

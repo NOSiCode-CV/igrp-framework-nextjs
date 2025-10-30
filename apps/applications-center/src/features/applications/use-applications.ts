@@ -1,21 +1,23 @@
 // import type { IGRPApplicationArgs } from "@igrp/framework-next-types";
-import type { UpdateApplicationRequest } from "@igrp/platform-access-management-client-ts";
+import type { ApplicationFilters, UpdateApplicationRequest } from "@igrp/platform-access-management-client-ts";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 
 import {
+  addDepartmentsToApplication,
   createApplication,
   getApplicationByCode,
   getApplications,
   getAvailableMenus,
+  removeDepartmentsFromApplication,
   updateApplication,
 } from "@/actions/applications";
 import type { ApplicationArgs } from "./app-schemas";
 import { MenuArgs } from "../menus/menu-schemas";
 
-export const useApplications = () => {
+export const useApplications = (filters?: ApplicationFilters) => {
   return useQuery<ApplicationArgs[]>({
-    queryKey: ["applications"],
-    queryFn: () => getApplications(),
+    queryKey: ["applications", filters],
+    queryFn: () => getApplications(filters),
   });
 };
 
@@ -62,3 +64,29 @@ export const useApplicationAvailableMenus = (code?: string) => {
     enabled: !!code,
   });
 }
+
+export const useAddDepartmentsToApplication = () => {
+  const queryClient = useQueryClient();
+
+  return useMutation({
+    mutationFn: ({ appCode, departmentIds }: { appCode: string; departmentIds: string[] }) =>
+      addDepartmentsToApplication(appCode, departmentIds),
+    onSuccess: (_, { appCode }) => {
+      queryClient.invalidateQueries({ queryKey: ["applications"] });
+      queryClient.invalidateQueries({ queryKey: ["applications", appCode] });
+    },
+  });
+};
+
+export const useRemoveDepartmentsFromApplication = () => {
+  const queryClient = useQueryClient();
+
+  return useMutation({
+    mutationFn: ({ appCode, departmentIds }: { appCode: string; departmentIds: string[] }) =>
+      removeDepartmentsFromApplication(appCode, departmentIds),
+    onSuccess: (_, { appCode }) => {
+      queryClient.invalidateQueries({ queryKey: ["applications"] });
+      queryClient.invalidateQueries({ queryKey: ["applications", appCode] });
+    },
+  });
+};

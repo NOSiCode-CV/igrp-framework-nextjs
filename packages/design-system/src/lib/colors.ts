@@ -116,8 +116,8 @@ export const IGRPColors = {
   solid: {
     primary: {
       bg: 'bg-primary',
-      text: 'text-primary dark:text-primary-foreground',
-      textDark: 'dark:text-primary/40',
+      text: 'text-foreground',
+      textDark: '',
       border: 'border-primary',
       bgForeground: 'bg-primary',
       textBadge: 'text-primary-foreground',

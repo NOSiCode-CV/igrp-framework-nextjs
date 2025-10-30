@@ -30,7 +30,7 @@ export type IGRPOptionsProps = {
   value: string;
   color?: string;
   status?: IGRPColorVariants;
-  icon?: IGRPIconName | string;
+  icon?: IGRPIconName | string;   
   group?: string;
   description?: string;
   image?: string;

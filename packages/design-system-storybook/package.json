@@ -24,7 +24,7 @@
     "test-storybook": "test-storybook",
     "lint": "eslint . --ext .ts,.tsx",
     "format": "prettier --write .",
-    "clean-all": "rimraf node_modules && rimraf dist && rimraf tsconfig.tsbuildinfo"
+    "clean-all": "rimraf node_modules"
   },
   "dependencies": {
     "@hookform/resolvers": "5.2.2",
@@ -39,7 +39,7 @@
     "recharts": "^2.15.2",
     "tailwind-merge": "3.3.1",
     "tailwindcss": "^4.1.16",
-    "zod": "^4.1.12"
+    "zod": "^ 4.1.12"
   },
   "devDependencies": {
     "@chromatic-com/storybook": "^4.1.1",

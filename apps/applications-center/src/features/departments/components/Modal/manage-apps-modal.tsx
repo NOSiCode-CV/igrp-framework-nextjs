@@ -189,7 +189,6 @@ export function ManageAppsModal({
                 <IGRPTableHeaderPrimitive>
                   <IGRPTableRowPrimitive>
                     <IGRPTableHeadPrimitive className="w-12 text-center">
-                      <IGRPIcon iconName="Check" className="w-4 h-4 mx-auto" strokeWidth={2} />
                     </IGRPTableHeadPrimitive>
                     <IGRPTableHeadPrimitive>Aplicação</IGRPTableHeadPrimitive>
                     <IGRPTableHeadPrimitive className="w-32">Tipo</IGRPTableHeadPrimitive>

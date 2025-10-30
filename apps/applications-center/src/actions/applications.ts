@@ -8,7 +8,6 @@ import type {
 import type { ApplicationArgs } from "@/features/applications/app-schemas";
 import { getClientAccess } from "./access-client";
 import { MenuArgs } from "@/features/menus/menu-schemas";
-import { DepartmentArgs } from "@/features/departments/dept-schemas";
 
 export async function getApplications(filters?: ApplicationFilters): Promise<ApplicationArgs[]> {
   const client = await getClientAccess();

@@ -27,6 +27,7 @@ import { CopyToClipboard } from "@/components/copy-to-clipboard";
 import { RolesListTree } from "@/features/roles/components/role-tree-list";
 import { MenuPermissions } from "./dept-menu";
 import { useRoles } from "@/features/roles/use-roles";
+import { ManageAppsModal } from "./Modal/manage-apps-modal";
 
 export type DepartmentWithChildren = DepartmentArgs & {
   children?: DepartmentWithChildren[];
@@ -45,9 +46,11 @@ export function DepartmentListTree() {
   } | null>(null);
   const [searchTerm, setSearchTerm] = useState("");
 
+  const [showAppsModal, setShowAppsModal] = useState(false);
+
   const { data: departments, isLoading, error } = useDepartments();
   const { data: selectedDepartment, isLoading: isLoadSelectedDep } = useDepartmentByCode(selectedDeptCode || "");
-  
+
   const buildTree = (depts: DepartmentArgs[]): DepartmentWithChildren[] => {
     const map = new Map<string, DepartmentWithChildren>();
     const roots: DepartmentWithChildren[] = [];
@@ -156,14 +159,12 @@ export function DepartmentListTree() {
       label: "Menus",
       value: "menus",
       content: (
-        <MenuPermissions 
+        <MenuPermissions
           departmentCode={selectedDeptCode ?? ""}
-          parentDepartmentCode={selectedDepartment?.parent_code}
         />
       ),
     }
   ];
-
 
   return (
     <div className="flex flex-col h-screen  overflow-hidden">
@@ -179,11 +180,11 @@ export function DepartmentListTree() {
             <p className="text-muted-foreground text-sm mb-4">Ver e gerir todos os departamentos do sistema.</p>
 
             <ButtonLink
-                onClick={handleOpenCreate}
-                icon="Plus"
-                href="#"
-                label="Novo Departamento"
-              />
+              onClick={handleOpenCreate}
+              icon="Plus"
+              href="#"
+              label="Novo Departamento"
+            />
           </div>
 
           <div className="mt-4">
@@ -222,39 +223,39 @@ export function DepartmentListTree() {
         </div>
 
         <div className="flex-1 overflow-y-auto">
-          { isLoadSelectedDep &&
+          {isLoadSelectedDep &&
             <AppCenterLoading descrption="Carregando departamentos..." />
           }
           {!isLoadSelectedDep && selectedDepartment ? (
             <div className="container mx-auto px-6">
               <IGRPBreadcrumbPrimitive>
-                  <IGRPBreadcrumbListPrimitive>
-                    <IGRPBreadcrumbItemPrimitive className="text-xs">
-                      Departamentos
-                    </IGRPBreadcrumbItemPrimitive>
-                    {selectedDepartment?.parent_code && (
-                      <>
-                    <IGRPBreadcrumbSeparatorPrimitive />
+                <IGRPBreadcrumbListPrimitive>
+                  <IGRPBreadcrumbItemPrimitive className="text-xs">
+                    Departamentos
+                  </IGRPBreadcrumbItemPrimitive>
+                  {selectedDepartment?.parent_code && (
+                    <>
+                      <IGRPBreadcrumbSeparatorPrimitive />
                       <IGRPBreadcrumbItemPrimitive className="text-xs">
                         {selectedDepartment.parent_code}
                       </IGRPBreadcrumbItemPrimitive>
-                      </>
-                    )}
-                    <IGRPBreadcrumbSeparatorPrimitive />
-                    <IGRPBreadcrumbItemPrimitive className="text-xs">
-                      {selectedDepartment.name}
-                    </IGRPBreadcrumbItemPrimitive>
-                    
-                  </IGRPBreadcrumbListPrimitive>
-                </IGRPBreadcrumbPrimitive>
+                    </>
+                  )}
+                  <IGRPBreadcrumbSeparatorPrimitive />
+                  <IGRPBreadcrumbItemPrimitive className="text-xs">
+                    {selectedDepartment.name}
+                  </IGRPBreadcrumbItemPrimitive>
+
+                </IGRPBreadcrumbListPrimitive>
+              </IGRPBreadcrumbPrimitive>
               <div className="flex items-start justify-between mb-6">
-                
+
                 <div>
                   <div className="flex items-center gap-3">
                     <h1 className="text-2xl mt-2 font-bold">
                       {selectedDepartment.name}
                     </h1>
-                    
+
                     {IGRPBadge ? (
                       <IGRPBadge
                         variant="solid"
@@ -298,7 +299,7 @@ export function DepartmentListTree() {
                     </span>
                     <CopyToClipboard value={selectedDepartment?.code || ""} />
                   </div>
-                  
+
                   <p className="text-muted-foreground text-sm">{selectedDepartment?.description || "Sem descrição."}</p>
                 </div>
 
@@ -306,6 +307,7 @@ export function DepartmentListTree() {
                   <IGRPButtonPrimitive
                     onClick={() => handleEdit(selectedDepartment)}
                     variant="outline"
+                    className="cursor-pointer"
                   >
                     <IGRPIcon iconName="AppWindow" className="w-4 h-4" strokeWidth={2} />
                     Editar
@@ -313,14 +315,12 @@ export function DepartmentListTree() {
 
                   <IGRPButtonPrimitive
                     variant="outline"
-                    //onClick={() => setShowAppsModal(true)}
-                    className="gap-2"
+                    onClick={() => setShowAppsModal(true)}
+                    className="gap-2 cursor-pointer"
                   >
                     <IGRPIcon iconName="AppWindow" className="w-4 h-4" strokeWidth={2} />
                     Gerenciar Apps
                   </IGRPButtonPrimitive>
-                  
-                  
                 </div>
               </div>
 
@@ -367,6 +367,13 @@ export function DepartmentListTree() {
           deptToDelete={deptToDelete}
         />
       )}
+
+      <ManageAppsModal
+        departmentCode={selectedDeptCode ?? ""}
+        open={showAppsModal}
+        onOpenChange={setShowAppsModal}
+      />
+
     </div>
   );
 }

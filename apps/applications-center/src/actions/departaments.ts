@@ -8,7 +8,6 @@ import type {
 
 import type { DepartmentArgs } from "@/features/departments/dept-schemas";
 import { getClientAccess } from "./access-client";
-import { MenuArgs } from "@/features/menus/menu-schemas";
 import { ApplicationArgs } from "@/features/applications/app-schemas";
 
 export async function getDepartments() {

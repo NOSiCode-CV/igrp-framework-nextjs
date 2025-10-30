@@ -31,14 +31,12 @@ import { ManageMenusModal } from "./Modal/manage-menus-modal";
 
 interface MenuPermissionsProps {
   departmentCode: string;
-  parentDepartmentCode?: string | null;
 }
 
 export type MenuWithChildren = MenuEntryDTO & { children?: MenuWithChildren[] };
 
 export function MenuPermissions({ 
-  departmentCode
-  
+  departmentCode,
 }: MenuPermissionsProps) {
   const { igrpToast } = useIGRPToast();
   
@@ -47,7 +45,6 @@ export function MenuPermissions({
   const [menuRoleAssignments, setMenuRoleAssignments] = useState<Map<string, Set<string>>>(new Map());
   const [expandedMenus, setExpandedMenus] = useState<Set<string>>(new Set());
   
-  const [showAppsModal, setShowAppsModal] = useState(false);
   const [showMenusModal, setShowMenusModal] = useState(false);
   
   const { data: menus, isLoading: loading } = useDepartmentMenus(departmentCode || "");
@@ -248,14 +245,6 @@ export function MenuPermissions({
                 <IGRPIcon iconName="Menu" className="w-4 h-4" strokeWidth={2} />
                 Gerenciar Menus
               </IGRPButtonPrimitive>
-              <IGRPButtonPrimitive
-                variant="outline"
-                onClick={() => setShowAppsModal(true)}
-                className="gap-2"
-              >
-                <IGRPIcon iconName="AppWindow" className="w-4 h-4" strokeWidth={2} />
-                Gerenciar Apps
-              </IGRPButtonPrimitive>
             </div>
           </div>
         ) : (
@@ -317,7 +306,7 @@ export function MenuPermissions({
 
             <div className="flex justify-between items-center pt-2">
               <div className="text-sm text-muted-foreground">
-                {menus?.length} menu{menus?.length !== 1 ? 's' : ''} • {roles?.length || 0} perfil{roles?.length !== 1 ? 'is' : ''}
+                {menus?.length} menu{menus?.length !== 1 ? 's' : ''} • {roles?.length || 0} perf{roles?.length !== 1 ? 'is' : 'il'}
               </div>
               
               <div className="flex gap-2">
@@ -360,12 +349,6 @@ export function MenuPermissions({
           </>
         )}
       </div>
-
-      <ManageAppsModal
-        departmentCode={departmentCode}
-        open={showAppsModal}
-        onOpenChange={setShowAppsModal}
-      />
 
       <ManageMenusModal
         departmentCode={departmentCode}

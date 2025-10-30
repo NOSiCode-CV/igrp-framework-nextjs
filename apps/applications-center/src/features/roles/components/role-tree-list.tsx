@@ -24,7 +24,6 @@ import {
 import { useState } from "react";
 import { ButtonLink } from "@/components/button-link";
 import { STATUS_OPTIONS } from "@/lib/constants";
-import { showStatus, statusClass } from "@/lib/utils";
 import type { RoleArgs } from "../role-schemas";
 import { useRoles } from "../use-roles";
 import { RoleDeleteDialog } from "./role-delete-dialog";
@@ -233,8 +232,10 @@ export function RolesListTree({ departmentCode }: RolesListProps) {
             ))}
           </div>
         ) : roleEmpty ? (
-          <div className="text-center py-6 text-muted-foreground">
-            <div>Nenhum perfil encontrado </div>
+          <div className="flex flex-col items-center justify-center py-16 text-muted-foreground border rounded-lg">
+            <IGRPIcon iconName="UserLock" className="w-16 h-16 mb-4 opacity-30" strokeWidth={1.5} />
+            <p className="text-lg font-medium mb-2">Nenhum perfil criado</p>
+            <p className="text-sm mb-4">Ainda não existem perfis criados.</p>
             {searchTerm ? (
               "Tente ajustar a sua pesquisa."
             ) : (

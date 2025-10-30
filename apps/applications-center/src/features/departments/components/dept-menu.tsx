@@ -7,7 +7,6 @@ import {
   cn,
   IGRPBadgePrimitive,
   IGRPButtonPrimitive,
-  IGRPCheckboxPrimitive,
   IGRPIcon,
   IGRPInputPrimitive,
   IGRPSelectPrimitive,
@@ -17,7 +16,6 @@ import {
   IGRPSelectItemPrimitive,
   IGRPSkeletonPrimitive,
   IGRPTableBodyPrimitive,
-  IGRPTableCellPrimitive,
   IGRPTableHeaderPrimitive,
   IGRPTableHeadPrimitive,
   IGRPTablePrimitive,
@@ -38,8 +36,8 @@ interface MenuPermissionsProps {
 export type MenuWithChildren = MenuEntryDTO & { children?: MenuWithChildren[] };
 
 export function MenuPermissions({ 
-  departmentCode,
-  parentDepartmentCode
+  departmentCode
+  
 }: MenuPermissionsProps) {
   const { igrpToast } = useIGRPToast();
   
@@ -54,6 +52,7 @@ export function MenuPermissions({
   const { data: menus, isLoading: loading } = useDepartmentMenus(departmentCode || "");
   const { data: roles, isLoading: isLoadingRoles } = useRoles({ departmentCode: departmentCode || "" });
   const { data: assignedApps, isLoading: loadingApps } = useApplications({ departmentCode: departmentCode || "" });
+  
   const addRolesMutation = useAddRolesToMenu();
   const removeRolesMutation = useRemoveRolesFromMenu();
   const saving = addRolesMutation.isPending || removeRolesMutation.isPending;
@@ -92,8 +91,6 @@ export function MenuPermissions({
 
     return roots;
   };
-
-  
 
   const handleSave = async () => {
     try {
@@ -152,7 +149,6 @@ export function MenuPermissions({
     }
   };
 
- 
 
   const filteredByApp = selectedApp
     ? (menus || []).filter(menu => menu.applicationCode === selectedApp)
@@ -213,20 +209,8 @@ export function MenuPermissions({
           </div>
         </div>
 
-        {/* {isChildDepartment && (
-          <div className="flex items-start gap-3 p-4 rounded-lg bg-muted/50 border">
-            <IGRPIcon iconName="Info" className="w-5 h-5 text-primary mt-0.5 shrink-0" strokeWidth={2} />
-            <div>
-              <div className="font-medium">Departamento Filho</div>
-              <div className="text-sm text-muted-foreground">
-                Este departamento herda de {parentDepartmentCode}. Configure as permissões abaixo.
-              </div>
-            </div>
-          </div>
-        )} */}
-
         <div className="flex flex-col sm:flex-row gap-4">
-          <div className="w-full sm:w-80">
+          {assignedApps?.length !== 0 && <div className="w-full sm:w-80">
             <label className="text-sm font-medium mb-2 block">
               Filtrar por aplicação
             </label>
@@ -250,6 +234,7 @@ export function MenuPermissions({
               </IGRPSelectContentPrimitive>
             </IGRPSelectPrimitive>
           </div>
+          }
 
           {!loading && menus && menus.length > 0 && (
             <div className="">

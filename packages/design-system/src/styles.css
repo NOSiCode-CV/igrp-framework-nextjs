@@ -378,6 +378,9 @@
   .right-4 {
     right: calc(var(--spacing) * 4);
   }
+  .right-8 {
+    right: calc(var(--spacing) * 8);
+  }
   .-bottom-12 {
     bottom: calc(var(--spacing) * -12);
   }
@@ -477,12 +480,6 @@
   .-mx-1 {
     margin-inline: calc(var(--spacing) * -1);
   }
-  .-mx-2 {
-    margin-inline: calc(var(--spacing) * -2);
-  }
-  .mx-0 {
-    margin-inline: calc(var(--spacing) * 0);
-  }
   .mx-1 {
     margin-inline: calc(var(--spacing) * 1);
   }
@@ -519,26 +516,20 @@
   .my-4 {
     margin-block: calc(var(--spacing) * 4);
   }
-  .-ms-2 {
-    margin-inline-start: calc(var(--spacing) * -2);
-  }
   .-ms-px {
     margin-inline-start: -1px;
   }
   .ms-1 {
     margin-inline-start: calc(var(--spacing) * 1);
   }
-  .ms-2\.5 {
-    margin-inline-start: calc(var(--spacing) * 2.5);
+  .ms-2 {
+    margin-inline-start: calc(var(--spacing) * 2);
   }
   .-me-2 {
     margin-inline-end: calc(var(--spacing) * -2);
   }
   .me-3 {
     margin-inline-end: calc(var(--spacing) * 3);
-  }
-  .me-20 {
-    margin-inline-end: calc(var(--spacing) * 20);
   }
   .-mt-0\.5 {
     margin-top: calc(var(--spacing) * -0.5);
@@ -582,9 +573,6 @@
   .mr-2 {
     margin-right: calc(var(--spacing) * 2);
   }
-  .-mb-2 {
-    margin-bottom: calc(var(--spacing) * -2);
-  }
   .mb-0 {
     margin-bottom: calc(var(--spacing) * 0);
   }
@@ -602,9 +590,6 @@
   }
   .mb-6 {
     margin-bottom: calc(var(--spacing) * 6);
-  }
-  .-ml-3 {
-    margin-left: calc(var(--spacing) * -3);
   }
   .-ml-4 {
     margin-left: calc(var(--spacing) * -4);
@@ -759,9 +744,6 @@
   .h-3 {
     height: calc(var(--spacing) * 3);
   }
-  .h-3\.5 {
-    height: calc(var(--spacing) * 3.5);
-  }
   .h-4 {
     height: calc(var(--spacing) * 4);
   }
@@ -890,9 +872,6 @@
   }
   .w-3 {
     width: calc(var(--spacing) * 3);
-  }
-  .w-3\.5 {
-    width: calc(var(--spacing) * 3.5);
   }
   .w-3\/4 {
     width: calc(3/4 * 100%);
@@ -1191,11 +1170,11 @@
   .list-none {
     list-style-type: none;
   }
+  .appearance-none {
+    appearance: none;
+  }
   .auto-rows-min {
     grid-auto-rows: min-content;
-  }
-  .grid-cols-3 {
-    grid-template-columns: repeat(3, minmax(0, 1fr));
   }
   .grid-cols-\[0_1fr\] {
     grid-template-columns: 0 1fr;
@@ -1280,9 +1259,6 @@
   }
   .gap-7 {
     gap: calc(var(--spacing) * 7);
-  }
-  .gap-8 {
-    gap: calc(var(--spacing) * 8);
   }
   .space-y-0 {
     :where(& > :not(:last-child)) {
@@ -3512,11 +3488,6 @@
       }
     }
   }
-  .first\:grow {
-    &:first-child {
-      flex-grow: 1;
-    }
-  }
   .first\:rounded-l-md {
     &:first-child {
       border-top-left-radius: calc(var(--radius) - 2px);
@@ -3945,12 +3916,6 @@
       box-shadow: var(--tw-inset-shadow), var(--tw-inset-ring-shadow), var(--tw-ring-offset-shadow), var(--tw-ring-shadow), var(--tw-shadow);
     }
   }
-  .focus-visible\:ring-\[2px\] {
-    &:focus-visible {
-      --tw-ring-shadow: var(--tw-ring-inset,) 0 0 0 calc(2px + var(--tw-ring-offset-width)) var(--tw-ring-color, currentcolor);
-      box-shadow: var(--tw-inset-shadow), var(--tw-inset-ring-shadow), var(--tw-ring-offset-shadow), var(--tw-ring-shadow), var(--tw-shadow);
-    }
-  }
   .focus-visible\:ring-\[3px\] {
     &:focus-visible {
       --tw-ring-shadow: var(--tw-ring-inset,) 0 0 0 calc(3px + var(--tw-ring-offset-width)) var(--tw-ring-color, currentcolor);
@@ -4020,6 +3985,12 @@
       outline-width: 1px;
     }
   }
+  .focus-visible\:outline-2 {
+    &:focus-visible {
+      outline-style: var(--tw-outline-style);
+      outline-width: 2px;
+    }
+  }
   .focus-visible\:outline-\[3px\] {
     &:focus-visible {
       outline-style: var(--tw-outline-style);
@@ -4070,6 +4041,16 @@
   .in-data-\[side\=right\]\:cursor-e-resize {
     :where(*[data-side="right"]) & {
       cursor: e-resize;
+    }
+  }
+  .in-data-\[slot\=card-content\]\:bg-transparent {
+    :where(*[data-slot="card-content"]) & {
+      background-color: transparent;
+    }
+  }
+  .in-data-\[slot\=popover-content\]\:bg-transparent {
+    :where(*[data-slot="popover-content"]) & {
+      background-color: transparent;
     }
   }
   .in-\[\[data-slot\=cropper\]\:focus-visible\]\:ring-\[3px\] {
@@ -4862,9 +4843,9 @@
       background-color: transparent;
     }
   }
-  .data-\[state\=active\]\:text-primary-foreground {
+  .data-\[state\=active\]\:text-muted-foreground {
     &[data-state="active"] {
-      color: var(--primary-foreground);
+      color: var(--muted-foreground);
     }
   }
   .data-\[state\=active\]\:shadow-none {
@@ -4928,11 +4909,6 @@
   .data-\[state\=closed\]\:animate-accordion-up {
     &[data-state="closed"] {
       animation: accordion-up var(--tw-animation-duration,var(--tw-duration,.2s))var(--tw-ease,ease-out)var(--tw-animation-delay,0s)var(--tw-animation-iteration-count,1)var(--tw-animation-direction,normal)var(--tw-animation-fill-mode,none);
-    }
-  }
-  .data-\[state\=closed\]\:animate-collapsible-up {
-    &[data-state="closed"] {
-      animation: collapsible-up var(--tw-animation-duration,var(--tw-duration,.2s))var(--tw-ease,ease-out)var(--tw-animation-delay,0s)var(--tw-animation-iteration-count,1)var(--tw-animation-direction,normal)var(--tw-animation-fill-mode,none);
     }
   }
   .data-\[state\=closed\]\:animate-out {
@@ -5034,11 +5010,6 @@
   .data-\[state\=open\]\:animate-accordion-down {
     &[data-state="open"] {
       animation: accordion-down var(--tw-animation-duration,var(--tw-duration,.2s))var(--tw-ease,ease-out)var(--tw-animation-delay,0s)var(--tw-animation-iteration-count,1)var(--tw-animation-direction,normal)var(--tw-animation-fill-mode,none);
-    }
-  }
-  .data-\[state\=open\]\:animate-collapsible-down {
-    &[data-state="open"] {
-      animation: collapsible-down var(--tw-animation-duration,var(--tw-duration,.2s))var(--tw-ease,ease-out)var(--tw-animation-delay,0s)var(--tw-animation-iteration-count,1)var(--tw-animation-direction,normal)var(--tw-animation-fill-mode,none);
     }
   }
   .data-\[state\=open\]\:animate-in {
@@ -5389,30 +5360,6 @@
       flex-wrap: wrap;
     }
   }
-  .max-md\:before\:inset-x-2 {
-    @media (width < 48rem) {
-      &::before {
-        content: var(--tw-content);
-        inset-inline: calc(var(--spacing) * 2);
-      }
-    }
-  }
-  .max-md\:before\:-top-4 {
-    @media (width < 48rem) {
-      &::before {
-        content: var(--tw-content);
-        top: calc(var(--spacing) * -4);
-      }
-    }
-  }
-  .max-md\:before\:h-px {
-    @media (width < 48rem) {
-      &::before {
-        content: var(--tw-content);
-        height: 1px;
-      }
-    }
-  }
   .max-sm\:sr-only {
     @media (width < 40rem) {
       position: absolute;
@@ -5522,11 +5469,6 @@
   .sm\:max-w-sm {
     @media (width >= 40rem) {
       max-width: var(--container-sm);
-    }
-  }
-  .sm\:flex-col {
-    @media (width >= 40rem) {
-      flex-direction: column;
     }
   }
   .sm\:flex-row {
@@ -5728,30 +5670,6 @@
       }
     }
   }
-  .md\:before\:inset-y-2 {
-    @media (width >= 48rem) {
-      &::before {
-        content: var(--tw-content);
-        inset-block: calc(var(--spacing) * 2);
-      }
-    }
-  }
-  .md\:before\:-left-4 {
-    @media (width >= 48rem) {
-      &::before {
-        content: var(--tw-content);
-        left: calc(var(--spacing) * -4);
-      }
-    }
-  }
-  .md\:before\:w-px {
-    @media (width >= 48rem) {
-      &::before {
-        content: var(--tw-content);
-        width: 1px;
-      }
-    }
-  }
   .md\:after\:hidden {
     @media (width >= 48rem) {
       &::after {
@@ -5893,11 +5811,6 @@
   .dark\:text-muted-foreground {
     &:is(.dark *) {
       color: var(--muted-foreground);
-    }
-  }
-  .dark\:text-primary-foreground {
-    &:is(.dark *) {
-      color: var(--primary-foreground);
     }
   }
   .dark\:text-primary\/40 {
@@ -6345,6 +6258,16 @@
   .\[\&\+\[data-slot\=item-content\]\]\:flex-none {
     &+[data-slot=item-content] {
       flex: none;
+    }
+  }
+  .\[\&\:\:-webkit-calendar-picker-indicator\]\:hidden {
+    &::-webkit-calendar-picker-indicator {
+      display: none;
+    }
+  }
+  .\[\&\:\:-webkit-calendar-picker-indicator\]\:appearance-none {
+    &::-webkit-calendar-picker-indicator {
+      appearance: none;
     }
   }
   .\[\&\:\:-webkit-inner-spin-button\]\:m-0 {
@@ -6864,16 +6787,6 @@
       cursor: w-resize;
     }
   }
-  .\[\[data-slot\=card-content\]_\&\]\:bg-transparent {
-    [data-slot=card-content] & {
-      background-color: transparent;
-    }
-  }
-  .\[\[data-slot\=popover-content\]_\&\]\:bg-transparent {
-    [data-slot=popover-content] & {
-      background-color: transparent;
-    }
-  }
   .\[\[data-slot\=tooltip-content\]_\&\]\:bg-background\/20 {
     [data-slot=tooltip-content] & {
       background-color: var(--background);
@@ -7377,22 +7290,6 @@
 @keyframes accordion-up {
   from {
     height: var(--radix-accordion-content-height,var(--bits-accordion-content-height,var(--reka-accordion-content-height,var(--kb-accordion-content-height,var(--ngp-accordion-content-height,auto)))));
-  }
-  to {
-    height: 0;
-  }
-}
-@keyframes collapsible-down {
-  from {
-    height: 0;
-  }
-  to {
-    height: var(--radix-collapsible-content-height,var(--bits-collapsible-content-height,var(--reka-collapsible-content-height,var(--kb-collapsible-content-height,auto))));
-  }
-}
-@keyframes collapsible-up {
-  from {
-    height: var(--radix-collapsible-content-height,var(--bits-collapsible-content-height,var(--reka-collapsible-content-height,var(--kb-collapsible-content-height,auto))));
   }
   to {
     height: 0;

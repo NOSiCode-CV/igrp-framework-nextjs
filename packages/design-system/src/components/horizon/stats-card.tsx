@@ -1,15 +1,14 @@
-/* eslint-disable react-refresh/only-export-components */
 'use client';
 
-import { useCallback } from 'react';
 import { cva, type VariantProps } from 'class-variance-authority';
+import { useCallback } from 'react';
 
-import { IGRPIcon, type IGRPIconName } from './icon';
 import { IGRPColors, type IGRPColorVariants } from '../../lib/colors';
 import { cn } from '../../lib/utils';
 import type { IGRPBaseAttributes } from '../../types';
+import { IGRPIcon, type IGRPIconName } from './icon';
 
-// Card CVA
+
 const igrpStatsCardVariants = cva(
   'flex items-center p-4 bg-card shadow-sm text-card-foreground transition-all overflow-hidden',
   {
@@ -45,7 +44,6 @@ const igrpStatsCardVariants = cva(
   },
 );
 
-// Title CVA
 const igrpStatsCardTitleVariants = cva('font-medium tracking-tighter', {
   variants: {
     size: {
@@ -61,7 +59,6 @@ const igrpStatsCardTitleVariants = cva('font-medium tracking-tighter', {
   },
 });
 
-// Value CVA
 const igrpStatsCardValueVariants = cva('font-bold', {
   variants: {
     size: {
@@ -79,7 +76,6 @@ const igrpStatsCardValueVariants = cva('font-bold', {
   },
 });
 
-// Icon/Image CVA
 const igrpStstaCardIconVariants = cva('flex items-center justify-center shrink-0', {
   variants: {
     size: {
@@ -112,8 +108,7 @@ const igrpStstaCardIconVariants = cva('flex items-center justify-center shrink-0
       indigo: '',
     },
   },
-  compoundVariants: [
-    // === Show Background + Rounded/Square ===
+  compoundVariants: [    
     {
       showBackground: true,
       background: ['rounded', 'square'],
@@ -156,8 +151,6 @@ const igrpStstaCardIconVariants = cva('flex items-center justify-center shrink-0
       variant: 'indigo',
       className: 'bg-indigo-100 text-purple-500',
     },
-
-    // === Border styles (independent of background) ===
     {
       backgroundBorder: true,
       variant: 'primary',

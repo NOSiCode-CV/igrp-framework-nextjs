@@ -1,5 +1,3 @@
-/* eslint-disable @typescript-eslint/no-explicit-any */
-/* eslint-disable react-refresh/only-export-components */
 'use client';
 
 import { toast, type ExternalToast } from 'sonner';

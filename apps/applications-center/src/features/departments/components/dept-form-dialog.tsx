@@ -30,6 +30,7 @@ import { useEffect } from "react";
 import { useForm } from "react-hook-form";
 import { STATUS_OPTIONS } from "@/lib/constants";
 import { statusSchema } from "@/schemas/global";
+import { DEPT_OPTIONS } from "../dept-lib";
 import {
   type DepartmentArgs,
   departmentSchema,
@@ -157,7 +158,7 @@ export function DepartmentFormDialog({
     : "Criar um novo departamento";
 
   return (
-    <IGRPDialogPrimitive open={open} onOpenChange={onOpenChange}>
+    <IGRPDialogPrimitive open={open} onOpenChange={onOpenChange} modal={false}>
       <IGRPDialogContentPrimitive>
         <IGRPDialogHeaderPrimitive>
           <IGRPDialogTitlePrimitive>{titleTxt}</IGRPDialogTitlePrimitive>
@@ -189,7 +190,7 @@ export function DepartmentFormDialog({
                       ref={field.ref}
                       required
                       disabled={isLoading}
-                      className="placeholder:truncate border-primary/30 focus-visible:ring-[2px] focus-visible:ring-primary/30 focus-visible:border-primary/30"
+                      className="placeholder:truncate border-primary/30 focus-visible:ring-2 focus-visible:ring-primary/30 focus-visible:border-primary/30"
                     />
                   </IGRPFormControlPrimitive>
                   <IGRPFormMessagePrimitive />
@@ -239,7 +240,7 @@ export function DepartmentFormDialog({
                       onBlur={field.onBlur}
                       name={field.name}
                       ref={field.ref}
-                      className="resize-none placeholder:truncate border-primary/30 focus-visible:ring-[2px] focus-visible:ring-primary/30 focus-visible:border-primary/30"
+                      className="resize-none placeholder:truncate border-primary/30 focus-visible:ring-2 focus-visible:ring-primary/30 focus-visible:border-primary/30"
                     />
                   </IGRPFormControlPrimitive>
                   <IGRPFormMessagePrimitive />

@@ -35,7 +35,6 @@ import { IGRPButton } from '../../button';
 import { IGRPIcon } from '../../icon';
 import { IGRPLabel } from '../../label';
 import { igrpColorText } from '../../../../lib/colors';
-// import { igrpGridSizeClasses } from '../../../../lib/constants';
 import { cn } from '../../../../lib/utils';
 import type { IGRPBaseAttributes, IGRPGridSize, IGRPOptionsProps } from '../../../../types';
 
@@ -195,7 +194,7 @@ function IGRPSelect({
       control={formContext.control}
       name={fieldName}
       render={({ field, fieldState }) => (
-        <FormItem className={cn('space-y-2', /*igrpGridSizeClasses[gridSize],*/ className)}>
+        <FormItem className={cn('space-y-2', className)}>
           {label && (
             <FormLabel
               className={cn(

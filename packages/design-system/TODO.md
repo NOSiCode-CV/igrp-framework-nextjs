@@ -21,3 +21,11 @@
 ## exports
 
 --> implement exports separately, /primitives, /horizon, /utilities
+
+###
+--> avatar
+--> accordion
+--> breadcrumb
+--> avatar
+--> image
+--> video

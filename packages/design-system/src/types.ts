@@ -1,6 +1,7 @@
 import { type IGRPIconName } from './components/horizon/icon';
 import { igrpGridSizeClasses } from './lib/constants';
 import type { IGRPColorVariants } from './lib/colors';
+import { Calendar } from './components/primitives/calendar';
 
 export type IGRPPlacementProps = 'start' | 'end' | 'center';
 
@@ -29,7 +30,7 @@ export type IGRPOptionsProps = {
   value: string;
   color?: string;
   status?: IGRPColorVariants;
-  icon?: IGRPIconName | string;
+  icon?: IGRPIconName | string;   
   group?: string;
   description?: string;
   image?: string;
@@ -37,3 +38,28 @@ export type IGRPOptionsProps = {
 };
 
 export type IGRPGridSize = keyof typeof igrpGridSizeClasses;
+
+export type IGRPCalendarProps = Omit<React.ComponentProps<typeof Calendar>, 'mode'> & {
+  name?: string;
+  disableBefore?: Date;
+  disableAfter?: Date;
+  disableDayOfWeek?: number | number[];
+};
+
+export type IGRPCalendarTimeProps = {
+  onStartTime?: (value: string | undefined) => void;
+  onEndTime?: (value: string | undefined) => void;
+  hideEndTimePicker?: boolean;
+  startTimePlaceholder?: string;
+  endTimePlaceholder?: string;
+  startTimeLabel?: string;
+  endTimeLabel?: string;
+  showTimeIndicator?: boolean;
+};
+
+export type IGRPDatePickerBaseProps = {
+  required?: boolean;
+  disabledPicker?: boolean;
+  dateFormat?: string;
+  placeholder?: string;
+} & Pick<IGRPBaseAttributes, 'label' | 'helperText' | 'labelClassName' | 'name'>;

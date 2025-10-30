@@ -48,7 +48,7 @@ import { PermissionLoading } from "@/features/permissions/components/permission-
 import type { PermissionArgs } from "@/features/permissions/permissions-schemas";
 import { usePermissions } from "@/features/permissions/use-permission";
 import type { RoleArgs } from "@/features/roles/role-schemas";
-import { showStatus, statusClass } from "@/lib/utils";
+import { getStatusColor, showStatus } from "@/lib/utils";
 import {
   useAddPermissionsToRole,
   usePermissionsByRoleByName,
@@ -115,7 +115,7 @@ const columns: ColumnDef<PermissionArgs>[] = [
     accessorKey: "status",
     cell: ({ row }) => (
       <IGRPBadgePrimitive
-        className={cn(statusClass(row.getValue("status")), "capitalize")}
+        className={cn(getStatusColor(row.getValue("status")), "capitalize")}
       >
         {showStatus(row.getValue("status"))}
       </IGRPBadgePrimitive>
@@ -264,7 +264,10 @@ export function RoleDetails({
 
     try {
       if (toAdd.length) {
-        await addPermissions({ name: role.name, permissionNames: toAdd as string[] });
+        await addPermissions({
+          name: role.name,
+          permissionNames: toAdd as string[],
+        });
       }
       if (toRemove.length) {
         await removePermissions({ name: role.name, permissionNames: toRemove });

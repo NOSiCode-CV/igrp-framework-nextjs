@@ -39,6 +39,7 @@ import { type Control, type FieldPath, useForm } from "react-hook-form";
 
 // import { FileUploadField } from "@/components/file-upload-field";
 import { AppCenterLoading } from "@/components/loading";
+import { PageHeader } from "@/components/page-header";
 import {
   type ApplicationArgs,
   appTypeCrud,
@@ -50,17 +51,16 @@ import {
   useCreateApplication,
   useUpdateApplication,
 } from "@/features/applications/use-applications";
+import {
+  DEPT_OPTIONS,
+  type DepartmentOption,
+} from "@/features/departments/dept-lib";
 import { useDepartments } from "@/features/departments/use-departments";
 // import { useUploadPublicFiles } from "@/features/files/use-files";
 import { useUsers } from "@/features/users/use-users";
 import { ROUTES, STATUS_OPTIONS } from "@/lib/constants";
 import { statusSchema } from "@/schemas/global";
 import { APPLICATIONS_TYPES_FILTERED } from "../app-utils";
-import {
-  DepartmentOption,
-  DEPT_OPTIONS,
-} from "@/features/departments/dept-lib";
-import { PageHeader } from "@/components/page-header";
 
 // TDOD: implement picture
 
@@ -162,7 +162,7 @@ export function ApplicationForm({
 
   const submitLblBtn = form.formState.isSubmitting ? "Guardando..." : "Guardar";
 
-  const title = application ? "Editar Aplicação" : "Nova Aplicação"; 
+  const title = application ? "Editar Aplicação" : "Nova Aplicação";
 
   const onSubmit = async (values: FormVals) => {
     const payload = { ...values };
@@ -202,7 +202,6 @@ export function ApplicationForm({
       });
 
       router.push(`${ROUTES.APPLICATIONS}/${payload.code}`);
-
     } catch (error) {
       igrpToast({
         type: "error",
@@ -225,8 +224,7 @@ export function ApplicationForm({
 
       <IGRPCardPrimitive className="py-6">
         <IGRPFormPrimitive {...form}>
-          <form onSubmit={form.handleSubmit(onSubmit)}
-          >
+          <form onSubmit={form.handleSubmit(onSubmit)}>
             <IGRPCardContentPrimitive>
               <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
                 <IGRPFormFieldPrimitive
@@ -384,7 +382,8 @@ export function ApplicationForm({
                             name={field.name}
                             ref={field.ref}
                             disabled={
-                              disabledFields && type !== appTypeCrud.enum.INTERNAL
+                              disabledFields &&
+                              type !== appTypeCrud.enum.INTERNAL
                             }
                             className="placeholder:truncate border-primary/30 focus-visible:ring-2 focus-visible:ring-primary/30 focus-visible:border-primary/30"
                           />
@@ -413,7 +412,8 @@ export function ApplicationForm({
                             name={field.name}
                             ref={field.ref}
                             disabled={
-                              disabledFields && type !== appTypeCrud.enum.EXTERNAL
+                              disabledFields &&
+                              type !== appTypeCrud.enum.EXTERNAL
                             }
                             className="placeholder:truncate border-primary/30 focus-visible:ring-2 focus-visible:ring-primary/30 focus-visible:border-primary/30"
                           />
@@ -531,7 +531,6 @@ export function ApplicationForm({
         </IGRPFormPrimitive>
       </IGRPCardPrimitive>
     </div>
-
   );
 }
 

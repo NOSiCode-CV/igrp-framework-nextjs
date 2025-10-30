@@ -30,5 +30,5 @@ export default function EditApplicationPage({
     );
   }
 
-  return <ApplicationForm application={data} />    
+  return <ApplicationForm application={data} />;
 }

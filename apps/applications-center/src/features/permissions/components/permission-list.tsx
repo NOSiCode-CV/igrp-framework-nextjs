@@ -25,7 +25,7 @@ import { useState } from "react";
 
 import { ButtonLink } from "@/components/button-link";
 import { STATUS_OPTIONS } from "@/lib/constants";
-import { showStatus, statusClass } from "@/lib/utils";
+import { getStatusColor, showStatus } from "@/lib/utils";
 import type { PermissionArgs } from "../permissions-schemas";
 import { usePermissions } from "../use-permission";
 import { PermissionDeleteDialog } from "./permisssion-delete-dialog";
@@ -236,7 +236,7 @@ export function PermissionList({ departmentCode }: PermissionListProps) {
                         <IGRPTableCellPrimitive className="whitespace-nowrap">
                           <IGRPBadgePrimitive
                             className={cn(
-                              statusClass(permssion.status),
+                              getStatusColor(permssion.status),
                               "capitalize",
                             )}
                           >

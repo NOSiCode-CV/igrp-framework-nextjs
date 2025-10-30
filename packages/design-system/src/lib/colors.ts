@@ -116,13 +116,12 @@ export const IGRPColors = {
   solid: {
     primary: {
       bg: 'bg-primary',
-      text: 'text-primary dark:text-primary-foreground',
-      textDark: 'dark:text-primary/40',
+      text: 'text-foreground',      
       border: 'border-primary',
       bgForeground: 'bg-primary',
-      textBadge: 'text-primary',
-      bgBadge: 'bg-primary/10',
-      borderBadge: 'border-primary/10',
+      textBadge: 'text-muted-foreground',
+      bgBadge: 'bg-primary',
+      borderBadge: 'border-primary',
       textCard: 'text-primary',
       bgCardIcon: 'bg-primary',
       borderCard: 'border-primary',
@@ -133,7 +132,6 @@ export const IGRPColors = {
     success: {
       bg: 'bg-emerald-800',
       text: 'text-emerald-600 dark:text-emerald-400',
-      textDark: 'dark:text-emerald-400',
       border: 'border-emerald-800',
       bgForeground: 'bg-emerald-800',
       textBadge: 'text-emerald-800',
@@ -149,7 +147,6 @@ export const IGRPColors = {
     destructive: {
       bg: 'bg-red-500',
       text: 'text-red-600 dark:text-red-400',
-      textDark: 'dark:text-red-400',
       border: 'border-red-500',
       bgForeground: 'bg-red-800',
       textBadge: 'text-red-800',
@@ -165,7 +162,6 @@ export const IGRPColors = {
     warning: {
       bg: 'bg-amber-500',
       text: 'text-amber-600 dark:text-amber-400',
-      textDark: 'dark:text-amber-400',
       border: 'border-amber-500',
       bgForeground: 'bg-amber-800',
       textBadge: 'text-amber-800',
@@ -181,7 +177,6 @@ export const IGRPColors = {
     info: {
       bg: 'bg-blue-500',
       text: 'text-blue-600 dark:text-blue-400',
-      textDark: 'dark:text-blue-400',
       border: 'border-blue-500',
       bgForeground: 'bg-blue-800',
       textBadge: 'text-blue-800',
@@ -197,7 +192,6 @@ export const IGRPColors = {
     secondary: {
       bg: 'bg-gray-500',
       text: 'text-gray-700 dark:text-gray-300',
-      textDark: 'dark:text-gray-300',
       border: 'border-gray-500',
       bgForeground: 'bg-gray-800',
       textBadge: 'text-gray-800',
@@ -213,7 +207,6 @@ export const IGRPColors = {
     indigo: {
       bg: 'bg-purple-500',
       text: 'text-purple-600 dark:text-purple-400',
-      textDark: 'dark:text-purple-400',
       border: 'border-purple-500',
       bgForeground: 'bg-purple-800',
       textBadge: 'text-purple-800',
@@ -231,7 +224,6 @@ export const IGRPColors = {
     primary: {
       bg: 'bg-primary/10',
       text: 'text-primary',
-      textDark: 'dark:text-primary/40',
       border: 'border-transparent',
       bgForeground: 'bg-primary',
       textBadge: 'text-primary',
@@ -246,8 +238,7 @@ export const IGRPColors = {
     },
     success: {
       bg: 'bg-emerald-100',
-      text: 'text-emerald-600',
-      textDark: 'dark:text-emerald-400',
+      text: 'text-emerald-600 dark:text-emerald-400',
       border: 'border-transparent',
       bgForeground: 'bg-emerald-500',
       textBadge: 'text-emerald-500',
@@ -262,8 +253,7 @@ export const IGRPColors = {
     },
     destructive: {
       bg: 'bg-red-100',
-      text: 'text-red-600',
-      textDark: 'dark:text-red-400',
+      text: 'text-red-600 dark:text-red-400',
       border: 'border-transparent',
       bgForeground: 'bg-red-500',
       textBadge: 'text-red-500',
@@ -278,8 +268,7 @@ export const IGRPColors = {
     },
     warning: {
       bg: 'bg-amber-100',
-      text: 'text-amber-600',
-      textDark: 'dark:text-amber-400',
+      text: 'text-amber-600 dark:text-amber-400',
       border: 'border-transparent',
       bgForeground: 'bg-amber-500',
       textBadge: 'text-amber-500',
@@ -294,8 +283,7 @@ export const IGRPColors = {
     },
     info: {
       bg: 'bg-blue-100',
-      text: 'text-blue-600',
-      textDark: 'dark:text-blue-400',
+      text: 'text-blue-600 dark:text-blue-400',
       border: 'border-transparent',
       bgForeground: 'bg-blue-500',
       textBadge: 'text-blue-500',
@@ -310,8 +298,7 @@ export const IGRPColors = {
     },
     secondary: {
       bg: 'bg-gray-100',
-      text: 'text-gray-600',
-      textDark: 'dark:text-gray-300',
+      text: 'text-gray-600 dark:text-gray-300',
       border: 'border-transparent',
       bgForeground: 'bg-gray-500',
       textBadge: 'text-gray-500',
@@ -326,8 +313,7 @@ export const IGRPColors = {
     },
     indigo: {
       bg: 'bg-purple-100',
-      text: 'text-purple-600',
-      textDark: 'dark:text-purple-400',
+      text: 'text-purple-600 dark:text-purple-400',
       border: 'border-transparent',
       bgForeground: 'bg-purple-500',
       textBadge: 'text-purple-500',

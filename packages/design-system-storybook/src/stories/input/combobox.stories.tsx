@@ -9,6 +9,9 @@ import {
   IGRPIconObject,
   IGRPForm,
   type IGRPFormHandle,
+  cn,
+  IGRPCardContent,
+  IGRPCard,
 } from '@igrp/igrp-framework-react-design-system';
 import z from 'zod';
 
@@ -115,6 +118,28 @@ const COUNTRIES_WITH_ICONS: IGRPOptionsProps[] = [
   { label: 'Japan', value: 'japan', icon: 'Airplay' },
 ];
 
+const OPTIONS: IGRPOptionsProps[] = [
+  { value: "privacy", label: "This is a long text explaining your privacy policy..." },
+  { value: "terms", label: "These are the terms and conditions for using the app..." },
+  { value: "about", label: "We are a company dedicated to building amazing tools for developers." },
+];
+const OPTIONS2: IGRPOptionsProps[] = [
+  { value: "policy", label: "This is a long text explaining your privacy policy..." },
+  { value: "conditions", label: "These are the terms and conditions for using the app..." },
+  { value: "us", label: "We are a company dedicated to building amazing tools for developers." },
+];
+const OPTIONS3: IGRPOptionsProps[] = [
+  { value: "ivacy_policy", label: "This is a long text explaining your privacy policy..." },
+  { value: "rms_conditions", label: "These are the terms and conditions for using the app..." },
+  { value: "out_us", label: "We are a company dedicated to building amazing tools for developers." },
+];
+const OPTIONS4: IGRPOptionsProps[] = [
+  { value: "privacy_poli", label: "This is a long text explaining your privacy policy..." },
+  { value: "terms_conditi", label: "These are the terms and conditions for using the app..." },
+  { value: "about_", label: "We are a company dedicated to building amazing tools for developers." },
+];
+
+
 const ControlledTemplate = (args: JSX.IntrinsicAttributes & IGRPComboboxProps) => {
   const [selected, setSelected] = useState(args.value || '');
   return (
@@ -127,6 +152,136 @@ const ControlledTemplate = (args: JSX.IntrinsicAttributes & IGRPComboboxProps) =
           console.log('Selected:', value);
         }}
       />
+    </div>
+  );
+};
+
+const MultipleTemplate = (args: JSX.IntrinsicAttributes & IGRPComboboxProps) => {
+  const [selected, setSelected] = useState(args.value || '');
+  const [selected2, setSelected2] = useState(args.value || '');
+  const [selected3, setSelected3] = useState(args.value || '');
+  const [selected4, setSelected4] = useState(args.value || '');
+  return (
+    <div className='m-20 flex flex-col gap-20'>
+    <IGRPCard
+      name={`vinculoLaboral`}
+      // ref={getSectionRef('vinculoLaboral')}
+      data-section-id={'vinculoLaboral'}
+      className={cn()}
+      >
+      <IGRPCardContent className={cn('', 'space-x-3', 'space-y-3',)}>
+        <div className={cn('grid', 'grid-cols-1 ', 'md:grid-cols-2 ', 'lg:grid-cols-4 ', ' gap-4',)}>
+          <IGRPCombobox
+            name={`numeroContribuinte`}
+            label={`N Contribuinte`}
+            variant={`single`}
+            placeholder={`Select an option...`}
+            required={true}
+            selectLabel={`No option found`}
+            showSearch={true}
+            showIcon={false}
+            iconName={`CornerDownRight`}
+            onChange={(value) => { 
+              setSelected(value);
+              console.log('Selected:', value); }}
+            value={selected}
+            options={OPTIONS}
+          >
+          </IGRPCombobox>
+          <IGRPCombobox
+            name={`contribuinteUuid`}
+            label={`Sede/Sucursal`}
+            variant={`single`}
+            placeholder={`Select an option...`}
+            required={true}
+            selectLabel={`No option found`}
+            showSearch={true}
+            showIcon={false}
+            iconName={`CornerDownRight`}
+            value={selected2}
+            options={OPTIONS2}
+            onChange={(value) => {
+              setSelected2(value);
+              console.log('Selected:', value);
+            }}
+          >
+          </IGRPCombobox>
+          <IGRPCombobox
+            name={`idProfissao`}
+            label={`Profissāo`}
+            variant={`single`}
+            placeholder={`Select an option...`}
+            selectLabel={`No option found`}
+            showSearch={true}
+            showIcon={false}
+            iconName={`CornerDownRight`}
+            onChange={(value) => {
+              setSelected3(value);
+              console.log('Selected:', value);
+            }}
+            value={selected3}
+            options={OPTIONS3}
+          >
+          </IGRPCombobox>
+          <IGRPCombobox
+            name={`idCategoriaProfissao`}
+            label={`Categoria`}
+            variant={`single`}
+            placeholder={`Select an option...`}
+            selectLabel={`No option found`}
+            showSearch={true}
+            showIcon={false}
+            iconName={`CornerDownRight`}
+            onChange={(value) => {
+              setSelected4(value);
+              console.log('Selected:', value);
+            }}
+            value={selected4}
+            options={OPTIONS4}
+          >
+          </IGRPCombobox>        
+        </div>
+      </IGRPCardContent>
+    </IGRPCard>
+      
+      <div className='grid md:grid-cols-2 lg:grid-cols-4 gap-4'>
+        <IGRPCombobox
+          {...args}
+          value={selected}
+          onChange={(value) => {
+            setSelected(value);
+            console.log('Selected:', value);
+          }}
+          options={OPTIONS}
+        />
+        <IGRPCombobox
+          {...args}
+          value={selected2}
+          onChange={(value) => {
+            setSelected2(value);
+            console.log('Selected:', value);
+          }}
+          options={OPTIONS2}
+        />
+        <IGRPCombobox
+          {...args}
+          value={selected3}
+          onChange={(value) => {
+            setSelected3(value);
+            console.log('Selected:', value);
+          }}
+          options={OPTIONS3}
+        />
+        <IGRPCombobox
+          {...args}
+          value={selected4}
+          onChange={(value) => {
+            setSelected4(value);
+            console.log('Selected:', value);
+          }}
+          options={OPTIONS4}
+        />
+      </div>
     </div>
   );
 };
@@ -149,6 +304,7 @@ const FormTemplate = (args: IGRPComboboxProps) => {
         onSubmit={onSubmit}
         formRef={formRef}
         gridClassName='space-y-4 w-80'
+        defaultValues={{ fruit: 'apple' }}
       >
         <IGRPCombobox
           {...args}
@@ -174,6 +330,15 @@ export const Default: Story = {
   args: {
     variant: 'single',
     options: FRAMEWORKS,
+    label: 'Select a framework',
+    placeholder: 'Select an option...',
+  },
+};
+
+export const Multi: Story = {
+  render: MultipleTemplate,
+  args: {
+    variant: 'single',
     label: 'Select a framework',
     placeholder: 'Select an option...',
   },

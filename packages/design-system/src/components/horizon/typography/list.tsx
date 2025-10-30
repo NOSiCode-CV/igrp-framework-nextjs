@@ -281,7 +281,6 @@ function IGRPTextList({
       className={cn(
         igrpTextlistVariants({ size, spacing }),
         colorClass.text,
-        colorClass.textDark,
         className,
       )}
       {...props}

@@ -102,7 +102,7 @@ function IGRPChat({ apiEndpoint, labelDescription = 'Ask me anything!' }: IGRPCh
                 )}
               >
                 {message.role === 'user' ? (
-                  <IGRPIcon iconName="User" className="h-4 w-4 text-primary-foreground" />
+                  <IGRPIcon iconName="User" className="h-4 w-4 text-muted-foreground" />
                 ) : (
                   <IGRPIcon iconName="Bot" className="h-4 w-4" />
                 )}

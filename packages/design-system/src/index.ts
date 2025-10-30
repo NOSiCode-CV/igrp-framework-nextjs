@@ -383,9 +383,42 @@ export {
 // horizon components
 
 export { IGRPAlert, type IGRPAlertProps } from './components/horizon/alert';
+
 export { IGRPAlertDialog, type IGRPAlertDialogProps } from './components/horizon/alert-dialog';
+
 export { IGRPBadge, type IGRPBadgeProps, igrpBadgeVariants } from './components/horizon/badge';
+
 export { IGRPButton, type IGRPButtonProps } from './components/horizon/button';
+
+export {
+  IGRPCalendarSingle,
+  type IGRPCalendarSingleProps,
+} from './components/horizon/calendar/single';
+
+export {
+  IGRPCalendarSingleTime,
+  type IGRPCalendarSingleTimeProps,
+} from './components/horizon/calendar/single-time';
+
+export {
+  IGRPCalendarRange,
+  type IGRPCalendarRangeProps,
+} from './components/horizon/calendar/range';
+
+export {
+  IGRPCalendarRangeTime,
+  type IGRPCalendarRangeTimeProps,
+} from './components/horizon/calendar/range-time';
+
+export {
+  IGRPCalendarMultiple,
+  type IGRPCalendarMultipleProps,
+} from './components/horizon/calendar/multiple';
+
+export {
+  IGRPCalendarMultipleTime,
+  type IGRPCalendarMultipleTimeProps,
+} from './components/horizon/calendar/multiple-time';
 
 export {
   IGRPCard,
@@ -397,17 +430,33 @@ export {
   IGRPCardFooter,
 } from './components/horizon/card';
 
-export { IGRPAreaChart } from './components/horizon/chart/Area';
-export { IGRPHorizontalBarChart } from './components/horizon/chart/Bar/horizontal';
-export { IGRPVerticalBarChart } from './components/horizon/chart/Bar/vertical';
+export { IGRPAreaChart, type IGRPAreaChartProps } from './components/horizon/charts/area';
+
+export {
+  IGRPHorizontalBarChart,
+  type IGRPHorizontalBarChartProps,
+} from './components/horizon/charts/bars/horizontal';
+
+export {
+  IGRPVerticalBarChart,
+  type IGRPVerticalBarChartProps,
+} from './components/horizon/charts/bars/vertical';
+
 export {
   IGRPLineChart,
   type LineConfig,
   type IGRPLineChartProps,
-} from './components/horizon/chart/Line';
-export { IGRPPieChart } from './components/horizon/chart/Pie';
-export { IGRPRadarChart } from './components/horizon/chart/Radar';
-export { IGRPRadialBarChart } from './components/horizon/chart/Radial';
+} from './components/horizon/charts/line';
+
+export { IGRPPieChart, type IGRPPieChartProps } from './components/horizon/charts/pie';
+
+export { IGRPRadarChart, type IGRPRadarChartProps } from './components/horizon/charts/radar';
+
+export {
+  IGRPRadialBarChart,
+  type IGRPRadialBarChartProps,
+} from './components/horizon/charts/radial';
+
 export type {
   IGRPChartDataItem,
   IGRPChartSize,
@@ -418,17 +467,11 @@ export type {
   IGRPBarConfig,
   IGRPChartFooter,
   IGRPChartProps,
-  IGRPAreaChartProps,
-  IGRPVerticalBarChartProps,
-  IGRPHorizontalBarChartProps,
   PieConfig,
-  IGRPPieChartProps,
   IGRPRadarConfig,
-  IGRPRadarChartProps,
   RadialBarConfig,
-  IGRPRadialBarChartProps,
-} from './components/horizon/chart/types';
-export { IGRP_CHART_COLORS } from './components/horizon/chart/types';
+} from './components/horizon/charts/types';
+
 export {
   formatChartValue,
   getChartHeight,
@@ -438,7 +481,8 @@ export {
   getLegendHorizontalAlign,
   hasNegativeValues,
   createChartConfig,
-} from './components/horizon/chart/lib';
+  IGRP_CHART_COLORS,
+} from './components/horizon/charts/lib';
 
 export { IGRPChat, type IGRPChatProps, type IGRPChatMessage } from './components/horizon/chat';
 
@@ -568,24 +612,36 @@ export {
 } from './components/horizon/info-card';
 
 export { IGRPCheckbox, type IGRPCheckboxProps } from './components/horizon/input/checkbox';
+
 export { IGRPInputColor, type IGRPInputColorProps } from './components/horizon/input/color';
+
 export { IGRPCombobox, type IGRPComboboxProps } from './components/horizon/input/combobox';
+
+// export {
+//   IGRPDatePickerInputRange,
+//   type IGRPDatePickerInputRangeProps
+// } from './components/horizon/input/date-picker/input-range';
+
 export {
-  IGRPCalendar,
-  type IGRPCalendarProps,
-} from './components/horizon/input/date-picker/calendar/calendar';
+  IGRPDatePickerInputSingle,
+  type IGRPDatePickerInputSingleProps,
+} from './components/horizon/input/date-picker/input-single';
+
 export {
-  IGRPCalendarRange,
-  type IGRPCalendarRangeProps,
-} from './components/horizon/input/date-picker/calendar/calendar-range';
-export {
-  IGRPDatePicker,
-  type IGRPDatePickerProps,
-} from './components/horizon/input/date-picker/date-picker';
+  IGRPDatePickerMultiple,
+  type IGRPDatePickerMultipleProps,
+} from './components/horizon/input/date-picker/multiple';
+
 export {
   IGRPDatePickerRange,
   type IGRPDatePickerRangeProps,
-} from './components/horizon/input/date-picker/date-picker-range';
+} from './components/horizon/input/date-picker/range';
+
+export {
+  IGRPDatePickerSingle,
+  type IGRPDatePickerSingleProps,
+} from './components/horizon/input/date-picker/single';
+
 export {
   IGRPDateTimeInput,
   type IGRPDateTimeInputProps,
@@ -609,6 +665,7 @@ export { IGRPRadioGroup, type IGRPRadioGroupProps } from './components/horizon/i
 export { IGRPInputAddOn, type IGRPInputAddOnProps } from './components/horizon/input/with-addons';
 
 export { IGRPLabel, type IGRPLabelProps } from './components/horizon/label';
+
 export { IGRPLoadingSpinner } from './components/horizon/loading-spiner';
 
 export {

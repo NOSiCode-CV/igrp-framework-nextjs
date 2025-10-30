@@ -1,5 +1,5 @@
+import type { IGRPOptionsProps } from "@igrp/igrp-framework-react-design-system";
 import { statusSchema } from "@/schemas/global";
-import { IGRPOptionsProps } from "@igrp/igrp-framework-react-design-system";
 
 export const ROUTES = {
   APPLICATIONS: "/applications",

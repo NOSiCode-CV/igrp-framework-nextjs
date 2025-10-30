@@ -6,7 +6,7 @@ export function cn(...inputs: ClassValue[]) {
   return twMerge(clsx(inputs));
 }
 
-export function statusClass(status: string) {
+export function getStatusColor(status: string) {
   return status === "ACTIVE" ? "status-active" : "status-inactive";
 }
 

@@ -286,6 +286,20 @@ export function ManageMenusModal({
         </IGRPDialogHeaderPrimitive>
 
         <div className="flex flex-col sm:flex-row gap-3 pb-4">
+          
+          <div className="max-w-full relative">
+            <IGRPIcon
+              iconName="Search"
+              className="absolute left-2.5 top-2.5 size-4 text-muted-foreground"
+            />
+            <IGRPInputPrimitive
+              type="search"
+              placeholder="Pesquisar menu..."
+              className="pl-8"
+              value={searchTerm}
+              onChange={(e) => setSearchTerm(e.target.value)}
+            />
+          </div>
           <div className="w-full sm:w-64">
             <IGRPSelectPrimitive 
               value={selectedApp} 
@@ -308,19 +322,6 @@ export function ManageMenusModal({
             </IGRPSelectPrimitive>
           </div>
 
-          <div className="relative">
-            <IGRPIcon
-              iconName="Search"
-              className="absolute left-2.5 top-2.5 size-4 text-muted-foreground"
-            />
-            <IGRPInputPrimitive
-              type="search"
-              placeholder="Pesquisar menu..."
-              className="pl-8"
-              value={searchTerm}
-              onChange={(e) => setSearchTerm(e.target.value)}
-            />
-          </div>
         </div>
 
         <div className="flex-1 overflow-y-auto">

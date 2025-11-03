@@ -176,7 +176,7 @@ export function MenuPermissions({
 
         <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
           {!loading && menus && menus.length > 0 && (
-            <div className="w-9/12">
+            <div className="w-10/12">
               <div className="relative">
                 <IGRPIcon
                   iconName="Search"
@@ -194,13 +194,14 @@ export function MenuPermissions({
           )}
 
           {assignedApps?.length !== 0 && 
-          <div className="w-3/12">
+          <div className="w-2/12">
             <IGRPSelectPrimitive 
               value={selectedApp} 
               onValueChange={setSelectedApp}
               disabled={loading || loadingApps}
+              
             >
-              <IGRPSelectTriggerPrimitive>
+              <IGRPSelectTriggerPrimitive className="w-full">
                 <IGRPSelectValuePrimitive placeholder="Todas as aplicações" />
               </IGRPSelectTriggerPrimitive>
               <IGRPSelectContentPrimitive>

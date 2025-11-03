@@ -14,7 +14,6 @@ import {
   updateDepartment,
 } from "@/actions/departaments";
 import type { DepartmentArgs } from "./dept-schemas";
-import { MenuArgs } from "../menus/menu-schemas";
 import { ApplicationArgs } from "../applications/app-schemas";
 
 export const useDepartments = () => {
@@ -98,13 +97,23 @@ export const useAddApplicationsToDepartment = () => {
   const queryClient = useQueryClient();
   return useMutation({
     mutationFn: async ({
-      code, appCodes,
+      code, 
+      appCodes,
     }: {
       code: string;
       appCodes: string[];
     }) => addApplicationsToDepartment(code, appCodes),
-    onSuccess: async () => {
+    onSuccess: async (_, variables) => {
       await queryClient.invalidateQueries({ queryKey: ["departments"] });
+      
+      await queryClient.invalidateQueries({ 
+        queryKey: ["applications", { departmentCode: variables.code }] 
+      });
+    
+      await queryClient.invalidateQueries({ 
+        queryKey: ["department-available-apps", variables.code] 
+      });
+      
       await queryClient.refetchQueries({
         queryKey: ["departments"],
         exact: true,
@@ -117,13 +126,23 @@ export const useRemoveApplicationsFromDepartment = () => {
   const queryClient = useQueryClient();
   return useMutation({
     mutationFn: async ({
-      code, appCodes,
+      code, 
+      appCodes,
     }: {
       code: string;
       appCodes: string[];
     }) => removeApplicationsFromDepartment(code, appCodes),
-    onSuccess: async () => {
+    onSuccess: async (_, variables) => {
       await queryClient.invalidateQueries({ queryKey: ["departments"] });
+      
+      await queryClient.invalidateQueries({ 
+        queryKey: ["applications", { departmentCode: variables.code }] 
+      });
+      
+      await queryClient.invalidateQueries({ 
+        queryKey: ["department-available-apps", variables.code] 
+      });
+      
       await queryClient.refetchQueries({
         queryKey: ["departments"],
         exact: true,
@@ -144,13 +163,23 @@ export const useAddMenusToDepartment = () => {
   const queryClient = useQueryClient();
   return useMutation({
     mutationFn: async ({
-      code, menuCodes,
+      code, 
+      menuCodes,
     }: {
       code: string;
       menuCodes: string[];
     }) => addMenusToDepartment(code, menuCodes),
-    onSuccess: async () => {
+    onSuccess: async (_, variables) => {
       await queryClient.invalidateQueries({ queryKey: ["departments"] });
+      
+      await queryClient.invalidateQueries({ 
+        queryKey: ["department-menus", variables.code] 
+      });
+      
+      await queryClient.invalidateQueries({ 
+        queryKey: ["department-available-menus", variables.code] 
+      });
+      
       await queryClient.refetchQueries({
         queryKey: ["departments"],
         exact: true,
@@ -163,13 +192,23 @@ export const useRemoveMenusFromDepartment = () => {
   const queryClient = useQueryClient();
   return useMutation({
     mutationFn: async ({
-      code, menuCodes,
+      code, 
+      menuCodes,
     }: {
       code: string;
       menuCodes: string[];
     }) => removeMenusFromDepartment(code, menuCodes),
-    onSuccess: async () => {
+    onSuccess: async (_, variables) => {
       await queryClient.invalidateQueries({ queryKey: ["departments"] });
+      
+      await queryClient.invalidateQueries({ 
+        queryKey: ["department-menus", variables.code] 
+      });
+      
+      await queryClient.invalidateQueries({ 
+        queryKey: ["department-available-menus", variables.code] 
+      });
+      
       await queryClient.refetchQueries({
         queryKey: ["departments"],
         exact: true,

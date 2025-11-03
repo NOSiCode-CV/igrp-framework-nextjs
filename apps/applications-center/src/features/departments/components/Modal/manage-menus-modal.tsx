@@ -24,6 +24,10 @@ import {
   IGRPTableHeadPrimitive,
   IGRPTablePrimitive,
   IGRPTableRowPrimitive,
+  IGRPTabsPrimitive,
+  IGRPTabsListPrimitive,
+  IGRPTabsTriggerPrimitive,
+  IGRPTabsContentPrimitive,
   useIGRPToast,
 } from "@igrp/igrp-framework-react-design-system";
 import { useState, useEffect, useMemo } from "react";
@@ -50,7 +54,8 @@ export function ManageMenusModal({
   const [selectedApp, setSelectedApp] = useState<string>("");
   const [searchTerm, setSearchTerm] = useState("");
   const [expandedMenus, setExpandedMenus] = useState<Set<string>>(new Set());
-  const [menuAssignments, setMenuAssignments] = useState<Map<string, boolean>>(new Map());
+  const [menusToAdd, setMenusToAdd] = useState<Set<string>>(new Set());
+  const [menusToRemove, setMenusToRemove] = useState<Set<string>>(new Set());
 
   const { data: availableMenus, isLoading: loadingAvailable } = useDepartmentAvailableMenus(departmentCode || "");
   const { data: assignedMenus, isLoading: loadingAssigned } = useDepartmentMenus(departmentCode || "");
@@ -60,17 +65,16 @@ export function ManageMenusModal({
   const loading = loadingAvailable || loadingAssigned;
 
   useEffect(() => {
-    if (availableMenus && availableMenus.length > 0) {
-      const initialAssignments = new Map<string, boolean>();
-      const assignedCodes = new Set(assignedMenus?.map(menu => menu.code) || []);
-      
-      availableMenus.forEach((menu) => {
-        const isAssigned = assignedCodes.has(menu.code);
-        initialAssignments.set(menu.code, isAssigned);
-      });
-      setMenuAssignments(initialAssignments);
+    if (open) {
+      setMenusToAdd(new Set());
+      setMenusToRemove(new Set());
+      setSearchTerm("");
+      setSelectedApp("");
     }
-  }, [availableMenus, assignedMenus, open]);
+  }, [open]);
+
+  const assignedCodes = new Set(assignedMenus?.map(menu => menu.code) || []);
+  const menusNotAssigned = (availableMenus || []).filter(menu => !assignedCodes.has(menu.code));
 
   const appsFromMenus = useMemo(() => {
     if (!availableMenus) return [];
@@ -80,12 +84,6 @@ export function ManageMenusModal({
       name: appCode,
     }));
   }, [availableMenus]);
-
-  const filteredByApp = selectedApp
-    ? (availableMenus || []).filter(menu => menu.applicationCode === selectedApp)
-    : (availableMenus || []);
-
-
 
   const toggleExpand = (menuCode: string) => {
     setExpandedMenus(prev => {
@@ -99,39 +97,50 @@ export function ManageMenusModal({
     });
   };
 
-  const toggleMenuAssignment = (menuCode: string) => {
-    setMenuAssignments(prev => {
-      const newMap = new Map(prev);
-      newMap.set(menuCode, !newMap.get(menuCode));
-      return newMap;
+  const toggleMenuToAdd = (menuCode: string) => {
+    setMenusToAdd(prev => {
+      const newSet = new Set(prev);
+      if (newSet.has(menuCode)) {
+        newSet.delete(menuCode);
+      } else {
+        newSet.add(menuCode);
+      }
+      return newSet;
+    });
+  };
+
+  const toggleMenuToRemove = (menuCode: string) => {
+    setMenusToRemove(prev => {
+      const newSet = new Set(prev);
+      if (newSet.has(menuCode)) {
+        newSet.delete(menuCode);
+      } else {
+        newSet.add(menuCode);
+      }
+      return newSet;
     });
   };
 
   const handleSave = async () => {
     try {
       const promises = [];
-      const assignedCodes = new Set(assignedMenus?.map(menu => menu.code) || []);
 
-      for (const [menuCode, isAssigned] of menuAssignments.entries()) {
-        const wasAssigned = assignedCodes.has(menuCode);
+      if (menusToAdd.size > 0) {
+        promises.push(
+          addMenusMutation.mutateAsync({
+            code: departmentCode,
+            menuCodes: Array.from(menusToAdd),
+          })
+        );
+      }
 
-        if (isAssigned && !wasAssigned) {
-          promises.push(
-            addMenusMutation.mutateAsync({
-              code: departmentCode,
-              menuCodes: [menuCode],
-            })
-          );
-        }
-
-        if (!isAssigned && wasAssigned) {
-          promises.push(
-            removeMenusMutation.mutateAsync({
-              code: departmentCode,
-              menuCodes: [menuCode],
-            })
-          );
-        }
+      if (menusToRemove.size > 0) {
+        promises.push(
+          removeMenusMutation.mutateAsync({
+            code: departmentCode,
+            menuCodes: Array.from(menusToRemove),
+          })
+        );
       }
 
       if (promises.length === 0) {
@@ -148,7 +157,7 @@ export function ManageMenusModal({
       igrpToast({
         type: "success",
         title: "Menus atualizados",
-        description: "Os menus foram atribuídos ao departamento com sucesso.",
+        description: "Os menus foram atualizados com sucesso.",
       });
 
       onOpenChange(false);
@@ -165,14 +174,18 @@ export function ManageMenusModal({
 
   const MenuTreeRow = ({ 
     menu, 
-    level = 0 
+    level = 0,
+    isAddMode = true
   }: { 
     menu: MenuWithChildren; 
-    level?: number 
+    level?: number;
+    isAddMode?: boolean;
   }) => {
     const hasChildren = menu.children && menu.children.length > 0;
     const isExpanded = expandedMenus.has(menu.code);
-    const isAssigned = menuAssignments.get(menu.code) || false;
+    const isSelected = isAddMode 
+      ? menusToAdd.has(menu.code)
+      : menusToRemove.has(menu.code);
 
     const getMenuIcon = (type: string) => {
       switch(type) {
@@ -189,8 +202,8 @@ export function ManageMenusModal({
           <IGRPTableCellPrimitive className="text-center">
             <div className="flex items-center justify-center">
               <IGRPCheckboxPrimitive
-                checked={isAssigned}
-                onCheckedChange={() => toggleMenuAssignment(menu.code)}
+                checked={isSelected}
+                onCheckedChange={() => isAddMode ? toggleMenuToAdd(menu.code) : toggleMenuToRemove(menu.code)}
               />
             </div>
           </IGRPTableCellPrimitive>
@@ -249,28 +262,34 @@ export function ManageMenusModal({
           <MenuTreeRow 
             key={child.code} 
             menu={child} 
-            level={level + 1} 
+            level={level + 1}
+            isAddMode={isAddMode}
           />
         ))}
       </>
     );
   };
 
-  const filteredMenus = filteredByApp.filter((menu) => {
-    if (!searchTerm) return true;
-    return (
-      menu.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
-      menu.code.toLowerCase().includes(searchTerm.toLowerCase())
-    );
-  });
+  const filterMenus = (menus: MenuEntryDTO[]) => {
+    const filtered = selectedApp
+      ? menus.filter(menu => menu.applicationCode === selectedApp)
+      : menus;
 
-  const menuTree = buildMenuTree(filteredMenus);
+    return filtered.filter((menu) => {
+      if (!searchTerm) return true;
+      return (
+        menu.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
+        menu.code.toLowerCase().includes(searchTerm.toLowerCase())
+      );
+    });
+  };
 
-  const hasChanges = Array.from(menuAssignments.entries()).some(([menuCode, isAssigned]) => {
-    const assignedCodes = new Set(assignedMenus?.map(menu => menu.code) || []);
-    const wasAssigned = assignedCodes.has(menuCode);
-    return isAssigned !== wasAssigned;
-  });
+  const filteredNotAssigned = filterMenus(menusNotAssigned);
+  const filteredAssigned = filterMenus(assignedMenus as any || []);
+  const menuTreeNotAssigned = buildMenuTree(filteredNotAssigned);
+  const menuTreeAssigned = buildMenuTree(filteredAssigned);
+
+  const hasChanges = menusToAdd.size > 0 || menusToRemove.size > 0;
 
   return (
     <IGRPDialogPrimitive open={open} onOpenChange={onOpenChange}>
@@ -281,13 +300,12 @@ export function ManageMenusModal({
             Gerenciar Menus
           </IGRPDialogTitlePrimitive>
           <IGRPDialogDescriptionPrimitive>
-            Selecione os menus que estarão disponíveis para este departamento.
+            Adicione ou remova menus do departamento.
           </IGRPDialogDescriptionPrimitive>
         </IGRPDialogHeaderPrimitive>
 
-        <div className="flex flex-col sm:flex-row gap-3 pb-4">
-          
-          <div className="max-w-full relative">
+        <div className="flex flex-col w-full sm:flex-row gap-3 pb-4">
+          <div className="max-w-full w-9/12 relative">
             <IGRPIcon
               iconName="Search"
               className="absolute left-2.5 top-2.5 size-4 text-muted-foreground"
@@ -300,7 +318,7 @@ export function ManageMenusModal({
               onChange={(e) => setSearchTerm(e.target.value)}
             />
           </div>
-          <div className="w-full sm:w-64">
+          <div className="w-3/12">
             <IGRPSelectPrimitive 
               value={selectedApp} 
               onValueChange={setSelectedApp}
@@ -321,53 +339,105 @@ export function ManageMenusModal({
               </IGRPSelectContentPrimitive>
             </IGRPSelectPrimitive>
           </div>
-
         </div>
 
-        <div className="flex-1 overflow-y-auto">
-          {loading ? (
-            <div className="space-y-3">
-              {Array.from({ length: 5 }).map((_, i) => (
-                <IGRPSkeletonPrimitive key={i} className="h-14 rounded-lg" />
-              ))}
-            </div>
-          ) : menuTree.length === 0 ? (
-            <div className="flex flex-col items-center justify-center py-12 text-muted-foreground">
-              <IGRPIcon iconName="Menu" className="w-12 h-12 mb-3 opacity-30" strokeWidth={1.5} />
-              <p className="font-medium">Nenhum menu encontrado</p>
-              <p className="text-sm">
-                {searchTerm 
-                  ? "Tente ajustar os termos de pesquisa" 
-                  : "Atribua aplicações ao departamento primeiro"
-                }
-              </p>
-            </div>
-          ) : (
-            <div className="rounded-md border">
-              <IGRPTablePrimitive>
-                <IGRPTableHeaderPrimitive>
-                  <IGRPTableRowPrimitive>
-                    <IGRPTableHeadPrimitive className="w-12 text-center">
-                      <IGRPIcon iconName="Check" className="w-4 h-4 mx-auto" strokeWidth={2} />
-                    </IGRPTableHeadPrimitive>
-                    <IGRPTableHeadPrimitive>Menu</IGRPTableHeadPrimitive>
-                    <IGRPTableHeadPrimitive className="w-48">Aplicação</IGRPTableHeadPrimitive>
-                  </IGRPTableRowPrimitive>
-                </IGRPTableHeaderPrimitive>
-                
-                <IGRPTableBodyPrimitive>
-                  {menuTree.map((menu) => (
-                    <MenuTreeRow key={menu.code} menu={menu} />
-                  ))}
-                </IGRPTableBodyPrimitive>
-              </IGRPTablePrimitive>
-            </div>
-          )}
-        </div>
+        <IGRPTabsPrimitive defaultValue="add" className="flex-1 flex flex-col overflow-hidden">
+          <IGRPTabsListPrimitive className="grid w-full grid-cols-2">
+            <IGRPTabsTriggerPrimitive value="add" className="gap-2">
+              <IGRPIcon iconName="Plus" className="w-4 h-4" strokeWidth={2} />
+              Adicionar ({menusToAdd.size})
+            </IGRPTabsTriggerPrimitive>
+            <IGRPTabsTriggerPrimitive value="remove" className="gap-2">
+              <IGRPIcon iconName="Minus" className="w-4 h-4" strokeWidth={2} />
+              Remover ({menusToRemove.size})
+            </IGRPTabsTriggerPrimitive>
+          </IGRPTabsListPrimitive>
+
+          <IGRPTabsContentPrimitive value="add" className="flex-1 overflow-y-auto mt-4">
+            {loading ? (
+              <div className="space-y-3">
+                {Array.from({ length: 5 }).map((_, i) => (
+                  <IGRPSkeletonPrimitive key={i} className="h-14 rounded-lg" />
+                ))}
+              </div>
+            ) : menuTreeNotAssigned.length === 0 ? (
+              <div className="flex flex-col items-center justify-center py-12 text-muted-foreground">
+                <IGRPIcon iconName="Menu" className="w-12 h-12 mb-3 opacity-30" strokeWidth={1.5} />
+                <p className="font-medium">Nenhum menu disponível</p>
+                <p className="text-sm">
+                  {searchTerm 
+                    ? "Tente ajustar os termos de pesquisa" 
+                    : "Todos os menus já estão adicionados"
+                  }
+                </p>
+              </div>
+            ) : (
+              <div className="rounded-md border">
+                <IGRPTablePrimitive>
+                  <IGRPTableHeaderPrimitive>
+                    <IGRPTableRowPrimitive>
+                      <IGRPTableHeadPrimitive className="w-12 text-center" />
+                      <IGRPTableHeadPrimitive>Menu</IGRPTableHeadPrimitive>
+                      <IGRPTableHeadPrimitive className="w-48">Aplicação</IGRPTableHeadPrimitive>
+                    </IGRPTableRowPrimitive>
+                  </IGRPTableHeaderPrimitive>
+                  
+                  <IGRPTableBodyPrimitive>
+                    {menuTreeNotAssigned.map((menu) => (
+                      <MenuTreeRow key={menu.code} menu={menu} isAddMode={true} />
+                    ))}
+                  </IGRPTableBodyPrimitive>
+                </IGRPTablePrimitive>
+              </div>
+            )}
+          </IGRPTabsContentPrimitive>
+
+          <IGRPTabsContentPrimitive value="remove" className="flex-1 overflow-y-auto mt-4">
+            {loading ? (
+              <div className="space-y-3">
+                {Array.from({ length: 5 }).map((_, i) => (
+                  <IGRPSkeletonPrimitive key={i} className="h-14 rounded-lg" />
+                ))}
+              </div>
+            ) : menuTreeAssigned.length === 0 ? (
+              <div className="flex flex-col items-center justify-center py-12 text-muted-foreground">
+                <IGRPIcon iconName="Menu" className="w-12 h-12 mb-3 opacity-30" strokeWidth={1.5} />
+                <p className="font-medium">Nenhum menu adicionado</p>
+                <p className="text-sm">
+                  {searchTerm 
+                    ? "Tente ajustar os termos de pesquisa" 
+                    : "Não há menus para remover"
+                  }
+                </p>
+              </div>
+            ) : (
+              <div className="rounded-md border">
+                <IGRPTablePrimitive>
+                  <IGRPTableHeaderPrimitive>
+                    <IGRPTableRowPrimitive>
+                      <IGRPTableHeadPrimitive className="w-12 text-center" />
+                      <IGRPTableHeadPrimitive>Menu</IGRPTableHeadPrimitive>
+                      <IGRPTableHeadPrimitive className="w-48">Aplicação</IGRPTableHeadPrimitive>
+                    </IGRPTableRowPrimitive>
+                  </IGRPTableHeaderPrimitive>
+                  
+                  <IGRPTableBodyPrimitive>
+                    {menuTreeAssigned.map((menu) => (
+                      <MenuTreeRow key={menu.code} menu={menu} isAddMode={false} />
+                    ))}
+                  </IGRPTableBodyPrimitive>
+                </IGRPTablePrimitive>
+              </div>
+            )}
+          </IGRPTabsContentPrimitive>
+        </IGRPTabsPrimitive>
 
         <div className="flex justify-between items-center px-6 py-4 border-t bg-muted/20">
           <div className="text-sm text-muted-foreground">
-            {filteredMenus.filter(m => menuAssignments.get(m.code)).length} de {filteredMenus.length} selecionados
+            {menusToAdd.size > 0 && `${menusToAdd.size} para adicionar`}
+            {menusToAdd.size > 0 && menusToRemove.size > 0 && " • "}
+            {menusToRemove.size > 0 && `${menusToRemove.size} para remover`}
+            {!hasChanges && "Nenhuma alteração"}
           </div>
           
           <div className="flex gap-2">
@@ -392,7 +462,7 @@ export function ManageMenusModal({
               ) : (
                 <>
                   <IGRPIcon iconName="Check" className="w-4 h-4" strokeWidth={2} />
-                  Salvar Menus
+                  Salvar Alterações
                 </>
               )}
             </IGRPButtonPrimitive>

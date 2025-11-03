@@ -31,10 +31,10 @@
     "@igrp/framework-next-auth": "workspace:*"
   },
   "devDependencies": {
-    "@types/node": "^24.9.1",
-    "next-auth": "^4.24.12",
+    "@types/node": "^24.10.0",
+    "next-auth": "^4.24.13",
     "prettier": "^3.6.2",
-    "rimraf": "^6.0.1",
+    "rimraf": "^6.1.0",
     "typescript": "^5.9.3"
   },
   "engines": {

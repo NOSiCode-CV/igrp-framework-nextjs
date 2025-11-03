@@ -795,6 +795,12 @@ export {
   igrpTextVariants,
 } from './components/horizon/typography/text';
 
+export { 
+  IGRPVideoEmbed, 
+  type IGRPVideoEmbedProps, 
+  type IGRPVideoEmbedAllowFeature 
+} from './components/horizon/video-embed';
+
 // types
 
 export type {

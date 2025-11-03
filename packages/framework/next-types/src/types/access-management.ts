@@ -57,7 +57,7 @@ export interface IGRPRoleArgs {
   name: string;
   description?: string;
   departmentCode: string;
-  parentName?: string;
+  parentCode?: string;
   status: IGRPStatus;
 }
 

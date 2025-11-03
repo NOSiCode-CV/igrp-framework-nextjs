@@ -16,10 +16,10 @@
 --> ...
 
 ## MENUS
---> Review Menu (Create, Edit and Delete)
---> Remove drag and drop
+--> Review Menu (Create, Edit and Delete) *DONE*
+--> Remove drag and drop *DONE*
 --> Add Pagination
---> (new) Add Roles
+--> (new) Add Roles *DOinG*
 
 ## USERS
 --> Review Users (List, Invite)

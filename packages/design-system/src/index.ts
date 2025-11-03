@@ -386,6 +386,8 @@ export { IGRPAlert, type IGRPAlertProps } from './components/horizon/alert';
 
 export { IGRPAlertDialog, type IGRPAlertDialogProps } from './components/horizon/alert-dialog';
 
+export { IGRPAvatar, type IGRPAvatarProps } from './components/horizon/avatar';
+
 export { IGRPBadge, type IGRPBadgeProps, igrpBadgeVariants } from './components/horizon/badge';
 
 export { IGRPButton, type IGRPButtonProps } from './components/horizon/button';
@@ -497,6 +499,7 @@ export {
   IGRPCommandShortcut,
   IGRPCommandSeparator,
 } from './components/horizon/command';
+
 export { IGRPContainer } from './components/horizon/container';
 export { IGRPDataTable, type IGRPDataTableProps } from './components/horizon/data-table';
 export {
@@ -585,6 +588,7 @@ export {
   IGRPDropdownMenuSubTrigger,
   IGRPDropdownMenuSubContent,
 } from './components/horizon/dropdown-menu';
+
 export {
   type IGRPFormContextValue,
   useIGRPFormContext,
@@ -603,6 +607,8 @@ export {
   type LucideProps,
   IGRPIconList,
 } from './components/horizon/icon';
+
+export {IGRPImage, type IGRPImageProps  } from './components/horizon/image';
 
 export {
   IGRPInfoCard,
@@ -797,6 +803,8 @@ export type {
   IGRPInputProps,
   IGRPOptionsProps,
   IGRPGridSize,
+  IGRPSize,
+  IGRPRoundSize,
 } from './types';
 
 // hooks

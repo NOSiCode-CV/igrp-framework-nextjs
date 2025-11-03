@@ -246,11 +246,7 @@ function IGRPCombobox({
           {setSelectValue(currentValue)}
         </IGRPButton>
       </PopoverTrigger>
-      <PopoverContent 
-        className={cn('p-0', selectClassName)} 
-        align="start"
-        side='bottom'
-      >
+      <PopoverContent className={cn('p-0', selectClassName)} align="start" side="bottom">
         <Command>
           {showSearch && (
             <div className="relative p-2">

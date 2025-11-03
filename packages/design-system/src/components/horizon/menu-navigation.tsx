@@ -8,7 +8,6 @@ import { Card, CardContent, CardHeader, CardTitle } from '../primitives/card';
 import { IGRPBadge } from './badge';
 import { IGRPIcon } from './icon';
 
-
 interface IGRPMenuNavigationItem {
   id: string;
   label: string;

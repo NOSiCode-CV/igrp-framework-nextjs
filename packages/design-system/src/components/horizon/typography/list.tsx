@@ -278,11 +278,7 @@ function IGRPTextList({
 
   return (
     <Component
-      className={cn(
-        igrpTextlistVariants({ size, spacing }),
-        colorClass.text,
-        className,
-      )}
+      className={cn(igrpTextlistVariants({ size, spacing }), colorClass.text, className)}
       {...props}
     >
       {items.map((item, index) => renderListItem(item, index))}

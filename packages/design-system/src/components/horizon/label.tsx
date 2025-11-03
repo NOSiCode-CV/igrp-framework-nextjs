@@ -6,14 +6,21 @@ import { cn } from '../../lib/utils';
 type IGRPLabelProps = React.ComponentProps<typeof Label> & {
   label?: string;
   required?: boolean;
+  name?: string;
 };
 
-function IGRPLabel({ label = '', className, required = false, id }: IGRPLabelProps) {
+function IGRPLabel({ 
+  label, 
+  className, 
+  required = false,
+  name,
+  id, 
+}: IGRPLabelProps) {
   if (!label) return null;
 
   return (
     <Label
-      htmlFor={id}
+      htmlFor={name || id}
       className={cn(
         required && 'after:content-["*"] after:ml-0.5 after:text-destructive',
         className,

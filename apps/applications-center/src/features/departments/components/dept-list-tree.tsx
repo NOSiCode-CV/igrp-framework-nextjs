@@ -309,7 +309,7 @@ export function DepartmentListTree() {
                     variant="outline"
                     className="cursor-pointer"
                   >
-                    <IGRPIcon iconName="AppWindow" className="w-4 h-4" strokeWidth={2} />
+                    <IGRPIcon iconName="Pencil" className="w-4 h-4" strokeWidth={2} />
                     Editar
                   </IGRPButtonPrimitive>
 

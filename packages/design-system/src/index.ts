@@ -499,6 +499,7 @@ export {
   IGRPCommandShortcut,
   IGRPCommandSeparator,
 } from './components/horizon/command';
+
 export { IGRPContainer } from './components/horizon/container';
 export { IGRPDataTable, type IGRPDataTableProps } from './components/horizon/data-table';
 export {
@@ -587,6 +588,7 @@ export {
   IGRPDropdownMenuSubTrigger,
   IGRPDropdownMenuSubContent,
 } from './components/horizon/dropdown-menu';
+
 export {
   type IGRPFormContextValue,
   useIGRPFormContext,
@@ -605,6 +607,8 @@ export {
   type LucideProps,
   IGRPIconList,
 } from './components/horizon/icon';
+
+export {IGRPImage, type IGRPImageProps  } from './components/horizon/image';
 
 export {
   IGRPInfoCard,

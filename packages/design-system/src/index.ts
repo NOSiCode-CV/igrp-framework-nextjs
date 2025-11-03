@@ -608,7 +608,7 @@ export {
   IGRPIconList,
 } from './components/horizon/icon';
 
-export {IGRPImage, type IGRPImageProps  } from './components/horizon/image';
+export { IGRPImage, type IGRPImageProps, type IGRPRatioType } from './components/horizon/image';
 
 export {
   IGRPInfoCard,

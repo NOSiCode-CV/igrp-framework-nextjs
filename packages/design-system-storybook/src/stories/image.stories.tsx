@@ -17,17 +17,14 @@ export default {
      rounded: {
       control: 'select',
       description: 'Radius',
-      options: ['rounded-none', 'rounded-sm', 'rounded', 'rounded-md', 'rounded-lg', 'rounded-xl', 'rounded-2xl', 'rounded-3xl', 'rounded-full'],
-      defaultValue: 'rounded-none',
+      options: ['none', 'sm', 'md', 'lg', 'xl', '2xl', '3xl', '4xl', 'full'],
+      defaultValue: 'none',
     },
-
   },
 } as Meta;
 
-
-
 const Template: StoryFn<typeof IGRPImage> = (args) => (
-  <div className='container my-10 mx-auto p-4 border rounded-lg shadow-sm'>
+  <div className='container my-10 mx-auto p-4'>
     <IGRPImage       
       {...args} 
     />

@@ -3,7 +3,6 @@ export const IGRPColors = {
     primary: {
       bg: 'bg-transparent',
       text: 'text-primary',
-      textDark: 'dark:text-primary/40',
       border: 'border-primary',
       bgForeground: 'bg-primary',
       textBadge: 'text-primary',
@@ -18,8 +17,7 @@ export const IGRPColors = {
     },
     success: {
       bg: 'bg-transparent',
-      text: 'text-emerald-700',
-      textDark: 'dark:text-emerald-400',
+      text: 'text-emerald-700 dark:text-emerald-400',
       border: 'border-emerald-700',
       bgForeground: 'bg-emerald-600',
       textBadge: 'text-emerald-700',
@@ -34,8 +32,7 @@ export const IGRPColors = {
     },
     destructive: {
       bg: 'bg-transparent',
-      text: 'text-red-600',
-      textDark: 'dark:text-red-400',
+      text: 'text-red-600 dark:text-red-400',
       border: 'border-red-500',
       bgForeground: 'bg-red-500',
       textBadge: 'text-red-600',
@@ -50,8 +47,7 @@ export const IGRPColors = {
     },
     warning: {
       bg: 'bg-transparent',
-      text: 'text-amber-600',
-      textDark: 'dark:text-amber-400',
+      text: 'text-amber-600 dark:text-amber-400',
       border: 'border-amber-500',
       bgForeground: 'bg-amber-500',
       textBadge: 'text-amber-700',
@@ -66,8 +62,7 @@ export const IGRPColors = {
     },
     info: {
       bg: 'bg-transparent',
-      text: 'text-blue-600',
-      textDark: 'dark:text-blue-400',
+      text: 'text-blue-600 dark:text-blue-400',
       border: 'border-blue-500',
       bgForeground: 'bg-blue-500',
       textBadge: 'text-blue-700',
@@ -82,8 +77,7 @@ export const IGRPColors = {
     },
     secondary: {
       bg: 'bg-transparent',
-      text: 'text-gray-700',
-      textDark: 'dark:text-gray-300',
+      text: 'text-gray-700 dark:text-gray-300',
       border: 'border-black',
       bgForeground: 'bg-gray-500',
       textBadge: 'text-gray-700',
@@ -98,8 +92,7 @@ export const IGRPColors = {
     },
     indigo: {
       bg: 'bg-transparent',
-      text: 'text-purple-600',
-      textDark: 'dark:text-purple-400',
+      text: 'text-purple-600 dark:text-purple-400',
       border: 'border-purple-500',
       bgForeground: 'bg-purple-500',
       textBadge: 'text-purple-700',

@@ -388,9 +388,6 @@
   .right-0 {
     right: calc(var(--spacing) * 0);
   }
-  .right-0\.5 {
-    right: calc(var(--spacing) * 0.5);
-  }
   .right-1 {
     right: calc(var(--spacing) * 1);
   }
@@ -412,17 +409,11 @@
   .-bottom-1 {
     bottom: calc(var(--spacing) * -1);
   }
-  .-bottom-1\.5 {
-    bottom: calc(var(--spacing) * -1.5);
-  }
   .-bottom-12 {
     bottom: calc(var(--spacing) * -12);
   }
   .bottom-0 {
     bottom: calc(var(--spacing) * 0);
-  }
-  .bottom-0\.5 {
-    bottom: calc(var(--spacing) * 0.5);
   }
   .bottom-4 {
     bottom: calc(var(--spacing) * 4);
@@ -675,9 +666,6 @@
   }
   .inline {
     display: inline;
-  }
-  .inline-block {
-    display: inline-block;
   }
   .inline-flex {
     display: inline-flex;
@@ -2269,9 +2257,6 @@
   }
   .text-\[0\.8rem\] {
     font-size: 0.8rem;
-  }
-  .text-\[10px\] {
-    font-size: 10px;
   }
   .leading-5 {
     --tw-leading: calc(var(--spacing) * 5);
@@ -5865,14 +5850,6 @@
   .dark\:text-muted-foreground {
     &:is(.dark *) {
       color: var(--muted-foreground);
-    }
-  }
-  .dark\:text-primary\/40 {
-    &:is(.dark *) {
-      color: var(--primary);
-      @supports (color: color-mix(in lab, red, red)) {
-        color: color-mix(in oklab, var(--primary) 40%, transparent);
-      }
     }
   }
   .dark\:text-purple-400 {

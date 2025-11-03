@@ -1,19 +1,18 @@
 import Image from 'next/image';
 
 import { cn } from '../../lib/utils';
-import type { IGRPRoundSize } from '../../types';
 import { AspectRatio } from '../primitives/aspect-ratio';
 
 interface IGRPImageProps extends React.ComponentProps<typeof Image> {
   className?: string;
   ratio?: '1/1' | '4/3' | '16/9' | '21/9';
-  rounded?: IGRPRoundSize;
+ // rounded?: IGRPRoundSize;
 }
 
 function IGRPImage({
   className,
   ratio = '16/9',
-  rounded,
+  // rounded,
   fill = false,
   width = 250,
   height = 250,
@@ -35,7 +34,7 @@ function IGRPImage({
           width={fill ? undefined : width}
           height={fill ? undefined : height}
           {...props}
-          className={cn('object-cover object-center', rounded, className)}
+          className={cn('object-cover object-center', /*rounded,*/ className)}
         />
       </AspectRatio>
     </div>

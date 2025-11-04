@@ -25,7 +25,7 @@ function IGRPIcon({
     return <AlertCircle className="text-destructive" />;
   }
 
-  const ref = id ?? iconName
+  const ref = id ?? iconName;
 
   return <LucideIcon className={className} id={ref} color={color} size={size} {...props} />;
 }

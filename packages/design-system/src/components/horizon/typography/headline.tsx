@@ -52,7 +52,7 @@ function IGRPHeadline({
   ...props
 }: IGRPHeadlineProps) {
   const _id = useId();
-  const ref = name ?? id ?? _id
+  const ref = name ?? id ?? _id;
 
   const Tag = variant as keyof React.JSX.IntrinsicElements;
 

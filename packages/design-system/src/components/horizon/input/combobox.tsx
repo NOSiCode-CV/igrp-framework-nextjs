@@ -69,11 +69,11 @@ function IGRPCombobox({
   iconName = 'CornerDownRight',
 }: IGRPComboboxProps) {
   const _id = useId();
-  const fieldName = name ?? id ?? _id
+  const fieldName = name ?? id ?? _id;
 
-  const formContext = useFormContext()
-  const [open, setOpen] = useState(false)
-  const [localValue, setLocalValue] = useState<string | string[]>(value)
+  const formContext = useFormContext();
+  const [open, setOpen] = useState(false);
+  const [localValue, setLocalValue] = useState<string | string[]>(value);
 
   useEffect(() => {
     setLocalValue(value);

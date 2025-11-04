@@ -21,7 +21,6 @@ import { IGRPLoadingSpinner } from './loading-spiner';
 import { IGRPHeadline } from './typography/headline';
 import { IGRPText } from './typography/text';
 
-
 type IGRPDocumentItem = {
   id: number;
   title: string;
@@ -50,14 +49,14 @@ function IGRPPdfViewer({
   inlineHeight = '50vh',
   notFoundLabel = 'No File found',
   name,
-  id
+  id,
 }: IGRPPdfViewerProps) {
   const [selectedDocument, setSelectedDocument] = useState<IGRPDocumentItem>();
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [loading, setLoading] = useState(true);
 
   const _id = useId();
-  const ref = name ?? id ?? _id
+  const ref = name ?? id ?? _id;
 
   useEffect(() => {
     const timeout = setTimeout(() => {

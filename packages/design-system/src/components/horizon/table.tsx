@@ -50,11 +50,11 @@ function IGRPTable<T>({
   footerColumn,
   isStriped = false,
   isHeaderSticky = false,
-  id
+  id,
 }: IGRPTableProps<T>) {
   const _id = useId();
-  const ref = id ?? _id
-  
+  const ref = id ?? _id;
+
   const renderCell = (value: T[keyof T], render?: (value: T[keyof T]) => ReactNode): ReactNode => {
     if (render) {
       return render(value);

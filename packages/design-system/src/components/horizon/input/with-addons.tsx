@@ -16,8 +16,11 @@ import { IGRPLabel } from '../label';
 import { cn } from '../../../lib/utils';
 import type { IGRPInputProps, IGRPOptionsProps } from '../../../types';
 
-interface IGRPInputAddOnProps 
-  extends Omit< IGRPInputProps, 'showIcon' | 'iconName' | 'iconSize' | 'iconPlacement' | 'iconClassName'> {
+interface IGRPInputAddOnProps
+  extends Omit<
+    IGRPInputProps,
+    'showIcon' | 'iconName' | 'iconSize' | 'iconPlacement' | 'iconClassName'
+  > {
   options: IGRPOptionsProps[];
   optionLabel?: string;
   selectValue?: string;

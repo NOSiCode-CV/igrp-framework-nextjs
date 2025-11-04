@@ -39,8 +39,8 @@ function IGRPPageHeader({
   iconBackButton,
 }: IGRPPageHeaderProps) {
   const _id = useId();
-  const ref = name ?? id ?? _id
-  
+  const ref = name ?? id ?? _id;
+
   return (
     <div
       className={cn(

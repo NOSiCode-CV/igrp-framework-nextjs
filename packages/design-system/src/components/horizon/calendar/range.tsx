@@ -24,7 +24,7 @@ function IGRPCalendarRange({
   ...props
 }: IGRPCalendarRangeProps) {
   const _id = useId();
-  const ref = name ?? id ?? _id
+  const ref = name ?? id ?? _id;
 
   const [range, setRange] = useState<DateRange | undefined>(date);
   const disabled = getDisabledDays({ disableBefore, disableAfter, disableDayOfWeek });

@@ -17,18 +17,19 @@ import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '../pr
 import { IGRPBadge, type IGRPBadgeProps } from './badge';
 import { IGRPIcon, type IGRPIconName } from './icon';
 
-interface IGRPFormListProps<TItem> extends Omit<IGRPBaseAttributes,'iconPlacement' | 'helperText'>,
-  Partial<IGRPBadgeProps> {
-    id: string;
-    defaultItem: TItem;
-    description?: string;
-    renderItem: (item: TItem, index: number) => React.ReactNode;
-    computeLabel?: (item: TItem, index: number) => string;
-    badgeValue?: string;
-    className?: string;
-    addButtonLabel?: string;
-    addButtonIconName?: IGRPIconName | string;
-    badgeClassName?: string;
+interface IGRPFormListProps<TItem>
+  extends Omit<IGRPBaseAttributes, 'iconPlacement' | 'helperText'>,
+    Partial<IGRPBadgeProps> {
+  id: string;
+  defaultItem: TItem;
+  description?: string;
+  renderItem: (item: TItem, index: number) => React.ReactNode;
+  computeLabel?: (item: TItem, index: number) => string;
+  badgeValue?: string;
+  className?: string;
+  addButtonLabel?: string;
+  addButtonIconName?: IGRPIconName | string;
+  badgeClassName?: string;
 }
 
 function IGRPFormList<TItem>({
@@ -54,7 +55,7 @@ function IGRPFormList<TItem>({
   addButtonLabel = 'Adicionar',
   addButtonIconName = 'Plus',
 }: IGRPFormListProps<TItem>) {
-  const groupId = name ?? id
+  const groupId = name ?? id;
 
   const [openItem, setOpenItem] = useState<string | undefined>('item-0');
   const { fields, append, remove } = useFieldArray({ name: groupId });

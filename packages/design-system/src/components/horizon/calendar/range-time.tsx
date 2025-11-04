@@ -22,7 +22,7 @@ function IGRPCalendarRangeTime({
   ...props
 }: IGRPCalendarRangeTimeProps) {
   const _id = useId();
-  const ref = name ?? id ?? _id
+  const ref = name ?? id ?? _id;
 
   const [startTime, setStartTime] = useState<string>('');
   const [endTime, setEndTime] = useState<string>('');

@@ -10,16 +10,10 @@ type IGRPLabelProps = React.ComponentProps<typeof Label> & {
   name?: string;
 };
 
-function IGRPLabel({ 
-  label, 
-  className, 
-  required = false, 
-  name, 
-  id 
-}: IGRPLabelProps) {
+function IGRPLabel({ label, className, required = false, name, id }: IGRPLabelProps) {
   const _id = useId();
-  const ref = name ?? id ?? _id
-  
+  const ref = name ?? id ?? _id;
+
   if (!label) return null;
 
   return (

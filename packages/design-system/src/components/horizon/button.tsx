@@ -8,12 +8,14 @@ import { IGRPIcon } from './icon';
 import { cn } from '../../lib/utils';
 import type { IGRPBaseAttributes } from '../../types';
 
-interface IGRPButtonProps extends Omit<React.ComponentProps<typeof Button>, 'name'>,
-  VariantProps<typeof buttonVariants>, IGRPBaseAttributes {
-    children?: ReactNode;
-    asChild?: boolean;
-    loading?: boolean;
-    loadingText?: string;
+interface IGRPButtonProps
+  extends Omit<React.ComponentProps<typeof Button>, 'name'>,
+    VariantProps<typeof buttonVariants>,
+    IGRPBaseAttributes {
+  children?: ReactNode;
+  asChild?: boolean;
+  loading?: boolean;
+  loadingText?: string;
 }
 
 function IGRPButton({
@@ -33,8 +35,8 @@ function IGRPButton({
   ...props
 }: IGRPButtonProps) {
   const _id = useId();
-  const ref = name ?? id ?? _id
-  
+  const ref = name ?? id ?? _id;
+
   const { size } = props;
 
   const computedIconSize =

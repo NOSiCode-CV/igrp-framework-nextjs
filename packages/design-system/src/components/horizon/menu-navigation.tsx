@@ -84,7 +84,7 @@ function IGRPMenuNavigation({
   const navigationContext = useContext(NavigationContext);
 
   const _id = useId();
-  const ref = id ?? _id
+  const ref = id ?? _id;
 
   const activeSection = controlledActiveSection ?? internalActiveSection;
 

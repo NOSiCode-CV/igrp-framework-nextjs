@@ -29,9 +29,10 @@ const igrpModalDialogContentVariants = cva('w-full sm:max-w-lg max-h-[90vh] over
   },
 });
 
-interface IGRPModalDialogContentProps extends React.ComponentProps<typeof DialogContent>,
-  VariantProps<typeof igrpModalDialogContentVariants> {
-    contentClassName?: string;
+interface IGRPModalDialogContentProps
+  extends React.ComponentProps<typeof DialogContent>,
+    VariantProps<typeof igrpModalDialogContentVariants> {
+  contentClassName?: string;
 }
 
 function IGRPModalDialogContent({

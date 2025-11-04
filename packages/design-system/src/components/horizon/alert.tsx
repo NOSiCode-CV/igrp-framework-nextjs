@@ -7,14 +7,11 @@ import type { IGRPBaseAttributes, IGRPPlacementProps } from '../../types';
 import { IGRPIcon, type IGRPIconName } from './icon';
 import { IGRPLink } from './typography/link';
 
-interface IGRPAlertProps extends Pick<IGRPBaseAttributes,
-  'showIcon' | 
-  'iconName' | 
-  'iconClassName' | 
-  'iconPlacement' | 
-  'label' | 
-  'name'> 
-{
+interface IGRPAlertProps
+  extends Pick<
+    IGRPBaseAttributes,
+    'showIcon' | 'iconName' | 'iconClassName' | 'iconPlacement' | 'label' | 'name'
+  > {
   variant?: IGRPColorRole;
   color?: IGRPColorVariants;
   children: React.ReactNode;
@@ -26,8 +23,8 @@ interface IGRPAlertProps extends Pick<IGRPBaseAttributes,
   borderColored?: boolean;
   bgColored?: boolean;
   className?: string;
-  alignment?: IGRPPlacementProps
-  id?: string
+  alignment?: IGRPPlacementProps;
+  id?: string;
 }
 
 function IGRPAlert({
@@ -51,7 +48,7 @@ function IGRPAlert({
   alignment = 'start',
 }: IGRPAlertProps) {
   const _id = useId();
-  const ref = name ?? id ?? _id
+  const ref = name ?? id ?? _id;
 
   const iconDefault = igrpAlertIconMappings[color];
   const colors = IGRPColors[variant][color];
@@ -72,12 +69,7 @@ function IGRPAlert({
       id={ref}
     >
       <div className={cn('flex gap-3', alignmentClass)}>
-        {showIcon && (
-          <IGRPIcon
-            iconName={alertIcon}
-            className={cn('shrink-0', iconClassName)}
-          />
-        )}
+        {showIcon && <IGRPIcon iconName={alertIcon} className={cn('shrink-0', iconClassName)} />}
         <div className="flex grow justify-between gap-3">
           <div className="grow space-y-1">{children}</div>
 

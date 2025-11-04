@@ -39,10 +39,10 @@ function IGRPAccordion({
   ...accordionProps
 }: IGRPAccordionProps) {
   const _id = useId();
-  const ref = name ?? id ?? _id
+  const ref = name ?? id ?? _id;
 
-  const _defaultValue = defaultValue || items[0]?.title
-  const defaultId = igrpCleanString(_defaultValue).toLowerCase()
+  const _defaultValue = defaultValue || items[0]?.title;
+  const defaultId = igrpCleanString(_defaultValue).toLowerCase();
 
   return (
     <Accordion

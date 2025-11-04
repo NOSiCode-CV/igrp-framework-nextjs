@@ -18,7 +18,6 @@ import {
 import { type IGRPButtonProps } from './button';
 import { IGRPIcon, type IGRPIconName } from './icon';
 
-
 interface IGRPAlertDialogProps extends Omit<IGRPBaseAttributes, 'ref'> {
   open?: boolean;
   onOpenChange?: (open: boolean) => void;
@@ -62,10 +61,10 @@ function IGRPAlertDialog({
   actionProps,
   cancelProps,
   name,
-  id
+  id,
 }: IGRPAlertDialogProps) {
   const _id = useId();
-  const ref = name ?? id ?? _id
+  const ref = name ?? id ?? _id;
 
   const iconDefault = igrpAlertIconMappings[variant];
   const softColors = IGRPColors.soft[variant];
@@ -111,7 +110,9 @@ function IGRPAlertDialog({
             )}
             <div className="flex-1">
               <AlertDialogHeader className={cn(iconPlacement === 'center' && 'items-center')}>
-                {title && <AlertDialogTitle className={cn(titleClassName)}>{title}</AlertDialogTitle>}
+                {title && (
+                  <AlertDialogTitle className={cn(titleClassName)}>{title}</AlertDialogTitle>
+                )}
                 {description && (
                   <AlertDialogDescription className={descriptionClassName}>
                     {description}
@@ -138,7 +139,9 @@ function IGRPAlertDialog({
                 )}
                 <AlertDialogAction
                   onClick={handleAction}
-                  className={cn(actionProps?.className || strongColors.bg + ' ' + strongColors.text)}
+                  className={cn(
+                    actionProps?.className || strongColors.bg + ' ' + strongColors.text,
+                  )}
                   {...actionProps}
                 >
                   {actionLabel}
@@ -155,7 +158,7 @@ function IGRPAlertDialog({
 interface AlertIconProps {
   bgClass: string;
   textClass: string;
-  iconPlacement: IGRPPlacementProps
+  iconPlacement: IGRPPlacementProps;
   iconName: IGRPIconName | string;
 }
 

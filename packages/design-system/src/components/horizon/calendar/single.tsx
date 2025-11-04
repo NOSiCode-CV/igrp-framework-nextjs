@@ -23,8 +23,8 @@ function IGRPCalendarSingle({
   ...props
 }: IGRPCalendarSingleProps) {
   const _id = useId();
-  const ref = name ?? id ?? _id
-  
+  const ref = name ?? id ?? _id;
+
   const [ownDate, setOwnDate] = useState<Date | undefined>(date);
   const disabled = getDisabledDays({ disableBefore, disableAfter, disableDayOfWeek });
 

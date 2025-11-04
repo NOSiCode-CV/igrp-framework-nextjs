@@ -1024,6 +1024,9 @@
   .min-w-5 {
     min-width: calc(var(--spacing) * 5);
   }
+  .min-w-6 {
+    min-width: calc(var(--spacing) * 6);
+  }
   .min-w-8 {
     min-width: calc(var(--spacing) * 8);
   }
@@ -1042,9 +1045,6 @@
   .min-w-60 {
     min-width: calc(var(--spacing) * 60);
   }
-  .min-w-\[1\.5rem\] {
-    min-width: 1.5rem;
-  }
   .min-w-\[8rem\] {
     min-width: 8rem;
   }
@@ -1059,9 +1059,6 @@
   }
   .flex-1 {
     flex: 1;
-  }
-  .flex-shrink-0 {
-    flex-shrink: 0;
   }
   .shrink-0 {
     flex-shrink: 0;

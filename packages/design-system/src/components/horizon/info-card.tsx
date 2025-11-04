@@ -39,11 +39,11 @@ function IGRPInfoCard({
   variantSection = 'solid',
   colorSection = 'primary',
   orientation = 'vertical',
-  id
+  id,
 }: IGRPInfoCardProps) {
   const _id = useId();
-  const ref = id ?? _id
-  
+  const ref = id ?? _id;
+
   const infoCardClass = IGRPColors[variantSection][colorSection];
 
   return (

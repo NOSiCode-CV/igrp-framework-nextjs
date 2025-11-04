@@ -93,7 +93,7 @@ function IGRPDataTable<TData, TValue>({
   // onRowSelectionChange,
   getRowCanExpand = () => false,
   renderSubComponent,
-  id
+  id,
 }: IGRPDataTableProps<TData, TValue>) {
   const [columnFilters, setColumnFilters] = useState<ColumnFiltersState>([]);
   const [columnVisibility, setColumnVisibility] = useState<VisibilityState>({});
@@ -107,7 +107,7 @@ function IGRPDataTable<TData, TValue>({
   const [rowSelection, setRowSelection] = useState({});
 
   const _id = useId();
-  const ref = id ?? _id
+  const ref = id ?? _id;
 
   const table = useReactTable({
     data,

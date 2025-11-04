@@ -72,8 +72,8 @@ function IGRPLink({
   ...props
 }: IGRPLinkProps) {
   const _id = useId();
-  const ref = id ?? _id
-  
+  const ref = id ?? _id;
+
   const isExternal = igrpIsExternalUrl(href);
   const colorLink = variant ? IGRPColors[variant][color].text : igrpColorText(color);
   const linkClass = cn(IGRPLinkVariants({ size, underline }), colorLink, className);
@@ -104,11 +104,11 @@ function IGRPLink({
   }
 
   return (
-    <Link 
-      href={href || '#'} 
-      {...props} 
-      className={linkClass} 
-      onClick={onClick} 
+    <Link
+      href={href || '#'}
+      {...props}
+      className={linkClass}
+      onClick={onClick}
       target={target}
       id={ref}
     >

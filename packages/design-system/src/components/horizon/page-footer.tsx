@@ -9,16 +9,10 @@ interface IGRPPageFooterProps {
   id?: string;
 }
 
-function IGRPPageFooter({ 
-  className, 
-  children, 
-  name, 
-  isSticky,
-  id
-}: IGRPPageFooterProps) {
+function IGRPPageFooter({ className, children, name, isSticky, id }: IGRPPageFooterProps) {
   const _id = useId();
-  const ref = name ?? id ?? _id
-  
+  const ref = name ?? id ?? _id;
+
   return (
     <div
       className={cn(

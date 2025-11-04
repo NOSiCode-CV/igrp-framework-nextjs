@@ -58,11 +58,11 @@ function IGRPNotification({
   border = 'default',
   variant = 'default',
   customActions,
-  id
+  id,
 }: IGRPNotificationProps) {
   const _id = useId();
-  const ref = id ?? _id
-  
+  const ref = id ?? _id;
+
   const icon = iconName ?? typeIconMap[variant ?? 'default'];
 
   return (

@@ -9,11 +9,11 @@ import { Switch } from '../../primitives/switch';
 import { IGRPFormField } from '../form/form-field';
 import { IGRPLabel } from '../label';
 
-
-interface IGRPSwitchProps extends React.ComponentProps<typeof Switch>,
-  Pick<IGRPBaseAttributes, 'helperText' | 'label'> {
-    labelClassName?: string;
-    error?: string;
+interface IGRPSwitchProps
+  extends React.ComponentProps<typeof Switch>,
+    Pick<IGRPBaseAttributes, 'helperText' | 'label'> {
+  labelClassName?: string;
+  error?: string;
 }
 
 function IGRPSwitch({

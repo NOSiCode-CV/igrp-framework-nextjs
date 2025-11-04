@@ -13,11 +13,11 @@ function IGRPRepetitiveComponent<T>({
   children,
   keyExtractor,
   name,
-  id
+  id,
 }: IGRPRepetitiveComponentProps<T>) {
   const _id = useId();
-  const ref = name ?? id ?? _id
-  
+  const ref = name ?? id ?? _id;
+
   return (
     <div id={ref}>
       {items.map((item) => (

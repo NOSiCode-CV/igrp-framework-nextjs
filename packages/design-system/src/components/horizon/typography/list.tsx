@@ -100,10 +100,7 @@ const getDefaultIcon = (type: IGRPTextListType, iconColor?: IGRPColorVariants, i
     case 'ordered':
       return (
         <span
-          className={cn(
-            IGRPColors.outline[iconColor || 'secondary'].badge,
-            'font-medium min-w-6',
-          )}
+          className={cn(IGRPColors.outline[iconColor || 'secondary'].badge, 'font-medium min-w-6')}
         >
           {(index || 0) + 1}.
         </span>
@@ -146,8 +143,8 @@ function IGRPTextList({
   ...props
 }: IGRPTextListProps) {
   const _id = useId();
-  const ref = id ?? _id
-  
+  const ref = id ?? _id;
+
   const [visibleItems, setVisibleItems] = useState<Set<number>>(new Set());
   const [collapsedItems, setCollapsedItems] = useState<Set<string | number>>(new Set());
 

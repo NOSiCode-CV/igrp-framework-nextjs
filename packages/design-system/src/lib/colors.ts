@@ -110,7 +110,7 @@ export const IGRPColors = {
       textCard: 'text-primary',
       bgCardIcon: 'bg-primary',
       borderCard: 'border-primary',
-      alert: 'text-background bg-red-600 border-red-600/50'
+      alert: 'text-background bg-red-600 border-red-600/50',
     },
     warning: {
       bg: 'bg-amber-500',

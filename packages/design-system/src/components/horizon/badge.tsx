@@ -22,7 +22,8 @@ const igrpBadgeVariants = cva(
   },
 );
 
-interface IGRPBadgeProps extends Omit<IGRPBaseAttributes, 'helperText'>,
+interface IGRPBadgeProps
+  extends Omit<IGRPBaseAttributes, 'helperText'>,
     Omit<React.ComponentProps<'div'>, 'color'>,
     VariantProps<typeof igrpBadgeVariants> {
   dot?: boolean;

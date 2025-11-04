@@ -28,9 +28,9 @@ function IGRPStatusBanner({
   id,
   className,
 }: IGRPStatusBannerProps) {
- const _id = useId();
-    const ref = name ?? id ?? _id
-  
+  const _id = useId();
+  const ref = name ?? id ?? _id;
+
   return (
     <IGRPAlert
       variant={variant}

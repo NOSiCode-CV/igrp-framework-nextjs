@@ -10,19 +10,13 @@ function IGRPStatsCardTopBorderColored({
   iconName,
   name,
   id,
-}: Pick<IGRPStatsCardProps, 
-  'cardVariant' | 
-  'title' | 
-  'value' | 
-  'className' | 
-  'iconClassName' | 
-  'iconName' |
-  'name' |
-  'id'
+}: Pick<
+  IGRPStatsCardProps,
+  'cardVariant' | 'title' | 'value' | 'className' | 'iconClassName' | 'iconName' | 'name' | 'id'
 >) {
   const _id = useId();
-    const ref = name ?? id ?? _id
-    
+  const ref = name ?? id ?? _id;
+
   return (
     <IGRPStatsCard
       title={title}

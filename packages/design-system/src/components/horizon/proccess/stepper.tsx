@@ -27,16 +27,16 @@ interface IGRPStepperProcessProps {
   id?: string;
 }
 
-function IGRPStepperProcess({ 
-  steps, 
-  children, 
-  isLoading, 
+function IGRPStepperProcess({
+  steps,
+  children,
+  isLoading,
   currentStep,
-  id 
+  id,
 }: IGRPStepperProcessProps) {
   const _id = useId();
-  const ref = id ?? _id
-  
+  const ref = id ?? _id;
+
   return (
     <div className="space-y-8 w-full" id={ref}>
       <div className="flex justify-center">

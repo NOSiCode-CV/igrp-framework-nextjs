@@ -95,26 +95,28 @@ const badgeVariants = cva(
   },
 );
 
-interface IGRPAvatarProps extends React.ComponentProps<typeof Avatar>, IGRPBaseAttributes, 
-  VariantProps<typeof avatarVariants> {
-    src?: string;
-    alt?: string;
-    fallback?: string;
-    fallbackClassName?: string;
-    fallbackIcon?: IGRPIconName | string;
-    hasFallbackIcon?: boolean;
-    hasStatus?: boolean;
-    status: IGRPColorVariants;
-    showIcon?: boolean;
-    iconName?: IGRPIconName | string;
-    showBadge?: boolean;
-    className?: string;
-    badgeNumber?: number;
-    iconNumber?: string;
-    badgeColor: IGRPColorVariants;
-    iconColor: string;
-    badgeShowIcon?: boolean;
-    badgeIconName?: string;
+interface IGRPAvatarProps
+  extends React.ComponentProps<typeof Avatar>,
+    IGRPBaseAttributes,
+    VariantProps<typeof avatarVariants> {
+  src?: string;
+  alt?: string;
+  fallback?: string;
+  fallbackClassName?: string;
+  fallbackIcon?: IGRPIconName | string;
+  hasFallbackIcon?: boolean;
+  hasStatus?: boolean;
+  status: IGRPColorVariants;
+  showIcon?: boolean;
+  iconName?: IGRPIconName | string;
+  showBadge?: boolean;
+  className?: string;
+  badgeNumber?: number;
+  iconNumber?: string;
+  badgeColor: IGRPColorVariants;
+  iconColor: string;
+  badgeShowIcon?: boolean;
+  badgeIconName?: string;
 }
 function IGRPAvatar({
   src,

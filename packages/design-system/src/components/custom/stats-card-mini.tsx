@@ -2,7 +2,7 @@
 
 import { useId } from 'react';
 
-import { IGRPColors , type IGRPColorVariants} from '../../lib/colors';
+import { IGRPColors, type IGRPColorVariants } from '../../lib/colors';
 import { cn } from '../../lib/utils';
 import { IGRPStatsCard, type IGRPStatsCardProps } from '../horizon/stats-card';
 
@@ -41,8 +41,8 @@ function StatsCardMini({
   ...props
 }: StatsCardMiniProps) {
   const _id = useId();
-  const ref = name ?? id ?? _id
-    
+  const ref = name ?? id ?? _id;
+
   const color = IGRPColors.outline[variant];
 
   return (

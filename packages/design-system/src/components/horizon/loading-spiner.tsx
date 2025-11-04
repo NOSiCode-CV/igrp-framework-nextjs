@@ -1,4 +1,4 @@
-'use client'
+'use client';
 
 import { useId } from 'react';
 
@@ -10,14 +10,10 @@ interface IGRPLoadingSpinnerProps {
   id?: string;
 }
 
-function IGRPLoadingSpinner({ 
-  parentClassName, 
-  className,
-  id
-}: IGRPLoadingSpinnerProps) {
+function IGRPLoadingSpinner({ parentClassName, className, id }: IGRPLoadingSpinnerProps) {
   const _id = useId();
-  const ref = id ?? _id
-  
+  const ref = id ?? _id;
+
   return (
     <div className={cn('flex justify-center items-center h-64', parentClassName)} id={ref}>
       <div

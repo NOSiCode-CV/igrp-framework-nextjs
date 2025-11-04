@@ -21,8 +21,8 @@ function IGRPUserAvatar({
   id,
 }: IGRPUserAvatarProps) {
   const _id = useId();
-  const ref = name ?? id ?? _id
-      
+  const ref = name ?? id ?? _id;
+
   return (
     <Avatar className={className} id={ref}>
       <AvatarImage src={image || undefined} alt={alt || 'Current User'} />

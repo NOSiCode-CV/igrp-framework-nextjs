@@ -295,8 +295,8 @@ function IGRPStatsCard({
   ...props
 }: IGRPStatsCardProps) {
   const _id = useId();
-    const ref = name ?? id ?? _id
-    
+  const ref = name ?? id ?? _id;
+
   const isInteractive = !!onClick;
   const outlineColors = IGRPColors['outline'][cardVariant];
   const solidColors = IGRPColors['solid'][cardVariant];

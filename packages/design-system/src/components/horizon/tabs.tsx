@@ -80,12 +80,12 @@ function IGRPTabs({
   defaultValue,
   variant = 'default',
   fullWidth = false,
-  id
+  id,
 }: IGRPTabsProps) {
   const [activeTab, setActiveTab] = useState(items[0]?.value || '');
-  
+
   const _id = useId();
-  const ref = id ?? _id
+  const ref = id ?? _id;
 
   return (
     <Tabs

@@ -73,8 +73,8 @@ function IGRPText({
   ...props
 }: IGRPTextProps) {
   const _id = useId();
-  const ref = name ?? id ?? _id
-  
+  const ref = name ?? id ?? _id;
+
   const [isVisible, setIsVisible] = useState(!animate);
 
   useEffect(() => {
@@ -141,8 +141,4 @@ function IGRPText({
   );
 }
 
-export {
-  IGRPText,
-  type IGRPTextProps,
-  igrpTextVariants,
-};
+export { IGRPText, type IGRPTextProps, igrpTextVariants };

@@ -99,7 +99,6 @@ function IGRPSelect({
   showGroup = false,
   ...props
 }: IGRPSelectProps) {
-
   const _id = useId();
   const fieldName = name ?? id ?? _id;
 

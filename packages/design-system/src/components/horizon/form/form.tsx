@@ -61,11 +61,11 @@ function IGRPForm<TSchema extends AnyZod>({
   className,
   gridClassName,
   children,
-  id
+  id,
 }: IGRPFormProps<TSchema>) {
   const _id = useId();
-  const ref = id ?? _id
-  
+  const ref = id ?? _id;
+
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [formError, setFormError] = useState<string | undefined>();
   const internalFormRef = useRef<IGRPFormHandle<TSchema> | null>(null);
@@ -147,7 +147,7 @@ function IGRPForm<TSchema extends AnyZod>({
   return (
     <IGRPFormContext.Provider value={{ form, isSubmitting, formError }}>
       <Form {...form}>
-        <form className={className} onSubmit={form.handleSubmit(handleSubmit)} noValidate  id={ref}>
+        <form className={className} onSubmit={form.handleSubmit(handleSubmit)} noValidate id={ref}>
           {formError && (
             <div className="mb-4 p-3 border border-destructive bg-destructive/10 rounded-md text-destructive text-sm">
               {formError}

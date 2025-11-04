@@ -6,14 +6,10 @@ interface IGRPSeparatorProps extends React.ComponentProps<typeof Separator> {
   id?: string;
 }
 
-function IGRPSeparator({ 
-  name,
-  id,
-  ...props 
-}: IGRPSeparatorProps) {
+function IGRPSeparator({ name, id, ...props }: IGRPSeparatorProps) {
   const _id = useId();
-  const ref = name ?? id ?? _id
-  
+  const ref = name ?? id ?? _id;
+
   return <Separator id={ref} {...props} />;
 }
 

@@ -21,8 +21,8 @@ function IGRPCalendarSingleTime({
   id,
   ...props
 }: IGRPCalendarSingleTimeProps) {
-   const _id = useId();
-  const ref = name ?? id ?? _id
+  const _id = useId();
+  const ref = name ?? id ?? _id;
 
   const [startTime, setStartTime] = useState<string>('');
   const [endTime, setEndTime] = useState<string>('');

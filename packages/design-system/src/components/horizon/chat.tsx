@@ -9,33 +9,28 @@ import { IGRPInputText } from './input/text';
 import { IGRPIcon } from './icon';
 
 interface IGRPChatMessage {
-  role: 'user' | 'assistant' | 'system'
-  content: string
-  type?: 'text' | 'image' | 'link' | 'button'
-  timestamp?: string
-  sender?: string
+  role: 'user' | 'assistant' | 'system';
+  content: string;
+  type?: 'text' | 'image' | 'link' | 'button';
+  timestamp?: string;
+  sender?: string;
 }
 
 interface IGRPChatProps {
-  apiEndpoint: string
-  labelDescription?: string
-  name?: string
-  id?: string
+  apiEndpoint: string;
+  labelDescription?: string;
+  name?: string;
+  id?: string;
 }
 
-function IGRPChat({ 
-  apiEndpoint, 
-  labelDescription = 'Ask me anything!',
-  name,
-  id,
-}: IGRPChatProps) {
+function IGRPChat({ apiEndpoint, labelDescription = 'Ask me anything!', name, id }: IGRPChatProps) {
   const [messages, setMessages] = useState<IGRPChatMessage[]>([]);
   const [input, setInput] = useState('');
   const [isLoading, setIsLoading] = useState(false);
   const messagesEndRef = useRef<HTMLDivElement | null>(null);
 
   const _id = useId();
-  const ref = name ?? id ?? _id
+  const ref = name ?? id ?? _id;
 
   useEffect(() => {
     messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' });

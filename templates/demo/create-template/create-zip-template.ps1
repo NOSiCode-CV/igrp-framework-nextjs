@@ -2,7 +2,7 @@
 
 # === CONFIG ===
 $zipName = "igrp-next-template.zip"
-$excludeFolders = @(".next", "node_modules", ".git", "create-template")
+$excludeFolders = @(".next", "node_modules", ".git", "create-template", ".env")
 $excludeTemp = "_excluded"
 
 # === READ VERSION FROM package.json ===

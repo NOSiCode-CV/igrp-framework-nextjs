@@ -17,8 +17,7 @@
     "sourceMap": true,
     "composite": true
   },
-  "references": [
-    // { "path": "./packages/igrp-cli-next" },
+  "references": [   
     { "path": "./templates/demo" },
     { "path": "./apps/applications-center" },
     { "path": "./packages/design-system" },

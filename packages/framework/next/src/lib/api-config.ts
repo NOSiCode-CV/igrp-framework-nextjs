@@ -6,16 +6,16 @@ export type IGRPClientRuntimeConfig = {
 
 let runtimeConfig: IGRPClientRuntimeConfig | null = null;
 
-export function setIGRPAccessClientConfig(config: IGRPClientRuntimeConfig) {
+export function igrpSetAccessClientConfig(config: IGRPClientRuntimeConfig) {
   runtimeConfig = config;
 }
 
-export function getIGRPAccessClientConfig(): IGRPClientRuntimeConfig {
+export function igrpGetAccessClientConfig(): IGRPClientRuntimeConfig {
   if (!runtimeConfig)
-    throw new Error('[access-client]: Configuração do cliente de acesso não definida.');
+    throw new Error('[access-client]: Configuração cliente de acesso não está definida.');
   return runtimeConfig;
 }
 
-export function resetIGRPAccessClientConfig() {
+export function igrpResetAccessClientConfig() {
   runtimeConfig = null;
 }

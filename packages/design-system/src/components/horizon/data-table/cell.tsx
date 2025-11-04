@@ -1,10 +1,14 @@
 import { type Row } from '@tanstack/react-table';
 import { format } from 'date-fns';
 
-import { IGRPBadge, type IGRPBadgeProps } from '../badge';
-import { IGRPIcon } from '../icon';
 import { Button } from '../../primitives/button';
 import { Checkbox } from '../../primitives/checkbox';
+import { Tooltip, TooltipTrigger, TooltipContent, TooltipProvider } from '../../primitives/tooltip';
+
+import { IGRPBadge, type IGRPBadgeProps } from '../badge';
+import { IGRPIcon } from '../icon';
+import { IGRPLink, type IGRPLinkProps } from '../typography/link';
+import { DD_MM_YYYY } from '../../../lib/constants';
 
 interface IGRPDataTableCellCheckboxProps<TData> extends React.ComponentProps<typeof Checkbox> {
   row: Row<TData>;
@@ -36,23 +40,23 @@ function IGRPDataTableCellExpander<TData>({ row, field }: IGRPDataTableCellExpan
   return row.getCanExpand() ? (
     <Button
       {...{
-        className: 'size-7 shadow-none text-muted-foreground',
+        className: 'shadow-none text-muted-foreground',
         onClick: row.getToggleExpandedHandler(),
         'aria-expanded': row.getIsExpanded(),
         'aria-label': row.getIsExpanded()
           ? `Collapse details for ${field}`
           : `Expand details for ${field}`,
-        size: 'icon',
+        size: 'sm',
         variant: 'ghost',
       }}
     >
       {row.getIsExpanded() ? (
-        <IGRPIcon iconName="ChevronDown" className="opacity-60" size={16} strokeWidth={2} />
+        <IGRPIcon iconName="ChevronDown" />
       ) : (
-        <IGRPIcon iconName="ChevronUp" className="opacity-60" size={16} strokeWidth={2} />
+        <IGRPIcon iconName="ChevronRight" />
       )}
     </Button>
-  ) : undefined;
+  ) : null;
 }
 
 interface IGRPDataTableCellAmountProps {
@@ -106,15 +110,65 @@ interface IGRPDataTableCellDateProps {
   dateFormat?: string;
 }
 
-function IGRPDataTableCellDate({ date, dateFormat = 'dd/MM/yyyy' }: IGRPDataTableCellDateProps) {
+function IGRPDataTableCellDate({ date, dateFormat = DD_MM_YYYY }: IGRPDataTableCellDateProps) {
   if (!date) return null;
-  // if (date instanceof Date) return <span>{format(new Date(date), dateFormat)}</span>
-  // if (typeof date === 'string') {
-  //   const dateParse = parse(date, dateFormat, new Date())
-  //   return <span>{format(dateParse, dateFormat)}</span>
-  // }
-
   return <span>{format(new Date(date), dateFormat)}</span>;
+}
+
+function IGRPDataTableCellLink({
+  href,
+  children,
+  target,
+  showIcon,
+  rel,
+  className,
+  iconName,
+  iconClassName,
+  iconPlacement,
+  ...props
+}: IGRPLinkProps) {
+  return (
+    <IGRPLink
+      href={href}
+      target={target}
+      showIcon={showIcon}
+      rel={rel}
+      className={className}
+      iconName={iconName}
+      iconClassName={iconClassName}
+      iconPlacement={iconPlacement}
+      {...props}
+    >
+      {children}
+    </IGRPLink>
+  );
+}
+
+type IGRPDataTableCellTooltipProps = {
+  text: string;
+  side?: 'top' | 'bottom' | 'left' | 'right';
+  align?: 'start' | 'center' | 'end';
+};
+
+function IGRPDataTableCellTooltip({
+  text,
+  side = 'top',
+  align = 'start',
+}: IGRPDataTableCellTooltipProps) {
+  return (
+    <TooltipProvider delayDuration={200}>
+      <Tooltip>
+        <TooltipTrigger asChild>
+          <div className="cursor-help whitespace-nowrap truncate">
+            <span>{text}</span>
+          </div>
+        </TooltipTrigger>
+        <TooltipContent side={side} align={align} sideOffset={4} className="max-w-sm">
+          {text}
+        </TooltipContent>
+      </Tooltip>
+    </TooltipProvider>
+  );
 }
 
 export {
@@ -123,8 +177,11 @@ export {
   IGRPDataTableCellAmount,
   IGRPDataTableCellBadge,
   IGRPDataTableCellDate,
+  IGRPDataTableCellLink,
+  IGRPDataTableCellTooltip,
   type IGRPDataTableCellExpanderProps,
   type IGRPDataTableCellAmountProps,
   type IGRPDataTableCellBadgeProps,
   type IGRPDataTableCellDateProps,
+  type IGRPDataTableCellTooltipProps,
 };

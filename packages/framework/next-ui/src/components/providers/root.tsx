@@ -40,17 +40,21 @@ export function IGRPRootProviders({
     theme = 'system',
     richColors = true,
     expand = false,
-    duration = 3500,
+    duration = 5000,
   } = toasterConfig ?? {};
 
   return (
     <IGRPSidebarProviderPrimitive defaultOpen={defaultOpen}>
-      {showSidebar && <IGRPTemplateSidebar data={sidebarData} />}
+      {showSidebar && (
+        <div className="z-45">
+          <IGRPTemplateSidebar data={sidebarData} />
+        </div>
+      )}
 
-      <IGRPSidebarInsetPrimitive>
+      <IGRPSidebarInsetPrimitive className="min-w-0">
         {showHeader && <IGRPTemplateHeader data={headerData} />}
 
-        <main className="flex flex-col flex-1 px-6 py-8">{children}</main>
+        <div className="p-4">{children}</div>
 
         {showToaster && (
           <IGRPToaster
@@ -59,6 +63,7 @@ export function IGRPRootProviders({
             richColors={richColors}
             expand={expand}
             duration={duration}
+            {...toasterConfig}
           />
         )}
       </IGRPSidebarInsetPrimitive>

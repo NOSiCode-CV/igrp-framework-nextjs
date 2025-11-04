@@ -7,18 +7,20 @@ export { IGRPLayout, type IGRPLayoutArgs } from './components/igrp-layout';
 
 export { IGRPRootLayout, type IGRPRootLayoutArgs } from './components/igrp-root-layout';
 
-export { buildConfig } from './config/build';
+export { igrpBuildConfig } from './config/build';
 
-export { getIGRPAccessClient } from './lib/api-client';
+export { igrpGetAccessClient, igrpResetAccessClient } from './lib/api-client';
 
 export {
   type IGRPClientRuntimeConfig,
-  setIGRPAccessClientConfig,
-  getIGRPAccessClientConfig,
-  resetIGRPAccessClientConfig,
+  igrpGetAccessClientConfig,
+  igrpResetAccessClientConfig,
+  igrpSetAccessClientConfig,
 } from './lib/api-config';
 
 export { igrpBuildQueryString } from './lib/build-query-string';
+
+export { igrpDeleteAuthCookies } from './lib/delete-auth-cookies';
 
 export { mapperApplications } from './mappers/applications-mapper';
 

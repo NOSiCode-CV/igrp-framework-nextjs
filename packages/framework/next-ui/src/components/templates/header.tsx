@@ -30,7 +30,7 @@ function IGRPTemplateHeader({ data, className }: IGRPTemplateHeaderProps) {
       type: 'info',
       description:
         '[header-template] Cabeçalho do IGRP não tem dados, define os dados no src/igrp.template.config.',
-      duration: 6000,
+      duration: 10000,
     });
     return null;
   }
@@ -38,13 +38,13 @@ function IGRPTemplateHeader({ data, className }: IGRPTemplateHeaderProps) {
   const { user, showBreadcrumb, showSearch, showNotifications, showThemeSwitcher, showUser } = data;
 
   return (
-    <header
+    <div
       className={cn(
-        'bg-background sticky top-0 inset-x-0 isolate z-10 border-b flex items-center justify-between gap-2 px-4 py-2',
+        'bg-background sticky top-0 inset-x-0 isolate z-40 border-b flex items-center justify-between gap-2 px-4 py-2 min-w-0',
         className,
       )}
     >
-      <div className="flex items-center gap-2 h-12">
+      <div className="flex items-center gap-2 h-12 min-w-0">
         <IGRPSidebarTriggerPrimitive />
         {showBreadcrumb && (
           <>
@@ -56,7 +56,7 @@ function IGRPTemplateHeader({ data, className }: IGRPTemplateHeaderProps) {
           </>
         )}
       </div>
-      <div className="flex items-center gap-2">
+      <div className="flex items-center gap-2 flex-shrink-0">
         {showSearch && <IGRPTemplateCommandSearch />}
 
         {showNotifications && (
@@ -69,7 +69,7 @@ function IGRPTemplateHeader({ data, className }: IGRPTemplateHeaderProps) {
 
         {showUser && <IGRPTemplateNavUserHeader user={user} />}
       </div>
-    </header>
+    </div>
   );
 }
 

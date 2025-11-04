@@ -34,7 +34,6 @@ type IGRPTemplateMenuArgs = {
 
 export function IGRPTemplateMenus({ menus = [] }: IGRPTemplateMenuArgs) {
   const pathname = usePathname();
-
   const menuData = useMemo(() => (menus.length > 0 ? menus : undefined), [menus]);
 
   const { groups, childrenByParentKey, keyOf } = useMemo(() => {
@@ -98,10 +97,7 @@ export function IGRPTemplateMenus({ menus = [] }: IGRPTemplateMenuArgs) {
     return (
       <IGRPAlertPrimitive variant="destructive">
         <IGRPIcon iconName="CircleAlert" />
-        <IGRPAlertDescriptionPrimitive>
-          O modo de protótipo não está habilitado e nenhum código de aplicação válido foi
-          encontrado.
-        </IGRPAlertDescriptionPrimitive>
+        <IGRPAlertDescriptionPrimitive>Applicação sem menus.</IGRPAlertDescriptionPrimitive>
       </IGRPAlertPrimitive>
     );
   }
@@ -119,29 +115,47 @@ export function IGRPTemplateMenus({ menus = [] }: IGRPTemplateMenuArgs) {
 
   return (
     <>
-      {sections.map((section) => {
-        const sectionKey = keyOf(section as any);
-        const sectionLabel = section.name;
-        const topLevel = getChildren(sectionKey);
+      {sections.length > 0 ? (
+        sections.map((section) => {
+          const sectionKey = keyOf(section as any);
+          const sectionLabel = section.name;
+          const topLevel = getChildren(sectionKey);
 
-        return (
-          <IGRPSidebarGroupPrimitive key={`grp-${sectionKey}`}>
-            <IGRPSidebarGroupLabelPrimitive>{sectionLabel}</IGRPSidebarGroupLabelPrimitive>
-            <IGRPSidebarGroupContentPrimitive>
-              <IGRPSidebarMenuPrimitive role="navigation">
-                {topLevel.map((menu) => (
-                  <MenuItemWithSubmenus
-                    key={`menu-${menu.id}`}
-                    menu={menu}
-                    pathname={pathname}
-                    childMenus={getChildren(keyOf(menu as any))}
-                  />
-                ))}
-              </IGRPSidebarMenuPrimitive>
-            </IGRPSidebarGroupContentPrimitive>
-          </IGRPSidebarGroupPrimitive>
-        );
-      })}
+          return (
+            <IGRPSidebarGroupPrimitive key={`grp-${sectionKey}`}>
+              <IGRPSidebarGroupLabelPrimitive>{sectionLabel}</IGRPSidebarGroupLabelPrimitive>
+              <IGRPSidebarGroupContentPrimitive>
+                <IGRPSidebarMenuPrimitive role="navigation">
+                  {topLevel.map((menu) => (
+                    <MenuItemWithSubmenus
+                      key={`menu-${menu.id}`}
+                      menu={menu}
+                      pathname={pathname}
+                      childMenus={getChildren(keyOf(menu as any))}
+                    />
+                  ))}
+                </IGRPSidebarMenuPrimitive>
+              </IGRPSidebarGroupContentPrimitive>
+            </IGRPSidebarGroupPrimitive>
+          );
+        })
+      ) : (
+        <IGRPSidebarGroupPrimitive key="grp-root">
+          {/* no label for root */}
+          <IGRPSidebarGroupContentPrimitive>
+            <IGRPSidebarMenuPrimitive role="navigation">
+              {getChildren('root').map((menu) => (
+                <MenuItemWithSubmenus
+                  key={`menu-${menu.id}`}
+                  menu={menu}
+                  pathname={pathname}
+                  childMenus={getChildren(keyOf(menu as any))}
+                />
+              ))}
+            </IGRPSidebarMenuPrimitive>
+          </IGRPSidebarGroupContentPrimitive>
+        </IGRPSidebarGroupPrimitive>
+      )}
     </>
   );
 }

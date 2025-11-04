@@ -6,8 +6,9 @@ export type { NextAuthOptions, TokenSet };
 export interface Session extends DefaultSession {
   accessToken?: string;
   idToken?: string;
-  expiresAt?: number;
   error?: string;
+  expiresAt?: number;
+  forceLogout?: boolean;
   user?: {
     id?: string;
   } & DefaultSession['user'];

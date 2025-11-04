@@ -1,7 +1,6 @@
 import { getServerSession } from 'next-auth';
 import type { NextAuthOptions } from 'next-auth';
 import NextAuth from 'next-auth';
-import KeycloakProvider from 'next-auth/providers/keycloak';
 
 export async function getServerSessionStrict(opts: NextAuthOptions) {
   const session = await getServerSession(opts);
@@ -11,5 +10,5 @@ export async function getServerSessionStrict(opts: NextAuthOptions) {
 
 export { getServerSession } from 'next-auth';
 export type { NextAuthOptions } from 'next-auth';
-export { NextAuth } 
-export { KeycloakProvider }
+export { NextAuth };
+export { default as KeycloakProvider } from 'next-auth/providers/keycloak';

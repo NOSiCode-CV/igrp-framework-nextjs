@@ -18,7 +18,7 @@ const mapMenu = (menu: MenuEntryDTO): IGRPMenuItemArgs => ({
   url: menu.url,
   pageSlug: menu.pageSlug,
   applicationCode: menu.applicationCode,
-  permissions: menu.permissions,
+  roles: menu.roles,
   parentCode: menu.parentCode,
 });
 

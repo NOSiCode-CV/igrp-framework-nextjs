@@ -1,9 +1,9 @@
 services:
-  cadastro-ui-development:
+  igrp-template-development:
     build:
       context: ../../
       dockerfile: docker/development/Dockerfile
 
-    image: igrp-next-template-development
+    image: igrp-template-development
     ports:
       - '3001:3000'

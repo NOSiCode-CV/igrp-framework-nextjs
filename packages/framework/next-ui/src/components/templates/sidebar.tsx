@@ -23,13 +23,13 @@ interface IGRPTemplateSidebarProps extends React.ComponentProps<typeof IGRPSideb
 }
 
 function IGRPTemplateSidebar({ data, ...props }: IGRPTemplateSidebarProps) {
-  if (!data) throw new Error('Sidebar data is required');
+  if (!data) throw new Error('Dados de Sidebar é obrigatorio.');
 
   const pathname = usePathname();
   const { footerItems, menuItems, user, showAppSwitcher, apps, appCode, appCenterUrl } = data;
 
   return (
-    <IGRPSidebarPrimitive collapsible="icon" {...props} variant="sidebar">
+    <IGRPSidebarPrimitive collapsible="icon" {...props}>
       <IGRPSidebarHeaderPrimitive>
         {showAppSwitcher && (
           <IGRPTemplateAppSwitcher apps={apps} appCode={appCode} appCenterUrl={appCenterUrl} />

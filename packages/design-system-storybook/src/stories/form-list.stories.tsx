@@ -127,7 +127,6 @@ const Template = () => {
   const formRef = useRef<IGRPFormHandle<typeof schema>>(null);
 
   const field = formRef?.current?.watch('socials');
-  console.log({ field });
 
   return (
     <div className='mx-auto px-6 py-8'>

@@ -7,7 +7,7 @@
     "jsx": "react-jsx",
 
     "strict": true,
-    "noEmit": false,                 
+    "noEmit": false,
     "composite": true,
 
     "verbatimModuleSyntax": true,

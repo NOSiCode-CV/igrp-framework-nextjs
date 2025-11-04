@@ -6,7 +6,7 @@ export type IGRPStatus = 'ACTIVE' | 'INACTIVE' | 'DELETED';
 
 export type IGRPTargetType = '_self' | '_blank';
 
-export type IGRPApplicationType = 'INTERNAL' | 'EXTERNAL';
+export type IGRPApplicationType = 'INTERNAL' | 'EXTERNAL' | 'SYSTEM';
 
 export type IGRPConfigurationType = 'CLUSTER' | 'ORGANIZATION';
 
@@ -14,14 +14,14 @@ export interface IGRPApplicationArgs {
   id: number;
   code: string;
   name: string;
-  description?: string;
+  description?: string | null;
   status: IGRPStatus;
   type: IGRPApplicationType;
   owner?: string;
-  picture?: string;
-  url?: string;
+  picture?: string | null;
+  url?: string | null;
   slug?: string;
-  departmentCode: string;
+  departments: string[];
   createdBy?: string;
   createdDate?: string;
   lastModifiedBy?: string;
@@ -45,7 +45,7 @@ export interface IGRPMenuItemArgs {
   createdDate?: string;
   lastModifiedBy?: string;
   lastModifiedDate?: string;
-  permissions: string[];
+  roles: string[];
 }
 
 export type IGRPMenuCRUDArgs = Omit<IGRPMenuItemArgs, 'type'> & {
@@ -57,7 +57,7 @@ export interface IGRPRoleArgs {
   name: string;
   description?: string;
   departmentCode: string;
-  parentName?: string;
+  parentCode?: string;
   status: IGRPStatus;
 }
 

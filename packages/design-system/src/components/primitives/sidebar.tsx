@@ -1,9 +1,11 @@
+/* eslint-disable react-refresh/only-export-components */
+
 'use client';
 
 import { createContext, useCallback, useContext, useEffect, useMemo, useState } from 'react';
 import { Slot } from '@radix-ui/react-slot';
 import { type VariantProps, cva } from 'class-variance-authority';
-import { AlignLeft } from 'lucide-react';
+import { PanelLeftIcon } from 'lucide-react';
 
 import { useIsMobile } from '../../hooks/use-mobile';
 import { cn } from '../../lib/utils';
@@ -148,14 +150,12 @@ function Sidebar({
   variant = 'sidebar',
   collapsible = 'offcanvas',
   className,
-  bgClassName,
   children,
   ...props
 }: React.ComponentProps<'div'> & {
   side?: 'left' | 'right';
   variant?: 'sidebar' | 'floating' | 'inset';
   collapsible?: 'offcanvas' | 'icon' | 'none';
-  bgClassName?: string;
 }) {
   const { isMobile, state, openMobile, setOpenMobile } = useSidebar();
 
@@ -165,7 +165,6 @@ function Sidebar({
         data-slot="sidebar"
         className={cn(
           'bg-sidebar text-sidebar-foreground flex h-full w-(--sidebar-width) flex-col',
-          bgClassName,
           className,
         )}
         {...props}
@@ -182,10 +181,7 @@ function Sidebar({
           data-sidebar="sidebar"
           data-slot="sidebar"
           data-mobile="true"
-          className={cn(
-            'bg-sidebar text-sidebar-foreground w-(--sidebar-width) p-0 [&>button]:hidden',
-            bgClassName,
-          )}
+          className="bg-sidebar text-sidebar-foreground w-(--sidebar-width) p-0 [&>button]:hidden"
           style={
             {
               '--sidebar-width': SIDEBAR_WIDTH_MOBILE,
@@ -242,10 +238,7 @@ function Sidebar({
         <div
           data-sidebar="sidebar"
           data-slot="sidebar-inner"
-          className={cn(
-            'bg-sidebar group-data-[variant=floating]:border-sidebar-border flex h-full w-full flex-col group-data-[variant=floating]:rounded-lg group-data-[variant=floating]:border group-data-[variant=floating]:shadow-sm',
-            bgClassName,
-          )}
+          className="bg-sidebar group-data-[variant=floating]:border-sidebar-border flex h-full w-full flex-col group-data-[variant=floating]:rounded-lg group-data-[variant=floating]:border group-data-[variant=floating]:shadow-sm"
         >
           {children}
         </div>
@@ -270,7 +263,7 @@ function SidebarTrigger({ className, onClick, ...props }: React.ComponentProps<t
       }}
       {...props}
     >
-      <AlignLeft className="size-5.5" strokeWidth={2} />
+      <PanelLeftIcon />
       <span className="sr-only">Toggle Sidebar</span>
     </Button>
   );
@@ -593,6 +586,7 @@ function SidebarMenuSkeleton({
 }) {
   // Random width between 50 to 90%.
   const width = useMemo(() => {
+    // eslint-disable-next-line react-hooks/purity
     return `${Math.floor(Math.random() * 40) + 50}%`;
   }, []);
 
@@ -699,6 +693,5 @@ export {
   SidebarRail,
   SidebarSeparator,
   SidebarTrigger,
-  // eslint-disable-next-line react-refresh/only-export-components
   useSidebar,
 };

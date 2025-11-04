@@ -1,32 +1,15 @@
-// 'use server';
+"use server";
 
-// import { Resource, CreateResourceDto, UpdateResourceDto } from '@/features/resources/types';
-// import { callApi } from '@/lib/api-client';
+import { ResourceDTO, ResourceFilters } from "@igrp/platform-access-management-client-ts";
+import { getClientAccess } from "./access-client";
 
-// export async function getAllResources(): Promise<Resource[]> {
-//   return callApi<Resource[]>('/api/resources');
-// }
-
-// export async function getResourceById(id: number): Promise<Resource> {
-//   return callApi<Resource>(`/api/resources/${id}`);
-// }
-
-// export async function createResource(data: CreateResourceDto): Promise<Resource> {
-//   return callApi<Resource>('/api/resources', {
-//     method: 'POST',
-//     body: JSON.stringify(data),
-//   });
-// }
-
-// export async function updateResource(id: number, data: UpdateResourceDto): Promise<Resource> {
-//   return callApi<Resource>(`/api/resources/${id}`, {
-//     method: 'PATCH',
-//     body: JSON.stringify(data),
-//   });
-// }
-
-// export async function deleteResource(id: number): Promise<void> {
-//   await callApi<void>(`/api/resources/${id}`, {
-//     method: 'DELETE',
-//   });
-// }
+export async function getResources(filters?: ResourceFilters): Promise<ResourceDTO[]> {
+  const client = await getClientAccess();
+  try {
+    const result = await client.resources.getResources(filters);
+    return result.data as ResourceDTO[];
+  } catch (error) {
+    console.error("[resources] Não foi possível obter os dados:", error);
+    throw error;
+  }
+}

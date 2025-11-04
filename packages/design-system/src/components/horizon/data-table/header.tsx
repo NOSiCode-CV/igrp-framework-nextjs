@@ -1,8 +1,14 @@
 'use client';
 
-import { useCallback } from 'react';
 import { type Column, type Table } from '@tanstack/react-table';
-import { ArrowDown, ArrowUp, ArrowUpDown, ChevronsUpDown } from 'lucide-react';
+import {
+  ArrowDown,
+  ArrowUp,
+  ArrowUpDown,
+  ChevronDown,
+  ChevronsUpDown,
+  ChevronUp,
+} from 'lucide-react';
 
 import { Button } from '../../primitives/button';
 import { Checkbox } from '../../primitives/checkbox';
@@ -28,23 +34,35 @@ function IGRPDataTableHeaderSortToggle<T>({
   className,
   ...props
 }: Omit<IGRPDataTableHeaderProps<T>, 'table'> & React.ComponentProps<'div'>) {
-  const canSort = column?.getCanSort();
-  const isSorted = column?.getIsSorted();
+  const canSort = column.getCanSort();
+  const isSorted = column.getIsSorted();
 
-  const handleToggleSorting = useCallback(() => {
-    column?.toggleSorting(isSorted === 'asc');
-  }, [column, isSorted]);
+  const ariaSort = isSorted === 'asc' ? 'ascending' : isSorted === 'desc' ? 'descending' : 'none';
 
   return (
     <div
-      aria-label={`Sort by ${title}`}
-      className={cn('flex items-center space-x-2', className)}
+      aria-label={`Ordenar por ${title}`}
+      className={cn('flex items-center gap-2 w-full', className)}
+      aria-sort={ariaSort as React.AriaAttributes['aria-sort']}
       {...props}
     >
       {canSort ? (
-        <Button variant="ghost" onClick={handleToggleSorting} className="flex items-center gap-2">
+        <Button
+          variant="ghost"
+          onClick={(e) => column.toggleSorting(undefined, e.shiftKey)}
+          className="px-0 py-0 has-[>svg]:px-0 data-[state=open]:bg-accent"
+          title="Ordenar"
+          size="sm"
+        >
           <span>{title}</span>
-          <ArrowUpDown className={cn('ml-2 h-4 w-4', !isSorted && 'text-gray-500')} />
+
+          {isSorted === 'asc' ? (
+            <ChevronUp className="ms-2 text-muted-foreground/70" />
+          ) : isSorted === 'desc' ? (
+            <ChevronDown className="ms-2 text-muted-foreground/70" />
+          ) : (
+            <ArrowUpDown className="ms-2 text-muted-foreground/70" />
+          )}
         </Button>
       ) : (
         <span>{title}</span>
@@ -77,28 +95,25 @@ function IGRPDataTableHeaderSortDropdown<T>({
             <Button
               variant="ghost"
               size="sm"
-              className={cn(
-                '-ml-3 h-8 flex items-center space-x-2',
-                'data-[state=open]:bg-accent data-[state=open]:border-accent',
-              )}
+              className={cn('data-[state=open]:bg-accent data-[state=open]:border-accent')}
             >
               <span>{title}</span>
               {isSorted === 'desc' ? (
-                <ArrowDown />
+                <ArrowDown className="ms-2 text-muted-foreground/70" />
               ) : isSorted === 'asc' ? (
-                <ArrowUp />
+                <ArrowUp className="ms-2 text-muted-foreground/70" />
               ) : (
-                <ChevronsUpDown />
+                <ChevronsUpDown className="ms-2 text-muted-foreground/70" />
               )}
             </Button>
           </DropdownMenuTrigger>
           <DropdownMenuContent align="start">
             <DropdownMenuItem onClick={handleSortAsc} aria-label="Sort ascending">
-              <ArrowUp className="h-3.5 w-3.5 text-muted-foreground/70" />
+              <ArrowUp className="text-muted-foreground/70 size-3.5" />
               Asc
             </DropdownMenuItem>
             <DropdownMenuItem onClick={handleSortDesc} aria-label="Sort descending">
-              <ArrowDown className="h-3.5 w-3.5 text-muted-foreground/70" />
+              <ArrowDown className="text-muted-foreground/70 size-3.5" />
               Desc
             </DropdownMenuItem>
             <DropdownMenuSeparator />
@@ -133,11 +148,11 @@ function IGRPDataTableHeaderDefault<T>({
   title,
   className,
   ...props
-}: Omit<IGRPDataTableHeaderProps<T>, 'column' | 'table'> & React.ComponentProps<'span'>) {
+}: Omit<IGRPDataTableHeaderProps<T>, 'column' | 'table'> & React.ComponentProps<'div'>) {
   return (
-    <span className={cn(className)} {...props}>
+    <div className={cn(className)} {...props}>
       {title}
-    </span>
+    </div>
   );
 }
 

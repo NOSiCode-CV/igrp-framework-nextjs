@@ -1,4 +1,4 @@
-import { getIGRPAccessClient } from '../lib/api-client';
+import { igrpGetAccessClient } from '../lib/api-client';
 import { mapperApplications } from '../mappers/applications-mapper';
 
 export async function fetchAppByCode(appCode: string) {
@@ -8,7 +8,7 @@ export async function fetchAppByCode(appCode: string) {
         '[app-by-code]: O Modo de Visualização não está ativo. Quando está desativado, é necessário indicar o código da aplicação. Não foi encontrado nenhum código da aplicação.',
       );
 
-    const client = await getIGRPAccessClient();
+    const client = await igrpGetAccessClient();
     const result = await client.applications.getApplications({ code: appCode });
     const app = mapperApplications(result);
     return app[0];
@@ -22,7 +22,7 @@ export async function fetchAppsByUser(username: string) {
   try {
     if (!username) throw new Error('[apps-by-user] O utilizador não foi encontrado.');
 
-    const client = await getIGRPAccessClient();
+    const client = await igrpGetAccessClient();
     const result = await client.applications.getApplicationsByUser(username);
     const apps = mapperApplications(result);
     return apps;

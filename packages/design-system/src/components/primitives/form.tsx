@@ -1,4 +1,5 @@
 /* eslint-disable react-refresh/only-export-components */
+
 import { createContext, useContext, useId } from 'react';
 import { Slot } from '@radix-ui/react-slot';
 import {
@@ -106,11 +107,7 @@ function FormControl({ ...props }: React.ComponentProps<typeof Slot>) {
 }
 
 function FormDescription({ className, ...props }: React.ComponentProps<'p'>) {
-  const { error, formDescriptionId } = useFormField();
-
-  if (error) {
-    return null;
-  }
+  const { formDescriptionId } = useFormField();
 
   return (
     <p

@@ -1,9 +1,9 @@
-import { getIGRPAccessClient } from '../lib/api-client';
+import { igrpGetAccessClient } from '../lib/api-client';
 import { mapperUser } from '../mappers/users-mapper';
 
 export const fetchCurrentUser = async () => {
   try {
-    const client = await getIGRPAccessClient();
+    const client = await igrpGetAccessClient();
     const result = await client.users.getCurrentUser();
     const user = mapperUser(result);
     return user;

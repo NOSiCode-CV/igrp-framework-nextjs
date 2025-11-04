@@ -4,6 +4,7 @@ import { type VariantProps } from 'class-variance-authority';
 import { buttonVariants } from '../../primitives/button';
 import { type IGRPIconName } from '../icon';
 import type { igrpModalDialogContentVariants } from '../modal-dialog';
+import { cn } from '../../../lib/utils';
 
 interface IGRPDataTableActionProps {
   labelTrigger?: string;
@@ -38,8 +39,14 @@ interface IGRPDataTableLinkProps
   action?: () => void;
 }
 
-function IGRPDataTableRowAction({ children }: { children: ReactNode }) {
-  return <div className="flex items-center justify-end gap-2">{children}</div>;
+function IGRPDataTableRowAction({
+  className,
+  children,
+}: {
+  className?: string;
+  children: ReactNode;
+}) {
+  return <div className={cn('flex items-center', className)}>{children}</div>;
 }
 
 export {

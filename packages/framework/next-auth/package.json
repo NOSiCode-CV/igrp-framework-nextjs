@@ -1,6 +1,6 @@
 {
   "name": "@igrp/framework-next-auth",
-  "version": "0.1.0-beta.3",
+  "version": "0.1.0-beta.29",
   "description": "IGRP Framework for Next.js | Auth",
   "type": "module",
   "sideEffects": false,
@@ -28,10 +28,14 @@
     "./middleware": {
       "types": "./dist/middleware.d.ts",
       "import": "./dist/middleware.js"
-    },    
+    },
     "./package.json": "./package.json"
   },
-  "files": ["dist", "README.md", "LICENSE"],
+  "files": [
+    "dist",
+    "README.md",
+    "LICENSE"
+  ],
   "main": "./dist/index.js",
   "types": "./dist/index.d.ts",
   "scripts": {
@@ -44,23 +48,30 @@
     "release": "pnpm build && yarn publish --registry=https://sonatype.nosi.cv/repository/igrp/ --tag latest"
   },
   "peerDependencies": {
+    "next": "^15.5.6",
     "next-auth": "^4.24.11",
-    "react": "19.1.1",    
-    "next": "15.5.2"
+    "react": "^19.2.0"
   },
   "peerDependenciesMeta": {
-    "next-auth": { "optional": false }
+    "next-auth": {
+      "optional": false
+    }
   },
-  "devDependencies": {    
-    "@types/node": "24.3.1",
-    "next-auth": "^4.24.11",
+  "devDependencies": {
+    "@types/node": "^24.10.0",
+    "next-auth": "^4.24.13",
     "prettier": "^3.6.2",
-    "rimraf": "^6.0.1",
-    "tsup": "^8.0.0",
-    "typescript": "^5.9.2"
-  },  
+    "rimraf": "^6.1.0",
+    "tsup": "^8.5.0",
+    "typescript": "^5.9.3"
+  },
   "publishConfig": {
     "access": "public"
   },
-  "keywords": ["igrp", "framework", "nextjs", "auth"]
+  "keywords": [
+    "igrp",
+    "framework",
+    "nextjs",
+    "auth"
+  ]
 }

@@ -1,29 +1,44 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 'use client';
 
 import type React from 'react';
-import { useCallback, useEffect, useRef, useState } from 'react';
-import { type Mode, useForm, type UseFormReturn } from 'react-hook-form';
+import { useCallback, useEffect, useId, useRef, useState } from 'react';
+import { type Mode, useForm, type UseFormReturn, type Resolver } from 'react-hook-form';
 import { toast } from 'sonner';
-import { zodResolver } from '@hookform/resolvers/zod';
 import { z } from 'zod';
+import { zodResolver } from '@hookform/resolvers/zod';
 
 import { Form } from '../../primitives/form';
 import { cn } from '../../../lib/utils';
 import { IGRPFormContext } from './form-context';
 
-type IGRPFormHandle<TSchema extends z.ZodTypeAny> = UseFormReturn<z.infer<TSchema>> & {
+type AnyZod = z.ZodType<any, any, any>;
+type InputOf<T extends AnyZod> = z.input<T>;
+type OutputOf<T extends AnyZod> = z.output<T>;
+
+type ResetFn<TSchema extends AnyZod> = UseFormReturn<
+  InputOf<TSchema>,
+  any,
+  OutputOf<TSchema>
+>['reset'];
+
+export type IGRPFormHandle<TSchema extends AnyZod> = UseFormReturn<
+  InputOf<TSchema>,
+  any,
+  OutputOf<TSchema>
+> & {
   submit: () => Promise<void>;
-  reset: (values?: Partial<z.infer<TSchema>>) => void;
-  setError: (message: string) => void;
-  clearError: () => void;
+  reset: ResetFn<TSchema>;
+  setGlobalError: (message: string) => void;
+  clearGlobalError: () => void;
   isSubmitting: boolean;
 };
 
-interface IGRPFormProps<TSchema extends z.ZodType> {
+export interface IGRPFormProps<TSchema extends AnyZod> {
   schema: TSchema;
-  defaultValues?: Partial<z.infer<TSchema>>;
+  defaultValues: InputOf<TSchema>;
   validationMode?: Mode;
-  onSubmit: (values: z.infer<TSchema>) => void | Promise<void>;
+  onSubmit: (values: OutputOf<TSchema>) => void | Promise<void>;
   resetAfterSubmit?: boolean;
   formRef: React.RefObject<IGRPFormHandle<TSchema> | null>;
   onError?: (error: unknown) => void;
@@ -31,9 +46,10 @@ interface IGRPFormProps<TSchema extends z.ZodType> {
   className?: string;
   gridClassName?: string;
   children: React.ReactNode;
+  id?: string;
 }
 
-function IGRPForm<TSchema extends z.ZodType>({
+function IGRPForm<TSchema extends AnyZod>({
   schema,
   defaultValues,
   validationMode = 'onSubmit',
@@ -45,52 +61,49 @@ function IGRPForm<TSchema extends z.ZodType>({
   className,
   gridClassName,
   children,
+  id,
 }: IGRPFormProps<TSchema>) {
+  const _id = useId();
+  const ref = id ?? _id;
+
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [formError, setFormError] = useState<string | undefined>();
   const internalFormRef = useRef<IGRPFormHandle<TSchema> | null>(null);
 
-  const form = useForm<z.infer<TSchema>>({
-    resolver: zodResolver(schema),
-    defaultValues: defaultValues as never,
+  const form = useForm<InputOf<TSchema>, any, OutputOf<TSchema>>({
+    resolver: zodResolver(schema) as Resolver<InputOf<TSchema>, any, OutputOf<TSchema>>,
+    defaultValues,
     mode: validationMode,
   });
 
   useEffect(() => {
     if (defaultValues) {
-      form.reset(defaultValues as never);
+      form.reset(defaultValues);
     }
   }, [form, defaultValues]);
 
-  const clearError = useCallback(() => {
-    setFormError(undefined);
-  }, []);
-
-  const setError = useCallback((message: string) => {
-    setFormError(message);
-  }, []);
+  const clearGlobalError = useCallback(() => setFormError(undefined), []);
+  const setGlobalError = useCallback((message: string) => setFormError(message), []);
 
   const handleSubmit = useCallback(
-    async (values: z.infer<TSchema>) => {
+    async (values: OutputOf<TSchema>) => {
       setIsSubmitting(true);
-      clearError();
+      clearGlobalError();
 
       try {
         await onSubmit(values);
+
         if (resetAfterSubmit) {
-          form.reset(defaultValues as never);
+          form.reset(defaultValues);
         }
       } catch (err) {
         console.error('Form submission failed:', err);
-
         const errorMessage = err instanceof Error ? err.message : 'An unexpected error occurred';
 
-        setError(errorMessage);
+        setGlobalError(errorMessage);
 
         if (showToastOnError) {
-          toast.error('Form Submission Error', {
-            description: errorMessage,
-          });
+          toast.error('Form Submission Error', { description: errorMessage });
         }
 
         onError?.(err);
@@ -99,41 +112,42 @@ function IGRPForm<TSchema extends z.ZodType>({
       }
     },
     [
+      clearGlobalError,
       onSubmit,
       resetAfterSubmit,
-      defaultValues,
       form,
-      clearError,
-      setError,
+      defaultValues,
+      setGlobalError,
       showToastOnError,
       onError,
     ],
   );
 
-  const submitForm = useCallback(async () => {
-    return form.handleSubmit(handleSubmit)();
-  }, [form, handleSubmit]);
+  const submitForm = useCallback(
+    async () => form.handleSubmit(handleSubmit)(),
+    [form, handleSubmit],
+  );
 
   useEffect(() => {
-    const formHandle: IGRPFormHandle<TSchema> = {
+    const handle: IGRPFormHandle<TSchema> = {
       ...form,
       submit: submitForm,
-      reset: (values) => form.reset(values as never),
-      setError,
-      clearError,
+      reset: ((...args) => form.reset(...args)) as ResetFn<TSchema>,
+      setGlobalError,
+      clearGlobalError,
       isSubmitting,
     };
 
     if (formRef) {
-      formRef.current = formHandle;
+      formRef.current = handle;
     }
-    internalFormRef.current = formHandle;
-  }, [form, submitForm, setError, clearError, isSubmitting, formRef]);
+    internalFormRef.current = handle;
+  }, [form, submitForm, setGlobalError, clearGlobalError, isSubmitting, formRef]);
 
   return (
     <IGRPFormContext.Provider value={{ form, isSubmitting, formError }}>
       <Form {...form}>
-        <form className={className} onSubmit={handleSubmit} noValidate>
+        <form className={className} onSubmit={form.handleSubmit(handleSubmit)} noValidate id={ref}>
           {formError && (
             <div className="mb-4 p-3 border border-destructive bg-destructive/10 rounded-md text-destructive text-sm">
               {formError}
@@ -146,4 +160,4 @@ function IGRPForm<TSchema extends z.ZodType>({
   );
 }
 
-export { IGRPForm, type IGRPFormProps, type IGRPFormHandle };
+export { IGRPForm };

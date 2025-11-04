@@ -3,6 +3,7 @@ import { Session } from '@igrp/framework-next-auth';
 import { IGRPHeaderDataArgs } from './header';
 import { IGRPSidebarDataArgs } from './sidebar';
 import { IGRPToasterPosition } from './globals';
+import type { SessionProviderProps } from '@igrp/framework-next-auth/client';
 
 export type IGRPConfigArgs = {
   appCode: string;
@@ -32,6 +33,8 @@ export type IGRPConfigArgs = {
   };
   loginUrl?: string;
   logoutUrl?: string;
+  showSettings?: boolean;
+  sessionArgs?: Partial<SessionProviderProps>;
 };
 
 export type IGRPConfigClient = () => Promise<IGRPConfigArgs>;

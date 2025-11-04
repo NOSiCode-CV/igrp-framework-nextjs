@@ -13,7 +13,7 @@ export async function fetchLayoutData(
   let sidebarData = await getSidebarData();
 
   if (!previewMode) {
-    if (!appCode) throw new Error('[igrp-layout]: Código da aplicação não encontrado.');
+    if (!appCode) throw new Error('[igrp-layout]: Código da aplicação não encontrada.');
 
     const menuItems = await fetchMenus(appCode);
     const user = await fetchCurrentUser();

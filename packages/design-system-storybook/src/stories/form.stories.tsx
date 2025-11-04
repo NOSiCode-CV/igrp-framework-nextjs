@@ -277,7 +277,9 @@ export const BasicExternalTrigger: StoryObj = {
         >
           <BasicFields />
         </IGRPForm>
-        <Button onClick={() => formRef.current?.submit()}>Submit Externally</Button>
+        <IGRPButtonPrimitive onClick={() => formRef.current?.submit()}>
+          Submit Externally
+        </IGRPButtonPrimitive>
       </div>
     );
   },

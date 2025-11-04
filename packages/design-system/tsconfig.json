@@ -38,7 +38,7 @@
   },
   "include": [
     "src"
-  ],
+, "src/components/horizon/alert-dialog/.tsx"  ],
   "exclude": [
     "dist",
     "node_modules"

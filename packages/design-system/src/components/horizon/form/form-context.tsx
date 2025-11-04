@@ -1,11 +1,11 @@
 'use client';
 
 import { createContext, useContext } from 'react';
-import { type UseFormReturn } from 'react-hook-form';
+import { type FieldValues, type UseFormReturn } from 'react-hook-form';
 import { z } from 'zod';
 
 type IGRPFormContextValue<TSchema extends z.ZodType> = {
-  form: UseFormReturn<z.infer<TSchema>>;
+  form: UseFormReturn<z.infer<TSchema> & FieldValues>;
   isSubmitting: boolean;
   formError?: string;
 };

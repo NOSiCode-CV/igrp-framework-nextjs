@@ -1,23 +1,36 @@
-import { loginConfig } from '@/config/login';
-import { AuthCarousel } from '@/features/auth/components/carousel';
-import { AuthForm } from '@/features/auth/components/form';
-import { cn } from '@/lib/utils';
+import { IGRPAuthCarousel, IGRPAuthForm } from "@igrp/framework-next-ui";
 
-const { sliderPosition } = loginConfig;
+import { carouselItems, loginConfig } from "@/config/login";
+import { siteConfig } from "@/config/site";
+import { cn } from "@/lib/utils";
 
-export default function AuthPage() {
+const { sliderPosition, texts } = loginConfig;
+const { logo, name } = siteConfig;
+
+export default async function AuthPage({
+  searchParams,
+}: {
+  searchParams: PageProps<"/login">["searchParams"];
+}) {
+  const { callbackUrl } = await searchParams;
+
   return (
-    <section className='flex min-h-screen flex-col md:flex-row'>
+    <section className="flex min-h-screen flex-col md:flex-row">
       <div
         className={cn(
-          'relative hidden w-full md:block md:w-1/2',
-          'lg:order-first hidden lg:block',
-          sliderPosition === 'right' && 'lg:order-last',
+          "relative hidden w-full md:block md:w-1/2",
+          "lg:order-first hidden lg:block",
+          sliderPosition === "right" && "lg:order-last",
         )}
       >
-        <AuthCarousel />
+        <IGRPAuthCarousel carouselItems={carouselItems} />
       </div>
-      <AuthForm />
+      <IGRPAuthForm
+        texts={texts}
+        logo={logo}
+        name={name}
+        callbackUrl={callbackUrl as string}
+      />
     </section>
   );
 }

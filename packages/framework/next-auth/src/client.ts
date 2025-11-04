@@ -1,6 +1,7 @@
 'use client';
 
 import { useSession as useSessionBase } from 'next-auth/react';
+import type { Session } from './session';
 
 export {
   SessionProvider,
@@ -9,12 +10,14 @@ export {
   signIn,
   signOut,
   getCsrfToken,
-  getProviders,  
+  getProviders,
+  getSession,
 } from 'next-auth/react';
 
 export type { User } from 'next-auth';
 
 export function useSafeSession() {
-  const { data, status } = useSessionBase();
-  return { session: data ?? null, status };
+  const { data, status, update } = useSessionBase();
+  const session: Session | null = data as Session | null;
+  return { session, status, update };
 }

@@ -1,6 +1,6 @@
 'use client';
 
-import { useCallback, useEffect, useId, useMemo, useState } from 'react';
+import { useCallback, useEffect, useId, useMemo, useRef, useState } from 'react';
 import { type Column, type Table } from '@tanstack/react-table';
 import { type DateRange } from 'react-day-picker';
 
@@ -25,11 +25,13 @@ import {
 import { Separator } from '../../primitives/separator';
 import { IGRPButton } from '../button';
 import { IGRPBadge } from '../badge';
-import { IGRPIcon } from '../icon';
-import { IGRPDatePickerRange } from '../input/date-picker/date-picker-range';
-import { IGRPInputText } from '../input/text';
-import type { IGRPInputProps, IGRPOptionsProps } from '../../../types';
+import { IGRPIcon, type IGRPIconName } from '../icon';
+// import { IGRPDatePickerRange } from '../input/date-picker/date-picker-range';
+import type { IGRPOptionsProps } from '../../../types';
 import { cn } from '../../../lib/utils';
+import { Input } from '../../primitives/input';
+import { CircleXIcon } from 'lucide-react';
+import { Button } from '../../primitives/button';
 
 interface IGRPDataTableFilterProps<TData> {
   column?: Column<TData, unknown>;
@@ -39,6 +41,7 @@ interface IGRPDataTableFilterProps<TData> {
   className?: string;
   placeholderMax?: string;
   disabled?: boolean;
+  iconName?: IGRPIconName | string;
 }
 
 // TODO: Replace for igrp/date-picker
@@ -46,7 +49,7 @@ function IGRPDataTableFilterDate<TData>({
   column,
   // placeholder = 'Selecionar datas...', // TODO : Add this to DateRangePicker
   clearDates, // TODO: review how to implement it
-  className,
+  // className,
 }: Omit<IGRPDataTableFilterProps<TData>, 'options' | 'placeholderMax'>) {
   const [dateRange, setDateRange] = useState<DateRange | undefined>();
 
@@ -68,7 +71,8 @@ function IGRPDataTableFilterDate<TData>({
   }, [dateRange]);
 
   return (
-    <IGRPDatePickerRange date={dateRange} onDateChange={setDateRange} className={cn(className)} />
+    // <IGRPDatePickerRange date={dateRange} onDateChange={setDateRange} className={cn(className)} />
+    null
   );
 }
 
@@ -166,15 +170,17 @@ function IGRPDataTableFilterFaceted<TData>({
   labelFilter = 'Limpar Filtro',
   labelSearchField = 'Nenhum resultado encontrado.',
   showFilter = false,
+  iconName = 'BadgePlus',
 }: IGRPDataTableFilterFacetedProps<TData>) {
   const id = useId();
+
   const facets = column?.getFacetedUniqueValues();
-  const [selectedValues, setSelectedValues] = useState<Set<string>>(
+  const [selectedValues, setSelectedValues] = useState<Set<string | number>>(
     useMemo(() => new Set(column?.getFilterValue() as string[]), [column]),
   );
 
   const handleSelect = useCallback(
-    (value: string) => {
+    (value: string | number) => {
       if (selectedValues.has(value)) {
         selectedValues.delete(value);
       } else {
@@ -195,53 +201,24 @@ function IGRPDataTableFilterFaceted<TData>({
     <div id={`faceted-${id}`}>
       <Popover>
         <PopoverTrigger asChild>
-          <IGRPButton
-            variant="outline"
-            className={cn(className)}
-            iconName="Plus"
-            iconClassName="-ms-1 opacity-60 rounded-full border border-muted-foreground p-0.5"
-            showIcon
-          >
+          <Button variant="outline">
+            <IGRPIcon iconName={iconName} />
             {placeholder}
             {selectedValues?.size > 0 && (
               <>
-                <Separator orientation="vertical" className="mx-2 h-4" />
+                <Separator orientation="vertical" className="h-2" />
                 <IGRPBadge
                   variant="soft"
-                  color="secondary"
-                  badgeClassName="rounded-sm px-1 font-normal lg:hidden"
+                  color="primary"
+                  badgeClassName="rounded-sm px-1 font-normal"
                 >
                   {selectedValues.size}
                 </IGRPBadge>
-                <div className="hidden space-x-1 lg:flex">
-                  {selectedValues.size > 2 ? (
-                    <IGRPBadge
-                      variant="soft"
-                      color="secondary"
-                      badgeClassName="rounded-sm px-1 font-normal"
-                    >
-                      {selectedValues.size} selected
-                    </IGRPBadge>
-                  ) : (
-                    options
-                      ?.filter((option) => selectedValues.has(option.value))
-                      .map((option) => (
-                        <IGRPBadge
-                          variant="soft"
-                          color="secondary"
-                          key={option.value}
-                          badgeClassName="rounded-sm px-1 font-normal"
-                        >
-                          {option.label}
-                        </IGRPBadge>
-                      ))
-                  )}
-                </div>
               </>
             )}
-          </IGRPButton>
+          </Button>
         </PopoverTrigger>
-        <PopoverContent className="max-w-52 p-0" align="start">
+        <PopoverContent className="w-auto min-w-36 p-1" align="start">
           <Command>
             {showFilter && <CommandInput placeholder={placeholder} className="h-8" />}
             <CommandEmpty>{labelSearchField}</CommandEmpty>
@@ -249,12 +226,12 @@ function IGRPDataTableFilterFaceted<TData>({
               {options?.map((option, i) => {
                 return (
                   <CommandItem className={cn('justify-between', className)} key={option.value}>
-                    <div className="flex items-center gap-2 cursor-pointer text-foreground">
+                    <div className="flex items-center gap-2">
                       <Checkbox
                         id={`${id}-${i}`}
                         checked={selectedValues.has(option.value)}
                         onCheckedChange={() => handleSelect(option.value)}
-                        className="cursor-pointer"
+                        className="border-foreground"
                       />
                     </div>
 
@@ -271,7 +248,7 @@ function IGRPDataTableFilterFaceted<TData>({
               <>
                 <CommandSeparator />
                 <CommandGroup>
-                  <CommandItem onSelect={handleClear} className="cursor-pointer">
+                  <CommandItem onSelect={handleClear}>
                     <IGRPIcon iconName="X" />
                     {labelFilter}
                   </CommandItem>
@@ -285,26 +262,50 @@ function IGRPDataTableFilterFaceted<TData>({
   );
 }
 
-type IGRPDataTableFilterInputProps<TData> = IGRPInputProps &
-  Omit<IGRPDataTableFilterProps<TData>, 'options' | 'clearDates' | 'placeholderMax' | 'target'>;
+type IGRPDataTableFilterInputProps<TData> = Pick<
+  IGRPDataTableFilterProps<TData>,
+  'column' | 'placeholder' | 'className' | 'iconName'
+>;
 
 function IGRPDataTableFilterInput<TData>({
   column,
   placeholder = 'Pesquisar...',
   className,
-  inputClassName,
+  iconName = 'ListFilter',
 }: IGRPDataTableFilterInputProps<TData>) {
   const id = useId();
+  const inputRef = useRef<HTMLInputElement>(null);
 
   return (
-    <IGRPInputText
-      placeholder={placeholder}
-      value={(column?.getFilterValue() as string) ?? ''}
-      onChange={(e) => column?.setFilterValue(e.target.value)}
-      className={className}
-      inputClassName={inputClassName}
-      name={`text-${id}`}
-    />
+    <div className="relative">
+      <Input
+        placeholder={placeholder}
+        value={(column?.getFilterValue() ?? '') as string}
+        onChange={(e) => column?.setFilterValue(e.target.value)}
+        className={cn('peer min-w-60 ps-9', Boolean(column?.getFilterValue()) && 'pe-9', className)}
+        name={`text-${id}`}
+        ref={inputRef}
+        type="text"
+        aria-label="Filtar"
+      />
+      <div className="pointer-events-none absolute inset-y-0 start-0 flex items-center justify-center ps-3 text-muted-foreground/80 peer-disabled:opacity-50">
+        <IGRPIcon iconName={iconName} className="size-3" />
+      </div>
+      {Boolean(column?.getFilterValue()) && (
+        <button
+          className="absolute inset-y-0 end-0 flex h-full w-9 items-center justify-center rounded-e-md text-muted-foreground/80 transition-[color,box-shadow] outline-none hover:text-foreground focus:z-10 focus-visible:border-ring focus-visible:ring-[3px] focus-visible:ring-ring/50 disabled:pointer-events-none disabled:cursor-not-allowed disabled:opacity-50"
+          aria-label="Limpar Filtro"
+          onClick={() => {
+            column?.setFilterValue('');
+            if (inputRef.current) {
+              inputRef.current.focus();
+            }
+          }}
+        >
+          <CircleXIcon size={16} aria-hidden="true" />
+        </button>
+      )}
+    </div>
   );
 }
 
@@ -321,7 +322,7 @@ function IGRPDataTableFilterMinMax<TData>({
 
   return (
     <div className="flex gap-2">
-      <IGRPInputText
+      <Input
         id={`${id}-min`}
         className="flex-1 rounded-e-none [-moz-appearance:_textfield] focus:z-10 [&::-webkit-inner-spin-button]:m-0 [&::-webkit-inner-spin-button]:appearance-none [&::-webkit-outer-spin-button]:m-0 [&::-webkit-outer-spin-button]:appearance-none"
         value={columnFilterValue?.[0] ?? ''}
@@ -335,7 +336,7 @@ function IGRPDataTableFilterMinMax<TData>({
         type="number"
         aria-label={`${columnHeader} min`}
       />
-      <IGRPInputText
+      <Input
         id={`${id}-range-2`}
         className="-ms-px flex-1 rounded-s-none [-moz-appearance:_textfield] focus:z-10 [&::-webkit-inner-spin-button]:m-0 [&::-webkit-inner-spin-button]:appearance-none [&::-webkit-outer-spin-button]:m-0 [&::-webkit-outer-spin-button]:appearance-none"
         value={(columnFilterValue as [number, number])?.[1] ?? ''}

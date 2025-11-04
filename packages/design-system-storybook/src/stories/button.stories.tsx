@@ -10,8 +10,6 @@ import { fn } from 'storybook/test';
 
 import { expect, userEvent, within } from 'storybook/test';
 
-
-
 const meta = {
   title: 'Components/Button',
   component: IGRPButton,
@@ -67,7 +65,6 @@ export const LoggedIn: Story = {
     await expect(logoutButton).toBeInTheDocument();
   },
 };
-
 
 const Template: StoryFn<IGRPButtonProps> = (args) => (
   <div className='p-4 flex flex-wrap gap-2'>

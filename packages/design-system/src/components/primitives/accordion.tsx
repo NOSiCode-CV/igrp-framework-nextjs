@@ -1,16 +1,11 @@
-import * as AccordionPrimitive from '@radix-ui/react-accordion';
-import * as LucideIcons from 'lucide-react';
-import { cn } from '../../lib/utils';
-
 // IGRP CUSTOM: THIS COMPONENT IS CHANGED FROM THE ORIGINAL
-interface AccordionProps {
-  iconName?: keyof typeof LucideIcons | '';
-  showIcon?: boolean;
-  iconPlacement?: 'left' | 'right';
-}
+
+import * as AccordionPrimitive from '@radix-ui/react-accordion';
+import { cn } from '../../lib/utils';
+import { IGRPIcon, type IGRPIconName } from '../horizon/icon';
 
 function Accordion({ ...props }: React.ComponentProps<typeof AccordionPrimitive.Root>) {
-  return <AccordionPrimitive.Root data-slot="accordion" {...props} />;
+  return <AccordionPrimitive.Root data-slot="accordion" {...props} />
 }
 
 function AccordionItem({
@@ -26,43 +21,45 @@ function AccordionItem({
   );
 }
 
-type AccordionTriggerProps = React.ComponentProps<typeof AccordionPrimitive.Trigger> &
-  AccordionProps;
+type AccordionTriggerArgs = {
+  iconName: IGRPIconName | string;
+  showIcon: boolean;
+  iconPlacement: 'start' | 'end';
+}
+
+interface AccordionTriggerProps extends React.ComponentProps<typeof AccordionPrimitive.Trigger>,
+  AccordionTriggerArgs { }
 
 function AccordionTrigger({
   className,
   children,
-  iconName = '',
-  showIcon = true,
-  iconPlacement = 'right',
+  iconName,
+  showIcon,
+  iconPlacement,
   ...props
 }: AccordionTriggerProps) {
-  const IconComponent = iconName ? LucideIcons[iconName] as React.FC<React.SVGProps<SVGSVGElement>>: () => null;
-  const spacement = iconPlacement === 'right' ? 'justify-between' : '';
 
   return (
     <AccordionPrimitive.Header className="flex">
       <AccordionPrimitive.Trigger
         data-slot="accordion-trigger"
         className={cn(
-          'focus-visible:border-ring focus-visible:ring-ring/50 flex flex-1 items-start gap-4 rounded-md py-4 text-left text-sm font-medium transition-all outline-none hover:underline focus-visible:ring-[3px] disabled:pointer-events-none disabled:opacity-50 [&[data-state=open]>svg]:rotate-180',
+          'focus-visible:border-ring focus-visible:ring-ring/50 flex flex-1 items-start gap-4 rounded-md py-4 text-left text-sm font-medium transition-all outline-none focus-visible:ring-2 disabled:pointer-events-none disabled:opacity-50 [&[data-state=open]>svg]:rotate-180',
+          iconPlacement === 'end' && 'justify-between',
           className,
-          spacement,
         )}
         {...props}
       >
-        <div className="flex items-center gap-2">
-          {showIcon && iconName && <IconComponent width={16} height={16}></IconComponent>}
-          {children}
-        </div>
-        {iconPlacement && (
-          <LucideIcons.ChevronDownIcon
+        {showIcon && (
+          <IGRPIcon
+            iconName={iconName}
             className={cn(
               'text-muted-foreground pointer-events-none size-4 shrink-0 translate-y-0.5 transition-transform duration-200',
-              iconPlacement === 'left' && 'order-first mr-2',
+              iconPlacement === 'end' && 'order-last',
             )}
           />
         )}
+        {children}
       </AccordionPrimitive.Trigger>
     </AccordionPrimitive.Header>
   );
@@ -84,4 +81,11 @@ function AccordionContent({
   );
 }
 
-export { Accordion, AccordionItem, AccordionTrigger, AccordionContent };
+export {
+  Accordion,
+  AccordionItem,
+  AccordionTrigger,
+  AccordionContent,
+  type AccordionTriggerProps,
+  type AccordionTriggerArgs
+};

@@ -10,8 +10,6 @@ import { fn } from 'storybook/test';
 
 import { expect, userEvent, within } from 'storybook/test';
 
-
-
 const meta = {
   title: 'Components/Button',
   component: IGRPButton,

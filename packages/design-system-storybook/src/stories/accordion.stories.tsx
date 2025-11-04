@@ -6,108 +6,62 @@ export default {
   component: IGRPAccordion,
   argTypes: {
     className: { control: 'text' },
-    showIcon: { control: 'boolean', default: true },
-    iconPlacement: { control: 'select', options: ['left', 'right'], default: 'right' },
-
-    accordionList: {
-      control: 'array',
-      description: 'Array of accordion items with title and content',
-      default: [
-        {
-          title: 'First Item',
-          content: 'This is the content of the first accordion item.',
-          iconName: 'Home',
-        },
-        {
-          title: 'Second Item',
-          content: 'This is the content of the second accordion item.',
-          iconName: 'SpaceIcon',
-        },
-        {
-          title: 'Third Item',
-          content: 'This is the content of the third accordion item.',
-          iconName: 'Home',
-        },
-      ],
+    showIcon: {
+      control: 'boolean',
+      default: true
+    },
+    iconPlacement: {
+      control: 'select',
+      options: ['start', 'end'],
+      default: 'end'
     },
   },
 };
 
+const items_examples = [
+  {
+    title: 'First Item',
+    content: 'This is the content of the first accordion item.',
+    iconName: 'Minus'
+  },
+  {
+    title: 'Second Item',
+    content: 'This is the content of the second accordion item.',
+    showIcon: false
+  },
+  {
+    title: 'Third Item',
+    content: 'This is the content of the third accordion item.',
+  },
+]
+
 const Template: StoryFn<IGRPAccordionProps> = (args) => (
-  <div className='container my-10 mx-auto p-4 border rounded-lg shadow-sm max-w-lg'>
+  <div className='container my-10 mx-auto p-4'>
     <IGRPAccordion {...args} />
   </div>
 );
 
+export const Default: StoryObj<IGRPAccordionProps> = {
+  render: Template,
+  args: {    
+    iconPlacement: 'end',
+    items: items_examples,
+    iconName: 'Minus'
+  },
+};
+
 export const LeftArrowTrigger: StoryObj<IGRPAccordionProps> = {
   render: Template,
-  args: {
-    className: '',
-    iconPlacement: 'left',
-    showIcon: true,
-    accordionList: [
-      {
-        title: 'First Item',
-        content: 'This is the content of the first accordion item.',
-      },
-      {
-        title: 'Second Item',
-        content: 'This is the content of the second accordion item.',
-      },
-      {
-        title: 'Third Item',
-        content: 'This is the content of the third accordion item.',
-      },
-    ],
+  args: {    
+    iconPlacement: 'start',
+    items: items_examples
   },
 };
 export const NoIcon: StoryObj<IGRPAccordionProps> = {
   render: Template,
   args: {
-    className: '',
-    iconPlacement: 'right',
+    iconPlacement: 'end',
     showIcon: false,
-    accordionList: [
-      {
-        title: 'First Item',
-        content: 'This is the content of the first accordion item.',
-        iconName: 'Home',
-      },
-      {
-        title: 'Second Item',
-        content: 'This is the content of the second accordion item.',
-        iconName: 'DatabaseZap',
-      },
-      {
-        title: 'Third Item',
-        content: 'This is the content of the third accordion item.',
-        iconName: 'Aperture',
-      },
-    ],
-  },
-};
-export const Default: StoryObj<IGRPAccordionProps> = {
-  render: Template,
-  args: {
-    className: '',
-    iconPlacement: 'right',
-    showIcon: true,
-    accordionList: [
-      {
-        title: 'First Item',
-        content: 'This is the content of the first accordion item.',
-        iconName: 'Home',
-      },
-      {
-        title: 'Second Item',
-        content: 'This is the content of the second accordion item.',
-        iconName: 'DatabaseZap',
-      },
-      {
-        title: 'Third Item',
-        content: 'This is the content of the third accordion item.',
-        iconName: 'Aperture',
-      },
-    ],
+    items: items_examples
   },
 };

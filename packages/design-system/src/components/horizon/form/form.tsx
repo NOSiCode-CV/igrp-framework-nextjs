@@ -2,7 +2,7 @@
 'use client';
 
 import type React from 'react';
-import { useCallback, useEffect, useRef, useState } from 'react';
+import { useCallback, useEffect, useId, useRef, useState } from 'react';
 import { type Mode, useForm, type UseFormReturn, type Resolver } from 'react-hook-form';
 import { toast } from 'sonner';
 import { z } from 'zod';
@@ -46,6 +46,7 @@ export interface IGRPFormProps<TSchema extends AnyZod> {
   className?: string;
   gridClassName?: string;
   children: React.ReactNode;
+  id?: string;
 }
 
 function IGRPForm<TSchema extends AnyZod>({
@@ -60,7 +61,11 @@ function IGRPForm<TSchema extends AnyZod>({
   className,
   gridClassName,
   children,
+  id
 }: IGRPFormProps<TSchema>) {
+  const _id = useId();
+  const ref = id ?? _id
+  
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [formError, setFormError] = useState<string | undefined>();
   const internalFormRef = useRef<IGRPFormHandle<TSchema> | null>(null);
@@ -142,7 +147,7 @@ function IGRPForm<TSchema extends AnyZod>({
   return (
     <IGRPFormContext.Provider value={{ form, isSubmitting, formError }}>
       <Form {...form}>
-        <form className={className} onSubmit={form.handleSubmit(handleSubmit)} noValidate>
+        <form className={className} onSubmit={form.handleSubmit(handleSubmit)} noValidate  id={ref}>
           {formError && (
             <div className="mb-4 p-3 border border-destructive bg-destructive/10 rounded-md text-destructive text-sm">
               {formError}

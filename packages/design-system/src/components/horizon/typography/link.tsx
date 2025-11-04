@@ -1,4 +1,4 @@
-import type { ReactNode } from 'react';
+import { useId, type ReactNode } from 'react';
 import Link, { type LinkProps } from 'next/link';
 import { cva, type VariantProps } from 'class-variance-authority';
 
@@ -68,8 +68,12 @@ function IGRPLink({
   iconSize,
   variant,
   color = 'primary',
+  id,
   ...props
 }: IGRPLinkProps) {
+  const _id = useId();
+  const ref = id ?? _id
+  
   const isExternal = igrpIsExternalUrl(href);
   const colorLink = variant ? IGRPColors[variant][color].text : igrpColorText(color);
   const linkClass = cn(IGRPLinkVariants({ size, underline }), colorLink, className);
@@ -83,6 +87,7 @@ function IGRPLink({
         target={target || '_blank'}
         rel="noopener noreferrer"
         onClick={onClick}
+        id={ref}
         {...props}
       >
         <IGRPLinkRender
@@ -99,7 +104,14 @@ function IGRPLink({
   }
 
   return (
-    <Link href={href || ''} {...props} className={linkClass} onClick={onClick} target={target}>
+    <Link 
+      href={href || '#'} 
+      {...props} 
+      className={linkClass} 
+      onClick={onClick} 
+      target={target}
+      id={ref}
+    >
       <IGRPLinkRender
         iconName={iconName}
         iconClassName={iconClassName}

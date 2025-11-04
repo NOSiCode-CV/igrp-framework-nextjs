@@ -1,13 +1,12 @@
-/* eslint-disable react-refresh/only-export-components */
 'use client';
 
-import { useEffect, useState } from 'react';
+import { useEffect, useId, useState } from 'react';
 import { cva, type VariantProps } from 'class-variance-authority';
 
-import { IGRPBadge } from '../badge';
-import { IGRPIcon, type IGRPIconName } from '../icon';
 import { IGRPColors, type IGRPColorRole, type IGRPColorVariants } from '../../../lib/colors';
 import { cn } from '../../../lib/utils';
+import { IGRPBadge } from '../badge';
+import { IGRPIcon, type IGRPIconName } from '../icon';
 
 const igrpTextlistVariants = cva('', {
   variants: {
@@ -91,7 +90,7 @@ const getDefaultIcon = (type: IGRPTextListType, iconColor?: IGRPColorVariants, i
         <div
           className={cn(
             'w-6 h-6 rounded-full flex items-center justify-center text-xs font-medium',
-            IGRPColors.solid[iconColor || 'info'].alertText,
+            IGRPColors.solid[iconColor || 'info'].alert,
             IGRPColors.solid[iconColor || 'info'].bg,
           )}
         >
@@ -102,8 +101,8 @@ const getDefaultIcon = (type: IGRPTextListType, iconColor?: IGRPColorVariants, i
       return (
         <span
           className={cn(
-            IGRPColors.outline[iconColor || 'secondary'].textBadge,
-            'font-medium min-w-[1.5rem]',
+            IGRPColors.outline[iconColor || 'secondary'].badge,
+            'font-medium min-w-6',
           )}
         >
           {(index || 0) + 1}.
@@ -114,7 +113,7 @@ const getDefaultIcon = (type: IGRPTextListType, iconColor?: IGRPColorVariants, i
         <IGRPIcon
           iconName="Circle"
           className={cn(
-            IGRPColors.outline[iconColor || 'secondary'].textBadge,
+            IGRPColors.outline[iconColor || 'secondary'].badge,
             'h-1.5 w-1.5 fill-current',
           )}
         />
@@ -123,7 +122,7 @@ const getDefaultIcon = (type: IGRPTextListType, iconColor?: IGRPColorVariants, i
       return (
         <IGRPIcon
           iconName="ArrowRight"
-          className={cn(IGRPColors.outline[iconColor || 'secondary'].textBadge)}
+          className={cn(IGRPColors.outline[iconColor || 'secondary'].badge)}
         />
       );
   }
@@ -143,8 +142,12 @@ function IGRPTextList({
   size,
   spacing,
   className,
+  id,
   ...props
 }: IGRPTextListProps) {
+  const _id = useId();
+  const ref = id ?? _id
+  
   const [visibleItems, setVisibleItems] = useState<Set<number>>(new Set());
   const [collapsedItems, setCollapsedItems] = useState<Set<string | number>>(new Set());
 
@@ -184,7 +187,7 @@ function IGRPTextList({
       (item.icon && (
         <IGRPIcon
           iconName={item.icon}
-          className={IGRPColors.outline[iconGlobalColor || item.iconColor || 'secondary'].textBadge}
+          className={IGRPColors.outline[iconGlobalColor || item.iconColor || 'secondary'].badge}
         />
       )) ||
       customIcon ||
@@ -222,7 +225,7 @@ function IGRPTextList({
           onClick={handleItemClick}
         >
           {/* Icon */}
-          <div className="flex-shrink-0 mt-0.5">{itemIcon}</div>
+          <div className="shrink-0 mt-0.5">{itemIcon}</div>
 
           {/* Content */}
           <div className="flex-1 min-w-0">
@@ -253,7 +256,7 @@ function IGRPTextList({
                 >
                   <IGRPIcon
                     iconName="ArrowRight"
-                    className={cn(IGRPColors.outline.secondary.textBadge)}
+                    className={cn(IGRPColors.outline.secondary.badge)}
                   />
                 </div>
               )}
@@ -279,6 +282,7 @@ function IGRPTextList({
   return (
     <Component
       className={cn(igrpTextlistVariants({ size, spacing }), colorClass.text, className)}
+      id={ref}
       {...props}
     >
       {items.map((item, index) => renderListItem(item, index))}

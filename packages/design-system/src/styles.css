@@ -439,6 +439,9 @@
   .isolate {
     isolation: isolate;
   }
+  .z-5 {
+    z-index: 5;
+  }
   .z-10 {
     z-index: 10;
   }
@@ -453,9 +456,6 @@
   }
   .z-\[1\] {
     z-index: 1;
-  }
-  .z-\[5\] {
-    z-index: 5;
   }
   .-order-1 {
     order: calc(1 * -1);
@@ -1682,6 +1682,9 @@
   .border-foreground {
     border-color: var(--foreground);
   }
+  .border-gray-100 {
+    border-color: var(--color-gray-100);
+  }
   .border-gray-200 {
     border-color: var(--color-gray-200);
   }
@@ -1711,12 +1714,6 @@
   }
   .border-input {
     border-color: var(--input);
-  }
-  .border-muted-foreground\/10 {
-    border-color: var(--muted-foreground);
-    @supports (color: color-mix(in lab, red, red)) {
-      border-color: color-mix(in oklab, var(--muted-foreground) 10%, transparent);
-    }
   }
   .border-primary {
     border-color: var(--primary);
@@ -1838,6 +1835,12 @@
   .bg-background {
     background-color: var(--background);
   }
+  .bg-background\/80 {
+    background-color: var(--background);
+    @supports (color: color-mix(in lab, red, red)) {
+      background-color: color-mix(in oklab, var(--background) 80%, transparent);
+    }
+  }
   .bg-background\/90 {
     background-color: var(--background);
     @supports (color: color-mix(in lab, red, red)) {
@@ -1946,9 +1949,6 @@
   .bg-primary {
     background-color: var(--primary);
   }
-  .bg-primary-foreground {
-    background-color: var(--primary-foreground);
-  }
   .bg-primary\/5 {
     background-color: var(--primary);
     @supports (color: color-mix(in lab, red, red)) {
@@ -2011,12 +2011,6 @@
   }
   .bg-white {
     background-color: var(--color-white);
-  }
-  .bg-white\/80 {
-    background-color: color-mix(in srgb, #fff 80%, transparent);
-    @supports (color: color-mix(in lab, red, red)) {
-      background-color: color-mix(in oklab, var(--color-white) 80%, transparent);
-    }
   }
   .bg-yellow-200 {
     background-color: var(--color-yellow-200);
@@ -5865,6 +5859,11 @@
   .dark\:text-muted-foreground {
     &:is(.dark *) {
       color: var(--muted-foreground);
+    }
+  }
+  .dark\:text-primary-foreground {
+    &:is(.dark *) {
+      color: var(--primary-foreground);
     }
   }
   .dark\:text-purple-400 {

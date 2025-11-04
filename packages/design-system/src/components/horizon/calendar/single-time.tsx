@@ -1,10 +1,10 @@
-import { useState } from 'react';
+import { useId, useState } from 'react';
 
+import { DEFAULT_HIDE_TIME_INDICATOR } from '../../../lib/constants';
+import type { IGRPCalendarTimeProps } from '../../../types';
 import { Input } from '../../primitives/input';
 import { Label } from '../../primitives/label';
-import type { IGRPCalendarTimeProps } from '../../../types';
 import { IGRPCalendarSingle, type IGRPCalendarSingleProps } from './single';
-import { DEFAULT_HIDE_TIME_INDICATOR } from '../../../lib/constants';
 
 interface IGRPCalendarSingleTimeProps extends IGRPCalendarSingleProps, IGRPCalendarTimeProps {}
 
@@ -18,8 +18,12 @@ function IGRPCalendarSingleTime({
   endTimeLabel = 'Data Fim',
   showTimeIndicator = false,
   name,
+  id,
   ...props
 }: IGRPCalendarSingleTimeProps) {
+   const _id = useId();
+  const ref = name ?? id ?? _id
+
   const [startTime, setStartTime] = useState<string>('');
   const [endTime, setEndTime] = useState<string>('');
 
@@ -38,15 +42,15 @@ function IGRPCalendarSingleTime({
   };
 
   return (
-    <div id={name}>
+    <div id={ref}>
       <div className="space-y-4">
         <IGRPCalendarSingle {...props} />
 
         <div className="space-y-4 pt-4 border-t">
           <div className="space-y-2">
-            <Label htmlFor={`${name}-start-time`}>{startTimeLabel}</Label>
+            <Label htmlFor={`${ref}-start-time`}>{startTimeLabel}</Label>
             <Input
-              id={`${name}-start-time`}
+              id={`${ref}-start-time`}
               type="time"
               step="1"
               placeholder={startTimePlaceholder}
@@ -58,9 +62,9 @@ function IGRPCalendarSingleTime({
 
           {!hideEndTimePicker && (
             <div className="space-y-2">
-              <Label htmlFor={`${name}-end-time`}>{endTimeLabel}</Label>
+              <Label htmlFor={`${ref}-end-time`}>{endTimeLabel}</Label>
               <Input
-                id={`${name}-end-time`}
+                id={`${ref}-end-time`}
                 type="time"
                 step="1"
                 placeholder={endTimePlaceholder}

@@ -2,7 +2,7 @@
 
 import { useEffect, useId, useMemo } from 'react';
 
-import { Input } from '../../../primitives/input';
+import { Input } from '../../primitives/input';
 import {
   Select,
   SelectContent,
@@ -11,16 +11,13 @@ import {
   SelectLabel,
   SelectTrigger,
   SelectValue,
-} from '../../../primitives/select';
-import { IGRPLabel } from '../../label';
-import { cn } from '../../../../lib/utils';
-import type { IGRPInputProps, IGRPOptionsProps } from '../../../../types';
+} from '../../primitives/select';
+import { IGRPLabel } from '../label';
+import { cn } from '../../../lib/utils';
+import type { IGRPInputProps, IGRPOptionsProps } from '../../../types';
 
-interface IGRPInputAddOnProps
-  extends Omit<
-    IGRPInputProps,
-    'showIcon' | 'iconName' | 'iconSize' | 'iconPlacement' | 'iconClassName'
-  > {
+interface IGRPInputAddOnProps 
+  extends Omit< IGRPInputProps, 'showIcon' | 'iconName' | 'iconSize' | 'iconPlacement' | 'iconClassName'> {
   options: IGRPOptionsProps[];
   optionLabel?: string;
   selectValue?: string;
@@ -37,10 +34,11 @@ function IGRPInputAddOn({
   className: classNameGlobal,
   classNameLabel,
   name,
+  id,
   ...props
 }: IGRPInputAddOnProps) {
-  const id = useId();
-  const ref = name ? name : `input-addon-${id}`;
+  const _id = useId();
+  const ref = name ?? id ?? _id;
 
   const defaultValue = useMemo(() => options?.[0]?.value, [options]);
 
@@ -56,7 +54,7 @@ function IGRPInputAddOn({
 
       <div className="flex rounded-md border overflow-hidden">
         <Select value={selectValue} onValueChange={onSelectValueChange}>
-          <SelectTrigger className="border-0 border-r rounded-none min-w-[80px] px-3 py-2 focus:ring-0 focus-visible:ring-0 focus-visible:ring-offset-0 shadow-none cursor-pointer">
+          <SelectTrigger className="border-0 border-r rounded-none min-w-20 px-3 py-2 focus:ring-0 focus-visible:ring-0 focus-visible:ring-offset-0 shadow-none">
             <SelectValue>
               {selectValue && (
                 <span

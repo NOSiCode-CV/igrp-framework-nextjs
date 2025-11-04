@@ -1,8 +1,9 @@
 import { cva, type VariantProps } from 'class-variance-authority';
+import { useId } from 'react';
 
+import { cn } from '../../lib/utils';
 import { IGRPButton } from './button';
 import { IGRPIcon, type IGRPIconName } from './icon';
-import { cn } from '../../lib/utils';
 
 const IGRPNotificationVariants = cva('bg-background z-50 rounded-md p-4 shadow-lg', {
   variants: {
@@ -42,6 +43,7 @@ type IGRPNotificationProps = {
   lableLink?: string;
   actionLink?: string;
   customActions?: React.ReactNode;
+  id?: string;
 } & VariantProps<typeof IGRPNotificationVariants>;
 
 function IGRPNotification({
@@ -56,7 +58,11 @@ function IGRPNotification({
   border = 'default',
   variant = 'default',
   customActions,
+  id
 }: IGRPNotificationProps) {
+  const _id = useId();
+  const ref = id ?? _id
+  
   const icon = iconName ?? typeIconMap[variant ?? 'default'];
 
   return (
@@ -66,6 +72,7 @@ function IGRPNotification({
         border === 'colored' && IGRPNotificationVariants({ variant, border }),
         className,
       )}
+      id={ref}
     >
       <div className="flex justify-between gap-3">
         <div className="flex grow text-sm">
@@ -76,8 +83,6 @@ function IGRPNotification({
                 IGRPNotificationVariants({ variant, border: 'default' }),
                 'me-3 inline-flex shadow-none p-0 mt-0.5',
               )}
-              size={16}
-              aria-hidden="true"
             />
           )}
           <div>{content}</div>
@@ -92,8 +97,6 @@ function IGRPNotification({
               <IGRPIcon
                 iconName="ArrowRight"
                 className="ms-1 inline-flex opacity-60 transition-transform group-hover:translate-x-0.5"
-                size={16}
-                aria-hidden="true"
               />
             </a>
           )}

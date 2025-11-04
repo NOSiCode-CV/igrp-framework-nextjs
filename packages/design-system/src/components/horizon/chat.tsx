@@ -1,31 +1,41 @@
 'use client';
 
-import { useState, useEffect, useRef, useCallback } from 'react';
+import { useState, useEffect, useRef, useCallback, useId } from 'react';
 
+import { cn } from '../../lib/utils';
 import { ScrollArea } from '../primitives/scroll-area';
 import { IGRPButton } from './button';
 import { IGRPInputText } from './input/text';
 import { IGRPIcon } from './icon';
-import { cn } from '../../lib/utils';
 
 interface IGRPChatMessage {
-  role: 'user' | 'assistant' | 'system';
-  content: string;
-  type?: 'text' | 'image' | 'link' | 'button';
-  timestamp?: string;
-  sender?: string;
+  role: 'user' | 'assistant' | 'system'
+  content: string
+  type?: 'text' | 'image' | 'link' | 'button'
+  timestamp?: string
+  sender?: string
 }
 
 interface IGRPChatProps {
-  apiEndpoint: string;
-  labelDescription?: string;
+  apiEndpoint: string
+  labelDescription?: string
+  name?: string
+  id?: string
 }
 
-function IGRPChat({ apiEndpoint, labelDescription = 'Ask me anything!' }: IGRPChatProps) {
+function IGRPChat({ 
+  apiEndpoint, 
+  labelDescription = 'Ask me anything!',
+  name,
+  id,
+}: IGRPChatProps) {
   const [messages, setMessages] = useState<IGRPChatMessage[]>([]);
   const [input, setInput] = useState('');
   const [isLoading, setIsLoading] = useState(false);
   const messagesEndRef = useRef<HTMLDivElement | null>(null);
+
+  const _id = useId();
+  const ref = name ?? id ?? _id
 
   useEffect(() => {
     messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' });
@@ -78,12 +88,12 @@ function IGRPChat({ apiEndpoint, labelDescription = 'Ask me anything!' }: IGRPCh
   }, [apiEndpoint, input, isLoading, messages]);
 
   return (
-    <div className="flex flex-col h-full">
+    <div className="flex flex-col h-full" id={ref}>
       <ScrollArea className="pr-4 h-[80%]">
         <div className="space-y-4">
           {messages.length === 0 && (
             <div className="flex flex-col items-center justify-center h-40 text-muted-foreground">
-              <IGRPIcon iconName="Bot" className="h-12 w-12 mb-2 opacity-20" />
+              <IGRPIcon iconName="Bot" className="size-12 mb-2 opacity-20" />
               <p>{labelDescription}</p>
             </div>
           )}

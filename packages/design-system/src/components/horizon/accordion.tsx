@@ -1,10 +1,11 @@
+import { useId } from 'react';
 import { igrpCleanString } from '../../lib/strings';
 import {
   Accordion,
   AccordionContent,
   AccordionItem,
   AccordionTrigger,
-  type AccordionTriggerArgs
+  type AccordionTriggerArgs,
 } from '../primitives/accordion';
 
 interface IGRPAccordionItem extends Partial<AccordionTriggerArgs> {
@@ -12,14 +13,16 @@ interface IGRPAccordionItem extends Partial<AccordionTriggerArgs> {
   content: string;
 }
 
-interface IGRPAccordionProps extends Partial<AccordionTriggerArgs>,
-  Omit<React.ComponentProps<typeof Accordion>, 'type'> {
+interface IGRPAccordionProps
+  extends Partial<AccordionTriggerArgs>,
+    Omit<React.ComponentProps<typeof Accordion>, 'type'> {
   classNameTrigger?: string;
   classNameContent?: string;
   items: IGRPAccordionItem[];
   value?: string;
   defaultValue?: string;
   onValueChange?(value: string): void;
+  name?: string;
 }
 
 function IGRPAccordion({
@@ -31,13 +34,19 @@ function IGRPAccordion({
   iconName = 'ChevronDown',
   iconPlacement = 'end',
   defaultValue,
+  name,
+  id,
   ...accordionProps
 }: IGRPAccordionProps) {
+  const _id = useId();
+  const ref = name ?? id ?? _id
+
   const _defaultValue = defaultValue || items[0]?.title
   const defaultId = igrpCleanString(_defaultValue).toLowerCase()
 
   return (
     <Accordion
+      id={ref}
       className={className}
       type="single"
       collapsible
@@ -45,11 +54,9 @@ function IGRPAccordion({
       {...accordionProps}
     >
       {items?.map((item) => {
-        const id = igrpCleanString(item.title).toLowerCase()
+        const id = igrpCleanString(item.title).toLowerCase();
         return (
-          <AccordionItem
-            key={id}
-            value={`item-${id}`}>
+          <AccordionItem key={id} value={`item-${id}`}>
             <AccordionTrigger
               iconName={item.iconName ?? iconName}
               showIcon={item.showIcon ?? showIcon}
@@ -59,7 +66,7 @@ function IGRPAccordion({
             </AccordionTrigger>
             <AccordionContent>{item.content}</AccordionContent>
           </AccordionItem>
-        )
+        );
       })}
     </Accordion>
   );

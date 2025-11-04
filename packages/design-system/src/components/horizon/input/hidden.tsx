@@ -3,13 +3,17 @@
 import { useId } from 'react';
 import { useFormContext } from 'react-hook-form';
 
-import { Input } from '../../../primitives/input';
-import { IGRPFormField } from '../../form/form-field';
-import type { IGRPInputProps } from '../../../../types';
+import { Input } from '../../primitives/input';
+import { IGRPFormField } from '../form/form-field';
+import type { IGRPInputProps } from '../../../types';
 
-function IGRPInputHidden({ name, required = false, ...props }: Omit<IGRPInputProps, 'showIcon'>) {
-  const id = useId();
-  const ref = name || id;
+function IGRPInputHidden({ 
+  name, 
+  id,
+  required = false, 
+  ...props }: Omit<IGRPInputProps, 'showIcon'>) {
+  const _id = useId();
+  const ref = name ?? id ?? _id;
 
   const formContext = useFormContext();
 

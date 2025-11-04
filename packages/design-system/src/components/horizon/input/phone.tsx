@@ -5,15 +5,13 @@ import * as RPNInput from 'react-phone-number-input';
 import flags from 'react-phone-number-input/flags';
 import { useFormContext, Controller } from 'react-hook-form';
 
-import { Input } from '../../../primitives/input';
-import { IGRPIcon } from '../../icon';
-import { IGRPLabel } from '../../label';
-// import { igrpGridSizeClasses } from '../../../../lib/constants';
-import { cn } from '../../../../lib/utils';
-import type { IGRPInputProps, IGRPGridSize } from '../../../../types';
+import { cn } from '../../../lib/utils';
+import type { IGRPInputProps } from '../../../types';
+import { Input } from '../../primitives/input';
+import { IGRPIcon } from '../icon';
+import { IGRPLabel } from '../label';
 
 interface IGRPInputPhoneProps extends Omit<IGRPInputProps, 'onChange' | 'ref'> {
-  name: string;
   description?: string;
   helperText?: string;
   defaultValue?: string;
@@ -23,7 +21,6 @@ interface IGRPInputPhoneProps extends Omit<IGRPInputProps, 'onChange' | 'ref'> {
   countries?: RPNInput.Country[];
   onChange?: (value: string | undefined) => void;
   dir?: 'ltr' | 'rtl';
-  gridSize?: IGRPGridSize;
 }
 
 function PhoneInput({ className, ...props }: React.ComponentProps<'input'>) {
@@ -93,6 +90,7 @@ function FlagComponent({ country, countryName }: RPNInput.FlagProps) {
 
 function IGRPInputPhone({
   name,
+  id,
   label,
   description,
   helperText,
@@ -111,8 +109,8 @@ function IGRPInputPhone({
   gridSize = 'default',
   ...props
 }: IGRPInputPhoneProps) {
-  const id = useId();
-  const fieldName = name || id;
+  const _id = useId();
+  const fieldName = name ?? id ?? _id;
   const formContext = useFormContext();
   const [localValue, setLocalValue] = useState(defaultValue || '');
 

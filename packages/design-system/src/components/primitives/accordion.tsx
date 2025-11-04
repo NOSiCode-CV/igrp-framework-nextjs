@@ -5,7 +5,7 @@ import { cn } from '../../lib/utils';
 import { IGRPIcon, type IGRPIconName } from '../horizon/icon';
 
 function Accordion({ ...props }: React.ComponentProps<typeof AccordionPrimitive.Root>) {
-  return <AccordionPrimitive.Root data-slot="accordion" {...props} />
+  return <AccordionPrimitive.Root data-slot="accordion" {...props} />;
 }
 
 function AccordionItem({
@@ -25,10 +25,11 @@ type AccordionTriggerArgs = {
   iconName: IGRPIconName | string;
   showIcon: boolean;
   iconPlacement: 'start' | 'end';
-}
+};
 
-interface AccordionTriggerProps extends React.ComponentProps<typeof AccordionPrimitive.Trigger>,
-  AccordionTriggerArgs { }
+interface AccordionTriggerProps
+  extends React.ComponentProps<typeof AccordionPrimitive.Trigger>,
+    AccordionTriggerArgs {}
 
 function AccordionTrigger({
   className,
@@ -38,7 +39,6 @@ function AccordionTrigger({
   iconPlacement,
   ...props
 }: AccordionTriggerProps) {
-
   return (
     <AccordionPrimitive.Header className="flex">
       <AccordionPrimitive.Trigger
@@ -87,5 +87,5 @@ export {
   AccordionTrigger,
   AccordionContent,
   type AccordionTriggerProps,
-  type AccordionTriggerArgs
+  type AccordionTriggerArgs,
 };

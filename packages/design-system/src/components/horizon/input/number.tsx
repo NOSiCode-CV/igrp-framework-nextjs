@@ -3,15 +3,13 @@
 import { useState, useEffect, useId } from 'react';
 import { useFormContext, Controller } from 'react-hook-form';
 
-import { Input } from '../../../primitives/input';
-import { IGRPLabel } from '../../label';
-import { IGRPButton } from '../../button';
-// import { igrpGridSizeClasses } from '../../../../lib/constants';
-import { cn } from '../../../../lib/utils';
-import type { IGRPInputProps, IGRPGridSize } from '../../../../types';
+import { cn } from '../../../lib/utils';
+import type { IGRPInputProps, IGRPGridSize } from '../../../types';
+import { Input } from '../../primitives/input';
+import { IGRPButton } from '../button';
+import { IGRPLabel } from '../label';
 
 interface IGRPInputNumberProps extends Omit<IGRPInputProps, 'onChange'> {
-  name: string;
   label?: string;
   helperText?: string;
   description?: string;
@@ -29,6 +27,7 @@ interface IGRPInputNumberProps extends Omit<IGRPInputProps, 'onChange'> {
 
 function IGRPInputNumber({
   name,
+  id,
   label,
   helperText,
   description,
@@ -48,8 +47,9 @@ function IGRPInputNumber({
   gridSize = 'default',
   ...props
 }: IGRPInputNumberProps) {
-  const id = useId();
-  const fieldName = name ?? id;
+  const _id = useId();
+  const fieldName = name ?? id ?? _id;
+
   const [localValue, setLocalValue] = useState(controlledValue ?? defaultValue);
   const [isFocused, setIsFocused] = useState(false);
   const [validationError, setValidationError] = useState(false);
@@ -261,11 +261,11 @@ function IGRPInputNumber({
 
   return (
     <Controller
-      name={name}
+      name={fieldName}
       control={formContext.control}
       defaultValue={defaultValue}
       render={({ field, fieldState }) => (
-        <div className={cn('w-full', /*igrpGridSizeClasses[gridSize],*/ className)}>
+        <div className={cn('w-full', className)}>
           {renderNumberInput(
             parseFloat(field.value) || defaultValue,
             (newValue) => {

@@ -2,17 +2,16 @@
 
 import { useId } from 'react';
 import { useFormContext } from 'react-hook-form';
-import { Checkbox } from '../../../primitives/checkbox';
-import { IGRPFormField } from '../../form/form-field';
-import { IGRPLabel } from '../../label';
-import { cn } from '../../../../lib/utils';
-// import { igrpGridSizeClasses } from '../../../../lib/constants';
-import type { IGRPBaseAttributes, IGRPGridSize } from '../../../../types';
+
+import { Checkbox } from '../../primitives/checkbox';
+import { cn } from '../../../lib/utils';
+import type { IGRPBaseAttributes, IGRPGridSize } from '../../../types';
+import { IGRPFormField } from '../form/form-field';
+import { IGRPLabel } from '../label';
 
 interface IGRPCheckboxProps
   extends React.ComponentProps<typeof Checkbox>,
     Pick<IGRPBaseAttributes, 'helperText' | 'label'> {
-  name: string;
   labelClassName?: string;
   gridSize?: IGRPGridSize;
   error?: string;
@@ -20,6 +19,7 @@ interface IGRPCheckboxProps
 
 function IGRPCheckbox({
   name,
+  id,
   label,
   helperText,
   className,
@@ -30,8 +30,8 @@ function IGRPCheckbox({
   onCheckedChange,
   ...props
 }: IGRPCheckboxProps) {
-  const id = useId();
-  const fieldName = name || id;
+  const _id = useId();
+  const fieldName = name ?? id ?? _id;
 
   const formContext = useFormContext();
 
@@ -87,7 +87,6 @@ function IGRPCheckbox({
       name={fieldName}
       label={label}
       helperText={helperText}
-      // size={igrpGridSizeClasses[gridSize]}
       required={required}
       control={formContext.control}
       labelPlacement="end"

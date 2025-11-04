@@ -3,13 +3,12 @@
 import { useId, useRef } from 'react';
 import { useFormContext, Controller } from 'react-hook-form';
 
-import { Input } from '../../../primitives/input';
-import { IGRPLabel } from '../../label';
-import { cn } from '../../../../lib/utils';
-import type { IGRPInputProps, IGRPGridSize } from '../../../../types';
+import { Input } from '../../primitives/input';
+import { IGRPLabel } from '../label';
+import { cn } from '../../../lib/utils';
+import type { IGRPInputProps, IGRPGridSize } from '../../../types';
 
 interface IGRPInputFileProps extends IGRPInputProps {
-  name: string;
   gridSize?: IGRPGridSize;
   accept?: string;
   multiple?: boolean;
@@ -17,6 +16,7 @@ interface IGRPInputFileProps extends IGRPInputProps {
 
 function IGRPInputFile({
   name,
+  id,
   label,
   className,
   required = false,
@@ -30,8 +30,9 @@ function IGRPInputFile({
   helperText,
   ...props
 }: IGRPInputFileProps) {
-  const id = useId();
-  const fieldName = name ?? id;
+  const _id = useId();
+  const fieldName = name ?? id ?? _id;
+
   const inputRef = useRef<HTMLInputElement>(null);
   const formContext = useFormContext();
 
@@ -81,7 +82,7 @@ function IGRPInputFile({
     );
   }
 
-  const fieldError = formContext.formState.errors[name];
+  const fieldError = formContext.formState.errors[fieldName];
   const errorMessage = error || (fieldError?.message as string);
 
   return (
@@ -95,7 +96,7 @@ function IGRPInputFile({
         };
 
         return (
-          <div className={cn('*:not-first:mt-2' /*, gridSize*/)}>
+          <div className={cn('*:not-first:mt-2')}>
             {label && (
               <IGRPLabel label={label} className={className} required={required} id={fieldName} />
             )}

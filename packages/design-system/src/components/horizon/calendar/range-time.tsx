@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useId, useState } from 'react';
 
 import { Input } from '../../primitives/input';
 import { Label } from '../../primitives/label';
@@ -18,8 +18,12 @@ function IGRPCalendarRangeTime({
   endTimeLabel = 'Data Fim',
   showTimeIndicator = false,
   name,
+  id,
   ...props
 }: IGRPCalendarRangeTimeProps) {
+  const _id = useId();
+  const ref = name ?? id ?? _id
+
   const [startTime, setStartTime] = useState<string>('');
   const [endTime, setEndTime] = useState<string>('');
 
@@ -38,15 +42,15 @@ function IGRPCalendarRangeTime({
   };
 
   return (
-    <div id={name}>
+    <div id={ref}>
       <div className="space-y-4">
-        <IGRPCalendarRange {...props} />
+        <IGRPCalendarRange id={ref} {...props} />
 
         <div className="space-y-4 pt-4 border-t">
           <div className="space-y-2">
-            <Label htmlFor={`${name}-start-time`}>{startTimeLabel}</Label>
+            <Label htmlFor={`${ref}-start-time`}>{startTimeLabel}</Label>
             <Input
-              id={`${name}-start-time`}
+              id={`${ref}-start-time`}
               type="time"
               step="1"
               placeholder={startTimePlaceholder}
@@ -58,9 +62,9 @@ function IGRPCalendarRangeTime({
 
           {!hideEndTimePicker && (
             <div className="space-y-2">
-              <Label htmlFor={`${name}-end-time`}>{endTimeLabel}</Label>
+              <Label htmlFor={`${ref}-end-time`}>{endTimeLabel}</Label>
               <Input
-                id={`${name}-end-time`}
+                id={`${ref}-end-time`}
                 type="time"
                 step="1"
                 placeholder={endTimePlaceholder}

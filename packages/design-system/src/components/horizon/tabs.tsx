@@ -1,7 +1,7 @@
 'use client';
 
 import { cva, type VariantProps } from 'class-variance-authority';
-import { useState } from 'react';
+import { useId, useState } from 'react';
 
 import { cn } from '../../lib/utils';
 import { Tabs, TabsList, TabsTrigger, TabsContent } from '../primitives/tabs';
@@ -64,6 +64,7 @@ interface IGRPTabsProps extends React.ComponentProps<typeof Tabs> {
   contentBorder?: boolean;
   variant?: VariantProps<typeof tabListVariants>['variant'];
   fullWidth?: boolean;
+  id?: string;
 }
 
 function IGRPTabs({
@@ -79,8 +80,12 @@ function IGRPTabs({
   defaultValue,
   variant = 'default',
   fullWidth = false,
+  id
 }: IGRPTabsProps) {
   const [activeTab, setActiveTab] = useState(items[0]?.value || '');
+  
+  const _id = useId();
+  const ref = id ?? _id
 
   return (
     <Tabs
@@ -89,6 +94,7 @@ function IGRPTabs({
       onValueChange={setActiveTab}
       className={cn('w-full', orientation === 'vertical' && 'flex-row', tabClassName)}
       orientation={orientation}
+      id={ref}
     >
       <TabsList
         className={cn(

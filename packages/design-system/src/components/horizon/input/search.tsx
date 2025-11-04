@@ -4,15 +4,14 @@ import { useId, useState, useEffect, useCallback } from 'react';
 import { useFormContext } from 'react-hook-form';
 import type { VariantProps } from 'class-variance-authority';
 
-import { Input } from '../../../primitives/input';
-import { IGRPButton } from '../../button';
-import { IGRPFieldDescription } from '../../field-description';
-import { IGRPFormField } from '../../form/form-field';
-import { IGRPIcon, type IGRPIconName } from '../../icon';
-import { IGRPLabel } from '../../label';
-// import { igrpGridSizeClasses } from '../../../../lib/constants';
-import { cn } from '../../../../lib/utils';
-import { type IGRPInputProps } from '../../../../types';
+import { cn } from '../../../lib/utils';
+import { type IGRPInputProps } from '../../../types';
+import { Input } from '../../primitives/input';
+import { IGRPButton } from '../button';
+import { IGRPFieldDescription } from '../field-description';
+import { IGRPFormField } from '../form/form-field';
+import { IGRPIcon, type IGRPIconName } from '../icon';
+import { IGRPLabel } from '../label';
 
 interface IGRPInputSearchProps extends Omit<IGRPInputProps, 'value' | 'defaultValue'> {
   value?: string;
@@ -43,6 +42,7 @@ const isDebouncedCallback = (callback?: (val: string) => void, delay = 2000) => 
 
 function IGRPInputSearch({
   name,
+  id,
   label,
   helperText,
   className,
@@ -68,8 +68,9 @@ function IGRPInputSearch({
   loading,
   ...props
 }: IGRPInputSearchProps) {
-  const id = useId();
-  const fieldName = name ?? id;
+  const _id = useId();
+  const fieldName = name ?? id ?? _id;
+
   const formContext = useFormContext();
   const [localValue, setLocalValue] = useState(controlledValue ?? defaultValue);
   const debouncedSearch = isDebouncedCallback(onSearch, debounceMs);
@@ -152,7 +153,6 @@ function IGRPInputSearch({
         label={label}
         helperText={helperText}
         className={className}
-        // size={igrpGridSizeClasses[gridSize]}
         required={required}
         control={formContext.control}
       >

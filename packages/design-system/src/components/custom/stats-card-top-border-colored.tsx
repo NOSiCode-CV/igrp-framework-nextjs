@@ -1,4 +1,5 @@
-import { IGRPStatsCard, type IGRPStatsCardProps } from '../../horizon/stats-card';
+import { useId } from 'react';
+import { IGRPStatsCard, type IGRPStatsCardProps } from '../horizon/stats-card';
 
 function IGRPStatsCardTopBorderColored({
   cardVariant,
@@ -7,10 +8,21 @@ function IGRPStatsCardTopBorderColored({
   className,
   iconClassName,
   iconName,
-}: Pick<
-  IGRPStatsCardProps,
-  'cardVariant' | 'title' | 'value' | 'className' | 'iconClassName' | 'iconName'
+  name,
+  id,
+}: Pick<IGRPStatsCardProps, 
+  'cardVariant' | 
+  'title' | 
+  'value' | 
+  'className' | 
+  'iconClassName' | 
+  'iconName' |
+  'name' |
+  'id'
 >) {
+  const _id = useId();
+    const ref = name ?? id ?? _id
+    
   return (
     <IGRPStatsCard
       title={title}
@@ -30,6 +42,7 @@ function IGRPStatsCardTopBorderColored({
       titleClassName="text-muted-foreground"
       titleSize="xs"
       valueSize="2xl"
+      id={ref}
     />
   );
 }

@@ -3,36 +3,33 @@
 import { useId } from 'react';
 import { useFormContext } from 'react-hook-form';
 
-import { Switch } from '../../../primitives/switch';
-import { IGRPFormField } from '../../form/form-field';
-import { IGRPLabel } from '../../label';
-// import { igrpGridSizeClasses } from '../../../../lib/constants';
-import { cn } from '../../../../lib/utils';
-import type { IGRPBaseAttributes, IGRPGridSize } from '../../../../types';
+import { cn } from '../../../lib/utils';
+import type { IGRPBaseAttributes } from '../../../types';
+import { Switch } from '../../primitives/switch';
+import { IGRPFormField } from '../form/form-field';
+import { IGRPLabel } from '../label';
 
-interface IGRPSwitchProps
-  extends Omit<React.ComponentProps<typeof Switch>, 'name'>,
-    Pick<IGRPBaseAttributes, 'helperText' | 'label'> {
-  name: string;
-  labelClassName?: string;
-  gridSize?: IGRPGridSize;
-  error?: string;
+
+interface IGRPSwitchProps extends React.ComponentProps<typeof Switch>,
+  Pick<IGRPBaseAttributes, 'helperText' | 'label'> {
+    labelClassName?: string;
+    error?: string;
 }
 
 function IGRPSwitch({
   name,
+  id,
   label,
   helperText,
   className,
   labelClassName,
   required,
   error,
-  gridSize = 'default',
   onCheckedChange,
   ...props
 }: IGRPSwitchProps) {
-  const id = useId();
-  const fielName = name ?? id;
+  const _id = useId();
+  const fielName = name ?? id ?? _id;
 
   const formContext = useFormContext();
 
@@ -88,7 +85,6 @@ function IGRPSwitch({
       name={fielName}
       label={label}
       helperText={helperText}
-      // size={igrpGridSizeClasses[gridSize]}
       required={required}
       control={formContext.control}
       labelPlacement="end"

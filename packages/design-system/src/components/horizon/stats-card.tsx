@@ -1,7 +1,7 @@
 'use client';
 
 import { cva, type VariantProps } from 'class-variance-authority';
-import { useCallback } from 'react';
+import { useCallback, useId } from 'react';
 
 import { IGRPColors, type IGRPColorVariants } from '../../lib/colors';
 import { cn } from '../../lib/utils';
@@ -290,8 +290,13 @@ function IGRPStatsCard({
   cardVariant = 'primary',
   itemPlacement = 'start',
   onClick,
+  name,
+  id,
   ...props
 }: IGRPStatsCardProps) {
+  const _id = useId();
+    const ref = name ?? id ?? _id
+    
   const isInteractive = !!onClick;
   const outlineColors = IGRPColors['outline'][cardVariant];
   const solidColors = IGRPColors['solid'][cardVariant];
@@ -327,6 +332,7 @@ function IGRPStatsCard({
       role={isInteractive ? 'button' : 'none'}
       tabIndex={0}
       onKeyDown={handleKeyDown}
+      id={ref}
       {...props}
     >
       <div className="flex flex-col flex-1 mx-4">

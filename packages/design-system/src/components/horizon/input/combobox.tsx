@@ -3,6 +3,9 @@
 import { useEffect, useId, useMemo, useState } from 'react';
 import { useFormContext } from 'react-hook-form';
 
+import { igrpColorText } from '../../../lib/colors';
+import { cn } from '../../../lib/utils';
+import type { IGRPBaseAttributes, IGRPOptionsProps } from '../../../types';
 import {
   Command,
   CommandEmpty,
@@ -11,17 +14,14 @@ import {
   CommandItem,
   CommandList,
   CommandSeparator,
-} from '../../../primitives/command';
-import { Popover, PopoverContent, PopoverTrigger } from '../../../primitives/popover';
-import { IGRPButton } from '../../button';
-import { IGRPFieldDescription } from '../../field-description';
-import { IGRPFormField } from '../../form/form-field';
-import { IGRPLabel } from '../../label';
-import { IGRPIcon } from '../../icon';
-import { IGRPCircleFull } from '../../icon/custom';
-import { cn } from '../../../../lib/utils';
-import { igrpColorText } from '../../../../lib/colors';
-import type { IGRPBaseAttributes, IGRPOptionsProps } from '../../../../types';
+} from '../../primitives/command';
+import { Popover, PopoverContent, PopoverTrigger } from '../../primitives/popover';
+import { IGRPButton } from '../button';
+import { IGRPFieldDescription } from '../field-description';
+import { IGRPFormField } from '../form/form-field';
+import { IGRPLabel } from '../label';
+import { IGRPIcon } from '../icon';
+import { IGRPCircleFull } from '../icon/custom';
 
 interface IGRPComboboxProps extends IGRPBaseAttributes {
   variant?: 'single' | 'multiple';
@@ -41,6 +41,7 @@ interface IGRPComboboxProps extends IGRPBaseAttributes {
   showGroup?: boolean;
   showStatus?: boolean;
   showIcon?: boolean;
+  id?: string;
 }
 
 function IGRPCombobox({
@@ -54,6 +55,7 @@ function IGRPCombobox({
   label,
   required = false,
   name,
+  id,
   selectClassName,
   labelClassName,
   errorText,
@@ -66,11 +68,12 @@ function IGRPCombobox({
   showIcon = false,
   iconName = 'CornerDownRight',
 }: IGRPComboboxProps) {
-  const id = useId();
-  const fieldName = name ?? id;
-  const formContext = useFormContext();
-  const [open, setOpen] = useState(false);
-  const [localValue, setLocalValue] = useState<string | string[]>(value);
+  const _id = useId();
+  const fieldName = name ?? id ?? _id
+
+  const formContext = useFormContext()
+  const [open, setOpen] = useState(false)
+  const [localValue, setLocalValue] = useState<string | string[]>(value)
 
   useEffect(() => {
     setLocalValue(value);

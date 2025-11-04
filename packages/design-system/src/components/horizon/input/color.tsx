@@ -3,13 +3,12 @@
 import { useId, useState, useEffect } from 'react';
 import { useFormContext, Controller } from 'react-hook-form';
 
-import { Input } from '../../../primitives/input';
-import { IGRPLabel } from '../../label';
-import { cn } from '../../../../lib/utils';
-import type { IGRPInputProps, IGRPGridSize } from '../../../../types';
+import { cn } from '../../../lib/utils';
+import type { IGRPInputProps, IGRPGridSize } from '../../../types';
+import { Input } from '../../primitives/input';
+import { IGRPLabel } from '../label';
 
 interface IGRPInputColorProps extends Omit<IGRPInputProps, 'onChange' | 'value' | 'defaultValue'> {
-  name: string;
   defaultValue?: string;
   value?: string;
   onChange?: (value: string) => void;
@@ -20,6 +19,7 @@ interface IGRPInputColorProps extends Omit<IGRPInputProps, 'onChange' | 'value' 
 
 function IGRPInputColor({
   name,
+  id,
   label,
   helperText = '',
   className,
@@ -32,8 +32,8 @@ function IGRPInputColor({
   gridSize = 'default',
   ...props
 }: IGRPInputColorProps) {
-  const id = useId();
-  const fieldName = name ?? id;
+  const _id = useId();
+  const fieldName = name ?? id ?? _id;
 
   const formContext = useFormContext();
   const [internalValue, setInternalValue] = useState(controlledValue || defaultValue);
@@ -133,7 +133,7 @@ function IGRPInputColor({
         };
 
         return (
-          <div className={cn('*:not-first:mt-2' /*gridSize*/)}>
+          <div className={cn('*:not-first:mt-2')}>
             {label && (
               <IGRPLabel label={label} className={className} required={required} id={fieldName} />
             )}

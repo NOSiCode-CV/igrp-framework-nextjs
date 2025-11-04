@@ -3,22 +3,21 @@
 import { useId } from 'react';
 import { useFormContext } from 'react-hook-form';
 
-import { Input } from '../../../primitives/input';
-import { IGRPFormField } from '../../form/form-field';
-import { IGRPIcon } from '../../icon';
-import { IGRPLabel } from '../../label';
-// import { igrpGridSizeClasses } from '../../../../lib/constants';
-import { cn } from '../../../../lib/utils';
-import type { IGRPInputProps, IGRPGridSize } from '../../../../types';
+import { cn } from '../../../lib/utils';
+import type { IGRPInputProps } from '../../../types';
+import { Input } from '../../primitives/input';
+import { IGRPFormField } from '../form/form-field';
+import { IGRPIcon } from '../icon';
+import { IGRPLabel } from '../label';
 
 interface IGRPInputTextProps extends IGRPInputProps {
   type?: 'text' | 'email' | 'number';
-  gridSize?: IGRPGridSize;
   error?: string;
 }
 
 function IGRPInputText({
   name,
+  id,
   type = 'text',
   label,
   helperText,
@@ -31,12 +30,12 @@ function IGRPInputText({
   labelClassName,
   required,
   inputClassName,
-  // gridSize = 'default',
   error,
   ...props
 }: IGRPInputTextProps) {
-  const id = useId();
-  const fieldName = name ?? id;
+  const _id = useId();
+  const fieldName = name ?? id ?? _id;
+
   const formContext = useFormContext();
 
   const positionIcon = iconPlacement === 'start' ? 'start-0 ps-3' : 'end-0 pe-3';
@@ -49,7 +48,6 @@ function IGRPInputText({
         label={label}
         helperText={helperText}
         className={className}
-        // size={igrpGridSizeClasses[gridSize]}
         required={required}
         control={formContext.control}
       >

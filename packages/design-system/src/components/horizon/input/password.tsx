@@ -1,43 +1,58 @@
 'use client';
 
-import { useId } from 'react';
+import { useId, useState, useEffect } from 'react';
 import { useFormContext, Controller } from 'react-hook-form';
 
-import { Input } from '../../../primitives/input';
-import { IGRPLabel } from '../../label';
-// import { igrpGridSizeClasses } from '../../../../lib/constants';
-import { cn } from '../../../../lib/utils';
-import type { IGRPInputProps, IGRPGridSize } from '../../../../types';
+import { Input } from '../../primitives/input';
+import { IGRPButton } from '../button';
+import { IGRPLabel } from '../label';
+import { cn } from '../../../lib/utils';
+import type { IGRPInputProps, IGRPGridSize } from '../../../types';
 
-interface IGRPInputTimeProps extends Omit<IGRPInputProps, 'onChange'> {
-  name: string;
-  gridSize?: IGRPGridSize;
+interface IGRPInputPasswordProps extends Omit<IGRPInputProps, 'onChange'> {
   value?: string;
   defaultValue?: string;
   onChange?: (value: string) => void;
+  showPasswordToggle?: boolean;
+  IGRPGridSize?: IGRPGridSize;
 }
 
-function IGRPInputTime({
+function IGRPInputPassword({
   name,
+  id,
   label,
-  helperText = '',
+  helperText,
   className,
   required = false,
   error,
   value,
   defaultValue,
   onChange,
+  showPasswordToggle = true,
   gridSize = 'default',
   ...props
-}: IGRPInputTimeProps) {
-  const id = useId();
-  const fieldName = name ?? id;
+}: IGRPInputPasswordProps) {
+  const _id = useId();
+  const fieldName = name ?? id ?? _id;
 
+  const [showPassword, setShowPassword] = useState(false);
   const formContext = useFormContext();
+  const [localValue, setLocalValue] = useState(value !== undefined ? value : defaultValue || '');
 
-  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+  useEffect(() => {
+    if (value !== undefined && !formContext) {
+      setLocalValue(value);
+    }
+  }, [value, formContext]);
+
+  const handleStandaloneChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const newValue = e.target.value;
+    setLocalValue(newValue);
     onChange?.(newValue);
+  };
+
+  const togglePasswordVisibility = () => {
+    setShowPassword(!showPassword);
   };
 
   if (!formContext) {
@@ -51,21 +66,37 @@ function IGRPInputTime({
           <Input
             id={fieldName}
             name={fieldName}
-            type="time"
+            type={showPassword ? 'text' : 'password'}
             required={required}
             aria-required={required}
             aria-invalid={!!error || !!props['aria-invalid']}
             aria-describedby={helperText || error ? `${id}-helper` : undefined}
             className={cn(
               'peer bg-background py-3 text-sm outline-hidden',
+              showPasswordToggle && 'pr-10',
               error && 'border-destructive focus-visible:ring-destructive/20',
               className,
             )}
-            value={value}
+            value={value !== undefined ? value : localValue}
             defaultValue={defaultValue}
-            onChange={handleChange}
+            onChange={handleStandaloneChange}
             {...props}
           />
+
+          {showPasswordToggle && (
+            <IGRPButton
+              type="button"
+              variant="ghost"
+              size="sm"
+              className="absolute right-0 top-0 h-full px-3 py-2 text-muted-foreground hover:text-foreground"
+              onClick={togglePasswordVisibility}
+              tabIndex={-1}
+              aria-label={showPassword ? 'Hide password' : 'Show password'}
+              showIcon
+              iconName={showPassword ? 'EyeOff' : 'Eye'}
+              name="toggle-password-visibility"
+            />
+          )}
         </div>
 
         {helperText && !error && (
@@ -80,7 +111,7 @@ function IGRPInputTime({
         )}
 
         {error && (
-          <p id={`${fieldName}-error`} className="text-destructive mt-2 text-xs" role="alert">
+          <p id={`${fieldName}-errror`} className="text-destructive mt-2 text-xs" role="alert">
             {error}
           </p>
         )}
@@ -102,14 +133,16 @@ function IGRPInputTime({
           <div className="relative">
             <Input
               id={fieldName}
-              name={fieldName}
-              type="time"
+              type={showPassword ? 'text' : 'password'}
               required={required}
               aria-required={required}
               aria-invalid={!!fieldState.error || !!error || !!props['aria-invalid']}
-              aria-describedby={helperText || error ? `${id}-helper` : undefined}
+              aria-describedby={
+                helperText || error || fieldState.error ? `${id}-helper` : undefined
+              }
               className={cn(
                 'peer bg-background py-3 text-sm outline-hidden',
+                showPasswordToggle && 'pr-10',
                 (fieldState.error || error) &&
                   'border-destructive focus-visible:ring-destructive/20',
                 className,
@@ -117,11 +150,25 @@ function IGRPInputTime({
               value={field.value}
               onChange={(e) => {
                 field.onChange(e);
-                handleChange(e);
+                onChange?.(e.target.value);
               }}
               onBlur={field.onBlur}
               {...props}
             />
+
+            {showPasswordToggle && (
+              <IGRPButton
+                type="button"
+                variant="ghost"
+                size="sm"
+                className="absolute right-0 top-0 h-full px-3 py-2 text-muted-foreground hover:text-foreground"
+                onClick={togglePasswordVisibility}
+                tabIndex={-1}
+                aria-label={showPassword ? 'Hide password' : 'Show password'}
+                showIcon
+                iconName={showPassword ? 'EyeOff' : 'Eye'}
+              />
+            )}
           </div>
 
           {helperText && !error && !fieldState.error && (
@@ -136,7 +183,7 @@ function IGRPInputTime({
           )}
 
           {(error || fieldState.error) && (
-            <p id={`${fieldName}-error`} className="text-destructive mt-2 text-xs" role="alert">
+            <p id={`${fieldName}-helper`} className="text-destructive mt-2 text-xs" role="alert">
               {error || fieldState.error?.message}
             </p>
           )}
@@ -146,4 +193,4 @@ function IGRPInputTime({
   );
 }
 
-export { IGRPInputTime, type IGRPInputTimeProps };
+export { IGRPInputPassword, type IGRPInputPasswordProps };

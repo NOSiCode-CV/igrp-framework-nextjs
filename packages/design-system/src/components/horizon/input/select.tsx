@@ -13,6 +13,9 @@ import {
 import { useFormContext } from 'react-hook-form';
 import { Circle } from 'lucide-react';
 
+import { igrpColorText } from '../../../lib/colors';
+import { cn } from '../../../lib/utils';
+import type { IGRPBaseAttributes, IGRPOptionsProps } from '../../../types';
 import {
   FormControl,
   FormDescription,
@@ -20,7 +23,8 @@ import {
   FormItem,
   FormLabel,
   FormMessage,
-} from '../../../primitives/form';
+} from '../../primitives/form';
+import { Input } from '../../primitives/input';
 import {
   Select,
   SelectContent,
@@ -29,14 +33,10 @@ import {
   SelectLabel,
   SelectTrigger,
   SelectValue,
-} from '../../../primitives/select';
-import { Input } from '../../../primitives/input';
-import { IGRPButton } from '../../button';
-import { IGRPIcon } from '../../icon';
-import { IGRPLabel } from '../../label';
-import { igrpColorText } from '../../../../lib/colors';
-import { cn } from '../../../../lib/utils';
-import type { IGRPBaseAttributes, IGRPGridSize, IGRPOptionsProps } from '../../../../types';
+} from '../../primitives/select';
+import { IGRPButton } from '../button';
+import { IGRPIcon } from '../icon';
+import { IGRPLabel } from '../label';
 
 type SelectState = {
   selected: string;
@@ -77,7 +77,7 @@ interface IGRPSelectProps
   showStatus?: boolean;
   selectClassName?: string;
   showGroup?: boolean;
-  gridSize?: IGRPGridSize;
+  id?: string;
 }
 
 function IGRPSelect({
@@ -86,6 +86,7 @@ function IGRPSelect({
   className,
   showSearch = false,
   name,
+  id,
   required,
   disabled,
   error,
@@ -96,12 +97,13 @@ function IGRPSelect({
   label = 'Select an option',
   labelClassName,
   showGroup = false,
-  gridSize = 'default',
   ...props
 }: IGRPSelectProps) {
+
+  const _id = useId();
+  const fieldName = name ?? id ?? _id;
+
   const formContext = useFormContext();
-  const id = useId();
-  const fieldName = name ?? id;
 
   const [state, dispatch] = useReducer(selectReducer, {
     selected: value || '',

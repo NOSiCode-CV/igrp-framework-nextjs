@@ -3,18 +3,17 @@
 import { useId, useState, useEffect, useCallback } from 'react';
 import { useFormContext, Controller } from 'react-hook-form';
 
-import { Input } from '../../../primitives/input';
-import { IGRPLabel } from '../../label';
+import { cn } from '../../../lib/utils';
+import type { IGRPOptionsProps } from '../../../types';
+import { Input } from '../../primitives/input';
 import {
   Select,
   SelectContent,
   SelectItem,
   SelectTrigger,
   SelectValue,
-} from '../../../primitives/select';
-// import { igrpGridSizeClasses } from '../../../../lib/constants';
-import { cn } from '../../../../lib/utils';
-import type { IGRPOptionsProps, IGRPGridSize } from '../../../../types';
+} from '../../primitives/select';
+import { IGRPLabel } from '../label';
 
 interface IGRPInputUrlProps
   extends Omit<React.InputHTMLAttributes<HTMLInputElement>, 'type' | 'onChange'> {
@@ -28,7 +27,6 @@ interface IGRPInputUrlProps
   onChange?: (value: string) => void;
   protocols?: IGRPOptionsProps[];
   defaultProtocol?: string;
-  gridSize?: IGRPGridSize;
 }
 
 const DEFAULT_PROTOCOLS: IGRPOptionsProps[] = [
@@ -42,6 +40,7 @@ const DEFAULT_PROTOCOLS: IGRPOptionsProps[] = [
 
 function IGRPInputUrl({
   name,
+  id,
   label,
   helperText,
   className,
@@ -52,11 +51,10 @@ function IGRPInputUrl({
   onChange,
   protocols = DEFAULT_PROTOCOLS,
   defaultProtocol = 'https://',
-  gridSize = 'default',
   ...props
 }: IGRPInputUrlProps) {
-  const id = useId();
-  const fieldName = name || id;
+  const _id = useId();
+  const fieldName = name ?? id ?? _id;
 
   const formContext = useFormContext();
 

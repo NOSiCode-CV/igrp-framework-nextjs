@@ -1,9 +1,10 @@
 'use client';
 
-import { IGRPStatsCard, type IGRPStatsCardProps } from '../../horizon/stats-card';
-import type { IGRPColorVariants } from '../../../lib/colors';
-import { IGRPColors } from '../../../lib/colors';
-import { cn } from '../../../lib/utils';
+import { useId } from 'react';
+
+import { IGRPColors , type IGRPColorVariants} from '../../lib/colors';
+import { cn } from '../../lib/utils';
+import { IGRPStatsCard, type IGRPStatsCardProps } from '../horizon/stats-card';
 
 interface StatsCardMiniProps
   extends Omit<
@@ -35,13 +36,19 @@ function StatsCardMini({
   className,
   onClick,
   variant = 'primary',
+  name,
+  id,
   ...props
 }: StatsCardMiniProps) {
+  const _id = useId();
+  const ref = name ?? id ?? _id
+    
   const color = IGRPColors.outline[variant];
 
   return (
     <IGRPStatsCard
       {...props}
+      id={ref}
       className={className}
       onClick={onClick}
       title={title}

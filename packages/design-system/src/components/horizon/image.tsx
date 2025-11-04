@@ -23,10 +23,11 @@ function IGRPImage({
   width,
   height,
   name,
+  id,
   ...props
 }: IGRPImageProps) {
-  const id = useId();
-  const ref = name || id;
+  const _id = useId();
+  const ref = name ?? id ?? _id;
 
   const ratioNumber = {
     '1/1': 1 / 1,

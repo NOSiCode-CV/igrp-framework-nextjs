@@ -95,26 +95,26 @@ const badgeVariants = cva(
   },
 );
 
-interface IGRPAvatarProps extends IGRPBaseAttributes, VariantProps<typeof avatarVariants> {
-  src?: string;
-  alt?: string;
-  fallback?: string;
-  fallbackClassName?: string;
-  fallbackIcon?: IGRPIconName | string;
-  hasFallbackIcon?: boolean;
-  hasStatus?: boolean;
-  status: IGRPColorVariants;
-  showIcon?: boolean;
-  iconName?: IGRPIconName | string;
-  showBadge?: boolean;
-  className?: string;
-  badgeNumber?: number;
-  iconNumber?: string;
-  badgeColor: IGRPColorVariants;
-  iconColor: string;
-  badgeShowIcon?: boolean;
-  badgeIconName?: string;
-  name?: string;
+interface IGRPAvatarProps extends React.ComponentProps<typeof Avatar>, IGRPBaseAttributes, 
+  VariantProps<typeof avatarVariants> {
+    src?: string;
+    alt?: string;
+    fallback?: string;
+    fallbackClassName?: string;
+    fallbackIcon?: IGRPIconName | string;
+    hasFallbackIcon?: boolean;
+    hasStatus?: boolean;
+    status: IGRPColorVariants;
+    showIcon?: boolean;
+    iconName?: IGRPIconName | string;
+    showBadge?: boolean;
+    className?: string;
+    badgeNumber?: number;
+    iconNumber?: string;
+    badgeColor: IGRPColorVariants;
+    iconColor: string;
+    badgeShowIcon?: boolean;
+    badgeIconName?: string;
 }
 function IGRPAvatar({
   src,
@@ -138,15 +138,18 @@ function IGRPAvatar({
   iconClassName,
   iconColor = '#000000',
   name,
+  id,
+  ...avatarProps
 }: IGRPAvatarProps) {
-  const id = useId();
-  const ref = name || id;
+  const _id = useId();
+  const ref = name ?? id ?? _id;
+
   const colorClasses = IGRPColors['solid'][status];
   const upperFallBack = convertFallback(fallback);
 
   return (
     <div className={cn('relative', avatarVariants({ size, rounded }), className)} id={ref}>
-      <Avatar className="size-full">
+      <Avatar className="size-full" {...avatarProps}>
         <AvatarImage src={src} alt={alt} />
         <AvatarFallback className={cn('text-sm font-medium', fallbackClassName)}>
           {hasFallbackIcon ? <IGRPIcon iconName={fallbackIcon} /> : upperFallBack}

@@ -2,12 +2,11 @@
 
 import { useId, useState, useEffect } from 'react';
 import { useFormContext, Controller } from 'react-hook-form';
-import { Input } from '../../../primitives/input';
-import { IGRPLabel } from '../../label';
-// import { igrpGridSizeClasses } from '../../../../lib/constants';
-import { cn } from '../../../../lib/utils';
-import type { IGRPInputProps, IGRPGridSize } from '../../../../types';
-import { DD_MM_YYYY } from '../../../../lib/constants';
+import { Input } from '../../primitives/input';
+import { IGRPLabel } from '../label';
+import { cn } from '../../../lib/utils';
+import type { IGRPInputProps, IGRPGridSize } from '../../../types';
+import { DD_MM_YYYY } from '../../../lib/constants';
 
 interface IGRPDateTimeInputProps
   extends Omit<IGRPInputProps, 'onChange' | 'defaultValue' | 'value'> {
@@ -20,6 +19,7 @@ interface IGRPDateTimeInputProps
 
 function IGRPDateTimeInput({
   name,
+  id,
   label,
   helperText,
   error,
@@ -35,8 +35,8 @@ function IGRPDateTimeInput({
   onBlur,
   ...props
 }: IGRPDateTimeInputProps) {
-  const id = useId();
-  const fieldName = name ?? id;
+  const _id = useId();
+  const fieldName = name ?? id ?? _id;
 
   const formContext = useFormContext();
   const [inputValue, setInputValue] = useState(controlledValue || defaultValue);

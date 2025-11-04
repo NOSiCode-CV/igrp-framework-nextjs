@@ -4,12 +4,11 @@ import { useId } from 'react';
 import { useFormContext } from 'react-hook-form';
 import { type VariantProps } from 'class-variance-authority';
 
-import { RadioGroup, RadioGroupItem, radioItemVariants } from '../../../primitives/radio-group';
-import { IGRPFormField } from '../../form/form-field';
-import { IGRPLabel } from '../../label';
-// import { igrpGridSizeClasses } from '../../../../lib/constants';
-import { cn } from '../../../../lib/utils';
-import type { IGRPBaseAttributes, IGRPGridSize } from '../../../../types';
+import { RadioGroup, RadioGroupItem, radioItemVariants } from '../../primitives/radio-group';
+import { IGRPFormField } from '../form/form-field';
+import { IGRPLabel } from '../label';
+import { cn } from '../../../lib/utils';
+import type { IGRPBaseAttributes, IGRPGridSize } from '../../../types';
 
 type IGRPRadioOption = {
   value: string;
@@ -19,7 +18,7 @@ type IGRPRadioOption = {
 };
 
 interface IGRPRadioGroupProps
-  extends Omit<IGRPBaseAttributes, 'ref' | 'name'>,
+  extends Omit<IGRPBaseAttributes, 'ref'>,
     VariantProps<typeof radioItemVariants>,
     React.ComponentProps<typeof RadioGroup> {
   options: IGRPRadioOption[];
@@ -29,6 +28,7 @@ interface IGRPRadioGroupProps
 
 function IGRPRadioGroup({
   name,
+  id,
   required = false,
   disabled = false,
   dir,
@@ -47,8 +47,8 @@ function IGRPRadioGroup({
   error,
   ...props
 }: IGRPRadioGroupProps) {
-  const id = useId();
-  const fieldName = name ?? id;
+  const _id = useId();
+  const fieldName = name ?? id ?? _id;
   const formContext = useFormContext();
 
   const describedById = error

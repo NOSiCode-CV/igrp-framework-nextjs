@@ -39,6 +39,7 @@ interface IGRPVideoEmbedProps extends VariantProps<typeof videoVariants> {
   loop?: boolean;
   className?: string;
   name?: string;
+  id?: string;
   start?: number;
 }
 
@@ -54,11 +55,12 @@ function IGRPVideoEmbed({
   loop = false,
   className,
   name,
+  id,
   start = 0,
   aspectRatio = '16/9',
 }: IGRPVideoEmbedProps) {
-  const id = useId();
-  const ref = name || id;
+  const _id = useId();
+  const ref = name ?? id ?? _id;
 
   let videoUrl: URL;
   try {
@@ -72,6 +74,7 @@ function IGRPVideoEmbed({
           videoVariants({ aspectRatio }),
           className,
         )}
+        id={ref}
       >
         <p className="text-muted-foreground text-sm">Invalid video URL</p>
       </div>

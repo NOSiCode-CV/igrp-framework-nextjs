@@ -4,7 +4,7 @@ import { getDisabledDays } from '../../../lib/calendar-utils';
 import { cn } from '../../../lib/utils';
 import type { IGRPCalendarProps } from '../../../types';
 import { Calendar } from '../../primitives/calendar';
-import { useState } from 'react';
+import { useId, useState } from 'react';
 
 type IGRPCalendarMultipleProps = {
   date?: Date[];
@@ -23,6 +23,9 @@ function IGRPCalendarMultiple({
   disableDayOfWeek,
   ...props
 }: IGRPCalendarMultipleProps) {
+  const _id = useId();
+  const ref = name ?? id ?? _id
+
   const [ownDate, setOwnDate] = useState<Date[] | undefined>(date);
   const disabled = getDisabledDays({ disableBefore, disableAfter, disableDayOfWeek });
 
@@ -30,7 +33,7 @@ function IGRPCalendarMultiple({
     <Calendar
       {...props}
       mode="multiple"
-      id={name || id}
+      id={ref}
       defaultMonth={defaultMonth || ownDate?.[0] || new Date()}
       selected={date}
       onSelect={(date) => {

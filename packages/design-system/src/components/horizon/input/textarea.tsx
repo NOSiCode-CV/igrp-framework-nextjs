@@ -3,33 +3,32 @@
 import { useId } from 'react';
 import { useFormContext, Controller } from 'react-hook-form';
 
-import { Textarea } from '../../../primitives/textarea';
-import { IGRPLabel } from '../../label';
-// import { igrpGridSizeClasses } from '../../../../lib/constants';
-import { cn } from '../../../../lib/utils';
-import type { IGRPInputProps, IGRPGridSize } from '../../../../types';
+import { cn } from '../../../lib/utils';
+import type { IGRPInputProps } from '../../../types';
+import { Textarea } from '../../primitives/textarea';
+import { IGRPLabel } from '../label';
 
-interface IGRPTextareaProps
-  extends React.ComponentProps<'textarea'>,
-    Pick<IGRPInputProps, 'label' | 'helperText' | 'className' | 'required' | 'error'> {
-  name: string;
-  gridSize?: IGRPGridSize;
-  rows?: number;
-}
+interface IGRPTextareaProps extends React.ComponentProps<typeof Textarea>,
+  Pick<IGRPInputProps, 
+  'label' | 
+  'helperText' | 
+  'className' | 
+  'required' | 
+  'error'> {}
 
 function IGRPTextarea({
   name,
+  id,
   label,
   helperText,
   className,
   required = false,
   error,
   rows = 3,
-  gridSize = 'default',
   ...props
 }: IGRPTextareaProps) {
-  const id = useId();
-  const fieldName = name ?? id;
+  const _id = useId();
+  const fieldName = name ?? id ?? _id;
 
   const formContext = useFormContext();
 
@@ -78,7 +77,7 @@ function IGRPTextarea({
     );
   }
 
-  const fieldError = formContext.formState.errors[name];
+  const fieldError = formContext.formState.errors[fieldName];
   const errorMessage = error || (fieldError?.message as string);
 
   return (
@@ -86,7 +85,7 @@ function IGRPTextarea({
       name={fieldName}
       control={formContext.control}
       render={({ field, fieldState }) => (
-        <div className={cn('*:not-first:mt-2' /*, igrpGridSizeClasses[gridSize]*/)}>
+        <div className={cn('*:not-first:mt-2')}>
           {label && (
             <IGRPLabel label={label} className={className} required={required} id={fieldName} />
           )}

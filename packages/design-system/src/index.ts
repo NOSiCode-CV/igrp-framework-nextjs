@@ -384,6 +384,8 @@ export {
 
 export { IGRPAlert, type IGRPAlertProps } from './components/horizon/alert';
 
+export { IGRPAccordion, type IGRPAccordionProps } from './components/horizon/accordion';
+
 export { IGRPAlertDialog, type IGRPAlertDialogProps } from './components/horizon/alert-dialog';
 
 export { IGRPAvatar, type IGRPAvatarProps } from './components/horizon/avatar';

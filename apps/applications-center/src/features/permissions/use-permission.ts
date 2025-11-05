@@ -23,7 +23,7 @@ export const usePermissions = (params: PermissionFilters) => {
 
 export function usePermissionsbyName(resourceName: any) {
   return useQuery({
-    queryKey: ['permissions', resourceName],
+    queryKey: ["permissions", resourceName],
     queryFn: () => getPermissions(resourceName),
     enabled: !!resourceName,
   });

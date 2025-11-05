@@ -9,5 +9,5 @@ export default async function DepartmentDetailsPage({
 }) {
   const { code } = await params;
   // return <DepartmentDetails code={code} />;
-  return null
+  return null;
 }

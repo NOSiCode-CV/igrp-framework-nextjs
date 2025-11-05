@@ -53,7 +53,6 @@ export async function updateRole(name: string, roleData: UpdateRoleRequest) {
   }
 }
 
-
 export async function deleteRole(code: string) {
   const client = await getClientAccess();
   try {

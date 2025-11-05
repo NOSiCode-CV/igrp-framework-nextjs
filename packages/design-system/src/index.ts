@@ -434,6 +434,12 @@ export {
   IGRPCardFooter,
 } from './components/horizon/card';
 
+export {
+  IGRPCardDetails,
+  type IGRPCardDetailsProps,
+  type IGRPCardDetailsItemProps,
+} from './components/horizon/card-details';
+
 export { IGRPAreaChart, type IGRPAreaChartProps } from './components/horizon/charts/area';
 
 export {
@@ -503,6 +509,9 @@ export {
 } from './components/horizon/command';
 
 export { IGRPContainer } from './components/horizon/container';
+
+export { IGRPCopyTo, type IGRPCopyToProps } from './components/horizon/copy-to';
+
 export { IGRPDataTable, type IGRPDataTableProps } from './components/horizon/data-table';
 export {
   IGRPDataTableButtonAlert,

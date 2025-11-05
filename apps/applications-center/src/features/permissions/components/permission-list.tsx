@@ -45,8 +45,12 @@ export function PermissionList({ departmentCode }: PermissionListProps) {
   const [searchTerm, setSearchTerm] = useState("");
   const [openFormDialog, setOpenFormDialog] = useState(false);
   const [openDeleteDialog, setOpenDeleteDialog] = useState(false);
-  const [selectedPermission, setSelectedPermission] = useState<PermissionArgs | undefined>(undefined);
-  const [permissionToDelete, setPermissionToDelete] = useState<string | null>(null);
+  const [selectedPermission, setSelectedPermission] = useState<
+    PermissionArgs | undefined
+  >(undefined);
+  const [permissionToDelete, setPermissionToDelete] = useState<string | null>(
+    null,
+  );
 
   const [statusFilter, setStatusFilter] = useState<string[]>([]);
   const [resourceSelected, setResourceSelected] = useState<string>("");
@@ -59,7 +63,7 @@ export function PermissionList({ departmentCode }: PermissionListProps) {
     error,
   } = usePermissionsbyName({ resourceName: resourceSelected });
 
-  console.log("permissions - ", permissions)
+  console.log("permissions - ", permissions);
 
   if (error) {
     return (
@@ -125,18 +129,18 @@ export function PermissionList({ departmentCode }: PermissionListProps) {
         <div className="flex flex-col gap-6">
           <div className="flex flex-col sm:flex-row items-start gap-4 w-full min-w-0">
             <div className="relative w-full max-w-full">
-                  <IGRPIcon
-                    iconName="Search"
-                    className="absolute left-2.5 top-2.5 size-4 text-muted-foreground"
-                  />
-                  <IGRPInputPrimitive
-                    type="search"
-                    placeholder="Pesquisar permissões..."
-                    className="pl-8"
-                    value={searchTerm}
-                    onChange={(e) => setSearchTerm(e.target.value)}
-                  />
-                </div>
+              <IGRPIcon
+                iconName="Search"
+                className="absolute left-2.5 top-2.5 size-4 text-muted-foreground"
+              />
+              <IGRPInputPrimitive
+                type="search"
+                placeholder="Pesquisar permissões..."
+                className="pl-8"
+                value={searchTerm}
+                onChange={(e) => setSearchTerm(e.target.value)}
+              />
+            </div>
             <IGRPSelectPrimitive
               value={resourceSelected}
               onValueChange={setResourceSelected}
@@ -147,7 +151,10 @@ export function PermissionList({ departmentCode }: PermissionListProps) {
               </IGRPSelectTriggerPrimitive>
               <IGRPSelectContentPrimitive>
                 {resources?.map((resource) => (
-                  <IGRPSelectItemPrimitive key={resource.id} value={resource.name}>
+                  <IGRPSelectItemPrimitive
+                    key={resource.id}
+                    value={resource.name}
+                  >
                     {resource.name}
                   </IGRPSelectItemPrimitive>
                 ))}
@@ -156,7 +163,6 @@ export function PermissionList({ departmentCode }: PermissionListProps) {
 
             {resourceSelected && (
               <>
-                
                 <div className="flex flex-wrap gap-2 flex-shirnk-0">
                   <IGRPDropdownMenuPrimitive>
                     <IGRPDropdownMenuTriggerPrimitive asChild>
@@ -211,9 +217,14 @@ export function PermissionList({ departmentCode }: PermissionListProps) {
 
           {!resourceSelected ? (
             <div className="text-center py-12 text-muted-foreground">
-              <IGRPIcon iconName="ListFilter" className="size-12 mx-auto mb-4 opacity-50" />
+              <IGRPIcon
+                iconName="ListFilter"
+                className="size-12 mx-auto mb-4 opacity-50"
+              />
               <p className="text-lg font-medium">Selecione um recurso</p>
-              <p className="text-sm">Escolha um recurso para visualizar as permissões</p>
+              <p className="text-sm">
+                Escolha um recurso para visualizar as permissões
+              </p>
             </div>
           ) : isLoading ? (
             <div className="grid gap-4 animate-pulse">

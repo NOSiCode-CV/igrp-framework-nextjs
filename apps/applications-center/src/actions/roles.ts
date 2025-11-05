@@ -67,11 +67,11 @@ export async function deleteRole(code: string) {
   }
 }
 
-export async function getRoleByName(name: string) {
+export async function getRoleByCode(name: string) {
   const client = await getClientAccess();
 
   try {
-    const result = await client.roles.getRoleByName(name);
+    const result = await client.roles.getRoleByCode(name);
     return result.data as RoleArgs;
   } catch (error) {
     console.error(
@@ -129,11 +129,11 @@ export async function removePermissionsFromRole(
   }
 }
 
-export async function getPermissionsByRoleName(name: string) {
+export async function getPermissionsByRoleCode(name: string) {
   const client = await getClientAccess();
 
   try {
-    const result = await client.roles.getPermissionsByRoleName(name);
+    const result = await client.roles.getPermissionsByRoleCode(name);
     return result.data as PermissionArgs[];
   } catch (error) {
     console.error(

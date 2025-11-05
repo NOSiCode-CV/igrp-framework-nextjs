@@ -63,8 +63,6 @@ export function PermissionList({ departmentCode }: PermissionListProps) {
     error,
   } = usePermissionsbyName({ resourceName: resourceSelected });
 
-  console.log("permissions - ", permissions);
-
   if (error) {
     return (
       <div className="rounded-md border py-6">

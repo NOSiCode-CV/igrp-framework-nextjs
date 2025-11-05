@@ -384,6 +384,8 @@ export {
 
 export { IGRPAlert, type IGRPAlertProps } from './components/horizon/alert';
 
+export { IGRPAccordion, type IGRPAccordionProps } from './components/horizon/accordion';
+
 export { IGRPAlertDialog, type IGRPAlertDialogProps } from './components/horizon/alert-dialog';
 
 export { IGRPAvatar, type IGRPAvatarProps } from './components/horizon/avatar';
@@ -431,6 +433,12 @@ export {
   IGRPCardContent,
   IGRPCardFooter,
 } from './components/horizon/card';
+
+export {
+  IGRPCardDetails,
+  type IGRPCardDetailsProps,
+  type IGRPCardDetailsItemProps,
+} from './components/horizon/card-details';
 
 export { IGRPAreaChart, type IGRPAreaChartProps } from './components/horizon/charts/area';
 
@@ -501,6 +509,9 @@ export {
 } from './components/horizon/command';
 
 export { IGRPContainer } from './components/horizon/container';
+
+export { IGRPCopyTo, type IGRPCopyToProps } from './components/horizon/copy-to';
+
 export { IGRPDataTable, type IGRPDataTableProps } from './components/horizon/data-table';
 export {
   IGRPDataTableButtonAlert,
@@ -608,7 +619,7 @@ export {
   IGRPIconList,
 } from './components/horizon/icon';
 
-export {IGRPImage, type IGRPImageProps  } from './components/horizon/image';
+export { IGRPImage, type IGRPImageProps, type IGRPRatioType } from './components/horizon/image';
 
 export {
   IGRPInfoCard,
@@ -794,6 +805,19 @@ export {
   type IGRPTextProps,
   igrpTextVariants,
 } from './components/horizon/typography/text';
+
+export {
+  IGRPVideoEmbed,
+  type IGRPVideoEmbedProps,
+  type IGRPVideoEmbedAllowFeature,
+} from './components/horizon/video-embed';
+
+// DEPRECATED
+export { IGRPCalendar, type IGRPCalendarProps } from './components/horizon/calendar/calendar';
+export {
+  IGRPDatePicker,
+  type IGRPDatePickerProps,
+} from './components/horizon/input/date-picker/date-picker';
 
 // types
 

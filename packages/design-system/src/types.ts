@@ -15,14 +15,13 @@ export type IGRPBaseAttributes = {
   iconPlacement?: IGRPPlacementProps;
   iconClassName?: string;
   name?: string;
-  ref?: React.Ref<HTMLDivElement> | undefined;
 };
 
 export type IGRPInputProps = {
   inputClassName?: string;
   error?: string;
   gridSize?: IGRPGridSize;
-} & Omit<React.ComponentProps<'input'>, 'type' | 'name'> &
+} & Omit<React.ComponentProps<'input'>, 'type'> &
   IGRPBaseAttributes;
 
 export type IGRPOptionsProps = {

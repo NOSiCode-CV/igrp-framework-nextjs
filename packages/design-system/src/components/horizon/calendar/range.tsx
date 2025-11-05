@@ -1,10 +1,10 @@
+import { useId, useState } from 'react';
 import type { DateRange } from 'react-day-picker';
 
 import { getDisabledDays } from '../../../lib/calendar-utils';
 import { cn } from '../../../lib/utils';
 import type { IGRPCalendarProps } from '../../../types';
 import { Calendar } from '../../primitives/calendar';
-import { useState } from 'react';
 
 type IGRPCalendarRangeProps = {
   date?: DateRange;
@@ -23,6 +23,9 @@ function IGRPCalendarRange({
   disableDayOfWeek,
   ...props
 }: IGRPCalendarRangeProps) {
+  const _id = useId();
+  const ref = name ?? id ?? _id;
+
   const [range, setRange] = useState<DateRange | undefined>(date);
   const disabled = getDisabledDays({ disableBefore, disableAfter, disableDayOfWeek });
 
@@ -30,7 +33,7 @@ function IGRPCalendarRange({
     <Calendar
       {...props}
       mode="range"
-      id={name || id}
+      id={ref}
       defaultMonth={defaultMonth || range?.from}
       selected={date}
       onSelect={(date) => {

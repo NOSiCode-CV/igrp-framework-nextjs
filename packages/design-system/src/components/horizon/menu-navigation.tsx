@@ -1,6 +1,6 @@
 'use client';
 
-import { useRef, useState, useCallback, createContext, useContext } from 'react';
+import { useRef, useState, useCallback, createContext, useContext, useId } from 'react';
 
 import type { IGRPColorRole, IGRPColorVariants } from '../../lib/colors';
 import { cn } from '../../lib/utils';
@@ -27,6 +27,7 @@ interface IGRPMenuNavigationProps {
   className?: string;
   isStickyTop?: boolean;
   showChevron?: boolean;
+  id?: string;
 }
 
 interface NavigationContextType {
@@ -77,9 +78,13 @@ function IGRPMenuNavigation({
   className,
   showChevron = true,
   isStickyTop = false,
+  id,
 }: IGRPMenuNavigationProps) {
   const [internalActiveSection, setInternalActiveSection] = useState(sections[0]?.id || '');
   const navigationContext = useContext(NavigationContext);
+
+  const _id = useId();
+  const ref = id ?? _id;
 
   const activeSection = controlledActiveSection ?? internalActiveSection;
 
@@ -111,7 +116,7 @@ function IGRPMenuNavigation({
   );
 
   return (
-    <div className={cn(isStickyTop && 'sticky top-20', className)}>
+    <div className={cn(isStickyTop && 'sticky top-20', className)} id={ref}>
       <Card className="shadow-sm gap-0">
         <CardHeader className="border-b py-3 px-4 gap-0">
           <div className="flex items-center justify-between">
@@ -191,6 +196,5 @@ export {
   IGRPMenuNavigation,
   type IGRPMenuNavigationItem,
   type IGRPMenuNavigationProps,
-  // eslint-disable-next-line react-refresh/only-export-components
   useIGRPMenuNavigation,
 };

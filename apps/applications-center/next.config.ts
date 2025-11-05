@@ -1,20 +1,35 @@
 import type { NextConfig } from "next";
+import type { ImageConfigComplete } from "next/dist/shared/lib/image-config";
+
+const basePath = process.env.NEXT_PUBLIC_BASE_PATH || "";
+
+// Função para parsear domains de variável de ambiente
+const getRemotePatterns = () => {
+  const patterns: ImageConfigComplete["remotePatterns"] = [];
+
+  // Adicionar domains extras via env (separados por vírgula)
+  // Ex: NEXT_PUBLIC_ALLOWED_DOMAINS=example.com,cdn.example.com
+  const extraDomains =
+    process.env.NEXT_PUBLIC_ALLOWED_DOMAINS?.split(",") || [];
+
+  extraDomains.forEach((domain) => {
+    const trimmedDomain = domain.trim();
+    if (trimmedDomain) {
+      patterns.push({
+        protocol: "https" as const,
+        hostname: trimmedDomain,
+      });
+    }
+  });
+
+  return patterns;
+};
 
 const nextConfig: NextConfig = {
-  basePath: process.env.IGRP_APP_BASE_PATH || "",
-  // output: "standalone",
-
+  output: "standalone",
+  basePath: basePath,
   images: {
-    remotePatterns: [
-      {
-        protocol: "https",
-        hostname: "nosi.cv",
-      },
-      {
-        protocol: "https",
-        hostname: "img.youtube.com",
-      },
-    ],
+    remotePatterns: getRemotePatterns(),
   },
 };
 

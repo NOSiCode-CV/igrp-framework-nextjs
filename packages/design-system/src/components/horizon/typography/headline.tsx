@@ -32,6 +32,7 @@ interface IGRPHeadlineProps
   description?: string;
   roleColor?: IGRPColorRole;
   color?: IGRPColorVariants;
+  id?: string;
 }
 
 function IGRPHeadline({
@@ -40,6 +41,7 @@ function IGRPHeadline({
   description,
   className,
   name,
+  id,
   roleColor = 'solid',
   color = 'primary',
   iconName = 'Info',
@@ -49,8 +51,8 @@ function IGRPHeadline({
   iconSize,
   ...props
 }: IGRPHeadlineProps) {
-  const id = useId();
-  const ref = name || id;
+  const _id = useId();
+  const ref = name ?? id ?? _id;
 
   const Tag = variant as keyof React.JSX.IntrinsicElements;
 

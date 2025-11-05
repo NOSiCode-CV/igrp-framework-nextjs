@@ -1,4 +1,4 @@
-import { type ReactNode } from 'react';
+import { useId, type ReactNode } from 'react';
 
 import { cn } from '../../lib/utils';
 import {
@@ -31,6 +31,7 @@ type IGRPTableProps<T> = {
   footerColumn?: keyof T;
   isStriped?: boolean;
   isHeaderSticky?: boolean;
+  id?: string;
 };
 
 function IGRPTable<T>({
@@ -49,7 +50,11 @@ function IGRPTable<T>({
   footerColumn,
   isStriped = false,
   isHeaderSticky = false,
+  id,
 }: IGRPTableProps<T>) {
+  const _id = useId();
+  const ref = id ?? _id;
+
   const renderCell = (value: T[keyof T], render?: (value: T[keyof T]) => ReactNode): ReactNode => {
     if (render) {
       return render(value);
@@ -64,7 +69,7 @@ function IGRPTable<T>({
     : '';
 
   return (
-    <div className={cn('w-full overflow-auto', tableClass)}>
+    <div className={cn('w-full overflow-auto', tableClass)} id={ref}>
       <Table>
         <TableHeader className={cn(stickyHeaderClass, tHeadClass)}>
           <TableRow className={cn('bg-muted/50', tHeadRowClass)}>

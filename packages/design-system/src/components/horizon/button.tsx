@@ -1,6 +1,6 @@
 'use client';
 
-import type { ReactNode } from 'react';
+import { useId, type ReactNode } from 'react';
 import type { VariantProps } from 'class-variance-authority';
 
 import { Button, buttonVariants } from '../primitives/button';
@@ -9,9 +9,9 @@ import { cn } from '../../lib/utils';
 import type { IGRPBaseAttributes } from '../../types';
 
 interface IGRPButtonProps
-  extends Omit<React.ComponentProps<'button'>, 'name'>,
+  extends Omit<React.ComponentProps<typeof Button>, 'name'>,
     VariantProps<typeof buttonVariants>,
-    Omit<IGRPBaseAttributes, 'ref'> {
+    IGRPBaseAttributes {
   children?: ReactNode;
   asChild?: boolean;
   loading?: boolean;
@@ -30,8 +30,13 @@ function IGRPButton({
   loadingText = 'Loading...',
   disabled,
   type = 'button',
+  name,
+  id,
   ...props
 }: IGRPButtonProps) {
+  const _id = useId();
+  const ref = name ?? id ?? _id;
+
   const { size } = props;
 
   const computedIconSize =
@@ -48,6 +53,7 @@ function IGRPButton({
         className={cn(loading && 'cursor-wait', className)}
         disabled={disabled || loading}
         type={type}
+        id={ref}
       >
         {loading ? (
           <>
@@ -67,6 +73,7 @@ function IGRPButton({
       className={cn('relative', loading && 'cursor-wait', className)}
       disabled={disabled || loading}
       type={type}
+      id={ref}
     >
       {loading && iconPlacement === 'start'
         ? LoadingIcon

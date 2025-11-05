@@ -1,32 +1,39 @@
-## new shadcn compoment:
+### new shadcn compoment:
 
 --> add this to the design system
 
-### button-group,
+##### button-group,
 
-### item,
+##### item,
 
-### empty,
+##### empty,
 
-### field,
+##### field,
 
-### spiner,
+##### spiner,
 
-### input-group
+##### input-group
 
---> sonner from primitive review the new version
+--> sonner from primitive review the new version [done]
 --> review banner from experimental
---> use the new calendar from shadcn and add all the calendar, picker from this
+--> use the new calendar from shadcn and add all the calendar, picker from this [done]
 
-## exports
+### new components
 
---> implement exports separately, /primitives, /horizon, /utilities
-
-###
-
---> avatar
---> accordion
+--> avatar [done]
+--> accordion [done]
 --> breadcrumb
---> avatar
---> image
---> video
+--> avatar [done]
+--> image [done]
+--> progress
+
+--> new form [2026]
+
+### review
+
+--> charts
+--> banner status
+
+### exports
+
+--> implement exports separately, /primitives, /horizon, /utilities [2027]

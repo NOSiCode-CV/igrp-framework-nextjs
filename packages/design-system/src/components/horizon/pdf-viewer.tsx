@@ -1,8 +1,10 @@
 'use client';
 
-import { useCallback, useEffect, useState } from 'react';
+import { useCallback, useEffect, useId, useState } from 'react';
 import { format } from 'date-fns';
 
+import { IGRPColors } from '../../lib/colors';
+import { DD_MM_YYYY } from '../../lib/constants';
 import { Card, CardHeader, CardTitle } from '../primitives/card';
 import {
   Dialog,
@@ -18,8 +20,6 @@ import { IGRPIcon } from './icon';
 import { IGRPLoadingSpinner } from './loading-spiner';
 import { IGRPHeadline } from './typography/headline';
 import { IGRPText } from './typography/text';
-import { IGRPColors } from '../../lib/colors';
-import { DD_MM_YYYY } from '../../lib/constants';
 
 type IGRPDocumentItem = {
   id: number;
@@ -38,6 +38,7 @@ interface IGRPPdfViewerProps {
   inlineHeight?: string;
   notFoundLabel?: string;
   name?: string;
+  id?: string;
 }
 
 function IGRPPdfViewer({
@@ -48,10 +49,14 @@ function IGRPPdfViewer({
   inlineHeight = '50vh',
   notFoundLabel = 'No File found',
   name,
+  id,
 }: IGRPPdfViewerProps) {
   const [selectedDocument, setSelectedDocument] = useState<IGRPDocumentItem>();
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [loading, setLoading] = useState(true);
+
+  const _id = useId();
+  const ref = name ?? id ?? _id;
 
   useEffect(() => {
     const timeout = setTimeout(() => {
@@ -75,7 +80,7 @@ function IGRPPdfViewer({
 
   if (!document) {
     return (
-      <div className="flex items-center gap-3" id={name}>
+      <div className="flex items-center gap-3" id={ref}>
         <IGRPIcon iconName="FileX2" className={IGRPColors.solid.destructive.text} />
         <IGRPText as="p" size="default" weight="semibold" spacing="none">
           {notFoundLabel}
@@ -85,7 +90,7 @@ function IGRPPdfViewer({
   }
 
   return (
-    <div className="flex flex-col">
+    <div className="flex flex-col" id={ref}>
       {displayMode === 'inline' && (
         <IGRPPdfViewerInline
           document={document}

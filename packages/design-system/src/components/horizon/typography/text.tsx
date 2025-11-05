@@ -1,6 +1,6 @@
 'use client';
 
-import { useEffect, useState } from 'react';
+import { useEffect, useId, useState } from 'react';
 import { cva, type VariantProps } from 'class-variance-authority';
 
 import { IGRPColors, type IGRPColorVariants } from '../../../lib/colors';
@@ -69,8 +69,12 @@ function IGRPText({
   as: Component = 'div',
   className,
   name,
+  id,
   ...props
 }: IGRPTextProps) {
+  const _id = useId();
+  const ref = name ?? id ?? _id;
+
   const [isVisible, setIsVisible] = useState(!animate);
 
   useEffect(() => {
@@ -129,7 +133,7 @@ function IGRPText({
         className,
       )}
       style={truncateStyles}
-      id={name}
+      id={ref}
       {...props}
     >
       {renderContent()}
@@ -137,9 +141,4 @@ function IGRPText({
   );
 }
 
-export {
-  IGRPText,
-  type IGRPTextProps,
-  // eslint-disable-next-line react-refresh/only-export-components
-  igrpTextVariants,
-};
+export { IGRPText, type IGRPTextProps, igrpTextVariants };

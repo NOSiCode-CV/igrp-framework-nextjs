@@ -1,9 +1,11 @@
-import { IGRPIcon, type IGRPIconName } from './icon';
-import { IGRPLink } from './typography/link';
+import { useId } from 'react';
+
 import { IGRPColors, type IGRPColorRole, type IGRPColorVariants } from '../../lib/colors';
 import { igrpAlertIconMappings } from '../../lib/constants';
 import { cn } from '../../lib/utils';
-import type { IGRPBaseAttributes } from '../../types';
+import type { IGRPBaseAttributes, IGRPPlacementProps } from '../../types';
+import { IGRPIcon, type IGRPIconName } from './icon';
+import { IGRPLink } from './typography/link';
 
 interface IGRPAlertProps
   extends Pick<
@@ -21,7 +23,8 @@ interface IGRPAlertProps
   borderColored?: boolean;
   bgColored?: boolean;
   className?: string;
-  alignment?: 'start' | 'center' | 'end';
+  alignment?: IGRPPlacementProps;
+  id?: string;
 }
 
 function IGRPAlert({
@@ -41,8 +44,12 @@ function IGRPAlert({
   bgColored = true,
   className,
   name,
+  id,
   alignment = 'start',
 }: IGRPAlertProps) {
+  const _id = useId();
+  const ref = name ?? id ?? _id;
+
   const iconDefault = igrpAlertIconMappings[color];
   const colors = IGRPColors[variant][color];
   const alertIcon = iconName !== undefined ? iconName : iconDefault;
@@ -53,24 +60,16 @@ function IGRPAlert({
     <div
       className={cn(
         'rounded-md border px-4 py-3',
-        textColored && colors.alertText,
-        !textColored && variant === 'solid' && 'text-white',
-        borderColored && colors.alertBorder,
+        colors.alert,
+        !textColored && variant === 'solid' && 'text-background',
         !borderColored && 'border-transparent',
-        bgColored && colors.alertBg,
+        !bgColored && 'bg-transparent',
         className,
       )}
-      id={name}
+      id={ref}
     >
       <div className={cn('flex gap-3', alignmentClass)}>
-        {showIcon && (
-          <IGRPIcon
-            iconName={alertIcon}
-            className={cn('shrink-0', iconClassName)}
-            size={16}
-            aria-hidden="true"
-          />
-        )}
+        {showIcon && <IGRPIcon iconName={alertIcon} className={cn('shrink-0', iconClassName)} />}
         <div className="flex grow justify-between gap-3">
           <div className="grow space-y-1">{children}</div>
 

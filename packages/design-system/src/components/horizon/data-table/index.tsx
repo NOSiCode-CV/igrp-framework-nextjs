@@ -1,6 +1,6 @@
 'use client';
 
-import { Fragment, useState } from 'react';
+import { Fragment, useId, useState } from 'react';
 import {
   type ColumnDef,
   type ColumnFiltersState,
@@ -66,6 +66,7 @@ interface IGRPDataTableProps<TData, TValue> {
   // onRowSelectionChange?: OnChangeFn<RowSelectionState>
   getRowCanExpand?: TableOptions<TData>['getRowCanExpand'];
   renderSubComponent?: (row: Row<TData>) => React.ReactElement | undefined;
+  id?: string;
 }
 
 function IGRPDataTable<TData, TValue>({
@@ -92,6 +93,7 @@ function IGRPDataTable<TData, TValue>({
   // onRowSelectionChange,
   getRowCanExpand = () => false,
   renderSubComponent,
+  id,
 }: IGRPDataTableProps<TData, TValue>) {
   const [columnFilters, setColumnFilters] = useState<ColumnFiltersState>([]);
   const [columnVisibility, setColumnVisibility] = useState<VisibilityState>({});
@@ -103,6 +105,9 @@ function IGRPDataTable<TData, TValue>({
   const [sorting, setSorting] = useState<SortingState>([]);
   const [expanded, setExpanded] = useState<ExpandedState>({});
   const [rowSelection, setRowSelection] = useState({});
+
+  const _id = useId();
+  const ref = id ?? _id;
 
   const table = useReactTable({
     data,
@@ -148,7 +153,7 @@ function IGRPDataTable<TData, TValue>({
   );
 
   return (
-    <div className={cn('flex flex-col gap-4', className)}>
+    <div className={cn('flex flex-col gap-4', className)} id={ref}>
       <div className="flex flex-col md:flex-row md:items-center md:justify-between md:flex-1 gap-3">
         {showFilter &&
           (isServerSide ? (

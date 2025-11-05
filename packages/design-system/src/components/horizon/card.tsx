@@ -1,47 +1,26 @@
+import { useId } from 'react';
+
 import {
   Card,
-  CardAction,
-  CardContent,
-  CardDescription,
-  CardFooter,
-  CardHeader,
-  CardTitle,
+  CardAction as IGRPCardAction,
+  CardContent as IGRPCardContent,
+  CardDescription as IGRPCardDescription,
+  CardFooter as IGRPCardFooter,
+  CardHeader as IGRPCardHeader,
+  CardTitle as IGRPCardTitle,
 } from '../primitives/card';
-import { cn } from '../../lib/utils';
 
-interface IGRPCardProps extends React.ComponentProps<typeof Card> {
+interface CardProps {
   name?: string;
 }
 
-function IGRPCard({ className, name, ...props }: IGRPCardProps) {
-  return <Card className={className} id={name} {...props} />;
-}
+interface IGRPCardProps extends React.ComponentProps<typeof Card>, CardProps {}
 
-function IGRPCardHeader({ className, ...props }: React.ComponentProps<typeof CardHeader>) {
-  return <CardHeader className={className} {...props} />;
-}
+function IGRPCard({ className, id, ...props }: IGRPCardProps) {
+  const _id = useId();
+  const ref = name ?? id ?? _id;
 
-function IGRPCardTitle({ className, ...props }: React.ComponentProps<typeof CardTitle>) {
-  return <CardTitle className={className} {...props} />;
-}
-
-function IGRPCardDescription({
-  className,
-  ...props
-}: React.ComponentProps<typeof CardDescription>) {
-  return <CardDescription className={className} {...props} />;
-}
-
-function IGRPCardAction({ className, ...props }: React.ComponentProps<typeof CardAction>) {
-  return <CardAction className={className} {...props} />;
-}
-
-function IGRPCardContent({ className, ...props }: React.ComponentProps<typeof CardContent>) {
-  return <CardContent className={cn('py-3', className)} {...props} />;
-}
-
-function IGRPCardFooter({ className, ...props }: React.ComponentProps<typeof CardFooter>) {
-  return <CardFooter className={className} {...props} />;
+  return <Card className={className} id={ref} {...props} />;
 }
 
 export {

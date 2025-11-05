@@ -1,6 +1,6 @@
 "use server";
 
-import {
+import type {
   ResourceDTO,
   ResourceFilters,
 } from "@igrp/platform-access-management-client-ts";

@@ -8,6 +8,7 @@ import {
   StepperTrigger,
 } from '../../primitives/stepper';
 import { ScrollArea, ScrollBar } from '../../primitives/scroll-area';
+import { useId } from 'react';
 
 interface IGRPStepProcessProps {
   step: number;
@@ -23,11 +24,21 @@ interface IGRPStepperProcessProps {
   isLoading?: boolean;
   currentStep: number;
   children: (step: number) => React.ReactNode;
+  id?: string;
 }
 
-function IGRPStepperProcess({ steps, children, isLoading, currentStep }: IGRPStepperProcessProps) {
+function IGRPStepperProcess({
+  steps,
+  children,
+  isLoading,
+  currentStep,
+  id,
+}: IGRPStepperProcessProps) {
+  const _id = useId();
+  const ref = id ?? _id;
+
   return (
-    <div className="space-y-8 w-full">
+    <div className="space-y-8 w-full" id={ref}>
       <div className="flex justify-center">
         <ScrollArea className="w-[80vw] whitespace-nowrap">
           <Stepper value={currentStep}>

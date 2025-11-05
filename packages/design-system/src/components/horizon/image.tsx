@@ -1,44 +1,57 @@
-import Image from 'next/image';
+'use client';
 
+import Image, { type ImageProps } from 'next/image';
+
+import { igrpRounded } from '../../lib/rounded-classes';
 import { cn } from '../../lib/utils';
 import { AspectRatio } from '../primitives/aspect-ratio';
+import type { VariantProps } from 'class-variance-authority';
+import { useId } from 'react';
 
-interface IGRPImageProps extends React.ComponentProps<typeof Image> {
+type IGRPRatioType = '1/1' | '4/3' | '16/9' | '21/9';
+
+interface IGRPImageProps extends ImageProps, VariantProps<typeof igrpRounded> {
   className?: string;
-  ratio?: '1/1' | '4/3' | '16/9' | '21/9';
- // rounded?: IGRPRoundSize;
+  ratio?: IGRPRatioType;
+  name?: string;
 }
 
 function IGRPImage({
   className,
   ratio = '16/9',
-  // rounded,
-  fill = false,
-  width = 250,
-  height = 250,
+  rounded = 'md',
+  width,
+  height,
+  name,
+  id,
   ...props
 }: IGRPImageProps) {
+  const _id = useId();
+  const ref = name ?? id ?? _id;
 
   const ratioNumber = {
     '1/1': 1 / 1,
     '4/3': 4 / 3,
     '16/9': 16 / 9,
     '21/9': 21 / 9,
-  }[ratio]
+  }[ratio];
 
-  return (
-    <div className="flex justify-center items-center">
-      <AspectRatio ratio={ratioNumber}>
-        <Image
-          fill={fill}
-          width={fill ? undefined : width}
-          height={fill ? undefined : height}
-          {...props}
-          className={cn('object-cover object-center', /*rounded,*/ className)}
-        />
-      </AspectRatio>
-    </div>
-  )
+  const useFill = !width && !height;
+
+  const imageElement = (
+    <Image
+      {...props}
+      {...(useFill ? { fill: true } : { width, height })}
+      id={ref}
+      className={cn('object-cover object-center', igrpRounded({ rounded }), className)}
+    />
+  );
+
+  if (useFill) {
+    return <AspectRatio ratio={ratioNumber}>{imageElement}</AspectRatio>;
+  }
+
+  return imageElement;
 }
 
-export { IGRPImage, type IGRPImageProps };
+export { IGRPImage, type IGRPImageProps, type IGRPRatioType };

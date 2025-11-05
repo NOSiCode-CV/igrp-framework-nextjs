@@ -1,4 +1,4 @@
-import { Fragment } from 'react';
+import { Fragment, useId } from 'react';
 
 import { IGRPColors, type IGRPColorRole, type IGRPColorVariants } from '../../lib/colors';
 import { cn } from '../../lib/utils';
@@ -28,6 +28,7 @@ interface IGRPInfoCardProps {
   variantSection?: IGRPColorRole;
   colorSection?: IGRPColorVariants;
   orientation?: 'horizontal' | 'vertical';
+  id?: string;
 }
 
 function IGRPInfoCard({
@@ -38,11 +39,15 @@ function IGRPInfoCard({
   variantSection = 'solid',
   colorSection = 'primary',
   orientation = 'vertical',
+  id,
 }: IGRPInfoCardProps) {
+  const _id = useId();
+  const ref = id ?? _id;
+
   const infoCardClass = IGRPColors[variantSection][colorSection];
 
   return (
-    <Card className={cn(infoCardClass, className)}>
+    <Card className={cn(infoCardClass, className)} id={ref}>
       <CardHeader>
         <CardTitle
           className={cn('text-2xl font-semibold leading-none tracking-tight', titleClassName)}

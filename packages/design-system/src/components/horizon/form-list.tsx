@@ -1,8 +1,10 @@
-/* eslint-disable @typescript-eslint/no-explicit-any */
 'use client';
 
 import { useCallback, useEffect, useState } from 'react';
 import { useFieldArray, useWatch, type FieldArrayWithId } from 'react-hook-form';
+
+import { cn } from '../../lib/utils';
+import { type IGRPBaseAttributes } from '../../types';
 
 import {
   Accordion,
@@ -14,14 +16,11 @@ import { Button } from '../primitives/button';
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '../primitives/card';
 import { IGRPBadge, type IGRPBadgeProps } from './badge';
 import { IGRPIcon, type IGRPIconName } from './icon';
-import { type IGRPBaseAttributes } from '../../types';
-import { cn } from '../../lib/utils';
 
 interface IGRPFormListProps<TItem>
-  extends Omit<IGRPBaseAttributes, 'name' | 'iconPlacement' | 'helperText'>,
+  extends Omit<IGRPBaseAttributes, 'iconPlacement' | 'helperText'>,
     Partial<IGRPBadgeProps> {
   id: string;
-  name: string;
   defaultItem: TItem;
   description?: string;
   renderItem: (item: TItem, index: number) => React.ReactNode;
@@ -56,9 +55,11 @@ function IGRPFormList<TItem>({
   addButtonLabel = 'Adicionar',
   addButtonIconName = 'Plus',
 }: IGRPFormListProps<TItem>) {
+  const groupId = name ?? id;
+
   const [openItem, setOpenItem] = useState<string | undefined>('item-0');
-  const { fields, append, remove } = useFieldArray({ name });
-  const values = useWatch({ name }) ?? [];
+  const { fields, append, remove } = useFieldArray({ name: groupId });
+  const values = useWatch({ name: groupId }) ?? [];
 
   const handleAppendAndSetOpenItem = useCallback(() => {
     if (fields.length === 0) {
@@ -73,7 +74,7 @@ function IGRPFormList<TItem>({
   }, [fields.length, handleAppendAndSetOpenItem]);
 
   return (
-    <Card className={cn('shadow-sm gap-0 rounded-md', className)} ref={ref} id={id}>
+    <Card className={cn('shadow-sm gap-0 rounded-md', className)} ref={ref} id={groupId}>
       <CardHeader className="py-3 border-b flex flex-row items-center justify-between">
         <div className="flex items-center gap-2">
           {showIcon && (
@@ -111,7 +112,12 @@ function IGRPFormList<TItem>({
             >
               <div className="flex justify-between items-center px-4">
                 <div className="flex-1">
-                  <AccordionTrigger className="hover:no-underline">
+                  <AccordionTrigger
+                    className="hover:no-underline"
+                    iconName={''}
+                    showIcon={true}
+                    iconPlacement="end"
+                  >
                     <span className="font-medium text-sm">
                       {computeLabel?.(values[index] ?? defaultItem, index) ??
                         `${label} ${index + 1}`}

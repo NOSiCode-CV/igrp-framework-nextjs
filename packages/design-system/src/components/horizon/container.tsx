@@ -1,12 +1,12 @@
-import { cn } from '../../lib/utils';
-import type { IGRPBaseAttributes } from '../../types';
+import { useId } from 'react';
 
-function IGRPContainer({
-  className,
-  name,
-  ...props
-}: React.ComponentProps<'div'> & Pick<IGRPBaseAttributes, 'name'>) {
-  return <div className={cn('p-3', className)} {...props} id={name} />;
+import { cn } from '../../lib/utils';
+
+function IGRPContainer({ className, id, ...props }: React.ComponentProps<'div'>) {
+  const _id = useId();
+  const ref = id ?? _id;
+
+  return <div className={cn('p-3', className)} {...props} id={ref} />;
 }
 
 export { IGRPContainer };

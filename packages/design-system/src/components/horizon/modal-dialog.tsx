@@ -80,7 +80,7 @@ function IGRPModalDialogHeader({ className, stickyHeader, ...props }: IGRPModalD
     <DialogHeader
       className={cn(
         stickyHeader &&
-          'sticky top-0 z-[5] backdrop-blur-2xl bg-white/80 dark:bg-zinc-900/60 border-b py-3',
+          'sticky top-0 z-5 backdrop-blur-2xl bg-background/80 dark:bg-zinc-900/60 border-b py-3',
         className,
       )}
       {...props}
@@ -98,7 +98,7 @@ function IGRPModalDialogFooter({ className, stickyFooter, ...props }: IGRPModalD
       className={cn(
         'flex-col sm:justify-start',
         stickyFooter &&
-          'sticky bottom-0 z-[5] backdrop-blur-2xl bg-white/80 dark:bg-zinc-900/60 py-3',
+          'sticky bottom-0 z-5 backdrop-blur-2xl bg-background/80 dark:bg-zinc-900/60 py-3',
         className,
       )}
       {...props}
@@ -134,6 +134,5 @@ export {
   type IGRPModalDialogHeaderProps,
   IGRPModalDialogTitle,
   IGRPModalDialogTrigger,
-  // eslint-disable-next-line react-refresh/only-export-components
   igrpModalDialogContentVariants,
 };

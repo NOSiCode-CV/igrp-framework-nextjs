@@ -803,6 +803,13 @@ export {
   type IGRPVideoEmbedAllowFeature,
 } from './components/horizon/video-embed';
 
+// DEPRECATED
+export { IGRPCalendar, type IGRPCalendarProps } from './components/horizon/calendar/calendar';
+export {
+  IGRPDatePicker,
+  type IGRPDatePickerProps,
+} from './components/horizon/input/date-picker/date-picker';
+
 // types
 
 export type {

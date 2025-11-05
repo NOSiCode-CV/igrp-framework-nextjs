@@ -1,6 +1,6 @@
 "use server";
 
-import { ResourceDTO, ResourceFilters } from "@igrp/platform-access-management-client-ts";
+import type { ResourceDTO, ResourceFilters } from "@igrp/platform-access-management-client-ts";
 import { getClientAccess } from "./access-client";
 
 export async function getResources(filters?: ResourceFilters): Promise<ResourceDTO[]> {

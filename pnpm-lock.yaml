@@ -480,14 +480,14 @@ importers:
   packages/framework/next:
     dependencies:
       '@igrp/framework-next-auth':
-        specifier: 0.1.0-beta.38
-        version: 0.1.0-beta.38(next-auth@4.24.13(next@15.5.6(react-dom@19.2.0(react@19.2.0))(react@19.2.0))(react-dom@19.2.0(react@19.2.0))(react@19.2.0))(next@15.5.6(react-dom@19.2.0(react@19.2.0))(react@19.2.0))(react@19.2.0)
+        specifier: workspace:*
+        version: link:../next-auth
       '@igrp/framework-next-types':
-        specifier: 0.1.0-beta.38
-        version: 0.1.0-beta.38(next-auth@4.24.13(next@15.5.6(react-dom@19.2.0(react@19.2.0))(react@19.2.0))(react-dom@19.2.0(react@19.2.0))(react@19.2.0))(next@15.5.6(react-dom@19.2.0(react@19.2.0))(react@19.2.0))(react@19.2.0)
+        specifier: workspace:*
+        version: link:../next-types
       '@igrp/framework-next-ui':
-        specifier: 0.1.0-beta.38
-        version: 0.1.0-beta.38(@types/react-dom@19.2.2(@types/react@19.2.2))(@types/react@19.2.2)(next-auth@4.24.13(next@15.5.6(react-dom@19.2.0(react@19.2.0))(react@19.2.0))(react-dom@19.2.0(react@19.2.0))(react@19.2.0))(next@15.5.6(react-dom@19.2.0(react@19.2.0))(react@19.2.0))(react-dom@19.2.0(react@19.2.0))(react@19.2.0)
+        specifier: workspace:*
+        version: link:../next-ui
       '@igrp/platform-access-management-client-ts':
         specifier: 0.1.0-beta.45
         version: 0.1.0-beta.45
@@ -597,7 +597,7 @@ importers:
         version: 24.10.0
       next-auth:
         specifier: ^4.24.13
-        version: 4.24.13(next@15.5.6(react-dom@19.2.0(react@19.2.0))(react@19.2.0))(react-dom@19.2.0(react@19.2.0))(react@19.2.0)
+        version: 4.24.13(next@15.5.6(@babel/core@7.28.5)(babel-plugin-react-compiler@19.1.0-rc.3)(react-dom@19.2.0(react@19.2.0))(react@19.2.0))(react-dom@19.2.0(react@19.2.0))(react@19.2.0)
       prettier:
         specifier: ^3.6.2
         version: 3.6.2
@@ -614,15 +614,15 @@ importers:
   packages/framework/next-types:
     dependencies:
       '@igrp/framework-next-auth':
-        specifier: 0.1.0-beta.38
-        version: 0.1.0-beta.38(next-auth@4.24.13(next@15.5.6(react-dom@19.2.0(react@19.2.0))(react@19.2.0))(react-dom@19.2.0(react@19.2.0))(react@19.2.0))(next@15.5.6(react-dom@19.2.0(react@19.2.0))(react@19.2.0))(react@19.2.0)
+        specifier: workspace:*
+        version: link:../next-auth
     devDependencies:
       '@types/node':
         specifier: ^24.10.0
         version: 24.10.0
       next-auth:
         specifier: ^4.24.13
-        version: 4.24.13(next@15.5.6(react-dom@19.2.0(react@19.2.0))(react@19.2.0))(react-dom@19.2.0(react@19.2.0))(react@19.2.0)
+        version: 4.24.13(next@15.5.6(@babel/core@7.28.5)(babel-plugin-react-compiler@19.1.0-rc.3)(react-dom@19.2.0(react@19.2.0))(react@19.2.0))(react-dom@19.2.0(react@19.2.0))(react@19.2.0)
       prettier:
         specifier: ^3.6.2
         version: 3.6.2
@@ -636,14 +636,14 @@ importers:
   packages/framework/next-ui:
     dependencies:
       '@igrp/framework-next-auth':
-        specifier: 0.1.0-beta.38
-        version: 0.1.0-beta.38(next-auth@4.24.13(next@15.5.6(react-dom@19.2.0(react@19.2.0))(react@19.2.0))(react-dom@19.2.0(react@19.2.0))(react@19.2.0))(next@15.5.6(react-dom@19.2.0(react@19.2.0))(react@19.2.0))(react@19.2.0)
+        specifier: workspace:*
+        version: link:../next-auth
       '@igrp/framework-next-types':
-        specifier: 0.1.0-beta.38
-        version: 0.1.0-beta.38(next-auth@4.24.13(next@15.5.6(react-dom@19.2.0(react@19.2.0))(react@19.2.0))(react-dom@19.2.0(react@19.2.0))(react@19.2.0))(next@15.5.6(react-dom@19.2.0(react@19.2.0))(react@19.2.0))(react@19.2.0)
+        specifier: workspace:*
+        version: link:../next-types
       '@igrp/igrp-framework-react-design-system':
-        specifier: 0.1.0-beta.38
-        version: 0.1.0-beta.38(@types/react-dom@19.2.2(@types/react@19.2.2))(@types/react@19.2.2)(next@15.5.6(react-dom@19.2.0(react@19.2.0))(react@19.2.0))(react-dom@19.2.0(react@19.2.0))(react@19.2.0)
+        specifier: workspace:*
+        version: link:../../design-system
       class-variance-authority:
         specifier: ^0.7.1
         version: 0.7.1
@@ -655,7 +655,7 @@ importers:
         version: 15.5.6(@babel/core@7.28.5)(babel-plugin-react-compiler@19.1.0-rc.3)(react-dom@19.2.0(react@19.2.0))(react@19.2.0)
       next-auth:
         specifier: ^4.24.13
-        version: 4.24.13(next@15.5.6(react-dom@19.2.0(react@19.2.0))(react@19.2.0))(react-dom@19.2.0(react@19.2.0))(react@19.2.0)
+        version: 4.24.13(next@15.5.6(@babel/core@7.28.5)(babel-plugin-react-compiler@19.1.0-rc.3)(react-dom@19.2.0(react@19.2.0))(react@19.2.0))(react-dom@19.2.0(react@19.2.0))(react@19.2.0)
       next-themes:
         specifier: 0.4.6
         version: 0.4.6(react-dom@19.2.0(react@19.2.0))(react@19.2.0)
@@ -779,7 +779,7 @@ importers:
         version: 15.5.6(@babel/core@7.28.5)(babel-plugin-react-compiler@19.1.0-rc.3)(react-dom@19.2.0(react@19.2.0))(react@19.2.0)
       next-auth:
         specifier: ^4.24.13
-        version: 4.24.13(next@15.5.6(react-dom@19.2.0(react@19.2.0))(react@19.2.0))(react-dom@19.2.0(react@19.2.0))(react@19.2.0)
+        version: 4.24.13(next@15.5.6(@babel/core@7.28.5)(babel-plugin-react-compiler@19.1.0-rc.3)(react-dom@19.2.0(react@19.2.0))(react@19.2.0))(react-dom@19.2.0(react@19.2.0))(react@19.2.0)
       next-themes:
         specifier: ^0.4.6
         version: 0.4.6(react-dom@19.2.0(react@19.2.0))(react@19.2.0)
@@ -7374,13 +7374,13 @@ snapshots:
   '@igrp/framework-next-auth@0.1.0-beta.38(next-auth@4.24.13(next@15.5.6(react-dom@19.2.0(react@19.2.0))(react@19.2.0))(react-dom@19.2.0(react@19.2.0))(react@19.2.0))(next@15.5.6(react-dom@19.2.0(react@19.2.0))(react@19.2.0))(react@19.2.0)':
     dependencies:
       next: 15.5.6(@babel/core@7.28.5)(babel-plugin-react-compiler@19.1.0-rc.3)(react-dom@19.2.0(react@19.2.0))(react@19.2.0)
-      next-auth: 4.24.13(next@15.5.6(react-dom@19.2.0(react@19.2.0))(react@19.2.0))(react-dom@19.2.0(react@19.2.0))(react@19.2.0)
+      next-auth: 4.24.13(next@15.5.6(@babel/core@7.28.5)(babel-plugin-react-compiler@19.1.0-rc.3)(react-dom@19.2.0(react@19.2.0))(react@19.2.0))(react-dom@19.2.0(react@19.2.0))(react@19.2.0)
       react: 19.2.0
 
   '@igrp/framework-next-types@0.1.0-beta.38(next-auth@4.24.13(next@15.5.6(react-dom@19.2.0(react@19.2.0))(react@19.2.0))(react-dom@19.2.0(react@19.2.0))(react@19.2.0))(next@15.5.6(react-dom@19.2.0(react@19.2.0))(react@19.2.0))(react@19.2.0)':
     dependencies:
       '@igrp/framework-next-auth': 0.1.0-beta.38(next-auth@4.24.13(next@15.5.6(react-dom@19.2.0(react@19.2.0))(react@19.2.0))(react-dom@19.2.0(react@19.2.0))(react@19.2.0))(next@15.5.6(react-dom@19.2.0(react@19.2.0))(react@19.2.0))(react@19.2.0)
-      next-auth: 4.24.13(next@15.5.6(react-dom@19.2.0(react@19.2.0))(react@19.2.0))(react-dom@19.2.0(react@19.2.0))(react@19.2.0)
+      next-auth: 4.24.13(next@15.5.6(@babel/core@7.28.5)(babel-plugin-react-compiler@19.1.0-rc.3)(react-dom@19.2.0(react@19.2.0))(react@19.2.0))(react-dom@19.2.0(react@19.2.0))(react@19.2.0)
     transitivePeerDependencies:
       - next
       - react
@@ -7393,7 +7393,7 @@ snapshots:
       class-variance-authority: 0.7.1
       clsx: 2.1.1
       next: 15.5.6(@babel/core@7.28.5)(babel-plugin-react-compiler@19.1.0-rc.3)(react-dom@19.2.0(react@19.2.0))(react@19.2.0)
-      next-auth: 4.24.13(next@15.5.6(react-dom@19.2.0(react@19.2.0))(react@19.2.0))(react-dom@19.2.0(react@19.2.0))(react@19.2.0)
+      next-auth: 4.24.13(next@15.5.6(@babel/core@7.28.5)(babel-plugin-react-compiler@19.1.0-rc.3)(react-dom@19.2.0(react@19.2.0))(react@19.2.0))(react-dom@19.2.0(react@19.2.0))(react@19.2.0)
       next-themes: 0.4.6(react-dom@19.2.0(react@19.2.0))(react@19.2.0)
       react: 19.2.0
       react-dom: 19.2.0(react@19.2.0)
@@ -10620,7 +10620,7 @@ snapshots:
       react-dom: 19.2.0(react@19.2.0)
       uuid: 8.3.2
 
-  next-auth@4.24.13(next@15.5.6(react-dom@19.2.0(react@19.2.0))(react@19.2.0))(react-dom@19.2.0(react@19.2.0))(react@19.2.0):
+  next-auth@4.24.13(next@15.5.6(@babel/core@7.28.5)(babel-plugin-react-compiler@19.1.0-rc.3)(react-dom@19.2.0(react@19.2.0))(react@19.2.0))(react-dom@19.2.0(react@19.2.0))(react@19.2.0):
     dependencies:
       '@babel/runtime': 7.28.4
       '@panva/hkdf': 1.2.1

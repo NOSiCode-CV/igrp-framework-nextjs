@@ -2,7 +2,7 @@
 
 import { cookies } from "next/headers";
 
-import { getSession } from "./auth";
+import { getAccessToken } from "@/lib/auth-helpers";
 
 export async function getTheme() {
   const cookieStore = await cookies();
@@ -13,7 +13,8 @@ export async function getTheme() {
 }
 
 export async function configLayout() {
-  const session = await getSession();
+  const session = await getAccessToken();
+
   const { activeThemeValue, isScaled } = await getTheme();
 
   return { session, activeThemeValue, isScaled };

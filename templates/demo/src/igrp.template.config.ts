@@ -45,7 +45,7 @@ export function createConfig(
         defaultOpen: true,
         showAppSwitcher: true,
         apps: apps,
-        appCenterUrl: process.env.IGRP_APP_CENTER_URL || "",
+        appCenterUrl: process.env.NEXT_IGRP_APP_CENTER_URL || "",
       }),
     },
     font: fontVariables,
@@ -68,7 +68,7 @@ export function createConfig(
     sessionArgs: {
       refetchInterval: 5 * 60,
       refetchOnWindowFocus: true,
-      basePath: basePath(process.env.IGRP_APP_BASE_PATH || ""),
+      basePath: basePath(process.env.NEXT_PUBLIC_BASE_PATH || ""),
     },
   });
 }

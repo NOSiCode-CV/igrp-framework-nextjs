@@ -4,7 +4,7 @@ import { useId, useState, useEffect } from 'react';
 import { useFormContext, Controller } from 'react-hook-form';
 
 import { cn } from '../../../lib/utils';
-import type { IGRPInputProps, IGRPGridSize } from '../../../types';
+import type { IGRPInputProps } from '../../../types';
 import { Input } from '../../primitives/input';
 import { IGRPLabel } from '../label';
 
@@ -13,7 +13,6 @@ interface IGRPInputColorProps extends Omit<IGRPInputProps, 'onChange' | 'value' 
   value?: string;
   onChange?: (value: string) => void;
   showHexValue?: boolean;
-  gridSize?: IGRPGridSize;
   className?: string;
 }
 
@@ -29,7 +28,6 @@ function IGRPInputColor({
   value: controlledValue,
   onChange,
   showHexValue = true,
-  gridSize = 'default',
   ...props
 }: IGRPInputColorProps) {
   const _id = useId();

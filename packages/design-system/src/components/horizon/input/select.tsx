@@ -65,9 +65,7 @@ function selectReducer(state: SelectState, action: SelectAction): SelectState {
   }
 }
 
-interface IGRPSelectProps
-  extends Omit<IGRPBaseAttributes, 'ref'>,
-    React.ComponentProps<typeof Select> {
+interface IGRPSelectProps extends IGRPBaseAttributes, React.ComponentProps<typeof Select> {
   options: IGRPOptionsProps[];
   placeholder?: string;
   className?: string;

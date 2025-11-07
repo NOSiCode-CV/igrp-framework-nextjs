@@ -3,17 +3,16 @@
 import { useId } from 'react';
 import { useFormContext } from 'react-hook-form';
 
-import { Checkbox } from '../../primitives/checkbox';
 import { cn } from '../../../lib/utils';
-import type { IGRPBaseAttributes, IGRPGridSize } from '../../../types';
+import type { IGRPInputProps } from '../../../types';
+import { Checkbox } from '../../primitives/checkbox';
 import { IGRPFormField } from '../form/form-field';
 import { IGRPLabel } from '../label';
 
 interface IGRPCheckboxProps
   extends React.ComponentProps<typeof Checkbox>,
-    Pick<IGRPBaseAttributes, 'helperText' | 'label'> {
+    Pick<IGRPInputProps, 'helperText' | 'label' | 'gridSize'> {
   labelClassName?: string;
-  gridSize?: IGRPGridSize;
   error?: string;
 }
 
@@ -26,7 +25,6 @@ function IGRPCheckbox({
   labelClassName,
   required,
   error,
-  gridSize = 'default',
   onCheckedChange,
   ...props
 }: IGRPCheckboxProps) {

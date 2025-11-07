@@ -1,9 +1,9 @@
 'use client';
 
 import { useId, useState, useEffect } from 'react';
+import { useFormContext, Controller } from 'react-hook-form';
 import * as RPNInput from 'react-phone-number-input';
 import flags from 'react-phone-number-input/flags';
-import { useFormContext, Controller } from 'react-hook-form';
 
 import { cn } from '../../../lib/utils';
 import type { IGRPInputProps } from '../../../types';
@@ -106,7 +106,6 @@ function IGRPInputPhone({
   className,
   required,
   dir = 'ltr',
-  gridSize = 'default',
   ...props
 }: IGRPInputPhoneProps) {
   const _id = useId();
@@ -163,10 +162,7 @@ function IGRPInputPhone({
       control={formContext.control}
       defaultValue={defaultValue || ''}
       render={({ field, fieldState }) => (
-        <div
-          className={cn('*:not-first:mt-2', /*igrpGridSizeClasses[gridSize],*/ className)}
-          dir={dir}
-        >
+        <div className={cn('*:not-first:mt-2', className)} dir={dir}>
           {label && (
             <IGRPLabel label={label} className={className} required={required} id={fieldName} />
           )}

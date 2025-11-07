@@ -2,6 +2,8 @@
 
 import { useEffect, useId, useMemo } from 'react';
 
+import { cn } from '../../../lib/utils';
+import type { IGRPInputProps, IGRPOptionsProps } from '../../../types';
 import { Input } from '../../primitives/input';
 import {
   Select,
@@ -13,8 +15,6 @@ import {
   SelectValue,
 } from '../../primitives/select';
 import { IGRPLabel } from '../label';
-import { cn } from '../../../lib/utils';
-import type { IGRPInputProps, IGRPOptionsProps } from '../../../types';
 
 interface IGRPInputAddOnProps
   extends Omit<

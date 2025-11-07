@@ -1,6 +1,6 @@
 {
   "name": "@igrp/igrp-framework-react-design-system",
-  "version": "0.1.0-beta.38",
+  "version": "0.1.0-beta.40",
   "description": "IGRP Design System components",
   "keywords": [
     "igrp",
@@ -89,7 +89,7 @@
     "recharts": "2.15.4",
     "sonner": "^2.0.7",
     "tailwind-merge": "^3.3.1",
-    "tailwindcss": "^4.1.16",
+    "tailwindcss": "^4.1.17",
     "vaul": "^1.1.2",
     "zod": "^4.1.12"
   },
@@ -102,7 +102,7 @@
     "@eslint/js": "^9.39.1",
     "@swc/cli": "^0.7.9",
     "@swc/core": "^1.15.0",
-    "@tailwindcss/cli": "^4.1.16",
+    "@tailwindcss/cli": "^4.1.17",
     "@types/babel__preset-env": "7.10.0",
     "@types/node": "^24.10.0",
     "@types/react": "^19.2.2",

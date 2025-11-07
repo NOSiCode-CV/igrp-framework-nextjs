@@ -58,7 +58,6 @@ function IGRPInputSearch({
   submitIcon = 'ArrowRight',
   submitButtonLabel,
   submitButtonClassName,
-  gridSize = 'default',
   debounceMs = 2000,
   isDebounce = false,
   showIcon = true,

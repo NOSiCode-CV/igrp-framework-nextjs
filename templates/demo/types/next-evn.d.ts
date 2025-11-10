@@ -15,7 +15,7 @@ declare global {
 
       NEXT_IGRP_APP_CENTER_URL: string;
       NEXT_PUBLIC_BASE_PATH: string;
-      NEXT_IGRP_APP_HOME_SLUG: string;
+      NEXT_PUBLIC_IGRP_APP_HOME_SLUG: string;
       NEXT_PUBLIC_ALLOWED_DOMAINS: string;
     }
   }

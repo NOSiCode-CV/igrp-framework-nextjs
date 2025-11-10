@@ -28,7 +28,14 @@ export function createConfig(
 
   return igrpBuildConfig({
     appCode: process.env.IGRP_APP_CODE || "",
-    previewMode: process.env.IGRP_PREVIEW_MODE === "true",
+    previewMode: (() => {
+      const rawValue = process.env.IGRP_PREVIEW_MODE;
+      const previewModeValue = rawValue
+        ?.trim()
+        ?.replace(/^["']|["']$/g, "")
+        ?.toLowerCase();
+      return previewModeValue === "true";
+    })(),
     layoutMockData: {
       getHeaderData: async () => ({
         user: user,
@@ -65,10 +72,28 @@ export function createConfig(
       closeButton: true,
     },
     showSettings: true,
-    sessionArgs: {
-      refetchInterval: 5 * 60,
-      refetchOnWindowFocus: true,
-      basePath: basePath(process.env.NEXT_PUBLIC_BASE_PATH || ""),
-    },
+    sessionArgs: (() => {
+      const rawValue = process.env.IGRP_PREVIEW_MODE;
+      const previewModeValue = rawValue
+        ?.trim()
+        ?.replace(/^["']|["']$/g, "")
+        ?.toLowerCase();
+      const isPreviewMode = previewModeValue === "true";
+
+      // Disable session refetching in preview mode to prevent client-side redirects
+      if (isPreviewMode) {
+        return {
+          refetchInterval: 0, // Disable refetching
+          refetchOnWindowFocus: false, // Disable refetching on focus
+          basePath: basePath(process.env.NEXT_PUBLIC_BASE_PATH || ""),
+        };
+      }
+
+      return {
+        refetchInterval: 5 * 60,
+        refetchOnWindowFocus: true,
+        basePath: basePath(process.env.NEXT_PUBLIC_BASE_PATH || ""),
+      };
+    })(),
   });
 }

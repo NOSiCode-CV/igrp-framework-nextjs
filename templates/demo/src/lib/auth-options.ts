@@ -41,7 +41,7 @@ export const authOptions: AuthOptions = {
     },
     async redirect({ url }) {
       const nextInternalUrl = process.env.NEXTAUTH_URL_INTERNAL || "";
-      const igrpAppHomeSlug = process.env.NEXT_IGRP_APP_HOME_SLUG || "";
+      const igrpAppHomeSlug = process.env.NEXT_PUBLIC_IGRP_APP_HOME_SLUG || "";
       const redirectTo = `${nextInternalUrl}${igrpAppHomeSlug}`;
 
       return nextInternalUrl ? redirectTo : url;

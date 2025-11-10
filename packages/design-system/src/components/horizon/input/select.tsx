@@ -15,7 +15,7 @@ import { Circle } from 'lucide-react';
 
 import { igrpColorText } from '../../../lib/colors';
 import { cn } from '../../../lib/utils';
-import type { IGRPBaseAttributes, IGRPOptionsProps } from '../../../types';
+import type { IGRPInputProps, IGRPOptionsProps } from '../../../types';
 import {
   FormControl,
   FormDescription,
@@ -65,7 +65,9 @@ function selectReducer(state: SelectState, action: SelectAction): SelectState {
   }
 }
 
-interface IGRPSelectProps extends IGRPBaseAttributes, React.ComponentProps<typeof Select> {
+interface IGRPSelectProps
+  extends React.ComponentProps<typeof Select>,
+    Omit<IGRPInputProps, 'autoComplete' | 'defaultValue' | 'dir' | 'value'> {
   options: IGRPOptionsProps[];
   placeholder?: string;
   className?: string;

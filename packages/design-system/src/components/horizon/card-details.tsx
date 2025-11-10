@@ -20,6 +20,7 @@ interface IGRPCardDetailsProps extends React.ComponentProps<typeof Card> {
   contentClassName?: string;
   items: IGRPCardDetailsItemProps[];
 }
+// TODO: see to use shadcn/ui Items component instead
 
 function IGRPCardDetails({
   title,

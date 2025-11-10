@@ -5,7 +5,7 @@ import { useFormContext } from 'react-hook-form';
 import { type VariantProps } from 'class-variance-authority';
 
 import { cn } from '../../../lib/utils';
-import type { IGRPBaseAttributes } from '../../../types';
+import type { IGRPBaseAttributes, IGRPGridSize } from '../../../types';
 import { RadioGroup, RadioGroupItem, radioItemVariants } from '../../primitives/radio-group';
 import { IGRPFormField } from '../form/form-field';
 import { IGRPLabel } from '../label';
@@ -19,10 +19,14 @@ type IGRPRadioOption = {
 
 interface IGRPRadioGroupProps
   extends IGRPBaseAttributes,
-    VariantProps<typeof radioItemVariants>,
-    React.ComponentProps<typeof RadioGroup> {
+  VariantProps<typeof radioItemVariants>,
+  React.ComponentProps<typeof RadioGroup> {
   options: IGRPRadioOption[];
   error?: string;
+  /**
+   * @deprecated This props will be deprecated in the next release.
+   */
+  gridSize?: IGRPGridSize;
 }
 
 function IGRPRadioGroup({
@@ -140,7 +144,7 @@ function IGRPRadioGroup({
         <IGRPLabel label={label} required={required} id={fieldName} className={labelClassName} />
       )}
 
-      {renderRadioOptions(value, onValueChange ?? (() => {}))}
+      {renderRadioOptions(value, onValueChange ?? (() => { }))}
 
       {helperText && !error && (
         <p

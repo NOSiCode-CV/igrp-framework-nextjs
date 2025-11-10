@@ -16,20 +16,32 @@ function isPublicPath(pathname: string) {
 export async function middleware(request: NextRequest) {
   const { pathname } = request.nextUrl;
 
-  if (isPublicPath(pathname)) return NextResponse.next();
+  // Skip authentication checks if preview mode is enabled (handle whitespace, case, and quotes)
+  const rawValue = process.env.IGRP_PREVIEW_MODE;
+  const previewModeValue = rawValue
+    ?.trim()
+    ?.replace(/^["']|["']$/g, "")
+    ?.toLowerCase();
+  const isPreviewMode = previewModeValue === "true";
 
-  const token = await getToken({ req: request });
+  if (!isPreviewMode) {
+    // IF YOU USE AN AUTHENTICATION STRATEGY, UNCOMMENT THIS BLOCK
 
-  if (token?.error === "RefreshAccessTokenError") {
-    return NextResponse.redirect(
-      new URL("/login", process.env.NEXTAUTH_URL_INTERNAL ?? request.url),
-    );
+    if (isPublicPath(pathname)) return NextResponse.next();
+
+    const token = await getToken({ req: request });
+
+    if (token?.error === "RefreshAccessTokenError") {
+      return NextResponse.redirect(
+        new URL("/login", process.env.NEXTAUTH_URL_INTERNAL ?? request.url),
+      );
+    }
   }
 
   return NextResponse.next();
 }
 
-// adictional paths for apps, is used as subdomains
+// additional paths for apps, is used as subdomains
 export const config = {
   matcher: ["/", "/((?!api|apps|health|_next|favicon.ico|.*\\..*).*)"],
 };

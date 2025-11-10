@@ -24,7 +24,7 @@ interface IGRPInputAddOnProps
   options: IGRPOptionsProps[];
   optionLabel?: string;
   selectValue?: string;
-  onSelectValueChange(value: string): void;
+  onSelectValueChange?(value: string): void;
   classNameLabel?: string;
 }
 
@@ -47,7 +47,7 @@ function IGRPInputAddOn({
 
   useEffect(() => {
     if (defaultValue && !selectValue) {
-      onSelectValueChange(String(defaultValue));
+      onSelectValueChange?.(String(defaultValue));
     }
   }, [defaultValue, selectValue, onSelectValueChange]);
 

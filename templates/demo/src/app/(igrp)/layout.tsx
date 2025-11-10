@@ -13,9 +13,19 @@ export default async function IGRPRootLayout({
   const layoutConfig = await configLayout();
   const config = await createConfig(layoutConfig as IGRPLayoutConfigArgs);
 
-  // TDOD: see to move this to the root-layout
+  // IF YOU USE AN AUTHENTICATION STRATEGY, UNCOMMENT THIS BLOCK
+
   const { layout, previewMode } = config;
   const { session } = layout || {};
+
+  // Check preview mode directly from environment variable as well (handle whitespace, case, and quotes)
+  const rawValue = process.env.IGRP_PREVIEW_MODE;
+  const previewModeValue = rawValue
+    ?.trim()
+    ?.replace(/^["']|["']$/g, "")
+    ?.toLowerCase();
+  const envPreviewMode = previewModeValue === "true";
+  const isPreviewMode = envPreviewMode || previewMode;
 
   const headersList = await headers();
   const currentPath =
@@ -24,7 +34,8 @@ export default async function IGRPRootLayout({
     headersList.get("referer") ||
     "";
 
-  const baseUrl = process.env.NEXTAUTH_URL_INTERNAL || process.env.NEXTAUTH_URL;
+  const baseUrl =
+    process.env.NEXTAUTH_URL_INTERNAL || process.env.NEXTAUTH_URL || "/";
 
   const urlLogin = "/login";
 
@@ -32,7 +43,7 @@ export default async function IGRPRootLayout({
 
   const isAlreadyOnLogin = currentPath.startsWith(loginPath);
 
-  if (!previewMode && session === null && urlLogin && !isAlreadyOnLogin) {
+  if (!isPreviewMode && session === null && urlLogin && !isAlreadyOnLogin) {
     redirect(urlLogin);
   }
 

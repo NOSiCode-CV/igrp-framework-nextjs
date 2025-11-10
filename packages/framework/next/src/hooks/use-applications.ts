@@ -1,5 +1,4 @@
 import { igrpGetAccessClient } from '../lib/api-client';
-import { mapperApplications } from '../mappers/applications-mapper';
 
 export async function fetchAppByCode(appCode: string) {
   try {
@@ -10,8 +9,8 @@ export async function fetchAppByCode(appCode: string) {
 
     const client = await igrpGetAccessClient();
     const result = await client.applications.getApplications({ code: appCode });
-    const app = mapperApplications(result);
-    return app[0];
+    const app = result.data;
+    return app?.[0];
   } catch (error) {
     console.error('[app-by-code] Não foi possível obter os dados da aplicação:', error);
     throw error;
@@ -24,8 +23,8 @@ export async function fetchAppsByUser(username: string) {
 
     const client = await igrpGetAccessClient();
     const result = await client.applications.getApplicationsByUser(username);
-    const apps = mapperApplications(result);
-    return apps;
+    const apps = result.data;
+    return apps ?? [];
   } catch (error) {
     console.error('[apps-by-user] Erro ao carregar os dados da aplicação.:', error);
     throw error;

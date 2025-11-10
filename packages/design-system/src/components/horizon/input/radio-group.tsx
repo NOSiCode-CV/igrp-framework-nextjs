@@ -19,8 +19,8 @@ type IGRPRadioOption = {
 
 interface IGRPRadioGroupProps
   extends IGRPBaseAttributes,
-  VariantProps<typeof radioItemVariants>,
-  React.ComponentProps<typeof RadioGroup> {
+    VariantProps<typeof radioItemVariants>,
+    React.ComponentProps<typeof RadioGroup> {
   options: IGRPRadioOption[];
   error?: string;
   /**
@@ -144,7 +144,7 @@ function IGRPRadioGroup({
         <IGRPLabel label={label} required={required} id={fieldName} className={labelClassName} />
       )}
 
-      {renderRadioOptions(value, onValueChange ?? (() => { }))}
+      {renderRadioOptions(value, onValueChange ?? (() => {}))}
 
       {helperText && !error && (
         <p

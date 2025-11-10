@@ -2,15 +2,15 @@
 
 --> add this to the design system
 
-##### button-group,
+##### button-group
 
-##### item,
+##### item
 
-##### empty,
+##### empty
 
-##### field,
+##### field
 
-##### spiner,
+##### spiner
 
 ##### input-group
 
@@ -20,13 +20,7 @@
 
 ### new components
 
---> avatar [done]
---> accordion [done]
---> breadcrumb
---> avatar [done]
---> image [done]
 --> progress
-
 --> new form [2026]
 
 ### review

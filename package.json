@@ -33,7 +33,6 @@
     "clean-all": "pnpm -r run clean-all"
   },
   "devDependencies": {
-    "@changesets/cli": "^2.29.7",
     "eslint": "^9.39.1",
     "typescript": "^5.9.3"
   },

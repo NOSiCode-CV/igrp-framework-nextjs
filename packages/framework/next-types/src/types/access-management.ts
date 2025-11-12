@@ -6,14 +6,9 @@ export type IGRPStatus = 'ACTIVE' | 'INACTIVE' | 'DELETED';
 
 export type IGRPTargetType = '_self' | '_blank';
 
-export type IGRPApplicationType = 'INTERNAL' | 'EXTERNAL';
+export type IGRPApplicationType = 'INTERNAL' | 'EXTERNAL' | 'SYSTEM';
 
 export type IGRPConfigurationType = 'CLUSTER' | 'ORGANIZATION';
-
-export interface IGRPCodeDescriptionArgs {
-  code: string;
-  description?: string;
-}
 
 export interface IGRPApplicationArgs {
   id: number;
@@ -22,11 +17,11 @@ export interface IGRPApplicationArgs {
   description?: string | null;
   status: IGRPStatus;
   type: IGRPApplicationType;
-  owner: string;
+  owner?: string;
   picture?: string | null;
   url?: string | null;
-  slug?: string | null;
-  departments: IGRPCodeDescriptionArgs[];
+  slug?: string;
+  departments: string[];
   createdBy?: string;
   createdDate?: string;
   lastModifiedBy?: string;
@@ -34,7 +29,7 @@ export interface IGRPApplicationArgs {
 }
 
 export interface IGRPMenuItemArgs {
-  id?: number;
+  id: number;
   code: string;
   name: string;
   type: IGRPMenuType;
@@ -44,13 +39,13 @@ export interface IGRPMenuItemArgs {
   target?: IGRPTargetType;
   url?: string | null;
   pageSlug?: string | null;
-  parent?: IGRPCodeDescriptionArgs | null;
-  application: IGRPCodeDescriptionArgs;
+  parentCode?: string | null;
+  applicationCode: string;
   createdBy?: string;
   createdDate?: string;
   lastModifiedBy?: string;
   lastModifiedDate?: string;
-  roles: IGRPCodeDescriptionArgs[];
+  roles: string[];
 }
 
 export type IGRPMenuCRUDArgs = Omit<IGRPMenuItemArgs, 'type'> & {

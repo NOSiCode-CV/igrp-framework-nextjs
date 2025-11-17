@@ -1,6 +1,6 @@
 {
   "name": "@igrp/framework-next-auth",
-  "version": "0.1.0-beta.46",
+  "version": "0.1.0-beta.51",
   "description": "IGRP Framework for Next.js | Auth",
   "type": "module",
   "sideEffects": false,

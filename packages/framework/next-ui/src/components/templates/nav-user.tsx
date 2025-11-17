@@ -40,7 +40,7 @@ function IGRPTemplateNavUser({ user }: IGRPTemplateNavUserProps) {
             >
               <IGRPUserAvatar
                 alt={user.username}
-                fallbackContent={user && igrpGetnitials(user.username)}
+                fallbackContent={user && igrpGetnitials(user?.username ?? '')}
                 fallbackClass="text-xs"
                 className="shadow-md"
               />

@@ -32,7 +32,7 @@ function IGRPTemplateNavUserHeader({ user }: IGRPTemplateNavUserProps) {
             >
               <IGRPUserAvatar
                 alt={user.name}
-                fallbackContent={user && igrpGetnitials(user.username)}
+                fallbackContent={user && igrpGetnitials(user?.username ?? '')}
                 fallbackClass="text-xs"
                 className="shadow-md"
               />

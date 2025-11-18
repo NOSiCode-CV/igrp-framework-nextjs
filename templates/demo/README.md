@@ -14,7 +14,6 @@ A production-ready template for building applications with the IGRP Framework on
 - [How It's Built](#how-its-built)
 - [Authentication](#authentication)
 - [Preview Mode](#preview-mode)
-- [Publishing Template](#publishing-template)
 - [Docker Support](#docker-support)
 
 ## 🎯 Overview
@@ -91,7 +90,7 @@ pnpm start
 ```
 templates/demo/
 ├── src/
-│   ├── app/                    # Next.js App Router pages
+│   ├── app/                   # Next.js App Router pages
 │   │   ├── (auth)/            # Authentication routes (login, logout)
 │   │   ├── (igrp)/            # IGRP-protected routes
 │   │   │   ├── layout.tsx    # IGRP layout wrapper
@@ -141,9 +140,13 @@ The layout is configured in `src/app/(igrp)/layout.tsx`:
 - Manages session state
 - Configures preview mode
 
-### Site Configuration
+### Site Customization
 
-Comming Soon
+Comming soon
+
+### Login Customization
+
+Commin soon
 
 ## 🔐 Environment Variables
 
@@ -191,7 +194,13 @@ pnpm build
 pnpm start
 ```
 
-2. Updated the version in `package.json`
+### Template Publishing
+
+```bash
+pnpm publish:template
+```
+
+Packages the template with `create-template/create-zip-template.ps1`, uploads the resulting `igrp-next-template.zip` to Nexus, and restores your working tree. Refer to [Publishing Template](#publishing-template) for prerequisites.
 
 ## 🏗️ How It's Built
 

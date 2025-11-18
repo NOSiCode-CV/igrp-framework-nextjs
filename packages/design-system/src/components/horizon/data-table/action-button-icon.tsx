@@ -29,7 +29,7 @@ import { IGRPIcon } from '../icon';
 import { cn } from '../../../lib/utils';
 import { igrpModalDialogContentVariants } from '../modal-dialog';
 import { type IGRPDataTableDialogProps, type IGRPDataTableLinkProps } from './row-actions';
-import { DataTableTooltipContext, IGRPDataTableTooltipProvider } from './tooltip-provider';
+import { IGRPDataTableTooltipContext, IGRPDataTableTooltipProvider } from './tooltip-provider';
 
 function IGRPDataTableActionTooltip({
   label,
@@ -48,7 +48,7 @@ function IGRPDataTableActionTooltip({
   tooltipSideOffset?: number;
   tooltipDelayDuration?: number;
 }) {
-  const hasProvider = useContext(DataTableTooltipContext);
+  const hasProvider = useContext(IGRPDataTableTooltipContext);
 
   if (!label) return children;
 

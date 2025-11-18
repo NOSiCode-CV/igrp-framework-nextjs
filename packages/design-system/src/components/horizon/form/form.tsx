@@ -36,7 +36,7 @@ export type IGRPFormHandle<TSchema extends AnyZod> = UseFormReturn<
 
 export interface IGRPFormProps<TSchema extends AnyZod> {
   schema: TSchema;
-  defaultValues: InputOf<TSchema>;
+  defaultValues?: InputOf<TSchema>;
   validationMode?: Mode;
   onSubmit: (values: OutputOf<TSchema>) => void | Promise<void>;
   resetAfterSubmit?: boolean;

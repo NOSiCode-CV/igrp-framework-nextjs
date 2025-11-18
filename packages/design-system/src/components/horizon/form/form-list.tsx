@@ -3,19 +3,19 @@
 import { useCallback, useEffect, useState } from 'react';
 import { useFieldArray, useWatch, type FieldArrayWithId } from 'react-hook-form';
 
-import { cn } from '../../lib/utils';
-import { type IGRPBaseAttributes } from '../../types';
+import { cn } from '../../../lib/utils';
+import { type IGRPBaseAttributes } from '../../../types';
 
 import {
   Accordion,
   AccordionItem,
   AccordionTrigger,
   AccordionContent,
-} from '../primitives/accordion';
-import { Button } from '../primitives/button';
-import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '../primitives/card';
-import { IGRPBadge, type IGRPBadgeProps } from './badge';
-import { IGRPIcon, type IGRPIconName } from './icon';
+} from '../../primitives/accordion';
+import { Button } from '../../primitives/button';
+import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '../../primitives/card';
+import { IGRPBadge, type IGRPBadgeProps } from '../badge';
+import { IGRPIcon, type IGRPIconName } from '../icon';
 
 interface IGRPFormListProps<TItem>
   extends Omit<IGRPBaseAttributes, 'iconPlacement' | 'helperText'>,

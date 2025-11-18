@@ -2,7 +2,7 @@ import { createContext, type ReactNode } from 'react';
 
 import { TooltipProvider } from '../../primitives/tooltip';
 
-const DataTableTooltipContext = createContext(false);
+const IGRPDataTableTooltipContext = createContext(false);
 
 function IGRPDataTableTooltipProvider({
   children,
@@ -12,11 +12,10 @@ function IGRPDataTableTooltipProvider({
   delayDuration?: number;
 }) {
   return (
-    <DataTableTooltipContext.Provider value>
+    <IGRPDataTableTooltipContext.Provider value>
       <TooltipProvider delayDuration={delayDuration}>{children}</TooltipProvider>
-    </DataTableTooltipContext.Provider>
+    </IGRPDataTableTooltipContext.Provider>
   );
 }
 
-export { DataTableTooltipContext, IGRPDataTableTooltipProvider };
-
+export { IGRPDataTableTooltipContext, IGRPDataTableTooltipProvider };

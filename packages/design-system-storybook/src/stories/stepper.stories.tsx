@@ -11,21 +11,7 @@ const pipelineSteps: IGRPStepProcessProps[] = [
     title: 'Lead Captured lorem ipsum dolor sit amet',
     isCompleted: true,
     isActive: false,
-  },
-  {
-    step: 2,
-    stepKey: 'qualification',
-    title: 'Qualification lorem ipsum dolor sit amet',
-    isCompleted: true,
-    isActive: false,
-  },
-  {
-    step: 3,
-    stepKey: 'proposal',
-    title: 'Proposal Sent lorem ipsum dolor sit amet',
-    isCompleted: true,
-    isActive: false,
-  },
+  },  
   {
     step: 4,
     stepKey: 'nurturing',
@@ -46,14 +32,7 @@ const pipelineSteps: IGRPStepProcessProps[] = [
     title: 'Closed Won lorem ipsum dolor sit amet',
     isCompleted: false,
     isActive: false,
-  },
-  {
-    step: 7,
-    stepKey: 'closed-2',
-    title: 'Closed Won lorem ipsum dolor sit amet',
-    isCompleted: false,
-    isActive: false,
-  },
+  },  
 ] satisfies IGRPStepProcessProps[];
 
 const longJourneySteps: IGRPStepProcessProps[] = [

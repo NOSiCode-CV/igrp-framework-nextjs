@@ -1,8 +1,8 @@
 {
   "name": "@igrp/framework-next-types",
-  "version": "0.1.0-beta.54",
+  "version": "0.1.0-beta.55",
   "type": "module",
-  "description": "IGRP Framework for Next.js | Types",
+  "description": "iGRP Framework for Next.js | Types",
   "keywords": [
     "igrp",
     "framework",
@@ -12,23 +12,30 @@
   "author": "IGRP Team",
   "license": "MIT",
   "main": "./dist/index.js",
-  "module": "./dist/index.js",
   "types": "./dist/index.d.ts",
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "import": "./dist/index.js",
+      "default": "./dist/index.js"
+    }
+  },
   "files": [
     "dist"
   ],
   "scripts": {
     "dev": "tsc --watch",
     "build": "rimraf dist && rimraf tsconfig.tsbuildinfo && pnpm format && tsc -b",
+    "clean": "rimraf dist && rimraf tsconfig.tsbuildinfo",
     "format": "prettier --write .",
-    "release": "pnpm build && yarn publish --registry=https://sonatype.nosi.cv/repository/igrp/ --tag latest",
+    "release": "pnpm build && pnpm publish --registry=https://sonatype.nosi.cv/repository/igrp/ --tag latest --no-git-checks",
     "clean-all": "rimraf node_modules && rimraf dist && rimraf tsconfig.tsbuildinfo"
   },
   "peerDependencies": {
     "next-auth": "^4.24.13"
   },
   "dependencies": {
-    "@igrp/framework-next-auth": "0.1.0-beta.54"
+    "@igrp/framework-next-auth": "0.1.0-beta.55"
   },
   "devDependencies": {
     "@types/node": "^24.10.0",
@@ -38,6 +45,9 @@
     "typescript": "^5.9.3"
   },
   "engines": {
-    "node": ">=20.x.x"
+    "node": ">=22.x.x"
+  },
+  "publishConfig": {
+    "access": "public"
   }
 }

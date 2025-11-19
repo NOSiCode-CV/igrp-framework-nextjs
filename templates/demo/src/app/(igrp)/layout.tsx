@@ -1,19 +1,28 @@
 import { IGRPLayout } from "@igrp/framework-next";
+import type { IGRPLayoutConfigArgs } from "@igrp/framework-next-types";
 import { createConfig } from "@igrp/template-config";
+
 import { headers } from "next/headers";
 import { redirect } from "next/navigation";
 
 import { configLayout } from "@/actions/igrp/layout";
 
-export default async function RootLayout({
+export default async function IGRPRootLayout({
   children,
 }: Readonly<{ children: React.ReactNode }>) {
   const layoutConfig = await configLayout();
-  const config = await createConfig(layoutConfig);
+  const config = await createConfig(layoutConfig as IGRPLayoutConfigArgs);
 
-  // TDOD: see to move this to the root-layout
-  const { layout, previewMode, loginUrl, logoutUrl } = config;
+  const { layout, previewMode } = config;
   const { session } = layout || {};
+
+  const rawValue = process.env.IGRP_PREVIEW_MODE;
+  const previewModeValue = rawValue
+    ?.trim()
+    ?.replace(/^["']|["']$/g, "")
+    ?.toLowerCase();
+  const envPreviewMode = previewModeValue === "true";
+  const isPreviewMode = envPreviewMode || previewMode;
 
   const headersList = await headers();
   const currentPath =
@@ -22,17 +31,17 @@ export default async function RootLayout({
     headersList.get("referer") ||
     "";
 
-  const baseUrl = process.env.NEXTAUTH_URL;
+  const baseUrl = process.env.NEXTAUTH_URL_INTERNAL || process.env.NEXTAUTH_URL;
 
-  const urlLogin = loginUrl || "/login";
-  const urlLogout = logoutUrl || "/logout";
+  const urlLogin = "/login";
 
-  const loginPath = new URL(loginUrl || "/", baseUrl).pathname;
+  const resolvedBaseUrl = baseUrl || "http://localhost:3000";
+  const loginPath = new URL(urlLogin || "/", resolvedBaseUrl).pathname;
 
   const isAlreadyOnLogin = currentPath.startsWith(loginPath);
 
-  if (!previewMode && session === null && urlLogin && !isAlreadyOnLogin) {
-    redirect(urlLogin || urlLogout);
+  if (!isPreviewMode && session === null && urlLogin && !isAlreadyOnLogin) {
+    redirect(urlLogin);
   }
 
   return <IGRPLayout config={config}>{children}</IGRPLayout>;

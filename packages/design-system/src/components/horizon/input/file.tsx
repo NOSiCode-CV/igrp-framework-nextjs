@@ -3,13 +3,12 @@
 import { useId, useRef } from 'react';
 import { useFormContext, Controller } from 'react-hook-form';
 
+import { cn } from '../../../lib/utils';
+import type { IGRPInputProps } from '../../../types';
 import { Input } from '../../primitives/input';
 import { IGRPLabel } from '../label';
-import { cn } from '../../../lib/utils';
-import type { IGRPInputProps, IGRPGridSize } from '../../../types';
 
 interface IGRPInputFileProps extends IGRPInputProps {
-  gridSize?: IGRPGridSize;
   accept?: string;
   multiple?: boolean;
 }
@@ -25,7 +24,6 @@ function IGRPInputFile({
   multiple = false,
   placeholder,
   onChange,
-  gridSize = 'default',
   error,
   helperText,
   ...props

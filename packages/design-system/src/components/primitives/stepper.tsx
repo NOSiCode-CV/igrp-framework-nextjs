@@ -4,7 +4,6 @@ import { Slot } from '@radix-ui/react-slot';
 
 import { cn } from '../../lib/utils';
 
-// Types
 type StepperContextValue = {
   activeStep: number;
   setActiveStep: (step: number) => void;
@@ -20,7 +19,6 @@ type StepItemContextValue = {
 
 type StepState = 'active' | 'completed' | 'inactive' | 'loading';
 
-// Contexts
 const StepperContext = createContext<StepperContextValue | undefined>(undefined);
 const StepItemContext = createContext<StepItemContextValue | undefined>(undefined);
 
@@ -40,7 +38,6 @@ const useStepItem = () => {
   return context;
 };
 
-// Components
 interface StepperProps extends React.HTMLAttributes<HTMLDivElement> {
   defaultValue?: number;
   value?: number;
@@ -91,7 +88,6 @@ function Stepper({
   );
 }
 
-// StepperItem
 interface StepperItemProps extends React.HTMLAttributes<HTMLDivElement> {
   step: number;
   completed?: boolean;
@@ -133,7 +129,6 @@ function StepperItem({
   );
 }
 
-// StepperTrigger
 interface StepperTriggerProps extends React.ButtonHTMLAttributes<HTMLButtonElement> {
   asChild?: boolean;
 }
@@ -142,23 +137,29 @@ function StepperTrigger({ asChild = false, className, children, ...props }: Step
   const { setActiveStep } = useStepper();
   const { step, isDisabled } = useStepItem();
 
+  const handleClick = () => {
+    if (!isDisabled) {
+      setActiveStep(step);
+    }
+  };
+
   if (asChild) {
-    const Comp = asChild ? Slot : 'span';
     return (
-      <Comp data-slot="stepper-trigger" className={className}>
+      <Slot data-slot="stepper-trigger" onClick={handleClick} className={className} {...props}>
         {children}
-      </Comp>
+      </Slot>
     );
   }
 
   return (
     <button
+      type="button"
       data-slot="stepper-trigger"
       className={cn(
         'focus-visible:border-ring focus-visible:ring-ring/50 inline-flex items-center gap-3 rounded-full outline-none focus-visible:z-10 focus-visible:ring-[3px] disabled:pointer-events-none disabled:opacity-50',
         className,
       )}
-      onClick={() => setActiveStep(step)}
+      onClick={handleClick}
       disabled={isDisabled}
       {...props}
     >
@@ -167,7 +168,6 @@ function StepperTrigger({ asChild = false, className, children, ...props }: Step
   );
 }
 
-// StepperIndicator
 interface StepperIndicatorProps extends React.HTMLAttributes<HTMLDivElement> {
   asChild?: boolean;
 }
@@ -213,14 +213,12 @@ function StepperIndicator({
   );
 }
 
-// StepperTitle
 function StepperTitle({ className, ...props }: React.HTMLAttributes<HTMLHeadingElement>) {
   return (
     <h3 data-slot="stepper-title" className={cn('text-sm font-medium', className)} {...props} />
   );
 }
 
-// StepperDescription
 function StepperDescription({ className, ...props }: React.HTMLAttributes<HTMLParagraphElement>) {
   return (
     <p
@@ -231,7 +229,6 @@ function StepperDescription({ className, ...props }: React.HTMLAttributes<HTMLPa
   );
 }
 
-// StepperSeparator
 function StepperSeparator({ className, ...props }: React.HTMLAttributes<HTMLDivElement>) {
   return (
     <div

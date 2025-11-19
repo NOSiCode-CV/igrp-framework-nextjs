@@ -434,6 +434,12 @@ export {
   IGRPCardFooter,
 } from './components/horizon/card';
 
+export {
+  IGRPCardDetails,
+  type IGRPCardDetailsProps,
+  type IGRPCardDetailsItemProps,
+} from './components/horizon/card-details';
+
 export { IGRPAreaChart, type IGRPAreaChartProps } from './components/horizon/charts/area';
 
 export {
@@ -503,6 +509,9 @@ export {
 } from './components/horizon/command';
 
 export { IGRPContainer } from './components/horizon/container';
+
+export { IGRPCopyTo, type IGRPCopyToProps } from './components/horizon/copy-to';
+
 export { IGRPDataTable, type IGRPDataTableProps } from './components/horizon/data-table';
 export {
   IGRPDataTableButtonAlert,
@@ -569,6 +578,10 @@ export {
   type IGPRDataTableVisibilityProps,
 } from './components/horizon/data-table/toggle-visibility';
 export {
+  IGRPDataTableTooltipContext,
+  IGRPDataTableTooltipProvider,
+} from './components/horizon/data-table/tooltip-provider';
+export {
   IGRPDataTableDateRangeFilterFn,
   IGRPDataTableFacetedFilterFn,
 } from './components/horizon/data-table/lib/filters-utils';
@@ -599,7 +612,7 @@ export {
 export { IGRPFormField, type IGRPFormFielProps } from './components/horizon/form/form-field';
 export { IGRPForm, type IGRPFormProps, type IGRPFormHandle } from './components/horizon/form/form';
 export { convertValuesToFormData } from './components/horizon/form/lib/utils';
-export { IGRPFormList, type IGRPFormListProps } from './components/horizon/form-list';
+export { IGRPFormList, type IGRPFormListProps } from './components/horizon/form/form-list';
 
 export {
   IGRPIcon,
@@ -802,6 +815,13 @@ export {
   type IGRPVideoEmbedProps,
   type IGRPVideoEmbedAllowFeature,
 } from './components/horizon/video-embed';
+
+// DEPRECATED
+export { IGRPCalendar, type IGRPCalendarProps } from './components/horizon/calendar/calendar';
+export {
+  IGRPDatePicker,
+  type IGRPDatePickerProps,
+} from './components/horizon/input/date-picker/date-picker';
 
 // types
 

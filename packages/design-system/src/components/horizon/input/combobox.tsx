@@ -5,7 +5,7 @@ import { useFormContext } from 'react-hook-form';
 
 import { igrpColorText } from '../../../lib/colors';
 import { cn } from '../../../lib/utils';
-import type { IGRPBaseAttributes, IGRPOptionsProps } from '../../../types';
+import type { IGRPInputProps, IGRPOptionsProps } from '../../../types';
 import {
   Command,
   CommandEmpty,
@@ -23,7 +23,7 @@ import { IGRPLabel } from '../label';
 import { IGRPIcon } from '../icon';
 import { IGRPCircleFull } from '../icon/custom';
 
-interface IGRPComboboxProps extends IGRPBaseAttributes {
+interface IGRPComboboxProps extends Omit<IGRPInputProps, 'onChange'> {
   variant?: 'single' | 'multiple';
   options: IGRPOptionsProps[];
   value?: string | string[];

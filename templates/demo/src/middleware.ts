@@ -1,77 +1,47 @@
-import { getToken } from "@igrp/framework-next-auth/jwt";
 import { type NextRequest, NextResponse } from "next/server";
+import { getToken } from "next-auth/jwt";
 
 const PUBLIC_PATHS = ["/login", "/logout", "/api/auth"];
 
-function isPublicPath(pathname: string, basePath: string) {
-  // Remove basePath from pathname for comparison
-  const pathWithoutBase =
-    basePath && pathname.startsWith(basePath)
-      ? pathname.slice(basePath.length)
-      : pathname;
-
-  const isPublic =
-    PUBLIC_PATHS.some(
-      (p) => pathWithoutBase === p || pathWithoutBase.startsWith(`${p}/`),
-    ) ||
+function isPublicPath(pathname: string) {
+  return (
+    PUBLIC_PATHS.some((p) => pathname === p || pathname.startsWith(`${p}/`)) ||
+    pathname.startsWith("/api/auth/") ||
     pathname.startsWith("/_next/") ||
     pathname.startsWith("/static/") ||
-    pathname.includes(".");
-
-  return isPublic;
+    pathname.includes(".")
+  );
 }
 
 export async function middleware(request: NextRequest) {
   const { pathname } = request.nextUrl;
-  const basePath = process.env.IGRP_APP_BASE_PATH || "";
 
-  if (isPublicPath(pathname, basePath)) {
-    return NextResponse.next();
-  }
+  // Skip authentication checks if preview mode is enabled (handle whitespace, case, and quotes)
+  const rawValue = process.env.IGRP_PREVIEW_MODE;
+  const previewModeValue = rawValue
+    ?.trim()
+    ?.replace(/^["']|["']$/g, "")
+    ?.toLowerCase();
+  const isPreviewMode = previewModeValue === "true";
 
-  const possibleCookieNames = [
-    "__Secure-next-auth.session-token",
-    "next-auth.session-token",
-  ];
+  if (!isPreviewMode) {
+    // IF YOU USE AN AUTHENTICATION STRATEGY, UNCOMMENT THIS BLOCK
 
-  let token = null;
-  for (const name of possibleCookieNames) {
-    token = await getToken({
-      req: request,
-      secret: process.env.NEXTAUTH_SECRET,
-      cookieName: name,
-    });
-    if (token) break;
-  }
+    if (isPublicPath(pathname)) return NextResponse.next();
 
-  if (!token) {
-    // Redirect to login page
-    const loginPath = `${basePath}/login`;
+    const token = await getToken({ req: request });
 
-    // Get the correct public URL (handling proxies like Railway)
-    const protocol = request.headers.get("x-forwarded-proto") || "https";
-    const host =
-      request.headers.get("x-forwarded-host") ||
-      request.headers.get("host") ||
-      request.nextUrl.host;
-    const publicUrl = `${protocol}://${host}${pathname}`;
-
-    // Use NEXTAUTH_URL as base if available, otherwise construct from headers
-    const baseUrl = process.env.NEXTAUTH_URL || `${protocol}://${host}`;
-    const loginUrl = new URL(loginPath, baseUrl);
-    loginUrl.searchParams.set("callbackUrl", publicUrl);
-
-    return NextResponse.redirect(loginUrl);
-  }
-
-  if (token.error === "RefreshAccessTokenError") {
-    return NextResponse.redirect(new URL("/logout", request.url));
+    if (token?.error === "RefreshAccessTokenError") {
+      return NextResponse.redirect(
+        new URL("/login", process.env.NEXTAUTH_URL_INTERNAL ?? request.url),
+      );
+    }
   }
 
   return NextResponse.next();
 }
 
-// adictional paths for apps, is used as subdomains
+// additional paths for apps, is used as subdomains
 export const config = {
   matcher: ["/", "/((?!api|apps|health|_next|favicon.ico|.*\\..*).*)"],
 };

@@ -10,7 +10,10 @@ import { IGRPLabel } from '../label';
 
 interface IGRPTextareaProps
   extends React.ComponentProps<typeof Textarea>,
-    Pick<IGRPInputProps, 'label' | 'helperText' | 'className' | 'required' | 'error'> {}
+    Pick<
+      IGRPInputProps,
+      'label' | 'helperText' | 'className' | 'required' | 'error' | 'gridSize'
+    > {}
 
 function IGRPTextarea({
   name,

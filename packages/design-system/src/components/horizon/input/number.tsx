@@ -4,7 +4,7 @@ import { useState, useEffect, useId } from 'react';
 import { useFormContext, Controller } from 'react-hook-form';
 
 import { cn } from '../../../lib/utils';
-import type { IGRPInputProps, IGRPGridSize } from '../../../types';
+import type { IGRPInputProps } from '../../../types';
 import { Input } from '../../primitives/input';
 import { IGRPButton } from '../button';
 import { IGRPLabel } from '../label';
@@ -22,7 +22,6 @@ interface IGRPInputNumberProps extends Omit<IGRPInputProps, 'onChange'> {
   onChange?: (value: number) => void;
   error?: string;
   errorMessage?: string;
-  gridSize?: IGRPGridSize;
 }
 
 function IGRPInputNumber({
@@ -44,7 +43,6 @@ function IGRPInputNumber({
   error,
   errorMessage = 'Please enter a valid number',
   required,
-  gridSize = 'default',
   ...props
 }: IGRPInputNumberProps) {
   const _id = useId();

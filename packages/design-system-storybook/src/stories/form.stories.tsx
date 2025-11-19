@@ -43,7 +43,7 @@ export default meta;
 // ─── Schemas ─────────────────────────────────────────────────────────
 const basicSchema = z.object({
   name: z.string().min(2, 'Name is required'),
-  email: z.string().email('Invalid email'),
+  email: z.email('Invalid email'),
   age: z.coerce.number().min(1, 'Age must be at least 1'),
   remember: z.boolean().optional(),
   uuid: z.string().optional(),
@@ -273,7 +273,7 @@ export const BasicExternalTrigger: StoryObj = {
         <IGRPForm
           schema={basicSchema}
           onSubmit={(values) => alert(`Submitted externally: ${JSON.stringify(values)}`)}
-          formRef={formRef}
+          formRef={formRef}                  
         >
           <BasicFields />
         </IGRPForm>

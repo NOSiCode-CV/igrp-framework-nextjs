@@ -1,8 +1,8 @@
 'use client';
 
-import { useCallback, useId, useMemo } from 'react';
+import { useCallback, useEffect, useId, useMemo, useRef, useState } from 'react';
 import type React from 'react';
-import { CheckIcon } from 'lucide-react';
+import { CheckIcon, ChevronLeft, ChevronRight } from 'lucide-react';
 
 import { cn } from '../../../lib/utils';
 import { ScrollArea, ScrollBar } from '../../primitives/scroll-area';
@@ -26,6 +26,8 @@ interface IGRPStepperProcessProps {
   children: (step: number) => React.ReactNode;
   id?: string;
   onStepChange?: (step: number, stepData: IGRPStepProcessProps) => void;
+  stepperClassName?: string;
+  stepperItemsClassName?: string;
 }
 
 // TODO: add button next and previous to the stepper
@@ -75,27 +77,29 @@ function IGRPStepperProcess({
   currentStep,
   id,
   onStepChange,
+  stepperClassName,
+  stepperItemsClassName,
 }: IGRPStepperProcessProps) {
   const _id = useId();
   const ref = id ?? _id;
+  const scrollAreaRef = useRef<HTMLDivElement>(null);
+  const scrollViewportRef = useRef<HTMLDivElement | null>(null);
+  const [canScrollLeft, setCanScrollLeft] = useState(false);
+  const [canScrollRight, setCanScrollRight] = useState(false);
 
-  // Validate currentStep - find matching step by step property, or use first active step, or first step
   const validCurrentStep = useMemo(() => {
     if (steps.length === 0) return 0;
 
-    // Try to find a step that matches currentStep by its step property
     const matchingStep = steps.find((s) => s.step === currentStep);
     if (matchingStep) {
       return matchingStep.step;
     }
 
-    // If no match, try to find the first active step
     const activeStep = steps.find((s) => s.isActive);
     if (activeStep) {
       return activeStep.step;
     }
 
-    // Fallback to first step's step value
     return steps[0]?.step ?? 0;
   }, [currentStep, steps]);
 
@@ -109,81 +113,158 @@ function IGRPStepperProcess({
     [steps, onStepChange],
   );
 
-  // Early return if no steps
+  const checkScrollPosition = useCallback(() => {
+    const viewport = scrollViewportRef.current;
+    if (!viewport) {
+      setCanScrollLeft(false);
+      setCanScrollRight(false);
+      return;
+    }
+
+    const { scrollLeft, scrollWidth, clientWidth } = viewport;
+    setCanScrollLeft(scrollLeft > 0);
+    setCanScrollRight(scrollLeft < scrollWidth - clientWidth - 1);
+  }, []);
+
+  const scrollLeft = useCallback(() => {
+    const viewport = scrollViewportRef.current;
+    if (!viewport) return;
+
+    const scrollAmount = viewport.clientWidth * 0.8; // Scroll 80% of visible width
+    viewport.scrollBy({ left: -scrollAmount, behavior: 'smooth' });
+  }, []);
+
+  const scrollRight = useCallback(() => {
+    const viewport = scrollViewportRef.current;
+    if (!viewport) return;
+
+    const scrollAmount = viewport.clientWidth * 0.8; // Scroll 80% of visible width
+    viewport.scrollBy({ left: scrollAmount, behavior: 'smooth' });
+  }, []);
+
+  useEffect(() => {
+    if (!scrollAreaRef.current) return;
+
+    const viewport = scrollAreaRef.current.querySelector<HTMLDivElement>(
+      '[data-slot="scroll-area-viewport"]',
+    );
+    if (viewport) {
+      scrollViewportRef.current = viewport;
+      checkScrollPosition();
+
+      viewport.addEventListener('scroll', checkScrollPosition);
+      const resizeObserver = new ResizeObserver(checkScrollPosition);
+      resizeObserver.observe(viewport);
+
+      return () => {
+        viewport.removeEventListener('scroll', checkScrollPosition);
+        resizeObserver.disconnect();
+      };
+    }
+  }, [checkScrollPosition, steps.length]);
+
   if (steps.length === 0) {
     return null;
   }
 
   return (
     <div className="space-y-8 w-full" id={ref}>
-      <div className="flex justify-center">
-        <ScrollArea className="w-[80vw]">
-          <Stepper
-            value={validCurrentStep}
-            onValueChange={handleStepChange}
-            className="mb-4 gap-0.5 justify-center"
-            role="navigation"
-            aria-label="Process steps"
-            aria-valuenow={validCurrentStep + 1}
-            aria-valuemin={1}
-            aria-valuemax={steps.length}
-          >
-            {steps.map(({ step, stepKey, title, isCompleted, isActive }) => (
-              <StepperItem
-                key={stepKey ?? step}
-                step={step}
-                completed={isCompleted}
-                disabled={!isActive}
-                aria-current={isActive ? 'step' : undefined}
-                className={getStepperItemClassName()}
-                loading={isLoading && validCurrentStep === step}
-              >
-                <StepperTrigger
-                  asChild
-                  className="gap-1 rounded max-md:flex-col z-10 cursor-pointer"
+      <div className="flex items-center justify-center gap-4 relative">
+        <div ref={scrollAreaRef} className="w-[80vw]">
+          <ScrollArea className="w-full">
+            <Stepper
+              value={validCurrentStep}
+              onValueChange={handleStepChange}
+              className={cn('gap-0.5 justify-center mb-3', stepperClassName)}
+              role="navigation"
+              aria-label="Process steps"
+              aria-valuenow={validCurrentStep + 1}
+              aria-valuemin={1}
+              aria-valuemax={steps.length}
+            >
+              {steps.map(({ step, stepKey, title, isCompleted, isActive }) => (
+                <StepperItem
+                  key={stepKey ?? step}
+                  step={step}
+                  completed={isCompleted}
+                  disabled={!isActive}
+                  aria-current={isActive ? 'step' : undefined}
+                  className={cn(getStepperItemClassName(), stepperItemsClassName)}
+                  loading={isLoading && validCurrentStep === step}
                 >
-                  <Button
-                    variant="ghost"
-                    className={cn(
-                      'bg-transparent hover:bg-transparent text-center flex items-center justify-center',
-                      'shadow-none text-xs w-37.5',
-                    )}
-                    size="xs"
+                  <StepperTrigger
+                    asChild
+                    className="gap-1 rounded max-md:flex-col z-10 cursor-pointer"
                   >
-                    <Tooltip>
-                      <TooltipTrigger asChild>
-                        {isCompleted ? (
-                          <span className="flex items-center justify-center gap-2 w-full min-w-0">
-                            <CheckIcon
-                              className="text-background stroke-[2.5] group-hover/step:hidden shrink-0"
-                              aria-hidden="true"
-                            />
-                            <StepperTitle className="text-background hidden group-hover/step:block truncate min-w-0">
-                              {title}
-                            </StepperTitle>
-                          </span>
-                        ) : (
-                          <span className="w-full min-w-0">
-                            <StepperTitle
-                              className={cn(
-                                'truncate w-full min-w-0',
-                                isActive && 'text-background',
-                              )}
-                            >
-                              {title}
-                            </StepperTitle>
-                          </span>
-                        )}
-                      </TooltipTrigger>
-                      <TooltipContent side="bottom">{title}</TooltipContent>
-                    </Tooltip>
-                  </Button>
-                </StepperTrigger>
-              </StepperItem>
-            ))}
-          </Stepper>
-          <ScrollBar orientation="horizontal" />
-        </ScrollArea>
+                    <Button
+                      variant="ghost"
+                      className={cn(
+                        'bg-transparent hover:bg-transparent text-center flex items-center justify-center',
+                        'shadow-none text-[10px] w-34',
+                      )}
+                      size="xs"
+                    >
+                      <Tooltip>
+                        <TooltipTrigger asChild>
+                          {isCompleted ? (
+                            <span className="flex items-center justify-center gap-2 w-full min-w-0">
+                              <CheckIcon
+                                className="text-background stroke-[2.5] group-hover/step:hidden shrink-0"
+                                aria-hidden="true"
+                              />
+                              <StepperTitle className="text-background hidden group-hover/step:block truncate min-w-0">
+                                {title}
+                              </StepperTitle>
+                            </span>
+                          ) : (
+                            <span className="w-full min-w-0">
+                              <StepperTitle
+                                className={cn(
+                                  'truncate w-full min-w-0',
+                                  isActive && 'text-background',
+                                )}
+                              >
+                                {title}
+                              </StepperTitle>
+                            </span>
+                          )}
+                        </TooltipTrigger>
+                        <TooltipContent side="bottom">{title}</TooltipContent>
+                      </Tooltip>
+                    </Button>
+                  </StepperTrigger>
+                </StepperItem>
+              ))}
+            </Stepper>
+            <ScrollBar orientation="horizontal" />
+          </ScrollArea>
+        </div>
+
+        <div className="flex items-center justify-center gap-1">
+          <Button
+            variant="outline"
+            size="icon-sm"
+            className="size-6 shrink-0 mb-3"
+            onClick={scrollLeft}
+            aria-label="Scroll to previous steps"
+            type="button"
+            disabled={!canScrollLeft}
+          >
+            <ChevronLeft className="size-3" aria-hidden="true" />
+          </Button>
+
+          <Button
+            variant="outline"
+            size="icon-sm"
+            className="size-6 shrink-0 mb-3"
+            onClick={scrollRight}
+            aria-label="Scroll to next steps"
+            type="button"
+            disabled={!canScrollRight}
+          >
+            <ChevronRight className="size-3" aria-hidden="true" />
+          </Button>
+        </div>
       </div>
       {children(validCurrentStep)}
     </div>

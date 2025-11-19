@@ -29,15 +29,15 @@ const getRemotePatterns = () => {
 };
 
 const nextConfig: NextConfig = {
-  output: "standalone",
+  // output: "standalone",
   basePath: basePath,
   images: {
     remotePatterns: getRemotePatterns(),
   },
-  typedRoutes: true,
-  experimental: {
-    typedEnv: true,
-  },
+  // typedRoutes: true,
+  // experimental: {
+  //   typedEnv: true,
+  // },
 };
 
 export default nextConfig;

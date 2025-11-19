@@ -4,6 +4,8 @@ import { useId, useState, useEffect } from 'react';
 import { format } from 'date-fns';
 import { useFormContext } from 'react-hook-form';
 
+import { cn } from '../../../../lib/utils';
+import type { IGRPInputProps } from '../../../../types';
 import {
   FormControl,
   FormDescription,
@@ -16,9 +18,6 @@ import { Popover, PopoverContent, PopoverTrigger } from '../../../primitives/pop
 import { IGRPButton } from '../../button';
 import { IGRPCalendar, type IGRPCalendarProps } from '../../calendar/calendar';
 import { IGRPLabel } from '../../label';
-import { cn } from '../../../../lib/utils';
-
-import type { IGRPBaseAttributes } from '../../../../types';
 
 export type IGRPDatePickerBaseProps = {
   error?: string;
@@ -26,7 +25,7 @@ export type IGRPDatePickerBaseProps = {
   disabledPicker?: boolean;
   dateFormat?: string;
   placeholder?: string;
-} & Pick<IGRPBaseAttributes, 'label' | 'helperText' | 'labelClassName' | 'name'>;
+} & Pick<IGRPInputProps, 'label' | 'helperText' | 'labelClassName' | 'name' | 'gridSize'>;
 
 type IGRPDatePickerProps = IGRPCalendarProps & IGRPDatePickerBaseProps;
 

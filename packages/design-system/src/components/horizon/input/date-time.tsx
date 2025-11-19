@@ -2,17 +2,18 @@
 
 import { useId, useState, useEffect } from 'react';
 import { useFormContext, Controller } from 'react-hook-form';
+
+import { DD_MM_YYYY } from '../../../lib/constants';
+import { cn } from '../../../lib/utils';
+import type { IGRPInputProps } from '../../../types';
+
 import { Input } from '../../primitives/input';
 import { IGRPLabel } from '../label';
-import { cn } from '../../../lib/utils';
-import type { IGRPInputProps, IGRPGridSize } from '../../../types';
-import { DD_MM_YYYY } from '../../../lib/constants';
 
 interface IGRPDateTimeInputProps
   extends Omit<IGRPInputProps, 'onChange' | 'defaultValue' | 'value'> {
   value?: string;
   defaultValue?: string;
-  gridSize?: IGRPGridSize;
   onChange?: (value: string) => void;
   onBlur?: (e: React.FocusEvent<HTMLInputElement>) => void;
 }
@@ -28,7 +29,6 @@ function IGRPDateTimeInput({
   value: controlledValue,
   defaultValue = '',
   placeholder = `${DD_MM_YYYY}, --:--`,
-  gridSize = 'default',
   className,
   inputClassName,
   onChange,
@@ -168,7 +168,7 @@ function IGRPDateTimeInput({
         };
 
         return (
-          <div className={cn('*:not-first:mt-2' /*, igrpGridSizeClasses[gridSize]*/)}>
+          <div className={cn('*:not-first:mt-2')}>
             {label && (
               <IGRPLabel label={label} className={className} required={required} id={fieldName} />
             )}

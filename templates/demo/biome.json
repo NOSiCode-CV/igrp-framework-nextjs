@@ -13,7 +13,9 @@
       "!.next",
       "!dist",
       "!build",
-      "!**/*.css"
+      "!**/*.css",
+      "!.igrpstudio",
+      "!src/app/(igrp)/(generated)"
     ]
   },
   "formatter": {

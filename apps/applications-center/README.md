@@ -1,1 +1,0 @@
-## @igrp/applications-center

@@ -3,7 +3,7 @@ import type { Meta, StoryObj } from '@storybook/nextjs-vite';
 import { IGRPCalendar } from '@igrp/igrp-framework-react-design-system';
 
 const meta: Meta<typeof IGRPCalendar> = {
-  title: 'Components/Deprecated/Calendar-Dropdown',
+  title: 'Deprecated/Calendar-Dropdown',
   component: IGRPCalendar,
   tags: ['deprecated'],
   parameters: {

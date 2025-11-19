@@ -1,14 +1,6 @@
 import type { ApiResponse, IGRPUserDTO } from '@igrp/platform-access-management-client-ts';
-import type { IGRPUserArgs } from '@igrp/framework-next-types';
 
-const map = (user: IGRPUserDTO): IGRPUserArgs => ({
-  id: user.id as number,
-  name: user.name,
-  email: user.email,
-  username: user.username,
-});
-
-export const mapperUser = (user: ApiResponse<IGRPUserDTO>): IGRPUserArgs => {
+export const mapperUser = (user: ApiResponse<IGRPUserDTO>): IGRPUserDTO => {
   if (!user.data) throw new Error('[igrp-users]: O utilizador não foi encontrado.');
-  return map(user.data);
+  return user.data;
 };

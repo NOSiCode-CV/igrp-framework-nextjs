@@ -4,7 +4,7 @@ import type { DateBefore } from 'react-day-picker';
 import { useForm, FormProvider } from 'react-hook-form';
 
 const meta: Meta<typeof IGRPDatePicker> = {
-  title: 'Components/Deprecated/DatePicker',
+  title: 'Deprecated/DatePicker',
   component: IGRPDatePicker,
   tags: ['deprecated'],
   parameters: {

@@ -43,7 +43,7 @@ const Template: StoryFn<IGRPAccordionProps> = (args) => (
 
 export const Default: StoryObj<IGRPAccordionProps> = {
   render: Template,
-  args: {    
+  args: {        
     iconPlacement: 'end',
     items: items_examples,
     iconName: 'Minus'

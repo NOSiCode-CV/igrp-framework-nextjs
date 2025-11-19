@@ -20,6 +20,9 @@ export type IGRPBaseAttributes = {
 export type IGRPInputProps = {
   inputClassName?: string;
   error?: string;
+  /**
+   * @deprecated This props will be deprecated in the next release.
+   */
   gridSize?: IGRPGridSize;
 } & Omit<React.ComponentProps<'input'>, 'type'> &
   IGRPBaseAttributes;

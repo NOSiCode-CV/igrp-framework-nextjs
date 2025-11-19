@@ -125,6 +125,9 @@ export interface IGRPResourceArgs {
 export interface IGRPUserArgs {
   id: number;
   name: string;
-  username: string;
+  username?: string;
   email: string;
+  status: IGRPStatus;
+  picture?: string;
+  signature?: string;
 }

@@ -3,17 +3,20 @@
 import { useId, useState, useEffect } from 'react';
 import { useFormContext, Controller } from 'react-hook-form';
 
+import { cn } from '../../../lib/utils';
+import type { IGRPGridSize, IGRPInputProps } from '../../../types';
 import { Input } from '../../primitives/input';
 import { IGRPButton } from '../button';
 import { IGRPLabel } from '../label';
-import { cn } from '../../../lib/utils';
-import type { IGRPInputProps, IGRPGridSize } from '../../../types';
 
 interface IGRPInputPasswordProps extends Omit<IGRPInputProps, 'onChange'> {
   value?: string;
   defaultValue?: string;
   onChange?: (value: string) => void;
   showPasswordToggle?: boolean;
+  /**
+   * @deprecated This props will be deprecated in the next release.
+   */
   IGRPGridSize?: IGRPGridSize;
 }
 
@@ -29,7 +32,6 @@ function IGRPInputPassword({
   defaultValue,
   onChange,
   showPasswordToggle = true,
-  gridSize = 'default',
   ...props
 }: IGRPInputPasswordProps) {
   const _id = useId();
@@ -125,7 +127,7 @@ function IGRPInputPassword({
       control={formContext.control}
       defaultValue={defaultValue || ''}
       render={({ field, fieldState }) => (
-        <div className={cn('*:not-first:mt-2' /*, igrpGridSizeClasses[gridSize]*/)}>
+        <div className={cn('*:not-first:mt-2')}>
           {label && (
             <IGRPLabel label={label} className={className} required={required} id={fieldName} />
           )}

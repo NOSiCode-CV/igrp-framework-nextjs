@@ -4,7 +4,7 @@ import { useId, useState, useEffect, useCallback } from 'react';
 import { useFormContext, Controller } from 'react-hook-form';
 
 import { cn } from '../../../lib/utils';
-import type { IGRPOptionsProps } from '../../../types';
+import type { IGRPInputProps, IGRPOptionsProps } from '../../../types';
 import { Input } from '../../primitives/input';
 import {
   Select,
@@ -15,8 +15,7 @@ import {
 } from '../../primitives/select';
 import { IGRPLabel } from '../label';
 
-interface IGRPInputUrlProps
-  extends Omit<React.InputHTMLAttributes<HTMLInputElement>, 'type' | 'onChange'> {
+interface IGRPInputUrlProps extends Omit<IGRPInputProps, 'onChange'> {
   name: string;
   label?: string;
   helperText?: string;
@@ -190,7 +189,7 @@ function IGRPInputUrl({
         };
 
         return (
-          <div className={cn('*:not-first:mt-2' /*, igrpGridSizeClasses[gridSize]*/)}>
+          <div className={cn('*:not-first:mt-2')}>
             {label && (
               <IGRPLabel label={label} className={className} required={required} id={fieldName} />
             )}

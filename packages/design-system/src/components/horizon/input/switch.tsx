@@ -4,14 +4,14 @@ import { useId } from 'react';
 import { useFormContext } from 'react-hook-form';
 
 import { cn } from '../../../lib/utils';
-import type { IGRPBaseAttributes } from '../../../types';
+import type { IGRPInputProps } from '../../../types';
 import { Switch } from '../../primitives/switch';
 import { IGRPFormField } from '../form/form-field';
 import { IGRPLabel } from '../label';
 
 interface IGRPSwitchProps
   extends React.ComponentProps<typeof Switch>,
-    Pick<IGRPBaseAttributes, 'helperText' | 'label'> {
+    Pick<IGRPInputProps, 'helperText' | 'label' | 'gridSize'> {
   labelClassName?: string;
   error?: string;
 }

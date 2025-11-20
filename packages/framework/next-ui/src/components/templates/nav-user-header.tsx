@@ -31,9 +31,8 @@ function IGRPTemplateNavUserHeader({ user }: IGRPTemplateNavUserProps) {
               size="lg"
             >
               <IGRPUserAvatar
-                image={user.image}
-                alt={user.username}
-                fallbackContent={user && igrpGetnitials(user.username)}
+                alt={user.name}
+                fallbackContent={user && igrpGetnitials(user?.username ?? '')}
                 fallbackClass="text-xs"
                 className="shadow-md"
               />
@@ -47,7 +46,7 @@ function IGRPTemplateNavUserHeader({ user }: IGRPTemplateNavUserProps) {
           >
             <IGRPDropdownMenuLabelPrimitive className="font-normal">
               <div className="flex flex-col space-y-1">
-                <p className="text-sm font-medium leading-none">{user.fullname}</p>
+                <p className="text-sm font-medium leading-none">{user.name}</p>
                 <p className="text-xs leading-none text-muted-foreground">{user.email}</p>
               </div>
             </IGRPDropdownMenuLabelPrimitive>

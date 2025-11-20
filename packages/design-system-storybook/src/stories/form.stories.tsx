@@ -15,7 +15,6 @@ import {
   IGRPInputPrimitive,
   IGRPCheckbox,
   IGRPCombobox,
-  IGRPDatePicker,
   IGRPInputFile,
   IGRPInputHidden,
   IGRPInputNumber,
@@ -32,6 +31,7 @@ import {
   IGRPCardHeader,
   IGRPFormList,
   type IGRPOptionsProps,
+  IGRPDatePickerInputSingle,
 } from '@igrp/igrp-framework-react-design-system';
 
 const meta: Meta<typeof IGRPForm> = {
@@ -43,7 +43,7 @@ export default meta;
 // ─── Schemas ─────────────────────────────────────────────────────────
 const basicSchema = z.object({
   name: z.string().min(2, 'Name is required'),
-  email: z.string().email('Invalid email'),
+  email: z.email('Invalid email'),
   age: z.coerce.number().min(1, 'Age must be at least 1'),
   remember: z.boolean().optional(),
   uuid: z.string().optional(),
@@ -277,7 +277,9 @@ export const BasicExternalTrigger: StoryObj = {
         >
           <BasicFields />
         </IGRPForm>
-        <Button onClick={() => formRef.current?.submit()}>Submit Externally</Button>
+        <IGRPButtonPrimitive onClick={() => formRef.current?.submit()}>
+          Submit Externally
+        </IGRPButtonPrimitive>
       </div>
     );
   },
@@ -644,7 +646,7 @@ export const FormExamples: StoryObj = {
                       required={true}
                       className={cn('col-span-1')}
                     />
-                    <IGRPDatePicker
+                    {/* <IGRPDatePicker
                       placeholder='Please select a date...'
                       name={`dataInicioAtividade`}
                       id={`dataInicioAtividade`}
@@ -658,7 +660,19 @@ export const FormExamples: StoryObj = {
                       month={new Date('2025-01-01')}
                       endMonth={new Date('2025-12-31')}
                       className={cn('col-span-1')}
-                    />
+                    /> */}
+                    <IGRPDatePickerInputSingle
+                      placeholder='Please select a date...'
+                      name={`dataInicioAtividadeSingle`}
+                      id={`dataInicioAtividadeSingle`}
+                      label='Data de Início de Atividade'
+                      disableBefore={new Date('1900-01-01')}
+                      disableAfter={new Date('2099-12-31')}
+                      defaultMonth={new Date('2025-01-01')}
+                      dateFormat={`dd/MM/yyyy`}
+                      className={cn('col-span-1')}
+                      required={true}
+                    ></IGRPDatePickerInputSingle>
                   </div>
                   {selecttipoRepresentacaoValue === 'F' && (
                     <div className='grid grid-cols-3 grid-rows-1 gap-2 justify-items-stretch items-start border rounded-sm p-2'>
@@ -936,6 +950,84 @@ export const FormExamples: StoryObj = {
           onClick={() =>
             formRef.current?.handleSubmit((values) => console.log('Submit from button:', values))()
           }
+        >
+          Finish
+        </IGRPButtonPrimitive>
+      </div>
+    );
+  },
+};
+
+export const FormExamples2: StoryObj = {
+  render: () => {
+    const formContribuinte = z.object({  
+      nomeResponsavel: z.string(),    
+      dataInicioAtividade: z.date({
+        message: 'Data de Início de Atividade é obrigatória',
+      }),
+    });
+
+    const formRef = useRef<IGRPFormHandle<typeof formContribuinte>>(null);
+
+    return (
+      <div className='flex flex-col p-10 gap-6'>
+        <IGRPForm
+          schema={formContribuinte}
+          validationMode='onBlur'
+          onSubmit={(values) => {
+            console.log('Advanced External Submit:', values);
+            alert(`Form submitted successfully! Date: ${values.dataInicioAtividade.toLocaleDateString('pt-PT')}`);
+          }}
+          formRef={formRef}        
+        >
+          <div className='flex flex-col gap-6'>
+            <IGRPCard
+              name='identificacao'
+              data-section-id={'identificacao'}
+            >
+              <IGRPCardHeader>
+                <IGRPHeadline
+                  name={`headline1`}
+                  title={'Informações Básicas'}
+                  description={'Dados principais do contribuinte'}
+                  variant={'h5'}
+                  showIcon={true}
+                  iconName={'Building'}
+                  className={cn(
+                    'mt-3',
+                    'flex flex-row flex-nowrap items-stretch justify-start gap-2',
+                    'bg-[#FFFFFF] bg-cover bg-center bg-no-repeat bg-scroll mix-blend-normal',
+                  )}
+                />
+              </IGRPCardHeader>
+              <IGRPCardContent className='space-3 block'>
+                <div className='grid grid-cols-2 gap-4'>
+                  <IGRPInputText
+                    id={`nomeResponsavel`}
+                    label={'Nome do Responsável'}
+                    disabled={false}
+                    required={true}                    
+                  />                  
+                  <IGRPDatePickerInputSingle
+                    placeholder='Selecione uma data...'                    
+                    id="dataInicioAtividade"
+                    label='Data de Início de Atividade'
+                    disableBefore={new Date('1900-01-01')}
+                    disableAfter={new Date('2099-12-31')}                    
+                    dateFormat={`dd/MM/yyyy`}
+                    required={true}
+                  />
+                </div>
+              </IGRPCardContent>
+            </IGRPCard>
+          </div>
+        </IGRPForm>
+        <IGRPButtonPrimitive
+          onClick={() => {
+            formRef.current?.handleSubmit((values) => {
+              console.log('Submit FORM 2 from button:', values);
+            })();
+          }}
         >
           Finish
         </IGRPButtonPrimitive>

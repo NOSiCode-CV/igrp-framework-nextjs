@@ -1,5 +1,7 @@
 'use client';
 
+// IGRP CUSTOM: THIS COMPONENT IS CHANGED FROM THE ORIGINAL
+
 import * as PopoverPrimitive from '@radix-ui/react-popover';
 
 import { cn } from '../../lib/utils';
@@ -12,14 +14,19 @@ function PopoverTrigger({ ...props }: React.ComponentProps<typeof PopoverPrimiti
   return <PopoverPrimitive.Trigger data-slot="popover-trigger" {...props} />;
 }
 
+interface IGRPPopoverContentProps extends React.ComponentProps<typeof PopoverPrimitive.Content> {
+  container?: React.ComponentProps<typeof PopoverPrimitive.Portal>['container'];
+}
+
 function PopoverContent({
   className,
   align = 'center',
   sideOffset = 4,
+  container,
   ...props
-}: React.ComponentProps<typeof PopoverPrimitive.Content>) {
+}: IGRPPopoverContentProps) {
   return (
-    <PopoverPrimitive.Portal>
+    <PopoverPrimitive.Portal container={container}>
       <PopoverPrimitive.Content
         data-slot="popover-content"
         align={align}

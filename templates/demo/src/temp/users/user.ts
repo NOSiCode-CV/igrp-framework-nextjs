@@ -1,17 +1,12 @@
-import { IGRPUserArgs } from '@igrp/framework-next-types';
+import type {
+  IGRPUserDTO,
+  Status,
+} from "@igrp/platform-access-management-client-ts";
 
-export const IGRP_MOCK_USER: IGRPUserArgs = {
+export const IGRP_MOCK_USER: IGRPUserDTO = {
   id: 1,
-  igrpUsername: 'igrp.user',
-  username: 'igrp.user',
-  fullname: 'IGRP USER',
-  name: 'IGRP USER',
-  email: 'igrp.user@nosi.cv',
-  roles: [],
-  departments: [],
-  apps: ['igrp-demo', 'igrp-test'],
-  status: 'ACTIVE',
-  signature: null,
-  image: null,
-  picture: null,
+  username: "igrp.user",
+  name: "IGRP USER",
+  email: "igrp.user@nosi.cv",
+  status: "ACTIVE" as Status,
 };

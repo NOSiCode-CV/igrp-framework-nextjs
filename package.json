@@ -11,7 +11,8 @@
   "license": "MIT",
   "workspaces": [
     "packages/**",
-    "templates/**"
+    "templates/**",
+    "apps/**"
   ],
   "scripts": {
     "build": "pnpm -r run build",
@@ -19,21 +20,23 @@
     "clean": "pnpm -r run clean",
     "format": "pnpm -r run format",
     "build:next": "pnpm --filter @igrp/framework-next build",
-    "build:next-ui": "pnpm --filter @igrp/framework-next-ui build",
+    "build:auth": "pnpm --filter @igrp/framework-next-auth build",
     "build:next-types": "pnpm --filter @igrp/framework-next-types build",
+    "build:next-ui": "pnpm --filter @igrp/framework-next-ui build",
     "build:ds": "pnpm --filter @igrp/igrp-framework-react-design-system build",
-    "build:framework": "pnpm build:next-types && pnpm build:ds && pnpm build:next-ui && pnpm build:next",
+    "build:framework": "pnpm build:auth && pnpm build:next-types && pnpm build:ds && pnpm build:next-ui && pnpm build:next",
     "dev:demo": "pnpm --filter @igrp/framenwork-next-template dev",
     "build:demo": "pnpm --filter @igrp/framenwork-next-template build",
     "start:demo": "pnpm --filter @igrp/framenwork-next-template start",
-    "release:demo": "pnpm --filter @igrp/framenwork-next-template publish:template"
+    "release:demo": "pnpm --filter @igrp/framenwork-next-template publish:template",
+    "dev:app-center": "pnpm --filter @igrp/applications-center dev",
+    "clean-all": "pnpm -r run clean-all"
   },
   "devDependencies": {
-    "@changesets/cli": "^2.29.5",
-    "eslint": "^9.31.0",
-    "typescript": "^5.8.3"
+    "eslint": "^9.39.1",
+    "typescript": "^5.9.3"
   },
   "engines": {
-    "node": ">=20.x.x"
+    "node": ">=22.x.x"
   }
 }

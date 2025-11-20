@@ -1,12 +1,15 @@
 import { AccessManagementClient } from '@igrp/platform-access-management-client-ts';
-import { getAccessClientConfig } from './api-config';
+import { igrpGetAccessClientConfig, igrpResetAccessClientConfig } from './api-config';
 
 let clientInstance: AccessManagementClient | null = null;
 
-export async function getAccessClient(): Promise<AccessManagementClient> {
-  if (clientInstance) return clientInstance;
+export function igrpResetAccessClient() {
+  clientInstance = null;
+  igrpResetAccessClientConfig();
+}
 
-  const { baseUrl, token, timeout = 45000 } = getAccessClientConfig();
+export async function igrpGetAccessClient(): Promise<AccessManagementClient> {
+  const { baseUrl, token, timeout = 10000 } = igrpGetAccessClientConfig();
 
   clientInstance = AccessManagementClient.create({
     baseUrl,

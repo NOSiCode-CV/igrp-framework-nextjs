@@ -1,4 +1,3 @@
-/* eslint-disable perfectionist/sort-exports */
 'use client';
 
 // IMPORTANT: this file cannot use any wildcard exports because it is wrapped in a `use client` boundary
@@ -10,6 +9,7 @@ export { IGRPStatsCardTopBorderColored } from './components/custom/stats-card-to
 export { IGRPUserAvatar, type IGRPUserAvatarProps } from './components/custom/user-avatar';
 
 // primitives components
+
 export {
   Accordion as IGRPAccordionPrimitive,
   AccordionItem as IGRPAccordionItemPrimitive,
@@ -37,6 +37,8 @@ export {
   AlertDescription as IGRPAlertDescriptionPrimitive,
 } from './components/primitives/alert';
 
+export { AspectRatio as IGRPAspectRatioPrimitive } from './components/primitives/aspect-ratio';
+
 export {
   Avatar as IGRPUserAvatarPrimitive,
   AvatarImage as IGRPUserAvatarImagePrimitive,
@@ -63,6 +65,8 @@ export {
   buttonVariants as IGRPButtonVariantPrimitive,
 } from './components/primitives/button';
 
+export { Calendar as IGRPCalendarPrimitive } from './components/primitives/calendar';
+
 export {
   Card as IGRPCardPrimitive,
   CardHeader as IGRPCardHeaderPrimitive,
@@ -72,6 +76,26 @@ export {
   CardDescription as IGRPCardDescriptionPrimitive,
   CardContent as IGRPCardContentPrimitive,
 } from './components/primitives/card';
+
+export {
+  type CarouselApi as IGRPCarouselApi,
+  Carousel as IGRPCarouselPrimitive,
+  CarouselContent as IGRPCarouselContentPrimitive,
+  CarouselItem as IGRPCarouselItemPrimitive,
+  CarouselPrevious as IGRPCarouselPreviousPrimitive,
+  CarouselNext as IGRPCarouselNextPrimitive,
+} from './components/primitives/carousel';
+
+export {
+  ChartContainer as IGRPChartContainerPrimitive,
+  ChartTooltip as IGRPChartTooltipPrimitive,
+  ChartTooltipContent as IGRPChartTooltipContentPrimitive,
+  ChartLegend as IGRPChartLegendPrimitive,
+  ChartLegendContent as IGRPChartLegendContentPrimitive,
+  ChartStyle as IGRPChartStylePrimitive,
+} from './components/primitives/chart';
+
+export { Checkbox as IGRPCheckboxPrimitive } from './components/primitives/checkbox';
 
 export {
   Collapsible as IGRPCollapsiblePrimitive,
@@ -92,6 +116,24 @@ export {
 } from './components/primitives/command';
 
 export {
+  ContextMenu as IGRPContextMenuPrimitive,
+  ContextMenuTrigger as IGRPContextMenuTriggerPrimitive,
+  ContextMenuContent as IGRPContextMenuContentPrimitive,
+  ContextMenuItem as IGRPContextMenuItemPrimitive,
+  ContextMenuCheckboxItem as IGRPContextMenuCheckboxItemPrimitive,
+  ContextMenuRadioItem as IGRPContextMenuRadioItemPrimitive,
+  ContextMenuLabel as IGRPContextMenuLabelPrimitive,
+  ContextMenuSeparator as IGRPContextMenuSeparatorPrimitive,
+  ContextMenuShortcut as IGRPContextMenuShortcutPrimitive,
+  ContextMenuGroup as IGRPContextMenuGroupPrimitive,
+  ContextMenuPortal as IGRPContextMenuPortalPrimitive,
+  ContextMenuSub as IGRPContextMenuSubPrimitive,
+  ContextMenuSubContent as IGRPContextMenuSubContentPrimitive,
+  ContextMenuSubTrigger as IGRPContextMenuSubTriggerPrimitive,
+  ContextMenuRadioGroup as IGRPContextMenuRadioGroupPrimitive,
+} from './components/primitives/context-menu';
+
+export {
   Dialog as IGRPDialogPrimitive,
   DialogClose as IGRPDialogClosePrimitive,
   DialogContent as IGRPDialogContentPrimitive,
@@ -103,6 +145,19 @@ export {
   DialogTitle as IGRPDialogTitlePrimitive,
   DialogTrigger as IGRPDialogTriggerPrimitive,
 } from './components/primitives/dialog';
+
+export {
+  Drawer as IGRPDrawerPrimitive,
+  DrawerPortal as IGRPDrawerPortalPrimitive,
+  DrawerOverlay as IGRPDrawerOverlayPrimitive,
+  DrawerTrigger as IGRPDrawerTriggerPrimitive,
+  DrawerClose as IGRPDrawerClosePrimitive,
+  DrawerContent as IGRPDrawerContentPrimitive,
+  DrawerHeader as IGRPDrawerHeaderPrimitive,
+  DrawerFooter as IGRPDrawerFooterPrimitive,
+  DrawerTitle as IGRPDrawerTitlePrimitive,
+  DrawerDescription as IGRPDrawerDescriptionPrimitive,
+} from './components/primitives/drawer';
 
 export {
   DropdownMenu as IGRPDropdownMenuPrimitive,
@@ -133,14 +188,84 @@ export {
   FormField as IGRPFormFieldPrimitive,
 } from './components/primitives/form';
 
+export {
+  HoverCard as IGRPHoverCardPrimitive,
+  HoverCardTrigger as IGRPHoverCardTriggerPrimitive,
+  HoverCardContent as IGRPHoverCardContentPrimitive,
+} from './components/primitives/hover-card';
+
+export {
+  InputOTP as IGRPInputOTPPrimitive,
+  InputOTPGroup as IGRPInputOTPGroupPrimitive,
+  InputOTPSlot as IGRPInputOTPSlotPrimitive,
+  InputOTPSeparator as IGRPInputOTPSeparatorPrimitive,
+} from './components/primitives/input-otp';
+
 export { Input as IGRPInputPrimitive } from './components/primitives/input';
+
 export { Label as IGRPLabelPrimitive } from './components/primitives/label';
+
+export {
+  Menubar as IGRPMenubarPrimitive,
+  MenubarPortal as IGRPMenubarPortalPrimitive,
+  MenubarMenu as IGRPMenubarMenuPrimitive,
+  MenubarTrigger as IGRPMenubarTriggerPrimitive,
+  MenubarContent as IGRPMenubarContentPrimitive,
+  MenubarGroup as IGRPMenubarGroupPrimitive,
+  MenubarSeparator as IGRPMenubarSeparatorPrimitive,
+  MenubarLabel as IGRPMenubarLabelPrimitive,
+  MenubarItem as IGRPMenubarItemPrimitive,
+  MenubarShortcut as IGRPMenubarShortcutPrimitive,
+  MenubarCheckboxItem as IGRPMenubarCheckboxItemPrimitive,
+  MenubarRadioGroup as IGRPMenubarRadioGroupPrimitive,
+  MenubarRadioItem as IGRPMenubarRadioItemPrimitive,
+  MenubarSub as IGRPMenubarSubPrimitive,
+  MenubarSubTrigger as IGRPMenubarSubTriggerPrimitive,
+  MenubarSubContent as IGRPMenubarSubContentPrimitive,
+} from './components/primitives/menubar';
+
+export {
+  NavigationMenu as IGRPNavigationMenuPrimitive,
+  NavigationMenuList as IGRPNavigationMenuListPrimitive,
+  NavigationMenuItem as IGRPNavigationMenuItemPrimitive,
+  NavigationMenuContent as IGRPNavigationMenuContentPrimitive,
+  NavigationMenuTrigger as IGRPNavigationMenuTriggerPrimitive,
+  NavigationMenuLink as IGRPNavigationMenuLinkPrimitive,
+  NavigationMenuIndicator as IGRPNavigationMenuIndicatorPrimitive,
+  NavigationMenuViewport as IGRPNavigationMenuViewportPrimitive,
+  navigationMenuTriggerStyle as IGRPNavigationMenuTriggerStyle,
+} from './components/primitives/navigation-menu';
+
+export {
+  Pagination as IGRPPaginationPrimitive,
+  PaginationContent as IGRPPaginationContentPrimitive,
+  PaginationLink as IGRPPaginationLinkPrimitive,
+  PaginationItem as IGRPPaginationItemPrimitive,
+  PaginationPrevious as IGRPPaginationPreviousPrimitive,
+  PaginationNext as IGRPPaginationNextPrimitive,
+  PaginationEllipsis as IGRPPaginationEllipsisPrimitive,
+} from './components/primitives/pagination';
+
+export {
+  Popover as IGRPPopoverPrimitive,
+  PopoverTrigger as IGRPPopoverTriggerPrimitive,
+  PopoverContent as IGRPPopoverContentPrimitive,
+  PopoverAnchor as IGRPPopoverAnchorPrimitive,
+} from './components/primitives/popover';
+
+export { Progress } from './components/primitives/progress';
 
 export {
   RadioGroup as IGRPRadioGroupPrimitive,
   RadioGroupItem as IGRPRadioGroupItemPrimitive,
   radioItemVariants as IGRPRadioGroupVariantPrimitive,
 } from './components/primitives/radio-group';
+
+export {
+  ResizablePanelGroup as IGRPResizablePanelGroupPrimitive,
+  ResizablePanel as IGRPResizablePanelPrimitive,
+  ResizableHandle as IGRPResizableHandlePrimitive,
+} from './components/primitives/resizable';
 
 export {
   ScrollArea as IGRPScrollAreaPrimitive,
@@ -202,7 +327,17 @@ export {
 
 export { Skeleton as IGRPSkeletonPrimitive } from './components/primitives/skeleton';
 
-export { Toaster as IGRPToasterPrimitive } from './components/primitives/sonner';
+export { Slider as IGRPSLiderPrimitive } from './components/primitives/slider';
+
+export {
+  Stepper as IGRPStepperPrimitive,
+  StepperDescription as IGRPStepperDescriptionPrimitive,
+  StepperIndicator as IGRPStepperIndicatorPrimitive,
+  StepperItem as IGRPStepperItemPrimitive,
+  StepperSeparator as IGRPStepperSeparatorPrimitive,
+  StepperTitle as IGRPStepperTitlePrimitive,
+  StepperTrigger as IGRPStepperTriggerPrimitive,
+} from './components/primitives/stepper';
 
 export { Switch as IGRPSwitchPrimitive } from './components/primitives/switch';
 
@@ -217,7 +352,26 @@ export {
   TableCaption as IGRPTableCaptionPrimitive,
 } from './components/primitives/table';
 
+export {
+  Tabs as IGRPTabsPrimitive,
+  TabsList as IGRPTabsListPrimitive,
+  TabsTrigger as IGRPTabsTriggerPrimitive,
+  TabsContent as IGRPTabsContentPrimitive,
+} from './components/primitives/tabs';
+
 export { Textarea as IGRPTextAreaPrimitive } from './components/primitives/textarea';
+
+export { Toaster as IGRPToasterPrimitive } from './components/primitives/sonner';
+
+export {
+  ToggleGroup as IGRPToggleGroupPrimitive,
+  ToggleGroupItem as IGRPToggleGroupItemPrimitive,
+} from './components/primitives/toggle-group';
+
+export {
+  Toggle as IGRPTogglePrimitive,
+  toggleVariants as IGRPToggleVariantPrimitive,
+} from './components/primitives/toggle';
 
 export {
   Tooltip as IGRPTooltipPrimitive,
@@ -227,10 +381,48 @@ export {
 } from './components/primitives/tooltip';
 
 // horizon components
+
 export { IGRPAlert, type IGRPAlertProps } from './components/horizon/alert';
+
+export { IGRPAccordion, type IGRPAccordionProps } from './components/horizon/accordion';
+
 export { IGRPAlertDialog, type IGRPAlertDialogProps } from './components/horizon/alert-dialog';
+
+export { IGRPAvatar, type IGRPAvatarProps } from './components/horizon/avatar';
+
 export { IGRPBadge, type IGRPBadgeProps, igrpBadgeVariants } from './components/horizon/badge';
+
 export { IGRPButton, type IGRPButtonProps } from './components/horizon/button';
+
+export {
+  IGRPCalendarSingle,
+  type IGRPCalendarSingleProps,
+} from './components/horizon/calendar/single';
+
+export {
+  IGRPCalendarSingleTime,
+  type IGRPCalendarSingleTimeProps,
+} from './components/horizon/calendar/single-time';
+
+export {
+  IGRPCalendarRange,
+  type IGRPCalendarRangeProps,
+} from './components/horizon/calendar/range';
+
+export {
+  IGRPCalendarRangeTime,
+  type IGRPCalendarRangeTimeProps,
+} from './components/horizon/calendar/range-time';
+
+export {
+  IGRPCalendarMultiple,
+  type IGRPCalendarMultipleProps,
+} from './components/horizon/calendar/multiple';
+
+export {
+  IGRPCalendarMultipleTime,
+  type IGRPCalendarMultipleTimeProps,
+} from './components/horizon/calendar/multiple-time';
 
 export {
   IGRPCard,
@@ -242,17 +434,39 @@ export {
   IGRPCardFooter,
 } from './components/horizon/card';
 
-export { IGRPAreaChart } from './components/horizon/chart/Area';
-export { IGRPHorizontalBarChart } from './components/horizon/chart/Bar/horizontal';
-export { IGRPVerticalBarChart } from './components/horizon/chart/Bar/vertical';
+export {
+  IGRPCardDetails,
+  type IGRPCardDetailsProps,
+  type IGRPCardDetailsItemProps,
+} from './components/horizon/card-details';
+
+export { IGRPAreaChart, type IGRPAreaChartProps } from './components/horizon/charts/area';
+
+export {
+  IGRPHorizontalBarChart,
+  type IGRPHorizontalBarChartProps,
+} from './components/horizon/charts/bars/horizontal';
+
+export {
+  IGRPVerticalBarChart,
+  type IGRPVerticalBarChartProps,
+} from './components/horizon/charts/bars/vertical';
+
 export {
   IGRPLineChart,
   type LineConfig,
   type IGRPLineChartProps,
-} from './components/horizon/chart/Line';
-export { IGRPPieChart } from './components/horizon/chart/Pie';
-export { IGRPRadarChart } from './components/horizon/chart/Radar';
-export { IGRPRadialBarChart } from './components/horizon/chart/Radial';
+} from './components/horizon/charts/line';
+
+export { IGRPPieChart, type IGRPPieChartProps } from './components/horizon/charts/pie';
+
+export { IGRPRadarChart, type IGRPRadarChartProps } from './components/horizon/charts/radar';
+
+export {
+  IGRPRadialBarChart,
+  type IGRPRadialBarChartProps,
+} from './components/horizon/charts/radial';
+
 export type {
   IGRPChartDataItem,
   IGRPChartSize,
@@ -263,17 +477,11 @@ export type {
   IGRPBarConfig,
   IGRPChartFooter,
   IGRPChartProps,
-  IGRPAreaChartProps,
-  IGRPVerticalBarChartProps,
-  IGRPHorizontalBarChartProps,
   PieConfig,
-  IGRPPieChartProps,
   IGRPRadarConfig,
-  IGRPRadarChartProps,
   RadialBarConfig,
-  IGRPRadialBarChartProps,
-} from './components/horizon/chart/types';
-export { IGRP_CHART_COLORS } from './components/horizon/chart/types';
+} from './components/horizon/charts/types';
+
 export {
   formatChartValue,
   getChartHeight,
@@ -283,7 +491,8 @@ export {
   getLegendHorizontalAlign,
   hasNegativeValues,
   createChartConfig,
-} from './components/horizon/chart/lib';
+  IGRP_CHART_COLORS,
+} from './components/horizon/charts/lib';
 
 export { IGRPChat, type IGRPChatProps, type IGRPChatMessage } from './components/horizon/chat';
 
@@ -298,8 +507,12 @@ export {
   IGRPCommandShortcut,
   IGRPCommandSeparator,
 } from './components/horizon/command';
+
 export { IGRPContainer } from './components/horizon/container';
-export { IGRPDataTable, type IGRPDataTableProps } from './components/horizon/data-table/data-table';
+
+export { IGRPCopyTo, type IGRPCopyToProps } from './components/horizon/copy-to';
+
+export { IGRPDataTable, type IGRPDataTableProps } from './components/horizon/data-table';
 export {
   IGRPDataTableButtonAlert,
   IGRPDataTableButtonLink,
@@ -310,8 +523,8 @@ export {
   type IGRPDataTableActionDropdown,
   type IGRPDataTableDropdownMenuDialogProps,
   type IGRPDataTableDropdownMenuLinkProps,
+  type IGRPDataTableDropdownMenuProps,
   IGRPDataTableDropdownMenuAlert,
-  // IGRPDataTableDropdownMenuModal,
   IGRPDataTableDropdownMenuCustom,
   IGRPDataTableDropdownMenuLink,
   IGRPDataTableDropdownMenu,
@@ -322,10 +535,13 @@ export {
   IGRPDataTableCellAmount,
   IGRPDataTableCellBadge,
   IGRPDataTableCellDate,
+  IGRPDataTableCellLink,
+  IGRPDataTableCellTooltip,
   type IGRPDataTableCellExpanderProps,
   type IGRPDataTableCellAmountProps,
   type IGRPDataTableCellBadgeProps,
   type IGRPDataTableCellDateProps,
+  type IGRPDataTableCellTooltipProps,
 } from './components/horizon/data-table/cell';
 export {
   IGRPDataTableClientFilter,
@@ -362,6 +578,10 @@ export {
   type IGPRDataTableVisibilityProps,
 } from './components/horizon/data-table/toggle-visibility';
 export {
+  IGRPDataTableTooltipContext,
+  IGRPDataTableTooltipProvider,
+} from './components/horizon/data-table/tooltip-provider';
+export {
   IGRPDataTableDateRangeFilterFn,
   IGRPDataTableFacetedFilterFn,
 } from './components/horizon/data-table/lib/filters-utils';
@@ -383,6 +603,7 @@ export {
   IGRPDropdownMenuSubTrigger,
   IGRPDropdownMenuSubContent,
 } from './components/horizon/dropdown-menu';
+
 export {
   type IGRPFormContextValue,
   useIGRPFormContext,
@@ -391,14 +612,18 @@ export {
 export { IGRPFormField, type IGRPFormFielProps } from './components/horizon/form/form-field';
 export { IGRPForm, type IGRPFormProps, type IGRPFormHandle } from './components/horizon/form/form';
 export { convertValuesToFormData } from './components/horizon/form/lib/utils';
-export { IGRPFormList, type IGRPFormListProps } from './components/horizon/form-list';
+export { IGRPFormList, type IGRPFormListProps } from './components/horizon/form/form-list';
 
 export {
   IGRPIcon,
   IGRPIconObject,
   type IGRPIconProps,
   type IGRPIconName,
+  type LucideProps,
+  IGRPIconList,
 } from './components/horizon/icon';
+
+export { IGRPImage, type IGRPImageProps, type IGRPRatioType } from './components/horizon/image';
 
 export {
   IGRPInfoCard,
@@ -408,24 +633,36 @@ export {
 } from './components/horizon/info-card';
 
 export { IGRPCheckbox, type IGRPCheckboxProps } from './components/horizon/input/checkbox';
+
 export { IGRPInputColor, type IGRPInputColorProps } from './components/horizon/input/color';
+
 export { IGRPCombobox, type IGRPComboboxProps } from './components/horizon/input/combobox';
+
+// export {
+//   IGRPDatePickerInputRange,
+//   type IGRPDatePickerInputRangeProps
+// } from './components/horizon/input/date-picker/input-range';
+
 export {
-  IGRPCalendar,
-  type IGRPCalendarProps,
-} from './components/horizon/input/date-picker/calendar/calendar';
+  IGRPDatePickerInputSingle,
+  type IGRPDatePickerInputSingleProps,
+} from './components/horizon/input/date-picker/input-single';
+
 export {
-  IGRPCalendarRange,
-  type IGRPCalendarRangeProps,
-} from './components/horizon/input/date-picker/calendar/calendar-range';
-export {
-  IGRPDatePicker,
-  type IGRPDatePickerProps,
-} from './components/horizon/input/date-picker/date-picker';
+  IGRPDatePickerMultiple,
+  type IGRPDatePickerMultipleProps,
+} from './components/horizon/input/date-picker/multiple';
+
 export {
   IGRPDatePickerRange,
   type IGRPDatePickerRangeProps,
-} from './components/horizon/input/date-picker/date-picker-range';
+} from './components/horizon/input/date-picker/range';
+
+export {
+  IGRPDatePickerSingle,
+  type IGRPDatePickerSingleProps,
+} from './components/horizon/input/date-picker/single';
+
 export {
   IGRPDateTimeInput,
   type IGRPDateTimeInputProps,
@@ -449,7 +686,8 @@ export { IGRPRadioGroup, type IGRPRadioGroupProps } from './components/horizon/i
 export { IGRPInputAddOn, type IGRPInputAddOnProps } from './components/horizon/input/with-addons';
 
 export { IGRPLabel, type IGRPLabelProps } from './components/horizon/label';
-export { IGRPLoadingSpinner } from './components/horizon/loading/spiner';
+
+export { IGRPLoadingSpinner } from './components/horizon/loading-spiner';
 
 export {
   IGRPMenuNavigationProvider,
@@ -494,6 +732,12 @@ export {
 } from './components/horizon/pdf-viewer';
 
 export {
+  IGRPStepperProcess,
+  type IGRPStepperProcessProps,
+  type IGRPStepProcessProps,
+} from './components/horizon/proccess/stepper';
+
+export {
   IGRPRepetitiveComponent,
   type IGRPRepetitiveComponentProps,
 } from './components/horizon/repetitive-component';
@@ -530,7 +774,12 @@ export {
 export { IGRPStatsCard, type IGRPStatsCardProps } from './components/horizon/stats-card';
 export { IGRPTable, type IGRPTableProps } from './components/horizon/table';
 export { IGRPTabs, type IGRPTabsProps, type IGRPTabItem } from './components/horizon/tabs';
-export { IGRPToaster, useIGRPToast, type IGRPToastProps } from './components/horizon/toaster';
+export {
+  type IGRPPromiseToastProps,
+  type PlainToastProps,
+  useIGRPToast,
+  IGRPToaster,
+} from './components/horizon/toaster';
 
 export {
   IGRPHeadline,
@@ -561,20 +810,38 @@ export {
   igrpTextVariants,
 } from './components/horizon/typography/text';
 
+export {
+  IGRPVideoEmbed,
+  type IGRPVideoEmbedProps,
+  type IGRPVideoEmbedAllowFeature,
+} from './components/horizon/video-embed';
+
+// DEPRECATED
+export { IGRPCalendar, type IGRPCalendarProps } from './components/horizon/calendar/calendar';
+export {
+  IGRPDatePicker,
+  type IGRPDatePickerProps,
+} from './components/horizon/input/date-picker/date-picker';
+
 // types
+
 export type {
   IGRPPlacementProps,
   IGRPBaseAttributes,
   IGRPInputProps,
   IGRPOptionsProps,
   IGRPGridSize,
-} from './types/globals';
+  IGRPSize,
+  IGRPRoundSize,
+} from './types';
 
 // hooks
+
 export { IGRP_META_THEME_COLORS, useIGRPMetaColor } from './hooks/use-meta-color';
 export { useIsMobile } from './hooks/use-mobile';
 
 // libs
+
 export {
   IGRPColors,
   type IGRPColorType,

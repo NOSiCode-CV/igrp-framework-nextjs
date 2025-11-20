@@ -4,6 +4,8 @@ import { useId, useState, useEffect } from 'react';
 import { format } from 'date-fns';
 import { useFormContext } from 'react-hook-form';
 
+import { cn } from '../../../../lib/utils';
+import type { IGRPInputProps } from '../../../../types';
 import {
   FormControl,
   FormDescription,
@@ -14,16 +16,33 @@ import {
 } from '../../../primitives/form';
 import { Popover, PopoverContent, PopoverTrigger } from '../../../primitives/popover';
 import { IGRPButton } from '../../button';
-import { IGRPCalendar, type IGRPCalendarProps } from './calendar/calendar';
+import { IGRPCalendar, type IGRPCalendarProps } from '../../calendar/calendar';
 import { IGRPLabel } from '../../label';
-// import { igrpGridSizeClasses } from '../../../../lib/constants';
-import { cn } from '../../../../lib/utils';
-import { type IGRPDatePickerBaseProps } from './types';
+
+export type IGRPDatePickerBaseProps = {
+  error?: string;
+  required?: boolean;
+  disabledPicker?: boolean;
+  dateFormat?: string;
+  placeholder?: string;
+} & Pick<IGRPInputProps, 'label' | 'helperText' | 'labelClassName' | 'name' | 'gridSize'>;
 
 type IGRPDatePickerProps = IGRPCalendarProps & IGRPDatePickerBaseProps;
 
+/**
+ * @deprecated This component will be deprecated in the next release.
+ * Please migrate to the standard IGRPDatePickerSingle component from `@igrp/igrp-framework-react-design-system`.
+ *
+ * @example
+ * // Instead of:
+ * // <IGRPDatePicker id="my-calendar" date={date} onDateChange={setDate} />
+ *
+ * // Use:
+ * // <IGRPDatePickerSingle id="my-calendar" date={date} onDateChange={setDate} {..props} />
+ */
 function IGRPDatePicker({
   name,
+  id,
   date,
   onDateChange,
   startDate = new Date(1850, 0),
@@ -36,12 +55,11 @@ function IGRPDatePicker({
   required = false,
   disabledPicker = false,
   disabled,
-  // gridSize = 'default',
   dateFormat = 'dd/MM/yyyy',
   placeholder = 'Pick a date',
 }: IGRPDatePickerProps) {
-  const id = useId();
-  const fieldName = name ?? id;
+  const _id = useId();
+  const fieldName = name ?? id ?? _id;
   const [localDate, setLocalDate] = useState<Date | undefined>(date);
   const formContext = useFormContext();
 
@@ -89,73 +107,90 @@ function IGRPDatePicker({
   const renderPicker = (
     fieldValue: Date | undefined,
     onChange: (date: Date | undefined) => void,
-  ) => (
-    <>
-      <Popover>
-        <PopoverTrigger asChild>{DateButton(fieldValue)}</PopoverTrigger>
-        <PopoverContent className="w-auto p-2" align="start">
-          <IGRPCalendar
-            id={fieldName}
-            date={fieldValue}
-            onDateChange={onChange}
-            startDate={startDate}
-            endDate={endDate}
-            mode="single"
+  ) => {
+    // Use fieldValue for form context, localDate for standalone
+    const displayDate = formContext ? fieldValue : localDate;
+
+    return (
+      <>
+        <Popover>
+          <PopoverTrigger asChild>{DateButton(displayDate)}</PopoverTrigger>
+          <PopoverContent className="w-auto p-2" align="start">
+            <IGRPCalendar
+              id={fieldName}
+              date={displayDate}
+              onDateChange={onChange}
+              startDate={startDate}
+              endDate={endDate}
+              mode="single"
+            />
+          </PopoverContent>
+        </Popover>
+        {displayDate && (
+          <IGRPButton
+            onClick={() => {
+              setLocalDate(undefined);
+              onChange(undefined);
+              onDateChange?.(undefined);
+            }}
+            variant="link"
+            className="size-2 absolute right-2 top-1/2 h-3 w-3 -translate-y-1/2 text-muted-foreground z-100"
+            size="icon"
+            iconName="X"
+            iconSize={10}
+            disabled={disabledPicker}
+            showIcon={displayDate ? true : false}
           />
-        </PopoverContent>
-      </Popover>
-      {localDate && (
-        <IGRPButton
-          onClick={() => {
-            setLocalDate(undefined);
-            onDateChange?.(undefined);
-          }}
-          variant="link"
-          className="size-2 absolute right-2 top-1/2 h-3 w-3 -translate-y-1/2 text-muted-foreground z-100"
-          size="icon"
-          iconName="X"
-          iconSize={10}
-          disabled={disabledPicker}
-          showIcon={localDate ? true : false}
-        />
-      )}
-    </>
-  );
+        )}
+      </>
+    );
+  };
 
   if (formContext) {
     return (
-      <FormField
-        control={formContext.control}
-        name={fieldName}
-        render={({ field, fieldState }) => (
-          <FormItem className={cn(/*igrpGridSizeClasses[gridSize],*/ className)}>
-            {label && (
-              <FormLabel
-                className={cn(
-                  labelClassName,
-                  required && 'after:content-["*"] after:text-destructive',
-                )}
-              >
-                {label}
-              </FormLabel>
-            )}
-            <FormControl>
-              {renderPicker(field.value, (val) => {
-                field.onChange(val);
-                onDateChange?.(val);
-              })}
-            </FormControl>
+      <div className={cn('*:not-first:mt-2', className)}>
+        <FormField
+          control={formContext.control}
+          name={fieldName}
+          render={({ field, fieldState }) => {
+            // Sync local state when field value changes externally
+            useEffect(() => {
+              if (field.value !== localDate) {
+                setLocalDate(field.value);
+              }
+            }, [field.value]);
 
-            {helperText && !fieldState.error && <FormDescription>{helperText}</FormDescription>}
-            <FormMessage className="text-xs" />
-          </FormItem>
-        )}
-      />
+            return (
+              <FormItem>
+                {label && (
+                  <FormLabel
+                    className={cn(
+                      labelClassName,
+                      required && 'after:content-["*"] after:text-destructive',
+                    )}
+                  >
+                    {label}
+                  </FormLabel>
+                )}
+                <FormControl>
+                  {renderPicker(field.value, (val) => {
+                    field.onChange(val);
+                    onDateChange?.(val);
+                  })}
+                </FormControl>
+
+                {helperText && !fieldState.error && <FormDescription>{helperText}</FormDescription>}
+                <FormMessage className="text-xs" />
+              </FormItem>
+            );
+          }}
+        />
+      </div>
     );
   }
 
   return (
-    <div className={cn('*:not-first:mt-2', /*igrpGridSizeClasses[gridSize],*/ className)}>
+    <div className={cn('*:not-first:mt-2', className)}>
       {label && (
         <IGRPLabel label={label} className={labelClassName} required={required} id={name} />
       )}

@@ -3,7 +3,7 @@ import { z } from 'zod';
 import {
   IGRPInputSearch,
   type IGRPInputSearchProps,
-  IGRPButtonPrimitive
+  IGRPButtonPrimitive,
 } from '@igrp/igrp-framework-react-design-system';
 import { FormProvider, useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';

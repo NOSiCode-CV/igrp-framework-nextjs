@@ -1,6 +1,6 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import type { FilterFn } from '@tanstack/react-table';
 
-// eslint-disable-next-line @typescript-eslint/no-explicit-any
 export const IGRPDataTableDateRangeFilterFn: FilterFn<any> = (row, columnId, filterValue) => {
   if (!filterValue || !filterValue.from) return true;
   const cellValue = row.getValue(columnId) as string;
@@ -14,7 +14,6 @@ export const IGRPDataTableDateRangeFilterFn: FilterFn<any> = (row, columnId, fil
   return date >= start;
 };
 
-// eslint-disable-next-line @typescript-eslint/no-explicit-any
 export const IGRPDataTableFacetedFilterFn: FilterFn<any> = (
   row,
   columnId,
@@ -23,4 +22,14 @@ export const IGRPDataTableFacetedFilterFn: FilterFn<any> = (
   if (!filterValue?.length) return true;
   const status = row.getValue(columnId) as string;
   return filterValue.includes(status);
+};
+
+export const multiColumnFilterFn: FilterFn<any> = (row, _columnId, filterValue) => {
+  const term = String(filterValue ?? '')
+    .toLowerCase()
+    .trim();
+  if (!term) return true;
+  const name = String(row.original?.name ?? '').toLowerCase();
+  const desc = String(row.original?.description ?? '').toLowerCase();
+  return name.includes(term) || desc.includes(term);
 };

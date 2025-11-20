@@ -4,9 +4,10 @@ import { IGRPPageHeaderBackButton } from './back-button';
 import type { IGRPIconName } from '../icon';
 import { IGRPHeadline, igrpHeadlineVariants } from '../typography/headline';
 import { cn } from '../../../lib/utils';
-import { type IGRPBaseAttributes } from '../../../types/globals';
+import { type IGRPBaseAttributes } from '../../../types';
+import { useId } from 'react';
 
-type IGRPPageHeaderProps = {
+interface IGRPPageHeaderProps extends Pick<IGRPBaseAttributes, 'name'> {
   title: string;
   description?: string;
   variant?: VariantProps<typeof igrpHeadlineVariants>['variant'];
@@ -17,7 +18,11 @@ type IGRPPageHeaderProps = {
   showBackButton?: boolean;
   urlBackButton?: string;
   iconBackButton?: IGRPIconName | string;
-} & Pick<IGRPBaseAttributes, 'name'>;
+  id?: string;
+}
+
+// TODO: see back btn change variant and add text
+// TODO: see PageHeader of the igrp-applications
 
 function IGRPPageHeader({
   title,
@@ -27,19 +32,23 @@ function IGRPPageHeader({
   headlineClassName,
   children,
   name,
+  id,
   isSticky,
   showBackButton,
   urlBackButton,
   iconBackButton,
 }: IGRPPageHeaderProps) {
+  const _id = useId();
+  const ref = name ?? id ?? _id;
+
   return (
     <div
       className={cn(
-        'flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 space-y-2 sm:space-y-0 px-4',
+        'flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4',
         isSticky && 'sticky top-0 z-10 bg-background pt-6 pb-4',
         className,
       )}
-      id={name}
+      id={ref}
     >
       <div className="flex items-center gap-2">
         {showBackButton && (

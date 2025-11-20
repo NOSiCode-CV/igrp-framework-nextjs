@@ -1,4 +1,4 @@
-export function igrpIsExternalUrl(url: string): boolean {
+export function igrpIsExternalUrl(url?: string): boolean {
   if (!url) return false;
 
   try {

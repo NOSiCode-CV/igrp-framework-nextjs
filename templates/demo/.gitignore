@@ -32,7 +32,8 @@ yarn-error.log*
 
 # env files (can opt-in for committing if needed)
 .env*
-!.env.development
+!.env.example
+!.env.production
 
 # vercel
 .vercel
@@ -41,6 +42,5 @@ yarn-error.log*
 *.tsbuildinfo
 next-env.d.ts
 
-# create template zip
-create-template/nexus-auth.txt
-igrp-next-template.zip
+# docker
+# docker-compose.yml

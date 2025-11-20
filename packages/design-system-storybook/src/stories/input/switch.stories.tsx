@@ -1,13 +1,12 @@
 import type { Meta, StoryObj } from '@storybook/nextjs-vite';
 import { useState } from 'react';
 import { useForm, FormProvider } from 'react-hook-form';
-import { 
-  IGRPSwitch, 
+import {
+  IGRPSwitch,
   type IGRPSwitchProps,
   IGRPButtonPrimitive,
-  type IGRPGridSize 
+  type IGRPGridSize,
 } from '@igrp/igrp-framework-react-design-system';
-
 
 const meta: Meta<typeof IGRPSwitch> = {
   title: 'Components/Switch',

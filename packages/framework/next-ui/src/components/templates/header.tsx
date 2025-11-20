@@ -1,8 +1,11 @@
+'use client';
+
 import type { IGRPHeaderDataArgs } from '@igrp/framework-next-types';
 import {
   cn,
   IGRPSeparatorPrimitive,
   IGRPSidebarTriggerPrimitive,
+  useIGRPToast,
 } from '@igrp/igrp-framework-react-design-system';
 
 import { IGRPTemplateBreadcrumbs } from './breadcrumbs';
@@ -17,21 +20,31 @@ interface IGRPTemplateHeaderProps {
 }
 
 function IGRPTemplateHeader({ data, className }: IGRPTemplateHeaderProps) {
+  const { igrpToast } = useIGRPToast();
+
   if (!data) {
-    console.info('IGRP Header não tem dados, revisar src/igrp.template.config.');
+    console.info(
+      '[header-template] Cabeçalho do IGRP não tem dados, define os dados no src/igrp.template.config.',
+    );
+    igrpToast({
+      type: 'info',
+      description:
+        '[header-template] Cabeçalho do IGRP não tem dados, define os dados no src/igrp.template.config.',
+      duration: 10000,
+    });
     return null;
   }
 
   const { user, showBreadcrumb, showSearch, showNotifications, showThemeSwitcher, showUser } = data;
 
   return (
-    <header
+    <div
       className={cn(
-        'bg-background sticky top-0 inset-x-0 isolate z-10 border-b flex items-center justify-between gap-2 px-4 py-2',
+        'bg-background sticky top-0 inset-x-0 isolate z-40 border-b flex items-center justify-between gap-2 px-4 py-2 min-w-0',
         className,
       )}
     >
-      <div className="flex items-center gap-2 h-12">
+      <div className="flex items-center gap-2 h-12 min-w-0">
         <IGRPSidebarTriggerPrimitive />
         {showBreadcrumb && (
           <>
@@ -43,7 +56,7 @@ function IGRPTemplateHeader({ data, className }: IGRPTemplateHeaderProps) {
           </>
         )}
       </div>
-      <div className="flex items-center gap-2">
+      <div className="flex items-center gap-2 flex-shrink-0">
         {showSearch && <IGRPTemplateCommandSearch />}
 
         {showNotifications && (
@@ -56,7 +69,7 @@ function IGRPTemplateHeader({ data, className }: IGRPTemplateHeaderProps) {
 
         {showUser && <IGRPTemplateNavUserHeader user={user} />}
       </div>
-    </header>
+    </div>
   );
 }
 

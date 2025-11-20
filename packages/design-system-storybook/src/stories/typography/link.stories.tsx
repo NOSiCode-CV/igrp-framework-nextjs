@@ -446,7 +446,7 @@ export const ScrollBehavior: Story = {
       </p>
       <div className='flex gap-4'>
         <IGRPLink
-          href='/example'          
+          href='/example'
           iconName='ArrowUp'
           showIcon
         >

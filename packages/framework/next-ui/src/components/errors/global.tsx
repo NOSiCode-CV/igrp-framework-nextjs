@@ -8,6 +8,7 @@ interface IGRPGlobalErrorProps {
   children?: React.ReactNode;
 }
 
+// TODO: check the image
 function IGRPGlobalError({ error, reset, children }: IGRPGlobalErrorProps) {
   if (children) return <>{children}</>;
 
@@ -17,7 +18,6 @@ function IGRPGlobalError({ error, reset, children }: IGRPGlobalErrorProps) {
   useEffect(() => {
     console.error(error);
 
-    // Animate error details in after mount
     const timer = setTimeout(() => setErrorVisible(true), 300);
     return () => clearTimeout(timer);
   }, [error]);
@@ -31,7 +31,7 @@ function IGRPGlobalError({ error, reset, children }: IGRPGlobalErrorProps) {
   };
 
   return (
-    <div className="flex min-h-screen flex-col items-center justify-center bg-primary-50">
+    <div className="flex min-h-[calc(100vh-12rem)] items-center justify-center bg-primary-50">
       <div className="w-full max-w-3xl">
         <div className="text-center">
           <Image
@@ -42,10 +42,10 @@ function IGRPGlobalError({ error, reset, children }: IGRPGlobalErrorProps) {
             className="mx-auto mb-2 w-"
           />
           <h1 className="text-2xl font-bold tracking-tight text-gray-900 dark:text-white">
-            An unexpected error occurred.
+            Ocorreu um erro inesperado.
           </h1>
-          <p className="mb-3 text-base text-gray-600 dark:text-gray-300">
-            Our team has been notified and is working to resolve the issue.
+          <p className="mb-4 text-base text-gray-600 dark:text-gray-300">
+            A nossa equipa foi notificada e está a trabalhar para resolver o problema.
           </p>
 
           <div
@@ -54,13 +54,13 @@ function IGRPGlobalError({ error, reset, children }: IGRPGlobalErrorProps) {
               errorVisible ? 'translate-y-0 opacity-100' : 'translate-y-4 opacity-0',
             )}
           >
-            <p className="mb-2 font-medium text-gray-900 dark:text-white">Error details:</p>
+            <p className="mb-2 font-medium text-gray-900 dark:text-white">Detalhes do erro:</p>
             <p className="break-words text-gray-700 dark:text-gray-300">
               {error.message || 'An unknown error occurred'}
             </p>
             {error.digest && (
               <p className="mt-2 text-xs text-gray-500">
-                Reference ID:{' '}
+                ID de referência:{' '}
                 <code className="rounded bg-gray-100 px-1 py-0.5 dark:bg-gray-700">
                   {error.digest}
                 </code>

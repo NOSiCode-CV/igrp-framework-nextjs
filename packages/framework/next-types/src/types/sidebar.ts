@@ -1,4 +1,4 @@
-import type { IGRPApplicationArgs, IGRPMenuItemArgs, IGRPUserArgs } from './igrp';
+import type { IGRPApplicationArgs, IGRPMenuItemArgs, IGRPUserArgs } from './access-management';
 
 export interface IGRPSidebarDataArgs {
   menuItems: IGRPMenuItemArgs[];
@@ -7,7 +7,7 @@ export interface IGRPSidebarDataArgs {
   footerItems?: IGRPMenuItemArgs[];
   showAppSwitcher?: boolean;
   apps: IGRPApplicationArgs[];
-  appCode?: number;
+  appCode?: string;
   showPreviewMode?: boolean;
   appCenterUrl?: string;
 }

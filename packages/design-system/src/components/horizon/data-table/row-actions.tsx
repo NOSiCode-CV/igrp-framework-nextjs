@@ -4,6 +4,8 @@ import { type VariantProps } from 'class-variance-authority';
 import { buttonVariants } from '../../primitives/button';
 import { type IGRPIconName } from '../icon';
 import type { igrpModalDialogContentVariants } from '../modal-dialog';
+import { cn } from '../../../lib/utils';
+import { IGRPDataTableTooltipProvider } from './tooltip-provider';
 
 interface IGRPDataTableActionProps {
   labelTrigger?: string;
@@ -14,6 +16,11 @@ interface IGRPDataTableActionProps {
   className?: string;
   variant?: VariantProps<typeof buttonVariants>['variant'];
   classNameItem?: string;
+  tooltipSide?: 'top' | 'right' | 'bottom' | 'left';
+  tooltipAlign?: 'center' | 'start' | 'end';
+  tooltipClassName?: string;
+  tooltipSideOffset?: number;
+  tooltipDelayDuration?: number;
 }
 
 interface IGRPDataTableDialogProps
@@ -38,8 +45,18 @@ interface IGRPDataTableLinkProps
   action?: () => void;
 }
 
-function IGRPDataTableRowAction({ children }: { children: ReactNode }) {
-  return <div className="flex items-center justify-end gap-2">{children}</div>;
+function IGRPDataTableRowAction({
+  className,
+  children,
+}: {
+  className?: string;
+  children: ReactNode;
+}) {
+  return (
+    <IGRPDataTableTooltipProvider>
+      <div className={cn('flex items-center', className)}>{children}</div>
+    </IGRPDataTableTooltipProvider>
+  );
 }
 
 export {

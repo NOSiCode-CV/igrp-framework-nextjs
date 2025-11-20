@@ -1,12 +1,9 @@
 import { useState } from 'react';
 import Link from 'next/link';
 
-import {
-  DropdownMenu,
-  DropdownMenuContent,
-  DropdownMenuItem,
-  DropdownMenuTrigger,
-} from '../../primitives/dropdown-menu';
+import { cn } from '../../../lib/utils';
+import { type IGRPPlacementProps } from '../../../types';
+
 import {
   AlertDialog,
   AlertDialogAction,
@@ -18,15 +15,21 @@ import {
   AlertDialogTitle,
   AlertDialogTrigger,
 } from '../../primitives/alert-dialog';
+
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuTrigger,
+} from '../../primitives/dropdown-menu';
 import { buttonVariants } from '../../primitives/button';
-import { IGRPIcon } from '../icon';
-import { cn } from '../../../lib/utils';
-import { type IGRPPlacementProps } from '../../../types/globals';
+import { IGRPIcon, type IGRPIconName } from '../icon';
 import { type IGRPDataTableDialogProps, type IGRPDataTableLinkProps } from './row-actions';
 
 interface IGRPDataTableDropdownProps {
   showIcon?: boolean;
   iconPlacement?: IGRPPlacementProps;
+  variant?: React.ComponentProps<typeof DropdownMenuItem>['variant'];
 }
 
 interface IGRPDataTableDropdownMenuDialogProps
@@ -122,19 +125,12 @@ function IGRPDataTableDropdownMenuLink({
   iconClassName,
   showIcon = false,
   classNameItem,
+  variant = 'default',
 }: IGRPDataTableDropdownMenuLinkProps) {
   const iconClass = iconPlacement === 'end' ? 'flex-row-reverse' : '';
-  const customClss = cn('flex items-center justify-between gap-2 w-full', iconClass, classNameItem);
+  const customClss = cn('flex items-center gap-2 w-full', iconClass, classNameItem);
 
-  const handlerAction = () => {
-    if (typeof action === 'function') {
-      action();
-    } else {
-      console.warn('No action function provided');
-    }
-  };
-
-  const renderContent = () => (
+  const RenderContent = (
     <>
       {showIcon && (
         <IGRPIcon iconName={icon} className={cn('text-muted-foreground', iconClassName)} />
@@ -143,18 +139,31 @@ function IGRPDataTableDropdownMenuLink({
     </>
   );
 
-  return href ? (
-    <DropdownMenuItem onSelect={(e) => e.preventDefault()} asChild>
-      <Link href={href} className={customClss}>
-        {renderContent()}
-      </Link>
-    </DropdownMenuItem>
-  ) : (
-    <DropdownMenuItem className={customClss} onSelect={handlerAction}>
-      {renderContent()}
+  if (href) {
+    return (
+      <DropdownMenuItem onSelect={(e) => e.preventDefault()} asChild variant={variant}>
+        <Link href={href} className={customClss}>
+          {RenderContent}
+        </Link>
+      </DropdownMenuItem>
+    );
+  }
+
+  return (
+    <DropdownMenuItem
+      className={customClss}
+      variant={variant}
+      onSelect={() => {
+        if (!action) return;
+        action();
+      }}
+    >
+      {RenderContent}
     </DropdownMenuItem>
   );
 }
+
+type IGRPDataTableDropdownMenuCustomProps = Omit<IGRPDataTableDropdownMenuLinkProps, 'href'>;
 
 function IGRPDataTableDropdownMenuCustom({
   labelTrigger,
@@ -164,7 +173,8 @@ function IGRPDataTableDropdownMenuCustom({
   iconClassName,
   showIcon = false,
   classNameItem,
-}: Omit<IGRPDataTableDropdownMenuLinkProps, 'href'>) {
+  variant,
+}: IGRPDataTableDropdownMenuCustomProps) {
   const iconClass = iconPlacement === 'end' ? 'flex-row-reverse' : '';
 
   const handlerAction = () => {
@@ -177,8 +187,9 @@ function IGRPDataTableDropdownMenuCustom({
 
   return (
     <DropdownMenuItem
-      className={cn('flex items-center justify-between gap-2 w-full', iconClass, classNameItem)}
+      className={cn('flex items-center gap-2 w-full', iconClass, classNameItem)}
       onSelect={handlerAction}
+      variant={variant}
     >
       {showIcon && (
         <IGRPIcon iconName={icon} className={cn('text-muted-foreground', iconClassName)} />
@@ -203,16 +214,18 @@ function IGRPDataTableDropdownMenuItem({
   labelTrigger,
   onClick,
   classNameItem,
+  variant,
 }: IGRPDataTableDropdownMenuItemProps) {
   const iconClass = iconPlacement === 'end' ? 'flex-row-reverse' : '';
 
   return (
     <DropdownMenuItem
       onClick={onClick}
-      className={cn('flex items-center justify-between w-full gap-2', iconClass, classNameItem)}
+      className={cn('flex items-center w-full gap-2', iconClass, classNameItem)}
       onSelect={(e) => {
         e.preventDefault();
       }}
+      variant={variant}
     >
       {showIcon && (
         <IGRPIcon iconName={icon} className={cn('text-muted-foreground', iconClassName)} />
@@ -230,13 +243,25 @@ type IGRPDataTableActionDropdown =
   | {
       component: typeof IGRPDataTableDropdownMenuAlert;
       props: IGRPDataTableDropdownMenuDialogProps;
+    }
+  | {
+      component: typeof IGRPDataTableDropdownMenuCustom;
+      props: IGRPDataTableDropdownMenuDialogProps;
     };
 
-function IGRPDataTableDropdownMenu({ items }: { items: IGRPDataTableActionDropdown[] }) {
+type IGRPDataTableDropdownMenuProps = {
+  items: IGRPDataTableActionDropdown[];
+  iconName?: IGRPIconName | string;
+};
+
+function IGRPDataTableDropdownMenu({
+  items,
+  iconName = 'Ellipsis',
+}: IGRPDataTableDropdownMenuProps) {
   return (
     <DropdownMenu>
       <DropdownMenuTrigger className="flex items-center justify-center" aria-label="Open actions">
-        <IGRPIcon iconName="Ellipsis" className="shadow-none" />
+        <IGRPIcon iconName={iconName} className="shadow-none" />
       </DropdownMenuTrigger>
       <DropdownMenuContent align="end">
         {items.map(({ component: Component, props }, index) => (
@@ -252,6 +277,8 @@ export {
   type IGRPDataTableActionDropdown,
   type IGRPDataTableDropdownMenuDialogProps,
   type IGRPDataTableDropdownMenuLinkProps,
+  type IGRPDataTableDropdownMenuProps,
+  type IGRPDataTableDropdownMenuCustomProps,
   IGRPDataTableDropdownMenuAlert,
   IGRPDataTableDropdownMenuCustom,
   IGRPDataTableDropdownMenuLink,

@@ -29,7 +29,7 @@ function IGRPTemplateBreadcrumbs({ className }: IGRPTemplateBreadcrumbsProps) {
     });
 
   return (
-    <nav aria-label="Breadcrumb" className={cn('flex items-center text-xs', className)}>
+    <nav aria-label="Breadcrumb" className={cn('flex items-center text-xs min-w-0', className)}>
       <ol className="flex items-center flex-wrap gap-1.5">
         <li className="flex items-center">
           <Link

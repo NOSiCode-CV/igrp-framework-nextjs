@@ -1,4 +1,6 @@
+import { useContext, type ReactElement } from 'react';
 import Link from 'next/link';
+
 import {
   AlertDialog,
   AlertDialogAction,
@@ -21,11 +23,57 @@ import {
   DialogTitle,
   DialogTrigger,
 } from '../../primitives/dialog';
+import { Tooltip, TooltipContent, TooltipTrigger } from '../../primitives/tooltip';
 import { IGRPButton } from '../button';
 import { IGRPIcon } from '../icon';
 import { cn } from '../../../lib/utils';
 import { igrpModalDialogContentVariants } from '../modal-dialog';
 import { type IGRPDataTableDialogProps, type IGRPDataTableLinkProps } from './row-actions';
+import { IGRPDataTableTooltipContext, IGRPDataTableTooltipProvider } from './tooltip-provider';
+
+function IGRPDataTableActionTooltip({
+  label,
+  children,
+  tooltipSide = 'top',
+  tooltipAlign = 'center',
+  tooltipClassName,
+  tooltipSideOffset = 6,
+  tooltipDelayDuration = 0,
+}: {
+  label?: string;
+  children: ReactElement;
+  tooltipSide?: 'top' | 'right' | 'bottom' | 'left';
+  tooltipAlign?: 'center' | 'start' | 'end';
+  tooltipClassName?: string;
+  tooltipSideOffset?: number;
+  tooltipDelayDuration?: number;
+}) {
+  const hasProvider = useContext(IGRPDataTableTooltipContext);
+
+  if (!label) return children;
+
+  const tooltipNode = (
+    <Tooltip>
+      <TooltipTrigger asChild>{children}</TooltipTrigger>
+      <TooltipContent
+        side={tooltipSide}
+        align={tooltipAlign}
+        className={tooltipClassName}
+        sideOffset={tooltipSideOffset}
+      >
+        {label}
+      </TooltipContent>
+    </Tooltip>
+  );
+
+  if (hasProvider) return tooltipNode;
+
+  return (
+    <IGRPDataTableTooltipProvider delayDuration={tooltipDelayDuration}>
+      {tooltipNode}
+    </IGRPDataTableTooltipProvider>
+  );
+}
 
 function IGRPDataTableButtonAlert({
   labelTrigger,
@@ -45,19 +93,35 @@ function IGRPDataTableButtonAlert({
   classNameConfirm,
   variantConfirm,
   onClickConfirm,
+  tooltipSide,
+  tooltipAlign,
+  tooltipClassName,
+  tooltipSideOffset,
+  tooltipDelayDuration,
 }: IGRPDataTableDialogProps) {
+  const tooltipProps = {
+    label: labelTrigger,
+    tooltipSide,
+    tooltipAlign,
+    tooltipClassName,
+    tooltipSideOffset,
+    tooltipDelayDuration,
+  };
+
   return (
     <AlertDialog>
-      <AlertDialogTrigger asChild>
-        <IGRPButton
-          variant={variant}
-          size="icon"
-          className={cn('h-8 w-8 flex justify-center items-center', classNameTrigger)}
-          title={labelTrigger}
-          iconName={icon}
-          iconClassName={iconClassName}
-        />
-      </AlertDialogTrigger>
+      <IGRPDataTableActionTooltip {...tooltipProps}>
+        <AlertDialogTrigger asChild>
+          <IGRPButton
+            variant={variant}
+            size="icon"
+            className={cn('h-8 w-8 flex justify-center items-center', classNameTrigger)}
+            iconName={icon}
+            iconClassName={iconClassName}
+            aria-label={labelTrigger}
+          />
+        </AlertDialogTrigger>
+      </IGRPDataTableActionTooltip>
       <AlertDialogContent className={className}>
         <AlertDialogHeader>
           <AlertDialogTitle>{modalTitle}</AlertDialogTitle>
@@ -104,30 +168,51 @@ function IGRPDataTableButtonLink({
   variant = 'default',
   href,
   className,
+  tooltipSide,
+  tooltipAlign,
+  tooltipClassName,
+  tooltipSideOffset,
+  tooltipDelayDuration,
 }: IGRPDataTableLinkProps) {
+  if (!href && !action) return null;
+
+  const tooltipProps = {
+    label: labelTrigger,
+    tooltipSide,
+    tooltipAlign,
+    tooltipClassName,
+    tooltipSideOffset,
+    tooltipDelayDuration,
+  };
+
   return href ? (
-    <Button variant={variant} size="icon" className={cn('cursor-pointer', className)} asChild>
-      <Link href={href} className="flex items-center">
-        <IGRPIcon iconName={icon} />
-        <span className="sr-only">{labelTrigger}</span>
-      </Link>
-    </Button>
+    <IGRPDataTableActionTooltip {...tooltipProps}>
+      <Button variant={variant} size="icon" className={className} asChild>
+        <Link href={href} className="flex items-center" aria-label={labelTrigger}>
+          <IGRPIcon iconName={icon} />
+          <span className="sr-only">{labelTrigger}</span>
+        </Link>
+      </Button>
+    </IGRPDataTableActionTooltip>
   ) : (
-    <IGRPButton
-      variant={variant}
-      size="icon"
-      className={className}
-      onClick={action}
-      iconName={icon}
-      iconClassName="size-4"
-      title={labelTrigger}
-    />
+    <IGRPDataTableActionTooltip {...tooltipProps}>
+      <IGRPButton
+        variant={variant}
+        size="icon"
+        className={className}
+        onClick={action}
+        iconName={icon}
+        iconClassName="size-4"
+        aria-label={labelTrigger}
+      />
+    </IGRPDataTableActionTooltip>
   );
 }
 
 function IGRPDataTableButtonModal({
   labelTrigger,
   className,
+  classNameTrigger,
   icon = 'ArrowRight',
   children,
   variant = 'default',
@@ -142,18 +227,34 @@ function IGRPDataTableButtonModal({
   variantConfirm,
   onClickConfirm,
   size = 'lg',
+  tooltipSide,
+  tooltipAlign,
+  tooltipClassName,
+  tooltipSideOffset,
+  tooltipDelayDuration,
 }: IGRPDataTableDialogProps) {
+  const tooltipProps = {
+    label: labelTrigger,
+    tooltipSide,
+    tooltipAlign,
+    tooltipClassName,
+    tooltipSideOffset,
+    tooltipDelayDuration,
+  };
+
   return (
     <Dialog>
-      <DialogTrigger asChild>
-        <IGRPButton
-          variant={variant}
-          size="icon"
-          className="h-8 w-8 flex justify-center items-center"
-          title={labelTrigger}
-          iconName={icon}
-        />
-      </DialogTrigger>
+      <IGRPDataTableActionTooltip {...tooltipProps}>
+        <DialogTrigger asChild>
+          <IGRPButton
+            variant={variant}
+            size="icon"
+            className={cn('h-8 w-8 flex justify-center items-center', classNameTrigger)}
+            iconName={icon}
+            aria-label={labelTrigger}
+          />
+        </DialogTrigger>
+      </IGRPDataTableActionTooltip>
       <DialogContent
         className={cn(
           'flex flex-col gap-0 p-0 sm:max-h-[min(640px,90vh)] [&>button:last-child]:top-3.5',
@@ -197,4 +298,9 @@ function IGRPDataTableButtonModal({
   );
 }
 
-export { IGRPDataTableButtonAlert, IGRPDataTableButtonLink, IGRPDataTableButtonModal };
+export {
+  IGRPDataTableButtonAlert,
+  IGRPDataTableButtonLink,
+  IGRPDataTableButtonModal,
+  IGRPDataTableTooltipProvider,
+};

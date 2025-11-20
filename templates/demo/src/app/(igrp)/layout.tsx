@@ -6,6 +6,7 @@ import { headers } from "next/headers";
 import { redirect } from "next/navigation";
 
 import { configLayout } from "@/actions/igrp/layout";
+import { isPreviewMode as checkPreviewMode } from "@/lib/utils";
 
 export default async function IGRPRootLayout({
   children,
@@ -16,12 +17,7 @@ export default async function IGRPRootLayout({
   const { layout, previewMode } = config;
   const { session } = layout || {};
 
-  const rawValue = process.env.IGRP_PREVIEW_MODE;
-  const previewModeValue = rawValue
-    ?.trim()
-    ?.replace(/^["']|["']$/g, "")
-    ?.toLowerCase();
-  const envPreviewMode = previewModeValue === "true";
+  const envPreviewMode = checkPreviewMode();
   const isPreviewMode = envPreviewMode || previewMode;
 
   const headersList = await headers();

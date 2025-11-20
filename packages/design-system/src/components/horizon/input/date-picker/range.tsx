@@ -25,6 +25,7 @@ type IGRPDatePickerRangeProps = IGRPCalendarRangeProps & IGRPDatePickerBaseProps
 
 function IGRPDatePickerRange({
   name,
+  id,
   date,
   onDateChange,
   label,
@@ -38,8 +39,9 @@ function IGRPDatePickerRange({
   placeholder = 'Pick a date',
   ...props
 }: IGRPDatePickerRangeProps) {
-  const id = useId();
-  const fieldName = name ?? id;
+  const _id = useId();
+  const fieldName = name ?? id ?? _id;
+
   const [localDate, setLocalDate] = useState<DateRange | undefined>(date);
   const [open, setOpen] = useState(false);
   const formContext = useFormContext();
@@ -90,66 +92,87 @@ function IGRPDatePickerRange({
   const renderPicker = (
     fieldValue?: DateRange,
     onChange?: (val: DateRange | undefined) => void,
-  ) => (
-    <>
-      <Popover open={open} onOpenChange={setOpen}>
-        <PopoverTrigger asChild>{DateButton(fieldValue)}</PopoverTrigger>
-        <PopoverContent className="p-0 w-auto shadow-none" align="start">
-          <IGRPCalendarRange
-            {...props}
-            id={id}
-            date={fieldValue}
-            onDateChange={(val) => {
-              setLocalDate(val);
-              onChange?.(val);
-              setOpen(false);
-            }}
-            disabled={disabled}
-          />
-        </PopoverContent>
-      </Popover>
+  ) => {
+    // Use fieldValue for form context, localDate for standalone
+    const displayDate = formContext ? fieldValue : localDate;
 
-      {localDate && (
-        <IGRPButton
-          onClick={() => {
-            setLocalDate(undefined);
-            onDateChange?.(undefined);
-          }}
-          variant="link"
-          className="size-2 absolute right-2 top-1/2 h-3 w-3 -translate-y-1/2 text-muted-foreground z-100"
-          size="icon"
-          iconName="X"
-          iconSize={10}
-          disabled={disabledPicker}
-          showIcon={localDate ? true : false}
-        />
-      )}
-    </>
-  );
+    return (
+      <>
+        <Popover open={open} onOpenChange={setOpen}>
+          <PopoverTrigger asChild>{DateButton(displayDate)}</PopoverTrigger>
+          <PopoverContent className="p-0 w-auto shadow-none" align="start">
+            <IGRPCalendarRange
+              {...props}
+              id={id}
+              date={displayDate}
+              onDateChange={(val) => {
+                setLocalDate(val);
+                onChange?.(val);
+                onDateChange?.(val);
+                setOpen(false);
+              }}
+              disabled={disabled}
+            />
+          </PopoverContent>
+        </Popover>
+
+        {displayDate && (
+          <IGRPButton
+            onClick={() => {
+              setLocalDate(undefined);
+              onChange?.(undefined);
+              onDateChange?.(undefined);
+            }}
+            variant="link"
+            className="size-2 absolute right-2 top-1/2 h-3 w-3 -translate-y-1/2 text-muted-foreground z-100"
+            size="icon"
+            iconName="X"
+            iconSize={10}
+            disabled={disabledPicker}
+            showIcon={displayDate ? true : false}
+          />
+        )}
+      </>
+    );
+  };
 
   if (formContext) {
     return (
       <FormField
         control={formContext.control}
         name={fieldName}
-        render={({ field, fieldState }) => (
-          <FormItem className={className}>
-            {label && (
-              <FormLabel
-                className={cn(
-                  labelClassName,
-                  required && 'after:content-["*"] after:text-destructive',
-                )}
-              >
-                {label}
-              </FormLabel>
-            )}
-            <FormControl>{renderPicker(field.value, field.onChange)}</FormControl>
+        render={({ field, fieldState }) => {
+          // Sync local state when field value changes externally
+          useEffect(() => {
+            if (field.value !== localDate) {
+              setLocalDate(field.value);
+            }
+          }, [field.value]);
 
-            {helperText && !fieldState.error && <FormDescription>{helperText}</FormDescription>}
-            <FormMessage />
-          </FormItem>
-        )}
+          return (
+            <FormItem className={className}>
+              {label && (
+                <FormLabel
+                  className={cn(
+                    labelClassName,
+                    required && 'after:content-["*"] after:text-destructive',
+                  )}
+                >
+                  {label}
+                </FormLabel>
+              )}
+              <FormControl>
+                {renderPicker(field.value, (val) => {
+                  field.onChange(val);
+                  onDateChange?.(val);
+                })}
+              </FormControl>
+
+              {helperText && !fieldState.error && <FormDescription>{helperText}</FormDescription>}
+              <FormMessage />
+            </FormItem>
+          );
+        }}
       />
     );
   }

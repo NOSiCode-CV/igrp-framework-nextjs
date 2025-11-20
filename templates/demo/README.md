@@ -28,6 +28,7 @@ The IGRP Framework Next.js Template is a comprehensive starter template that inc
 - **React Query** for data fetching
 - **React Hook Form** with Zod validation
 - **Biome** for code formatting and linting
+- **[Lucide](https://lucide.dev/icons/)** for icon library
 - **Modern UI Components** from IGRP Design System
 
 ## 📦 Prerequisites
@@ -142,11 +143,11 @@ The layout is configured in `src/app/(igrp)/layout.tsx`:
 
 ### Site Customization
 
-Comming soon
+Coming soon
 
 ### Login Customization
 
-Commin soon
+Coming soon
 
 ## 🔐 Environment Variables
 

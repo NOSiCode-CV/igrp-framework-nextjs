@@ -3,6 +3,7 @@
 import { cookies } from "next/headers";
 
 import { getAccessToken } from "@/lib/auth-helpers";
+import { isPreviewMode } from "@/lib/utils";
 
 export async function getTheme() {
   const cookieStore = await cookies();
@@ -13,17 +14,11 @@ export async function getTheme() {
 }
 
 export async function configLayout() {
-  // Check preview mode (handle whitespace, case, and quotes)
-  const rawValue = process.env.IGRP_PREVIEW_MODE;
-  const previewModeValue = rawValue
-    ?.trim()
-    ?.replace(/^["']|["']$/g, "")
-    ?.toLowerCase();
-  const isPreviewMode = previewModeValue === "true";
+  // Check preview mode
 
   // In preview mode, provide a mock session object to prevent client-side redirects
   // The framework might check for session existence rather than just previewMode
-  const session = isPreviewMode
+  const session = isPreviewMode()
     ? ({
         user: { name: "Preview User", email: "preview@example.com" },
         accessToken: "preview-token",

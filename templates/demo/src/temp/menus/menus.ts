@@ -13,7 +13,7 @@ export const IGRP_DEFAULT_MENU: IGRPMenuItemArgs[] = [
     url: "meu-menu-test",
     pageSlug: "meu-menu-test",
     parent: null,
-    application: {code: "APP_TEST_1", description: "Application Test 1"},
+    application: { code: "APP_TEST_1", description: "Application Test 1" },
     roles: [],
   },
   {
@@ -28,7 +28,7 @@ export const IGRP_DEFAULT_MENU: IGRPMenuItemArgs[] = [
     url: null,
     pageSlug: null,
     parent: null,
-    application: {code: "APP_TEST_1", description: "Application Test 1"},
+    application: { code: "APP_TEST_1", description: "Application Test 1" },
     roles: [],
   },
   {
@@ -43,7 +43,7 @@ export const IGRP_DEFAULT_MENU: IGRPMenuItemArgs[] = [
     url: null,
     pageSlug: null,
     parent: null,
-    application: {code: "APP_TEST_1", description: "Application Test 1"},
+    application: { code: "APP_TEST_1", description: "Application Test 1" },
     roles: [],
   },
   {
@@ -58,7 +58,7 @@ export const IGRP_DEFAULT_MENU: IGRPMenuItemArgs[] = [
     url: "test-menu-externo",
     pageSlug: "test-menu-externo",
     parent: null,
-    application: {code: "APP_TEST_1", description: "Application Test 1"},
+    application: { code: "APP_TEST_1", description: "Application Test 1" },
     roles: [],
   },
   {
@@ -73,7 +73,7 @@ export const IGRP_DEFAULT_MENU: IGRPMenuItemArgs[] = [
     url: "https://nosi.cv",
     pageSlug: "test-external-page",
     parent: null,
-    application: {code: "APP_TEST_1", description: "Application Test 1"},
+    application: { code: "APP_TEST_1", description: "Application Test 1" },
     roles: [],
   },
 ];

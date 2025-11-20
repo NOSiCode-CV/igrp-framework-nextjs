@@ -1,4 +1,7 @@
-import type { IGRPUserDTO, Status } from "@igrp/platform-access-management-client-ts";
+import type {
+  IGRPUserDTO,
+  Status,
+} from "@igrp/platform-access-management-client-ts";
 
 export const IGRP_MOCK_USER: IGRPUserDTO = {
   id: 1,

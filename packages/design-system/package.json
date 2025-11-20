@@ -1,7 +1,7 @@
 {
   "name": "@igrp/igrp-framework-react-design-system",
-  "version": "0.1.0-beta.55",
-  "description": "iGRP Framework for Next.js | Design System components",
+  "version": "0.1.0-beta.56",
+  "description": "IGRP Design System components",
   "keywords": [
     "igrp",
     "framework",
@@ -36,7 +36,7 @@
     "clean:packages": "rimraf node_modules",
     "format": "prettier --write .",
     "tailwind:build": "pnpm dlx @tailwindcss/cli -i ./src/index.css -o ./src/styles.css",
-    "release": "pnpm format && pnpm build && pnpm publish --registry=https://sonatype.nosi.cv/repository/igrp/ --tag latest --no-git-checks",
+    "release": "pnpm format && pnpm build && yarn publish --registry=https://sonatype.nosi.cv/repository/igrp/ --tag latest",
     "clean-all": "rimraf node_modules && rimraf dist && rimraf tsconfig.tsbuildinfo"
   },
   "peerDependencies": {
@@ -83,10 +83,10 @@
     "lucide-react": "^0.554.0",
     "next-themes": "^0.4.6",
     "react-day-picker": "^9.11.1",
-    "react-hook-form": "^7.66.1",
-    "react-phone-number-input": "^3.4.14",
+    "react-hook-form": "^7.66.0",
+    "react-phone-number-input": "3.4.14",
     "react-resizable-panels": "^3.0.6",
-    "recharts": "^2.15.4",
+    "recharts": "2.15.4",
     "sonner": "^2.0.7",
     "tailwind-merge": "^3.4.0",
     "tailwindcss": "^4.1.17",
@@ -101,7 +101,7 @@
     "@babel/preset-typescript": "7.28.5",
     "@eslint/js": "^9.39.1",
     "@swc/cli": "^0.7.9",
-    "@swc/core": "^1.15.2",
+    "@swc/core": "^1.15.1",
     "@tailwindcss/cli": "^4.1.17",
     "@types/babel__preset-env": "7.10.0",
     "@types/node": "^24.10.1",
@@ -127,27 +127,26 @@
     "*.css"
   ],
   "type": "module",
+  "publishConfig": {
+    "exports": {
+      ".": {
+        "types": "./dist/index.d.ts",
+        "import": "./dist/index.js",
+        "default": "./dist/index.js"
+      },
+      "./css": {
+        "import": "./dist/index.css",
+        "default": "./dist/index.css"
+      },
+      "./styles.css": "./dist/styles.css"
+    }
+  },
   "main": "./dist/index.js",
   "types": "./dist/index.d.ts",
-  "exports": {
-    ".": {
-      "types": "./dist/index.d.ts",
-      "import": "./dist/index.js",
-      "default": "./dist/index.js"
-    },
-    "./css": {
-      "import": "./dist/index.css",
-      "default": "./dist/index.css"
-    },
-    "./styles.css": "./dist/styles.css"
-  },
-  "publishConfig": {
-    "access": "public"
-  },
   "files": [
     "dist"
   ],
   "engines": {
-    "node": ">=22.x.x"
+    "node": ">=20.x.x"
   }
 }

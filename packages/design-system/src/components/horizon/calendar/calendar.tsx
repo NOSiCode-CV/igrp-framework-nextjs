@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useId, useState } from 'react';
 import type { DropdownNavProps, DropdownProps, PropsBase, PropsSingle } from 'react-day-picker';
 
 import { Calendar as DropdownCalendar } from '../../primitives/calendar';
@@ -11,7 +11,8 @@ import {
 } from '../../primitives/select';
 
 type IGRPCalendarProps = {
-  id: string;
+  id?: string;
+  name?: string;
   date?: Date;
   onDateChange?: (date: Date | undefined) => void;
   startDate?: Date;
@@ -40,6 +41,7 @@ type IGRPCalendarProps = {
  */
 function IGRPCalendar({
   id,
+  name,
   date = new Date(),
   onDateChange,
   startDate,
@@ -47,6 +49,9 @@ function IGRPCalendar({
   dayButtonClassName,
   ...props
 }: IGRPCalendarProps) {
+  const _id = useId();
+  const ref = name ?? id ?? _id;
+
   const today = new Date();
   const [month, setMonth] = useState(date || today);
 
@@ -66,7 +71,7 @@ function IGRPCalendar({
     <DropdownCalendar
       {...props}
       mode="single"
-      id={id}
+      id={ref}
       selected={date}
       onSelect={onDateChange}
       className="p-1"

@@ -9,9 +9,9 @@ export const IGRP_DEFAULT_MENU_FOOTER: IGRPMenuItemArgs[] = [
     icon: "Settings2",
     status: "ACTIVE",
     url: "/system-settings",
-    application: { 
-      code: "APP_IGRP_CENTER", 
-      description: "Application IGRP Center"
+    application: {
+      code: "APP_IGRP_CENTER",
+      description: "Application IGRP Center",
     },
     code: "MENU_IGRP_SETTINGS",
     roles: [],

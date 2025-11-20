@@ -5,7 +5,7 @@ import type React from 'react';
 import { CheckIcon, ChevronLeft, ChevronRight } from 'lucide-react';
 
 import { cn } from '../../../lib/utils';
-import { ScrollArea, ScrollBar } from '../../primitives/scroll-area';
+import { ScrollArea } from '../../primitives/scroll-area';
 import { Stepper, StepperItem, StepperTitle, StepperTrigger } from '../../primitives/stepper';
 import { Button } from '../../primitives/button';
 import { Tooltip, TooltipTrigger, TooltipContent } from '../../primitives/tooltip';
@@ -34,7 +34,7 @@ interface IGRPStepperProcessProps {
 
 function getStepperItemClassName(): string {
   return cn(
-    'group/step relative text-center overflow-visible ml-1.5 mr-1.75 items-center justify-center max-md:items-start',
+    'group/step relative flex-1 text-center overflow-visible ml-1.5 mr-1.75 items-center justify-center max-md:items-start',
     // First child styles
     'first:ml-0 first:rounded-tl-2xl first:rounded-bl-2xl first:pl-2.5',
     // Last child styles
@@ -130,7 +130,7 @@ function IGRPStepperProcess({
     const viewport = scrollViewportRef.current;
     if (!viewport) return;
 
-    const scrollAmount = viewport.clientWidth * 0.8; // Scroll 80% of visible width
+    const scrollAmount = viewport.clientWidth * 0.8;
     viewport.scrollBy({ left: -scrollAmount, behavior: 'smooth' });
   }, []);
 
@@ -138,7 +138,7 @@ function IGRPStepperProcess({
     const viewport = scrollViewportRef.current;
     if (!viewport) return;
 
-    const scrollAmount = viewport.clientWidth * 0.8; // Scroll 80% of visible width
+    const scrollAmount = viewport.clientWidth * 0.8;
     viewport.scrollBy({ left: scrollAmount, behavior: 'smooth' });
   }, []);
 
@@ -170,12 +170,12 @@ function IGRPStepperProcess({
   return (
     <div className="space-y-8 w-full" id={ref}>
       <div className="flex items-center justify-center gap-4 relative">
-        <div ref={scrollAreaRef} className="w-[80vw]">
+        <div ref={scrollAreaRef} className="w-[90vw]">
           <ScrollArea className="w-full">
             <Stepper
               value={validCurrentStep}
               onValueChange={handleStepChange}
-              className={cn('gap-0.5 justify-center mb-3', stepperClassName)}
+              className={cn('gap-0.5 mb-3', stepperClassName)}
               role="navigation"
               aria-label="Process steps"
               aria-valuenow={validCurrentStep + 1}
@@ -236,7 +236,7 @@ function IGRPStepperProcess({
                 </StepperItem>
               ))}
             </Stepper>
-            <ScrollBar orientation="horizontal" />
+            {/* <ScrollBar orientation="horizontal" /> */}
           </ScrollArea>
         </div>
 

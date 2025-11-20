@@ -1,5 +1,6 @@
 import { type NextRequest, NextResponse } from "next/server";
 import { getToken } from "next-auth/jwt";
+import { isPreviewMode } from "@/lib/utils";
 
 const PUBLIC_PATHS = ["/login", "/logout", "/api/auth"];
 
@@ -16,15 +17,8 @@ function isPublicPath(pathname: string) {
 export async function middleware(request: NextRequest) {
   const { pathname } = request.nextUrl;
 
-  // Skip authentication checks if preview mode is enabled (handle whitespace, case, and quotes)
-  const rawValue = process.env.IGRP_PREVIEW_MODE;
-  const previewModeValue = rawValue
-    ?.trim()
-    ?.replace(/^["']|["']$/g, "")
-    ?.toLowerCase();
-  const isPreviewMode = previewModeValue === "true";
-
-  if (!isPreviewMode) {
+  // Skip authentication checks if preview mode is enabled
+  if (!isPreviewMode()) {
     // IF YOU USE AN AUTHENTICATION STRATEGY, UNCOMMENT THIS BLOCK
 
     if (isPublicPath(pathname)) return NextResponse.next();

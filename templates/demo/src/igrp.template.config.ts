@@ -4,6 +4,7 @@ import type {
   IGRPLayoutConfigArgs,
 } from "@igrp/framework-next-types";
 import { fontVariables } from "@/lib/fonts";
+import { isPreviewMode } from "@/lib/utils";
 import { getMockApps } from "@/temp/applications/use-mock-apps";
 import { getMockMenus } from "@/temp/menus/use-mock-menus";
 import { getMockMenusFooter } from "@/temp/menus/use-mock-menus-footer";
@@ -14,28 +15,23 @@ export function createConfig(
 ): Promise<IGRPConfigArgs> {
   const user = getMockUser().mockUser;
   const menu = getMockMenus().mockMenus;
-  const footerMwnu = getMockMenusFooter().mockMenusFooter;
+  const footerMenu = getMockMenusFooter().mockMenusFooter;
   const apps = getMockApps().mockApps;
 
   function basePath(bp: string) {
     if (!bp) return "/api/auth";
 
-    if (bp.startsWith("/") && bp.endsWith("/")) return `${bp}api/auth`;
-    if (bp.startsWith("/") && !bp.endsWith("/")) return `${bp}/api/auth/`;
-    if (!bp.startsWith("/") && bp.endsWith("/")) return `/${bp}api/auth`;
-    return `${bp}/api/auth`;
+    // Normalize base path: ensure it starts with / and doesn't end with /
+    const normalized = bp.startsWith("/") ? bp : `/${bp}`;
+    const cleanPath = normalized.endsWith("/")
+      ? normalized.slice(0, -1)
+      : normalized;
+    return `${cleanPath}/api/auth`;
   }
 
   return igrpBuildConfig({
     appCode: process.env.IGRP_APP_CODE || "",
-    previewMode: (() => {
-      const rawValue = process.env.IGRP_PREVIEW_MODE;
-      const previewModeValue = rawValue
-        ?.trim()
-        ?.replace(/^["']|["']$/g, "")
-        ?.toLowerCase();
-      return previewModeValue === "true";
-    })(),
+    previewMode: isPreviewMode(),
     layoutMockData: {
       getHeaderData: async () => ({
         user: user,
@@ -47,7 +43,7 @@ export function createConfig(
       }),
       getSidebarData: async () => ({
         menuItems: menu,
-        footerItems: footerMwnu,
+        footerItems: footerMenu,
         user: user,
         defaultOpen: true,
         showAppSwitcher: true,
@@ -73,15 +69,8 @@ export function createConfig(
     },
     showSettings: true,
     sessionArgs: (() => {
-      const rawValue = process.env.IGRP_PREVIEW_MODE;
-      const previewModeValue = rawValue
-        ?.trim()
-        ?.replace(/^["']|["']$/g, "")
-        ?.toLowerCase();
-      const isPreviewMode = previewModeValue === "true";
-
       // Disable session refetching in preview mode to prevent client-side redirects
-      if (isPreviewMode) {
+      if (isPreviewMode()) {
         return {
           refetchInterval: 0, // Disable refetching
           refetchOnWindowFocus: false, // Disable refetching on focus

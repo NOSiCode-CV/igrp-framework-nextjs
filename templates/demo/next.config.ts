@@ -34,10 +34,10 @@ const nextConfig: NextConfig = {
   images: {
     remotePatterns: getRemotePatterns(),
   },
-  // typedRoutes: true,
-  // experimental: {
-  //   typedEnv: true,
-  // },
+  typedRoutes: true,
+  experimental: {
+    typedEnv: true,
+  },
 };
 
 export default nextConfig;

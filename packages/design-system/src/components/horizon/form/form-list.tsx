@@ -1,6 +1,6 @@
 'use client';
 
-import { useCallback, useEffect, useState } from 'react';
+import { useCallback, useEffect, useId, useState } from 'react';
 import { useFieldArray, useWatch, type FieldArrayWithId } from 'react-hook-form';
 
 import { cn } from '../../../lib/utils';
@@ -55,7 +55,10 @@ function IGRPFormList<TItem>({
   addButtonLabel = 'Adicionar',
   addButtonIconName = 'Plus',
 }: IGRPFormListProps<TItem>) {
-  const groupId = name ?? id;
+  const _id = useId();
+  const groupId = name ?? id ?? _id;
+
+  console.log({ iconName })
 
   const [openItem, setOpenItem] = useState<string | undefined>('item-0');
   const { fields, append, remove } = useFieldArray({ name: groupId });
@@ -81,7 +84,7 @@ function IGRPFormList<TItem>({
             <IGRPIcon
               iconName={iconName}
               size={iconSize}
-              className={cn('h-4 w-4 text-muted-foreground', iconClassName)}
+              className={cn('size-4 text-muted-foreground', iconClassName)}
             />
           )}
           <div>

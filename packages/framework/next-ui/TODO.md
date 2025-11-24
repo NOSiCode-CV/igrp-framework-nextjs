@@ -5,4 +5,3 @@
 --> loading component
 --> not found component
 --> menu, when sidebar is close to show separator between groups, see scroll for better design
-

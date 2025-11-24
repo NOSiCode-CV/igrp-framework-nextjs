@@ -50,7 +50,7 @@ function IGRPTemplateNavUser({ user }: IGRPTemplateNavUserProps) {
               <div className="grid flex-1 text-left text-sm leading-tight">
                 <span className="truncate font-semibold">{user.username || 'N/A'}</span>
                 <span className="truncate text-xs">{user.email}</span>
-              </div>              
+              </div>
             </IGRPSidebarMenuButtonPrimitive>
           </IGRPDropdownMenuTriggerPrimitive>
           <IGRPDropdownMenuContentPrimitive
@@ -72,10 +72,7 @@ function IGRPTemplateNavUser({ user }: IGRPTemplateNavUserProps) {
               className="cursor-pointer hover:bg-primary! hover:text-primary-foreground!"
             >
               <Link href="/profile">
-                <IGRPIcon 
-                  iconName="User" 
-                  className={iconClassName}                  
-                /> 
+                <IGRPIcon iconName="User" className={iconClassName} />
                 <span>Profile</span>
               </Link>
             </IGRPDropdownMenuItemPrimitive>
@@ -86,10 +83,7 @@ function IGRPTemplateNavUser({ user }: IGRPTemplateNavUserProps) {
               className="cursor-pointer hover:bg-primary! hover:text-primary-foreground!"
             >
               <Link href="/notifications">
-                <IGRPIcon 
-                  iconName="Bell" 
-                  className="mr-1 hover:text-primary-foreground!"                  
-                /> 
+                <IGRPIcon iconName="Bell" className="mr-1 hover:text-primary-foreground!" />
                 <span>Notifications</span>
               </Link>
             </IGRPDropdownMenuItemPrimitive>
@@ -100,10 +94,7 @@ function IGRPTemplateNavUser({ user }: IGRPTemplateNavUserProps) {
               className="cursor-pointer hover:bg-primary! hover:text-primary-foreground!"
             >
               <Link href="/logout">
-                <IGRPIcon 
-                  iconName="LogOut" 
-                  className={iconClassName}                   
-                />                
+                <IGRPIcon iconName="LogOut" className={iconClassName} />
                 <span>Log out</span>
               </Link>
             </IGRPDropdownMenuItemPrimitive>

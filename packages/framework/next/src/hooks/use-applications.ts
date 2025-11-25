@@ -18,12 +18,10 @@ export async function fetchAppByCode(appCode: string) {
   }
 }
 
-export async function fetchAppsByUser(uid: string) {
+export async function fetchAppsByUser() {
   try {
-    if (!uid) throw new Error('[apps-by-user] O utilizador não foi encontrado.');
-
     const client = await igrpGetAccessClient();
-    const result = await client.applications.getApplicationsByUser(uid);
+    const result = await client.users.getCurrentUserApplications();
     const apps = mapperApplications(result);
     return apps;
   } catch (error) {

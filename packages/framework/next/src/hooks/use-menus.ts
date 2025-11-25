@@ -4,7 +4,7 @@ import { mapperMenus } from '../mappers/menus-mapper';
 export const fetchMenus = async (appCode: string) => {
   try {
     const client = await igrpGetAccessClient();
-    const result = await client.applications.getMenus(appCode);
+    const result = await client.users.getCurrentUserApplicationMenus(appCode);
     const menus = mapperMenus(result);
     return menus;
   } catch (error) {

@@ -1,6 +1,6 @@
 {
   "name": "@igrp/framework-next-auth",
-  "version": "0.1.0-beta.58",
+  "version": "0.1.0-beta.66",
   "description": "IGRP Framework for Next.js | Auth",
   "license": "MIT",
   "type": "module",

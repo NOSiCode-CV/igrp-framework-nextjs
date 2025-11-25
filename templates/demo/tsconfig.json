@@ -1,6 +1,6 @@
 {
   "compilerOptions": {
-    "target": "esnext",
+    "target": "ES2017",
     "lib": ["dom", "dom.iterable", "esnext"],
     "allowJs": true,
     "skipLibCheck": true,
@@ -21,7 +21,8 @@
     "paths": {
       "@/*": ["./src/*"],
       "@igrp/template-config": ["./src/igrp.template.config.ts"]
-    }
+    },
+    "composite": true
   },
   "include": [
     "next-env.d.ts",

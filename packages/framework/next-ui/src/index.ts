@@ -50,8 +50,6 @@ export {
   type IGRPTemplateNavUserProps,
 } from './components/templates/nav-user';
 
-export { IGRPTemplateNavUserHeader } from './components/templates/nav-user-header';
-
 export {
   IGRPTemplateNotFound,
   type IGRPTemplateNotFoundProps,

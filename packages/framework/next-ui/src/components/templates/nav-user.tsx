@@ -20,14 +20,18 @@ import {
 
 interface IGRPTemplateNavUserProps {
   user?: IGRPUserArgs;
+  isHeader?: boolean;
 }
 
-// TODO: see when user is null or undefiened
-
-function IGRPTemplateNavUser({ user }: IGRPTemplateNavUserProps) {
+function IGRPTemplateNavUser({ user, isHeader = false }: IGRPTemplateNavUserProps) {
   const { isMobile } = useIGRPSidebar();
 
   if (!user) return null;
+
+  function renderMobile() {
+    if (isHeader) return;
+    return isMobile ? 'bottom' : 'right';
+  }
 
   const iconClassName = 'mr-1 hover:text-primary-foreground!';
 
@@ -47,15 +51,17 @@ function IGRPTemplateNavUser({ user }: IGRPTemplateNavUserProps) {
                 fallbackClass="text-xs"
                 className="shadow-md"
               />
-              <div className="grid flex-1 text-left text-sm leading-tight">
-                <span className="truncate font-semibold">{user.username || 'N/A'}</span>
-                <span className="truncate text-xs">{user.email}</span>
-              </div>
+              {!isHeader && (
+                <div className="grid flex-1 text-left text-sm leading-tight">
+                  <span className="truncate font-semibold">{user.username || 'N/A'}</span>
+                  <span className="truncate text-xs">{user.email}</span>
+                </div>
+              )}
             </IGRPSidebarMenuButtonPrimitive>
           </IGRPDropdownMenuTriggerPrimitive>
           <IGRPDropdownMenuContentPrimitive
             className="min-w-56 rounded-lg"
-            side={isMobile ? 'bottom' : 'right'}
+            side={renderMobile()}
             align="end"
             sideOffset={4}
           >

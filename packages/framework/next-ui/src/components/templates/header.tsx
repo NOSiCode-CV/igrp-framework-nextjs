@@ -11,7 +11,7 @@ import {
 import { IGRPTemplateBreadcrumbs } from './breadcrumbs';
 import { IGRPTemplateCommandSearch } from './command-search';
 import { IGRPTemplateModeSwitcher } from './mode-switcher';
-import { IGRPTemplateNavUserHeader } from './nav-user-header';
+import { IGRPTemplateNavUser } from './nav-user';
 import { IGRPTemplateNotifications } from './notifications';
 
 interface IGRPTemplateHeaderProps {
@@ -67,7 +67,7 @@ function IGRPTemplateHeader({ data, className }: IGRPTemplateHeaderProps) {
 
         {showThemeSwitcher && <IGRPTemplateModeSwitcher />}
 
-        {showUser && <IGRPTemplateNavUserHeader user={user} />}
+        {showUser && <IGRPTemplateNavUser user={user} isHeader={true} />}
       </div>
     </div>
   );

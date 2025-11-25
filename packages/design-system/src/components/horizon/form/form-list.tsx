@@ -115,12 +115,7 @@ function IGRPFormList<TItem>({
             >
               <div className="flex justify-between items-center px-4">
                 <div className="flex-1">
-                  <AccordionTrigger
-                    className="hover:no-underline"
-                    iconName={''}
-                    showIcon={true}
-                    iconPlacement="end"
-                  >
+                  <AccordionTrigger className="hover:no-underline" showIcon iconPlacement="end">
                     <span className="font-medium text-sm">
                       {computeLabel?.(values[index] ?? defaultItem, index) ??
                         `${label} ${index + 1}`}

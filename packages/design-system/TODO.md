@@ -31,3 +31,9 @@
 ### exports
 
 --> implement exports separately, /primitives, /horizon, /utilities [2027]
+
+--> for numbers input see #https://base-ui.com/react/components/number-field
+--> create API reference for the components
+--> see this too:
+  - https://base-ui.com/react/components/autocomplete
+  - https://base-ui.com/react/components/preview-card

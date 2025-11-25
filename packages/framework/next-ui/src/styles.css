@@ -793,13 +793,6 @@
       }
     }
   }
-  .hover\:bg-transparent {
-    &:hover {
-      @media (hover: hover) {
-        background-color: transparent;
-      }
-    }
-  }
   .hover\:bg-white\/80 {
     &:hover {
       @media (hover: hover) {
@@ -807,13 +800,6 @@
         @supports (color: color-mix(in lab, red, red)) {
           background-color: color-mix(in oklab, var(--color-white) 80%, transparent);
         }
-      }
-    }
-  }
-  .hover\:p-0 {
-    &:hover {
-      @media (hover: hover) {
-        padding: calc(var(--spacing) * 0);
       }
     }
   }

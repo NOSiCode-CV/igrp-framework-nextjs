@@ -22,7 +22,7 @@ function AccordionItem({
 }
 
 type AccordionTriggerArgs = {
-  iconName: IGRPIconName | string;
+  iconName?: IGRPIconName | string;
   showIcon: boolean;
   iconPlacement: 'start' | 'end';
 };
@@ -34,11 +34,13 @@ interface AccordionTriggerProps
 function AccordionTrigger({
   className,
   children,
-  iconName,
+  iconName = 'ChevronDown',
   showIcon,
-  iconPlacement,
+  iconPlacement = 'end',
   ...props
 }: AccordionTriggerProps) {
+  console.log('iconName', iconName);
+  console.log('iconPlacement', iconPlacement);
   return (
     <AccordionPrimitive.Header className="flex">
       <AccordionPrimitive.Trigger

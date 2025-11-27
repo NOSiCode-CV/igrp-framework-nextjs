@@ -3,8 +3,10 @@
 import { cva, type VariantProps } from 'class-variance-authority';
 import { useId, useState } from 'react';
 
+import { type IGRPColorRole, type IGRPColorVariants } from '../../lib/colors';
 import { cn } from '../../lib/utils';
 import { Tabs, TabsList, TabsTrigger, TabsContent } from '../primitives/tabs';
+import { IGRPBadge } from './badge';
 import { IGRPIcon, type IGRPIconName } from './icon';
 
 const tabListVariants = cva('gap-1.5', {
@@ -52,6 +54,10 @@ interface IGRPTabItem {
   icon?: IGRPIconName;
   content: React.ReactNode;
   disabled?: boolean;
+  badgeContent?: string | number;
+  badgeVariant?: IGRPColorRole;
+  badgeColor?: IGRPColorVariants;
+  badgeClassName?: string;
 }
 
 interface IGRPTabsProps extends React.ComponentProps<typeof Tabs> {
@@ -61,10 +67,13 @@ interface IGRPTabsProps extends React.ComponentProps<typeof Tabs> {
   tabTriggerClassName?: string;
   showIcon?: boolean;
   iconPlacement?: 'start' | 'end' | 'top';
+  showBadge?: boolean;
+  badgePlacement?: 'start' | 'end';
   contentBorder?: boolean;
   variant?: VariantProps<typeof tabListVariants>['variant'];
   fullWidth?: boolean;
   id?: string;
+  name?: string;
 }
 
 function IGRPTabs({
@@ -75,26 +84,52 @@ function IGRPTabs({
   tabTriggerClassName,
   showIcon = false,
   iconPlacement = 'start',
+  showBadge = false,
+  badgePlacement = 'end',
   orientation = 'horizontal',
   contentBorder = false,
   defaultValue,
+  value: controlledValue,
+  onValueChange,
   variant = 'default',
   fullWidth = false,
   id,
+  name,
+  ...restProps
 }: IGRPTabsProps) {
-  const [activeTab, setActiveTab] = useState(items[0]?.value || '');
+  const isControlled = controlledValue !== undefined;
+  
+  const initialValue = defaultValue ?? items[0]?.value ?? '';
+  const [activeTab, setActiveTab] = useState(initialValue);
+
+  const currentValue = isControlled ? controlledValue : activeTab;
+  const handleValueChange = (newValue: string) => {
+    if (!isControlled) {
+      setActiveTab(newValue);
+    }
+    onValueChange?.(newValue);
+  };
 
   const _id = useId();
-  const ref = id ?? _id;
+  const ref = name ?? id ?? _id;
+
+  const tabsProps = isControlled
+    ? {
+        value: currentValue,
+        onValueChange: handleValueChange,
+      }
+    : {
+        defaultValue: defaultValue ?? initialValue,
+        onValueChange: handleValueChange,
+      };
 
   return (
     <Tabs
-      defaultValue={defaultValue}
-      value={activeTab}
-      onValueChange={setActiveTab}
+      {...tabsProps}
       className={cn('w-full', orientation === 'vertical' && 'flex-row', tabClassName)}
       orientation={orientation}
       id={ref}
+      {...restProps}
     >
       <TabsList
         className={cn(
@@ -114,11 +149,21 @@ function IGRPTabs({
               orientation === 'vertical' && 'w-full justify-start',
               orientation === 'vertical' &&
                 variant === 'underline' &&
-                'relative after:absolute after:inset-y-0 after:rigth-0 after:-mr-1 after:w-0.5 after:h-auto ',
+                'relative after:absolute after:inset-y-0 after:right-0 after:-mr-1 after:w-0.5 after:h-auto',
               iconPlacement === 'top' && 'flex-col',
               tabTriggerClassName,
             )}
           >
+            {showBadge && item.badgeContent !== undefined && badgePlacement === 'start' && (
+              <IGRPBadge
+                variant={item.badgeVariant}
+                color={item.badgeColor}
+                badgeClassName={item.badgeClassName}
+              >
+                {item.badgeContent}
+              </IGRPBadge>
+            )}
+
             {showIcon && item.icon && iconPlacement === 'start' && (
               <IGRPIcon iconName={item.icon} />
             )}
@@ -128,6 +173,16 @@ function IGRPTabs({
             {item.label && <span>{item.label}</span>}
 
             {showIcon && item.icon && iconPlacement === 'end' && <IGRPIcon iconName={item.icon} />}
+
+            {showBadge && item.badgeContent !== undefined && badgePlacement === 'end' && (
+              <IGRPBadge
+                variant={item.badgeVariant}
+                color={item.badgeColor}
+                badgeClassName={item.badgeClassName}
+              >
+                {item.badgeContent}
+              </IGRPBadge>
+            )}
           </TabsTrigger>
         ))}
       </TabsList>

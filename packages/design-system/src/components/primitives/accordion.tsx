@@ -39,8 +39,6 @@ function AccordionTrigger({
   iconPlacement = 'end',
   ...props
 }: AccordionTriggerProps) {
-  console.log('iconName', iconName);
-  console.log('iconPlacement', iconPlacement);
   return (
     <AccordionPrimitive.Header className="flex">
       <AccordionPrimitive.Trigger

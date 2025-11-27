@@ -58,8 +58,6 @@ function IGRPFormList<TItem>({
   const _id = useId();
   const groupId = name ?? id ?? _id;
 
-  console.log({ iconName });
-
   const [openItem, setOpenItem] = useState<string | undefined>('item-0');
   const { fields, append, remove } = useFieldArray({ name: groupId });
   const values = useWatch({ name: groupId }) ?? [];

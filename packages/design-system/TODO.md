@@ -35,5 +35,6 @@
 --> for numbers input see #https://base-ui.com/react/components/number-field
 --> create API reference for the components
 --> see this too:
-  - https://base-ui.com/react/components/autocomplete
-  - https://base-ui.com/react/components/preview-card
+
+- https://base-ui.com/react/components/autocomplete
+- https://base-ui.com/react/components/preview-card

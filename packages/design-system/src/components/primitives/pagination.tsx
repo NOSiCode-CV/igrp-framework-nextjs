@@ -56,7 +56,7 @@ interface PaginationButtonProps extends React.ComponentProps<typeof PaginationLi
   label?: string;
 }
 
-function PaginationPrevious({ className, label = 'Previous',...props }: PaginationButtonProps) {
+function PaginationPrevious({ className, label = 'Previous', ...props }: PaginationButtonProps) {
   return (
     <PaginationLink
       aria-label="Go to previous page"
@@ -70,7 +70,7 @@ function PaginationPrevious({ className, label = 'Previous',...props }: Paginati
   );
 }
 
-function PaginationNext({ className, label = 'Next',...props }: PaginationButtonProps) {
+function PaginationNext({ className, label = 'Next', ...props }: PaginationButtonProps) {
   return (
     <PaginationLink
       aria-label="Go to next page"

@@ -4,8 +4,9 @@ import { useId, useState, useEffect } from 'react';
 import { format } from 'date-fns';
 import { useFormContext } from 'react-hook-form';
 
+import { DD_MM_YYYY } from '../../../../lib/constants';
 import { cn } from '../../../../lib/utils';
-import { type IGRPDatePickerBaseProps } from '../../../../types';
+import { type IGRPDatePickerBaseProps, type IGRPInputProps } from '../../../../types';
 import {
   FormControl,
   FormDescription,
@@ -18,9 +19,14 @@ import { Popover, PopoverContent, PopoverTrigger } from '../../../primitives/pop
 import { IGRPButton } from '../../button';
 import { IGRPCalendarSingle, type IGRPCalendarSingleProps } from '../../calendar/single';
 import { IGRPLabel } from '../../label';
-import { DD_MM_YYYY } from '../../../../lib/constants';
 
-type IGRPDatePickerSingleProps = IGRPCalendarSingleProps & IGRPDatePickerBaseProps;
+type IGRPDatePickerSingleProps = IGRPCalendarSingleProps &
+  IGRPDatePickerBaseProps & {
+    /**
+     * @deprecated This props will be deprecated in the next release.
+     */
+    gridSize?: IGRPInputProps['gridSize'];
+  };
 
 function IGRPDatePickerSingle({
   name,
@@ -72,7 +78,7 @@ function IGRPDatePickerSingle({
       <IGRPButton
         id={fieldName}
         variant="outline"
-        className="underline-offset-0 hover:no-underline border-0 bg-transparent hover:bg-transparent shadow-none"
+        className="underline-offset-0 hover:no-underline border-0 bg-transparent hover:bg-transparent shadow-none justify-between w-full"
         disabled={disabledPicker}
         iconName="ChevronDown"
         iconClassName="text-muted-foreground/80 group-hover:text-foreground shrink-0 transition-colors"
@@ -90,11 +96,10 @@ function IGRPDatePickerSingle({
     fieldValue: Date | undefined,
     onChange: (date: Date | undefined) => void,
   ) => {
-    // Use fieldValue for form context, localDate for standalone
     const displayDate = formContext ? fieldValue : localDate;
 
     return (
-      <>
+      <div className="relative">
         <Popover>
           <PopoverTrigger asChild>{DateButton(displayDate)}</PopoverTrigger>
           <PopoverContent className="p-0 w-auto shadow-none" align="start">
@@ -120,10 +125,10 @@ function IGRPDatePickerSingle({
             iconName="X"
             iconSize={10}
             disabled={disabledPicker}
-            showIcon={displayDate ? true : false}
+            showIcon
           />
         )}
-      </>
+      </div>
     );
   };
 
@@ -134,7 +139,6 @@ function IGRPDatePickerSingle({
           control={formContext.control}
           name={fieldName}
           render={({ field, fieldState }) => {
-            // Sync local state when field value changes externally
             useEffect(() => {
               if (field.value !== localDate) {
                 setLocalDate(field.value);

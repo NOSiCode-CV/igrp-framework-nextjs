@@ -3644,6 +3644,12 @@
       right: calc(var(--spacing) * -1.25);
     }
   }
+  .after\:right-0 {
+    &::after {
+      content: var(--tw-content);
+      right: calc(var(--spacing) * 0);
+    }
+  }
   .after\:bottom-0 {
     &::after {
       content: var(--tw-content);

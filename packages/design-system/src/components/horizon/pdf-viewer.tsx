@@ -93,7 +93,7 @@ function IGRPPdfViewer({
   }
 
   return (
-    <div className={cn("flex flex-col", className)} id={ref}>
+    <div className={cn('flex flex-col', className)} id={ref}>
       {displayMode === 'inline' && (
         <IGRPPdfViewerInline
           document={document}

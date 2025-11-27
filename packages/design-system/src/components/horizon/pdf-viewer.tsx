@@ -20,6 +20,7 @@ import { IGRPIcon } from './icon';
 import { IGRPLoadingSpinner } from './loading-spiner';
 import { IGRPHeadline } from './typography/headline';
 import { IGRPText } from './typography/text';
+import { cn } from '../../lib/utils';
 
 type IGRPDocumentItem = {
   id: number;
@@ -39,6 +40,7 @@ interface IGRPPdfViewerProps {
   notFoundLabel?: string;
   name?: string;
   id?: string;
+  className?: string;
 }
 
 function IGRPPdfViewer({
@@ -50,6 +52,7 @@ function IGRPPdfViewer({
   notFoundLabel = 'No File found',
   name,
   id,
+  className,
 }: IGRPPdfViewerProps) {
   const [selectedDocument, setSelectedDocument] = useState<IGRPDocumentItem>();
   const [isModalOpen, setIsModalOpen] = useState(false);
@@ -90,7 +93,7 @@ function IGRPPdfViewer({
   }
 
   return (
-    <div className="flex flex-col" id={ref}>
+    <div className={cn("flex flex-col", className)} id={ref}>
       {displayMode === 'inline' && (
         <IGRPPdfViewerInline
           document={document}

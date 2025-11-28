@@ -98,7 +98,7 @@ function IGRPTabs({
   ...restProps
 }: IGRPTabsProps) {
   const isControlled = controlledValue !== undefined;
-  
+
   const initialValue = defaultValue ?? items[0]?.value ?? '';
   const [activeTab, setActiveTab] = useState(initialValue);
 

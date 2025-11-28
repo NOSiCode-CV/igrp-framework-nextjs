@@ -30,8 +30,6 @@ interface IGRPStepperProcessProps {
   stepperItemsClassName?: string;
 }
 
-// TODO: add button next and previous to the stepper
-
 function getStepperItemClassName(): string {
   return cn(
     'group/step relative flex-1 text-center overflow-visible ml-1.5 mr-1.75 items-center justify-center max-md:items-start',
@@ -175,7 +173,7 @@ function IGRPStepperProcess({
             <Stepper
               value={validCurrentStep}
               onValueChange={handleStepChange}
-              className={cn('gap-0.5 mb-3', stepperClassName)}
+              className={cn('gap-0.5', stepperClassName)}
               role="navigation"
               aria-label="Process steps"
               aria-valuenow={validCurrentStep + 1}
@@ -221,7 +219,7 @@ function IGRPStepperProcess({
                               <StepperTitle
                                 className={cn(
                                   'truncate w-full min-w-0',
-                                  isActive && 'text-background',
+                                  isActive && 'text-background hover:text-background',
                                 )}
                               >
                                 {title}
@@ -235,8 +233,7 @@ function IGRPStepperProcess({
                   </StepperTrigger>
                 </StepperItem>
               ))}
-            </Stepper>
-            {/* <ScrollBar orientation="horizontal" /> */}
+            </Stepper>            
           </ScrollArea>
         </div>
 

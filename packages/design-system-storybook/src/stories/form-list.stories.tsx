@@ -1,4 +1,4 @@
-import { useRef } from 'react';
+import { useState, useRef } from 'react';
 import z from 'zod';
 import type { Meta, StoryObj } from '@storybook/nextjs-vite';
 import {
@@ -119,14 +119,8 @@ const renderItem = (_: FormValues['socials'][0], index: number) => (
   </div>
 );
 
-// const computeLabel = (item: FormValues['socials'][0], index: number) => (
-//   item.label ? item.label1 : `Item ${index + 1}`
-// );
-
 const Template = () => {
   const formRef = useRef<IGRPFormHandle<typeof schema>>(null);
-
-  const field = formRef?.current?.watch('socials');
 
   return (
     <div className='mx-auto px-6 py-8'>
@@ -152,6 +146,199 @@ const Template = () => {
   );
 };
 
-export const Basic: StoryObj = {
+export const FormListBasic: StoryObj = {
   render: () => <Template />,
+};
+
+// Standalone version without form context
+type StandaloneItem = {
+  label: string;
+  label1: string;
+};
+
+const StandaloneTemplate = () => {
+  const [items, setItems] = useState<StandaloneItem[]>([
+    { label: '', label1: '' },
+  ]);
+
+  const renderStandaloneItem = (
+    item: StandaloneItem,
+    _index: number,
+    onChange?: (item: StandaloneItem) => void,
+  ) => (
+    <div className='grid gap-4'>
+      <IGRPInputText
+        label='Nome'
+        required
+        helperText='Insira seu Nome'
+        value={item.label}
+        onChange={(e) => onChange?.({ ...item, label: e.target.value })}
+      />
+      <IGRPSelect
+        label='Choose an item'
+        placeholder='Select one'
+        options={mockOptions}
+        showSearch={true}
+        showGroup={true}
+        showStatus={true}
+        helperText='You can search by name'
+        value={item.label1}
+        onValueChange={(value) => onChange?.({ ...item, label1: value })}
+      />
+    </div>
+  );
+
+  return (
+    <div className='mx-auto px-6 py-8'>
+      <IGRPFormList<StandaloneItem>
+        id='standalone-example'
+        label='Social Links'
+        description='Add your social media links (without form context)'
+        badgeValue='standalone'
+        defaultItem={{ label: '', label1: '' }}
+        value={items}
+        onChange={setItems}
+        renderItem={renderStandaloneItem}
+        computeLabel={(item: StandaloneItem, index: number) =>
+          item.label ? `${item.label} - ${item.label1}` : `Item ${index + 1}`
+        }
+      />
+      <div className='mt-4 p-4 bg-muted rounded-md'>
+        <p className='text-sm text-muted-foreground mb-2'>Current values:</p>
+        <pre className='text-xs overflow-auto'>
+          {JSON.stringify(items, null, 2)}
+        </pre>
+      </div>
+    </div>
+  );
+};
+
+export const Standalone: StoryObj = {
+  render: () => <StandaloneTemplate />,
+};
+
+// Standalone version with default values
+const WithDefaultValuesStandaloneTemplate = () => {
+  const defaultValues: StandaloneItem[] = [
+    {
+      label: 'Twitter',
+      label1: 'user_1',
+    },
+    {
+      label: 'LinkedIn',
+      label1: 'user_2',
+    },
+    {
+      label: 'GitHub',
+      label1: 'apple',
+    },
+  ];
+
+  const [items, setItems] = useState<StandaloneItem[]>(defaultValues);
+
+  const renderStandaloneItem = (
+    item: StandaloneItem,
+    _index: number,
+    onChange?: (item: StandaloneItem) => void,
+  ) => (
+    <div className='grid gap-4'>
+      <IGRPInputText
+        label='Nome'
+        required
+        helperText='Insira seu Nome'
+        value={item.label}
+        onChange={(e) => onChange?.({ ...item, label: e.target.value })}
+      />
+      <IGRPSelect
+        label='Choose an item'
+        placeholder='Select one'
+        options={mockOptions}
+        showSearch={true}
+        showGroup={true}
+        showStatus={true}
+        helperText='You can search by name'
+        value={item.label1}
+        onValueChange={(value) => onChange?.({ ...item, label1: value })}
+      />
+    </div>
+  );
+
+  return (
+    <div className='mx-auto px-6 py-8'>
+      <IGRPFormList<StandaloneItem>
+        id='default-values-standalone-example'
+        label='Social Media'
+        description='Your social media profiles (pre-filled)'
+        badgeValue='pre-filled'
+        defaultItem={{ label: '', label1: '' }}
+        defaultValue={defaultValues}
+        value={items}
+        onChange={setItems}
+        renderItem={renderStandaloneItem}
+        computeLabel={(item: StandaloneItem, index: number) =>
+          item.label ? `${item.label} - ${item.label1}` : `Item ${index + 1}`
+        }
+      />
+      <div className='mt-4 p-4 bg-muted rounded-md'>
+        <p className='text-sm text-muted-foreground mb-2'>Current values:</p>
+        <pre className='text-xs overflow-auto'>
+          {JSON.stringify(items, null, 2)}
+        </pre>
+      </div>
+    </div>
+  );
+};
+
+export const StandaloneWithDefaultValues: StoryObj = {
+  render: () => <WithDefaultValuesStandaloneTemplate />,
+};
+
+// Version with default values loaded (using IGRPForm)
+const WithDefaultValuesTemplate = () => {
+  const formRef = useRef<IGRPFormHandle<typeof schema>>(null);
+
+  const defaultValues: FormValues = {
+    socials: [
+      {
+        label: 'Twitter',
+        label1: 'user_1',
+      },
+      {
+        label: 'LinkedIn',
+        label1: 'user_2',
+      },
+      {
+        label: 'GitHub',
+        label1: 'apple',
+      },
+    ],
+  };
+
+  return (
+    <div className='mx-auto px-6 py-8'>
+      <IGRPForm
+        schema={schema}
+        formRef={formRef}
+        defaultValues={defaultValues}
+        onSubmit={(data) => console.log('Form submitted:', data)}
+      >
+        <IGRPFormList
+          id='default-values-example'
+          name='socials'
+          label='Social Media'
+          description='Your social media profiles'
+          badgeValue='pre-filled'
+          defaultItem={defaultItem}
+          renderItem={renderItem}
+          computeLabel={(item: FormValues['socials'][0], index: number) =>
+            item.label ? `${item.label} - ${item.label1}` : `Item ${index + 1}`
+          }
+        />
+      </IGRPForm>
+    </div>
+  );
+};
+
+export const FormListWithDefaultValues: StoryObj = {
+  render: () => <WithDefaultValuesTemplate />,
 };

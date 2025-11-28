@@ -1,0 +1,1 @@
+IGRP Design System is a component library built on top of shadcn/ui to help you build applications faster.

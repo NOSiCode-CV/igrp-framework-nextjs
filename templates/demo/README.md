@@ -195,14 +195,6 @@ pnpm build
 pnpm start
 ```
 
-### Template Publishing
-
-```bash
-pnpm publish:template
-```
-
-Packages the template with `create-template/create-zip-template.ps1`, uploads the resulting `igrp-next-template.zip` to Nexus, and restores your working tree. Refer to [Publishing Template](#publishing-template) for prerequisites.
-
 ## 🏗️ How It's Built
 
 ### Architecture Overview
@@ -210,29 +202,34 @@ Packages the template with `create-template/create-zip-template.ps1`, uploads th
 The template follows Next.js 15 App Router architecture with the following key components:
 
 #### 1. **Root Layout** (`src/app/layout.tsx`)
+
 - Provides global layout structure
 - Configures metadata and viewport
 - Wraps application with IGRP root layout
 
 #### 2. **IGRP Layout** (`src/app/(igrp)/layout.tsx`)
+
 - Handles authentication checks
 - Manages session state
 - Redirects unauthenticated users to login
 - Wraps routes with IGRP layout components (header, sidebar)
 
 #### 3. **Middleware** (`src/middleware.ts`)
+
 - Intercepts requests before they reach pages
 - Validates authentication tokens
 - Handles public paths (login, logout, API routes)
 - Supports preview mode bypass
 
 #### 4. **Configuration Builder** (`src/igrp.template.config.ts`)
+
 - Builds IGRP configuration object
 - Loads mock data for preview mode
 - Configures layout, API, and toaster settings
 - Manages session configuration
 
 #### 5. **Server Actions** (`src/actions/igrp/`)
+
 - `layout.ts`: Fetches layout configuration and session
 - `auth.ts`: Authentication-related actions
 
@@ -285,12 +282,14 @@ IGRP_PREVIEW_MODE=true
 ```
 
 When enabled:
+
 - Authentication checks are bypassed
 - Mock data is used for menus, users, and applications
 - Session refetching is disabled
 - No redirects to login page
 
 **Mock data sources:**
+
 - `src/temp/users/use-mock-user.ts`
 - `src/temp/menus/use-mock-menus.ts`
 - `src/temp/applications/use-mock-apps.ts`
@@ -301,7 +300,7 @@ When enabled:
 
 ```bash
 docker build -f docker/development/Dockerfile -t my-igrp-template:latest .
-docker run -d --name my-igrp-template -p 3000:3000 --restart unless-stopped --env-file .env.docker my-igrp-template:latest
+docker run -d --name my-igrp-template -p 3000:3000 --restart unless-stopped --env-file docker/development/.env.development my-igrp-template:latest
 ```
 
 ### Production

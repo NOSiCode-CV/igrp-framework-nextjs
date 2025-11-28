@@ -8,6 +8,10 @@ export interface IGRPHeaderDataArgs {
   showNotifications: boolean;
   showThemeSwitcher: boolean;
   showUser: boolean;
+  showIGRPSidebarTrigger: boolean;
+  showIGRPHeaderTitle: boolean;
+  showIGRPHeaderLogo: boolean;
+  headerLogo?: string;
 }
 
 export interface IGRPNotificationArgs {

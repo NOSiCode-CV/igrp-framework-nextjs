@@ -13,6 +13,7 @@ import { IGRPTemplateCommandSearch } from './command-search';
 import { IGRPTemplateModeSwitcher } from './mode-switcher';
 import { IGRPTemplateNavUser } from './nav-user';
 import { IGRPTemplateNotifications } from './notifications';
+import Image from 'next/image';
 
 interface IGRPTemplateHeaderProps {
   data: IGRPHeaderDataArgs;
@@ -35,7 +36,18 @@ function IGRPTemplateHeader({ data, className }: IGRPTemplateHeaderProps) {
     return null;
   }
 
-  const { user, showBreadcrumb, showSearch, showNotifications, showThemeSwitcher, showUser } = data;
+  const {
+    user,
+    showBreadcrumb,
+    showSearch,
+    showNotifications,
+    showThemeSwitcher,
+    showUser,
+    showIGRPSidebarTrigger,
+    showIGRPHeaderLogo,
+    showIGRPHeaderTitle,
+    headerLogo,
+  } = data;
 
   return (
     <div
@@ -45,7 +57,25 @@ function IGRPTemplateHeader({ data, className }: IGRPTemplateHeaderProps) {
       )}
     >
       <div className="flex items-center gap-2 h-12 min-w-0">
-        <IGRPSidebarTriggerPrimitive />
+        {showIGRPSidebarTrigger && <IGRPSidebarTriggerPrimitive />}
+        {!showIGRPSidebarTrigger && (
+          <div className="flex items-center gap-2">
+            {showIGRPHeaderLogo && (
+              <div className="h-8 w-8 rounded-lg bg-foreground flex items-center justify-center">
+                <Image
+                  src={headerLogo || './logo.webp'}
+                  alt="IGRP Logo"
+                  fill
+                  className="object-cover"
+                  quality={100}
+                  sizes="46px"
+                  priority
+                />
+              </div>
+            )}
+            {showIGRPHeaderTitle && <span className="text-base font-semibold">iGRP</span>}
+          </div>
+        )}
         {showBreadcrumb && (
           <>
             <IGRPSeparatorPrimitive

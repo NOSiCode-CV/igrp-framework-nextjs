@@ -233,7 +233,7 @@ function IGRPStepperProcess({
                   </StepperTrigger>
                 </StepperItem>
               ))}
-            </Stepper>            
+            </Stepper>
           </ScrollArea>
         </div>
 

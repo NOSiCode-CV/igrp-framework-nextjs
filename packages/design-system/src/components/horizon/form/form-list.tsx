@@ -35,6 +35,8 @@ interface IGRPFormListProps<TItem>
   value?: TItem[];
   defaultValue?: TItem[];
   onChange?: (items: TItem[]) => void;
+  // Ref prop (React 19+)
+  ref?: React.Ref<HTMLDivElement>;
 }
 
 function IGRPFormList<TItem>({
@@ -62,6 +64,7 @@ function IGRPFormList<TItem>({
   value,
   defaultValue,
   onChange,
+  ref,
 }: IGRPFormListProps<TItem>) {
   const _id = useId();
   const groupId = name ?? id ?? _id;
@@ -93,6 +96,7 @@ function IGRPFormList<TItem>({
         badgeClassName={badgeClassName}
         addButtonLabel={addButtonLabel}
         addButtonIconName={addButtonIconName}
+        ref={ref}
       />
     );
   }
@@ -121,6 +125,7 @@ function IGRPFormList<TItem>({
       value={value}
       defaultValue={defaultValue}
       onChange={onChange}
+      ref={ref}
     />
   );
 }
@@ -146,6 +151,7 @@ function FormListFormMode<TItem>({
   badgeClassName,
   addButtonLabel,
   addButtonIconName,
+  ref,
 }: Omit<IGRPFormListProps<TItem>, 'value' | 'defaultValue' | 'onChange' | 'id' | 'name'> & {
   groupId: string;
 }) {
@@ -200,7 +206,7 @@ function FormListFormMode<TItem>({
   );
 
   return (
-    <Card className={cn('shadow-sm gap-0 rounded-lg py-0', className)} id={groupId}>
+    <Card className={cn('shadow-sm gap-0 rounded-lg py-0', className)} id={groupId} ref={ref}>
       <CardHeader className="py-3 border-b flex flex-row items-center justify-between">
         <div className="flex items-center gap-2">
           {showIcon && iconName && (
@@ -324,10 +330,11 @@ function FormListStandaloneMode<TItem>({
   value,
   defaultValue,
   onChange,
+  ref,
 }: Omit<IGRPFormListProps<TItem>, 'name' | 'id'> & {
   groupId: string;
 }) {
-  const [items, setItems] = useState<TItem[]>(defaultValue ?? []);
+  const [items, setItems] = useState<any[]>(defaultValue ?? []);
   const [openItem, setOpenItem] = useState<string | undefined>(
     items.length > 0 ? 'item-0' : undefined,
   );
@@ -364,7 +371,7 @@ function FormListStandaloneMode<TItem>({
   }, [items.length, openItem]);
 
   const handleItemChange = useCallback(
-    (index: number, updatedItem: TItem) => {
+    (index: number, updatedItem: any) => {
       const newItems = [...items];
       newItems[index] = updatedItem;
       setItems(newItems);
@@ -404,7 +411,7 @@ function FormListStandaloneMode<TItem>({
   );
 
   return (
-    <Card className={cn('shadow-sm gap-0 rounded-lg py-0', className)} id={groupId}>
+    <Card className={cn('shadow-sm gap-0 rounded-lg py-0', className)} id={groupId} ref={ref}>
       <CardHeader className="py-3 border-b flex flex-row items-center justify-between">
         <div className="flex items-center gap-2">
           {showIcon && iconName && (

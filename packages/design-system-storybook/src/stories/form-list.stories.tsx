@@ -5,6 +5,7 @@ import {
   IGRPFormList,
   IGRPInputText,
   IGRPSelect,
+  IGRPCombobox,
   IGRPForm,
   type IGRPFormHandle,
   type IGRPOptionsProps,
@@ -174,7 +175,7 @@ const StandaloneTemplate = () => {
         value={item.label}
         onChange={(e) => onChange?.({ ...item, label: e.target.value })}
       />
-      <IGRPSelect
+      <IGRPCombobox
         label='Choose an item'
         placeholder='Select one'
         options={mockOptions}
@@ -183,7 +184,7 @@ const StandaloneTemplate = () => {
         showStatus={true}
         helperText='You can search by name'
         value={item.label1}
-        onValueChange={(value) => onChange?.({ ...item, label1: value })}
+        onChange={(value) => onChange?.({ ...item, label1: value as string })}
       />
     </div>
   );

@@ -4060,6 +4060,13 @@
       }
     }
   }
+  .hover\:text-background {
+    &:hover {
+      @media (hover: hover) {
+        color: var(--background);
+      }
+    }
+  }
   .hover\:text-destructive {
     &:hover {
       @media (hover: hover) {

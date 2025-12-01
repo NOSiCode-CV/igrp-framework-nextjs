@@ -199,33 +199,31 @@ function IGRPStepperProcess({
                       className={cn(
                         'bg-transparent hover:bg-transparent text-center flex items-center justify-center',
                         'shadow-none text-[10px] w-34',
+                        (isActive || isCompleted) && 'text-background hover:text-background',
                       )}
                       size="xs"
                     >
                       <Tooltip>
                         <TooltipTrigger asChild>
-                          {isCompleted ? (
-                            <span className="flex items-center justify-center gap-2 w-full min-w-0">
-                              <CheckIcon
-                                className="text-background stroke-[2.5] group-hover/step:hidden shrink-0"
-                                aria-hidden="true"
-                              />
-                              <StepperTitle className="text-background hidden group-hover/step:block truncate min-w-0">
-                                {title}
-                              </StepperTitle>
-                            </span>
-                          ) : (
-                            <span className="w-full min-w-0">
-                              <StepperTitle
-                                className={cn(
-                                  'truncate w-full min-w-0',
-                                  isActive && 'text-background hover:text-background',
-                                )}
-                              >
-                                {title}
-                              </StepperTitle>
-                            </span>
-                          )}
+                          <span className="flex items-center justify-center gap-2 w-full min-w-0">
+                            <CheckIcon
+                              className={cn(
+                                'hidden',
+                                isCompleted &&
+                                  'stroke-[2.5] block group-hover/step:hidden shrink-0',
+                              )}
+                              aria-hidden="true"
+                            />
+                            <StepperTitle
+                              className={cn(
+                                isCompleted
+                                  ? 'hidden group-hover/step:block truncate min-w-0'
+                                  : 'truncate w-full min-w-0',
+                              )}
+                            >
+                              {title}
+                            </StepperTitle>
+                          </span>
                         </TooltipTrigger>
                         <TooltipContent side="bottom">{title}</TooltipContent>
                       </Tooltip>

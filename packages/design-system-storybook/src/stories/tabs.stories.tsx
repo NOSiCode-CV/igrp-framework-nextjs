@@ -6,6 +6,11 @@ import {
   IGRPTabs,
   type IGRPTabsProps,
   type IGRPTabItem,
+  IGRPFormList,
+  IGRPCombobox,
+  cn,
+  IGRPInputFile,
+  IGRPInputHidden,
 } from '@igrp/igrp-framework-react-design-system';
 
 const meta: Meta<typeof IGRPTabs> = {
@@ -77,6 +82,53 @@ const defaultTabs: IGRPTabItem[] = [
   { value: 'notifications', label: 'Notifications', content: createTabContent('Notifications') },
 ];
 
+const manyItems = () => (
+  <IGRPFormList
+    id='formList1'
+    label='Documentos'
+    description='Documentos do contribuinte'
+    color='primary'
+    variant='solid'
+    addButtonLabel='Add'
+    iconName='FileText'
+    addButtonIconName='Plus'
+    renderItem={(_: any, index: number) => (
+      <div className='grid sm:grid-cols-1 md:grid-cols-2 gap-4'>
+        <IGRPCombobox
+          id={`formList1.${index}.idTipoDocumento`}
+          label='Tipo de Documento'
+          variant='single'
+          placeholder='Select an option...'
+          selectLabel='No option found'
+          showSearch={true}
+          showIcon={false}
+          iconName='CornerDownRight'
+          className={cn('col-span-1',)}
+          onChange={() => { }}
+          value={''}
+          options={[]}
+        />
+        <IGRPInputFile
+          id='formList1.${index}.inputFile1'
+          label='Input File'
+          accept='application/pdf'
+        />
+        <IGRPInputHidden
+          id='formList1.${index}.url'
+          label='url'
+        />
+        <IGRPInputHidden
+          id='formList1.${index}.inputHidden5'
+          label='Doc Id'
+        />
+      </div>
+    )}
+
+    defaultItem={[]}
+  />
+)
+
+
 const tabsWithIcons: IGRPTabItem[] = [
   {
     value: 'account',
@@ -93,7 +145,7 @@ const tabsWithIcons: IGRPTabItem[] = [
   {
     value: 'notifications',
     label: 'Notifications',
-    content: createTabContent('Notifications'),
+    content: manyItems(),
     icon: 'Bell',
   },
 ];
@@ -121,7 +173,7 @@ const manyTabs: IGRPTabItem[] = [
   {
     value: 'billing',
     label: 'Billing',
-    content: createTabContent('Billing'),
+    content: manyItems(),
     icon: 'CreditCard',
   },
   { value: 'api', label: 'API', content: createTabContent('API'), icon: 'Code' },

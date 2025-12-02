@@ -61,12 +61,12 @@ function IGRPTemplateHeader({ data, className }: IGRPTemplateHeaderProps) {
         {!showIGRPSidebarTrigger && (
           <div className="flex items-center gap-2">
             {showIGRPHeaderLogo && (
-              <div className="h-8 w-8 rounded-lg bg-foreground flex items-center justify-center">
+              <div className="h-10 w-10 relative rounded-lg flex items-center justify-center">
                 <Image
                   src={headerLogo || './logo.webp'}
                   alt="IGRP Logo"
                   fill
-                  className="object-cover"
+                  className="object-contain"
                   quality={100}
                   sizes="46px"
                   priority

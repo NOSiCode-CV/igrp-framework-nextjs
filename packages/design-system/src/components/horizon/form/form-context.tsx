@@ -8,6 +8,7 @@ type IGRPFormContextValue<TSchema extends z.ZodType> = {
   form: UseFormReturn<z.infer<TSchema> & FieldValues>;
   isSubmitting: boolean;
   formError?: string;
+  disabled?: boolean;
 };
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any

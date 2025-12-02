@@ -343,3 +343,50 @@ const WithDefaultValuesTemplate = () => {
 export const FormListWithDefaultValues: StoryObj = {
   render: () => <WithDefaultValuesTemplate />,
 };
+
+// Version with disabled form
+const DisabledTemplate = () => {
+  const formRef = useRef<IGRPFormHandle<typeof schema>>(null);
+
+  const defaultValues: FormValues = {
+    socials: [
+      {
+        label: 'Twitter',
+        label1: 'user_1',
+      },
+      {
+        label: 'LinkedIn',
+        label1: 'user_2',
+      },
+    ],
+  };
+
+  return (
+    <div className='mx-auto px-6 py-8'>
+      <IGRPForm
+        schema={schema}
+        formRef={formRef}
+        defaultValues={defaultValues}
+        onSubmit={(data) => console.log('Form submitted:', data)}
+        disabled
+      >
+        <IGRPFormList
+          id='disabled-example'
+          name='socials'
+          label='Social Media'
+          description='Your social media profiles (disabled)'
+          badgeValue='disabled'
+          defaultItem={defaultItem}
+          renderItem={renderItem}
+          computeLabel={(item: FormValues['socials'][0], index: number) =>
+            item.label ? `${item.label} - ${item.label1}` : `Item ${index + 1}`
+          }
+        />
+      </IGRPForm>
+    </div>
+  );
+};
+
+export const FormListDisabled: StoryObj = {
+  render: () => <DisabledTemplate />,
+};

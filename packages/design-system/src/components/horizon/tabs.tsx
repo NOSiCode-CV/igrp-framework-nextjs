@@ -94,8 +94,8 @@ function IGRPTabs({
   defaultValue,
   value: controlledValue,
   onValueChange,
-  variant = 'default',
-  fullWidth = false,
+  variant,
+  fullWidth,
   id,
   name,
   showScrollIndicators = true,
@@ -130,7 +130,7 @@ function IGRPTabs({
     }
 
     const { scrollLeft, scrollWidth, clientWidth } = tabsListRef.current;
-    const epsilon = 1; // Small threshold for floating point comparison
+    const epsilon = 1;
     setCanScrollLeft(scrollLeft > epsilon);
     setCanScrollRight(scrollLeft + clientWidth < scrollWidth - epsilon);
   }, [orientation]);
@@ -175,7 +175,6 @@ function IGRPTabs({
     const containerScrollRight = scrollLeft + containerRect.width;
     const padding = 16;
 
-    // Only scroll if tab is not fully visible
     if (tabLeft < containerScrollLeft) {
       container.scrollTo({ left: tabLeft - padding, behavior: 'smooth' });
     } else if (tabRight > containerScrollRight) {
@@ -183,18 +182,11 @@ function IGRPTabs({
     }
   }, [orientation]);
 
-  // Touch/swipe handlers for mobile - native scrolling handles this, handlers kept for future enhancements
-  const handleTouchStart = useCallback((_e: React.TouchEvent) => {
-    // Native scroll handles touch scrolling, but we can add custom behavior here if needed
-  }, []);
+  const handleTouchStart = useCallback((_e: React.TouchEvent) => {}, []);
 
-  const handleTouchMove = useCallback((_e: React.TouchEvent) => {
-    // Native scroll handles touch scrolling
-  }, []);
+  const handleTouchMove = useCallback((_e: React.TouchEvent) => {}, []);
 
-  const handleTouchEnd = useCallback(() => {
-    // Native scroll handles touch scrolling
-  }, []);
+  const handleTouchEnd = useCallback(() => {}, []);
 
   useEffect(() => {
     checkScrollability();
@@ -213,7 +205,6 @@ function IGRPTabs({
   }, [checkScrollability, items.length]);
 
   useEffect(() => {
-    // Scroll to active tab when it changes
     const timeoutId = setTimeout(() => {
       scrollToActiveTab();
     }, 100);
@@ -234,7 +225,6 @@ function IGRPTabs({
   const isHorizontal = orientation === 'horizontal';
   const showIndicators = showScrollIndicators && isHorizontal && (canScrollLeft || canScrollRight);
 
-  // Handle empty items array
   if (!items || items.length === 0) {
     return null;
   }
@@ -283,9 +273,9 @@ function IGRPTabs({
           <TabsList
             className={cn(
               orientation === 'vertical' && 'flex-col h-fit',
+              isHorizontal && 'w-max',
               tabListVariants({ variant, fullWidth }),
               fullWidth === true && orientation === 'vertical' && 'w-fit',
-              isHorizontal && 'w-max',
               tabListClassName,
             )}
           >

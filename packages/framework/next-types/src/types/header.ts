@@ -12,6 +12,9 @@ export interface IGRPHeaderDataArgs {
   showIGRPHeaderTitle: boolean;
   showIGRPHeaderLogo: boolean;
   headerLogo?: string;
+  showSettings?: boolean;
+  settingsUrl?: string;
+  settingsIcon?: string;
 }
 
 export interface IGRPNotificationArgs {

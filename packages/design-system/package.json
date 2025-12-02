@@ -1,6 +1,6 @@
 {
   "name": "@igrp/igrp-framework-react-design-system",
-  "version": "0.1.0-beta.75",
+  "version": "0.1.0-beta.77-4",
   "description": "IGRP Design System components",
   "keywords": [
     "igrp",
@@ -36,7 +36,7 @@
     "clean:packages": "rimraf node_modules",
     "format": "prettier --write .",
     "tailwind:build": "pnpm dlx @tailwindcss/cli -i ./src/index.css -o ./src/styles.css",
-    "release": "pnpm format && pnpm build && yarn publish --registry=https://sonatype.nosi.cv/repository/igrp/ --tag latest",
+    "release": "pnpm format && pnpm build && yarn publish --registry=https://sonatype.nosi.cv/repository/igrp/",
     "clean-all": "rimraf node_modules && rimraf dist && rimraf tsconfig.tsbuildinfo"
   },
   "peerDependencies": {

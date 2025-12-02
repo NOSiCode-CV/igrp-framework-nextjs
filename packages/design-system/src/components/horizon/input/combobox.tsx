@@ -76,18 +76,15 @@ function IGRPCombobox({
   const [localValue, setLocalValue] = useState<string | string[]>(value);
 
   useEffect(() => {
-    setLocalValue(value);
-  }, [value]);
+    if (!formContext && value !== undefined) {
+      setLocalValue(value);
+    }
+  }, [value, formContext]);
 
-  const removeValue = (valueToRemove: string) => {
-    const currentValues = localValue as string[];
-    const updatedValues = currentValues.filter((val) => val !== valueToRemove);
-
-    if (!formContext) setLocalValue(updatedValues);
-    onChange?.(updatedValues);
-  };
-
-  const setSelectValue = (currentValue: string | string[]) => {
+  const setSelectValue = (
+    currentValue: string | string[],
+    onChangeHandler?: (value: string | string[]) => void,
+  ) => {
     if (variant === 'single') {
       const selected = options?.find((opt) => opt.value === currentValue);
       const labelValue = selected?.label ?? placeholder;
@@ -109,6 +106,20 @@ function IGRPCombobox({
     if (!Array.isArray(currentValue) || currentValue.length === 0) {
       return placeholder;
     }
+
+    const removeValue = (valueToRemove: string) => {
+      const currentValues = currentValue as string[];
+      const updatedValues = currentValues.filter((val) => val !== valueToRemove);
+
+      if (!formContext && !onChangeHandler) {
+        setLocalValue(updatedValues);
+      }
+      if (onChangeHandler) {
+        onChangeHandler(updatedValues);
+      } else {
+        onChange?.(updatedValues);
+      }
+    };
 
     return (
       <div className="flex gap-1 flex-wrap">
@@ -246,7 +257,7 @@ function IGRPCombobox({
           iconClassName="ml-2 h-4 w-4 shrink-0 opacity-50"
           showIcon
         >
-          {setSelectValue(currentValue)}
+          {setSelectValue(currentValue, onChangeHandler)}
         </IGRPButton>
       </PopoverTrigger>
       <PopoverContent className={cn('p-0', selectClassName)} align="start" side="bottom">

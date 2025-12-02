@@ -31,11 +31,11 @@ interface IGRPFormListProps<TItem>
   addButtonLabel?: string;
   addButtonIconName?: IGRPIconName | string;
   badgeClassName?: string;
-  // Standalone mode props
+
   value?: TItem[];
   defaultValue?: TItem[];
   onChange?: (items: TItem[]) => void;
-  // Ref prop (React 19+)
+
   ref?: React.Ref<HTMLDivElement>;
 }
 
@@ -60,7 +60,6 @@ function IGRPFormList<TItem>({
   badgeClassName,
   addButtonLabel = 'Adicionar',
   addButtonIconName = 'Plus',
-  // Standalone mode props
   value,
   defaultValue,
   onChange,
@@ -69,11 +68,9 @@ function IGRPFormList<TItem>({
   const _id = useId();
   const groupId = name ?? id ?? _id;
 
-  // Check if we're in form context
   const formContext = useContext(IGRPFormContext);
   const isFormMode = !!formContext;
 
-  // If in form mode, render form version, otherwise standalone
   if (isFormMode) {
     return (
       <FormListFormMode
@@ -130,7 +127,6 @@ function IGRPFormList<TItem>({
   );
 }
 
-// Form mode component (uses react-hook-form)
 function FormListFormMode<TItem>({
   groupId,
   defaultItem,
@@ -157,14 +153,11 @@ function FormListFormMode<TItem>({
 }) {
   const { fields, append, remove } = useFieldArray({ name: groupId });
   const values = useWatch({ name: groupId }) ?? [];
-  const [openItem, setOpenItem] = useState<string | undefined>(
-    fields.length > 0 ? 'item-0' : undefined,
-  );
+  const [openItem, setOpenItem] = useState<string | undefined>(undefined);
 
   useEffect(() => {
     if (fields.length === 0) {
       append(defaultItem);
-      setOpenItem('item-0');
     }
   }, [append, defaultItem, fields.length]);
 
@@ -175,6 +168,9 @@ function FormListFormMode<TItem>({
         if (itemIndex >= fields.length) {
           setOpenItem('item-0');
         }
+      } else {
+        // Ensure first item is open when fields are available
+        setOpenItem('item-0');
       }
     } else {
       setOpenItem(undefined);
@@ -207,7 +203,7 @@ function FormListFormMode<TItem>({
 
   return (
     <Card className={cn('shadow-sm gap-0 rounded-lg py-0', className)} id={groupId} ref={ref}>
-      <CardHeader className="py-3 border-b flex flex-row items-center justify-between">
+      <CardHeader className="px-0 p-4 border-b [.border-b]:pb-4 flex flex-row items-center justify-between ">
         <div className="flex items-center gap-2">
           {showIcon && iconName && (
             <IGRPIcon
@@ -306,7 +302,6 @@ function FormListFormMode<TItem>({
   );
 }
 
-// Standalone mode component (uses local state)
 function FormListStandaloneMode<TItem>({
   groupId,
   defaultItem,
@@ -335,9 +330,7 @@ function FormListStandaloneMode<TItem>({
   groupId: string;
 }) {
   const [items, setItems] = useState<any[]>(defaultValue ?? []);
-  const [openItem, setOpenItem] = useState<string | undefined>(
-    items.length > 0 ? 'item-0' : undefined,
-  );
+  const [openItem, setOpenItem] = useState<string | undefined>(undefined);
 
   // Sync with controlled value prop
   useEffect(() => {
@@ -350,7 +343,6 @@ function FormListStandaloneMode<TItem>({
   useEffect(() => {
     if (items.length === 0 && value === undefined) {
       setItems([defaultItem]);
-      setOpenItem('item-0');
       onChange?.([defaultItem]);
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -364,6 +356,8 @@ function FormListStandaloneMode<TItem>({
         if (itemIndex >= items.length) {
           setOpenItem('item-0');
         }
+      } else {
+        setOpenItem('item-0');
       }
     } else {
       setOpenItem(undefined);

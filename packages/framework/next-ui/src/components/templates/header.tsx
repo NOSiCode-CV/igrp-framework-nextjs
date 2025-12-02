@@ -3,6 +3,7 @@
 import type { IGRPHeaderDataArgs } from '@igrp/framework-next-types';
 import {
   cn,
+  IGRPIcon,
   IGRPSeparatorPrimitive,
   IGRPSidebarTriggerPrimitive,
   useIGRPToast,
@@ -14,6 +15,7 @@ import { IGRPTemplateModeSwitcher } from './mode-switcher';
 import { IGRPTemplateNavUser } from './nav-user';
 import { IGRPTemplateNotifications } from './notifications';
 import Image from 'next/image';
+import Link from 'next/link';
 
 interface IGRPTemplateHeaderProps {
   data: IGRPHeaderDataArgs;
@@ -47,6 +49,9 @@ function IGRPTemplateHeader({ data, className }: IGRPTemplateHeaderProps) {
     showIGRPHeaderLogo,
     showIGRPHeaderTitle,
     headerLogo,
+    showSettings,
+    settingsUrl,
+    settingsIcon,
   } = data;
 
   return (
@@ -63,7 +68,7 @@ function IGRPTemplateHeader({ data, className }: IGRPTemplateHeaderProps) {
             {showIGRPHeaderLogo && (
               <div className="h-8 w-8 rounded-lg bg-foreground flex items-center justify-center">
                 <Image
-                  src={headerLogo || './logo.webp'}
+                  src={headerLogo || '/logo-no-text.png'}
                   alt="IGRP Logo"
                   fill
                   className="object-cover"
@@ -76,6 +81,7 @@ function IGRPTemplateHeader({ data, className }: IGRPTemplateHeaderProps) {
             {showIGRPHeaderTitle && <span className="text-base font-semibold">iGRP</span>}
           </div>
         )}
+
         {showBreadcrumb && (
           <>
             <IGRPSeparatorPrimitive
@@ -88,6 +94,12 @@ function IGRPTemplateHeader({ data, className }: IGRPTemplateHeaderProps) {
       </div>
       <div className="flex items-center gap-2 shrink-0">
         {showSearch && <IGRPTemplateCommandSearch />}
+
+        {showSettings && (
+          <Link href={settingsUrl || '/settings'}>
+            <IGRPIcon iconName={settingsIcon ?? 'Settings'} />
+          </Link>
+        )}
 
         {showNotifications && (
           <span className="hidden md:block">

@@ -12,6 +12,7 @@ import {
   cn,
   IGRPCardContent,
   IGRPCard,
+  IGRPFormList,
 } from '@igrp/igrp-framework-react-design-system';
 import z from 'zod';
 
@@ -287,10 +288,10 @@ const MultipleTemplate = (args: JSX.IntrinsicAttributes & IGRPComboboxProps) => 
 };
 
 const FormTemplate = (args: IGRPComboboxProps) => {
-  const [selected, setSelected] = useState(args.value || '');
-
+  const fieldName = args.name || 'fruit';
+  const defaultValue = typeof args.value === 'string' ? args.value : '';
   const schema = z.object({
-    fruit: z.string(),
+    [fieldName]: z.string(),
   });
   const formRef = useRef<IGRPFormHandle<typeof schema>>(null);
 
@@ -304,13 +305,11 @@ const FormTemplate = (args: IGRPComboboxProps) => {
         onSubmit={onSubmit}
         formRef={formRef}
         gridClassName='space-y-4 w-80'
-        defaultValues={{ fruit: 'apple' }}
+        defaultValues={{ [fieldName]: defaultValue }}
       >
         <IGRPCombobox
           {...args}
-          value={selected}
           onChange={(value) => {
-            setSelected(value);
             console.log('Selected:', value);
           }}
         />
@@ -479,4 +478,82 @@ export const WithFormContext: Story = {
     showStatus: true,
     placeholder: 'Selecione o estado (obrigatório)',
   },
+};
+
+// Standalone FormList with Comboboxes
+type FormListItem = {
+  country: string;
+  priority: string;
+  status: string;
+};
+
+const FormListStandaloneTemplate = () => {
+  const [items, setItems] = useState<FormListItem[]>([
+    { country: '', priority: '', status: '' },
+  ]);
+
+  return (
+    <div className="container my-10 mx-auto p-4 border rounded-lg shadow-sm max-w-4xl">
+      <IGRPFormList<FormListItem>
+        id="combobox-formlist-standalone"
+        label="Itens com Comboboxes"
+        description="Adicione múltiplos itens usando comboboxes (modo standalone)"
+        badgeValue="standalone"
+        defaultItem={{ country: '', priority: '', status: '' }}
+        value={items}
+        onChange={setItems}
+        renderItem={(item, _index, onChange) => (
+          <div className="grid gap-4">
+            <IGRPCombobox
+              label="País"
+              placeholder="Selecione um país"
+              options={COUNTRIES}
+              value={item.country}
+              onChange={(value) => onChange?.({ ...item, country: value as string })}
+              showSearch={true}
+              helperText="Escolha o país de origem"
+            />
+            <IGRPCombobox
+              label="Prioridade"
+              placeholder="Selecione a prioridade"
+              options={PRIORITIES}
+              value={item.priority}
+              onChange={(value) => onChange?.({ ...item, priority: value as string })}
+              showSearch={true}
+              helperText="Nível de urgência"
+            />
+            <IGRPCombobox
+              label="Estado"
+              placeholder="Selecione o estado"
+              options={STATUS}
+              value={item.status}
+              onChange={(value) => onChange?.({ ...item, status: value as string })}
+              showSearch={true}
+              showStatus={true}
+              helperText="Estado atual do item"
+            />
+          </div>
+        )}
+        computeLabel={(item: FormListItem, index: number) => {
+          const countryLabel = COUNTRIES.find((c) => c.value === item.country)?.label;
+          const priorityLabel = PRIORITIES.find((p) => p.value === item.priority)?.label;
+          if (countryLabel && priorityLabel) {
+            return `${countryLabel} - ${priorityLabel}`;
+          }
+          return `Item ${index + 1}`;
+        }}
+      />
+      <div className="mt-4 p-4 bg-muted rounded-md">
+        <p className="text-sm text-muted-foreground mb-2">Valores atuais:</p>
+        <pre className="text-xs overflow-auto">
+          {JSON.stringify(items, null, 2)}
+        </pre>
+      </div>
+    </div>
+  );
+};
+
+export const WithFormListStandalone: Story = {
+  render: FormListStandaloneTemplate,
+  args: {},
 };

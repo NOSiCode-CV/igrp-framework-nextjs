@@ -37,11 +37,6 @@ const meta: Meta<typeof IGRPTabs> = {
       options: ['default', 'outline', 'pills', 'underline', 'cards'],
       description: 'Visual style variant of the tabs',
     },
-    // tabSize: {
-    //   control: { type: 'select' },
-    //   options: ['default', 'sm', 'lg'],
-    //   description: 'Size of the tab buttons',
-    // },
     fullWidth: {
       control: 'boolean',
       description: 'Whether tab list spans full width',
@@ -49,6 +44,19 @@ const meta: Meta<typeof IGRPTabs> = {
     contentBorder: {
       control: 'boolean',
       description: 'Apply border to tab content panel',
+    },
+    showBadge: {
+      control: 'boolean',
+      description: 'Whether to show badges in tabs',
+    },
+    badgePlacement: {
+      control: { type: 'select' },
+      options: ['start', 'end'],
+      description: 'Position of the badge relative to the tab label',
+    },
+    showScrollIndicators: {
+      control: 'boolean',
+      description: 'Whether to show scroll indicators when tabs overflow',
     },
     tabTriggerClassName: {
       control: 'text',
@@ -61,6 +69,10 @@ const meta: Meta<typeof IGRPTabs> = {
     tabListClassName: {
       control: 'text',
       description: 'Custom className for the tab list',
+    },
+    scrollButtonClassName: {
+      control: 'text',
+      description: 'Custom className for scroll indicator buttons',
     },
   },
 };
@@ -147,6 +159,68 @@ const tabsWithIcons: IGRPTabItem[] = [
     label: 'Notifications',
     content: manyItems(),
     icon: 'Bell',
+  },
+];
+
+const tabsWithBadges: IGRPTabItem[] = [
+  {
+    value: 'inbox',
+    label: 'Inbox',
+    content: createTabContent('Inbox'),
+    icon: 'Inbox',
+    badgeContent: 5,
+    badgeVariant: 'solid',
+    badgeColor: 'primary',
+    badgeClassName: 'px-1.5 rounded-full',
+  },
+  {
+    value: 'sent',
+    label: 'Sent',
+    content: createTabContent('Sent'),
+    icon: 'Send',
+    badgeContent: 12,
+    badgeVariant: 'soft',
+    badgeColor: 'success',
+  },
+  {
+    value: 'drafts',
+    label: 'Drafts',
+    content: createTabContent('Drafts'),
+    icon: 'FileText',
+    badgeContent: 3,
+    badgeVariant: 'solid',
+    badgeColor: 'warning',
+  },
+  {
+    value: 'spam',
+    label: 'Spam',
+    content: createTabContent('Spam'),
+    icon: 'Bell',
+    badgeContent: '99+',
+    badgeVariant: 'solid',
+    badgeColor: 'destructive',
+  },
+];
+
+const tabsWithDisabled: IGRPTabItem[] = [
+  {
+    value: 'active',
+    label: 'Active',
+    content: createTabContent('Active'),
+    icon: 'Check',
+  },
+  {
+    value: 'pending',
+    label: 'Pending',
+    content: createTabContent('Pending'),
+    icon: 'Clock',
+    disabled: true,
+  },
+  {
+    value: 'completed',
+    label: 'Completed',
+    content: createTabContent('Completed'),
+    icon: 'Check',
   },
 ];
 
@@ -274,11 +348,63 @@ export const WithOrientation: Story = {
   },
 };
 
-export const WithSizes: Story = {
+export const WithBadges: Story = {
+  render: Template,
+  args: {
+    items: tabsWithBadges,
+    showIcon: true,
+    showBadge: true,
+    badgePlacement: 'end',
+  },
+};
+
+export const WithBadgesStart: Story = {
+  render: Template,
+  args: {
+    items: tabsWithBadges,
+    showIcon: false,
+    showBadge: true,
+    badgePlacement: 'start',   
+  },
+};
+
+export const WithDisabled: Story = {
+  render: Template,
+  args: {
+    items: tabsWithDisabled,
+    showIcon: true,
+  },
+};
+
+export const AllVariants: Story = {
   render: Template,
   args: {
     items: tabsWithIcons,
     showIcon: true,
-    // tabSize: 'sm',
+    variant: 'default',
+  },
+  argTypes: {
+    variant: {
+      control: { type: 'select' },
+      options: ['default', 'outline', 'pills', 'underline', 'cards'],
+    },
+  },
+};
+
+export const WithScrollIndicators: Story = {
+  render: Template,
+  args: {
+    items: manyTabs,
+    showIcon: true,
+    showScrollIndicators: true,
+  },
+};
+
+export const WithoutScrollIndicators: Story = {
+  render: Template,
+  args: {
+    items: manyTabs,
+    showIcon: true,
+    showScrollIndicators: false,
   },
 };

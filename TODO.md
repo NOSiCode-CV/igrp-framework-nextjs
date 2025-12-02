@@ -26,6 +26,7 @@ Add the following components to the design system:
 
 - [ ] Charts
 - [ ] Banner status
+- [ ] IGRPColors
 
 ## Exports
 

@@ -199,7 +199,7 @@ function IGRPStepperProcess({
                       className={cn(
                         'bg-transparent hover:bg-transparent text-center flex items-center justify-center',
                         'shadow-none text-[10px] w-34',
-                        (isActive || isCompleted) && 'text-background hover:text-background',
+                        (isActive || isCompleted) && 'text-background hover:text-background!',
                       )}
                       size="xs"
                     >

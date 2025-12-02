@@ -286,9 +286,6 @@
   .invisible {
     visibility: hidden;
   }
-  .visible {
-    visibility: visible;
-  }
   .sr-only {
     position: absolute;
     width: 1px;
@@ -2917,14 +2914,14 @@
       }
     }
   }
+  .group-has-data-\[orientation\=horizontal\]\/field\:text-balance {
+    &:is(:where(.group\/field):has(*[data-orientation="horizontal"]) *) {
+      text-wrap: balance;
+    }
+  }
   .group-has-data-\[sidebar\=menu-action\]\/menu-item\:pr-8 {
     &:is(:where(.group\/menu-item):has(*[data-sidebar="menu-action"]) *) {
       padding-right: calc(var(--spacing) * 8);
-    }
-  }
-  .group-has-\[\[data-orientation\=horizontal\]\]\/field\:text-balance {
-    &:is(:where(.group\/field):has(*:is([data-orientation=horizontal])) *) {
-      text-wrap: balance;
     }
   }
   .group-has-\[\[data-slot\=item-description\]\]\/item\:translate-y-0\.5 {
@@ -4081,10 +4078,10 @@
       }
     }
   }
-  .hover\:text-background {
+  .hover\:text-background\! {
     &:hover {
       @media (hover: hover) {
-        color: var(--background);
+        color: var(--background) !important;
       }
     }
   }
@@ -5208,6 +5205,20 @@
     :is(& *) {
       &[data-slot="command-input-wrapper"] {
         height: calc(var(--spacing) * 12);
+      }
+    }
+  }
+  .\*\:data-\[slot\=field\]\:p-4 {
+    :is(& > *) {
+      &[data-slot="field"] {
+        padding: calc(var(--spacing) * 4);
+      }
+    }
+  }
+  .\*\:data-\[slot\=field-group\]\:gap-4 {
+    :is(& > *) {
+      &[data-slot="field-group"] {
+        gap: calc(var(--spacing) * 4);
       }
     }
   }
@@ -6908,6 +6919,11 @@
       padding-bottom: calc(var(--spacing) * 3);
     }
   }
+  .\[\.border-b\]\:pb-4 {
+    &:is(.border-b) {
+      padding-bottom: calc(var(--spacing) * 4);
+    }
+  }
   .\[\.border-b\]\:pb-6 {
     &:is(.border-b) {
       padding-bottom: calc(var(--spacing) * 6);
@@ -7031,13 +7047,6 @@
       }
     }
   }
-  .\[\&\>\*\]\:data-\[slot\=field\]\:p-4 {
-    &>* {
-      &[data-slot="field"] {
-        padding: calc(var(--spacing) * 4);
-      }
-    }
-  }
   .\@md\/field-group\:\[\&\>\*\]\:w-auto {
     @container field-group (width >= 28rem) {
       &>* {
@@ -7084,11 +7093,6 @@
   .\[\&\>\.sr-only\]\:w-auto {
     &>.sr-only {
       width: auto;
-    }
-  }
-  .\[\&\>\[data-slot\=field-group\]\]\:gap-4 {
-    &>[data-slot=field-group] {
-      gap: calc(var(--spacing) * 4);
     }
   }
   .\[\&\>\[data-slot\=field-label\]\]\:flex-auto {

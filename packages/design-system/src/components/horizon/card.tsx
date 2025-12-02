@@ -16,7 +16,7 @@ interface CardProps {
 
 interface IGRPCardProps extends React.ComponentProps<typeof Card>, CardProps {}
 
-function IGRPCard({ className, id, ...props }: IGRPCardProps) {
+function IGRPCard({ className, id, name, ...props }: IGRPCardProps) {
   const _id = useId();
   const ref = name ?? id ?? _id;
 

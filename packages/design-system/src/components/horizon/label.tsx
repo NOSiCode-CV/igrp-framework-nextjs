@@ -1,8 +1,9 @@
 'use client';
 
-import { Label } from '../primitives/label';
-import { cn } from '../../lib/utils';
 import { useId } from 'react';
+
+import { cn } from '../../lib/utils';
+import { Label } from '../primitives/label';
 
 type IGRPLabelProps = React.ComponentProps<typeof Label> & {
   label?: string;
@@ -10,7 +11,14 @@ type IGRPLabelProps = React.ComponentProps<typeof Label> & {
   name?: string;
 };
 
-function IGRPLabel({ label, className, required = false, name, id }: IGRPLabelProps) {
+function IGRPLabel({ 
+  label, 
+  className, 
+  required = false, 
+  name, 
+  id,
+  ...props 
+}: IGRPLabelProps) {
   const _id = useId();
   const ref = name ?? id ?? _id;
 
@@ -20,9 +28,11 @@ function IGRPLabel({ label, className, required = false, name, id }: IGRPLabelPr
     <Label
       htmlFor={ref}
       className={cn(
-        required && 'after:content-["*"] after:ml-0.5 after:text-destructive',
+        required && 'after:content-["*"] after:text-destructive',
+        "gap-0.5",
         className,
       )}
+      {...props}
     >
       {label}
     </Label>

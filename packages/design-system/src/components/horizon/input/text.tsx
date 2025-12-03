@@ -59,7 +59,7 @@ function IGRPInputText({
               type={type}
               required={required}
               aria-required={required}
-              aria-describedby={helperText || error ? `${id}-helper` : undefined}
+              aria-describedby={helperText || error ? `${fieldName}-helper` : undefined}
               className={cn(
                 'peer bg-background py-3 text-sm outline-hidden',
                 showIcon && positionParentIcon,
@@ -86,7 +86,12 @@ function IGRPInputText({
   return (
     <div className={cn('*:not-first:mt-2', className)}>
       {label && (
-        <IGRPLabel label={label} className={labelClassName} required={required} id={fieldName} />
+        <IGRPLabel 
+          label={label} 
+          className={labelClassName} 
+          required={required} 
+          id={fieldName} 
+        />
       )}
 
       <div className={cn('relative')}>
@@ -97,7 +102,7 @@ function IGRPInputText({
           required={required}
           aria-required={required}
           aria-invalid={!!error || !!props['aria-invalid']}
-          aria-describedby={helperText || error ? `${id}-helper` : undefined}
+          aria-describedby={helperText || error ? `${fieldName}-helper` : undefined}
           className={cn(
             'peer bg-background py-3 text-sm outline-hidden',
             showIcon && positionParentIcon,

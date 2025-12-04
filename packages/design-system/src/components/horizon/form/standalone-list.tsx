@@ -17,7 +17,8 @@ import { IGRPBadge, type IGRPBadgeProps } from '../badge';
 import { IGRPIcon, type IGRPIconName } from '../icon';
 
 interface IGRPStandaloneListProps<TItem>
-  extends Omit<IGRPBaseAttributes, 'iconPlacement' | 'helperText'>,
+  extends
+    Omit<IGRPBaseAttributes, 'iconPlacement' | 'helperText'>,
     Partial<Pick<IGRPBadgeProps, 'variant' | 'color' | 'dot' | 'badgeClassName'>> {
   id: string;
   defaultItem: TItem;

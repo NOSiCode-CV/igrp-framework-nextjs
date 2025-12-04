@@ -31,8 +31,7 @@ const breadcrumbVariants = cva('flex flex-wrap items-center', {
 });
 
 interface IGRPBreadcrumbProps
-  extends React.HTMLAttributes<HTMLElement>,
-    VariantProps<typeof breadcrumbVariants> {
+  extends React.HTMLAttributes<HTMLElement>, VariantProps<typeof breadcrumbVariants> {
   separator?: React.ReactNode;
   collapsed?: boolean;
   maxItems?: number;

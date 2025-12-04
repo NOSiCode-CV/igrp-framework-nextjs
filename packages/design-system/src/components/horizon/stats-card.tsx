@@ -240,8 +240,7 @@ const igrpStstaCardIconVariants = cva('flex items-center justify-center shrink-0
 });
 
 interface IGRPStatsCardProps
-  extends Omit<IGRPBaseAttributes, 'ref' | 'iconSize'>,
-    React.HTMLAttributes<HTMLDivElement> {
+  extends Omit<IGRPBaseAttributes, 'ref' | 'iconSize'>, React.HTMLAttributes<HTMLDivElement> {
   title?: string;
   titleSize?: VariantProps<typeof igrpStatsCardTitleVariants>['size'];
   titleClassName?: string;

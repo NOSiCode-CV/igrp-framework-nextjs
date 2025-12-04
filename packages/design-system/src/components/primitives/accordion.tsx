@@ -28,8 +28,7 @@ type AccordionTriggerArgs = {
 };
 
 interface AccordionTriggerProps
-  extends React.ComponentProps<typeof AccordionPrimitive.Trigger>,
-    AccordionTriggerArgs {}
+  extends React.ComponentProps<typeof AccordionPrimitive.Trigger>, AccordionTriggerArgs {}
 
 function AccordionTrigger({
   className,

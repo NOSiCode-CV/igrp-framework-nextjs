@@ -30,12 +30,13 @@ const igrpModalDialogContentVariants = cva('w-full sm:max-w-lg max-h-[90vh] over
 });
 
 /**
- * @deprecated 
+ * @deprecated
  * Use `React.ComponentProps<typeof IGRPModalDialogContent>` instead
  * will be deprecated in the next major version 0.2.0-beta.1
  */
- interface IGRPModalDialogContentProps
-  extends React.ComponentProps<typeof DialogContent>,
+interface IGRPModalDialogContentProps
+  extends
+    React.ComponentProps<typeof DialogContent>,
     VariantProps<typeof igrpModalDialogContentVariants> {
   contentClassName?: string;
 }
@@ -47,9 +48,9 @@ function IGRPModalDialogContent({
   contentClassName,
   ...props
 }: React.ComponentProps<typeof DialogContent> &
-    VariantProps<typeof igrpModalDialogContentVariants> & {
-  contentClassName?: string;
-}) {
+  VariantProps<typeof igrpModalDialogContentVariants> & {
+    contentClassName?: string;
+  }) {
   const hasStickyHeader = Children.toArray(children).some(
     (child) =>
       isValidElement(child) &&
@@ -88,10 +89,10 @@ interface IGRPModalDialogHeaderProps extends React.ComponentProps<typeof DialogH
   stickyHeader?: boolean;
 }
 
-function IGRPModalDialogHeader({ 
-  className, 
-  stickyHeader, 
-  ...props 
+function IGRPModalDialogHeader({
+  className,
+  stickyHeader,
+  ...props
 }: React.ComponentProps<typeof DialogHeader> & {
   stickyHeader?: boolean;
 }) {
@@ -108,7 +109,7 @@ function IGRPModalDialogHeader({
 }
 
 /**
- * @deprecated 
+ * @deprecated
  * will be deprecated in the next major version 0.2.0-beta.1
  * Use `React.ComponentProps<typeof DialogFooter>` instead
  */
@@ -116,10 +117,10 @@ interface IGRPModalDialogFooterProps extends React.ComponentProps<typeof DialogF
   stickyFooter?: boolean;
 }
 
-function IGRPModalDialogFooter({ 
-  className, 
-  stickyFooter, 
-  ...props 
+function IGRPModalDialogFooter({
+  className,
+  stickyFooter,
+  ...props
 }: React.ComponentProps<typeof DialogFooter> & {
   stickyFooter?: boolean;
 }) {

@@ -62,8 +62,7 @@ interface IGRPTextListItem {
 }
 
 interface IGRPTextListProps
-  extends React.HTMLAttributes<HTMLElement>,
-    VariantProps<typeof igrpTextlistVariants> {
+  extends React.HTMLAttributes<HTMLElement>, VariantProps<typeof igrpTextlistVariants> {
   items: IGRPTextListItem[];
   type?: IGRPTextListType;
   animate?: boolean;

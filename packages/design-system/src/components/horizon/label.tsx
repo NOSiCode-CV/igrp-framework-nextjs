@@ -11,14 +11,7 @@ type IGRPLabelProps = React.ComponentProps<typeof Label> & {
   name?: string;
 };
 
-function IGRPLabel({ 
-  label, 
-  className, 
-  required = false, 
-  name, 
-  id,
-  ...props 
-}: IGRPLabelProps) {
+function IGRPLabel({ label, className, required = false, name, id, ...props }: IGRPLabelProps) {
   const _id = useId();
   const ref = name ?? id ?? _id;
 
@@ -27,11 +20,7 @@ function IGRPLabel({
   return (
     <Label
       htmlFor={ref}
-      className={cn(
-        required && 'after:content-["*"] after:text-destructive',
-        "gap-0.5",
-        className,
-      )}
+      className={cn(required && 'after:content-["*"] after:text-destructive', 'gap-0.5', className)}
       {...props}
     >
       {label}

@@ -501,11 +501,11 @@
       max-width: 96rem;
     }
   }
-  .\!m-0 {
-    margin: calc(var(--spacing) * 0) !important;
-  }
   .m-0 {
     margin: calc(var(--spacing) * 0);
+  }
+  .m-0\! {
+    margin: calc(var(--spacing) * 0) !important;
   }
   .m-0\.5 {
     margin: calc(var(--spacing) * 0.5);
@@ -3696,12 +3696,6 @@
     &::after {
       content: var(--tw-content);
       margin-bottom: calc(var(--spacing) * -1);
-    }
-  }
-  .after\:ml-0\.5 {
-    &::after {
-      content: var(--tw-content);
-      margin-left: calc(var(--spacing) * 0.5);
     }
   }
   .after\:h-0\.5 {

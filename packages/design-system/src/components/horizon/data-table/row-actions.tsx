@@ -24,8 +24,7 @@ interface IGRPDataTableActionProps {
 }
 
 interface IGRPDataTableDialogProps
-  extends IGRPDataTableActionProps,
-    VariantProps<typeof igrpModalDialogContentVariants> {
+  extends IGRPDataTableActionProps, VariantProps<typeof igrpModalDialogContentVariants> {
   modalTitle?: string;
   showCancel?: boolean;
   labelCancel?: string;
@@ -39,8 +38,10 @@ interface IGRPDataTableDialogProps
   showStickyFooter?: boolean;
 }
 
-interface IGRPDataTableLinkProps
-  extends Omit<IGRPDataTableActionProps, 'classNameTrigger' | 'children'> {
+interface IGRPDataTableLinkProps extends Omit<
+  IGRPDataTableActionProps,
+  'classNameTrigger' | 'children'
+> {
   href?: string;
   action?: () => void;
 }

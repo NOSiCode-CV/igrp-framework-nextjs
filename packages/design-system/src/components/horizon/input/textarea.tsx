@@ -9,7 +9,8 @@ import { Textarea } from '../../primitives/textarea';
 import { IGRPLabel } from '../label';
 
 interface IGRPTextareaProps
-  extends React.ComponentProps<typeof Textarea>,
+  extends
+    React.ComponentProps<typeof Textarea>,
     Pick<
       IGRPInputProps,
       'label' | 'helperText' | 'className' | 'required' | 'error' | 'gridSize'

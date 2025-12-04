@@ -10,7 +10,8 @@ import { IGRPFormField } from '../form/form-field';
 import { IGRPLabel } from '../label';
 
 interface IGRPCheckboxProps
-  extends React.ComponentProps<typeof Checkbox>,
+  extends
+    React.ComponentProps<typeof Checkbox>,
     Pick<IGRPInputProps, 'helperText' | 'label' | 'gridSize'> {
   labelClassName?: string;
   error?: string;

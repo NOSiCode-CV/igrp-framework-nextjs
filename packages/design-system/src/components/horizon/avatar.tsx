@@ -96,7 +96,8 @@ const badgeVariants = cva(
 );
 
 interface IGRPAvatarProps
-  extends React.ComponentProps<typeof Avatar>,
+  extends
+    React.ComponentProps<typeof Avatar>,
     IGRPBaseAttributes,
     VariantProps<typeof avatarVariants> {
   src?: string;

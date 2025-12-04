@@ -14,8 +14,7 @@ interface IGRPAccordionItem extends Partial<AccordionTriggerArgs> {
 }
 
 interface IGRPAccordionProps
-  extends Partial<AccordionTriggerArgs>,
-    Omit<React.ComponentProps<typeof Accordion>, 'type'> {
+  extends Partial<AccordionTriggerArgs>, Omit<React.ComponentProps<typeof Accordion>, 'type'> {
   classNameTrigger?: string;
   classNameContent?: string;
   items: IGRPAccordionItem[];

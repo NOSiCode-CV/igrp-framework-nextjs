@@ -16,7 +16,7 @@ import {
 import { cn } from '../../../lib/utils';
 import { type IGRPPlacementProps } from '../../../types';
 
-interface IGRPFormFielProps {  
+interface IGRPFormFielProps {
   name: string;
   label?: string;
   helperText?: string;
@@ -57,7 +57,7 @@ function IGRPFormField({
                 <FormLabel
                   className={cn(
                     labelPlacement === 'end' && 'order-last',
-                    "gap-0.5",
+                    'gap-0.5',
                     required && 'after:content-["*"] after:text-destructive',
                   )}
                 >

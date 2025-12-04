@@ -6,19 +6,18 @@ import { IGRPColors, type IGRPColorVariants } from '../../lib/colors';
 import { cn } from '../../lib/utils';
 import { IGRPStatsCard, type IGRPStatsCardProps } from '../horizon/stats-card';
 
-interface StatsCardMiniProps
-  extends Omit<
-    IGRPStatsCardProps,
-    | 'cardBorder'
-    | 'cardBorderPosition'
-    | 'cardVariant'
-    | 'iconShowBackground'
-    | 'iconBackground'
-    | 'iconBackgroundBorder'
-    | 'iconVariant'
-    | 'titleColor'
-    | 'valueColor'
-  > {
+interface StatsCardMiniProps extends Omit<
+  IGRPStatsCardProps,
+  | 'cardBorder'
+  | 'cardBorderPosition'
+  | 'cardVariant'
+  | 'iconShowBackground'
+  | 'iconBackground'
+  | 'iconBackgroundBorder'
+  | 'iconVariant'
+  | 'titleColor'
+  | 'valueColor'
+> {
   variant?: IGRPColorVariants;
 }
 

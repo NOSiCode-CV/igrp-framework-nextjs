@@ -86,12 +86,7 @@ function IGRPInputText({
   return (
     <div className={cn('*:not-first:mt-2', className)}>
       {label && (
-        <IGRPLabel 
-          label={label} 
-          className={labelClassName} 
-          required={required} 
-          id={fieldName} 
-        />
+        <IGRPLabel label={label} className={labelClassName} required={required} id={fieldName} />
       )}
 
       <div className={cn('relative')}>

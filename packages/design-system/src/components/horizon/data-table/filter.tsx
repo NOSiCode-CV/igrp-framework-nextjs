@@ -76,8 +76,10 @@ function IGRPDataTableFilterDate<TData>({
   );
 }
 
-interface IGRPDataTableFilterDropdownProps<TData>
-  extends Omit<IGRPDataTableFilterProps<TData>, 'clearDates' | 'placeholderMax' | 'target'> {
+interface IGRPDataTableFilterDropdownProps<TData> extends Omit<
+  IGRPDataTableFilterProps<TData>,
+  'clearDates' | 'placeholderMax' | 'target'
+> {
   showFilter?: boolean;
   notFoundText?: string;
 }
@@ -154,8 +156,10 @@ function IGRPDataTableFilterDropdown<TData>({
   );
 }
 
-interface IGRPDataTableFilterFacetedProps<TData>
-  extends Omit<IGRPDataTableFilterProps<TData>, 'clearDates' | 'placeholderMax' | 'target'> {
+interface IGRPDataTableFilterFacetedProps<TData> extends Omit<
+  IGRPDataTableFilterProps<TData>,
+  'clearDates' | 'placeholderMax' | 'target'
+> {
   labelFilter?: string;
   labelSearchField?: string;
   table?: Table<TData>;

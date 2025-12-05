@@ -25,5 +25,5 @@ export default async function RootLayout({
   const layoutConfig = await configLayout();
   const config = await createConfig(layoutConfig as IGRPLayoutConfigArgs);
 
-  return <IGRPRootLayout config={config}>{children}</IGRPRootLayout>;
+  return <IGRPRootLayout config={config}>{children}</IGRPRootLayout>
 }

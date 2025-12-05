@@ -103,7 +103,7 @@ function IGRPTemplateHeader({ data, className }: IGRPTemplateHeaderProps) {
 
         {showNotifications && (
           <span className="hidden md:block">
-            <IGRPTemplateNotifications />
+            <IGRPTemplateNotifications notifications={[]} />
           </span>
         )}
 

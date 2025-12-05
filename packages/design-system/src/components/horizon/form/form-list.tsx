@@ -170,7 +170,6 @@ function FormListFormMode<TItem>({
           setOpenItem('item-0');
         }
       } else {
-        // Ensure first item is open when fields are available
         setOpenItem('item-0');
       }
     } else {
@@ -252,25 +251,23 @@ function FormListFormMode<TItem>({
                   </AccordionTrigger>
                 </div>
 
-                {fields.length > 1 && (
-                  <Button
-                    type="button"
-                    variant="ghost"
-                    size="sm"
-                    onClick={(e) => {
-                      e.stopPropagation();
-                      handleRemove(index);
-                    }}
-                    className="h-7 w-7 p-0 ml-2 shrink-0"
-                    aria-label={`Remover item ${index + 1}`}
-                  >
-                    <IGRPIcon
-                      iconName="Trash2"
-                      className="h-4 w-4 text-muted-foreground hover:text-destructive hover:bg-destructive/10"
-                      strokeWidth={2}
-                    />
-                  </Button>
-                )}
+                <Button
+                  type="button"
+                  variant="ghost"
+                  size="sm"
+                  onClick={(e) => {
+                    e.stopPropagation();
+                    handleRemove(index);
+                  }}
+                  className="h-7 w-7 p-0 ml-2 shrink-0"
+                  aria-label={`Remover item ${index + 1}`}
+                >
+                  <IGRPIcon
+                    iconName="Trash2"
+                    className="h-4 w-4 text-muted-foreground hover:text-destructive hover:bg-destructive/10"
+                    strokeWidth={2}
+                  />
+                </Button>
               </div>
 
               <AccordionContent className="px-4 pb-4">
@@ -333,23 +330,19 @@ function FormListStandaloneMode<TItem>({
   const [items, setItems] = useState<any[]>(defaultValue ?? []);
   const [openItem, setOpenItem] = useState<string | undefined>(undefined);
 
-  // Sync with controlled value prop
   useEffect(() => {
     if (value !== undefined) {
       setItems(value);
     }
   }, [value]);
 
-  // Initialize with default item if empty
   useEffect(() => {
     if (items.length === 0 && value === undefined) {
       setItems([defaultItem]);
       onChange?.([defaultItem]);
     }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
-  // Update open item when items change
   useEffect(() => {
     if (items.length > 0) {
       if (openItem) {

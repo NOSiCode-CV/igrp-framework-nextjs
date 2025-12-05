@@ -2,12 +2,14 @@ import { Session } from '@igrp/framework-next-auth';
 
 import { IGRPHeaderDataArgs } from './header';
 import { IGRPSidebarDataArgs } from './sidebar';
-import { IGRPToasterPosition } from './globals';
+import { IGRPPackageJson, IGRPToasterPosition } from './globals';
 import type { SessionProviderProps } from '@igrp/framework-next-auth/client';
 
 export type IGRPConfigArgs = {
   appCode: string;
   previewMode: boolean;
+  syncAccess: boolean;
+  appInformation: IGRPPackageJson;
   layoutMockData: {
     getHeaderData: () => Promise<IGRPHeaderDataArgs>;
     getSidebarData: () => Promise<IGRPSidebarDataArgs>;
@@ -21,6 +23,11 @@ export type IGRPConfigArgs = {
     baseUrl: string;
     timeout?: number;
     headers?: Record<string, string>;
+    m2mServiceId: string;
+    m2mToken: string;
+    syncOnCodeMenus: boolean;
+    appRoutesMatch?: string;
+    appRoutesContent?: string;
   };
   toasterConfig: {
     showToaster: boolean;

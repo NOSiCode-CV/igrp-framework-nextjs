@@ -63,7 +63,7 @@ NEXTAUTH_URL_INTERNAL=http://localhost:3000
 NEXTAUTH_SECRET=your-secret-key-here
 
 # API Configuration
-IGRP_APP_MANAGER_API=https://your-api-url.com
+IGRP_ACCESS_MANAGEMENT_API=https://your-api-url.com
 NEXT_PUBLIC_IGRP_APP_HOME_SLUG=/
 NEXT_IGRP_APP_CENTER_URL=https://app-center-url.com
 
@@ -164,11 +164,43 @@ Coming soon
 | Variable | Description | Default |
 |----------|-------------|---------|
 | `IGRP_PREVIEW_MODE` | Enable preview mode (no auth required) | `false` |
-| `IGRP_APP_MANAGER_API` | API Management base URL | - |
+| `IGRP_ACCESS_MANAGEMENT_API` | API Management base URL | - |
 | `NEXT_PUBLIC_BASE_PATH` | Base path for the application | `/` |
 | `NEXT_PUBLIC_IGRP_APP_HOME_SLUG` | Default home route | `/` |
 | `NEXT_IGRP_APP_CENTER_URL` | Application center URL | - |
 | `NEXT_PUBLIC_ALLOWED_DOMAINS` | Allowed image domains (comma-separated) | - |
+| `IGRP_SYNC_ON_CODE_MENUS` | Enable synchronization of menus defined in code with the IGRP system | `false` |
+| `IGRP_SYNC_ACCESS` | Enable synchronization of applications, resources, and menus with the IGRP Access Management API | `true` |
+| `IGRP_M2M_SERVICE_ID` | Unique identifier for your service in the IGRP Access Management system (required when `IGRP_SYNC_ACCESS=true`) | - |
+| `IGRP_M2M_TOKEN` | Authentication token for machine-to-machine API calls (required when `IGRP_SYNC_ACCESS=true`) | - |
+
+### Synchronization Variables
+
+The following variables control how your application synchronizes with the IGRP system:
+
+#### `IGRP_SYNC_ON_CODE_MENUS`
+- **Purpose**: Controls whether menus defined in your application code are synchronized with the IGRP system
+- **Usage**: Set to `true` to enable code-based menu synchronization, `false` to disable
+- **When to use**: Enable this if you want to sync menus that are hardcoded in your application with the IGRP framework
+
+#### `IGRP_SYNC_ACCESS`
+- **Purpose**: Controls synchronization of applications, resources, and menus with the IGRP Access Management API
+- **Usage**: Set to `true` to enable access management synchronization, `false` to disable
+- **When to use**: Enable this if you want your application to automatically sync its structure (applications, resources, menus) with the IGRP Access Management system
+- **Note**: Requires `IGRP_M2M_SERVICE_ID` and `IGRP_M2M_TOKEN` to be configured when enabled
+
+#### `IGRP_M2M_SERVICE_ID`
+- **Purpose**: Unique identifier for your service in the IGRP Access Management system
+- **Usage**: Set this to your service identifier (e.g., `demo-igrp` or `your-service-name`)
+- **Required when**: `IGRP_SYNC_ACCESS=true`
+- **How to get**: Contact your IGRP Access Management administrator
+
+#### `IGRP_M2M_TOKEN`
+- **Purpose**: Authentication token used for machine-to-machine API calls to the IGRP Access Management API
+- **Usage**: Set this to the token provided by your IGRP Access Management administrator
+- **Required when**: `IGRP_SYNC_ACCESS=true`
+- **How to get**: Contact your IGRP Access Management administrator
+- **Security**: Keep this token secure and never commit it to version control
 
 ## 📜 Available Scripts
 

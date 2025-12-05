@@ -2,7 +2,11 @@ import { igrpBuildConfig } from "@igrp/framework-next";
 import type {
   IGRPConfigArgs,
   IGRPLayoutConfigArgs,
+  IGRPPackageJson,
 } from "@igrp/framework-next-types";
+import pkg from "../package.json"
+import path from "path";
+import fs from "fs";
 import { fontVariables } from "@/lib/fonts";
 import { isPreviewMode } from "@/lib/utils";
 import { getMockApps } from "@/temp/applications/use-mock-apps";
@@ -29,9 +33,32 @@ export function createConfig(
     return `${cleanPath}/api/auth`;
   }
 
+  const appInfo: IGRPPackageJson = {
+    name: pkg.name,
+    version: pkg.version,
+    description: pkg.description,
+  };
+
+  // Extract appRoutesMatch from routes file
+  let appRoutesContent: string | undefined;
+  let appRoutesMatch: string | undefined;
+  try {
+    const defaultRoutesPath = path.join(process.cwd(), ".next/types/routes.d.ts");    
+    const content = fs.readFileSync(defaultRoutesPath, "utf8");
+    
+    const routesMatch = content.match(/type AppRoutes\s*=\s*([\s\S]*?)\n(?=type|interface)/);
+    if (routesMatch && routesMatch[1]) {
+      appRoutesContent = routesMatch[1];
+    }
+  } catch (error) {    
+    console.warn("Could not read routes file:", error);
+  }
+
   return igrpBuildConfig({
     appCode: process.env.IGRP_APP_CODE || "",
     previewMode: isPreviewMode(),
+    syncAccess: process.env.IGRP_SYNC_ACCESS === "true",
+    appInformation: appInfo,
     layoutMockData: {
       getHeaderData: async () => ({
         user: user,
@@ -40,6 +67,9 @@ export function createConfig(
         showNotifications: true,
         showUser: true,
         showThemeSwitcher: true,
+        showIGRPSidebarTrigger: true,
+        showIGRPHeaderTitle: true,
+        showIGRPHeaderLogo: true,
       }),
       getSidebarData: async () => ({
         menuItems: menu,
@@ -59,7 +89,12 @@ export function createConfig(
       ...config,
     },
     apiManagementConfig: {
-      baseUrl: process.env.IGRP_APP_MANAGER_API || "",
+      baseUrl: process.env.IGRP_ACCESS_MANAGEMENT_API || "",
+      m2mServiceId: process.env.IGRP_M2M_SERVICE_ID || "",
+      m2mToken: process.env.IGRP_M2M_TOKEN || "",
+      syncOnCodeMenus: process.env.IGRP_SYNC_ON_CODE_MENUS === "true",      
+      appRoutesMatch,
+      appRoutesContent,
     },
     toasterConfig: {
       showToaster: true,

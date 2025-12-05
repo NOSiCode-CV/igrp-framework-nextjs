@@ -14,6 +14,8 @@ import {
   IGRPCommandSeparatorPrimitive,
 } from '@igrp/igrp-framework-react-design-system';
 
+// TODO: Search items
+
 function IGRPTemplateCommandSearch() {
   const [open, setOpen] = useState(false);
   const router = useRouter();
@@ -46,20 +48,20 @@ function IGRPTemplateCommandSearch() {
         onClick={() => setOpen(true)}
         variant="outline"
         size="lg"
-        className="justify-between focus-visible:outline-none focus-visible:ring-1 border-input px-3 shadow-none sm:w-40 sm:pe-12 md:flex-none lg:w-52 xl:w-64"
+        className="justify-between focus-visible:outline-none focus-visible:ring-1 border-input px-3 shadow-none sm:pe-12 md:flex-none sm:w-40 lg:w-52 xl:w-64"
       >
         <span className="flex items-center ">
           <IGRPIcon iconName="Search" className="mr-1 size-3" />
-          <span className="hidden md:inline-block">Pesquisar...</span>
+          <span>Pesquisar...</span>
         </span>
         <kbd className="pointer-events-none select-none flex items-center gap-1 rounded border px-1 py-1 font-mono text-[10px] font-medium">
           <span className="text-xs">⌘</span>K
         </kbd>
       </IGRPButton>
       <IGRPCommandDialogPrimitive open={open} onOpenChange={setOpen}>
-        <IGRPCommandInputPrimitive placeholder="Type a command or search..." />
+        <IGRPCommandInputPrimitive placeholder="Digite um comando ou pesquisa..." />
         <IGRPCommandListPrimitive>
-          <IGRPCommandEmptyPrimitive>No results found.</IGRPCommandEmptyPrimitive>
+          <IGRPCommandEmptyPrimitive>Sem Resultados.</IGRPCommandEmptyPrimitive>
           <IGRPCommandGroupPrimitive heading="Suggestions">
             <IGRPCommandItemPrimitive onSelect={() => runCommand(() => router.push('/'))}>
               <IGRPIcon iconName="House" className="mr-2" />

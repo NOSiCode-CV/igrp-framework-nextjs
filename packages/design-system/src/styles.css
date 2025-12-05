@@ -2430,7 +2430,7 @@
   .text-balance {
     text-wrap: balance;
   }
-  .break-words {
+  .wrap-break-word {
     overflow-wrap: break-word;
   }
   .whitespace-nowrap {

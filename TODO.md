@@ -58,3 +58,8 @@ Add the following components to the design system:
 ## Menu & Sidebar
 
 - [ ] Menu: When sidebar is closed, show separator between groups. Review scroll behavior for better design
+
+
+# Plus
+
+- create a logger to use in this to logs in the server to see what happens

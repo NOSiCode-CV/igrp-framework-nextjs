@@ -13,8 +13,8 @@ export type IGRPStartupSyncArgs = {
   m2mServiceId: string;
   m2mToken: string;
   menus: IGRPMenuItemArgs[];
-  appRoutesContent?: string;
-  appRoutesMatch?: string;
+  appRoutes?: string[];
+  paramMapBody?: string;
 };
 
 export async function igrpStartupSync({
@@ -25,10 +25,23 @@ export async function igrpStartupSync({
   m2mServiceId,
   m2mToken,
   menus,
-  appRoutesContent,
-  appRoutesMatch,
+  appRoutes,
+  paramMapBody,
 }: IGRPStartupSyncArgs) {
   console.info('=========== IGRP STARTUP SYNC ===========');
+
+  console.log('================================================');
+  console.log({
+    appInformation,
+    baseUrl,
+    appCode,
+    m2mServiceId,
+    m2mToken,
+    menus,
+    appRoutes,
+    paramMapBody,
+  });
+  console.log('================================================');
 
   if (!syncEnabled) {
     console.info(
@@ -42,7 +55,7 @@ export async function igrpStartupSync({
 
   try {
     await igrpSyncApplication({ appInformation, baseUrl, appCode, m2mServiceId, m2mToken });
-    await igrpSyncRoutes({ baseUrl, m2mServiceId, m2mToken, appRoutesContent, appRoutesMatch });
+    await igrpSyncRoutes({ baseUrl, m2mServiceId, m2mToken, appRoutes, paramMapBody });
     await igrpSyncMenus({ appCode, menus, baseUrl, m2mServiceId, m2mToken, syncEnabled });
     isSynced = true;
     console.log('✔ Access Management sync completed.');

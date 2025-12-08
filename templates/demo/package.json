@@ -1,7 +1,7 @@
 ﻿{
   "name": "@igrp/framework-next-template",
-  "version": "0.1.0-beta.84",
-  "description": "iGRP",
+  "version": "0.1.0-beta.85",
+  "description": "iGRP teplate",
   "keywords": [
     "igrp",
     "framework",
@@ -20,18 +20,17 @@
   },
   "dependencies": {
     "@hookform/resolvers": "^5.2.2",
-    "@igrp/framework-next": "0.1.0-beta.84",
-    "@igrp/framework-next-auth": "0.1.0-beta.84",
-    "@igrp/framework-next-types": "0.1.0-beta.84",
-    "@igrp/framework-next-ui": "0.1.0-beta.84",
-    "@igrp/igrp-framework-react-design-system": "0.1.0-beta.84",
+    "@igrp/framework-next": "0.1.0-beta.85",
+    "@igrp/framework-next-auth": "0.1.0-beta.85",
+    "@igrp/framework-next-types": "0.1.0-beta.85",
+    "@igrp/framework-next-ui": "0.1.0-beta.85",
+    "@igrp/igrp-framework-react-design-system": "0.1.0-beta.85",
     "@igrp/platform-access-management-client-ts": "0.1.0-beta.63",
     "@tanstack/react-query": "^5.90.12",
     "class-variance-authority": "^0.7.1",
     "clsx": "^2.1.1",
     "next": "15.5.7",
     "next-auth": "^4.24.13",
-    "next-themes": "^0.4.6",
     "react": "19.2.1",
     "react-dom": "19.2.1",
     "react-hook-form": "^7.66.0",
@@ -42,9 +41,9 @@
   "devDependencies": {
     "@biomejs/biome": "2.2.6",
     "@tailwindcss/postcss": "^4.1.17",
-    "@types/node": "^24.10.0",
-    "@types/react": "^19.2.6",
-    "@types/react-dom": "^19.2.3",
+    "@types/node": "^24.10.1",
+    "@types/react": "19.2.7",
+    "@types/react-dom": "19.2.3",
     "tailwindcss": "^4.1.17",
     "typescript": "^5.9.3"
   }

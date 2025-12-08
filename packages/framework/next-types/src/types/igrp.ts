@@ -26,8 +26,8 @@ export type IGRPConfigArgs = {
     m2mServiceId: string;
     m2mToken: string;
     syncOnCodeMenus: boolean;
-    appRoutesMatch?: string;
-    appRoutesContent?: string;
+    appRoutes?: string[];
+    paramMapBody?: string;
   };
   toasterConfig: {
     showToaster: boolean;

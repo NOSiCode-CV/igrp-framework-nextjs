@@ -9,6 +9,11 @@ export type IGRPRootLayoutArgs = {
 
 export async function IGRPRootLayout({ children, config }: IGRPRootLayoutArgs) {
   const layoutConfig = config;
+
+  console.log('================================================');
+  console.log(layoutConfig);
+  console.log('================================================');
+
   const {
     font,
     layout,
@@ -32,8 +37,8 @@ export async function IGRPRootLayout({ children, config }: IGRPRootLayoutArgs) {
     menus: sidebarData.menuItems || [],
     m2mServiceId: apiManagementConfig?.m2mServiceId || '',
     m2mToken: apiManagementConfig?.m2mToken || '',
-    appRoutesContent: apiManagementConfig?.appRoutesContent,
-    appRoutesMatch: apiManagementConfig?.appRoutesMatch,
+    appRoutes: apiManagementConfig?.appRoutes,
+    paramMapBody: apiManagementConfig?.paramMapBody,
   });
 
   return (

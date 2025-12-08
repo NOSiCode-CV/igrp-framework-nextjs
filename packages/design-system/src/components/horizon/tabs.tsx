@@ -59,6 +59,7 @@ interface IGRPTabItem {
   badgeVariant?: IGRPColorRole;
   badgeColor?: IGRPColorVariants;
   badgeClassName?: string;
+  className?: string;
 }
 
 interface IGRPTabsProps extends React.ComponentProps<typeof Tabs> {

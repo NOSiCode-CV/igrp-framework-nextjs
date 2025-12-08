@@ -24,6 +24,10 @@ export async function igrpSyncMenus({
   m2mToken,
   syncEnabled,
 }: IGRPSyncMenusArgs) {
+  console.log('================================================');
+  console.log({ appCode, menus, baseUrl, m2mServiceId, m2mToken, syncEnabled });
+  console.log('================================================');
+
   if (!syncEnabled) {
     console.log(
       'On code menus synchronization skipped due to disabling. ' +

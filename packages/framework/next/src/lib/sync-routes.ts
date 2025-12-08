@@ -11,17 +11,26 @@ export interface IGRPSyncRoutesArgs {
   baseUrl: string;
   m2mServiceId: string;
   m2mToken: string;
-  appRoutesContent?: string;
-  appRoutesMatch?: string;
+  appRoutes?: string[];
+  paramMapBody?: string;
 }
 
 export async function igrpSyncRoutes({
   baseUrl,
   m2mServiceId,
   m2mToken,
-  appRoutesContent,
-  appRoutesMatch,
+  appRoutes,
+  paramMapBody,
 }: IGRPSyncRoutesArgs) {
+  console.log('================================================');
+  console.log({ baseUrl, m2mServiceId, m2mToken, appRoutes, paramMapBody });
+  console.log('================================================');
+
+  if (!appRoutes || !paramMapBody) {
+    console.warn('No app routes or param map body found');
+    return;
+  }
+
   const config: ApiClientConfig = {
     baseUrl,
   };
@@ -32,24 +41,6 @@ export async function igrpSyncRoutes({
   };
 
   const accessManagementClient = AccessManagementClient.create(config, m2mConfig);
-
-  if (!appRoutesContent) {
-    throw new Error('Could not find AppRoutes in routes.d.ts');
-  }
-
-  const appRoutes = appRoutesContent
-    .split('|')
-    .map((r) => r.trim().replace(/"/g, ''))
-    .filter((r) => r.length > 0 && !r.startsWith('type'));
-
-  // ---- FIX 2: Extract ParamMap block ----
-  const paramMapMatch = appRoutesMatch?.match(/interface ParamMap\s*{([\s\S]*?)^}/m) || [];
-
-  if (!paramMapMatch || !paramMapMatch[1]) {
-    throw new Error('Could not find ParamMap in routes.d.ts');
-  }
-
-  const paramMapBody = paramMapMatch[1];
 
   // ---- FIX 3: Parse ParamMap entries ----
   const paramMap: Record<string, object> = {};
@@ -66,17 +57,13 @@ export async function igrpSyncRoutes({
   }
 
   // ---- Excluded routes ----
-  const excludedRoutes = ['/login', '/logout'];
+  const excludedRoutes = ['/login', '/logout', '/[...not-found]'];
 
   // ---- FIX 4: Filter static routes & exclude unwanted ----
   const menuRoutes = appRoutes.filter((route) => {
     const entry = paramMap[route];
 
-    return (
-      entry &&
-      Object.keys(entry).length === 0 && // must be static
-      !excludedRoutes.includes(route) // must not be excluded
-    );
+    return entry && Object.keys(entry).length === 0 && !excludedRoutes.includes(route);
   });
 
   // ---- Sync to backend ----

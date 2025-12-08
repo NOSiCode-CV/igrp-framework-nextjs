@@ -1,4 +1,4 @@
-import { IGRPQueryProvider } from '@/providers/providers';
+import { IGRPQueryProvider } from '@/providers/query-client';
 
 export default function IGRPGeneratedLayout({ 
   children 

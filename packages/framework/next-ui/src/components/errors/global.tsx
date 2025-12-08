@@ -39,7 +39,7 @@ function IGRPGlobalError({ error, reset, children }: IGRPGlobalErrorProps) {
             alt="Error Image"
             width={300}
             height={200}
-            className="mx-auto mb-2 w-"
+            className="mx-auto mb-2"
           />
           <h1 className="text-2xl font-bold tracking-tight text-gray-900 dark:text-white">
             Ocorreu um erro inesperado.
@@ -55,7 +55,7 @@ function IGRPGlobalError({ error, reset, children }: IGRPGlobalErrorProps) {
             )}
           >
             <p className="mb-2 font-medium text-gray-900 dark:text-white">Detalhes do erro:</p>
-            <p className="break-words text-gray-700 dark:text-gray-300">
+            <p className="wrap-break-word text-gray-700 dark:text-gray-300">
               {error.message || 'An unknown error occurred'}
             </p>
             {error.digest && (

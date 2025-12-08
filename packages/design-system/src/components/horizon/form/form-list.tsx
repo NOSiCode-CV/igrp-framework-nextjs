@@ -1,7 +1,7 @@
 'use client';
 
 import { useCallback, useContext, useEffect, useId, useState } from 'react';
-import { useFieldArray, useWatch, type FieldArrayWithId } from 'react-hook-form';
+import { useFieldArray, useWatch } from 'react-hook-form';
 
 import { cn } from '../../../lib/utils';
 import { type IGRPBaseAttributes } from '../../../types';
@@ -23,7 +23,7 @@ interface IGRPFormListProps<TItem>
     Omit<IGRPBaseAttributes, 'iconPlacement' | 'helperText'>,
     Partial<Pick<IGRPBadgeProps, 'variant' | 'color' | 'dot' | 'badgeClassName'>> {
   id: string;
-  defaultItem: TItem;
+  defaultItem?: TItem;
   description?: string;
   renderItem: (item: TItem, index: number, onChange?: (item: TItem) => void) => React.ReactNode;
   computeLabel?: (item: TItem, index: number) => string;
@@ -32,6 +32,7 @@ interface IGRPFormListProps<TItem>
   addButtonLabel?: string;
   addButtonIconName?: IGRPIconName | string;
   badgeClassName?: string;
+  allowEmpty?: boolean;
 
   value?: TItem[];
   defaultValue?: TItem[];
@@ -61,6 +62,7 @@ function IGRPFormList<TItem>({
   badgeClassName,
   addButtonLabel = 'Adicionar',
   addButtonIconName = 'Plus',
+  allowEmpty = false,
   value,
   defaultValue,
   onChange,
@@ -94,6 +96,7 @@ function IGRPFormList<TItem>({
         badgeClassName={badgeClassName}
         addButtonLabel={addButtonLabel}
         addButtonIconName={addButtonIconName}
+        allowEmpty={allowEmpty}
         ref={ref}
       />
     );
@@ -120,6 +123,7 @@ function IGRPFormList<TItem>({
       badgeClassName={badgeClassName}
       addButtonLabel={addButtonLabel}
       addButtonIconName={addButtonIconName}
+      allowEmpty={allowEmpty}
       value={value}
       defaultValue={defaultValue}
       onChange={onChange}
@@ -148,6 +152,7 @@ function FormListFormMode<TItem>({
   badgeClassName,
   addButtonLabel,
   addButtonIconName,
+  allowEmpty = false,
   ref,
 }: Omit<IGRPFormListProps<TItem>, 'value' | 'defaultValue' | 'onChange' | 'id' | 'name'> & {
   groupId: string;
@@ -155,12 +160,20 @@ function FormListFormMode<TItem>({
   const { fields, append, remove } = useFieldArray({ name: groupId });
   const values = useWatch({ name: groupId }) ?? [];
   const [openItem, setOpenItem] = useState<string | undefined>(undefined);
+  const [pendingNewItem, setPendingNewItem] = useState(false);
 
   useEffect(() => {
-    if (fields.length === 0) {
+    if (fields.length === 0 && defaultItem !== undefined && !allowEmpty) {
       append(defaultItem);
     }
-  }, [append, defaultItem, fields.length]);
+  }, [append, defaultItem, fields.length, allowEmpty]);
+
+  useEffect(() => {
+    if (pendingNewItem && fields.length > 0) {
+      setOpenItem(`item-${fields.length - 1}`);
+      setPendingNewItem(false);
+    }
+  }, [fields.length, pendingNewItem]);
 
   useEffect(() => {
     if (fields.length > 0) {
@@ -179,6 +192,10 @@ function FormListFormMode<TItem>({
 
   const handleRemove = useCallback(
     (index: number) => {
+      if (fields.length <= 1 && !allowEmpty) {
+        return;
+      }
+
       const wasOpen = openItem === `item-${index}`;
       const willHaveItems = fields.length > 1;
 
@@ -198,7 +215,7 @@ function FormListFormMode<TItem>({
         }
       }
     },
-    [remove, openItem, fields.length],
+    [remove, openItem, fields.length, allowEmpty],
   );
 
   return (
@@ -232,13 +249,13 @@ function FormListFormMode<TItem>({
           onValueChange={setOpenItem}
           className="w-full"
         >
-          {fields.map((field: FieldArrayWithId<Record<string, any>, string>, index: number) => (
+          {fields.map((field, index: number) => (
             <AccordionItem
               key={field.id}
               value={`item-${index}`}
               className="border last:border-b rounded-sm mb-4"
             >
-              <div className="flex justify-between items-center px-4">
+              <div className="flex justify-between items-center px-4 gap-2">
                 <div className="flex-1">
                   <AccordionTrigger
                     className={cn('hover:no-underline', computeLabel ? 'py-4' : 'py-2')}
@@ -246,32 +263,30 @@ function FormListFormMode<TItem>({
                     iconPlacement="end"
                   >
                     <span className="font-medium text-sm">
-                      {computeLabel?.(values[index] ?? defaultItem, index) ?? ''}
+                      {computeLabel?.(values[index] ?? defaultItem!, index) ?? ''}
                     </span>
                   </AccordionTrigger>
                 </div>
 
-                <Button
-                  type="button"
-                  variant="ghost"
-                  size="sm"
-                  onClick={(e) => {
-                    e.stopPropagation();
-                    handleRemove(index);
-                  }}
-                  className="h-7 w-7 p-0 ml-2 shrink-0"
-                  aria-label={`Remover item ${index + 1}`}
-                >
-                  <IGRPIcon
-                    iconName="Trash2"
-                    className="h-4 w-4 text-muted-foreground hover:text-destructive hover:bg-destructive/10"
-                    strokeWidth={2}
-                  />
-                </Button>
+                {(fields.length > 1 || allowEmpty) && (
+                  <Button
+                    type="button"
+                    variant="ghost"
+                    size="icon-sm"
+                    onClick={(e) => {
+                      e.stopPropagation();
+                      handleRemove(index);
+                    }}
+                    className="h-7 w-7 p-0 shrink-0 hover:text-destructive"
+                    aria-label={`Remover item ${index + 1}`}
+                  >
+                    <IGRPIcon iconName="Trash2" />
+                  </Button>
+                )}
               </div>
 
               <AccordionContent className="px-4 pb-4">
-                {renderItem(values[index] ?? defaultItem, index)}
+                {renderItem(values[index] ?? defaultItem!, index)}
               </AccordionContent>
             </AccordionItem>
           ))}
@@ -281,9 +296,12 @@ function FormListFormMode<TItem>({
           type="button"
           variant="outline"
           onClick={() => {
-            append(defaultItem);
-            setOpenItem(`item-${fields.length}`);
+            if (defaultItem !== undefined) {
+              setPendingNewItem(true);
+              append(defaultItem);
+            }
           }}
+          disabled={defaultItem === undefined}
           className="w-full"
         >
           <IGRPIcon
@@ -320,6 +338,7 @@ function FormListStandaloneMode<TItem>({
   badgeClassName,
   addButtonLabel,
   addButtonIconName,
+  allowEmpty = false,
   value,
   defaultValue,
   onChange,
@@ -327,7 +346,7 @@ function FormListStandaloneMode<TItem>({
 }: Omit<IGRPFormListProps<TItem>, 'name' | 'id'> & {
   groupId: string;
 }) {
-  const [items, setItems] = useState<any[]>(defaultValue ?? []);
+  const [items, setItems] = useState<TItem[]>(defaultValue ?? []);
   const [openItem, setOpenItem] = useState<string | undefined>(undefined);
 
   useEffect(() => {
@@ -337,9 +356,16 @@ function FormListStandaloneMode<TItem>({
   }, [value]);
 
   useEffect(() => {
-    if (items.length === 0 && value === undefined) {
-      setItems([defaultItem]);
-      onChange?.([defaultItem]);
+    if (
+      items.length === 0 &&
+      value === undefined &&
+      defaultValue === undefined &&
+      defaultItem !== undefined &&
+      !allowEmpty
+    ) {
+      const initialItems = [defaultItem];
+      setItems(initialItems);
+      onChange?.(initialItems);
     }
   }, []);
 
@@ -359,7 +385,7 @@ function FormListStandaloneMode<TItem>({
   }, [items.length, openItem]);
 
   const handleItemChange = useCallback(
-    (index: number, updatedItem: any) => {
+    (index: number, updatedItem: TItem) => {
       const newItems = [...items];
       newItems[index] = updatedItem;
       setItems(newItems);
@@ -369,15 +395,17 @@ function FormListStandaloneMode<TItem>({
   );
 
   const handleAdd = useCallback(() => {
-    const newItems = [...items, defaultItem];
-    setItems(newItems);
-    setOpenItem(`item-${items.length}`);
-    onChange?.(newItems);
+    if (defaultItem !== undefined) {
+      const newItems = [...items, defaultItem];
+      setItems(newItems);
+      setOpenItem(`item-${items.length}`);
+      onChange?.(newItems);
+    }
   }, [items, defaultItem, onChange]);
 
   const handleRemove = useCallback(
     (index: number) => {
-      if (items.length > 1) {
+      if (items.length > 1 || allowEmpty) {
         const wasOpen = openItem === `item-${index}`;
 
         const newItems = items.filter((_, i) => i !== index);
@@ -385,8 +413,12 @@ function FormListStandaloneMode<TItem>({
         onChange?.(newItems);
 
         if (wasOpen) {
-          const newIndex = Math.max(0, index - 1);
-          setOpenItem(`item-${newIndex}`);
+          if (newItems.length > 0) {
+            const newIndex = Math.max(0, index - 1);
+            setOpenItem(`item-${newIndex}`);
+          } else {
+            setOpenItem(undefined);
+          }
         } else if (openItem) {
           const currentIndex = parseInt(openItem.replace('item-', ''), 10);
           if (index < currentIndex && currentIndex > 0) {
@@ -395,12 +427,12 @@ function FormListStandaloneMode<TItem>({
         }
       }
     },
-    [items, onChange, openItem],
+    [items, onChange, openItem, allowEmpty],
   );
 
   return (
     <Card className={cn('shadow-sm gap-0 rounded-lg py-0', className)} id={groupId} ref={ref}>
-      <CardHeader className="py-3 border-b flex flex-row items-center justify-between">
+      <CardHeader className="px-0 p-4 border-b [.border-b]:pb-4 flex flex-row items-center justify-between">
         <div className="flex items-center gap-2">
           {showIcon && iconName && (
             <IGRPIcon
@@ -435,7 +467,7 @@ function FormListStandaloneMode<TItem>({
               value={`item-${index}`}
               className="border last:border-b rounded-sm mb-4"
             >
-              <div className="flex justify-between items-center px-4">
+              <div className="flex justify-between items-center px-4 gap-2">
                 <div className="flex-1">
                   <AccordionTrigger
                     className={cn('hover:no-underline', computeLabel ? 'py-4' : 'py-2')}
@@ -443,42 +475,48 @@ function FormListStandaloneMode<TItem>({
                     iconPlacement="end"
                   >
                     <span className="font-medium text-sm">
-                      {computeLabel?.(item ?? defaultItem, index) ?? ''}
+                      {computeLabel?.(item ?? defaultItem!, index) ?? ''}
                     </span>
                   </AccordionTrigger>
                 </div>
 
-                {items.length > 1 && (
+                {(items.length > 1 || allowEmpty) && (
                   <Button
                     type="button"
                     variant="ghost"
-                    size="sm"
+                    size="icon-sm"
                     onClick={(e) => {
                       e.stopPropagation();
                       handleRemove(index);
                     }}
-                    className="h-7 w-7 p-0 ml-2 shrink-0"
+                    className="h-7 w-7 p-0 shrink-0 hover:text-destructive"
                     aria-label={`Remover item ${index + 1}`}
                   >
-                    <IGRPIcon
-                      iconName="Trash2"
-                      className="h-4 w-4 text-muted-foreground hover:text-destructive hover:bg-destructive/10"
-                      strokeWidth={2}
-                    />
+                    <IGRPIcon iconName="Trash2" />
                   </Button>
                 )}
               </div>
 
               <AccordionContent className="px-4 pb-4">
-                {renderItem(item ?? defaultItem, index, (updatedItem) =>
-                  handleItemChange(index, updatedItem),
+                {renderItem(
+                  item ?? defaultItem!,
+                  index,
+                  defaultItem !== undefined
+                    ? (updatedItem) => handleItemChange(index, updatedItem)
+                    : undefined,
                 )}
               </AccordionContent>
             </AccordionItem>
           ))}
         </Accordion>
 
-        <Button type="button" variant="outline" onClick={handleAdd} className="w-full">
+        <Button
+          type="button"
+          variant="outline"
+          onClick={handleAdd}
+          disabled={defaultItem === undefined}
+          className="w-full"
+        >
           <IGRPIcon
             iconName={addButtonIconName ?? 'Plus'}
             className="h-4 w-4 mr-1"

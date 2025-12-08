@@ -1,4 +1,5 @@
 import { useId } from 'react';
+
 import { igrpCleanString } from '../../lib/strings';
 import {
   Accordion,
@@ -10,7 +11,7 @@ import {
 
 interface IGRPAccordionItem extends Partial<AccordionTriggerArgs> {
   title: string;
-  content: string;
+  content: React.ReactNode;
 }
 
 interface IGRPAccordionProps

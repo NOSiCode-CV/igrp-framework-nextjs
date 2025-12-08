@@ -151,6 +151,179 @@ export const FormListBasic: StoryObj = {
   render: () => <Template />,
 };
 
+const OptionalTemplate = () => {
+  const formRef = useRef<IGRPFormHandle<typeof schema>>(null);
+
+  return (
+    <div className='mx-auto px-6 py-8'>
+      <IGRPForm
+        schema={schema}
+        formRef={formRef}
+        defaultValues={{ socials: [] }}
+        onSubmit={(data) => console.log('Form submitted (optional):', data)}
+      >
+        <IGRPFormList
+          id='optional-example'
+          name='socials'
+          label='Optional Social Links'
+          description='Adicione links sociais apenas se necessário'
+          badgeValue='opcional'
+          defaultItem={defaultItem}
+          renderItem={renderItem}
+          allowEmpty
+          computeLabel={(item: FormValues['socials'][0], index: number) =>
+            item.label ? item.label1 : `Item ${index + 1}`
+          }
+        />
+      </IGRPForm>
+    </div>
+  );
+};
+
+export const FormListOptional: StoryObj = {
+  render: () => <OptionalTemplate />,
+};
+
+// Standalone version with allowEmpty - starts empty
+const AllowEmptyStandaloneTemplate = () => {
+  const [items, setItems] = useState<StandaloneItem[]>([]);
+
+  const renderStandaloneItem = (
+    item: StandaloneItem,
+    _index: number,
+    onChange?: (item: StandaloneItem) => void,
+  ) => (
+    <div className='grid gap-4'>
+      <IGRPInputText
+        label='Nome'
+        required
+        helperText='Insira seu Nome'
+        value={item.label}
+        onChange={(e) => onChange?.({ ...item, label: e.target.value })}
+      />
+      <IGRPCombobox
+        label='Choose an item'
+        placeholder='Select one'
+        options={mockOptions}
+        showSearch={true}
+        showGroup={true}
+        showStatus={true}
+        helperText='You can search by name'
+        value={item.label1}
+        onChange={(value) => onChange?.({ ...item, label1: value as string })}
+      />
+    </div>
+  );
+
+  return (
+    <div className='mx-auto px-6 py-8'>
+      <div className='mb-4 p-4 bg-blue-50 border border-blue-200 rounded-md'>
+        <p className='text-sm font-medium text-blue-900 mb-1'>
+          ✨ allowEmpty Demo
+        </p>
+        <p className='text-xs text-blue-700'>
+          This form list starts empty. Click "Add" to add items. You can remove all items including the last one.
+        </p>
+      </div>
+      <IGRPFormList<StandaloneItem>
+        id='allow-empty-example'
+        label='Social Links'
+        description='Start empty and add items as needed'
+        badgeValue='allowEmpty'
+        defaultItem={{ label: '', label1: '' }}
+        allowEmpty
+        value={items}
+        onChange={setItems}
+        renderItem={renderStandaloneItem}
+        computeLabel={(item: StandaloneItem, index: number) =>
+          item.label ? `${item.label} - ${item.label1}` : `Item ${index + 1}`
+        }
+      />
+      <div className='mt-4 p-4 bg-muted rounded-md'>
+        <p className='text-sm text-muted-foreground mb-2'>
+          Current values ({items.length} {items.length === 1 ? 'item' : 'items'}):
+        </p>
+        {items.length === 0 ? (
+          <p className='text-xs text-muted-foreground italic'>No items added yet</p>
+        ) : (
+          <pre className='text-xs overflow-auto'>
+            {JSON.stringify(items, null, 2)}
+          </pre>
+        )}
+      </div>
+    </div>
+  );
+};
+
+export const FormListAllowEmpty: StoryObj = {
+  render: () => <AllowEmptyStandaloneTemplate />,
+};
+
+// Form version with allowEmpty - starts empty
+const AllowEmptyFormTemplate = () => {
+  const formRef = useRef<IGRPFormHandle<typeof schema>>(null);
+
+  return (
+    <div className='mx-auto px-6 py-8'>
+      <div className='mb-4 p-4 bg-blue-50 border border-blue-200 rounded-md'>
+        <p className='text-sm font-medium text-blue-900 mb-1'>
+          ✨ allowEmpty with Form Context
+        </p>
+        <p className='text-xs text-blue-700'>
+          This form list starts completely empty. Click "Add Social" to add items. You can remove all items including the last one.
+        </p>
+      </div>
+      <IGRPForm
+        schema={schema}
+        formRef={formRef}
+        defaultValues={{ socials: [] }}
+        onSubmit={(data) => {
+          console.log('Form submitted (allowEmpty):', data);
+          alert(`Form submitted with ${data.socials.length} items!`);
+        }}
+      >
+        <IGRPFormList
+          id='allow-empty-form-example'
+          name='socials'
+          label='Social'
+          description='Start empty and add items as needed'
+          badgeValue='allowEmpty'
+          defaultItem={defaultItem}
+          allowEmpty
+          renderItem={renderItem}
+          computeLabel={(item: FormValues['socials'][0], index: number) =>
+            item.label ? `${item.label} - ${item.label1}` : `Item ${index + 1}`
+          }
+        />
+        <div className='mt-4 flex gap-2'>
+          <button
+            type='button'
+            onClick={() => {
+              const data = formRef.current?.getValues();
+              console.log('Current form values:', data);
+              alert(`Current form has ${data?.socials?.length || 0} items`);
+            }}
+            className='px-4 py-2 bg-gray-100 hover:bg-gray-200 rounded-md text-sm'
+          >
+            Check Values
+          </button>
+          <button
+            type='button'
+            onClick={() => formRef.current?.submit()}
+            className='px-4 py-2 bg-blue-600 hover:bg-blue-700 text-white rounded-md text-sm'
+          >
+            Submit Form
+          </button>
+        </div>
+      </IGRPForm>
+    </div>
+  );
+};
+
+export const FormListAllowEmptyForm: StoryObj = {
+  render: () => <AllowEmptyFormTemplate />,
+};
+
 // Standalone version without form context
 type StandaloneItem = {
   label: string;

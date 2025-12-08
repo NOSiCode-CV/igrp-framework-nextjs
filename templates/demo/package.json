@@ -1,7 +1,8 @@
 ﻿{
   "name": "@igrp/framework-next-template",
-  "version": "0.1.0-beta.85",
-  "description": "iGRP teplate",
+  "version": "0.1.0-beta.86",
+  "description": "igrp template",
+  "displayName": "igrp template",
   "keywords": [
     "igrp",
     "framework",
@@ -20,11 +21,11 @@
   },
   "dependencies": {
     "@hookform/resolvers": "^5.2.2",
-    "@igrp/framework-next": "0.1.0-beta.85",
-    "@igrp/framework-next-auth": "0.1.0-beta.85",
-    "@igrp/framework-next-types": "0.1.0-beta.85",
-    "@igrp/framework-next-ui": "0.1.0-beta.85",
-    "@igrp/igrp-framework-react-design-system": "0.1.0-beta.85",
+    "@igrp/framework-next": "0.1.0-beta.86",
+    "@igrp/framework-next-auth": "0.1.0-beta.86",
+    "@igrp/framework-next-types": "0.1.0-beta.86",
+    "@igrp/framework-next-ui": "0.1.0-beta.86",
+    "@igrp/igrp-framework-react-design-system": "0.1.0-beta.86",
     "@igrp/platform-access-management-client-ts": "0.1.0-beta.63",
     "@tanstack/react-query": "^5.90.12",
     "class-variance-authority": "^0.7.1",

@@ -33,7 +33,7 @@ export async function igrpSyncApplication({
     id: 0,
     code: appCode || `APP_${toUpperCaseIdentifier(appInformation.name)}`,
     type: 'INTERNAL' as ApplicationType,
-    name: appInformation.name,
+    name: appInformation.displayName ?? appInformation.name,
     status: 'ACTIVE' as Status,
     description: appInformation.description ?? '',
     departments: [],

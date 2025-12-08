@@ -14,7 +14,7 @@ interface IGRPTemplateNotFoundProps {
 
 function IGRPTemplateNotFound({
   title = '404',
-  description = 'Desculpe, a página que você procurou não foi encontrada.',
+  description = 'Desculpe, página não foi encontrada.',
   image,
   imageAlt = 'Página não encontrada',
   imageWidth = 300,

@@ -20,9 +20,10 @@ import { IGRPTemplateNavUser } from './nav-user';
 
 interface IGRPTemplateSidebarProps extends React.ComponentProps<typeof IGRPSidebarPrimitive> {
   data?: IGRPSidebarDataArgs;
+  baseUrl?: string;
 }
 
-function IGRPTemplateSidebar({ data, ...props }: IGRPTemplateSidebarProps) {
+function IGRPTemplateSidebar({ data, baseUrl, ...props }: IGRPTemplateSidebarProps) {
   if (!data) throw new Error('Dados de Sidebar é obrigatorio.');
 
   const pathname = usePathname();

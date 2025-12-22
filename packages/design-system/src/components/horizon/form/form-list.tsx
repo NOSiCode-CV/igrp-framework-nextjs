@@ -41,6 +41,224 @@ interface IGRPFormListProps<TItem>
   ref?: React.Ref<HTMLDivElement>;
 }
 
+type FormListLayoutProps<TItem> = {
+  groupId: string;
+  className?: string;
+  label?: string;
+  labelClassName?: string;
+  description?: string;
+  showIcon?: boolean;
+  iconName?: IGRPIconName | string;
+  iconClassName?: string;
+  iconSize?: IGRPBaseAttributes['iconSize'];
+  badgeValue?: string;
+  variant?: IGRPBadgeProps['variant'];
+  color?: IGRPBadgeProps['color'];
+  dot?: boolean;
+  badgeClassName?: string;
+  items: TItem[];
+  itemKeys?: string[];
+  computeLabel?: (item: TItem, index: number) => string;
+  renderItem: (item: TItem, index: number, onChange?: (item: TItem) => void) => React.ReactNode;
+  allowEmpty: boolean;
+  onRemove?: (index: number) => void;
+  openItem?: string;
+  onOpenChange: (value: string | undefined) => void;
+  addButtonLabel: string;
+  addButtonIconName?: IGRPIconName | string;
+  onAdd?: () => void;
+  addDisabled?: boolean;
+  onItemChangeFactory?: (index: number) => ((item: TItem) => void) | undefined;
+  ref?: React.Ref<HTMLDivElement>;
+};
+
+function FormListHeader({
+  label,
+  labelClassName,
+  description,
+  showIcon,
+  iconName,
+  iconClassName,
+  iconSize,
+  badgeValue,
+  variant,
+  color,
+  dot,
+  badgeClassName,
+}: Pick<
+  FormListLayoutProps<unknown>,
+  | 'label'
+  | 'labelClassName'
+  | 'description'
+  | 'showIcon'
+  | 'iconName'
+  | 'iconClassName'
+  | 'iconSize'
+  | 'badgeValue'
+  | 'variant'
+  | 'color'
+  | 'dot'
+  | 'badgeClassName'
+>) {
+  return (
+    <CardHeader className="px-0 p-4 border-b [.border-b]:pb-4 flex flex-row items-center justify-between">
+      <div className="flex items-center gap-2">
+        {showIcon && iconName && (
+          <IGRPIcon
+            iconName={iconName}
+            size={iconSize}
+            className={cn('size-4 text-muted-foreground', iconClassName)}
+          />
+        )}
+        <div>
+          <CardTitle className={cn('text-sm font-medium', labelClassName)}>{label}</CardTitle>
+          {description && <CardDescription className="text-xs">{description}</CardDescription>}
+        </div>
+      </div>
+      {badgeValue && (
+        <IGRPBadge variant={variant} color={color} dot={dot} badgeClassName={badgeClassName}>
+          {badgeValue}
+        </IGRPBadge>
+      )}
+    </CardHeader>
+  );
+}
+
+function FormListAddButton({
+  onAdd,
+  disabled,
+  addButtonIconName,
+  addButtonLabel,
+}: Pick<FormListLayoutProps<unknown>, 'onAdd' | 'addButtonIconName' | 'addButtonLabel'> & {
+  disabled?: boolean;
+}) {
+  return (
+    <Button type="button" variant="outline" onClick={onAdd} disabled={disabled} className="w-full">
+      <IGRPIcon iconName={addButtonIconName ?? 'Plus'} className="h-4 w-4 mr-1" strokeWidth={2} />
+      <span>{addButtonLabel}</span>
+    </Button>
+  );
+}
+
+function FormListLayout<TItem>({
+  groupId,
+  className,
+  label,
+  labelClassName,
+  description,
+  showIcon,
+  iconName,
+  iconClassName,
+  iconSize,
+  badgeValue,
+  variant,
+  color,
+  dot,
+  badgeClassName,
+  items,
+  itemKeys,
+  computeLabel,
+  renderItem,
+  allowEmpty,
+  onRemove,
+  openItem,
+  onOpenChange,
+  addButtonLabel,
+  addButtonIconName,
+  onAdd,
+  addDisabled,
+  onItemChangeFactory,
+  ref,
+}: FormListLayoutProps<TItem>) {
+  const canRemove = (items.length > 1 || allowEmpty) && !!onRemove;
+  const getItemKey = (index: number) => itemKeys?.[index] ?? `item-${index}`;
+
+  return (
+    <Card className={cn('shadow-sm gap-0 rounded-lg py-0', className)} id={groupId} ref={ref}>
+      <FormListHeader
+        label={label}
+        labelClassName={labelClassName}
+        description={description}
+        showIcon={showIcon}
+        iconName={iconName}
+        iconClassName={iconClassName}
+        iconSize={iconSize}
+        badgeValue={badgeValue}
+        variant={variant}
+        color={color}
+        dot={dot}
+        badgeClassName={badgeClassName}
+      />
+
+      <CardContent className="p-4">
+        <Accordion
+          type="single"
+          collapsible
+          value={openItem ?? ''}
+          onValueChange={(value) => onOpenChange(value || undefined)}
+          className="w-full"
+        >
+          {items.map((item, index) => {
+            const accordionValue = `item-${index}`;
+            const itemKey = getItemKey(index);
+            const labelValue = computeLabel?.(item, index) ?? '';
+            const onItemRemove = onRemove ? () => onRemove(index) : undefined;
+            const onItemChange = onItemChangeFactory?.(index);
+            const normalizedOnItemChange = onItemChange as ((item: TItem) => void) | undefined;
+
+            return (
+              <AccordionItem
+                key={itemKey}
+                value={accordionValue}
+                className="border last:border-b rounded-sm mb-4"
+              >
+                <div className="flex justify-between items-center px-4 gap-2">
+                  <div className="flex-1">
+                    <AccordionTrigger
+                      className={cn('hover:no-underline', computeLabel ? 'py-4' : 'py-2')}
+                      showIcon
+                      iconPlacement="end"
+                    >
+                      <span className="font-medium text-sm">{labelValue}</span>
+                    </AccordionTrigger>
+                  </div>
+
+                  {canRemove && onItemRemove && (
+                    <Button
+                      type="button"
+                      variant="ghost"
+                      size="icon-sm"
+                      onClick={(e) => {
+                        e.stopPropagation();
+                        onItemRemove();
+                      }}
+                      className="h-7 w-7 p-0 shrink-0 hover:text-destructive"
+                      aria-label={`Remover item ${index + 1}`}
+                    >
+                      <IGRPIcon iconName="Trash2" />
+                    </Button>
+                  )}
+                </div>
+
+                <AccordionContent className="px-4 pb-4">
+                  {renderItem(item, index, normalizedOnItemChange)}
+                </AccordionContent>
+              </AccordionItem>
+            );
+          })}
+        </Accordion>
+
+        <FormListAddButton
+          onAdd={onAdd}
+          disabled={addDisabled ?? !onAdd}
+          addButtonIconName={addButtonIconName}
+          addButtonLabel={addButtonLabel}
+        />
+      </CardContent>
+    </Card>
+  );
+}
+
 function IGRPFormList<TItem>({
   id,
   name,
@@ -150,8 +368,8 @@ function FormListFormMode<TItem>({
   variant,
   color,
   badgeClassName,
-  addButtonLabel,
-  addButtonIconName,
+  addButtonLabel = 'Adicionar',
+  addButtonIconName = 'Plus',
   allowEmpty = false,
   ref,
 }: Omit<IGRPFormListProps<TItem>, 'value' | 'defaultValue' | 'onChange' | 'id' | 'name'> & {
@@ -219,102 +437,42 @@ function FormListFormMode<TItem>({
   );
 
   return (
-    <Card className={cn('shadow-sm gap-0 rounded-lg py-0', className)} id={groupId} ref={ref}>
-      <CardHeader className="px-0 p-4 border-b [.border-b]:pb-4 flex flex-row items-center justify-between ">
-        <div className="flex items-center gap-2">
-          {showIcon && iconName && (
-            <IGRPIcon
-              iconName={iconName}
-              size={iconSize}
-              className={cn('size-4 text-muted-foreground', iconClassName)}
-            />
-          )}
-          <div>
-            <CardTitle className={cn('text-sm font-medium', labelClassName)}>{label}</CardTitle>
-            {description && <CardDescription className="text-xs">{description}</CardDescription>}
-          </div>
-        </div>
-        {badgeValue && (
-          <IGRPBadge variant={variant} color={color} dot={dot} badgeClassName={badgeClassName}>
-            {badgeValue}
-          </IGRPBadge>
-        )}
-      </CardHeader>
-
-      <CardContent className="p-4">
-        <Accordion
-          type="single"
-          collapsible
-          value={openItem}
-          onValueChange={setOpenItem}
-          className="w-full"
-        >
-          {fields.map((field, index: number) => (
-            <AccordionItem
-              key={field.id}
-              value={`item-${index}`}
-              className="border last:border-b rounded-sm mb-4"
-            >
-              <div className="flex justify-between items-center px-4 gap-2">
-                <div className="flex-1">
-                  <AccordionTrigger
-                    className={cn('hover:no-underline', computeLabel ? 'py-4' : 'py-2')}
-                    showIcon
-                    iconPlacement="end"
-                  >
-                    <span className="font-medium text-sm">
-                      {computeLabel?.(values[index] ?? defaultItem!, index) ?? ''}
-                    </span>
-                  </AccordionTrigger>
-                </div>
-
-                {(fields.length > 1 || allowEmpty) && (
-                  <Button
-                    type="button"
-                    variant="ghost"
-                    size="icon-sm"
-                    onClick={(e) => {
-                      e.stopPropagation();
-                      handleRemove(index);
-                    }}
-                    className="h-7 w-7 p-0 shrink-0 hover:text-destructive"
-                    aria-label={`Remover item ${index + 1}`}
-                  >
-                    <IGRPIcon iconName="Trash2" />
-                  </Button>
-                )}
-              </div>
-
-              <AccordionContent className="px-4 pb-4">
-                {renderItem(values[index] ?? defaultItem!, index)}
-              </AccordionContent>
-            </AccordionItem>
-          ))}
-        </Accordion>
-
-        <Button
-          type="button"
-          variant="outline"
-          onClick={() => {
-            if (defaultItem !== undefined) {
+    <FormListLayout
+      groupId={groupId}
+      className={className}
+      label={label}
+      labelClassName={labelClassName}
+      description={description}
+      showIcon={showIcon}
+      iconName={iconName}
+      iconClassName={iconClassName}
+      iconSize={iconSize}
+      badgeValue={badgeValue}
+      variant={variant}
+      color={color}
+      dot={dot}
+      badgeClassName={badgeClassName}
+      items={fields.map((_, index) => values[index] ?? defaultItem!)}
+      itemKeys={fields.map((field) => field.id)}
+      computeLabel={(item, index) => computeLabel?.(item, index) ?? ''}
+      renderItem={(item, index) => renderItem(item, index)}
+      allowEmpty={allowEmpty}
+      onRemove={handleRemove}
+      openItem={openItem}
+      onOpenChange={setOpenItem}
+      addButtonLabel={addButtonLabel}
+      addButtonIconName={addButtonIconName}
+      onAdd={
+        defaultItem !== undefined
+          ? () => {
               setPendingNewItem(true);
               append(defaultItem);
             }
-          }}
-          disabled={defaultItem === undefined}
-          className="w-full"
-        >
-          <IGRPIcon
-            iconName={addButtonIconName ?? 'Plus'}
-            className="h-4 w-4 mr-1"
-            strokeWidth={2}
-          />
-          <span>
-            {addButtonLabel} {label}
-          </span>
-        </Button>
-      </CardContent>
-    </Card>
+          : undefined
+      }
+      addDisabled={defaultItem === undefined}
+      ref={ref}
+    />
   );
 }
 
@@ -336,8 +494,8 @@ function FormListStandaloneMode<TItem>({
   variant,
   color,
   badgeClassName,
-  addButtonLabel,
-  addButtonIconName,
+  addButtonLabel = 'Adicionar',
+  addButtonIconName = 'Plus',
   allowEmpty = false,
   value,
   defaultValue,
@@ -431,103 +589,41 @@ function FormListStandaloneMode<TItem>({
   );
 
   return (
-    <Card className={cn('shadow-sm gap-0 rounded-lg py-0', className)} id={groupId} ref={ref}>
-      <CardHeader className="px-0 p-4 border-b [.border-b]:pb-4 flex flex-row items-center justify-between">
-        <div className="flex items-center gap-2">
-          {showIcon && iconName && (
-            <IGRPIcon
-              iconName={iconName}
-              size={iconSize}
-              className={cn('size-4 text-muted-foreground', iconClassName)}
-            />
-          )}
-          <div>
-            <CardTitle className={cn('text-sm font-medium', labelClassName)}>{label}</CardTitle>
-            {description && <CardDescription className="text-xs">{description}</CardDescription>}
-          </div>
-        </div>
-        {badgeValue && (
-          <IGRPBadge variant={variant} color={color} dot={dot} badgeClassName={badgeClassName}>
-            {badgeValue}
-          </IGRPBadge>
-        )}
-      </CardHeader>
-
-      <CardContent className="p-4">
-        <Accordion
-          type="single"
-          collapsible
-          value={openItem}
-          onValueChange={setOpenItem}
-          className="w-full"
-        >
-          {items.map((item, index) => (
-            <AccordionItem
-              key={`item-${index}`}
-              value={`item-${index}`}
-              className="border last:border-b rounded-sm mb-4"
-            >
-              <div className="flex justify-between items-center px-4 gap-2">
-                <div className="flex-1">
-                  <AccordionTrigger
-                    className={cn('hover:no-underline', computeLabel ? 'py-4' : 'py-2')}
-                    showIcon
-                    iconPlacement="end"
-                  >
-                    <span className="font-medium text-sm">
-                      {computeLabel?.(item ?? defaultItem!, index) ?? ''}
-                    </span>
-                  </AccordionTrigger>
-                </div>
-
-                {(items.length > 1 || allowEmpty) && (
-                  <Button
-                    type="button"
-                    variant="ghost"
-                    size="icon-sm"
-                    onClick={(e) => {
-                      e.stopPropagation();
-                      handleRemove(index);
-                    }}
-                    className="h-7 w-7 p-0 shrink-0 hover:text-destructive"
-                    aria-label={`Remover item ${index + 1}`}
-                  >
-                    <IGRPIcon iconName="Trash2" />
-                  </Button>
-                )}
-              </div>
-
-              <AccordionContent className="px-4 pb-4">
-                {renderItem(
-                  item ?? defaultItem!,
-                  index,
-                  defaultItem !== undefined
-                    ? (updatedItem) => handleItemChange(index, updatedItem)
-                    : undefined,
-                )}
-              </AccordionContent>
-            </AccordionItem>
-          ))}
-        </Accordion>
-
-        <Button
-          type="button"
-          variant="outline"
-          onClick={handleAdd}
-          disabled={defaultItem === undefined}
-          className="w-full"
-        >
-          <IGRPIcon
-            iconName={addButtonIconName ?? 'Plus'}
-            className="h-4 w-4 mr-1"
-            strokeWidth={2}
-          />
-          <span>
-            {addButtonLabel} {label}
-          </span>
-        </Button>
-      </CardContent>
-    </Card>
+    <FormListLayout
+      groupId={groupId}
+      className={className}
+      label={label}
+      labelClassName={labelClassName}
+      description={description}
+      showIcon={showIcon}
+      iconName={iconName}
+      iconClassName={iconClassName}
+      iconSize={iconSize}
+      badgeValue={badgeValue}
+      variant={variant}
+      color={color}
+      dot={dot}
+      badgeClassName={badgeClassName}
+      items={items.map((item) => (item ?? defaultItem!) as TItem)}
+      computeLabel={(item, index) => computeLabel?.(item, index) ?? ''}
+      renderItem={(item, index, onChange?: (value: TItem) => void) =>
+        renderItem(item, index, onChange)
+      }
+      allowEmpty={allowEmpty}
+      onRemove={handleRemove}
+      openItem={openItem}
+      onOpenChange={setOpenItem}
+      addButtonLabel={addButtonLabel}
+      addButtonIconName={addButtonIconName}
+      onAdd={handleAdd}
+      addDisabled={defaultItem === undefined}
+      onItemChangeFactory={
+        defaultItem !== undefined
+          ? (index) => (updatedItem: TItem) => handleItemChange(index, updatedItem)
+          : undefined
+      }
+      ref={ref}
+    />
   );
 }
 

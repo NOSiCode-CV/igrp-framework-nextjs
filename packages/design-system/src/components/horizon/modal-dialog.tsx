@@ -29,8 +29,14 @@ const igrpModalDialogContentVariants = cva('w-full sm:max-w-lg max-h-[90vh] over
   },
 });
 
+/**
+ * @deprecated
+ * Use `React.ComponentProps<typeof IGRPModalDialogContent>` instead
+ * will be deprecated in the next major version 0.2.0-beta.1
+ */
 interface IGRPModalDialogContentProps
-  extends React.ComponentProps<typeof DialogContent>,
+  extends
+    React.ComponentProps<typeof DialogContent>,
     VariantProps<typeof igrpModalDialogContentVariants> {
   contentClassName?: string;
 }
@@ -41,7 +47,10 @@ function IGRPModalDialogContent({
   children,
   contentClassName,
   ...props
-}: IGRPModalDialogContentProps) {
+}: React.ComponentProps<typeof DialogContent> &
+  VariantProps<typeof igrpModalDialogContentVariants> & {
+    contentClassName?: string;
+  }) {
   const hasStickyHeader = Children.toArray(children).some(
     (child) =>
       isValidElement(child) &&
@@ -71,11 +80,22 @@ function IGRPModalDialogContent({
   );
 }
 
+/**
+ * @deprecated
+ * will be deprecated in the next major version 0.2.0-beta.1
+ * Use `React.ComponentProps<typeof IGRPModalDialogHeader>` instead
+ */
 interface IGRPModalDialogHeaderProps extends React.ComponentProps<typeof DialogHeader> {
   stickyHeader?: boolean;
 }
 
-function IGRPModalDialogHeader({ className, stickyHeader, ...props }: IGRPModalDialogHeaderProps) {
+function IGRPModalDialogHeader({
+  className,
+  stickyHeader,
+  ...props
+}: React.ComponentProps<typeof DialogHeader> & {
+  stickyHeader?: boolean;
+}) {
   return (
     <DialogHeader
       className={cn(
@@ -88,11 +108,22 @@ function IGRPModalDialogHeader({ className, stickyHeader, ...props }: IGRPModalD
   );
 }
 
+/**
+ * @deprecated
+ * will be deprecated in the next major version 0.2.0-beta.1
+ * Use `React.ComponentProps<typeof DialogFooter>` instead
+ */
 interface IGRPModalDialogFooterProps extends React.ComponentProps<typeof DialogFooter> {
   stickyFooter?: boolean;
 }
 
-function IGRPModalDialogFooter({ className, stickyFooter, ...props }: IGRPModalDialogFooterProps) {
+function IGRPModalDialogFooter({
+  className,
+  stickyFooter,
+  ...props
+}: React.ComponentProps<typeof DialogFooter> & {
+  stickyFooter?: boolean;
+}) {
   return (
     <DialogFooter
       className={cn(

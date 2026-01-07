@@ -10,8 +10,10 @@ import type { IGRPInputProps } from '../../../types';
 import { Input } from '../../primitives/input';
 import { IGRPLabel } from '../label';
 
-interface IGRPDateTimeInputProps
-  extends Omit<IGRPInputProps, 'onChange' | 'defaultValue' | 'value'> {
+interface IGRPDateTimeInputProps extends Omit<
+  IGRPInputProps,
+  'onChange' | 'defaultValue' | 'value'
+> {
   value?: string;
   defaultValue?: string;
   onChange?: (value: string) => void;

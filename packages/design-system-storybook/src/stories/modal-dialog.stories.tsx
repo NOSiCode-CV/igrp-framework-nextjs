@@ -1,3 +1,4 @@
+import { useState } from 'react';
 import type { Meta, StoryObj } from '@storybook/nextjs-vite';
 import {
   IGRPModalDialog,
@@ -254,4 +255,47 @@ export const WithFormContent: Story = {
         </>
       ),
     }),
+};
+
+export const WithOutsideButton: Story = {
+  render: () => {
+    const [open, setOpen] = useState(false);
+
+    return (
+      <div className='container mx-auto p-10 flex flex-col items-center justify-center gap-4'>
+        <IGRPButtonPrimitive onClick={() => setOpen(true)}>
+          Open Modal from Outside Button
+        </IGRPButtonPrimitive>
+        <IGRPModalDialog open={open} onOpenChange={setOpen}>
+          <IGRPModalDialogContent size='md'>
+            <IGRPModalDialogHeader>
+              <IGRPModalDialogTitle>Modal Controlled by Outside Button</IGRPModalDialogTitle>
+              <IGRPModalDialogDescription>
+                This modal is opened and controlled by a button that is outside the modal dialog
+                component structure.
+              </IGRPModalDialogDescription>
+            </IGRPModalDialogHeader>
+            <div>
+              <p>
+                The modal state is managed using React state, allowing you to control it from
+                anywhere in your component tree.
+              </p>
+              <p className='mt-4'>
+                This pattern is useful when you need to trigger a modal from a button that's not
+                directly nested within the modal component.
+              </p>
+            </div>
+            <IGRPModalDialogFooter>
+              <IGRPButtonPrimitive variant='outline' onClick={() => setOpen(false)}>
+                Cancel
+              </IGRPButtonPrimitive>
+              <IGRPModalDialogClose asChild>
+                <IGRPButtonPrimitive>Confirm</IGRPButtonPrimitive>
+              </IGRPModalDialogClose>
+            </IGRPModalDialogFooter>
+          </IGRPModalDialogContent>
+        </IGRPModalDialog>
+      </div>
+    );
+  },
 };

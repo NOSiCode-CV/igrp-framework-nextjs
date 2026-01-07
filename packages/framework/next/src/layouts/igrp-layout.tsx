@@ -12,6 +12,10 @@ export type IGRPLayoutArgs = {
 export async function IGRPLayout({ children, config }: IGRPLayoutArgs) {
   const layoutConfig = config;
 
+  console.log('================================================');
+  console.log(layoutConfig);
+  console.log('================================================');
+
   const {
     appCode,
     previewMode,
@@ -28,13 +32,13 @@ export async function IGRPLayout({ children, config }: IGRPLayoutArgs) {
   if (!previewMode) {
     if (!apiManagementConfig || !apiManagementConfig.baseUrl) {
       throw new Error(
-        '[igrp-layout]: Modo de pré-visualização desativado. É necessária a configuração da gestão de acesso',
+        '[ERROR_IGRP_PREVIEW_MODE]: Modo de pré-visualização desativado. É necessária a configuração da gestão de acesso',
       );
     }
 
     igrpSetAccessClientConfig({
       token: session?.accessToken || '',
-      baseUrl: apiManagementConfig?.baseUrl || '',
+      baseUrl: apiManagementConfig?.baseUrl,
     });
   }
 

@@ -57,7 +57,8 @@ function IGRPFormField({
                 <FormLabel
                   className={cn(
                     labelPlacement === 'end' && 'order-last',
-                    required && 'after:content-["*"] after:ml-0.5 after:text-destructive',
+                    'gap-0.5',
+                    required && 'after:content-["*"] after:text-destructive',
                   )}
                 >
                   {label}

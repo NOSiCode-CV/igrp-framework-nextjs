@@ -66,7 +66,8 @@ function selectReducer(state: SelectState, action: SelectAction): SelectState {
 }
 
 interface IGRPSelectProps
-  extends React.ComponentProps<typeof Select>,
+  extends
+    React.ComponentProps<typeof Select>,
     Omit<IGRPInputProps, 'autoComplete' | 'defaultValue' | 'dir' | 'value'> {
   options: IGRPOptionsProps[];
   placeholder?: string;

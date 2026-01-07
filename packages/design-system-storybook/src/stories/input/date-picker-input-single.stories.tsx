@@ -41,6 +41,16 @@ export const Default: Story = {
   render: Demo,
 };
 
+export const WithDefaultValue: Story = {
+  args: {
+    label: 'Event Date',
+    helperText: 'This date picker has a default value',
+    required: true,
+    date: new Date(2024, 5, 15), // June 15, 2024
+  },
+  render: Demo,
+};
+
 export const WithForm: Story = {
   args: {
     name: 'bookingDate',
@@ -50,6 +60,43 @@ export const WithForm: Story = {
   },
   render: (args) => {
     const methods = useForm({});
+
+    const onSubmit = methods.handleSubmit((data) => {
+      alert(JSON.stringify(data, null, 2));
+    });
+
+    return (
+      <FormProvider {...methods}>
+        <form
+          onSubmit={onSubmit}
+          className='space-y-4 max-w-md p-4'
+        >
+          <IGRPDatePickerInputSingle {...args} />
+          <button
+            type='submit'
+            className='bg-primary text-white px-4 py-2 rounded-md'
+          >
+            Submit
+          </button>
+        </form>
+      </FormProvider>
+    );
+  },
+};
+
+export const WithFormDefaultValue: Story = {
+  args: {
+    name: 'appointmentDate',
+    label: 'Appointment Date',
+    helperText: 'This form has a default date value',
+    required: true,
+  },
+  render: (args) => {
+    const methods = useForm({
+      defaultValues: {
+        appointmentDate: new Date(2024, 8, 20), // September 20, 2024
+      },
+    });
 
     const onSubmit = methods.handleSubmit((data) => {
       alert(JSON.stringify(data, null, 2));

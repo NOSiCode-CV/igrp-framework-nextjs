@@ -18,7 +18,8 @@ type IGRPRadioOption = {
 };
 
 interface IGRPRadioGroupProps
-  extends IGRPBaseAttributes,
+  extends
+    IGRPBaseAttributes,
     VariantProps<typeof radioItemVariants>,
     React.ComponentProps<typeof RadioGroup> {
   options: IGRPRadioOption[];

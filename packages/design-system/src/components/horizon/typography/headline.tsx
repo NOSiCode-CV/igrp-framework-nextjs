@@ -25,7 +25,8 @@ const igrpHeadlineVariants = cva('scroll-m-20 font-bold tracking-tight text-bala
 });
 
 interface IGRPHeadlineProps
-  extends VariantProps<typeof igrpHeadlineVariants>,
+  extends
+    VariantProps<typeof igrpHeadlineVariants>,
     Omit<React.ComponentProps<'div'>, 'title'>,
     Partial<IGRPBaseAttributes> {
   title: string;

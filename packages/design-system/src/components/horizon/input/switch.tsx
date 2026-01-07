@@ -10,7 +10,8 @@ import { IGRPFormField } from '../form/form-field';
 import { IGRPLabel } from '../label';
 
 interface IGRPSwitchProps
-  extends React.ComponentProps<typeof Switch>,
+  extends
+    React.ComponentProps<typeof Switch>,
     Pick<IGRPInputProps, 'helperText' | 'label' | 'gridSize'> {
   labelClassName?: string;
   error?: string;

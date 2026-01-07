@@ -20,7 +20,12 @@ export type {
   IGRPUserArgs,
 } from './types/access-management';
 
-export type { IGRPMockDataAsync, IGRPMockData, IGRPToasterPosition } from './types/globals';
+export type {
+  IGRPMockDataAsync,
+  IGRPMockData,
+  IGRPToasterPosition,
+  IGRPPackageJson,
+} from './types/globals';
 
 export type { IGRPHeaderDataArgs, IGRPNotificationArgs } from './types/header';
 

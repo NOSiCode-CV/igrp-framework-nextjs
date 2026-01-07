@@ -28,8 +28,7 @@ type AccordionTriggerArgs = {
 };
 
 interface AccordionTriggerProps
-  extends React.ComponentProps<typeof AccordionPrimitive.Trigger>,
-    AccordionTriggerArgs {}
+  extends React.ComponentProps<typeof AccordionPrimitive.Trigger>, AccordionTriggerArgs {}
 
 function AccordionTrigger({
   className,
@@ -39,8 +38,6 @@ function AccordionTrigger({
   iconPlacement = 'end',
   ...props
 }: AccordionTriggerProps) {
-  console.log('iconName', iconName);
-  console.log('iconPlacement', iconPlacement);
   return (
     <AccordionPrimitive.Header className="flex">
       <AccordionPrimitive.Trigger

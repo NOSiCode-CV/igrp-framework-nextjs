@@ -3,11 +3,11 @@
 
 export { IGRPGlobalLoading } from './components/glabal-loading';
 
-export { IGRPLayout, type IGRPLayoutArgs } from './components/igrp-layout';
+export { IGRPLayout, type IGRPLayoutArgs } from './layouts/igrp-layout';
 
-export { IGRPRootLayout, type IGRPRootLayoutArgs } from './components/igrp-root-layout';
+export { IGRPRootLayout, type IGRPRootLayoutArgs } from './layouts/igrp-root-layout';
 
-export { igrpBuildConfig } from './config/build';
+export { igrpBuildConfig } from './lib/build';
 
 export { igrpGetAccessClient, igrpResetAccessClient } from './lib/api-client';
 
@@ -21,9 +21,3 @@ export {
 export { igrpBuildQueryString } from './lib/build-query-string';
 
 export { igrpDeleteAuthCookies } from './lib/delete-auth-cookies';
-
-export { mapperApplications } from './mappers/applications-mapper';
-
-export { mapperMenus, mapperMenu } from './mappers/menus-mapper';
-
-export { mapperUser } from './mappers/users-mapper';

@@ -63,6 +63,19 @@ const meta: Meta<typeof IGRPPdfViewer> = {
       description: 'Label for the "open in new tab" button',
       control: 'text',
     },
+    loadErrorLabel: {
+      description: 'Message shown when the PDF cannot be loaded',
+      control: 'text',
+    },
+    loadTimeoutMs: {
+      description: 'Milliseconds to wait before treating load as timed out',
+      control: 'number',
+    },
+    viewerPreference: {
+      description: 'Preferred viewer engine',
+      control: 'select',
+      options: ['google', 'native', 'auto'],
+    },
   },
 };
 
@@ -76,6 +89,7 @@ export const Default: Story = {
     displayMode: 'modal',
     labelButtonCancel: 'Close',
     labelButtonNewTab: 'Open in new tab',
+    viewerPreference: 'google',
   },
   parameters: {
     docs: {
@@ -92,6 +106,7 @@ export const Inline: Story = {
     document: sampleDocument,
     displayMode: 'inline',
     inlineHeight: '500px',
+    viewerPreference: 'google',
   },
   parameters: {
     docs: {
@@ -108,6 +123,7 @@ export const InlineWithoutCard: Story = {
     document: sampleDocument,
     displayMode: 'inline',
     inlineHeight: '400px',
+    viewerPreference: 'google',
   },
   parameters: {
     docs: {
@@ -123,6 +139,7 @@ export const LongTitle: Story = {
   args: {
     document: longTitleDocument,
     displayMode: 'modal',
+    viewerPreference: 'google',
   },
   parameters: {
     docs: {
@@ -139,6 +156,7 @@ export const TechnicalDocument: Story = {
     document: technicalDocument,
     displayMode: 'inline',
     inlineHeight: '600px',
+    viewerPreference: 'google',
   },
   parameters: {
     docs: {
@@ -156,6 +174,7 @@ export const CustomLabels: Story = {
     displayMode: 'modal',
     labelButtonCancel: 'Cerrar',
     labelButtonNewTab: 'Abrir en nueva pestaña',
+    viewerPreference: 'google',
   },
   parameters: {
     docs: {
@@ -172,6 +191,7 @@ export const SmallHeightInline: Story = {
     document: sampleDocument,
     displayMode: 'inline',
     inlineHeight: '300px',
+    viewerPreference: 'google',
   },
   parameters: {
     docs: {
@@ -188,6 +208,7 @@ export const LargeHeightInline: Story = {
     document: sampleDocument,
     displayMode: 'inline',
     inlineHeight: '80vh',
+    viewerPreference: 'google',
   },
   parameters: {
     docs: {
@@ -207,6 +228,7 @@ export const MultipleDocuments: Story = {
         <IGRPPdfViewer
           document={sampleDocument}
           displayMode='modal'
+          viewerPreference='google'
         />
       </div>
       <div>
@@ -214,6 +236,7 @@ export const MultipleDocuments: Story = {
         <IGRPPdfViewer
           document={technicalDocument}
           displayMode='modal'
+          viewerPreference='google'
         />
       </div>
       <div>
@@ -221,6 +244,7 @@ export const MultipleDocuments: Story = {
         <IGRPPdfViewer
           document={longTitleDocument}
           displayMode='modal'
+          viewerPreference='google'
         />
       </div>
     </div>
@@ -243,6 +267,7 @@ export const ComparisonView: Story = {
         <IGRPPdfViewer
           document={sampleDocument}
           displayMode='modal'
+          viewerPreference='google'
         />
       </div>
       <div>
@@ -251,6 +276,7 @@ export const ComparisonView: Story = {
           document={sampleDocument}
           displayMode='inline'
           inlineHeight='400px'
+          viewerPreference='google'
         />
       </div>
     </div>
@@ -259,6 +285,48 @@ export const ComparisonView: Story = {
     docs: {
       description: {
         story: 'Side-by-side comparison of modal and inline display modes.',
+      },
+    },
+  },
+};
+
+// Auto fallback story demonstrating Google -> native timeout failover
+export const AutoFallback: Story = {
+  args: {
+    document: {
+      ...sampleDocument,
+      // This URL intentionally uses the same file; rely on timeout to demonstrate fallback in Storybook controls.
+    },
+    displayMode: 'inline',
+    inlineHeight: '500px',
+    viewerPreference: 'auto',
+    loadTimeoutMs: 1500,
+    loadErrorLabel: 'Could not load PDF (auto fallback engaged)',
+  },
+  parameters: {
+    docs: {
+      description: {
+        story:
+          'Starts with Google Viewer and falls back to the native PDF renderer after a short timeout. Adjust controls to experiment.',
+      },
+    },
+  },
+};
+
+// Native-only story for private/auth PDFs where Google Viewer cannot access the file
+export const NativeViewer: Story = {
+  args: {
+    document: sampleDocument,
+    displayMode: 'inline',
+    inlineHeight: '500px',
+    viewerPreference: 'native',
+    loadErrorLabel: 'Could not load PDF (native)',
+  },
+  parameters: {
+    docs: {
+      description: {
+        story:
+          'For private/authenticated PDFs where Google Viewer will not work. Uses the browser-native PDF renderer.',
       },
     },
   },

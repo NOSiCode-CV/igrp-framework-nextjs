@@ -1,6 +1,6 @@
 'use client';
 
-import { useRef, useState, useCallback, createContext, useContext, useId } from 'react';
+import { useRef, useState, useCallback, createContext, useContext, useId, useEffect } from 'react';
 
 import type { IGRPColorRole, IGRPColorVariants } from '../../lib/colors';
 import { cn } from '../../lib/utils';
@@ -86,6 +86,16 @@ function IGRPMenuNavigation({
   const _id = useId();
   const ref = id ?? _id;
 
+  // Sync internal state when sections change
+  useEffect(() => {
+    if (controlledActiveSection === undefined && sections.length > 0) {
+      const firstSectionId = sections[0]?.id;
+      if (firstSectionId && firstSectionId !== internalActiveSection) {
+        setInternalActiveSection(firstSectionId);
+      }
+    }
+  }, [sections, controlledActiveSection, internalActiveSection]);
+
   const activeSection = controlledActiveSection ?? internalActiveSection;
 
   const handleSectionClick = useCallback(
@@ -115,8 +125,12 @@ function IGRPMenuNavigation({
     [controlledActiveSection, onSectionChange, sections, navigationContext],
   );
 
+  if (sections.length === 0) {
+    return null;
+  }
+
   return (
-    <div className={cn(isStickyTop && 'sticky top-20', className)} id={ref}>
+    <nav className={cn(isStickyTop && 'sticky top-20', className)} id={ref} aria-label={title}>
       <Card className="shadow-sm gap-0">
         <CardHeader className="border-b py-3 px-4 gap-0">
           <div className="flex items-center justify-between">
@@ -129,13 +143,14 @@ function IGRPMenuNavigation({
           </div>
         </CardHeader>
         <CardContent className="p-0">
-          <div className="divide-y">
+          <div className="divide-y" role="list">
             {sections.map((section) => (
               <button
                 key={section.id}
                 type="button"
                 onClick={() => handleSectionClick(section.id)}
                 disabled={section.disabled}
+                aria-current={activeSection === section.id ? 'page' : undefined}
                 className={cn(
                   'flex items-center justify-between w-full text-left transition-colors',
                   'py-2.5 px-4 text-sm',
@@ -146,7 +161,11 @@ function IGRPMenuNavigation({
                 )}
               >
                 <div className="flex items-center gap-2">
-                  <IGRPIcon iconName={section.icon} className="size-4 shrink-0" />
+                  <IGRPIcon
+                    iconName={section.icon}
+                    className="size-4 shrink-0"
+                    aria-hidden="true"
+                  />
                   <span className="truncate">{section.label}</span>
                 </div>
                 {showChevron && (
@@ -156,6 +175,7 @@ function IGRPMenuNavigation({
                       'size-4 transition-colors shrink-0',
                       activeSection === section.id ? 'text-primary' : 'text-muted-foreground',
                     )}
+                    aria-hidden="true"
                   />
                 )}
               </button>
@@ -163,7 +183,7 @@ function IGRPMenuNavigation({
           </div>
         </CardContent>
       </Card>
-    </div>
+    </nav>
   );
 }
 

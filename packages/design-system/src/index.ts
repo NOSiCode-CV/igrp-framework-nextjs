@@ -679,6 +679,10 @@ export { IGRPFormField, type IGRPFormFielProps } from './components/horizon/form
 export { IGRPForm, type IGRPFormProps, type IGRPFormHandle } from './components/horizon/form/form';
 export { convertValuesToFormData } from './components/horizon/form/lib/utils';
 export { IGRPFormList, type IGRPFormListProps } from './components/horizon/form/form-list';
+export {
+  IGRPStandaloneList,
+  type IGRPStandaloneListProps,
+} from './components/horizon/form/standalone-list';
 
 export {
   IGRPIcon,

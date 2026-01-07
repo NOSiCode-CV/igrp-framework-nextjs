@@ -33,12 +33,10 @@ interface IGRPDataTableDropdownProps {
 }
 
 interface IGRPDataTableDropdownMenuDialogProps
-  extends Omit<IGRPDataTableDialogProps, 'variant'>,
-    IGRPDataTableDropdownProps {}
+  extends Omit<IGRPDataTableDialogProps, 'variant'>, IGRPDataTableDropdownProps {}
 
 interface IGRPDataTableDropdownMenuLinkProps
-  extends Omit<IGRPDataTableLinkProps, 'variant'>,
-    IGRPDataTableDropdownProps {}
+  extends Omit<IGRPDataTableLinkProps, 'variant'>, IGRPDataTableDropdownProps {}
 
 function IGRPDataTableDropdownMenuAlert({
   labelTrigger,
@@ -200,7 +198,8 @@ function IGRPDataTableDropdownMenuCustom({
 }
 
 interface IGRPDataTableDropdownMenuItemProps
-  extends IGRPDataTableDropdownProps,
+  extends
+    IGRPDataTableDropdownProps,
     Pick<IGRPDataTableDropdownMenuDialogProps, 'icon' | 'labelTrigger' | 'iconClassName'> {
   onClick?: () => void;
   classNameItem?: string;

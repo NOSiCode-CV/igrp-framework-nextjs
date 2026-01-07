@@ -5,7 +5,6 @@ import {
   IGRPDropdownMenuPrimitive,
   IGRPDropdownMenuContentPrimitive,
   IGRPDropdownMenuItemPrimitive,
-  IGRPDropdownMenuLabelPrimitive,
   IGRPDropdownMenuSeparatorPrimitive,
   IGRPDropdownMenuTriggerPrimitive,
   IGRPSidebarMenuPrimitive,
@@ -22,9 +21,15 @@ interface IGRPTemplateAppSwitcherProps {
   apps?: IGRPApplicationArgs[];
   appCode?: string;
   appCenterUrl?: string;
+  baseUrl?: string;
 }
 
-function IGRPTemplateAppSwitcher({ apps, appCode, appCenterUrl }: IGRPTemplateAppSwitcherProps) {
+function IGRPTemplateAppSwitcher({
+  apps,
+  appCode,
+  appCenterUrl,
+  baseUrl
+}: IGRPTemplateAppSwitcherProps) {
   const { isMobile } = useIGRPSidebarPrimitive();
 
   const currentApp = useMemo(() => {
@@ -38,7 +43,6 @@ function IGRPTemplateAppSwitcher({ apps, appCode, appCenterUrl }: IGRPTemplateAp
     return apps.filter((item) => item.id !== activeApp.id);
   });
 
-  // Sync state when props change
   useEffect(() => {
     if (currentApp) {
       setActiveApp(currentApp);
@@ -48,11 +52,31 @@ function IGRPTemplateAppSwitcher({ apps, appCode, appCenterUrl }: IGRPTemplateAp
     }
   }, [currentApp, apps]);
 
+  const normalizedBaseUrl = useMemo(() => {
+    if (!baseUrl) return '';
+    try {
+      return new URL(baseUrl).origin;
+    } catch (error) {
+      console.warn('IGRPTemplateAppSwitcher received invalid baseUrl', baseUrl, error);
+      return baseUrl.replace(/\/+$/, '');
+    }
+  }, [baseUrl]);
+
   const getApps = (app: IGRPApplicationArgs) => {
     setActiveApp(app);
     if (apps) {
       setListApps(apps.filter((item) => item.id !== app.id));
     }
+  };
+
+  const getAppUrl = (app: IGRPApplicationArgs): string => {
+    if (app.url) return app.url;
+    if (app.slug) {
+      const base = normalizedBaseUrl ? normalizedBaseUrl.replace(/\/+$/, '') : '';
+      if (!base) return `/${app.slug}`;
+      return `${base}/${app.slug}`;
+    }
+    return '/';
   };
 
   return (
@@ -76,7 +100,7 @@ function IGRPTemplateAppSwitcher({ apps, appCode, appCenterUrl }: IGRPTemplateAp
                       priority
                     />
                   ) : (
-                    <IGRPIcon iconName="GalleryVerticalEnd" className="size-4" />
+                    <IGRPIcon iconName="GalleryVerticalEnd" />
                   )}
                 </div>
                 <div className="grid flex-1 text-left text-sm leading-tight">
@@ -93,33 +117,27 @@ function IGRPTemplateAppSwitcher({ apps, appCode, appCenterUrl }: IGRPTemplateAp
               sideOffset={4}
             >
               {listApps.length > 0 && (
-                <>
-                  <IGRPDropdownMenuLabelPrimitive className="text-muted-foreground text-xs">
-                    Apps
-                  </IGRPDropdownMenuLabelPrimitive>
-
-                  {listApps.map((app) => (
-                    <IGRPDropdownMenuItemPrimitive key={app.code} className="gap-2 p-2" asChild>
-                      <Link href={app.url || '#'} onClick={() => getApps(app)}>
-                        <div className="flex size-6 items-center justify-center rounded-md border">
-                          {app.picture ? (
-                            <Image
-                              src={app.picture}
-                              alt={app.name}
-                              width={24}
-                              height={24}
-                              className="h-full w-full rounded-md object-cover"
-                              priority
-                            />
-                          ) : (
-                            <IGRPIcon iconName="AudioWaveform" className="size-3.5 shrink-0" />
-                          )}
-                        </div>
-                        {app.name}
-                      </Link>
-                    </IGRPDropdownMenuItemPrimitive>
-                  ))}
-                </>
+                listApps.map((app) => (
+                  <IGRPDropdownMenuItemPrimitive key={app.code} className="gap-2 p-2" asChild>
+                    <Link href={getAppUrl(app)} onClick={() => getApps(app)}>
+                      <div className="flex size-6 items-center justify-center rounded-md border">
+                        {app.picture ? (
+                          <Image
+                            src={app.picture}
+                            alt={app.name}
+                            width={24}
+                            height={24}
+                            className="h-full w-full rounded-md object-cover"
+                            priority
+                          />
+                        ) : (
+                          <IGRPIcon iconName="AudioWaveform" className="size-3.5 shrink-0" />
+                        )}
+                      </div>
+                      {app.name}
+                    </Link>
+                  </IGRPDropdownMenuItemPrimitive>
+                ))
               )}
 
               {appCenterUrl && (listApps?.length ?? 0) > 1 && (
@@ -128,9 +146,9 @@ function IGRPTemplateAppSwitcher({ apps, appCode, appCenterUrl }: IGRPTemplateAp
                   <IGRPDropdownMenuItemPrimitive className="gap-2 p-2" asChild>
                     <Link href={appCenterUrl}>
                       <div className="flex size-6 items-center justify-center rounded-md border bg-transparent">
-                        <IGRPIcon iconName="Plus" className="size-4" />
+                        <IGRPIcon iconName="CornerDownLeft" className="size-3 shrink-0" />
                       </div>
-                      <div className="text-muted-foreground font-medium">Ir ao Apps Center</div>
+                      <div className="text-muted-foreground font-medium">Applications Center</div>
                     </Link>
                   </IGRPDropdownMenuItemPrimitive>
                 </>
@@ -144,11 +162,11 @@ function IGRPTemplateAppSwitcher({ apps, appCode, appCenterUrl }: IGRPTemplateAp
             className="data-[state=open]:bg-sidebar-accent data-[state=open]:text-sidebar-accent-foreground"
           >
             <div className="flex aspect-square size-8 items-center justify-center rounded-lg">
-              <IGRPIcon iconName="Command" className="size-4" />
+              <IGRPIcon iconName="Command" />
             </div>
             <div className="grid flex-1 text-left text-sm leading-tight">
-              <span className="truncate font-medium">Nenhuma aplicação disponível</span>
-              <span className="truncate text-xs">Nenhuma aplicação disponível</span>
+              <span className="truncate font-medium">N/A</span>
+              <span className="truncate text-xs">N/A</span>
             </div>
             <IGRPIcon iconName="ChevronsUpDown" className="ml-auto" />
           </IGRPSidebarMenuButtonPrimitive>

@@ -113,6 +113,7 @@ function IGRPDatePickerInputSingle({
 
         {displayDate && (
           <Button
+            type="button"
             id={`${fieldName}-clean`}
             variant="ghost"
             className="absolute top-1/2 right-8 size-6 -translate-y-1/2"
@@ -135,6 +136,7 @@ function IGRPDatePickerInputSingle({
           <PopoverTrigger asChild>
             {!displayDate && (
               <Button
+                type="button"
                 id={`date-picker-btn-${fieldName}`}
                 variant="ghost"
                 className="absolute top-1/2 right-2 size-6 -translate-y-1/2"

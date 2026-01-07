@@ -1,6 +1,6 @@
 {
   "name": "@igrp/igrp-framework-react-design-system",
-  "version": "0.1.0-beta.87.6",
+  "version": "0.1.0-beta.87.7",
   "description": "IGRP Design System components",
   "keywords": [
     "igrp",
@@ -27,7 +27,10 @@
     "dev": "tsc --watch",
     "build": "pnpm build:reactcompiler",
     "build:babel": "rimraf dist_optimized && babel dist --out-dir dist_optimized --source-maps --extensions .ts,.js,.tsx,.jsx,.cjs,.mjs && rimraf dist && move dist_optimized dist && cpy src/*.css dist/",
+    "build:babel:mac": "rimraf dist_optimized && babel dist --out-dir dist_optimized --source-maps --extensions .ts,.js,.tsx,.jsx,.cjs,.mjs && rimraf dist && mv dist_optimized dist && cpy src/*.css dist/",
     "build:reactcompiler": "pnpm clean:dist && pnpm tailwind:build && pnpm build:swc && pnpm build:babel && pnpm build:types",
+    "build:reactcompiler:mac": "pnpm clean:dist && pnpm tailwind:build && pnpm build:swc && pnpm build:babel:mac && pnpm build:types",
+    "build:mac": "pnpm build:reactcompiler:mac",
     "build:swc": "swc ./src -d dist --config-file .swcrc --strip-leading-paths && cpy src/*.css dist/",
     "build:types": "tsc --emitDeclarationOnly --outDir dist/",
     "build:without_reactcompiler": "pnpm clean:dist && pnpm build:types && pnpm build:swc",
@@ -37,6 +40,7 @@
     "format": "prettier --write .",
     "tailwind:build": "pnpm dlx @tailwindcss/cli -i ./src/index.css -o ./src/styles.css",
     "release": "pnpm format && pnpm build && yarn publish --registry=https://sonatype.nosi.cv/repository/igrp/ --tag latest",
+    "release:mac": "pnpm format && pnpm build:mac && yarn publish --registry=https://sonatype.nosi.cv/repository/igrp/ --tag latest",
     "clean-all": "rimraf node_modules && rimraf dist && rimraf tsconfig.tsbuildinfo"
   },
   "peerDependencies": {

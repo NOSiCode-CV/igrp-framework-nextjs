@@ -9,7 +9,8 @@ import { cn } from '../../lib/utils';
 import type { IGRPBaseAttributes } from '../../types';
 
 interface IGRPButtonProps
-  extends Omit<React.ComponentProps<typeof Button>, 'name'>,
+  extends
+    Omit<React.ComponentProps<typeof Button>, 'name'>,
     VariantProps<typeof buttonVariants>,
     IGRPBaseAttributes {
   children?: ReactNode;

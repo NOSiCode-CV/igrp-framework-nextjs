@@ -9,6 +9,7 @@ import { z } from 'zod';
 import { zodResolver } from '@hookform/resolvers/zod';
 
 import { Form } from '../../primitives/form';
+import { FieldSet } from '../../primitives/field';
 import { cn } from '../../../lib/utils';
 import { IGRPFormContext } from './form-context';
 
@@ -47,6 +48,7 @@ export interface IGRPFormProps<TSchema extends AnyZod> {
   gridClassName?: string;
   children: React.ReactNode;
   id?: string;
+  disabled?: boolean;
 }
 
 function IGRPForm<TSchema extends AnyZod>({
@@ -62,6 +64,7 @@ function IGRPForm<TSchema extends AnyZod>({
   gridClassName,
   children,
   id,
+  disabled = false,
 }: IGRPFormProps<TSchema>) {
   const _id = useId();
   const ref = id ?? _id;
@@ -144,16 +147,29 @@ function IGRPForm<TSchema extends AnyZod>({
     internalFormRef.current = handle;
   }, [form, submitForm, setGlobalError, clearGlobalError, isSubmitting, formRef]);
 
+  const handleFormSubmit = useCallback(
+    (e: React.FormEvent<HTMLFormElement>) => {
+      if (disabled) {
+        e.preventDefault();
+        return;
+      }
+      form.handleSubmit(handleSubmit)(e);
+    },
+    [disabled, form, handleSubmit],
+  );
+
   return (
-    <IGRPFormContext.Provider value={{ form, isSubmitting, formError }}>
+    <IGRPFormContext.Provider value={{ form, isSubmitting, formError, disabled }}>
       <Form {...form}>
-        <form className={className} onSubmit={form.handleSubmit(handleSubmit)} noValidate id={ref}>
+        <form className={className} onSubmit={handleFormSubmit} noValidate id={ref}>
           {formError && (
             <div className="mb-4 p-3 border border-destructive bg-destructive/10 rounded-md text-destructive text-sm">
               {formError}
             </div>
           )}
-          <div className={cn('grid gap-4', gridClassName)}>{children}</div>
+          <FieldSet disabled={disabled} className="border-0 p-0 m-0 gap-0">
+            <div className={cn('grid gap-4', gridClassName)}>{children}</div>
+          </FieldSet>
         </form>
       </Form>
     </IGRPFormContext.Provider>

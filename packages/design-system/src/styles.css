@@ -1,4 +1,4 @@
-/*! tailwindcss v4.1.17 | MIT License | https://tailwindcss.com */
+/*! tailwindcss v4.1.18 | MIT License | https://tailwindcss.com */
 @layer properties;
 @layer theme, base, components, utilities;
 @layer theme {
@@ -113,6 +113,7 @@
     --animate-spin: spin 1s linear infinite;
     --animate-pulse: pulse 2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
     --blur-xs: 4px;
+    --blur-sm: 8px;
     --blur-2xl: 40px;
     --aspect-video: 16 / 9;
     --default-transition-duration: 150ms;
@@ -500,11 +501,11 @@
       max-width: 96rem;
     }
   }
-  .\!m-0 {
-    margin: calc(var(--spacing) * 0) !important;
-  }
   .m-0 {
     margin: calc(var(--spacing) * 0);
+  }
+  .m-0\! {
+    margin: calc(var(--spacing) * 0) !important;
   }
   .m-0\.5 {
     margin: calc(var(--spacing) * 0.5);
@@ -874,6 +875,9 @@
   }
   .h-auto {
     height: auto;
+  }
+  .h-fit {
+    height: fit-content;
   }
   .h-full {
     height: 100%;
@@ -1454,6 +1458,9 @@
   .overflow-y-auto {
     overflow-y: auto;
   }
+  .scroll-smooth {
+    scroll-behavior: smooth;
+  }
   .rounded {
     border-radius: 0.25rem;
   }
@@ -1882,6 +1889,12 @@
   }
   .bg-background {
     background-color: var(--background);
+  }
+  .bg-background\/70 {
+    background-color: var(--background);
+    @supports (color: color-mix(in lab, red, red)) {
+      background-color: color-mix(in oklab, var(--background) 70%, transparent);
+    }
   }
   .bg-background\/80 {
     background-color: var(--background);
@@ -2423,7 +2436,7 @@
   .text-balance {
     text-wrap: balance;
   }
-  .break-words {
+  .wrap-break-word {
     overflow-wrap: break-word;
   }
   .whitespace-nowrap {
@@ -2715,6 +2728,11 @@
     -webkit-backdrop-filter: var(--tw-backdrop-blur,) var(--tw-backdrop-brightness,) var(--tw-backdrop-contrast,) var(--tw-backdrop-grayscale,) var(--tw-backdrop-hue-rotate,) var(--tw-backdrop-invert,) var(--tw-backdrop-opacity,) var(--tw-backdrop-saturate,) var(--tw-backdrop-sepia,);
     backdrop-filter: var(--tw-backdrop-blur,) var(--tw-backdrop-brightness,) var(--tw-backdrop-contrast,) var(--tw-backdrop-grayscale,) var(--tw-backdrop-hue-rotate,) var(--tw-backdrop-invert,) var(--tw-backdrop-opacity,) var(--tw-backdrop-saturate,) var(--tw-backdrop-sepia,);
   }
+  .backdrop-blur-sm {
+    --tw-backdrop-blur: blur(var(--blur-sm));
+    -webkit-backdrop-filter: var(--tw-backdrop-blur,) var(--tw-backdrop-brightness,) var(--tw-backdrop-contrast,) var(--tw-backdrop-grayscale,) var(--tw-backdrop-hue-rotate,) var(--tw-backdrop-invert,) var(--tw-backdrop-opacity,) var(--tw-backdrop-saturate,) var(--tw-backdrop-sepia,);
+    backdrop-filter: var(--tw-backdrop-blur,) var(--tw-backdrop-brightness,) var(--tw-backdrop-contrast,) var(--tw-backdrop-grayscale,) var(--tw-backdrop-hue-rotate,) var(--tw-backdrop-invert,) var(--tw-backdrop-opacity,) var(--tw-backdrop-saturate,) var(--tw-backdrop-sepia,);
+  }
   .backdrop-blur-xs {
     --tw-backdrop-blur: blur(var(--blur-xs));
     -webkit-backdrop-filter: var(--tw-backdrop-blur,) var(--tw-backdrop-brightness,) var(--tw-backdrop-contrast,) var(--tw-backdrop-grayscale,) var(--tw-backdrop-hue-rotate,) var(--tw-backdrop-invert,) var(--tw-backdrop-opacity,) var(--tw-backdrop-saturate,) var(--tw-backdrop-sepia,);
@@ -2824,6 +2842,12 @@
   .\[-moz-appearance\:_textfield\] {
     -moz-appearance:  textfield;
   }
+  .\[-ms-overflow-style\:none\] {
+    -ms-overflow-style: none;
+  }
+  .\[scrollbar-width\:none\] {
+    scrollbar-width: none;
+  }
   .\*\:not-first\:mt-2 {
     :is(& > *) {
       &:not(*:first-child) {
@@ -2896,14 +2920,14 @@
       }
     }
   }
+  .group-has-data-\[orientation\=horizontal\]\/field\:text-balance {
+    &:is(:where(.group\/field):has(*[data-orientation="horizontal"]) *) {
+      text-wrap: balance;
+    }
+  }
   .group-has-data-\[sidebar\=menu-action\]\/menu-item\:pr-8 {
     &:is(:where(.group\/menu-item):has(*[data-sidebar="menu-action"]) *) {
       padding-right: calc(var(--spacing) * 8);
-    }
-  }
-  .group-has-\[\[data-orientation\=horizontal\]\]\/field\:text-balance {
-    &:is(:where(.group\/field):has(*:is([data-orientation=horizontal])) *) {
-      text-wrap: balance;
     }
   }
   .group-has-\[\[data-slot\=item-description\]\]\/item\:translate-y-0\.5 {
@@ -3644,6 +3668,12 @@
       right: calc(var(--spacing) * -1.25);
     }
   }
+  .after\:right-0 {
+    &::after {
+      content: var(--tw-content);
+      right: calc(var(--spacing) * 0);
+    }
+  }
   .after\:bottom-0 {
     &::after {
       content: var(--tw-content);
@@ -3672,12 +3702,6 @@
     &::after {
       content: var(--tw-content);
       margin-bottom: calc(var(--spacing) * -1);
-    }
-  }
-  .after\:ml-0\.5 {
-    &::after {
-      content: var(--tw-content);
-      margin-left: calc(var(--spacing) * 0.5);
     }
   }
   .after\:h-0\.5 {
@@ -4051,6 +4075,13 @@
     &:hover {
       @media (hover: hover) {
         color: var(--accent-foreground);
+      }
+    }
+  }
+  .hover\:text-background\! {
+    &:hover {
+      @media (hover: hover) {
+        color: var(--background) !important;
       }
     }
   }
@@ -5174,6 +5205,20 @@
     :is(& *) {
       &[data-slot="command-input-wrapper"] {
         height: calc(var(--spacing) * 12);
+      }
+    }
+  }
+  .\*\:data-\[slot\=field\]\:p-4 {
+    :is(& > *) {
+      &[data-slot="field"] {
+        padding: calc(var(--spacing) * 4);
+      }
+    }
+  }
+  .\*\:data-\[slot\=field-group\]\:gap-4 {
+    :is(& > *) {
+      &[data-slot="field-group"] {
+        gap: calc(var(--spacing) * 4);
       }
     }
   }
@@ -6808,6 +6853,11 @@
       appearance: none;
     }
   }
+  .\[\&\:\:-webkit-scrollbar\]\:hidden {
+    &::-webkit-scrollbar {
+      display: none;
+    }
+  }
   .\[\&\:\:-webkit-search-cancel-button\]\:appearance-none {
     &::-webkit-search-cancel-button {
       appearance: none;
@@ -6867,6 +6917,11 @@
   .\[\.border-b\]\:pb-3 {
     &:is(.border-b) {
       padding-bottom: calc(var(--spacing) * 3);
+    }
+  }
+  .\[\.border-b\]\:pb-4 {
+    &:is(.border-b) {
+      padding-bottom: calc(var(--spacing) * 4);
     }
   }
   .\[\.border-b\]\:pb-6 {
@@ -6992,13 +7047,6 @@
       }
     }
   }
-  .\[\&\>\*\]\:data-\[slot\=field\]\:p-4 {
-    &>* {
-      &[data-slot="field"] {
-        padding: calc(var(--spacing) * 4);
-      }
-    }
-  }
   .\@md\/field-group\:\[\&\>\*\]\:w-auto {
     @container field-group (width >= 28rem) {
       &>* {
@@ -7045,11 +7093,6 @@
   .\[\&\>\.sr-only\]\:w-auto {
     &>.sr-only {
       width: auto;
-    }
-  }
-  .\[\&\>\[data-slot\=field-group\]\]\:gap-4 {
-    &>[data-slot=field-group] {
-      gap: calc(var(--spacing) * 4);
     }
   }
   .\[\&\>\[data-slot\=field-label\]\]\:flex-auto {

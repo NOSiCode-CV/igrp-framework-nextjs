@@ -63,7 +63,7 @@ NEXTAUTH_URL_INTERNAL=http://localhost:3000
 NEXTAUTH_SECRET=your-secret-key-here
 
 # API Configuration
-IGRP_APP_MANAGER_API=https://your-api-url.com
+IGRP_ACCESS_MANAGEMENT_API=https://your-api-url.com
 NEXT_PUBLIC_IGRP_APP_HOME_SLUG=/
 NEXT_IGRP_APP_CENTER_URL=https://app-center-url.com
 
@@ -164,11 +164,43 @@ Coming soon
 | Variable | Description | Default |
 |----------|-------------|---------|
 | `IGRP_PREVIEW_MODE` | Enable preview mode (no auth required) | `false` |
-| `IGRP_APP_MANAGER_API` | API Management base URL | - |
+| `IGRP_ACCESS_MANAGEMENT_API` | API Management base URL | - |
 | `NEXT_PUBLIC_BASE_PATH` | Base path for the application | `/` |
 | `NEXT_PUBLIC_IGRP_APP_HOME_SLUG` | Default home route | `/` |
 | `NEXT_IGRP_APP_CENTER_URL` | Application center URL | - |
 | `NEXT_PUBLIC_ALLOWED_DOMAINS` | Allowed image domains (comma-separated) | - |
+| `IGRP_SYNC_ON_CODE_MENUS` | Enable synchronization of menus defined in code with the IGRP system | `false` |
+| `IGRP_SYNC_ACCESS` | Enable synchronization of applications, resources, and menus with the IGRP Access Management API | `true` |
+| `IGRP_M2M_SERVICE_ID` | Unique identifier for your service in the IGRP Access Management system (required when `IGRP_SYNC_ACCESS=true`) | - |
+| `IGRP_M2M_TOKEN` | Authentication token for machine-to-machine API calls (required when `IGRP_SYNC_ACCESS=true`) | - |
+
+### Synchronization Variables
+
+The following variables control how your application synchronizes with the IGRP system:
+
+#### `IGRP_SYNC_ON_CODE_MENUS`
+- **Purpose**: Controls whether menus defined in your application code are synchronized with the IGRP system
+- **Usage**: Set to `true` to enable code-based menu synchronization, `false` to disable
+- **When to use**: Enable this if you want to sync menus that are hardcoded in your application with the IGRP framework
+
+#### `IGRP_SYNC_ACCESS`
+- **Purpose**: Controls synchronization of applications, resources, and menus with the IGRP Access Management API
+- **Usage**: Set to `true` to enable access management synchronization, `false` to disable
+- **When to use**: Enable this if you want your application to automatically sync its structure (applications, resources, menus) with the IGRP Access Management system
+- **Note**: Requires `IGRP_M2M_SERVICE_ID` and `IGRP_M2M_TOKEN` to be configured when enabled
+
+#### `IGRP_M2M_SERVICE_ID`
+- **Purpose**: Unique identifier for your service in the IGRP Access Management system
+- **Usage**: Set this to your service identifier (e.g., `demo-igrp` or `your-service-name`)
+- **Required when**: `IGRP_SYNC_ACCESS=true`
+- **How to get**: Contact your IGRP Access Management administrator
+
+#### `IGRP_M2M_TOKEN`
+- **Purpose**: Authentication token used for machine-to-machine API calls to the IGRP Access Management API
+- **Usage**: Set this to the token provided by your IGRP Access Management administrator
+- **Required when**: `IGRP_SYNC_ACCESS=true`
+- **How to get**: Contact your IGRP Access Management administrator
+- **Security**: Keep this token secure and never commit it to version control
 
 ## 📜 Available Scripts
 
@@ -195,14 +227,6 @@ pnpm build
 pnpm start
 ```
 
-### Template Publishing
-
-```bash
-pnpm publish:template
-```
-
-Packages the template with `create-template/create-zip-template.ps1`, uploads the resulting `igrp-next-template.zip` to Nexus, and restores your working tree. Refer to [Publishing Template](#publishing-template) for prerequisites.
-
 ## 🏗️ How It's Built
 
 ### Architecture Overview
@@ -210,29 +234,34 @@ Packages the template with `create-template/create-zip-template.ps1`, uploads th
 The template follows Next.js 15 App Router architecture with the following key components:
 
 #### 1. **Root Layout** (`src/app/layout.tsx`)
+
 - Provides global layout structure
 - Configures metadata and viewport
 - Wraps application with IGRP root layout
 
 #### 2. **IGRP Layout** (`src/app/(igrp)/layout.tsx`)
+
 - Handles authentication checks
 - Manages session state
 - Redirects unauthenticated users to login
 - Wraps routes with IGRP layout components (header, sidebar)
 
 #### 3. **Middleware** (`src/middleware.ts`)
+
 - Intercepts requests before they reach pages
 - Validates authentication tokens
 - Handles public paths (login, logout, API routes)
 - Supports preview mode bypass
 
 #### 4. **Configuration Builder** (`src/igrp.template.config.ts`)
+
 - Builds IGRP configuration object
 - Loads mock data for preview mode
 - Configures layout, API, and toaster settings
 - Manages session configuration
 
 #### 5. **Server Actions** (`src/actions/igrp/`)
+
 - `layout.ts`: Fetches layout configuration and session
 - `auth.ts`: Authentication-related actions
 
@@ -285,12 +314,14 @@ IGRP_PREVIEW_MODE=true
 ```
 
 When enabled:
+
 - Authentication checks are bypassed
 - Mock data is used for menus, users, and applications
 - Session refetching is disabled
 - No redirects to login page
 
 **Mock data sources:**
+
 - `src/temp/users/use-mock-user.ts`
 - `src/temp/menus/use-mock-menus.ts`
 - `src/temp/applications/use-mock-apps.ts`
@@ -301,7 +332,7 @@ When enabled:
 
 ```bash
 docker build -f docker/development/Dockerfile -t my-igrp-template:latest .
-docker run -d --name my-igrp-template -p 3000:3000 --restart unless-stopped --env-file .env.docker my-igrp-template:latest
+docker run -d --name my-igrp-template -p 3000:3000 --restart unless-stopped --env-file docker/development/.env.development my-igrp-template:latest
 ```
 
 ### Production

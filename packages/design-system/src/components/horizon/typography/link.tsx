@@ -35,7 +35,8 @@ type AnchorProps = Omit<React.AnchorHTMLAttributes<HTMLAnchorElement>, 'href'>;
 type NextLinkProps = Omit<LinkProps, 'href' | 'as'>;
 
 interface IGRPLinkProps
-  extends AnchorProps,
+  extends
+    AnchorProps,
     NextLinkProps,
     Omit<IGRPBaseAttributes, 'ref'>,
     VariantProps<typeof IGRPLinkVariants> {

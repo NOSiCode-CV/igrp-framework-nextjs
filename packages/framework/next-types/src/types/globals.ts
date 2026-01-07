@@ -18,3 +18,10 @@ export type IGRPToasterPosition =
   | 'bottom-right'
   | 'top-center'
   | 'bottom-center';
+
+export type IGRPPackageJson = {
+  name: string;
+  version?: string;
+  description?: string;
+  displayName?: string;
+};

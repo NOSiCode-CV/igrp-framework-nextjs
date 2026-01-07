@@ -43,8 +43,7 @@ const igrpTextVariants = cva('transition-all duration-300 ease-in-out', {
 });
 
 interface IGRPTextProps
-  extends React.HTMLAttributes<HTMLDivElement>,
-    VariantProps<typeof igrpTextVariants> {
+  extends React.HTMLAttributes<HTMLDivElement>, VariantProps<typeof igrpTextVariants> {
   children: React.ReactNode;
   variant?: IGRPColorVariants;
   animate?: boolean;

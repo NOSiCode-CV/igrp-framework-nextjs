@@ -7,11 +7,10 @@ import type { IGRPBaseAttributes, IGRPPlacementProps } from '../../types';
 import { IGRPIcon, type IGRPIconName } from './icon';
 import { IGRPLink } from './typography/link';
 
-interface IGRPAlertProps
-  extends Pick<
-    IGRPBaseAttributes,
-    'showIcon' | 'iconName' | 'iconClassName' | 'iconPlacement' | 'label' | 'name'
-  > {
+interface IGRPAlertProps extends Pick<
+  IGRPBaseAttributes,
+  'showIcon' | 'iconName' | 'iconClassName' | 'iconPlacement' | 'label' | 'name'
+> {
   variant?: IGRPColorRole;
   color?: IGRPColorVariants;
   children: React.ReactNode;

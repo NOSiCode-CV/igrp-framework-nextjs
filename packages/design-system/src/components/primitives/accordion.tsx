@@ -22,21 +22,20 @@ function AccordionItem({
 }
 
 type AccordionTriggerArgs = {
-  iconName: IGRPIconName | string;
+  iconName?: IGRPIconName | string;
   showIcon: boolean;
   iconPlacement: 'start' | 'end';
 };
 
 interface AccordionTriggerProps
-  extends React.ComponentProps<typeof AccordionPrimitive.Trigger>,
-    AccordionTriggerArgs {}
+  extends React.ComponentProps<typeof AccordionPrimitive.Trigger>, AccordionTriggerArgs {}
 
 function AccordionTrigger({
   className,
   children,
-  iconName,
+  iconName = 'ChevronDown',
   showIcon,
-  iconPlacement,
+  iconPlacement = 'end',
   ...props
 }: AccordionTriggerProps) {
   return (

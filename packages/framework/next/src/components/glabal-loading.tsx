@@ -5,7 +5,7 @@ export async function IGRPGlobalLoading({ appCode }: { appCode: string }) {
     return (
       <>
         <div>Loading...</div>
-        <span className='hidden'>{appCode}</span>
+        <span className="hidden">{appCode}</span>
       </>
     );
   }

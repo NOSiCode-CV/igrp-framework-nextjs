@@ -28,6 +28,10 @@ export interface IGRPApplicationArgs {
   lastModifiedDate?: string;
 }
 
+export interface IGRPRoleDepartmentArgs {
+  roleCode: string;
+  departmentCode: string;
+}
 export interface IGRPMenuItemArgs {
   id: number;
   code: string;
@@ -45,7 +49,7 @@ export interface IGRPMenuItemArgs {
   createdDate?: string;
   lastModifiedBy?: string;
   lastModifiedDate?: string;
-  roles: string[];
+  roles: IGRPRoleDepartmentArgs[];
 }
 
 export type IGRPMenuCRUDArgs = Omit<IGRPMenuItemArgs, 'type'> & {

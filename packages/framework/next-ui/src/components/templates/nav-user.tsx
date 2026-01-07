@@ -15,18 +15,25 @@ import {
   useIGRPSidebar,
   IGRPUserAvatar,
   igrpGetnitials,
+  IGRPIcon,
 } from '@igrp/igrp-framework-react-design-system';
 
 interface IGRPTemplateNavUserProps {
   user?: IGRPUserArgs;
+  isHeader?: boolean;
 }
 
-// TODO: see when user is null or undefiened
-
-function IGRPTemplateNavUser({ user }: IGRPTemplateNavUserProps) {
+function IGRPTemplateNavUser({ user, isHeader = false }: IGRPTemplateNavUserProps) {
   const { isMobile } = useIGRPSidebar();
 
   if (!user) return null;
+
+  function renderMobile() {
+    if (isHeader) return;
+    return isMobile ? 'bottom' : 'right';
+  }
+
+  const iconClassName = 'mr-1 hover:text-primary-foreground!';
 
   return (
     <IGRPSidebarMenuPrimitive>
@@ -44,16 +51,17 @@ function IGRPTemplateNavUser({ user }: IGRPTemplateNavUserProps) {
                 fallbackClass="text-xs"
                 className="shadow-md"
               />
-              <div className="grid flex-1 text-left text-sm leading-tight">
-                <span className="truncate font-semibold">{user.username || 'N/A'}</span>
-                <span className="truncate text-xs">{user.email}</span>
-              </div>
-              {/* <ChevronsUpDown className="ml-auto size-3.5" strokeWidth={2} /> */}
+              {!isHeader && (
+                <div className="grid flex-1 text-left text-sm leading-tight">
+                  <span className="truncate font-semibold">{user.username || 'N/A'}</span>
+                  <span className="truncate text-xs">{user.email}</span>
+                </div>
+              )}
             </IGRPSidebarMenuButtonPrimitive>
           </IGRPDropdownMenuTriggerPrimitive>
           <IGRPDropdownMenuContentPrimitive
             className="min-w-56 rounded-lg"
-            side={isMobile ? 'bottom' : 'right'}
+            side={renderMobile()}
             align="end"
             sideOffset={4}
           >
@@ -69,11 +77,8 @@ function IGRPTemplateNavUser({ user }: IGRPTemplateNavUserProps) {
               asChild
               className="cursor-pointer hover:bg-primary! hover:text-primary-foreground!"
             >
-              <Link href="/users/profile">
-                {/* <UserIcon
-                  className="mr-1 size-3.5 hover:text-primary-foreground!"
-                  strokeWidth={2}
-                /> */}
+              <Link href="/profile">
+                <IGRPIcon iconName="User" className={iconClassName} />
                 <span>Profile</span>
               </Link>
             </IGRPDropdownMenuItemPrimitive>
@@ -83,8 +88,8 @@ function IGRPTemplateNavUser({ user }: IGRPTemplateNavUserProps) {
               asChild
               className="cursor-pointer hover:bg-primary! hover:text-primary-foreground!"
             >
-              <Link href="/users/notifications">
-                {/* <Bell className="mr-1 size-3.5 hover:text-primary-foreground!" strokeWidth={2} /> */}
+              <Link href="/notifications">
+                <IGRPIcon iconName="Bell" className="mr-1 hover:text-primary-foreground!" />
                 <span>Notifications</span>
               </Link>
             </IGRPDropdownMenuItemPrimitive>
@@ -95,7 +100,7 @@ function IGRPTemplateNavUser({ user }: IGRPTemplateNavUserProps) {
               className="cursor-pointer hover:bg-primary! hover:text-primary-foreground!"
             >
               <Link href="/logout">
-                {/* <LogOut className="mr-1 size-3.5 hover:text-primary-foreground!" strokeWidth={2} /> */}
+                <IGRPIcon iconName="LogOut" className={iconClassName} />
                 <span>Log out</span>
               </Link>
             </IGRPDropdownMenuItemPrimitive>

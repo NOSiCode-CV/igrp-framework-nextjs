@@ -4,13 +4,15 @@ WORKDIR /app
 
 FROM base AS deps
 COPY package.json .npmrc ./
-COPY pnpm-lock.yaml ./
+COPY pnpm-lock.yaml* ./ 
 RUN node -v && pnpm -v
-RUN if [ -f pnpm-lock.yaml ]; then \
-    echo "Using frozen lockfile" && pnpm i --frozen-lockfile; \
+RUN \
+  if [ -f pnpm-lock.yaml ]; then \
+    echo "Using frozen lockfile" && pnpm install --frozen-lockfile; \
   else \
-    echo "No lockfile found, installing dependencies"; \
+    echo "No lockfile found, if you want to install dependencies in not prod env put this '&& pnpm install' in this same line else in Dockerfile"; \
   fi
+
 
 FROM base AS builder
 WORKDIR /app

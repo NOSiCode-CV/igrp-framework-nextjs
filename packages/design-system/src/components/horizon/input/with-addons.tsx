@@ -16,11 +16,10 @@ import {
 } from '../../primitives/select';
 import { IGRPLabel } from '../label';
 
-interface IGRPInputAddOnProps
-  extends Omit<
-    IGRPInputProps,
-    'showIcon' | 'iconName' | 'iconSize' | 'iconPlacement' | 'iconClassName'
-  > {
+interface IGRPInputAddOnProps extends Omit<
+  IGRPInputProps,
+  'showIcon' | 'iconName' | 'iconSize' | 'iconPlacement' | 'iconClassName'
+> {
   options: IGRPOptionsProps[];
   optionLabel?: string;
   selectValue?: string;

@@ -15,7 +15,6 @@ import {
 import type { IGRPApplicationArgs } from '@igrp/framework-next-types';
 import { useState, useEffect, useMemo } from 'react';
 import Image from 'next/image';
-import Link from 'next/link';
 
 interface IGRPTemplateAppSwitcherProps {
   apps?: IGRPApplicationArgs[];
@@ -24,12 +23,7 @@ interface IGRPTemplateAppSwitcherProps {
   baseUrl?: string;
 }
 
-function IGRPTemplateAppSwitcher({
-  apps,
-  appCode,
-  appCenterUrl,
-  baseUrl
-}: IGRPTemplateAppSwitcherProps) {
+function IGRPTemplateAppSwitcher({ apps, appCode, appCenterUrl }: IGRPTemplateAppSwitcherProps) {
   const { isMobile } = useIGRPSidebarPrimitive();
 
   const currentApp = useMemo(() => {
@@ -39,8 +33,8 @@ function IGRPTemplateAppSwitcher({
 
   const [activeApp, setActiveApp] = useState<IGRPApplicationArgs | undefined>(currentApp);
   const [listApps, setListApps] = useState<IGRPApplicationArgs[]>(() => {
-    if (!apps || !activeApp) return [];
-    return apps.filter((item) => item.id !== activeApp.id);
+    if (!apps || !currentApp) return [];
+    return apps.filter((item) => item.id !== currentApp.id);
   });
 
   useEffect(() => {
@@ -52,31 +46,21 @@ function IGRPTemplateAppSwitcher({
     }
   }, [currentApp, apps]);
 
-  const normalizedBaseUrl = useMemo(() => {
-    if (!baseUrl) return '';
-    try {
-      return new URL(baseUrl).origin;
-    } catch (error) {
-      console.warn('IGRPTemplateAppSwitcher received invalid baseUrl', baseUrl, error);
-      return baseUrl.replace(/\/+$/, '');
-    }
-  }, [baseUrl]);
-
-  const getApps = (app: IGRPApplicationArgs) => {
-    setActiveApp(app);
-    if (apps) {
-      setListApps(apps.filter((item) => item.id !== app.id));
-    }
-  };
+  const _url = typeof window !== 'undefined' ? window.location.origin : '';
+  console.log('WINDOW ORIGIN ::: ', _url);
 
   const getAppUrl = (app: IGRPApplicationArgs): string => {
-    if (app.url) return app.url;
-    if (app.slug) {
-      const base = normalizedBaseUrl ? normalizedBaseUrl.replace(/\/+$/, '') : '';
-      if (!base) return `/${app.slug}`;
-      return `${base}/${app.slug}`;
+    if (app.url) {
+      console.log('APP URL ::: ', app.url);
+      return app.url;
     }
-    return '/';
+
+    if (app.slug) {
+      console.log('APP SLUG ::: ', app.slug);
+      return app.slug.startsWith('/') ? `${_url}${app.slug}` : `${_url}/${app.slug}`;
+    }
+
+    return _url;
   };
 
   return (
@@ -116,10 +100,10 @@ function IGRPTemplateAppSwitcher({
               side={isMobile ? 'bottom' : 'right'}
               sideOffset={4}
             >
-              {listApps.length > 0 && (
+              {listApps.length > 0 &&
                 listApps.map((app) => (
                   <IGRPDropdownMenuItemPrimitive key={app.code} className="gap-2 p-2" asChild>
-                    <Link href={getAppUrl(app)} onClick={() => getApps(app)}>
+                    <a href={getAppUrl(app)}>
                       <div className="flex size-6 items-center justify-center rounded-md border">
                         {app.picture ? (
                           <Image
@@ -135,21 +119,20 @@ function IGRPTemplateAppSwitcher({
                         )}
                       </div>
                       {app.name}
-                    </Link>
+                    </a>
                   </IGRPDropdownMenuItemPrimitive>
-                ))
-              )}
+                ))}
 
               {appCenterUrl && (listApps?.length ?? 0) > 1 && (
                 <>
                   <IGRPDropdownMenuSeparatorPrimitive />
                   <IGRPDropdownMenuItemPrimitive className="gap-2 p-2" asChild>
-                    <Link href={appCenterUrl}>
+                    <a href={appCenterUrl}>
                       <div className="flex size-6 items-center justify-center rounded-md border bg-transparent">
                         <IGRPIcon iconName="CornerDownLeft" className="size-3 shrink-0" />
                       </div>
                       <div className="text-muted-foreground font-medium">Applications Center</div>
-                    </Link>
+                    </a>
                   </IGRPDropdownMenuItemPrimitive>
                 </>
               )}

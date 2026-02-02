@@ -40,9 +40,9 @@ function getStepperItemClassName(): string {
     //'last:mr-0 last:rounded-tr-2xl last:rounded-br-2xl last:pr-2.5 last:overflow-hidden',
     'bg-muted text-gray-600',
     // Completed state background
-    'data-[state=completed]:bg-process-completed data-[state=completed]:text-background',
+    'data-[state=completed]:bg-process-completed data-[state=completed]:text-background hover:data-[state=active]:text-background',
     // Active state background
-    'data-[state=active]:bg-process-active data-[state=active]:text-background',
+    'data-[state=active]:bg-process-active data-[state=active]:text-background hover:data-[state=active]:text-background',
     // Incomplete/inactive state background
     'data-[state=inactive]:bg-muted data-[state=inactive]:text-gray-600',
     // Pseudo-elements base styles
@@ -199,7 +199,7 @@ function IGRPStepperProcess({
                       className={cn(
                         'bg-transparent hover:bg-transparent text-center flex items-center justify-center',
                         'shadow-none text-[10px] w-34',
-                        (isActive || isCompleted) && 'text-background hover:text-background!',
+                        (isActive || isCompleted) && 'text-background hover:text-background',
                       )}
                       size="xs"
                     >

@@ -269,7 +269,7 @@ export const BasicExternalTrigger: StoryObj = {
   render: () => {
     const formRef = useRef<IGRPFormHandle<typeof basicSchema> | null>(null);
     return (
-      <div className='space-y-4'>
+      <div className='space-y-4 p-10'>
         <IGRPForm
           schema={basicSchema}
           onSubmit={(values) => alert(`Submitted externally: ${JSON.stringify(values)}`)}

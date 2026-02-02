@@ -1,11 +1,11 @@
 import { type VariantProps } from 'class-variance-authority';
+import { useId } from 'react';
 
 import { IGRPPageHeaderBackButton } from './back-button';
 import type { IGRPIconName } from '../icon';
 import { IGRPHeadline, igrpHeadlineVariants } from '../typography/headline';
 import { cn } from '../../../lib/utils';
 import { type IGRPBaseAttributes } from '../../../types';
-import { useId } from 'react';
 
 interface IGRPPageHeaderProps extends Pick<IGRPBaseAttributes, 'name'> {
   title: string;
@@ -16,13 +16,76 @@ interface IGRPPageHeaderProps extends Pick<IGRPBaseAttributes, 'name'> {
   children?: React.ReactNode;
   isSticky?: boolean;
   showBackButton?: boolean;
+  // Back button props - forward most props from IGRPPageHeaderBackButton
   urlBackButton?: string;
   iconBackButton?: IGRPIconName | string;
+  backButtonVariant?: React.ComponentProps<typeof IGRPPageHeaderBackButton>['variant'];
+  backButtonSize?: React.ComponentProps<typeof IGRPPageHeaderBackButton>['size'];
+  backButtonAriaLabel?: string;
+  backButtonShowText?: boolean;
+  backButtonText?: string;
+  backButtonClassName?: string;
+  backButtonUseBrowserBack?: boolean;
+  backButtonOnClick?: React.ComponentProps<typeof IGRPPageHeaderBackButton>['onClick'];
   id?: string;
 }
 
-// TODO: see back btn change variant and add text
-// TODO: see PageHeader of the igrp-applications
+type BackButtonProps = {
+  iconBackButton?: IGRPIconName | string;
+  backButtonVariant?: React.ComponentProps<typeof IGRPPageHeaderBackButton>['variant'];
+  backButtonSize?: React.ComponentProps<typeof IGRPPageHeaderBackButton>['size'];
+  backButtonAriaLabel?: string;
+  backButtonShowText?: boolean;
+  backButtonText?: string;
+  backButtonClassName?: string;
+  urlBackButton?: string;
+  backButtonUseBrowserBack?: boolean;
+  backButtonOnClick?: React.ComponentProps<typeof IGRPPageHeaderBackButton>['onClick'];
+};
+
+function renderBackButton({
+  iconBackButton,
+  backButtonVariant,
+  backButtonSize,
+  backButtonAriaLabel,
+  backButtonShowText,
+  backButtonText,
+  backButtonClassName,
+  urlBackButton,
+  backButtonUseBrowserBack,
+  backButtonOnClick,
+}: BackButtonProps) {
+  const baseProps = {
+    iconName: iconBackButton,
+    variant: backButtonVariant,
+    size: backButtonSize,
+    ariaLabel: backButtonAriaLabel,
+    showText: backButtonShowText,
+    text: backButtonText,
+    className: backButtonClassName,
+  };
+
+  // Browser back mode - url must not be passed
+  if (backButtonUseBrowserBack) {
+    return (
+      <IGRPPageHeaderBackButton
+        {...baseProps}
+        useBrowserBack={true}
+        onClick={backButtonOnClick}
+      />
+    );
+  }
+
+  // Custom onClick handler mode - url must not be passed
+  if (backButtonOnClick) {
+    return (
+      <IGRPPageHeaderBackButton {...baseProps} onClick={backButtonOnClick} />
+    );
+  }
+
+  // Link navigation mode (default) - onClick must not be passed
+  return <IGRPPageHeaderBackButton {...baseProps} url={urlBackButton} />;
+}
 
 function IGRPPageHeader({
   title,
@@ -37,6 +100,14 @@ function IGRPPageHeader({
   showBackButton,
   urlBackButton,
   iconBackButton,
+  backButtonVariant,
+  backButtonSize,
+  backButtonAriaLabel,
+  backButtonShowText,
+  backButtonText,
+  backButtonClassName,
+  backButtonUseBrowserBack,
+  backButtonOnClick,
 }: IGRPPageHeaderProps) {
   const _id = useId();
   const ref = name ?? id ?? _id;
@@ -51,9 +122,19 @@ function IGRPPageHeader({
       id={ref}
     >
       <div className="flex items-center gap-2">
-        {showBackButton && (
-          <IGRPPageHeaderBackButton url={urlBackButton} iconName={iconBackButton} />
-        )}
+        {showBackButton &&
+          renderBackButton({
+            iconBackButton,
+            backButtonVariant,
+            backButtonSize,
+            backButtonAriaLabel,
+            backButtonShowText,
+            backButtonText,
+            backButtonClassName,
+            urlBackButton,
+            backButtonUseBrowserBack,
+            backButtonOnClick,
+          })}
 
         <IGRPHeadline
           title={title}

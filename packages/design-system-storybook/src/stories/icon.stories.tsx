@@ -128,7 +128,7 @@ function IconGalleryComponent() {
 
         <IGRPSeparatorPrimitive className='my-6' />
 
-        <div className='grid grid-cols-[repeat(auto-fill,_minmax(56px,_1fr))] gap-4 w-full'>
+        <div className='grid grid-cols-[repeat(auto-fill,minmax(56px,1fr))] gap-4 w-full'>
           {filteredIcons.length > 0 ? (
             filteredIcons.map((iconName) => (
               <IGRPAlertDialogPrimitive

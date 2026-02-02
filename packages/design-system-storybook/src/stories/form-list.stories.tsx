@@ -4,11 +4,14 @@ import type { Meta, StoryObj } from '@storybook/nextjs-vite';
 import {
   IGRPFormList,
   IGRPInputText,
+  IGRPInputNumber,
+  IGRPCheckbox,
   IGRPSelect,
   IGRPCombobox,
   IGRPForm,
   type IGRPFormHandle,
   type IGRPOptionsProps,
+  cn,
 } from '@igrp/igrp-framework-react-design-system';
 
 const meta: Meta<typeof IGRPFormList> = {
@@ -96,6 +99,59 @@ const mockOptions: IGRPOptionsProps[] = [
     group: 'Users',
   },
 ];
+
+type ActividadeEconomicaItem = {
+  idActividadeEconomica: string;
+  taxa: number;
+  principal: boolean;
+};
+
+const selectidActividadeEconomicaOptions: (IGRPOptionsProps & { taxa: number })[] = [
+  {
+    value: 'construction',
+    label:
+      'Construção civil, incluindo obras públicas, privadas e infraestruturas complexas que exigem planeamento urbano, gestão de materiais e equipas multidisciplinares especializadas',
+    description: 'Obras públicas e privadas',
+    taxa: 1200,
+  },
+  {
+    value: 'tourism',
+    label:
+      'Turismo e hotelaria com foco em resorts, alojamentos locais, restauração e experiências culturais prolongadas que envolvem atendimento personalizado e gestão de visitantes internacionais',
+    description: 'Hotéis, agências de viagens e turismo',
+    taxa: 950,
+  },
+  {
+    value: 'it-services',
+    label:
+      'Tecnologias de informação, desenvolvimento de software, consultoria, suporte técnico, integração de sistemas empresariais e serviços geridos para operações críticas de negócio',
+    description: 'Serviços de software e consultoria',
+    taxa: 800,
+  },
+  {
+    value: 'retail',
+    label:
+      'Comércio e retalho em lojas físicas e canais digitais, incluindo gestão de inventário, logística, atendimento omnicanal e promoção contínua de produtos para diversos segmentos',
+    description: 'Lojas, supermercados e comércio a retalho',
+    taxa: 675,
+  },
+];
+
+const formListactividadesEconomicasDefault: ActividadeEconomicaItem = {
+  idActividadeEconomica: '',
+  taxa: 0,
+  principal: false,
+};
+
+const actividadesEconomicasBadgeValue = 'SOAT';
+
+const renderLabel = (item: ActividadeEconomicaItem, index: number) => {
+  const option = selectidActividadeEconomicaOptions.find(
+    (opt) => opt.value === item.idActividadeEconomica,
+  );
+  const baseLabel = option?.label ?? `Item ${index + 1}`;
+  return item.principal ? `${baseLabel} (Principal)` : baseLabel;
+};
 
 const defaultItem = { label: '', label1: '' };
 
@@ -322,6 +378,106 @@ const AllowEmptyFormTemplate = () => {
 
 export const FormListAllowEmptyForm: StoryObj = {
   render: () => <AllowEmptyFormTemplate />,
+};
+
+const ActividadesEconomicasTemplate = () => {
+  const [items, setItems] = useState<ActividadeEconomicaItem[]>([
+    formListactividadesEconomicasDefault,
+  ]);
+
+  return (
+    <>
+      <IGRPFormList<ActividadeEconomicaItem>
+        id='actividadesEconomicas'
+        label='Sector de Actividade/SOAT'
+        color='primary'
+        variant='solid'
+        addButtonLabel='Add'
+        iconName='Briefcase'
+        addButtonIconName='Plus'
+        value={items}
+        onChange={setItems}
+        renderItem={(item, index, onChange) => {
+          const handleActividadeChange = (value: string) => {
+            const option = selectidActividadeEconomicaOptions.find(
+              (opt) => opt.value === value,
+            );
+            onChange?.({
+              ...item,
+              idActividadeEconomica: value,
+              taxa: option?.taxa ?? 0,
+            });
+          };
+
+          return (
+            <div className={cn('grid', 'grid-cols-2 ', 'md:grid-cols-2 ', 'lg:grid-cols-2 ', ' gap-4',)}>
+              <IGRPCombobox
+                id={`actividadesEconomicas.${index}.idActividadeEconomica`}
+                label='Actividade'
+                variant='single'
+                placeholder='Select an option...'
+                required
+                selectLabel='No option found'
+                showSearch
+                showIcon={false}
+                iconName='CornerDownRight'
+                className={cn('col-span-1')}
+                value={item.idActividadeEconomica}
+                onChange={(value) => handleActividadeChange(value as string)}
+                options={selectidActividadeEconomicaOptions}
+              />
+              <IGRPInputNumber
+                id={`actividadesEconomicas.${index}.taxa`}
+                label='SOAT'
+                max={9999999}
+                step={1}
+                required
+                disabled
+                className={cn('col-span-1')}
+                value={item.taxa}
+                onChange={(value) =>
+                  onChange?.({
+                    ...item,
+                    taxa: Number(value) || 0,
+                  })
+                }
+              />
+              <IGRPCheckbox
+                id={`actividadesEconomicas.${index}.principal`}
+                label='Principal'
+                className={cn('col-span-1')}
+                checked={item.principal}
+                onCheckedChange={(checked) =>
+                  onChange?.({
+                    ...item,
+                    principal: Boolean(checked),
+                  })
+                }
+              />
+            </div>
+          );
+        }}
+        computeLabel={(item: ActividadeEconomicaItem, index: number) =>
+          `${renderLabel(item, index)}`
+        }
+        className={cn()}
+        defaultItem={formListactividadesEconomicasDefault}
+        badgeValue={actividadesEconomicasBadgeValue}
+      />
+      <div className='mt-4 p-4 bg-muted rounded-md'>
+        <p className='text-sm text-muted-foreground mb-2'>
+          Current activities ({items.length} {items.length === 1 ? 'item' : 'items'}):
+        </p>
+        <pre className='text-xs overflow-auto'>
+          {JSON.stringify(items, null, 2)}
+        </pre>
+      </div>
+    </>
+  );
+};
+
+export const FormListEconomicActivities: StoryObj = {
+  render: () => <ActividadesEconomicasTemplate />,
 };
 
 // Standalone version without form context

@@ -1,7 +1,8 @@
 'use client';
 
 import { useId, useState, useEffect, useRef } from 'react';
-import { useFormContext } from 'react-hook-form';
+import type { Control } from 'react-hook-form';
+import { useFormContext, useWatch } from 'react-hook-form';
 import { CalendarIcon, XIcon } from 'lucide-react';
 
 import {
@@ -28,7 +29,59 @@ import { Popover, PopoverContent, PopoverTrigger } from '../../../primitives/pop
 import { type IGRPCalendarSingleProps } from '../../calendar/single';
 import { IGRPLabel } from '../../label';
 
-type IGRPDatePickerInputSingleProps = IGRPCalendarSingleProps & IGRPDatePickerBaseProps;
+type IGRPDatePickerInputSingleProps = IGRPCalendarSingleProps &
+  IGRPDatePickerBaseProps & {
+    inputGroupClassName?: string;
+  };
+
+type FormSyncProps = {
+  fieldName: string;
+  date: Date | undefined;
+  dateFormat: string;
+  setLocalDate: (d: Date | undefined) => void;
+  setValue: (v: string) => void;
+  setMonth: (d: Date | undefined) => void;
+  prevDateRef: React.MutableRefObject<Date | undefined>;
+  setValueForm: (name: string, value: Date | undefined) => void;
+  control: Control;
+};
+
+function FormConnectedDatePickerSync({
+  fieldName,
+  date,
+  dateFormat,
+  setLocalDate,
+  setValue,
+  setMonth,
+  prevDateRef,
+  setValueForm,
+  control,
+}: FormSyncProps) {
+  const watchedValue = useWatch({ control, name: fieldName, defaultValue: undefined });
+
+  useEffect(() => {
+    const dateChanged = prevDateRef.current !== date;
+    if (dateChanged) {
+      prevDateRef.current = date;
+    }
+
+    const valueToSync = (dateChanged ? date : watchedValue) as Date | undefined;
+
+    setLocalDate(valueToSync);
+    setValue(formatDateToString(valueToSync, dateFormat));
+    if (valueToSync) {
+      setMonth(valueToSync);
+    } else {
+      setMonth(undefined);
+    }
+
+    if (dateChanged && watchedValue !== date) {
+      setValueForm(fieldName, date);
+    }
+  }, [watchedValue, date, dateFormat, fieldName, setLocalDate, setValue, setMonth, setValueForm]);
+
+  return null;
+}
 
 function IGRPDatePickerInputSingle({
   name,
@@ -42,9 +95,11 @@ function IGRPDatePickerInputSingle({
   required = false,
   disabledPicker = false,
   dateFormat = DD_MM_YYYY,
+  placeholder: placeholderProp,
   disableBefore,
   disableAfter,
   disableDayOfWeek,
+  inputGroupClassName,
   ...calendarProps
 }: IGRPDatePickerInputSingleProps) {
   const _id = useId();
@@ -58,7 +113,9 @@ function IGRPDatePickerInputSingle({
   const [open, setOpen] = useState(false);
   const prevDateRef = useRef<Date | undefined>(date);
 
-  // Sync local state with date prop when it changes externally (controlled component)
+  const placeholder = placeholderProp ?? dateFormat;
+
+  // Sync local state with date prop when it changes externally (standalone only)
   useEffect(() => {
     if (!formContext) {
       setLocalDate(date);
@@ -77,11 +134,13 @@ function IGRPDatePickerInputSingle({
     }
   }, [formContext, onDateChange]);
 
+  useEffect(() => {
+    if (disabledPicker && open) setOpen(false);
+  }, [disabledPicker, open]);
+
   const disabled = getDisabledDays({ disableBefore, disableAfter, disableDayOfWeek });
 
   const renderPicker = (onChange: (date: Date | undefined) => void) => {
-    // Keep the input display controlled by local state in both modes.
-    // For formContext mode we sync local state from RHF value (see effect in FormField render).
     const displayDate = localDate;
     const displayValue = value;
 
@@ -91,7 +150,7 @@ function IGRPDatePickerInputSingle({
           id={fieldName}
           name={fieldName}
           value={displayValue}
-          placeholder={dateFormat}
+          placeholder={placeholder}
           className="bg-background pr-10"
           disabled={disabledPicker}
           onChange={(e) => {
@@ -111,6 +170,11 @@ function IGRPDatePickerInputSingle({
               setMonth(parsedDate);
               onChange(parsedDate);
               onDateChange?.(parsedDate);
+            } else {
+              setLocalDate(undefined);
+              setMonth(undefined);
+              onChange(undefined);
+              onDateChange?.(undefined);
             }
           }}
           onKeyDown={(e) => {
@@ -128,7 +192,7 @@ function IGRPDatePickerInputSingle({
             variant="ghost"
             className="absolute top-1/2 right-8 size-6 -translate-y-1/2"
             disabled={disabledPicker}
-            aria-label="Open Calendar"
+            aria-label="Remover Data"
             onClick={() => {
               setLocalDate(undefined);
               setMonth(undefined);
@@ -139,11 +203,15 @@ function IGRPDatePickerInputSingle({
             }}
           >
             <XIcon className="size-3.5" />
-            <span className="sr-only">Remover Data</span>
           </Button>
         )}
 
-        <Popover open={open} onOpenChange={(v) => !disabledPicker && setOpen(v)}>
+        <Popover
+          open={open}
+          onOpenChange={(v) => {
+            if (!disabledPicker) setOpen(v);
+          }}
+        >
           <PopoverTrigger asChild>
             {!displayDate && (
               <Button
@@ -151,6 +219,7 @@ function IGRPDatePickerInputSingle({
                 id={`date-picker-btn-${fieldName}`}
                 variant="ghost"
                 className="absolute top-1/2 right-2 size-6 -translate-y-1/2"
+                disabled={disabledPicker}
               >
                 <CalendarIcon className="size-3.5" />
                 <span className="sr-only">Selecionar Data</span>
@@ -175,6 +244,10 @@ function IGRPDatePickerInputSingle({
                   setLocalDate(date);
                   setValue(formatDateToString(date, dateFormat));
                   setMonth(date);
+                } else {
+                  setLocalDate(undefined);
+                  setValue('');
+                  setMonth(undefined);
                 }
                 onChange(date);
                 setOpen(false);
@@ -192,60 +265,44 @@ function IGRPDatePickerInputSingle({
   if (formContext) {
     return (
       <div className={cn('*:not-first:mt-2', className)}>
+        <FormConnectedDatePickerSync
+          fieldName={fieldName}
+          date={date}
+          dateFormat={dateFormat}
+          setLocalDate={setLocalDate}
+          setValue={setValue}
+          setMonth={setMonth}
+          prevDateRef={prevDateRef}
+          setValueForm={formContext.setValue}
+          control={formContext.control}
+        />
         <FormField
           control={formContext.control}
           name={fieldName}
-          render={({ field, fieldState }) => {
-            // Sync local state when field value or date prop changes externally
-            useEffect(() => {
-              // Check if date prop changed (including to undefined)
-              const dateChanged = prevDateRef.current !== date;
-              if (dateChanged) {
-                prevDateRef.current = date;
-              }
+          render={({ field, fieldState }) => (
+            <FormItem className={inputGroupClassName}>
+              {label && (
+                <FormLabel
+                  htmlFor={fieldName}
+                  className={cn(
+                    labelClassName,
+                    required && 'after:content-["*"] after:text-destructive',
+                  )}
+                >
+                  {label}
+                </FormLabel>
+              )}
+              <FormControl>
+                {renderPicker((val) => {
+                  field.onChange(val);
+                  onDateChange?.(val);
+                })}
+              </FormControl>
 
-              // Priority: if date prop changed (controlled component), sync with it
-              // Otherwise sync with RHF field value
-              const valueToSync = dateChanged ? date : field.value;
-
-              setLocalDate(valueToSync);
-              setValue(formatDateToString(valueToSync, dateFormat));
-              if (valueToSync) {
-                setMonth(valueToSync);
-              } else {
-                setMonth(undefined);
-              }
-              // If date prop changed and different from field.value, update RHF
-              if (dateChanged && field.value !== date) {
-                field.onChange(date);
-              }
-            }, [field.value, date, dateFormat]);
-
-            return (
-              <FormItem>
-                {label && (
-                  <FormLabel
-                    htmlFor={fieldName}
-                    className={cn(
-                      labelClassName,
-                      required && 'after:content-["*"] after:text-destructive',
-                    )}
-                  >
-                    {label}
-                  </FormLabel>
-                )}
-                <FormControl>
-                  {renderPicker((val) => {
-                    field.onChange(val);
-                    onDateChange?.(val);
-                  })}
-                </FormControl>
-
-                {helperText && !fieldState.error && <FormDescription>{helperText}</FormDescription>}
-                <FormMessage className="text-xs" />
-              </FormItem>
-            );
-          }}
+              {helperText && !fieldState.error && <FormDescription>{helperText}</FormDescription>}
+              <FormMessage className="text-xs" />
+            </FormItem>
+          )}
         />
       </div>
     );

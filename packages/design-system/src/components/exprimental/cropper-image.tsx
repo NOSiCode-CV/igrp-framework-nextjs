@@ -51,17 +51,6 @@ export function Component2() {
         <CropperImage />
         <CropperCropArea className="rounded-full" />
       </Cropper>
-
-      <p aria-live="polite" role="region" className="mt-2 text-xs text-muted-foreground">
-        Cropper with full-rounded mask ∙{' '}
-        <a
-          href="https://github.com/origin-space/image-cropper"
-          className="underline hover:text-foreground"
-          target="_blank"
-        >
-          API
-        </a>
-      </p>
     </div>
   );
 }
@@ -97,17 +86,6 @@ export default function Component3() {
           </output>
         </div>
       </div>
-
-      <p aria-live="polite" role="region" className="mt-2 text-xs text-muted-foreground">
-        Cropper with zoom slider ∙{' '}
-        <a
-          href="https://github.com/origin-space/image-cropper"
-          className="underline hover:text-foreground"
-          target="_blank"
-        >
-          API
-        </a>
-      </p>
     </div>
   );
 }
@@ -223,7 +201,7 @@ export function Component4() {
     return () => {
       if (currentUrl && currentUrl.startsWith('blob:')) {
         URL.revokeObjectURL(currentUrl);
-        console.log('Revoked URL:', currentUrl); // Optional: for debugging
+        console.log('Revoked URL:', currentUrl);
       }
     };
   }, [croppedImageUrl]); // Dependency array ensures cleanup runs when URL changes
@@ -260,18 +238,6 @@ export function Component4() {
           </div>
         </div>
       </div>
-
-      <p aria-live="polite" role="region" className="mt-2 text-xs text-muted-foreground">
-        Cropper with image preview ∙{' '}
-        <a
-          href="https://github.com/origin-space/image-cropper"
-          className="underline hover:text-foreground"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          API
-        </a>
-      </p>
     </div>
   );
 }

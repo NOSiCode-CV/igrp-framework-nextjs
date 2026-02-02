@@ -35,7 +35,7 @@ function IGRPTemplateHeader({ data, className }: IGRPTemplateHeaderProps) {
         '[header-template] Cabeçalho do IGRP não tem dados, define os dados no src/igrp.template.config.',
       duration: 10000,
     });
-    return null;
+    return;
   }
 
   const {
@@ -52,6 +52,9 @@ function IGRPTemplateHeader({ data, className }: IGRPTemplateHeaderProps) {
     showSettings,
     settingsUrl,
     settingsIcon,
+    userProfileUrl,
+    notificationsUrl,
+    notifications,
   } = data;
 
   return (
@@ -103,13 +106,23 @@ function IGRPTemplateHeader({ data, className }: IGRPTemplateHeaderProps) {
 
         {showNotifications && (
           <span className="hidden md:block">
-            <IGRPTemplateNotifications notifications={[]} />
+            <IGRPTemplateNotifications
+              notifications={notifications || []}
+              notificationsUrl={notificationsUrl}
+            />
           </span>
         )}
 
         {showThemeSwitcher && <IGRPTemplateModeSwitcher />}
 
-        {showUser && <IGRPTemplateNavUser user={user} isHeader={true} />}
+        {showUser && (
+          <IGRPTemplateNavUser
+            user={user}
+            isHeader={true}
+            userProfileUrl={userProfileUrl}
+            notificationsUrl={notificationsUrl}
+          />
+        )}
       </div>
     </div>
   );

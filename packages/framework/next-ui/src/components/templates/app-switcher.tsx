@@ -16,6 +16,8 @@ import type { IGRPApplicationArgs } from '@igrp/framework-next-types';
 import { useState, useEffect, useMemo } from 'react';
 import Image from 'next/image';
 
+import { getLocationOriginURL } from '../../lib/utils';
+
 interface IGRPTemplateAppSwitcherProps {
   apps?: IGRPApplicationArgs[];
   appCode?: string;
@@ -46,19 +48,12 @@ function IGRPTemplateAppSwitcher({ apps, appCode, appCenterUrl }: IGRPTemplateAp
     }
   }, [currentApp, apps]);
 
-  const _url = typeof window !== 'undefined' ? window.location.origin : '';
-  console.log('WINDOW ORIGIN ::: ', _url);
-
   const getAppUrl = (app: IGRPApplicationArgs): string => {
-    if (app.url) {
-      console.log('APP URL ::: ', app.url);
-      return app.url;
-    }
+    if (app.url) return app.url;
 
-    if (app.slug) {
-      console.log('APP SLUG ::: ', app.slug);
-      return app.slug.startsWith('/') ? `${_url}${app.slug}` : `${_url}/${app.slug}`;
-    }
+    const _url = getLocationOriginURL();
+
+    if (app.slug) return app.slug.startsWith('/') ? `${_url}${app.slug}` : `${_url}/${app.slug}`;
 
     return _url;
   };

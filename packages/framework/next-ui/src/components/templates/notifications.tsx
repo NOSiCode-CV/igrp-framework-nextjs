@@ -14,12 +14,25 @@ import {
   IGRPIcon,
 } from '@igrp/igrp-framework-react-design-system';
 import type { IGRPNotificationArgs } from '@igrp/framework-next-types';
+import Link from 'next/link';
+import { getLocationOriginURL } from '../../lib/utils';
 
-function IGRPTemplateNotifications({ notifications }: { notifications: IGRPNotificationArgs[] }) {
+function IGRPTemplateNotifications({
+  notifications,
+  notificationsUrl,
+}: {
+  notifications: IGRPNotificationArgs[];
+  notificationsUrl?: string;
+}) {
   const [notificationCount, setNotificationCount] = useState(3);
 
   const markAsRead = () => {
     setNotificationCount(0);
+  };
+
+  const handleUrl = () => {
+    const _url = getLocationOriginURL();
+    return notificationsUrl ? notificationsUrl : `${_url}/notifications`;
   };
 
   return (
@@ -72,8 +85,8 @@ function IGRPTemplateNotifications({ notifications }: { notifications: IGRPNotif
           )}
         </IGRPDropdownMenuGroupPrimitive>
         <IGRPDropdownMenuSeparatorPrimitive />
-        <IGRPDropdownMenuItemPrimitive className="justify-center">
-          View all notifications
+        <IGRPDropdownMenuItemPrimitive className="justify-center" asChild>
+          <Link href={handleUrl()}>Todas as notificações</Link>
         </IGRPDropdownMenuItemPrimitive>
       </IGRPDropdownMenuContentPrimitive>
     </IGRPDropdownMenuPrimitive>

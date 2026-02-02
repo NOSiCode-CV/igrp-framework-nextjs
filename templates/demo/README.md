@@ -169,6 +169,8 @@ Coming soon
 | `NEXT_PUBLIC_IGRP_APP_HOME_SLUG` | Default home route | `/` |
 | `NEXT_IGRP_APP_CENTER_URL` | Application center URL | - |
 | `NEXT_PUBLIC_ALLOWED_DOMAINS` | Allowed image domains (comma-separated) | - |
+| `NEXT_PUBLIC_IGRP_PROFILE_URL` | Base URL for profile | - |
+| `NEXT_PUBLIC_IGRP_NOTIFICATION_URL` | Base URL for notification | - |
 | `IGRP_SYNC_ON_CODE_MENUS` | Enable synchronization of menus defined in code with the IGRP system | `false` |
 | `IGRP_SYNC_ACCESS` | Enable synchronization of applications, resources, and menus with the IGRP Access Management API | `true` |
 | `IGRP_M2M_SERVICE_ID` | Unique identifier for your service in the IGRP Access Management system (required when `IGRP_SYNC_ACCESS=true`) | - |
@@ -201,6 +203,16 @@ The following variables control how your application synchronizes with the IGRP 
 - **Required when**: `IGRP_SYNC_ACCESS=true`
 - **How to get**: Contact your IGRP Access Management administrator
 - **Security**: Keep this token secure and never commit it to version control
+
+#### `NEXT_PUBLIC_IGRP_PROFILE_URL`
+- **Purpose**: Base URL for profile
+- **Usage**: Used by the frontend profile
+- **Example**: `https://frontendexample.com/profile`
+
+#### `NEXT_PUBLIC_IGRP_NOTIFICATION_URL`
+- **Purpose**: Base URL for notification service calls/streams
+- **Usage**: Used by the frontend notifications
+- **Example**: `https://frontendexample.com/notifications`
 
 ## 📜 Available Scripts
 

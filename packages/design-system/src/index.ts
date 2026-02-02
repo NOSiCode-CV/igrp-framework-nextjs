@@ -922,7 +922,7 @@ export {
   igrpColorText,
 } from './lib/colors';
 export { igrpGridSizeClasses, igrpAlertIconMappings } from './lib/constants';
-export { igrpGetnitials } from './lib/initials';
+export { igrpGetInitials } from './lib/initials';
 export { igrpToPascalCase } from './lib/pascal-case';
 export { igrpIsExternalUrl, igrpNormalizeUrl } from './lib/url';
 export { cn } from './lib/utils';

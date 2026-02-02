@@ -22,12 +22,8 @@ export async function igrpSyncRoutes({
   appRoutes,
   paramMapBody,
 }: IGRPSyncRoutesArgs) {
-  console.log('================================================');
-  console.log({ baseUrl, m2mServiceId, m2mToken, appRoutes, paramMapBody });
-  console.log('================================================');
-
   if (!appRoutes || !paramMapBody) {
-    console.warn('No app routes or param map body found');
+    console.warn('✖ No app routes or param map body found');
     return;
   }
 
@@ -85,5 +81,5 @@ export async function igrpSyncRoutes({
 
   await accessManagementClient.m2m.syncResources(resource);
 
-  console.log('✔ Synced static menu routes:', menuRoutes);
+  console.info('✔ Synced static menu routes:', menuRoutes);
 }

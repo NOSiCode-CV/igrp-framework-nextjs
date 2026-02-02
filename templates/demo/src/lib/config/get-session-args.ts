@@ -14,5 +14,5 @@ export function getSessionArgs() {
     refetchInterval: 5 * 60,
     refetchOnWindowFocus: true,
     basePath: getBasePath(process.env.NEXT_PUBLIC_BASE_PATH || ""),
-  }
+  };
 }

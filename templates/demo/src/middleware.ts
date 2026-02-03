@@ -51,4 +51,3 @@ export async function middleware(request: NextRequest) {
 export const config = {
   matcher: ["/", "/((?!api|apps|health|_next|favicon.ico|.*\\..*).*)"],
 };
- 

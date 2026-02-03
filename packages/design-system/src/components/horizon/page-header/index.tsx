@@ -68,19 +68,13 @@ function renderBackButton({
   // Browser back mode - url must not be passed
   if (backButtonUseBrowserBack) {
     return (
-      <IGRPPageHeaderBackButton
-        {...baseProps}
-        useBrowserBack={true}
-        onClick={backButtonOnClick}
-      />
+      <IGRPPageHeaderBackButton {...baseProps} useBrowserBack={true} onClick={backButtonOnClick} />
     );
   }
 
   // Custom onClick handler mode - url must not be passed
   if (backButtonOnClick) {
-    return (
-      <IGRPPageHeaderBackButton {...baseProps} onClick={backButtonOnClick} />
-    );
+    return <IGRPPageHeaderBackButton {...baseProps} onClick={backButtonOnClick} />;
   }
 
   // Link navigation mode (default) - onClick must not be passed

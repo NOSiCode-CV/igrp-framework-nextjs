@@ -1,6 +1,6 @@
 {
   "name": "@igrp/framework-next",
-  "version": "0.1.0-beta.91-2",
+  "version": "0.1.0-beta.92",
   "description": "IGRP Framework for Next.js | Server Rendering components",
   "keywords": [
     "igrp",
@@ -24,7 +24,7 @@
     "build:types": "tsc --emitDeclarationOnly --outDir dist",
     "build:without_reactcompiler": "pnpm clean:dist && pnpm build:swc && pnpm build:types",
     "format": "prettier --write .",
-    "release": "pnpm build && yarn publish --registry=https://sonatype.nosi.cv/repository/igrp/ --tag next",
+    "release": "pnpm build && yarn publish --registry=https://sonatype.nosi.cv/repository/igrp/ --tag latest",
     "clean-all": "rimraf node_modules && rimraf dist && rimraf tsconfig.tsbuildinfo"
   },
   "peerDependencies": {
@@ -33,22 +33,22 @@
     "react-dom": "19.2.3"
   },
   "dependencies": {
-    "@igrp/framework-next-auth": "0.1.0-beta.91",
-    "@igrp/framework-next-types": "0.1.0-beta.91",
-    "@igrp/framework-next-ui": "0.1.0-beta.91-2",
-    "@igrp/platform-access-management-client-ts": "0.1.0-beta.63"
+    "@igrp/framework-next-auth": "0.1.0-beta.92",
+    "@igrp/framework-next-types": "0.1.0-beta.92",
+    "@igrp/framework-next-ui": "0.1.0-beta.92",
+    "@igrp/platform-access-management-client-ts": "0.1.0-beta.64"
   },
   "devDependencies": {
     "@babel/cli": "7.28.6",
-    "@babel/core": "7.28.6",
-    "@babel/preset-env": "7.28.6",
+    "@babel/core": "7.29.0",
+    "@babel/preset-env": "7.29.0",
     "@babel/preset-react": "7.28.5",
     "@babel/preset-typescript": "7.28.5",
     "@eslint/js": "^9.39.2",
     "@swc/cli": "^0.7.10",
-    "@swc/core": "^1.15.10",
+    "@swc/core": "^1.15.11",
     "@types/node": "^24.10.1",
-    "@types/react": "19.2.9",
+    "@types/react": "19.2.10",
     "@types/react-dom": "19.2.3",
     "babel-plugin-react-compiler": "19.1.0-rc.3",
     "cpy-cli": "6.0.0",
@@ -56,13 +56,13 @@
     "eslint-config-prettier": "10.1.8",
     "eslint-plugin-prettier": "5.5.5",
     "eslint-plugin-react-hooks": "^7.0.1",
-    "eslint-plugin-react-refresh": "^0.4.26",
-    "globals": "^17.1.0",
+    "eslint-plugin-react-refresh": "^0.5.0",
+    "globals": "^17.3.0",
     "move-cli": "^2.0.0",
     "prettier": "^3.8.1",
     "rimraf": "^6.1.0",
     "typescript": "^5.9.3",
-    "typescript-eslint": "^8.53.1"
+    "typescript-eslint": "^8.54.0"
   },
   "sideEffects": [
     "*.css"

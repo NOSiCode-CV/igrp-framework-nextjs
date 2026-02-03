@@ -1,10 +1,17 @@
+/*
+ * CSS load order (avoids Tailwind priority conflicts):
+ * 1. Package styles (next-ui, design-system) — loaded first.
+ * 2. Tailwind + app styles — loaded after, so app Tailwind classes win over packages.
+ * Long-term: consider packages shipping theme-only CSS and a single Tailwind build in the app.
+ */
+@import "@igrp/framework-next-ui/dist/styles.css";
+@import "@igrp/igrp-framework-react-design-system/dist/styles.css";
+
 @import "tailwindcss";
 @import "tw-animate-css";
 
 @custom-variant dark (&:is(.dark *));
 
-@import "@igrp/framework-next-ui/dist/styles.css";
-@import "@igrp/igrp-framework-react-design-system/dist/styles.css";
 @import "./themes.css";
 
 @theme inline {

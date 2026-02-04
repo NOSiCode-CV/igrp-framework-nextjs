@@ -7,6 +7,7 @@ import {
   DropdownMenuLabel,
   DropdownMenuTrigger,
 } from '../../primitives/dropdown-menu';
+import { cn } from '../../../lib/utils';
 import { IGRPButton } from '../button';
 
 type IGPRDataTableVisibilityProps<TData> = {
@@ -36,7 +37,7 @@ function IGPRDataTableToggleVisibility<TData>({
             return (
               <DropdownMenuCheckboxItem
                 key={column.id}
-                className="capitalize"
+                className={cn('capitalize')}
                 checked={column.getIsVisible()}
                 onCheckedChange={(value) => column.toggleVisibility(!!value)}
                 onSelect={(e) => e.preventDefault()}

@@ -289,6 +289,31 @@ The template follows Next.js 15 App Router architecture with the following key c
 - **Tailwind CSS**: Utility-first CSS framework
 - **Biome**: Fast formatter and linter
 
+### Styling (Tailwind v4 + IGRP packages)
+
+This template compiles Tailwind **once in the app** and uses Tailwind v4 `@source` to scan both:
+
+- The template source files (`src/**`)
+- The compiled `dist/` output from the IGRP packages (so Tailwind utilities used inside those packages are generated too)
+
+See `src/styles/globals.css` for the active `@source` configuration.
+
+#### Tokens / theming
+
+- Base design tokens (CSS variables) are imported from the design system:
+  - `@igrp/igrp-framework-react-design-system/tokens`
+- Theme overrides live in:
+  - `src/styles/themes.css`
+
+#### Important
+
+- Do **not** import prebuilt `@igrp/*/styles.css` files in the template. They are static and can:
+  - miss utilities your pages need
+  - cause CSS override conflicts depending on import order
+
+If you're upgrading an existing app, check:
+- `.igrpmigrations/03.MIGRATIONS-04022026.md`
+
 ### Data Flow
 
 1. **Request arrives** → Middleware checks authentication

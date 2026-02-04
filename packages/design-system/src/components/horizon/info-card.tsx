@@ -47,7 +47,7 @@ function IGRPInfoCard({
   const infoCardClass = IGRPColors[variantSection][colorSection];
 
   return (
-    <Card className={cn(infoCardClass, className)} id={ref}>
+    <Card className={cn(infoCardClass.bg, className)} id={ref}>
       <CardHeader>
         <CardTitle
           className={cn('text-2xl font-semibold leading-none tracking-tight', titleClassName)}
@@ -80,11 +80,11 @@ function IGRPInfoField({ item }: IGRPInfoFieldProps) {
 
   return (
     <div className={cn('flex flex-col gap-0.5', colorClass.text)}>
-      <span className="text-sm font-medium">{item.label}</span>
-      <div className="flex items-center gap-2">
+      <span className={cn('text-sm font-medium')}>{item.label}</span>
+      <div className={cn('flex items-center gap-2')}>
         {item.showIcon && item.icon && (
-          <div className="flex items-center gap-2">
-            <IGRPIcon iconName={item.icon} className={item.iconClassName} />
+          <div className={cn('flex items-center gap-2')}>
+            <IGRPIcon iconName={item.icon} className={cn(item.iconClassName)} />
           </div>
         )}
         <span>{item.text}</span>

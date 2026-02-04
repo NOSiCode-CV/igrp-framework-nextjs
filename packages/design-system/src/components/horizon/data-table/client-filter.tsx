@@ -3,6 +3,8 @@
 import { type Column, type Table } from '@tanstack/react-table';
 import { Fragment, type JSX } from 'react';
 
+import { cn } from '../../../lib/utils';
+
 // import { IGRPButton } from '../button';
 
 interface IGRPDataTableClientFilterListProps<TData> {
@@ -32,7 +34,7 @@ function IGRPDataTableClientFilter<TData>({
   // };
 
   return (
-    <div className="flex md:items-center gap-2 flex-col md:flex-row">
+    <div className={cn('flex md:items-center gap-2 flex-col md:flex-row')}>
       {filterList.map(({ columnId, component }) => {
         const column = table.getColumn(columnId as string);
         return column && <Fragment key={columnId as string}>{component(column)}</Fragment>;

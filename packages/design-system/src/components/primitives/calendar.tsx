@@ -73,7 +73,7 @@ function Calendar({
             : 'rounded-md pl-2 pr-1 flex items-center gap-1 text-sm h-8 [&>svg]:text-muted-foreground [&>svg]:size-3.5',
           defaultClassNames.caption_label,
         ),
-        table: 'w-full border-collapse',
+        table: cn('w-full border-collapse'),
         weekdays: cn('flex', defaultClassNames.weekdays),
         weekday: cn(
           'text-muted-foreground rounded-md flex-1 font-normal text-[0.8rem] select-none',
@@ -130,7 +130,9 @@ function Calendar({
         WeekNumber: ({ children, ...props }) => {
           return (
             <td {...props}>
-              <div className="flex size-(--cell-size) items-center justify-center text-center">
+              <div
+                className={cn('flex size-(--cell-size) items-center justify-center text-center')}
+              >
                 {children}
               </div>
             </td>

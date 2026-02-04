@@ -259,8 +259,11 @@ function IGRPDataTableDropdownMenu({
 }: IGRPDataTableDropdownMenuProps) {
   return (
     <DropdownMenu>
-      <DropdownMenuTrigger className="flex items-center justify-center" aria-label="Open actions">
-        <IGRPIcon iconName={iconName} className="shadow-none" />
+      <DropdownMenuTrigger
+        className={cn('flex items-center justify-center')}
+        aria-label="Open actions"
+      >
+        <IGRPIcon iconName={iconName} className={cn('shadow-none')} />
       </DropdownMenuTrigger>
       <DropdownMenuContent align="end">
         {items.map(({ component: Component, props }, index) => (

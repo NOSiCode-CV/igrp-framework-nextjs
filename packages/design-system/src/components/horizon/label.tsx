@@ -20,7 +20,7 @@ function IGRPLabel({ label, className, required = false, name, id, ...props }: I
   return (
     <Label
       htmlFor={ref}
-      className={cn(required && 'after:content-["*"] after:text-destructive', 'gap-0.5', className)}
+      className={cn(required && "after:content-['*'] after:text-destructive", 'gap-0.5', className)}
       {...props}
     >
       {label}

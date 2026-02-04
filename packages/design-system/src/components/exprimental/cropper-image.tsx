@@ -12,12 +12,13 @@ import { Cropper, CropperCropArea, CropperDescription, CropperImage } from '../p
 import { useCallback, useEffect } from 'react';
 
 import { Button } from '../primitives/button';
+import { cn } from '../../lib/utils';
 
 export function Component() {
   return (
-    <div className="flex flex-col items-center gap-2">
+    <div className={cn('flex flex-col items-center gap-2')}>
       <Cropper
-        className="h-80"
+        className={cn('h-80')}
         image="https://raw.githubusercontent.com/origin-space/origin-images/refs/heads/main/cropper-02_a2xwtd.jpg"
         aspectRatio={16 / 9}
       >
@@ -26,11 +27,11 @@ export function Component() {
         <CropperCropArea />
       </Cropper>
 
-      <p aria-live="polite" role="region" className="mt-2 text-xs text-muted-foreground">
+      <p aria-live="polite" role="region" className={cn('mt-2 text-xs text-muted-foreground')}>
         Cropper with aspect ratio 16:9 ∙{' '}
         <a
           href="https://github.com/origin-space/image-cropper"
-          className="underline hover:text-foreground"
+          className={cn('underline hover:text-foreground')}
           target="_blank"
         >
           API
@@ -42,14 +43,14 @@ export function Component() {
 
 export function Component2() {
   return (
-    <div className="flex flex-col items-center gap-2">
+    <div className={cn('flex flex-col items-center gap-2')}>
       <Cropper
-        className="h-80"
+        className={cn('h-80')}
         image="https://raw.githubusercontent.com/origin-space/origin-images/refs/heads/main/cropper-06_dduwky.jpg"
       >
         <CropperDescription />
         <CropperImage />
-        <CropperCropArea className="rounded-full" />
+        <CropperCropArea className={cn('rounded-full')} />
       </Cropper>
     </div>
   );
@@ -59,10 +60,10 @@ export default function Component3() {
   const [zoom, setZoom] = useState(1);
 
   return (
-    <div className="flex flex-col items-center gap-2">
-      <div className="flex w-full flex-col gap-4">
+    <div className={cn('flex flex-col items-center gap-2')}>
+      <div className={cn('flex w-full flex-col gap-4')}>
         <Cropper
-          className="h-80"
+          className={cn('h-80')}
           image="https://raw.githubusercontent.com/origin-space/origin-images/refs/heads/main/cropper-07_scsejv.jpg"
           zoom={zoom}
           onZoomChange={setZoom}
@@ -71,7 +72,7 @@ export default function Component3() {
           <CropperImage />
           <CropperCropArea />
         </Cropper>
-        <div className="mx-auto flex w-full max-w-80 items-center gap-1">
+        <div className={cn('mx-auto flex w-full max-w-80 items-center gap-1')}>
           <Slider
             defaultValue={[1]}
             value={[zoom]}
@@ -81,7 +82,7 @@ export default function Component3() {
             onValueChange={(value) => setZoom(value[0] || 1)}
             aria-label="Zoom slider"
           />
-          <output className="block w-10 shrink-0 text-right text-sm font-medium tabular-nums">
+          <output className={cn('block w-10 shrink-0 text-right text-sm font-medium tabular-nums')}>
             {parseFloat(zoom.toFixed(1))}x
           </output>
         </div>
@@ -207,10 +208,10 @@ export function Component4() {
   }, [croppedImageUrl]); // Dependency array ensures cleanup runs when URL changes
 
   return (
-    <div className="flex flex-col items-center gap-2">
-      <div className="flex w-full flex-col gap-4 md:flex-row">
+    <div className={cn('flex flex-col items-center gap-2')}>
+      <div className={cn('flex w-full flex-col gap-4 md:flex-row')}>
         <Cropper
-          className="h-64 md:flex-1"
+          className={cn('h-64 md:flex-1')}
           image={ORIGINAL_IMAGE_URL}
           onCropChange={handleCropChange}
         >
@@ -218,20 +219,24 @@ export function Component4() {
           <CropperImage />
           <CropperCropArea />
         </Cropper>
-        <div className="flex w-26 flex-col gap-4">
+        <div className={cn('flex w-26 flex-col gap-4')}>
           <Button onClick={handleCrop} disabled={!croppedAreaPixels}>
             Crop preview
           </Button>
           {/* Display Area */}
-          <div className="aspect-square w-full shrink-0 overflow-hidden rounded-lg border">
+          <div className={cn('aspect-square w-full shrink-0 overflow-hidden rounded-lg border')}>
             {croppedImageUrl ? (
               <img
                 src={croppedImageUrl}
                 alt="Cropped result"
-                className="h-full w-full object-cover"
+                className={cn('h-full w-full object-cover')}
               />
             ) : (
-              <div className="flex h-full w-full items-center justify-center bg-muted p-2 text-center text-xs text-muted-foreground/80">
+              <div
+                className={cn(
+                  'flex h-full w-full items-center justify-center bg-muted p-2 text-center text-xs text-muted-foreground/80',
+                )}
+              >
                 Image preview
               </div>
             )}

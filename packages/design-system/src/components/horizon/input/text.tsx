@@ -52,7 +52,7 @@ function IGRPInputText({
         control={formContext.control}
       >
         {(field, fieldState) => (
-          <div className="relative">
+          <div className={cn('relative')}>
             <Input
               id={fieldName}
               name={fieldName}
@@ -116,7 +116,7 @@ function IGRPInputText({
       {helperText && !error && (
         <p
           id={`${fieldName}-helper`}
-          className="text-muted-foreground mt-2 text-xs"
+          className={cn('text-muted-foreground mt-2 text-xs')}
           role="region"
           aria-live="polite"
         >
@@ -125,7 +125,7 @@ function IGRPInputText({
       )}
 
       {error && (
-        <p id={`${fieldName}-error`} className="text-destructive mt-2 text-xs" role="alert">
+        <p id={`${fieldName}-error`} className={cn('text-destructive mt-2 text-xs')} role="alert">
           {error}
         </p>
       )}

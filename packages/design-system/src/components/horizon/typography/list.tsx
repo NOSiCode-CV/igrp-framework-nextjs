@@ -221,11 +221,11 @@ function IGRPTextList({
           onClick={handleItemClick}
         >
           {/* Icon */}
-          <div className="shrink-0 mt-0.5">{itemIcon}</div>
+          <div className={cn('shrink-0 mt-0.5')}>{itemIcon}</div>
 
           {/* Content */}
-          <div className="flex-1 min-w-0">
-            <div className="flex items-center gap-2">
+          <div className={cn('flex-1 min-w-0')}>
+            <div className={cn('flex items-center gap-2')}>
               <div className={cn('flex-1', item.variant && IGRPColors.solid[item.variant].text)}>
                 {item.content}
               </div>

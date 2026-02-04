@@ -5,6 +5,7 @@ import { Pie, PieChart, Sector, Cell, Label, Legend, type LegendType } from 'rec
 import type { PieSectorDataItem } from 'recharts/types/polar/Pie';
 import React, { useState, type SVGAttributes } from 'react';
 
+import { cn } from '../../../lib/utils';
 import { ChartContainer, ChartTooltip, ChartTooltipContent } from '../../primitives/chart';
 import type { IGRPChartProps, PieConfig } from './types';
 import {
@@ -164,7 +165,7 @@ function IGRPPieChart({
         y={y}
         textAnchor={textAnchor}
         dominantBaseline="central"
-        className="fill-foreground text-xs"
+        className={cn('fill-foreground text-xs')}
       >
         {content}
       </text>
@@ -176,7 +177,7 @@ function IGRPPieChart({
 
     return (
       <text x={viewBox.cx} y={viewBox.cy} textAnchor="middle" dominantBaseline="middle">
-        <tspan x={viewBox.cx} y={viewBox.cy} className="fill-foreground text-3xl font-bold">
+        <tspan x={viewBox.cx} y={viewBox.cy} className={cn('fill-foreground text-3xl font-bold')}>
           {formatValue(
             interactive && activeIndex >= 0 && activeIndex < data.length && pies[0]?.dataKey
               ? Number(data[activeIndex]?.[pies[0].dataKey] ?? 0)
@@ -184,7 +185,7 @@ function IGRPPieChart({
           )}
         </tspan>
         {centerLabel.text && (
-          <tspan x={viewBox.cx} y={(viewBox.cy || 0) + 24} className="fill-muted-foreground">
+          <tspan x={viewBox.cx} y={(viewBox.cy || 0) + 24} className={cn('fill-muted-foreground')}>
             {centerLabel.text}
           </tspan>
         )}
@@ -198,15 +199,18 @@ function IGRPPieChart({
       style={backgroundColor ? { backgroundColor } : undefined}
     >
       {(title || description) && (
-        <div className="pb-3">
-          {title && <div className="text-xl font-semibold">{title}</div>}
-          {description && <div className="text-sm text-muted-foreground">{description}</div>}
+        <div className={cn('pb-3')}>
+          {title && <div className={cn('text-xl font-semibold')}>{title}</div>}
+          {description && <div className={cn('text-sm text-muted-foreground')}>{description}</div>}
         </div>
       )}
 
-      <div className="overflow-hidden">
-        <div style={{ height: chartHeight, width: chartWidth }} className="w-full overflow-hidden">
-          <ChartContainer className="h-full w-full" config={chartConfig}>
+      <div className={cn('overflow-hidden')}>
+        <div
+          style={{ height: chartHeight, width: chartWidth }}
+          className={cn('w-full overflow-hidden')}
+        >
+          <ChartContainer className={cn('h-full w-full')} config={chartConfig}>
             <PieChart
               margin={{
                 top: 20,
@@ -231,7 +235,7 @@ function IGRPPieChart({
                   iconSize={10}
                   iconType="square"
                   wrapperStyle={{ paddingTop: 10 }}
-                  className="text-xs fill-foreground"
+                  className={cn('text-xs fill-foreground')}
                 />
               )}
 
@@ -281,9 +285,9 @@ function IGRPPieChart({
       </div>
 
       {footer && (
-        <div className="flex-col items-start gap-2 text-sm pt-4">
+        <div className={cn('flex-col items-start gap-2 text-sm pt-4')}>
           {footer.description && (
-            <div className="leading-none text-muted-foreground">{footer.description}</div>
+            <div className={cn('leading-none text-muted-foreground')}>{footer.description}</div>
           )}
         </div>
       )}

@@ -83,9 +83,9 @@ function IGRPAlertDialog({
   return (
     <Slot id={ref}>
       <AlertDialog open={open} onOpenChange={onOpenChange}>
-        <AlertDialogContent className={className}>
+        <AlertDialogContent className={cn(className)}>
           {showIcon && iconPlacement === 'center' && (
-            <div className="flex justify-center -mt-2">
+            <div className={cn('flex justify-center -mt-2')}>
               <AlertIcon
                 iconName={iconName || iconDefault}
                 bgClass={softColors.bg}
@@ -108,13 +108,13 @@ function IGRPAlertDialog({
                 iconPlacement={iconPlacement}
               />
             )}
-            <div className="flex-1">
+            <div className={cn('flex-1')}>
               <AlertDialogHeader className={cn(iconPlacement === 'center' && 'items-center')}>
                 {title && (
                   <AlertDialogTitle className={cn(titleClassName)}>{title}</AlertDialogTitle>
                 )}
                 {description && (
-                  <AlertDialogDescription className={descriptionClassName}>
+                  <AlertDialogDescription className={cn(descriptionClassName)}>
                     {description}
                   </AlertDialogDescription>
                 )}

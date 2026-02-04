@@ -1,6 +1,7 @@
 import { useId } from 'react';
 
 import { Avatar, AvatarImage, AvatarFallback } from '../primitives/avatar';
+import { cn } from '../../lib/utils';
 
 interface IGRPUserAvatarProps {
   image?: string | null;
@@ -24,9 +25,9 @@ function IGRPUserAvatar({
   const ref = name ?? id ?? _id;
 
   return (
-    <Avatar className={className} id={ref}>
+    <Avatar className={cn(className)} id={ref}>
       <AvatarImage src={image || undefined} alt={alt || 'Current User'} />
-      <AvatarFallback className={fallbackClass}>{fallbackContent}</AvatarFallback>
+      <AvatarFallback className={cn(fallbackClass)}>{fallbackContent}</AvatarFallback>
     </Avatar>
   );
 }

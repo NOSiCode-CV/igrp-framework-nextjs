@@ -152,7 +152,7 @@ function IGRPAvatar({
 
   return (
     <div className={cn('relative', avatarVariants({ size, rounded }), className)} id={ref}>
-      <Avatar className="size-full" {...avatarProps}>
+      <Avatar className={cn('size-full')} {...avatarProps}>
         <AvatarImage src={src} alt={alt} />
         <AvatarFallback className={cn('text-sm font-medium', fallbackClassName)}>
           {hasFallbackIcon ? <IGRPIcon iconName={fallbackIcon} /> : upperFallBack}

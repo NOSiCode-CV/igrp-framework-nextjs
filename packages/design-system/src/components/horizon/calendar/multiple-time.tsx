@@ -5,6 +5,7 @@ import { Label } from '../../primitives/label';
 import type { IGRPCalendarTimeProps } from '../../../types';
 import { IGRPCalendarMultiple, type IGRPCalendarMultipleProps } from './multiple';
 import { DEFAULT_HIDE_TIME_INDICATOR } from '../../../lib/constants';
+import { cn } from '../../../lib/utils';
 
 interface IGRPCalendarMultipleTimeProps extends IGRPCalendarMultipleProps, IGRPCalendarTimeProps {}
 
@@ -43,11 +44,11 @@ function IGRPCalendarMultipleTime({
 
   return (
     <div id={ref}>
-      <div className="space-y-4">
+      <div className={cn('space-y-4')}>
         <IGRPCalendarMultiple id={ref} {...props} />
 
-        <div className="space-y-4 pt-4 border-t">
-          <div className="space-y-2">
+        <div className={cn('space-y-4 pt-4 border-t')}>
+          <div className={cn('space-y-2')}>
             <Label htmlFor={`${ref}-start-time`}>{startTimeLabel}</Label>
             <Input
               id={`${ref}-start-time`}
@@ -61,7 +62,7 @@ function IGRPCalendarMultipleTime({
           </div>
 
           {!hideEndTimePicker && (
-            <div className="space-y-2">
+            <div className={cn('space-y-2')}>
               <Label htmlFor={`${ref}-end-time`}>{endTimeLabel}</Label>
               <Input
                 id={`${ref}-end-time`}

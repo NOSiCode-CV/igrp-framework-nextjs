@@ -160,7 +160,7 @@ function ChartTooltipContent({
       )}
     >
       {!nestLabel ? tooltipLabel : null}
-      <div className="grid gap-1.5">
+      <div className={cn('grid gap-1.5')}>
         {payload
           .filter((item) => item.type !== 'none')
           .map((item, index) => {
@@ -210,14 +210,14 @@ function ChartTooltipContent({
                         nestLabel ? 'items-end' : 'items-center',
                       )}
                     >
-                      <div className="grid gap-1.5">
+                      <div className={cn('grid gap-1.5')}>
                         {nestLabel ? tooltipLabel : null}
-                        <span className="text-muted-foreground">
+                        <span className={cn('text-muted-foreground')}>
                           {itemConfig?.label || item.name}
                         </span>
                       </div>
                       {item.value && (
-                        <span className="text-foreground font-mono font-medium tabular-nums">
+                        <span className={cn('text-foreground font-mono font-medium tabular-nums')}>
                           {item.value.toLocaleString()}
                         </span>
                       )}
@@ -276,7 +276,7 @@ function ChartLegendContent({
                 <itemConfig.icon />
               ) : (
                 <div
-                  className="h-2 w-2 shrink-0 rounded-[2px]"
+                  className={cn('h-2 w-2 shrink-0 rounded-[2px]')}
                   style={{
                     backgroundColor: item.color,
                   }}

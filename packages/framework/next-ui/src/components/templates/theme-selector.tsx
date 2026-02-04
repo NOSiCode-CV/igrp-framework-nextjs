@@ -1,6 +1,7 @@
 'use client';
 
 import {
+  cn,
   IGRPLabelPrimitive,
   IGRPSelectPrimitive,
   IGRPSelectContentPrimitive,
@@ -56,18 +57,18 @@ function IGRPTemplateThemeSelector() {
   const { activeTheme, setActiveTheme } = useIGRPThemeConfig();
 
   return (
-    <div className="flex items-center gap-2">
-      <IGRPLabelPrimitive htmlFor="theme-selector" className="sr-only">
+    <div className={cn('flex items-center gap-2')}>
+      <IGRPLabelPrimitive htmlFor="theme-selector" className={cn('sr-only')}>
         Theme
       </IGRPLabelPrimitive>
       <IGRPSelectPrimitive value={activeTheme} onValueChange={setActiveTheme}>
         <IGRPSelectTriggerPrimitive
           id="theme-selector"
           size="sm"
-          className="justify-start *:data-[slot=select-value]:w-12"
+          className={cn('justify-start *:data-[slot=select-value]:w-12')}
         >
-          <span className="text-muted-foreground hidden sm:block">Select a theme:</span>
-          <span className="text-muted-foreground block sm:hidden">Theme</span>
+          <span className={cn('text-muted-foreground hidden sm:block')}>Select a theme:</span>
+          <span className={cn('text-muted-foreground block sm:hidden')}>Theme</span>
           <IGRPSelectValuePrimitive placeholder="Select a theme" />
         </IGRPSelectTriggerPrimitive>
         <IGRPSelectContentPrimitive align="end">

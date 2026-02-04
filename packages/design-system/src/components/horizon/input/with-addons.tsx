@@ -54,9 +54,13 @@ function IGRPInputAddOn({
     <div className={cn('*:not-first:mt-2', classNameGlobal)} id={ref}>
       {label && <IGRPLabel label={label} className={classNameLabel} id={ref} />}
 
-      <div className="flex rounded-md border overflow-hidden">
+      <div className={cn('flex rounded-md border overflow-hidden')}>
         <Select value={selectValue} onValueChange={onSelectValueChange}>
-          <SelectTrigger className="border-0 border-r rounded-none min-w-20 px-3 py-2 focus:ring-0 focus-visible:ring-0 focus-visible:ring-offset-0 shadow-none">
+          <SelectTrigger
+            className={cn(
+              'border-0 border-r rounded-none min-w-20 px-3 py-2 focus:ring-0 focus-visible:ring-0 focus-visible:ring-offset-0 shadow-none',
+            )}
+          >
             <SelectValue>
               {selectValue && (
                 <span
@@ -73,7 +77,7 @@ function IGRPInputAddOn({
           <SelectContent>
             <SelectGroup>
               {optionLabel && (
-                <SelectLabel className="font-light text-sm">{optionLabel}</SelectLabel>
+                <SelectLabel className={cn('font-light text-sm')}>{optionLabel}</SelectLabel>
               )}
               {options?.map((option, index) => (
                 <SelectItem

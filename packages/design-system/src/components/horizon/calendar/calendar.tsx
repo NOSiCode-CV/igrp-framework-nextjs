@@ -9,6 +9,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from '../../primitives/select';
+import { cn } from '../../../lib/utils';
 
 type IGRPCalendarProps = {
   id?: string;
@@ -74,7 +75,7 @@ function IGRPCalendar({
       id={ref}
       selected={date}
       onSelect={onDateChange}
-      className="p-1"
+      className={cn('p-1')}
       classNames={{
         month_caption: 'mx-0',
         day_button: dayButtonClassName,
@@ -87,7 +88,7 @@ function IGRPCalendar({
       endMonth={endDate}
       components={{
         DropdownNav: (props: DropdownNavProps) => {
-          return <div className="flex w-full items-center gap-2">{props.children}</div>;
+          return <div className={cn('flex w-full items-center gap-2')}>{props.children}</div>;
         },
         Dropdown: (props: DropdownProps) => {
           return (
@@ -99,7 +100,7 @@ function IGRPCalendar({
                 }
               }}
             >
-              <SelectTrigger className="h-8 w-fit font-medium first:grow">
+              <SelectTrigger className={cn('h-8 w-fit font-medium first:grow')}>
                 <SelectValue />
               </SelectTrigger>
               <SelectContent>

@@ -48,11 +48,11 @@ function StatsCardMini({
     <IGRPStatsCard
       {...props}
       id={ref}
-      className={className}
+      className={cn(className)}
       onClick={onClick}
       title={title}
       titleSize={titleSize}
-      titleClassName={titleClassName}
+      titleClassName={cn(titleClassName)}
       value={value}
       valueSize={valueSize}
       valueClassName={cn('font-semibold', color.text, valueClassName)}

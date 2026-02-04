@@ -127,7 +127,7 @@ function IGRPDataTableFilterDropdown<TData>({
         </PopoverTrigger>
         <PopoverContent align="start" className={cn('p-0', className)}>
           <Command>
-            {showFilter && <CommandInput placeholder={placeholder} className="h-8" />}
+            {showFilter && <CommandInput placeholder={placeholder} className={cn('h-8')} />}
             <CommandList>
               <CommandEmpty>{notFoundText}</CommandEmpty>
               <CommandGroup>
@@ -210,7 +210,7 @@ function IGRPDataTableFilterFaceted<TData>({
             {placeholder}
             {selectedValues?.size > 0 && (
               <>
-                <Separator orientation="vertical" className="h-2" />
+                <Separator orientation="vertical" className={cn('h-2')} />
                 <IGRPBadge
                   variant="soft"
                   color="primary"
@@ -222,26 +222,30 @@ function IGRPDataTableFilterFaceted<TData>({
             )}
           </Button>
         </PopoverTrigger>
-        <PopoverContent className="w-auto min-w-36 p-1" align="start">
+        <PopoverContent className={cn('w-auto min-w-36 p-1')} align="start">
           <Command>
-            {showFilter && <CommandInput placeholder={placeholder} className="h-8" />}
+            {showFilter && <CommandInput placeholder={placeholder} className={cn('h-8')} />}
             <CommandEmpty>{labelSearchField}</CommandEmpty>
             <CommandGroup>
               {options?.map((option, i) => {
                 return (
                   <CommandItem className={cn('justify-between', className)} key={option.value}>
-                    <div className="flex items-center gap-2">
+                    <div className={cn('flex items-center gap-2')}>
                       <Checkbox
                         id={`${id}-${i}`}
                         checked={selectedValues.has(option.value)}
                         onCheckedChange={() => handleSelect(option.value)}
-                        className="border-foreground"
+                        className={cn('border-foreground')}
                       />
                     </div>
 
                     <span>{option.label}</span>
 
-                    <span className="ml-auto flex h-4 w-4 items-center justify-center font-mono text-xs">
+                    <span
+                      className={cn(
+                        'ml-auto flex h-4 w-4 items-center justify-center font-mono text-xs',
+                      )}
+                    >
                       {facets?.get(option.value) || 0}
                     </span>
                   </CommandItem>
@@ -281,7 +285,7 @@ function IGRPDataTableFilterInput<TData>({
   const inputRef = useRef<HTMLInputElement>(null);
 
   return (
-    <div className="relative">
+    <div className={cn('relative')}>
       <Input
         placeholder={placeholder}
         value={(column?.getFilterValue() ?? '') as string}
@@ -292,12 +296,18 @@ function IGRPDataTableFilterInput<TData>({
         type="text"
         aria-label="Filtar"
       />
-      <div className="pointer-events-none absolute inset-y-0 start-0 flex items-center justify-center ps-3 text-muted-foreground/80 peer-disabled:opacity-50">
-        <IGRPIcon iconName={iconName} className="size-3" />
+      <div
+        className={cn(
+          'pointer-events-none absolute inset-y-0 start-0 flex items-center justify-center ps-3 text-muted-foreground/80 peer-disabled:opacity-50',
+        )}
+      >
+        <IGRPIcon iconName={iconName} className={cn('size-3')} />
       </div>
       {Boolean(column?.getFilterValue()) && (
         <button
-          className="absolute inset-y-0 end-0 flex h-full w-9 items-center justify-center rounded-e-md text-muted-foreground/80 transition-[color,box-shadow] outline-none hover:text-foreground focus:z-10 focus-visible:border-ring focus-visible:ring-[3px] focus-visible:ring-ring/50 disabled:pointer-events-none disabled:cursor-not-allowed disabled:opacity-50"
+          className={cn(
+            'absolute inset-y-0 end-0 flex h-full w-9 items-center justify-center rounded-e-md text-muted-foreground/80 transition-[color,box-shadow] outline-none hover:text-foreground focus:z-10 focus-visible:border-ring focus-visible:ring-[3px] focus-visible:ring-ring/50 disabled:pointer-events-none disabled:cursor-not-allowed disabled:opacity-50',
+          )}
           aria-label="Limpar Filtro"
           onClick={() => {
             column?.setFilterValue('');
@@ -325,10 +335,12 @@ function IGRPDataTableFilterMinMax<TData>({
   const columnHeader = typeof column?.columnDef.header === 'string' ? column.columnDef.header : '';
 
   return (
-    <div className="flex gap-2">
+    <div className={cn('flex gap-2')}>
       <Input
         id={`${id}-min`}
-        className="flex-1 rounded-e-none [-moz-appearance:_textfield] focus:z-10 [&::-webkit-inner-spin-button]:m-0 [&::-webkit-inner-spin-button]:appearance-none [&::-webkit-outer-spin-button]:m-0 [&::-webkit-outer-spin-button]:appearance-none"
+        className={cn(
+          'flex-1 rounded-e-none [-moz-appearance:_textfield] focus:z-10 [&::-webkit-inner-spin-button]:m-0 [&::-webkit-inner-spin-button]:appearance-none [&::-webkit-outer-spin-button]:m-0 [&::-webkit-outer-spin-button]:appearance-none',
+        )}
         value={columnFilterValue?.[0] ?? ''}
         onChange={(e) =>
           column?.setFilterValue((old: [number, number]) => [
@@ -342,7 +354,9 @@ function IGRPDataTableFilterMinMax<TData>({
       />
       <Input
         id={`${id}-range-2`}
-        className="-ms-px flex-1 rounded-s-none [-moz-appearance:_textfield] focus:z-10 [&::-webkit-inner-spin-button]:m-0 [&::-webkit-inner-spin-button]:appearance-none [&::-webkit-outer-spin-button]:m-0 [&::-webkit-outer-spin-button]:appearance-none"
+        className={cn(
+          '-ms-px flex-1 rounded-s-none [-moz-appearance:_textfield] focus:z-10 [&::-webkit-inner-spin-button]:m-0 [&::-webkit-inner-spin-button]:appearance-none [&::-webkit-outer-spin-button]:m-0 [&::-webkit-outer-spin-button]:appearance-none',
+        )}
         value={(columnFilterValue as [number, number])?.[1] ?? ''}
         onChange={(e) =>
           column?.setFilterValue((old: [number, number]) => [

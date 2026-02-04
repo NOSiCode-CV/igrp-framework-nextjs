@@ -131,19 +131,23 @@ function IGRPMenuNavigation({
 
   return (
     <nav className={cn(isStickyTop && 'sticky top-20', className)} id={ref} aria-label={title}>
-      <Card className="shadow-sm gap-0">
-        <CardHeader className="border-b py-3 px-4 gap-0">
-          <div className="flex items-center justify-between">
-            <CardTitle className="font-medium text-sm">{title}</CardTitle>
+      <Card className={cn('shadow-sm gap-0')}>
+        <CardHeader className={cn('border-b py-3 px-4 gap-0')}>
+          <div className={cn('flex items-center justify-between')}>
+            <CardTitle className={cn('font-medium text-sm')}>{title}</CardTitle>
             {badgeContent && (
-              <IGRPBadge variant={badgeVariant} color={badgeColor} badgeClassName={badgeClassName}>
+              <IGRPBadge
+                variant={badgeVariant}
+                color={badgeColor}
+                badgeClassName={cn(badgeClassName)}
+              >
                 {badgeContent}
               </IGRPBadge>
             )}
           </div>
         </CardHeader>
-        <CardContent className="p-0">
-          <div className="divide-y" role="list">
+        <CardContent className={cn('p-0')}>
+          <div className={cn('divide-y')} role="list">
             {sections.map((section) => (
               <button
                 key={section.id}
@@ -160,13 +164,13 @@ function IGRPMenuNavigation({
                     : 'hover:bg-muted/30 text-muted-foreground',
                 )}
               >
-                <div className="flex items-center gap-2">
+                <div className={cn('flex items-center gap-2')}>
                   <IGRPIcon
                     iconName={section.icon}
-                    className="size-4 shrink-0"
+                    className={cn('size-4 shrink-0')}
                     aria-hidden="true"
                   />
-                  <span className="truncate">{section.label}</span>
+                  <span className={cn('truncate')}>{section.label}</span>
                 </div>
                 {showChevron && (
                   <IGRPIcon

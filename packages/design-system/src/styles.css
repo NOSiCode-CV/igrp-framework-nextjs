@@ -3797,6 +3797,12 @@
       content: var(--tw-content);
     }
   }
+  .after\:content-\[\'\*\'\] {
+    &::after {
+      --tw-content: '*';
+      content: var(--tw-content);
+    }
+  }
   .group-data-\[collapsible\=offcanvas\]\:after\:left-full {
     &:is(:where(.group)[data-collapsible="offcanvas"] *) {
       &::after {

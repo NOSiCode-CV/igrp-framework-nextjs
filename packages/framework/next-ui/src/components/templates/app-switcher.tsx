@@ -1,6 +1,7 @@
 'use client';
 
 import {
+  cn,
   IGRPIcon,
   IGRPDropdownMenuPrimitive,
   IGRPDropdownMenuContentPrimitive,
@@ -66,51 +67,57 @@ function IGRPTemplateAppSwitcher({ apps, appCode, appCenterUrl }: IGRPTemplateAp
             <IGRPDropdownMenuTriggerPrimitive asChild>
               <IGRPSidebarMenuButtonPrimitive
                 size="lg"
-                className="data-[state=open]:bg-sidebar-accent data-[state=open]:text-sidebar-accent-foreground"
+                className={cn(
+                  'data-[state=open]:bg-sidebar-accent data-[state=open]:text-sidebar-accent-foreground',
+                )}
               >
-                <div className="flex aspect-square size-8 items-center justify-center rounded-lg">
+                <div
+                  className={cn('flex aspect-square size-8 items-center justify-center rounded-lg')}
+                >
                   {activeApp.picture ? (
                     <Image
                       src={activeApp.picture}
                       alt={activeApp.name}
                       width={32}
                       height={32}
-                      className="h-full w-full rounded-lg object-cover"
+                      className={cn('h-full w-full rounded-lg object-cover')}
                       priority
                     />
                   ) : (
                     <IGRPIcon iconName="GalleryVerticalEnd" />
                   )}
                 </div>
-                <div className="grid flex-1 text-left text-sm leading-tight">
-                  <span className="truncate font-medium">{activeApp.name}</span>
-                  <span className="truncate text-xs">{activeApp.description || ''}</span>
+                <div className={cn('grid flex-1 text-left text-sm leading-tight')}>
+                  <span className={cn('truncate font-medium')}>{activeApp.name}</span>
+                  <span className={cn('truncate text-xs')}>{activeApp.description || ''}</span>
                 </div>
-                <IGRPIcon iconName="ChevronsUpDown" className="ml-auto" />
+                <IGRPIcon iconName="ChevronsUpDown" className={cn('ml-auto')} />
               </IGRPSidebarMenuButtonPrimitive>
             </IGRPDropdownMenuTriggerPrimitive>
             <IGRPDropdownMenuContentPrimitive
-              className="min-w-56 rounded-lg"
+              className={cn('min-w-56 rounded-lg')}
               align="start"
               side={isMobile ? 'bottom' : 'right'}
               sideOffset={4}
             >
               {listApps.length > 0 &&
                 listApps.map((app) => (
-                  <IGRPDropdownMenuItemPrimitive key={app.code} className="gap-2 p-2" asChild>
+                  <IGRPDropdownMenuItemPrimitive key={app.code} className={cn('gap-2 p-2')} asChild>
                     <a href={getAppUrl(app)}>
-                      <div className="flex size-6 items-center justify-center rounded-md border">
+                      <div
+                        className={cn('flex size-6 items-center justify-center rounded-md border')}
+                      >
                         {app.picture ? (
                           <Image
                             src={app.picture}
                             alt={app.name}
                             width={24}
                             height={24}
-                            className="h-full w-full rounded-md object-cover"
+                            className={cn('h-full w-full rounded-md object-cover')}
                             priority
                           />
                         ) : (
-                          <IGRPIcon iconName="AudioWaveform" className="size-3.5 shrink-0" />
+                          <IGRPIcon iconName="AudioWaveform" className={cn('size-3.5 shrink-0')} />
                         )}
                       </div>
                       {app.name}
@@ -121,12 +128,18 @@ function IGRPTemplateAppSwitcher({ apps, appCode, appCenterUrl }: IGRPTemplateAp
               {appCenterUrl && (listApps?.length ?? 0) > 1 && (
                 <>
                   <IGRPDropdownMenuSeparatorPrimitive />
-                  <IGRPDropdownMenuItemPrimitive className="gap-2 p-2" asChild>
+                  <IGRPDropdownMenuItemPrimitive className={cn('gap-2 p-2')} asChild>
                     <a href={appCenterUrl}>
-                      <div className="flex size-6 items-center justify-center rounded-md border bg-transparent">
-                        <IGRPIcon iconName="CornerDownLeft" className="size-3 shrink-0" />
+                      <div
+                        className={cn(
+                          'flex size-6 items-center justify-center rounded-md border bg-transparent',
+                        )}
+                      >
+                        <IGRPIcon iconName="CornerDownLeft" className={cn('size-3 shrink-0')} />
                       </div>
-                      <div className="text-muted-foreground font-medium">Applications Center</div>
+                      <div className={cn('text-muted-foreground font-medium')}>
+                        Applications Center
+                      </div>
                     </a>
                   </IGRPDropdownMenuItemPrimitive>
                 </>
@@ -137,16 +150,18 @@ function IGRPTemplateAppSwitcher({ apps, appCode, appCenterUrl }: IGRPTemplateAp
           <IGRPSidebarMenuButtonPrimitive
             size="lg"
             disabled
-            className="data-[state=open]:bg-sidebar-accent data-[state=open]:text-sidebar-accent-foreground"
+            className={cn(
+              'data-[state=open]:bg-sidebar-accent data-[state=open]:text-sidebar-accent-foreground',
+            )}
           >
-            <div className="flex aspect-square size-8 items-center justify-center rounded-lg">
+            <div className={cn('flex aspect-square size-8 items-center justify-center rounded-lg')}>
               <IGRPIcon iconName="Command" />
             </div>
-            <div className="grid flex-1 text-left text-sm leading-tight">
-              <span className="truncate font-medium">N/A</span>
-              <span className="truncate text-xs">N/A</span>
+            <div className={cn('grid flex-1 text-left text-sm leading-tight')}>
+              <span className={cn('truncate font-medium')}>N/A</span>
+              <span className={cn('truncate text-xs')}>N/A</span>
             </div>
-            <IGRPIcon iconName="ChevronsUpDown" className="ml-auto" />
+            <IGRPIcon iconName="ChevronsUpDown" className={cn('ml-auto')} />
           </IGRPSidebarMenuButtonPrimitive>
         )}
       </IGRPSidebarMenuItemPrimitive>

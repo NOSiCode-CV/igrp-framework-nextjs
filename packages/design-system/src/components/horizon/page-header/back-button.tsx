@@ -67,7 +67,9 @@ function IGRPPageHeaderBackButton({
     [router, onClick],
   );
 
-  const iconElement = <IGRPIcon iconName={iconName} aria-hidden="true" className="shrink-0" />;
+  const iconElement = (
+    <IGRPIcon iconName={iconName} aria-hidden="true" className={cn('shrink-0')} />
+  );
 
   const textElement = showText ? (
     <span className={cn(size === 'icon' && 'sr-only', 'ml-2')}>{text || ariaLabel}</span>

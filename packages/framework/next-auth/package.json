@@ -1,6 +1,6 @@
 {
   "name": "@igrp/framework-next-auth",
-  "version": "0.1.0-beta.92",
+  "version": "0.1.0-beta.96",
   "description": "IGRP Framework for Next.js | Auth",
   "license": "MIT",
   "type": "module",
@@ -51,7 +51,7 @@
   "peerDependencies": {
     "next": "^15.5.9",
     "next-auth": "^4.24.13",
-    "react": "^19.2.3"
+    "react": "^19.2.4"
   },
   "peerDependenciesMeta": {
     "next-auth": {

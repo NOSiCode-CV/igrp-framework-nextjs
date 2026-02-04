@@ -89,7 +89,7 @@ function IGRPRadioGroup({
             value={option.value}
             id={`${fieldName}-${option.value}`}
             disabled={option.disabled || disabled}
-            className="mt-0.5"
+            className={cn('mt-0.5')}
             size={size}
             variant={variant}
           />
@@ -128,7 +128,7 @@ function IGRPRadioGroup({
         control={formContext.control}
       >
         {(field) => (
-          <div className="relative">
+          <div className={cn('relative')}>
             {renderRadioOptions(field.value, (newValue) => {
               field.onChange(newValue);
               onValueChange?.(newValue);
@@ -150,7 +150,7 @@ function IGRPRadioGroup({
       {helperText && !error && (
         <p
           id={`${fieldName}-helper`}
-          className="text-muted-foreground mt-2 text-xs"
+          className={cn('text-muted-foreground mt-2 text-xs')}
           role="region"
           aria-live="polite"
         >
@@ -159,7 +159,7 @@ function IGRPRadioGroup({
       )}
 
       {error && (
-        <p id={`${fieldName}-error`} className="text-destructive mt-2 text-xs" role="alert">
+        <p id={`${fieldName}-error`} className={cn('text-destructive mt-2 text-xs')} role="alert">
           {error}
         </p>
       )}

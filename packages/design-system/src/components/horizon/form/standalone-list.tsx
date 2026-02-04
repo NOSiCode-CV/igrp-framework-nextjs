@@ -142,8 +142,8 @@ function IGRPStandaloneList<TItem>({
 
   return (
     <Card className={cn('shadow-sm gap-0 rounded-lg py-0', className)} id={groupId}>
-      <CardHeader className="py-3 border-b flex flex-row items-center justify-between">
-        <div className="flex items-center gap-2">
+      <CardHeader className={cn('py-3 border-b flex flex-row items-center justify-between')}>
+        <div className={cn('flex items-center gap-2')}>
           {showIcon && iconName && (
             <IGRPIcon
               iconName={iconName}
@@ -153,7 +153,9 @@ function IGRPStandaloneList<TItem>({
           )}
           <div>
             <CardTitle className={cn('text-sm font-medium', labelClassName)}>{label}</CardTitle>
-            {description && <CardDescription className="text-xs">{description}</CardDescription>}
+            {description && (
+              <CardDescription className={cn('text-xs')}>{description}</CardDescription>
+            )}
           </div>
         </div>
         {badgeValue && (
@@ -163,28 +165,28 @@ function IGRPStandaloneList<TItem>({
         )}
       </CardHeader>
 
-      <CardContent className="p-4">
+      <CardContent className={cn('p-4')}>
         <Accordion
           type="single"
           collapsible
           value={openItem}
           onValueChange={setOpenItem}
-          className="w-full"
+          className={cn('w-full')}
         >
           {items.map((item, index) => (
             <AccordionItem
               key={`item-${index}`}
               value={`item-${index}`}
-              className="border last:border-b rounded-sm mb-4"
+              className={cn('border last:border-b rounded-sm mb-4')}
             >
-              <div className="flex justify-between items-center px-4">
-                <div className="flex-1">
+              <div className={cn('flex justify-between items-center px-4')}>
+                <div className={cn('flex-1')}>
                   <AccordionTrigger
                     className={cn('hover:no-underline', computeLabel ? 'py-4' : 'py-2')}
                     showIcon
                     iconPlacement="end"
                   >
-                    <span className="font-medium text-sm">
+                    <span className={cn('font-medium text-sm')}>
                       {computeLabel?.(item ?? defaultItem, index) ?? ''}
                     </span>
                   </AccordionTrigger>
@@ -199,19 +201,21 @@ function IGRPStandaloneList<TItem>({
                       e.stopPropagation();
                       handleRemove(index);
                     }}
-                    className="h-7 w-7 p-0 ml-2 shrink-0"
+                    className={cn('h-7 w-7 p-0 ml-2 shrink-0')}
                     aria-label={`Remover item ${index + 1}`}
                   >
                     <IGRPIcon
                       iconName="Trash2"
-                      className="h-4 w-4 text-muted-foreground hover:text-destructive hover:bg-destructive/10"
+                      className={cn(
+                        'h-4 w-4 text-muted-foreground hover:text-destructive hover:bg-destructive/10',
+                      )}
                       strokeWidth={2}
                     />
                   </Button>
                 )}
               </div>
 
-              <AccordionContent className="px-4 pb-4">
+              <AccordionContent className={cn('px-4 pb-4')}>
                 {renderItem(item ?? defaultItem, index, (updatedItem) =>
                   handleItemChange(index, updatedItem),
                 )}
@@ -220,8 +224,8 @@ function IGRPStandaloneList<TItem>({
           ))}
         </Accordion>
 
-        <Button type="button" variant="outline" onClick={handleAdd} className="w-full">
-          <IGRPIcon iconName={addButtonIconName} className="h-4 w-4 mr-1" strokeWidth={2} />
+        <Button type="button" variant="outline" onClick={handleAdd} className={cn('w-full')}>
+          <IGRPIcon iconName={addButtonIconName} className={cn('h-4 w-4 mr-1')} strokeWidth={2} />
           <span>
             {addButtonLabel} {label}
           </span>

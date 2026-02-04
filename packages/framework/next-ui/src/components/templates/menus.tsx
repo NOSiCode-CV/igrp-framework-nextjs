@@ -5,6 +5,7 @@ import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 import type { IGRPMenuItemArgs } from '@igrp/framework-next-types';
 import {
+  cn,
   IGRPIcon,
   IGRPAlertPrimitive,
   IGRPAlertDescriptionPrimitive,
@@ -262,18 +263,18 @@ function MenuItemWithSubmenus({ menu, pathname, childMenus }: MenuItemWithSubmen
   return (
     <>
       {/* Dropdown for collapsed sidebar */}
-      <IGRPSidebarMenuItemPrimitive className="group">
+      <IGRPSidebarMenuItemPrimitive className={cn('group')}>
         <IGRPDropdownMenuPrimitive>
           <IGRPDropdownMenuTriggerPrimitive asChild>
             <IGRPSidebarMenuButtonPrimitive
               tooltip={name}
-              className="hidden cursor-pointer group-data-[collapsible=icon]:flex"
+              className={cn('hidden cursor-pointer group-data-[collapsible=icon]:flex')}
               aria-label={`${name} menu`}
             >
               {icon && <IGRPIcon iconName={icon} />}
             </IGRPSidebarMenuButtonPrimitive>
           </IGRPDropdownMenuTriggerPrimitive>
-          <IGRPDropdownMenuContentPrimitive side="right" align="start" className="min-w-48">
+          <IGRPDropdownMenuContentPrimitive side="right" align="start" className={cn('min-w-48')}>
             {childMenus.map((subMenu) => (
               <SubMenuItem key={`dropdown-${id}-${subMenu.id}`} menu={subMenu} variant="dropdown" />
             ))}
@@ -283,14 +284,14 @@ function MenuItemWithSubmenus({ menu, pathname, childMenus }: MenuItemWithSubmen
 
       {/* Collapsible for expanded sidebar */}
       <IGRPSidebarMenuItemPrimitive>
-        <IGRPCollapsiblePrimitive className="w-full group">
+        <IGRPCollapsiblePrimitive className={cn('w-full group')}>
           <IGRPCollapsibleTriggerPrimitive
-            className="flex w-full group-data-[collapsible=icon]:hidden"
+            className={cn('flex w-full group-data-[collapsible=icon]:hidden')}
             asChild
           >
             <IGRPSidebarMenuButtonPrimitive
               tooltip={name}
-              className="w-full cursor-pointer"
+              className={cn('w-full cursor-pointer')}
               aria-label={`Toggle ${name} submenu`}
               aria-expanded="false"
             >
@@ -298,7 +299,9 @@ function MenuItemWithSubmenus({ menu, pathname, childMenus }: MenuItemWithSubmen
               <span>{name}</span>
               <IGRPIcon
                 iconName="ChevronRight"
-                className="ml-auto h-4 w-4 transition-transform duration-200 group-data-[state=open]:rotate-90"
+                className={cn(
+                  'ml-auto h-4 w-4 transition-transform duration-200 group-data-[state=open]:rotate-90',
+                )}
                 strokeWidth={2}
               />
             </IGRPSidebarMenuButtonPrimitive>
@@ -350,12 +353,12 @@ function SubMenuItem({ menu, variant }: SubMenuItemProps) {
   const useAnchorTag = isExternalUrl || target === '_blank';
 
   // Show icons in both dropdown and collapsible variants
-  const iconElement = icon && <IGRPIcon iconName={icon} className="h-4 w-4 shrink-0" />;
+  const iconElement = icon && <IGRPIcon iconName={icon} className={cn('h-4 w-4 shrink-0')} />;
 
   const content = (
     <>
       {iconElement}
-      <span className={variant === 'dropdown' ? 'truncate' : ''}>{name}</span>
+      <span className={cn(variant === 'dropdown' ? 'truncate' : '')}>{name}</span>
     </>
   );
 
@@ -378,14 +381,14 @@ function SubMenuItem({ menu, variant }: SubMenuItemProps) {
       <IGRPDropdownMenuItemPrimitive
         asChild
         onSelect={(e) => e.preventDefault()}
-        className="cursor-pointer px-2 py-2.5"
+        className={cn('cursor-pointer px-2 py-2.5')}
       >
         {useAnchorTag ? (
-          <a {...linkProps} className="w-full flex items-center gap-2 min-w-0">
+          <a {...linkProps} className={cn('w-full flex items-center gap-2 min-w-0')}>
             {content}
           </a>
         ) : (
-          <Link {...linkProps} className="w-full flex items-center gap-2 min-w-0">
+          <Link {...linkProps} className={cn('w-full flex items-center gap-2 min-w-0')}>
             {content}
           </Link>
         )}
@@ -397,11 +400,11 @@ function SubMenuItem({ menu, variant }: SubMenuItemProps) {
     <IGRPSidebarMenuSubItemPrimitive>
       <IGRPSidebarMenuSubButtonPrimitive asChild>
         {useAnchorTag ? (
-          <a {...linkProps} className="flex items-center gap-2">
+          <a {...linkProps} className={cn('flex items-center gap-2')}>
             {content}
           </a>
         ) : (
-          <Link {...linkProps} className="flex items-center gap-2">
+          <Link {...linkProps} className={cn('flex items-center gap-2')}>
             {content}
           </Link>
         )}

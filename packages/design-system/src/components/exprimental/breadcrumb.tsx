@@ -68,7 +68,7 @@ const IGRPBreadcrumb = React.forwardRef<
   (
     {
       className,
-      separator = <IGRPIcon iconName="ChevronRight" className="h-4 w-4" />,
+      separator = <IGRPIcon iconName="ChevronRight" className={cn('h-4 w-4')} />,
       collapsed = false,
       maxItems = 5,
       size = 'md',
@@ -131,16 +131,16 @@ const IGRPBreadcrumb = React.forwardRef<
           <IGRPBreadcrumbSeparator />
           <IGRPBreadcrumbItem>
             <DropdownMenu>
-              <DropdownMenuTrigger className="flex items-center gap-1">
+              <DropdownMenuTrigger className={cn('flex items-center gap-1')}>
                 <BreadcrumbEllipsis />
-                <span className="sr-only">Toggle menu</span>
+                <span className={cn('sr-only')}>Toggle menu</span>
               </DropdownMenuTrigger>
               <DropdownMenuContent align="start">
                 {middleItems.map((item, index) => (
                   <DropdownMenuItem key={index} asChild>
-                    <a href={item.href || '#'} className="flex items-center gap-2">
+                    <a href={item.href || '#'} className={cn('flex items-center gap-2')}>
                       {item.showIcon && item.iconName && (
-                        <IGRPIcon iconName={item.iconName} className={getIconSize()} />
+                        <IGRPIcon iconName={item.iconName} className={cn(getIconSize())} />
                       )}
                       {item.label}
                     </a>
@@ -195,16 +195,16 @@ const IGRPBreadcrumb = React.forwardRef<
             )}
           >
             {homeIcon && (
-              <li className="inline-flex items-center">
+              <li className={cn('inline-flex items-center')}>
                 <a
                   href={homeHref}
-                  className="text-muted-foreground hover:text-foreground flex items-center"
+                  className={cn('text-muted-foreground hover:text-foreground flex items-center')}
                   aria-label={homeLabel}
                 >
                   {iconName ? (
-                    <IGRPIcon iconName={iconName} className={iconSize} />
+                    <IGRPIcon iconName={iconName} className={cn(iconSize)} />
                   ) : (
-                    <IGRPIcon iconName="House" className={iconSize} />
+                    <IGRPIcon iconName="House" className={cn(iconSize)} />
                   )}
                 </a>
                 <span
@@ -392,8 +392,8 @@ const BreadcrumbEllipsis = React.forwardRef<HTMLSpanElement, React.HTMLAttribute
         )}
         {...props}
       >
-        <IGRPIcon iconName="Ellipsis" className={iconSize} />
-        <span className="sr-only">More</span>
+        <IGRPIcon iconName="Ellipsis" className={cn(iconSize)} />
+        <span className={cn('sr-only')}>More</span>
       </span>
     );
   },

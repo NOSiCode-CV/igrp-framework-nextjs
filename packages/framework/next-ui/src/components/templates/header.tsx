@@ -64,24 +64,24 @@ function IGRPTemplateHeader({ data, className }: IGRPTemplateHeaderProps) {
         className,
       )}
     >
-      <div className="flex items-center gap-2 h-12 min-w-0">
+      <div className={cn('flex items-center gap-2 h-12 min-w-0')}>
         {showIGRPSidebarTrigger && <IGRPSidebarTriggerPrimitive />}
         {!showIGRPSidebarTrigger && (
-          <div className="flex items-center gap-2">
+          <div className={cn('flex items-center gap-2')}>
             {showIGRPHeaderLogo && (
-              <div className="h-10 w-10 relative rounded-lg flex items-center justify-center">
+              <div className={cn('h-10 w-10 relative rounded-lg flex items-center justify-center')}>
                 <Image
                   src={headerLogo || '/logo-no-text.png'}
                   alt="IGRP Logo"
                   fill
-                  className="object-contain"
+                  className={cn('object-contain')}
                   quality={100}
                   sizes="46px"
                   priority
                 />
               </div>
             )}
-            {showIGRPHeaderTitle && <span className="text-base font-semibold">iGRP</span>}
+            {showIGRPHeaderTitle && <span className={cn('text-base font-semibold')}>iGRP</span>}
           </div>
         )}
 
@@ -89,13 +89,13 @@ function IGRPTemplateHeader({ data, className }: IGRPTemplateHeaderProps) {
           <>
             <IGRPSeparatorPrimitive
               orientation="vertical"
-              className="mr-2 data-[orientation=vertical]:h-4"
+              className={cn('mr-2 data-[orientation=vertical]:h-4')}
             />
             <IGRPTemplateBreadcrumbs />
           </>
         )}
       </div>
-      <div className="flex items-center gap-2 shrink-0">
+      <div className={cn('flex items-center gap-2 shrink-0')}>
         {showSearch && <IGRPTemplateCommandSearch />}
 
         {showSettings && (
@@ -105,7 +105,7 @@ function IGRPTemplateHeader({ data, className }: IGRPTemplateHeaderProps) {
         )}
 
         {showNotifications && (
-          <span className="hidden md:block">
+          <span className={cn('hidden md:block')}>
             <IGRPTemplateNotifications
               notifications={notifications || []}
               notificationsUrl={notificationsUrl}

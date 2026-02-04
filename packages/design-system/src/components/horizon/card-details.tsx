@@ -49,10 +49,10 @@ function IGRPCardDetails({
       {...props}
     >
       {(title || description) && (
-        <CardHeader className="pb-4">
+        <CardHeader className={cn('pb-4')}>
           {title && <CardTitle>{title}</CardTitle>}
           {description && <CardDescription>{description}</CardDescription>}
-          <Separator className="mt-4" />
+          <Separator className={cn('mt-4')} />
         </CardHeader>
       )}
       <CardContent
@@ -65,11 +65,11 @@ function IGRPCardDetails({
           const key = igrpCleanString(item.label);
 
           return (
-            <div key={key} className="flex items-center gap-4">
+            <div key={key} className={cn('flex items-center gap-4')}>
               <div>
-                <h3 className="font-normal text-muted-foreground">{item.label}</h3>
+                <h3 className={cn('font-normal text-muted-foreground')}>{item.label}</h3>
                 {typeof item.content === 'string' ? (
-                  <span className="font-medium">{item.content}</span>
+                  <span className={cn('font-medium')}>{item.content}</span>
                 ) : (
                   item.content
                 )}

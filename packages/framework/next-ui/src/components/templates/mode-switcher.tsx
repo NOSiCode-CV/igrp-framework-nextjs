@@ -30,12 +30,12 @@ function IGRPTemplateModeSwitcher() {
       <IGRPButtonPrimitive
         variant="ghost"
         size="icon"
-        className="size-6"
+        className={cn('size-6')}
         aria-label="Toggle theme"
         disabled
       >
-        <div className="size-4" aria-hidden="true" />
-        <span className="sr-only">Toggle theme</span>
+        <div className={cn('size-4')} aria-hidden="true" />
+        <span className={cn('sr-only')}>Toggle theme</span>
       </IGRPButtonPrimitive>
     );
   }
@@ -44,12 +44,12 @@ function IGRPTemplateModeSwitcher() {
     <IGRPButtonPrimitive
       variant="ghost"
       size="icon"
-      className="size-6 relative overflow-hidden"
+      className={cn('size-6 relative overflow-hidden')}
       onClick={toggleTheme}
       aria-label={isDark ? 'Switch to light mode' : 'Switch to dark mode'}
       aria-pressed={isDark}
     >
-      <div className="relative size-4 flex items-center justify-center">
+      <div className={cn('relative size-4 flex items-center justify-center')}>
         <IGRPIcon
           iconName="Sun"
           strokeWidth={2}
@@ -69,7 +69,9 @@ function IGRPTemplateModeSwitcher() {
           aria-hidden="true"
         />
       </div>
-      <span className="sr-only">{isDark ? 'Switch to light mode' : 'Switch to dark mode'}</span>
+      <span className={cn('sr-only')}>
+        {isDark ? 'Switch to light mode' : 'Switch to dark mode'}
+      </span>
     </IGRPButtonPrimitive>
   );
 }

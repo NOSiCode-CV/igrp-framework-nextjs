@@ -42,8 +42,8 @@ function IGRPDataTablePagination<TData>({
     : table.getRowCount();
   return (
     <div className={cn('flex items-center gap-6 px-2', className)}>
-      <div className="flex items-center gap-3 grow justify-end">
-        <Label htmlFor={id} className="max-sm:sr-only">
+      <div className={cn('flex items-center gap-3 grow justify-end')}>
+        <Label htmlFor={id} className={cn('max-sm:sr-only')}>
           Registo por página
         </Label>
         <Select
@@ -52,10 +52,14 @@ function IGRPDataTablePagination<TData>({
             table.setPageSize(Number(value));
           }}
         >
-          <SelectTrigger id={id} className="w-fit whitespace-nowrap">
+          <SelectTrigger id={id} className={cn('w-fit whitespace-nowrap')}>
             <SelectValue />
           </SelectTrigger>
-          <SelectContent className="[&_*[role=option]]:ps-2 [&_*[role=option]]:pe-8 [&_*[role=option]>span]:start-auto [&_*[role=option]>span]:end-2">
+          <SelectContent
+            className={cn(
+              '[&_*[role=option]]:ps-2 [&_*[role=option]]:pe-8 [&_*[role=option]>span]:start-auto [&_*[role=option]>span]:end-2',
+            )}
+          >
             {pageSize.map((p) => (
               <SelectItem key={p} value={p.toString()}>
                 {p}
@@ -65,12 +69,12 @@ function IGRPDataTablePagination<TData>({
         </Select>
       </div>
 
-      <div className="text-sm whitespace-nowrap text-muted-foreground">
-        <p className="whitespace-nowrap text-sm text-muted-foreground" aria-live="polite">
-          <span className="text-foreground">
+      <div className={cn('text-sm whitespace-nowrap text-muted-foreground')}>
+        <p className={cn('whitespace-nowrap text-sm text-muted-foreground')} aria-live="polite">
+          <span className={cn('text-foreground')}>
             {start}-{end}
           </span>{' '}
-          de <span className="text-foreground">{table.getRowCount().toString()}</span>
+          de <span className={cn('text-foreground')}>{table.getRowCount().toString()}</span>
         </p>
       </div>
 
@@ -81,7 +85,7 @@ function IGRPDataTablePagination<TData>({
               <Button
                 size="icon"
                 variant="outline"
-                className="disabled:pointer-events-none disabled:opacity-50"
+                className={cn('disabled:pointer-events-none disabled:opacity-50')}
                 onClick={() => table.setPageIndex(0)}
                 disabled={!table.getCanPreviousPage()}
                 aria-label="Go to first page"
@@ -94,7 +98,7 @@ function IGRPDataTablePagination<TData>({
               <Button
                 size="icon"
                 variant="outline"
-                className="disabled:pointer-events-none disabled:opacity-50"
+                className={cn('disabled:pointer-events-none disabled:opacity-50')}
                 onClick={() => table.previousPage()}
                 disabled={!table.getCanPreviousPage()}
                 aria-label="Go to previous page"
@@ -107,7 +111,7 @@ function IGRPDataTablePagination<TData>({
               <Button
                 size="icon"
                 variant="outline"
-                className="disabled:pointer-events-none disabled:opacity-50"
+                className={cn('disabled:pointer-events-none disabled:opacity-50')}
                 onClick={() => table.nextPage()}
                 disabled={!table.getCanNextPage()}
                 aria-label="Go to next page"
@@ -120,7 +124,7 @@ function IGRPDataTablePagination<TData>({
               <Button
                 size="icon"
                 variant="outline"
-                className="disabled:pointer-events-none disabled:opacity-50"
+                className={cn('disabled:pointer-events-none disabled:opacity-50')}
                 onClick={() => table.setPageIndex(table.getPageCount() - 1)}
                 disabled={!table.getCanNextPage()}
                 aria-label="Go to last page"
@@ -152,19 +156,23 @@ function IGRPDataTablePaginationNumeric<TData>({
       id={id}
       className={cn('flex items-center justify-between gap-3 max-sm:flex-col', className)}
     >
-      <p className="flex-1 whitespace-nowrap text-sm text-muted-foreground" aria-live="polite">
-        Page <span className="text-foreground">{table.getState().pagination.pageIndex + 1}</span> of{' '}
-        <span className="text-foreground">{table.getPageCount()}</span>
+      <p
+        className={cn('flex-1 whitespace-nowrap text-sm text-muted-foreground')}
+        aria-live="polite"
+      >
+        Page{' '}
+        <span className={cn('text-foreground')}>{table.getState().pagination.pageIndex + 1}</span>{' '}
+        of <span className={cn('text-foreground')}>{table.getPageCount()}</span>
       </p>
 
-      <div className="grow">
+      <div className={cn('grow')}>
         <Pagination>
           <PaginationContent>
             <PaginationItem>
               <Button
                 size="icon"
                 variant="outline"
-                className="disabled:pointer-events-none disabled:opacity-50"
+                className={cn('disabled:pointer-events-none disabled:opacity-50')}
                 onClick={() => table.previousPage()}
                 disabled={!table.getCanPreviousPage()}
                 aria-label="Go to previous page"
@@ -205,7 +213,7 @@ function IGRPDataTablePaginationNumeric<TData>({
               <Button
                 size="icon"
                 variant="outline"
-                className="disabled:pointer-events-none disabled:opacity-50"
+                className={cn('disabled:pointer-events-none disabled:opacity-50')}
                 onClick={() => table.nextPage()}
                 disabled={!table.getCanNextPage()}
                 aria-label="Go to next page"
@@ -217,7 +225,7 @@ function IGRPDataTablePaginationNumeric<TData>({
         </Pagination>
       </div>
 
-      <div className="flex flex-1 justify-end">
+      <div className={cn('flex flex-1 justify-end')}>
         <Select
           value={table.getState().pagination.pageSize.toString()}
           onValueChange={(value) => {
@@ -225,7 +233,7 @@ function IGRPDataTablePaginationNumeric<TData>({
           }}
           aria-label="Results per page"
         >
-          <SelectTrigger id="results-per-page" className="w-fit whitespace-nowrap">
+          <SelectTrigger id="results-per-page" className={cn('w-fit whitespace-nowrap')}>
             <SelectValue placeholder="Select number of results" />
           </SelectTrigger>
           <SelectContent>

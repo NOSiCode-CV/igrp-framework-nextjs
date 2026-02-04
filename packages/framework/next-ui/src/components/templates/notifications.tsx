@@ -2,6 +2,7 @@
 
 import { useState } from 'react';
 import {
+  cn,
   IGRPBadgePrimitive,
   IGRPButtonPrimitive,
   IGRPDropdownMenuPrimitive,
@@ -38,54 +39,56 @@ function IGRPTemplateNotifications({
   return (
     <IGRPDropdownMenuPrimitive>
       <IGRPDropdownMenuTriggerPrimitive asChild>
-        <IGRPButtonPrimitive variant="ghost" size="icon" className="size-6 relative">
+        <IGRPButtonPrimitive variant="ghost" size="icon" className={cn('size-6 relative')}>
           <IGRPIcon iconName="Bell" strokeWidth={2} />
           {notificationCount > 0 && (
             <IGRPBadgePrimitive
-              className="absolute -top-1 -right-0.5 h-3.5 w-3.5 flex text-[10px] py-0 px-0"
+              className={cn('absolute -top-1 -right-0.5 h-3.5 w-3.5 flex text-[10px] py-0 px-0')}
               variant="destructive"
             >
               {notificationCount}
             </IGRPBadgePrimitive>
           )}
-          <span className="sr-only">Notifications</span>
+          <span className={cn('sr-only')}>Notifications</span>
         </IGRPButtonPrimitive>
       </IGRPDropdownMenuTriggerPrimitive>
-      <IGRPDropdownMenuContentPrimitive align="end" className="max-w-80">
-        <IGRPDropdownMenuLabelPrimitive className="flex items-center justify-between">
+      <IGRPDropdownMenuContentPrimitive align="end" className={cn('max-w-80')}>
+        <IGRPDropdownMenuLabelPrimitive className={cn('flex items-center justify-between')}>
           <span>Notifications</span>
           {notificationCount > 0 && (
             <IGRPButtonPrimitive
               variant="ghost"
               size="sm"
               onClick={markAsRead}
-              className="h-auto text-xs"
+              className={cn('h-auto text-xs')}
             >
               Mark all as read
             </IGRPButtonPrimitive>
           )}
         </IGRPDropdownMenuLabelPrimitive>
         <IGRPDropdownMenuSeparatorPrimitive />
-        <IGRPDropdownMenuGroupPrimitive className="max-h-72 overflow-auto">
+        <IGRPDropdownMenuGroupPrimitive className={cn('max-h-72 overflow-auto')}>
           {notifications.length > 0 ? (
             notifications.map((notification) => (
               <IGRPDropdownMenuItemPrimitive
                 key={notification.id}
-                className="flex flex-col items-start p-4"
+                className={cn('flex flex-col items-start p-4')}
               >
-                <div className="font-medium">{notification.title}</div>
-                <div className="text-sm text-muted-foreground">{notification.message}</div>
-                <div className="text-xs text-muted-foreground mt-1">
+                <div className={cn('font-medium')}>{notification.title}</div>
+                <div className={cn('text-sm text-muted-foreground')}>{notification.message}</div>
+                <div className={cn('text-xs text-muted-foreground mt-1')}>
                   {notification.timestamp.toLocaleString()}
                 </div>
               </IGRPDropdownMenuItemPrimitive>
             ))
           ) : (
-            <div className="py-4 px-2 text-center text-muted-foreground">Sem notificações</div>
+            <div className={cn('py-4 px-2 text-center text-muted-foreground')}>
+              Sem notificações
+            </div>
           )}
         </IGRPDropdownMenuGroupPrimitive>
         <IGRPDropdownMenuSeparatorPrimitive />
-        <IGRPDropdownMenuItemPrimitive className="justify-center" asChild>
+        <IGRPDropdownMenuItemPrimitive className={cn('justify-center')} asChild>
           <Link href={handleUrl()}>Todas as notificações</Link>
         </IGRPDropdownMenuItemPrimitive>
       </IGRPDropdownMenuContentPrimitive>

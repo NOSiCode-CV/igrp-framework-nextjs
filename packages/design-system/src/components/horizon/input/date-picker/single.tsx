@@ -78,7 +78,9 @@ function IGRPDatePickerSingle({
       <IGRPButton
         id={fieldName}
         variant="outline"
-        className="underline-offset-0 hover:no-underline border-0 bg-transparent hover:bg-transparent shadow-none justify-between w-full"
+        className={cn(
+          'underline-offset-0 hover:no-underline border-0 bg-transparent hover:bg-transparent shadow-none justify-between w-full',
+        )}
         disabled={disabledPicker}
         iconName="ChevronDown"
         iconClassName="text-muted-foreground/80 group-hover:text-foreground shrink-0 transition-colors"
@@ -99,10 +101,10 @@ function IGRPDatePickerSingle({
     const displayDate = formContext ? fieldValue : localDate;
 
     return (
-      <div className="relative">
+      <div className={cn('relative')}>
         <Popover>
           <PopoverTrigger asChild>{DateButton(displayDate)}</PopoverTrigger>
-          <PopoverContent className="p-0 w-auto shadow-none" align="start">
+          <PopoverContent className={cn('p-0 w-auto shadow-none')} align="start">
             <IGRPCalendarSingle
               id={fieldName}
               date={displayDate}
@@ -120,7 +122,9 @@ function IGRPDatePickerSingle({
               onDateChange?.(undefined);
             }}
             variant="link"
-            className="size-2 absolute right-2 top-1/2 h-3 w-3 -translate-y-1/2 text-muted-foreground z-100"
+            className={cn(
+              'size-2 absolute right-2 top-1/2 h-3 w-3 -translate-y-1/2 text-muted-foreground z-100',
+            )}
             size="icon"
             iconName="X"
             iconSize={10}
@@ -165,7 +169,7 @@ function IGRPDatePickerSingle({
                 </FormControl>
 
                 {helperText && !fieldState.error && <FormDescription>{helperText}</FormDescription>}
-                <FormMessage className="text-xs" />
+                <FormMessage className={cn('text-xs')} />
               </FormItem>
             );
           }}
@@ -179,7 +183,7 @@ function IGRPDatePickerSingle({
       {label && (
         <IGRPLabel label={label} className={labelClassName} required={required} id={name} />
       )}
-      <div className="relative">
+      <div className={cn('relative')}>
         {renderPicker(localDate, (val) => {
           setLocalDate(val);
           onDateChange?.(val);
@@ -189,7 +193,7 @@ function IGRPDatePickerSingle({
       {helperText && (
         <p
           id={`${fieldName}-helper`}
-          className="text-muted-foreground mt-2 text-xs"
+          className={cn('text-muted-foreground mt-2 text-xs')}
           role="region"
           aria-live="polite"
         >

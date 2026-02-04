@@ -174,16 +174,16 @@ function IGRPSelect({
       <div className={cn('space-y-2', className)}>
         <IGRPLabel id={fieldName} className={labelClassName} required={required} label={label} />
 
-        <div className="relative">{renderSelect(state.selected, handleChange)}</div>
+        <div className={cn('relative')}>{renderSelect(state.selected, handleChange)}</div>
 
         {helperText && !error && (
-          <p className="text-muted-foreground text-xs mt-1" role="note">
+          <p className={cn('text-muted-foreground text-xs mt-1')} role="note">
             {helperText}
           </p>
         )}
 
         {error && (
-          <p className="text-destructive text-xs mt-1" role="alert">
+          <p className={cn('text-destructive text-xs mt-1')} role="alert">
             {error}
           </p>
         )}
@@ -215,7 +215,7 @@ function IGRPSelect({
           </FormControl>
 
           {helperText && !fieldState.error && <FormDescription>{helperText}</FormDescription>}
-          <FormMessage className="text-xs" />
+          <FormMessage className={cn('text-xs')} />
         </FormItem>
       )}
     />
@@ -232,15 +232,15 @@ const IGRPSelectSearch = memo(
     setSearch: Dispatch<SetStateAction<string>>;
     onResetSearch: () => void;
   }) => (
-    <div className="flex items-center gap-2 pb-3 mb-2 border-b">
-      <div className="relative flex-1">
+    <div className={cn('flex items-center gap-2 pb-3 mb-2 border-b')}>
+      <div className={cn('relative flex-1')}>
         <IGRPIcon
           iconName="Search"
-          className="absolute left-2 top-1/2 h-3 w-3 -translate-y-1/2 text-muted-foreground"
+          className={cn('absolute left-2 top-1/2 h-3 w-3 -translate-y-1/2 text-muted-foreground')}
         />
         <Input
           type="text"
-          className="pl-7 h-8 text-sm"
+          className={cn('pl-7 h-8 text-sm')}
           placeholder="Search..."
           aria-label="Search options"
           value={search}
@@ -253,7 +253,7 @@ const IGRPSelectSearch = memo(
           aria-label="Clear search"
           variant="ghost"
           size="icon"
-          className="h-8 w-8 p-0"
+          className={cn('h-8 w-8 p-0')}
           iconName="X"
         />
       )}
@@ -263,24 +263,24 @@ const IGRPSelectSearch = memo(
 
 const IGRPSelectItem = memo(
   ({ item, showStatus }: { item: IGRPOptionsProps; showStatus: boolean }) => (
-    <SelectItem value={String(item.value)} className="flex items-center gap-2 truncate">
-      <div className="flex items-center gap-2 w-full">
+    <SelectItem value={String(item.value)} className={cn('flex items-center gap-2 truncate')}>
+      <div className={cn('flex items-center gap-2 w-full')}>
         {showStatus && (
           <Circle className={cn('h-2 w-2 fill-current', igrpColorText(item.status || 'primary'))} />
         )}
         {item.image && (
           <img
-            className="h-5 w-5 rounded"
+            className={cn('h-5 w-5 rounded')}
             src={item.image || '/placeholder.svg'}
             alt={item.label}
             width={20}
             height={20}
           />
         )}
-        <div className="flex flex-col">
+        <div className={cn('flex flex-col')}>
           <span>{item.label}</span>
           {item.description && (
-            <span className="text-muted-foreground text-xs">{item.description}</span>
+            <span className={cn('text-muted-foreground text-xs')}>{item.description}</span>
           )}
         </div>
       </div>
@@ -314,7 +314,7 @@ const IGRPSelectContent = memo(
     );
 
     return (
-      <SelectContent className="max-h-[300px] overflow-y-auto">
+      <SelectContent className={cn('max-h-[300px] overflow-y-auto')}>
         {showSearch && (
           <IGRPSelectSearch search={search} setSearch={setSearch} onResetSearch={onResetSearch} />
         )}
@@ -322,7 +322,9 @@ const IGRPSelectContent = memo(
           ? groups.map((group) => (
               <Fragment key={group}>
                 <SelectGroup>
-                  <SelectLabel className="text-xs text-muted-foreground px-2">{group}</SelectLabel>
+                  <SelectLabel className={cn('text-xs text-muted-foreground px-2')}>
+                    {group}
+                  </SelectLabel>
                   {filteredOptions
                     .filter((opt) => opt.group === group)
                     .map((opt) => (
@@ -357,8 +359,8 @@ const IGRPSelectTrigger = ({
   className?: string;
 }) => (
   <SelectTrigger className={cn('w-full', className)} aria-expanded={isOpen}>
-    <SelectValue placeholder={placeholder} className="w-full">
-      <div className="w-full flex items-center gap-2 truncate">
+    <SelectValue placeholder={placeholder} className={cn('w-full')}>
+      <div className={cn('w-full flex items-center gap-2 truncate')}>
         {showStatus && (
           <Circle
             className={cn(

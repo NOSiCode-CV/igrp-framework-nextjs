@@ -1,0 +1,9 @@
+/*
+  Reuse design-system tokens to avoid duplicate/competing variable definitions.
+*/
+@import '@igrp/igrp-framework-react-design-system/styles';
+
+/*
+  If next-ui ever needs additional tokens that are NOT in design-system,
+  add them here as extra CSS variables (prefer contributing them upstream).
+*/

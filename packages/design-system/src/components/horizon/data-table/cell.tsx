@@ -9,6 +9,7 @@ import { IGRPBadge, type IGRPBadgeProps } from '../badge';
 import { IGRPIcon } from '../icon';
 import { IGRPLink, type IGRPLinkProps } from '../typography/link';
 import { DD_MM_YYYY } from '../../../lib/constants';
+import { cn } from '../../../lib/utils';
 
 interface IGRPDataTableCellCheckboxProps<TData> extends React.ComponentProps<typeof Checkbox> {
   row: Row<TData>;
@@ -159,11 +160,11 @@ function IGRPDataTableCellTooltip({
     <TooltipProvider delayDuration={200}>
       <Tooltip>
         <TooltipTrigger asChild>
-          <div className="cursor-help whitespace-nowrap truncate">
+          <div className={cn('cursor-help whitespace-nowrap truncate')}>
             <span>{text}</span>
           </div>
         </TooltipTrigger>
-        <TooltipContent side={side} align={align} sideOffset={4} className="max-w-sm">
+        <TooltipContent side={side} align={align} sideOffset={4} className={cn('max-w-sm')}>
           {text}
         </TooltipContent>
       </Tooltip>

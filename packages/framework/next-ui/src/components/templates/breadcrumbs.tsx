@@ -145,16 +145,16 @@ function IGRPTemplateBreadcrumbs({
   const renderBreadcrumbItem = (item: BreadcrumbItem, isLast: boolean, key: string) => (
     <Fragment key={key}>
       <IGRPBreadcrumbSeparatorPrimitive>
-        <IGRPIcon iconName="ChevronRight" className="h-3 w-3" strokeWidth={2} />
+        <IGRPIcon iconName="ChevronRight" className={cn('h-3 w-3')} strokeWidth={2} />
       </IGRPBreadcrumbSeparatorPrimitive>
       <IGRPBreadcrumbItemPrimitive>
         {isLast ? (
-          <IGRPBreadcrumbPagePrimitive className="text-xs">
+          <IGRPBreadcrumbPagePrimitive className={cn('text-xs')}>
             {item.label}
           </IGRPBreadcrumbPagePrimitive>
         ) : (
           <IGRPBreadcrumbLinkPrimitive asChild>
-            <Link href={item.href} className="text-xs">
+            <Link href={item.href} className={cn('text-xs')}>
               {item.label}
             </Link>
           </IGRPBreadcrumbLinkPrimitive>
@@ -167,16 +167,18 @@ function IGRPTemplateBreadcrumbs({
     <IGRPBreadcrumbPrimitive className={cn('text-xs min-w-0', className)}>
       <IGRPBreadcrumbListPrimitive
         ref={containerRef}
-        className="gap-0.5 sm:gap-0.5 text-xs overflow-hidden"
+        className={cn('gap-0.5 sm:gap-0.5 text-xs overflow-hidden')}
       >
         <IGRPBreadcrumbItemPrimitive>
           <IGRPBreadcrumbLinkPrimitive asChild>
             <Link
               href={homeHref}
-              className="text-muted-foreground hover:text-foreground flex items-center gap-1 transition-colors"
+              className={cn(
+                'text-muted-foreground hover:text-foreground flex items-center gap-1 transition-colors',
+              )}
             >
-              <IGRPIcon iconName="House" className="h-3 w-3" strokeWidth={2} />
-              <span className="sr-only">{homeLabel}</span>
+              <IGRPIcon iconName="House" className={cn('h-3 w-3')} strokeWidth={2} />
+              <span className={cn('sr-only')}>{homeLabel}</span>
             </Link>
           </IGRPBreadcrumbLinkPrimitive>
         </IGRPBreadcrumbItemPrimitive>
@@ -184,18 +186,20 @@ function IGRPTemplateBreadcrumbs({
         {shouldCollapse && middleItems.length > 0 ? (
           <>
             <IGRPBreadcrumbSeparatorPrimitive>
-              <IGRPIcon iconName="ChevronRight" className="h-3 w-3" strokeWidth={2} />
+              <IGRPIcon iconName="ChevronRight" className={cn('h-3 w-3')} strokeWidth={2} />
             </IGRPBreadcrumbSeparatorPrimitive>
             <IGRPBreadcrumbItemPrimitive>
               <IGRPDropdownMenuPrimitive>
-                <IGRPDropdownMenuTriggerPrimitive className="flex items-center gap-1 focus:outline-none">
+                <IGRPDropdownMenuTriggerPrimitive
+                  className={cn('flex items-center gap-1 focus:outline-none')}
+                >
                   <IGRPBreadcrumbEllipsisPrimitive />
-                  <span className="sr-only">Toggle menu</span>
+                  <span className={cn('sr-only')}>Toggle menu</span>
                 </IGRPDropdownMenuTriggerPrimitive>
                 <IGRPDropdownMenuContentPrimitive align="start">
                   {middleItems.map((item, index) => (
                     <IGRPDropdownMenuItemPrimitive key={`${item.href}-${index}`} asChild>
-                      <Link href={item.href} className="flex items-center gap-2">
+                      <Link href={item.href} className={cn('flex items-center gap-2')}>
                         {item.label}
                       </Link>
                     </IGRPDropdownMenuItemPrimitive>

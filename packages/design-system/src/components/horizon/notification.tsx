@@ -74,8 +74,8 @@ function IGRPNotification({
       )}
       id={ref}
     >
-      <div className="flex justify-between gap-3">
-        <div className="flex grow text-sm">
+      <div className={cn('flex justify-between gap-3')}>
+        <div className={cn('flex grow text-sm')}>
           {showIcon && (
             <IGRPIcon
               iconName={icon}
@@ -87,16 +87,18 @@ function IGRPNotification({
           )}
           <div>{content}</div>
         </div>
-        <div className="flex items-center gap-3">
+        <div className={cn('flex items-center gap-3')}>
           {showLink && (
             <a
               href={actionLink}
-              className="group text-sm font-medium whitespace-nowrap cursor-pointer"
+              className={cn('group text-sm font-medium whitespace-nowrap cursor-pointer')}
             >
               {lableLink}
               <IGRPIcon
                 iconName="ArrowRight"
-                className="ms-1 inline-flex opacity-60 transition-transform group-hover:translate-x-0.5"
+                className={cn(
+                  'ms-1 inline-flex opacity-60 transition-transform group-hover:translate-x-0.5',
+                )}
               />
             </a>
           )}
@@ -106,12 +108,12 @@ function IGRPNotification({
           {showClose && (
             <IGRPButton
               variant="ghost"
-              className="group -my-1.5 -me-2 size-8 shrink-0 p-0 hover:bg-transparent"
+              className={cn('group -my-1.5 -me-2 size-8 shrink-0 p-0 hover:bg-transparent')}
               aria-label="Close notification"
               iconName="X"
               showIcon={true}
               size="icon"
-              iconClassName="opacity-60 transition-opacity group-hover:opacity-100"
+              iconClassName={cn('opacity-60 transition-opacity group-hover:opacity-100')}
               aria-hidden="true"
             />
           )}

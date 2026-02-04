@@ -101,8 +101,12 @@ function FormListHeader({
   | 'badgeClassName'
 >) {
   return (
-    <CardHeader className="px-0 p-4 border-b [.border-b]:pb-4 flex flex-row items-center justify-between">
-      <div className="flex items-center gap-2">
+    <CardHeader
+      className={cn(
+        'px-0 p-4 border-b [.border-b]:pb-4 flex flex-row items-center justify-between',
+      )}
+    >
+      <div className={cn('flex items-center gap-2')}>
         {showIcon && iconName && (
           <IGRPIcon
             iconName={iconName}
@@ -112,7 +116,9 @@ function FormListHeader({
         )}
         <div>
           <CardTitle className={cn('text-sm font-medium', labelClassName)}>{label}</CardTitle>
-          {description && <CardDescription className="text-xs">{description}</CardDescription>}
+          {description && (
+            <CardDescription className={cn('text-xs')}>{description}</CardDescription>
+          )}
         </div>
       </div>
       {badgeValue && (
@@ -133,8 +139,18 @@ function FormListAddButton({
   disabled?: boolean;
 }) {
   return (
-    <Button type="button" variant="outline" onClick={onAdd} disabled={disabled} className="w-full">
-      <IGRPIcon iconName={addButtonIconName ?? 'Plus'} className="h-4 w-4 mr-1" strokeWidth={2} />
+    <Button
+      type="button"
+      variant="outline"
+      onClick={onAdd}
+      disabled={disabled}
+      className={cn('w-full')}
+    >
+      <IGRPIcon
+        iconName={addButtonIconName ?? 'Plus'}
+        className={cn('h-4 w-4 mr-1')}
+        strokeWidth={2}
+      />
       <span>{addButtonLabel}</span>
     </Button>
   );
@@ -190,13 +206,13 @@ function FormListLayout<TItem>({
         badgeClassName={badgeClassName}
       />
 
-      <CardContent className="p-4">
+      <CardContent className={cn('p-4')}>
         <Accordion
           type="single"
           collapsible
           value={openItem ?? ''}
           onValueChange={(value) => onOpenChange(value || undefined)}
-          className="w-full"
+          className={cn('w-full')}
         >
           {items.map((item, index) => {
             const accordionValue = `item-${index}`;
@@ -210,16 +226,16 @@ function FormListLayout<TItem>({
               <AccordionItem
                 key={itemKey}
                 value={accordionValue}
-                className="border last:border-b rounded-sm mb-4"
+                className={cn('border last:border-b rounded-sm mb-4')}
               >
-                <div className="flex justify-between items-center px-4 gap-2">
-                  <div className="flex-1">
+                <div className={cn('flex justify-between items-center px-4 gap-2')}>
+                  <div className={cn('flex-1')}>
                     <AccordionTrigger
                       className={cn('hover:no-underline', computeLabel ? 'py-4' : 'py-2')}
                       showIcon
                       iconPlacement="end"
                     >
-                      <span className="font-medium text-sm">{labelValue}</span>
+                      <span className={cn('font-medium text-sm')}>{labelValue}</span>
                     </AccordionTrigger>
                   </div>
 
@@ -232,7 +248,7 @@ function FormListLayout<TItem>({
                         e.stopPropagation();
                         onItemRemove();
                       }}
-                      className="h-7 w-7 p-0 shrink-0 hover:text-destructive"
+                      className={cn('h-7 w-7 p-0 shrink-0 hover:text-destructive')}
                       aria-label={`Remover item ${index + 1}`}
                     >
                       <IGRPIcon iconName="Trash2" />
@@ -240,7 +256,7 @@ function FormListLayout<TItem>({
                   )}
                 </div>
 
-                <AccordionContent className="px-4 pb-4">
+                <AccordionContent className={cn('px-4 pb-4')}>
                   {renderItem(item, index, normalizedOnItemChange)}
                 </AccordionContent>
               </AccordionItem>

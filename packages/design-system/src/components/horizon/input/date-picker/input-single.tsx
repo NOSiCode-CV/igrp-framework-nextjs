@@ -145,13 +145,13 @@ function IGRPDatePickerInputSingle({
     const displayValue = value;
 
     return (
-      <div className="relative flex gap-2">
+      <div className={cn('relative flex gap-2')}>
         <Input
           id={fieldName}
           name={fieldName}
           value={displayValue}
           placeholder={placeholder}
-          className="bg-background pr-10"
+          className={cn('bg-background pr-10')}
           disabled={disabledPicker}
           onChange={(e) => {
             const newValue = e.target.value;
@@ -190,7 +190,7 @@ function IGRPDatePickerInputSingle({
             type="button"
             id={`${fieldName}-clean`}
             variant="ghost"
-            className="absolute top-1/2 right-8 size-6 -translate-y-1/2"
+            className={cn('absolute top-1/2 right-8 size-6 -translate-y-1/2')}
             disabled={disabledPicker}
             aria-label="Remover Data"
             onClick={() => {
@@ -202,7 +202,7 @@ function IGRPDatePickerInputSingle({
               onChange(undefined);
             }}
           >
-            <XIcon className="size-3.5" />
+            <XIcon className={cn('size-3.5')} />
           </Button>
         )}
 
@@ -218,16 +218,16 @@ function IGRPDatePickerInputSingle({
                 type="button"
                 id={`date-picker-btn-${fieldName}`}
                 variant="ghost"
-                className="absolute top-1/2 right-2 size-6 -translate-y-1/2"
+                className={cn('absolute top-1/2 right-2 size-6 -translate-y-1/2')}
                 disabled={disabledPicker}
               >
-                <CalendarIcon className="size-3.5" />
-                <span className="sr-only">Selecionar Data</span>
+                <CalendarIcon className={cn('size-3.5')} />
+                <span className={cn('sr-only')}>Selecionar Data</span>
               </Button>
             )}
           </PopoverTrigger>
           <PopoverContent
-            className="p-0 w-auto shadow-none"
+            className={cn('p-0 w-auto shadow-none')}
             align="start"
             alignOffset={-8}
             sideOffset={10}
@@ -300,7 +300,7 @@ function IGRPDatePickerInputSingle({
               </FormControl>
 
               {helperText && !fieldState.error && <FormDescription>{helperText}</FormDescription>}
-              <FormMessage className="text-xs" />
+              <FormMessage className={cn('text-xs')} />
             </FormItem>
           )}
         />
@@ -322,7 +322,7 @@ function IGRPDatePickerInputSingle({
       {helperText && (
         <p
           id={`${fieldName}-helper`}
-          className="text-muted-foreground mt-2 text-xs"
+          className={cn('text-muted-foreground mt-2 text-xs')}
           role="region"
           aria-live="polite"
         >

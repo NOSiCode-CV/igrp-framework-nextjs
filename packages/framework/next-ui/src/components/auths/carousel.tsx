@@ -30,8 +30,8 @@ function IGRPAuthCarousel({ carouselItems }: IGRPAuthCarouselProps) {
   };
 
   return (
-    <div className="relative h-full w-full overflow-hidden bg-slate-900">
-      <div className="relative h-full">
+    <div className={cn('relative h-full w-full overflow-hidden bg-slate-900')}>
+      <div className={cn('relative h-full')}>
         {carouselItems.map((item, index) => (
           <div
             key={index}
@@ -45,17 +45,17 @@ function IGRPAuthCarousel({ carouselItems }: IGRPAuthCarouselProps) {
               alt={item.title}
               fill
               priority={index === 0}
-              className="object-cover"
+              className={cn('object-cover')}
               sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
             />
 
-            <div className="absolute inset-0 bg-black/40" />
+            <div className={cn('absolute inset-0 bg-black/40')} />
 
-            <div className="absolute bottom-0 left-0 right-0 p-8 text-white">
-              <h2 className="text-3xl font-bold">{item.title}</h2>
-              <p className="mt-2 text-md text-slate-200">{item.description}</p>
+            <div className={cn('absolute bottom-0 left-0 right-0 p-8 text-white')}>
+              <h2 className={cn('text-3xl font-bold')}>{item.title}</h2>
+              <p className={cn('mt-2 text-md text-slate-200')}>{item.description}</p>
 
-              <div className="mt-4 flex justify-start space-x-2">
+              <div className={cn('mt-4 flex justify-start space-x-2')}>
                 {carouselItems.map((_, idx) => (
                   <IGRPButtonPrimitive
                     variant="ghost"

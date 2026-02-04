@@ -77,8 +77,8 @@ function IGRPTable<T>({
               <TableHead key={column.accessorKey.toString()}>{column.header}</TableHead>
             ))}
             {actions && (
-              <TableHead className="">
-                <span className="sr-only">Actions</span>
+              <TableHead>
+                <span className={cn('sr-only')}>Actions</span>
               </TableHead>
             )}
           </TableRow>
@@ -92,7 +92,7 @@ function IGRPTable<T>({
                 </TableCell>
               ))}
               {actions && (
-                <TableCell className="text-right">{actions({ original: row })}</TableCell>
+                <TableCell className={cn('text-right')}>{actions({ original: row })}</TableCell>
               )}
             </TableRow>
           ))}
@@ -101,7 +101,7 @@ function IGRPTable<T>({
           <TableFooter className={cn(tFootClass)}>
             <TableRow className={cn(tFootRowClass)}>
               {columns.map((column) => (
-                <TableCell key={column.accessorKey.toString()} className="font-medium">
+                <TableCell key={column.accessorKey.toString()} className={cn('font-medium')}>
                   {footerColumn === column.accessorKey ? footerContent : ''}
                 </TableCell>
               ))}

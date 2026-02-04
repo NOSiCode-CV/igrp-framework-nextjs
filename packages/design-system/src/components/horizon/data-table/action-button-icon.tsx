@@ -188,9 +188,9 @@ function IGRPDataTableButtonLink({
   return href ? (
     <IGRPDataTableActionTooltip {...tooltipProps}>
       <Button variant={variant} size="icon" className={className} asChild>
-        <Link href={href} className="flex items-center" aria-label={labelTrigger}>
+        <Link href={href} className={cn('flex items-center')} aria-label={labelTrigger}>
           <IGRPIcon iconName={icon} />
-          <span className="sr-only">{labelTrigger}</span>
+          <span className={cn('sr-only')}>{labelTrigger}</span>
         </Link>
       </Button>
     </IGRPDataTableActionTooltip>
@@ -262,7 +262,7 @@ function IGRPDataTableButtonModal({
           className,
         )}
       >
-        <DialogHeader className="contents space-y-0 text-left">
+        <DialogHeader className={cn('contents space-y-0 text-left')}>
           <DialogTitle className={cn(modalTitle && 'border-b px-6 py-4 text-base')}>
             {modalTitle}
           </DialogTitle>
@@ -271,7 +271,7 @@ function IGRPDataTableButtonModal({
             <DialogDescription asChild>{children}</DialogDescription>
 
             {(showCancel || showConfirm) && (
-              <DialogFooter className="px-6 pb-6 sm:justify-start mt-4">
+              <DialogFooter className={cn('px-6 pb-6 sm:justify-start mt-4')}>
                 <DialogClose
                   className={cn(
                     buttonVariants({ variant: variantCancel }),

@@ -44,7 +44,7 @@ function IGRPCopyTo({
   }, []);
 
   async function handleCopy() {
-    if (!value || value.trim() === '') {
+    if (!value) {
       igrpToast({
         type: 'error',
         title: errorMessage,

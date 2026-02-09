@@ -1,5 +1,7 @@
 # Design System
 
+## Add Switch to the DataTable as checkbox
+
 ## New shadcn Components
 
 Add the following components to the design system:

@@ -196,7 +196,7 @@ function IGRPSelect({
       control={formContext.control}
       name={fieldName}
       render={({ field, fieldState }) => (
-        <FormItem className={cn('space-y-2', className)}>
+        <FormItem className={cn(className)}>
           {label && (
             <FormLabel
               className={cn(

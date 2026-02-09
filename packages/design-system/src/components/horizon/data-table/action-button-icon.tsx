@@ -1,6 +1,7 @@
 import { useContext, type ReactElement } from 'react';
 import Link from 'next/link';
 
+import { cn } from '../../../lib/utils';
 import {
   AlertDialog,
   AlertDialogAction,
@@ -26,7 +27,6 @@ import {
 import { Tooltip, TooltipContent, TooltipTrigger } from '../../primitives/tooltip';
 import { IGRPButton } from '../button';
 import { IGRPIcon } from '../icon';
-import { cn } from '../../../lib/utils';
 import { igrpModalDialogContentVariants } from '../modal-dialog';
 import { type IGRPDataTableDialogProps, type IGRPDataTableLinkProps } from './row-actions';
 import { IGRPDataTableTooltipContext, IGRPDataTableTooltipProvider } from './tooltip-provider';
@@ -114,8 +114,8 @@ function IGRPDataTableButtonAlert({
         <AlertDialogTrigger asChild>
           <IGRPButton
             variant={variant}
-            size="icon"
-            className={cn('h-8 w-8 flex justify-center items-center', classNameTrigger)}
+            size="icon-sm"
+            className={cn('size-7 flex justify-center items-center', classNameTrigger)}
             iconName={icon}
             iconClassName={iconClassName}
             aria-label={labelTrigger}
@@ -187,8 +187,17 @@ function IGRPDataTableButtonLink({
 
   return href ? (
     <IGRPDataTableActionTooltip {...tooltipProps}>
-      <Button variant={variant} size="icon" className={className} asChild>
-        <Link href={href} className={cn('flex items-center')} aria-label={labelTrigger}>
+      <Button 
+        variant={variant} 
+        size="icon-sm" 
+        className={cn('h-8 w-8', className)} 
+        asChild
+      >
+        <Link 
+          href={href} 
+          className={cn('flex items-center')} 
+          aria-label={labelTrigger}
+        >
           <IGRPIcon iconName={icon} />
           <span className={cn('sr-only')}>{labelTrigger}</span>
         </Link>
@@ -198,7 +207,7 @@ function IGRPDataTableButtonLink({
     <IGRPDataTableActionTooltip {...tooltipProps}>
       <IGRPButton
         variant={variant}
-        size="icon"
+        size="icon-sm"
         className={className}
         onClick={action}
         iconName={icon}
@@ -248,8 +257,8 @@ function IGRPDataTableButtonModal({
         <DialogTrigger asChild>
           <IGRPButton
             variant={variant}
-            size="icon"
-            className={cn('h-8 w-8 flex justify-center items-center', classNameTrigger)}
+            size="icon-sm"
+            className={cn('size-7 flex justify-center items-center', classNameTrigger)}
             iconName={icon}
             aria-label={labelTrigger}
           />

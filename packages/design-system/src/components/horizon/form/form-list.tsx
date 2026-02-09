@@ -66,6 +66,7 @@ type FormListLayoutProps<TItem> = {
   onOpenChange: (value: string | undefined) => void;
   addButtonLabel: string;
   addButtonIconName?: IGRPIconName | string;
+  addButtonClassName?: string;
   onAdd?: () => void;
   addDisabled?: boolean;
   onItemChangeFactory?: (index: number) => ((item: TItem) => void) | undefined;
@@ -135,24 +136,32 @@ function FormListAddButton({
   disabled,
   addButtonIconName,
   addButtonLabel,
-}: Pick<FormListLayoutProps<unknown>, 'onAdd' | 'addButtonIconName' | 'addButtonLabel'> & {
+  addButtonClassName
+}: Pick<FormListLayoutProps<unknown>, 
+  'onAdd' | 
+  'addButtonIconName' | 
+  'addButtonLabel' | 
+  'addButtonClassName' |
+  'addButtonClassName'> & {
   disabled?: boolean;
 }) {
   return (
-    <Button
-      type="button"
-      variant="outline"
-      onClick={onAdd}
-      disabled={disabled}
-      className={cn('w-full')}
-    >
-      <IGRPIcon
-        iconName={addButtonIconName ?? 'Plus'}
-        className={cn('h-4 w-4 mr-1')}
-        strokeWidth={2}
-      />
-      <span>{addButtonLabel}</span>
-    </Button>
+    <div className={cn('flex justify-center')}>
+      <Button
+        type="button"
+        variant="outline"
+        onClick={onAdd}
+        disabled={disabled}
+        className={addButtonClassName}
+      >
+        <IGRPIcon
+          iconName={addButtonIconName ?? 'Plus'}
+          className={cn('h-4 w-4 mr-1')}
+          strokeWidth={2}
+        />
+        <span>{addButtonLabel}</span>
+      </Button>
+    </div>
   );
 }
 

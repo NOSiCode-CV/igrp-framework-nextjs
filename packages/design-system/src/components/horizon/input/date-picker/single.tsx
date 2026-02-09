@@ -82,7 +82,7 @@ function IGRPDatePickerSingle({
           'underline-offset-0 hover:no-underline border-0 bg-transparent hover:bg-transparent shadow-none justify-between w-full',
         )}
         disabled={disabledPicker}
-        iconName="ChevronDown"
+        iconName="Calendar"
         iconClassName="text-muted-foreground/80 group-hover:text-foreground shrink-0 transition-colors"
         showIcon={localDate ? false : true}
         iconPlacement="end"

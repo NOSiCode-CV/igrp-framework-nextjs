@@ -90,7 +90,7 @@ function IGRPDataTableCellBadge({
   variant,
   color,
   size,
-  badgeClassName = "",
+  badgeClassName = '',
   ...props
 }: IGRPDataTableCellBadgeProps) {
   return (

@@ -94,6 +94,7 @@ function IGRPDataTableFilterDropdown<TData>({
   notFoundText = 'No Item found.',
 }: IGRPDataTableFilterDropdownProps<TData>) {
   const id = useId();
+  const [open, setOpen] = useState(false);
   const selectedValue = column?.getFilterValue() as string | undefined;
   const selectedLabel = useMemo(
     () => options?.find((opt) => opt.value === selectedValue)?.label || placeholder,
@@ -103,13 +104,14 @@ function IGRPDataTableFilterDropdown<TData>({
   const handleSelect = useCallback(
     (value: string) => {
       column?.setFilterValue(value);
+      setOpen(false);
     },
     [column],
   );
 
   return (
     <div id={`dropdown-${id}`}>
-      <Popover>
+      <Popover open={open} onOpenChange={setOpen}>
         <PopoverTrigger asChild>
           <IGRPButton
             variant="outline"
@@ -355,7 +357,7 @@ function IGRPDataTableFilterMinMax<TData>({
       <Input
         id={`${id}-range-2`}
         className={cn(
-          '-ms-px flex-1 rounded-s-none [-moz-appearance:_textfield] focus:z-10 [&::-webkit-inner-spin-button]:m-0 [&::-webkit-inner-spin-button]:appearance-none [&::-webkit-outer-spin-button]:m-0 [&::-webkit-outer-spin-button]:appearance-none',
+          '-ms-px flex-1 rounded-s-none [-moz-appearance:textfield] focus:z-10 [&::-webkit-inner-spin-button]:m-0 [&::-webkit-inner-spin-button]:appearance-none [&::-webkit-outer-spin-button]:m-0 [&::-webkit-outer-spin-button]:appearance-none',
         )}
         value={(columnFilterValue as [number, number])?.[1] ?? ''}
         onChange={(e) =>

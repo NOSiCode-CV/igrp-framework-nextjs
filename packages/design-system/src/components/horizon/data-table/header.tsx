@@ -84,11 +84,7 @@ function IGRPDataTableHeaderSortDropdown<T>({
   const handleSortDesc = () => column.toggleSorting(true);
 
   return (
-    <div
-      aria-label={`Sort by ${title}`}
-      className={cn(className)}
-      {...props}
-    >
+    <div aria-label={`Sort by ${title}`} className={cn(className)} {...props}>
       {canSort ? (
         <DropdownMenu>
           <DropdownMenuTrigger asChild>

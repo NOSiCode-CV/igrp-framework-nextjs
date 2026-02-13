@@ -11,11 +11,7 @@ import type { FilterFn } from '@tanstack/react-table';
  * @param filterValue - An object containing `from` (start date) and optionally `to` (end date)
  * @returns `true` if the row should be included (no filter or date in range), `false` otherwise
  */
-export const IGRPDataTableDateRangeFilterFn: FilterFn<any> = (
-  row, 
-  columnId, 
-  filterValue
-) => {
+export const IGRPDataTableDateRangeFilterFn: FilterFn<any> = (row, columnId, filterValue) => {
   if (!filterValue || !filterValue.from) return true;
   const cellValue = row.getValue(columnId) as string;
   const date = new Date(cellValue);
@@ -56,11 +52,7 @@ export const IGRPDataTableFacetedFilterFn: FilterFn<any> = (
  * @param filterValue - The text string to search for
  * @returns `true` if the row should be included (no filter or text found in column), `false` otherwise
  */
-export const IGRPDataTableTextFilterFn: FilterFn<any> = (
-  row,
-  columnId,
-  filterValue,
-) => {
+export const IGRPDataTableTextFilterFn: FilterFn<any> = (row, columnId, filterValue) => {
   const term = String(filterValue ?? '')
     .toLowerCase()
     .trim();
@@ -80,11 +72,7 @@ export const IGRPDataTableTextFilterFn: FilterFn<any> = (
  * @param filterValue - The text string to search for
  * @returns `true` if the row should be included (no filter or text found in name/description), `false` otherwise
  */
-export const multiColumnFilterFn: FilterFn<any> = (
-  row, 
-  _columnId, 
-  filterValue
-) => {
+export const multiColumnFilterFn: FilterFn<any> = (row, _columnId, filterValue) => {
   const term = String(filterValue ?? '')
     .toLowerCase()
     .trim();

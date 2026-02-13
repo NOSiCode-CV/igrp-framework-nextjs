@@ -125,7 +125,6 @@ function IGRPDataTableButtonAlert({
       <AlertDialogContent className={className}>
         <AlertDialogHeader>
           <AlertDialogTitle>{modalTitle}</AlertDialogTitle>
-
           <AlertDialogDescription>{children}</AlertDialogDescription>
         </AlertDialogHeader>
 
@@ -187,17 +186,8 @@ function IGRPDataTableButtonLink({
 
   return href ? (
     <IGRPDataTableActionTooltip {...tooltipProps}>
-      <Button 
-        variant={variant} 
-        size="icon-sm" 
-        className={cn('h-8 w-8', className)} 
-        asChild
-      >
-        <Link 
-          href={href} 
-          className={cn('flex items-center')} 
-          aria-label={labelTrigger}
-        >
+      <Button variant={variant} size="icon-sm" className={cn('h-8 w-8', className)} asChild>
+        <Link href={href} className={cn('flex items-center')} aria-label={labelTrigger}>
           <IGRPIcon iconName={icon} />
           <span className={cn('sr-only')}>{labelTrigger}</span>
         </Link>

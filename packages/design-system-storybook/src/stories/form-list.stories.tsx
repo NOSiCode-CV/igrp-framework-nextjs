@@ -17,6 +17,12 @@ import {
 const meta: Meta<typeof IGRPFormList> = {
   title: 'Components/FormList',
   component: IGRPFormList,
+  argTypes: {
+    allowMultipleOpen: {
+      control: 'boolean',
+      description: 'When true, multiple items can be expanded at once. When false, opening one closes the others.',
+    },
+  },
 };
 export default meta;
 
@@ -238,6 +244,53 @@ const OptionalTemplate = () => {
 
 export const FormListOptional: StoryObj = {
   render: () => <OptionalTemplate />,
+};
+
+const AllowMultipleOpenTemplate = () => {
+  const formRef = useRef<IGRPFormHandle<typeof schema>>(null);
+
+  return (
+    <div className='mx-auto px-6 py-8'>
+      <div className='mb-4 p-4 bg-green-50 border border-green-200 rounded-md'>
+        <p className='text-sm font-medium text-green-900 mb-1'>
+          ✨ allowMultipleOpen Demo
+        </p>
+        <p className='text-xs text-green-700'>
+          Multiple items can be expanded at once. Opening one does not close the others.
+        </p>
+      </div>
+      <IGRPForm
+        schema={schema}
+        formRef={formRef}
+        defaultValues={{
+          socials: [
+            { label: 'Twitter', label1: 'user_1' },
+            { label: 'LinkedIn', label1: 'user_2' },
+            { label: 'GitHub', label1: 'apple' },
+          ],
+        }}
+        onSubmit={(data) => console.log('Form submitted (allowMultipleOpen):', data)}
+      >
+        <IGRPFormList
+          id='allow-multiple-open-example'
+          name='socials'
+          label='Social Links'
+          description='Expand multiple items at once'
+          badgeValue='allowMultipleOpen'
+          defaultItem={defaultItem}
+          renderItem={renderItem}
+          allowMultipleOpen
+          computeLabel={(item: FormValues['socials'][0], index: number) =>
+            item.label ? `${item.label} - ${item.label1}` : `Item ${index + 1}`
+          }
+        />
+      </IGRPForm>
+    </div>
+  );
+};
+
+export const FormListAllowMultipleOpen: StoryObj = {
+  render: () => <AllowMultipleOpenTemplate />,
 };
 
 // Standalone version with allowEmpty - starts empty

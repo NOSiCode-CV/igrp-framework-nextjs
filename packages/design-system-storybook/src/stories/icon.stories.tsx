@@ -16,8 +16,6 @@ import {
   IGRPTooltipTriggerPrimitive,
 } from '@igrp/igrp-framework-react-design-system';
 
-import { dependencies } from '@igrp/igrp-framework-react-design-system/package.json';
-
 const meta: Meta<IGRPIconProps> = {
   title: 'Components/Icons',
   component: IGRPIcon,
@@ -88,7 +86,7 @@ function IconGalleryComponent() {
       <div className='p-8 space-y-4'>
         <div className='flex gap-8 items-center'>
           <h3 className='font-semibold text-xl'>
-            Browse for Lucide Icons version {dependencies['lucide-react']}
+            Browse Lucide Icons
           </h3>
           <div className='relative flex-1'>
             <IGRPIcon

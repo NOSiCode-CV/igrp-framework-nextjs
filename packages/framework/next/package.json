@@ -1,6 +1,6 @@
 {
   "name": "@igrp/framework-next",
-  "version": "0.1.0-beta.99",
+  "version": "0.1.0-beta.101",
   "description": "IGRP Framework for Next.js | Server Rendering components",
   "keywords": [
     "igrp",
@@ -32,9 +32,9 @@
     "next": "15.5.12",
     "react": "19.2.4",
     "react-dom": "19.2.4",
-    "@igrp/framework-next-auth": "0.1.0-beta.99",
-    "@igrp/framework-next-types": "0.1.0-beta.99",
-    "@igrp/framework-next-ui": "0.1.0-beta.99",
+    "@igrp/framework-next-auth": "0.1.0-beta.101",
+    "@igrp/framework-next-types": "0.1.0-beta.101",
+    "@igrp/framework-next-ui": "0.1.0-beta.101",
     "@igrp/platform-access-management-client-ts": "0.1.0-beta.64"
   },
   "devDependencies": {

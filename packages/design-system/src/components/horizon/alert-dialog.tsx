@@ -15,7 +15,6 @@ import {
   AlertDialogHeader,
   AlertDialogTitle,
 } from '../primitives/alert-dialog';
-import { type IGRPButtonProps } from './button';
 import { IGRPIcon, type IGRPIconName } from './icon';
 
 interface IGRPAlertDialogProps extends Omit<IGRPBaseAttributes, 'ref'> {
@@ -34,8 +33,8 @@ interface IGRPAlertDialogProps extends Omit<IGRPBaseAttributes, 'ref'> {
   onAction?: () => void;
   onCancel?: () => void;
   showCancel?: boolean;
-  actionProps?: Partial<IGRPButtonProps>;
-  cancelProps?: Partial<IGRPButtonProps>;
+  actionProps?: Partial<React.ComponentProps<typeof AlertDialogAction>>;
+  cancelProps?: Partial<React.ComponentProps<typeof AlertDialogCancel>>;
   id?: string;
 }
 

@@ -1,6 +1,14 @@
 'use client';
 
-import { forwardRef, useCallback, useContext, useEffect, useId, useRef, useState } from 'react';
+import { 
+  forwardRef, 
+  useCallback, 
+  useContext, 
+  useEffect, 
+  useId, 
+  useRef, 
+  useState 
+} from 'react';
 import { useFieldArray, useWatch } from 'react-hook-form';
 
 import { cn } from '../../../lib/utils';
@@ -13,13 +21,20 @@ import {
   AccordionContent,
 } from '../../primitives/accordion';
 import { Button } from '../../primitives/button';
-import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '../../primitives/card';
+import { 
+  Card, 
+  CardContent, 
+  CardHeader, 
+  CardTitle, 
+  CardDescription 
+} from '../../primitives/card';
 import { IGRPBadge, type IGRPBadgeProps } from '../badge';
 import { IGRPIcon, type IGRPIconName } from '../icon';
 import { IGRPFormContext } from './form-context';
 
 const ACCORDION_ITEM_PREFIX = 'item-';
 const getRemoveItemAriaLabel = (index: number) => `Remover item ${index + 1}`;
+type RemoveBehavior = 'direct' | 'confirm';
 
 const getAccordionValue = (index: number) => `${ACCORDION_ITEM_PREFIX}${index}`;
 const parseAccordionIndex = (value: string) =>
@@ -54,6 +69,14 @@ interface IGRPFormListProps<TItem>
   allowEmpty?: boolean;
   /** When true, multiple items can be expanded at once. When false, opening one closes the others (default). */
   allowMultipleOpen?: boolean;
+  renderRemoveAction?: (params: {
+    index: number;
+    ariaLabel: string;
+    onRemove: () => void;
+    onTriggerClick: (e: React.MouseEvent<HTMLElement>) => void;
+  }) => React.ReactNode;
+  /** Called when an item is removed. */
+  onItemRemove?: (item: TItem, index: number) => void;
 
   value?: TItem[];
   defaultValue?: TItem[];
@@ -83,6 +106,17 @@ type FormListLayoutProps<TItem> = {
   renderItem: (item: TItem, index: number, onChange?: (item: TItem) => void) => React.ReactNode;
   allowEmpty: boolean;
   allowMultipleOpen?: boolean;
+  removeBehavior?: RemoveBehavior;
+  removeDialogTitle?: string;
+  removeDialogDescription?: string;
+  removeDialogCancelLabel?: string;
+  removeDialogConfirmLabel?: string;
+  renderRemoveAction?: (params: {
+    index: number;
+    ariaLabel: string;
+    onRemove: () => void;
+    onTriggerClick: (e: React.MouseEvent<HTMLElement>) => void;
+  }) => React.ReactNode;
   onRemove?: (index: number) => void;
   openItem?: string;
   openItems?: string[];
@@ -213,7 +247,8 @@ function FormListLayout<TItem>({
   computeLabel,
   renderItem,
   allowEmpty,
-  allowMultipleOpen = false,
+  allowMultipleOpen = false,  
+  renderRemoveAction,
   onRemove,
   openItem,
   openItems,
@@ -236,6 +271,10 @@ function FormListLayout<TItem>({
     const itemKey = getItemKey(index);
     const labelValue = computeLabel?.(item, index) ?? '';
     const onItemRemove = onRemove ? () => onRemove(index) : undefined;
+    const removeAriaLabel = getRemoveItemAriaLabel(index);
+    const onRemoveTriggerClick = (e: React.MouseEvent<HTMLElement>) => {
+      e.stopPropagation();
+    };
     const onItemChange = onItemChangeFactory?.(index);
     const normalizedOnItemChange = onItemChange as ((item: TItem) => void) | undefined;
 
@@ -257,23 +296,32 @@ function FormListLayout<TItem>({
           </div>
 
           {canRemove && onItemRemove && (
-            <Button
-              type="button"
-              variant="ghost"
-              size="icon-sm"
-              onClick={(e) => {
-                e.stopPropagation();
-                onItemRemove();
-              }}
-              className="size-7 p-0 shrink-0 hover:text-destructive"
-              aria-label={getRemoveItemAriaLabel(index)}
-            >
-              <IGRPIcon iconName="Trash2" />
-            </Button>
+            renderRemoveAction ? (
+              renderRemoveAction({
+                index,
+                ariaLabel: removeAriaLabel,
+                onRemove: onItemRemove,
+                onTriggerClick: onRemoveTriggerClick,
+              })
+            ) : (              
+              <Button
+                type="button"
+                variant="ghost"
+                size="icon-sm"
+                onClick={(e) => {
+                  onRemoveTriggerClick(e);
+                  onItemRemove();
+                }}
+                className="size-7 p-0 shrink-0 hover:text-destructive"
+                aria-label={removeAriaLabel}
+              >
+                <IGRPIcon iconName="Trash2" />
+              </Button>
+            )
           )}
         </div>
 
-        <AccordionContent className={cn('px-4 pb-4')}>
+        <AccordionContent className={cn('p-4')}>
           {renderItem(item, index, normalizedOnItemChange)}
         </AccordionContent>
       </AccordionItem>
@@ -358,7 +406,9 @@ const IGRPFormListInner = <TItem,>(
     addButtonIconName = 'Plus',
     addButtonClassName,
     allowEmpty = false,
-    allowMultipleOpen = false,
+    allowMultipleOpen = false,    
+    renderRemoveAction,
+    onItemRemove,
     value,
     defaultValue,
     onChange,
@@ -397,7 +447,9 @@ const IGRPFormListInner = <TItem,>(
         addButtonIconName={addButtonIconName}
         addButtonClassName={addButtonClassName}
         allowEmpty={allowEmpty}
-        allowMultipleOpen={allowMultipleOpen}
+        allowMultipleOpen={allowMultipleOpen}        
+        renderRemoveAction={renderRemoveAction}
+        onItemRemove={onItemRemove}
         ref={ref}
       />
     );
@@ -428,7 +480,9 @@ const IGRPFormListInner = <TItem,>(
       addButtonIconName={addButtonIconName}
       addButtonClassName={addButtonClassName}
       allowEmpty={allowEmpty}
-      allowMultipleOpen={allowMultipleOpen}
+      allowMultipleOpen={allowMultipleOpen}      
+      renderRemoveAction={renderRemoveAction}
+      onItemRemove={onItemRemove}
       value={value}
       defaultValue={defaultValue}
       onChange={onChange}
@@ -461,7 +515,9 @@ function FormListFormMode<TItem>({
   addButtonIconName = 'Plus',
   addButtonClassName,
   allowEmpty = false,
-  allowMultipleOpen = false,
+  allowMultipleOpen = false,  
+  renderRemoveAction,
+  onItemRemove,
   ref,
 }: Omit<IGRPFormListProps<TItem>, 'value' | 'defaultValue' | 'onChange' | 'id' | 'name'> & {
   groupId: string;
@@ -526,6 +582,14 @@ function FormListFormMode<TItem>({
         ? openItems.includes(removedValue)
         : openItem === removedValue;
       const willHaveItems = fields.length > 1;
+      const removedItem = (values[index] ?? defaultItem ?? ({} as TItem)) as TItem;
+
+      try {
+        onItemRemove?.(removedItem, index);
+      } catch (error) {
+        console.error('IGRPFormList onItemRemove callback failed:', error);
+        return;
+      }
 
       remove(index);
 
@@ -544,8 +608,9 @@ function FormListFormMode<TItem>({
           setOpenItem(getAccordionValue(currentIndex - 1));
         }
       }
+
     },
-    [remove, openItem, openItems, fields.length, allowEmpty, allowMultipleOpen],
+    [remove, openItem, openItems, fields.length, allowEmpty, allowMultipleOpen, values, defaultItem, onItemRemove],
   );
 
   return (
@@ -572,6 +637,7 @@ function FormListFormMode<TItem>({
       renderItem={(item, index) => renderItem(item, index)}
       allowEmpty={allowEmpty}
       allowMultipleOpen={allowMultipleOpen}
+      renderRemoveAction={renderRemoveAction}
       onRemove={handleRemove}
       openItem={allowMultipleOpen ? undefined : openItem}
       openItems={allowMultipleOpen ? openItems : undefined}
@@ -619,7 +685,9 @@ function FormListStandaloneMode<TItem>({
   addButtonIconName = 'Plus',
   addButtonClassName,
   allowEmpty = false,
-  allowMultipleOpen = false,
+  allowMultipleOpen = false,  
+  renderRemoveAction,
+  onItemRemove,
   value,
   defaultValue,
   onChange,
@@ -704,6 +772,16 @@ function FormListStandaloneMode<TItem>({
         const wasOpen = allowMultipleOpen
           ? openItems.includes(removedValue)
           : openItem === removedValue;
+        const removedItem = items[index];
+
+        if (removedItem !== undefined) {
+          try {
+            onItemRemove?.(removedItem, index);
+          } catch (error) {
+            console.error('IGRPFormList onItemRemove callback failed:', error);
+            return;
+          }
+        }
 
         const newItems = items.filter((_, i) => i !== index);
         setItems(newItems);
@@ -726,7 +804,7 @@ function FormListStandaloneMode<TItem>({
         }
       }
     },
-    [items, onChange, openItem, openItems, allowEmpty, allowMultipleOpen],
+    [items, onChange, openItem, openItems, allowEmpty, allowMultipleOpen, onItemRemove],
   );
 
   return (
@@ -753,7 +831,8 @@ function FormListStandaloneMode<TItem>({
         renderItem(item, index, onChange)
       }
       allowEmpty={allowEmpty}
-      allowMultipleOpen={allowMultipleOpen}
+      allowMultipleOpen={allowMultipleOpen}      
+      renderRemoveAction={renderRemoveAction}
       onRemove={handleRemove}
       openItem={allowMultipleOpen ? undefined : openItem}
       openItems={allowMultipleOpen ? openItems : undefined}

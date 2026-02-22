@@ -24,6 +24,7 @@ interface IGRPInfoCardProps {
   title?: string;
   titleClassName?: string;
   className?: string;
+  contentClassName?: string;
   sections: IGRPInfoSection[];
   variantSection?: IGRPColorRole;
   colorSection?: IGRPColorVariants;
@@ -31,14 +32,17 @@ interface IGRPInfoCardProps {
   id?: string;
 }
 
+// TODO: Orientation horizontal and see design for this
+
 function IGRPInfoCard({
   title,
   titleClassName,
   className,
+  contentClassName,
   sections,
-  variantSection = 'solid',
+  variantSection = 'outline',
   colorSection = 'primary',
-  orientation = 'vertical',
+  // orientation = 'vertical',
   id,
 }: IGRPInfoCardProps) {
   const _id = useId();
@@ -55,9 +59,7 @@ function IGRPInfoCard({
           {title}
         </CardTitle>
       </CardHeader>
-      <CardContent
-        className={cn('flex gap-4', orientation === 'vertical' ? 'flex-col' : 'flex-row')}
-      >
+      <CardContent className={cn('flex flex-col gap-4', contentClassName)}>
         {sections.map((section, sectionIndex) => (
           <Fragment key={sectionIndex}>
             {section.items.map((item, itemIndex) => (
@@ -76,10 +78,10 @@ interface IGRPInfoFieldProps {
 }
 
 function IGRPInfoField({ item }: IGRPInfoFieldProps) {
-  const colorClass = IGRPColors[item.variantItem || 'solid'][item.colorItem || 'primary'];
+  // const colorClass = IGRPColors[item.variantItem || 'solid'][item.colorItem || 'primary'];
 
   return (
-    <div className={cn('flex flex-col gap-0.5', colorClass.text)}>
+    <div className={cn('flex flex-col gap-0.5' /*, colorClass.text*/ )}>
       <span className={cn('text-sm font-medium')}>{item.label}</span>
       <div className={cn('flex items-center gap-2')}>
         {item.showIcon && item.icon && (

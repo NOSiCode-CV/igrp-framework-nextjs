@@ -1,6 +1,6 @@
 {
   "name": "@igrp/framework-next",
-  "version": "0.1.0-beta.96",
+  "version": "0.1.0-beta.99",
   "description": "IGRP Framework for Next.js | Server Rendering components",
   "keywords": [
     "igrp",
@@ -27,15 +27,14 @@
     "release": "pnpm build && yarn publish --registry=https://sonatype.nosi.cv/repository/igrp/ --tag latest",
     "clean-all": "rimraf node_modules && rimraf dist && rimraf tsconfig.tsbuildinfo"
   },
-  "peerDependencies": {
-    "next": "15.5.9",
-    "react": "19.2.4",
-    "react-dom": "19.2.4"
-  },
+  "peerDependencies": {},
   "dependencies": {
-    "@igrp/framework-next-auth": "0.1.0-beta.96",
-    "@igrp/framework-next-types": "0.1.0-beta.96",
-    "@igrp/framework-next-ui": "0.1.0-beta.96",
+    "next": "15.5.12",
+    "react": "19.2.4",
+    "react-dom": "19.2.4",
+    "@igrp/framework-next-auth": "0.1.0-beta.99",
+    "@igrp/framework-next-types": "0.1.0-beta.99",
+    "@igrp/framework-next-ui": "0.1.0-beta.99",
     "@igrp/platform-access-management-client-ts": "0.1.0-beta.64"
   },
   "devDependencies": {
@@ -45,13 +44,13 @@
     "@babel/preset-react": "7.28.5",
     "@babel/preset-typescript": "7.28.5",
     "@eslint/js": "^9.39.2",
-    "@swc/cli": "^0.7.10",
+    "@swc/cli": "^0.8.0",
     "@swc/core": "^1.15.11",
     "@types/node": "^24.10.1",
-    "@types/react": "19.2.11",
+    "@types/react": "19.2.14",
     "@types/react-dom": "19.2.3",
     "babel-plugin-react-compiler": "19.1.0-rc.3",
-    "cpy-cli": "6.0.0",
+    "cpy-cli": "7.0.0",
     "eslint": "^9.39.2",
     "eslint-config-prettier": "10.1.8",
     "eslint-plugin-prettier": "5.5.5",
@@ -60,9 +59,9 @@
     "globals": "^17.3.0",
     "move-cli": "^2.0.0",
     "prettier": "^3.8.1",
-    "rimraf": "^6.1.0",
+    "rimraf": "^6.1.3",
     "typescript": "^5.9.3",
-    "typescript-eslint": "^8.54.0"
+    "typescript-eslint": "^8.55.0"
   },
   "sideEffects": [
     "*.css"

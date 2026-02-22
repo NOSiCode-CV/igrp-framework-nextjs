@@ -10,6 +10,7 @@ import { IGRPIcon } from '../icon';
 import { IGRPLink, type IGRPLinkProps } from '../typography/link';
 import { DD_MM_YYYY } from '../../../lib/constants';
 import { cn } from '../../../lib/utils';
+import { Switch } from '../../primitives/switch';
 
 interface IGRPDataTableCellCheckboxProps<TData> extends React.ComponentProps<typeof Checkbox> {
   row: Row<TData>;
@@ -26,6 +27,27 @@ function IGRPDataTableCellCheckbox<TData>({
       disabled={!row.getCanSelect()}
       onCheckedChange={(value) => row.toggleSelected(!!value)}
       aria-label="Select row"
+      className={className}
+      {...props}
+    />
+  );
+}
+
+interface IGRPDataTableCellSwitchProps<TData> extends React.ComponentProps<typeof Switch> {
+  row: Row<TData>;
+}
+
+function IGRPDataTableCellSwitch<TData>({
+  row,
+  className,
+  ...props
+}: IGRPDataTableCellSwitchProps<TData>) {
+  return (
+    <Switch
+      checked={row.getIsSelected()}
+      disabled={!row.getCanSelect()}
+      onCheckedChange={(value) => row.toggleSelected(!!value)}
+      aria-label="Toggle row"
       className={className}
       {...props}
     />
@@ -113,7 +135,9 @@ interface IGRPDataTableCellDateProps {
 
 function IGRPDataTableCellDate({ date, dateFormat = DD_MM_YYYY }: IGRPDataTableCellDateProps) {
   if (!date) return null;
-  return <span>{format(new Date(date), dateFormat)}</span>;
+  const d = date instanceof Date ? date : new Date(date);
+  if (Number.isNaN(d.getTime())) return null;
+  return <span>{format(d, dateFormat)}</span>;
 }
 
 function IGRPDataTableCellLink({
@@ -174,6 +198,7 @@ function IGRPDataTableCellTooltip({
 
 export {
   IGRPDataTableCellCheckbox,
+  IGRPDataTableCellSwitch,
   IGRPDataTableCellExpander,
   IGRPDataTableCellAmount,
   IGRPDataTableCellBadge,
@@ -181,6 +206,7 @@ export {
   IGRPDataTableCellLink,
   IGRPDataTableCellTooltip,
   type IGRPDataTableCellExpanderProps,
+  type IGRPDataTableCellSwitchProps,
   type IGRPDataTableCellAmountProps,
   type IGRPDataTableCellBadgeProps,
   type IGRPDataTableCellDateProps,

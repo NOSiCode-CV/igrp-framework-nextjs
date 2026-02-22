@@ -2,6 +2,7 @@
 
 import { Area, AreaChart, CartesianGrid, Legend, XAxis, YAxis, ReferenceLine } from 'recharts';
 
+import { cn } from '../../../lib/utils';
 import {
   ChartContainer,
   ChartTooltip,
@@ -20,7 +21,6 @@ import {
   hasNegativeValues,
 } from './lib';
 import type { IGRPAreaConfig, IGRPChartProps } from './types';
-import { cn } from '../../../lib/utils';
 
 // TODO: check to assign areas props default value
 

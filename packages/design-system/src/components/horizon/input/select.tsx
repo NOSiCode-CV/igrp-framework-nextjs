@@ -65,21 +65,28 @@ function selectReducer(state: SelectState, action: SelectAction): SelectState {
   }
 }
 
-interface IGRPSelectProps
-  extends
-    React.ComponentProps<typeof Select>,
-    Omit<IGRPInputProps, 'autoComplete' | 'defaultValue' | 'dir' | 'value'> {
-  options: IGRPOptionsProps[];
-  placeholder?: string;
-  className?: string;
-  showSearch?: boolean;
-  required?: boolean;
-  error?: string;
-  showStatus?: boolean;
-  selectClassName?: string;
-  showGroup?: boolean;
-  id?: string;
-}
+type IGRPSelectProps = Omit<
+  React.ComponentProps<typeof Select>,
+  'value' | 'defaultValue' | 'onValueChange' | 'children'
+> &
+  Omit<IGRPInputProps, 'autoComplete' | 'defaultValue' | 'dir' | 'value'> & {
+    options: IGRPOptionsProps[];
+    value?: string;
+    defaultValue?: string;
+    onValueChange?: (value: string) => void;
+    placeholder?: string;
+    className?: string;
+    showSearch?: boolean;
+    required?: boolean;
+    error?: string;
+    showStatus?: boolean;
+    selectClassName?: string;
+    showGroup?: boolean;
+    id?: string;
+    label?: string;
+    labelClassName?: string;
+    helperText?: string;
+  };
 
 function IGRPSelect({
   options,

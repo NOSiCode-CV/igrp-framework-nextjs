@@ -1,0 +1,36 @@
+# Dependencies - must not overwrite container's pnpm install
+node_modules/
+
+# Git
+.git/
+.gitignore
+
+# Build outputs
+dist/
+dist_optimized
+dist_types
+build/
+.next/
+out/
+storybook-static/
+
+# Testing & coverage
+coverage/
+.nyc_output/
+
+# Cache
+.cache/
+.parcel-cache/
+*.tsbuildinfo
+.eslintcache
+
+# Env files
+.env
+.env.*
+!.env.example
+
+# Misc
+.DS_Store
+*.log
+*.tgz
+.vercel/

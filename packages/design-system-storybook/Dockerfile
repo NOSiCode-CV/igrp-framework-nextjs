@@ -10,16 +10,21 @@ RUN corepack enable
 COPY package.json pnpm-lock.yaml pnpm-workspace.yaml .npmrc ./
 
 # Copy workspace package manifests first (better caching)
+COPY packages/design-system/package.json ./packages/design-system/
 COPY packages/design-system-storybook/package.json ./packages/design-system-storybook/
-
-# If you depend on shared packages, copy their package.json too:
-# COPY packages/design-system/package.json ./packages/design-system/
 
 # Install dependencies (workspace-aware)
 RUN pnpm install --frozen-lockfile
 
-# Now copy full source
+# Now copy full source (.dockerignore excludes node_modules so we keep container's install)
 COPY . .
+
+# Re-run install so workspace packages get correct node_modules layout
+RUN pnpm install --frozen-lockfile
+
+# Build design-system first (Storybook depends on it) - use mac/Unix scripts for Alpine
+WORKDIR /igrp-framework-nextjs
+RUN pnpm --filter @igrp/igrp-framework-react-design-system build:mac
 
 # Build Storybook from workspace
 WORKDIR /igrp-framework-nextjs/packages/design-system-storybook
@@ -27,11 +32,10 @@ RUN pnpm build-storybook
 
 
 # ---------- Production image ----------
-FROM node:20-alpine
+FROM node:22-alpine
 
 WORKDIR /app
-RUN corepack enable
-RUN pnpm add -g serve
+RUN npm install -g serve
 
 COPY --from=builder /igrp-framework-nextjs/packages/design-system-storybook/storybook-static ./storybook-static
 

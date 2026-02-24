@@ -18,8 +18,6 @@ build_storybook_image:
     - changes:
         - packages/design-system-storybook/*
       when: always
-  only:
-    - main
   script:
     - docker login -u "$DOCKER_REGISTRY_USERNAME" -p "$DOCKER_REGISTRY_PASSWORD" "$DOCKER_REGISTRY"
     - docker build -t $DOCKER_REGISTRY/$DOCKER_PROJECT/$IMAGE_NAME -f packages/design-system-storybook/Dockerfile .
@@ -33,9 +31,6 @@ deploy_storybook:
     - changes:
         - packages/design-system-storybook/*
       when: always
-
-  only:
-    - main
   script:
     - |
       curl -u "$DEPLOY_USER:$DEPLOY_PASSWORD" \

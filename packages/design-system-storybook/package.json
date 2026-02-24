@@ -18,9 +18,9 @@
    "license": "MIT",
   "scripts": {
     "dev": "tsc --watch",
-    "storybook": "storybook dev -p 6006",
+    "storybook": "storybook dev -p 6006 --ci",
     "build-storybook": "storybook build",
-    "serve-storybook": "serve storybook-static",
+    "serve-storybook": "pnpm dlx serve storybook-static -l 6006",
     "test-storybook": "test-storybook",
     "lint": "eslint . --ext .ts,.tsx",
     "format": "prettier --write .",

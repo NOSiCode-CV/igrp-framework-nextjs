@@ -7,7 +7,7 @@ WORKDIR /igrp-framework-nextjs
 RUN corepack enable
 
 # Copy root workspace files
-COPY package.json pnpm-lock.yaml pnpm-workspace.yaml ./
+COPY package.json pnpm-lock.yaml pnpm-workspace.yaml .npmrc ./
 
 # Copy workspace package manifests first (better caching)
 COPY packages/design-system-storybook/package.json ./packages/design-system-storybook/

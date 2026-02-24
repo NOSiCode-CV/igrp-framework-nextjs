@@ -29,6 +29,11 @@ build_storybook_image:
 deploy_storybook:
   image: gcc:latest
   stage: deploy
+  rules:
+    - changes:
+        - packages/design-system-storybook/*
+      when: always
+
   only:
     - main
   script:

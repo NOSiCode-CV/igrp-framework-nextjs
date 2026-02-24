@@ -6,6 +6,7 @@ import type {
   IGRPSidebarDataArgs,
 } from '@igrp/framework-next-types';
 import {
+  cn,
   IGRPToaster,
   IGRPSidebarInsetPrimitive,
   IGRPSidebarProviderPrimitive,
@@ -46,15 +47,15 @@ export function IGRPRootProviders({
   return (
     <IGRPSidebarProviderPrimitive defaultOpen={defaultOpen}>
       {showSidebar && (
-        <div className="z-45">
+        <div className={cn('z-45')}>
           <IGRPTemplateSidebar data={sidebarData} />
         </div>
       )}
 
-      <IGRPSidebarInsetPrimitive className="min-w-0">
+      <IGRPSidebarInsetPrimitive className={cn('min-w-0')}>
         {showHeader && <IGRPTemplateHeader data={headerData} />}
 
-        <div className="p-4">{children}</div>
+        <div className={cn('p-4')}>{children}</div>
 
         {showToaster && (
           <IGRPToaster

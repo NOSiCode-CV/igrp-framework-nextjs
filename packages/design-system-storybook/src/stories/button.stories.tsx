@@ -34,7 +34,6 @@ const meta = {
       options: ['start', 'end'],
     },
     iconSize: { control: 'number' },
-    iconSpacing: { control: 'number' },
     loading: { control: 'boolean' },
     loadingText: { control: 'text' },
     disabled: { control: 'boolean' },

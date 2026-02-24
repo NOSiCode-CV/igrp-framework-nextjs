@@ -194,17 +194,23 @@ function StepperIndicator({
         children
       ) : (
         <>
-          <span className="transition-all group-data-loading/step:scale-0 group-data-loading/step:opacity-0 group-data-loading/step:transition-none group-data-[state=completed]/step:scale-0 group-data-[state=completed]/step:opacity-0">
+          <span
+            className={cn(
+              'transition-all group-data-loading/step:scale-0 group-data-loading/step:opacity-0 group-data-loading/step:transition-none group-data-[state=completed]/step:scale-0 group-data-[state=completed]/step:opacity-0',
+            )}
+          >
             {step}
           </span>
           <CheckIcon
-            className="absolute scale-0 opacity-0 transition-all group-data-[state=completed]/step:scale-100 group-data-[state=completed]/step:opacity-100"
+            className={cn(
+              'absolute scale-0 opacity-0 transition-all group-data-[state=completed]/step:scale-100 group-data-[state=completed]/step:opacity-100',
+            )}
             size={16}
             aria-hidden="true"
           />
           {isLoading && (
-            <span className="absolute transition-all">
-              <LoaderCircleIcon className="animate-spin" size={14} aria-hidden="true" />
+            <span className={cn('absolute transition-all')}>
+              <LoaderCircleIcon className={cn('animate-spin')} size={14} aria-hidden="true" />
             </span>
           )}
         </>

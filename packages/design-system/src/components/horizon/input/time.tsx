@@ -44,7 +44,7 @@ function IGRPInputTime({
           <IGRPLabel label={label} className={className} required={required} id={fieldName} />
         )}
 
-        <div className="relative">
+        <div className={cn('relative')}>
           <Input
             id={fieldName}
             name={fieldName}
@@ -68,7 +68,7 @@ function IGRPInputTime({
         {helperText && !error && (
           <p
             id={`${fieldName}-helper`}
-            className="text-muted-foreground mt-2 text-xs"
+            className={cn('text-muted-foreground mt-2 text-xs')}
             role="region"
             aria-live="polite"
           >
@@ -77,7 +77,7 @@ function IGRPInputTime({
         )}
 
         {error && (
-          <p id={`${fieldName}-error`} className="text-destructive mt-2 text-xs" role="alert">
+          <p id={`${fieldName}-error`} className={cn('text-destructive mt-2 text-xs')} role="alert">
             {error}
           </p>
         )}
@@ -96,7 +96,7 @@ function IGRPInputTime({
             <IGRPLabel label={label} className={className} required={required} id={fieldName} />
           )}
 
-          <div className="relative">
+          <div className={cn('relative')}>
             <Input
               id={fieldName}
               name={fieldName}
@@ -124,7 +124,7 @@ function IGRPInputTime({
           {helperText && !error && !fieldState.error && (
             <p
               id={`${fieldName}-helper`}
-              className="text-muted-foreground mt-2 text-xs"
+              className={cn('text-muted-foreground mt-2 text-xs')}
               role="region"
               aria-live="polite"
             >
@@ -133,7 +133,11 @@ function IGRPInputTime({
           )}
 
           {(error || fieldState.error) && (
-            <p id={`${fieldName}-error`} className="text-destructive mt-2 text-xs" role="alert">
+            <p
+              id={`${fieldName}-error`}
+              className={cn('text-destructive mt-2 text-xs')}
+              role="alert"
+            >
               {error || fieldState.error?.message}
             </p>
           )}

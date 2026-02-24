@@ -87,7 +87,7 @@ function IGRPDatePickerMultiple({
       <IGRPButton
         id={fieldName}
         variant="link"
-        className="underline-offset-0 hover:no-underline"
+        className={cn('underline-offset-0 hover:no-underline')}
         disabled={disabledPicker}
         iconName="Calendar"
         iconClassName="text-muted-foreground/80 group-hover:text-foreground shrink-0 transition-colors"
@@ -109,7 +109,7 @@ function IGRPDatePickerMultiple({
       <>
         <Popover>
           <PopoverTrigger asChild>{DateButton(displayDate)}</PopoverTrigger>
-          <PopoverContent className="p-0 w-auto shadow-none" align="start">
+          <PopoverContent className={cn('p-0 w-auto shadow-none')} align="start">
             <IGRPCalendarMultiple
               {...props}
               id={id}
@@ -132,7 +132,9 @@ function IGRPDatePickerMultiple({
               onDateChange?.(undefined);
             }}
             variant="link"
-            className="size-2 absolute right-2 top-1/2 h-3 w-3 -translate-y-1/2 text-muted-foreground z-100"
+            className={cn(
+              'size-2 absolute right-2 top-1/2 h-3 w-3 -translate-y-1/2 text-muted-foreground z-100',
+            )}
             size="icon"
             iconName="X"
             iconSize={10}
@@ -191,9 +193,9 @@ function IGRPDatePickerMultiple({
         <IGRPLabel label={label} required={required} id={name} className={labelClassName} />
       )}
 
-      <div className="relative">{renderPicker(localDate, onDateChange)}</div>
+      <div className={cn('relative')}>{renderPicker(localDate, onDateChange)}</div>
 
-      {helperText && <p className="text-sm text-muted-foreground mt-1">{helperText}</p>}
+      {helperText && <p className={cn('text-sm text-muted-foreground mt-1')}>{helperText}</p>}
     </div>
   );
 }

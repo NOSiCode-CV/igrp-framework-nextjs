@@ -41,8 +41,8 @@ function IGRPStatusBanner({
       alignment="center"
       name={ref}
     >
-      <span className="font-medium">{text}</span>
-      <IGRPBadge variant={badgeVariant} color={badgeColor} badgeClassName="ml-4 font-normal">
+      <span className={cn('font-medium')}>{text}</span>
+      <IGRPBadge variant={badgeVariant} color={badgeColor} badgeClassName={cn('ml-4 font-normal')}>
         {badgeText}
       </IGRPBadge>
     </IGRPAlert>

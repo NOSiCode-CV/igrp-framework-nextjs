@@ -2,16 +2,23 @@ import type { IGRPUserArgs } from './access-management';
 
 export interface IGRPHeaderDataArgs {
   user: IGRPUserArgs;
+  userProfileUrl?: string;
+  showUser: boolean;
+
   notifications?: IGRPNotificationArgs[];
+  notificationsUrl?: string;
+  showNotifications: boolean;
+
   showBreadcrumb: boolean;
   showSearch: boolean;
-  showNotifications: boolean;
   showThemeSwitcher: boolean;
-  showUser: boolean;
+
   showIGRPSidebarTrigger: boolean;
+
   showIGRPHeaderTitle: boolean;
   showIGRPHeaderLogo: boolean;
   headerLogo?: string;
+
   showSettings?: boolean;
   settingsUrl?: string;
   settingsIcon?: string;

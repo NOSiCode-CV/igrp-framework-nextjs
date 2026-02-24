@@ -1,3 +1,5 @@
+// TODO: REVIEW THIS COLORS
+
 export const IGRPColors = {
   outline: {
     primary: {

@@ -5,6 +5,7 @@ import type { IGRPCalendarTimeProps } from '../../../types';
 import { Input } from '../../primitives/input';
 import { Label } from '../../primitives/label';
 import { IGRPCalendarSingle, type IGRPCalendarSingleProps } from './single';
+import { cn } from '../../../lib/utils';
 
 interface IGRPCalendarSingleTimeProps extends IGRPCalendarSingleProps, IGRPCalendarTimeProps {}
 
@@ -43,11 +44,11 @@ function IGRPCalendarSingleTime({
 
   return (
     <div id={ref}>
-      <div className="space-y-4">
+      <div className={cn('space-y-4')}>
         <IGRPCalendarSingle {...props} />
 
-        <div className="space-y-4 pt-4 border-t">
-          <div className="space-y-2">
+        <div className={cn('space-y-4 pt-4 border-t')}>
+          <div className={cn('space-y-2')}>
             <Label htmlFor={`${ref}-start-time`}>{startTimeLabel}</Label>
             <Input
               id={`${ref}-start-time`}
@@ -56,12 +57,12 @@ function IGRPCalendarSingleTime({
               placeholder={startTimePlaceholder}
               value={startTime}
               onChange={handleStartTimeChange}
-              className={classHide}
+              className={cn(classHide)}
             />
           </div>
 
           {!hideEndTimePicker && (
-            <div className="space-y-2">
+            <div className={cn('space-y-2')}>
               <Label htmlFor={`${ref}-end-time`}>{endTimeLabel}</Label>
               <Input
                 id={`${ref}-end-time`}
@@ -70,7 +71,7 @@ function IGRPCalendarSingleTime({
                 placeholder={endTimePlaceholder}
                 value={endTime}
                 onChange={handleEndTimeChange}
-                className={classHide}
+                className={cn(classHide)}
               />
             </div>
           )}

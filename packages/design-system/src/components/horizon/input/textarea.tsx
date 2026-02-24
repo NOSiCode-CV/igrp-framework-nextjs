@@ -39,7 +39,7 @@ function IGRPTextarea({
           <IGRPLabel label={label} className={className} required={required} id={fieldName} />
         )}
 
-        <div className="relative">
+        <div className={cn('relative')}>
           <Textarea
             id={fieldName}
             name={fieldName}
@@ -60,7 +60,7 @@ function IGRPTextarea({
         {helperText && !error && (
           <p
             id={`${fieldName}-helper`}
-            className="text-muted-foreground mt-2 text-xs"
+            className={cn('text-muted-foreground mt-2 text-xs')}
             role="region"
             aria-live="polite"
           >
@@ -69,7 +69,7 @@ function IGRPTextarea({
         )}
 
         {error && (
-          <p id={`${fieldName}-error`} className="text-destructive mt-2 text-xs" role="alert">
+          <p id={`${fieldName}-error`} className={cn('text-destructive mt-2 text-xs')} role="alert">
             {error}
           </p>
         )}
@@ -90,7 +90,7 @@ function IGRPTextarea({
             <IGRPLabel label={label} className={className} required={required} id={fieldName} />
           )}
 
-          <div className="relative">
+          <div className={cn('relative')}>
             <Textarea
               id={fieldName}
               name={fieldName}
@@ -115,7 +115,7 @@ function IGRPTextarea({
           {helperText && !errorMessage && !fieldState.error && (
             <p
               id={`${fieldName}-helper`}
-              className="text-muted-foreground mt-2 text-xs"
+              className={cn('text-muted-foreground mt-2 text-xs')}
               role="region"
               aria-live="polite"
             >
@@ -124,7 +124,11 @@ function IGRPTextarea({
           )}
 
           {(errorMessage || fieldState.error) && (
-            <p id={`${fieldName}-error`} className="text-destructive mt-2 text-xs" role="alert">
+            <p
+              id={`${fieldName}-error`}
+              className={cn('text-destructive mt-2 text-xs')}
+              role="alert"
+            >
               {errorMessage || fieldState.error?.message}
             </p>
           )}

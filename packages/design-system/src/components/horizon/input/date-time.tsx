@@ -125,7 +125,7 @@ function IGRPDateTimeInput({
         {helperText && !error && (
           <p
             id={`${fieldName}-helper`}
-            className="text-muted-foreground mt-2 text-xs"
+            className={cn('text-muted-foreground mt-2 text-xs')}
             role="region"
             aria-live="polite"
           >
@@ -134,7 +134,11 @@ function IGRPDateTimeInput({
         )}
 
         {error && (
-          <p id={`${fieldName}-helper`} className="text-destructive mt-2 text-xs" role="alert">
+          <p
+            id={`${fieldName}-helper`}
+            className={cn('text-destructive mt-2 text-xs')}
+            role="alert"
+          >
             {error}
           </p>
         )}
@@ -199,7 +203,7 @@ function IGRPDateTimeInput({
             {helperText && !error && !fieldState.error && (
               <p
                 id={`${fieldName}-helper`}
-                className="text-muted-foreground mt-2 text-xs"
+                className={cn('text-muted-foreground mt-2 text-xs')}
                 role="region"
                 aria-live="polite"
               >
@@ -208,7 +212,11 @@ function IGRPDateTimeInput({
             )}
 
             {(error || fieldState.error) && (
-              <p id={`${fieldName}-error`} className="text-destructive mt-2 text-xs" role="alert">
+              <p
+                id={`${fieldName}-error`}
+                className={cn('text-destructive mt-2 text-xs')}
+                role="alert"
+              >
                 {error || fieldState.error?.message}
               </p>
             )}

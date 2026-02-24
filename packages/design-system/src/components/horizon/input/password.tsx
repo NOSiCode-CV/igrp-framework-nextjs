@@ -64,7 +64,7 @@ function IGRPInputPassword({
           <IGRPLabel label={label} className={className} required={required} id={fieldName} />
         )}
 
-        <div className="relative">
+        <div className={cn('relative')}>
           <Input
             id={fieldName}
             name={fieldName}
@@ -90,7 +90,9 @@ function IGRPInputPassword({
               type="button"
               variant="ghost"
               size="sm"
-              className="absolute right-0 top-0 h-full px-3 py-2 text-muted-foreground hover:text-foreground"
+              className={cn(
+                'absolute right-0 top-0 h-full px-3 py-2 text-muted-foreground hover:text-foreground',
+              )}
               onClick={togglePasswordVisibility}
               tabIndex={-1}
               aria-label={showPassword ? 'Hide password' : 'Show password'}
@@ -104,7 +106,7 @@ function IGRPInputPassword({
         {helperText && !error && (
           <p
             id={`${fieldName}-helper`}
-            className="text-muted-foreground mt-2 text-xs"
+            className={cn('text-muted-foreground mt-2 text-xs')}
             role="region"
             aria-live="polite"
           >
@@ -113,7 +115,11 @@ function IGRPInputPassword({
         )}
 
         {error && (
-          <p id={`${fieldName}-errror`} className="text-destructive mt-2 text-xs" role="alert">
+          <p
+            id={`${fieldName}-errror`}
+            className={cn('text-destructive mt-2 text-xs')}
+            role="alert"
+          >
             {error}
           </p>
         )}
@@ -132,7 +138,7 @@ function IGRPInputPassword({
             <IGRPLabel label={label} className={className} required={required} id={fieldName} />
           )}
 
-          <div className="relative">
+          <div className={cn('relative')}>
             <Input
               id={fieldName}
               type={showPassword ? 'text' : 'password'}
@@ -163,7 +169,9 @@ function IGRPInputPassword({
                 type="button"
                 variant="ghost"
                 size="sm"
-                className="absolute right-0 top-0 h-full px-3 py-2 text-muted-foreground hover:text-foreground"
+                className={cn(
+                  'absolute right-0 top-0 h-full px-3 py-2 text-muted-foreground hover:text-foreground',
+                )}
                 onClick={togglePasswordVisibility}
                 tabIndex={-1}
                 aria-label={showPassword ? 'Hide password' : 'Show password'}
@@ -176,7 +184,7 @@ function IGRPInputPassword({
           {helperText && !error && !fieldState.error && (
             <p
               id={`${fieldName}-helper`}
-              className="text-muted-foreground mt-2 text-xs"
+              className={cn('text-muted-foreground mt-2 text-xs')}
               role="region"
               aria-live="polite"
             >
@@ -185,7 +193,11 @@ function IGRPInputPassword({
           )}
 
           {(error || fieldState.error) && (
-            <p id={`${fieldName}-helper`} className="text-destructive mt-2 text-xs" role="alert">
+            <p
+              id={`${fieldName}-helper`}
+              className={cn('text-destructive mt-2 text-xs')}
+              role="alert"
+            >
               {error || fieldState.error?.message}
             </p>
           )}

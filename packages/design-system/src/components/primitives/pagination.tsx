@@ -65,7 +65,7 @@ function PaginationPrevious({ className, label = 'Previous', ...props }: Paginat
       {...props}
     >
       <ChevronLeftIcon />
-      <span className="hidden sm:block">{label}</span>
+      <span className={cn('hidden sm:block')}>{label}</span>
     </PaginationLink>
   );
 }
@@ -78,7 +78,7 @@ function PaginationNext({ className, label = 'Next', ...props }: PaginationButto
       className={cn('gap-1 px-2.5 sm:pr-2.5', className)}
       {...props}
     >
-      <span className="hidden sm:block">{label}</span>
+      <span className={cn('hidden sm:block')}>{label}</span>
       <ChevronRightIcon />
     </PaginationLink>
   );
@@ -92,8 +92,8 @@ function PaginationEllipsis({ className, ...props }: React.ComponentProps<'span'
       className={cn('flex size-9 items-center justify-center', className)}
       {...props}
     >
-      <MoreHorizontalIcon className="size-4" />
-      <span className="sr-only">More pages</span>
+      <MoreHorizontalIcon className={cn('size-4')} />
+      <span className={cn('sr-only')}>More pages</span>
     </span>
   );
 }

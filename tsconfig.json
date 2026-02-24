@@ -19,7 +19,6 @@
   },
   "references": [   
     { "path": "./templates/demo" },
-    { "path": "./apps/applications-center" },
     { "path": "./packages/design-system" },
     { "path": "./packages/design-system-storybook" },
     { "path": "./packages/framework/next" },    

@@ -44,7 +44,7 @@ function IGRPButton({
     iconSize || (size === 'sm' ? 14 : size === 'lg' ? 20 : size === 'icon' ? 18 : 16);
 
   const LoadingIcon = (
-    <IGRPIcon iconName="LoaderCircle" className="animate-spin" aria-hidden="true" />
+    <IGRPIcon iconName="LoaderCircle" className={cn('animate-spin')} aria-hidden="true" />
   );
 
   if (size === 'icon' || size === 'icon-sm' || size === 'icon-lg') {
@@ -59,10 +59,10 @@ function IGRPButton({
         {loading ? (
           <>
             {LoadingIcon}
-            <span className="sr-only">{loadingText}</span>
+            <span className={cn('sr-only')}>{loadingText}</span>
           </>
         ) : (
-          <IGRPIcon iconName={iconName} className={iconClassName} aria-hidden="true" />
+          <IGRPIcon iconName={iconName} className={cn(iconClassName)} aria-hidden="true" />
         )}
       </Button>
     );
@@ -82,7 +82,7 @@ function IGRPButton({
           iconPlacement === 'start' && (
             <IGRPIcon
               iconName={iconName}
-              className={iconClassName}
+              className={cn(iconClassName)}
               size={computedIconSize}
               aria-hidden="true"
             />
@@ -93,7 +93,7 @@ function IGRPButton({
       {!loading && showIcon && iconPlacement === 'end' && (
         <IGRPIcon
           iconName={iconName}
-          className={iconClassName}
+          className={cn(iconClassName)}
           size={computedIconSize}
           aria-hidden="true"
         />

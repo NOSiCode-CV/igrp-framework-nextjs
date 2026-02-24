@@ -1,15 +1,10 @@
 'use client';
 
-import Link from 'next/link';
-import { usePathname } from 'next/navigation';
 import {
-  IGRPIcon,
   IGRPSidebarPrimitive,
   IGRPSidebarContentPrimitive,
   IGRPSidebarFooterPrimitive,
   IGRPSidebarHeaderPrimitive,
-  IGRPSidebarMenuPrimitive,
-  IGRPSidebarMenuButtonPrimitive,
   IGRPSidebarRailPrimitive,
 } from '@igrp/igrp-framework-react-design-system';
 import type { IGRPSidebarDataArgs } from '@igrp/framework-next-types';
@@ -26,8 +21,7 @@ interface IGRPTemplateSidebarProps extends React.ComponentProps<typeof IGRPSideb
 function IGRPTemplateSidebar({ data, baseUrl, ...props }: IGRPTemplateSidebarProps) {
   if (!data) throw new Error('Dados de Sidebar é obrigatorio.');
 
-  const pathname = usePathname();
-  const { footerItems, menuItems, user, showAppSwitcher, apps, appCode, appCenterUrl } = data;
+  const { menuItems, user, showAppSwitcher, apps, appCode, appCenterUrl } = data;
 
   return (
     <IGRPSidebarPrimitive collapsible="icon" {...props}>
@@ -42,22 +36,6 @@ function IGRPTemplateSidebar({ data, baseUrl, ...props }: IGRPTemplateSidebarPro
       </IGRPSidebarContentPrimitive>
 
       <IGRPSidebarFooterPrimitive>
-        <IGRPSidebarMenuPrimitive>
-          {footerItems?.map(({ name, url, icon }, index) => (
-            <IGRPSidebarMenuButtonPrimitive
-              asChild
-              isActive={pathname === url || (url !== '/' && pathname?.startsWith(url || ''))}
-              tooltip={name}
-              key={`footer-menu-${index}`}
-            >
-              <Link href={url || ''}>
-                {icon && <IGRPIcon iconName={icon} />}
-                <span>{name}</span>
-              </Link>
-            </IGRPSidebarMenuButtonPrimitive>
-          ))}
-        </IGRPSidebarMenuPrimitive>
-
         <IGRPTemplateNavUser user={user} />
       </IGRPSidebarFooterPrimitive>
 

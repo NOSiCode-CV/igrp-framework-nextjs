@@ -23,11 +23,15 @@ function IGRPTemplateNotFound({
   appCode,
 }: IGRPTemplateNotFoundProps) {
   return (
-    <div className="flex min-h-[calc(100vh-12rem)] items-center justify-center bg-background px-4 py-16">
-      <div className="w-full max-w-2xl">
-        <div className="text-center">
+    <div
+      className={cn(
+        'flex min-h-[calc(100vh-12rem)] items-center justify-center bg-background px-4 py-16',
+      )}
+    >
+      <div className={cn('w-full max-w-2xl')}>
+        <div className={cn('text-center')}>
           {image && (
-            <div className="mb-8 flex justify-center">
+            <div className={cn('mb-8 flex justify-center')}>
               <IGRPImage
                 src={image}
                 alt={imageAlt}
@@ -38,23 +42,25 @@ function IGRPTemplateNotFound({
             </div>
           )}
 
-          <h1 className="mb-4 text-6xl font-bold tracking-tight text-foreground sm:text-7xl">
+          <h1 className={cn('mb-4 text-6xl font-bold tracking-tight text-foreground sm:text-7xl')}>
             {title}
           </h1>
 
-          <h2 className="mb-4 text-2xl font-semibold tracking-tight text-foreground sm:text-3xl">
+          <h2
+            className={cn('mb-4 text-2xl font-semibold tracking-tight text-foreground sm:text-3xl')}
+          >
             Página não encontrada
           </h2>
 
-          <p className="mb-8 text-base text-muted-foreground sm:text-lg">{description}</p>
+          <p className={cn('mb-8 text-base text-muted-foreground sm:text-lg')}>{description}</p>
 
-          <div className="flex flex-col items-center justify-center gap-4 sm:flex-row">
-            <IGRPButton asChild size="lg" className="min-w-40">
+          <div className={cn('flex flex-col items-center justify-center gap-4 sm:flex-row')}>
+            <IGRPButton asChild size="lg" className={cn('min-w-40')}>
               <Link href="/">Voltar à Página Inicial</Link>
             </IGRPButton>
           </div>
 
-          {appCode && <span className="sr-only">{appCode}</span>}
+          {appCode && <span className={cn('sr-only')}>{appCode}</span>}
         </div>
       </div>
     </div>

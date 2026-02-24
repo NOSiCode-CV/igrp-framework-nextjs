@@ -120,7 +120,6 @@ export const DesempenhoEquipe: StoryObj<IGRPVerticalBarChartProps> = {
     categoryKey: 'equipe',
     legendPosition: 'bottom',
     valueFormatter: (value) => `${value}%`,
-    showXAxis: true,
     footer: { description: 'Equipe de Vendas superou a meta estabelecida' },
   },
 };
@@ -138,7 +137,6 @@ export const VendasPorRegiao: StoryObj<IGRPVerticalBarChartProps> = {
     categoryKey: 'regiao',
     legendPosition: 'bottom',
     valueFormatter: (value) => value.toLocaleString(),
-    showXAxis: true,
     tooltipIndicator: 'dot',
   },
 };
@@ -153,7 +151,6 @@ export const SatisfacaoProdutos: StoryObj<IGRPVerticalBarChartProps> = {
     categoryKey: 'produto',
     valueFormatter: (value) => `${value}/5`,
     valueDomain: [3.5, 5],
-    showXAxis: true,
     footer: {
       description: 'Satisfação média aumentou em relação ao período anterior',
     },
@@ -176,7 +173,6 @@ export const AvaliacaoCursos: StoryObj<IGRPVerticalBarChartProps> = {
     valueFormatter: (value) => `${value}%`,
     valueDomain: [60, 100],
     stacked: true, // Can be toggled in controls
-    showXAxis: true,
     footer: { description: 'DevOps tem a avaliação mais baixa entre iniciantes' },
   },
 };
@@ -192,7 +188,6 @@ export const EstiloPersonalizado: StoryObj<IGRPVerticalBarChartProps> = {
     valueFormatter: (value) => `★ ${value.toFixed(1)}`,
     barRadius: 15,
     showGrid: true,
-    showXAxis: true,
     hideAxis: false,
     footer: { description: 'Produtos de hardware têm melhor avaliação' },
   },

@@ -9,6 +9,7 @@ import {
   CardHeader as IGRPCardHeader,
   CardTitle as IGRPCardTitle,
 } from '../primitives/card';
+import { cn } from '../../lib/utils';
 
 interface CardProps {
   name?: string;
@@ -20,7 +21,7 @@ function IGRPCard({ className, id, name, ...props }: IGRPCardProps) {
   const _id = useId();
   const ref = name ?? id ?? _id;
 
-  return <Card className={className} id={ref} {...props} />;
+  return <Card className={cn(className)} id={ref} {...props} />;
 }
 
 export {

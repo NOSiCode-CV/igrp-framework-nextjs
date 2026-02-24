@@ -1,5 +1,7 @@
 import { AlertCircle, type LucideProps, icons } from 'lucide-react';
 
+import { cn } from '../../../lib/utils';
+
 type IGRPIconName = keyof typeof icons;
 
 const IGRPIconObject = Object.keys(icons).sort();
@@ -22,7 +24,7 @@ function IGRPIcon({
 
   if (!LucideIcon) {
     console.warn('Invalid icon::', { iconName });
-    return <AlertCircle className="text-destructive" />;
+    return <AlertCircle className={cn('text-destructive')} />;
   }
 
   const ref = id ?? iconName;

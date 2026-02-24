@@ -159,7 +159,6 @@ export const RadarChartCustomLabel: StoryObj<IGRPRadarChartProps> = {
         <text
           x={x}
           y={index === 0 ? y - 10 : y}
-          textAnchor={textAnchor}
           fontSize={13}
           fontWeight={500}
           className='fill-foreground'

@@ -163,11 +163,15 @@ function IGRPForm<TSchema extends AnyZod>({
       <Form {...form}>
         <form className={className} onSubmit={handleFormSubmit} noValidate id={ref}>
           {formError && (
-            <div className="mb-4 p-3 border border-destructive bg-destructive/10 rounded-md text-destructive text-sm">
+            <div
+              className={cn(
+                'mb-4 p-3 border border-destructive bg-destructive/10 rounded-md text-destructive text-sm',
+              )}
+            >
               {formError}
             </div>
           )}
-          <FieldSet disabled={disabled} className="border-0 p-0 m-0 gap-0">
+          <FieldSet disabled={disabled} className={cn('border-0 p-0 m-0 gap-0')}>
             <div className={cn('grid gap-4', gridClassName)}>{children}</div>
           </FieldSet>
         </form>

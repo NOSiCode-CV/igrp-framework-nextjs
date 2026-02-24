@@ -159,10 +159,10 @@ function FieldSeparator({
       )}
       {...props}
     >
-      <Separator className="absolute inset-0 top-1/2" />
+      <Separator className={cn('absolute inset-0 top-1/2')} />
       {children && (
         <span
-          className="bg-background text-muted-foreground relative mx-auto block w-fit px-2"
+          className={cn('bg-background text-muted-foreground relative mx-auto block w-fit px-2')}
           data-slot="field-separator-content"
         >
           {children}
@@ -194,7 +194,7 @@ function FieldError({
     }
 
     return (
-      <ul className="ml-4 flex list-disc flex-col gap-1">
+      <ul className={cn('ml-4 flex list-disc flex-col gap-1')}>
         {errors.map((error, index) => error?.message && <li key={index}>{error.message}</li>)}
       </ul>
     );

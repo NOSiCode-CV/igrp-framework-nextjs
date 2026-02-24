@@ -14,7 +14,7 @@ export async function fetchAppByCode(appCode: string) {
     return app[0];
   } catch (error) {
     console.error('[app-by-code] Não foi possível obter os dados da aplicação:', error);
-    throw error;
+    throw new Error();
   }
 }
 
@@ -26,6 +26,6 @@ export async function fetchAppsByUser() {
     return apps;
   } catch (error) {
     console.error('[apps-by-user] Erro ao carregar os dados da aplicação.:', error);
-    throw error;
+    throw new Error();
   }
 }

@@ -146,7 +146,7 @@ function IGRPDataTable<TData, TValue>({
   });
 
   const NotFoundRowSubComponent = (
-    <div className="flex items-center gap-2 p-3">
+    <div className={cn('flex items-center gap-2 p-3')}>
       <IGRPIcon iconName="OctagonAlert" />
       <span>N/A</span>
     </div>
@@ -154,7 +154,11 @@ function IGRPDataTable<TData, TValue>({
 
   return (
     <div className={cn('flex flex-col gap-4', className)} id={ref}>
-      <div className="flex flex-col md:flex-row md:items-center md:justify-between md:flex-1 gap-3">
+      <div
+        className={cn(
+          'flex flex-col md:flex-row md:items-center md:justify-between md:flex-1 gap-3',
+        )}
+      >
         {showFilter &&
           (isServerSide ? (
             serverFilterComponent
@@ -178,14 +182,14 @@ function IGRPDataTable<TData, TValue>({
         <Table className={tableClassName}>
           <TableHeader className={tableHeaderClassName}>
             {table.getHeaderGroups().map((headerGroup) => (
-              <TableRow key={headerGroup.id} className="border-b dark:border-slate-800/60">
+              <TableRow key={headerGroup.id} className={cn('border-b dark:border-slate-800/60')}>
                 {headerGroup.headers.map((header) => {
                   return (
                     <TableHead
                       key={header.id}
                       colSpan={header.colSpan}
                       style={{ width: `${header.getSize()}px` }}
-                      className="font-semibold px-3"
+                      className={cn('font-semibold px-3')}
                     >
                       {header.isPlaceholder
                         ? null
@@ -215,7 +219,9 @@ function IGRPDataTable<TData, TValue>({
                       {row.getVisibleCells().map((cell) => (
                         <TableCell
                           key={cell.id}
-                          className="p-3 truncate h-[inherit] [&:has([aria-expanded])]:w-px [&:has([aria-expanded])]:py-0 [&:has([aria-expanded])]:pr-0"
+                          className={cn(
+                            'p-3 truncate h-[inherit] [&:has([aria-expanded])]:w-px [&:has([aria-expanded])]:py-0 [&:has([aria-expanded])]:pr-0',
+                          )}
                         >
                           {flexRender(cell.column.columnDef.cell, cell.getContext())}
                         </TableCell>
@@ -241,13 +247,16 @@ function IGRPDataTable<TData, TValue>({
               //   '[&:last-child>td:last-child]:rounded-br-lg',
               // )}
               >
-                <TableCell colSpan={columns.length} className="h-24 text-center font-semibold">
+                <TableCell
+                  colSpan={columns.length}
+                  className={cn('h-24 text-center font-semibold')}
+                >
                   {notFoundLabel}
                 </TableCell>
               </TableRow>
             )}
           </TableBody>
-          <tbody aria-hidden="true" className="table-row h-1"></tbody>
+          <tbody aria-hidden="true" className={cn('table-row h-1')}></tbody>
         </Table>
       </div>
 

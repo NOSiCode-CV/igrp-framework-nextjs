@@ -16,8 +16,6 @@ import {
   IGRPTooltipTriggerPrimitive,
 } from '@igrp/igrp-framework-react-design-system';
 
-import { dependencies } from '@igrp/igrp-framework-react-design-system/package.json';
-
 const meta: Meta<IGRPIconProps> = {
   title: 'Components/Icons',
   component: IGRPIcon,
@@ -88,7 +86,7 @@ function IconGalleryComponent() {
       <div className='p-8 space-y-4'>
         <div className='flex gap-8 items-center'>
           <h3 className='font-semibold text-xl'>
-            Browse for Lucide Icons version {dependencies['lucide-react']}
+            Browse Lucide Icons
           </h3>
           <div className='relative flex-1'>
             <IGRPIcon
@@ -128,7 +126,7 @@ function IconGalleryComponent() {
 
         <IGRPSeparatorPrimitive className='my-6' />
 
-        <div className='grid grid-cols-[repeat(auto-fill,_minmax(56px,_1fr))] gap-4 w-full'>
+        <div className='grid grid-cols-[repeat(auto-fill,minmax(56px,1fr))] gap-4 w-full'>
           {filteredIcons.length > 0 ? (
             filteredIcons.map((iconName) => (
               <IGRPAlertDialogPrimitive

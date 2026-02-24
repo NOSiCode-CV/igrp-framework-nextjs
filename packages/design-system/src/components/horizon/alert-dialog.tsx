@@ -15,7 +15,6 @@ import {
   AlertDialogHeader,
   AlertDialogTitle,
 } from '../primitives/alert-dialog';
-import { type IGRPButtonProps } from './button';
 import { IGRPIcon, type IGRPIconName } from './icon';
 
 interface IGRPAlertDialogProps extends Omit<IGRPBaseAttributes, 'ref'> {
@@ -34,8 +33,8 @@ interface IGRPAlertDialogProps extends Omit<IGRPBaseAttributes, 'ref'> {
   onAction?: () => void;
   onCancel?: () => void;
   showCancel?: boolean;
-  actionProps?: Partial<IGRPButtonProps>;
-  cancelProps?: Partial<IGRPButtonProps>;
+  actionProps?: Partial<React.ComponentProps<typeof AlertDialogAction>>;
+  cancelProps?: Partial<React.ComponentProps<typeof AlertDialogCancel>>;
   id?: string;
 }
 
@@ -83,9 +82,9 @@ function IGRPAlertDialog({
   return (
     <Slot id={ref}>
       <AlertDialog open={open} onOpenChange={onOpenChange}>
-        <AlertDialogContent className={className}>
+        <AlertDialogContent className={cn(className)}>
           {showIcon && iconPlacement === 'center' && (
-            <div className="flex justify-center -mt-2">
+            <div className={cn('flex justify-center -mt-2')}>
               <AlertIcon
                 iconName={iconName || iconDefault}
                 bgClass={softColors.bg}
@@ -108,13 +107,13 @@ function IGRPAlertDialog({
                 iconPlacement={iconPlacement}
               />
             )}
-            <div className="flex-1">
+            <div className={cn('flex-1')}>
               <AlertDialogHeader className={cn(iconPlacement === 'center' && 'items-center')}>
                 {title && (
                   <AlertDialogTitle className={cn(titleClassName)}>{title}</AlertDialogTitle>
                 )}
                 {description && (
-                  <AlertDialogDescription className={descriptionClassName}>
+                  <AlertDialogDescription className={cn(descriptionClassName)}>
                     {description}
                   </AlertDialogDescription>
                 )}

@@ -2,6 +2,7 @@
 'use client';
 
 import { RadarChart, Radar, PolarGrid, PolarAngleAxis, PolarRadiusAxis, Legend } from 'recharts';
+import { cn } from '../../../lib/utils';
 import {
   ChartContainer,
   ChartTooltip,
@@ -74,15 +75,18 @@ function IGRPRadarChart({
       style={backgroundColor ? { backgroundColor } : undefined}
     >
       {(title || description) && (
-        <div className="pb-3">
-          {title && <div className="text-xl font-semibold">{title}</div>}
-          {description && <div className="text-sm text-muted-foreground">{description}</div>}
+        <div className={cn('pb-3')}>
+          {title && <div className={cn('text-xl font-semibold')}>{title}</div>}
+          {description && <div className={cn('text-sm text-muted-foreground')}>{description}</div>}
         </div>
       )}
 
-      <div className="overflow-hidden">
-        <div style={{ height: chartHeight, width: chartWidth }} className="w-full overflow-hidden">
-          <ChartContainer className="h-full w-full" config={chartConfig}>
+      <div className={cn('overflow-hidden')}>
+        <div
+          style={{ height: chartHeight, width: chartWidth }}
+          className={cn('w-full overflow-hidden')}
+        >
+          <ChartContainer className={cn('h-full w-full')} config={chartConfig}>
             <RadarChart
               data={data}
               margin={{
@@ -144,7 +148,7 @@ function IGRPRadarChart({
                   verticalAlign={getLegendVerticalAlign(legendPosition)}
                   align={getLegendHorizontalAlign(legendPosition)}
                   layout={getLegendLayout(legendPosition)}
-                  content={<ChartLegendContent className="text-xs" />}
+                  content={<ChartLegendContent className={cn('text-xs')} />}
                 />
               )}
 
@@ -168,9 +172,9 @@ function IGRPRadarChart({
       </div>
 
       {footer && (
-        <div className="flex-col items-start gap-2 text-sm pt-4">
+        <div className={cn('flex-col items-start gap-2 text-sm pt-4')}>
           {footer.description && (
-            <div className="leading-none text-muted-foreground">{footer.description}</div>
+            <div className={cn('leading-none text-muted-foreground')}>{footer.description}</div>
           )}
         </div>
       )}

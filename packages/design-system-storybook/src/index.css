@@ -1,6 +1,6 @@
 @import 'tailwindcss';
 
-@import '@igrp/igrp-framework-react-design-system/dist/styles.css';
+@import '@igrp/igrp-framework-react-design-system/styles';
 
 @custom-variant dark (&:is(.dark *));
 

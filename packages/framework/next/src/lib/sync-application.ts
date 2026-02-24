@@ -25,10 +25,6 @@ export async function igrpSyncApplication({
   m2mServiceId,
   m2mToken,
 }: IGRPSyncApplicationArgs) {
-  console.log('================================================');
-  console.log({ appInformation, baseUrl, appCode, m2mServiceId, m2mToken });
-  console.log('================================================');
-
   const payload: ApplicationDTO = {
     id: 0,
     code: appCode || `APP_${toUpperCaseIdentifier(appInformation.name)}`,
@@ -52,5 +48,5 @@ export async function igrpSyncApplication({
 
   await accessManagementClient.m2m.syncApplications(payload);
 
-  console.log('Application', appCode, 'metadata synced successfully.');
+  console.info('Application', appCode, 'metadata synced successfully.');
 }

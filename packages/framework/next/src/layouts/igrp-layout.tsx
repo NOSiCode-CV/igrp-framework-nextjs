@@ -12,10 +12,6 @@ export type IGRPLayoutArgs = {
 export async function IGRPLayout({ children, config }: IGRPLayoutArgs) {
   const layoutConfig = config;
 
-  console.log('================================================');
-  console.log(layoutConfig);
-  console.log('================================================');
-
   const {
     appCode,
     previewMode,

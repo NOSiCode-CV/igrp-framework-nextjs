@@ -8,5 +8,5 @@ export function getPackageJson() {
     description: pkg.description,
     displayName: pkg.displayName,
   };
-  return appInfo
+  return appInfo;
 }

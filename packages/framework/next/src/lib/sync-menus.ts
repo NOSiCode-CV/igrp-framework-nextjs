@@ -24,13 +24,9 @@ export async function igrpSyncMenus({
   m2mToken,
   syncEnabled,
 }: IGRPSyncMenusArgs) {
-  console.log('================================================');
-  console.log({ appCode, menus, baseUrl, m2mServiceId, m2mToken, syncEnabled });
-  console.log('================================================');
-
   if (!syncEnabled) {
-    console.log(
-      'On code menus synchronization skipped due to disabling. ' +
+    console.warn(
+      '✖ On code menus synchronization skipped due to disabling. ' +
         'To re-enable it set IGRP_SYNC_ON_CODE_MENUS=true in environment variables.',
     );
     return;
@@ -58,7 +54,7 @@ export async function igrpSyncMenus({
     }),
   );
 
-  console.log(
-    'On code menus synchronized successfully. To disable it set IGRP_SYNC_ON_CODE_MENUS as false in environment variables.',
+  console.info(
+    '✔ On code menus synchronized successfully. To disable it set IGRP_SYNC_ON_CODE_MENUS as false in environment variables.',
   );
 }

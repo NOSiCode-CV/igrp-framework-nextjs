@@ -3,6 +3,7 @@ import {
   IGRPInfoCard,
   type IGRPInfoCardProps,
   IGRPColorObjectVariants,
+  IGRPColorObjectRole,
 } from '@igrp/igrp-framework-react-design-system';
 
 const meta: Meta<typeof IGRPInfoCard> = {
@@ -28,6 +29,14 @@ const meta: Meta<typeof IGRPInfoCard> = {
     variantSection: {
       control: 'select',
       options: IGRPColorObjectVariants,
+    },
+    colorSection: {
+      control: 'select',
+      options: IGRPColorObjectRole,
+    },
+    orientation: {
+      control: 'select',
+      options: ['vertical', 'horizontal'],
     },
     // size: {
     //   control: 'select',
@@ -75,8 +84,10 @@ export const Default: Story = {
       },
       {
         items: [{ label: 'Data de Registro', text: '15/03/2024', icon: 'Calendar' }],
-      },
+      },      
     ],
+    variantSection: 'solid',
+    colorSection: 'success',
   },
 };
 

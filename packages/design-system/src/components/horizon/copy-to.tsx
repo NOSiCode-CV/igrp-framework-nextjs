@@ -44,7 +44,7 @@ function IGRPCopyTo({
   }, []);
 
   async function handleCopy() {
-    if (!value || value.trim() === '') {
+    if (!value) {
       igrpToast({
         type: 'error',
         title: errorMessage,
@@ -104,7 +104,7 @@ function IGRPCopyTo({
                 copied ? 'scale-100 opacity-100' : 'scale-0 opacity-0',
               )}
             >
-              <IGRPIcon iconName="Check" className="stroke-primary" strokeWidth={2} />
+              <IGRPIcon iconName="Check" className={cn('stroke-primary')} strokeWidth={2} />
             </div>
             <div
               className={cn(
@@ -112,11 +112,11 @@ function IGRPCopyTo({
                 copied ? 'scale-0 opacity-0' : 'scale-100 opacity-100',
               )}
             >
-              <IGRPIcon iconName="Copy" strokeWidth={2} className="size-3" />
+              <IGRPIcon iconName="Copy" strokeWidth={2} className={cn('size-3')} />
             </div>
           </Button>
         </TooltipTrigger>
-        <TooltipContent className="px-2 py-1 text-xs">{tooltipMessage}</TooltipContent>
+        <TooltipContent className={cn('px-2 py-1 text-xs')}>{tooltipMessage}</TooltipContent>
       </Tooltip>
     </TooltipProvider>
   );

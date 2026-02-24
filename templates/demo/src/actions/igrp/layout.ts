@@ -1,8 +1,11 @@
 "use server";
 
+import type { IGRPLayoutConfigArgs } from "@igrp/framework-next-types";
+import type { Session } from "@igrp/framework-next-auth";
 import { cookies } from "next/headers";
 
 import { getAccessToken } from "@/lib/auth-helpers";
+import { AUTH_CONSTANTS } from "@/lib/constants";
 import { isPreviewMode } from "@/lib/utils";
 
 export async function getTheme() {
@@ -13,18 +16,28 @@ export async function getTheme() {
   return { activeThemeValue, isScaled };
 }
 
-export async function configLayout() {
-  // Check preview mode
+/**
+ * Creates a preview session object for development/demo mode.
+ * This session bypasses authentication checks while maintaining type safety.
+ */
+function createPreviewSession(): Session {
+  return {
+    user: {
+      name: "Preview User",
+      email: "preview@example.com",
+    },
+    accessToken: AUTH_CONSTANTS.PREVIEW_TOKEN,
+    expiresAt: Date.now() + AUTH_CONSTANTS.PREVIEW_SESSION_EXPIRY_MS,
+    expires: "",
+  };
+}
 
+export async function configLayout(): Promise<IGRPLayoutConfigArgs> {
   // In preview mode, provide a mock session object to prevent client-side redirects
   // The framework might check for session existence rather than just previewMode
-  const session = isPreviewMode()
-    ? ({
-        user: { name: "Preview User", email: "preview@example.com" },
-        accessToken: "preview-token",
-        expires: "9999-12-31T23:59:59.999Z",
-      } as any)
-    : await getAccessToken();
+  const session: Session | null = isPreviewMode()
+    ? createPreviewSession()
+    : ((await getAccessToken()) as Session | null);
 
   const { activeThemeValue, isScaled } = await getTheme();
 

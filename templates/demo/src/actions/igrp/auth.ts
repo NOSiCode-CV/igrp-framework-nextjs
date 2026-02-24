@@ -5,32 +5,16 @@ import { getServerSession, type Session } from "@igrp/framework-next-auth";
 import { redirect } from "next/navigation";
 
 import { authOptions } from "@/lib/auth-options";
+import { AUTH_CONSTANTS } from "@/lib/constants";
+import { EnvValidationError, logger } from "@/lib/errors";
+import { validateEnv } from "@/lib/env";
+import { isPreviewMode } from "@/lib/utils";
 
-export async function serverSession() {
+export async function serverSession(): Promise<Session | null> {
   const apiManagement = process.env.IGRP_ACCESS_MANAGEMENT_API || "";
 
   try {
-    if (!process.env.NEXTAUTH_SECRET) {
-      console.warn(
-        "NEXTAUTH_SECRET is not set. This is required for production.",
-      );
-      if (process.env.NODE_ENV === "production") {
-        throw new Error("NEXTAUTH_SECRET must be set in production");
-      }
-    }
-
-    if (
-      !process.env.KEYCLOAK_CLIENT_ID ||
-      !process.env.KEYCLOAK_CLIENT_SECRET ||
-      !process.env.KEYCLOAK_ISSUER
-    ) {
-      console.warn(
-        "Warning: One or more Keycloak environment variables are missing.",
-      );
-      throw new Error(
-        "One or more Keycloak environment variables are missing.",
-      );
-    }
+    validateEnv();
 
     const session = await getServerSession(authOptions);
 
@@ -42,22 +26,30 @@ export async function serverSession() {
     }
     return session;
   } catch (error) {
-    console.error("::Error getting server session::", error);
+    if (error instanceof EnvValidationError) {
+      logger.error("[Auth] Environment validation failed", error, {
+        missingVars: error.missingVars,
+      });
+      if (process.env.NODE_ENV === "production") {
+        throw error;
+      }
+      return null;
+    }
+    logger.error("[Auth] Getting server session failed", error);
     return null;
   }
 }
 
-export async function getSession() {
+export async function getSession(): Promise<Session | null> {
+  if (isPreviewMode()) return null;
+
   let session: Session | null;
-  const isPreviewMode = process.env.IGRP_PREVIEW_MODE === "true";
-
-  if (isPreviewMode) return null;
-
   try {
     session = await serverSession();
     if (!session) return session;
 
-    const now = Math.floor(Date.now() / 1000) + 60;
+    const now =
+      Math.floor(Date.now() / 1000) + AUTH_CONSTANTS.TOKEN_EXPIRY_BUFFER_SEC;
 
     const providerExp =
       typeof session.expiresAt === "number" ? session.expiresAt : undefined;
@@ -65,11 +57,10 @@ export async function getSession() {
     const refreshFailed = session.error === "RefreshAccessTokenError";
 
     if (providerExpired || refreshFailed) {
-      const logout = "/logout";
-      redirect(logout);
+      redirect("/logout");
     }
   } catch (error) {
-    console.error("Failed to get session in layout:", error);
+    logger.error("Failed to get session in layout", error);
     session = null;
   }
 

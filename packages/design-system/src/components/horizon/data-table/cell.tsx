@@ -9,6 +9,8 @@ import { IGRPBadge, type IGRPBadgeProps } from '../badge';
 import { IGRPIcon } from '../icon';
 import { IGRPLink, type IGRPLinkProps } from '../typography/link';
 import { DD_MM_YYYY } from '../../../lib/constants';
+import { cn } from '../../../lib/utils';
+import { Switch } from '../../primitives/switch';
 
 interface IGRPDataTableCellCheckboxProps<TData> extends React.ComponentProps<typeof Checkbox> {
   row: Row<TData>;
@@ -25,6 +27,27 @@ function IGRPDataTableCellCheckbox<TData>({
       disabled={!row.getCanSelect()}
       onCheckedChange={(value) => row.toggleSelected(!!value)}
       aria-label="Select row"
+      className={className}
+      {...props}
+    />
+  );
+}
+
+interface IGRPDataTableCellSwitchProps<TData> extends React.ComponentProps<typeof Switch> {
+  row: Row<TData>;
+}
+
+function IGRPDataTableCellSwitch<TData>({
+  row,
+  className,
+  ...props
+}: IGRPDataTableCellSwitchProps<TData>) {
+  return (
+    <Switch
+      checked={row.getIsSelected()}
+      disabled={!row.getCanSelect()}
+      onCheckedChange={(value) => row.toggleSelected(!!value)}
+      aria-label="Toggle row"
       className={className}
       {...props}
     />
@@ -89,7 +112,7 @@ function IGRPDataTableCellBadge({
   variant,
   color,
   size,
-  badgeClassName,
+  badgeClassName = '',
   ...props
 }: IGRPDataTableCellBadgeProps) {
   return (
@@ -112,7 +135,9 @@ interface IGRPDataTableCellDateProps {
 
 function IGRPDataTableCellDate({ date, dateFormat = DD_MM_YYYY }: IGRPDataTableCellDateProps) {
   if (!date) return null;
-  return <span>{format(new Date(date), dateFormat)}</span>;
+  const d = date instanceof Date ? date : new Date(date);
+  if (Number.isNaN(d.getTime())) return null;
+  return <span>{format(d, dateFormat)}</span>;
 }
 
 function IGRPDataTableCellLink({
@@ -159,11 +184,11 @@ function IGRPDataTableCellTooltip({
     <TooltipProvider delayDuration={200}>
       <Tooltip>
         <TooltipTrigger asChild>
-          <div className="cursor-help whitespace-nowrap truncate">
+          <div className={cn('cursor-help whitespace-nowrap truncate')}>
             <span>{text}</span>
           </div>
         </TooltipTrigger>
-        <TooltipContent side={side} align={align} sideOffset={4} className="max-w-sm">
+        <TooltipContent side={side} align={align} sideOffset={4} className={cn('max-w-sm')}>
           {text}
         </TooltipContent>
       </Tooltip>
@@ -173,6 +198,7 @@ function IGRPDataTableCellTooltip({
 
 export {
   IGRPDataTableCellCheckbox,
+  IGRPDataTableCellSwitch,
   IGRPDataTableCellExpander,
   IGRPDataTableCellAmount,
   IGRPDataTableCellBadge,
@@ -180,6 +206,7 @@ export {
   IGRPDataTableCellLink,
   IGRPDataTableCellTooltip,
   type IGRPDataTableCellExpanderProps,
+  type IGRPDataTableCellSwitchProps,
   type IGRPDataTableCellAmountProps,
   type IGRPDataTableCellBadgeProps,
   type IGRPDataTableCellDateProps,

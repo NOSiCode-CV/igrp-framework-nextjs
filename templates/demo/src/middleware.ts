@@ -1,5 +1,8 @@
 import { type NextRequest, NextResponse } from "next/server";
 import { getToken } from "@igrp/framework-next-auth";
+
+import { AUTH_CONSTANTS } from "@/lib/constants";
+import { logger } from "@/lib/errors";
 import { isPreviewMode } from "@/lib/utils";
 
 const PUBLIC_PATHS = ["/login", "/logout", "/api/auth"];
@@ -15,6 +18,12 @@ function isPublicPath(pathname: string) {
   return false;
 }
 
+function loginRedirect(request: NextRequest) {
+  return NextResponse.redirect(
+    new URL("/login", process.env.NEXTAUTH_URL_INTERNAL ?? request.url),
+  );
+}
+
 export async function middleware(request: NextRequest) {
   const { pathname } = request.nextUrl;
 
@@ -22,26 +31,30 @@ export async function middleware(request: NextRequest) {
 
   if (isPublicPath(pathname)) return NextResponse.next();
 
-  const token = await getToken({ req: request });
+  let token: Awaited<ReturnType<typeof getToken>>;
+  try {
+    token = await getToken({ req: request });
+  } catch (error) {
+    logger.error("[Middleware] getToken failed", error, { pathname });
+    return loginRedirect(request);
+  }
 
   if (!token) {
-    return NextResponse.redirect(
-      new URL("/login", process.env.NEXTAUTH_URL_INTERNAL ?? request.url),
-    );
+    return loginRedirect(request);
   }
 
   const expiresAt =
     typeof token.expiresAt === "number" ? token.expiresAt : undefined;
-  const isExpired = expiresAt !== undefined && expiresAt <= Date.now() + 60_000;
+  const isExpired =
+    expiresAt !== undefined &&
+    expiresAt <= Date.now() + AUTH_CONSTANTS.TOKEN_REFRESH_BUFFER_MS;
 
   if (
     isExpired ||
     token.error === "RefreshAccessTokenError" ||
     token.error === "invalid_grant"
   ) {
-    return NextResponse.redirect(
-      new URL("/login", process.env.NEXTAUTH_URL_INTERNAL ?? request.url),
-    );
+    return loginRedirect(request);
   }
 
   return NextResponse.next();

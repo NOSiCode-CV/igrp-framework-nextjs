@@ -81,7 +81,7 @@ function IGRPInfoField({ item }: IGRPInfoFieldProps) {
   // const colorClass = IGRPColors[item.variantItem || 'solid'][item.colorItem || 'primary'];
 
   return (
-    <div className={cn('flex flex-col gap-0.5' /*, colorClass.text*/ )}>
+    <div className={cn('flex flex-col gap-0.5' /*, colorClass.text*/)}>
       <span className={cn('text-sm font-medium')}>{item.label}</span>
       <div className={cn('flex items-center gap-2')}>
         {item.showIcon && item.icon && (

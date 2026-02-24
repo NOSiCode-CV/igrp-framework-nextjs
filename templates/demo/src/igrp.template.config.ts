@@ -12,14 +12,14 @@ import { getPackageJson } from "./lib/config/get-pkj";
 import { getSessionArgs } from "./lib/config/get-session-args";
 import { getRoutes } from "./lib/config/get-routes";
 
-export function createConfig(
+export async function createConfig(
   config: IGRPLayoutConfigArgs,
 ): Promise<IGRPConfigArgs> {
   const user = getMockUser().mockUser;
   const menu = getMockMenus().mockMenus;
   const apps = getMockApps().mockApps;
 
-  const routes = getRoutes();
+  const routes = await getRoutes();
   const appRoutes = routes?.appRoutes ?? [];
   const paramMapBody = routes?.paramMapBody ?? "";
 

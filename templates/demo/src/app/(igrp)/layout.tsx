@@ -1,4 +1,3 @@
-import { IGRPLayout } from "@igrp/framework-next";
 import type { IGRPLayoutConfigArgs } from "@igrp/framework-next-types";
 import { createConfig } from "@igrp/template-config";
 
@@ -6,13 +5,16 @@ import { headers } from "next/headers";
 import { redirect } from "next/navigation";
 
 import { configLayout } from "@/actions/igrp/layout";
+import { setupEnvironment } from "@/lib/env-setup";
 import { isPreviewMode as checkPreviewMode } from "@/lib/utils";
 
 export default async function IGRPRootLayout({
   children,
-}: Readonly<{ children: React.ReactNode }>) {
+}: Readonly<{ children: React.ReactNode }>): Promise<React.ReactNode> {
+  setupEnvironment();
+
   const layoutConfig = await configLayout();
-  const config = await createConfig(layoutConfig as IGRPLayoutConfigArgs);
+  const config = await createConfig(layoutConfig);
 
   const { layout, previewMode } = config;
   const { session } = layout || {};
@@ -40,5 +42,6 @@ export default async function IGRPRootLayout({
     redirect(urlLogin);
   }
 
+  const { IGRPLayout } = await import("@igrp/framework-next");
   return <IGRPLayout config={config}>{children}</IGRPLayout>;
 }

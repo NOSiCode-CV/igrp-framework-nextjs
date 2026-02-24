@@ -1,3 +1,4 @@
+import { AUTH_CONSTANTS } from "../constants";
 import { isPreviewMode } from "../utils";
 import { getBasePath } from "./get-base-path";
 
@@ -11,7 +12,7 @@ export function getSessionArgs() {
   }
 
   return {
-    refetchInterval: 5 * 60,
+    refetchInterval: AUTH_CONSTANTS.SESSION_REFETCH_INTERVAL_SEC,
     refetchOnWindowFocus: true,
     basePath: getBasePath(process.env.NEXT_PUBLIC_BASE_PATH || ""),
   };

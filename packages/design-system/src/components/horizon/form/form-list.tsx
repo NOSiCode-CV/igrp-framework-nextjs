@@ -1,14 +1,6 @@
 'use client';
 
-import { 
-  forwardRef, 
-  useCallback, 
-  useContext, 
-  useEffect, 
-  useId, 
-  useRef, 
-  useState 
-} from 'react';
+import { forwardRef, useCallback, useContext, useEffect, useId, useRef, useState } from 'react';
 import { useFieldArray, useWatch } from 'react-hook-form';
 
 import { cn } from '../../../lib/utils';
@@ -21,13 +13,7 @@ import {
   AccordionContent,
 } from '../../primitives/accordion';
 import { Button } from '../../primitives/button';
-import { 
-  Card, 
-  CardContent, 
-  CardHeader, 
-  CardTitle, 
-  CardDescription 
-} from '../../primitives/card';
+import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '../../primitives/card';
 import { IGRPBadge, type IGRPBadgeProps } from '../badge';
 import { IGRPIcon, type IGRPIconName } from '../icon';
 import { IGRPFormContext } from './form-context';
@@ -247,7 +233,7 @@ function FormListLayout<TItem>({
   computeLabel,
   renderItem,
   allowEmpty,
-  allowMultipleOpen = false,  
+  allowMultipleOpen = false,
   renderRemoveAction,
   onRemove,
   openItem,
@@ -295,15 +281,16 @@ function FormListLayout<TItem>({
             </AccordionTrigger>
           </div>
 
-          {canRemove && onItemRemove && (
-            renderRemoveAction ? (
+          {canRemove &&
+            onItemRemove &&
+            (renderRemoveAction ? (
               renderRemoveAction({
                 index,
                 ariaLabel: removeAriaLabel,
                 onRemove: onItemRemove,
                 onTriggerClick: onRemoveTriggerClick,
               })
-            ) : (              
+            ) : (
               <Button
                 type="button"
                 variant="ghost"
@@ -317,8 +304,7 @@ function FormListLayout<TItem>({
               >
                 <IGRPIcon iconName="Trash2" />
               </Button>
-            )
-          )}
+            ))}
         </div>
 
         <AccordionContent className={cn('p-4')}>
@@ -406,7 +392,7 @@ const IGRPFormListInner = <TItem,>(
     addButtonIconName = 'Plus',
     addButtonClassName,
     allowEmpty = false,
-    allowMultipleOpen = false,    
+    allowMultipleOpen = false,
     renderRemoveAction,
     onItemRemove,
     value,
@@ -447,7 +433,7 @@ const IGRPFormListInner = <TItem,>(
         addButtonIconName={addButtonIconName}
         addButtonClassName={addButtonClassName}
         allowEmpty={allowEmpty}
-        allowMultipleOpen={allowMultipleOpen}        
+        allowMultipleOpen={allowMultipleOpen}
         renderRemoveAction={renderRemoveAction}
         onItemRemove={onItemRemove}
         ref={ref}
@@ -480,7 +466,7 @@ const IGRPFormListInner = <TItem,>(
       addButtonIconName={addButtonIconName}
       addButtonClassName={addButtonClassName}
       allowEmpty={allowEmpty}
-      allowMultipleOpen={allowMultipleOpen}      
+      allowMultipleOpen={allowMultipleOpen}
       renderRemoveAction={renderRemoveAction}
       onItemRemove={onItemRemove}
       value={value}
@@ -515,7 +501,7 @@ function FormListFormMode<TItem>({
   addButtonIconName = 'Plus',
   addButtonClassName,
   allowEmpty = false,
-  allowMultipleOpen = false,  
+  allowMultipleOpen = false,
   renderRemoveAction,
   onItemRemove,
   ref,
@@ -608,9 +594,18 @@ function FormListFormMode<TItem>({
           setOpenItem(getAccordionValue(currentIndex - 1));
         }
       }
-
     },
-    [remove, openItem, openItems, fields.length, allowEmpty, allowMultipleOpen, values, defaultItem, onItemRemove],
+    [
+      remove,
+      openItem,
+      openItems,
+      fields.length,
+      allowEmpty,
+      allowMultipleOpen,
+      values,
+      defaultItem,
+      onItemRemove,
+    ],
   );
 
   return (
@@ -685,7 +680,7 @@ function FormListStandaloneMode<TItem>({
   addButtonIconName = 'Plus',
   addButtonClassName,
   allowEmpty = false,
-  allowMultipleOpen = false,  
+  allowMultipleOpen = false,
   renderRemoveAction,
   onItemRemove,
   value,
@@ -831,7 +826,7 @@ function FormListStandaloneMode<TItem>({
         renderItem(item, index, onChange)
       }
       allowEmpty={allowEmpty}
-      allowMultipleOpen={allowMultipleOpen}      
+      allowMultipleOpen={allowMultipleOpen}
       renderRemoveAction={renderRemoveAction}
       onRemove={handleRemove}
       openItem={allowMultipleOpen ? undefined : openItem}

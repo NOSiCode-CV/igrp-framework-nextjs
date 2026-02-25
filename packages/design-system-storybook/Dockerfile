@@ -28,7 +28,7 @@ RUN pnpm --filter @igrp/igrp-framework-react-design-system build:mac
 
 # Build Storybook from workspace
 WORKDIR /igrp-framework-nextjs/packages/design-system-storybook
-RUN pnpm build-storybook -- --output-dir storybook-static --stats-json
+RUN pnpm exec storybook build --output-dir storybook-static --stats-json
 
 
 # ---------- Production image ----------

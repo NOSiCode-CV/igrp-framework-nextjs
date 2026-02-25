@@ -113,4 +113,5 @@ igrp-next-template.zip
 /storybook-static
 *storybook.log
 
-.npmrc
+.npmrc.example
+

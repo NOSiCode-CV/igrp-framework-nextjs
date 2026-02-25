@@ -4,16 +4,36 @@ import type { Meta, StoryObj } from '@storybook/nextjs-vite';
 import {
   IGRPFormList,
   IGRPInputText,
+  IGRPInputNumber,
+  IGRPCheckbox,
   IGRPSelect,
   IGRPCombobox,
+  IGRPButton,
+  IGRPIcon,
+  IGRPAlertDialogPrimitive,
+  IGRPAlertDialogTriggerPrimitive,
+  IGRPAlertDialogContentPrimitive,
+  IGRPAlertDialogHeaderPrimitive,
+  IGRPAlertDialogTitlePrimitive,
+  IGRPAlertDialogDescriptionPrimitive,
+  IGRPAlertDialogFooterPrimitive,
+  IGRPAlertDialogCancelPrimitive,
+  IGRPAlertDialogActionPrimitive,
   IGRPForm,
   type IGRPFormHandle,
   type IGRPOptionsProps,
+  cn,
 } from '@igrp/igrp-framework-react-design-system';
 
 const meta: Meta<typeof IGRPFormList> = {
   title: 'Components/FormList',
   component: IGRPFormList,
+  argTypes: {
+    allowMultipleOpen: {
+      control: 'boolean',
+      description: 'When true, multiple items can be expanded at once. When false, opening one closes the others.',
+    },
+  },
 };
 export default meta;
 
@@ -97,7 +117,66 @@ const mockOptions: IGRPOptionsProps[] = [
   },
 ];
 
+type ActividadeEconomicaItem = {
+  idActividadeEconomica: string;
+  taxa: number;
+  principal: boolean;
+};
+
+const selectidActividadeEconomicaOptions: (IGRPOptionsProps & { taxa: number })[] = [
+  {
+    value: 'construction',
+    label:
+      'Construção civil, incluindo obras públicas, privadas e infraestruturas complexas que exigem planeamento urbano, gestão de materiais e equipas multidisciplinares especializadas',
+    description: 'Obras públicas e privadas',
+    taxa: 1200,
+  },
+  {
+    value: 'tourism',
+    label:
+      'Turismo e hotelaria com foco em resorts, alojamentos locais, restauração e experiências culturais prolongadas que envolvem atendimento personalizado e gestão de visitantes internacionais',
+    description: 'Hotéis, agências de viagens e turismo',
+    taxa: 950,
+  },
+  {
+    value: 'it-services',
+    label:
+      'Tecnologias de informação, desenvolvimento de software, consultoria, suporte técnico, integração de sistemas empresariais e serviços geridos para operações críticas de negócio',
+    description: 'Serviços de software e consultoria',
+    taxa: 800,
+  },
+  {
+    value: 'retail',
+    label:
+      'Comércio e retalho em lojas físicas e canais digitais, incluindo gestão de inventário, logística, atendimento omnicanal e promoção contínua de produtos para diversos segmentos',
+    description: 'Lojas, supermercados e comércio a retalho',
+    taxa: 675,
+  },
+];
+
+const formListactividadesEconomicasDefault: ActividadeEconomicaItem = {
+  idActividadeEconomica: '',
+  taxa: 0,
+  principal: false,
+};
+
+const actividadesEconomicasBadgeValue = 'SOAT';
+
+const renderLabel = (item: ActividadeEconomicaItem, index: number) => {
+  const option = selectidActividadeEconomicaOptions.find(
+    (opt) => opt.value === item.idActividadeEconomica,
+  );
+  const baseLabel = option?.label ?? `Item ${index + 1}`;
+  return item.principal ? `${baseLabel} (Principal)` : baseLabel;
+};
+
 const defaultItem = { label: '', label1: '' };
+const customRemoveDefaultValues: FormValues = {
+  socials: [
+    { label: 'Twitter', label1: 'user_1' },
+    { label: 'LinkedIn', label1: 'user_2' },
+  ],
+};
 
 const renderItem = (_: FormValues['socials'][0], index: number) => (
   <div className='grid gap-4'>
@@ -182,6 +261,153 @@ const OptionalTemplate = () => {
 
 export const FormListOptional: StoryObj = {
   render: () => <OptionalTemplate />,
+};
+
+const AllowMultipleOpenTemplate = () => {
+  const formRef = useRef<IGRPFormHandle<typeof schema>>(null);
+
+  return (
+    <div className='mx-auto px-6 py-8'>
+      <div className='mb-4 p-4 bg-green-50 border border-green-200 rounded-md'>
+        <p className='text-sm font-medium text-green-900 mb-1'>
+          ✨ allowMultipleOpen Demo
+        </p>
+        <p className='text-xs text-green-700'>
+          Multiple items can be expanded at once. Opening one does not close the others.
+        </p>
+      </div>
+      <IGRPForm
+        schema={schema}
+        formRef={formRef}
+        defaultValues={{
+          socials: [
+            { label: 'Twitter', label1: 'user_1' },
+            { label: 'LinkedIn', label1: 'user_2' },
+            { label: 'GitHub', label1: 'apple' },
+          ],
+        }}
+        onSubmit={(data) => console.log('Form submitted (allowMultipleOpen):', data)}
+      >
+        <IGRPFormList
+          id='allow-multiple-open-example'
+          name='socials'
+          label='Social Links'
+          description='Expand multiple items at once'
+          badgeValue='allowMultipleOpen'
+          defaultItem={defaultItem}
+          renderItem={renderItem}
+          allowMultipleOpen
+          computeLabel={(item: FormValues['socials'][0], index: number) =>
+            item.label ? `${item.label} - ${item.label1}` : `Item ${index + 1}`
+          }
+        />
+      </IGRPForm>
+    </div>
+  );
+};
+
+export const FormListAllowMultipleOpen: StoryObj = {
+  render: () => <AllowMultipleOpenTemplate />,
+};
+
+const FormListCustomRemoveActionTemplate = () => {
+  const formRef = useRef<IGRPFormHandle<typeof schema>>(null);
+  const [blockRemove, setBlockRemove] = useState(false);
+  const [lastRemoved, setLastRemoved] = useState<{
+    item: FormValues['socials'][0];
+    index: number;
+  } | null>(null);
+
+  return (
+    <div className='mx-auto px-6 py-8'>
+      <IGRPForm
+        schema={schema}
+        formRef={formRef}
+        defaultValues={customRemoveDefaultValues}
+        onSubmit={(data) => console.log('Form submitted (custom remove action):', data)}
+      >
+        <IGRPFormList
+          id='custom-remove-action-example'
+          name='socials'
+          label='Social Links'
+          description='Custom remove button with renderRemoveAction + AlertDialog. onItemRemove runs first.'
+          badgeValue='custom remove'
+          defaultItem={defaultItem}
+          renderItem={renderItem}
+          computeLabel={(item: FormValues['socials'][0], index: number) =>
+            item.label ? `${item.label} - ${item.label1}` : `Item ${index + 1}`
+          }
+          onItemRemove={(item, index) => {
+            if (blockRemove) {
+              throw new Error('Blocked by onItemRemove callback');
+            }
+            setLastRemoved({ item, index });
+            console.log('onItemRemove callback:', { item, index });
+          }}
+          renderRemoveAction={({ ariaLabel, onRemove, onTriggerClick }) => (
+            <IGRPAlertDialogPrimitive>
+              <IGRPAlertDialogTriggerPrimitive asChild>
+                <IGRPButton
+                  type='button'
+                  variant='ghost'
+                  size='icon-sm'
+                  onClick={onTriggerClick}
+                  className='size-7 p-0 shrink-0 hover:text-destructive'
+                  aria-label={ariaLabel}
+                >
+                  <IGRPIcon iconName='Trash2' />
+                </IGRPButton>
+              </IGRPAlertDialogTriggerPrimitive>
+
+              <IGRPAlertDialogContentPrimitive onClick={(e) => e.stopPropagation()}>
+                <IGRPAlertDialogHeaderPrimitive>
+                  <IGRPAlertDialogTitlePrimitive>Remover item?</IGRPAlertDialogTitlePrimitive>
+                  <IGRPAlertDialogDescriptionPrimitive>
+                    Esta acao vai remover este item da lista e nao pode ser desfeita.
+                  </IGRPAlertDialogDescriptionPrimitive>
+                </IGRPAlertDialogHeaderPrimitive>
+                <IGRPAlertDialogFooterPrimitive>
+                  <IGRPAlertDialogCancelPrimitive>Cancelar</IGRPAlertDialogCancelPrimitive>
+                  <IGRPAlertDialogActionPrimitive
+                    className='bg-destructive text-white hover:bg-destructive/90'
+                    onClick={onRemove}
+                  >
+                    Confirmar
+                  </IGRPAlertDialogActionPrimitive>
+                </IGRPAlertDialogFooterPrimitive>
+              </IGRPAlertDialogContentPrimitive>
+            </IGRPAlertDialogPrimitive>
+          )}
+        />
+      </IGRPForm>
+      <div className='mt-4 p-4 bg-muted rounded-md'>
+        <div className='mb-3'>
+          <IGRPButton
+            type='button'
+            variant={blockRemove ? 'destructive' : 'outline'}
+            size='sm'
+            onClick={() => setBlockRemove((prev) => !prev)}
+          >
+            {blockRemove ? 'Blocking remove (onItemRemove throws)' : 'Allowing remove'}
+          </IGRPButton>
+          <p className='text-xs text-muted-foreground mt-2'>
+            Toggle to test the new flow: `onItemRemove` executes first; if it throws, the item is not
+            removed.
+          </p>
+        </div>
+        <p className='text-sm text-muted-foreground mb-2'>Last removed item callback:</p>
+        {lastRemoved ? (
+          <pre className='text-xs overflow-auto'>{JSON.stringify(lastRemoved, null, 2)}</pre>
+        ) : (
+          <p className='text-xs text-muted-foreground italic'>No items removed yet</p>
+        )}
+      </div>
+    </div>
+  );
+};
+
+export const FormListRenderRemoveActionAlertDialog: StoryObj = {
+  render: () => <FormListCustomRemoveActionTemplate />,
 };
 
 // Standalone version with allowEmpty - starts empty
@@ -322,6 +548,106 @@ const AllowEmptyFormTemplate = () => {
 
 export const FormListAllowEmptyForm: StoryObj = {
   render: () => <AllowEmptyFormTemplate />,
+};
+
+const ActividadesEconomicasTemplate = () => {
+  const [items, setItems] = useState<ActividadeEconomicaItem[]>([
+    formListactividadesEconomicasDefault,
+  ]);
+
+  return (
+    <>
+      <IGRPFormList<ActividadeEconomicaItem>
+        id='actividadesEconomicas'
+        label='Sector de Actividade/SOAT'
+        color='primary'
+        variant='solid'
+        addButtonLabel='Add'
+        iconName='Briefcase'
+        addButtonIconName='Plus'
+        value={items}
+        onChange={setItems}
+        renderItem={(item, index, onChange) => {
+          const handleActividadeChange = (value: string) => {
+            const option = selectidActividadeEconomicaOptions.find(
+              (opt) => opt.value === value,
+            );
+            onChange?.({
+              ...item,
+              idActividadeEconomica: value,
+              taxa: option?.taxa ?? 0,
+            });
+          };
+
+          return (
+            <div className={cn('grid', 'grid-cols-2 ', 'md:grid-cols-2 ', 'lg:grid-cols-2 ', ' gap-4',)}>
+              <IGRPCombobox
+                id={`actividadesEconomicas.${index}.idActividadeEconomica`}
+                label='Actividade'
+                variant='single'
+                placeholder='Select an option...'
+                required
+                selectLabel='No option found'
+                showSearch
+                showIcon={false}
+                iconName='CornerDownRight'
+                className={cn('col-span-1')}
+                value={item.idActividadeEconomica}
+                onChange={(value) => handleActividadeChange(value as string)}
+                options={selectidActividadeEconomicaOptions}
+              />
+              <IGRPInputNumber
+                id={`actividadesEconomicas.${index}.taxa`}
+                label='SOAT'
+                max={9999999}
+                step={1}
+                required
+                disabled
+                className={cn('col-span-1')}
+                value={item.taxa}
+                onChange={(value) =>
+                  onChange?.({
+                    ...item,
+                    taxa: Number(value) || 0,
+                  })
+                }
+              />
+              <IGRPCheckbox
+                id={`actividadesEconomicas.${index}.principal`}
+                label='Principal'
+                className={cn('col-span-1')}
+                checked={item.principal}
+                onCheckedChange={(checked) =>
+                  onChange?.({
+                    ...item,
+                    principal: Boolean(checked),
+                  })
+                }
+              />
+            </div>
+          );
+        }}
+        computeLabel={(item: ActividadeEconomicaItem, index: number) =>
+          `${renderLabel(item, index)}`
+        }
+        className={cn()}
+        defaultItem={formListactividadesEconomicasDefault}
+        badgeValue={actividadesEconomicasBadgeValue}
+      />
+      <div className='mt-4 p-4 bg-muted rounded-md'>
+        <p className='text-sm text-muted-foreground mb-2'>
+          Current activities ({items.length} {items.length === 1 ? 'item' : 'items'}):
+        </p>
+        <pre className='text-xs overflow-auto'>
+          {JSON.stringify(items, null, 2)}
+        </pre>
+      </div>
+    </>
+  );
+};
+
+export const FormListEconomicActivities: StoryObj = {
+  render: () => <ActividadesEconomicasTemplate />,
 };
 
 // Standalone version without form context

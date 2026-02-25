@@ -37,7 +37,7 @@ function IGRPCheckbox({
   if (!formContext) {
     return (
       <div className={cn('*:not-first:mt-2')}>
-        <div className="flex items-center gap-2">
+        <div className={cn('flex items-center gap-2')}>
           <Checkbox
             id={fieldName}
             name={fieldName}
@@ -64,7 +64,7 @@ function IGRPCheckbox({
         {helperText && !error && (
           <p
             id={`${fieldName}-helper`}
-            className="text-muted-foreground mt-2 text-xs"
+            className={cn('text-muted-foreground mt-2 text-xs')}
             role="region"
             aria-live="polite"
           >
@@ -73,7 +73,7 @@ function IGRPCheckbox({
         )}
 
         {error && (
-          <p id={`${fieldName}-error`} className="text-destructive mt-2 text-xs" role="alert">
+          <p id={`${fieldName}-error`} className={cn('text-destructive mt-2 text-xs')} role="alert">
             {error}
           </p>
         )}

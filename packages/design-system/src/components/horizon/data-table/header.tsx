@@ -42,7 +42,7 @@ function IGRPDataTableHeaderSortToggle<T>({
   return (
     <div
       aria-label={`Ordenar por ${title}`}
-      className={cn('flex items-center gap-2 w-full', className)}
+      className={cn(className)}
       aria-sort={ariaSort as React.AriaAttributes['aria-sort']}
       {...props}
     >
@@ -50,18 +50,18 @@ function IGRPDataTableHeaderSortToggle<T>({
         <Button
           variant="ghost"
           onClick={(e) => column.toggleSorting(undefined, e.shiftKey)}
-          className="px-0 py-0 has-[>svg]:px-0 data-[state=open]:bg-accent"
+          className={cn('px-0 py-0 has-[>svg]:px-0 data-[state=open]:bg-accent')}
           title="Ordenar"
           size="sm"
         >
           <span>{title}</span>
 
           {isSorted === 'asc' ? (
-            <ChevronUp className="ms-2 text-muted-foreground/70" />
+            <ChevronUp className={cn('ms-2 text-muted-foreground/70')} />
           ) : isSorted === 'desc' ? (
-            <ChevronDown className="ms-2 text-muted-foreground/70" />
+            <ChevronDown className={cn('ms-2 text-muted-foreground/70')} />
           ) : (
-            <ArrowUpDown className="ms-2 text-muted-foreground/70" />
+            <ArrowUpDown className={cn('ms-2 text-muted-foreground/70')} />
           )}
         </Button>
       ) : (
@@ -84,11 +84,7 @@ function IGRPDataTableHeaderSortDropdown<T>({
   const handleSortDesc = () => column.toggleSorting(true);
 
   return (
-    <div
-      aria-label={`Sort by ${title}`}
-      className={cn('flex items-center gap-2', className)}
-      {...props}
-    >
+    <div aria-label={`Sort by ${title}`} className={cn(className)} {...props}>
       {canSort ? (
         <DropdownMenu>
           <DropdownMenuTrigger asChild>
@@ -99,21 +95,21 @@ function IGRPDataTableHeaderSortDropdown<T>({
             >
               <span>{title}</span>
               {isSorted === 'desc' ? (
-                <ArrowDown className="ms-2 text-muted-foreground/70" />
+                <ArrowDown className={cn('ms-2 text-muted-foreground/70')} />
               ) : isSorted === 'asc' ? (
-                <ArrowUp className="ms-2 text-muted-foreground/70" />
+                <ArrowUp className={cn('ms-2 text-muted-foreground/70')} />
               ) : (
-                <ChevronsUpDown className="ms-2 text-muted-foreground/70" />
+                <ChevronsUpDown className={cn('ms-2 text-muted-foreground/70')} />
               )}
             </Button>
           </DropdownMenuTrigger>
           <DropdownMenuContent align="start">
             <DropdownMenuItem onClick={handleSortAsc} aria-label="Sort ascending">
-              <ArrowUp className="text-muted-foreground/70 size-3.5" />
+              <ArrowUp className={cn('text-muted-foreground/70 size-3.5')} />
               Asc
             </DropdownMenuItem>
             <DropdownMenuItem onClick={handleSortDesc} aria-label="Sort descending">
-              <ArrowDown className="text-muted-foreground/70 size-3.5" />
+              <ArrowDown className={cn('text-muted-foreground/70 size-3.5')} />
               Desc
             </DropdownMenuItem>
             <DropdownMenuSeparator />

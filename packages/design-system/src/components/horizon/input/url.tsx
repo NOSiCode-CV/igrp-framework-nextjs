@@ -109,13 +109,17 @@ function IGRPInputUrl({
           <IGRPLabel label={label} className={className} required={required} id={fieldName} />
         )}
 
-        <div className="flex rounded-md shadow-xs">
+        <div className={cn('flex rounded-md shadow-xs')}>
           <Select
             value={localProtocol}
             onValueChange={handleStandaloneProtocolChange}
             disabled={props.disabled}
           >
-            <SelectTrigger className="border-0 shadow-none border-l border-b border-t rounded-l-2xl rounded-none min-w-[100px]">
+            <SelectTrigger
+              className={cn(
+                'border-0 shadow-none border-l border-b border-t rounded-l-2xl rounded-none min-w-[100px]',
+              )}
+            >
               <SelectValue placeholder={defaultProtocol} />
             </SelectTrigger>
             <SelectContent>
@@ -148,7 +152,7 @@ function IGRPInputUrl({
         {helperText && !error && (
           <p
             id={`${fieldName}-helper`}
-            className="text-muted-foreground mt-2 text-xs"
+            className={cn('text-muted-foreground mt-2 text-xs')}
             role="region"
             aria-live="polite"
           >
@@ -157,7 +161,7 @@ function IGRPInputUrl({
         )}
 
         {error && (
-          <p id={`${fieldName}-error`} className="text-destructive mt-2 text-xs" role="alert">
+          <p id={`${fieldName}-error`} className={cn('text-destructive mt-2 text-xs')} role="alert">
             {error}
           </p>
         )}
@@ -194,14 +198,18 @@ function IGRPInputUrl({
               <IGRPLabel label={label} className={className} required={required} id={fieldName} />
             )}
 
-            <div className="flex rounded-md shadow-xs">
+            <div className={cn('flex rounded-md shadow-xs')}>
               <Select
                 value={String(fieldProtocol)}
                 onValueChange={handleProtocolChange}
                 disabled={props.disabled}
                 onOpenChange={() => field.onBlur()}
               >
-                <SelectTrigger className="border-0 shadow-none border-l border-b border-t rounded-l-2xl rounded-none min-w-[100px]">
+                <SelectTrigger
+                  className={cn(
+                    'border-0 shadow-none border-l border-b border-t rounded-l-2xl rounded-none min-w-[100px]',
+                  )}
+                >
                   <SelectValue placeholder={defaultProtocol} />
                 </SelectTrigger>
                 <SelectContent>
@@ -238,7 +246,7 @@ function IGRPInputUrl({
             {helperText && !error && !fieldState.error && (
               <p
                 id={`${fieldName}-helper`}
-                className="text-muted-foreground mt-2 text-xs"
+                className={cn('text-muted-foreground mt-2 text-xs')}
                 role="region"
                 aria-live="polite"
               >
@@ -247,7 +255,11 @@ function IGRPInputUrl({
             )}
 
             {(error || fieldState.error) && (
-              <p id={`${fieldName}-error`} className="text-destructive mt-2 text-xs" role="alert">
+              <p
+                id={`${fieldName}-error`}
+                className={cn('text-destructive mt-2 text-xs')}
+                role="alert"
+              >
                 {error || fieldState.error?.message}
               </p>
             )}

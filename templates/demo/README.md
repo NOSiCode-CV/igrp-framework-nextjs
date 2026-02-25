@@ -16,7 +16,7 @@ A production-ready template for building applications with the IGRP Framework on
 - [Preview Mode](#preview-mode)
 - [Docker Support](#docker-support)
 
-## 🎯 Overview
+## Overview
 
 The IGRP Framework Next.js Template is a comprehensive starter template that includes:
 
@@ -31,7 +31,7 @@ The IGRP Framework Next.js Template is a comprehensive starter template that inc
 - **[Lucide](https://lucide.dev/icons/)** for icon library
 - **Modern UI Components** from IGRP Design System
 
-## 📦 Prerequisites
+## Prerequisites
 
 Before you begin, ensure you have the following installed:
 
@@ -39,7 +39,7 @@ Before you begin, ensure you have the following installed:
 - **pnpm** (recommended) or npm/yarn
 - **Git**
 
-## 🚀 Getting Started
+## Getting Started
 
 ### 1. Install Dependencies
 
@@ -86,9 +86,9 @@ pnpm build
 pnpm start
 ```
 
-## 📁 Project Structure
+## Project Structure
 
-```
+```text
 templates/demo/
 ├── src/
 │   ├── app/                   # Next.js App Router pages
@@ -121,7 +121,7 @@ templates/demo/
 └── package.json
 ```
 
-## ⚙️ Configuration
+## Configuration
 
 ### IGRP Configuration
 
@@ -149,12 +149,12 @@ Coming soon
 
 Coming soon
 
-## 🔐 Environment Variables
+## Environment Variables
 
 ### Required Variables
 
 | Variable | Description | Example |
-|----------|-------------|---------|
+| ---------- | ------------- | --------- |
 | `IGRP_APP_CODE` | Your application code identifier | `my-app` |
 | `NEXTAUTH_URL` | Public URL of your application | `http://localhost:3000` |
 | `NEXTAUTH_SECRET` | Secret key for NextAuth encryption | Generate with `openssl rand -base64 32` |
@@ -162,13 +162,15 @@ Coming soon
 ### Optional Variables
 
 | Variable | Description | Default |
-|----------|-------------|---------|
+| ---------- | ------------- | --------- |
 | `IGRP_PREVIEW_MODE` | Enable preview mode (no auth required) | `false` |
 | `IGRP_ACCESS_MANAGEMENT_API` | API Management base URL | - |
 | `NEXT_PUBLIC_BASE_PATH` | Base path for the application | `/` |
 | `NEXT_PUBLIC_IGRP_APP_HOME_SLUG` | Default home route | `/` |
 | `NEXT_IGRP_APP_CENTER_URL` | Application center URL | - |
 | `NEXT_PUBLIC_ALLOWED_DOMAINS` | Allowed image domains (comma-separated) | - |
+| `NEXT_PUBLIC_IGRP_PROFILE_URL` | Base URL for profile | - |
+| `NEXT_PUBLIC_IGRP_NOTIFICATION_URL` | Base URL for notification | - |
 | `IGRP_SYNC_ON_CODE_MENUS` | Enable synchronization of menus defined in code with the IGRP system | `false` |
 | `IGRP_SYNC_ACCESS` | Enable synchronization of applications, resources, and menus with the IGRP Access Management API | `true` |
 | `IGRP_M2M_SERVICE_ID` | Unique identifier for your service in the IGRP Access Management system (required when `IGRP_SYNC_ACCESS=true`) | - |
@@ -179,30 +181,46 @@ Coming soon
 The following variables control how your application synchronizes with the IGRP system:
 
 #### `IGRP_SYNC_ON_CODE_MENUS`
+
 - **Purpose**: Controls whether menus defined in your application code are synchronized with the IGRP system
 - **Usage**: Set to `true` to enable code-based menu synchronization, `false` to disable
 - **When to use**: Enable this if you want to sync menus that are hardcoded in your application with the IGRP framework
 
 #### `IGRP_SYNC_ACCESS`
+
 - **Purpose**: Controls synchronization of applications, resources, and menus with the IGRP Access Management API
 - **Usage**: Set to `true` to enable access management synchronization, `false` to disable
 - **When to use**: Enable this if you want your application to automatically sync its structure (applications, resources, menus) with the IGRP Access Management system
 - **Note**: Requires `IGRP_M2M_SERVICE_ID` and `IGRP_M2M_TOKEN` to be configured when enabled
 
 #### `IGRP_M2M_SERVICE_ID`
+
 - **Purpose**: Unique identifier for your service in the IGRP Access Management system
 - **Usage**: Set this to your service identifier (e.g., `demo-igrp` or `your-service-name`)
 - **Required when**: `IGRP_SYNC_ACCESS=true`
 - **How to get**: Contact your IGRP Access Management administrator
 
 #### `IGRP_M2M_TOKEN`
+
 - **Purpose**: Authentication token used for machine-to-machine API calls to the IGRP Access Management API
 - **Usage**: Set this to the token provided by your IGRP Access Management administrator
 - **Required when**: `IGRP_SYNC_ACCESS=true`
 - **How to get**: Contact your IGRP Access Management administrator
 - **Security**: Keep this token secure and never commit it to version control
 
-## 📜 Available Scripts
+#### `NEXT_PUBLIC_IGRP_PROFILE_URL`
+
+- **Purpose**: Base URL for profile
+- **Usage**: Used by the frontend profile
+- **Example**: `https://frontendexample.com/profile`
+
+#### `NEXT_PUBLIC_IGRP_NOTIFICATION_URL`
+
+- **Purpose**: Base URL for notification service calls/streams
+- **Usage**: Used by the frontend notifications
+- **Example**: `https://frontendexample.com/notifications`
+
+## Available Scripts
 
 ### Development
 
@@ -217,7 +235,7 @@ pnpm format
 pnpm lint
 ```
 
-### Production
+### Production Local Server
 
 ```bash
 # Build for production (includes formatting)
@@ -227,7 +245,7 @@ pnpm build
 pnpm start
 ```
 
-## 🏗️ How It's Built
+## How It's Built
 
 ### Architecture Overview
 
@@ -277,6 +295,32 @@ The template follows Next.js 15 App Router architecture with the following key c
 - **Tailwind CSS**: Utility-first CSS framework
 - **Biome**: Fast formatter and linter
 
+### Styling (Tailwind v4 + IGRP packages)
+
+This template compiles Tailwind **once in the app** and uses Tailwind v4 `@source` to scan both:
+
+- The template source files (`src/**`)
+- The compiled `dist/` output from the IGRP packages (so Tailwind utilities used inside those packages are generated too)
+
+See `src/styles/globals.css` for the active `@source` configuration.
+
+#### Tokens / theming
+
+- Base design tokens (CSS variables) are imported from the design system:
+  - `@igrp/igrp-framework-react-design-system/tokens`
+- Theme overrides live in:
+  - `src/styles/themes.css`
+
+#### Important
+
+- Do **not** import prebuilt `@igrp/*/styles.css` files in the template. They are static and can:
+  - miss utilities your pages need
+  - cause CSS override conflicts depending on import order
+
+If you're upgrading an existing app, check:
+
+- `.igrpmigrations/03.MIGRATIONS-04022026.md`
+
 ### Data Flow
 
 1. **Request arrives** → Middleware checks authentication
@@ -285,7 +329,7 @@ The template follows Next.js 15 App Router architecture with the following key c
 4. **Configuration built** → IGRP layout components render
 5. **Page renders** → With header, sidebar, and content
 
-## 🔒 Authentication
+## Authentication
 
 The template uses NextAuth.js for authentication. Configuration is in `src/lib/auth-options.ts`.
 
@@ -305,7 +349,7 @@ To customize authentication:
 2. Update `src/app/(auth)/login/page.tsx` for custom login UI
 3. Modify `src/middleware.ts` for custom auth logic
 
-## 👁️ Preview Mode
+## Preview Mode
 
 Preview mode allows you to develop and test without authentication:
 
@@ -326,9 +370,9 @@ When enabled:
 - `src/temp/menus/use-mock-menus.ts`
 - `src/temp/applications/use-mock-apps.ts`
 
-## 🐳 Docker Support
+## Docker Support
 
-### Development
+### Development Docker
 
 ```bash
 docker build -f docker/development/Dockerfile -t my-igrp-template:latest .
@@ -346,6 +390,13 @@ Use the production Dockerfile with appropriate environment variables.
 - [NextAuth.js Documentation](https://next-auth.js.org)
 - [React Query Documentation](https://tanstack.com/query/latest)
 
+### Design tokens reference
+
+If you want to override theme variables (tokens), see:
+
+- `TOKENS.md`
+  - Tip: tokens follow the shadcn/ui variable model; you can generate themes with `https://tweakcn.com/editor/theme`
+
 ## 🤝 Contributing
 
 Contributions are welcome! Please ensure you:
@@ -355,10 +406,10 @@ Contributions are welcome! Please ensure you:
 3. Test your changes thoroughly
 4. Update documentation as needed
 
-## 📄 License
+## License
 
 MIT License - see LICENSE file for details
 
 ---
 
-**Built with ❤️ by the IGRP Team**
+### Built with ❤️ by the IGRP Team**

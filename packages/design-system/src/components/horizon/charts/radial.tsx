@@ -14,6 +14,7 @@ import {
   type LegendType,
 } from 'recharts';
 
+import { cn } from '../../../lib/utils';
 import { ChartContainer, ChartTooltip } from '../../primitives/chart';
 import {
   createChartConfig,
@@ -161,15 +162,18 @@ function IGRPRadialBarChart({
       style={backgroundColor ? { backgroundColor } : undefined}
     >
       {(title || description) && (
-        <div className="pb-3">
-          {title && <div className="text-xl font-semibold">{title}</div>}
-          {description && <div className="text-sm text-muted-foreground">{description}</div>}
+        <div className={cn('pb-3')}>
+          {title && <div className={cn('text-xl font-semibold')}>{title}</div>}
+          {description && <div className={cn('text-sm text-muted-foreground')}>{description}</div>}
         </div>
       )}
 
-      <div className="overflow-hidden">
-        <div style={{ height: chartHeight, width: chartWidth }} className="w-full overflow-hidden">
-          <ChartContainer className="h-full w-full" config={chartConfig}>
+      <div className={cn('overflow-hidden')}>
+        <div
+          style={{ height: chartHeight, width: chartWidth }}
+          className={cn('w-full overflow-hidden')}
+        >
+          <ChartContainer className={cn('h-full w-full')} config={chartConfig}>
             <RadialBarChart
               data={enhancedData}
               startAngle={startAngle}
@@ -198,15 +202,15 @@ function IGRPRadialBarChart({
                     const fill = item._fill;
 
                     return (
-                      <div className="rounded-lg border bg-background p-2 shadow-md">
-                        <div className="flex flex-col gap-1">
-                          <div className="text-sm font-medium">{name}</div>
-                          <div className="flex items-center gap-2">
+                      <div className={cn('rounded-lg border bg-background p-2 shadow-md')}>
+                        <div className={cn('flex flex-col gap-1')}>
+                          <div className={cn('text-sm font-medium')}>{name}</div>
+                          <div className={cn('flex items-center gap-2')}>
                             <div
-                              className="h-3 w-3 rounded-full"
+                              className={cn('h-3 w-3 rounded-full')}
                               style={{ backgroundColor: fill }}
                             />
-                            <span className="text-sm">{formatValue(Number(value))}</span>
+                            <span className={cn('text-sm')}>{formatValue(Number(value))}</span>
                           </div>
                         </div>
                       </div>
@@ -233,7 +237,7 @@ function IGRPRadialBarChart({
                               <tspan
                                 x={viewBox.cx}
                                 y={viewBox.cy}
-                                className="fill-foreground text-3xl font-bold"
+                                className={cn('fill-foreground text-3xl font-bold')}
                               >
                                 {formattedTotal}
                               </tspan>
@@ -241,7 +245,7 @@ function IGRPRadialBarChart({
                                 <tspan
                                   x={viewBox.cx}
                                   y={(viewBox.cy || 0) + 24}
-                                  className="fill-muted-foreground"
+                                  className={cn('fill-muted-foreground')}
                                 >
                                   {centerText.label}
                                 </tspan>
@@ -270,7 +274,7 @@ function IGRPRadialBarChart({
                             <tspan
                               x={viewBox.cx}
                               y={viewBox.cy}
-                              className="fill-foreground text-3xl font-bold"
+                              className={cn('fill-foreground text-3xl font-bold')}
                             >
                               {formattedTotal}
                             </tspan>
@@ -278,7 +282,7 @@ function IGRPRadialBarChart({
                               <tspan
                                 x={viewBox.cx}
                                 y={(viewBox.cy || 0) + 24}
-                                className="fill-muted-foreground"
+                                className={cn('fill-muted-foreground')}
                               >
                                 {centerText.label}
                               </tspan>
@@ -297,7 +301,7 @@ function IGRPRadialBarChart({
                   background={showBackground}
                   cornerRadius={bars[0].cornerRadius}
                   stackId={bars[0].stackId}
-                  className="stroke-transparent stroke-2"
+                  className={cn('stroke-transparent stroke-2')}
                   name={bars[0].name || bars[0].dataKey}
                 >
                   {data.map((_, index) => (
@@ -311,7 +315,7 @@ function IGRPRadialBarChart({
                     <LabelList
                       dataKey={bars[0].labelType === 'name' ? nameKey : bars[0].dataKey}
                       position={bars[0].labelPosition || 'insideStart'}
-                      className="fill-white capitalize mix-blend-luminosity"
+                      className={cn('fill-white capitalize mix-blend-luminosity')}
                       fontSize={11}
                       style={bars[0].labelStyle}
                       formatter={(entry: { payload: any }) => {
@@ -332,13 +336,13 @@ function IGRPRadialBarChart({
                   background={showBackground}
                   cornerRadius={bar.cornerRadius}
                   stackId={bar.stackId}
-                  className="stroke-transparent stroke-2"
+                  className={cn('stroke-transparent stroke-2')}
                 >
                   {bar.showLabels && (
                     <LabelList
                       dataKey={bar.labelType === 'name' ? nameKey : bar.dataKey}
                       position={bar.labelPosition || 'insideStart'}
-                      className="fill-white capitalize mix-blend-luminosity"
+                      className={cn('fill-white capitalize mix-blend-luminosity')}
                       fontSize={11}
                       style={bar.labelStyle}
                       formatter={(entry: { payload: any }) => {
@@ -359,7 +363,7 @@ function IGRPRadialBarChart({
                   iconSize={10}
                   iconType="square"
                   wrapperStyle={{ paddingTop: 10 }}
-                  className="text-xs fill-foreground"
+                  className={cn('text-xs fill-foreground')}
                 />
               )}
             </RadialBarChart>
@@ -368,9 +372,9 @@ function IGRPRadialBarChart({
       </div>
 
       {footer && (
-        <div className="flex-col items-start gap-2 text-sm pt-4">
+        <div className={cn('flex-col items-start gap-2 text-sm pt-4')}>
           {footer.description && (
-            <div className="leading-none text-muted-foreground">{footer.description}</div>
+            <div className={cn('leading-none text-muted-foreground')}>{footer.description}</div>
           )}
         </div>
       )}

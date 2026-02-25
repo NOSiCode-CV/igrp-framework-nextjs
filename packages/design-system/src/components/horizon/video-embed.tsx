@@ -76,7 +76,7 @@ function IGRPVideoEmbed({
         )}
         id={ref}
       >
-        <p className="text-muted-foreground text-sm">Invalid video URL</p>
+        <p className={cn('text-muted-foreground text-sm')}>Invalid video URL</p>
       </div>
     );
   }

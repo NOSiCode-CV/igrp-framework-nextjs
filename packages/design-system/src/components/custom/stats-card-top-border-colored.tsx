@@ -1,5 +1,6 @@
 import { useId } from 'react';
 import { IGRPStatsCard, type IGRPStatsCardProps } from '../horizon/stats-card';
+import { cn } from '../../lib/utils';
 
 function IGRPStatsCardTopBorderColored({
   cardVariant,
@@ -22,8 +23,8 @@ function IGRPStatsCardTopBorderColored({
       title={title}
       value={value}
       iconVariant={cardVariant}
-      className={className}
-      iconClassName={iconClassName}
+      className={cn(className)}
+      iconClassName={cn(iconClassName)}
       iconName={iconName}
       cardBorder="rounded-lg"
       cardBorderPosition="top"
@@ -33,7 +34,7 @@ function IGRPStatsCardTopBorderColored({
       iconBackground="rounded"
       showIconBackground={true}
       iconSize="sm"
-      titleClassName="text-muted-foreground"
+      titleClassName={cn('text-muted-foreground')}
       titleSize="xs"
       valueSize="2xl"
       id={ref}

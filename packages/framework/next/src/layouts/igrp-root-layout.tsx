@@ -10,10 +10,6 @@ export type IGRPRootLayoutArgs = {
 export async function IGRPRootLayout({ children, config }: IGRPRootLayoutArgs) {
   const layoutConfig = config;
 
-  console.log('================================================');
-  console.log(layoutConfig);
-  console.log('================================================');
-
   const {
     font,
     layout,

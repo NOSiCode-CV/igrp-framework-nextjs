@@ -94,7 +94,7 @@ function IGRPInputSearch({
     onChange: (e: React.ChangeEvent<HTMLInputElement>) => void,
     onKeyDown?: (e: React.KeyboardEvent<HTMLInputElement>) => void,
   ) => (
-    <div className="relative py-2">
+    <div className={cn('relative py-2')}>
       <Input
         id={fieldName}
         name={fieldName}
@@ -117,7 +117,11 @@ function IGRPInputSearch({
       />
 
       {showStartIcon && (
-        <div className="text-muted-foreground/80 pointer-events-none absolute inset-y-0 start-0 flex items-center justify-center ps-1.5 peer-disabled:opacity-50">
+        <div
+          className={cn(
+            'text-muted-foreground/80 pointer-events-none absolute inset-y-0 start-0 flex items-center justify-center ps-1.5 peer-disabled:opacity-50',
+          )}
+        >
           <IGRPIcon iconName={startIcon} aria-hidden="true" size={14} />
         </div>
       )}

@@ -21,16 +21,16 @@ function IGRPTemplateLoading({
       aria-live="polite"
       aria-label={text}
     >
-      <div className="w-full max-w-md">
-        <div className="text-center">
+      <div className={cn('w-full max-w-md')}>
+        <div className={cn('text-center')}>
           <IGRPIcon
             iconName="LoaderCircle"
             strokeWidth={1}
-            className="size-16 animate-spin mx-auto mb-4 text-primary"
+            className={cn('size-16 animate-spin mx-auto mb-4 text-primary')}
             aria-hidden="true"
           />
-          <p className="text-lg font-medium text-foreground">{text}</p>
-          {appCode && <span className="sr-only">iGRP {appCode}</span>}
+          <p className={cn('text-lg font-medium text-foreground')}>{text}</p>
+          {appCode && <span className={cn('sr-only')}>iGRP {appCode}</span>}
         </div>
       </div>
     </div>

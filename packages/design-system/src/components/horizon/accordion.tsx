@@ -8,6 +8,7 @@ import {
   AccordionTrigger,
   type AccordionTriggerArgs,
 } from '../primitives/accordion';
+import { cn } from '../../lib/utils';
 
 interface IGRPAccordionItem extends Partial<AccordionTriggerArgs> {
   title: string;
@@ -47,7 +48,7 @@ function IGRPAccordion({
   return (
     <Accordion
       id={ref}
-      className={className}
+      className={cn(className)}
       type="single"
       collapsible
       defaultValue={`item-${defaultId}`}

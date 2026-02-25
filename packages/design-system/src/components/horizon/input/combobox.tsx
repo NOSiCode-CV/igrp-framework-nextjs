@@ -91,14 +91,17 @@ function IGRPCombobox({
       const iconValue = selected?.icon ?? iconName;
 
       return (
-        <span className={cn('flex items-center gap-2 truncate', selected?.color)}>
+        <span
+          className={cn('flex items-center gap-2 min-w-0 flex-1 overflow-hidden', selected?.color)}
+          style={{ maxWidth: '100%' }}
+        >
           {showStatus && selected?.status && (
-            <IGRPCircleFull className={cn('mr-1', igrpColorText(selected.status))} />
+            <IGRPCircleFull className={cn('shrink-0', igrpColorText(selected.status))} />
           )}
 
-          {showIcon && <IGRPIcon iconName={iconValue} />}
+          {showIcon && <IGRPIcon iconName={iconValue} className={cn('shrink-0')} />}
 
-          {labelValue}
+          <span className={cn('truncate min-w-0 flex-1 block')}>{labelValue}</span>
         </span>
       );
     }
@@ -122,13 +125,16 @@ function IGRPCombobox({
     };
 
     return (
-      <div className="flex gap-1 flex-wrap">
+      <div className={cn('flex gap-1 flex-wrap')}>
         {currentValue.map((val) => {
           const selected = options?.find((opt) => opt.value === val);
           if (!selected) return null;
 
           return (
-            <span key={val} className="flex items-center bg-gray-100 px-2 py-1 rounded-md gap-1">
+            <span
+              key={val}
+              className={cn('flex items-center bg-gray-100 px-2 py-1 rounded-md gap-1')}
+            >
               {showStatus && selected.status && (
                 <IGRPCircleFull className={igrpColorText(selected.status)} />
               )}
@@ -138,7 +144,7 @@ function IGRPCombobox({
               <span className={selected.color}>{selected.label}</span>
 
               <IGRPButton
-                className="ml-1 text-gray-400 hover:text-red-400 rounded-full size-5"
+                className={cn('ml-1 text-gray-400 hover:text-red-400 rounded-full size-5')}
                 onKeyDown={(e) => {
                   if (e.key === 'Enter') {
                     e.preventDefault();
@@ -213,9 +219,9 @@ function IGRPCombobox({
             <CommandItem
               key={`${groupName}-${value}`}
               onSelect={() => onSelectHandler(value)}
-              className="flex items-center justify-between cursor-pointer"
+              className={cn('flex items-center justify-between cursor-pointer')}
             >
-              <div className="flex items-center gap-2">
+              <div className={cn('flex items-center gap-2')}>
                 {showStatus && status && <IGRPCircleFull className={igrpColorText(status)} />}
 
                 {showIcon && <IGRPIcon iconName={icon ?? 'CornerDownRight'} />}
@@ -240,42 +246,48 @@ function IGRPCombobox({
     currentValue: string | string[],
     onChangeHandler: (value: string | string[]) => void,
   ) => (
-    <Popover open={open} onOpenChange={setOpen} modal>
-      <PopoverTrigger asChild>
-        <IGRPButton
-          name={fieldName}
-          variant="outline"
-          role="combobox"
-          aria-expanded={open}
-          className={cn(
-            'w-full justify-between',
-            className,
-            disabled && 'cursor-not-allowed pointer-events-none opacity-50',
-          )}
-          iconName="ChevronsUpDown"
-          iconPlacement="end"
-          iconClassName="ml-2 h-4 w-4 shrink-0 opacity-50"
-          showIcon
+    <div className={cn('w-full min-w-0 max-w-full')}>
+      <Popover open={open} onOpenChange={setOpen} modal>
+        <PopoverTrigger asChild>
+          <IGRPButton
+            name={fieldName}
+            variant="outline"
+            role="combobox"
+            aria-expanded={open}
+            className={cn(
+              'w-full justify-between overflow-hidden text-left max-w-full',
+              className,
+              disabled && 'cursor-not-allowed pointer-events-none opacity-50',
+            )}
+            iconName="ChevronsUpDown"
+            iconPlacement="end"
+            iconClassName="ml-2 h-4 w-4 shrink-0 opacity-50"
+            showIcon
+          >
+            {setSelectValue(currentValue, onChangeHandler)}
+          </IGRPButton>
+        </PopoverTrigger>
+        <PopoverContent
+          className={cn('p-0 max-w-[calc(100vw-2rem)]', selectClassName)}
+          align="start"
+          side="bottom"
         >
-          {setSelectValue(currentValue, onChangeHandler)}
-        </IGRPButton>
-      </PopoverTrigger>
-      <PopoverContent className={cn('p-0', selectClassName)} align="start" side="bottom">
-        <Command>
-          {showSearch && (
-            <div className="relative p-2">
-              <CommandInput placeholder={searchText} className="h-8" />
-              <CommandEmpty>{selectLabel}</CommandEmpty>
-            </div>
-          )}
-          <CommandList>
-            {renderOptionsList(currentValue, (selectedValue) => {
-              onOptionsChangeHandler(selectedValue, currentValue, onChangeHandler);
-            })}
-          </CommandList>
-        </Command>
-      </PopoverContent>
-    </Popover>
+          <Command>
+            {showSearch && (
+              <div className={cn('relative p-2')}>
+                <CommandInput placeholder={searchText} className={cn('h-8')} />
+                <CommandEmpty>{selectLabel}</CommandEmpty>
+              </div>
+            )}
+            <CommandList>
+              {renderOptionsList(currentValue, (selectedValue) => {
+                onOptionsChangeHandler(selectedValue, currentValue, onChangeHandler);
+              })}
+            </CommandList>
+          </Command>
+        </PopoverContent>
+      </Popover>
+    </div>
   );
 
   if (formContext) {
@@ -289,7 +301,7 @@ function IGRPCombobox({
         control={formContext.control}
       >
         {(field) => (
-          <div className="relative">
+          <div className={cn('relative w-full min-w-0 max-w-full')}>
             {renderCombobox(field.value, (val) => {
               field.onChange(val);
               onChange?.(val);
@@ -301,7 +313,7 @@ function IGRPCombobox({
   }
 
   return (
-    <div className="*:not-first:mt-2" id={name}>
+    <div className={cn('*:not-first:mt-2 w-full min-w-0 max-w-full')} id={name}>
       {label && (
         <IGRPLabel label={label} className={labelClassName} required={required} id={fieldName} />
       )}

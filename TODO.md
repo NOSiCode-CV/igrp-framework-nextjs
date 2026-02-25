@@ -1,5 +1,15 @@
 # Design System
 
+## Review the input color
+
+## Review Data-table filters
+
+## fix rthe pagination on mobile
+
+## Add Switch to the DataTable as checkbox
+
+## Review info-card orientation horizontal and see design for this, review the colors mode
+
 ## New shadcn Components
 
 Add the following components to the design system:
@@ -13,9 +23,7 @@ Add the following components to the design system:
 
 ## Component Updates
 
-- [x] Sonner from primitive - review the new version [done]
 - [ ] Review banner from experimental
-- [x] Use the new calendar from shadcn and add all the calendar, picker from this [done]
 
 ## New Components
 
@@ -50,7 +58,6 @@ Add the following components to the design system:
 
 ## Components
 
-- [ ] App switcher: Fix router navigation click behavior when there's only one app
 - [ ] Error component
 - [ ] Loading component
 - [ ] Not found component

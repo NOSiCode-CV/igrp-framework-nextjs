@@ -317,6 +317,7 @@ export const WithDots: Story = {
         <IGRPBadge
           dot
           color='success'
+          
         >
           Active
         </IGRPBadge>

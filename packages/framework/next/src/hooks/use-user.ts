@@ -8,6 +8,6 @@ export const fetchCurrentUser = async () => {
     return user;
   } catch (error) {
     console.error('[igrp-user] Erro ao carregar os dados do utilizador atual.:', error);
-    throw error;
+    throw new Error();
   }
 };

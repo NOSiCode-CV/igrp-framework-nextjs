@@ -31,20 +31,20 @@ function IGRPGlobalError({ error, reset, children }: IGRPGlobalErrorProps) {
   };
 
   return (
-    <div className="flex min-h-[calc(100vh-12rem)] items-center justify-center bg-primary-50">
-      <div className="w-full max-w-3xl">
-        <div className="text-center">
+    <div className={cn('flex min-h-[calc(100vh-12rem)] items-center justify-center bg-primary-50')}>
+      <div className={cn('w-full max-w-3xl')}>
+        <div className={cn('text-center')}>
           <Image
             src="/igrp/error-img.webp"
             alt="Error Image"
             width={300}
             height={200}
-            className="mx-auto mb-2"
+            className={cn('mx-auto mb-2')}
           />
-          <h1 className="text-2xl font-bold tracking-tight text-gray-900 dark:text-white">
+          <h1 className={cn('text-2xl font-bold tracking-tight text-gray-900 dark:text-white')}>
             Ocorreu um erro inesperado.
           </h1>
-          <p className="mb-4 text-base text-gray-600 dark:text-gray-300">
+          <p className={cn('mb-4 text-base text-gray-600 dark:text-gray-300')}>
             A nossa equipa foi notificada e está a trabalhar para resolver o problema.
           </p>
 
@@ -54,25 +54,27 @@ function IGRPGlobalError({ error, reset, children }: IGRPGlobalErrorProps) {
               errorVisible ? 'translate-y-0 opacity-100' : 'translate-y-4 opacity-0',
             )}
           >
-            <p className="mb-2 font-medium text-gray-900 dark:text-white">Detalhes do erro:</p>
-            <p className="wrap-break-word text-gray-700 dark:text-gray-300">
+            <p className={cn('mb-2 font-medium text-gray-900 dark:text-white')}>
+              Detalhes do erro:
+            </p>
+            <p className={cn('wrap-break-word text-gray-700 dark:text-gray-300')}>
               {error.message || 'An unknown error occurred'}
             </p>
             {error.digest && (
-              <p className="mt-2 text-xs text-gray-500">
+              <p className={cn('mt-2 text-xs text-gray-500')}>
                 ID de referência:{' '}
-                <code className="rounded bg-gray-100 px-1 py-0.5 dark:bg-gray-700">
+                <code className={cn('rounded bg-gray-100 px-1 py-0.5 dark:bg-gray-700')}>
                   {error.digest}
                 </code>
               </p>
             )}
           </div>
 
-          <div className="flex flex-col items-center justify-center gap-4 sm:flex-row">
+          <div className={cn('flex flex-col items-center justify-center gap-4 sm:flex-row')}>
             <IGRPButton
               onClick={handleReset}
               size="lg"
-              className="group min-w-40"
+              className={cn('group min-w-40')}
               disabled={isResetting}
               showIcon
               iconName="RefreshCw"

@@ -17,3 +17,10 @@ export function isPreviewMode(): boolean {
     ?.toLowerCase();
   return previewModeValue === "true";
 }
+
+export function unsetEmptyEnv(key: string) {
+  const value = process.env[key];
+  if (typeof value === "string" && value.trim() === "") {
+    delete process.env[key];
+  }
+}

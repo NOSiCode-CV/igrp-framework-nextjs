@@ -299,7 +299,7 @@ function IGRPTabs({
                   <IGRPBadge
                     variant={item.badgeVariant}
                     color={item.badgeColor}
-                    badgeClassName={item.badgeClassName}
+                    badgeClassName={cn(item.badgeClassName)}
                   >
                     {item.badgeContent}
                   </IGRPBadge>
@@ -323,7 +323,7 @@ function IGRPTabs({
                   <IGRPBadge
                     variant={item.badgeVariant}
                     color={item.badgeColor}
-                    badgeClassName={item.badgeClassName}
+                    badgeClassName={cn(item.badgeClassName)}
                   >
                     {item.badgeContent}
                   </IGRPBadge>

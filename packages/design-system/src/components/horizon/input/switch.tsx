@@ -37,7 +37,7 @@ function IGRPSwitch({
   if (!formContext) {
     return (
       <div className={cn('*:not-first:mt-2')}>
-        <div className="flex items-center gap-2">
+        <div className={cn('flex items-center gap-2')}>
           <Switch
             id={fielName}
             name={fielName}
@@ -64,7 +64,7 @@ function IGRPSwitch({
         {helperText && !error && (
           <p
             id={`${fielName}-helper`}
-            className="text-muted-foreground mt-2 text-xs"
+            className={cn('text-muted-foreground mt-2 text-xs')}
             role="region"
             aria-live="polite"
           >
@@ -73,7 +73,7 @@ function IGRPSwitch({
         )}
 
         {error && (
-          <p id={`${fielName}-error`} className="text-destructive mt-2 text-xs" role="alert">
+          <p id={`${fielName}-error`} className={cn('text-destructive mt-2 text-xs')} role="alert">
             {error}
           </p>
         )}
@@ -92,8 +92,8 @@ function IGRPSwitch({
       isToggle
     >
       {(field, fieldState) => (
-        <div className="*:not-first:mt-2">
-          <div className="flex items-center gap-2">
+        <div className={cn('*:not-first:mt-2')}>
+          <div className={cn('flex items-center gap-2')}>
             <Switch
               id={fielName}
               name={fielName}

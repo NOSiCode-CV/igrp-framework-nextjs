@@ -7,19 +7,19 @@ import { fontVariables } from "@/lib/fonts";
 import { isPreviewMode } from "@/lib/utils";
 import { getMockApps } from "@/temp/applications/use-mock-apps";
 import { getMockMenus } from "@/temp/menus/use-mock-menus";
-import { getMockMenusFooter } from "@/temp/menus/use-mock-menus-footer";
 import { getMockUser } from "@/temp/users/use-mock-user";
 import { getPackageJson } from "./lib/config/get-pkj";
 import { getSessionArgs } from "./lib/config/get-session-args";
 import { getRoutes } from "./lib/config/get-routes";
 
-export function createConfig(config: IGRPLayoutConfigArgs): Promise<IGRPConfigArgs> {
+export async function createConfig(
+  config: IGRPLayoutConfigArgs,
+): Promise<IGRPConfigArgs> {
   const user = getMockUser().mockUser;
   const menu = getMockMenus().mockMenus;
-  const footerMenu = getMockMenusFooter().mockMenusFooter;
   const apps = getMockApps().mockApps;
 
-  const routes = getRoutes();
+  const routes = await getRoutes();
   const appRoutes = routes?.appRoutes ?? [];
   const paramMapBody = routes?.paramMapBody ?? "";
 
@@ -31,6 +31,8 @@ export function createConfig(config: IGRPLayoutConfigArgs): Promise<IGRPConfigAr
     layoutMockData: {
       getHeaderData: async () => ({
         user: user,
+        userProfileUrl: process.env.NEXT_PUBLIC_IGRP_PROFILE_URL || "",
+        notificationsUrl: process.env.NEXT_PUBLIC_IGRP_NOTIFICATION_URL || "",
         showBreadcrumb: true,
         showSearch: true,
         showNotifications: true,
@@ -42,7 +44,6 @@ export function createConfig(config: IGRPLayoutConfigArgs): Promise<IGRPConfigAr
       }),
       getSidebarData: async () => ({
         menuItems: menu,
-        footerItems: footerMenu,
         user: user,
         defaultOpen: true,
         showAppSwitcher: true,

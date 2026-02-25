@@ -1,9 +1,9 @@
 import { Session } from '@igrp/framework-next-auth';
+import type { SessionProviderProps } from '@igrp/framework-next-auth/client';
 
 import { IGRPHeaderDataArgs } from './header';
 import { IGRPSidebarDataArgs } from './sidebar';
 import { IGRPPackageJson, IGRPToasterPosition } from './globals';
-import type { SessionProviderProps } from '@igrp/framework-next-auth/client';
 
 export type IGRPConfigArgs = {
   appCode: string;

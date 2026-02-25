@@ -9,6 +9,6 @@ export const fetchMenus = async (appCode: string) => {
     return menus;
   } catch (error) {
     console.error('[igrp-menus]: Erro ao carregar os menus da aplicação.:', error);
-    throw error;
+    throw new Error();
   }
 };

@@ -106,8 +106,8 @@ function IGRPPdfViewer({
 
   if (!document) {
     return (
-      <div className="flex items-center gap-3" id={ref}>
-        <IGRPIcon iconName="FileX2" className={IGRPColors.solid.destructive.text} />
+      <div className={cn('flex items-center gap-3')} id={ref}>
+        <IGRPIcon iconName="FileX2" className={cn(IGRPColors.solid.destructive.text)} />
         <IGRPText as="p" size="default" weight="semibold" spacing="none">
           {notFoundLabel}
         </IGRPText>
@@ -171,19 +171,21 @@ function IGRPPdfViewerCard({ document, onView, clickable = true }: IGRPPdfViewer
   return (
     <Card
       key={document.id}
-      className={`transition-all py-3 ${clickable ? 'cursor-pointer hover:shadow-md' : ''}`}
+      className={cn('transition-all py-3', clickable ? 'cursor-pointer hover:shadow-md' : '')}
       onClick={clickable ? () => onView(document) : undefined}
       role={clickable ? 'button' : undefined}
       tabIndex={clickable ? 0 : undefined}
       onKeyDown={handleKeyDown}
     >
-      <CardHeader className="gap-0">
-        <div className="flex items-start justify-between">
-          <div className="flex items-center gap-2">
-            <IGRPIcon iconName="FileText" className="text-muted-foreground" />
-            <CardTitle className="text-sm font-medium leading-tight">{document.title}</CardTitle>
+      <CardHeader className={cn('gap-0')}>
+        <div className={cn('flex items-start justify-between')}>
+          <div className={cn('flex items-center gap-2')}>
+            <IGRPIcon iconName="FileText" className={cn('text-muted-foreground')} />
+            <CardTitle className={cn('text-sm font-medium leading-tight')}>
+              {document.title}
+            </CardTitle>
           </div>
-          <IGRPBadge variant="soft" color="destructive" badgeClassName="px-3">
+          <IGRPBadge variant="soft" color="destructive" badgeClassName={cn('px-3')}>
             PDF
           </IGRPBadge>
         </div>
@@ -256,18 +258,18 @@ function IGRPPdfViewerInline({
       : fileUrl;
 
   return (
-    <div className="flex flex-col gap-2">
-      <div className="flex flex-col">
-        <div className="flex items-center justify-between">
+    <div className={cn('flex flex-col gap-2')}>
+      <div className={cn('flex flex-col')}>
+        <div className={cn('flex items-center justify-between')}>
           <div>
             <IGRPHeadline variant="h6" title={title} />
-            <div className="flex items-center gap-2 text-sm text-muted-foreground">
-              <div className="flex items-center gap-1 text-xs">
-                <IGRPIcon iconName="User" className="text-primary" />
+            <div className={cn('flex items-center gap-2 text-sm text-muted-foreground')}>
+              <div className={cn('flex items-center gap-1 text-xs')}>
+                <IGRPIcon iconName="User" className={cn('text-primary')} />
                 {author}
               </div>
-              <div className="flex items-center gap-1 text-xs">
-                <IGRPIcon iconName="Calendar" className="text-primary" />
+              <div className={cn('flex items-center gap-1 text-xs')}>
+                <IGRPIcon iconName="Calendar" className={cn('text-primary')} />
                 {safeFormatDate(date)}
               </div>
             </div>
@@ -287,19 +289,23 @@ function IGRPPdfViewerInline({
       </div>
 
       <div
-        className="w-full bg-gray-100 rounded-lg overflow-hidden relative"
+        className={cn('w-full bg-gray-100 rounded-lg overflow-hidden relative')}
         style={{ height }}
         aria-busy={frameStatus === 'loading'}
       >
         {frameStatus === 'loading' && (
-          <div className="absolute inset-0 flex items-center justify-center bg-background/70">
+          <div className={cn('absolute inset-0 flex items-center justify-center bg-background/70')}>
             <IGRPLoadingSpinner />
           </div>
         )}
 
         {frameStatus === 'error' && (
-          <div className="absolute inset-0 flex flex-col items-center justify-center gap-2 bg-background/80 text-sm text-muted-foreground">
-            <IGRPIcon iconName="AlertCircle" className="text-destructive" />
+          <div
+            className={cn(
+              'absolute inset-0 flex flex-col items-center justify-center gap-2 bg-background/80 text-sm text-muted-foreground',
+            )}
+          >
+            <IGRPIcon iconName="AlertCircle" className={cn('text-destructive')} />
             <span>{loadErrorLabel}</span>
           </div>
         )}
@@ -389,35 +395,43 @@ function IGRPPdfViewerModal({
 
   return (
     <Dialog open={open} onOpenChange={onClose}>
-      <DialogContent className="sm:max-w-6xl w-[95vw] max-h-[95vh] overflow-auto flex flex-col gap-0">
+      <DialogContent
+        className={cn('sm:max-w-6xl w-[95vw] max-h-[95vh] overflow-auto flex flex-col gap-0')}
+      >
         <DialogHeader>
-          <DialogTitle className="text-xl font-semibold">{title}</DialogTitle>
-          <DialogDescription className="flex items-center gap-4 mt-1">
-            <div className="flex items-center gap-1">
-              <IGRPIcon iconName="User" className="text-primary" />
+          <DialogTitle className={cn('text-xl font-semibold')}>{title}</DialogTitle>
+          <DialogDescription className={cn('flex items-center gap-4 mt-1')}>
+            <div className={cn('flex items-center gap-1')}>
+              <IGRPIcon iconName="User" className={cn('text-primary')} />
               {author}
             </div>
-            <div className="flex items-center gap-1">
-              <IGRPIcon iconName="Calendar" className="text-primary" />
+            <div className={cn('flex items-center gap-1')}>
+              <IGRPIcon iconName="Calendar" className={cn('text-primary')} />
               {safeFormatDate(date)}
             </div>
           </DialogDescription>
         </DialogHeader>
 
-        <div className="flex-1 mt-4">
+        <div className={cn('flex-1 mt-4')}>
           <div
-            className="w-full h-[60vh] bg-gray-100 rounded-lg overflow-hidden relative"
+            className={cn('w-full h-[60vh] bg-gray-100 rounded-lg overflow-hidden relative')}
             aria-busy={frameStatus === 'loading'}
           >
             {frameStatus === 'loading' && (
-              <div className="absolute inset-0 flex items-center justify-center bg-background/70">
+              <div
+                className={cn('absolute inset-0 flex items-center justify-center bg-background/70')}
+              >
                 <IGRPLoadingSpinner />
               </div>
             )}
 
             {frameStatus === 'error' && (
-              <div className="absolute inset-0 flex flex-col items-center justify-center gap-2 bg-background/80 text-sm text-muted-foreground">
-                <IGRPIcon iconName="AlertCircle" className="text-destructive" />
+              <div
+                className={cn(
+                  'absolute inset-0 flex flex-col items-center justify-center gap-2 bg-background/80 text-sm text-muted-foreground',
+                )}
+              >
+                <IGRPIcon iconName="AlertCircle" className={cn('text-destructive')} />
                 <span>{loadErrorLabel}</span>
               </div>
             )}
@@ -434,7 +448,7 @@ function IGRPPdfViewerModal({
           </div>
         </div>
 
-        <DialogFooter className="mt-4">
+        <DialogFooter className={cn('mt-4')}>
           <IGRPButton variant="default" onClick={() => onClose(false)}>
             {labelButtonCancel}
           </IGRPButton>

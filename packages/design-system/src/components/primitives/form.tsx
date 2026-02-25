@@ -1,5 +1,7 @@
 /* eslint-disable react-refresh/only-export-components */
 
+// IGRP CUSTOM: THIS COMPONENT IS CHANGED FROM THE ORIGINAL
+
 import { createContext, useContext, useId } from 'react';
 import { Slot } from '@radix-ui/react-slot';
 import {
@@ -15,7 +17,8 @@ import {
 import { Label } from './label';
 import { cn } from '../../lib/utils';
 
-const Form = FormProvider;
+// Explicit annotation avoids non-portable inferred type referencing local @types/react path
+const Form: typeof FormProvider = FormProvider;
 
 type FormFieldContextValue<
   TFieldValues extends FieldValues = FieldValues,
@@ -68,12 +71,16 @@ type FormItemContextValue = {
 
 const FormItemContext = createContext<FormItemContextValue>({} as FormItemContextValue);
 
+/*
+ * Warning: This component is changed from the original.
+ * Was removed the 'grid gap-2' class from the original component.
+ */
 function FormItem({ className, ...props }: React.ComponentProps<'div'>) {
   const id = useId();
 
   return (
     <FormItemContext.Provider value={{ id }}>
-      <div data-slot="form-item" className={cn('grid gap-2', className)} {...props} />
+      <div data-slot="form-item" className={cn('flex flex-col gap-2', className)} {...props} />
     </FormItemContext.Provider>
   );
 }

@@ -69,8 +69,8 @@ function IGRPAlert({
     >
       <div className={cn('flex gap-3', alignmentClass)}>
         {showIcon && <IGRPIcon iconName={alertIcon} className={cn('shrink-0', iconClassName)} />}
-        <div className="flex grow justify-between gap-3">
-          <div className="grow space-y-1">{children}</div>
+        <div className={cn('flex grow justify-between gap-3')}>
+          <div className={cn('grow space-y-1')}>{children}</div>
 
           {showLink && (
             <IGRPLink

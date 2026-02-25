@@ -63,7 +63,7 @@ function IGRPInputFile({
         {helperText && !error && (
           <p
             id={`${fieldName}-helper`}
-            className="text-muted-foreground mt-2 text-xs"
+            className={cn('text-muted-foreground mt-2 text-xs')}
             role="region"
             aria-live="polite"
           >
@@ -72,7 +72,7 @@ function IGRPInputFile({
         )}
 
         {error && (
-          <p id={`${fieldName}-error`} className="text-destructive mt-2 text-xs" role="alert">
+          <p id={`${fieldName}-error`} className={cn('text-destructive mt-2 text-xs')} role="alert">
             {error}
           </p>
         )}
@@ -132,7 +132,7 @@ function IGRPInputFile({
             {helperText && !errorMessage && !fieldState.error && (
               <p
                 id={`${fieldName}-helper`}
-                className="text-muted-foreground mt-2 text-xs"
+                className={cn('text-muted-foreground mt-2 text-xs')}
                 role="region"
                 aria-live="polite"
               >
@@ -141,7 +141,11 @@ function IGRPInputFile({
             )}
 
             {(errorMessage || fieldState.error) && (
-              <p id={`${fieldName}-error`} className="text-destructive mt-2 text-xs" role="alert">
+              <p
+                id={`${fieldName}-error`}
+                className={cn('text-destructive mt-2 text-xs')}
+                role="alert"
+              >
                 {errorMessage || fieldState.error?.message}
               </p>
             )}

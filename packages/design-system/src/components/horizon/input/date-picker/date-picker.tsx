@@ -90,7 +90,9 @@ function IGRPDatePicker({
       <IGRPButton
         id={fieldName}
         variant="outline"
-        className="underline-offset-0 hover:no-underline border-0 bg-transparent hover:bg-transparent shadow-none"
+        className={cn(
+          'underline-offset-0 hover:no-underline border-0 bg-transparent hover:bg-transparent shadow-none',
+        )}
         disabled={disabledPicker}
         iconName="Calendar"
         iconClassName="text-muted-foreground/80 group-hover:text-foreground shrink-0 transition-colors"
@@ -115,7 +117,7 @@ function IGRPDatePicker({
       <>
         <Popover>
           <PopoverTrigger asChild>{DateButton(displayDate)}</PopoverTrigger>
-          <PopoverContent className="w-auto p-2" align="start">
+          <PopoverContent className={cn('w-auto p-2')} align="start">
             <IGRPCalendar
               id={fieldName}
               date={displayDate}
@@ -134,7 +136,9 @@ function IGRPDatePicker({
               onDateChange?.(undefined);
             }}
             variant="link"
-            className="size-2 absolute right-2 top-1/2 h-3 w-3 -translate-y-1/2 text-muted-foreground z-100"
+            className={cn(
+              'size-2 absolute right-2 top-1/2 h-3 w-3 -translate-y-1/2 text-muted-foreground z-100',
+            )}
             size="icon"
             iconName="X"
             iconSize={10}
@@ -180,7 +184,7 @@ function IGRPDatePicker({
                 </FormControl>
 
                 {helperText && !fieldState.error && <FormDescription>{helperText}</FormDescription>}
-                <FormMessage className="text-xs" />
+                <FormMessage className={cn('text-xs')} />
               </FormItem>
             );
           }}
@@ -194,7 +198,7 @@ function IGRPDatePicker({
       {label && (
         <IGRPLabel label={label} className={labelClassName} required={required} id={name} />
       )}
-      <div className="relative">
+      <div className={cn('relative')}>
         {renderPicker(localDate, (val) => {
           setLocalDate(val);
           onDateChange?.(val);
@@ -204,7 +208,7 @@ function IGRPDatePicker({
       {helperText && !error && (
         <p
           id={`${fieldName}-helper`}
-          className="text-muted-foreground mt-2 text-xs"
+          className={cn('text-muted-foreground mt-2 text-xs')}
           role="region"
           aria-live="polite"
         >
@@ -213,7 +217,7 @@ function IGRPDatePicker({
       )}
 
       {error && (
-        <p id={`${fieldName}-helper`} className="text-destructive mt-2 text-xs" role="alert">
+        <p id={`${fieldName}-helper`} className={cn('text-destructive mt-2 text-xs')} role="alert">
           {error}
         </p>
       )}

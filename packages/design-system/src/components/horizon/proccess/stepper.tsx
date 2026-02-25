@@ -40,9 +40,9 @@ function getStepperItemClassName(): string {
     //'last:mr-0 last:rounded-tr-2xl last:rounded-br-2xl last:pr-2.5 last:overflow-hidden',
     'bg-muted text-gray-600',
     // Completed state background
-    'data-[state=completed]:bg-process-completed data-[state=completed]:text-background',
+    'data-[state=completed]:bg-process-completed data-[state=completed]:text-background hover:data-[state=active]:text-background',
     // Active state background
-    'data-[state=active]:bg-process-active data-[state=active]:text-background',
+    'data-[state=active]:bg-process-active data-[state=active]:text-background hover:data-[state=active]:text-background',
     // Incomplete/inactive state background
     'data-[state=inactive]:bg-muted data-[state=inactive]:text-gray-600',
     // Pseudo-elements base styles
@@ -166,10 +166,10 @@ function IGRPStepperProcess({
   }
 
   return (
-    <div className="space-y-8 w-full" id={ref}>
-      <div className="flex items-center justify-center gap-4 relative">
-        <div ref={scrollAreaRef} className="w-[90vw]">
-          <ScrollArea className="w-full">
+    <div className={cn('space-y-8 w-full')} id={ref}>
+      <div className={cn('flex items-center justify-center gap-4 relative')}>
+        <div ref={scrollAreaRef} className={cn('w-[90vw]')}>
+          <ScrollArea className={cn('w-full')}>
             <Stepper
               value={validCurrentStep}
               onValueChange={handleStepChange}
@@ -192,20 +192,22 @@ function IGRPStepperProcess({
                 >
                   <StepperTrigger
                     asChild
-                    className="gap-1 rounded max-md:flex-col z-10 cursor-pointer"
+                    className={cn('gap-1 rounded max-md:flex-col z-10 cursor-pointer')}
                   >
                     <Button
                       variant="ghost"
                       className={cn(
                         'bg-transparent hover:bg-transparent text-center flex items-center justify-center',
                         'shadow-none text-[10px] w-34',
-                        (isActive || isCompleted) && 'text-background hover:text-background!',
+                        (isActive || isCompleted) && 'text-background hover:text-background',
                       )}
                       size="xs"
                     >
                       <Tooltip>
                         <TooltipTrigger asChild>
-                          <span className="flex items-center justify-center gap-2 w-full min-w-0">
+                          <span
+                            className={cn('flex items-center justify-center gap-2 w-full min-w-0')}
+                          >
                             <CheckIcon
                               className={cn(
                                 'hidden',
@@ -235,29 +237,29 @@ function IGRPStepperProcess({
           </ScrollArea>
         </div>
 
-        <div className="flex items-center justify-center gap-1">
+        <div className={cn('flex items-center justify-center gap-1')}>
           <Button
             variant="outline"
             size="icon-sm"
-            className="size-6 shrink-0 mb-3"
+            className={cn('size-6 shrink-0 mb-3')}
             onClick={scrollLeft}
             aria-label="Scroll to previous steps"
             type="button"
             disabled={!canScrollLeft}
           >
-            <ChevronLeft className="size-3" aria-hidden="true" />
+            <ChevronLeft className={cn('size-3')} aria-hidden="true" />
           </Button>
 
           <Button
             variant="outline"
             size="icon-sm"
-            className="size-6 shrink-0 mb-3"
+            className={cn('size-6 shrink-0 mb-3')}
             onClick={scrollRight}
             aria-label="Scroll to next steps"
             type="button"
             disabled={!canScrollRight}
           >
-            <ChevronRight className="size-3" aria-hidden="true" />
+            <ChevronRight className={cn('size-3')} aria-hidden="true" />
           </Button>
         </div>
       </div>

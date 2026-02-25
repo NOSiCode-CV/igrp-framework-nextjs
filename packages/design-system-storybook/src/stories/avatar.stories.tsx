@@ -144,7 +144,6 @@ export const Default: StoryObj<IGRPAvatarProps> = {
     fallbackIcon: 'User',
     showBadge: false,
     badgeColor: 'success',
-    badgeVariant: 'solid',
     badgeNumber: 6,
     status: 'success',
   },
@@ -157,7 +156,6 @@ export const AvatarShape: StoryObj<IGRPAvatarProps> = {
     fallback: 'AV',
     iconName: 'Check',
     status: 'success',
-    roundedSize: 'lg',
   },
 };
 
@@ -233,7 +231,6 @@ export const MultipleBadge: Story = {
           iconSize={0}
           showBadge={false}
           badgeNumber={0}
-          multiple={0}
           badgeColor={'destructive'} 
           iconColor={''}        
         />
@@ -267,7 +264,6 @@ export const MultipleBadgeWithText: Story = {
           iconSize={0}
           showBadge={false}
           badgeNumber={0}
-          multiple={0}
           badgeColor='destructive' 
           iconColor={''}        
         />

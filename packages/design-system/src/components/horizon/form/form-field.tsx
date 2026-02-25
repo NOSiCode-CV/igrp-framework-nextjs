@@ -72,7 +72,7 @@ function IGRPFormField({
 
             {helperText && !fieldState.error && <FormDescription>{helperText}</FormDescription>}
 
-            <FormMessage className="text-xs" />
+            <FormMessage className={cn('text-xs')} />
           </FormItem>
         </div>
       )}

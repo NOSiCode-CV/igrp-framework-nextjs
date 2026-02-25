@@ -30,6 +30,7 @@ const config: StorybookConfig = {
   viteFinal: async (config) => ({
     ...config,
     base: '/storybook/',
+    publicPath: '/storybook/',
   }),
 };
 

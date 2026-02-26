@@ -37,8 +37,11 @@ FROM node:22-alpine
 WORKDIR /app
 RUN npm install -g serve
 
-COPY --from=builder /igrp-framework-nextjs/packages/design-system-storybook/storybook-static ./storybook-static
+# Copy built files into ./public/storybook/ so serve exposes them
+# at /storybook/, matching the Vite base path set in .storybook/main.ts
+RUN mkdir -p ./public/storybook
+COPY --from=builder /igrp-framework-nextjs/packages/design-system-storybook/storybook-static ./public/storybook/
 
 EXPOSE 6006
 
-CMD ["serve", "-s", "storybook-static", "-l", "6006"]
+CMD ["serve", "public", "-l", "6006"]

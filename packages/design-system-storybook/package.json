@@ -18,9 +18,9 @@
    "license": "MIT",
   "scripts": {
     "dev": "tsc --watch",
-    "storybook": "storybook dev -p 6006",
+    "storybook": "storybook dev -p 6006 --ci",
     "build-storybook": "storybook build",
-    "serve-storybook": "serve storybook-static",
+    "serve-storybook": "pnpm dlx serve storybook-static -l 6006",
     "test-storybook": "test-storybook",
     "lint": "eslint . --ext .ts,.tsx",
     "format": "prettier --write .",
@@ -28,7 +28,7 @@
   },
   "dependencies": {
     "@hookform/resolvers": "5.2.2",
-    "@igrp/igrp-framework-react-design-system": "workspace:*",
+    "@igrp/igrp-framework-react-design-system": "0.1.0-beta.102",
     "@tailwindcss/vite": "^4.1.18",
     "next": "15.5.12",
     "react": "19.2.4",
@@ -72,8 +72,9 @@
   },
   "engines": {
     "node": ">=22.x.x",
-    "npm": ">=10.8.2"
+    "pnpm": ">=10"
   },
+  "packageManager": "pnpm@10.17.1",
   "eslintConfig": {
     "extends": [
       "plugin:storybook/recommended"

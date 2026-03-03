@@ -1,4 +1,4 @@
-'use client';
+'use client'
 
 import { useId, useState, useEffect } from 'react';
 import { format } from 'date-fns';
@@ -19,17 +19,31 @@ import { IGRPButton } from '../../button';
 import { IGRPCalendar, type IGRPCalendarProps } from '../../calendar/calendar';
 import { IGRPLabel } from '../../label';
 
+/**
+ * Base props for date picker components (label, helper, format, etc.).
+ * @see IGRPDatePicker
+ */
 export type IGRPDatePickerBaseProps = {
+  /** Validation error message. */
   error?: string;
+  /** Whether the field is required. */
   required?: boolean;
+  /** Disable the calendar popover. */
   disabledPicker?: boolean;
+  /** date-fns format string. */
   dateFormat?: string;
+  /** Placeholder when no date selected. */
   placeholder?: string;
 } & Pick<IGRPInputProps, 'label' | 'helperText' | 'labelClassName' | 'name' | 'gridSize'>;
 
+/**
+ * Props for the IGRPDatePicker component (deprecated).
+ * @see IGRPDatePicker
+ */
 type IGRPDatePickerProps = IGRPCalendarProps & IGRPDatePickerBaseProps;
 
 /**
+ * Single-date picker (deprecated). Use IGRPDatePickerSingle instead.
  * @deprecated This component will be deprecated in the next release.
  * Please migrate to the standard IGRPDatePickerSingle component from `@igrp/igrp-framework-react-design-system`.
  *

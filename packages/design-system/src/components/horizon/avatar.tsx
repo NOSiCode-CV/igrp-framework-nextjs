@@ -95,30 +95,57 @@ const badgeVariants = cva(
   },
 );
 
+/**
+ * Props for the IGRPAvatar component.
+ * @see IGRPAvatar
+ */
 interface IGRPAvatarProps
   extends
     React.ComponentProps<typeof Avatar>,
     IGRPBaseAttributes,
     VariantProps<typeof avatarVariants> {
+  /** Image URL for the avatar. */
   src?: string;
+  /** Alt text for the image. */
   alt?: string;
+  /** Fallback text (e.g. initials) when image fails to load. */
   fallback?: string;
+  /** CSS classes for the fallback element. */
   fallbackClassName?: string;
+  /** Icon name for fallback when hasFallbackIcon is true. */
   fallbackIcon?: IGRPIconName | string;
+  /** Show icon instead of initials in fallback. */
   hasFallbackIcon?: boolean;
+  /** Show status indicator dot. */
   hasStatus?: boolean;
+  /** Color of the status indicator. */
   status: IGRPColorVariants;
+  /** Show icon overlay (e.g. checkmark). */
   showIcon?: boolean;
+  /** Icon name for the overlay. */
   iconName?: IGRPIconName | string;
+  /** Show badge overlay with number or icon. */
   showBadge?: boolean;
+  /** Additional CSS classes. */
   className?: string;
+  /** Badge content (number). */
   badgeNumber?: number;
+  /** Badge content (icon label). */
   iconNumber?: string;
+  /** Badge color theme. */
   badgeColor: IGRPColorVariants;
+  /** Icon color (hex). */
   iconColor: string;
+  /** Show icon inside the badge. */
   badgeShowIcon?: boolean;
+  /** Icon name for the badge. */
   badgeIconName?: string;
 }
+
+/**
+ * Avatar with image, fallback, optional status indicator, icon overlay, or badge.
+ * Supports size and rounded variants.
+ */
 function IGRPAvatar({
   src,
   alt = 'avatar',

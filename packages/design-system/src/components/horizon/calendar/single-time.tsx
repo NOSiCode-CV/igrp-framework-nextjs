@@ -1,3 +1,5 @@
+"use client"
+
 import { useId, useState } from 'react';
 
 import { DEFAULT_HIDE_TIME_INDICATOR } from '../../../lib/constants';
@@ -7,8 +9,16 @@ import { Label } from '../../primitives/label';
 import { IGRPCalendarSingle, type IGRPCalendarSingleProps } from './single';
 import { cn } from '../../../lib/utils';
 
+/**
+ * Props for the IGRPCalendarSingleTime component.
+ * Combines single-date picker with start/end time inputs.
+ * @see IGRPCalendarSingleTime
+ */
 interface IGRPCalendarSingleTimeProps extends IGRPCalendarSingleProps, IGRPCalendarTimeProps {}
 
+/**
+ * Single-date calendar with optional start and end time pickers.
+ */
 function IGRPCalendarSingleTime({
   onStartTime,
   onEndTime,

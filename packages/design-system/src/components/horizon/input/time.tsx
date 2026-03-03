@@ -8,12 +8,22 @@ import type { IGRPInputProps } from '../../../types';
 import { Input } from '../../primitives/input';
 import { IGRPLabel } from '../label';
 
+/**
+ * Props for the IGRPInputTime component.
+ * @see IGRPInputTime
+ */
 interface IGRPInputTimeProps extends Omit<IGRPInputProps, 'onChange'> {
+  /** Controlled time value (HH:mm). */
   value?: string;
+  /** Default time value. */
   defaultValue?: string;
+  /** Called when value changes. */
   onChange?: (value: string) => void;
 }
 
+/**
+ * Time input (native time picker). Integrates with react-hook-form.
+ */
 function IGRPInputTime({
   name,
   id,

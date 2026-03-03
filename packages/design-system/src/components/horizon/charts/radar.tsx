@@ -21,21 +21,40 @@ import {
 } from './lib';
 import { type IGRPChartProps, type IGRPRadarConfig } from './types';
 
+/**
+ * Props for the IGRPRadarChart component.
+ * @see IGRPRadarChart
+ */
 interface IGRPRadarChartProps extends IGRPChartProps {
+  /** Radar series configurations. */
   radars: IGRPRadarConfig[];
+  /** Key for angle axis labels. */
   angleAxisKey: string;
+  /** Polar grid shape. */
   polarGridType?: 'polygon' | 'circle';
+  /** Grid line style. */
   polarGridLineType?: 'solid' | 'dashed' | 'dotted';
+  /** Show polar grid. */
   showPolarGrid?: boolean;
+  /** Show radius axis. */
   showRadiusAxis?: boolean;
+  /** Radius axis domain. */
   radiusAxisDomain?: [number | string, number | string];
+  /** Radius axis angle. */
   radiusAxisAngle?: number;
+  /** Custom angle axis tick renderer. */
   customAngleAxisTick?: any;
+  /** Show grid lines. */
   showGridLines?: boolean;
+  /** Show radius lines. */
   showRadiusLines?: boolean;
+  /** Fill grid areas. */
   gridFilled?: boolean;
 }
 
+/**
+ * Radar/spider chart with polar grid and configurable axes.
+ */
 function IGRPRadarChart({
   data,
   radars,

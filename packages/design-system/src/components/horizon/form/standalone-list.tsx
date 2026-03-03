@@ -1,4 +1,4 @@
-'use client';
+'use client'
 
 import { useCallback, useEffect, useId, useState } from 'react';
 
@@ -16,25 +16,45 @@ import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '../..
 import { IGRPBadge, type IGRPBadgeProps } from '../badge';
 import { IGRPIcon, type IGRPIconName } from '../icon';
 
+/**
+ * Props for the IGRPStandaloneList component.
+ * @see IGRPStandaloneList
+ */
 interface IGRPStandaloneListProps<TItem>
   extends
     Omit<IGRPBaseAttributes, 'iconPlacement' | 'helperText'>,
     Partial<Pick<IGRPBadgeProps, 'variant' | 'color' | 'dot' | 'badgeClassName'>> {
+  /** Unique id. */
   id: string;
+  /** Default item for new entries. */
   defaultItem: TItem;
+  /** Card description. */
   description?: string;
+  /** Render function for each item. */
   renderItem: (item: TItem, index: number, onChange: (item: TItem) => void) => React.ReactNode;
+  /** Compute accordion label from item. */
   computeLabel?: (item: TItem, index: number) => string;
+  /** Badge content. */
   badgeValue?: string;
+  /** Additional CSS classes. */
   className?: string;
+  /** Add button label. */
   addButtonLabel?: string;
+  /** Add button icon. */
   addButtonIconName?: IGRPIconName | string;
+  /** Badge CSS classes. */
   badgeClassName?: string;
+  /** Controlled value. */
   value?: TItem[];
+  /** Uncontrolled default value. */
   defaultValue?: TItem[];
+  /** Called when items change. */
   onChange?: (items: TItem[]) => void;
 }
 
+/**
+ * Standalone dynamic list (no form). Use IGRPFormList when inside IGRPForm.
+ */
 function IGRPStandaloneList<TItem>({
   id,
   defaultItem,

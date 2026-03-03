@@ -7,6 +7,9 @@ import type { IGRPInputProps } from '../../../types';
 import { Input } from '../../primitives/input';
 import { IGRPFormField } from '../form/form-field';
 
+/**
+ * Hidden input for form values. Integrates with react-hook-form.
+ */
 function IGRPInputHidden({
   name,
   id,

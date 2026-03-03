@@ -1,16 +1,27 @@
+"use client"
+
+import { useId, useState } from 'react';
 import { addDays } from 'date-fns';
 
 import { getDisabledDays } from '../../../lib/calendar-utils';
 import { cn } from '../../../lib/utils';
 import type { IGRPCalendarProps } from '../../../types';
 import { Calendar } from '../../primitives/calendar';
-import { useId, useState } from 'react';
 
+/**
+ * Props for the IGRPCalendarMultiple component.
+ * @see IGRPCalendarMultiple
+ */
 type IGRPCalendarMultipleProps = {
+  /** Selected dates. */
   date?: Date[];
+  /** Called when the selected dates change. */
   onDateChange?: (date: Date[] | undefined) => void;
 } & Omit<IGRPCalendarProps, 'mode'>;
 
+/**
+ * Multi-date calendar picker.
+ */
 function IGRPCalendarMultiple({
   name,
   id,

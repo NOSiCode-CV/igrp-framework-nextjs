@@ -15,16 +15,30 @@ import {
 } from '../../primitives/select';
 import { IGRPLabel } from '../label';
 
+/**
+ * Props for the IGRPInputUrl component.
+ * @see IGRPInputUrl
+ */
 interface IGRPInputUrlProps extends Omit<IGRPInputProps, 'onChange'> {
+  /** Field name. */
   name: string;
+  /** Field label. */
   label?: string;
+  /** Helper text below the input. */
   helperText?: string;
+  /** Validation error message. */
   error?: string;
+  /** Whether the field is required. */
   required?: boolean;
+  /** Controlled URL value. */
   value?: string;
+  /** Default URL value. */
   defaultValue?: string;
+  /** Called when URL changes. */
   onChange?: (value: string) => void;
+  /** Protocol options (e.g. https://, http://). */
   protocols?: IGRPOptionsProps[];
+  /** Default protocol prefix. */
   defaultProtocol?: string;
 }
 
@@ -37,6 +51,9 @@ const DEFAULT_PROTOCOLS: IGRPOptionsProps[] = [
   { value: 'wss://', label: 'wss://' },
 ];
 
+/**
+ * URL input with protocol selector. Integrates with react-hook-form.
+ */
 function IGRPInputUrl({
   name,
   id,

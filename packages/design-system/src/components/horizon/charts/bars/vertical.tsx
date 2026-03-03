@@ -21,13 +21,24 @@ import {
 } from '../lib';
 import type { IGRPBarConfig, IGRPChartProps } from '../types';
 
+/**
+ * Props for the IGRPVerticalBarChart component.
+ * @see IGRPVerticalBarChart
+ */
 interface IGRPVerticalBarChartProps extends IGRPChartProps {
+  /** Bar series configurations. */
   bars: IGRPBarConfig[];
+  /** Bar corner radius. */
   barRadius?: number;
+  /** Gap between bars in same category. */
   barGap?: number;
+  /** Gap between categories. */
   barCategoryGap?: string | number;
 }
 
+/**
+ * Vertical bar chart with optional stacking and grid.
+ */
 function IGRPVerticalBarChart({
   data,
   bars,

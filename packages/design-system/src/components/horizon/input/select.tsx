@@ -65,6 +65,10 @@ function selectReducer(state: SelectState, action: SelectAction): SelectState {
   }
 }
 
+/**
+ * Props for the IGRPSelect component.
+ * @see IGRPSelect
+ */
 type IGRPSelectProps = Omit<
   React.ComponentProps<typeof Select>,
   'value' | 'defaultValue' | 'onValueChange' | 'children'
@@ -88,6 +92,9 @@ type IGRPSelectProps = Omit<
     helperText?: string;
   };
 
+/**
+ * Select dropdown with optional search and grouped options. Integrates with react-hook-form.
+ */
 function IGRPSelect({
   options,
   placeholder = 'Select an option',

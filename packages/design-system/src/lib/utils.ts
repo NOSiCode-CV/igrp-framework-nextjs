@@ -1,9 +1,12 @@
 import { clsx, type ClassValue } from 'clsx';
 import { twMerge } from 'tailwind-merge';
 
+/** Merges Tailwind classes with clsx and tailwind-merge. */
 export function cn(...inputs: ClassValue[]) {
   return twMerge(clsx(inputs));
 }
+
+/** Parses "yyyy-mm-dd" or "y-m-d" string to local Date. Throws on invalid input. */
 export function parseLocalDate(dateStr: string): Date {
   const [yStr, mStr, dStr] = dateStr.split('-');
   const y = Number(yStr);

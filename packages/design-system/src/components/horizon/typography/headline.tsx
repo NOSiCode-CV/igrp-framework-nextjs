@@ -24,18 +24,30 @@ const igrpHeadlineVariants = cva('scroll-m-20 font-bold tracking-tight text-bala
   },
 });
 
+/**
+ * Props for the IGRPHeadline component.
+ * @see IGRPHeadline
+ */
 interface IGRPHeadlineProps
   extends
     VariantProps<typeof igrpHeadlineVariants>,
     Omit<React.ComponentProps<'div'>, 'title'>,
     Partial<IGRPBaseAttributes> {
+  /** Headline text. */
   title: string;
+  /** Optional description below the title. */
   description?: string;
+  /** Color role (solid, soft, outline). */
   roleColor?: IGRPColorRole;
+  /** Color theme. */
   color?: IGRPColorVariants;
+  /** HTML id attribute. */
   id?: string;
 }
 
+/**
+ * Headline (h1–h6) with optional description and icon.
+ */
 function IGRPHeadline({
   variant = 'h3',
   title,

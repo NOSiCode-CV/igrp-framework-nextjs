@@ -19,10 +19,14 @@ import {
 import { IGRPBadge } from './badge';
 import { IGRPButton } from './button';
 import { IGRPIcon } from './icon';
-import { IGRPLoadingSpinner } from './loading-spiner';
+import { IGRPLoadingSpinner } from './loading-spinner';
 import { IGRPHeadline } from './typography/headline';
 import { IGRPText } from './typography/text';
 
+/**
+ * Document item shape for PDF viewer.
+ * Represents a single document with metadata and file URL.
+ */
 type IGRPDocumentItem = {
   id: number;
   title: string;
@@ -32,18 +36,34 @@ type IGRPDocumentItem = {
   fileUrl: string;
 };
 
+/**
+ * Props for the IGRPPdfViewer component.
+ * @see IGRPPdfViewer
+ */
 interface IGRPPdfViewerProps {
+  /** Document to display (metadata and file URL). */
   document: IGRPDocumentItem;
+  /** Display mode: 'modal' shows a card that opens a dialog, 'inline' embeds the PDF. */
   displayMode?: 'modal' | 'inline';
+  /** Label for the close/cancel button in the modal. */
   labelButtonCancel?: string;
+  /** Label for the "open in new tab" button. */
   labelButtonNewTab?: string;
+  /** Height of the inline viewer (e.g. '50vh'). */
   inlineHeight?: string;
+  /** Message shown when the PDF fails to load. */
   loadErrorLabel?: string;
+  /** Timeout in ms before showing load error or switching viewer engine. */
   loadTimeoutMs?: number;
+  /** PDF viewer engine: 'google' (Docs viewer), 'native' (iframe), or 'auto' (fallback). */
   viewerPreference?: 'google' | 'native' | 'auto';
+  /** Message shown when no document is provided. */
   notFoundLabel?: string;
+  /** HTML name attribute. */
   name?: string;
+  /** HTML id attribute. */
   id?: string;
+  /** Additional CSS classes. */
   className?: string;
 }
 
@@ -63,6 +83,10 @@ const openDocNewTab = (fileUrl: string) => {
   if (newWindow) newWindow.opener = null;
 };
 
+/**
+ * PDF viewer component supporting modal and inline display modes.
+ * Uses Google Docs viewer or native iframe with fallback on load failure.
+ */
 function IGRPPdfViewer({
   document,
   displayMode = 'modal',
@@ -152,12 +176,19 @@ function IGRPPdfViewer({
   );
 }
 
+/**
+ * Props for the internal IGRPPdfViewerCard component.
+ */
 type IGRPPdfViewerCardProps = {
+  /** Document to display in the card. */
   document: IGRPDocumentItem;
+  /** Callback when the user requests to view the document. */
   onView: (doc: IGRPDocumentItem) => void;
+  /** Whether the card is clickable to open the modal. */
   clickable?: boolean;
 };
 
+/** Card preview for a PDF document in modal mode. */
 function IGRPPdfViewerCard({ document, onView, clickable = true }: IGRPPdfViewerCardProps) {
   const handleKeyDown = (event: React.KeyboardEvent<HTMLDivElement>) => {
     if (!clickable) return;
@@ -194,15 +225,25 @@ function IGRPPdfViewerCard({ document, onView, clickable = true }: IGRPPdfViewer
   );
 }
 
+/**
+ * Props for the internal IGRPPdfViewerInline component.
+ */
 type IGRPPdfViewerInlineProps = {
+  /** Document to display inline. */
   document: IGRPDocumentItem;
+  /** Label for the "open in new tab" button. */
   labelButtonNewTab?: string;
+  /** Height of the iframe container. */
   height?: string;
+  /** Message shown when the PDF fails to load. */
   loadErrorLabel?: string;
+  /** Timeout in ms before showing load error or switching viewer engine. */
   loadTimeoutMs?: number;
+  /** PDF viewer engine preference. */
   viewerPreference?: 'google' | 'native' | 'auto';
 };
 
+/** Inline PDF viewer with embedded iframe. */
 function IGRPPdfViewerInline({
   document,
   labelButtonNewTab = 'Open in new tab',
@@ -324,17 +365,29 @@ function IGRPPdfViewerInline({
   );
 }
 
+/**
+ * Props for the internal IGRPPdfViewerModal component.
+ */
 type IGRPPdfViewerModalProps = {
+  /** Whether the modal is open. */
   open: boolean;
+  /** Document to display, or null when closed. */
   document: IGRPDocumentItem | null;
+  /** Callback when the modal should close. */
   onClose: (open: boolean) => void;
+  /** Label for the close button. */
   labelButtonCancel?: string;
+  /** Label for the "open in new tab" button. */
   labelButtonNewTab?: string;
+  /** Message shown when the PDF fails to load. */
   loadErrorLabel?: string;
+  /** Timeout in ms before showing load error or switching viewer engine. */
   loadTimeoutMs?: number;
+  /** PDF viewer engine preference. */
   viewerPreference?: 'google' | 'native' | 'auto';
 };
 
+/** Modal dialog containing the PDF viewer. */
 function IGRPPdfViewerModal({
   open,
   document,

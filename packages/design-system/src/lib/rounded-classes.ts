@@ -1,5 +1,6 @@
 import { cva } from 'class-variance-authority';
 
+/** CVA variants for border radius (none, sm, md, lg, xl, 2xl, 3xl, 4xl, full). */
 export const igrpRounded = cva('', {
   variants: {
     rounded: {

@@ -9,14 +9,23 @@ import { Checkbox } from '../../primitives/checkbox';
 import { IGRPFormField } from '../form/form-field';
 import { IGRPLabel } from '../label';
 
+/**
+ * Props for the IGRPCheckbox component.
+ * @see IGRPCheckbox
+ */
 interface IGRPCheckboxProps
   extends
     React.ComponentProps<typeof Checkbox>,
     Pick<IGRPInputProps, 'helperText' | 'label' | 'gridSize'> {
+  /** CSS classes for the label. */
   labelClassName?: string;
+  /** Validation error message. */
   error?: string;
 }
 
+/**
+ * Checkbox with label, helper text, and form integration.
+ */
 function IGRPCheckbox({
   name,
   id,

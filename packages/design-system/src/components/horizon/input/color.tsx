@@ -8,14 +8,26 @@ import type { IGRPInputProps } from '../../../types';
 import { Input } from '../../primitives/input';
 import { IGRPLabel } from '../label';
 
+/**
+ * Props for the IGRPInputColor component.
+ * @see IGRPInputColor
+ */
 interface IGRPInputColorProps extends Omit<IGRPInputProps, 'onChange' | 'value' | 'defaultValue'> {
+  /** Default hex color. */
   defaultValue?: string;
+  /** Controlled hex color value. */
   value?: string;
+  /** Called when color changes. */
   onChange?: (value: string) => void;
+  /** Whether to show the hex value next to the picker. */
   showHexValue?: boolean;
+  /** CSS classes for the wrapper. */
   className?: string;
 }
 
+/**
+ * Color picker input with optional hex display. Integrates with react-hook-form.
+ */
 function IGRPInputColor({
   name,
   id,

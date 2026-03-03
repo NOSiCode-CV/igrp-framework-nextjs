@@ -1,3 +1,7 @@
+/**
+ * Extracts initials from a name (e.g. "John Doe" → "JD").
+ * Single word returns first letter. Empty returns "N/A".
+ */
 export function igrpGetInitials(value: string): string {
   if (!value) return 'N/A';
   const parts = value.trim().split(' ').filter(Boolean);

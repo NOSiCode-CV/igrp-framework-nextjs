@@ -1,6 +1,14 @@
 'use client';
 
-import { useRef, useState, useCallback, createContext, useContext, useId, useEffect } from 'react';
+import { 
+  useRef, 
+  useState, 
+  useCallback, 
+  createContext, 
+  useContext, 
+  useId, 
+  useEffect 
+} from 'react';
 
 import type { IGRPColorRole, IGRPColorVariants } from '../../lib/colors';
 import { cn } from '../../lib/utils';
@@ -8,28 +16,53 @@ import { Card, CardContent, CardHeader, CardTitle } from '../primitives/card';
 import { IGRPBadge } from './badge';
 import { IGRPIcon } from './icon';
 
+/**
+ * Single menu navigation item.
+ * @see IGRPMenuNavigation
+ */
 interface IGRPMenuNavigationItem {
+  /** Unique section id. */
   id: string;
+  /** Display label. */
   label: string;
+  /** Icon name. */
   icon: string;
+  /** Whether the item is disabled. */
   disabled?: boolean;
 }
 
+/**
+ * Props for the IGRPMenuNavigation component.
+ * @see IGRPMenuNavigation
+ */
 interface IGRPMenuNavigationProps {
+  /** Navigation sections. */
   sections: IGRPMenuNavigationItem[];
+  /** Controlled active section id. */
   activeSection?: string;
+  /** Called when the active section changes. */
   onSectionChange?: (sectionId: string) => void;
+  /** Navigation title. */
   title?: string;
+  /** Badge content. */
   badgeContent?: string;
+  /** Badge variant. */
   badgeVariant?: IGRPColorRole;
+  /** Badge color. */
   badgeColor?: IGRPColorVariants;
+  /** CSS classes for the badge. */
   badgeClassName?: string;
+  /** Additional CSS classes. */
   className?: string;
+  /** Stick to top when scrolling. */
   isStickyTop?: boolean;
+  /** Show chevron on each item. */
   showChevron?: boolean;
+  /** HTML id attribute. */
   id?: string;
 }
 
+/** @internal */
 interface NavigationContextType {
   sectionRefs: React.RefObject<Record<string, HTMLDivElement | null>>;
   scrollToSection: (sectionId: string) => void;
@@ -66,6 +99,10 @@ function IGRPMenuNavigationProvider({ children }: { children: React.ReactNode })
   );
 }
 
+/**
+ * Side navigation menu with sections, active state, and scroll-to-section.
+ * Use IGRPMenuNavigationProvider for scroll behavior.
+ */
 function IGRPMenuNavigation({
   sections,
   activeSection: controlledActiveSection,

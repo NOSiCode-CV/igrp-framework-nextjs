@@ -10,17 +10,28 @@ import {
 import { cn } from '../../../lib/utils';
 import { IGRPButton } from '../button';
 
-type IGPRDataTableVisibilityProps<TData> = {
+/**
+ * Props for the IGRPDataTableToggleVisibility component.
+ * @see IGRPDataTableToggleVisibility
+ */
+type IGRPDataTableVisibilityProps<TData> = {
+  /** TanStack Table instance. */
   table: Table<TData>;
+  /** Button label. */
   label?: string;
+  /** Dropdown header label. */
   optionsLabel?: string;
 };
 
-function IGPRDataTableToggleVisibility<TData>({
+/**
+ * Dropdown to toggle column visibility in a data table.
+ * Renders a button that opens a list of hideable columns.
+ */
+function IGRPDataTableToggleVisibility<TData>({
   table,
   label = 'View',
   optionsLabel = 'Toggle columns',
-}: IGPRDataTableVisibilityProps<TData>) {
+}: IGRPDataTableVisibilityProps<TData>) {
   return (
     <DropdownMenu>
       <DropdownMenuTrigger asChild>
@@ -51,4 +62,4 @@ function IGPRDataTableToggleVisibility<TData>({
   );
 }
 
-export { IGPRDataTableToggleVisibility, type IGPRDataTableVisibilityProps };
+export { IGRPDataTableToggleVisibility, type IGRPDataTableVisibilityProps };

@@ -1,4 +1,4 @@
-'use client';
+'use client'
 
 import { useId, useState, useEffect } from 'react';
 import { format } from 'date-fns';
@@ -20,8 +20,15 @@ import { IGRPLabel } from '../../label';
 import { IGRPCalendarMultiple, type IGRPCalendarMultipleProps } from '../../calendar/multiple';
 import { DD_MM_YYYY } from '../../../../lib/constants';
 
+/**
+ * Props for the IGRPDatePickerMultiple component.
+ * @see IGRPDatePickerMultiple
+ */
 type IGRPDatePickerMultipleProps = IGRPCalendarMultipleProps & IGRPDatePickerBaseProps;
 
+/**
+ * Multi-date picker with popover calendar. Integrates with react-hook-form.
+ */
 function IGRPDatePickerMultiple({
   name,
   id,

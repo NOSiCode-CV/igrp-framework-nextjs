@@ -1,4 +1,4 @@
-'use client';
+'use client'
 
 import { useId } from 'react';
 import { useFormContext } from 'react-hook-form';
@@ -10,13 +10,25 @@ import { RadioGroup, RadioGroupItem, radioItemVariants } from '../../primitives/
 import { IGRPFormField } from '../form/form-field';
 import { IGRPLabel } from '../label';
 
+/**
+ * Option for radio group.
+ * @see IGRPRadioGroup
+ */
 type IGRPRadioOption = {
+  /** Option value. */
   value: string;
+  /** Option label. */
   label: string;
+  /** Optional description. */
   description?: string;
+  /** Disable this option. */
   disabled?: boolean;
 };
 
+/**
+ * Props for the IGRPRadioGroup component.
+ * @see IGRPRadioGroup
+ */
 interface IGRPRadioGroupProps
   extends
     IGRPBaseAttributes,
@@ -30,6 +42,9 @@ interface IGRPRadioGroupProps
   gridSize?: IGRPGridSize;
 }
 
+/**
+ * Radio group with label, helper text, and form integration.
+ */
 function IGRPRadioGroup({
   name,
   id,

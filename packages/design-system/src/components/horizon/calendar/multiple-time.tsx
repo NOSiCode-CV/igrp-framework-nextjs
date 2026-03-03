@@ -1,3 +1,5 @@
+"use client"
+
 import { useId, useState } from 'react';
 
 import { Input } from '../../primitives/input';
@@ -7,8 +9,16 @@ import { IGRPCalendarMultiple, type IGRPCalendarMultipleProps } from './multiple
 import { DEFAULT_HIDE_TIME_INDICATOR } from '../../../lib/constants';
 import { cn } from '../../../lib/utils';
 
+/**
+ * Props for the IGRPCalendarMultipleTime component.
+ * Combines multi-date picker with start/end time inputs.
+ * @see IGRPCalendarMultipleTime
+ */
 interface IGRPCalendarMultipleTimeProps extends IGRPCalendarMultipleProps, IGRPCalendarTimeProps {}
 
+/**
+ * Multi-date calendar with optional start and end time pickers.
+ */
 function IGRPCalendarMultipleTime({
   onStartTime,
   onEndTime,

@@ -1,3 +1,5 @@
+"use client"
+
 import { useId, type ReactNode } from 'react';
 import Link, { type LinkProps } from 'next/link';
 import { cva, type VariantProps } from 'class-variance-authority';
@@ -34,26 +36,45 @@ const IGRPLinkVariants = cva(
 type AnchorProps = Omit<React.AnchorHTMLAttributes<HTMLAnchorElement>, 'href'>;
 type NextLinkProps = Omit<LinkProps, 'href' | 'as'>;
 
+/**
+ * Props for the IGRPLink component.
+ * @see IGRPLink
+ */
 interface IGRPLinkProps
   extends
     AnchorProps,
     NextLinkProps,
     Omit<IGRPBaseAttributes, 'ref'>,
     VariantProps<typeof IGRPLinkVariants> {
+  /** Link URL. */
   href?: string;
+  /** Link content. */
   children: ReactNode;
+  /** Additional CSS classes. */
   className?: string;
+  /** Link target. */
   target?: string;
+  /** Click handler. */
   onClick?: () => void;
+  /** Color role. */
   variant?: IGRPColorRole;
+  /** Color theme. */
   color?: IGRPColorVariants;
+  /** Show icon. */
   showIcon?: boolean;
+  /** Icon name. */
   iconName?: IGRPIconName | string;
+  /** Icon position. */
   iconPlacement?: IGRPPlacementProps;
+  /** CSS classes for the icon. */
   iconClassName?: string;
+  /** Icon size. */
   iconSize?: number | string;
 }
 
+/**
+ * Link (Next.js or anchor) with optional icon and color variants.
+ */
 function IGRPLink({
   href,
   children,

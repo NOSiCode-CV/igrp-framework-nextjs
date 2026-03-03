@@ -1,14 +1,28 @@
+"use client";
+
 import { useId } from 'react';
 import { cn } from '../../lib/utils';
 
+/**
+ * Props for the IGRPPageFooter component.
+ * @see IGRPPageFooter
+ */
 interface IGRPPageFooterProps {
+  /** Additional CSS classes. */
   className?: string;
+  /** Footer content. */
   children?: React.ReactNode;
+  /** Stick to bottom when scrolling. */
   isSticky?: boolean;
+  /** HTML name attribute. */
   name?: string;
+  /** HTML id attribute. */
   id?: string;
 }
 
+/**
+ * Page footer with optional sticky positioning.
+ */
 function IGRPPageFooter({ className, children, name, isSticky, id }: IGRPPageFooterProps) {
   const _id = useId();
   const ref = name ?? id ?? _id;

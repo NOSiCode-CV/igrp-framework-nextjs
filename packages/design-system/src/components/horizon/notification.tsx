@@ -1,3 +1,5 @@
+"use client"
+
 import { cva, type VariantProps } from 'class-variance-authority';
 import { useId } from 'react';
 
@@ -33,19 +35,36 @@ const typeIconMap: Record<NonNullable<IGRPNotificationProps['variant']>, IGRPIco
   warninig: 'TriangleAlert',
 };
 
+/**
+ * Props for the IGRPNotification component.
+ * @see IGRPNotification
+ */
 type IGRPNotificationProps = {
+  /** Additional CSS classes. */
   className?: string;
+  /** Whether to show the type icon. */
   showIcon?: boolean;
+  /** Notification content. */
   content?: React.ReactNode;
+  /** Whether to show the close button. */
   showClose?: boolean;
+  /** Custom icon name. */
   iconName?: IGRPIconName | string;
+  /** Whether to show the link. */
   showLink?: boolean;
+  /** Link label. */
   lableLink?: string;
+  /** Link URL. */
   actionLink?: string;
+  /** Custom action elements. */
   customActions?: React.ReactNode;
+  /** HTML id attribute. */
   id?: string;
 } & VariantProps<typeof IGRPNotificationVariants>;
 
+/**
+ * Notification banner with icon, content, optional link, and close button.
+ */
 function IGRPNotification({
   className,
   showIcon = true,

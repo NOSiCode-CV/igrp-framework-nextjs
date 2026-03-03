@@ -1,5 +1,11 @@
+"use client"
+
 import { z } from 'zod';
 
+/**
+ * Converts form values to FormData for multipart/form-data submissions.
+ * Handles arrays, File, Date, and primitives.
+ */
 export const convertValuesToFormData = <TSchema extends z.ZodTypeAny>(
   values: z.infer<TSchema>,
 ): FormData => {

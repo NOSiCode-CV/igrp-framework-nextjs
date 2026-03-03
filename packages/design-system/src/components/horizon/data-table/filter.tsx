@@ -33,18 +33,32 @@ import { Input } from '../../primitives/input';
 import { CircleXIcon } from 'lucide-react';
 import { Button } from '../../primitives/button';
 
+/**
+ * Base props for data table filter components.
+ * @see IGRPDataTableFilterDropdown
+ * @see IGRPDataTableFilterFaceted
+ * @see IGRPDataTableFilterInput
+ */
 interface IGRPDataTableFilterProps<TData> {
+  /** Column to filter. */
   column?: Column<TData, unknown>;
+  /** Placeholder text. */
   placeholder?: string;
+  /** Clear date filter. */
   clearDates?: boolean;
+  /** Options for select/dropdown filters. */
   options?: IGRPOptionsProps[];
+  /** Additional CSS classes. */
   className?: string;
+  /** Max placeholder (e.g. for min/max). */
   placeholderMax?: string;
+  /** Disable the filter. */
   disabled?: boolean;
+  /** Icon name. */
   iconName?: IGRPIconName | string;
 }
 
-// TODO: Replace for igrp/date-picker
+/** Date range filter (placeholder). */
 function IGRPDataTableFilterDate<TData>({
   column,
   // placeholder = 'Selecionar datas...', // TODO : Add this to DateRangePicker
@@ -76,6 +90,10 @@ function IGRPDataTableFilterDate<TData>({
   );
 }
 
+/**
+ * Props for the IGRPDataTableFilterDropdown component.
+ * @see IGRPDataTableFilterDropdown
+ */
 interface IGRPDataTableFilterDropdownProps<TData> extends Omit<
   IGRPDataTableFilterProps<TData>,
   'clearDates' | 'placeholderMax' | 'target'
@@ -168,6 +186,7 @@ interface IGRPDataTableFilterFacetedProps<TData> extends Omit<
   showFilter?: boolean;
 }
 
+/** Multi-select faceted filter with search. */
 function IGRPDataTableFilterFaceted<TData>({
   column,
   placeholder = 'Selecionar...',
@@ -277,6 +296,7 @@ type IGRPDataTableFilterInputProps<TData> = Pick<
   'column' | 'placeholder' | 'className' | 'iconName'
 >;
 
+/** Text input filter. */
 function IGRPDataTableFilterInput<TData>({
   column,
   placeholder = 'Pesquisar...',
@@ -325,8 +345,7 @@ function IGRPDataTableFilterInput<TData>({
   );
 }
 
-// TODO: input number
-
+/** Min/max number range filter. */
 function IGRPDataTableFilterMinMax<TData>({
   column,
   placeholder: placeholderMin = 'Min',

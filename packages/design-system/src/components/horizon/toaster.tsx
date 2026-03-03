@@ -4,26 +4,50 @@ import { toast, type ExternalToast } from 'sonner';
 import { useCallback, useMemo } from 'react';
 import { Toaster } from '../primitives/sonner';
 
+/**
+ * Toast container. Place once in the app layout.
+ */
 function IGRPToaster(props: React.ComponentProps<typeof Toaster>) {
   return <Toaster {...props} />;
 }
 
+/** Toast type variants. */
 type IGRPToastKind = 'default' | 'success' | 'error' | 'info' | 'warning' | 'loading';
 
+/**
+ * Common props for all toast types.
+ * @see useIGRPToast
+ */
 type IGRPCommonToastProps = ExternalToast & {
+  /** Toast type. */
   type?: IGRPToastKind;
+  /** Toast title. */
   title?: React.ReactNode;
+  /** Toast description. */
   description?: React.ReactNode;
+  /** Raw content (overrides title/description). */
   content?: React.ReactNode;
 };
 
+/**
+ * Props for promise-based toasts.
+ * @see useIGRPToast
+ */
 type IGRPPromiseToastProps<T> = IGRPCommonToastProps & {
+  /** Promise to track. */
   promise: Promise<T>;
+  /** Loading message. */
   loading?: React.ReactNode;
+  /** Success message or render function. */
   success?: React.ReactNode | ((data: T) => React.ReactNode);
+  /** Error message or render function. */
   error?: React.ReactNode | ((err: unknown) => React.ReactNode);
 };
 
+/**
+ * Props for plain toasts (no promise).
+ * @see useIGRPToast
+ */
 type PlainToastProps = IGRPCommonToastProps & {
   promise?: never;
   loading?: never;

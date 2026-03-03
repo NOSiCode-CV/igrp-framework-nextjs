@@ -8,20 +8,37 @@ import { Card, CardHeader, CardTitle, CardDescription, CardContent } from '../pr
 import { Separator } from '../primitives/separator';
 import { IGRPCopyTo } from './copy-to';
 
+/**
+ * Single detail item (label + content).
+ * @see IGRPCardDetails
+ */
 interface IGRPCardDetailsItemProps {
+  /** Field label. */
   label: string;
+  /** Field content. */
   content: React.ReactNode;
+  /** Show copy-to-clipboard button. */
   showCopyTo?: boolean;
 }
 
+/**
+ * Props for the IGRPCardDetails component.
+ * @see IGRPCardDetails
+ */
 interface IGRPCardDetailsProps extends React.ComponentProps<typeof Card> {
+  /** Card title. */
   title?: string;
+  /** Card description. */
   description?: string;
+  /** CSS classes for the content grid. */
   contentClassName?: string;
+  /** Detail items. */
   items: IGRPCardDetailsItemProps[];
 }
-// TODO: see to use shadcn/ui Items component instead
 
+/**
+ * Card displaying labeled detail items in a grid, with optional copy button.
+ */
 function IGRPCardDetails({
   title,
   description,

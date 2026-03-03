@@ -11,18 +11,32 @@ import { Input } from '../../primitives/input';
 import { IGRPIcon } from '../icon';
 import { IGRPLabel } from '../label';
 
+/**
+ * Props for the IGRPInputPhone component.
+ * @see IGRPInputPhone
+ */
 interface IGRPInputPhoneProps extends Omit<IGRPInputProps, 'onChange' | 'ref'> {
+  /** Description text. */
   description?: string;
+  /** Helper text below the input. */
   helperText?: string;
+  /** Default phone value. */
   defaultValue?: string;
+  /** Controlled phone value. */
   value?: string;
+  /** Use international format. */
   international?: boolean;
+  /** Default country code. */
   defaultCountry?: RPNInput.Country;
+  /** Allowed countries. */
   countries?: RPNInput.Country[];
+  /** Called when phone value changes. */
   onChange?: (value: string | undefined) => void;
+  /** Text direction. */
   dir?: 'ltr' | 'rtl';
 }
 
+/** @internal Wrapper for phone input styling. */
 function PhoneInput({ className, ...props }: React.ComponentProps<'input'>) {
   return (
     <Input
@@ -33,6 +47,7 @@ function PhoneInput({ className, ...props }: React.ComponentProps<'input'>) {
   );
 }
 
+/** @internal Country selector for phone input. */
 type CountrySelectProps = {
   disabled?: boolean;
   value: RPNInput.Country;
@@ -92,6 +107,9 @@ function FlagComponent({ country, countryName }: RPNInput.FlagProps) {
   );
 }
 
+/**
+ * Phone input with country selector. Integrates with react-hook-form.
+ */
 function IGRPInputPhone({
   name,
   id,

@@ -1,3 +1,5 @@
+"use client"
+
 import { type Row } from '@tanstack/react-table';
 import { format } from 'date-fns';
 
@@ -12,10 +14,16 @@ import { DD_MM_YYYY } from '../../../lib/constants';
 import { cn } from '../../../lib/utils';
 import { Switch } from '../../primitives/switch';
 
+/**
+ * Props for the IGRPDataTableCellCheckbox component.
+ * @see IGRPDataTableCellCheckbox
+ */
 interface IGRPDataTableCellCheckboxProps<TData> extends React.ComponentProps<typeof Checkbox> {
+  /** Table row. */
   row: Row<TData>;
 }
 
+/** Checkbox for row selection. */
 function IGRPDataTableCellCheckbox<TData>({
   row,
   className,
@@ -33,10 +41,15 @@ function IGRPDataTableCellCheckbox<TData>({
   );
 }
 
+/**
+ * Props for the IGRPDataTableCellSwitch component.
+ * @see IGRPDataTableCellSwitch
+ */
 interface IGRPDataTableCellSwitchProps<TData> extends React.ComponentProps<typeof Switch> {
   row: Row<TData>;
 }
 
+/** Switch for row selection. */
 function IGRPDataTableCellSwitch<TData>({
   row,
   className,
@@ -54,11 +67,18 @@ function IGRPDataTableCellSwitch<TData>({
   );
 }
 
+/**
+ * Props for the IGRPDataTableCellExpander component.
+ * @see IGRPDataTableCellExpander
+ */
 interface IGRPDataTableCellExpanderProps<TData> {
+  /** Table row. */
   row: Row<TData>;
+  /** Field name for aria-label. */
   field: string;
 }
 
+/** Button to expand/collapse row details. */
 function IGRPDataTableCellExpander<TData>({ row, field }: IGRPDataTableCellExpanderProps<TData>) {
   return row.getCanExpand() ? (
     <Button
@@ -82,13 +102,22 @@ function IGRPDataTableCellExpander<TData>({ row, field }: IGRPDataTableCellExpan
   ) : null;
 }
 
+/**
+ * Props for the IGRPDataTableCellAmount component.
+ * @see IGRPDataTableCellAmount
+ */
 interface IGRPDataTableCellAmountProps {
+  /** Numeric value to format. */
   field: string;
+  /** Currency code. */
   currency?: string;
+  /** Locale for formatting. */
   language?: string;
+  /** Intl.format style. */
   formatStyle?: 'currency' | 'decimal' | 'percent' | 'unit';
 }
 
+/** Formatted amount/number cell. */
 function IGRPDataTableCellAmount({
   field,
   currency = 'USD',
@@ -103,10 +132,16 @@ function IGRPDataTableCellAmount({
   return formatted;
 }
 
+/**
+ * Props for the IGRPDataTableCellBadge component.
+ * @see IGRPDataTableCellBadge
+ */
 interface IGRPDataTableCellBadgeProps extends IGRPBadgeProps {
+  /** Badge text. */
   label: string;
 }
 
+/** Badge cell. */
 function IGRPDataTableCellBadge({
   label,
   variant,
@@ -169,12 +204,20 @@ function IGRPDataTableCellLink({
   );
 }
 
+/**
+ * Props for the IGRPDataTableCellTooltip component.
+ * @see IGRPDataTableCellTooltip
+ */
 type IGRPDataTableCellTooltipProps = {
+  /** Text to show in tooltip. */
   text: string;
+  /** Tooltip side. */
   side?: 'top' | 'bottom' | 'left' | 'right';
+  /** Tooltip alignment. */
   align?: 'start' | 'center' | 'end';
 };
 
+/** Cell with tooltip on truncated text. */
 function IGRPDataTableCellTooltip({
   text,
   side = 'top',

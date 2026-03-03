@@ -239,30 +239,57 @@ const igrpStstaCardIconVariants = cva('flex items-center justify-center shrink-0
   },
 });
 
+/**
+ * Props for the IGRPStatsCard component.
+ * @see IGRPStatsCard
+ */
 interface IGRPStatsCardProps
   extends Omit<IGRPBaseAttributes, 'ref' | 'iconSize'>, React.HTMLAttributes<HTMLDivElement> {
+  /** Card title. */
   title?: string;
+  /** Title size variant. */
   titleSize?: VariantProps<typeof igrpStatsCardTitleVariants>['size'];
+  /** CSS classes for the title. */
   titleClassName?: string;
+  /** Apply card variant color to title. */
   titleColored?: boolean;
+  /** Main value (number or string). */
   value?: string | number;
+  /** Value size variant. */
   valueSize?: VariantProps<typeof igrpStatsCardValueVariants>['size'];
+  /** CSS classes for the value. */
   valueClassName?: string;
+  /** Apply card variant color to value. */
   valueColored?: boolean;
+  /** Click handler (makes card interactive). */
   onClick?: () => void;
+  /** Image URL (replaces icon). */
   image?: string;
+  /** Alt text for the image. */
   imageAlt?: string;
+  /** Card border style. */
   cardBorder?: VariantProps<typeof igrpStatsCardVariants>['border'];
+  /** Border position (top, bottom, left, right). */
   cardBorderPosition?: VariantProps<typeof igrpStatsCardVariants>['borderPosition'];
+  /** Color theme for border and icon. */
   cardVariant?: IGRPColorVariants;
+  /** Show background behind icon. */
   showIconBackground?: boolean;
+  /** Icon background shape. */
   iconBackground?: VariantProps<typeof igrpStstaCardIconVariants>['background'];
+  /** Show border around icon. */
   showIconBorder?: boolean;
+  /** Icon color variant. */
   iconVariant?: IGRPColorVariants;
+  /** Layout: title/value at start or end. */
   itemPlacement?: 'start' | 'end';
+  /** Icon size. */
   iconSize?: VariantProps<typeof igrpStstaCardIconVariants>['size'];
 }
 
+/**
+ * Stats card with title, value, icon or image, and optional click handler.
+ */
 function IGRPStatsCard({
   className,
   title,
@@ -374,6 +401,9 @@ function IGRPStatsCard({
   );
 }
 
+/**
+ * Props for the internal IGRPStatsCardIcon component.
+ */
 interface IGRPStatsCardIconProps {
   showIcon: boolean;
   image?: string;
@@ -386,6 +416,8 @@ interface IGRPStatsCardIconProps {
   iconVariant: IGRPColorVariants;
   iconClassName?: string;
 }
+
+/** Renders the icon or image for IGRPStatsCard. */
 function IGRPStatsCardIcon({
   showIcon,
   image,

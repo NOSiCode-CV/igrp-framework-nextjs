@@ -1,3 +1,5 @@
+"use client"
+
 import { useEffect, useId, useState } from 'react';
 
 import { getDisabledDays } from '../../../lib/calendar-utils';
@@ -5,11 +7,20 @@ import { cn } from '../../../lib/utils';
 import type { IGRPCalendarProps } from '../../../types';
 import { Calendar } from '../../primitives/calendar';
 
+/**
+ * Props for the IGRPCalendarSingle component.
+ * @see IGRPCalendarSingle
+ */
 type IGRPCalendarSingleProps = {
+  /** Selected date. */
   date?: Date;
+  /** Called when the selected date changes. */
   onDateChange?: (date: Date | undefined) => void;
 } & Omit<IGRPCalendarProps, 'mode'>;
 
+/**
+ * Single-date calendar picker.
+ */
 function IGRPCalendarSingle({
   name,
   id,

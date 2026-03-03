@@ -1,3 +1,5 @@
+"use client"
+
 import { useId, useState } from 'react';
 
 import { Input } from '../../primitives/input';
@@ -7,8 +9,16 @@ import { IGRPCalendarRange, type IGRPCalendarRangeProps } from './range';
 import { DEFAULT_HIDE_TIME_INDICATOR } from '../../../lib/constants';
 import { cn } from '../../../lib/utils';
 
+/**
+ * Props for the IGRPCalendarRangeTime component.
+ * Combines date range picker with start/end time inputs.
+ * @see IGRPCalendarRangeTime
+ */
 interface IGRPCalendarRangeTimeProps extends IGRPCalendarRangeProps, IGRPCalendarTimeProps {}
 
+/**
+ * Date range calendar with optional start and end time pickers.
+ */
 function IGRPCalendarRangeTime({
   onStartTime,
   onEndTime,

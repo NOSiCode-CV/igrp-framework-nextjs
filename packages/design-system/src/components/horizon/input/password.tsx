@@ -9,10 +9,18 @@ import { Input } from '../../primitives/input';
 import { IGRPButton } from '../button';
 import { IGRPLabel } from '../label';
 
+/**
+ * Props for the IGRPInputPassword component.
+ * @see IGRPInputPassword
+ */
 interface IGRPInputPasswordProps extends Omit<IGRPInputProps, 'onChange'> {
+  /** Controlled password value. */
   value?: string;
+  /** Default password value. */
   defaultValue?: string;
+  /** Called when value changes. */
   onChange?: (value: string) => void;
+  /** Show toggle to reveal/hide password. */
   showPasswordToggle?: boolean;
   /**
    * @deprecated This props will be deprecated in the next release.
@@ -20,6 +28,9 @@ interface IGRPInputPasswordProps extends Omit<IGRPInputProps, 'onChange'> {
   IGRPGridSize?: IGRPGridSize;
 }
 
+/**
+ * Password input with optional visibility toggle. Integrates with react-hook-form.
+ */
 function IGRPInputPassword({
   name,
   id,

@@ -6,6 +6,11 @@ import { IGRPColors, type IGRPColorVariants } from '../../lib/colors';
 import { cn } from '../../lib/utils';
 import { IGRPStatsCard, type IGRPStatsCardProps } from '../horizon/stats-card';
 
+/**
+ * Props for the StatsCardMini component.
+ * Extends IGRPStatsCardProps with a simplified variant-based color scheme.
+ * @see StatsCardMini
+ */
 interface StatsCardMiniProps extends Omit<
   IGRPStatsCardProps,
   | 'cardBorder'
@@ -18,9 +23,14 @@ interface StatsCardMiniProps extends Omit<
   | 'titleColor'
   | 'valueColor'
 > {
+  /** Color theme for the card (e.g. 'primary', 'success', 'destructive'). */
   variant?: IGRPColorVariants;
 }
 
+/**
+ * Compact stats card with minimal styling and variant-based colors.
+ * Uses IGRPStatsCard internally with fixed layout (no icon background, rounded icon border).
+ */
 function StatsCardMini({
   title,
   titleSize = 'sm',

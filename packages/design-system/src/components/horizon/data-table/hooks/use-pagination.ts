@@ -1,15 +1,31 @@
+/**
+ * Props for the usePagination hook.
+ * @see usePagination
+ */
 type UsePaginationProps = {
+  /** Current page (1-based). */
   currentPage: number;
+  /** Total number of pages. */
   totalPages: number;
+  /** Max page numbers to show. */
   paginationItemsToDisplay: number;
 };
 
+/**
+ * Return value of usePagination.
+ */
 type UsePaginationReturn = {
+  /** Page numbers to display. */
   pages: number[];
+  /** Show ellipsis on the left. */
   showLeftEllipsis: boolean;
+  /** Show ellipsis on the right. */
   showRightEllipsis: boolean;
 };
 
+/**
+ * Computes page numbers and ellipsis visibility for numeric pagination.
+ */
 export function usePagination({
   currentPage,
   totalPages,

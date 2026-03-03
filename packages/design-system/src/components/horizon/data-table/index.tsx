@@ -38,37 +38,65 @@ import {
   IGRPDataTableClientFilter,
 } from './client-filter';
 import { IGRPDataTablePagination, IGRPDataTablePaginationNumeric } from './pagination';
-import { IGPRDataTableToggleVisibility } from './toggle-visibility';
+import { IGRPDataTableToggleVisibility } from './toggle-visibility';
 import { cn } from '../../../lib/utils';
 import { IGRPIcon } from '../icon';
 
+/**
+ * Props for the IGRPDataTable component.
+ * @see IGRPDataTable
+ */
 interface IGRPDataTableProps<TData, TValue> {
+  /** TanStack Table column definitions. */
   columns: ColumnDef<TData, TValue>[];
+  /** Table data rows. */
   data: TData[];
+  /** Show pagination controls. */
   showPagination?: boolean;
+  /** Use numeric page selector instead of prev/next. */
   isNumericPagination?: boolean;
+  /** Available page size options. */
   pageSizePagination?: number[];
+  /** Use server-side filtering (requires serverFilterComponent). */
   isServerSide?: boolean;
+  /** Show filter UI. */
   showFilter?: boolean;
+  /** Client-side filter configurations. */
   clientFilters?: IGRPDataTableClientFilterListProps<TData>[];
+  /** Label for clear filters button. */
   clientClearLabel?: string;
+  /** Show column visibility toggle. */
   showToggleColumn?: boolean;
+  /** Label for column visibility toggle button. */
   toggleLabel?: string;
+  /** Label for column visibility dropdown. */
   toggleOptionsLabel?: string;
+  /** CSS classes for the wrapper. */
   className?: string;
+  /** CSS classes for the table element. */
   tableClassName?: string;
+  /** CSS classes for the table header. */
   tableHeaderClassName?: string;
+  /** CSS classes for the table body. */
   tableBodyClassName?: string;
+  /** CSS classes for pagination. */
   paginationClassName?: string;
+  /** Custom filter component for server-side mode. */
   serverFilterComponent?: React.ReactNode;
+  /** Message when no rows match. */
   notFoundLabel?: string;
-  // rowSelection?: RowSelectionState
-  // onRowSelectionChange?: OnChangeFn<RowSelectionState>
+  /** Whether a row can be expanded. */
   getRowCanExpand?: TableOptions<TData>['getRowCanExpand'];
+  /** Render expanded row content. */
   renderSubComponent?: (row: Row<TData>) => React.ReactElement | undefined;
+  /** HTML id attribute. */
   id?: string;
 }
 
+/**
+ * Data table with sorting, filtering, pagination, and expandable rows.
+ * Built on TanStack Table. Use IGRPDataTableHeader*, IGRPDataTableCell*, etc. for column setup.
+ */
 function IGRPDataTable<TData, TValue>({
   columns,
   data,
@@ -170,7 +198,7 @@ function IGRPDataTable<TData, TValue>({
             />
           ))}
         {showToggleColumn && (
-          <IGPRDataTableToggleVisibility
+          <IGRPDataTableToggleVisibility
             table={table}
             label={toggleLabel}
             optionsLabel={toggleOptionsLabel}

@@ -4,12 +4,23 @@ import { useId } from 'react';
 
 import { cn } from '../../lib/utils';
 
+/**
+ * Props for the IGRPLoadingSpinner component.
+ * @see IGRPLoadingSpinner
+ */
 interface IGRPLoadingSpinnerProps {
+  /** CSS classes for the outer container (centers the spinner). */
   parentClassName?: string;
+  /** CSS classes for the spinner element. */
   className?: string;
+  /** HTML id attribute. */
   id?: string;
 }
 
+/**
+ * Centered loading spinner for async states.
+ * Renders a circular animated spinner in a flex container.
+ */
 function IGRPLoadingSpinner({ parentClassName, className, id }: IGRPLoadingSpinnerProps) {
   const _id = useId();
   const ref = id ?? _id;

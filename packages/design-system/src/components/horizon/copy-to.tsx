@@ -1,4 +1,4 @@
-'use client';
+"use client"
 
 import { useEffect, useRef, useState } from 'react';
 
@@ -8,18 +8,34 @@ import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from '../pri
 import { IGRPIcon } from './icon';
 import { useIGRPToast } from './toaster';
 
+/**
+ * Props for the IGRPCopyTo component.
+ * @see IGRPCopyTo
+ */
 interface IGRPCopyToProps {
+  /** Text to copy to clipboard. */
   value: string;
+  /** Tooltip delay in ms. */
   tooltipDelayDuration?: number;
+  /** Toast duration in ms. */
   toastDuration?: number;
+  /** Message shown on successful copy. */
   successMessage?: string;
+  /** Message shown when copy fails. */
   errorMessage?: string;
+  /** Tooltip text before copy. */
   tooltipMessage?: string;
+  /** CSS classes for the trigger button. */
   triggerClassName?: string;
+  /** Called when copy succeeds. */
   onCopySuccess?: (value: string) => void;
+  /** Called when copy fails. */
   onCopyError?: (error: Error) => void;
 }
 
+/**
+ * Copy-to-clipboard button with tooltip and toast feedback.
+ */
 function IGRPCopyTo({
   value,
   tooltipDelayDuration = 700,

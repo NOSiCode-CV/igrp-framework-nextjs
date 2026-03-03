@@ -4,6 +4,10 @@ import { useEffect, useState } from 'react';
 
 const MOBILE_BREAKPOINT = 768;
 
+/**
+ * Returns whether the viewport is below the mobile breakpoint (768px).
+ * Updates on window resize.
+ */
 export function useIsMobile() {
   const [isMobile, setIsMobile] = useState<boolean | undefined>(undefined);
 

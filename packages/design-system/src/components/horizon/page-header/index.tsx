@@ -1,3 +1,5 @@
+"use client"
+
 import { type VariantProps } from 'class-variance-authority';
 import { useId } from 'react';
 
@@ -7,29 +9,52 @@ import { IGRPHeadline, igrpHeadlineVariants } from '../typography/headline';
 import { cn } from '../../../lib/utils';
 import { type IGRPBaseAttributes } from '../../../types';
 
+/**
+ * Props for the IGRPPageHeader component.
+ * @see IGRPPageHeader
+ */
 interface IGRPPageHeaderProps extends Pick<IGRPBaseAttributes, 'name'> {
+  /** Page title. */
   title: string;
+  /** Optional description. */
   description?: string;
+  /** Headline variant. */
   variant?: VariantProps<typeof igrpHeadlineVariants>['variant'];
+  /** Additional CSS classes. */
   className?: string;
+  /** CSS classes for the headline. */
   headlineClassName?: string;
+  /** Right-side content (e.g. actions). */
   children?: React.ReactNode;
+  /** Stick to top when scrolling. */
   isSticky?: boolean;
+  /** Show back button. */
   showBackButton?: boolean;
-  // Back button props - forward most props from IGRPPageHeaderBackButton
+  /** URL for back button (link mode). */
   urlBackButton?: string;
+  /** Back button icon. */
   iconBackButton?: IGRPIconName | string;
+  /** Back button variant. */
   backButtonVariant?: React.ComponentProps<typeof IGRPPageHeaderBackButton>['variant'];
+  /** Back button size. */
   backButtonSize?: React.ComponentProps<typeof IGRPPageHeaderBackButton>['size'];
+  /** Back button aria-label. */
   backButtonAriaLabel?: string;
+  /** Show text on back button. */
   backButtonShowText?: boolean;
+  /** Back button text. */
   backButtonText?: string;
+  /** CSS classes for back button. */
   backButtonClassName?: string;
+  /** Use browser history back. */
   backButtonUseBrowserBack?: boolean;
+  /** Custom back button click handler. */
   backButtonOnClick?: React.ComponentProps<typeof IGRPPageHeaderBackButton>['onClick'];
+  /** HTML id attribute. */
   id?: string;
 }
 
+/** @internal */
 type BackButtonProps = {
   iconBackButton?: IGRPIconName | string;
   backButtonVariant?: React.ComponentProps<typeof IGRPPageHeaderBackButton>['variant'];
@@ -81,6 +106,9 @@ function renderBackButton({
   return <IGRPPageHeaderBackButton {...baseProps} url={urlBackButton} />;
 }
 
+/**
+ * Page header with title, description, optional back button, and action slot.
+ */
 function IGRPPageHeader({
   title,
   description,

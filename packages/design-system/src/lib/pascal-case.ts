@@ -1,3 +1,4 @@
+/** Converts a string to PascalCase (e.g. "hello world" → "HelloWorld"). */
 export function igrpToPascalCase(input: string): string {
   return input
     .replace(/[^a-zA-Z0-9]+/g, ' ')

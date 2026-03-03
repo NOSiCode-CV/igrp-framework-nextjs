@@ -10,11 +10,22 @@ import { IGRPFormField } from '../form/form-field';
 import { IGRPIcon } from '../icon';
 import { IGRPLabel } from '../label';
 
+/**
+ * Props for the IGRPInputText component.
+ * Extends IGRPInputProps with text input specifics.
+ * @see IGRPInputText
+ */
 interface IGRPInputTextProps extends IGRPInputProps {
+  /** Input type: 'text' | 'email' | 'number'. */
   type?: 'text' | 'email' | 'number';
+  /** Validation error message (overrides form field error). */
   error?: string;
 }
 
+/**
+ * Text input with label, helper text, optional icon, and form integration.
+ * Auto-wires to IGRPForm when inside form context.
+ */
 function IGRPInputText({
   name,
   id,

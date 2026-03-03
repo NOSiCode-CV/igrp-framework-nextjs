@@ -22,17 +22,29 @@ const igrpBadgeVariants = cva(
   },
 );
 
+/**
+ * Props for the IGRPBadge component.
+ * @see IGRPBadge
+ */
 interface IGRPBadgeProps
   extends
     Omit<IGRPBaseAttributes, 'helperText'>,
     Omit<React.ComponentProps<'div'>, 'color'>,
     VariantProps<typeof igrpBadgeVariants> {
+  /** Show a colored dot indicator. */
   dot?: boolean;
+  /** Badge style variant (e.g. 'solid', 'soft', 'outline'). */
   variant?: IGRPColorRole;
+  /** Color theme (e.g. 'primary', 'success', 'destructive'). */
   color?: IGRPColorVariants;
+  /** Additional CSS classes for the badge. */
   badgeClassName?: string;
 }
 
+/**
+ * Badge for labels, status indicators, and counts.
+ * Supports icon, dot indicator, and size variants.
+ */
 function IGRPBadge({
   dot = false,
   variant = 'solid',

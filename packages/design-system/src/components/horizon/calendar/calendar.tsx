@@ -1,3 +1,5 @@
+"use client"
+
 import { useId, useState } from 'react';
 import type { DropdownNavProps, DropdownProps, PropsBase, PropsSingle } from 'react-day-picker';
 
@@ -11,14 +13,26 @@ import {
 } from '../../primitives/select';
 import { cn } from '../../../lib/utils';
 
+/**
+ * Props for the IGRPCalendar component (deprecated).
+ * @see IGRPCalendar
+ */
 type IGRPCalendarProps = {
+  /** HTML id attribute. */
   id?: string;
+  /** HTML name attribute. */
   name?: string;
+  /** Selected date. */
   date?: Date;
+  /** Called when the selected date changes. */
   onDateChange?: (date: Date | undefined) => void;
+  /** Earliest selectable month. */
   startDate?: Date;
+  /** Latest selectable month. */
   endDate?: Date;
+  /** Additional CSS classes. */
   className?: string;
+  /** CSS classes for day buttons. */
   dayButtonClassName?: string;
 } & PropsBase &
   (

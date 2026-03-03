@@ -30,6 +30,10 @@ import {
   hasNegativeValues,
 } from './lib';
 
+/**
+ * Line series configuration.
+ * @see IGRPLineChart
+ */
 interface LineConfig extends IGRPSeriesConfig {
   type?: 'linear' | 'monotone' | 'step' | 'basis' | 'natural';
   strokeWidth?: number;
@@ -41,10 +45,17 @@ interface LineConfig extends IGRPSeriesConfig {
   labelOffset?: number;
 }
 
+/**
+ * Props for the IGRPLineChart component.
+ * @see IGRPLineChart
+ */
 interface IGRPLineChartProps extends IGRPChartProps {
   lines: LineConfig[];
 }
 
+/**
+ * Line chart with optional grid, tooltip, and legend.
+ */
 function IGRPLineChart({
   data,
   lines,

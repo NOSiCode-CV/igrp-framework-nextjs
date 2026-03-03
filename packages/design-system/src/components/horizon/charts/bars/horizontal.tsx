@@ -22,14 +22,26 @@ import {
 } from '../lib';
 import type { IGRPBarConfig, IGRPChartProps } from '../types';
 
+/**
+ * Props for the IGRPHorizontalBarChart component.
+ * @see IGRPHorizontalBarChart
+ */
 interface IGRPHorizontalBarChartProps extends IGRPChartProps {
+  /** Bar series configurations. */
   bars: IGRPBarConfig[];
+  /** Bar corner radius. */
   barRadius?: number;
+  /** Gap between bars in same category. */
   barGap?: number;
+  /** Gap between categories. */
   barCategoryGap?: string | number;
+  /** Show X axis (values). */
   showXAxis?: boolean;
 }
 
+/**
+ * Horizontal bar chart with optional stacking and grid.
+ */
 function IGRPHorizontalBarChart({
   data,
   bars,

@@ -1,3 +1,4 @@
+/** Returns true if the URL points to a different origin than the current page. */
 export function igrpIsExternalUrl(url?: string): boolean {
   if (!url) return false;
 
@@ -9,6 +10,7 @@ export function igrpIsExternalUrl(url?: string): boolean {
   }
 }
 
+/** Ensures URL has leading slash or full protocol. Relative paths get / prefix. */
 export function igrpNormalizeUrl(url: string): string {
   if (!url) return '';
 

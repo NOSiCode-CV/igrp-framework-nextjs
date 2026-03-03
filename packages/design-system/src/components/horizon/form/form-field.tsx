@@ -16,24 +16,42 @@ import {
 import { cn } from '../../../lib/utils';
 import { type IGRPPlacementProps } from '../../../types';
 
-interface IGRPFormFielProps {
+/**
+ * Props for the IGRPFormField component.
+ * Wraps react-hook-form FormField with IGRP layout and styling.
+ * @see IGRPFormField
+ */
+interface IGRPFormFieldProps {
+  /** Form field name (must match schema). */
   name: string;
+  /** Field label. */
   label?: string;
+  /** Helper text shown below the field. */
   helperText?: string;
+  /** Additional CSS classes for the wrapper. */
   className?: string;
   /**
    * @deprecated This props will be deprecated in the next release.
    */
   size?: string;
+  /** Field content or render function receiving field and fieldState. */
   children:
     | React.ReactNode
     | ((field: ControllerRenderProps, fieldState: ControllerFieldState) => React.ReactNode);
+  /** Whether the field is required. */
   required?: boolean;
+  /** react-hook-form control from useFormContext. */
   control: Control<FieldValues, unknown, FieldValues>;
+  /** Label position ('start' | 'end' | 'center'). */
   labelPlacement?: IGRPPlacementProps;
+  /** Use horizontal layout (label beside control), e.g. for switches. */
   isToggle?: boolean;
 }
 
+/**
+ * Form field wrapper integrating with react-hook-form.
+ * Must be used inside IGRPFormContext. Renders label, control, helper text, and validation errors.
+ */
 function IGRPFormField({
   name,
   label,
@@ -44,7 +62,7 @@ function IGRPFormField({
   control,
   labelPlacement = 'start',
   isToggle = false,
-}: IGRPFormFielProps) {
+}: IGRPFormFieldProps) {
   return (
     <FormField
       control={control}
@@ -80,4 +98,4 @@ function IGRPFormField({
   );
 }
 
-export { IGRPFormField, type IGRPFormFielProps };
+export { IGRPFormField, type IGRPFormFieldProps };

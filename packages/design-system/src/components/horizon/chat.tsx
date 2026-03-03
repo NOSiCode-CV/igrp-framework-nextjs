@@ -1,4 +1,4 @@
-'use client';
+"use client" 
 
 import { useState, useEffect, useRef, useCallback, useId } from 'react';
 
@@ -8,21 +8,42 @@ import { IGRPButton } from './button';
 import { IGRPInputText } from './input/text';
 import { IGRPIcon } from './icon';
 
+/**
+ * Chat message shape for IGRPChat.
+ * @see IGRPChat
+ */
 interface IGRPChatMessage {
+  /** Message role. */
   role: 'user' | 'assistant' | 'system';
+  /** Message content (text or URL depending on type). */
   content: string;
+  /** Content type for rendering. */
   type?: 'text' | 'image' | 'link' | 'button';
+  /** ISO timestamp. */
   timestamp?: string;
+  /** Sender display name. */
   sender?: string;
 }
 
+/**
+ * Props for the IGRPChat component.
+ * @see IGRPChat
+ */
 interface IGRPChatProps {
+  /** API endpoint for POST requests (receives messages, returns new messages). */
   apiEndpoint: string;
+  /** Placeholder text when there are no messages. */
   labelDescription?: string;
+  /** HTML name attribute. */
   name?: string;
+  /** HTML id attribute. */
   id?: string;
 }
 
+/**
+ * Chat interface with message list, input, and API integration.
+ * Sends user messages to the endpoint and displays responses.
+ */
 function IGRPChat({ apiEndpoint, labelDescription = 'Ask me anything!', name, id }: IGRPChatProps) {
   const [messages, setMessages] = useState<IGRPChatMessage[]>([]);
   const [input, setInput] = useState('');

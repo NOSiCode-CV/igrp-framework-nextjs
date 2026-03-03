@@ -8,40 +8,57 @@ import { Button } from '../../primitives/button';
 import { IGRPIcon, type IGRPIconName } from '../icon';
 import { cn } from '../../../lib/utils';
 
+/** @internal Base props shared by all back button variants. */
 type IGRPPageHeaderBackButtonPropsBase = Omit<
   React.ComponentProps<typeof Button>,
   'asChild' | 'onClick' | 'children'
 > & {
+  /** Icon to display. */
   iconName?: IGRPIconName | string;
+  /** Accessible label. */
   ariaLabel?: string;
+  /** Show text label next to icon. */
   showText?: boolean;
+  /** Text to display when showText is true. */
   text?: string;
+  /** CSS classes for the button. */
   className?: string;
 };
 
+/** @internal Variant: link navigation via url. */
 type IGRPPageHeaderBackButtonWithUrl = IGRPPageHeaderBackButtonPropsBase & {
   url?: string;
   useBrowserBack?: false;
   onClick?: never;
 };
 
+/** @internal Variant: browser history back. */
 type IGRPPageHeaderBackButtonWithBrowserBack = IGRPPageHeaderBackButtonPropsBase & {
   url?: never;
   useBrowserBack: true;
   onClick?: (e: React.MouseEvent<HTMLButtonElement>) => void;
 };
 
+/** @internal Variant: custom onClick handler. */
 type IGRPPageHeaderBackButtonWithOnClick = IGRPPageHeaderBackButtonPropsBase & {
   url?: never;
   useBrowserBack?: false;
   onClick: (e: React.MouseEvent<HTMLButtonElement>) => void;
 };
 
+/**
+ * Props for the IGRPPageHeaderBackButton component.
+ * Supports link (url), browser back (useBrowserBack), or custom onClick.
+ * @see IGRPPageHeaderBackButton
+ */
 type IGRPPageHeaderBackButtonProps =
   | IGRPPageHeaderBackButtonWithUrl
   | IGRPPageHeaderBackButtonWithBrowserBack
   | IGRPPageHeaderBackButtonWithOnClick;
 
+/**
+ * Back button for page headers. Navigates via URL link, browser back, or custom onClick.
+ */
 function IGRPPageHeaderBackButton({
   url,
   iconName = 'ArrowLeft',

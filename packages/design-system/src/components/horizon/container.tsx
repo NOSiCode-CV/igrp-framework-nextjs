@@ -2,6 +2,9 @@ import { useId } from 'react';
 
 import { cn } from '../../lib/utils';
 
+/**
+ * Layout container with default padding. Accepts standard div props.
+ */
 function IGRPContainer({ className, id, ...props }: React.ComponentProps<'div'>) {
   const _id = useId();
   const ref = id ?? _id;

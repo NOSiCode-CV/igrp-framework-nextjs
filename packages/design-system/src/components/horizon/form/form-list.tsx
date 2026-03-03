@@ -1,6 +1,14 @@
-'use client';
+'use client'
 
-import { forwardRef, useCallback, useContext, useEffect, useId, useRef, useState } from 'react';
+import { 
+  forwardRef, 
+  useCallback, 
+  useContext, 
+  useEffect, 
+  useId, 
+  useRef, 
+  useState 
+} from 'react';
 import { useFieldArray, useWatch } from 'react-hook-form';
 
 import { cn } from '../../../lib/utils';
@@ -35,6 +43,11 @@ const mapOpenItemsAfterRemove = (openItems: string[], removedIndex: number): str
       return idx > removedIndex ? getAccordionValue(idx - 1) : v;
     });
 
+/**
+ * Props for the IGRPFormList component.
+ * Works in form mode (inside IGRPForm) or standalone mode (controlled value/onChange).
+ * @see IGRPFormList
+ */
 interface IGRPFormListProps<TItem>
   extends
     Omit<IGRPBaseAttributes, 'iconPlacement' | 'helperText'>,
@@ -69,6 +82,7 @@ interface IGRPFormListProps<TItem>
   onChange?: (items: TItem[]) => void;
 }
 
+/** @internal Layout props for FormListLayout. */
 type FormListLayoutProps<TItem> = {
   groupId: string;
   className?: string;
@@ -118,6 +132,7 @@ type FormListLayoutProps<TItem> = {
   ref?: React.Ref<HTMLDivElement>;
 };
 
+/** @internal Card header for form list. */
 function FormListHeader({
   label,
   labelClassName,
@@ -179,6 +194,7 @@ function FormListHeader({
   );
 }
 
+/** @internal Add item button. */
 function FormListAddButton({
   onAdd,
   disabled,
@@ -366,6 +382,10 @@ function FormListLayout<TItem>({
   );
 }
 
+/**
+ * Dynamic list of items with add/remove, accordion UI, and optional form integration.
+ * Use inside IGRPForm for form mode, or with value/onChange for standalone.
+ */
 const IGRPFormListInner = <TItem,>(
   {
     id,
@@ -477,6 +497,7 @@ const IGRPFormListInner = <TItem,>(
   );
 };
 
+/** @internal Form list when used inside IGRPForm (useFieldArray). */
 function FormListFormMode<TItem>({
   groupId,
   defaultItem,
@@ -656,6 +677,7 @@ function FormListFormMode<TItem>({
   );
 }
 
+/** @internal Form list in standalone mode (controlled value/onChange). */
 function FormListStandaloneMode<TItem>({
   groupId,
   defaultItem,

@@ -5,7 +5,7 @@
 
 // custom components
 export { IGRPStatusBanner, type IGRPStatusBannerProps } from './components/custom/status-banner';
-export { IGRPStatsCardTopBorderColored } from './components/custom/stats-card-top-border-colored';
+export { IGRPStatsCardTopBorderColored, type IGRPStatsCardTopBorderColoredProps } from './components/custom/stats-card-top-border-colored';
 export { IGRPUserAvatar, type IGRPUserAvatarProps } from './components/custom/user-avatar';
 
 // primitives components
@@ -354,14 +354,14 @@ export {
 export { Separator as IGRPSeparatorPrimitive } from './components/primitives/separator';
 
 export {
-  Sheet as IGRPCSheetPrimitive,
-  SheetTrigger as IGRPCSheetTriggerPrimitive,
-  SheetClose as IGRPCSheetClosePrimitive,
-  SheetContent as IGRPCSheetContentPrimitive,
-  SheetHeader as IGRPCSheetHeaderPrimitive,
-  SheetFooter as IGRPCSheetFooterPrimitive,
-  SheetTitle as IGRPCSheetTitlePrimitive,
-  SheetDescription as IGRPCSheetDescriptionPrimitive,
+  Sheet as IGRPSheetPrimitive,
+  SheetTrigger as IGRPSheetTriggerPrimitive,
+  SheetClose as IGRPSheetClosePrimitive,
+  SheetContent as IGRPSheetContentPrimitive,
+  SheetHeader as IGRPSheetHeaderPrimitive,
+  SheetFooter as IGRPSheetFooterPrimitive,
+  SheetTitle as IGRPSheetTitlePrimitive,
+  SheetDescription as IGRPSheetDescriptionPrimitive,
 } from './components/primitives/sheet';
 
 export {
@@ -393,7 +393,7 @@ export {
 
 export { Skeleton as IGRPSkeletonPrimitive } from './components/primitives/skeleton';
 
-export { Slider as IGRPSLiderPrimitive } from './components/primitives/slider';
+export { Slider as IGRPSliderPrimitive } from './components/primitives/slider';
 
 export {
   Stepper as IGRPStepperPrimitive,
@@ -640,8 +640,8 @@ export {
   type IGRPDataTableLinkProps,
 } from './components/horizon/data-table/row-actions';
 export {
-  IGPRDataTableToggleVisibility,
-  type IGPRDataTableVisibilityProps,
+  IGRPDataTableToggleVisibility,
+  type IGRPDataTableVisibilityProps,
 } from './components/horizon/data-table/toggle-visibility';
 export {
   IGRPDataTableTooltipContext,
@@ -675,7 +675,7 @@ export {
   useIGRPFormContext,
   IGRPFormContext,
 } from './components/horizon/form/form-context';
-export { IGRPFormField, type IGRPFormFielProps } from './components/horizon/form/form-field';
+export { IGRPFormField, type IGRPFormFieldProps } from './components/horizon/form/form-field';
 export { IGRPForm, type IGRPFormProps, type IGRPFormHandle } from './components/horizon/form/form';
 export { convertValuesToFormData } from './components/horizon/form/lib/utils';
 export { IGRPFormList, type IGRPFormListProps } from './components/horizon/form/form-list';
@@ -757,7 +757,7 @@ export { IGRPInputAddOn, type IGRPInputAddOnProps } from './components/horizon/i
 
 export { IGRPLabel, type IGRPLabelProps } from './components/horizon/label';
 
-export { IGRPLoadingSpinner } from './components/horizon/loading-spiner';
+export { IGRPLoadingSpinner } from './components/horizon/loading-spinner';
 
 export {
   IGRPMenuNavigationProvider,
@@ -805,7 +805,7 @@ export {
   IGRPStepperProcess,
   type IGRPStepperProcessProps,
   type IGRPStepProcessProps,
-} from './components/horizon/proccess/stepper';
+} from './components/horizon/process/stepper';
 
 export {
   IGRPRepetitiveComponent,

@@ -22,13 +22,20 @@ import {
 } from './lib';
 import type { IGRPAreaConfig, IGRPChartProps } from './types';
 
-// TODO: check to assign areas props default value
-
+/**
+ * Props for the IGRPAreaChart component.
+ * @see IGRPAreaChart
+ */
 interface IGRPAreaChartProps extends IGRPChartProps {
+  /** Area series configurations. */
   areas: IGRPAreaConfig[];
+  /** Use 100% stacked (normalized) display. */
   expanded?: boolean;
 }
 
+/**
+ * Area chart with optional stacking, gradient fill, and reference line.
+ */
 function IGRPAreaChart({
   data,
   areas,

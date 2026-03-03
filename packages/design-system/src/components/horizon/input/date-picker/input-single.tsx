@@ -1,4 +1,4 @@
-'use client';
+'use client'
 
 import { useId, useState, useEffect, useRef } from 'react';
 import type { Control } from 'react-hook-form';
@@ -29,11 +29,17 @@ import { Popover, PopoverContent, PopoverTrigger } from '../../../primitives/pop
 import { type IGRPCalendarSingleProps } from '../../calendar/single';
 import { IGRPLabel } from '../../label';
 
+/**
+ * Props for the IGRPDatePickerInputSingle component.
+ * @see IGRPDatePickerInputSingle
+ */
 type IGRPDatePickerInputSingleProps = IGRPCalendarSingleProps &
   IGRPDatePickerBaseProps & {
+    /** CSS classes for the input group wrapper. */
     inputGroupClassName?: string;
   };
 
+/** @internal Props for form sync component. */
 type FormSyncProps = {
   fieldName: string;
   date: Date | undefined;
@@ -46,6 +52,7 @@ type FormSyncProps = {
   control: Control;
 };
 
+/** @internal Syncs form value with local date/input state. */
 function FormConnectedDatePickerSync({
   fieldName,
   date,
@@ -83,6 +90,10 @@ function FormConnectedDatePickerSync({
   return null;
 }
 
+/**
+ * Single-date picker with text input and calendar popover.
+ * Supports typing dates and picking from calendar. Integrates with react-hook-form.
+ */
 function IGRPDatePickerInputSingle({
   name,
   id,

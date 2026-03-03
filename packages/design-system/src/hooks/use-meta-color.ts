@@ -1,11 +1,18 @@
+"use client"
+
 import { useTheme } from 'next-themes';
 import { useCallback, useMemo } from 'react';
 
+/** Theme colors for meta theme-color (browser chrome). */
 export const IGRP_META_THEME_COLORS = {
   dark: '#ffffff',
   light: '#09090b',
 };
 
+/**
+ * Returns the current meta theme-color and a setter to update it.
+ * Syncs with next-themes resolved theme.
+ */
 export function useIGRPMetaColor() {
   const { resolvedTheme } = useTheme();
 

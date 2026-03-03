@@ -8,6 +8,10 @@ import type { IGRPInputProps } from '../../../types';
 import { Textarea } from '../../primitives/textarea';
 import { IGRPLabel } from '../label';
 
+/**
+ * Props for the IGRPTextarea component.
+ * @see IGRPTextarea
+ */
 interface IGRPTextareaProps
   extends
     React.ComponentProps<typeof Textarea>,
@@ -16,6 +20,9 @@ interface IGRPTextareaProps
       'label' | 'helperText' | 'className' | 'required' | 'error' | 'gridSize'
     > {}
 
+/**
+ * Textarea with label, helper text, and form integration.
+ */
 function IGRPTextarea({
   name,
   id,

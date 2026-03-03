@@ -1,4 +1,4 @@
-'use client';
+'use client'
 
 import { useId, useState, useEffect } from 'react';
 import { format } from 'date-fns';
@@ -21,8 +21,15 @@ import { IGRPLabel } from '../../label';
 import { IGRPCalendarRange, type IGRPCalendarRangeProps } from '../../calendar/range';
 import { DD_MM_YYYY } from '../../../../lib/constants';
 
+/**
+ * Props for the IGRPDatePickerRange component.
+ * @see IGRPDatePickerRange
+ */
 type IGRPDatePickerRangeProps = IGRPCalendarRangeProps & IGRPDatePickerBaseProps;
 
+/**
+ * Date range picker with popover calendar. Integrates with react-hook-form.
+ */
 function IGRPDatePickerRange({
   name,
   id,

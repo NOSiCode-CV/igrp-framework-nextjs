@@ -7,17 +7,33 @@ import { cn } from '../../../lib/utils';
 
 // import { IGRPButton } from '../button';
 
+/**
+ * Single filter config for client-side filtering.
+ * @see IGRPDataTableClientFilter
+ */
 interface IGRPDataTableClientFilterListProps<TData> {
+  /** Column id to filter. */
   columnId: keyof TData;
+  /** Filter component receiving the column. */
   component: (props: { column: Column<TData, unknown> }) => JSX.Element;
 }
 
+/**
+ * Props for the IGRPDataTableClientFilter component.
+ * @see IGRPDataTableClientFilter
+ */
 interface IGRPDataTableFilterClientProps<TData> {
+  /** TanStack Table instance. */
   table: Table<TData>;
+  /** Filter configurations. */
   filterList: IGRPDataTableClientFilterListProps<TData>[];
+  /** Label for clear filters button. */
   filterLabel: string;
 }
 
+/**
+ * Renders client-side filter components for each configured column.
+ */
 function IGRPDataTableClientFilter<TData>({
   table,
   filterList,

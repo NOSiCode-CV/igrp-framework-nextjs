@@ -13,20 +13,38 @@ import { IGRPFormField } from '../form/form-field';
 import { IGRPIcon, type IGRPIconName } from '../icon';
 import { IGRPLabel } from '../label';
 
+/**
+ * Props for the IGRPInputSearch component.
+ * @see IGRPInputSearch
+ */
 interface IGRPInputSearchProps extends Omit<IGRPInputProps, 'value' | 'defaultValue'> {
+  /** Controlled search value. */
   value?: string;
+  /** Default search value. */
   defaultValue?: string;
+  /** Called on search (with optional debounce). */
   onSearch?: (value: string) => void;
+  /** Called when input value changes. */
   setValueChange?: (value: string) => void;
+  /** Show icon at start of input. */
   showStartIcon?: boolean;
+  /** Icon name for start icon. */
   startIcon?: IGRPIconName | string;
+  /** Show submit button. */
   showSubmitButton?: boolean;
+  /** Icon for submit button. */
   submitIcon?: IGRPIconName | string;
+  /** Label for submit button. */
   submitButtonLabel?: string;
+  /** CSS classes for submit button. */
   submitButtonClassName?: string;
+  /** Enable debounce for onSearch. */
   isDebounce?: boolean;
+  /** Debounce delay in ms. */
   debounceMs?: number;
+  /** Submit button variant. */
   submitVariant?: VariantProps<typeof IGRPButton>['variant'];
+  /** Show loading state. */
   loading?: boolean;
 }
 
@@ -40,6 +58,9 @@ const isDebouncedCallback = (callback?: (val: string) => void, delay = 2000) => 
   };
 };
 
+/**
+ * Search input with optional icon, submit button, and debounce. Integrates with react-hook-form.
+ */
 function IGRPInputSearch({
   name,
   id,

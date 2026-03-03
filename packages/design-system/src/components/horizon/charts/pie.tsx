@@ -18,6 +18,10 @@ import {
   getLegendVerticalAlign,
 } from './lib';
 
+/**
+ * Props for the IGRPPieChart component.
+ * @see IGRPPieChart
+ */
 interface IGRPPieChartProps extends IGRPChartProps {
   pies: PieConfig[];
   nameKey: string;
@@ -28,6 +32,9 @@ interface IGRPPieChartProps extends IGRPChartProps {
   interactive?: boolean;
 }
 
+/**
+ * Pie chart with optional center label, labels, and interactive hover.
+ */
 function IGRPPieChart({
   data,
   pies,

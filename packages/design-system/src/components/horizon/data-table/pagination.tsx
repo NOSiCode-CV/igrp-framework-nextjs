@@ -22,12 +22,23 @@ import {
 import { usePagination } from './hooks/use-pagination';
 import { cn } from '../../../lib/utils';
 
+/**
+ * Props for the IGRPDataTablePagination components.
+ * @see IGRPDataTablePagination
+ * @see IGRPDataTablePaginationNumeric
+ */
 interface IGRPDataTablePaginationProps<TData> {
+  /** TanStack Table instance. */
   table: Table<TData>;
+  /** Page size options. */
   pageSize?: number[];
+  /** Additional CSS classes. */
   className?: string;
 }
 
+/**
+ * Pagination with prev/next buttons and page size selector.
+ */
 function IGRPDataTablePagination<TData>({
   table,
   pageSize = [50, 100, 150, 200],
@@ -139,6 +150,9 @@ function IGRPDataTablePagination<TData>({
   );
 }
 
+/**
+ * Pagination with numeric page buttons and page size selector.
+ */
 function IGRPDataTablePaginationNumeric<TData>({
   table,
   pageSize = [50, 100, 150, 200],

@@ -1,3 +1,5 @@
+"use client"
+
 import { useId, useState } from 'react';
 import type { DateRange } from 'react-day-picker';
 
@@ -6,11 +8,20 @@ import { cn } from '../../../lib/utils';
 import type { IGRPCalendarProps } from '../../../types';
 import { Calendar } from '../../primitives/calendar';
 
+/**
+ * Props for the IGRPCalendarRange component.
+ * @see IGRPCalendarRange
+ */
 type IGRPCalendarRangeProps = {
+  /** Selected date range (from/to). */
   date?: DateRange;
+  /** Called when the selected range changes. */
   onDateChange?: (date: DateRange | undefined) => void;
 } & Omit<IGRPCalendarProps, 'mode'>;
 
+/**
+ * Date range calendar picker.
+ */
 function IGRPCalendarRange({
   name,
   id,

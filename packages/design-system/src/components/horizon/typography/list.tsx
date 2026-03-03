@@ -47,32 +47,62 @@ const igrpTextlistItemVariants = cva('flex items-center gap-2 transition-all dur
 
 type IGRPTextListType = 'unordered' | 'ordered' | 'checklist' | 'steps' | 'features' | 'custom';
 
+/**
+ * Single list item.
+ * @see IGRPTextList
+ */
 interface IGRPTextListItem {
+  /** Item id. */
   id?: string | number;
+  /** Item content. */
   content: React.ReactNode;
+  /** Color variant. */
   variant?: IGRPColorVariants;
+  /** Mark as completed (checklist). */
   completed?: boolean;
+  /** Disable the item. */
   disabled?: boolean;
+  /** Item icon. */
   icon?: IGRPIconName | string;
+  /** Icon color. */
   iconColor?: IGRPColorVariants;
+  /** Badge text. */
   badgeText?: string;
+  /** Badge variant. */
   badgeVariant?: IGRPColorRole;
+  /** Badge color. */
   badgeColor?: IGRPColorVariants;
+  /** Nested items. */
   subItems?: IGRPTextListItem[];
 }
 
+/**
+ * Props for the IGRPTextList component.
+ * @see IGRPTextList
+ */
 interface IGRPTextListProps
   extends React.HTMLAttributes<HTMLElement>, VariantProps<typeof igrpTextlistVariants> {
+  /** List items. */
   items: IGRPTextListItem[];
+  /** List type (unordered, ordered, checklist, steps, features, custom). */
   type?: IGRPTextListType;
+  /** Animate items on scroll. */
   animate?: boolean;
+  /** Make items clickable. */
   interactive?: boolean;
+  /** Called when an item is clicked. */
   onItemClick?: (item: IGRPTextListItem, index: number) => void;
+  /** Show numbers (ordered/steps). */
   showNumbers?: boolean;
+  /** Custom icon for all items. */
   customIcon?: React.ReactNode;
+  /** Max nesting depth. */
   maxDepth?: number;
+  /** Allow collapsing nested items. */
   collapsible?: boolean;
+  /** Global color variant. */
   variant?: IGRPColorVariants;
+  /** Global icon color. */
   iconGlobalColor?: IGRPColorVariants;
 }
 
@@ -124,6 +154,9 @@ const getDefaultIcon = (type: IGRPTextListType, iconColor?: IGRPColorVariants, i
   }
 };
 
+/**
+ * List component with multiple types (unordered, ordered, checklist, steps, features).
+ */
 function IGRPTextList({
   items,
   type = 'unordered',

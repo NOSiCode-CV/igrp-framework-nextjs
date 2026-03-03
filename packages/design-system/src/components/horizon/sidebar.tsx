@@ -1,3 +1,7 @@
+/**
+ * Re-exports of sidebar primitives for collapsible app navigation.
+ * @module
+ */
 import {
   Sidebar as IGRPSidebar,
   SidebarContent as IGRPSidebarContent,

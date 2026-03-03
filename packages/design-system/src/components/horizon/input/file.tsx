@@ -8,11 +8,20 @@ import type { IGRPInputProps } from '../../../types';
 import { Input } from '../../primitives/input';
 import { IGRPLabel } from '../label';
 
+/**
+ * Props for the IGRPInputFile component.
+ * @see IGRPInputFile
+ */
 interface IGRPInputFileProps extends IGRPInputProps {
+  /** Accepted file types (e.g. 'image/*', '.pdf'). */
   accept?: string;
+  /** Allow multiple file selection. */
   multiple?: boolean;
 }
 
+/**
+ * File input with label, helper text, and form integration.
+ */
 function IGRPInputFile({
   name,
   id,

@@ -42,18 +42,33 @@ const igrpTextVariants = cva('transition-all duration-300 ease-in-out', {
   },
 });
 
+/**
+ * Props for the IGRPText component.
+ * @see IGRPText
+ */
 interface IGRPTextProps
   extends React.HTMLAttributes<HTMLDivElement>, VariantProps<typeof igrpTextVariants> {
+  /** Text content. */
   children: React.ReactNode;
+  /** Color variant. */
   variant?: IGRPColorVariants;
+  /** Animate on scroll into view. */
   animate?: boolean;
+  /** Truncate with ellipsis. */
   truncate?: boolean;
+  /** Max lines before truncation. */
   maxLines?: number;
+  /** Strings to highlight. */
   highlight?: string[];
+  /** HTML element to render as. */
   as?: 'p' | 'span' | 'div';
+  /** HTML name attribute. */
   name?: string;
 }
 
+/**
+ * Text with size, weight, alignment, and optional highlight/truncate.
+ */
 function IGRPText({
   children,
   variant = 'primary',

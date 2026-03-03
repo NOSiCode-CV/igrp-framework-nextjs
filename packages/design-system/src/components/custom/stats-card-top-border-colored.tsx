@@ -2,6 +2,20 @@ import { useId } from 'react';
 import { IGRPStatsCard, type IGRPStatsCardProps } from '../horizon/stats-card';
 import { cn } from '../../lib/utils';
 
+/**
+ * Props for the IGRPStatsCardTopBorderColored component.
+ * Subset of IGRPStatsCardProps for the top-border colored variant.
+ * @see IGRPStatsCardTopBorderColored
+ */
+type IGRPStatsCardTopBorderColoredProps = Pick<
+  IGRPStatsCardProps,
+  'cardVariant' | 'title' | 'value' | 'className' | 'iconClassName' | 'iconName' | 'name' | 'id'
+>;
+
+/**
+ * Stats card with a colored top border and icon at the end.
+ * Renders title, value, and icon with the card variant applied to the top border.
+ */
 function IGRPStatsCardTopBorderColored({
   cardVariant,
   title,
@@ -11,10 +25,7 @@ function IGRPStatsCardTopBorderColored({
   iconName,
   name,
   id,
-}: Pick<
-  IGRPStatsCardProps,
-  'cardVariant' | 'title' | 'value' | 'className' | 'iconClassName' | 'iconName' | 'name' | 'id'
->) {
+}: IGRPStatsCardTopBorderColoredProps) {
   const _id = useId();
   const ref = name ?? id ?? _id;
 
@@ -42,4 +53,4 @@ function IGRPStatsCardTopBorderColored({
   );
 }
 
-export { IGRPStatsCardTopBorderColored };
+export { IGRPStatsCardTopBorderColored, type IGRPStatsCardTopBorderColoredProps };

@@ -22,12 +22,22 @@ import {
 
 import { cn } from '../../../lib/utils';
 
+/**
+ * Props for data table header components.
+ * @see IGRPDataTableHeaderSortToggle
+ * @see IGRPDataTableHeaderSortDropdown
+ * @see IGRPDataTableHeaderRowsSelect
+ */
 interface IGRPDataTableHeaderProps<T> {
+  /** TanStack Table instance. */
   table: Table<T>;
+  /** Column for sorting/selection. */
   column: Column<T, unknown>;
+  /** Header title. */
   title: string;
 }
 
+/** Sortable header with inline toggle (click to cycle asc/desc). */
 function IGRPDataTableHeaderSortToggle<T>({
   column,
   title,
@@ -71,6 +81,7 @@ function IGRPDataTableHeaderSortToggle<T>({
   );
 }
 
+/** Sortable header with dropdown (Asc/Desc options). */
 function IGRPDataTableHeaderSortDropdown<T>({
   column,
   title,
@@ -122,6 +133,7 @@ function IGRPDataTableHeaderSortDropdown<T>({
   );
 }
 
+/** Checkbox to select/deselect all rows on the current page. */
 function IGRPDataTableHeaderRowsSelect<T>({
   table,
   className,
@@ -140,6 +152,7 @@ function IGRPDataTableHeaderRowsSelect<T>({
   );
 }
 
+/** Plain header with no sorting or selection. */
 function IGRPDataTableHeaderDefault<T>({
   title,
   className,

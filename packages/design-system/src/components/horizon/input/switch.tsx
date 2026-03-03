@@ -9,14 +9,23 @@ import { Switch } from '../../primitives/switch';
 import { IGRPFormField } from '../form/form-field';
 import { IGRPLabel } from '../label';
 
+/**
+ * Props for the IGRPSwitch component.
+ * @see IGRPSwitch
+ */
 interface IGRPSwitchProps
   extends
     React.ComponentProps<typeof Switch>,
     Pick<IGRPInputProps, 'helperText' | 'label' | 'gridSize'> {
+  /** CSS classes for the label. */
   labelClassName?: string;
+  /** Validation error message. */
   error?: string;
 }
 
+/**
+ * Switch/toggle with label, helper text, and form integration.
+ */
 function IGRPSwitch({
   name,
   id,

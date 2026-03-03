@@ -23,27 +23,52 @@ import { IGRPLabel } from '../label';
 import { IGRPIcon } from '../icon';
 import { IGRPCircleFull } from '../icon/custom';
 
+/**
+ * Props for the IGRPCombobox component.
+ * @see IGRPCombobox
+ */
 interface IGRPComboboxProps extends Omit<IGRPInputProps, 'onChange'> {
+  /** Single or multiple selection. */
   variant?: 'single' | 'multiple';
+  /** Options to display. */
   options: IGRPOptionsProps[];
+  /** Selected value(s). */
   value?: string | string[];
+  /** Called when selection changes. */
   onChange?: (selected: string | string[]) => void;
+  /** CSS classes for the wrapper. */
   className?: string;
+  /** Placeholder when nothing selected. */
   placeholder?: string;
+  /** Disable the combobox. */
   disabled?: boolean;
+  /** Whether the field is required. */
   required?: boolean;
+  /** CSS classes for the select trigger. */
   selectClassName?: string;
+  /** CSS classes for the label. */
   labelClassName?: string;
+  /** Text when no items found. */
   selectLabel?: string;
+  /** Validation error message. */
   errorText?: string;
+  /** Show search input. */
   showSearch?: boolean;
+  /** Search input placeholder. */
   searchText?: string;
+  /** Group options. */
   showGroup?: boolean;
+  /** Show status indicator. */
   showStatus?: boolean;
+  /** Show icon in options. */
   showIcon?: boolean;
+  /** Input id. */
   id?: string;
 }
 
+/**
+ * Combobox with search and single/multiple selection. Integrates with react-hook-form.
+ */
 function IGRPCombobox({
   variant = 'single',
   options,

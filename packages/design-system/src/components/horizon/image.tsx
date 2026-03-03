@@ -1,21 +1,32 @@
-'use client';
+"use client"
 
+import { useId } from 'react';
 import Image, { type ImageProps } from 'next/image';
 
 import { igrpRounded } from '../../lib/rounded-classes';
 import { cn } from '../../lib/utils';
 import { AspectRatio } from '../primitives/aspect-ratio';
 import type { VariantProps } from 'class-variance-authority';
-import { useId } from 'react';
 
+/** Aspect ratio options for IGRPImage. */
 type IGRPRatioType = '1/1' | '4/3' | '16/9' | '21/9';
 
+/**
+ * Props for the IGRPImage component.
+ * @see IGRPImage
+ */
 interface IGRPImageProps extends ImageProps, VariantProps<typeof igrpRounded> {
+  /** Additional CSS classes. */
   className?: string;
+  /** Aspect ratio when using fill mode. */
   ratio?: IGRPRatioType;
+  /** HTML name attribute. */
   name?: string;
 }
 
+/**
+ * Next.js Image with aspect ratio, rounded variants, and fill support.
+ */
 function IGRPImage({
   className,
   ratio = '16/9',

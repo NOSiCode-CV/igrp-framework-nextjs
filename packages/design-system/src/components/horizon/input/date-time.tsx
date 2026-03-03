@@ -10,16 +10,27 @@ import type { IGRPInputProps } from '../../../types';
 import { Input } from '../../primitives/input';
 import { IGRPLabel } from '../label';
 
+/**
+ * Props for the IGRPDateTimeInput component.
+ * @see IGRPDateTimeInput
+ */
 interface IGRPDateTimeInputProps extends Omit<
   IGRPInputProps,
   'onChange' | 'defaultValue' | 'value'
 > {
+  /** Controlled date-time string value. */
   value?: string;
+  /** Default date-time string value. */
   defaultValue?: string;
+  /** Called when value changes. */
   onChange?: (value: string) => void;
+  /** Called on blur. */
   onBlur?: (e: React.FocusEvent<HTMLInputElement>) => void;
 }
 
+/**
+ * Date and time input with DD/MM/YYYY, HH:MM format. Integrates with react-hook-form.
+ */
 function IGRPDateTimeInput({
   name,
   id,

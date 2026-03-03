@@ -9,23 +9,42 @@ import { Input } from '../../primitives/input';
 import { IGRPButton } from '../button';
 import { IGRPLabel } from '../label';
 
+/**
+ * Props for the IGRPInputNumber component.
+ * @see IGRPInputNumber
+ */
 interface IGRPInputNumberProps extends Omit<IGRPInputProps, 'onChange'> {
+  /** Field label. */
   label?: string;
+  /** Helper text below the input. */
   helperText?: string;
+  /** Description text. */
   description?: string;
+  /** Default numeric value. */
   defaultValue?: number;
+  /** Controlled numeric value. */
   value?: number;
+  /** Intl.NumberFormat options for display. */
   formatOptions?: Intl.NumberFormatOptions;
+  /** Minimum value. */
   min?: number;
+  /** Maximum value. */
   max?: number;
+  /** Step for increment/decrement. */
   step?: number;
+  /** Called when value changes. */
   onChange?: (value: number) => void;
+  /** Validation error message. */
   error?: string;
+  /** Message shown when validation fails. */
   errorMessage?: string;
 }
 
 type NumberValue = number | '';
 
+/**
+ * Numeric input with stepper, formatting, and min/max. Integrates with react-hook-form.
+ */
 function IGRPInputNumber({
   name,
   id,

@@ -16,17 +16,29 @@ import {
 } from '../../primitives/select';
 import { IGRPLabel } from '../label';
 
+/**
+ * Props for the IGRPInputAddOn component.
+ * @see IGRPInputAddOn
+ */
 interface IGRPInputAddOnProps extends Omit<
   IGRPInputProps,
   'showIcon' | 'iconName' | 'iconSize' | 'iconPlacement' | 'iconClassName'
 > {
+  /** Options for the addon select. */
   options: IGRPOptionsProps[];
+  /** Label for the option group. */
   optionLabel?: string;
+  /** Selected addon value. */
   selectValue?: string;
+  /** Called when addon selection changes. */
   onSelectValueChange?(value: string): void;
+  /** CSS classes for the label. */
   classNameLabel?: string;
 }
 
+/**
+ * Input with a select addon (e.g. prefix/suffix). Integrates with form context.
+ */
 function IGRPInputAddOn({
   optionLabel,
   options,

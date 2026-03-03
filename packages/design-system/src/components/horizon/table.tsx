@@ -1,3 +1,5 @@
+"use client"
+
 import { useId, type ReactNode } from 'react';
 
 import { cn } from '../../lib/utils';
@@ -11,29 +13,52 @@ import {
   TableRow,
 } from '../primitives/table';
 
+/**
+ * Props for the IGRPTable component.
+ * @see IGRPTable
+ */
 type IGRPTableProps<T> = {
+  /** Row data. */
   content: T[];
+  /** Column definitions. */
   columns: {
     header: string;
     accessorKey: keyof T;
     render?: (value: T[keyof T]) => ReactNode;
   }[];
+  /** Row actions render function. */
   actions?: (row: { original: T }) => ReactNode;
+  /** CSS classes for the table wrapper. */
   tableClass?: string;
+  /** CSS classes for the header. */
   tHeadClass?: string;
+  /** CSS classes for the body. */
   tBodyClass?: string;
+  /** CSS classes for the footer. */
   tFootClass?: string;
+  /** CSS classes for header rows. */
   tHeadRowClass?: string;
+  /** CSS classes for body rows. */
   tBodyRowClass?: string;
+  /** CSS classes for footer rows. */
   tFootRowClass?: string;
+  /** Whether to show the footer. */
   showFooter?: boolean;
+  /** Footer content. */
   footerContent?: ReactNode;
+  /** Column to show footer content in. */
   footerColumn?: keyof T;
+  /** Alternate row background. */
   isStriped?: boolean;
+  /** Sticky header on scroll. */
   isHeaderSticky?: boolean;
+  /** HTML id attribute. */
   id?: string;
 };
 
+/**
+ * Table with configurable columns, row actions, footer, and styling options.
+ */
 function IGRPTable<T>({
   content,
   columns,

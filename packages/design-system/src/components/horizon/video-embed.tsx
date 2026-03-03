@@ -1,6 +1,8 @@
+"use client"
+
+import { useId } from 'react';
 import { cva, type VariantProps } from 'class-variance-authority';
 import { cn } from '../../lib/utils';
-import { useId } from 'react';
 
 type IGRPVideoEmbedAllowFeature =
   | 'autoplay'
@@ -27,22 +29,42 @@ const videoVariants = cva('', {
   },
 });
 
+/**
+ * Props for the IGRPVideoEmbed component.
+ * @see IGRPVideoEmbed
+ */
 interface IGRPVideoEmbedProps extends VariantProps<typeof videoVariants> {
+  /** Video URL (YouTube, Vimeo, etc.). */
   src: string;
+  /** Accessible title for the iframe. */
   title: string;
+  /** Iframe loading strategy. */
   loading?: 'eager' | 'lazy';
+  /** Allowed iframe features. */
   allow?: IGRPVideoEmbedAllowFeature[];
+  /** Allow fullscreen. */
   allowFullScreen?: boolean;
+  /** Autoplay on load. */
   autoplay?: boolean;
+  /** Mute by default. */
   muted?: boolean;
+  /** Show controls. */
   controls?: boolean;
+  /** Loop video. */
   loop?: boolean;
+  /** Additional CSS classes. */
   className?: string;
+  /** HTML name attribute. */
   name?: string;
+  /** HTML id attribute. */
   id?: string;
+  /** Start time in seconds. */
   start?: number;
 }
 
+/**
+ * Embeds video from YouTube, Vimeo, or similar via iframe.
+ */
 function IGRPVideoEmbed({
   src,
   title,

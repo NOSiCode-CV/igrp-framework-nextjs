@@ -1,3 +1,5 @@
+"use client"
+
 import { useState } from 'react';
 import Link from 'next/link';
 
@@ -26,18 +28,29 @@ import { buttonVariants } from '../../primitives/button';
 import { IGRPIcon, type IGRPIconName } from '../icon';
 import { type IGRPDataTableDialogProps, type IGRPDataTableLinkProps } from './row-actions';
 
+/**
+ * Base props for dropdown menu items.
+ * @see IGRPDataTableDropdownMenuDialogProps
+ * @see IGRPDataTableDropdownMenuLinkProps
+ */
 interface IGRPDataTableDropdownProps {
+  /** Show icon in menu item. */
   showIcon?: boolean;
+  /** Icon position. */
   iconPlacement?: IGRPPlacementProps;
+  /** Menu item variant. */
   variant?: React.ComponentProps<typeof DropdownMenuItem>['variant'];
 }
 
+/** @internal */
 interface IGRPDataTableDropdownMenuDialogProps
   extends Omit<IGRPDataTableDialogProps, 'variant'>, IGRPDataTableDropdownProps {}
 
+/** @internal */
 interface IGRPDataTableDropdownMenuLinkProps
   extends Omit<IGRPDataTableLinkProps, 'variant'>, IGRPDataTableDropdownProps {}
 
+/** Dropdown menu item that opens an alert dialog. */
 function IGRPDataTableDropdownMenuAlert({
   labelTrigger,
   className,
@@ -114,6 +127,7 @@ function IGRPDataTableDropdownMenuAlert({
   );
 }
 
+/** Dropdown menu item that navigates or triggers an action. */
 function IGRPDataTableDropdownMenuLink({
   labelTrigger,
   action,

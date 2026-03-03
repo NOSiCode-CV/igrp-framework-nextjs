@@ -49,37 +49,73 @@ const tabTriggerVariants = cva('px-4 py-1.5', {
   },
 });
 
+/**
+ * Single tab item.
+ * @see IGRPTabs
+ */
 interface IGRPTabItem {
+  /** Tab value (unique id). */
   value: string;
+  /** Tab label. */
   label: string;
+  /** Tab icon. */
   icon?: IGRPIconName;
+  /** Tab panel content. */
   content: React.ReactNode;
+  /** Whether the tab is disabled. */
   disabled?: boolean;
+  /** Badge content. */
   badgeContent?: string | number;
+  /** Badge variant. */
   badgeVariant?: IGRPColorRole;
+  /** Badge color. */
   badgeColor?: IGRPColorVariants;
+  /** CSS classes for the badge. */
   badgeClassName?: string;
+  /** Additional CSS classes. */
   className?: string;
 }
 
+/**
+ * Props for the IGRPTabs component.
+ * @see IGRPTabs
+ */
 interface IGRPTabsProps extends React.ComponentProps<typeof Tabs> {
+  /** Tab items. */
   items: IGRPTabItem[];
+  /** CSS classes for the tab list. */
   tabListClassName?: string;
+  /** CSS classes for the tab content. */
   tabContentClassName?: string;
+  /** CSS classes for tab triggers. */
   tabTriggerClassName?: string;
+  /** Show icon on tabs. */
   showIcon?: boolean;
+  /** Icon position. */
   iconPlacement?: 'start' | 'end' | 'top';
+  /** Show badge on tabs. */
   showBadge?: boolean;
+  /** Badge position. */
   badgePlacement?: 'start' | 'end';
+  /** Show border around content. */
   contentBorder?: boolean;
+  /** Tab list variant (default, outline, pills, underline, cards). */
   variant?: VariantProps<typeof tabListVariants>['variant'];
+  /** Full-width tab list. */
   fullWidth?: boolean;
+  /** HTML id attribute. */
   id?: string;
+  /** HTML name attribute. */
   name?: string;
+  /** Show scroll indicators when tabs overflow. */
   showScrollIndicators?: boolean;
+  /** CSS classes for scroll buttons. */
   scrollButtonClassName?: string;
 }
 
+/**
+ * Tabs with icon, badge, and multiple style variants.
+ */
 function IGRPTabs({
   items,
   className: tabClassName,

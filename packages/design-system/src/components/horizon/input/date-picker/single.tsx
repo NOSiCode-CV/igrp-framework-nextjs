@@ -1,4 +1,4 @@
-'use client';
+'use client'
 
 import { useId, useState, useEffect } from 'react';
 import { format } from 'date-fns';
@@ -20,6 +20,10 @@ import { IGRPButton } from '../../button';
 import { IGRPCalendarSingle, type IGRPCalendarSingleProps } from '../../calendar/single';
 import { IGRPLabel } from '../../label';
 
+/**
+ * Props for the IGRPDatePickerSingle component.
+ * @see IGRPDatePickerSingle
+ */
 type IGRPDatePickerSingleProps = IGRPCalendarSingleProps &
   IGRPDatePickerBaseProps & {
     /**
@@ -28,6 +32,9 @@ type IGRPDatePickerSingleProps = IGRPCalendarSingleProps &
     gridSize?: IGRPInputProps['gridSize'];
   };
 
+/**
+ * Single-date picker with popover calendar. Integrates with react-hook-form.
+ */
 function IGRPDatePickerSingle({
   name,
   id,

@@ -10,23 +10,45 @@ import { Stepper, StepperItem, StepperTitle, StepperTrigger } from '../../primit
 import { Button } from '../../primitives/button';
 import { Tooltip, TooltipTrigger, TooltipContent } from '../../primitives/tooltip';
 
+/**
+ * Props for a single step in the process stepper.
+ * @see IGRPStepperProcess
+ */
 interface IGRPStepProcessProps {
+  /** Step index/number. */
   step: number;
+  /** Unique key for the step. */
   stepKey: string;
+  /** Step title. */
   title: string;
+  /** Optional step description. */
   description?: string;
+  /** Whether the step is completed. */
   isCompleted: boolean;
+  /** Whether the step is currently active. */
   isActive: boolean;
 }
 
+/**
+ * Props for the IGRPStepperProcess component.
+ * @see IGRPStepperProcess
+ */
 interface IGRPStepperProcessProps {
+  /** Array of step definitions. */
   steps: IGRPStepProcessProps[];
+  /** Show loading state on the active step. */
   isLoading?: boolean;
+  /** Currently active step number. */
   currentStep: number;
+  /** Render function for step content; receives current step number. */
   children: (step: number) => React.ReactNode;
+  /** HTML id attribute. */
   id?: string;
+  /** Called when user selects a different step. */
   onStepChange?: (step: number, stepData: IGRPStepProcessProps) => void;
+  /** CSS classes for the stepper container. */
   stepperClassName?: string;
+  /** CSS classes for each step item. */
   stepperItemsClassName?: string;
 }
 
@@ -68,6 +90,10 @@ function getStepperItemClassName(): string {
   );
 }
 
+/**
+ * Process stepper with horizontal steps, scroll navigation, and step content.
+ * Use children(step) to render content for the current step.
+ */
 function IGRPStepperProcess({
   steps,
   children,

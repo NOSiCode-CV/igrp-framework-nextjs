@@ -30,9 +30,8 @@ const igrpModalDialogContentVariants = cva('w-full sm:max-w-lg max-h-[90vh] over
 });
 
 /**
- * @deprecated
- * Use `React.ComponentProps<typeof IGRPModalDialogContent>` instead
- * will be deprecated in the next major version 0.2.0-beta.1
+ * Props for IGRPModalDialogContent.
+ * @deprecated Use `React.ComponentProps<typeof IGRPModalDialogContent>` instead. Will be deprecated in the next major version 0.2.0-beta.1
  */
 interface IGRPModalDialogContentProps
   extends
@@ -41,6 +40,9 @@ interface IGRPModalDialogContentProps
   contentClassName?: string;
 }
 
+/**
+ * Modal dialog content with size variants and optional sticky header/footer.
+ */
 function IGRPModalDialogContent({
   className,
   size,
@@ -81,14 +83,17 @@ function IGRPModalDialogContent({
 }
 
 /**
- * @deprecated
- * will be deprecated in the next major version 0.2.0-beta.1
- * Use `React.ComponentProps<typeof IGRPModalDialogHeader>` instead
+ * Props for IGRPModalDialogHeader.
+ * @deprecated Use `React.ComponentProps<typeof IGRPModalDialogHeader>` instead. Will be deprecated in the next major version 0.2.0-beta.1
  */
 interface IGRPModalDialogHeaderProps extends React.ComponentProps<typeof DialogHeader> {
+  /** Pin header to top when scrolling. */
   stickyHeader?: boolean;
 }
 
+/**
+ * Modal dialog header with optional sticky positioning.
+ */
 function IGRPModalDialogHeader({
   className,
   stickyHeader,
@@ -137,6 +142,9 @@ function IGRPModalDialogFooter({
   );
 }
 
+/**
+ * Modal dialog title.
+ */
 function IGRPModalDialogTitle({
   className,
   name,
@@ -145,6 +153,9 @@ function IGRPModalDialogTitle({
   return <DialogTitle className={cn(className)} {...props}></DialogTitle>;
 }
 
+/**
+ * Modal dialog description.
+ */
 function IGRPModalDialogDescription({
   className,
   name,

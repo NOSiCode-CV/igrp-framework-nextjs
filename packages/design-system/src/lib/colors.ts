@@ -1,5 +1,9 @@
 // TODO: REVIEW THIS COLORS
 
+/**
+ * Tailwind class mappings for color variants (outline, solid, soft).
+ * Used for badges, alerts, cards, etc.
+ */
 export const IGRPColors = {
   outline: {
     primary: {
@@ -242,13 +246,20 @@ export const IGRPColors = {
   },
 };
 
+/** Type of IGRPColors object. */
 export type IGRPColorType = typeof IGRPColors;
-// use appearance instead of role
+/** Color role (outline, solid, soft). */
 export type IGRPColorRole = keyof IGRPColorType;
+/** Color variant (primary, success, destructive, etc.). */
 export type IGRPColorVariants = keyof IGRPColorType['solid'];
+/** All color variant keys. */
 export const IGRPColorObjectVariants = Object.keys(IGRPColors.solid) as IGRPColorVariants[];
+/** All color role keys. */
 export const IGRPColorObjectRole = Object.keys(IGRPColors) as IGRPColorRole[];
 
+/**
+ * Returns the text class for a color variant (solid style).
+ */
 export const igrpColorText = (value: IGRPColorVariants) => {
   return IGRPColors['solid'][value].text;
 };

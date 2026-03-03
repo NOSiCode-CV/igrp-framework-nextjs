@@ -27,18 +27,34 @@ import {
 } from './lib';
 import { type IGRPChartProps, type RadialBarConfig } from './types';
 
+/**
+ * Props for the IGRPRadialBarChart component.
+ * @see IGRPRadialBarChart
+ */
 interface IGRPRadialBarChartProps extends IGRPChartProps {
+  /** Radial bar series configurations. */
   bars: RadialBarConfig[];
+  /** Key in data for bar labels. */
   nameKey: string;
+  /** Start angle (degrees). */
   startAngle?: number;
+  /** End angle (degrees). */
   endAngle?: number;
+  /** Inner radius. */
   innerRadius?: number | string;
+  /** Outer radius. */
   outerRadius?: number | string;
+  /** Bar thickness. */
   barSize?: number;
+  /** Show polar grid. */
   showGrid?: boolean;
+  /** Grid type. */
   gridType?: 'polygon' | 'circle';
+  /** Show bar background. */
   showBackground?: boolean;
+  /** Show radius axis. */
   showRadiusAxis?: boolean;
+  /** Center text config (e.g. total value). */
   centerText?: {
     show: boolean;
     value?: string | number;
@@ -47,6 +63,9 @@ interface IGRPRadialBarChartProps extends IGRPChartProps {
   };
 }
 
+/**
+ * Radial bar chart with optional center text and polar grid.
+ */
 function IGRPRadialBarChart({
   data,
   bars,

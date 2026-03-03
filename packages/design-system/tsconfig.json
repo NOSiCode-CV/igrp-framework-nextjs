@@ -10,7 +10,6 @@
     "rootDir": "./src",
     "module": "esnext",
     "moduleResolution": "bundler",
-    // "allowJs": true,
     "checkJs": false,
     "esModuleInterop": true,
     "forceConsistentCasingInFileNames": true,
@@ -22,14 +21,14 @@
     "lib": [
       "ES2023",
       "DOM",
-      "DOM.Iterable",      
+      "DOM.Iterable",
     ],
     "incremental": true,
-    "isolatedModules": true,    
+    "isolatedModules": true,
     "useDefineForClassFields": true,
     "importHelpers": true,
     "allowImportingTsExtensions": false,
-    "verbatimModuleSyntax": true,    
+    "verbatimModuleSyntax": true,
     "noUnusedLocals": true,
     "noUnusedParameters": true,
     "erasableSyntaxOnly": true,
@@ -38,9 +37,10 @@
   },
   "include": [
     "src"
-, "src/components/horizon/alert-dialog/.tsx"  ],
+  ],
   "exclude": [
     "dist",
-    "node_modules"
+    "node_modules",
+    "src/components/experimental"
   ]
 }

@@ -21,7 +21,12 @@
     "storybook": "storybook dev -p 6006 --ci",
     "build-storybook": "storybook build",
     "serve-storybook": "pnpm dlx serve storybook-static -l 6006",
-    "test-storybook": "test-storybook",
+    "test-storybook": "test-storybook --url http://localhost:6006/storybook",
+    "test-storybook:ci": "test-storybook --url http://localhost:6006/storybook --ci",
+    "test-storybook:update-snapshots": "test-storybook --url http://localhost:6006/storybook -u",
+    "test:vitest": "vitest run",
+    "test:vitest:watch": "vitest",
+    "chromatic": "chromatic --exit-zero-on-changes",
     "lint": "eslint . --ext .ts,.tsx",
     "format": "prettier --write .",
     "clean-all": "rimraf node_modules"
@@ -42,6 +47,9 @@
   },
   "devDependencies": {
     "@chromatic-com/storybook": "5.0.1",
+    "@storybook/test-runner": "^0.24.2",
+    "@types/jest": "^29.5.14",
+    "chromatic": "^11.3.3",
     "@eslint/js": "9.39.2",
     "@storybook/addon-a11y": "^10.2.8",
     "@storybook/addon-docs": "^10.2.8",

@@ -1,5 +1,9 @@
 'use client';
 
+/**
+ * Re-exports of command primitives for command palette, search, and keyboard navigation.
+ * @module
+ */
 import {
   Command as IGRPCommand,
   CommandDialog as IGRPCommandDialog,

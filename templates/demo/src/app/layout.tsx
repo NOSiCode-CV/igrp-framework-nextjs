@@ -18,6 +18,12 @@ export const viewport: Viewport = {
   themeColor: IGRP_META_THEME_COLORS.light,
 };
 
+/**
+ * Root layout: env setup, config, and IGRP framework wrapper.
+ *
+ * @param props - Layout props with children
+ * @returns IGRPRootLayout wrapping children
+ */
 export default async function RootLayout({
   children,
 }: Readonly<{ children: React.ReactNode }>): Promise<React.ReactNode> {

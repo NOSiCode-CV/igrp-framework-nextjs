@@ -29,10 +29,6 @@ const igrpModalDialogContentVariants = cva('w-full sm:max-w-lg max-h-[90vh] over
   },
 });
 
-/**
- * Props for IGRPModalDialogContent.
- * @deprecated Use `React.ComponentProps<typeof IGRPModalDialogContent>` instead. Will be deprecated in the next major version 0.2.0-beta.1
- */
 interface IGRPModalDialogContentProps
   extends
     React.ComponentProps<typeof DialogContent>,
@@ -49,10 +45,7 @@ function IGRPModalDialogContent({
   children,
   contentClassName,
   ...props
-}: React.ComponentProps<typeof DialogContent> &
-  VariantProps<typeof igrpModalDialogContentVariants> & {
-    contentClassName?: string;
-  }) {
+}:IGRPModalDialogContentProps) {
   const hasStickyHeader = Children.toArray(children).some(
     (child) =>
       isValidElement(child) &&
@@ -82,10 +75,7 @@ function IGRPModalDialogContent({
   );
 }
 
-/**
- * Props for IGRPModalDialogHeader.
- * @deprecated Use `React.ComponentProps<typeof IGRPModalDialogHeader>` instead. Will be deprecated in the next major version 0.2.0-beta.1
- */
+
 interface IGRPModalDialogHeaderProps extends React.ComponentProps<typeof DialogHeader> {
   /** Pin header to top when scrolling. */
   stickyHeader?: boolean;
@@ -98,9 +88,7 @@ function IGRPModalDialogHeader({
   className,
   stickyHeader,
   ...props
-}: React.ComponentProps<typeof DialogHeader> & {
-  stickyHeader?: boolean;
-}) {
+}: IGRPModalDialogHeaderProps) {
   return (
     <DialogHeader
       className={cn(
@@ -113,11 +101,6 @@ function IGRPModalDialogHeader({
   );
 }
 
-/**
- * @deprecated
- * will be deprecated in the next major version 0.2.0-beta.1
- * Use `React.ComponentProps<typeof DialogFooter>` instead
- */
 interface IGRPModalDialogFooterProps extends React.ComponentProps<typeof DialogFooter> {
   stickyFooter?: boolean;
 }
@@ -126,9 +109,7 @@ function IGRPModalDialogFooter({
   className,
   stickyFooter,
   ...props
-}: React.ComponentProps<typeof DialogFooter> & {
-  stickyFooter?: boolean;
-}) {
+}: IGRPModalDialogFooterProps) {
   return (
     <DialogFooter
       className={cn(
@@ -161,7 +142,11 @@ function IGRPModalDialogDescription({
   name,
   ...props
 }: React.ComponentProps<typeof DialogDescription> & { name?: string }) {
-  return <DialogDescription className={cn(className)} {...props}></DialogDescription>;
+  return (
+    <DialogDescription className={cn(className)} {...props}>
+      {name}
+    </DialogDescription>
+  );
 }
 
 export {

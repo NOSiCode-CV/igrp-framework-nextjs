@@ -1,8 +1,16 @@
+import { cache } from "react";
+
 import { AUTH_CONSTANTS } from "../constants";
 import { isPreviewMode } from "../utils";
 import { getBasePath } from "./get-base-path";
 
-export function getSessionArgs() {
+/**
+ * Session refetch args for React Query. Cached per request.
+ * Disables refetch in preview mode.
+ *
+ * @returns Object with refetchInterval, refetchOnWindowFocus, basePath
+ */
+export const getSessionArgs = cache(function getSessionArgs() {
   if (isPreviewMode()) {
     return {
       refetchInterval: 0,
@@ -16,4 +24,4 @@ export function getSessionArgs() {
     refetchOnWindowFocus: true,
     basePath: getBasePath(process.env.NEXT_PUBLIC_BASE_PATH || ""),
   };
-}
+});

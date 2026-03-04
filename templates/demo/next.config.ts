@@ -37,6 +37,9 @@ const nextConfig: NextConfig = {
   typedRoutes: true,
   experimental: {
     typedEnv: true,
+    // CSRF: Server Actions only accept same-origin requests by default.
+    // Add allowedOrigins when using a proxy or multiple domains.
+    // serverActions: { allowedOrigins: ["localhost:3000", "your-domain.com"] },
   },
 };
 

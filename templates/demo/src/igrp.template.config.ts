@@ -9,9 +9,16 @@ import { getMockApps } from "@/temp/applications/use-mock-apps";
 import { getMockMenus } from "@/temp/menus/use-mock-menus";
 import { getMockUser } from "@/temp/users/use-mock-user";
 import { getPackageJson } from "./lib/config/get-pkj";
-import { getSessionArgs } from "./lib/config/get-session-args";
 import { getRoutes } from "./lib/config/get-routes";
+import { getSessionArgs } from "./lib/config/get-session-args";
 
+/**
+ * Creates the IGRP framework config from layout args.
+ * Aggregates routes, mock data, and API configuration.
+ *
+ * @param config - Layout config (session, theme, scale)
+ * @returns Full IGRP config for the framework
+ */
 export async function createConfig(
   config: IGRPLayoutConfigArgs,
 ): Promise<IGRPConfigArgs> {

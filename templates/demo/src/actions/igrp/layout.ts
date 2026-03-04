@@ -1,13 +1,18 @@
 "use server";
 
-import type { IGRPLayoutConfigArgs } from "@igrp/framework-next-types";
 import type { Session } from "@igrp/framework-next-auth";
+import type { IGRPLayoutConfigArgs } from "@igrp/framework-next-types";
 import { cookies } from "next/headers";
 
 import { getAccessToken } from "@/lib/auth-helpers";
 import { AUTH_CONSTANTS } from "@/lib/constants";
 import { isPreviewMode } from "@/lib/utils";
 
+/**
+ * Reads theme preferences from cookies (active theme, scale mode).
+ *
+ * @returns Object with activeThemeValue and isScaled flag
+ */
 export async function getTheme() {
   const cookieStore = await cookies();
   const activeThemeValue = cookieStore.get("igrp_active_theme")?.value;
@@ -32,6 +37,12 @@ function createPreviewSession(): Session {
   };
 }
 
+/**
+ * Builds layout configuration: session, theme, and scale preferences.
+ * Uses preview session when IGRP_PREVIEW_MODE is enabled.
+ *
+ * @returns Layout config for IGRP framework
+ */
 export async function configLayout(): Promise<IGRPLayoutConfigArgs> {
   // In preview mode, provide a mock session object to prevent client-side redirects
   // The framework might check for session existence rather than just previewMode

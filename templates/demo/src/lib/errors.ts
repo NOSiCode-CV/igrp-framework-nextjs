@@ -27,39 +27,5 @@ export class AuthError extends Error {
   }
 }
 
-/**
- * Simple logger for consistent error/warn/info prefixes across the app.
- */
-export const logger = {
-  error(
-    message: string,
-    error?: unknown,
-    meta?: Record<string, unknown>,
-  ): void {
-    const details =
-      error instanceof Error
-        ? error.message
-        : error != null
-          ? String(error)
-          : "";
-    const extra = meta ? ` ${JSON.stringify(meta)}` : "";
-    console.error(`[Error] ${message}${details ? `: ${details}` : ""}${extra}`);
-    if (
-      error instanceof Error &&
-      error.stack &&
-      process.env.NODE_ENV === "development"
-    ) {
-      console.error(error.stack);
-    }
-  },
-
-  warn(message: string, meta?: Record<string, unknown>): void {
-    const extra = meta ? ` ${JSON.stringify(meta)}` : "";
-    console.warn(`[Warn] ${message}${extra}`);
-  },
-
-  info(message: string, meta?: Record<string, unknown>): void {
-    const extra = meta ? ` ${JSON.stringify(meta)}` : "";
-    console.info(`[Info] ${message}${extra}`);
-  },
-};
+/** Re-export logger for backwards compatibility. Prefer importing from @/lib/logger. */
+export { type LogLevel, logger } from "./logger";

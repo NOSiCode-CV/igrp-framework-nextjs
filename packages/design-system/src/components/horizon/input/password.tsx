@@ -1,6 +1,6 @@
 'use client';
 
-import { useId, useState, useEffect } from 'react';
+import { useId, useState } from 'react';
 import { useFormContext, Controller } from 'react-hook-form';
 
 import { cn } from '../../../lib/utils';
@@ -50,17 +50,11 @@ function IGRPInputPassword({
 
   const [showPassword, setShowPassword] = useState(false);
   const formContext = useFormContext();
-  const [localValue, setLocalValue] = useState(value !== undefined ? value : defaultValue || '');
-
-  useEffect(() => {
-    if (value !== undefined && !formContext) {
-      setLocalValue(value);
-    }
-  }, [value, formContext]);
+  const [localValue, setLocalValue] = useState(value ?? defaultValue ?? '');
 
   const handleStandaloneChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const newValue = e.target.value;
-    setLocalValue(newValue);
+    if (value === undefined) setLocalValue(newValue);
     onChange?.(newValue);
   };
 

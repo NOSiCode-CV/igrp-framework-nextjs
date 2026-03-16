@@ -87,7 +87,7 @@ function IGRPVideoEmbed({
   let videoUrl: URL;
   try {
     videoUrl = new URL(src);
-  } catch (error) {
+  } catch {
     console.error('[VideoEmbed] Invalid URL provided:', src);
     return (
       <div

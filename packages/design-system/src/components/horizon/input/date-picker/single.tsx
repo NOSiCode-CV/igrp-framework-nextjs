@@ -58,10 +58,6 @@ function IGRPDatePickerSingle({
   const formContext = useFormContext();
 
   useEffect(() => {
-    if (!formContext) setLocalDate(date);
-  }, [date, formContext]);
-
-  useEffect(() => {
     if (!formContext && typeof onDateChange !== 'function') {
       console.warn('DatePicker in standalone mode requires `onDateChange`');
     }
@@ -105,7 +101,7 @@ function IGRPDatePickerSingle({
     fieldValue: Date | undefined,
     onChange: (date: Date | undefined) => void,
   ) => {
-    const displayDate = formContext ? fieldValue : localDate;
+    const displayDate = formContext ? fieldValue : (date ?? localDate);
 
     return (
       <div className={cn('relative')}>
@@ -149,37 +145,29 @@ function IGRPDatePickerSingle({
         <FormField
           control={formContext.control}
           name={fieldName}
-          render={({ field, fieldState }) => {
-            useEffect(() => {
-              if (field.value !== localDate) {
-                setLocalDate(field.value);
-              }
-            }, [field.value]);
+          render={({ field, fieldState }) => (
+            <FormItem>
+              {label && (
+                <FormLabel
+                  className={cn(
+                    labelClassName,
+                    required && 'after:content-["*"] after:text-destructive',
+                  )}
+                >
+                  {label}
+                </FormLabel>
+              )}
+              <FormControl>
+                {renderPicker(field.value, (val) => {
+                  field.onChange(val);
+                  onDateChange?.(val);
+                })}
+              </FormControl>
 
-            return (
-              <FormItem>
-                {label && (
-                  <FormLabel
-                    className={cn(
-                      labelClassName,
-                      required && 'after:content-["*"] after:text-destructive',
-                    )}
-                  >
-                    {label}
-                  </FormLabel>
-                )}
-                <FormControl>
-                  {renderPicker(field.value, (val) => {
-                    field.onChange(val);
-                    onDateChange?.(val);
-                  })}
-                </FormControl>
-
-                {helperText && !fieldState.error && <FormDescription>{helperText}</FormDescription>}
-                <FormMessage className={cn('text-xs')} />
-              </FormItem>
-            );
-          }}
+              {helperText && !fieldState.error && <FormDescription>{helperText}</FormDescription>}
+              <FormMessage className={cn('text-xs')} />
+            </FormItem>
+          )}
         />
       </div>
     );

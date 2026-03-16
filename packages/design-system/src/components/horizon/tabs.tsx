@@ -219,14 +219,14 @@ function IGRPTabs({
     }
   }, [orientation]);
 
-  const handleTouchStart = useCallback((_e: React.TouchEvent) => {}, []);
+  const handleTouchStart = useCallback(() => {}, []);
 
-  const handleTouchMove = useCallback((_e: React.TouchEvent) => {}, []);
+  const handleTouchMove = useCallback(() => {}, []);
 
   const handleTouchEnd = useCallback(() => {}, []);
 
   useEffect(() => {
-    checkScrollability();
+    requestAnimationFrame(() => checkScrollability());
 
     const container = tabsListRef.current;
     if (!container) return;

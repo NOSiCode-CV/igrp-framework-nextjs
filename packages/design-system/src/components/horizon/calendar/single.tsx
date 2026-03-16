@@ -27,7 +27,6 @@ function IGRPCalendarSingle({
   date,
   onDateChange,
   className,
-  defaultMonth,
   disableBefore,
   disableAfter,
   disableDayOfWeek,

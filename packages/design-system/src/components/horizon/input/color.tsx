@@ -1,6 +1,6 @@
 'use client';
 
-import { useId, useState, useEffect } from 'react';
+import { useId, useState } from 'react';
 import { useFormContext, Controller } from 'react-hook-form';
 
 import { cn } from '../../../lib/utils';
@@ -46,13 +46,7 @@ function IGRPInputColor({
   const fieldName = name ?? id ?? _id;
 
   const formContext = useFormContext();
-  const [internalValue, setInternalValue] = useState(controlledValue || defaultValue);
-
-  useEffect(() => {
-    if (!formContext && controlledValue !== undefined) {
-      setInternalValue(controlledValue);
-    }
-  }, [controlledValue, formContext]);
+  const [internalValue, setInternalValue] = useState(controlledValue ?? defaultValue);
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const newValue = e.target.value;

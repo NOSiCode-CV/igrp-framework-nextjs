@@ -143,6 +143,7 @@ function IGRPPdfViewer({
     <div className={cn('flex flex-col', className)} id={ref}>
       {displayMode === 'inline' && (
         <IGRPPdfViewerInline
+          key={`${document.fileUrl}-${viewerPreference}`}
           document={document}
           labelButtonNewTab={labelButtonNewTab}
           height={inlineHeight}
@@ -161,6 +162,7 @@ function IGRPPdfViewer({
             clickable={displayMode === 'modal'}
           />
           <IGRPPdfViewerModal
+            key={selectedDocument ? `${selectedDocument.fileUrl}-${viewerPreference}` : 'closed'}
             open={isModalOpen}
             onClose={() => setIsModalOpen(false)}
             document={selectedDocument || null}
@@ -257,11 +259,6 @@ function IGRPPdfViewerInline({
   const [viewerEngine, setViewerEngine] = useState<'google' | 'native'>(
     viewerPreference === 'native' ? 'native' : 'google',
   );
-
-  useEffect(() => {
-    setFrameStatus('loading');
-    setViewerEngine(viewerPreference === 'native' ? 'native' : 'google');
-  }, [fileUrl, viewerPreference]);
 
   const handleFrameLoad = () => setFrameStatus('loaded');
   const handleFrameError = () => {
@@ -398,18 +395,10 @@ function IGRPPdfViewerModal({
   loadTimeoutMs = 8000,
   viewerPreference = 'auto',
 }: IGRPPdfViewerModalProps) {
-  if (!document) return null;
-
-  const { fileUrl, title, author, date } = document;
   const [frameStatus, setFrameStatus] = useState<'loading' | 'loaded' | 'error'>('loading');
   const [viewerEngine, setViewerEngine] = useState<'google' | 'native'>(
     viewerPreference === 'native' ? 'native' : 'google',
   );
-
-  useEffect(() => {
-    setFrameStatus('loading');
-    setViewerEngine(viewerPreference === 'native' ? 'native' : 'google');
-  }, [fileUrl, viewerPreference]);
 
   const handleFrameLoad = () => setFrameStatus('loaded');
   const handleFrameError = () => {
@@ -441,6 +430,9 @@ function IGRPPdfViewerModal({
     return () => clearTimeout(timeout);
   }, [frameStatus, loadTimeoutMs, viewerEngine, viewerPreference]);
 
+  if (!document) return null;
+
+  const { fileUrl, title, author, date } = document;
   const iframeSrc =
     viewerEngine === 'google'
       ? `https://docs.google.com/viewer?url=${encodeURIComponent(fileUrl)}&embedded=true`

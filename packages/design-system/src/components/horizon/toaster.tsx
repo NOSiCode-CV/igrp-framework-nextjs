@@ -4,15 +4,30 @@ import { toast, type ExternalToast } from 'sonner';
 import { useCallback, useMemo } from 'react';
 import { Toaster } from '../primitives/sonner';
 
+/** Default duration (ms) for success toasts. */
+const DEFAULT_SUCCESS_DURATION = 4000;
+/** Default duration (ms) for error toasts (longer so user can read). */
+const DEFAULT_ERROR_DURATION = 6000;
+
+/** Toast type variants. */
+type IGRPToastKind = 'default' | 'success' | 'error' | 'info' | 'warning' | 'loading';
+
+/** Module-scope map for toast type dispatch (avoids allocation per call). */
+const TOAST_TYPE_MAP = {
+  success: toast.success,
+  error: toast.error,
+  info: toast.info,
+  warning: toast.warning,
+  loading: toast.loading,
+  default: toast,
+} as const;
+
 /**
  * Toast container. Place once in the app layout.
  */
 function IGRPToaster(props: React.ComponentProps<typeof Toaster>) {
   return <Toaster {...props} />;
 }
-
-/** Toast type variants. */
-type IGRPToastKind = 'default' | 'success' | 'error' | 'info' | 'warning' | 'loading';
 
 /**
  * Common props for all toast types.
@@ -55,57 +70,71 @@ type PlainToastProps = IGRPCommonToastProps & {
   error?: never;
 };
 
+type ToastProps<T> = IGRPPromiseToastProps<T> | PlainToastProps;
+
 function createToast<T>(props: IGRPPromiseToastProps<T>): string | number;
 function createToast(props: PlainToastProps): string | number;
-
-function createToast<T>(props: IGRPPromiseToastProps<T> | PlainToastProps) {
+function createToast<T>(props: ToastProps<T>): string | number {
   if ('promise' in props && props.promise) {
     const { promise, loading, success, error, ...rest } = props;
-    return toast.promise(promise, {
+    const id = toast.promise(promise, {
       loading: loading ?? 'Processing...',
       success:
         success ?? ((data: T) => (typeof data === 'string' ? data : 'Operation successful!')),
       error:
         error ?? ((err: unknown) => (err instanceof Error ? err.message : 'Something went wrong!')),
+      duration: rest.duration ?? DEFAULT_SUCCESS_DURATION,
       ...rest,
     });
+    return id as string | number;
   }
 
   const { type = 'default', title, description, content, ...rest } = props as PlainToastProps;
 
   if (content) return toast(content, rest);
 
-  const map = {
-    success: toast.success,
-    error: toast.error,
-    info: toast.info,
-    warning: toast.warning,
-    loading: toast.loading,
-    default: toast,
-  } as const;
+  const duration =
+    rest.duration ??
+    (type === 'error'
+      ? DEFAULT_ERROR_DURATION
+      : type === 'success'
+        ? DEFAULT_SUCCESS_DURATION
+        : undefined);
 
-  const fn = map[type] ?? toast;
-  return fn(title ?? 'Notification', { description, ...rest });
+  const fn = TOAST_TYPE_MAP[type] ?? toast;
+  return fn(title ?? 'Notification', { description, duration, ...rest });
 }
 
 function useIGRPToast<T = unknown>() {
   const igrpToast = useCallback(
-    (props: IGRPPromiseToastProps<T> | PlainToastProps) => createToast<T>(props as any),
+    (props: ToastProps<T>) =>
+      'promise' in props && props.promise
+        ? createToast(props as IGRPPromiseToastProps<T>)
+        : createToast(props as PlainToastProps),
     [],
   );
 
-  const helpers = useMemo(() => {
-    return {
-      success: (msg: React.ReactNode, opts?: ExternalToast) => toast.success(msg, opts),
-      error: (msg: React.ReactNode, opts?: ExternalToast) => toast.error(msg, opts),
+  const helpers = useMemo(
+    () => ({
+      success: (msg: React.ReactNode, opts?: ExternalToast) =>
+        toast.success(msg, { duration: DEFAULT_SUCCESS_DURATION, ...opts }),
+      error: (msg: React.ReactNode, opts?: ExternalToast) =>
+        toast.error(msg, { duration: DEFAULT_ERROR_DURATION, ...opts }),
       info: (msg: React.ReactNode, opts?: ExternalToast) => toast.info(msg, opts),
       warning: (msg: React.ReactNode, opts?: ExternalToast) => toast.warning(msg, opts),
       loading: (msg: React.ReactNode, opts?: ExternalToast) => toast.loading(msg, opts),
       dismiss: toast.dismiss,
-    };
-  }, []);
+    }),
+    [],
+  );
 
-  return { igrpToast, ...helpers };
+  return useMemo(() => ({ igrpToast, ...helpers }), [igrpToast, helpers]);
 }
 
-export { type IGRPPromiseToastProps, type PlainToastProps, useIGRPToast, IGRPToaster };
+export {
+  type IGRPPromiseToastProps,
+  type PlainToastProps,
+  // eslint-disable-next-line react-refresh/only-export-components
+  useIGRPToast,
+  IGRPToaster,
+};

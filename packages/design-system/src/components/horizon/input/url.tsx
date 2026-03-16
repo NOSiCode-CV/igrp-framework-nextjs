@@ -1,6 +1,6 @@
 'use client';
 
-import { useId, useState, useEffect, useCallback } from 'react';
+import { useId, useState, useCallback } from 'react';
 import { useFormContext, Controller } from 'react-hook-form';
 
 import { cn } from '../../../lib/utils';
@@ -74,9 +74,6 @@ function IGRPInputUrl({
 
   const formContext = useFormContext();
 
-  const [localProtocol, setLocalProtocol] = useState(defaultProtocol);
-  const [localAddress, setLocalAddress] = useState('');
-
   const extractUrlParts = useCallback(
     (url: string) => {
       const protocolMatch = protocols.find((p) => url.startsWith(String(p.value)));
@@ -94,29 +91,29 @@ function IGRPInputUrl({
     [defaultProtocol, protocols],
   );
 
+  const initialUrl = value ?? defaultValue ?? '';
+  const initialParts = extractUrlParts(initialUrl);
+  const [localProtocol, setLocalProtocol] = useState(() => String(initialParts.protocol));
+  const [localAddress, setLocalAddress] = useState(() => initialParts.address);
+
+  const displayProtocol =
+    !formContext && value !== undefined ? String(extractUrlParts(value).protocol) : localProtocol;
+  const displayAddress =
+    !formContext && value !== undefined ? extractUrlParts(value).address : localAddress;
+
   const combineUrl = (protocol: string, address: string) => {
     return `${protocol}${address}`;
   };
 
-  useEffect(() => {
-    if (!formContext && (value !== undefined || defaultValue)) {
-      const initialValue = value !== undefined ? value : defaultValue;
-      const { protocol: extractedProtocol, address: extractedAddress } =
-        extractUrlParts(initialValue);
-      setLocalProtocol(String(extractedProtocol));
-      setLocalAddress(extractedAddress);
-    }
-  }, [value, defaultValue, formContext, extractUrlParts]);
-
   const handleStandaloneProtocolChange = (newProtocol: string) => {
-    setLocalProtocol(newProtocol);
-    onChange?.(combineUrl(newProtocol, localAddress));
+    if (value === undefined) setLocalProtocol(newProtocol);
+    onChange?.(combineUrl(newProtocol, displayAddress));
   };
 
   const handleStandaloneAddressChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const newAddress = e.target.value;
-    setLocalAddress(newAddress);
-    onChange?.(combineUrl(localProtocol, newAddress));
+    if (value === undefined) setLocalAddress(newAddress);
+    onChange?.(combineUrl(displayProtocol, newAddress));
   };
 
   if (!formContext) {
@@ -128,7 +125,7 @@ function IGRPInputUrl({
 
         <div className={cn('flex rounded-md shadow-xs')}>
           <Select
-            value={localProtocol}
+            value={displayProtocol}
             onValueChange={handleStandaloneProtocolChange}
             disabled={props.disabled}
           >
@@ -151,7 +148,7 @@ function IGRPInputUrl({
           <Input
             id={fieldName}
             name={fieldName}
-            value={localAddress}
+            value={displayAddress}
             onChange={handleStandaloneAddressChange}
             required={required}
             aria-required={required}

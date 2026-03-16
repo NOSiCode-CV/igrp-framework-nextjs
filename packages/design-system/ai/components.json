@@ -69,7 +69,13 @@
     {
       "name": "IGRPModalDialog",
       "category": "overlay",
-      "children": ["IGRPModalDialogTrigger", "IGRPModalDialogContent", "IGRPModalDialogHeader", "IGRPModalDialogTitle", "IGRPModalDialogFooter"],
+      "children": [
+        "IGRPModalDialogTrigger",
+        "IGRPModalDialogContent",
+        "IGRPModalDialogHeader",
+        "IGRPModalDialogTitle",
+        "IGRPModalDialogFooter"
+      ],
       "example": "<IGRPModalDialog><IGRPModalDialogTrigger asChild><IGRPButton>Open</IGRPButton></IGRPModalDialogTrigger><IGRPModalDialogContent>...</IGRPModalDialogContent></IGRPModalDialog>"
     },
     {

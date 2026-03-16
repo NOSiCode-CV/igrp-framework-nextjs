@@ -85,7 +85,17 @@ function FormConnectedDatePickerSync({
     if (dateChanged && watchedValue !== date) {
       setValueForm(fieldName, date);
     }
-  }, [watchedValue, date, dateFormat, fieldName, setLocalDate, setValue, setMonth, setValueForm]);
+  }, [
+    watchedValue,
+    date,
+    dateFormat,
+    fieldName,
+    setLocalDate,
+    setValue,
+    setMonth,
+    setValueForm,
+    prevDateRef,
+  ]);
 
   return null;
 }
@@ -126,34 +136,22 @@ function IGRPDatePickerInputSingle({
 
   const placeholder = placeholderProp ?? dateFormat;
 
-  // Sync local state with date prop when it changes externally (standalone only)
-  useEffect(() => {
-    if (!formContext) {
-      setLocalDate(date);
-      setValue(formatDateToString(date, dateFormat));
-      if (date) {
-        setMonth(date);
-      } else {
-        setMonth(undefined);
-      }
-    }
-  }, [date, formContext, dateFormat]);
-
   useEffect(() => {
     if (!formContext && typeof onDateChange !== 'function') {
       console.warn('DatePicker in standalone mode requires `onDateChange`');
     }
   }, [formContext, onDateChange]);
 
-  useEffect(() => {
-    if (disabledPicker && open) setOpen(false);
-  }, [disabledPicker, open]);
-
   const disabled = getDisabledDays({ disableBefore, disableAfter, disableDayOfWeek });
 
   const renderPicker = (onChange: (date: Date | undefined) => void) => {
-    const displayDate = localDate;
-    const displayValue = value;
+    const displayDate = formContext ? localDate : (date ?? localDate);
+    const displayValue = formContext
+      ? value
+      : date !== undefined
+        ? formatDateToString(date, dateFormat)
+        : value;
+    const displayMonth = formContext ? month : (date ?? localDate ?? month);
 
     return (
       <div className={cn('relative flex gap-2')}>
@@ -218,7 +216,7 @@ function IGRPDatePickerInputSingle({
         )}
 
         <Popover
-          open={open}
+          open={disabledPicker ? false : open}
           onOpenChange={(v) => {
             if (!disabledPicker) setOpen(v);
           }}
@@ -248,7 +246,7 @@ function IGRPDatePickerInputSingle({
               id={name || id}
               selected={displayDate}
               captionLayout="dropdown"
-              month={month}
+              month={displayMonth}
               onMonthChange={setMonth}
               onSelect={(date) => {
                 if (date) {

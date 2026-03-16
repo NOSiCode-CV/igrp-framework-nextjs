@@ -171,13 +171,6 @@ function IGRPDatePicker({
           control={formContext.control}
           name={fieldName}
           render={({ field, fieldState }) => {
-            // Sync local state when field value changes externally
-            useEffect(() => {
-              if (field.value !== localDate) {
-                setLocalDate(field.value);
-              }
-            }, [field.value]);
-
             return (
               <FormItem>
                 {label && (

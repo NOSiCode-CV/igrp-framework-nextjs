@@ -1,6 +1,6 @@
 'use client';
 
-import { useEffect, useId, useMemo, useState } from 'react';
+import { useId, useMemo, useState } from 'react';
 import { useFormContext } from 'react-hook-form';
 
 import { igrpColorText } from '../../../lib/colors';
@@ -99,12 +99,7 @@ function IGRPCombobox({
   const formContext = useFormContext();
   const [open, setOpen] = useState(false);
   const [localValue, setLocalValue] = useState<string | string[]>(value);
-
-  useEffect(() => {
-    if (!formContext && value !== undefined) {
-      setLocalValue(value);
-    }
-  }, [value, formContext]);
+  const displayValue = value !== undefined ? value : localValue;
 
   const setSelectValue = (
     currentValue: string | string[],
@@ -343,8 +338,8 @@ function IGRPCombobox({
         <IGRPLabel label={label} className={labelClassName} required={required} id={fieldName} />
       )}
 
-      {renderCombobox(localValue, (newValue) => {
-        setLocalValue(newValue);
+      {renderCombobox(displayValue, (newValue) => {
+        if (value === undefined) setLocalValue(newValue);
         onChange?.(newValue);
       })}
 

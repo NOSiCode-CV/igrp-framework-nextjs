@@ -117,11 +117,7 @@ function IGRPModalDialogFooter({ className, stickyFooter, ...props }: IGRPModalD
 /**
  * Modal dialog title.
  */
-function IGRPModalDialogTitle({
-  className,
-  name,
-  ...props
-}: React.ComponentProps<typeof DialogTitle> & { name?: string }) {
+function IGRPModalDialogTitle({ className, ...props }: React.ComponentProps<typeof DialogTitle>) {
   return <DialogTitle className={cn(className)} {...props}></DialogTitle>;
 }
 
@@ -152,5 +148,6 @@ export {
   type IGRPModalDialogHeaderProps,
   IGRPModalDialogTitle,
   IGRPModalDialogTrigger,
+  // eslint-disable-next-line react-refresh/only-export-components
   igrpModalDialogContentVariants,
 };

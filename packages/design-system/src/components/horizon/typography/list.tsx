@@ -1,6 +1,7 @@
+/* eslint-disable react-refresh/only-export-components */
 'use client';
 
-import { useEffect, useId, useState } from 'react';
+import { useEffect, useId, useMemo, useState } from 'react';
 import { cva, type VariantProps } from 'class-variance-authority';
 
 import { IGRPColors, type IGRPColorRole, type IGRPColorVariants } from '../../../lib/colors';
@@ -180,16 +181,19 @@ function IGRPTextList({
   const [visibleItems, setVisibleItems] = useState<Set<number>>(new Set());
   const [collapsedItems, setCollapsedItems] = useState<Set<string | number>>(new Set());
 
+  const allItemsVisible = useMemo(() => new Set(items.map((_, index) => index)), [items]);
+
+  const effectiveVisibleItems = animate ? visibleItems : allItemsVisible;
+
   useEffect(() => {
-    if (animate) {
-      items.forEach((_, index) => {
-        setTimeout(() => {
-          setVisibleItems((prev) => new Set([...prev, index]));
-        }, index * 100);
-      });
-    } else {
-      setVisibleItems(new Set(items.map((_, index) => index)));
-    }
+    if (!animate) return;
+
+    queueMicrotask(() => setVisibleItems(new Set()));
+    items.forEach((_, index) => {
+      setTimeout(() => {
+        setVisibleItems((prev) => new Set([...prev, index]));
+      }, index * 100);
+    });
   }, [items, animate]);
 
   const toggleCollapse = (itemId: string | number) => {
@@ -207,7 +211,7 @@ function IGRPTextList({
   };
 
   const renderListItem = (item: IGRPTextListItem, index: number, depth = 0) => {
-    const isVisible = visibleItems.has(index);
+    const isVisible = effectiveVisibleItems.has(index);
     const isCollapsed = collapsible && item.id && collapsedItems.has(item.id);
     const hasSubItems = item.subItems && item.subItems.length > 0;
     const shouldShowSubItems = hasSubItems && !isCollapsed && depth < maxDepth;

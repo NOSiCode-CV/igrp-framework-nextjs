@@ -7,7 +7,7 @@ copilots, coding agents, and autonomous development assistants.
 The goal is to allow AI systems to **read, understand, and generate code
 that correctly uses the IGRP Design System**.
 
-------------------------------------------------------------------------
+---
 
 # Overview
 
@@ -23,12 +23,12 @@ To make a framework AI-friendly, combine the following layers:
 
 This architecture allows AI tools to:
 
--   Understand your framework rules
--   Discover available components
--   Generate valid code using your design system
--   Follow framework patterns automatically
+- Understand your framework rules
+- Discover available components
+- Generate valid code using your design system
+- Follow framework patterns automatically
 
-------------------------------------------------------------------------
+---
 
 # 1. llms.txt (AI Rules File)
 
@@ -82,7 +82,7 @@ Example:
 
     <IGRPDataTable />
 
-------------------------------------------------------------------------
+---
 
 # 2. AI Component Documentation
 
@@ -129,7 +129,7 @@ Structured format:
         type: enum
         values: [sm, md, lg]
 
-------------------------------------------------------------------------
+---
 
 # 3. Agent Skills
 
@@ -171,7 +171,7 @@ Example content:
       <IGRPInput name="name" label="Name" />
     </IGRPForm>
 
-------------------------------------------------------------------------
+---
 
 # 4. Component Registry
 
@@ -183,7 +183,7 @@ Recommended location:
 
 Example:
 
-``` json
+```json
 {
   "components": [
     {
@@ -201,7 +201,7 @@ Example:
 
 This allows AI systems to discover components programmatically.
 
-------------------------------------------------------------------------
+---
 
 # 5. Examples
 
@@ -220,7 +220,7 @@ Example files:
 
 AI systems often learn from patterns in real examples.
 
-------------------------------------------------------------------------
+---
 
 # 6. CLI Code Generators
 
@@ -244,7 +244,7 @@ Output:
 This allows AI agents to use tooling instead of generating everything
 manually.
 
-------------------------------------------------------------------------
+---
 
 # 7. MCP Server (Model Context Protocol)
 
@@ -252,15 +252,15 @@ Modern AI agents can interact with frameworks using **MCP servers**.
 
 An MCP server can expose tools such as:
 
--   get_components
--   get_component_props
--   generate_form
--   generate_table
+- get_components
+- get_component_props
+- generate_form
+- generate_table
 
 This allows AI agents to request structured information about your
 design system.
 
-------------------------------------------------------------------------
+---
 
 # Recommended Project Structure
 
@@ -291,19 +291,19 @@ design system.
           components.json
           patterns.json
 
-------------------------------------------------------------------------
+---
 
 # Benefits
 
 Implementing this system enables:
 
--   AI-native framework support
--   Automatic code generation using your design system
--   Better compatibility with AI coding agents
--   Reduced incorrect component usage
--   Faster development workflows
+- AI-native framework support
+- Automatic code generation using your design system
+- Better compatibility with AI coding agents
+- Reduced incorrect component usage
+- Faster development workflows
 
-------------------------------------------------------------------------
+---
 
 # Next Step
 

@@ -1,6 +1,6 @@
 'use client';
 
-import { useRef, useState, useCallback, createContext, useContext, useId, useEffect } from 'react';
+import { useRef, useState, useCallback, createContext, useContext, useId } from 'react';
 
 import type { IGRPColorRole, IGRPColorVariants } from '../../lib/colors';
 import { cn } from '../../lib/utils';
@@ -115,17 +115,12 @@ function IGRPMenuNavigation({
   const _id = useId();
   const ref = id ?? _id;
 
-  // Sync internal state when sections change
-  useEffect(() => {
-    if (controlledActiveSection === undefined && sections.length > 0) {
-      const firstSectionId = sections[0]?.id;
-      if (firstSectionId && firstSectionId !== internalActiveSection) {
-        setInternalActiveSection(firstSectionId);
-      }
-    }
-  }, [sections, controlledActiveSection, internalActiveSection]);
-
-  const activeSection = controlledActiveSection ?? internalActiveSection;
+  // When uncontrolled: use internalActiveSection if still valid in sections, else first section
+  const activeSection =
+    controlledActiveSection ??
+    (sections.some((s) => s.id === internalActiveSection)
+      ? internalActiveSection
+      : (sections[0]?.id ?? internalActiveSection));
 
   const handleSectionClick = useCallback(
     (sectionId: string) => {
@@ -249,5 +244,6 @@ export {
   IGRPMenuNavigation,
   type IGRPMenuNavigationItem,
   type IGRPMenuNavigationProps,
+  // eslint-disable-next-line react-refresh/only-export-components
   useIGRPMenuNavigation,
 };

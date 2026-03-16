@@ -1,6 +1,6 @@
 'use client';
 
-import { useId, useState, useEffect, useCallback } from 'react';
+import { useId, useState, useCallback } from 'react';
 import { useFormContext } from 'react-hook-form';
 import type { VariantProps } from 'class-variance-authority';
 
@@ -94,20 +94,15 @@ function IGRPInputSearch({
   const formContext = useFormContext();
   const [localValue, setLocalValue] = useState(controlledValue ?? defaultValue);
   const debouncedSearch = isDebouncedCallback(onSearch, debounceMs);
-
-  useEffect(() => {
-    if (controlledValue !== undefined) {
-      setLocalValue(controlledValue);
-    }
-  }, [controlledValue]);
+  const displayValue = controlledValue !== undefined ? controlledValue : localValue;
 
   const handleInputChange = useCallback(
     (value: string) => {
-      setLocalValue(value);
+      if (controlledValue === undefined) setLocalValue(value);
       setValueChange?.(value);
       if (isDebounce) debouncedSearch?.(value);
     },
-    [debouncedSearch, isDebounce, setValueChange],
+    [controlledValue, debouncedSearch, isDebounce, setValueChange],
   );
 
   const renderInput = (
@@ -140,7 +135,7 @@ function IGRPInputSearch({
       {showStartIcon && (
         <div
           className={cn(
-            'text-muted-foreground/80 pointer-events-none absolute inset-y-0 start-0 flex items-center justify-center ps-1.5 peer-disabled:opacity-50',
+            'text-muted-foreground/80 pointer-events-none absolute inset-y-0 inset-s-0 flex items-center justify-center ps-1.5 peer-disabled:opacity-50',
           )}
         >
           <IGRPIcon iconName={startIcon} aria-hidden="true" size={14} />
@@ -150,7 +145,7 @@ function IGRPInputSearch({
       {showSubmitButton && (
         <IGRPButton
           className={cn(
-            'absolute top-1/2 -translate-y-1/2 end-0 flex items-center justify-center rounded-md transition-[color,box-shadow] outline-none z-10 focus-visible:ring-[3px] gap-0',
+            'absolute top-1/2 -translate-y-1/2 inset-e-0 flex items-center justify-center rounded-md transition-[color,box-shadow] outline-none z-10 focus-visible:ring-[3px] gap-0',
             submitButtonClassName,
           )}
           aria-label={submitButtonLabel}
@@ -204,12 +199,12 @@ function IGRPInputSearch({
       {label && <IGRPLabel label={label} required={required} id={fieldName} />}
 
       {renderInput(
-        localValue,
+        displayValue,
         (e) => handleInputChange(e.target.value),
         (e) => {
           if (e.key === 'Enter') {
             e.preventDefault();
-            onSearch?.(localValue);
+            onSearch?.(displayValue);
           }
         },
       )}

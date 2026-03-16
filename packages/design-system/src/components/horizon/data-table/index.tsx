@@ -25,6 +25,7 @@ import {
   type TableOptions,
 } from '@tanstack/react-table';
 
+import { cn } from '../../../lib/utils';
 import {
   Table,
   TableBody,
@@ -33,14 +34,13 @@ import {
   TableHeader,
   TableRow,
 } from '../../primitives/table';
+import { IGRPIcon } from '../icon';
 import {
   type IGRPDataTableClientFilterListProps,
   IGRPDataTableClientFilter,
 } from './client-filter';
 import { IGRPDataTablePagination, IGRPDataTablePaginationNumeric } from './pagination';
 import { IGRPDataTableToggleVisibility } from './toggle-visibility';
-import { cn } from '../../../lib/utils';
-import { IGRPIcon } from '../icon';
 
 /**
  * Props for the IGRPDataTable component.
@@ -137,6 +137,7 @@ function IGRPDataTable<TData, TValue>({
   const _id = useId();
   const ref = id ?? _id;
 
+  // eslint-disable-next-line react-hooks/incompatible-library
   const table = useReactTable({
     data,
     columns,

@@ -523,14 +523,21 @@ function FormListFormMode<TItem>({
   ref?: React.Ref<HTMLDivElement>;
 }) {
   const formContext = useContext(IGRPFormContext);
+  const disabled = formContext?.disabled;
+
   const { fields, append, remove } = useFieldArray({ name: groupId });
+  const appendRef = useRef(append);
+
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   const values = useWatch({ name: groupId }) ?? [];
+
   const [openItem, setOpenItem] = useState<string | undefined>(undefined);
   const [openItems, setOpenItems] = useState<string[]>([]);
   const [pendingNewItem, setPendingNewItem] = useState(false);
-  const disabled = formContext?.disabled;
-  const appendRef = useRef(append);
-  appendRef.current = append;
+
+  useEffect(() => {
+    appendRef.current = append;
+  });
 
   useEffect(() => {
     if (fields.length === 0 && defaultItem !== undefined && !allowEmpty) {

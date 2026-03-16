@@ -3,6 +3,7 @@
 import { useId } from 'react';
 
 import { igrpCleanString } from '../../lib/strings';
+import { cn } from '../../lib/utils';
 import {
   Accordion,
   AccordionContent,
@@ -10,7 +11,6 @@ import {
   AccordionTrigger,
   type AccordionTriggerArgs,
 } from '../primitives/accordion';
-import { cn } from '../../lib/utils';
 
 /**
  * Single accordion item with title and content.
@@ -84,10 +84,11 @@ function IGRPAccordion({
               iconName={item.iconName ?? iconName}
               showIcon={item.showIcon ?? showIcon}
               iconPlacement={item.iconPlacement ?? iconPlacement}
+              className={classNameTrigger}
             >
               {item.title}
             </AccordionTrigger>
-            <AccordionContent>{item.content}</AccordionContent>
+            <AccordionContent className={classNameContent}>{item.content}</AccordionContent>
           </AccordionItem>
         );
       })}

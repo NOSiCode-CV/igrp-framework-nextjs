@@ -54,10 +54,6 @@ function IGRPDatePickerRange({
   const formContext = useFormContext();
 
   useEffect(() => {
-    if (!formContext) setLocalDate(date);
-  }, [date, formContext]);
-
-  useEffect(() => {
     if (!formContext && typeof onDateChange !== 'function') {
       console.warn('DatePickerRange in standalone mode requires `onDateChange`');
     }
@@ -100,8 +96,8 @@ function IGRPDatePickerRange({
     fieldValue?: DateRange,
     onChange?: (val: DateRange | undefined) => void,
   ) => {
-    // Use fieldValue for form context, localDate for standalone
-    const displayDate = formContext ? fieldValue : localDate;
+    // Use fieldValue for form context; when standalone, use date prop when defined else localDate
+    const displayDate = formContext ? fieldValue : (date ?? localDate);
 
     return (
       <>
@@ -150,38 +146,29 @@ function IGRPDatePickerRange({
       <FormField
         control={formContext.control}
         name={fieldName}
-        render={({ field, fieldState }) => {
-          // Sync local state when field value changes externally
-          useEffect(() => {
-            if (field.value !== localDate) {
-              setLocalDate(field.value);
-            }
-          }, [field.value]);
+        render={({ field, fieldState }) => (
+          <FormItem className={className}>
+            {label && (
+              <FormLabel
+                className={cn(
+                  labelClassName,
+                  required && 'after:content-["*"] after:text-destructive',
+                )}
+              >
+                {label}
+              </FormLabel>
+            )}
+            <FormControl>
+              {renderPicker(field.value, (val) => {
+                field.onChange(val);
+                onDateChange?.(val);
+              })}
+            </FormControl>
 
-          return (
-            <FormItem className={className}>
-              {label && (
-                <FormLabel
-                  className={cn(
-                    labelClassName,
-                    required && 'after:content-["*"] after:text-destructive',
-                  )}
-                >
-                  {label}
-                </FormLabel>
-              )}
-              <FormControl>
-                {renderPicker(field.value, (val) => {
-                  field.onChange(val);
-                  onDateChange?.(val);
-                })}
-              </FormControl>
-
-              {helperText && !fieldState.error && <FormDescription>{helperText}</FormDescription>}
-              <FormMessage />
-            </FormItem>
-          );
-        }}
+            {helperText && !fieldState.error && <FormDescription>{helperText}</FormDescription>}
+            <FormMessage />
+          </FormItem>
+        )}
       />
     );
   }

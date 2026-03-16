@@ -42,6 +42,88 @@ interface IGRPInputNumberProps extends Omit<IGRPInputProps, 'onChange'> {
 
 type NumberValue = number | '';
 
+/** @internal Props for form-connected number input. */
+type FormNumberInputProps = {
+  field: { value: unknown; onChange: (v: unknown) => void };
+  fieldState: { error?: { message?: string } };
+  controlledValue: number | undefined;
+  prevControlledValueRef: React.MutableRefObject<number | undefined>;
+  renderNumberInput: (
+    value: NumberValue,
+    onValueChange?: (newValue: NumberValue) => void,
+    fieldError?: boolean,
+  ) => React.ReactNode;
+  helperOrDescription: string | undefined;
+  error: string | undefined;
+  errorMessage: string;
+  validationError: boolean;
+  setValidationError: (v: boolean) => void;
+  onValueChange?: (value: number) => void;
+  className?: string;
+};
+
+/** @internal Syncs controlledValue prop with form field and renders the input. */
+function FormNumberInput({
+  field,
+  fieldState,
+  controlledValue,
+  prevControlledValueRef,
+  renderNumberInput,
+  helperOrDescription,
+  error,
+  errorMessage,
+  validationError,
+  setValidationError,
+  onValueChange,
+  className,
+}: FormNumberInputProps) {
+  useEffect(() => {
+    const controlledValueChanged = prevControlledValueRef.current !== controlledValue;
+    if (controlledValueChanged) {
+      prevControlledValueRef.current = controlledValue;
+    }
+    if (controlledValueChanged && field.value !== controlledValue) {
+      field.onChange(controlledValue === undefined ? undefined : controlledValue);
+    }
+  }, [field.value, controlledValue, field, prevControlledValueRef]);
+
+  const displayValue = (() => {
+    if (controlledValue !== undefined) return controlledValue;
+    const raw = field.value;
+    if (raw === '' || raw === undefined || raw === null) return '';
+    const parsed = typeof raw === 'number' ? raw : parseFloat(String(raw));
+    return Number.isFinite(parsed) ? parsed : '';
+  })() as NumberValue;
+
+  return (
+    <div className={cn('w-full', className)}>
+      {renderNumberInput(
+        displayValue,
+        (newValue) => {
+          if (newValue === '') {
+            field.onChange(undefined);
+            setValidationError(false);
+            return;
+          }
+          field.onChange(newValue);
+          onValueChange?.(newValue);
+        },
+        !!fieldState.error,
+      )}
+      {helperOrDescription && !error && !fieldState.error && !validationError && (
+        <p className={cn('text-muted-foreground mt-2 text-xs')} role="region" aria-live="polite">
+          {helperOrDescription}
+        </p>
+      )}
+      {(error || fieldState.error || validationError) && (
+        <p className={cn('text-destructive mt-2 text-xs')} role="alert">
+          {error || fieldState.error?.message || errorMessage}
+        </p>
+      )}
+    </div>
+  );
+}
+
 /**
  * Numeric input with stepper, formatting, and min/max. Integrates with react-hook-form.
  */
@@ -77,16 +159,7 @@ function IGRPInputNumber({
 
   const formatter = new Intl.NumberFormat(undefined, formatOptions);
 
-  useEffect(() => {
-    if (!formContext) {
-      // Sync with controlledValue when it changes, including when it becomes undefined
-      if (controlledValue === undefined) {
-        setLocalValue('');
-      } else {
-        setLocalValue(controlledValue);
-      }
-    }
-  }, [controlledValue, formContext]);
+  const displayValue = !formContext && controlledValue !== undefined ? controlledValue : localValue;
 
   const constrainValue = (newValue: number): number => {
     if (min !== undefined && newValue < min) {
@@ -290,7 +363,7 @@ function IGRPInputNumber({
   if (!formContext) {
     return (
       <div className={cn('w-full', className)}>
-        {renderNumberInput(localValue)}
+        {renderNumberInput(displayValue)}
 
         {helperOrDescription && !error && !validationError && (
           <p className={cn('text-muted-foreground mt-2 text-xs')} role="region" aria-live="polite">
@@ -312,64 +385,22 @@ function IGRPInputNumber({
       name={fieldName}
       control={formContext.control}
       defaultValue={defaultValue ?? ''}
-      render={({ field, fieldState }) => {
-        // Sync local state when field value or controlledValue prop changes externally
-        useEffect(() => {
-          // Check if controlledValue prop changed (including to undefined)
-          const controlledValueChanged = prevControlledValueRef.current !== controlledValue;
-          if (controlledValueChanged) {
-            prevControlledValueRef.current = controlledValue;
-          }
-
-          // If controlledValue prop changed and different from field.value, update RHF
-          if (controlledValueChanged && field.value !== controlledValue) {
-            field.onChange(controlledValue === undefined ? undefined : controlledValue);
-          }
-        }, [field.value, controlledValue, field]);
-
-        return (
-          <div className={cn('w-full', className)}>
-            {renderNumberInput(
-              (() => {
-                // Priority: if controlledValue prop is provided, use it
-                if (controlledValue !== undefined) {
-                  return controlledValue;
-                }
-                const raw = field.value;
-                if (raw === '' || raw === undefined || raw === null) return '';
-                const parsed = typeof raw === 'number' ? raw : parseFloat(String(raw));
-                return Number.isFinite(parsed) ? parsed : '';
-              })(),
-              (newValue) => {
-                if (newValue === '') {
-                  field.onChange(undefined);
-                  setValidationError(false);
-                  return;
-                }
-                field.onChange(newValue);
-                onChange?.(newValue);
-              },
-              !!fieldState.error,
-            )}
-
-            {helperOrDescription && !error && !fieldState.error && !validationError && (
-              <p
-                className={cn('text-muted-foreground mt-2 text-xs')}
-                role="region"
-                aria-live="polite"
-              >
-                {helperOrDescription}
-              </p>
-            )}
-
-            {(error || fieldState.error || validationError) && (
-              <p className={cn('text-destructive mt-2 text-xs')} role="alert">
-                {error || fieldState.error?.message || errorMessage}
-              </p>
-            )}
-          </div>
-        );
-      }}
+      render={({ field, fieldState }) => (
+        <FormNumberInput
+          field={field}
+          fieldState={fieldState}
+          controlledValue={controlledValue}
+          prevControlledValueRef={prevControlledValueRef}
+          renderNumberInput={renderNumberInput}
+          helperOrDescription={helperOrDescription}
+          error={error}
+          errorMessage={errorMessage}
+          validationError={validationError}
+          setValidationError={setValidationError}
+          onValueChange={onChange}
+          className={className}
+        />
+      )}
     />
   );
 }

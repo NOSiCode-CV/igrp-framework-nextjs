@@ -1,6 +1,6 @@
 'use client';
 
-import { useId, useState, useEffect } from 'react';
+import { useId, useState } from 'react';
 import { useFormContext, Controller } from 'react-hook-form';
 import * as RPNInput from 'react-phone-number-input';
 import flags from 'react-phone-number-input/flags';
@@ -133,16 +133,10 @@ function IGRPInputPhone({
   const _id = useId();
   const fieldName = name ?? id ?? _id;
   const formContext = useFormContext();
-  const [localValue, setLocalValue] = useState(defaultValue || '');
-
-  useEffect(() => {
-    if (value !== undefined && !formContext) {
-      setLocalValue(value);
-    }
-  }, [value, formContext]);
+  const [localValue, setLocalValue] = useState(value ?? defaultValue ?? '');
 
   const handleStandaloneChange = (newValue: string | undefined) => {
-    setLocalValue(newValue || '');
+    if (value === undefined) setLocalValue(newValue || '');
     onChange?.(newValue);
   };
 

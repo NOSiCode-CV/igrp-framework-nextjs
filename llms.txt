@@ -1,0 +1,65 @@
+# IGRP React Framework
+
+IGRP is a React framework using:
+
+- React 19
+- Next.js 15
+- react-hook-form
+- zod
+- TailwindCSS v4
+- Radix UI (via @igrp/igrp-framework-react-design-system)
+
+## Component Rules
+
+Always use IGRP components instead of raw HTML.
+
+❌ Do not use:
+<input />
+<button />
+<select />
+<textarea />
+
+✅ Use:
+<IGRPInputText />
+<IGRPButton />
+<IGRPSelect />
+<IGRPTextarea />
+
+## Import Path
+
+import { ... } from '@igrp/igrp-framework-react-design-system';
+
+## Forms
+
+Forms must use:
+
+- IGRPForm
+- IGRPFormField
+- react-hook-form (via IGRPForm)
+- zod schema
+
+Example:
+
+<IGRPForm schema={schema} onSubmit={onSubmit}>
+  <IGRPFormField name="name" label="Name" required>
+    <IGRPInputText name="name" />
+  </IGRPFormField>
+</IGRPForm>
+
+## Tables
+
+Tables must use:
+
+- IGRPDataTable (for data with columns, sorting, filtering)
+- IGRPTable (for simple static tables)
+
+Example:
+
+<IGRPDataTable columns={columns} data={data} />
+
+## AI Resources
+
+- Component specs: docs/ai/components/
+- Component registry: packages/design-system/ai/components.json
+- Examples: examples/
+- Skills: .ai/skills/ and .cursor/skills/igrp-design-system/

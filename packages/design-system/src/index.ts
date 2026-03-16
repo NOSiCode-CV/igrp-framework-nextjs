@@ -5,7 +5,10 @@
 
 // custom components
 export { IGRPStatusBanner, type IGRPStatusBannerProps } from './components/custom/status-banner';
-export { IGRPStatsCardTopBorderColored, type IGRPStatsCardTopBorderColoredProps } from './components/custom/stats-card-top-border-colored';
+export {
+  IGRPStatsCardTopBorderColored,
+  type IGRPStatsCardTopBorderColoredProps,
+} from './components/custom/stats-card-top-border-colored';
 export { IGRPUserAvatar, type IGRPUserAvatarProps } from './components/custom/user-avatar';
 
 // primitives components

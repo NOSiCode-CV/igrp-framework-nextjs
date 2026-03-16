@@ -1,4 +1,4 @@
-'use client'
+'use client';
 
 import { useId, useState, useEffect } from 'react';
 import { format } from 'date-fns';

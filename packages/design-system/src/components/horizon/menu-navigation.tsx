@@ -1,14 +1,6 @@
 'use client';
 
-import { 
-  useRef, 
-  useState, 
-  useCallback, 
-  createContext, 
-  useContext, 
-  useId, 
-  useEffect 
-} from 'react';
+import { useRef, useState, useCallback, createContext, useContext, useId, useEffect } from 'react';
 
 import type { IGRPColorRole, IGRPColorVariants } from '../../lib/colors';
 import { cn } from '../../lib/utils';

@@ -1,4 +1,4 @@
-"use client"
+'use client';
 
 import { type Row } from '@tanstack/react-table';
 import { format } from 'date-fns';
@@ -71,35 +71,36 @@ function IGRPDataTableCellSwitch<TData>({
  * Props for the IGRPDataTableCellExpander component.
  * @see IGRPDataTableCellExpander
  */
-interface IGRPDataTableCellExpanderProps<TData> {
+interface IGRPDataTableCellExpanderProps<TData> extends React.ComponentProps<typeof Button> {
   /** Table row. */
   row: Row<TData>;
   /** Field name for aria-label. */
-  field: string;
+  /** @deprecated */
+  field?: string;
+  label?: string;
 }
 
 /** Button to expand/collapse row details. */
-function IGRPDataTableCellExpander<TData>({ row, field }: IGRPDataTableCellExpanderProps<TData>) {
-  return row.getCanExpand() ? (
-    <Button
-      {...{
-        className: 'shadow-none text-muted-foreground',
-        onClick: row.getToggleExpandedHandler(),
-        'aria-expanded': row.getIsExpanded(),
-        'aria-label': row.getIsExpanded()
-          ? `Collapse details for ${field}`
-          : `Expand details for ${field}`,
-        size: 'sm',
-        variant: 'ghost',
-      }}
-    >
-      {row.getIsExpanded() ? (
-        <IGRPIcon iconName="ChevronDown" />
-      ) : (
-        <IGRPIcon iconName="ChevronRight" />
-      )}
-    </Button>
-  ) : null;
+function IGRPDataTableCellExpander<TData>({ row, label }: IGRPDataTableCellExpanderProps<TData>) {
+  if (!row.getCanExpand()) return null;
+
+  <Button
+    {...{
+      className: 'shadow-none ',
+      onClick: row.getToggleExpandedHandler(),
+      'aria-expanded': row.getIsExpanded(),
+      'aria-label': row.getIsExpanded() ? `Collapse details` : `Expand for details`,
+      size: 'sm',
+      variant: 'ghost',
+    }}
+  >
+    <span>{label}</span>
+    {row.getIsExpanded() ? (
+      <IGRPIcon iconName="ChevronDown" />
+    ) : (
+      <IGRPIcon iconName="ChevronRight" />
+    )}
+  </Button>;
 }
 
 /**

@@ -1,4 +1,4 @@
-"use client"
+'use client';
 
 import { useId, useState } from 'react';
 import type { DropdownNavProps, DropdownProps, PropsBase, PropsSingle } from 'react-day-picker';

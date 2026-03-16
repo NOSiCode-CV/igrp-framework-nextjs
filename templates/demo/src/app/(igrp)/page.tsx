@@ -1,4 +1,5 @@
 import type { ReactNode } from "react";
+import { Route } from "next";
 import { redirect } from "next/navigation";
 
 import { sanitizePath } from "@/lib/sanitize";
@@ -13,8 +14,12 @@ export default function Home(): ReactNode {
   );
 
   if (root === "/") {
-    return <div className="text-3xl font-bold">IGRP NEXT.js Template</div>;
+    return (
+      <main id="main-content">
+        <h3 className="text-3xl font-bold">IGRP NEXT.js Template</h3>
+      </main>
+    );
   }
 
-  redirect(root as Parameters<typeof redirect>[0]);
+  redirect(root as Route);
 }

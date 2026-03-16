@@ -1,4 +1,4 @@
-"use client"
+'use client';
 
 import { AlertCircle, type LucideProps, icons } from 'lucide-react';
 

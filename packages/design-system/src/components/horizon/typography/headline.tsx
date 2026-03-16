@@ -43,6 +43,7 @@ interface IGRPHeadlineProps
   color?: IGRPColorVariants;
   /** HTML id attribute. */
   id?: string;
+  headlineContentClassName?: string;
 }
 
 /**
@@ -62,6 +63,7 @@ function IGRPHeadline({
   iconClassName,
   iconPlacement = 'start',
   iconSize,
+  headlineContentClassName,
   ...props
 }: IGRPHeadlineProps) {
   const _id = useId();
@@ -85,7 +87,7 @@ function IGRPHeadline({
       {showIcon && (
         <IGRPIcon iconName={iconName} size={iconSize} className={cn('mt-1', iconClassName)} />
       )}
-      <div className={cn('flex flex-col gap-1')}>
+      <div className={cn('flex flex-col gap-1', headlineContentClassName)}>
         <Tag className={cn(igrpHeadlineVariants({ variant }))}>{title}</Tag>
         <p className={cn('text-sm')}>{description}</p>
       </div>

@@ -1,9 +1,9 @@
 "use server";
 
+import { cache } from "react";
+import { cookies } from "next/headers";
 import type { Session } from "@igrp/framework-next-auth";
 import type { IGRPLayoutConfigArgs } from "@igrp/framework-next-types";
-import { cookies } from "next/headers";
-
 import { getAccessToken } from "@/lib/auth-helpers";
 import { AUTH_CONSTANTS } from "@/lib/constants";
 import { isPreviewMode } from "@/lib/utils";
@@ -40,17 +40,18 @@ function createPreviewSession(): Session {
 /**
  * Builds layout configuration: session, theme, and scale preferences.
  * Uses preview session when IGRP_PREVIEW_MODE is enabled.
+ * Cached per request to avoid duplicate work when both root and (igrp) layouts run.
  *
  * @returns Layout config for IGRP framework
  */
-export async function configLayout(): Promise<IGRPLayoutConfigArgs> {
-  // In preview mode, provide a mock session object to prevent client-side redirects
-  // The framework might check for session existence rather than just previewMode
-  const session: Session | null = isPreviewMode()
-    ? createPreviewSession()
-    : ((await getAccessToken()) as Session | null);
-
-  const { activeThemeValue, isScaled } = await getTheme();
-
+export const configLayout = cache(async (): Promise<IGRPLayoutConfigArgs> => {
+  const [sessionResult, themeResult] = await Promise.all([
+    isPreviewMode()
+      ? Promise.resolve(createPreviewSession())
+      : getAccessToken(),
+    getTheme(),
+  ]);
+  const session = sessionResult as Session | null;
+  const { activeThemeValue, isScaled } = themeResult;
   return { session, activeThemeValue, isScaled };
-}
+});

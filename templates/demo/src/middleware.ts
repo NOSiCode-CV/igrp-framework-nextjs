@@ -1,5 +1,5 @@
-import { getToken } from "@igrp/framework-next-auth";
 import { type NextRequest, NextResponse } from "next/server";
+import { getToken } from "@igrp/framework-next-auth/jwt";
 
 import { AUTH_CONSTANTS } from "@/lib/constants";
 import { logger } from "@/lib/errors";
@@ -25,15 +25,18 @@ function withSecurityHeaders(response: NextResponse): NextResponse {
   return response;
 }
 
-const PUBLIC_PATHS = ["/login", "/logout", "/api/auth", "/api/health"];
+const PUBLIC_PATH_SET = new Set([
+  "/login",
+  "/logout",
+  "/api/auth",
+  "/api/health",
+]);
+const PUBLIC_PREFIXES = ["/login/", "/logout/", "/api/auth/", "/api/health/"];
 const STATIC_PREFIXES = ["/_next/", "/static/", "/favicon.ico"];
 
-function isPublicPath(pathname: string) {
-  if (
-    PUBLIC_PATHS.some((p) => pathname === p || pathname.startsWith(`${p}/`))
-  ) {
-    return true;
-  }
+function isPublicPath(pathname: string): boolean {
+  if (PUBLIC_PATH_SET.has(pathname)) return true;
+  if (PUBLIC_PREFIXES.some((p) => pathname.startsWith(p))) return true;
   if (STATIC_PREFIXES.some((p) => pathname.startsWith(p))) return true;
   return false;
 }

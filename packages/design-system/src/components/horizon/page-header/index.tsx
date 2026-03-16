@@ -1,4 +1,4 @@
-"use client"
+'use client';
 
 import { type VariantProps } from 'class-variance-authority';
 import { useId } from 'react';
@@ -52,6 +52,8 @@ interface IGRPPageHeaderProps extends Pick<IGRPBaseAttributes, 'name'> {
   backButtonOnClick?: React.ComponentProps<typeof IGRPPageHeaderBackButton>['onClick'];
   /** HTML id attribute. */
   id?: string;
+  headlineContentClassName?: string;
+  pageHeaderContentClassName?: string;
 }
 
 /** @internal */
@@ -115,6 +117,7 @@ function IGRPPageHeader({
   variant,
   className,
   headlineClassName,
+  headlineContentClassName,
   children,
   name,
   id,
@@ -130,6 +133,7 @@ function IGRPPageHeader({
   backButtonClassName,
   backButtonUseBrowserBack,
   backButtonOnClick,
+  pageHeaderContentClassName,
 }: IGRPPageHeaderProps) {
   const _id = useId();
   const ref = name ?? id ?? _id;
@@ -143,7 +147,7 @@ function IGRPPageHeader({
       )}
       id={ref}
     >
-      <div className={cn('flex items-center gap-2')}>
+      <div className={cn('flex items-center gap-2', pageHeaderContentClassName)}>
         {showBackButton &&
           renderBackButton({
             iconBackButton,
@@ -164,6 +168,7 @@ function IGRPPageHeader({
           className={headlineClassName}
           variant={variant}
           name={`h-${name}`}
+          headlineContentClassName={headlineContentClassName}
         />
       </div>
 

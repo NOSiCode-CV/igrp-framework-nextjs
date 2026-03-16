@@ -114,4 +114,5 @@ igrp-next-template.zip
 *storybook.log
 
 .npmrc.example
+.cursor
 

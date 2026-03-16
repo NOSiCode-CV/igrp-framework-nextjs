@@ -5,6 +5,7 @@ import {
   IGRPDataTableCellBadge,
   IGRPDataTableCellCheckbox,
   IGRPDataTableCellDate,
+  IGRPDataTableCellExpander,
   IGRPDataTableCellLink,
   IGRPDataTableFilterFaceted,
   IGRPDataTableFilterInput,
@@ -21,6 +22,8 @@ type UserRow = {
   role: 'Admin' | 'Manager' | 'Analyst' | 'Viewer';
   status: 'Active' | 'Pending' | 'Inactive';
   amount: number;
+  completed: number;
+  total: number;
   createdAt: string;
   website: string;
 };
@@ -29,12 +32,16 @@ const rows: UserRow[] = Array.from({ length: 16 }).map((_, index) => {
   const roles: UserRow['role'][] = ['Admin', 'Manager', 'Analyst', 'Viewer'];
   const statuses: UserRow['status'][] = ['Active', 'Pending', 'Inactive'];
 
+  const total = 10;
+  const completed = index % (total + 1);
   return {
     id: index + 1,
     name: `User ${index + 1}`,
     role: roles[index % roles.length] as UserRow['role'],
     status: statuses[index % statuses.length] as UserRow['status'],
     amount: 1200 + index * 95,
+    completed,
+    total,
     createdAt: new Date(2025, (index % 12) + 1, (index % 28) + 1).toISOString(),
     website: `https://example.com/users/${index + 1}`,
   };
@@ -99,7 +106,7 @@ const columns: ColumnDef<UserRow>[] = [
         language="en-US"
       />
     ),
-  },
+  },  
   {
     accessorKey: 'createdAt',
     header: ({ column }) => <IGRPDataTableHeaderSortToggle column={column} title="Created At" />,
@@ -245,10 +252,22 @@ export const ServerSideFilterMode: Story = {
   ),
 };
 
+const columnsWithExpand: ColumnDef<UserRow>[] = [
+  {
+    id: 'expand',
+    header: () => null,
+    cell: ({ row }) => <IGRPDataTableCellExpander row={row} field="user" />,
+    enableSorting: false,
+    enableHiding: false,
+    size: 46,
+  },
+  ...columns,
+];
+
 export const WithExpandableRows: Story = {
   args: {
     data: rows,
-    columns,
+    columns: columnsWithExpand,
     getRowCanExpand: () => true,
     renderSubComponent: (row) => (
       <div className="grid gap-2 rounded-md bg-muted/40 p-3 text-sm">
@@ -260,6 +279,9 @@ export const WithExpandableRows: Story = {
         </p>
         <p>
           <strong>Status:</strong> {row.original.status}
+        </p>
+        <p>
+          <strong>Progress:</strong> {row.original.completed}/{row.original.total}
         </p>
       </div>
     ),

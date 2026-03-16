@@ -45,7 +45,7 @@ function IGRPModalDialogContent({
   children,
   contentClassName,
   ...props
-}:IGRPModalDialogContentProps) {
+}: IGRPModalDialogContentProps) {
   const hasStickyHeader = Children.toArray(children).some(
     (child) =>
       isValidElement(child) &&
@@ -75,7 +75,6 @@ function IGRPModalDialogContent({
   );
 }
 
-
 interface IGRPModalDialogHeaderProps extends React.ComponentProps<typeof DialogHeader> {
   /** Pin header to top when scrolling. */
   stickyHeader?: boolean;
@@ -84,11 +83,7 @@ interface IGRPModalDialogHeaderProps extends React.ComponentProps<typeof DialogH
 /**
  * Modal dialog header with optional sticky positioning.
  */
-function IGRPModalDialogHeader({
-  className,
-  stickyHeader,
-  ...props
-}: IGRPModalDialogHeaderProps) {
+function IGRPModalDialogHeader({ className, stickyHeader, ...props }: IGRPModalDialogHeaderProps) {
   return (
     <DialogHeader
       className={cn(
@@ -105,11 +100,7 @@ interface IGRPModalDialogFooterProps extends React.ComponentProps<typeof DialogF
   stickyFooter?: boolean;
 }
 
-function IGRPModalDialogFooter({
-  className,
-  stickyFooter,
-  ...props
-}: IGRPModalDialogFooterProps) {
+function IGRPModalDialogFooter({ className, stickyFooter, ...props }: IGRPModalDialogFooterProps) {
   return (
     <DialogFooter
       className={cn(

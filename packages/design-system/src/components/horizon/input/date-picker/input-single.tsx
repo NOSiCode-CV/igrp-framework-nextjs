@@ -1,4 +1,4 @@
-'use client'
+'use client';
 
 import { useId, useState, useEffect, useRef } from 'react';
 import type { Control } from 'react-hook-form';

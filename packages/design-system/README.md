@@ -29,8 +29,8 @@ The design system uses Tailwind v4 and CSS variables (tokens). Configure your ap
 In your main CSS file (e.g. `src/styles/globals.css`):
 
 ```css
-@import "tailwindcss";
-@import "tw-animate-css";
+@import 'tailwindcss';
+@import 'tw-animate-css';
 
 @custom-variant dark (&:is(.dark *));
 
@@ -39,10 +39,10 @@ In your main CSS file (e.g. `src/styles/globals.css`):
 @source "../../node_modules/@igrp/igrp-framework-react-design-system/dist/**/*.{js,jsx,ts,tsx,mjs,cjs}";
 
 /* Import tokens (CSS variables) */
-@import "@igrp/igrp-framework-react-design-system/tokens";
+@import '@igrp/igrp-framework-react-design-system/tokens';
 
 /* Optional: your theme overrides */
-@import "./themes.css";
+@import './themes.css';
 ```
 
 ### Importing Components
@@ -60,7 +60,7 @@ import {
 ### Package Exports
 
 | Export | Description |
-|--------|-------------|
+| ------ | ----------- |
 
 | `@igrp/igrp-framework-react-design-system` | Main entry — components, hooks, utilities |
 | `@igrp/igrp-framework-react-design-system/tokens` | CSS variables (theme tokens) |
@@ -75,7 +75,7 @@ import {
 ### Primitives vs Horizon
 
 | Aspect | Primitives (`*Primitive`) | Horizon |
-|--------|---------------------------|---------|
+| ------ | ------------------------- | ------- |
 
 | **Purpose** | Low-level building blocks; minimal styling, maximum flexibility | High-level, opinionated components for common IGRP patterns |
 | **Built on** | Radix UI primitives, CVA variants | Primitives (they wrap primitives) |
@@ -124,7 +124,7 @@ The design system uses CSS custom properties for theming. Tokens are defined in 
 ### Core Tokens
 
 | Token | Purpose |
-|-------|---------|
+| ----- | ------- |
 
 | `--background`, `--foreground` | Page background and text |
 | `--primary`, `--primary-foreground` | Primary actions and text |
@@ -147,7 +147,7 @@ import { ThemeProvider } from 'next-themes';
 
 <ThemeProvider attribute="class" defaultTheme="system">
   {children}
-</ThemeProvider>
+</ThemeProvider>;
 ```
 
 ### Custom Themes
@@ -200,7 +200,7 @@ If you previously imported prebuilt styles:
 **Before:**
 
 ```css
-@import "@igrp/igrp-framework-react-design-system/styles.css";
+@import '@igrp/igrp-framework-react-design-system/styles.css';
 ```
 
 **After:**
@@ -212,18 +212,18 @@ If you previously imported prebuilt styles:
    ```
 
 2. Import tokens only:
-  
+
    ```css
-   @import "@igrp/igrp-framework-react-design-system/tokens";
+   @import '@igrp/igrp-framework-react-design-system/tokens';
    ```
 
 3. Remove imports of `@igrp/*/styles.css` to avoid cascade conflicts and missing utilities.
 
 ### Deprecated Components
 
-| Deprecated | Migration |
-|------------|-----------|
-| `IGRPCalendar` | Use `IGRPCalendarSingle`, `IGRPCalendarRange`, or `IGRPCalendarMultiple` |
+| Deprecated       | Migration                                                                      |
+| ---------------- | ------------------------------------------------------------------------------ |
+| `IGRPCalendar`   | Use `IGRPCalendarSingle`, `IGRPCalendarRange`, or `IGRPCalendarMultiple`       |
 | `IGRPDatePicker` | Use `IGRPDatePickerSingle`, `IGRPDatePickerRange`, or `IGRPDatePickerMultiple` |
 
 ---

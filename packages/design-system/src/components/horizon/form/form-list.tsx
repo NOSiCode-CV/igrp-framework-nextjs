@@ -1,14 +1,6 @@
-'use client'
+'use client';
 
-import { 
-  forwardRef, 
-  useCallback, 
-  useContext, 
-  useEffect, 
-  useId, 
-  useRef, 
-  useState 
-} from 'react';
+import { forwardRef, useCallback, useContext, useEffect, useId, useRef, useState } from 'react';
 import { useFieldArray, useWatch } from 'react-hook-form';
 
 import { cn } from '../../../lib/utils';
@@ -265,7 +257,7 @@ function FormListLayout<TItem>({
   disabled,
   ref,
 }: FormListLayoutProps<TItem>) {
-  const canRemove = (items.length > 1 || allowEmpty) && !!onRemove && !disabled;
+  const canRemove = (items.length > 0 || allowEmpty) && !!onRemove && !disabled;
   const getItemKey = (index: number) => itemKeys?.[index] ?? `${ACCORDION_ITEM_PREFIX}${index}`;
 
   const accordionItems = items.map((item, index) => {

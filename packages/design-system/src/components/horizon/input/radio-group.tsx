@@ -1,4 +1,4 @@
-'use client'
+'use client';
 
 import { useId } from 'react';
 import { useFormContext } from 'react-hook-form';

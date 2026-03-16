@@ -1,4 +1,4 @@
-"use client"
+'use client';
 
 import { useId } from 'react';
 import { cva, type VariantProps } from 'class-variance-authority';

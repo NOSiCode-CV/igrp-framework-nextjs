@@ -49,26 +49,31 @@ Domain-specific components (e.g. `IGRPStatusBanner`, `IGRPStatsCardTopBorderColo
 
 ## Key Types
 
-| Type | Purpose |
-|------|---------|
+| Type                 | Purpose                                                                                             |
+| -------------------- | --------------------------------------------------------------------------------------------------- |
 | `IGRPBaseAttributes` | `label`, `helperText`, `showIcon`, `iconName`, `iconPlacement`, `iconSize`, `iconClassName`, `name` |
-| `IGRPInputProps` | Extends `IGRPBaseAttributes` + `inputClassName`, `error`, `gridSize` |
-| `IGRPSize` | `'sm' \| 'md' \| 'lg' \| 'xl'` |
-| `IGRPPlacementProps` | `'start' \| 'end' \| 'center'` |
+| `IGRPInputProps`     | Extends `IGRPBaseAttributes` + `inputClassName`, `error`, `gridSize`                                |
+| `IGRPSize`           | `'sm' \| 'md' \| 'lg' \| 'xl'`                                                                      |
+| `IGRPPlacementProps` | `'start' \| 'end' \| 'center'`                                                                      |
 
 ## Common Patterns
 
 ### Form with validation
 
 ```tsx
-import { IGRPForm, IGRPFormField, IGRPInputText, IGRPButton } from '@igrp/igrp-framework-react-design-system';
+import {
+  IGRPForm,
+  IGRPFormField,
+  IGRPInputText,
+  IGRPButton,
+} from '@igrp/igrp-framework-react-design-system';
 
 <IGRPForm schema={schema} onSubmit={onSubmit}>
   <IGRPFormField name="email" label="Email" required>
     <IGRPInputText name="email" type="email" />
   </IGRPFormField>
   <IGRPButton type="submit">Submit</IGRPButton>
-</IGRPForm>
+</IGRPForm>;
 ```
 
 ### Input with icon
@@ -95,7 +100,13 @@ import { IGRPForm, IGRPFormField, IGRPInputText, IGRPButton } from '@igrp/igrp-f
 ### Cards
 
 ```tsx
-import { IGRPCard, IGRPCardHeader, IGRPCardTitle, IGRPCardContent, IGRPCardFooter } from '@igrp/igrp-framework-react-design-system';
+import {
+  IGRPCard,
+  IGRPCardHeader,
+  IGRPCardTitle,
+  IGRPCardContent,
+  IGRPCardFooter,
+} from '@igrp/igrp-framework-react-design-system';
 
 <IGRPCard>
   <IGRPCardHeader>
@@ -103,7 +114,7 @@ import { IGRPCard, IGRPCardHeader, IGRPCardTitle, IGRPCardContent, IGRPCardFoote
   </IGRPCardHeader>
   <IGRPCardContent>Content</IGRPCardContent>
   <IGRPCardFooter>Footer</IGRPCardFooter>
-</IGRPCard>
+</IGRPCard>;
 ```
 
 ### Data table
@@ -111,25 +122,59 @@ import { IGRPCard, IGRPCardHeader, IGRPCardTitle, IGRPCardContent, IGRPCardFoote
 ```tsx
 import { IGRPDataTable, type ColumnDef } from '@igrp/igrp-framework-react-design-system';
 
-<IGRPDataTable columns={columns} data={data} />
+<IGRPDataTable columns={columns} data={data} />;
 ```
+
+### Checklist, Amount input, Progress cell
+
+```tsx
+import {
+  IGRPChecklist,
+  IGRPInputAmount,
+  IGRPProgressTableCell,
+} from '@igrp/igrp-framework-react-design-system';
+
+// Checklist: multi-select with ReactNode content per item
+<IGRPChecklist
+  name="notifications"
+  label="Preferences"
+  items={[{ value: 'email', content: 'Email' }, { value: 'sms', content: 'SMS' }]}
+  onValueChange={(values) => setSelected(values)}
+/>
+
+// Amount: formatted currency display (read-only), supports formRef, form context, or controlled
+<IGRPInputAmount
+  name="total"
+  label="Total"
+  formatValue={(v) => new Intl.NumberFormat('en-US', { style: 'currency', currency: 'USD' }).format(v)}
+  formRef={formRef}
+  fieldName="total"
+/>
+
+// Progress cell: progress bar + label for tables/dashboards
+<IGRPProgressTableCell value={70} completedTasks={7} totalTasks={10} />
+```
+
+See `packages/design-system/docs/use-cases/` for detailed use cases.
 
 ### Icons
 
 ```tsx
 import { IGRPIcon, type IGRPIconName } from '@igrp/igrp-framework-react-design-system';
 
-<IGRPIcon iconName="Check" size={16} />
+<IGRPIcon iconName="Check" size={16} />;
 ```
 
 ## Styling in Templates
 
 1. **Tokens**: Import tokens in `globals.css`:
+
    ```css
-   @import "@igrp/igrp-framework-react-design-system/tokens";
+   @import '@igrp/igrp-framework-react-design-system/tokens';
    ```
 
 2. **Tailwind source**: Scan design-system dist so Tailwind generates utilities:
+
    ```css
    @source "../../node_modules/@igrp/igrp-framework-react-design-system/dist/**/*.{js,jsx,ts,tsx,mjs,cjs}";
    ```

@@ -18,11 +18,7 @@
     "resolveJsonModule": true,
     "skipLibCheck": true,
     "sourceMap": true,
-    "lib": [
-      "ES2023",
-      "DOM",
-      "DOM.Iterable",
-    ],
+    "lib": ["ES2023", "DOM", "DOM.Iterable"],
     "incremental": true,
     "isolatedModules": true,
     "useDefineForClassFields": true,
@@ -33,14 +29,8 @@
     "noUnusedParameters": true,
     "erasableSyntaxOnly": true,
     "noFallthroughCasesInSwitch": true,
-    "noUncheckedSideEffectImports": true,
+    "noUncheckedSideEffectImports": true
   },
-  "include": [
-    "src"
-  ],
-  "exclude": [
-    "dist",
-    "node_modules",
-    "src/components/experimental"
-  ]
+  "include": ["src"],
+  "exclude": ["dist", "node_modules", "src/components/experimental"]
 }

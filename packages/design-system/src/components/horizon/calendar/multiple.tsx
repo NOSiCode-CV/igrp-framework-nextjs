@@ -1,4 +1,4 @@
-"use client"
+'use client';
 
 import { useId, useState } from 'react';
 import { addDays } from 'date-fns';

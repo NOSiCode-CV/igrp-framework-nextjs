@@ -13,6 +13,22 @@ const MAX_STRING_LENGTH = 10_000;
 const DANGEROUS_PROTOCOLS = /^(javascript|data|vbscript|file):/i;
 
 /**
+ * Resolves the login path relative to a base URL.
+ * Falls back to "/login" if base URL is invalid.
+ *
+ * @param baseUrl - Base URL (e.g. NEXTAUTH_URL or "http://localhost:3000")
+ * @param path - Login path (default: "/login")
+ * @returns Resolved pathname
+ */
+export function getLoginPath(baseUrl: string, path = "/login"): string {
+  try {
+    return new URL(path, baseUrl).pathname;
+  } catch {
+    return "/login";
+  }
+}
+
+/**
  * Sanitizes a redirect/callback URL to prevent open redirect attacks.
  * Allows only relative paths (/) or same-origin absolute URLs.
  *

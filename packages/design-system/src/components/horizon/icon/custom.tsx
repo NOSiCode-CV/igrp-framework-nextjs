@@ -1,4 +1,4 @@
-"use client"
+'use client';
 
 /**
  * Props for custom icon components.

@@ -1,6 +1,6 @@
 {
   "name": "@igrp/framework-next-ui",
-  "version": "0.1.0-beta.102",
+  "version": "0.1.0-beta.105",
   "description": "IGRP Framework for Next.js | Design System components",
   "keywords": [
     "igrp",
@@ -35,9 +35,9 @@
     "react-dom": "^19.2.4"
   },
   "dependencies": {
-    "@igrp/framework-next-auth": "0.1.0-beta.101",
-    "@igrp/framework-next-types": "0.1.0-beta.101",
-    "@igrp/igrp-framework-react-design-system": "0.1.0-beta.102",
+    "@igrp/framework-next-auth": "workspace:*",
+    "@igrp/framework-next-types": "workspace:*",
+    "@igrp/igrp-framework-react-design-system": "workspace:*",
     "class-variance-authority": "^0.7.1",
     "clsx": "^2.1.1",
     "next-themes": "0.4.6",

@@ -37,51 +37,48 @@ interface IGRPRadioGroupProps
   options: IGRPRadioOption[];
   error?: string;
   /**
-   * @deprecated This props will be deprecated in the next release.
+   * @deprecated This props will be deprecated in the next major release.
    */
   gridSize?: IGRPGridSize;
 }
 
-/**
- * Radio group with label, helper text, and form integration.
- */
-function IGRPRadioGroup({
-  name,
-  id,
-  required = false,
-  disabled = false,
-  dir,
-  orientation,
-  defaultValue,
+/** @internal Radio group with options. */
+function RadioGroupOptionsField({
   value,
   onValueChange,
-  className,
+  fieldName,
   options,
-  variant,
-  size = 'md',
-  label,
-  labelClassName,
-  helperText,
+  defaultValue,
+  className,
+  orientation,
+  disabled,
+  required,
   error,
-  ...props
-}: IGRPRadioGroupProps) {
-  const _id = useId();
-  const fieldName = name ?? id ?? _id;
-  const formContext = useFormContext();
-
-  const describedById = error
-    ? `${fieldName}-error`
-    : helperText
-      ? `${fieldName}-helper`
-      : undefined;
-
-  const renderRadioOptions = (
-    currentValue?: string | null,
-    onValueChange?: (value: string) => void,
-  ) => (
+  describedById,
+  dir,
+  size,
+  variant,
+  ...radioGroupProps
+}: {
+  value?: string | null;
+  onValueChange?: (value: string) => void;
+  fieldName: string;
+  options: IGRPRadioOption[];
+  defaultValue?: string;
+  className?: string;
+  orientation?: 'horizontal' | 'vertical';
+  disabled?: boolean;
+  required?: boolean;
+  error?: string;
+  describedById?: string;
+  dir?: 'ltr' | 'rtl';
+  size: VariantProps<typeof radioItemVariants>['size'];
+  variant?: VariantProps<typeof radioItemVariants>['variant'];
+} & Omit<React.ComponentProps<typeof RadioGroup>, 'value' | 'onValueChange' | 'name' | 'children'>) {
+  return (
     <RadioGroup
       defaultValue={defaultValue}
-      value={currentValue}
+      value={value ?? undefined}
       onValueChange={onValueChange}
       name={fieldName}
       className={cn('flex flex-row', orientation === 'vertical' && 'flex-col', className)}
@@ -89,7 +86,7 @@ function IGRPRadioGroup({
       aria-required={required}
       aria-invalid={!!error}
       aria-describedby={describedById}
-      {...props}
+      {...radioGroupProps}
     >
       {options.map((option) => (
         <div
@@ -131,6 +128,56 @@ function IGRPRadioGroup({
       ))}
     </RadioGroup>
   );
+}
+
+/**
+ * Radio group with label, helper text, and form integration.
+ */
+function IGRPRadioGroup({
+  name,
+  id,
+  required = false,
+  disabled = false,
+  dir,
+  orientation,
+  defaultValue,
+  value,
+  onValueChange,
+  className,
+  options,
+  variant,
+  size = 'md',
+  label,
+  labelClassName,
+  helperText,
+  error,
+  ...props
+}: IGRPRadioGroupProps) {
+  const _id = useId();
+  const fieldName = name ?? id ?? _id;
+  const formContext = useFormContext();
+
+  const describedById = error
+    ? `${fieldName}-error`
+    : helperText
+      ? `${fieldName}-helper`
+      : undefined;
+
+  const radioFieldProps = {
+    fieldName,
+    options,
+    defaultValue,
+    className,
+    orientation,
+    disabled,
+    required,
+    error,
+    describedById,
+    dir,
+    size,
+    variant,
+    ...props,
+  };
 
   if (formContext) {
     return (
@@ -144,10 +191,14 @@ function IGRPRadioGroup({
       >
         {(field) => (
           <div className={cn('relative')}>
-            {renderRadioOptions(field.value, (newValue) => {
-              field.onChange(newValue);
-              onValueChange?.(newValue);
-            })}
+            <RadioGroupOptionsField
+              {...radioFieldProps}
+              value={field.value}
+              onValueChange={(newValue) => {
+                field.onChange(newValue);
+                onValueChange?.(newValue);
+              }}
+            />
           </div>
         )}
       </IGRPFormField>
@@ -160,7 +211,11 @@ function IGRPRadioGroup({
         <IGRPLabel label={label} required={required} id={fieldName} className={labelClassName} />
       )}
 
-      {renderRadioOptions(value, onValueChange ?? (() => {}))}
+      <RadioGroupOptionsField
+        {...radioFieldProps}
+        value={value}
+        onValueChange={onValueChange ?? (() => {})}
+      />
 
       {helperText && !error && (
         <p

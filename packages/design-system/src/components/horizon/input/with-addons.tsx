@@ -91,9 +91,9 @@ function IGRPInputAddOn({
               {optionLabel && (
                 <SelectLabel className={cn('font-light text-sm')}>{optionLabel}</SelectLabel>
               )}
-              {options?.map((option, index) => (
+              {options?.map((option) => (
                 <SelectItem
-                  key={index}
+                  key={option.value}
                   value={String(option.value)}
                   className={cn('cursor-pointer font-semibold', option.color)}
                 >

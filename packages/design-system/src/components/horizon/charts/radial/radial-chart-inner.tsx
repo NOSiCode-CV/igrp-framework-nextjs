@@ -14,8 +14,8 @@ import {
   type LegendType,
 } from 'recharts';
 
-import { cn } from '../../../lib/utils';
-import { ChartContainer, ChartTooltip } from '../../primitives/chart';
+import { cn } from '../../../../lib/utils';
+import { ChartContainer, ChartTooltip } from '../../../primitives/chart';
 import {
   createChartConfig,
   formatChartValue,
@@ -24,14 +24,14 @@ import {
   getLegendHorizontalAlign,
   getLegendLayout,
   getLegendVerticalAlign,
-} from './lib';
-import { type IGRPChartProps, type RadialBarConfig } from './types';
+} from '../lib';
+import { type IGRPChartProps, type RadialBarConfig } from '../types';
 
 /**
  * Props for the IGRPRadialBarChart component.
  * @see IGRPRadialBarChart
  */
-interface IGRPRadialBarChartProps extends IGRPChartProps {
+export interface IGRPRadialBarChartProps extends IGRPChartProps {
   /** Radial bar series configurations. */
   bars: RadialBarConfig[];
   /** Key in data for bar labels. */
@@ -63,10 +63,95 @@ interface IGRPRadialBarChartProps extends IGRPChartProps {
   };
 }
 
+function RadialChartHeader({
+  title,
+  description,
+}: {
+  title?: string;
+  description?: string;
+}) {
+  if (!title && !description) return null;
+  return (
+    <div className={cn('pb-3')}>
+      {title && <div className={cn('text-xl font-semibold')}>{title}</div>}
+      {description && (
+        <div className={cn('text-sm text-muted-foreground')}>{description}</div>
+      )}
+    </div>
+  );
+}
+
+function CenterLabelContent({
+  formattedTotal,
+  label,
+  viewBox,
+}: {
+  formattedTotal: string;
+  label?: string;
+  viewBox?: Record<string, unknown>;
+}) {
+  if (!viewBox || !('cx' in viewBox) || !('cy' in viewBox)) return null;
+  const cx = viewBox.cx as number;
+  const cy = viewBox.cy as number;
+  return (
+    <text x={cx} y={cy} textAnchor="middle" dominantBaseline="middle">
+      <tspan x={cx} y={cy} className={cn('fill-foreground text-3xl font-bold')}>
+        {formattedTotal}
+      </tspan>
+      {label && (
+        <tspan x={cx} y={cy + 24} className={cn('fill-muted-foreground')}>
+          {label}
+        </tspan>
+      )}
+    </text>
+  );
+}
+
+function RadialChartTooltipContent({
+  payload,
+  nameKey,
+  formatValue,
+}: {
+  payload: Array<{ payload?: any; value?: unknown }>;
+  nameKey: string;
+  formatValue: (v: number) => string;
+}) {
+  if (!payload?.length) return null;
+  const item = payload[0]?.payload;
+  const value = payload[0]?.value;
+  if (!item) return null;
+  const name = item[nameKey];
+  const fill = item._fill;
+  return (
+    <div className={cn('rounded-lg border bg-background p-2 shadow-md')}>
+      <div className={cn('flex flex-col gap-1')}>
+        <div className={cn('text-sm font-medium')}>{name}</div>
+        <div className={cn('flex items-center gap-2')}>
+          <div
+            className={cn('h-3 w-3 rounded-full')}
+            style={{ backgroundColor: fill }}
+          />
+          <span className={cn('text-sm')}>{formatValue(Number(value))}</span>
+        </div>
+      </div>
+    </div>
+  );
+}
+
+function RadialChartFooter({ description }: { description?: string }) {
+  if (!description) return null;
+  return (
+    <div className={cn('flex-col items-start gap-2 text-sm pt-4')}>
+      <div className={cn('leading-none text-muted-foreground')}>{description}</div>
+    </div>
+  );
+}
+
 /**
  * Radial bar chart with optional center text and polar grid.
+ * Loaded dynamically for code splitting (recharts is heavy).
  */
-function IGRPRadialBarChart({
+function IGRPRadialBarChartInner({
   data,
   bars,
   nameKey,
@@ -95,7 +180,10 @@ function IGRPRadialBarChart({
 }: IGRPRadialBarChartProps) {
   const chartHeight = getChartHeight(size, data, height);
   const chartWidth = getChartWidth(width);
-  const formatValue = (value: number) => formatChartValue(value, valueFormatter);
+  const formatValue = React.useCallback(
+    (value: number) => formatChartValue(value, valueFormatter),
+    [valueFormatter],
+  );
   const chartConfig = createChartConfig(bars);
 
   const calculateTotal = () => {
@@ -124,6 +212,13 @@ function IGRPRadialBarChart({
     ? centerText.formatter(totalValue)
     : formatValue(totalValue);
 
+  const computePercent = (entry: any, dataKey: string, data: any[]): string => {
+    const total = data.reduce((sum, item) => sum + Number(item[dataKey] || 0), 0);
+    if (total === 0) return '0%';
+    const percent = ((Number(entry[dataKey] || 0) / total) * 100).toFixed(0);
+    return `${percent}%`;
+  };
+
   const formatLabel = (
     entry: any,
     dataKey: string,
@@ -136,10 +231,7 @@ function IGRPRadialBarChart({
         return entry[nameKey] || '';
       case 'percent':
         try {
-          const total = data.reduce((sum, item) => sum + Number(item[dataKey] || 0), 0);
-          if (total === 0) return '0%';
-          const percent = ((Number(entry[dataKey] || 0) / total) * 100).toFixed(0);
-          return `${percent}%`;
+          return computePercent(entry, dataKey, data);
         } catch {
           return '0%';
         }
@@ -168,6 +260,7 @@ function IGRPRadialBarChart({
       payload: { dataKey: bar.dataKey, strokeDasharray: '' },
     }));
   }, [bars, data, nameKey, legendPosition]);
+
   const enhancedData = React.useMemo(() => {
     return data.map((item, index) => ({
       ...item,
@@ -175,17 +268,38 @@ function IGRPRadialBarChart({
     }));
   }, [data, bars]);
 
+  const tooltipContent = React.useCallback(
+    (props: { active?: boolean; payload?: Array<{ payload?: any; value?: unknown }> }) => {
+      if (!props.active || !props.payload || !props.payload.length) return null;
+      return (
+        <RadialChartTooltipContent
+          payload={props.payload}
+          nameKey={nameKey}
+          formatValue={formatValue}
+        />
+      );
+    },
+    [nameKey, formatValue],
+  );
+
+  const centerLabelContent = React.useCallback(
+    (props: any) =>
+      props?.viewBox ? (
+        <CenterLabelContent
+          formattedTotal={formattedTotal}
+          label={centerText.label}
+          viewBox={props.viewBox}
+        />
+      ) : null,
+    [formattedTotal, centerText.label],
+  );
+
   return (
     <div
       className={`w-full overflow-hidden ${className || ''}`}
       style={backgroundColor ? { backgroundColor } : undefined}
     >
-      {(title || description) && (
-        <div className={cn('pb-3')}>
-          {title && <div className={cn('text-xl font-semibold')}>{title}</div>}
-          {description && <div className={cn('text-sm text-muted-foreground')}>{description}</div>}
-        </div>
-      )}
+      <RadialChartHeader title={title} description={description} />
 
       <div className={cn('overflow-hidden')}>
         <div
@@ -208,109 +322,20 @@ function IGRPRadialBarChart({
               }}
             >
               {showTooltip && (
-                <ChartTooltip
-                  cursor={false}
-                  content={(props) => {
-                    if (!props.active || !props.payload || !props.payload.length) {
-                      return null;
-                    }
-
-                    const item = props.payload[0]?.payload;
-                    const value = props.payload[0]?.value;
-                    const name = item[nameKey];
-                    const fill = item._fill;
-
-                    return (
-                      <div className={cn('rounded-lg border bg-background p-2 shadow-md')}>
-                        <div className={cn('flex flex-col gap-1')}>
-                          <div className={cn('text-sm font-medium')}>{name}</div>
-                          <div className={cn('flex items-center gap-2')}>
-                            <div
-                              className={cn('h-3 w-3 rounded-full')}
-                              style={{ backgroundColor: fill }}
-                            />
-                            <span className={cn('text-sm')}>{formatValue(Number(value))}</span>
-                          </div>
-                        </div>
-                      </div>
-                    );
-                  }}
-                />
+                <ChartTooltip cursor={false} content={tooltipContent} />
               )}
 
               {showGrid && <PolarGrid gridType={gridType} stroke={gridColor} />}
 
               {showRadiusAxis && (
                 <PolarRadiusAxis tick tickFormatter={formatValue} stroke={gridColor}>
-                  {centerText.show && (
-                    <Label
-                      content={({ viewBox }) => {
-                        if (viewBox && 'cx' in viewBox && 'cy' in viewBox) {
-                          return (
-                            <text
-                              x={viewBox.cx}
-                              y={viewBox.cy}
-                              textAnchor="middle"
-                              dominantBaseline="middle"
-                            >
-                              <tspan
-                                x={viewBox.cx}
-                                y={viewBox.cy}
-                                className={cn('fill-foreground text-3xl font-bold')}
-                              >
-                                {formattedTotal}
-                              </tspan>
-                              {centerText.label && (
-                                <tspan
-                                  x={viewBox.cx}
-                                  y={(viewBox.cy || 0) + 24}
-                                  className={cn('fill-muted-foreground')}
-                                >
-                                  {centerText.label}
-                                </tspan>
-                              )}
-                            </text>
-                          );
-                        }
-                      }}
-                    />
-                  )}
+                  {centerText.show && <Label content={centerLabelContent} />}
                 </PolarRadiusAxis>
               )}
 
               {!showRadiusAxis && centerText.show && (
                 <PolarRadiusAxis tick={false} tickLine={false} axisLine={false}>
-                  <Label
-                    content={({ viewBox }) => {
-                      if (viewBox && 'cx' in viewBox && 'cy' in viewBox) {
-                        return (
-                          <text
-                            x={viewBox.cx}
-                            y={viewBox.cy}
-                            textAnchor="middle"
-                            dominantBaseline="middle"
-                          >
-                            <tspan
-                              x={viewBox.cx}
-                              y={viewBox.cy}
-                              className={cn('fill-foreground text-3xl font-bold')}
-                            >
-                              {formattedTotal}
-                            </tspan>
-                            {centerText.label && (
-                              <tspan
-                                x={viewBox.cx}
-                                y={(viewBox.cy || 0) + 24}
-                                className={cn('fill-muted-foreground')}
-                              >
-                                {centerText.label}
-                              </tspan>
-                            )}
-                          </text>
-                        );
-                      }
-                    }}
-                  />
+                  <Label content={centerLabelContent} />
                 </PolarRadiusAxis>
               )}
 
@@ -323,35 +348,55 @@ function IGRPRadialBarChart({
                   className={cn('stroke-transparent stroke-2')}
                   name={bars[0].name || bars[0].dataKey}
                 >
-                  {data.map((_, index) => (
-                    <Cell
-                      key={`cell-${index}`}
-                      fill={bars[0]?.color || `var(--chart-${(index % 8) + 1})`}
-                    />
-                  ))}
+                  {data.map((item, index) => {
+                    const cellKey =
+                      (item as Record<string, unknown>).id ??
+                      (item as Record<string, unknown>)[nameKey] ??
+                      `cell-${index}`;
+                    return (
+                      <Cell
+                        key={String(cellKey)}
+                        fill={
+                          bars[0]?.color ||
+                          `var(--chart-${(index % 8) + 1})`
+                        }
+                      />
+                    );
+                  })}
 
                   {bars[0].showLabels && (
                     <LabelList
-                      dataKey={bars[0].labelType === 'name' ? nameKey : bars[0].dataKey}
+                      dataKey={
+                        bars[0].labelType === 'name' ? nameKey : bars[0].dataKey
+                      }
                       position={bars[0].labelPosition || 'insideStart'}
-                      className={cn('fill-white capitalize mix-blend-luminosity')}
+                      className={cn(
+                        'fill-white capitalize mix-blend-luminosity',
+                      )}
                       fontSize={11}
                       style={bars[0].labelStyle}
                       formatter={(entry: { payload: any }) => {
                         if (!entry?.payload) return '';
-                        return formatLabel(entry.payload, bars[0]!.dataKey, bars[0]?.labelType);
+                        return formatLabel(
+                          entry.payload,
+                          bars[0]!.dataKey,
+                          bars[0]?.labelType,
+                        );
                       }}
                     />
                   )}
                 </RadialBar>
               )}
 
-              {bars.slice(1).map((bar, index) => (
+              {bars.slice(1).map((bar, secondaryIndex) => (
                 <RadialBar
-                  key={`bar-${index + 1}`}
+                  key={bar.dataKey}
                   dataKey={bar.dataKey}
                   name={bar.name || bar.dataKey}
-                  fill={bar.color || `var(--chart-${((index + 1) % 8) + 1})`}
+                  fill={
+                    bar.color ||
+                    `var(--chart-${((secondaryIndex + 1) % 8) + 1})`
+                  }
                   background={showBackground}
                   cornerRadius={bar.cornerRadius}
                   stackId={bar.stackId}
@@ -359,14 +404,22 @@ function IGRPRadialBarChart({
                 >
                   {bar.showLabels && (
                     <LabelList
-                      dataKey={bar.labelType === 'name' ? nameKey : bar.dataKey}
+                      dataKey={
+                        bar.labelType === 'name' ? nameKey : bar.dataKey
+                      }
                       position={bar.labelPosition || 'insideStart'}
-                      className={cn('fill-white capitalize mix-blend-luminosity')}
+                      className={cn(
+                        'fill-white capitalize mix-blend-luminosity',
+                      )}
                       fontSize={11}
                       style={bar.labelStyle}
                       formatter={(entry: { payload: any }) => {
                         if (!entry || !entry.payload) return '';
-                        return formatLabel(entry.payload, bar.dataKey, bar.labelType);
+                        return formatLabel(
+                          entry.payload,
+                          bar.dataKey,
+                          bar.labelType,
+                        );
                       }}
                     />
                   )}
@@ -390,15 +443,9 @@ function IGRPRadialBarChart({
         </div>
       </div>
 
-      {footer && (
-        <div className={cn('flex-col items-start gap-2 text-sm pt-4')}>
-          {footer.description && (
-            <div className={cn('leading-none text-muted-foreground')}>{footer.description}</div>
-          )}
-        </div>
-      )}
+      <RadialChartFooter description={footer?.description} />
     </div>
   );
 }
 
-export { IGRPRadialBarChart, type IGRPRadialBarChartProps };
+export default IGRPRadialBarChartInner;

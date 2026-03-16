@@ -176,7 +176,7 @@ function IGRPStepperProcess({
       scrollViewportRef.current = viewport;
       requestAnimationFrame(() => checkScrollPosition());
 
-      viewport.addEventListener('scroll', checkScrollPosition);
+      viewport.addEventListener('scroll', checkScrollPosition, { passive: true });
       const resizeObserver = new ResizeObserver(checkScrollPosition);
       resizeObserver.observe(viewport);
 

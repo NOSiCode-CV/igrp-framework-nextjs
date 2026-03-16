@@ -917,6 +917,9 @@
   .min-h-16 {
     min-height: calc(var(--spacing) * 16);
   }
+  .min-h-\[200px\] {
+    min-height: 200px;
+  }
   .min-h-svh {
     min-height: 100svh;
   }
@@ -5178,6 +5181,15 @@
       }
     }
   }
+  .has-\[\+\[data-completed\]\]\:\*\*\:data-\[slot\=timeline-separator\]\:bg-primary {
+    &:has(+[data-completed]) {
+      :is(& *) {
+        &[data-slot="timeline-separator"] {
+          background-color: var(--primary);
+        }
+      }
+    }
+  }
   .data-\[state\=active\]\:z-10 {
     &[data-state="active"] {
       z-index: 10;
@@ -6602,13 +6614,6 @@
   .\[\&_\[cmdk-item\]_svg\]\:w-5 {
     & [cmdk-item] svg {
       width: calc(var(--spacing) * 5);
-    }
-  }
-  .has-\[\+\[data-completed\]\]\:\[\&_\[data-slot\=timeline-separator\]\]\:bg-primary {
-    &:has(+[data-completed]) {
-      & [data-slot=timeline-separator] {
-        background-color: var(--primary);
-      }
     }
   }
   .\[\&_img\]\:size-full {

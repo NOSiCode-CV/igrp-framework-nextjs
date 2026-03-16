@@ -250,14 +250,18 @@ function IGRPDataTableDropdownMenuItem({
 
 type IGRPDataTableActionDropdown =
   | {
+      /** Stable key for list rendering; use when items may be reordered or filtered. */
+      id?: string;
       component: typeof IGRPDataTableDropdownMenuLink;
       props: IGRPDataTableDropdownMenuLinkProps;
     }
   | {
+      id?: string;
       component: typeof IGRPDataTableDropdownMenuAlert;
       props: IGRPDataTableDropdownMenuDialogProps;
     }
   | {
+      id?: string;
       component: typeof IGRPDataTableDropdownMenuCustom;
       props: IGRPDataTableDropdownMenuDialogProps;
     };
@@ -280,9 +284,16 @@ function IGRPDataTableDropdownMenu({
         <IGRPIcon iconName={iconName} className={cn('shadow-none')} />
       </DropdownMenuTrigger>
       <DropdownMenuContent align="end">
-        {items.map(({ component: Component, props }, index) => (
-          <Component key={index} {...props} />
-        ))}
+        {items.map((item, index) => {
+          const { component: Component, props } = item;
+          const key =
+            item.id ??
+            props.labelTrigger ??
+            ('href' in props ? props.href : undefined) ??
+            ('modalTitle' in props ? props.modalTitle : undefined) ??
+            `action-${index}`;
+          return <Component key={key} {...props} />;
+        })}
       </DropdownMenuContent>
     </DropdownMenu>
   );

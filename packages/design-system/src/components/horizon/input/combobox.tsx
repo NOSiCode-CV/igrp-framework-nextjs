@@ -23,6 +23,163 @@ import { IGRPLabel } from '../label';
 import { IGRPIcon } from '../icon';
 import { IGRPCircleFull } from '../icon/custom';
 
+/** @internal Options list for combobox dropdown. */
+function ComboboxOptionsList({
+  groupedOptions,
+  showGroup,
+  showStatus,
+  showIcon,
+  currentValue,
+  onSelectHandler,
+  isSelected,
+  iconName = 'CornerDownRight',
+}: {
+  groupedOptions: Record<string, IGRPOptionsProps[]>;
+  showGroup?: boolean;
+  showStatus?: boolean;
+  showIcon?: boolean;
+  currentValue: string | string[];
+  onSelectHandler: (value: string) => void;
+  isSelected: (optValue: string, currentValue: string | string[]) => boolean;
+  iconName?: string;
+}) {
+  return (
+    <>
+      {Object.entries(groupedOptions).map(([groupName, groupOptions], index) => (
+        <div key={groupName}>
+          {showGroup && index > 0 && <CommandSeparator />}
+          <CommandGroup heading={showGroup ? groupName : ''}>
+            {groupOptions.map(({ label, value, status, icon }) => (
+              <CommandItem
+                key={`${groupName}-${value}`}
+                onSelect={() => onSelectHandler(value)}
+                className={cn('flex items-center justify-between cursor-pointer')}
+              >
+                <div className={cn('flex items-center gap-2')}>
+                  {showStatus && status && <IGRPCircleFull className={igrpColorText(status)} />}
+                  {showIcon && <IGRPIcon iconName={icon ?? iconName} />}
+                  {label}
+                </div>
+                <IGRPIcon
+                  iconName="Check"
+                  className={cn(
+                    'ml-auto w-4 h-4 opacity-0',
+                    isSelected(value, currentValue) && 'opacity-100',
+                  )}
+                />
+              </CommandItem>
+            ))}
+          </CommandGroup>
+        </div>
+      ))}
+    </>
+  );
+}
+
+/** @internal Combobox trigger + popover field. */
+function ComboboxField({
+  fieldName,
+  listId,
+  open,
+  setOpen,
+  currentValue,
+  onChangeHandler,
+  setSelectValue,
+  groupedOptions,
+  showGroup,
+  showStatus,
+  showIcon,
+  showSearch,
+  searchText,
+  selectLabel,
+  selectClassName,
+  disabled,
+  className,
+  onOptionsChangeHandler,
+  isSelected,
+  iconName = 'CornerDownRight',
+}: {
+  fieldName: string;
+  listId: string;
+  open: boolean;
+  setOpen: (open: boolean) => void;
+  currentValue: string | string[];
+  onChangeHandler: (value: string | string[]) => void;
+  setSelectValue: (val: string | string[], handler?: (v: string | string[]) => void) => React.ReactNode;
+  groupedOptions: Record<string, IGRPOptionsProps[]>;
+  showGroup?: boolean;
+  showStatus?: boolean;
+  showIcon?: boolean;
+  showSearch?: boolean;
+  searchText?: string;
+  selectLabel?: string;
+  selectClassName?: string;
+  disabled?: boolean;
+  className?: string;
+  onOptionsChangeHandler: (
+    selectedValue: string,
+    currentValue: string | string[],
+    onChangeHandler: (value: string | string[]) => void,
+  ) => void;
+  isSelected: (optValue: string, currentValue: string | string[]) => boolean;
+  iconName?: string;
+}) {
+  return (
+    <div className={cn('w-full min-w-0 max-w-full')}>
+      <Popover open={open} onOpenChange={setOpen} modal>
+        <PopoverTrigger asChild>
+          <IGRPButton
+            name={fieldName}
+            variant="outline"
+            role="combobox"
+            aria-expanded={open}
+            aria-controls={listId}
+            className={cn(
+              'w-full justify-between overflow-hidden text-left max-w-full',
+              className,
+              disabled && 'cursor-not-allowed pointer-events-none opacity-50',
+            )}
+            iconName="ChevronsUpDown"
+            iconPlacement="end"
+            iconClassName="ml-2 h-4 w-4 shrink-0 opacity-50"
+            showIcon
+          >
+            {setSelectValue(currentValue, onChangeHandler)}
+          </IGRPButton>
+        </PopoverTrigger>
+        <PopoverContent
+          className={cn('p-0 max-w-[calc(100vw-2rem)]', selectClassName)}
+          align="start"
+          side="bottom"
+        >
+          <Command>
+            {showSearch && (
+              <div className={cn('relative p-2')}>
+                <CommandInput placeholder={searchText} className={cn('h-8')} />
+                <CommandEmpty>{selectLabel}</CommandEmpty>
+              </div>
+            )}
+            <CommandList id={listId}>
+              <ComboboxOptionsList
+                groupedOptions={groupedOptions}
+                showGroup={showGroup}
+                showStatus={showStatus}
+                showIcon={showIcon}
+                currentValue={currentValue}
+                onSelectHandler={(selectedValue) =>
+                  onOptionsChangeHandler(selectedValue, currentValue, onChangeHandler)
+                }
+                isSelected={isSelected}
+                iconName={iconName}
+              />
+            </CommandList>
+          </Command>
+        </PopoverContent>
+      </Popover>
+    </div>
+  );
+}
+
 /**
  * Props for the IGRPCombobox component.
  * @see IGRPCombobox
@@ -95,10 +252,13 @@ function IGRPCombobox({
 }: IGRPComboboxProps) {
   const _id = useId();
   const fieldName = name ?? id ?? _id;
+  const listId = useId();
 
   const formContext = useFormContext();
   const [open, setOpen] = useState(false);
-  const [localValue, setLocalValue] = useState<string | string[]>(value);
+  const [localValue, setLocalValue] = useState<string | string[]>(
+    () => (variant === 'single' ? '' : []),
+  );
   const displayValue = value !== undefined ? value : localValue;
 
   const setSelectValue = (
@@ -226,90 +386,6 @@ function IGRPCombobox({
     }
   };
 
-  const renderOptionsList = (
-    currentValue: string | string[],
-    onSelectHandler: (value: string) => void,
-  ) =>
-    Object.entries(groupedOptions).map(([groupName, groupOptions], index) => (
-      <div key={groupName}>
-        {showGroup && index > 0 && <CommandSeparator />}
-
-        <CommandGroup heading={showGroup ? groupName : ''}>
-          {groupOptions.map(({ label, value, status, icon }) => (
-            <CommandItem
-              key={`${groupName}-${value}`}
-              onSelect={() => onSelectHandler(value)}
-              className={cn('flex items-center justify-between cursor-pointer')}
-            >
-              <div className={cn('flex items-center gap-2')}>
-                {showStatus && status && <IGRPCircleFull className={igrpColorText(status)} />}
-
-                {showIcon && <IGRPIcon iconName={icon ?? 'CornerDownRight'} />}
-
-                {label}
-              </div>
-
-              <IGRPIcon
-                iconName="Check"
-                className={cn(
-                  'ml-auto w-4 h-4 opacity-0',
-                  isSelected(value, currentValue) && 'opacity-100',
-                )}
-              />
-            </CommandItem>
-          ))}
-        </CommandGroup>
-      </div>
-    ));
-
-  const renderCombobox = (
-    currentValue: string | string[],
-    onChangeHandler: (value: string | string[]) => void,
-  ) => (
-    <div className={cn('w-full min-w-0 max-w-full')}>
-      <Popover open={open} onOpenChange={setOpen} modal>
-        <PopoverTrigger asChild>
-          <IGRPButton
-            name={fieldName}
-            variant="outline"
-            role="combobox"
-            aria-expanded={open}
-            className={cn(
-              'w-full justify-between overflow-hidden text-left max-w-full',
-              className,
-              disabled && 'cursor-not-allowed pointer-events-none opacity-50',
-            )}
-            iconName="ChevronsUpDown"
-            iconPlacement="end"
-            iconClassName="ml-2 h-4 w-4 shrink-0 opacity-50"
-            showIcon
-          >
-            {setSelectValue(currentValue, onChangeHandler)}
-          </IGRPButton>
-        </PopoverTrigger>
-        <PopoverContent
-          className={cn('p-0 max-w-[calc(100vw-2rem)]', selectClassName)}
-          align="start"
-          side="bottom"
-        >
-          <Command>
-            {showSearch && (
-              <div className={cn('relative p-2')}>
-                <CommandInput placeholder={searchText} className={cn('h-8')} />
-                <CommandEmpty>{selectLabel}</CommandEmpty>
-              </div>
-            )}
-            <CommandList>
-              {renderOptionsList(currentValue, (selectedValue) => {
-                onOptionsChangeHandler(selectedValue, currentValue, onChangeHandler);
-              })}
-            </CommandList>
-          </Command>
-        </PopoverContent>
-      </Popover>
-    </div>
-  );
-
   if (formContext) {
     return (
       <IGRPFormField
@@ -322,10 +398,31 @@ function IGRPCombobox({
       >
         {(field) => (
           <div className={cn('relative w-full min-w-0 max-w-full')}>
-            {renderCombobox(field.value, (val) => {
-              field.onChange(val);
-              onChange?.(val);
-            })}
+            <ComboboxField
+              fieldName={fieldName}
+              listId={listId}
+              open={open}
+              setOpen={setOpen}
+              currentValue={field.value}
+              onChangeHandler={(val) => {
+                field.onChange(val);
+                onChange?.(val);
+              }}
+              setSelectValue={setSelectValue}
+              groupedOptions={groupedOptions}
+              showGroup={showGroup}
+              showStatus={showStatus}
+              showIcon={showIcon}
+              showSearch={showSearch}
+              searchText={searchText}
+              selectLabel={selectLabel}
+              selectClassName={selectClassName}
+              disabled={disabled}
+              className={className}
+              onOptionsChangeHandler={onOptionsChangeHandler}
+              isSelected={isSelected}
+              iconName={iconName}
+            />
           </div>
         )}
       </IGRPFormField>
@@ -338,10 +435,31 @@ function IGRPCombobox({
         <IGRPLabel label={label} className={labelClassName} required={required} id={fieldName} />
       )}
 
-      {renderCombobox(displayValue, (newValue) => {
-        if (value === undefined) setLocalValue(newValue);
-        onChange?.(newValue);
-      })}
+      <ComboboxField
+        fieldName={fieldName}
+        listId={listId}
+        open={open}
+        setOpen={setOpen}
+        currentValue={displayValue}
+        onChangeHandler={(newValue) => {
+          if (value === undefined) setLocalValue(newValue);
+          onChange?.(newValue);
+        }}
+        setSelectValue={setSelectValue}
+        groupedOptions={groupedOptions}
+        showGroup={showGroup}
+        showStatus={showStatus}
+        showIcon={showIcon}
+        showSearch={showSearch}
+        searchText={searchText}
+        selectLabel={selectLabel}
+        selectClassName={selectClassName}
+        disabled={disabled}
+        className={className}
+        onOptionsChangeHandler={onOptionsChangeHandler}
+        isSelected={isSelected}
+        iconName={iconName}
+      />
 
       <IGRPFieldDescription error={errorText} helperText={helperText} />
     </div>

@@ -2,7 +2,7 @@
 
 'use client';
 
-import { createContext, useCallback, useContext, useEffect, useMemo, useState } from 'react';
+import { createContext, useCallback, useContext, useEffect, useId, useMemo, useState } from 'react';
 import { Slot } from '@radix-ui/react-slot';
 import { type VariantProps, cva } from 'class-variance-authority';
 import { PanelLeftIcon } from 'lucide-react';
@@ -68,8 +68,8 @@ function SidebarProvider({
 
   // This is the internal state of the sidebar.
   // We use openProp and setOpenProp for control from outside the component.
-  const [_open, _setOpen] = useState(defaultOpen);
-  const open = openProp ?? _open;
+  const [_open, _setOpen] = useState<boolean | undefined>(undefined);
+  const open = openProp ?? _open ?? defaultOpen;
   const setOpen = useCallback(
     (value: boolean | ((value: boolean) => boolean)) => {
       const openState = typeof value === 'function' ? value(open) : value;
@@ -588,11 +588,9 @@ function SidebarMenuSkeleton({
 }: React.ComponentProps<'div'> & {
   showIcon?: boolean;
 }) {
-  // Random width between 50 to 90%.
-  const width = useMemo(() => {
-    // eslint-disable-next-line react-hooks/purity
-    return `${Math.floor(Math.random() * 40) + 50}%`;
-  }, []);
+  // Deterministic width 50–90% from instance id for visual variety (avoids impure Math.random)
+  const id = useId();
+  const width = `${(id.split('').reduce((acc, c) => acc + c.charCodeAt(0), 0) % 41) + 50}%`;
 
   return (
     <div

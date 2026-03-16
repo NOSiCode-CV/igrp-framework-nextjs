@@ -1,7 +1,7 @@
 'use client';
 
 import type React from 'react';
-import { useCallback, useEffect, useId, useState } from 'react';
+import { useCallback, useEffect, useId, useReducer, useRef, useState } from 'react';
 import { format } from 'date-fns';
 
 import { IGRPColors } from '../../lib/colors';
@@ -65,6 +65,45 @@ interface IGRPPdfViewerProps {
   id?: string;
   /** Additional CSS classes. */
   className?: string;
+}
+
+type PdfViewerState = {
+  frameStatus: 'loading' | 'loaded' | 'error';
+  viewerEngine: 'google' | 'native';
+};
+
+type PdfViewerAction =
+  | { type: 'LOADED' }
+  | { type: 'ERROR' }
+  | { type: 'FALLBACK_TO_NATIVE' }
+  | { type: 'TIMEOUT'; viewerPreference: string; viewerEngine: 'google' | 'native' }
+  | { type: 'RESET'; viewerPreference: string };
+
+function pdfViewerReducer(state: PdfViewerState, action: PdfViewerAction): PdfViewerState {
+  switch (action.type) {
+    case 'LOADED':
+      return { ...state, frameStatus: 'loaded' };
+    case 'ERROR':
+      return { ...state, frameStatus: 'error' };
+    case 'FALLBACK_TO_NATIVE':
+      return { frameStatus: 'loading', viewerEngine: 'native' };
+    case 'RESET':
+      return getInitialPdfViewerState(action.viewerPreference);
+    case 'TIMEOUT':
+      if (action.viewerPreference === 'auto' && action.viewerEngine === 'google') {
+        return { frameStatus: 'loading', viewerEngine: 'native' };
+      }
+      return { ...state, frameStatus: 'error' };
+    default:
+      return state;
+  }
+}
+
+function getInitialPdfViewerState(viewerPreference: string): PdfViewerState {
+  return {
+    frameStatus: 'loading',
+    viewerEngine: viewerPreference === 'native' ? 'native' : 'google',
+  };
 }
 
 const safeFormatDate = (date?: string | Date) => {
@@ -255,36 +294,27 @@ function IGRPPdfViewerInline({
   viewerPreference = 'auto',
 }: IGRPPdfViewerInlineProps) {
   const { fileUrl, title, author, date } = document;
-  const [frameStatus, setFrameStatus] = useState<'loading' | 'loaded' | 'error'>('loading');
-  const [viewerEngine, setViewerEngine] = useState<'google' | 'native'>(
-    viewerPreference === 'native' ? 'native' : 'google',
+  const [state, dispatch] = useReducer(
+    pdfViewerReducer,
+    viewerPreference,
+    getInitialPdfViewerState,
   );
+  const { frameStatus, viewerEngine } = state;
 
-  const handleFrameLoad = () => setFrameStatus('loaded');
-  const handleFrameError = () => {
+  const handleFrameLoad = useCallback(() => dispatch({ type: 'LOADED' }), []);
+  const handleFrameError = useCallback(() => {
     if (viewerPreference === 'auto' && viewerEngine === 'google') {
-      setViewerEngine('native');
-      setFrameStatus('loading');
+      dispatch({ type: 'FALLBACK_TO_NATIVE' });
       return;
     }
-
-    setFrameStatus('error');
-  };
+    dispatch({ type: 'ERROR' });
+  }, [viewerPreference, viewerEngine]);
 
   useEffect(() => {
     if (frameStatus !== 'loading') return;
 
     const timeout = setTimeout(() => {
-      setFrameStatus((status) => {
-        if (status !== 'loading') return status;
-
-        if (viewerPreference === 'auto' && viewerEngine === 'google') {
-          setViewerEngine('native');
-          return 'loading';
-        }
-
-        return 'error';
-      });
+      dispatch({ type: 'TIMEOUT', viewerPreference, viewerEngine });
     }, loadTimeoutMs);
 
     return () => clearTimeout(timeout);
@@ -395,36 +425,37 @@ function IGRPPdfViewerModal({
   loadTimeoutMs = 8000,
   viewerPreference = 'auto',
 }: IGRPPdfViewerModalProps) {
-  const [frameStatus, setFrameStatus] = useState<'loading' | 'loaded' | 'error'>('loading');
-  const [viewerEngine, setViewerEngine] = useState<'google' | 'native'>(
-    viewerPreference === 'native' ? 'native' : 'google',
+  const [state, dispatch] = useReducer(
+    pdfViewerReducer,
+    viewerPreference,
+    getInitialPdfViewerState,
   );
+  const { frameStatus, viewerEngine } = state;
 
-  const handleFrameLoad = () => setFrameStatus('loaded');
-  const handleFrameError = () => {
+  const handleFrameLoad = useCallback(() => dispatch({ type: 'LOADED' }), []);
+  const handleFrameError = useCallback(() => {
     if (viewerPreference === 'auto' && viewerEngine === 'google') {
-      setViewerEngine('native');
-      setFrameStatus('loading');
+      dispatch({ type: 'FALLBACK_TO_NATIVE' });
       return;
     }
+    dispatch({ type: 'ERROR' });
+  }, [viewerPreference, viewerEngine]);
 
-    setFrameStatus('error');
-  };
+  const prevDocIdRef = useRef<number | null>(null);
+  useEffect(() => {
+    if (document && document.id !== prevDocIdRef.current) {
+      prevDocIdRef.current = document.id;
+      dispatch({ type: 'RESET', viewerPreference });
+    } else if (!document) {
+      prevDocIdRef.current = null;
+    }
+  }, [document?.id, viewerPreference]);
 
   useEffect(() => {
     if (frameStatus !== 'loading') return;
 
     const timeout = setTimeout(() => {
-      setFrameStatus((status) => {
-        if (status !== 'loading') return status;
-
-        if (viewerPreference === 'auto' && viewerEngine === 'google') {
-          setViewerEngine('native');
-          return 'loading';
-        }
-
-        return 'error';
-      });
+      dispatch({ type: 'TIMEOUT', viewerPreference, viewerEngine });
     }, loadTimeoutMs);
 
     return () => clearTimeout(timeout);

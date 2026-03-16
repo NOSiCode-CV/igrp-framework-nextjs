@@ -21,6 +21,113 @@ import { IGRPLabel } from '../../label';
 import { IGRPCalendarRange, type IGRPCalendarRangeProps } from '../../calendar/range';
 import { DD_MM_YYYY } from '../../../../lib/constants';
 
+/** @internal Trigger button showing the selected date range. */
+function DatePickerRangeTrigger({
+  value,
+  fieldName,
+  placeholder,
+  dateFormat,
+  disabledPicker,
+}: {
+  value: DateRange | undefined;
+  fieldName: string;
+  placeholder: string;
+  dateFormat: string;
+  disabledPicker?: boolean;
+}) {
+  const displayText = value?.from
+    ? `${format(value.from, dateFormat)}${value.to ? ` - ${format(value.to, dateFormat)}` : ''}`
+    : placeholder;
+  return (
+    <div
+      className={cn(
+        'flex gap-2 items-center relative',
+        'group bg-background hover:bg-background border border-input w-full justify-between px-3 font-normal outline-offset-0 outline-none focus-visible:outline-[3px] h-10 rounded-md',
+        !value && 'text-muted-foreground',
+        disabledPicker && 'opacity-50 cursor-not-allowed',
+      )}
+    >
+      <IGRPButton
+        id={fieldName}
+        variant="link"
+        className={cn('underline-offset-0 hover:no-underline')}
+        disabled={disabledPicker}
+        iconName="Calendar"
+        iconClassName="text-muted-foreground/80 group-hover:text-foreground shrink-0 transition-colors"
+        showIcon={!value?.from}
+        iconPlacement="end"
+      >
+        <span className={cn('truncate', !value && 'text-muted-foreground')}>{displayText}</span>
+      </IGRPButton>
+    </div>
+  );
+}
+
+/** @internal Popover + calendar + clear button for date range. */
+function DatePickerRangeField({
+  value,
+  onChange,
+  fieldName,
+  calendarProps,
+  placeholder,
+  dateFormat,
+  disabled,
+  disabledPicker,
+}: {
+  value: DateRange | undefined;
+  onChange: (date: DateRange | undefined) => void;
+  fieldName: string;
+  calendarProps: Omit<IGRPCalendarRangeProps, 'date' | 'onDateChange' | 'id'>;
+  placeholder: string;
+  dateFormat: string;
+  disabled?: IGRPCalendarRangeProps['disabled'];
+  disabledPicker?: boolean;
+}) {
+  const [open, setOpen] = useState(false);
+
+  return (
+    <div className={cn('relative')}>
+      <Popover open={open} onOpenChange={setOpen}>
+        <PopoverTrigger asChild>
+          <DatePickerRangeTrigger
+            value={value}
+            fieldName={fieldName}
+            placeholder={placeholder}
+            dateFormat={dateFormat}
+            disabledPicker={disabledPicker}
+          />
+        </PopoverTrigger>
+        <PopoverContent className={cn('p-0 w-auto shadow-none')} align="start">
+          <IGRPCalendarRange
+            {...calendarProps}
+            id={fieldName}
+            date={value}
+            onDateChange={(val) => {
+              onChange(val);
+              setOpen(false);
+            }}
+            disabled={disabled}
+          />
+        </PopoverContent>
+      </Popover>
+      {value?.from && (
+        <IGRPButton
+          onClick={() => onChange(undefined)}
+          variant="link"
+          className={cn(
+            'size-2 absolute right-2 top-1/2 h-3 w-3 -translate-y-1/2 text-muted-foreground z-100',
+          )}
+          size="icon"
+          iconName="X"
+          iconSize={10}
+          disabled={disabledPicker}
+          showIcon
+        />
+      )}
+    </div>
+  );
+}
+
 /**
  * Props for the IGRPDatePickerRange component.
  * @see IGRPDatePickerRange
@@ -49,8 +156,8 @@ function IGRPDatePickerRange({
   const _id = useId();
   const fieldName = name ?? id ?? _id;
 
-  const [localDate, setLocalDate] = useState<DateRange | undefined>(date);
-  const [open, setOpen] = useState(false);
+  const [localDate, setLocalDate] = useState<DateRange | undefined>(undefined);
+  const displayDate = date ?? localDate;
   const formContext = useFormContext();
 
   useEffect(() => {
@@ -59,86 +166,13 @@ function IGRPDatePickerRange({
     }
   }, [formContext, onDateChange]);
 
-  const getDisplayDate = (value: DateRange | undefined) => {
-    if (!value?.from) return placeholder;
-    const from = format(value.from, dateFormat);
-    const to = value.to ? format(value.to, dateFormat) : '';
-    return `${from} - ${to}`;
-  };
-
-  const DateButton = (value: DateRange | undefined) => (
-    <div
-      className={cn(
-        'flex gap-2 items-center relative',
-        'group bg-background hover:bg-background border border-input w-full justify-between px-3 font-normal outline-offset-0 outline-none focus-visible:outline-[3px] h-10 rounded-md',
-        !value && 'text-muted-foreground',
-        disabledPicker && 'opacity-50 cursor-not-allowed',
-      )}
-    >
-      <IGRPButton
-        id={fieldName}
-        variant="link"
-        className={cn('underline-offset-0 hover:no-underline')}
-        disabled={disabledPicker}
-        iconName="Calendar"
-        iconClassName="text-muted-foreground/80 group-hover:text-foreground shrink-0 transition-colors"
-        showIcon={localDate ? false : true}
-        iconPlacement="end"
-      >
-        <span className={cn('truncate', !value && 'text-muted-foreground')}>
-          {getDisplayDate(value)}
-        </span>
-      </IGRPButton>
-    </div>
-  );
-
-  const renderPicker = (
-    fieldValue?: DateRange,
-    onChange?: (val: DateRange | undefined) => void,
-  ) => {
-    // Use fieldValue for form context; when standalone, use date prop when defined else localDate
-    const displayDate = formContext ? fieldValue : (date ?? localDate);
-
-    return (
-      <>
-        <Popover open={open} onOpenChange={setOpen}>
-          <PopoverTrigger asChild>{DateButton(displayDate)}</PopoverTrigger>
-          <PopoverContent className={cn('p-0 w-auto shadow-none')} align="start">
-            <IGRPCalendarRange
-              {...props}
-              id={id}
-              date={displayDate}
-              onDateChange={(val) => {
-                setLocalDate(val);
-                onChange?.(val);
-                onDateChange?.(val);
-                setOpen(false);
-              }}
-              disabled={disabled}
-            />
-          </PopoverContent>
-        </Popover>
-
-        {displayDate && (
-          <IGRPButton
-            onClick={() => {
-              setLocalDate(undefined);
-              onChange?.(undefined);
-              onDateChange?.(undefined);
-            }}
-            variant="link"
-            className={cn(
-              'size-2 absolute right-2 top-1/2 h-3 w-3 -translate-y-1/2 text-muted-foreground z-100',
-            )}
-            size="icon"
-            iconName="X"
-            iconSize={10}
-            disabled={disabledPicker}
-            showIcon={displayDate ? true : false}
-          />
-        )}
-      </>
-    );
+  const fieldProps = {
+    fieldName,
+    calendarProps: props,
+    placeholder,
+    dateFormat,
+    disabled,
+    disabledPicker,
   };
 
   if (formContext) {
@@ -159,10 +193,14 @@ function IGRPDatePickerRange({
               </FormLabel>
             )}
             <FormControl>
-              {renderPicker(field.value, (val) => {
-                field.onChange(val);
-                onDateChange?.(val);
-              })}
+              <DatePickerRangeField
+                {...fieldProps}
+                value={field.value}
+                onChange={(val) => {
+                  field.onChange(val);
+                  onDateChange?.(val);
+                }}
+              />
             </FormControl>
 
             {helperText && !fieldState.error && <FormDescription>{helperText}</FormDescription>}
@@ -179,7 +217,14 @@ function IGRPDatePickerRange({
         <IGRPLabel label={label} required={required} id={name} className={labelClassName} />
       )}
 
-      <div className={cn('relative')}>{renderPicker(localDate, onDateChange)}</div>
+      <DatePickerRangeField
+        {...fieldProps}
+        value={displayDate}
+        onChange={(val) => {
+          setLocalDate(val);
+          onDateChange?.(val);
+        }}
+      />
 
       {helperText && <p className={cn('text-sm text-muted-foreground mt-1')}>{helperText}</p>}
     </div>

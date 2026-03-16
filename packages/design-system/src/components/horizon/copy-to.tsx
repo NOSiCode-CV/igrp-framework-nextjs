@@ -70,9 +70,10 @@ function IGRPCopyTo({
       return;
     }
 
+    const displayValue = value.length > 50 ? `${value.substring(0, 47)}...` : value;
+
     try {
       await navigator.clipboard.writeText(value);
-      const displayValue = value.length > 50 ? `${value.substring(0, 47)}...` : value;
 
       setCopied(true);
       igrpToast({
@@ -82,14 +83,19 @@ function IGRPCopyTo({
         duration: toastDuration,
       });
 
-      onCopySuccess?.(value);
+      if (onCopySuccess) onCopySuccess(value);
 
       if (timeoutRef.current) {
         clearTimeout(timeoutRef.current);
       }
       timeoutRef.current = setTimeout(() => setCopied(false), 2000);
     } catch (error) {
-      const errorInstance = error instanceof Error ? error : new Error('An unknown error occurred');
+      let errorInstance: Error;
+      if (error instanceof Error) {
+        errorInstance = error;
+      } else {
+        errorInstance = new Error('An unknown error occurred');
+      }
 
       igrpToast({
         type: 'error',
@@ -98,7 +104,7 @@ function IGRPCopyTo({
         duration: toastDuration,
       });
 
-      onCopyError?.(errorInstance);
+      if (onCopyError) onCopyError(errorInstance);
     }
   }
 

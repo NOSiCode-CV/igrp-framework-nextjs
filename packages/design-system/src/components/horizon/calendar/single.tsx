@@ -1,6 +1,6 @@
 'use client';
 
-import { useEffect, useId, useState } from 'react';
+import { useId, useState } from 'react';
 
 import { getDisabledDays } from '../../../lib/calendar-utils';
 import { cn } from '../../../lib/utils';
@@ -35,21 +35,18 @@ function IGRPCalendarSingle({
   const _id = useId();
   const ref = name ?? id ?? _id;
 
-  const [ownDate, setOwnDate] = useState<Date | undefined>(date);
+  const [ownDate, setOwnDate] = useState<Date | undefined>(undefined);
+  const selected = date ?? ownDate;
   const disabled = getDisabledDays({ disableBefore, disableAfter, disableDayOfWeek });
-
-  useEffect(() => {
-    setOwnDate(date);
-  }, [date]);
 
   return (
     <Calendar
       mode="single"
       id={ref}
-      selected={ownDate}
-      onSelect={(date) => {
-        setOwnDate(date);
-        onDateChange?.(date);
+      selected={selected}
+      onSelect={(selectedDate) => {
+        setOwnDate(selectedDate);
+        onDateChange?.(selectedDate);
       }}
       disabled={disabled}
       className={cn('rounded-lg border shadow-sm', className)}

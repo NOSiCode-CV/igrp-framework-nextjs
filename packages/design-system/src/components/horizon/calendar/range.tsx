@@ -37,7 +37,8 @@ function IGRPCalendarRange({
   const _id = useId();
   const ref = name ?? id ?? _id;
 
-  const [range, setRange] = useState<DateRange | undefined>(date);
+  const [range, setRange] = useState<DateRange | undefined>(undefined);
+  const selected = date ?? range;
   const disabled = getDisabledDays({ disableBefore, disableAfter, disableDayOfWeek });
 
   return (
@@ -45,11 +46,11 @@ function IGRPCalendarRange({
       {...props}
       mode="range"
       id={ref}
-      defaultMonth={defaultMonth || range?.from}
-      selected={date}
-      onSelect={(date) => {
-        setRange(date);
-        onDateChange?.(date);
+      defaultMonth={defaultMonth || selected?.from}
+      selected={selected}
+      onSelect={(selectedRange) => {
+        setRange(selectedRange);
+        onDateChange?.(selectedRange);
       }}
       disabled={disabled}
       className={cn('rounded-lg border shadow-sm', className)}

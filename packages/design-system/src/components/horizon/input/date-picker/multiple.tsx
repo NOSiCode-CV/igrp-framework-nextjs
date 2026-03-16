@@ -20,6 +20,115 @@ import { IGRPLabel } from '../../label';
 import { IGRPCalendarMultiple, type IGRPCalendarMultipleProps } from '../../calendar/multiple';
 import { DD_MM_YYYY } from '../../../../lib/constants';
 
+/** @internal Trigger button showing the selected date(s). */
+function DatePickerMultipleTrigger({
+  value,
+  fieldName,
+  placeholder,
+  dateFormat,
+  disabledPicker,
+}: {
+  value: Date[] | undefined;
+  fieldName: string;
+  placeholder: string;
+  dateFormat: string;
+  disabledPicker?: boolean;
+}) {
+  const displayText = !value?.length
+    ? placeholder
+    : value.length === 1
+      ? format(value[0]!, dateFormat)
+      : value.length === 2
+        ? `${format(value[0]!, dateFormat)} - ${format(value[1]!, dateFormat)}`
+        : `${format(value[0]!, dateFormat)} - ${format(value[value.length - 1]!, dateFormat)}`;
+
+  return (
+    <div
+      className={cn(
+        'flex gap-2 items-center relative',
+        'group bg-background hover:bg-background border border-input w-full justify-between px-3 font-normal outline-offset-0 outline-none focus-visible:outline-[3px] h-10 rounded-md',
+        !value?.length && 'text-muted-foreground',
+        disabledPicker && 'opacity-50 cursor-not-allowed',
+      )}
+    >
+      <IGRPButton
+        id={fieldName}
+        variant="link"
+        className={cn('underline-offset-0 hover:no-underline')}
+        disabled={disabledPicker}
+        iconName="Calendar"
+        iconClassName="text-muted-foreground/80 group-hover:text-foreground shrink-0 transition-colors"
+        showIcon={!value?.length}
+        iconPlacement="end"
+      >
+        <span className={cn('truncate', !value?.length && 'text-muted-foreground')}>
+          {displayText}
+        </span>
+      </IGRPButton>
+    </div>
+  );
+}
+
+/** @internal Popover + calendar + clear button for multiple dates. */
+function DatePickerMultipleField({
+  value,
+  onChange,
+  fieldName,
+  calendarProps,
+  placeholder,
+  dateFormat,
+  disabled,
+  disabledPicker,
+}: {
+  value: Date[] | undefined;
+  onChange: (date: Date[] | undefined) => void;
+  fieldName: string;
+  calendarProps: Omit<IGRPCalendarMultipleProps, 'date' | 'onDateChange' | 'id'>;
+  placeholder: string;
+  dateFormat: string;
+  disabled?: IGRPCalendarMultipleProps['disabled'];
+  disabledPicker?: boolean;
+}) {
+  return (
+    <div className={cn('relative')}>
+      <Popover>
+        <PopoverTrigger asChild>
+          <DatePickerMultipleTrigger
+            value={value}
+            fieldName={fieldName}
+            placeholder={placeholder}
+            dateFormat={dateFormat}
+            disabledPicker={disabledPicker}
+          />
+        </PopoverTrigger>
+        <PopoverContent className={cn('p-0 w-auto shadow-none')} align="start">
+          <IGRPCalendarMultiple
+            {...calendarProps}
+            id={fieldName}
+            date={value}
+            onDateChange={onChange}
+            disabled={disabled}
+          />
+        </PopoverContent>
+      </Popover>
+      {value?.length && (
+        <IGRPButton
+          onClick={() => onChange(undefined)}
+          variant="link"
+          className={cn(
+            'size-2 absolute right-2 top-1/2 h-3 w-3 -translate-y-1/2 text-muted-foreground z-100',
+          )}
+          size="icon"
+          iconName="X"
+          iconSize={10}
+          disabled={disabledPicker}
+          showIcon
+        />
+      )}
+    </div>
+  );
+}
+
 /**
  * Props for the IGRPDatePickerMultiple component.
  * @see IGRPDatePickerMultiple
@@ -47,106 +156,24 @@ function IGRPDatePickerMultiple({
 }: IGRPDatePickerMultipleProps) {
   const _id = useId();
   const fieldName = name ?? id ?? _id;
-  const [localDate, setLocalDate] = useState<Date[] | undefined>(date);
+
+  const [localDate, setLocalDate] = useState<Date[] | undefined>(undefined);
+  const displayDate = date ?? localDate;
   const formContext = useFormContext();
 
   useEffect(() => {
     if (!formContext && typeof onDateChange !== 'function') {
-      console.warn('DatePickerRange in standalone mode requires `onDateChange`');
+      console.warn('DatePickerMultiple in standalone mode requires `onDateChange`');
     }
   }, [formContext, onDateChange]);
 
-  const getDisplayDate = (value: Date[] | undefined) => {
-    if (!value?.length) return placeholder;
-
-    if (value.length === 1) {
-      return format(value[0]!, dateFormat);
-    }
-
-    if (value.length === 2) {
-      const from = format(value[0]!, dateFormat);
-      const to = format(value[1]!, dateFormat);
-      return `${from} - ${to}`;
-    }
-
-    if (value.length > 2) {
-      const from = format(value[0]!, dateFormat);
-      const to = format(value[value.length - 1]!, dateFormat);
-      return `${from} - ${to}`;
-    }
-
-    return placeholder;
-  };
-
-  const DateButton = (value: Date[] | undefined) => (
-    <div
-      className={cn(
-        'flex gap-2 items-center relative',
-        'group bg-background hover:bg-background border border-input w-full justify-between px-3 font-normal outline-offset-0 outline-none focus-visible:outline-[3px] h-10 rounded-md',
-        !value && 'text-muted-foreground',
-        disabledPicker && 'opacity-50 cursor-not-allowed',
-      )}
-    >
-      <IGRPButton
-        id={fieldName}
-        variant="link"
-        className={cn('underline-offset-0 hover:no-underline')}
-        disabled={disabledPicker}
-        iconName="Calendar"
-        iconClassName="text-muted-foreground/80 group-hover:text-foreground shrink-0 transition-colors"
-        showIcon={localDate ? false : true}
-        iconPlacement="end"
-      >
-        <span className={cn('truncate', !value && 'text-muted-foreground')}>
-          {getDisplayDate(value)}
-        </span>
-      </IGRPButton>
-    </div>
-  );
-
-  const renderPicker = (fieldValue?: Date[], onChange?: (val: Date[] | undefined) => void) => {
-    // Use fieldValue for form context; when standalone, use date prop when defined else localDate
-    const displayDate = formContext ? fieldValue : (date ?? localDate);
-
-    return (
-      <>
-        <Popover>
-          <PopoverTrigger asChild>{DateButton(displayDate)}</PopoverTrigger>
-          <PopoverContent className={cn('p-0 w-auto shadow-none')} align="start">
-            <IGRPCalendarMultiple
-              {...props}
-              id={id}
-              date={displayDate}
-              onDateChange={(val) => {
-                setLocalDate(val);
-                onChange?.(val);
-                onDateChange?.(val);
-              }}
-              disabled={disabled}
-            />
-          </PopoverContent>
-        </Popover>
-
-        {displayDate && (
-          <IGRPButton
-            onClick={() => {
-              setLocalDate(undefined);
-              onChange?.(undefined);
-              onDateChange?.(undefined);
-            }}
-            variant="link"
-            className={cn(
-              'size-2 absolute right-2 top-1/2 h-3 w-3 -translate-y-1/2 text-muted-foreground z-100',
-            )}
-            size="icon"
-            iconName="X"
-            iconSize={10}
-            disabled={disabledPicker}
-            showIcon={displayDate ? true : false}
-          />
-        )}
-      </>
-    );
+  const fieldProps = {
+    fieldName,
+    calendarProps: props,
+    placeholder,
+    dateFormat,
+    disabled,
+    disabledPicker,
   };
 
   if (formContext) {
@@ -167,10 +194,14 @@ function IGRPDatePickerMultiple({
               </FormLabel>
             )}
             <FormControl>
-              {renderPicker(field.value, (val) => {
-                field.onChange(val);
-                onDateChange?.(val);
-              })}
+              <DatePickerMultipleField
+                {...fieldProps}
+                value={field.value}
+                onChange={(val) => {
+                  field.onChange(val);
+                  onDateChange?.(val);
+                }}
+              />
             </FormControl>
 
             {helperText && !fieldState.error && <FormDescription>{helperText}</FormDescription>}
@@ -187,7 +218,14 @@ function IGRPDatePickerMultiple({
         <IGRPLabel label={label} required={required} id={name} className={labelClassName} />
       )}
 
-      <div className={cn('relative')}>{renderPicker(localDate, onDateChange)}</div>
+      <DatePickerMultipleField
+        {...fieldProps}
+        value={displayDate}
+        onChange={(val) => {
+          setLocalDate(val);
+          onDateChange?.(val);
+        }}
+      />
 
       {helperText && <p className={cn('text-sm text-muted-foreground mt-1')}>{helperText}</p>}
     </div>

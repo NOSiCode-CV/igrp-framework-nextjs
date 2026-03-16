@@ -53,7 +53,7 @@ function Stepper({
   className,
   ...props
 }: StepperProps) {
-  const [activeStep, setInternalStep] = useState(defaultValue);
+  const [activeStep, setInternalStep] = useState<number | undefined>(undefined);
 
   const setActiveStep = useCallback(
     (step: number) => {
@@ -65,7 +65,7 @@ function Stepper({
     [value, onValueChange],
   );
 
-  const currentStep = value ?? activeStep;
+  const currentStep = value ?? activeStep ?? defaultValue;
 
   return (
     <StepperContext.Provider
@@ -219,9 +219,19 @@ function StepperIndicator({
   );
 }
 
-function StepperTitle({ className, ...props }: React.HTMLAttributes<HTMLHeadingElement>) {
+function StepperTitle({
+  className,
+  children,
+  ...props
+}: React.HTMLAttributes<HTMLHeadingElement>) {
   return (
-    <h3 data-slot="stepper-title" className={cn('text-sm font-medium', className)} {...props} />
+    <h3
+      data-slot="stepper-title"
+      className={cn('text-sm font-medium', className)}
+      {...props}
+    >
+      {children ?? <span className="sr-only">Step</span>}
+    </h3>
   );
 }
 

@@ -1,7 +1,7 @@
 /* eslint-disable react-refresh/only-export-components */
 'use client';
 
-import { useEffect, useId, useMemo, useState } from 'react';
+import { useEffect, useId, useMemo, useReducer, useState } from 'react';
 import { cva, type VariantProps } from 'class-variance-authority';
 
 import { IGRPColors, type IGRPColorRole, type IGRPColorVariants } from '../../../lib/colors';
@@ -155,6 +155,19 @@ const getDefaultIcon = (type: IGRPTextListType, iconColor?: IGRPColorVariants, i
   }
 };
 
+type VisibleItemsAction = { type: 'RESET' } | { type: 'ADD'; index: number };
+
+function visibleItemsReducer(state: Set<number>, action: VisibleItemsAction): Set<number> {
+  switch (action.type) {
+    case 'RESET':
+      return new Set();
+    case 'ADD':
+      return new Set([...state, action.index]);
+    default:
+      return state;
+  }
+}
+
 /**
  * List component with multiple types (unordered, ordered, checklist, steps, features).
  */
@@ -178,7 +191,7 @@ function IGRPTextList({
   const _id = useId();
   const ref = id ?? _id;
 
-  const [visibleItems, setVisibleItems] = useState<Set<number>>(new Set());
+  const [visibleItems, dispatchVisibleItems] = useReducer(visibleItemsReducer, new Set());
   const [collapsedItems, setCollapsedItems] = useState<Set<string | number>>(new Set());
 
   const allItemsVisible = useMemo(() => new Set(items.map((_, index) => index)), [items]);
@@ -188,10 +201,10 @@ function IGRPTextList({
   useEffect(() => {
     if (!animate) return;
 
-    queueMicrotask(() => setVisibleItems(new Set()));
+    queueMicrotask(() => dispatchVisibleItems({ type: 'RESET' }));
     items.forEach((_, index) => {
       setTimeout(() => {
-        setVisibleItems((prev) => new Set([...prev, index]));
+        dispatchVisibleItems({ type: 'ADD', index });
       }, index * 100);
     });
   }, [items, animate]);
@@ -238,6 +251,15 @@ function IGRPTextList({
       }
     };
 
+    const handleKeyDown = (e: React.KeyboardEvent) => {
+      if (e.key === 'Enter' || e.key === ' ') {
+        e.preventDefault();
+        handleItemClick();
+      }
+    };
+
+    const isInteractive = interactive || collapsible || !!onItemClick;
+
     return (
       <div
         key={item.id || index}
@@ -247,15 +269,18 @@ function IGRPTextList({
         })}
       >
         <div
+          role={isInteractive ? 'button' : undefined}
+          tabIndex={isInteractive ? 0 : undefined}
           className={cn(
             igrpTextlistItemVariants({
-              interactive: interactive || collapsible,
+              interactive: isInteractive,
               completed: item.completed,
             }),
             item.disabled && 'opacity-50 cursor-not-allowed',
             depth > 0 && 'ml-6',
           )}
           onClick={handleItemClick}
+          onKeyDown={isInteractive ? handleKeyDown : undefined}
         >
           {/* Icon */}
           <div className={cn('shrink-0 mt-0.5')}>{itemIcon}</div>

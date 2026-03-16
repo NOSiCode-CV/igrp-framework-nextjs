@@ -4,6 +4,10 @@ import { useId, useState } from 'react';
 import type { DropdownNavProps, DropdownProps, PropsBase, PropsSingle } from 'react-day-picker';
 
 import { Calendar as DropdownCalendar } from '../../primitives/calendar';
+
+function getToday(): Date {
+  return new Date();
+}
 import {
   Select,
   SelectContent,
@@ -57,7 +61,7 @@ type IGRPCalendarProps = {
 function IGRPCalendar({
   id,
   name,
-  date = new Date(),
+  date = getToday(),
   onDateChange,
   startDate,
   endDate,
@@ -67,7 +71,7 @@ function IGRPCalendar({
   const _id = useId();
   const ref = name ?? id ?? _id;
 
-  const today = new Date();
+  const today = getToday();
   const [month, setMonth] = useState(date || today);
 
   const handleCalendarChange = (

@@ -16,7 +16,7 @@ import {
 } from '../../../primitives/form';
 import { Popover, PopoverContent, PopoverTrigger } from '../../../primitives/popover';
 import { IGRPButton } from '../../button';
-import { IGRPCalendar, type IGRPCalendarProps } from '../../calendar/calendar';
+import { IGRPCalendar, type IGRPCalendarPropsDeprecated } from '../../calendar/calendar';
 import { IGRPLabel } from '../../label';
 
 /** Default date range for calendar dropdown. */
@@ -38,7 +38,7 @@ function DatePickerTriggerButton({
   dateFormat: string;
   placeholder: string;
   error?: string;
-  disabled?: IGRPCalendarProps['disabled'];
+  disabled?: IGRPCalendarPropsDeprecated['disabled'];
   disabledPicker?: boolean;
 }) {
   const displayText = displayDate ? format(displayDate, dateFormat) : placeholder;
@@ -96,7 +96,7 @@ function DatePickerPopoverField({
   placeholder: string;
   disabledPicker: boolean;
   error?: string;
-  disabled?: IGRPCalendarProps['disabled'];
+  disabled?: IGRPCalendarPropsDeprecated['disabled'];
 }) {
   return (
     <>
@@ -163,7 +163,7 @@ export type IGRPDatePickerBaseProps = {
  * Props for the IGRPDatePicker component (deprecated).
  * @see IGRPDatePicker
  */
-type IGRPDatePickerProps = IGRPCalendarProps & IGRPDatePickerBaseProps;
+type IGRPDatePickerProps = IGRPCalendarPropsDeprecated & IGRPDatePickerBaseProps;
 
 /**
  * Single-date picker (deprecated). Use IGRPDatePickerSingle instead.
@@ -200,7 +200,7 @@ function StandaloneDatePickerContent({
   placeholder: string;
   disabledPicker: boolean;
   error?: string;
-  disabled?: IGRPCalendarProps['disabled'];
+  disabled?: IGRPCalendarPropsDeprecated['disabled'];
   helperText?: string;
 }) {
   const [localDate, setLocalDate] = useState<Date | undefined>(undefined);
@@ -352,4 +352,4 @@ function IGRPDatePicker({
   );
 }
 
-export { IGRPDatePicker, type IGRPDatePickerProps };
+export { IGRPDatePicker, type IGRPDatePickerProps as IGRPDatePickerPropsDeprecated };

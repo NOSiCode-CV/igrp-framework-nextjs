@@ -140,4 +140,4 @@ function IGRPCalendar({
   );
 }
 
-export { IGRPCalendar, type IGRPCalendarProps };
+export { IGRPCalendar, type IGRPCalendarProps as IGRPCalendarPropsDeprecated };

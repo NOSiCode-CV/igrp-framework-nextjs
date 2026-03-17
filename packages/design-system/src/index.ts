@@ -907,11 +907,9 @@ export {
 } from './components/horizon/video-embed';
 
 // DEPRECATED
-export { IGRPCalendar, type IGRPCalendarProps as IGRPCalendarPropsDeprecated } from './components/horizon/calendar/calendar';
-export {
-  IGRPDatePicker,
-  type IGRPDatePickerProps,
-} from './components/horizon/input/date-picker/date-picker';
+export { IGRPCalendar, type IGRPCalendarPropsDeprecated } from './components/horizon/calendar/calendar';
+
+export { IGRPDatePicker, type IGRPDatePickerPropsDeprecated } from './components/horizon/input/date-picker/date-picker';
 
 // types
 

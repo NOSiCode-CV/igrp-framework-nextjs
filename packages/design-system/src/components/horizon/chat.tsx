@@ -164,6 +164,7 @@ function IGRPChat({ apiEndpoint, labelDescription = 'Ask me anything!', name, id
                       src={message.content}
                       alt="Sent content"
                       fill
+                      sizes="(max-width: 768px) 80vw, 400px"
                       className={cn('object-contain rounded')}
                       unoptimized
                     />

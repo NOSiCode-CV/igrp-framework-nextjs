@@ -1,6 +1,6 @@
 'use client';
 
-import { useCallback, useEffect, useId, useState } from 'react';
+import { useCallback, useEffect, useId, useMemo, useRef, useState } from 'react';
 
 import { cn } from '../../../lib/utils';
 import { type IGRPBaseAttributes } from '../../../types';
@@ -15,6 +15,21 @@ import { Button } from '../../primitives/button';
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '../../primitives/card';
 import { IGRPBadge, type IGRPBadgeProps } from '../badge';
 import { IGRPIcon, type IGRPIconName } from '../icon';
+
+/** @internal Wrapper to avoid inline render in render. */
+function StandaloneListItemContent<TItem>({
+  item,
+  index,
+  renderItem,
+  onItemChange,
+}: {
+  item: TItem;
+  index: number;
+  renderItem: (item: TItem, index: number, onChange: (item: TItem) => void) => React.ReactNode;
+  onItemChange: (item: TItem) => void;
+}) {
+  return <>{renderItem(item, index, onItemChange)}</>;
+}
 
 /**
  * Props for the IGRPStandaloneList component.
@@ -82,82 +97,99 @@ function IGRPStandaloneList<TItem>({
   const _id = useId();
   const groupId = id ?? _id;
 
-  const [items, setItems] = useState<TItem[]>(defaultValue ?? []);
-  const [openItem, setOpenItem] = useState<string | undefined>(
-    items.length > 0 ? 'item-0' : undefined,
+  const [internalItems, setInternalItems] = useState<TItem[]>(() =>
+    value === undefined && (defaultValue === undefined || defaultValue.length === 0)
+      ? [defaultItem]
+      : defaultValue ?? [],
   );
+  const [itemKeys, setItemKeys] = useState<string[]>(() => {
+    const initial =
+      value === undefined && (defaultValue === undefined || defaultValue.length === 0)
+        ? [defaultItem]
+        : (defaultValue ?? []);
+    return initial.map(() => crypto.randomUUID());
+  });
+  const [userOpenItem, setUserOpenItem] = useState<string | undefined>(undefined);
+  const controlledKeysRef = useRef<string[]>([]);
 
-  // Sync with controlled value prop
-  useEffect(() => {
+  const items = value ?? internalItems;
+
+  const stableItemKeys = useMemo(() => {
     if (value !== undefined) {
-      setItems(value);
+      while (controlledKeysRef.current.length < value.length) {
+        controlledKeysRef.current = [...controlledKeysRef.current, crypto.randomUUID()];
+      }
+      controlledKeysRef.current = controlledKeysRef.current.slice(0, value.length);
+      return controlledKeysRef.current;
     }
-  }, [value]);
+    return itemKeys;
+  }, [value, itemKeys]);
 
-  // Initialize with default item if empty (only when value is undefined)
+  const bootstrappedRef = useRef(false);
   useEffect(() => {
-    if (items.length === 0 && value === undefined) {
-      setItems([defaultItem]);
-      setOpenItem('item-0');
+    if (
+      !bootstrappedRef.current &&
+      value === undefined &&
+      (defaultValue === undefined || defaultValue.length === 0)
+    ) {
+      bootstrappedRef.current = true;
       onChange?.([defaultItem]);
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
-  // Update open item when items change (safety net for edge cases)
-  useEffect(() => {
-    if (items.length > 0) {
-      if (openItem) {
-        const itemIndex = parseInt(openItem.replace('item-', ''), 10);
-        if (itemIndex >= items.length) {
-          setOpenItem('item-0');
-        }
-      }
-      // Allow openItem to be undefined when user collapses the accordion
-    } else {
-      setOpenItem(undefined);
-    }
-  }, [items.length, openItem]);
+  const effectiveOpenItem = useMemo(() => {
+    if (items.length === 0) return undefined;
+    if (!userOpenItem) return stableItemKeys[0];
+    const idx = stableItemKeys.indexOf(userOpenItem);
+    return idx >= 0 && idx < items.length ? userOpenItem : stableItemKeys[0];
+  }, [items.length, stableItemKeys, userOpenItem]);
 
   const handleItemChange = useCallback(
     (index: number, updatedItem: TItem) => {
       const newItems = [...items];
       newItems[index] = updatedItem;
-      setItems(newItems);
+      if (value === undefined) setInternalItems(newItems);
       onChange?.(newItems);
     },
-    [items, onChange],
+    [items, value, onChange],
   );
 
   const handleAdd = useCallback(() => {
     const newItems = [...items, defaultItem];
-    setItems(newItems);
-    setOpenItem(`item-${items.length}`);
+    if (value === undefined) {
+      const newKey = crypto.randomUUID();
+      setInternalItems(newItems);
+      setItemKeys((prev) => [...prev, newKey]);
+      setUserOpenItem(newKey);
+    }
     onChange?.(newItems);
-  }, [items, defaultItem, onChange]);
+  }, [items, defaultItem, value, onChange]);
 
   const handleRemove = useCallback(
     (index: number) => {
       if (items.length > 1) {
-        const wasOpen = openItem === `item-${index}`;
+        const removedKey = stableItemKeys[index];
+        const wasOpen = userOpenItem === removedKey;
 
         const newItems = items.filter((_, i) => i !== index);
-        setItems(newItems);
-        onChange?.(newItems);
-
+        if (value === undefined) {
+          setInternalItems(newItems);
+          setItemKeys((prev) => prev.filter((_, i) => i !== index));
+        }
         if (wasOpen) {
-          // After removal, we'll have at least one item (since length > 1 check)
           const newIndex = Math.max(0, index - 1);
-          setOpenItem(`item-${newIndex}`);
-        } else if (openItem) {
-          const currentIndex = parseInt(openItem.replace('item-', ''), 10);
-          if (index < currentIndex && currentIndex > 0) {
-            setOpenItem(`item-${currentIndex - 1}`);
+          setUserOpenItem(stableItemKeys[newIndex]);
+        } else if (userOpenItem) {
+          const currentIdx = stableItemKeys.indexOf(userOpenItem);
+          if (index < currentIdx && currentIdx > 0) {
+            setUserOpenItem(stableItemKeys[currentIdx - 1]);
           }
         }
+        onChange?.(newItems);
       }
     },
-    [items, onChange, openItem],
+    [items, value, onChange, userOpenItem, stableItemKeys],
   );
 
   return (
@@ -189,14 +221,14 @@ function IGRPStandaloneList<TItem>({
         <Accordion
           type="single"
           collapsible
-          value={openItem}
-          onValueChange={setOpenItem}
+          value={effectiveOpenItem}
+          onValueChange={setUserOpenItem}
           className={cn('w-full')}
         >
           {items.map((item, index) => (
             <AccordionItem
-              key={`item-${index}`}
-              value={`item-${index}`}
+              key={stableItemKeys[index] ?? `item-${index}`}
+              value={stableItemKeys[index] ?? `item-${index}`}
               className={cn('border last:border-b rounded-sm mb-4')}
             >
               <div className={cn('flex justify-between items-center px-4')}>
@@ -236,9 +268,12 @@ function IGRPStandaloneList<TItem>({
               </div>
 
               <AccordionContent className={cn('px-4 pb-4')}>
-                {renderItem(item ?? defaultItem, index, (updatedItem) =>
-                  handleItemChange(index, updatedItem),
-                )}
+                <StandaloneListItemContent
+                  item={item ?? defaultItem}
+                  index={index}
+                  renderItem={renderItem}
+                  onItemChange={(updatedItem) => handleItemChange(index, updatedItem)}
+                />
               </AccordionContent>
             </AccordionItem>
           ))}

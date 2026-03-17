@@ -1,6 +1,6 @@
 'use client';
 
-import { useId, useState, useEffect } from 'react';
+import { useId, useState } from 'react';
 import { useFormContext, Controller } from 'react-hook-form';
 
 import { DD_MM_YYYY } from '../../../lib/constants';
@@ -9,6 +9,8 @@ import type { IGRPInputProps } from '../../../types';
 
 import { Input } from '../../primitives/input';
 import { IGRPLabel } from '../label';
+
+const DEFAULT_PLACEHOLDER = `${DD_MM_YYYY}, --:--`;
 
 /**
  * Props for the IGRPDateTimeInput component.
@@ -41,7 +43,7 @@ function IGRPDateTimeInput({
   disabled = false,
   value: controlledValue,
   defaultValue = '',
-  placeholder = `${DD_MM_YYYY}, --:--`,
+  placeholder = DEFAULT_PLACEHOLDER,
   className,
   inputClassName,
   onChange,
@@ -52,13 +54,11 @@ function IGRPDateTimeInput({
   const fieldName = name ?? id ?? _id;
 
   const formContext = useFormContext();
-  const [inputValue, setInputValue] = useState(controlledValue || defaultValue);
+  const [inputValue, setInputValue] = useState(controlledValue ?? defaultValue ?? '');
 
-  useEffect(() => {
-    if (!formContext && controlledValue !== undefined) {
-      setInputValue(controlledValue);
-    }
-  }, [controlledValue, formContext]);
+  // Derive display value: controlled uses prop, uncontrolled uses state (no effect needed)
+  const isControlled = !formContext && controlledValue !== undefined;
+  const displayValue = isControlled ? (controlledValue ?? '') : inputValue;
 
   const formatDateTimeInput = (value: string): string => {
     const digitsOnly = value.replace(/\D/g, '');
@@ -81,26 +81,19 @@ function IGRPDateTimeInput({
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const rawValue = e.target.value;
 
-    if (rawValue.length >= inputValue.length) {
+    if (rawValue.length >= displayValue.length) {
       const formatted = formatDateTimeInput(rawValue);
-      setInputValue(formatted);
-
-      if (!formContext) {
-        onChange?.(formatted);
-      }
+      if (!isControlled) setInputValue(formatted);
+      if (!formContext) onChange?.(formatted);
     } else {
-      setInputValue(rawValue);
-
-      if (!formContext) {
-        onChange?.(rawValue);
-      }
+      if (!isControlled) setInputValue(rawValue);
+      if (!formContext) onChange?.(rawValue);
     }
   };
 
   const handleInputBlur = (e: React.FocusEvent<HTMLInputElement>) => {
     const formatted = formatDateTimeInput(e.target.value);
-    setInputValue(formatted);
-
+    if (!isControlled) setInputValue(formatted);
     if (!formContext) {
       onChange?.(formatted);
       onBlur?.(e);
@@ -117,7 +110,7 @@ function IGRPDateTimeInput({
         <Input
           id={fieldName}
           name={fieldName}
-          value={inputValue}
+          value={displayValue}
           onChange={handleInputChange}
           onBlur={handleInputBlur}
           disabled={disabled}

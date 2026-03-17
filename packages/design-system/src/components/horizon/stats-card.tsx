@@ -1,9 +1,9 @@
 /* eslint-disable react-refresh/only-export-components */
 'use client';
 
-import Image from 'next/image';
 import { cva, type VariantProps } from 'class-variance-authority';
 import { useCallback, useId } from 'react';
+import Image from 'next/image';
 
 import { IGRPColors, type IGRPColorVariants } from '../../lib/colors';
 import { cn } from '../../lib/utils';

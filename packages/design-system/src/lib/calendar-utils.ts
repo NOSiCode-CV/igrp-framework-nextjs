@@ -2,6 +2,28 @@ import { lightFormat, parse } from 'date-fns';
 import type { DateAfter, DateBefore, DateRange, DayOfWeek } from 'react-day-picker';
 import type { IGRPCalendarProps } from '../types';
 
+/** Formats a date range to string using date-fns lightFormat. */
+export function formatDateRange(range: DateRange | undefined, dateFormat: string) {
+  if (!range?.from) {
+    return '';
+  }
+
+  const fromDate = formatDateToString(range.from, dateFormat);
+
+  if (!range.to) {
+    return fromDate;
+  }
+
+  const toDate = formatDateToString(range.from, dateFormat);
+
+  return `${fromDate} / ${toDate}`;
+}
+
+/** Formats a date to string using date-fns lightFormat. */
+export function formatDateToString(date: Date | undefined, dateFormat: string) {
+  return date ? lightFormat(date, dateFormat) : '';
+}
+
 /**
  * Builds disabled days config for react-day-picker from calendar props.
  */
@@ -34,26 +56,6 @@ export function isValidDate(date: Date | undefined) {
   return !isNaN(date.getTime());
 }
 
-export function formatDateRange(range: DateRange | undefined, dateFormat: string) {
-  if (!range?.from) {
-    return '';
-  }
-
-  const fromDate = formatDateToString(range.from, dateFormat);
-
-  if (!range.to) {
-    return fromDate;
-  }
-
-  const toDate = formatDateToString(range.from, dateFormat);
-
-  return `${fromDate} / ${toDate}`;
-}
-
-/** Formats a date to string using date-fns lightFormat. */
-export function formatDateToString(date: Date | undefined, dateFormat: string) {
-  return date ? lightFormat(date, dateFormat) : '';
-}
 
 /** Parses a date string to Date using date-fns parse. Returns undefined if invalid. */
 export function parseStringToDate(dateString: string, dateFormat: string) {

@@ -4,6 +4,8 @@
 // IMPORTANT: do _not_ alias any of the exports in this file, this will cause a mismatch between the unbundled exports
 
 // custom components
+
+export { IGRPStatsCardMini, type IGRPStatsCardMiniProps } from './components/custom/stats-card-mini';
 export { IGRPStatusBanner, type IGRPStatusBannerProps } from './components/custom/status-banner';
 export {
   IGRPStatsCardTopBorderColored,
@@ -18,6 +20,8 @@ export {
   AccordionItem as IGRPAccordionItemPrimitive,
   AccordionTrigger as IGRPAccordionTriggerPrimitive,
   AccordionContent as IGRPAccordionContentPrimitive,
+  type AccordionTriggerProps as IGRPAccordionTriggerProps,
+  type AccordionTriggerArgs as IGRPAccordionTriggerArgs,
 } from './components/primitives/accordion';
 
 export {
@@ -453,7 +457,7 @@ export {
 
 export { IGRPAlert, type IGRPAlertProps } from './components/horizon/alert';
 
-export { IGRPAccordion, type IGRPAccordionProps } from './components/horizon/accordion';
+export { IGRPAccordion, type IGRPAccordionProps, type IGRPAccordionItem } from './components/horizon/accordion';
 
 export { IGRPAlertDialog, type IGRPAlertDialogProps } from './components/horizon/alert-dialog';
 
@@ -593,6 +597,7 @@ export {
   type IGRPDataTableDropdownMenuDialogProps,
   type IGRPDataTableDropdownMenuLinkProps,
   type IGRPDataTableDropdownMenuProps,
+  type IGRPDataTableDropdownMenuCustomProps,
   IGRPDataTableDropdownMenuAlert,
   IGRPDataTableDropdownMenuCustom,
   IGRPDataTableDropdownMenuLink,
@@ -600,6 +605,7 @@ export {
 } from './components/horizon/data-table/action-dropdown-menu';
 export {
   IGRPDataTableCellCheckbox,
+  IGRPDataTableCellSwitch,
   IGRPDataTableCellExpander,
   IGRPDataTableCellAmount,
   IGRPDataTableCellBadge,
@@ -607,6 +613,7 @@ export {
   IGRPDataTableCellLink,
   IGRPDataTableCellTooltip,
   type IGRPDataTableCellExpanderProps,
+  type IGRPDataTableCellSwitchProps,
   type IGRPDataTableCellAmountProps,
   type IGRPDataTableCellBadgeProps,
   type IGRPDataTableCellDateProps,
@@ -653,6 +660,7 @@ export {
 export {
   IGRPDataTableDateRangeFilterFn,
   IGRPDataTableFacetedFilterFn,
+  IGRPDataTableTextFilterFn,
 } from './components/horizon/data-table/lib/filters-utils';
 
 export {
@@ -672,6 +680,8 @@ export {
   IGRPDropdownMenuSubTrigger,
   IGRPDropdownMenuSubContent,
 } from './components/horizon/dropdown-menu';
+
+export { IGRPFieldDescription, type IGRPFieldDescriptionProps } from './components/horizon/field-description';
 
 export {
   type IGRPFormContextValue,
@@ -844,7 +854,14 @@ export {
   useIGRPSidebar,
 } from './components/horizon/sidebar';
 
-export { IGRPStatsCard, type IGRPStatsCardProps } from './components/horizon/stats-card';
+export {
+  IGRPStatsCard,
+  type IGRPStatsCardProps,
+  igrpStatsCardVariants,
+  igrpStatsCardTitleVariants,
+  igrpStatsCardValueVariants,
+  igrpStstaCardIconVariants,
+} from './components/horizon/stats-card';
 export { IGRPTable, type IGRPTableProps } from './components/horizon/table';
 export { IGRPTabs, type IGRPTabsProps, type IGRPTabItem } from './components/horizon/tabs';
 export {
@@ -890,7 +907,7 @@ export {
 } from './components/horizon/video-embed';
 
 // DEPRECATED
-export { IGRPCalendar, type IGRPCalendarProps } from './components/horizon/calendar/calendar';
+export { IGRPCalendar, type IGRPCalendarProps as IGRPCalendarPropsDeprecated } from './components/horizon/calendar/calendar';
 export {
   IGRPDatePicker,
   type IGRPDatePickerProps,
@@ -904,6 +921,9 @@ export type {
   IGRPInputProps,
   IGRPOptionsProps,
   IGRPGridSize,
+  IGRPCalendarProps,
+  IGRPCalendarTimeProps,
+  IGRPDatePickerBaseProps,
   IGRPSize,
   IGRPRoundSize,
 } from './types';
@@ -915,6 +935,14 @@ export { useIsMobile } from './hooks/use-mobile';
 
 // libs
 
+export { 
+  formatDateRange, 
+  formatDateToString,
+  getDisabledDays,
+  isValidDate,   
+  parseStringToDate, 
+  parseStringToRange 
+} from './lib/calendar-utils';
 export {
   IGRPColors,
   type IGRPColorType,
@@ -928,7 +956,7 @@ export { igrpGridSizeClasses, igrpAlertIconMappings } from './lib/constants';
 export { igrpGetInitials } from './lib/initials';
 export { igrpToPascalCase } from './lib/pascal-case';
 export { igrpIsExternalUrl, igrpNormalizeUrl } from './lib/url';
-export { cn } from './lib/utils';
+export { cn, parseLocalDate } from './lib/utils';
 
 // external dependencies
 

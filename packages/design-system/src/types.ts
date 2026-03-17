@@ -85,6 +85,7 @@ export type IGRPDatePickerBaseProps = {
   dateFormat?: string;
   placeholder?: string;
 } & Pick<IGRPBaseAttributes, 'label' | 'helperText' | 'labelClassName' | 'name'>;
+
 export type IGRPSize = 'sm' | 'md' | 'lg' | 'xl';
 
 export type IGRPRoundSize = 'none' | 'sm' | 'md' | 'lg' | 'xl' | '2xl' | '3xl' | '4xl' | 'full';

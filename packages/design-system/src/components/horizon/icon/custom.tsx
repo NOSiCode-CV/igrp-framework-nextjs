@@ -1,15 +1,7 @@
 'use client';
 
-/**
- * Props for custom icon components.
- */
-interface IGRPCustomIconProps {
-  /** Additional CSS classes. */
-  className?: string;
-}
-
 /** Small circular icon (4x4). */
-function IGRPCircleFull({ className }: IGRPCustomIconProps) {
+function IGRPCircleFull({ className }: { className?: string }) {
   return (
     <svg
       width="4"
@@ -25,4 +17,4 @@ function IGRPCircleFull({ className }: IGRPCustomIconProps) {
   );
 }
 
-export { IGRPCircleFull, type IGRPCustomIconProps };
+export { IGRPCircleFull };

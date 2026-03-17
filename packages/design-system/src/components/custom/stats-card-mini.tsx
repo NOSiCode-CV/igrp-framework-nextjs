@@ -11,7 +11,7 @@ import { IGRPStatsCard, type IGRPStatsCardProps } from '../horizon/stats-card';
  * Extends IGRPStatsCardProps with a simplified variant-based color scheme.
  * @see StatsCardMini
  */
-interface StatsCardMiniProps extends Omit<
+interface IGRPStatsCardMiniProps extends Omit<
   IGRPStatsCardProps,
   | 'cardBorder'
   | 'cardBorderPosition'
@@ -31,7 +31,7 @@ interface StatsCardMiniProps extends Omit<
  * Compact stats card with minimal styling and variant-based colors.
  * Uses IGRPStatsCard internally with fixed layout (no icon background, rounded icon border).
  */
-function StatsCardMini({
+function IGRPStatsCardMini({
   title,
   titleSize = 'sm',
   titleClassName,
@@ -48,7 +48,7 @@ function StatsCardMini({
   name,
   id,
   ...props
-}: StatsCardMiniProps) {
+}: IGRPStatsCardMiniProps) {
   const _id = useId();
   const ref = name ?? id ?? _id;
 
@@ -82,4 +82,4 @@ function StatsCardMini({
   );
 }
 
-export { StatsCardMini, type StatsCardMiniProps };
+export { IGRPStatsCardMini, type IGRPStatsCardMiniProps };

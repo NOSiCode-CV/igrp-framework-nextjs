@@ -146,7 +146,7 @@ function DatePickerPopoverField({
  * Base props for date picker components (label, helper, format, etc.).
  * @see IGRPDatePicker
  */
-export type IGRPDatePickerBaseProps = {
+type IGRPDatePickerBaseProps = {
   /** Validation error message. */
   error?: string;
   /** Whether the field is required. */

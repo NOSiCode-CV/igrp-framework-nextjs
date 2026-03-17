@@ -279,8 +279,10 @@ function IGRPTextList({
             item.disabled && 'opacity-50 cursor-not-allowed',
             depth > 0 && 'ml-6',
           )}
-          onClick={handleItemClick}
-          onKeyDown={isInteractive ? handleKeyDown : undefined}
+          {...(isInteractive && {
+            onClick: handleItemClick,
+            onKeyDown: handleKeyDown,
+          })}
         >
           {/* Icon */}
           <div className={cn('shrink-0 mt-0.5')}>{itemIcon}</div>

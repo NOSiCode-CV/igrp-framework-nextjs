@@ -72,12 +72,12 @@ export const IGRPDataTableTextFilterFn: FilterFn<any> = (row, columnId, filterVa
  * @param filterValue - The text string to search for
  * @returns `true` if the row should be included (no filter or text found in name/description), `false` otherwise
  */
-export const multiColumnFilterFn: FilterFn<any> = (row, _columnId, filterValue) => {
-  const term = String(filterValue ?? '')
-    .toLowerCase()
-    .trim();
-  if (!term) return true;
-  const name = String(row.original?.name ?? '').toLowerCase();
-  const desc = String(row.original?.description ?? '').toLowerCase();
-  return name.includes(term) || desc.includes(term);
-};
+// export const multiColumnFilterFn: FilterFn<any> = (row, _columnId, filterValue) => {
+//   const term = String(filterValue ?? '')
+//     .toLowerCase()
+//     .trim();
+//   if (!term) return true;
+//   const name = String(row.original?.name ?? '').toLowerCase();
+//   const desc = String(row.original?.description ?? '').toLowerCase();
+//   return name.includes(term) || desc.includes(term);
+// };

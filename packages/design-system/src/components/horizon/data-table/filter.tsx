@@ -1,9 +1,7 @@
 'use client';
 
-import { useCallback, useEffect, useId, useMemo, useRef, useState } from 'react';
+import { useCallback, useId, useMemo, useRef, useState } from 'react';
 import { type Column, type Table } from '@tanstack/react-table';
-import { type DateRange } from 'react-day-picker';
-
 import { cn } from '../../../lib/utils';
 import type { IGRPOptionsProps } from '../../../types';
 import { Button } from '../../primitives/button';
@@ -59,16 +57,11 @@ interface IGRPDataTableFilterProps<TData> {
 
 /** @internal Date range filter content; keyed by clearDates to reset when parent requests clear. */
 function IGRPDataTableFilterDateContent<TData>({ column }: { column?: Column<TData, unknown> }) {
-  const [dateRange] = useState<DateRange | undefined>(undefined);
-  const setFilterValue = useCallback(
-    (value: DateRange | undefined) => column?.setFilterValue(value),
-    [column],
-  );
-
-  useEffect(() => {
-    setFilterValue(dateRange);
-  }, [dateRange, setFilterValue]);
-
+  // Compute during render: placeholder has no date picker UI yet, filter value is undefined
+  const currentFilter = column?.getFilterValue();
+  if (currentFilter !== undefined) {
+    column?.setFilterValue(undefined);
+  }
   return null;
 }
 

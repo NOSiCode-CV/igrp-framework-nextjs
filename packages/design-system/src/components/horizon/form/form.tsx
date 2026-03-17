@@ -75,6 +75,8 @@ export interface IGRPFormProps<TSchema extends AnyZod> {
   id?: string;
   /** Disable all form inputs. */
   disabled?: boolean;
+  /** Key to reset form when changed (e.g. record id when loading new data). When provided, form remounts instead of syncing via effect. */
+  resetKey?: React.Key;
 }
 
 /**
@@ -95,6 +97,7 @@ function IGRPForm<TSchema extends AnyZod>({
   children,
   id,
   disabled = false,
+  resetKey,
 }: IGRPFormProps<TSchema>) {
   const _id = useId();
   const ref = id ?? _id;
@@ -109,11 +112,13 @@ function IGRPForm<TSchema extends AnyZod>({
     mode: validationMode,
   });
 
+  // Sync defaultValues to form when they change (valid prop sync, not event simulation). Use resetKey to reset via remount instead.
   useEffect(() => {
+    if (resetKey !== undefined) return;
     if (defaultValues) {
       form.reset(defaultValues);
     }
-  }, [form, defaultValues]);
+  }, [form, defaultValues, resetKey]);
 
   const clearGlobalError = useCallback(() => setFormError(undefined), []);
   const setGlobalError = useCallback((message: string) => setFormError(message), []);
@@ -140,9 +145,8 @@ function IGRPForm<TSchema extends AnyZod>({
         }
 
         onError?.(err);
-      } finally {
-        setIsSubmitting(false);
       }
+      setIsSubmitting(false);
     },
     [
       clearGlobalError,

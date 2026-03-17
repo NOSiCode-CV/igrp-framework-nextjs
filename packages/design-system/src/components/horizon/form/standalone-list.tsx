@@ -110,20 +110,24 @@ function IGRPStandaloneList<TItem>({
     return initial.map(() => crypto.randomUUID());
   });
   const [userOpenItem, setUserOpenItem] = useState<string | undefined>(undefined);
-  const controlledKeysRef = useRef<string[]>([]);
+  const [controlledKeys, setControlledKeys] = useState<string[]>(() =>
+    value !== undefined && value.length > 0 ? value.map(() => crypto.randomUUID()) : [],
+  );
 
   const items = value ?? internalItems;
 
-  const stableItemKeys = useMemo(() => {
-    if (value !== undefined) {
-      while (controlledKeysRef.current.length < value.length) {
-        controlledKeysRef.current = [...controlledKeysRef.current, crypto.randomUUID()];
+  useEffect(() => {
+    if (value === undefined) return;
+    setControlledKeys((prev) => {
+      const next = [...prev];
+      while (next.length < value.length) {
+        next.push(crypto.randomUUID());
       }
-      controlledKeysRef.current = controlledKeysRef.current.slice(0, value.length);
-      return controlledKeysRef.current;
-    }
-    return itemKeys;
-  }, [value, itemKeys]);
+      return next.slice(0, value.length);
+    });
+  }, [value]);
+
+  const stableItemKeys = value !== undefined ? controlledKeys : itemKeys;
 
   const bootstrappedRef = useRef(false);
   useEffect(() => {

@@ -443,6 +443,7 @@ function IGRPStatsCardIcon({
           src={image}
           alt={imageAlt || ''}
           fill
+          sizes="56px"
           className={cn('object-cover')}
           unoptimized
         />

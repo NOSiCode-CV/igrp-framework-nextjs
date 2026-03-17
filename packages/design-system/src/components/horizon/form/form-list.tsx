@@ -562,7 +562,6 @@ function FormListFormMode<TItem>({
 
   const [userOpenItem, setUserOpenItem] = useState<string | undefined>(undefined);
   const [userOpenItems, setUserOpenItems] = useState<string[]>([]);
-  const [pendingNewItem, setPendingNewItem] = useState(false);
 
   useEffect(() => {
     appendRef.current = append;
@@ -574,33 +573,19 @@ function FormListFormMode<TItem>({
     }
   }, [defaultItem, fields.length, allowEmpty]);
 
-  // Clear pending flag after fields have updated (avoids setState for open value)
-  useEffect(() => {
-    if (pendingNewItem && fields.length > 0) {
-      setPendingNewItem(false);
-    }
-  }, [pendingNewItem, fields.length]);
-
-  // Derive effective open state from user selection + fields.length (no setState in effect)
+  // Derive effective open state from user selection + fields.length
   const openItem = useMemo(() => {
     if (fields.length === 0) return undefined;
-    if (pendingNewItem && fields.length > 0) {
-      return getAccordionValue(fields.length - 1);
-    }
     if (!userOpenItem) return getAccordionValue(0);
     const idx = parseAccordionIndex(userOpenItem);
     return idx >= fields.length ? getAccordionValue(0) : userOpenItem;
-  }, [fields.length, userOpenItem, pendingNewItem]);
+  }, [fields.length, userOpenItem]);
 
   const openItems = useMemo(() => {
     if (fields.length === 0) return [];
-    if (pendingNewItem && fields.length > 0) {
-      const newVal = getAccordionValue(fields.length - 1);
-      return userOpenItems.includes(newVal) ? userOpenItems : [...userOpenItems, newVal];
-    }
     const valid = userOpenItems.filter((v) => parseAccordionIndex(v) < fields.length);
     return valid.length > 0 ? valid : [getAccordionValue(0)];
-  }, [fields.length, userOpenItems, pendingNewItem]);
+  }, [fields.length, userOpenItems]);
 
   const handleRemove = useCallback(
     (index: number) => {
@@ -693,8 +678,14 @@ function FormListFormMode<TItem>({
       onAdd={
         defaultItem !== undefined
           ? () => {
-              setPendingNewItem(true);
               append(defaultItem);
+              setUserOpenItem(getAccordionValue(fields.length));
+              if (allowMultipleOpen) {
+                setUserOpenItems((prev) => {
+                  const newVal = getAccordionValue(fields.length);
+                  return prev.includes(newVal) ? prev : [...prev, newVal];
+                });
+              }
             }
           : undefined
       }
@@ -741,25 +732,28 @@ function FormListStandaloneMode<TItem>({
   groupId: string;
   ref?: React.Ref<HTMLDivElement>;
 }) {
-  const [internalItems, setInternalItems] = useState<TItem[]>(defaultValue ?? []);
+  const [internalItems, setInternalItems] = useState<TItem[]>(() => {
+    if (value !== undefined) return [];
+    if (defaultValue !== undefined && defaultValue.length > 0) return defaultValue;
+    if (defaultItem !== undefined && !allowEmpty) return [defaultItem];
+    return [];
+  });
   const [userOpenItem, setUserOpenItem] = useState<string | undefined>(undefined);
   const [userOpenItems, setUserOpenItems] = useState<string[]>([]);
 
   // Controlled: use value. Uncontrolled: use internalItems.
   const items = value ?? internalItems;
 
+  // Bootstrap: notify parent of initial items when we seeded from defaultItem (no setState)
+  const bootstrappedRef = useRef(false);
   useEffect(() => {
-    if (
-      items.length === 0 &&
-      value === undefined &&
-      defaultValue === undefined &&
-      defaultItem !== undefined &&
-      !allowEmpty
-    ) {
-      const initialItems = [defaultItem];
-      setInternalItems(initialItems);
-      onChange?.(initialItems);
-    }
+    if (bootstrappedRef.current) return;
+    if (value !== undefined) return;
+    if (defaultValue !== undefined && defaultValue.length > 0) return;
+    if (defaultItem === undefined || allowEmpty) return;
+    if (items.length === 0) return;
+    bootstrappedRef.current = true;
+    onChange?.([defaultItem]);
     // eslint-disable-next-line react-hooks/exhaustive-deps -- intentional: run only on mount for initial bootstrap
   }, []);
 

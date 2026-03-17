@@ -16,19 +16,9 @@ import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '../..
 import { IGRPBadge, type IGRPBadgeProps } from '../badge';
 import { IGRPIcon, type IGRPIconName } from '../icon';
 
-/** @internal Wrapper to avoid inline render in render. */
-function StandaloneListItemContent<TItem>({
-  item,
-  index,
-  renderItem,
-  onItemChange,
-}: {
-  item: TItem;
-  index: number;
-  renderItem: (item: TItem, index: number, onChange: (item: TItem) => void) => React.ReactNode;
-  onItemChange: (item: TItem) => void;
-}) {
-  return <>{renderItem(item, index, onItemChange)}</>;
+/** @internal Named component for list item content — receives pre-rendered content to avoid inline render function. */
+function StandaloneListItemContent({ content }: { content: React.ReactNode }) {
+  return <>{content}</>;
 }
 
 /**
@@ -116,8 +106,8 @@ function IGRPStandaloneList<TItem>({
 
   const items = value ?? internalItems;
 
-  useEffect(() => {
-    if (value === undefined) return;
+  // Sync controlledKeys to value.length during render (avoids setState in effect)
+  if (value !== undefined && value.length !== controlledKeys.length) {
     setControlledKeys((prev) => {
       const next = [...prev];
       while (next.length < value.length) {
@@ -125,7 +115,7 @@ function IGRPStandaloneList<TItem>({
       }
       return next.slice(0, value.length);
     });
-  }, [value]);
+  }
 
   const stableItemKeys = value !== undefined ? controlledKeys : itemKeys;
 
@@ -273,10 +263,11 @@ function IGRPStandaloneList<TItem>({
 
               <AccordionContent className={cn('px-4 pb-4')}>
                 <StandaloneListItemContent
-                  item={item ?? defaultItem}
-                  index={index}
-                  renderItem={renderItem}
-                  onItemChange={(updatedItem) => handleItemChange(index, updatedItem)}
+                  content={renderItem(
+                    item ?? defaultItem,
+                    index,
+                    (updatedItem) => handleItemChange(index, updatedItem),
+                  )}
                 />
               </AccordionContent>
             </AccordionItem>

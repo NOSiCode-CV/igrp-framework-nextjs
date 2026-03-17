@@ -231,12 +231,13 @@ function IGRPTabs({
     const container = tabsListRef.current;
     if (!container) return;
 
-    container.addEventListener('scroll', checkScrollability);
+    const scrollOptions: AddEventListenerOptions = { passive: true };
+    container.addEventListener('scroll', checkScrollability, scrollOptions);
     const resizeObserver = new ResizeObserver(checkScrollability);
     resizeObserver.observe(container);
 
     return () => {
-      container.removeEventListener('scroll', checkScrollability);
+      container.removeEventListener('scroll', checkScrollability, scrollOptions);
       resizeObserver.disconnect();
     };
   }, [checkScrollability, items.length]);

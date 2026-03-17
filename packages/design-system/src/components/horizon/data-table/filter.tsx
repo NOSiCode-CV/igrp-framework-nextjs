@@ -4,6 +4,9 @@ import { useCallback, useEffect, useId, useMemo, useRef, useState } from 'react'
 import { type Column, type Table } from '@tanstack/react-table';
 import { type DateRange } from 'react-day-picker';
 
+import { cn } from '../../../lib/utils';
+import type { IGRPOptionsProps } from '../../../types';
+import { Button } from '../../primitives/button';
 import { Checkbox } from '../../primitives/checkbox';
 import {
   Command,
@@ -14,6 +17,7 @@ import {
   CommandList,
   CommandSeparator,
 } from '../../primitives/command';
+import { Input } from '../../primitives/input';
 import { Popover, PopoverContent, PopoverTrigger } from '../../primitives/popover';
 import {
   Select,
@@ -23,15 +27,10 @@ import {
   SelectValue,
 } from '../../primitives/select';
 import { Separator } from '../../primitives/separator';
-import { IGRPButton } from '../button';
 import { IGRPBadge } from '../badge';
+import { IGRPButton } from '../button';
 import { IGRPIcon, type IGRPIconName } from '../icon';
 // import { IGRPDatePickerRange } from '../input/date-picker/date-picker-range';
-import type { IGRPOptionsProps } from '../../../types';
-import { cn } from '../../../lib/utils';
-import { Input } from '../../primitives/input';
-import { CircleXIcon } from 'lucide-react';
-import { Button } from '../../primitives/button';
 
 /**
  * Base props for data table filter components.
@@ -58,35 +57,31 @@ interface IGRPDataTableFilterProps<TData> {
   iconName?: IGRPIconName | string;
 }
 
-/** Date range filter (placeholder). */
-function IGRPDataTableFilterDate<TData>({
-  column,
-  // placeholder = 'Selecionar datas...', // TODO : Add this to DateRangePicker
-  clearDates, // TODO: review how to implement it
-  // className,
-}: Omit<IGRPDataTableFilterProps<TData>, 'options' | 'placeholderMax'>) {
-  const [dateRange, setDateRange] = useState<DateRange | undefined>();
-
+/** @internal Date range filter content; keyed by clearDates to reset when parent requests clear. */
+function IGRPDataTableFilterDateContent<TData>({ column }: { column?: Column<TData, unknown> }) {
+  const [dateRange] = useState<DateRange | undefined>(undefined);
   const setFilterValue = useCallback(
     (value: DateRange | undefined) => column?.setFilterValue(value),
     [column],
   );
 
   useEffect(() => {
-    if (clearDates) {
-      setDateRange(undefined);
-      setFilterValue(undefined);
-    }
-  }, [clearDates, setFilterValue]);
-
-  useEffect(() => {
     setFilterValue(dateRange);
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [dateRange]);
+  }, [dateRange, setFilterValue]);
 
+  return null;
+}
+
+/** Date range filter (placeholder). */
+function IGRPDataTableFilterDate<TData>({
+  column,
+  clearDates,
+}: Omit<IGRPDataTableFilterProps<TData>, 'options' | 'placeholderMax'>) {
   return (
-    // <IGRPDatePickerRange date={dateRange} onDateChange={setDateRange} className={cn(className)} />
-    null
+    <IGRPDataTableFilterDateContent
+      key={clearDates ? 'cleared' : 'active'}
+      column={column}
+    />
   );
 }
 
@@ -112,6 +107,7 @@ function IGRPDataTableFilterDropdown<TData>({
   notFoundText = 'No Item found.',
 }: IGRPDataTableFilterDropdownProps<TData>) {
   const id = useId();
+  const listId = useId();
   const [open, setOpen] = useState(false);
   const selectedValue = column?.getFilterValue() as string | undefined;
   const selectedLabel = useMemo(
@@ -134,6 +130,8 @@ function IGRPDataTableFilterDropdown<TData>({
           <IGRPButton
             variant="outline"
             role="combobox"
+            aria-expanded={open}
+            aria-controls={listId}
             size="sm"
             className={cn(
               'w-full justify-between',
@@ -148,7 +146,7 @@ function IGRPDataTableFilterDropdown<TData>({
         <PopoverContent align="start" className={cn('p-0', className)}>
           <Command>
             {showFilter && <CommandInput placeholder={placeholder} className={cn('h-8')} />}
-            <CommandList>
+            <CommandList id={listId}>
               <CommandEmpty>{notFoundText}</CommandEmpty>
               <CommandGroup>
                 {options?.map((opt) => (
@@ -201,17 +199,19 @@ function IGRPDataTableFilterFaceted<TData>({
 
   const facets = column?.getFacetedUniqueValues();
   const [selectedValues, setSelectedValues] = useState<Set<string | number>>(
-    useMemo(() => new Set(column?.getFilterValue() as string[]), [column]),
+    () => new Set((column?.getFilterValue() as string[]) ?? []),
   );
 
   const handleSelect = useCallback(
     (value: string | number) => {
-      if (selectedValues.has(value)) {
-        selectedValues.delete(value);
+      const next = new Set(selectedValues);
+      if (next.has(value)) {
+        next.delete(value);
       } else {
-        selectedValues.add(value);
+        next.add(value);
       }
-      const filterValues = Array.from(selectedValues);
+      setSelectedValues(next);
+      const filterValues = Array.from(next);
       column?.setFilterValue(filterValues.length ? filterValues : undefined);
     },
     [column, selectedValues],
@@ -338,7 +338,7 @@ function IGRPDataTableFilterInput<TData>({
             }
           }}
         >
-          <CircleXIcon size={16} aria-hidden="true" />
+          <IGRPIcon iconName="CircleX" />
         </button>
       )}
     </div>

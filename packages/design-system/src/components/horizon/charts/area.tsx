@@ -22,6 +22,9 @@ import {
 } from './lib';
 import type { IGRPAreaConfig, IGRPChartProps } from './types';
 
+const defaultLabelFormatter = (value: unknown) =>
+  typeof value === 'string' ? value : String(value);
+
 /**
  * Props for the IGRPAreaChart component.
  * @see IGRPAreaChart
@@ -58,7 +61,7 @@ function IGRPAreaChart({
   expanded = false,
   className,
   valueFormatter,
-  labelFormatter = (value) => (typeof value === 'string' ? value : String(value)),
+  labelFormatter = defaultLabelFormatter,
   gridColor = '#e5e7eb',
   backgroundColor,
   referenceLineColor = '#e5e7eb',

@@ -1,6 +1,15 @@
 'use client';
 
-import { forwardRef, useCallback, useContext, useEffect, useId, useRef, useState } from 'react';
+import {
+  forwardRef,
+  useCallback,
+  useContext,
+  useEffect,
+  useId,
+  useMemo,
+  useRef,
+  useState,
+} from 'react';
 import { useFieldArray, useWatch } from 'react-hook-form';
 
 import { cn } from '../../../lib/utils';
@@ -186,6 +195,21 @@ function FormListHeader({
   );
 }
 
+/** @internal Wrapper to avoid inline render in render. */
+function FormListItemContent<TItem>({
+  item,
+  index,
+  renderItem,
+  onItemChange,
+}: {
+  item: TItem;
+  index: number;
+  renderItem: (item: TItem, index: number, onChange?: (item: TItem) => void) => React.ReactNode;
+  onItemChange?: (item: TItem) => void;
+}) {
+  return <>{renderItem(item, index, onItemChange)}</>;
+}
+
 /** @internal Add item button. */
 function FormListAddButton({
   onAdd,
@@ -316,7 +340,12 @@ function FormListLayout<TItem>({
         </div>
 
         <AccordionContent className={cn('p-4')}>
-          {renderItem(item, index, normalizedOnItemChange)}
+          <FormListItemContent
+            item={item}
+            index={index}
+            renderItem={renderItem}
+            onItemChange={normalizedOnItemChange}
+          />
         </AccordionContent>
       </AccordionItem>
     );
@@ -531,8 +560,8 @@ function FormListFormMode<TItem>({
   // eslint-disable-next-line react-hooks/exhaustive-deps
   const values = useWatch({ name: groupId }) ?? [];
 
-  const [openItem, setOpenItem] = useState<string | undefined>(undefined);
-  const [openItems, setOpenItems] = useState<string[]>([]);
+  const [userOpenItem, setUserOpenItem] = useState<string | undefined>(undefined);
+  const [userOpenItems, setUserOpenItems] = useState<string[]>([]);
   const [pendingNewItem, setPendingNewItem] = useState(false);
 
   useEffect(() => {
@@ -545,37 +574,33 @@ function FormListFormMode<TItem>({
     }
   }, [defaultItem, fields.length, allowEmpty]);
 
+  // Clear pending flag after fields have updated (avoids setState for open value)
   useEffect(() => {
     if (pendingNewItem && fields.length > 0) {
-      const newValue = getAccordionValue(fields.length - 1);
-      if (allowMultipleOpen) {
-        setOpenItems((prev) => (prev.includes(newValue) ? prev : [...prev, newValue]));
-      } else {
-        setOpenItem(newValue);
-      }
       setPendingNewItem(false);
     }
-  }, [fields.length, pendingNewItem, allowMultipleOpen]);
+  }, [pendingNewItem, fields.length]);
 
-  useEffect(() => {
-    if (fields.length > 0) {
-      if (allowMultipleOpen) {
-        setOpenItems((prev) => {
-          const valid = prev.filter((v) => parseAccordionIndex(v) < fields.length);
-          return valid.length > 0 ? valid : [getAccordionValue(0)];
-        });
-      } else {
-        setOpenItem((prev) => {
-          if (!prev) return getAccordionValue(0);
-          const itemIndex = parseAccordionIndex(prev);
-          return itemIndex >= fields.length ? getAccordionValue(0) : prev;
-        });
-      }
-    } else {
-      setOpenItem(undefined);
-      setOpenItems([]);
+  // Derive effective open state from user selection + fields.length (no setState in effect)
+  const openItem = useMemo(() => {
+    if (fields.length === 0) return undefined;
+    if (pendingNewItem && fields.length > 0) {
+      return getAccordionValue(fields.length - 1);
     }
-  }, [fields.length, allowMultipleOpen]);
+    if (!userOpenItem) return getAccordionValue(0);
+    const idx = parseAccordionIndex(userOpenItem);
+    return idx >= fields.length ? getAccordionValue(0) : userOpenItem;
+  }, [fields.length, userOpenItem, pendingNewItem]);
+
+  const openItems = useMemo(() => {
+    if (fields.length === 0) return [];
+    if (pendingNewItem && fields.length > 0) {
+      const newVal = getAccordionValue(fields.length - 1);
+      return userOpenItems.includes(newVal) ? userOpenItems : [...userOpenItems, newVal];
+    }
+    const valid = userOpenItems.filter((v) => parseAccordionIndex(v) < fields.length);
+    return valid.length > 0 ? valid : [getAccordionValue(0)];
+  }, [fields.length, userOpenItems, pendingNewItem]);
 
   const handleRemove = useCallback(
     (index: number) => {
@@ -590,28 +615,31 @@ function FormListFormMode<TItem>({
       const willHaveItems = fields.length > 1;
       const removedItem = (values[index] ?? defaultItem ?? ({} as TItem)) as TItem;
 
-      try {
-        onItemRemove?.(removedItem, index);
-      } catch (error) {
-        console.error('IGRPFormList onItemRemove callback failed:', error);
-        return;
+      const cb = onItemRemove;
+      if (cb) {
+        try {
+          cb(removedItem, index);
+        } catch (error) {
+          console.error('IGRPFormList onItemRemove callback failed:', error);
+          return;
+        }
       }
 
       remove(index);
 
       if (allowMultipleOpen) {
-        setOpenItems((prev) => mapOpenItemsAfterRemove(prev, index));
+        setUserOpenItems((prev) => mapOpenItemsAfterRemove(prev, index));
       } else if (wasOpen) {
         if (willHaveItems) {
           const newIndex = Math.max(0, index - 1);
-          setOpenItem(getAccordionValue(newIndex));
+          setUserOpenItem(getAccordionValue(newIndex));
         } else {
-          setOpenItem(undefined);
+          setUserOpenItem(undefined);
         }
-      } else if (openItem) {
-        const currentIndex = parseAccordionIndex(openItem);
+      } else if (userOpenItem) {
+        const currentIndex = parseAccordionIndex(userOpenItem);
         if (index < currentIndex && currentIndex > 0) {
-          setOpenItem(getAccordionValue(currentIndex - 1));
+          setUserOpenItem(getAccordionValue(currentIndex - 1));
         }
       }
     },
@@ -619,6 +647,7 @@ function FormListFormMode<TItem>({
       remove,
       openItem,
       openItems,
+      userOpenItem,
       fields.length,
       allowEmpty,
       allowMultipleOpen,
@@ -656,8 +685,8 @@ function FormListFormMode<TItem>({
       onRemove={handleRemove}
       openItem={allowMultipleOpen ? undefined : openItem}
       openItems={allowMultipleOpen ? openItems : undefined}
-      onOpenChange={setOpenItem}
-      onOpenItemsChange={setOpenItems}
+      onOpenChange={setUserOpenItem}
+      onOpenItemsChange={setUserOpenItems}
       addButtonLabel={addButtonLabel}
       addButtonIconName={addButtonIconName}
       addButtonClassName={addButtonClassName}
@@ -712,15 +741,12 @@ function FormListStandaloneMode<TItem>({
   groupId: string;
   ref?: React.Ref<HTMLDivElement>;
 }) {
-  const [items, setItems] = useState<TItem[]>(defaultValue ?? []);
-  const [openItem, setOpenItem] = useState<string | undefined>(undefined);
-  const [openItems, setOpenItems] = useState<string[]>([]);
+  const [internalItems, setInternalItems] = useState<TItem[]>(defaultValue ?? []);
+  const [userOpenItem, setUserOpenItem] = useState<string | undefined>(undefined);
+  const [userOpenItems, setUserOpenItems] = useState<string[]>([]);
 
-  useEffect(() => {
-    if (value !== undefined) {
-      setItems(value);
-    }
-  }, [value]);
+  // Controlled: use value. Uncontrolled: use internalItems.
+  const items = value ?? internalItems;
 
   useEffect(() => {
     if (
@@ -731,55 +757,53 @@ function FormListStandaloneMode<TItem>({
       !allowEmpty
     ) {
       const initialItems = [defaultItem];
-      setItems(initialItems);
+      setInternalItems(initialItems);
       onChange?.(initialItems);
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps -- intentional: run only on mount for initial bootstrap
   }, []);
 
-  useEffect(() => {
-    if (items.length > 0) {
-      if (allowMultipleOpen) {
-        setOpenItems((prev) => {
-          const valid = prev.filter((v) => parseAccordionIndex(v) < items.length);
-          return valid.length > 0 ? valid : [getAccordionValue(0)];
-        });
-      } else {
-        setOpenItem((prev) => {
-          if (!prev) return getAccordionValue(0);
-          const itemIndex = parseAccordionIndex(prev);
-          return itemIndex >= items.length ? getAccordionValue(0) : prev;
-        });
-      }
-    } else {
-      setOpenItem(undefined);
-      setOpenItems([]);
-    }
-  }, [items.length, allowMultipleOpen]);
+  // Derive effective open state (no setState in effect)
+  const openItem = useMemo(() => {
+    if (items.length === 0) return undefined;
+    if (!userOpenItem) return getAccordionValue(0);
+    const idx = parseAccordionIndex(userOpenItem);
+    return idx >= items.length ? getAccordionValue(0) : userOpenItem;
+  }, [items.length, userOpenItem]);
+
+  const openItems = useMemo(() => {
+    if (items.length === 0) return [];
+    const valid = userOpenItems.filter((v) => parseAccordionIndex(v) < items.length);
+    return valid.length > 0 ? valid : [getAccordionValue(0)];
+  }, [items.length, userOpenItems]);
 
   const handleItemChange = useCallback(
     (index: number, updatedItem: TItem) => {
       const newItems = [...items];
       newItems[index] = updatedItem;
-      setItems(newItems);
+      if (value === undefined) {
+        setInternalItems(newItems);
+      }
       onChange?.(newItems);
     },
-    [items, onChange],
+    [items, value, onChange],
   );
 
   const handleAdd = useCallback(() => {
     if (defaultItem !== undefined) {
       const newItems = [...items, defaultItem];
-      setItems(newItems);
+      if (value === undefined) {
+        setInternalItems(newItems);
+      }
       const newValue = getAccordionValue(items.length);
       if (allowMultipleOpen) {
-        setOpenItems((prev) => (prev.includes(newValue) ? prev : [...prev, newValue]));
+        setUserOpenItems((prev) => (prev.includes(newValue) ? prev : [...prev, newValue]));
       } else {
-        setOpenItem(newValue);
+        setUserOpenItem(newValue);
       }
       onChange?.(newItems);
     }
-  }, [items, defaultItem, onChange, allowMultipleOpen]);
+  }, [items, defaultItem, value, onChange, allowMultipleOpen]);
 
   const handleRemove = useCallback(
     (index: number) => {
@@ -790,9 +814,10 @@ function FormListStandaloneMode<TItem>({
           : openItem === removedValue;
         const removedItem = items[index];
 
-        if (removedItem !== undefined) {
+        const cb = onItemRemove;
+        if (removedItem !== undefined && cb) {
           try {
-            onItemRemove?.(removedItem, index);
+            cb(removedItem, index);
           } catch (error) {
             console.error('IGRPFormList onItemRemove callback failed:', error);
             return;
@@ -800,27 +825,29 @@ function FormListStandaloneMode<TItem>({
         }
 
         const newItems = items.filter((_, i) => i !== index);
-        setItems(newItems);
+        if (value === undefined) {
+          setInternalItems(newItems);
+        }
         onChange?.(newItems);
 
         if (allowMultipleOpen) {
-          setOpenItems((prev) => mapOpenItemsAfterRemove(prev, index));
+          setUserOpenItems((prev) => mapOpenItemsAfterRemove(prev, index));
         } else if (wasOpen) {
           if (newItems.length > 0) {
             const newIndex = Math.max(0, index - 1);
-            setOpenItem(getAccordionValue(newIndex));
+            setUserOpenItem(getAccordionValue(newIndex));
           } else {
-            setOpenItem(undefined);
+            setUserOpenItem(undefined);
           }
-        } else if (openItem) {
-          const currentIndex = parseAccordionIndex(openItem);
+        } else if (userOpenItem) {
+          const currentIndex = parseAccordionIndex(userOpenItem);
           if (index < currentIndex && currentIndex > 0) {
-            setOpenItem(getAccordionValue(currentIndex - 1));
+            setUserOpenItem(getAccordionValue(currentIndex - 1));
           }
         }
       }
     },
-    [items, onChange, openItem, openItems, allowEmpty, allowMultipleOpen, onItemRemove],
+    [items, value, onChange, openItem, openItems, userOpenItem, allowEmpty, allowMultipleOpen, onItemRemove],
   );
 
   return (
@@ -852,8 +879,8 @@ function FormListStandaloneMode<TItem>({
       onRemove={handleRemove}
       openItem={allowMultipleOpen ? undefined : openItem}
       openItems={allowMultipleOpen ? openItems : undefined}
-      onOpenChange={setOpenItem}
-      onOpenItemsChange={setOpenItems}
+      onOpenChange={setUserOpenItem}
+      onOpenItemsChange={setUserOpenItems}
       addButtonLabel={addButtonLabel}
       addButtonIconName={addButtonIconName}
       addButtonClassName={addButtonClassName}

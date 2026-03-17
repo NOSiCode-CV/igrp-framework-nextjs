@@ -137,7 +137,6 @@ function IGRPDataTable<TData, TValue>({
   const _id = useId();
   const ref = id ?? _id;
 
-  // eslint-disable-next-line react-hooks/incompatible-library
   const table = useReactTable({
     data,
     columns,

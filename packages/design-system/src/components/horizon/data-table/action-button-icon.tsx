@@ -307,5 +307,4 @@ export {
   IGRPDataTableButtonAlert,
   IGRPDataTableButtonLink,
   IGRPDataTableButtonModal,
-  IGRPDataTableTooltipProvider,
 };

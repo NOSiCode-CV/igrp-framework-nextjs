@@ -1,6 +1,7 @@
 'use client';
 
 import { useState, useEffect, useRef, useCallback, useId } from 'react';
+import Image from 'next/image';
 
 import { cn } from '../../lib/utils';
 import { ScrollArea } from '../primitives/scroll-area';
@@ -13,6 +14,8 @@ import { IGRPIcon } from './icon';
  * @see IGRPChat
  */
 interface IGRPChatMessage {
+  /** Unique message id for React keys. */
+  id?: string;
   /** Message role. */
   role: 'user' | 'assistant' | 'system';
   /** Message content (text or URL depending on type). */
@@ -61,6 +64,7 @@ function IGRPChat({ apiEndpoint, labelDescription = 'Ask me anything!', name, id
     if (!input.trim() || isLoading) return;
 
     const userMessage: IGRPChatMessage = {
+      id: crypto.randomUUID(),
       role: 'user',
       content: input,
       timestamp: new Date().toISOString(),
@@ -72,35 +76,51 @@ function IGRPChat({ apiEndpoint, labelDescription = 'Ask me anything!', name, id
     setInput('');
     setIsLoading(true);
 
-    try {
-      const response = await fetch(apiEndpoint, {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ messages: [...messages, userMessage] }),
-      });
+    const response = await fetch(apiEndpoint, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ messages: [...messages, userMessage] }),
+    });
 
-      if (!response.ok) throw new Error('Failed to get response');
-
-      const data = await response.json();
-
-      if (!data.messages || !Array.isArray(data.messages))
-        throw new Error('Invalid response format');
-
-      setMessages((prev) => [...prev, ...data.messages]);
-    } catch (error) {
-      console.error('Error:', error);
+    if (!response.ok) {
+      console.error('Error: Failed to get response');
       setMessages((prev) => [
         ...prev,
         {
+          id: crypto.randomUUID(),
           role: 'system',
           content: 'Something went wrong. Please try again!',
           type: 'text',
           timestamp: new Date().toISOString(),
         },
       ]);
-    } finally {
       setIsLoading(false);
+      return;
     }
+
+    const data = await response.json();
+    if (!data.messages || !Array.isArray(data.messages)) {
+      console.error('Error: Invalid response format');
+      setMessages((prev) => [
+        ...prev,
+        {
+          id: crypto.randomUUID(),
+          role: 'system',
+          content: 'Something went wrong. Please try again!',
+          type: 'text',
+          timestamp: new Date().toISOString(),
+        },
+      ]);
+      setIsLoading(false);
+      return;
+    }
+
+    const newMessages = (data.messages as IGRPChatMessage[]).map((m, i) => ({
+      ...m,
+      id: m.id ?? `msg-${Date.now()}-${i}`,
+    }));
+    setMessages((prev) => [...prev, ...newMessages]);
+    setIsLoading(false);
   }, [apiEndpoint, input, isLoading, messages]);
 
   return (
@@ -115,9 +135,9 @@ function IGRPChat({ apiEndpoint, labelDescription = 'Ask me anything!', name, id
               <p>{labelDescription}</p>
             </div>
           )}
-          {messages.map((message, i) => (
+          {messages.map((message) => (
             <div
-              key={i}
+              key={message.id ?? `${message.timestamp}-${message.content.slice(0, 20)}`}
               className={cn(
                 'flex items-start space-x-2',
                 message.role === 'user' ? 'flex-row-reverse space-x-reverse' : 'flex-row',
@@ -139,11 +159,15 @@ function IGRPChat({ apiEndpoint, labelDescription = 'Ask me anything!', name, id
               <div className={cn('rounded-lg px-4 py-2 max-w-[80%] bg-muted')}>
                 {message.type === 'text' && <p>{message.content} </p>}
                 {message.type === 'image' && (
-                  <img
-                    src={message.content}
-                    alt="Sent content"
-                    className={cn('max-w-full rounded')}
-                  />
+                  <div className={cn('relative w-full max-w-full min-h-[120px] aspect-video')}>
+                    <Image
+                      src={message.content}
+                      alt="Sent content"
+                      fill
+                      className={cn('object-contain rounded')}
+                      unoptimized
+                    />
+                  </div>
                 )}
                 {message.type === 'link' && (
                   <a

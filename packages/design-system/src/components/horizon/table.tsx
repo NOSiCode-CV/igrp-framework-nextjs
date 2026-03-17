@@ -13,6 +13,20 @@ import {
   TableRow,
 } from '../primitives/table';
 
+/** @internal Renders cell content with optional custom render function. */
+function TableCellContent<T>({
+  value,
+  render,
+}: {
+  value: T;
+  render?: (value: T) => ReactNode;
+}) {
+  if (render) {
+    return <>{render(value)}</>;
+  }
+  return <>{String(value)}</>;
+}
+
 /**
  * Props for the IGRPTable component.
  * @see IGRPTable
@@ -80,13 +94,6 @@ function IGRPTable<T>({
   const _id = useId();
   const ref = id ?? _id;
 
-  const renderCell = (value: T[keyof T], render?: (value: T[keyof T]) => ReactNode): ReactNode => {
-    if (render) {
-      return render(value);
-    }
-    return String(value);
-  };
-
   const stripeClass = isStriped ? 'odd:bg-muted/50 odd:hover:bg-muted/50 border-none' : '';
 
   const stickyHeaderClass = isHeaderSticky
@@ -113,7 +120,10 @@ function IGRPTable<T>({
             <TableRow className={cn(tBodyRowClass, stripeClass)} key={rowIndex}>
               {columns.map((column) => (
                 <TableCell key={column.accessorKey.toString()}>
-                  {renderCell(row[column.accessorKey], column.render)}
+                  <TableCellContent
+                    value={row[column.accessorKey]}
+                    render={column.render}
+                  />
                 </TableCell>
               ))}
               {actions && (

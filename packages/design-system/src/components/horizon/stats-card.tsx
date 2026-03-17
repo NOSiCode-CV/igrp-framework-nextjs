@@ -1,6 +1,7 @@
 /* eslint-disable react-refresh/only-export-components */
 'use client';
 
+import Image from 'next/image';
 import { cva, type VariantProps } from 'class-variance-authority';
 import { useCallback, useId } from 'react';
 
@@ -355,10 +356,12 @@ function IGRPStatsCard({
         cardBorderPosition !== 'none' && outlineColors.border,
         className,
       )}
-      onClick={isInteractive ? onClick : undefined}
-      role={isInteractive ? 'button' : 'none'}
-      tabIndex={0}
-      onKeyDown={handleKeyDown}
+      {...(isInteractive && {
+        role: 'button',
+        tabIndex: 0,
+        onClick,
+        onKeyDown: handleKeyDown,
+      })}
       id={ref}
       {...props}
     >
@@ -435,7 +438,15 @@ function IGRPStatsCardIcon({
 
   const content = () => {
     if (image) {
-      return <img src={image} alt={imageAlt || ''} className={cn('h-full w-full object-cover')} />;
+      return (
+        <Image
+          src={image}
+          alt={imageAlt || ''}
+          fill
+          className={cn('object-cover')}
+          unoptimized
+        />
+      );
     }
     if (showIcon && iconName) {
       return <IGRPIcon iconName={iconName} className={cn('h-6 w-6')} />;
@@ -446,6 +457,7 @@ function IGRPStatsCardIcon({
   return (
     <div
       className={cn(
+        'relative overflow-hidden',
         igrpStstaCardIconVariants({
           size: iconSize as VariantProps<typeof igrpStstaCardIconVariants>['size'],
           showBackground: showIconBackground,

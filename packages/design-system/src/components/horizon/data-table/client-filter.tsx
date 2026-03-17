@@ -1,4 +1,5 @@
 'use client';
+'use no memo';
 
 import { type Column, type Table } from '@tanstack/react-table';
 import { Fragment, type JSX } from 'react';

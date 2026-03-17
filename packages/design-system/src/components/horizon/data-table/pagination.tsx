@@ -1,4 +1,5 @@
 'use client';
+'use no memo';
 
 import { useId } from 'react';
 import { type Table } from '@tanstack/react-table';

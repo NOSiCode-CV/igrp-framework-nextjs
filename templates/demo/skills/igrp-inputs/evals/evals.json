@@ -1,0 +1,23 @@
+{
+  "skill_name": "igrp-inputs",
+  "evals": [
+    {
+      "id": 1,
+      "prompt": "Add a form field for email with label and validation.",
+      "expected_output": "IGRPInputText with name, label, type email, required, inside IGRPForm.",
+      "files": []
+    },
+    {
+      "id": 2,
+      "prompt": "Create a select dropdown for status with Active and Inactive options.",
+      "expected_output": "IGRPSelect with options array [{ label, value }], optionally status/color for badges.",
+      "files": []
+    },
+    {
+      "id": 3,
+      "prompt": "Add a search input with a search icon on the left.",
+      "expected_output": "IGRPInputSearch or IGRPInputText with showIcon, iconName Search, iconPlacement start.",
+      "files": []
+    }
+  ]
+}

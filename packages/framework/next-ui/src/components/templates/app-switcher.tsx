@@ -3,15 +3,15 @@
 import {
   cn,
   IGRPIcon,
-  IGRPDropdownMenuPrimitive,
-  IGRPDropdownMenuContentPrimitive,
-  IGRPDropdownMenuItemPrimitive,
-  IGRPDropdownMenuSeparatorPrimitive,
-  IGRPDropdownMenuTriggerPrimitive,
-  IGRPSidebarMenuPrimitive,
-  IGRPSidebarMenuButtonPrimitive,
-  IGRPSidebarMenuItemPrimitive,
-  useIGRPSidebarPrimitive,
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuSeparator,
+  DropdownMenuTrigger,
+  SidebarMenu,
+  SidebarMenuButton,
+  SidebarMenuItem,
+  useSidebar,
 } from '@igrp/igrp-framework-react-design-system';
 import type { IGRPApplicationArgs } from '@igrp/framework-next-types';
 import { useState, useEffect, useMemo } from 'react';
@@ -27,7 +27,7 @@ interface IGRPTemplateAppSwitcherProps {
 }
 
 function IGRPTemplateAppSwitcher({ apps, appCode, appCenterUrl }: IGRPTemplateAppSwitcherProps) {
-  const { isMobile } = useIGRPSidebarPrimitive();
+  const { isMobile } = useSidebar();
 
   const currentApp = useMemo(() => {
     if (!apps || apps.length === 0) return undefined;
@@ -60,12 +60,12 @@ function IGRPTemplateAppSwitcher({ apps, appCode, appCenterUrl }: IGRPTemplateAp
   };
 
   return (
-    <IGRPSidebarMenuPrimitive>
-      <IGRPSidebarMenuItemPrimitive>
+    <SidebarMenu>
+      <SidebarMenuItem>
         {activeApp ? (
-          <IGRPDropdownMenuPrimitive>
-            <IGRPDropdownMenuTriggerPrimitive asChild>
-              <IGRPSidebarMenuButtonPrimitive
+          <DropdownMenu>
+            <DropdownMenuTrigger asChild>
+              <SidebarMenuButton
                 size="lg"
                 className={cn(
                   'data-[state=open]:bg-sidebar-accent data-[state=open]:text-sidebar-accent-foreground',
@@ -92,9 +92,9 @@ function IGRPTemplateAppSwitcher({ apps, appCode, appCenterUrl }: IGRPTemplateAp
                   <span className={cn('truncate text-xs')}>{activeApp.description || ''}</span>
                 </div>
                 <IGRPIcon iconName="ChevronsUpDown" className={cn('ml-auto')} />
-              </IGRPSidebarMenuButtonPrimitive>
-            </IGRPDropdownMenuTriggerPrimitive>
-            <IGRPDropdownMenuContentPrimitive
+              </SidebarMenuButton>
+            </DropdownMenuTrigger>
+            <DropdownMenuContent
               className={cn('min-w-56 rounded-lg')}
               align="start"
               side={isMobile ? 'bottom' : 'right'}
@@ -102,7 +102,7 @@ function IGRPTemplateAppSwitcher({ apps, appCode, appCenterUrl }: IGRPTemplateAp
             >
               {listApps.length > 0 &&
                 listApps.map((app) => (
-                  <IGRPDropdownMenuItemPrimitive key={app.code} className={cn('gap-2 p-2')} asChild>
+                  <DropdownMenuItem key={app.code} className={cn('gap-2 p-2')} asChild>
                     <a href={getAppUrl(app)}>
                       <div
                         className={cn('flex size-6 items-center justify-center rounded-md border')}
@@ -122,13 +122,13 @@ function IGRPTemplateAppSwitcher({ apps, appCode, appCenterUrl }: IGRPTemplateAp
                       </div>
                       {app.name}
                     </a>
-                  </IGRPDropdownMenuItemPrimitive>
+                  </DropdownMenuItem>
                 ))}
 
               {appCenterUrl && (listApps?.length ?? 0) > 1 && (
                 <>
-                  <IGRPDropdownMenuSeparatorPrimitive />
-                  <IGRPDropdownMenuItemPrimitive className={cn('gap-2 p-2')} asChild>
+                  <DropdownMenuSeparator />
+                  <DropdownMenuItem className={cn('gap-2 p-2')} asChild>
                     <a href={appCenterUrl}>
                       <div
                         className={cn(
@@ -141,13 +141,13 @@ function IGRPTemplateAppSwitcher({ apps, appCode, appCenterUrl }: IGRPTemplateAp
                         Applications Center
                       </div>
                     </a>
-                  </IGRPDropdownMenuItemPrimitive>
+                  </DropdownMenuItem>
                 </>
               )}
-            </IGRPDropdownMenuContentPrimitive>
-          </IGRPDropdownMenuPrimitive>
+            </DropdownMenuContent>
+          </DropdownMenu>
         ) : (
-          <IGRPSidebarMenuButtonPrimitive
+          <SidebarMenuButton
             size="lg"
             disabled
             className={cn(
@@ -162,10 +162,10 @@ function IGRPTemplateAppSwitcher({ apps, appCode, appCenterUrl }: IGRPTemplateAp
               <span className={cn('truncate text-xs')}>N/A</span>
             </div>
             <IGRPIcon iconName="ChevronsUpDown" className={cn('ml-auto')} />
-          </IGRPSidebarMenuButtonPrimitive>
+          </SidebarMenuButton>
         )}
-      </IGRPSidebarMenuItemPrimitive>
-    </IGRPSidebarMenuPrimitive>
+      </SidebarMenuItem>
+    </SidebarMenu>
   );
 }
 

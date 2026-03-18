@@ -2,7 +2,7 @@
 
 import { useState, useEffect } from 'react';
 import Image from 'next/image';
-import { IGRPButtonPrimitive, cn } from '@igrp/igrp-framework-react-design-system';
+import { Button, cn } from '@igrp/igrp-framework-react-design-system';
 
 interface IGRPCarousel {
   image: string;
@@ -65,7 +65,7 @@ function IGRPAuthCarousel({
 
               <div className={cn('mt-4 flex justify-start space-x-2')}>
                 {carouselItems.map((_, idx) => (
-                  <IGRPButtonPrimitive
+                  <Button
                     variant="ghost"
                     key={idx}
                     onClick={() => goToSlide(idx)}

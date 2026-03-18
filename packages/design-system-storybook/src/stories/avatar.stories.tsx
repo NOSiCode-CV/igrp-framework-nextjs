@@ -4,7 +4,7 @@ import {
   type IGRPAvatarProps,
   IGRPIconObject
 } from '@igrp/igrp-framework-react-design-system';
-import { IGRPButtonPrimitive } from '@igrp/igrp-framework-react-design-system';
+import { Button } from '@igrp/igrp-framework-react-design-system';
 
 
 const avatars = [
@@ -236,13 +236,13 @@ export const MultipleBadge: Story = {
         />
       ))}
       {remaining > 0 && (
-        <IGRPButtonPrimitive
+        <Button
           className='bg-secondary text-muted-foreground ring-background hover:bg-secondary hover:text-foreground flex size-10 items-center justify-center rounded-full text-md ring-2 ps-3'
           variant='ghost'
           size='icon'
         >
           +3
-        </IGRPButtonPrimitive>
+        </Button>
       )}
     </div>
   ),

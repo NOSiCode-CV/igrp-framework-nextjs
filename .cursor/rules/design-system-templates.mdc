@@ -9,6 +9,7 @@ alwaysApply: false
 When building UI in this template, use `@igrp/igrp-framework-react-design-system` as the **first and default option**. Do not create from scratch or suggest other UI libraries.
 
 - **Read**: `templates/demo/AGENTS.md` and `templates/demo/DESIGN_SYSTEM.md` for full context
+- **Skills**: Use `templates/demo/skills/` for component-specific guidance (igrp-form, igrp-inputs, igrp-datatable, igrp-button, igrp-card, igrp-charts, igrp-modal, igrp-layout, igrp-navigation, igrp-feedback, igrp-custom, igrp-primitives)
 - **Import from**: `@igrp/igrp-framework-react-design-system`
 - **Prefer Horizon components** (IGRPButton, IGRPInputText, IGRPCard, IGRPForm, IGRPDataTable, etc.)
 - **Forms**: Use IGRPForm, IGRPFormField, IGRPInputText, IGRPSelect

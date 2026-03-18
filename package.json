@@ -34,7 +34,9 @@
     "dev:app-center": "pnpm --filter @igrp/applications-center dev",
     "clean-all": "pnpm -r run clean-all",
     "changeset": "changeset",
-    "version:changesets": "changeset version"
+    "version:changesets": "changeset version",
+    "migrate:primitives": "node scripts/migrate-primitive-names.mjs",
+    "migrate:primitives:apply": "node scripts/migrate-primitive-names.mjs --apply"
   },
   "devDependencies": {
     "@changesets/cli": "^2.30.0",

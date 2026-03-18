@@ -16,10 +16,10 @@ Low-level building blocks (Radix-based). Use when composing custom components.
 
 ```tsx
 import {
-  IGRPButtonPrimitive,
-  IGRPCardPrimitive,
+  Button,
+  Card,
   IGRPDialogPrimitive,
-  IGRPInputPrimitive,
+  Input,
 } from '@igrp/igrp-framework-react-design-system';
 ```
 
@@ -44,7 +44,7 @@ Domain-specific components (e.g. `IGRPStatusBanner`, `IGRPStatsCardTopBorderColo
 ## Naming Convention
 
 - All exports use the `IGRP` prefix.
-- Primitives: `IGRP*Primitive` (e.g. `IGRPButtonPrimitive`).
+- Primitives: `IGRP*Primitive` (e.g. `Button`).
 - Horizon: `IGRP*` (e.g. `IGRPButton`, `IGRPInputText`).
 
 ## Key Types

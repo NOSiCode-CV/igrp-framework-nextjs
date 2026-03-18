@@ -4,15 +4,15 @@ import Link from 'next/link';
 import type { IGRPUserArgs } from '@igrp/framework-next-types';
 import {
   cn,
-  IGRPDropdownMenuPrimitive,
-  IGRPDropdownMenuContentPrimitive,
-  IGRPDropdownMenuItemPrimitive,
-  IGRPDropdownMenuLabelPrimitive,
-  IGRPDropdownMenuSeparatorPrimitive,
-  IGRPDropdownMenuTriggerPrimitive,
-  IGRPSidebarMenuPrimitive,
-  IGRPSidebarMenuButtonPrimitive,
-  IGRPSidebarMenuItemPrimitive,
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuLabel,
+  DropdownMenuSeparator,
+  DropdownMenuTrigger,
+  SidebarMenu,
+  SidebarMenuButton,
+  SidebarMenuItem,
   useIGRPSidebar,
   IGRPUserAvatar,
   igrpGetInitials,
@@ -62,11 +62,11 @@ function IGRPTemplateNavUser({
   };
 
   return (
-    <IGRPSidebarMenuPrimitive>
-      <IGRPSidebarMenuItemPrimitive>
-        <IGRPDropdownMenuPrimitive>
-          <IGRPDropdownMenuTriggerPrimitive asChild>
-            <IGRPSidebarMenuButtonPrimitive
+    <SidebarMenu>
+      <SidebarMenuItem>
+        <DropdownMenu>
+          <DropdownMenuTrigger asChild>
+            <SidebarMenuButton
               className={cn(
                 'group data-[state=open]:bg-sidebar-accent data-[state=open]:text-sidebar-accent-foreground',
               )}
@@ -88,24 +88,24 @@ function IGRPTemplateNavUser({
                   <IGRPIcon iconName="ChevronsUpDown" className={cn('ml-auto')} />
                 </>
               )}
-            </IGRPSidebarMenuButtonPrimitive>
-          </IGRPDropdownMenuTriggerPrimitive>
+            </SidebarMenuButton>
+          </DropdownMenuTrigger>
 
-          <IGRPDropdownMenuContentPrimitive
+          <DropdownMenuContent
             className={cn('min-w-56 rounded-lg')}
             side={renderMobile()}
             align="end"
             sideOffset={4}
           >
-            <IGRPDropdownMenuLabelPrimitive className={cn('font-normal')}>
+            <DropdownMenuLabel className={cn('font-normal')}>
               <div className={cn('flex flex-col space-y-1')}>
                 <p className={cn('text-sm font-medium leading-none')}>{user.name}</p>
                 <p className={cn('text-xs leading-none text-muted-foreground')}>{user.email}</p>
               </div>
-            </IGRPDropdownMenuLabelPrimitive>
-            <IGRPDropdownMenuSeparatorPrimitive />
+            </DropdownMenuLabel>
+            <DropdownMenuSeparator />
 
-            <IGRPDropdownMenuItemPrimitive
+            <DropdownMenuItem
               asChild
               className={cn('cursor-pointer hover:bg-primary! hover:text-primary-foreground!')}
             >
@@ -113,10 +113,10 @@ function IGRPTemplateNavUser({
                 <IGRPIcon iconName="User" className={iconClassName} />
                 <span>Profile</span>
               </Link>
-            </IGRPDropdownMenuItemPrimitive>
-            <IGRPDropdownMenuSeparatorPrimitive />
+            </DropdownMenuItem>
+            <DropdownMenuSeparator />
 
-            <IGRPDropdownMenuItemPrimitive
+            <DropdownMenuItem
               asChild
               className={cn('cursor-pointer hover:bg-primary! hover:text-primary-foreground!')}
             >
@@ -124,11 +124,11 @@ function IGRPTemplateNavUser({
                 <IGRPIcon iconName="Bell" className={cn('mr-1 hover:text-primary-foreground!')} />
                 <span>Notifications</span>
               </Link>
-            </IGRPDropdownMenuItemPrimitive>
-            <IGRPDropdownMenuSeparatorPrimitive />
+            </DropdownMenuItem>
+            <DropdownMenuSeparator />
 
             {!isHeader && (
-              <IGRPDropdownMenuItemPrimitive
+              <DropdownMenuItem
                 asChild
                 className={cn('cursor-pointer hover:bg-primary! hover:text-primary-foreground!')}
               >
@@ -139,12 +139,12 @@ function IGRPTemplateNavUser({
                   />
                   <span>Settings</span>
                 </Link>
-              </IGRPDropdownMenuItemPrimitive>
+              </DropdownMenuItem>
             )}
 
-            <IGRPDropdownMenuSeparatorPrimitive />
+            <DropdownMenuSeparator />
 
-            <IGRPDropdownMenuItemPrimitive
+            <DropdownMenuItem
               asChild
               className={cn('cursor-pointer hover:bg-primary! hover:text-primary-foreground!')}
             >
@@ -152,11 +152,11 @@ function IGRPTemplateNavUser({
                 <IGRPIcon iconName="LogOut" className={iconClassName} />
                 <span>Log out</span>
               </Link>
-            </IGRPDropdownMenuItemPrimitive>
-          </IGRPDropdownMenuContentPrimitive>
-        </IGRPDropdownMenuPrimitive>
-      </IGRPSidebarMenuItemPrimitive>
-    </IGRPSidebarMenuPrimitive>
+            </DropdownMenuItem>
+          </DropdownMenuContent>
+        </DropdownMenu>
+      </SidebarMenuItem>
+    </SidebarMenu>
   );
 }
 

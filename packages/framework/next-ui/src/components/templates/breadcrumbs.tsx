@@ -5,17 +5,17 @@ import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 import {
   IGRPIcon,
-  IGRPBreadcrumbPrimitive,
-  IGRPBreadcrumbListPrimitive,
-  IGRPBreadcrumbItemPrimitive,
-  IGRPBreadcrumbLinkPrimitive,
-  IGRPBreadcrumbPagePrimitive,
-  IGRPBreadcrumbSeparatorPrimitive,
-  IGRPBreadcrumbEllipsisPrimitive,
-  IGRPDropdownMenuPrimitive,
-  IGRPDropdownMenuTriggerPrimitive,
-  IGRPDropdownMenuContentPrimitive,
-  IGRPDropdownMenuItemPrimitive,
+  Breadcrumb,
+  BreadcrumbList,
+  BreadcrumbItem,
+  BreadcrumbLink,
+  BreadcrumbPage,
+  BreadcrumbSeparator,
+  BreadcrumbEllipsis,
+  DropdownMenu,
+  DropdownMenuTrigger,
+  DropdownMenuContent,
+  DropdownMenuItem,
   useIsMobile,
   cn,
 } from '@igrp/igrp-framework-react-design-system';
@@ -144,33 +144,33 @@ function IGRPTemplateBreadcrumbs({
 
   const renderBreadcrumbItem = (item: BreadcrumbItem, isLast: boolean, key: string) => (
     <Fragment key={key}>
-      <IGRPBreadcrumbSeparatorPrimitive>
+      <BreadcrumbSeparator>
         <IGRPIcon iconName="ChevronRight" className={cn('h-3 w-3')} strokeWidth={2} />
-      </IGRPBreadcrumbSeparatorPrimitive>
-      <IGRPBreadcrumbItemPrimitive>
+      </BreadcrumbSeparator>
+      <BreadcrumbItem>
         {isLast ? (
-          <IGRPBreadcrumbPagePrimitive className={cn('text-xs')}>
+          <BreadcrumbPage className={cn('text-xs')}>
             {item.label}
-          </IGRPBreadcrumbPagePrimitive>
+          </BreadcrumbPage>
         ) : (
-          <IGRPBreadcrumbLinkPrimitive asChild>
+          <BreadcrumbLink asChild>
             <Link href={item.href} className={cn('text-xs')}>
               {item.label}
             </Link>
-          </IGRPBreadcrumbLinkPrimitive>
+          </BreadcrumbLink>
         )}
-      </IGRPBreadcrumbItemPrimitive>
+      </BreadcrumbItem>
     </Fragment>
   );
 
   return (
-    <IGRPBreadcrumbPrimitive className={cn('text-xs min-w-0', className)}>
-      <IGRPBreadcrumbListPrimitive
+    <Breadcrumb className={cn('text-xs min-w-0', className)}>
+      <BreadcrumbList
         ref={containerRef}
         className={cn('gap-0.5 sm:gap-0.5 text-xs overflow-hidden')}
       >
-        <IGRPBreadcrumbItemPrimitive>
-          <IGRPBreadcrumbLinkPrimitive asChild>
+        <BreadcrumbItem>
+          <BreadcrumbLink asChild>
             <Link
               href={homeHref}
               className={cn(
@@ -180,33 +180,33 @@ function IGRPTemplateBreadcrumbs({
               <IGRPIcon iconName="House" className={cn('h-3 w-3')} strokeWidth={2} />
               <span className={cn('sr-only')}>{homeLabel}</span>
             </Link>
-          </IGRPBreadcrumbLinkPrimitive>
-        </IGRPBreadcrumbItemPrimitive>
+          </BreadcrumbLink>
+        </BreadcrumbItem>
 
         {shouldCollapse && middleItems.length > 0 ? (
           <>
-            <IGRPBreadcrumbSeparatorPrimitive>
+            <BreadcrumbSeparator>
               <IGRPIcon iconName="ChevronRight" className={cn('h-3 w-3')} strokeWidth={2} />
-            </IGRPBreadcrumbSeparatorPrimitive>
-            <IGRPBreadcrumbItemPrimitive>
-              <IGRPDropdownMenuPrimitive>
-                <IGRPDropdownMenuTriggerPrimitive
+            </BreadcrumbSeparator>
+            <BreadcrumbItem>
+              <DropdownMenu>
+                <DropdownMenuTrigger
                   className={cn('flex items-center gap-1 focus:outline-none')}
                 >
-                  <IGRPBreadcrumbEllipsisPrimitive />
+                  <BreadcrumbEllipsis />
                   <span className={cn('sr-only')}>Toggle menu</span>
-                </IGRPDropdownMenuTriggerPrimitive>
-                <IGRPDropdownMenuContentPrimitive align="start">
+                </DropdownMenuTrigger>
+                <DropdownMenuContent align="start">
                   {middleItems.map((item, index) => (
-                    <IGRPDropdownMenuItemPrimitive key={`${item.href}-${index}`} asChild>
+                    <DropdownMenuItem key={`${item.href}-${index}`} asChild>
                       <Link href={item.href} className={cn('flex items-center gap-2')}>
                         {item.label}
                       </Link>
-                    </IGRPDropdownMenuItemPrimitive>
+                    </DropdownMenuItem>
                   ))}
-                </IGRPDropdownMenuContentPrimitive>
-              </IGRPDropdownMenuPrimitive>
-            </IGRPBreadcrumbItemPrimitive>
+                </DropdownMenuContent>
+              </DropdownMenu>
+            </BreadcrumbItem>
             {lastItems.map((item, index) => {
               const isLast = index === lastItems.length - 1;
               return renderBreadcrumbItem(item, isLast, `collapsed-${item.href}-${index}`);
@@ -218,8 +218,8 @@ function IGRPTemplateBreadcrumbs({
             return renderBreadcrumbItem(item, isLast, item.href);
           })
         )}
-      </IGRPBreadcrumbListPrimitive>
-    </IGRPBreadcrumbPrimitive>
+      </BreadcrumbList>
+    </Breadcrumb>
   );
 }
 

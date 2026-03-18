@@ -5,9 +5,9 @@ import Image from 'next/image';
 import { signIn } from '@igrp/framework-next-auth/client';
 import {
   cn,
-  IGRPAlertPrimitive,
-  IGRPAlertDescriptionPrimitive,
-  IGRPButtonPrimitive,
+  Alert,
+  AlertDescription,
+  Button,
   IGRPIcon,
 } from '@igrp/igrp-framework-react-design-system';
 import { IGRPTemplateModeSwitcher } from '../templates/mode-switcher';
@@ -63,7 +63,7 @@ function IGRPAuthForm({ texts, logo, name, callbackUrl = '/' }: IGRPAuthFormProp
       <div className={cn('grow flex flex-col justify-center items-center')}>
         <div className={cn('w-full max-w-md space-y-8 flex flex-col justify-center')}>
           {authError && (
-            <IGRPAlertPrimitive
+            <Alert
               variant="destructive"
               className={cn('animate-in fade-in-50 slide-in-from-top-5')}
               role="alert"
@@ -75,8 +75,8 @@ function IGRPAuthForm({ texts, logo, name, callbackUrl = '/' }: IGRPAuthFormProp
                 strokeWidth={2}
                 aria-hidden
               />
-              <IGRPAlertDescriptionPrimitive>{authError}</IGRPAlertDescriptionPrimitive>
-            </IGRPAlertPrimitive>
+              <AlertDescription>{authError}</AlertDescription>
+            </Alert>
           )}
           <div className={cn('flex flex-col items-center')}>
             <Image
@@ -92,7 +92,7 @@ function IGRPAuthForm({ texts, logo, name, callbackUrl = '/' }: IGRPAuthFormProp
             </h3>
           </div>
 
-          <IGRPButtonPrimitive
+          <Button
             onClick={onSubmit}
             disabled={isLoading}
             className={cn('h-10 text-md')}
@@ -119,7 +119,7 @@ function IGRPAuthForm({ texts, logo, name, callbackUrl = '/' }: IGRPAuthFormProp
                 />
               </>
             )}
-          </IGRPButtonPrimitive>
+          </Button>
         </div>
       </div>
 

@@ -5,7 +5,7 @@ import { zodResolver } from '@hookform/resolvers/zod';
 import {
   IGRPInputColor,
   type IGRPInputColorProps,
-  IGRPButtonPrimitive,
+  Button,
 } from '@igrp/igrp-framework-react-design-system';
 
 export default {
@@ -61,12 +61,12 @@ const FormTemplate: StoryFn<IGRPInputColorProps> = (args) => {
         >
           <IGRPInputColor {...args} />
 
-          <IGRPButtonPrimitive
+          <Button
             type='submit'
             className='w-full mt-4'
           >
             Enviar
-          </IGRPButtonPrimitive>
+          </Button>
         </form>
       </FormProvider>
     </div>

@@ -1,0 +1,17 @@
+{
+  "skill_name": "igrp-card",
+  "evals": [
+    {
+      "id": 1,
+      "prompt": "Create a card with a title, description, and a form in the content area.",
+      "expected_output": "IGRPCard with IGRPCardHeader (IGRPCardTitle, IGRPCardDescription), IGRPCardContent with form.",
+      "files": []
+    },
+    {
+      "id": 2,
+      "prompt": "Display user profile as a read-only card with name, email, and role fields.",
+      "expected_output": "IGRPCardDetails with items array for label/content pairs.",
+      "files": []
+    }
+  ]
+}

@@ -8,8 +8,8 @@ import type {
 import {
   cn,
   IGRPToaster,
-  IGRPSidebarInsetPrimitive,
-  IGRPSidebarProviderPrimitive,
+  SidebarInset,
+  SidebarProvider,
 } from '@igrp/igrp-framework-react-design-system';
 
 import { IGRPTemplateHeader } from '../templates/header';
@@ -45,14 +45,14 @@ export function IGRPRootProviders({
   } = toasterConfig ?? {};
 
   return (
-    <IGRPSidebarProviderPrimitive defaultOpen={defaultOpen}>
+    <SidebarProvider defaultOpen={defaultOpen}>
       {showSidebar && (
         <div className={cn('z-45')}>
           <IGRPTemplateSidebar data={sidebarData} />
         </div>
       )}
 
-      <IGRPSidebarInsetPrimitive className={cn('min-w-0')}>
+      <SidebarInset className={cn('min-w-0')}>
         {showHeader && <IGRPTemplateHeader data={headerData} />}
 
         <div className={cn('p-4')}>{children}</div>
@@ -67,7 +67,7 @@ export function IGRPRootProviders({
             {...toasterConfig}
           />
         )}
-      </IGRPSidebarInsetPrimitive>
-    </IGRPSidebarProviderPrimitive>
+      </SidebarInset>
+    </SidebarProvider>
   );
 }

@@ -34,9 +34,9 @@ Low-level building blocks. Use when composing custom components.
 
 ```tsx
 import {
-  IGRPButtonPrimitive,
-  IGRPCardPrimitive,
-  IGRPInputPrimitive,
+  Button,
+  Card,
+  Input,
 } from '@igrp/igrp-framework-react-design-system';
 ```
 

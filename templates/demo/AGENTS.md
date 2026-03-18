@@ -10,6 +10,7 @@ When the user asks to create UI, forms, tables, modals, buttons, inputs, or any 
 2. **Import from** `@igrp/igrp-framework-react-design-system`.
 3. **Prefer Horizon components** (e.g. `IGRPButton`, `IGRPInputText`, `IGRPCard`, `IGRPForm`, `IGRPDataTable`) over Primitives unless composing custom behavior.
 4. **Read `DESIGN_SYSTEM.md`** in this directory for the full component catalog, types, and usage patterns.
+5. **Use Design System Skills** in `templates/demo/skills/` when building specific UI: forms (igrp-form), inputs (igrp-inputs), tables (igrp-datatable), buttons (igrp-button), cards (igrp-card), charts (igrp-charts), modals (igrp-modal), layout (igrp-layout), navigation (igrp-navigation), feedback (igrp-feedback), custom components (igrp-custom), primitives (igrp-primitives).
 
 ## Context
 

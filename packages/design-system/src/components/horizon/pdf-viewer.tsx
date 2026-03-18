@@ -449,7 +449,7 @@ function IGRPPdfViewerModal({
     } else if (!document) {
       prevDocIdRef.current = null;
     }
-  }, [document?.id, viewerPreference]);
+  }, [document, viewerPreference]);
 
   useEffect(() => {
     if (frameStatus !== 'loading') return;

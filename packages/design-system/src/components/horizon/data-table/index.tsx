@@ -1,5 +1,5 @@
 'use client';
-'use no memo'; // TanStack Table useReactTable uses interior mutability; opt out of React Compiler memoization
+'use no memo';
 
 import { Fragment, useCallback, useId, useReducer } from 'react';
 import {
@@ -224,6 +224,7 @@ function IGRPDataTable<TData, TValue>({
   const _id = useId();
   const ref = id ?? _id;
 
+  // eslint-disable-next-line react-hooks/incompatible-library
   const table = useReactTable({
     data,
     columns,

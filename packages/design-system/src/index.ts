@@ -16,441 +16,441 @@ export { IGRPUserAvatar, type IGRPUserAvatarProps } from './components/custom/us
 // primitives components
 
 export {
-  Accordion as IGRPAccordionPrimitive,
-  AccordionItem as IGRPAccordionItemPrimitive,
-  AccordionTrigger as IGRPAccordionTriggerPrimitive,
-  AccordionContent as IGRPAccordionContentPrimitive,
-  type AccordionTriggerProps as IGRPAccordionTriggerProps,
-  type AccordionTriggerArgs as IGRPAccordionTriggerArgs,
+  Accordion,
+  AccordionItem,
+  AccordionTrigger,
+  AccordionContent,
+  type AccordionTriggerProps,
+  type AccordionTriggerArgs,
 } from './components/primitives/accordion';
 
 export {
-  AlertDialog as IGRPAlertDialogPrimitive,
-  AlertDialogPortal as IGRPAlertDialogPortalPrimitive,
-  AlertDialogOverlay as IGRPAlertDialogOverlayPrimitive,
-  AlertDialogTrigger as IGRPAlertDialogTriggerPrimitive,
-  AlertDialogContent as IGRPAlertDialogContentPrimitive,
-  AlertDialogHeader as IGRPAlertDialogHeaderPrimitive,
-  AlertDialogFooter as IGRPAlertDialogFooterPrimitive,
-  AlertDialogTitle as IGRPAlertDialogTitlePrimitive,
-  AlertDialogDescription as IGRPAlertDialogDescriptionPrimitive,
-  AlertDialogAction as IGRPAlertDialogActionPrimitive,
-  AlertDialogCancel as IGRPAlertDialogCancelPrimitive,
+  AlertDialog,
+  AlertDialogPortal,
+  AlertDialogOverlay,
+  AlertDialogTrigger,
+  AlertDialogContent,
+  AlertDialogHeader,
+  AlertDialogFooter,
+  AlertDialogTitle,
+  AlertDialogDescription,
+  AlertDialogAction,
+  AlertDialogCancel,
 } from './components/primitives/alert-dialog';
 
 export {
-  Alert as IGRPAlertPrimitive,
-  AlertTitle as IGRPAlertTitlePrimitive,
-  AlertDescription as IGRPAlertDescriptionPrimitive,
+  Alert,
+  AlertTitle,
+  AlertDescription,
 } from './components/primitives/alert';
 
-export { AspectRatio as IGRPAspectRatioPrimitive } from './components/primitives/aspect-ratio';
+export { AspectRatio } from './components/primitives/aspect-ratio';
 
 export {
-  Avatar as IGRPUserAvatarPrimitive,
-  AvatarImage as IGRPUserAvatarImagePrimitive,
-  AvatarFallback as IGRPUserAvatarFallbackPrimitive,
+  Avatar,
+  AvatarImage,
+  AvatarFallback,
 } from './components/primitives/avatar';
 
 export {
-  Badge as IGRPBadgePrimitive,
-  badgeVariants as IGRPBadgeVariantPrimitive,
+  Badge,
+  badgeVariants,
 } from './components/primitives/badge';
 
 export {
-  Breadcrumb as IGRPBreadcrumbPrimitive,
-  BreadcrumbList as IGRPBreadcrumbListPrimitive,
-  BreadcrumbItem as IGRPBreadcrumbItemPrimitive,
-  BreadcrumbLink as IGRPBreadcrumbLinkPrimitive,
-  BreadcrumbPage as IGRPBreadcrumbPagePrimitive,
-  BreadcrumbSeparator as IGRPBreadcrumbSeparatorPrimitive,
-  BreadcrumbEllipsis as IGRPBreadcrumbEllipsisPrimitive,
+  Breadcrumb,
+  BreadcrumbList,
+  BreadcrumbItem,
+  BreadcrumbLink,
+  BreadcrumbPage,
+  BreadcrumbSeparator,
+  BreadcrumbEllipsis,
 } from './components/primitives/breadcrumb';
 
 export {
-  ButtonGroup as IGRPButtonGroupPrimitive,
-  ButtonGroupSeparator as IGRPButtonGroupSeparatorPrimitive,
-  ButtonGroupText as IGRPButtonGroupTextPrimitive,
-  buttonGroupVariants as IGRPButtonGroupVariantPrimitive,
+  ButtonGroup,
+  ButtonGroupSeparator,
+  ButtonGroupText,
+  buttonGroupVariants,
 } from './components/primitives/button-group';
 
 export {
-  Button as IGRPButtonPrimitive,
-  buttonVariants as IGRPButtonVariantPrimitive,
+  Button,
+  buttonVariants,
 } from './components/primitives/button';
 
 export {
-  Calendar as IGRPCalendarPrimitive,
-  CalendarDayButton as IGRPCalendarDayButtonPrimitive,
+  Calendar,
+  CalendarDayButton,
 } from './components/primitives/calendar';
 
 export {
-  Card as IGRPCardPrimitive,
-  CardHeader as IGRPCardHeaderPrimitive,
-  CardFooter as IGRPCardFooterPrimitive,
-  CardTitle as IGRPCardTitlePrimitive,
-  CardAction as IGRPCardActionPrimitive,
-  CardDescription as IGRPCardDescriptionPrimitive,
-  CardContent as IGRPCardContentPrimitive,
+  Card,
+  CardHeader,
+  CardFooter,
+  CardTitle,
+  CardAction,
+  CardDescription,
+  CardContent,
 } from './components/primitives/card';
 
 export {
-  type CarouselApi as IGRPCarouselApi,
-  Carousel as IGRPCarouselPrimitive,
-  CarouselContent as IGRPCarouselContentPrimitive,
-  CarouselItem as IGRPCarouselItemPrimitive,
-  CarouselPrevious as IGRPCarouselPreviousPrimitive,
-  CarouselNext as IGRPCarouselNextPrimitive,
+  type CarouselApi,
+  Carousel,
+  CarouselContent,
+  CarouselItem,
+  CarouselPrevious,
+  CarouselNext,
 } from './components/primitives/carousel';
 
 export {
-  ChartContainer as IGRPChartContainerPrimitive,
-  ChartTooltip as IGRPChartTooltipPrimitive,
-  ChartTooltipContent as IGRPChartTooltipContentPrimitive,
-  ChartLegend as IGRPChartLegendPrimitive,
-  ChartLegendContent as IGRPChartLegendContentPrimitive,
-  ChartStyle as IGRPChartStylePrimitive,
+  ChartContainer,
+  ChartTooltip,
+  ChartTooltipContent,
+  ChartLegend,
+  ChartLegendContent,
+  ChartStyle,
 } from './components/primitives/chart';
 
-export { Checkbox as IGRPCheckboxPrimitive } from './components/primitives/checkbox';
+export { Checkbox } from './components/primitives/checkbox';
 
 export {
-  Collapsible as IGRPCollapsiblePrimitive,
-  CollapsibleTrigger as IGRPCollapsibleTriggerPrimitive,
-  CollapsibleContent as IGRPCollapsibleContentPrimitive,
+  Collapsible,
+  CollapsibleTrigger,
+  CollapsibleContent,
 } from './components/primitives/collapsible';
 
 export {
-  Command as IGRPCommandPrimitive,
-  CommandDialog as IGRPCommandDialogPrimitive,
-  CommandInput as IGRPCommandInputPrimitive,
-  CommandList as IGRPCommandListPrimitive,
-  CommandEmpty as IGRPCommandEmptyPrimitive,
-  CommandGroup as IGRPCommandGroupPrimitive,
-  CommandItem as IGRPCommandItemPrimitive,
-  CommandShortcut as IGRPCommandShortcutPrimitive,
-  CommandSeparator as IGRPCommandSeparatorPrimitive,
+  Command,
+  CommandDialog,
+  CommandInput,
+  CommandList,
+  CommandEmpty,
+  CommandGroup,
+  CommandItem,
+  CommandShortcut,
+  CommandSeparator,
 } from './components/primitives/command';
 
 export {
-  ContextMenu as IGRPContextMenuPrimitive,
-  ContextMenuTrigger as IGRPContextMenuTriggerPrimitive,
-  ContextMenuContent as IGRPContextMenuContentPrimitive,
-  ContextMenuItem as IGRPContextMenuItemPrimitive,
-  ContextMenuCheckboxItem as IGRPContextMenuCheckboxItemPrimitive,
-  ContextMenuRadioItem as IGRPContextMenuRadioItemPrimitive,
-  ContextMenuLabel as IGRPContextMenuLabelPrimitive,
-  ContextMenuSeparator as IGRPContextMenuSeparatorPrimitive,
-  ContextMenuShortcut as IGRPContextMenuShortcutPrimitive,
-  ContextMenuGroup as IGRPContextMenuGroupPrimitive,
-  ContextMenuPortal as IGRPContextMenuPortalPrimitive,
-  ContextMenuSub as IGRPContextMenuSubPrimitive,
-  ContextMenuSubContent as IGRPContextMenuSubContentPrimitive,
-  ContextMenuSubTrigger as IGRPContextMenuSubTriggerPrimitive,
-  ContextMenuRadioGroup as IGRPContextMenuRadioGroupPrimitive,
+  ContextMenu,
+  ContextMenuTrigger,
+  ContextMenuContent,
+  ContextMenuItem,
+  ContextMenuCheckboxItem,
+  ContextMenuRadioItem,
+  ContextMenuLabel,
+  ContextMenuSeparator,
+  ContextMenuShortcut,
+  ContextMenuGroup,
+  ContextMenuPortal,
+  ContextMenuSub,
+  ContextMenuSubContent,
+  ContextMenuSubTrigger,
+  ContextMenuRadioGroup,
 } from './components/primitives/context-menu';
 
 export {
-  Cropper as IGRPCropperPrimitive,
-  CropperDescription as IGRPCropperDescriptionPrimitive,
-  CropperImage as IGRPCropperImagePrimitive,
-  CropperCropArea as IGRPCropperCropAreaPrimitive,
+  Cropper,
+  CropperDescription,
+  CropperImage,
+  CropperCropArea,
 } from './components/primitives/cropper';
 
 export {
-  Dialog as IGRPDialogPrimitive,
-  DialogClose as IGRPDialogClosePrimitive,
-  DialogContent as IGRPDialogContentPrimitive,
-  DialogDescription as IGRPDialogDescriptionPrimitive,
-  DialogFooter as IGRPDialogFooterPrimitive,
-  DialogHeader as IGRPDialogHeaderPrimitive,
-  DialogOverlay as IGRPDialogOverlayPrimitive,
-  DialogPortal as IGRPDialogPortalPrimitive,
-  DialogTitle as IGRPDialogTitlePrimitive,
-  DialogTrigger as IGRPDialogTriggerPrimitive,
+  Dialog,
+  DialogClose,
+  DialogContent,
+  DialogDescription,
+  DialogFooter,
+  DialogHeader,
+  DialogOverlay,
+  DialogPortal,
+  DialogTitle,
+  DialogTrigger,
 } from './components/primitives/dialog';
 
 export {
-  Drawer as IGRPDrawerPrimitive,
-  DrawerPortal as IGRPDrawerPortalPrimitive,
-  DrawerOverlay as IGRPDrawerOverlayPrimitive,
-  DrawerTrigger as IGRPDrawerTriggerPrimitive,
-  DrawerClose as IGRPDrawerClosePrimitive,
-  DrawerContent as IGRPDrawerContentPrimitive,
-  DrawerHeader as IGRPDrawerHeaderPrimitive,
-  DrawerFooter as IGRPDrawerFooterPrimitive,
-  DrawerTitle as IGRPDrawerTitlePrimitive,
-  DrawerDescription as IGRPDrawerDescriptionPrimitive,
+  Drawer,
+  DrawerPortal,
+  DrawerOverlay,
+  DrawerTrigger,
+  DrawerClose,
+  DrawerContent,
+  DrawerHeader,
+  DrawerFooter,
+  DrawerTitle,
+  DrawerDescription,
 } from './components/primitives/drawer';
 
 export {
-  DropdownMenu as IGRPDropdownMenuPrimitive,
-  DropdownMenuPortal as IGRPDropdownMenuPortalPrimitive,
-  DropdownMenuTrigger as IGRPDropdownMenuTriggerPrimitive,
-  DropdownMenuContent as IGRPDropdownMenuContentPrimitive,
-  DropdownMenuGroup as IGRPDropdownMenuGroupPrimitive,
-  DropdownMenuLabel as IGRPDropdownMenuLabelPrimitive,
-  DropdownMenuItem as IGRPDropdownMenuItemPrimitive,
-  DropdownMenuCheckboxItem as IGRPDropdownMenuCheckboxItemPrimitive,
-  DropdownMenuRadioGroup as IGRPDropdownMenuRadioGroupPrimitive,
-  DropdownMenuRadioItem as IGRPDropdownMenuRadioItemPrimitive,
-  DropdownMenuSeparator as IGRPDropdownMenuSeparatorPrimitive,
-  DropdownMenuShortcut as IGRPDropdownMenuShortcutPrimitive,
-  DropdownMenuSub as IGRPDropdownMenuSubPrimitive,
-  DropdownMenuSubTrigger as IGRPDropdownMenuSubTriggerPrimitive,
-  DropdownMenuSubContent as IGRPDropdownMenuSubContentPrimitive,
+  DropdownMenu,
+  DropdownMenuPortal,
+  DropdownMenuTrigger,
+  DropdownMenuContent,
+  DropdownMenuGroup,
+  DropdownMenuLabel,
+  DropdownMenuItem,
+  DropdownMenuCheckboxItem,
+  DropdownMenuRadioGroup,
+  DropdownMenuRadioItem,
+  DropdownMenuSeparator,
+  DropdownMenuShortcut,
+  DropdownMenuSub,
+  DropdownMenuSubTrigger,
+  DropdownMenuSubContent,
 } from './components/primitives/dropdown-menu';
 
 export {
-  Empty as IGRPEmptyPrimitive,
-  EmptyHeader as IGRPEmptyHeaderPrimitive,
-  EmptyTitle as IGRPEmptyTitlePrimitive,
-  EmptyDescription as IGRPEmptyDescriptionPrimitive,
-  EmptyContent as IGRPEmptyContentPrimitive,
-  EmptyMedia as IGRPEmptyMediaPrimitive,
+  Empty,
+  EmptyHeader,
+  EmptyTitle,
+  EmptyDescription,
+  EmptyContent,
+  EmptyMedia,
 } from './components/primitives/empty';
 
 export {
-  Field as IGRPFieldPrimitive,
-  FieldLabel as IGRPFieldLabelPrimitive,
-  FieldDescription as IGRPFieldDescriptionPrimitive,
-  FieldError as IGRPFieldErrorPrimitive,
-  FieldGroup as IGRPFieldGroupPrimitive,
-  FieldLegend as IGRPFieldLegendPrimitive,
-  FieldSeparator as IGRPFieldSeparatorPrimitive,
-  FieldSet as IGRPFieldSetPrimitive,
-  FieldContent as IGRPFieldContentPrimitive,
-  FieldTitle as IGRPFieldTitlePrimitive,
+  Field,
+  FieldLabel,
+  FieldDescription,
+  FieldError,
+  FieldGroup,
+  FieldLegend,
+  FieldSeparator,
+  FieldSet,
+  FieldContent,
+  FieldTitle,
 } from './components/primitives/field';
 
 export {
-  useFormField as useIGRPFormFieldPrimitive,
-  Form as IGRPFormPrimitive,
-  FormItem as IGRPFormItemPrimitive,
-  FormLabel as IGRPFormLabelPrimitive,
-  FormControl as IGRPFormControlPrimitive,
-  FormDescription as IGRPFormDescriptionPrimitive,
-  FormMessage as IGRPFormMessagePrimitive,
-  FormField as IGRPFormFieldPrimitive,
+  useFormField,
+  Form,
+  FormItem,
+  FormLabel,
+  FormControl,
+  FormDescription,
+  FormMessage,
+  FormField,
 } from './components/primitives/form';
 
 export {
-  HoverCard as IGRPHoverCardPrimitive,
-  HoverCardTrigger as IGRPHoverCardTriggerPrimitive,
-  HoverCardContent as IGRPHoverCardContentPrimitive,
+  HoverCard,
+  HoverCardTrigger,
+  HoverCardContent,
 } from './components/primitives/hover-card';
 
 export {
-  InputGroup as IGRPInputGroupPrimitive,
-  InputGroupAddon as IGRPInputGroupAddonPrimitive,
-  InputGroupButton as IGRPInputGroupButtonPrimitive,
-  InputGroupText as IGRPInputGroupTextPrimitive,
-  InputGroupInput as IGRPInputGroupInputPrimitive,
-  InputGroupTextarea as IGRPInputGroupTextareaPrimitive,
+  InputGroup,
+  InputGroupAddon,
+  InputGroupButton,
+  InputGroupText,
+  InputGroupInput,
+  InputGroupTextarea,
 } from './components/primitives/input-group';
 
 export {
-  InputOTP as IGRPInputOTPPrimitive,
-  InputOTPGroup as IGRPInputOTPGroupPrimitive,
-  InputOTPSlot as IGRPInputOTPSlotPrimitive,
-  InputOTPSeparator as IGRPInputOTPSeparatorPrimitive,
+  InputOTP,
+  InputOTPGroup,
+  InputOTPSlot,
+  InputOTPSeparator,
 } from './components/primitives/input-otp';
 
-export { Input as IGRPInputPrimitive } from './components/primitives/input';
+export { Input } from './components/primitives/input';
 
 export {
-  Item as IGRPItemPrimitive,
-  ItemMedia as IGRPItemMediaPrimitive,
-  ItemContent as IGRPItemContentPrimitive,
-  ItemActions as IGRPItemActionsPrimitive,
-  ItemGroup as IGRPItemGroupPrimitive,
-  ItemSeparator as IGRPItemSeparatorPrimitive,
-  ItemTitle as IGRPItemTitlePrimitive,
-  ItemDescription as IGRPItemDescriptionPrimitive,
-  ItemHeader as IGRPItemHeaderPrimitive,
-  ItemFooter as IGRPItemFooterPrimitive,
+  Item,
+  ItemMedia,
+  ItemContent,
+  ItemActions,
+  ItemGroup,
+  ItemSeparator,
+  ItemTitle,
+  ItemDescription,
+  ItemHeader,
+  ItemFooter,
 } from './components/primitives/item';
 
 export {
-  Kbd as IGRPKbdPrimitive,
-  KbdGroup as IGRPKbdGroupPrimitive,
+  Kbd,
+  KbdGroup,
 } from './components/primitives/kbd';
 
-export { Label as IGRPLabelPrimitive } from './components/primitives/label';
+export { Label } from './components/primitives/label';
 
 export {
-  Menubar as IGRPMenubarPrimitive,
-  MenubarPortal as IGRPMenubarPortalPrimitive,
-  MenubarMenu as IGRPMenubarMenuPrimitive,
-  MenubarTrigger as IGRPMenubarTriggerPrimitive,
-  MenubarContent as IGRPMenubarContentPrimitive,
-  MenubarGroup as IGRPMenubarGroupPrimitive,
-  MenubarSeparator as IGRPMenubarSeparatorPrimitive,
-  MenubarLabel as IGRPMenubarLabelPrimitive,
-  MenubarItem as IGRPMenubarItemPrimitive,
-  MenubarShortcut as IGRPMenubarShortcutPrimitive,
-  MenubarCheckboxItem as IGRPMenubarCheckboxItemPrimitive,
-  MenubarRadioGroup as IGRPMenubarRadioGroupPrimitive,
-  MenubarRadioItem as IGRPMenubarRadioItemPrimitive,
-  MenubarSub as IGRPMenubarSubPrimitive,
-  MenubarSubTrigger as IGRPMenubarSubTriggerPrimitive,
-  MenubarSubContent as IGRPMenubarSubContentPrimitive,
+  Menubar,
+  MenubarPortal,
+  MenubarMenu,
+  MenubarTrigger,
+  MenubarContent,
+  MenubarGroup,
+  MenubarSeparator,
+  MenubarLabel,
+  MenubarItem,
+  MenubarShortcut,
+  MenubarCheckboxItem,
+  MenubarRadioGroup,
+  MenubarRadioItem,
+  MenubarSub,
+  MenubarSubTrigger,
+  MenubarSubContent,
 } from './components/primitives/menubar';
 
 export {
-  NavigationMenu as IGRPNavigationMenuPrimitive,
-  NavigationMenuList as IGRPNavigationMenuListPrimitive,
-  NavigationMenuItem as IGRPNavigationMenuItemPrimitive,
-  NavigationMenuContent as IGRPNavigationMenuContentPrimitive,
-  NavigationMenuTrigger as IGRPNavigationMenuTriggerPrimitive,
-  NavigationMenuLink as IGRPNavigationMenuLinkPrimitive,
-  NavigationMenuIndicator as IGRPNavigationMenuIndicatorPrimitive,
-  NavigationMenuViewport as IGRPNavigationMenuViewportPrimitive,
-  navigationMenuTriggerStyle as IGRPNavigationMenuTriggerStyle,
+  NavigationMenu,
+  NavigationMenuList,
+  NavigationMenuItem,
+  NavigationMenuContent,
+  NavigationMenuTrigger,
+  NavigationMenuLink,
+  NavigationMenuIndicator,
+  NavigationMenuViewport,
+  navigationMenuTriggerStyle,
 } from './components/primitives/navigation-menu';
 
 export {
-  Pagination as IGRPPaginationPrimitive,
-  PaginationContent as IGRPPaginationContentPrimitive,
-  PaginationLink as IGRPPaginationLinkPrimitive,
-  PaginationItem as IGRPPaginationItemPrimitive,
-  PaginationPrevious as IGRPPaginationPreviousPrimitive,
-  PaginationNext as IGRPPaginationNextPrimitive,
-  PaginationEllipsis as IGRPPaginationEllipsisPrimitive,
+  Pagination,
+  PaginationContent,
+  PaginationLink,
+  PaginationItem,
+  PaginationPrevious,
+  PaginationNext,
+  PaginationEllipsis,
 } from './components/primitives/pagination';
 
 export {
-  Popover as IGRPPopoverPrimitive,
-  PopoverTrigger as IGRPPopoverTriggerPrimitive,
-  PopoverContent as IGRPPopoverContentPrimitive,
-  PopoverAnchor as IGRPPopoverAnchorPrimitive,
+  Popover,
+  PopoverTrigger,
+  PopoverContent,
+  PopoverAnchor,
 } from './components/primitives/popover';
 
 export { Progress } from './components/primitives/progress';
 
 export {
-  RadioGroup as IGRPRadioGroupPrimitive,
-  RadioGroupItem as IGRPRadioGroupItemPrimitive,
-  radioItemVariants as IGRPRadioGroupVariantPrimitive,
+  RadioGroup,
+  RadioGroupItem,
+  radioItemVariants,
 } from './components/primitives/radio-group';
 
 export {
-  ResizablePanelGroup as IGRPResizablePanelGroupPrimitive,
-  ResizablePanel as IGRPResizablePanelPrimitive,
-  ResizableHandle as IGRPResizableHandlePrimitive,
+  ResizablePanelGroup,
+  ResizablePanel,
+  ResizableHandle,
 } from './components/primitives/resizable';
 
 export {
-  ScrollArea as IGRPScrollAreaPrimitive,
-  ScrollBar as IGRPScrollBarPrimitive,
+  ScrollArea,
+  ScrollBar,
 } from './components/primitives/scroll-area';
 
 export {
-  Select as IGRPSelectPrimitive,
-  SelectContent as IGRPSelectContentPrimitive,
-  SelectGroup as IGRPSelectGroupPrimitive,
-  SelectItem as IGRPSelectItemPrimitive,
-  SelectLabel as IGRPSelectLabelPrimitive,
-  SelectScrollDownButton as IGRPSelectScrollDownButtonPrimitive,
-  SelectScrollUpButton as IGRPSelectScrollUpButtonPrimitive,
-  SelectSeparator as IGRPSelectSeparatorPrimitive,
-  SelectTrigger as IGRPSelectTriggerPrimitive,
-  SelectValue as IGRPSelectValuePrimitive,
+  Select,
+  SelectContent,
+  SelectGroup,
+  SelectItem,
+  SelectLabel,
+  SelectScrollDownButton,
+  SelectScrollUpButton,
+  SelectSeparator,
+  SelectTrigger,
+  SelectValue,
 } from './components/primitives/select';
 
-export { Separator as IGRPSeparatorPrimitive } from './components/primitives/separator';
+export { Separator } from './components/primitives/separator';
 
 export {
-  Sheet as IGRPSheetPrimitive,
-  SheetTrigger as IGRPSheetTriggerPrimitive,
-  SheetClose as IGRPSheetClosePrimitive,
-  SheetContent as IGRPSheetContentPrimitive,
-  SheetHeader as IGRPSheetHeaderPrimitive,
-  SheetFooter as IGRPSheetFooterPrimitive,
-  SheetTitle as IGRPSheetTitlePrimitive,
-  SheetDescription as IGRPSheetDescriptionPrimitive,
+  Sheet,
+  SheetTrigger,
+  SheetClose,
+  SheetContent,
+  SheetHeader,
+  SheetFooter,
+  SheetTitle,
+  SheetDescription,
 } from './components/primitives/sheet';
 
 export {
-  Sidebar as IGRPSidebarPrimitive,
-  SidebarContent as IGRPSidebarContentPrimitive,
-  SidebarFooter as IGRPSidebarFooterPrimitive,
-  SidebarGroup as IGRPSidebarGroupPrimitive,
-  SidebarGroupAction as IGRPSidebarGroupActionPrimitive,
-  SidebarGroupContent as IGRPSidebarGroupContentPrimitive,
-  SidebarGroupLabel as IGRPSidebarGroupLabelPrimitive,
-  SidebarHeader as IGRPSidebarHeaderPrimitive,
-  SidebarInput as IGRPSidebarInputPrimitive,
-  SidebarInset as IGRPSidebarInsetPrimitive,
-  SidebarMenu as IGRPSidebarMenuPrimitive,
-  SidebarMenuAction as IGRPSidebarMenuActionPrimitive,
-  SidebarMenuBadge as IGRPSidebarMenuBadgePrimitive,
-  SidebarMenuButton as IGRPSidebarMenuButtonPrimitive,
-  SidebarMenuItem as IGRPSidebarMenuItemPrimitive,
-  SidebarMenuSkeleton as IGRPSidebarMenuSkeletonPrimitive,
-  SidebarMenuSub as IGRPSidebarMenuSubPrimitive,
-  SidebarMenuSubButton as IGRPSidebarMenuSubButtonPrimitive,
-  SidebarMenuSubItem as IGRPSidebarMenuSubItemPrimitive,
-  SidebarProvider as IGRPSidebarProviderPrimitive,
-  SidebarRail as IGRPSidebarRailPrimitive,
-  SidebarSeparator as IGRPSidebarSeparatorPrimitive,
-  SidebarTrigger as IGRPSidebarTriggerPrimitive,
-  useSidebar as useIGRPSidebarPrimitive,
+  Sidebar,
+  SidebarContent,
+  SidebarFooter,
+  SidebarGroup,
+  SidebarGroupAction,
+  SidebarGroupContent,
+  SidebarGroupLabel,
+  SidebarHeader,
+  SidebarInput,
+  SidebarInset,
+  SidebarMenu,
+  SidebarMenuAction,
+  SidebarMenuBadge,
+  SidebarMenuButton,
+  SidebarMenuItem,
+  SidebarMenuSkeleton,
+  SidebarMenuSub,
+  SidebarMenuSubButton,
+  SidebarMenuSubItem,
+  SidebarProvider,
+  SidebarRail,
+  SidebarSeparator,
+  SidebarTrigger,
+  useSidebar,
 } from './components/primitives/sidebar';
 
-export { Skeleton as IGRPSkeletonPrimitive } from './components/primitives/skeleton';
+export { Skeleton } from './components/primitives/skeleton';
 
-export { Slider as IGRPSliderPrimitive } from './components/primitives/slider';
+export { Slider } from './components/primitives/slider';
 
 export {
-  Stepper as IGRPStepperPrimitive,
-  StepperDescription as IGRPStepperDescriptionPrimitive,
-  StepperIndicator as IGRPStepperIndicatorPrimitive,
-  StepperItem as IGRPStepperItemPrimitive,
-  StepperSeparator as IGRPStepperSeparatorPrimitive,
-  StepperTitle as IGRPStepperTitlePrimitive,
-  StepperTrigger as IGRPStepperTriggerPrimitive,
+  Stepper,
+  StepperDescription,
+  StepperIndicator,
+  StepperItem,
+  StepperSeparator,
+  StepperTitle,
+  StepperTrigger,
 } from './components/primitives/stepper';
 
-export { Switch as IGRPSwitchPrimitive } from './components/primitives/switch';
+export { Switch } from './components/primitives/switch';
 
 export {
-  Table as IGRPTablePrimitive,
-  TableHeader as IGRPTableHeaderPrimitive,
-  TableBody as IGRPTableBodyPrimitive,
-  TableFooter as IGRPTableFooterPrimitive,
-  TableHead as IGRPTableHeadPrimitive,
-  TableRow as IGRPTableRowPrimitive,
-  TableCell as IGRPTableCellPrimitive,
-  TableCaption as IGRPTableCaptionPrimitive,
+  Table,
+  TableHeader,
+  TableBody,
+  TableFooter,
+  TableHead,
+  TableRow,
+  TableCell,
+  TableCaption,
 } from './components/primitives/table';
 
 export {
-  Tabs as IGRPTabsPrimitive,
-  TabsList as IGRPTabsListPrimitive,
-  TabsTrigger as IGRPTabsTriggerPrimitive,
-  TabsContent as IGRPTabsContentPrimitive,
+  Tabs,
+  TabsList,
+  TabsTrigger,
+  TabsContent,
 } from './components/primitives/tabs';
 
-export { Textarea as IGRPTextAreaPrimitive } from './components/primitives/textarea';
+export { Textarea } from './components/primitives/textarea';
 
-export { Toaster as IGRPToasterPrimitive } from './components/primitives/sonner';
+export { Toaster } from './components/primitives/sonner';
 
 export {
-  ToggleGroup as IGRPToggleGroupPrimitive,
-  ToggleGroupItem as IGRPToggleGroupItemPrimitive,
+  ToggleGroup,
+  ToggleGroupItem,
 } from './components/primitives/toggle-group';
 
 export {
-  Toggle as IGRPTogglePrimitive,
-  toggleVariants as IGRPToggleVariantPrimitive,
+  Toggle,
+  toggleVariants,
 } from './components/primitives/toggle';
 
 export {
-  Tooltip as IGRPTooltipPrimitive,
-  TooltipTrigger as IGRPTooltipTriggerPrimitive,
-  TooltipContent as IGRPTooltipContentPrimitive,
-  TooltipProvider as IGRPTooltipProviderPrimitive,
+  Tooltip,
+  TooltipTrigger,
+  TooltipContent,
+  TooltipProvider,
 } from './components/primitives/tooltip';
 
 // horizon components
@@ -689,7 +689,7 @@ export {
   IGRPFormContext,
 } from './components/horizon/form/form-context';
 export { IGRPFormField, type IGRPFormFieldProps } from './components/horizon/form/form-field';
-export { IGRPForm, type IGRPFormProps, type IGRPFormHandle } from './components/horizon/form/form';
+export { IGRPForm, type IGRPFormProps, type IGRPFormHandle } from './components/horizon/form/';
 export { convertValuesToFormData } from './components/horizon/form/lib/utils';
 export { IGRPFormList, type IGRPFormListProps } from './components/horizon/form/form-list';
 export {

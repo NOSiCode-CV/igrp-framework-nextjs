@@ -1,7 +1,6 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 'use client';
 
-import type React from 'react';
 import { useCallback, useEffect, useId, useRef, useState } from 'react';
 import { type Mode, useForm, type UseFormReturn, type Resolver } from 'react-hook-form';
 import { toast } from 'sonner';

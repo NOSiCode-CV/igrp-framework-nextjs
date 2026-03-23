@@ -22,7 +22,7 @@ export const IGRP_DEFAULT_MENU: IGRPMenuItemArgs[] = [
     name: "Test MEnu Grupo",
     type: "FOLDER",
     position: 4,
-    icon: "WrapText",
+    icon: "ArrowRightLeft",
     status: "ACTIVE",
     target: "_self",
     url: null,

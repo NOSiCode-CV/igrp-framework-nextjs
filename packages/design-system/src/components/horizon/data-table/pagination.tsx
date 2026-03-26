@@ -5,21 +5,21 @@ import { useId } from 'react';
 import { type Table } from '@tanstack/react-table';
 import { ChevronFirst, ChevronLast, ChevronLeft, ChevronRight } from 'lucide-react';
 
-import { Label } from '../../primitives/label';
-import { Button } from '../../primitives/button';
+import { Label } from '../../ui/label';
+import { Button } from '../../ui/button';
 import {
   Pagination,
   PaginationContent,
   PaginationEllipsis,
   PaginationItem,
-} from '../../primitives/pagination';
+} from '../../ui/pagination';
 import {
   Select,
   SelectContent,
   SelectItem,
   SelectTrigger,
   SelectValue,
-} from '../../primitives/select';
+} from '../../ui/select';
 import { usePagination } from './hooks/use-pagination';
 import { cn } from '../../../lib/utils';
 

@@ -19,7 +19,9 @@
   },
   "references": [   
     { "path": "./templates/demo" },
+    { "path": "./templates/demo-legacy" },
     { "path": "./packages/design-system" },
+    { "path": "./packages/design-system-new" },
     { "path": "./packages/design-system-storybook" },
     { "path": "./packages/framework/next" },    
     { "path": "./packages/framework/next-auth" },    

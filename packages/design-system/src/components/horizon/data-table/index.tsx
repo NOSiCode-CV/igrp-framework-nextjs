@@ -34,7 +34,7 @@ import {
   TableHead,
   TableHeader,
   TableRow,
-} from '../../primitives/table';
+} from '../../ui/table';
 import { IGRPIcon } from '../icon';
 import {
   type IGRPDataTableClientFilterListProps,

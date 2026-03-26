@@ -10,9 +10,9 @@ import {
   AccordionItem,
   AccordionTrigger,
   AccordionContent,
-} from '../../primitives/accordion';
-import { Button } from '../../primitives/button';
-import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '../../primitives/card';
+} from '../../ui/accordion';
+import { Button } from '../../ui/button';
+import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '../../ui/card';
 import { IGRPBadge, type IGRPBadgeProps } from '../badge';
 import { IGRPIcon, type IGRPIconName } from '../icon';
 

@@ -1,0 +1,385 @@
+/* eslint-disable react-refresh/only-export-components */
+'use client';
+
+import { useEffect, useId, useMemo, useReducer, useState } from 'react';
+import { cva, type VariantProps } from 'class-variance-authority';
+
+import { IGRPColors, type IGRPColorRole, type IGRPColorVariants } from '../../../lib/colors';
+import { cn } from '../../../lib/utils';
+import { IGRPBadge } from '../badge';
+import { IGRPIcon, type IGRPIconName } from '../icon';
+
+const igrpTextlistVariants = cva('', {
+  variants: {
+    size: {
+      sm: 'text-sm',
+      default: 'text-base',
+      lg: 'text-lg',
+      xl: 'text-xl',
+    },
+    spacing: {
+      tight: 'space-y-1',
+      normal: 'space-y-2',
+      loose: 'space-y-4',
+    },
+  },
+  defaultVariants: {
+    size: 'default',
+    spacing: 'normal',
+  },
+});
+
+const igrpTextlistItemVariants = cva('flex items-center gap-2 transition-all duration-200', {
+  variants: {
+    interactive: {
+      true: 'hover:bg-gray-50 dark:hover:bg-gray-800 p-2 rounded-md cursor-pointer',
+      false: '',
+    },
+    completed: {
+      true: 'opacity-60 line-through',
+      false: '',
+    },
+  },
+  defaultVariants: {
+    interactive: false,
+    completed: false,
+  },
+});
+
+type IGRPTextListType = 'unordered' | 'ordered' | 'checklist' | 'steps' | 'features' | 'custom';
+
+/**
+ * Single list item.
+ * @see IGRPTextList
+ */
+interface IGRPTextListItem {
+  /** Item id. */
+  id?: string | number;
+  /** Item content. */
+  content: React.ReactNode;
+  /** Color variant. */
+  variant?: IGRPColorVariants;
+  /** Mark as completed (checklist). */
+  completed?: boolean;
+  /** Disable the item. */
+  disabled?: boolean;
+  /** Item icon. */
+  icon?: IGRPIconName | string;
+  /** Icon color. */
+  iconColor?: IGRPColorVariants;
+  /** Badge text. */
+  badgeText?: string;
+  /** Badge variant. */
+  badgeVariant?: IGRPColorRole;
+  /** Badge color. */
+  badgeColor?: IGRPColorVariants;
+  /** Nested items. */
+  subItems?: IGRPTextListItem[];
+}
+
+/**
+ * Props for the IGRPTextList component.
+ * @see IGRPTextList
+ */
+interface IGRPTextListProps
+  extends React.HTMLAttributes<HTMLElement>, VariantProps<typeof igrpTextlistVariants> {
+  /** List items. */
+  items: IGRPTextListItem[];
+  /** List type (unordered, ordered, checklist, steps, features, custom). */
+  type?: IGRPTextListType;
+  /** Animate items on scroll. */
+  animate?: boolean;
+  /** Make items clickable. */
+  interactive?: boolean;
+  /** Called when an item is clicked. */
+  onItemClick?: (item: IGRPTextListItem, index: number) => void;
+  /** Show numbers (ordered/steps). */
+  showNumbers?: boolean;
+  /** Custom icon for all items. */
+  customIcon?: React.ReactNode;
+  /** Max nesting depth. */
+  maxDepth?: number;
+  /** Allow collapsing nested items. */
+  collapsible?: boolean;
+  /** Global color variant. */
+  variant?: IGRPColorVariants;
+  /** Global icon color. */
+  iconGlobalColor?: IGRPColorVariants;
+}
+
+const getDefaultIcon = (type: IGRPTextListType, iconColor?: IGRPColorVariants, index?: number) => {
+  switch (type) {
+    case 'checklist':
+      return (
+        <IGRPIcon iconName="Check" className={IGRPColors.solid[iconColor || 'success'].text} />
+      );
+    case 'features':
+      return <IGRPIcon iconName="Star" className={IGRPColors.solid[iconColor || 'warning'].text} />;
+    case 'steps':
+      return (
+        <div
+          className={cn(
+            'w-6 h-6 rounded-full flex items-center justify-center text-xs font-medium',
+            IGRPColors.solid[iconColor || 'info'].alert,
+            IGRPColors.solid[iconColor || 'info'].bg,
+          )}
+        >
+          {(index || 0) + 1}
+        </div>
+      );
+    case 'ordered':
+      return (
+        <span
+          className={cn(IGRPColors.outline[iconColor || 'secondary'].badge, 'font-medium min-w-6')}
+        >
+          {(index || 0) + 1}.
+        </span>
+      );
+    case 'unordered':
+      return (
+        <IGRPIcon
+          iconName="Circle"
+          className={cn(
+            IGRPColors.outline[iconColor || 'secondary'].badge,
+            'h-1.5 w-1.5 fill-current',
+          )}
+        />
+      );
+    default:
+      return (
+        <IGRPIcon
+          iconName="ArrowRight"
+          className={cn(IGRPColors.outline[iconColor || 'secondary'].badge)}
+        />
+      );
+  }
+};
+
+type VisibleItemsAction = { type: 'RESET' } | { type: 'ADD'; index: number };
+
+function visibleItemsReducer(state: Set<number>, action: VisibleItemsAction): Set<number> {
+  switch (action.type) {
+    case 'RESET':
+      return new Set();
+    case 'ADD':
+      return new Set([...state, action.index]);
+    default:
+      return state;
+  }
+}
+
+/**
+ * List component with multiple types (unordered, ordered, checklist, steps, features).
+ */
+function IGRPTextList({
+  items,
+  type = 'unordered',
+  animate = false,
+  interactive = false,
+  onItemClick,
+  customIcon,
+  maxDepth = 3,
+  collapsible = false,
+  variant = 'primary',
+  iconGlobalColor,
+  size,
+  spacing,
+  className,
+  id,
+  ...props
+}: IGRPTextListProps) {
+  const _id = useId();
+  const ref = id ?? _id;
+
+  const [visibleItems, dispatchVisibleItems] = useReducer(visibleItemsReducer, new Set());
+  const [collapsedItems, setCollapsedItems] = useState<Set<string | number>>(new Set());
+
+  const allItemsVisible = useMemo(() => new Set(items.map((_, index) => index)), [items]);
+
+  const effectiveVisibleItems = animate ? visibleItems : allItemsVisible;
+
+  useEffect(() => {
+    if (!animate) return;
+
+    queueMicrotask(() => dispatchVisibleItems({ type: 'RESET' }));
+    items.forEach((_, index) => {
+      setTimeout(() => {
+        dispatchVisibleItems({ type: 'ADD', index });
+      }, index * 100);
+    });
+  }, [items, animate]);
+
+  const toggleCollapse = (itemId: string | number) => {
+    if (!collapsible) return;
+
+    setCollapsedItems((prev) => {
+      const newSet = new Set(prev);
+      if (newSet.has(itemId)) {
+        newSet.delete(itemId);
+      } else {
+        newSet.add(itemId);
+      }
+      return newSet;
+    });
+  };
+
+  const renderListItem = (item: IGRPTextListItem, index: number, depth = 0) => {
+    const isVisible = effectiveVisibleItems.has(index);
+    const isCollapsed = collapsible && item.id && collapsedItems.has(item.id);
+    const hasSubItems = item.subItems && item.subItems.length > 0;
+    const shouldShowSubItems = hasSubItems && !isCollapsed && depth < maxDepth;
+
+    const itemIcon =
+      (item.icon && (
+        <IGRPIcon
+          iconName={item.icon}
+          className={IGRPColors.outline[iconGlobalColor || item.iconColor || 'secondary'].badge}
+        />
+      )) ||
+      customIcon ||
+      getDefaultIcon(type, iconGlobalColor || item.iconColor, index);
+
+    const handleItemClick = () => {
+      if (item.disabled) return;
+
+      if (collapsible && hasSubItems && item.id) {
+        toggleCollapse(item.id);
+      }
+
+      if (onItemClick && !item.disabled) {
+        onItemClick(item, index);
+      }
+    };
+
+    const handleKeyDown = (e: React.KeyboardEvent) => {
+      if (e.key === 'Enter' || e.key === ' ') {
+        e.preventDefault();
+        handleItemClick();
+      }
+    };
+
+    const isInteractive = interactive || collapsible || !!onItemClick;
+
+    return (
+      <div
+        key={item.id || index}
+        className={cn('transition-all duration-300', {
+          'opacity-0 translate-x-4': animate && !isVisible,
+          'opacity-100 translate-x-0': !animate || isVisible,
+        })}
+      >
+        <div
+          role={isInteractive ? 'button' : undefined}
+          tabIndex={isInteractive ? 0 : undefined}
+          className={cn(
+            igrpTextlistItemVariants({
+              interactive: isInteractive,
+              completed: item.completed,
+            }),
+            item.disabled && 'opacity-50 cursor-not-allowed',
+            depth > 0 && 'ml-6',
+          )}
+          {...(isInteractive && {
+            onClick: handleItemClick,
+            onKeyDown: handleKeyDown,
+          })}
+        >
+          {/* Icon */}
+          <div className={cn('shrink-0 mt-0.5')}>{itemIcon}</div>
+
+          {/* Content */}
+          <div className={cn('flex-1 min-w-0')}>
+            <div className={cn('flex items-center gap-2')}>
+              <div className={cn('flex-1', item.variant && IGRPColors.solid[item.variant].text)}>
+                {item.content}
+              </div>
+
+              {/* Badge */}
+              {item.badgeText && (
+                <IGRPBadge
+                  variant={item.badgeVariant || 'soft'}
+                  color={item.badgeColor || 'secondary'}
+                  size="sm"
+                  badgeClassName="px-2 py-1"
+                >
+                  {item.badgeText}
+                </IGRPBadge>
+              )}
+
+              {/* Collapse indicator */}
+              {collapsible && hasSubItems && (
+                <div
+                  className={cn(
+                    'transition-transform duration-200 rotate-90',
+                    isCollapsed && 'rotate-0',
+                  )}
+                >
+                  <IGRPIcon
+                    iconName="ArrowRight"
+                    className={cn(IGRPColors.outline.secondary.badge)}
+                  />
+                </div>
+              )}
+            </div>
+          </div>
+        </div>
+
+        {/* Sub-items */}
+        {shouldShowSubItems && (
+          <div>
+            {item.subItems!.map((subItem, subIndex) =>
+              renderListItem(subItem, subIndex, depth + 1),
+            )}
+          </div>
+        )}
+      </div>
+    );
+  };
+
+  const Component = type === 'ordered' ? 'ol' : 'ul';
+  const colorClass = IGRPColors.solid[variant];
+
+  return (
+    <Component
+      className={cn(igrpTextlistVariants({ size, spacing }), colorClass.text, className)}
+      id={ref}
+      {...props}
+    >
+      {items.map((item, index) => renderListItem(item, index))}
+    </Component>
+  );
+}
+
+const igrpCreateListItem = (
+  content: React.ReactNode,
+  options?: Partial<Omit<IGRPTextListItem, 'content'>>,
+): IGRPTextListItem => ({
+  content,
+  ...options,
+});
+
+const igrpListItems = {
+  withIcon: (
+    content: React.ReactNode,
+    icon: IGRPIconName | string,
+    iconColor?: IGRPColorVariants,
+    options?: Partial<IGRPTextListItem>,
+  ) => igrpCreateListItem(content, { icon, iconColor, ...options }),
+
+  withSubItems: (
+    content: React.ReactNode,
+    subItems: IGRPTextListItem[],
+    options?: Partial<IGRPTextListItem>,
+  ) => igrpCreateListItem(content, { subItems, ...options }),
+};
+
+export {
+  IGRPTextList,
+  type IGRPTextListProps,
+  type IGRPTextListType,
+  type IGRPTextListItem,
+  igrpTextlistVariants,
+  igrpTextlistItemVariants,
+  igrpCreateListItem,
+  igrpListItems,
+};

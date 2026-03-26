@@ -16,7 +16,7 @@ import {
   AlertDialogFooter,
   AlertDialogHeader,
   AlertDialogTitle,
-} from '../primitives/alert-dialog';
+} from '../ui/alert-dialog';
 import { IGRPIcon, type IGRPIconName } from './icon';
 
 /**

@@ -15,7 +15,7 @@ import {
 } from 'recharts';
 
 import { cn } from '../../../../lib/utils';
-import { ChartContainer, ChartTooltip } from '../../../primitives/chart';
+import { ChartContainer, ChartTooltip } from '../../../ui/chart';
 import {
   createChartConfig,
   formatChartValue,

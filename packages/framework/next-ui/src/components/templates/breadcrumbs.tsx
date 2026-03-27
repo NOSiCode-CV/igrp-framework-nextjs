@@ -149,9 +149,7 @@ function IGRPTemplateBreadcrumbs({
       </BreadcrumbSeparator>
       <BreadcrumbItem>
         {isLast ? (
-          <BreadcrumbPage className={cn('text-xs')}>
-            {item.label}
-          </BreadcrumbPage>
+          <BreadcrumbPage className={cn('text-xs')}>{item.label}</BreadcrumbPage>
         ) : (
           <BreadcrumbLink asChild>
             <Link href={item.href} className={cn('text-xs')}>
@@ -190,9 +188,7 @@ function IGRPTemplateBreadcrumbs({
             </BreadcrumbSeparator>
             <BreadcrumbItem>
               <DropdownMenu>
-                <DropdownMenuTrigger
-                  className={cn('flex items-center gap-1 focus:outline-none')}
-                >
+                <DropdownMenuTrigger className={cn('flex items-center gap-1 focus:outline-none')}>
                   <BreadcrumbEllipsis />
                   <span className={cn('sr-only')}>Toggle menu</span>
                 </DropdownMenuTrigger>

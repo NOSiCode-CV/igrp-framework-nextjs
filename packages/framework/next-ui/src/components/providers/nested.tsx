@@ -2,6 +2,7 @@
 
 import { type Session } from '@igrp/framework-next-auth';
 import type { SessionProviderProps } from '@igrp/framework-next-auth/client';
+import { TooltipProvider } from '@igrp/igrp-framework-react-design-system';
 
 import { IGRPActiveThemeProvider } from './active-theme';
 import { IGRPSessionProvider } from './session';
@@ -26,18 +27,20 @@ export function IGRPNestedProviders({
 }: IGRPNestedProvidersArgs) {
   return (
     <IGRPSessionProvider {...sessionArgs} session={session}>
-      <IGRPThemeProvider
-        attribute="class"
-        defaultTheme="system"
-        enableSystem
-        disableTransitionOnChange
-        enableColorScheme
-        {...themeArgs}
-      >
-        <IGRPActiveThemeProvider initialTheme={activeThemeValue}>
-          <IGRPSessionWatcher>{children}</IGRPSessionWatcher>
-        </IGRPActiveThemeProvider>
-      </IGRPThemeProvider>
+      <TooltipProvider>
+        <IGRPThemeProvider
+          attribute="class"
+          defaultTheme="system"
+          enableSystem
+          disableTransitionOnChange
+          enableColorScheme
+          {...themeArgs}
+        >
+          <IGRPActiveThemeProvider initialTheme={activeThemeValue}>
+            <IGRPSessionWatcher>{children}</IGRPSessionWatcher>
+          </IGRPActiveThemeProvider>
+        </IGRPThemeProvider>
+      </TooltipProvider>
     </IGRPSessionProvider>
   );
 }

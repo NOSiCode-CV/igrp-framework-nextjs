@@ -89,9 +89,7 @@ function IGRPTemplateCommandSearch() {
           </CommandGroup>
           <CommandSeparator />
           <CommandGroup heading="Team">
-            <CommandItem
-              onSelect={() => runCommand(() => router.push('/team/invite'))}
-            >
+            <CommandItem onSelect={() => runCommand(() => router.push('/team/invite'))}>
               <IGRPIcon iconName="UserPlus" className={cn('mr-2')} />
               <span>Invite Members</span>
             </CommandItem>

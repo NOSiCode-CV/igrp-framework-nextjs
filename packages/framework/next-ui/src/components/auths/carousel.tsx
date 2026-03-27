@@ -15,10 +15,7 @@ interface IGRPAuthCarouselProps {
   intervalTime?: number;
 }
 
-function IGRPAuthCarousel({
-  carouselItems,
-  intervalTime = 6000,
-}: IGRPAuthCarouselProps) {
+function IGRPAuthCarousel({ carouselItems, intervalTime = 6000 }: IGRPAuthCarouselProps) {
   const [currentIndex, setCurrentIndex] = useState(0);
 
   useEffect(() => {

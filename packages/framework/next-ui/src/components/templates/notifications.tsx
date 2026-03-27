@@ -39,11 +39,11 @@ function IGRPTemplateNotifications({
   return (
     <DropdownMenu>
       <DropdownMenuTrigger asChild>
-        <Button variant="ghost" size="icon" className={cn('size-6 relative')}>
+        <Button variant="ghost" size="icon" className='size-6 relative'>
           <IGRPIcon iconName="Bell" strokeWidth={2} />
           {notificationCount > 0 && (
             <Badge
-              className={cn('absolute -top-1 -right-0.5 h-3.5 w-3.5 flex text-[10px] py-0 px-0')}
+              className='absolute -top-1 -right-0.5 h-3.5 w-3.5 flex text-[10px] py-0 px-0'
               variant="destructive"
             >
               {notificationCount}
@@ -52,16 +52,11 @@ function IGRPTemplateNotifications({
           <span className={cn('sr-only')}>Notifications</span>
         </Button>
       </DropdownMenuTrigger>
-      <DropdownMenuContent align="end" className={cn('max-w-80')}>
+      <DropdownMenuContent align="end" className='max-w-80'>
         <DropdownMenuLabel className={cn('flex items-center justify-between')}>
           <span>Notifications</span>
           {notificationCount > 0 && (
-            <Button
-              variant="ghost"
-              size="sm"
-              onClick={markAsRead}
-              className={cn('h-auto text-xs')}
-            >
+            <Button variant="ghost" size="sm" onClick={markAsRead} className='h-auto text-xs'>
               Mark all as read
             </Button>
           )}

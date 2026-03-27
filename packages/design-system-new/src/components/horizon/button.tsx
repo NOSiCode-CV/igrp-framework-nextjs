@@ -46,6 +46,7 @@ function IGRPButton({
   type = 'button',
   name,
   id,
+  asChild = false,
   ...props
 }: IGRPButtonProps) {
   const _id = useId();
@@ -59,6 +60,21 @@ function IGRPButton({
   const LoadingIcon = (
     <IGRPIcon iconName="LoaderCircle" className={cn('animate-spin')} aria-hidden="true" />
   );
+
+  if (asChild) {
+    return (
+      <Button
+        {...props}
+        asChild
+        className={cn(loading && 'cursor-wait', className)}
+        disabled={disabled || loading}
+        type={type}
+        id={ref}
+      >
+        {children}
+      </Button>
+    );
+  }
 
   if (size === 'icon' || size === 'icon-sm' || size === 'icon-lg') {
     return (

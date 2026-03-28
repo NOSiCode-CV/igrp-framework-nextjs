@@ -1,4 +1,4 @@
-﻿{
+{
   "name": "@igrp/framework-next-template",
   "version": "0.1.0-beta.96",
   "description": "igrp template",
@@ -13,7 +13,7 @@
   "license": "MIT",
   "scripts": {
     "dev": "next dev --turbopack",
-    "build": "pnpm format \u0026\u0026 next build --turbopack",
+    "build": "pnpm format && next build --turbopack",
     "start": "next start",
     "lint": "biome check --write",
     "format": "biome format --write"

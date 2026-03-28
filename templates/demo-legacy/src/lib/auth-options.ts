@@ -1,15 +1,12 @@
 import type { AuthOptions } from "next-auth";
-import KeycloakProvider from "next-auth/providers/keycloak";
+import {
+  createAuthProviderFromEnv,
+  getAuthProviderIdFromEnv,
+} from "@igrp/framework-next-auth";
 import { refreshAccessToken } from "./auth-helpers";
 
 export const authOptions: AuthOptions = {
-  providers: [
-    KeycloakProvider({
-      clientId: process.env.KEYCLOAK_CLIENT_ID || "",
-      clientSecret: process.env.KEYCLOAK_CLIENT_SECRET || "",
-      issuer: process.env.KEYCLOAK_ISSUER || "",
-    }),
-  ],
+  providers: [createAuthProviderFromEnv(process.env)],
 
   secret: process.env.NEXTAUTH_SECRET,
 
@@ -17,7 +14,9 @@ export const authOptions: AuthOptions = {
     async jwt({ token, account }) {
       // Initial sign in
       if (account) {
+        token.authProviderId = getAuthProviderIdFromEnv(process.env);
         token.accessToken = account.access_token;
+        token.idToken = account.id_token;
         token.expiresAt = account.expires_at
           ? account.expires_at * 1000
           : Date.now() + 3600 * 1000;
@@ -35,6 +34,8 @@ export const authOptions: AuthOptions = {
     async session({ session, token }) {
       if (token) {
         session.accessToken = token.accessToken;
+        session.idToken = token.idToken;
+        session.authProviderId = token.authProviderId;
         session.error = token.error;
       }
       return session;

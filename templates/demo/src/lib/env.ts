@@ -1,4 +1,5 @@
 import { z } from "zod";
+import { getMissingAuthProviderEnvVars } from "@igrp/framework-next-auth";
 
 import { EnvValidationError } from "./errors";
 import { isPreviewMode } from "./utils";
@@ -32,6 +33,7 @@ const envSchema = z.object({
   NODE_ENV: z.enum(["development", "production", "test"]).optional(),
 
   // NextAuth
+  AUTH_PROVIDER: optionalString,
   NEXTAUTH_SECRET: optionalString,
   NEXTAUTH_URL: optionalUrl,
   NEXTAUTH_URL_INTERNAL: optionalUrl,
@@ -40,6 +42,13 @@ const envSchema = z.object({
   KEYCLOAK_CLIENT_ID: optionalString,
   KEYCLOAK_CLIENT_SECRET: optionalString,
   KEYCLOAK_ISSUER: optionalUrl,
+
+  // Autentika
+  AUTENTIKA_CLIENT_ID: optionalString,
+  AUTENTIKA_CLIENT_SECRET: optionalString,
+  AUTENTIKA_HOST: optionalUrl,
+  AUTENTIKA_TENANT_NAME: optionalString,
+  AUTENTIKA_SCOPES: optionalString,
 
   // IGRP
   IGRP_ACCESS_MANAGEMENT_API: optionalUrl,
@@ -69,8 +78,7 @@ let cached: Env | null = null;
  * - In development or when IGRP_PREVIEW_MODE=true, only parses and returns (no strict requirement).
  * - Result is cached per process; subsequent calls return the same object.
  *
- * Required in production when auth is used: NEXTAUTH_SECRET, KEYCLOAK_CLIENT_ID,
- * KEYCLOAK_CLIENT_SECRET, KEYCLOAK_ISSUER.
+ * Required in production when auth is used: NEXTAUTH_SECRET and the variables for the active provider.
  */
 export function validateEnv(): Env {
   if (cached !== null) {
@@ -97,13 +105,14 @@ export function validateEnv(): Env {
   const isPreview = isPreviewMode();
 
   if (isProduction && !isPreview) {
-    const required: (keyof Env)[] = [
-      "NEXTAUTH_SECRET",
-      "KEYCLOAK_CLIENT_ID",
-      "KEYCLOAK_CLIENT_SECRET",
-      "KEYCLOAK_ISSUER",
-    ];
-    const missing = required.filter((key) => {
+    const required: (keyof Env)[] = ["NEXTAUTH_SECRET", "AUTH_PROVIDER"];
+    const activeProviderRequired = getMissingAuthProviderEnvVars(process.env).length > 0
+      ? [
+          ...required,
+          ...getMissingAuthProviderEnvVars(process.env),
+        ]
+      : required;
+    const missing = activeProviderRequired.filter((key) => {
       const v = parsed.data[key];
       return v === undefined || (typeof v === "string" && v.trim() === "");
     });

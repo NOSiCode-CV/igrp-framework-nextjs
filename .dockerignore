@@ -34,3 +34,4 @@ coverage/
 *.log
 *.tgz
 .vercel/
+.idea

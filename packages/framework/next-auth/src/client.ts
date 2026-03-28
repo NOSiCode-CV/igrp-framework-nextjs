@@ -2,6 +2,12 @@
 
 import { useSession as useSessionBase } from 'next-auth/react';
 import type { Session } from './session';
+export {
+  AUTH_PROVIDER_IDS,
+  AUTENTIKA_PROVIDER_ID,
+  KEYCLOAK_PROVIDER_ID,
+} from './providers';
+export type { AuthProviderId } from './providers';
 
 export {
   SessionProvider,

@@ -1,6 +1,6 @@
 {
   "name": "@igrp/framework-next-types",
-  "version": "0.1.0-beta.101",
+  "version": "0.1.0-beta.110",
   "type": "module",
   "description": "IGRP Framework for Next.js | Types",
   "keywords": [
@@ -31,7 +31,7 @@
     "@igrp/framework-next-auth": "workspace:*"
   },
   "devDependencies": {
-    "@types/node": "^24.10.1",
+    "@types/node": "^25.5.0",
     "next-auth": "^4.24.13",
     "prettier": "^3.8.1",
     "rimraf": "^6.1.3",

@@ -16,7 +16,7 @@ A production-ready template for building applications with the IGRP Framework on
 - [Preview Mode](#preview-mode)
 - [Docker Support](#docker-support)
 
-## 🎯 Overview
+## Overview
 
 The IGRP Framework Next.js Template is a comprehensive starter template that includes:
 
@@ -31,7 +31,7 @@ The IGRP Framework Next.js Template is a comprehensive starter template that inc
 - **[Lucide](https://lucide.dev/icons/)** for icon library
 - **Modern UI Components** from IGRP Design System
 
-## 📦 Prerequisites
+## Prerequisites
 
 Before you begin, ensure you have the following installed:
 
@@ -39,7 +39,7 @@ Before you begin, ensure you have the following installed:
 - **pnpm** (recommended) or npm/yarn
 - **Git**
 
-## 🚀 Getting Started
+## Getting Started
 
 ### 1. Install Dependencies
 
@@ -86,10 +86,9 @@ pnpm build
 pnpm start
 ```
 
-## 📁 Project Structure
+## Project Structure
 
-```
-templates/demo/
+```templates/demo/
 ├── src/
 │   ├── app/                   # Next.js App Router pages
 │   │   ├── (auth)/            # Authentication routes (login, logout)
@@ -121,7 +120,7 @@ templates/demo/
 └── package.json
 ```
 
-## ⚙️ Configuration
+## Configuration
 
 ### IGRP Configuration
 
@@ -149,12 +148,12 @@ Coming soon
 
 Coming soon
 
-## 🔐 Environment Variables
+## Environment Variables
 
 ### Required Variables
 
 | Variable | Description | Example |
-|----------|-------------|---------|
+| ---------- | ------------- | --------- |
 | `IGRP_APP_CODE` | Your application code identifier | `my-app` |
 | `NEXTAUTH_URL` | Public URL of your application | `http://localhost:3000` |
 | `NEXTAUTH_SECRET` | Secret key for NextAuth encryption | Generate with `openssl rand -base64 32` |
@@ -162,7 +161,7 @@ Coming soon
 ### Optional Variables
 
 | Variable | Description | Default |
-|----------|-------------|---------|
+| ---------- | ------------- | --------- |
 | `IGRP_PREVIEW_MODE` | Enable preview mode (no auth required) | `false` |
 | `IGRP_ACCESS_MANAGEMENT_API` | API Management base URL | - |
 | `NEXT_PUBLIC_BASE_PATH` | Base path for the application | `/` |
@@ -181,23 +180,27 @@ Coming soon
 The following variables control how your application synchronizes with the IGRP system:
 
 #### `IGRP_SYNC_ON_CODE_MENUS`
+
 - **Purpose**: Controls whether menus defined in your application code are synchronized with the IGRP system
 - **Usage**: Set to `true` to enable code-based menu synchronization, `false` to disable
 - **When to use**: Enable this if you want to sync menus that are hardcoded in your application with the IGRP framework
 
 #### `IGRP_SYNC_ACCESS`
+
 - **Purpose**: Controls synchronization of applications, resources, and menus with the IGRP Access Management API
 - **Usage**: Set to `true` to enable access management synchronization, `false` to disable
 - **When to use**: Enable this if you want your application to automatically sync its structure (applications, resources, menus) with the IGRP Access Management system
 - **Note**: Requires `IGRP_M2M_SERVICE_ID` and `IGRP_M2M_TOKEN` to be configured when enabled
 
 #### `IGRP_M2M_SERVICE_ID`
+
 - **Purpose**: Unique identifier for your service in the IGRP Access Management system
 - **Usage**: Set this to your service identifier (e.g., `demo-igrp` or `your-service-name`)
 - **Required when**: `IGRP_SYNC_ACCESS=true`
 - **How to get**: Contact your IGRP Access Management administrator
 
 #### `IGRP_M2M_TOKEN`
+
 - **Purpose**: Authentication token used for machine-to-machine API calls to the IGRP Access Management API
 - **Usage**: Set this to the token provided by your IGRP Access Management administrator
 - **Required when**: `IGRP_SYNC_ACCESS=true`
@@ -205,16 +208,18 @@ The following variables control how your application synchronizes with the IGRP 
 - **Security**: Keep this token secure and never commit it to version control
 
 #### `NEXT_PUBLIC_IGRP_PROFILE_URL`
+
 - **Purpose**: Base URL for profile
 - **Usage**: Used by the frontend profile
 - **Example**: `https://frontendexample.com/profile`
 
 #### `NEXT_PUBLIC_IGRP_NOTIFICATION_URL`
+
 - **Purpose**: Base URL for notification service calls/streams
 - **Usage**: Used by the frontend notifications
 - **Example**: `https://frontendexample.com/notifications`
 
-## 📜 Available Scripts
+## Available Scripts
 
 ### Development
 
@@ -239,7 +244,7 @@ pnpm build
 pnpm start
 ```
 
-## 🏗️ How It's Built
+## How It's Built
 
 ### Architecture Overview
 
@@ -312,6 +317,7 @@ See `src/styles/globals.css` for the active `@source` configuration.
   - cause CSS override conflicts depending on import order
 
 If you're upgrading an existing app, check:
+
 - `.igrpmigrations/03.MIGRATIONS-04022026.md`
 
 ### Data Flow
@@ -322,7 +328,7 @@ If you're upgrading an existing app, check:
 4. **Configuration built** → IGRP layout components render
 5. **Page renders** → With header, sidebar, and content
 
-## 🔒 Authentication
+## Authentication
 
 The template uses NextAuth.js for authentication. Configuration is in `src/lib/auth-options.ts`.
 
@@ -342,7 +348,7 @@ To customize authentication:
 2. Update `src/app/(auth)/login/page.tsx` for custom login UI
 3. Modify `src/middleware.ts` for custom auth logic
 
-## 👁️ Preview Mode
+## Preview Mode
 
 Preview mode allows you to develop and test without authentication:
 
@@ -363,27 +369,27 @@ When enabled:
 - `src/temp/menus/use-mock-menus.ts`
 - `src/temp/applications/use-mock-apps.ts`
 
-## 🐳 Docker Support
+## Docker Support
 
-### Development
+### Docker Development
 
 ```bash
 docker build -f docker/development/Dockerfile -t my-igrp-template:latest .
 docker run -d --name my-igrp-template -p 3000:3000 --restart unless-stopped --env-file docker/development/.env.development my-igrp-template:latest
 ```
 
-### Production
+### Docker Production
 
 Use the production Dockerfile with appropriate environment variables.
 
-## 📚 Additional Resources
+## Additional Resources
 
 - [Next.js Documentation](https://nextjs.org/docs)
 - [IGRP Framework Documentation](https://github.com/NOSiCode-CV/IGRP-Framework)
 - [NextAuth.js Documentation](https://next-auth.js.org)
 - [React Query Documentation](https://tanstack.com/query/latest)
 
-## 🤝 Contributing
+## Contributing
 
 Contributions are welcome! Please ensure you:
 
@@ -392,10 +398,10 @@ Contributions are welcome! Please ensure you:
 3. Test your changes thoroughly
 4. Update documentation as needed
 
-## 📄 License
+## License
 
 MIT License - see LICENSE file for details
 
 ---
 
-**Built with ❤️ by the IGRP Team**
+### Built with ❤️ by the IGRP Team · NOSI E.P.E

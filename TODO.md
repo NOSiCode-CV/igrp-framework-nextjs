@@ -29,8 +29,9 @@ Add the following components to the design system:
 
 ## New Components
 
-- [ ] Progress component
-- [ ] New form component [2026]
+- [ ] Progress
+- [ ] Form
+- [ ] Combobox
 
 ## Component Reviews
 
@@ -40,7 +41,7 @@ Add the following components to the design system:
 
 ## Exports
 
-- [ ] Implement exports separately: `/primitives`, `/horizon`, `/utilities` [2027]
+- [ ] Implement exports separately:, `/horizon`, `/utilities` [2027]
 
 ## Research & Documentation
 

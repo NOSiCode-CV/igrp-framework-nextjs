@@ -4,8 +4,8 @@ import type { IGRPHeaderDataArgs } from '@igrp/framework-next-types';
 import {
   cn,
   IGRPIcon,
-  IGRPSeparatorPrimitive,
-  IGRPSidebarTriggerPrimitive,
+  Separator,
+  SidebarTrigger,
   useIGRPToast,
 } from '@igrp/igrp-framework-react-design-system';
 
@@ -65,7 +65,7 @@ function IGRPTemplateHeader({ data, className }: IGRPTemplateHeaderProps) {
       )}
     >
       <div className={cn('flex items-center gap-2 h-12 min-w-0')}>
-        {showIGRPSidebarTrigger && <IGRPSidebarTriggerPrimitive />}
+        {showIGRPSidebarTrigger && <SidebarTrigger />}
         {!showIGRPSidebarTrigger && (
           <div className={cn('flex items-center gap-2')}>
             {showIGRPHeaderLogo && (
@@ -87,7 +87,7 @@ function IGRPTemplateHeader({ data, className }: IGRPTemplateHeaderProps) {
 
         {showBreadcrumb && (
           <>
-            <IGRPSeparatorPrimitive
+            <Separator
               orientation="vertical"
               className={cn('mr-2 data-[orientation=vertical]:h-4')}
             />

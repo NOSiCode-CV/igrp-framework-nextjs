@@ -1,6 +1,13 @@
 import type { NextConfig } from "next";
 import type { RemotePattern } from "next/dist/shared/lib/image-config";
 
+import bundleAnalyzer from "@next/bundle-analyzer";
+
+const withBundleAnalyzer = bundleAnalyzer({
+  enabled: process.env.ANALYZE === "true",
+  openAnalyzer: false,
+});
+
 const basePath = process.env.NEXT_PUBLIC_BASE_PATH || "";
 
 // Function to parse domains from environment variable
@@ -37,7 +44,17 @@ const nextConfig: NextConfig = {
   typedRoutes: true,
   experimental: {
     typedEnv: true,
+    // Tree-shake barrel exports: load only used modules from these packages
+    optimizePackageImports: [
+      "@igrp/igrp-framework-react-design-system",
+      "@igrp/framework-next-ui",
+      "@igrp/framework-next",
+      "@tanstack/react-query",
+    ],
+    // CSRF: Server Actions only accept same-origin requests by default.
+    // Add allowedOrigins when using a proxy or multiple domains.
+    // serverActions: { allowedOrigins: ["localhost:3000", "your-domain.com"] },
   },
 };
 
-export default nextConfig;
+export default withBundleAnalyzer(nextConfig);

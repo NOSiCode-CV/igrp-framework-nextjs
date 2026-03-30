@@ -3,7 +3,7 @@
 import { useCallback, useEffect, useState } from 'react';
 import { useTheme } from 'next-themes';
 import {
-  IGRPButtonPrimitive,
+  Button,
   IGRP_META_THEME_COLORS,
   useIGRPMetaColor,
   IGRPIcon,
@@ -27,7 +27,7 @@ function IGRPTemplateModeSwitcher() {
 
   if (!mounted) {
     return (
-      <IGRPButtonPrimitive
+      <Button
         variant="ghost"
         size="icon"
         className={cn('size-6')}
@@ -36,12 +36,12 @@ function IGRPTemplateModeSwitcher() {
       >
         <div className={cn('size-4')} aria-hidden="true" />
         <span className={cn('sr-only')}>Toggle theme</span>
-      </IGRPButtonPrimitive>
+      </Button>
     );
   }
 
   return (
-    <IGRPButtonPrimitive
+    <Button
       variant="ghost"
       size="icon"
       className={cn('size-6 relative overflow-hidden')}
@@ -72,7 +72,7 @@ function IGRPTemplateModeSwitcher() {
       <span className={cn('sr-only')}>
         {isDark ? 'Switch to light mode' : 'Switch to dark mode'}
       </span>
-    </IGRPButtonPrimitive>
+    </Button>
   );
 }
 

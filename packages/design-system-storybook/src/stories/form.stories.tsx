@@ -6,13 +6,13 @@ import { z } from 'zod';
 import {
   IGRPForm,
   type IGRPFormHandle,
-  IGRPFormFieldPrimitive,
-  IGRPFormItemPrimitive,
-  IGRPFormLabelPrimitive,
-  IGRPFormControlPrimitive,
-  IGRPFormMessagePrimitive,
-  IGRPButtonPrimitive,
-  IGRPInputPrimitive,
+  FormField,
+  FormItem,
+  FormLabel,
+  FormControl,
+  FormMessage,
+  Button,
+  Input,
   IGRPCheckbox,
   IGRPCombobox,
   IGRPInputFile,
@@ -100,20 +100,20 @@ const AdvancedFields = () => (
       { name: 'address', label: 'Address' },
       { name: 'city', label: 'City' },
     ].map(({ name, label, type }) => (
-      <IGRPFormFieldPrimitive
+      <FormField
         key={name}
         name={name}
         render={({ field }) => (
-          <IGRPFormItemPrimitive className='col-span-12 sm:col-span-6'>
-            <IGRPFormLabelPrimitive>{label}</IGRPFormLabelPrimitive>
-            <IGRPFormControlPrimitive>
-              <IGRPInputPrimitive
+          <FormItem className='col-span-12 sm:col-span-6'>
+            <FormLabel>{label}</FormLabel>
+            <FormControl>
+              <Input
                 type={type}
                 {...field}
               />
-            </IGRPFormControlPrimitive>
-            <IGRPFormMessagePrimitive />
-          </IGRPFormItemPrimitive>
+            </FormControl>
+            <FormMessage />
+          </FormItem>
         )}
       />
     ))}
@@ -277,9 +277,9 @@ export const BasicExternalTrigger: StoryObj = {
         >
           <BasicFields />
         </IGRPForm>
-        <IGRPButtonPrimitive onClick={() => formRef.current?.submit()}>
+        <Button onClick={() => formRef.current?.submit()}>
           Submit Externally
-        </IGRPButtonPrimitive>
+        </Button>
       </div>
     );
   },
@@ -298,13 +298,13 @@ export const AdvancedExternalTrigger: StoryObj = {
         >
           <AdvancedFields />
         </IGRPForm>
-        <IGRPButtonPrimitive
+        <Button
           onClick={() =>
             formRef.current?.handleSubmit((values) => console.log('Submit from button:', values))()
           }
         >
           Finish
-        </IGRPButtonPrimitive>
+        </Button>
       </div>
     );
   },
@@ -946,13 +946,13 @@ export const FormExamples: StoryObj = {
             </div>
           </>
         </IGRPForm>
-        <IGRPButtonPrimitive
+        <Button
           onClick={() =>
             formRef.current?.handleSubmit((values) => console.log('Submit from button:', values))()
           }
         >
           Finish
-        </IGRPButtonPrimitive>
+        </Button>
       </div>
     );
   },
@@ -1022,7 +1022,7 @@ export const FormExamples2: StoryObj = {
             </IGRPCard>
           </div>
         </IGRPForm>
-        <IGRPButtonPrimitive
+        <Button
           onClick={() => {
             formRef.current?.handleSubmit((values) => {
               console.log('Submit FORM 2 from button:', values);
@@ -1030,7 +1030,7 @@ export const FormExamples2: StoryObj = {
           }}
         >
           Finish
-        </IGRPButtonPrimitive>
+        </Button>
       </div>
     );
   },

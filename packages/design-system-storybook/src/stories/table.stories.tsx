@@ -2,7 +2,7 @@ import type { Meta, StoryFn, StoryObj } from '@storybook/nextjs-vite';
 import {
   IGRPTable,
   type IGRPTableProps,
-  IGRPButtonPrimitive,
+  Button,
 } from '@igrp/igrp-framework-react-design-system';
 
 const meta: Meta<typeof IGRPTable> = {
@@ -52,12 +52,12 @@ export const Default: StoryObj<IGRPTableProps<any>> = {
       { header: 'Age', accessorKey: 'age' },
     ],
     actions: ({ original }) => (
-      <IGRPButtonPrimitive
+      <Button
         variant='outline'
         size='sm'
       >
         Edit {original.name}
-      </IGRPButtonPrimitive>
+      </Button>
     ),
   },
 };

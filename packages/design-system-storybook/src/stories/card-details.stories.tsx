@@ -1,4 +1,4 @@
-import { IGRPBadgePrimitive, IGRPButtonPrimitive, IGRPCardDetails } from '@igrp/igrp-framework-react-design-system';
+import { Badge, Button, IGRPCardDetails } from '@igrp/igrp-framework-react-design-system';
 import type { Meta, StoryObj } from '@storybook/nextjs-vite';
 
 const meta = {
@@ -61,7 +61,7 @@ export const WithCustomContent: Story = {
       { label: "Order ID", content: "#ORD-2024-001" },
       {
         label: "Status",
-        content: <IGRPBadgePrimitive variant="default">Shipped</IGRPBadgePrimitive>,
+        content: <Badge variant="default">Shipped</Badge>,
       },
       { label: "Total Amount", content: "$299.99" },
       {
@@ -71,7 +71,7 @@ export const WithCustomContent: Story = {
       { label: "Estimated Delivery", content: "March 15, 2024" },
       {
         label: "Tracking",
-        content: <IGRPBadgePrimitive variant="outline">1Z999AA10123456784</IGRPBadgePrimitive>,
+        content: <Badge variant="outline">1Z999AA10123456784</Badge>,
       },
     ],
   },
@@ -94,7 +94,7 @@ export const SingleColumn: Story = {
     description: "Current system status and configuration",
     contentClassName: "md:grid-cols-1",
     items: [
-      { label: "Server Status", content: <IGRPBadgePrimitive variant="default">Online</IGRPBadgePrimitive> },
+      { label: "Server Status", content: <Badge variant="default">Online</Badge> },
       { label: "Uptime", content: "99.9%" },
       { label: "Last Backup", content: "2024-03-10 14:30:00 UTC" },
       { label: "Database Size", content: "2.4 GB" },
@@ -165,8 +165,8 @@ export const MixedContentTypes: Story = {
         label: "Status",
         content: (
           <div className="flex gap-2">
-            <IGRPBadgePrimitive variant="default">Active</IGRPBadgePrimitive>
-            <IGRPBadgePrimitive variant="outline">Verified</IGRPBadgePrimitive>
+            <Badge variant="default">Active</Badge>
+            <Badge variant="outline">Verified</Badge>
           </div>
         ),
       },
@@ -174,9 +174,9 @@ export const MixedContentTypes: Story = {
       {
         label: "Actions",
         content: (
-          <IGRPButtonPrimitive variant="outline" size="sm">
+          <Button variant="outline" size="sm">
             View Details
-          </IGRPButtonPrimitive>
+          </Button>
         ),
       },
     ],

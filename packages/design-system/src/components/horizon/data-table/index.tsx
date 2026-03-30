@@ -1,6 +1,7 @@
 'use client';
+'use no memo';
 
-import { Fragment, useId, useState } from 'react';
+import { Fragment, useCallback, useId, useReducer } from 'react';
 import {
   type ColumnDef,
   type ColumnFiltersState,
@@ -16,15 +17,16 @@ import {
   getPaginationRowModel,
   getSortedRowModel,
   type PaginationState,
-  // type OnChangeFn,
-  // type RowSelectionState,
+  type RowSelectionState,
   type SortingState,
+  type Updater,
   type VisibilityState,
   useReactTable,
   type Row,
   type TableOptions,
 } from '@tanstack/react-table';
 
+import { cn } from '../../../lib/utils';
 import {
   Table,
   TableBody,
@@ -32,43 +34,106 @@ import {
   TableHead,
   TableHeader,
   TableRow,
-} from '../../primitives/table';
+} from '../../ui/table';
+import { IGRPIcon } from '../icon';
 import {
   type IGRPDataTableClientFilterListProps,
   IGRPDataTableClientFilter,
 } from './client-filter';
 import { IGRPDataTablePagination, IGRPDataTablePaginationNumeric } from './pagination';
-import { IGPRDataTableToggleVisibility } from './toggle-visibility';
-import { cn } from '../../../lib/utils';
-import { IGRPIcon } from '../icon';
+import { IGRPDataTableToggleVisibility } from './toggle-visibility';
 
+/**
+ * Props for the IGRPDataTable component.
+ * @see IGRPDataTable
+ */
 interface IGRPDataTableProps<TData, TValue> {
+  /** TanStack Table column definitions. */
   columns: ColumnDef<TData, TValue>[];
+  /** Table data rows. */
   data: TData[];
+  /** Show pagination controls. */
   showPagination?: boolean;
+  /** Use numeric page selector instead of prev/next. */
   isNumericPagination?: boolean;
+  /** Available page size options. */
   pageSizePagination?: number[];
+  /** Use server-side filtering (requires serverFilterComponent). */
   isServerSide?: boolean;
+  /** Show filter UI. */
   showFilter?: boolean;
+  /** Client-side filter configurations. */
   clientFilters?: IGRPDataTableClientFilterListProps<TData>[];
+  /** Label for clear filters button. */
   clientClearLabel?: string;
+  /** Show column visibility toggle. */
   showToggleColumn?: boolean;
+  /** Label for column visibility toggle button. */
   toggleLabel?: string;
+  /** Label for column visibility dropdown. */
   toggleOptionsLabel?: string;
+  /** CSS classes for the wrapper. */
   className?: string;
+  /** CSS classes for the table element. */
   tableClassName?: string;
+  /** CSS classes for the table header. */
   tableHeaderClassName?: string;
+  /** CSS classes for the table body. */
   tableBodyClassName?: string;
+  /** CSS classes for pagination. */
   paginationClassName?: string;
+  /** Custom filter component for server-side mode. */
   serverFilterComponent?: React.ReactNode;
+  /** Message when no rows match. */
   notFoundLabel?: string;
-  // rowSelection?: RowSelectionState
-  // onRowSelectionChange?: OnChangeFn<RowSelectionState>
+  /** Whether a row can be expanded. */
   getRowCanExpand?: TableOptions<TData>['getRowCanExpand'];
+  /** Render expanded row content. */
   renderSubComponent?: (row: Row<TData>) => React.ReactElement | undefined;
+  /** HTML id attribute. */
   id?: string;
 }
 
+type TableState = {
+  columnFilters: ColumnFiltersState;
+  columnVisibility: VisibilityState;
+  pagination: PaginationState;
+  sorting: SortingState;
+  expanded: ExpandedState;
+  rowSelection: RowSelectionState;
+};
+
+type TableAction =
+  | { type: 'columnFilters'; payload: ColumnFiltersState }
+  | { type: 'columnVisibility'; payload: VisibilityState }
+  | { type: 'pagination'; payload: PaginationState }
+  | { type: 'sorting'; payload: SortingState }
+  | { type: 'expanded'; payload: ExpandedState }
+  | { type: 'rowSelection'; payload: RowSelectionState };
+
+function tableReducer(state: TableState, action: TableAction): TableState {
+  switch (action.type) {
+    case 'columnFilters':
+      return { ...state, columnFilters: action.payload };
+    case 'columnVisibility':
+      return { ...state, columnVisibility: action.payload };
+    case 'pagination':
+      return { ...state, pagination: action.payload };
+    case 'sorting':
+      return { ...state, sorting: action.payload };
+    case 'expanded':
+      return { ...state, expanded: action.payload };
+    case 'rowSelection':
+      return { ...state, rowSelection: action.payload };
+    default:
+      return state;
+  }
+}
+
+/**
+ * Data table with sorting, filtering, pagination, and expandable rows.
+ * Built on TanStack Table. Use IGRPDataTableHeader*, IGRPDataTableCell*, etc. for column setup.
+ */
 function IGRPDataTable<TData, TValue>({
   columns,
   data,
@@ -95,20 +160,71 @@ function IGRPDataTable<TData, TValue>({
   renderSubComponent,
   id,
 }: IGRPDataTableProps<TData, TValue>) {
-  const [columnFilters, setColumnFilters] = useState<ColumnFiltersState>([]);
-  const [columnVisibility, setColumnVisibility] = useState<VisibilityState>({});
-  const [pagination, setPagination] = useState<PaginationState>({
-    pageIndex: 0,
-    pageSize: pageSizePagination?.[0] || 50,
+  const [state, dispatch] = useReducer(tableReducer, {
+    columnFilters: [],
+    columnVisibility: {},
+    pagination: {
+      pageIndex: 0,
+      pageSize: pageSizePagination?.[0] || 50,
+    },
+    sorting: [],
+    expanded: {},
+    rowSelection: {},
   });
 
-  const [sorting, setSorting] = useState<SortingState>([]);
-  const [expanded, setExpanded] = useState<ExpandedState>({});
-  const [rowSelection, setRowSelection] = useState({});
+  const setColumnFilters = useCallback(
+    (updater: Updater<ColumnFiltersState>) =>
+      dispatch({
+        type: 'columnFilters',
+        payload: typeof updater === 'function' ? updater(state.columnFilters) : updater,
+      }),
+    [state.columnFilters],
+  );
+  const setColumnVisibility = useCallback(
+    (updater: Updater<VisibilityState>) =>
+      dispatch({
+        type: 'columnVisibility',
+        payload: typeof updater === 'function' ? updater(state.columnVisibility) : updater,
+      }),
+    [state.columnVisibility],
+  );
+  const setPagination = useCallback(
+    (updater: Updater<PaginationState>) =>
+      dispatch({
+        type: 'pagination',
+        payload: typeof updater === 'function' ? updater(state.pagination) : updater,
+      }),
+    [state.pagination],
+  );
+  const setSorting = useCallback(
+    (updater: Updater<SortingState>) =>
+      dispatch({
+        type: 'sorting',
+        payload: typeof updater === 'function' ? updater(state.sorting) : updater,
+      }),
+    [state.sorting],
+  );
+  const setExpanded = useCallback(
+    (updater: Updater<ExpandedState>) =>
+      dispatch({
+        type: 'expanded',
+        payload: typeof updater === 'function' ? updater(state.expanded) : updater,
+      }),
+    [state.expanded],
+  );
+  const setRowSelection = useCallback(
+    (updater: Updater<RowSelectionState>) =>
+      dispatch({
+        type: 'rowSelection',
+        payload: typeof updater === 'function' ? updater(state.rowSelection) : updater,
+      }),
+    [state.rowSelection],
+  );
 
   const _id = useId();
   const ref = id ?? _id;
 
+  // eslint-disable-next-line react-hooks/incompatible-library
   const table = useReactTable({
     data,
     columns,
@@ -128,17 +244,16 @@ function IGRPDataTable<TData, TValue>({
     onColumnVisibilityChange: setColumnVisibility,
     onExpandedChange: setExpanded,
     onPaginationChange: setPagination,
-    // onRowSelectionChange: onRowSelectionChange,
     onRowSelectionChange: setRowSelection,
     onSortingChange: setSorting,
 
     state: {
-      sorting,
-      columnVisibility,
-      rowSelection,
-      columnFilters,
-      pagination,
-      expanded,
+      sorting: state.sorting,
+      columnVisibility: state.columnVisibility,
+      rowSelection: state.rowSelection,
+      columnFilters: state.columnFilters,
+      pagination: state.pagination,
+      expanded: state.expanded,
     },
 
     enableRowSelection: true,
@@ -170,7 +285,7 @@ function IGRPDataTable<TData, TValue>({
             />
           ))}
         {showToggleColumn && (
-          <IGPRDataTableToggleVisibility
+          <IGRPDataTableToggleVisibility
             table={table}
             label={toggleLabel}
             optionsLabel={toggleOptionsLabel}
@@ -260,7 +375,7 @@ function IGRPDataTable<TData, TValue>({
         </Table>
       </div>
 
-      {table.getRowCount() > pagination.pageSize &&
+      {table.getRowCount() > state.pagination.pageSize &&
         showPagination &&
         (isNumericPagination ? (
           <IGRPDataTablePaginationNumeric

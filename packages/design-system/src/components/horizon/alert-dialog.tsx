@@ -1,3 +1,5 @@
+'use client';
+
 import { useId } from 'react';
 import { Slot } from '@radix-ui/react-slot';
 
@@ -14,30 +16,56 @@ import {
   AlertDialogFooter,
   AlertDialogHeader,
   AlertDialogTitle,
-} from '../primitives/alert-dialog';
+} from '../ui/alert-dialog';
 import { IGRPIcon, type IGRPIconName } from './icon';
 
+/**
+ * Props for the IGRPAlertDialog component.
+ * @see IGRPAlertDialog
+ */
 interface IGRPAlertDialogProps extends Omit<IGRPBaseAttributes, 'ref'> {
+  /** Whether the dialog is open. */
   open?: boolean;
+  /** Called when open state changes. */
   onOpenChange?: (open: boolean) => void;
+  /** Color theme (e.g. 'primary', 'destructive'). */
   variant?: IGRPColorVariants;
+  /** Additional CSS classes. */
   className?: string;
+  /** Dialog title. */
   title?: string;
+  /** CSS classes for the title. */
   titleClassName?: string;
+  /** Dialog description. */
   description?: string;
+  /** CSS classes for the description. */
   descriptionClassName?: string;
+  /** Additional content. */
   children?: React.ReactNode;
+  /** CSS classes for the footer. */
   footerClassName?: string;
+  /** Label for the confirm/action button. */
   actionLabel?: string;
+  /** Label for the cancel button. */
   cancelLabel?: string;
+  /** Called when the action button is clicked. */
   onAction?: () => void;
+  /** Called when the cancel button is clicked. */
   onCancel?: () => void;
+  /** Whether to show the cancel button. */
   showCancel?: boolean;
+  /** Props passed to the action button. */
   actionProps?: Partial<React.ComponentProps<typeof AlertDialogAction>>;
+  /** Props passed to the cancel button. */
   cancelProps?: Partial<React.ComponentProps<typeof AlertDialogCancel>>;
+  /** HTML id attribute. */
   id?: string;
 }
 
+/**
+ * Alert dialog for confirmations and destructive actions.
+ * Supports icon, title, description, and action/cancel buttons.
+ */
 function IGRPAlertDialog({
   open,
   onOpenChange,

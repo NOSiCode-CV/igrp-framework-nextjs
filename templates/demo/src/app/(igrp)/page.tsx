@@ -1,14 +1,25 @@
+import type { ReactNode } from "react";
+import { Route } from "next";
 import { redirect } from "next/navigation";
 
-export default function Home() {
-  const root = process.env.NEXT_PUBLIC_IGRP_APP_HOME_SLUG || "/";
+import { sanitizePath } from "@/lib/sanitize";
 
-  if (!root.startsWith("/"))
-    throw new Error("Root redirect must be a valid path");
+/**
+ * Home page: renders template title or redirects to IGRP_APP_HOME_SLUG.
+ */
+export default function Home(): ReactNode {
+  const root = sanitizePath(
+    process.env.NEXT_PUBLIC_IGRP_APP_HOME_SLUG || "/",
+    "/",
+  );
 
   if (root === "/") {
-    return <div className="text-3xl font-bold">IGRP NEXT.js Template</div>;
+    return (
+      <main id="main-content">
+        <h3 className="text-3xl font-bold">IGRP NEXT.js Template</h3>
+      </main>
+    );
   }
 
-  redirect(root as Parameters<typeof redirect>[0]);
+  redirect(root as Route);
 }

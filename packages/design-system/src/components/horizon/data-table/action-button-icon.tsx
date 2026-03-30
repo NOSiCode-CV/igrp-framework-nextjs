@@ -1,3 +1,5 @@
+'use client';
+
 import { useContext, type ReactElement } from 'react';
 import Link from 'next/link';
 
@@ -12,8 +14,8 @@ import {
   AlertDialogHeader,
   AlertDialogTitle,
   AlertDialogTrigger,
-} from '../../primitives/alert-dialog';
-import { Button, buttonVariants } from '../../primitives/button';
+} from '../../ui/alert-dialog';
+import { Button, buttonVariants } from '../../ui/button';
 import {
   Dialog,
   DialogClose,
@@ -23,14 +25,15 @@ import {
   DialogHeader,
   DialogTitle,
   DialogTrigger,
-} from '../../primitives/dialog';
-import { Tooltip, TooltipContent, TooltipTrigger } from '../../primitives/tooltip';
+} from '../../ui/dialog';
+import { Tooltip, TooltipContent, TooltipTrigger } from '../../ui/tooltip';
 import { IGRPButton } from '../button';
 import { IGRPIcon } from '../icon';
 import { igrpModalDialogContentVariants } from '../modal-dialog';
 import { type IGRPDataTableDialogProps, type IGRPDataTableLinkProps } from './row-actions';
 import { IGRPDataTableTooltipContext, IGRPDataTableTooltipProvider } from './tooltip-provider';
 
+/** @internal Wraps action button with tooltip when label is provided. */
 function IGRPDataTableActionTooltip({
   label,
   children,
@@ -75,6 +78,7 @@ function IGRPDataTableActionTooltip({
   );
 }
 
+/** Icon button that opens an alert dialog. */
 function IGRPDataTableButtonAlert({
   labelTrigger,
   classNameTrigger,
@@ -160,6 +164,7 @@ function IGRPDataTableButtonAlert({
   );
 }
 
+/** Icon button that navigates (link) or triggers an action. */
 function IGRPDataTableButtonLink({
   labelTrigger,
   action,
@@ -208,6 +213,7 @@ function IGRPDataTableButtonLink({
   );
 }
 
+/** Icon button that opens a modal dialog. */
 function IGRPDataTableButtonModal({
   labelTrigger,
   className,
@@ -301,5 +307,4 @@ export {
   IGRPDataTableButtonAlert,
   IGRPDataTableButtonLink,
   IGRPDataTableButtonModal,
-  IGRPDataTableTooltipProvider,
 };

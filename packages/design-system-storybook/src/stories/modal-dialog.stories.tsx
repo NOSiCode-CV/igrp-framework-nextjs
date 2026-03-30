@@ -10,9 +10,9 @@ import {
   IGRPModalDialogFooter,
   IGRPModalDialogClose,
   type IGRPModalDialogContentProps,
-  IGRPButtonPrimitive,
-  IGRPInputPrimitive,
-  IGRPLabelPrimitive,
+  Button,
+  Input,
+  Label,
 } from '@igrp/igrp-framework-react-design-system';
 
 const meta: Meta<typeof IGRPModalDialogContent> = {
@@ -45,7 +45,7 @@ const renderModalContent = (
   <div className='container mx-auto p-10 flex items-center justify-center'>
     <IGRPModalDialog>
       <IGRPModalDialogTrigger asChild>
-        <IGRPButtonPrimitive>Open Modal</IGRPButtonPrimitive>
+        <Button>Open Modal</Button>
       </IGRPModalDialogTrigger>
       <IGRPModalDialogContent size={args.size}>
         <IGRPModalDialogHeader stickyHeader={args.stickyHeader}>
@@ -73,9 +73,9 @@ const renderModalContent = (
         <IGRPModalDialogFooter stickyFooter={args.stickyFooter}>
           {args.footerContent || (
             <>
-              <IGRPButtonPrimitive variant='outline'>Cancel</IGRPButtonPrimitive>
+              <Button variant='outline'>Cancel</Button>
               <IGRPModalDialogClose asChild>
-                <IGRPButtonPrimitive>Save Changes</IGRPButtonPrimitive>
+                <Button>Save Changes</Button>
               </IGRPModalDialogClose>
             </>
           )}
@@ -183,39 +183,39 @@ export const WithFormContent: Story = {
       bodyContent: (
         <div className='grid gap-4 py-4'>
           <div className='grid grid-cols-4 items-center gap-4'>
-            <IGRPLabelPrimitive
+            <Label
               htmlFor='name'
               className='text-right'
             >
               Name
-            </IGRPLabelPrimitive>
-            <IGRPInputPrimitive
+            </Label>
+            <Input
               id='name'
               defaultValue='John Doe'
               className='col-span-3'
             />
           </div>
           <div className='grid grid-cols-4 items-center gap-4'>
-            <IGRPLabelPrimitive
+            <Label
               htmlFor='username'
               className='text-right'
             >
               Username
-            </IGRPLabelPrimitive>
-            <IGRPInputPrimitive
+            </Label>
+            <Input
               id='username'
               defaultValue='@johndoe'
               className='col-span-3'
             />
           </div>
           <div className='grid grid-cols-4 items-center gap-4'>
-            <IGRPLabelPrimitive
+            <Label
               htmlFor='email'
               className='text-right'
             >
               Email
-            </IGRPLabelPrimitive>
-            <IGRPInputPrimitive
+            </Label>
+            <Input
               id='email'
               type='email'
               defaultValue='john.doe@example.com'
@@ -223,12 +223,12 @@ export const WithFormContent: Story = {
             />
           </div>
           <div className='grid grid-cols-4 items-center gap-4'>
-            <IGRPLabelPrimitive
+            <Label
               htmlFor='bio'
               className='text-right self-start pt-2'
             >
               Bio
-            </IGRPLabelPrimitive>
+            </Label>
             <textarea
               id='bio'
               defaultValue='Loves coding and building awesome things with Next.js and Tailwind CSS.'
@@ -240,17 +240,17 @@ export const WithFormContent: Story = {
       footerContent: (
         <>
           <IGRPModalDialogClose asChild>
-            <IGRPButtonPrimitive variant='outline'>Cancel</IGRPButtonPrimitive>
+            <Button variant='outline'>Cancel</Button>
           </IGRPModalDialogClose>
           <IGRPModalDialogClose asChild>
-            <IGRPButtonPrimitive
+            <Button
               onClick={() => {
                 console.log('Form submitted (simulated)');
                 // alert("Form submitted (simulated)") // You can use alert for quick feedback in Storybook
               }}
             >
               Save Profile
-            </IGRPButtonPrimitive>
+            </Button>
           </IGRPModalDialogClose>
         </>
       ),
@@ -263,9 +263,9 @@ export const WithOutsideButton: Story = {
 
     return (
       <div className='container mx-auto p-10 flex flex-col items-center justify-center gap-4'>
-        <IGRPButtonPrimitive onClick={() => setOpen(true)}>
+        <Button onClick={() => setOpen(true)}>
           Open Modal from Outside Button
-        </IGRPButtonPrimitive>
+        </Button>
         <IGRPModalDialog open={open} onOpenChange={setOpen}>
           <IGRPModalDialogContent size='md'>
             <IGRPModalDialogHeader>
@@ -286,11 +286,11 @@ export const WithOutsideButton: Story = {
               </p>
             </div>
             <IGRPModalDialogFooter>
-              <IGRPButtonPrimitive variant='outline' onClick={() => setOpen(false)}>
+              <Button variant='outline' onClick={() => setOpen(false)}>
                 Cancel
-              </IGRPButtonPrimitive>
+              </Button>
               <IGRPModalDialogClose asChild>
-                <IGRPButtonPrimitive>Confirm</IGRPButtonPrimitive>
+                <Button>Confirm</Button>
               </IGRPModalDialogClose>
             </IGRPModalDialogFooter>
           </IGRPModalDialogContent>

@@ -2,7 +2,7 @@
 
 import { useState, useEffect } from 'react';
 import Image from 'next/image';
-import { IGRPButtonPrimitive, cn } from '@igrp/igrp-framework-react-design-system';
+import { Button, cn } from '@igrp/igrp-framework-react-design-system';
 
 interface IGRPCarousel {
   image: string;
@@ -15,15 +15,20 @@ interface IGRPAuthCarouselProps {
   intervalTime?: number;
 }
 
-function IGRPAuthCarousel({ carouselItems }: IGRPAuthCarouselProps) {
+function IGRPAuthCarousel({ carouselItems, intervalTime = 6000 }: IGRPAuthCarouselProps) {
   const [currentIndex, setCurrentIndex] = useState(0);
 
   useEffect(() => {
+    const prefersReducedMotion =
+      typeof window !== 'undefined' &&
+      window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    if (prefersReducedMotion || carouselItems.length <= 1) return;
+
     const interval = setInterval(() => {
       setCurrentIndex((prevIndex) => (prevIndex + 1) % carouselItems.length);
-    }, 6000);
+    }, intervalTime);
     return () => clearInterval(interval);
-  }, []);
+  }, [carouselItems.length, intervalTime]);
 
   const goToSlide = (index: number) => {
     setCurrentIndex(index);
@@ -57,12 +62,12 @@ function IGRPAuthCarousel({ carouselItems }: IGRPAuthCarouselProps) {
 
               <div className={cn('mt-4 flex justify-start space-x-2')}>
                 {carouselItems.map((_, idx) => (
-                  <IGRPButtonPrimitive
+                  <Button
                     variant="ghost"
                     key={idx}
                     onClick={() => goToSlide(idx)}
                     className={cn(
-                      'h-3 rounded-full transition-all delay-350 w-3 bg-white/50 p-0',
+                      'h-3 rounded-full w-3 bg-white/50 p-0 transition-[width,background-color] duration-350 delay-350',
                       idx === currentIndex ? 'w-6 bg-white' : 'hover:bg-white/80',
                     )}
                     aria-label={`Go to slide ${idx + 1}`}

@@ -3,7 +3,7 @@ import { z } from 'zod';
 import {
   IGRPInputUrl,
   type IGRPInputUrlProps,
-  IGRPButtonPrimitive,
+  Button,
   type IGRPOptionsProps,
 } from '@igrp/igrp-framework-react-design-system';
 import { FormProvider, useForm } from 'react-hook-form';
@@ -70,12 +70,12 @@ const FormTemplate: StoryFn<IGRPInputUrlProps> = (args) => {
         >
           <IGRPInputUrl {...args} />
 
-          <IGRPButtonPrimitive
+          <Button
             type='submit'
             className='w-full mt-4'
           >
             Enviar
-          </IGRPButtonPrimitive>
+          </Button>
         </form>
       </FormProvider>
     </div>

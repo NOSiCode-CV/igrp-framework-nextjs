@@ -27,6 +27,9 @@ const config: StorybookConfig = {
     name: getAbsolutePath('@storybook/nextjs-vite'),
     options: {},
   },
+  viteFinal: async (config) => ({
+    ...config,
+  }),
 };
 
 export default config;

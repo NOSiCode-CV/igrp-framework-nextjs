@@ -7,24 +7,24 @@ import type { IGRPMenuItemArgs } from '@igrp/framework-next-types';
 import {
   cn,
   IGRPIcon,
-  IGRPAlertPrimitive,
-  IGRPAlertDescriptionPrimitive,
-  IGRPCollapsiblePrimitive,
-  IGRPCollapsibleContentPrimitive,
-  IGRPCollapsibleTriggerPrimitive,
-  IGRPDropdownMenuPrimitive,
-  IGRPDropdownMenuContentPrimitive,
-  IGRPDropdownMenuItemPrimitive,
-  IGRPDropdownMenuTriggerPrimitive,
-  IGRPSidebarGroupPrimitive,
-  IGRPSidebarGroupLabelPrimitive,
-  IGRPSidebarGroupContentPrimitive,
-  IGRPSidebarMenuPrimitive,
-  IGRPSidebarMenuButtonPrimitive,
-  IGRPSidebarMenuItemPrimitive,
-  IGRPSidebarMenuSubPrimitive,
-  IGRPSidebarMenuSubButtonPrimitive,
-  IGRPSidebarMenuSubItemPrimitive,
+  Alert,
+  AlertDescription,
+  Collapsible,
+  CollapsibleContent,
+  CollapsibleTrigger,
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuTrigger,
+  SidebarGroup,
+  SidebarGroupLabel,
+  SidebarGroupContent,
+  SidebarMenu,
+  SidebarMenuButton,
+  SidebarMenuItem,
+  SidebarMenuSub,
+  SidebarMenuSubButton,
+  SidebarMenuSubItem,
   igrpIsExternalUrl,
   igrpNormalizeUrl,
 } from '@igrp/igrp-framework-react-design-system';
@@ -133,19 +133,19 @@ export function IGRPTemplateMenus({ menus = [] }: IGRPTemplateMenuArgs) {
 
   if (menuData === undefined) {
     return (
-      <IGRPAlertPrimitive variant="destructive">
+      <Alert variant="destructive">
         <IGRPIcon iconName="CircleAlert" />
-        <IGRPAlertDescriptionPrimitive>Applicação sem menus.</IGRPAlertDescriptionPrimitive>
-      </IGRPAlertPrimitive>
+        <AlertDescription>Applicação sem menus.</AlertDescription>
+      </Alert>
     );
   }
 
   if (menuData.length === 0) {
     return (
-      <IGRPAlertPrimitive variant="default">
+      <Alert variant="default">
         <IGRPIcon iconName="Info" />
-        <IGRPAlertDescriptionPrimitive>Aplicação não tem menu.</IGRPAlertDescriptionPrimitive>
-      </IGRPAlertPrimitive>
+        <AlertDescription>Aplicação não tem menu.</AlertDescription>
+      </Alert>
     );
   }
 
@@ -160,10 +160,10 @@ export function IGRPTemplateMenus({ menus = [] }: IGRPTemplateMenuArgs) {
           const topLevel = getChildren(sectionKey);
 
           return (
-            <IGRPSidebarGroupPrimitive key={`grp-${sectionKey}`}>
-              <IGRPSidebarGroupLabelPrimitive>{sectionLabel}</IGRPSidebarGroupLabelPrimitive>
-              <IGRPSidebarGroupContentPrimitive>
-                <IGRPSidebarMenuPrimitive role="navigation">
+            <SidebarGroup key={`grp-${sectionKey}`}>
+              <SidebarGroupLabel>{sectionLabel}</SidebarGroupLabel>
+              <SidebarGroupContent>
+                <SidebarMenu role="navigation">
                   {topLevel.map((menu) => (
                     <MenuItemWithSubmenus
                       key={`menu-${menu.id}`}
@@ -172,16 +172,16 @@ export function IGRPTemplateMenus({ menus = [] }: IGRPTemplateMenuArgs) {
                       childMenus={getChildren(keyOf(menu as any))}
                     />
                   ))}
-                </IGRPSidebarMenuPrimitive>
-              </IGRPSidebarGroupContentPrimitive>
-            </IGRPSidebarGroupPrimitive>
+                </SidebarMenu>
+              </SidebarGroupContent>
+            </SidebarGroup>
           );
         })
       ) : (
-        <IGRPSidebarGroupPrimitive key="grp-root">
+        <SidebarGroup key="grp-root">
           {/* no label for root */}
-          <IGRPSidebarGroupContentPrimitive>
-            <IGRPSidebarMenuPrimitive role="navigation">
+          <SidebarGroupContent>
+            <SidebarMenu role="navigation">
               {getChildren('root').map((menu) => (
                 <MenuItemWithSubmenus
                   key={`menu-${menu.id}`}
@@ -190,9 +190,9 @@ export function IGRPTemplateMenus({ menus = [] }: IGRPTemplateMenuArgs) {
                   childMenus={getChildren(keyOf(menu as any))}
                 />
               ))}
-            </IGRPSidebarMenuPrimitive>
-          </IGRPSidebarGroupContentPrimitive>
-        </IGRPSidebarGroupPrimitive>
+            </SidebarMenu>
+          </SidebarGroupContent>
+        </SidebarGroup>
       )}
     </>
   );
@@ -237,8 +237,8 @@ function MenuItemWithSubmenus({ menu, pathname, childMenus }: MenuItemWithSubmen
 
   if (!hasChildren) {
     return (
-      <IGRPSidebarMenuItemPrimitive>
-        <IGRPSidebarMenuButtonPrimitive asChild tooltip={name} isActive={isActive}>
+      <SidebarMenuItem>
+        <SidebarMenuButton asChild tooltip={name} isActive={isActive}>
           {useAnchorTag ? (
             <a
               href={normalizedHref}
@@ -255,41 +255,41 @@ function MenuItemWithSubmenus({ menu, pathname, childMenus }: MenuItemWithSubmen
               <span>{name}</span>
             </Link>
           )}
-        </IGRPSidebarMenuButtonPrimitive>
-      </IGRPSidebarMenuItemPrimitive>
+        </SidebarMenuButton>
+      </SidebarMenuItem>
     );
   }
 
   return (
     <>
       {/* Dropdown for collapsed sidebar */}
-      <IGRPSidebarMenuItemPrimitive className={cn('group')}>
-        <IGRPDropdownMenuPrimitive>
-          <IGRPDropdownMenuTriggerPrimitive asChild>
-            <IGRPSidebarMenuButtonPrimitive
+      <SidebarMenuItem className={cn('group')}>
+        <DropdownMenu>
+          <DropdownMenuTrigger asChild>
+            <SidebarMenuButton
               tooltip={name}
               className={cn('hidden cursor-pointer group-data-[collapsible=icon]:flex')}
               aria-label={`${name} menu`}
             >
               {icon && <IGRPIcon iconName={icon} />}
-            </IGRPSidebarMenuButtonPrimitive>
-          </IGRPDropdownMenuTriggerPrimitive>
-          <IGRPDropdownMenuContentPrimitive side="right" align="start" className={cn('min-w-48')}>
+            </SidebarMenuButton>
+          </DropdownMenuTrigger>
+          <DropdownMenuContent side="right" align="start" className={cn('min-w-48')}>
             {childMenus.map((subMenu) => (
               <SubMenuItem key={`dropdown-${id}-${subMenu.id}`} menu={subMenu} variant="dropdown" />
             ))}
-          </IGRPDropdownMenuContentPrimitive>
-        </IGRPDropdownMenuPrimitive>
-      </IGRPSidebarMenuItemPrimitive>
+          </DropdownMenuContent>
+        </DropdownMenu>
+      </SidebarMenuItem>
 
       {/* Collapsible for expanded sidebar */}
-      <IGRPSidebarMenuItemPrimitive>
-        <IGRPCollapsiblePrimitive className={cn('w-full group')}>
-          <IGRPCollapsibleTriggerPrimitive
+      <SidebarMenuItem>
+        <Collapsible className={cn('w-full group')}>
+          <CollapsibleTrigger
             className={cn('flex w-full group-data-[collapsible=icon]:hidden')}
             asChild
           >
-            <IGRPSidebarMenuButtonPrimitive
+            <SidebarMenuButton
               tooltip={name}
               className={cn('w-full cursor-pointer')}
               aria-label={`Toggle ${name} submenu`}
@@ -304,10 +304,10 @@ function MenuItemWithSubmenus({ menu, pathname, childMenus }: MenuItemWithSubmen
                 )}
                 strokeWidth={2}
               />
-            </IGRPSidebarMenuButtonPrimitive>
-          </IGRPCollapsibleTriggerPrimitive>
-          <IGRPCollapsibleContentPrimitive>
-            <IGRPSidebarMenuSubPrimitive>
+            </SidebarMenuButton>
+          </CollapsibleTrigger>
+          <CollapsibleContent>
+            <SidebarMenuSub>
               {childMenus.map((subMenu) => (
                 <SubMenuItem
                   key={`collapse-${id}-${subMenu.id}`}
@@ -315,10 +315,10 @@ function MenuItemWithSubmenus({ menu, pathname, childMenus }: MenuItemWithSubmen
                   variant="collapsible"
                 />
               ))}
-            </IGRPSidebarMenuSubPrimitive>
-          </IGRPCollapsibleContentPrimitive>
-        </IGRPCollapsiblePrimitive>
-      </IGRPSidebarMenuItemPrimitive>
+            </SidebarMenuSub>
+          </CollapsibleContent>
+        </Collapsible>
+      </SidebarMenuItem>
     </>
   );
 }
@@ -378,7 +378,7 @@ function SubMenuItem({ menu, variant }: SubMenuItemProps) {
 
   if (variant === 'dropdown') {
     return (
-      <IGRPDropdownMenuItemPrimitive
+      <DropdownMenuItem
         asChild
         onSelect={(e) => e.preventDefault()}
         className={cn('cursor-pointer px-2 py-2.5')}
@@ -392,13 +392,13 @@ function SubMenuItem({ menu, variant }: SubMenuItemProps) {
             {content}
           </Link>
         )}
-      </IGRPDropdownMenuItemPrimitive>
+      </DropdownMenuItem>
     );
   }
 
   return (
-    <IGRPSidebarMenuSubItemPrimitive>
-      <IGRPSidebarMenuSubButtonPrimitive asChild>
+    <SidebarMenuSubItem>
+      <SidebarMenuSubButton asChild>
         {useAnchorTag ? (
           <a {...linkProps} className={cn('flex items-center gap-2')}>
             {content}
@@ -408,8 +408,8 @@ function SubMenuItem({ menu, variant }: SubMenuItemProps) {
             {content}
           </Link>
         )}
-      </IGRPSidebarMenuSubButtonPrimitive>
-    </IGRPSidebarMenuSubItemPrimitive>
+      </SidebarMenuSubButton>
+    </SidebarMenuSubItem>
   );
 }
 

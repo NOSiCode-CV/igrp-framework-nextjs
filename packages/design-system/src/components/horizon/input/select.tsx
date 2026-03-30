@@ -10,6 +10,7 @@ import {
   type SetStateAction,
   type Dispatch,
 } from 'react';
+import Image from 'next/image';
 import { useFormContext } from 'react-hook-form';
 import { Circle } from 'lucide-react';
 
@@ -23,8 +24,8 @@ import {
   FormItem,
   FormLabel,
   FormMessage,
-} from '../../primitives/form';
-import { Input } from '../../primitives/input';
+} from '../../ui/form';
+import { Input } from '../../ui/input';
 import {
   Select,
   SelectContent,
@@ -33,7 +34,7 @@ import {
   SelectLabel,
   SelectTrigger,
   SelectValue,
-} from '../../primitives/select';
+} from '../../ui/select';
 import { IGRPButton } from '../button';
 import { IGRPIcon } from '../icon';
 import { IGRPLabel } from '../label';
@@ -65,6 +66,10 @@ function selectReducer(state: SelectState, action: SelectAction): SelectState {
   }
 }
 
+/**
+ * Props for the IGRPSelect component.
+ * @see IGRPSelect
+ */
 type IGRPSelectProps = Omit<
   React.ComponentProps<typeof Select>,
   'value' | 'defaultValue' | 'onValueChange' | 'children'
@@ -88,6 +93,80 @@ type IGRPSelectProps = Omit<
     helperText?: string;
   };
 
+/** @internal Select field with trigger and content. */
+function IGRPSelectField({
+  value,
+  onChange,
+  onOpenChange,
+  disabled,
+  options,
+  placeholder,
+  isOpen,
+  label,
+  showSearch,
+  search,
+  setSearch,
+  onResetSearch,
+  filteredOptions,
+  showStatus,
+  showGroup,
+  className,
+  ...selectProps
+}: {
+  value: string;
+  onChange: (val: string) => void;
+  onOpenChange: (open: boolean) => void;
+  disabled?: boolean;
+  options: IGRPOptionsProps[];
+  placeholder: string;
+  isOpen: boolean;
+  label: string;
+  showSearch: boolean;
+  search: string;
+  setSearch: Dispatch<SetStateAction<string>>;
+  onResetSearch: () => void;
+  filteredOptions: IGRPOptionsProps[];
+  showStatus: boolean;
+  showGroup: boolean;
+  className?: string;
+} & Omit<
+  React.ComponentProps<typeof Select>,
+  'value' | 'onValueChange' | 'onOpenChange' | 'children'
+>) {
+  return (
+    <Select
+      value={value}
+      onValueChange={onChange}
+      onOpenChange={onOpenChange}
+      disabled={disabled}
+      {...selectProps}
+    >
+      <IGRPSelectTrigger
+        className={className}
+        showStatus={showStatus}
+        value={value}
+        options={options}
+        placeholder={placeholder}
+        isOpen={isOpen}
+        label={label}
+      />
+      <IGRPSelectContent
+        showSearch={showSearch}
+        search={search}
+        setSearch={setSearch}
+        onResetSearch={onResetSearch}
+        options={options}
+        filteredOptions={filteredOptions}
+        showStatus={showStatus}
+        showGroup={showGroup}
+      />
+    </Select>
+  );
+}
+
+/**
+ * Select dropdown with optional search and grouped options. Integrates with react-hook-form.
+ */
 function IGRPSelect({
   options,
   placeholder = 'Select an option',
@@ -145,43 +224,40 @@ function IGRPSelect({
     [state.selected, onValueChange],
   );
 
-  const renderSelect = (value: string, onChange: (val: string) => void) => (
-    <Select
-      value={value}
-      onValueChange={onChange}
-      onOpenChange={(open) => dispatch({ type: 'SET_OPEN', payload: open })}
-      disabled={disabled}
-      {...props}
-    >
-      <IGRPSelectTrigger
-        className={className}
-        showStatus={showStatus}
-        value={value}
-        options={options}
-        placeholder={placeholder}
-        isOpen={state.isOpen}
-        label={selectedLabel}
-      />
-
-      <IGRPSelectContent
-        showSearch={showSearch}
-        search={state.search}
-        setSearch={(val) => dispatch({ type: 'SET_SEARCH', payload: val as string })}
-        onResetSearch={() => dispatch({ type: 'RESET_SEARCH' })}
-        options={options}
-        filteredOptions={filteredOptions}
-        showStatus={showStatus}
-        showGroup={showGroup}
-      />
-    </Select>
-  );
+  const selectFieldProps = {
+    onOpenChange: (open: boolean) => dispatch({ type: 'SET_OPEN', payload: open }),
+    disabled,
+    options,
+    placeholder,
+    isOpen: state.isOpen,
+    label: selectedLabel,
+    showSearch,
+    search: state.search,
+    setSearch: (val: SetStateAction<string>) =>
+      dispatch({
+        type: 'SET_SEARCH',
+        payload: typeof val === 'function' ? (val as (prev: string) => string)(state.search) : val,
+      }),
+    onResetSearch: () => dispatch({ type: 'RESET_SEARCH' }),
+    filteredOptions,
+    showStatus,
+    showGroup,
+    className,
+    ...props,
+  };
 
   if (!formContext) {
     return (
       <div className={cn('space-y-2', className)}>
         <IGRPLabel id={fieldName} className={labelClassName} required={required} label={label} />
 
-        <div className={cn('relative')}>{renderSelect(state.selected, handleChange)}</div>
+        <div className={cn('relative')}>
+          <IGRPSelectField
+            {...selectFieldProps}
+            value={state.selected}
+            onChange={handleChange}
+          />
+        </div>
 
         {helperText && !error && (
           <p className={cn('text-muted-foreground text-xs mt-1')} role="note">
@@ -215,10 +291,14 @@ function IGRPSelect({
             </FormLabel>
           )}
           <FormControl>
-            {renderSelect(field.value, (val) => {
-              field.onChange(val);
-              handleChange(val);
-            })}
+            <IGRPSelectField
+              {...selectFieldProps}
+              value={field.value ?? ''}
+              onChange={(val) => {
+                field.onChange(val);
+                handleChange(val);
+              }}
+            />
           </FormControl>
 
           {helperText && !fieldState.error && <FormDescription>{helperText}</FormDescription>}
@@ -276,7 +356,7 @@ const IGRPSelectItem = memo(
           <Circle className={cn('h-2 w-2 fill-current', igrpColorText(item.status || 'primary'))} />
         )}
         {item.image && (
-          <img
+          <Image
             className={cn('h-5 w-5 rounded')}
             src={item.image || '/placeholder.svg'}
             alt={item.label}

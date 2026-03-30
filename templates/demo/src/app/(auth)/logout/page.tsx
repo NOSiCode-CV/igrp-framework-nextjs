@@ -1,7 +1,7 @@
 "use client";
 
-import { signOut } from "@igrp/framework-next-auth/client";
 import { useEffect } from "react";
+import { signOut } from "@igrp/framework-next-auth/client";
 
 export default function LogoutPage() {
   useEffect(() => {
@@ -10,6 +10,12 @@ export default function LogoutPage() {
     })();
   }, []);
 
-  // TODO: apply design
-  return <div>Logout in progress</div>;
+  return (
+    <main id="main-content" aria-live="polite" aria-busy="true">
+      <h1 className="sr-only">Logout</h1>
+      <div className="flex min-h-[50vh] items-center justify-center p-6">
+        <p className="text-muted-foreground">A terminar sessão…</p>
+      </div>
+    </main>
+  );
 }

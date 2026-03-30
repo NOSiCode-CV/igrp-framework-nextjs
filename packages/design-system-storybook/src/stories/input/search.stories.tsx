@@ -3,7 +3,7 @@ import { z } from 'zod';
 import {
   IGRPInputSearch,
   type IGRPInputSearchProps,
-  IGRPButtonPrimitive,
+  Button,
 } from '@igrp/igrp-framework-react-design-system';
 import { FormProvider, useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
@@ -71,12 +71,12 @@ const FormTemplate: StoryFn<IGRPInputSearchProps> = (args) => {
             }}
           />
 
-          <IGRPButtonPrimitive
+          <Button
             type='submit'
             className='w-full mt-4'
           >
             Pesquisar
-          </IGRPButtonPrimitive>
+          </Button>
         </form>
       </FormProvider>
     </div>

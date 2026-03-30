@@ -2,15 +2,15 @@
 
 import {
   cn,
-  IGRPLabelPrimitive,
-  IGRPSelectPrimitive,
-  IGRPSelectContentPrimitive,
-  IGRPSelectGroupPrimitive,
-  IGRPSelectItemPrimitive,
-  IGRPSelectLabelPrimitive,
-  IGRPSelectSeparatorPrimitive,
-  IGRPSelectTriggerPrimitive,
-  IGRPSelectValuePrimitive,
+  Label,
+  Select,
+  SelectContent,
+  SelectGroup,
+  SelectItem,
+  SelectLabel,
+  SelectSeparator,
+  SelectTrigger,
+  SelectValue,
 } from '@igrp/igrp-framework-react-design-system';
 
 import { useIGRPThemeConfig } from '../providers/active-theme';
@@ -58,39 +58,39 @@ function IGRPTemplateThemeSelector() {
 
   return (
     <div className={cn('flex items-center gap-2')}>
-      <IGRPLabelPrimitive htmlFor="theme-selector" className={cn('sr-only')}>
+      <Label htmlFor="theme-selector" className={cn('sr-only')}>
         Theme
-      </IGRPLabelPrimitive>
-      <IGRPSelectPrimitive value={activeTheme} onValueChange={setActiveTheme}>
-        <IGRPSelectTriggerPrimitive
+      </Label>
+      <Select value={activeTheme} onValueChange={setActiveTheme}>
+        <SelectTrigger
           id="theme-selector"
           size="sm"
           className={cn('justify-start *:data-[slot=select-value]:w-12')}
         >
           <span className={cn('text-muted-foreground hidden sm:block')}>Select a theme:</span>
           <span className={cn('text-muted-foreground block sm:hidden')}>Theme</span>
-          <IGRPSelectValuePrimitive placeholder="Select a theme" />
-        </IGRPSelectTriggerPrimitive>
-        <IGRPSelectContentPrimitive align="end">
-          <IGRPSelectGroupPrimitive>
-            <IGRPSelectLabelPrimitive>Default</IGRPSelectLabelPrimitive>
+          <SelectValue placeholder="Select a theme" />
+        </SelectTrigger>
+        <SelectContent align="end">
+          <SelectGroup>
+            <SelectLabel>Default</SelectLabel>
             {DEFAULT_THEMES.map((theme) => (
-              <IGRPSelectItemPrimitive key={theme.name} value={theme.value}>
+              <SelectItem key={theme.name} value={theme.value}>
                 {theme.name}
-              </IGRPSelectItemPrimitive>
+              </SelectItem>
             ))}
-          </IGRPSelectGroupPrimitive>
-          <IGRPSelectSeparatorPrimitive />
-          <IGRPSelectGroupPrimitive>
-            <IGRPSelectLabelPrimitive>Scaled</IGRPSelectLabelPrimitive>
+          </SelectGroup>
+          <SelectSeparator />
+          <SelectGroup>
+            <SelectLabel>Scaled</SelectLabel>
             {SCALED_THEMES.map((theme) => (
-              <IGRPSelectItemPrimitive key={theme.name} value={theme.value}>
+              <SelectItem key={theme.name} value={theme.value}>
                 {theme.name}
-              </IGRPSelectItemPrimitive>
+              </SelectItem>
             ))}
-          </IGRPSelectGroupPrimitive>
-        </IGRPSelectContentPrimitive>
-      </IGRPSelectPrimitive>
+          </SelectGroup>
+        </SelectContent>
+      </Select>
     </div>
   );
 }

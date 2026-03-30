@@ -1,3 +1,9 @@
+/**
+ * Normalizes base path and returns the API auth path.
+ *
+ * @param bp - Base path (e.g. "" or "/my-app")
+ * @returns Normalized path ending with /api/auth
+ */
 export function getBasePath(bp: string) {
   if (!bp) return "/api/auth";
 

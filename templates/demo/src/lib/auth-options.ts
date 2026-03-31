@@ -1,8 +1,12 @@
 import type { AuthOptions } from "next-auth";
 import KeycloakProvider from "next-auth/providers/keycloak";
 import { refreshAccessToken } from "./auth-helpers";
+import { sanitizeRedirectUrl } from "./sanitize";
 
 export const authOptions: AuthOptions = {
+  // Secure cookies in production (HTTPS only); allow HTTP in development
+  useSecureCookies: process.env.NODE_ENV === "production",
+
   providers: [
     KeycloakProvider({
       clientId: process.env.KEYCLOAK_CLIENT_ID || "",
@@ -14,8 +18,17 @@ export const authOptions: AuthOptions = {
   secret: process.env.NEXTAUTH_SECRET,
 
   callbacks: {
+    /**
+     * JWT callback: runs on every request. Handles token storage and refresh.
+     *
+     * Flow:
+     * 1. Initial sign-in (account present): store access_token, expires_at (ms), refresh_token
+     * 2. Token still valid (expiresAt > now): return cached token
+     * 3. Token expired: call refreshAccessToken; returns new token or token with error
+     *
+     * When error is set, session callback propagates it; layout redirects to /logout.
+     */
     async jwt({ token, account }) {
-      // Initial sign in
       if (account) {
         token.accessToken = account.access_token;
         token.expiresAt = account.expires_at
@@ -24,12 +37,10 @@ export const authOptions: AuthOptions = {
         token.refreshToken = account.refresh_token;
       }
 
-      // Return previous token if the access token has not expired yet
       if (token.expiresAt && Date.now() < token.expiresAt) {
         return token;
       }
 
-      // Access token has expired, try to update it
       return refreshAccessToken(token);
     },
     async session({ session, token }) {
@@ -44,7 +55,10 @@ export const authOptions: AuthOptions = {
       const igrpAppHomeSlug = process.env.NEXT_PUBLIC_IGRP_APP_HOME_SLUG || "";
       const redirectTo = `${nextInternalUrl}${igrpAppHomeSlug}`;
 
-      return nextInternalUrl ? redirectTo : url;
+      if (nextInternalUrl) return redirectTo;
+
+      // Sanitize user-provided redirect URL to prevent open redirect
+      return sanitizeRedirectUrl(url, process.env.NEXTAUTH_URL, "/");
     },
   },
 };

@@ -2,12 +2,12 @@ import type { Meta, StoryObj } from '@storybook/nextjs-vite';
 import {
   IGRPPageFooter,
   type IGRPPageFooterProps,
-  IGRPBadgePrimitive,
-  IGRPButtonPrimitive,
-  IGRPCardPrimitive,
-  IGRPCardContentPrimitive,
-  IGRPCardHeaderPrimitive,
-  IGRPCardTitlePrimitive,
+  Badge,
+  Button,
+  Card,
+  CardContent,
+  CardHeader,
+  CardTitle,
   cn,
   useIGRPMenuNavigation,
   IGRPIcon,
@@ -47,21 +47,21 @@ const Template = (args: IGRPPageFooterProps) => {
         <div className='grid grid-cols-1 lg:grid-cols-4 gap-4'>
           <div className='lg:col-span-1'>
             <div className='sticky top-20'>
-              <IGRPCardPrimitive className='shadow-sm'>
-                <IGRPCardHeaderPrimitive className='py-3 px-4 border-b'>
+              <Card className='shadow-sm'>
+                <CardHeader className='py-3 px-4 border-b'>
                   <div className='flex items-center justify-between'>
-                    <IGRPCardTitlePrimitive className='text-sm font-medium'>
+                    <CardTitle className='text-sm font-medium'>
                       Navegação
-                    </IGRPCardTitlePrimitive>
-                    <IGRPBadgePrimitive
+                    </CardTitle>
+                    <Badge
                       variant='outline'
                       className='font-normal text-xs'
                     >
                       Novo
-                    </IGRPBadgePrimitive>
+                    </Badge>
                   </div>
-                </IGRPCardHeaderPrimitive>
-                <IGRPCardContentPrimitive className='p-0'>
+                </CardHeader>
+                <CardContent className='p-0'>
                   <div className='divide-y'>
                     {formSections.map((section) => (
                       <button
@@ -86,8 +86,8 @@ const Template = (args: IGRPPageFooterProps) => {
                       </button>
                     ))}
                   </div>
-                </IGRPCardContentPrimitive>
-              </IGRPCardPrimitive>
+                </CardContent>
+              </Card>
 
               <div className='mt-4 p-4 bg-blue-50 rounded-lg border border-blue-100 shadow-sm'>
                 <div className='flex items-start'>
@@ -390,7 +390,7 @@ const Template = (args: IGRPPageFooterProps) => {
 
         <IGRPPageFooter {...args}>
           <div className='flex items-center gap-2'>
-            <IGRPBadgePrimitive
+            <Badge
               variant='outline'
               className='bg-green-50 text-green-700 border-green-200'
             >
@@ -399,28 +399,28 @@ const Template = (args: IGRPPageFooterProps) => {
                 className='h-3.5 w-3.5 mr-1'
               />
               Novo Contribuinte
-            </IGRPBadgePrimitive>
+            </Badge>
 
             <span className='text-xs text-muted-foreground'>
               Preencha os campos obrigatórios marcados com *
             </span>
           </div>
           <div className='flex gap-3'>
-            <IGRPButtonPrimitive
+            <Button
               type='button'
               variant='outline'
               onClick={() => console.log('Cancel Clcked...')}
             >
               Cancelar
-            </IGRPButtonPrimitive>
+            </Button>
 
-            <IGRPButtonPrimitive
+            <Button
               type='submit'
               form='contribuinte-form'
               className='min-w-[150px]'
             >
               Salvar Contribuinte
-            </IGRPButtonPrimitive>
+            </Button>
           </div>
         </IGRPPageFooter>
       </div>

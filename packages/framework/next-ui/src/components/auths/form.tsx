@@ -5,9 +5,9 @@ import Image from 'next/image';
 import { signIn } from '@igrp/framework-next-auth/client';
 import {
   cn,
-  IGRPAlertPrimitive,
-  IGRPAlertDescriptionPrimitive,
-  IGRPButtonPrimitive,
+  Alert,
+  AlertDescription,
+  Button,
   IGRPIcon,
 } from '@igrp/igrp-framework-react-design-system';
 import { IGRPTemplateModeSwitcher } from '../templates/mode-switcher';
@@ -63,13 +63,20 @@ function IGRPAuthForm({ texts, logo, name, callbackUrl = '/' }: IGRPAuthFormProp
       <div className={cn('grow flex flex-col justify-center items-center')}>
         <div className={cn('w-full max-w-md space-y-8 flex flex-col justify-center')}>
           {authError && (
-            <IGRPAlertPrimitive
+            <Alert
               variant="destructive"
               className={cn('animate-in fade-in-50 slide-in-from-top-5')}
+              role="alert"
+              aria-live="polite"
             >
-              <IGRPIcon iconName="AlertCircle" className={cn('h-4 w-4')} strokeWidth={2} />
-              <IGRPAlertDescriptionPrimitive>{authError}</IGRPAlertDescriptionPrimitive>
-            </IGRPAlertPrimitive>
+              <IGRPIcon
+                iconName="AlertCircle"
+                className={cn('h-4 w-4')}
+                strokeWidth={2}
+                aria-hidden
+              />
+              <AlertDescription>{authError}</AlertDescription>
+            </Alert>
           )}
           <div className={cn('flex flex-col items-center')}>
             <Image
@@ -85,24 +92,34 @@ function IGRPAuthForm({ texts, logo, name, callbackUrl = '/' }: IGRPAuthFormProp
             </h3>
           </div>
 
-          <IGRPButtonPrimitive
+          <Button
             onClick={onSubmit}
             disabled={isLoading}
             className={cn('h-10 text-md')}
-            aria-live="polite"
+            aria-busy={isLoading}
           >
             {isLoading ? (
               <>
-                <IGRPIcon iconName="Loader" className={cn('mr-2 animate-spin')} strokeWidth={2} />A
-                autenticar...
+                <IGRPIcon
+                  iconName="Loader"
+                  className={cn('mr-2 animate-spin motion-reduce:animate-none')}
+                  strokeWidth={2}
+                  aria-hidden
+                />
+                {texts.loginButton}…
               </>
             ) : (
               <>
-                Autenticar
-                <IGRPIcon iconName="ShieldCheck" className={cn('mr-2 size-6')} strokeWidth={2} />
+                {texts.loginButton}
+                <IGRPIcon
+                  iconName="ShieldCheck"
+                  className={cn('mr-2 size-6')}
+                  strokeWidth={2}
+                  aria-hidden
+                />
               </>
             )}
-          </IGRPButtonPrimitive>
+          </Button>
         </div>
       </div>
 

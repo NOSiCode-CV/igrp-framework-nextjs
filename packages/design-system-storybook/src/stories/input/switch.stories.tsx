@@ -4,7 +4,7 @@ import { useForm, FormProvider } from 'react-hook-form';
 import {
   IGRPSwitch,
   type IGRPSwitchProps,
-  IGRPButtonPrimitive,
+  Button,
   type IGRPGridSize,
 } from '@igrp/igrp-framework-react-design-system';
 
@@ -82,7 +82,7 @@ function InsideFormComponent(args: IGRPSwitchProps) {
       <form onSubmit={form.handleSubmit(onSubmit)}>
         <StoryContainer>
           <IGRPSwitch {...args} />
-          <IGRPButtonPrimitive type='submit'>Submit</IGRPButtonPrimitive>
+          <Button type='submit'>Submit</Button>
         </StoryContainer>
       </form>
     </FormProvider>

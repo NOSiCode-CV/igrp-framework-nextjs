@@ -1,24 +1,42 @@
+'use client';
+
 import { useId, useState } from 'react';
 import type { DropdownNavProps, DropdownProps, PropsBase, PropsSingle } from 'react-day-picker';
 
-import { Calendar as DropdownCalendar } from '../../primitives/calendar';
+import { Calendar as DropdownCalendar } from '../../ui/calendar';
+
+function getToday(): Date {
+  return new Date();
+}
 import {
   Select,
   SelectContent,
   SelectItem,
   SelectTrigger,
   SelectValue,
-} from '../../primitives/select';
+} from '../../ui/select';
 import { cn } from '../../../lib/utils';
 
+/**
+ * Props for the IGRPCalendar component (deprecated).
+ * @see IGRPCalendar
+ */
 type IGRPCalendarProps = {
+  /** HTML id attribute. */
   id?: string;
+  /** HTML name attribute. */
   name?: string;
+  /** Selected date. */
   date?: Date;
+  /** Called when the selected date changes. */
   onDateChange?: (date: Date | undefined) => void;
+  /** Earliest selectable month. */
   startDate?: Date;
+  /** Latest selectable month. */
   endDate?: Date;
+  /** Additional CSS classes. */
   className?: string;
+  /** CSS classes for day buttons. */
   dayButtonClassName?: string;
 } & PropsBase &
   (
@@ -43,7 +61,7 @@ type IGRPCalendarProps = {
 function IGRPCalendar({
   id,
   name,
-  date = new Date(),
+  date = getToday(),
   onDateChange,
   startDate,
   endDate,
@@ -53,7 +71,7 @@ function IGRPCalendar({
   const _id = useId();
   const ref = name ?? id ?? _id;
 
-  const today = new Date();
+  const today = getToday();
   const [month, setMonth] = useState(date || today);
 
   const handleCalendarChange = (
@@ -122,4 +140,4 @@ function IGRPCalendar({
   );
 }
 
-export { IGRPCalendar, type IGRPCalendarProps };
+export { IGRPCalendar, type IGRPCalendarProps as IGRPCalendarPropsDeprecated };

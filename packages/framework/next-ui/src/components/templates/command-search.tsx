@@ -6,13 +6,13 @@ import {
   cn,
   IGRPIcon,
   IGRPButton,
-  IGRPCommandDialogPrimitive,
-  IGRPCommandEmptyPrimitive,
-  IGRPCommandGroupPrimitive,
-  IGRPCommandInputPrimitive,
-  IGRPCommandItemPrimitive,
-  IGRPCommandListPrimitive,
-  IGRPCommandSeparatorPrimitive,
+  CommandDialog,
+  CommandEmpty,
+  CommandGroup,
+  CommandInput,
+  CommandItem,
+  CommandList,
+  CommandSeparator,
 } from '@igrp/igrp-framework-react-design-system';
 
 // TODO: Search items
@@ -65,57 +65,55 @@ function IGRPTemplateCommandSearch() {
           <span className={cn('text-xs')}>⌘</span>K
         </kbd>
       </IGRPButton>
-      <IGRPCommandDialogPrimitive open={open} onOpenChange={setOpen}>
-        <IGRPCommandInputPrimitive placeholder="Digite um comando ou pesquisa..." />
-        <IGRPCommandListPrimitive>
-          <IGRPCommandEmptyPrimitive>Sem Resultados.</IGRPCommandEmptyPrimitive>
-          <IGRPCommandGroupPrimitive heading="Suggestions">
-            <IGRPCommandItemPrimitive onSelect={() => runCommand(() => router.push('/'))}>
+      <CommandDialog open={open} onOpenChange={setOpen}>
+        <CommandInput placeholder="Digite um comando ou pesquisa..." />
+        <CommandList>
+          <CommandEmpty>Sem Resultados.</CommandEmpty>
+          <CommandGroup heading="Suggestions">
+            <CommandItem onSelect={() => runCommand(() => router.push('/'))}>
               <IGRPIcon iconName="House" className={cn('mr-2')} />
               <span>Home</span>
-            </IGRPCommandItemPrimitive>
-            <IGRPCommandItemPrimitive onSelect={() => runCommand(() => router.push('/'))}>
+            </CommandItem>
+            <CommandItem onSelect={() => runCommand(() => router.push('/'))}>
               <IGRPIcon iconName="House" className={cn('mr-2')} />
               <span>Library</span>
-            </IGRPCommandItemPrimitive>
-            <IGRPCommandItemPrimitive onSelect={() => runCommand(() => router.push('/docs'))}>
+            </CommandItem>
+            <CommandItem onSelect={() => runCommand(() => router.push('/docs'))}>
               <IGRPIcon iconName="FileText" className={cn('mr-2')} />
               <span>Documentation</span>
-            </IGRPCommandItemPrimitive>
-            <IGRPCommandItemPrimitive onSelect={() => runCommand(() => router.push('/settings'))}>
+            </CommandItem>
+            <CommandItem onSelect={() => runCommand(() => router.push('/settings'))}>
               <IGRPIcon iconName="Settings" className={cn('mr-2')} />
               <span>Settings</span>
-            </IGRPCommandItemPrimitive>
-          </IGRPCommandGroupPrimitive>
-          <IGRPCommandSeparatorPrimitive />
-          <IGRPCommandGroupPrimitive heading="Team">
-            <IGRPCommandItemPrimitive
-              onSelect={() => runCommand(() => router.push('/team/invite'))}
-            >
+            </CommandItem>
+          </CommandGroup>
+          <CommandSeparator />
+          <CommandGroup heading="Team">
+            <CommandItem onSelect={() => runCommand(() => router.push('/team/invite'))}>
               <IGRPIcon iconName="UserPlus" className={cn('mr-2')} />
               <span>Invite Members</span>
-            </IGRPCommandItemPrimitive>
-          </IGRPCommandGroupPrimitive>
-          <IGRPCommandSeparatorPrimitive />
-          <IGRPCommandGroupPrimitive heading="Profile">
-            <IGRPCommandItemPrimitive onSelect={() => runCommand(() => router.push('/profile'))}>
+            </CommandItem>
+          </CommandGroup>
+          <CommandSeparator />
+          <CommandGroup heading="Profile">
+            <CommandItem onSelect={() => runCommand(() => router.push('/profile'))}>
               <IGRPIcon iconName="User" className={cn('mr-2')} />
               <span>Profile</span>
-            </IGRPCommandItemPrimitive>
-            <IGRPCommandItemPrimitive onSelect={() => runCommand(() => router.push('/logout'))}>
+            </CommandItem>
+            <CommandItem onSelect={() => runCommand(() => router.push('/logout'))}>
               <IGRPIcon iconName="LogOut" className={cn('mr-2')} />
               <span>Logout</span>
-            </IGRPCommandItemPrimitive>
-          </IGRPCommandGroupPrimitive>
-          <IGRPCommandSeparatorPrimitive />
-          <IGRPCommandGroupPrimitive heading="Support">
-            <IGRPCommandItemPrimitive onSelect={() => runCommand(() => router.push('/help'))}>
+            </CommandItem>
+          </CommandGroup>
+          <CommandSeparator />
+          <CommandGroup heading="Support">
+            <CommandItem onSelect={() => runCommand(() => router.push('/help'))}>
               <IGRPIcon iconName="LifeBuoy" className={cn('mr-2')} />
               <span>Help</span>
-            </IGRPCommandItemPrimitive>
-          </IGRPCommandGroupPrimitive>
-        </IGRPCommandListPrimitive>
-      </IGRPCommandDialogPrimitive>
+            </CommandItem>
+          </CommandGroup>
+        </CommandList>
+      </CommandDialog>
     </>
   );
 }

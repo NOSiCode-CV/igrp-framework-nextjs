@@ -1,5 +1,10 @@
 import { NextResponse } from "next/server";
 
+/**
+ * Health check endpoint for load balancers and monitoring.
+ *
+ * @returns JSON with status, message, and timestamp
+ */
 export async function GET() {
   return NextResponse.json(
     {

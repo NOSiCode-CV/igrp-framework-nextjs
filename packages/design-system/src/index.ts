@@ -4,453 +4,460 @@
 // IMPORTANT: do _not_ alias any of the exports in this file, this will cause a mismatch between the unbundled exports
 
 // custom components
+
+export { IGRPStatsCardMini, type IGRPStatsCardMiniProps } from './components/custom/stats-card-mini';
 export { IGRPStatusBanner, type IGRPStatusBannerProps } from './components/custom/status-banner';
-export { IGRPStatsCardTopBorderColored } from './components/custom/stats-card-top-border-colored';
+export {
+  IGRPStatsCardTopBorderColored,
+  type IGRPStatsCardTopBorderColoredProps,
+} from './components/custom/stats-card-top-border-colored';
 export { IGRPUserAvatar, type IGRPUserAvatarProps } from './components/custom/user-avatar';
 
 // primitives components
 
 export {
-  Accordion as IGRPAccordionPrimitive,
-  AccordionItem as IGRPAccordionItemPrimitive,
-  AccordionTrigger as IGRPAccordionTriggerPrimitive,
-  AccordionContent as IGRPAccordionContentPrimitive,
-} from './components/primitives/accordion';
+  Accordion,
+  AccordionItem,
+  AccordionTrigger,
+  AccordionContent,
+  type AccordionTriggerProps,
+  type AccordionTriggerArgs,
+} from './components/ui/accordion';
 
 export {
-  AlertDialog as IGRPAlertDialogPrimitive,
-  AlertDialogPortal as IGRPAlertDialogPortalPrimitive,
-  AlertDialogOverlay as IGRPAlertDialogOverlayPrimitive,
-  AlertDialogTrigger as IGRPAlertDialogTriggerPrimitive,
-  AlertDialogContent as IGRPAlertDialogContentPrimitive,
-  AlertDialogHeader as IGRPAlertDialogHeaderPrimitive,
-  AlertDialogFooter as IGRPAlertDialogFooterPrimitive,
-  AlertDialogTitle as IGRPAlertDialogTitlePrimitive,
-  AlertDialogDescription as IGRPAlertDialogDescriptionPrimitive,
-  AlertDialogAction as IGRPAlertDialogActionPrimitive,
-  AlertDialogCancel as IGRPAlertDialogCancelPrimitive,
-} from './components/primitives/alert-dialog';
+  AlertDialog,
+  AlertDialogPortal,
+  AlertDialogOverlay,
+  AlertDialogTrigger,
+  AlertDialogContent,
+  AlertDialogHeader,
+  AlertDialogFooter,
+  AlertDialogTitle,
+  AlertDialogDescription,
+  AlertDialogAction,
+  AlertDialogCancel,
+} from './components/ui/alert-dialog';
 
 export {
-  Alert as IGRPAlertPrimitive,
-  AlertTitle as IGRPAlertTitlePrimitive,
-  AlertDescription as IGRPAlertDescriptionPrimitive,
-} from './components/primitives/alert';
+  Alert,
+  AlertTitle,
+  AlertDescription,
+} from './components/ui/alert';
 
-export { AspectRatio as IGRPAspectRatioPrimitive } from './components/primitives/aspect-ratio';
-
-export {
-  Avatar as IGRPUserAvatarPrimitive,
-  AvatarImage as IGRPUserAvatarImagePrimitive,
-  AvatarFallback as IGRPUserAvatarFallbackPrimitive,
-} from './components/primitives/avatar';
+export { AspectRatio } from './components/ui/aspect-ratio';
 
 export {
-  Badge as IGRPBadgePrimitive,
-  badgeVariants as IGRPBadgeVariantPrimitive,
-} from './components/primitives/badge';
+  Avatar,
+  AvatarImage,
+  AvatarFallback,
+} from './components/ui/avatar';
 
 export {
-  Breadcrumb as IGRPBreadcrumbPrimitive,
-  BreadcrumbList as IGRPBreadcrumbListPrimitive,
-  BreadcrumbItem as IGRPBreadcrumbItemPrimitive,
-  BreadcrumbLink as IGRPBreadcrumbLinkPrimitive,
-  BreadcrumbPage as IGRPBreadcrumbPagePrimitive,
-  BreadcrumbSeparator as IGRPBreadcrumbSeparatorPrimitive,
-  BreadcrumbEllipsis as IGRPBreadcrumbEllipsisPrimitive,
-} from './components/primitives/breadcrumb';
+  Badge,
+  badgeVariants,
+} from './components/ui/badge';
 
 export {
-  ButtonGroup as IGRPButtonGroupPrimitive,
-  ButtonGroupSeparator as IGRPButtonGroupSeparatorPrimitive,
-  ButtonGroupText as IGRPButtonGroupTextPrimitive,
-  buttonGroupVariants as IGRPButtonGroupVariantPrimitive,
-} from './components/primitives/button-group';
+  Breadcrumb,
+  BreadcrumbList,
+  BreadcrumbItem,
+  BreadcrumbLink,
+  BreadcrumbPage,
+  BreadcrumbSeparator,
+  BreadcrumbEllipsis,
+} from './components/ui/breadcrumb';
 
 export {
-  Button as IGRPButtonPrimitive,
-  buttonVariants as IGRPButtonVariantPrimitive,
-} from './components/primitives/button';
+  ButtonGroup,
+  ButtonGroupSeparator,
+  ButtonGroupText,
+  buttonGroupVariants,
+} from './components/ui/button-group';
 
 export {
-  Calendar as IGRPCalendarPrimitive,
-  CalendarDayButton as IGRPCalendarDayButtonPrimitive,
-} from './components/primitives/calendar';
+  Button,
+  buttonVariants,
+} from './components/ui/button';
 
 export {
-  Card as IGRPCardPrimitive,
-  CardHeader as IGRPCardHeaderPrimitive,
-  CardFooter as IGRPCardFooterPrimitive,
-  CardTitle as IGRPCardTitlePrimitive,
-  CardAction as IGRPCardActionPrimitive,
-  CardDescription as IGRPCardDescriptionPrimitive,
-  CardContent as IGRPCardContentPrimitive,
-} from './components/primitives/card';
+  Calendar,
+  CalendarDayButton,
+} from './components/ui/calendar';
 
 export {
-  type CarouselApi as IGRPCarouselApi,
-  Carousel as IGRPCarouselPrimitive,
-  CarouselContent as IGRPCarouselContentPrimitive,
-  CarouselItem as IGRPCarouselItemPrimitive,
-  CarouselPrevious as IGRPCarouselPreviousPrimitive,
-  CarouselNext as IGRPCarouselNextPrimitive,
-} from './components/primitives/carousel';
+  Card,
+  CardHeader,
+  CardFooter,
+  CardTitle,
+  CardAction,
+  CardDescription,
+  CardContent,
+} from './components/ui/card';
 
 export {
-  ChartContainer as IGRPChartContainerPrimitive,
-  ChartTooltip as IGRPChartTooltipPrimitive,
-  ChartTooltipContent as IGRPChartTooltipContentPrimitive,
-  ChartLegend as IGRPChartLegendPrimitive,
-  ChartLegendContent as IGRPChartLegendContentPrimitive,
-  ChartStyle as IGRPChartStylePrimitive,
-} from './components/primitives/chart';
-
-export { Checkbox as IGRPCheckboxPrimitive } from './components/primitives/checkbox';
+  type CarouselApi,
+  Carousel,
+  CarouselContent,
+  CarouselItem,
+  CarouselPrevious,
+  CarouselNext,
+} from './components/ui/carousel';
 
 export {
-  Collapsible as IGRPCollapsiblePrimitive,
-  CollapsibleTrigger as IGRPCollapsibleTriggerPrimitive,
-  CollapsibleContent as IGRPCollapsibleContentPrimitive,
-} from './components/primitives/collapsible';
+  ChartContainer,
+  ChartTooltip,
+  ChartTooltipContent,
+  ChartLegend,
+  ChartLegendContent,
+  ChartStyle,
+} from './components/ui/chart';
+
+export { Checkbox } from './components/ui/checkbox';
 
 export {
-  Command as IGRPCommandPrimitive,
-  CommandDialog as IGRPCommandDialogPrimitive,
-  CommandInput as IGRPCommandInputPrimitive,
-  CommandList as IGRPCommandListPrimitive,
-  CommandEmpty as IGRPCommandEmptyPrimitive,
-  CommandGroup as IGRPCommandGroupPrimitive,
-  CommandItem as IGRPCommandItemPrimitive,
-  CommandShortcut as IGRPCommandShortcutPrimitive,
-  CommandSeparator as IGRPCommandSeparatorPrimitive,
-} from './components/primitives/command';
+  Collapsible,
+  CollapsibleTrigger,
+  CollapsibleContent,
+} from './components/ui/collapsible';
 
 export {
-  ContextMenu as IGRPContextMenuPrimitive,
-  ContextMenuTrigger as IGRPContextMenuTriggerPrimitive,
-  ContextMenuContent as IGRPContextMenuContentPrimitive,
-  ContextMenuItem as IGRPContextMenuItemPrimitive,
-  ContextMenuCheckboxItem as IGRPContextMenuCheckboxItemPrimitive,
-  ContextMenuRadioItem as IGRPContextMenuRadioItemPrimitive,
-  ContextMenuLabel as IGRPContextMenuLabelPrimitive,
-  ContextMenuSeparator as IGRPContextMenuSeparatorPrimitive,
-  ContextMenuShortcut as IGRPContextMenuShortcutPrimitive,
-  ContextMenuGroup as IGRPContextMenuGroupPrimitive,
-  ContextMenuPortal as IGRPContextMenuPortalPrimitive,
-  ContextMenuSub as IGRPContextMenuSubPrimitive,
-  ContextMenuSubContent as IGRPContextMenuSubContentPrimitive,
-  ContextMenuSubTrigger as IGRPContextMenuSubTriggerPrimitive,
-  ContextMenuRadioGroup as IGRPContextMenuRadioGroupPrimitive,
-} from './components/primitives/context-menu';
+  Command,
+  CommandDialog,
+  CommandInput,
+  CommandList,
+  CommandEmpty,
+  CommandGroup,
+  CommandItem,
+  CommandShortcut,
+  CommandSeparator,
+} from './components/ui/command';
 
 export {
-  Cropper as IGRPCropperPrimitive,
-  CropperDescription as IGRPCropperDescriptionPrimitive,
-  CropperImage as IGRPCropperImagePrimitive,
-  CropperCropArea as IGRPCropperCropAreaPrimitive,
-} from './components/primitives/cropper';
+  ContextMenu,
+  ContextMenuTrigger,
+  ContextMenuContent,
+  ContextMenuItem,
+  ContextMenuCheckboxItem,
+  ContextMenuRadioItem,
+  ContextMenuLabel,
+  ContextMenuSeparator,
+  ContextMenuShortcut,
+  ContextMenuGroup,
+  ContextMenuPortal,
+  ContextMenuSub,
+  ContextMenuSubContent,
+  ContextMenuSubTrigger,
+  ContextMenuRadioGroup,
+} from './components/ui/context-menu';
 
 export {
-  Dialog as IGRPDialogPrimitive,
-  DialogClose as IGRPDialogClosePrimitive,
-  DialogContent as IGRPDialogContentPrimitive,
-  DialogDescription as IGRPDialogDescriptionPrimitive,
-  DialogFooter as IGRPDialogFooterPrimitive,
-  DialogHeader as IGRPDialogHeaderPrimitive,
-  DialogOverlay as IGRPDialogOverlayPrimitive,
-  DialogPortal as IGRPDialogPortalPrimitive,
-  DialogTitle as IGRPDialogTitlePrimitive,
-  DialogTrigger as IGRPDialogTriggerPrimitive,
-} from './components/primitives/dialog';
+  Cropper,
+  CropperDescription,
+  CropperImage,
+  CropperCropArea,
+} from './components/ui/cropper';
 
 export {
-  Drawer as IGRPDrawerPrimitive,
-  DrawerPortal as IGRPDrawerPortalPrimitive,
-  DrawerOverlay as IGRPDrawerOverlayPrimitive,
-  DrawerTrigger as IGRPDrawerTriggerPrimitive,
-  DrawerClose as IGRPDrawerClosePrimitive,
-  DrawerContent as IGRPDrawerContentPrimitive,
-  DrawerHeader as IGRPDrawerHeaderPrimitive,
-  DrawerFooter as IGRPDrawerFooterPrimitive,
-  DrawerTitle as IGRPDrawerTitlePrimitive,
-  DrawerDescription as IGRPDrawerDescriptionPrimitive,
-} from './components/primitives/drawer';
+  Dialog,
+  DialogClose,
+  DialogContent,
+  DialogDescription,
+  DialogFooter,
+  DialogHeader,
+  DialogOverlay,
+  DialogPortal,
+  DialogTitle,
+  DialogTrigger,
+} from './components/ui/dialog';
 
 export {
-  DropdownMenu as IGRPDropdownMenuPrimitive,
-  DropdownMenuPortal as IGRPDropdownMenuPortalPrimitive,
-  DropdownMenuTrigger as IGRPDropdownMenuTriggerPrimitive,
-  DropdownMenuContent as IGRPDropdownMenuContentPrimitive,
-  DropdownMenuGroup as IGRPDropdownMenuGroupPrimitive,
-  DropdownMenuLabel as IGRPDropdownMenuLabelPrimitive,
-  DropdownMenuItem as IGRPDropdownMenuItemPrimitive,
-  DropdownMenuCheckboxItem as IGRPDropdownMenuCheckboxItemPrimitive,
-  DropdownMenuRadioGroup as IGRPDropdownMenuRadioGroupPrimitive,
-  DropdownMenuRadioItem as IGRPDropdownMenuRadioItemPrimitive,
-  DropdownMenuSeparator as IGRPDropdownMenuSeparatorPrimitive,
-  DropdownMenuShortcut as IGRPDropdownMenuShortcutPrimitive,
-  DropdownMenuSub as IGRPDropdownMenuSubPrimitive,
-  DropdownMenuSubTrigger as IGRPDropdownMenuSubTriggerPrimitive,
-  DropdownMenuSubContent as IGRPDropdownMenuSubContentPrimitive,
-} from './components/primitives/dropdown-menu';
+  Drawer,
+  DrawerPortal,
+  DrawerOverlay,
+  DrawerTrigger,
+  DrawerClose,
+  DrawerContent,
+  DrawerHeader,
+  DrawerFooter,
+  DrawerTitle,
+  DrawerDescription,
+} from './components/ui/drawer';
 
 export {
-  Empty as IGRPEmptyPrimitive,
-  EmptyHeader as IGRPEmptyHeaderPrimitive,
-  EmptyTitle as IGRPEmptyTitlePrimitive,
-  EmptyDescription as IGRPEmptyDescriptionPrimitive,
-  EmptyContent as IGRPEmptyContentPrimitive,
-  EmptyMedia as IGRPEmptyMediaPrimitive,
-} from './components/primitives/empty';
+  DropdownMenu,
+  DropdownMenuPortal,
+  DropdownMenuTrigger,
+  DropdownMenuContent,
+  DropdownMenuGroup,
+  DropdownMenuLabel,
+  DropdownMenuItem,
+  DropdownMenuCheckboxItem,
+  DropdownMenuRadioGroup,
+  DropdownMenuRadioItem,
+  DropdownMenuSeparator,
+  DropdownMenuShortcut,
+  DropdownMenuSub,
+  DropdownMenuSubTrigger,
+  DropdownMenuSubContent,
+} from './components/ui/dropdown-menu';
 
 export {
-  Field as IGRPFieldPrimitive,
-  FieldLabel as IGRPFieldLabelPrimitive,
-  FieldDescription as IGRPFieldDescriptionPrimitive,
-  FieldError as IGRPFieldErrorPrimitive,
-  FieldGroup as IGRPFieldGroupPrimitive,
-  FieldLegend as IGRPFieldLegendPrimitive,
-  FieldSeparator as IGRPFieldSeparatorPrimitive,
-  FieldSet as IGRPFieldSetPrimitive,
-  FieldContent as IGRPFieldContentPrimitive,
-  FieldTitle as IGRPFieldTitlePrimitive,
-} from './components/primitives/field';
+  Empty,
+  EmptyHeader,
+  EmptyTitle,
+  EmptyDescription,
+  EmptyContent,
+  EmptyMedia,
+} from './components/ui/empty';
 
 export {
-  useFormField as useIGRPFormFieldPrimitive,
-  Form as IGRPFormPrimitive,
-  FormItem as IGRPFormItemPrimitive,
-  FormLabel as IGRPFormLabelPrimitive,
-  FormControl as IGRPFormControlPrimitive,
-  FormDescription as IGRPFormDescriptionPrimitive,
-  FormMessage as IGRPFormMessagePrimitive,
-  FormField as IGRPFormFieldPrimitive,
-} from './components/primitives/form';
+  Field,
+  FieldLabel,
+  FieldDescription,
+  FieldError,
+  FieldGroup,
+  FieldLegend,
+  FieldSeparator,
+  FieldSet,
+  FieldContent,
+  FieldTitle,
+} from './components/ui/field';
 
 export {
-  HoverCard as IGRPHoverCardPrimitive,
-  HoverCardTrigger as IGRPHoverCardTriggerPrimitive,
-  HoverCardContent as IGRPHoverCardContentPrimitive,
-} from './components/primitives/hover-card';
+  useFormField,
+  Form,
+  FormItem,
+  FormLabel,
+  FormControl,
+  FormDescription,
+  FormMessage,
+  FormField,
+} from './components/ui/form';
 
 export {
-  InputGroup as IGRPInputGroupPrimitive,
-  InputGroupAddon as IGRPInputGroupAddonPrimitive,
-  InputGroupButton as IGRPInputGroupButtonPrimitive,
-  InputGroupText as IGRPInputGroupTextPrimitive,
-  InputGroupInput as IGRPInputGroupInputPrimitive,
-  InputGroupTextarea as IGRPInputGroupTextareaPrimitive,
-} from './components/primitives/input-group';
+  HoverCard,
+  HoverCardTrigger,
+  HoverCardContent,
+} from './components/ui/hover-card';
 
 export {
-  InputOTP as IGRPInputOTPPrimitive,
-  InputOTPGroup as IGRPInputOTPGroupPrimitive,
-  InputOTPSlot as IGRPInputOTPSlotPrimitive,
-  InputOTPSeparator as IGRPInputOTPSeparatorPrimitive,
-} from './components/primitives/input-otp';
-
-export { Input as IGRPInputPrimitive } from './components/primitives/input';
-
-export {
-  Item as IGRPItemPrimitive,
-  ItemMedia as IGRPItemMediaPrimitive,
-  ItemContent as IGRPItemContentPrimitive,
-  ItemActions as IGRPItemActionsPrimitive,
-  ItemGroup as IGRPItemGroupPrimitive,
-  ItemSeparator as IGRPItemSeparatorPrimitive,
-  ItemTitle as IGRPItemTitlePrimitive,
-  ItemDescription as IGRPItemDescriptionPrimitive,
-  ItemHeader as IGRPItemHeaderPrimitive,
-  ItemFooter as IGRPItemFooterPrimitive,
-} from './components/primitives/item';
+  InputGroup,
+  InputGroupAddon,
+  InputGroupButton,
+  InputGroupText,
+  InputGroupInput,
+  InputGroupTextarea,
+} from './components/ui/input-group';
 
 export {
-  Kbd as IGRPKbdPrimitive,
-  KbdGroup as IGRPKbdGroupPrimitive,
-} from './components/primitives/kbd';
+  InputOTP,
+  InputOTPGroup,
+  InputOTPSlot,
+  InputOTPSeparator,
+} from './components/ui/input-otp';
 
-export { Label as IGRPLabelPrimitive } from './components/primitives/label';
-
-export {
-  Menubar as IGRPMenubarPrimitive,
-  MenubarPortal as IGRPMenubarPortalPrimitive,
-  MenubarMenu as IGRPMenubarMenuPrimitive,
-  MenubarTrigger as IGRPMenubarTriggerPrimitive,
-  MenubarContent as IGRPMenubarContentPrimitive,
-  MenubarGroup as IGRPMenubarGroupPrimitive,
-  MenubarSeparator as IGRPMenubarSeparatorPrimitive,
-  MenubarLabel as IGRPMenubarLabelPrimitive,
-  MenubarItem as IGRPMenubarItemPrimitive,
-  MenubarShortcut as IGRPMenubarShortcutPrimitive,
-  MenubarCheckboxItem as IGRPMenubarCheckboxItemPrimitive,
-  MenubarRadioGroup as IGRPMenubarRadioGroupPrimitive,
-  MenubarRadioItem as IGRPMenubarRadioItemPrimitive,
-  MenubarSub as IGRPMenubarSubPrimitive,
-  MenubarSubTrigger as IGRPMenubarSubTriggerPrimitive,
-  MenubarSubContent as IGRPMenubarSubContentPrimitive,
-} from './components/primitives/menubar';
+export { Input } from './components/ui/input';
 
 export {
-  NavigationMenu as IGRPNavigationMenuPrimitive,
-  NavigationMenuList as IGRPNavigationMenuListPrimitive,
-  NavigationMenuItem as IGRPNavigationMenuItemPrimitive,
-  NavigationMenuContent as IGRPNavigationMenuContentPrimitive,
-  NavigationMenuTrigger as IGRPNavigationMenuTriggerPrimitive,
-  NavigationMenuLink as IGRPNavigationMenuLinkPrimitive,
-  NavigationMenuIndicator as IGRPNavigationMenuIndicatorPrimitive,
-  NavigationMenuViewport as IGRPNavigationMenuViewportPrimitive,
-  navigationMenuTriggerStyle as IGRPNavigationMenuTriggerStyle,
-} from './components/primitives/navigation-menu';
+  Item,
+  ItemMedia,
+  ItemContent,
+  ItemActions,
+  ItemGroup,
+  ItemSeparator,
+  ItemTitle,
+  ItemDescription,
+  ItemHeader,
+  ItemFooter,
+} from './components/ui/item';
 
 export {
-  Pagination as IGRPPaginationPrimitive,
-  PaginationContent as IGRPPaginationContentPrimitive,
-  PaginationLink as IGRPPaginationLinkPrimitive,
-  PaginationItem as IGRPPaginationItemPrimitive,
-  PaginationPrevious as IGRPPaginationPreviousPrimitive,
-  PaginationNext as IGRPPaginationNextPrimitive,
-  PaginationEllipsis as IGRPPaginationEllipsisPrimitive,
-} from './components/primitives/pagination';
+  Kbd,
+  KbdGroup,
+} from './components/ui/kbd';
+
+export { Label } from './components/ui/label';
 
 export {
-  Popover as IGRPPopoverPrimitive,
-  PopoverTrigger as IGRPPopoverTriggerPrimitive,
-  PopoverContent as IGRPPopoverContentPrimitive,
-  PopoverAnchor as IGRPPopoverAnchorPrimitive,
-} from './components/primitives/popover';
-
-export { Progress } from './components/primitives/progress';
-
-export {
-  RadioGroup as IGRPRadioGroupPrimitive,
-  RadioGroupItem as IGRPRadioGroupItemPrimitive,
-  radioItemVariants as IGRPRadioGroupVariantPrimitive,
-} from './components/primitives/radio-group';
-
-export {
-  ResizablePanelGroup as IGRPResizablePanelGroupPrimitive,
-  ResizablePanel as IGRPResizablePanelPrimitive,
-  ResizableHandle as IGRPResizableHandlePrimitive,
-} from './components/primitives/resizable';
+  Menubar,
+  MenubarPortal,
+  MenubarMenu,
+  MenubarTrigger,
+  MenubarContent,
+  MenubarGroup,
+  MenubarSeparator,
+  MenubarLabel,
+  MenubarItem,
+  MenubarShortcut,
+  MenubarCheckboxItem,
+  MenubarRadioGroup,
+  MenubarRadioItem,
+  MenubarSub,
+  MenubarSubTrigger,
+  MenubarSubContent,
+} from './components/ui/menubar';
 
 export {
-  ScrollArea as IGRPScrollAreaPrimitive,
-  ScrollBar as IGRPScrollBarPrimitive,
-} from './components/primitives/scroll-area';
+  NavigationMenu,
+  NavigationMenuList,
+  NavigationMenuItem,
+  NavigationMenuContent,
+  NavigationMenuTrigger,
+  NavigationMenuLink,
+  NavigationMenuIndicator,
+  NavigationMenuViewport,
+  navigationMenuTriggerStyle,
+} from './components/ui/navigation-menu';
 
 export {
-  Select as IGRPSelectPrimitive,
-  SelectContent as IGRPSelectContentPrimitive,
-  SelectGroup as IGRPSelectGroupPrimitive,
-  SelectItem as IGRPSelectItemPrimitive,
-  SelectLabel as IGRPSelectLabelPrimitive,
-  SelectScrollDownButton as IGRPSelectScrollDownButtonPrimitive,
-  SelectScrollUpButton as IGRPSelectScrollUpButtonPrimitive,
-  SelectSeparator as IGRPSelectSeparatorPrimitive,
-  SelectTrigger as IGRPSelectTriggerPrimitive,
-  SelectValue as IGRPSelectValuePrimitive,
-} from './components/primitives/select';
-
-export { Separator as IGRPSeparatorPrimitive } from './components/primitives/separator';
+  Pagination,
+  PaginationContent,
+  PaginationLink,
+  PaginationItem,
+  PaginationPrevious,
+  PaginationNext,
+  PaginationEllipsis,
+} from './components/ui/pagination';
 
 export {
-  Sheet as IGRPCSheetPrimitive,
-  SheetTrigger as IGRPCSheetTriggerPrimitive,
-  SheetClose as IGRPCSheetClosePrimitive,
-  SheetContent as IGRPCSheetContentPrimitive,
-  SheetHeader as IGRPCSheetHeaderPrimitive,
-  SheetFooter as IGRPCSheetFooterPrimitive,
-  SheetTitle as IGRPCSheetTitlePrimitive,
-  SheetDescription as IGRPCSheetDescriptionPrimitive,
-} from './components/primitives/sheet';
+  Popover,
+  PopoverTrigger,
+  PopoverContent,
+  PopoverAnchor,
+} from './components/ui/popover';
+
+export { Progress } from './components/ui/progress';
 
 export {
-  Sidebar as IGRPSidebarPrimitive,
-  SidebarContent as IGRPSidebarContentPrimitive,
-  SidebarFooter as IGRPSidebarFooterPrimitive,
-  SidebarGroup as IGRPSidebarGroupPrimitive,
-  SidebarGroupAction as IGRPSidebarGroupActionPrimitive,
-  SidebarGroupContent as IGRPSidebarGroupContentPrimitive,
-  SidebarGroupLabel as IGRPSidebarGroupLabelPrimitive,
-  SidebarHeader as IGRPSidebarHeaderPrimitive,
-  SidebarInput as IGRPSidebarInputPrimitive,
-  SidebarInset as IGRPSidebarInsetPrimitive,
-  SidebarMenu as IGRPSidebarMenuPrimitive,
-  SidebarMenuAction as IGRPSidebarMenuActionPrimitive,
-  SidebarMenuBadge as IGRPSidebarMenuBadgePrimitive,
-  SidebarMenuButton as IGRPSidebarMenuButtonPrimitive,
-  SidebarMenuItem as IGRPSidebarMenuItemPrimitive,
-  SidebarMenuSkeleton as IGRPSidebarMenuSkeletonPrimitive,
-  SidebarMenuSub as IGRPSidebarMenuSubPrimitive,
-  SidebarMenuSubButton as IGRPSidebarMenuSubButtonPrimitive,
-  SidebarMenuSubItem as IGRPSidebarMenuSubItemPrimitive,
-  SidebarProvider as IGRPSidebarProviderPrimitive,
-  SidebarRail as IGRPSidebarRailPrimitive,
-  SidebarSeparator as IGRPSidebarSeparatorPrimitive,
-  SidebarTrigger as IGRPSidebarTriggerPrimitive,
-  useSidebar as useIGRPSidebarPrimitive,
-} from './components/primitives/sidebar';
+  RadioGroup,
+  RadioGroupItem,
+  radioItemVariants,
+} from './components/ui/radio-group';
 
-export { Skeleton as IGRPSkeletonPrimitive } from './components/primitives/skeleton';
-
-export { Slider as IGRPSLiderPrimitive } from './components/primitives/slider';
+export { 
+  ResizableHandle, 
+  ResizablePanel, 
+  ResizablePanelGroup 
+} from './components/ui/resizable';
 
 export {
-  Stepper as IGRPStepperPrimitive,
-  StepperDescription as IGRPStepperDescriptionPrimitive,
-  StepperIndicator as IGRPStepperIndicatorPrimitive,
-  StepperItem as IGRPStepperItemPrimitive,
-  StepperSeparator as IGRPStepperSeparatorPrimitive,
-  StepperTitle as IGRPStepperTitlePrimitive,
-  StepperTrigger as IGRPStepperTriggerPrimitive,
-} from './components/primitives/stepper';
-
-export { Switch as IGRPSwitchPrimitive } from './components/primitives/switch';
+  ScrollArea,
+  ScrollBar,
+} from './components/ui/scroll-area';
 
 export {
-  Table as IGRPTablePrimitive,
-  TableHeader as IGRPTableHeaderPrimitive,
-  TableBody as IGRPTableBodyPrimitive,
-  TableFooter as IGRPTableFooterPrimitive,
-  TableHead as IGRPTableHeadPrimitive,
-  TableRow as IGRPTableRowPrimitive,
-  TableCell as IGRPTableCellPrimitive,
-  TableCaption as IGRPTableCaptionPrimitive,
-} from './components/primitives/table';
+  Select,
+  SelectContent,
+  SelectGroup,
+  SelectItem,
+  SelectLabel,
+  SelectScrollDownButton,
+  SelectScrollUpButton,
+  SelectSeparator,
+  SelectTrigger,
+  SelectValue,
+} from './components/ui/select';
+
+export { Separator } from './components/ui/separator';
 
 export {
-  Tabs as IGRPTabsPrimitive,
-  TabsList as IGRPTabsListPrimitive,
-  TabsTrigger as IGRPTabsTriggerPrimitive,
-  TabsContent as IGRPTabsContentPrimitive,
-} from './components/primitives/tabs';
-
-export { Textarea as IGRPTextAreaPrimitive } from './components/primitives/textarea';
-
-export { Toaster as IGRPToasterPrimitive } from './components/primitives/sonner';
-
-export {
-  ToggleGroup as IGRPToggleGroupPrimitive,
-  ToggleGroupItem as IGRPToggleGroupItemPrimitive,
-} from './components/primitives/toggle-group';
+  Sheet,
+  SheetTrigger,
+  SheetClose,
+  SheetContent,
+  SheetHeader,
+  SheetFooter,
+  SheetTitle,
+  SheetDescription,
+} from './components/ui/sheet';
 
 export {
-  Toggle as IGRPTogglePrimitive,
-  toggleVariants as IGRPToggleVariantPrimitive,
-} from './components/primitives/toggle';
+  Sidebar,
+  SidebarContent,
+  SidebarFooter,
+  SidebarGroup,
+  SidebarGroupAction,
+  SidebarGroupContent,
+  SidebarGroupLabel,
+  SidebarHeader,
+  SidebarInput,
+  SidebarInset,
+  SidebarMenu,
+  SidebarMenuAction,
+  SidebarMenuBadge,
+  SidebarMenuButton,
+  SidebarMenuItem,
+  SidebarMenuSkeleton,
+  SidebarMenuSub,
+  SidebarMenuSubButton,
+  SidebarMenuSubItem,
+  SidebarProvider,
+  SidebarRail,
+  SidebarSeparator,
+  SidebarTrigger,
+  useSidebar,
+} from './components/ui/sidebar';
+
+export { Skeleton } from './components/ui/skeleton';
+
+export { Slider } from './components/ui/slider';
 
 export {
-  Tooltip as IGRPTooltipPrimitive,
-  TooltipTrigger as IGRPTooltipTriggerPrimitive,
-  TooltipContent as IGRPTooltipContentPrimitive,
-  TooltipProvider as IGRPTooltipProviderPrimitive,
-} from './components/primitives/tooltip';
+  Stepper,
+  StepperDescription,
+  StepperIndicator,
+  StepperItem,
+  StepperSeparator,
+  StepperTitle,
+  StepperTrigger,
+} from './components/ui/stepper';
+
+export { Switch } from './components/ui/switch';
+
+export {
+  Table,
+  TableHeader,
+  TableBody,
+  TableFooter,
+  TableHead,
+  TableRow,
+  TableCell,
+  TableCaption,
+} from './components/ui/table';
+
+export {
+  Tabs,
+  TabsList,
+  TabsTrigger,
+  TabsContent,
+} from './components/ui/tabs';
+
+export { Textarea } from './components/ui/textarea';
+
+export { Toaster } from './components/ui/sonner';
+
+export {
+  ToggleGroup,
+  ToggleGroupItem,
+} from './components/ui/toggle-group';
+
+export {
+  Toggle,
+  toggleVariants,
+} from './components/ui/toggle';
+
+export {
+  Tooltip,
+  TooltipTrigger,
+  TooltipContent,
+  TooltipProvider,
+} from './components/ui/tooltip';
 
 // horizon components
 
 export { IGRPAlert, type IGRPAlertProps } from './components/horizon/alert';
 
-export { IGRPAccordion, type IGRPAccordionProps } from './components/horizon/accordion';
+export { IGRPAccordion, type IGRPAccordionProps, type IGRPAccordionItem } from './components/horizon/accordion';
 
 export { IGRPAlertDialog, type IGRPAlertDialogProps } from './components/horizon/alert-dialog';
 
@@ -590,6 +597,7 @@ export {
   type IGRPDataTableDropdownMenuDialogProps,
   type IGRPDataTableDropdownMenuLinkProps,
   type IGRPDataTableDropdownMenuProps,
+  type IGRPDataTableDropdownMenuCustomProps,
   IGRPDataTableDropdownMenuAlert,
   IGRPDataTableDropdownMenuCustom,
   IGRPDataTableDropdownMenuLink,
@@ -597,6 +605,7 @@ export {
 } from './components/horizon/data-table/action-dropdown-menu';
 export {
   IGRPDataTableCellCheckbox,
+  IGRPDataTableCellSwitch,
   IGRPDataTableCellExpander,
   IGRPDataTableCellAmount,
   IGRPDataTableCellBadge,
@@ -604,6 +613,7 @@ export {
   IGRPDataTableCellLink,
   IGRPDataTableCellTooltip,
   type IGRPDataTableCellExpanderProps,
+  type IGRPDataTableCellSwitchProps,
   type IGRPDataTableCellAmountProps,
   type IGRPDataTableCellBadgeProps,
   type IGRPDataTableCellDateProps,
@@ -640,8 +650,8 @@ export {
   type IGRPDataTableLinkProps,
 } from './components/horizon/data-table/row-actions';
 export {
-  IGPRDataTableToggleVisibility,
-  type IGPRDataTableVisibilityProps,
+  IGRPDataTableToggleVisibility,
+  type IGRPDataTableVisibilityProps,
 } from './components/horizon/data-table/toggle-visibility';
 export {
   IGRPDataTableTooltipContext,
@@ -650,6 +660,7 @@ export {
 export {
   IGRPDataTableDateRangeFilterFn,
   IGRPDataTableFacetedFilterFn,
+  IGRPDataTableTextFilterFn,
 } from './components/horizon/data-table/lib/filters-utils';
 
 export {
@@ -670,13 +681,15 @@ export {
   IGRPDropdownMenuSubContent,
 } from './components/horizon/dropdown-menu';
 
+export { IGRPFieldDescription, type IGRPFieldDescriptionProps } from './components/horizon/field-description';
+
 export {
   type IGRPFormContextValue,
   useIGRPFormContext,
   IGRPFormContext,
 } from './components/horizon/form/form-context';
-export { IGRPFormField, type IGRPFormFielProps } from './components/horizon/form/form-field';
-export { IGRPForm, type IGRPFormProps, type IGRPFormHandle } from './components/horizon/form/form';
+export { IGRPFormField, type IGRPFormFieldProps } from './components/horizon/form/form-field';
+export { IGRPForm, type IGRPFormProps, type IGRPFormHandle } from './components/horizon/form/';
 export { convertValuesToFormData } from './components/horizon/form/lib/utils';
 export { IGRPFormList, type IGRPFormListProps } from './components/horizon/form/form-list';
 export {
@@ -757,7 +770,7 @@ export { IGRPInputAddOn, type IGRPInputAddOnProps } from './components/horizon/i
 
 export { IGRPLabel, type IGRPLabelProps } from './components/horizon/label';
 
-export { IGRPLoadingSpinner } from './components/horizon/loading-spiner';
+export { IGRPLoadingSpinner } from './components/horizon/loading-spinner';
 
 export {
   IGRPMenuNavigationProvider,
@@ -805,7 +818,7 @@ export {
   IGRPStepperProcess,
   type IGRPStepperProcessProps,
   type IGRPStepProcessProps,
-} from './components/horizon/proccess/stepper';
+} from './components/horizon/process/stepper';
 
 export {
   IGRPRepetitiveComponent,
@@ -841,7 +854,14 @@ export {
   useIGRPSidebar,
 } from './components/horizon/sidebar';
 
-export { IGRPStatsCard, type IGRPStatsCardProps } from './components/horizon/stats-card';
+export {
+  IGRPStatsCard,
+  type IGRPStatsCardProps,
+  igrpStatsCardVariants,
+  igrpStatsCardTitleVariants,
+  igrpStatsCardValueVariants,
+  igrpStstaCardIconVariants,
+} from './components/horizon/stats-card';
 export { IGRPTable, type IGRPTableProps } from './components/horizon/table';
 export { IGRPTabs, type IGRPTabsProps, type IGRPTabItem } from './components/horizon/tabs';
 export {
@@ -887,11 +907,9 @@ export {
 } from './components/horizon/video-embed';
 
 // DEPRECATED
-export { IGRPCalendar, type IGRPCalendarProps } from './components/horizon/calendar/calendar';
-export {
-  IGRPDatePicker,
-  type IGRPDatePickerProps,
-} from './components/horizon/input/date-picker/date-picker';
+export { IGRPCalendar, type IGRPCalendarPropsDeprecated } from './components/horizon/calendar/calendar';
+
+export { IGRPDatePicker, type IGRPDatePickerPropsDeprecated } from './components/horizon/input/date-picker/date-picker';
 
 // types
 
@@ -901,6 +919,9 @@ export type {
   IGRPInputProps,
   IGRPOptionsProps,
   IGRPGridSize,
+  IGRPCalendarProps,
+  IGRPCalendarTimeProps,
+  IGRPDatePickerBaseProps,
   IGRPSize,
   IGRPRoundSize,
 } from './types';
@@ -912,6 +933,14 @@ export { useIsMobile } from './hooks/use-mobile';
 
 // libs
 
+export { 
+  formatDateRange, 
+  formatDateToString,
+  getDisabledDays,
+  isValidDate,   
+  parseStringToDate, 
+  parseStringToRange 
+} from './lib/calendar-utils';
 export {
   IGRPColors,
   type IGRPColorType,
@@ -925,7 +954,7 @@ export { igrpGridSizeClasses, igrpAlertIconMappings } from './lib/constants';
 export { igrpGetInitials } from './lib/initials';
 export { igrpToPascalCase } from './lib/pascal-case';
 export { igrpIsExternalUrl, igrpNormalizeUrl } from './lib/url';
-export { cn } from './lib/utils';
+export { cn, parseLocalDate } from './lib/utils';
 
 // external dependencies
 

@@ -1,33 +1,45 @@
 'use client';
+'use no memo';
 
 import { useId } from 'react';
 import { type Table } from '@tanstack/react-table';
 import { ChevronFirst, ChevronLast, ChevronLeft, ChevronRight } from 'lucide-react';
 
-import { Label } from '../../primitives/label';
-import { Button } from '../../primitives/button';
+import { Label } from '../../ui/label';
+import { Button } from '../../ui/button';
 import {
   Pagination,
   PaginationContent,
   PaginationEllipsis,
   PaginationItem,
-} from '../../primitives/pagination';
+} from '../../ui/pagination';
 import {
   Select,
   SelectContent,
   SelectItem,
   SelectTrigger,
   SelectValue,
-} from '../../primitives/select';
+} from '../../ui/select';
 import { usePagination } from './hooks/use-pagination';
 import { cn } from '../../../lib/utils';
 
+/**
+ * Props for the IGRPDataTablePagination components.
+ * @see IGRPDataTablePagination
+ * @see IGRPDataTablePaginationNumeric
+ */
 interface IGRPDataTablePaginationProps<TData> {
+  /** TanStack Table instance. */
   table: Table<TData>;
+  /** Page size options. */
   pageSize?: number[];
+  /** Additional CSS classes. */
   className?: string;
 }
 
+/**
+ * Pagination with prev/next buttons and page size selector.
+ */
 function IGRPDataTablePagination<TData>({
   table,
   pageSize = [50, 100, 150, 200],
@@ -139,6 +151,9 @@ function IGRPDataTablePagination<TData>({
   );
 }
 
+/**
+ * Pagination with numeric page buttons and page size selector.
+ */
 function IGRPDataTablePaginationNumeric<TData>({
   table,
   pageSize = [50, 100, 150, 200],

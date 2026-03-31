@@ -1,6 +1,7 @@
 import { z } from "zod";
 
 import { EnvValidationError } from "./errors";
+import { isPreviewMode } from "./utils";
 
 /** Optional non-empty string (empty string treated as missing) */
 const optionalString = z
@@ -93,11 +94,7 @@ export function validateEnv(): Env {
   }
 
   const isProduction = process.env.NODE_ENV === "production";
-  const isPreview =
-    parsed.data.IGRP_PREVIEW_MODE === "true" ||
-    process.env.IGRP_PREVIEW_MODE?.trim?.()
-      ?.replace(/^["']|["']$/g, "")
-      ?.toLowerCase() === "true";
+  const isPreview = isPreviewMode();
 
   if (isProduction && !isPreview) {
     const required: (keyof Env)[] = [

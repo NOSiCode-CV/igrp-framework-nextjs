@@ -1,14 +1,16 @@
-# Design System
+# TODO
 
-## Review the input color
+## Design System
 
-## Review Data-table filters
+- Review the input color
 
-## fix rthe pagination on mobile
+- Review Data-table filters
 
-## Add Switch to the DataTable as checkbox
+- fix rthe pagination on mobile
 
-## Review info-card orientation horizontal and see design for this, review the colors mode
+- Add Switch to the DataTable as checkbox
+
+- Review info-card orientation horizontal and see design for this, review the colors mode
 
 ## New shadcn Components
 
@@ -27,8 +29,9 @@ Add the following components to the design system:
 
 ## New Components
 
-- [ ] Progress component
-- [ ] New form component [2026]
+- [ ] Progress
+- [ ] Form
+- [ ] Combobox
 
 ## Component Reviews
 
@@ -38,15 +41,15 @@ Add the following components to the design system:
 
 ## Exports
 
-- [ ] Implement exports separately: `/primitives`, `/horizon`, `/utilities` [2027]
+- [ ] Implement exports separately:, `/horizon`, `/utilities` [2027]
 
 ## Research & Documentation
 
-- [ ] For number input, see: https://base-ui.com/react/components/number-field
+- [ ] For number input, see: <https://base-ui.com/react/components/number-field>
 - [ ] Create API reference for the components
 - [ ] Review additional components:
-  - https://base-ui.com/react/components/autocomplete
-  - https://base-ui.com/react/components/preview-card
+  - <https://base-ui.com/react/components/autocomplete>
+  - <https://base-ui.com/react/components/preview-card>
 
 ## Updates
 
@@ -54,19 +57,18 @@ Add the following components to the design system:
 
 ---
 
-# Next UI
+## Next UI
 
-## Components
+- Components:
 
-- [ ] Error component
-- [ ] Loading component
-- [ ] Not found component
+-- [ ] Error component
+-- [ ] Loading component
+-- [ ] Not found component
 
-## Menu & Sidebar
+- Menu & Sidebar
 
-- [ ] Menu: When sidebar is closed, show separator between groups. Review scroll behavior for better design
+-- [ ] Menu: When sidebar is closed, show separator between groups. Review scroll behavior for better design
 
+-- Get breadcrumbs via script
 
-# Plus
-
-- create a logger to use in this to logs in the server to see what happens
+## Animations component see: <https://animations.dev/learn/animation-theory/the-easing-blueprint>

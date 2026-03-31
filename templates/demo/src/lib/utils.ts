@@ -1,6 +1,12 @@
 import { type ClassValue, clsx } from "clsx";
 import { twMerge } from "tailwind-merge";
 
+/**
+ * Merges Tailwind CSS class names with clsx, resolving conflicts.
+ *
+ * @param inputs - Class values (strings, objects, arrays)
+ * @returns Merged class string
+ */
 export function cn(...inputs: ClassValue[]) {
   return twMerge(clsx(inputs));
 }
@@ -18,6 +24,11 @@ export function isPreviewMode(): boolean {
   return previewModeValue === "true";
 }
 
+/**
+ * Removes empty string values from process.env to avoid "Invalid URL" errors.
+ *
+ * @param key - Environment variable name to unset if empty
+ */
 export function unsetEmptyEnv(key: string) {
   const value = process.env[key];
   if (typeof value === "string" && value.trim() === "") {

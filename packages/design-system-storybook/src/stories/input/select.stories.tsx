@@ -4,7 +4,7 @@ import type { Meta, StoryObj } from '@storybook/nextjs-vite';
 import {
   IGRPSelect,
   type IGRPOptionsProps,
-  IGRPButtonPrimitive,
+  Button,
   IGRPForm,
   type IGRPFormHandle,
 } from '@igrp/igrp-framework-react-design-system';
@@ -118,12 +118,12 @@ const Template: React.FC<Partial<React.ComponentProps<typeof IGRPSelect>>> = (ar
         />
       </IGRPForm>
 
-      <IGRPButtonPrimitive
+      <Button
         type='submit'
         onClick={() => formRef.current?.submit()}
       >
         Submit
-      </IGRPButtonPrimitive>
+      </Button>
     </>
   );
 };

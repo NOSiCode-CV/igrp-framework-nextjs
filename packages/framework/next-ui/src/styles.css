@@ -1,4 +1,4 @@
-/*! tailwindcss v4.2.1 | MIT License | https://tailwindcss.com */
+/*! tailwindcss v4.2.2 | MIT License | https://tailwindcss.com */
 @layer properties;
 @layer theme, base, components, utilities;
 @layer theme {
@@ -794,6 +794,11 @@
     -webkit-backdrop-filter: var(--tw-backdrop-blur,) var(--tw-backdrop-brightness,) var(--tw-backdrop-contrast,) var(--tw-backdrop-grayscale,) var(--tw-backdrop-hue-rotate,) var(--tw-backdrop-invert,) var(--tw-backdrop-opacity,) var(--tw-backdrop-saturate,) var(--tw-backdrop-sepia,);
     backdrop-filter: var(--tw-backdrop-blur,) var(--tw-backdrop-brightness,) var(--tw-backdrop-contrast,) var(--tw-backdrop-grayscale,) var(--tw-backdrop-hue-rotate,) var(--tw-backdrop-invert,) var(--tw-backdrop-opacity,) var(--tw-backdrop-saturate,) var(--tw-backdrop-sepia,);
   }
+  .transition-\[width\,background-color\] {
+    transition-property: width,background-color;
+    transition-timing-function: var(--tw-ease, var(--default-transition-timing-function));
+    transition-duration: var(--tw-duration, var(--default-transition-duration));
+  }
   .transition-all {
     transition-property: all;
     transition-timing-function: var(--tw-ease, var(--default-transition-timing-function));
@@ -824,6 +829,10 @@
   .duration-300 {
     --tw-duration: 300ms;
     transition-duration: 300ms;
+  }
+  .duration-350 {
+    --tw-duration: 350ms;
+    transition-duration: 350ms;
   }
   .duration-500 {
     --tw-duration: 500ms;
@@ -940,6 +949,11 @@
   .data-\[state\=open\]\:text-sidebar-accent-foreground {
     &[data-state="open"] {
       color: var(--sidebar-accent-foreground);
+    }
+  }
+  .motion-reduce\:animate-none {
+    @media (prefers-reduced-motion: reduce) {
+      animation: none;
     }
   }
   .sm\:block {

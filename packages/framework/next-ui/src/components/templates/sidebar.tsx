@@ -1,11 +1,9 @@
-'use client';
-
 import {
-  IGRPSidebarPrimitive,
-  IGRPSidebarContentPrimitive,
-  IGRPSidebarFooterPrimitive,
-  IGRPSidebarHeaderPrimitive,
-  IGRPSidebarRailPrimitive,
+  Sidebar,
+  SidebarContent,
+  SidebarFooter,
+  SidebarHeader,
+  SidebarRail,
 } from '@igrp/igrp-framework-react-design-system';
 import type { IGRPSidebarDataArgs } from '@igrp/framework-next-types';
 
@@ -13,7 +11,7 @@ import { IGRPTemplateAppSwitcher } from './app-switcher';
 import { IGRPTemplateMenus } from './menus';
 import { IGRPTemplateNavUser } from './nav-user';
 
-interface IGRPTemplateSidebarProps extends React.ComponentProps<typeof IGRPSidebarPrimitive> {
+interface IGRPTemplateSidebarProps extends React.ComponentProps<typeof Sidebar> {
   data?: IGRPSidebarDataArgs;
   baseUrl?: string;
 }
@@ -24,23 +22,23 @@ function IGRPTemplateSidebar({ data, baseUrl, ...props }: IGRPTemplateSidebarPro
   const { menuItems, user, showAppSwitcher, apps, appCode, appCenterUrl } = data;
 
   return (
-    <IGRPSidebarPrimitive collapsible="icon" {...props}>
-      <IGRPSidebarHeaderPrimitive>
+    <Sidebar collapsible="icon" {...props}>
+      <SidebarHeader>
         {showAppSwitcher && (
           <IGRPTemplateAppSwitcher apps={apps} appCode={appCode} appCenterUrl={appCenterUrl} />
         )}
-      </IGRPSidebarHeaderPrimitive>
+      </SidebarHeader>
 
-      <IGRPSidebarContentPrimitive>
+      <SidebarContent>
         <IGRPTemplateMenus menus={menuItems} />
-      </IGRPSidebarContentPrimitive>
+      </SidebarContent>
 
-      <IGRPSidebarFooterPrimitive>
+      <SidebarFooter>
         <IGRPTemplateNavUser user={user} />
-      </IGRPSidebarFooterPrimitive>
+      </SidebarFooter>
 
-      <IGRPSidebarRailPrimitive />
-    </IGRPSidebarPrimitive>
+      <SidebarRail />
+    </Sidebar>
   );
 }
 

@@ -2,6 +2,13 @@ import type { NextApiRequest } from "next";
 import { cookies } from "next/headers";
 import { getToken, type JWT } from "next-auth/jwt";
 
+import { logger } from "@/lib/logger";
+
+/**
+ * Retrieves the JWT access token from cookies (NextAuth session).
+ *
+ * @returns The decoded JWT token or null if not authenticated
+ */
 export async function getAccessToken() {
   const cookieStore = await cookies();
 
@@ -18,9 +25,21 @@ export async function getAccessToken() {
 }
 
 /**
- * Refreshes the access token using the refresh token from Keycloak
- * @param token The JWT token to refresh
- * @returns Promise with refreshed token data
+ * Refreshes the access token using the refresh token from Keycloak.
+ *
+ * ## Token refresh flow
+ * 1. Validates Keycloak env vars (issuer, clientId, clientSecret)
+ * 2. POSTs to Keycloak's OIDC token endpoint with grant_type=refresh_token
+ * 3. On success: updates accessToken, expiresAt (ms), and refreshToken (if rotated)
+ * 4. On failure: returns token with error flag; NextAuth will redirect to logout
+ *
+ * ## Keycloak response
+ * - access_token: New access token
+ * - expires_in: Seconds until expiry (converted to ms for expiresAt)
+ * - refresh_token: Optional; Keycloak may rotate it (we keep old if not returned)
+ *
+ * @param token - The JWT token containing the refresh token
+ * @returns Promise with refreshed token data or token with error flag
  */
 export async function refreshAccessToken(token: JWT): Promise<JWT> {
   try {
@@ -29,7 +48,7 @@ export async function refreshAccessToken(token: JWT): Promise<JWT> {
     const clientSecret = process.env.KEYCLOAK_CLIENT_SECRET;
 
     if (!issuer || !clientId || !clientSecret) {
-      console.error("[Auth] Missing Keycloak configuration for token refresh");
+      logger.error("[Auth] Missing Keycloak configuration for token refresh");
       return { ...token, error: "RefreshAccessTokenError" };
     }
 
@@ -51,11 +70,10 @@ export async function refreshAccessToken(token: JWT): Promise<JWT> {
 
     if (!refreshResponse.ok) {
       const errorText = await refreshResponse.text();
-      console.error(
-        "[Auth] Failed to refresh token:",
-        refreshResponse.status,
+      logger.error("[Auth] Failed to refresh token", undefined, {
+        status: refreshResponse.status,
         errorText,
-      );
+      });
       return { ...token, error: "RefreshAccessTokenError" };
     }
 
@@ -68,7 +86,7 @@ export async function refreshAccessToken(token: JWT): Promise<JWT> {
       refreshToken: refreshed.refresh_token ?? token.refreshToken, // Fall back to old refresh token
     };
   } catch (error) {
-    console.error("[Auth] Error refreshing token:", error);
+    logger.error("[Auth] Error refreshing token", error);
     return { ...token, error: "RefreshAccessTokenError" };
   }
 }

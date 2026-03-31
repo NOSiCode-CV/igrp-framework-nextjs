@@ -1,7 +1,13 @@
-import { IGRPPackageJson } from "@igrp/framework-next-types";
+import type { IGRPPackageJson } from "@igrp/framework-next-types";
+import { cache } from "react";
 import pkg from "../../../package.json";
 
-export function getPackageJson() {
+/**
+ * Reads package.json fields for IGRP app info. Cached per request.
+ *
+ * @returns App name, version, description, displayName
+ */
+export const getPackageJson = cache(function getPackageJson() {
   const appInfo: IGRPPackageJson = {
     name: pkg.name,
     version: pkg.version,
@@ -9,4 +15,4 @@ export function getPackageJson() {
     displayName: pkg.displayName,
   };
   return appInfo;
-}
+});

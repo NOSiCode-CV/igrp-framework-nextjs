@@ -3,22 +3,35 @@
 import { useId, type ReactNode } from 'react';
 import type { VariantProps } from 'class-variance-authority';
 
-import { Button, buttonVariants } from '../primitives/button';
+import { Button, buttonVariants } from '../ui/button';
 import { IGRPIcon } from './icon';
 import { cn } from '../../lib/utils';
 import type { IGRPBaseAttributes } from '../../types';
 
+/**
+ * Props for the IGRPButton component.
+ * Extends button primitives with IGRP conventions: icons, loading state, and base attributes.
+ * @see IGRPButton
+ */
 interface IGRPButtonProps
   extends
     Omit<React.ComponentProps<typeof Button>, 'name'>,
     VariantProps<typeof buttonVariants>,
     IGRPBaseAttributes {
+  /** Button content. */
   children?: ReactNode;
+  /** Render as child component (Radix composition). */
   asChild?: boolean;
+  /** Show loading spinner and disable interaction. */
   loading?: boolean;
+  /** Accessible text shown during loading state. */
   loadingText?: string;
 }
 
+/**
+ * Horizon button with optional icon, loading state, and IGRP attributes.
+ * Integrates with form context when used inside IGRPForm.
+ */
 function IGRPButton({
   children,
   showIcon = false,

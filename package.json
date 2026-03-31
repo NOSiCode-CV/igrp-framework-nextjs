@@ -24,15 +24,24 @@
     "build:next-types": "pnpm --filter @igrp/framework-next-types build",
     "build:next-ui": "pnpm --filter @igrp/framework-next-ui build",
     "build:ds": "pnpm --filter @igrp/igrp-framework-react-design-system build",
+    "storybook": "pnpm --filter @igrp/igrp-framework-react-design-system-storybook storybook",
+    "test:storybook": "pnpm --filter @igrp/igrp-framework-react-design-system-storybook test-storybook",
     "build:framework": "pnpm build:auth && pnpm build:next-types && pnpm build:ds && pnpm build:next-ui && pnpm build:next",
     "dev:demo": "pnpm --filter @igrp/framework-next-template dev",
     "build:demo": "pnpm --filter @igrp/framework-next-template build",
     "start:demo": "pnpm --filter @igrp/framework-next-template start",
     "release:demo": "pnpm --filter @igrp/framework-next-template publish:template",
     "dev:app-center": "pnpm --filter @igrp/applications-center dev",
-    "clean-all": "pnpm -r run clean-all"
+    "clean-all": "pnpm -r run clean-all",
+    "changeset": "changeset",
+    "version:changesets": "changeset version",
+    "migrate:primitives": "node scripts/migrate-primitive-names.mjs",
+    "migrate:primitives:apply": "node scripts/migrate-primitive-names.mjs --apply",
+    "install:deps": "dotenv -e .env -- pnpm install"
   },
   "devDependencies": {
+    "@changesets/cli": "^2.30.0",
+    "dotenv-cli": "^11.0.0",
     "eslint": "^9.39.1",
     "typescript": "^5.9.3"
   },

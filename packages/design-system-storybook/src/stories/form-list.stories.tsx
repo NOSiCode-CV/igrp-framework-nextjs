@@ -10,15 +10,15 @@ import {
   IGRPCombobox,
   IGRPButton,
   IGRPIcon,
-  IGRPAlertDialogPrimitive,
-  IGRPAlertDialogTriggerPrimitive,
-  IGRPAlertDialogContentPrimitive,
-  IGRPAlertDialogHeaderPrimitive,
-  IGRPAlertDialogTitlePrimitive,
-  IGRPAlertDialogDescriptionPrimitive,
-  IGRPAlertDialogFooterPrimitive,
-  IGRPAlertDialogCancelPrimitive,
-  IGRPAlertDialogActionPrimitive,
+  AlertDialog,
+  AlertDialogTrigger,
+  AlertDialogContent,
+  AlertDialogHeader,
+  AlertDialogTitle,
+  AlertDialogDescription,
+  AlertDialogFooter,
+  AlertDialogCancel,
+  AlertDialogAction,
   IGRPForm,
   type IGRPFormHandle,
   type IGRPOptionsProps,
@@ -345,8 +345,8 @@ const FormListCustomRemoveActionTemplate = () => {
             console.log('onItemRemove callback:', { item, index });
           }}
           renderRemoveAction={({ ariaLabel, onRemove, onTriggerClick }) => (
-            <IGRPAlertDialogPrimitive>
-              <IGRPAlertDialogTriggerPrimitive asChild>
+            <AlertDialog>
+              <AlertDialogTrigger asChild>
                 <IGRPButton
                   type='button'
                   variant='ghost'
@@ -357,26 +357,26 @@ const FormListCustomRemoveActionTemplate = () => {
                 >
                   <IGRPIcon iconName='Trash2' />
                 </IGRPButton>
-              </IGRPAlertDialogTriggerPrimitive>
+              </AlertDialogTrigger>
 
-              <IGRPAlertDialogContentPrimitive onClick={(e) => e.stopPropagation()}>
-                <IGRPAlertDialogHeaderPrimitive>
-                  <IGRPAlertDialogTitlePrimitive>Remover item?</IGRPAlertDialogTitlePrimitive>
-                  <IGRPAlertDialogDescriptionPrimitive>
+              <AlertDialogContent onClick={(e) => e.stopPropagation()}>
+                <AlertDialogHeader>
+                  <AlertDialogTitle>Remover item?</AlertDialogTitle>
+                  <AlertDialogDescription>
                     Esta acao vai remover este item da lista e nao pode ser desfeita.
-                  </IGRPAlertDialogDescriptionPrimitive>
-                </IGRPAlertDialogHeaderPrimitive>
-                <IGRPAlertDialogFooterPrimitive>
-                  <IGRPAlertDialogCancelPrimitive>Cancelar</IGRPAlertDialogCancelPrimitive>
-                  <IGRPAlertDialogActionPrimitive
+                  </AlertDialogDescription>
+                </AlertDialogHeader>
+                <AlertDialogFooter>
+                  <AlertDialogCancel>Cancelar</AlertDialogCancel>
+                  <AlertDialogAction
                     className='bg-destructive text-white hover:bg-destructive/90'
                     onClick={onRemove}
                   >
                     Confirmar
-                  </IGRPAlertDialogActionPrimitive>
-                </IGRPAlertDialogFooterPrimitive>
-              </IGRPAlertDialogContentPrimitive>
-            </IGRPAlertDialogPrimitive>
+                  </AlertDialogAction>
+                </AlertDialogFooter>
+              </AlertDialogContent>
+            </AlertDialog>
           )}
         />
       </IGRPForm>

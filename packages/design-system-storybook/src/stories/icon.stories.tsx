@@ -4,16 +4,16 @@ import {
   IGRPIcon,
   type IGRPIconProps,
   IGRPIconObject,
-  IGRPAlertDialogPrimitive,
-  IGRPAlertDialogContentPrimitive,
-  IGRPAlertDialogHeaderPrimitive,
-  IGRPButtonPrimitive,
-  IGRPInputPrimitive,
-  IGRPSeparatorPrimitive,
-  IGRPTooltipProviderPrimitive,
-  IGRPTooltipPrimitive,
-  IGRPTooltipContentPrimitive,
-  IGRPTooltipTriggerPrimitive,
+  AlertDialog,
+  AlertDialogContent,
+  AlertDialogHeader,
+  Button,
+  Input,
+  Separator,
+  TooltipProvider,
+  Tooltip,
+  TooltipContent,
+  TooltipTrigger,
 } from '@igrp/igrp-framework-react-design-system';
 
 const meta: Meta<IGRPIconProps> = {
@@ -82,7 +82,7 @@ function IconGalleryComponent() {
   }, []);
 
   return (
-    <IGRPTooltipProviderPrimitive>
+    <TooltipProvider>
       <div className='p-8 space-y-4'>
         <div className='flex gap-8 items-center'>
           <h3 className='font-semibold text-xl'>
@@ -94,7 +94,7 @@ function IconGalleryComponent() {
               className='absolute left-3 top-1/2 transform -translate-y-1/2 w-5 h-5 text-gray-500'
               aria-hidden='true'
             />
-            <IGRPInputPrimitive
+            <Input
               type='text'
               placeholder='Search icons...'
               value={search}
@@ -103,7 +103,7 @@ function IconGalleryComponent() {
               aria-label='Search icons'
             />
             {search && (
-              <IGRPButtonPrimitive
+              <Button
                 className='absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-500 hover:text-gray-700 focus:outline-none hover:bg-transparent cursor-pointer'
                 onClick={() => setSearch('')}
                 aria-label='Clear search'
@@ -115,7 +115,7 @@ function IconGalleryComponent() {
                   className='w-5 h-5'
                   aria-hidden='true'
                 />
-              </IGRPButtonPrimitive>
+              </Button>
             )}
           </div>
         </div>
@@ -124,12 +124,12 @@ function IconGalleryComponent() {
           Showing {filteredIcons.length} of {iconsList.length} icons
         </div>
 
-        <IGRPSeparatorPrimitive className='my-6' />
+        <Separator className='my-6' />
 
         <div className='grid grid-cols-[repeat(auto-fill,minmax(56px,1fr))] gap-4 w-full'>
           {filteredIcons.length > 0 ? (
             filteredIcons.map((iconName) => (
-              <IGRPAlertDialogPrimitive
+              <AlertDialog
                 key={iconName}
                 open={openDialogs[iconName] || false}
                 onOpenChange={(open) => {
@@ -139,9 +139,9 @@ function IconGalleryComponent() {
                   }
                 }}
               >
-                <IGRPTooltipPrimitive>
-                  <IGRPTooltipTriggerPrimitive asChild>
-                    <IGRPButtonPrimitive
+                <Tooltip>
+                  <TooltipTrigger asChild>
+                    <Button
                       aria-label={`View details for ${iconName}`}
                       variant='ghost'
                       size='icon'
@@ -161,17 +161,17 @@ function IconGalleryComponent() {
                         />
                       )}
                       <span className='sr-only'>{iconName}</span>
-                    </IGRPButtonPrimitive>
-                  </IGRPTooltipTriggerPrimitive>
+                    </Button>
+                  </TooltipTrigger>
                   {selectedIcon !== iconName && loadingIcon !== iconName && (
-                    <IGRPTooltipContentPrimitive>{iconName}</IGRPTooltipContentPrimitive>
+                    <TooltipContent>{iconName}</TooltipContent>
                   )}
-                </IGRPTooltipPrimitive>
+                </Tooltip>
 
                 {selectedIcon === iconName && (
-                  <IGRPAlertDialogContentPrimitive className='p-4'>
-                    <IGRPAlertDialogHeaderPrimitive className='flex justify-between items-center relative'>
-                      <IGRPButtonPrimitive
+                  <AlertDialogContent className='p-4'>
+                    <AlertDialogHeader className='flex justify-between items-center relative'>
+                      <Button
                         size='icon'
                         variant='ghost'
                         onClick={() => setSelectedIcon(null)}
@@ -183,8 +183,8 @@ function IconGalleryComponent() {
                           className='w-5 h-5'
                           aria-hidden='true'
                         />
-                      </IGRPButtonPrimitive>
-                    </IGRPAlertDialogHeaderPrimitive>
+                      </Button>
+                    </AlertDialogHeader>
 
                     <div className='flex gap-8 mt-3'>
                       <IGRPIcon
@@ -196,7 +196,7 @@ function IconGalleryComponent() {
                         <h3 className='flex flex-wrap text-xl font-semibold'>
                           {highlightMatch(selectedIcon, search)}
                         </h3>
-                        <IGRPButtonPrimitive
+                        <Button
                           variant='outline'
                           onClick={() => handleCopy(selectedIcon)}
                           aria-label='Copy icon name'
@@ -213,19 +213,19 @@ function IconGalleryComponent() {
                               className='w-4 h-4 mr-1'
                             />
                           )}
-                        </IGRPButtonPrimitive>
+                        </Button>
                       </div>
                     </div>
-                  </IGRPAlertDialogContentPrimitive>
+                  </AlertDialogContent>
                 )}
-              </IGRPAlertDialogPrimitive>
+              </AlertDialog>
             ))
           ) : (
             <p className='col-span-6 text-center text-gray-500'>No icons found</p>
           )}
         </div>
       </div>
-    </IGRPTooltipProviderPrimitive>
+    </TooltipProvider>
   );
 }
 

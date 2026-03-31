@@ -107,8 +107,7 @@ const AUTH_PROVIDER_REGISTRY: Record<AuthProviderId, AuthProviderDefinition> = {
     requiredEnvKeys: [
       'AUTENTIKA_CLIENT_ID',
       'AUTENTIKA_CLIENT_SECRET',
-      'AUTENTIKA_HOST',
-      'AUTENTIKA_TENANT_NAME',
+      'AUTENTIKA_HOST'
     ],
     getDiscoveryUrl: buildAutentikaDiscoveryUrl,
     createProvider: (env) =>

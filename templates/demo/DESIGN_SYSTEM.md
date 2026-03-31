@@ -28,7 +28,7 @@ import {
 } from '@igrp/igrp-framework-react-design-system';
 ```
 
-### Primitives (`*Primitive`)
+### ShandCn UI (`*UI`)
 
 Low-level building blocks. Use when composing custom components.
 

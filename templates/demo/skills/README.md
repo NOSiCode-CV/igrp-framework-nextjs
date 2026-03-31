@@ -1,63 +1,112 @@
 # IGRP Design System Skills
 
-Agent skills for building UI with the IGRP Design System (`@igrp/igrp-framework-react-design-system`).
+Agent skill for building UI with `@igrp/igrp-framework-react-design-system`.
 
-## Quick Start: CRUD Example
+## Structure
 
-See **[CRUD_EXAMPLE.md](./CRUD_EXAMPLE.md)** for a step-by-step guide on using these skills to build a full CRUD. Step 1 covers how to start with all skills agents.
+```skills/
+├── igrp-design-system/          <- single skill: entry point for all UI work
+│   ├── SKILL.md                 <- master: component table, patterns, rules, links
+│   ├── evals/                   <- eval prompts per component area
+│   │   ├── button.json
+│   │   ├── form.json
+│   │   └── ... (one per area)
+│   ├── rules/                   <- global rules (apply to all components)
+│   │   ├── forms.md
+│   │   ├── styling.md
+│   │   └── composition.md
+│   ├── references/              <- package-level docs
+│   │   ├── overview.md          <- types, utilities, deprecated components
+│   │   └── theming.md           <- CSS setup, tokens, dark mode, theme variants
+│   └── components/              <- per-area deep API docs (loaded on demand)
+│       ├── button/
+│       │   └── button.md
+│       ├── calendar-datepicker/
+│       │   ├── calendar.md
+│       │   ├── date-picker.md
+│       │   └── time.md
+│       ├── card/
+│       │   ├── card.md
+│       │   └── card-details.md
+│       ├── charts/
+│       │   ├── area-line-bar.md
+│       │   ├── pie-radar-radial.md
+│       │   └── types.md
+│       ├── custom/
+│       │   ├── stats-card.md
+│       │   ├── stats-card-top-border.md
+│       │   ├── status-banner.md
+│       │   └── user-avatar.md
+│       ├── datatable/
+│       │   ├── datatable.md
+│       │   ├── cells.md
+│       │   ├── filters.md
+│       │   ├── pagination.md
+│       │   └── row-actions.md
+│       ├── feedback/
+│       │   ├── alert.md
+│       │   ├── badge.md
+│       │   ├── notification.md
+│       │   └── toaster.md
+│       ├── form/
+│       │   ├── form.md
+│       │   ├── form-field.md
+│       │   ├── form-list.md
+│       │   └── standalone-list.md
+│       ├── inputs/
+│       │   ├── input-text.md
+│       │   ├── select.md
+│       │   ├── checkbox.md
+│       │   ├── combobox.md
+│       │   ├── date-picker.md
+│       │   ├── number.md
+│       │   └── textarea.md
+│       ├── layout/
+│       │   ├── container.md
+│       │   ├── page-header.md
+│       │   ├── page-footer.md
+│       │   └── sidebar.md
+│       ├── modal/
+│       │   ├── modal-dialog.md
+│       │   └── alert-dialog.md
+│       ├── navigation/
+│       │   ├── menu-navigation.md
+│       │   ├── dropdown-menu.md
+│       │   └── tabs.md
+│       └── ui/
+│           └── ui-overview.md
+│
+├── scripts/
+│   └── setup-cursor-skills.ps1  <- links skill into all agent dirs (run once)
+├── CRUD_EXAMPLE.md              <- step-by-step CRUD guide
+└── README.md                    <- this file
+```
 
-## Skills Index
+## How it works
 
-| Skill | When to Use |
-|-------|-------------|
-| [igrp-form](./igrp-form/) | Forms, validation, form fields |
-| [igrp-inputs](./igrp-inputs/) | Text inputs, select, checkbox, textarea, etc. |
-| [igrp-datatable](./igrp-datatable/) | Data tables, pagination, filtering, sorting |
-| [igrp-button](./igrp-button/) | Buttons, variants, loading states |
-| [igrp-card](./igrp-card/) | Cards, card details |
-| [igrp-charts](./igrp-charts/) | Area, line, bar, pie, radar, radial charts |
-| [igrp-modal](./igrp-modal/) | Modal dialogs, alert dialogs |
-| [igrp-calendar-datepicker](./igrp-calendar-datepicker/) | Calendars, date pickers, time inputs |
-| [igrp-layout](./igrp-layout/) | Container, page header/footer, sidebar |
-| [igrp-navigation](./igrp-navigation/) | Menu navigation, dropdown menus, tabs |
-| [igrp-feedback](./igrp-feedback/) | Alerts, notifications, badges, toasts |
-| [igrp-custom](./igrp-custom/) | Stats cards, status banner, user avatar |
-| [igrp-primitives](./igrp-primitives/) | Primitives for custom composition |
+Agents discover `igrp-design-system/` from their skills directory and load `SKILL.md` as the entry point. From there they follow links into `components/` on demand — only reading the specific area they need for the task at hand (Option B: load on demand).
 
-## Usage
+| Agent reads... | From... |
+| ---------------- | --------- |
+| `SKILL.md` | Auto-discovered via skills directory |
+| `components/datatable/*.md` | Followed as links from `SKILL.md` when building a table |
+| `rules/forms.md` | Followed when writing a form |
+| `references/theming.md` | Followed when setting up CSS or theming |
 
-### Cursor (project-level discovery)
-
-Cursor discovers skills from `.cursor/skills/` or `.agents/skills/` at the repo root. Run the setup script to link these skills:
+## Setup (run once after cloning)
 
 ```powershell
 # From repo root
 .\templates\demo\skills\scripts\setup-cursor-skills.ps1
 ```
 
-This creates junctions in `.cursor/skills/` pointing to each skill here. Cursor will then auto-discover them. You can also invoke skills manually with `/igrp-form`, `/igrp-datatable`, etc.
+| Agent | Discovery path |
+| ------- | --------------- |
+| Cursor | `.cursor/skills/igrp-design-system/` |
+| Claude Code | `templates/demo/.claude/skills/igrp-design-system/` |
+| Trae / OpenHands | `templates/demo/.agents/skills/igrp-design-system/` |
+| GitHub Copilot | `.github/copilot-instructions.md` (inline reference) |
 
-### Anthropic / skills.sh (package for distribution)
+## Quick Start: CRUD Example
 
-To create `.skill` files for installation via `npx skills add`:
-
-```powershell
-# From repo root (no dependencies)
-.\templates\demo\skills\scripts\package-skill-standalone.ps1
-```
-
-Output: `templates/demo/skills/dist/*.skill`. Install with:
-
-```bash
-npx skills add ./templates/demo/skills/dist/igrp-form.skill
-```
-
-Alternative: `package-all-skills.ps1` uses skill-creator's package_skill.py (requires PyYAML; may have encoding issues on Windows).
-
-## Structure
-
-Each skill contains:
-
-- `SKILL.md` – Main instructions and trigger description
-- `references/` – Per-component API docs (heavy depth)
-- `evals/` – Test prompts for skill-creator workflow
+See **[CRUD_EXAMPLE.md](./CRUD_EXAMPLE.md)** for a step-by-step guide to building a full CRUD.

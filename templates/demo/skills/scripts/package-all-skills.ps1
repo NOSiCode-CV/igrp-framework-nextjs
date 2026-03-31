@@ -1,16 +1,16 @@
 # Package IGRP skills for Anthropic/skills.sh
 # Creates .skill files (zip) for each skill. Uses skill-creator's package_skill.py.
-# Run from repo root: .\templates\demo\skills\scripts\package-all-skills.ps1
+# Run from repo root: .\.\skills\scripts\package-all-skills.ps1
 
 $ErrorActionPreference = "Stop"
 $RepoRoot = (Get-Item $PSScriptRoot).Parent.Parent.Parent.Parent.FullName
-$SkillsSource = Join-Path $RepoRoot "templates\demo\skills"
-$OutputDir = Join-Path $RepoRoot "templates\demo\skills\dist"
+$SkillsSource = Join-Path $RepoRoot ".\skills"
+$OutputDir = Join-Path $RepoRoot ".\skills\dist"
 $SkillCreatorPaths = @(
-    (Join-Path $RepoRoot "templates\demo\.claude\skills\skill-creator"),
-    (Join-Path $RepoRoot "templates\demo\.agents\skills\skill-creator"),
-    (Join-Path $RepoRoot "templates\demo\.windsurf\skills\skill-creator"),
-    (Join-Path $RepoRoot "templates\demo\.cortex\skills\skill-creator")
+    (Join-Path $RepoRoot ".\.claude\skills\skill-creator"),
+    (Join-Path $RepoRoot ".\.agents\skills\skill-creator"),
+    (Join-Path $RepoRoot ".\.windsurf\skills\skill-creator"),
+    (Join-Path $RepoRoot ".\.cortex\skills\skill-creator")
 )
 
 $SkillCreatorDir = $null
@@ -31,7 +31,7 @@ if (-not $SkillCreatorDir) {
 $SkillFolders = @(
     "igrp-form", "igrp-inputs", "igrp-datatable", "igrp-button", "igrp-card",
     "igrp-charts", "igrp-modal", "igrp-calendar-datepicker", "igrp-layout",
-    "igrp-navigation", "igrp-feedback", "igrp-custom", "igrp-primitives"
+    "igrp-navigation", "igrp-feedback", "igrp-custom", "igrp-ui"
 )
 
 New-Item -ItemType Directory -Path $OutputDir -Force | Out-Null

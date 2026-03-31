@@ -4,13 +4,13 @@
 
 $ErrorActionPreference = "Stop"
 $RepoRoot = (Get-Item $PSScriptRoot).Parent.Parent.Parent.Parent.FullName
-$SkillsSource = Join-Path $RepoRoot "templates\demo\skills"
+$SkillsSource = Join-Path $RepoRoot ".\demo\skills"
 $OutputDir = Join-Path $SkillsSource "dist"
 
 $SkillFolders = @(
     "igrp-form", "igrp-inputs", "igrp-datatable", "igrp-button", "igrp-card",
     "igrp-charts", "igrp-modal", "igrp-calendar-datepicker", "igrp-layout",
-    "igrp-navigation", "igrp-feedback", "igrp-custom", "igrp-primitives"
+    "igrp-navigation", "igrp-feedback", "igrp-custom", "igrp-ui"
 )
 
 $ExcludeDirs = @("evals", "__pycache__", "node_modules")

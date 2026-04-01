@@ -106,6 +106,9 @@ All UI is built with `@igrp/igrp-framework-react-design-system`. All exports are
 | Status banner | `IGRPStatusBanner` |
 | User avatar | `IGRPUserAvatar` |
 | Icon | `IGRPIcon` (Lucide icon names) |
+| Command palette / ⌘K | `IGRPCommand`, `IGRPCommandDialog`, `IGRPCommandInput`, `IGRPCommandList`, `IGRPCommandGroup`, `IGRPCommandItem` |
+| Simple static table | `IGRPTable` (no sort/filter; for small read-only tables) |
+| Field helper text / error | `IGRPFieldDescription` (outside `IGRPForm` only) |
 | Typography / heading | `IGRPHeadline` |
 | Body text | `IGRPText` |
 | Link | `IGRPLink` |
@@ -229,6 +232,7 @@ All component references live inside `components/`. Read the relevant file(s) wh
 - [components/form/form-field.md](./components/form/form-field.md) — IGRPFormField props, render function
 - [components/form/form-list.md](./components/form/form-list.md) — IGRPFormList dynamic field arrays
 - [components/form/standalone-list.md](./components/form/standalone-list.md) — IGRPStandaloneList
+- [components/form/field-description.md](./components/form/field-description.md) — IGRPFieldDescription (helper text + error for custom fields)
 
 ### Inputs
 
@@ -249,6 +253,7 @@ All component references live inside `components/`. Read the relevant file(s) wh
 ### Data Table
 
 - [components/datatable/datatable.md](./components/datatable/datatable.md) — IGRPDataTable props, columns
+- [components/datatable/table-simple.md](./components/datatable/table-simple.md) — IGRPTable (lightweight static table, no TanStack)
 - [components/datatable/cells.md](./components/datatable/cells.md) — cell renderers (badge, date, link, switch…)
 - [components/datatable/row-actions.md](./components/datatable/row-actions.md) — row action patterns
 - [components/datatable/filters.md](./components/datatable/filters.md) — filter components
@@ -289,6 +294,11 @@ All component references live inside `components/`. Read the relevant file(s) wh
 - [components/feedback/notification.md](./components/feedback/notification.md) — IGRPNotification
 - [components/feedback/badge.md](./components/feedback/badge.md) — IGRPBadge
 - [components/feedback/toaster.md](./components/feedback/toaster.md) — IGRPToaster, useIGRPToast
+- [components/feedback/icon.md](./components/feedback/icon.md) — IGRPIcon, IGRPIconObject, IGRPIconList, IGRPIconName
+
+### Command Palette
+
+- [components/command/command.md](./components/command/command.md) — IGRPCommand family (inline + dialog ⌘K)
 
 ### Custom Domain
 

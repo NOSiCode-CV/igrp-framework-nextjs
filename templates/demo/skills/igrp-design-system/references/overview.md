@@ -32,18 +32,74 @@
 
 ```tsx
 import {
-  cn,                   // class merging (clsx + tailwind-merge)
-  igrpGetInitials,      // "John Doe" -> "JD"
-  igrpToPascalCase,     // "my-name" -> "MyName"
-  IGRPColors,           // color palette constants
-  igrpColorText,        // color -> Tailwind text class
-  useIGRPMetaColor,     // syncs browser chrome theme-color meta tag
-  useIsMobile,          // responsive mobile detection hook
-  formatDateRange,      // format date ranges to string
-  formatDateToString,   // format single date to string
-  igrpIsExternalUrl,    // detect external vs internal URLs
-  igrpNormalizeUrl,     // normalize URL strings
+  // Class merging
+  cn,                        // clsx + tailwind-merge
+
+  // String helpers
+  igrpGetInitials,           // "John Doe" -> "JD"
+  igrpToPascalCase,          // "my-name" -> "MyName"
+
+  // Color helpers
+  IGRPColors,                // color palette constants
+  igrpColorText,             // color -> Tailwind text class
+
+  // Grid / layout constants
+  igrpGridSizeClasses,       // maps IGRPGridSize -> Tailwind col-span class
+
+  // Alert constants
+  igrpAlertIconMappings,     // maps alert variant -> { iconName, className }
+
+  // Date / calendar utilities
+  formatDateRange,           // format a DateRange to locale string
+  formatDateToString,        // format single Date to locale string
+  getDisabledDays,           // build a DayPicker `disabled` matcher from config
+  isValidDate,               // checks if a value is a valid Date
+  parseStringToDate,         // parses "YYYY-MM-DD" string -> Date
+  parseStringToRange,        // parses "YYYY-MM-DD:YYYY-MM-DD" -> DateRange
+  parseLocalDate,            // parses a date string as local time (no UTC shift)
+
+  // URL helpers
+  igrpIsExternalUrl,         // detect external vs internal URLs
+  igrpNormalizeUrl,          // normalize URL strings
+
+  // Hooks
+  useIGRPMetaColor,          // syncs browser chrome theme-color meta tag
+  useIsMobile,               // responsive mobile detection hook
 } from '@igrp/igrp-framework-react-design-system';
+```
+
+### `igrpGridSizeClasses`
+
+Maps an `IGRPGridSize` value to a Tailwind `col-span-*` class:
+
+```tsx
+import { igrpGridSizeClasses } from '@igrp/igrp-framework-react-design-system';
+// { 'default': 'col-span-full', '1/2': 'col-span-6', '1/3': 'col-span-4', … }
+```
+
+### Date utilities
+
+```tsx
+import {
+  getDisabledDays,
+  isValidDate,
+  parseStringToDate,
+  parseStringToRange,
+  parseLocalDate,
+} from '@igrp/igrp-framework-react-design-system';
+
+// Disable weekends for a calendar
+const disabled = getDisabledDays({ disableWeekends: true });
+
+// Parse from API string safely
+const date = parseStringToDate('2025-12-31');       // Date | null
+const range = parseStringToRange('2025-01-01:2025-12-31'); // DateRange | null
+
+// Avoid UTC timezone shift when parsing "YYYY-MM-DD"
+const local = parseLocalDate('2025-06-15'); // Date (midnight local)
+
+// Validate before using
+if (isValidDate(value)) { /* … */ }
 ```
 
 ## Re-exported External Types

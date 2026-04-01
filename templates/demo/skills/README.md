@@ -8,104 +8,53 @@ Agent skill for building UI with `@igrp/igrp-framework-react-design-system`.
 ├── igrp-design-system/          <- single skill: entry point for all UI work
 │   ├── SKILL.md                 <- master: component table, patterns, rules, links
 │   ├── evals/                   <- eval prompts per component area
-│   │   ├── button.json
-│   │   ├── form.json
-│   │   └── ... (one per area)
-│   ├── rules/                   <- global rules (apply to all components)
-│   │   ├── forms.md
-│   │   ├── styling.md
-│   │   └── composition.md
-│   ├── references/              <- package-level docs
-│   │   ├── overview.md          <- types, utilities, deprecated components
-│   │   └── theming.md           <- CSS setup, tokens, dark mode, theme variants
+│   ├── rules/                   <- forms.md, styling.md, composition.md
+│   ├── references/              <- overview.md, theming.md
 │   └── components/              <- per-area deep API docs (loaded on demand)
 │       ├── button/
-│       │   └── button.md
 │       ├── calendar-datepicker/
-│       │   ├── calendar.md
-│       │   ├── date-picker.md
-│       │   └── time.md
 │       ├── card/
-│       │   ├── card.md
-│       │   └── card-details.md
 │       ├── charts/
-│       │   ├── area-line-bar.md
-│       │   ├── pie-radar-radial.md
-│       │   └── types.md
+│       ├── command/
 │       ├── custom/
-│       │   ├── stats-card.md
-│       │   ├── stats-card-top-border.md
-│       │   ├── status-banner.md
-│       │   └── user-avatar.md
 │       ├── datatable/
-│       │   ├── datatable.md
-│       │   ├── cells.md
-│       │   ├── filters.md
-│       │   ├── pagination.md
-│       │   └── row-actions.md
 │       ├── feedback/
-│       │   ├── alert.md
-│       │   ├── badge.md
-│       │   ├── notification.md
-│       │   └── toaster.md
 │       ├── form/
-│       │   ├── form.md
-│       │   ├── form-field.md
-│       │   ├── form-list.md
-│       │   └── standalone-list.md
 │       ├── inputs/
-│       │   ├── input-text.md
-│       │   ├── select.md
-│       │   ├── checkbox.md
-│       │   ├── combobox.md
-│       │   ├── date-picker.md
-│       │   ├── number.md
-│       │   └── textarea.md
 │       ├── layout/
-│       │   ├── container.md
-│       │   ├── page-header.md
-│       │   ├── page-footer.md
-│       │   └── sidebar.md
 │       ├── modal/
-│       │   ├── modal-dialog.md
-│       │   └── alert-dialog.md
 │       ├── navigation/
-│       │   ├── menu-navigation.md
-│       │   ├── dropdown-menu.md
-│       │   └── tabs.md
 │       └── ui/
-│           └── ui-overview.md
 │
 ├── scripts/
-│   └── setup-cursor-skills.ps1  <- links skill into all agent dirs (run once)
+│   └── setup-cursor-skills.ps1  <- creates Cursor junction (run once)
 ├── CRUD_EXAMPLE.md              <- step-by-step CRUD guide
 └── README.md                    <- this file
 ```
 
-## How it works
+## How each agent reads the skill
 
-Agents discover `igrp-design-system/` from their skills directory and load `SKILL.md` as the entry point. From there they follow links into `components/` on demand — only reading the specific area they need for the task at hand (Option B: load on demand).
+Each agent config file **points directly at `skills/igrp-design-system/SKILL.md`** — no extra copies or sync needed. The skill file links out to `components/` on demand.
 
-| Agent reads... | From... |
-| ---------------- | --------- |
-| `SKILL.md` | Auto-discovered via skills directory |
-| `components/datatable/*.md` | Followed as links from `SKILL.md` when building a table |
-| `rules/forms.md` | Followed when writing a form |
-| `references/theming.md` | Followed when setting up CSS or theming |
+| Agent | How it reads `SKILL.md` |
+|-------|------------------------|
+| **Cursor** | `.cursor/rules/igrp-design-system.mdc` (`alwaysApply`) points at `skills/igrp-design-system/SKILL.md` |
+| **Claude Code** | `CLAUDE.md` uses `@./skills/igrp-design-system/SKILL.md` to include it at startup |
+| **Trae / OpenHands** | `AGENTS.md` instructs the agent to read `./skills/igrp-design-system/SKILL.md` |
+| **GitHub Copilot** | `.github/copilot-instructions.md` references `skills/igrp-design-system/SKILL.md` |
 
-## Setup (run once after cloning)
+The `skills/` folder is the **single source of truth** — no duplication, no syncing.
+
+## Setup (run once after cloning — Cursor only)
+
+Cursor also discovers skills via `.cursor/skills/`. Run this once to create the junction:
 
 ```powershell
-# From repo root
+# From anywhere inside the repo
 .\templates\demo\skills\scripts\setup-cursor-skills.ps1
 ```
 
-| Agent | Discovery path |
-| ------- | --------------- |
-| Cursor | `.cursor/skills/igrp-design-system/` |
-| Claude Code | `templates/demo/.claude/skills/igrp-design-system/` |
-| Trae / OpenHands | `templates/demo/.agents/skills/igrp-design-system/` |
-| GitHub Copilot | `.github/copilot-instructions.md` (inline reference) |
+All other agents (Claude, Trae, Copilot) read `skills/` directly via their config files — no setup required.
 
 ## Quick Start: CRUD Example
 

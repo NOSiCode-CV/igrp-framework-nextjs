@@ -281,7 +281,7 @@ function FormListLayout<TItem>({
   disabled,
   ref,
 }: FormListLayoutProps<TItem>) {
-  const canRemove = (items.length > 0 || allowEmpty) && !!onRemove && !disabled;
+  const canRemove = (items.length > 1 || allowEmpty) && !!onRemove && !disabled;
   const getItemKey = (index: number) => itemKeys?.[index] ?? `${ACCORDION_ITEM_PREFIX}${index}`;
 
   const accordionItems = items.map((item, index) => {

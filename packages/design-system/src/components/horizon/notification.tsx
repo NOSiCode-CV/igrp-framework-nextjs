@@ -1,12 +1,12 @@
 'use client';
-
+ 
 import { cva, type VariantProps } from 'class-variance-authority';
 import { useId } from 'react';
-
+ 
 import { cn } from '../../lib/utils';
 import { IGRPButton } from './button';
 import { IGRPIcon, type IGRPIconName } from './icon';
-
+ 
 const IGRPNotificationVariants = cva('bg-background z-50 rounded-md p-4 shadow-lg', {
   variants: {
     variant: {
@@ -14,7 +14,7 @@ const IGRPNotificationVariants = cva('bg-background z-50 rounded-md p-4 shadow-l
       error: 'text-red-600 border-red-500/50',
       info: 'text-blue-600 border-blue-500/50',
       success: 'text-emerald-600 border-emerald-500/50',
-      warninig: 'text-amber-600 border-amber-500/50',
+      warning: 'text-amber-600 border-amber-500/50',
     },
     border: {
       default: 'border-0',
@@ -26,15 +26,15 @@ const IGRPNotificationVariants = cva('bg-background z-50 rounded-md p-4 shadow-l
     border: 'default',
   },
 });
-
+ 
 const typeIconMap: Record<NonNullable<IGRPNotificationProps['variant']>, IGRPIconName> = {
   default: 'RefreshCcw',
   error: 'CircleAlert',
   info: 'Info',
   success: 'CircleCheck',
-  warninig: 'TriangleAlert',
+  warning: 'TriangleAlert',
 };
-
+ 
 /**
  * Props for the IGRPNotification component.
  * @see IGRPNotification
@@ -61,7 +61,7 @@ type IGRPNotificationProps = {
   /** HTML id attribute. */
   id?: string;
 } & VariantProps<typeof IGRPNotificationVariants>;
-
+ 
 /**
  * Notification banner with icon, content, optional link, and close button.
  */
@@ -81,9 +81,9 @@ function IGRPNotification({
 }: IGRPNotificationProps) {
   const _id = useId();
   const ref = id ?? _id;
-
+ 
   const icon = iconName ?? typeIconMap[variant ?? 'default'];
-
+ 
   return (
     <div
       className={cn(
@@ -121,9 +121,9 @@ function IGRPNotification({
               />
             </a>
           )}
-
+ 
           {customActions && <>{customActions}</>}
-
+ 
           {showClose && (
             <IGRPButton
               variant="ghost"
@@ -141,5 +141,5 @@ function IGRPNotification({
     </div>
   );
 }
-
+ 
 export { IGRPNotification, type IGRPNotificationProps, IGRPNotificationVariants };

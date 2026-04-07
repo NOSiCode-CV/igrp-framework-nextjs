@@ -5,10 +5,10 @@ import type React from 'react';
 import { CheckIcon, ChevronLeft, ChevronRight } from 'lucide-react';
 
 import { cn } from '../../../lib/utils';
-import { ScrollArea } from '../../ui/scroll-area';
-import { Stepper, StepperItem, StepperTitle, StepperTrigger } from '../../ui/stepper';
-import { Button } from '../../ui/button';
-import { Tooltip, TooltipTrigger, TooltipContent } from '../../ui/tooltip';
+import { ScrollArea } from '../../primitives/scroll-area';
+import { Stepper, StepperItem, StepperTitle, StepperTrigger } from '../../primitives/stepper';
+import { Button } from '../../primitives/button';
+import { Tooltip, TooltipTrigger, TooltipContent } from '../../primitives/tooltip';
 
 /**
  * Props for a single step in the process stepper.

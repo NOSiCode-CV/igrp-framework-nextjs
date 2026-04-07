@@ -3,7 +3,7 @@
 import { useId, type ReactNode } from 'react';
 import type { VariantProps } from 'class-variance-authority';
 
-import { Button, buttonVariants } from '../ui/button';
+import { Button, buttonVariants } from '../primitives/button';
 import { IGRPIcon } from './icon';
 import { cn } from '../../lib/utils';
 import type { IGRPBaseAttributes } from '../../types';

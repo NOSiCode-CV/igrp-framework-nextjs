@@ -5,10 +5,10 @@ import { format } from 'date-fns';
 
 import { DD_MM_YYYY } from '../../../lib/constants';
 import { cn } from '../../../lib/utils';
-import { Button } from '../../ui/button';
-import { Checkbox } from '../../ui/checkbox';
-import { Tooltip, TooltipTrigger, TooltipContent, TooltipProvider } from '../../ui/tooltip';
-import { Switch } from '../../ui/switch';
+import { Button } from '../../primitives/button';
+import { Checkbox } from '../../primitives/checkbox';
+import { Tooltip, TooltipTrigger, TooltipContent, TooltipProvider } from '../../primitives/tooltip';
+import { Switch } from '../../primitives/switch';
 import { IGRPBadge, type IGRPBadgeProps } from '../badge';
 import { IGRPIcon } from '../icon';
 import { IGRPLink, type IGRPLinkProps } from '../typography/link';

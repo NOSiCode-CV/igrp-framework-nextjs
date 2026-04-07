@@ -4,7 +4,7 @@ import { useState, useEffect, useRef, useCallback, useId } from 'react';
 import Image from 'next/image';
 
 import { cn } from '../../lib/utils';
-import { ScrollArea } from '../ui/scroll-area';
+import { ScrollArea } from '../primitives/scroll-area';
 import { IGRPButton } from './button';
 import { IGRPInputText } from './input/text';
 import { IGRPIcon } from './icon';

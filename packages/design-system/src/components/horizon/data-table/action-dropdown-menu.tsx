@@ -16,15 +16,15 @@ import {
   AlertDialogHeader,
   AlertDialogTitle,
   AlertDialogTrigger,
-} from '../../ui/alert-dialog';
+} from '../../primitives/alert-dialog';
 
 import {
   DropdownMenu,
   DropdownMenuContent,
   DropdownMenuItem,
   DropdownMenuTrigger,
-} from '../../ui/dropdown-menu';
-import { buttonVariants } from '../../ui/button';
+} from '../../primitives/dropdown-menu';
+import { buttonVariants } from '../../primitives/button';
 import { IGRPIcon, type IGRPIconName } from '../icon';
 import { type IGRPDataTableDialogProps, type IGRPDataTableLinkProps } from './row-actions';
 

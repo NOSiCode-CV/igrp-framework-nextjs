@@ -6,7 +6,7 @@ import { useFormContext } from 'react-hook-form';
 
 import { DD_MM_YYYY } from '../../../../lib/constants';
 import { cn } from '../../../../lib/utils';
-import { type IGRPDatePickerBaseProps, type IGRPInputProps } from '../../../../types';
+import { type IGRPDatePickerBaseProps } from '../../../../types';
 import {
   FormControl,
   FormDescription,
@@ -14,8 +14,8 @@ import {
   FormItem,
   FormLabel,
   FormMessage,
-} from '../../../ui/form';
-import { Popover, PopoverContent, PopoverTrigger } from '../../../ui/popover';
+} from '../../../primitives/form';
+import { Popover, PopoverContent, PopoverTrigger } from '../../../primitives/popover';
 import { IGRPButton } from '../../button';
 import { IGRPCalendarSingle, type IGRPCalendarSingleProps } from '../../calendar/single';
 import { IGRPLabel } from '../../label';
@@ -131,13 +131,7 @@ function DatePickerSingleField({
  * Props for the IGRPDatePickerSingle component.
  * @see IGRPDatePickerSingle
  */
-type IGRPDatePickerSingleProps = IGRPCalendarSingleProps &
-  IGRPDatePickerBaseProps & {
-    /**
-     * @deprecated This props will be deprecated in the next release.
-     */
-    gridSize?: IGRPInputProps['gridSize'];
-  };
+type IGRPDatePickerSingleProps = IGRPCalendarSingleProps & IGRPDatePickerBaseProps
 
 /**
  * Single-date picker with popover calendar. Integrates with react-hook-form.

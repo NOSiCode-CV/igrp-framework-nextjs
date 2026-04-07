@@ -6,7 +6,7 @@ import { type VariantProps } from 'class-variance-authority';
 
 import { cn } from '../../../lib/utils';
 import type { IGRPBaseAttributes, IGRPGridSize } from '../../../types';
-import { RadioGroup, RadioGroupItem, radioItemVariants } from '../../ui/radio-group';
+import { RadioGroup, RadioGroupItem, radioItemVariants } from '../../primitives/radio-group';
 import { IGRPFormField } from '../form/form-field';
 import { IGRPLabel } from '../label';
 

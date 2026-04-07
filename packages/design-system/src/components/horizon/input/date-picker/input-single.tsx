@@ -13,8 +13,8 @@ import {
 import { DD_MM_YYYY } from '../../../../lib/constants';
 import { cn } from '../../../../lib/utils';
 import { type IGRPDatePickerBaseProps } from '../../../../types';
-import { Button } from '../../../ui/button';
-import { Calendar } from '../../../ui/calendar';
+import { Button } from '../../../primitives/button';
+import { Calendar } from '../../../primitives/calendar';
 import {
   FormControl,
   FormDescription,
@@ -22,9 +22,9 @@ import {
   FormItem,
   FormLabel,
   FormMessage,
-} from '../../../ui/form';
-import { Input } from '../../../ui/input';
-import { Popover, PopoverContent, PopoverTrigger } from '../../../ui/popover';
+} from '../../../primitives/form';
+import { Input } from '../../../primitives/input';
+import { Popover, PopoverContent, PopoverTrigger } from '../../../primitives/popover';
 import { type IGRPCalendarSingleProps } from '../../calendar/single';
 import { IGRPLabel } from '../../label';
 

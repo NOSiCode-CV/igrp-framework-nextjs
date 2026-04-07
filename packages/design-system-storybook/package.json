@@ -1,6 +1,6 @@
 {
   "name": "@igrp/igrp-framework-react-design-system-storybook",
-  "version": "0.0.1-beta.57",
+  "version": "0.0.1",
   "description": "IGRP Design System Storybook",
   "type": "module",
   "author": {

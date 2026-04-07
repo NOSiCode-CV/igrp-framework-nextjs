@@ -7,7 +7,7 @@ import { DD_MM_YYYY } from '../../../lib/constants';
 import { cn } from '../../../lib/utils';
 import type { IGRPInputProps } from '../../../types';
 
-import { Input } from '../../ui/input';
+import { Input } from '../../primitives/input';
 import { IGRPLabel } from '../label';
 
 const DEFAULT_PLACEHOLDER = `${DD_MM_YYYY}, --:--`;

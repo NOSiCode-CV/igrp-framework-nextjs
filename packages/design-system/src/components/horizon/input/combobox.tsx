@@ -14,8 +14,8 @@ import {
   CommandItem,
   CommandList,
   CommandSeparator,
-} from '../../ui/command';
-import { Popover, PopoverContent, PopoverTrigger } from '../../ui/popover';
+} from '../../primitives/command';
+import { Popover, PopoverContent, PopoverTrigger } from '../../primitives/popover';
 import { IGRPButton } from '../button';
 import { IGRPFieldDescription } from '../field-description';
 import { IGRPFormField } from '../form/form-field';

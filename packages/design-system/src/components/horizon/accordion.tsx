@@ -10,7 +10,7 @@ import {
   AccordionItem,
   AccordionTrigger,
   type AccordionTriggerArgs,
-} from '../ui/accordion';
+} from '../primitives/accordion';
 
 /**
  * Single accordion item with title and content.

@@ -5,7 +5,7 @@ import { useFormContext } from 'react-hook-form';
 
 import { cn } from '../../../lib/utils';
 import type { IGRPInputProps } from '../../../types';
-import { Checkbox } from '../../ui/checkbox';
+import { Checkbox } from '../../primitives/checkbox';
 import { IGRPFormField } from '../form/form-field';
 import { IGRPLabel } from '../label';
 

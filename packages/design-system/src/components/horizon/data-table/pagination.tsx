@@ -5,23 +5,24 @@ import { useId } from 'react';
 import { type Table } from '@tanstack/react-table';
 import { ChevronFirst, ChevronLast, ChevronLeft, ChevronRight } from 'lucide-react';
 
-import { Label } from '../../ui/label';
-import { Button } from '../../ui/button';
+import { Label } from '../../primitives/label';
+import { Button } from '../../primitives/button';
 import {
   Pagination,
   PaginationContent,
   PaginationEllipsis,
   PaginationItem,
-} from '../../ui/pagination';
+} from '../../primitives/pagination';
 import {
   Select,
   SelectContent,
   SelectItem,
   SelectTrigger,
   SelectValue,
-} from '../../ui/select';
+} from '../../primitives/select';
 import { usePagination } from './hooks/use-pagination';
 import { cn } from '../../../lib/utils';
+
 
 /**
  * Props for the IGRPDataTablePagination components.

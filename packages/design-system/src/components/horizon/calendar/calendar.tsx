@@ -3,7 +3,7 @@
 import { useId, useState } from 'react';
 import type { DropdownNavProps, DropdownProps, PropsBase, PropsSingle } from 'react-day-picker';
 
-import { Calendar as DropdownCalendar } from '../../ui/calendar';
+import { Calendar as DropdownCalendar } from '../../primitives/calendar';
 
 function getToday(): Date {
   return new Date();
@@ -14,7 +14,7 @@ import {
   SelectItem,
   SelectTrigger,
   SelectValue,
-} from '../../ui/select';
+} from '../../primitives/select';
 import { cn } from '../../../lib/utils';
 
 /**

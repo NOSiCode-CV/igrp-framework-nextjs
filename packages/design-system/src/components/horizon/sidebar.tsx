@@ -27,7 +27,7 @@ import {
   SidebarSeparator as IGRPSidebarSeparator,
   SidebarTrigger as IGRPSidebarTrigger,
   useSidebar as useIGRPSidebar,
-} from '../ui/sidebar';
+} from '../primitives/sidebar';
 
 export {
   IGRPSidebarProvider,

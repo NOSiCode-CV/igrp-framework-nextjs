@@ -4,8 +4,8 @@ import { useCallback, useId, useMemo, useRef, useState } from 'react';
 import { type Column, type Table } from '@tanstack/react-table';
 import { cn } from '../../../lib/utils';
 import type { IGRPOptionsProps } from '../../../types';
-import { Button } from '../../ui/button';
-import { Checkbox } from '../../ui/checkbox';
+import { Button } from '../../primitives/button';
+import { Checkbox } from '../../primitives/checkbox';
 import {
   Command,
   CommandEmpty,
@@ -14,17 +14,17 @@ import {
   CommandItem,
   CommandList,
   CommandSeparator,
-} from '../../ui/command';
-import { Input } from '../../ui/input';
-import { Popover, PopoverContent, PopoverTrigger } from '../../ui/popover';
+} from '../../primitives/command';
+import { Input } from '../../primitives/input';
+import { Popover, PopoverContent, PopoverTrigger } from '../../primitives/popover';
 import {
   Select,
   SelectContent,
   SelectItem,
   SelectTrigger,
   SelectValue,
-} from '../../ui/select';
-import { Separator } from '../../ui/separator';
+} from '../../primitives/select';
+import { Separator } from '../../primitives/separator';
 import { IGRPBadge } from '../badge';
 import { IGRPButton } from '../button';
 import { IGRPIcon, type IGRPIconName } from '../icon';

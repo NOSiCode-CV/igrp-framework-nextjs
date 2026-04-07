@@ -11,7 +11,7 @@ import {
   TableHead,
   TableHeader,
   TableRow,
-} from '../ui/table';
+} from '../primitives/table';
 
 /** @internal Renders cell content with optional custom render function. */
 function TableCellContent<T>({

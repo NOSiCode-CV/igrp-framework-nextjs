@@ -6,7 +6,7 @@ import type { PieSectorDataItem } from 'recharts/types/polar/Pie';
 import React, { useState, type SVGAttributes } from 'react';
 
 import { cn } from '../../../lib/utils';
-import { ChartContainer, ChartTooltip, ChartTooltipContent } from '../../ui/chart';
+import { ChartContainer, ChartTooltip, ChartTooltipContent } from '../../primitives/chart';
 import type { IGRPChartProps, PieConfig } from './types';
 import {
   createChartConfig,

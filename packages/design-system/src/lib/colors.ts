@@ -97,7 +97,7 @@ export const IGRPColors = {
       alert: 'text-background bg-primary border-primary/50',
     },
     success: {
-      bg: 'bg-emerald-800',
+      bg: 'bg-emerald-800 hover:bg-emerald-900',
       text: 'text-emerald-600 dark:text-emerald-400',
       border: 'border-emerald-800',
       bgForeground: 'bg-emerald-800',

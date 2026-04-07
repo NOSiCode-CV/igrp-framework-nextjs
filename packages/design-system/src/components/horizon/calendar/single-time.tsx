@@ -4,8 +4,8 @@ import { useId, useState } from 'react';
 
 import { DEFAULT_HIDE_TIME_INDICATOR } from '../../../lib/constants';
 import type { IGRPCalendarTimeProps } from '../../../types';
-import { Input } from '../../ui/input';
-import { Label } from '../../ui/label';
+import { Input } from '../../primitives/input';
+import { Label } from '../../primitives/label';
 import { IGRPCalendarSingle, type IGRPCalendarSingleProps } from './single';
 import { cn } from '../../../lib/utils';
 

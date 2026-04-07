@@ -5,14 +5,14 @@ import { useFormContext, Controller } from 'react-hook-form';
 
 import { cn } from '../../../lib/utils';
 import type { IGRPInputProps, IGRPOptionsProps } from '../../../types';
-import { Input } from '../../ui/input';
+import { Input } from '../../primitives/input';
 import {
   Select,
   SelectContent,
   SelectItem,
   SelectTrigger,
   SelectValue,
-} from '../../ui/select';
+} from '../../primitives/select';
 import { IGRPLabel } from '../label';
 
 /**

@@ -5,7 +5,7 @@ import { useId, useState } from 'react';
 import { getDisabledDays } from '../../../lib/calendar-utils';
 import { cn } from '../../../lib/utils';
 import type { IGRPCalendarProps } from '../../../types';
-import { Calendar } from '../../ui/calendar';
+import { Calendar } from '../../primitives/calendar';
 
 /**
  * Props for the IGRPCalendarSingle component.

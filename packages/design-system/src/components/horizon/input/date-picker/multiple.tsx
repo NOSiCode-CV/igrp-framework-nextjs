@@ -13,8 +13,8 @@ import {
   FormItem,
   FormLabel,
   FormMessage,
-} from '../../../ui/form';
-import { Popover, PopoverContent, PopoverTrigger } from '../../../ui/popover';
+} from '../../../primitives/form';
+import { Popover, PopoverContent, PopoverTrigger } from '../../../primitives/popover';
 import { IGRPButton } from '../../button';
 import { IGRPLabel } from '../../label';
 import { IGRPCalendarMultiple, type IGRPCalendarMultipleProps } from '../../calendar/multiple';

@@ -4,7 +4,7 @@ import { useRef, useState, useCallback, createContext, useContext, useId } from 
 
 import type { IGRPColorRole, IGRPColorVariants } from '../../lib/colors';
 import { cn } from '../../lib/utils';
-import { Card, CardContent, CardHeader, CardTitle } from '../ui/card';
+import { Card, CardContent, CardHeader, CardTitle } from '../primitives/card';
 import { IGRPBadge } from './badge';
 import { IGRPIcon } from './icon';
 

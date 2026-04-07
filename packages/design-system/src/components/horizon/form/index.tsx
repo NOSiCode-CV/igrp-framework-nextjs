@@ -7,8 +7,8 @@ import { toast } from 'sonner';
 import { z } from 'zod';
 import { zodResolver } from '@hookform/resolvers/zod';
 
-import { Form } from '../../ui/form';
-import { FieldSet } from '../../ui/field';
+import { Form } from '../../primitives/form';
+import { FieldSet } from '../../primitives/field';
 import { cn } from '../../../lib/utils';
 import { IGRPFormContext } from './form-context';
 

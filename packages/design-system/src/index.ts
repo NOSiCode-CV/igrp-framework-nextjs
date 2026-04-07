@@ -22,7 +22,7 @@ export {
   AccordionContent,
   type AccordionTriggerProps,
   type AccordionTriggerArgs,
-} from './components/ui/accordion';
+} from './components/primitives/accordion';
 
 export {
   AlertDialog,
@@ -36,26 +36,26 @@ export {
   AlertDialogDescription,
   AlertDialogAction,
   AlertDialogCancel,
-} from './components/ui/alert-dialog';
+} from './components/primitives/alert-dialog';
 
 export {
   Alert,
   AlertTitle,
   AlertDescription,
-} from './components/ui/alert';
+} from './components/primitives/alert';
 
-export { AspectRatio } from './components/ui/aspect-ratio';
+export { AspectRatio } from './components/primitives/aspect-ratio';
 
 export {
   Avatar,
   AvatarImage,
   AvatarFallback,
-} from './components/ui/avatar';
+} from './components/primitives/avatar';
 
 export {
   Badge,
   badgeVariants,
-} from './components/ui/badge';
+} from './components/primitives/badge';
 
 export {
   Breadcrumb,
@@ -65,24 +65,24 @@ export {
   BreadcrumbPage,
   BreadcrumbSeparator,
   BreadcrumbEllipsis,
-} from './components/ui/breadcrumb';
+} from './components/primitives/breadcrumb';
 
 export {
   ButtonGroup,
   ButtonGroupSeparator,
   ButtonGroupText,
   buttonGroupVariants,
-} from './components/ui/button-group';
+} from './components/primitives/button-group';
 
 export {
   Button,
   buttonVariants,
-} from './components/ui/button';
+} from './components/primitives/button';
 
 export {
   Calendar,
   CalendarDayButton,
-} from './components/ui/calendar';
+} from './components/primitives/calendar';
 
 export {
   Card,
@@ -92,7 +92,7 @@ export {
   CardAction,
   CardDescription,
   CardContent,
-} from './components/ui/card';
+} from './components/primitives/card';
 
 export {
   type CarouselApi,
@@ -101,7 +101,7 @@ export {
   CarouselItem,
   CarouselPrevious,
   CarouselNext,
-} from './components/ui/carousel';
+} from './components/primitives/carousel';
 
 export {
   ChartContainer,
@@ -110,15 +110,15 @@ export {
   ChartLegend,
   ChartLegendContent,
   ChartStyle,
-} from './components/ui/chart';
+} from './components/primitives/chart';
 
-export { Checkbox } from './components/ui/checkbox';
+export { Checkbox } from './components/primitives/checkbox';
 
 export {
   Collapsible,
   CollapsibleTrigger,
   CollapsibleContent,
-} from './components/ui/collapsible';
+} from './components/primitives/collapsible';
 
 export {
   Command,
@@ -130,7 +130,7 @@ export {
   CommandItem,
   CommandShortcut,
   CommandSeparator,
-} from './components/ui/command';
+} from './components/primitives/command';
 
 export {
   ContextMenu,
@@ -148,14 +148,14 @@ export {
   ContextMenuSubContent,
   ContextMenuSubTrigger,
   ContextMenuRadioGroup,
-} from './components/ui/context-menu';
+} from './components/primitives/context-menu';
 
 export {
   Cropper,
   CropperDescription,
   CropperImage,
   CropperCropArea,
-} from './components/ui/cropper';
+} from './components/primitives/cropper';
 
 export {
   Dialog,
@@ -168,7 +168,7 @@ export {
   DialogPortal,
   DialogTitle,
   DialogTrigger,
-} from './components/ui/dialog';
+} from './components/primitives/dialog';
 
 export {
   Drawer,
@@ -181,7 +181,7 @@ export {
   DrawerFooter,
   DrawerTitle,
   DrawerDescription,
-} from './components/ui/drawer';
+} from './components/primitives/drawer';
 
 export {
   DropdownMenu,
@@ -199,7 +199,7 @@ export {
   DropdownMenuSub,
   DropdownMenuSubTrigger,
   DropdownMenuSubContent,
-} from './components/ui/dropdown-menu';
+} from './components/primitives/dropdown-menu';
 
 export {
   Empty,
@@ -208,7 +208,7 @@ export {
   EmptyDescription,
   EmptyContent,
   EmptyMedia,
-} from './components/ui/empty';
+} from './components/primitives/empty';
 
 export {
   Field,
@@ -221,7 +221,7 @@ export {
   FieldSet,
   FieldContent,
   FieldTitle,
-} from './components/ui/field';
+} from './components/primitives/field';
 
 export {
   useFormField,
@@ -232,13 +232,13 @@ export {
   FormDescription,
   FormMessage,
   FormField,
-} from './components/ui/form';
+} from './components/primitives/form';
 
 export {
   HoverCard,
   HoverCardTrigger,
   HoverCardContent,
-} from './components/ui/hover-card';
+} from './components/primitives/hover-card';
 
 export {
   InputGroup,
@@ -247,16 +247,16 @@ export {
   InputGroupText,
   InputGroupInput,
   InputGroupTextarea,
-} from './components/ui/input-group';
+} from './components/primitives/input-group';
 
 export {
   InputOTP,
   InputOTPGroup,
   InputOTPSlot,
   InputOTPSeparator,
-} from './components/ui/input-otp';
+} from './components/primitives/input-otp';
 
-export { Input } from './components/ui/input';
+export { Input } from './components/primitives/input';
 
 export {
   Item,
@@ -269,14 +269,14 @@ export {
   ItemDescription,
   ItemHeader,
   ItemFooter,
-} from './components/ui/item';
+} from './components/primitives/item';
 
 export {
   Kbd,
   KbdGroup,
-} from './components/ui/kbd';
+} from './components/primitives/kbd';
 
-export { Label } from './components/ui/label';
+export { Label } from './components/primitives/label';
 
 export {
   Menubar,
@@ -295,7 +295,7 @@ export {
   MenubarSub,
   MenubarSubTrigger,
   MenubarSubContent,
-} from './components/ui/menubar';
+} from './components/primitives/menubar';
 
 export {
   NavigationMenu,
@@ -307,7 +307,7 @@ export {
   NavigationMenuIndicator,
   NavigationMenuViewport,
   navigationMenuTriggerStyle,
-} from './components/ui/navigation-menu';
+} from './components/primitives/navigation-menu';
 
 export {
   Pagination,
@@ -317,33 +317,33 @@ export {
   PaginationPrevious,
   PaginationNext,
   PaginationEllipsis,
-} from './components/ui/pagination';
+} from './components/primitives/pagination';
 
 export {
   Popover,
   PopoverTrigger,
   PopoverContent,
   PopoverAnchor,
-} from './components/ui/popover';
+} from './components/primitives/popover';
 
-export { Progress } from './components/ui/progress';
+export { Progress } from './components/primitives/progress';
 
 export {
   RadioGroup,
   RadioGroupItem,
   radioItemVariants,
-} from './components/ui/radio-group';
+} from './components/primitives/radio-group';
 
-export { 
-  ResizableHandle, 
-  ResizablePanel, 
-  ResizablePanelGroup 
-} from './components/ui/resizable';
+export {
+  ResizablePanelGroup,
+  ResizablePanel,
+  ResizableHandle,
+} from './components/primitives/resizable';
 
 export {
   ScrollArea,
   ScrollBar,
-} from './components/ui/scroll-area';
+} from './components/primitives/scroll-area';
 
 export {
   Select,
@@ -356,9 +356,9 @@ export {
   SelectSeparator,
   SelectTrigger,
   SelectValue,
-} from './components/ui/select';
+} from './components/primitives/select';
 
-export { Separator } from './components/ui/separator';
+export { Separator } from './components/primitives/separator';
 
 export {
   Sheet,
@@ -369,7 +369,7 @@ export {
   SheetFooter,
   SheetTitle,
   SheetDescription,
-} from './components/ui/sheet';
+} from './components/primitives/sheet';
 
 export {
   Sidebar,
@@ -396,11 +396,11 @@ export {
   SidebarSeparator,
   SidebarTrigger,
   useSidebar,
-} from './components/ui/sidebar';
+} from './components/primitives/sidebar';
 
-export { Skeleton } from './components/ui/skeleton';
+export { Skeleton } from './components/primitives/skeleton';
 
-export { Slider } from './components/ui/slider';
+export { Slider } from './components/primitives/slider';
 
 export {
   Stepper,
@@ -410,9 +410,9 @@ export {
   StepperSeparator,
   StepperTitle,
   StepperTrigger,
-} from './components/ui/stepper';
+} from './components/primitives/stepper';
 
-export { Switch } from './components/ui/switch';
+export { Switch } from './components/primitives/switch';
 
 export {
   Table,
@@ -423,35 +423,35 @@ export {
   TableRow,
   TableCell,
   TableCaption,
-} from './components/ui/table';
+} from './components/primitives/table';
 
 export {
   Tabs,
   TabsList,
   TabsTrigger,
   TabsContent,
-} from './components/ui/tabs';
+} from './components/primitives/tabs';
 
-export { Textarea } from './components/ui/textarea';
+export { Textarea } from './components/primitives/textarea';
 
-export { Toaster } from './components/ui/sonner';
+export { Toaster } from './components/primitives/sonner';
 
 export {
   ToggleGroup,
   ToggleGroupItem,
-} from './components/ui/toggle-group';
+} from './components/primitives/toggle-group';
 
 export {
   Toggle,
   toggleVariants,
-} from './components/ui/toggle';
+} from './components/primitives/toggle';
 
 export {
   Tooltip,
   TooltipTrigger,
   TooltipContent,
   TooltipProvider,
-} from './components/ui/tooltip';
+} from './components/primitives/tooltip';
 
 // horizon components
 

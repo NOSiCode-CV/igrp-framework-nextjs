@@ -4,8 +4,8 @@ import { Fragment, useId } from 'react';
 
 import { IGRPColors, type IGRPColorRole, type IGRPColorVariants } from '../../lib/colors';
 import { cn } from '../../lib/utils';
-import { Card, CardContent, CardHeader, CardTitle } from '../ui/card';
-import { Separator } from '../ui/separator';
+import { Card, CardContent, CardHeader, CardTitle } from '../primitives/card';
+import { Separator } from '../primitives/separator';
 import { IGRPIcon, type IGRPIconName } from './icon';
 
 /**

@@ -6,7 +6,7 @@ import type { DateRange } from 'react-day-picker';
 import { getDisabledDays } from '../../../lib/calendar-utils';
 import { cn } from '../../../lib/utils';
 import type { IGRPCalendarProps } from '../../../types';
-import { Calendar } from '../../ui/calendar';
+import { Calendar } from '../../primitives/calendar';
 
 /**
  * Props for the IGRPCalendarRange component.

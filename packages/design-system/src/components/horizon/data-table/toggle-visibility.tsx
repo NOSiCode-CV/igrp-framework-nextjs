@@ -8,7 +8,7 @@ import {
   DropdownMenuContent,
   DropdownMenuLabel,
   DropdownMenuTrigger,
-} from '../../ui/dropdown-menu';
+} from '../../primitives/dropdown-menu';
 import { cn } from '../../../lib/utils';
 import { IGRPButton } from '../button';
 

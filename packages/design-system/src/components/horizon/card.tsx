@@ -8,7 +8,7 @@ import {
   CardFooter as IGRPCardFooter,
   CardHeader as IGRPCardHeader,
   CardTitle as IGRPCardTitle,
-} from '../ui/card';
+} from '../primitives/card';
 import { cn } from '../../lib/utils';
 
 /**

@@ -16,7 +16,7 @@ import { IGRPLabel } from '../label';
 interface IGRPCheckboxProps
   extends
     React.ComponentProps<typeof Checkbox>,
-    Pick<IGRPInputProps, 'helperText' | 'label' | 'gridSize'> {
+    Pick<IGRPInputProps, 'helperText' | 'label'> {
   /** CSS classes for the label. */
   labelClassName?: string;
   /** Validation error message. */

@@ -36,6 +36,36 @@ const IGRPLinkVariants = cva(
 type AnchorProps = Omit<React.AnchorHTMLAttributes<HTMLAnchorElement>, 'href'>;
 type NextLinkProps = Omit<LinkProps, 'href' | 'as'>;
 
+function IGRPLinkRender({
+  showIcon,
+  iconName,
+  iconClassName,
+  iconPlacement,
+  sizeIcon,
+  children,
+}: IGRPLinkIconProps) {
+  return (
+    <span
+      className={cn(
+        'group flex gap-1 items-center whitespace-nowrap',
+        iconPlacement === 'end' && 'flex-row-reverse',
+      )}
+    >
+      {showIcon && iconName && (
+        <IGRPIcon
+          iconName={iconName}
+          className={cn(
+            'inline-flex transition-transform group-hover:translate-x-0.5',
+            iconClassName,
+          )}
+          size={sizeIcon}
+        />
+      )}
+      {children}
+    </span>
+  );
+}
+
 /**
  * Props for the IGRPLink component.
  * @see IGRPLink
@@ -156,34 +186,6 @@ interface IGRPLinkIconProps {
   children?: ReactNode;
 }
 
-function IGRPLinkRender({
-  showIcon,
-  iconName,
-  iconClassName,
-  iconPlacement,
-  sizeIcon,
-  children,
-}: IGRPLinkIconProps) {
-  return (
-    <div
-      className={cn(
-        'group flex gap-1 items-center whitespace-nowrap',
-        iconPlacement === 'end' && 'flex-row-reverse',
-      )}
-    >
-      {showIcon && iconName && (
-        <IGRPIcon
-          iconName={iconName}
-          className={cn(
-            'inline-flex opacity-60 transition-transform group-hover:translate-x-0.5',
-            iconClassName,
-          )}
-          size={sizeIcon}
-        />
-      )}
-      {children}
-    </div>
-  );
-}
+
 
 export { IGRPLink, IGRPLinkVariants, type IGRPLinkProps };

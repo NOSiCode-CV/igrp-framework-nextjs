@@ -17,8 +17,7 @@ interface IGRPTextareaProps
     React.ComponentProps<typeof Textarea>,
     Pick<
       IGRPInputProps,
-      'label' | 'helperText' | 'className' | 'required' | 'error' | 'gridSize'
-    > {}
+      'label' | 'helperText' | 'className' | 'required' | 'error'> {}
 
 /**
  * Textarea with label, helper text, and form integration.

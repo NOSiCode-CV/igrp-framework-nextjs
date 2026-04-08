@@ -74,7 +74,7 @@ function IGRPAlert({
   const colors = IGRPColors[variant][color];
   const alertIcon = iconName !== undefined ? iconName : iconDefault;
   const alignmentClass =
-    alignment === 'start' ? 'items-start' : alignment === 'center' ? 'items-center' : 'items-end';
+    alignment === 'start' ? 'items-baseline' : alignment === 'center' ? 'items-center' : 'items-end';
 
   return (
     <div
@@ -89,17 +89,23 @@ function IGRPAlert({
       id={ref}
     >
       <div className={cn('flex gap-3', alignmentClass)}>
-        {showIcon && <IGRPIcon iconName={alertIcon} className={cn('shrink-0', iconClassName)} />}
-        <div className={cn('flex grow justify-between gap-3')}>
-          <div className={cn('grow space-y-1')}>{children}</div>
+        {showIcon && (
+          <IGRPIcon
+            iconName={alertIcon}
+            className={cn('shrink-0 size-5', textColored ? colors.text : undefined, iconClassName)}
+          />
+        )}
+
+        <div className='flex grow justify-between gap-3'>
+          <div className='grow space-y-1'>{children}</div>
 
           {showLink && (
             <IGRPLink
               iconName={linkIcon}
               iconPlacement={iconPlacement}
-              href={linkUrl || ''}
+              href={linkUrl}
               showIcon
-              size="default"
+              className={colors.alert}
             >
               {label}
             </IGRPLink>

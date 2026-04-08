@@ -742,6 +742,11 @@ export {
 } from './components/horizon/input/date-picker/range';
 
 export {
+  IGRPDatePicker,
+  type IGRPDatePickerProps,
+} from './components/horizon/input/date-picker/date-picker';
+
+export {
   IGRPDatePickerSingle,
   type IGRPDatePickerSingleProps,
 } from './components/horizon/input/date-picker/single';
@@ -905,11 +910,6 @@ export {
   type IGRPVideoEmbedProps,
   type IGRPVideoEmbedAllowFeature,
 } from './components/horizon/video-embed';
-
-// DEPRECATED
-export { IGRPCalendar, type IGRPCalendarPropsDeprecated } from './components/horizon/calendar/calendar';
-
-export { IGRPDatePicker, type IGRPDatePickerPropsDeprecated } from './components/horizon/input/date-picker/date-picker';
 
 // types
 

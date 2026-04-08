@@ -16,7 +16,7 @@ import { IGRPLabel } from '../label';
 interface IGRPSwitchProps
   extends
     React.ComponentProps<typeof Switch>,
-    Pick<IGRPInputProps, 'helperText' | 'label' | 'gridSize'> {
+    Pick<IGRPInputProps, 'helperText' | 'label'> {
   /** CSS classes for the label. */
   labelClassName?: string;
   /** Validation error message. */

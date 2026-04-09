@@ -1,7 +1,7 @@
 import { type IGRPIconName } from './components/horizon/icon';
 import { igrpGridSizeClasses } from './lib/constants';
 import type { IGRPColorVariants } from './lib/colors';
-import { Calendar } from './components/ui/calendar';
+import { Calendar } from './components/primitives/calendar';
 
 /** Placement options for labels, icons, and alignment. */
 export type IGRPPlacementProps = 'start' | 'end' | 'center';
@@ -40,10 +40,6 @@ export type IGRPInputProps = {
   inputClassName?: string;
   /** Validation error message. */
   error?: string;
-  /**
-   * @deprecated This props will be deprecated in the next release.
-   */
-  gridSize?: IGRPGridSize;
 } & Omit<React.ComponentProps<'input'>, 'type'> &
   IGRPBaseAttributes;
 

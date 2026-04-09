@@ -2,8 +2,8 @@
 
 import { useId, useState } from 'react';
 
-import { Input } from '../../ui/input';
-import { Label } from '../../ui/label';
+import { Input } from '../../primitives/input';
+import { Label } from '../../primitives/label';
 import type { IGRPCalendarTimeProps } from '../../../types';
 import { IGRPCalendarRange, type IGRPCalendarRangeProps } from './range';
 import { DEFAULT_HIDE_TIME_INDICATOR } from '../../../lib/constants';

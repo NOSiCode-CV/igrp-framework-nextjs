@@ -27,7 +27,7 @@ This creates junctions in `.cursor/skills/` pointing to each skill. Cursor will 
 ### 1.3 Skills you have
 
 | Skill | Use for |
-|-------|---------|
+| ------- | --------- |
 | `igrp-form` | Forms, validation, form fields |
 | `igrp-inputs` | Text, select, checkbox, textarea, etc. |
 | `igrp-datatable` | Data tables, pagination, filtering |
@@ -38,14 +38,14 @@ This creates junctions in `.cursor/skills/` pointing to each skill. Cursor will 
 | `igrp-feedback` | Alerts, badges, toasts |
 | `igrp-navigation` | Tabs, dropdown menus |
 | `igrp-custom` | Stats cards, avatars |
-| `igrp-primitives` | Low-level composition |
+| `igrp-ui` | Low-level composition |
 
 ### 1.4 Context files
 
 The agent uses these for design system rules:
 
-- `templates/demo/AGENTS.md` – Design system first rule
-- `templates/demo/DESIGN_SYSTEM.md` – Component catalog
+- `./AGENTS.md` – Design system first rule
+- `./DESIGN_SYSTEM.md` – Component catalog
 
 ---
 
@@ -56,7 +56,7 @@ Decide what you’re building a CRUD for (e.g. Products, Users, Orders) and its 
 **Example – Products:**
 
 | Field | Type | Required |
-|-------|------|----------|
+| ------- | ------ | ---------- |
 | name | string | Yes |
 | description | text | No |
 | price | number | Yes |
@@ -68,8 +68,7 @@ Decide what you’re building a CRUD for (e.g. Products, Users, Orders) and its 
 
 Prompt the agent:
 
-```
-Create a list page for [Entity] using IGRPDataTable. Include:
+```Create a list page for [Entity] using IGRPDataTable. Include:
 - Columns: [list your columns]
 - Pagination
 - Row actions: Edit and Delete buttons
@@ -80,8 +79,7 @@ Use @igrp/igrp-framework-react-design-system. Put the page at src/app/(igrp)/[ro
 
 **Example:**
 
-```
-Create a list page for products using IGRPDataTable. Include:
+```Create a list page for products using IGRPDataTable. Include:
 - Columns: name, description, price, status (as badge)
 - Pagination
 - Row actions: Edit and Delete
@@ -96,8 +94,7 @@ Use @igrp/igrp-framework-react-design-system.
 
 Prompt the agent:
 
-```
-Add a modal for creating and editing [Entity]. Use IGRPModalDialog with:
+```Add a modal for creating and editing [Entity]. Use IGRPModalDialog with:
 - IGRPForm inside, Zod schema for [list fields]
 - Fields: [list with types, e.g. IGRPInputText for name, IGRPSelect for status]
 - Save and Cancel buttons
@@ -107,8 +104,7 @@ Add a modal for creating and editing [Entity]. Use IGRPModalDialog with:
 
 **Example:**
 
-```
-Add a modal for creating and editing products. Use IGRPModalDialog with:
+```Add a modal for creating and editing products. Use IGRPModalDialog with:
 - IGRPForm, Zod schema for name, description, price, status
 - IGRPInputText (name), IGRPTextarea (description), IGRPInputNumber (price), IGRPSelect (status: Active/Inactive)
 - Save and Cancel in the footer
@@ -122,8 +118,7 @@ Add a modal for creating and editing products. Use IGRPModalDialog with:
 
 Prompt the agent:
 
-```
-Add delete confirmation using IGRPAlertDialog. When user clicks Delete in the table:
+```Add delete confirmation using IGRPAlertDialog. When user clicks Delete in the table:
 - Show confirmation dialog
 - On confirm, call delete action and refresh the list
 - Show toast on success/error
@@ -135,8 +130,7 @@ Add delete confirmation using IGRPAlertDialog. When user clicks Delete in the ta
 
 Prompt the agent:
 
-```
-Create server actions for [Entity] CRUD:
+```Create server actions for [Entity] CRUD:
 - fetchList: get all with pagination
 - create: insert new
 - update: update by id
@@ -165,8 +159,7 @@ Example: *`/igrp-form` Add a product form with name, price, and status fields.*
 
 You can use a single prompt for the whole CRUD:
 
-```
-Create a full CRUD for products using the IGRP design system:
+```Create a full CRUD for products using the IGRP design system:
 
 1. List page (src/app/(igrp)/products/page.tsx):
    - IGRPDataTable with columns: name, description, price, status (badge)
@@ -190,7 +183,7 @@ Use @igrp/igrp-framework-react-design-system. Follow templates/demo/AGENTS.md an
 ## Troubleshooting
 
 | Issue | Solution |
-|------|----------|
+| ------ | ---------- |
 | Agent doesn’t use design system | Re-run `setup-cursor-skills.ps1`, restart Cursor |
 | Wrong components | Explicitly mention "IGRPForm", "IGRPDataTable" in the prompt |
 | Skills not found | Check `.cursor/skills/` has junctions; verify in Cursor Settings → Rules |

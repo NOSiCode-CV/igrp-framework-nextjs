@@ -1,6 +1,6 @@
 import { createContext, type ReactNode } from 'react';
 
-import { TooltipProvider } from '../../ui/tooltip';
+import { TooltipProvider } from '../../primitives/tooltip';
 
 /** @internal Context indicating tooltip provider is present. */
 const IGRPDataTableTooltipContext = createContext(false);

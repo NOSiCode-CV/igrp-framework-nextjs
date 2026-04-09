@@ -1,6 +1,6 @@
 import { useId } from 'react';
 
-import { Avatar, AvatarImage, AvatarFallback } from '../ui/avatar';
+import { Avatar, AvatarImage, AvatarFallback } from '../primitives/avatar';
 import { cn } from '../../lib/utils';
 
 /**

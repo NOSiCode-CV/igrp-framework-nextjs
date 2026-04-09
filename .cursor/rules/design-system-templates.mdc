@@ -1,16 +1,59 @@
 ---
-description: Use design system as first option when building UI in templates/demo
-globs: templates/demo/**/*.{ts,tsx}
-alwaysApply: false
+description: Use IGRP Design System for all UI in templates/demo. Apply when creating any component, page, form, table, chart, modal, or layout inside the template.
+globs: ["templates/demo/**/*.{ts,tsx}"]
+alwaysApply: true
 ---
 
-# Design System First
+# IGRP Design System — Always On (templates/demo)
 
-When building UI in this template, use `@igrp/igrp-framework-react-design-system` as the **first and default option**. Do not create from scratch or suggest other UI libraries.
+This project uses `@igrp/igrp-framework-react-design-system` as the **only UI library**.
 
-- **Read**: `templates/demo/AGENTS.md` and `templates/demo/DESIGN_SYSTEM.md` for full context
-- **Skills**: Use `templates/demo/skills/` for component-specific guidance (igrp-form, igrp-inputs, igrp-datatable, igrp-button, igrp-card, igrp-charts, igrp-modal, igrp-layout, igrp-navigation, igrp-feedback, igrp-custom, igrp-primitives)
-- **Import from**: `@igrp/igrp-framework-react-design-system`
-- **Prefer Horizon components** (IGRPButton, IGRPInputText, IGRPCard, IGRPForm, IGRPDataTable, etc.)
-- **Forms**: Use IGRPForm, IGRPFormField, IGRPInputText, IGRPSelect
-- **Icons**: Use IGRPIcon with Lucide icon names
+## Before writing any UI code
+
+Read the master skill file directly:
+
+```
+templates/demo/skills/igrp-design-system/SKILL.md
+```
+
+It contains:
+
+- The complete component selection table (what to use for every UI need)
+- Critical rules for forms, styling, and composition
+- Key code patterns (form, button, card, table, toast)
+- Links to per-component deep-dive references in `templates/demo/skills/igrp-design-system/components/`
+
+**Load only the linked component file(s) relevant to your task — do not read the entire `skills/` tree upfront.**
+
+## Non-negotiable rules
+
+1. **All UI imports from `@igrp/igrp-framework-react-design-system`** — never raw HTML or other UI libs.
+2. **Horizon components first** (`IGRPButton`, `IGRPInputText`, `IGRPCard`, `IGRPForm`, `IGRPDataTable`).
+3. **Forms always use `IGRPForm` + Zod** — never raw `<form>` or react-hook-form directly.
+4. **Semantic CSS tokens only** (`bg-background`, `text-foreground`) — never raw colors.
+5. **`'use client'`** required on every file that imports design system components.
+6. **`cn()` for class merging** — import from `@igrp/igrp-framework-react-design-system`.
+
+## Skills folder structure
+
+```
+templates/demo/skills/igrp-design-system/
+├── SKILL.md          ← read this first
+├── rules/            ← forms, styling, composition
+├── references/       ← overview, theming, types, utilities
+└── components/       ← per-area deep API docs (load on demand)
+    ├── button/
+    ├── command/
+    ├── form/
+    ├── inputs/
+    ├── datatable/
+    ├── card/
+    ├── charts/
+    ├── modal/
+    ├── calendar-datepicker/
+    ├── layout/
+    ├── navigation/
+    ├── feedback/
+    ├── custom/
+    └── ui/
+```

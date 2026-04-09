@@ -22,7 +22,7 @@ export async function serverSession(): Promise<Session | null> {
   try {
     validateEnv();
 
-    const session = await getServerSession(authOptions);
+    const session = (await getServerSession(authOptions)) as Session | null;
 
     if (session !== null) {
       igrpSetAccessClientConfig({

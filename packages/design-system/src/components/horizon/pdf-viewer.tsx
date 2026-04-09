@@ -7,7 +7,7 @@ import { format } from 'date-fns';
 import { IGRPColors } from '../../lib/colors';
 import { DD_MM_YYYY } from '../../lib/constants';
 import { cn } from '../../lib/utils';
-import { Card, CardHeader, CardTitle } from '../ui/card';
+import { Card, CardHeader, CardTitle } from '../primitives/card';
 import {
   Dialog,
   DialogContent,
@@ -15,7 +15,7 @@ import {
   DialogFooter,
   DialogHeader,
   DialogTitle,
-} from '../ui/dialog';
+} from '../primitives/dialog';
 import { IGRPBadge } from './badge';
 import { IGRPButton } from './button';
 import { IGRPIcon } from './icon';

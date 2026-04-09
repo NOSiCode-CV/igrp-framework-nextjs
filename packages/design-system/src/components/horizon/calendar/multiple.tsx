@@ -6,7 +6,7 @@ import { addDays } from 'date-fns';
 import { getDisabledDays } from '../../../lib/calendar-utils';
 import { cn } from '../../../lib/utils';
 import type { IGRPCalendarProps } from '../../../types';
-import { Calendar } from '../../ui/calendar';
+import { Calendar } from '../../primitives/calendar';
 
 function getDefaultMultipleDates(): Date[] {
   return [new Date(), addDays(new Date(), 5)];

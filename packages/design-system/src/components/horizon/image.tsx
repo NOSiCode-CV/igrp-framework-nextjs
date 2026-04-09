@@ -5,7 +5,7 @@ import Image, { type ImageProps } from 'next/image';
 
 import { igrpRounded } from '../../lib/rounded-classes';
 import { cn } from '../../lib/utils';
-import { AspectRatio } from '../ui/aspect-ratio';
+import { AspectRatio } from '../primitives/aspect-ratio';
 import type { VariantProps } from 'class-variance-authority';
 
 /** Aspect ratio options for IGRPImage. */

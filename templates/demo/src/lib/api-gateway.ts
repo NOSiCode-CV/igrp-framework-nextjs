@@ -17,8 +17,7 @@ export interface ErrorResponse extends Error {
 export async function callGateway<T>(
   endpoint: string,
   options: ExtendedRequestInit = {},
-): Promise<T> {  
-
+): Promise<T> {
   const baseHeaders: Record<string, string> = {
     "Content-Type": "application/json",
     Accept: "application/json",

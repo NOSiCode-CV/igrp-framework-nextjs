@@ -5,7 +5,7 @@ import { useFormContext, Controller } from 'react-hook-form';
 
 import { cn } from '../../../lib/utils';
 import type { IGRPInputProps } from '../../../types';
-import { Textarea } from '../../ui/textarea';
+import { Textarea } from '../../primitives/textarea';
 import { IGRPLabel } from '../label';
 
 /**
@@ -17,8 +17,7 @@ interface IGRPTextareaProps
     React.ComponentProps<typeof Textarea>,
     Pick<
       IGRPInputProps,
-      'label' | 'helperText' | 'className' | 'required' | 'error' | 'gridSize'
-    > {}
+      'label' | 'helperText' | 'className' | 'required' | 'error'> {}
 
 /**
  * Textarea with label, helper text, and form integration.

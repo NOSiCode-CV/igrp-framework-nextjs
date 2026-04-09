@@ -10,15 +10,15 @@ import {
   ChevronUp,
 } from 'lucide-react';
 
-import { Button } from '../../ui/button';
-import { Checkbox } from '../../ui/checkbox';
+import { Button } from '../../primitives/button';
+import { Checkbox } from '../../primitives/checkbox';
 import {
   DropdownMenu,
   DropdownMenuContent,
   DropdownMenuItem,
   DropdownMenuSeparator,
   DropdownMenuTrigger,
-} from '../../ui/dropdown-menu';
+} from '../../primitives/dropdown-menu';
 
 import { cn } from '../../../lib/utils';
 

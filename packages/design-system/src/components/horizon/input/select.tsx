@@ -24,8 +24,8 @@ import {
   FormItem,
   FormLabel,
   FormMessage,
-} from '../../ui/form';
-import { Input } from '../../ui/input';
+} from '../../primitives/form';
+import { Input } from '../../primitives/input';
 import {
   Select,
   SelectContent,
@@ -34,7 +34,7 @@ import {
   SelectLabel,
   SelectTrigger,
   SelectValue,
-} from '../../ui/select';
+} from '../../primitives/select';
 import { IGRPButton } from '../button';
 import { IGRPIcon } from '../icon';
 import { IGRPLabel } from '../label';

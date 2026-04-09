@@ -6,7 +6,7 @@ import type { VariantProps } from 'class-variance-authority';
 
 import { cn } from '../../../lib/utils';
 import { type IGRPInputProps } from '../../../types';
-import { Input } from '../../ui/input';
+import { Input } from '../../primitives/input';
 import { IGRPButton } from '../button';
 import { IGRPFieldDescription } from '../field-description';
 import { IGRPFormField } from '../form/form-field';

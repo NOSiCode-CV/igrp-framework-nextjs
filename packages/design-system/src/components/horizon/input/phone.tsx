@@ -7,7 +7,7 @@ import flags from 'react-phone-number-input/flags';
 
 import { cn } from '../../../lib/utils';
 import type { IGRPInputProps } from '../../../types';
-import { Input } from '../../ui/input';
+import { Input } from '../../primitives/input';
 import { IGRPIcon } from '../icon';
 import { IGRPLabel } from '../label';
 

@@ -16,7 +16,7 @@ import {
   AlertDialogFooter,
   AlertDialogHeader,
   AlertDialogTitle,
-} from '../ui/alert-dialog';
+} from '../primitives/alert-dialog';
 import { IGRPIcon, type IGRPIconName } from './icon';
 
 /**
@@ -96,6 +96,7 @@ function IGRPAlertDialog({
   const iconDefault = igrpAlertIconMappings[variant];
   const softColors = IGRPColors.soft[variant];
   const strongColors = IGRPColors.solid[variant];
+  const actionClassName = actionProps ? actionProps.className : `${strongColors.bg} hover:${strongColors.bg}`;
 
   const handleAction = () => {
     if (onAction) onAction();
@@ -110,9 +111,9 @@ function IGRPAlertDialog({
   return (
     <Slot id={ref}>
       <AlertDialog open={open} onOpenChange={onOpenChange}>
-        <AlertDialogContent className={cn(className)}>
+        <AlertDialogContent className={className}>
           {showIcon && iconPlacement === 'center' && (
-            <div className={cn('flex justify-center -mt-2')}>
+            <div className="flex justify-center -mt-2">
               <AlertIcon
                 iconName={iconName || iconDefault}
                 bgClass={softColors.bg}
@@ -135,13 +136,13 @@ function IGRPAlertDialog({
                 iconPlacement={iconPlacement}
               />
             )}
-            <div className={cn('flex-1')}>
+            <div className="flex-1">
               <AlertDialogHeader className={cn(iconPlacement === 'center' && 'items-center')}>
                 {title && (
                   <AlertDialogTitle className={cn(titleClassName)}>{title}</AlertDialogTitle>
                 )}
                 {description && (
-                  <AlertDialogDescription className={cn(descriptionClassName)}>
+                  <AlertDialogDescription className={descriptionClassName}>
                     {description}
                   </AlertDialogDescription>
                 )}
@@ -166,9 +167,7 @@ function IGRPAlertDialog({
                 )}
                 <AlertDialogAction
                   onClick={handleAction}
-                  className={cn(
-                    actionProps?.className || strongColors.bg + ' ' + strongColors.text,
-                  )}
+                  className={actionClassName}
                   {...actionProps}
                 >
                   {actionLabel}

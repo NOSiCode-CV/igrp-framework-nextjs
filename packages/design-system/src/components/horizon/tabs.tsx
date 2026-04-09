@@ -5,8 +5,8 @@ import { useCallback, useEffect, useId, useRef, useState } from 'react';
 
 import { type IGRPColorRole, type IGRPColorVariants } from '../../lib/colors';
 import { cn } from '../../lib/utils';
-import { Button } from '../ui/button';
-import { Tabs, TabsList, TabsTrigger, TabsContent } from '../ui/tabs';
+import { Button } from '../primitives/button';
+import { Tabs, TabsList, TabsTrigger, TabsContent } from '../primitives/tabs';
 import { IGRPBadge } from './badge';
 import { IGRPIcon, type IGRPIconName } from './icon';
 

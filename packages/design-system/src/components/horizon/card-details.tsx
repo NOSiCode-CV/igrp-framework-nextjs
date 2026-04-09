@@ -4,8 +4,8 @@ import { useId } from 'react';
 
 import { cn } from '../../lib/utils';
 import { igrpCleanString } from '../../lib/strings';
-import { Card, CardHeader, CardTitle, CardDescription, CardContent } from '../ui/card';
-import { Separator } from '../ui/separator';
+import { Card, CardHeader, CardTitle, CardDescription, CardContent } from '../primitives/card';
+import { Separator } from '../primitives/separator';
 import { IGRPCopyTo } from './copy-to';
 
 /**

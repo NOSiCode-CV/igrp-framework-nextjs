@@ -69,7 +69,7 @@ import {
 ### Component Categories
 
 - **Horizon** — High-level components (`IGRPButton`, `IGRPCard`, `IGRPForm`, etc.)
-- **Primitives** — Low-level building blocks (`Button`, `IGRPDialogPrimitive`, etc.)
+- **Primitives** — Low-level building blocks (`IGRPButtonPrimitive`, `IGRPDialogPrimitive`, etc.)
 - **Custom** — Domain-specific components (`IGRPStatusBanner`, `IGRPUserAvatar`, etc.)
 
 ### Primitives vs Horizon
@@ -91,7 +91,7 @@ import {
 
 ```tsx
 // Primitive: just a styled button, you control everything
-<Button variant="outline" size="sm">Click</Button>
+<IGRPButtonPrimitive variant="outline" size="sm">Click</IGRPButtonPrimitive>
 
 // Horizon: adds icons, loading state, IGRP attributes
 <IGRPButton showIcon iconName="ArrowRight" loading={isSubmitting} loadingText="Saving...">
@@ -103,7 +103,7 @@ import {
 
 ```tsx
 // Primitive: raw input, no label or form wiring
-<Input placeholder="Enter value" />
+<IGRPInputPrimitive placeholder="Enter value" />
 
 // Horizon: label, helper text, icon, form integration, error display
 <IGRPInputText

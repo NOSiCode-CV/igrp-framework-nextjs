@@ -17,7 +17,7 @@ import {
   ChartTooltipContent,
   ChartLegend,
   ChartLegendContent,
-} from '../../ui/chart';
+} from '../../primitives/chart';
 import type { IGRPChartProps, IGRPSeriesConfig } from './types';
 import {
   createChartConfig,

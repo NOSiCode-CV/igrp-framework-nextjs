@@ -5,7 +5,7 @@ import { useFormContext } from 'react-hook-form';
 
 import { cn } from '../../../lib/utils';
 import type { IGRPInputProps } from '../../../types';
-import { Switch } from '../../ui/switch';
+import { Switch } from '../../primitives/switch';
 import { IGRPFormField } from '../form/form-field';
 import { IGRPLabel } from '../label';
 
@@ -16,7 +16,7 @@ import { IGRPLabel } from '../label';
 interface IGRPSwitchProps
   extends
     React.ComponentProps<typeof Switch>,
-    Pick<IGRPInputProps, 'helperText' | 'label' | 'gridSize'> {
+    Pick<IGRPInputProps, 'helperText' | 'label'> {
   /** CSS classes for the label. */
   labelClassName?: string;
   /** Validation error message. */

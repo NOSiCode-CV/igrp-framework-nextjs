@@ -16,7 +16,7 @@ import {
   ChartTooltipContent,
   ChartLegend,
   ChartLegendContent,
-} from '../../ui/chart';
+} from '../../primitives/chart';
 import {
   createChartConfig,
   formatChartValue,

@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { Progress } from '../../ui/progress';
+import { Progress } from '../../primitives/progress';
 import { cn } from '../../../lib/utils';
 
 interface ProgressIGRPProps {

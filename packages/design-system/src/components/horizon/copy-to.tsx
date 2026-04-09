@@ -3,8 +3,8 @@
 import { useEffect, useRef, useState } from 'react';
 
 import { cn } from '../../lib/utils';
-import { Button } from '../ui/button';
-import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from '../ui/tooltip';
+import { Button } from '../primitives/button';
+import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from '../primitives/tooltip';
 import { IGRPIcon } from './icon';
 import { useIGRPToast } from './toaster';
 

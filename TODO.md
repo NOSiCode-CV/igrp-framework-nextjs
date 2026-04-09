@@ -72,3 +72,7 @@ Add the following components to the design system:
 -- Get breadcrumbs via script
 
 ## Animations component see: <https://animations.dev/learn/animation-theory/the-easing-blueprint>
+
+## Skills
+
+-- Add dynamic import if the component is not loaded when the page start, example: dialog

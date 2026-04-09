@@ -1,63 +1,61 @@
 # IGRP Design System Skills
 
-Agent skills for building UI with the IGRP Design System (`@igrp/igrp-framework-react-design-system`).
-
-## Quick Start: CRUD Example
-
-See **[CRUD_EXAMPLE.md](./CRUD_EXAMPLE.md)** for a step-by-step guide on using these skills to build a full CRUD. Step 1 covers how to start with all skills agents.
-
-## Skills Index
-
-| Skill | When to Use |
-|-------|-------------|
-| [igrp-form](./igrp-form/) | Forms, validation, form fields |
-| [igrp-inputs](./igrp-inputs/) | Text inputs, select, checkbox, textarea, etc. |
-| [igrp-datatable](./igrp-datatable/) | Data tables, pagination, filtering, sorting |
-| [igrp-button](./igrp-button/) | Buttons, variants, loading states |
-| [igrp-card](./igrp-card/) | Cards, card details |
-| [igrp-charts](./igrp-charts/) | Area, line, bar, pie, radar, radial charts |
-| [igrp-modal](./igrp-modal/) | Modal dialogs, alert dialogs |
-| [igrp-calendar-datepicker](./igrp-calendar-datepicker/) | Calendars, date pickers, time inputs |
-| [igrp-layout](./igrp-layout/) | Container, page header/footer, sidebar |
-| [igrp-navigation](./igrp-navigation/) | Menu navigation, dropdown menus, tabs |
-| [igrp-feedback](./igrp-feedback/) | Alerts, notifications, badges, toasts |
-| [igrp-custom](./igrp-custom/) | Stats cards, status banner, user avatar |
-| [igrp-primitives](./igrp-primitives/) | Primitives for custom composition |
-
-## Usage
-
-### Cursor (project-level discovery)
-
-Cursor discovers skills from `.cursor/skills/` or `.agents/skills/` at the repo root. Run the setup script to link these skills:
-
-```powershell
-# From repo root
-.\templates\demo\skills\scripts\setup-cursor-skills.ps1
-```
-
-This creates junctions in `.cursor/skills/` pointing to each skill here. Cursor will then auto-discover them. You can also invoke skills manually with `/igrp-form`, `/igrp-datatable`, etc.
-
-### Anthropic / skills.sh (package for distribution)
-
-To create `.skill` files for installation via `npx skills add`:
-
-```powershell
-# From repo root (no dependencies)
-.\templates\demo\skills\scripts\package-skill-standalone.ps1
-```
-
-Output: `templates/demo/skills/dist/*.skill`. Install with:
-
-```bash
-npx skills add ./templates/demo/skills/dist/igrp-form.skill
-```
-
-Alternative: `package-all-skills.ps1` uses skill-creator's package_skill.py (requires PyYAML; may have encoding issues on Windows).
+Agent skill for building UI with `@igrp/igrp-framework-react-design-system`.
 
 ## Structure
 
-Each skill contains:
+```skills/
+├── igrp-design-system/          <- single skill: entry point for all UI work
+│   ├── SKILL.md                 <- master: component table, patterns, rules, links
+│   ├── evals/                   <- eval prompts per component area
+│   ├── rules/                   <- forms.md, styling.md, composition.md
+│   ├── references/              <- overview.md, theming.md
+│   └── components/              <- per-area deep API docs (loaded on demand)
+│       ├── button/
+│       ├── calendar-datepicker/
+│       ├── card/
+│       ├── charts/
+│       ├── command/
+│       ├── custom/
+│       ├── datatable/
+│       ├── feedback/
+│       ├── form/
+│       ├── inputs/
+│       ├── layout/
+│       ├── modal/
+│       ├── navigation/
+│       └── ui/
+│
+├── scripts/
+│   └── setup-cursor-skills.ps1  <- creates Cursor junction (run once)
+├── CRUD_EXAMPLE.md              <- step-by-step CRUD guide
+└── README.md                    <- this file
+```
 
-- `SKILL.md` – Main instructions and trigger description
-- `references/` – Per-component API docs (heavy depth)
-- `evals/` – Test prompts for skill-creator workflow
+## How each agent reads the skill
+
+Each agent config file **points directly at `skills/igrp-design-system/SKILL.md`** — no extra copies or sync needed. The skill file links out to `components/` on demand.
+
+| Agent | How it reads `SKILL.md` |
+|-------|------------------------|
+| **Cursor** | `.cursor/rules/igrp-design-system.mdc` (`alwaysApply`) points at `skills/igrp-design-system/SKILL.md` |
+| **Claude Code** | `CLAUDE.md` uses `@./skills/igrp-design-system/SKILL.md` to include it at startup |
+| **Trae / OpenHands** | `AGENTS.md` instructs the agent to read `./skills/igrp-design-system/SKILL.md` |
+| **GitHub Copilot** | `.github/copilot-instructions.md` references `skills/igrp-design-system/SKILL.md` |
+
+The `skills/` folder is the **single source of truth** — no duplication, no syncing.
+
+## Setup (run once after cloning — Cursor only)
+
+Cursor also discovers skills via `.cursor/skills/`. Run this once to create the junction:
+
+```powershell
+# From anywhere inside the repo
+.\templates\demo\skills\scripts\setup-cursor-skills.ps1
+```
+
+All other agents (Claude, Trae, Copilot) read `skills/` directly via their config files — no setup required.
+
+## Quick Start: CRUD Example
+
+See **[CRUD_EXAMPLE.md](./CRUD_EXAMPLE.md)** for a step-by-step guide to building a full CRUD.

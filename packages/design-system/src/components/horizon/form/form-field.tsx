@@ -12,7 +12,7 @@ import {
   FormItem,
   FormLabel,
   FormMessage,
-} from '../../ui/form';
+} from '../../primitives/form';
 import { cn } from '../../../lib/utils';
 import { type IGRPPlacementProps } from '../../../types';
 

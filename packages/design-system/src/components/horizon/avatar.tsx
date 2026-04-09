@@ -6,7 +6,7 @@ import { useId } from 'react';
 import { IGRPColors, type IGRPColorVariants } from '../../lib/colors';
 import { cn } from '../../lib/utils';
 import type { IGRPBaseAttributes } from '../../types';
-import { Avatar, AvatarImage, AvatarFallback } from '../ui/avatar';
+import { Avatar, AvatarImage, AvatarFallback } from '../primitives/avatar';
 import { IGRPBadge } from './badge';
 import { IGRPIcon, type IGRPIconName } from './icon';
 

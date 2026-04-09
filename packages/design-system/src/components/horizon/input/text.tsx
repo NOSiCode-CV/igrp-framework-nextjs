@@ -5,7 +5,7 @@ import { useFormContext } from 'react-hook-form';
 
 import { cn } from '../../../lib/utils';
 import type { IGRPInputProps } from '../../../types';
-import { Input } from '../../ui/input';
+import { Input } from '../../primitives/input';
 import { IGRPFormField } from '../form/form-field';
 import { IGRPIcon } from '../icon';
 import { IGRPLabel } from '../label';

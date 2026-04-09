@@ -14,8 +14,8 @@ import {
   AlertDialogHeader,
   AlertDialogTitle,
   AlertDialogTrigger,
-} from '../../ui/alert-dialog';
-import { Button, buttonVariants } from '../../ui/button';
+} from '../../primitives/alert-dialog';
+import { Button, buttonVariants } from '../../primitives/button';
 import {
   Dialog,
   DialogClose,
@@ -25,8 +25,8 @@ import {
   DialogHeader,
   DialogTitle,
   DialogTrigger,
-} from '../../ui/dialog';
-import { Tooltip, TooltipContent, TooltipTrigger } from '../../ui/tooltip';
+} from '../../primitives/dialog';
+import { Tooltip, TooltipContent, TooltipTrigger } from '../../primitives/tooltip';
 import { IGRPButton } from '../button';
 import { IGRPIcon } from '../icon';
 import { igrpModalDialogContentVariants } from '../modal-dialog';

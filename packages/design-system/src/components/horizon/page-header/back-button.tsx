@@ -4,7 +4,7 @@ import { useCallback } from 'react';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 
-import { Button } from '../../ui/button';
+import { Button } from '../../primitives/button';
 import { IGRPIcon, type IGRPIconName } from '../icon';
 import { cn } from '../../../lib/utils';
 

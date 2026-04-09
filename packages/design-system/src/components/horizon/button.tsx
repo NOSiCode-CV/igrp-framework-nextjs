@@ -1,9 +1,10 @@
 'use client';
 
+import * as React from 'react';
 import { useId, type ReactNode } from 'react';
 import type { VariantProps } from 'class-variance-authority';
 
-import { Button, buttonVariants } from '../ui/button';
+import { Button, buttonVariants } from '../primitives/button';
 import { IGRPIcon } from './icon';
 import { cn } from '../../lib/utils';
 import type { IGRPBaseAttributes } from '../../types';
@@ -60,7 +61,7 @@ function IGRPButton({
     <IGRPIcon iconName="LoaderCircle" className={cn('animate-spin')} aria-hidden="true" />
   );
 
-  if (size === 'icon' || size === 'icon-sm' || size === 'icon-lg') {
+  if (size === 'icon' || size === 'icon-xs' || size === 'icon-sm' || size === 'icon-lg') {
     return (
       <Button
         {...props}

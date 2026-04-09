@@ -1,4 +1,4 @@
-import type { ChartConfig as ShadCNChartConfig } from '../../ui/chart';
+import type { ChartConfig as ShadCNChartConfig } from '../../primitives/chart';
 import {
   type IGRPChartDataItem,
   type IGRPChartLegendPosition,

@@ -3,7 +3,7 @@
 import { useId } from 'react';
 
 import { cn } from '../../lib/utils';
-import { Label } from '../ui/label';
+import { Label } from '../primitives/label';
 
 /**
  * Props for the IGRPLabel component.

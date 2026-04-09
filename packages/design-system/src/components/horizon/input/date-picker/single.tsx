@@ -3,6 +3,7 @@
 import { useId, useState, useEffect } from 'react';
 import { format } from 'date-fns';
 import { useFormContext } from 'react-hook-form';
+import { CalendarIcon } from 'lucide-react';
 
 import { DD_MM_YYYY } from '../../../../lib/constants';
 import { cn } from '../../../../lib/utils';
@@ -15,56 +16,11 @@ import {
   FormLabel,
   FormMessage,
 } from '../../../primitives/form';
+import { Button } from '../../../primitives/button';
 import { Popover, PopoverContent, PopoverTrigger } from '../../../primitives/popover';
 import { IGRPButton } from '../../button';
 import { IGRPCalendarSingle, type IGRPCalendarSingleProps } from '../../calendar/single';
 import { IGRPLabel } from '../../label';
-
-/** @internal Trigger button showing the selected date. */
-function DatePickerTrigger({
-  value,
-  fieldName,
-  placeholder,
-  dateFormat,
-  disabled,
-  disabledPicker,
-}: {
-  value: Date | undefined;
-  fieldName: string;
-  placeholder: string;
-  dateFormat: string;
-  disabled?: boolean;
-  disabledPicker?: boolean;
-}) {
-  const displayText = value ? format(value, dateFormat) : placeholder;
-  return (
-    <div
-      className={cn(
-        'flex gap-2 items-center relative',
-        'group bg-background hover:bg-accent border border-input hover:text-accent-foreground',
-        'w-full justify-between outline-offset-0 outline-none focus-visible:outline-2',
-        'rounded-md shadow-xs dark:bg-input/30 dark:border-input dark:hover:bg-input/50',
-        !value && 'text-muted-foreground',
-        disabled && 'opacity-50 cursor-not-allowed',
-      )}
-    >
-      <IGRPButton
-        id={fieldName}
-        variant="outline"
-        className={cn(
-          'underline-offset-0 hover:no-underline border-0 bg-transparent hover:bg-transparent shadow-none justify-between w-full',
-        )}
-        disabled={disabledPicker}
-        iconName="Calendar"
-        iconClassName="text-muted-foreground/80 group-hover:text-foreground shrink-0 transition-colors"
-        showIcon={value ? false : true}
-        iconPlacement="end"
-      >
-        <span className={cn('truncate', !value && 'text-muted-foreground')}>{displayText}</span>
-      </IGRPButton>
-    </div>
-  );
-}
 
 /** @internal Popover + calendar + clear button. */
 function DatePickerSingleField({
@@ -86,18 +42,30 @@ function DatePickerSingleField({
   disabled?: boolean;
   disabledPicker?: boolean;
 }) {
+  const displayText = value ? format(value, dateFormat) : placeholder;
+
   return (
     <div className={cn('relative')}>
       <Popover>
         <PopoverTrigger asChild>
-          <DatePickerTrigger
-            value={value}
-            fieldName={fieldName}
-            placeholder={placeholder}
-            dateFormat={dateFormat}
-            disabled={disabled}
-            disabledPicker={disabledPicker}
-          />
+          <Button
+            id={fieldName}
+            variant="outline"
+            disabled={disabledPicker || disabled}
+            className={cn(
+              'group w-full justify-between font-normal shadow-xs',
+              'bg-background hover:bg-accent border-input dark:bg-input/30 dark:border-input dark:hover:bg-input/50',
+              !value && 'text-muted-foreground',
+            )}
+          >
+            <span className={cn('truncate', !value && 'text-muted-foreground')}>{displayText}</span>
+            {!value && (
+              <CalendarIcon
+                className="text-muted-foreground/80 group-hover:text-foreground shrink-0 transition-colors"
+                aria-hidden="true"
+              />
+            )}
+          </Button>
         </PopoverTrigger>
         <PopoverContent className={cn('p-0 w-auto shadow-none')} align="start">
           <IGRPCalendarSingle

@@ -4318,12 +4318,6 @@
       outline-width: 1px;
     }
   }
-  .focus-visible\:outline-2 {
-    &:focus-visible {
-      outline-style: var(--tw-outline-style);
-      outline-width: 2px;
-    }
-  }
   .focus-visible\:outline-\[3px\] {
     &:focus-visible {
       outline-style: var(--tw-outline-style);

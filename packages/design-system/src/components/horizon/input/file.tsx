@@ -1,12 +1,12 @@
-'use client';
+"use client"
 
-import { useId, useRef } from 'react';
-import { useFormContext, Controller } from 'react-hook-form';
+import { useId, useRef } from "react"
+import { useFormContext, Controller } from "react-hook-form"
 
-import { cn } from '../../../lib/utils';
-import type { IGRPInputProps } from '../../../types';
-import { Input } from '../../primitives/input';
-import { IGRPLabel } from '../label';
+import { cn } from "../../../lib/utils"
+import type { IGRPInputProps } from "../../../types"
+import { Input } from "../../primitives/input"
+import { IGRPLabel } from "../label"
 
 /**
  * Props for the IGRPInputFile component.
@@ -14,9 +14,9 @@ import { IGRPLabel } from '../label';
  */
 interface IGRPInputFileProps extends IGRPInputProps {
   /** Accepted file types (e.g. 'image/*', '.pdf'). */
-  accept?: string;
+  accept?: string
   /** Allow multiple file selection. */
-  multiple?: boolean;
+  multiple?: boolean
 }
 
 /**
@@ -37,25 +37,23 @@ function IGRPInputFile({
   helperText,
   ...props
 }: IGRPInputFileProps) {
-  const _id = useId();
-  const fieldName = name ?? id ?? _id;
+  const _id = useId()
+  const fieldName = name ?? id ?? _id
 
-  const inputRef = useRef<HTMLInputElement>(null);
-  const formContext = useFormContext();
+  const inputRef = useRef<HTMLInputElement>(null)
+  const formContext = useFormContext()
 
   if (!formContext) {
     return (
-      <div className={cn('*:not-first:mt-2')}>
-        {label && (
-          <IGRPLabel label={label} className={className} required={required} id={fieldName} />
-        )}
+      <div className={cn("*:not-first:mt-2")}>
+        {label && <IGRPLabel label={label} className={className} required={required} id={fieldName} />}
         <Input
           ref={inputRef}
           id={fieldName}
           name={fieldName}
           className={cn(
-            'p-0 pe-3 file:me-3 file:border-0 file:border-e file:border-gray-100 file:py-2 file:px-4 file:transition-colors cursor-pointer',
-            error && 'border-destructive focus-visible:ring-destructive/20',
+            "p-0 pe-3 file:me-3 file:border-0 file:border-e file:border-gray-100 file:py-2 file:px-4 file:transition-colors cursor-pointer",
+            error && "border-destructive focus-visible:ring-destructive/20",
             className,
           )}
           type="file"
@@ -72,7 +70,7 @@ function IGRPInputFile({
         {helperText && !error && (
           <p
             id={`${fieldName}-helper`}
-            className={cn('text-muted-foreground mt-2 text-xs')}
+            className={cn("text-muted-foreground mt-2 text-xs")}
             role="region"
             aria-live="polite"
           >
@@ -81,16 +79,16 @@ function IGRPInputFile({
         )}
 
         {error && (
-          <p id={`${fieldName}-error`} className={cn('text-destructive mt-2 text-xs')} role="alert">
+          <p id={`${fieldName}-error`} className={cn("text-destructive mt-2 text-xs")} role="alert">
             {error}
           </p>
         )}
       </div>
-    );
+    )
   }
 
-  const fieldError = formContext.formState.errors[fieldName];
-  const errorMessage = error || (fieldError?.message as string);
+  const fieldError = formContext.formState.errors[fieldName]
+  const errorMessage = error || (fieldError?.message as string)
 
   return (
     <Controller
@@ -100,20 +98,17 @@ function IGRPInputFile({
         const safeFieldProps = {
           name: field.name,
           onBlur: field.onBlur,
-        };
+        }
 
         return (
-          <div className={cn('*:not-first:mt-2')}>
-            {label && (
-              <IGRPLabel label={label} className={className} required={required} id={fieldName} />
-            )}
+          <div className={cn("*:not-first:mt-2")}>
+            {label && <IGRPLabel label={label} className={className} required={required} id={fieldName} />}
             <Input
               ref={inputRef}
               id={fieldName}
               className={cn(
-                'p-0 pe-3 file:me-3 file:border-0 file:border-e file:border-gray-100 file:py-2 file:px-4 file:transition-colors cursor-pointer',
-                (fieldState.error || error) &&
-                  'border-destructive focus-visible:ring-destructive/20',
+                "p-0 pe-3 file:me-3 file:border-0 file:border-e file:border-gray-100 file:py-2 file:px-4 file:transition-colors cursor-pointer",
+                (fieldState.error || error) && "border-destructive focus-visible:ring-destructive/20",
                 className,
               )}
               type="file"
@@ -122,13 +117,13 @@ function IGRPInputFile({
               multiple={multiple}
               placeholder={placeholder}
               onChange={(e) => {
-                const files = e.target.files;
-                const fileValue = multiple ? files : files?.[0] || null;
+                const files = e.target.files
+                const fileValue = multiple ? files : files?.[0] || null
 
-                field.onChange(fileValue);
+                field.onChange(fileValue)
 
                 if (onChange) {
-                  onChange(e);
+                  onChange(e)
                 }
               }}
               aria-invalid={!!fieldState.error || !!error}
@@ -141,7 +136,7 @@ function IGRPInputFile({
             {helperText && !errorMessage && !fieldState.error && (
               <p
                 id={`${fieldName}-helper`}
-                className={cn('text-muted-foreground mt-2 text-xs')}
+                className={cn("text-muted-foreground mt-2 text-xs")}
                 role="region"
                 aria-live="polite"
               >
@@ -150,19 +145,15 @@ function IGRPInputFile({
             )}
 
             {(errorMessage || fieldState.error) && (
-              <p
-                id={`${fieldName}-error`}
-                className={cn('text-destructive mt-2 text-xs')}
-                role="alert"
-              >
+              <p id={`${fieldName}-error`} className={cn("text-destructive mt-2 text-xs")} role="alert">
                 {errorMessage || fieldState.error?.message}
               </p>
             )}
           </div>
-        );
+        )
       }}
     />
-  );
+  )
 }
 
-export { IGRPInputFile, type IGRPInputFileProps };
+export { IGRPInputFile, type IGRPInputFileProps }

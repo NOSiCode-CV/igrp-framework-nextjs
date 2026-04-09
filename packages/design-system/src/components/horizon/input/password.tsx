@@ -1,31 +1,31 @@
-'use client';
+"use client"
 
-import { useId, useState } from 'react';
-import { useFormContext, Controller } from 'react-hook-form';
+import { useId, useState } from "react"
+import { useFormContext, Controller } from "react-hook-form"
 
-import { cn } from '../../../lib/utils';
-import type { IGRPGridSize, IGRPInputProps } from '../../../types';
-import { Input } from '../../primitives/input';
-import { IGRPButton } from '../button';
-import { IGRPLabel } from '../label';
+import { cn } from "../../../lib/utils"
+import type { IGRPGridSize, IGRPInputProps } from "../../../types"
+import { Input } from "../../primitives/input"
+import { IGRPButton } from "../button"
+import { IGRPLabel } from "../label"
 
 /**
  * Props for the IGRPInputPassword component.
  * @see IGRPInputPassword
  */
-interface IGRPInputPasswordProps extends Omit<IGRPInputProps, 'onChange'> {
+interface IGRPInputPasswordProps extends Omit<IGRPInputProps, "onChange"> {
   /** Controlled password value. */
-  value?: string;
+  value?: string
   /** Default password value. */
-  defaultValue?: string;
+  defaultValue?: string
   /** Called when value changes. */
-  onChange?: (value: string) => void;
+  onChange?: (value: string) => void
   /** Show toggle to reveal/hide password. */
-  showPasswordToggle?: boolean;
+  showPasswordToggle?: boolean
   /**
    * @deprecated This props will be deprecated in the next release.
    */
-  IGRPGridSize?: IGRPGridSize;
+  IGRPGridSize?: IGRPGridSize
 }
 
 /**
@@ -45,43 +45,41 @@ function IGRPInputPassword({
   showPasswordToggle = true,
   ...props
 }: IGRPInputPasswordProps) {
-  const _id = useId();
-  const fieldName = name ?? id ?? _id;
+  const _id = useId()
+  const fieldName = name ?? id ?? _id
 
-  const [showPassword, setShowPassword] = useState(false);
-  const formContext = useFormContext();
-  const [localValue, setLocalValue] = useState(value ?? defaultValue ?? '');
+  const [showPassword, setShowPassword] = useState(false)
+  const formContext = useFormContext()
+  const [localValue, setLocalValue] = useState(value ?? defaultValue ?? "")
 
   const handleStandaloneChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const newValue = e.target.value;
-    if (value === undefined) setLocalValue(newValue);
-    onChange?.(newValue);
-  };
+    const newValue = e.target.value
+    if (value === undefined) setLocalValue(newValue)
+    onChange?.(newValue)
+  }
 
   const togglePasswordVisibility = () => {
-    setShowPassword(!showPassword);
-  };
+    setShowPassword(!showPassword)
+  }
 
   if (!formContext) {
     return (
-      <div className={cn('*:not-first:mt-2')}>
-        {label && (
-          <IGRPLabel label={label} className={className} required={required} id={fieldName} />
-        )}
+      <div className={cn("*:not-first:mt-2")}>
+        {label && <IGRPLabel label={label} className={className} required={required} id={fieldName} />}
 
-        <div className={cn('relative')}>
+        <div className={cn("relative")}>
           <Input
             id={fieldName}
             name={fieldName}
-            type={showPassword ? 'text' : 'password'}
+            type={showPassword ? "text" : "password"}
             required={required}
             aria-required={required}
-            aria-invalid={!!error || !!props['aria-invalid']}
+            aria-invalid={!!error || !!props["aria-invalid"]}
             aria-describedby={helperText || error ? `${id}-helper` : undefined}
             className={cn(
-              'peer bg-background py-3 text-sm outline-hidden',
-              showPasswordToggle && 'pr-10',
-              error && 'border-destructive focus-visible:ring-destructive/20',
+              "peer bg-background py-3 text-sm outline-hidden",
+              showPasswordToggle && "pr-10",
+              error && "border-destructive focus-visible:ring-destructive/20",
               className,
             )}
             value={value !== undefined ? value : localValue}
@@ -95,14 +93,12 @@ function IGRPInputPassword({
               type="button"
               variant="ghost"
               size="sm"
-              className={cn(
-                'absolute right-0 top-0 h-full px-3 py-2 text-muted-foreground hover:text-foreground',
-              )}
+              className={cn("absolute right-0 top-0 h-full px-3 py-2 text-muted-foreground hover:text-foreground")}
               onClick={togglePasswordVisibility}
               tabIndex={-1}
-              aria-label={showPassword ? 'Hide password' : 'Show password'}
+              aria-label={showPassword ? "Hide password" : "Show password"}
               showIcon
-              iconName={showPassword ? 'EyeOff' : 'Eye'}
+              iconName={showPassword ? "EyeOff" : "Eye"}
               name="toggle-password-visibility"
             />
           )}
@@ -111,7 +107,7 @@ function IGRPInputPassword({
         {helperText && !error && (
           <p
             id={`${fieldName}-helper`}
-            className={cn('text-muted-foreground mt-2 text-xs')}
+            className={cn("text-muted-foreground mt-2 text-xs")}
             role="region"
             aria-live="polite"
           >
@@ -120,50 +116,41 @@ function IGRPInputPassword({
         )}
 
         {error && (
-          <p
-            id={`${fieldName}-errror`}
-            className={cn('text-destructive mt-2 text-xs')}
-            role="alert"
-          >
+          <p id={`${fieldName}-errror`} className={cn("text-destructive mt-2 text-xs")} role="alert">
             {error}
           </p>
         )}
       </div>
-    );
+    )
   }
 
   return (
     <Controller
       name={fieldName}
       control={formContext.control}
-      defaultValue={defaultValue || ''}
+      defaultValue={defaultValue || ""}
       render={({ field, fieldState }) => (
-        <div className={cn('*:not-first:mt-2')}>
-          {label && (
-            <IGRPLabel label={label} className={className} required={required} id={fieldName} />
-          )}
+        <div className={cn("*:not-first:mt-2")}>
+          {label && <IGRPLabel label={label} className={className} required={required} id={fieldName} />}
 
-          <div className={cn('relative')}>
+          <div className={cn("relative")}>
             <Input
               id={fieldName}
-              type={showPassword ? 'text' : 'password'}
+              type={showPassword ? "text" : "password"}
               required={required}
               aria-required={required}
-              aria-invalid={!!fieldState.error || !!error || !!props['aria-invalid']}
-              aria-describedby={
-                helperText || error || fieldState.error ? `${id}-helper` : undefined
-              }
+              aria-invalid={!!fieldState.error || !!error || !!props["aria-invalid"]}
+              aria-describedby={helperText || error || fieldState.error ? `${id}-helper` : undefined}
               className={cn(
-                'peer bg-background py-3 text-sm outline-hidden',
-                showPasswordToggle && 'pr-10',
-                (fieldState.error || error) &&
-                  'border-destructive focus-visible:ring-destructive/20',
+                "peer bg-background py-3 text-sm outline-hidden",
+                showPasswordToggle && "pr-10",
+                (fieldState.error || error) && "border-destructive focus-visible:ring-destructive/20",
                 className,
               )}
               value={field.value}
               onChange={(e) => {
-                field.onChange(e);
-                onChange?.(e.target.value);
+                field.onChange(e)
+                onChange?.(e.target.value)
               }}
               onBlur={field.onBlur}
               {...props}
@@ -174,14 +161,12 @@ function IGRPInputPassword({
                 type="button"
                 variant="ghost"
                 size="sm"
-                className={cn(
-                  'absolute right-0 top-0 h-full px-3 py-2 text-muted-foreground hover:text-foreground',
-                )}
+                className={cn("absolute right-0 top-0 h-full px-3 py-2 text-muted-foreground hover:text-foreground")}
                 onClick={togglePasswordVisibility}
                 tabIndex={-1}
-                aria-label={showPassword ? 'Hide password' : 'Show password'}
+                aria-label={showPassword ? "Hide password" : "Show password"}
                 showIcon
-                iconName={showPassword ? 'EyeOff' : 'Eye'}
+                iconName={showPassword ? "EyeOff" : "Eye"}
               />
             )}
           </div>
@@ -189,7 +174,7 @@ function IGRPInputPassword({
           {helperText && !error && !fieldState.error && (
             <p
               id={`${fieldName}-helper`}
-              className={cn('text-muted-foreground mt-2 text-xs')}
+              className={cn("text-muted-foreground mt-2 text-xs")}
               role="region"
               aria-live="polite"
             >
@@ -198,18 +183,14 @@ function IGRPInputPassword({
           )}
 
           {(error || fieldState.error) && (
-            <p
-              id={`${fieldName}-helper`}
-              className={cn('text-destructive mt-2 text-xs')}
-              role="alert"
-            >
+            <p id={`${fieldName}-helper`} className={cn("text-destructive mt-2 text-xs")} role="alert">
               {error || fieldState.error?.message}
             </p>
           )}
         </div>
       )}
     />
-  );
+  )
 }
 
-export { IGRPInputPassword, type IGRPInputPasswordProps };
+export { IGRPInputPassword, type IGRPInputPasswordProps }

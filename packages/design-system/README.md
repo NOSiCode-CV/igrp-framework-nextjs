@@ -29,8 +29,8 @@ The design system uses Tailwind v4 and CSS variables (tokens). Configure your ap
 In your main CSS file (e.g. `src/styles/globals.css`):
 
 ```css
-@import 'tailwindcss';
-@import 'tw-animate-css';
+@import "tailwindcss";
+@import "tw-animate-css";
 
 @custom-variant dark (&:is(.dark *));
 
@@ -39,10 +39,10 @@ In your main CSS file (e.g. `src/styles/globals.css`):
 @source "../../node_modules/@igrp/igrp-framework-react-design-system/dist/**/*.{js,jsx,ts,tsx,mjs,cjs}";
 
 /* Import tokens (CSS variables) */
-@import '@igrp/igrp-framework-react-design-system/tokens';
+@import "@igrp/igrp-framework-react-design-system/tokens";
 
 /* Optional: your theme overrides */
-@import './themes.css';
+@import "./themes.css";
 ```
 
 ### Importing Components
@@ -54,7 +54,7 @@ import {
   IGRPInputText,
   IGRPToaster,
   useIGRPToast,
-} from '@igrp/igrp-framework-react-design-system';
+} from "@igrp/igrp-framework-react-design-system"
 ```
 
 ### Package Exports
@@ -143,11 +143,11 @@ The design system uses CSS custom properties for theming. Tokens are defined in 
 Dark mode is controlled by the `.dark` class on a parent element (e.g. `<html>`). Use `next-themes` for automatic switching:
 
 ```tsx
-import { ThemeProvider } from 'next-themes';
+import { ThemeProvider } from "next-themes"
 
-<ThemeProvider attribute="class" defaultTheme="system">
+;<ThemeProvider attribute="class" defaultTheme="system">
   {children}
-</ThemeProvider>;
+</ThemeProvider>
 ```
 
 ### Custom Themes
@@ -183,10 +183,10 @@ Override tokens in your own CSS (e.g. `themes.css`), loaded **after** the tokens
 For browser chrome (e.g. mobile address bar), use the provided hook:
 
 ```tsx
-import { IGRP_META_THEME_COLORS, useIGRPMetaColor } from '@igrp/igrp-framework-react-design-system';
+import { IGRP_META_THEME_COLORS, useIGRPMetaColor } from "@igrp/igrp-framework-react-design-system"
 
 // In layout or root component
-useIGRPMetaColor(); // Syncs theme-color meta tag with current theme
+useIGRPMetaColor() // Syncs theme-color meta tag with current theme
 ```
 
 ---
@@ -200,7 +200,7 @@ If you previously imported prebuilt styles:
 **Before:**
 
 ```css
-@import '@igrp/igrp-framework-react-design-system/styles.css';
+@import "@igrp/igrp-framework-react-design-system/styles.css";
 ```
 
 **After:**
@@ -214,7 +214,7 @@ If you previously imported prebuilt styles:
 2. Import tokens only:
 
    ```css
-   @import '@igrp/igrp-framework-react-design-system/tokens';
+   @import "@igrp/igrp-framework-react-design-system/tokens";
    ```
 
 3. Remove imports of `@igrp/*/styles.css` to avoid cascade conflicts and missing utilities.

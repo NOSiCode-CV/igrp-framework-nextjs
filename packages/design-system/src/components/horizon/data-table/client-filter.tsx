@@ -1,10 +1,10 @@
-'use client';
-'use no memo';
+"use client"
+"use no memo"
 
-import { type Column, type Table } from '@tanstack/react-table';
-import { Fragment, type JSX } from 'react';
+import { type Column, type Table } from "@tanstack/react-table"
+import { Fragment, type JSX } from "react"
 
-import { cn } from '../../../lib/utils';
+import { cn } from "../../../lib/utils"
 
 // import { IGRPButton } from '../button';
 
@@ -14,9 +14,9 @@ import { cn } from '../../../lib/utils';
  */
 interface IGRPDataTableClientFilterListProps<TData> {
   /** Column id to filter. */
-  columnId: keyof TData;
+  columnId: keyof TData
   /** Filter component receiving the column. */
-  component: (props: { column: Column<TData, unknown> }) => JSX.Element;
+  component: (props: { column: Column<TData, unknown> }) => JSX.Element
 }
 
 /**
@@ -25,11 +25,11 @@ interface IGRPDataTableClientFilterListProps<TData> {
  */
 interface IGRPDataTableFilterClientProps<TData> {
   /** TanStack Table instance. */
-  table: Table<TData>;
+  table: Table<TData>
   /** Filter configurations. */
-  filterList: IGRPDataTableClientFilterListProps<TData>[];
+  filterList: IGRPDataTableClientFilterListProps<TData>[]
   /** Label for clear filters button. */
-  filterLabel: string;
+  filterLabel: string
 }
 
 /**
@@ -51,12 +51,10 @@ function IGRPDataTableClientFilter<TData>({
   // };
 
   return (
-    <div className={cn('flex md:items-center gap-2 flex-col md:flex-row')}>
+    <div className={cn("flex md:items-center gap-2 flex-col md:flex-row")}>
       {filterList.map(({ columnId, component }) => {
-        const column = table.getColumn(columnId as string);
-        return (
-          column && <Fragment key={columnId as string}>{component({ column: column })}</Fragment>
-        );
+        const column = table.getColumn(columnId as string)
+        return column && <Fragment key={columnId as string}>{component({ column: column })}</Fragment>
       })}
 
       {/* {isFiltered && (
@@ -70,11 +68,7 @@ function IGRPDataTableClientFilter<TData>({
         </IGRPButton>
       )} */}
     </div>
-  );
+  )
 }
 
-export {
-  IGRPDataTableClientFilter,
-  type IGRPDataTableFilterClientProps,
-  type IGRPDataTableClientFilterListProps,
-};
+export { IGRPDataTableClientFilter, type IGRPDataTableFilterClientProps, type IGRPDataTableClientFilterListProps }

@@ -1,13 +1,13 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-'use client';
+"use client"
 
-import { Pie, PieChart, Sector, Cell, Label, Legend, type LegendType } from 'recharts';
-import type { PieSectorDataItem } from 'recharts/types/polar/Pie';
-import React, { useState, type SVGAttributes } from 'react';
+import { Pie, PieChart, Sector, Cell, Label, Legend, type LegendType } from "recharts"
+import type { PieSectorDataItem } from "recharts/types/polar/Pie"
+import React, { useState, type SVGAttributes } from "react"
 
-import { cn } from '../../../lib/utils';
-import { ChartContainer, ChartTooltip, ChartTooltipContent } from '../../primitives/chart';
-import type { IGRPChartProps, PieConfig } from './types';
+import { cn } from "../../../lib/utils"
+import { ChartContainer, ChartTooltip, ChartTooltipContent } from "../../primitives/chart"
+import type { IGRPChartProps, PieConfig } from "./types"
 import {
   createChartConfig,
   formatChartValue,
@@ -16,20 +16,20 @@ import {
   getLegendHorizontalAlign,
   getLegendLayout,
   getLegendVerticalAlign,
-} from './lib';
+} from "./lib"
 
 /**
  * Props for the IGRPPieChart component.
  * @see IGRPPieChart
  */
 export interface IGRPPieChartProps extends IGRPChartProps {
-  pies: PieConfig[];
-  nameKey: string;
+  pies: PieConfig[]
+  nameKey: string
   centerLabel?: {
-    show: boolean;
-    text?: string;
-  };
-  interactive?: boolean;
+    show: boolean
+    text?: string
+  }
+  interactive?: boolean
 }
 
 /**
@@ -42,58 +42,58 @@ function IGRPPieChartInner({
   nameKey,
   title,
   description,
-  legendPosition = 'none',
+  legendPosition = "none",
   showTooltip = true,
-  size = 'md',
+  size = "md",
   height,
   width,
   className,
   valueFormatter,
   backgroundColor,
-  tooltipIndicator = 'line',
+  tooltipIndicator = "line",
   footer,
-  centerLabel = { show: false, text: '' },
+  centerLabel = { show: false, text: "" },
   interactive = false,
 }: IGRPPieChartProps) {
-  const [activeIndex, setActiveIndex] = useState(-1);
+  const [activeIndex, setActiveIndex] = useState(-1)
 
-  const chartHeight = getChartHeight(size, data, height);
-  const chartWidth = getChartWidth(width);
-  const formatValue = (value: number) => formatChartValue(value, valueFormatter);
-  const chartConfig = createChartConfig(pies);
+  const chartHeight = getChartHeight(size, data, height)
+  const chartWidth = getChartWidth(width)
+  const formatValue = (value: number) => formatChartValue(value, valueFormatter)
+  const chartConfig = createChartConfig(pies)
 
   const totalValue = React.useMemo(() => {
-    if (!centerLabel.show || !pies.length || !data.length) return 0;
+    if (!centerLabel.show || !pies.length || !data.length) return 0
 
     return data.reduce((sum, entry) => {
-      const key = pies[0]?.dataKey;
-      if (!key) return 0;
-      return sum + Number(entry[key] ?? 0);
-    }, 0);
-  }, [centerLabel.show, data, pies]);
+      const key = pies[0]?.dataKey
+      if (!key) return 0
+      return sum + Number(entry[key] ?? 0)
+    }, 0)
+  }, [centerLabel.show, data, pies])
 
   const legendPayload = React.useMemo(() => {
-    if (legendPosition === 'none' || !pies.length || !data.length) return [];
+    if (legendPosition === "none" || !pies.length || !data.length) return []
 
     if (pies.length === 1) {
       return data.map((entry, index) => ({
         value: entry[nameKey] || `Item ${index + 1}`,
-        type: 'square' as LegendType,
+        type: "square" as LegendType,
         color: pies[0]?.color || `var(--chart-${(index % 8) + 1})`,
-        payload: { ...entry, strokeDasharray: '' },
-      }));
+        payload: { ...entry, strokeDasharray: "" },
+      }))
     }
 
     return pies.map((pie, index) => ({
       value: pie.name || pie.dataKey || `Series ${index + 1}`,
-      type: 'square' as LegendType,
+      type: "square" as LegendType,
       color: pie.color || `var(--chart-${(index % 8) + 1})`,
-      payload: { dataKey: pie.dataKey, strokeDasharray: '' },
-    }));
-  }, [pies, data, nameKey, legendPosition]);
+      payload: { dataKey: pie.dataKey, strokeDasharray: "" },
+    }))
+  }, [pies, data, nameKey, legendPosition])
 
   const renderActiveShape = (props: PieSectorDataItem) => {
-    const { cx, cy, innerRadius, outerRadius, startAngle, endAngle, fill } = props;
+    const { cx, cy, innerRadius, outerRadius, startAngle, endAngle, fill } = props
 
     return (
       <g>
@@ -117,75 +117,55 @@ function IGRPPieChartInner({
           opacity={0.4}
         />
       </g>
-    );
-  };
+    )
+  }
 
   const renderCustomLabel = (props: any) => {
-    const {
-      cx,
-      cy,
-      midAngle,
-      innerRadius,
-      outerRadius,
-      value,
-      name,
-      percent,
-      labelType,
-      labelPosition,
-    } = props;
+    const { cx, cy, midAngle, innerRadius, outerRadius, value, name, percent, labelType, labelPosition } = props
 
-    if (!cx || !cy) return null;
+    if (!cx || !cy) return null
 
-    const RADIAN = Math.PI / 180;
+    const RADIAN = Math.PI / 180
 
-    let radius = 0;
-    let textAnchor: SVGAttributes<SVGTextElement>['textAnchor'] = 'middle';
+    let radius = 0
+    let textAnchor: SVGAttributes<SVGTextElement>["textAnchor"] = "middle"
 
-    if (labelPosition === 'outside') {
-      radius = (outerRadius || 0) + 30;
-      textAnchor = midAngle > 270 || midAngle < 90 ? 'start' : 'end';
+    if (labelPosition === "outside") {
+      radius = (outerRadius || 0) + 30
+      textAnchor = midAngle > 270 || midAngle < 90 ? "start" : "end"
     } else {
-      radius =
-        innerRadius && outerRadius
-          ? innerRadius + (outerRadius - innerRadius) / 2
-          : (outerRadius || 0) * 0.7;
+      radius = innerRadius && outerRadius ? innerRadius + (outerRadius - innerRadius) / 2 : (outerRadius || 0) * 0.7
     }
 
-    const x = cx + radius * Math.cos(-midAngle * RADIAN);
-    const y = cy + radius * Math.sin(-midAngle * RADIAN);
+    const x = cx + radius * Math.cos(-midAngle * RADIAN)
+    const y = cy + radius * Math.sin(-midAngle * RADIAN)
 
-    let content = '';
+    let content = ""
     switch (labelType) {
-      case 'name':
-        content = name || '';
-        break;
-      case 'percent':
-        content = percent ? `${(percent * 100).toFixed(0)}%` : '0%';
-        break;
-      case 'value':
+      case "name":
+        content = name || ""
+        break
+      case "percent":
+        content = percent ? `${(percent * 100).toFixed(0)}%` : "0%"
+        break
+      case "value":
       default:
-        content = value !== undefined ? formatValue(value) : '';
+        content = value !== undefined ? formatValue(value) : ""
     }
 
     return (
-      <text
-        x={x}
-        y={y}
-        textAnchor={textAnchor}
-        dominantBaseline="central"
-        className={cn('fill-foreground text-xs')}
-      >
+      <text x={x} y={y} textAnchor={textAnchor} dominantBaseline="central" className={cn("fill-foreground text-xs")}>
         {content}
       </text>
-    );
-  };
+    )
+  }
 
   const renderCenterLabel = ({ viewBox }: any) => {
-    if (!centerLabel.show || !viewBox || !('cx' in viewBox)) return null;
+    if (!centerLabel.show || !viewBox || !("cx" in viewBox)) return null
 
     return (
       <text x={viewBox.cx} y={viewBox.cy} textAnchor="middle" dominantBaseline="middle">
-        <tspan x={viewBox.cx} y={viewBox.cy} className={cn('fill-foreground text-3xl font-bold')}>
+        <tspan x={viewBox.cx} y={viewBox.cy} className={cn("fill-foreground text-3xl font-bold")}>
           {formatValue(
             interactive && activeIndex >= 0 && activeIndex < data.length && pies[0]?.dataKey
               ? Number(data[activeIndex]?.[pies[0].dataKey] ?? 0)
@@ -193,34 +173,29 @@ function IGRPPieChartInner({
           )}
         </tspan>
         {centerLabel.text && (
-          <tspan x={viewBox.cx} y={(viewBox.cy || 0) + 24} className={cn('fill-muted-foreground')}>
+          <tspan x={viewBox.cx} y={(viewBox.cy || 0) + 24} className={cn("fill-muted-foreground")}>
             {centerLabel.text}
           </tspan>
         )}
       </text>
-    );
-  };
+    )
+  }
 
   return (
     <div
-      className={`w-full overflow-hidden ${className || ''}`}
+      className={`w-full overflow-hidden ${className || ""}`}
       style={backgroundColor ? { backgroundColor } : undefined}
     >
       {(title || description) && (
-        <div className={cn('pb-3')}>
-          {title && <div className={cn('text-xl font-semibold')}>{title}</div>}
-          {description && (
-            <div className={cn('text-sm text-muted-foreground')}>{description}</div>
-          )}
+        <div className={cn("pb-3")}>
+          {title && <div className={cn("text-xl font-semibold")}>{title}</div>}
+          {description && <div className={cn("text-sm text-muted-foreground")}>{description}</div>}
         </div>
       )}
 
-      <div className={cn('overflow-hidden')}>
-        <div
-          style={{ height: chartHeight, width: chartWidth }}
-          className={cn('w-full overflow-hidden')}
-        >
-          <ChartContainer className={cn('h-full w-full')} config={chartConfig}>
+      <div className={cn("overflow-hidden")}>
+        <div style={{ height: chartHeight, width: chartWidth }} className={cn("w-full overflow-hidden")}>
+          <ChartContainer className={cn("h-full w-full")} config={chartConfig}>
             <PieChart
               margin={{
                 top: 20,
@@ -230,13 +205,10 @@ function IGRPPieChartInner({
               }}
             >
               {showTooltip && (
-                <ChartTooltip
-                  cursor={false}
-                  content={<ChartTooltipContent indicator={tooltipIndicator} />}
-                />
+                <ChartTooltip cursor={false} content={<ChartTooltipContent indicator={tooltipIndicator} />} />
               )}
 
-              {legendPosition !== 'none' && (
+              {legendPosition !== "none" && (
                 <Legend
                   verticalAlign={getLegendVerticalAlign(legendPosition)}
                   align={getLegendHorizontalAlign(legendPosition)}
@@ -245,7 +217,7 @@ function IGRPPieChartInner({
                   iconSize={10}
                   iconType="square"
                   wrapperStyle={{ paddingTop: 10 }}
-                  className={cn('text-xs fill-foreground')}
+                  className={cn("text-xs fill-foreground")}
                 />
               )}
 
@@ -255,8 +227,8 @@ function IGRPPieChartInner({
                   data={data}
                   dataKey={pie.dataKey}
                   nameKey={nameKey}
-                  cx={pie.cx || '50%'}
-                  cy={pie.cy || '50%'}
+                  cx={pie.cx || "50%"}
+                  cy={pie.cy || "50%"}
                   innerRadius={pie.innerRadius || 0}
                   outerRadius={pie.outerRadius}
                   paddingAngle={pie.paddingAngle || 0}
@@ -283,18 +255,11 @@ function IGRPPieChartInner({
                     const cellKey =
                       (item as Record<string, unknown>).id ??
                       (item as Record<string, unknown>)[nameKey] ??
-                      `cell-${index}`;
-                    return (
-                      <Cell
-                        key={String(cellKey)}
-                        fill={pie.color || `var(--chart-${(index % 8) + 1})`}
-                      />
-                    );
+                      `cell-${index}`
+                    return <Cell key={String(cellKey)} fill={pie.color || `var(--chart-${(index % 8) + 1})`} />
                   })}
 
-                  {pieIndex === 0 && centerLabel.show && (
-                    <Label content={renderCenterLabel} />
-                  )}
+                  {pieIndex === 0 && centerLabel.show && <Label content={renderCenterLabel} />}
                 </Pie>
               ))}
             </PieChart>
@@ -303,16 +268,12 @@ function IGRPPieChartInner({
       </div>
 
       {footer && (
-        <div className={cn('flex-col items-start gap-2 text-sm pt-4')}>
-          {footer.description && (
-            <div className={cn('leading-none text-muted-foreground')}>
-              {footer.description}
-            </div>
-          )}
+        <div className={cn("flex-col items-start gap-2 text-sm pt-4")}>
+          {footer.description && <div className={cn("leading-none text-muted-foreground")}>{footer.description}</div>}
         </div>
       )}
     </div>
-  );
+  )
 }
 
-export default IGRPPieChartInner;
+export default IGRPPieChartInner

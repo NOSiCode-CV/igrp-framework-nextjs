@@ -1,6 +1,6 @@
 {
   "name": "@igrp/framework-next-auth",
-  "version": "0.1.0-beta.110",
+  "version": "0.1.0-beta.111-1",
   "description": "IGRP Framework for Next.js | Auth",
   "license": "MIT",
   "type": "module",
@@ -46,10 +46,10 @@
     "build:js": "tsup",
     "build": "pnpm clean && pnpm build:js && pnpm build:types",
     "clean-all": "rimraf node_modules && rimraf dist && rimraf tsconfig.tsbuildinfo",
-    "release": "pnpm build && yarn publish --registry=https://sonatype.nosi.cv/repository/igrp/ --tag latest"
+    "release": "pnpm build && yarn publish --registry=https://sonatype.nosi.cv/repository/igrp/ --tag next"
   },
   "peerDependencies": {
-    "next": "^15.5.13",
+    "next": "^15.5.14",
     "next-auth": "^4.24.13",
     "react": "^19.2.4"
   },

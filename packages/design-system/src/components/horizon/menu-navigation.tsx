@@ -1,12 +1,12 @@
-'use client';
+"use client"
 
-import { useRef, useState, useCallback, createContext, useContext, useId } from 'react';
+import { useRef, useState, useCallback, createContext, useContext, useId } from "react"
 
-import type { IGRPColorRole, IGRPColorVariants } from '../../lib/colors';
-import { cn } from '../../lib/utils';
-import { Card, CardContent, CardHeader, CardTitle } from '../primitives/card';
-import { IGRPBadge } from './badge';
-import { IGRPIcon } from './icon';
+import type { IGRPColorRole, IGRPColorVariants } from "../../lib/colors"
+import { cn } from "../../lib/utils"
+import { Card, CardContent, CardHeader, CardTitle } from "../primitives/card"
+import { IGRPBadge } from "./badge"
+import { IGRPIcon } from "./icon"
 
 /**
  * Single menu navigation item.
@@ -14,13 +14,13 @@ import { IGRPIcon } from './icon';
  */
 interface IGRPMenuNavigationItem {
   /** Unique section id. */
-  id: string;
+  id: string
   /** Display label. */
-  label: string;
+  label: string
   /** Icon name. */
-  icon: string;
+  icon: string
   /** Whether the item is disabled. */
-  disabled?: boolean;
+  disabled?: boolean
 }
 
 /**
@@ -29,66 +29,66 @@ interface IGRPMenuNavigationItem {
  */
 interface IGRPMenuNavigationProps {
   /** Navigation sections. */
-  sections: IGRPMenuNavigationItem[];
+  sections: IGRPMenuNavigationItem[]
   /** Controlled active section id. */
-  activeSection?: string;
+  activeSection?: string
   /** Called when the active section changes. */
-  onSectionChange?: (sectionId: string) => void;
+  onSectionChange?: (sectionId: string) => void
   /** Navigation title. */
-  title?: string;
+  title?: string
   /** Badge content. */
-  badgeContent?: string;
+  badgeContent?: string
   /** Badge variant. */
-  badgeVariant?: IGRPColorRole;
+  badgeVariant?: IGRPColorRole
   /** Badge color. */
-  badgeColor?: IGRPColorVariants;
+  badgeColor?: IGRPColorVariants
   /** CSS classes for the badge. */
-  badgeClassName?: string;
+  badgeClassName?: string
   /** Additional CSS classes. */
-  className?: string;
+  className?: string
   /** Stick to top when scrolling. */
-  isStickyTop?: boolean;
+  isStickyTop?: boolean
   /** Show chevron on each item. */
-  showChevron?: boolean;
+  showChevron?: boolean
   /** HTML id attribute. */
-  id?: string;
+  id?: string
 }
 
 /** @internal */
 interface NavigationContextType {
-  sectionRefs: React.RefObject<Record<string, HTMLDivElement | null>>;
-  scrollToSection: (sectionId: string) => void;
-  getSectionRef: (sectionId: string) => (el: HTMLDivElement | null) => void;
+  sectionRefs: React.RefObject<Record<string, HTMLDivElement | null>>
+  scrollToSection: (sectionId: string) => void
+  getSectionRef: (sectionId: string) => (el: HTMLDivElement | null) => void
 }
 
-const NavigationContext = createContext<NavigationContextType | null>(null);
+const NavigationContext = createContext<NavigationContextType | null>(null)
 
 function IGRPMenuNavigationProvider({ children }: { children: React.ReactNode }) {
-  const sectionRefs = useRef<Record<string, HTMLDivElement | null>>({});
+  const sectionRefs = useRef<Record<string, HTMLDivElement | null>>({})
 
   const scrollToSection = useCallback((sectionId: string) => {
-    const sectionRef = sectionRefs.current[sectionId];
+    const sectionRef = sectionRefs.current[sectionId]
     if (sectionRef) {
       sectionRef.scrollIntoView({
-        behavior: 'smooth',
-        block: 'start',
-        inline: 'nearest',
-      });
+        behavior: "smooth",
+        block: "start",
+        inline: "nearest",
+      })
     }
-  }, []);
+  }, [])
 
   const getSectionRef = useCallback(
     (sectionId: string) => (el: HTMLDivElement | null) => {
-      sectionRefs.current[sectionId] = el;
+      sectionRefs.current[sectionId] = el
     },
     [],
-  );
+  )
 
   return (
     <NavigationContext.Provider value={{ sectionRefs, scrollToSection, getSectionRef }}>
       {children}
     </NavigationContext.Provider>
-  );
+  )
 }
 
 /**
@@ -99,7 +99,7 @@ function IGRPMenuNavigation({
   sections,
   activeSection: controlledActiveSection,
   onSectionChange,
-  title = 'Navigation',
+  title = "Navigation",
   badgeContent,
   badgeVariant,
   badgeColor,
@@ -109,99 +109,91 @@ function IGRPMenuNavigation({
   isStickyTop = false,
   id,
 }: IGRPMenuNavigationProps) {
-  const [internalActiveSection, setInternalActiveSection] = useState(sections[0]?.id || '');
-  const navigationContext = useContext(NavigationContext);
+  const [internalActiveSection, setInternalActiveSection] = useState(sections[0]?.id || "")
+  const navigationContext = useContext(NavigationContext)
 
-  const _id = useId();
-  const ref = id ?? _id;
+  const _id = useId()
+  const ref = id ?? _id
 
   // When uncontrolled: use internalActiveSection if still valid in sections, else first section
   const activeSection =
     controlledActiveSection ??
     (sections.some((s) => s.id === internalActiveSection)
       ? internalActiveSection
-      : (sections[0]?.id ?? internalActiveSection));
+      : (sections[0]?.id ?? internalActiveSection))
 
   const handleSectionClick = useCallback(
     (sectionId: string) => {
-      const section = sections.find((s) => s.id === sectionId);
-      if (section?.disabled) return;
+      const section = sections.find((s) => s.id === sectionId)
+      if (section?.disabled) return
 
       if (controlledActiveSection === undefined) {
-        setInternalActiveSection(sectionId);
+        setInternalActiveSection(sectionId)
       }
 
-      onSectionChange?.(sectionId);
+      onSectionChange?.(sectionId)
 
       if (navigationContext) {
-        navigationContext.scrollToSection(sectionId);
+        navigationContext.scrollToSection(sectionId)
       } else {
-        const element = document.querySelector(`[data-section-id='${sectionId}']`);
+        const element = document.querySelector(`[data-section-id='${sectionId}']`)
         if (element) {
           element.scrollIntoView({
-            behavior: 'smooth',
-            block: 'start',
-            inline: 'nearest',
-          });
+            behavior: "smooth",
+            block: "start",
+            inline: "nearest",
+          })
         }
       }
     },
     [controlledActiveSection, onSectionChange, sections, navigationContext],
-  );
+  )
 
   if (sections.length === 0) {
-    return null;
+    return null
   }
 
   return (
-    <nav className={cn(isStickyTop && 'sticky top-20', className)} id={ref} aria-label={title}>
-      <Card className={cn('shadow-sm gap-0')}>
-        <CardHeader className={cn('border-b py-3 px-4 gap-0')}>
-          <div className={cn('flex items-center justify-between')}>
-            <CardTitle className={cn('font-medium text-sm')}>{title}</CardTitle>
+    <nav className={cn(isStickyTop && "sticky top-20", className)} id={ref} aria-label={title}>
+      <Card className={cn("shadow-sm gap-0")}>
+        <CardHeader className={cn("border-b py-3 px-4 gap-0")}>
+          <div className={cn("flex items-center justify-between")}>
+            <CardTitle className={cn("font-medium text-sm")}>{title}</CardTitle>
             {badgeContent && (
-              <IGRPBadge
-                variant={badgeVariant}
-                color={badgeColor}
-                badgeClassName={cn(badgeClassName)}
-              >
+              <IGRPBadge variant={badgeVariant} color={badgeColor} badgeClassName={cn(badgeClassName)}>
                 {badgeContent}
               </IGRPBadge>
             )}
           </div>
         </CardHeader>
-        <CardContent className={cn('p-0')}>
-          <div className={cn('divide-y')} role="list">
+        <CardContent className={cn("p-0")}>
+          <div className={cn("divide-y")} role="list">
             {sections.map((section) => (
               <button
                 key={section.id}
                 type="button"
                 onClick={() => handleSectionClick(section.id)}
                 disabled={section.disabled}
-                aria-current={activeSection === section.id ? 'page' : undefined}
+                aria-current={activeSection === section.id ? "page" : undefined}
                 className={cn(
-                  'flex items-center justify-between w-full text-left transition-colors',
-                  'py-2.5 px-4 text-sm',
-                  section.disabled ? 'opacity-50 cursor-not-allowed' : 'cursor-pointer',
+                  "flex items-center justify-between w-full text-left transition-colors",
+                  "py-2.5 px-4 text-sm",
+                  section.disabled ? "opacity-50 cursor-not-allowed" : "cursor-pointer",
                   activeSection === section.id
-                    ? 'bg-primary/5 text-primary font-medium'
-                    : 'hover:bg-muted/30 text-muted-foreground',
+                    ? "bg-primary/5 text-primary font-medium"
+                    : "hover:bg-muted/30 text-muted-foreground",
                 )}
               >
-                <div className={cn('flex items-center gap-2')}>
-                  <IGRPIcon
-                    iconName={section.icon}
-                    className={cn('size-4 shrink-0')}
-                    aria-hidden="true"
-                  />
-                  <span className={cn('truncate')}>{section.label}</span>
+                <div className={cn("flex items-center gap-2")}>
+                  <IGRPIcon iconName={section.icon} className={cn("size-4 shrink-0")} aria-hidden="true" />
+                  <span className={cn("truncate")}>{section.label}</span>
                 </div>
                 {showChevron && (
                   <IGRPIcon
                     iconName="ChevronRight"
                     className={cn(
-                      'size-4 transition-colors shrink-0',
-                      activeSection === section.id ? 'text-primary' : 'text-muted-foreground',
+                      "size-4 transition-colors shrink-0",
+                      activeSection === section.id ? "text-primary" : "text-muted-foreground",
                     )}
                     aria-hidden="true"
                   />
@@ -212,31 +204,31 @@ function IGRPMenuNavigation({
         </CardContent>
       </Card>
     </nav>
-  );
+  )
 }
 
 function useIGRPMenuNavigation() {
-  const navigationContext = useContext(NavigationContext);
+  const navigationContext = useContext(NavigationContext)
 
   const getSectionRef = useCallback(
     (sectionId: string) => (el: HTMLDivElement | null) => {
       if (navigationContext) {
-        navigationContext.getSectionRef(sectionId)(el);
+        navigationContext.getSectionRef(sectionId)(el)
       }
     },
     [navigationContext],
-  );
+  )
 
   const scrollToSection = useCallback(
     (sectionId: string) => {
       if (navigationContext) {
-        navigationContext.scrollToSection(sectionId);
+        navigationContext.scrollToSection(sectionId)
       }
     },
     [navigationContext],
-  );
+  )
 
-  return { getSectionRef, scrollToSection };
+  return { getSectionRef, scrollToSection }
 }
 
 export {
@@ -246,4 +238,4 @@ export {
   type IGRPMenuNavigationProps,
   // eslint-disable-next-line react-refresh/only-export-components
   useIGRPMenuNavigation,
-};
+}

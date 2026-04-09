@@ -1,15 +1,15 @@
-'use client';
+"use client"
 
-import { Area, AreaChart, CartesianGrid, Legend, XAxis, YAxis, ReferenceLine } from 'recharts';
+import { Area, AreaChart, CartesianGrid, Legend, XAxis, YAxis, ReferenceLine } from "recharts"
 
-import { cn } from '../../../lib/utils';
+import { cn } from "../../../lib/utils"
 import {
   ChartContainer,
   ChartTooltip,
   ChartTooltipContent,
   ChartLegend,
   ChartLegendContent,
-} from '../../primitives/chart';
+} from "../../primitives/chart"
 import {
   createChartConfig,
   formatChartValue,
@@ -19,11 +19,10 @@ import {
   getLegendLayout,
   getLegendVerticalAlign,
   hasNegativeValues,
-} from './lib';
-import type { IGRPAreaConfig, IGRPChartProps } from './types';
+} from "./lib"
+import type { IGRPAreaConfig, IGRPChartProps } from "./types"
 
-const defaultLabelFormatter = (value: unknown) =>
-  typeof value === 'string' ? value : String(value);
+const defaultLabelFormatter = (value: unknown) => (typeof value === "string" ? value : String(value))
 
 /**
  * Props for the IGRPAreaChart component.
@@ -31,9 +30,9 @@ const defaultLabelFormatter = (value: unknown) =>
  */
 interface IGRPAreaChartProps extends IGRPChartProps {
   /** Area series configurations. */
-  areas: IGRPAreaConfig[];
+  areas: IGRPAreaConfig[]
   /** Use 100% stacked (normalized) display. */
-  expanded?: boolean;
+  expanded?: boolean
 }
 
 /**
@@ -46,7 +45,7 @@ function IGRPAreaChart({
   title,
   description,
   showGrid = false,
-  legendPosition = 'none',
+  legendPosition = "none",
   customLegend,
   showTooltip = true,
   hideAxis = false,
@@ -54,7 +53,7 @@ function IGRPAreaChart({
   hideYAxis = false,
   showReferenceZero = false,
   valueDomain,
-  size = 'md',
+  size = "md",
   height,
   width,
   stacked = false,
@@ -62,40 +61,37 @@ function IGRPAreaChart({
   className,
   valueFormatter,
   labelFormatter = defaultLabelFormatter,
-  gridColor = '#e5e7eb',
+  gridColor = "#e5e7eb",
   backgroundColor,
-  referenceLineColor = '#e5e7eb',
-  axisColor = '#d1d5db',
-  tooltipIndicator = 'line',
+  referenceLineColor = "#e5e7eb",
+  axisColor = "#d1d5db",
+  tooltipIndicator = "line",
   footer,
 }: IGRPAreaChartProps) {
-  const chartHeight = getChartHeight(size, data, height);
-  const chartWidth = getChartWidth(width);
-  const formatValue = (value: number) => formatChartValue(value, valueFormatter);
+  const chartHeight = getChartHeight(size, data, height)
+  const chartWidth = getChartWidth(width)
+  const formatValue = (value: number) => formatChartValue(value, valueFormatter)
   const hasNegativeDataValues = hasNegativeValues(
     data,
     areas.map((a) => a.dataKey),
-  );
-  const chartConfig = createChartConfig(areas);
+  )
+  const chartConfig = createChartConfig(areas)
 
   return (
     <div
-      className={cn(`w-full overflow-hidden ${className || ''}`)}
+      className={cn(`w-full overflow-hidden ${className || ""}`)}
       style={backgroundColor ? { backgroundColor } : undefined}
     >
       {(title || description) && (
-        <div className={cn('pb-3')}>
-          {title && <div className={cn('text-xl font-semibold')}>{title}</div>}
-          {description && <div className={cn('text-sm text-muted-foreground')}>{description}</div>}
+        <div className={cn("pb-3")}>
+          {title && <div className={cn("text-xl font-semibold")}>{title}</div>}
+          {description && <div className={cn("text-sm text-muted-foreground")}>{description}</div>}
         </div>
       )}
 
-      <div className={cn('overflow-hidden')}>
-        <div
-          style={{ height: chartHeight, width: chartWidth }}
-          className={cn('w-full overflow-hidden')}
-        >
-          <ChartContainer className={cn('h-full w-full')} config={chartConfig}>
+      <div className={cn("overflow-hidden")}>
+        <div style={{ height: chartHeight, width: chartWidth }} className={cn("w-full overflow-hidden")}>
+          <ChartContainer className={cn("h-full w-full")} config={chartConfig}>
             <AreaChart
               accessibilityLayer
               data={data}
@@ -105,7 +101,7 @@ function IGRPAreaChart({
                 left: 5,
                 bottom: 5,
               }}
-              stackOffset={expanded ? 'expand' : stacked ? 'none' : undefined}
+              stackOffset={expanded ? "expand" : stacked ? "none" : undefined}
             >
               {showGrid && <CartesianGrid stroke={gridColor} vertical={false} />}
 
@@ -123,7 +119,7 @@ function IGRPAreaChart({
               {!hideAxis && !hideYAxis && (
                 <YAxis
                   type="number"
-                  domain={valueDomain || (hasNegativeDataValues ? ['auto', 'auto'] : [0, 'auto'])}
+                  domain={valueDomain || (hasNegativeDataValues ? ["auto", "auto"] : [0, "auto"])}
                   tickFormatter={formatValue}
                   hide={hideAxis || hideYAxis}
                   stroke={axisColor}
@@ -133,18 +129,13 @@ function IGRPAreaChart({
                 />
               )}
 
-              {showReferenceZero && hasNegativeDataValues && (
-                <ReferenceLine y={0} stroke={referenceLineColor} />
-              )}
+              {showReferenceZero && hasNegativeDataValues && <ReferenceLine y={0} stroke={referenceLineColor} />}
 
               {showTooltip && (
-                <ChartTooltip
-                  cursor={false}
-                  content={<ChartTooltipContent indicator={tooltipIndicator} />}
-                />
+                <ChartTooltip cursor={false} content={<ChartTooltipContent indicator={tooltipIndicator} />} />
               )}
 
-              {legendPosition !== 'none' && customLegend && (
+              {legendPosition !== "none" && customLegend && (
                 <Legend
                   verticalAlign={getLegendVerticalAlign(legendPosition)}
                   align={getLegendHorizontalAlign(legendPosition)}
@@ -153,12 +144,12 @@ function IGRPAreaChart({
                 />
               )}
 
-              {legendPosition !== 'none' && !customLegend && (
+              {legendPosition !== "none" && !customLegend && (
                 <ChartLegend
                   verticalAlign={getLegendVerticalAlign(legendPosition)}
                   align={getLegendHorizontalAlign(legendPosition)}
                   layout={getLegendLayout(legendPosition)}
-                  content={<ChartLegendContent className={cn('text-xs')} />}
+                  content={<ChartLegendContent className={cn("text-xs")} />}
                 />
               )}
 
@@ -166,24 +157,9 @@ function IGRPAreaChart({
                 {areas
                   .filter((area) => area.gradient === true)
                   .map((area) => (
-                    <linearGradient
-                      key={`fill${area.dataKey}`}
-                      id={`fill${area.dataKey}`}
-                      x1="0"
-                      y1="0"
-                      x2="0"
-                      y2="1"
-                    >
-                      <stop
-                        offset="5%"
-                        stopColor={`var(--color-${area.dataKey})`}
-                        stopOpacity={0.8}
-                      />
-                      <stop
-                        offset="95%"
-                        stopColor={`var(--color-${area.dataKey})`}
-                        stopOpacity={0.1}
-                      />
+                    <linearGradient key={`fill${area.dataKey}`} id={`fill${area.dataKey}`} x1="0" y1="0" x2="0" y2="1">
+                      <stop offset="5%" stopColor={`var(--color-${area.dataKey})`} stopOpacity={0.8} />
+                      <stop offset="95%" stopColor={`var(--color-${area.dataKey})`} stopOpacity={0.1} />
                     </linearGradient>
                   ))}
               </defs>
@@ -194,29 +170,22 @@ function IGRPAreaChart({
                     key: area.dataKey,
                     dataKey: area.dataKey,
                     name: area.name || area.dataKey,
-                    stackId: stacked || expanded ? 'stack1' : undefined,
-                    fill:
-                      area.gradient === true
-                        ? `url(#fill${area.dataKey})`
-                        : `var(--color-${area.dataKey})`,
+                    stackId: stacked || expanded ? "stack1" : undefined,
+                    fill: area.gradient === true ? `url(#fill${area.dataKey})` : `var(--color-${area.dataKey})`,
                     fillOpacity: area.fillOpacity || 0.6,
                     stroke: `var(--color-${area.dataKey})`,
-                    type: area.type || 'monotone',
+                    type: area.type || "monotone",
                   })
                 ) : (
                   <Area
                     key={area.dataKey}
                     dataKey={area.dataKey}
                     name={area.name || area.dataKey}
-                    stackId={stacked || expanded ? 'stack1' : undefined}
-                    fill={
-                      area.gradient === true
-                        ? `url(#fill${area.dataKey})`
-                        : `var(--color-${area.dataKey})`
-                    }
+                    stackId={stacked || expanded ? "stack1" : undefined}
+                    fill={area.gradient === true ? `url(#fill${area.dataKey})` : `var(--color-${area.dataKey})`}
                     fillOpacity={area.fillOpacity || 0.4}
                     stroke={`var(--color-${area.dataKey})`}
-                    type={area.type || 'monotone'}
+                    type={area.type || "monotone"}
                   />
                 ),
               )}
@@ -226,14 +195,12 @@ function IGRPAreaChart({
       </div>
 
       {footer && (
-        <div className={cn('flex-col items-start gap-2 text-sm pt-4')}>
-          {footer.description && (
-            <div className={cn('leading-none text-muted-foreground')}>{footer.description}</div>
-          )}
+        <div className={cn("flex-col items-start gap-2 text-sm pt-4")}>
+          {footer.description && <div className={cn("leading-none text-muted-foreground")}>{footer.description}</div>}
         </div>
       )}
     </div>
-  );
+  )
 }
 
-export { IGRPAreaChart, type IGRPAreaChartProps };
+export { IGRPAreaChart, type IGRPAreaChartProps }

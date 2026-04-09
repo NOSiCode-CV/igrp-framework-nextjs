@@ -1,15 +1,15 @@
-'use client';
+"use client"
 
-import { useId, useMemo, useState } from 'react';
-import { addDays } from 'date-fns';
+import { useId, useMemo, useState } from "react"
+import { addDays } from "date-fns"
 
-import { getDisabledDays } from '../../../lib/calendar-utils';
-import { cn } from '../../../lib/utils';
-import type { IGRPCalendarProps } from '../../../types';
-import { Calendar } from '../../primitives/calendar';
+import { getDisabledDays } from "../../../lib/calendar-utils"
+import { cn } from "../../../lib/utils"
+import type { IGRPCalendarProps } from "../../../types"
+import { Calendar } from "../../primitives/calendar"
 
 function getDefaultMultipleDates(): Date[] {
-  return [new Date(), addDays(new Date(), 5)];
+  return [new Date(), addDays(new Date(), 5)]
 }
 
 /**
@@ -18,10 +18,10 @@ function getDefaultMultipleDates(): Date[] {
  */
 type IGRPCalendarMultipleProps = {
   /** Selected dates. */
-  date?: Date[];
+  date?: Date[]
   /** Called when the selected dates change. */
-  onDateChange?: (date: Date[] | undefined) => void;
-} & Omit<IGRPCalendarProps, 'mode'>;
+  onDateChange?: (date: Date[] | undefined) => void
+} & Omit<IGRPCalendarProps, "mode">
 
 /**
  * Multi-date calendar picker.
@@ -38,13 +38,13 @@ function IGRPCalendarMultiple({
   disableDayOfWeek,
   ...props
 }: IGRPCalendarMultipleProps) {
-  const _id = useId();
-  const ref = name ?? id ?? _id;
+  const _id = useId()
+  const ref = name ?? id ?? _id
 
-  const [ownDate, setOwnDate] = useState<Date[] | undefined>(undefined);
-  const defaultDates = useMemo(() => getDefaultMultipleDates(), []);
-  const selected = date ?? ownDate ?? defaultDates;
-  const disabled = getDisabledDays({ disableBefore, disableAfter, disableDayOfWeek });
+  const [ownDate, setOwnDate] = useState<Date[] | undefined>(undefined)
+  const defaultDates = useMemo(() => getDefaultMultipleDates(), [])
+  const selected = date ?? ownDate ?? defaultDates
+  const disabled = getDisabledDays({ disableBefore, disableAfter, disableDayOfWeek })
 
   return (
     <Calendar
@@ -54,13 +54,13 @@ function IGRPCalendarMultiple({
       defaultMonth={defaultMonth || selected?.[0] || new Date()}
       selected={selected}
       onSelect={(selectedDates) => {
-        setOwnDate(selectedDates);
-        onDateChange?.(selectedDates);
+        setOwnDate(selectedDates)
+        onDateChange?.(selectedDates)
       }}
       disabled={disabled}
-      className={cn('rounded-lg border shadow-sm', className)}
+      className={cn("rounded-lg border shadow-sm", className)}
     />
-  );
+  )
 }
 
-export { IGRPCalendarMultiple, type IGRPCalendarMultipleProps };
+export { IGRPCalendarMultiple, type IGRPCalendarMultipleProps }

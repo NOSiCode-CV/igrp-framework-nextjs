@@ -1,4 +1,4 @@
-'use client';
+"use client"
 
 /**
  * Re-exports of command primitives for command palette, search, and keyboard navigation.
@@ -14,7 +14,7 @@ import {
   CommandList as IGRPCommandList,
   CommandSeparator as IGRPCommandSeparator,
   CommandShortcut as IGRPCommandShortcut,
-} from '../primitives/command';
+} from "../primitives/command"
 
 export {
   IGRPCommand,
@@ -26,4 +26,4 @@ export {
   IGRPCommandItem,
   IGRPCommandShortcut,
   IGRPCommandSeparator,
-};
+}

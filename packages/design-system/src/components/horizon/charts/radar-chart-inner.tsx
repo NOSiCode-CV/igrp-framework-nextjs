@@ -1,22 +1,15 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-'use client';
+"use client"
 
-import {
-  RadarChart,
-  Radar,
-  PolarGrid,
-  PolarAngleAxis,
-  PolarRadiusAxis,
-  Legend,
-} from 'recharts';
-import { cn } from '../../../lib/utils';
+import { RadarChart, Radar, PolarGrid, PolarAngleAxis, PolarRadiusAxis, Legend } from "recharts"
+import { cn } from "../../../lib/utils"
 import {
   ChartContainer,
   ChartTooltip,
   ChartTooltipContent,
   ChartLegend,
   ChartLegendContent,
-} from '../../primitives/chart';
+} from "../../primitives/chart"
 import {
   createChartConfig,
   formatChartValue,
@@ -25,8 +18,8 @@ import {
   getLegendHorizontalAlign,
   getLegendLayout,
   getLegendVerticalAlign,
-} from './lib';
-import { type IGRPChartProps, type IGRPRadarConfig } from './types';
+} from "./lib"
+import { type IGRPChartProps, type IGRPRadarConfig } from "./types"
 
 /**
  * Props for the IGRPRadarChart component.
@@ -34,29 +27,29 @@ import { type IGRPChartProps, type IGRPRadarConfig } from './types';
  */
 export interface IGRPRadarChartProps extends IGRPChartProps {
   /** Radar series configurations. */
-  radars: IGRPRadarConfig[];
+  radars: IGRPRadarConfig[]
   /** Key for angle axis labels. */
-  angleAxisKey: string;
+  angleAxisKey: string
   /** Polar grid shape. */
-  polarGridType?: 'polygon' | 'circle';
+  polarGridType?: "polygon" | "circle"
   /** Grid line style. */
-  polarGridLineType?: 'solid' | 'dashed' | 'dotted';
+  polarGridLineType?: "solid" | "dashed" | "dotted"
   /** Show polar grid. */
-  showPolarGrid?: boolean;
+  showPolarGrid?: boolean
   /** Show radius axis. */
-  showRadiusAxis?: boolean;
+  showRadiusAxis?: boolean
   /** Radius axis domain. */
-  radiusAxisDomain?: [number | string, number | string];
+  radiusAxisDomain?: [number | string, number | string]
   /** Radius axis angle. */
-  radiusAxisAngle?: number;
+  radiusAxisAngle?: number
   /** Custom angle axis tick renderer. */
-  customAngleAxisTick?: any;
+  customAngleAxisTick?: any
   /** Show grid lines. */
-  showGridLines?: boolean;
+  showGridLines?: boolean
   /** Show radius lines. */
-  showRadiusLines?: boolean;
+  showRadiusLines?: boolean
   /** Fill grid areas. */
-  gridFilled?: boolean;
+  gridFilled?: boolean
 }
 
 /**
@@ -69,20 +62,20 @@ function IGRPRadarChartInner({
   angleAxisKey,
   title,
   description,
-  legendPosition = 'none',
+  legendPosition = "none",
   customLegend,
   showTooltip = true,
-  size = 'md',
+  size = "md",
   height,
   width,
   className,
   valueFormatter,
-  gridColor = '#e5e7eb',
+  gridColor = "#e5e7eb",
   backgroundColor,
-  tooltipIndicator = 'line',
+  tooltipIndicator = "line",
   footer,
-  polarGridType = 'polygon',
-  polarGridLineType = 'solid',
+  polarGridType = "polygon",
+  polarGridLineType = "solid",
   showPolarGrid = true,
   showRadiusAxis = false,
   radiusAxisDomain,
@@ -91,31 +84,26 @@ function IGRPRadarChartInner({
   showRadiusLines = true,
   gridFilled = false,
 }: IGRPRadarChartProps) {
-  const chartHeight = getChartHeight(size, data, height);
-  const chartWidth = getChartWidth(width);
-  const formatValue = (value: number) => formatChartValue(value, valueFormatter);
-  const chartConfig = createChartConfig(radars);
+  const chartHeight = getChartHeight(size, data, height)
+  const chartWidth = getChartWidth(width)
+  const formatValue = (value: number) => formatChartValue(value, valueFormatter)
+  const chartConfig = createChartConfig(radars)
 
   return (
     <div
-      className={`w-full overflow-hidden ${className || ''}`}
+      className={`w-full overflow-hidden ${className || ""}`}
       style={backgroundColor ? { backgroundColor } : undefined}
     >
       {(title || description) && (
-        <div className={cn('pb-3')}>
-          {title && <div className={cn('text-xl font-semibold')}>{title}</div>}
-          {description && (
-            <div className={cn('text-sm text-muted-foreground')}>{description}</div>
-          )}
+        <div className={cn("pb-3")}>
+          {title && <div className={cn("text-xl font-semibold")}>{title}</div>}
+          {description && <div className={cn("text-sm text-muted-foreground")}>{description}</div>}
         </div>
       )}
 
-      <div className={cn('overflow-hidden')}>
-        <div
-          style={{ height: chartHeight, width: chartWidth }}
-          className={cn('w-full overflow-hidden')}
-        >
-          <ChartContainer className={cn('h-full w-full')} config={chartConfig}>
+      <div className={cn("overflow-hidden")}>
+        <div style={{ height: chartHeight, width: chartWidth }} className={cn("w-full overflow-hidden")}>
+          <ChartContainer className={cn("h-full w-full")} config={chartConfig}>
             <RadarChart
               data={data}
               margin={{
@@ -126,21 +114,14 @@ function IGRPRadarChartInner({
               }}
             >
               {showTooltip && (
-                <ChartTooltip
-                  cursor={false}
-                  content={<ChartTooltipContent indicator={tooltipIndicator} />}
-                />
+                <ChartTooltip cursor={false} content={<ChartTooltipContent indicator={tooltipIndicator} />} />
               )}
 
               {showPolarGrid && (
                 <PolarGrid
                   gridType={polarGridType}
                   strokeDasharray={
-                    polarGridLineType === 'dashed'
-                      ? '5 5'
-                      : polarGridLineType === 'dotted'
-                        ? '1 5'
-                        : undefined
+                    polarGridLineType === "dashed" ? "5 5" : polarGridLineType === "dotted" ? "1 5" : undefined
                   }
                   stroke={gridColor}
                   radialLines={showRadiusLines}
@@ -148,22 +129,18 @@ function IGRPRadarChartInner({
                 />
               )}
 
-              <PolarAngleAxis
-                dataKey={angleAxisKey}
-                tick={customAngleAxisTick}
-                stroke={gridColor}
-              />
+              <PolarAngleAxis dataKey={angleAxisKey} tick={customAngleAxisTick} stroke={gridColor} />
 
               {showRadiusAxis && (
                 <PolarRadiusAxis
                   angle={radiusAxisAngle}
-                  domain={radiusAxisDomain || [0, 'auto']}
+                  domain={radiusAxisDomain || [0, "auto"]}
                   tickFormatter={formatValue}
                   stroke={gridColor}
                 />
               )}
 
-              {legendPosition !== 'none' && customLegend && (
+              {legendPosition !== "none" && customLegend && (
                 <Legend
                   verticalAlign={getLegendVerticalAlign(legendPosition)}
                   align={getLegendHorizontalAlign(legendPosition)}
@@ -172,12 +149,12 @@ function IGRPRadarChartInner({
                 />
               )}
 
-              {legendPosition !== 'none' && !customLegend && (
+              {legendPosition !== "none" && !customLegend && (
                 <ChartLegend
                   verticalAlign={getLegendVerticalAlign(legendPosition)}
                   align={getLegendHorizontalAlign(legendPosition)}
                   layout={getLegendLayout(legendPosition)}
-                  content={<ChartLegendContent className={cn('text-xs')} />}
+                  content={<ChartLegendContent className={cn("text-xs")} />}
                 />
               )}
 
@@ -201,16 +178,12 @@ function IGRPRadarChartInner({
       </div>
 
       {footer && (
-        <div className={cn('flex-col items-start gap-2 text-sm pt-4')}>
-          {footer.description && (
-            <div className={cn('leading-none text-muted-foreground')}>
-              {footer.description}
-            </div>
-          )}
+        <div className={cn("flex-col items-start gap-2 text-sm pt-4")}>
+          {footer.description && <div className={cn("leading-none text-muted-foreground")}>{footer.description}</div>}
         </div>
       )}
     </div>
-  );
+  )
 }
 
-export default IGRPRadarChartInner;
+export default IGRPRadarChartInner

@@ -1,15 +1,15 @@
-'use client';
+"use client"
 
-import { Bar, BarChart, CartesianGrid, Legend, XAxis, YAxis, ReferenceLine } from 'recharts';
+import { Bar, BarChart, CartesianGrid, Legend, XAxis, YAxis, ReferenceLine } from "recharts"
 
-import { cn } from '../../../../lib/utils';
+import { cn } from "../../../../lib/utils"
 import {
   ChartContainer,
   ChartTooltip,
   ChartTooltipContent,
   ChartLegend,
   ChartLegendContent,
-} from '../../../primitives/chart';
+} from "../../../primitives/chart"
 import {
   formatChartValue,
   getChartHeight,
@@ -19,11 +19,11 @@ import {
   getLegendHorizontalAlign,
   hasNegativeValues,
   createChartConfig,
-} from '../lib';
-import type { IGRPBarConfig, IGRPChartProps } from '../types';
+} from "../lib"
+import type { IGRPBarConfig, IGRPChartProps } from "../types"
 
 function defaultLabelFormatter(value: unknown): string {
-  return typeof value === 'string' ? value.slice(0, 3) : String(value);
+  return typeof value === "string" ? value.slice(0, 3) : String(value)
 }
 
 /**
@@ -32,13 +32,13 @@ function defaultLabelFormatter(value: unknown): string {
  */
 export interface IGRPVerticalBarChartProps extends IGRPChartProps {
   /** Bar series configurations. */
-  bars: IGRPBarConfig[];
+  bars: IGRPBarConfig[]
   /** Bar corner radius. */
-  barRadius?: number;
+  barRadius?: number
   /** Gap between bars in same category. */
-  barGap?: number;
+  barGap?: number
   /** Gap between categories. */
-  barCategoryGap?: string | number;
+  barCategoryGap?: string | number
 }
 
 /**
@@ -52,7 +52,7 @@ function IGRPVerticalBarChartInner({
   title,
   description,
   showGrid = false,
-  legendPosition = 'none',
+  legendPosition = "none",
   customLegend,
   showTooltip = true,
   hideAxis = false,
@@ -60,7 +60,7 @@ function IGRPVerticalBarChartInner({
   hideYAxis = false,
   showReferenceZero = false,
   valueDomain,
-  size = 'md',
+  size = "md",
   height,
   width,
   stacked = false,
@@ -69,41 +69,38 @@ function IGRPVerticalBarChartInner({
   labelFormatter = defaultLabelFormatter,
   barRadius = 5,
   barGap = 8,
-  barCategoryGap = '30%',
-  gridColor = '#e5e7eb',
+  barCategoryGap = "30%",
+  gridColor = "#e5e7eb",
   backgroundColor,
-  referenceLineColor = '#e5e7eb',
-  axisColor = '#d1d5db',
-  tooltipIndicator = 'line',
+  referenceLineColor = "#e5e7eb",
+  axisColor = "#d1d5db",
+  tooltipIndicator = "line",
   footer,
 }: IGRPVerticalBarChartProps) {
-  const chartHeight = getChartHeight(size, [], height);
-  const chartWidth = getChartWidth(width);
-  const formatValue = (value: number) => formatChartValue(value, valueFormatter);
+  const chartHeight = getChartHeight(size, [], height)
+  const chartWidth = getChartWidth(width)
+  const formatValue = (value: number) => formatChartValue(value, valueFormatter)
   const hasNegativeDataValues = hasNegativeValues(
     data,
     bars.map((b) => b.dataKey),
-  );
-  const chartConfig = createChartConfig(bars);
+  )
+  const chartConfig = createChartConfig(bars)
 
   return (
     <div
-      className={`w-full overflow-hidden ${className || ''}`}
+      className={`w-full overflow-hidden ${className || ""}`}
       style={backgroundColor ? { backgroundColor } : undefined}
     >
       {(title || description) && (
-        <div className={cn('pb-3')}>
-          {title && <div className={cn('text-xl font-semibold')}>{title}</div>}
-          {description && <div className={cn('text-sm text-muted-foreground')}>{description}</div>}
+        <div className={cn("pb-3")}>
+          {title && <div className={cn("text-xl font-semibold")}>{title}</div>}
+          {description && <div className={cn("text-sm text-muted-foreground")}>{description}</div>}
         </div>
       )}
 
-      <div className={cn('overflow-hidden')}>
-        <div
-          style={{ height: chartHeight, width: chartWidth }}
-          className={cn('w-full overflow-hidden')}
-        >
-          <ChartContainer className={cn('h-full w-full')} config={chartConfig}>
+      <div className={cn("overflow-hidden")}>
+        <div style={{ height: chartHeight, width: chartWidth }} className={cn("w-full overflow-hidden")}>
+          <ChartContainer className={cn("h-full w-full")} config={chartConfig}>
             <BarChart
               accessibilityLayer
               data={data}
@@ -113,12 +110,7 @@ function IGRPVerticalBarChartInner({
               barGap={barGap}
             >
               {showGrid && (
-                <CartesianGrid
-                  strokeDasharray="3 3"
-                  stroke={gridColor}
-                  horizontal={true}
-                  vertical={false}
-                />
+                <CartesianGrid strokeDasharray="3 3" stroke={gridColor} horizontal={true} vertical={false} />
               )}
 
               <XAxis
@@ -135,7 +127,7 @@ function IGRPVerticalBarChartInner({
 
               <YAxis
                 type="number"
-                domain={valueDomain || (hasNegativeDataValues ? ['auto', 'auto'] : [0, 'auto'])}
+                domain={valueDomain || (hasNegativeDataValues ? ["auto", "auto"] : [0, "auto"])}
                 tickFormatter={formatValue}
                 hide={hideAxis || hideYAxis}
                 stroke={axisColor}
@@ -143,18 +135,13 @@ function IGRPVerticalBarChartInner({
                 axisLine={false}
               />
 
-              {showReferenceZero && hasNegativeDataValues && (
-                <ReferenceLine y={0} stroke={referenceLineColor} />
-              )}
+              {showReferenceZero && hasNegativeDataValues && <ReferenceLine y={0} stroke={referenceLineColor} />}
 
               {showTooltip && (
-                <ChartTooltip
-                  cursor={false}
-                  content={<ChartTooltipContent indicator={tooltipIndicator} />}
-                />
+                <ChartTooltip cursor={false} content={<ChartTooltipContent indicator={tooltipIndicator} />} />
               )}
 
-              {legendPosition !== 'none' && customLegend && (
+              {legendPosition !== "none" && customLegend && (
                 <Legend
                   verticalAlign={getLegendVerticalAlign(legendPosition)}
                   align={getLegendHorizontalAlign(legendPosition)}
@@ -163,12 +150,12 @@ function IGRPVerticalBarChartInner({
                 />
               )}
 
-              {legendPosition !== 'none' && !customLegend && (
+              {legendPosition !== "none" && !customLegend && (
                 <ChartLegend
                   verticalAlign={getLegendVerticalAlign(legendPosition)}
                   align={getLegendHorizontalAlign(legendPosition)}
                   layout={getLegendLayout(legendPosition)}
-                  content={<ChartLegendContent className={cn('text-xs')} />}
+                  content={<ChartLegendContent className={cn("text-xs")} />}
                 />
               )}
 
@@ -178,7 +165,7 @@ function IGRPVerticalBarChartInner({
                     key: bar.dataKey,
                     dataKey: bar.dataKey,
                     name: bar.name || bar.dataKey,
-                    stackId: stacked ? 'stack1' : undefined,
+                    stackId: stacked ? "stack1" : undefined,
                     fill: `var(--color-${bar.dataKey})`,
                     radius: barRadius,
                   })
@@ -187,7 +174,7 @@ function IGRPVerticalBarChartInner({
                     key={bar.dataKey}
                     dataKey={bar.dataKey}
                     name={bar.name || bar.dataKey}
-                    stackId={stacked ? 'stack1' : undefined}
+                    stackId={stacked ? "stack1" : undefined}
                     fill={`var(--color-${bar.dataKey})`}
                     radius={barRadius}
                   />
@@ -199,14 +186,12 @@ function IGRPVerticalBarChartInner({
       </div>
 
       {footer && (
-        <div className={cn('flex-col items-start gap-2 text-sm pt-4')}>
-          {footer.description && (
-            <div className={cn('leading-none text-muted-foreground')}>{footer.description}</div>
-          )}
+        <div className={cn("flex-col items-start gap-2 text-sm pt-4")}>
+          {footer.description && <div className={cn("leading-none text-muted-foreground")}>{footer.description}</div>}
         </div>
       )}
     </div>
-  );
+  )
 }
 
-export default IGRPVerticalBarChartInner;
+export default IGRPVerticalBarChartInner

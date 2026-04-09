@@ -1,53 +1,53 @@
-'use client';
+"use client"
 
-import { cva, type VariantProps } from 'class-variance-authority';
-import { useCallback, useEffect, useId, useRef, useState } from 'react';
+import { cva, type VariantProps } from "class-variance-authority"
+import { useCallback, useEffect, useId, useRef, useState } from "react"
 
-import { type IGRPColorRole, type IGRPColorVariants } from '../../lib/colors';
-import { cn } from '../../lib/utils';
-import { Button } from '../primitives/button';
-import { Tabs, TabsList, TabsTrigger, TabsContent } from '../primitives/tabs';
-import { IGRPBadge } from './badge';
-import { IGRPIcon, type IGRPIconName } from './icon';
+import { type IGRPColorRole, type IGRPColorVariants } from "../../lib/colors"
+import { cn } from "../../lib/utils"
+import { Button } from "../primitives/button"
+import { Tabs, TabsList, TabsTrigger, TabsContent } from "../primitives/tabs"
+import { IGRPBadge } from "./badge"
+import { IGRPIcon, type IGRPIconName } from "./icon"
 
-const tabListVariants = cva('gap-1.5', {
+const tabListVariants = cva("gap-1.5", {
   variants: {
     variant: {
-      default: '',
-      outline: 'bg-transparent',
-      pills: 'gap-1.5 bg-transparent',
-      underline: 'text-foreground h-auto gap-2 rounded-none border-b bg-transparent',
+      default: "",
+      outline: "bg-transparent",
+      pills: "gap-1.5 bg-transparent",
+      underline: "text-foreground h-auto gap-2 rounded-none border-b bg-transparent",
       cards:
-        'before:bg-border relative h-auto gap-0.5 bg-transparent p-0 before:absolute before:inset-x-0 before:bottom-0 before:h-px',
+        "before:bg-border relative h-auto gap-0.5 bg-transparent p-0 before:absolute before:inset-x-0 before:bottom-0 before:h-px",
     },
     fullWidth: {
-      true: 'w-full',
-      false: 'w-fit',
+      true: "w-full",
+      false: "w-fit",
     },
   },
   defaultVariants: {
-    variant: 'default',
+    variant: "default",
     fullWidth: false,
   },
-});
+})
 
-const tabTriggerVariants = cva('px-4 py-1.5', {
+const tabTriggerVariants = cva("px-4 py-1.5", {
   variants: {
     variant: {
-      default: '',
-      outline: 'data-[state=active]:bg-muted data-[state=active]:shadow-none',
+      default: "",
+      outline: "data-[state=active]:bg-muted data-[state=active]:shadow-none",
       pills:
-        'data-[state=active]:bg-primary data-[state=active]:text-muted-foreground rounded-full data-[state=active]:shadow-none',
+        "data-[state=active]:bg-primary data-[state=active]:text-muted-foreground rounded-full data-[state=active]:shadow-none",
       underline:
-        'hover:bg-accent hover:text-foreground data-[state=active]:after:bg-primary data-[state=active]:hover:bg-accent relative after:absolute after:inset-x-0 after:bottom-0 after:-mb-1 after:h-0.5 data-[state=active]:bg-transparent data-[state=active]:shadow-none',
+        "hover:bg-accent hover:text-foreground data-[state=active]:after:bg-primary data-[state=active]:hover:bg-accent relative after:absolute after:inset-x-0 after:bottom-0 after:-mb-1 after:h-0.5 data-[state=active]:bg-transparent data-[state=active]:shadow-none",
       cards:
-        'bg-muted overflow-hidden rounded-b-none border-x border-t py-2 data-[state=active]:z-10 data-[state=active]:shadow-none',
+        "bg-muted overflow-hidden rounded-b-none border-x border-t py-2 data-[state=active]:z-10 data-[state=active]:shadow-none",
     },
   },
   defaultVariants: {
-    variant: 'default',
+    variant: "default",
   },
-});
+})
 
 /**
  * Single tab item.
@@ -55,25 +55,25 @@ const tabTriggerVariants = cva('px-4 py-1.5', {
  */
 interface IGRPTabItem {
   /** Tab value (unique id). */
-  value: string;
+  value: string
   /** Tab label. */
-  label: string;
+  label: string
   /** Tab icon. */
-  icon?: IGRPIconName;
+  icon?: IGRPIconName
   /** Tab panel content. */
-  content: React.ReactNode;
+  content: React.ReactNode
   /** Whether the tab is disabled. */
-  disabled?: boolean;
+  disabled?: boolean
   /** Badge content. */
-  badgeContent?: string | number;
+  badgeContent?: string | number
   /** Badge variant. */
-  badgeVariant?: IGRPColorRole;
+  badgeVariant?: IGRPColorRole
   /** Badge color. */
-  badgeColor?: IGRPColorVariants;
+  badgeColor?: IGRPColorVariants
   /** CSS classes for the badge. */
-  badgeClassName?: string;
+  badgeClassName?: string
   /** Additional CSS classes. */
-  className?: string;
+  className?: string
 }
 
 /**
@@ -82,35 +82,35 @@ interface IGRPTabItem {
  */
 interface IGRPTabsProps extends React.ComponentProps<typeof Tabs> {
   /** Tab items. */
-  items: IGRPTabItem[];
+  items: IGRPTabItem[]
   /** CSS classes for the tab list. */
-  tabListClassName?: string;
+  tabListClassName?: string
   /** CSS classes for the tab content. */
-  tabContentClassName?: string;
+  tabContentClassName?: string
   /** CSS classes for tab triggers. */
-  tabTriggerClassName?: string;
+  tabTriggerClassName?: string
   /** Show icon on tabs. */
-  showIcon?: boolean;
+  showIcon?: boolean
   /** Icon position. */
-  iconPlacement?: 'start' | 'end' | 'top';
+  iconPlacement?: "start" | "end" | "top"
   /** Show badge on tabs. */
-  showBadge?: boolean;
+  showBadge?: boolean
   /** Badge position. */
-  badgePlacement?: 'start' | 'end';
+  badgePlacement?: "start" | "end"
   /** Show border around content. */
-  contentBorder?: boolean;
+  contentBorder?: boolean
   /** Tab list variant (default, outline, pills, underline, cards). */
-  variant?: VariantProps<typeof tabListVariants>['variant'];
+  variant?: VariantProps<typeof tabListVariants>["variant"]
   /** Full-width tab list. */
-  fullWidth?: boolean;
+  fullWidth?: boolean
   /** HTML id attribute. */
-  id?: string;
+  id?: string
   /** HTML name attribute. */
-  name?: string;
+  name?: string
   /** Show scroll indicators when tabs overflow. */
-  showScrollIndicators?: boolean;
+  showScrollIndicators?: boolean
   /** CSS classes for scroll buttons. */
-  scrollButtonClassName?: string;
+  scrollButtonClassName?: string
 }
 
 /**
@@ -123,10 +123,10 @@ function IGRPTabs({
   tabContentClassName,
   tabTriggerClassName,
   showIcon = false,
-  iconPlacement = 'start',
+  iconPlacement = "start",
   showBadge = false,
-  badgePlacement = 'end',
-  orientation = 'horizontal',
+  badgePlacement = "end",
+  orientation = "horizontal",
   contentBorder = false,
   defaultValue,
   value: controlledValue,
@@ -139,116 +139,116 @@ function IGRPTabs({
   scrollButtonClassName,
   ...restProps
 }: IGRPTabsProps) {
-  const isControlled = controlledValue !== undefined;
+  const isControlled = controlledValue !== undefined
 
-  const initialValue = defaultValue ?? items[0]?.value ?? '';
-  const [activeTab, setActiveTab] = useState(initialValue);
-  const [canScrollLeft, setCanScrollLeft] = useState(false);
-  const [canScrollRight, setCanScrollRight] = useState(false);
+  const initialValue = defaultValue ?? items[0]?.value ?? ""
+  const [activeTab, setActiveTab] = useState(initialValue)
+  const [canScrollLeft, setCanScrollLeft] = useState(false)
+  const [canScrollRight, setCanScrollRight] = useState(false)
 
-  const tabsListRef = useRef<HTMLDivElement>(null);
+  const tabsListRef = useRef<HTMLDivElement>(null)
 
-  const currentValue = isControlled ? controlledValue : activeTab;
+  const currentValue = isControlled ? controlledValue : activeTab
   const handleValueChange = (newValue: string) => {
     if (!isControlled) {
-      setActiveTab(newValue);
+      setActiveTab(newValue)
     }
-    onValueChange?.(newValue);
-  };
+    onValueChange?.(newValue)
+  }
 
-  const _id = useId();
-  const ref = name ?? id ?? _id;
+  const _id = useId()
+  const ref = name ?? id ?? _id
 
   const checkScrollability = useCallback(() => {
-    if (!tabsListRef.current || orientation === 'vertical') {
-      setCanScrollLeft(false);
-      setCanScrollRight(false);
-      return;
+    if (!tabsListRef.current || orientation === "vertical") {
+      setCanScrollLeft(false)
+      setCanScrollRight(false)
+      return
     }
 
-    const { scrollLeft, scrollWidth, clientWidth } = tabsListRef.current;
-    const epsilon = 1;
-    setCanScrollLeft(scrollLeft > epsilon);
-    setCanScrollRight(scrollLeft + clientWidth < scrollWidth - epsilon);
-  }, [orientation]);
+    const { scrollLeft, scrollWidth, clientWidth } = tabsListRef.current
+    const epsilon = 1
+    setCanScrollLeft(scrollLeft > epsilon)
+    setCanScrollRight(scrollLeft + clientWidth < scrollWidth - epsilon)
+  }, [orientation])
 
-  const scrollToTab = useCallback((direction: 'left' | 'right' | 'start' | 'end') => {
-    if (!tabsListRef.current) return;
+  const scrollToTab = useCallback((direction: "left" | "right" | "start" | "end") => {
+    if (!tabsListRef.current) return
 
-    const container = tabsListRef.current;
-    const scrollAmount = container.clientWidth * 0.7;
+    const container = tabsListRef.current
+    const scrollAmount = container.clientWidth * 0.7
 
     switch (direction) {
-      case 'left':
-        container.scrollBy({ left: -scrollAmount, behavior: 'smooth' });
-        break;
-      case 'right':
-        container.scrollBy({ left: scrollAmount, behavior: 'smooth' });
-        break;
-      case 'start':
-        container.scrollTo({ left: 0, behavior: 'smooth' });
-        break;
-      case 'end':
-        container.scrollTo({ left: container.scrollWidth, behavior: 'smooth' });
-        break;
+      case "left":
+        container.scrollBy({ left: -scrollAmount, behavior: "smooth" })
+        break
+      case "right":
+        container.scrollBy({ left: scrollAmount, behavior: "smooth" })
+        break
+      case "start":
+        container.scrollTo({ left: 0, behavior: "smooth" })
+        break
+      case "end":
+        container.scrollTo({ left: container.scrollWidth, behavior: "smooth" })
+        break
     }
-  }, []);
+  }, [])
 
   const scrollToActiveTab = useCallback(() => {
-    if (!tabsListRef.current || orientation === 'vertical') return;
+    if (!tabsListRef.current || orientation === "vertical") return
 
-    const container = tabsListRef.current;
-    const activeTabElement = container.querySelector(`[data-state="active"]`) as HTMLElement;
+    const container = tabsListRef.current
+    const activeTabElement = container.querySelector(`[data-state="active"]`) as HTMLElement
 
-    if (!activeTabElement) return;
+    if (!activeTabElement) return
 
-    const containerRect = container.getBoundingClientRect();
-    const tabRect = activeTabElement.getBoundingClientRect();
+    const containerRect = container.getBoundingClientRect()
+    const tabRect = activeTabElement.getBoundingClientRect()
 
-    const scrollLeft = container.scrollLeft;
-    const tabLeft = tabRect.left - containerRect.left + scrollLeft;
-    const tabRight = tabLeft + tabRect.width;
-    const containerScrollLeft = scrollLeft;
-    const containerScrollRight = scrollLeft + containerRect.width;
-    const padding = 16;
+    const scrollLeft = container.scrollLeft
+    const tabLeft = tabRect.left - containerRect.left + scrollLeft
+    const tabRight = tabLeft + tabRect.width
+    const containerScrollLeft = scrollLeft
+    const containerScrollRight = scrollLeft + containerRect.width
+    const padding = 16
 
     if (tabLeft < containerScrollLeft) {
-      container.scrollTo({ left: tabLeft - padding, behavior: 'smooth' });
+      container.scrollTo({ left: tabLeft - padding, behavior: "smooth" })
     } else if (tabRight > containerScrollRight) {
-      container.scrollTo({ left: tabRight - containerRect.width + padding, behavior: 'smooth' });
+      container.scrollTo({ left: tabRight - containerRect.width + padding, behavior: "smooth" })
     }
-  }, [orientation]);
+  }, [orientation])
 
-  const handleTouchStart = useCallback(() => {}, []);
+  const handleTouchStart = useCallback(() => {}, [])
 
-  const handleTouchMove = useCallback(() => {}, []);
+  const handleTouchMove = useCallback(() => {}, [])
 
-  const handleTouchEnd = useCallback(() => {}, []);
+  const handleTouchEnd = useCallback(() => {}, [])
 
   useEffect(() => {
-    requestAnimationFrame(() => checkScrollability());
+    requestAnimationFrame(() => checkScrollability())
 
-    const container = tabsListRef.current;
-    if (!container) return;
+    const container = tabsListRef.current
+    if (!container) return
 
-    const scrollOptions: AddEventListenerOptions = { passive: true };
-    container.addEventListener('scroll', checkScrollability, scrollOptions);
-    const resizeObserver = new ResizeObserver(checkScrollability);
-    resizeObserver.observe(container);
+    const scrollOptions: AddEventListenerOptions = { passive: true }
+    container.addEventListener("scroll", checkScrollability, scrollOptions)
+    const resizeObserver = new ResizeObserver(checkScrollability)
+    resizeObserver.observe(container)
 
     return () => {
-      container.removeEventListener('scroll', checkScrollability, scrollOptions);
-      resizeObserver.disconnect();
-    };
-  }, [checkScrollability, items.length]);
+      container.removeEventListener("scroll", checkScrollability, scrollOptions)
+      resizeObserver.disconnect()
+    }
+  }, [checkScrollability, items.length])
 
   useEffect(() => {
     const timeoutId = setTimeout(() => {
-      scrollToActiveTab();
-    }, 100);
+      scrollToActiveTab()
+    }, 100)
 
-    return () => clearTimeout(timeoutId);
-  }, [currentValue, scrollToActiveTab]);
+    return () => clearTimeout(timeoutId)
+  }, [currentValue, scrollToActiveTab])
 
   const tabsProps = isControlled
     ? {
@@ -258,27 +258,27 @@ function IGRPTabs({
     : {
         defaultValue: defaultValue ?? initialValue,
         onValueChange: handleValueChange,
-      };
+      }
 
-  const isHorizontal = orientation === 'horizontal';
-  const showIndicators = showScrollIndicators && isHorizontal && (canScrollLeft || canScrollRight);
+  const isHorizontal = orientation === "horizontal"
+  const showIndicators = showScrollIndicators && isHorizontal && (canScrollLeft || canScrollRight)
 
   if (!items || items.length === 0) {
-    return null;
+    return null
   }
 
   return (
     <Tabs
       {...tabsProps}
-      className={cn('w-full', orientation === 'vertical' && 'flex-row items-start', tabClassName)}
+      className={cn("w-full", orientation === "vertical" && "flex-row items-start", tabClassName)}
       orientation={orientation}
       id={ref}
       {...restProps}
     >
       <div
         className={cn(
-          'relative flex gap-1.5',
-          isHorizontal ? 'items-center w-full' : 'flex-col items-start self-start',
+          "relative flex gap-1.5",
+          isHorizontal ? "items-center w-full" : "flex-col items-start self-start",
         )}
       >
         {showIndicators && canScrollLeft && (
@@ -286,10 +286,10 @@ function IGRPTabs({
             variant="ghost"
             size="icon-sm"
             className={cn(
-              'z-10 shrink-0 bg-background/80 shadow-md backdrop-blur-sm hover:bg-background',
+              "z-10 shrink-0 bg-background/80 shadow-md backdrop-blur-sm hover:bg-background",
               scrollButtonClassName,
             )}
-            onClick={() => scrollToTab('left')}
+            onClick={() => scrollToTab("left")}
             aria-label="Scroll tabs left"
             type="button"
           >
@@ -303,17 +303,17 @@ function IGRPTabs({
           onTouchEnd={handleTouchEnd}
           className={cn(
             isHorizontal &&
-              'overflow-x-auto scrollbar-hide scroll-smooth [scrollbar-width:none] [-ms-overflow-style:none] [&::-webkit-scrollbar]:hidden',
-            isHorizontal && 'flex-1',
-            !isHorizontal && 'w-full',
+              "overflow-x-auto scrollbar-hide scroll-smooth [scrollbar-width:none] [-ms-overflow-style:none] [&::-webkit-scrollbar]:hidden",
+            isHorizontal && "flex-1",
+            !isHorizontal && "w-full",
           )}
         >
           <TabsList
             className={cn(
-              orientation === 'vertical' && 'flex-col h-fit',
-              isHorizontal && 'w-max',
+              orientation === "vertical" && "flex-col h-fit",
+              isHorizontal && "w-max",
               tabListVariants({ variant, fullWidth }),
-              fullWidth === true && orientation === 'vertical' && 'w-fit',
+              fullWidth === true && orientation === "vertical" && "w-fit",
               tabListClassName,
             )}
           >
@@ -324,15 +324,15 @@ function IGRPTabs({
                 disabled={item.disabled}
                 className={cn(
                   tabTriggerVariants({ variant }),
-                  orientation === 'vertical' && 'w-full justify-start',
-                  orientation === 'vertical' &&
-                    variant === 'underline' &&
-                    'relative after:absolute after:inset-y-0 after:right-0 after:-mr-1 after:w-0.5 after:h-auto',
-                  iconPlacement === 'top' && 'flex-col',
+                  orientation === "vertical" && "w-full justify-start",
+                  orientation === "vertical" &&
+                    variant === "underline" &&
+                    "relative after:absolute after:inset-y-0 after:right-0 after:-mr-1 after:w-0.5 after:h-auto",
+                  iconPlacement === "top" && "flex-col",
                   tabTriggerClassName,
                 )}
               >
-                {showBadge && item.badgeContent !== undefined && badgePlacement === 'start' && (
+                {showBadge && item.badgeContent !== undefined && badgePlacement === "start" && (
                   <IGRPBadge
                     variant={item.badgeVariant}
                     color={item.badgeColor}
@@ -342,21 +342,15 @@ function IGRPTabs({
                   </IGRPBadge>
                 )}
 
-                {showIcon && item.icon && iconPlacement === 'start' && (
-                  <IGRPIcon iconName={item.icon} />
-                )}
+                {showIcon && item.icon && iconPlacement === "start" && <IGRPIcon iconName={item.icon} />}
 
-                {showIcon && item.icon && iconPlacement === 'top' && (
-                  <IGRPIcon iconName={item.icon} />
-                )}
+                {showIcon && item.icon && iconPlacement === "top" && <IGRPIcon iconName={item.icon} />}
 
                 {item.label && <span>{item.label}</span>}
 
-                {showIcon && item.icon && iconPlacement === 'end' && (
-                  <IGRPIcon iconName={item.icon} />
-                )}
+                {showIcon && item.icon && iconPlacement === "end" && <IGRPIcon iconName={item.icon} />}
 
-                {showBadge && item.badgeContent !== undefined && badgePlacement === 'end' && (
+                {showBadge && item.badgeContent !== undefined && badgePlacement === "end" && (
                   <IGRPBadge
                     variant={item.badgeVariant}
                     color={item.badgeColor}
@@ -374,10 +368,10 @@ function IGRPTabs({
             variant="ghost"
             size="icon-sm"
             className={cn(
-              'z-10 shrink-0 bg-background/80 shadow-md backdrop-blur-sm hover:bg-background',
+              "z-10 shrink-0 bg-background/80 shadow-md backdrop-blur-sm hover:bg-background",
               scrollButtonClassName,
             )}
-            onClick={() => scrollToTab('right')}
+            onClick={() => scrollToTab("right")}
             aria-label="Scroll tabs right"
             type="button"
           >
@@ -391,8 +385,8 @@ function IGRPTabs({
           key={item.value}
           value={item.value}
           className={cn(
-            'p-4 w-full border border-transparent rounded-md',
-            contentBorder === true && 'border-border',
+            "p-4 w-full border border-transparent rounded-md",
+            contentBorder === true && "border-border",
             tabContentClassName,
           )}
         >
@@ -400,7 +394,7 @@ function IGRPTabs({
         </TabsContent>
       ))}
     </Tabs>
-  );
+  )
 }
 
-export { IGRPTabs, type IGRPTabsProps, type IGRPTabItem };
+export { IGRPTabs, type IGRPTabsProps, type IGRPTabItem }

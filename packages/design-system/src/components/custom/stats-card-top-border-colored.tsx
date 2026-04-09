@@ -1,6 +1,6 @@
-import { useId } from 'react';
-import { IGRPStatsCard, type IGRPStatsCardProps } from '../horizon/stats-card';
-import { cn } from '../../lib/utils';
+import { useId } from "react"
+import { IGRPStatsCard, type IGRPStatsCardProps } from "../horizon/stats-card"
+import { cn } from "../../lib/utils"
 
 /**
  * Props for the IGRPStatsCardTopBorderColored component.
@@ -9,8 +9,8 @@ import { cn } from '../../lib/utils';
  */
 type IGRPStatsCardTopBorderColoredProps = Pick<
   IGRPStatsCardProps,
-  'cardVariant' | 'title' | 'value' | 'className' | 'iconClassName' | 'iconName' | 'name' | 'id'
->;
+  "cardVariant" | "title" | "value" | "className" | "iconClassName" | "iconName" | "name" | "id"
+>
 
 /**
  * Stats card with a colored top border and icon at the end.
@@ -26,8 +26,8 @@ function IGRPStatsCardTopBorderColored({
   name,
   id,
 }: IGRPStatsCardTopBorderColoredProps) {
-  const _id = useId();
-  const ref = name ?? id ?? _id;
+  const _id = useId()
+  const ref = name ?? id ?? _id
 
   return (
     <IGRPStatsCard
@@ -45,12 +45,12 @@ function IGRPStatsCardTopBorderColored({
       iconBackground="rounded"
       showIconBackground={true}
       iconSize="sm"
-      titleClassName={cn('text-muted-foreground')}
+      titleClassName={cn("text-muted-foreground")}
       titleSize="xs"
       valueSize="2xl"
       id={ref}
     />
-  );
+  )
 }
 
-export { IGRPStatsCardTopBorderColored, type IGRPStatsCardTopBorderColoredProps };
+export { IGRPStatsCardTopBorderColored, type IGRPStatsCardTopBorderColoredProps }

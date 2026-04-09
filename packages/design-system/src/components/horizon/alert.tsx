@@ -1,11 +1,11 @@
-import { useId } from 'react';
+import { useId } from "react"
 
-import { IGRPColors, type IGRPColorRole, type IGRPColorVariants } from '../../lib/colors';
-import { igrpAlertIconMappings } from '../../lib/constants';
-import { cn } from '../../lib/utils';
-import type { IGRPBaseAttributes, IGRPPlacementProps } from '../../types';
-import { IGRPIcon, type IGRPIconName } from './icon';
-import { IGRPLink } from './typography/link';
+import { IGRPColors, type IGRPColorRole, type IGRPColorVariants } from "../../lib/colors"
+import { igrpAlertIconMappings } from "../../lib/constants"
+import { cn } from "../../lib/utils"
+import type { IGRPBaseAttributes, IGRPPlacementProps } from "../../types"
+import { IGRPIcon, type IGRPIconName } from "./icon"
+import { IGRPLink } from "./typography/link"
 
 /**
  * Props for the IGRPAlert component.
@@ -13,34 +13,34 @@ import { IGRPLink } from './typography/link';
  */
 interface IGRPAlertProps extends Pick<
   IGRPBaseAttributes,
-  'showIcon' | 'iconName' | 'iconClassName' | 'iconPlacement' | 'label' | 'name'
+  "showIcon" | "iconName" | "iconClassName" | "iconPlacement" | "label" | "name"
 > {
   /** Alert style variant (e.g. 'solid', 'soft', 'outline'). */
-  variant?: IGRPColorRole;
+  variant?: IGRPColorRole
   /** Color theme (e.g. 'primary', 'success', 'destructive'). */
-  color?: IGRPColorVariants;
+  color?: IGRPColorVariants
   /** Alert content. */
-  children: React.ReactNode;
+  children: React.ReactNode
   /** Label for optional link. */
-  linkLabel?: string;
+  linkLabel?: string
   /** URL for optional link. */
-  linkUrl?: string;
+  linkUrl?: string
   /** Icon for optional link. */
-  linkIcon?: IGRPIconName | string;
+  linkIcon?: IGRPIconName | string
   /** Whether to show the link. */
-  showLink?: boolean;
+  showLink?: boolean
   /** Apply color to text. */
-  textColored?: boolean;
+  textColored?: boolean
   /** Apply color to border. */
-  borderColored?: boolean;
+  borderColored?: boolean
   /** Apply color to background. */
-  bgColored?: boolean;
+  bgColored?: boolean
   /** Additional CSS classes. */
-  className?: string;
+  className?: string
   /** Content alignment ('start' | 'center' | 'end'). */
-  alignment?: IGRPPlacementProps;
+  alignment?: IGRPPlacementProps
   /** HTML id attribute. */
-  id?: string;
+  id?: string
 }
 
 /**
@@ -48,16 +48,16 @@ interface IGRPAlertProps extends Pick<
  * Supports optional link, icon, and color variants.
  */
 function IGRPAlert({
-  variant = 'solid',
-  color = 'primary',
+  variant = "solid",
+  color = "primary",
   showIcon = true,
   iconName,
   iconClassName,
-  iconPlacement = 'end',
+  iconPlacement = "end",
   children,
-  label = 'link',
+  label = "link",
   linkUrl,
-  linkIcon = 'ArrowRight',
+  linkIcon = "ArrowRight",
   showLink,
   textColored = true,
   borderColored = true,
@@ -65,39 +65,39 @@ function IGRPAlert({
   className,
   name,
   id,
-  alignment = 'start',
+  alignment = "start",
 }: IGRPAlertProps) {
-  const _id = useId();
-  const ref = name ?? id ?? _id;
+  const _id = useId()
+  const ref = name ?? id ?? _id
 
-  const iconDefault = igrpAlertIconMappings[color];
-  const colors = IGRPColors[variant][color];
-  const alertIcon = iconName !== undefined ? iconName : iconDefault;
+  const iconDefault = igrpAlertIconMappings[color]
+  const colors = IGRPColors[variant][color]
+  const alertIcon = iconName !== undefined ? iconName : iconDefault
   const alignmentClass =
-    alignment === 'start' ? 'items-baseline' : alignment === 'center' ? 'items-center' : 'items-end';
+    alignment === "start" ? "items-baseline" : alignment === "center" ? "items-center" : "items-end"
 
   return (
     <div
       className={cn(
-        'rounded-md border px-4 py-3',
+        "rounded-md border px-4 py-3",
         colors.alert,
-        !textColored && variant === 'solid' && 'text-background',
-        !borderColored && 'border-transparent',
-        !bgColored && 'bg-transparent',
+        !textColored && variant === "solid" && "text-background",
+        !borderColored && "border-transparent",
+        !bgColored && "bg-transparent",
         className,
       )}
       id={ref}
     >
-      <div className={cn('flex gap-3', alignmentClass)}>
+      <div className={cn("flex gap-3", alignmentClass)}>
         {showIcon && (
           <IGRPIcon
             iconName={alertIcon}
-            className={cn('shrink-0 size-5', textColored ? colors.text : undefined, iconClassName)}
+            className={cn("shrink-0 size-5", textColored ? colors.text : undefined, iconClassName)}
           />
         )}
 
-        <div className='flex grow justify-between gap-3'>
-          <div className='grow space-y-1'>{children}</div>
+        <div className="flex grow justify-between gap-3">
+          <div className="grow space-y-1">{children}</div>
 
           {showLink && (
             <IGRPLink
@@ -113,7 +113,7 @@ function IGRPAlert({
         </div>
       </div>
     </div>
-  );
+  )
 }
 
-export { IGRPAlert, type IGRPAlertProps };
+export { IGRPAlert, type IGRPAlertProps }

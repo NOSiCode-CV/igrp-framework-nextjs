@@ -1,292 +1,292 @@
 /* eslint-disable react-refresh/only-export-components */
-'use client';
+"use client"
 
-import { cva, type VariantProps } from 'class-variance-authority';
-import { useCallback, useId } from 'react';
-import Image from 'next/image';
+import { cva, type VariantProps } from "class-variance-authority"
+import { useCallback, useId } from "react"
+import Image from "next/image"
 
-import { IGRPColors, type IGRPColorVariants } from '../../lib/colors';
-import { cn } from '../../lib/utils';
-import type { IGRPBaseAttributes } from '../../types';
-import { IGRPIcon, type IGRPIconName } from './icon';
+import { IGRPColors, type IGRPColorVariants } from "../../lib/colors"
+import { cn } from "../../lib/utils"
+import type { IGRPBaseAttributes } from "../../types"
+import { IGRPIcon, type IGRPIconName } from "./icon"
 
 const igrpStatsCardVariants = cva(
-  'flex items-center p-4 bg-card shadow-sm text-card-foreground transition-all overflow-hidden',
+  "flex items-center p-4 bg-card shadow-sm text-card-foreground transition-all overflow-hidden",
   {
     variants: {
       border: {
-        none: '',
-        'rounded-sm': 'rounded-sm border border-border',
-        'rounded-md': 'rounded-md border border-border',
-        'rounded-lg': 'rounded-lg border border-border',
-        'rounded-xl': 'rounded-xl border border-border',
-        'rounded-2xl': 'rounded-2xl border border-border',
-        'rounded-3xl': 'rounded-3xl border border-border',
-        'rounded-full': 'rounded-full border border-border',
-        square: 'border border-border',
+        none: "",
+        "rounded-sm": "rounded-sm border border-border",
+        "rounded-md": "rounded-md border border-border",
+        "rounded-lg": "rounded-lg border border-border",
+        "rounded-xl": "rounded-xl border border-border",
+        "rounded-2xl": "rounded-2xl border border-border",
+        "rounded-3xl": "rounded-3xl border border-border",
+        "rounded-full": "rounded-full border border-border",
+        square: "border border-border",
       },
       borderPosition: {
-        none: '',
-        top: 'border-t-4 border-l-0 border-r-0 border-b-0',
-        bottom: 'border-b-4 border-l-0 border-r-0 border-t-0',
-        left: 'border-l-4 border-t-0 border-r-0 border-b-0',
-        right: 'border-r-4 border-t-0 border-l-0 border-b-0',
+        none: "",
+        top: "border-t-4 border-l-0 border-r-0 border-b-0",
+        bottom: "border-b-4 border-l-0 border-r-0 border-t-0",
+        left: "border-l-4 border-t-0 border-r-0 border-b-0",
+        right: "border-r-4 border-t-0 border-l-0 border-b-0",
       },
       interactive: {
-        true: 'cursor-pointer hover:shadow-md',
-        false: '',
+        true: "cursor-pointer hover:shadow-md",
+        false: "",
       },
     },
     defaultVariants: {
-      border: 'rounded-md',
-      borderPosition: 'none',
+      border: "rounded-md",
+      borderPosition: "none",
       interactive: false,
     },
   },
-);
+)
 
-const igrpStatsCardTitleVariants = cva('font-medium tracking-tighter', {
+const igrpStatsCardTitleVariants = cva("font-medium tracking-tighter", {
   variants: {
     size: {
-      xs: 'text-xs',
-      sm: 'text-sm',
-      base: 'text-base',
-      lg: 'text-lg',
-      xl: 'text-xl',
+      xs: "text-xs",
+      sm: "text-sm",
+      base: "text-base",
+      lg: "text-lg",
+      xl: "text-xl",
     },
   },
   defaultVariants: {
-    size: 'sm',
+    size: "sm",
   },
-});
+})
 
-const igrpStatsCardValueVariants = cva('font-bold', {
+const igrpStatsCardValueVariants = cva("font-bold", {
   variants: {
     size: {
-      sm: 'text-sm',
-      base: 'text-base',
-      lg: 'text-lg',
-      xl: 'text-xl',
-      '2xl': 'text-2xl',
-      '3xl': 'text-3xl',
-      '4xl': 'text-4xl',
+      sm: "text-sm",
+      base: "text-base",
+      lg: "text-lg",
+      xl: "text-xl",
+      "2xl": "text-2xl",
+      "3xl": "text-3xl",
+      "4xl": "text-4xl",
     },
   },
   defaultVariants: {
-    size: '2xl',
+    size: "2xl",
   },
-});
+})
 
-const igrpStstaCardIconVariants = cva('flex items-center justify-center shrink-0', {
+const igrpStstaCardIconVariants = cva("flex items-center justify-center shrink-0", {
   variants: {
     size: {
-      sm: 'h-8 w-8',
-      md: 'h-10 w-10',
-      lg: 'h-12 w-12',
-      xl: 'h-14 w-14',
+      sm: "h-8 w-8",
+      md: "h-10 w-10",
+      lg: "h-12 w-12",
+      xl: "h-14 w-14",
     },
     showBackground: {
-      true: '',
-      false: '',
+      true: "",
+      false: "",
     },
     background: {
-      none: '',
-      rounded: 'rounded-full',
-      square: 'rounded-md',
+      none: "",
+      rounded: "rounded-full",
+      square: "rounded-md",
     },
     backgroundBorder: {
-      true: '',
-      false: '',
+      true: "",
+      false: "",
     },
     variant: {
-      none: '',
-      primary: '',
-      secondary: '',
-      success: '',
-      destructive: '',
-      warning: '',
-      info: '',
-      indigo: '',
+      none: "",
+      primary: "",
+      secondary: "",
+      success: "",
+      destructive: "",
+      warning: "",
+      info: "",
+      indigo: "",
     },
   },
   compoundVariants: [
     {
       showBackground: true,
-      background: ['rounded', 'square'],
-      variant: 'primary',
-      className: 'bg-primary/10 text-primary',
+      background: ["rounded", "square"],
+      variant: "primary",
+      className: "bg-primary/10 text-primary",
     },
     {
       showBackground: true,
-      background: ['rounded', 'square'],
-      variant: 'secondary',
-      className: 'bg-gray-100 text-gray-600',
+      background: ["rounded", "square"],
+      variant: "secondary",
+      className: "bg-gray-100 text-gray-600",
     },
     {
       showBackground: true,
-      background: ['rounded', 'square'],
-      variant: 'success',
-      className: 'bg-green-100 text-green-500',
+      background: ["rounded", "square"],
+      variant: "success",
+      className: "bg-green-100 text-green-500",
     },
     {
       showBackground: true,
-      background: ['rounded', 'square'],
-      variant: 'destructive',
-      className: 'bg-red-100 text-red-500',
+      background: ["rounded", "square"],
+      variant: "destructive",
+      className: "bg-red-100 text-red-500",
     },
     {
       showBackground: true,
-      background: ['rounded', 'square'],
-      variant: 'warning',
-      className: 'bg-amber-100 text-amber-500',
+      background: ["rounded", "square"],
+      variant: "warning",
+      className: "bg-amber-100 text-amber-500",
     },
     {
       showBackground: true,
-      background: ['rounded', 'square'],
-      variant: 'info',
-      className: 'bg-blue-100 text-blue-500',
+      background: ["rounded", "square"],
+      variant: "info",
+      className: "bg-blue-100 text-blue-500",
     },
     {
       showBackground: true,
-      background: ['rounded', 'square'],
-      variant: 'indigo',
-      className: 'bg-indigo-100 text-purple-500',
+      background: ["rounded", "square"],
+      variant: "indigo",
+      className: "bg-indigo-100 text-purple-500",
     },
     {
       backgroundBorder: true,
-      variant: 'primary',
-      className: 'border border-primary/20',
+      variant: "primary",
+      className: "border border-primary/20",
     },
     {
       backgroundBorder: true,
-      variant: 'secondary',
-      className: 'border border-gray-200',
+      variant: "secondary",
+      className: "border border-gray-200",
     },
     {
       backgroundBorder: true,
-      variant: 'success',
-      className: 'border border-green-200',
+      variant: "success",
+      className: "border border-green-200",
     },
     {
       backgroundBorder: true,
-      variant: 'destructive',
-      className: 'border border-red-200',
+      variant: "destructive",
+      className: "border border-red-200",
     },
     {
       backgroundBorder: true,
-      variant: 'warning',
-      className: 'border border-amber-200',
+      variant: "warning",
+      className: "border border-amber-200",
     },
     {
       backgroundBorder: true,
-      variant: 'info',
-      className: 'border border-blue-200',
+      variant: "info",
+      className: "border border-blue-200",
     },
     {
       backgroundBorder: true,
-      variant: 'indigo',
-      className: 'border border-purple-200',
+      variant: "indigo",
+      className: "border border-purple-200",
     },
 
     // === No Background, Just Text Color ===
     {
       showBackground: false,
-      background: 'none',
-      variant: 'primary',
-      className: 'text-primary',
+      background: "none",
+      variant: "primary",
+      className: "text-primary",
     },
     {
       showBackground: false,
-      background: 'none',
-      variant: 'secondary',
-      className: 'text-gray-500',
+      background: "none",
+      variant: "secondary",
+      className: "text-gray-500",
     },
     {
       showBackground: false,
-      background: 'none',
-      variant: 'success',
-      className: 'text-green-500',
+      background: "none",
+      variant: "success",
+      className: "text-green-500",
     },
     {
       showBackground: false,
-      background: 'none',
-      variant: 'destructive',
-      className: 'text-red-500',
+      background: "none",
+      variant: "destructive",
+      className: "text-red-500",
     },
     {
       showBackground: false,
-      background: 'none',
-      variant: 'warning',
-      className: 'text-amber-500',
+      background: "none",
+      variant: "warning",
+      className: "text-amber-500",
     },
     {
       showBackground: false,
-      background: 'none',
-      variant: 'info',
-      className: 'text-blue-500',
+      background: "none",
+      variant: "info",
+      className: "text-blue-500",
     },
     {
       showBackground: false,
-      background: 'none',
-      variant: 'indigo',
-      className: 'text-indigo-500',
+      background: "none",
+      variant: "indigo",
+      className: "text-indigo-500",
     },
   ],
   defaultVariants: {
-    size: 'md',
+    size: "md",
     showBackground: false,
-    background: 'none',
+    background: "none",
     backgroundBorder: false,
-    variant: 'none',
+    variant: "none",
   },
-});
+})
 
 /**
  * Props for the IGRPStatsCard component.
  * @see IGRPStatsCard
  */
 interface IGRPStatsCardProps
-  extends Omit<IGRPBaseAttributes, 'ref' | 'iconSize'>, React.HTMLAttributes<HTMLDivElement> {
+  extends Omit<IGRPBaseAttributes, "ref" | "iconSize">, React.HTMLAttributes<HTMLDivElement> {
   /** Card title. */
-  title?: string;
+  title?: string
   /** Title size variant. */
-  titleSize?: VariantProps<typeof igrpStatsCardTitleVariants>['size'];
+  titleSize?: VariantProps<typeof igrpStatsCardTitleVariants>["size"]
   /** CSS classes for the title. */
-  titleClassName?: string;
+  titleClassName?: string
   /** Apply card variant color to title. */
-  titleColored?: boolean;
+  titleColored?: boolean
   /** Main value (number or string). */
-  value?: string | number;
+  value?: string | number
   /** Value size variant. */
-  valueSize?: VariantProps<typeof igrpStatsCardValueVariants>['size'];
+  valueSize?: VariantProps<typeof igrpStatsCardValueVariants>["size"]
   /** CSS classes for the value. */
-  valueClassName?: string;
+  valueClassName?: string
   /** Apply card variant color to value. */
-  valueColored?: boolean;
+  valueColored?: boolean
   /** Click handler (makes card interactive). */
-  onClick?: () => void;
+  onClick?: () => void
   /** Image URL (replaces icon). */
-  image?: string;
+  image?: string
   /** Alt text for the image. */
-  imageAlt?: string;
+  imageAlt?: string
   /** Card border style. */
-  cardBorder?: VariantProps<typeof igrpStatsCardVariants>['border'];
+  cardBorder?: VariantProps<typeof igrpStatsCardVariants>["border"]
   /** Border position (top, bottom, left, right). */
-  cardBorderPosition?: VariantProps<typeof igrpStatsCardVariants>['borderPosition'];
+  cardBorderPosition?: VariantProps<typeof igrpStatsCardVariants>["borderPosition"]
   /** Color theme for border and icon. */
-  cardVariant?: IGRPColorVariants;
+  cardVariant?: IGRPColorVariants
   /** Show background behind icon. */
-  showIconBackground?: boolean;
+  showIconBackground?: boolean
   /** Icon background shape. */
-  iconBackground?: VariantProps<typeof igrpStstaCardIconVariants>['background'];
+  iconBackground?: VariantProps<typeof igrpStstaCardIconVariants>["background"]
   /** Show border around icon. */
-  showIconBorder?: boolean;
+  showIconBorder?: boolean
   /** Icon color variant. */
-  iconVariant?: IGRPColorVariants;
+  iconVariant?: IGRPColorVariants
   /** Layout: title/value at start or end. */
-  itemPlacement?: 'start' | 'end';
+  itemPlacement?: "start" | "end"
   /** Icon size. */
-  iconSize?: VariantProps<typeof igrpStstaCardIconVariants>['size'];
+  iconSize?: VariantProps<typeof igrpStstaCardIconVariants>["size"]
 }
 
 /**
@@ -295,69 +295,67 @@ interface IGRPStatsCardProps
 function IGRPStatsCard({
   className,
   title,
-  titleSize = 'sm',
+  titleSize = "sm",
   titleColored = false,
   titleClassName,
   value,
-  valueSize = '2xl',
+  valueSize = "2xl",
   valueColored = false,
   valueClassName,
   showIcon = true,
-  iconName = 'Box',
-  iconSize = 'md',
-  iconPlacement = 'start',
+  iconName = "Box",
+  iconSize = "md",
+  iconPlacement = "start",
   showIconBackground = false,
-  iconBackground = 'none',
+  iconBackground = "none",
   showIconBorder = false,
-  iconVariant = 'primary',
+  iconVariant = "primary",
   iconClassName,
   image,
   imageAlt,
-  cardBorder = 'rounded-xl',
-  cardBorderPosition = 'none',
-  cardVariant = 'primary',
-  itemPlacement = 'start',
+  cardBorder = "rounded-xl",
+  cardBorderPosition = "none",
+  cardVariant = "primary",
+  itemPlacement = "start",
   onClick,
   name,
   id,
   ...props
 }: IGRPStatsCardProps) {
-  const _id = useId();
-  const ref = name ?? id ?? _id;
+  const _id = useId()
+  const ref = name ?? id ?? _id
 
-  const isInteractive = !!onClick;
-  const outlineColors = IGRPColors['outline'][cardVariant];
-  const solidColors = IGRPColors['solid'][cardVariant];
+  const isInteractive = !!onClick
+  const outlineColors = IGRPColors["outline"][cardVariant]
+  const solidColors = IGRPColors["solid"][cardVariant]
 
   const handleKeyDown = useCallback(
     (e: React.KeyboardEvent) => {
-      if (!isInteractive) return;
+      if (!isInteractive) return
 
-      if (e.key === 'Enter' || e.key === ' ') {
-        e.preventDefault();
-        onClick?.();
+      if (e.key === "Enter" || e.key === " ") {
+        e.preventDefault()
+        onClick?.()
       }
     },
     [isInteractive, onClick],
-  );
+  )
 
   return (
     <div
       className={cn(
-        iconPlacement === 'start' ? 'flex-row-reverse' : 'flex-row',
-        itemPlacement === 'end'
-          ? 'justify-end text-right items-end'
-          : 'justify-start text-left items-start',
+        iconPlacement === "start" ? "flex-row-reverse" : "flex-row",
+        itemPlacement === "end" ? "justify-end text-right items-end" : "justify-start text-left items-start",
         igrpStatsCardVariants({
           border: cardBorder,
           borderPosition: cardBorderPosition,
           interactive: isInteractive,
         }),
-        cardBorderPosition !== 'none' && outlineColors.border,
+        cardBorderPosition !== "none" && outlineColors.border,
         className,
       )}
       {...(isInteractive && {
-        role: 'button',
+        role: "button",
         tabIndex: 0,
         onClick,
         onKeyDown: handleKeyDown,
@@ -365,7 +363,7 @@ function IGRPStatsCard({
       id={ref}
       {...props}
     >
-      <div className={cn('flex flex-col flex-1 mx-4')}>
+      <div className={cn("flex flex-col flex-1 mx-4")}>
         {title && (
           <p
             className={cn(
@@ -402,23 +400,23 @@ function IGRPStatsCard({
         imageAlt={imageAlt}
       />
     </div>
-  );
+  )
 }
 
 /**
  * Props for the internal IGRPStatsCardIcon component.
  */
 interface IGRPStatsCardIconProps {
-  showIcon: boolean;
-  image?: string;
-  imageAlt?: string;
-  iconName: IGRPIconName | string;
-  iconSize?: VariantProps<typeof igrpStstaCardIconVariants>['size'];
-  showIconBackground: boolean;
-  iconBackground?: VariantProps<typeof igrpStstaCardIconVariants>['background'];
-  showIconBorder: boolean;
-  iconVariant: IGRPColorVariants;
-  iconClassName?: string;
+  showIcon: boolean
+  image?: string
+  imageAlt?: string
+  iconName: IGRPIconName | string
+  iconSize?: VariantProps<typeof igrpStstaCardIconVariants>["size"]
+  showIconBackground: boolean
+  iconBackground?: VariantProps<typeof igrpStstaCardIconVariants>["background"]
+  showIconBorder: boolean
+  iconVariant: IGRPColorVariants
+  iconClassName?: string
 }
 
 /** Renders the icon or image for IGRPStatsCard. */
@@ -434,33 +432,24 @@ function IGRPStatsCardIcon({
   iconVariant,
   iconClassName,
 }: IGRPStatsCardIconProps) {
-  if (!showIcon && !image) return null;
+  if (!showIcon && !image) return null
 
   const content = () => {
     if (image) {
-      return (
-        <Image
-          src={image}
-          alt={imageAlt || ''}
-          fill
-          sizes="56px"
-          className={cn('object-cover')}
-          unoptimized
-        />
-      );
+      return <Image src={image} alt={imageAlt || ""} fill sizes="56px" className={cn("object-cover")} unoptimized />
     }
     if (showIcon && iconName) {
-      return <IGRPIcon iconName={iconName} className={cn('h-6 w-6')} />;
+      return <IGRPIcon iconName={iconName} className={cn("h-6 w-6")} />
     }
-    return null;
-  };
+    return null
+  }
 
   return (
     <div
       className={cn(
-        'relative overflow-hidden',
+        "relative overflow-hidden",
         igrpStstaCardIconVariants({
-          size: iconSize as VariantProps<typeof igrpStstaCardIconVariants>['size'],
+          size: iconSize as VariantProps<typeof igrpStstaCardIconVariants>["size"],
           showBackground: showIconBackground,
           background: iconBackground,
           backgroundBorder: showIconBorder,
@@ -471,7 +460,7 @@ function IGRPStatsCardIcon({
     >
       {content()}
     </div>
-  );
+  )
 }
 
 export {
@@ -481,4 +470,4 @@ export {
   igrpStatsCardTitleVariants,
   igrpStatsCardValueVariants,
   igrpStstaCardIconVariants,
-};
+}

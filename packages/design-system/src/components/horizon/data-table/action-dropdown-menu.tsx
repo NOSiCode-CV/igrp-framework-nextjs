@@ -1,10 +1,10 @@
-'use client';
+"use client"
 
-import { useState } from 'react';
-import Link from 'next/link';
+import { useState } from "react"
+import Link from "next/link"
 
-import { cn } from '../../../lib/utils';
-import { type IGRPPlacementProps } from '../../../types';
+import { cn } from "../../../lib/utils"
+import { type IGRPPlacementProps } from "../../../types"
 
 import {
   AlertDialog,
@@ -16,17 +16,17 @@ import {
   AlertDialogHeader,
   AlertDialogTitle,
   AlertDialogTrigger,
-} from '../../primitives/alert-dialog';
+} from "../../primitives/alert-dialog"
 
 import {
   DropdownMenu,
   DropdownMenuContent,
   DropdownMenuItem,
   DropdownMenuTrigger,
-} from '../../primitives/dropdown-menu';
-import { buttonVariants } from '../../primitives/button';
-import { IGRPIcon, type IGRPIconName } from '../icon';
-import { type IGRPDataTableDialogProps, type IGRPDataTableLinkProps } from './row-actions';
+} from "../../primitives/dropdown-menu"
+import { buttonVariants } from "../../primitives/button"
+import { IGRPIcon, type IGRPIconName } from "../icon"
+import { type IGRPDataTableDialogProps, type IGRPDataTableLinkProps } from "./row-actions"
 
 /**
  * Base props for dropdown menu items.
@@ -35,54 +35,54 @@ import { type IGRPDataTableDialogProps, type IGRPDataTableLinkProps } from './ro
  */
 interface IGRPDataTableDropdownProps {
   /** Show icon in menu item. */
-  showIcon?: boolean;
+  showIcon?: boolean
   /** Icon position. */
-  iconPlacement?: IGRPPlacementProps;
+  iconPlacement?: IGRPPlacementProps
   /** Menu item variant. */
-  variant?: React.ComponentProps<typeof DropdownMenuItem>['variant'];
+  variant?: React.ComponentProps<typeof DropdownMenuItem>["variant"]
 }
 
 /** @internal */
 interface IGRPDataTableDropdownMenuDialogProps
-  extends Omit<IGRPDataTableDialogProps, 'variant'>, IGRPDataTableDropdownProps {}
+  extends Omit<IGRPDataTableDialogProps, "variant">, IGRPDataTableDropdownProps {}
 
 /** @internal */
 interface IGRPDataTableDropdownMenuLinkProps
-  extends Omit<IGRPDataTableLinkProps, 'variant'>, IGRPDataTableDropdownProps {}
+  extends Omit<IGRPDataTableLinkProps, "variant">, IGRPDataTableDropdownProps {}
 
 /** Dropdown menu item that opens an alert dialog. */
 function IGRPDataTableDropdownMenuAlert({
   labelTrigger,
   className,
-  icon = 'AlertCircle',
+  icon = "AlertCircle",
   iconClassName,
-  children = 'Insert your content here...',
-  modalTitle = 'This is an Alert Dialog, Insert a Title...',
+  children = "Insert your content here...",
+  modalTitle = "This is an Alert Dialog, Insert a Title...",
   showCancel = true,
-  labelCancel = 'Cancel',
+  labelCancel = "Cancel",
   classNameCancel,
-  variantCancel = 'outline',
+  variantCancel = "outline",
   showConfirm = true,
-  labelConfirm = 'Confirm',
+  labelConfirm = "Confirm",
   classNameConfirm,
-  variantConfirm = 'default',
+  variantConfirm = "default",
   onClickConfirm,
   showIcon = true,
-  iconPlacement = 'start',
+  iconPlacement = "start",
   classNameItem,
 }: IGRPDataTableDropdownMenuDialogProps) {
-  const [open, setOpen] = useState(false);
+  const [open, setOpen] = useState(false)
 
   const handleConfirm = () => {
     if (onClickConfirm) {
-      onClickConfirm();
+      onClickConfirm()
     }
-    setOpen(false);
-  };
+    setOpen(false)
+  }
 
   const handleCancel = () => {
-    setOpen(false);
-  };
+    setOpen(false)
+  }
 
   return (
     <AlertDialog open={open} onOpenChange={setOpen}>
@@ -96,7 +96,7 @@ function IGRPDataTableDropdownMenuAlert({
           classNameItem={classNameItem}
         />
       </AlertDialogTrigger>
-      <AlertDialogContent className={cn('max-w-md', className)}>
+      <AlertDialogContent className={cn("max-w-md", className)}>
         <AlertDialogHeader>
           <AlertDialogTitle>{modalTitle}</AlertDialogTitle>
           <AlertDialogDescription>{children}</AlertDialogDescription>
@@ -124,32 +124,30 @@ function IGRPDataTableDropdownMenuAlert({
         )}
       </AlertDialogContent>
     </AlertDialog>
-  );
+  )
 }
 
 /** Dropdown menu item that navigates or triggers an action. */
 function IGRPDataTableDropdownMenuLink({
   labelTrigger,
   action,
-  icon = 'ArrowRight',
+  icon = "ArrowRight",
   href,
-  iconPlacement = 'start',
+  iconPlacement = "start",
   iconClassName,
   showIcon = false,
   classNameItem,
-  variant = 'default',
+  variant = "default",
 }: IGRPDataTableDropdownMenuLinkProps) {
-  const iconClass = iconPlacement === 'end' ? 'flex-row-reverse' : '';
-  const customClss = cn('flex items-center gap-2 w-full', iconClass, classNameItem);
+  const iconClass = iconPlacement === "end" ? "flex-row-reverse" : ""
+  const customClss = cn("flex items-center gap-2 w-full", iconClass, classNameItem)
 
   const RenderContent = (
     <>
-      {showIcon && (
-        <IGRPIcon iconName={icon} className={cn('text-muted-foreground', iconClassName)} />
-      )}
+      {showIcon && <IGRPIcon iconName={icon} className={cn("text-muted-foreground", iconClassName)} />}
       <span>{labelTrigger}</span>
     </>
-  );
+  )
 
   if (href) {
     return (
@@ -158,7 +156,7 @@ function IGRPDataTableDropdownMenuLink({
           {RenderContent}
         </Link>
       </DropdownMenuItem>
-    );
+    )
   }
 
   return (
@@ -166,137 +164,127 @@ function IGRPDataTableDropdownMenuLink({
       className={customClss}
       variant={variant}
       onSelect={() => {
-        if (!action) return;
-        action();
+        if (!action) return
+        action()
       }}
     >
       {RenderContent}
     </DropdownMenuItem>
-  );
+  )
 }
 
-type IGRPDataTableDropdownMenuCustomProps = Omit<IGRPDataTableDropdownMenuLinkProps, 'href'>;
+type IGRPDataTableDropdownMenuCustomProps = Omit<IGRPDataTableDropdownMenuLinkProps, "href">
 
 function IGRPDataTableDropdownMenuCustom({
   labelTrigger,
   action,
-  icon = 'ArrowRight',
-  iconPlacement = 'start',
+  icon = "ArrowRight",
+  iconPlacement = "start",
   iconClassName,
   showIcon = false,
   classNameItem,
   variant,
 }: IGRPDataTableDropdownMenuCustomProps) {
-  const iconClass = iconPlacement === 'end' ? 'flex-row-reverse' : '';
+  const iconClass = iconPlacement === "end" ? "flex-row-reverse" : ""
 
   const handlerAction = () => {
-    if (typeof action === 'function') {
-      action();
+    if (typeof action === "function") {
+      action()
     } else {
-      console.warn('No action function provided');
+      console.warn("No action function provided")
     }
-  };
+  }
 
   return (
     <DropdownMenuItem
-      className={cn('flex items-center gap-2 w-full', iconClass, classNameItem)}
+      className={cn("flex items-center gap-2 w-full", iconClass, classNameItem)}
       onSelect={handlerAction}
       variant={variant}
     >
-      {showIcon && (
-        <IGRPIcon iconName={icon} className={cn('text-muted-foreground', iconClassName)} />
-      )}
+      {showIcon && <IGRPIcon iconName={icon} className={cn("text-muted-foreground", iconClassName)} />}
       <span>{labelTrigger}</span>
     </DropdownMenuItem>
-  );
+  )
 }
 
 interface IGRPDataTableDropdownMenuItemProps
   extends
     IGRPDataTableDropdownProps,
-    Pick<IGRPDataTableDropdownMenuDialogProps, 'icon' | 'labelTrigger' | 'iconClassName'> {
-  onClick?: () => void;
-  classNameItem?: string;
+    Pick<IGRPDataTableDropdownMenuDialogProps, "icon" | "labelTrigger" | "iconClassName"> {
+  onClick?: () => void
+  classNameItem?: string
 }
 
 function IGRPDataTableDropdownMenuItem({
   showIcon = true,
-  iconPlacement = 'start',
+  iconPlacement = "start",
   iconClassName,
-  icon = 'ArrowRight',
+  icon = "ArrowRight",
   labelTrigger,
   onClick,
   classNameItem,
   variant,
 }: IGRPDataTableDropdownMenuItemProps) {
-  const iconClass = iconPlacement === 'end' ? 'flex-row-reverse' : '';
+  const iconClass = iconPlacement === "end" ? "flex-row-reverse" : ""
 
   return (
     <DropdownMenuItem
       onClick={onClick}
-      className={cn('flex items-center w-full gap-2', iconClass, classNameItem)}
+      className={cn("flex items-center w-full gap-2", iconClass, classNameItem)}
       onSelect={(e) => {
-        e.preventDefault();
+        e.preventDefault()
       }}
       variant={variant}
     >
-      {showIcon && (
-        <IGRPIcon iconName={icon} className={cn('text-muted-foreground', iconClassName)} />
-      )}
+      {showIcon && <IGRPIcon iconName={icon} className={cn("text-muted-foreground", iconClassName)} />}
       <span>{labelTrigger}</span>
     </DropdownMenuItem>
-  );
+  )
 }
 
 type IGRPDataTableActionDropdown =
   | {
       /** Stable key for list rendering; use when items may be reordered or filtered. */
-      id?: string;
-      component: typeof IGRPDataTableDropdownMenuLink;
-      props: IGRPDataTableDropdownMenuLinkProps;
+      id?: string
+      component: typeof IGRPDataTableDropdownMenuLink
+      props: IGRPDataTableDropdownMenuLinkProps
     }
   | {
-      id?: string;
-      component: typeof IGRPDataTableDropdownMenuAlert;
-      props: IGRPDataTableDropdownMenuDialogProps;
+      id?: string
+      component: typeof IGRPDataTableDropdownMenuAlert
+      props: IGRPDataTableDropdownMenuDialogProps
     }
   | {
-      id?: string;
-      component: typeof IGRPDataTableDropdownMenuCustom;
-      props: IGRPDataTableDropdownMenuDialogProps;
-    };
+      id?: string
+      component: typeof IGRPDataTableDropdownMenuCustom
+      props: IGRPDataTableDropdownMenuDialogProps
+    }
 
 type IGRPDataTableDropdownMenuProps = {
-  items: IGRPDataTableActionDropdown[];
-  iconName?: IGRPIconName | string;
-};
+  items: IGRPDataTableActionDropdown[]
+  iconName?: IGRPIconName | string
+}
 
-function IGRPDataTableDropdownMenu({
-  items,
-  iconName = 'Ellipsis',
-}: IGRPDataTableDropdownMenuProps) {
+function IGRPDataTableDropdownMenu({ items, iconName = "Ellipsis" }: IGRPDataTableDropdownMenuProps) {
   return (
     <DropdownMenu>
-      <DropdownMenuTrigger
-        className={cn('flex items-center justify-center')}
-        aria-label="Open actions"
-      >
-        <IGRPIcon iconName={iconName} className={cn('shadow-none')} />
+      <DropdownMenuTrigger className={cn("flex items-center justify-center")} aria-label="Open actions">
+        <IGRPIcon iconName={iconName} className={cn("shadow-none")} />
       </DropdownMenuTrigger>
       <DropdownMenuContent align="end">
         {items.map((item, index) => {
-          const { component: Component, props } = item;
+          const { component: Component, props } = item
           const key =
             item.id ??
             props.labelTrigger ??
-            ('href' in props ? props.href : undefined) ??
-            ('modalTitle' in props ? props.modalTitle : undefined) ??
-            `action-${index}`;
-          return <Component key={key} {...props} />;
+            ("href" in props ? props.href : undefined) ??
+            ("modalTitle" in props ? props.modalTitle : undefined) ??
+            `action-${index}`
+          return <Component key={key} {...props} />
         })}
       </DropdownMenuContent>
     </DropdownMenu>
-  );
+  )
 }
 
 export {
@@ -310,4 +298,4 @@ export {
   IGRPDataTableDropdownMenuCustom,
   IGRPDataTableDropdownMenuLink,
   IGRPDataTableDropdownMenu,
-};
+}

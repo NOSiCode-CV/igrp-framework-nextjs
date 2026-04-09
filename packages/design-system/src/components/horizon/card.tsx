@@ -1,4 +1,4 @@
-import { useId } from 'react';
+import { useId } from "react"
 
 import {
   Card,
@@ -8,8 +8,8 @@ import {
   CardFooter as IGRPCardFooter,
   CardHeader as IGRPCardHeader,
   CardTitle as IGRPCardTitle,
-} from '../primitives/card';
-import { cn } from '../../lib/utils';
+} from "../primitives/card"
+import { cn } from "../../lib/utils"
 
 /**
  * Props for the IGRPCard component.
@@ -17,7 +17,7 @@ import { cn } from '../../lib/utils';
  */
 interface CardProps {
   /** HTML name attribute. */
-  name?: string;
+  name?: string
 }
 
 /** IGRPCard props extending the primitive Card. */
@@ -28,18 +28,10 @@ interface IGRPCardProps extends React.ComponentProps<typeof Card>, CardProps {}
  * Use IGRPCardHeader, IGRPCardTitle, IGRPCardContent, IGRPCardFooter for structure.
  */
 function IGRPCard({ className, id, name, ...props }: IGRPCardProps) {
-  const _id = useId();
-  const ref = name ?? id ?? _id;
+  const _id = useId()
+  const ref = name ?? id ?? _id
 
-  return <Card className={cn(className)} id={ref} {...props} />;
+  return <Card className={cn(className)} id={ref} {...props} />
 }
 
-export {
-  IGRPCard,
-  IGRPCardHeader,
-  IGRPCardTitle,
-  IGRPCardDescription,
-  IGRPCardAction,
-  IGRPCardContent,
-  IGRPCardFooter,
-};
+export { IGRPCard, IGRPCardHeader, IGRPCardTitle, IGRPCardDescription, IGRPCardAction, IGRPCardContent, IGRPCardFooter }

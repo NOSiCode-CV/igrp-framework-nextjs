@@ -1,7 +1,7 @@
-import { useId } from 'react';
+import { useId } from "react"
 
-import { Avatar, AvatarImage, AvatarFallback } from '../primitives/avatar';
-import { cn } from '../../lib/utils';
+import { Avatar, AvatarImage, AvatarFallback } from "../primitives/avatar"
+import { cn } from "../../lib/utils"
 
 /**
  * Props for the IGRPUserAvatar component.
@@ -9,43 +9,35 @@ import { cn } from '../../lib/utils';
  */
 interface IGRPUserAvatarProps {
   /** Image URL for the avatar. */
-  image?: string | null;
+  image?: string | null
   /** Alt text for the image. */
-  alt?: string;
+  alt?: string
   /** Content shown when image fails to load (e.g. initials). */
-  fallbackContent: React.ReactNode;
+  fallbackContent: React.ReactNode
   /** Additional CSS classes for the avatar container. */
-  className?: string;
+  className?: string
   /** CSS classes for the fallback element. */
-  fallbackClass?: string;
+  fallbackClass?: string
   /** HTML name attribute. */
-  name?: string;
+  name?: string
   /** HTML id attribute. */
-  id?: string;
+  id?: string
 }
 
 /**
  * User avatar with image and fallback content.
  * Renders an image when available, otherwise shows fallbackContent.
  */
-function IGRPUserAvatar({
-  image,
-  alt,
-  fallbackContent,
-  className,
-  fallbackClass,
-  name,
-  id,
-}: IGRPUserAvatarProps) {
-  const _id = useId();
-  const ref = name ?? id ?? _id;
+function IGRPUserAvatar({ image, alt, fallbackContent, className, fallbackClass, name, id }: IGRPUserAvatarProps) {
+  const _id = useId()
+  const ref = name ?? id ?? _id
 
   return (
     <Avatar className={cn(className)} id={ref}>
-      <AvatarImage src={image || undefined} alt={alt || 'Current User'} />
+      <AvatarImage src={image || undefined} alt={alt || "Current User"} />
       <AvatarFallback className={cn(fallbackClass)}>{fallbackContent}</AvatarFallback>
     </Avatar>
-  );
+  )
 }
 
-export { IGRPUserAvatar, type IGRPUserAvatarProps };
+export { IGRPUserAvatar, type IGRPUserAvatarProps }

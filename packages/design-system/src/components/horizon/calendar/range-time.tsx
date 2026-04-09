@@ -1,13 +1,13 @@
-'use client';
+"use client"
 
-import { useId, useState } from 'react';
+import { useId, useState } from "react"
 
-import { Input } from '../../primitives/input';
-import { Label } from '../../primitives/label';
-import type { IGRPCalendarTimeProps } from '../../../types';
-import { IGRPCalendarRange, type IGRPCalendarRangeProps } from './range';
-import { DEFAULT_HIDE_TIME_INDICATOR } from '../../../lib/constants';
-import { cn } from '../../../lib/utils';
+import { Input } from "../../primitives/input"
+import { Label } from "../../primitives/label"
+import type { IGRPCalendarTimeProps } from "../../../types"
+import { IGRPCalendarRange, type IGRPCalendarRangeProps } from "./range"
+import { DEFAULT_HIDE_TIME_INDICATOR } from "../../../lib/constants"
+import { cn } from "../../../lib/utils"
 
 /**
  * Props for the IGRPCalendarRangeTime component.
@@ -25,40 +25,40 @@ function IGRPCalendarRangeTime({
   hideEndTimePicker = false,
   startTimePlaceholder,
   endTimePlaceholder,
-  startTimeLabel = 'Data Início',
-  endTimeLabel = 'Data Fim',
+  startTimeLabel = "Data Início",
+  endTimeLabel = "Data Fim",
   showTimeIndicator = false,
   name,
   id,
   ...props
 }: IGRPCalendarRangeTimeProps) {
-  const _id = useId();
-  const ref = name ?? id ?? _id;
+  const _id = useId()
+  const ref = name ?? id ?? _id
 
-  const [startTime, setStartTime] = useState<string>('');
-  const [endTime, setEndTime] = useState<string>('');
+  const [startTime, setStartTime] = useState<string>("")
+  const [endTime, setEndTime] = useState<string>("")
 
-  const classHide = showTimeIndicator ? DEFAULT_HIDE_TIME_INDICATOR : '';
+  const classHide = showTimeIndicator ? DEFAULT_HIDE_TIME_INDICATOR : ""
 
   const handleStartTimeChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const value = e.target.value;
-    setStartTime(value);
-    onStartTime?.(value || undefined);
-  };
+    const value = e.target.value
+    setStartTime(value)
+    onStartTime?.(value || undefined)
+  }
 
   const handleEndTimeChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const value = e.target.value;
-    setEndTime(value);
-    onEndTime?.(value || undefined);
-  };
+    const value = e.target.value
+    setEndTime(value)
+    onEndTime?.(value || undefined)
+  }
 
   return (
     <div id={ref}>
-      <div className={cn('space-y-4')}>
+      <div className={cn("space-y-4")}>
         <IGRPCalendarRange id={ref} {...props} />
 
-        <div className={cn('space-y-4 pt-4 border-t')}>
-          <div className={cn('space-y-2')}>
+        <div className={cn("space-y-4 pt-4 border-t")}>
+          <div className={cn("space-y-2")}>
             <Label htmlFor={`${ref}-start-time`}>{startTimeLabel}</Label>
             <Input
               id={`${ref}-start-time`}
@@ -72,7 +72,7 @@ function IGRPCalendarRangeTime({
           </div>
 
           {!hideEndTimePicker && (
-            <div className={cn('space-y-2')}>
+            <div className={cn("space-y-2")}>
               <Label htmlFor={`${ref}-end-time`}>{endTimeLabel}</Label>
               <Input
                 id={`${ref}-end-time`}
@@ -88,7 +88,7 @@ function IGRPCalendarRangeTime({
         </div>
       </div>
     </div>
-  );
+  )
 }
 
-export { IGRPCalendarRangeTime, type IGRPCalendarRangeTimeProps };
+export { IGRPCalendarRangeTime, type IGRPCalendarRangeTimeProps }

@@ -1,5 +1,6 @@
 import { type NextRequest, NextResponse } from "next/server";
 import { getToken } from "@igrp/framework-next-auth/jwt";
+import { isAuthDisabled } from "@igrp/framework-next-auth";
 
 import { AUTH_CONSTANTS } from "@/lib/constants";
 import { logger } from "@/lib/errors";
@@ -56,6 +57,9 @@ function loginRedirect(request: NextRequest) {
  */
 export async function middleware(request: NextRequest) {
   const { pathname } = request.nextUrl;
+
+  if (isAuthDisabled(process.env))
+    return withSecurityHeaders(NextResponse.next());
 
   if (isPreviewMode()) return withSecurityHeaders(NextResponse.next());
 

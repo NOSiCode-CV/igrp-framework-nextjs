@@ -10,7 +10,9 @@ export const authOptions: AuthOptions = {
   // Secure cookies in production (HTTPS only); allow HTTP in development
   useSecureCookies: process.env.NODE_ENV === "production",
 
-  providers: [createAuthProviderFromEnv(process.env)],
+  providers: [createAuthProviderFromEnv(process.env)].filter(
+    Boolean,
+  ) as AuthOptions["providers"],
 
   secret: process.env.NEXTAUTH_SECRET,
 

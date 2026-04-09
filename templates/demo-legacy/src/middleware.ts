@@ -1,5 +1,5 @@
 import { type NextRequest, NextResponse } from "next/server";
-import { getToken } from "@igrp/framework-next-auth";
+import { getToken, isAuthDisabled } from "@igrp/framework-next-auth";
 import { isPreviewMode } from "@/lib/utils";
 
 const PUBLIC_PATHS = ["/login", "/logout", "/api/auth"];
@@ -17,6 +17,8 @@ function isPublicPath(pathname: string) {
 
 export async function middleware(request: NextRequest) {
   const { pathname } = request.nextUrl;
+
+  if (isAuthDisabled(process.env)) return NextResponse.next();
 
   if (isPreviewMode()) return NextResponse.next();
 

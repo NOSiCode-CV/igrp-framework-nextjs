@@ -6,7 +6,9 @@ import {
 import { refreshAccessToken } from "./auth-helpers";
 
 export const authOptions: AuthOptions = {
-  providers: [createAuthProviderFromEnv(process.env)],
+  providers: [createAuthProviderFromEnv(process.env)].filter(
+    Boolean,
+  ) as AuthOptions["providers"],
 
   secret: process.env.NEXTAUTH_SECRET,
 

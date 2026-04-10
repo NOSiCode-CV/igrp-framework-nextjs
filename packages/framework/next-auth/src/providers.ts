@@ -3,10 +3,12 @@ import type { OAuthConfig, OAuthUserConfig } from 'next-auth/providers/oauth';
 
 export const KEYCLOAK_PROVIDER_ID = 'keycloak';
 export const AUTENTIKA_PROVIDER_ID = 'autentika';
+export const NONE_PROVIDER_ID = 'none';
 
 export const AUTH_PROVIDER_IDS = {
   KEYCLOAK: KEYCLOAK_PROVIDER_ID,
   AUTENTIKA: AUTENTIKA_PROVIDER_ID,
+  NONE: NONE_PROVIDER_ID,
 } as const;
 
 export type AuthProviderId = (typeof AUTH_PROVIDER_IDS)[keyof typeof AUTH_PROVIDER_IDS];
@@ -24,7 +26,7 @@ interface AutentikaProfile extends Record<string, unknown> {
 type AuthProviderDefinition = {
   requiredEnvKeys: readonly string[];
   getDiscoveryUrl: (env: AuthEnvironment) => string;
-  createProvider: (env: AuthEnvironment) => OAuthConfig<AutentikaProfile> | ReturnType<typeof KeycloakProvider>;
+  createProvider: (env: AuthEnvironment) => OAuthConfig<AutentikaProfile> | ReturnType<typeof KeycloakProvider> | null;
 };
 
 const DEFAULT_AUTH_PROVIDER_ID = KEYCLOAK_PROVIDER_ID;
@@ -119,6 +121,11 @@ const AUTH_PROVIDER_REGISTRY: Record<AuthProviderId, AuthProviderDefinition> = {
         scopes: env.AUTENTIKA_SCOPES,
       }),
   },
+  [NONE_PROVIDER_ID]: {
+    requiredEnvKeys: [],
+    getDiscoveryUrl: () => '',
+    createProvider: () => null,
+  },
 };
 
 export function getAuthProviderIdFromEnv(
@@ -177,4 +184,17 @@ export function getAuthProviderDiscoveryUrl(env: AuthEnvironment, providerId?: A
   assertAuthProviderEnv(env, definition.id);
 
   return definition.getDiscoveryUrl(env);
+}
+
+export function isAuthEnabled(env: AuthEnvironment): boolean {
+  try {
+    const providerId = getAuthProviderIdFromEnv(env);
+    return providerId !== NONE_PROVIDER_ID;
+  } catch {
+    return true;
+  }
+}
+
+export function isAuthDisabled(env: AuthEnvironment): boolean {
+  return !isAuthEnabled(env);
 }

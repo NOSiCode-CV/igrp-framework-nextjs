@@ -1,9 +1,9 @@
 import type { JWT } from './jwt';
-import type { AuthProviderId } from './providers';
 import {
   assertAuthProviderEnv,
   getAuthProviderDiscoveryUrl,
   getAuthProviderIdFromEnv,
+  type AuthProviderId,
 } from './providers';
 
 type AuthEnvironment = Record<string, string | undefined>;
@@ -43,7 +43,7 @@ function getProviderIdFromTokenOrEnv(token: JWT, env: AuthEnvironment): AuthProv
   return (token.authProviderId as AuthProviderId | undefined) ?? getAuthProviderIdFromEnv(env);
 }
 
-function getClientCredentials(env: AuthEnvironment, providerId: AuthProviderId) {
+function getClientCredentials(env: AuthEnvironment, providerId: Exclude<AuthProviderId, 'none'>) {
   const credentialKeys = {
     keycloak: {
       clientIdKey: 'KEYCLOAK_CLIENT_ID',
@@ -78,7 +78,7 @@ export async function refreshOidcAccessToken(token: JWT, env: AuthEnvironment) {
 
   const discoveryUrl = getAuthProviderDiscoveryUrl(env, providerId);
   const openIdConfiguration = await getOpenIdConfiguration(discoveryUrl);
-  const { clientId, clientSecret } = getClientCredentials(env, providerId);
+  const { clientId, clientSecret } = getClientCredentials(env, providerId as Exclude<AuthProviderId, 'none'>);
 
   const response = await fetch(openIdConfiguration.token_endpoint, {
     method: 'POST',
@@ -132,7 +132,7 @@ export async function revokeOidcSession(token: JWT, env: AuthEnvironment) {
     return;
   }
 
-  const { clientId, clientSecret } = getClientCredentials(env, providerId);
+  const { clientId, clientSecret } = getClientCredentials(env, providerId as Exclude<AuthProviderId, 'none'>);
 
   await fetch(revocationEndpoint, {
     method: 'POST',

@@ -53,20 +53,9 @@ function getClientCredentials(env: AuthEnvironment, providerId: Exclude<AuthProv
       clientIdKey: 'AUTENTIKA_CLIENT_ID',
       clientSecretKey: 'AUTENTIKA_CLIENT_SECRET',
     },
-    none: {
-      clientIdKey: '',
-      clientSecretKey: ''
-    }
   } as const;
 
   const { clientIdKey, clientSecretKey } = credentialKeys[providerId];
-
-  if (clientIdKey === '') {
-    return {
-      clientId: '',
-      clientSecret: ''
-    }
-  }
 
   return {
     clientId: env[clientIdKey]!,
@@ -90,8 +79,6 @@ export async function refreshOidcAccessToken(token: JWT, env: AuthEnvironment) {
   const discoveryUrl = getAuthProviderDiscoveryUrl(env, providerId);
   const openIdConfiguration = await getOpenIdConfiguration(discoveryUrl);
   const { clientId, clientSecret } = getClientCredentials(env, providerId as Exclude<AuthProviderId, 'none'>);
-
-  if (clientId === '' || clientSecret === '') return;
 
   const response = await fetch(openIdConfiguration.token_endpoint, {
     method: 'POST',
@@ -146,8 +133,6 @@ export async function revokeOidcSession(token: JWT, env: AuthEnvironment) {
   }
 
   const { clientId, clientSecret } = getClientCredentials(env, providerId as Exclude<AuthProviderId, 'none'>);
-
-  if (clientId === '' || clientSecret === '') return;
 
   await fetch(revocationEndpoint, {
     method: 'POST',

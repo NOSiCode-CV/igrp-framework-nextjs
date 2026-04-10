@@ -61,6 +61,13 @@ function getClientCredentials(env: AuthEnvironment, providerId: AuthProviderId) 
 
   const { clientIdKey, clientSecretKey } = credentialKeys[providerId];
 
+  if (clientIdKey === '') {
+    return {
+      clientId: '',
+      clientSecret: ''
+    }
+  }
+
   return {
     clientId: env[clientIdKey]!,
     clientSecret: env[clientSecretKey]!,

@@ -74,7 +74,6 @@ interface IGRPDataTableCellExpanderProps<TData> extends React.ComponentProps<typ
 /** Button to expand/collapse row details. */
 function IGRPDataTableCellExpander<TData>({ row, label }: IGRPDataTableCellExpanderProps<TData>) {
   if (!row.getCanExpand()) return null
-
   ;<Button
     {...{
       className: "shadow-none ",

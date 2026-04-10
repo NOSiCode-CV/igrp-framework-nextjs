@@ -1,55 +1,73 @@
 import { type NextRequest, NextResponse } from "next/server";
-import { getToken, isAuthDisabled } from "@igrp/framework-next-auth";
-import { isPreviewMode } from "@/lib/utils";
 
-const PUBLIC_PATHS = ["/login", "/logout", "/api/auth"];
+import { auth } from "@/lib/auth";
+
+/** Security headers applied to all responses in production. */
+const SECURITY_HEADERS: Record<string, string> = {
+  "X-Content-Type-Options": "nosniff",
+  "X-Frame-Options": "DENY",
+  "X-XSS-Protection": "1; mode=block",
+  "Referrer-Policy": "strict-origin-when-cross-origin",
+  "Permissions-Policy":
+    "camera=(), microphone=(), geolocation=(), interest-cohort=()",
+};
+
+function withSecurityHeaders(response: NextResponse): NextResponse {
+  if (process.env.NODE_ENV === "production") {
+    for (const [key, value] of Object.entries(SECURITY_HEADERS)) {
+      response.headers.set(key, value);
+    }
+  }
+  return response;
+}
+
+const PUBLIC_PATHS = new Set(["/login", "/logout", "/api/auth"]);
+const PUBLIC_PREFIXES = ["/login/", "/logout/", "/api/auth/"];
 const STATIC_PREFIXES = ["/_next/", "/static/", "/favicon.ico"];
 
-function isPublicPath(pathname: string) {
-  if (
-    PUBLIC_PATHS.some((p) => pathname === p || pathname.startsWith(`${p}/`))
-  ) {
-    return true;
-  }
+function isPublicPath(pathname: string): boolean {
+  if (PUBLIC_PATHS.has(pathname)) return true;
+  if (PUBLIC_PREFIXES.some((p) => pathname.startsWith(p))) return true;
   if (STATIC_PREFIXES.some((p) => pathname.startsWith(p))) return true;
   return false;
 }
 
+/**
+ * Next.js middleware: auth check + security headers.
+ *
+ * Flow:
+ * 1. Skip auth when disabled (AUTH_PROVIDER=none) or preview mode
+ * 2. Skip auth for public/static paths
+ * 3. Extract JWT — redirect to login on failure
+ * 4. Redirect to login when token expired or refresh failed
+ * 5. Apply security headers to all passing responses
+ */
 export async function middleware(request: NextRequest) {
   const { pathname } = request.nextUrl;
 
-  if (isAuthDisabled(process.env)) return NextResponse.next();
+  if (auth.isAuthDisabled()) return withSecurityHeaders(NextResponse.next());
+  if (auth.isPreviewMode()) return withSecurityHeaders(NextResponse.next());
+  if (isPublicPath(pathname)) return withSecurityHeaders(NextResponse.next());
 
-  if (isPreviewMode()) return NextResponse.next();
-
-  if (isPublicPath(pathname)) return NextResponse.next();
-
-  const token = await getToken({ req: request });
-
-  if (!token) {
-    return NextResponse.redirect(
-      new URL("/login", process.env.NEXTAUTH_URL_INTERNAL ?? request.url),
+  const loginRedirect = () =>
+    withSecurityHeaders(
+      NextResponse.redirect(auth.getLoginRedirectUrl(request)),
     );
+
+  let token: Awaited<ReturnType<typeof auth.getTokenFromRequest>>;
+  try {
+    token = await auth.getTokenFromRequest(request);
+  } catch (error) {
+    console.error("[Middleware] getToken failed", error, { pathname });
+    return loginRedirect();
   }
 
-  const expiresAt =
-    typeof token.expiresAt === "number" ? token.expiresAt : undefined;
-  const isExpired = expiresAt !== undefined && expiresAt <= Date.now() + 60_000;
-
-  if (
-    isExpired ||
-    token.error === "RefreshAccessTokenError" ||
-    token.error === "invalid_grant"
-  ) {
-    return NextResponse.redirect(
-      new URL("/login", process.env.NEXTAUTH_URL_INTERNAL ?? request.url),
-    );
+  if (!token || auth.isTokenExpiredOrFailed(token)) {
+    return loginRedirect();
   }
 
-  return NextResponse.next();
+  return withSecurityHeaders(NextResponse.next());
 }
 
-// additional paths for apps, is used as subdomains
-export const config = {
-  matcher: ["/", "/((?!api|apps|health|_next|favicon.ico|.*\\..*).*)"],
-};
+// Matcher: page routes only (legacy template)
+export const { config } = auth;

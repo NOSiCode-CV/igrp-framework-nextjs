@@ -5,7 +5,7 @@ import { IGRPAuthForm } from "@igrp/framework-next-ui";
 
 import { carouselItems, loginConfig } from "@/config/login";
 import { siteConfig } from "@/config/site";
-import { sanitizeRedirectUrl } from "@/lib/sanitize";
+import { sanitizeRedirectUrl } from "@igrp/framework-next-auth/sanitize";
 import { cn } from "@/lib/utils";
 
 const IGRPAuthCarousel = dynamic(

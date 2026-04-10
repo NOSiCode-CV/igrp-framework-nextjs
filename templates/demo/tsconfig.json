@@ -32,7 +32,7 @@
     "**/*.tsx",
     "next.config.ts",
     ".next/types/**/*.ts",
-    "types/next-auth.d.ts"
+    "node_modules/@igrp/framework-next-auth/dist/types.d.ts"
   ],
   "exclude": ["node_modules"]
 }

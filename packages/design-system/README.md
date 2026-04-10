@@ -144,7 +144,6 @@ Dark mode is controlled by the `.dark` class on a parent element (e.g. `<html>`)
 
 ```tsx
 import { ThemeProvider } from "next-themes"
-
 ;<ThemeProvider attribute="class" defaultTheme="system">
   {children}
 </ThemeProvider>

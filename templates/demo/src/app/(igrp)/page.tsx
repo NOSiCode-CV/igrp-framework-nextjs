@@ -2,7 +2,7 @@ import type { ReactNode } from "react";
 import { Route } from "next";
 import { redirect } from "next/navigation";
 
-import { sanitizePath } from "@/lib/sanitize";
+import { sanitizePath } from "@igrp/framework-next-auth/sanitize";
 
 /**
  * Home page: renders template title or redirects to IGRP_APP_HOME_SLUG.

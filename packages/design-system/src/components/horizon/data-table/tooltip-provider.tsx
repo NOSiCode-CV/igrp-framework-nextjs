@@ -1,9 +1,9 @@
-import { createContext, type ReactNode } from 'react';
+import { createContext, type ReactNode } from "react"
 
-import { TooltipProvider } from '../../primitives/tooltip';
+import { TooltipProvider } from "../../primitives/tooltip"
 
 /** @internal Context indicating tooltip provider is present. */
-const IGRPDataTableTooltipContext = createContext(false);
+const IGRPDataTableTooltipContext = createContext(false)
 
 /**
  * Wraps data table row actions with TooltipProvider for consistent tooltip behavior.
@@ -14,15 +14,15 @@ function IGRPDataTableTooltipProvider({
   delayDuration = 200,
 }: {
   /** Child content (e.g. row actions). */
-  children: ReactNode;
+  children: ReactNode
   /** Tooltip delay in ms. */
-  delayDuration?: number;
+  delayDuration?: number
 }) {
   return (
     <IGRPDataTableTooltipContext.Provider value>
       <TooltipProvider delayDuration={delayDuration}>{children}</TooltipProvider>
     </IGRPDataTableTooltipContext.Provider>
-  );
+  )
 }
 
-export { IGRPDataTableTooltipContext, IGRPDataTableTooltipProvider };
+export { IGRPDataTableTooltipContext, IGRPDataTableTooltipProvider }

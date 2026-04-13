@@ -8,6 +8,7 @@ declare global {
       NODE_ENV?: "development" | "production" | "test";
 
       // NextAuth
+      AUTH_PROVIDER?: "keycloak" | "autentika";
       NEXTAUTH_SECRET?: string;
       NEXTAUTH_URL?: string;
       NEXTAUTH_URL_INTERNAL?: string;
@@ -16,6 +17,13 @@ declare global {
       KEYCLOAK_CLIENT_ID?: string;
       KEYCLOAK_CLIENT_SECRET?: string;
       KEYCLOAK_ISSUER?: string;
+
+      // Autentika
+      AUTENTIKA_CLIENT_ID?: string;
+      AUTENTIKA_CLIENT_SECRET?: string;
+      AUTENTIKA_HOST?: string;
+      AUTENTIKA_TENANT_NAME?: string;
+      AUTENTIKA_SCOPES?: string;
 
       // IGRP
       IGRP_ACCESS_MANAGEMENT_API?: string;

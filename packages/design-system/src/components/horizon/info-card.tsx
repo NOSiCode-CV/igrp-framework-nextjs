@@ -1,12 +1,12 @@
-'use client';
+"use client"
 
-import { Fragment, useId } from 'react';
+import { Fragment, useId } from "react"
 
-import { IGRPColors, type IGRPColorRole, type IGRPColorVariants } from '../../lib/colors';
-import { cn } from '../../lib/utils';
-import { Card, CardContent, CardHeader, CardTitle } from '../primitives/card';
-import { Separator } from '../primitives/separator';
-import { IGRPIcon, type IGRPIconName } from './icon';
+import { IGRPColors, type IGRPColorRole, type IGRPColorVariants } from "../../lib/colors"
+import { cn } from "../../lib/utils"
+import { Card, CardContent, CardHeader, CardTitle } from "../primitives/card"
+import { Separator } from "../primitives/separator"
+import { IGRPIcon, type IGRPIconName } from "./icon"
 
 /**
  * Single info field (label + value).
@@ -14,19 +14,19 @@ import { IGRPIcon, type IGRPIconName } from './icon';
  */
 interface IGRPInfoItem {
   /** Field label. */
-  label: string;
+  label: string
   /** Field value. */
-  text: string;
+  text: string
   /** Icon name. */
-  icon?: IGRPIconName | string;
+  icon?: IGRPIconName | string
   /** CSS classes for the icon. */
-  iconClassName?: string;
+  iconClassName?: string
   /** Whether to show the icon. */
-  showIcon?: boolean;
+  showIcon?: boolean
   /** Color variant for the item. */
-  variantItem?: IGRPColorRole;
+  variantItem?: IGRPColorRole
   /** Color theme for the item. */
-  colorItem?: IGRPColorVariants;
+  colorItem?: IGRPColorVariants
 }
 
 /**
@@ -35,7 +35,7 @@ interface IGRPInfoItem {
  */
 interface IGRPInfoSection {
   /** Items in this section. */
-  items: IGRPInfoItem[];
+  items: IGRPInfoItem[]
 }
 
 /**
@@ -44,23 +44,23 @@ interface IGRPInfoSection {
  */
 interface IGRPInfoCardProps {
   /** Card title. */
-  title?: string;
+  title?: string
   /** CSS classes for the title. */
-  titleClassName?: string;
+  titleClassName?: string
   /** Additional CSS classes. */
-  className?: string;
+  className?: string
   /** CSS classes for the content area. */
-  contentClassName?: string;
+  contentClassName?: string
   /** Sections of info items. */
-  sections: IGRPInfoSection[];
+  sections: IGRPInfoSection[]
   /** Color variant for sections. */
-  variantSection?: IGRPColorRole;
+  variantSection?: IGRPColorRole
   /** Color theme for sections. */
-  colorSection?: IGRPColorVariants;
+  colorSection?: IGRPColorVariants
   /** Layout orientation. */
-  orientation?: 'horizontal' | 'vertical';
+  orientation?: "horizontal" | "vertical"
   /** HTML id attribute. */
-  id?: string;
+  id?: string
 }
 
 /**
@@ -72,26 +72,24 @@ function IGRPInfoCard({
   className,
   contentClassName,
   sections,
-  variantSection = 'outline',
-  colorSection = 'primary',
+  variantSection = "outline",
+  colorSection = "primary",
   // orientation = 'vertical',
   id,
 }: IGRPInfoCardProps) {
-  const _id = useId();
-  const ref = id ?? _id;
+  const _id = useId()
+  const ref = id ?? _id
 
-  const infoCardClass = IGRPColors[variantSection][colorSection];
+  const infoCardClass = IGRPColors[variantSection][colorSection]
 
   return (
     <Card className={cn(infoCardClass.bg, className)} id={ref}>
       <CardHeader>
-        <CardTitle
-          className={cn('text-2xl font-semibold leading-none tracking-tight', titleClassName)}
-        >
+        <CardTitle className={cn("text-2xl font-semibold leading-none tracking-tight", titleClassName)}>
           {title}
         </CardTitle>
       </CardHeader>
-      <CardContent className={cn('flex flex-col gap-4', contentClassName)}>
+      <CardContent className={cn("flex flex-col gap-4", contentClassName)}>
         {sections.map((section, sectionIndex) => (
           <Fragment key={sectionIndex}>
             {section.items.map((item, itemIndex) => (
@@ -102,7 +100,7 @@ function IGRPInfoCard({
         ))}
       </CardContent>
     </Card>
-  );
+  )
 }
 
 /**
@@ -110,7 +108,7 @@ function IGRPInfoCard({
  */
 interface IGRPInfoFieldProps {
   /** Info item to render. */
-  item: IGRPInfoItem;
+  item: IGRPInfoItem
 }
 
 /** Renders a single info field (label + value). */
@@ -118,18 +116,18 @@ function IGRPInfoField({ item }: IGRPInfoFieldProps) {
   // const colorClass = IGRPColors[item.variantItem || 'solid'][item.colorItem || 'primary'];
 
   return (
-    <div className={cn('flex flex-col gap-0.5' /*, colorClass.text*/)}>
-      <span className={cn('text-sm font-medium')}>{item.label}</span>
-      <div className={cn('flex items-center gap-2')}>
+    <div className={cn("flex flex-col gap-0.5" /*, colorClass.text*/)}>
+      <span className={cn("text-sm font-medium")}>{item.label}</span>
+      <div className={cn("flex items-center gap-2")}>
         {item.showIcon && item.icon && (
-          <div className={cn('flex items-center gap-2')}>
+          <div className={cn("flex items-center gap-2")}>
             <IGRPIcon iconName={item.icon} className={cn(item.iconClassName)} />
           </div>
         )}
         <span>{item.text}</span>
       </div>
     </div>
-  );
+  )
 }
 
-export { IGRPInfoCard, type IGRPInfoCardProps, type IGRPInfoItem, type IGRPInfoSection };
+export { IGRPInfoCard, type IGRPInfoCardProps, type IGRPInfoItem, type IGRPInfoSection }

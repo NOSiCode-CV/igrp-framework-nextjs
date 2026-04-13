@@ -1,6 +1,6 @@
-'use no memo';
+"use no memo"
 
-import { type Table } from '@tanstack/react-table';
+import { type Table } from "@tanstack/react-table"
 
 import {
   DropdownMenu,
@@ -8,9 +8,9 @@ import {
   DropdownMenuContent,
   DropdownMenuLabel,
   DropdownMenuTrigger,
-} from '../../primitives/dropdown-menu';
-import { cn } from '../../../lib/utils';
-import { IGRPButton } from '../button';
+} from "../../primitives/dropdown-menu"
+import { cn } from "../../../lib/utils"
+import { IGRPButton } from "../button"
 
 /**
  * Props for the IGRPDataTableToggleVisibility component.
@@ -18,12 +18,12 @@ import { IGRPButton } from '../button';
  */
 type IGRPDataTableVisibilityProps<TData> = {
   /** TanStack Table instance. */
-  table: Table<TData>;
+  table: Table<TData>
   /** Button label. */
-  label?: string;
+  label?: string
   /** Dropdown header label. */
-  optionsLabel?: string;
-};
+  optionsLabel?: string
+}
 
 /**
  * Dropdown to toggle column visibility in a data table.
@@ -31,8 +31,8 @@ type IGRPDataTableVisibilityProps<TData> = {
  */
 function IGRPDataTableToggleVisibility<TData>({
   table,
-  label = 'View',
-  optionsLabel = 'Toggle columns',
+  label = "View",
+  optionsLabel = "Toggle columns",
 }: IGRPDataTableVisibilityProps<TData>) {
   return (
     <DropdownMenu>
@@ -50,18 +50,18 @@ function IGRPDataTableToggleVisibility<TData>({
             return (
               <DropdownMenuCheckboxItem
                 key={column.id}
-                className={cn('capitalize')}
+                className={cn("capitalize")}
                 checked={column.getIsVisible()}
                 onCheckedChange={(value) => column.toggleVisibility(!!value)}
                 onSelect={(e) => e.preventDefault()}
               >
                 {column.id}
               </DropdownMenuCheckboxItem>
-            );
+            )
           })}
       </DropdownMenuContent>
     </DropdownMenu>
-  );
+  )
 }
 
-export { IGRPDataTableToggleVisibility, type IGRPDataTableVisibilityProps };
+export { IGRPDataTableToggleVisibility, type IGRPDataTableVisibilityProps }

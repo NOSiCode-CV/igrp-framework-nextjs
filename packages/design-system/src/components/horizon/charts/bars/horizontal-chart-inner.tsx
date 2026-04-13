@@ -1,15 +1,15 @@
-'use client';
+"use client"
 
-import { Bar, BarChart, CartesianGrid, Legend, XAxis, YAxis, ReferenceLine } from 'recharts';
+import { Bar, BarChart, CartesianGrid, Legend, XAxis, YAxis, ReferenceLine } from "recharts"
 
-import { cn } from '../../../../lib/utils';
+import { cn } from "../../../../lib/utils"
 import {
   ChartContainer,
   ChartTooltip,
   ChartTooltipContent,
   ChartLegend,
   ChartLegendContent,
-} from '../../../primitives/chart';
+} from "../../../primitives/chart"
 import {
   formatChartValue,
   getChartHeight,
@@ -19,11 +19,11 @@ import {
   getLegendHorizontalAlign,
   hasNegativeValues,
   createChartConfig,
-} from '../lib';
-import type { IGRPBarConfig, IGRPChartProps } from '../types';
+} from "../lib"
+import type { IGRPBarConfig, IGRPChartProps } from "../types"
 
 function defaultLabelFormatter(value: unknown): string {
-  return typeof value === 'string' ? value : String(value);
+  return typeof value === "string" ? value : String(value)
 }
 
 /**
@@ -32,15 +32,15 @@ function defaultLabelFormatter(value: unknown): string {
  */
 export interface IGRPHorizontalBarChartProps extends IGRPChartProps {
   /** Bar series configurations. */
-  bars: IGRPBarConfig[];
+  bars: IGRPBarConfig[]
   /** Bar corner radius. */
-  barRadius?: number;
+  barRadius?: number
   /** Gap between bars in same category. */
-  barGap?: number;
+  barGap?: number
   /** Gap between categories. */
-  barCategoryGap?: string | number;
+  barCategoryGap?: string | number
   /** Show X axis (values). */
-  showXAxis?: boolean;
+  showXAxis?: boolean
 }
 
 /**
@@ -54,7 +54,7 @@ function IGRPHorizontalBarChartInner({
   title,
   description,
   showGrid = false,
-  legendPosition = 'none',
+  legendPosition = "none",
   customLegend,
   showTooltip = true,
   showXAxis = false,
@@ -63,7 +63,7 @@ function IGRPHorizontalBarChartInner({
   hideYAxis = false,
   showReferenceZero = false,
   valueDomain,
-  size = 'md',
+  size = "md",
   height,
   width,
   stacked = false,
@@ -72,54 +72,49 @@ function IGRPHorizontalBarChartInner({
   labelFormatter = defaultLabelFormatter,
   barRadius = 5,
   barGap = 8,
-  barCategoryGap = '30%',
-  gridColor = '#e5e7eb',
+  barCategoryGap = "30%",
+  gridColor = "#e5e7eb",
   backgroundColor,
-  referenceLineColor = '#e5e7eb',
-  axisColor = '#d1d5db',
-  tooltipIndicator = 'line',
+  referenceLineColor = "#e5e7eb",
+  axisColor = "#d1d5db",
+  tooltipIndicator = "line",
   footer,
 }: IGRPHorizontalBarChartProps) {
-  const chartHeight = getChartHeight(size, data, height);
-  const chartWidth = getChartWidth(width);
-  const formatValue = (value: number) => formatChartValue(value, valueFormatter);
+  const chartHeight = getChartHeight(size, data, height)
+  const chartWidth = getChartWidth(width)
+  const formatValue = (value: number) => formatChartValue(value, valueFormatter)
   const hasNegativeDataValues = hasNegativeValues(
     data,
     bars.map((b) => b.dataKey),
-  );
-  const chartConfig = createChartConfig(bars);
+  )
+  const chartConfig = createChartConfig(bars)
 
   const getLeftMargin = () => {
     const maxLabelLength = Math.max(
       ...data.map((item) => {
-        const label = String(item[categoryKey]);
-        return label.length;
+        const label = String(item[categoryKey])
+        return label.length
       }),
-    );
+    )
 
-    return Math.max(maxLabelLength * 7, 80);
-  };
+    return Math.max(maxLabelLength * 7, 80)
+  }
 
   return (
     <div
-      className={`w-full overflow-hidden ${className || ''}`}
+      className={`w-full overflow-hidden ${className || ""}`}
       style={backgroundColor ? { backgroundColor } : undefined}
     >
       {(title || description) && (
-        <div className={cn('pb-3')}>
-          {title && <div className={cn('text-xl font-semibold')}>{title}</div>}
-          {description && (
-            <div className={cn('text-sm text-muted-foreground')}>{description}</div>
-          )}
+        <div className={cn("pb-3")}>
+          {title && <div className={cn("text-xl font-semibold")}>{title}</div>}
+          {description && <div className={cn("text-sm text-muted-foreground")}>{description}</div>}
         </div>
       )}
 
-      <div className={cn('overflow-hidden')}>
-        <div
-          style={{ height: chartHeight, width: chartWidth }}
-          className={cn('w-full overflow-hidden')}
-        >
-          <ChartContainer className={cn('h-full w-full')} config={chartConfig}>
+      <div className={cn("overflow-hidden")}>
+        <div style={{ height: chartHeight, width: chartWidth }} className={cn("w-full overflow-hidden")}>
+          <ChartContainer className={cn("h-full w-full")} config={chartConfig}>
             <BarChart
               accessibilityLayer
               layout="vertical"
@@ -129,20 +124,12 @@ function IGRPHorizontalBarChartInner({
               barGap={barGap}
             >
               {showGrid && (
-                <CartesianGrid
-                  strokeDasharray="3 3"
-                  stroke={gridColor}
-                  horizontal={false}
-                  vertical={true}
-                />
+                <CartesianGrid strokeDasharray="3 3" stroke={gridColor} horizontal={false} vertical={true} />
               )}
 
               <XAxis
                 type="number"
-                domain={
-                  valueDomain ||
-                  (hasNegativeDataValues ? ['auto', 'auto'] : [0, 'auto'])
-                }
+                domain={valueDomain || (hasNegativeDataValues ? ["auto", "auto"] : [0, "auto"])}
                 tickFormatter={formatValue}
                 hide={hideAxis || hideXAxis || !showXAxis}
                 stroke={axisColor}
@@ -163,18 +150,13 @@ function IGRPHorizontalBarChartInner({
                 stroke={axisColor}
               />
 
-              {showReferenceZero && hasNegativeDataValues && (
-                <ReferenceLine x={0} stroke={referenceLineColor} />
-              )}
+              {showReferenceZero && hasNegativeDataValues && <ReferenceLine x={0} stroke={referenceLineColor} />}
 
               {showTooltip && (
-                <ChartTooltip
-                  cursor={false}
-                  content={<ChartTooltipContent indicator={tooltipIndicator} />}
-                />
+                <ChartTooltip cursor={false} content={<ChartTooltipContent indicator={tooltipIndicator} />} />
               )}
 
-              {legendPosition !== 'none' && customLegend && (
+              {legendPosition !== "none" && customLegend && (
                 <Legend
                   verticalAlign={getLegendVerticalAlign(legendPosition)}
                   align={getLegendHorizontalAlign(legendPosition)}
@@ -183,12 +165,12 @@ function IGRPHorizontalBarChartInner({
                 />
               )}
 
-              {legendPosition !== 'none' && !customLegend && (
+              {legendPosition !== "none" && !customLegend && (
                 <ChartLegend
                   verticalAlign={getLegendVerticalAlign(legendPosition)}
                   align={getLegendHorizontalAlign(legendPosition)}
                   layout={getLegendLayout(legendPosition)}
-                  content={<ChartLegendContent className={cn('text-xs')} />}
+                  content={<ChartLegendContent className={cn("text-xs")} />}
                 />
               )}
 
@@ -198,7 +180,7 @@ function IGRPHorizontalBarChartInner({
                     key: bar.dataKey,
                     dataKey: bar.dataKey,
                     name: bar.name || bar.dataKey,
-                    stackId: stacked ? 'stack1' : undefined,
+                    stackId: stacked ? "stack1" : undefined,
                     fill: `var(--color-${bar.dataKey})`,
                     radius: barRadius,
                   })
@@ -207,7 +189,7 @@ function IGRPHorizontalBarChartInner({
                     key={bar.dataKey}
                     dataKey={bar.dataKey}
                     name={bar.name || bar.dataKey}
-                    stackId={stacked ? 'stack1' : undefined}
+                    stackId={stacked ? "stack1" : undefined}
                     fill={`var(--color-${bar.dataKey})`}
                     radius={barRadius}
                   />
@@ -219,16 +201,12 @@ function IGRPHorizontalBarChartInner({
       </div>
 
       {footer && (
-        <div className={cn('flex-col items-start gap-2 text-sm pt-4')}>
-          {footer.description && (
-            <div className={cn('leading-none text-muted-foreground')}>
-              {footer.description}
-            </div>
-          )}
+        <div className={cn("flex-col items-start gap-2 text-sm pt-4")}>
+          {footer.description && <div className={cn("leading-none text-muted-foreground")}>{footer.description}</div>}
         </div>
       )}
     </div>
-  );
+  )
 }
 
-export default IGRPHorizontalBarChartInner;
+export default IGRPHorizontalBarChartInner

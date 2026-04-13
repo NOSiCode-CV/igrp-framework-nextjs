@@ -1,26 +1,24 @@
-'use client';
+"use client"
 
-import { useId } from 'react';
-import { useFormContext } from 'react-hook-form';
+import { useId } from "react"
+import { useFormContext } from "react-hook-form"
 
-import { cn } from '../../../lib/utils';
-import type { IGRPInputProps } from '../../../types';
-import { Checkbox } from '../../primitives/checkbox';
-import { IGRPFormField } from '../form/form-field';
-import { IGRPLabel } from '../label';
+import { cn } from "../../../lib/utils"
+import type { IGRPInputProps } from "../../../types"
+import { Checkbox } from "../../primitives/checkbox"
+import { IGRPFormField } from "../form/form-field"
+import { IGRPLabel } from "../label"
 
 /**
  * Props for the IGRPCheckbox component.
  * @see IGRPCheckbox
  */
 interface IGRPCheckboxProps
-  extends
-    React.ComponentProps<typeof Checkbox>,
-    Pick<IGRPInputProps, 'helperText' | 'label'> {
+  extends React.ComponentProps<typeof Checkbox>, Pick<IGRPInputProps, "helperText" | "label"> {
   /** CSS classes for the label. */
-  labelClassName?: string;
+  labelClassName?: string
   /** Validation error message. */
-  error?: string;
+  error?: string
 }
 
 /**
@@ -38,22 +36,19 @@ function IGRPCheckbox({
   onCheckedChange,
   ...props
 }: IGRPCheckboxProps) {
-  const _id = useId();
-  const fieldName = name ?? id ?? _id;
+  const _id = useId()
+  const fieldName = name ?? id ?? _id
 
-  const formContext = useFormContext();
+  const formContext = useFormContext()
 
   if (!formContext) {
     return (
-      <div className={cn('*:not-first:mt-2')}>
-        <div className={cn('flex items-center gap-2')}>
+      <div className={cn("*:not-first:mt-2")}>
+        <div className={cn("flex items-center gap-2")}>
           <Checkbox
             id={fieldName}
             name={fieldName}
-            className={cn(
-              className,
-              error && 'border-destructive focus-visible:ring-destructive/20',
-            )}
+            className={cn(className, error && "border-destructive focus-visible:ring-destructive/20")}
             onCheckedChange={onCheckedChange}
             aria-invalid={!!error}
             aria-describedby={helperText || error ? `${fieldName}-helper` : undefined}
@@ -63,7 +58,7 @@ function IGRPCheckbox({
           {label && (
             <IGRPLabel
               label={label}
-              className={cn(labelClassName, error && 'text-destructive')}
+              className={cn(labelClassName, error && "text-destructive")}
               required={required}
               id={fieldName}
             />
@@ -73,7 +68,7 @@ function IGRPCheckbox({
         {helperText && !error && (
           <p
             id={`${fieldName}-helper`}
-            className={cn('text-muted-foreground mt-2 text-xs')}
+            className={cn("text-muted-foreground mt-2 text-xs")}
             role="region"
             aria-live="polite"
           >
@@ -82,12 +77,12 @@ function IGRPCheckbox({
         )}
 
         {error && (
-          <p id={`${fieldName}-error`} className={cn('text-destructive mt-2 text-xs')} role="alert">
+          <p id={`${fieldName}-error`} className={cn("text-destructive mt-2 text-xs")} role="alert">
             {error}
           </p>
         )}
       </div>
-    );
+    )
   }
 
   return (
@@ -104,15 +99,15 @@ function IGRPCheckbox({
         <Checkbox
           required={required}
           className={cn(
-            'bg-backsground',
-            (fieldState.error || error) && 'border-destructive focus-visible:ring-destructive/20',
+            "bg-backsground",
+            (fieldState.error || error) && "border-destructive focus-visible:ring-destructive/20",
             className,
           )}
           checked={field.value === true}
           onCheckedChange={(checked) => {
-            field.onChange(checked);
+            field.onChange(checked)
             if (onCheckedChange) {
-              onCheckedChange(checked);
+              onCheckedChange(checked)
             }
           }}
           onBlur={field.onBlur}
@@ -122,7 +117,7 @@ function IGRPCheckbox({
         />
       )}
     </IGRPFormField>
-  );
+  )
 }
 
-export { IGRPCheckbox, type IGRPCheckboxProps };
+export { IGRPCheckbox, type IGRPCheckboxProps }

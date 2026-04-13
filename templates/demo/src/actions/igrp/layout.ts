@@ -4,7 +4,7 @@ import { cache } from "react";
 import { cookies } from "next/headers";
 import type { Session } from "@igrp/framework-next-auth";
 import type { IGRPLayoutConfigArgs } from "@igrp/framework-next-types";
-import { getAccessToken } from "@/lib/auth-helpers";
+import { auth } from "@/lib/auth";
 import { AUTH_CONSTANTS } from "@/lib/constants";
 import { isPreviewMode } from "@/lib/utils";
 
@@ -48,7 +48,7 @@ export const configLayout = cache(async (): Promise<IGRPLayoutConfigArgs> => {
   const [sessionResult, themeResult] = await Promise.all([
     isPreviewMode()
       ? Promise.resolve(createPreviewSession())
-      : getAccessToken(),
+      : auth.getAccessToken(),
     getTheme(),
   ]);
   const session = sessionResult as Session | null;

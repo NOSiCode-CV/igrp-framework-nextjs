@@ -1,6 +1,6 @@
 {
   "name": "@igrp/framework-next",
-  "version": "0.1.0-beta.110",
+  "version": "0.1.0-beta.111-2",
   "description": "IGRP Framework for Next.js | Server Rendering components",
   "keywords": [
     "igrp",
@@ -24,17 +24,17 @@
     "build:types": "tsc --emitDeclarationOnly --outDir dist",
     "build:without_reactcompiler": "pnpm clean:dist && pnpm build:swc && pnpm build:types",
     "format": "prettier --write .",
-    "release": "pnpm build && yarn publish --registry=https://sonatype.nosi.cv/repository/igrp/ --tag latest",
+    "release": "pnpm build && yarn publish --registry=https://sonatype.nosi.cv/repository/igrp/ --tag next",
     "clean-all": "rimraf node_modules && rimraf dist && rimraf tsconfig.tsbuildinfo"
   },
   "peerDependencies": {},
   "dependencies": {
-    "next": "^15.5.14",
+    "next": "^15.5.15",
     "react": "^19.2.4",
     "react-dom": "19.2.4",
-    "@igrp/framework-next-auth": "workspace:*",
-    "@igrp/framework-next-types": "workspace:*",
-    "@igrp/framework-next-ui": "workspace:*",
+    "@igrp/framework-next-auth": "0.1.0-beta.111-2",
+    "@igrp/framework-next-types": "0.1.0-beta.111-2",
+    "@igrp/framework-next-ui": "0.1.0-beta.111-2",
     "@igrp/platform-access-management-client-ts": "0.1.0-beta.64"
   },
   "devDependencies": {

@@ -1,12 +1,12 @@
-'use client';
+"use client"
 
-import { useId, useState } from 'react';
-import type { DateRange } from 'react-day-picker';
+import { useId, useState } from "react"
+import type { DateRange } from "react-day-picker"
 
-import { getDisabledDays } from '../../../lib/calendar-utils';
-import { cn } from '../../../lib/utils';
-import type { IGRPCalendarProps } from '../../../types';
-import { Calendar } from '../../primitives/calendar';
+import { getDisabledDays } from "../../../lib/calendar-utils"
+import { cn } from "../../../lib/utils"
+import type { IGRPCalendarProps } from "../../../types"
+import { Calendar } from "../../primitives/calendar"
 
 /**
  * Props for the IGRPCalendarRange component.
@@ -14,10 +14,10 @@ import { Calendar } from '../../primitives/calendar';
  */
 type IGRPCalendarRangeProps = {
   /** Selected date range (from/to). */
-  date?: DateRange;
+  date?: DateRange
   /** Called when the selected range changes. */
-  onDateChange?: (date: DateRange | undefined) => void;
-} & Omit<IGRPCalendarProps, 'mode'>;
+  onDateChange?: (date: DateRange | undefined) => void
+} & Omit<IGRPCalendarProps, "mode">
 
 /**
  * Date range calendar picker.
@@ -34,12 +34,12 @@ function IGRPCalendarRange({
   disableDayOfWeek,
   ...props
 }: IGRPCalendarRangeProps) {
-  const _id = useId();
-  const ref = name ?? id ?? _id;
+  const _id = useId()
+  const ref = name ?? id ?? _id
 
-  const [range, setRange] = useState<DateRange | undefined>(undefined);
-  const selected = date ?? range;
-  const disabled = getDisabledDays({ disableBefore, disableAfter, disableDayOfWeek });
+  const [range, setRange] = useState<DateRange | undefined>(undefined)
+  const selected = date ?? range
+  const disabled = getDisabledDays({ disableBefore, disableAfter, disableDayOfWeek })
 
   return (
     <Calendar
@@ -49,13 +49,13 @@ function IGRPCalendarRange({
       defaultMonth={defaultMonth || selected?.from}
       selected={selected}
       onSelect={(selectedRange) => {
-        setRange(selectedRange);
-        onDateChange?.(selectedRange);
+        setRange(selectedRange)
+        onDateChange?.(selectedRange)
       }}
       disabled={disabled}
-      className={cn('rounded-lg border shadow-sm', className)}
+      className={cn("rounded-lg border shadow-sm", className)}
     />
-  );
+  )
 }
 
-export { IGRPCalendarRange, type IGRPCalendarRangeProps };
+export { IGRPCalendarRange, type IGRPCalendarRangeProps }

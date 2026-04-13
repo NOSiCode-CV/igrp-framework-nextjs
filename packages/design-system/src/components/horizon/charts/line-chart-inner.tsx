@@ -1,24 +1,15 @@
-'use client';
+"use client"
 
-import {
-  Line,
-  LineChart,
-  CartesianGrid,
-  Legend,
-  XAxis,
-  YAxis,
-  ReferenceLine,
-  LabelList,
-} from 'recharts';
-import { cn } from '../../../lib/utils';
+import { Line, LineChart, CartesianGrid, Legend, XAxis, YAxis, ReferenceLine, LabelList } from "recharts"
+import { cn } from "../../../lib/utils"
 import {
   ChartContainer,
   ChartTooltip,
   ChartTooltipContent,
   ChartLegend,
   ChartLegendContent,
-} from '../../primitives/chart';
-import type { IGRPChartProps, IGRPSeriesConfig } from './types';
+} from "../../primitives/chart"
+import type { IGRPChartProps, IGRPSeriesConfig } from "./types"
 import {
   createChartConfig,
   formatChartValue,
@@ -28,10 +19,10 @@ import {
   getLegendLayout,
   getLegendVerticalAlign,
   hasNegativeValues,
-} from './lib';
+} from "./lib"
 
 function defaultLabelFormatter(value: unknown): string {
-  return String(value ?? '');
+  return String(value ?? "")
 }
 
 /**
@@ -39,14 +30,14 @@ function defaultLabelFormatter(value: unknown): string {
  * @see IGRPLineChart
  */
 export interface LineConfig extends IGRPSeriesConfig {
-  type?: 'linear' | 'monotone' | 'step' | 'basis' | 'natural';
-  strokeWidth?: number;
-  strokeDasharray?: string;
-  dot?: boolean | object;
-  activeDot?: object;
-  showLabels?: boolean;
-  labelPosition?: 'top' | 'bottom' | 'right' | 'left' | 'center';
-  labelOffset?: number;
+  type?: "linear" | "monotone" | "step" | "basis" | "natural"
+  strokeWidth?: number
+  strokeDasharray?: string
+  dot?: boolean | object
+  activeDot?: object
+  showLabels?: boolean
+  labelPosition?: "top" | "bottom" | "right" | "left" | "center"
+  labelOffset?: number
 }
 
 /**
@@ -54,7 +45,7 @@ export interface LineConfig extends IGRPSeriesConfig {
  * @see IGRPLineChart
  */
 export interface IGRPLineChartProps extends IGRPChartProps {
-  lines: LineConfig[];
+  lines: LineConfig[]
 }
 
 /**
@@ -68,7 +59,7 @@ function IGRPLineChartInner({
   title,
   description,
   showGrid = false,
-  legendPosition = 'none',
+  legendPosition = "none",
   customLegend,
   showTooltip = true,
   hideAxis = false,
@@ -76,48 +67,43 @@ function IGRPLineChartInner({
   hideYAxis = false,
   showReferenceZero = false,
   valueDomain,
-  size = 'md',
+  size = "md",
   height,
   width,
   className,
   valueFormatter,
   labelFormatter = defaultLabelFormatter,
-  gridColor = '#e5e7eb',
+  gridColor = "#e5e7eb",
   backgroundColor,
-  referenceLineColor = '#e5e7eb',
-  axisColor = '#d1d5db',
-  tooltipIndicator = 'line',
+  referenceLineColor = "#e5e7eb",
+  axisColor = "#d1d5db",
+  tooltipIndicator = "line",
   footer,
 }: IGRPLineChartProps) {
-  const chartHeight = getChartHeight(size, data, height);
-  const chartWidth = getChartWidth(width);
-  const formatValue = (value: number) => formatChartValue(value, valueFormatter);
+  const chartHeight = getChartHeight(size, data, height)
+  const chartWidth = getChartWidth(width)
+  const formatValue = (value: number) => formatChartValue(value, valueFormatter)
   const hasNegativeDataValues = hasNegativeValues(
     data,
     lines.map((l) => l.dataKey),
-  );
-  const chartConfig = createChartConfig(lines);
+  )
+  const chartConfig = createChartConfig(lines)
 
   return (
     <div
-      className={`w-full overflow-hidden ${className || ''}`}
+      className={`w-full overflow-hidden ${className || ""}`}
       style={backgroundColor ? { backgroundColor } : undefined}
     >
       {(title || description) && (
-        <div className={cn('pb-3')}>
-          {title && <div className={cn('text-xl font-semibold')}>{title}</div>}
-          {description && (
-            <div className={cn('text-sm text-muted-foreground')}>{description}</div>
-          )}
+        <div className={cn("pb-3")}>
+          {title && <div className={cn("text-xl font-semibold")}>{title}</div>}
+          {description && <div className={cn("text-sm text-muted-foreground")}>{description}</div>}
         </div>
       )}
 
-      <div className={cn('overflow-hidden')}>
-        <div
-          style={{ height: chartHeight, width: chartWidth }}
-          className={cn('w-full overflow-hidden')}
-        >
-          <ChartContainer className={cn('h-full w-full')} config={chartConfig}>
+      <div className={cn("overflow-hidden")}>
+        <div style={{ height: chartHeight, width: chartWidth }} className={cn("w-full overflow-hidden")}>
+          <ChartContainer className={cn("h-full w-full")} config={chartConfig}>
             <LineChart
               accessibilityLayer
               data={data}
@@ -144,10 +130,7 @@ function IGRPLineChartInner({
               {!hideAxis && !hideYAxis && (
                 <YAxis
                   type="number"
-                  domain={
-                    valueDomain ||
-                    (hasNegativeDataValues ? ['auto', 'auto'] : [0, 'auto'])
-                  }
+                  domain={valueDomain || (hasNegativeDataValues ? ["auto", "auto"] : [0, "auto"])}
                   tickFormatter={formatValue}
                   hide={hideAxis || hideYAxis}
                   stroke={axisColor}
@@ -157,18 +140,13 @@ function IGRPLineChartInner({
                 />
               )}
 
-              {showReferenceZero && hasNegativeDataValues && (
-                <ReferenceLine y={0} stroke={referenceLineColor} />
-              )}
+              {showReferenceZero && hasNegativeDataValues && <ReferenceLine y={0} stroke={referenceLineColor} />}
 
               {showTooltip && (
-                <ChartTooltip
-                  cursor={false}
-                  content={<ChartTooltipContent indicator={tooltipIndicator} />}
-                />
+                <ChartTooltip cursor={false} content={<ChartTooltipContent indicator={tooltipIndicator} />} />
               )}
 
-              {legendPosition !== 'none' && customLegend && (
+              {legendPosition !== "none" && customLegend && (
                 <Legend
                   verticalAlign={getLegendVerticalAlign(legendPosition)}
                   align={getLegendHorizontalAlign(legendPosition)}
@@ -177,12 +155,12 @@ function IGRPLineChartInner({
                 />
               )}
 
-              {legendPosition !== 'none' && !customLegend && (
+              {legendPosition !== "none" && !customLegend && (
                 <ChartLegend
                   verticalAlign={getLegendVerticalAlign(legendPosition)}
                   align={getLegendHorizontalAlign(legendPosition)}
                   layout={getLegendLayout(legendPosition)}
-                  content={<ChartLegendContent className={cn('text-xs')} />}
+                  content={<ChartLegendContent className={cn("text-xs")} />}
                 />
               )}
 
@@ -192,19 +170,15 @@ function IGRPLineChartInner({
                     key: line.dataKey,
                     dataKey: line.dataKey,
                     name: line.name || line.dataKey,
-                    stroke: line.color
-                      ? line.color
-                      : `var(--chart-${(lineIndex % 8) + 1})`,
+                    stroke: line.color ? line.color : `var(--chart-${(lineIndex % 8) + 1})`,
                     strokeWidth: line.strokeWidth || 2,
                     strokeDasharray: line.strokeDasharray,
-                    type: line.type || 'monotone',
+                    type: line.type || "monotone",
                     dot:
                       line.dot !== undefined
                         ? line.dot
                         : {
-                            fill: line.color
-                              ? line.color
-                              : `var(--chart-${(lineIndex % 8) + 1})`,
+                            fill: line.color ? line.color : `var(--chart-${(lineIndex % 8) + 1})`,
                           },
                     activeDot: line.activeDot || { r: 6 },
                   })
@@ -213,28 +187,24 @@ function IGRPLineChartInner({
                     key={line.dataKey}
                     dataKey={line.dataKey}
                     name={line.name || line.dataKey}
-                    stroke={
-                      line.color ? line.color : `var(--chart-${(lineIndex % 8) + 1})`
-                    }
+                    stroke={line.color ? line.color : `var(--chart-${(lineIndex % 8) + 1})`}
                     strokeWidth={line.strokeWidth || 2}
                     strokeDasharray={line.strokeDasharray}
-                    type={line.type || 'monotone'}
+                    type={line.type || "monotone"}
                     dot={
                       line.dot !== undefined
                         ? line.dot
                         : {
-                            fill: line.color
-                              ? line.color
-                              : `var(--chart-${(lineIndex % 8) + 1})`,
+                            fill: line.color ? line.color : `var(--chart-${(lineIndex % 8) + 1})`,
                           }
                     }
                     activeDot={line.activeDot || { r: 6 }}
                   >
                     {line.showLabels && (
                       <LabelList
-                        position={line.labelPosition || 'top'}
+                        position={line.labelPosition || "top"}
                         offset={line.labelOffset || 12}
-                        className={cn('fill-foreground')}
+                        className={cn("fill-foreground")}
                         fontSize={12}
                       />
                     )}
@@ -247,16 +217,12 @@ function IGRPLineChartInner({
       </div>
 
       {footer && (
-        <div className={cn('flex-col items-start gap-2 text-sm pt-4')}>
-          {footer.description && (
-            <div className={cn('leading-none text-muted-foreground')}>
-              {footer.description}
-            </div>
-          )}
+        <div className={cn("flex-col items-start gap-2 text-sm pt-4")}>
+          {footer.description && <div className={cn("leading-none text-muted-foreground")}>{footer.description}</div>}
         </div>
       )}
     </div>
-  );
+  )
 }
 
-export default IGRPLineChartInner;
+export default IGRPLineChartInner

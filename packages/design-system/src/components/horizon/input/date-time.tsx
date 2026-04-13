@@ -1,33 +1,30 @@
-'use client';
+"use client"
 
-import { useId, useState } from 'react';
-import { useFormContext, Controller } from 'react-hook-form';
+import { useId, useState } from "react"
+import { useFormContext, Controller } from "react-hook-form"
 
-import { DD_MM_YYYY } from '../../../lib/constants';
-import { cn } from '../../../lib/utils';
-import type { IGRPInputProps } from '../../../types';
+import { DD_MM_YYYY } from "../../../lib/constants"
+import { cn } from "../../../lib/utils"
+import type { IGRPInputProps } from "../../../types"
 
-import { Input } from '../../primitives/input';
-import { IGRPLabel } from '../label';
+import { Input } from "../../primitives/input"
+import { IGRPLabel } from "../label"
 
-const DEFAULT_PLACEHOLDER = `${DD_MM_YYYY}, --:--`;
+const DEFAULT_PLACEHOLDER = `${DD_MM_YYYY}, --:--`
 
 /**
  * Props for the IGRPDateTimeInput component.
  * @see IGRPDateTimeInput
  */
-interface IGRPDateTimeInputProps extends Omit<
-  IGRPInputProps,
-  'onChange' | 'defaultValue' | 'value'
-> {
+interface IGRPDateTimeInputProps extends Omit<IGRPInputProps, "onChange" | "defaultValue" | "value"> {
   /** Controlled date-time string value. */
-  value?: string;
+  value?: string
   /** Default date-time string value. */
-  defaultValue?: string;
+  defaultValue?: string
   /** Called when value changes. */
-  onChange?: (value: string) => void;
+  onChange?: (value: string) => void
   /** Called on blur. */
-  onBlur?: (e: React.FocusEvent<HTMLInputElement>) => void;
+  onBlur?: (e: React.FocusEvent<HTMLInputElement>) => void
 }
 
 /**
@@ -42,7 +39,7 @@ function IGRPDateTimeInput({
   required = false,
   disabled = false,
   value: controlledValue,
-  defaultValue = '',
+  defaultValue = "",
   placeholder = DEFAULT_PLACEHOLDER,
   className,
   inputClassName,
@@ -50,62 +47,60 @@ function IGRPDateTimeInput({
   onBlur,
   ...props
 }: IGRPDateTimeInputProps) {
-  const _id = useId();
-  const fieldName = name ?? id ?? _id;
+  const _id = useId()
+  const fieldName = name ?? id ?? _id
 
-  const formContext = useFormContext();
-  const [inputValue, setInputValue] = useState(controlledValue ?? defaultValue ?? '');
+  const formContext = useFormContext()
+  const [inputValue, setInputValue] = useState(controlledValue ?? defaultValue ?? "")
 
   // Derive display value: controlled uses prop, uncontrolled uses state (no effect needed)
-  const isControlled = !formContext && controlledValue !== undefined;
-  const displayValue = isControlled ? (controlledValue ?? '') : inputValue;
+  const isControlled = !formContext && controlledValue !== undefined
+  const displayValue = isControlled ? (controlledValue ?? "") : inputValue
 
   const formatDateTimeInput = (value: string): string => {
-    const digitsOnly = value.replace(/\D/g, '');
+    const digitsOnly = value.replace(/\D/g, "")
 
     if (digitsOnly.length <= 2) {
-      return digitsOnly;
+      return digitsOnly
     } else if (digitsOnly.length <= 4) {
-      return `${digitsOnly.slice(0, 2)}/${digitsOnly.slice(2)}`;
+      return `${digitsOnly.slice(0, 2)}/${digitsOnly.slice(2)}`
     } else if (digitsOnly.length <= 6) {
-      return `${digitsOnly.slice(0, 2)}/${digitsOnly.slice(2, 4)}/${digitsOnly.slice(4)}`;
+      return `${digitsOnly.slice(0, 2)}/${digitsOnly.slice(2, 4)}/${digitsOnly.slice(4)}`
     } else if (digitsOnly.length <= 8) {
-      return `${digitsOnly.slice(0, 2)}/${digitsOnly.slice(2, 4)}/${digitsOnly.slice(4, 8)}`;
+      return `${digitsOnly.slice(0, 2)}/${digitsOnly.slice(2, 4)}/${digitsOnly.slice(4, 8)}`
     } else if (digitsOnly.length <= 10) {
-      return `${digitsOnly.slice(0, 2)}/${digitsOnly.slice(2, 4)}/${digitsOnly.slice(4, 8)}, ${digitsOnly.slice(8, 10)}`;
+      return `${digitsOnly.slice(0, 2)}/${digitsOnly.slice(2, 4)}/${digitsOnly.slice(4, 8)}, ${digitsOnly.slice(8, 10)}`
     } else {
-      return `${digitsOnly.slice(0, 2)}/${digitsOnly.slice(2, 4)}/${digitsOnly.slice(4, 8)}, ${digitsOnly.slice(8, 10)}:${digitsOnly.slice(10, 12)}`;
+      return `${digitsOnly.slice(0, 2)}/${digitsOnly.slice(2, 4)}/${digitsOnly.slice(4, 8)}, ${digitsOnly.slice(8, 10)}:${digitsOnly.slice(10, 12)}`
     }
-  };
+  }
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const rawValue = e.target.value;
+    const rawValue = e.target.value
 
     if (rawValue.length >= displayValue.length) {
-      const formatted = formatDateTimeInput(rawValue);
-      if (!isControlled) setInputValue(formatted);
-      if (!formContext) onChange?.(formatted);
+      const formatted = formatDateTimeInput(rawValue)
+      if (!isControlled) setInputValue(formatted)
+      if (!formContext) onChange?.(formatted)
     } else {
-      if (!isControlled) setInputValue(rawValue);
-      if (!formContext) onChange?.(rawValue);
+      if (!isControlled) setInputValue(rawValue)
+      if (!formContext) onChange?.(rawValue)
     }
-  };
+  }
 
   const handleInputBlur = (e: React.FocusEvent<HTMLInputElement>) => {
-    const formatted = formatDateTimeInput(e.target.value);
-    if (!isControlled) setInputValue(formatted);
+    const formatted = formatDateTimeInput(e.target.value)
+    if (!isControlled) setInputValue(formatted)
     if (!formContext) {
-      onChange?.(formatted);
-      onBlur?.(e);
+      onChange?.(formatted)
+      onBlur?.(e)
     }
-  };
+  }
 
   if (!formContext) {
     return (
-      <div className={cn('*:not-first:mt-2')}>
-        {label && (
-          <IGRPLabel label={label} className={className} required={required} id={fieldName} />
-        )}
+      <div className={cn("*:not-first:mt-2")}>
+        {label && <IGRPLabel label={label} className={className} required={required} id={fieldName} />}
 
         <Input
           id={fieldName}
@@ -117,19 +112,16 @@ function IGRPDateTimeInput({
           placeholder={placeholder}
           required={required}
           aria-required={required}
-          aria-invalid={!!error || !!props['aria-invalid']}
+          aria-invalid={!!error || !!props["aria-invalid"]}
           aria-describedby={helperText || error ? `${fieldName}-helper` : undefined}
-          className={cn(
-            error && 'border-destructive focus-visible:ring-destructive/20',
-            inputClassName,
-          )}
+          className={cn(error && "border-destructive focus-visible:ring-destructive/20", inputClassName)}
           {...props}
         />
 
         {helperText && !error && (
           <p
             id={`${fieldName}-helper`}
-            className={cn('text-muted-foreground mt-2 text-xs')}
+            className={cn("text-muted-foreground mt-2 text-xs")}
             role="region"
             aria-live="polite"
           >
@@ -138,16 +130,12 @@ function IGRPDateTimeInput({
         )}
 
         {error && (
-          <p
-            id={`${fieldName}-helper`}
-            className={cn('text-destructive mt-2 text-xs')}
-            role="alert"
-          >
+          <p id={`${fieldName}-helper`} className={cn("text-destructive mt-2 text-xs")} role="alert">
             {error}
           </p>
         )}
       </div>
-    );
+    )
   }
 
   return (
@@ -157,48 +145,43 @@ function IGRPDateTimeInput({
       defaultValue={defaultValue}
       render={({ field, fieldState }) => {
         const handleFormInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-          const rawValue = e.target.value;
+          const rawValue = e.target.value
 
           if (rawValue.length >= field.value?.length) {
-            const formatted = formatDateTimeInput(rawValue);
-            field.onChange(formatted);
-            onChange?.(formatted);
+            const formatted = formatDateTimeInput(rawValue)
+            field.onChange(formatted)
+            onChange?.(formatted)
           } else {
-            field.onChange(rawValue);
-            onChange?.(rawValue);
+            field.onChange(rawValue)
+            onChange?.(rawValue)
           }
-        };
+        }
 
         const handleFormInputBlur = (e: React.FocusEvent<HTMLInputElement>) => {
-          const formatted = formatDateTimeInput(e.target.value);
-          field.onChange(formatted);
-          onChange?.(formatted);
-          field.onBlur();
-          onBlur?.(e);
-        };
+          const formatted = formatDateTimeInput(e.target.value)
+          field.onChange(formatted)
+          onChange?.(formatted)
+          field.onBlur()
+          onBlur?.(e)
+        }
 
         return (
-          <div className={cn('*:not-first:mt-2')}>
-            {label && (
-              <IGRPLabel label={label} className={className} required={required} id={fieldName} />
-            )}
+          <div className={cn("*:not-first:mt-2")}>
+            {label && <IGRPLabel label={label} className={className} required={required} id={fieldName} />}
 
             <Input
               id={fieldName}
-              value={field.value || ''}
+              value={field.value || ""}
               onChange={handleFormInputChange}
               onBlur={handleFormInputBlur}
               disabled={disabled}
               placeholder={placeholder}
               required={required}
               aria-required={required}
-              aria-invalid={!!fieldState.error || !!error || !!props['aria-invalid']}
-              aria-describedby={
-                helperText || error || fieldState.error ? `${fieldName}-helper` : undefined
-              }
+              aria-invalid={!!fieldState.error || !!error || !!props["aria-invalid"]}
+              aria-describedby={helperText || error || fieldState.error ? `${fieldName}-helper` : undefined}
               className={cn(
-                (fieldState.error || error) &&
-                  'border-destructive focus-visible:ring-destructive/20',
+                (fieldState.error || error) && "border-destructive focus-visible:ring-destructive/20",
                 inputClassName,
               )}
               {...props}
@@ -207,7 +190,7 @@ function IGRPDateTimeInput({
             {helperText && !error && !fieldState.error && (
               <p
                 id={`${fieldName}-helper`}
-                className={cn('text-muted-foreground mt-2 text-xs')}
+                className={cn("text-muted-foreground mt-2 text-xs")}
                 role="region"
                 aria-live="polite"
               >
@@ -216,19 +199,15 @@ function IGRPDateTimeInput({
             )}
 
             {(error || fieldState.error) && (
-              <p
-                id={`${fieldName}-error`}
-                className={cn('text-destructive mt-2 text-xs')}
-                role="alert"
-              >
+              <p id={`${fieldName}-error`} className={cn("text-destructive mt-2 text-xs")} role="alert">
                 {error || fieldState.error?.message}
               </p>
             )}
           </div>
-        );
+        )
       }}
     />
-  );
+  )
 }
 
-export { IGRPDateTimeInput, type IGRPDateTimeInputProps };
+export { IGRPDateTimeInput, type IGRPDateTimeInputProps }

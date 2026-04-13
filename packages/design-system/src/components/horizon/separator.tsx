@@ -1,7 +1,7 @@
-'use client';
+"use client"
 
-import { useId } from 'react';
-import { Separator } from '../primitives/separator';
+import { useId } from "react"
+import { Separator } from "../primitives/separator"
 
 /**
  * Props for the IGRPSeparator component.
@@ -9,19 +9,19 @@ import { Separator } from '../primitives/separator';
  */
 interface IGRPSeparatorProps extends React.ComponentProps<typeof Separator> {
   /** HTML name attribute. */
-  name?: string;
+  name?: string
   /** HTML id attribute. */
-  id?: string;
+  id?: string
 }
 
 /**
  * Horizontal or vertical separator line.
  */
 function IGRPSeparator({ name, id, ...props }: IGRPSeparatorProps) {
-  const _id = useId();
-  const ref = name ?? id ?? _id;
+  const _id = useId()
+  const ref = name ?? id ?? _id
 
-  return <Separator id={ref} {...props} />;
+  return <Separator id={ref} {...props} />
 }
 
-export { IGRPSeparator };
+export { IGRPSeparator }

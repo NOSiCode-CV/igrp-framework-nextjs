@@ -3,7 +3,7 @@ import { after } from "next/server";
 import { redirect } from "next/navigation";
 
 import { getConfig } from "@/igrp.template.config";
-import { getLoginPath } from "@/lib/sanitize";
+import { getLoginPath } from "@igrp/framework-next-auth/sanitize";
 import { isPreviewMode } from "@/lib/utils";
 
 export default async function IGRPRootLayout({

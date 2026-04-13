@@ -1,10 +1,11 @@
 import type { ReactNode } from "react";
 import dynamic from "next/dynamic";
+import { getAuthProviderIdFromEnv } from "@igrp/framework-next-auth";
 import { IGRPAuthForm } from "@igrp/framework-next-ui";
 
 import { carouselItems, loginConfig } from "@/config/login";
 import { siteConfig } from "@/config/site";
-import { sanitizeRedirectUrl } from "@/lib/sanitize";
+import { sanitizeRedirectUrl } from "@igrp/framework-next-auth/sanitize";
 import { cn } from "@/lib/utils";
 
 const IGRPAuthCarousel = dynamic(
@@ -40,6 +41,7 @@ export default async function AuthPage({
     process.env.NEXTAUTH_URL,
     "/",
   );
+  const providerId = getAuthProviderIdFromEnv(process.env);
 
   return (
     <section
@@ -67,6 +69,7 @@ export default async function AuthPage({
           logo={logo}
           name={name}
           callbackUrl={safeCallbackUrl}
+          providerId={providerId}
         />
       </div>
     </section>

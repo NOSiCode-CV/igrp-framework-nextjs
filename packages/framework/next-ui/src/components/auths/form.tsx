@@ -2,7 +2,11 @@
 
 import { useState } from 'react';
 import Image from 'next/image';
-import { signIn } from '@igrp/framework-next-auth/client';
+import {
+  KEYCLOAK_PROVIDER_ID,
+  signIn,
+  type AuthProviderId,
+} from '@igrp/framework-next-auth/client';
 import {
   cn,
   Alert,
@@ -34,9 +38,16 @@ interface IGRPAuthFormProps {
   logo: IGRPSiteLogo;
   name: string;
   callbackUrl?: string;
+  providerId?: AuthProviderId;
 }
 
-function IGRPAuthForm({ texts, logo, name, callbackUrl = '/' }: IGRPAuthFormProps) {
+function IGRPAuthForm({
+  texts,
+  logo,
+  name,
+  callbackUrl = '/',
+  providerId = KEYCLOAK_PROVIDER_ID,
+}: IGRPAuthFormProps) {
   const [isLoading, setIsLoading] = useState(false);
   const [authError, setAuthError] = useState<string | null>(null);
 
@@ -45,7 +56,7 @@ function IGRPAuthForm({ texts, logo, name, callbackUrl = '/' }: IGRPAuthFormProp
     setAuthError(null);
 
     try {
-      await signIn('keycloak', { callbackUrl });
+      await signIn(providerId, { callbackUrl });
     } catch (error) {
       console.error('Authentication error:', error);
       setAuthError(error instanceof Error ? error.message : 'Failed to sign in. Please try again.');

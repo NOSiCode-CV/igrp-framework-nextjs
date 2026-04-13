@@ -1,11 +1,11 @@
-'use client';
+"use client"
 
-import { useId, useState } from 'react';
+import { useId, useState } from "react"
 
-import { getDisabledDays } from '../../../lib/calendar-utils';
-import { cn } from '../../../lib/utils';
-import type { IGRPCalendarProps } from '../../../types';
-import { Calendar } from '../../primitives/calendar';
+import { getDisabledDays } from "../../../lib/calendar-utils"
+import { cn } from "../../../lib/utils"
+import type { IGRPCalendarProps } from "../../../types"
+import { Calendar } from "../../primitives/calendar"
 
 /**
  * Props for the IGRPCalendarSingle component.
@@ -13,10 +13,10 @@ import { Calendar } from '../../primitives/calendar';
  */
 type IGRPCalendarSingleProps = {
   /** Selected date. */
-  date?: Date;
+  date?: Date
   /** Called when the selected date changes. */
-  onDateChange?: (date: Date | undefined) => void;
-} & Omit<IGRPCalendarProps, 'mode'>;
+  onDateChange?: (date: Date | undefined) => void
+} & Omit<IGRPCalendarProps, "mode">
 
 /**
  * Single-date calendar picker.
@@ -32,12 +32,12 @@ function IGRPCalendarSingle({
   disableDayOfWeek,
   ...props
 }: IGRPCalendarSingleProps) {
-  const _id = useId();
-  const ref = name ?? id ?? _id;
+  const _id = useId()
+  const ref = name ?? id ?? _id
 
-  const [ownDate, setOwnDate] = useState<Date | undefined>(undefined);
-  const selected = date ?? ownDate;
-  const disabled = getDisabledDays({ disableBefore, disableAfter, disableDayOfWeek });
+  const [ownDate, setOwnDate] = useState<Date | undefined>(undefined)
+  const selected = date ?? ownDate
+  const disabled = getDisabledDays({ disableBefore, disableAfter, disableDayOfWeek })
 
   return (
     <Calendar
@@ -45,14 +45,14 @@ function IGRPCalendarSingle({
       id={ref}
       selected={selected}
       onSelect={(selectedDate) => {
-        setOwnDate(selectedDate);
-        onDateChange?.(selectedDate);
+        setOwnDate(selectedDate)
+        onDateChange?.(selectedDate)
       }}
       disabled={disabled}
-      className={cn('rounded-lg border shadow-sm', className)}
+      className={cn("rounded-lg border shadow-sm", className)}
       {...props}
     />
-  );
+  )
 }
 
-export { IGRPCalendarSingle, type IGRPCalendarSingleProps };
+export { IGRPCalendarSingle, type IGRPCalendarSingleProps }

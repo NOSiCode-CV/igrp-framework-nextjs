@@ -2,7 +2,7 @@
 
 import { cookies } from "next/headers";
 
-import { getAccessToken } from "@/lib/auth-helpers";
+import { auth } from "@/lib/auth";
 import { isPreviewMode } from "@/lib/utils";
 
 export async function getTheme() {
@@ -24,7 +24,7 @@ export async function configLayout() {
         accessToken: "preview-token",
         expires: "9999-12-31T23:59:59.999Z",
       } as any)
-    : await getAccessToken();
+    : await auth.getAccessToken();
 
   const { activeThemeValue, isScaled } = await getTheme();
 

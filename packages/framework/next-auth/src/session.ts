@@ -1,11 +1,13 @@
 import type { NextAuthOptions, TokenSet } from 'next-auth';
 import type { Session as DefaultSession } from 'next-auth';
+import type { AuthProviderId } from './providers';
 
 export type { NextAuthOptions, TokenSet };
 
 export interface Session extends DefaultSession {
   accessToken?: string;
   idToken?: string;
+  authProviderId?: AuthProviderId;
   error?: string;
   expiresAt?: number;
   forceLogout?: boolean;

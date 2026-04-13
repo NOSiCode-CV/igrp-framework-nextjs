@@ -1,16 +1,16 @@
-'use client';
+"use client"
 
-import { useId } from 'react';
+import { useId } from "react"
 
-import { igrpCleanString } from '../../lib/strings';
-import { cn } from '../../lib/utils';
+import { igrpCleanString } from "../../lib/strings"
+import { cn } from "../../lib/utils"
 import {
   Accordion,
   AccordionContent,
   AccordionItem,
   AccordionTrigger,
   type AccordionTriggerArgs,
-} from '../primitives/accordion';
+} from "../primitives/accordion"
 
 /**
  * Single accordion item with title and content.
@@ -18,9 +18,9 @@ import {
  */
 interface IGRPAccordionItem extends Partial<AccordionTriggerArgs> {
   /** Item title shown in the trigger. */
-  title: string;
+  title: string
   /** Content shown when expanded. */
-  content: React.ReactNode;
+  content: React.ReactNode
 }
 
 /**
@@ -28,21 +28,21 @@ interface IGRPAccordionItem extends Partial<AccordionTriggerArgs> {
  * @see IGRPAccordion
  */
 interface IGRPAccordionProps
-  extends Partial<AccordionTriggerArgs>, Omit<React.ComponentProps<typeof Accordion>, 'type'> {
+  extends Partial<AccordionTriggerArgs>, Omit<React.ComponentProps<typeof Accordion>, "type"> {
   /** CSS classes for the trigger. */
-  classNameTrigger?: string;
+  classNameTrigger?: string
   /** CSS classes for the content. */
-  classNameContent?: string;
+  classNameContent?: string
   /** Array of accordion items. */
-  items: IGRPAccordionItem[];
+  items: IGRPAccordionItem[]
   /** Controlled value (open item). */
-  value?: string;
+  value?: string
   /** Uncontrolled default value. */
-  defaultValue?: string;
+  defaultValue?: string
   /** Called when the open item changes. */
-  onValueChange?(value: string): void;
+  onValueChange?(value: string): void
   /** HTML name attribute. */
-  name?: string;
+  name?: string
 }
 
 /**
@@ -54,18 +54,18 @@ function IGRPAccordion({
   classNameContent,
   items,
   showIcon = true,
-  iconName = 'ChevronDown',
-  iconPlacement = 'end',
+  iconName = "ChevronDown",
+  iconPlacement = "end",
   defaultValue,
   name,
   id,
   ...accordionProps
 }: IGRPAccordionProps) {
-  const _id = useId();
-  const ref = name ?? id ?? _id;
+  const _id = useId()
+  const ref = name ?? id ?? _id
 
-  const _defaultValue = defaultValue || items[0]?.title;
-  const defaultId = igrpCleanString(_defaultValue).toLowerCase();
+  const _defaultValue = defaultValue || items[0]?.title
+  const defaultId = igrpCleanString(_defaultValue).toLowerCase()
 
   return (
     <Accordion
@@ -77,7 +77,7 @@ function IGRPAccordion({
       {...accordionProps}
     >
       {items?.map((item) => {
-        const id = igrpCleanString(item.title).toLowerCase();
+        const id = igrpCleanString(item.title).toLowerCase()
         return (
           <AccordionItem key={id} value={`item-${id}`}>
             <AccordionTrigger
@@ -90,10 +90,10 @@ function IGRPAccordion({
             </AccordionTrigger>
             <AccordionContent className={classNameContent}>{item.content}</AccordionContent>
           </AccordionItem>
-        );
+        )
       })}
     </Accordion>
-  );
+  )
 }
 
-export { IGRPAccordion, type IGRPAccordionProps, type IGRPAccordionItem };
+export { IGRPAccordion, type IGRPAccordionProps, type IGRPAccordionItem }

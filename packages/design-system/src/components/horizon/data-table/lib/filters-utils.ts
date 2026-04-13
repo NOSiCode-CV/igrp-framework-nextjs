@@ -1,6 +1,6 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 
-import type { FilterFn } from '@tanstack/react-table';
+import type { FilterFn } from "@tanstack/react-table"
 
 /**
  * Filter function for date range filtering in IGRP data tables.
@@ -12,17 +12,17 @@ import type { FilterFn } from '@tanstack/react-table';
  * @returns `true` if the row should be included (no filter or date in range), `false` otherwise
  */
 export const IGRPDataTableDateRangeFilterFn: FilterFn<any> = (row, columnId, filterValue) => {
-  if (!filterValue || !filterValue.from) return true;
-  const cellValue = row.getValue(columnId) as string;
-  const date = new Date(cellValue);
-  const start = filterValue.from;
-  const end = filterValue.to ? new Date(filterValue.to) : undefined;
+  if (!filterValue || !filterValue.from) return true
+  const cellValue = row.getValue(columnId) as string
+  const date = new Date(cellValue)
+  const start = filterValue.from
+  const end = filterValue.to ? new Date(filterValue.to) : undefined
 
   if (start && end) {
-    return date >= start && date <= end;
+    return date >= start && date <= end
   }
-  return date >= start;
-};
+  return date >= start
+}
 
 /**
  * Filter function for faceted filtering in IGRP data tables.
@@ -33,15 +33,11 @@ export const IGRPDataTableDateRangeFilterFn: FilterFn<any> = (row, columnId, fil
  * @param filterValue - An array of string values to match against
  * @returns `true` if the row should be included (no filter or value matches), `false` otherwise
  */
-export const IGRPDataTableFacetedFilterFn: FilterFn<any> = (
-  row,
-  columnId,
-  filterValue: string[],
-) => {
-  if (!filterValue?.length) return true;
-  const status = row.getValue(columnId) as string;
-  return filterValue.includes(status);
-};
+export const IGRPDataTableFacetedFilterFn: FilterFn<any> = (row, columnId, filterValue: string[]) => {
+  if (!filterValue?.length) return true
+  const status = row.getValue(columnId) as string
+  return filterValue.includes(status)
+}
 
 /**
  * Filter function for text filtering in IGRP data tables.
@@ -53,13 +49,13 @@ export const IGRPDataTableFacetedFilterFn: FilterFn<any> = (
  * @returns `true` if the row should be included (no filter or text found in column), `false` otherwise
  */
 export const IGRPDataTableTextFilterFn: FilterFn<any> = (row, columnId, filterValue) => {
-  const term = String(filterValue ?? '')
+  const term = String(filterValue ?? "")
     .toLowerCase()
-    .trim();
-  if (!term) return true;
-  const cellValue = String(row.getValue(columnId) ?? '').toLowerCase();
-  return cellValue.includes(term);
-};
+    .trim()
+  if (!term) return true
+  const cellValue = String(row.getValue(columnId) ?? "").toLowerCase()
+  return cellValue.includes(term)
+}
 
 /**
  * Multi-column filter function for text searching across multiple columns.

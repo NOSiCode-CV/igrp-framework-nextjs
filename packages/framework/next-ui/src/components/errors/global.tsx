@@ -35,7 +35,7 @@ function IGRPGlobalError({ error, reset, children }: IGRPGlobalErrorProps) {
       <div className={cn('w-full max-w-3xl')}>
         <div className={cn('text-center')}>
           <Image
-            src="/igrp/error-img.webp"
+            src="/error-img.webp"
             alt="Error Image"
             width={300}
             height={200}

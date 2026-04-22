@@ -43,7 +43,7 @@ export async function igrpStartupSync({
     await igrpSyncRoutes({ baseUrl, m2mServiceId, m2mToken, appRoutes, paramMapBody });
     await igrpSyncMenus({ appCode, menus, baseUrl, m2mServiceId, m2mToken, syncEnabled });
     isSynced = true;
-    console.info('✔ Access Management sync completed.');
+    console.info('Access Management sync completed.');
   } catch (e) {
     console.error('An error occurred while syncing with Access Management: ', e);
     return;

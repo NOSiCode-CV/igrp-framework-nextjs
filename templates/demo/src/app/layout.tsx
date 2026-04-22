@@ -12,7 +12,7 @@ export const metadata: Metadata = {
   metadataBase: new URL(process.env.NEXTAUTH_URL || siteConfig.url),
   title: "IGRP | Centro de Aplicações",
   description: "IGRP | Centro de Aplicações",
-  icons: { icon: "/igrp/logo-no-text.png" },
+  icons: { icon: "/logo-no-text.png" },
   openGraph: {
     title: "IGRP | Centro de Aplicações",
     description: "IGRP | Centro de Aplicações",

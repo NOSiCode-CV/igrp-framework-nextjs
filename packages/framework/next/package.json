@@ -1,6 +1,6 @@
 {
   "name": "@igrp/framework-next",
-  "version": "0.1.0-beta.113",
+  "version": "0.1.0-beta.113-2",
   "description": "IGRP Framework for Next.js | Server Rendering components",
   "keywords": [
     "igrp",
@@ -24,17 +24,17 @@
     "build:types": "tsc --emitDeclarationOnly --outDir dist",
     "build:without_reactcompiler": "pnpm clean:dist && pnpm build:swc && pnpm build:types",
     "format": "prettier --write .",
-    "release": "pnpm build && yarn publish --registry=https://sonatype.nosi.cv/repository/igrp/ --tag latest",
+    "release": "pnpm build && yarn publish --registry=https://sonatype.nosi.cv/repository/igrp/ --tag next",
     "clean-all": "rimraf node_modules && rimraf dist && rimraf tsconfig.tsbuildinfo"
   },
   "dependencies": {
     "next": "^15.5.15",
     "react": "^19.2.5",
     "react-dom": "^19.2.5",
-    "@igrp/framework-next-auth": "0.1.0-beta.113",
-    "@igrp/framework-next-types": "0.1.0-beta.113",
-    "@igrp/framework-next-ui": "0.1.0-beta.113",
-    "@igrp/platform-access-management-client-ts": "0.2.0-beta.1"
+    "@igrp/framework-next-auth": "workspace:*",
+    "@igrp/framework-next-types": "workspace:*",
+    "@igrp/framework-next-ui": "workspace:*",
+    "@igrp/platform-access-management-client-ts": "0.2.0-beta.2"
   },
   "devDependencies": {
     "@babel/cli": "^7.28.6",
@@ -60,7 +60,7 @@
     "prettier": "^3.8.3",
     "rimraf": "^6.1.3",
     "typescript": "^5.9.3",
-    "typescript-eslint": "^8.58.2"
+    "typescript-eslint": "^8.59.0"
   },
   "sideEffects": [
     "*.css"

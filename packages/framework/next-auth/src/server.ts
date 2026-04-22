@@ -9,6 +9,6 @@ export async function getServerSessionStrict(opts: NextAuthOptions) {
 }
 
 export { getServerSession } from 'next-auth';
-export type { NextAuthOptions } from 'next-auth';
+export type { NextAuthOptions, Account, User } from 'next-auth';
 export { NextAuth };
 export { default as KeycloakProvider } from 'next-auth/providers/keycloak';

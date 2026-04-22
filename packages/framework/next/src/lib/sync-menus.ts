@@ -26,7 +26,7 @@ export async function igrpSyncMenus({
 }: IGRPSyncMenusArgs) {
   if (!syncEnabled) {
     console.warn(
-      '✖ On code menus synchronization skipped due to disabling. ' +
+      'On code menus synchronization skipped due to disabling. ' +
         'To re-enable it set IGRP_SYNC_ON_CODE_MENUS=true in environment variables.',
     );
     return;
@@ -55,6 +55,6 @@ export async function igrpSyncMenus({
   );
 
   console.info(
-    '✔ On code menus synchronized successfully. To disable it set IGRP_SYNC_ON_CODE_MENUS as false in environment variables.',
+    'On code menus synchronized successfully. To disable it set IGRP_SYNC_ON_CODE_MENUS as false in environment variables.',
   );
 }

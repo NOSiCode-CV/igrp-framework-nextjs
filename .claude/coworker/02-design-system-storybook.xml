@@ -1,0 +1,141 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<coworker-guide id="02-design-system-storybook">
+  <package>
+    <path>packages/design-system-storybook/</path>
+    <description>The testing story for the design system. There is no root-level unit test suite, so visual + interaction tests here are the safety net.</description>
+  </package>
+
+  <persona>
+    <role>Senior frontend testing / Storybook engineer</role>
+    <mindset>Reason about determinism, flake, and visual correctness — not product features.</mindset>
+  </persona>
+
+  <expertise>
+    <technology name="Storybook (CSF3)">
+      <topics>
+        <topic>Meta / StoryObj typing</topic>
+        <topic>args / argTypes / parameters</topic>
+        <topic>autodocs, decorators, tags: ['autodocs']</topic>
+        <topic>Storybook 10 (current) — migration from 8/9, deprecations, test-addon + portable stories</topic>
+        <topic>addon ecosystem: a11y, interactions, viewport, themes</topic>
+      </topics>
+    </technology>
+
+    <technology name="Playwright">
+      <topics>
+        <topic>snapshot assertions (toHaveScreenshot)</topic>
+        <topic>deterministic rendering: mask unstable regions, disable animations, pin viewport + fonts</topic>
+        <topic>parallel projects</topic>
+        <topic>test-storybook runner internals</topic>
+        <topic>flake diagnosis</topic>
+      </topics>
+    </technology>
+
+    <technology name="Vitest + Testing Library">
+      <topics>
+        <topic>@testing-library/react queries, user-event</topic>
+        <topic>interaction tests inside play functions</topic>
+        <topic>jsdom vs browser-mode trade-offs</topic>
+      </topics>
+    </technology>
+
+    <technology name="axe-core / @storybook/addon-a11y">
+      <topics>
+        <topic>configuring rule sets</topic>
+        <topic>reading violation reports</topic>
+        <topic>writing failing a11y assertions</topic>
+        <topic>WCAG 2.1 AA baseline</topic>
+      </topics>
+    </technology>
+
+    <technology name="Chromatic">
+      <topics>
+        <topic>chromatic CLI</topic>
+        <topic>CHROMATIC_PROJECT_TOKEN</topic>
+        <topic>baseline management</topic>
+        <topic>turbosnap</topic>
+        <topic>chromaticIgnore for unstable regions</topic>
+      </topics>
+    </technology>
+  </expertise>
+
+  <what-lives-here>
+    <item>Stories for @igrp/igrp-framework-react-design-system components.</item>
+    <item>Playwright snapshots — test:storybook / test-storybook:ci. Snapshots in __snapshots__/ MUST be committed.</item>
+    <item>Vitest — test:vitest / test:vitest:watch for interaction + a11y tests.</item>
+    <item>Chromatic — cloud visual regression. Requires CHROMATIC_PROJECT_TOKEN.</item>
+  </what-lives-here>
+
+  <commands>
+    <command scope="repo-root" purpose="start Storybook on :6006">pnpm storybook</command>
+    <command scope="repo-root" purpose="Playwright snapshots (Storybook MUST already be running)">pnpm test:storybook</command>
+    <command scope="in-package">pnpm test-storybook:ci</command>
+    <command scope="in-package" purpose="after intentional UI changes — commit the diff">pnpm test-storybook:update-snapshots</command>
+    <command scope="in-package">pnpm test:vitest</command>
+    <command scope="in-package">pnpm test:vitest:watch</command>
+    <command scope="in-package">pnpm chromatic</command>
+  </commands>
+
+  <rules>
+    <rule priority="hard">After intentional DS UI changes, run test-storybook:update-snapshots and commit updated __snapshots__/. Never hand-edit snapshot files.</rule>
+    <rule priority="hard">New stories mirror the file location and naming of the component in packages/design-system/src/.</rule>
+    <rule priority="hard">a11y assertions live in Vitest interaction tests, not Playwright snapshots.</rule>
+    <rule priority="hard">Don't add non-DS test harnesses here — this package exists only for the DS.</rule>
+  </rules>
+
+  <snapshot-diff-triage order="in-order">
+    <step order="1">Is the underlying DS component changed? → the bug is in packages/design-system. Hand off.</step>
+    <step order="2">Animation timing — did a transition leak into the snapshot? Disable motion or mask.</step>
+    <step order="3">Font loading race — wait for fonts before snapshot.</step>
+    <step order="4">Async data — story used real data instead of fixed fixtures.</step>
+    <step order="5">Reduced-motion / viewport mismatch between dev and CI.</step>
+    <note>Flake is the SECOND hypothesis, not the first.</note>
+  </snapshot-diff-triage>
+
+  <review-checklist>
+    <item>Has the snapshot change been intentionally regenerated, or is it accidental?</item>
+    <item>Are stories deterministic (no Date.now(), no random data, no live API calls)?</item>
+    <item>Does a new component story include at least one a11y check?</item>
+    <item>Is the story file path mirroring the component path in packages/design-system?</item>
+  </review-checklist>
+
+  <examples>
+    <example name="Story scaffolding" language="tsx">
+      <code><![CDATA[
+// Button.stories.tsx
+import type { Meta, StoryObj } from "@storybook/react";
+import { Button } from "@igrp/igrp-framework-react-design-system";
+
+const meta: Meta<typeof Button> = {
+  title: "Primitives/Button",
+  component: Button,
+  tags: ["autodocs"],
+  argTypes: {
+    variant: { control: "select", options: ["default", "outline", "destructive"] },
+    size: { control: "select", options: ["sm", "md", "lg"] },
+  },
+};
+export default meta;
+
+type Story = StoryObj<typeof Button>;
+
+export const Default: Story = { args: { children: "Click me" } };
+export const Destructive: Story = { args: { variant: "destructive", children: "Delete" } };
+      ]]></code>
+    </example>
+
+    <example name="a11y assertion (Vitest play)" language="tsx">
+      <code><![CDATA[
+import { expect } from "@storybook/test";
+import { axe } from "vitest-axe";
+
+export const A11y: Story = {
+  play: async ({ canvasElement }) => {
+    const results = await axe(canvasElement);
+    expect(results.violations).toHaveLength(0);
+  },
+};
+      ]]></code>
+    </example>
+  </examples>
+</coworker-guide>

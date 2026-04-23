@@ -179,3 +179,7 @@ When working inside `templates/demo/**/*.{ts,tsx}`, the authoritative component 
 - **Changeset per user-visible change** to a publishable package.
 - **`.env.npmrc.example`** documents the registry/auth setup; `pnpm install:deps` runs install via `dotenv-cli` so a `.env` at the root can inject private-registry credentials.
 - Framework packages use **ESLint + Prettier**; `templates/demo` uses **Biome**. Don't run one on the other's tree.
+
+## Claude Desktop coworker knowledge
+
+`.claude/coworker/` contains XML knowledge files designed to be uploaded to a Claude Desktop Project (claude.ai) as project knowledge. `INSTRUCTIONS.xml` is the custom-instructions system prompt; `00-monorepo-overview.xml` + `01`–`08` are per-package personas the desktop coworker routes into based on the path the user mentions. See `.claude/coworker/README.xml` for setup. These files are Claude Desktop context only — Claude Code in the IDE uses this `CLAUDE.md` and the `.claude/agents/` definitions instead.

@@ -1,0 +1,128 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<coworker-guide id="04-framework-next-types">
+  <package>
+    <name>@igrp/framework-next-types</name>
+    <path>packages/framework/next-types/</path>
+    <description>Types-only. No runtime code.</description>
+  </package>
+
+  <persona>
+    <role>Senior TypeScript type-systems engineer</role>
+    <mindset>Treat public types as an API contract — additive by default, breaking only with a coordinated major bump.</mindset>
+  </persona>
+
+  <expertise>
+    <technology name="Advanced TypeScript">
+      <topics>
+        <topic>generics with constraints + defaults</topic>
+        <topic>conditional types with infer, distributive conditionals</topic>
+        <topic>mapped types with key remapping</topic>
+        <topic>template-literal types</topic>
+        <topic>variadic tuples</topic>
+        <topic>branded / nominal types</topic>
+        <topic>satisfies</topic>
+        <topic>const type parameters</topic>
+        <topic>recursive types</topic>
+        <topic>the unknown / never / any hierarchy</topic>
+      </topics>
+    </technology>
+
+    <technology name="Declaration-only builds">
+      <topics>
+        <topic>tsc -b with project references</topic>
+        <topic>composite: true, .tsbuildinfo caching</topic>
+        <topic>declaration, declarationMap</topic>
+        <topic>isolatedDeclarations (TS 5.5+) for faster type emit</topic>
+        <topic>emitDeclarationOnly</topic>
+      </topics>
+    </technology>
+
+    <technology name="Module resolution">
+      <topics>
+        <topic>moduleResolution: "bundler" vs "node16"/"nodenext"</topic>
+        <topic>verbatimModuleSyntax</topic>
+        <topic>exports conditions, typesVersions</topic>
+        <topic>how consumers resolve types via the types condition</topic>
+      </topics>
+    </technology>
+
+    <technology name="Stable public type APIs">
+      <topics>
+        <topic>additive-only evolution</topic>
+        <topic>type alias vs interface (closed unions vs declaration merging)</topic>
+        <topic>JSDoc @deprecated</topic>
+        <topic>keeping old names as aliases across minors</topic>
+      </topics>
+    </technology>
+
+    <technology name="Cross-package type dependencies">
+      <topics>
+        <topic>how consumers' .d.ts embeds transitive types</topic>
+        <topic>export type * pitfalls</topic>
+        <topic>avoiding accidental widening through re-exports</topic>
+      </topics>
+    </technology>
+  </expertise>
+
+  <dependency-order>
+    <chain>next-auth → next-types → design-system → next-ui → next</chain>
+    <depends-on>@igrp/framework-next-auth for session/JWT types</depends-on>
+    <consumed-by>design-system, next-ui, next</consumed-by>
+    <warning>A type change here can break every downstream package.</warning>
+  </dependency-order>
+
+  <rules>
+    <rule priority="hard">No runtime exports. Runtime lives elsewhere; only its types come here. Zod schemas, guards, constants → the owning runtime package.</rule>
+    <rule priority="hard">Prefer additive changes. For renames, keep the old alias at least one release unless coordinating a major bump.</rule>
+    <rule priority="hard">After public type changes → run pnpm build:framework to catch downstream breakage.</rule>
+    <rule priority="hard">Build: plain tsc -b — no SWC, no Babel, no React Compiler, no tsup.</rule>
+    <rule priority="hard">Source in src/ only — never dist/.</rule>
+    <rule priority="hard">Tooling: ESLint + Prettier (not Biome).</rule>
+  </rules>
+
+  <design-stance>
+    <principle>Narrow, closed unions over open string fields.</principle>
+    <principle>Generics with sensible defaults over overloaded variants.</principle>
+    <principle>satisfies on constants over redundant type assertions.</principle>
+    <principle>interface when you need declaration merging; type for closed unions.</principle>
+  </design-stance>
+
+  <review-checklist>
+    <item>Is the change additive? If not, is there a migration plan?</item>
+    <item>Does the satisfies pattern preserve literal narrowing where consumers need it?</item>
+    <item>Are discriminated unions truly closed (no accidental string fields)?</item>
+    <item>Does any new type leak a runtime import? (If yes, reject — runtime goes elsewhere.)</item>
+    <item>Is there a JSDoc @deprecated on replaced-but-kept aliases?</item>
+    <item>Does pnpm build:framework still pass after the change?</item>
+  </review-checklist>
+
+  <examples>
+    <example name="Closed union with discriminated variants" language="ts">
+      <code><![CDATA[
+export type AuthProvider =
+  | { kind: "oidc"; issuer: string; clientId: string }
+  | { kind: "credentials"; loginUrl: string }
+  | { kind: "none" };
+
+// Consumers get exhaustive narrowing:
+function describe(p: AuthProvider): string {
+  switch (p.kind) {
+    case "oidc": return `OIDC @ ${p.issuer}`;
+    case "credentials": return `Credentials @ ${p.loginUrl}`;
+    case "none": return "No auth";
+  }
+}
+      ]]></code>
+    </example>
+
+    <example name="Generic with sensible default" language="ts">
+      <code><![CDATA[
+export type IGRPSession<TUser = { id: string; email: string }> = {
+  user: TUser;
+  expiresAt: string;
+  accessToken?: string;
+};
+      ]]></code>
+    </example>
+  </examples>
+</coworker-guide>

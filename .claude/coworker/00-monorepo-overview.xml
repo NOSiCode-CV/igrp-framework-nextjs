@@ -1,0 +1,150 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<monorepo-overview id="00-monorepo-overview">
+  <summary>
+    igrp-framework-nextjs is a pnpm workspace monorepo that publishes the IGRP Framework —
+    a set of React/Next.js packages used to build IGRP applications at NOSi — plus reference templates.
+    Published artifacts go to the internal NOSi Sonatype registry (https://sonatype.nosi.cv/repository/igrp/).
+  </summary>
+
+  <requirements>
+    <item>Node &gt;= 22</item>
+    <item>pnpm</item>
+    <item>Workspaces: packages/**, templates/**, apps/**</item>
+  </requirements>
+
+  <workspace-layout><![CDATA[
+packages/
+  design-system/              → @igrp/igrp-framework-react-design-system  (client UI library)
+  design-system-storybook/    → Storybook + visual/regression tests for the DS
+  framework/
+    next-auth/                → @igrp/framework-next-auth   (NextAuth wrappers, OIDC, session, middleware)
+    next-types/               → @igrp/framework-next-types  (shared TS types; depends on next-auth types)
+    next-ui/                  → @igrp/framework-next-ui     (client template chrome)
+    next/                     → @igrp/framework-next        (server entry: IGRPLayout, IGRPRootLayout, igrpBuildConfig, API client)
+templates/
+  demo/                       → @igrp/framework-next-template-new  (workspace:* and published zip)
+  demo-legacy/                → older reference template
+scripts/                      → repo utilities (e.g. migrate-primitive-names.mjs)
+  ]]></workspace-layout>
+
+  <dependency-order>
+    <chain>next-auth → next-types → design-system → next-ui → next</chain>
+    <notes>
+      <note>pnpm build:framework runs in exactly this order.</note>
+      <note>Do not reorder — next-ui imports from the DS and auth packages, and next imports from next-ui/next-auth/next-types.</note>
+      <note>framework-next-auth is the root — changes there cascade to every downstream package.</note>
+      <note>framework-next is the top — changes affect templates/apps but no other framework packages.</note>
+    </notes>
+  </dependency-order>
+
+  <commands>
+    <group name="setup">
+      <command purpose="install via dotenv-cli (injects .env registry credentials)">pnpm install:deps</command>
+      <command purpose="MUST run once after install before dev:demo works">pnpm build:framework</command>
+      <note>For fastest dev loop without auth/backend setup: IGRP_PREVIEW_MODE=true in templates/demo/.env bypasses auth, uses mock data, disables session refetch.</note>
+    </group>
+
+    <group name="framework-builds">
+      <command purpose="full ordered build (always use this after cross-package changes)">pnpm build:framework</command>
+      <command purpose="@igrp/framework-next-auth">pnpm build:auth</command>
+      <command purpose="@igrp/framework-next-types">pnpm build:next-types</command>
+      <command purpose="@igrp/igrp-framework-react-design-system">pnpm build:ds</command>
+      <command purpose="@igrp/framework-next-ui">pnpm build:next-ui</command>
+      <command purpose="@igrp/framework-next">pnpm build:next</command>
+      <command purpose="everything with a build script">pnpm build</command>
+    </group>
+
+    <group name="lint-format-clean">
+      <command purpose="recursive lint">pnpm lint</command>
+      <command purpose="recursive format">pnpm format</command>
+      <command purpose="removes dist/ etc.">pnpm clean</command>
+      <command purpose="also removes node_modules">pnpm clean-all</command>
+    </group>
+
+    <group name="templates">
+      <command purpose="Next.js 15 + Turbopack dev server">pnpm dev:demo</command>
+      <command purpose="next build (runs biome format)">pnpm build:demo</command>
+      <command purpose="next start">pnpm start:demo</command>
+      <command purpose="publishable zip template">pnpm release:demo</command>
+      <command purpose="App Center dev (if apps/ exists)">pnpm dev:app-center</command>
+    </group>
+
+    <group name="storybook-tests">
+      <command purpose="Storybook from root, port 6006">pnpm storybook</command>
+      <command purpose="Playwright snapshot (Storybook must be running)">pnpm test:storybook</command>
+      <note>More scripts inside packages/design-system-storybook: test-storybook:ci, test-storybook:update-snapshots, test:vitest, chromatic.</note>
+    </group>
+
+    <group name="releases">
+      <command purpose="record a changeset">pnpm changeset</command>
+      <command purpose="apply versions, regenerate CHANGELOGs (baseBranch = main)">pnpm version:changesets</command>
+      <note>Each publishable package has a release script that publishes to Sonatype with yarn publish --tag latest. Do not switch registries or tags without checking.</note>
+    </group>
+
+    <group name="codemods">
+      <command purpose="dry-run">pnpm migrate:primitives</command>
+      <command purpose="actually rewrite files">pnpm migrate:primitives:apply</command>
+    </group>
+  </commands>
+
+  <build-tooling-by-package>
+    <package name="framework-next-auth" build="tsup" react-compiler="no" tailwind-prebuild="no" />
+    <package name="framework-next-types" build="tsc -b" react-compiler="n/a (types only)" tailwind-prebuild="no" />
+    <package name="design-system" build="SWC + Babel" react-compiler="yes" tailwind-prebuild="yes" />
+    <package name="framework-next-ui" build="SWC + Babel" react-compiler="yes" tailwind-prebuild="yes" />
+    <package name="framework-next" build="SWC + Babel" react-compiler="yes" tailwind-prebuild="no" />
+    <notes>
+      <note>SWC+Babel pipeline: build:swc → build:babel (React Compiler pass) → build:types (emit .d.ts).</note>
+      <note>Escape hatch when the React Compiler misbehaves: build:without_reactcompiler.</note>
+    </notes>
+  </build-tooling-by-package>
+
+  <tailwind-v4>
+    <critical>true</critical>
+    <rules>
+      <rule>Templates compile Tailwind once in the app, not in framework packages.</rule>
+      <rule>@source in the app's globals.css must point at both app source and the compiled dist/ of the IGRP packages, so Tailwind generates utilities used inside the DS.</rule>
+      <rule>Import tokens only — never the prebuilt styles.css.</rule>
+      <rule>Dark mode is the .dark class on a parent (driven by next-themes).</rule>
+      <rule>Theme variants (theme-blue, etc.) override tokens in src/styles/themes.css, imported after the tokens import.</rule>
+    </rules>
+    <correct-import><![CDATA[
+@import "@igrp/igrp-framework-react-design-system/tokens";
+    ]]></correct-import>
+    <incorrect-import reason="causes cascade conflicts and missing utilities"><![CDATA[
+@import "@igrp/igrp-framework-react-design-system/styles.css";
+    ]]></incorrect-import>
+  </tailwind-v4>
+
+  <three-layer-ui-model>
+    <layer name="Horizon" prefix="IGRP*" when="Default for all app UI. Opinionated — built-in labels, icons, loading, IGRPForm integration." />
+    <layer name="Primitives" prefix="*Primitive / unprefixed shadcn-style (Button, Card, Input)" when="Custom composition, full control. Thin Radix + CVA wrappers." />
+    <layer name="Custom" prefix="IGRP* (e.g. IGRPStatsCard)" when="Domain-specific, built on Horizon." />
+    <rule>Horizon is always first choice. Drop to Primitives only when Horizon doesn't fit.</rule>
+    <rule>Everything from @igrp/igrp-framework-react-design-system is client-side — any file importing from it needs 'use client'.</rule>
+  </three-layer-ui-model>
+
+  <framework-runtime-layering>
+    <package name="@igrp/framework-next" role="server-side entry: IGRPRootLayout, IGRPLayout, igrpBuildConfig, access-management API client (igrpGetAccessClient, igrpGetAccessClientConfig)." />
+    <package name="@igrp/framework-next-ui" role="client-side template chrome: header, sidebar, menus, nav-user, breadcrumbs, command search, theme selector, auth carousel/form, IGRPRootProviders, IGRPSessionProvider." />
+    <package name="@igrp/framework-next-auth" role="NextAuth.js wrappers with multiple entry points (./server, ./client, ./session, ./jwt, ./middleware, ./config, ./sanitize, ./oidc, ./providers, ./types)." />
+    <package name="@igrp/framework-next-types" role="shared TS types; depends on @igrp/framework-next-auth for session/JWT types." />
+  </framework-runtime-layering>
+
+  <template-flow-demo>
+    <step order="1" file="src/middleware.ts">Validates NextAuth session, bypasses public/login/logout/API routes, honors IGRP_PREVIEW_MODE.</step>
+    <step order="2" file="src/app/layout.tsx">Wraps app in IGRPRootLayout + providers.</step>
+    <step order="3" file="src/app/(igrp)/layout.tsx">Auth checks, session load, renders IGRPLayout with header/sidebar around the (igrp) route group.</step>
+    <step order="4" file="src/igrp.template.config.ts">igrpBuildConfig assembles layout + API + toaster + session; swaps in mock data when IGRP_PREVIEW_MODE=true.</step>
+    <step order="5" file="src/actions/igrp/">Fetches layout + session server-side. NextAuth routes under api/auth/*.</step>
+  </template-flow-demo>
+
+  <repo-conventions>
+    <convention>pnpm only. engines.node >= 22. Workspaces use workspace:*.</convention>
+    <convention>Don't edit dist/. Source is src/.</convention>
+    <convention>Don't import across package internals (no @igrp/framework-next-auth/dist/...). Use documented entry points.</convention>
+    <convention>Changeset per user-visible change to a publishable package.</convention>
+    <convention>.env.npmrc.example documents the registry setup; pnpm install:deps injects .env creds via dotenv-cli.</convention>
+    <convention>Framework packages: ESLint + Prettier. templates/demo: Biome. Don't run one on the other's tree.</convention>
+  </repo-conventions>
+</monorepo-overview>

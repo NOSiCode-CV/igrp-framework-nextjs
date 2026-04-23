@@ -37,6 +37,15 @@ next-auth → next-types → design-system → next-ui → next
 
 All run from repo root unless stated. Most scripts forward through pnpm workspace filters.
 
+### Setup
+
+```bash
+pnpm install:deps      # install via dotenv-cli (injects .env registry credentials)
+pnpm build:framework   # must run once after install before dev:demo works
+```
+
+For the fastest dev loop without auth/backend setup, set `IGRP_PREVIEW_MODE=true` in `templates/demo/.env` — this bypasses authentication, uses mock data, and disables session refetch.
+
 ### Framework packages
 
 ```bash
@@ -62,6 +71,8 @@ pnpm clean-all         # also removes node_modules
 
 Most framework packages build with SWC + Babel and run `babel-plugin-react-compiler` (React Compiler). The output of `build:swc` is re-passed through `build:babel` to apply the compiler, then `build:types` emits `.d.ts`. If the React Compiler misbehaves, packages also expose `build:without_reactcompiler` as an escape hatch. `design-system` and `next-ui` additionally prebuild Tailwind with `pnpm dlx @tailwindcss/cli` via `tailwind:build` before SWC.
 
+Exceptions: `next-auth` builds with **tsup** (not SWC+Babel) — it has no React Compiler step. `next-types` builds with plain **tsc -b** only.
+
 ### Templates & apps
 
 ```bash
@@ -75,7 +86,7 @@ pnpm release:demo      # create the publishable zip template
 pnpm dev:app-center
 ```
 
-Templates use **Biome** (not ESLint) for lint/format: from inside a template, `pnpm lint` → `biome check --write`, `pnpm format` → `biome format --write`.
+Templates use **Biome** (not ESLint) for lint/format: from inside a template, `pnpm lint` → `biome check --write`, `pnpm format` → `biome format --write`. For bundle analysis, run `pnpm build:analyze` from inside `templates/demo` (`ANALYZE=true next build`).
 
 ### Storybook & visual tests (packages/design-system-storybook)
 

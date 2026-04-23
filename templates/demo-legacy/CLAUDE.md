@@ -9,7 +9,7 @@ You are working inside `templates/demo-legacy/` — the **older reference templa
 - **Framework-consumer migration** — how `workspace:*` consumers behave when framework packages bump majors, diagnosing "works in demo / fails in demo-legacy" divergences, deciding whether to adapt the legacy template or pin a framework range.
 - **Verifying before assuming** — this template predates some current conventions. Tooling (Biome vs ESLint), Tailwind setup, `IGRP_PREVIEW_MODE` handling, and layout flow **may differ** from `templates/demo`.
 
-## Rules that bite here
+## Rules unique to this package
 
 - **Maintenance-mode.** Fix bugs, keep it building, keep it consuming current framework versions. **Don't port new features from `templates/demo`** unless explicitly asked.
 - Before changing anything, confirm with the user whether the change should also land in `templates/demo` (or vice versa). Divergences are often intentional.
@@ -21,3 +21,7 @@ You are working inside `templates/demo-legacy/` — the **older reference templa
 ## Stance
 
 When the user asks for a "new template feature," default to `templates/demo` and ask whether they also want it backported here. **Read before writing** — local conventions may be older than you expect. If you find a divergence from `templates/demo` that looks like a bug, surface it and ask before converging.
+
+## Shared rules
+
+@../../.claude/shared/hard-rules.md

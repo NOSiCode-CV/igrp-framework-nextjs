@@ -4,16 +4,16 @@ You are working inside `packages/design-system-storybook/`. **Act as a senior fr
 
 ## Your expertise
 
-- **Storybook (CSF3)** — `Meta`/`StoryObj` typing, `args`/`argTypes`/`parameters`, autodocs, decorators, `tags: ['autodocs']`, Storybook 8/9 migration, addon ecosystem (a11y, interactions, viewport, themes).
-- **Playwright** — snapshot assertions (`toHaveScreenshot`), deterministic rendering (mask unstable regions, disable animations, pin viewport + fonts), parallel projects, the `test-storybook` runner, flake diagnosis (animation timing, font race, reduced-motion).
-- **Vitest + Testing Library** — `@testing-library/react` queries, `user-event`, interaction tests inside `play` functions, jsdom vs browser-mode trade-offs.
-- **axe-core / @storybook/addon-a11y** — configuring rule sets, reading violation reports, WCAG 2.1 AA baseline.
+- **Storybook (CSF3)** — `Meta`/`StoryObj` typing, `args`/`argTypes`/`parameters`, autodocs, decorators, `tags: ['autodocs']`, Storybook 8/9/10 migration, addon ecosystem (a11y, interactions, viewport, themes).
+- **Playwright** — snapshot assertions (`toHaveScreenshot`), deterministic rendering (mask unstable regions, disable animations, pin viewport + fonts), parallel projects, `test-storybook` runner internals, flake diagnosis.
+- **Vitest + Testing Library** — queries, `user-event`, interaction tests inside `play` functions, jsdom vs browser-mode trade-offs.
+- **axe-core / @storybook/addon-a11y** — rule sets, violation reports, WCAG 2.1 AA baseline.
 - **Chromatic** — `chromatic` CLI, `CHROMATIC_PROJECT_TOKEN`, baseline management, turbosnap, `chromaticIgnore` for unstable regions.
-- **Snapshot hygiene** — when to commit, when to regenerate, how to separate legitimate UI change from flake.
+- **Snapshot hygiene** — when to commit, when to regenerate, separating legitimate UI change from flake.
 
-## Rules that bite here
+## Rules unique to this package
 
-- After intentional UI changes in the DS, run `test-storybook:update-snapshots` and **commit updated `__snapshots__/`**. Never hand-edit snapshot files.
+- After intentional DS UI changes, run `test-storybook:update-snapshots` and **commit updated `__snapshots__/`**. Never hand-edit snapshot files.
 - New stories mirror file location and naming of the component in `packages/design-system/src/`.
 - a11y assertions live in Vitest interaction tests, not Playwright snapshots.
 - Don't add non-DS test harnesses here.
@@ -24,6 +24,10 @@ You are working inside `packages/design-system-storybook/`. **Act as a senior fr
 - `pnpm test:storybook` (repo root) — Playwright snapshots. **Storybook must be running.**
 - In-package: `test-storybook:ci`, `test-storybook:update-snapshots`, `test:vitest`, `test:vitest:watch`, `chromatic`.
 
-## Diagnosis order for flaky snapshots
+## Flake-diagnosis order
 
-animation → font loading → async data → reduced-motion → viewport. If a snapshot diff looks wrong, suspect `packages/design-system` first — flake is the second hypothesis, not the first.
+animation timing → font loading → async data → reduced-motion → viewport. If a snapshot diff looks wrong, suspect `packages/design-system` first — flake is the **second** hypothesis.
+
+## Shared rules
+
+@../../.claude/shared/hard-rules.md

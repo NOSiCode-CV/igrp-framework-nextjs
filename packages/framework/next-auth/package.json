@@ -34,6 +34,14 @@
       "types": "./dist/config.d.ts",
       "import": "./dist/config.js"
     },
+    "./oidc": {
+      "types": "./dist/oidc.d.ts",
+      "import": "./dist/oidc.js"
+    },
+    "./providers": {
+      "types": "./dist/providers.d.ts",
+      "import": "./dist/providers.js"
+    },
     "./sanitize": {
       "types": "./dist/sanitize.d.ts",
       "import": "./dist/sanitize.js"
@@ -54,9 +62,8 @@
   "scripts": {
     "clean": "rimraf dist tsconfig.build.tsbuildinfo",
     "format": "prettier --write .",
-    "build:types": "tsc -p tsconfig.build.json --emitDeclarationOnly --outDir dist",
     "build:js": "tsup",
-    "build": "pnpm clean && pnpm build:js && pnpm build:types",
+    "build": "pnpm clean && pnpm build:js",
     "clean-all": "rimraf node_modules && rimraf dist && rimraf tsconfig.tsbuildinfo",
     "release": "pnpm build && yarn publish --registry=https://sonatype.nosi.cv/repository/igrp/ --tag next"
   },

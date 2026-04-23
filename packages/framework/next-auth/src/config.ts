@@ -1,11 +1,30 @@
+// ─────────────────────────────────────────────────────────────────────────────
+// @igrp/framework-next-auth/config
+//
+// Edge-safety contract:
+// The top of this file imports ONLY things that are safe in the Edge runtime
+// (types, next-auth/jwt, pure local modules). The full `next-auth` package and
+// `next/headers` are heavy Node-only dependencies — `next-auth` transitively
+// requires `openid-client`, which uses `crypto` / `stream` / `events` and
+// cannot execute in Edge. Pulling them into the top-level module graph drags
+// them into any middleware bundle that imports `@igrp/framework-next-auth/config`,
+// which is exactly what caused:
+//
+//   TypeError: Cannot read properties of undefined (reading 'custom')
+//     at openid-client/lib/device_flow_handle.js (middleware.js)
+//
+// To keep the middleware bundle clean, every `next-auth` main package usage
+// (handler construction, getServerSession) and every `next/headers` usage
+// (cookies) lives inside a function body and uses `await import(...)`. Webpack
+// then puts them in a lazy chunk the Edge bundle never reaches.
+// ─────────────────────────────────────────────────────────────────────────────
+
 import type { NextApiRequest } from 'next';
-import { cookies } from 'next/headers';
-import NextAuth from 'next-auth';
-import { getServerSession } from 'next-auth';
 import { getToken } from 'next-auth/jwt';
 import type { NextAuthOptions, Account } from 'next-auth';
 import type { OAuthConfig } from 'next-auth/providers/oauth';
 
+import { interopDefault } from './_interop';
 import type { JWT } from './jwt';
 import type { Session } from './session';
 import {
@@ -27,6 +46,13 @@ const DEFAULT_MATCHER = ['/', '/((?!apps|_next|favicon.ico|.*\\..*).*)', '/api/:
 // ─── Types ────────────────────────────────────────────────────────────────────
 
 type AnyProvider = OAuthConfig<Record<string, unknown>> | ReturnType<typeof import('next-auth/providers/keycloak').default>;
+
+/**
+ * Signature of a NextAuth v4 App Router route handler. Typed with the Web
+ * Fetch API shapes (`Request` / `Response`) so this module doesn't need to
+ * statically import `next-auth` just to spell the return type.
+ */
+export type NextAuthHandler = (req: Request, ctx?: unknown) => Promise<Response>;
 
 /**
  * User-supplied callback extensions that run AFTER IGRP defaults.
@@ -119,8 +145,8 @@ export type IGRPAuthInstance = {
    * @example
    * export const { GET, POST } = auth;
    */
-  GET: ReturnType<typeof NextAuth>;
-  POST: ReturnType<typeof NextAuth>;
+  GET: NextAuthHandler;
+  POST: NextAuthHandler;
 
   /**
    * Matcher config for the middleware.
@@ -214,6 +240,24 @@ function normalizePreviewMode(env: Record<string, string | undefined>): boolean 
   return env.IGRP_PREVIEW_MODE?.trim().replace(/^["']|["']$/g, '').toLowerCase() === 'true';
 }
 
+/**
+ * Lazily loads `next-auth` and returns a constructed handler.
+ * Dynamic import so webpack doesn't pull `next-auth` (and transitively
+ * `openid-client`) into any Edge bundle that imports `withIGRPAuth`.
+ */
+async function createNextAuthHandler(authOptions: NextAuthOptions): Promise<NextAuthHandler> {
+  const NextAuthModule = await import('next-auth');
+  const NextAuth = interopDefault(NextAuthModule as unknown as typeof NextAuthModule.default);
+  return NextAuth({
+    ...authOptions,
+    debug: process.env.NODE_ENV === 'development',
+  }) as unknown as NextAuthHandler;
+}
+
+/** Stub handler used when AUTH_PROVIDER=none — avoids constructing NextAuth with empty providers. */
+const disabledAuthHandler: NextAuthHandler = async () =>
+  new Response('Authentication is disabled (AUTH_PROVIDER=none)', { status: 404 });
+
 // ─── Factory ──────────────────────────────────────────────────────────────────
 
 /**
@@ -269,12 +313,15 @@ export function withIGRPAuth(options: IGRPAuthOptions = {}): IGRPAuthInstance {
   } = middlewareOptions;
 
   const resolvedProvider = resolveProvider(provider, env);
+  const authIsDisabled = resolvedProvider === null;
 
   // ── authOptions ────────────────────────────────────────────────────────────
+  // Built synchronously. The options *object* has no Node-only deps; it only
+  // becomes Node-only when passed to NextAuth() below, which we defer.
 
   const authOptions: NextAuthOptions = {
     useSecureCookies: process.env.NODE_ENV === 'production',
-    providers: [resolvedProvider].filter(Boolean) as NextAuthOptions['providers'],
+    providers: resolvedProvider ? [resolvedProvider] : [],
     secret,
     ...(pages ? { pages } : {}),
     ...(sessionConfig ? { session: sessionConfig } : {}),
@@ -361,14 +408,28 @@ export function withIGRPAuth(options: IGRPAuthOptions = {}): IGRPAuthInstance {
     },
   };
 
-  // ── Route handler ──────────────────────────────────────────────────────────
+  // ── Route handler (lazy) ──────────────────────────────────────────────────
+  // `NextAuth()` is only called on the first request that hits GET/POST, which
+  // only happens in Node runtime (the /api/auth/[...nextauth] route). This
+  // keeps `next-auth` + `openid-client` out of the Edge middleware bundle.
 
-  const handler = NextAuth({
-    ...authOptions,
-    debug: process.env.NODE_ENV === 'development',
-  });
+  let cachedHandler: NextAuthHandler | null = null;
+  async function ensureHandler(): Promise<NextAuthHandler> {
+    if (cachedHandler) return cachedHandler;
+    cachedHandler = await createNextAuthHandler(authOptions);
+    return cachedHandler;
+  }
 
-  // ── Middleware primitives ──────────────────────────────────────────────────
+  const handlerGET: NextAuthHandler = async (req, ctx) => {
+    const h = await ensureHandler();
+    return h(req, ctx);
+  };
+  const handlerPOST: NextAuthHandler = async (req, ctx) => {
+    const h = await ensureHandler();
+    return h(req, ctx);
+  };
+
+  // ── Middleware primitives (Edge-safe) ─────────────────────────────────────
 
   function isAuthDisabled(): boolean {
     return isAuthDisabledFromEnv(env);
@@ -394,9 +455,10 @@ export function withIGRPAuth(options: IGRPAuthOptions = {}): IGRPAuthInstance {
     return new URL(loginUrl, env.NEXTAUTH_URL_INTERNAL ?? request.url);
   }
 
-  // ── Server helpers (Node runtime) ─────────────────────────────────────────
+  // ── Server helpers (Node runtime only — dynamic imports) ──────────────────
 
   async function getAccessToken(): Promise<JWT | null> {
+    const { cookies } = await import('next/headers');
     const cookieStore = await cookies();
     const token = await getToken({
       req: {
@@ -408,7 +470,9 @@ export function withIGRPAuth(options: IGRPAuthOptions = {}): IGRPAuthInstance {
   }
 
   async function serverSession(): Promise<Session | null> {
+    if (authIsDisabled) return null;
     try {
+      const { getServerSession } = await import('next-auth');
       return (await getServerSession(authOptions)) as Session | null;
     } catch {
       return null;
@@ -442,8 +506,10 @@ export function withIGRPAuth(options: IGRPAuthOptions = {}): IGRPAuthInstance {
 
   return {
     authOptions,
-    GET: handler,
-    POST: handler,
+    // When AUTH_PROVIDER=none we never construct NextAuth — return a stub that
+    // responds 404 instead of crashing v4 with an empty providers array.
+    GET: authIsDisabled ? disabledAuthHandler : handlerGET,
+    POST: authIsDisabled ? disabledAuthHandler : handlerPOST,
     config: { matcher },
     isAuthDisabled,
     isPreviewMode,

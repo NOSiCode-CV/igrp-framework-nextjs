@@ -1,5 +1,13 @@
-import KeycloakProvider from 'next-auth/providers/keycloak';
+import KeycloakProviderImport from 'next-auth/providers/keycloak';
 import type { OAuthConfig, OAuthUserConfig } from 'next-auth/providers/oauth';
+
+import { interopDefault } from './_interop';
+
+// `next-auth/providers/keycloak` is a CJS module whose factory lives on
+// `exports.default`. Normalize the import so consuming bundlers (webpack under
+// Next.js 15 App Router in particular) don't hand us the namespace object
+// instead of the function — see ./_interop.ts for the full story.
+const KeycloakProvider = interopDefault(KeycloakProviderImport);
 
 export const KEYCLOAK_PROVIDER_ID = 'keycloak';
 export const AUTENTIKA_PROVIDER_ID = 'autentika';

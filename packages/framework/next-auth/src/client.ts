@@ -1,5 +1,3 @@
-'use client';
-
 import { useSession as useSessionBase } from 'next-auth/react';
 import type { Session } from './session';
 export {

@@ -1,4 +1,4 @@
-# @igrp/igrp-framework-react-design-system
+# @igrp/framework-next-ui
 
 ## 0.1.0-beta.115
 
@@ -28,6 +28,11 @@
 
   See templates/demo-legacy/.igrpmigrations/05.MIGRATIONS-23042026.md and 06.MIGRATIONS-23042026.md for the full migration guides.
 
+- Updated dependencies
+  - @igrp/framework-next-types@0.1.0-beta.115
+  - @igrp/framework-next-auth@0.1.0-beta.115
+  - @igrp/igrp-framework-react-design-system@0.1.0-beta.115
+
 ## 0.1.0-beta.114
 
 ### Patch Changes
@@ -56,6 +61,7 @@
 
   See templates/demo-legacy/.igrpmigrations/05.MIGRATIONS-23042026.md and 06.MIGRATIONS-23042026.md for the full migration guides.
 
-## 0.1.0-beta.102
-
-- Initial changelog. Future releases will be documented via [Changesets](https://github.com/changesets/changesets).
+- Updated dependencies
+  - @igrp/framework-next-types@0.1.0-beta.114
+  - @igrp/framework-next-auth@0.1.0-beta.114
+  - @igrp/igrp-framework-react-design-system@0.1.0-beta.114

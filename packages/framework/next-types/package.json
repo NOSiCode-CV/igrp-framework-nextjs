@@ -1,6 +1,6 @@
 {
   "name": "@igrp/framework-next-types",
-  "version": "0.1.0-beta.113-2",
+  "version": "0.1.0-beta.115",
   "type": "module",
   "description": "IGRP Framework for Next.js | Types",
   "keywords": [
@@ -21,7 +21,7 @@
     "dev": "tsc --watch",
     "build": "rimraf dist && rimraf tsconfig.tsbuildinfo && pnpm format && tsc -b",
     "format": "prettier --write .",
-    "release": "pnpm build && yarn publish --registry=https://sonatype.nosi.cv/repository/igrp/ --tag next",
+    "release": "pnpm build && yarn publish --registry=https://sonatype.nosi.cv/repository/igrp/ --tag latest",
     "clean-all": "rimraf node_modules && rimraf dist && rimraf tsconfig.tsbuildinfo"
   },
   "peerDependencies": {
@@ -39,5 +39,10 @@
   },
   "engines": {
     "node": ">=20.x.x"
+  },
+  "publishConfig": {
+    "registry": "https://sonatype.nosi.cv/repository/igrp/",
+    "tag": "latest",
+    "access": "public"
   }
 }

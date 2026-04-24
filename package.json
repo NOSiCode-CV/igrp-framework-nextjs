@@ -1,6 +1,6 @@
 {
   "name": "igrp-framework-nextjs",
-  "version": "0.0.1",
+  "version": "0.0.1-beta.114",
   "description": "IGRP Framework for Next.js",
   "keywords": [
     "igrp",
@@ -35,12 +35,16 @@
     "clean-all": "pnpm -r run clean-all",
     "changeset": "changeset",
     "version:changesets": "changeset version",
+    "release:version": "changeset version",
+    "release:build": "pnpm build:framework",
+    "release:publish": "changeset publish",
+    "release:all": "pnpm release:version && pnpm release:build && pnpm release:publish",
     "migrate:primitives": "node scripts/migrate-primitive-names.mjs",
     "migrate:primitives:apply": "node scripts/migrate-primitive-names.mjs --apply",
     "install:deps": "dotenv -e .env -- pnpm install"
   },
   "devDependencies": {
-    "@changesets/cli": "^2.30.0",
+    "@changesets/cli": "^2.31.0",
     "dotenv-cli": "^11.0.0",
     "eslint": "^9.39.1",
     "typescript": "^5.9.3"

@@ -1,6 +1,6 @@
 {
   "name": "@igrp/framework-next",
-  "version": "0.1.0-beta.113-2",
+  "version": "0.1.0-beta.115",
   "description": "IGRP Framework for Next.js | Server Rendering components",
   "keywords": [
     "igrp",
@@ -24,7 +24,7 @@
     "build:types": "tsc --emitDeclarationOnly --outDir dist",
     "build:without_reactcompiler": "pnpm clean:dist && pnpm build:swc && pnpm build:types",
     "format": "prettier --write .",
-    "release": "pnpm build && yarn publish --registry=https://sonatype.nosi.cv/repository/igrp/ --tag next",
+    "release": "pnpm build && yarn publish --registry=https://sonatype.nosi.cv/repository/igrp/ --tag latest",
     "clean-all": "rimraf node_modules && rimraf dist && rimraf tsconfig.tsbuildinfo"
   },
   "dependencies": {
@@ -85,5 +85,10 @@
   ],
   "engines": {
     "node": ">=20.x.x"
+  },
+  "publishConfig": {
+    "registry": "https://sonatype.nosi.cv/repository/igrp/",
+    "tag": "latest",
+    "access": "public"
   }
 }

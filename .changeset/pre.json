@@ -1,0 +1,14 @@
+{
+  "mode": "pre",
+  "tag": "beta",
+  "initialVersions": {
+    "@igrp/igrp-framework-react-design-system": "0.1.0-beta.114",
+    "@igrp/framework-next": "0.1.0-beta.114",
+    "@igrp/framework-next-auth": "0.1.0-beta.114",
+    "@igrp/framework-next-types": "0.1.0-beta.114",
+    "@igrp/framework-next-ui": "0.1.0-beta.114"
+  },
+  "changesets": [
+    "heavy-pants-sink"
+  ]
+}

@@ -1,4 +1,4 @@
-# @igrp/igrp-framework-react-design-system
+# @igrp/framework-next-auth
 
 ## 0.1.0-beta.115
 
@@ -55,7 +55,3 @@
   - serverSession() no longer swallows typed errors; logout page hardened with .catch + fallback redirect + 3 s safety timeout.
 
   See templates/demo-legacy/.igrpmigrations/05.MIGRATIONS-23042026.md and 06.MIGRATIONS-23042026.md for the full migration guides.
-
-## 0.1.0-beta.102
-
-- Initial changelog. Future releases will be documented via [Changesets](https://github.com/changesets/changesets).

@@ -6,7 +6,7 @@ import { headers } from "next/headers";
 import { redirect } from "next/navigation";
 
 import { configLayout } from "@/actions/igrp/layout";
-import { isPreviewMode as checkPreviewMode } from "@/lib/utils";
+import { isAuthBypass as checkAuthBypass } from "@/lib/utils";
 
 export default async function IGRPRootLayout({
   children,
@@ -17,8 +17,10 @@ export default async function IGRPRootLayout({
   const { layout, previewMode } = config;
   const { session } = layout || {};
 
-  const envPreviewMode = checkPreviewMode();
-  const isPreviewMode = envPreviewMode || previewMode;
+  // Auth bypass covers both `IGRP_PREVIEW_MODE=true` and `AUTH_PROVIDER=none`.
+  // When either is active, we skip the login redirect and let the app render.
+  const envAuthBypass = checkAuthBypass();
+  const authBypassed = envAuthBypass || previewMode;
 
   const headersList = await headers();
   const currentPath =
@@ -36,7 +38,7 @@ export default async function IGRPRootLayout({
 
   const isAlreadyOnLogin = currentPath.startsWith(loginPath);
 
-  if (!isPreviewMode && session === null && urlLogin && !isAlreadyOnLogin) {
+  if (!authBypassed && session === null && urlLogin && !isAlreadyOnLogin) {
     redirect(urlLogin);
   }
 

@@ -2,8 +2,10 @@ import { withIGRPAuth } from "@igrp/framework-next-auth/config";
 import { redirect } from "next/navigation";
 
 import { igrpSetAccessClientConfig } from "@igrp/framework-next";
+import { isIgrpError } from "@igrp/framework-next/errors";
 import { assertAuthProviderEnv } from "@igrp/framework-next-auth";
 import { isPreviewMode } from "@/lib/utils";
+import { reportError } from "@/lib/report-error";
 
 /**
  * Central IGRP auth instance.
@@ -31,16 +33,21 @@ export const auth = withIGRPAuth({
 export async function serverSession() {
   const apiManagement = process.env.IGRP_ACCESS_MANAGEMENT_API || "";
 
-  try {
-    if (!process.env.NEXTAUTH_SECRET) {
-      console.warn("NEXTAUTH_SECRET is not set. This is required for production.");
-      if (process.env.NODE_ENV === "production") {
-        throw new Error("NEXTAUTH_SECRET must be set in production");
-      }
+  if (!process.env.NEXTAUTH_SECRET) {
+    console.warn("NEXTAUTH_SECRET is not set. This is required for production.");
+    if (process.env.NODE_ENV === "production") {
+      // Hard fail in prod — we will not masquerade as "no session". Bubbles
+      // to the nearest App Router `error.tsx`.
+      throw new Error("NEXTAUTH_SECRET must be set in production");
     }
+  }
 
-    assertAuthProviderEnv(process.env);
+  // Env/provider misconfiguration is a setup problem, not a "no session"
+  // condition — let typed framework errors propagate so the boundary can
+  // render a real diagnosis rather than silently redirecting to login.
+  assertAuthProviderEnv(process.env);
 
+  try {
     const session = await auth.serverSession();
 
     if (session !== null) {
@@ -52,7 +59,10 @@ export async function serverSession() {
 
     return session;
   } catch (error) {
-    console.error("::Error getting server session::", error);
+    // Only swallow the "no session / cookie decode failed" branch. Typed
+    // IgrpError instances indicate config-level problems and must surface.
+    if (isIgrpError(error)) throw error;
+    reportError(error, { segment: "lib/auth.serverSession" });
     return null;
   }
 }

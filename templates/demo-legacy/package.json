@@ -12,8 +12,8 @@
   "author": "IGRP Team",
   "license": "MIT",
   "scripts": {
-    "dev": "next dev",
-    "build": "pnpm format && next build",
+    "dev": "next dev --turbopack",
+    "build": "pnpm format && next build --turbopack",
     "start": "next start",
     "lint": "biome check --write",
     "format": "biome format --write"

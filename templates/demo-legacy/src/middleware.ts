@@ -21,6 +21,8 @@ function withSecurityHeaders(response: NextResponse): NextResponse {
   return response;
 }
 
+const AUTH_UI_PREFIXES = ["/login", "/logout", "/api/auth"];
+
 const PUBLIC_PATHS = new Set(["/login", "/logout", "/api/auth"]);
 const PUBLIC_PREFIXES = ["/login/", "/logout/", "/api/auth/"];
 const STATIC_PREFIXES = ["/_next/", "/static/", "/favicon.ico"];
@@ -32,21 +34,36 @@ function isPublicPath(pathname: string): boolean {
   return false;
 }
 
+function isAuthUiPath(pathname: string): boolean {
+  return AUTH_UI_PREFIXES.some(
+    (p) => pathname === p || pathname.startsWith(`${p}/`),
+  );
+}
+
 /**
  * Next.js middleware: auth check + security headers.
  *
  * Flow:
- * 1. Skip auth when disabled (AUTH_PROVIDER=none) or preview mode
- * 2. Skip auth for public/static paths
- * 3. Extract JWT — redirect to login on failure
- * 4. Redirect to login when token expired or refresh failed
- * 5. Apply security headers to all passing responses
+ * 1. When auth is bypassed (AUTH_PROVIDER=none or IGRP_PREVIEW_MODE=true),
+ *    redirect any /login, /logout, or /api/auth/* request to / and let every
+ *    other path through untouched. There is no real provider to talk to.
+ * 2. Otherwise: skip auth for public/static paths.
+ * 3. Extract JWT — redirect to login on failure.
+ * 4. Redirect to login when token expired or refresh failed.
+ * 5. Apply security headers to all passing responses.
  */
 export async function middleware(request: NextRequest) {
   const { pathname } = request.nextUrl;
 
-  if (auth.isAuthDisabled()) return withSecurityHeaders(NextResponse.next());
-  if (auth.isPreviewMode()) return withSecurityHeaders(NextResponse.next());
+  if (auth.isAuthDisabled() || auth.isPreviewMode()) {
+    if (isAuthUiPath(pathname)) {
+      return withSecurityHeaders(
+        NextResponse.redirect(new URL("/", request.url)),
+      );
+    }
+    return withSecurityHeaders(NextResponse.next());
+  }
+
   if (isPublicPath(pathname)) return withSecurityHeaders(NextResponse.next());
 
   const loginRedirect = () =>

@@ -3,7 +3,7 @@
 import { cookies } from "next/headers";
 
 import { auth } from "@/lib/auth";
-import { isPreviewMode } from "@/lib/utils";
+import { isAuthBypass } from "@/lib/utils";
 
 export async function getTheme() {
   const cookieStore = await cookies();
@@ -14,11 +14,10 @@ export async function getTheme() {
 }
 
 export async function configLayout() {
-  // Check preview mode
-
-  // In preview mode, provide a mock session object to prevent client-side redirects
-  // The framework might check for session existence rather than just previewMode
-  const session = isPreviewMode()
+  // When auth is bypassed (preview mode OR AUTH_PROVIDER=none), provide a mock
+  // session so the layout doesn't kick the user to /login. The framework reads
+  // session existence rather than the preview flag when deciding redirects.
+  const session = isAuthBypass()
     ? ({
         user: { name: "Preview User", email: "preview@example.com" },
         accessToken: "preview-token",

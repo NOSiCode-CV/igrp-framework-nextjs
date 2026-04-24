@@ -22,6 +22,7 @@ export {
 // erros components
 
 export { IGRPGlobalError, type IGRPGlobalErrorProps } from './components/errors/global';
+export { IGRPSegmentError, type IGRPSegmentErrorProps } from './components/errors/segment';
 
 // templates
 

@@ -21,3 +21,16 @@ export {
 export { igrpBuildQueryString } from './lib/build-query-string';
 
 export { igrpDeleteAuthCookies } from './lib/delete-auth-cookies';
+
+// Typed errors — also importable via `@igrp/framework-next/errors` for
+// consumers who want to isolate error imports from the server entry.
+export {
+  IgrpError,
+  IgrpConfigError,
+  IgrpAuthConfigError,
+  IgrpLayoutDataError,
+  isIgrpError,
+  type IgrpErrorCode,
+  type IgrpErrorContext,
+  type IgrpErrorShape,
+} from './errors';

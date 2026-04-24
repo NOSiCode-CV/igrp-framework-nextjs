@@ -25,16 +25,14 @@ export async function IGRPLayout({ children, config }: IGRPLayoutArgs) {
 
   const { session } = layout;
 
-  if (!previewMode) {
-    if (!apiManagementConfig || !apiManagementConfig.baseUrl) {
-      throw new Error(
-        '[ERROR_IGRP_PREVIEW_MODE]: Modo de pré-visualização desativado. É necessária a configuração da gestão de acesso',
-      );
-    }
-
+  // Access-management config presence is validated upstream in
+  // `igrpBuildConfig` (see ../lib/build.ts). By the time we reach here, either
+  // `previewMode` is true OR `apiManagementConfig.baseUrl` is guaranteed to
+  // be present — so no runtime throw is needed in this layout.
+  if (!previewMode && apiManagementConfig?.baseUrl) {
     igrpSetAccessClientConfig({
       token: session?.accessToken || '',
-      baseUrl: apiManagementConfig?.baseUrl,
+      baseUrl: apiManagementConfig.baseUrl,
     });
   }
 

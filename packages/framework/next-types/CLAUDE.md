@@ -14,7 +14,7 @@ You are working inside `packages/framework/next-types/` — `@igrp/framework-nex
 
 - Depends on `@igrp/framework-next-auth` for session/JWT types; consumed by `design-system`, `next-ui`, `next`. A single type change can break every downstream package.
 - Prefer **additive** changes. For renames, keep the old alias for at least one release unless doing a coordinated major bump.
-- **No runtime exports.** Runtime (Zod schemas, type guards, constants) lives in the owning runtime package; only its *types* come here.
+- **No runtime exports.** Runtime (Zod schemas, type guards, constants) lives in the owning runtime package; only its _types_ come here.
 - Build: plain **`tsc -b`** — no SWC, no Babel, no React Compiler, no tsup. `pnpm build:next-types` from repo root.
 - After public type changes → `pnpm build:framework` to catch downstream breakage.
 

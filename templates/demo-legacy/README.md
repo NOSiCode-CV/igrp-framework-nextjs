@@ -7,6 +7,7 @@ A production-ready template for building applications with the IGRP Framework on
 - [Overview](#overview)
 - [Prerequisites](#prerequisites)
 - [Getting Started](#getting-started)
+- [Upgrading](#upgrading)
 - [Project Structure](#project-structure)
 - [Configuration](#configuration)
 - [Environment Variables](#environment-variables)
@@ -85,6 +86,86 @@ Open [http://localhost:3000](http://localhost:3000) in your browser to see the a
 pnpm build
 pnpm start
 ```
+
+## Upgrading
+
+When a new IGRP framework version ships, the template needs matching source changes (new files, updated middleware, `.env.example` additions, dependency bumps). These are automated via `@igrp/template-migrator`.
+
+### Check your upgrade status
+
+```bash
+pnpm dlx @igrp/template-migrator@latest status
+```
+
+Sample output:
+
+```
+Template: demo-legacy  CLI: 0.1.0-beta.115
+
+  ✓ applied  01-preview-mode-not-found
+  ✓ applied  02-access-sync-config-refactor
+  • pending  03-tailwind-v4-tokens
+  • pending  04-multi-auth-provider
+  • pending  05-edge-safe-auth-bypass
+  • pending  06-error-handling-overhaul
+
+2 applied, 4 pending
+```
+
+### Preview what will change
+
+```bash
+pnpm dlx @igrp/template-migrator@latest plan
+```
+
+Prints each pending migration with the exact file operations it performs — no writes.
+
+### Apply migrations
+
+```bash
+pnpm dlx @igrp/template-migrator@latest apply
+```
+
+The CLI runs each pending migration in order, prompts before each step, and writes `.igrpmigrations.lock.json` after each success so the run is resumable on failure. When complete it prints the follow-up command:
+
+```
+Next steps:
+  pnpm install
+```
+
+Run without prompts (CI / scripted):
+
+```bash
+pnpm dlx @igrp/template-migrator@latest apply --yes
+```
+
+### CI gate
+
+Add a step to your CI workflow to fail if pending migrations exist:
+
+```yaml
+- name: Check migrations
+  run: pnpm dlx @igrp/template-migrator@latest check
+```
+
+### How it works
+
+Each framework release that requires template changes ships a migration guide under [`.igrpmigrations/`](.igrpmigrations/). The CLI bundles all guides as a cumulative manifest — installing any version brings every migration up to that point. The lock file (`.igrpmigrations.lock.json`) tracks which migrations have been applied so re-running `apply` is always a no-op.
+
+Migration history:
+
+| # | What changed | Target framework |
+|---|---|---|
+| `01-preview-mode-not-found` | Preview mode bypass, custom 404 | — |
+| `02-access-sync-config-refactor` | Access Management sync, config helpers | beta.84 |
+| `03-tailwind-v4-tokens` | Tailwind v4 `@source` / token-only imports | — |
+| `04-multi-auth-provider` | Multi-provider auth (`AUTH_PROVIDER`), central `auth.ts` | beta.113 |
+| `05-edge-safe-auth-bypass` | Edge-safe auth refactor, `isAuthBypass()` unification | beta.114 |
+| `06-error-handling-overhaul` | Typed error hierarchy, full App Router error boundaries | beta.115 |
+
+Full migration guides (with before/after code): [`.igrpmigrations/`](.igrpmigrations/)
+
+---
 
 ## Project Structure
 

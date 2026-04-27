@@ -3,7 +3,13 @@
 # === CONFIG ===
 $zipName = "igrp-next-template.zip"
 $excludeFolders = @(".next", "node_modules", ".git", "create-template", ".env", ".env.docker")
+# The full .igrpmigrations/ tree (guides + payloads) is managed by the source
+# repo and bundled into @igrp/template-migrator — it must NOT go into the zip.
+# We move it out and replace it with a slim folder containing only lock.json,
+# so consumers of the template immediately see all migrations as applied.
 $excludeTemp = "_excluded"
+$migrationsDir = ".igrpmigrations"
+$migrationsLock = ".igrpmigrations/lock.json"
 
 # === READ VERSION FROM package.json ===
 $packageJsonPath = "./package.json"
@@ -89,6 +95,22 @@ try {
     Move-Item -Path $scriptPath -Destination $excludeTemp -Force
   }
 
+  # === SLIM .igrpmigrations/ ===
+  # Move the full folder (guides + payloads) to _excluded, then create a
+  # minimal replacement containing only lock.json so the zip ships a clean
+  # template that is already fully up-to-date per the migrator.
+  if (Test-Path $migrationsDir) {
+    Move-Item -Path $migrationsDir -Destination $excludeTemp -Force
+  }
+  New-Item -ItemType Directory -Path $migrationsDir | Out-Null
+  $lockSource = "$excludeTemp/$migrationsDir/lock.json"
+  if (Test-Path $lockSource) {
+    Copy-Item -Path $lockSource -Destination $migrationsLock -Force
+    Write-Host "Included slim .igrpmigrations/lock.json in zip"
+  } else {
+    Write-Host "Warning: lock.json not found at $lockSource — .igrpmigrations/ will be empty in zip"
+  }
+
   # Remove existing zip if it exists
   if (Test-Path $zipName) {
     Remove-Item $zipName -Force
@@ -124,6 +146,12 @@ try {
     Write-Host "Check log: $logPath"
   }
 } finally {
+  # Remove the slim .igrpmigrations/ we created for the zip before restoring
+  # the full original folder from _excluded.
+  if (Test-Path $migrationsDir) {
+    Remove-Item $migrationsDir -Recurse -Force
+  }
+
   if (Test-Path $excludeTemp) {
     Get-ChildItem -Path $excludeTemp -Force | ForEach-Object {
       Move-Item -Path $_.FullName -Destination . -Force

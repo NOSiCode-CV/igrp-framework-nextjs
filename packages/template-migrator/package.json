@@ -1,0 +1,41 @@
+{
+  "name": "@igrp/template-migrator",
+  "version": "0.1.0-beta.116",
+  "description": "CLI to apply IGRP template migrations to consumer apps",
+  "type": "module",
+  "bin": {
+    "igrp-migrate": "dist/cli.js"
+  },
+  "main": "dist/index.js",
+  "exports": {
+    ".": {
+      "import": "./dist/index.js",
+      "types": "./dist/index.d.ts"
+    }
+  },
+  "scripts": {
+    "prebuild": "tsx scripts/pack.ts",
+    "build:js": "tsup",
+    "build:types": "tsc -p tsconfig.build.json --emitDeclarationOnly",
+    "build": "pnpm prebuild && pnpm build:js && pnpm build:types",
+    "clean": "rm -rf dist"
+  },
+  "dependencies": {
+    "yaml": "^2.7.1"
+  },
+  "devDependencies": {
+    "tsx": "^4.19.4",
+    "tsup": "^8.5.0",
+    "typescript": "^5.9.3",
+    "@types/node": "^22.0.0"
+  },
+  "engines": {
+    "node": ">=22"
+  },
+  "publishConfig": {
+    "registry": "https://sonatype.nosi.cv/repository/igrp/"
+  },
+  "files": [
+    "dist"
+  ]
+}

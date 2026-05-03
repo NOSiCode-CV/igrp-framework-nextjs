@@ -51,7 +51,68 @@ function resolveAnchorTag(item: IGRPMenuItemArgs): boolean {
   return isExternal || item.target === '_blank';
 }
 
-// ─── Stub (replaced in later tasks) ──────────────────────────────────────────
+// ─── Tree builder ─────────────────────────────────────────────────────────────
+
+function buildMenuSections(menus: IGRPMenuItemArgs[]): Section[] {
+  const byPosition = (a: IGRPMenuItemArgs, b: IGRPMenuItemArgs) =>
+    (a.position ?? 0) - (b.position ?? 0);
+
+  const active = menus.filter((m) => m.status === 'ACTIVE').sort(byPosition);
+  if (active.length === 0) return [];
+
+  const codeSet = new Set(active.map((m) => m.code).filter(Boolean));
+  const topLevel: IGRPMenuItemArgs[] = [];
+  const childrenMap = new Map<string, IGRPMenuItemArgs[]>();
+
+  for (const item of active) {
+    const isTopLevel =
+      !item.parentCode ||
+      item.parentCode === item.code ||
+      !codeSet.has(item.parentCode);
+
+    if (isTopLevel) {
+      topLevel.push(item);
+    } else {
+      const list = childrenMap.get(item.parentCode!) ?? [];
+      list.push(item);
+      childrenMap.set(item.parentCode!, list);
+    }
+  }
+
+  const toNode = (item: IGRPMenuItemArgs): TreeNode => {
+    if (item.type === 'FOLDER') {
+      const children = (childrenMap.get(item.code) ?? []).map(
+        (child): LeafNode => ({ kind: 'leaf', item: child }),
+      );
+      return { kind: 'folder', item, children };
+    }
+    return { kind: 'leaf', item };
+  };
+
+  const sections: Section[] = [];
+  let unlabeled: Section | null = null;
+
+  for (const item of topLevel) {
+    if (item.type === 'GROUP') {
+      unlabeled = null;
+      sections.push({
+        key: item.code,
+        label: item.name,
+        nodes: (childrenMap.get(item.code) ?? []).map(toNode),
+      });
+    } else {
+      if (!unlabeled) {
+        unlabeled = { key: `root-${sections.length}`, nodes: [] };
+        sections.push(unlabeled);
+      }
+      unlabeled.nodes.push(toNode(item));
+    }
+  }
+
+  return sections;
+}
+
+// ─── Root component (stub) ────────────────────────────────────────────────────
 
 type IGRPTemplateMenuArgs = { menus?: IGRPMenuItemArgs[] };
 

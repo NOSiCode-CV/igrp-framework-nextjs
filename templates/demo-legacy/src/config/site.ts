@@ -10,7 +10,7 @@ export const siteConfig = {
   },
   logo: {
     src: "/logo-no-text.png",
-    srcDark: "/logo-negative.png",
+    srcDark: "/logo-no-text.png",
     width: 100,
     height: 60,
   },

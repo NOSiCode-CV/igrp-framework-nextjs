@@ -205,6 +205,9 @@
   .pointer-events-none {
     pointer-events: none;
   }
+  .visible {
+    visibility: visible;
+  }
   .sr-only {
     position: absolute;
     width: 1px;
@@ -900,8 +903,8 @@
       display: none;
     }
   }
-  .group-data-\[state\=open\]\:rotate-90 {
-    &:is(:where(.group)[data-state="open"] *) {
+  .group-data-\[state\=open\]\/collapsible\:rotate-90 {
+    &:is(:where(.group\/collapsible)[data-state="open"] *) {
       rotate: 90deg;
     }
   }

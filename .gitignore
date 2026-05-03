@@ -116,3 +116,4 @@ igrp-next-template.zip
 .npmrc.example
 .cursor
 .idea
+.claude/settings.local.json

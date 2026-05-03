@@ -172,7 +172,7 @@ function SubLeafLink({ node, variant }: SubLeafLinkProps) {
       aria-label={item.target === '_blank' ? `${item.name} (opens in new tab)` : item.name}
       className={cn('flex items-center gap-2 w-full min-w-0')}
     >
-      {item.icon && <IGRPIcon iconName={item.icon} className={cn('h-4 w-4 shrink-0')} />}
+      {item.icon && <IGRPIcon iconName={item.icon} className={cn('size-4 shrink-0')} />}
       <span className={cn('truncate')}>{item.name}</span>
     </a>
   ) : (
@@ -181,7 +181,7 @@ function SubLeafLink({ node, variant }: SubLeafLinkProps) {
       aria-label={item.name}
       className={cn('flex items-center gap-2 w-full min-w-0')}
     >
-      {item.icon && <IGRPIcon iconName={item.icon} className={cn('h-4 w-4 shrink-0')} />}
+      {item.icon && <IGRPIcon iconName={item.icon} className={cn('size-4 shrink-0')} />}
       <span className={cn('truncate')}>{item.name}</span>
     </Link>
   );
@@ -253,7 +253,7 @@ function FolderMenuItem({ node }: FolderMenuItemProps) {
               <IGRPIcon
                 iconName="ChevronRight"
                 className={cn(
-                  'ml-auto h-4 w-4 transition-transform duration-200 group-data-[state=open]/collapsible:rotate-90',
+                  'ml-auto size-4 transition-transform duration-200 group-data-[state=open]/collapsible:rotate-90',
                 )}
                 strokeWidth={2}
               />

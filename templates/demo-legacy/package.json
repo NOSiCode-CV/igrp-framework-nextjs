@@ -1,6 +1,7 @@
 {
   "name": "@igrp/framework-next-template",
   "version": "0.1.0-beta.115",
+  "private": true,
   "description": "igrp template",
   "displayName": "igrp template",
   "keywords": [
@@ -16,7 +17,8 @@
     "build": "pnpm format && next build --turbopack",
     "start": "next start",
     "lint": "biome check --write",
-    "format": "biome format --write"
+    "format": "biome format --write",
+    "publish:template": "powershell -ExecutionPolicy Bypass -File ./create-template/create-zip-template.ps1"
   },
   "dependencies": {
     "@hookform/resolvers": "^5.2.2",

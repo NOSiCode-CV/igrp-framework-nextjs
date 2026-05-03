@@ -1,5 +1,11 @@
 # @igrp/framework-next-ui
 
+## 0.1.0-beta.117
+
+### Patch Changes
+
+- f594936: refactor(menus): rewrite IGRPTemplateMenus with tree-builder + type-dispatch renderer; fix isActive false-positive, filter INACTIVE items, handle SYSTEM_PAGE
+
 ## 0.1.0-beta.116
 
 ### Patch Changes

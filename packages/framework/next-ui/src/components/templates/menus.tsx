@@ -272,12 +272,56 @@ function FolderMenuItem({ node }: FolderMenuItemProps) {
   );
 }
 
-// ─── Root component (stub) ────────────────────────────────────────────────────
+// ─── SectionGroup ─────────────────────────────────────────────────────────────
+
+interface SectionGroupProps {
+  section: Section;
+  pathname: string;
+}
+
+function SectionGroup({ section, pathname }: SectionGroupProps) {
+  return (
+    <SidebarGroup>
+      {section.label && <SidebarGroupLabel>{section.label}</SidebarGroupLabel>}
+      <SidebarGroupContent>
+        <SidebarMenu role="navigation">
+          {section.nodes.map((node) =>
+            node.kind === 'folder' ? (
+              <FolderMenuItem key={`folder-${node.item.id}`} node={node} />
+            ) : (
+              <LeafMenuItem key={`leaf-${node.item.id}`} node={node} pathname={pathname} />
+            ),
+          )}
+        </SidebarMenu>
+      </SidebarGroupContent>
+    </SidebarGroup>
+  );
+}
+
+// ─── IGRPTemplateMenus (public) ───────────────────────────────────────────────
 
 type IGRPTemplateMenuArgs = { menus?: IGRPMenuItemArgs[] };
 
-export function IGRPTemplateMenus(_props: IGRPTemplateMenuArgs) {
-  return null;
+export function IGRPTemplateMenus({ menus = [] }: IGRPTemplateMenuArgs) {
+  const pathname = usePathname();
+  const sections = useMemo(() => buildMenuSections(menus), [menus]);
+
+  if (sections.length === 0) {
+    return (
+      <Alert variant="destructive">
+        <IGRPIcon iconName="CircleAlert" />
+        <AlertDescription>Aplicação sem menus.</AlertDescription>
+      </Alert>
+    );
+  }
+
+  return (
+    <>
+      {sections.map((section) => (
+        <SectionGroup key={`grp-${section.key}`} section={section} pathname={pathname} />
+      ))}
+    </>
+  );
 }
 
 export type { IGRPTemplateMenuArgs };

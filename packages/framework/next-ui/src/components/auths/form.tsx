@@ -3,7 +3,7 @@
 import { useState } from 'react';
 import Image from 'next/image';
 import {
-  KEYCLOAK_PROVIDER_ID,
+  OAUTH2_PROVIDER_ID,
   signIn,
   type AuthProviderId,
 } from '@igrp/framework-next-auth/client';
@@ -46,7 +46,7 @@ function IGRPAuthForm({
   logo,
   name,
   callbackUrl = '/',
-  providerId = KEYCLOAK_PROVIDER_ID,
+  providerId = OAUTH2_PROVIDER_ID,
 }: IGRPAuthFormProps) {
   const [isLoading, setIsLoading] = useState(false);
   const [authError, setAuthError] = useState<string | null>(null);

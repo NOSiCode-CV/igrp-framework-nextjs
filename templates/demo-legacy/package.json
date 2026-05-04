@@ -18,7 +18,7 @@
     "start": "next start",
     "lint": "biome check --write",
     "format": "biome format --write",
-    "publish:template": "powershell -ExecutionPolicy Bypass -File ./create-template/create-zip-template.ps1"
+    "publish:template": "pwsh -ExecutionPolicy Bypass -File ./create-template/create-zip-template.ps1"
   },
   "dependencies": {
     "@hookform/resolvers": "^5.2.2",
@@ -50,3 +50,4 @@
     "typescript": "^5.9.3"
   }
 }
+

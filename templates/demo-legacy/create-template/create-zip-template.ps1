@@ -4,7 +4,7 @@
 $zipName = "igrp-next-template.zip"
 $excludeFolders = @(".next", "node_modules", ".git", "create-template", ".env", ".env.docker")
 # The full .igrpmigrations/ tree (guides + payloads) is managed by the source
-# repo and bundled into @igrp/template-migrator — it must NOT go into the zip.
+# repo and bundled into @igrp/template-migrator - it must NOT go into the zip.
 # We move it out and replace it with a slim folder containing only lock.json,
 # so consumers of the template immediately see all migrations as applied.
 $excludeTemp = "_excluded"
@@ -27,19 +27,66 @@ try {
   exit 1
 }
 
+# === BUILD WORKSPACE VERSION MAP ===
+# Scan <monorepo-root>/packages/**/package.json (2 levels up from template dir)
+# and build a name->version table so workspace:* deps can be resolved to exact versions.
+$monorepoRoot = Resolve-Path (Join-Path $PSScriptRoot "../../..")
+$workspaceVersions = @{}
+
+Get-ChildItem -Path (Join-Path $monorepoRoot "packages") -Recurse -Filter "package.json" |
+  Where-Object { $_.FullName -notmatch "[\\/]node_modules[\\/]" } |
+  ForEach-Object {
+    try {
+      $pkg = Get-Content $_.FullName -Raw | ConvertFrom-Json
+      if ($pkg.name -and $pkg.version) {
+        $workspaceVersions[$pkg.name] = $pkg.version
+      }
+    } catch {
+      Write-Host "Warning: could not parse $($_.FullName)"
+    }
+  }
+
+Write-Host "Resolved $($workspaceVersions.Count) workspace package(s):"
+foreach ($kv in $workspaceVersions.GetEnumerator() | Sort-Object Key) {
+  Write-Host "  $($kv.Key) -> $($kv.Value)"
+}
+
+# === RESOLVE workspace:* IN TEMPLATE package.json ===
+function Resolve-WorkspaceDeps {
+  param($depsObject, [hashtable]$versionMap)
+  if (-not $depsObject) { return }
+  foreach ($prop in @($depsObject.PSObject.Properties)) {
+    if ($prop.Value -eq "workspace:*") {
+      if ($versionMap.ContainsKey($prop.Name)) {
+        $resolved = $versionMap[$prop.Name]
+        $prop.Value = $resolved
+        Write-Host "  Resolved: $($prop.Name)  workspace:*  ->  $resolved"
+      } else {
+        Write-Host "  Warning: $($prop.Name) uses workspace:* but was not found in packages/ - left as-is"
+      }
+    }
+  }
+}
+
+Write-Host "Resolving workspace:* dependencies..."
+Resolve-WorkspaceDeps -depsObject $packageJson.dependencies    -versionMap $workspaceVersions
+Resolve-WorkspaceDeps -depsObject $packageJson.devDependencies -versionMap $workspaceVersions
+
 # === REMOVE publish:template SCRIPT BEFORE ZIPPING ===
 if ($packageJson.scripts -and $packageJson.scripts.PSObject.Properties.Name -contains "publish:template") {
   $packageJson.scripts.PSObject.Properties.Remove("publish:template")
-  try {
-    $packageJson | ConvertTo-Json -Depth 32 | Set-Content -Path $packageJsonPath -Encoding UTF8
-    $packageJsonSanitized = $true
-  } catch {
-    Write-Host "Failed to sanitize package.json."
-    if ($packageJsonRaw) {
-      Set-Content -Path $packageJsonPath -Value $packageJsonRaw -Encoding UTF8
-    }
-    exit 1
+}
+
+# Write the sanitized + resolved package.json to disk (restored in finally block)
+try {
+  $packageJson | ConvertTo-Json -Depth 32 | Set-Content -Path $packageJsonPath -Encoding UTF8
+  $packageJsonSanitized = $true
+} catch {
+  Write-Host "Failed to write resolved package.json."
+  if ($packageJsonRaw) {
+    Set-Content -Path $packageJsonPath -Value $packageJsonRaw -Encoding UTF8
   }
+  exit 1
 }
 
 # === FINAL NEXUS TARGET ===
@@ -108,7 +155,7 @@ try {
     Copy-Item -Path $lockSource -Destination $migrationsLock -Force
     Write-Host "Included slim .igrpmigrations/lock.json in zip"
   } else {
-    Write-Host "Warning: lock.json not found at $lockSource — .igrpmigrations/ will be empty in zip"
+    Write-Host "Warning: lock.json not found at $lockSource - .igrpmigrations/ will be empty in zip"
   }
 
   # Remove existing zip if it exists

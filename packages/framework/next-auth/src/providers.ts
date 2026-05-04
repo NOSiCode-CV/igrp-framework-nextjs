@@ -1,21 +1,10 @@
-import KeycloakProviderImport from 'next-auth/providers/keycloak';
-import type { OAuthConfig, OAuthUserConfig } from 'next-auth/providers/oauth';
+import type { OAuthConfig } from 'next-auth/providers/oauth';
 
-import { interopDefault } from './_interop';
-
-// `next-auth/providers/keycloak` is a CJS module whose factory lives on
-// `exports.default`. Normalize the import so consuming bundlers (webpack under
-// Next.js 15 App Router in particular) don't hand us the namespace object
-// instead of the function — see ./_interop.ts for the full story.
-const KeycloakProvider = interopDefault(KeycloakProviderImport);
-
-export const KEYCLOAK_PROVIDER_ID = 'keycloak';
-export const AUTENTIKA_PROVIDER_ID = 'autentika';
-export const NONE_PROVIDER_ID = 'none';
+export const OAUTH2_PROVIDER_ID = 'oauth2' as const;
+export const NONE_PROVIDER_ID = 'none' as const;
 
 export const AUTH_PROVIDER_IDS = {
-  KEYCLOAK: KEYCLOAK_PROVIDER_ID,
-  AUTENTIKA: AUTENTIKA_PROVIDER_ID,
+  OAUTH2: OAUTH2_PROVIDER_ID,
   NONE: NONE_PROVIDER_ID,
 } as const;
 
@@ -23,7 +12,7 @@ export type AuthProviderId = (typeof AUTH_PROVIDER_IDS)[keyof typeof AUTH_PROVID
 
 type AuthEnvironment = Record<string, string | undefined>;
 
-interface AutentikaProfile extends Record<string, unknown> {
+interface OAuth2Profile extends Record<string, unknown> {
   sub: string;
   name?: string;
   email?: string;
@@ -34,11 +23,11 @@ interface AutentikaProfile extends Record<string, unknown> {
 type AuthProviderDefinition = {
   requiredEnvKeys: readonly string[];
   getDiscoveryUrl: (env: AuthEnvironment) => string;
-  createProvider: (env: AuthEnvironment) => OAuthConfig<AutentikaProfile> | ReturnType<typeof KeycloakProvider> | null;
+  createProvider: (env: AuthEnvironment) => OAuthConfig<OAuth2Profile> | null;
 };
 
-const DEFAULT_AUTH_PROVIDER_ID = KEYCLOAK_PROVIDER_ID;
-const DEFAULT_AUTENTIKA_SCOPES = 'openid internal_login';
+const DEFAULT_AUTH_PROVIDER_ID = OAUTH2_PROVIDER_ID;
+const DEFAULT_OAUTH2_SCOPES = 'openid';
 
 function getRequiredEnvValue(env: AuthEnvironment, key: string) {
   const value = env[key]?.trim();
@@ -54,80 +43,32 @@ function stripTrailingSlash(value: string) {
   return value.replace(/\/+$/, '');
 }
 
-function buildAutentikaDiscoveryUrl(env: AuthEnvironment) {
-  const host = stripTrailingSlash(getRequiredEnvValue(env, 'AUTENTIKA_HOST'));
-  const tenantName = env.AUTENTIKA_TENANT_NAME;
-
-  return `${host}${tenantName ? `/t/${tenantName}` : ``}/oauth2/token/.well-known/openid-configuration`;
-}
-
-function AutentikaProvider(
-  options: OAuthUserConfig<AutentikaProfile> & {
-    host: string;
-    tenantName?: string;
-    scopes?: string;
-  },
-): OAuthConfig<AutentikaProfile> {
-  const host = stripTrailingSlash(options.host);
-  const tenantName = options.tenantName;
-  const scopes = options.scopes?.trim() || DEFAULT_AUTENTIKA_SCOPES;
-
-  return {
-    id: AUTENTIKA_PROVIDER_ID,
-    name: 'AUTENTIKA',
-    type: 'oauth',
-    clientId: options.clientId,
-    clientSecret: options.clientSecret,
-    wellKnown: `${host}${tenantName ? `/t/${tenantName}` : ``}/oauth2/token/.well-known/openid-configuration`,
-    authorization: {
-      params: {
-        scope: scopes,
-      },
-    },
-    profile(profile) {
-      return {
-        id: profile.sub,
-        name: profile.name ?? profile.preferred_username ?? null,
-        email: profile.email ?? null,
-        image: typeof profile.picture === 'string' ? profile.picture : null,
-      };
-    },
-    style: {
-      logo: '',
-      bg: '',
-      text: '',
-    },
-    options,
-  };
-}
-
 const AUTH_PROVIDER_REGISTRY: Record<AuthProviderId, AuthProviderDefinition> = {
-  [KEYCLOAK_PROVIDER_ID]: {
-    requiredEnvKeys: ['KEYCLOAK_CLIENT_ID', 'KEYCLOAK_CLIENT_SECRET', 'KEYCLOAK_ISSUER'],
+  [OAUTH2_PROVIDER_ID]: {
+    requiredEnvKeys: ['OAUTH2_CLIENT_ID', 'OAUTH2_CLIENT_SECRET', 'OAUTH2_ISSUER'],
     getDiscoveryUrl: (env) =>
-      `${stripTrailingSlash(getRequiredEnvValue(env, 'KEYCLOAK_ISSUER'))}/.well-known/openid-configuration`,
-    createProvider: (env) =>
-      KeycloakProvider({
-        clientId: getRequiredEnvValue(env, 'KEYCLOAK_CLIENT_ID'),
-        clientSecret: getRequiredEnvValue(env, 'KEYCLOAK_CLIENT_SECRET'),
-        issuer: stripTrailingSlash(getRequiredEnvValue(env, 'KEYCLOAK_ISSUER')),
-      }),
-  },
-  [AUTENTIKA_PROVIDER_ID]: {
-    requiredEnvKeys: [
-      'AUTENTIKA_CLIENT_ID',
-      'AUTENTIKA_CLIENT_SECRET',
-      'AUTENTIKA_HOST'
-    ],
-    getDiscoveryUrl: buildAutentikaDiscoveryUrl,
-    createProvider: (env) =>
-      AutentikaProvider({
-        clientId: getRequiredEnvValue(env, 'AUTENTIKA_CLIENT_ID'),
-        clientSecret: getRequiredEnvValue(env, 'AUTENTIKA_CLIENT_SECRET'),
-        host: getRequiredEnvValue(env, 'AUTENTIKA_HOST'),
-        tenantName: env.AUTENTIKA_TENANT_NAME,
-        scopes: env.AUTENTIKA_SCOPES,
-      }),
+      `${stripTrailingSlash(getRequiredEnvValue(env, 'OAUTH2_ISSUER'))}/.well-known/openid-configuration`,
+    createProvider: (env) => ({
+      id: OAUTH2_PROVIDER_ID,
+      name: 'OAuth2',
+      type: 'oauth',
+      clientId: getRequiredEnvValue(env, 'OAUTH2_CLIENT_ID'),
+      clientSecret: getRequiredEnvValue(env, 'OAUTH2_CLIENT_SECRET'),
+      wellKnown: `${stripTrailingSlash(getRequiredEnvValue(env, 'OAUTH2_ISSUER'))}/.well-known/openid-configuration`,
+      authorization: {
+        params: {
+          scope: env.OAUTH2_SCOPES?.trim() || DEFAULT_OAUTH2_SCOPES,
+        },
+      },
+      profile(profile: OAuth2Profile) {
+        return {
+          id: profile.sub,
+          name: profile.name ?? profile.preferred_username ?? null,
+          email: profile.email ?? null,
+          image: typeof profile.picture === 'string' ? profile.picture : null,
+        };
+      },
+    }),
   },
   [NONE_PROVIDER_ID]: {
     requiredEnvKeys: [],

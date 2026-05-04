@@ -104,6 +104,10 @@ describe('getAuthProviderDiscoveryUrl', () => {
       'http://localhost:9090/.well-known/openid-configuration',
     );
   });
+
+  it('returns empty string for none provider', () => {
+    expect(getAuthProviderDiscoveryUrl({ AUTH_PROVIDER: 'none' })).toBe('');
+  });
 });
 
 describe('createAuthProviderFromEnv', () => {
@@ -135,6 +139,15 @@ describe('createAuthProviderFromEnv', () => {
 
   it('returns null for none provider', () => {
     expect(createAuthProviderFromEnv({ AUTH_PROVIDER: 'none' })).toBeNull();
+  });
+
+  it('wires clientId and clientSecret from env into the provider', () => {
+    const provider = createAuthProviderFromEnv(VALID_OAUTH2_ENV) as {
+      clientId: string;
+      clientSecret: string;
+    };
+    expect(provider.clientId).toBe('igrp-example');
+    expect(provider.clientSecret).toBe('psw');
   });
 });
 

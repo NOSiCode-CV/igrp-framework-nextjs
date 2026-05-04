@@ -45,7 +45,7 @@ const DEFAULT_MATCHER = ['/', '/((?!apps|_next|favicon.ico|.*\\..*).*)', '/api/:
 
 // ─── Types ────────────────────────────────────────────────────────────────────
 
-type AnyProvider = OAuthConfig<Record<string, unknown>> | ReturnType<typeof import('next-auth/providers/keycloak').default>;
+type AnyProvider = OAuthConfig<Record<string, unknown>>;
 
 /**
  * Signature of a NextAuth v4 App Router route handler. Typed with the Web
@@ -96,7 +96,7 @@ type IGRPAuthMiddlewareOptions = {
 export type IGRPAuthOptions = {
   /**
    * Provider selection:
-   * - Omit or pass "keycloak" / "autentika" / "none" to use IGRP pre-defined providers (reads env vars automatically).
+   * - Omit or pass "oauth2" / "none" to use IGRP pre-defined providers (reads env vars automatically).
    * - Pass a fully-constructed next-auth Provider object for a custom provider.
    */
   provider?: AuthProviderId | AnyProvider;

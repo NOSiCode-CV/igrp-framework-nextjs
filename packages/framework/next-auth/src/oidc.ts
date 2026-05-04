@@ -43,23 +43,10 @@ function getProviderIdFromTokenOrEnv(token: JWT, env: AuthEnvironment): AuthProv
   return (token.authProviderId as AuthProviderId | undefined) ?? getAuthProviderIdFromEnv(env);
 }
 
-function getClientCredentials(env: AuthEnvironment, providerId: Exclude<AuthProviderId, 'none'>) {
-  const credentialKeys = {
-    keycloak: {
-      clientIdKey: 'KEYCLOAK_CLIENT_ID',
-      clientSecretKey: 'KEYCLOAK_CLIENT_SECRET',
-    },
-    autentika: {
-      clientIdKey: 'AUTENTIKA_CLIENT_ID',
-      clientSecretKey: 'AUTENTIKA_CLIENT_SECRET',
-    },
-  } as const;
-
-  const { clientIdKey, clientSecretKey } = credentialKeys[providerId];
-
+function getClientCredentials(env: AuthEnvironment) {
   return {
-    clientId: env[clientIdKey]!,
-    clientSecret: env[clientSecretKey]!,
+    clientId: env.OAUTH2_CLIENT_ID!,
+    clientSecret: env.OAUTH2_CLIENT_SECRET!,
   };
 }
 
@@ -78,7 +65,7 @@ export async function refreshOidcAccessToken(token: JWT, env: AuthEnvironment) {
 
   const discoveryUrl = getAuthProviderDiscoveryUrl(env, providerId);
   const openIdConfiguration = await getOpenIdConfiguration(discoveryUrl);
-  const { clientId, clientSecret } = getClientCredentials(env, providerId as Exclude<AuthProviderId, 'none'>);
+  const { clientId, clientSecret } = getClientCredentials(env);
 
   const response = await fetch(openIdConfiguration.token_endpoint, {
     method: 'POST',
@@ -132,7 +119,7 @@ export async function revokeOidcSession(token: JWT, env: AuthEnvironment) {
     return;
   }
 
-  const { clientId, clientSecret } = getClientCredentials(env, providerId as Exclude<AuthProviderId, 'none'>);
+  const { clientId, clientSecret } = getClientCredentials(env);
 
   await fetch(revocationEndpoint, {
     method: 'POST',

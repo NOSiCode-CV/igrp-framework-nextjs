@@ -10,7 +10,7 @@ import { reportError } from "@/lib/report-error";
 /**
  * Central IGRP auth instance.
  *
- * - Provider is resolved automatically from AUTH_PROVIDER env var (keycloak / autentika / none).
+ * - Provider is resolved automatically from AUTH_PROVIDER env var (oauth2 / none).
  *   To use a custom provider, pass a Provider object: `provider: GitHubProvider({ ... })`.
  * - All auth boilerplate (authOptions, route handler, middleware, session helpers) is provided.
  *

@@ -33,7 +33,7 @@ import {
   isAuthDisabled as isAuthDisabledFromEnv,
   type AuthProviderId,
 } from './providers';
-import { refreshOidcAccessToken } from './oidc';
+import { refreshOidcAccessToken, revokeOidcSession } from './oidc';
 import { sanitizeRedirectUrl } from './sanitize';
 
 // ─── Config Error ─────────────────────────────────────────────────────────────
@@ -490,6 +490,24 @@ export function withIGRPAuth(options: IGRPAuthOptions = {}): IGRPAuthInstance {
         }
 
         return sanitizeRedirectUrl(url, env.NEXTAUTH_URL, '/');
+      },
+    },
+
+    events: {
+      async signOut(message) {
+        // Skip revocation when auth is disabled or in preview mode — no real token exists.
+        if (authIsDisabled || normalizePreviewMode(env)) return;
+
+        // JWT sessions carry { token }; DB sessions carry { session }.
+        // This package uses JWT sessions only, but guard defensively.
+        const token = ('token' in message ? message.token : null) as JWT | null;
+        if (!token) return;
+
+        // Fire-and-forget: revocation failure (network error, provider doesn't support
+        // RFC 7009, token already expired) must never block logout completing.
+        void revokeOidcSession(token, env).catch(() => {
+          // Intentionally swallowed — logout must always succeed.
+        });
       },
     },
   };

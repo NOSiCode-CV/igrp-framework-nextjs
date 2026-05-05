@@ -22,7 +22,6 @@ packages/
     next/                     → @igrp/framework-next
   template-migrator/          → @igrp/template-migrator
 templates/
-  demo/                       → @igrp/framework-next-template-new  (canonical template)
   demo-legacy/                → older reference template (maintenance mode)
 ```
 

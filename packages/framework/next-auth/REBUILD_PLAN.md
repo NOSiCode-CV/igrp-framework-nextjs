@@ -152,7 +152,6 @@ Run in this order from repo root:
 2. `pnpm build:framework` — rebuilds downstream packages (`next-types` depends on `next-auth` types).
 3. **Sanity-check `dist/`**: every `.d.ts` must have a sibling `.js`; no `export * from './providers'` in `dist/index.d.ts` pointing at a missing module.
 4. `pnpm --filter @igrp/framework-next-template-legacy dev` (or whatever filter matches demo-legacy) and hit `/` — the `.custom` error should be gone.
-5. `pnpm --filter @igrp/framework-next-template-new dev` — smoke-test the non-legacy demo to confirm no regression.
 6. If preview mode is set (`IGRP_PREVIEW_MODE=true`), confirm middleware returns `NextResponse.next()` before touching auth.
 7. Flip `AUTH_PROVIDER=none` locally and confirm the stub path returns 404 on `/api/auth/*` and middleware treats requests as authenticated.
 

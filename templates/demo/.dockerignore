@@ -1,8 +1,0 @@
-node_modules
-.next
-build
-*.log
-.env*
-npm-debug.log
-README.md
-.git

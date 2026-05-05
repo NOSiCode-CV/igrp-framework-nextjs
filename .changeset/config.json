@@ -9,7 +9,6 @@
   "updateInternalDependencies": "patch",
   "ignore": [
     "@igrp/framework-next-template",
-    "@igrp/framework-next-template-new",
     "@igrp/igrp-framework-react-design-system-storybook"
   ]
 }

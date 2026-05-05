@@ -20,7 +20,6 @@ packages/
     next-ui/                  → @igrp/framework-next-ui     (client template chrome)
     next/                     → @igrp/framework-next        (server entry: IGRPLayout, IGRPRootLayout, igrpBuildConfig, API client)
 templates/
-  demo/                       → @igrp/framework-next-template-new  (workspace:* and published zip)
   demo-legacy/                → older reference template
 scripts/                      → repo utilities (e.g. migrate-primitive-names.mjs)
 ```

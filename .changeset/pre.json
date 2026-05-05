@@ -9,7 +9,6 @@
     "@igrp/framework-next-ui": "0.1.0-beta.114",
     "@igrp/igrp-framework-react-design-system-storybook": "0.0.1",
     "@igrp/template-migrator": "0.1.2-beta.115",
-    "@igrp/framework-next-template-new": "0.1.0-beta.99",
     "@igrp/framework-next-template": "0.1.0-beta.115"
   },
   "changesets": [

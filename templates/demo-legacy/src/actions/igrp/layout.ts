@@ -14,6 +14,12 @@ export async function getTheme() {
 }
 
 export async function configLayout() {
+  // NOTE: This function is called from both the root layout (app/layout.tsx) and the
+  // protected IGRP layout (app/(igrp)/layout.tsx). Auth enforcement is handled by
+  // verifySession() in dal.ts, which is called only from the protected layout.
+  // Do NOT add verifySession() here — it would redirect unauthenticated users on
+  // the root layout, breaking the login page.
+  //
   // When auth is bypassed (preview mode OR AUTH_PROVIDER=none), provide a mock
   // session so the layout doesn't kick the user to /login. The framework reads
   // session existence rather than the preview flag when deciding redirects.

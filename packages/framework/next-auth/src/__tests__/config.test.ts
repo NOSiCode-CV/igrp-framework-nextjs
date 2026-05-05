@@ -71,6 +71,20 @@ describe('withIGRPAuth — events.signOut', () => {
     expect(oidcModule.revokeOidcSession).not.toHaveBeenCalled();
   });
 
+  it('does not call revokeOidcSession when configError is set (invalid AUTH_PROVIDER)', async () => {
+    const withIGRPAuth = await getFactory();
+    // Pass an invalid AUTH_PROVIDER to trigger a configError
+    const instance = withIGRPAuth({ env: { AUTH_PROVIDER: 'unsupported-provider' } });
+    // configError should be set
+    expect(instance.configError).not.toBeNull();
+    const signOutEvent = instance.authOptions.events?.signOut;
+
+    await signOutEvent?.({ token: { refreshToken: 'rt-abc' } } as any);
+    await new Promise((r) => setTimeout(r, 0));
+
+    expect(oidcModule.revokeOidcSession).not.toHaveBeenCalled();
+  });
+
   it('does not throw when revokeOidcSession rejects', async () => {
     vi.mocked(oidcModule.revokeOidcSession).mockRejectedValueOnce(new Error('network error'));
 

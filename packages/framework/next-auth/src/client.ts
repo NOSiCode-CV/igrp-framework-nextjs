@@ -39,6 +39,8 @@ export function useSafeSession({
       signingOut.current = true;
       void signOut({ callbackUrl: forceLogoutCallbackUrl });
     }
+    // forceLogoutCallbackUrl is included to satisfy exhaustive-deps; once signingOut
+    // is true the guard prevents re-execution regardless of URL changes.
   }, [session?.forceLogout, session?.error, forceLogoutCallbackUrl]);
 
   return { session, status, update };

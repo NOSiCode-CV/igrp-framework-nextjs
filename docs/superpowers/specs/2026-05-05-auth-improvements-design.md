@@ -6,11 +6,12 @@
 
 ## Background
 
-A review of the project's authentication implementation against the Next.js 15 authentication guide identified three gaps:
+A review of the project's authentication implementation against the Next.js 15 authentication guide identified four gaps:
 
 1. OIDC tokens are not revoked when a user logs out.
 2. No Data Access Layer (DAL) exists — auth checks are scattered across layouts and server actions.
 3. Deprecated provider names (`keycloak`, `autentika`, `oauth2`) still appear in framework comments and error messages.
+4. When the refresh token expires or fails, the client does not react immediately — the user stays on the current page until their next navigation triggers middleware.
 
 The improvements are independent and non-breaking. `templates/demo` will be removed from the monorepo; `templates/demo-legacy` is the canonical reference template.
 
@@ -127,6 +128,55 @@ getAuthenticatedUser() (DTO) → filtered data, safe to pass to any server compo
 
 ---
 
+## Improvement 4 — Client-Side Forced Logout on Refresh Failure
+
+### Problem
+
+When the OIDC refresh token expires or the refresh call fails, the server sets `forceLogout: true` on the session JWT. The middleware correctly catches this on the **next navigation** and redirects to `/login`.
+
+However, if the user is sitting idle on a page (no navigation), nothing reacts to `forceLogout: true` until they click something. The user sees a stale, expired session displayed in the UI with no indication they have been logged out.
+
+### How sessions reach the client
+
+`<SessionProvider>` (wired inside `IGRPRootProviders` in `framework-next-ui`) polls `GET /api/auth/session` every 5 minutes (`refetchInterval: 300`). Each poll returns the current session object, including any `forceLogout` or `error` fields set by the JWT callback.
+
+### Design
+
+Add a watcher inside `useSafeSession()` in `packages/framework/next-ui` that reacts to the session error state:
+
+```
+useSafeSession() watches session.forceLogout === true
+                        OR session.error === 'RefreshAccessTokenError'
+  → call signOut({ callbackUrl: '/login' }) immediately
+  → user is redirected to /login without needing to navigate
+```
+
+**Key decisions:**
+
+- **Wired in `useSafeSession()`** — this hook is already used throughout the framework's client components. One change covers all consumers.
+- **Triggers on the next poll at most.** The 5-minute refetch means a user could sit with an expired session for up to 5 minutes before the client detects it. This is acceptable — the next poll fires the reaction. If faster detection is needed, `refetchInterval` can be lowered (separate concern).
+- **Skipped in preview/bypass mode.** `useSafeSession()` already knows the auth context; no forced logout when `AUTH_PROVIDER=none` or `IGRP_PREVIEW_MODE=true`.
+- **No new env vars, no breaking changes.**
+
+### Flow after change
+
+```
+Refresh token expires
+  → JWT callback sets forceLogout: true on session
+  → client polls /api/auth/session (within 5 min)
+  → useSafeSession() detects forceLogout: true
+  → calls signOut({ callbackUrl: '/login' })
+  → user redirected to /login immediately
+```
+
+### Files affected
+
+| File | Change |
+|---|---|
+| `packages/framework/next-ui/src/...` (wherever `useSafeSession` is defined) | Add `useEffect` watching `session.forceLogout` / `session.error`, call `signOut()` when triggered |
+
+---
+
 ## Out of Scope
 
 - **NextAuth v4 → Auth.js v5 migration.** Breaking change, significant effort, separate initiative.
@@ -138,8 +188,9 @@ getAuthenticatedUser() (DTO) → filtered data, safe to pass to any server compo
 
 ## Dependency order
 
-These three improvements are independent and can be implemented in parallel. If sequenced:
+These four improvements are independent and can be implemented in parallel. If sequenced:
 
 1. Improvement 3 (doc cleanup) — no risk, do first
 2. Improvement 1 (token revocation) — framework change, needs changeset
-3. Improvement 2 (DAL) — template change, after framework build passes
+3. Improvement 4 (client forced logout) — framework change, needs changeset; can run parallel to #2
+4. Improvement 2 (DAL) — template change, after framework build passes

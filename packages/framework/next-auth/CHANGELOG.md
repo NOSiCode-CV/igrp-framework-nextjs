@@ -1,5 +1,33 @@
 # @igrp/framework-next-auth
 
+## 0.1.0-beta.118
+
+### Patch Changes
+
+- Graceful error handling for invalid AUTH_PROVIDER configuration.
+
+  **Previously:** `withIGRPAuth()` threw synchronously at module-evaluation time when `AUTH_PROVIDER` was set to an unsupported value (e.g. `autentika`). This crashed the module before React loaded and showed a raw Next.js runtime error overlay with no helpful UI.
+
+  **Now:** `withIGRPAuth()` catches provider-resolution errors and stores them as `configError: IGRPAuthConfigError | null` on the returned instance. Errors are re-thrown lazily so App Router error boundaries can catch and render a proper diagnostic page:
+  - `GET` / `POST` handlers return a `500` HTML page with the error code and message.
+  - `serverSession()` / `getSession()` throw `IGRPAuthConfigError` during render — caught by the nearest `error.tsx` or `global-error.tsx`.
+
+  **New exports** from `@igrp/framework-next-auth/config`:
+  - `IGRPAuthConfigError` — typed error class (`name: 'IGRPAuthConfigError'`, `code: string`)
+  - `isIGRPAuthConfigError(error)` — structural guard (works across serialisation boundaries)
+
+- Rename provider ID from `oauth2` to `igrp-auth`.
+
+  **Breaking changes:**
+  - `AUTH_PROVIDER` now accepts `igrp-auth` or `none` only (`oauth2` is removed)
+  - `AUTH_PROVIDER` defaults to `igrp-auth`
+  - `OAUTH2_CLIENT_ID`, `OAUTH2_CLIENT_SECRET`, `OAUTH2_ISSUER`, `OAUTH2_SCOPES` env vars renamed to `IGRP_AUTH_CLIENT_ID`, `IGRP_AUTH_CLIENT_SECRET`, `IGRP_AUTH_ISSUER`, `IGRP_AUTH_SCOPES`
+  - `OAUTH2_PROVIDER_ID` named export renamed to `IGRP_AUTH_PROVIDER_ID`
+  - `AUTH_PROVIDER_IDS.OAUTH2` key renamed to `AUTH_PROVIDER_IDS.IGRP_AUTH`
+  - NextAuth callback URL changes from `/api/auth/callback/oauth2` → `/api/auth/callback/igrp-auth`
+
+  **Migration:** Update your `.env` file — replace `AUTH_PROVIDER=oauth2` with `AUTH_PROVIDER=igrp-auth`, and rename all `OAUTH2_*` vars to `IGRP_AUTH_*`. Re-register the redirect URI on your authorization server as `{NEXTAUTH_URL}/api/auth/callback/igrp-auth`.
+
 ## 0.1.0-beta.117
 
 ### Patch Changes

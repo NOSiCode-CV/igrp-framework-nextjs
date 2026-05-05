@@ -10,7 +10,7 @@ import { reportError } from "@/lib/report-error";
 /**
  * Central IGRP auth instance.
  *
- * - Provider is resolved automatically from AUTH_PROVIDER env var (oauth2 / none).
+ * - Provider is resolved automatically from AUTH_PROVIDER env var (igrp-auth / none).
  *   To use a custom provider, pass a Provider object: `provider: GitHubProvider({ ... })`.
  * - All auth boilerplate (authOptions, route handler, middleware, session helpers) is provided.
  *
@@ -34,7 +34,9 @@ export async function serverSession() {
   const apiManagement = process.env.IGRP_ACCESS_MANAGEMENT_API || "";
 
   if (!process.env.NEXTAUTH_SECRET) {
-    console.warn("NEXTAUTH_SECRET is not set. This is required for production.");
+    console.warn(
+      "NEXTAUTH_SECRET is not set. This is required for production.",
+    );
     if (process.env.NODE_ENV === "production") {
       // Hard fail in prod — we will not masquerade as "no session". Bubbles
       // to the nearest App Router `error.tsx`.
@@ -60,8 +62,11 @@ export async function serverSession() {
     return session;
   } catch (error) {
     // Only swallow the "no session / cookie decode failed" branch. Typed
-    // IgrpError instances indicate config-level problems and must surface.
+    // IgrpError instances and IGRPAuthConfigError indicate config-level problems
+    // and must surface so error boundaries can render a proper diagnosis.
     if (isIgrpError(error)) throw error;
+    if (error instanceof Error && error.name === "IGRPAuthConfigError")
+      throw error;
     reportError(error, { segment: "lib/auth.serverSession" });
     return null;
   }

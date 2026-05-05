@@ -49,27 +49,28 @@ pnpm install
 
 ### 2. Configure Environment Variables
 
-Create a `.env.local` file in the root directory with the following variables:
+Copy `.env.example` to `.env.local` and fill in the values. Minimum set to start:
 
 ```env
-# Application Configuration
-IGRP_APP_CODE=your-app-code
-IGRP_PREVIEW_MODE=false
-NEXT_PUBLIC_BASE_PATH=
+# Pick your auth provider
+AUTH_PROVIDER=keycloak   # keycloak | autentika
 
-# NextAuth Configuration
+# Keycloak (if AUTH_PROVIDER=keycloak)
+KEYCLOAK_CLIENT_ID=my-client
+KEYCLOAK_CLIENT_SECRET=...
+KEYCLOAK_ISSUER=https://keycloak.example.com/realms/my-realm
+
+# Application
+IGRP_APP_CODE=my-app
+IGRP_PREVIEW_MODE=false
+
+# NextAuth
 NEXTAUTH_URL=http://localhost:3000
 NEXTAUTH_URL_INTERNAL=http://localhost:3000
-NEXTAUTH_SECRET=your-secret-key-here
-
-# API Configuration
-IGRP_ACCESS_MANAGEMENT_API=https://your-api-url.com
-NEXT_PUBLIC_IGRP_APP_HOME_SLUG=/
-NEXT_IGRP_APP_CENTER_URL=https://app-center-url.com
-
-# Image Domains (comma-separated)
-NEXT_PUBLIC_ALLOWED_DOMAINS=example.com,cdn.example.com
+NEXTAUTH_SECRET=...      # openssl rand -base64 32
 ```
+
+For a no-auth dev loop, set `IGRP_PREVIEW_MODE=true` — no provider vars required.
 
 ### 3. Start Development Server
 
@@ -150,6 +151,20 @@ Coming soon
 Coming soon
 
 ## Environment Variables
+
+### Auth provider variables
+
+| Variable | Description | Example |
+| -------- | ----------- | ------- |
+| `AUTH_PROVIDER` | Active auth provider | `keycloak` or `autentika` |
+| `KEYCLOAK_CLIENT_ID` | Keycloak client ID | `my-app-client` |
+| `KEYCLOAK_CLIENT_SECRET` | Keycloak client secret | — |
+| `KEYCLOAK_ISSUER` | Keycloak realm URL | `https://kc.example.com/realms/my-realm` |
+| `AUTENTIKA_CLIENT_ID` | Autentika client ID | — |
+| `AUTENTIKA_CLIENT_SECRET` | Autentika client secret | — |
+| `AUTENTIKA_HOST` | Autentika base URL | `https://autentika.example.com` |
+| `AUTENTIKA_TENANT_NAME` | WSO2IS tenant | `carbon.super` |
+| `AUTENTIKA_SCOPES` | OAuth scopes | `openid internal_login` |
 
 ### Required Variables
 
@@ -331,21 +346,21 @@ If you're upgrading an existing app, check:
 
 ## Authentication
 
-The template uses NextAuth.js for authentication. Configuration is in `src/lib/auth-options.ts`.
+The template uses NextAuth.js for authentication. Select the active provider with `AUTH_PROVIDER` (supported values: `keycloak`, `autentika`).
 
 ### Authentication Flow
 
 1. User visits protected route
-2. Middleware checks for valid session
-3. If no session → Redirect to `/login`
-4. User authenticates → Session created
-5. User redirected to original destination
+2. Middleware checks for valid JWT session
+3. If no session or token expired → Redirect to `/login`
+4. User authenticates via the configured OIDC provider
+5. Session created; user redirected to original destination
 
 ### Customizing Authentication
 
 To customize authentication:
 
-1. Edit `src/lib/auth-options.ts` to configure providers
+1. Set `AUTH_PROVIDER` and the matching provider vars in `.env.local`
 2. Update `src/app/(auth)/login/page.tsx` for custom login UI
 3. Modify `src/middleware.ts` for custom auth logic
 

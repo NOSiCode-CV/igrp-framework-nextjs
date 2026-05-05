@@ -7,25 +7,25 @@ import {
   createAuthProviderFromEnv,
   isAuthEnabled,
   isAuthDisabled,
-  OAUTH2_PROVIDER_ID,
+  IGRP_AUTH_PROVIDER_ID,
   NONE_PROVIDER_ID,
   AUTH_PROVIDER_IDS,
 } from '../providers';
 
-const VALID_OAUTH2_ENV = {
-  AUTH_PROVIDER: 'oauth2',
-  OAUTH2_CLIENT_ID: 'igrp-example',
-  OAUTH2_CLIENT_SECRET: 'psw',
-  OAUTH2_ISSUER: 'http://localhost:9090',
+const VALID_IGRP_AUTH_ENV = {
+  AUTH_PROVIDER: 'igrp-auth',
+  IGRP_AUTH_CLIENT_ID: 'igrp-example',
+  IGRP_AUTH_CLIENT_SECRET: 'psw',
+  IGRP_AUTH_ISSUER: 'http://localhost:9090',
 };
 
 describe('getAuthProviderIdFromEnv', () => {
-  it('returns oauth2 when AUTH_PROVIDER=oauth2', () => {
-    expect(getAuthProviderIdFromEnv({ AUTH_PROVIDER: 'oauth2' })).toBe('oauth2');
+  it('returns igrp-auth when AUTH_PROVIDER=igrp-auth', () => {
+    expect(getAuthProviderIdFromEnv({ AUTH_PROVIDER: 'igrp-auth' })).toBe('igrp-auth');
   });
 
-  it('defaults to oauth2 when AUTH_PROVIDER is not set', () => {
-    expect(getAuthProviderIdFromEnv({})).toBe('oauth2');
+  it('defaults to igrp-auth when AUTH_PROVIDER is not set', () => {
+    expect(getAuthProviderIdFromEnv({})).toBe('igrp-auth');
   });
 
   it('returns none when AUTH_PROVIDER=none', () => {
@@ -33,7 +33,7 @@ describe('getAuthProviderIdFromEnv', () => {
   });
 
   it('is case-insensitive', () => {
-    expect(getAuthProviderIdFromEnv({ AUTH_PROVIDER: 'OAUTH2' })).toBe('oauth2');
+    expect(getAuthProviderIdFromEnv({ AUTH_PROVIDER: 'IGRP-AUTH' })).toBe('igrp-auth');
     expect(getAuthProviderIdFromEnv({ AUTH_PROVIDER: 'NONE' })).toBe('none');
   });
 
@@ -48,16 +48,22 @@ describe('getAuthProviderIdFromEnv', () => {
       'Unsupported AUTH_PROVIDER "autentika"',
     );
   });
+
+  it('throws for oauth2 (renamed provider)', () => {
+    expect(() => getAuthProviderIdFromEnv({ AUTH_PROVIDER: 'oauth2' })).toThrow(
+      'Unsupported AUTH_PROVIDER "oauth2"',
+    );
+  });
 });
 
 describe('getMissingAuthProviderEnvVars', () => {
-  it('returns missing keys for oauth2 when env is empty', () => {
-    const missing = getMissingAuthProviderEnvVars({}, 'oauth2');
-    expect(missing).toEqual(['OAUTH2_CLIENT_ID', 'OAUTH2_CLIENT_SECRET', 'OAUTH2_ISSUER']);
+  it('returns missing keys for igrp-auth when env is empty', () => {
+    const missing = getMissingAuthProviderEnvVars({}, 'igrp-auth');
+    expect(missing).toEqual(['IGRP_AUTH_CLIENT_ID', 'IGRP_AUTH_CLIENT_SECRET', 'IGRP_AUTH_ISSUER']);
   });
 
-  it('returns empty array when all oauth2 vars are present', () => {
-    const missing = getMissingAuthProviderEnvVars(VALID_OAUTH2_ENV, 'oauth2');
+  it('returns empty array when all igrp-auth vars are present', () => {
+    const missing = getMissingAuthProviderEnvVars(VALID_IGRP_AUTH_ENV, 'igrp-auth');
     expect(missing).toEqual([]);
   });
 
@@ -68,23 +74,23 @@ describe('getMissingAuthProviderEnvVars', () => {
 });
 
 describe('assertAuthProviderEnv', () => {
-  it('does not throw when all oauth2 vars are present', () => {
-    expect(() => assertAuthProviderEnv(VALID_OAUTH2_ENV)).not.toThrow();
+  it('does not throw when all igrp-auth vars are present', () => {
+    expect(() => assertAuthProviderEnv(VALID_IGRP_AUTH_ENV)).not.toThrow();
   });
 
-  it('throws when OAUTH2_CLIENT_ID is missing', () => {
-    const env = { ...VALID_OAUTH2_ENV, OAUTH2_CLIENT_ID: undefined };
-    expect(() => assertAuthProviderEnv(env)).toThrow('OAUTH2_CLIENT_ID');
+  it('throws when IGRP_AUTH_CLIENT_ID is missing', () => {
+    const env = { ...VALID_IGRP_AUTH_ENV, IGRP_AUTH_CLIENT_ID: undefined };
+    expect(() => assertAuthProviderEnv(env)).toThrow('IGRP_AUTH_CLIENT_ID');
   });
 
-  it('throws when OAUTH2_CLIENT_SECRET is missing', () => {
-    const env = { ...VALID_OAUTH2_ENV, OAUTH2_CLIENT_SECRET: '' };
-    expect(() => assertAuthProviderEnv(env)).toThrow('OAUTH2_CLIENT_SECRET');
+  it('throws when IGRP_AUTH_CLIENT_SECRET is missing', () => {
+    const env = { ...VALID_IGRP_AUTH_ENV, IGRP_AUTH_CLIENT_SECRET: '' };
+    expect(() => assertAuthProviderEnv(env)).toThrow('IGRP_AUTH_CLIENT_SECRET');
   });
 
-  it('throws when OAUTH2_ISSUER is missing', () => {
-    const env = { ...VALID_OAUTH2_ENV, OAUTH2_ISSUER: undefined };
-    expect(() => assertAuthProviderEnv(env)).toThrow('OAUTH2_ISSUER');
+  it('throws when IGRP_AUTH_ISSUER is missing', () => {
+    const env = { ...VALID_IGRP_AUTH_ENV, IGRP_AUTH_ISSUER: undefined };
+    expect(() => assertAuthProviderEnv(env)).toThrow('IGRP_AUTH_ISSUER');
   });
 
   it('does not throw for none provider regardless of env', () => {
@@ -93,13 +99,13 @@ describe('assertAuthProviderEnv', () => {
 });
 
 describe('getAuthProviderDiscoveryUrl', () => {
-  it('appends /.well-known/openid-configuration to OAUTH2_ISSUER', () => {
-    const url = getAuthProviderDiscoveryUrl(VALID_OAUTH2_ENV);
+  it('appends /.well-known/openid-configuration to IGRP_AUTH_ISSUER', () => {
+    const url = getAuthProviderDiscoveryUrl(VALID_IGRP_AUTH_ENV);
     expect(url).toBe('http://localhost:9090/.well-known/openid-configuration');
   });
 
-  it('strips trailing slash from OAUTH2_ISSUER before appending', () => {
-    const env = { ...VALID_OAUTH2_ENV, OAUTH2_ISSUER: 'http://localhost:9090/' };
+  it('strips trailing slash from IGRP_AUTH_ISSUER before appending', () => {
+    const env = { ...VALID_IGRP_AUTH_ENV, IGRP_AUTH_ISSUER: 'http://localhost:9090/' };
     expect(getAuthProviderDiscoveryUrl(env)).toBe(
       'http://localhost:9090/.well-known/openid-configuration',
     );
@@ -111,26 +117,26 @@ describe('getAuthProviderDiscoveryUrl', () => {
 });
 
 describe('createAuthProviderFromEnv', () => {
-  it('returns an OAuthConfig with correct id for oauth2', () => {
-    const provider = createAuthProviderFromEnv(VALID_OAUTH2_ENV);
+  it('returns an OAuthConfig with correct id for igrp-auth', () => {
+    const provider = createAuthProviderFromEnv(VALID_IGRP_AUTH_ENV);
     expect(provider).not.toBeNull();
-    expect((provider as { id: string }).id).toBe('oauth2');
+    expect((provider as { id: string }).id).toBe('igrp-auth');
   });
 
-  it('sets wellKnown from OAUTH2_ISSUER', () => {
-    const provider = createAuthProviderFromEnv(VALID_OAUTH2_ENV) as { wellKnown: string };
+  it('sets wellKnown from IGRP_AUTH_ISSUER', () => {
+    const provider = createAuthProviderFromEnv(VALID_IGRP_AUTH_ENV) as { wellKnown: string };
     expect(provider.wellKnown).toBe('http://localhost:9090/.well-known/openid-configuration');
   });
 
-  it('sets default scope to openid when OAUTH2_SCOPES is not set', () => {
-    const provider = createAuthProviderFromEnv(VALID_OAUTH2_ENV) as {
+  it('sets default scope to openid when IGRP_AUTH_SCOPES is not set', () => {
+    const provider = createAuthProviderFromEnv(VALID_IGRP_AUTH_ENV) as {
       authorization: { params: { scope: string } };
     };
     expect(provider.authorization.params.scope).toBe('openid');
   });
 
-  it('uses OAUTH2_SCOPES when provided', () => {
-    const env = { ...VALID_OAUTH2_ENV, OAUTH2_SCOPES: 'openid profile email' };
+  it('uses IGRP_AUTH_SCOPES when provided', () => {
+    const env = { ...VALID_IGRP_AUTH_ENV, IGRP_AUTH_SCOPES: 'openid profile email' };
     const provider = createAuthProviderFromEnv(env) as {
       authorization: { params: { scope: string } };
     };
@@ -142,7 +148,7 @@ describe('createAuthProviderFromEnv', () => {
   });
 
   it('wires clientId and clientSecret from env into the provider', () => {
-    const provider = createAuthProviderFromEnv(VALID_OAUTH2_ENV) as {
+    const provider = createAuthProviderFromEnv(VALID_IGRP_AUTH_ENV) as {
       clientId: string;
       clientSecret: string;
     };
@@ -152,8 +158,8 @@ describe('createAuthProviderFromEnv', () => {
 });
 
 describe('isAuthEnabled / isAuthDisabled', () => {
-  it('isAuthEnabled returns true for oauth2', () => {
-    expect(isAuthEnabled({ AUTH_PROVIDER: 'oauth2' })).toBe(true);
+  it('isAuthEnabled returns true for igrp-auth', () => {
+    expect(isAuthEnabled({ AUTH_PROVIDER: 'igrp-auth' })).toBe(true);
   });
 
   it('isAuthEnabled returns false for none', () => {
@@ -162,20 +168,20 @@ describe('isAuthEnabled / isAuthDisabled', () => {
 
   it('isAuthDisabled is the inverse of isAuthEnabled', () => {
     expect(isAuthDisabled({ AUTH_PROVIDER: 'none' })).toBe(true);
-    expect(isAuthDisabled({ AUTH_PROVIDER: 'oauth2' })).toBe(false);
+    expect(isAuthDisabled({ AUTH_PROVIDER: 'igrp-auth' })).toBe(false);
   });
 });
 
 describe('exported constants', () => {
-  it('OAUTH2_PROVIDER_ID is "oauth2"', () => {
-    expect(OAUTH2_PROVIDER_ID).toBe('oauth2');
+  it('IGRP_AUTH_PROVIDER_ID is "igrp-auth"', () => {
+    expect(IGRP_AUTH_PROVIDER_ID).toBe('igrp-auth');
   });
 
   it('NONE_PROVIDER_ID is "none"', () => {
     expect(NONE_PROVIDER_ID).toBe('none');
   });
 
-  it('AUTH_PROVIDER_IDS contains OAUTH2 and NONE only', () => {
-    expect(Object.values(AUTH_PROVIDER_IDS)).toEqual(['oauth2', 'none']);
+  it('AUTH_PROVIDER_IDS contains IGRP_AUTH and NONE only', () => {
+    expect(Object.values(AUTH_PROVIDER_IDS)).toEqual(['igrp-auth', 'none']);
   });
 });

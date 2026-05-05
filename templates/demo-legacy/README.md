@@ -231,6 +231,20 @@ Coming soon
 
 ## Environment Variables
 
+### Auth provider variables
+
+| Variable | Description | Example |
+| -------- | ----------- | ------- |
+| `AUTH_PROVIDER` | Active auth provider | `keycloak` or `autentika` |
+| `KEYCLOAK_CLIENT_ID` | Keycloak client ID | `my-app-client` |
+| `KEYCLOAK_CLIENT_SECRET` | Keycloak client secret | — |
+| `KEYCLOAK_ISSUER` | Keycloak realm URL | `https://kc.example.com/realms/my-realm` |
+| `AUTENTIKA_CLIENT_ID` | Autentika client ID | — |
+| `AUTENTIKA_CLIENT_SECRET` | Autentika client secret | — |
+| `AUTENTIKA_HOST` | Autentika base URL | `https://autentika.example.com` |
+| `AUTENTIKA_TENANT_NAME` | WSO2IS tenant | `carbon.super` |
+| `AUTENTIKA_SCOPES` | OAuth scopes | `openid internal_login` |
+
 ### Required Variables
 
 | Variable | Description | Example |
@@ -425,7 +439,7 @@ The template uses NextAuth.js for authentication. Configuration is in `src/lib/a
 
 To customize authentication:
 
-1. Edit `src/lib/auth-options.ts` to configure providers
+1. Set `AUTH_PROVIDER` and the matching provider vars in `.env.local`
 2. Update `src/app/(auth)/login/page.tsx` for custom login UI
 3. Modify `src/middleware.ts` for custom auth logic
 

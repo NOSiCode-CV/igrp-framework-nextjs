@@ -45,8 +45,8 @@ function getProviderIdFromTokenOrEnv(token: JWT, env: AuthEnvironment): AuthProv
 
 function getClientCredentials(env: AuthEnvironment) {
   return {
-    clientId: env.OAUTH2_CLIENT_ID!,
-    clientSecret: env.OAUTH2_CLIENT_SECRET!,
+    clientId: env.IGRP_AUTH_CLIENT_ID!,
+    clientSecret: env.IGRP_AUTH_CLIENT_SECRET!,
   };
 }
 

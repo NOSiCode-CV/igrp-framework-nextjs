@@ -7,7 +7,10 @@
 // so the fallback copy is tuned toward provider / config issues.
 
 import { useEffect } from "react";
-import { IGRPSegmentError, type IGRPSegmentErrorProps } from "@igrp/framework-next-ui";
+import {
+  IGRPSegmentError,
+  type IGRPSegmentErrorProps,
+} from "@igrp/framework-next-ui";
 
 import { reportError } from "@/lib/report-error";
 import { resolveErrorCopy } from "@/config/error-messages";
@@ -18,7 +21,9 @@ const AUTH_FALLBACK = {
     "Verifique a configuração do provedor de autenticação e as variáveis de ambiente. Se o problema persistir, contacte o suporte.",
 };
 
-const resolveAuthCopy: NonNullable<IGRPSegmentErrorProps["resolveCopy"]> = (error) => {
+const resolveAuthCopy: NonNullable<IGRPSegmentErrorProps["resolveCopy"]> = (
+  error,
+) => {
   const typed = resolveErrorCopy(error);
   // If the framework didn't tag the error with a known code, swap in the
   // auth-scoped fallback instead of the generic one.
@@ -39,5 +44,11 @@ export default function AuthSegmentError({
     reportError(error, { segment: "(auth)" });
   }, [error]);
 
-  return <IGRPSegmentError error={error} reset={reset} resolveCopy={resolveAuthCopy} />;
+  return (
+    <IGRPSegmentError
+      error={error}
+      reset={reset}
+      resolveCopy={resolveAuthCopy}
+    />
+  );
 }

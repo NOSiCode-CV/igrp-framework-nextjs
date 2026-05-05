@@ -9,7 +9,7 @@ import { isPreviewMode } from "@/lib/utils";
 /**
  * Central IGRP auth instance.
  *
- * - Provider is resolved automatically from AUTH_PROVIDER env var (keycloak / autentika / none).
+ * - Provider is resolved automatically from AUTH_PROVIDER env var (oauth2 / none).
  *   To use a custom provider, pass a Provider object: `provider: GitHubProvider({ ... })`.
  * - All auth boilerplate (authOptions, route handler, middleware, session helpers) is provided.
  *
@@ -52,6 +52,12 @@ export async function serverSession() {
       });
       if (process.env.NODE_ENV === "production") throw error;
       return null;
+    }
+    // Auth config errors (invalid/unsupported AUTH_PROVIDER, missing oauth env vars)
+    // are setup problems — surface them so the error boundary renders a diagnosis
+    // rather than silently redirecting to login.
+    if (error instanceof Error && error.name === "IGRPAuthConfigError") {
+      throw error;
     }
     logger.error("[Auth] Getting server session failed", error);
     return null;

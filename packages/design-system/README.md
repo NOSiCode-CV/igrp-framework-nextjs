@@ -4,7 +4,7 @@ IGRP Design System — React components built on Radix UI, Tailwind CSS v4, and 
 
 ## Requirements
 
-- **Node.js** ≥ 20.x
+- **Node.js** ≥ 22.x
 - **React** ^19.2.4
 - **Next.js** ^15.5.12
 - **Tailwind CSS** v4
@@ -61,7 +61,6 @@ import {
 
 | Export | Description |
 | ------ | ----------- |
-
 | `@igrp/igrp-framework-react-design-system` | Main entry — components, hooks, utilities |
 | `@igrp/igrp-framework-react-design-system/tokens` | CSS variables (theme tokens) |
 | `@igrp/igrp-framework-react-design-system/styles` | Full styles (Tailwind + base) — use only when not compiling Tailwind in your app |
@@ -76,7 +75,6 @@ import {
 
 | Aspect | Primitives (`*Primitive`) | Horizon |
 | ------ | ------------------------- | ------- |
-
 | **Purpose** | Low-level building blocks; minimal styling, maximum flexibility | High-level, opinionated components for common IGRP patterns |
 | **Built on** | Radix UI primitives, CVA variants | Primitives (they wrap primitives) |
 | **Props** | Standard HTML/React props + variant props (`variant`, `size`, `asChild`) | IGRP-specific props (`label`, `helperText`, `showIcon`, `iconName`, `loading`, etc.) |
@@ -125,7 +123,6 @@ The design system uses CSS custom properties for theming. Tokens are defined in 
 
 | Token | Purpose |
 | ----- | ------- |
-
 | `--background`, `--foreground` | Page background and text |
 | `--primary`, `--primary-foreground` | Primary actions and text |
 | `--secondary`, `--secondary-foreground` | Secondary elements |

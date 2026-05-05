@@ -3,7 +3,7 @@ import type { Session } from './session';
 
 export {
   AUTH_PROVIDER_IDS,
-  OAUTH2_PROVIDER_ID,
+  IGRP_AUTH_PROVIDER_ID,
   NONE_PROVIDER_ID,
 } from './providers';
 export type { AuthProviderId } from './providers';

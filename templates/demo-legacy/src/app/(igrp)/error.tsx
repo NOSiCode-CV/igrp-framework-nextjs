@@ -24,5 +24,11 @@ export default function IgrpSegmentError({
     reportError(error, { segment: "(igrp)" });
   }, [error]);
 
-  return <IGRPSegmentError error={error} reset={reset} resolveCopy={resolveErrorCopy} />;
+  return (
+    <IGRPSegmentError
+      error={error}
+      reset={reset}
+      resolveCopy={resolveErrorCopy}
+    />
+  );
 }

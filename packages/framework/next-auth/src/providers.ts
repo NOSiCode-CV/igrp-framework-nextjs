@@ -1,10 +1,10 @@
 import type { OAuthConfig } from 'next-auth/providers/oauth';
 
-export const OAUTH2_PROVIDER_ID = 'oauth2' as const;
+export const IGRP_AUTH_PROVIDER_ID = 'igrp-auth' as const;
 export const NONE_PROVIDER_ID = 'none' as const;
 
 export const AUTH_PROVIDER_IDS = {
-  OAUTH2: OAUTH2_PROVIDER_ID,
+  IGRP_AUTH: IGRP_AUTH_PROVIDER_ID,
   NONE: NONE_PROVIDER_ID,
 } as const;
 
@@ -26,8 +26,8 @@ type AuthProviderDefinition = {
   createProvider: (env: AuthEnvironment) => OAuthConfig<OAuth2Profile> | null;
 };
 
-const DEFAULT_AUTH_PROVIDER_ID = OAUTH2_PROVIDER_ID;
-const DEFAULT_OAUTH2_SCOPES = 'openid';
+const DEFAULT_AUTH_PROVIDER_ID = IGRP_AUTH_PROVIDER_ID;
+const DEFAULT_IGRP_AUTH_SCOPES = 'openid';
 
 function getRequiredEnvValue(env: AuthEnvironment, key: string) {
   const value = env[key]?.trim();
@@ -44,20 +44,20 @@ function stripTrailingSlash(value: string) {
 }
 
 const AUTH_PROVIDER_REGISTRY: Record<AuthProviderId, AuthProviderDefinition> = {
-  [OAUTH2_PROVIDER_ID]: {
-    requiredEnvKeys: ['OAUTH2_CLIENT_ID', 'OAUTH2_CLIENT_SECRET', 'OAUTH2_ISSUER'],
+  [IGRP_AUTH_PROVIDER_ID]: {
+    requiredEnvKeys: ['IGRP_AUTH_CLIENT_ID', 'IGRP_AUTH_CLIENT_SECRET', 'IGRP_AUTH_ISSUER'],
     getDiscoveryUrl: (env) =>
-      `${stripTrailingSlash(getRequiredEnvValue(env, 'OAUTH2_ISSUER'))}/.well-known/openid-configuration`,
+      `${stripTrailingSlash(getRequiredEnvValue(env, 'IGRP_AUTH_ISSUER'))}/.well-known/openid-configuration`,
     createProvider: (env) => ({
-      id: OAUTH2_PROVIDER_ID,
-      name: 'OAuth2',
+      id: IGRP_AUTH_PROVIDER_ID,
+      name: 'IGRP Auth',
       type: 'oauth',
-      clientId: getRequiredEnvValue(env, 'OAUTH2_CLIENT_ID'),
-      clientSecret: getRequiredEnvValue(env, 'OAUTH2_CLIENT_SECRET'),
-      wellKnown: `${stripTrailingSlash(getRequiredEnvValue(env, 'OAUTH2_ISSUER'))}/.well-known/openid-configuration`,
+      clientId: getRequiredEnvValue(env, 'IGRP_AUTH_CLIENT_ID'),
+      clientSecret: getRequiredEnvValue(env, 'IGRP_AUTH_CLIENT_SECRET'),
+      wellKnown: `${stripTrailingSlash(getRequiredEnvValue(env, 'IGRP_AUTH_ISSUER'))}/.well-known/openid-configuration`,
       authorization: {
         params: {
-          scope: env.OAUTH2_SCOPES?.trim() || DEFAULT_OAUTH2_SCOPES,
+          scope: env.IGRP_AUTH_SCOPES?.trim() || DEFAULT_IGRP_AUTH_SCOPES,
         },
       },
       profile(profile: OAuth2Profile) {

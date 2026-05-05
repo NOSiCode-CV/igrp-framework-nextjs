@@ -36,6 +36,37 @@ import {
 import { refreshOidcAccessToken } from './oidc';
 import { sanitizeRedirectUrl } from './sanitize';
 
+// ─── Config Error ─────────────────────────────────────────────────────────────
+
+/**
+ * Thrown when `withIGRPAuth` cannot build a valid provider from the environment
+ * (e.g. unsupported `AUTH_PROVIDER` value, missing required env vars).
+ *
+ * Unlike a construction-time throw, this error is stored inside the auth instance
+ * and re-thrown lazily so the module can load cleanly. Next.js App Router error
+ * boundaries (`error.tsx` / `global-error.tsx`) will catch it during render and
+ * display a proper error page instead of a raw runtime overlay.
+ */
+export class IGRPAuthConfigError extends Error {
+  override readonly name = 'IGRPAuthConfigError' as const;
+  readonly code: string;
+
+  constructor(message: string, code = 'AUTH_CONFIG_INVALID') {
+    super(message);
+    this.code = code;
+    Object.setPrototypeOf(this, IGRPAuthConfigError.prototype);
+  }
+}
+
+/** Structural guard — works across package boundaries and serialisation. */
+export function isIGRPAuthConfigError(error: unknown): error is IGRPAuthConfigError {
+  return (
+    typeof error === 'object' &&
+    error !== null &&
+    (error as { name?: unknown }).name === 'IGRPAuthConfigError'
+  );
+}
+
 // ─── Constants ───────────────────────────────────────────────────────────────
 
 const TOKEN_REFRESH_BUFFER_MS = 60_000;
@@ -96,7 +127,7 @@ type IGRPAuthMiddlewareOptions = {
 export type IGRPAuthOptions = {
   /**
    * Provider selection:
-   * - Omit or pass "oauth2" / "none" to use IGRP pre-defined providers (reads env vars automatically).
+   * - Omit or pass "igrp-auth" / "none" to use IGRP pre-defined providers (reads env vars automatically).
    * - Pass a fully-constructed next-auth Provider object for a custom provider.
    */
   provider?: AuthProviderId | AnyProvider;
@@ -135,6 +166,17 @@ export type IGRPAuthOptions = {
 };
 
 export type IGRPAuthInstance = {
+  /**
+   * Non-null when the auth provider could not be configured (unsupported
+   * `AUTH_PROVIDER` value, missing required env vars, etc.).
+   *
+   * When set:
+   * - `GET` / `POST` return a 500 HTML diagnostic page.
+   * - `serverSession` / `getSession` throw this error so App Router error
+   *   boundaries can catch and render a proper error page.
+   */
+  configError: IGRPAuthConfigError | null;
+
   /** NextAuth options object — pass to NextAuth() if you need to customise further. */
   authOptions: NextAuthOptions;
 
@@ -258,6 +300,29 @@ async function createNextAuthHandler(authOptions: NextAuthOptions): Promise<Next
 const disabledAuthHandler: NextAuthHandler = async () =>
   new Response('Authentication is disabled (AUTH_PROVIDER=none)', { status: 404 });
 
+/** Stub handler used when auth configuration is invalid — returns a 500 with a diagnostic HTML page. */
+function makeConfigErrorHandler(err: IGRPAuthConfigError): NextAuthHandler {
+  const html = [
+    '<!DOCTYPE html><html lang="en"><head>',
+    '<meta charset="utf-8">',
+    '<title>Auth Configuration Error</title>',
+    '<style>',
+    'body{font-family:system-ui,sans-serif;max-width:600px;margin:4rem auto;padding:0 1rem;color:#111}',
+    'h1{color:#b91c1c;margin-bottom:.5rem}',
+    'code{background:#f3f4f6;padding:.1em .4em;border-radius:.25em;font-size:.9em}',
+    'p{line-height:1.6}',
+    '</style>',
+    '</head><body>',
+    '<h1>Authentication Configuration Error</h1>',
+    `<p><strong>Code:</strong> <code>${err.code}</code></p>`,
+    `<p>${err.message}</p>`,
+    '<p>Check your <code>AUTH_PROVIDER</code> environment variable and ensure all required env vars are set.</p>',
+    '</body></html>',
+  ].join('');
+  return async () =>
+    new Response(html, { status: 500, headers: { 'Content-Type': 'text/html; charset=utf-8' } });
+}
+
 // ─── Factory ──────────────────────────────────────────────────────────────────
 
 /**
@@ -312,8 +377,29 @@ export function withIGRPAuth(options: IGRPAuthOptions = {}): IGRPAuthInstance {
     matcher = DEFAULT_MATCHER,
   } = middlewareOptions;
 
-  const resolvedProvider = resolveProvider(provider, env);
-  const authIsDisabled = resolvedProvider === null;
+  // ── Provider resolution (non-throwing) ────────────────────────────────────
+  // Errors here (unsupported AUTH_PROVIDER, missing env vars) used to throw
+  // synchronously at module-evaluation time (withIGRPAuth is called at the top
+  // level of src/lib/auth.ts). That crashed the module before React loaded, so
+  // Next.js showed a raw runtime error overlay with no meaningful UI.
+  //
+  // We now capture the error and surface it lazily:
+  // - GET / POST  →  500 HTML diagnostic page
+  // - serverSession / getSession  →  throw so the nearest error.tsx boundary
+  //   renders a proper "configuration error" page inside the app chrome.
+
+  let resolvedProvider: AnyProvider | null = null;
+  let configError: IGRPAuthConfigError | null = null;
+
+  try {
+    resolvedProvider = resolveProvider(provider, env);
+  } catch (err) {
+    const msg = err instanceof Error ? err.message : String(err);
+    const code = msg.includes('Unsupported AUTH_PROVIDER') ? 'AUTH_PROVIDER_INVALID' : 'AUTH_CONFIG_INVALID';
+    configError = new IGRPAuthConfigError(msg, code);
+  }
+
+  const authIsDisabled = !configError && resolvedProvider === null;
 
   // ── authOptions ────────────────────────────────────────────────────────────
   // Built synchronously. The options *object* has no Node-only deps; it only
@@ -470,6 +556,7 @@ export function withIGRPAuth(options: IGRPAuthOptions = {}): IGRPAuthInstance {
   }
 
   async function serverSession(): Promise<Session | null> {
+    if (configError) throw configError;
     if (authIsDisabled) return null;
     try {
       const { getServerSession } = await import('next-auth');
@@ -480,6 +567,7 @@ export function withIGRPAuth(options: IGRPAuthOptions = {}): IGRPAuthInstance {
   }
 
   async function getSession(): Promise<Session | null> {
+    if (configError) throw configError;
     let session: Session | null;
 
     try {
@@ -504,12 +592,14 @@ export function withIGRPAuth(options: IGRPAuthOptions = {}): IGRPAuthInstance {
 
   // ── Return ─────────────────────────────────────────────────────────────────
 
+  const configErrorHandler = configError ? makeConfigErrorHandler(configError) : null;
+
   return {
+    configError,
     authOptions,
-    // When AUTH_PROVIDER=none we never construct NextAuth — return a stub that
-    // responds 404 instead of crashing v4 with an empty providers array.
-    GET: authIsDisabled ? disabledAuthHandler : handlerGET,
-    POST: authIsDisabled ? disabledAuthHandler : handlerPOST,
+    // Priority: config error > auth disabled (none) > normal handler
+    GET: configErrorHandler ?? (authIsDisabled ? disabledAuthHandler : handlerGET),
+    POST: configErrorHandler ?? (authIsDisabled ? disabledAuthHandler : handlerPOST),
     config: { matcher },
     isAuthDisabled,
     isPreviewMode,

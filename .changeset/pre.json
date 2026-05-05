@@ -13,10 +13,7 @@
     "@igrp/framework-next-template": "0.1.0-beta.115"
   },
   "changesets": [
-    "brave-waves-beta116",
-    "heavy-pants-sink",
-    "menus-rewrite",
-    "next-ui-oauth2-fix",
-    "oauth2-generic-provider"
+    "auth-config-error-boundary",
+    "rename-provider-igrp-auth"
   ]
 }

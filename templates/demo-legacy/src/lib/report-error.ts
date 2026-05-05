@@ -26,12 +26,20 @@ export type ReportErrorContext = {
  * the server→client edge), and especially `(error as any).digest`, which is
  * the correlation ID that maps back to the server-side log entry.
  */
-export function reportError(error: unknown, context?: ReportErrorContext): void {
+export function reportError(
+  error: unknown,
+  context?: ReportErrorContext,
+): void {
   try {
-    if (process.env.NODE_ENV !== 'production') {
+    if (process.env.NODE_ENV !== "production") {
       // Development: surface everything verbatim for the console.
       // eslint-disable-next-line no-console
-      console.error('[reportError]', context?.segment ?? 'unknown', error, context);
+      console.error(
+        "[reportError]",
+        context?.segment ?? "unknown",
+        error,
+        context,
+      );
       return;
     }
 
@@ -39,22 +47,22 @@ export function reportError(error: unknown, context?: ReportErrorContext): void 
     // Keep the shape below so later wiring is drop-in: a serializable payload
     // with the error's stable fields and the caller-provided context.
     const payload = {
-      name: getStringField(error, 'name') ?? 'Error',
-      message: getStringField(error, 'message') ?? 'Unknown error',
-      digest: getStringField(error, 'digest'),
-      code: getStringField(error, 'code'),
+      name: getStringField(error, "name") ?? "Error",
+      message: getStringField(error, "message") ?? "Unknown error",
+      digest: getStringField(error, "digest"),
+      code: getStringField(error, "code"),
       context,
     };
 
     // eslint-disable-next-line no-console
-    console.error('[reportError:prod]', payload);
+    console.error("[reportError:prod]", payload);
   } catch {
     // Never let the reporter itself throw.
   }
 }
 
 function getStringField(value: unknown, key: string): string | undefined {
-  if (!value || typeof value !== 'object') return undefined;
+  if (!value || typeof value !== "object") return undefined;
   const raw = (value as Record<string, unknown>)[key];
-  return typeof raw === 'string' ? raw : undefined;
+  return typeof raw === "string" ? raw : undefined;
 }

@@ -24,5 +24,11 @@ export default function RootSegmentError({
     reportError(error, { segment: "root" });
   }, [error]);
 
-  return <IGRPSegmentError error={error} reset={reset} resolveCopy={resolveErrorCopy} />;
+  return (
+    <IGRPSegmentError
+      error={error}
+      reset={reset}
+      resolveCopy={resolveErrorCopy}
+    />
+  );
 }

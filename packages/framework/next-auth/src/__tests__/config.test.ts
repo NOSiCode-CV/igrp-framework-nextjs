@@ -83,6 +83,7 @@ describe('withIGRPAuth — events.signOut', () => {
     ).resolves.toBeUndefined();
 
     await new Promise((r) => setTimeout(r, 0));
+    expect(oidcModule.revokeOidcSession).toHaveBeenCalled();
     // No unhandled rejection — the fire-and-forget .catch() swallowed it
   });
 });

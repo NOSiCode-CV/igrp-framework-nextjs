@@ -496,7 +496,7 @@ export function withIGRPAuth(options: IGRPAuthOptions = {}): IGRPAuthInstance {
     events: {
       async signOut(message) {
         // Skip revocation when auth is disabled or in preview mode — no real token exists.
-        if (authIsDisabled || normalizePreviewMode(env)) return;
+        if (authIsDisabled || configError || normalizePreviewMode(env)) return;
 
         // JWT sessions carry { token }; DB sessions carry { session }.
         // This package uses JWT sessions only, but guard defensively.

@@ -1,143 +1,83 @@
 # @igrp/framework-next-auth
 
-NextAuth.js wrappers for the IGRP Framework — OIDC provider configuration, JWT/session helpers, edge-safe middleware, and server/client entry points that keep auth code out of client bundles.
-
-## Requirements
-
-- **Node.js** ≥ 20.x
-- **Next.js** ^15.5.15
-- **next-auth** ^4.24.14
-- **React** ^19.2.5
-
----
-
-## Installation
-
-```bash
-pnpm add @igrp/framework-next-auth
-```
-
----
+NextAuth.js wrapper for the IGRP Framework. Provides a single `withIGRPAuth()` factory
+that configures OIDC authentication, JWT session management, token refresh, and
+route-protection middleware primitives.
 
 ## Entry points
 
-Each subpath is a separate bundle — import only what a given file needs so server-only code never leaks into client bundles.
+| Import path | Runtime | Purpose |
+|---|---|---|
+| `@igrp/framework-next-auth/config` | Node + Edge | `withIGRPAuth()` factory |
+| `@igrp/framework-next-auth/client` | Browser | `useSafeSession()`, `signIn`, `signOut`, `SessionProvider` |
+| `@igrp/framework-next-auth/server` | Node | `getServerSession` |
+| `@igrp/framework-next-auth/session` | Node | Session types |
+| `@igrp/framework-next-auth/jwt` | Node | JWT types |
+| `@igrp/framework-next-auth/middleware` | Edge | NextAuth middleware |
+| `@igrp/framework-next-auth/oidc` | Node | `refreshOidcAccessToken`, `revokeOidcSession` |
+| `@igrp/framework-next-auth/providers` | Node | Provider registry helpers |
+| `@igrp/framework-next-auth/sanitize` | Node + Edge | URL/redirect sanitization |
+| `@igrp/framework-next-auth/types` | types only | Session/JWT module augmentation |
 
-| Entry | Use in | What it provides |
-| ----- | ------ | ---------------- |
-| `@igrp/framework-next-auth` | server | Root barrel (session + JWT + middleware + providers) |
-| `@igrp/framework-next-auth/server` | server | Server-side auth helpers, `auth()`, `signIn`, `signOut` |
-| `@igrp/framework-next-auth/client` | client | `useSession`, `SessionProvider`, `signIn`, `signOut` |
-| `@igrp/framework-next-auth/session` | server / client | Typed session accessors |
-| `@igrp/framework-next-auth/jwt` | server | JWT decode / validation helpers |
-| `@igrp/framework-next-auth/middleware` | edge (middleware) | `isAuthBypass`, matcher config, edge-safe auth check |
-| `@igrp/framework-next-auth/config` | server | NextAuth option builders |
-| `@igrp/framework-next-auth/oidc` | server | OIDC discovery + token introspection helpers |
-| `@igrp/framework-next-auth/providers` | server | Pre-configured Keycloak and Autentika providers |
-| `@igrp/framework-next-auth/sanitize` | server | Token sanitization utilities |
-| `@igrp/framework-next-auth/types` | anywhere | Shared TypeScript types |
-
-Never import from `@igrp/framework-next-auth/dist/...` — use the subpath entries above.
-
----
-
-## Usage
-
-### Auth providers
-
-Two OIDC providers are pre-configured: **Keycloak** and **Autentika** (WSO2IS). Select one with the `AUTH_PROVIDER` environment variable.
+## Quick start
 
 ```ts
 // src/lib/auth.ts
-import { getAuthConfig } from "@igrp/framework-next-auth/config"
+import { withIGRPAuth } from "@igrp/framework-next-auth/config";
+import { redirect } from "next/navigation";
 
-export const { handlers, auth, signIn, signOut } = getAuthConfig()
-```
+export const auth = withIGRPAuth({
+  onSessionExpired: () => redirect("/logout"),
+});
 
-#### Required environment variables
+// src/app/api/auth/[...nextauth]/route.ts
+export const { GET, POST } = auth;
 
-**Common:**
-
-```env
-AUTH_PROVIDER=keycloak   # keycloak | autentika
-NEXTAUTH_URL=http://localhost:3000
-NEXTAUTH_SECRET=...      # openssl rand -base64 32
-NEXTAUTH_URL_INTERNAL=http://localhost:3000
-```
-
-**Keycloak:**
-
-```env
-KEYCLOAK_CLIENT_ID=my-client
-KEYCLOAK_CLIENT_SECRET=...
-KEYCLOAK_ISSUER=https://keycloak.example.com/realms/my-realm
-```
-
-**Autentika (WSO2IS):**
-
-```env
-AUTENTIKA_CLIENT_ID=my-client
-AUTENTIKA_CLIENT_SECRET=...
-AUTENTIKA_HOST=https://autentika.example.com
-AUTENTIKA_TENANT_NAME=carbon.super
-AUTENTIKA_SCOPES=openid internal_login
-```
-
-### Middleware (edge)
-
-```ts
 // src/middleware.ts
-import { isAuthBypass, authMiddlewareConfig } from "@igrp/framework-next-auth/middleware"
-import { NextResponse } from "next/server"
-import type { NextRequest } from "next/server"
-
-export function middleware(request: NextRequest) {
-  if (isAuthBypass(request)) return NextResponse.next()
-  // ... JWT validation
-}
-
-export const config = authMiddlewareConfig
+export const { config } = auth;
 ```
 
-### Session (server component)
-
-```ts
-import { getServerSession } from "@igrp/framework-next-auth/session"
-
-export default async function Page() {
-  const session = await getServerSession()
-  // session.user.name, session.user.email, ...
-}
-```
-
-### Client session
-
-```tsx
-"use client"
-import { useSession } from "@igrp/framework-next-auth/client"
-
-export function UserMenu() {
-  const { data: session } = useSession()
-  return <span>{session?.user?.name}</span>
-}
-```
-
----
-
-## Build
+## Environment variables
 
 ```bash
-# From repo root
-pnpm build:auth
+# Required
+AUTH_PROVIDER=igrp-auth          # "igrp-auth" or "none" (disables auth)
+IGRP_AUTH_CLIENT_ID=my-client
+IGRP_AUTH_CLIENT_SECRET=my-secret
+IGRP_AUTH_ISSUER=https://your-oidc-provider.example.com/realms/my-realm
+NEXTAUTH_URL=http://localhost:3000
+NEXTAUTH_SECRET=some-random-secret
 
-# From package directory
-pnpm build
+# Optional
+IGRP_AUTH_SCOPES=openid profile email   # defaults to "openid"
+NEXTAUTH_URL_INTERNAL=http://app:3000   # internal URL for server-to-server calls
+IGRP_PREVIEW_MODE=true                  # bypass auth for local dev (no OIDC needed)
 ```
 
-Built with **tsup** (no React Compiler step). Output in `dist/`.
+## Supported providers
 
----
+| `AUTH_PROVIDER` value | Description |
+|---|---|
+| `igrp-auth` (default) | Generic OIDC — works with Keycloak, WSO2IS, or any OIDC-compliant provider |
+| `none` | Disables authentication entirely |
+
+The OIDC callback URL to register on your provider is:
+`{NEXTAUTH_URL}/api/auth/callback/igrp-auth`
+
+## Session shape
+
+```ts
+import type { Session } from "next-auth";
+
+// Augmented fields (from @igrp/framework-next-auth/types):
+session.accessToken    // OIDC access token
+session.idToken        // OIDC ID token
+session.authProviderId // "igrp-auth" | "none"
+session.expiresAt      // Unix ms when access token expires
+session.error          // "RefreshAccessTokenError" on failed refresh
+session.forceLogout    // true when refresh has failed — client should signOut()
+```
 
 ## License
 
-MIT © IGRP Labs
+MIT

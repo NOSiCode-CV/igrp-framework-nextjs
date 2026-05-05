@@ -1,8 +1,8 @@
 # @igrp/framework-next-auth
 
-## 1.0.0-beta.117
+## 0.1.0-beta.117
 
-### Major Changes
+### Patch Changes
 
 - 724398a: Replace Keycloak and Autentika providers with a single generic `oauth2` OIDC provider.
 

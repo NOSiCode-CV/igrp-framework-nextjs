@@ -9,8 +9,8 @@ export default async function IGRPRootLayout({
   children,
 }: Readonly<{ children: React.ReactNode }>) {
   // Auth enforcement: redirects to /login if unauthenticated, /logout if token expired.
-  // React cache() ensures getSession() runs only once per request even if other
-  // server components also call verifySession().
+  // verifySession() is React-cache()-memoized — runs once per request even if called
+  // by multiple server components in the same render.
   await verifySession();
 
   const layoutConfig = await configLayout();

@@ -15,6 +15,7 @@ import { isAuthBypass } from "@/lib/utils";
  */
 export const verifySession = cache(async (): Promise<Session> => {
   if (isAuthBypass()) {
+    // Stub covers the minimal fields the layout needs; cast is safe in dev/preview only.
     return {
       user: { name: "Preview User", email: "preview@example.com" },
       accessToken: "preview-token",

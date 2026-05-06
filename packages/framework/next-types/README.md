@@ -19,13 +19,13 @@ pnpm add @igrp/framework-next-types
 
 ## What's exported
 
-| Category | Types |
-| -------- | ----- |
+| Category              | Types                                                              |
+| --------------------- | ------------------------------------------------------------------ |
 | **Access management** | Permission, resource, and role types used by `igrpGetAccessClient` |
-| **Globals** | Shared IGRP config types |
-| **Header** | `IGRPHeaderConfig`, nav-user and notification shapes |
-| **IGRP config** | `IGRPConfig`, layout config input/output shapes |
-| **Sidebar** | `IGRPSidebarConfig`, menu item trees |
+| **Globals**           | Shared IGRP config types                                           |
+| **Header**            | `IGRPHeaderConfig`, nav-user and notification shapes               |
+| **IGRP config**       | `IGRPConfig`, layout config input/output shapes                    |
+| **Sidebar**           | `IGRPSidebarConfig`, menu item trees                               |
 
 Session and JWT types are re-exported from `@igrp/framework-next-auth/types`.
 
@@ -34,7 +34,7 @@ Session and JWT types are re-exported from `@igrp/framework-next-auth/types`.
 ## Usage
 
 ```ts
-import type { IGRPConfig, IGRPSidebarConfig } from "@igrp/framework-next-types"
+import type { IGRPConfig, IGRPSidebarConfig } from '@igrp/framework-next-types';
 ```
 
 ---

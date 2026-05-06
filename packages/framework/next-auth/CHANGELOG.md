@@ -1,5 +1,12 @@
 # @igrp/framework-next-auth
 
+## 0.1.0-beta.119
+
+### Patch Changes
+
+- 20a0850: useSafeSession() now calls signOut() immediately when forceLogout is detected, eliminating the need for a navigation to trigger logout after refresh failure.
+- 2137c48: Auto-revoke OIDC token on logout via events.signOut callback (non-blocking)
+
 ## 0.1.0-beta.118
 
 ### Patch Changes

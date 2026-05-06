@@ -13,6 +13,8 @@
   },
   "changesets": [
     "auth-config-error-boundary",
-    "rename-provider-igrp-auth"
+    "force-logout-usesafesession",
+    "rename-provider-igrp-auth",
+    "token-revocation-on-logout"
   ]
 }

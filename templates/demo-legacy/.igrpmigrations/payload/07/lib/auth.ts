@@ -75,7 +75,7 @@ export async function serverSession() {
 /**
  * Gets the current session for layout use.
  * Redirects to /logout when token expired or refresh failed.
- * Returns null in preview mode.
+ * Returns null in bypass mode (IGRP_PREVIEW_MODE or AUTH_PROVIDER=none).
  */
 export async function getSession() {
   if (isAuthBypass()) return null;

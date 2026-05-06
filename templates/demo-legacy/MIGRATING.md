@@ -30,16 +30,17 @@ pnpm dlx @igrp/template-migrator@latest status
 ```
 
 ```
-Template: demo-legacy  CLI: 0.1.0-beta.115
+Template: demo-legacy  CLI: 0.1.0-beta.120
 
   ✓ applied  01-preview-mode-not-found
   ✓ applied  02-access-sync-config-refactor
-  • pending  03-tailwind-v4-tokens
-  • pending  04-multi-auth-provider
-  • pending  05-edge-safe-auth-bypass
-  • pending  06-error-handling-overhaul
+  ✓ applied  03-tailwind-v4-tokens
+  ✓ applied  04-multi-auth-provider
+  ✓ applied  05-edge-safe-auth-bypass
+  ✓ applied  06-error-handling-overhaul
+  • pending  07-data-access-layer
 
-2 applied, 4 pending
+6 applied, 1 pending
 ```
 
 - **✓ applied** — already done, will be skipped.
@@ -56,30 +57,12 @@ pnpm dlx @igrp/template-migrator@latest plan
 Prints every file operation each pending migration will perform. Nothing is written to disk — safe to run at any time.
 
 ```
-Pending migrations (4):
+Pending migrations (1):
 
-── 03-tailwind-v4-tokens ──────────────────────────────────────
-  file.write  src/styles/globals.css  (replace)
-
-── 04-multi-auth-provider ─────────────────────────────────────
+── 07-data-access-layer ───────────────────────────────────────
+  file.create src/lib/dal.ts
   file.write  src/lib/auth.ts  (replace)
-  file.write  src/middleware.ts  (replace)
-  file.create src/actions/igrp/auth.ts
-  file.write  src/actions/igrp/layout.ts  (replace)
-  file.write  src/app/(auth)/login/page.tsx  (replace)
-  file.create src/app/api/auth/[...nextauth]/route.ts
-  env.add     .env.example  →  AUTH_PROVIDER, KEYCLOAK_*, AUTENTIKA_*
-
-── 05-edge-safe-auth-bypass ───────────────────────────────────
-  file.write  src/middleware.ts  (replace)
-  file.create src/lib/utils.ts
-  ...
-
-── 06-error-handling-overhaul ─────────────────────────────────
-  file.write  src/lib/auth.ts  (replace)
-  file.create src/lib/report-error.ts
-  file.create src/config/error-messages.ts
-  ...
+  deps.bump   package.json
 
 No files were written.
 ```
@@ -166,6 +149,7 @@ After each successful migration `apply` writes `.igrpmigrations/lock.json` to yo
 | 04 | `04-multi-auth-provider` | Multi-provider auth (`AUTH_PROVIDER`), central `auth.ts` | beta.113 |
 | 05 | `05-edge-safe-auth-bypass` | Edge-safe auth refactor, `isAuthBypass()` unification | beta.114 |
 | 06 | `06-error-handling-overhaul` | Typed error hierarchy, full App Router error boundaries | beta.115 |
+| 07 | `07-data-access-layer` | Data Access Layer (`verifySession`, `getAuthenticatedUser`), complete `isAuthBypass` in `getSession` | beta.120 |
 
 Full prose guides with before/after code: [`.igrpmigrations/`](.igrpmigrations/)
 

@@ -29,6 +29,7 @@ interface IGRPLoginTexts {
 
 interface IGRPSiteLogo {
   src: string;
+  srcDark?: string;
   width: number;
   height: number;
 }
@@ -95,8 +96,17 @@ function IGRPAuthForm({
               alt={name}
               width={logo.width}
               height={logo.height}
-              className={cn('w-auto h-auto')}
+              className={cn('w-auto h-auto', logo.srcDark && 'dark:hidden')}
             />
+            {logo.srcDark && (
+              <Image
+                src={logo.srcDark}
+                alt={name}
+                width={logo.width}
+                height={logo.height}
+                className={cn('w-auto h-auto hidden dark:block')}
+              />
+            )}
             <h3 className={cn('mt-6 text-center')}>
               <p>{texts.welcome}</p>
               <p>{texts.description}</p>

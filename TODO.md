@@ -3,14 +3,11 @@
 ## Design System
 
 - Review the input color
-
 - Review Data-table filters
-
 - fix rthe pagination on mobile
-
 - Add Switch to the DataTable as checkbox
-
 - Review info-card orientation horizontal and see design for this, review the colors mode
+- Review the ```<TooltipProvider></TooltipProvider>``` usage
 
 ## New shadcn Components
 

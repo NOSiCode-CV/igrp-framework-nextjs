@@ -9,7 +9,9 @@ import { logger } from '../logger';
 
 export type ActionResult<T> = { ok: true; data: T } | { ok: false; error: string };
 
-export async function fetchMenusAction(appCode: string): Promise<ActionResult<Awaited<ReturnType<typeof fetchMenus>>>> {
+export async function fetchMenusAction(
+  appCode: string,
+): Promise<ActionResult<Awaited<ReturnType<typeof fetchMenus>>>> {
   try {
     const data = await fetchMenus(appCode);
     return { ok: true, data };
@@ -19,7 +21,9 @@ export async function fetchMenusAction(appCode: string): Promise<ActionResult<Aw
   }
 }
 
-export async function fetchCurrentUserAction(): Promise<ActionResult<Awaited<ReturnType<typeof fetchCurrentUser>>>> {
+export async function fetchCurrentUserAction(): Promise<
+  ActionResult<Awaited<ReturnType<typeof fetchCurrentUser>>>
+> {
   try {
     const data = await fetchCurrentUser();
     return { ok: true, data };
@@ -29,7 +33,9 @@ export async function fetchCurrentUserAction(): Promise<ActionResult<Awaited<Ret
   }
 }
 
-export async function fetchAppsByUserAction(): Promise<ActionResult<Awaited<ReturnType<typeof fetchAppsByUser>>>> {
+export async function fetchAppsByUserAction(): Promise<
+  ActionResult<Awaited<ReturnType<typeof fetchAppsByUser>>>
+> {
   try {
     const data = await fetchAppsByUser();
     return { ok: true, data };
@@ -39,7 +45,9 @@ export async function fetchAppsByUserAction(): Promise<ActionResult<Awaited<Retu
   }
 }
 
-export async function fetchAppByCodeAction(appCode: string): Promise<ActionResult<Awaited<ReturnType<typeof fetchAppByCode>>>> {
+export async function fetchAppByCodeAction(
+  appCode: string,
+): Promise<ActionResult<Awaited<ReturnType<typeof fetchAppByCode>>>> {
   try {
     const data = await fetchAppByCode(appCode);
     return { ok: true, data };

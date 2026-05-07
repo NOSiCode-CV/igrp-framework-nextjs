@@ -31,6 +31,7 @@ function isPublicPath(pathname: string): boolean {
   if (PUBLIC_PATHS.has(pathname)) return true;
   if (PUBLIC_PREFIXES.some((p) => pathname.startsWith(p))) return true;
   if (STATIC_PREFIXES.some((p) => pathname.startsWith(p))) return true;
+  if (/\.[^/]+$/.test(pathname)) return true;
   return false;
 }
 

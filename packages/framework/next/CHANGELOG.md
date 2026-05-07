@@ -1,5 +1,26 @@
 # @igrp/framework-next
 
+## 0.1.0-beta.122
+
+### Patch Changes
+
+- ef2342d: Add per-request API client isolation via React.cache(), unstable_cache caching for menus/apps/user data, server actions subpath (@igrp/framework-next/actions), useLayoutData client hook (@igrp/framework-next/client), and Suspense-streamed IGRPLayout with ErrorBoundary fallbacks.
+- Updated dependencies [ef2342d]
+  - @igrp/framework-next-ui@0.1.0-beta.122
+
+## 0.1.0-beta.121
+
+### Patch Changes
+
+- Add `@igrp/framework-next/app-error` and `@igrp/framework-next/logger` subpath exports.
+
+  **`/app-error`** — `AppError`, `parsePublicDigest`, `getDisplayableErrorMessage`, and related types/constants for passing user-friendly messages through Next.js production sanitization of `error.message` via `error.digest`.
+
+  **`/logger`** — minimal `logger` object (`error`, `warn`, `info`) with consistent `[Error]` / `[Warn]` / `[Info]` prefixes. Drop-in integration point for Sentry / OpenTelemetry without changing call sites.
+
+- Updated dependencies
+  - @igrp/framework-next-ui@0.1.0-beta.121
+
 ## 0.1.0-beta.120
 
 ### Patch Changes

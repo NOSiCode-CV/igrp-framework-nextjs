@@ -20,14 +20,8 @@ export type IGRPLayoutArgs = {
 };
 
 export async function IGRPLayout({ children, config }: IGRPLayoutArgs) {
-  const {
-    previewMode,
-    showSidebar,
-    showHeader,
-    layout,
-    apiManagementConfig,
-    toasterConfig,
-  } = config;
+  const { previewMode, showSidebar, showHeader, layout, apiManagementConfig, toasterConfig } =
+    config;
 
   const { session } = layout;
 

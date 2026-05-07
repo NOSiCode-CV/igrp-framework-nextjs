@@ -6,11 +6,13 @@ export type IGRPClientRuntimeConfig = {
   timeout?: number;
 };
 
-const getRequestConfig = cache((): IGRPClientRuntimeConfig => ({
-  token: '',
-  baseUrl: '',
-  timeout: 10_000,
-}));
+const getRequestConfig = cache(
+  (): IGRPClientRuntimeConfig => ({
+    token: '',
+    baseUrl: '',
+    timeout: 10_000,
+  }),
+);
 
 export function igrpSetAccessClientConfig(config: IGRPClientRuntimeConfig): void {
   Object.assign(getRequestConfig(), config);

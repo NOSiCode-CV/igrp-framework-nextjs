@@ -12,8 +12,12 @@
     "@igrp/framework-next-template": "0.1.0-beta.115"
   },
   "changesets": [
+    "add-app-error-and-logger",
     "auth-config-error-boundary",
+    "fix-header-logo-and-dark-logo",
     "force-logout-usesafesession",
+    "framework-next-streaming",
+    "framework-next-ui-streaming",
     "rename-provider-igrp-auth",
     "token-revocation-on-logout"
   ]

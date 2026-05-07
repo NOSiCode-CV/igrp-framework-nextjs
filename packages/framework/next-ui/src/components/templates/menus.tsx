@@ -7,8 +7,6 @@ import type { IGRPMenuItemArgs } from '@igrp/framework-next-types';
 import {
   cn,
   IGRPIcon,
-  Alert,
-  AlertDescription,
   Collapsible,
   CollapsibleContent,
   CollapsibleTrigger,
@@ -308,10 +306,21 @@ export function IGRPTemplateMenus({ menus = [] }: IGRPTemplateMenuArgs) {
 
   if (sections.length === 0) {
     return (
-      <Alert variant="destructive">
-        <IGRPIcon iconName="CircleAlert" />
-        <AlertDescription>Aplicação sem menus.</AlertDescription>
-      </Alert>
+      <SidebarGroup>
+        <div
+          className={cn(
+            'flex items-center gap-3 rounded-md border border-dashed px-3 py-3',
+            'text-muted-foreground',
+            'group-data-[collapsible=icon]:justify-center group-data-[collapsible=icon]:px-2',
+          )}
+          title="Aplicação sem menus"
+        >
+          <IGRPIcon iconName="GlobeX" className={cn('size-4 shrink-0')} />
+          <span className={cn('text-xs group-data-[collapsible=icon]:hidden')}>
+            Aplicação sem menus.
+          </span>
+        </div>
+      </SidebarGroup>
     );
   }
 

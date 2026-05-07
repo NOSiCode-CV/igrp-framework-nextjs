@@ -29,15 +29,10 @@ export default function GlobalError({
     reportError(error, { segment: "global" });
   }, [error]);
 
-  // `IGRPGlobalError` renders its own hardcoded copy today. Resolving the
-  // copy via `resolveErrorCopy(error)` lets us surface typed-error strings
-  // as soon as the framework-next-ui component is updated to accept them.
-  void resolveErrorCopy(error);
-
   return (
     <html lang="pt-PT">
       <body>
-        <IGRPGlobalError error={error} reset={reset} />
+        <IGRPGlobalError error={error} reset={reset} resolveCopy={resolveErrorCopy} />
       </body>
     </html>
   );

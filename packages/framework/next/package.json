@@ -1,6 +1,6 @@
 {
   "name": "@igrp/framework-next",
-  "version": "0.1.0-beta.121",
+  "version": "0.1.0-beta.122",
   "description": "IGRP Framework for Next.js | Server Rendering components",
   "keywords": [
     "igrp",
@@ -34,7 +34,7 @@
     "@igrp/framework-next-auth": "workspace:*",
     "@igrp/framework-next-types": "workspace:*",
     "@igrp/framework-next-ui": "workspace:*",
-    "@igrp/platform-access-management-client-ts": "0.2.0-beta.2"
+    "@igrp/platform-access-management-client-ts": "0.2.0-beta.4"
   },
   "devDependencies": {
     "@babel/cli": "^7.28.6",

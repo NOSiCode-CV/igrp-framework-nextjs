@@ -22,18 +22,20 @@ export async function fetchLayoutData(
       );
     }
 
-    const menuItems = await fetchMenus(appCode);
-    const user = await fetchCurrentUser();
-    const apps = await fetchAppsByUser();
+    const [menuItems, user, apps] = await Promise.all([
+      fetchMenus(appCode),
+      fetchCurrentUser(),
+      fetchAppsByUser(),
+    ]);
 
     headerData = {
       ...headerData,
-      user,
+      ...(user !== null && { user }),
     };
 
     sidebarData = {
       ...sidebarData,
-      user,
+      user: user ?? undefined,
       menuItems,
       apps,
       appCode,

@@ -5,6 +5,7 @@ import { revalidateTag } from 'next/cache';
 import { fetchAppByCode, fetchAppsByUser } from '../hooks/use-applications';
 import { fetchMenus } from '../hooks/use-menus';
 import { fetchCurrentUser } from '../hooks/use-user';
+import { logger } from '../logger';
 
 export type ActionResult<T> = { ok: true; data: T } | { ok: false; error: string };
 
@@ -12,7 +13,8 @@ export async function fetchMenusAction(appCode: string): Promise<ActionResult<Aw
   try {
     const data = await fetchMenus(appCode);
     return { ok: true, data };
-  } catch {
+  } catch (error) {
+    logger.error('[fetchMenusAction] Falha ao carregar os menus:', error);
     return { ok: false, error: 'Falha ao carregar os menus.' };
   }
 }
@@ -21,7 +23,8 @@ export async function fetchCurrentUserAction(): Promise<ActionResult<Awaited<Ret
   try {
     const data = await fetchCurrentUser();
     return { ok: true, data };
-  } catch {
+  } catch (error) {
+    logger.error('[fetchCurrentUserAction] Falha ao carregar os dados do utilizador:', error);
     return { ok: false, error: 'Falha ao carregar os dados do utilizador.' };
   }
 }
@@ -30,7 +33,8 @@ export async function fetchAppsByUserAction(): Promise<ActionResult<Awaited<Retu
   try {
     const data = await fetchAppsByUser();
     return { ok: true, data };
-  } catch {
+  } catch (error) {
+    logger.error('[fetchAppsByUserAction] Falha ao carregar as aplicações:', error);
     return { ok: false, error: 'Falha ao carregar as aplicações.' };
   }
 }
@@ -39,7 +43,8 @@ export async function fetchAppByCodeAction(appCode: string): Promise<ActionResul
   try {
     const data = await fetchAppByCode(appCode);
     return { ok: true, data };
-  } catch {
+  } catch (error) {
+    logger.error('[fetchAppByCodeAction] Falha ao carregar os dados da aplicação:', error);
     return { ok: false, error: 'Falha ao carregar os dados da aplicação.' };
   }
 }

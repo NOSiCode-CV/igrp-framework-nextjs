@@ -21,7 +21,6 @@ export type IGRPLayoutArgs = {
 
 export async function IGRPLayout({ children, config }: IGRPLayoutArgs) {
   const {
-    appCode,
     previewMode,
     showSidebar,
     showHeader,

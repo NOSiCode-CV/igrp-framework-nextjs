@@ -16,7 +16,7 @@ export async function HeaderDataProvider({ config }: HeaderDataProviderProps) {
     return <IGRPTemplateHeader data={headerData} />;
   }
 
-  const [user] = await Promise.all([fetchCurrentUser()]);
+  const user = await fetchCurrentUser();
 
   return (
     <IGRPTemplateHeader

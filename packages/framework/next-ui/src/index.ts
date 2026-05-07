@@ -45,6 +45,8 @@ export { IGRPTemplateCommandSearch } from './components/templates/command-search
 
 export { IGRPTemplateHeader } from './components/templates/header';
 
+export { IGRPTemplateSidebar, type IGRPTemplateSidebarProps } from './components/templates/sidebar';
+
 export { IGRPTemplateLoading, type IGRPTemplateLoadingProps } from './components/templates/loading';
 
 export { IGRPTemplateMenus, type IGRPTemplateMenuArgs } from './components/templates/menus';

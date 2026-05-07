@@ -1,8 +1,18 @@
-import { IGRPRootProviders } from '@igrp/framework-next-ui';
+// packages/framework/next/src/layouts/igrp-layout.tsx
+import { Suspense } from 'react';
+import {
+  IGRPRootProviders,
+  IGRPLayoutErrorBoundary,
+  IGRPHeaderSkeleton,
+  IGRPSidebarSkeleton,
+  IGRPHeaderError,
+  IGRPSidebarError,
+} from '@igrp/framework-next-ui';
 import type { IGRPConfigArgs } from '@igrp/framework-next-types';
 
 import { igrpSetAccessClientConfig } from '../lib/api-config';
-import { fetchLayoutData } from '../hooks/use-layout';
+import { HeaderDataProvider } from './providers/header-data-provider';
+import { SidebarDataProvider } from './providers/sidebar-data-provider';
 
 export type IGRPLayoutArgs = {
   readonly children: React.ReactNode;
@@ -10,25 +20,18 @@ export type IGRPLayoutArgs = {
 };
 
 export async function IGRPLayout({ children, config }: IGRPLayoutArgs) {
-  const layoutConfig = config;
-
   const {
     appCode,
     previewMode,
-    layoutMockData,
     showSidebar,
     showHeader,
     layout,
     apiManagementConfig,
     toasterConfig,
-  } = layoutConfig;
+  } = config;
 
   const { session } = layout;
 
-  // Access-management config presence is validated upstream in
-  // `igrpBuildConfig` (see ../lib/build.ts). By the time we reach here, either
-  // `previewMode` is true OR `apiManagementConfig.baseUrl` is guaranteed to
-  // be present — so no runtime throw is needed in this layout.
   if (!previewMode && apiManagementConfig?.baseUrl) {
     igrpSetAccessClientConfig({
       token: session?.accessToken || '',
@@ -36,21 +39,32 @@ export async function IGRPLayout({ children, config }: IGRPLayoutArgs) {
     });
   }
 
-  const { headerData, sidebarData } = await fetchLayoutData(
-    layoutMockData.getHeaderData,
-    layoutMockData.getSidebarData,
-    previewMode,
-    appCode,
-  );
+  // Only create slots when the section is enabled — avoids executing the async
+  // server component when showSidebar/showHeader is false.
+  const sidebarSlot = showSidebar ? (
+    <IGRPLayoutErrorBoundary fallback={<IGRPSidebarError />}>
+      <Suspense fallback={<IGRPSidebarSkeleton />}>
+        <SidebarDataProvider config={config} />
+      </Suspense>
+    </IGRPLayoutErrorBoundary>
+  ) : null;
+
+  const headerSlot = showHeader ? (
+    <IGRPLayoutErrorBoundary fallback={<IGRPHeaderError />}>
+      <Suspense fallback={<IGRPHeaderSkeleton />}>
+        <HeaderDataProvider config={config} />
+      </Suspense>
+    </IGRPLayoutErrorBoundary>
+  ) : null;
 
   return (
     <IGRPRootProviders
       defaultOpen={true}
-      sidebarData={sidebarData}
-      headerData={headerData}
       showSidebar={showSidebar}
       showHeader={showHeader}
       toasterConfig={toasterConfig}
+      sidebar={sidebarSlot}
+      header={headerSlot}
     >
       {children}
     </IGRPRootProviders>

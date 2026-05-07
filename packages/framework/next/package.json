@@ -1,6 +1,6 @@
 {
   "name": "@igrp/framework-next",
-  "version": "0.1.0-beta.120",
+  "version": "0.1.0-beta.121",
   "description": "IGRP Framework for Next.js | Server Rendering components",
   "keywords": [
     "igrp",
@@ -39,12 +39,12 @@
   "devDependencies": {
     "@babel/cli": "^7.28.6",
     "@babel/core": "^7.29.0",
-    "@babel/preset-env": "^7.29.2",
+    "@babel/preset-env": "^7.29.5",
     "@babel/preset-react": "^7.28.5",
     "@babel/preset-typescript": "^7.28.5",
     "@eslint/js": "^9.39.2",
     "@swc/cli": "^0.8.0",
-    "@swc/core": "^1.15.30",
+    "@swc/core": "^1.15.33",
     "@types/node": "^24.10.1",
     "@types/react": "^19.2.14",
     "@types/react-dom": "^19.2.3",
@@ -76,6 +76,26 @@
       "import": "./dist/errors.js",
       "types": "./dist/errors.d.ts",
       "default": "./dist/errors.js"
+    },
+    "./app-error": {
+      "import": "./dist/app-error.js",
+      "types": "./dist/app-error.d.ts",
+      "default": "./dist/app-error.js"
+    },
+    "./logger": {
+      "import": "./dist/logger.js",
+      "types": "./dist/logger.d.ts",
+      "default": "./dist/logger.js"
+    },
+    "./actions": {
+      "import": "./dist/actions/index.js",
+      "types": "./dist/actions/index.d.ts",
+      "default": "./dist/actions/index.js"
+    },
+    "./client": {
+      "import": "./dist/client/use-layout-data.js",
+      "types": "./dist/client/use-layout-data.d.ts",
+      "default": "./dist/client/use-layout-data.js"
     }
   },
   "main": "./dist/index.js",

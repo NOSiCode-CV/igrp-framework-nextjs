@@ -23,6 +23,11 @@ export {
 
 export { IGRPGlobalError, type IGRPGlobalErrorProps } from './components/errors/global';
 export { IGRPSegmentError, type IGRPSegmentErrorProps } from './components/errors/segment';
+export { IGRPLayoutErrorBoundary } from './components/templates/layout-error-boundary';
+export { IGRPHeaderSkeleton } from './components/templates/header-skeleton';
+export { IGRPSidebarSkeleton } from './components/templates/sidebar-skeleton';
+export { IGRPHeaderError } from './components/templates/header-error';
+export { IGRPSidebarError } from './components/templates/sidebar-error';
 
 // templates
 

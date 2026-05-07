@@ -21,8 +21,10 @@ export type IGRPRootProvidersArgs = {
   showSidebar?: boolean;
   defaultOpen?: boolean;
   showHeader?: boolean;
-  sidebarData: IGRPSidebarDataArgs;
-  headerData: IGRPHeaderDataArgs;
+  sidebarData?: IGRPSidebarDataArgs;
+  headerData?: IGRPHeaderDataArgs;
+  sidebar?: React.ReactNode;
+  header?: React.ReactNode;
   toasterConfig?: IGRPConfigArgs['toasterConfig'];
 };
 
@@ -33,6 +35,8 @@ export function IGRPRootProviders({
   showHeader,
   sidebarData,
   headerData,
+  sidebar,
+  header,
   toasterConfig,
 }: IGRPRootProvidersArgs) {
   const {
@@ -44,16 +48,17 @@ export function IGRPRootProviders({
     duration = 5000,
   } = toasterConfig ?? {};
 
+  const sidebarContent = sidebar ?? (sidebarData ? <IGRPTemplateSidebar data={sidebarData} /> : null);
+  const headerContent = header ?? (headerData ? <IGRPTemplateHeader data={headerData} /> : null);
+
   return (
     <SidebarProvider defaultOpen={defaultOpen}>
-      {showSidebar && (
-        <div className={cn('z-45')}>
-          <IGRPTemplateSidebar data={sidebarData} />
-        </div>
+      {showSidebar && sidebarContent && (
+        <div className={cn('z-45')}>{sidebarContent}</div>
       )}
 
       <SidebarInset className={cn('min-w-0')}>
-        {showHeader && <IGRPTemplateHeader data={headerData} />}
+        {showHeader && headerContent}
 
         <div className={cn('p-4')}>{children}</div>
 

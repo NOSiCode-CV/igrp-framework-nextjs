@@ -1,5 +1,15 @@
 # @igrp/framework-next
 
+## 0.1.0-beta.125
+
+### Patch Changes
+
+- 939446a: fix(framework-next): throw clear error when baseUrl is not configured in igrpGetAccessClient
+- Updated dependencies [939446a]
+  - @igrp/framework-next-auth@0.1.0-beta.120
+  - @igrp/framework-next-types@0.1.0-beta.120
+  - @igrp/framework-next-ui@0.1.0-beta.123
+
 ## 0.1.0-beta.124
 
 ### Patch Changes

@@ -32,9 +32,9 @@
     "next": "^15.5.15",
     "react": "^19.2.5",
     "react-dom": "^19.2.5",
-    "@igrp/framework-next-auth": "latest",
-    "@igrp/framework-next-types": "latest",
-    "@igrp/framework-next-ui": "latest",
+    "@igrp/framework-next-auth": "workspace:*",
+    "@igrp/framework-next-types": "workspace:*",
+    "@igrp/framework-next-ui": "workspace:*",
     "@igrp/platform-access-management-client-ts": "0.2.0-beta.5"
   },
   "devDependencies": {

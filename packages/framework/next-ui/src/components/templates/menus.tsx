@@ -29,10 +29,10 @@ import {
 
 // ─── Private tree types ───────────────────────────────────────────────────────
 
-type LeafNode   = { kind: 'leaf';   item: IGRPMenuItemArgs }
-type FolderNode = { kind: 'folder'; item: IGRPMenuItemArgs; children: LeafNode[] }
-type TreeNode   = LeafNode | FolderNode
-type Section    = { key: string; label?: string; nodes: TreeNode[] }
+type LeafNode = { kind: 'leaf'; item: IGRPMenuItemArgs };
+type FolderNode = { kind: 'folder'; item: IGRPMenuItemArgs; children: LeafNode[] };
+type TreeNode = LeafNode | FolderNode;
+type Section = { key: string; label?: string; nodes: TreeNode[] };
 
 // ─── Pure helpers ─────────────────────────────────────────────────────────────
 
@@ -64,9 +64,7 @@ function buildMenuSections(menus: IGRPMenuItemArgs[]): Section[] {
 
   for (const item of active) {
     const isTopLevel =
-      !item.parentCode ||
-      item.parentCode === item.code ||
-      !codeSet.has(item.parentCode);
+      !item.parentCode || item.parentCode === item.code || !codeSet.has(item.parentCode);
 
     if (isTopLevel) {
       topLevel.push(item);
@@ -122,9 +120,7 @@ function LeafMenuItem({ node, pathname }: LeafMenuItemProps) {
   const href = resolveHref(item);
   const isAnchor = resolveAnchorTag(item);
   const isActive =
-    !isAnchor &&
-    href !== '#' &&
-    (pathname === href || pathname.startsWith(href + '/'));
+    !isAnchor && href !== '#' && (pathname === href || pathname.startsWith(href + '/'));
 
   return (
     <SidebarMenuItem>

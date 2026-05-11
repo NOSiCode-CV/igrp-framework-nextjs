@@ -22,6 +22,7 @@
     "force-logout-usesafesession",
     "framework-next-streaming",
     "framework-next-ui-streaming",
+    "remove-react-cache-api-config",
     "rename-provider-igrp-auth",
     "token-revocation-on-logout"
   ]

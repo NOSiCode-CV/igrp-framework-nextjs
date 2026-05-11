@@ -59,10 +59,10 @@ import {
 
 ### Package Exports
 
-| Export | Description |
-| ------ | ----------- |
-| `@igrp/igrp-framework-react-design-system` | Main entry — components, hooks, utilities |
-| `@igrp/igrp-framework-react-design-system/tokens` | CSS variables (theme tokens) |
+| Export                                            | Description                                                                      |
+| ------------------------------------------------- | -------------------------------------------------------------------------------- |
+| `@igrp/igrp-framework-react-design-system`        | Main entry — components, hooks, utilities                                        |
+| `@igrp/igrp-framework-react-design-system/tokens` | CSS variables (theme tokens)                                                     |
 | `@igrp/igrp-framework-react-design-system/styles` | Full styles (Tailwind + base) — use only when not compiling Tailwind in your app |
 
 ### Component Categories
@@ -73,13 +73,13 @@ import {
 
 ### Primitives vs Horizon
 
-| Aspect | Primitives (`*Primitive`) | Horizon |
-| ------ | ------------------------- | ------- |
-| **Purpose** | Low-level building blocks; minimal styling, maximum flexibility | High-level, opinionated components for common IGRP patterns |
-| **Built on** | Radix UI primitives, CVA variants | Primitives (they wrap primitives) |
-| **Props** | Standard HTML/React props + variant props (`variant`, `size`, `asChild`) | IGRP-specific props (`label`, `helperText`, `showIcon`, `iconName`, `loading`, etc.) |
-| **Form integration** | None | Integrates with `IGRPFormField` and `react-hook-form` |
-| **Use when** | You need full control, custom composition, or are building your own patterns | You want ready-made forms, buttons with icons/loading, labeled inputs, etc. |
+| Aspect               | Primitives (`*Primitive`)                                                    | Horizon                                                                              |
+| -------------------- | ---------------------------------------------------------------------------- | ------------------------------------------------------------------------------------ |
+| **Purpose**          | Low-level building blocks; minimal styling, maximum flexibility              | High-level, opinionated components for common IGRP patterns                          |
+| **Built on**         | Radix UI primitives, CVA variants                                            | Primitives (they wrap primitives)                                                    |
+| **Props**            | Standard HTML/React props + variant props (`variant`, `size`, `asChild`)     | IGRP-specific props (`label`, `helperText`, `showIcon`, `iconName`, `loading`, etc.) |
+| **Form integration** | None                                                                         | Integrates with `IGRPFormField` and `react-hook-form`                                |
+| **Use when**         | You need full control, custom composition, or are building your own patterns | You want ready-made forms, buttons with icons/loading, labeled inputs, etc.          |
 
 **Primitives** are thin wrappers: they handle accessibility (Radix), apply base styles via Tailwind, and expose variants. Use them when you want to compose your own UI or need behavior without IGRP conventions.
 
@@ -121,19 +121,19 @@ The design system uses CSS custom properties for theming. Tokens are defined in 
 
 ### Core Tokens
 
-| Token | Purpose |
-| ----- | ------- |
-| `--background`, `--foreground` | Page background and text |
-| `--primary`, `--primary-foreground` | Primary actions and text |
-| `--secondary`, `--secondary-foreground` | Secondary elements |
-| `--muted`, `--muted-foreground` | Muted backgrounds and text |
-| `--accent`, `--accent-foreground` | Accent/hover states |
-| `--destructive` | Destructive actions |
-| `--border`, `--input`, `--ring` | Borders, inputs, focus ring |
-| `--radius` | Base border radius |
-| `--sidebar-*` | Sidebar-specific tokens |
-| `--chart-1` … `--chart-5` | Chart colors |
-| `--process-completed`, `--process-active` | Stepper/process states |
+| Token                                     | Purpose                     |
+| ----------------------------------------- | --------------------------- |
+| `--background`, `--foreground`            | Page background and text    |
+| `--primary`, `--primary-foreground`       | Primary actions and text    |
+| `--secondary`, `--secondary-foreground`   | Secondary elements          |
+| `--muted`, `--muted-foreground`           | Muted backgrounds and text  |
+| `--accent`, `--accent-foreground`         | Accent/hover states         |
+| `--destructive`                           | Destructive actions         |
+| `--border`, `--input`, `--ring`           | Borders, inputs, focus ring |
+| `--radius`                                | Base border radius          |
+| `--sidebar-*`                             | Sidebar-specific tokens     |
+| `--chart-1` … `--chart-5`                 | Chart colors                |
+| `--process-completed`, `--process-active` | Stepper/process states      |
 
 ### Dark Mode
 

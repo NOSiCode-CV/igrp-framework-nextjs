@@ -1,4 +1,3 @@
-import { cache } from 'react';
 import { unstable_cache } from 'next/cache';
 import { ApiClientError, AccessManagementClient } from '@igrp/platform-access-management-client-ts';
 import { redirect } from 'next/navigation';
@@ -15,7 +14,7 @@ async function fetchCurrentUserRaw(token: string, baseUrl: string) {
   return result.data;
 }
 
-export const fetchCurrentUser = cache(async () => {
+export async function fetchCurrentUser() {
   try {
     const { token, baseUrl } = igrpGetAccessClientConfig();
     const cached = unstable_cache(
@@ -31,4 +30,4 @@ export const fetchCurrentUser = cache(async () => {
     console.error('[igrp-user] Erro ao carregar os dados do utilizador atual.:', error);
     return null;
   }
-});
+}

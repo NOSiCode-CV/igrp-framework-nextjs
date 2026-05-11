@@ -13,9 +13,7 @@ export function IGRPHeaderError() {
         'bg-background sticky top-0 inset-x-0 isolate z-40 border-b flex items-center justify-between gap-2 px-4 py-2 min-w-0 h-16',
       )}
     >
-      <span className={cn('text-sm text-muted-foreground')}>
-        Falha ao carregar o cabeçalho.
-      </span>
+      <span className={cn('text-sm text-muted-foreground')}>Falha ao carregar o cabeçalho.</span>
       <IGRPButton
         variant="ghost"
         size="sm"

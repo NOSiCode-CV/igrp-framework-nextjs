@@ -1,4 +1,3 @@
-import { cache } from 'react';
 import { unstable_cache } from 'next/cache';
 import { ApiClientError, AccessManagementClient } from '@igrp/platform-access-management-client-ts';
 import { redirect } from 'next/navigation';
@@ -26,7 +25,7 @@ async function fetchAppByCodeRaw(appCode: string, token: string, baseUrl: string
   return mapperApplications(result)[0] ?? null;
 }
 
-export const fetchAppsByUser = cache(async () => {
+export async function fetchAppsByUser() {
   try {
     const { token, baseUrl } = igrpGetAccessClientConfig();
     const cached = unstable_cache(
@@ -42,9 +41,9 @@ export const fetchAppsByUser = cache(async () => {
     console.error('[apps-by-user] Erro ao carregar os dados da aplicação.:', error);
     return [];
   }
-});
+}
 
-export const fetchAppByCode = cache(async (appCode: string) => {
+export async function fetchAppByCode(appCode: string) {
   try {
     if (!appCode)
       throw new Error(
@@ -64,4 +63,4 @@ export const fetchAppByCode = cache(async (appCode: string) => {
     console.error('[app-by-code] Não foi possível obter os dados da aplicação:', error);
     return null;
   }
-});
+}

@@ -2,6 +2,12 @@
 
 Guidance for Claude Code working in this repository.
 
+## Before any task
+
+Read `.claude/shared/hard-rules.md` before doing anything — including when the user gives you a specific command or script to run. Hard rules are non-negotiable and override convenience shortcuts, user phrasing, and script names. If a suggested script violates a hard rule, flag it and use the correct alternative.
+
+For release/publish tasks specifically: always query the registry to verify actual published state before drawing conclusions. Use per-package `release` scripts (not `changeset publish`) to ensure `--tag latest` is always respected.
+
 ## Repository Overview
 
 `igrp-framework-nextjs` is a pnpm workspace monorepo that publishes the IGRP Framework — a set of React/Next.js packages used to build IGRP applications — plus reference templates. Published artifacts go to the internal NOSi Sonatype registry.
@@ -70,6 +76,74 @@ Demo is the canonical example of how to consume the framework:
 @.claude/shared/ui-rules.md
 
 Inside `templates/demo/**/*.{ts,tsx}`, the authoritative component reference is `templates/demo/skills/igrp-design-system/SKILL.md` — load only the sub-files you need.
+
+## Package API Quick Reference
+
+### `@igrp/framework-next-auth` — entry points
+| Entry point | Key exports |
+|---|---|
+| `./server` | `getServerSession`, `getServerSessionStrict` (throws on missing session), `NextAuth` factory |
+| `./client` | `useSession`, `useSafeSession`, `signIn`, `signOut`, `SessionProvider` |
+| `./config` | `IGRPAuthConfigError`, `withIGRPAuth()`, edge-safe config builder |
+| `./oidc` | `refreshOidcAccessToken`, `revokeOidcSession` |
+| `./providers` | `createAuthProviderFromEnv`, `IGRP_AUTH_PROVIDER_ID` |
+| `./middleware` | `withAuth` |
+| `./jwt` | JWT helpers/types |
+| `./session` | Session shape (includes `accessToken`) |
+| `./sanitize` | Redirect URL sanitization |
+| `./types` | `AuthProviderId` enum |
+
+Source: `packages/framework/next-auth/src/` — server.ts, client.ts, config.ts, middleware.ts, oidc.ts, providers.ts, etc.
+
+### `@igrp/framework-next-types` — key types
+`IGRPConfigArgs`, `IGRPLayoutConfigArgs`, `IGRPConfigClient`, `IGRPMenuType`, `IGRPApplicationType`, `IGRPResourceType`, `IGRPHeaderDataArgs`, `IGRPNotificationArgs`, `IGRPSidebarDataArgs`, `IGRPMockDataAsync`, `IGRPToasterPosition`, `IGRPPackageJson`
+
+Source: `packages/framework/next-types/src/types/` — igrp.ts, access-management.ts, header.ts, sidebar.ts, globals.ts
+
+### `@igrp/framework-next` — entry points
+| Entry point | Key exports |
+|---|---|
+| `.` (root) | `IGRPRootLayout`, `IGRPLayout`, `IGRPGlobalLoading`, `igrpBuildConfig`, `igrpGetAccessClient`, `igrpGetAccessClientConfig` |
+| `./errors` | `IgrpError`, `IgrpConfigError`, `IgrpAuthConfigError`, `IgrpLayoutDataError` |
+| `./app-error` | App-level error boundary |
+| `./logger` | Logger utility |
+| `./actions` | Server actions (`fetchMenusAction`, `fetchCurrentUserAction`, …) + `ActionResult<T>` |
+| `./client` | `useLayoutData` hook |
+
+Source: `packages/framework/next/src/` — igrp-layout.tsx, igrp-root-layout.tsx, lib/build.ts, lib/api-client.ts, lib/api-config.ts, errors.ts
+
+### `@igrp/framework-next-ui` — key components
+**Providers:** `IGRPRootProviders`, `IGRPSessionProvider`, `IGRPActiveThemeProvider`, `IGRPNestedProviders`
+**Header:** `IGRPTemplateHeader`, `IGRPHeaderSkeleton`, `IGRPHeaderError`
+**Sidebar:** `IGRPTemplateSidebar`, `IGRPSidebarSkeleton`, `IGRPSidebarError`
+**Nav:** `IGRPTemplateMenus`, `IGRPTemplateNavUser`, `IGRPTemplateAppSwitcher`, `IGRPTemplateBreadcrumbs`
+**Search/settings:** `IGRPTemplateCommandSearch`, `IGRPTemplateThemeSelector`, `IGRPTemplateModeSwitcher`
+**Auth:** `IGRPAuthCarousel`, `IGRPAuthForm`
+**Error:** `IGRPGlobalError`, `IGRPSegmentError`, `IGRPLayoutErrorBoundary`, `IGRPTemplateNotFound`
+**Misc:** `IGRPSessionWatcher`, `IGRPTemplateNotifications`, `IGRPTemplateLoading`
+
+Source: `packages/framework/next-ui/src/` — providers/, components/templates/, components/auth/, components/errors/
+
+### `@igrp/igrp-framework-react-design-system` — component layers
+**Horizon (IGRP\* — always first choice):**
+Forms: `IGRPForm`, `IGRPInput`, `IGRPSelect`, `IGRPCheckbox`, `IGRPSwitch`, `IGRPTextarea`
+Data: `IGRPDataTable` (pagination, filter, sort, row actions)
+Charts: `IGRPAreaChart`, `IGRPBarChart`, `IGRPLineChart`, `IGRPPieChart`, `IGRPRadarChart`, `IGRPRadialBarChart`
+Cards: `IGRPCard`, `IGRPCardDetails`, `IGRPStatsCard`
+Calendar: `IGRPCalendarSingle`, `IGRPCalendarRange`, `IGRPCalendarMultiple`
+Dialogs: `IGRPModalDialog`, `IGRPAlertDialog`
+Other: `IGRPMenuNavigation`, `IGRPChat`, `IGRPAccordion`, `IGRPTabs`, `IGRPAvatar`, `IGRPBadge`, `IGRPButton`, `IGRPAlert`, `IGRPCommand`
+
+**Primitives (Radix + CVA — only when Horizon is too opinionated):**
+`Button`, `Card`, `Input`, `Textarea`, `Badge`, `Avatar`, `Separator`, `Dialog`, `AlertDialog`, `Drawer`, `Popover`, `Sheet`, `Breadcrumb`, `NavigationMenu`, `Pagination`, `Tabs`, `Sidebar`, `Form`, `Field`, `Label`, `Checkbox`, `RadioGroup`, `Select`, `InputOTP`, `Slider`, `Switch`, `Toggle`, `Accordion`, `Collapsible`, `CommandDialog`, `DropdownMenu`, `Table`, `Progress`, `Skeleton`, `Spinner`, `HoverCard`, `Tooltip`, `ContextMenu`, `Carousel`, `ScrollArea`, `Chart*`
+
+**Custom (domain-specific):** `IGRPUserAvatar`, `IGRPStatsCardMini`, `IGRPStatsCardTopBorderColored`, `IGRPStatusBanner`
+
+**Utilities:** `cn()`, `formatChartValue`, `getChartHeight`, `IGRP_CHART_COLORS`
+
+Source: `packages/design-system/src/components/` — horizon/, primitives/, custom/
+
+---
 
 ## Build tooling by package
 

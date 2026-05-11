@@ -1,4 +1,3 @@
-import { cache } from 'react';
 import { unstable_cache } from 'next/cache';
 import { ApiClientError, AccessManagementClient } from '@igrp/platform-access-management-client-ts';
 import { redirect } from 'next/navigation';
@@ -18,7 +17,7 @@ async function fetchMenusRaw(appCode: string, token: string, baseUrl: string) {
   return mapperMenus(result);
 }
 
-export const fetchMenus = cache(async (appCode: string) => {
+export async function fetchMenus(appCode: string) {
   try {
     const { token, baseUrl } = igrpGetAccessClientConfig();
     const cached = unstable_cache(
@@ -34,4 +33,4 @@ export const fetchMenus = cache(async (appCode: string) => {
     console.error('[igrp-menus]: Erro ao carregar os menus da aplicação.:', error);
     return [];
   }
-});
+}

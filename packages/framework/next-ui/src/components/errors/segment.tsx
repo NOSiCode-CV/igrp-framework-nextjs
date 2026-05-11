@@ -94,7 +94,9 @@ function IGRPSegmentError({
           {error.digest ? (
             <p className={cn('text-xs text-muted-foreground')}>
               ID de referência:{' '}
-              <code className={cn('rounded bg-muted px-1 py-0.5 font-mono text-xs text-foreground')}>
+              <code
+                className={cn('rounded bg-muted px-1 py-0.5 font-mono text-xs text-foreground')}
+              >
                 {error.digest}
               </code>
             </p>
@@ -110,7 +112,13 @@ function IGRPSegmentError({
             >
               <span>{isResetting ? 'A tentar...' : resetLabel}</span>
             </IGRPButton>
-            <IGRPButton asChild variant="outline" showIcon iconName="Home" iconClassName={cn('mr-2 h-4 w-4')}>
+            <IGRPButton
+              asChild
+              variant="outline"
+              showIcon
+              iconName="Home"
+              iconClassName={cn('mr-2 h-4 w-4')}
+            >
               <Link href={homeHref}>{homeLabel}</Link>
             </IGRPButton>
           </div>

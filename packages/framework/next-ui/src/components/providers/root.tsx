@@ -48,14 +48,13 @@ export function IGRPRootProviders({
     duration = 5000,
   } = toasterConfig ?? {};
 
-  const sidebarContent = sidebar ?? (sidebarData ? <IGRPTemplateSidebar data={sidebarData} /> : null);
+  const sidebarContent =
+    sidebar ?? (sidebarData ? <IGRPTemplateSidebar data={sidebarData} /> : null);
   const headerContent = header ?? (headerData ? <IGRPTemplateHeader data={headerData} /> : null);
 
   return (
     <SidebarProvider defaultOpen={defaultOpen}>
-      {showSidebar && sidebarContent && (
-        <div className={cn('z-45')}>{sidebarContent}</div>
-      )}
+      {showSidebar && sidebarContent && <div className={cn('z-45')}>{sidebarContent}</div>}
 
       <SidebarInset className={cn('min-w-0')}>
         {showHeader && headerContent}

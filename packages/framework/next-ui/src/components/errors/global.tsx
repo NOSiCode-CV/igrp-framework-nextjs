@@ -59,9 +59,7 @@ function IGRPGlobalError({ error, reset, children, resolveCopy }: IGRPGlobalErro
           <h1 className={cn('text-2xl font-bold tracking-tight text-gray-900 dark:text-white')}>
             {title}
           </h1>
-          <p className={cn('mb-4 text-base text-gray-600 dark:text-gray-300')}>
-            {description}
-          </p>
+          <p className={cn('mb-4 text-base text-gray-600 dark:text-gray-300')}>{description}</p>
 
           {error.digest && (
             <div

@@ -24,7 +24,7 @@
     "build:types": "tsc --emitDeclarationOnly --outDir dist",
     "build:without_reactcompiler": "pnpm clean:dist && pnpm build:swc && pnpm build:types",
     "format": "prettier --write .",
-    "release": "pnpm build && yarn publish --registry=https://sonatype.nosi.cv/repository/igrp/ --tag latest",
+    "release": "pnpm build && pnpm publish --registry=https://sonatype.nosi.cv/repository/igrp/ --tag latest --no-git-checks",
     "clean-all": "rimraf node_modules && rimraf dist && rimraf tsconfig.tsbuildinfo",
     "test": "vitest run"
   },

@@ -2,11 +2,7 @@
 
 import { useRouter } from 'next/navigation';
 
-import {
-  revalidateAppsAction,
-  revalidateMenusAction,
-  revalidateUserAction,
-} from '../actions/index';
+import { revalidateAppsAction, revalidateMenusAction } from '../actions/index';
 
 export function useLayoutData(appCode: string) {
   const router = useRouter();
@@ -21,7 +17,6 @@ export function useLayoutData(appCode: string) {
       router.refresh();
     },
     refreshUser: async () => {
-      await revalidateUserAction();
       router.refresh();
     },
   };

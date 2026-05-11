@@ -64,9 +64,3 @@ export async function revalidateMenusAction(appCode: string): Promise<void> {
 export async function revalidateAppsAction(): Promise<void> {
   revalidateTag('igrp-apps');
 }
-
-export async function revalidateUserAction(): Promise<void> {
-  // User cache is keyed by session token, not a revalidatable tag.
-  // This action is a no-op on the server; the client must call router.refresh()
-  // after invoking it to trigger an RSC re-render with the new session token.
-}

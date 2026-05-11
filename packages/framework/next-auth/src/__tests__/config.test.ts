@@ -101,3 +101,34 @@ describe('withIGRPAuth — events.signOut', () => {
     // No unhandled rejection — the fire-and-forget .catch() swallowed it
   });
 });
+
+describe('withIGRPAuth — serverSession', () => {
+  it('returns null when there is no session (getServerSession returns null)', async () => {
+    const withIGRPAuth = await getFactory();
+    const instance = withIGRPAuth({ env: VALID_ENV });
+
+    vi.doMock('next-auth', () => ({
+      getServerSession: vi.fn().mockResolvedValue(null),
+    }));
+
+    const session = await instance.serverSession();
+    expect(session).toBeNull();
+  });
+
+  it('rethrows errors from getServerSession instead of swallowing them', async () => {
+    const withIGRPAuth = await getFactory();
+    const instance = withIGRPAuth({ env: VALID_ENV });
+
+    vi.doMock('next-auth', () => ({
+      getServerSession: vi.fn().mockRejectedValue(new Error('OIDC network failure')),
+    }));
+
+    await expect(instance.serverSession()).rejects.toThrow('OIDC network failure');
+  });
+
+  it('throws configError when configuration is invalid', async () => {
+    const withIGRPAuth = await getFactory();
+    const instance = withIGRPAuth({ env: { AUTH_PROVIDER: 'igrp-auth' } });
+    await expect(instance.serverSession()).rejects.toThrow();
+  });
+});

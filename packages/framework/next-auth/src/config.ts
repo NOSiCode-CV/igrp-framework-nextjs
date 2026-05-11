@@ -576,12 +576,8 @@ export function withIGRPAuth(options: IGRPAuthOptions = {}): IGRPAuthInstance {
   async function serverSession(): Promise<Session | null> {
     if (configError) throw configError;
     if (authIsDisabled) return null;
-    try {
-      const { getServerSession } = await import('next-auth');
-      return (await getServerSession(authOptions)) as Session | null;
-    } catch {
-      return null;
-    }
+    const { getServerSession } = await import('next-auth');
+    return (await getServerSession(authOptions)) as Session | null;
   }
 
   async function getSession(): Promise<Session | null> {

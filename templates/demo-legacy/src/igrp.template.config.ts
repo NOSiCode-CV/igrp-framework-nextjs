@@ -41,6 +41,8 @@ export function createConfig(
         showIGRPSidebarTrigger: true,
         showIGRPHeaderTitle: true,
         showIGRPHeaderLogo: true,
+        showSettings: true,
+        settingsUrl: process.env.NEXT_PUBLIC_IGRP_SETTINGS_URL || "",
       }),
       getSidebarData: async () => ({
         menuItems: menu,
@@ -72,7 +74,6 @@ export function createConfig(
       richColors: true,
       closeButton: true,
     },
-    showSettings: true,
     sessionArgs: getSessionArgs(),
   });
 }

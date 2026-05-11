@@ -1,5 +1,17 @@
 # @igrp/framework-next
 
+## 0.1.0-beta.124
+
+### Patch Changes
+
+- chore(framework-next): update @igrp/platform-access-management-client-ts to 0.2.0-beta.5
+
+## 0.1.0-beta.123
+
+### Patch Changes
+
+- chore(framework-next): update @igrp/platform-access-management-client-ts to 0.2.0-beta.2
+
 ## 0.1.0-beta.122
 
 ### Patch Changes

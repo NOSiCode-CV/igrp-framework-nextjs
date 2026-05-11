@@ -14,6 +14,8 @@
   "changesets": [
     "add-app-error-and-logger",
     "auth-config-error-boundary",
+    "bump-access-management-client-beta5",
+    "bump-access-management-client",
     "fix-header-logo-and-dark-logo",
     "force-logout-usesafesession",
     "framework-next-streaming",

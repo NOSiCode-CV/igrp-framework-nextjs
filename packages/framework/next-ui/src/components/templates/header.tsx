@@ -9,7 +9,7 @@ import {
   useIGRPToast,
 } from '@igrp/igrp-framework-react-design-system';
 
-import { IGRPTemplateBreadcrumbs } from './breadcrumbs';
+import { type BreadcrumbItem, IGRPTemplateBreadcrumbs } from './breadcrumbs';
 import { IGRPTemplateCommandSearch } from './command-search';
 import { IGRPTemplateModeSwitcher } from './mode-switcher';
 import { IGRPTemplateNavUser } from './nav-user';
@@ -20,9 +20,13 @@ import Link from 'next/link';
 interface IGRPTemplateHeaderProps {
   data: IGRPHeaderDataArgs;
   className?: string;
+  /** Pre-resolved breadcrumb items. Forwarded to IGRPTemplateBreadcrumbs. */
+  breadcrumbs?: BreadcrumbItem[];
+  /** App-level route → label map. Forwarded to IGRPTemplateBreadcrumbs. */
+  breadcrumbRouteLabels?: Record<string, string>;
 }
 
-function IGRPTemplateHeader({ data, className }: IGRPTemplateHeaderProps) {
+function IGRPTemplateHeader({ data, className, breadcrumbs, breadcrumbRouteLabels }: IGRPTemplateHeaderProps) {
   const { igrpToast } = useIGRPToast();
 
   if (!data) {
@@ -91,7 +95,10 @@ function IGRPTemplateHeader({ data, className }: IGRPTemplateHeaderProps) {
               orientation="vertical"
               className={cn('mr-2 data-[orientation=vertical]:h-4')}
             />
-            <IGRPTemplateBreadcrumbs />
+            <IGRPTemplateBreadcrumbs
+              items={breadcrumbs}
+              routeLabels={breadcrumbRouteLabels}
+            />
           </>
         )}
       </div>

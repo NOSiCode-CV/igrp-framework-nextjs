@@ -39,6 +39,7 @@ export {
 export {
   IGRPTemplateBreadcrumbs,
   type IGRPTemplateBreadcrumbsProps,
+  type BreadcrumbItem,
 } from './components/templates/breadcrumbs';
 
 export { IGRPTemplateCommandSearch } from './components/templates/command-search';

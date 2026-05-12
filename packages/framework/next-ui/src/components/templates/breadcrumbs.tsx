@@ -48,6 +48,19 @@ interface IGRPTemplateBreadcrumbsProps {
    * Number of items to show at the end when collapsed. Defaults to 1
    */
   itemsAfterCollapse?: number;
+  /**
+   * Custom label formatter called for every path segment before falling back
+   * to customLabels or auto-formatting.
+   *
+   * @param segment - raw path segment, e.g. 'a1b2c3-f4e5'
+   * @param href    - accumulated href for this segment, e.g. '/users/a1b2c3-f4e5'
+   * @returns a display string, or undefined to fall through to the next resolver
+   *
+   * @example
+   * // Fetch label from a cache populated by your data layer
+   * formatLabel={(segment, href) => userCache.get(href)?.name}
+   */
+  formatLabel?: (segment: string, href: string) => string | undefined;
 }
 
 function formatSegmentLabel(segment: string): string {
@@ -66,6 +79,7 @@ function IGRPTemplateBreadcrumbs({
   homeHref = '/',
   maxItems = 4,
   itemsAfterCollapse = 1,
+  formatLabel,
 }: IGRPTemplateBreadcrumbsProps) {
   const pathname = usePathname();
   const isMobile = useIsMobile();
@@ -87,11 +101,15 @@ function IGRPTemplateBreadcrumbs({
 
     return segments.map((segment, index) => {
       const href = `/${segments.slice(0, index + 1).join('/')}`;
-      const label = customLabels[segment] ?? customLabels[href] ?? formatSegmentLabel(segment);
+      const label =
+        formatLabel?.(segment, href) ??
+        customLabels[segment] ??
+        customLabels[href] ??
+        formatSegmentLabel(segment);
 
       return { label, href };
     });
-  }, [pathname, homeHref, customLabels]);
+  }, [pathname, homeHref, customLabels, formatLabel]);
 
   // Determine if we should check for overflow (only when not already collapsed)
   const shouldCheckOverflow = breadcrumbItems.length <= maxItems && !isMobile;

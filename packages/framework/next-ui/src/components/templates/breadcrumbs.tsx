@@ -132,7 +132,7 @@ function IGRPTemplateBreadcrumbs({
       clearTimeout(timeoutId);
       resizeObserver.disconnect();
     };
-  }, [breadcrumbItems, shouldCheckOverflow]);
+  }, [breadcrumbItems, shouldCheckOverflow, isMobile]);
 
   if (breadcrumbItems.length === 0) {
     return null;
@@ -211,7 +211,7 @@ function IGRPTemplateBreadcrumbs({
         ) : (
           breadcrumbItems.map((item, index) => {
             const isLast = index === breadcrumbItems.length - 1;
-            return renderBreadcrumbItem(item, isLast, item.href);
+            return renderBreadcrumbItem(item, isLast, `${item.href}-${index}`);
           })
         )}
       </BreadcrumbList>

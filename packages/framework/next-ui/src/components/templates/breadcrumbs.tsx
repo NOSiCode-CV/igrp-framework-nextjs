@@ -59,6 +59,9 @@ interface IGRPTemplateBreadcrumbsProps {
    * @example
    * // Fetch label from a cache populated by your data layer
    * formatLabel={(segment, href) => userCache.get(href)?.name}
+   *
+   * Wrap in `useCallback` (or define outside the component) to avoid
+   * triggering a breadcrumb recompute on every parent render.
    */
   formatLabel?: (segment: string, href: string) => string | undefined;
 }

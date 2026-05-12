@@ -20,6 +20,8 @@ Run `git diff HEAD` and `git status --short` to find modified files. Map files t
 
 Files outside these prefixes (templates, apps, scripts, docs, `.claude/`) are ignored.
 
+Look for **modified, added, and untracked** files — `git diff HEAD` covers tracked changes; `git status --short` covers untracked new files. Include both.
+
 **If no framework package files are detected:** stop and report "No framework package changes detected — nothing to release."
 
 ---
@@ -38,16 +40,17 @@ Record each result as the **old version** for the final summary table.
 
 ## Step 3 — Idempotency check
 
-Check whether a `.changeset/*.md` file already exists covering the detected packages AND `pnpm version:changesets` has already been run (i.e., the `package.json` version fields have already been bumped past the old versions).
+Compare local `package.json` versions against the registry versions recorded in Step 2.
 
-- If **both** are true: skip Steps 4–7 and go directly to Step 8 (build).
-- Otherwise: continue with Step 4.
+- If the local versions **equal** the registry versions AND a `.changeset/*.md` file covering the detected packages exists → the changeset was written but versioning hasn't run yet. Skip Steps 4–6 and go to Step 7 (run `pnpm version:changesets`).
+- If the local versions are **ahead** of the registry versions AND no `.changeset/*.md` file covers the detected packages → versioning already ran. Skip Steps 4–7 and go to Step 8 (build).
+- Otherwise (local versions equal registry versions, no changeset file): proceed normally from Step 4.
 
 ---
 
 ## Step 4 — Generate changeset summary
 
-Read the full `git diff HEAD` output for the detected packages. Write a concise summary of **at most 3 plain-English bullet points** describing the user-visible changes. Focus on what changed, not file names or internal details.
+Read the full `git diff HEAD` output for the detected packages. Write a concise summary of **1–3 plain-English bullet points** describing the user-visible changes. Focus on what changed, not file names or internal details.
 
 ---
 
@@ -55,12 +58,12 @@ Read the full `git diff HEAD` output for the detected packages. Write a concise 
 
 Create `.changeset/<slug>.md` where `<slug>` is a two-word kebab-case identifier (e.g. `golden-wolf`, `happy-trees`).
 
-Use exactly this format:
+Write **one line per detected package** in the frontmatter — only the packages detected in Step 1, no more, no fewer. Use exactly this format:
 
 ```
 ---
-"@igrp/framework-next-ui": patch
-"@igrp/framework-next": patch
+"<npm-package-name-1>": patch
+"<npm-package-name-2>": patch
 ---
 
 - <bullet from Step 4>
@@ -96,9 +99,13 @@ git add .
 git commit -m "chore: version packages"
 ```
 
+> Do not push. Leave commits local for the user to review and push.
+
 ---
 
 ## Step 8 — Build affected packages (dependency order)
+
+("Affected" means detected in Step 1.)
 
 Run only the build scripts for affected packages, **in this exact order** (skip any not affected):
 
@@ -111,6 +118,8 @@ Run only the build scripts for affected packages, **in this exact order** (skip 
 ---
 
 ## Step 9 — Release affected packages (dependency order)
+
+("Affected" means detected in Step 1.)
 
 Run only the release scripts for affected packages, **in the same dependency order** (skip any not affected):
 

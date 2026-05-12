@@ -8,6 +8,42 @@ Read `.claude/shared/hard-rules.md` before doing anything — including when the
 
 For release/publish tasks specifically: always query the registry to verify actual published state before drawing conclusions. Use per-package `release` scripts (not `changeset publish`) to ensure `--tag latest` is always respected.
 
+## Release workflow — when the user says "bump and release"
+
+> **Use the `/release-framework` command.** Type `/release-framework` in Claude Code — it automates the full workflow below (detect changed packages, create changeset, version, build, publish, verify) with no manual steps.
+
+When the user asks to bump a version and/or release a package, execute these steps in order. No deviations.
+
+**1. Verify registry state first**
+```powershell
+pnpm view <pkg> version --registry=https://sonatype.nosi.cv/repository/igrp/
+```
+Confirm the current published version before doing anything else.
+
+**2. Apply versions from changesets**
+```powershell
+pnpm version:changesets
+```
+This consumes pending `.changeset/*.md` files, bumps `package.json` versions, and regenerates `CHANGELOG.md`. Commit the result.
+
+**3. Build (respect dependency order)**
+Build only the affected package(s). Order: `next-auth → next-types → design-system → next-ui → next`.
+- Single package: use its specific build script (e.g. `pnpm build:next-ui`)
+- All framework packages: `pnpm build:framework`
+
+**4. Release via per-package script**
+```powershell
+# from the repo root — example for next-ui:
+pnpm --filter @igrp/framework-next-ui release
+```
+Each package's `release` script runs `pnpm publish --registry=... --tag latest`. **Never** use `changeset publish` or `pnpm release:publish` — they use `--tag beta` in pre-release mode.
+
+**5. Verify the publish landed**
+```powershell
+pnpm view <pkg> version --registry=https://sonatype.nosi.cv/repository/igrp/
+```
+Confirm the new version is live before reporting success.
+
 ## Repository Overview
 
 `igrp-framework-nextjs` is a pnpm workspace monorepo that publishes the IGRP Framework — a set of React/Next.js packages used to build IGRP applications — plus reference templates. Published artifacts go to the internal NOSi Sonatype registry.

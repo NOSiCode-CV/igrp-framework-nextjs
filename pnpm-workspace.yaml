@@ -2,11 +2,9 @@ packages:
   - packages/**
   - templates/**
   - apps/**
-
-# onlyBuiltDependencies:
-#   - '@swc/core'
-#   - '@tailwindcss/oxide'
-#   - core-js
-#   - esbuild
-#   - sharp
-#   - unrs-resolver
+allowBuilds:
+  '@parcel/watcher': true
+  '@swc/core': true
+  esbuild: true
+  sharp: true
+  unrs-resolver: true

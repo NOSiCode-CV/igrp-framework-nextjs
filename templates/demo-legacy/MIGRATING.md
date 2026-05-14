@@ -75,7 +75,7 @@ No files were written.
 pnpm dlx @igrp/template-migrator@latest apply
 ```
 
-The CLI walks through each pending migration in order. For each step it shows what it is about to do and asks for confirmation before writing. After each completed migration it records an entry in `.igrpmigrations/lock.json` — so if the run is interrupted you can re-run `apply` and it will resume from where it stopped.
+The CLI walks through each pending migration in order. For each step it shows what it is about to do and asks for confirmation before writing. After each completed migration it records an entry in `.igrp-migrations-lock.json` — so if the run is interrupted you can re-run `apply` and it will resume from where it stopped.
 
 When done, if any `package.json` dependency was bumped the CLI prints:
 
@@ -135,7 +135,7 @@ Exits with code `1` if any migration is pending, `0` if everything is up to date
 
 ## The lock file
 
-After each successful migration `apply` writes `.igrpmigrations/lock.json` to your project root. **Commit this file.** It is the source of truth for which migrations your app has applied — re-running `apply` always skips completed entries.
+After each successful migration `apply` writes `.igrp-migrations-lock.json` to your project root. **Commit this file.** It is the source of truth for which migrations your app has applied — re-running `apply` always skips completed entries.
 
 ---
 

@@ -126,7 +126,7 @@ Prints each pending migration with the exact file operations it performs — no 
 pnpm dlx @igrp/template-migrator@latest apply
 ```
 
-The CLI runs each pending migration in order, prompts before each step, and writes `.igrpmigrations.lock.json` after each success so the run is resumable on failure. When complete it prints the follow-up command:
+The CLI runs each pending migration in order, prompts before each step, and writes `.igrp-migrations-lock.json` after each success so the run is resumable on failure. When complete it prints the follow-up command:
 
 ```
 Next steps:
@@ -150,7 +150,7 @@ Add a step to your CI workflow to fail if pending migrations exist:
 
 ### How it works
 
-Each framework release that requires template changes ships a migration guide under [`.igrpmigrations/`](.igrpmigrations/). The CLI bundles all guides as a cumulative manifest — installing any version brings every migration up to that point. The lock file (`.igrpmigrations.lock.json`) tracks which migrations have been applied so re-running `apply` is always a no-op.
+Each framework release that requires template changes ships a migration guide under [`.igrpmigrations/`](.igrpmigrations/). The CLI bundles all guides as a cumulative manifest — installing any version brings every migration up to that point. The lock file (`.igrp-migrations-lock.json`) tracks which migrations have been applied so re-running `apply` is always a no-op.
 
 Migration history:
 

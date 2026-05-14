@@ -16,7 +16,7 @@
       "!**/*.css",
       "!.igrpstudio",
       "!src/app/(igrp)/(generated)",
-      "!.igrpmigrations",
+      "!.igrp-migrations-lock.json",
       "!.npmignore"
     ]
   },

@@ -15,8 +15,8 @@ const appRoot = resolve(process.cwd());
 
 async function main() {
   // convert and list don't read the lock file — run them unconditionally
-  if (cmd === "convert") { convert(appRoot); return; }
-  if (cmd === "list") { list(); return; }
+  if (cmd === "convert") { await convert(appRoot); return; }
+  if (cmd === "list") { await list(); return; }
 
   try {
     switch (cmd) {

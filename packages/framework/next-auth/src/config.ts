@@ -33,7 +33,7 @@ import {
   isAuthDisabled as isAuthDisabledFromEnv,
   type AuthProviderId,
 } from './providers';
-import { refreshOidcAccessToken, revokeOidcSession } from './oidc';
+import { introspectOidcToken, refreshOidcAccessToken, revokeOidcSession } from './oidc';
 import { sanitizeRedirectUrl } from './sanitize';
 
 // ─── Config Error ─────────────────────────────────────────────────────────────
@@ -439,11 +439,16 @@ export function withIGRPAuth(options: IGRPAuthOptions = {}): IGRPAuthInstance {
           return igrpToken;
         }
 
-        // Token expired — attempt refresh
-        try {
-          igrpToken = await refreshOidcAccessToken(igrpToken, env);
-        } catch {
+        // Token expired — introspect first to catch server-side revocations (fail-open)
+        const tokenIsActive = await introspectOidcToken(igrpToken, env).catch(() => true);
+        if (!tokenIsActive) {
           igrpToken = { ...igrpToken, error: 'RefreshAccessTokenError', forceLogout: true };
+        } else {
+          try {
+            igrpToken = await refreshOidcAccessToken(igrpToken, env);
+          } catch {
+            igrpToken = { ...igrpToken, error: 'RefreshAccessTokenError', forceLogout: true };
+          }
         }
 
         if (callbackExtensions.jwt) {

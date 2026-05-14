@@ -7,6 +7,8 @@ vi.mock('../oidc', async (importOriginal) => {
   return {
     ...original,
     revokeOidcSession: vi.fn().mockResolvedValue(undefined),
+    introspectOidcToken: vi.fn().mockResolvedValue(true),
+    refreshOidcAccessToken: vi.fn().mockResolvedValue({ accessToken: 'refreshed-at', forceLogout: false }),
   };
 });
 
@@ -130,5 +132,59 @@ describe('withIGRPAuth — serverSession', () => {
     const withIGRPAuth = await getFactory();
     const instance = withIGRPAuth({ env: { AUTH_PROVIDER: 'igrp-auth' } });
     await expect(instance.serverSession()).rejects.toThrow();
+  });
+});
+
+describe('withIGRPAuth — jwt callback introspect gate', () => {
+  beforeEach(() => {
+    vi.clearAllMocks();
+    // Default: token is active, refresh succeeds
+    vi.mocked(oidcModule.introspectOidcToken).mockResolvedValue(true);
+    vi.mocked(oidcModule.refreshOidcAccessToken).mockResolvedValue({
+      accessToken: 'new-at',
+      forceLogout: false,
+      error: undefined,
+    } as any);
+  });
+
+  it('sets forceLogout without calling refresh when introspect returns false', async () => {
+    vi.mocked(oidcModule.introspectOidcToken).mockResolvedValue(false);
+
+    const withIGRPAuth = await getFactory();
+    const instance = withIGRPAuth({ env: VALID_ENV });
+    const jwtCallback = instance.authOptions.callbacks?.jwt;
+
+    const expiredToken = {
+      accessToken: 'at-old',
+      refreshToken: 'rt-old',
+      authProviderId: 'igrp-auth' as const,
+      expiresAt: Date.now() - 10_000, // expired, in ms
+    };
+
+    const result = await jwtCallback!({ token: expiredToken, account: null } as any);
+
+    expect((result as any).forceLogout).toBe(true);
+    expect((result as any).error).toBe('RefreshAccessTokenError');
+    expect(oidcModule.refreshOidcAccessToken).not.toHaveBeenCalled();
+  });
+
+  it('calls refresh when introspect returns true and token is expired', async () => {
+    vi.mocked(oidcModule.introspectOidcToken).mockResolvedValue(true);
+
+    const withIGRPAuth = await getFactory();
+    const instance = withIGRPAuth({ env: VALID_ENV });
+    const jwtCallback = instance.authOptions.callbacks?.jwt;
+
+    const expiredToken = {
+      accessToken: 'at-old',
+      refreshToken: 'rt-old',
+      authProviderId: 'igrp-auth' as const,
+      expiresAt: Date.now() - 10_000,
+    };
+
+    await jwtCallback!({ token: expiredToken, account: null } as any);
+
+    expect(oidcModule.introspectOidcToken).toHaveBeenCalledWith(expiredToken, VALID_ENV);
+    expect(oidcModule.refreshOidcAccessToken).toHaveBeenCalledWith(expiredToken, VALID_ENV);
   });
 });

@@ -1,33 +1,26 @@
-import { existsSync, mkdirSync, readFileSync, writeFileSync } from "fs";
+import { existsSync, readFileSync, writeFileSync } from "fs";
 import { join } from "path";
 import type { LockFile } from "./types.js";
+import { LegacyLockError } from "./types.js";
 
-const LOCK_DIR = ".igrpmigrations";
-const LOCK_FILE = "lock.json";
-// Legacy path used by CLI versions < 0.1.2-beta.115
-const LEGACY_LOCK_FILE = ".igrpmigrations.lock.json";
+const LOCK_FILE = ".igrp-migrations-lock.json";
+const LEGACY_LOCK_PATH = join(".igrpmigrations", "lock.json");
 
 export function lockPath(appRoot: string): string {
-  return join(appRoot, LOCK_DIR, LOCK_FILE);
+  return join(appRoot, LOCK_FILE);
 }
 
 export function readLock(appRoot: string): LockFile {
-  const newPath = lockPath(appRoot);
-  if (existsSync(newPath)) {
-    return JSON.parse(readFileSync(newPath, "utf8")) as LockFile;
+  if (existsSync(join(appRoot, LEGACY_LOCK_PATH))) {
+    throw new LegacyLockError();
   }
-  // Backward compat: migrate from root-level lock file written by older CLI versions.
-  const legacyPath = join(appRoot, LEGACY_LOCK_FILE);
-  if (existsSync(legacyPath)) {
-    const lock = JSON.parse(readFileSync(legacyPath, "utf8")) as LockFile;
-    writeLock(appRoot, lock); // promote to new location
-    return lock;
+  const p = lockPath(appRoot);
+  if (!existsSync(p)) {
+    return { version: 1, template: "demo-legacy", applied: [] };
   }
-  return { version: 1, template: "demo-legacy", applied: [] };
+  return JSON.parse(readFileSync(p, "utf8")) as LockFile;
 }
 
 export function writeLock(appRoot: string, lock: LockFile): void {
-  const dir = join(appRoot, LOCK_DIR);
-  mkdirSync(dir, { recursive: true });
-  writeFileSync(join(dir, LOCK_FILE), JSON.stringify(lock, null, 2) + "\n", "utf8");
+  writeFileSync(lockPath(appRoot), JSON.stringify(lock, null, 2) + "\n", "utf8");
 }

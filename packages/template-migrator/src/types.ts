@@ -42,3 +42,12 @@ export interface LockFile {
   template: "demo-legacy";
   applied: LockEntry[];
 }
+
+export class LegacyLockError extends Error {
+  constructor() {
+    super(
+      "Legacy lock file found at .igrpmigrations/lock.json.\nRun `igrp-migrate convert` to upgrade, then retry."
+    );
+    this.name = "LegacyLockError";
+  }
+}

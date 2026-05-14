@@ -158,3 +158,38 @@ export async function buildEndSessionUrl(
 
   return url.toString();
 }
+
+export async function introspectOidcToken(token: JWT, env: AuthEnvironment): Promise<boolean> {
+  if (!token.accessToken) return true;
+
+  const providerId = getProviderIdFromTokenOrEnv(token, env);
+  if (providerId === 'none') return true;
+
+  try {
+    const discoveryUrl = getAuthProviderDiscoveryUrl(env, providerId);
+    const openIdConfiguration = await getOpenIdConfiguration(discoveryUrl);
+    if (!openIdConfiguration.introspection_endpoint) return true;
+
+    const { clientId, clientSecret } = getClientCredentials(env);
+    const credentials = btoa(`${clientId}:${clientSecret}`);
+
+    const response = await fetch(openIdConfiguration.introspection_endpoint, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/x-www-form-urlencoded',
+        Authorization: `Basic ${credentials}`,
+      },
+      body: new URLSearchParams({
+        token: token.accessToken,
+        token_type_hint: 'access_token',
+      }),
+    });
+
+    if (!response.ok) return true;
+
+    const result = (await response.json()) as { active?: boolean };
+    return result.active !== false;
+  } catch {
+    return true;
+  }
+}

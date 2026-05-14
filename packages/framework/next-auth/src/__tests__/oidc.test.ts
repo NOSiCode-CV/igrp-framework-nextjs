@@ -143,3 +143,73 @@ describe('buildEndSessionUrl', () => {
     expect(fetchSpy).not.toHaveBeenCalled();
   });
 });
+
+describe('introspectOidcToken', () => {
+  it('returns true when IdP responds with active: true', async () => {
+    mockFetch([
+      { url: DISCOVERY_URL, body: MOCK_DISCOVERY },
+      { url: MOCK_DISCOVERY.introspection_endpoint, body: { active: true } },
+    ]);
+    const { introspectOidcToken } = await import('../oidc');
+    expect(await introspectOidcToken(makeToken(), VALID_ENV)).toBe(true);
+  });
+
+  it('returns false when IdP responds with active: false', async () => {
+    mockFetch([
+      { url: DISCOVERY_URL, body: MOCK_DISCOVERY },
+      { url: MOCK_DISCOVERY.introspection_endpoint, body: { active: false } },
+    ]);
+    const { introspectOidcToken } = await import('../oidc');
+    expect(await introspectOidcToken(makeToken(), VALID_ENV)).toBe(false);
+  });
+
+  it('returns true (fail-open) when introspection_endpoint is absent from discovery', async () => {
+    const { introspection_endpoint: _, ...discoveryWithout } = MOCK_DISCOVERY;
+    mockFetch([{ url: DISCOVERY_URL, body: discoveryWithout }]);
+    const { introspectOidcToken } = await import('../oidc');
+    expect(await introspectOidcToken(makeToken(), VALID_ENV)).toBe(true);
+  });
+
+  it('returns true (fail-open) when introspection endpoint returns non-ok status', async () => {
+    mockFetch([
+      { url: DISCOVERY_URL, body: MOCK_DISCOVERY },
+      { url: MOCK_DISCOVERY.introspection_endpoint, body: { error: 'server_error' }, ok: false },
+    ]);
+    const { introspectOidcToken } = await import('../oidc');
+    expect(await introspectOidcToken(makeToken(), VALID_ENV)).toBe(true);
+  });
+
+  it('returns true (fail-open) when accessToken is missing', async () => {
+    const { introspectOidcToken } = await import('../oidc');
+    expect(await introspectOidcToken(makeToken({ accessToken: undefined }), VALID_ENV)).toBe(true);
+  });
+
+  it('returns true (fail-open) for none provider without making fetch calls', async () => {
+    const fetchSpy = vi.fn();
+    vi.stubGlobal('fetch', fetchSpy);
+    const { introspectOidcToken } = await import('../oidc');
+
+    expect(await introspectOidcToken({ authProviderId: 'none' }, { AUTH_PROVIDER: 'none' })).toBe(true);
+    expect(fetchSpy).not.toHaveBeenCalled();
+  });
+
+  it('sends Basic auth header with base64-encoded clientId:clientSecret', async () => {
+    const capturedInit: RequestInit[] = [];
+    vi.stubGlobal(
+      'fetch',
+      vi.fn((url: string, init?: RequestInit) => {
+        if (url === MOCK_DISCOVERY.introspection_endpoint) capturedInit.push(init ?? {});
+        const bodies: Record<string, unknown> = {
+          [DISCOVERY_URL]: MOCK_DISCOVERY,
+          [MOCK_DISCOVERY.introspection_endpoint]: { active: true },
+        };
+        return Promise.resolve({ ok: true, json: () => Promise.resolve(bodies[url] ?? {}) });
+      }),
+    );
+    const { introspectOidcToken } = await import('../oidc');
+    await introspectOidcToken(makeToken(), VALID_ENV);
+
+    const headers = capturedInit[0]?.headers as Record<string, string>;
+    expect(headers['Authorization']).toBe(`Basic ${btoa('test-client:test-secret')}`);
+  });
+});

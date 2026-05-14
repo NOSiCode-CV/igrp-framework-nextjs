@@ -7,3 +7,4 @@ export { check } from "./commands/check.js";
 export { getManifest } from "./manifest.js";
 export { readLock, writeLock } from "./lock.js";
 export type { Manifest, MigrationEntry, MigrationStep, LockFile, LockEntry } from "./types.js";
+export { LegacyLockError } from "./types.js";

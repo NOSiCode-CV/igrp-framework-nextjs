@@ -1,4 +1,4 @@
-import { existsSync, readdirSync, readFileSync, rmSync, unlinkSync, writeFileSync } from "fs";
+import { existsSync, readdirSync, readFileSync, rmdirSync, unlinkSync, writeFileSync } from "fs";
 import { join } from "path";
 
 const LEGACY_DIR = ".igrpmigrations";
@@ -14,7 +14,7 @@ export function convert(appRoot: string): void {
     unlinkSync(legacyPath);
     const legacyDir = join(appRoot, LEGACY_DIR);
     try {
-      if (readdirSync(legacyDir).length === 0) rmSync(legacyDir);
+      if (readdirSync(legacyDir).length === 0) rmdirSync(legacyDir);
     } catch { /* already gone or not empty */ }
     console.log(`Recovered interrupted convert: removed stale ${LEGACY_LOCK}`);
     return;
@@ -37,7 +37,7 @@ export function convert(appRoot: string): void {
   const legacyDir = join(appRoot, LEGACY_DIR);
   try {
     if (readdirSync(legacyDir).length === 0) {
-      rmSync(legacyDir);
+      rmdirSync(legacyDir);
     }
   } catch {
     // Directory already gone or not empty — both are fine

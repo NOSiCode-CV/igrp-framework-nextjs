@@ -109,9 +109,7 @@ function IGRPTemplateBreadcrumbs({
     return filteredSegments.map((segment, index) => {
       const href = `/${filteredSegments.slice(0, index + 1).join('/')}`;
       const label =
-        routeLabels[href] ??
-        formatLabel?.(segment, href) ??
-        formatSegmentLabel(segment);
+        routeLabels[href] ?? formatLabel?.(segment, href) ?? formatSegmentLabel(segment);
 
       return { label, href };
     });

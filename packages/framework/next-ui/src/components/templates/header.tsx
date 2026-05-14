@@ -26,7 +26,12 @@ interface IGRPTemplateHeaderProps {
   breadcrumbRouteLabels?: Record<string, string>;
 }
 
-function IGRPTemplateHeader({ data, className, breadcrumbs, breadcrumbRouteLabels }: IGRPTemplateHeaderProps) {
+function IGRPTemplateHeader({
+  data,
+  className,
+  breadcrumbs,
+  breadcrumbRouteLabels,
+}: IGRPTemplateHeaderProps) {
   const { igrpToast } = useIGRPToast();
 
   if (!data) {
@@ -95,10 +100,7 @@ function IGRPTemplateHeader({ data, className, breadcrumbs, breadcrumbRouteLabel
               orientation="vertical"
               className={cn('mr-2 data-[orientation=vertical]:h-4')}
             />
-            <IGRPTemplateBreadcrumbs
-              items={breadcrumbs}
-              routeLabels={breadcrumbRouteLabels}
-            />
+            <IGRPTemplateBreadcrumbs items={breadcrumbs} routeLabels={breadcrumbRouteLabels} />
           </>
         )}
       </div>

@@ -1,3 +1,4 @@
+export { convert } from "./commands/convert.js";
 export { status } from "./commands/status.js";
 export { plan } from "./commands/plan.js";
 export { apply } from "./commands/apply.js";

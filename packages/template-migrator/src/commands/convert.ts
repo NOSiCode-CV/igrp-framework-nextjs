@@ -1,4 +1,4 @@
-import { existsSync, readdirSync, readFileSync, rmdirSync, unlinkSync, writeFileSync } from "fs";
+import { existsSync, readdirSync, readFileSync, rmSync, unlinkSync, writeFileSync } from "fs";
 import { join } from "path";
 
 const LEGACY_DIR = ".igrpmigrations";
@@ -8,6 +8,17 @@ const NEW_LOCK = ".igrp-migrations-lock.json";
 export function convert(appRoot: string): void {
   const legacyPath = join(appRoot, LEGACY_LOCK);
   const newPath = join(appRoot, NEW_LOCK);
+
+  // Heal partial-convert: both files exist means a previous run was interrupted.
+  if (existsSync(legacyPath) && existsSync(newPath)) {
+    unlinkSync(legacyPath);
+    const legacyDir = join(appRoot, LEGACY_DIR);
+    try {
+      if (readdirSync(legacyDir).length === 0) rmSync(legacyDir);
+    } catch { /* already gone or not empty */ }
+    console.log(`Recovered interrupted convert: removed stale ${LEGACY_LOCK}`);
+    return;
+  }
 
   if (!existsSync(legacyPath)) {
     console.error(`No legacy lock file found at ${LEGACY_LOCK}. Nothing to convert.`);
@@ -26,7 +37,7 @@ export function convert(appRoot: string): void {
   const legacyDir = join(appRoot, LEGACY_DIR);
   try {
     if (readdirSync(legacyDir).length === 0) {
-      rmdirSync(legacyDir);
+      rmSync(legacyDir);
     }
   } catch {
     // Directory already gone or not empty — both are fine

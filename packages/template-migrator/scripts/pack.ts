@@ -7,7 +7,7 @@ import { parse as parseYaml } from "yaml";
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);
 const ROOT = join(__dirname, "..");
-const MIGRATIONS_DIR = join(ROOT, "../../templates/demo-legacy/.igrpmigrations");
+const MIGRATIONS_DIR = join(ROOT, "migrations/demo-legacy");
 const OUT_DIR = join(ROOT, "dist");
 const PAYLOAD_OUT = join(OUT_DIR, "payload");
 

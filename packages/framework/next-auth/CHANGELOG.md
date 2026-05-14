@@ -1,5 +1,11 @@
 # @igrp/framework-next-auth
 
+## 0.1.0-beta.127
+
+### Patch Changes
+
+- 4e9ecd5: Fix expiresAt unit bug causing infinite refresh loops; change AUTH_PROVIDER default to none; add buildEndSessionUrl for RP-initiated logout; add introspectOidcToken refresh gate
+
 ## 0.1.0-beta.120
 
 ### Patch Changes

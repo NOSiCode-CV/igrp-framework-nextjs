@@ -1,5 +1,24 @@
 # @igrp/framework-next-ui
 
+## 0.1.0-beta.128
+
+### Patch Changes
+
+- 420c647: fix(breadcrumbs): fix key collision and missing isMobile effect dep; add formatLabel prop for dynamic segments
+- 66a4bc3: feat(breadcrumbs): controlled-first architecture with useSelectedLayoutSegments fallback
+
+  IGRPTemplateBreadcrumbs now accepts `items?: BreadcrumbItem[]` for server-resolved labels (dynamic routes, user names, etc.) and `routeLabels?: Record<string, string>` as a shared config for static routes. When `items` is not provided, auto-derive mode uses `useSelectedLayoutSegments()` instead of `usePathname()` — route-context aware and handles parallel routes and route groups correctly.
+
+  IGRPTemplateHeader gains `breadcrumbs` and `breadcrumbRouteLabels` props that forward to the breadcrumb component. IGRPLayout (framework-next) accepts and threads the same props through HeaderDataProvider to the header, enabling server layouts to inject pre-resolved items at any nesting level.
+
+  `BreadcrumbItem` is now exported from `@igrp/framework-next-ui` for server component type annotations.
+
+  Breaking: `customLabels` prop removed — migrate to `routeLabels` (full-href keys) and `formatLabel` (segment escape hatch).
+
+- Updated dependencies [4e9ecd5]
+  - @igrp/framework-next-auth@0.1.0-beta.127
+  - @igrp/framework-next-types@0.1.0-beta.128
+
 ## 0.1.0-beta.123
 
 ### Patch Changes

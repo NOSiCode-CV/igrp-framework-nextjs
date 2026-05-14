@@ -1,5 +1,12 @@
 # @igrp/igrp-framework-react-design-system
 
+## 0.1.0-beta.128
+
+### Patch Changes
+
+- fe2ed3d: - Update `@types/node` to v25.7.0 across all framework packages
+  - Bump `typescript-eslint` and `vitest` to latest versions
+
 ## 0.1.0-beta.116
 
 ### Patch Changes

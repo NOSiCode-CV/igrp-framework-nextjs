@@ -18,6 +18,7 @@
     "breadcrumbs-rebuild",
     "bump-access-management-client-beta5",
     "bump-access-management-client",
+    "bump-dev-deps-node25",
     "fix-basurl-guard",
     "fix-header-logo-and-dark-logo",
     "fix-server-session-error-swallow",

@@ -1,5 +1,16 @@
 # @igrp/framework-next-ui
 
+## 0.1.0-beta.129
+
+### Patch Changes
+
+- fe2ed3d: - Update `@types/node` to v25.7.0 across all framework packages
+  - Bump `typescript-eslint` and `vitest` to latest versions
+- Updated dependencies [fe2ed3d]
+  - @igrp/framework-next-auth@0.1.0-beta.128
+  - @igrp/framework-next-types@0.1.0-beta.129
+  - @igrp/igrp-framework-react-design-system@0.1.0-beta.128
+
 ## 0.1.0-beta.128
 
 ### Patch Changes

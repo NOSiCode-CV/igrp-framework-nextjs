@@ -8,6 +8,7 @@
 - Add Switch to the DataTable as checkbox
 - Review info-card orientation horizontal and see design for this, review the colors mode
 - Review the ```<TooltipProvider></TooltipProvider>``` usage
+- IGRPSelect see filter, not working well
 
 ## New shadcn Components
 

@@ -504,8 +504,8 @@ export function withIGRPAuth(options: IGRPAuthOptions = {}): IGRPAuthInstance {
 
         // Fire-and-forget: revocation failure (network error, provider doesn't support
         // RFC 7009, token already expired) must never block logout completing.
-        void revokeOidcSession(token, env).catch(() => {
-          // Intentionally swallowed — logout must always succeed.
+        void revokeOidcSession(token, env).catch((err) => {
+          console.error('[next-auth] token revocation failed:', err);
         });
       },
     },

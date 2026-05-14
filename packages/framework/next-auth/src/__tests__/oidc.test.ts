@@ -95,3 +95,51 @@ describe('refreshOidcAccessToken — expiresAt units', () => {
     expect(result.forceLogout).toBe(true);
   });
 });
+
+describe('buildEndSessionUrl', () => {
+  it('builds URL with id_token_hint, post_logout_redirect_uri, and client_id', async () => {
+    mockFetch([{ url: DISCOVERY_URL, body: MOCK_DISCOVERY }]);
+    const { buildEndSessionUrl } = await import('../oidc');
+
+    const url = await buildEndSessionUrl(makeToken(), VALID_ENV, 'http://app/login');
+
+    expect(url).not.toBeNull();
+    const parsed = new URL(url!);
+    expect(parsed.origin + parsed.pathname).toBe('http://localhost:9090/connect/logout');
+    expect(parsed.searchParams.get('id_token_hint')).toBe('id-token-abc');
+    expect(parsed.searchParams.get('post_logout_redirect_uri')).toBe('http://app/login');
+    expect(parsed.searchParams.get('client_id')).toBe('test-client');
+  });
+
+  it('returns null when end_session_endpoint is absent from discovery', async () => {
+    const { end_session_endpoint: _, ...discoveryWithout } = MOCK_DISCOVERY;
+    mockFetch([{ url: DISCOVERY_URL, body: discoveryWithout }]);
+    const { buildEndSessionUrl } = await import('../oidc');
+
+    const url = await buildEndSessionUrl(makeToken(), VALID_ENV, 'http://app/login');
+    expect(url).toBeNull();
+  });
+
+  it('returns null when token has no idToken', async () => {
+    mockFetch([{ url: DISCOVERY_URL, body: MOCK_DISCOVERY }]);
+    const { buildEndSessionUrl } = await import('../oidc');
+
+    const url = await buildEndSessionUrl(makeToken({ idToken: undefined }), VALID_ENV, 'http://app/login');
+    expect(url).toBeNull();
+  });
+
+  it('returns null for none provider without making any fetch calls', async () => {
+    const fetchSpy = vi.fn();
+    vi.stubGlobal('fetch', fetchSpy);
+    const { buildEndSessionUrl } = await import('../oidc');
+
+    const url = await buildEndSessionUrl(
+      { authProviderId: 'none' },
+      { AUTH_PROVIDER: 'none' },
+      'http://app/login',
+    );
+
+    expect(url).toBeNull();
+    expect(fetchSpy).not.toHaveBeenCalled();
+  });
+});

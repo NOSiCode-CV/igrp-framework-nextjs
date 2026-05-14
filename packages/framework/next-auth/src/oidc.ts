@@ -11,6 +11,8 @@ type AuthEnvironment = Record<string, string | undefined>;
 type OpenIdConfiguration = {
   token_endpoint: string;
   revocation_endpoint?: string;
+  end_session_endpoint?: string;
+  introspection_endpoint?: string;
 };
 
 const openIdConfigurationCache = new Map<string, Promise<OpenIdConfiguration>>();
@@ -133,4 +135,26 @@ export async function revokeOidcSession(token: JWT, env: AuthEnvironment) {
       token_type_hint: 'refresh_token',
     }),
   });
+}
+
+export async function buildEndSessionUrl(
+  token: JWT,
+  env: AuthEnvironment,
+  postLogoutRedirectUri: string,
+): Promise<string | null> {
+  const providerId = getProviderIdFromTokenOrEnv(token, env);
+  if (providerId === 'none') return null;
+  if (!token.idToken) return null;
+
+  const discoveryUrl = getAuthProviderDiscoveryUrl(env, providerId);
+  const openIdConfiguration = await getOpenIdConfiguration(discoveryUrl);
+  if (!openIdConfiguration.end_session_endpoint) return null;
+
+  const { clientId } = getClientCredentials(env);
+  const url = new URL(openIdConfiguration.end_session_endpoint);
+  url.searchParams.set('id_token_hint', token.idToken);
+  url.searchParams.set('post_logout_redirect_uri', postLogoutRedirectUri);
+  url.searchParams.set('client_id', clientId);
+
+  return url.toString();
 }

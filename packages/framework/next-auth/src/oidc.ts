@@ -94,7 +94,7 @@ export async function refreshOidcAccessToken(token: JWT, env: AuthEnvironment) {
     ...token,
     accessToken: refreshedToken.access_token,
     idToken: refreshedToken.id_token ?? token.idToken,
-    expiresAt: Math.floor(Date.now() / 1000 + (refreshedToken.expires_in ?? 0)),
+    expiresAt: Date.now() + (refreshedToken.expires_in ?? 3600) * 1000,
     refreshToken: refreshedToken.refresh_token ?? token.refreshToken,
     authProviderId: providerId,
     error: undefined,

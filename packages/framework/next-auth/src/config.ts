@@ -70,7 +70,6 @@ export function isIGRPAuthConfigError(error: unknown): error is IGRPAuthConfigEr
 // ─── Constants ───────────────────────────────────────────────────────────────
 
 const TOKEN_REFRESH_BUFFER_MS = 60_000;
-const TOKEN_EXPIRY_BUFFER_SEC = 60;
 
 const DEFAULT_MATCHER = ['/', '/((?!apps|_next|favicon.ico|.*\\..*).*)', '/api/:path*'];
 
@@ -432,8 +431,8 @@ export function withIGRPAuth(options: IGRPAuthOptions = {}): IGRPAuthInstance {
           };
         }
 
-        // Token still valid — return as-is
-        if (igrpToken.expiresAt && Date.now() < igrpToken.expiresAt) {
+        // Token still valid — return as-is (with 60s proactive refresh buffer)
+        if (igrpToken.expiresAt && Date.now() < igrpToken.expiresAt - TOKEN_REFRESH_BUFFER_MS) {
           if (callbackExtensions.jwt) {
             return callbackExtensions.jwt(params, igrpToken);
           }
@@ -588,9 +587,8 @@ export function withIGRPAuth(options: IGRPAuthOptions = {}): IGRPAuthInstance {
       session = await serverSession();
       if (!session) return session;
 
-      const now = Math.floor(Date.now() / 1000) + TOKEN_EXPIRY_BUFFER_SEC;
       const providerExp = typeof session.expiresAt === 'number' ? session.expiresAt : undefined;
-      const providerExpired = providerExp !== undefined && providerExp < now;
+      const providerExpired = providerExp !== undefined && providerExp < Date.now() + TOKEN_REFRESH_BUFFER_MS;
       const refreshFailed = session.error === 'RefreshAccessTokenError';
 
       if (providerExpired || refreshFailed) {

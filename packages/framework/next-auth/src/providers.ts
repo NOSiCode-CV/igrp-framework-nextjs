@@ -26,7 +26,7 @@ type AuthProviderDefinition = {
   createProvider: (env: AuthEnvironment) => OAuthConfig<OAuth2Profile> | null;
 };
 
-const DEFAULT_AUTH_PROVIDER_ID = IGRP_AUTH_PROVIDER_ID;
+const DEFAULT_AUTH_PROVIDER_ID = NONE_PROVIDER_ID;
 const DEFAULT_IGRP_AUTH_SCOPES = 'openid';
 
 function getRequiredEnvValue(env: AuthEnvironment, key: string) {

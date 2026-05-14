@@ -24,8 +24,8 @@ describe('getAuthProviderIdFromEnv', () => {
     expect(getAuthProviderIdFromEnv({ AUTH_PROVIDER: 'igrp-auth' })).toBe('igrp-auth');
   });
 
-  it('defaults to igrp-auth when AUTH_PROVIDER is not set', () => {
-    expect(getAuthProviderIdFromEnv({})).toBe('igrp-auth');
+  it('defaults to none when AUTH_PROVIDER is not set', () => {
+    expect(getAuthProviderIdFromEnv({})).toBe('none');
   });
 
   it('returns none when AUTH_PROVIDER=none', () => {
@@ -169,6 +169,10 @@ describe('isAuthEnabled / isAuthDisabled', () => {
   it('isAuthDisabled is the inverse of isAuthEnabled', () => {
     expect(isAuthDisabled({ AUTH_PROVIDER: 'none' })).toBe(true);
     expect(isAuthDisabled({ AUTH_PROVIDER: 'igrp-auth' })).toBe(false);
+  });
+
+  it('isAuthEnabled returns false when AUTH_PROVIDER is not set', () => {
+    expect(isAuthEnabled({})).toBe(false);
   });
 });
 

@@ -1,201 +1,257 @@
 "use client"
 
-import { useId, useState } from "react"
-import { useFormContext, Controller } from "react-hook-form"
+import { useId, useState, useEffect } from "react"
+import { useFormContext } from "react-hook-form"
+import { ChevronDown } from "lucide-react"
 
 import { cn } from "../../../lib/utils"
 import type { IGRPInputProps } from "../../../types"
-import { Input } from "../../primitives/input"
+import {
+  InputGroup,
+  InputGroupInput,
+  InputGroupAddon,
+  InputGroupButton,
+} from "../../primitives/input-group"
+import {
+  DropdownMenu,
+  DropdownMenuTrigger,
+  DropdownMenuContent,
+  DropdownMenuGroup,
+  DropdownMenuItem,
+} from "../../primitives/dropdown-menu"
+import { IGRPFormField } from "../form/form-field"
 import { IGRPLabel } from "../label"
+import {
+  hexToFormat,
+  formatToHex,
+  detectFormat,
+  type ColorFormat,
+} from "../../../lib/color-utils"
 
-/**
- * Props for the IGRPInputColor component.
- * @see IGRPInputColor
- */
-interface IGRPInputColorProps extends Omit<IGRPInputProps, "onChange" | "value" | "defaultValue"> {
-  /** Default hex color. */
+interface IGRPInputColorProps
+  extends Omit<IGRPInputProps, "onChange" | "value" | "defaultValue"> {
+  /** Initial color in any supported format. Default: "#000000" */
   defaultValue?: string
-  /** Controlled hex color value. */
+  /** Controlled color value in the active format. */
   value?: string
-  /** Called when color changes. */
+  /** Fires on every confirmed change; emits in the active format. */
   onChange?: (value: string) => void
-  /** Whether to show the hex value next to the picker. */
-  showHexValue?: boolean
-  /** CSS classes for the wrapper. */
-  className?: string
+  /** Locks the display format and hides the format dropdown. */
+  format?: ColorFormat
+  /** Initial format when format prop is omitted. Default: "oklch" */
+  defaultFormat?: ColorFormat
+  /** Show/hide the text field + format dropdown. Default: true */
+  showFormatValue?: boolean
+  error?: string
 }
 
-/**
- * Color picker input with optional hex display. Integrates with react-hook-form.
- */
+const FORMAT_LABELS: Record<ColorFormat, string> = {
+  hex: "HEX",
+  rgb: "RGB",
+  hsl: "HSL",
+  oklch: "OKLCH",
+}
+
+const ALL_FORMATS: ColorFormat[] = ["hex", "rgb", "hsl", "oklch"]
+
+function normalizeToHex(value: string, hint?: ColorFormat): string {
+  if (!value) return "#000000"
+  const fmt = hint ?? detectFormat(value) ?? "hex"
+  return formatToHex(value, fmt) ?? "#000000"
+}
+
 function IGRPInputColor({
   name,
   id,
   label,
-  helperText = "",
+  helperText,
   className,
-  required = false,
-  error,
+  labelClassName,
+  required,
   defaultValue = "#000000",
   value: controlledValue,
   onChange,
-  showHexValue = true,
+  format: formatProp,
+  defaultFormat = "oklch",
+  showFormatValue = true,
+  error,
   ...props
 }: IGRPInputColorProps) {
   const _id = useId()
   const fieldName = name ?? id ?? _id
-
   const formContext = useFormContext()
-  const [internalValue, setInternalValue] = useState(controlledValue ?? defaultValue)
+  const isFormatLocked = formatProp !== undefined
 
-  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const newValue = e.target.value
-    if (!formContext) {
-      setInternalValue(newValue)
-      onChange?.(newValue)
+  const [activeFormat, setActiveFormat] = useState<ColorFormat>(formatProp ?? defaultFormat)
+  const [hexValue, setHexValue] = useState(() =>
+    normalizeToHex(
+      controlledValue ?? defaultValue,
+      formatProp ?? (controlledValue ? (detectFormat(controlledValue) ?? defaultFormat) : defaultFormat),
+    ),
+  )
+  const [stringInput, setStringInput] = useState(() => hexToFormat(hexValue, activeFormat))
+
+  // Sync when controlled value changes externally (standalone path only)
+  useEffect(() => {
+    if (controlledValue !== undefined && !formContext) {
+      const newHex = normalizeToHex(
+        controlledValue,
+        formatProp ?? detectFormat(controlledValue) ?? activeFormat,
+      )
+      setHexValue(newHex)
+      setStringInput(hexToFormat(newHex, activeFormat))
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [controlledValue])
+
+  function commitString(onFieldChange?: (v: string) => void) {
+    const parsed = formatToHex(stringInput, activeFormat)
+    if (parsed) {
+      setHexValue(parsed)
+      const display = hexToFormat(parsed, activeFormat)
+      setStringInput(display)
+      onFieldChange?.(display)
+      onChange?.(display)
+    } else {
+      setStringInput(hexToFormat(hexValue, activeFormat))
     }
   }
 
-  const currentValue = controlledValue !== undefined ? controlledValue : internalValue
+  function handlePickerChange(
+    e: React.ChangeEvent<HTMLInputElement>,
+    onFieldChange?: (v: string) => void,
+  ) {
+    const newHex = e.target.value
+    setHexValue(newHex)
+    const display = hexToFormat(newHex, activeFormat)
+    setStringInput(display)
+    onFieldChange?.(display)
+    onChange?.(display)
+  }
 
-  if (!formContext) {
+  function handleFormatChange(fmt: ColorFormat, onFieldChange?: (v: string) => void) {
+    setActiveFormat(fmt)
+    const display = hexToFormat(hexValue, fmt)
+    setStringInput(display)
+    onFieldChange?.(display)
+    onChange?.(display)
+  }
+
+  function renderControl(
+    hasError: boolean,
+    onFieldChange?: (v: string) => void,
+    onFieldBlur?: () => void,
+  ) {
     return (
-      <div className={cn("*:not-first:mt-2")}>
-        {label && <IGRPLabel label={label} className={cn(className)} required={required} id={fieldName} />}
-
-        <div className={cn("flex items-center gap-3")}>
-          <div
-            className={cn(
-              "relative rounded-md overflow-hidden border border-input shadow-sm w-9 h-9",
-              error && "border-destructive",
-              props.disabled && "opacity-50",
-            )}
-          >
-            <Input
-              id={fieldName}
-              name={fieldName}
-              type="color"
-              required={required}
-              aria-required={required}
-              aria-invalid={!!error || !!props["aria-invalid"]}
-              aria-describedby={helperText || error ? `${id}-helper` : undefined}
-              className={cn("absolute inset-0 w-full h-full cursor-pointer opacity-0", className)}
-              value={currentValue}
-              onChange={handleChange}
-              {...props}
-            />
-            <div className={cn("absolute inset-0 pointer-events-none")} style={{ backgroundColor: currentValue }} />
-          </div>
-
-          {showHexValue && (
-            <div
-              className={cn(
-                "h-9 px-3 py-2 rounded-md border border-input bg-background text-sm",
-                props.disabled && "opacity-50",
-              )}
-            >
-              {currentValue.toUpperCase()}
-            </div>
+      <div className={cn("flex items-center gap-2", props.disabled && "opacity-50 pointer-events-none")}>
+        {/* Swatch — overflow-hidden removed so focus ring is not clipped */}
+        <div
+          className={cn(
+            "relative size-9 flex-shrink-0 rounded-md border border-input shadow-xs",
+            "has-[:focus-visible]:border-ring has-[:focus-visible]:ring-2 has-[:focus-visible]:ring-ring/50",
+            hasError && "border-destructive",
           )}
+        >
+          <input
+            type="color"
+            className="absolute inset-0 size-full cursor-pointer opacity-0"
+            value={hexValue}
+            onChange={(e) => handlePickerChange(e, onFieldChange)}
+            onBlur={onFieldBlur}
+            disabled={props.disabled}
+          />
+          <div
+            className="absolute inset-0 rounded-md pointer-events-none"
+            style={{ backgroundColor: hexValue }}
+          />
         </div>
 
-        {helperText && !error && (
-          <p
-            id={`${fieldName}-helper`}
-            className={cn("text-muted-foreground mt-2 text-xs")}
-            role="region"
-            aria-live="polite"
-          >
-            {helperText}
-          </p>
-        )}
-
-        {error && (
-          <p id={`${fieldName}-error`} className={cn("text-destructive mt-2 text-xs")} role="alert">
-            {error}
-          </p>
+        {showFormatValue && (
+          <InputGroup className={cn("flex-1", hasError && "border-destructive")}>
+            <InputGroupInput
+              value={stringInput}
+              onChange={(e) => setStringInput(e.target.value)}
+              onBlur={() => commitString(onFieldChange)}
+              onKeyDown={(e) => {
+                if (e.key === "Enter") {
+                  e.preventDefault()
+                  commitString(onFieldChange)
+                }
+              }}
+              aria-invalid={hasError || undefined}
+            />
+            {!isFormatLocked && (
+              <InputGroupAddon align="inline-end">
+                <DropdownMenu>
+                  <DropdownMenuTrigger asChild>
+                    <InputGroupButton size="xs">
+                      {FORMAT_LABELS[activeFormat]}
+                      <ChevronDown data-icon="inline-end" />
+                    </InputGroupButton>
+                  </DropdownMenuTrigger>
+                  <DropdownMenuContent align="end">
+                    <DropdownMenuGroup>
+                      {ALL_FORMATS.map((fmt) => (
+                        <DropdownMenuItem
+                          key={fmt}
+                          onSelect={() => handleFormatChange(fmt, onFieldChange)}
+                        >
+                          {FORMAT_LABELS[fmt]}
+                        </DropdownMenuItem>
+                      ))}
+                    </DropdownMenuGroup>
+                  </DropdownMenuContent>
+                </DropdownMenu>
+              </InputGroupAddon>
+            )}
+          </InputGroup>
         )}
       </div>
     )
   }
 
-  return (
-    <Controller
-      name={fieldName}
-      control={formContext.control}
-      defaultValue={defaultValue}
-      render={({ field, fieldState }) => {
-        const handleControlledChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-          const newValue = e.target.value
-          field.onChange(newValue)
-          onChange?.(newValue)
+  if (formContext) {
+    return (
+      <IGRPFormField
+        name={fieldName}
+        label={label}
+        helperText={helperText}
+        className={className}
+        required={required}
+        control={formContext.control}
+      >
+        {(field, fieldState) =>
+          renderControl(!!fieldState.error || !!error, field.onChange, field.onBlur)
         }
+      </IGRPFormField>
+    )
+  }
 
-        return (
-          <div className={cn("*:not-first:mt-2")}>
-            {label && <IGRPLabel label={label} className={cn(className)} required={required} id={fieldName} />}
+  return (
+    <div className={cn("*:not-first:mt-2", className)}>
+      {label && (
+        <IGRPLabel label={label} className={labelClassName} required={required} id={fieldName} />
+      )}
 
-            <div className={cn("flex items-center gap-3")}>
-              <div
-                className={cn(
-                  "relative rounded-md overflow-hidden border border-input shadow-sm w-9 h-9",
-                  (fieldState.error || error) && "border-destructive",
-                  props.disabled && "opacity-50",
-                )}
-              >
-                <Input
-                  id={fieldName}
-                  name={fieldName}
-                  type="color"
-                  required={required}
-                  aria-required={required}
-                  aria-invalid={!!fieldState.error || !!error || !!props["aria-invalid"]}
-                  aria-describedby={helperText || error || fieldState.error ? `${id}-helper` : undefined}
-                  className={cn("absolute inset-0 w-full h-full cursor-pointer opacity-0", className)}
-                  value={field.value || defaultValue}
-                  onChange={handleControlledChange}
-                  onBlur={field.onBlur}
-                  disabled={props.disabled}
-                  {...props}
-                />
-                <div
-                  className={cn("absolute inset-0 pointer-events-none")}
-                  style={{ backgroundColor: field.value || defaultValue }}
-                />
-              </div>
+      {renderControl(!!error)}
 
-              {showHexValue && (
-                <div
-                  className={cn(
-                    "h-9 px-3 py-2 rounded-md border border-input bg-background text-sm",
-                    props.disabled && "opacity-50",
-                  )}
-                >
-                  {(field.value || defaultValue).toUpperCase()}
-                </div>
-              )}
-            </div>
+      {helperText && !error && (
+        <p
+          id={`${fieldName}-helper`}
+          className="text-muted-foreground mt-2 text-xs"
+          role="region"
+          aria-live="polite"
+        >
+          {helperText}
+        </p>
+      )}
 
-            {helperText && !error && !fieldState.error && (
-              <p
-                id={`${fieldName}-helper`}
-                className={cn("text-muted-foreground mt-2 text-xs")}
-                role="region"
-                aria-live="polite"
-              >
-                {helperText}
-              </p>
-            )}
-
-            {(error || fieldState.error) && (
-              <p id={`${fieldName}-error`} className={cn("text-destructive mt-2 text-xs")} role="alert">
-                {error || fieldState.error?.message}
-              </p>
-            )}
-          </div>
-        )
-      }}
-    />
+      {error && (
+        <p id={`${fieldName}-error`} className="text-destructive mt-2 text-xs" role="alert">
+          {error}
+        </p>
+      )}
+    </div>
   )
 }
 

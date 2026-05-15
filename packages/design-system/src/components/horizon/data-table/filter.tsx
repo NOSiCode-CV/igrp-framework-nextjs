@@ -16,13 +16,13 @@ import {
   CommandSeparator,
 } from "../../primitives/command"
 import { Input } from "../../primitives/input"
+import { Calendar } from "../../primitives/calendar"
 import { Popover, PopoverContent, PopoverTrigger } from "../../primitives/popover"
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "../../primitives/select"
 import { Separator } from "../../primitives/separator"
 import { IGRPBadge } from "../badge"
 import { IGRPButton } from "../button"
 import { IGRPIcon, type IGRPIconName } from "../icon"
-// import { IGRPDatePickerRange } from '../input/date-picker/date-picker-range';
 
 /**
  * Base props for data table filter components.
@@ -49,22 +49,45 @@ interface IGRPDataTableFilterProps<TData> {
   iconName?: IGRPIconName | string
 }
 
-/** @internal Date range filter content; keyed by clearDates to reset when parent requests clear. */
-function IGRPDataTableFilterDateContent<TData>({ column }: { column?: Column<TData, unknown> }) {
-  // Compute during render: placeholder has no date picker UI yet, filter value is undefined
-  const currentFilter = column?.getFilterValue()
-  if (currentFilter !== undefined) {
-    column?.setFilterValue(undefined)
-  }
-  return null
+function formatDate(date: Date): string {
+  return new Intl.DateTimeFormat(undefined, {
+    day: "2-digit",
+    month: "2-digit",
+    year: "numeric",
+  }).format(date)
 }
 
-/** Date range filter (placeholder). */
+/** Date range filter. Opens a popover with a range calendar. */
 function IGRPDataTableFilterDate<TData>({
   column,
   clearDates,
+  placeholder = "Selecionar data...",
 }: Omit<IGRPDataTableFilterProps<TData>, "options" | "placeholderMax">) {
-  return <IGRPDataTableFilterDateContent key={clearDates ? "cleared" : "active"} column={column} />
+  const value = column?.getFilterValue() as { from?: Date; to?: Date } | undefined
+
+  return (
+    <Popover key={clearDates ? "cleared" : "active"}>
+      <PopoverTrigger asChild>
+        <IGRPButton variant="outline" size="sm" className="justify-start">
+          <IGRPIcon iconName="CalendarDays" />
+          {value?.from
+            ? value.to
+              ? `${formatDate(value.from)} – ${formatDate(value.to)}`
+              : formatDate(value.from)
+            : placeholder}
+        </IGRPButton>
+      </PopoverTrigger>
+      <PopoverContent align="start" className="w-auto p-0">
+        <Calendar
+          mode="range"
+          selected={{ from: value?.from, to: value?.to }}
+          onSelect={(range) =>
+            column?.setFilterValue(range?.from ? range : undefined)
+          }
+        />
+      </PopoverContent>
+    </Popover>
+  )
 }
 
 /**
@@ -115,11 +138,8 @@ function IGRPDataTableFilterDropdown<TData>({
             aria-expanded={open}
             aria-controls={listId}
             size="sm"
-            className={cn(
-              "w-full justify-between",
-              className,
-              disabled && "cursor-not-allowed pointer-events-none opacity-50",
-            )}
+            disabled={disabled}
+            className={cn("w-full justify-between", className)}
           >
             <span>{selectedLabel}</span>
             <IGRPIcon iconName="ChevronsUpDown" />
@@ -177,8 +197,10 @@ function IGRPDataTableFilterFaceted<TData>({
   const id = useId()
 
   const facets = column?.getFacetedUniqueValues()
-  const [selectedValues, setSelectedValues] = useState<Set<string | number>>(
-    () => new Set((column?.getFilterValue() as string[]) ?? []),
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  const selectedValues = useMemo(
+    () => new Set<string | number>((column?.getFilterValue() as (string | number)[]) ?? []),
+    [column?.getFilterValue()],
   )
 
   const handleSelect = useCallback(
@@ -189,7 +211,6 @@ function IGRPDataTableFilterFaceted<TData>({
       } else {
         next.add(value)
       }
-      setSelectedValues(next)
       const filterValues = Array.from(next)
       column?.setFilterValue(filterValues.length ? filterValues : undefined)
     },
@@ -198,7 +219,6 @@ function IGRPDataTableFilterFaceted<TData>({
 
   const handleClear = useCallback(() => {
     column?.setFilterValue(undefined)
-    setSelectedValues(new Set())
   }, [column])
 
   return (
@@ -223,26 +243,28 @@ function IGRPDataTableFilterFaceted<TData>({
             {showFilter && <CommandInput placeholder={placeholder} className={cn("h-8")} />}
             <CommandEmpty>{labelSearchField}</CommandEmpty>
             <CommandGroup>
-              {options?.map((option, i) => {
-                return (
-                  <CommandItem className={cn("justify-between", className)} key={option.value}>
-                    <div className={cn("flex items-center gap-2")}>
-                      <Checkbox
-                        id={`${id}-${i}`}
-                        checked={selectedValues.has(option.value)}
-                        onCheckedChange={() => handleSelect(option.value)}
-                        className={cn("border-foreground")}
-                      />
-                    </div>
-
-                    <span>{option.label}</span>
-
-                    <span className={cn("ml-auto flex h-4 w-4 items-center justify-center font-mono text-xs")}>
-                      {facets?.get(option.value) || 0}
-                    </span>
-                  </CommandItem>
-                )
-              })}
+              {options?.map((option, i) => (
+                <CommandItem
+                  key={String(option.value)}
+                  value={String(option.value)}
+                  onSelect={() => handleSelect(option.value)}
+                  className={cn("gap-2", className)}
+                >
+                  <Checkbox
+                    id={`${id}-${i}`}
+                    checked={selectedValues.has(option.value)}
+                    onCheckedChange={() => handleSelect(option.value)}
+                    aria-label={option.label}
+                    className={cn("border-foreground")}
+                  />
+                  <label htmlFor={`${id}-${i}`} className="cursor-pointer flex-1">
+                    {option.label}
+                  </label>
+                  <span className="ml-auto font-mono text-xs">
+                    {facets?.get(option.value) ?? 0}
+                  </span>
+                </CommandItem>
+              ))}
             </CommandGroup>
             {selectedValues.size > 0 && (
               <>
@@ -287,7 +309,7 @@ function IGRPDataTableFilterInput<TData>({
         name={`text-${id}`}
         ref={inputRef}
         type="text"
-        aria-label="Filtar"
+        aria-label="Filtrar"
       />
       <div
         className={cn(

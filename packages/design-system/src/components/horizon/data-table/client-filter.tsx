@@ -5,8 +5,8 @@ import { type Column, type Table } from "@tanstack/react-table"
 import { Fragment, type JSX } from "react"
 
 import { cn } from "../../../lib/utils"
-
-// import { IGRPButton } from '../button';
+import { useFilterState } from "./hooks/use-filter-state"
+import { IGRPButton } from "../button"
 
 /**
  * Single filter config for client-side filtering.
@@ -30,6 +30,8 @@ interface IGRPDataTableFilterClientProps<TData> {
   filterList: IGRPDataTableClientFilterListProps<TData>[]
   /** Label for clear filters button. */
   filterLabel: string
+  /** Optional callback invoked after all filters are cleared. */
+  onFiltersCleared?: () => void
 }
 
 /**
@@ -38,35 +40,27 @@ interface IGRPDataTableFilterClientProps<TData> {
 function IGRPDataTableClientFilter<TData>({
   table,
   filterList,
-  // filterLabel,
+  filterLabel,
+  onFiltersCleared,
 }: IGRPDataTableFilterClientProps<TData>) {
-  // const isFiltered = table.getState().columnFilters.length > 0;
-
-  // const handleCleanFilter = () => {
-  //   table.resetColumnFilters();
-  //   filterList.forEach(({ columnId }) => {
-  //   const col = table.getColumn(columnId as string);
-  //   col?.setFilterValue(undefined);
-  // });
-  // };
+  const { isFiltered, handleClear } = useFilterState(table, onFiltersCleared)
 
   return (
     <div className={cn("flex md:items-center gap-2 flex-col md:flex-row")}>
       {filterList.map(({ columnId, component }) => {
         const column = table.getColumn(columnId as string)
-        return column && <Fragment key={columnId as string}>{component({ column: column })}</Fragment>
+        return (
+          column && (
+            <Fragment key={columnId as string}>{component({ column })}</Fragment>
+          )
+        )
       })}
 
-      {/* {isFiltered && (
-        <IGRPButton
-          onClick={handleCleanFilter}         
-          variant="ghost"
-          showIcon
-          iconName="X"
-        >
+      {isFiltered && (
+        <IGRPButton onClick={handleClear} variant="ghost" showIcon iconName="X">
           {filterLabel}
         </IGRPButton>
-      )} */}
+      )}
     </div>
   )
 }

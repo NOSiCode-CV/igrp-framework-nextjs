@@ -82,6 +82,8 @@ interface IGRPDataTableProps<TData, TValue> {
   renderSubComponent?: (row: Row<TData>) => React.ReactElement | undefined
   /** HTML id attribute. */
   id?: string
+  /** Called after all client-side column filters are cleared via the clear button. */
+  onFiltersCleared?: () => void
 }
 
 type TableState = {
@@ -149,6 +151,7 @@ function IGRPDataTable<TData, TValue>({
   getRowCanExpand = () => false,
   renderSubComponent,
   id,
+  onFiltersCleared,
 }: IGRPDataTableProps<TData, TValue>) {
   const [state, dispatch] = useReducer(tableReducer, {
     columnFilters: [],
@@ -264,7 +267,12 @@ function IGRPDataTable<TData, TValue>({
           (isServerSide ? (
             serverFilterComponent
           ) : (
-            <IGRPDataTableClientFilter table={table} filterList={clientFilters || []} filterLabel={clientClearLabel} />
+            <IGRPDataTableClientFilter
+                  table={table}
+                  filterList={clientFilters || []}
+                  filterLabel={clientClearLabel}
+                  onFiltersCleared={onFiltersCleared}
+                />
           ))}
         {showToggleColumn && (
           <IGRPDataTableToggleVisibility table={table} label={toggleLabel} optionsLabel={toggleOptionsLabel} />

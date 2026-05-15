@@ -15,9 +15,7 @@ import { getRoutes } from "./lib/config/get-routes";
 export function createConfig(
   config: IGRPLayoutConfigArgs,
 ): Promise<IGRPConfigArgs> {
-  const user = getMockUser().mockUser;
-  const menu = getMockMenus().mockMenus;
-  const apps = getMockApps().mockApps;
+  const preview = isPreviewMode();
 
   const routes = getRoutes();
   const appRoutes = routes?.appRoutes ?? [];
@@ -25,33 +23,41 @@ export function createConfig(
 
   return igrpBuildConfig({
     appCode: process.env.IGRP_APP_CODE || "",
-    previewMode: isPreviewMode(),
+    previewMode: preview,
     syncAccess: process.env.IGRP_SYNC_ACCESS === "true",
     appInformation: getPackageJson(),
     layoutMockData: {
-      getHeaderData: async () => ({
-        user: user,
-        userProfileUrl: process.env.NEXT_PUBLIC_IGRP_PROFILE_URL || "",
-        notificationsUrl: process.env.NEXT_PUBLIC_IGRP_NOTIFICATION_URL || "",
-        showBreadcrumb: true,
-        showSearch: true,
-        showNotifications: true,
-        showUser: true,
-        showThemeSwitcher: true,
-        showIGRPSidebarTrigger: true,
-        showIGRPHeaderTitle: true,
-        showIGRPHeaderLogo: true,
-        showSettings: true,
-        settingsUrl: process.env.NEXT_PUBLIC_IGRP_SETTINGS_URL || "",
-      }),
-      getSidebarData: async () => ({
-        menuItems: menu,
-        user: user,
-        defaultOpen: true,
-        showAppSwitcher: true,
-        apps: apps,
-        appCenterUrl: process.env.NEXT_IGRP_APP_CENTER_URL || "",
-      }),
+      getHeaderData: async () => {
+        const user = preview ? getMockUser().mockUser : undefined;
+        return {
+          user: user,
+          userProfileUrl: process.env.NEXT_PUBLIC_IGRP_PROFILE_URL || "",
+          notificationsUrl: process.env.NEXT_PUBLIC_IGRP_NOTIFICATION_URL || "",
+          showBreadcrumb: true,
+          showSearch: true,
+          showNotifications: true,
+          showUser: true,
+          showThemeSwitcher: true,
+          showIGRPSidebarTrigger: true,
+          showIGRPHeaderTitle: true,
+          showIGRPHeaderLogo: true,
+          showSettings: true,
+          settingsUrl: process.env.NEXT_PUBLIC_IGRP_SETTINGS_URL || "",
+        };
+      },
+      getSidebarData: async () => {
+        const user = preview ? getMockUser().mockUser : undefined;
+        const menu = preview ? getMockMenus().mockMenus : undefined;
+        const apps = preview ? getMockApps().mockApps : undefined;
+        return {
+          menuItems: menu,
+          user: user,
+          defaultOpen: true,
+          showAppSwitcher: true,
+          apps: apps,
+          appCenterUrl: process.env.NEXT_IGRP_APP_CENTER_URL || "",
+        };
+      },
     },
     font: fontVariables,
     showSidebar: true,

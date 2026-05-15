@@ -22,6 +22,7 @@ export interface IGRPApplicationArgs {
   url?: string | null;
   slug?: string;
   departments: string[];
+  lastAccess?: string;
   createdBy?: string;
   createdDate?: string;
   lastModifiedBy?: string;
@@ -32,10 +33,11 @@ export interface IGRPRoleDepartmentArgs {
   roleCode: string;
   departmentCode: string;
 }
+
 export interface IGRPMenuItemArgs {
   id: number;
-  code: string;
   name: string;
+  code: string;
   type: IGRPMenuType;
   position: number;
   icon?: string;
@@ -58,11 +60,14 @@ export type IGRPMenuCRUDArgs = Omit<IGRPMenuItemArgs, 'type'> & {
 
 export interface IGRPRoleArgs {
   id: number;
+  code: string;
   name: string;
+  icon?: string;
   description?: string;
   departmentCode: string;
   parentCode?: string;
   status: IGRPStatus;
+  permissions?: IGRPPermissionArgs[];
 }
 
 export interface IGRPRoleUserArgs {
@@ -74,6 +79,7 @@ export interface IGRPDepartmentArgs {
   id: number;
   code: string;
   name: string;
+  icon?: string;
   description?: string;
   status: IGRPStatus;
   parentCode?: string;
@@ -86,7 +92,7 @@ export interface IGRPGlobalConfigurationArgs {
 
 export interface IGRPFileUrlArgs {
   url: string;
-  expiration: Date;
+  expiration: string;
 }
 
 export interface IGRPPermissionArgs {
@@ -94,7 +100,7 @@ export interface IGRPPermissionArgs {
   name: string;
   description?: string;
   status: IGRPStatus;
-  applicationCode: string;
+  departmentCode: string;
 }
 
 export type IGRPResourceType = 'API' | 'UI';
@@ -105,6 +111,7 @@ export interface IGRPResourceItem {
   url?: string;
   permissionName?: string;
   resourceName: string;
+  permissions?: IGRPPermissionArgs[];
   createdBy?: string;
   createdDate?: string;
   lastModifiedBy?: string;
@@ -117,7 +124,8 @@ export interface IGRPResourceArgs {
   description?: string;
   type: IGRPResourceType;
   status: IGRPStatus;
-  applicationCode: string;
+  applications: string[];
+  permissions?: IGRPPermissionArgs[];
   items?: IGRPResourceItem[];
   externalId?: string;
   createdBy?: string;

@@ -60,6 +60,7 @@ const AUTH_PROVIDER_REGISTRY: Record<AuthProviderId, AuthProviderDefinition> = {
       id: IGRP_AUTH_PROVIDER_ID,
       name: 'IGRP Auth',
       type: 'oauth',
+      idToken: true,
       clientId: getRequiredEnvValue(env, 'IGRP_AUTH_CLIENT_ID'),
       clientSecret: getRequiredEnvValue(env, 'IGRP_AUTH_CLIENT_SECRET'),
       wellKnown: `${stripTrailingSlash(getRequiredEnvValue(env, 'IGRP_AUTH_ISSUER'))}/.well-known/openid-configuration`,

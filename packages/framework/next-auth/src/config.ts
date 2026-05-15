@@ -34,7 +34,7 @@ import {
   type AuthProviderId,
 } from './providers';
 import { introspectOidcToken, refreshOidcAccessToken, revokeOidcSession } from './oidc';
-import { sanitizeRedirectUrl } from './sanitize';
+import { escapeHtml, sanitizeRedirectUrl } from './sanitize';
 
 // ─── Config Error ─────────────────────────────────────────────────────────────
 
@@ -313,8 +313,8 @@ function makeConfigErrorHandler(err: IGRPAuthConfigError): NextAuthHandler {
     '</style>',
     '</head><body>',
     '<h1>Authentication Configuration Error</h1>',
-    `<p><strong>Code:</strong> <code>${err.code}</code></p>`,
-    `<p>${err.message}</p>`,
+    `<p><strong>Code:</strong> <code>${escapeHtml(err.code)}</code></p>`,
+    `<p>${escapeHtml(err.message)}</p>`,
     '<p>Check your <code>AUTH_PROVIDER</code> environment variable and ensure all required env vars are set.</p>',
     '</body></html>',
   ].join('');
@@ -550,6 +550,7 @@ export function withIGRPAuth(options: IGRPAuthOptions = {}): IGRPAuthInstance {
   async function getTokenFromRequest(request: unknown): Promise<JWT | null> {
     return (await getToken({
       req: request as Parameters<typeof getToken>[0]['req'],
+      secret: secret || process.env.NEXTAUTH_SECRET,
     })) as JWT | null;
   }
 

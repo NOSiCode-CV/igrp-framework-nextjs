@@ -162,7 +162,6 @@ export async function buildEndSessionUrl(
 ): Promise<string | null> {
   const providerId = getProviderIdFromTokenOrEnv(token, env);
   if (providerId === 'none') return null;
-  if (!token.idToken) return null;
 
   const discoveryUrl = getAuthProviderDiscoveryUrl(env, providerId);
   const openIdConfiguration = await getOpenIdConfiguration(discoveryUrl);
@@ -170,9 +169,11 @@ export async function buildEndSessionUrl(
 
   const { clientId } = getClientCredentials(env);
   const url = new URL(openIdConfiguration.end_session_endpoint);
-  url.searchParams.set('id_token_hint', token.idToken);
-  url.searchParams.set('post_logout_redirect_uri', postLogoutRedirectUri);
   url.searchParams.set('client_id', clientId);
+  url.searchParams.set('post_logout_redirect_uri', postLogoutRedirectUri);
+  if (token.idToken) {
+    url.searchParams.set('id_token_hint', token.idToken);
+  }
 
   return url.toString();
 }

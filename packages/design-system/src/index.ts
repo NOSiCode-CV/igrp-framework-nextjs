@@ -816,6 +816,7 @@ export { igrpGetInitials } from "./lib/initials"
 export { igrpToPascalCase } from "./lib/pascal-case"
 export { igrpIsExternalUrl, igrpNormalizeUrl } from "./lib/url"
 export { cn, parseLocalDate } from "./lib/utils"
+export { colorToOklch, detectFormat, type ColorFormat } from "./lib/color-utils"
 
 // external dependencies
 

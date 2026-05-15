@@ -1,6 +1,6 @@
 "use client"
 
-import { useId, useState, useEffect } from "react"
+import { useId, useState, useEffect, useRef } from "react"
 import { useFormContext } from "react-hook-form"
 import { ChevronDown } from "lucide-react"
 
@@ -42,7 +42,6 @@ interface IGRPInputColorProps
   defaultFormat?: ColorFormat
   /** Show/hide the text field + format dropdown. Default: true */
   showFormatValue?: boolean
-  error?: string
 }
 
 const FORMAT_LABELS: Record<ColorFormat, string> = {
@@ -58,6 +57,101 @@ function normalizeToHex(value: string, hint?: ColorFormat): string {
   if (!value) return "#000000"
   const fmt = hint ?? detectFormat(value) ?? "hex"
   return formatToHex(value, fmt) ?? "#000000"
+}
+
+interface ColorControlProps {
+  hexValue: string
+  stringInput: string
+  activeFormat: ColorFormat
+  isFormatLocked: boolean
+  showFormatValue: boolean
+  disabled?: boolean
+  hasError: boolean
+  onPickerChange: (e: React.ChangeEvent<HTMLInputElement>) => void
+  onStringChange: (e: React.ChangeEvent<HTMLInputElement>) => void
+  onBlur: () => void
+  onKeyDown: (e: React.KeyboardEvent<HTMLInputElement>) => void
+  onFormatChange: (fmt: ColorFormat) => void
+  label?: string
+}
+
+function ColorControl({
+  hexValue,
+  stringInput,
+  activeFormat,
+  isFormatLocked,
+  showFormatValue,
+  disabled,
+  hasError,
+  onPickerChange,
+  onStringChange,
+  onBlur,
+  onKeyDown,
+  onFormatChange,
+  label,
+}: ColorControlProps) {
+  return (
+    <div className={cn("flex items-center gap-2", disabled && "opacity-50 pointer-events-none")}>
+      {/* Swatch — overflow-hidden removed so focus ring is not clipped */}
+      <div
+        className={cn(
+          "relative size-9 shrink-0 rounded-md border border-input shadow-xs",
+          "has-[:focus-visible]:border-ring has-[:focus-visible]:ring-2 has-[:focus-visible]:ring-ring/50",
+          hasError && "border-destructive",
+        )}
+      >
+        <input
+          type="color"
+          className="absolute inset-0 size-full cursor-pointer opacity-0"
+          value={hexValue}
+          onChange={onPickerChange}
+          onBlur={onBlur}
+          disabled={disabled}
+          aria-label={label ? `${label} color picker` : "Color picker"}
+        />
+        <div
+          className="absolute inset-0 rounded-md pointer-events-none"
+          style={{ backgroundColor: hexValue }}
+        />
+      </div>
+
+      {showFormatValue && (
+        <InputGroup className={cn("flex-1", hasError && "border-destructive")}>
+          <InputGroupInput
+            value={stringInput}
+            onChange={onStringChange}
+            onBlur={onBlur}
+            onKeyDown={onKeyDown}
+            aria-invalid={hasError ? true : undefined}
+          />
+          {!isFormatLocked && (
+            <InputGroupAddon align="inline-end">
+              <DropdownMenu>
+                <DropdownMenuTrigger asChild>
+                  <InputGroupButton size="xs">
+                    {FORMAT_LABELS[activeFormat]}
+                    <ChevronDown data-icon="inline-end" />
+                  </InputGroupButton>
+                </DropdownMenuTrigger>
+                <DropdownMenuContent align="end">
+                  <DropdownMenuGroup>
+                    {ALL_FORMATS.map((fmt) => (
+                      <DropdownMenuItem
+                        key={fmt}
+                        onSelect={() => onFormatChange(fmt)}
+                      >
+                        {FORMAT_LABELS[fmt]}
+                      </DropdownMenuItem>
+                    ))}
+                  </DropdownMenuGroup>
+                </DropdownMenuContent>
+              </DropdownMenu>
+            </InputGroupAddon>
+          )}
+        </InputGroup>
+      )}
+    </div>
+  )
 }
 
 function IGRPInputColor({
@@ -91,124 +185,22 @@ function IGRPInputColor({
   )
   const [stringInput, setStringInput] = useState(() => hexToFormat(hexValue, activeFormat))
 
+  // Keep a ref to the latest activeFormat so the sync effect always reads current format
+  const activeFormatRef = useRef(activeFormat)
+  useEffect(() => { activeFormatRef.current = activeFormat }, [activeFormat])
+
   // Sync when controlled value changes externally (standalone path only)
   useEffect(() => {
     if (controlledValue !== undefined && !formContext) {
       const newHex = normalizeToHex(
         controlledValue,
-        formatProp ?? detectFormat(controlledValue) ?? activeFormat,
+        formatProp ?? detectFormat(controlledValue) ?? activeFormatRef.current,
       )
       setHexValue(newHex)
-      setStringInput(hexToFormat(newHex, activeFormat))
+      setStringInput(hexToFormat(newHex, activeFormatRef.current))
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [controlledValue])
-
-  function commitString(onFieldChange?: (v: string) => void) {
-    const parsed = formatToHex(stringInput, activeFormat)
-    if (parsed) {
-      setHexValue(parsed)
-      const display = hexToFormat(parsed, activeFormat)
-      setStringInput(display)
-      onFieldChange?.(display)
-      onChange?.(display)
-    } else {
-      setStringInput(hexToFormat(hexValue, activeFormat))
-    }
-  }
-
-  function handlePickerChange(
-    e: React.ChangeEvent<HTMLInputElement>,
-    onFieldChange?: (v: string) => void,
-  ) {
-    const newHex = e.target.value
-    setHexValue(newHex)
-    const display = hexToFormat(newHex, activeFormat)
-    setStringInput(display)
-    onFieldChange?.(display)
-    onChange?.(display)
-  }
-
-  function handleFormatChange(fmt: ColorFormat, onFieldChange?: (v: string) => void) {
-    setActiveFormat(fmt)
-    const display = hexToFormat(hexValue, fmt)
-    setStringInput(display)
-    onFieldChange?.(display)
-    onChange?.(display)
-  }
-
-  function renderControl(
-    hasError: boolean,
-    onFieldChange?: (v: string) => void,
-    onFieldBlur?: () => void,
-  ) {
-    return (
-      <div className={cn("flex items-center gap-2", props.disabled && "opacity-50 pointer-events-none")}>
-        {/* Swatch — overflow-hidden removed so focus ring is not clipped */}
-        <div
-          className={cn(
-            "relative size-9 flex-shrink-0 rounded-md border border-input shadow-xs",
-            "has-[:focus-visible]:border-ring has-[:focus-visible]:ring-2 has-[:focus-visible]:ring-ring/50",
-            hasError && "border-destructive",
-          )}
-        >
-          <input
-            type="color"
-            className="absolute inset-0 size-full cursor-pointer opacity-0"
-            value={hexValue}
-            onChange={(e) => handlePickerChange(e, onFieldChange)}
-            onBlur={onFieldBlur}
-            disabled={props.disabled}
-          />
-          <div
-            className="absolute inset-0 rounded-md pointer-events-none"
-            style={{ backgroundColor: hexValue }}
-          />
-        </div>
-
-        {showFormatValue && (
-          <InputGroup className={cn("flex-1", hasError && "border-destructive")}>
-            <InputGroupInput
-              value={stringInput}
-              onChange={(e) => setStringInput(e.target.value)}
-              onBlur={() => commitString(onFieldChange)}
-              onKeyDown={(e) => {
-                if (e.key === "Enter") {
-                  e.preventDefault()
-                  commitString(onFieldChange)
-                }
-              }}
-              aria-invalid={hasError || undefined}
-            />
-            {!isFormatLocked && (
-              <InputGroupAddon align="inline-end">
-                <DropdownMenu>
-                  <DropdownMenuTrigger asChild>
-                    <InputGroupButton size="xs">
-                      {FORMAT_LABELS[activeFormat]}
-                      <ChevronDown data-icon="inline-end" />
-                    </InputGroupButton>
-                  </DropdownMenuTrigger>
-                  <DropdownMenuContent align="end">
-                    <DropdownMenuGroup>
-                      {ALL_FORMATS.map((fmt) => (
-                        <DropdownMenuItem
-                          key={fmt}
-                          onSelect={() => handleFormatChange(fmt, onFieldChange)}
-                        >
-                          {FORMAT_LABELS[fmt]}
-                        </DropdownMenuItem>
-                      ))}
-                    </DropdownMenuGroup>
-                  </DropdownMenuContent>
-                </DropdownMenu>
-              </InputGroupAddon>
-            )}
-          </InputGroup>
-        )}
-      </div>
-    )
-  }
 
   if (formContext) {
     return (
@@ -220,9 +212,62 @@ function IGRPInputColor({
         required={required}
         control={formContext.control}
       >
-        {(field, fieldState) =>
-          renderControl(!!fieldState.error || !!error, field.onChange, field.onBlur)
-        }
+        {(field, fieldState) => (
+          <ColorControl
+            hexValue={hexValue}
+            stringInput={stringInput}
+            activeFormat={activeFormat}
+            isFormatLocked={isFormatLocked}
+            showFormatValue={showFormatValue}
+            disabled={props.disabled}
+            hasError={!!fieldState.error || !!error}
+            onPickerChange={(e) => {
+              const newHex = e.target.value
+              setHexValue(newHex)
+              const display = hexToFormat(newHex, activeFormat)
+              setStringInput(display)
+              field.onChange(display)
+              onChange?.(display)
+            }}
+            onStringChange={(e) => setStringInput(e.target.value)}
+            onBlur={() => {
+              const parsed = formatToHex(stringInput, activeFormat)
+              if (parsed) {
+                setHexValue(parsed)
+                const display = hexToFormat(parsed, activeFormat)
+                setStringInput(display)
+                field.onChange(display)
+                onChange?.(display)
+              } else {
+                setStringInput(hexToFormat(hexValue, activeFormat))
+              }
+              field.onBlur()
+            }}
+            onKeyDown={(e) => {
+              if (e.key === "Enter") {
+                e.preventDefault()
+                const parsed = formatToHex(stringInput, activeFormat)
+                if (parsed) {
+                  setHexValue(parsed)
+                  const display = hexToFormat(parsed, activeFormat)
+                  setStringInput(display)
+                  field.onChange(display)
+                  onChange?.(display)
+                } else {
+                  setStringInput(hexToFormat(hexValue, activeFormat))
+                }
+              }
+            }}
+            onFormatChange={(fmt) => {
+              setActiveFormat(fmt)
+              const display = hexToFormat(hexValue, fmt)
+              setStringInput(display)
+              field.onChange(display)
+              onChange?.(display)
+            }}
+            label={label}
+          />
+        )}
       </IGRPFormField>
     )
   }
@@ -233,13 +278,60 @@ function IGRPInputColor({
         <IGRPLabel label={label} className={labelClassName} required={required} id={fieldName} />
       )}
 
-      {renderControl(!!error)}
+      <ColorControl
+        hexValue={hexValue}
+        stringInput={stringInput}
+        activeFormat={activeFormat}
+        isFormatLocked={isFormatLocked}
+        showFormatValue={showFormatValue}
+        disabled={props.disabled}
+        hasError={!!error}
+        onPickerChange={(e) => {
+          const newHex = e.target.value
+          setHexValue(newHex)
+          const display = hexToFormat(newHex, activeFormat)
+          setStringInput(display)
+          onChange?.(display)
+        }}
+        onStringChange={(e) => setStringInput(e.target.value)}
+        onBlur={() => {
+          const parsed = formatToHex(stringInput, activeFormat)
+          if (parsed) {
+            setHexValue(parsed)
+            const display = hexToFormat(parsed, activeFormat)
+            setStringInput(display)
+            onChange?.(display)
+          } else {
+            setStringInput(hexToFormat(hexValue, activeFormat))
+          }
+        }}
+        onKeyDown={(e) => {
+          if (e.key === "Enter") {
+            e.preventDefault()
+            const parsed = formatToHex(stringInput, activeFormat)
+            if (parsed) {
+              setHexValue(parsed)
+              const display = hexToFormat(parsed, activeFormat)
+              setStringInput(display)
+              onChange?.(display)
+            } else {
+              setStringInput(hexToFormat(hexValue, activeFormat))
+            }
+          }
+        }}
+        onFormatChange={(fmt) => {
+          setActiveFormat(fmt)
+          const display = hexToFormat(hexValue, fmt)
+          setStringInput(display)
+          onChange?.(display)
+        }}
+        label={label}
+      />
 
       {helperText && !error && (
         <p
           id={`${fieldName}-helper`}
           className="text-muted-foreground mt-2 text-xs"
-          role="region"
           aria-live="polite"
         >
           {helperText}

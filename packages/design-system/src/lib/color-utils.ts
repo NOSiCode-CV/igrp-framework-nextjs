@@ -130,7 +130,7 @@ function parseOklch(value: string): [number, number, number] | null {
 /** Detect the format of a color string. Returns null if unrecognised. */
 export function detectFormat(value: string): ColorFormat | null {
   const v = value.trim()
-  if (/^#[0-9a-fA-F]{3,6}$/.test(v)) return "hex"
+  if (/^#([0-9a-fA-F]{3}|[0-9a-fA-F]{6})$/.test(v)) return "hex"
   if (/^rgb\(/.test(v)) return "rgb"
   if (/^hsl\(/.test(v)) return "hsl"
   if (/^oklch\(/.test(v)) return "oklch"

@@ -10,6 +10,7 @@ import {
 describe("detectFormat", () => {
   it("detects hex", () => expect(detectFormat("#3b82f6")).toBe("hex"))
   it("detects short hex", () => expect(detectFormat("#fff")).toBe("hex"))
+  it("returns null for 4-char hex", () => expect(detectFormat("#ffff")).toBeNull())
   it("detects rgb", () => expect(detectFormat("rgb(59, 130, 246)")).toBe("rgb"))
   it("detects hsl", () => expect(detectFormat("hsl(217, 91%, 60%)")).toBe("hsl"))
   it("detects oklch", () => expect(detectFormat("oklch(0.546 0.245 262.881)")).toBe("oklch"))

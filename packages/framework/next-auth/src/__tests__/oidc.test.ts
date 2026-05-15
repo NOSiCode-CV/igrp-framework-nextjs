@@ -120,12 +120,18 @@ describe('buildEndSessionUrl', () => {
     expect(url).toBeNull();
   });
 
-  it('returns null when token has no idToken', async () => {
+  it('builds URL without id_token_hint when idToken is absent', async () => {
     mockFetch([{ url: DISCOVERY_URL, body: MOCK_DISCOVERY }]);
     const { buildEndSessionUrl } = await import('../oidc');
 
     const url = await buildEndSessionUrl(makeToken({ idToken: undefined }), VALID_ENV, 'http://app/login');
-    expect(url).toBeNull();
+
+    expect(url).not.toBeNull();
+    const parsed = new URL(url!);
+    expect(parsed.origin + parsed.pathname).toBe('http://localhost:9090/connect/logout');
+    expect(parsed.searchParams.has('id_token_hint')).toBe(false);
+    expect(parsed.searchParams.get('client_id')).toBe('test-client');
+    expect(parsed.searchParams.get('post_logout_redirect_uri')).toBe('http://app/login');
   });
 
   it('returns null for none provider without making any fetch calls', async () => {

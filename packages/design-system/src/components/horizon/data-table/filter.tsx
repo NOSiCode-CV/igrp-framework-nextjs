@@ -174,8 +174,10 @@ function IGRPDataTableFilterFaceted<TData>({
   const id = useId()
 
   const facets = column?.getFacetedUniqueValues()
-  const [selectedValues, setSelectedValues] = useState<Set<string | number>>(
-    () => new Set((column?.getFilterValue() as string[]) ?? []),
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  const selectedValues = useMemo(
+    () => new Set<string | number>((column?.getFilterValue() as (string | number)[]) ?? []),
+    [column?.getFilterValue()],
   )
 
   const handleSelect = useCallback(
@@ -186,7 +188,6 @@ function IGRPDataTableFilterFaceted<TData>({
       } else {
         next.add(value)
       }
-      setSelectedValues(next)
       const filterValues = Array.from(next)
       column?.setFilterValue(filterValues.length ? filterValues : undefined)
     },
@@ -195,7 +196,6 @@ function IGRPDataTableFilterFaceted<TData>({
 
   const handleClear = useCallback(() => {
     column?.setFilterValue(undefined)
-    setSelectedValues(new Set())
   }, [column])
 
   return (
@@ -220,26 +220,28 @@ function IGRPDataTableFilterFaceted<TData>({
             {showFilter && <CommandInput placeholder={placeholder} className={cn("h-8")} />}
             <CommandEmpty>{labelSearchField}</CommandEmpty>
             <CommandGroup>
-              {options?.map((option, i) => {
-                return (
-                  <CommandItem className={cn("justify-between", className)} key={option.value}>
-                    <div className={cn("flex items-center gap-2")}>
-                      <Checkbox
-                        id={`${id}-${i}`}
-                        checked={selectedValues.has(option.value)}
-                        onCheckedChange={() => handleSelect(option.value)}
-                        className={cn("border-foreground")}
-                      />
-                    </div>
-
-                    <span>{option.label}</span>
-
-                    <span className={cn("ml-auto flex h-4 w-4 items-center justify-center font-mono text-xs")}>
-                      {facets?.get(option.value) || 0}
-                    </span>
-                  </CommandItem>
-                )
-              })}
+              {options?.map((option, i) => (
+                <CommandItem
+                  key={String(option.value)}
+                  value={String(option.value)}
+                  onSelect={() => handleSelect(option.value)}
+                  className={cn("gap-2", className)}
+                >
+                  <Checkbox
+                    id={`${id}-${i}`}
+                    checked={selectedValues.has(option.value)}
+                    onCheckedChange={() => handleSelect(option.value)}
+                    aria-label={option.label}
+                    className={cn("border-foreground")}
+                  />
+                  <label htmlFor={`${id}-${i}`} className="cursor-pointer flex-1">
+                    {option.label}
+                  </label>
+                  <span className="ml-auto font-mono text-xs">
+                    {facets?.get(option.value) ?? 0}
+                  </span>
+                </CommandItem>
+              ))}
             </CommandGroup>
             {selectedValues.size > 0 && (
               <>

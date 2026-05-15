@@ -1,9 +1,13 @@
+import path from "node:path";
+import { fileURLToPath } from "node:url";
 import type { NextConfig } from "next";
 import type { RemotePattern } from "next/dist/shared/lib/image-config";
 
+/** Monorepo root — stops Turbopack from traversing to D:\ while keeping the pnpm .pnpm store in scope for symlink resolution. */
+const turbopackRoot = path.resolve(path.dirname(fileURLToPath(import.meta.url)), "../..");
+
 const basePath = process.env.NEXT_PUBLIC_BASE_PATH || "";
 
-// Function to parse domains from environment variable
 const getRemotePatterns = () => {
   const patterns: Array<{
     protocol: RemotePattern["protocol"];
@@ -18,10 +22,10 @@ const getRemotePatterns = () => {
   extraDomains.forEach((domain) => {
     const trimmedDomain = domain.trim();
     if (trimmedDomain) {
-      patterns.push({
-        protocol: "https" as const,
-        hostname: trimmedDomain,
-      });
+      patterns.push(
+        { protocol: "https" as const, hostname: trimmedDomain },
+        { protocol: "http" as const, hostname: trimmedDomain },
+      );
     }
   });
 
@@ -29,12 +33,15 @@ const getRemotePatterns = () => {
 };
 
 const nextConfig: NextConfig = {
-  // output: "standalone",
+  output: "standalone",
   basePath: basePath,
   images: {
     remotePatterns: getRemotePatterns(),
   },
   typedRoutes: true,
+  turbopack: {
+    root: turbopackRoot,
+  },
   experimental: {
     typedEnv: true,
     optimizePackageImports: [

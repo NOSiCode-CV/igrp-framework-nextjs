@@ -49,10 +49,31 @@ NEXTAUTH_URL=http://localhost:3000
 NEXTAUTH_SECRET=some-random-secret
 
 # Optional
-IGRP_AUTH_SCOPES=openid profile email   # defaults to "openid"
+IGRP_AUTH_SCOPES=openid profile email   # defaults to "openid"; "openid" is always injected automatically
 NEXTAUTH_URL_INTERNAL=http://app:3000   # internal URL for server-to-server calls
 IGRP_PREVIEW_MODE=true                  # bypass auth for local dev (no OIDC needed)
 ```
+
+### Scopes and refresh tokens
+
+`IGRP_AUTH_SCOPES` controls the OAuth2 `scope` parameter sent during the authorization request.
+`openid` is always included automatically — you cannot accidentally omit it.
+
+**Token refresh requires `offline_access`.**
+The framework calls `refreshOidcAccessToken` to silently renew expired access tokens.
+For this to work the IdP must issue a `refresh_token`, which most providers only do when
+`offline_access` is requested:
+
+```bash
+IGRP_AUTH_SCOPES=openid profile email offline_access
+```
+
+Without `offline_access`, the refresh call will have no `refresh_token` to use and the
+session will be marked with `error: "RefreshAccessTokenError"` + `forceLogout: true`,
+causing the client to sign the user out. This is safe behaviour, but avoidable.
+
+> **Note:** Some providers (e.g. WSO2IS) issue refresh tokens by default regardless of
+> `offline_access`. Check your provider's documentation.
 
 ## Supported providers
 

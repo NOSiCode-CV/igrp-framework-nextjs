@@ -127,7 +127,7 @@ export interface IGRPResourceArgs {
 }
 
 export interface IGRPUserArgs {
-  id: number;
+  id: string;
   name: string;
   username?: string;
   email: string;

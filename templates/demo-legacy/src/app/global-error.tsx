@@ -32,7 +32,11 @@ export default function GlobalError({
   return (
     <html lang="pt-PT">
       <body>
-        <IGRPGlobalError error={error} reset={reset} resolveCopy={resolveErrorCopy} />
+        <IGRPGlobalError
+          error={error}
+          reset={reset}
+          resolveCopy={resolveErrorCopy}
+        />
       </body>
     </html>
   );

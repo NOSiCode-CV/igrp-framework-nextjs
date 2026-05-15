@@ -143,6 +143,30 @@ describe('createAuthProviderFromEnv', () => {
     expect(provider.authorization.params.scope).toBe('openid profile email');
   });
 
+  it('always includes openid even when omitted from IGRP_AUTH_SCOPES', () => {
+    const env = { ...VALID_IGRP_AUTH_ENV, IGRP_AUTH_SCOPES: 'profile email' };
+    const provider = createAuthProviderFromEnv(env) as {
+      authorization: { params: { scope: string } };
+    };
+    expect(provider.authorization.params.scope).toBe('openid profile email');
+  });
+
+  it('deduplicates openid when already present in IGRP_AUTH_SCOPES', () => {
+    const env = { ...VALID_IGRP_AUTH_ENV, IGRP_AUTH_SCOPES: 'openid openid profile' };
+    const provider = createAuthProviderFromEnv(env) as {
+      authorization: { params: { scope: string } };
+    };
+    expect(provider.authorization.params.scope).toBe('openid profile');
+  });
+
+  it('normalizes extra internal whitespace in IGRP_AUTH_SCOPES', () => {
+    const env = { ...VALID_IGRP_AUTH_ENV, IGRP_AUTH_SCOPES: '  profile   email  ' };
+    const provider = createAuthProviderFromEnv(env) as {
+      authorization: { params: { scope: string } };
+    };
+    expect(provider.authorization.params.scope).toBe('openid profile email');
+  });
+
   it('returns null for none provider', () => {
     expect(createAuthProviderFromEnv({ AUTH_PROVIDER: 'none' })).toBeNull();
   });

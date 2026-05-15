@@ -4,7 +4,6 @@ import { redirect } from 'next/navigation';
 
 import { igrpGetAccessClientConfig } from '../lib/api-config';
 import { mapperMenus } from '../mappers/menus-mapper';
-import { logger } from '../logger';
 
 async function fetchMenusRaw(appCode: string, token: string, baseUrl: string) {
   const client = AccessManagementClient.create({
@@ -13,7 +12,6 @@ async function fetchMenusRaw(appCode: string, token: string, baseUrl: string) {
     headers: { Authorization: `Bearer ${token}` },
   });
   const result = await client.users.getCurrentUserApplicationMenus(appCode);
-  logger.info('fetchMenusRaw', { result });
   return mapperMenus(result);
 }
 

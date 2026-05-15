@@ -27,7 +27,15 @@ type AuthProviderDefinition = {
 };
 
 const DEFAULT_AUTH_PROVIDER_ID = NONE_PROVIDER_ID;
-const DEFAULT_IGRP_AUTH_SCOPES = 'openid';
+
+// `openid` is mandatory for OIDC — always inject it regardless of what IGRP_AUTH_SCOPES contains.
+function buildScopeString(raw: string | undefined): string {
+  const scopes = new Set(['openid']);
+  if (raw?.trim()) {
+    for (const s of raw.trim().split(/\s+/)) scopes.add(s);
+  }
+  return [...scopes].join(' ');
+}
 
 function getRequiredEnvValue(env: AuthEnvironment, key: string) {
   const value = env[key]?.trim();
@@ -57,7 +65,7 @@ const AUTH_PROVIDER_REGISTRY: Record<AuthProviderId, AuthProviderDefinition> = {
       wellKnown: `${stripTrailingSlash(getRequiredEnvValue(env, 'IGRP_AUTH_ISSUER'))}/.well-known/openid-configuration`,
       authorization: {
         params: {
-          scope: env.IGRP_AUTH_SCOPES?.trim() || DEFAULT_IGRP_AUTH_SCOPES,
+          scope: buildScopeString(env.IGRP_AUTH_SCOPES),
         },
       },
       profile(profile: OAuth2Profile) {

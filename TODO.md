@@ -2,7 +2,7 @@
 
 ## Design System
 
-- Review the input color
+- Review the input color [x]
 - Review Data-table filters
 - fix rthe pagination on mobile
 - Add Switch to the DataTable as checkbox
@@ -75,6 +75,4 @@ Add the following components to the design system:
 
 -- Add dynamic import if the component is not loaded when the page start, example: dialog
 
-## Release
-
-0.1.0-beta.111-2
+## Async slug from applications

@@ -18,9 +18,9 @@ export {
   getDisplayableErrorMessage,
   type PublicErrorId,
   type PublicErrorMessage,
-} from '@igrp/framework-next/app-error';
+} from "@igrp/framework-next/app-error";
 
-export { logger } from '@igrp/framework-next/logger';
+export { logger } from "@igrp/framework-next/logger";
 
 // ── Template-specific errors ─────────────────────────────────────────────────
 
@@ -34,7 +34,7 @@ export class EnvValidationError extends Error {
     public readonly missingVars: string[] = [],
   ) {
     super(message);
-    this.name = 'EnvValidationError';
+    this.name = "EnvValidationError";
     Object.setPrototypeOf(this, EnvValidationError.prototype);
   }
 }
@@ -50,7 +50,7 @@ export class AuthError extends Error {
     public readonly code: string,
   ) {
     super(message);
-    this.name = 'AuthError';
+    this.name = "AuthError";
     Object.setPrototypeOf(this, AuthError.prototype);
   }
 }

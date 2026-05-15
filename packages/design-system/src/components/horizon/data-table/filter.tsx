@@ -115,11 +115,8 @@ function IGRPDataTableFilterDropdown<TData>({
             aria-expanded={open}
             aria-controls={listId}
             size="sm"
-            className={cn(
-              "w-full justify-between",
-              className,
-              disabled && "cursor-not-allowed pointer-events-none opacity-50",
-            )}
+            disabled={disabled}
+            className={cn("w-full justify-between", className)}
           >
             <span>{selectedLabel}</span>
             <IGRPIcon iconName="ChevronsUpDown" />
@@ -287,7 +284,7 @@ function IGRPDataTableFilterInput<TData>({
         name={`text-${id}`}
         ref={inputRef}
         type="text"
-        aria-label="Filtar"
+        aria-label="Filtrar"
       />
       <div
         className={cn(

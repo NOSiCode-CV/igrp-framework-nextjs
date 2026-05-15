@@ -8,7 +8,7 @@ function clamp(n: number, min: number, max: number): number {
 
 function hexToRgbComponents(hex: string): [number, number, number] {
   const h = hex.replace("#", "")
-  const full = h.length === 3 ? h[0] + h[0] + h[1] + h[1] + h[2] + h[2] : h
+  const full = h.length === 3 ? h.charAt(0) + h.charAt(0) + h.charAt(1) + h.charAt(1) + h.charAt(2) + h.charAt(2) : h
   return [
     parseInt(full.slice(0, 2), 16) / 255,
     parseInt(full.slice(2, 4), 16) / 255,
@@ -102,8 +102,8 @@ function oklchToHex(L: number, C: number, H: number): string {
 function parseHex(value: string): string | null {
   const m = value.trim().match(/^#([0-9a-fA-F]{3}|[0-9a-fA-F]{6})$/)
   if (!m) return null
-  const h = m[1]
-  const full = h.length === 3 ? h[0] + h[0] + h[1] + h[1] + h[2] + h[2] : h
+  const h = m[1]!
+  const full = h.length === 3 ? h.charAt(0) + h.charAt(0) + h.charAt(1) + h.charAt(1) + h.charAt(2) + h.charAt(2) : h
   return `#${full.toLowerCase()}`
 }
 

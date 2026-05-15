@@ -4,7 +4,6 @@ import {
   formatToHex,
   detectFormat,
   colorToOklch,
-  type ColorFormat,
 } from "./color-utils"
 
 describe("detectFormat", () => {
@@ -36,13 +35,13 @@ describe("hexToFormat", () => {
   it("hex → oklch black has L≈0", () => {
     const result = hexToFormat("#000000", "oklch")
     const m = result.match(/oklch\(([\d.]+)\s+([\d.]+)\s+([\d.]+)\)/)!
-    expect(parseFloat(m[1])).toBeCloseTo(0, 2)
+    expect(parseFloat(m[1]!)).toBeCloseTo(0, 2)
   })
   it("hex → oklch white has L≈1, C≈0", () => {
     const result = hexToFormat("#ffffff", "oklch")
     const m = result.match(/oklch\(([\d.]+)\s+([\d.]+)\s+([\d.]+)\)/)!
-    expect(parseFloat(m[1])).toBeCloseTo(1, 2)
-    expect(parseFloat(m[2])).toBeCloseTo(0, 2)
+    expect(parseFloat(m[1]!)).toBeCloseTo(1, 2)
+    expect(parseFloat(m[2]!)).toBeCloseTo(0, 2)
   })
 })
 
@@ -71,7 +70,7 @@ describe("round-trip conversions", () => {
       const back = formatToHex(hexToFormat(hex, "oklch"), "oklch")!
       const orig = [parseInt(hex.slice(1, 3), 16), parseInt(hex.slice(3, 5), 16), parseInt(hex.slice(5, 7), 16)]
       const got  = [parseInt(back.slice(1, 3), 16), parseInt(back.slice(3, 5), 16), parseInt(back.slice(5, 7), 16)]
-      orig.forEach((v, i) => expect(Math.abs(v - got[i])).toBeLessThanOrEqual(1))
+      orig.forEach((v, i) => expect(Math.abs(v - got[i]!)).toBeLessThanOrEqual(1))
     })
   }
 })

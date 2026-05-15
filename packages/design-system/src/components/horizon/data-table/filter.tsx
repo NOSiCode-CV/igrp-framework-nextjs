@@ -385,9 +385,9 @@ function IGRPDataTableFilterSelect<TData>({
       </SelectTrigger>
       <SelectContent className={cn(className)}>
         <SelectItem value="all">{placeholder}</SelectItem>
-        {options?.map((value) => (
-          <SelectItem key={String(value)} value={String(value)}>
-            {String(value)}
+        {options?.map((opt) => (
+          <SelectItem key={String(opt.value)} value={String(opt.value)}>
+            {opt.label}
           </SelectItem>
         ))}
       </SelectContent>

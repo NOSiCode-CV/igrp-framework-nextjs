@@ -16,13 +16,13 @@ import {
   CommandSeparator,
 } from "../../primitives/command"
 import { Input } from "../../primitives/input"
+import { Calendar } from "../../primitives/calendar"
 import { Popover, PopoverContent, PopoverTrigger } from "../../primitives/popover"
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "../../primitives/select"
 import { Separator } from "../../primitives/separator"
 import { IGRPBadge } from "../badge"
 import { IGRPButton } from "../button"
 import { IGRPIcon, type IGRPIconName } from "../icon"
-// import { IGRPDatePickerRange } from '../input/date-picker/date-picker-range';
 
 /**
  * Base props for data table filter components.
@@ -49,22 +49,45 @@ interface IGRPDataTableFilterProps<TData> {
   iconName?: IGRPIconName | string
 }
 
-/** @internal Date range filter content; keyed by clearDates to reset when parent requests clear. */
-function IGRPDataTableFilterDateContent<TData>({ column }: { column?: Column<TData, unknown> }) {
-  // Compute during render: placeholder has no date picker UI yet, filter value is undefined
-  const currentFilter = column?.getFilterValue()
-  if (currentFilter !== undefined) {
-    column?.setFilterValue(undefined)
-  }
-  return null
+function formatDate(date: Date): string {
+  return new Intl.DateTimeFormat(undefined, {
+    day: "2-digit",
+    month: "2-digit",
+    year: "numeric",
+  }).format(date)
 }
 
-/** Date range filter (placeholder). */
+/** Date range filter. Opens a popover with a range calendar. */
 function IGRPDataTableFilterDate<TData>({
   column,
   clearDates,
+  placeholder = "Selecionar data...",
 }: Omit<IGRPDataTableFilterProps<TData>, "options" | "placeholderMax">) {
-  return <IGRPDataTableFilterDateContent key={clearDates ? "cleared" : "active"} column={column} />
+  const value = column?.getFilterValue() as { from?: Date; to?: Date } | undefined
+
+  return (
+    <Popover key={clearDates ? "cleared" : "active"}>
+      <PopoverTrigger asChild>
+        <IGRPButton variant="outline" size="sm" className="justify-start">
+          <IGRPIcon iconName="CalendarDays" />
+          {value?.from
+            ? value.to
+              ? `${formatDate(value.from)} – ${formatDate(value.to)}`
+              : formatDate(value.from)
+            : placeholder}
+        </IGRPButton>
+      </PopoverTrigger>
+      <PopoverContent align="start" className="w-auto p-0">
+        <Calendar
+          mode="range"
+          selected={{ from: value?.from, to: value?.to }}
+          onSelect={(range) =>
+            column?.setFilterValue(range?.from ? range : undefined)
+          }
+        />
+      </PopoverContent>
+    </Popover>
+  )
 }
 
 /**

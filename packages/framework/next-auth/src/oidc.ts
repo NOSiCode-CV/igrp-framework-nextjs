@@ -15,16 +15,20 @@ type OpenIdConfiguration = {
   introspection_endpoint?: string;
 };
 
-const openIdConfigurationCache = new Map<string, Promise<OpenIdConfiguration>>();
+const DISCOVERY_CACHE_TTL_MS = 5 * 60 * 1000;
+
+type DiscoveryCacheEntry = { promise: Promise<OpenIdConfiguration>; expiresAt: number };
+
+const openIdConfigurationCache = new Map<string, DiscoveryCacheEntry>();
 
 function getOpenIdConfiguration(discoveryUrl: string) {
-  const cachedConfiguration = openIdConfigurationCache.get(discoveryUrl);
+  const cached = openIdConfigurationCache.get(discoveryUrl);
 
-  if (cachedConfiguration) {
-    return cachedConfiguration;
+  if (cached && cached.expiresAt > Date.now()) {
+    return cached.promise;
   }
 
-  const configurationPromise = fetch(discoveryUrl, {
+  const promise = fetch(discoveryUrl, {
     headers: {
       Accept: 'application/json',
     },
@@ -36,9 +40,15 @@ function getOpenIdConfiguration(discoveryUrl: string) {
     return (await response.json()) as OpenIdConfiguration;
   });
 
-  openIdConfigurationCache.set(discoveryUrl, configurationPromise);
+  openIdConfigurationCache.set(discoveryUrl, {
+    promise,
+    expiresAt: Date.now() + DISCOVERY_CACHE_TTL_MS,
+  });
 
-  return configurationPromise;
+  // Remove poisoned entry so the next call retries
+  promise.catch(() => openIdConfigurationCache.delete(discoveryUrl));
+
+  return promise;
 }
 
 function getProviderIdFromTokenOrEnv(token: JWT, env: AuthEnvironment): AuthProviderId {
@@ -91,6 +101,14 @@ export async function refreshOidcAccessToken(token: JWT, env: AuthEnvironment) {
   }
 
   const refreshedToken = await response.json();
+
+  if (!refreshedToken.access_token || typeof refreshedToken.access_token !== 'string') {
+    return {
+      ...token,
+      error: 'RefreshAccessTokenError',
+      forceLogout: true,
+    };
+  }
 
   return {
     ...token,

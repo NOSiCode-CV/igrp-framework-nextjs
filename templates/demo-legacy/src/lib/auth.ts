@@ -3,7 +3,7 @@ import { redirect } from "next/navigation";
 
 import { igrpSetAccessClientConfig } from "@igrp/framework-next";
 import { isIgrpError } from "@igrp/framework-next/errors";
-import { assertAuthProviderEnv } from "@igrp/framework-next-auth";
+import { assertAuthProviderEnv } from "@igrp/framework-next-auth/providers";
 import { isAuthBypass } from "@/lib/utils";
 import { reportError } from "@/lib/report-error";
 

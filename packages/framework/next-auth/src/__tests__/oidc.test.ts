@@ -94,6 +94,22 @@ describe('refreshOidcAccessToken — expiresAt units', () => {
     const result = await refreshOidcAccessToken(makeToken(), VALID_ENV);
     expect(result.forceLogout).toBe(true);
   });
+
+  it('preserves the existing idToken when refresh response returns empty string', async () => {
+    mockFetch([
+      { url: DISCOVERY_URL, body: MOCK_DISCOVERY },
+      {
+        url: MOCK_DISCOVERY.token_endpoint,
+        body: { access_token: 'new-at', refresh_token: 'new-rt', expires_in: 3600, id_token: '' },
+      },
+    ]);
+
+    const { refreshOidcAccessToken } = await import('../oidc');
+    const token = makeToken({ idToken: 'original-id-token' });
+    const result = await refreshOidcAccessToken(token, VALID_ENV);
+
+    expect(result.idToken).toBe('original-id-token');
+  });
 });
 
 describe('buildEndSessionUrl', () => {
@@ -147,6 +163,18 @@ describe('buildEndSessionUrl', () => {
 
     expect(url).toBeNull();
     expect(fetchSpy).not.toHaveBeenCalled();
+  });
+
+  it('builds URL without id_token_hint when idToken is an empty string', async () => {
+    mockFetch([{ url: DISCOVERY_URL, body: MOCK_DISCOVERY }]);
+    const { buildEndSessionUrl } = await import('../oidc');
+
+    const url = await buildEndSessionUrl(makeToken({ idToken: '' }), VALID_ENV, 'http://app/login');
+
+    expect(url).not.toBeNull();
+    const parsed = new URL(url!);
+    expect(parsed.searchParams.has('id_token_hint')).toBe(false);
+    expect(parsed.searchParams.get('client_id')).toBe('test-client');
   });
 });
 

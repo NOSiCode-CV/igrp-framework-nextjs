@@ -2,16 +2,25 @@
 
 import { signOut } from "@igrp/framework-next-auth/client";
 import { useRouter } from "next/navigation";
-import { useEffect } from "react";
+import { useEffect, useRef } from "react";
 
 import { getLogoutUrl } from "@/actions/igrp/auth";
 import { reportError } from "@/lib/report-error";
 
 export default function LogoutPage() {
   const router = useRouter();
+  const hasStarted = useRef(false);
 
   useEffect(() => {
-    let cancelled = false;
+    // Guard against React Strict Mode double-invoking this effect in dev.
+    // Logout must run exactly once: getLogoutUrl reads the token cookie, then
+    // signOut clears it — a second run finds no token and skips the IdP redirect.
+    if (hasStarted.current) return;
+    hasStarted.current = true;
+
+    const timeout = setTimeout(() => {
+      router.replace("/login");
+    }, 3000);
 
     (async () => {
       try {
@@ -23,29 +32,23 @@ export default function LogoutPage() {
 
         await signOut({ redirect: false });
 
-        if (!cancelled) {
-          if (endSessionUrl) {
-            // Redirect browser to IdP end-session endpoint so the SSO session
-            // is also terminated. The IdP redirects back to /login when done.
-            window.location.replace(endSessionUrl);
-          } else {
-            router.replace("/login");
-          }
+        clearTimeout(timeout);
+
+        if (endSessionUrl) {
+          // Redirect browser to IdP end-session endpoint so the SSO session
+          // is also terminated. The IdP redirects back to /login when done.
+          window.location.replace(endSessionUrl);
+        } else {
+          router.replace("/login");
         }
       } catch (error) {
         reportError(error, { segment: "(auth)/logout" });
-        if (!cancelled) router.replace("/login");
+        clearTimeout(timeout);
+        router.replace("/login");
       }
     })();
 
-    // Absolute-worst-case fallback: if the async chain above hangs for any
-    // reason, still leave the page after 3 seconds.
-    const timeout = setTimeout(() => {
-      if (!cancelled) router.replace("/login");
-    }, 3000);
-
     return () => {
-      cancelled = true;
       clearTimeout(timeout);
     };
   }, [router]);

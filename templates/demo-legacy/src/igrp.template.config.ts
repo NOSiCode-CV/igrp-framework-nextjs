@@ -39,8 +39,8 @@ export function createConfig(
           showUser: true,
           showThemeSwitcher: true,
           showIGRPSidebarTrigger: true,
-          showIGRPHeaderTitle: true,
-          showIGRPHeaderLogo: true,
+          showIGRPHeaderTitle: false,
+          showIGRPHeaderLogo: false,
           showSettings: true,
           settingsUrl: process.env.NEXT_PUBLIC_IGRP_SETTINGS_URL || "",
         };
@@ -50,11 +50,11 @@ export function createConfig(
         const menu = preview ? getMockMenus().mockMenus : undefined;
         const apps = preview ? getMockApps().mockApps : undefined;
         return {
-          menuItems: menu,
+          menuItems: menu ?? [],
           user: user,
           defaultOpen: true,
           showAppSwitcher: true,
-          apps: apps,
+          apps: apps ?? [],
           appCenterUrl: process.env.NEXT_IGRP_APP_CENTER_URL || "",
         };
       },

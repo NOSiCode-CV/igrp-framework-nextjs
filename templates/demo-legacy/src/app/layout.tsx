@@ -10,8 +10,8 @@ import { configLayout } from "@/actions/igrp/layout";
 import { createConfig } from "@/igrp.template.config";
 
 export const metadata: Metadata = {
-  title: "IGRP | Centro de Aplicações",
-  description: "IGRP | Centro de Aplicações",
+  title: "IGRP | Template Aplicações",
+  description: "IGRP | Template Aplicações",
   icons: { icon: "/logo-no-text.png" },
 };
 

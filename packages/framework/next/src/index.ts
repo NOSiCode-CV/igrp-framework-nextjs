@@ -1,7 +1,7 @@
 // IMPORTANT: this file cannot use any wildcard exports because it is wrapped in a `use client` boundary
 // IMPORTANT: do _not_ alias any of the exports in this file, this will cause a mismatch between the unbundled exports
 
-export { IGRPGlobalLoading } from './components/glabal-loading';
+export { IGRPGlobalLoading } from './components/global-loading';
 
 export { IGRPLayout, type IGRPLayoutArgs } from './layouts/igrp-layout';
 

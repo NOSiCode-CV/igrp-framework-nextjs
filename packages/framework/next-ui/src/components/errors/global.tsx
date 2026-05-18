@@ -1,6 +1,12 @@
+'use client';
+
 import { useEffect, useState } from 'react';
 import Image from 'next/image';
+import { unstable_rethrow } from 'next/navigation';
 import { cn, IGRPButton } from '@igrp/igrp-framework-react-design-system';
+
+const ANIMATION_DELAY_MS = 300;
+const RESET_DELAY_MS = 1000;
 
 const DEFAULT_COPY = {
   title: 'Ocorreu um erro inesperado.',
@@ -19,19 +25,34 @@ interface IGRPGlobalErrorProps {
    * `DEFAULT_COPY` when omitted or when the resolver returns nothing.
    */
   resolveCopy?: (error: Error) => { title: string; description: string };
+  /** Label for the retry button. Defaults to `'Tentar novamente'`. */
+  resetLabel?: string;
+  /** Label shown while the reset is in progress. Defaults to `'A tentar...'`. */
+  retryingLabel?: string;
+  /** Label prefix for the error reference ID. Defaults to `'ID de referência:'`. */
+  errorRefLabel?: string;
 }
 
 // TODO: check the image
-function IGRPGlobalError({ error, reset, children, resolveCopy }: IGRPGlobalErrorProps) {
+function IGRPGlobalError({
+  error,
+  reset,
+  children,
+  resolveCopy,
+  resetLabel = 'Tentar novamente',
+  retryingLabel = 'A tentar...',
+  errorRefLabel = 'ID de referência:',
+}: IGRPGlobalErrorProps) {
   if (children) return <>{children}</>;
 
   const [isResetting, setIsResetting] = useState(false);
   const [errorVisible, setErrorVisible] = useState(false);
 
   useEffect(() => {
+    unstable_rethrow(error);
     console.error(error);
 
-    const timer = setTimeout(() => setErrorVisible(true), 300);
+    const timer = setTimeout(() => setErrorVisible(true), ANIMATION_DELAY_MS);
     return () => clearTimeout(timer);
   }, [error]);
 
@@ -40,7 +61,7 @@ function IGRPGlobalError({ error, reset, children, resolveCopy }: IGRPGlobalErro
     setTimeout(() => {
       reset();
       setIsResetting(false);
-    }, 1000);
+    }, RESET_DELAY_MS);
   };
 
   const { title, description } = resolveCopy?.(error) ?? DEFAULT_COPY;
@@ -69,7 +90,7 @@ function IGRPGlobalError({ error, reset, children, resolveCopy }: IGRPGlobalErro
               )}
             >
               <p className={cn('text-xs text-gray-500')}>
-                ID de referência:{' '}
+                {errorRefLabel}{' '}
                 <code className={cn('rounded bg-gray-100 px-1 py-0.5 dark:bg-gray-700')}>
                   {error.digest}
                 </code>
@@ -87,7 +108,7 @@ function IGRPGlobalError({ error, reset, children, resolveCopy }: IGRPGlobalErro
               iconName="RefreshCw"
               iconClassName={cn('mr-2 h-4 w-4 transition-transform', isResetting && 'animate-spin')}
             >
-              <span>{isResetting ? 'A tentar...' : 'Tentar novamente'}</span>
+              <span>{isResetting ? retryingLabel : resetLabel}</span>
             </IGRPButton>
           </div>
         </div>

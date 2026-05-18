@@ -80,10 +80,10 @@ const igrpStatsCardValueVariants = cva("font-bold", {
 const igrpStstaCardIconVariants = cva("flex items-center justify-center shrink-0", {
   variants: {
     size: {
-      sm: "h-8 w-8",
-      md: "h-10 w-10",
-      lg: "h-12 w-12",
-      xl: "h-14 w-14",
+      sm: "size-8",
+      md: "size-10",
+      lg: "size-12",
+      xl: "size-14",
     },
     showBackground: {
       true: "",
@@ -434,12 +434,26 @@ function IGRPStatsCardIcon({
 }: IGRPStatsCardIconProps) {
   if (!showIcon && !image) return null
 
+  const iconSizeClass = ({
+    sm: "size-4",
+    md: "size-5",
+    lg: "size-6",
+    xl: "size-7",
+  } as Record<string, string>)[iconSize ?? "md"] ?? "size-5"
+
+  const imageSizes = ({
+    sm: "32px",
+    md: "40px",
+    lg: "48px",
+    xl: "56px",
+  } as Record<string, string>)[iconSize ?? "md"] ?? "40px"
+
   const content = () => {
     if (image) {
-      return <Image src={image} alt={imageAlt || ""} fill sizes="56px" className={cn("object-cover")} unoptimized />
+      return <Image src={image} alt={imageAlt || ""} fill sizes={imageSizes} className={cn("object-cover")} unoptimized />
     }
     if (showIcon && iconName) {
-      return <IGRPIcon iconName={iconName} className={cn("h-6 w-6")} />
+      return <IGRPIcon iconName={iconName} className={cn(iconSizeClass)} />
     }
     return null
   }

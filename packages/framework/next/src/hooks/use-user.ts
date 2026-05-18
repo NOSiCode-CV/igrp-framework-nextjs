@@ -14,15 +14,16 @@ async function fetchCurrentUserRaw(token: string, baseUrl: string) {
   return result.data;
 }
 
+// Hoisted: one stable wrapper for the lifetime of the process.
+// token + baseUrl are passed as args and become part of the cache key automatically.
+const getCachedCurrentUser = unstable_cache(fetchCurrentUserRaw, ['igrp-user'], {
+  revalidate: 60,
+});
+
 export async function fetchCurrentUser() {
   try {
     const { token, baseUrl } = igrpGetAccessClientConfig();
-    const cached = unstable_cache(
-      async () => fetchCurrentUserRaw(token, baseUrl),
-      ['igrp-user', token],
-      { revalidate: 60 },
-    );
-    return await cached();
+    return await getCachedCurrentUser(token, baseUrl);
   } catch (error) {
     if (error instanceof ApiClientError && (error.status === 401 || error.status === 403)) {
       redirect('/login');

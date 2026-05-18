@@ -15,15 +15,31 @@ async function fetchMenusRaw(appCode: string, token: string, baseUrl: string) {
   return mapperMenus(result);
 }
 
+// One unstable_cache wrapper per appCode — preserves dynamic 'igrp-menus-${appCode}'
+// revalidation tag required by revalidateMenusAction.
+const _menuCaches = new Map<
+  string,
+  (token: string, baseUrl: string) => ReturnType<typeof fetchMenusRaw>
+>();
+
+function getMenuCache(appCode: string) {
+  if (!_menuCaches.has(appCode)) {
+    _menuCaches.set(
+      appCode,
+      unstable_cache(
+        (token: string, baseUrl: string) => fetchMenusRaw(appCode, token, baseUrl),
+        ['igrp-menus', appCode],
+        { tags: [`igrp-menus-${appCode}`], revalidate: 300 },
+      ),
+    );
+  }
+  return _menuCaches.get(appCode)!;
+}
+
 export async function fetchMenus(appCode: string) {
   try {
     const { token, baseUrl } = igrpGetAccessClientConfig();
-    const cached = unstable_cache(
-      async () => fetchMenusRaw(appCode, token, baseUrl),
-      ['igrp-menus', appCode, token],
-      { tags: [`igrp-menus-${appCode}`], revalidate: 300 },
-    );
-    return await cached();
+    return await getMenuCache(appCode)(token, baseUrl);
   } catch (error) {
     if (error instanceof ApiClientError && (error.status === 401 || error.status === 403)) {
       redirect('/login');

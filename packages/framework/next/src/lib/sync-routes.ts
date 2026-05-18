@@ -38,7 +38,6 @@ export async function igrpSyncRoutes({
 
   const accessManagementClient = AccessManagementClient.create(config, m2mConfig);
 
-  // ---- FIX 3: Parse ParamMap entries ----
   const paramMap: Record<string, object> = {};
   const lineRegex = /"([^"]+)"\s*:\s*(\{[\s\S]*?});?/g;
 
@@ -55,7 +54,6 @@ export async function igrpSyncRoutes({
   // ---- Excluded routes ----
   const excludedRoutes = ['/login', '/logout', '/[...not-found]'];
 
-  // ---- FIX 4: Filter static routes & exclude unwanted ----
   const menuRoutes = appRoutes.filter((route) => {
     const entry = paramMap[route];
 

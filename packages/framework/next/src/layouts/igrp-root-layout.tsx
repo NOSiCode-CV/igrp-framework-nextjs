@@ -8,8 +8,6 @@ export type IGRPRootLayoutArgs = {
 };
 
 export async function IGRPRootLayout({ children, config }: IGRPRootLayoutArgs) {
-  const layoutConfig = config;
-
   const {
     font,
     layout,
@@ -19,7 +17,7 @@ export async function IGRPRootLayout({ children, config }: IGRPRootLayoutArgs) {
     apiManagementConfig,
     appCode,
     layoutMockData,
-  } = layoutConfig;
+  } = config;
 
   const { session, activeThemeValue, isScaled } = layout;
 

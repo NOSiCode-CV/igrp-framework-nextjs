@@ -40,7 +40,7 @@ export async function SidebarDataProvider({ config }: SidebarDataProviderProps) 
         menuItems,
         apps,
         appCode,
-        showPreviewMode: false,
+        showPreviewMode: previewMode,
       }}
     />
   );

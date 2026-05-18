@@ -2,7 +2,10 @@
 
 import { useEffect, useState } from 'react';
 import Link from 'next/link';
+import { unstable_rethrow } from 'next/navigation';
 import { cn, IGRPButton } from '@igrp/igrp-framework-react-design-system';
+
+const RESET_DELAY_MS = 400;
 
 /**
  * Props for {@link IGRPSegmentError}.
@@ -45,6 +48,12 @@ export interface IGRPSegmentErrorProps {
 
   /** Label for the reset button. Defaults to `'Tentar novamente'`. */
   resetLabel?: string;
+
+  /** Label shown while the reset is in progress. Defaults to `'A tentar...'`. */
+  retryingLabel?: string;
+
+  /** Label prefix for the error reference ID. Defaults to `'ID de referência:'`. */
+  errorRefLabel?: string;
 }
 
 const DEFAULT_COPY = {
@@ -61,12 +70,15 @@ function IGRPSegmentError({
   homeHref = '/',
   homeLabel = 'Voltar ao início',
   resetLabel = 'Tentar novamente',
+  retryingLabel = 'A tentar...',
+  errorRefLabel = 'ID de referência:',
 }: IGRPSegmentErrorProps) {
   if (children) return <>{children}</>;
 
   const [isResetting, setIsResetting] = useState(false);
 
   useEffect(() => {
+    unstable_rethrow(error);
     // Basic dev-time logging. Templates should compose a `reportError` hook
     // above this boundary for production observability.
     console.error('[IGRPSegmentError]', error);
@@ -79,7 +91,7 @@ function IGRPSegmentError({
     setTimeout(() => {
       reset();
       setIsResetting(false);
-    }, 400);
+    }, RESET_DELAY_MS);
   };
 
   return (
@@ -93,7 +105,7 @@ function IGRPSegmentError({
 
           {error.digest ? (
             <p className={cn('text-xs text-muted-foreground')}>
-              ID de referência:{' '}
+              {errorRefLabel}{' '}
               <code
                 className={cn('rounded bg-muted px-1 py-0.5 font-mono text-xs text-foreground')}
               >
@@ -110,7 +122,7 @@ function IGRPSegmentError({
               iconName="RefreshCw"
               iconClassName={cn('mr-2 h-4 w-4 transition-transform', isResetting && 'animate-spin')}
             >
-              <span>{isResetting ? 'A tentar...' : resetLabel}</span>
+              <span>{isResetting ? retryingLabel : resetLabel}</span>
             </IGRPButton>
             <IGRPButton
               asChild

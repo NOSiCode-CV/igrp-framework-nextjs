@@ -12,11 +12,11 @@ const DEFAULT_TIMEOUT = 10_000;
 // request its own isolated config. This prevents token cross-contamination
 // between concurrent requests during RSC renders.
 //
-// ⚠️  Server Actions have a separate React.cache scope from the page render.
-// They inherit whatever token was most recently set in their own execution
-// context. This is a known limitation for Server Action callers; the typical
-// data-refresh actions (revalidateMenusAction, revalidateAppsAction) do not
-// need the auth token and are unaffected.
+// ⚠️  Server Actions execute in a fresh React.cache scope, so getPerRequestConfig()
+// returns a new default object — any token set during the page RSC render is not
+// visible to Server Actions invoked from that page. The data-refresh actions
+// (revalidateMenusAction, revalidateAppsAction) do not need the auth token and
+// are unaffected.
 const getPerRequestConfig = cache(
   (): IGRPClientRuntimeConfig => ({ token: '', baseUrl: '', timeout: DEFAULT_TIMEOUT }),
 );

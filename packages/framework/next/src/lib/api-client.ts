@@ -1,29 +1,16 @@
 import { AccessManagementClient } from '@igrp/platform-access-management-client-ts';
 import { igrpGetAccessClientConfig, igrpResetAccessClientConfig } from './api-config';
 
-let clientInstance: AccessManagementClient | null = null;
-
-export function igrpResetAccessClient() {
-  clientInstance = null;
-  igrpResetAccessClientConfig();
-}
-
-export async function igrpGetAccessClient(): Promise<AccessManagementClient> {
-  const { baseUrl, token, timeout = 10000 } = igrpGetAccessClientConfig();
-
+export function igrpGetAccessClient(): AccessManagementClient {
+  const { baseUrl } = igrpGetAccessClientConfig();
   if (!baseUrl) {
     throw new Error(
-      'igrpGetAccessClient: baseUrl is not configured. Call igrpSetAccessClientConfig() before making API requests.',
+      'Access Management client is not configured. Call igrpSetAccessClientConfig() first.',
     );
   }
+  return AccessManagementClient.create({ baseUrl });
+}
 
-  clientInstance = AccessManagementClient.create({
-    baseUrl,
-    timeout,
-    headers: {
-      Authorization: `Bearer ${token}`,
-    },
-  });
-
-  return clientInstance;
+export function igrpResetAccessClient(): void {
+  igrpResetAccessClientConfig();
 }

@@ -23,22 +23,27 @@ vi.mock('react', async (importOriginal) => {
 // Dynamic imports AFTER vi.mock so both mocks are in place when modules initialise.
 const { igrpGetAccessClient } = await import('../api-client');
 const { igrpSetAccessClientConfig, igrpResetAccessClientConfig } = await import('../api-config');
+const { AccessManagementClient } = await import('@igrp/platform-access-management-client-ts');
 
 describe('igrpGetAccessClient', () => {
   beforeEach(() => {
     igrpResetAccessClientConfig();
+    vi.mocked(AccessManagementClient.create).mockClear();
   });
 
-  it('throws a clear error when baseUrl is empty', async () => {
+  it('throws a clear error when baseUrl is empty', () => {
     // baseUrl defaults to '' — no igrpSetAccessClientConfig call
-    await expect(igrpGetAccessClient()).rejects.toThrow(
-      'igrpGetAccessClient: baseUrl is not configured. Call igrpSetAccessClientConfig() before making API requests.',
+    expect(() => igrpGetAccessClient()).toThrow(
+      'Access Management client is not configured. Call igrpSetAccessClientConfig() first.',
     );
   });
 
-  it('returns a client when baseUrl is set', async () => {
+  it('returns a client when baseUrl is set', () => {
     igrpSetAccessClientConfig({ baseUrl: 'https://api.example.com', token: 'tok' });
-    const client = await igrpGetAccessClient();
+    const client = igrpGetAccessClient();
     expect(client).toBeDefined();
+    expect(AccessManagementClient.create).toHaveBeenCalledWith(
+      expect.objectContaining({ baseUrl: 'https://api.example.com' }),
+    );
   });
 });

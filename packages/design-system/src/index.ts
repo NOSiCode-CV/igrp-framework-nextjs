@@ -590,7 +590,6 @@ export { IGRPFormField, type IGRPFormFieldProps } from "./components/horizon/for
 export { IGRPForm, type IGRPFormProps, type IGRPFormHandle } from "./components/horizon/form/"
 export { convertValuesToFormData } from "./components/horizon/form/lib/utils"
 export { IGRPFormList, type IGRPFormListProps } from "./components/horizon/form/form-list"
-export { IGRPStandaloneList, type IGRPStandaloneListProps } from "./components/horizon/form/standalone-list"
 
 export {
   IGRPIcon,
@@ -700,8 +699,6 @@ export {
   type IGRPStepperProcessProps,
   type IGRPStepProcessProps,
 } from "./components/horizon/process/stepper"
-
-export { IGRPRepetitiveComponent, type IGRPRepetitiveComponentProps } from "./components/horizon/repetitive-component"
 
 export { IGRPSeparator } from "./components/horizon/separator"
 

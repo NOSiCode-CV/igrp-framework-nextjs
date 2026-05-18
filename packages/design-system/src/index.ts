@@ -395,6 +395,19 @@ export { IGRPAvatar, type IGRPAvatarProps } from "./components/horizon/avatar"
 
 export { IGRPBadge, type IGRPBadgeProps, igrpBadgeVariants } from "./components/horizon/badge"
 
+export {
+  IGRPBreadcrumb,
+  type IGRPBreadcrumbProps,
+  IGRPBreadcrumbList,
+  IGRPBreadcrumbItem,
+  type IGRPBreadcrumbItemProps,
+  type IGRPBreadcrumbItemType,
+  IGRPBreadcrumbLink,
+  IGRPBreadcrumbPage,
+  IGRPBreadcrumbSeparator,
+  IGRPBreadcrumbEllipsis,
+} from "./components/horizon/breadcrumb"
+
 export { IGRPButton, type IGRPButtonProps } from "./components/horizon/button"
 
 export { IGRPCalendarSingle, type IGRPCalendarSingleProps } from "./components/horizon/calendar/single"

@@ -14,7 +14,7 @@ import {
   useSidebar,
 } from '@igrp/igrp-framework-react-design-system';
 import type { IGRPApplicationArgs } from '@igrp/framework-next-types';
-import { useState, useEffect, useMemo } from 'react';
+import { useMemo } from 'react';
 import Image from 'next/image';
 
 import { getLocationOriginURL } from '../../lib/utils';
@@ -29,25 +29,15 @@ interface IGRPTemplateAppSwitcherProps {
 function IGRPTemplateAppSwitcher({ apps, appCode, appCenterUrl }: IGRPTemplateAppSwitcherProps) {
   const { isMobile } = useSidebar();
 
-  const currentApp = useMemo(() => {
+  const activeApp = useMemo(() => {
     if (!apps || apps.length === 0) return undefined;
     return appCode ? apps.find((item) => item.code === appCode) : apps[0];
   }, [apps, appCode]);
 
-  const [activeApp, setActiveApp] = useState<IGRPApplicationArgs | undefined>(currentApp);
-  const [listApps, setListApps] = useState<IGRPApplicationArgs[]>(() => {
-    if (!apps || !currentApp) return [];
-    return apps.filter((item) => item.id !== currentApp.id);
-  });
-
-  useEffect(() => {
-    if (currentApp) {
-      setActiveApp(currentApp);
-      if (apps) {
-        setListApps(apps.filter((item) => item.id !== currentApp.id));
-      }
-    }
-  }, [currentApp, apps]);
+  const listApps = useMemo(() => {
+    if (!apps || !activeApp) return [];
+    return apps.filter((item) => item.id !== activeApp.id);
+  }, [apps, activeApp]);
 
   const getAppUrl = (app: IGRPApplicationArgs): string => {
     if (app.url) return app.url;

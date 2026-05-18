@@ -1,6 +1,6 @@
 'use client';
 
-import { useCallback, useEffect, useState } from 'react';
+import { Fragment, useCallback, useEffect, useMemo, useState } from 'react';
 import {
   cn,
   IGRPIcon,
@@ -15,6 +15,8 @@ import {
 } from '@igrp/igrp-framework-react-design-system';
 
 export interface IGRPCommandItem {
+  /** Optional stable identifier for use as React key. Falls back to label. */
+  id?: string;
   /** Display label shown in the command list. */
   label: string;
   /** Lucide icon name rendered before the label. Optional. */
@@ -55,13 +57,17 @@ function IGRPTemplateCommandSearch({ commands = [] }: IGRPTemplateCommandSearchP
   }, []);
 
   // Group commands by their `group` field. Items without a group are collected under undefined.
-  const grouped = commands.reduce<Map<string | undefined, IGRPCommandItem[]>>((acc, item) => {
-    const key = item.group;
-    const list = acc.get(key) ?? [];
-    list.push(item);
-    acc.set(key, list);
-    return acc;
-  }, new Map());
+  const grouped = useMemo(
+    () =>
+      commands.reduce<Map<string | undefined, IGRPCommandItem[]>>((acc, item) => {
+        const key = item.group;
+        const list = acc.get(key) ?? [];
+        list.push(item);
+        acc.set(key, list);
+        return acc;
+      }, new Map()),
+    [commands],
+  );
 
   return (
     <>
@@ -90,12 +96,12 @@ function IGRPTemplateCommandSearch({ commands = [] }: IGRPTemplateCommandSearchP
         <CommandList>
           <CommandEmpty>Sem Resultados.</CommandEmpty>
           {Array.from(grouped.entries()).map(([group, items], groupIndex) => (
-            <>
-              {groupIndex > 0 && <CommandSeparator key={`sep-${group ?? 'ungrouped'}`} />}
-              <CommandGroup key={group ?? 'ungrouped'} heading={group}>
+            <Fragment key={group ?? 'ungrouped'}>
+              {groupIndex > 0 && <CommandSeparator />}
+              <CommandGroup heading={group}>
                 {items.map((item) => (
                   <CommandItem
-                    key={item.label}
+                    key={item.id ?? item.label}
                     onSelect={() => runCommand(item.onSelect)}
                   >
                     {item.icon && <IGRPIcon iconName={item.icon} className={cn('mr-2')} />}
@@ -103,7 +109,7 @@ function IGRPTemplateCommandSearch({ commands = [] }: IGRPTemplateCommandSearchP
                   </CommandItem>
                 ))}
               </CommandGroup>
-            </>
+            </Fragment>
           ))}
         </CommandList>
       </CommandDialog>

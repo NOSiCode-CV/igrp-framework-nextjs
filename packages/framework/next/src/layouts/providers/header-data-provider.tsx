@@ -17,9 +17,9 @@ export async function HeaderDataProvider({
   breadcrumbRouteLabels,
 }: HeaderDataProviderProps) {
   const { previewMode, layoutMockData } = config;
-  const headerData = await layoutMockData.getHeaderData();
 
   if (previewMode) {
+    const headerData = await layoutMockData.getHeaderData();
     return (
       <IGRPTemplateHeader
         data={headerData}
@@ -29,7 +29,11 @@ export async function HeaderDataProvider({
     );
   }
 
-  const user = await fetchCurrentUser();
+  // Parallel fetch: both are independent of each other.
+  const [headerData, user] = await Promise.all([
+    layoutMockData.getHeaderData(),
+    fetchCurrentUser(),
+  ]);
 
   return (
     <IGRPTemplateHeader

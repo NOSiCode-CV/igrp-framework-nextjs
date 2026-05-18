@@ -42,7 +42,11 @@ export {
   type BreadcrumbItem,
 } from './components/templates/breadcrumbs';
 
-export { IGRPTemplateCommandSearch } from './components/templates/command-search';
+export {
+  IGRPTemplateCommandSearch,
+  type IGRPTemplateCommandSearchProps,
+  type IGRPCommandItem,
+} from './components/templates/command-search';
 
 export { IGRPTemplateHeader } from './components/templates/header';
 

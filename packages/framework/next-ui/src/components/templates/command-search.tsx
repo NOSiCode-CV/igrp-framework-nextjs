@@ -1,7 +1,6 @@
 'use client';
 
 import { useCallback, useEffect, useState } from 'react';
-import { useRouter } from 'next/navigation';
 import {
   cn,
   IGRPIcon,
@@ -15,24 +14,36 @@ import {
   CommandSeparator,
 } from '@igrp/igrp-framework-react-design-system';
 
-// TODO: Search items
+export interface IGRPCommandItem {
+  /** Display label shown in the command list. */
+  label: string;
+  /** Lucide icon name rendered before the label. Optional. */
+  icon?: string;
+  /** Group heading the item appears under. Items without a group are shown ungrouped. */
+  group?: string;
+  /** Called when the user selects this item. */
+  onSelect: () => void;
+}
 
-function IGRPTemplateCommandSearch() {
+interface IGRPTemplateCommandSearchProps {
+  /** Command items to render in the palette. When omitted, the palette shows only the empty state. */
+  commands?: IGRPCommandItem[];
+}
+
+function IGRPTemplateCommandSearch({ commands = [] }: IGRPTemplateCommandSearchProps) {
   const [open, setOpen] = useState(false);
-  const router = useRouter();
 
   useEffect(() => {
     const controller = new AbortController();
-    const signal = controller.signal;
 
     const down = (e: KeyboardEvent) => {
       if (e.key === 'k' && (e.metaKey || e.ctrlKey)) {
         e.preventDefault();
-        setOpen((open) => !open);
+        setOpen((prev) => !prev);
       }
     };
 
-    document.addEventListener('keydown', down, { signal });
+    document.addEventListener('keydown', down, { signal: controller.signal });
     return () => {
       controller.abort();
     };
@@ -42,6 +53,15 @@ function IGRPTemplateCommandSearch() {
     setOpen(false);
     command();
   }, []);
+
+  // Group commands by their `group` field. Items without a group are collected under undefined.
+  const grouped = commands.reduce<Map<string | undefined, IGRPCommandItem[]>>((acc, item) => {
+    const key = item.group;
+    const list = acc.get(key) ?? [];
+    list.push(item);
+    acc.set(key, list);
+    return acc;
+  }, new Map());
 
   return (
     <>
@@ -69,53 +89,26 @@ function IGRPTemplateCommandSearch() {
         <CommandInput placeholder="Digite um comando ou pesquisa..." />
         <CommandList>
           <CommandEmpty>Sem Resultados.</CommandEmpty>
-          <CommandGroup heading="Suggestions">
-            <CommandItem onSelect={() => runCommand(() => router.push('/'))}>
-              <IGRPIcon iconName="House" className={cn('mr-2')} />
-              <span>Home</span>
-            </CommandItem>
-            <CommandItem onSelect={() => runCommand(() => router.push('/'))}>
-              <IGRPIcon iconName="House" className={cn('mr-2')} />
-              <span>Library</span>
-            </CommandItem>
-            <CommandItem onSelect={() => runCommand(() => router.push('/docs'))}>
-              <IGRPIcon iconName="FileText" className={cn('mr-2')} />
-              <span>Documentation</span>
-            </CommandItem>
-            <CommandItem onSelect={() => runCommand(() => router.push('/settings'))}>
-              <IGRPIcon iconName="Settings" className={cn('mr-2')} />
-              <span>Settings</span>
-            </CommandItem>
-          </CommandGroup>
-          <CommandSeparator />
-          <CommandGroup heading="Team">
-            <CommandItem onSelect={() => runCommand(() => router.push('/team/invite'))}>
-              <IGRPIcon iconName="UserPlus" className={cn('mr-2')} />
-              <span>Invite Members</span>
-            </CommandItem>
-          </CommandGroup>
-          <CommandSeparator />
-          <CommandGroup heading="Profile">
-            <CommandItem onSelect={() => runCommand(() => router.push('/profile'))}>
-              <IGRPIcon iconName="User" className={cn('mr-2')} />
-              <span>Profile</span>
-            </CommandItem>
-            <CommandItem onSelect={() => runCommand(() => router.push('/logout'))}>
-              <IGRPIcon iconName="LogOut" className={cn('mr-2')} />
-              <span>Logout</span>
-            </CommandItem>
-          </CommandGroup>
-          <CommandSeparator />
-          <CommandGroup heading="Support">
-            <CommandItem onSelect={() => runCommand(() => router.push('/help'))}>
-              <IGRPIcon iconName="LifeBuoy" className={cn('mr-2')} />
-              <span>Help</span>
-            </CommandItem>
-          </CommandGroup>
+          {Array.from(grouped.entries()).map(([group, items], groupIndex) => (
+            <>
+              {groupIndex > 0 && <CommandSeparator key={`sep-${group ?? 'ungrouped'}`} />}
+              <CommandGroup key={group ?? 'ungrouped'} heading={group}>
+                {items.map((item) => (
+                  <CommandItem
+                    key={item.label}
+                    onSelect={() => runCommand(item.onSelect)}
+                  >
+                    {item.icon && <IGRPIcon iconName={item.icon} className={cn('mr-2')} />}
+                    <span>{item.label}</span>
+                  </CommandItem>
+                ))}
+              </CommandGroup>
+            </>
+          ))}
         </CommandList>
       </CommandDialog>
     </>
   );
 }
 
-export { IGRPTemplateCommandSearch };
+export { IGRPTemplateCommandSearch, type IGRPTemplateCommandSearchProps };

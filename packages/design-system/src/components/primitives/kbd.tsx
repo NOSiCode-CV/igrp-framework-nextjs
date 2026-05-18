@@ -1,3 +1,4 @@
+// shadcn: 2026-05-18
 import { cn } from "../../lib/utils"
 
 function Kbd({ className, ...props }: React.ComponentProps<"kbd">) {

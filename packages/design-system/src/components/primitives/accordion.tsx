@@ -1,3 +1,4 @@
+// shadcn: 2026-05-18
 // IGRP CUSTOM: THIS COMPONENT IS CHANGED FROM THE ORIGINAL
 
 import * as AccordionPrimitive from "@radix-ui/react-accordion"

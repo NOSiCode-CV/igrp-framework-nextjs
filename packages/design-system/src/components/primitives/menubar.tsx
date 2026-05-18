@@ -1,3 +1,4 @@
+// shadcn: 2026-05-18
 import * as MenubarPrimitive from "@radix-ui/react-menubar"
 import { CheckIcon, ChevronRightIcon, CircleIcon } from "lucide-react"
 

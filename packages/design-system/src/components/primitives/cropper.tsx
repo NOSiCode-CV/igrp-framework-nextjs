@@ -1,3 +1,4 @@
+// shadcn: 2026-05-18
 import { Cropper as CropperPrimitive } from "@origin-space/image-cropper"
 
 import { cn } from "../../lib/utils"

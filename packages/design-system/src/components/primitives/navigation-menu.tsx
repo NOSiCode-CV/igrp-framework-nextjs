@@ -1,3 +1,4 @@
+// shadcn: 2026-05-18
 /* eslint-disable react-refresh/only-export-components */
 
 import * as NavigationMenuPrimitive from "@radix-ui/react-navigation-menu"

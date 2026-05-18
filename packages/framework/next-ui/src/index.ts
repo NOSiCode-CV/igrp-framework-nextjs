@@ -64,7 +64,7 @@ export {
   type IGRPTemplateNotFoundProps,
 } from './components/templates/not-found';
 
-export { IGRPTemplateNotifications } from './components/templates/notifications';
+export { IGRPTemplateNotifications, type IGRPTemplateNotificationsProps } from './components/templates/notifications';
 
 export { IGRPSessionWatcher } from './components/templates/session-watcher';
 

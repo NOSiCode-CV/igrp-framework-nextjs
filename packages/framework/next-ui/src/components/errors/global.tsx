@@ -43,18 +43,19 @@ function IGRPGlobalError({
   retryingLabel = 'A tentar...',
   errorRefLabel = 'ID de referência:',
 }: IGRPGlobalErrorProps) {
-  if (children) return <>{children}</>;
-
   const [isResetting, setIsResetting] = useState(false);
   const [errorVisible, setErrorVisible] = useState(false);
 
   useEffect(() => {
+    if (children) return;
     unstable_rethrow(error);
     console.error(error);
 
     const timer = setTimeout(() => setErrorVisible(true), ANIMATION_DELAY_MS);
     return () => clearTimeout(timer);
-  }, [error]);
+  }, [error, children]);
+
+  if (children) return <>{children}</>;
 
   const handleReset = () => {
     setIsResetting(true);

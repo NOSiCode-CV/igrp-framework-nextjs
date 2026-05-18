@@ -51,9 +51,19 @@ function IGRPButton({
 
   const { size } = props
 
-  const computedIconSize = iconSize || (size === "sm" ? 14 : size === "lg" ? 20 : size === "icon" ? 18 : 16)
+  const computedIconClassName = ({
+    xs: "size-3",
+    sm: "size-3.5",
+    lg: "size-5",
+    icon: "size-4",
+    "icon-xs": "size-3",
+    "icon-sm": "size-3.5",
+    "icon-lg": "size-5",
+  } as Record<string, string>)[size as string] ?? "size-4"
 
-  const LoadingIcon = <IGRPIcon iconName="LoaderCircle" className={cn("animate-spin")} aria-hidden="true" />
+  const LoadingIcon = (
+    <IGRPIcon iconName="LoaderCircle" className={cn("animate-spin", computedIconClassName)} aria-hidden="true" />
+  )
 
   if (size === "icon" || size === "icon-xs" || size === "icon-sm" || size === "icon-lg") {
     return (
@@ -70,7 +80,7 @@ function IGRPButton({
             <span className={cn("sr-only")}>{loadingText}</span>
           </>
         ) : (
-          <IGRPIcon iconName={iconName} className={cn(iconClassName)} aria-hidden="true" />
+          <IGRPIcon iconName={iconName} className={cn(computedIconClassName, iconClassName)} aria-hidden="true" />
         )}
       </Button>
     )
@@ -88,13 +98,13 @@ function IGRPButton({
         ? LoadingIcon
         : showIcon &&
           iconPlacement === "start" && (
-            <IGRPIcon iconName={iconName} className={cn(iconClassName)} size={computedIconSize} aria-hidden="true" />
+            <IGRPIcon iconName={iconName} className={cn(computedIconClassName, iconClassName)} aria-hidden="true" />
           )}
 
       {loading && loadingText ? loadingText : children}
 
       {!loading && showIcon && iconPlacement === "end" && (
-        <IGRPIcon iconName={iconName} className={cn(iconClassName)} size={computedIconSize} aria-hidden="true" />
+        <IGRPIcon iconName={iconName} className={cn(computedIconClassName, iconClassName)} aria-hidden="true" />
       )}
 
       {loading && iconPlacement === "end" && LoadingIcon}

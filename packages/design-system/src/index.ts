@@ -579,6 +579,24 @@ export {
   IGRPDataTableFacetedFilterFn,
   IGRPDataTableTextFilterFn,
 } from "./components/horizon/data-table/lib/filters-utils"
+export { createIGRPColumnHelper } from "./components/horizon/data-table/column-helper"
+export type {
+  IGRPColumnHelper,
+  IGRPAccessorColumnDef,
+  IGRPCellType,
+  IGRPCellConfig,
+} from "./components/horizon/data-table/column-helper"
+export type {
+  IGRPDataTableAction,
+  IGRPDataTableActionLink,
+  IGRPDataTableActionAlert,
+  IGRPDataTableActionModal,
+  IGRPDataTableActionCustom,
+  IGRPDataTableFilterDescriptor,
+  IGRPDataTableFilterType,
+  IGRPDataTablePaginationConfig,
+  IGRPDataTableQuery,
+} from "./components/horizon/data-table/types"
 
 export {
   IGRPDropdownMenu,

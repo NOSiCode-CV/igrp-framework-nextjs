@@ -618,6 +618,12 @@ export {
 export { IGRPImage, type IGRPImageProps, type IGRPRatioType } from "./components/horizon/image"
 
 export {
+  IGRPImageCropper,
+  type IGRPImageCropperProps,
+  type IGRPImageCropperVariant,
+} from "./components/horizon/image-cropper"
+
+export {
   IGRPInfoCard,
   type IGRPInfoCardProps,
   type IGRPInfoItem,

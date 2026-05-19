@@ -45,11 +45,11 @@
     "clean-all": "rimraf node_modules && rimraf dist && rimraf tsconfig.tsbuildinfo"
   },
   "peerDependencies": {
-     "next": "^15.5.18",
+    "next": "^15.5.18",
     "react": "^19.2.6",
     "react-dom": "^19.2.6"
   },
-  "dependencies": {   
+  "dependencies": {
     "@hookform/resolvers": "^5.2.2",
     "@origin-space/image-cropper": "^0.1.9",
     "@radix-ui/react-accordion": "^1.2.12",
@@ -88,6 +88,7 @@
     "lucide-react": "^0.577.0",
     "next-themes": "^0.4.6",
     "react-day-picker": "^9.11.3",
+    "react-dropzone": "^15.0.0",
     "react-hook-form": "^7.76.0",
     "react-phone-number-input": "3.4.16",
     "react-resizable-panels": "^3.0.6",

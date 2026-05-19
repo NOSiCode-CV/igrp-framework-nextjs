@@ -59,6 +59,16 @@ interface IGRPInputFileProps extends IGRPInputProps {
   removeLabel?: string
   /** Label for the remove-all-files button. Default: "Remover todos". */
   removeAllLabel?: string
+  /** Label shown during drag-active state. Default: "Solte os arquivos aqui". */
+  dragActiveLabel?: string
+  /** Label shown during drag when some files would be rejected. Default: "Alguns arquivos serão rejeitados". */
+  dragRejectLabel?: string
+  /** Prefix for the max file size constraint. Default: "Tamanho máx:". */
+  maxSizeLabel?: string
+  /** Prefix for the max file count constraint. Default: "Máx de arquivos:". */
+  maxFilesLabel?: string
+  /** Title of the rejected-files alert. Default: "Erro no upload". */
+  rejectedAlertTitle?: string
   /**
    * Called whenever the file list changes in `variant="dropzone"`.
    * Use this instead of `onChange` when in dropzone mode.
@@ -86,6 +96,11 @@ interface IGRPDropzoneInternalProps {
   dropzoneHint: string
   removeLabel: string
   removeAllLabel: string
+  dragActiveLabel: string
+  dragRejectLabel: string
+  maxSizeLabel: string
+  maxFilesLabel: string
+  rejectedAlertTitle: string
   onFilesChange?: (files: File[]) => void
   /** react-hook-form field onChange (when inside a form). */
   onFieldChange?: (value: File | FileList | File[] | null) => void
@@ -107,6 +122,11 @@ function IGRPDropzoneInternal({
   dropzoneHint,
   removeLabel,
   removeAllLabel,
+  dragActiveLabel,
+  dragRejectLabel,
+  maxSizeLabel,
+  maxFilesLabel,
+  rejectedAlertTitle,
   onFilesChange,
   onFieldChange,
 }: IGRPDropzoneInternalProps) {
@@ -219,8 +239,8 @@ function IGRPDropzoneInternal({
           <p className="text-sm font-medium">
             {isDragActive
               ? isDragReject
-                ? "Alguns arquivos serão rejeitados"
-                : "Solte os arquivos aqui"
+                ? dragRejectLabel
+                : dragActiveLabel
               : dropzoneLabel}
           </p>
           <p className="text-xs text-muted-foreground">
@@ -230,9 +250,9 @@ function IGRPDropzoneInternal({
               </span>
             )}
             {maxSize && acceptTypes && <span> · </span>}
-            {maxSize && <span>Tamanho máx: {formatFileSize(maxSize)}</span>}
+            {maxSize && <span>{maxSizeLabel} {formatFileSize(maxSize)}</span>}
             {maxFiles && (maxSize || acceptTypes) && <span> · </span>}
-            {maxFiles && <span>Máx de arquivos: {maxFiles}</span>}
+            {maxFiles && <span>{maxFilesLabel} {maxFiles}</span>}
           </p>
         </div>
       </Card>
@@ -240,7 +260,7 @@ function IGRPDropzoneInternal({
       {rejectedFiles.length > 0 && (
         <Alert variant="destructive">
           <AlertCircle className="size-4" />
-          <AlertTitle>Erro no upload</AlertTitle>
+          <AlertTitle>{rejectedAlertTitle}</AlertTitle>
           <AlertDescription>
             <ul className="mt-2 text-sm list-disc pl-5 space-y-1">
               {rejectedFiles.map((item, index) => (
@@ -346,6 +366,11 @@ function IGRPInputFile({
   dropzoneHint = "Tipos aceitos",
   removeLabel = "Remover",
   removeAllLabel = "Remover todos",
+  dragActiveLabel = "Solte os arquivos aqui",
+  dragRejectLabel = "Alguns arquivos serão rejeitados",
+  maxSizeLabel = "Tamanho máx:",
+  maxFilesLabel = "Máx de arquivos:",
+  rejectedAlertTitle = "Erro no upload",
   onFilesChange,
   placeholder,
   onChange,
@@ -379,6 +404,11 @@ function IGRPInputFile({
           dropzoneHint={dropzoneHint}
           removeLabel={removeLabel}
           removeAllLabel={removeAllLabel}
+          dragActiveLabel={dragActiveLabel}
+          dragRejectLabel={dragRejectLabel}
+          maxSizeLabel={maxSizeLabel}
+          maxFilesLabel={maxFilesLabel}
+          rejectedAlertTitle={rejectedAlertTitle}
           onFilesChange={onFilesChange}
         />
       )
@@ -408,6 +438,11 @@ function IGRPInputFile({
             dropzoneHint={dropzoneHint}
             removeLabel={removeLabel}
             removeAllLabel={removeAllLabel}
+            dragActiveLabel={dragActiveLabel}
+            dragRejectLabel={dragRejectLabel}
+            maxSizeLabel={maxSizeLabel}
+            maxFilesLabel={maxFilesLabel}
+            rejectedAlertTitle={rejectedAlertTitle}
             onFilesChange={onFilesChange}
             onFieldChange={field.onChange}
           />

@@ -5,6 +5,7 @@ import { Fragment, useCallback, useId, useReducer } from "react"
 import {
   type ColumnDef,
   type ColumnFiltersState,
+  createColumnHelper,
   type ExpandedState,
   flexRender,
   getCoreRowModel,
@@ -28,10 +29,19 @@ import {
 
 import { cn } from "../../../lib/utils"
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "../../primitives/table"
-import { IGRPIcon } from "../icon"
+import { type IGRPIconName, IGRPIcon } from "../icon"
 import { type IGRPDataTableClientFilterListProps, IGRPDataTableClientFilter } from "./client-filter"
 import { IGRPDataTablePagination, IGRPDataTablePaginationNumeric } from "./pagination"
 import { IGRPDataTableToggleVisibility } from "./toggle-visibility"
+import { IGRPDataTableButtonAlert, IGRPDataTableButtonLink, IGRPDataTableButtonModal } from "./action-button-icon"
+import {
+  IGRPDataTableDropdownMenu,
+  IGRPDataTableDropdownMenuAlert,
+  IGRPDataTableDropdownMenuLink,
+  IGRPDataTableDropdownMenuCustom,
+  type IGRPDataTableActionDropdown,
+} from "./action-dropdown-menu"
+import type { IGRPDataTableAction } from "./types"
 
 /**
  * Props for the IGRPDataTable component.
@@ -84,6 +94,11 @@ interface IGRPDataTableProps<TData, TValue> {
   id?: string
   /** Called after all client-side column filters are cleared via the clear button. */
   onFiltersCleared?: () => void
+  /**
+   * Row actions. ≤2 actions render as inline icon buttons; >2 render as a dropdown menu.
+   * Use `hidden` / `disabled` per-action callbacks to control visibility per row.
+   */
+  actions?: IGRPDataTableAction<TData>[]
 }
 
 type TableState = {
@@ -122,6 +137,106 @@ function tableReducer(state: TableState, action: TableAction): TableState {
   }
 }
 
+/** @internal Renders inline icon buttons (≤2 actions) or a dropdown (>2 actions) for a single row. */
+function IGRPDataTableRowActions<TData>({
+  row,
+  actions,
+}: {
+  row: Row<TData>
+  actions: IGRPDataTableAction<TData>[]
+}) {
+  const visibleActions = actions.filter((a) => !a.hidden?.(row))
+  if (visibleActions.length === 0) return null
+
+  if (visibleActions.length <= 2) {
+    return (
+      <div className="flex items-center gap-1">
+        {visibleActions.map((action, i) => {
+          if (action.type === "link") {
+            return (
+              <IGRPDataTableButtonLink
+                key={i}
+                href={action.href(row)}
+                icon={(action.icon as IGRPIconName) ?? "Eye"}
+                labelTrigger={action.label}
+              />
+            )
+          }
+          if (action.type === "alert") {
+            return (
+              <IGRPDataTableButtonAlert
+                key={i}
+                icon={(action.icon as IGRPIconName) ?? "Trash2"}
+                labelTrigger={action.label}
+                modalTitle={action.title}
+                onClickConfirm={() => action.onConfirm(row)}
+              >
+                {action.description}
+              </IGRPDataTableButtonAlert>
+            )
+          }
+          if (action.type === "modal") {
+            return (
+              <IGRPDataTableButtonModal
+                key={i}
+                icon={(action.icon as IGRPIconName) ?? "Edit"}
+                labelTrigger={action.label}
+              >
+                {action.render(row, () => undefined)}
+              </IGRPDataTableButtonModal>
+            )
+          }
+          if (action.type === "custom") {
+            return <span key={i}>{action.render(row)}</span>
+          }
+          return null
+        })}
+      </div>
+    )
+  }
+
+  // >2 actions: dropdown
+  const dropdownItems: IGRPDataTableActionDropdown[] = []
+  for (const action of visibleActions) {
+    if (action.type === "link") {
+      dropdownItems.push({
+        component: IGRPDataTableDropdownMenuLink,
+        props: { labelTrigger: action.label, href: action.href(row) },
+      })
+    } else if (action.type === "alert") {
+      dropdownItems.push({
+        component: IGRPDataTableDropdownMenuAlert,
+        props: {
+          labelTrigger: action.label,
+          modalTitle: action.title,
+          children: action.description,
+          onClickConfirm: () => action.onConfirm(row),
+        },
+      })
+    } else if (action.type === "modal") {
+      const capturedRender = action.render
+      dropdownItems.push({
+        component: IGRPDataTableDropdownMenuCustom,
+        props: {
+          labelTrigger: action.label,
+          action: () => { capturedRender(row, () => undefined) },
+        },
+      })
+    } else if (action.type === "custom") {
+      const capturedRender = action.render
+      dropdownItems.push({
+        component: IGRPDataTableDropdownMenuCustom,
+        props: {
+          labelTrigger: action.label,
+          action: () => { capturedRender(row) },
+        },
+      })
+    }
+  }
+
+  return <IGRPDataTableDropdownMenu items={dropdownItems} />
+}
+
 /**
  * Data table with sorting, filtering, pagination, and expandable rows.
  * Built on TanStack Table. Use IGRPDataTableHeader*, IGRPDataTableCell*, etc. for column setup.
@@ -152,6 +267,7 @@ function IGRPDataTable<TData, TValue>({
   renderSubComponent,
   id,
   onFiltersCleared,
+  actions,
 }: IGRPDataTableProps<TData, TValue>) {
   const [state, dispatch] = useReducer(tableReducer, {
     columnFilters: [],
@@ -217,10 +333,25 @@ function IGRPDataTable<TData, TValue>({
   const _id = useId()
   const ref = id ?? _id
 
+  const tableHelper = createColumnHelper<TData>()
+  const actionColumn =
+    actions && actions.length > 0
+      ? [
+          tableHelper.display({
+            id: "__igrp_actions__",
+            header: "",
+            cell: ({ row }) => <IGRPDataTableRowActions row={row} actions={actions} />,
+            enableSorting: false,
+            enableHiding: false,
+          }),
+        ]
+      : []
+  const allColumns = [...columns, ...actionColumn] as ColumnDef<TData, TValue>[]
+
   // eslint-disable-next-line react-hooks/incompatible-library
   const table = useReactTable({
     data,
-    columns,
+    columns: allColumns,
 
     getCoreRowModel: getCoreRowModel(),
     getFilteredRowModel: getFilteredRowModel(),
@@ -346,7 +477,7 @@ function IGRPDataTable<TData, TValue>({
               //   '[&:last-child>td:last-child]:rounded-br-lg',
               // )}
               >
-                <TableCell colSpan={columns.length} className={cn("h-24 text-center font-semibold")}>
+                <TableCell colSpan={allColumns.length} className={cn("h-24 text-center font-semibold")}>
                   {notFoundLabel}
                 </TableCell>
               </TableRow>

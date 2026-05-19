@@ -1,7 +1,7 @@
 "use client"
 "use no memo"
 
-import { Fragment, useCallback, useId, useMemo, useReducer } from "react"
+import { Fragment, useCallback, useId, useReducer } from "react"
 import {
   type ColumnDef,
   type ColumnFiltersState,
@@ -396,15 +396,15 @@ function IGRPDataTable<TData, TValue>({
     enableSortingRemoval: false,
   })
 
-  const filterDescriptors = useMemo(() => {
-    return (columns as IGRPAccessorColumnDef<TData>[])
-      .filter((col) => "filter" in col && col.filter)
-      .map((col) => ({
-        columnId: (col as unknown as { accessorKey?: string }).accessorKey ?? "",
-        descriptor: col.filter!,
-      }))
-      .filter(({ columnId }) => columnId !== "")
-  }, [columns])
+  const filterDescriptors = (columns as IGRPAccessorColumnDef<TData>[])
+    .filter(
+      (col): col is IGRPAccessorColumnDef<TData> & { accessorKey: string } =>
+        "filter" in col &&
+        !!col.filter &&
+        "accessorKey" in col &&
+        typeof (col as { accessorKey?: unknown }).accessorKey === "string"
+    )
+    .map((col) => ({ columnId: col.accessorKey, descriptor: col.filter! }))
 
   const NotFoundRowSubComponent = (
     <div className={cn("flex items-center gap-2 p-3")}>
@@ -416,66 +416,68 @@ function IGRPDataTable<TData, TValue>({
   return (
     <div className={cn("flex flex-col gap-4", className)} id={ref}>
       <div className={cn("flex flex-col md:flex-row md:items-center md:justify-between md:flex-1 gap-3")}>
-        {showFilter &&
-          (isServerSide ? (
-            serverFilterComponent
-          ) : (
-            <IGRPDataTableClientFilter
-                  table={table}
-                  filterList={clientFilters || []}
-                  filterLabel={clientClearLabel}
-                  onFiltersCleared={onFiltersCleared}
-                />
-          ))}
-        {filterDescriptors.length > 0 && (
-          <div className={cn("flex md:items-center gap-2 flex-col md:flex-row")}>
-            {filterDescriptors.map(({ columnId, descriptor }) => {
-              const column = table.getColumn(columnId)
-              if (!column) return null
+        <div className="flex md:flex-row flex-col gap-2">
+          {showFilter &&
+            (isServerSide ? (
+              serverFilterComponent
+            ) : (
+              <IGRPDataTableClientFilter
+                table={table}
+                filterList={clientFilters || []}
+                filterLabel={clientClearLabel}
+                onFiltersCleared={onFiltersCleared}
+              />
+            ))}
+          {filterDescriptors.length > 0 && (
+            <div className={cn("flex md:items-center gap-2 flex-col md:flex-row")}>
+              {filterDescriptors.map(({ columnId, descriptor }) => {
+                const column = table.getColumn(columnId)
+                if (!column) return null
 
-              switch (descriptor.type) {
-                case "input":
-                  return (
-                    <IGRPDataTableFilterInput
-                      key={columnId}
-                      column={column}
-                      placeholder={descriptor.placeholder}
-                    />
-                  )
-                case "select":
-                  return (
-                    <IGRPDataTableFilterSelect
-                      key={columnId}
-                      column={column}
-                      options={descriptor.options ?? []}
-                    />
-                  )
-                case "faceted":
-                  return (
-                    <IGRPDataTableFilterFaceted
-                      key={columnId}
-                      column={column}
-                      options={descriptor.options ?? []}
-                    />
-                  )
-                case "date":
-                  return <IGRPDataTableFilterDate key={columnId} column={column} />
-                case "range":
-                  return <IGRPDataTableFilterMinMax key={columnId} column={column} />
-                case "dropdown":
-                  return (
-                    <IGRPDataTableFilterDropdown
-                      key={columnId}
-                      column={column}
-                      options={descriptor.options ?? []}
-                    />
-                  )
-                default:
-                  return descriptor.render?.(column) ?? null
-              }
-            })}
-          </div>
-        )}
+                switch (descriptor.type) {
+                  case "input":
+                    return (
+                      <IGRPDataTableFilterInput
+                        key={columnId}
+                        column={column}
+                        placeholder={descriptor.placeholder}
+                      />
+                    )
+                  case "select":
+                    return (
+                      <IGRPDataTableFilterSelect
+                        key={columnId}
+                        column={column}
+                        options={descriptor.options ?? []}
+                      />
+                    )
+                  case "faceted":
+                    return (
+                      <IGRPDataTableFilterFaceted
+                        key={columnId}
+                        column={column}
+                        options={descriptor.options ?? []}
+                      />
+                    )
+                  case "date":
+                    return <IGRPDataTableFilterDate key={columnId} column={column} />
+                  case "range":
+                    return <IGRPDataTableFilterMinMax key={columnId} column={column} />
+                  case "dropdown":
+                    return (
+                      <IGRPDataTableFilterDropdown
+                        key={columnId}
+                        column={column}
+                        options={descriptor.options ?? []}
+                      />
+                    )
+                  default:
+                    return descriptor.render?.(column) ?? null
+                }
+              })}
+            </div>
+          )}
+        </div>
         {showToggleColumn && (
           <IGRPDataTableToggleVisibility table={table} label={toggleLabel} optionsLabel={toggleOptionsLabel} />
         )}

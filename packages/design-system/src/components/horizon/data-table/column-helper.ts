@@ -47,6 +47,14 @@ export type IGRPCellConfig =
 
 // ─── Extended column definition ──────────────────────────────────────────────
 
+/**
+ * Extended column definition for use with `createIGRPColumnHelper`.
+ *
+ * The `cellType`, `variants`, `format`, `currency`, and `href` fields are
+ * type-level scaffolding for upcoming cell-renderer wiring. They are not yet
+ * consumed by `IGRPDataTable` — columns render as plain text until that follow-up
+ * ships. Use the raw `cell` escape hatch for custom rendering today.
+ */
 export type IGRPAccessorColumnDef<TData, TValue = unknown> = Omit<
   ColumnDef<TData, TValue>,
   "cell"

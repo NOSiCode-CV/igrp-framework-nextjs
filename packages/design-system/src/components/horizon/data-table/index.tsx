@@ -29,7 +29,7 @@ import {
 
 import { cn } from "../../../lib/utils"
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "../../primitives/table"
-import { type IGRPIconName, IGRPIcon } from "../icon"
+import { IGRPIcon } from "../icon"
 import { type IGRPDataTableClientFilterListProps, IGRPDataTableClientFilter } from "./client-filter"
 import { IGRPDataTablePagination, IGRPDataTablePaginationNumeric } from "./pagination"
 import { IGRPDataTableToggleVisibility } from "./toggle-visibility"
@@ -157,7 +157,7 @@ function IGRPDataTableRowActions<TData>({
               <IGRPDataTableButtonLink
                 key={i}
                 href={action.href(row)}
-                icon={(action.icon as IGRPIconName) ?? "Eye"}
+                icon={action.icon ?? "Eye"}
                 labelTrigger={action.label}
                 disabled={action.disabled?.(row)}
               />
@@ -167,7 +167,7 @@ function IGRPDataTableRowActions<TData>({
             return (
               <IGRPDataTableButtonAlert
                 key={i}
-                icon={(action.icon as IGRPIconName) ?? "Trash2"}
+                icon={action.icon ?? "Trash2"}
                 labelTrigger={action.label}
                 modalTitle={action.title}
                 onClickConfirm={() => action.onConfirm(row)}
@@ -181,7 +181,7 @@ function IGRPDataTableRowActions<TData>({
             return (
               <IGRPDataTableButtonModal
                 key={i}
-                icon={(action.icon as IGRPIconName) ?? "Edit"}
+                icon={action.icon ?? "Edit"}
                 labelTrigger={action.label}
                 disabled={action.disabled?.(row)}
                 render={(close) => action.render(row, close)}

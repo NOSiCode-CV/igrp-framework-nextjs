@@ -1,6 +1,6 @@
 "use client"
 
-import { useContext, useState, type ReactElement } from "react"
+import { useCallback, useContext, useState, type ReactElement } from "react"
 import Link from "next/link"
 
 import { cn } from "../../../lib/utils"
@@ -233,7 +233,7 @@ function IGRPDataTableButtonModal({
   tooltipDelayDuration,
 }: IGRPDataTableDialogProps) {
   const [open, setOpen] = useState(false)
-  const close = () => setOpen(false)
+  const close = useCallback(() => setOpen(false), [])
 
   const tooltipProps = {
     label: labelTrigger,

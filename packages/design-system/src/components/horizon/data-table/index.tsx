@@ -159,6 +159,7 @@ function IGRPDataTableRowActions<TData>({
                 href={action.href(row)}
                 icon={(action.icon as IGRPIconName) ?? "Eye"}
                 labelTrigger={action.label}
+                disabled={action.disabled?.(row)}
               />
             )
           }
@@ -170,6 +171,7 @@ function IGRPDataTableRowActions<TData>({
                 labelTrigger={action.label}
                 modalTitle={action.title}
                 onClickConfirm={() => action.onConfirm(row)}
+                disabled={action.disabled?.(row)}
               >
                 {action.description}
               </IGRPDataTableButtonAlert>
@@ -181,9 +183,9 @@ function IGRPDataTableRowActions<TData>({
                 key={i}
                 icon={(action.icon as IGRPIconName) ?? "Edit"}
                 labelTrigger={action.label}
-              >
-                {action.render(row, () => undefined)}
-              </IGRPDataTableButtonModal>
+                disabled={action.disabled?.(row)}
+                render={(close) => action.render(row, close)}
+              />
             )
           }
           if (action.type === "custom") {
@@ -343,6 +345,7 @@ function IGRPDataTable<TData, TValue>({
             cell: ({ row }) => <IGRPDataTableRowActions row={row} actions={actions} />,
             enableSorting: false,
             enableHiding: false,
+            size: actions.length <= 2 ? actions.length * 44 : 44,
           }),
         ]
       : []

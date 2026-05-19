@@ -1,7 +1,7 @@
 "use client"
 "use no memo"
 
-import { Fragment, useCallback, useId, useReducer } from "react"
+import { Fragment, useCallback, useEffect, useId, useReducer } from "react"
 import {
   type ColumnDef,
   type ColumnFiltersState,
@@ -41,7 +41,7 @@ import {
   IGRPDataTableDropdownMenuCustom,
   type IGRPDataTableActionDropdown,
 } from "./action-dropdown-menu"
-import type { IGRPDataTableAction } from "./types"
+import type { IGRPDataTableAction, IGRPDataTablePaginationConfig, IGRPDataTableQuery } from "./types"
 import type { IGRPAccessorColumnDef } from "./column-helper"
 import {
   IGRPDataTableFilterDate,
@@ -108,6 +108,12 @@ interface IGRPDataTableProps<TData, TValue> {
    * Use `hidden` / `disabled` per-action callbacks to control visibility per row.
    */
   actions?: IGRPDataTableAction<TData>[]
+  /** Total row count for server-side pagination display (use with onQueryChange). */
+  rowCount?: number
+  /** Called whenever pagination, sorting, or filters change. Enables server-side mode. */
+  onQueryChange?: (query: IGRPDataTableQuery) => void
+  /** Pagination display configuration. */
+  pagination?: IGRPDataTablePaginationConfig
 }
 
 type TableState = {
@@ -279,6 +285,9 @@ function IGRPDataTable<TData, TValue>({
   id,
   onFiltersCleared,
   actions,
+  rowCount,
+  onQueryChange,
+  pagination,
 }: IGRPDataTableProps<TData, TValue>) {
   const [state, dispatch] = useReducer(tableReducer, {
     columnFilters: [],
@@ -394,7 +403,26 @@ function IGRPDataTable<TData, TValue>({
 
     enableRowSelection: true,
     enableSortingRemoval: false,
+
+    manualPagination: !!onQueryChange,
+    manualSorting: !!onQueryChange,
+    manualFiltering: !!onQueryChange,
+    rowCount: onQueryChange ? (rowCount ?? 0) : undefined,
   })
+
+  const { pageIndex, pageSize } = table.getState().pagination
+  const sorting = table.getState().sorting
+  const columnFilters = table.getState().columnFilters
+
+  useEffect(() => {
+    if (!onQueryChange) return
+    onQueryChange({
+      page: pageIndex,
+      pageSize,
+      sorting: sorting.map((s) => ({ id: s.id, desc: s.desc })),
+      filters: columnFilters.map((f) => ({ id: f.id, value: f.value })),
+    })
+  }, [pageIndex, pageSize, sorting, columnFilters, onQueryChange])
 
   const filterDescriptors = (columns as IGRPAccessorColumnDef<TData>[])
     .filter(
@@ -562,10 +590,18 @@ function IGRPDataTable<TData, TValue>({
 
       {table.getRowCount() > state.pagination.pageSize &&
         showPagination &&
-        (isNumericPagination ? (
-          <IGRPDataTablePaginationNumeric table={table} pageSize={pageSizePagination} className={paginationClassName} />
+        (isNumericPagination || pagination?.type === "numeric" ? (
+          <IGRPDataTablePaginationNumeric
+            table={table}
+            pageSize={pagination?.pageSizeOptions ?? pageSizePagination}
+            className={paginationClassName}
+          />
         ) : (
-          <IGRPDataTablePagination table={table} pageSize={pageSizePagination} className={paginationClassName} />
+          <IGRPDataTablePagination
+            table={table}
+            pageSize={pagination?.pageSizeOptions ?? pageSizePagination}
+            className={paginationClassName}
+          />
         ))}
     </div>
   )

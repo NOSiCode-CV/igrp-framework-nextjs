@@ -395,6 +395,8 @@ export { IGRPAvatar, type IGRPAvatarProps } from "./components/horizon/avatar"
 
 export { IGRPBadge, type IGRPBadgeProps, igrpBadgeVariants } from "./components/horizon/badge"
 
+export { IGRPBanner, type IGRPBannerProps } from "./components/horizon/banner"
+
 export {
   IGRPBreadcrumb,
   type IGRPBreadcrumbProps,

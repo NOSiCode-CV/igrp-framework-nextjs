@@ -78,9 +78,7 @@ function IGRPGlobalError({
             height={200}
             className={cn('mx-auto mb-2')}
           />
-          <h1 className={cn('text-2xl font-bold tracking-tight text-foreground')}>
-            {title}
-          </h1>
+          <h1 className={cn('text-2xl font-bold tracking-tight text-foreground')}>{title}</h1>
           <p className={cn('mb-4 text-base text-muted-foreground')}>{description}</p>
 
           {error.digest && (
@@ -92,9 +90,7 @@ function IGRPGlobalError({
             >
               <p className={cn('text-xs text-muted-foreground')}>
                 {errorRefLabel}{' '}
-                <code className={cn('rounded bg-muted px-1 py-0.5')}>
-                  {error.digest}
-                </code>
+                <code className={cn('rounded bg-muted px-1 py-0.5')}>{error.digest}</code>
               </p>
             </div>
           )}

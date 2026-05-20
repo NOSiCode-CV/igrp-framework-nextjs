@@ -1,5 +1,16 @@
 # @igrp/framework-next
 
+## 0.1.0-beta.133
+
+### Patch Changes
+
+- 56b14c3: Add `showSidebar` prop to `IGRPLayoutFull` to render header-only chrome without a sidebar.
+
+  `IGRPRootProvidersFull` now accepts `sidebar` as optional — when absent, skips `SidebarProvider`/`SidebarInset` and renders a plain flex-column layout instead, avoiding sidebar CSS offsets.
+
+- Updated dependencies [56b14c3]
+  - @igrp/framework-next-ui@0.1.0-beta.132
+
 ## 0.1.0-beta.132
 
 ### Patch Changes

@@ -3,11 +3,7 @@
 import { useMemo } from 'react';
 import { usePathname } from 'next/navigation';
 import type { IGRPMenuItemArgs } from '@igrp/framework-next-types';
-import {
-  cn,
-  IGRPIcon,
-  SidebarGroup,
-} from '@igrp/igrp-framework-react-design-system';
+import { cn, IGRPIcon, SidebarGroup } from '@igrp/igrp-framework-react-design-system';
 
 import { buildMenuSections } from './utils';
 import { SectionGroup } from './section-group';

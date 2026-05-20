@@ -17,6 +17,8 @@ export interface IGRPImageCropperProps {
   src: string
   variant?: IGRPImageCropperVariant
   onCrop?: (blob: Blob) => void
+  /** Called when the crop operation fails. Receives the thrown error. */
+  onError?: (error: unknown) => void
   cropLabel?: string
   className?: string
 }
@@ -57,8 +59,7 @@ async function getCroppedImg(
         resolve(blob)
       }, "image/jpeg")
     })
-  } catch (error) {
-    console.error("Error in getCroppedImg:", error)
+  } catch {
     return null
   }
 }
@@ -69,6 +70,7 @@ export function IGRPImageCropper({
   src,
   variant = "basic",
   onCrop,
+  onError,
   cropLabel = "Crop",
   className,
 }: IGRPImageCropperProps) {
@@ -99,7 +101,7 @@ export function IGRPImageCropper({
         setCroppedImageUrl(newUrl)
       }
     } catch (error) {
-      console.error("Error during cropping:", error)
+      onError?.(error)
       if (showPreview && croppedImageUrl) {
         URL.revokeObjectURL(croppedImageUrl)
         setCroppedImageUrl(null)

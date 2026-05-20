@@ -2,8 +2,8 @@
 "@igrp/framework-next": patch
 ---
 
-fix(framework-next): replace React.cache with module-level object in api-config; remove React.cache wrappers from fetch hooks
+fix(framework-next): replace React.cache with AsyncLocalStorage in api-config
 
-React.cache does not work across Server Action invocations — each call returns a fresh instance, so igrpSetAccessClientConfig and igrpGetAccessClientConfig were operating on different objects, causing "baseUrl is not configured" errors in server actions.
+React.cache only memoizes within an active React render tree. Server Actions run as plain Node.js handlers outside any React context, so each call to getPerRequestConfig() returned a new default object — igrpSetAccessClientConfig and igrpGetAccessClientConfig were operating on different objects, causing "Access Management client is not configured" errors in Server Actions.
 
-api-config now uses a plain module-level mutable object. The fetch hooks (use-user, use-applications, use-menus) drop the outer cache() wrapper; unstable_cache inside each still handles persistent cross-request caching.
+AsyncLocalStorage propagates context through async call chains in both RSC renders and Server Actions, correctly isolating concurrent requests.

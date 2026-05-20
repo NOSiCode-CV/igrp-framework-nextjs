@@ -1,4 +1,4 @@
-import { cache } from 'react';
+import { AsyncLocalStorage } from 'async_hooks';
 
 export type IGRPClientRuntimeConfig = {
   token: string;
@@ -8,21 +8,30 @@ export type IGRPClientRuntimeConfig = {
 
 const DEFAULT_TIMEOUT = 10_000;
 
-// React.cache creates a fresh instance per RSC request, giving each concurrent
-// request its own isolated config. This prevents token cross-contamination
-// between concurrent requests during RSC renders.
+// AsyncLocalStorage propagates context through async call chains in both RSC
+// renders and Server Actions. React.cache only memoizes inside an active React
+// render tree, which means it returns a fresh default object in Server Actions
+// (which run as plain Node.js handlers outside any render context).
 //
-// ⚠️  Server Actions execute in a fresh React.cache scope, so getPerRequestConfig()
-// returns a new default object — any token set during the page RSC render is not
-// visible to Server Actions invoked from that page. The data-refresh actions
-// (revalidateMenusAction, revalidateAppsAction) do not need the auth token and
-// are unaffected.
-const getPerRequestConfig = cache(
-  (): IGRPClientRuntimeConfig => ({ token: '', baseUrl: '', timeout: DEFAULT_TIMEOUT }),
-);
+// enterWith() establishes a new store for the current async context and all
+// async operations that originate from it — set once per request/action, read
+// anywhere downstream in the same async chain.
+const storage = new AsyncLocalStorage<IGRPClientRuntimeConfig>();
+
+function getPerRequestConfig(): IGRPClientRuntimeConfig {
+  return storage.getStore() ?? { token: '', baseUrl: '', timeout: DEFAULT_TIMEOUT };
+}
 
 export function igrpSetAccessClientConfig(config: IGRPClientRuntimeConfig): void {
-  Object.assign(getPerRequestConfig(), config);
+  const current = storage.getStore();
+  if (current) {
+    // Store already established in this async context — update in place.
+    Object.assign(current, config);
+  } else {
+    // No store yet (e.g. first call in a Server Action or RSC render).
+    // enterWith propagates to all downstream async calls in this context.
+    storage.enterWith({ timeout: DEFAULT_TIMEOUT, ...config });
+  }
 }
 
 export function igrpGetAccessClientConfig(): IGRPClientRuntimeConfig {
@@ -30,5 +39,8 @@ export function igrpGetAccessClientConfig(): IGRPClientRuntimeConfig {
 }
 
 export function igrpResetAccessClientConfig(): void {
-  Object.assign(getPerRequestConfig(), { token: '', baseUrl: '', timeout: DEFAULT_TIMEOUT });
+  const current = storage.getStore();
+  if (current) {
+    Object.assign(current, { token: '', baseUrl: '', timeout: DEFAULT_TIMEOUT });
+  }
 }

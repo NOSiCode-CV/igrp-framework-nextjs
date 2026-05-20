@@ -15,8 +15,6 @@ export type IGRPConfigArgs = {
     getSidebarData: () => Promise<IGRPSidebarDataArgs>;
   };
   font?: string;
-  showSidebar?: boolean;
-  showHeader?: boolean;
   showLanguageSelector?: boolean;
   layout: IGRPLayoutConfigArgs;
   apiManagementConfig?: {

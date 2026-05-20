@@ -1,5 +1,11 @@
 # @igrp/framework-next-auth
 
+## 0.1.0-beta.129
+
+### Patch Changes
+
+- f283926: buildEndSessionUrl no longer requires idToken to build the Keycloak end-session URL; idToken fallback in refreshOidcAccessToken now uses || to handle empty-string responses
+
 ## 0.1.0-beta.128
 
 ### Patch Changes

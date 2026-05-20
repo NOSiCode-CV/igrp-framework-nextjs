@@ -1,5 +1,21 @@
 # @igrp/framework-next-ui
 
+## 0.1.0-beta.130
+
+### Patch Changes
+
+- 776aac2: Fix derived-state anti-pattern in app-switcher; bind notification unread count to prop; add unstable_rethrow to error boundaries; add i18n label props to error components; expose commands prop on command search
+- Updated dependencies [ac94a9c]
+- Updated dependencies [a4ef1fe]
+- Updated dependencies [9a0dd9b]
+- Updated dependencies [9f9ee3d]
+- Updated dependencies [72268fd]
+- Updated dependencies [ba86302]
+- Updated dependencies [f283926]
+  - @igrp/igrp-framework-react-design-system@0.1.0-beta.129
+  - @igrp/framework-next-auth@0.1.0-beta.129
+  - @igrp/framework-next-types@0.1.0-beta.130
+
 ## 0.1.0-beta.129
 
 ### Patch Changes

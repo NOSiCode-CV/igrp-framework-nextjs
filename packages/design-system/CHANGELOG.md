@@ -1,5 +1,16 @@
 # @igrp/igrp-framework-react-design-system
 
+## 0.1.0-beta.129
+
+### Patch Changes
+
+- ac94a9c: Promote experimental components to Horizon: IGRPBreadcrumb (with size/color variants and dropdown collapsing), IGRPBanner (cookie and announcement variants), IGRPImageCropper (basic/circular/zoom/preview variants); add dropzone variant to IGRPInputFile with all UI strings configurable as props
+- a4ef1fe: Add success, warning, info as first-class semantic tokens; replace all raw Tailwind colors in IGRPStatsCard with semantic tokens; fix proportional icon sizing in IGRPStatsCard; standardize IGRPButton icon sizes to Tailwind scale and gap to gap-1.5
+- 9a0dd9b: fix(data-table): fix filter state desync, date range picker, clear-all button, select rendering, and a11y issues
+- 9f9ee3d: Add createIGRPColumnHelper with cellType shortcuts, unified actions prop, declarative filter descriptors, onQueryChange server-side callback, and pagination config prop to IGRPDataTable
+- 72268fd: a11y/polish pass: focus rings, motion-safe animations, tabular-nums, text-balance, onError callback, remove stale iconSize prop
+- ba86302: Remove dead experimental components (timeline, sheet, progress, appointment-picker); remove IGRPStandaloneList and IGRPRepetitiveComponent; fix sidebar cookie restore on mount; add shadcn audit date tracking to all primitives
+
 ## 0.1.0-beta.128
 
 ### Patch Changes

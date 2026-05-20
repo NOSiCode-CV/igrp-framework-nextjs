@@ -68,7 +68,10 @@ export {
   type IGRPTemplateNotFoundProps,
 } from './components/templates/not-found';
 
-export { IGRPTemplateNotifications, type IGRPTemplateNotificationsProps } from './components/templates/notifications';
+export {
+  IGRPTemplateNotifications,
+  type IGRPTemplateNotificationsProps,
+} from './components/templates/notifications';
 
 export { IGRPSessionWatcher } from './components/templates/session-watcher';
 
@@ -83,6 +86,17 @@ export {
 
 export { IGRPNestedProviders, type IGRPNestedProvidersArgs } from './components/providers/nested';
 
+export {
+  IGRPRootProvidersFull,
+  type IGRPRootProvidersFullProps,
+} from './components/providers/root-full';
+
+export {
+  IGRPRootProvidersBlank,
+  type IGRPRootProvidersBlankProps,
+} from './components/providers/root-blank';
+
+// @deprecated Use IGRPRootProvidersFull instead.
 export { IGRPRootProviders } from './components/providers/root';
 
 export { IGRPSessionProvider } from './components/providers/session';

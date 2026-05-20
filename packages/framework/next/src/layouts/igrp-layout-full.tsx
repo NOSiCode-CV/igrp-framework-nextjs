@@ -17,6 +17,7 @@ import { SidebarDataProvider } from './providers/sidebar-data-provider';
 export type IGRPLayoutFullArgs = {
   readonly children: React.ReactNode;
   readonly config: IGRPConfigArgs;
+  readonly showSidebar?: boolean;
   readonly breadcrumbs?: BreadcrumbItem[];
   readonly breadcrumbRouteLabels?: Record<string, string>;
 };
@@ -24,6 +25,7 @@ export type IGRPLayoutFullArgs = {
 export async function IGRPLayoutFull({
   children,
   config,
+  showSidebar = true,
   breadcrumbs,
   breadcrumbRouteLabels,
 }: IGRPLayoutFullArgs) {
@@ -37,13 +39,13 @@ export async function IGRPLayoutFull({
     });
   }
 
-  const sidebarSlot = (
+  const sidebarSlot = showSidebar ? (
     <IGRPLayoutErrorBoundary fallback={<IGRPSidebarError />}>
       <Suspense fallback={<IGRPSidebarSkeleton />}>
         <SidebarDataProvider config={config} />
       </Suspense>
     </IGRPLayoutErrorBoundary>
-  );
+  ) : undefined;
 
   const headerSlot = (
     <IGRPLayoutErrorBoundary fallback={<IGRPHeaderError />}>

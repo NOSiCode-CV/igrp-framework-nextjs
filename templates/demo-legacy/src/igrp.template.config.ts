@@ -38,7 +38,7 @@ export function createConfig(
           showNotifications: true,
           showUser: true,
           showThemeSwitcher: true,
-          showIGRPSidebarTrigger: true,
+          showIGRPSidebarTrigger: false,
           showIGRPHeaderTitle: false,
           showIGRPHeaderLogo: false,
           showSettings: true,

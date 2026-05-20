@@ -9,7 +9,7 @@ import {
 } from '@igrp/igrp-framework-react-design-system';
 
 export type IGRPRootProvidersFullProps = {
-  sidebar: React.ReactNode;
+  sidebar?: React.ReactNode;
   header: React.ReactNode;
   defaultOpen?: boolean;
   toasterConfig?: IGRPConfigArgs['toasterConfig'];
@@ -34,22 +34,34 @@ export function IGRPRootProvidersFull({
     duration = 5000,
   } = toasterConfig ?? {};
 
+  const toaster = showToaster && (
+    <IGRPToaster
+      position={position}
+      theme={theme}
+      richColors={richColors}
+      expand={expand}
+      duration={duration}
+      {...toasterConfig}
+    />
+  );
+
+  if (!sidebar) {
+    return (
+      <div className={cn('flex min-h-screen flex-col')}>
+        {header}
+        <div className={cn('p-4', className)}>{children}</div>
+        {toaster}
+      </div>
+    );
+  }
+
   return (
     <SidebarProvider defaultOpen={defaultOpen}>
       <div className={cn('z-45')}>{sidebar}</div>
       <SidebarInset className={cn('min-w-0')}>
         {header}
         <div className={cn('p-4', className)}>{children}</div>
-        {showToaster && (
-          <IGRPToaster
-            position={position}
-            theme={theme}
-            richColors={richColors}
-            expand={expand}
-            duration={duration}
-            {...toasterConfig}
-          />
-        )}
+        {toaster}
       </SidebarInset>
     </SidebarProvider>
   );

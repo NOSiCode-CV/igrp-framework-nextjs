@@ -28,7 +28,7 @@ export default function LogoutPage() {
         // Fetch end-session URL before clearing local session — token is required
         // to build the id_token_hint parameter and is gone after signOut().
         const endSessionUrl = await getLogoutUrl(
-          `${window.location.origin}/login`,
+          `${window.location.origin}${process.env.NEXT_PUBLIC_BASE_PATH ?? ""}/login`,
         );
 
         await signOut({ redirect: false });

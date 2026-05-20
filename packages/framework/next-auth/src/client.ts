@@ -23,7 +23,7 @@ export {
 export type { User } from 'next-auth';
 
 export function useSafeSession({
-  forceLogoutCallbackUrl = '/login',
+  forceLogoutCallbackUrl = `${process.env.NEXT_PUBLIC_BASE_PATH ?? ''}/login`,
 }: { forceLogoutCallbackUrl?: string } = {}) {
   const { data, status, update } = useSessionBase();
   const session: Session | null = data as Session | null;

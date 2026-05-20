@@ -27,6 +27,10 @@ const PUBLIC_PATHS = new Set(["/login", "/logout", "/api/auth"]);
 const PUBLIC_PREFIXES = ["/login/", "/logout/", "/api/auth/"];
 const STATIC_PREFIXES = ["/_next/", "/static/", "/favicon.ico"];
 
+// Build-time constant — baked in by Next.js for NEXT_PUBLIC_* vars.
+// Needed for raw URL construction in middleware where next/navigation isn't available.
+const BASE_PATH = process.env.NEXT_PUBLIC_BASE_PATH ?? "";
+
 function isPublicPath(pathname: string): boolean {
   if (PUBLIC_PATHS.has(pathname)) return true;
   if (PUBLIC_PREFIXES.some((p) => pathname.startsWith(p))) return true;
@@ -71,7 +75,7 @@ export async function middleware(request: NextRequest) {
 
   // Redirects to /login with the current path as callbackUrl.
   const loginRedirect = (): NextResponse => {
-    const loginUrl = new URL("/login", request.url);
+    const loginUrl = new URL(`${BASE_PATH}/login`, request.url);
     if (currentPath && currentPath !== "/") {
       loginUrl.searchParams.set("callbackUrl", currentPath);
     }
@@ -81,7 +85,7 @@ export async function middleware(request: NextRequest) {
   if (auth.isAuthDisabled() || auth.isPreviewMode()) {
     if (isAuthUiPath(pathname)) {
       return withSecurityHeaders(
-        NextResponse.redirect(new URL("/", request.url)),
+        NextResponse.redirect(new URL(`${BASE_PATH}/`, request.url)),
       );
     }
     return nextWithPath();

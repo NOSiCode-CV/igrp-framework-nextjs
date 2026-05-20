@@ -16,6 +16,7 @@
     "VjdamIUb",
     "add-app-error-and-logger",
     "auth-config-error-boundary",
+    "basepath-login-redirects-ff0b7f4f",
     "blue-foxes-run",
     "breadcrumbs-fixes",
     "breadcrumbs-rebuild",
@@ -40,6 +41,7 @@
     "remove-react-cache-api-config",
     "rename-provider-igrp-auth",
     "show-sidebar-prop-15b46d4e",
+    "sidebar-provider-no-sidebar",
     "silent-wombat-dances",
     "token-revocation-on-logout",
     "vgrotmhs"

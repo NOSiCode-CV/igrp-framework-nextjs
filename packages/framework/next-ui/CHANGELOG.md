@@ -1,5 +1,20 @@
 # @igrp/framework-next-ui
 
+## 0.1.0-beta.133
+
+### Patch Changes
+
+- 819f3b4: fix: header fails to load when showSidebar is false in IGRPLayoutFull
+
+  `IGRPTemplateNavUser` calls `useIGRPSidebar()` unconditionally, which throws when
+  no `SidebarProvider` is present. `IGRPRootProvidersFull` now always wraps with
+  `SidebarProvider` regardless of whether the sidebar slot is provided, so the header
+  renders correctly when `showSidebar={false}`.
+
+- Updated dependencies
+  - @igrp/framework-next-auth@0.1.0-beta.130
+  - @igrp/framework-next-types@0.1.0-beta.132
+
 ## 0.1.0-beta.132
 
 ### Patch Changes

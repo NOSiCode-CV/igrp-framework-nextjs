@@ -561,7 +561,8 @@ export function withIGRPAuth(options: IGRPAuthOptions = {}): IGRPAuthInstance {
   }
 
   function getLoginRedirectUrl(request: { url: string }): URL {
-    return new URL(loginUrl, env.NEXTAUTH_URL_INTERNAL ?? request.url);
+    const basePath = process.env.NEXT_PUBLIC_BASE_PATH ?? '';
+    return new URL(`${basePath}${loginUrl}`, env.NEXTAUTH_URL_INTERNAL ?? request.url);
   }
 
   // ── Server helpers (Node runtime only — dynamic imports) ──────────────────

@@ -40,7 +40,7 @@ export function createConfig(
           showThemeSwitcher: true,
           showIGRPSidebarTrigger: false,
           showIGRPHeaderTitle: false,
-          showIGRPHeaderLogo: false,
+          showIGRPHeaderLogo: true,
           showSettings: true,
           settingsUrl: process.env.NEXT_PUBLIC_IGRP_SETTINGS_URL || "",
         };

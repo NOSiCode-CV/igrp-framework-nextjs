@@ -1,6 +1,7 @@
 'use client';
 
-import { Fragment, useMemo, useRef, useEffect, useState } from 'react';
+import { Fragment, useMemo, useRef } from 'react';
+import { useBreadcrumbOverflow } from '../../hooks/use-breadcrumb-overflow';
 import Link from 'next/link';
 import { useSelectedLayoutSegments } from 'next/navigation';
 import {
@@ -88,7 +89,6 @@ function IGRPTemplateBreadcrumbs({
   const segments = useSelectedLayoutSegments();
   const isMobile = useIsMobile();
   const containerRef = useRef<HTMLOListElement>(null);
-  const [isOverflowing, setIsOverflowing] = useState(false);
 
   const breadcrumbItems = useMemo<BreadcrumbItem[]>(() => {
     // Controlled mode: items provided — skip all URL logic
@@ -115,45 +115,7 @@ function IGRPTemplateBreadcrumbs({
     });
   }, [items, segments, routeLabels, formatLabel]);
 
-  // Determine if we should check for overflow (only when not already collapsed)
-  const shouldCheckOverflow = breadcrumbItems.length <= maxItems && !isMobile;
-
-  // Check for overflow
-  useEffect(() => {
-    if (!shouldCheckOverflow) {
-      setIsOverflowing(false);
-      return;
-    }
-
-    const checkOverflow = () => {
-      if (!containerRef.current) return;
-      const container = containerRef.current;
-      // Add a small threshold to account for rounding differences
-      const isOverflow = container.scrollWidth > container.clientWidth + 1;
-      setIsOverflowing(isOverflow);
-    };
-
-    // Use requestAnimationFrame to ensure DOM is rendered
-    const timeoutId = setTimeout(() => {
-      checkOverflow();
-    }, 0);
-
-    // Use ResizeObserver to detect size changes
-    const resizeObserver = new ResizeObserver(() => {
-      if (shouldCheckOverflow) {
-        checkOverflow();
-      }
-    });
-
-    if (containerRef.current) {
-      resizeObserver.observe(containerRef.current);
-    }
-
-    return () => {
-      clearTimeout(timeoutId);
-      resizeObserver.disconnect();
-    };
-  }, [breadcrumbItems, shouldCheckOverflow, isMobile]);
+  const isOverflowing = useBreadcrumbOverflow(containerRef);
 
   if (breadcrumbItems.length === 0) {
     return null;

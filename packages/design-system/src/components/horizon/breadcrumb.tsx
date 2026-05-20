@@ -2,12 +2,11 @@
 
 import { Slot } from '@radix-ui/react-slot';
 import { cva, type VariantProps } from 'class-variance-authority';
-import { icons } from 'lucide-react';
 import { createContext, forwardRef, Fragment } from 'react';
 import React from 'react';
 
 import { cn } from '../../lib/utils';
-import { IGRPIcon } from './icon';
+import { IGRPIcon, type IGRPIconName } from './icon';
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -39,7 +38,7 @@ export interface IGRPBreadcrumbProps
   homeIcon?: boolean;
   homeHref?: string;
   homeLabel?: string;
-  iconName?: keyof typeof icons;
+  iconName?: IGRPIconName;
   size?: 'sm' | 'md' | 'lg';
 }
 
@@ -48,7 +47,7 @@ export interface IGRPBreadcrumbItemType {
   id?: string;
   label: string;
   href?: string;
-  iconName?: keyof typeof icons;
+  iconName?: IGRPIconName;
   showIcon?: boolean;
   current?: boolean;
   color?: 'primary' | 'secondary' | 'success' | 'warning' | 'destructive';
@@ -92,11 +91,11 @@ const IGRPBreadcrumb = forwardRef<
     const getIconSize = () => {
       switch (size) {
         case 'sm':
-          return 'h-3 w-3';
+          return 'size-3';
         case 'lg':
-          return 'h-5 w-5';
+          return 'size-5';
         default:
-          return 'h-4 w-4';
+          return 'size-4';
       }
     };
 
@@ -141,14 +140,14 @@ const IGRPBreadcrumb = forwardRef<
           <IGRPBreadcrumbSeparator />
           <IGRPBreadcrumbItem>
             <DropdownMenu>
-              <DropdownMenuTrigger className={cn('flex items-center gap-1')}>
+              <DropdownMenuTrigger className="flex items-center gap-1">
                 <IGRPBreadcrumbEllipsis />
                 <span className={cn('sr-only')}>Toggle menu</span>
               </DropdownMenuTrigger>
               <DropdownMenuContent align="start">
-                {middleItems.map((item, index) => (
-                  <DropdownMenuItem key={index} asChild>
-                    <a href={item.href || '#'} className={cn('flex items-center gap-2')}>
+                {middleItems.map((item) => (
+                  <DropdownMenuItem key={item.href ?? item.label} asChild>
+                    <a href={item.href || '#'} className="flex items-center gap-2">
                       {item.showIcon && item.iconName && (
                         <IGRPIcon iconName={item.iconName} className={cn(getIconSize())} />
                       )}
@@ -263,15 +262,14 @@ IGRPBreadcrumbList.displayName = 'IGRPBreadcrumbList';
 export interface IGRPBreadcrumbItemProps extends React.LiHTMLAttributes<HTMLLIElement> {
   current?: boolean;
   showIcon?: boolean;
-  iconName?: keyof typeof icons;
+  iconName?: IGRPIconName;
 }
 
 const IGRPBreadcrumbItem = React.forwardRef<HTMLLIElement, IGRPBreadcrumbItemProps>(
   ({ className, current, showIcon, iconName, children, ...props }, ref) => {
     const { size } = React.useContext(IGRPBreadcrumbContext);
     const gapClass = size === 'sm' ? 'gap-1' : size === 'lg' ? 'gap-2' : 'gap-1.5';
-    const iconSize = size === 'sm' ? 'h-3 w-3' : size === 'lg' ? 'h-5 w-5' : 'h-4 w-4';
-    const iconMargin = size === 'sm' ? 'mr-1' : size === 'lg' ? 'mr-2' : 'mr-1.5';
+    const iconSize = size === 'sm' ? 'size-3' : size === 'lg' ? 'size-5' : 'size-4';
 
     return (
       <li
@@ -281,7 +279,7 @@ const IGRPBreadcrumbItem = React.forwardRef<HTMLLIElement, IGRPBreadcrumbItemPro
         {...props}
       >
         {showIcon && iconName && (
-          <IGRPIcon iconName={iconName} className={cn(iconMargin, iconSize)} />
+          <IGRPIcon iconName={iconName} className={cn(iconSize)} />
         )}
         {children}
       </li>
@@ -294,27 +292,28 @@ const IGRPBreadcrumbLink = React.forwardRef<
   HTMLAnchorElement,
   React.AnchorHTMLAttributes<HTMLAnchorElement> & {
     asChild?: boolean;
-    iconName?: keyof typeof icons;
+    iconName?: IGRPIconName;
     showIcon?: boolean;
   }
 >(({ className, asChild = false, iconName, showIcon, children, ...props }, ref) => {
   const Component = asChild ? Slot : 'a';
   const { size } = React.useContext(IGRPBreadcrumbContext);
 
-  const iconSize = size === 'sm' ? 'h-3 w-3' : size === 'lg' ? 'h-5 w-5' : 'h-4 w-4';
-  const iconMargin = size === 'sm' ? 'mr-1' : size === 'lg' ? 'mr-2' : 'mr-1.5';
+  const iconSize = size === 'sm' ? 'size-3' : size === 'lg' ? 'size-5' : 'size-4';
 
   return (
     <Component
       ref={ref}
       className={cn(
         'font-medium underline-offset-4 hover:text-foreground hover:underline flex items-center',
+        showIcon && iconName && (size === 'sm' ? 'gap-1' : size === 'lg' ? 'gap-2' : 'gap-1.5'),
+        'rounded-sm focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-1',
         className,
       )}
       {...props}
     >
       {showIcon && iconName && (
-        <IGRPIcon iconName={iconName} className={cn(iconMargin, iconSize)} />
+        <IGRPIcon iconName={iconName} className={cn(iconSize)} />
       )}
       {children}
     </Component>
@@ -325,15 +324,14 @@ IGRPBreadcrumbLink.displayName = 'IGRPBreadcrumbLink';
 const IGRPBreadcrumbPage = React.forwardRef<
   HTMLSpanElement,
   React.HTMLAttributes<HTMLSpanElement> & {
-    iconName?: keyof typeof icons;
+    iconName?: IGRPIconName;
     showIcon?: boolean;
     color?: 'primary' | 'secondary' | 'success' | 'warning' | 'destructive';
   }
 >(({ className, iconName, showIcon, color = 'primary', children, ...props }, ref) => {
   const { size } = React.useContext(IGRPBreadcrumbContext);
 
-  const iconSize = size === 'sm' ? 'h-3 w-3' : size === 'lg' ? 'h-5 w-5' : 'h-4 w-4';
-  const iconMargin = size === 'sm' ? 'mr-1' : size === 'lg' ? 'mr-2' : 'mr-1.5';
+  const iconSize = size === 'sm' ? 'size-3' : size === 'lg' ? 'size-5' : 'size-4';
   const colorClass =
     color === 'secondary'
       ? 'text-secondary'
@@ -348,14 +346,17 @@ const IGRPBreadcrumbPage = React.forwardRef<
   return (
     <span
       ref={ref}
-      role="link"
-      aria-disabled="true"
       aria-current="page"
-      className={cn('font-semibold flex items-center', colorClass, className)}
+      className={cn(
+        'font-semibold flex items-center',
+        showIcon && iconName && (size === 'sm' ? 'gap-1' : size === 'lg' ? 'gap-2' : 'gap-1.5'),
+        colorClass,
+        className,
+      )}
       {...props}
     >
       {showIcon && iconName && (
-        <IGRPIcon iconName={iconName} className={cn(iconMargin, iconSize)} />
+        <IGRPIcon iconName={iconName} className={cn(iconSize)} />
       )}
       {children}
     </span>
@@ -387,8 +388,8 @@ IGRPBreadcrumbSeparator.displayName = 'IGRPBreadcrumbSeparator';
 const IGRPBreadcrumbEllipsis = React.forwardRef<HTMLSpanElement, React.HTMLAttributes<HTMLSpanElement>>(
   ({ className, ...props }, ref) => {
     const { size } = React.useContext(IGRPBreadcrumbContext);
-    const containerSize = size === 'sm' ? 'h-6 w-6' : size === 'lg' ? 'h-10 w-10' : 'h-8 w-8';
-    const iconSize = size === 'sm' ? 'h-3 w-3' : size === 'lg' ? 'h-5 w-5' : 'h-4 w-4';
+    const containerSize = size === 'sm' ? 'size-6' : size === 'lg' ? 'size-10' : 'size-8';
+    const iconSize = size === 'sm' ? 'size-3' : size === 'lg' ? 'size-5' : 'size-4';
 
     return (
       <span

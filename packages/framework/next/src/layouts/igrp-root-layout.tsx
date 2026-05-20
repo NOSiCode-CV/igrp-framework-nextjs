@@ -50,7 +50,6 @@ export async function IGRPRootLayout({ children, config }: IGRPRootLayoutArgs) {
           session={session}
           activeThemeValue={activeThemeValue}
           sessionArgs={sessionArgs}
-          themeArgs={undefined}
         >
           {children}
         </IGRPNestedProviders>

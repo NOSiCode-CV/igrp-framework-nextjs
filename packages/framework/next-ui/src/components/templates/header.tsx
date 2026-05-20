@@ -78,14 +78,14 @@ function IGRPTemplateHeader({
         {(showIGRPHeaderLogo || showIGRPHeaderTitle) && (
           <div className={cn('flex items-center gap-2')}>
             {showIGRPHeaderLogo && (
-              <div className={cn('h-10 w-10 relative rounded-lg flex items-center justify-center')}>
+              <div className={cn('size-10 rounded-lg overflow-hidden flex items-center justify-center')}>
                 <Image
                   src={headerLogo || '/logo-no-text.png'}
                   alt="IGRP Logo"
-                  fill
-                  className={cn('object-contain')}
+                  width={40}
+                  height={40}
+                  className={cn('object-contain size-10')}
                   quality={100}
-                  sizes="46px"
                   priority
                 />
               </div>

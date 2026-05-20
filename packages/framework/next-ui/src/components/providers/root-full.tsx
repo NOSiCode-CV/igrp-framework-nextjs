@@ -50,7 +50,7 @@ export function IGRPRootProvidersFull({
       // SidebarProvider is required even without a visible sidebar because
       // IGRPTemplateNavUser (and SidebarMenuButton) call useIGRPSidebar() unconditionally.
       <SidebarProvider defaultOpen={defaultOpen}>
-        <div className={cn('flex min-h-screen flex-col')}>
+        <div className='flex min-h-screen flex-col w-full'>
           {header}
           <div className={cn('p-4', className)}>{children}</div>
           {toaster}
@@ -61,8 +61,8 @@ export function IGRPRootProvidersFull({
 
   return (
     <SidebarProvider defaultOpen={defaultOpen}>
-      <div className={cn('z-45')}>{sidebar}</div>
-      <SidebarInset className={cn('min-w-0')}>
+      <div className='z-45'>{sidebar}</div>
+      <SidebarInset className='min-w-0'>
         {header}
         <div className={cn('p-4', className)}>{children}</div>
         {toaster}

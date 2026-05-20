@@ -1,5 +1,15 @@
 # @igrp/framework-next-ui
 
+## 0.1.0-beta.134
+
+### Patch Changes
+
+- 3cbddca: fix: replace fill with explicit dimensions on header logo image
+
+  The `fill` prop on the logo `<Image>` caused it to be invisible when
+  combined with a flex parent. Replaced with explicit `width={40} height={40}`
+  and added `overflow-hidden` to the container for correct rounded-corner clipping.
+
 ## 0.1.0-beta.133
 
 ### Patch Changes

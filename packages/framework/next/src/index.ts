@@ -3,6 +3,9 @@
 
 export { IGRPGlobalLoading } from './components/global-loading';
 
+export { IGRPLayoutFull, type IGRPLayoutFullArgs } from './layouts/igrp-layout-full';
+export { IGRPLayoutBlank, type IGRPLayoutBlankArgs } from './layouts/igrp-layout-blank';
+// @deprecated Use IGRPLayoutFull instead.
 export { IGRPLayout, type IGRPLayoutArgs } from './layouts/igrp-layout';
 
 export { IGRPRootLayout, type IGRPRootLayoutArgs } from './layouts/igrp-root-layout';

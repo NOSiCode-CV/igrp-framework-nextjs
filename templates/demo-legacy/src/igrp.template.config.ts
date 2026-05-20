@@ -60,8 +60,6 @@ export function createConfig(
       },
     },
     font: fontVariables,
-    showSidebar: true,
-    showHeader: true,
 
     layout: {
       ...config,

@@ -76,7 +76,7 @@ function IGRPButton({
         {loading ? (
           <>
             {LoadingIcon}
-            <span className={cn("sr-only")}>{loadingText}</span>
+            <span className="sr-only">{loadingText}</span>
           </>
         ) : (
           <IGRPIcon iconName={iconName} className={cn(computedIconClassName, iconClassName)} aria-hidden="true" />

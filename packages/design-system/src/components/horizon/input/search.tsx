@@ -66,7 +66,6 @@ function SearchInputField({
   submitButtonLabel,
   onSearch,
   submitIcon,
-  iconSize,
   submitVariant,
   loading,
   iconPlacement,
@@ -90,7 +89,6 @@ function SearchInputField({
   submitButtonLabel?: string
   onSearch?: (value: string) => void
   submitIcon: IGRPIconName | string
-  iconSize?: number | string
   submitVariant: VariantProps<typeof IGRPButton>["variant"]
   loading?: boolean
   iconPlacement?: IGRPInputProps["iconPlacement"]

@@ -395,7 +395,7 @@ function IGRPStatsCard({
         iconBackground={iconBackground}
         showIconBorder={showIconBorder}
         iconVariant={iconVariant}
-        iconClassName={cn(iconClassName)}
+        iconClassName={iconClassName}
         image={image}
         imageAlt={imageAlt}
       />
@@ -450,10 +450,10 @@ function IGRPStatsCardIcon({
 
   const content = () => {
     if (image) {
-      return <Image src={image} alt={imageAlt || ""} fill sizes={imageSizes} className={cn("object-cover")} unoptimized />
+      return <Image src={image} alt={imageAlt || ""} fill sizes={imageSizes} className="object-cover" unoptimized />
     }
     if (showIcon && iconName) {
-      return <IGRPIcon iconName={iconName} className={cn(iconSizeClass)} />
+      return <IGRPIcon iconName={iconName} className={iconSizeClass} />
     }
     return null
   }

@@ -47,11 +47,15 @@ export function IGRPRootProvidersFull({
 
   if (!sidebar) {
     return (
-      <div className={cn('flex min-h-screen flex-col')}>
-        {header}
-        <div className={cn('p-4', className)}>{children}</div>
-        {toaster}
-      </div>
+      // SidebarProvider is required even without a visible sidebar because
+      // IGRPTemplateNavUser (and SidebarMenuButton) call useIGRPSidebar() unconditionally.
+      <SidebarProvider defaultOpen={defaultOpen}>
+        <div className={cn('flex min-h-screen flex-col')}>
+          {header}
+          <div className={cn('p-4', className)}>{children}</div>
+          {toaster}
+        </div>
+      </SidebarProvider>
     );
   }
 

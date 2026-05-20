@@ -27,15 +27,14 @@ async function fetchAppByCodeRaw(appCode: string, token: string, baseUrl: string
 }
 
 // Hoisted: static tag 'igrp-apps' allows module-level declaration.
-// token + baseUrl become part of the cache key via function arguments.
 const getCachedAppsByUser = unstable_cache(fetchAppsByUserRaw, ['igrp-apps'], {
   tags: ['igrp-apps'],
   revalidate: 300,
 });
 
-// One unstable_cache wrapper per appCode — created lazily, stored in a Map so
-// the wrapper is stable across calls for the same app. This preserves the
-// dynamic 'igrp-app-${appCode}' revalidation tag required for targeted invalidation.
+// One unstable_cache wrapper per appCode — created lazily, stored in a Map.
+// Capped at MAX_CACHE_ENTRIES to prevent unbounded memory growth.
+const MAX_CACHE_ENTRIES = 50;
 const _appByCodeCaches = new Map<
   string,
   (token: string, baseUrl: string) => ReturnType<typeof fetchAppByCodeRaw>
@@ -43,6 +42,10 @@ const _appByCodeCaches = new Map<
 
 function getAppByCodeCache(appCode: string) {
   if (!_appByCodeCaches.has(appCode)) {
+    if (_appByCodeCaches.size >= MAX_CACHE_ENTRIES) {
+      const oldestKey = _appByCodeCaches.keys().next().value;
+      if (oldestKey !== undefined) _appByCodeCaches.delete(oldestKey);
+    }
     _appByCodeCaches.set(
       appCode,
       unstable_cache(

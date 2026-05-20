@@ -178,7 +178,6 @@ function NumberInputField({
               aria-label="Increment"
               iconName="ChevronUp"
               size="icon"
-              iconSize={10}
             />
             <IGRPButton
               type="button"
@@ -190,7 +189,6 @@ function NumberInputField({
               aria-label="Decrement"
               iconName="ChevronDown"
               size="icon"
-              iconSize={10}
             />
           </div>
         )}

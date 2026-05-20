@@ -15,7 +15,7 @@ import type { IGRPBaseAttributes } from "../../types"
  * @see IGRPButton
  */
 interface IGRPButtonProps
-  extends Omit<React.ComponentProps<typeof Button>, "name">, VariantProps<typeof buttonVariants>, IGRPBaseAttributes {
+  extends Omit<React.ComponentProps<typeof Button>, "name">, VariantProps<typeof buttonVariants>, Omit<IGRPBaseAttributes, "iconSize"> {
   /** Button content. */
   children?: ReactNode
   /** Render as child component (Radix composition). */
@@ -36,10 +36,9 @@ function IGRPButton({
   iconName = "ArrowLeft",
   iconPlacement = "start",
   iconClassName,
-  iconSize = 14,
   className,
   loading = false,
-  loadingText = "Loading...",
+  loadingText = "Loading…",
   disabled,
   type = "button",
   name,

@@ -143,7 +143,6 @@ function SearchInputField({
           disabled={disabled}
           showIcon={showIcon}
           iconName={submitIcon}
-          iconSize={iconSize}
           variant={submitVariant}
           loading={loading}
           iconPlacement={iconPlacement}

@@ -77,7 +77,6 @@ function DatePickerSingleField({
           className={cn("size-2 absolute right-2 top-1/2 h-3 w-3 -translate-y-1/2 text-muted-foreground z-100")}
           size="icon"
           iconName="X"
-          iconSize={10}
           disabled={disabledPicker}
           showIcon
         />

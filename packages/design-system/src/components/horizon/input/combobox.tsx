@@ -320,7 +320,6 @@ function IGRPCombobox({
                 }}
                 onClick={() => removeValue(val)}
                 iconName="X"
-                iconSize={12}
                 size="icon"
                 showIcon
                 variant="outline"

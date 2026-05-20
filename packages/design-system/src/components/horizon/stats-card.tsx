@@ -45,7 +45,7 @@ const igrpStatsCardVariants = cva(
   },
 )
 
-const igrpStatsCardTitleVariants = cva("font-medium tracking-tighter", {
+const igrpStatsCardTitleVariants = cva("font-medium tracking-tighter text-balance", {
   variants: {
     size: {
       xs: "text-xs",
@@ -60,7 +60,7 @@ const igrpStatsCardTitleVariants = cva("font-medium tracking-tighter", {
   },
 })
 
-const igrpStatsCardValueVariants = cva("font-bold", {
+const igrpStatsCardValueVariants = cva("font-bold tabular-nums", {
   variants: {
     size: {
       sm: "text-sm",

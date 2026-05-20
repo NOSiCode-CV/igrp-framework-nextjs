@@ -52,9 +52,31 @@ function isAuthUiPath(pathname: string): boolean {
  * 3. Extract JWT — redirect to login on failure.
  * 4. Redirect to login when token expired or refresh failed.
  * 5. Apply security headers to all passing responses.
+ *
+ * x-current-path is injected as a request header on every passing response so
+ * server components can build a callbackUrl when they need to redirect to login.
  */
 export async function middleware(request: NextRequest) {
-  const { pathname } = request.nextUrl;
+  const { pathname, search } = request.nextUrl;
+  const currentPath = pathname + search;
+
+  // Passes the request through, forwarding the current path to server components.
+  const nextWithPath = (): NextResponse => {
+    const requestHeaders = new Headers(request.headers);
+    requestHeaders.set("x-current-path", currentPath);
+    return withSecurityHeaders(
+      NextResponse.next({ request: { headers: requestHeaders } }),
+    );
+  };
+
+  // Redirects to /login with the current path as callbackUrl.
+  const loginRedirect = (): NextResponse => {
+    const loginUrl = new URL("/login", request.url);
+    if (currentPath && currentPath !== "/") {
+      loginUrl.searchParams.set("callbackUrl", currentPath);
+    }
+    return withSecurityHeaders(NextResponse.redirect(loginUrl));
+  };
 
   if (auth.isAuthDisabled() || auth.isPreviewMode()) {
     if (isAuthUiPath(pathname)) {
@@ -62,15 +84,10 @@ export async function middleware(request: NextRequest) {
         NextResponse.redirect(new URL("/", request.url)),
       );
     }
-    return withSecurityHeaders(NextResponse.next());
+    return nextWithPath();
   }
 
-  if (isPublicPath(pathname)) return withSecurityHeaders(NextResponse.next());
-
-  const loginRedirect = () =>
-    withSecurityHeaders(
-      NextResponse.redirect(auth.getLoginRedirectUrl(request)),
-    );
+  if (isPublicPath(pathname)) return nextWithPath();
 
   let token: Awaited<ReturnType<typeof auth.getTokenFromRequest>>;
   try {
@@ -84,7 +101,7 @@ export async function middleware(request: NextRequest) {
     return loginRedirect();
   }
 
-  return withSecurityHeaders(NextResponse.next());
+  return nextWithPath();
 }
 
 // Matcher: page routes only (legacy template)

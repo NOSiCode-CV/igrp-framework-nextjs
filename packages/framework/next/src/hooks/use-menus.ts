@@ -1,6 +1,7 @@
 import { unstable_cache } from 'next/cache';
 import { ApiClientError, AccessManagementClient } from '@igrp/platform-access-management-client-ts';
 import { redirect } from 'next/navigation';
+import { headers } from 'next/headers';
 
 import { igrpGetAccessClientConfig } from '../lib/api-config';
 import { mapperMenus } from '../mappers/menus-mapper';
@@ -42,7 +43,9 @@ export async function fetchMenus(appCode: string) {
     return await getMenuCache(appCode)(token, baseUrl);
   } catch (error) {
     if (error instanceof ApiClientError && (error.status === 401 || error.status === 403)) {
-      redirect('/login');
+      const h = await headers();
+      const callbackUrl = h.get('x-current-path');
+      redirect(callbackUrl ? `/login?callbackUrl=${encodeURIComponent(callbackUrl)}` : '/login');
     }
     console.error('[igrp-menus]: Erro ao carregar os menus da aplicação.:', error);
     return [];

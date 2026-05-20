@@ -1,5 +1,6 @@
 import { cache } from "react";
 import { redirect } from "next/navigation";
+import { headers } from "next/headers";
 import type { Session } from "next-auth";
 
 import { getSession } from "@/lib/auth";
@@ -24,7 +25,15 @@ export const verifySession = cache(async (): Promise<Session> => {
   }
 
   const session = await getSession();
-  if (!session) redirect("/login");
+  if (!session) {
+    const h = await headers();
+    const callbackUrl = h.get("x-current-path");
+    redirect(
+      callbackUrl
+        ? `/login?callbackUrl=${encodeURIComponent(callbackUrl)}`
+        : "/login",
+    );
+  }
   return session;
 });
 

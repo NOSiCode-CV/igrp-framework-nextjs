@@ -1,6 +1,7 @@
 import { unstable_cache } from 'next/cache';
 import { ApiClientError, AccessManagementClient } from '@igrp/platform-access-management-client-ts';
 import { redirect } from 'next/navigation';
+import { headers } from 'next/headers';
 
 import { igrpGetAccessClientConfig } from '../lib/api-config';
 
@@ -26,7 +27,9 @@ export async function fetchCurrentUser() {
     return await getCachedCurrentUser(token, baseUrl);
   } catch (error) {
     if (error instanceof ApiClientError && (error.status === 401 || error.status === 403)) {
-      redirect('/login');
+      const h = await headers();
+      const callbackUrl = h.get('x-current-path');
+      redirect(callbackUrl ? `/login?callbackUrl=${encodeURIComponent(callbackUrl)}` : '/login');
     }
     console.error('[igrp-user] Erro ao carregar os dados do utilizador atual.:', error);
     return null;

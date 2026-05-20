@@ -97,6 +97,6 @@ export {
 } from './components/providers/root-blank';
 
 // @deprecated Use IGRPRootProvidersFull instead.
-export { IGRPRootProviders } from './components/providers/root';
+export { IGRPRootProviders, type IGRPRootProvidersArgs } from './components/providers/root';
 
 export { IGRPSessionProvider } from './components/providers/session';

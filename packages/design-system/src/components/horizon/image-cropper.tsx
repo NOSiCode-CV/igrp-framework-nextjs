@@ -158,17 +158,11 @@ export function IGRPImageCropper({
         {showPreview && (
           <div className={cn("flex w-full flex-col gap-2 md:w-40")}>
             <div
-              className={cn(
-                "relative aspect-square w-full overflow-hidden rounded-lg border border-border bg-muted",
-              )}
+              className={cn("relative aspect-square w-full overflow-hidden rounded-lg border border-border bg-muted")}
             >
               {croppedImageUrl ? (
                 // eslint-disable-next-line @next/next-eslint/no-img-element
-                <img
-                  src={croppedImageUrl}
-                  alt="Cropped result"
-                  className={cn("size-full object-cover")}
-                />
+                <img src={croppedImageUrl} alt="Cropped result" className={cn("size-full object-cover")} />
               ) : (
                 <div
                   className={cn(

@@ -153,13 +153,7 @@ function tableReducer(state: TableState, action: TableAction): TableState {
 }
 
 /** @internal Renders inline icon buttons (≤2 actions) or a dropdown (>2 actions) for a single row. */
-function IGRPDataTableRowActions<TData>({
-  row,
-  actions,
-}: {
-  row: Row<TData>
-  actions: IGRPDataTableAction<TData>[]
-}) {
+function IGRPDataTableRowActions<TData>({ row, actions }: { row: Row<TData>; actions: IGRPDataTableAction<TData>[] }) {
   const visibleActions = actions.filter((a) => !a.hidden?.(row))
   if (visibleActions.length === 0) return null
 
@@ -236,7 +230,9 @@ function IGRPDataTableRowActions<TData>({
         component: IGRPDataTableDropdownMenuCustom,
         props: {
           labelTrigger: action.label,
-          action: () => { capturedRender(row, () => undefined) },
+          action: () => {
+            capturedRender(row, () => undefined)
+          },
         },
       })
     } else if (action.type === "custom") {
@@ -245,7 +241,9 @@ function IGRPDataTableRowActions<TData>({
         component: IGRPDataTableDropdownMenuCustom,
         props: {
           labelTrigger: action.label,
-          action: () => { capturedRender(row) },
+          action: () => {
+            capturedRender(row)
+          },
         },
       })
     }
@@ -430,7 +428,7 @@ function IGRPDataTable<TData, TValue>({
         "filter" in col &&
         !!col.filter &&
         "accessorKey" in col &&
-        typeof (col as { accessorKey?: unknown }).accessorKey === "string"
+        typeof (col as { accessorKey?: unknown }).accessorKey === "string",
     )
     .map((col) => ({ columnId: col.accessorKey, descriptor: col.filter! }))
 
@@ -465,27 +463,15 @@ function IGRPDataTable<TData, TValue>({
                 switch (descriptor.type) {
                   case "input":
                     return (
-                      <IGRPDataTableFilterInput
-                        key={columnId}
-                        column={column}
-                        placeholder={descriptor.placeholder}
-                      />
+                      <IGRPDataTableFilterInput key={columnId} column={column} placeholder={descriptor.placeholder} />
                     )
                   case "select":
                     return (
-                      <IGRPDataTableFilterSelect
-                        key={columnId}
-                        column={column}
-                        options={descriptor.options ?? []}
-                      />
+                      <IGRPDataTableFilterSelect key={columnId} column={column} options={descriptor.options ?? []} />
                     )
                   case "faceted":
                     return (
-                      <IGRPDataTableFilterFaceted
-                        key={columnId}
-                        column={column}
-                        options={descriptor.options ?? []}
-                      />
+                      <IGRPDataTableFilterFaceted key={columnId} column={column} options={descriptor.options ?? []} />
                     )
                   case "date":
                     return <IGRPDataTableFilterDate key={columnId} column={column} />
@@ -493,11 +479,7 @@ function IGRPDataTable<TData, TValue>({
                     return <IGRPDataTableFilterMinMax key={columnId} column={column} />
                   case "dropdown":
                     return (
-                      <IGRPDataTableFilterDropdown
-                        key={columnId}
-                        column={column}
-                        options={descriptor.options ?? []}
-                      />
+                      <IGRPDataTableFilterDropdown key={columnId} column={column} options={descriptor.options ?? []} />
                     )
                   default:
                     return descriptor.render?.(column) ?? null

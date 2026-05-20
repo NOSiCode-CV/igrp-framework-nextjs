@@ -1,5 +1,11 @@
 # @igrp/framework-next-types
 
+## 0.1.0-beta.131
+
+### Patch Changes
+
+- f8dc318: feat: remove showSidebar/showHeader from IGRPConfigArgs
+
 ## 0.1.0-beta.130
 
 ### Patch Changes

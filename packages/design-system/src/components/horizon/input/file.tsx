@@ -237,11 +237,7 @@ function IGRPDropzoneInternal({
         />
         <div className="space-y-1">
           <p className="text-sm font-medium">
-            {isDragActive
-              ? isDragReject
-                ? dragRejectLabel
-                : dragActiveLabel
-              : dropzoneLabel}
+            {isDragActive ? (isDragReject ? dragRejectLabel : dragActiveLabel) : dropzoneLabel}
           </p>
           <p className="text-xs text-muted-foreground">
             {acceptTypes && (
@@ -250,9 +246,17 @@ function IGRPDropzoneInternal({
               </span>
             )}
             {maxSize && acceptTypes && <span> · </span>}
-            {maxSize && <span>{maxSizeLabel} {formatFileSize(maxSize)}</span>}
+            {maxSize && (
+              <span>
+                {maxSizeLabel} {formatFileSize(maxSize)}
+              </span>
+            )}
             {maxFiles && (maxSize || acceptTypes) && <span> · </span>}
-            {maxFiles && <span>{maxFilesLabel} {maxFiles}</span>}
+            {maxFiles && (
+              <span>
+                {maxFilesLabel} {maxFiles}
+              </span>
+            )}
           </p>
         </div>
       </Card>
@@ -266,8 +270,7 @@ function IGRPDropzoneInternal({
               {rejectedFiles.map((item, index) => (
                 <li key={index} className="flex items-center justify-between">
                   <span>
-                    {item.file.name} —{" "}
-                    {item.errors.map((e) => e.message).join(", ")}
+                    {item.file.name} — {item.errors.map((e) => e.message).join(", ")}
                   </span>
                   <Button
                     size="icon"
@@ -288,10 +291,7 @@ function IGRPDropzoneInternal({
       {files.length > 0 && (
         <div className="space-y-2">
           {files.map((item, index) => (
-            <div
-              key={index}
-              className="flex items-center justify-between border border-input rounded-md p-2 gap-2"
-            >
+            <div key={index} className="flex items-center justify-between border border-input rounded-md p-2 gap-2">
               <div className="flex-1 min-w-0">
                 <p className="text-sm font-medium truncate">{item.file.name}</p>
                 <Progress value={item.progress} className="h-1 mt-1" />
@@ -307,25 +307,14 @@ function IGRPDropzoneInternal({
               </Button>
             </div>
           ))}
-          <Button
-            variant="outline"
-            size="sm"
-            type="button"
-            onClick={removeAllFiles}
-            className="w-full"
-          >
+          <Button variant="outline" size="sm" type="button" onClick={removeAllFiles} className="w-full">
             {removeAllLabel}
           </Button>
         </div>
       )}
 
       {helperText && !error && (
-        <p
-          id={`${name}-helper`}
-          className="text-muted-foreground text-xs"
-          role="region"
-          aria-live="polite"
-        >
+        <p id={`${name}-helper`} className="text-muted-foreground text-xs" role="region" aria-live="polite">
           {helperText}
         </p>
       )}

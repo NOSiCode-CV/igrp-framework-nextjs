@@ -50,13 +50,7 @@ export type IGRPDataTableAction<TData> =
 
 // ─── Filter descriptors ──────────────────────────────────────────────────────
 
-export type IGRPDataTableFilterType =
-  | "input"
-  | "select"
-  | "dropdown"
-  | "faceted"
-  | "date"
-  | "range"
+export type IGRPDataTableFilterType = "input" | "select" | "dropdown" | "faceted" | "date" | "range"
 
 export interface IGRPDataTableFilterDescriptor {
   type: IGRPDataTableFilterType

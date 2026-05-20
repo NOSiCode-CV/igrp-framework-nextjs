@@ -81,9 +81,7 @@ function IGRPDataTableFilterDate<TData>({
         <Calendar
           mode="range"
           selected={{ from: value?.from, to: value?.to }}
-          onSelect={(range) =>
-            column?.setFilterValue(range?.from ? range : undefined)
-          }
+          onSelect={(range) => column?.setFilterValue(range?.from ? range : undefined)}
         />
       </PopoverContent>
     </Popover>
@@ -260,9 +258,7 @@ function IGRPDataTableFilterFaceted<TData>({
                   <label htmlFor={`${id}-${i}`} className="cursor-pointer flex-1">
                     {option.label}
                   </label>
-                  <span className="ml-auto font-mono text-xs">
-                    {facets?.get(option.value) ?? 0}
-                  </span>
+                  <span className="ml-auto font-mono text-xs">{facets?.get(option.value) ?? 0}</span>
                 </CommandItem>
               ))}
             </CommandGroup>

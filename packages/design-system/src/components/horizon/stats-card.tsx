@@ -434,19 +434,25 @@ function IGRPStatsCardIcon({
 }: IGRPStatsCardIconProps) {
   if (!showIcon && !image) return null
 
-  const iconSizeClass = ({
-    sm: "size-4",
-    md: "size-5",
-    lg: "size-6",
-    xl: "size-7",
-  } as Record<string, string>)[iconSize ?? "md"] ?? "size-5"
+  const iconSizeClass =
+    (
+      {
+        sm: "size-4",
+        md: "size-5",
+        lg: "size-6",
+        xl: "size-7",
+      } as Record<string, string>
+    )[iconSize ?? "md"] ?? "size-5"
 
-  const imageSizes = ({
-    sm: "32px",
-    md: "40px",
-    lg: "48px",
-    xl: "56px",
-  } as Record<string, string>)[iconSize ?? "md"] ?? "40px"
+  const imageSizes =
+    (
+      {
+        sm: "32px",
+        md: "40px",
+        lg: "48px",
+        xl: "56px",
+      } as Record<string, string>
+    )[iconSize ?? "md"] ?? "40px"
 
   const content = () => {
     if (image) {

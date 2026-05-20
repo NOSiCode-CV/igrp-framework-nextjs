@@ -6,12 +6,7 @@ import { ChevronDown } from "lucide-react"
 
 import { cn } from "../../../lib/utils"
 import type { IGRPInputProps } from "../../../types"
-import {
-  InputGroup,
-  InputGroupInput,
-  InputGroupAddon,
-  InputGroupButton,
-} from "../../primitives/input-group"
+import { InputGroup, InputGroupInput, InputGroupAddon, InputGroupButton } from "../../primitives/input-group"
 import {
   DropdownMenu,
   DropdownMenuTrigger,
@@ -21,15 +16,9 @@ import {
 } from "../../primitives/dropdown-menu"
 import { IGRPFormField } from "../form/form-field"
 import { IGRPLabel } from "../label"
-import {
-  hexToFormat,
-  formatToHex,
-  detectFormat,
-  type ColorFormat,
-} from "../../../lib/color-utils"
+import { hexToFormat, formatToHex, detectFormat, type ColorFormat } from "../../../lib/color-utils"
 
-interface IGRPInputColorProps
-  extends Omit<IGRPInputProps, "onChange" | "value" | "defaultValue"> {
+interface IGRPInputColorProps extends Omit<IGRPInputProps, "onChange" | "value" | "defaultValue"> {
   /** Initial color in any supported format. Default: "#000000" */
   defaultValue?: string
   /** Controlled color value in the active format. */
@@ -109,10 +98,7 @@ function ColorControl({
           disabled={disabled}
           aria-label={label ? `${label} color picker` : "Color picker"}
         />
-        <div
-          className="absolute inset-0 rounded-md pointer-events-none"
-          style={{ backgroundColor: hexValue }}
-        />
+        <div className="absolute inset-0 rounded-md pointer-events-none" style={{ backgroundColor: hexValue }} />
       </div>
 
       {showFormatValue && (
@@ -136,10 +122,7 @@ function ColorControl({
                 <DropdownMenuContent align="end">
                   <DropdownMenuGroup>
                     {ALL_FORMATS.map((fmt) => (
-                      <DropdownMenuItem
-                        key={fmt}
-                        onSelect={() => onFormatChange(fmt)}
-                      >
+                      <DropdownMenuItem key={fmt} onSelect={() => onFormatChange(fmt)}>
                         {FORMAT_LABELS[fmt]}
                       </DropdownMenuItem>
                     ))}
@@ -187,7 +170,9 @@ function IGRPInputColor({
 
   // Keep a ref to the latest activeFormat so the sync effect always reads current format
   const activeFormatRef = useRef(activeFormat)
-  useEffect(() => { activeFormatRef.current = activeFormat }, [activeFormat])
+  useEffect(() => {
+    activeFormatRef.current = activeFormat
+  }, [activeFormat])
 
   // Sync when controlled value changes externally (standalone path only)
   useEffect(() => {
@@ -274,9 +259,7 @@ function IGRPInputColor({
 
   return (
     <div className={cn("*:not-first:mt-2", className)}>
-      {label && (
-        <IGRPLabel label={label} className={labelClassName} required={required} id={fieldName} />
-      )}
+      {label && <IGRPLabel label={label} className={labelClassName} required={required} id={fieldName} />}
 
       <ColorControl
         hexValue={hexValue}
@@ -329,11 +312,7 @@ function IGRPInputColor({
       />
 
       {helperText && !error && (
-        <p
-          id={`${fieldName}-helper`}
-          className="text-muted-foreground mt-2 text-xs"
-          aria-live="polite"
-        >
+        <p id={`${fieldName}-helper`} className="text-muted-foreground mt-2 text-xs" aria-live="polite">
           {helperText}
         </p>
       )}

@@ -4,15 +4,7 @@ import type { IGRPDataTableFilterDescriptor } from "./types"
 
 // ─── Cell type shortcuts ─────────────────────────────────────────────────────
 
-export type IGRPCellType =
-  | "text"
-  | "badge"
-  | "date"
-  | "amount"
-  | "link"
-  | "tooltip"
-  | "switch"
-  | "checkbox"
+export type IGRPCellType = "text" | "badge" | "date" | "amount" | "link" | "tooltip" | "switch" | "checkbox"
 
 export interface IGRPCellBadgeConfig {
   cellType: "badge"
@@ -55,10 +47,7 @@ export type IGRPCellConfig =
  * consumed by `IGRPDataTable` — columns render as plain text until that follow-up
  * ships. Use the raw `cell` escape hatch for custom rendering today.
  */
-export type IGRPAccessorColumnDef<TData, TValue = unknown> = Omit<
-  ColumnDef<TData, TValue>,
-  "cell"
-> & {
+export type IGRPAccessorColumnDef<TData, TValue = unknown> = Omit<ColumnDef<TData, TValue>, "cell"> & {
   cellType?: IGRPCellType
   variants?: Record<string, string>
   format?: string

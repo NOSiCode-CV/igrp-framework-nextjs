@@ -17,15 +17,23 @@ export async function getLogoutUrl(
   const token = await auth.getAccessToken();
 
   if (!token) {
-    console.warn("[getLogoutUrl] no active token found — skipping IdP logout redirect");
+    console.warn(
+      "[getLogoutUrl] no active token found — skipping IdP logout redirect",
+    );
     return null;
   }
 
   if (!token.idToken) {
-    console.warn("[getLogoutUrl] token has no idToken — logout URL will be built without id_token_hint");
+    console.warn(
+      "[getLogoutUrl] token has no idToken — logout URL will be built without id_token_hint",
+    );
   }
 
-  const url = await buildEndSessionUrl(token, process.env, postLogoutRedirectUri);
+  const url = await buildEndSessionUrl(
+    token,
+    process.env,
+    postLogoutRedirectUri,
+  );
 
   if (!url) {
     console.warn(

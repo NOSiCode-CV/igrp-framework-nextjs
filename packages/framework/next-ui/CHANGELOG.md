@@ -1,5 +1,13 @@
 # @igrp/framework-next-ui
 
+## 0.1.0-beta.131
+
+### Patch Changes
+
+- f8dc318: feat: add IGRPRootProvidersFull/Blank, split menus, fix global error colors, extract breadcrumb hook, remove themeArgs
+- Updated dependencies [f8dc318]
+  - @igrp/framework-next-types@0.1.0-beta.131
+
 ## 0.1.0-beta.130
 
 ### Patch Changes

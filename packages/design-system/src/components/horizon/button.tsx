@@ -15,7 +15,10 @@ import type { IGRPBaseAttributes } from "../../types"
  * @see IGRPButton
  */
 interface IGRPButtonProps
-  extends Omit<React.ComponentProps<typeof Button>, "name">, VariantProps<typeof buttonVariants>, Omit<IGRPBaseAttributes, "iconSize"> {
+  extends
+    Omit<React.ComponentProps<typeof Button>, "name">,
+    VariantProps<typeof buttonVariants>,
+    Omit<IGRPBaseAttributes, "iconSize"> {
   /** Button content. */
   children?: ReactNode
   /** Render as child component (Radix composition). */
@@ -50,15 +53,18 @@ function IGRPButton({
 
   const { size } = props
 
-  const computedIconClassName = ({
-    xs: "size-3",
-    sm: "size-3.5",
-    lg: "size-5",
-    icon: "size-4",
-    "icon-xs": "size-3",
-    "icon-sm": "size-3.5",
-    "icon-lg": "size-5",
-  } as Record<string, string>)[size as string] ?? "size-4"
+  const computedIconClassName =
+    (
+      {
+        xs: "size-3",
+        sm: "size-3.5",
+        lg: "size-5",
+        icon: "size-4",
+        "icon-xs": "size-3",
+        "icon-sm": "size-3.5",
+        "icon-lg": "size-5",
+      } as Record<string, string>
+    )[size as string] ?? "size-4"
 
   const LoadingIcon = (
     <IGRPIcon iconName="LoaderCircle" className={cn("animate-spin", computedIconClassName)} aria-hidden="true" />

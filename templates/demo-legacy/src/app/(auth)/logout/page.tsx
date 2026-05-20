@@ -1,6 +1,7 @@
 "use client";
 
 import { signOut } from "@igrp/framework-next-auth/client";
+import { IGRPTemplateLoading } from "@igrp/framework-next-ui";
 import { useRouter } from "next/navigation";
 import { useEffect, useRef } from "react";
 
@@ -53,6 +54,10 @@ export default function LogoutPage() {
     };
   }, [router]);
 
-  // TODO: apply design
-  return <div>Logout in progress</div>;
+  return (
+    <IGRPTemplateLoading
+      text="A terminar sessão..."
+      appCode={process.env.NEXT_PUBLIC_IGRP_APP_CODE}
+    />
+  );
 }

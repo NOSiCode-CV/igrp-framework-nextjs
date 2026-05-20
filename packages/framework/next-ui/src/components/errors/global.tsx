@@ -68,7 +68,7 @@ function IGRPGlobalError({
   const { title, description } = resolveCopy?.(error) ?? DEFAULT_COPY;
 
   return (
-    <div className={cn('flex min-h-[calc(100vh-12rem)] items-center justify-center bg-primary-50')}>
+    <div className={cn('flex min-h-[calc(100vh-12rem)] items-center justify-center bg-background')}>
       <div className={cn('w-full max-w-3xl')}>
         <div className={cn('text-center')}>
           <Image
@@ -78,21 +78,21 @@ function IGRPGlobalError({
             height={200}
             className={cn('mx-auto mb-2')}
           />
-          <h1 className={cn('text-2xl font-bold tracking-tight text-gray-900 dark:text-white')}>
+          <h1 className={cn('text-2xl font-bold tracking-tight text-foreground')}>
             {title}
           </h1>
-          <p className={cn('mb-4 text-base text-gray-600 dark:text-gray-300')}>{description}</p>
+          <p className={cn('mb-4 text-base text-muted-foreground')}>{description}</p>
 
           {error.digest && (
             <div
               className={cn(
-                'mx-auto max-w-xl transform overflow-hidden rounded-lg p-3 mb-4 backdrop-blur transition-all duration-500 bg-stone-100 dark:bg-gray-800/50 shadow-xs',
+                'mx-auto max-w-xl transform overflow-hidden rounded-lg p-3 mb-4 backdrop-blur transition-all duration-500 bg-muted shadow-xs',
                 errorVisible ? 'translate-y-0 opacity-100' : 'translate-y-4 opacity-0',
               )}
             >
-              <p className={cn('text-xs text-gray-500')}>
+              <p className={cn('text-xs text-muted-foreground')}>
                 {errorRefLabel}{' '}
-                <code className={cn('rounded bg-gray-100 px-1 py-0.5 dark:bg-gray-700')}>
+                <code className={cn('rounded bg-muted px-1 py-0.5')}>
                   {error.digest}
                 </code>
               </p>

@@ -116,7 +116,7 @@ function IGRPDataTableButtonAlert({
           <IGRPButton
             variant={variant}
             size="icon-sm"
-            className={cn("size-7 flex justify-center items-center", classNameTrigger)}
+            className={cn("size-7", classNameTrigger)}
             iconName={icon}
             iconClassName={iconClassName}
             aria-label={labelTrigger}
@@ -182,7 +182,7 @@ function IGRPDataTableButtonLink({
 
   return href ? (
     <IGRPDataTableActionTooltip {...tooltipProps}>
-      <Button variant={variant} size="icon-sm" className={cn("h-8 w-8", className)} asChild disabled={disabled}>
+      <Button variant={variant} size="icon-sm" className={cn("size-8", className)} asChild disabled={disabled}>
         <Link href={href} className={cn("flex items-center")} aria-label={labelTrigger}>
           <IGRPIcon iconName={icon} />
           <span className={cn("sr-only")}>{labelTrigger}</span>
@@ -251,7 +251,7 @@ function IGRPDataTableButtonModal({
           <IGRPButton
             variant={variant}
             size="icon-sm"
-            className={cn("size-7 flex justify-center items-center", classNameTrigger)}
+            className={cn("size-7", classNameTrigger)}
             iconName={icon}
             aria-label={labelTrigger}
             disabled={disabled}

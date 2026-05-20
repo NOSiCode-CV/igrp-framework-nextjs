@@ -18,6 +18,8 @@ async function fetchMenusRaw(appCode: string, token: string, baseUrl: string) {
 
 // One unstable_cache wrapper per appCode — preserves dynamic 'igrp-menus-${appCode}'
 // revalidation tag required by revalidateMenusAction.
+// Capped at MAX_CACHE_ENTRIES to prevent unbounded memory growth on long-running servers.
+const MAX_CACHE_ENTRIES = 50;
 const _menuCaches = new Map<
   string,
   (token: string, baseUrl: string) => ReturnType<typeof fetchMenusRaw>
@@ -25,6 +27,10 @@ const _menuCaches = new Map<
 
 function getMenuCache(appCode: string) {
   if (!_menuCaches.has(appCode)) {
+    if (_menuCaches.size >= MAX_CACHE_ENTRIES) {
+      const oldestKey = _menuCaches.keys().next().value;
+      if (oldestKey !== undefined) _menuCaches.delete(oldestKey);
+    }
     _menuCaches.set(
       appCode,
       unstable_cache(

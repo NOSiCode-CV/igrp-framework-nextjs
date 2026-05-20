@@ -73,24 +73,23 @@ function IGRPTemplateHeader({
         className,
       )}
     >
-      <div className={cn('flex items-center gap-2 h-12 min-w-0')}>
+      <div className='flex items-center gap-2 h-12 min-w-0'>
         {showIGRPSidebarTrigger && <SidebarTrigger />}
         {(showIGRPHeaderLogo || showIGRPHeaderTitle) && (
-          <div className={cn('flex items-center gap-2')}>
+          <div className='flex items-center gap-2'>
             {showIGRPHeaderLogo && (
-              <div className={cn('size-10 rounded-lg overflow-hidden flex items-center justify-center')}>
+              <div className='size-10 rounded-lg overflow-hidden flex items-center justify-center'>
                 <Image
-                  src={headerLogo || '/logo-no-text.png'}
-                  alt="IGRP Logo"
+                  src={headerLogo || `${process.env.NEXT_PUBLIC_BASE_PATH ?? ''}/logo-no-text.png`}
+                  alt="IGRP"
                   width={40}
                   height={40}
-                  className={cn('object-contain size-10')}
-                  quality={100}
+                  className='object-contain size-10'
                   priority
                 />
               </div>
             )}
-            {showIGRPHeaderTitle && <span className={cn('text-base font-semibold')}>iGRP</span>}
+            {showIGRPHeaderTitle && <span className='text-base font-semibold'>iGRP</span>}
           </div>
         )}
 

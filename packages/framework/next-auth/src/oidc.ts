@@ -79,6 +79,21 @@ export async function refreshOidcAccessToken(token: JWT, env: AuthEnvironment) {
   const openIdConfiguration = await getOpenIdConfiguration(discoveryUrl);
   const { clientId, clientSecret } = getClientCredentials(env);
 
+  // Include the original auth scopes on refresh so the IdP re-issues an
+  // id_token with `sid` matching the *current* servlet session. Spring
+  // Authorization Server (and other OIDC v1 servers) gate id_token issuance
+  // on `openid` being present in the refresh request — without it, refresh
+  // returns access_token + refresh_token only, leaving the original id_token
+  // in the JWT pointing at a stale session id. That stale `sid` then causes
+  // /connect/logout to no-op: Spring compares `id_token_hint.sid` to the
+  // current JSESSIONID's hashed session id, sees mismatch, and redirects
+  // without invalidating the session.
+  const requestedScopes = (env.IGRP_AUTH_SCOPES ?? 'openid')
+    .split(/\s+/)
+    .map((s) => s.trim())
+    .filter(Boolean);
+  if (!requestedScopes.includes('openid')) requestedScopes.unshift('openid');
+
   const response = await fetch(openIdConfiguration.token_endpoint, {
     method: 'POST',
     headers: {
@@ -89,6 +104,7 @@ export async function refreshOidcAccessToken(token: JWT, env: AuthEnvironment) {
       client_secret: clientSecret,
       grant_type: 'refresh_token',
       refresh_token: token.refreshToken,
+      scope: requestedScopes.join(' '),
     }),
   });
 
@@ -110,6 +126,25 @@ export async function refreshOidcAccessToken(token: JWT, env: AuthEnvironment) {
     };
   }
 
+  // Dev-mode: verify the IdP honored the `scope=openid` request and
+  // returned a fresh id_token. If `gotFreshIdToken` is false here, OIDC
+  // logout will fail silently because our cached id_token's `sid` no longer
+  // matches the current servlet session.
+  if (env.NODE_ENV !== 'production') {
+    const gotFreshIdToken =
+      typeof refreshedToken.id_token === 'string' && refreshedToken.id_token.length > 0;
+    if (!gotFreshIdToken) {
+      console.warn(
+        '[oidc.refreshOidcAccessToken] IdP did not return a new id_token on refresh — ' +
+          'OIDC end-session may fail because the stored id_token references a stale session id. ' +
+          'Check the IdP\'s OIDC refresh-token grant configuration (Spring AS requires the ' +
+          'refresh-token grant authentication-converter to include the openid scope).',
+      );
+    } else {
+      console.debug('[oidc.refreshOidcAccessToken] refresh returned a fresh id_token');
+    }
+  }
+
   return {
     ...token,
     accessToken: refreshedToken.access_token,
@@ -122,13 +157,30 @@ export async function refreshOidcAccessToken(token: JWT, env: AuthEnvironment) {
   };
 }
 
-export async function revokeOidcSession(token: JWT, env: AuthEnvironment) {
+/**
+ * Outcome of {@link revokeOidcSession}. The caller (typically NextAuth
+ * `events.signOut`) can log or surface this; callers that need a "fire and
+ * forget" call can simply ignore the returned value.
+ *
+ * Why a tagged result instead of throwing?
+ * - Revocation is best-effort and must never block local sign-out.
+ * - Callers in the signout path can't reasonably `try`/`catch` and still
+ *   know *why* it skipped (no token, no endpoint, network error, 4xx).
+ */
+export type RevokeOidcSessionResult =
+  | { ok: true; status: number }
+  | { ok: false; reason: 'no_refresh_token' | 'no_revocation_endpoint' | 'http_error' | 'network_error'; status?: number; body?: string; error?: unknown };
+
+export async function revokeOidcSession(
+  token: JWT,
+  env: AuthEnvironment,
+): Promise<RevokeOidcSessionResult> {
   const providerId = getProviderIdFromTokenOrEnv(token, env);
 
   assertAuthProviderEnv(env, providerId);
 
   if (!token.refreshToken) {
-    return;
+    return { ok: false, reason: 'no_refresh_token' };
   }
 
   const discoveryUrl = getAuthProviderDiscoveryUrl(env, providerId);
@@ -136,23 +188,36 @@ export async function revokeOidcSession(token: JWT, env: AuthEnvironment) {
   const revocationEndpoint = openIdConfiguration.revocation_endpoint;
 
   if (!revocationEndpoint) {
-    return;
+    return { ok: false, reason: 'no_revocation_endpoint' };
   }
 
   const { clientId, clientSecret } = getClientCredentials(env);
 
-  await fetch(revocationEndpoint, {
-    method: 'POST',
-    headers: {
-      'Content-Type': 'application/x-www-form-urlencoded',
-    },
-    body: new URLSearchParams({
-      client_id: clientId,
-      client_secret: clientSecret,
-      token: token.refreshToken,
-      token_type_hint: 'refresh_token',
-    }),
-  });
+  let response: Response;
+  try {
+    response = await fetch(revocationEndpoint, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/x-www-form-urlencoded',
+      },
+      body: new URLSearchParams({
+        client_id: clientId,
+        client_secret: clientSecret,
+        token: token.refreshToken,
+        token_type_hint: 'refresh_token',
+      }),
+    });
+  } catch (error) {
+    return { ok: false, reason: 'network_error', error };
+  }
+
+  if (!response.ok) {
+    // Capture body for diagnostics — IdP error messages here are typically small.
+    const body = await response.text().catch(() => '');
+    return { ok: false, reason: 'http_error', status: response.status, body };
+  }
+
+  return { ok: true, status: response.status };
 }
 
 export async function buildEndSessionUrl(
@@ -160,19 +225,50 @@ export async function buildEndSessionUrl(
   env: AuthEnvironment,
   postLogoutRedirectUri: string,
 ): Promise<string | null> {
+  const isDev = env.NODE_ENV !== 'production';
+
   const providerId = getProviderIdFromTokenOrEnv(token, env);
-  if (providerId === 'none') return null;
+  if (providerId === 'none') {
+    if (isDev) {
+      console.warn(
+        '[oidc.buildEndSessionUrl] returning null — provider is "none" (AUTH_PROVIDER=none)',
+      );
+    }
+    return null;
+  }
 
   const discoveryUrl = getAuthProviderDiscoveryUrl(env, providerId);
   const openIdConfiguration = await getOpenIdConfiguration(discoveryUrl);
-  if (!openIdConfiguration.end_session_endpoint) return null;
+  if (!openIdConfiguration.end_session_endpoint) {
+    if (isDev) {
+      console.warn(
+        `[oidc.buildEndSessionUrl] returning null — discovery doc at ${discoveryUrl} has no end_session_endpoint`,
+      );
+    }
+    return null;
+  }
 
   const { clientId } = getClientCredentials(env);
   const url = new URL(openIdConfiguration.end_session_endpoint);
   url.searchParams.set('client_id', clientId);
   url.searchParams.set('post_logout_redirect_uri', postLogoutRedirectUri);
-  if (token.idToken) {
-    url.searchParams.set('id_token_hint', token.idToken);
+  const hasIdToken = typeof token.idToken === 'string' && token.idToken.length > 0;
+  if (hasIdToken) {
+    url.searchParams.set('id_token_hint', token.idToken as string);
+  }
+
+  if (isDev) {
+    // Spring Authorization Server (and most OIDC IdPs) treat the request
+    // very differently depending on which of these three are present.
+    // Log the booleans so we can tell from server logs alone whether the
+    // request had everything Spring's OidcLogoutEndpointFilter needs.
+    console.debug('[oidc.buildEndSessionUrl] built URL', {
+      endSessionEndpoint: openIdConfiguration.end_session_endpoint,
+      hasClientId: true,
+      hasPostLogoutRedirectUri: true,
+      postLogoutRedirectUri,
+      hasIdTokenHint: hasIdToken,
+    });
   }
 
   return url.toString();

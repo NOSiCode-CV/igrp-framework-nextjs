@@ -507,11 +507,43 @@ export function withIGRPAuth(options: IGRPAuthOptions = {}): IGRPAuthInstance {
         const token = ('token' in message ? message.token : null) as JWT | null;
         if (!token) return;
 
-        // Fire-and-forget: revocation failure (network error, provider doesn't support
-        // RFC 7009, token already expired) must never block logout completing.
-        void revokeOidcSession(token, env).catch((err) => {
-          console.error('[next-auth] token revocation failed:', err);
-        });
+        const isDev = env.NODE_ENV !== 'production';
+
+        // D3 — log the shape of the token at signout time. Booleans only,
+        // never the values. Helps confirm whether `id_token_hint` will be
+        // present in the subsequent end-session URL and whether the refresh
+        // token is available to revoke.
+        if (isDev) {
+          console.debug('[next-auth.events.signOut] token shape', {
+            hasIdToken: typeof token.idToken === 'string' && token.idToken.length > 0,
+            hasAccessToken: typeof token.accessToken === 'string' && token.accessToken.length > 0,
+            hasRefreshToken: typeof token.refreshToken === 'string' && token.refreshToken.length > 0,
+            authProviderId: token.authProviderId,
+            expiresAt: token.expiresAt,
+            error: token.error,
+          });
+        }
+
+        // F1a — await revocation so the /api/auth/signout response is delayed
+        // until the IdP has confirmed (or refused) the revoke. This closes the
+        // race where the client called `window.location.replace(endSessionUrl)`
+        // before the revoke `fetch()` had finished — browser navigation aborts
+        // in-flight requests.
+        //
+        // Revocation must still never **throw** — local sign-out always
+        // succeeds, even if the IdP is unreachable. Errors surface as logs.
+        try {
+          const result = await revokeOidcSession(token, env);
+          if (!result.ok) {
+            console.warn('[next-auth.events.signOut] token revocation skipped/failed', result);
+          } else if (isDev) {
+            console.debug('[next-auth.events.signOut] token revocation succeeded', result);
+          }
+        } catch (err) {
+          // Belt-and-braces — `revokeOidcSession` is supposed to catch its own
+          // network errors and tag them, but defend against future changes.
+          console.error('[next-auth.events.signOut] token revocation threw:', err);
+        }
       },
     },
   };

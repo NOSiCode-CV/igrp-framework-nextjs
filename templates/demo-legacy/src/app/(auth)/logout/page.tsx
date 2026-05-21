@@ -36,10 +36,20 @@ export default function LogoutPage() {
         clearTimeout(timeout);
 
         if (endSessionUrl) {
+          // D4 — log the URL we're about to navigate to. Lets us copy-paste
+          // it into a fresh tab to test the IdP's logout behavior in isolation.
+          if (process.env.NODE_ENV !== "production") {
+            console.debug("[logout] navigating to end-session URL", endSessionUrl);
+          }
           // Redirect browser to IdP end-session endpoint so the SSO session
           // is also terminated. The IdP redirects back to /login when done.
           window.location.replace(endSessionUrl);
         } else {
+          if (process.env.NODE_ENV !== "production") {
+            console.warn(
+              "[logout] no end-session URL — IdP SSO session may persist; falling back to /login",
+            );
+          }
           router.replace("/login");
         }
       } catch (error) {

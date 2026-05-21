@@ -59,8 +59,11 @@ IGRP_PREVIEW_MODE=false
 NEXT_PUBLIC_BASE_PATH=
 
 # NextAuth Configuration
-NEXTAUTH_URL=http://localhost:3000
-NEXTAUTH_URL_INTERNAL=http://localhost:3000
+# IMPORTANT: NEXTAUTH_URL must include the NextAuth API root path. NextAuth v4
+# uses this URL verbatim — it does NOT auto-append /api/auth when a basePath
+# is present. See "Auth server registration" below.
+NEXTAUTH_URL=http://localhost:3000/api/auth
+NEXTAUTH_URL_INTERNAL=http://localhost:3000/api/auth
 NEXTAUTH_SECRET=your-secret-key-here
 
 # API Configuration
@@ -71,6 +74,34 @@ NEXT_IGRP_APP_CENTER_URL=https://app-center-url.com
 # Image Domains (comma-separated)
 NEXT_PUBLIC_ALLOWED_DOMAINS=example.com,cdn.example.com
 ```
+
+#### Auth server registration (REQUIRED)
+
+Two URIs must be registered on the OAuth client (e.g. `igrp-access-management`
+in IGRP Access Management). Missing either causes silent failures:
+
+| URI | Why | Symptom if missing |
+|---|---|---|
+| **OAuth callback** | Where the IdP sends the user after authentication | Login appears to succeed but bounces back to `/login` with a growing nested `callbackUrl` chain |
+| **Post-logout redirect** | Where the IdP sends the user after the SSO session is cleared | Logout clears local cookies but the IdP SSO session survives — clicking Sign In again skips the credential prompt |
+
+The exact values depend on `NEXT_PUBLIC_BASE_PATH`:
+
+| Config | OAuth callback URI | Post-logout redirect URI |
+|---|---|---|
+| `NEXT_PUBLIC_BASE_PATH=` (root) | `http://localhost:3000/api/auth/callback/igrp-auth` | `http://localhost:3000/login` |
+| `NEXT_PUBLIC_BASE_PATH=/apps/template` | `http://localhost:3000/apps/template/api/auth/callback/igrp-auth` | `http://localhost:3000/apps/template/login` |
+
+The OIDC spec requires byte-for-byte match on both.
+
+#### Scope alignment
+
+Set `IGRP_AUTH_SCOPES` to scopes registered on the OAuth client. The default
+IGRP Access Management discovery doc advertises `openid` only. Requesting
+unregistered scopes (e.g. `profile`, `email`) is either silently dropped or
+rejected by Spring Authorization Server depending on per-client config. To use
+extra claims, register the scopes on the client first, then update this env
+var.
 
 ### 3. Start Development Server
 

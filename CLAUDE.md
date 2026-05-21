@@ -62,7 +62,7 @@ packages/
     next-ui/                  → @igrp/framework-next-ui     (client template chrome)
     next/                     → @igrp/framework-next        (server entry: IGRPLayout, IGRPRootLayout, igrpBuildConfig, API client)
 templates/
-  demo-legacy/                → older reference template
+  demo-legacy/                → @igrp/framework-next-template  (canonical reference template — the only one in the repo)
 scripts/                      → repo utilities (e.g. migrate-primitive-names.mjs)
 ```
 
@@ -91,15 +91,17 @@ The distinction is load-bearing — mixing layers incorrectly produces inconsist
 - **`@igrp/framework-next-auth`** — NextAuth.js wrappers with multiple entry points (`./server`, `./client`, `./session`, `./jwt`, `./middleware`, `./config`, `./sanitize`, `./oidc`, `./providers`, `./types`). Respect these entry points instead of reaching into `dist/`.
 - **`@igrp/framework-next-types`** — shared TS types. Depends on `@igrp/framework-next-auth` for session/JWT types.
 
-### Template architecture (templates/demo)
+### Template architecture (`templates/demo-legacy` — the only template)
 
-Demo is the canonical example of how to consume the framework:
+`demo-legacy` is the canonical example of how to consume the framework:
 
-1. **Middleware** (`src/middleware.ts`) validates the NextAuth session, bypasses public/login/logout/API routes, honors `IGRP_PREVIEW_MODE`.
+1. **Middleware** (`src/middleware.ts`) validates the NextAuth session, bypasses public/login/logout/API routes, honors `IGRP_PREVIEW_MODE` / `AUTH_PROVIDER=none`, and sanitizes `callbackUrl` to prevent login loops and open-redirects.
 2. **Root layout** (`src/app/layout.tsx`) wraps the app in `IGRPRootLayout` + providers.
 3. **IGRP layout** (`src/app/(igrp)/layout.tsx`) runs auth checks, loads session, renders `IGRPLayout` with header/sidebar around the route group.
-4. **Config builder** (`src/igrp.template.config.ts`) uses `igrpBuildConfig` to assemble layout + API + toaster + session config, and swaps in mock data when `IGRP_PREVIEW_MODE=true`.
+4. **Config builder** (`src/igrp.template.config.ts`) uses `igrpBuildConfig` to assemble layout + API + toaster + session config, and swaps in mock data when bypass is on.
 5. **Server actions** (`src/actions/igrp/`) fetch layout + session server-side; `api/auth/*` holds NextAuth routes.
+
+Critical env constraint: when `NEXT_PUBLIC_BASE_PATH` is set, `NEXTAUTH_URL` must include both the basePath **and** `/api/auth` (e.g. `http://localhost:3000/apps/template/api/auth`). NextAuth treats `NEXTAUTH_URL` as the API root, not the app root — getting this wrong produces a login loop with a growing nested `callbackUrl` chain.
 
 @.claude/shared/preview-mode.md
 
@@ -111,7 +113,7 @@ Demo is the canonical example of how to consume the framework:
 
 @.claude/shared/ui-rules.md
 
-Inside `templates/demo/**/*.{ts,tsx}`, the authoritative component reference is `templates/demo/skills/igrp-design-system/SKILL.md` — load only the sub-files you need.
+Inside `templates/demo-legacy/**/*.{ts,tsx}`, if `templates/demo-legacy/skills/igrp-design-system/SKILL.md` is present, treat it as the authoritative component reference and load only the sub-files you need.
 
 ## Package API Quick Reference
 
@@ -192,7 +194,3 @@ Source: `packages/design-system/src/components/` — horizon/, primitives/, cust
 | `framework-next` | SWC + Babel | yes | no |
 
 SWC+Babel pipeline: `build:swc` → `build:babel` (React Compiler pass) → `build:types` (emit `.d.ts`). Escape hatch when the React Compiler misbehaves: `build:without_reactcompiler`.
-
-## Claude Desktop coworker knowledge
-
-`.claude/coworker/` contains files designed to be uploaded to a Claude Desktop Project (claude.ai) as project knowledge. `INSTRUCTIONS.xml` is the custom-instructions system prompt; see `.claude/coworker/README.xml` for setup. Claude Code in the IDE uses this `CLAUDE.md` tree and `.claude/agents/` instead.

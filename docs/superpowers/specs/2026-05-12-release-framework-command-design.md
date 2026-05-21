@@ -105,6 +105,6 @@ If packages are already versioned (changeset already consumed) and the registry 
 
 ## Out of Scope
 
-- Template packages (`templates/demo`, `templates/demo-legacy`) — not released via this command.
+- Template package (`templates/demo-legacy`) — not released via this command.
 - `@igrp/igrp-framework-react-design-system-storybook` — ignored (listed in changeset ignored packages).
 - Interactive mode — no prompts, no confirmations mid-run.

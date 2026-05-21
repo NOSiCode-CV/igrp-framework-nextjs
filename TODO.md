@@ -75,4 +75,6 @@ Add the following components to the design system:
 
 -- Add dynamic import if the component is not loaded when the page start, example: dialog
 
-## Async slug from applications
+-- Async slug from applications
+
+-- logo-no-text.png is get 500

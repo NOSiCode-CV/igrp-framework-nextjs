@@ -428,4 +428,4 @@ All fetch errors log via `logger.error()` before throwing — no change to the l
 - [ ] User profile refreshes within 60 s of a session change.
 - [ ] `fetchMenusAction` and `revalidateMenusAction` callable from a client component without errors.
 - [ ] Concurrent requests with different session tokens receive correct, isolated data.
-- [ ] No change required in `templates/demo` or `templates/demo-legacy` to benefit from streaming.
+- [ ] No change required in `templates/demo-legacy` to benefit from streaming.

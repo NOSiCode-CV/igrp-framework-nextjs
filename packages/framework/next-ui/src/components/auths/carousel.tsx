@@ -4,6 +4,19 @@ import { useState, useEffect } from 'react';
 import Image from 'next/image';
 import { Button, cn } from '@igrp/igrp-framework-react-design-system';
 
+function withBasePath(src: string): string {
+  const basePath = process.env.NEXT_PUBLIC_BASE_PATH ?? '';
+  if (
+    !basePath ||
+    !src.startsWith('/') ||
+    src.startsWith('//') ||
+    src.startsWith(`${basePath}/`)
+  ) {
+    return src;
+  }
+  return `${basePath}${src}`;
+}
+
 interface IGRPCarousel {
   image: string;
   title: string;
@@ -46,7 +59,7 @@ function IGRPAuthCarousel({ carouselItems, intervalTime = 6000 }: IGRPAuthCarous
             )}
           >
             <Image
-              src={item.image}
+              src={withBasePath(item.image)}
               alt={item.title}
               fill
               priority={index === 0}

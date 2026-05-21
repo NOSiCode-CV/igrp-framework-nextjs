@@ -1,6 +1,7 @@
 import { type NextRequest, NextResponse } from "next/server";
 
 import { auth } from "@/lib/auth";
+import { sanitizeCallbackUrl } from "@/lib/utils";
 
 /** Security headers applied to all responses in production. */
 const SECURITY_HEADERS: Record<string, string> = {
@@ -76,8 +77,11 @@ export async function middleware(request: NextRequest) {
   // Redirects to /login with the current path as callbackUrl.
   const loginRedirect = (): NextResponse => {
     const loginUrl = new URL(`${BASE_PATH}/login`, request.url);
-    if (currentPath && currentPath !== "/") {
-      loginUrl.searchParams.set("callbackUrl", currentPath);
+    // Only set callbackUrl when it's a useful destination — never `/`, never
+    // /login/* (would loop), never /logout/*.
+    const safeCallback = sanitizeCallbackUrl(currentPath, BASE_PATH);
+    if (safeCallback && safeCallback !== "/") {
+      loginUrl.searchParams.set("callbackUrl", safeCallback);
     }
     return withSecurityHeaders(NextResponse.redirect(loginUrl));
   };

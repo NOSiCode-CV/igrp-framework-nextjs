@@ -1,26 +1,93 @@
 # templates/demo-legacy — expert context
 
-You are working inside `templates/demo-legacy/` — the **older reference template**. `templates/demo` is canonical; this one is kept for consumers still on the previous generation. **Act as a senior Next.js engineer with a maintenance-engineering mindset.**
+You are working inside `templates/demo-legacy/` — the **canonical reference template** for the IGRP Framework. This is the only template in the repo; treat it as the source of truth for how a downstream IGRP app is expected to consume `@igrp/framework-next*` and the design system. **Act as a senior Next.js engineer.**
 
 ## Your expertise
 
-- **Legacy Next.js / React patterns** — older App Router conventions (sync `cookies()`/`headers()`/`params` **before Next 15**), older NextAuth usage, older `"use client"` conventions, pre-React-Compiler code.
-- **Backward-compatible maintenance** — smallest-diff bug fixes, resisting feature creep, recognizing when "fixing" old code actually breaks consumers pinned to the old version.
-- **Framework-consumer migration** — how `workspace:*` consumers behave when framework packages bump majors, diagnosing "works in demo / fails in demo-legacy" divergences, deciding whether to adapt the legacy template or pin a framework range.
-- **Verifying before assuming** — this template predates some current conventions. Tooling (Biome vs ESLint), Tailwind setup, `IGRP_PREVIEW_MODE` handling, and layout flow **may differ** from `templates/demo`.
+- **Next.js 15 + App Router** — async `cookies()`/`headers()`/`params`/`searchParams`, server vs. client component boundaries, route groups, parallel/intercepted routes, middleware, `basePath`, `output: "standalone"`, Turbopack dev.
+- **NextAuth v4 + OIDC** — provider config, `NEXTAUTH_URL` semantics (it points at the NextAuth API root, **including** `basePath` + `/api/auth`), `redirect_uri` registration, JWT/session callbacks, token refresh, middleware-based gating, `callbackUrl` sanitization to prevent open-redirect and login-loop chains.
+- **IGRP framework consumer patterns** — how the template wires `withIGRPAuth`, `IGRPRootLayout`, `IGRPLayout`, `igrpBuildConfig`, `igrpGetAccessClient`, server actions, and the `IGRP_PREVIEW_MODE` / `AUTH_PROVIDER=none` bypass paths.
+- **`workspace:*` consumption** — every `@igrp/*` dep is linked from `packages/**`. After any public-API change in a framework package, run `pnpm build:framework` before assuming this template still builds.
+- **Tailwind v4** — Tailwind compiles **once here** in the app, not in framework packages. `@source` must point at this app's `src/` **and** the consumed `dist/` of each `@igrp/*` package. Import tokens only (`@igrp/igrp-framework-react-design-system/tokens`) — never the prebuilt `styles.css`.
+- **Biome** — this template uses **Biome** for lint/format. Don't introduce ESLint/Prettier configs here; framework packages have their own (ESLint + Prettier) and the toolchains don't cross-apply.
 
-## Rules unique to this package
+## What lives here
 
-- **Maintenance-mode.** Fix bugs, keep it building, keep it consuming current framework versions. **Don't port new features from `templates/demo`** unless explicitly asked.
-- Before changing anything, confirm with the user whether the change should also land in `templates/demo` (or vice versa). Divergences are often intentional.
-- **Read the actual files** (`package.json`, `biome.json`/`.eslintrc`, `globals.css`, `next.config.*`) before applying rules from `templates/demo` — don't assume parity.
-- Consumed as `workspace:*` — framework edits need `pnpm build:framework` first.
-- Framework API changes: verify this template still compiles. If it no longer does, **surface that** to the user rather than silently updating.
-- **Don't delete** this package or its scripts as part of cleanup — it's load-bearing for existing consumers.
+```
+src/
+  middleware.ts                 → auth gate + security headers + basePath-aware redirects
+  app/
+    layout.tsx                  → IGRPRootLayout + providers
+    (igrp)/layout.tsx           → IGRPLayout (header + sidebar shell)
+    (auth)/login/page.tsx       → IGRPAuthForm launcher
+    (auth)/logout/…             → logout flow
+    api/auth/[...nextauth]/route.ts → NextAuth route handler from `auth.ts`
+  actions/igrp/                 → server actions (fetchMenusAction, fetchCurrentUserAction, …)
+  config/                       → site/login/menu config consumed by igrpBuildConfig
+  lib/
+    auth.ts                     → `withIGRPAuth` instance, `serverSession`, `getSession`
+    utils.ts                    → `cn`, `isPreviewMode`, `isAuthDisabled`, `isAuthBypass`, `sanitizeCallbackUrl`
+  igrp.template.config.ts       → `igrpBuildConfig` assembly, preview-mode mock swap
+  temp/                         → mock users/menus/applications for preview mode
+  styles/                       → tokens + theme variants (imported after tokens)
+```
 
-## Stance
+## Hard rules unique to this template
 
-When the user asks for a "new template feature," default to `templates/demo` and ask whether they also want it backported here. **Read before writing** — local conventions may be older than you expect. If you find a divergence from `templates/demo` that looks like a bug, surface it and ask before converging.
+- **`NEXTAUTH_URL` must include the basePath and `/api/auth`.** With `NEXT_PUBLIC_BASE_PATH=/apps/template`, the correct value is `NEXTAUTH_URL=http://localhost:3000/apps/template/api/auth`. NextAuth treats this as the URL of its API root and derives `signin`/`callback` endpoints from it. Getting this wrong produces a login loop with a deeply nested `?callbackUrl=…?callbackUrl=…` chain.
+- **`redirect_uri` registered on the IGRP auth server must exactly match** what NextAuth builds: `<NEXTAUTH_URL>/callback/<provider-id>`. The OIDC spec requires an exact match.
+- **`callbackUrl` is always sanitized.** Both middleware and the login page pass user-supplied values through `sanitizeCallbackUrl()` (in `lib/utils.ts`) to:
+  - reject scheme-relative (`//…`) and absolute URLs (open-redirect),
+  - collapse `/login` and `/<basePath>/login` so we never bounce back to login,
+  - drop `/logout*` targets so a successful login doesn't immediately log out.
+  Any new code that consumes `callbackUrl` must go through this helper.
+- **Preview mode (`IGRP_PREVIEW_MODE=true`) and `AUTH_PROVIDER=none` are the auth-bypass paths.** Both checks live behind `isAuthBypass()`. Every branch that mentions auth (middleware, root layout, `(igrp)/layout.tsx`, `igrp.template.config.ts`, the login page itself) must work with bypass **on** and **off**. The login page redirects to `/` when bypass is on, because there's no real provider to sign into.
+- **All UI comes from `@igrp/igrp-framework-react-design-system`.** Horizon (`IGRP*`) first; Primitives only when Horizon is too opinionated. Forms are **always** `IGRPForm` + Zod — never raw `<form>` or direct `react-hook-form`. Only semantic tokens (`bg-background`, `text-foreground`, `border-input`, …) — never raw Tailwind colors. No manual `dark:` overrides — tokens drive dark mode. Use `cn()` for class merging, `size-*` when width = height, `flex gap-*` instead of `space-x-*`/`space-y-*`. Every file importing from the DS needs `'use client'`.
+- **Don't import package internals.** Use documented subpath exports (`@igrp/framework-next-auth/client`, `/server`, `/config`, `/providers`, …) — never `…/dist/…`.
+
+## Architecture notes
+
+### Auth flow (no bypass)
+
+1. Request hits `middleware.ts`.
+2. Public/static paths pass through with an `x-current-path` request header.
+3. JWT extracted via `auth.getTokenFromRequest()`. Missing/expired/refresh-failed → redirect to `${BASE_PATH}/login` (sanitized callbackUrl).
+4. `/login` renders `IGRPAuthForm` from `@igrp/framework-next-ui`. The button calls `signIn('igrp-auth', { callbackUrl: safeCallbackUrl })`.
+5. NextAuth POSTs `/api/auth/signin/igrp-auth`, returns the IGRP issuer's `/oauth2/authorize` URL; browser navigates there.
+6. IGRP issuer authenticates → 302 to `<NEXTAUTH_URL>/callback/igrp-auth?code=…&state=…`.
+7. NextAuth exchanges code → tokens → session cookie set → redirect to `callbackUrl`.
+8. Middleware on the next request sees a valid token → `nextWithPath()` passes through.
+
+### Auth flow (bypass)
+
+- `IGRP_PREVIEW_MODE=true` or `AUTH_PROVIDER=none` → middleware lets every non-`/login` path through with mock layout data; visiting `/login`, `/logout`, or `/api/auth/*` redirects to `/`. `serverSession()`/`getSession()` return `null`. `igrpBuildConfig` swaps in `src/temp/*` mocks.
+
+### Layout composition
+
+- `src/app/layout.tsx` mounts `IGRPRootLayout` + providers (`IGRPRootProviders`, `IGRPSessionProvider`, theme provider).
+- `src/app/(igrp)/layout.tsx` runs auth check, loads session via `serverSession()`, calls `igrpBuildConfig(...)`, renders `IGRPLayout` (header + sidebar + nav-user + breadcrumbs + command search) around `children`.
+- Route groups: `(auth)` for login/logout, `(igrp)` for the authenticated shell, `(myapp)` for the demo app pages.
+
+## Build & dev commands (from repo root)
+
+| Goal | Command |
+|---|---|
+| Install (with private-registry creds from root `.env`) | `pnpm install:deps` |
+| Build framework packages in order | `pnpm build:framework` |
+| Dev this template (Turbopack) | `pnpm dev:demo` *(legacy script name — check `package.json` if unsure)* |
+| Production build | `pnpm build:demo` (runs Biome format first) |
+| Production start | `pnpm start:demo` |
+| Package the template zip | `pnpm release:demo` |
+
+> Always read the current `templates/demo-legacy/package.json` for the authoritative script names — older snapshots may diverge.
+
+## Review stance
+
+- **Read before writing.** This template is older code; sync vs. async API conventions, `"use client"` placement, and middleware structure may not match modern Next.js docs verbatim. Verify against the actual file before applying a "modernization."
+- **Smallest diff wins.** Bug fixes should land surgically. Resist refactor-on-touch.
+- **Framework API changes ripple here.** If a `@igrp/*` public API changes, run `pnpm build:framework` and confirm this template still compiles before declaring the framework change done.
+- **Surface, don't silently update.** If you discover this template no longer compiles against the current framework packages, report it to the user rather than guessing the migration.
+- **Don't delete this package or its scripts as part of cleanup** — it's load-bearing for existing consumers.
 
 ## Shared rules
 

@@ -12,10 +12,10 @@
 - `pnpm build` — everything with a build script
 - `pnpm lint` | `pnpm format` | `pnpm clean` | `pnpm clean-all` (also removes `node_modules`)
 
-## Templates
+## Template (`templates/demo-legacy` — the only template, package name `@igrp/framework-next-template`)
 
 - `pnpm dev:demo` — Next.js 15 + Turbopack
-- `pnpm build:demo` — `next build` (runs biome format)
+- `pnpm build:demo` — `next build` (runs Biome format)
 - `pnpm start:demo` — `next start`
 - `pnpm release:demo` — create the publishable zip template
 - `pnpm dev:app-center` — if `apps/` is present

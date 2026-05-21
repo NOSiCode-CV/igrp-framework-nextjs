@@ -169,7 +169,7 @@ Full migration guides (with before/after code): [`.igrpmigrations/`](.igrpmigrat
 
 ## Project Structure
 
-```templates/demo/
+```templates/demo-legacy/
 ├── src/
 │   ├── app/                   # Next.js App Router pages
 │   │   ├── (auth)/            # Authentication routes (login, logout)

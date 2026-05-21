@@ -13,7 +13,7 @@ A review of the project's authentication implementation against the Next.js 15 a
 3. Deprecated provider names (`keycloak`, `autentika`, `oauth2`) still appear in framework comments and error messages.
 4. When the refresh token expires or fails, the client does not react immediately — the user stays on the current page until their next navigation triggers middleware.
 
-The improvements are independent and non-breaking. `templates/demo` will be removed from the monorepo; `templates/demo-legacy` is the canonical reference template.
+The improvements are independent and non-breaking. `templates/demo-legacy` is the canonical (and only) reference template.
 
 ---
 
@@ -182,7 +182,7 @@ Refresh token expires
 - **NextAuth v4 → Auth.js v5 migration.** Breaking change, significant effort, separate initiative.
 - **Database-backed sessions.** JWT stateless sessions are correct for this use case.
 - **Role-based access control (RBAC) in DAL.** Out of scope for this improvement; RBAC belongs in a future iteration once the DAL foundation exists.
-- **`templates/demo` changes.** This template is being removed from the monorepo.
+- **`templates/demo` changes.** This template was removed from the monorepo; only `templates/demo-legacy` remains.
 
 ---
 

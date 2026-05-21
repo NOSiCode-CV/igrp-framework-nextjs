@@ -4,7 +4,7 @@ import { redirect } from "next/navigation";
 
 import { carouselItems, loginConfig } from "@/config/login";
 import { siteConfig } from "@/config/site";
-import { cn, isAuthBypass } from "@/lib/utils";
+import { cn, isAuthBypass, sanitizeCallbackUrl } from "@/lib/utils";
 
 const { sliderPosition, texts } = loginConfig;
 const { logo, name } = siteConfig;
@@ -22,6 +22,11 @@ export default async function AuthPage({
   }
 
   const { callbackUrl } = await searchParams;
+  // Drop callbackUrl values that would bounce the user back to /login (or
+  // /logout) after the OIDC round-trip — those produce the nested
+  // `?callbackUrl=…?callbackUrl=…` chain. Fall back to `/` so a successful
+  // login lands on the app home.
+  const safeCallbackUrl = sanitizeCallbackUrl(callbackUrl) ?? "/";
   const providerId = getAuthProviderIdFromEnv(process.env);
 
   return (
@@ -39,7 +44,7 @@ export default async function AuthPage({
         texts={texts}
         logo={logo}
         name={name}
-        callbackUrl={callbackUrl as string}
+        callbackUrl={safeCallbackUrl}
         providerId={providerId}
       />
     </section>

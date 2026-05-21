@@ -139,4 +139,4 @@ buildEndSessionUrl(token, env, postLogoutRedirectUri)
 
 - Back-channel logout (OIDC logout tokens)
 - `post_logout_redirect_uri` registration validation (Keycloak client config — must be done in Keycloak admin)
-- Applying the diagnostic logging to `templates/demo` (canonical template) — not requested
+- Applying the diagnostic logging to `templates/demo-legacy` (canonical template) — not requested

@@ -1,5 +1,32 @@
 # @igrp/framework-next-ui
 
+## 0.1.0-beta.136
+
+### Patch Changes
+
+- b9c286f: fix: prepend NEXT_PUBLIC_BASE_PATH to auth carousel and login form images
+
+  When basePath is configured, IGRPAuthCarousel and IGRPAuthForm passed
+  consumer-provided image paths to next/image as-is. The optimizer fetched
+  them without the basePath prefix, causing 404s on `/login` for images
+  referenced by absolute root paths (e.g. `/logo-no-text.png`). The src
+  values are now resolved through an idempotent basePath prefixer so
+  consumers can keep passing raw `/foo.png` paths and existing already-
+  prefixed paths are not double-prefixed.
+
+- 2a0ef32: fix(session-watcher): don't push to /login when already on the auth UI
+
+  `IGRPSessionWatcher` is mounted globally via `IGRPNestedProviders`, so it runs on every route — including `/login` and `/logout`. Previously, an unauthenticated state on `/login` triggered `router.push('/login?callbackUrl=<window.location.href>')`, which:
+  - created a self-referential URL (`/login?callbackUrl=/apps/template/login`),
+  - overwrote any legitimate `callbackUrl` set by middleware (e.g. `/dashboard`) with `/login`, so post-sign-in always landed on `/` regardless of intended target.
+
+  The watcher now strips the configured `NEXT_PUBLIC_BASE_PATH` from `window.location.pathname` and skips the push when the path matches the auth chrome routes (`/login*`, `/logout*`). Genuine session-expiry on protected routes still triggers the push as before.
+
+- Updated dependencies [2a0ef32]
+- Updated dependencies [2196ef8]
+  - @igrp/framework-next-auth@0.1.0-beta.131
+  - @igrp/framework-next-types@0.1.0-beta.133
+
 ## 0.1.0-beta.135
 
 ### Patch Changes

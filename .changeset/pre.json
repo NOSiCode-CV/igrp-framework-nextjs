@@ -53,6 +53,7 @@
     "sidebar-provider-no-sidebar",
     "silent-wombat-dances",
     "token-revocation-on-logout",
-    "vgrotmhs"
+    "vgrotmhs",
+    "migrator-08-m2m-oauth2"
   ]
 }

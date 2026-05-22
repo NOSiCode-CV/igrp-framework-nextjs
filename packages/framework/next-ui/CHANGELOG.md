@@ -1,5 +1,11 @@
 # @igrp/framework-next-ui
 
+## 0.1.0-beta.137
+
+### Patch Changes
+
+- 1d4a0b7: - Prepend `NEXT_PUBLIC_BASE_PATH` to the error image in `IGRPGlobalError` so the asset resolves correctly when the app is hosted under a base path.
+
 ## 0.1.0-beta.136
 
 ### Patch Changes

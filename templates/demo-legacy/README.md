@@ -296,42 +296,58 @@ Coming soon
 | `NEXT_PUBLIC_ALLOWED_DOMAINS` | Allowed image domains (comma-separated) | - |
 | `NEXT_PUBLIC_IGRP_PROFILE_URL` | Base URL for profile | - |
 | `NEXT_PUBLIC_IGRP_NOTIFICATION_URL` | Base URL for notification | - |
-| `IGRP_SYNC_ON_CODE_MENUS` | Enable synchronization of menus defined in code with the IGRP system | `false` |
-| `IGRP_SYNC_ACCESS` | Enable synchronization of applications, resources, and menus with the IGRP Access Management API | `true` |
-| `IGRP_M2M_SERVICE_ID` | Unique identifier for your service in the IGRP Access Management system (required when `IGRP_SYNC_ACCESS=true`) | - |
-| `IGRP_M2M_TOKEN` | Authentication token for machine-to-machine API calls (required when `IGRP_SYNC_ACCESS=true`) | - |
+| `IGRP_SYNC_ACCESS` | Enable synchronization of applications, resources, and menus with the IGRP Access Management API | `false` |
+| `IGRP_SERVICE_ID` | Service identity (resource name + `X-Machine-Service-ID` header) — required when `IGRP_SYNC_ACCESS=true` | - |
+| `IGRP_M2M_CLIENT_ID` | OAuth2 `client_credentials` client identifier — required when `IGRP_SYNC_ACCESS=true` | - |
+| `IGRP_M2M_CLIENT_SECRET` | OAuth2 `client_credentials` client secret — required when `IGRP_SYNC_ACCESS=true` | - |
+| `IGRP_M2M_SCOPE` | OAuth2 scope to request (optional) | - |
 
 ### Synchronization Variables
 
-The following variables control how your application synchronizes with the IGRP system:
+When `IGRP_SYNC_ACCESS=true` and `IGRP_PREVIEW_MODE` is off, the framework
+authenticates to the IGRP Access Management API using OAuth2
+`client_credentials`. The bearer token is fetched once from
+`POST {IGRP_ACCESS_MANAGEMENT_API}/oauth2/token`, cached until expiry, and
+shared across the three sync phases (application metadata, route
+resources, on-code menus). Sync runs post-response via `after()`, so it
+never blocks the first request.
 
-#### `IGRP_SYNC_ON_CODE_MENUS`
-
-- **Purpose**: Controls whether menus defined in your application code are synchronized with the IGRP system
-- **Usage**: Set to `true` to enable code-based menu synchronization, `false` to disable
-- **When to use**: Enable this if you want to sync menus that are hardcoded in your application with the IGRP framework
+All required variables are validated during render of `IGRPRootLayout`.
+Missing or malformed values surface as `IgrpConfigError` in
+`app/global-error.tsx` (machine code `IGRP_ACCESS_MANAGEMENT_CONFIG_MISSING`),
+not as opaque 4xx responses inside the post-stream sync.
 
 #### `IGRP_SYNC_ACCESS`
 
-- **Purpose**: Controls synchronization of applications, resources, and menus with the IGRP Access Management API
-- **Usage**: Set to `true` to enable access management synchronization, `false` to disable
-- **When to use**: Enable this if you want your application to automatically sync its structure (applications, resources, menus) with the IGRP Access Management system
-- **Note**: Requires `IGRP_M2M_SERVICE_ID` and `IGRP_M2M_TOKEN` to be configured when enabled
+- **Purpose**: Master switch for Access Management synchronization
+- **Usage**: Set to `true` to sync; `false` (or unset) to skip
+- **When to use**: Enable when your application's structure (resources, menus) needs to be propagated to IGRP Access Management
 
-#### `IGRP_M2M_SERVICE_ID`
+#### `IGRP_SERVICE_ID`
 
-- **Purpose**: Unique identifier for your service in the IGRP Access Management system
-- **Usage**: Set this to your service identifier (e.g., `demo-igrp` or `your-service-name`)
+- **Purpose**: Stable identity for this service on the Access Management server. Used as the resource `name` and sent in the `X-Machine-Service-ID` header on every M2M request.
+- **Format**: Lowercase alphanumeric + dashes/underscores, 2-64 chars, starts and ends with `[a-z0-9]`. Examples: `demo-igrp`, `my_service-prod`
 - **Required when**: `IGRP_SYNC_ACCESS=true`
-- **How to get**: Contact your IGRP Access Management administrator
+- **Note**: This is *not* a credential. It identifies the service across deployments — keep it stable per logical service.
 
-#### `IGRP_M2M_TOKEN`
+#### `IGRP_M2M_CLIENT_ID`
 
-- **Purpose**: Authentication token used for machine-to-machine API calls to the IGRP Access Management API
-- **Usage**: Set this to the token provided by your IGRP Access Management administrator
+- **Purpose**: OAuth2 client identifier for this service's machine-to-machine integration
 - **Required when**: `IGRP_SYNC_ACCESS=true`
-- **How to get**: Contact your IGRP Access Management administrator
-- **Security**: Keep this token secure and never commit it to version control
+- **How to get**: Issued by your IGRP Access Management administrator when registering the M2M client
+
+#### `IGRP_M2M_CLIENT_SECRET`
+
+- **Purpose**: OAuth2 client secret paired with `IGRP_M2M_CLIENT_ID`
+- **Required when**: `IGRP_SYNC_ACCESS=true`
+- **How to get**: Issued alongside the client ID. Rotate via your AM admin.
+- **Security**: Server-only — the framework keeps it inside `IGRPRootLayout` and the `after()` boundary. Never commit it to version control.
+
+#### `IGRP_M2M_SCOPE`
+
+- **Purpose**: OAuth2 scope to request when fetching the bearer token
+- **Required when**: Never — leave blank to use the AM authorization server's default scope for this client
+- **How to set**: Provide a value when your AM admin has issued a specific scope (e.g. `access-mgmt:sync`). An unrecognized scope causes the token endpoint to return 4xx.
 
 #### `NEXT_PUBLIC_IGRP_PROFILE_URL`
 

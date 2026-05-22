@@ -1,49 +1,20 @@
-import { IGRPMenuItemArgs } from '@igrp/framework-next-types';
+import 'server-only';
+
+import type { IGRPMenuItemArgs } from '@igrp/framework-next-types';
 import {
-  AccessManagementClient,
-  ApiClientConfig,
-  M2MClientConfig,
-  MenuType,
-  Status,
+  type AccessManagementClient,
+  type MenuType,
+  type Status,
 } from '@igrp/platform-access-management-client-ts';
 
 export interface IGRPSyncMenusArgs {
+  client: AccessManagementClient;
   appCode: string;
   menus: IGRPMenuItemArgs[];
-  baseUrl: string;
-  m2mServiceId: string;
-  m2mToken: string;
-  syncEnabled: boolean;
 }
 
-export async function igrpSyncMenus({
-  appCode,
-  menus,
-  baseUrl,
-  m2mServiceId,
-  m2mToken,
-  syncEnabled,
-}: IGRPSyncMenusArgs) {
-  if (!syncEnabled) {
-    console.warn(
-      'On code menus synchronization skipped due to disabling. ' +
-        'To re-enable it set IGRP_SYNC_ON_CODE_MENUS=true in environment variables.',
-    );
-    return;
-  }
-
-  const config: ApiClientConfig = {
-    baseUrl: baseUrl,
-  };
-
-  const m2mConfig: M2MClientConfig = {
-    serviceId: m2mServiceId,
-    token: m2mToken,
-  };
-
-  const accessManagementClient = AccessManagementClient.create(config, m2mConfig);
-
-  await accessManagementClient.m2m.syncApplicationMenus(
+export async function igrpSyncMenus({ client, appCode, menus }: IGRPSyncMenusArgs) {
+  await client.m2m.syncApplicationMenus(
     appCode,
     menus.map((i: IGRPMenuItemArgs) => {
       return {
@@ -54,7 +25,5 @@ export async function igrpSyncMenus({
     }),
   );
 
-  console.info(
-    'On code menus synchronized successfully. To disable it set IGRP_SYNC_ON_CODE_MENUS as false in environment variables.',
-  );
+  console.info('On-code menus synchronized successfully.');
 }

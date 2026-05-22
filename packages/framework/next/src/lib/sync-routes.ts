@@ -1,24 +1,22 @@
+import 'server-only';
+
 import {
-  AccessManagementClient,
-  ApiClientConfig,
-  M2MClientConfig,
-  ResourceDTO,
-  ResourceItemDTO,
-  ResourceType,
+  type AccessManagementClient,
+  type ResourceDTO,
+  type ResourceItemDTO,
+  type ResourceType,
 } from '@igrp/platform-access-management-client-ts';
 
 export interface IGRPSyncRoutesArgs {
-  baseUrl: string;
-  m2mServiceId: string;
-  m2mToken: string;
+  client: AccessManagementClient;
+  serviceId: string;
   appRoutes?: string[];
   paramMapBody?: string;
 }
 
 export async function igrpSyncRoutes({
-  baseUrl,
-  m2mServiceId,
-  m2mToken,
+  client,
+  serviceId,
   appRoutes,
   paramMapBody,
 }: IGRPSyncRoutesArgs) {
@@ -26,17 +24,6 @@ export async function igrpSyncRoutes({
     console.warn('No app routes or param map body found');
     return;
   }
-
-  const config: ApiClientConfig = {
-    baseUrl,
-  };
-
-  const m2mConfig: M2MClientConfig = {
-    serviceId: m2mServiceId,
-    token: m2mToken,
-  };
-
-  const accessManagementClient = AccessManagementClient.create(config, m2mConfig);
 
   const paramMap: Record<string, object> = {};
   const lineRegex = /"([^"]+)"\s*:\s*(\{[\s\S]*?});?/g;
@@ -63,21 +50,21 @@ export async function igrpSyncRoutes({
   // ---- Sync to backend ----
   const resourceItems: ResourceItemDTO[] = menuRoutes.map((route): ResourceItemDTO => {
     return {
-      name: m2mServiceId + '-' + route.replace('/', '-'),
+      name: serviceId + '-' + route.replace('/', '-'),
       url: route,
-      resourceName: m2mServiceId,
+      resourceName: serviceId,
     };
   });
 
   const resource: ResourceDTO = {
-    name: m2mServiceId,
-    description: `User interface for service ${m2mServiceId}`,
+    name: serviceId,
+    description: `User interface for service ${serviceId}`,
     type: 'UI' as ResourceType,
     applications: [],
     items: resourceItems,
   };
 
-  await accessManagementClient.m2m.syncResources(resource);
+  await client.m2m.syncResources(resource);
 
   console.info('Synced static menu routes:', menuRoutes);
 }

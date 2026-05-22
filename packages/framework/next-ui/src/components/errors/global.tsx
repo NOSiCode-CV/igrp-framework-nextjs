@@ -8,6 +8,14 @@ import { cn, IGRPButton } from '@igrp/igrp-framework-react-design-system';
 const ANIMATION_DELAY_MS = 300;
 const RESET_DELAY_MS = 1000;
 
+function withBasePath(src: string): string {
+  const basePath = process.env.NEXT_PUBLIC_BASE_PATH ?? '';
+  if (!basePath || !src.startsWith('/') || src.startsWith('//') || src.startsWith(`${basePath}/`)) {
+    return src;
+  }
+  return `${basePath}${src}`;
+}
+
 const DEFAULT_COPY = {
   title: 'Ocorreu um erro inesperado.',
   description:
@@ -72,7 +80,7 @@ function IGRPGlobalError({
       <div className={cn('w-full max-w-3xl')}>
         <div className={cn('text-center')}>
           <Image
-            src="/error-img.webp"
+            src={withBasePath("/error-img.webp")}
             alt="Error Image"
             width={300}
             height={200}

@@ -4,7 +4,7 @@ import type {
 } from "@igrp/platform-access-management-client-ts";
 
 export const IGRP_MOCK_USER: IGRPUserDTO = {
-  id: 1,
+  id: "1234567890",
   username: "igrp.user",
   name: "IGRP USER",
   email: "igrp.user@nosi.cv",

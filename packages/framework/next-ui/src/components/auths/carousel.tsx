@@ -6,12 +6,7 @@ import { Button, cn } from '@igrp/igrp-framework-react-design-system';
 
 function withBasePath(src: string): string {
   const basePath = process.env.NEXT_PUBLIC_BASE_PATH ?? '';
-  if (
-    !basePath ||
-    !src.startsWith('/') ||
-    src.startsWith('//') ||
-    src.startsWith(`${basePath}/`)
-  ) {
+  if (!basePath || !src.startsWith('/') || src.startsWith('//') || src.startsWith(`${basePath}/`)) {
     return src;
   }
   return `${basePath}${src}`;

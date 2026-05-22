@@ -9,10 +9,12 @@ import type { Metadata, Viewport } from "next";
 import { configLayout } from "@/actions/igrp/layout";
 import { createConfig } from "@/igrp.template.config";
 
+const basePath = process.env.NEXT_PUBLIC_BASE_PATH ?? "";
+
 export const metadata: Metadata = {
   title: "IGRP | Template Aplicações",
   description: "IGRP | Template Aplicações",
-  icons: { icon: "/logo-no-text.png" },
+  icons: { icon: `${basePath}/logo-no-text.png` },
 };
 
 export const viewport: Viewport = {

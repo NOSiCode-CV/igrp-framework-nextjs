@@ -76,7 +76,8 @@ export function sanitizeCallbackUrl(
 
   const pathOnly = normalized.split("?")[0]?.split("#")[0] ?? "";
   if (pathOnly === "/login" || pathOnly.startsWith("/login/")) return undefined;
-  if (pathOnly === "/logout" || pathOnly.startsWith("/logout/")) return undefined;
+  if (pathOnly === "/logout" || pathOnly.startsWith("/logout/"))
+    return undefined;
 
   return raw;
 }

@@ -98,7 +98,9 @@ export async function serverSession() {
   const apiManagement = process.env.IGRP_ACCESS_MANAGEMENT_API || "";
 
   if (!process.env.NEXTAUTH_SECRET) {
-    console.warn("NEXTAUTH_SECRET is not set. This is required for production.");
+    console.warn(
+      "NEXTAUTH_SECRET is not set. This is required for production.",
+    );
     if (process.env.NODE_ENV === "production") {
       // Hard fail in prod — we will not masquerade as "no session". Bubbles
       // to the nearest App Router `error.tsx`.

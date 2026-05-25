@@ -300,7 +300,6 @@ Coming soon
 | `IGRP_SERVICE_ID` | Service identity (resource name + `X-Machine-Service-ID` header) — required when `IGRP_SYNC_ACCESS=true` | - |
 | `IGRP_M2M_CLIENT_ID` | OAuth2 `client_credentials` client identifier — required when `IGRP_SYNC_ACCESS=true` | - |
 | `IGRP_M2M_CLIENT_SECRET` | OAuth2 `client_credentials` client secret — required when `IGRP_SYNC_ACCESS=true` | - |
-| `IGRP_M2M_SCOPE` | OAuth2 scope to request (optional) | - |
 
 ### Synchronization Variables
 
@@ -342,12 +341,6 @@ not as opaque 4xx responses inside the post-stream sync.
 - **Required when**: `IGRP_SYNC_ACCESS=true`
 - **How to get**: Issued alongside the client ID. Rotate via your AM admin.
 - **Security**: Server-only — the framework keeps it inside `IGRPRootLayout` and the `after()` boundary. Never commit it to version control.
-
-#### `IGRP_M2M_SCOPE`
-
-- **Purpose**: OAuth2 scope to request when fetching the bearer token
-- **Required when**: Never — leave blank to use the AM authorization server's default scope for this client
-- **How to set**: Provide a value when your AM admin has issued a specific scope (e.g. `access-mgmt:sync`). An unrecognized scope causes the token endpoint to return 4xx.
 
 #### `NEXT_PUBLIC_IGRP_PROFILE_URL`
 

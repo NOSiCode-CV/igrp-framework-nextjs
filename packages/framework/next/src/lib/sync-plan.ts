@@ -22,6 +22,7 @@ export type IGRPAccessManagementSyncPlan = {
   serviceId: string;
   appInformation: IGRPPackageJson;
   menus: IGRPMenuItemArgs[];
+  syncOnCodeMenus: boolean;
   appRoutes?: string[];
   paramMapBody?: string;
 };
@@ -147,6 +148,7 @@ export function planAccessManagementSync(
     serviceId: rawServiceId,
     appInformation: args.appInformation,
     menus: args.menus,
+    syncOnCodeMenus: cfg!.syncOnCodeMenus === true,
     appRoutes: cfg!.appRoutes,
     paramMapBody: cfg!.paramMapBody,
   };

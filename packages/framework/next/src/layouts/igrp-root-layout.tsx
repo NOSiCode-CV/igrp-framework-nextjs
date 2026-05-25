@@ -42,7 +42,7 @@ export async function IGRPRootLayout({ children, config }: IGRPRootLayoutArgs) {
     previewMode,
     appCode,
     appInformation,
-    menus: sidebarData.menuItems ?? [],
+    menus: apiManagementConfig?.onCodeMenus ?? [],
     apiManagementConfig,
   });
 

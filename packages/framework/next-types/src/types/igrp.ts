@@ -51,14 +51,6 @@ export type IGRPConfigArgs = {
      * Sourced from `process.env.IGRP_M2M_CLIENT_SECRET` in the template.
      */
     m2mClientSecret: string;
-    /**
-     * Optional OAuth2 scope requested when fetching the bearer token. Leave
-     * `undefined` to let the AM authorization server pick the default scope
-     * this client is allowed. Set when the AM admin has issued a specific
-     * scope for resource sync.
-     *
-     * Sourced from `process.env.IGRP_M2M_SCOPE` in the template.
-     */
     appRoutes?: string[];
     paramMapBody?: string;
     /**

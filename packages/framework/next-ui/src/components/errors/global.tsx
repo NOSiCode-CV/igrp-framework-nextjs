@@ -80,7 +80,7 @@ function IGRPGlobalError({
       <div className={cn('w-full max-w-3xl')}>
         <div className={cn('text-center')}>
           <Image
-            src={withBasePath("/error-img.webp")}
+            src={withBasePath('/error-img.webp')}
             alt="Error Image"
             width={300}
             height={200}
@@ -103,7 +103,7 @@ function IGRPGlobalError({
             </div>
           )}
 
-          <div className={cn('flex flex-col items-center justify-center gap-4 sm:flex-row')}>
+          <div className='flex flex-col items-center justify-center gap-4 sm:flex-row'>
             <IGRPButton
               onClick={handleReset}
               size="lg"

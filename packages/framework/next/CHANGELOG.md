@@ -23,7 +23,6 @@
   - `m2mToken` removed → use `m2mClientId` + `m2mClientSecret`.
   - `m2mServiceId` renamed → `serviceId`.
   - `syncOnCodeMenus` removed (was dead config).
-  - Optional `m2mScope` added.
 
   Internal modules `sync-application`, `sync-routes`, `sync-menus` now accept a shared `client` arg instead of building their own; their signatures changed but they're not part of the public API.
 

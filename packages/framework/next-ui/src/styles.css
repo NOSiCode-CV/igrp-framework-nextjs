@@ -1029,11 +1029,6 @@
       gap: calc(var(--spacing) * 0.5);
     }
   }
-  .sm\:pe-12 {
-    @media (width >= 40rem) {
-      padding-inline-end: calc(var(--spacing) * 12);
-    }
-  }
   .sm\:text-3xl {
     @media (width >= 40rem) {
       font-size: var(--text-3xl);
@@ -1070,11 +1065,6 @@
   .lg\:w-52 {
     @media (width >= 64rem) {
       width: calc(var(--spacing) * 52);
-    }
-  }
-  .xl\:w-64 {
-    @media (width >= 80rem) {
-      width: calc(var(--spacing) * 64);
     }
   }
   .dark\:block {

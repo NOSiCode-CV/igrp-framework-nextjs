@@ -58,7 +58,6 @@ export type IGRPConfigArgs = {
      *
      * Sourced from `process.env.IGRP_M2M_SCOPE` in the template.
      */
-    m2mScope?: string;
     appRoutes?: string[];
     paramMapBody?: string;
   };

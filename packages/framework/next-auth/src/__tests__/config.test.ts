@@ -188,3 +188,72 @@ describe('withIGRPAuth — jwt callback introspect gate', () => {
     expect(oidcModule.refreshOidcAccessToken).toHaveBeenCalledWith(expiredToken, VALID_ENV);
   });
 });
+
+describe('withIGRPAuth — callbacks.redirect', () => {
+  const REDIRECT_ENV = {
+    ...VALID_ENV,
+    NEXTAUTH_URL: 'http://localhost:3000/apps/template/api/auth',
+    NEXTAUTH_URL_INTERNAL: 'http://localhost:3000/apps/template/api/auth',
+    NEXT_PUBLIC_IGRP_APP_HOME_SLUG: '/',
+  };
+
+  const APP_BASE = 'http://localhost:3000/apps/template';
+
+  async function getRedirect(envOverrides: Record<string, string> = {}) {
+    const withIGRPAuth = await getFactory();
+    const instance = withIGRPAuth({ env: { ...REDIRECT_ENV, ...envOverrides } });
+    return instance.authOptions.callbacks!.redirect!;
+  }
+
+  it('honors a relative callbackUrl by resolving it against baseUrl', async () => {
+    const redirect = await getRedirect();
+    const result = await redirect({ url: '/some/page', baseUrl: APP_BASE });
+    expect(result).toBe(`${APP_BASE}/some/page`);
+  });
+
+  it('honors a relative callbackUrl with query string', async () => {
+    const redirect = await getRedirect();
+    const result = await redirect({ url: '/list?tab=open', baseUrl: APP_BASE });
+    expect(result).toBe(`${APP_BASE}/list?tab=open`);
+  });
+
+  it('honors a same-origin absolute callbackUrl', async () => {
+    const redirect = await getRedirect();
+    const absolute = `${APP_BASE}/deep/path`;
+    const result = await redirect({ url: absolute, baseUrl: APP_BASE });
+    expect(result).toBe(absolute);
+  });
+
+  it('falls back to home when url equals baseUrl', async () => {
+    const redirect = await getRedirect();
+    const result = await redirect({ url: APP_BASE, baseUrl: APP_BASE });
+    expect(result).toBe(`${REDIRECT_ENV.NEXTAUTH_URL_INTERNAL}${REDIRECT_ENV.NEXT_PUBLIC_IGRP_APP_HOME_SLUG}`);
+  });
+
+  it('rejects protocol-relative URLs (open-redirect guard)', async () => {
+    const redirect = await getRedirect();
+    const result = await redirect({ url: '//evil.com/path', baseUrl: APP_BASE });
+    expect(result).toBe(`${REDIRECT_ENV.NEXTAUTH_URL_INTERNAL}${REDIRECT_ENV.NEXT_PUBLIC_IGRP_APP_HOME_SLUG}`);
+  });
+
+  it('rejects cross-origin absolute URLs', async () => {
+    const redirect = await getRedirect();
+    const result = await redirect({ url: 'http://evil.com/path', baseUrl: APP_BASE });
+    expect(result).toBe(`${REDIRECT_ENV.NEXTAUTH_URL_INTERNAL}${REDIRECT_ENV.NEXT_PUBLIC_IGRP_APP_HOME_SLUG}`);
+  });
+
+  it('defers to callbackExtensions.redirect when provided', async () => {
+    const withIGRPAuth = await getFactory();
+    const customRedirect = vi.fn().mockResolvedValue('/custom');
+    const instance = withIGRPAuth({
+      env: REDIRECT_ENV,
+      callbacks: { redirect: customRedirect },
+    });
+    const result = await instance.authOptions.callbacks!.redirect!({
+      url: '/some/page',
+      baseUrl: APP_BASE,
+    });
+    expect(customRedirect).toHaveBeenCalledWith({ url: '/some/page', baseUrl: APP_BASE });
+    expect(result).toBe('/custom');
+  });
+});

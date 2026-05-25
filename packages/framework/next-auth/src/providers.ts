@@ -61,6 +61,11 @@ const AUTH_PROVIDER_REGISTRY: Record<AuthProviderId, AuthProviderDefinition> = {
       name: 'IGRP Auth',
       type: 'oauth',
       idToken: true,
+      // PKCE (RFC 7636, S256) defends the authorization-code exchange against
+      // code-interception attacks even when the client_secret is confidential.
+      // `nonce` is required to validate the id_token (CWE-294 replay).
+      // `state` is kept explicit rather than relying on the v4 default.
+      checks: ['pkce', 'state', 'nonce'],
       clientId: getRequiredEnvValue(env, 'IGRP_AUTH_CLIENT_ID'),
       clientSecret: getRequiredEnvValue(env, 'IGRP_AUTH_CLIENT_SECRET'),
       wellKnown: `${stripTrailingSlash(getRequiredEnvValue(env, 'IGRP_AUTH_ISSUER'))}/.well-known/openid-configuration`,

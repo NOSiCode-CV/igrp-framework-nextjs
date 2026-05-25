@@ -69,7 +69,6 @@ export function createConfig(
       serviceId: process.env.IGRP_SERVICE_ID || "",
       m2mClientId: process.env.IGRP_M2M_CLIENT_ID || "",
       m2mClientSecret: process.env.IGRP_M2M_CLIENT_SECRET || "",
-      m2mScope: process.env.IGRP_M2M_SCOPE || undefined,
       appRoutes,
       paramMapBody,
     },

@@ -36,7 +36,6 @@ export type M2MClientCredentials = {
   serviceId: string;
   clientId: string;
   clientSecret: string;
-  scope?: string;
 };
 
 /**
@@ -60,7 +59,6 @@ export function igrpGetAccessManagementClient(
       serviceId: credentials.serviceId,
       clientId: credentials.clientId,
       clientSecret: credentials.clientSecret,
-      scope: credentials.scope,
     };
     client = AccessManagementClient.create(config, m2mConfig);
     clients.set(key, client);

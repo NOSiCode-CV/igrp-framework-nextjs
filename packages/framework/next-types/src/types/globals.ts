@@ -24,4 +24,5 @@ export type IGRPPackageJson = {
   version?: string;
   description?: string;
   displayName?: string;
+  slug?: string;
 };

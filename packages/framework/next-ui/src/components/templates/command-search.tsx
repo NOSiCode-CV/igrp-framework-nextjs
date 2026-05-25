@@ -2,9 +2,8 @@
 
 import { Fragment, useCallback, useEffect, useMemo, useState } from 'react';
 import {
-  cn,
   IGRPIcon,
-  IGRPButton,
+  Button,
   CommandDialog,
   CommandEmpty,
   CommandGroup,
@@ -71,26 +70,22 @@ function IGRPTemplateCommandSearch({ commands = [] }: IGRPTemplateCommandSearchP
 
   return (
     <>
-      <IGRPButton
+      <Button
         onClick={() => setOpen(true)}
         variant="outline"
         size="lg"
-        className={cn(
-          'justify-between focus-visible:outline-none focus-visible:ring-1 border-input px-3 shadow-none sm:pe-12 md:flex-none sm:w-40 lg:w-52 xl:w-64',
-        )}
+        className='justify-between focus-visible:outline-none focus-visible:ring-1 border-input px-3 shadow-none md:flex-none sm:w-40 lg:w-52'
       >
-        <span className={cn('flex items-center ')}>
-          <IGRPIcon iconName="Search" className={cn('mr-1 size-3')} />
+        <span className='flex items-center'>
+          <IGRPIcon iconName="Search" className='mr-1 size-3' />
           <span>Pesquisar...</span>
         </span>
         <kbd
-          className={cn(
-            'pointer-events-none select-none flex items-center gap-1 rounded border px-1 py-1 font-mono text-[10px] font-medium',
-          )}
+          className='pointer-events-none select-none flex items-center gap-1 rounded border px-1 py-1 font-mono text-[10px] font-medium'
         >
-          <span className={cn('text-xs')}>⌘</span>K
+          <span className='text-xs'>⌘</span>K
         </kbd>
-      </IGRPButton>
+      </Button>
       <CommandDialog open={open} onOpenChange={setOpen}>
         <CommandInput placeholder="Digite um comando ou pesquisa..." />
         <CommandList>
@@ -104,7 +99,7 @@ function IGRPTemplateCommandSearch({ commands = [] }: IGRPTemplateCommandSearchP
                     key={item.id ?? item.label}
                     onSelect={() => runCommand(item.onSelect)}
                   >
-                    {item.icon && <IGRPIcon iconName={item.icon} className={cn('mr-2')} />}
+                    {item.icon && <IGRPIcon iconName={item.icon} className='mr-2' />}
                     <span>{item.label}</span>
                   </CommandItem>
                 ))}

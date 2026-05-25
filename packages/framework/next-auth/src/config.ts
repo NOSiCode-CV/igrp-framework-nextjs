@@ -485,15 +485,29 @@ export function withIGRPAuth(options: IGRPAuthOptions = {}): IGRPAuthInstance {
           return callbackExtensions.redirect(params);
         }
 
-        const { url } = params;
+        const { url, baseUrl } = params;
         const nextInternalUrl = env.NEXTAUTH_URL_INTERNAL || '';
         const igrpAppHomeSlug = env.NEXT_PUBLIC_IGRP_APP_HOME_SLUG || '';
+        const home = nextInternalUrl
+          ? `${nextInternalUrl}${igrpAppHomeSlug}`
+          : sanitizeRedirectUrl(igrpAppHomeSlug || '/', env.NEXTAUTH_URL ?? baseUrl, '/');
 
-        if (nextInternalUrl) {
-          return `${nextInternalUrl}${igrpAppHomeSlug}`;
+        // No useful callbackUrl — land on home.
+        if (!url || url === baseUrl || url === `${baseUrl}/`) return home;
+
+        // Relative same-origin path (e.g. "/some/page") — resolve against baseUrl.
+        // Protocol-relative ("//evil.com/…") is rejected as an open-redirect vector.
+        if (url.startsWith('/') && !url.startsWith('//')) {
+          return `${baseUrl}${url}`;
         }
 
-        return sanitizeRedirectUrl(url, env.NEXTAUTH_URL, '/');
+        // Absolute URL — only honor when it matches the app origin.
+        try {
+          if (new URL(url).origin === new URL(baseUrl).origin) return url;
+        } catch {
+          // fall through to home
+        }
+        return home;
       },
     },
 

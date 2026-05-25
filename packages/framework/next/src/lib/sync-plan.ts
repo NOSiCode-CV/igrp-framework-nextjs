@@ -138,7 +138,6 @@ export function planAccessManagementSync(
       serviceId: rawServiceId,
       clientId: m2mClientId,
       clientSecret: m2mClientSecret,
-      scope: cfg!.m2mScope?.trim() || undefined,
     },
   );
 

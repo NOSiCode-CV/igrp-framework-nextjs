@@ -28,6 +28,7 @@ export async function igrpSyncApplication({
     name: appInformation.displayName ?? appInformation.name,
     status: 'ACTIVE' as Status,
     description: appInformation.description ?? '',
+    slug: appInformation.slug,
     departments: [],
   };
 

@@ -496,12 +496,6 @@
   .-mx-1 {
     margin-inline: calc(var(--spacing) * -1);
   }
-  .mx-1 {
-    margin-inline: calc(var(--spacing) * 1);
-  }
-  .mx-1\.5 {
-    margin-inline: calc(var(--spacing) * 1.5);
-  }
   .mx-2 {
     margin-inline: calc(var(--spacing) * 2);
   }
@@ -2429,9 +2423,6 @@
   }
   .text-red-600 {
     color: var(--color-red-600);
-  }
-  .text-secondary {
-    color: var(--secondary);
   }
   .text-secondary-foreground {
     color: var(--secondary-foreground);

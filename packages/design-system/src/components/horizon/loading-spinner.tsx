@@ -35,7 +35,7 @@ function IGRPLoadingSpinner({ parentClassName, className, id, label = "Loadingâ€
       role="status"
       aria-live="polite"
     >
-      <Spinner className={cn("size-12 text-primary", className)} aria-label={undefined} />
+      <Spinner className={cn("size-12 text-primary", className)} role={undefined} aria-label={undefined} aria-hidden="true" />
       <span className={cn("sr-only")}>{label}</span>
     </div>
   )

@@ -26,7 +26,7 @@
   "scripts": {
     "dev": "tsc --watch",
     "build": "pnpm build:reactcompiler",
-    "build:babel": "rimraf dist_optimized && babel dist --out-dir dist_optimized --source-maps --extensions .ts,.js,.tsx,.jsx,.cjs,.mjs && rimraf dist && move dist_optimized dist && cpy src/*.css dist/",
+    "build:babel": "rimraf dist_optimized && babel dist --out-dir dist_optimized --source-maps --extensions .ts,.js,.tsx,.jsx,.cjs,.mjs && rimraf dist && move-cli dist_optimized dist && cpy src/*.css dist/",
     "build:reactcompiler": "pnpm clean:dist && pnpm tailwind:build && pnpm build:swc && pnpm build:babel && pnpm build:types",
     "build:swc": "swc ./src -d dist --config-file .swcrc --strip-leading-paths --ignore \"**/components/experimental/**\" && cpy src/*.css dist/",
     "build:types": "tsc --emitDeclarationOnly --outDir dist/",

@@ -11,10 +11,10 @@ const IGRPNotificationVariants = cva("bg-background z-50 rounded-md p-4 shadow-l
   variants: {
     variant: {
       default: "text-foreground",
-      error: "text-red-600 border-red-500/50",
-      info: "text-blue-600 border-blue-500/50",
-      success: "text-emerald-600 border-emerald-500/50",
-      warning: "text-amber-600 border-amber-500/50",
+      error: "text-destructive border-destructive/50",
+      info: "text-info border-info/50",
+      success: "text-success border-success/50",
+      warning: "text-warning border-warning/50",
     },
     border: {
       default: "border-0",

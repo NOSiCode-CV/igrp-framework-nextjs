@@ -60,13 +60,13 @@ function getStepperItemClassName(): string {
     // Last child styles
     "last:mr-0 last:rounded-tr-2xl last:rounded-br-2xl last:pr-2.5",
     //'last:mr-0 last:rounded-tr-2xl last:rounded-br-2xl last:pr-2.5 last:overflow-hidden',
-    "bg-muted text-gray-600",
+    "bg-muted text-muted-foreground",
     // Completed state background
     "data-[state=completed]:bg-process-completed data-[state=completed]:text-background hover:data-[state=active]:text-background",
     // Active state background
     "data-[state=active]:bg-process-active data-[state=active]:text-background hover:data-[state=active]:text-background",
     // Incomplete/inactive state background
-    "data-[state=inactive]:bg-muted data-[state=inactive]:text-gray-600",
+    "data-[state=inactive]:bg-muted data-[state=inactive]:text-muted-foreground",
     // Pseudo-elements base styles
     'before:content-[""] before:absolute before:-left-1 before:-right-1.25 before:cursor-pointer',
     'after:content-[""] after:absolute after:-left-1 after:-right-1.25 after:cursor-pointer',

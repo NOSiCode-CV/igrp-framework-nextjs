@@ -344,7 +344,7 @@ function IGRPPdfViewerInline({
       </div>
 
       <div
-        className={cn("w-full bg-gray-100 rounded-lg overflow-hidden relative")}
+        className={cn("w-full bg-muted rounded-lg overflow-hidden relative")}
         style={{ height }}
         aria-busy={frameStatus === "loading"}
       >
@@ -471,7 +471,7 @@ function IGRPPdfViewerModal({
 
         <div className={cn("flex-1 mt-4")}>
           <div
-            className={cn("w-full h-[60vh] bg-gray-100 rounded-lg overflow-hidden relative")}
+            className={cn("w-full h-[60vh] bg-muted rounded-lg overflow-hidden relative")}
             aria-busy={frameStatus === "loading"}
           >
             {frameStatus === "loading" && (

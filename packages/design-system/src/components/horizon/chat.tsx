@@ -166,7 +166,7 @@ function IGRPChat({ apiEndpoint, labelDescription = "Ask me anything!", name, id
                 {message.type === "link" && (
                   <a
                     href={message.content}
-                    className={cn("text-blue-500 underline")}
+                    className={cn("text-primary underline")}
                     target="_blank"
                     rel="noopener noreferrer"
                   >

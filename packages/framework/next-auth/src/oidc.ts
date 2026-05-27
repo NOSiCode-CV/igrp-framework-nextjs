@@ -275,7 +275,14 @@ export async function buildEndSessionUrl(
 }
 
 export async function introspectOidcToken(token: JWT, env: AuthEnvironment): Promise<boolean> {
-  if (!token.accessToken) return true;
+  // Introspect the REFRESH token, not the access token. This gate only runs
+  // once the access token has expired (or is inside its refresh buffer), at
+  // which point an access-token introspection always returns `active: false`
+  // per RFC 7662 — so gating on it would block every refresh exactly when one
+  // is needed. The refresh token's liveness is what actually determines
+  // whether the upcoming `grant_type=refresh_token` call can succeed, and lets
+  // us detect a server-side revocation before attempting the grant.
+  if (!token.refreshToken) return true;
 
   const providerId = getProviderIdFromTokenOrEnv(token, env);
   if (providerId === 'none') return true;
@@ -295,8 +302,8 @@ export async function introspectOidcToken(token: JWT, env: AuthEnvironment): Pro
         Authorization: `Basic ${credentials}`,
       },
       body: new URLSearchParams({
-        token: token.accessToken,
-        token_type_hint: 'access_token',
+        token: token.refreshToken,
+        token_type_hint: 'refresh_token',
       }),
     });
 

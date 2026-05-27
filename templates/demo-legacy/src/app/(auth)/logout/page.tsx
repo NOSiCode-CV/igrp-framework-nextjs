@@ -19,9 +19,21 @@ export default function LogoutPage() {
     if (hasStarted.current) return;
     hasStarted.current = true;
 
-    const timeout = setTimeout(() => {
+    // Single source of truth for "navigation already happened". The hard
+    // fallback below and the success path both check it so a slow-but-eventually
+    // successful logout can't fire a second navigation that clobbers the first.
+    let settled = false;
+    const goLogin = () => {
+      if (settled) return;
+      settled = true;
       router.replace("/login");
-    }, 3000);
+    };
+
+    // Hard fallback: only meant for the case where getLogoutUrl + signOut never
+    // resolve (e.g. the IdP revoke/end-session round-trip hangs). Kept generous
+    // so it does NOT pre-empt a normal slow single-logout — we want to reach the
+    // IdP end-session endpoint, not bounce straight to /login.
+    const timeout = setTimeout(goLogin, 8000);
 
     (async () => {
       try {
@@ -33,7 +45,10 @@ export default function LogoutPage() {
 
         await signOut({ redirect: false });
 
+        // Fallback already navigated to /login — don't navigate again.
+        if (settled) return;
         clearTimeout(timeout);
+        settled = true;
 
         if (endSessionUrl) {
           // D4 — log the URL we're about to navigate to. Lets us copy-paste
@@ -58,7 +73,7 @@ export default function LogoutPage() {
       } catch (error) {
         reportError(error, { segment: "(auth)/logout" });
         clearTimeout(timeout);
-        router.replace("/login");
+        goLogin();
       }
     })();
 

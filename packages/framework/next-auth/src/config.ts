@@ -71,6 +71,15 @@ export function isIGRPAuthConfigError(error: unknown): error is IGRPAuthConfigEr
 
 const TOKEN_REFRESH_BUFFER_MS = 60_000;
 
+// How long BEFORE actual access-token expiry middleware starts redirecting to
+// /login. Deliberately much smaller than TOKEN_REFRESH_BUFFER_MS: the jwt
+// callback begins refreshing proactively at `expiresAt - TOKEN_REFRESH_BUFFER_MS`
+// (60s out), so middleware must stay lenient past that point to give the client
+// session poll / focus-refetch a chance to rotate the cookie before a navigation
+// is bounced to /login. This is just a small grace to cover in-flight request
+// duration (the access token shouldn't die mid-render).
+const TOKEN_EXPIRY_GRACE_MS = 10_000;
+
 const DEFAULT_MATCHER = ['/', '/((?!apps|_next|favicon.ico|.*\\..*).*)', '/api/:path*'];
 
 // ─── Types ────────────────────────────────────────────────────────────────────
@@ -439,9 +448,11 @@ export function withIGRPAuth(options: IGRPAuthOptions = {}): IGRPAuthInstance {
           return igrpToken;
         }
 
-        // Token expired — introspect first to catch server-side revocations (fail-open)
-        const tokenIsActive = await introspectOidcToken(igrpToken, env).catch(() => true);
-        if (!tokenIsActive) {
+        // Access token expired (or within its refresh buffer). Introspect the
+        // refresh token first to catch a server-side revocation before we try
+        // to use it (fail-open: a flaky introspection must never block refresh).
+        const refreshTokenActive = await introspectOidcToken(igrpToken, env).catch(() => true);
+        if (!refreshTokenActive) {
           igrpToken = { ...igrpToken, error: 'RefreshAccessTokenError', forceLogout: true };
         } else {
           try {
@@ -602,7 +613,7 @@ export function withIGRPAuth(options: IGRPAuthOptions = {}): IGRPAuthInstance {
 
   function isTokenExpiredOrFailed(token: JWT): boolean {
     const expiresAt = typeof token.expiresAt === 'number' ? token.expiresAt : undefined;
-    const isExpired = expiresAt !== undefined && expiresAt <= Date.now() + TOKEN_REFRESH_BUFFER_MS;
+    const isExpired = expiresAt !== undefined && expiresAt <= Date.now() + TOKEN_EXPIRY_GRACE_MS;
     return isExpired || token.error === 'RefreshAccessTokenError' || token.error === 'invalid_grant';
   }
 
@@ -634,22 +645,30 @@ export function withIGRPAuth(options: IGRPAuthOptions = {}): IGRPAuthInstance {
 
   async function getSession(): Promise<Session | null> {
     if (configError) throw configError;
-    let session: Session | null;
 
+    let session: Session | null;
     try {
       session = await serverSession();
-      if (!session) return session;
-
-      const providerExp = typeof session.expiresAt === 'number' ? session.expiresAt : undefined;
-      const providerExpired = providerExp !== undefined && providerExp < Date.now() + TOKEN_REFRESH_BUFFER_MS;
-      const refreshFailed = session.error === 'RefreshAccessTokenError';
-
-      if (providerExpired || refreshFailed) {
-        onSessionExpired?.();
-        return null;
-      }
     } catch {
-      session = null;
+      // Cookie decode / transient session-read failure — treat as "no session".
+      return null;
+    }
+
+    if (!session) return null;
+
+    const providerExp = typeof session.expiresAt === 'number' ? session.expiresAt : undefined;
+    const providerExpired = providerExp !== undefined && providerExp < Date.now() + TOKEN_REFRESH_BUFFER_MS;
+    const refreshFailed = session.error === 'RefreshAccessTokenError';
+
+    // Expired access token or a failed refresh: hand control to onSessionExpired
+    // (typically `redirect('/logout')`). This MUST run outside the try/catch
+    // above — `redirect()` signals via a thrown NEXT_REDIRECT error, and
+    // swallowing it would silently cancel the redirect, leaving a dead session
+    // mounted until the next access-token-bearing request 401s into the error
+    // boundary.
+    if (providerExpired || refreshFailed) {
+      onSessionExpired?.();
+      return null;
     }
 
     return session;

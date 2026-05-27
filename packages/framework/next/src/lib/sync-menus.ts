@@ -14,12 +14,7 @@ export interface IGRPSyncMenusArgs {
   syncEnabled: boolean;
 }
 
-export async function igrpSyncMenus({
-  client,
-  appCode,
-  menus,
-  syncEnabled,
-}: IGRPSyncMenusArgs) {
+export async function igrpSyncMenus({ client, appCode, menus, syncEnabled }: IGRPSyncMenusArgs) {
   if (!syncEnabled) {
     console.info('On-code menus sync skipped (IGRP_SYNC_ON_CODE_MENUS=false).');
     return;

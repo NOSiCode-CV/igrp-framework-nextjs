@@ -213,9 +213,32 @@ describe('introspectOidcToken', () => {
     expect(await introspectOidcToken(makeToken(), VALID_ENV)).toBe(true);
   });
 
-  it('returns true (fail-open) when accessToken is missing', async () => {
+  it('returns true (fail-open) when refreshToken is missing', async () => {
     const { introspectOidcToken } = await import('../oidc');
-    expect(await introspectOidcToken(makeToken({ accessToken: undefined }), VALID_ENV)).toBe(true);
+    expect(await introspectOidcToken(makeToken({ refreshToken: undefined }), VALID_ENV)).toBe(true);
+  });
+
+  it('introspects the refresh token, not the access token', async () => {
+    const capturedBody: string[] = [];
+    vi.stubGlobal(
+      'fetch',
+      vi.fn((url: string, init?: RequestInit) => {
+        if (url === MOCK_DISCOVERY.introspection_endpoint) {
+          capturedBody.push(String(init?.body ?? ''));
+        }
+        const bodies: Record<string, unknown> = {
+          [DISCOVERY_URL]: MOCK_DISCOVERY,
+          [MOCK_DISCOVERY.introspection_endpoint]: { active: true },
+        };
+        return Promise.resolve({ ok: true, json: () => Promise.resolve(bodies[url] ?? {}) });
+      }),
+    );
+    const { introspectOidcToken } = await import('../oidc');
+    await introspectOidcToken(makeToken({ refreshToken: 'rt-xyz', accessToken: 'at-xyz' }), VALID_ENV);
+
+    const params = new URLSearchParams(capturedBody[0]);
+    expect(params.get('token')).toBe('rt-xyz');
+    expect(params.get('token_type_hint')).toBe('refresh_token');
   });
 
   it('returns true (fail-open) for none provider without making fetch calls', async () => {

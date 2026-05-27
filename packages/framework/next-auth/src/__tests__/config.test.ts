@@ -135,6 +135,107 @@ describe('withIGRPAuth — serverSession', () => {
   });
 });
 
+describe('withIGRPAuth — getSession', () => {
+  beforeEach(() => {
+    vi.clearAllMocks();
+    vi.resetModules();
+  });
+
+  function mockServerSession(value: unknown) {
+    vi.doMock('next-auth', () => ({
+      getServerSession: vi.fn().mockResolvedValue(value),
+    }));
+  }
+
+  it('returns the session unchanged when valid and not expired', async () => {
+    mockServerSession({ accessToken: 'at', expiresAt: Date.now() + 3_600_000 });
+    const withIGRPAuth = await getFactory();
+    const onSessionExpired = vi.fn();
+    const instance = withIGRPAuth({ env: VALID_ENV, onSessionExpired });
+
+    const session = await instance.getSession();
+    expect(session).not.toBeNull();
+    expect(onSessionExpired).not.toHaveBeenCalled();
+  });
+
+  it('calls onSessionExpired when refresh failed (RefreshAccessTokenError)', async () => {
+    mockServerSession({
+      accessToken: 'at',
+      expiresAt: Date.now() + 3_600_000,
+      error: 'RefreshAccessTokenError',
+    });
+    const withIGRPAuth = await getFactory();
+    const onSessionExpired = vi.fn();
+    const instance = withIGRPAuth({ env: VALID_ENV, onSessionExpired });
+
+    const session = await instance.getSession();
+    expect(onSessionExpired).toHaveBeenCalledTimes(1);
+    expect(session).toBeNull();
+  });
+
+  it('calls onSessionExpired when the provider token is expired', async () => {
+    mockServerSession({ accessToken: 'at', expiresAt: Date.now() - 10_000 });
+    const withIGRPAuth = await getFactory();
+    const onSessionExpired = vi.fn();
+    const instance = withIGRPAuth({ env: VALID_ENV, onSessionExpired });
+
+    const session = await instance.getSession();
+    expect(onSessionExpired).toHaveBeenCalledTimes(1);
+    expect(session).toBeNull();
+  });
+
+  it('does NOT swallow a redirect thrown by onSessionExpired (regression)', async () => {
+    // `redirect()` from next/navigation signals via a thrown NEXT_REDIRECT
+    // error. getSession must let it propagate, not catch it — otherwise the
+    // intended /logout redirect is silently cancelled and a dead session stays
+    // mounted (the bug that surfaced as global-error on failed refresh).
+    mockServerSession({
+      accessToken: 'at',
+      expiresAt: Date.now() + 3_600_000,
+      error: 'RefreshAccessTokenError',
+    });
+    const withIGRPAuth = await getFactory();
+    const redirectError = Object.assign(new Error('NEXT_REDIRECT'), {
+      digest: 'NEXT_REDIRECT;replace;/logout;307;',
+    });
+    const onSessionExpired = vi.fn(() => {
+      throw redirectError;
+    });
+    const instance = withIGRPAuth({ env: VALID_ENV, onSessionExpired });
+
+    await expect(instance.getSession()).rejects.toBe(redirectError);
+  });
+});
+
+describe('withIGRPAuth — isTokenExpiredOrFailed (middleware grace)', () => {
+  it('does NOT treat a token 30s from expiry as expired (lets the client refresh win)', async () => {
+    const withIGRPAuth = await getFactory();
+    const instance = withIGRPAuth({ env: VALID_ENV });
+    expect(
+      instance.isTokenExpiredOrFailed({ expiresAt: Date.now() + 30_000 } as any),
+    ).toBe(false);
+  });
+
+  it('treats an already-expired token as expired', async () => {
+    const withIGRPAuth = await getFactory();
+    const instance = withIGRPAuth({ env: VALID_ENV });
+    expect(
+      instance.isTokenExpiredOrFailed({ expiresAt: Date.now() - 1_000 } as any),
+    ).toBe(true);
+  });
+
+  it('treats a refresh-error token as expired regardless of expiry', async () => {
+    const withIGRPAuth = await getFactory();
+    const instance = withIGRPAuth({ env: VALID_ENV });
+    expect(
+      instance.isTokenExpiredOrFailed({
+        expiresAt: Date.now() + 3_600_000,
+        error: 'RefreshAccessTokenError',
+      } as any),
+    ).toBe(true);
+  });
+});
+
 describe('withIGRPAuth — jwt callback introspect gate', () => {
   beforeEach(() => {
     vi.clearAllMocks();

@@ -27,17 +27,29 @@ function stripBasePath(pathname: string): string {
 }
 
 export function IGRPSessionWatcher({ children }: { children: React.ReactNode }) {
-  const { status } = useSession();
+  const { data: session, status } = useSession();
   const router = useRouter();
 
   useEffect(() => {
-    if (status !== 'unauthenticated') return;
-
     // Already on the auth UI — that's the correct destination for an
-    // unauthenticated user. Pushing again would loop and stomp the
+    // unauthenticated/expired user. Navigating again would loop and stomp the
     // existing `?callbackUrl=…` set by middleware.
     const pathname = stripBasePath(window.location.pathname);
     if (AUTH_UI_PATH.test(pathname)) return;
+
+    // Refresh failed: the session cookie still decodes, so `status` stays
+    // `authenticated`, but the access token is dead. Route to `/logout` for a
+    // clean IdP single-logout instead of leaving the broken session mounted —
+    // otherwise the next access-token-bearing request 401s and surfaces in the
+    // global error boundary.
+    const refreshFailed =
+      (session as { error?: string } | null)?.error === 'RefreshAccessTokenError';
+    if (refreshFailed) {
+      router.replace('/logout');
+      return;
+    }
+
+    if (status !== 'unauthenticated') return;
 
     const currentPath = pathname + window.location.search;
     const target =
@@ -45,7 +57,7 @@ export function IGRPSessionWatcher({ children }: { children: React.ReactNode }) 
         ? `/login?callbackUrl=${encodeURIComponent(currentPath)}`
         : '/login';
     router.push(target);
-  }, [status, router]);
+  }, [status, session, router]);
 
   if (status === 'loading') return null;
   return children;

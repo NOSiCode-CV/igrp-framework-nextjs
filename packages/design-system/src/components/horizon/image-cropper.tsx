@@ -1,8 +1,7 @@
-/// <reference lib="dom" />
 "use client"
 
 import { useCallback, useEffect, useState } from "react"
-import Image from "next/image"
+import NextImage from "next/image"
 
 import { Button } from "../primitives/button"
 import { Cropper, CropperCropArea, CropperDescription, CropperImage } from "../primitives/cropper"
@@ -29,9 +28,9 @@ export interface IGRPImageCropperProps {
 
 const createImage = (url: string): Promise<HTMLImageElement> =>
   new Promise((resolve, reject) => {
-    const image = document.createElement("img") as HTMLImageElement
+    const image = new Image()
     image.addEventListener("load", () => resolve(image))
-    image.addEventListener("error", (error: Event) => reject(error))
+    image.addEventListener("error", (error) => reject(error))
     image.setAttribute("crossOrigin", "anonymous")
     image.src = url
   })
@@ -163,7 +162,7 @@ export function IGRPImageCropper({
               className={cn("relative aspect-square w-full overflow-hidden rounded-lg border border-border bg-muted")}
             >
               {croppedImageUrl ? (
-                <Image src={croppedImageUrl} alt="Cropped result" fill sizes="160px" className={cn("object-cover")} unoptimized />
+                <NextImage src={croppedImageUrl} alt="Cropped result" fill sizes="160px" className={cn("object-cover")} unoptimized />
               ) : (
                 <div
                   className={cn(

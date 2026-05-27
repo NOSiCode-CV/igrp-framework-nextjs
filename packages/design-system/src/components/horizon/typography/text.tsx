@@ -29,7 +29,7 @@ function TextWithHighlight({ text, highlight }: { text: string; highlight: strin
   while ((match = regex.exec(remaining)) !== null) {
     parts.push(remaining.slice(lastIndex, match.index))
     parts.push(
-      <mark key={`h-${matchIndex}`} className={cn("bg-yellow-200 dark:bg-yellow-800 px-1 rounded")}>
+      <mark key={`h-${matchIndex}`} className={cn("bg-highlight text-highlight-foreground px-1 rounded")}>
         {match[0]}
       </mark>,
     )

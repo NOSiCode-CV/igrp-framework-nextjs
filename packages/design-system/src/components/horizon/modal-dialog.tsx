@@ -85,7 +85,7 @@ function IGRPModalDialogHeader({ className, stickyHeader, ...props }: IGRPModalD
   return (
     <DialogHeader
       className={cn(
-        stickyHeader && "sticky top-0 z-5 backdrop-blur-2xl bg-background/80 dark:bg-zinc-900/60 border-b py-3",
+        stickyHeader && "sticky top-0 z-5 backdrop-blur-2xl bg-background/80 border-b py-3",
         className,
       )}
       {...props}
@@ -102,7 +102,7 @@ function IGRPModalDialogFooter({ className, stickyFooter, ...props }: IGRPModalD
     <DialogFooter
       className={cn(
         "flex-col sm:justify-start",
-        stickyFooter && "sticky bottom-0 z-5 backdrop-blur-2xl bg-background/80 dark:bg-zinc-900/60 py-3",
+        stickyFooter && "sticky bottom-0 z-5 backdrop-blur-2xl bg-background/80 py-3",
         className,
       )}
       {...props}

@@ -74,16 +74,14 @@ function IGRPTemplateCommandSearch({ commands = [] }: IGRPTemplateCommandSearchP
         onClick={() => setOpen(true)}
         variant="outline"
         size="lg"
-        className='justify-between focus-visible:outline-none focus-visible:ring-1 border-input px-3 shadow-none md:flex-none sm:w-40 lg:w-52'
+        className="justify-between focus-visible:outline-none focus-visible:ring-1 border-input px-3 shadow-none md:flex-none sm:w-40 lg:w-52"
       >
-        <span className='flex items-center'>
-          <IGRPIcon iconName="Search" className='mr-1 size-3' />
+        <span className="flex items-center">
+          <IGRPIcon iconName="Search" className="mr-1 size-3" />
           <span>Pesquisar...</span>
         </span>
-        <kbd
-          className='pointer-events-none select-none flex items-center gap-1 rounded border px-1 py-1 font-mono text-[10px] font-medium'
-        >
-          <span className='text-xs'>⌘</span>K
+        <kbd className="pointer-events-none select-none flex items-center gap-1 rounded border px-1 py-1 font-mono text-[10px] font-medium">
+          <span className="text-xs">⌘</span>K
         </kbd>
       </Button>
       <CommandDialog open={open} onOpenChange={setOpen}>
@@ -99,7 +97,7 @@ function IGRPTemplateCommandSearch({ commands = [] }: IGRPTemplateCommandSearchP
                     key={item.id ?? item.label}
                     onSelect={() => runCommand(item.onSelect)}
                   >
-                    {item.icon && <IGRPIcon iconName={item.icon} className='mr-2' />}
+                    {item.icon && <IGRPIcon iconName={item.icon} className="mr-2" />}
                     <span>{item.label}</span>
                   </CommandItem>
                 ))}

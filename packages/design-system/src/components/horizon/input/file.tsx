@@ -2,7 +2,7 @@
 
 import { useCallback, useId, useRef, useState } from "react"
 import { useFormContext, Controller } from "react-hook-form"
-import { useDropzone } from "react-dropzone"
+import { useDropzone, type FileRejection } from "react-dropzone"
 import { AlertCircle, UploadCloud, X } from "lucide-react"
 
 import { cn } from "../../../lib/utils"
@@ -131,9 +131,7 @@ function IGRPDropzoneInternal({
   onFieldChange,
 }: IGRPDropzoneInternalProps) {
   const [files, setFiles] = useState<FileWithProgress[]>([])
-  const [rejectedFiles, setRejectedFiles] = useState<
-    { file: File; errors: Array<{ code: string; message: string }> }[]
-  >([])
+  const [rejectedFiles, setRejectedFiles] = useState<FileRejection[]>([])
 
   const updateFiles = useCallback(
     (next: FileWithProgress[]) => {
@@ -151,9 +149,8 @@ function IGRPDropzoneInternal({
     [multiple, onFilesChange, onFieldChange],
   )
 
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const onDrop = useCallback(
-    (accepted: File[], rejected: any[]) => {
+    (accepted: File[], rejected: FileRejection[]) => {
       if (rejected.length > 0) {
         setRejectedFiles(rejected)
       } else {

@@ -162,7 +162,14 @@ export function IGRPImageCropper({
               className={cn("relative aspect-square w-full overflow-hidden rounded-lg border border-border bg-muted")}
             >
               {croppedImageUrl ? (
-                <NextImage src={croppedImageUrl} alt="Cropped result" fill sizes="160px" className={cn("object-cover")} unoptimized />
+                <NextImage
+                  src={croppedImageUrl}
+                  alt="Cropped result"
+                  fill
+                  sizes="160px"
+                  className={cn("object-cover")}
+                  unoptimized
+                />
               ) : (
                 <div
                   className={cn(

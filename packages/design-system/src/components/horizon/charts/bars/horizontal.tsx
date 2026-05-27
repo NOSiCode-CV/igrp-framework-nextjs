@@ -15,7 +15,11 @@ function IGRPHorizontalBarChart(props: IGRPHorizontalBarChartProps) {
   return (
     <Suspense
       fallback={
-        <div className={cn("w-full overflow-hidden animate-pulse motion-reduce:animate-none rounded-lg bg-muted min-h-[200px] aspect-video")} />
+        <div
+          className={cn(
+            "w-full overflow-hidden animate-pulse motion-reduce:animate-none rounded-lg bg-muted min-h-[200px] aspect-video",
+          )}
+        />
       }
     >
       <IGRPHorizontalBarChartLazy {...props} />

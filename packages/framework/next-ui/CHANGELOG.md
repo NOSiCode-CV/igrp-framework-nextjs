@@ -1,5 +1,28 @@
 # @igrp/framework-next-ui
 
+## 0.1.0-beta.138
+
+### Patch Changes
+
+- 12cc11b: fix(session-watcher): route to `/logout` when the session carries a failed-refresh error
+
+  After a failed token refresh the session cookie still decodes, so `useSession().status` stays `authenticated` even though the access token is dead. `IGRPSessionWatcher` previously only reacted to `status === 'unauthenticated'`, so it ignored this state — the broken session stayed mounted and the next access-token-bearing request 401'd into the global error boundary.
+
+  The watcher now also inspects `session.error`: when it equals `'RefreshAccessTokenError'` it navigates to `/logout` for a clean IdP single-logout (consistent with the server-side `onSessionExpired` contract). The existing auth-chrome skip (`/login*`, `/logout*`) still applies, so this can't loop.
+
+- Updated dependencies [2a06c02]
+- Updated dependencies [12cc11b]
+- Updated dependencies [12cc11b]
+- Updated dependencies [0cdef39]
+- Updated dependencies [12cc11b]
+- Updated dependencies [cc40fef]
+- Updated dependencies [a1fbb7c]
+- Updated dependencies [cc40fef]
+- Updated dependencies [123e361]
+  - @igrp/igrp-framework-react-design-system@0.1.0-beta.130
+  - @igrp/framework-next-auth@0.1.0-beta.132
+  - @igrp/framework-next-types@0.1.0-beta.134
+
 ## 0.1.0-beta.137
 
 ### Patch Changes

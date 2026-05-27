@@ -1,5 +1,12 @@
 # @igrp/igrp-framework-react-design-system
 
+## 0.1.0-beta.130
+
+### Patch Changes
+
+- 2a06c02: fix(design-system): add Spinner primitive; announce IGRPLoadingSpinner via role=status; next/image for cropper preview; autocomplete/inputmode on phone & url inputs; replace raw tailwind colors with semantic tokens; narrow transition-all in horizon layer; honor prefers-reduced-motion on animations
+- a1fbb7c: - Raise the minimum supported Node.js engine from `>=20.x.x` to `>=22.x.x` to match the rest of the monorepo.
+
 ## 0.1.0-beta.129
 
 ### Patch Changes

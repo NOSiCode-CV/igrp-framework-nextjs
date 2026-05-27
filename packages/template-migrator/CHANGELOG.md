@@ -1,5 +1,13 @@
 # @igrp/template-migrator
 
+## 0.1.0-beta.119
+
+### Patch Changes
+
+- b5f301f: docs(template-migrator): remove stale IGRP_M2M_SCOPE references from payloads
+
+  Drop the `IGRP_M2M_SCOPE` documentation and bare env line from the migration 08 and 09 payload `.env.example` files. The variable was deprecated and removed from the framework runtime; leaving it in the payloads would re-inject a no-op env var into consumer apps that apply these migrations.
+
 ## 0.1.0-beta.118
 
 ### Patch Changes

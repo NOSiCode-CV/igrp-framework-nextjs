@@ -1,5 +1,31 @@
 # @igrp/framework-next
 
+## 0.1.0-beta.139
+
+### Patch Changes
+
+- 123e361: feat(next): gate AM menu push on `IGRP_SYNC_ON_CODE_MENUS`
+
+  `igrpSyncMenus` now requires a `syncEnabled` arg. When `false`, the push is skipped and a `console.info` line is emitted. `IGRPRootLayout` sources the push payload from `apiManagementConfig.onCodeMenus` instead of the AM-loaded sidebar menus, so the push is meaningful (template-defined array → AM) rather than a no-op echo.
+
+  Outer sync gating on `IGRP_SYNC_ACCESS` / `IGRP_PREVIEW_MODE` is unchanged.
+
+- c92930a: test(next): add regression test for sync-plan menu source
+
+  Pins `planAccessManagementSync` behavior: `menus` passes through from `args.menus` verbatim, `syncOnCodeMenus` narrows to `false` when omitted and `true` when explicitly set, and the planner returns `null` in preview mode regardless of other settings. Guards against accidental reversion of the on-code-menus push payload source.
+
+- Updated dependencies [12cc11b]
+- Updated dependencies [12cc11b]
+- Updated dependencies [0cdef39]
+- Updated dependencies [12cc11b]
+- Updated dependencies [cc40fef]
+- Updated dependencies [cc40fef]
+- Updated dependencies [12cc11b]
+- Updated dependencies [123e361]
+  - @igrp/framework-next-auth@0.1.0-beta.132
+  - @igrp/framework-next-types@0.1.0-beta.134
+  - @igrp/framework-next-ui@0.1.0-beta.138
+
 ## 0.1.0-beta.138
 
 ### Patch Changes

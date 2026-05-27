@@ -128,7 +128,6 @@ function IGRPNotification({
               showIcon={true}
               size="icon"
               iconClassName={cn("opacity-60 transition-opacity group-hover:opacity-100")}
-              aria-hidden="true"
             />
           )}
         </div>

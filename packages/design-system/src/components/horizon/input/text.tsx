@@ -65,12 +65,10 @@ function IGRPInputText({
         {(field, fieldState) => (
           <div className={cn("relative")}>
             <Input
-              id={fieldName}
               name={fieldName}
               type={type}
               required={required}
               aria-required={required}
-              aria-describedby={helperText || error ? `${fieldName}-helper` : undefined}
               className={cn(
                 "peer bg-background py-3 text-sm outline-hidden",
                 showIcon && positionParentIcon,
@@ -105,7 +103,7 @@ function IGRPInputText({
           required={required}
           aria-required={required}
           aria-invalid={!!error || !!props["aria-invalid"]}
-          aria-describedby={helperText || error ? `${fieldName}-helper` : undefined}
+          aria-describedby={error ? `${fieldName}-error` : helperText ? `${fieldName}-helper` : undefined}
           className={cn(
             "peer bg-background py-3 text-sm outline-hidden",
             showIcon && positionParentIcon,

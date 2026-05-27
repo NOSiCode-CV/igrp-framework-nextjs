@@ -1,5 +1,28 @@
 # @igrp/framework-next-types
 
+## 0.1.0-beta.134
+
+### Patch Changes
+
+- 0cdef39: docs(next-types): remove stale m2mScope JSDoc
+
+  The JSDoc block above `appRoutes` in `apiManagementConfig` documented an `m2mScope` field that no longer exists (removed during the OAuth2 client_credentials migration 08). Removed the orphaned doc.
+
+- 123e361: feat(next-types): add `syncOnCodeMenus` and `onCodeMenus` to `apiManagementConfig`
+
+  Two new optional fields on `IGRPConfigArgs['apiManagementConfig']`:
+  - `syncOnCodeMenus?: boolean` — when true, the framework pushes `onCodeMenus` to Access Management at startup.
+  - `onCodeMenus?: IGRPMenuItemArgs[]` — the template-defined menu array used as the push payload.
+
+  Both are optional; omitting them keeps the current (post-migration-08) no-push behavior.
+
+- Updated dependencies [12cc11b]
+- Updated dependencies [12cc11b]
+- Updated dependencies [12cc11b]
+- Updated dependencies [cc40fef]
+- Updated dependencies [cc40fef]
+  - @igrp/framework-next-auth@0.1.0-beta.132
+
 ## 0.1.0-beta.133
 
 ### Patch Changes

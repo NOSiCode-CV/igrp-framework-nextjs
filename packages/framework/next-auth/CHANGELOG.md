@@ -1,5 +1,30 @@
 # @igrp/framework-next-auth
 
+## 0.1.0-beta.132
+
+### Patch Changes
+
+- 12cc11b: fix(framework-next-auth): don't swallow the `onSessionExpired` redirect in `getSession`
+
+  When a session was expired or its refresh had failed (`error: 'RefreshAccessTokenError'`), `getSession()` invoked `onSessionExpired()` (typically `redirect('/logout')`) from _inside_ a `try/catch`. `redirect()` signals via a thrown `NEXT_REDIRECT` error, so the bare `catch` swallowed it — the intended redirect was silently cancelled and a dead session stayed mounted until the next access-token-bearing request 401'd into the error boundary (surfacing as `global-error`).
+
+  `getSession` now keeps only `serverSession()` inside the `try/catch` (where a thrown error legitimately means "no session"), and runs the expiry/refresh check plus `onSessionExpired()` afterwards so the redirect propagates as intended.
+
+- 12cc11b: fix(oidc): introspect the refresh token instead of the access token in the refresh gate
+
+  The jwt callback's pre-refresh introspection (`introspectOidcToken`) checked the **access token**. That gate only runs once the access token is expired or inside its refresh buffer, and an expired access token always introspects as `active: false` per RFC 7662 — so the gate forced a logout (`RefreshAccessTokenError` / `forceLogout`) exactly when a refresh should have happened, leaving silent refresh effectively non-functional.
+
+  It now introspects the **refresh token** (`token_type_hint=refresh_token`), whose liveness actually determines whether `grant_type=refresh_token` can succeed. A live refresh token proceeds to refresh; a server-side-revoked one is correctly detected and forces logout. Introspection stays fail-open so a flaky introspection endpoint never blocks refresh.
+
+- 12cc11b: fix(config): give middleware a small expiry grace so the client refresh can win
+
+  `isTokenExpiredOrFailed` (used by middleware to decide the `/login` redirect) shared the 60s `TOKEN_REFRESH_BUFFER_MS` with the jwt callback's proactive refresh. That meant middleware redirected to `/login` at exactly the moment the client session poll would have refreshed the token, so navigations near expiry were bounced before any silent refresh could land.
+
+  Middleware now uses a separate, much smaller `TOKEN_EXPIRY_GRACE_MS` (10s), so it stays lenient through the proactive-refresh window and only redirects once the access token is effectively expired — letting the client poll / focus-refetch rotate the session cookie first (and, when it can't, falling back to a silent IdP-SSO re-login via `/login`). Refresh-error tokens are still treated as expired immediately.
+
+- cc40fef: Enable PKCE (RFC 7636, S256) and OIDC `nonce` validation on the `igrp-auth` provider in addition to the existing `state` check. PKCE protects the authorization-code exchange against code-interception even when the client_secret is confidential; `nonce` prevents id_token replay (CWE-294) given the provider already opts into `idToken: true`. The change touches only the `/authorize` → `/callback` exchange owned by NextAuth — refresh, revocation, and introspection are unaffected. Spring Authorization Server (the default IGRP IdP) accepts PKCE on confidential clients without server-side configuration. Deployments behind reverse proxies that rewrite paths between authorize and callback may observe `PKCE_ERROR`; this is the same class of failure that already affected the `state` cookie and is rooted in `NEXTAUTH_URL` / proxy stability rather than the OAuth client config.
+- cc40fef: Fix `withIGRPAuth` redirect callback discarding `callbackUrl` when `NEXTAUTH_URL_INTERNAL` was set, which forced every post-login redirect to the app home. The callback now honors a safe same-origin or relative `callbackUrl` and falls back to the configured home slug only when no useful destination was provided. This restores the expected flow after a token-refresh-driven re-login: the user lands back on the page they were on, not on `/`.
+
 ## 0.1.0-beta.131
 
 ### Patch Changes

@@ -91,7 +91,7 @@ templates/demo-legacy/
 │   │   │   ├── logout/page.tsx
 │   │   │   └── error.tsx
 │   │   ├── (igrp)/                        # Authenticated shell (verifySession gate)
-│   │   │   ├── layout.tsx                 # IGRPLayoutFull (header + sidebar)
+│   │   │   ├── layout.tsx                 # IGRPLayoutFull (header; sidebar optional)
 │   │   │   ├── page.tsx                   # Home
 │   │   │   ├── loading.tsx
 │   │   │   ├── error.tsx

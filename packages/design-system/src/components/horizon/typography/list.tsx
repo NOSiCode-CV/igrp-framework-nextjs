@@ -29,7 +29,7 @@ const igrpTextlistVariants = cva("", {
   },
 })
 
-const igrpTextlistItemVariants = cva("flex items-center gap-2 transition-all duration-200", {
+const igrpTextlistItemVariants = cva("flex items-center gap-2 transition-colors duration-200", {
   variants: {
     interactive: {
       true: "hover:bg-muted p-2 rounded-md cursor-pointer",
@@ -250,7 +250,7 @@ function IGRPTextList({
     return (
       <div
         key={item.id || index}
-        className={cn("transition-all duration-300", {
+        className={cn("transition-[opacity,transform] duration-300", {
           "opacity-0 translate-x-4": animate && !isVisible,
           "opacity-100 translate-x-0": !animate || isVisible,
         })}

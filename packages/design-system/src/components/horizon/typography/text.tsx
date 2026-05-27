@@ -41,7 +41,7 @@ function TextWithHighlight({ text, highlight }: { text: string; highlight: strin
   return <>{parts}</>
 }
 
-const igrpTextVariants = cva("transition-all duration-300 ease-in-out", {
+const igrpTextVariants = cva("transition-[font-size,line-height] duration-300 ease-in-out", {
   variants: {
     size: {
       sm: "text-sm leading-5",

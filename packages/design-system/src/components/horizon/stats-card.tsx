@@ -11,7 +11,7 @@ import type { IGRPBaseAttributes } from "../../types"
 import { IGRPIcon, type IGRPIconName } from "./icon"
 
 const igrpStatsCardVariants = cva(
-  "flex items-center p-4 bg-card shadow-sm text-card-foreground transition-all overflow-hidden",
+  "flex items-center p-4 bg-card shadow-sm text-card-foreground transition-[box-shadow,border-color] overflow-hidden",
   {
     variants: {
       border: {

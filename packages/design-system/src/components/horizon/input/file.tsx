@@ -219,7 +219,7 @@ function IGRPDropzoneInternal({
       <Card
         {...getRootProps()}
         className={cn(
-          "border-dashed cursor-pointer transition-[color,background-color,border-color] duration-200",
+          "border-dashed cursor-pointer transition-[color,background-color,border-color,box-shadow] duration-200",
           "hover:shadow-md hover:border-primary",
           "p-6 text-center flex flex-col items-center gap-2",
           isDragActive && !isDragReject && "border-primary bg-primary/5",

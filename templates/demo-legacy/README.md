@@ -139,7 +139,7 @@ Detailed topics live in [`docs/`](docs/):
 | [Access Management Sync](docs/ACCESS_MANAGEMENT.md) | OAuth2 `client_credentials` sync of application/resources/menus to the Access Management API |
 | [Design System](docs/DESIGN_SYSTEM.md) | The `@igrp/igrp-framework-react-design-system` component layers and usage |
 | [Design Tokens](docs/TOKENS.md) | CSS-variable tokens and how to theme the template |
-| [Upgrading](docs/MIGRATING.md) | Applying framework migrations with `@igrp/template-migrator` |
+| [Upgrading](docs/MIGRATION_GUIDE.md) | Applying framework migrations with `@igrp/template-migrator` |
 | [Docker](docs/DOCKER-RUN.md) | Building and running the template in Docker |
 
 ### Styling (Tailwind v4) — quick notes
@@ -148,7 +148,7 @@ Tailwind compiles **once here in the app**, not in the framework packages. Impor
 
 ### Upgrading — quick note
 
-Framework changes are delivered via `@igrp/template-migrator`; the applied set is tracked in [`.igrp-migrations-lock.json`](.igrp-migrations-lock.json). See [Upgrading](docs/MIGRATING.md) for the full workflow.
+Framework changes are delivered via `@igrp/template-migrator`; the applied set is tracked in [`.igrp-migrations-lock.json`](.igrp-migrations-lock.json). See [Upgrading](docs/MIGRATION_GUIDE.md) for the full workflow.
 
 ### Docker — quick note
 

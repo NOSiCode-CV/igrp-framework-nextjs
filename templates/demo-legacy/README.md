@@ -1,542 +1,354 @@
 # IGRP Framework Next.js Template
 
-A production-ready template for building applications with the IGRP Framework on Next.js 15. This template provides a complete foundation with authentication, layout management, and a modern UI built on top of the IGRP design system.
+The canonical reference template for building applications with the **IGRP Framework** on **Next.js 15**. It ships a complete, production-ready foundation: OIDC authentication, layout/session management, Access Management sync, typed error boundaries, and a modern UI built on the IGRP design system.
 
-## 📋 Table of Contents
+Package name: `@igrp/framework-next-template`.
+
+## Table of Contents
 
 - [Overview](#overview)
 - [Prerequisites](#prerequisites)
 - [Getting Started](#getting-started)
-- [Upgrading](#upgrading)
-- [Project Structure](#project-structure)
-- [Configuration](#configuration)
 - [Environment Variables](#environment-variables)
+- [Auth Server Registration](#auth-server-registration-required)
 - [Available Scripts](#available-scripts)
+- [Project Structure](#project-structure)
 - [How It's Built](#how-its-built)
 - [Authentication](#authentication)
-- [Preview Mode](#preview-mode)
+- [Preview Mode & Auth Bypass](#preview-mode--auth-bypass)
+- [Access Management Sync](#access-management-sync)
+- [Styling (Tailwind v4)](#styling-tailwind-v4)
+- [Upgrading](#upgrading)
 - [Docker Support](#docker-support)
 
 ## Overview
 
-The IGRP Framework Next.js Template is a comprehensive starter template that includes:
+The template integrates:
 
-- **Next.js 15** with App Router and Turbopack
-- **IGRP Framework** integration with layout management
-- **NextAuth.js** for authentication
-- **TypeScript** for type safety
-- **Tailwind CSS** for styling
-- **React Query** for data fetching
-- **React Hook Form** with Zod validation
-- **Biome** for code formatting and linting
-- **[Lucide](https://lucide.dev/icons/)** for icon library
-- **Modern UI Components** from IGRP Design System
+- **Next.js 15** — App Router + Turbopack (dev *and* build)
+- **IGRP Framework** — `@igrp/framework-next`, `-next-ui`, `-next-auth`, `-next-types`
+- **IGRP Design System** — `@igrp/igrp-framework-react-design-system` (Horizon components first)
+- **NextAuth v4** — OIDC via the `igrp-auth` provider (PKCE + nonce), with an `AUTH_PROVIDER=none` bypass
+- **TypeScript**, **Tailwind CSS v4**, **React Query**, **React Hook Form + Zod**
+- **Biome** for formatting and linting
+- **[Lucide](https://lucide.dev/icons/)** icons
+
+The framework dependencies are linked from the monorepo via `workspace:*`. In a published standalone template they resolve to the internal Sonatype registry.
 
 ## Prerequisites
 
-Before you begin, ensure you have the following installed:
-
-- **Node.js** >= 22.x.x
-- **pnpm** (recommended) or npm/yarn
+- **Node.js** >= 22
+- **pnpm** (this repo is pnpm-only)
 - **Git**
 
 ## Getting Started
 
-### 1. Install Dependencies
+### 1. Install dependencies
 
 ```bash
 pnpm install
 ```
 
-### 2. Configure Environment Variables
+### 2. Configure environment
 
-Create a `.env.local` file in the root directory with the following variables:
+Copy `.env.example` to `.env` and fill in the values. The fastest path for local development is **preview mode** — no auth server required:
 
 ```env
-# Application Configuration
-IGRP_APP_CODE=your-app-code
-IGRP_PREVIEW_MODE=false
-NEXT_PUBLIC_BASE_PATH=
-
-# NextAuth Configuration
-# IMPORTANT: NEXTAUTH_URL must include the NextAuth API root path. NextAuth v4
-# uses this URL verbatim — it does NOT auto-append /api/auth when a basePath
-# is present. See "Auth server registration" below.
-NEXTAUTH_URL=http://localhost:3000/api/auth
-NEXTAUTH_URL_INTERNAL=http://localhost:3000/api/auth
-NEXTAUTH_SECRET=your-secret-key-here
-
-# API Configuration
-IGRP_ACCESS_MANAGEMENT_API=https://your-api-url.com
-NEXT_PUBLIC_IGRP_APP_HOME_SLUG=/
-NEXT_IGRP_APP_CENTER_URL=https://app-center-url.com
-
-# Image Domains (comma-separated)
-NEXT_PUBLIC_ALLOWED_DOMAINS=example.com,cdn.example.com
+IGRP_PREVIEW_MODE=true
+IGRP_APP_CODE=demo-app
 ```
 
-#### Auth server registration (REQUIRED)
+For a real auth flow, see [Environment Variables](#environment-variables) and [Auth Server Registration](#auth-server-registration-required).
 
-Two URIs must be registered on the OAuth client (e.g. `igrp-access-management`
-in IGRP Access Management). Missing either causes silent failures:
-
-| URI | Why | Symptom if missing |
-|---|---|---|
-| **OAuth callback** | Where the IdP sends the user after authentication | Login appears to succeed but bounces back to `/login` with a growing nested `callbackUrl` chain |
-| **Post-logout redirect** | Where the IdP sends the user after the SSO session is cleared | Logout clears local cookies but the IdP SSO session survives — clicking Sign In again skips the credential prompt |
-
-The exact values depend on `NEXT_PUBLIC_BASE_PATH`:
-
-| Config | OAuth callback URI | Post-logout redirect URI |
-|---|---|---|
-| `NEXT_PUBLIC_BASE_PATH=` (root) | `http://localhost:3000/api/auth/callback/igrp-auth` | `http://localhost:3000/login` |
-| `NEXT_PUBLIC_BASE_PATH=/apps/template` | `http://localhost:3000/apps/template/api/auth/callback/igrp-auth` | `http://localhost:3000/apps/template/login` |
-
-The OIDC spec requires byte-for-byte match on both.
-
-#### Scope alignment
-
-Set `IGRP_AUTH_SCOPES` to scopes registered on the OAuth client. The default
-IGRP Access Management discovery doc advertises `openid` only. Requesting
-unregistered scopes (e.g. `profile`, `email`) is either silently dropped or
-rejected by Spring Authorization Server depending on per-client config. To use
-extra claims, register the scopes on the client first, then update this env
-var.
-
-### 3. Start Development Server
+### 3. Run the dev server
 
 ```bash
 pnpm dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000) in your browser to see the application.
+Open [http://localhost:3000](http://localhost:3000). If `NEXT_PUBLIC_BASE_PATH` is set (e.g. `/apps/template`), browse to that path.
 
-### 4. Build for Production
+### 4. Build for production
 
 ```bash
 pnpm build
 pnpm start
 ```
-
-## Upgrading
-
-When a new IGRP framework version ships, the template needs matching source changes (new files, updated middleware, `.env.example` additions, dependency bumps). These are automated via `@igrp/template-migrator`.
-
-### Check your upgrade status
-
-```bash
-pnpm dlx @igrp/template-migrator@latest status
-```
-
-Sample output:
-
-```
-Template: demo-legacy  CLI: 0.1.0-beta.115
-
-  ✓ applied  01-preview-mode-not-found
-  ✓ applied  02-access-sync-config-refactor
-  • pending  03-tailwind-v4-tokens
-  • pending  04-multi-auth-provider
-  • pending  05-edge-safe-auth-bypass
-  • pending  06-error-handling-overhaul
-
-2 applied, 4 pending
-```
-
-### Preview what will change
-
-```bash
-pnpm dlx @igrp/template-migrator@latest plan
-```
-
-Prints each pending migration with the exact file operations it performs — no writes.
-
-### Apply migrations
-
-```bash
-pnpm dlx @igrp/template-migrator@latest apply
-```
-
-The CLI runs each pending migration in order, prompts before each step, and writes `.igrp-migrations-lock.json` after each success so the run is resumable on failure. When complete it prints the follow-up command:
-
-```
-Next steps:
-  pnpm install
-```
-
-Run without prompts (CI / scripted):
-
-```bash
-pnpm dlx @igrp/template-migrator@latest apply --yes
-```
-
-### CI gate
-
-Add a step to your CI workflow to fail if pending migrations exist:
-
-```yaml
-- name: Check migrations
-  run: pnpm dlx @igrp/template-migrator@latest check
-```
-
-### How it works
-
-Each framework release that requires template changes ships a migration guide under [`.igrpmigrations/`](.igrpmigrations/). The CLI bundles all guides as a cumulative manifest — installing any version brings every migration up to that point. The lock file (`.igrp-migrations-lock.json`) tracks which migrations have been applied so re-running `apply` is always a no-op.
-
-Migration history:
-
-| # | What changed | Target framework |
-|---|---|---|
-| `01-preview-mode-not-found` | Preview mode bypass, custom 404 | — |
-| `02-access-sync-config-refactor` | Access Management sync, config helpers | beta.84 |
-| `03-tailwind-v4-tokens` | Tailwind v4 `@source` / token-only imports | — |
-| `04-multi-auth-provider` | Multi-provider auth (`AUTH_PROVIDER`), central `auth.ts` | beta.113 |
-| `05-edge-safe-auth-bypass` | Edge-safe auth refactor, `isAuthBypass()` unification | beta.114 |
-| `06-error-handling-overhaul` | Typed error hierarchy, full App Router error boundaries | beta.115 |
-
-Full migration guides (with before/after code): [`.igrpmigrations/`](.igrpmigrations/)
-
----
-
-## Project Structure
-
-```templates/demo-legacy/
-├── src/
-│   ├── app/                   # Next.js App Router pages
-│   │   ├── (auth)/            # Authentication routes (login, logout)
-│   │   ├── (igrp)/            # IGRP-protected routes
-│   │   │   ├── layout.tsx    # IGRP layout wrapper
-│   │   │   └── page.tsx      # Home page
-│   │   ├── api/               # API routes
-│   │   │   └── auth/         # NextAuth API routes
-│   │   └── layout.tsx        # Root layout
-│   ├── actions/               # Server actions
-│   │   └── igrp/             # IGRP-specific actions
-│   ├── config/               # Configuration files
-│   │   ├── login.ts         # Login configuration
-│   │   └── site.ts          # Site metadata
-│   ├── lib/                  # Utility libraries
-│   │   ├── auth-helpers.ts  # Authentication helpers
-│   │   ├── auth-options.ts  # NextAuth configuration
-│   │   └── fonts.ts         # Font configuration
-│   ├── temp/                 # Mock data (for preview mode)
-│   │   ├── applications/    # Mock applications
-│   │   ├── menus/           # Mock menu items
-│   │   └── users/           # Mock user data
-│   ├── styles/               # Global styles
-│   ├── middleware.ts         # Next.js middleware
-│   └── igrp.template.config.ts  # IGRP configuration builder
-├── public/                    # Static assets
-├── create-template/          # Template publishing scripts
-├── docker/                   # Docker configuration
-└── package.json
-```
-
-## Configuration
-
-### IGRP Configuration
-
-The main IGRP configuration is built in `src/igrp.template.config.ts`. This file:
-
-- Configures the IGRP layout (header, sidebar, menus)
-- Sets up authentication and session management
-- Defines preview mode behavior
-- Configures API management client
-
-### Layout Configuration
-
-The layout is configured in `src/app/(igrp)/layout.tsx`:
-
-- Wraps routes with IGRP layout components
-- Handles authentication redirects
-- Manages session state
-- Configures preview mode
-
-### Site Customization
-
-Coming soon
-
-### Login Customization
-
-Coming soon
 
 ## Environment Variables
 
-### Auth provider variables
+All variables are documented inline in [`.env.example`](.env.example). Required values are validated when `IGRPRootLayout` renders — misconfiguration surfaces as a typed `IgrpConfigError` in `app/global-error.tsx`, not as an opaque runtime failure.
 
-| Variable | Description | Example |
-| -------- | ----------- | ------- |
-| `AUTH_PROVIDER` | Active auth provider | `keycloak` or `autentika` |
-| `KEYCLOAK_CLIENT_ID` | Keycloak client ID | `my-app-client` |
-| `KEYCLOAK_CLIENT_SECRET` | Keycloak client secret | — |
-| `KEYCLOAK_ISSUER` | Keycloak realm URL | `https://kc.example.com/realms/my-realm` |
-| `AUTENTIKA_CLIENT_ID` | Autentika client ID | — |
-| `AUTENTIKA_CLIENT_SECRET` | Autentika client secret | — |
-| `AUTENTIKA_HOST` | Autentika base URL | `https://autentika.example.com` |
-| `AUTENTIKA_TENANT_NAME` | WSO2IS tenant | `carbon.super` |
-| `AUTENTIKA_SCOPES` | OAuth scopes | `openid internal_login` |
-
-### Required Variables
-
-| Variable | Description | Example |
-| ---------- | ------------- | --------- |
-| `IGRP_APP_CODE` | Your application code identifier | `my-app` |
-| `NEXTAUTH_URL` | Public URL of your application | `http://localhost:3000` |
-| `NEXTAUTH_SECRET` | Secret key for NextAuth encryption | Generate with `openssl rand -base64 32` |
-
-### Optional Variables
+### Authentication
 
 | Variable | Description | Default |
-| ---------- | ------------- | --------- |
-| `IGRP_PREVIEW_MODE` | Enable preview mode (no auth required) | `false` |
-| `IGRP_ACCESS_MANAGEMENT_API` | API Management base URL | - |
-| `NEXT_PUBLIC_BASE_PATH` | Base path for the application | `/` |
-| `NEXT_PUBLIC_IGRP_APP_HOME_SLUG` | Default home route | `/` |
-| `NEXT_IGRP_APP_CENTER_URL` | Application center URL | - |
-| `NEXT_PUBLIC_ALLOWED_DOMAINS` | Allowed image domains (comma-separated) | - |
-| `NEXT_PUBLIC_IGRP_PROFILE_URL` | Base URL for profile | - |
-| `NEXT_PUBLIC_IGRP_NOTIFICATION_URL` | Base URL for notification | - |
-| `IGRP_SYNC_ACCESS` | Enable synchronization of applications, resources, and menus with the IGRP Access Management API | `false` |
-| `IGRP_SERVICE_ID` | Service identity (resource name + `X-Machine-Service-ID` header) — required when `IGRP_SYNC_ACCESS=true` | - |
-| `IGRP_M2M_CLIENT_ID` | OAuth2 `client_credentials` client identifier — required when `IGRP_SYNC_ACCESS=true` | - |
-| `IGRP_M2M_CLIENT_SECRET` | OAuth2 `client_credentials` client secret — required when `IGRP_SYNC_ACCESS=true` | - |
+| --- | --- | --- |
+| `AUTH_PROVIDER` | Active provider. `igrp-auth` (OIDC) or `none` (bypass auth) | `igrp-auth` |
+| `IGRP_AUTH_CLIENT_ID` | OAuth client ID registered on the authorization server | — |
+| `IGRP_AUTH_CLIENT_SECRET` | OAuth client secret | — |
+| `IGRP_AUTH_ISSUER` | Authorization server base URL (no trailing slash); discovery at `/.well-known/openid-configuration` | — |
+| `IGRP_AUTH_SCOPES` | Space-separated OAuth scopes. Must be registered on the client *and* advertised by the IdP | `openid` |
 
-### Synchronization Variables
+> The IGRP discovery doc advertises `openid` only. Requesting unregistered scopes (`profile`, `email`, …) is silently dropped or rejected by Spring Authorization Server — register them on the client first.
 
-When `IGRP_SYNC_ACCESS=true` and `IGRP_PREVIEW_MODE` is off, the framework
-authenticates to the IGRP Access Management API using OAuth2
-`client_credentials`. The bearer token is fetched once from
-`POST {IGRP_ACCESS_MANAGEMENT_API}/oauth2/token`, cached until expiry, and
-shared across the three sync phases (application metadata, route
-resources, on-code menus). Sync runs post-response via `after()`, so it
-never blocks the first request.
+### NextAuth
 
-All required variables are validated during render of `IGRPRootLayout`.
-Missing or malformed values surface as `IgrpConfigError` in
-`app/global-error.tsx` (machine code `IGRP_ACCESS_MANAGEMENT_CONFIG_MISSING`),
-not as opaque 4xx responses inside the post-stream sync.
+| Variable | Description |
+| --- | --- |
+| `NEXTAUTH_URL` | Public URL of the **NextAuth API root**. Under a basePath this must include `<basePath>/api/auth` (see callout below) |
+| `NEXTAUTH_URL_INTERNAL` | Server-to-server URL; same as `NEXTAUTH_URL` outside Docker/K8s |
+| `NEXTAUTH_SECRET` | JWE secret for tokens/cookies. Generate with `openssl rand -base64 32`. **Hard-fails in production if unset** |
+| `IGRP_SESSION_REFETCH_INTERVAL` | Client session poll interval (seconds). Set **below** the IdP access-token TTL so refresh lands in time. Defaults to `180` (suits a 5-min token) |
 
-#### `IGRP_SYNC_ACCESS`
+> **`NEXTAUTH_URL` includes `/api/auth`.** NextAuth v4 treats this value as the URL of its API root and derives `signin`/`callback` from it — it does **not** auto-append `/api/auth` when a basePath is present. With `NEXT_PUBLIC_BASE_PATH=/apps/template`, the correct value is `http://localhost:3000/apps/template/api/auth`. Getting this wrong produces a login loop with a deeply nested `?callbackUrl=…?callbackUrl=…` chain.
 
-- **Purpose**: Master switch for Access Management synchronization
-- **Usage**: Set to `true` to sync; `false` (or unset) to skip
-- **When to use**: Enable when your application's structure (resources, menus) needs to be propagated to IGRP Access Management
+### IGRP Framework
 
-#### `IGRP_SERVICE_ID`
+| Variable | Description | Default |
+| --- | --- | --- |
+| `IGRP_APP_CODE` | Unique application identifier | — |
+| `IGRP_ACCESS_MANAGEMENT_API` | Base URL of the IGRP Access Management API | — |
+| `IGRP_PREVIEW_MODE` | Bypass auth + use mock data (case-insensitive, quote-tolerant) | `false` |
+| `IGRP_SYNC_ACCESS` | Sync application/resources/menus to Access Management at startup | `false` |
+| `IGRP_SYNC_ON_CODE_MENUS` | Push `src/temp/menus/menus.ts` to AM (overwrites AM menus). Requires sync on + preview off | `false` |
 
-- **Purpose**: Stable identity for this service on the Access Management server. Used as the resource `name` and sent in the `X-Machine-Service-ID` header on every M2M request.
-- **Format**: Lowercase alphanumeric + dashes/underscores, 2-64 chars, starts and ends with `[a-z0-9]`. Examples: `demo-igrp`, `my_service-prod`
-- **Required when**: `IGRP_SYNC_ACCESS=true`
-- **Note**: This is *not* a credential. It identifies the service across deployments — keep it stable per logical service.
+### Access Management M2M (required when `IGRP_SYNC_ACCESS=true`)
 
-#### `IGRP_M2M_CLIENT_ID`
+| Variable | Description |
+| --- | --- |
+| `IGRP_SERVICE_ID` | Stable service identity — resource name + `X-Machine-Service-ID` header. Lowercase alphanumeric + `-`/`_`, 2-64 chars. **Not a credential.** |
+| `IGRP_M2M_CLIENT_ID` | OAuth2 `client_credentials` client ID, issued by your AM admin |
+| `IGRP_M2M_CLIENT_SECRET` | Paired client secret. Server-only — never commit |
 
-- **Purpose**: OAuth2 client identifier for this service's machine-to-machine integration
-- **Required when**: `IGRP_SYNC_ACCESS=true`
-- **How to get**: Issued by your IGRP Access Management administrator when registering the M2M client
+### Next.js public
 
-#### `IGRP_M2M_CLIENT_SECRET`
+| Variable | Description | Default |
+| --- | --- | --- |
+| `NEXT_PUBLIC_BASE_PATH` | Subdirectory mount path (empty for root) | — |
+| `NEXT_PUBLIC_IGRP_APP_HOME_SLUG` | Route to land on after login | `/` |
+| `NEXT_IGRP_APP_CENTER_URL` | Application Center URL (app switcher) | — |
+| `NEXT_PUBLIC_ALLOWED_DOMAINS` | Comma-separated image domains for `next/image` | — |
+| `NEXT_PUBLIC_IGRP_PROFILE_URL` | External profile base URL | — |
+| `NEXT_PUBLIC_IGRP_NOTIFICATION_URL` | External notification base URL | — |
+| `NEXT_PUBLIC_IGRP_SETTINGS_URL` | External settings base URL | — |
 
-- **Purpose**: OAuth2 client secret paired with `IGRP_M2M_CLIENT_ID`
-- **Required when**: `IGRP_SYNC_ACCESS=true`
-- **How to get**: Issued alongside the client ID. Rotate via your AM admin.
-- **Security**: Server-only — the framework keeps it inside `IGRPRootLayout` and the `after()` boundary. Never commit it to version control.
+## Auth Server Registration (REQUIRED)
 
-#### `NEXT_PUBLIC_IGRP_PROFILE_URL`
+Two URIs **must** be registered on the OAuth client (e.g. `igrp-access-management` in IGRP Access Management). Missing either causes a silent failure:
 
-- **Purpose**: Base URL for profile
-- **Usage**: Used by the frontend profile
-- **Example**: `https://frontendexample.com/profile`
+| URI | Why | Symptom if missing |
+| --- | --- | --- |
+| **OAuth callback** | Where the IdP returns the user after authentication | Login bounces back to `/login` with a growing nested `callbackUrl` chain |
+| **Post-logout redirect** | Where the IdP returns the user after the SSO session is cleared | Logout clears local cookies but the IdP SSO session survives — re-login skips the credential prompt |
 
-#### `NEXT_PUBLIC_IGRP_NOTIFICATION_URL`
+Exact values depend on `NEXT_PUBLIC_BASE_PATH`:
 
-- **Purpose**: Base URL for notification service calls/streams
-- **Usage**: Used by the frontend notifications
-- **Example**: `https://frontendexample.com/notifications`
+| Config | OAuth callback URI | Post-logout redirect URI |
+| --- | --- | --- |
+| root (`NEXT_PUBLIC_BASE_PATH=`) | `http://localhost:3000/api/auth/callback/igrp-auth` | `http://localhost:3000/login` |
+| `/apps/template` | `http://localhost:3000/apps/template/api/auth/callback/igrp-auth` | `http://localhost:3000/apps/template/login` |
+
+The OIDC spec requires a byte-for-byte match. The provider enables PKCE (RFC 7636, S256) and an OIDC `nonce`; `NEXTAUTH_URL`, `NEXTAUTH_SECRET`, and the proxy path must stay stable across the `/authorize` → `/callback` round-trip (the PKCE/state/nonce cookies are JWE-encrypted with `NEXTAUTH_SECRET` and scoped to the `NEXTAUTH_URL` path).
 
 ## Available Scripts
 
-### Development
+| Script | Command | Purpose |
+| --- | --- | --- |
+| `pnpm dev` | `next dev --turbopack` | Development server |
+| `pnpm build` | `pnpm format && next build --turbopack` | Production build (Biome format first) |
+| `pnpm start` | `next start` | Serve the production build |
+| `pnpm lint` | `biome check --write` | Lint and auto-fix |
+| `pnpm format` | `biome format --write` | Format |
+| `pnpm publish:template` | PowerShell zip script | Package the publishable template |
 
-```bash
-# Start development server with Turbopack
-pnpm dev
+> This template uses **Biome** for lint/format — not ESLint/Prettier. Don't add ESLint/Prettier configs here.
 
-# Format code with Biome
-pnpm format
+## Project Structure
 
-# Lint and fix code with Biome
-pnpm lint
 ```
-
-### Production
-
-```bash
-# Build for production (includes formatting)
-pnpm build
-
-# Start production server
-pnpm start
+templates/demo-legacy/
+├── src/
+│   ├── app/
+│   │   ├── (auth)/                       # Login / logout route group
+│   │   │   ├── login/page.tsx            # IGRPAuthForm + carousel launcher
+│   │   │   ├── logout/page.tsx
+│   │   │   └── error.tsx
+│   │   ├── (igrp)/                        # Authenticated shell (verifySession gate)
+│   │   │   ├── layout.tsx                 # IGRPLayoutFull (header + sidebar)
+│   │   │   ├── page.tsx                   # Home
+│   │   │   ├── loading.tsx
+│   │   │   ├── error.tsx
+│   │   │   ├── system-settings/page.tsx
+│   │   │   └── (generated)/               # Code-generated route group
+│   │   ├── api/
+│   │   │   ├── auth/[...nextauth]/route.ts # NextAuth handler (from lib/auth.ts)
+│   │   │   └── health/route.ts            # Health check
+│   │   ├── layout.tsx                     # Root layout → IGRPRootLayout
+│   │   ├── not-found.tsx
+│   │   ├── error.tsx
+│   │   └── global-error.tsx               # Renders typed IgrpError
+│   ├── actions/igrp/
+│   │   ├── layout.ts                      # configLayout(), getTheme()
+│   │   └── auth.ts
+│   ├── config/                            # site, login, error-messages
+│   ├── lib/
+│   │   ├── auth.ts                        # withIGRPAuth instance, serverSession, getSession
+│   │   ├── dal.ts                         # verifySession() data-access gate
+│   │   ├── utils.ts                       # cn, isPreviewMode, isAuthDisabled, isAuthBypass, sanitizeCallbackUrl
+│   │   ├── errors.ts, report-error.ts
+│   │   ├── fonts.ts
+│   │   └── config/                        # get-base-path, get-pkj, get-routes, get-session-args
+│   ├── providers/query-client.tsx        # React Query provider
+│   ├── temp/                              # Mock users / menus / applications (preview mode)
+│   ├── styles/                            # globals.css + theme variants
+│   ├── middleware.ts                      # Auth gate + security headers
+│   └── igrp.template.config.ts            # createConfig() → igrpBuildConfig
+├── public/
+├── create-template/                      # Template publishing scripts
+├── docker/development/                   # Dockerfile, compose, env
+├── .igrp-migrations-lock.json            # Applied-migration tracker
+└── package.json
 ```
 
 ## How It's Built
 
-### Architecture Overview
+The template wires the framework together in four layers:
 
-The template follows Next.js 15 App Router architecture with the following key components:
+1. **Middleware** ([`src/middleware.ts`](src/middleware.ts)) — runs first. On auth bypass it redirects `/login`, `/logout`, `/api/auth/*` to `/` and lets everything else through. Otherwise it skips public/static paths, extracts the JWT via `auth.getTokenFromRequest()`, and redirects to `<basePath>/login` (with a sanitized `callbackUrl`) when the token is missing/expired/refresh-failed. Injects an `x-current-path` request header and applies security headers in production. The matcher comes from the framework (`export const { config } = auth`).
 
-#### 1. **Root Layout** (`src/app/layout.tsx`)
+2. **Root layout** ([`src/app/layout.tsx`](src/app/layout.tsx)) — builds config via `createConfig(...)` and mounts `IGRPRootLayout` (providers, theme, session). Does **not** enforce auth, so the login page stays reachable.
 
-- Provides global layout structure
-- Configures metadata and viewport
-- Wraps application with IGRP root layout
+3. **IGRP layout** ([`src/app/(igrp)/layout.tsx`](src/app/(igrp)/layout.tsx)) — calls `verifySession()` (from [`lib/dal.ts`](src/lib/dal.ts)) to gate the authenticated shell, then renders `IGRPLayoutFull` around `children`.
 
-#### 2. **IGRP Layout** (`src/app/(igrp)/layout.tsx`)
+4. **Config builder** ([`src/igrp.template.config.ts`](src/igrp.template.config.ts)) — `createConfig()` wraps `igrpBuildConfig`, assembling header/sidebar data, fonts, API/M2M config, toaster, and session args. In preview mode it swaps in `src/temp/*` mock data.
 
-- Handles authentication checks
-- Manages session state
-- Redirects unauthenticated users to login
-- Wraps routes with IGRP layout components (header, sidebar)
+### Data flow (authenticated)
 
-#### 3. **Middleware** (`src/middleware.ts`)
-
-- Intercepts requests before they reach pages
-- Validates authentication tokens
-- Handles public paths (login, logout, API routes)
-- Supports preview mode bypass
-
-#### 4. **Configuration Builder** (`src/igrp.template.config.ts`)
-
-- Builds IGRP configuration object
-- Loads mock data for preview mode
-- Configures layout, API, and toaster settings
-- Manages session configuration
-
-#### 5. **Server Actions** (`src/actions/igrp/`)
-
-- `layout.ts`: Fetches layout configuration and session
-- `auth.ts`: Authentication-related actions
-
-### Key Technologies
-
-- **Next.js 15**: React framework with App Router
-- **Turbopack**: Fast bundler for development
-- **TypeScript**: Type-safe JavaScript
-- **NextAuth.js**: Authentication library
-- **React Query**: Server state management
-- **React Hook Form**: Form handling
-- **Zod**: Schema validation
-- **Tailwind CSS**: Utility-first CSS framework
-- **Biome**: Fast formatter and linter
-
-### Styling (Tailwind v4 + IGRP packages)
-
-This template compiles Tailwind **once in the app** and uses Tailwind v4 `@source` to scan both:
-
-- The template source files (`src/**`)
-- The compiled `dist/` output from the IGRP packages (so Tailwind utilities used inside those packages are generated too)
-
-See `src/styles/globals.css` for the active `@source` configuration.
-
-#### Tokens / theming
-
-- Base design tokens (CSS variables) are imported from the design system:
-  - `@igrp/igrp-framework-react-design-system/tokens`
-- Theme overrides live in:
-  - `src/styles/themes.css`
-
-#### Important
-
-- Do **not** import prebuilt `@igrp/*/styles.css` files in the template. They are static and can:
-  - miss utilities your pages need
-  - cause CSS override conflicts depending on import order
-
-If you're upgrading an existing app, check:
-
-- `.igrpmigrations/03.MIGRATIONS-04022026.md`
-
-### Data Flow
-
-1. **Request arrives** → Middleware checks authentication
-2. **Authenticated** → Request proceeds to layout
-3. **Layout loads** → Fetches configuration and session
-4. **Configuration built** → IGRP layout components render
-5. **Page renders** → With header, sidebar, and content
+1. Request → middleware validates JWT
+2. Valid → passes through with `x-current-path`
+3. `(igrp)/layout.tsx` → `verifySession()` confirms session (else redirect to `/login`)
+4. `createConfig()` builds the IGRP config
+5. `IGRPLayoutFull` renders header + sidebar around the page
 
 ## Authentication
 
-The template uses NextAuth.js for authentication. Configuration is in `src/lib/auth-options.ts`.
+Auth is centralized in [`src/lib/auth.ts`](src/lib/auth.ts) via a single `withIGRPAuth(...)` instance. The provider is resolved from `AUTH_PROVIDER`. That instance exposes everything the app needs:
 
-### Authentication Flow
+- **Route handler** — `export const { GET, POST } = auth` in `api/auth/[...nextauth]/route.ts`
+- **Middleware** — `export const { config } = auth`
+- **`serverSession()`** — validates env, configures the IGRP access client, returns the session (or `null`)
+- **`getSession()`** — returns `null` on bypass; otherwise redirects to `/logout` on expired/failed refresh
 
-1. User visits protected route
-2. Middleware checks for valid session
-3. If no session → Redirect to `/login`
-4. User authenticates → Session created
-5. User redirected to original destination
+A custom `redirect` callback resolves post-login destinations against the **app origin** (`NEXTAUTH_URL` minus `/api/auth`), honoring same-origin `callbackUrl` values but never bouncing back to `/login` or `/logout`.
 
-### Customizing Authentication
+### `callbackUrl` is always sanitized
 
-To customize authentication:
+`sanitizeCallbackUrl()` ([`lib/utils.ts`](src/lib/utils.ts)) is applied in both middleware and the login page. It rejects scheme-relative (`//…`) and absolute URLs (open-redirect), collapses basePath-prefixed `/login`, and drops `/login*` / `/logout*` targets. Any new code consuming `callbackUrl` must go through it.
 
-1. Set `AUTH_PROVIDER` and the matching provider vars in `.env.local`
-2. Update `src/app/(auth)/login/page.tsx` for custom login UI
-3. Modify `src/middleware.ts` for custom auth logic
+### Authentication flow (no bypass)
 
-## Preview Mode
+1. Request hits middleware → no/expired token → redirect to `<basePath>/login`
+2. `/login` renders `IGRPAuthForm`; the button calls `signIn('igrp-auth', { callbackUrl })`
+3. NextAuth returns the IGRP issuer's `/oauth2/authorize` URL → browser navigates there
+4. IdP authenticates → 302 back to `<NEXTAUTH_URL>/callback/igrp-auth?code=…`
+5. NextAuth exchanges the code → session cookie set → redirect to `callbackUrl`
+6. Next request: middleware sees a valid token → passes through
 
-Preview mode allows you to develop and test without authentication:
+## Preview Mode & Auth Bypass
+
+Two env paths bypass authentication, both unified behind `isAuthBypass()`:
 
 ```env
-IGRP_PREVIEW_MODE=true
+IGRP_PREVIEW_MODE=true   # or
+AUTH_PROVIDER=none
 ```
 
-When enabled:
+When bypass is on:
 
-- Authentication checks are bypassed
-- Mock data is used for menus, users, and applications
-- Session refetching is disabled
-- No redirects to login page
+- Middleware lets every non-auth path through and redirects `/login`, `/logout`, `/api/auth/*` to `/`
+- `serverSession()` / `getSession()` return `null`; `verifySession()` returns a stub session
+- `createConfig()` swaps in mock data
+- Client session refetch is disabled
 
 **Mock data sources:**
 
-- `src/temp/users/use-mock-user.ts`
-- `src/temp/menus/use-mock-menus.ts`
-- `src/temp/applications/use-mock-apps.ts`
+- [`src/temp/users/use-mock-user.ts`](src/temp/users/use-mock-user.ts)
+- [`src/temp/menus/use-mock-menus.ts`](src/temp/menus/use-mock-menus.ts)
+- [`src/temp/applications/use-mock-apps.ts`](src/temp/applications/use-mock-apps.ts)
+
+> Any change to middleware, root layout, or the config builder must work with bypass **on** and **off**.
+
+## Access Management Sync
+
+When `IGRP_SYNC_ACCESS=true` and preview mode is off, the framework authenticates to the Access Management API with OAuth2 `client_credentials`:
+
+1. `POST {IGRP_ACCESS_MANAGEMENT_API}/oauth2/token` with `Basic base64(IGRP_M2M_CLIENT_ID:IGRP_M2M_CLIENT_SECRET)`
+2. The bearer token is cached until expiry and shared across the three sync phases (application metadata, route resources, on-code menus)
+
+Sync runs post-response via `after()`, so it never blocks the first request. The four M2M variables are validated at render time — misconfiguration surfaces as `IgrpConfigError` (`IGRP_ACCESS_MANAGEMENT_CONFIG_MISSING`) in `global-error.tsx`. Enabling `IGRP_SYNC_ON_CODE_MENUS` pushes `src/temp/menus/menus.ts` and **overwrites** the AM-side menus.
+
+## Styling (Tailwind v4)
+
+Tailwind compiles **once here in the app**, not in the framework packages. `src/styles/globals.css` uses `@source` to scan both the template `src/**` and the compiled `dist/` of each consumed `@igrp/*` package, so utilities used inside those packages are generated.
+
+- Import **tokens only**: `@import "@igrp/igrp-framework-react-design-system/tokens";` — never the prebuilt `styles.css` (causes cascade conflicts / missing utilities)
+- Theme variants live in `src/styles/themes.css`, imported **after** tokens
+- Dark mode is the `.dark` class driven by `next-themes` — no manual `dark:` overrides
+- All UI comes from the design system: Horizon (`IGRP*`) first, Primitives only when needed. Forms are always `IGRPForm` + Zod. Use semantic tokens (`bg-background`, `text-foreground`, …), `cn()`, `size-*`, and `flex gap-*`
+
+## Upgrading
+
+When a new framework version requires template changes, they're delivered via `@igrp/template-migrator`. The applied set is tracked in [`.igrp-migrations-lock.json`](.igrp-migrations-lock.json).
+
+```bash
+# See applied vs. pending
+pnpm dlx @igrp/template-migrator@latest status
+
+# Preview file operations (no writes)
+pnpm dlx @igrp/template-migrator@latest plan
+
+# Apply pending migrations (prompts before each; resumable)
+pnpm dlx @igrp/template-migrator@latest apply
+pnpm dlx @igrp/template-migrator@latest apply --yes   # CI / scripted
+
+# CI gate — fails if migrations are pending
+pnpm dlx @igrp/template-migrator@latest check
+```
+
+Migration history (all applied in this template):
+
+| # | What changed | Target framework |
+| --- | --- | --- |
+| `01-preview-mode-not-found` | Preview-mode bypass, custom 404 | — |
+| `02-access-sync-config-refactor` | Access Management sync, config helpers | beta.84 |
+| `03-tailwind-v4-tokens` | Tailwind v4 `@source` / token-only imports | — |
+| `04-multi-auth-provider` | Provider resolution (`AUTH_PROVIDER`), central `auth.ts` | beta.113 |
+| `05-edge-safe-auth-bypass` | Edge-safe auth refactor, `isAuthBypass()` unification | beta.114 |
+| `06-error-handling-overhaul` | Typed error hierarchy, full App Router error boundaries | beta.115 |
 
 ## Docker Support
 
-### Docker Development
-
 ```bash
 docker build -f docker/development/Dockerfile -t my-igrp-template:latest .
-docker run -d --name my-igrp-template -p 3000:3000 --restart unless-stopped --env-file docker/development/.env.development my-igrp-template:latest
+docker run -d --name my-igrp-template -p 3000:3000 \
+  --restart unless-stopped \
+  --env-file docker/development/.env.development \
+  my-igrp-template:latest
 ```
 
-### Docker Production
-
-Use the production Dockerfile with appropriate environment variables.
+A `docker/development/docker-compose.yml` is also provided.
 
 ## Additional Resources
 
 - [Next.js Documentation](https://nextjs.org/docs)
-- [IGRP Framework Documentation](https://github.com/NOSiCode-CV/IGRP-Framework)
+- [IGRP Framework](https://github.com/NOSiCode-CV/IGRP-Framework)
 - [NextAuth.js Documentation](https://next-auth.js.org)
-- [React Query Documentation](https://tanstack.com/query/latest)
-
-## Contributing
-
-Contributions are welcome! Please ensure you:
-
-1. Follow the code style (Biome formatting)
-2. Add appropriate TypeScript types
-3. Test your changes thoroughly
-4. Update documentation as needed
+- [TanStack Query](https://tanstack.com/query/latest)
 
 ## License
 
-MIT License - see LICENSE file for details
+MIT License — see [LICENSE](LICENSE).
 
 ---
 
-### Built with ❤️ by the IGRP Team · NOSI E.P.E
+### Built by the IGRP Core Team · NOSI E.P.E

@@ -346,6 +346,8 @@ export {
 
 export { Skeleton } from "./components/primitives/skeleton"
 
+export { Spinner } from "./components/primitives/spinner"
+
 export { Slider } from "./components/primitives/slider"
 
 export {

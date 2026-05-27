@@ -201,7 +201,7 @@ function IGRPChat({ apiEndpoint, labelDescription = "Ask me anything!", name, id
           disabled={isLoading}
           size="icon"
           iconName={isLoading ? "Loader" : "Send"}
-          iconClassName={cn(isLoading ? "animate-spin h-4 w-4" : "h-4 w-4")}
+          iconClassName={cn(isLoading ? "animate-spin motion-reduce:animate-none h-4 w-4" : "h-4 w-4")}
         />
       </form>
     </div>

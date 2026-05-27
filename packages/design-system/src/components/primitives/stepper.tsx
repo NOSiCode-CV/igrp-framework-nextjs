@@ -205,7 +205,7 @@ function StepperIndicator({ asChild = false, className, children, ...props }: St
           />
           {isLoading && (
             <span className={cn("absolute transition-all")}>
-              <LoaderCircleIcon className={cn("animate-spin")} size={14} aria-hidden="true" />
+              <LoaderCircleIcon className={cn("animate-spin motion-reduce:animate-none")} size={14} aria-hidden="true" />
             </span>
           )}
         </>

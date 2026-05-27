@@ -67,7 +67,7 @@ function IGRPButton({
     )[size as string] ?? "size-4"
 
   const LoadingIcon = (
-    <IGRPIcon iconName="LoaderCircle" className={cn("animate-spin", computedIconClassName)} aria-hidden="true" />
+    <IGRPIcon iconName="LoaderCircle" className={cn("animate-spin motion-reduce:animate-none", computedIconClassName)} aria-hidden="true" />
   )
 
   if (size === "icon" || size === "icon-xs" || size === "icon-sm" || size === "icon-lg") {

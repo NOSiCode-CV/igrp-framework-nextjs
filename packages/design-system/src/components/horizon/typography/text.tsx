@@ -145,7 +145,7 @@ function IGRPText({
       className={cn(
         igrpTextVariants({ size, weight, align, spacing }),
         colorClass.text,
-        animate && "animate-[igrp-text-fade-in_0.3s_ease-in-out_0.1s_both]",
+        animate && "animate-[igrp-text-fade-in_0.3s_ease-in-out_0.1s_both] motion-reduce:animate-none",
         className,
       )}
       style={truncateStyles}

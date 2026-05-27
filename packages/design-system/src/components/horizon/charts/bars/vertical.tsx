@@ -15,7 +15,7 @@ function IGRPVerticalBarChart(props: IGRPVerticalBarChartProps) {
   return (
     <Suspense
       fallback={
-        <div className={cn("w-full overflow-hidden animate-pulse rounded-lg bg-muted min-h-[200px] aspect-video")} />
+        <div className={cn("w-full overflow-hidden animate-pulse motion-reduce:animate-none rounded-lg bg-muted min-h-[200px] aspect-video")} />
       }
     >
       <IGRPVerticalBarChartLazy {...props} />

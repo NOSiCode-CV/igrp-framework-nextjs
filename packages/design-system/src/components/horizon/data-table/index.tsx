@@ -463,7 +463,12 @@ function IGRPDataTable<TData, TValue>({
                 switch (descriptor.type) {
                   case "input":
                     return (
-                      <IGRPDataTableFilterInput key={columnId} column={column} placeholder={descriptor.placeholder} />
+                      <IGRPDataTableFilterInput
+                        key={columnId}
+                        column={column}
+                        placeholder={descriptor.placeholder}
+                        ariaLabel={descriptor.ariaLabel}
+                      />
                     )
                   case "select":
                     return (
@@ -497,7 +502,7 @@ function IGRPDataTable<TData, TValue>({
         <Table className={tableClassName}>
           <TableHeader className={tableHeaderClassName}>
             {table.getHeaderGroups().map((headerGroup) => (
-              <TableRow key={headerGroup.id} className={cn("border-b dark:border-slate-800/60")}>
+              <TableRow key={headerGroup.id} className={cn("border-b")}>
                 {headerGroup.headers.map((header) => {
                   return (
                     <TableHead

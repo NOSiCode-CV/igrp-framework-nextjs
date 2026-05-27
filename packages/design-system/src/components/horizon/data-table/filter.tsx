@@ -283,7 +283,10 @@ function IGRPDataTableFilterFaceted<TData>({
 type IGRPDataTableFilterInputProps<TData> = Pick<
   IGRPDataTableFilterProps<TData>,
   "column" | "placeholder" | "className" | "iconName"
->
+> & {
+  /** Accessible label for the filter input. */
+  ariaLabel?: string
+}
 
 /** Text input filter. */
 function IGRPDataTableFilterInput<TData>({
@@ -291,6 +294,7 @@ function IGRPDataTableFilterInput<TData>({
   placeholder = "Pesquisar...",
   className,
   iconName = "ListFilter",
+  ariaLabel = "Filtrar",
 }: IGRPDataTableFilterInputProps<TData>) {
   const id = useId()
   const inputRef = useRef<HTMLInputElement>(null)
@@ -305,7 +309,7 @@ function IGRPDataTableFilterInput<TData>({
         name={`text-${id}`}
         ref={inputRef}
         type="text"
-        aria-label="Filtrar"
+        aria-label={ariaLabel}
       />
       <div
         className={cn(

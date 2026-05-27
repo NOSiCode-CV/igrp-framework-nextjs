@@ -75,12 +75,12 @@ export const createChartConfig = (series: IGRPSeriesConfig[]): ShadCNChartConfig
 }
 
 export const IGRP_CHART_COLORS = [
-  "var(--chart-1)", // Azul (equivalente ao #3b82f6)
-  "var(--chart-2)", // Verde (equivalente ao #10b981)
-  "var(--chart-3)", // Laranja (equivalente ao #f59e0b)
-  "var(--chart-4)", // Roxo (equivalente ao #6366f1)
-  "var(--chart-5)", // Rosa (equivalente ao #ec4899)
-  "var(--chart-6)", // Violeta (equivalente ao #8b5cf6)
-  "var(--chart-7)", // Vermelho (equivalente ao #ef4444)
-  "var(--chart-8)", // Lima (equivalente ao #84cc16)
+  "var(--chart-1)",
+  "var(--chart-2)",
+  "var(--chart-3)",
+  "var(--chart-4)",
+  "var(--chart-5)",
+  "var(--chart-6)",
+  "var(--chart-7)",
+  "var(--chart-8)",
 ]

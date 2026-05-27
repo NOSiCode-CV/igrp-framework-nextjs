@@ -75,8 +75,16 @@ function IGRPButton({
   )
 
   if (size === "icon" || size === "icon-xs" || size === "icon-sm" || size === "icon-lg") {
+    const hasAccessibleName = Boolean(props["aria-label"] || props["aria-labelledby"])
+    if (process.env.NODE_ENV !== "production" && !hasAccessibleName) {
+      console.warn(
+        `IGRPButton: icon-only button (iconName="${iconName}") has no accessible name. Pass an "aria-label".`,
+      )
+    }
+
     return (
       <Button
+        aria-label={!hasAccessibleName ? iconName : undefined}
         {...props}
         className={cn(loading && "cursor-wait", className)}
         disabled={disabled || loading}

@@ -72,10 +72,12 @@ function IGRPInputPassword({
             id={fieldName}
             name={fieldName}
             type={showPassword ? "text" : "password"}
+            spellCheck={false}
+            autoComplete="current-password"
             required={required}
             aria-required={required}
             aria-invalid={!!error || !!props["aria-invalid"]}
-            aria-describedby={helperText || error ? `${id}-helper` : undefined}
+            aria-describedby={error ? `${fieldName}-error` : helperText ? `${fieldName}-helper` : undefined}
             className={cn(
               "peer bg-background py-3 text-sm outline-hidden",
               showPasswordToggle && "pr-10",
@@ -116,7 +118,7 @@ function IGRPInputPassword({
         )}
 
         {error && (
-          <p id={`${fieldName}-errror`} className={cn("text-destructive mt-2 text-xs")} role="alert">
+          <p id={`${fieldName}-error`} className={cn("text-destructive mt-2 text-xs")} role="alert">
             {error}
           </p>
         )}
@@ -137,10 +139,14 @@ function IGRPInputPassword({
             <Input
               id={fieldName}
               type={showPassword ? "text" : "password"}
+              spellCheck={false}
+              autoComplete="current-password"
               required={required}
               aria-required={required}
               aria-invalid={!!fieldState.error || !!error || !!props["aria-invalid"]}
-              aria-describedby={helperText || error || fieldState.error ? `${id}-helper` : undefined}
+              aria-describedby={
+                error || fieldState.error ? `${fieldName}-error` : helperText ? `${fieldName}-helper` : undefined
+              }
               className={cn(
                 "peer bg-background py-3 text-sm outline-hidden",
                 showPasswordToggle && "pr-10",
@@ -183,7 +189,7 @@ function IGRPInputPassword({
           )}
 
           {(error || fieldState.error) && (
-            <p id={`${fieldName}-helper`} className={cn("text-destructive mt-2 text-xs")} role="alert">
+            <p id={`${fieldName}-error`} className={cn("text-destructive mt-2 text-xs")} role="alert">
               {error || fieldState.error?.message}
             </p>
           )}

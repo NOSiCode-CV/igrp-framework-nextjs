@@ -33,7 +33,7 @@ const igrpStatsCardVariants = cva(
         right: "border-r-4 border-t-0 border-l-0 border-b-0",
       },
       interactive: {
-        true: "cursor-pointer hover:shadow-md",
+        true: "cursor-pointer hover:shadow-md focus-visible:ring-2 focus-visible:ring-ring focus-visible:outline-none",
         false: "",
       },
     },

@@ -108,6 +108,9 @@ function ColorControl({
             onChange={onStringChange}
             onBlur={onBlur}
             onKeyDown={onKeyDown}
+            aria-label={
+              label ? `${label} (${FORMAT_LABELS[activeFormat]})` : `Color value (${FORMAT_LABELS[activeFormat]})`
+            }
             aria-invalid={hasError ? true : undefined}
           />
           {!isFormatLocked && (

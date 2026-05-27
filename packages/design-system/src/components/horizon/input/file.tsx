@@ -458,7 +458,7 @@ function IGRPInputFile({
           placeholder={placeholder}
           onChange={onChange}
           aria-invalid={!!error}
-          aria-describedby={helperText || error ? `${id}-helper` : undefined}
+          aria-describedby={error ? `${fieldName}-error` : helperText ? `${fieldName}-helper` : undefined}
           {...props}
         />
 
@@ -522,7 +522,9 @@ function IGRPInputFile({
                 }
               }}
               aria-invalid={!!fieldState.error || !!error}
-              aria-describedby={helperText || errorMessage ? `${id}-helper` : undefined}
+              aria-describedby={
+                errorMessage || fieldState.error ? `${fieldName}-error` : helperText ? `${fieldName}-helper` : undefined
+              }
               {...safeFieldProps}
               {...props}
               name={fieldName}

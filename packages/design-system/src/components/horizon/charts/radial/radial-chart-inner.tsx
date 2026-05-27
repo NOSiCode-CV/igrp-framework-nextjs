@@ -275,6 +275,7 @@ function IGRPRadialBarChartInner({
         <div style={{ height: chartHeight, width: chartWidth }} className={cn("w-full overflow-hidden")}>
           <ChartContainer className={cn("h-full w-full")} config={chartConfig}>
             <RadialBarChart
+              accessibilityLayer
               data={enhancedData}
               startAngle={startAngle}
               endAngle={endAngle}
@@ -325,7 +326,7 @@ function IGRPRadialBarChartInner({
                     <LabelList
                       dataKey={bars[0].labelType === "name" ? nameKey : bars[0].dataKey}
                       position={bars[0].labelPosition || "insideStart"}
-                      className={cn("fill-white capitalize mix-blend-luminosity")}
+                      className={cn("fill-background capitalize mix-blend-luminosity")}
                       fontSize={11}
                       style={bars[0].labelStyle}
                       formatter={(entry: { payload: any }) => {
@@ -352,7 +353,7 @@ function IGRPRadialBarChartInner({
                     <LabelList
                       dataKey={bar.labelType === "name" ? nameKey : bar.dataKey}
                       position={bar.labelPosition || "insideStart"}
-                      className={cn("fill-white capitalize mix-blend-luminosity")}
+                      className={cn("fill-background capitalize mix-blend-luminosity")}
                       fontSize={11}
                       style={bar.labelStyle}
                       formatter={(entry: { payload: any }) => {

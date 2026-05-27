@@ -57,7 +57,9 @@ function IGRPChat({ apiEndpoint, labelDescription = "Ask me anything!", name, id
   const ref = name ?? id ?? _id
 
   useEffect(() => {
-    messagesEndRef.current?.scrollIntoView({ behavior: "smooth" })
+    const prefersReducedMotion =
+      typeof window !== "undefined" && window.matchMedia("(prefers-reduced-motion: reduce)").matches
+    messagesEndRef.current?.scrollIntoView({ behavior: prefersReducedMotion ? "auto" : "smooth" })
   }, [messages])
 
   const sendMessage = useCallback(async () => {
@@ -126,7 +128,7 @@ function IGRPChat({ apiEndpoint, labelDescription = "Ask me anything!", name, id
   return (
     <div className={cn("flex flex-col h-full")} id={ref}>
       <ScrollArea className={cn("pr-4 h-[80%]")}>
-        <div className={cn("space-y-4")}>
+        <div className={cn("space-y-4")} aria-live="polite" aria-atomic="false">
           {messages.length === 0 && (
             <div className={cn("flex flex-col items-center justify-center h-40 text-muted-foreground")}>
               <IGRPIcon iconName="Bot" className={cn("size-12 mb-2 opacity-20")} />
@@ -191,7 +193,7 @@ function IGRPChat({ apiEndpoint, labelDescription = "Ask me anything!", name, id
         <IGRPInputText
           value={input}
           onChange={(e) => setInput(e.target.value)}
-          placeholder="Type your message..."
+          placeholder="Type your message…"
           disabled={isLoading}
           className={cn("flex-1")}
           type="text"
@@ -199,6 +201,7 @@ function IGRPChat({ apiEndpoint, labelDescription = "Ask me anything!", name, id
         <IGRPButton
           type="submit"
           disabled={isLoading}
+          aria-label="Send message"
           size="icon"
           iconName={isLoading ? "Loader" : "Send"}
           iconClassName={cn(isLoading ? "animate-spin motion-reduce:animate-none h-4 w-4" : "h-4 w-4")}

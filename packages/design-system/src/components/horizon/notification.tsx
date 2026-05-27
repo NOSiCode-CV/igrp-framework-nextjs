@@ -84,8 +84,12 @@ function IGRPNotification({
 
   const icon = iconName ?? typeIconMap[variant ?? "default"]
 
+  const isAssertive = variant === "error" || variant === "warning"
+
   return (
     <div
+      role={isAssertive ? "alert" : "status"}
+      aria-live={isAssertive ? "assertive" : "polite"}
       className={cn(
         IGRPNotificationVariants(),
         border === "colored" && IGRPNotificationVariants({ variant, border }),

@@ -10,6 +10,13 @@ import { Stepper, StepperItem, StepperTitle, StepperTrigger } from "../../primit
 import { Button } from "../../primitives/button"
 import { Tooltip, TooltipTrigger, TooltipContent } from "../../primitives/tooltip"
 
+function getScrollBehavior(): ScrollBehavior {
+  if (typeof window !== "undefined" && window.matchMedia("(prefers-reduced-motion: reduce)").matches) {
+    return "auto"
+  }
+  return "smooth"
+}
+
 /**
  * Props for a single step in the process stepper.
  * @see IGRPStepperProcess
@@ -155,7 +162,7 @@ function IGRPStepperProcess({
     if (!viewport) return
 
     const scrollAmount = viewport.clientWidth * 0.8
-    viewport.scrollBy({ left: -scrollAmount, behavior: "smooth" })
+    viewport.scrollBy({ left: -scrollAmount, behavior: getScrollBehavior() })
   }, [])
 
   const scrollRight = useCallback(() => {
@@ -163,7 +170,7 @@ function IGRPStepperProcess({
     if (!viewport) return
 
     const scrollAmount = viewport.clientWidth * 0.8
-    viewport.scrollBy({ left: scrollAmount, behavior: "smooth" })
+    viewport.scrollBy({ left: scrollAmount, behavior: getScrollBehavior() })
   }, [])
 
   useEffect(() => {
@@ -200,9 +207,6 @@ function IGRPStepperProcess({
               className={cn("gap-0.5", stepperClassName)}
               role="navigation"
               aria-label="Process steps"
-              aria-valuenow={validCurrentStep + 1}
-              aria-valuemin={1}
-              aria-valuemax={steps.length}
             >
               {steps.map(({ step, stepKey, title, isCompleted, isActive }) => (
                 <StepperItem

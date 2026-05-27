@@ -95,6 +95,8 @@ function IGRPSelectField({
   showStatus,
   showGroup,
   className,
+  triggerId,
+  triggerAriaLabelledby,
   ...selectProps
 }: {
   value: string
@@ -113,6 +115,8 @@ function IGRPSelectField({
   showStatus: boolean
   showGroup: boolean
   className?: string
+  triggerId?: string
+  triggerAriaLabelledby?: string
 } & Omit<React.ComponentProps<typeof Select>, "value" | "onValueChange" | "onOpenChange" | "children">) {
   return (
     <Select value={value} onValueChange={onChange} onOpenChange={onOpenChange} disabled={disabled} {...selectProps}>
@@ -124,6 +128,8 @@ function IGRPSelectField({
         placeholder={placeholder}
         isOpen={isOpen}
         label={label}
+        triggerId={triggerId}
+        triggerAriaLabelledby={triggerAriaLabelledby}
       />
       <IGRPSelectContent
         showSearch={showSearch}
@@ -227,7 +233,7 @@ function IGRPSelect({
         <IGRPLabel id={fieldName} className={labelClassName} required={required} label={label} />
 
         <div className={cn("relative")}>
-          <IGRPSelectField {...selectFieldProps} value={state.selected} onChange={handleChange} />
+          <IGRPSelectField {...selectFieldProps} value={state.selected} onChange={handleChange} triggerId={fieldName} />
         </div>
 
         {helperText && !error && (
@@ -252,7 +258,10 @@ function IGRPSelect({
       render={({ field, fieldState }) => (
         <FormItem className={cn(className)}>
           {label && (
-            <FormLabel className={cn(labelClassName, required && 'after:content-["*"] after:text-destructive')}>
+            <FormLabel
+              id={`${fieldName}-label`}
+              className={cn(labelClassName, required && 'after:content-["*"] after:text-destructive')}
+            >
               {label}
             </FormLabel>
           )}
@@ -264,6 +273,7 @@ function IGRPSelect({
                 field.onChange(val)
                 handleChange(val)
               }}
+              triggerAriaLabelledby={label ? `${fieldName}-label` : undefined}
             />
           </FormControl>
 
@@ -387,6 +397,8 @@ const IGRPSelectTrigger = ({
   label,
   isOpen,
   className,
+  triggerId,
+  triggerAriaLabelledby,
 }: {
   value: string
   options: IGRPOptionsProps[]
@@ -395,8 +407,15 @@ const IGRPSelectTrigger = ({
   label: string
   isOpen: boolean
   className?: string
+  triggerId?: string
+  triggerAriaLabelledby?: string
 }) => (
-  <SelectTrigger className={cn("w-full", className)} aria-expanded={isOpen}>
+  <SelectTrigger
+    id={triggerId}
+    aria-labelledby={triggerAriaLabelledby}
+    className={cn("w-full", className)}
+    aria-expanded={isOpen}
+  >
     <SelectValue placeholder={placeholder} className={cn("w-full")}>
       <div className={cn("w-full flex items-center gap-2 truncate")}>
         {showStatus && (

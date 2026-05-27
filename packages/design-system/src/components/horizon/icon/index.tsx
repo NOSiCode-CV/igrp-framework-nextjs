@@ -34,7 +34,7 @@ function IGRPIcon({ iconName, className, size = 16, color = "currentColor", id, 
 
   const ref = id ?? iconName
 
-  return <LucideIcon className={className} id={ref} color={color} size={size} {...props} />
+  return <LucideIcon aria-hidden="true" className={className} id={ref} color={color} size={size} {...props} />
 }
 
 export { IGRPIcon, IGRPIconObject, type IGRPIconProps, type IGRPIconName, type LucideProps, IGRPIconList }

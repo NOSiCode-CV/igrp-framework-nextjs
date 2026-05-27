@@ -36,7 +36,7 @@ function SelectTrigger({
     >
       {children}
       <SelectPrimitive.Icon asChild>
-        <ChevronDownIcon className={cn("size-4 opacity-50")} />
+        <ChevronDownIcon className={cn("size-4 opacity-50")} aria-hidden="true" />
       </SelectPrimitive.Icon>
     </SelectPrimitive.Trigger>
   )
@@ -126,7 +126,7 @@ function SelectScrollUpButton({ className, ...props }: React.ComponentProps<type
       className={cn("flex cursor-default items-center justify-center py-1", className)}
       {...props}
     >
-      <ChevronUpIcon className={cn("size-4")} />
+      <ChevronUpIcon className={cn("size-4")} aria-hidden="true" />
     </SelectPrimitive.ScrollUpButton>
   )
 }
@@ -141,7 +141,7 @@ function SelectScrollDownButton({
       className={cn("flex cursor-default items-center justify-center py-1", className)}
       {...props}
     >
-      <ChevronDownIcon className={cn("size-4")} />
+      <ChevronDownIcon className={cn("size-4")} aria-hidden="true" />
     </SelectPrimitive.ScrollDownButton>
   )
 }

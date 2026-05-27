@@ -197,6 +197,7 @@ function IGRPPieChartInner({
         <div style={{ height: chartHeight, width: chartWidth }} className={cn("w-full overflow-hidden")}>
           <ChartContainer className={cn("h-full w-full")} config={chartConfig}>
             <PieChart
+              accessibilityLayer
               margin={{
                 top: 20,
                 right: 12,

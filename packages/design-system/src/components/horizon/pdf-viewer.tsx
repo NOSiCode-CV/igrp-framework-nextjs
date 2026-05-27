@@ -2,10 +2,8 @@
 
 import type React from "react"
 import { useCallback, useEffect, useId, useReducer, useRef, useState } from "react"
-import { format } from "date-fns"
 
 import { IGRPColors } from "../../lib/colors"
-import { DD_MM_YYYY } from "../../lib/constants"
 import { cn } from "../../lib/utils"
 import { Card, CardHeader, CardTitle } from "../primitives/card"
 import { Dialog, DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogTitle } from "../primitives/dialog"
@@ -106,7 +104,11 @@ const safeFormatDate = (date?: string | Date) => {
 
   if (Number.isNaN(parsed.getTime())) return "—"
 
-  return format(parsed, DD_MM_YYYY)
+  return new Intl.DateTimeFormat(undefined, {
+    day: "2-digit",
+    month: "2-digit",
+    year: "numeric",
+  }).format(parsed)
 }
 
 const openDocNewTab = (fileUrl: string) => {

@@ -78,7 +78,7 @@ function createToast<T>(props: ToastProps<T>): string | number {
   if ("promise" in props && props.promise) {
     const { promise, loading, success, error, ...rest } = props
     const id = toast.promise(promise, {
-      loading: loading ?? "Processing...",
+      loading: loading ?? "Processing…",
       success: success ?? ((data: T) => (typeof data === "string" ? data : "Operation successful!")),
       error: error ?? ((err: unknown) => (err instanceof Error ? err.message : "Something went wrong!")),
       duration: rest.duration ?? DEFAULT_SUCCESS_DURATION,

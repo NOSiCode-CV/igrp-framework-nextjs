@@ -116,6 +116,7 @@ function IGRPInputUrl({
         <div className={cn("flex rounded-md shadow-xs")}>
           <Select value={displayProtocol} onValueChange={handleStandaloneProtocolChange} disabled={props.disabled}>
             <SelectTrigger
+              aria-label="Protocol"
               className={cn("border-0 shadow-none border-l border-b border-t rounded-l-2xl rounded-none min-w-[100px]")}
             >
               <SelectValue placeholder={defaultProtocol} />
@@ -139,7 +140,7 @@ function IGRPInputUrl({
             required={required}
             aria-required={required}
             aria-invalid={!!error || !!props["aria-invalid"]}
-            aria-describedby={helperText || error ? `${id}-helper` : undefined}
+            aria-describedby={error ? `${fieldName}-error` : helperText ? `${fieldName}-helper` : undefined}
             className={cn(
               "rounded-s-none shadow-none focus-visible:z-10",
               error && "border-destructive focus-visible:ring-destructive/20",
@@ -202,6 +203,7 @@ function IGRPInputUrl({
                 onOpenChange={() => field.onBlur()}
               >
                 <SelectTrigger
+                  aria-label="Protocol"
                   className={cn(
                     "border-0 shadow-none border-l border-b border-t rounded-l-2xl rounded-none min-w-[100px]",
                   )}
@@ -228,7 +230,9 @@ function IGRPInputUrl({
                 required={required}
                 aria-required={required}
                 aria-invalid={!!fieldState.error || !!error || !!props["aria-invalid"]}
-                aria-describedby={helperText || error || fieldState.error ? `${id}-helper` : undefined}
+                aria-describedby={
+                  error || fieldState.error ? `${fieldName}-error` : helperText ? `${fieldName}-helper` : undefined
+                }
                 className={cn(
                   "rounded-s-none shadow-none focus-visible:z-10",
                   (fieldState.error || error) && "border-destructive focus-visible:ring-destructive/20",

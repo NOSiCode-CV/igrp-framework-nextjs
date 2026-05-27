@@ -84,10 +84,7 @@ interface IGRPModalDialogHeaderProps extends React.ComponentProps<typeof DialogH
 function IGRPModalDialogHeader({ className, stickyHeader, ...props }: IGRPModalDialogHeaderProps) {
   return (
     <DialogHeader
-      className={cn(
-        stickyHeader && "sticky top-0 z-5 backdrop-blur-2xl bg-background/80 border-b py-3",
-        className,
-      )}
+      className={cn(stickyHeader && "sticky top-0 z-5 backdrop-blur-2xl bg-background/80 border-b py-3", className)}
       {...props}
     />
   )

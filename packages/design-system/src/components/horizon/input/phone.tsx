@@ -155,14 +155,24 @@ function IGRPInputPhone({
           disabled={disabled}
           defaultCountry={defaultCountry}
           countries={countries}
+          aria-invalid={!!error || undefined}
+          aria-describedby={
+            error ? `${fieldName}-error` : description || helperText ? `${fieldName}-helper` : undefined
+          }
           {...props}
         />
 
         {(description || helperText) && !error && (
-          <p className={cn("text-xs text-muted-foreground")}>{description || helperText}</p>
+          <p id={`${fieldName}-helper`} className={cn("text-xs text-muted-foreground")} aria-live="polite">
+            {description || helperText}
+          </p>
         )}
 
-        {error && <p className={cn("text-xs text-destructive")}>{error}</p>}
+        {error && (
+          <p id={`${fieldName}-error`} className={cn("text-xs text-destructive")} role="alert">
+            {error}
+          </p>
+        )}
       </div>
     )
   }
@@ -193,15 +203,27 @@ function IGRPInputPhone({
             disabled={disabled}
             defaultCountry={defaultCountry}
             countries={countries}
+            aria-invalid={!!fieldState.error || !!error || undefined}
+            aria-describedby={
+              error || fieldState.error
+                ? `${fieldName}-error`
+                : description || helperText
+                  ? `${fieldName}-helper`
+                  : undefined
+            }
             {...props}
           />
 
           {(description || helperText) && !error && !fieldState.error && (
-            <p className={cn("text-xs text-muted-foreground")}>{description || helperText}</p>
+            <p id={`${fieldName}-helper`} className={cn("text-xs text-muted-foreground")} aria-live="polite">
+              {description || helperText}
+            </p>
           )}
 
           {(error || fieldState.error) && (
-            <p className={cn("text-xs text-destructive")}>{error || fieldState.error?.message}</p>
+            <p id={`${fieldName}-error`} className={cn("text-xs text-destructive")} role="alert">
+              {error || fieldState.error?.message}
+            </p>
           )}
         </div>
       )}

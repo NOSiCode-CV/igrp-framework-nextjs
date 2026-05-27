@@ -70,7 +70,7 @@ function IGRPCopyTo({
       return
     }
 
-    const displayValue = value.length > 50 ? `${value.substring(0, 47)}...` : value
+    const displayValue = value.length > 50 ? `${value.substring(0, 47)}…` : value
 
     try {
       await navigator.clipboard.writeText(value)
@@ -121,13 +121,16 @@ function IGRPCopyTo({
             disabled={copied}
           >
             <div
-              className={cn("transition-[transform,opacity]", copied ? "scale-100 opacity-100" : "scale-0 opacity-0")}
+              className={cn(
+                "transition-[transform,opacity] motion-reduce:transition-none",
+                copied ? "scale-100 opacity-100" : "scale-0 opacity-0",
+              )}
             >
               <IGRPIcon iconName="Check" className={cn("stroke-primary")} strokeWidth={2} />
             </div>
             <div
               className={cn(
-                "absolute transition-[transform,opacity]",
+                "absolute transition-[transform,opacity] motion-reduce:transition-none",
                 copied ? "scale-0 opacity-0" : "scale-100 opacity-100",
               )}
             >

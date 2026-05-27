@@ -8,6 +8,13 @@ import { Card, CardContent, CardHeader, CardTitle } from "../primitives/card"
 import { IGRPBadge } from "./badge"
 import { IGRPIcon } from "./icon"
 
+function getScrollBehavior(): ScrollBehavior {
+  if (typeof window !== "undefined" && window.matchMedia("(prefers-reduced-motion: reduce)").matches) {
+    return "auto"
+  }
+  return "smooth"
+}
+
 /**
  * Single menu navigation item.
  * @see IGRPMenuNavigation
@@ -70,7 +77,7 @@ function IGRPMenuNavigationProvider({ children }: { children: React.ReactNode })
     const sectionRef = sectionRefs.current[sectionId]
     if (sectionRef) {
       sectionRef.scrollIntoView({
-        behavior: "smooth",
+        behavior: getScrollBehavior(),
         block: "start",
         inline: "nearest",
       })
@@ -139,7 +146,7 @@ function IGRPMenuNavigation({
         const element = document.querySelector(`[data-section-id='${sectionId}']`)
         if (element) {
           element.scrollIntoView({
-            behavior: "smooth",
+            behavior: getScrollBehavior(),
             block: "start",
             inline: "nearest",
           })
@@ -172,6 +179,7 @@ function IGRPMenuNavigation({
               <button
                 key={section.id}
                 type="button"
+                role="listitem"
                 onClick={() => handleSectionClick(section.id)}
                 disabled={section.disabled}
                 aria-current={activeSection === section.id ? "page" : undefined}

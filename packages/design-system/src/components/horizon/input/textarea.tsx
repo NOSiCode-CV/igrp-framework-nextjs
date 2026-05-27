@@ -48,7 +48,7 @@ function IGRPTextarea({
             required={required}
             aria-required={required}
             aria-invalid={!!error}
-            aria-describedby={helperText || error ? `${fieldName}-helper` : undefined}
+            aria-describedby={error ? `${fieldName}-error` : helperText ? `${fieldName}-helper` : undefined}
             className={cn(
               "peer bg-background py-3 text-sm outline-hidden",
               error && "border-destructive focus-visible:ring-destructive/20",
@@ -97,7 +97,9 @@ function IGRPTextarea({
               required={required}
               aria-required={required}
               aria-invalid={!!fieldState.error || !!error}
-              aria-describedby={helperText || errorMessage ? `${id}-helper` : undefined}
+              aria-describedby={
+                errorMessage || fieldState.error ? `${fieldName}-error` : helperText ? `${fieldName}-helper` : undefined
+              }
               className={cn(
                 "peer bg-background py-3 text-sm outline-hidden",
                 (fieldState.error || error) && "border-destructive focus-visible:ring-destructive/20",

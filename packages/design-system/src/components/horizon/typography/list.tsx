@@ -32,7 +32,7 @@ const igrpTextlistVariants = cva("", {
 const igrpTextlistItemVariants = cva("flex items-center gap-2 transition-colors duration-200", {
   variants: {
     interactive: {
-      true: "hover:bg-muted p-2 rounded-md cursor-pointer",
+      true: "hover:bg-muted p-2 rounded-md cursor-pointer focus-visible:ring-2 focus-visible:ring-ring focus-visible:outline-none",
       false: "",
     },
     completed: {

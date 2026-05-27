@@ -132,6 +132,8 @@ function IGRPInputUrl({
           <Input
             id={fieldName}
             name={fieldName}
+            type="url"
+            inputMode="url"
             value={displayAddress}
             onChange={handleStandaloneAddressChange}
             required={required}
@@ -218,6 +220,8 @@ function IGRPInputUrl({
               <Input
                 id={fieldName}
                 name={fieldName}
+                type="url"
+                inputMode="url"
                 value={fieldAddress}
                 onChange={handleAddressChange}
                 onBlur={field.onBlur}

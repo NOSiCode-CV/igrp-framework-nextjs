@@ -7,7 +7,7 @@ Templates compile Tailwind **once in the app**, not in the framework packages. T
    ```css
    @import "@igrp/igrp-framework-react-design-system/tokens";
    ```
-   `@igrp/*/styles.css` causes cascade conflicts and missing utilities. The DS `package.json` still exposes `/styles` for legacy consumers, but templates in this repo must not use it.
+   `@igrp/*/styles.css` causes cascade conflicts and missing utilities. The DS still publishes `/styles` for legacy consumers, but it is **deprecated** and will be removed one beta after the upcoming release. Templates in this repo must not use it.
 
 - Dark mode is the `.dark` class on a parent, driven by `next-themes`.
 - Theme variants (`theme-blue`, etc.) override tokens in `src/styles/themes.css`, which must be imported **after** the tokens import.

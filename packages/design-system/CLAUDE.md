@@ -20,6 +20,10 @@ You are working inside `packages/design-system/` — `@igrp/igrp-framework-react
 - Visual/interaction tests live in `packages/design-system-storybook` — hand off for snapshot/a11y work.
 - Build: `pnpm build:ds`. Escape hatch: `pnpm --filter @igrp/igrp-framework-react-design-system build:without_reactcompiler`.
 
+## Deprecated exports (do not extend)
+
+- `@igrp/igrp-framework-react-design-system/styles` — the prebuilt CSS bundle. Scheduled for removal one beta after the upcoming release. Templates must import `/tokens` only and compile Tailwind in the app itself. See `.claude/shared/tailwind-v4.md`. Do not add new code or examples that reference `/styles`.
+
 ## Shared rules
 
 @../../.claude/shared/hard-rules.md

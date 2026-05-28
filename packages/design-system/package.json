@@ -154,9 +154,9 @@
       "import": "./dist/index.js",
       "default": "./dist/index.js"
     },
-    "./tokens": "./dist/tokens.css",
-    "./styles": "./dist/styles.css"
+    "./tokens": "./dist/tokens.css"
   },
+  "//": "DEPRECATED: publishConfig.exports['./styles'] is scheduled for removal in the next beta after the upcoming release. Use './tokens' + the consuming app's own Tailwind build instead. See .claude/shared/tailwind-v4.md.",
   "publishConfig": {
     "exports": {
       ".": {

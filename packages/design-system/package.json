@@ -27,7 +27,7 @@
     "dev": "tsc --watch",
     "build": "pnpm build:reactcompiler",
     "build:babel": "rimraf dist_optimized && babel dist --out-dir dist_optimized --source-maps --extensions .ts,.js,.tsx,.jsx,.cjs,.mjs && rimraf dist && move-cli dist_optimized dist && cpy src/*.css dist/",
-    "build:reactcompiler": "pnpm clean:dist && pnpm tailwind:build && pnpm build:swc && pnpm build:babel && pnpm build:types",
+    "build:reactcompiler": "pnpm clean:dist && pnpm build:swc && pnpm build:babel && pnpm build:types",
     "build:swc": "swc ./src -d dist --config-file .swcrc --strip-leading-paths --ignore \"**/components/experimental/**\" && cpy src/*.css dist/",
     "build:types": "tsc --emitDeclarationOnly --outDir dist/",
     "build:without_reactcompiler": "pnpm clean:dist && pnpm build:types && pnpm build:swc",
@@ -39,7 +39,6 @@
     "format:check": "prettier --check .",
     "lint": "eslint .",
     "lint:fix": "eslint . --fix",
-    "tailwind:build": "pnpm dlx @tailwindcss/cli -i ./src/index.css -o ./src/styles.css",
     "test": "vitest run",
     "test:watch": "vitest",
     "release": "pnpm format && pnpm build && pnpm publish --registry=https://sonatype.nosi.cv/repository/igrp/ --tag latest --no-git-checks",
@@ -169,7 +168,6 @@
     },
     "./tokens": "./dist/tokens.css"
   },
-  "//": "DEPRECATED: publishConfig.exports['./styles'] is scheduled for removal in the next beta after the upcoming release. Use './tokens' + the consuming app's own Tailwind build instead. See .claude/shared/tailwind-v4.md.",
   "publishConfig": {
     "exports": {
       ".": {
@@ -177,8 +175,7 @@
         "import": "./dist/index.js",
         "default": "./dist/index.js"
       },
-      "./tokens": "./dist/tokens.css",
-      "./styles": "./dist/styles.css"
+      "./tokens": "./dist/tokens.css"
     },
     "registry": "https://sonatype.nosi.cv/repository/igrp/",
     "tag": "latest",

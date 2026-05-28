@@ -146,6 +146,8 @@ Detailed topics live in [`docs/`](docs/):
 
 Tailwind compiles **once here in the app**, not in the framework packages. Import **tokens only** (`@import "@igrp/igrp-framework-react-design-system/tokens";`) — never the prebuilt `styles.css`. All UI comes from the design system (Horizon `IGRP*` first), forms are always `IGRPForm` + Zod, and dark mode is driven by `next-themes`. Full details in [Design System](docs/DESIGN_SYSTEM.md) and [Design Tokens](docs/TOKENS.md).
 
+- **Do not run `npx shadcn add` here** — see `CLAUDE.md` § "Do not run `npx shadcn add` here". Use `IGRP*` from the design system instead.
+
 ### Upgrading — quick note
 
 Framework changes are delivered via `@igrp/template-migrator`; the applied set is tracked in [`.igrp-migrations-lock.json`](.igrp-migrations-lock.json). See [Upgrading](docs/MIGRATION_GUIDE.md) for the full workflow.

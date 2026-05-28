@@ -45,6 +45,22 @@ src/
 - **All UI comes from `@igrp/igrp-framework-react-design-system`.** Horizon (`IGRP*`) first; Primitives only when Horizon is too opinionated. Forms are **always** `IGRPForm` + Zod — never raw `<form>` or direct `react-hook-form`. Only semantic tokens (`bg-background`, `text-foreground`, `border-input`, …) — never raw Tailwind colors. No manual `dark:` overrides — tokens drive dark mode. Use `cn()` for class merging, `size-*` when width = height, `flex gap-*` instead of `space-x-*`/`space-y-*`. Every file importing from the DS needs `'use client'`.
 - **Don't import package internals.** Use documented subpath exports (`@igrp/framework-next-auth/client`, `/server`, `/config`, `/providers`, …) — never `…/dist/…`.
 
+## Do not run `npx shadcn add` here
+
+This template consumes `@igrp/igrp-framework-react-design-system`, which already vends every shadcn primitive (`Button`, `Card`, `Dialog`, `Select`, …) plus a Horizon layer of opinionated `IGRP*` wrappers. Running `npx shadcn@latest add <component>` will:
+
+- drop a fresh `components/ui/<component>.tsx` that **collides** with the existing IGRP primitive,
+- skip Horizon wiring (Zod, IGRPForm, mock-data preview mode, theme tokens),
+- introduce a second copy of dependencies the DS already manages.
+
+**Instead:**
+
+- Use the existing Horizon component (e.g. `IGRPSelect`) — see `packages/design-system/COMPONENTS.md` for the full map.
+- Drop to the primitive (`Select` from the DS root) only when Horizon is too opinionated.
+- If a component genuinely doesn't exist in the DS, open a PR against `packages/design-system` to add it — do not vendor it into the template.
+
+The shadcn CLI **is** appropriate inside `packages/design-system` itself, when refreshing primitives from upstream. See the upstream-drift script under `packages/design-system/scripts/`.
+
 ## Architecture notes
 
 ### Auth flow (no bypass)

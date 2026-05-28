@@ -59,11 +59,10 @@ import {
 
 ### Package Exports
 
-| Export                                            | Description                                                                      |
-| ------------------------------------------------- | -------------------------------------------------------------------------------- |
-| `@igrp/igrp-framework-react-design-system`        | Main entry — components, hooks, utilities                                        |
-| `@igrp/igrp-framework-react-design-system/tokens` | CSS variables (theme tokens)                                                     |
-| `@igrp/igrp-framework-react-design-system/styles` | Full styles (Tailwind + base) — use only when not compiling Tailwind in your app |
+| Export                                            | Description                               |
+| ------------------------------------------------- | ----------------------------------------- |
+| `@igrp/igrp-framework-react-design-system`        | Main entry — components, hooks, utilities |
+| `@igrp/igrp-framework-react-design-system/tokens` | CSS variables (theme tokens)              |
 
 ### Component Categories
 

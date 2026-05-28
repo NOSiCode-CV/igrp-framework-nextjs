@@ -183,9 +183,6 @@ importers:
       '@swc/core':
         specifier: ^1.15.33
         version: 1.15.33
-      '@tailwindcss/cli':
-        specifier: ^4.3.0
-        version: 4.3.0
       '@tanstack/react-table':
         specifier: ^8.21.3
         version: 8.21.3(react-dom@19.2.6(react@19.2.6))(react@19.2.6)

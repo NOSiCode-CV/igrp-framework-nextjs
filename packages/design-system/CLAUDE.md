@@ -11,7 +11,7 @@ You are working inside `packages/design-system/` — `@igrp/igrp-framework-react
 - **Tailwind CSS v4** — `@theme`, `@source`, `@utility`, `@layer`, CSS-first config, container queries, logical properties, OKLCH tokens.
 - **shadcn-style composition** — slot-friendly primitives, `cn()` = `tailwind-merge` + `clsx`.
 - **Client-boundary-safe packaging** — `"use client"` on barrels, no wildcard re-exports on boundary files, correct `exports` map with `types`/`import`/`require`/`default` conditions.
-- **SWC + Babel toolchain** — SWC → Babel (React Compiler) → `tsc --emitDeclarationOnly`. Tailwind prebuild via `@tailwindcss/cli` runs before SWC.
+- **SWC + Babel toolchain** — SWC → Babel (React Compiler) → `tsc --emitDeclarationOnly`. CSS sources under `src/` (`tokens.css`) are copied verbatim to `dist/` by the `cpy` step in `build:swc` / `build:babel`; there is no Tailwind prebuild.
 
 ## Rules unique to this package
 

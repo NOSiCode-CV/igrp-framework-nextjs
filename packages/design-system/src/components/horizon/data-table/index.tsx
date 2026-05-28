@@ -31,6 +31,7 @@ import {
 } from "@tanstack/react-table"
 
 import { cn } from "../../../lib/utils"
+import { useIGRPi18n } from "../../../i18n"
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "../../primitives/table"
 import { IGRPIcon } from "../icon"
 import { type IGRPDataTableClientFilterListProps, IGRPDataTableClientFilter } from "./client-filter"
@@ -161,7 +162,7 @@ function IGRPDataTable<TData, TValue>({
   isServerSide = false,
   showFilter = false,
   clientFilters,
-  clientClearLabel = "Limpar",
+  clientClearLabel,
   showToggleColumn = false,
   toggleLabel,
   toggleOptionsLabel,
@@ -171,7 +172,7 @@ function IGRPDataTable<TData, TValue>({
   tableBodyClassName,
   paginationClassName,
   serverFilterComponent,
-  notFoundLabel = "Nenhum registo encontrado.",
+  notFoundLabel,
   // rowSelection,
   // onRowSelectionChange,
   getRowCanExpand = () => false,
@@ -183,6 +184,10 @@ function IGRPDataTable<TData, TValue>({
   onQueryChange,
   pagination,
 }: IGRPDataTableProps<TData, TValue>) {
+  const i18n = useIGRPi18n()
+  const resolvedClearLabel = clientClearLabel ?? i18n.dataTable.clearFilters
+  const resolvedNotFoundLabel = notFoundLabel ?? i18n.dataTable.notFound
+
   const [state, dispatch] = useReducer(tableReducer, {
     columnFilters: [],
     columnVisibility: {},
@@ -346,7 +351,7 @@ function IGRPDataTable<TData, TValue>({
               <IGRPDataTableClientFilter
                 table={table}
                 filterList={clientFilters || []}
-                filterLabel={clientClearLabel}
+                filterLabel={resolvedClearLabel}
                 onFiltersCleared={onFiltersCleared}
               />
             ))}
@@ -462,7 +467,7 @@ function IGRPDataTable<TData, TValue>({
               // )}
               >
                 <TableCell colSpan={allColumns.length} className={cn("h-24 text-center font-semibold")}>
-                  {notFoundLabel}
+                  {resolvedNotFoundLabel}
                 </TableCell>
               </TableRow>
             )}

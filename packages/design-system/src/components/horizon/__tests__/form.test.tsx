@@ -12,14 +12,50 @@ const schema = z.object({
 })
 type Schema = typeof schema
 
-// IGRPInputText's form-context branch wraps the Input in a positioning div, which
-// captures FormControl's forwarded id — so label/input aren't associated by htmlFor.
-// We query by the name attribute instead until that's fixed in IGRPInputText.
-const inputByName = (name: string): HTMLInputElement => {
-  const el = document.querySelector(`input[name="${name}"]`)
-  if (!el) throw new Error(`no input[name="${name}"] in document`)
-  return el as HTMLInputElement
-}
+// After the M1 Slot-forwarding fix, IGRPInputText's form-context branch wires
+// label↔input via FormControl's id forwarding. We use the accessible name query
+// here as a regression guard: if the fix breaks, getByRole({name}) will fail
+// and these tests will catch it.
+
+describe("IGRPForm a11y", () => {
+  it("associates the FormLabel with the underlying input element (clicking label focuses input)", async () => {
+    render(
+      <IGRPForm
+        schema={schema}
+        formRef={createRef<IGRPFormHandle<Schema>>()}
+        onSubmit={vi.fn()}
+        defaultValues={{ name: "" }}
+      >
+        <IGRPInputText name="name" label="Email address" />
+      </IGRPForm>,
+    )
+
+    const input = screen.getByRole("textbox", { name: "Email address" }) as HTMLInputElement
+    expect(input.tagName).toBe("INPUT")
+
+    // Clicking the label should focus the input — the canonical accessibility contract.
+    const label = screen.getByText("Email address")
+    await userEvent.click(label)
+    expect(document.activeElement).toBe(input)
+  })
+
+  it("wires aria-invalid + aria-describedby through FormControl after a validation error", async () => {
+    const formRef = createRef<IGRPFormHandle<Schema>>()
+    render(
+      <IGRPForm schema={schema} formRef={formRef} onSubmit={vi.fn()} defaultValues={{ name: "" }}>
+        <IGRPInputText name="name" label="Name" />
+      </IGRPForm>,
+    )
+
+    await formRef.current!.submit()
+
+    const input = screen.getByRole("textbox", { name: "Name" })
+    await waitFor(() => {
+      expect(input).toHaveAttribute("aria-invalid", "true")
+    })
+    expect(input.getAttribute("aria-describedby")).toMatch(/form-item-message/)
+  })
+})
 
 describe("IGRPForm", () => {
   it("submits valid values via the formRef.submit() handle", async () => {
@@ -32,7 +68,7 @@ describe("IGRPForm", () => {
       </IGRPForm>,
     )
 
-    const input = inputByName("name")
+    const input = screen.getByRole("textbox", { name: "Name" }) as HTMLInputElement
     await userEvent.type(input, "Alice")
 
     await formRef.current!.submit()
@@ -100,7 +136,7 @@ describe("IGRPForm", () => {
 
     render(<Wrapper />)
 
-    const input = inputByName("name")
+    const input = screen.getByRole("textbox", { name: "Name" }) as HTMLInputElement
     await waitFor(() => expect(input.value).toBe("Initial"))
 
     // User types — form becomes dirty.
@@ -134,7 +170,7 @@ describe("IGRPForm", () => {
     }
 
     render(<Wrapper />)
-    const input = inputByName("name")
+    const input = screen.getByRole("textbox", { name: "Name" }) as HTMLInputElement
     await waitFor(() => expect(input.value).toBe("Initial"))
 
     await userEvent.click(screen.getByRole("button", { name: "update-defaults" }))

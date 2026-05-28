@@ -848,6 +848,7 @@ const IGRPFormList = forwardRef(IGRPFormListInner) as <TItem>(
   props: IGRPFormListProps<TItem> & { ref?: React.Ref<HTMLDivElement> },
 ) => React.ReactElement
 
-Object.assign(IGRPFormList, { displayName: "IGRPFormList" })
+// @ts-expect-error: displayName lives on the function reference; the cast above narrows to a callable.
+IGRPFormList.displayName = "IGRPFormList"
 
 export { IGRPFormList, type IGRPFormListProps }

@@ -4,6 +4,7 @@ import { useId, useState } from "react"
 import { useFormContext, Controller } from "react-hook-form"
 
 import { cn } from "../../../lib/utils"
+import { useIGRPi18n } from "../../../i18n"
 import type { IGRPGridSize, IGRPInputProps } from "../../../types"
 import { Input } from "../../primitives/input"
 import { IGRPButton } from "../button"
@@ -50,6 +51,8 @@ function IGRPInputPassword({
 
   const [showPassword, setShowPassword] = useState(false)
   const formContext = useFormContext()
+  const i18n = useIGRPi18n()
+  const toggleLabel = showPassword ? i18n.inputPassword.hidePasswordLabel : i18n.inputPassword.showPasswordLabel
   const [localValue, setLocalValue] = useState(value ?? defaultValue ?? "")
 
   const handleStandaloneChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -98,7 +101,7 @@ function IGRPInputPassword({
               className={cn("absolute right-0 top-0 h-full px-3 py-2 text-muted-foreground hover:text-foreground")}
               onClick={togglePasswordVisibility}
               tabIndex={-1}
-              aria-label={showPassword ? "Hide password" : "Show password"}
+              aria-label={toggleLabel}
               showIcon
               iconName={showPassword ? "EyeOff" : "Eye"}
               name="toggle-password-visibility"
@@ -170,7 +173,7 @@ function IGRPInputPassword({
                 className={cn("absolute right-0 top-0 h-full px-3 py-2 text-muted-foreground hover:text-foreground")}
                 onClick={togglePasswordVisibility}
                 tabIndex={-1}
-                aria-label={showPassword ? "Hide password" : "Show password"}
+                aria-label={toggleLabel}
                 showIcon
                 iconName={showPassword ? "EyeOff" : "Eye"}
               />

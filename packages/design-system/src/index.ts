@@ -862,6 +862,16 @@ export { igrpIsExternalUrl, igrpNormalizeUrl } from "./lib/url"
 export { cn, parseLocalDate } from "./lib/utils"
 export { colorToOklch, detectFormat, type ColorFormat } from "./lib/color-utils"
 
+// i18n
+
+export {
+  IGRPI18nProvider,
+  useIGRPi18n,
+  IGRP_I18N_DEFAULTS_PT_PT,
+  type IGRPI18nStrings,
+  type IGRPI18nStringsOverride,
+} from "./i18n"
+
 // external dependencies
 
 export type {

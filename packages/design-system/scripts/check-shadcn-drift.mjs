@@ -1,4 +1,3 @@
-#!/usr/bin/env node
 /**
  * Reports drift between local Primitives and upstream shadcn.
  *
@@ -41,7 +40,14 @@ export async function listPrimitives() {
 
 function run(cmd, args, opts) {
   return new Promise((resolveP, rejectP) => {
-    const child = spawn(cmd, args, { stdio: ["ignore", "pipe", "pipe"], ...opts })
+    // On Windows, `npx` (and other pnpm/npm shims) is a `.cmd` file that
+    // child_process.spawn cannot resolve without a shell. shell:true is safe
+    // here because all callers pass fixed, hard-coded arg lists.
+    const child = spawn(cmd, args, {
+      stdio: ["ignore", "pipe", "pipe"],
+      shell: process.platform === "win32",
+      ...opts,
+    })
     let stdout = ""
     let stderr = ""
     child.stdout.on("data", (b) => (stdout += b.toString()))

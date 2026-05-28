@@ -693,6 +693,25 @@ export {
 } from "./components/horizon/menu-navigation"
 
 export {
+  IGRPMenubar,
+  IGRPMenubarPortal,
+  IGRPMenubarMenu,
+  IGRPMenubarTrigger,
+  IGRPMenubarContent,
+  IGRPMenubarGroup,
+  IGRPMenubarSeparator,
+  IGRPMenubarLabel,
+  IGRPMenubarItem,
+  IGRPMenubarShortcut,
+  IGRPMenubarCheckboxItem,
+  IGRPMenubarRadioGroup,
+  IGRPMenubarRadioItem,
+  IGRPMenubarSub,
+  IGRPMenubarSubTrigger,
+  IGRPMenubarSubContent,
+} from "./components/horizon/menubar"
+
+export {
   IGRPModalDialog,
   IGRPModalDialogClose,
   IGRPModalDialogContent,

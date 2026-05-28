@@ -65,7 +65,7 @@
 | Video embed | `IGRPVideoEmbed` | — | — |
 | Copy-to-clipboard | `IGRPCopyTo` | — | — |
 | Notifications | `IGRPNotification` | — | — |
-| Icon | `IGRPIcon` | (use `lucide-react` directly with `data-icon="inline-start"` / `inline-end"` slot) | — |
+| Icon | `IGRPIcon` | (use `lucide-react` directly with `data-icon="inline-start"` / `data-icon="inline-end"` slot) | — |
 | Page header / footer / container | `IGRPPageHeader`, `IGRPPageFooter`, `IGRPContainer` | — | — |
 | Typography | `IGRPText`, `IGRPHeadline`, `IGRPLink`, `IGRPTextList` | — | — |
 

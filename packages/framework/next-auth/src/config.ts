@@ -440,8 +440,20 @@ export function withIGRPAuth(options: IGRPAuthOptions = {}): IGRPAuthInstance {
           };
         }
 
-        // Token still valid — return as-is (with 60s proactive refresh buffer)
+        // Token still valid — return as-is (with 60s proactive refresh buffer).
+        // Clear any stale `error` / `forceLogout` carried over from an earlier
+        // failed attempt: if `expiresAt` is comfortably in the future we are
+        // NOT going to refresh on this call, so a leftover error flag would
+        // stick to the cookie forever and trip the client-side session
+        // watcher into looping the user to /logout even though the access
+        // token is fine. This can happen when a successful refresh runs
+        // inside a server component (where cookies() is read-only and the
+        // rotated token can't be persisted) and the next route-handler poll
+        // sees a stale-but-still-valid token.
         if (igrpToken.expiresAt && Date.now() < igrpToken.expiresAt - TOKEN_REFRESH_BUFFER_MS) {
+          if (igrpToken.error || igrpToken.forceLogout) {
+            igrpToken = { ...igrpToken, error: undefined, forceLogout: false };
+          }
           if (callbackExtensions.jwt) {
             return callbackExtensions.jwt(params, igrpToken);
           }

@@ -269,6 +269,33 @@ describe('withIGRPAuth — jwt callback introspect gate', () => {
     expect(oidcModule.refreshOidcAccessToken).not.toHaveBeenCalled();
   });
 
+  it('clears stale error/forceLogout when returning a still-valid token without refresh', async () => {
+    const withIGRPAuth = await getFactory();
+    const instance = withIGRPAuth({ env: VALID_ENV });
+    const jwtCallback = instance.authOptions.callbacks?.jwt;
+
+    // Token has 30 minutes left — comfortably inside the refresh buffer, so
+    // the callback takes the early-return path. The stale `error` /
+    // `forceLogout` flags (e.g. carried from a prior failed attempt whose
+    // rotated cookie couldn't be persisted from an RSC tree) must be cleared
+    // here, otherwise they stick forever and trip the client session watcher.
+    const validButTaggedToken = {
+      accessToken: 'at-valid',
+      refreshToken: 'rt-valid',
+      authProviderId: 'igrp-auth' as const,
+      expiresAt: Date.now() + 30 * 60_000,
+      error: 'RefreshAccessTokenError',
+      forceLogout: true,
+    };
+
+    const result = (await jwtCallback!({ token: validButTaggedToken, account: null } as any)) as any;
+
+    expect(result.error).toBeUndefined();
+    expect(result.forceLogout).toBe(false);
+    expect(oidcModule.refreshOidcAccessToken).not.toHaveBeenCalled();
+    expect(oidcModule.introspectOidcToken).not.toHaveBeenCalled();
+  });
+
   it('calls refresh when introspect returns true and token is expired', async () => {
     vi.mocked(oidcModule.introspectOidcToken).mockResolvedValue(true);
 

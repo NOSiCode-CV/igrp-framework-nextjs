@@ -1,5 +1,4 @@
-import { useSession as useSessionBase, signOut } from 'next-auth/react';
-import { useEffect, useRef } from 'react';
+import { useSession as useSessionBase } from 'next-auth/react';
 import type { Session } from './session';
 
 export {
@@ -22,26 +21,18 @@ export {
 
 export type { User } from 'next-auth';
 
-export function useSafeSession({
-  forceLogoutCallbackUrl = `${process.env.NEXT_PUBLIC_BASE_PATH ?? ''}/login`,
-}: { forceLogoutCallbackUrl?: string } = {}) {
+// Force-logout on `session.error === 'RefreshAccessTokenError'` is owned
+// by IGRPSessionWatcher (in @igrp/framework-next-ui), which is path-aware
+// (doesn't bounce while already on /login or /logout) and routes to /logout
+// for a clean IdP single-logout. Calling `signOut()` from a hook here in
+// addition to the watcher caused two concurrent POST /api/auth/signout calls
+// whenever a layout consumer mounted alongside the logout page, racing the
+// page's own end-session redirect.
+//
+// `forceLogoutCallbackUrl` is kept in the type signature as a no-op for
+// backwards-compatibility with existing call sites; new code should drop it.
+export function useSafeSession(_options: { forceLogoutCallbackUrl?: string } = {}) {
   const { data, status, update } = useSessionBase();
   const session: Session | null = data as Session | null;
-  const signingOut = useRef(false);
-
-  // When the server sets forceLogout (refresh token expired or failed),
-  // the next session poll delivers it here. Sign out immediately so the
-  // user is redirected to /login without needing to navigate.
-  // signingOut guard prevents double calls if the session refetches
-  // between signOut and redirect completing.
-  useEffect(() => {
-    if (!signingOut.current && (session?.forceLogout || session?.error === 'RefreshAccessTokenError')) {
-      signingOut.current = true;
-      void signOut({ callbackUrl: forceLogoutCallbackUrl });
-    }
-    // forceLogoutCallbackUrl is included to satisfy exhaustive-deps; once signingOut
-    // is true the guard prevents re-execution regardless of URL changes.
-  }, [session?.forceLogout, session?.error, forceLogoutCallbackUrl]);
-
   return { session, status, update };
 }

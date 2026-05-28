@@ -74,7 +74,10 @@
 These primitives are intentionally divergent. **Audit them when refreshing from upstream.**
 
 - **`Button`** — adds `xs`, `icon-xs`, `icon-sm`, `icon-lg` sizes beyond the shadcn baseline. Adds `has-data-[icon=inline-end]` / `has-data-[icon=inline-start]` padding tweaks per size.
-- _(Add other deltas here as they accumulate. The header comment `// IGRP CUSTOM: THIS COMPONENT IS CHANGED FROM THE ORIGINAL` marks them in source.)_
+- **`Accordion`** — `AccordionTrigger` accepts `iconName` / `showIcon` / `iconPlacement` props and renders the chevron via `IGRPIcon` instead of the hard-coded `ChevronDownIcon`, allowing the indicator to be hidden, swapped, or moved to the start; also adds `motion-reduce:animate-none` on the content panel. Reason: lets Horizon wrappers drive iconography from a single source and respect reduced-motion preferences.
+- **`Form`** — `FormItem` uses `flex flex-col gap-2` instead of upstream's `grid gap-2` (per the inline `Warning` comment in source), and `FormMessage` adds `role="alert"` so screen readers announce validation errors live. Reason: pre-dating this catalogue; preserved as-is.
+- **`Popover`** — `PopoverContent` exposes a `container` prop forwarded to `PopoverPrimitive.Portal` and adds `motion-reduce:animate-none` to the enter/exit animations. Reason: required so popovers (combobox, date picker) can portal into a parent `Dialog`/`Drawer` instead of `document.body`, which otherwise breaks focus management.
+- **`RadioGroup`** — `RadioGroupItem` adopts a `radioItemVariants` CVA with `variant` (`default` / `outline` / `soft`) and `size` (`sm` / `md` / `lg`) props, and the inner `CircleIcon` indicator scales (`size-1.5` / `size-2` / `size-2.5`) to match the chosen size. Reason: pre-dating this catalogue; preserved as-is.
 
 ## Experimental layer
 

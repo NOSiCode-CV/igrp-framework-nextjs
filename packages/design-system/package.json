@@ -34,6 +34,7 @@
     "clean": "pnpm clean:dist && pnpm clean:packages",
     "clean:dist": "rimraf dist && rimraf tsconfig.tsbuildinfo",
     "clean:packages": "rimraf node_modules",
+    "drift:shadcn": "node scripts/check-shadcn-drift.mjs",
     "format": "prettier --write .",
     "format:check": "prettier --check .",
     "lint": "eslint .",
@@ -56,12 +57,24 @@
     "zod": "^4.0.0"
   },
   "peerDependenciesMeta": {
-    "@tanstack/react-table": { "optional": false },
-    "date-fns": { "optional": false },
-    "lucide-react": { "optional": false },
-    "react-hook-form": { "optional": false },
-    "recharts": { "optional": false },
-    "zod": { "optional": false }
+    "@tanstack/react-table": {
+      "optional": false
+    },
+    "date-fns": {
+      "optional": false
+    },
+    "lucide-react": {
+      "optional": false
+    },
+    "react-hook-form": {
+      "optional": false
+    },
+    "recharts": {
+      "optional": false
+    },
+    "zod": {
+      "optional": false
+    }
   },
   "dependencies": {
     "@hookform/resolvers": "^5.2.2",

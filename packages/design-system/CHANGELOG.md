@@ -1,5 +1,30 @@
 # @igrp/igrp-framework-react-design-system
 
+## 0.1.0-beta.131
+
+### Patch Changes
+
+- 48d2818: Web Interface Guidelines a11y pass: fix dead expander button and inverted theme-color constants; default `aria-hidden` on `IGRPIcon` and enforce an accessible name on icon-only `IGRPButton`; standardize input `aria-describedby`/label wiring and password hardening; add live regions to alert/notification/chat/form; scope `transition-all` and add reduced-motion guards; correct invalid ARIA on stepper/menu-navigation; locale-aware date formatting via `Intl.DateTimeFormat`. Note: `IGRPDataTableCellDate` props change from `dateFormat` to `language`/`dateOptions`.
+- 48dd45c: - Use `move-cli` instead of the cmd.exe `move` builtin in the `build:babel` step so the build runs on non-Windows platforms.
+- 3377f52: chore(design-system): close-out Bundle A — finish /styles removal, catalogue deltas, add IGRPMenubar, harden drift script
+  - Remove the deprecated `/styles` export entirely: dropped from `publishConfig.exports`, the `tailwind:build` script and its build-chain invocation are gone, the generated `src/styles.css` is deleted, `@tailwindcss/cli` dropped from devDependencies. Templates import `/tokens` only and compile Tailwind in the app. README and CLAUDE.md updated to reflect the removal.
+  - Catalogue the four remaining IGRP-custom primitive deltas in `COMPONENTS.md` (Accordion, Form, Popover, RadioGroup) alongside the existing Button entry. Combined with Button, this is the complete intentional-divergence baseline the drift detector compares against.
+  - Drift detector hardening: spawn options now use `shell: process.platform === "win32"` so `npx`/`npm` shims resolve on Windows; removed the `#!/usr/bin/env node` shebang from the `.mjs` so vitest 4.1.x can import it without a parser error.
+  - `drift-baseline-2026-05.md`: first end-to-end run captured. The run revealed two further structural defects in the script (non-interactive `init` blocks on a prompt → no `components.json`; `hasDrift` swallows non-zero CLI exits as `ok`). No actionable baseline this cycle; the next baseline will be the first real one after those fixes land in a follow-up.
+  - Add `IGRPMenubar` Horizon wrapper — pure re-export of all 16 primitive `Menubar*` sub-components under `IGRP*` aliases, mirroring the `IGRPDropdownMenu` pattern. Closes the Horizon-layer Menubar gap.
+
+- db24347: Replace raw color utilities with semantic tokens: add a `--highlight` / `--highlight-foreground` token (used by `IGRPText` highlighting) and drop manual `dark:bg-zinc-900/60` overrides on `IGRPModalDialog` sticky header/footer. Reconcile the legacy `index.css` theme with `tokens.css` by adding the previously missing `success`/`warning`/`info` tokens so the `/styles` build matches the `/tokens` export.
+- c412311: refactor(design-system): peer-dep heavy libs, deprecate /styles export, add COMPONENTS.md + shadcn-drift detector
+  - Move `react-hook-form`, `zod`, `recharts`, `@tanstack/react-table`, `date-fns`, and `lucide-react` from `dependencies` to `peerDependencies` so consumers can upgrade them independently and avoid duplicate copies. Loosened semver ranges; mirrored as `devDependencies` so the DS still builds standalone.
+  - Deprecate the `/styles` export. Removed from the dev `exports` map; kept in `publishConfig.exports` for one more beta as a soft-deprecation window. Scheduled for removal in the next beta. Templates must import `/tokens` only and compile Tailwind in the app.
+  - Add `packages/design-system/COMPONENTS.md` — three-layer (Horizon / Primitive / Custom) reference map with IGRP deltas from upstream shadcn and the experimental-layer promotion criteria.
+  - Add `pnpm drift:shadcn` — periodic-maintenance script that compares each primitive against upstream shadcn via the CLI `--diff` flow. Not wired into CI.
+  - demo-legacy template: document that `npx shadcn add` must not be run inside the template (it collides with IGRP primitives).
+
+- 55b7077: design-system: define the missing `--chart-6/7/8` tokens (violet/red/lime, light + dark) that `IGRP_CHART_COLORS` already referenced, so charts with 6–8 series render correct fills instead of blanks. Replace the hardcoded `dark:border-slate-800/60` on the data-table header row with the semantic `border-border` token. Make the data-table input-filter accessible label configurable via a new `ariaLabel` prop (and matching `ariaLabel` on the filter descriptor); pt-PT default labels are unchanged.
+
+  template: extend the theme variants (blue/green/amber/default/mono) beyond `--primary` to also re-theme `--ring`, `--sidebar-primary`, and (for the colored themes) the primary `--chart-1` series, so a selected theme expresses brand identity across focus rings, the active sidebar item, and charts.
+
 ## 0.1.0-beta.130
 
 ### Patch Changes

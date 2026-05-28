@@ -1,5 +1,30 @@
 # @igrp/framework-next-auth
 
+## 0.1.0-beta.133
+
+### Patch Changes
+
+- f89e1ab: fix(auth): stop double signOut race and clear stale refresh-error from still-valid tokens
+  - `useSafeSession` no longer calls `signOut()` on `RefreshAccessTokenError`.
+    That responsibility was already owned by `IGRPSessionWatcher` (path-aware,
+    routes to `/logout` for a clean IdP single-logout). Having both fire meant
+    two concurrent `POST /api/auth/signout` calls when a layout consumer
+    mounted alongside the logout page, racing the page's own end-session
+    redirect and leaving the UI stuck on "A terminar sessão…". The function
+    signature keeps `forceLogoutCallbackUrl` as an inert option for
+    backwards-compatibility with existing call sites.
+  - The `jwt` callback's still-valid early-return now clears any leftover
+    `error` / `forceLogout` flags before returning. Otherwise a successful
+    refresh inside a server-component tree (where `cookies()` is read-only
+    and the rotated token can't be persisted) would leave the cookie token
+    tagged with `RefreshAccessTokenError`; the next route-handler poll would
+    see "still valid" + stale error and return it untouched, sticking the
+    user in an auto-logout loop.
+
+- ec48e46: `refreshOidcAccessToken` now deduplicates concurrent refreshes that share a refresh_token. NextAuth's jwt callback runs once per session read, so near token expiry an RSC render + a `useSession` poll + a server action can all attempt a refresh with the SAME refresh_token; with refresh-token rotation the IdP accepts the first and rejects every subsequent one with `invalid_grant`, and the last cookie write wins — logging the user out even though one refresh succeeded. Sharing the in-flight promise collapses N concurrent calls into one network round-trip and one cookie write.
+
+  In-memory only — multi-instance deployments can still race across pods, but single-process dev (and most production traffic via sticky routing) is fully covered.
+
 ## 0.1.0-beta.132
 
 ### Patch Changes

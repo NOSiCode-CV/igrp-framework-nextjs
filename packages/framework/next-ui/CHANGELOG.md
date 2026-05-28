@@ -1,5 +1,22 @@
 # @igrp/framework-next-ui
 
+## 0.1.0-beta.139
+
+### Patch Changes
+
+- ec48e46: `IGRPSessionWatcher` no longer returns `null` on every `useSession` refetch. NextAuth briefly flips status to `'loading'` after `signOut`, on focus refetch, and on every polling interval; returning `null` there unmounted the whole subtree and forced child components to re-run their mount effects from scratch. The visible symptom was `/logout` running `signOut` twice and stalling on its loading template because the in-flight effect closure was racing the remount. The watcher now only renders `null` during the genuine initial probe (status `'loading'` AND no session data yet), which is the only state SSR can't already populate.
+- Updated dependencies [48d2818]
+- Updated dependencies [48dd45c]
+- Updated dependencies [3377f52]
+- Updated dependencies [db24347]
+- Updated dependencies [c412311]
+- Updated dependencies [55b7077]
+- Updated dependencies [f89e1ab]
+- Updated dependencies [ec48e46]
+  - @igrp/igrp-framework-react-design-system@0.1.0-beta.131
+  - @igrp/framework-next-auth@0.1.0-beta.133
+  - @igrp/framework-next-types@0.1.0-beta.135
+
 ## 0.1.0-beta.138
 
 ### Patch Changes

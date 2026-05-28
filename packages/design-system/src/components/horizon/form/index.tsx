@@ -103,12 +103,15 @@ function IGRPForm<TSchema extends AnyZod>({
     mode: validationMode,
   })
 
-  // Sync defaultValues to form when they change (valid prop sync, not event simulation). Use resetKey to reset via remount instead.
+  // Sync defaultValues to form when they change. Two safety rails to avoid clobbering user input:
+  //   1. If the consumer opts into `resetKey`, prop sync is disabled (they reset explicitly via remount).
+  //   2. If the form is dirty (user has typed), skip the reset — only refresh untouched defaults.
+  // Consumers that *need* to overwrite dirty state with new defaults should bump `resetKey` or call `formRef.current?.reset()` themselves.
   useEffect(() => {
     if (resetKey !== undefined) return
-    if (defaultValues) {
-      form.reset(defaultValues)
-    }
+    if (!defaultValues) return
+    if (form.formState.isDirty) return
+    form.reset(defaultValues)
   }, [form, defaultValues, resetKey])
 
   const clearGlobalError = useCallback(() => setFormError(undefined), [])

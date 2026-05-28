@@ -24,6 +24,20 @@ You are working inside `packages/design-system/` — `@igrp/igrp-framework-react
 
 - `@igrp/igrp-framework-react-design-system/styles` — removed. Was the prebuilt CSS bundle; caused cascade conflicts with consumer-side Tailwind builds. Templates import `/tokens` only and compile Tailwind in the app. Do not add it back: any new CSS belongs either in `tokens.css` (design tokens) or in the consuming app. See `.claude/shared/tailwind-v4.md`.
 
+## `dark:` selector policy
+
+The repo-wide rule is "no manual `dark:` overrides — tokens handle dark mode" (see `.claude/shared/ui-rules.md`). That rule has one **explicit exception** inside the Primitives layer:
+
+- **Allowed in `src/components/primitives/*`:** shadcn-idiomatic `dark:` *opacity adjustments of already-semantic tokens* (e.g. `dark:bg-input/30`, `dark:aria-invalid:ring-destructive/40`, `dark:bg-destructive/60`). These exist because OKLCH tokens need different alpha values to read correctly against a dark background. The drift checker (`scripts/check-shadcn-drift.mjs`) keeps these aligned with upstream shadcn — ripping them out creates permanent drift on every shadcn release.
+- **Not allowed anywhere:** raw Tailwind palette colors (`bg-emerald-500`, `text-red-600 dark:text-red-400`, etc.). Use semantic tokens (`bg-success`, `text-destructive`). If a needed color role is missing, **add a new token** to `tokens.css` (light + dark blocks + `@theme inline`) — don't reach for the palette.
+- **Horizon / Custom layers (`src/components/horizon/*`, `src/components/custom/*`):** no `dark:` of any kind. These layers compose Primitives + semantic tokens only.
+
+When auditing for `dark:` violations, grep specifically for raw palette names (`emerald-`, `red-`, `blue-`, etc.) — `dark:bg-input/30` style adjustments are intentional and not a violation.
+
+## Shadcn drift checker
+
+`scripts/check-shadcn-drift.mjs` is a periodic (~quarterly) maintenance tool. For each `.tsx` under `src/components/primitives/`, it runs `npx shadcn@latest add <name> --dry-run --diff` against a scratch project and reports drift from upstream. It hits the network, is slow, and is **not** wired into CI. Run manually before a major shadcn version bump or when revisiting the Primitives layer. Each primitive file may carry a `// shadcn: YYYY-MM-DD` first-line stamp recording the last upstream sync date.
+
 ## Shared rules
 
 @../../.claude/shared/hard-rules.md

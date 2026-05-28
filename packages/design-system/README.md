@@ -254,7 +254,17 @@ pnpm build
 
 # Watch mode
 pnpm dev
+
+# Unit tests
+pnpm test
+
+# Check primitives for drift from upstream shadcn (periodic maintenance, hits network)
+node scripts/check-shadcn-drift.mjs
 ```
+
+### Shadcn drift checker
+
+`scripts/check-shadcn-drift.mjs` reports drift between local primitives in `src/components/primitives/` and upstream shadcn. It is intended for periodic (~quarterly) maintenance — it hits the network, is slow, and is **not** wired into CI. Each primitive may carry a `// shadcn: YYYY-MM-DD` first-line stamp recording the last upstream sync. Exit code 1 if any primitive has drifted.
 
 ---
 

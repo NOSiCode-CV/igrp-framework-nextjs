@@ -891,6 +891,9 @@
     --tw-enter-translate-y: calc(5*var(--spacing)*-1);
     --tw-enter-translate-y: calc(.05*-100%);
   }
+  .running {
+    animation-play-state: running;
+  }
   .group-data-\[collapsible\=icon\]\:flex {
     &:is(:where(.group)[data-collapsible="icon"] *) {
       display: flex;

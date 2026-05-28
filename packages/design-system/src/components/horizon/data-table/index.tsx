@@ -1,4 +1,7 @@
 "use client"
+// React Compiler opt-out: required for `useReactTable` (TanStack mutates state
+// in ways the compiler can't model). Per-row rendering (IGRPDataTableRowActionsCell)
+// lives in its own file without this directive so the compiler can still memoize it.
 "use no memo"
 
 import { Fragment, useCallback, useEffect, useId, useReducer } from "react"
@@ -33,15 +36,8 @@ import { IGRPIcon } from "../icon"
 import { type IGRPDataTableClientFilterListProps, IGRPDataTableClientFilter } from "./client-filter"
 import { IGRPDataTablePagination, IGRPDataTablePaginationNumeric } from "./pagination"
 import { IGRPDataTableToggleVisibility } from "./toggle-visibility"
-import { IGRPDataTableButtonAlert, IGRPDataTableButtonLink, IGRPDataTableButtonModal } from "./action-button-icon"
-import {
-  IGRPDataTableDropdownMenu,
-  IGRPDataTableDropdownMenuAlert,
-  IGRPDataTableDropdownMenuLink,
-  IGRPDataTableDropdownMenuCustom,
-  type IGRPDataTableActionDropdown,
-} from "./action-dropdown-menu"
 import type { IGRPDataTableAction, IGRPDataTablePaginationConfig, IGRPDataTableQuery } from "./types"
+import { IGRPDataTableRowActionsCell } from "./row-actions-cell"
 import type { IGRPAccessorColumnDef } from "./column-helper"
 import {
   IGRPDataTableFilterDate,
@@ -152,106 +148,6 @@ function tableReducer(state: TableState, action: TableAction): TableState {
   }
 }
 
-/** @internal Renders inline icon buttons (≤2 actions) or a dropdown (>2 actions) for a single row. */
-function IGRPDataTableRowActions<TData>({ row, actions }: { row: Row<TData>; actions: IGRPDataTableAction<TData>[] }) {
-  const visibleActions = actions.filter((a) => !a.hidden?.(row))
-  if (visibleActions.length === 0) return null
-
-  if (visibleActions.length <= 2) {
-    return (
-      <div className="flex items-center gap-1">
-        {visibleActions.map((action, i) => {
-          if (action.type === "link") {
-            return (
-              <IGRPDataTableButtonLink
-                key={i}
-                href={action.href(row)}
-                icon={action.icon ?? "Eye"}
-                labelTrigger={action.label}
-                disabled={action.disabled?.(row)}
-              />
-            )
-          }
-          if (action.type === "alert") {
-            return (
-              <IGRPDataTableButtonAlert
-                key={i}
-                icon={action.icon ?? "Trash2"}
-                labelTrigger={action.label}
-                modalTitle={action.title}
-                onClickConfirm={() => action.onConfirm(row)}
-                disabled={action.disabled?.(row)}
-              >
-                {action.description}
-              </IGRPDataTableButtonAlert>
-            )
-          }
-          if (action.type === "modal") {
-            return (
-              <IGRPDataTableButtonModal
-                key={i}
-                icon={action.icon ?? "Edit"}
-                labelTrigger={action.label}
-                disabled={action.disabled?.(row)}
-                render={(close) => action.render(row, close)}
-              />
-            )
-          }
-          if (action.type === "custom") {
-            return <span key={i}>{action.render(row)}</span>
-          }
-          return null
-        })}
-      </div>
-    )
-  }
-
-  // >2 actions: dropdown
-  const dropdownItems: IGRPDataTableActionDropdown[] = []
-  for (const action of visibleActions) {
-    if (action.type === "link") {
-      dropdownItems.push({
-        component: IGRPDataTableDropdownMenuLink,
-        props: { labelTrigger: action.label, href: action.href(row) },
-      })
-    } else if (action.type === "alert") {
-      dropdownItems.push({
-        component: IGRPDataTableDropdownMenuAlert,
-        props: {
-          labelTrigger: action.label,
-          modalTitle: action.title,
-          children: action.description,
-          onClickConfirm: () => action.onConfirm(row),
-        },
-      })
-    } else if (action.type === "modal") {
-      const capturedRender = action.render
-      dropdownItems.push({
-        component: IGRPDataTableDropdownMenuCustom,
-        props: {
-          labelTrigger: action.label,
-          action: () => {
-            capturedRender(row, () => undefined)
-          },
-        },
-      })
-    } else if (action.type === "custom") {
-      const capturedRender = action.render
-      dropdownItems.push({
-        component: IGRPDataTableDropdownMenuCustom,
-        props: {
-          labelTrigger: action.label,
-          action: () => {
-            capturedRender(row)
-          },
-        },
-      })
-    }
-  }
-
-  return <IGRPDataTableDropdownMenu items={dropdownItems} />
-}
-
 /**
  * Data table with sorting, filtering, pagination, and expandable rows.
  * Built on TanStack Table. Use IGRPDataTableHeader*, IGRPDataTableCell*, etc. for column setup.
@@ -358,7 +254,7 @@ function IGRPDataTable<TData, TValue>({
           tableHelper.display({
             id: "__igrp_actions__",
             header: "",
-            cell: ({ row }) => <IGRPDataTableRowActions row={row} actions={actions} />,
+            cell: ({ row }) => <IGRPDataTableRowActionsCell row={row} actions={actions} />,
             enableSorting: false,
             enableHiding: false,
             size: actions.length <= 2 ? actions.length * 44 : 44,

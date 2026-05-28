@@ -62,11 +62,21 @@ function getClientCredentials(env: AuthEnvironment) {
   };
 }
 
-export async function refreshOidcAccessToken(token: JWT, env: AuthEnvironment) {
-  const providerId = getProviderIdFromTokenOrEnv(token, env);
+// In-flight refresh deduplication. NextAuth invokes the jwt callback once per
+// session read; near token expiry, multiple concurrent requests (a server
+// component RSC tree + a `useSession` poll + a server action) decode the
+// SAME cookie token and each call `refreshOidcAccessToken` with the same
+// refresh_token. With refresh-token rotation, the IdP accepts the FIRST call
+// and rejects every subsequent one with `invalid_grant` — the last cookie
+// write wins, so the user can be logged out even though one refresh
+// succeeded. Sharing the in-flight promise collapses N concurrent calls into
+// one network round-trip and one cookie write.
+//
+// In-memory only; multi-instance deployments can still race across pods.
+// Single-process dev is fully covered; sticky routing covers most prod.
+const inflightRefreshes = new Map<string, Promise<JWT>>();
 
-  assertAuthProviderEnv(env, providerId);
-
+export async function refreshOidcAccessToken(token: JWT, env: AuthEnvironment): Promise<JWT> {
   if (!token.refreshToken) {
     return {
       ...token,
@@ -74,6 +84,26 @@ export async function refreshOidcAccessToken(token: JWT, env: AuthEnvironment) {
       forceLogout: true,
     };
   }
+
+  const refreshKey = token.refreshToken;
+  const existing = inflightRefreshes.get(refreshKey);
+  if (existing) return existing;
+
+  const tokenWithRefresh = token as JWT & { refreshToken: string };
+  const promise = performRefresh(tokenWithRefresh, env).finally(() => {
+    inflightRefreshes.delete(refreshKey);
+  });
+  inflightRefreshes.set(refreshKey, promise);
+  return promise;
+}
+
+async function performRefresh(
+  token: JWT & { refreshToken: string },
+  env: AuthEnvironment,
+): Promise<JWT> {
+  const providerId = getProviderIdFromTokenOrEnv(token, env);
+
+  assertAuthProviderEnv(env, providerId);
 
   const discoveryUrl = getAuthProviderDiscoveryUrl(env, providerId);
   const openIdConfiguration = await getOpenIdConfiguration(discoveryUrl);

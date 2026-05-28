@@ -59,6 +59,14 @@ export function IGRPSessionWatcher({ children }: { children: React.ReactNode }) 
     router.push(target);
   }, [status, session, router]);
 
-  if (status === 'loading') return null;
+  // Only hide children during the FIRST session probe (no data yet). NextAuth
+  // briefly flips `status` to `'loading'` on every refetch (signOut completion,
+  // focus refetch, polling interval); returning `null` there would unmount the
+  // whole subtree on every poll, defeating refs/timers in mid-flight client
+  // components (notably `/logout`, which double-runs its effect after a remount
+  // and races its own navigation). With an SSR-hydrated session, the initial
+  // render already has `data`, so this branch only fires when there genuinely
+  // is no session yet.
+  if (status === 'loading' && !session) return null;
   return children;
 }

@@ -95,6 +95,46 @@ describe('refreshOidcAccessToken — expiresAt units', () => {
     expect(result.forceLogout).toBe(true);
   });
 
+  it('deduplicates concurrent refreshes that share a refresh_token', async () => {
+    let tokenEndpointCalls = 0;
+    vi.stubGlobal(
+      'fetch',
+      vi.fn(async (url: string) => {
+        if (url === DISCOVERY_URL) {
+          return { ok: true, json: async () => MOCK_DISCOVERY };
+        }
+        if (url === MOCK_DISCOVERY.token_endpoint) {
+          tokenEndpointCalls += 1;
+          await new Promise((r) => setTimeout(r, 10));
+          return {
+            ok: true,
+            json: async () => ({
+              access_token: 'new-at',
+              refresh_token: 'new-rt',
+              expires_in: 3600,
+              id_token: 'new-id',
+            }),
+          };
+        }
+        return { ok: false, json: async () => ({}) };
+      }),
+    );
+
+    const { refreshOidcAccessToken } = await import('../oidc');
+    const token = makeToken({ refreshToken: 'shared-rt' });
+
+    const [a, b] = await Promise.all([
+      refreshOidcAccessToken(token, VALID_ENV),
+      refreshOidcAccessToken(token, VALID_ENV),
+    ]);
+
+    expect(tokenEndpointCalls).toBe(1);
+    expect(a.error).toBeUndefined();
+    expect(b.error).toBeUndefined();
+    expect(a.accessToken).toBe('new-at');
+    expect(b.accessToken).toBe('new-at');
+  });
+
   it('preserves the existing idToken when refresh response returns empty string', async () => {
     mockFetch([
       { url: DISCOVERY_URL, body: MOCK_DISCOVERY },

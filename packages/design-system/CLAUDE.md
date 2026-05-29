@@ -4,7 +4,9 @@ You are working inside `packages/design-system/` — `@igrp/igrp-framework-react
 
 ## Consumer-facing skill
 
-If a task is about *consuming* the design system (building a form, table, chart, card, etc. in an app or template) rather than editing the DS source, load `skills/igrp-design-system/SKILL.md` — it documents which `IGRP*` to pick and the prop shapes the package actually exports. `skills/igrp-design-system/references/` has deeper docs per family (forms, data-table, charts, …).
+If a task is about *consuming* the design system (building a form, table, chart, card, etc. in an app or template) rather than editing the DS source, load the **`design-system`** skill that ships with the `igrp` plugin at `<repo-root>/plugins/igrp/skills/design-system/SKILL.md`. It documents which `IGRP*` to pick and the prop shapes the package actually exports; deep references per family (forms, data-table, charts, …) live alongside it under `references/`.
+
+The plugin is distributed via the in-repo Claude Code marketplace (`.claude-plugin/marketplace.json` at the repo root, marketplace name `nosi`). Consumers outside this monorepo install with `/plugin marketplace add` then `/plugin install igrp@nosi` — see `plugins/igrp/README.md` for the exact commands. After install, the skill is invokable as `/igrp:design-system`.
 
 ## Your expertise
 

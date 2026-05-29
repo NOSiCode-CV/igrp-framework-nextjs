@@ -1,6 +1,6 @@
 ---
-name: igrp-design-system
-description: Authoritative reference for the @igrp/igrp-framework-react-design-system UI kit. Use whenever building, editing, or reviewing any UI inside this monorepo — IGRP apps, templates, demos, or the design-system itself — including forms, tables, charts, modals, layouts, buttons, inputs, navigation, cards, or any component import from `@igrp/igrp-framework-react-design-system`. Trigger on phrases like "build a form", "show a table", "add a chart", "create a page", "use IGRP*", "Horizon vs primitive", "shadcn component in this repo", and any styling/Tailwind question for IGRP code. Prefer this over generic shadcn or React UI knowledge — this kit has three layers with strict precedence rules.
+name: design-system
+description: Authoritative reference for the @igrp/igrp-framework-react-design-system UI kit. Use whenever building, editing, or reviewing any UI inside an IGRP app, template, demo, or the design-system itself — including forms, tables, charts, modals, layouts, buttons, inputs, navigation, cards, or any component imported from `@igrp/igrp-framework-react-design-system`. Trigger on phrases like "build a form", "show a table", "add a chart", "create a page", "use IGRP*", "Horizon vs primitive", "shadcn component in this repo", and any styling/Tailwind question for IGRP code. Prefer this over generic shadcn or React UI knowledge — this kit has three layers with strict precedence rules.
 ---
 
 # IGRP Design System

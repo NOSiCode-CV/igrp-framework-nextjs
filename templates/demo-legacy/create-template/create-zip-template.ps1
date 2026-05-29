@@ -2,7 +2,7 @@
 
 # === CONFIG ===
 $zipName = "igrp-next-template.zip"
-$excludeFolders = @(".next", "node_modules", ".git", "create-template", ".env", ".env.docker")
+$excludeFolders = @(".next", "node_modules", ".git", "create-template", ".env", ".env.docker", "CHANGELOG.md")
 # The full .igrpmigrations/ tree (guides + payloads) is managed by the source
 # repo and bundled into @igrp/template-migrator - it must NOT go into the zip.
 # We move it out and replace it with a slim folder containing only lock.json,

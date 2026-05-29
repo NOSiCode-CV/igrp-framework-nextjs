@@ -121,6 +121,12 @@ if (-not $username -or -not $password) {
   exit 1
 }
 
+# Initialize state used by the finally block before entering try, so it's
+# defined even if an exception fires before the skill-injection step.
+$skillInjected     = $false
+$skillTargetAgents = ".agents/skills/igrp-design-system"
+$skillTargetClaude = ".claude/skills/igrp-design-system"
+
 try {
   Write-Host "Zipping project for version: $version"
   Write-Host "Upload target: $nexusUploadUrl"
@@ -158,6 +164,76 @@ try {
     Write-Host "Warning: lock.json not found at $lockSource - .igrpmigrations/ will be empty in zip"
   }
 
+  # === INJECT IGRP DESIGN-SYSTEM SKILL ===
+  # Bundle the design-system skill so consumers of the template have AI context
+  # for every supported tool (Claude Code via .claude/, Cursor / Codex / Trae /
+  # Copilot via the static bridge files committed in the template, all reading
+  # from the canonical at .agents/skills/igrp-design-system/).
+  # Source of truth is the plugin at <monorepo>/plugins/igrp/skills/design-system/.
+  # These dirs are tracked via $skillInjected and removed in the finally block
+  # so the monorepo working tree is unchanged after the script runs.
+  $skillSource         = Join-Path $monorepoRoot "plugins/igrp/skills/design-system"
+  $skillTargetAgents   = ".agents/skills/igrp-design-system"
+  $skillTargetClaude   = ".claude/skills/igrp-design-system"
+  $skillInjected       = $false
+
+  if (Test-Path $skillSource) {
+    # Copy canonical content into .agents/skills/igrp-design-system/
+    if (Test-Path $skillTargetAgents) { Remove-Item $skillTargetAgents -Recurse -Force }
+    New-Item -ItemType Directory -Path $skillTargetAgents -Force | Out-Null
+    Copy-Item -Path "$skillSource/*" -Destination $skillTargetAgents -Recurse -Force
+
+    # Patch the copied SKILL.md frontmatter: in the plugin the skill is named
+    # `design-system` (invoked as /igrp:design-system); in the standalone
+    # template context the folder is `igrp-design-system` so the frontmatter
+    # `name` must match.
+    $copiedSkillPath = Join-Path $skillTargetAgents "SKILL.md"
+    $skillRaw = Get-Content $copiedSkillPath -Raw
+    $skillRaw = $skillRaw -replace '(?m)^name:\s*design-system\s*$', 'name: igrp-design-system'
+    Set-Content -Path $copiedSkillPath -Value $skillRaw -Encoding UTF8
+
+    # Extract the canonical `description` for the Claude Code thin pointer so
+    # triggering parity is preserved without duplicating the body of SKILL.md.
+    $descMatch = [regex]::Match($skillRaw, '(?ms)^---\s*\r?\n.*?^description:\s*(.*?)\s*\r?\n(?:[a-zA-Z][a-zA-Z0-9_-]*:|---)')
+    $skillDescription = if ($descMatch.Success) {
+      $descMatch.Groups[1].Value.Trim()
+    } else {
+      "IGRP design system usage skill — three-layer picker (Horizon / Primitives / Custom) and source-verified prop shapes for the @igrp/igrp-framework-react-design-system UI kit."
+    }
+
+    # Write the Claude Code thin pointer at .claude/skills/igrp-design-system/SKILL.md.
+    # It carries the canonical description in its frontmatter (so model-invocation
+    # triggers fire) but the body just instructs the model to read the canonical
+    # SKILL.md at .agents/skills/igrp-design-system/. Single source of truth.
+    if (Test-Path $skillTargetClaude) { Remove-Item $skillTargetClaude -Recurse -Force }
+    New-Item -ItemType Directory -Path $skillTargetClaude -Force | Out-Null
+    $pointer = @"
+---
+name: igrp-design-system
+description: $skillDescription
+---
+
+# IGRP design system (pointer)
+
+The canonical content for this skill lives at ``.agents/skills/igrp-design-system/``. **Read ``.agents/skills/igrp-design-system/SKILL.md`` and follow its instructions** before writing any UI code — it documents the three-layer picker (Horizon / Custom / Primitives), the repo-wide UI hard rules, and source-verified prop shapes for the `@igrp/igrp-framework-react-design-system` package.
+
+Deep references are at ``.agents/skills/igrp-design-system/references/``. Load only the family relevant to your task:
+
+- ``forms.md`` — ``IGRPForm`` + Zod + all ``IGRPInput*``
+- ``data-table.md`` — ``IGRPDataTable`` + ``createIGRPColumnHelper`` + the ``actions`` prop
+- ``charts.md`` — ``IGRPAreaChart`` / ``IGRPVerticalBarChart`` / ``IGRPLineChart`` etc.
+- ``horizon.md`` — shared ``IGRPInputProps``, naming conventions
+- ``primitives.md`` — when to drop down, CVA variants
+- ``utilities.md`` — ``cn()``, ``IGRPColors``, hooks
+- ``custom.md`` — domain pieces
+"@
+    Set-Content -Path "$skillTargetClaude/SKILL.md" -Value $pointer -Encoding UTF8
+    $skillInjected = $true
+    Write-Host "Injected IGRP design-system skill into $skillTargetAgents (canonical) + $skillTargetClaude (Claude Code pointer)"
+  } else {
+    Write-Host "Warning: skill source not found at $skillSource - design-system skill will not be bundled in zip"
+  }
+
   # Remove existing zip if it exists
   if (Test-Path $zipName) {
     Remove-Item $zipName -Force
@@ -193,6 +269,19 @@ try {
     Write-Host "Check log: $logPath"
   }
 } finally {
+  # Remove the injected design-system skill content so the monorepo working
+  # tree returns to its pre-script state. We touch only what we created;
+  # static bridges (.cursor/, AGENTS.md, .trae/, .github/) stay put.
+  if ($skillInjected) {
+    if (Test-Path $skillTargetAgents) { Remove-Item $skillTargetAgents -Recurse -Force }
+    if (Test-Path $skillTargetClaude) { Remove-Item $skillTargetClaude -Recurse -Force }
+    foreach ($parentDir in @(".agents/skills", ".agents", ".claude/skills", ".claude")) {
+      if ((Test-Path $parentDir) -and -not (Get-ChildItem $parentDir -Force -ErrorAction SilentlyContinue)) {
+        Remove-Item $parentDir -Force
+      }
+    }
+  }
+
   # Remove the slim .igrpmigrations/ we created for the zip before restoring
   # the full original folder from _excluded.
   if (Test-Path $migrationsDir) {

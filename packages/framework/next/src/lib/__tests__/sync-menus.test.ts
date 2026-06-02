@@ -28,6 +28,7 @@ describe('igrpSyncMenus', () => {
         { id: 1, code: 'M1', name: 'M1', type: 'MENU_PAGE', status: 'ACTIVE' } as any,
       ],
       syncEnabled: false,
+      syncRoles: true,
     });
 
     expect(client.m2m.syncApplicationMenus).not.toHaveBeenCalled();
@@ -36,7 +37,7 @@ describe('igrpSyncMenus', () => {
     );
   });
 
-  it('calls syncApplicationMenus with mapped menus when syncEnabled=true', async () => {
+  it('calls syncApplicationMenus with mapped menus and forwards syncRoles=true', async () => {
     const client = makeClient();
     const info = vi.spyOn(console, 'info').mockImplementation(() => {});
 
@@ -53,6 +54,7 @@ describe('igrpSyncMenus', () => {
       appCode: 'APP_TEST_1',
       menus,
       syncEnabled: true,
+      syncRoles: true,
     });
 
     expect(client.m2m.syncApplicationMenus).toHaveBeenCalledTimes(1);
@@ -62,7 +64,31 @@ describe('igrpSyncMenus', () => {
         expect.objectContaining({ code: 'M1', type: 'MENU_PAGE', status: 'ACTIVE' }),
         expect.objectContaining({ code: 'M2', type: 'FOLDER', status: 'ACTIVE' }),
       ]),
+      true,
     );
-    expect(info).toHaveBeenCalledWith('On-code menus synchronized successfully.');
+    expect(info).toHaveBeenCalledWith('On-code menus synchronized successfully (syncRoles=true).');
+  });
+
+  it('forwards syncRoles=false to syncApplicationMenus when role sync is opted out', async () => {
+    const client = makeClient();
+    vi.spyOn(console, 'info').mockImplementation(() => {});
+
+    await igrpSyncMenus({
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+      client: client as any,
+      appCode: 'APP_TEST_1',
+      menus: [
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
+        { id: 1, code: 'M1', name: 'M1', type: 'MENU_PAGE', status: 'ACTIVE' } as any,
+      ],
+      syncEnabled: true,
+      syncRoles: false,
+    });
+
+    expect(client.m2m.syncApplicationMenus).toHaveBeenCalledWith(
+      'APP_TEST_1',
+      expect.any(Array),
+      false,
+    );
   });
 });

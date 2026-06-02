@@ -76,6 +76,24 @@ export type IGRPConfigArgs = {
      * because the gate short-circuits before reading the array.
      */
     onCodeMenus?: IGRPMenuItemArgs[];
+    /**
+     * Forwarded as the `syncRoles` argument of
+     * `client.m2m.syncApplicationMenus(appCode, menus, syncRoles)` during the
+     * on-code menu push. When `true`, Access Management also reconciles the
+     * menu↔role assignments; when `false`, only the menu entries are synced
+     * and existing role assignments are left untouched.
+     *
+     * Only consulted when the on-code menu push actually runs (i.e.
+     * `syncOnCodeMenus === true` and the outer `syncAccess` / `previewMode`
+     * gates are satisfied).
+     *
+     * Defaults to `true` when omitted — matching the AM client default — so
+     * role sync stays on unless a deployment opts out.
+     *
+     * Sourced from `process.env.IGRP_SYNC_ON_CODE_MENU_ROLES !== "false"` in
+     * the template.
+     */
+    syncOnCodeMenuRoles?: boolean;
   };
   toasterConfig: {
     showToaster: boolean;

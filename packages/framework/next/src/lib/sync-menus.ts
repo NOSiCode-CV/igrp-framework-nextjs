@@ -12,9 +12,24 @@ export interface IGRPSyncMenusArgs {
   appCode: string;
   menus: IGRPMenuItemArgs[];
   syncEnabled: boolean;
+  /**
+   * Forwarded as the `syncRoles` argument of
+   * `client.m2m.syncApplicationMenus`. When `true`, AM also reconciles the
+   * menu↔role assignments during the push. Required (no default) so a caller
+   * that forgets to thread it through fails compilation rather than silently
+   * changing behavior — the default lives at the config boundary
+   * (`IGRP_SYNC_ON_CODE_MENU_ROLES`).
+   */
+  syncRoles: boolean;
 }
 
-export async function igrpSyncMenus({ client, appCode, menus, syncEnabled }: IGRPSyncMenusArgs) {
+export async function igrpSyncMenus({
+  client,
+  appCode,
+  menus,
+  syncEnabled,
+  syncRoles,
+}: IGRPSyncMenusArgs) {
   if (!syncEnabled) {
     console.info('On-code menus sync skipped (IGRP_SYNC_ON_CODE_MENUS=false).');
     return;
@@ -29,7 +44,8 @@ export async function igrpSyncMenus({ client, appCode, menus, syncEnabled }: IGR
         status: i.status as Status,
       };
     }),
+    syncRoles,
   );
 
-  console.info('On-code menus synchronized successfully.');
+  console.info(`On-code menus synchronized successfully (syncRoles=${syncRoles}).`);
 }

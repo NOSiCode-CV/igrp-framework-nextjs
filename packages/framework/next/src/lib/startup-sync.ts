@@ -54,6 +54,7 @@ export async function igrpStartupSync(plan: IGRPAccessManagementSyncPlan): Promi
           appCode: plan.appCode,
           menus: plan.menus,
           syncEnabled: plan.syncOnCodeMenus,
+          syncRoles: plan.syncOnCodeMenuRoles,
         }),
       ]);
 

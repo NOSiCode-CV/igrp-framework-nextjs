@@ -34,6 +34,7 @@ All variables are documented inline in [`.env.example`](../.env.example). Requir
 | `IGRP_PREVIEW_MODE` | Bypass auth + use mock data (case-insensitive, quote-tolerant) | `false` |
 | `IGRP_SYNC_ACCESS` | Sync application/resources/menus to Access Management at startup | `false` |
 | `IGRP_SYNC_ON_CODE_MENUS` | Push `src/temp/menus/menus.ts` to AM (overwrites AM menus). Requires sync on + preview off | `false` |
+| `IGRP_SYNC_ON_CODE_MENU_ROLES` | Forward `syncRoles` to `syncApplicationMenus` during the on-code menu push — reconcile menu↔role assignments too. Only consulted when the push runs | `true` |
 
 ## Access Management M2M (required when `IGRP_SYNC_ACCESS=true`)
 

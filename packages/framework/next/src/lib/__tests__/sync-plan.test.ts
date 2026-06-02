@@ -82,6 +82,40 @@ describe('planAccessManagementSync', () => {
     expect(plan!.syncOnCodeMenus).toBe(true);
   });
 
+  it('defaults syncOnCodeMenuRoles to true when the field is omitted', () => {
+    const plan = planAccessManagementSync(
+      makeArgs({
+        apiManagementConfig: {
+          baseUrl: 'https://am.example.com',
+          serviceId: 'test-service',
+          m2mClientId: 'cid',
+          m2mClientSecret: 'csecret',
+          // syncOnCodeMenuRoles intentionally omitted
+        },
+      }),
+    );
+
+    expect(plan).not.toBeNull();
+    expect(plan!.syncOnCodeMenuRoles).toBe(true);
+  });
+
+  it('sets syncOnCodeMenuRoles to false only when explicitly false', () => {
+    const plan = planAccessManagementSync(
+      makeArgs({
+        apiManagementConfig: {
+          baseUrl: 'https://am.example.com',
+          serviceId: 'test-service',
+          m2mClientId: 'cid',
+          m2mClientSecret: 'csecret',
+          syncOnCodeMenuRoles: false,
+        },
+      }),
+    );
+
+    expect(plan).not.toBeNull();
+    expect(plan!.syncOnCodeMenuRoles).toBe(false);
+  });
+
   it('returns null in preview mode even with all other gates positive', () => {
     vi.spyOn(console, 'warn').mockImplementation(() => {});
 

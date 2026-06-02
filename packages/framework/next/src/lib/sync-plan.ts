@@ -23,6 +23,7 @@ export type IGRPAccessManagementSyncPlan = {
   appInformation: IGRPPackageJson;
   menus: IGRPMenuItemArgs[];
   syncOnCodeMenus: boolean;
+  syncOnCodeMenuRoles: boolean;
   appRoutes?: string[];
   paramMapBody?: string;
 };
@@ -149,6 +150,9 @@ export function planAccessManagementSync(
     appInformation: args.appInformation,
     menus: args.menus,
     syncOnCodeMenus: cfg!.syncOnCodeMenus === true,
+    // Defaults to `true` (matches the AM client default) — only an explicit
+    // `false` disables role sync during the on-code menu push.
+    syncOnCodeMenuRoles: cfg!.syncOnCodeMenuRoles !== false,
     appRoutes: cfg!.appRoutes,
     paramMapBody: cfg!.paramMapBody,
   };

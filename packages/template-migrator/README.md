@@ -16,7 +16,7 @@ packages/template-migrator/
 │   ├── types.ts             # Shared types: MigrationStep, Manifest, LockFile, …
 │   ├── manifest.ts          # Loads dist/manifest.json at runtime
 │   ├── apply.ts             # Executes a single MigrationStep against an app root
-│   ├── lock.ts              # Reads/writes .igrpmigrations/lock.json
+│   ├── lock.ts              # Reads/writes .igrp-migrations-lock.json (consumer project root)
 │   ├── hash.ts              # File hashing helpers
 │   └── commands/
 │       ├── status.ts        # igrp-migrate status
@@ -27,7 +27,7 @@ packages/template-migrator/
 │       └── check.ts         # igrp-migrate check  (CI gate)
 ```
 
-The **source of truth for migrations lives in `templates/demo-legacy/.igrpmigrations/`**, not in this package. `scripts/pack.ts` reads those files at build time and embeds everything into `dist/`.
+The **source of truth for migrations lives in this package at `migrations/demo-legacy/`**. `scripts/pack.ts` reads those files at build time and embeds everything into `dist/`.
 
 ---
 
@@ -41,9 +41,9 @@ Three sequential steps (wired as `prebuild → build:js → build:types`):
 
 ### 1. `prebuild` — `scripts/pack.ts`
 
-Reads every `NN.MIGRATIONS-*.md` file in `templates/demo-legacy/.igrpmigrations/`, parses the YAML frontmatter, then:
+Reads every `NN.MIGRATIONS-*.md` file in `migrations/demo-legacy/`, parses the YAML frontmatter, then:
 
-- **Copies payload files** from `.igrpmigrations/payload/NN/` → `dist/payload/NN/` (strips the `payload/` prefix from the `from` field so the dist layout is `dist/payload/NN/file`, not `dist/payload/payload/NN/file`).
+- **Copies payload files** from `migrations/demo-legacy/payload/NN/` → `dist/payload/NN/` (strips the `payload/` prefix from the `from` field so the dist layout is `dist/payload/NN/file`, not `dist/payload/payload/NN/file`).
 - **Emits `dist/manifest.json`** — a single JSON object with all migration metadata and steps.
 
 Any `.md` guide without valid YAML frontmatter (between `---` fences) will throw and abort the build.
@@ -60,7 +60,7 @@ Emits `.d.ts` declaration files from `tsconfig.build.json` (no JS output, types 
 
 ## Adding a new migration
 
-1. **Write the prose guide** in `templates/demo-legacy/.igrpmigrations/`:
+1. **Write the prose guide** in `migrations/demo-legacy/`:
 
    ```
    NN.MIGRATIONS-DDMMYYYY.md
@@ -98,7 +98,7 @@ Emits `.d.ts` declaration files from `tsconfig.build.json` (no JS output, types 
    ---
    ```
 
-3. **Create the payload files** in `templates/demo-legacy/.igrpmigrations/payload/NN/` — the final state of each file after the migration is applied.
+3. **Create the payload files** in `migrations/demo-legacy/payload/NN/` — the final state of each file after the migration is applied.
 
 4. **Build and verify**:
 
@@ -129,7 +129,7 @@ Emits `.d.ts` declaration files from `tsconfig.build.json` (no JS output, types 
 | `env.add` | `file`, `keys` | Appends missing keys (with doc comments) to an `.env` file |
 | `deps.bump` | `manifest`, `ranges` | Updates version ranges in `package.json` (deps or devDeps) |
 
-`from` values must be relative to `.igrpmigrations/` (e.g. `payload/NN/src/file.ts`). The pack script strips the leading `payload/` when copying to `dist/payload/`; the runtime in `apply.ts` does the same strip when resolving the source.
+`from` values must be relative to `migrations/demo-legacy/` (e.g. `payload/NN/src/file.ts`). The pack script strips the leading `payload/` when copying to `dist/payload/`; the runtime in `apply.ts` does the same strip when resolving the source.
 
 ---
 
@@ -208,7 +208,7 @@ If you publish a **patch fix to the CLI itself** (no new migrations), bump the p
 
 ## Lock file schema
 
-The CLI writes `.igrpmigrations/lock.json` in the consumer app root after each applied migration:
+The CLI writes `.igrp-migrations-lock.json` in the consumer app root after each applied migration:
 
 ```ts
 interface LockFile {

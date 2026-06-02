@@ -15,14 +15,17 @@ import {
 } from '@igrp/igrp-framework-react-design-system';
 
 import type { FolderNode } from './utils';
+import { isItemActive, ACTIVE_MENU_ITEM_CLASS } from './utils';
 import { SubLeafLink } from './sub-leaf-link';
 
 interface FolderMenuItemProps {
   node: FolderNode;
+  pathname: string;
 }
 
-export function FolderMenuItem({ node }: FolderMenuItemProps) {
+export function FolderMenuItem({ node, pathname }: FolderMenuItemProps) {
   const { item, children } = node;
+  const hasActiveChild = children.some((child) => isItemActive(child.item, pathname));
 
   return (
     <>
@@ -32,7 +35,11 @@ export function FolderMenuItem({ node }: FolderMenuItemProps) {
           <DropdownMenuTrigger asChild>
             <SidebarMenuButton
               tooltip={item.name}
-              className={cn('hidden cursor-pointer group-data-[collapsible=icon]:flex')}
+              isActive={hasActiveChild}
+              className={cn(
+                'hidden cursor-pointer group-data-[collapsible=icon]:flex',
+                ACTIVE_MENU_ITEM_CLASS,
+              )}
               aria-label={`${item.name} menu`}
             >
               {item.icon && <IGRPIcon iconName={item.icon} />}
@@ -40,7 +47,12 @@ export function FolderMenuItem({ node }: FolderMenuItemProps) {
           </DropdownMenuTrigger>
           <DropdownMenuContent side="right" align="start" className={cn('min-w-48')}>
             {children.map((child) => (
-              <SubLeafLink key={`dd-${child.item.id}`} node={child} variant="dropdown" />
+              <SubLeafLink
+                key={`dd-${child.item.id}`}
+                node={child}
+                variant="dropdown"
+                pathname={pathname}
+              />
             ))}
           </DropdownMenuContent>
         </DropdownMenu>
@@ -48,14 +60,15 @@ export function FolderMenuItem({ node }: FolderMenuItemProps) {
 
       {/* Collapsible — visible only in expanded sidebar mode */}
       <SidebarMenuItem>
-        <Collapsible className={cn('w-full group/collapsible')}>
+        <Collapsible defaultOpen={hasActiveChild} className={cn('w-full group/collapsible')}>
           <CollapsibleTrigger
             className={cn('flex w-full group-data-[collapsible=icon]:hidden')}
             asChild
           >
             <SidebarMenuButton
               tooltip={item.name}
-              className={cn('w-full cursor-pointer')}
+              isActive={hasActiveChild}
+              className={cn('w-full cursor-pointer', ACTIVE_MENU_ITEM_CLASS)}
               aria-label={`Toggle ${item.name} submenu`}
             >
               {item.icon && <IGRPIcon iconName={item.icon} />}
@@ -72,7 +85,12 @@ export function FolderMenuItem({ node }: FolderMenuItemProps) {
           <CollapsibleContent>
             <SidebarMenuSub>
               {children.map((child) => (
-                <SubLeafLink key={`col-${child.item.id}`} node={child} variant="collapsible" />
+                <SubLeafLink
+                  key={`col-${child.item.id}`}
+                  node={child}
+                  variant="collapsible"
+                  pathname={pathname}
+                />
               ))}
             </SidebarMenuSub>
           </CollapsibleContent>

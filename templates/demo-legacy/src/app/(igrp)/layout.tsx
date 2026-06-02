@@ -14,7 +14,7 @@ export default async function IGRPRootLayout({
   const config = await createConfig(layoutConfig as IGRPLayoutConfigArgs);
 
   return (
-    <IGRPLayoutFull config={config} showSidebar={false}>
+    <IGRPLayoutFull config={config}>
       {children}
     </IGRPLayoutFull>
   );

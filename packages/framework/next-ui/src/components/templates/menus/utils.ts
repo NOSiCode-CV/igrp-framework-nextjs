@@ -19,6 +19,35 @@ export function resolveAnchorTag(item: IGRPMenuItemArgs): boolean {
   return isExternal || item.target === '_blank';
 }
 
+export function isItemActive(item: IGRPMenuItemArgs, pathname: string): boolean {
+  const href = resolveHref(item);
+  if (resolveAnchorTag(item) || href === '#') return false;
+  return pathname === href || pathname.startsWith(href + '/');
+}
+
+/**
+ * Selected-item treatment: a soft brand tint (`sidebar-primary/10`), clearly
+ * distinct from the faint `sidebar-accent` hover wash without the weight of a
+ * solid fill. Semantic tokens only. Applied via className so it overrides the DS
+ * primitive's lighter `data-[active=true]:bg-sidebar-accent` default
+ * (tailwind-merge keeps the last).
+ *
+ * The hover overrides keep the active styling on mouseover. The `data-[state=open]`
+ * compound variant is required for FOLDER triggers: the DS primitive ships
+ * `data-[state=open]:hover:bg-sidebar-accent`, which has the same specificity as a
+ * plain `data-[active=true]:hover:` rule and would otherwise win and drop the
+ * highlight when hovering an open, active folder. The extra attribute raises
+ * specificity so the active treatment holds.
+ */
+export const ACTIVE_MENU_ITEM_CLASS = [
+  'data-[active=true]:bg-sidebar-primary/10',
+  'data-[active=true]:text-sidebar-accent-foreground',
+  'data-[active=true]:hover:bg-sidebar-primary/15',
+  'data-[active=true]:hover:text-sidebar-accent-foreground',
+  'data-[active=true]:data-[state=open]:hover:bg-sidebar-primary/15',
+  'data-[active=true]:data-[state=open]:hover:text-sidebar-accent-foreground',
+].join(' ');
+
 export function buildMenuSections(menus: IGRPMenuItemArgs[]): Section[] {
   const byPosition = (a: IGRPMenuItemArgs, b: IGRPMenuItemArgs) =>
     (a.position ?? 0) - (b.position ?? 0);

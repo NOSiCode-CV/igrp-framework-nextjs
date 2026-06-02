@@ -419,8 +419,8 @@ importers:
         specifier: workspace:*
         version: link:../next-ui
       '@igrp/platform-access-management-client-ts':
-        specifier: 0.2.0-beta.9
-        version: 0.2.0-beta.9
+        specifier: 0.2.0-beta.10
+        version: 0.2.0-beta.10
       next:
         specifier: ^15.5.18
         version: 15.5.18(@babel/core@7.29.0)(babel-plugin-react-compiler@19.1.0-rc.3)(react-dom@19.2.6(react@19.2.6))(react@19.2.6)
@@ -712,8 +712,8 @@ importers:
         specifier: workspace:*
         version: link:../../packages/design-system
       '@igrp/platform-access-management-client-ts':
-        specifier: 0.2.0-beta.9
-        version: 0.2.0-beta.9
+        specifier: 0.2.0-beta.10
+        version: 0.2.0-beta.10
       '@tanstack/react-query':
         specifier: ^5.100.10
         version: 5.100.10(react@19.2.6)
@@ -2006,8 +2006,8 @@ packages:
     resolution: {integrity: sha512-bV0Tgo9K4hfPCek+aMAn81RppFKv2ySDQeMoSZuvTASywNTnVJCArCZE2FWqpvIatKu7VMRLWlR1EazvVhDyhQ==}
     engines: {node: '>=18.18'}
 
-  '@igrp/platform-access-management-client-ts@0.2.0-beta.9':
-    resolution: {integrity: sha512-RmEd1OtAIcV8H9A74vtsxdHdua6zmptiucHes/mM0vg03u8RsjF6WFrKZ4zgJ31UjyjJkilvGkQoCW4Jx++GDQ==}
+  '@igrp/platform-access-management-client-ts@0.2.0-beta.10':
+    resolution: {integrity: sha512-lVg4pw87kOyP9Uh8Eb0EtvtU4eUoyXP3uTqClQNj4twy1Xn6A5wXK2A1ck6Jz6yMkP+gVnK1HFPl2GcHR4vNow==}
 
   '@img/colour@1.1.0':
     resolution: {integrity: sha512-Td76q7j57o/tLVdgS746cYARfSyxk8iEfRxewL9h4OMzYhbW4TAcppl0mT4eyqXddh6L/jwoM75mo7ixa/pCeQ==}
@@ -9703,7 +9703,7 @@ snapshots:
 
   '@humanwhocodes/retry@0.4.3': {}
 
-  '@igrp/platform-access-management-client-ts@0.2.0-beta.9': {}
+  '@igrp/platform-access-management-client-ts@0.2.0-beta.10': {}
 
   '@img/colour@1.1.0':
     optional: true

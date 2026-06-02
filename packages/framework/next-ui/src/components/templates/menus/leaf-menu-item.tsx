@@ -8,7 +8,7 @@ import {
 } from '@igrp/igrp-framework-react-design-system';
 
 import type { LeafNode } from './utils';
-import { resolveHref, resolveAnchorTag } from './utils';
+import { resolveHref, resolveAnchorTag, isItemActive, ACTIVE_MENU_ITEM_CLASS } from './utils';
 
 interface LeafMenuItemProps {
   node: LeafNode;
@@ -19,12 +19,16 @@ export function LeafMenuItem({ node, pathname }: LeafMenuItemProps) {
   const { item } = node;
   const href = resolveHref(item);
   const isAnchor = resolveAnchorTag(item);
-  const isActive =
-    !isAnchor && href !== '#' && (pathname === href || pathname.startsWith(href + '/'));
+  const isActive = isItemActive(item, pathname);
 
   return (
     <SidebarMenuItem>
-      <SidebarMenuButton asChild tooltip={item.name} isActive={isActive}>
+      <SidebarMenuButton
+        asChild
+        tooltip={item.name}
+        isActive={isActive}
+        className={ACTIVE_MENU_ITEM_CLASS}
+      >
         {isAnchor ? (
           <a
             href={href}

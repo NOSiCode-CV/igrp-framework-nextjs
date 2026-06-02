@@ -8,13 +8,7 @@ describe("IGRPInputSearch", () => {
   it("calls onSearch with the current value when the submit button is clicked", async () => {
     const onSearch = vi.fn()
     render(
-      <IGRPInputSearch
-        name="q"
-        label="Search"
-        defaultValue="initial"
-        onSearch={onSearch}
-        submitButtonLabel="Submit"
-      />,
+      <IGRPInputSearch name="q" label="Search" defaultValue="initial" onSearch={onSearch} submitButtonLabel="Submit" />,
     )
 
     await userEvent.click(screen.getByRole("button", { name: "Submit" }))

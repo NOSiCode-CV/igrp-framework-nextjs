@@ -7,14 +7,7 @@ import type { VariantProps } from "class-variance-authority"
 import { cn } from "../../../lib/utils"
 import { type IGRPInputProps } from "../../../types"
 import { Input } from "../../primitives/input"
-import {
-  FormControl,
-  FormDescription,
-  FormField,
-  FormItem,
-  FormLabel,
-  FormMessage,
-} from "../../primitives/form"
+import { FormControl, FormDescription, FormField, FormItem, FormLabel, FormMessage } from "../../primitives/form"
 import { IGRPButton } from "../button"
 import { IGRPFieldDescription } from "../field-description"
 import { IGRPIcon, type IGRPIconName } from "../icon"

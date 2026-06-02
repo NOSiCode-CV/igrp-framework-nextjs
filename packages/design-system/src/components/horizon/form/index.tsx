@@ -151,7 +151,17 @@ function IGRPForm<TSchema extends AnyZod>({
       }
       setIsSubmitting(false)
     },
-    [clearGlobalError, onSubmit, resetAfterSubmit, form, defaultValues, setGlobalError, showToastOnError, onError, i18n],
+    [
+      clearGlobalError,
+      onSubmit,
+      resetAfterSubmit,
+      form,
+      defaultValues,
+      setGlobalError,
+      showToastOnError,
+      onError,
+      i18n,
+    ],
   )
 
   const submitForm = useCallback(async () => form.handleSubmit(handleSubmit)(), [form, handleSubmit])

@@ -7,11 +7,7 @@
 
 import { createContext, useContext, useMemo, type ReactNode } from "react"
 
-import {
-  IGRP_I18N_DEFAULTS_PT_PT,
-  type IGRPI18nStrings,
-  type IGRPI18nStringsOverride,
-} from "./strings"
+import { IGRP_I18N_DEFAULTS_PT_PT, type IGRPI18nStrings, type IGRPI18nStringsOverride } from "./strings"
 
 const IGRPI18nContext = createContext<IGRPI18nStrings>(IGRP_I18N_DEFAULTS_PT_PT)
 

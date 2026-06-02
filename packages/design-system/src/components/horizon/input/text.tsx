@@ -6,14 +6,7 @@ import { useFormContext } from "react-hook-form"
 import { cn } from "../../../lib/utils"
 import type { IGRPInputProps } from "../../../types"
 import { Input } from "../../primitives/input"
-import {
-  FormControl,
-  FormDescription,
-  FormField,
-  FormItem,
-  FormLabel,
-  FormMessage,
-} from "../../primitives/form"
+import { FormControl, FormDescription, FormField, FormItem, FormLabel, FormMessage } from "../../primitives/form"
 import { IGRPIcon } from "../icon"
 import { IGRPLabel } from "../label"
 
@@ -93,12 +86,7 @@ function IGRPInputText({
                 />
               </FormControl>
               {showIcon && (
-                <div
-                  className={cn(
-                    "absolute inset-y-0 flex items-center pointer-events-none",
-                    positionIcon,
-                  )}
-                >
+                <div className={cn("absolute inset-y-0 flex items-center pointer-events-none", positionIcon)}>
                   <IGRPIcon iconName={iconName} size={iconSize} className={iconClassName} />
                 </div>
               )}

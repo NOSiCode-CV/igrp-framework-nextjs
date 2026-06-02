@@ -4,7 +4,7 @@ You are working inside `packages/design-system/` — `@igrp/igrp-framework-react
 
 ## Consumer-facing skill
 
-If a task is about *consuming* the design system (building a form, table, chart, card, etc. in an app or template) rather than editing the DS source, load the **`design-system`** skill that ships with the `igrp` plugin at `<repo-root>/plugins/igrp/skills/design-system/SKILL.md`. It documents which `IGRP*` to pick and the prop shapes the package actually exports; deep references per family (forms, data-table, charts, …) live alongside it under `references/`.
+If a task is about _consuming_ the design system (building a form, table, chart, card, etc. in an app or template) rather than editing the DS source, load the **`design-system`** skill that ships with the `igrp` plugin at `<repo-root>/plugins/igrp/skills/design-system/SKILL.md`. It documents which `IGRP*` to pick and the prop shapes the package actually exports; deep references per family (forms, data-table, charts, …) live alongside it under `references/`.
 
 The plugin is distributed via the in-repo Claude Code marketplace (`.claude-plugin/marketplace.json` at the repo root, marketplace name `nosi`). Consumers outside this monorepo install with `/plugin marketplace add` then `/plugin install igrp@nosi` — see `plugins/igrp/README.md` for the exact commands. After install, the skill is invokable as `/igrp:design-system`.
 
@@ -34,7 +34,7 @@ The plugin is distributed via the in-repo Claude Code marketplace (`.claude-plug
 
 The repo-wide rule is "no manual `dark:` overrides — tokens handle dark mode" (see `.claude/shared/ui-rules.md`). That rule has one **explicit exception** inside the Primitives layer:
 
-- **Allowed in `src/components/primitives/*`:** shadcn-idiomatic `dark:` *opacity adjustments of already-semantic tokens* (e.g. `dark:bg-input/30`, `dark:aria-invalid:ring-destructive/40`, `dark:bg-destructive/60`). These exist because OKLCH tokens need different alpha values to read correctly against a dark background. The drift checker (`scripts/check-shadcn-drift.mjs`) keeps these aligned with upstream shadcn — ripping them out creates permanent drift on every shadcn release.
+- **Allowed in `src/components/primitives/*`:** shadcn-idiomatic `dark:` _opacity adjustments of already-semantic tokens_ (e.g. `dark:bg-input/30`, `dark:aria-invalid:ring-destructive/40`, `dark:bg-destructive/60`). These exist because OKLCH tokens need different alpha values to read correctly against a dark background. The drift checker (`scripts/check-shadcn-drift.mjs`) keeps these aligned with upstream shadcn — ripping them out creates permanent drift on every shadcn release.
 - **Not allowed anywhere:** raw Tailwind palette colors (`bg-emerald-500`, `text-red-600 dark:text-red-400`, etc.). Use semantic tokens (`bg-success`, `text-destructive`). If a needed color role is missing, **add a new token** to `tokens.css` (light + dark blocks + `@theme inline`) — don't reach for the palette.
 - **Horizon / Custom layers (`src/components/horizon/*`, `src/components/custom/*`):** no `dark:` of any kind. These layers compose Primitives + semantic tokens only.
 

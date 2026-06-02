@@ -35,9 +35,7 @@ describe("IGRPInputPassword", () => {
 
   it("uses overridden i18n strings when wrapped in IGRPI18nProvider", () => {
     render(
-      <IGRPI18nProvider
-        strings={{ inputPassword: { showPasswordLabel: "Show", hidePasswordLabel: "Hide" } }}
-      >
+      <IGRPI18nProvider strings={{ inputPassword: { showPasswordLabel: "Show", hidePasswordLabel: "Hide" } }}>
         <IGRPInputPassword name="pwd" label="Password" />
       </IGRPI18nProvider>,
     )

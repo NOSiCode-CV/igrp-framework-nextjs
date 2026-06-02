@@ -34,6 +34,7 @@
     "ds-build-move-cli",
     "ds-closeout-bundle-a",
     "ds-highlight-token",
+    "ds-import-formatting-refactor",
     "ds-m1-m2-m3",
     "ds-quality-pass-peerdeps-styles-deprecation",
     "fix-basurl-guard",

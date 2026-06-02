@@ -65,6 +65,7 @@
     "migrator-08-m2m-oauth2",
     "migrator-10-logout-dep-fix",
     "migrator-10-session-refetch-menu-role-sync",
+    "migrator-11-callbackurl-error-copy",
     "migrator-flat-lock",
     "next-auth-enable-pkce-nonce",
     "next-auth-fixes-batch",

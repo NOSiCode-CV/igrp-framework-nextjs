@@ -56,7 +56,7 @@ export function SubLeafLink({ node, variant, pathname }: SubLeafLinkProps) {
         className={cn(
           'cursor-pointer px-2 py-2.5',
           isActive &&
-            'bg-sidebar-primary/10 text-sidebar-accent-foreground focus:bg-sidebar-primary/15 focus:text-sidebar-accent-foreground',
+            'bg-sidebar-active text-sidebar-active-foreground focus:bg-sidebar-active focus:text-sidebar-active-foreground',
         )}
       >
         {inner}

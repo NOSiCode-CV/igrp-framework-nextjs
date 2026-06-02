@@ -17,6 +17,28 @@ type OpenIdConfiguration = {
 
 const DISCOVERY_CACHE_TTL_MS = 5 * 60 * 1000;
 
+// Hard ceiling for IdP round-trips that sit on a user-blocking critical path
+// (notably `events.signOut` → discovery + `revokeOidcSession`, which delays the
+// /api/auth/signout response — and therefore the session-cookie clear — until
+// it resolves). `fetch` has no default timeout, so a slow or unreachable IdP
+// would otherwise hang sign-out indefinitely, leaving the user "logged out" in
+// the UI but still holding a valid cookie. Time-boxing converts the hang into a
+// prompt, recoverable failure: local sign-out still completes and the caller
+// falls back to /login.
+const IDP_FETCH_TIMEOUT_MS = 4000;
+
+/**
+ * `fetch` with an AbortController-backed timeout. On timeout the returned
+ * promise rejects with the AbortError, which existing call sites already treat
+ * as a network failure (cache eviction + retry for discovery, `network_error`
+ * for revocation).
+ */
+function fetchWithTimeout(input: string, init: RequestInit, timeoutMs: number): Promise<Response> {
+  const controller = new AbortController();
+  const timer = setTimeout(() => controller.abort(), timeoutMs);
+  return fetch(input, { ...init, signal: controller.signal }).finally(() => clearTimeout(timer));
+}
+
 type DiscoveryCacheEntry = { promise: Promise<OpenIdConfiguration>; expiresAt: number };
 
 const openIdConfigurationCache = new Map<string, DiscoveryCacheEntry>();
@@ -28,11 +50,15 @@ function getOpenIdConfiguration(discoveryUrl: string) {
     return cached.promise;
   }
 
-  const promise = fetch(discoveryUrl, {
-    headers: {
-      Accept: 'application/json',
+  const promise = fetchWithTimeout(
+    discoveryUrl,
+    {
+      headers: {
+        Accept: 'application/json',
+      },
     },
-  }).then(async (response) => {
+    IDP_FETCH_TIMEOUT_MS,
+  ).then(async (response) => {
     if (!response.ok) {
       throw new Error(`Failed to fetch OpenID configuration from ${discoveryUrl}`);
     }
@@ -225,18 +251,26 @@ export async function revokeOidcSession(
 
   let response: Response;
   try {
-    response = await fetch(revocationEndpoint, {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/x-www-form-urlencoded',
+    // Time-boxed: this runs inside `events.signOut`, which blocks the
+    // /api/auth/signout response (and the session-cookie clear) until it
+    // settles. A timeout here aborts the wait so local sign-out completes
+    // promptly even when the IdP revocation endpoint is unreachable.
+    response = await fetchWithTimeout(
+      revocationEndpoint,
+      {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/x-www-form-urlencoded',
+        },
+        body: new URLSearchParams({
+          client_id: clientId,
+          client_secret: clientSecret,
+          token: token.refreshToken,
+          token_type_hint: 'refresh_token',
+        }),
       },
-      body: new URLSearchParams({
-        client_id: clientId,
-        client_secret: clientSecret,
-        token: token.refreshToken,
-        token_type_hint: 'refresh_token',
-      }),
-    });
+      IDP_FETCH_TIMEOUT_MS,
+    );
   } catch (error) {
     return { ok: false, reason: 'network_error', error };
   }

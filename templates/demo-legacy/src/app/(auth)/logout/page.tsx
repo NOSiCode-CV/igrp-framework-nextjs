@@ -36,6 +36,17 @@ export default function LogoutPage() {
     // Hard fallback: only meant for the case where getLogoutUrl + signOut
     // never resolve (IdP revoke/end-session round-trip hangs). Generous so it
     // does NOT pre-empt a slow-but-successful single-logout.
+    //
+    // Deliberately NOT cleared on unmount. The `logoutStarted` module guard
+    // makes the effect body run exactly ONCE per module lifetime, so a remount
+    // during the logout window (React Strict Mode's mount→unmount→mount in dev,
+    // or `IGRPSessionWatcher` re-rendering the subtree on a session refetch)
+    // cannot re-arm this timer. If the unmount cleanup cleared it, that remount
+    // would strip away the only safety net and — should the async logout stall
+    // on a hanging IdP round-trip — leave the page rendering the spinner
+    // forever. The `settled` flag already prevents a double navigation, so a
+    // surviving timer that fires after a successful navigate is a harmless
+    // no-op (the page has already hard-navigated away).
     const fallbackTimeout = setTimeout(() => hardNavigate(buildLoginUrl()), 8000);
 
     (async () => {
@@ -72,10 +83,6 @@ export default function LogoutPage() {
         hardNavigate(buildLoginUrl());
       }
     })();
-
-    return () => {
-      clearTimeout(fallbackTimeout);
-    };
   }, []);
 
   return (

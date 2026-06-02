@@ -1,5 +1,25 @@
 # @igrp/framework-next
 
+## 0.1.0-beta.141
+
+### Patch Changes
+
+- ba91edb: feat: gate menu-role sync on `IGRP_SYNC_ON_CODE_MENU_ROLES`
+
+  The on-code menu push can now control the `syncRoles` argument of
+  `client.m2m.syncApplicationMenus(appCode, menus, syncRoles)`.
+  - **next-types**: new optional `apiManagementConfig.syncOnCodeMenuRoles?: boolean`. Defaults to `true` (matching the AM client default) when omitted.
+  - **next**: `igrpSyncMenus` now requires a `syncRoles` arg and forwards it as the third parameter of `syncApplicationMenus`; `planAccessManagementSync` derives `syncOnCodeMenuRoles` from config (`true` unless explicitly `false`) and `igrpStartupSync` threads it through.
+
+  Only consulted when the on-code menu push actually runs (`IGRP_SYNC_ON_CODE_MENUS=true` plus the outer `IGRP_SYNC_ACCESS` / `IGRP_PREVIEW_MODE` gates). Outer gating is unchanged.
+
+- Updated dependencies [b88c4b1]
+- Updated dependencies [7fb20b6]
+- Updated dependencies [ba91edb]
+  - @igrp/framework-next-auth@0.1.0-beta.134
+  - @igrp/framework-next-ui@0.1.0-beta.140
+  - @igrp/framework-next-types@0.1.0-beta.136
+
 ## 0.1.0-beta.140
 
 ### Patch Changes

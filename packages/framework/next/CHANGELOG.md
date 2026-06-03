@@ -1,5 +1,15 @@
 # @igrp/framework-next
 
+## 0.1.0-beta.143
+
+### Patch Changes
+
+- 6b42572: - Coordinated maintenance release: bump all framework packages to the next beta to keep versions aligned across the framework.
+- Updated dependencies [6b42572]
+  - @igrp/framework-next-auth@0.1.0-beta.135
+  - @igrp/framework-next-types@0.1.0-beta.137
+  - @igrp/framework-next-ui@0.1.0-beta.142
+
 ## 0.1.0-beta.142
 
 ### Patch Changes

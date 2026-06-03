@@ -1,5 +1,11 @@
 # @igrp/igrp-framework-react-design-system
 
+## 0.1.0-beta.134
+
+### Patch Changes
+
+- 6b42572: - Coordinated maintenance release: bump all framework packages to the next beta to keep versions aligned across the framework.
+
 ## 0.1.0-beta.133
 
 ### Patch Changes

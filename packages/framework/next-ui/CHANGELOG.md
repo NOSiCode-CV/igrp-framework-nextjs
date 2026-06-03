@@ -1,5 +1,15 @@
 # @igrp/framework-next-ui
 
+## 0.1.0-beta.142
+
+### Patch Changes
+
+- 6b42572: - Coordinated maintenance release: bump all framework packages to the next beta to keep versions aligned across the framework.
+- Updated dependencies [6b42572]
+  - @igrp/framework-next-auth@0.1.0-beta.135
+  - @igrp/framework-next-types@0.1.0-beta.137
+  - @igrp/igrp-framework-react-design-system@0.1.0-beta.134
+
 ## 0.1.0-beta.141
 
 ### Patch Changes

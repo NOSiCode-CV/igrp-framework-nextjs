@@ -8,6 +8,18 @@ import { isAuthBypass } from "@/lib/utils";
 import { reportError } from "@/lib/report-error";
 
 /**
+ * Minimal session shape used in bypass mode (IGRP_PREVIEW_MODE or
+ * AUTH_PROVIDER=none). Covers only the fields layouts/actions read; callers
+ * cast to their concrete session type. Single source of truth — do not inline.
+ */
+export const PREVIEW_SESSION_STUB = {
+  user: { name: "Preview User", email: "preview@example.com" },
+  accessToken: "preview-token",
+  expires: "9999-12-31T23:59:59.999Z",
+} as const;
+
+
+/**
  * Central IGRP auth instance.
  *
  * - Provider is resolved automatically from AUTH_PROVIDER env var (igrp-auth / none).

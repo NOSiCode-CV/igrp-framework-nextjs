@@ -2,7 +2,7 @@
 
 import { signOut } from "@igrp/framework-next-auth/client";
 import { IGRPTemplateLoading } from "@igrp/framework-next-ui";
-import { useEffect } from "react";
+import { useEffect, useRef, useState } from "react";
 
 import { getLogoutUrl } from "@/actions/igrp/auth";
 import { reportError } from "@/lib/report-error";
@@ -33,11 +33,28 @@ function buildLoginUrl(): string {
   return `${window.location.origin}${basePath}/login`;
 }
 
+// Shape for the IdP end-session request, split so it can be submitted as a
+// top-level POST (params in the body) instead of a GET (params in the URL).
+type EndSessionPost = { action: string; fields: Record<string, string> };
+
 export default function LogoutPage() {
+  // When set, the end-session POST form is rendered and auto-submitted. We use
+  // POST rather than a `window.location` GET so `id_token_hint` (the full
+  // signed ID token) rides in the request body — never the URL, browser
+  // history, or the IdP's access logs. It is still a TOP-LEVEL navigation, so
+  // the browser presents the IdP SSO cookie and the session is terminated.
+  const [endSessionPost, setEndSessionPost] = useState<EndSessionPost | null>(
+    null,
+  );
+  const formRef = useRef<HTMLFormElement>(null);
+
   useEffect(() => {
     if (logoutStarted) return;
     logoutStarted = true;
 
+    // Single source of truth for "we've already committed to navigating away".
+    // Shared by the fallback timer, the async logout body, and the IdP-POST
+    // branch so only ONE of them ever triggers a navigation.
     let settled = false;
     const hardNavigate = (url: string) => {
       if (settled) return;
@@ -45,10 +62,11 @@ export default function LogoutPage() {
       // Hard navigation rather than `router.replace`: logout must tear down
       // every client cache/provider that still holds the now-dead session.
       //
-      // INVARIANT: every exit path below MUST end in hardNavigate. Because
-      // `logoutStarted` is never reset, a full-page reload is the only thing
-      // that re-arms this page — a soft-nav (or early return without navigating)
-      // exit would wedge it un-loggable-out for the rest of the SPA lifetime.
+      // INVARIANT: every exit path MUST navigate away — either here, or via the
+      // end-session POST form. Because `logoutStarted` is never reset, a
+      // full-page load is the only thing that re-arms this page; a soft-nav (or
+      // an early return without navigating) would wedge it un-loggable-out for
+      // the rest of the SPA lifetime.
       window.location.replace(url);
     };
 
@@ -118,10 +136,22 @@ export default function LogoutPage() {
       if (settled) return;
 
       if (endSessionUrl) {
+        // Commit to the IdP-POST path: mark settled so the fallback timer /
+        // hardNavigate can no longer fire, then split the URL into a bare
+        // endpoint (form action) + params (hidden fields) and let the render
+        // below auto-submit it.
+        settled = true;
+        const url = new URL(endSessionUrl);
         if (process.env.NODE_ENV !== "production") {
-          console.debug("[logout] navigating to end-session URL", endSessionUrl);
+          console.debug(
+            "[logout] posting to end-session endpoint",
+            `${url.origin}${url.pathname}`,
+          );
         }
-        hardNavigate(endSessionUrl);
+        setEndSessionPost({
+          action: `${url.origin}${url.pathname}`,
+          fields: Object.fromEntries(url.searchParams),
+        });
       } else {
         if (process.env.NODE_ENV !== "production") {
           console.warn(
@@ -133,10 +163,27 @@ export default function LogoutPage() {
     })();
   }, []);
 
+  // Auto-submit the end-session form once it has rendered. This is the
+  // top-level cross-origin POST that terminates the IdP session; submitting
+  // from an effect (rather than building the form imperatively) keeps React in
+  // charge of the DOM node and is SSR-safe.
+  useEffect(() => {
+    if (endSessionPost) formRef.current?.requestSubmit();
+  }, [endSessionPost]);
+
   return (
-    <IGRPTemplateLoading
-      text="A terminar sessão..."
-      appCode={process.env.NEXT_PUBLIC_IGRP_APP_CODE}
-    />
+    <>
+      <IGRPTemplateLoading
+        text="A terminar sessão..."
+        appCode={process.env.NEXT_PUBLIC_IGRP_APP_CODE}
+      />
+      {endSessionPost && (
+        <form ref={formRef} method="POST" action={endSessionPost.action} hidden>
+          {Object.entries(endSessionPost.fields).map(([name, value]) => (
+            <input key={name} type="hidden" name={name} defaultValue={value} />
+          ))}
+        </form>
+      )}
+    </>
   );
 }

@@ -67,6 +67,7 @@
     "migrator-10-logout-dep-fix",
     "migrator-10-session-refetch-menu-role-sync",
     "migrator-11-callbackurl-error-copy",
+    "migrator-12-template-resync",
     "migrator-flat-lock",
     "next-auth-enable-pkce-nonce",
     "next-auth-fixes-batch",
@@ -91,6 +92,7 @@
     "sync-on-code-menus-template",
     "sync-on-code-menus-types",
     "sync-plan-regression-test",
+    "tidy-text-color",
     "token-revocation-on-logout",
     "vgrotmhs"
   ]

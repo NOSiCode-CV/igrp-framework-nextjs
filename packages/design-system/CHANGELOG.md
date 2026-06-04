@@ -1,5 +1,12 @@
 # @igrp/igrp-framework-react-design-system
 
+## 0.1.0-beta.135
+
+### Patch Changes
+
+- 0eb0323: - `IGRPText`: deprecate the `variant` color prop and stop applying a hard-coded solid color class, so text color now inherits from `className` / semantic tokens instead of being forced to `primary`.
+  - `IGRPStatusBanner`: drop redundant `cn()` wrappers around static className strings.
+
 ## 0.1.0-beta.134
 
 ### Patch Changes

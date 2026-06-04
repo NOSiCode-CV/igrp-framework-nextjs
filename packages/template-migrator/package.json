@@ -18,7 +18,8 @@
     "build:js": "tsup",
     "build:types": "tsc -p tsconfig.build.json --emitDeclarationOnly",
     "build": "pnpm prebuild && pnpm build:js && pnpm build:types",
-    "release": "pnpm build && pnpm publish --registry=https://sonatype.nosi.cv/repository/igrp/ --tag latest --no-git-checks",
+    "check:drift": "tsx scripts/check-drift.ts",
+    "release": "pnpm check:drift && pnpm build && pnpm publish --registry=https://sonatype.nosi.cv/repository/igrp/ --tag latest --no-git-checks",
     "clean": "rm -rf dist"
   },
   "dependencies": {

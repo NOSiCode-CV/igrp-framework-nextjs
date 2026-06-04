@@ -8,7 +8,10 @@ vi.mock('../oidc', async (importOriginal) => {
     ...original,
     revokeOidcSession: vi.fn().mockResolvedValue(undefined),
     introspectOidcToken: vi.fn().mockResolvedValue(true),
-    refreshOidcAccessToken: vi.fn().mockResolvedValue({ accessToken: 'refreshed-at', forceLogout: false }),
+    refreshOidcAccessToken: vi
+      .fn()
+      .mockResolvedValue({ accessToken: 'refreshed-at', forceLogout: false }),
+    getRecoveredToken: vi.fn().mockReturnValue(null),
   };
 });
 
@@ -211,17 +214,13 @@ describe('withIGRPAuth — isTokenExpiredOrFailed (middleware grace)', () => {
   it('does NOT treat a token 30s from expiry as expired (lets the client refresh win)', async () => {
     const withIGRPAuth = await getFactory();
     const instance = withIGRPAuth({ env: VALID_ENV });
-    expect(
-      instance.isTokenExpiredOrFailed({ expiresAt: Date.now() + 30_000 } as any),
-    ).toBe(false);
+    expect(instance.isTokenExpiredOrFailed({ expiresAt: Date.now() + 30_000 } as any)).toBe(false);
   });
 
   it('treats an already-expired token as expired', async () => {
     const withIGRPAuth = await getFactory();
     const instance = withIGRPAuth({ env: VALID_ENV });
-    expect(
-      instance.isTokenExpiredOrFailed({ expiresAt: Date.now() - 1_000 } as any),
-    ).toBe(true);
+    expect(instance.isTokenExpiredOrFailed({ expiresAt: Date.now() - 1_000 } as any)).toBe(true);
   });
 
   it('treats a refresh-error token as expired regardless of expiry', async () => {
@@ -288,7 +287,10 @@ describe('withIGRPAuth — jwt callback introspect gate', () => {
       forceLogout: true,
     };
 
-    const result = (await jwtCallback!({ token: validButTaggedToken, account: null } as any)) as any;
+    const result = (await jwtCallback!({
+      token: validButTaggedToken,
+      account: null,
+    } as any)) as any;
 
     expect(result.error).toBeUndefined();
     expect(result.forceLogout).toBe(false);
@@ -355,19 +357,25 @@ describe('withIGRPAuth — callbacks.redirect', () => {
   it('falls back to home when url equals baseUrl', async () => {
     const redirect = await getRedirect();
     const result = await redirect({ url: APP_BASE, baseUrl: APP_BASE });
-    expect(result).toBe(`${REDIRECT_ENV.NEXTAUTH_URL_INTERNAL}${REDIRECT_ENV.NEXT_PUBLIC_IGRP_APP_HOME_SLUG}`);
+    expect(result).toBe(
+      `${REDIRECT_ENV.NEXTAUTH_URL_INTERNAL}${REDIRECT_ENV.NEXT_PUBLIC_IGRP_APP_HOME_SLUG}`,
+    );
   });
 
   it('rejects protocol-relative URLs (open-redirect guard)', async () => {
     const redirect = await getRedirect();
     const result = await redirect({ url: '//evil.com/path', baseUrl: APP_BASE });
-    expect(result).toBe(`${REDIRECT_ENV.NEXTAUTH_URL_INTERNAL}${REDIRECT_ENV.NEXT_PUBLIC_IGRP_APP_HOME_SLUG}`);
+    expect(result).toBe(
+      `${REDIRECT_ENV.NEXTAUTH_URL_INTERNAL}${REDIRECT_ENV.NEXT_PUBLIC_IGRP_APP_HOME_SLUG}`,
+    );
   });
 
   it('rejects cross-origin absolute URLs', async () => {
     const redirect = await getRedirect();
     const result = await redirect({ url: 'http://evil.com/path', baseUrl: APP_BASE });
-    expect(result).toBe(`${REDIRECT_ENV.NEXTAUTH_URL_INTERNAL}${REDIRECT_ENV.NEXT_PUBLIC_IGRP_APP_HOME_SLUG}`);
+    expect(result).toBe(
+      `${REDIRECT_ENV.NEXTAUTH_URL_INTERNAL}${REDIRECT_ENV.NEXT_PUBLIC_IGRP_APP_HOME_SLUG}`,
+    );
   });
 
   it('defers to callbackExtensions.redirect when provided', async () => {
@@ -383,5 +391,61 @@ describe('withIGRPAuth — callbacks.redirect', () => {
     });
     expect(customRedirect).toHaveBeenCalledWith({ url: '/some/page', baseUrl: APP_BASE });
     expect(result).toBe('/custom');
+  });
+});
+
+describe('withIGRPAuth — jwt callback rotation recovery', () => {
+  beforeEach(() => {
+    vi.clearAllMocks();
+  });
+
+  it('uses a recovered token and skips introspection + refresh on a cache hit', async () => {
+    const withIGRPAuth = await getFactory();
+    const instance = withIGRPAuth({ env: VALID_ENV });
+    const jwtCb = instance.authOptions.callbacks?.jwt;
+    expect(jwtCb).toBeDefined();
+
+    const recoveredToken = {
+      refreshToken: 'new-rt',
+      accessToken: 'new-at',
+      expiresAt: Date.now() + 180_000,
+      error: undefined,
+      forceLogout: false,
+    };
+    (oidcModule.getRecoveredToken as ReturnType<typeof vi.fn>).mockReturnValue(recoveredToken);
+
+    // Expired access token; the cookie still holds the OLD refresh token.
+    const expiredToken = {
+      refreshToken: 'old-rt',
+      accessToken: 'old-at',
+      expiresAt: Date.now() - 1000,
+    };
+
+    const result = (await jwtCb!({ token: expiredToken, account: undefined } as any)) as any;
+
+    expect(oidcModule.getRecoveredToken).toHaveBeenCalledWith('old-rt');
+    expect(oidcModule.introspectOidcToken).not.toHaveBeenCalled();
+    expect(oidcModule.refreshOidcAccessToken).not.toHaveBeenCalled();
+    expect(result.accessToken).toBe('new-at');
+    expect(result.refreshToken).toBe('new-rt');
+    expect(result.forceLogout).toBe(false);
+  });
+
+  it('falls through to introspect + refresh when there is no recovered token', async () => {
+    const withIGRPAuth = await getFactory();
+    const instance = withIGRPAuth({ env: VALID_ENV });
+    const jwtCb = instance.authOptions.callbacks?.jwt;
+
+    (oidcModule.getRecoveredToken as ReturnType<typeof vi.fn>).mockReturnValue(null);
+
+    const expiredToken = {
+      refreshToken: 'old-rt',
+      accessToken: 'old-at',
+      expiresAt: Date.now() - 1000,
+    };
+    await jwtCb!({ token: expiredToken, account: undefined } as any);
+
+    expect(oidcModule.introspectOidcToken).toHaveBeenCalled();
+    expect(oidcModule.refreshOidcAccessToken).toHaveBeenCalled();
   });
 });

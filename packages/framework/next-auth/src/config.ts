@@ -33,7 +33,12 @@ import {
   isAuthDisabled as isAuthDisabledFromEnv,
   type AuthProviderId,
 } from './providers';
-import { introspectOidcToken, refreshOidcAccessToken, revokeOidcSession } from './oidc';
+import {
+  getRecoveredToken,
+  introspectOidcToken,
+  refreshOidcAccessToken,
+  revokeOidcSession,
+} from './oidc';
 import { escapeHtml, sanitizeRedirectUrl } from './sanitize';
 
 // ─── Config Error ─────────────────────────────────────────────────────────────
@@ -460,17 +465,34 @@ export function withIGRPAuth(options: IGRPAuthOptions = {}): IGRPAuthInstance {
           return igrpToken;
         }
 
-        // Access token expired (or within its refresh buffer). Introspect the
-        // refresh token first to catch a server-side revocation before we try
-        // to use it (fail-open: a flaky introspection must never block refresh).
-        const refreshTokenActive = await introspectOidcToken(igrpToken, env).catch(() => true);
-        if (!refreshTokenActive) {
-          igrpToken = { ...igrpToken, error: 'RefreshAccessTokenError', forceLogout: true };
+        // Access token expired (or within its refresh buffer).
+        //
+        // First, try to recover a rotated token from a recent refresh that
+        // could not persist its cookie (e.g. a refresh that ran inside an RSC
+        // render). This MUST run before introspection: after rotation the old
+        // refresh token reads `active: false`, so introspecting here would
+        // short-circuit a recoverable session straight to forceLogout.
+        const recovered = getRecoveredToken(igrpToken.refreshToken);
+        if (recovered) {
+          if (env.NODE_ENV !== 'production') {
+            console.debug('[next-auth.jwt] recovered rotated refresh token from cache', {
+              recovered: true,
+            });
+          }
+          igrpToken = recovered;
         } else {
-          try {
-            igrpToken = await refreshOidcAccessToken(igrpToken, env);
-          } catch {
+          // Introspect the refresh token to catch a server-side revocation
+          // before we try to use it (fail-open: a flaky introspection must
+          // never block refresh).
+          const refreshTokenActive = await introspectOidcToken(igrpToken, env).catch(() => true);
+          if (!refreshTokenActive) {
             igrpToken = { ...igrpToken, error: 'RefreshAccessTokenError', forceLogout: true };
+          } else {
+            try {
+              igrpToken = await refreshOidcAccessToken(igrpToken, env);
+            } catch {
+              igrpToken = { ...igrpToken, error: 'RefreshAccessTokenError', forceLogout: true };
+            }
           }
         }
 

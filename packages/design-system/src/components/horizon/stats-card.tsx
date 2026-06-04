@@ -363,7 +363,7 @@ function IGRPStatsCard({
       id={ref}
       {...props}
     >
-      <div className={cn("flex flex-col flex-1 mx-4")}>
+      <div className="flex flex-col flex-1 mx-4">
         {title && (
           <p
             className={cn(

@@ -27,6 +27,15 @@ const DISCOVERY_CACHE_TTL_MS = 5 * 60 * 1000;
 // falls back to /login.
 const IDP_FETCH_TIMEOUT_MS = 4000;
 
+// Bounded retry for the refresh-token grant. The access token has a short TTL
+// (~3 min against the IGRP IdP), so refreshes are frequent and a single
+// transient blip (network error, timeout, or a 5xx during an IdP deploy)
+// should not immediately log the user out. 4xx responses — notably
+// `invalid_grant` for a consumed/expired refresh token — are permanent and are
+// never retried (replaying a rotated token only earns another rejection).
+const REFRESH_MAX_ATTEMPTS = 2;
+const REFRESH_RETRY_DELAY_MS = 300;
+
 /**
  * `fetch` with an AbortController-backed timeout. On timeout the returned
  * promise rejects with the AbortError, which existing call sites already treat
@@ -150,21 +159,48 @@ async function performRefresh(
     .filter(Boolean);
   if (!requestedScopes.includes('openid')) requestedScopes.unshift('openid');
 
-  const response = await fetch(openIdConfiguration.token_endpoint, {
-    method: 'POST',
-    headers: {
-      'Content-Type': 'application/x-www-form-urlencoded',
-    },
-    body: new URLSearchParams({
-      client_id: clientId,
-      client_secret: clientSecret,
-      grant_type: 'refresh_token',
-      refresh_token: token.refreshToken,
-      scope: requestedScopes.join(' '),
-    }),
+  const body = new URLSearchParams({
+    client_id: clientId,
+    client_secret: clientSecret,
+    grant_type: 'refresh_token',
+    refresh_token: token.refreshToken,
+    scope: requestedScopes.join(' '),
   });
 
-  if (!response.ok) {
+  // Retry only on TRANSIENT failures (network error/timeout, or 5xx). A 4xx is
+  // a permanent decision by the IdP (`invalid_grant`, `invalid_client`, …) and
+  // breaks out immediately — retrying it is pointless and, with rotation, the
+  // refresh token is already spent.
+  let response: Response | undefined;
+  for (let attempt = 1; attempt <= REFRESH_MAX_ATTEMPTS; attempt++) {
+    try {
+      response = await fetchWithTimeout(
+        openIdConfiguration.token_endpoint,
+        {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+          body,
+        },
+        IDP_FETCH_TIMEOUT_MS,
+      );
+    } catch {
+      // Network error or timeout (AbortError) — transient.
+      response = undefined;
+    }
+
+    if (response) {
+      if (response.ok) break;
+      // 4xx — permanent; do not retry.
+      if (response.status < 500) break;
+      // 5xx falls through to retry.
+    }
+
+    if (attempt < REFRESH_MAX_ATTEMPTS) {
+      await new Promise((resolve) => setTimeout(resolve, REFRESH_RETRY_DELAY_MS));
+    }
+  }
+
+  if (!response || !response.ok) {
     return {
       ...token,
       error: 'RefreshAccessTokenError',
@@ -193,12 +229,25 @@ async function performRefresh(
       console.warn(
         '[oidc.refreshOidcAccessToken] IdP did not return a new id_token on refresh — ' +
           'OIDC end-session may fail because the stored id_token references a stale session id. ' +
-          'Check the IdP\'s OIDC refresh-token grant configuration (Spring AS requires the ' +
+          "Check the IdP's OIDC refresh-token grant configuration (Spring AS requires the " +
           'refresh-token grant authentication-converter to include the openid scope).',
       );
     } else {
       console.debug('[oidc.refreshOidcAccessToken] refresh returned a fresh id_token');
     }
+
+    // TEMP DIAGNOSTIC (dev-only): does the IdP rotate refresh tokens? When the
+    // returned refresh_token differs from the one we sent, the IdP rotates
+    // (`reuseRefreshTokens=false`) — which makes the RSC-refresh-can't-persist
+    // path a real logout risk (see docs/2026-06-03-refresh-token-flow-review.md
+    // #1). `rotated: false` means the IdP reuses the token and that path is
+    // merely a redundant round-trip. Logs a boolean only — never the token.
+    // Remove once the rotation behavior is confirmed.
+    const rotated =
+      typeof refreshedToken.refresh_token === 'string' &&
+      refreshedToken.refresh_token.length > 0 &&
+      refreshedToken.refresh_token !== token.refreshToken;
+    console.debug('[oidc.refreshOidcAccessToken] refresh-token rotation', { rotated });
   }
 
   return {
@@ -225,7 +274,13 @@ async function performRefresh(
  */
 export type RevokeOidcSessionResult =
   | { ok: true; status: number }
-  | { ok: false; reason: 'no_refresh_token' | 'no_revocation_endpoint' | 'http_error' | 'network_error'; status?: number; body?: string; error?: unknown };
+  | {
+      ok: false;
+      reason: 'no_refresh_token' | 'no_revocation_endpoint' | 'http_error' | 'network_error';
+      status?: number;
+      body?: string;
+      error?: unknown;
+    };
 
 export async function revokeOidcSession(
   token: JWT,

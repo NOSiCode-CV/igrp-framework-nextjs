@@ -150,11 +150,36 @@ refresh-capable jwt run per request.
 
 ## Status
 
-- **Applied:** `IGRP_SESSION_REFETCH_INTERVAL` 900 → 120 in `templates/demo-legacy/.env`
-  (local, gitignored; restart dev server to take effect). Comment corrected to
-  reflect the measured ~177s token.
-- **Not done (need decisions / a release):** #2 (verify IdP setting), #3–#8
-  (framework-level changes).
-- **Note:** env comments (`.env`, `.env.example`) assume a 300s access token;
-  the measured token is ~177s. If the IGRP server issues 3-min tokens generally,
-  the `.env.example` default (180) is slightly high too.
+Recommendations applied 2026-06-03 (follow-up pass):
+
+- **#2 (refetch interval) — DONE in source.** Template default
+  `DEFAULT_REFETCH_INTERVAL_SECONDS` 180 → 150 (below the measured ~177s TTL),
+  comment + `.env.example` (now 150, with rationale) corrected. The local `.env`
+  override (120) still applies on top for dev.
+- **#3 (no refresh retry) — DONE.** `performRefresh` now retries the grant once
+  on a transient failure (network error/timeout or 5xx) and is time-boxed via
+  `fetchWithTimeout`; 4xx (`invalid_grant`, …) is never retried. Covered by new
+  tests in `oidc.test.ts` (`refreshOidcAccessToken — transient retry`).
+- **#5 (getAccessToken secret) — DONE.** `secret || ''` → `secret ||
+  process.env.NEXTAUTH_SECRET`, matching `getTokenFromRequest`.
+- **#6 (dead invalid_grant branch) — DONE.** Removed the unreachable
+  `token.error === 'invalid_grant'` check in `isTokenExpiredOrFailed`;
+  `'RefreshAccessTokenError'` is the single canonical failure flag.
+- **#7 (session.maxAge) — DONE (env-configurable).** Template reads optional
+  `IGRP_SESSION_MAX_AGE` (seconds) and passes `session.maxAge` only when set;
+  unset preserves the NextAuth default. Documented in `.env.example`.
+- **#8 (introspection round-trip) — KEPT.** Retained for early revocation
+  detection; fail-open already prevents it from blocking refresh.
+- **#1 (IdP `reuseRefreshTokens`) — INSTRUMENTED, awaiting a reading.** A
+  **temporary dev-only** log was added in `performRefresh` (`oidc.ts`):
+  `[oidc.refreshOidcAccessToken] refresh-token rotation { rotated }`. Run
+  `pnpm dev:demo`, stay logged in past one refresh (~150s), read the server log.
+  `rotated: true` → IdP rotates → the RSC-refresh path is a real logout risk;
+  `rotated: false` → reuse → benign. **Remove this diagnostic before
+  versioning/publishing `framework-next-auth`.**
+- **#4 (multi-pod rotation race) — STILL OPEN.** Needs sticky sessions or a
+  shared lock; not addressable in-package.
+
+Release: `@igrp/framework-next-auth` changes (#3, #5, #6) have a changeset
+(`.changeset/refresh-retry-secret-fallback.md`, patch) and the package builds +
+tests pass (83). **Not yet versioned/published** — awaiting authorization.

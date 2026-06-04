@@ -626,7 +626,10 @@ export function withIGRPAuth(options: IGRPAuthOptions = {}): IGRPAuthInstance {
   function isTokenExpiredOrFailed(token: JWT): boolean {
     const expiresAt = typeof token.expiresAt === 'number' ? token.expiresAt : undefined;
     const isExpired = expiresAt !== undefined && expiresAt <= Date.now() + TOKEN_EXPIRY_GRACE_MS;
-    return isExpired || token.error === 'RefreshAccessTokenError' || token.error === 'invalid_grant';
+    // `token.error` is only ever set to 'RefreshAccessTokenError' (the refresh
+    // path flattens the IdP's OAuth error body into this single flag), so that
+    // is the only failure value to check here.
+    return isExpired || token.error === 'RefreshAccessTokenError';
   }
 
   function getLoginRedirectUrl(request: { url: string }): URL {
@@ -643,7 +646,7 @@ export function withIGRPAuth(options: IGRPAuthOptions = {}): IGRPAuthInstance {
       req: {
         cookies: Object.fromEntries(cookieStore.getAll().map((c) => [c.name, c.value])),
       } as NextApiRequest,
-      secret: secret || '',
+      secret: secret || process.env.NEXTAUTH_SECRET,
     });
     return token as JWT | null;
   }

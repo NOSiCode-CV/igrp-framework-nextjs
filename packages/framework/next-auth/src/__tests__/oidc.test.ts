@@ -152,6 +152,107 @@ describe('refreshOidcAccessToken — expiresAt units', () => {
   });
 });
 
+describe('refreshOidcAccessToken — transient retry', () => {
+  function stubTokenFetch(
+    handler: (call: number) => Promise<{ ok: boolean; status: number; body: unknown }>,
+  ) {
+    let tokenCalls = 0;
+    const counter = { get: () => tokenCalls };
+    vi.stubGlobal(
+      'fetch',
+      vi.fn(async (url: string) => {
+        if (url === DISCOVERY_URL) {
+          return { ok: true, status: 200, json: async () => MOCK_DISCOVERY };
+        }
+        if (url === MOCK_DISCOVERY.token_endpoint) {
+          tokenCalls += 1;
+          const { ok, status, body } = await handler(tokenCalls);
+          return { ok, status, json: async () => body };
+        }
+        return { ok: false, status: 404, json: async () => ({}) };
+      }),
+    );
+    return counter;
+  }
+
+  it('retries once on a 5xx and succeeds on the second attempt', async () => {
+    const counter = stubTokenFetch(async (call) =>
+      call === 1
+        ? { ok: false, status: 503, body: {} }
+        : {
+            ok: true,
+            status: 200,
+            body: {
+              access_token: 'retry-at',
+              refresh_token: 'retry-rt',
+              expires_in: 3600,
+              id_token: 'id',
+            },
+          },
+    );
+    const { refreshOidcAccessToken } = await import('../oidc');
+    const result = await refreshOidcAccessToken(makeToken(), VALID_ENV);
+
+    expect(counter.get()).toBe(2);
+    expect(result.error).toBeUndefined();
+    expect(result.accessToken).toBe('retry-at');
+  });
+
+  it('does NOT retry on a 4xx (invalid_grant) and forces logout', async () => {
+    const counter = stubTokenFetch(async () => ({
+      ok: false,
+      status: 400,
+      body: { error: 'invalid_grant' },
+    }));
+    const { refreshOidcAccessToken } = await import('../oidc');
+    const result = await refreshOidcAccessToken(makeToken(), VALID_ENV);
+
+    expect(counter.get()).toBe(1);
+    expect(result.forceLogout).toBe(true);
+    expect(result.error).toBe('RefreshAccessTokenError');
+  });
+
+  it('retries once after a network error then succeeds', async () => {
+    let tokenCalls = 0;
+    vi.stubGlobal(
+      'fetch',
+      vi.fn(async (url: string) => {
+        if (url === DISCOVERY_URL)
+          return { ok: true, status: 200, json: async () => MOCK_DISCOVERY };
+        if (url === MOCK_DISCOVERY.token_endpoint) {
+          tokenCalls += 1;
+          if (tokenCalls === 1) throw new Error('ECONNRESET');
+          return {
+            ok: true,
+            status: 200,
+            json: async () => ({
+              access_token: 'net-at',
+              refresh_token: 'net-rt',
+              expires_in: 3600,
+            }),
+          };
+        }
+        return { ok: false, status: 404, json: async () => ({}) };
+      }),
+    );
+    const { refreshOidcAccessToken } = await import('../oidc');
+    const result = await refreshOidcAccessToken(makeToken(), VALID_ENV);
+
+    expect(tokenCalls).toBe(2);
+    expect(result.accessToken).toBe('net-at');
+  });
+
+  it('gives up after exhausting retries on repeated 5xx', async () => {
+    const counter = stubTokenFetch(async () => ({ ok: false, status: 502, body: {} }));
+    const { refreshOidcAccessToken } = await import('../oidc');
+    const result = await refreshOidcAccessToken(makeToken(), VALID_ENV);
+
+    expect(counter.get()).toBe(2);
+    expect(result.forceLogout).toBe(true);
+    expect(result.error).toBe('RefreshAccessTokenError');
+  });
+});
+
 describe('buildEndSessionUrl', () => {
   it('builds URL with id_token_hint, post_logout_redirect_uri, and client_id', async () => {
     mockFetch([{ url: DISCOVERY_URL, body: MOCK_DISCOVERY }]);
@@ -180,7 +281,11 @@ describe('buildEndSessionUrl', () => {
     mockFetch([{ url: DISCOVERY_URL, body: MOCK_DISCOVERY }]);
     const { buildEndSessionUrl } = await import('../oidc');
 
-    const url = await buildEndSessionUrl(makeToken({ idToken: undefined }), VALID_ENV, 'http://app/login');
+    const url = await buildEndSessionUrl(
+      makeToken({ idToken: undefined }),
+      VALID_ENV,
+      'http://app/login',
+    );
 
     expect(url).not.toBeNull();
     const parsed = new URL(url!);
@@ -274,7 +379,10 @@ describe('introspectOidcToken', () => {
       }),
     );
     const { introspectOidcToken } = await import('../oidc');
-    await introspectOidcToken(makeToken({ refreshToken: 'rt-xyz', accessToken: 'at-xyz' }), VALID_ENV);
+    await introspectOidcToken(
+      makeToken({ refreshToken: 'rt-xyz', accessToken: 'at-xyz' }),
+      VALID_ENV,
+    );
 
     const params = new URLSearchParams(capturedBody[0]);
     expect(params.get('token')).toBe('rt-xyz');
@@ -286,7 +394,9 @@ describe('introspectOidcToken', () => {
     vi.stubGlobal('fetch', fetchSpy);
     const { introspectOidcToken } = await import('../oidc');
 
-    expect(await introspectOidcToken({ authProviderId: 'none' }, { AUTH_PROVIDER: 'none' })).toBe(true);
+    expect(await introspectOidcToken({ authProviderId: 'none' }, { AUTH_PROVIDER: 'none' })).toBe(
+      true,
+    );
     expect(fetchSpy).not.toHaveBeenCalled();
   });
 

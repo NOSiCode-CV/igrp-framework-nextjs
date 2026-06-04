@@ -111,6 +111,76 @@ function getClientCredentials(env: AuthEnvironment) {
 // Single-process dev is fully covered; sticky routing covers most prod.
 const inflightRefreshes = new Map<string, Promise<JWT>>();
 
+// Rotation-result recovery cache. NextAuth runs the jwt callback on every
+// session read, including RSC renders where `cookies()` is read-only. When the
+// IdP ROTATES refresh tokens, a refresh that runs inside an RSC render rotates
+// the token but cannot persist it; the next read replays the consumed token and
+// the IdP rejects it with `invalid_grant`, logging the user out of a healthy
+// session. Keyed by the CONSUMED refresh token, this remembers the rotated
+// result for a short window so the next persist-capable read (the client
+// session poll or a server action) can recover and persist it.
+//
+// Where `inflightRefreshes` collapses CONCURRENT refreshes, this bridges
+// SEQUENTIAL ones (an RSC render, then a later poll) — the gap the dedup misses.
+//
+// TTL is coupled to the access-token lifetime / session poll interval: the entry
+// must outlive the gap between an RSC rotation and the next persisting poll.
+// With a ~180s access token and a 150s poll, 180s comfortably bridges it while
+// holding a soon-stale refresh token in memory only briefly.
+//
+// In-memory only; multi-instance deployments without sticky sessions can still
+// race across pods (same limitation as `inflightRefreshes`). The `recoveryStore`
+// object is the seam where a shared store (e.g. Redis) could later drop in.
+const RECOVERY_TTL_MS = 180_000;
+const RECOVERY_MAX_ENTRIES = 5000;
+
+type RecoveryEntry = { result: JWT; expiresAt: number };
+
+const recoveryStore = (() => {
+  const entries = new Map<string, RecoveryEntry>();
+
+  function sweepExpired(now: number) {
+    for (const [key, entry] of entries) {
+      if (entry.expiresAt <= now) entries.delete(key);
+    }
+  }
+
+  return {
+    get(refreshToken: string | undefined): JWT | null {
+      if (!refreshToken) return null;
+      const entry = entries.get(refreshToken);
+      if (!entry) return null;
+      if (entry.expiresAt <= Date.now()) {
+        entries.delete(refreshToken);
+        return null;
+      }
+      return entry.result;
+    },
+    set(refreshToken: string, result: JWT) {
+      const now = Date.now();
+      if (entries.size >= RECOVERY_MAX_ENTRIES) {
+        sweepExpired(now);
+        if (entries.size >= RECOVERY_MAX_ENTRIES) {
+          // Still full after sweeping — drop the oldest insertion (Map preserves order).
+          const oldest = entries.keys().next().value;
+          if (oldest !== undefined) entries.delete(oldest);
+        }
+      }
+      entries.set(refreshToken, { result, expiresAt: now + RECOVERY_TTL_MS });
+    },
+  };
+})();
+
+/**
+ * Returns a rotated token previously cached by {@link refreshOidcAccessToken}
+ * for the given (now-consumed) refresh token, or null if absent/expired. Pure
+ * peek — no network, no deletion-on-read (both an RSC read and the persisting
+ * poll may need the same entry before one persists; it self-evicts by TTL).
+ */
+export function getRecoveredToken(refreshToken: string | undefined): JWT | null {
+  return recoveryStore.get(refreshToken);
+}
+
 export async function refreshOidcAccessToken(token: JWT, env: AuthEnvironment): Promise<JWT> {
   if (!token.refreshToken) {
     return {
@@ -235,31 +305,31 @@ async function performRefresh(
     } else {
       console.debug('[oidc.refreshOidcAccessToken] refresh returned a fresh id_token');
     }
-
-    // TEMP DIAGNOSTIC (dev-only): does the IdP rotate refresh tokens? When the
-    // returned refresh_token differs from the one we sent, the IdP rotates
-    // (`reuseRefreshTokens=false`) — which makes the RSC-refresh-can't-persist
-    // path a real logout risk (see docs/2026-06-03-refresh-token-flow-review.md
-    // #1). `rotated: false` means the IdP reuses the token and that path is
-    // merely a redundant round-trip. Logs a boolean only — never the token.
-    // Remove once the rotation behavior is confirmed.
-    const rotated =
-      typeof refreshedToken.refresh_token === 'string' &&
-      refreshedToken.refresh_token.length > 0 &&
-      refreshedToken.refresh_token !== token.refreshToken;
-    console.debug('[oidc.refreshOidcAccessToken] refresh-token rotation', { rotated });
   }
 
-  return {
+  const oldRefreshToken = token.refreshToken;
+  const newRefreshToken: string = refreshedToken.refresh_token ?? token.refreshToken;
+  const refreshed: JWT = {
     ...token,
     accessToken: refreshedToken.access_token,
     idToken: refreshedToken.id_token || token.idToken,
     expiresAt: Date.now() + (refreshedToken.expires_in ?? 3600) * 1000,
-    refreshToken: refreshedToken.refresh_token ?? token.refreshToken,
+    refreshToken: newRefreshToken,
     authProviderId: providerId,
     error: undefined,
     forceLogout: false,
   };
+
+  // The IdP rotated the refresh token. If this refresh ran where the cookie
+  // can't be persisted (an RSC render), the rotated token would be lost and the
+  // next read would replay the consumed one → invalid_grant → logout. Remember
+  // the outcome keyed by the CONSUMED token so the next persist-capable read can
+  // recover it. Skip when the token was reused (the cookie's token still works).
+  if (newRefreshToken !== oldRefreshToken) {
+    recoveryStore.set(oldRefreshToken, refreshed);
+  }
+
+  return refreshed;
 }
 
 /**

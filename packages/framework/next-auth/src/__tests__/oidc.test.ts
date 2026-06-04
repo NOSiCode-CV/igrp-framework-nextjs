@@ -253,6 +253,81 @@ describe('refreshOidcAccessToken — transient retry', () => {
   });
 });
 
+describe('refreshOidcAccessToken — rotation recovery cache', () => {
+  it('caches the rotated result so getRecoveredToken returns it for the old token', async () => {
+    mockFetch([
+      { url: DISCOVERY_URL, body: MOCK_DISCOVERY },
+      {
+        url: MOCK_DISCOVERY.token_endpoint,
+        body: {
+          access_token: 'new-at',
+          refresh_token: 'new-rt',
+          expires_in: 3600,
+          id_token: 'new-id',
+        },
+      },
+    ]);
+    const { refreshOidcAccessToken, getRecoveredToken } = await import('../oidc');
+
+    const result = await refreshOidcAccessToken(makeToken({ refreshToken: 'old-rt' }), VALID_ENV);
+    expect(result.refreshToken).toBe('new-rt');
+
+    const recovered = getRecoveredToken('old-rt');
+    expect(recovered).not.toBeNull();
+    expect(recovered!.refreshToken).toBe('new-rt');
+    expect(recovered!.accessToken).toBe('new-at');
+    expect(recovered!.error).toBeUndefined();
+    expect(recovered!.forceLogout).toBe(false);
+  });
+
+  it('does not cache when the refresh token is reused (no rotation)', async () => {
+    mockFetch([
+      { url: DISCOVERY_URL, body: MOCK_DISCOVERY },
+      {
+        url: MOCK_DISCOVERY.token_endpoint,
+        body: {
+          access_token: 'new-at',
+          refresh_token: 'old-rt',
+          expires_in: 3600,
+          id_token: 'new-id',
+        },
+      },
+    ]);
+    const { refreshOidcAccessToken, getRecoveredToken } = await import('../oidc');
+
+    await refreshOidcAccessToken(makeToken({ refreshToken: 'old-rt' }), VALID_ENV);
+    expect(getRecoveredToken('old-rt')).toBeNull();
+  });
+
+  it('expires a cached rotation after the TTL', async () => {
+    vi.useFakeTimers();
+    try {
+      mockFetch([
+        { url: DISCOVERY_URL, body: MOCK_DISCOVERY },
+        {
+          url: MOCK_DISCOVERY.token_endpoint,
+          body: { access_token: 'new-at', refresh_token: 'new-rt', expires_in: 3600 },
+        },
+      ]);
+      const { refreshOidcAccessToken, getRecoveredToken } = await import('../oidc');
+
+      await refreshOidcAccessToken(makeToken({ refreshToken: 'old-rt' }), VALID_ENV);
+      expect(getRecoveredToken('old-rt')).not.toBeNull();
+
+      vi.advanceTimersByTime(180_000 + 1000);
+      expect(getRecoveredToken('old-rt')).toBeNull();
+    } finally {
+      vi.useRealTimers();
+    }
+  });
+
+  it('getRecoveredToken returns null for an unknown or missing token', async () => {
+    const { getRecoveredToken } = await import('../oidc');
+    expect(getRecoveredToken('never-seen')).toBeNull();
+    expect(getRecoveredToken(undefined)).toBeNull();
+  });
+});
+
 describe('buildEndSessionUrl', () => {
   it('builds URL with id_token_hint, post_logout_redirect_uri, and client_id', async () => {
     mockFetch([{ url: DISCOVERY_URL, body: MOCK_DISCOVERY }]);

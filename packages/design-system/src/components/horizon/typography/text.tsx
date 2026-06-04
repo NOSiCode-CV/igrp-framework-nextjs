@@ -137,7 +137,6 @@ function IGRPText({
         }
     : {}
 
-
   return (
     <Component
       className={cn(

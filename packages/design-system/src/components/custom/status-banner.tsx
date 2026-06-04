@@ -54,13 +54,13 @@ function IGRPStatusBanner({
       variant={variant}
       color={color}
       iconName="Circle"
-      iconClassName={cn("h-3 w-3 fill-current")}
+      iconClassName="h-3 w-3 fill-current"
       className={cn("p-4 rounded-lg items-center", className)}
       alignment="center"
       name={ref}
     >
       <span className={cn("font-medium")}>{text}</span>
-      <IGRPBadge variant={badgeVariant} color={badgeColor} badgeClassName={cn("ml-4 font-normal")}>
+      <IGRPBadge variant={badgeVariant} color={badgeColor} badgeClassName="ml-4 font-normal">
         {badgeText}
       </IGRPBadge>
     </IGRPAlert>

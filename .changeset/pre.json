@@ -75,6 +75,7 @@
     "oidc-refresh-dedupe",
     "raise-node-engine",
     "redirect-callback-honor-callback-url",
+    "refresh-retry-secret-fallback",
     "remove-react-cache-api-config",
     "rename-provider-igrp-auth",
     "session-watcher-no-unmount-on-refetch",

@@ -170,13 +170,14 @@ Recommendations applied 2026-06-03 (follow-up pass):
   unset preserves the NextAuth default. Documented in `.env.example`.
 - **#8 (introspection round-trip) — KEPT.** Retained for early revocation
   detection; fail-open already prevents it from blocking refresh.
-- **#1 (IdP `reuseRefreshTokens`) — INSTRUMENTED, awaiting a reading.** A
-  **temporary dev-only** log was added in `performRefresh` (`oidc.ts`):
-  `[oidc.refreshOidcAccessToken] refresh-token rotation { rotated }`. Run
-  `pnpm dev:demo`, stay logged in past one refresh (~150s), read the server log.
-  `rotated: true` → IdP rotates → the RSC-refresh path is a real logout risk;
-  `rotated: false` → reuse → benign. **Remove this diagnostic before
-  versioning/publishing `framework-next-auth`.**
+- **#1 (IdP `reuseRefreshTokens`) — CONFIRMED rotating; FIXED in-process.** The
+  dev diagnostic returned `rotated: true` (IdP rotates). Implemented an in-memory
+  rotation-result recovery cache in `oidc.ts` (`getRecoveredToken` + populate on
+  rotation) and reordered the jwt callback to check recovery before
+  introspection, so an RSC-render rotation is recovered+persisted by the next
+  poll instead of forcing logout. Temporary `rotated` diagnostic removed. Design:
+  `docs/superpowers/specs/2026-06-03-refresh-token-rotation-recovery-design.md`.
+  Multi-pod-without-stickiness remains a documented limitation (in-memory).
 - **#4 (multi-pod rotation race) — STILL OPEN.** Needs sticky sessions or a
   shared lock; not addressable in-package.
 

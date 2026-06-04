@@ -68,6 +68,7 @@
     "migrator-10-session-refetch-menu-role-sync",
     "migrator-11-callbackurl-error-copy",
     "migrator-12-template-resync",
+    "migrator-13-resync-beta145",
     "migrator-flat-lock",
     "next-auth-enable-pkce-nonce",
     "next-auth-fixes-batch",

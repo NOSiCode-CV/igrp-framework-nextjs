@@ -1,11 +1,12 @@
-import { withIGRPAuth } from "@igrp/framework-next-auth/config";
 import { redirect } from "next/navigation";
 
 import { igrpSetAccessClientConfig } from "@igrp/framework-next";
 import { isIgrpError } from "@igrp/framework-next/errors";
+import { withIGRPAuth } from "@igrp/framework-next-auth/config";
 import { assertAuthProviderEnv } from "@igrp/framework-next-auth/providers";
-import { isAuthBypass } from "@/lib/utils";
+
 import { reportError } from "@/lib/report-error";
+import { isAuthBypass } from "@/lib/utils";
 
 /**
  * Minimal session shape used in bypass mode (IGRP_PREVIEW_MODE or
@@ -17,7 +18,6 @@ export const PREVIEW_SESSION_STUB = {
   accessToken: "preview-token",
   expires: "9999-12-31T23:59:59.999Z",
 } as const;
-
 
 /**
  * Central IGRP auth instance.
@@ -181,6 +181,17 @@ export async function serverSession() {
 
     return session;
   } catch (error) {
+    // Next.js static-render bailout: `headers()`/cookies were read during
+    // prerender. This is control flow, not an error — re-throw so Next marks
+    // the route dynamic. Swallowing it both masks the bailout as "no session"
+    // and floods the error reporter at build time.
+    if (
+      error instanceof Error &&
+      (error as { digest?: string }).digest === "DYNAMIC_SERVER_USAGE"
+    ) {
+      throw error;
+    }
+
     // Only swallow the "no session / cookie decode failed" branch. Typed
     // IgrpError instances and IGRPAuthConfigError indicate config-level problems
     // and must surface so error boundaries can render a proper diagnosis.

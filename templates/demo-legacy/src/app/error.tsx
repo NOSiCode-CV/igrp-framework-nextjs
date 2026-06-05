@@ -9,9 +9,8 @@
 
 import { IGRPSegmentError } from "@igrp/framework-next-ui";
 import { useEffect } from "react";
-
-import { reportError } from "@/lib/report-error";
 import { resolveErrorCopy } from "@/config/error-messages";
+import { reportError } from "@/lib/report-error";
 
 export default function RootSegmentError({
   error,

@@ -295,6 +295,60 @@ function normalizePreviewMode(env: Record<string, string | undefined>): boolean 
   return env.IGRP_PREVIEW_MODE?.trim().replace(/^["']|["']$/g, '').toLowerCase() === 'true';
 }
 
+const SESSION_COOKIE_BASENAME = 'next-auth.session-token';
+const SECURE_SESSION_COOKIE_BASENAME = `__Secure-${SESSION_COOKIE_BASENAME}`;
+
+/**
+ * Resolve `getToken`'s `secureCookie` flag from the cookie names actually
+ * present on the request, instead of letting it infer the flag from
+ * `NEXTAUTH_URL`.
+ *
+ * Why this is necessary:
+ * `getToken` (next-auth/jwt) derives the session-cookie name purely from
+ * `process.env.NEXTAUTH_URL.startsWith('https://')`. But the cookie is WRITTEN
+ * by NextAuth's request handler, which decides the `__Secure-` prefix from the
+ * *request* origin — e.g. `x-forwarded-proto: https` when `AUTH_TRUST_HOST`/
+ * `VERCEL` is set, or a build-time-inlined `NEXTAUTH_URL` baked into the Edge
+ * middleware bundle. Behind a TLS-terminating proxy with `NEXTAUTH_URL` left
+ * `http`/unset at the Node runtime, the handler stores
+ * `__Secure-next-auth.session-token` while `getToken` looks for the bare
+ * `next-auth.session-token` — so it returns `null` for a perfectly valid
+ * session. Login still works (it runs through the request-aware handler), but
+ * `getAccessToken` silently fails, which is what breaks RP-initiated logout
+ * (`[getLogoutUrl] no active token found`).
+ *
+ * Reading the prefix off the real cookie keeps both sides in agreement
+ * regardless of how the scheme was detected. Returns `undefined` when no
+ * session cookie is present so `getToken` keeps its own default.
+ */
+function resolveSecureCookie(cookieNames: Iterable<string>): boolean | undefined {
+  let hasPlain = false;
+  for (const name of cookieNames) {
+    if (name.startsWith(SECURE_SESSION_COOKIE_BASENAME)) return true;
+    if (name.startsWith(SESSION_COOKIE_BASENAME)) hasPlain = true;
+  }
+  return hasPlain ? false : undefined;
+}
+
+/**
+ * Best-effort extraction of cookie names from an incoming request of unknown
+ * shape (NextRequest in Edge). Used only to pick the session-cookie prefix;
+ * any failure falls back to an empty list so `getToken` keeps its default.
+ */
+function extractCookieNames(request: unknown): string[] {
+  const cookies = (request as { cookies?: unknown } | null | undefined)?.cookies;
+  const getAll = (cookies as { getAll?: () => Array<{ name?: string }> } | undefined)?.getAll;
+  if (typeof getAll !== 'function') return [];
+  try {
+    return getAll
+      .call(cookies)
+      .map((c) => c?.name ?? '')
+      .filter(Boolean);
+  } catch {
+    return [];
+  }
+}
+
 /**
  * Lazily loads `next-auth` and returns a constructed handler.
  * Dynamic import so webpack doesn't pull `next-auth` (and transitively
@@ -419,7 +473,15 @@ export function withIGRPAuth(options: IGRPAuthOptions = {}): IGRPAuthInstance {
   // becomes Node-only when passed to NextAuth() below, which we defer.
 
   const authOptions: NextAuthOptions = {
-    useSecureCookies: process.env.NODE_ENV === 'production',
+    // Do NOT set useSecureCookies explicitly. NextAuth defaults to
+    // `NEXTAUTH_URL.startsWith('https://')`, which is exactly the same
+    // signal that `getToken` (next-auth/jwt) uses to derive the cookie name.
+    // Overriding it with `NODE_ENV === 'production'` diverges from that:
+    // a production build on HTTP (e.g. `next start` on localhost) would have
+    // NextAuth write `__Secure-next-auth.session-token` while the middleware's
+    // `getToken` reads `next-auth.session-token` → the cookie is never found
+    // → infinite redirect to /login. Let both sides default from NEXTAUTH_URL
+    // so they are always consistent.
     providers: resolvedProvider ? [resolvedProvider] : [],
     secret,
     ...(pages ? { pages } : {}),
@@ -639,9 +701,11 @@ export function withIGRPAuth(options: IGRPAuthOptions = {}): IGRPAuthInstance {
   }
 
   async function getTokenFromRequest(request: unknown): Promise<JWT | null> {
+    const secureCookie = resolveSecureCookie(extractCookieNames(request));
     return (await getToken({
       req: request as Parameters<typeof getToken>[0]['req'],
       secret: secret || process.env.NEXTAUTH_SECRET,
+      ...(secureCookie !== undefined ? { secureCookie } : {}),
     })) as JWT | null;
   }
 
@@ -664,11 +728,14 @@ export function withIGRPAuth(options: IGRPAuthOptions = {}): IGRPAuthInstance {
   async function getAccessToken(): Promise<JWT | null> {
     const { cookies } = await import('next/headers');
     const cookieStore = await cookies();
+    const all = cookieStore.getAll();
+    const secureCookie = resolveSecureCookie(all.map((c) => c.name));
     const token = await getToken({
       req: {
-        cookies: Object.fromEntries(cookieStore.getAll().map((c) => [c.name, c.value])),
+        cookies: Object.fromEntries(all.map((c) => [c.name, c.value])),
       } as NextApiRequest,
       secret: secret || process.env.NEXTAUTH_SECRET,
+      ...(secureCookie !== undefined ? { secureCookie } : {}),
     });
     return token as JWT | null;
   }

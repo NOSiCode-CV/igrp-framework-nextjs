@@ -1,5 +1,19 @@
 # @igrp/framework-next-types
 
+## 0.1.0-beta.140
+
+### Patch Changes
+
+- Updated dependencies
+  - @igrp/framework-next-auth@0.1.0-beta.138
+
+## 0.1.0-beta.139
+
+### Patch Changes
+
+- Updated dependencies
+  - @igrp/framework-next-auth@0.1.0-beta.137
+
 ## 0.1.0-beta.138
 
 ### Patch Changes

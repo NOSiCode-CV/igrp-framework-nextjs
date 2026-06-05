@@ -1,5 +1,27 @@
 # @igrp/framework-next-auth
 
+## 0.1.0-beta.138
+
+### Patch Changes
+
+- Fix `getAccessToken` returning null (and RP-initiated logout failing with `[getLogoutUrl] no active token found`) on HTTPS deployments behind a TLS-terminating proxy.
+
+  `getToken` infers the session-cookie name solely from `NEXTAUTH_URL`'s scheme, but NextAuth's request handler writes the `__Secure-`-prefixed cookie based on the request origin (`x-forwarded-proto`, `AUTH_TRUST_HOST`, or a build-time-inlined `NEXTAUTH_URL` in the Edge middleware). When the app runs over HTTPS via a proxy while the Node runtime's `NEXTAUTH_URL` is `http`/unset, the handler stores `__Secure-next-auth.session-token` while `getToken` looks for the bare `next-auth.session-token` and finds nothing — login keeps working but `getAccessToken` silently fails.
+
+  `getAccessToken` and `getTokenFromRequest` now detect the actual session-cookie prefix present on the request and pass an explicit `secureCookie` flag to `getToken`, keeping the reader in sync with the writer regardless of how the scheme was detected.
+
+## 0.1.0-beta.137
+
+### Patch Changes
+
+- Fix login loop in production on HTTP: remove explicit `useSecureCookies: process.env.NODE_ENV === 'production'` from `withIGRPAuth` authOptions.
+
+  When a production build (`NODE_ENV=production`) runs over HTTP (e.g. `next start` on localhost), this flag caused NextAuth to write the session cookie as `__Secure-next-auth.session-token` while the middleware's `getToken` read back `next-auth.session-token` — a name mismatch that made every authenticated request look unauthenticated, producing an infinite redirect to `/login`.
+
+  NextAuth's own default derives `useSecureCookies` from whether `NEXTAUTH_URL` starts with `https://`, which is exactly the same signal `getToken` uses internally. Removing the override lets both sides default from the URL scheme and stay permanently in sync.
+
+  On a real HTTPS deployment (where `NEXTAUTH_URL` starts with `https://`), secure cookie behaviour is unchanged.
+
 ## 0.1.0-beta.136
 
 ### Patch Changes

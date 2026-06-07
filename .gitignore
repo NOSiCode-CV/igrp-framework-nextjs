@@ -120,3 +120,4 @@ igrp-next-template.zip
 !templates/demo-legacy/.cursor/**
 .idea
 .claude/settings.local.json
+.claude/launch.json

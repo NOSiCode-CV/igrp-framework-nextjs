@@ -35,10 +35,12 @@ function secureAttr(): string {
  * GET navigation, and Lax sends the cookie on top-level GET navigations.
  */
 export function markLogoutPending(): void {
+  // biome-ignore lint/suspicious/noDocumentCookie: the Cookie Store API can't set SameSite/path the way this marker needs, and this only runs client-side.
   document.cookie = `${LOGOUT_PENDING_COOKIE}=1; path=${cookiePath()}; max-age=${LOGOUT_PENDING_MAX_AGE_SECONDS}; samesite=lax${secureAttr()}`;
 }
 
 /** Clear the marker. Client-only — call after signOut() completes on /login. */
 export function clearLogoutPending(): void {
+  // biome-ignore lint/suspicious/noDocumentCookie: see markLogoutPending — intentional client-only cookie write.
   document.cookie = `${LOGOUT_PENDING_COOKIE}=; path=${cookiePath()}; max-age=0; samesite=lax${secureAttr()}`;
 }

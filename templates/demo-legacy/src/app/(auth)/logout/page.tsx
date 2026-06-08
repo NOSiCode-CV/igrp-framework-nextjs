@@ -24,9 +24,11 @@ let logoutStarted = false;
 // sit just above real-world discovery latency.
 const LOOKUP_TIMEOUT_MS = 3000;
 
-// Last-resort watchdog. Covers the effect hanging after the lookup resolves —
-// a hung local signOut() on the no-IdP fallback path, or a wedged form-submit
-// on the IdP-POST path. MUST be greater than LOOKUP_TIMEOUT_MS.
+// Last-resort watchdog for a hung local signOut() on the no-IdP fallback path
+// (it is awaited while this timer is still armed). The IdP-POST path clears
+// this timer before handing off to the form-submit effect, so a wedged submit
+// there is NOT covered — same as before this change. MUST be greater than
+// LOOKUP_TIMEOUT_MS.
 const FALLBACK_TIMEOUT_MS = 8000;
 
 function buildLoginUrl(): string {

@@ -47,6 +47,10 @@ const nextConfig: NextConfig = {
   },
   experimental: {
     typedEnv: true,
+    browserDebugInfoInTerminal: {
+      depthLimit: 5,
+      edgeLimit: 1000,
+    },
     optimizePackageImports: [
       "@igrp/igrp-framework-react-design-system",
       "@igrp/framework-next-ui",

@@ -17,6 +17,7 @@ Run `git diff HEAD` and `git status --short` to find modified files. Map files t
 | `packages/design-system/` | `@igrp/igrp-framework-react-design-system` | `pnpm build:ds` | `pnpm --filter @igrp/igrp-framework-react-design-system release` |
 | `packages/framework/next-ui/` | `@igrp/framework-next-ui` | `pnpm build:next-ui` | `pnpm --filter @igrp/framework-next-ui release` |
 | `packages/framework/next/` | `@igrp/framework-next` | `pnpm build:next` | `pnpm --filter @igrp/framework-next release` |
+| `packages/template-migrator/` | `@igrp/template-migrator` | `pnpm template-migrations` | `pnpm --filter @igrp/template-migrator release` |
 
 Files outside these prefixes (templates, apps, scripts, docs, `.claude/`) are ignored.
 
@@ -82,7 +83,7 @@ git add .changeset/<slug>.md
 git commit -m "chore: add changeset for <comma-separated short names>"
 ```
 
-Short names: `next-auth`, `next-types`, `ds`, `next-ui`, `next`.
+Short names: `next-auth`, `next-types`, `ds`, `next-ui`, `next`, `template-migrator`.
 
 ---
 
@@ -114,6 +115,7 @@ Run only the build scripts for affected packages, **in this exact order** (skip 
 3. `pnpm build:ds` — if `@igrp/igrp-framework-react-design-system` is affected
 4. `pnpm build:next-ui` — if `@igrp/framework-next-ui` is affected
 5. `pnpm build:next` — if `@igrp/framework-next` is affected
+6. `pnpm template-migrations` — if `@igrp/template-migrator` is affected
 
 ---
 
@@ -128,6 +130,7 @@ Run only the release scripts for affected packages, **in the same dependency ord
 3. `pnpm --filter @igrp/igrp-framework-react-design-system release`
 4. `pnpm --filter @igrp/framework-next-ui release`
 5. `pnpm --filter @igrp/framework-next release`
+6. `pnpm --filter @igrp/template-migrator release`
 
 **HARD RULE: never use `changeset publish`, `release:all`, or `release:publish`. Always use the per-package `release` script above.**
 

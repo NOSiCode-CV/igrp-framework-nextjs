@@ -1,5 +1,11 @@
 # @igrp/framework-next-auth
 
+## 0.1.0-beta.139
+
+### Patch Changes
+
+- 4e0137a: - Remove debug `console.debug` trace calls from OIDC token refresh (`refreshOidcAccessToken`), end-session URL builder (`buildEndSessionUrl`), and the `events.signOut` handler; retain all `console.warn`/`console.error` calls with diagnostic value
+
 ## 0.1.0-beta.138
 
 ### Patch Changes

@@ -302,8 +302,6 @@ async function performRefresh(
           "Check the IdP's OIDC refresh-token grant configuration (Spring AS requires the " +
           'refresh-token grant authentication-converter to include the openid scope).',
       );
-    } else {
-      console.debug('[oidc.refreshOidcAccessToken] refresh returned a fresh id_token');
     }
   }
 
@@ -444,20 +442,6 @@ export async function buildEndSessionUrl(
   const hasIdToken = typeof token.idToken === 'string' && token.idToken.length > 0;
   if (hasIdToken) {
     url.searchParams.set('id_token_hint', token.idToken as string);
-  }
-
-  if (isDev) {
-    // Spring Authorization Server (and most OIDC IdPs) treat the request
-    // very differently depending on which of these three are present.
-    // Log the booleans so we can tell from server logs alone whether the
-    // request had everything Spring's OidcLogoutEndpointFilter needs.
-    console.debug('[oidc.buildEndSessionUrl] built URL', {
-      endSessionEndpoint: openIdConfiguration.end_session_endpoint,
-      hasClientId: true,
-      hasPostLogoutRedirectUri: true,
-      postLogoutRedirectUri,
-      hasIdTokenHint: hasIdToken,
-    });
   }
 
   return url.toString();

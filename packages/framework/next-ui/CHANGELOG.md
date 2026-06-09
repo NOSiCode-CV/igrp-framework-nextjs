@@ -1,5 +1,11 @@
 # @igrp/framework-next-ui
 
+## 0.1.0-beta.148
+
+### Patch Changes
+
+- 5c14726: - Restore sidebar collapse/expand trigger: add `SidebarTrigger` (PanelLeft icon) to the sidebar header alongside the app switcher, following the shadcn recommended sidebar block pattern
+
 ## 0.1.0-beta.147
 
 ### Patch Changes

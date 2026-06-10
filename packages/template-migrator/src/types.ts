@@ -35,6 +35,13 @@ export interface LockEntry {
   manifestHash: string;
   undo: MigrationStep[];
   fileHashes: Record<string, string>;
+  /**
+   * Pre-migration file contents keyed by app-relative path, captured at apply
+   * time for steps whose undo would otherwise be an unrestorable `__undo__`
+   * placeholder (file.write over an existing file, file.delete). Absent on
+   * lock entries written by older CLI versions.
+   */
+  undoPayloads?: Record<string, string>;
 }
 
 export interface LockFile {

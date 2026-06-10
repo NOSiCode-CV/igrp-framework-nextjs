@@ -36,8 +36,9 @@ async function main() {
       }
       case "rollback": {
         const id = args[1];
-        if (!id) { console.error("Usage: igrp-migrate rollback <id>"); process.exit(1); }
-        await rollback(appRoot, id);
+        if (!id) { console.error("Usage: igrp-migrate rollback <id> [--force]"); process.exit(1); }
+        const ok = await rollback(appRoot, id, { force: args.includes("--force") });
+        if (!ok) process.exit(1);
         break;
       }
       case "check": {
@@ -54,7 +55,7 @@ Usage:
   igrp-migrate list             List all migrations in this CLI version
   igrp-migrate plan [--to <id>] Preview steps without writing
   igrp-migrate apply [--to <id>] [--yes]  Apply pending migrations
-  igrp-migrate rollback <id>    Revert a single applied migration
+  igrp-migrate rollback <id> [--force]  Revert a single applied migration
   igrp-migrate check            CI mode: exit 1 if pending migrations exist
   igrp-migrate convert          Upgrade legacy .igrpmigrations/lock.json → .igrp-migrations-lock.json
 `);

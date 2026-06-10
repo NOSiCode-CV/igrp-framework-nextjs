@@ -468,17 +468,21 @@ export async function introspectOidcToken(token: JWT, env: AuthEnvironment): Pro
     const { clientId, clientSecret } = getClientCredentials(env);
     const credentials = btoa(`${clientId}:${clientSecret}`);
 
-    const response = await fetch(openIdConfiguration.introspection_endpoint, {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/x-www-form-urlencoded',
-        Authorization: `Basic ${credentials}`,
+    const response = await fetchWithTimeout(
+      openIdConfiguration.introspection_endpoint,
+      {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/x-www-form-urlencoded',
+          Authorization: `Basic ${credentials}`,
+        },
+        body: new URLSearchParams({
+          token: token.refreshToken,
+          token_type_hint: 'refresh_token',
+        }),
       },
-      body: new URLSearchParams({
-        token: token.refreshToken,
-        token_type_hint: 'refresh_token',
-      }),
-    });
+      IDP_FETCH_TIMEOUT_MS,
+    );
 
     if (!response.ok) return true;
 

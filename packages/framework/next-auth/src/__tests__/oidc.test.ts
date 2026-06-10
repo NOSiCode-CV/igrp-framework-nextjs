@@ -494,4 +494,51 @@ describe('introspectOidcToken', () => {
     const headers = capturedInit[0]?.headers as Record<string, string>;
     expect(headers['Authorization']).toBe(`Basic ${btoa('test-client:test-secret')}`);
   });
+
+  it('passes an abort signal (timeout) to the introspection request (NA-1)', async () => {
+    const fetchSpy = vi.fn(async (url: string | URL, init?: RequestInit) => {
+      const u = String(url);
+      if (u.includes('.well-known')) {
+        return { ok: true, json: async () => MOCK_DISCOVERY } as Response;
+      }
+      return { ok: true, json: async () => ({ active: true }) } as Response;
+    });
+    vi.stubGlobal('fetch', fetchSpy);
+
+    const { introspectOidcToken } = await import('../oidc');
+    await introspectOidcToken(makeToken(), VALID_ENV);
+
+    expect(fetchSpy).toHaveBeenCalledWith(
+      MOCK_DISCOVERY.introspection_endpoint,
+      expect.objectContaining({ signal: expect.any(AbortSignal) }),
+    );
+  });
+
+  it('fails open when the introspection request exceeds the timeout (NA-1)', async () => {
+    vi.useFakeTimers();
+    try {
+      const fetchSpy = vi.fn((url: string | URL, init?: RequestInit) => {
+        const u = String(url);
+        if (u.includes('.well-known')) {
+          return Promise.resolve({ ok: true, json: async () => MOCK_DISCOVERY } as Response);
+        }
+        // Hang forever; only reject when the timeout aborts us — mirrors a
+        // stalled IdP. Without a signal this promise never settles and the
+        // test times out, which is exactly the bug being fixed.
+        return new Promise<Response>((_resolve, reject) => {
+          init?.signal?.addEventListener('abort', () =>
+            reject(new DOMException('The operation was aborted.', 'AbortError')),
+          );
+        });
+      });
+      vi.stubGlobal('fetch', fetchSpy);
+
+      const { introspectOidcToken } = await import('../oidc');
+      const resultPromise = introspectOidcToken(makeToken(), VALID_ENV);
+      await vi.advanceTimersByTimeAsync(5000); // > IDP_FETCH_TIMEOUT_MS (4000)
+      await expect(resultPromise).resolves.toBe(true);
+    } finally {
+      vi.useRealTimers();
+    }
+  });
 });

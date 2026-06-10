@@ -138,3 +138,27 @@ describe("rollback restores stored undo payloads (TM-1 phase 2b)", () => {
     expect(readLock(appRoot).applied).toHaveLength(0);
   });
 });
+
+describe("rollback executes undo steps in reverse order", () => {
+  it("delete-then-recreate of one path ends with the original restored, not deleted", async () => {
+    // Migration did: file.delete src/x.ts (original captured), then file.create src/x.ts (new content).
+    // Undo steps in FORWARD order: [file.create __undo__ (from the delete), file.delete (from the create)].
+    // Correct rollback runs them in REVERSE: delete the recreated file, then restore the original.
+    writeAppFile("src/x.ts", "RECREATED BY MIGRATION\n");
+    writeLock(
+      appRoot,
+      lockWith({
+        undo: [
+          { type: "file.create", path: "src/x.ts", from: "__undo__" },
+          { type: "file.delete", path: "src/x.ts" },
+        ],
+        undoPayloads: { "src/x.ts": "TRUE ORIGINAL\n" },
+      })
+    );
+
+    const ok = await rollback(appRoot, "07-test-migration");
+
+    expect(ok).toBe(true);
+    expect(readFileSync(join(appRoot, "src/x.ts"), "utf8")).toBe("TRUE ORIGINAL\n");
+  });
+});

@@ -1,5 +1,5 @@
 import { createInterface } from "readline";
-import { existsSync, readFileSync } from "fs";
+import { existsSync, readFileSync, statSync } from "fs";
 import { join } from "path";
 import { getManifest } from "../manifest.js";
 import { readLock, writeLock } from "../lock.js";
@@ -55,9 +55,15 @@ export async function apply(
           (step.type === "file.write" || step.type === "file.delete" || step.type === "file.create") &&
           typeof (step as { path?: unknown }).path === "string"
         ) {
-          const target = join(appRoot, (step as { path: string }).path);
-          if (existsSync(target)) {
-            undoPayloads[(step as { path: string }).path] = readFileSync(target, "utf8");
+          const path = (step as { path: string }).path;
+          const target = join(appRoot, path);
+          // First capture wins: if a migration touches the same path twice,
+          // later captures would hold intermediate migrated content, not the
+          // true pre-migration original. Directories are never captured
+          // (file.delete may target one) — they fall into the rollback
+          // refusal path, which is correct.
+          if (!(path in undoPayloads) && existsSync(target) && statSync(target).isFile()) {
+            undoPayloads[path] = readFileSync(target, "utf8");
           }
         }
         const undo = executeStep(step, appRoot, opts.payloadDir);

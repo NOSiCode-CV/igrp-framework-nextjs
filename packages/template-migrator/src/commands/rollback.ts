@@ -53,7 +53,13 @@ export async function rollback(
   }
 
   console.log(`\nRolling back ${id} (${entry.undo.length} undo step(s))\n`);
-  for (const step of entry.undo) {
+  // Undo steps must run in REVERSE apply order so multi-step touches of the
+  // same path unwind correctly (e.g. delete-then-recreate: first remove the
+  // recreated file, then restore the original).
+  // Note: rollback is not atomic — a crash mid-loop leaves the lock entry in
+  // place, and re-running rollback is safe because restores are idempotent
+  // overwrites/deletes and payloads persist in the lock until the final write.
+  for (const step of [...entry.undo].reverse()) {
     const pathKey =
       stepPath(step) ??
       (step as Record<string, unknown>).file ??

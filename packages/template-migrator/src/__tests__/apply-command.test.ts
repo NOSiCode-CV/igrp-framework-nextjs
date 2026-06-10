@@ -1,5 +1,5 @@
 import { describe, it, expect, beforeEach, afterEach, vi } from "vitest";
-import { mkdtempSync, mkdirSync, writeFileSync, readFileSync, rmSync } from "fs";
+import { mkdtempSync, mkdirSync, writeFileSync, readFileSync, rmSync, existsSync } from "fs";
 import { tmpdir } from "os";
 import { join, dirname } from "path";
 import { readLock } from "../lock";
@@ -78,5 +78,66 @@ describe("apply captures undo payloads (TM-1 phase 2a)", () => {
     });
     // brand-new file needs no payload — its undo is a clean file.delete
     expect(entry.undoPayloads!["src/brand-new.ts"]).toBeUndefined();
+  });
+
+  it("keeps the FIRST captured content when a migration touches the same path twice", async () => {
+    writeFileAt(appRoot, "src/twice.ts", "TRUE ORIGINAL\n");
+    writeFileAt(payloadDir, "11/src/twice.v1.ts", "INTERMEDIATE\n");
+    writeFileAt(payloadDir, "11/src/twice.v2.ts", "FINAL\n");
+
+    manifestRef.current = {
+      version: 1,
+      cliVersion: "test",
+      template: "demo-legacy",
+      migrations: [
+        {
+          id: "11-twice-test",
+          date: "2026-06-10",
+          requires: [],
+          targetFrameworkVersion: null,
+          guideHref: "11.MIGRATIONS-10062026.md",
+          contentHash: "0123456789abcdef",
+          steps: [
+            { type: "file.write", mode: "replace", path: "src/twice.ts", from: "11/src/twice.v1.ts" },
+            { type: "file.write", mode: "replace", path: "src/twice.ts", from: "11/src/twice.v2.ts" },
+          ],
+        },
+      ],
+    };
+
+    await apply(appRoot, { yes: true, payloadDir });
+
+    const entry = readLock(appRoot).applied[0];
+    expect(entry.undoPayloads).toEqual({ "src/twice.ts": "TRUE ORIGINAL\n" });
+  });
+
+  it("directory delete does not abort apply", async () => {
+    writeFileAt(appRoot, "src/dead-dir/file.txt", "x\n");
+
+    manifestRef.current = {
+      version: 1,
+      cliVersion: "test",
+      template: "demo-legacy",
+      migrations: [
+        {
+          id: "12-dir-delete-test",
+          date: "2026-06-10",
+          requires: [],
+          targetFrameworkVersion: null,
+          guideHref: "12.MIGRATIONS-10062026.md",
+          contentHash: "deadbeefdeadbeef",
+          steps: [{ type: "file.delete", path: "src/dead-dir" }],
+        },
+      ],
+    };
+
+    await apply(appRoot, { yes: true, payloadDir });
+
+    // directory removed, migration recorded
+    expect(existsSync(join(appRoot, "src/dead-dir"))).toBe(false);
+    const lock = readLock(appRoot);
+    expect(lock.applied).toHaveLength(1);
+    // directories are not captured as undo payloads (text files only)
+    expect(lock.applied[0].undoPayloads?.["src/dead-dir"]).toBeUndefined();
   });
 });

@@ -43,9 +43,10 @@ export type IGRPPlanAccessManagementSyncArgs = {
  * and as the `X-Machine-Service-ID` header. Allow lowercase alphanumeric +
  * dashes/underscores, must start and end alphanumeric, max length 64.
  *
- * The match is case-insensitive at the framework boundary; the AM server
- * decides the canonical form on its side. We reject obvious garbage
- * (whitespace, special characters, oversize) before any network call.
+ * Service-id matching is case-insensitive. App codes are accepted in any
+ * case and NORMALIZED TO UPPERCASE here before validation and before any
+ * network call — uppercase is the canonical form on the AM server. We reject
+ * obvious garbage (whitespace, special characters, oversize) early.
  */
 const SERVICE_ID_PATTERN = /^[a-z0-9][a-z0-9_-]{0,62}[a-z0-9]$/i;
 const APP_CODE_PATTERN = /^[A-Z0-9][A-Z0-9_]{0,62}[A-Z0-9]$/;
@@ -102,7 +103,7 @@ export function planAccessManagementSync(
   const rawServiceId = cfg!.serviceId.trim();
   const m2mClientId = cfg!.m2mClientId.trim();
   const m2mClientSecret = cfg!.m2mClientSecret;
-  const appCode = args.appCode.trim();
+  const appCode = args.appCode.trim().toUpperCase();
 
   // Re-check after trim — `"   "` is truthy but empty after trimming.
   const postTrimMissing: string[] = [];
@@ -129,7 +130,8 @@ export function planAccessManagementSync(
   if (!APP_CODE_PATTERN.test(appCode)) {
     throw new IgrpConfigError(
       'IGRP_ACCESS_MANAGEMENT_CONFIG_MISSING',
-      `IGRP_APP_CODE must match ${APP_CODE_PATTERN.source} (got: "${args.appCode}").`,
+      `IGRP_APP_CODE must contain only letters, digits and underscores, start and ` +
+        `end alphanumeric, max 64 chars (got: "${args.appCode}", normalized to "${appCode}").`,
       { field: 'appCode', value: args.appCode },
     );
   }

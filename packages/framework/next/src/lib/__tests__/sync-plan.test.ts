@@ -173,4 +173,30 @@ describe('planAccessManagementSync', () => {
       expect((err as IgrpConfigError).code).toBe('IGRP_ACCESS_MANAGEMENT_CONFIG_MISSING');
     }
   });
+
+  it('accepts a lowercase app code and normalizes it to uppercase (FN-1)', () => {
+    const plan = planAccessManagementSync(makeArgs({ appCode: 'app_test_1' }));
+
+    expect(plan).not.toBeNull();
+    expect(plan!.appCode).toBe('APP_TEST_1');
+  });
+
+  it('accepts a mixed-case app code and normalizes it to uppercase (FN-1)', () => {
+    const plan = planAccessManagementSync(makeArgs({ appCode: 'App_Test_1' }));
+
+    expect(plan).not.toBeNull();
+    expect(plan!.appCode).toBe('APP_TEST_1');
+  });
+
+  it('still rejects app codes with invalid characters after normalization (FN-1)', () => {
+    expect(() => planAccessManagementSync(makeArgs({ appCode: 'app code!' }))).toThrow(
+      IgrpConfigError,
+    );
+  });
+
+  it('still rejects app codes with dashes (underscores only) (FN-1)', () => {
+    expect(() => planAccessManagementSync(makeArgs({ appCode: 'app-test' }))).toThrow(
+      IgrpConfigError,
+    );
+  });
 });

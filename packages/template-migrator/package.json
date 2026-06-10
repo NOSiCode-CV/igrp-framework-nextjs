@@ -19,6 +19,7 @@
     "build:types": "tsc -p tsconfig.build.json --emitDeclarationOnly",
     "build": "pnpm prebuild && pnpm build:js && pnpm build:types",
     "check:drift": "tsx scripts/check-drift.ts",
+    "test": "vitest run",
     "release": "pnpm check:drift && pnpm build && pnpm publish --registry=https://sonatype.nosi.cv/repository/igrp/ --tag latest --no-git-checks",
     "clean": "rm -rf dist"
   },
@@ -29,6 +30,7 @@
     "tsx": "4.22.4",
     "tsup": "^8.5.0",
     "typescript": "^5.9.3",
+    "vitest": "4.1.8",
     "@types/node": "^25.9.1"
   },
   "engines": {

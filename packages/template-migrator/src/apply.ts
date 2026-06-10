@@ -12,7 +12,11 @@ function ensureDir(filePath: string) {
   mkdirSync(dirname(filePath), { recursive: true });
 }
 
-export function executeStep(step: MigrationStep, appRoot: string): MigrationStep {
+export function executeStep(
+  step: MigrationStep,
+  appRoot: string,
+  payloadDir: string = PAYLOAD_DIR
+): MigrationStep {
   switch (step.type) {
     case "file.create":
     case "file.write": {
@@ -20,7 +24,7 @@ export function executeStep(step: MigrationStep, appRoot: string): MigrationStep
       const existed = existsSync(dest);
       // Strip leading "payload/" prefix — dist/payload/ is already the base dir
       const fromRel = step.from!.startsWith("payload/") ? step.from!.slice("payload/".length) : step.from!;
-      const src = join(PAYLOAD_DIR, fromRel);
+      const src = join(payloadDir, fromRel);
       ensureDir(dest);
       copyFileSync(src, dest);
       // Return undo step

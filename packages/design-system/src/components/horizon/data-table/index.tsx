@@ -132,14 +132,26 @@ type TableAction =
 
 function tableReducer(state: TableState, action: TableAction): TableState {
   switch (action.type) {
+    // Filter/sort changes reset to the first page here (synchronously) because
+    // TanStack's autoResetPageIndex is disabled — its microtask-based reset
+    // dispatches state updates before the component mounts under React 19
+    // (https://github.com/TanStack/table/issues/5026).
     case "columnFilters":
-      return { ...state, columnFilters: action.payload }
+      return {
+        ...state,
+        columnFilters: action.payload,
+        pagination: { ...state.pagination, pageIndex: 0 },
+      }
     case "columnVisibility":
       return { ...state, columnVisibility: action.payload }
     case "pagination":
       return { ...state, pagination: action.payload }
     case "sorting":
-      return { ...state, sorting: action.payload }
+      return {
+        ...state,
+        sorting: action.payload,
+        pagination: { ...state.pagination, pageIndex: 0 },
+      }
     case "expanded":
       return { ...state, expanded: action.payload }
     case "rowSelection":
@@ -302,6 +314,13 @@ function IGRPDataTable<TData, TValue>({
 
     enableRowSelection: true,
     enableSortingRemoval: false,
+
+    // TanStack's auto-reset queues a setPagination/setExpanded in a microtask,
+    // which fires before mount under React 19 concurrent rendering and triggers
+    // "Can't perform a React state update on a component that hasn't mounted yet".
+    // Page-index reset on filter/sort changes is handled in tableReducer instead.
+    autoResetPageIndex: false,
+    autoResetExpanded: false,
 
     manualPagination: !!onQueryChange,
     manualSorting: !!onQueryChange,

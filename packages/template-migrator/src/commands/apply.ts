@@ -1,10 +1,11 @@
 import { createInterface } from "readline";
+import { existsSync, readFileSync } from "fs";
 import { join } from "path";
 import { getManifest } from "../manifest.js";
 import { readLock, writeLock } from "../lock.js";
 import { executeStep } from "../apply.js";
 import { hashFile } from "../hash.js";
-import type { LockEntry } from "../types.js";
+import type { LockEntry, MigrationStep } from "../types.js";
 
 async function confirm(question: string): Promise<boolean> {
   const rl = createInterface({ input: process.stdin, output: process.stdout });
@@ -13,7 +14,10 @@ async function confirm(question: string): Promise<boolean> {
   });
 }
 
-export async function apply(appRoot: string, opts: { toId?: string; yes?: boolean }) {
+export async function apply(
+  appRoot: string,
+  opts: { toId?: string; yes?: boolean; payloadDir?: string }
+) {
   const manifest = getManifest();
   const lock = readLock(appRoot);
   const appliedIds = new Set(lock.applied.map((a) => a.id));
@@ -35,7 +39,8 @@ export async function apply(appRoot: string, opts: { toId?: string; yes?: boolea
     }
 
     const fileHashes: Record<string, string> = {};
-    const undoSteps: ReturnType<typeof executeStep>[] = [];
+    const undoPayloads: Record<string, string> = {};
+    const undoSteps: MigrationStep[] = [];
     try {
       for (const step of migration.steps) {
         const pathKey = (step as Record<string, unknown>).path ?? (step as Record<string, unknown>).file ?? (step as Record<string, unknown>).manifest;
@@ -43,7 +48,19 @@ export async function apply(appRoot: string, opts: { toId?: string; yes?: boolea
           const hash = hashFile(join(appRoot, pathKey));
           if (hash) fileHashes[pathKey] = hash;
         }
-        const undo = executeStep(step, appRoot);
+        // Capture prior content for steps whose undo would otherwise be an
+        // unrestorable __undo__ placeholder: an overwrite of an existing file,
+        // or a delete. (A file.create over nothing undoes cleanly via delete.)
+        if (
+          (step.type === "file.write" || step.type === "file.delete" || step.type === "file.create") &&
+          typeof (step as { path?: unknown }).path === "string"
+        ) {
+          const target = join(appRoot, (step as { path: string }).path);
+          if (existsSync(target)) {
+            undoPayloads[(step as { path: string }).path] = readFileSync(target, "utf8");
+          }
+        }
+        const undo = executeStep(step, appRoot, opts.payloadDir);
         undoSteps.push(undo);
         console.log(`  ✓ ${step.type}  ${pathKey}`);
       }
@@ -60,6 +77,7 @@ export async function apply(appRoot: string, opts: { toId?: string; yes?: boolea
       manifestHash: migration.contentHash,
       undo: undoSteps,
       fileHashes,
+      ...(Object.keys(undoPayloads).length > 0 ? { undoPayloads } : {}),
     };
     lock.applied.push(entry);
     writeLock(appRoot, lock);

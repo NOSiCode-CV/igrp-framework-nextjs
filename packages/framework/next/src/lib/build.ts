@@ -123,5 +123,19 @@ function validateConfig(
 
 export async function igrpBuildConfig(config: IGRPConfigArgs): Promise<IGRPConfigArgs> {
   validateConfig(config);
+
+  // Canonicalize the app code once, at the single point every consumer flows
+  // through. Uppercase is the canonical form on the Access Management server;
+  // the AM sync (`planAccessManagementSync`) normalizes defensively too, but
+  // the read paths — menu/app fetch hooks and their cache keys — use
+  // `config.appCode` directly, so a lowercase env value must not survive past
+  // here or sync would register `APP_X` while reads query `app_x`.
+  if (typeof config.appCode === 'string') {
+    const appCode = config.appCode.trim().toUpperCase();
+    if (appCode !== config.appCode) {
+      return { ...config, appCode };
+    }
+  }
+
   return config;
 }

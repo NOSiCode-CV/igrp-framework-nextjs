@@ -47,7 +47,7 @@ Copy `.env.example` to `.env` and fill in the values. The fastest path for local
 
 ```env
 IGRP_PREVIEW_MODE=true
-IGRP_APP_CODE=demo-app
+IGRP_APP_CODE=DEMO_APP
 ```
 
 For a real auth flow, see [Environment Variables](docs/ENVIRONMENT.md) and [Auth Server Registration](docs/ENVIRONMENT.md#auth-server-registration-required).

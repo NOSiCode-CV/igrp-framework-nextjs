@@ -38,10 +38,11 @@ export type IGRPPlanAccessManagementSyncArgs = {
 };
 
 /**
- * Conservative identifier pattern for the AM service-id and app-code values.
+ * Conservative identifier patterns for the AM service-id and app-code values.
  * These end up as resource `name` fields on the Access Management server,
- * and as the `X-Machine-Service-ID` header. Allow lowercase alphanumeric +
- * dashes/underscores, must start and end alphanumeric, max length 64.
+ * and as the `X-Machine-Service-ID` header. Service-ids allow alphanumeric +
+ * dashes/underscores; app codes allow uppercase alphanumeric + underscores
+ * (no dashes). Both must start and end alphanumeric, max length 64.
  *
  * Service-id matching is case-insensitive. App codes are accepted in any
  * case and NORMALIZED TO UPPERCASE here before validation and before any

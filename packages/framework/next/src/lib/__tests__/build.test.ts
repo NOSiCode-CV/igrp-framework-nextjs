@@ -93,3 +93,37 @@ describe('igrpBuildConfig validation (FN-2)', () => {
     await expect(igrpBuildConfig(cfg)).resolves.toBe(cfg);
   });
 });
+
+describe('igrpBuildConfig appCode canonicalization', () => {
+  it('normalizes a lowercase appCode to uppercase in the returned config', async () => {
+    const cfg = baseConfig({ appCode: 'app_test' });
+
+    const result = await igrpBuildConfig(cfg);
+
+    expect(result.appCode).toBe('APP_TEST');
+    // Shallow copy: only appCode changes, every other field keeps its identity
+    expect(result).not.toBe(cfg);
+    expect(result.layoutMockData).toBe(cfg.layoutMockData);
+    expect(result.toasterConfig).toBe(cfg.toasterConfig);
+    // The input config is not mutated
+    expect(cfg.appCode).toBe('app_test');
+  });
+
+  it('trims surrounding whitespace while normalizing', async () => {
+    const cfg = baseConfig({ appCode: '  App_Test  ' });
+
+    const result = await igrpBuildConfig(cfg);
+
+    expect(result.appCode).toBe('APP_TEST');
+  });
+
+  it('returns the original object untouched when appCode is already canonical', async () => {
+    const cfg = baseConfig(); // appCode: 'APP_TEST'
+    await expect(igrpBuildConfig(cfg)).resolves.toBe(cfg);
+  });
+
+  it('leaves a missing appCode alone (preview mode boots without one)', async () => {
+    const cfg = baseConfig({ appCode: undefined });
+    await expect(igrpBuildConfig(cfg)).resolves.toBe(cfg);
+  });
+});

@@ -1,3 +1,5 @@
+import { mkdirSync, writeFileSync } from "fs";
+import { join, dirname } from "path";
 import { getManifest } from "../manifest.js";
 import { readLock, writeLock } from "../lock.js";
 import { executeStep } from "../apply.js";
@@ -58,9 +60,17 @@ export async function rollback(
       (step as Record<string, unknown>).manifest;
     console.log(`  undo ${step.type}  ${pathKey}`);
     if (isPlaceholder(step)) {
-      // Restored from stored payloads in Task 6 (phase 2). Until then —
-      // and for steps with no stored payload under --force — skip.
-      console.log("    (undo payload not stored — manual restoration required)");
+      const p = stepPath(step);
+      const content = p !== undefined ? entry.undoPayloads?.[p] : undefined;
+      if (p !== undefined && content !== undefined) {
+        const dest = join(appRoot, p);
+        mkdirSync(dirname(dest), { recursive: true });
+        writeFileSync(dest, content, "utf8");
+        console.log("    restored from stored undo payload");
+      } else {
+        // Only reachable under --force (the refusal gate catches this otherwise)
+        console.log("    (undo payload not stored — manual restoration required)");
+      }
       continue;
     }
     executeStep(step, appRoot);

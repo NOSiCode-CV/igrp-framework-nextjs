@@ -111,3 +111,30 @@ describe("rollback refusal (TM-1 phase 1)", () => {
     expect(ok).toBe(false);
   });
 });
+
+describe("rollback restores stored undo payloads (TM-1 phase 2b)", () => {
+  it("restores overwritten and deleted files from undoPayloads", async () => {
+    writeAppFile("src/touched.ts", "migrated content\n");
+    // deleted file is absent post-migration
+    writeLock(
+      appRoot,
+      lockWith({
+        undo: [
+          { type: "file.write", mode: "replace", path: "src/touched.ts", from: "__undo__" },
+          { type: "file.create", path: "src/deleted.ts", from: "__undo__" },
+        ],
+        undoPayloads: {
+          "src/touched.ts": "ORIGINAL A\n",
+          "src/deleted.ts": "ORIGINAL B\n",
+        },
+      })
+    );
+
+    const ok = await rollback(appRoot, "07-test-migration");
+
+    expect(ok).toBe(true);
+    expect(readFileSync(join(appRoot, "src/touched.ts"), "utf8")).toBe("ORIGINAL A\n");
+    expect(readFileSync(join(appRoot, "src/deleted.ts"), "utf8")).toBe("ORIGINAL B\n");
+    expect(readLock(appRoot).applied).toHaveLength(0);
+  });
+});

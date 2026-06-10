@@ -51,14 +51,16 @@ describe("convert", () => {
     expect(exitSpy).toHaveBeenCalledWith(1);
   });
 
-  it("exits 1 when already converted (new lock exists, legacy also exists is the heal path — here only new exists is checked via legacy-missing first)", () => {
+  it("exits 1 when only the new lock exists (no legacy lock to convert)", () => {
     // legacy missing + new lock present → "no legacy lock" branch fires first
     writeFileSync(join(appRoot, NEW_LOCK), "{}", "utf8");
+    const errorSpy = vi.spyOn(console, "error").mockImplementation(() => {});
     const exitSpy = vi.spyOn(process, "exit").mockImplementation((() => {
       throw new Error("process.exit called");
     }) as never);
 
     expect(() => convert(appRoot)).toThrow("process.exit called");
     expect(exitSpy).toHaveBeenCalledWith(1);
+    expect(errorSpy).toHaveBeenCalledWith(expect.stringContaining("No legacy lock file found"));
   });
 });

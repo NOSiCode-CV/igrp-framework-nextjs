@@ -1,5 +1,17 @@
 # @igrp/framework-next
 
+## 0.1.0-beta.150
+
+### Patch Changes
+
+- ca731c7: `igrpBuildConfig` now canonicalizes `appCode` (trim + uppercase) in the returned config, so the Access Management sync and the read paths (menu/app fetch hooks and their cache keys) always see the same uppercase form. Previously only the sync path normalized, so a lowercase `IGRP_APP_CODE` could register the app as `APP_X` while reads queried `app_x`. Configs whose `appCode` is already canonical are returned unchanged (same object identity).
+- 455138a: Access Management sync now accepts `IGRP_APP_CODE` in any case and normalizes it to uppercase (the AM canonical form) before validation, matching the documented case-insensitive contract. Previously, lowercase app codes were rejected with `IGRP_ACCESS_MANAGEMENT_CONFIG_MISSING`.
+- d861e16: `igrpBuildConfig` now validates the full config shape with a Zod schema, enforcing the previously documentation-only invariants: `previewMode`/`syncAccess` must be booleans, `layoutMockData` getters must be functions, `apiManagementConfig.baseUrl` is required when preview is off, and `serviceId`/`m2mClientId`/`m2mClientSecret`/`appCode` are required when sync is on outside preview. Failures throw `IgrpConfigError` with field-level context and a stable code (new code: `IGRP_CONFIG_INVALID`). Valid configs — including minimal preview-mode configs — are unaffected.
+- Updated dependencies [5ebe890]
+  - @igrp/framework-next-auth@0.1.0-beta.140
+  - @igrp/framework-next-ui@0.1.0-beta.149
+  - @igrp/framework-next-types@0.1.0-beta.142
+
 ## 0.1.0-beta.149
 
 ### Patch Changes

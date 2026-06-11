@@ -12,8 +12,14 @@
     "@igrp/framework-next-template": "0.1.0-beta.115"
   },
   "changesets": [
+    "design-system-datatable-autoreset",
+    "framework-next-appcode-canonical-config",
+    "framework-next-appcode-case",
+    "framework-next-config-schema",
     "migrator-migration-15",
+    "next-auth-introspection-timeout",
     "sidebar-trigger-restore",
-    "silent-logs-cleanup"
+    "silent-logs-cleanup",
+    "template-migrator-honest-rollback"
   ]
 }

@@ -60,7 +60,8 @@ export function createInMemoryTokenRecoveryStore(
     },
     async set(consumedRefreshToken, result, ttlMs) {
       const now = Date.now();
-      if (entries.size >= maxEntries) {
+      // Overwriting an existing key never grows the map — only evict for net-new keys.
+      if (!entries.has(consumedRefreshToken) && entries.size >= maxEntries) {
         sweepExpired(now);
         if (entries.size >= maxEntries) {
           const oldest = entries.keys().next().value;

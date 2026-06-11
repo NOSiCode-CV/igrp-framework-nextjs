@@ -5,6 +5,9 @@ import {
   getAuthProviderIdFromEnv,
   type AuthProviderId,
 } from './providers';
+import { createInMemoryTokenRecoveryStore, type IGRPTokenRecoveryStore } from './token-store';
+
+export * from './token-store';
 
 type AuthEnvironment = Record<string, string | undefined>;
 
@@ -126,59 +129,38 @@ const inflightRefreshes = new Map<string, Promise<JWT>>();
 // TTL is coupled to the access-token lifetime / session poll interval: the entry
 // must outlive the gap between an RSC rotation and the next persisting poll.
 // With a ~180s access token and a 150s poll, 180s comfortably bridges it while
-// holding a soon-stale refresh token in memory only briefly.
-//
-// In-memory only; multi-instance deployments without sticky sessions can still
-// race across pods (same limitation as `inflightRefreshes`). The `recoveryStore`
-// object is the seam where a shared store (e.g. Redis) could later drop in.
+// holding a soon-stale refresh token only briefly.
 const RECOVERY_TTL_MS = 180_000;
-const RECOVERY_MAX_ENTRIES = 5000;
 
-type RecoveryEntry = { result: JWT; expiresAt: number };
+// Defaults to per-process memory (single instance / sticky routing). Replace
+// via configureOidcTokenRecoveryStore with a shared store (e.g. Redis through
+// createRedisTokenRecoveryStore) for multi-replica deployments without sticky
+// sessions — that closes the cross-pod rotation race the in-memory store can't.
+let recoveryStore: IGRPTokenRecoveryStore = createInMemoryTokenRecoveryStore();
 
-const recoveryStore = (() => {
-  const entries = new Map<string, RecoveryEntry>();
-
-  function sweepExpired(now: number) {
-    for (const [key, entry] of entries) {
-      if (entry.expiresAt <= now) entries.delete(key);
-    }
-  }
-
-  return {
-    get(refreshToken: string | undefined): JWT | null {
-      if (!refreshToken) return null;
-      const entry = entries.get(refreshToken);
-      if (!entry) return null;
-      if (entry.expiresAt <= Date.now()) {
-        entries.delete(refreshToken);
-        return null;
-      }
-      return entry.result;
-    },
-    set(refreshToken: string, result: JWT) {
-      const now = Date.now();
-      if (entries.size >= RECOVERY_MAX_ENTRIES) {
-        sweepExpired(now);
-        if (entries.size >= RECOVERY_MAX_ENTRIES) {
-          // Still full after sweeping — drop the oldest insertion (Map preserves order).
-          const oldest = entries.keys().next().value;
-          if (oldest !== undefined) entries.delete(oldest);
-        }
-      }
-      entries.set(refreshToken, { result, expiresAt: now + RECOVERY_TTL_MS });
-    },
-  };
-})();
+/**
+ * Replaces the rotation-recovery store. Call once at startup — `withIGRPAuth`
+ * does this automatically when its `tokenRecoveryStore` option is set.
+ */
+export function configureOidcTokenRecoveryStore(store: IGRPTokenRecoveryStore): void {
+  recoveryStore = store;
+}
 
 /**
  * Returns a rotated token previously cached by {@link refreshOidcAccessToken}
  * for the given (now-consumed) refresh token, or null if absent/expired. Pure
- * peek — no network, no deletion-on-read (both an RSC read and the persisting
- * poll may need the same entry before one persists; it self-evicts by TTL).
+ * peek — no deletion-on-read (both an RSC read and the persisting poll may
+ * need the same entry before one persists; it self-evicts by TTL). A store
+ * failure degrades to a cache miss: the recovery path must never take a
+ * session read down with it.
  */
-export function getRecoveredToken(refreshToken: string | undefined): JWT | null {
-  return recoveryStore.get(refreshToken);
+export async function getRecoveredToken(refreshToken: string | undefined): Promise<JWT | null> {
+  if (!refreshToken) return null;
+  try {
+    return await recoveryStore.get(refreshToken);
+  } catch {
+    return null;
+  }
 }
 
 export async function refreshOidcAccessToken(token: JWT, env: AuthEnvironment): Promise<JWT> {
@@ -271,6 +253,14 @@ async function performRefresh(
   }
 
   if (!response || !response.ok) {
+    // With a SHARED recovery store, a permanent rejection (invalid_grant) often
+    // means another replica already rotated this refresh token — its result may
+    // have landed in the store after our caller's pre-flight recovery check.
+    // Peek once more before declaring the session dead. With the default
+    // in-memory store this is a cheap no-op re-check.
+    const recovered = await getRecoveredToken(token.refreshToken);
+    if (recovered) return recovered;
+
     return {
       ...token,
       error: 'RefreshAccessTokenError',
@@ -321,10 +311,17 @@ async function performRefresh(
   // The IdP rotated the refresh token. If this refresh ran where the cookie
   // can't be persisted (an RSC render), the rotated token would be lost and the
   // next read would replay the consumed one → invalid_grant → logout. Remember
-  // the outcome keyed by the CONSUMED token so the next persist-capable read can
-  // recover it. Skip when the token was reused (the cookie's token still works).
+  // the outcome keyed by the CONSUMED token so the next persist-capable read —
+  // possibly on another replica when the store is shared — can recover it.
+  // Skip when the token was reused (the cookie's token still works). Awaited so
+  // a shared store is consistent before the rotated cookie is written; a store
+  // outage must not fail a successful refresh.
   if (newRefreshToken !== oldRefreshToken) {
-    recoveryStore.set(oldRefreshToken, refreshed);
+    try {
+      await recoveryStore.set(oldRefreshToken, refreshed, RECOVERY_TTL_MS);
+    } catch {
+      // Best-effort: losing the recovery entry re-opens only the RSC race window.
+    }
   }
 
   return refreshed;

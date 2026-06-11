@@ -56,6 +56,15 @@ describe('createInMemoryTokenRecoveryStore', () => {
     expect(await store.get('rt-1')).toBeNull();
     expect(await store.get('rt-3')).not.toBeNull();
   });
+
+  it('overwriting an existing key at capacity does not evict another entry', async () => {
+    const store = createInMemoryTokenRecoveryStore({ maxEntries: 2 });
+    await store.set('rt-1', makeJwt(), 180_000);
+    await store.set('rt-2', makeJwt(), 180_000);
+    await store.set('rt-2', makeJwt({ accessToken: 'at-updated' }), 180_000);
+    expect(await store.get('rt-1')).not.toBeNull();
+    expect((await store.get('rt-2'))?.accessToken).toBe('at-updated');
+  });
 });
 
 describe('createRedisTokenRecoveryStore', () => {
@@ -70,6 +79,12 @@ describe('createRedisTokenRecoveryStore', () => {
     };
     return { client, data };
   }
+
+  it('returns null for an unknown key', async () => {
+    const { client } = makeFakeRedis();
+    const store = createRedisTokenRecoveryStore(client);
+    expect(await store.get('never-stored')).toBeNull();
+  });
 
   it('round-trips a stored result through JSON', async () => {
     const { client } = makeFakeRedis();

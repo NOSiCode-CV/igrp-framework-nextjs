@@ -41,6 +41,10 @@ function mockFetch(responses: FetchMockEntry[]) {
       );
       return Promise.resolve({
         ok: match?.ok ?? true,
+        // A real Response always carries a status; without one, `status < 500`
+        // is false and the refresh retry loop would treat the failure as a 5xx
+        // and retry. ok:false here means a permanent 4xx (e.g. invalid_grant).
+        status: (match?.ok ?? true) ? 200 : 400,
         json: () => Promise.resolve(match?.body ?? {}),
       });
     }),
@@ -272,7 +276,7 @@ describe('refreshOidcAccessToken — rotation recovery cache', () => {
     const result = await refreshOidcAccessToken(makeToken({ refreshToken: 'old-rt' }), VALID_ENV);
     expect(result.refreshToken).toBe('new-rt');
 
-    const recovered = getRecoveredToken('old-rt');
+    const recovered = await getRecoveredToken('old-rt');
     expect(recovered).not.toBeNull();
     expect(recovered!.refreshToken).toBe('new-rt');
     expect(recovered!.accessToken).toBe('new-at');
@@ -296,7 +300,7 @@ describe('refreshOidcAccessToken — rotation recovery cache', () => {
     const { refreshOidcAccessToken, getRecoveredToken } = await import('../oidc');
 
     await refreshOidcAccessToken(makeToken({ refreshToken: 'old-rt' }), VALID_ENV);
-    expect(getRecoveredToken('old-rt')).toBeNull();
+    expect(await getRecoveredToken('old-rt')).toBeNull();
   });
 
   it('expires a cached rotation after the TTL', async () => {
@@ -312,10 +316,10 @@ describe('refreshOidcAccessToken — rotation recovery cache', () => {
       const { refreshOidcAccessToken, getRecoveredToken } = await import('../oidc');
 
       await refreshOidcAccessToken(makeToken({ refreshToken: 'old-rt' }), VALID_ENV);
-      expect(getRecoveredToken('old-rt')).not.toBeNull();
+      expect(await getRecoveredToken('old-rt')).not.toBeNull();
 
       vi.advanceTimersByTime(180_000 + 1000);
-      expect(getRecoveredToken('old-rt')).toBeNull();
+      expect(await getRecoveredToken('old-rt')).toBeNull();
     } finally {
       vi.useRealTimers();
     }
@@ -323,8 +327,8 @@ describe('refreshOidcAccessToken — rotation recovery cache', () => {
 
   it('getRecoveredToken returns null for an unknown or missing token', async () => {
     const { getRecoveredToken } = await import('../oidc');
-    expect(getRecoveredToken('never-seen')).toBeNull();
-    expect(getRecoveredToken(undefined)).toBeNull();
+    expect(await getRecoveredToken('never-seen')).toBeNull();
+    expect(await getRecoveredToken(undefined)).toBeNull();
   });
 });
 
@@ -540,5 +544,87 @@ describe('introspectOidcToken', () => {
     } finally {
       vi.useRealTimers();
     }
+  });
+});
+
+// ─── configureOidcTokenRecoveryStore ─────────────────────────────────────────
+
+describe('configureOidcTokenRecoveryStore', () => {
+  it('routes getRecoveredToken reads through the injected store', async () => {
+    const { configureOidcTokenRecoveryStore, getRecoveredToken } = await import('../oidc');
+    const stored = makeToken({ refreshToken: 'rt-from-store', accessToken: 'at-from-store' });
+    configureOidcTokenRecoveryStore({
+      get: vi.fn(async (key: string) => (key === 'consumed-rt' ? stored : null)),
+      set: vi.fn(async () => {}),
+    });
+
+    expect(await getRecoveredToken('consumed-rt')).toEqual(stored);
+    expect(await getRecoveredToken('other')).toBeNull();
+  });
+
+  it('writes rotated results through the injected store', async () => {
+    mockFetch([
+      { url: DISCOVERY_URL, body: MOCK_DISCOVERY },
+      {
+        url: MOCK_DISCOVERY.token_endpoint,
+        body: { access_token: 'new-at', refresh_token: 'new-rt', expires_in: 180 },
+      },
+    ]);
+    const { configureOidcTokenRecoveryStore, refreshOidcAccessToken } = await import('../oidc');
+    const set = vi.fn(async () => {});
+    configureOidcTokenRecoveryStore({ get: vi.fn(async () => null), set });
+
+    await refreshOidcAccessToken(makeToken({ refreshToken: 'old-rt' }), VALID_ENV);
+
+    expect(set).toHaveBeenCalledWith(
+      'old-rt',
+      expect.objectContaining({ accessToken: 'new-at', refreshToken: 'new-rt' }),
+      expect.any(Number),
+    );
+  });
+
+  it('recovers from a permanent refresh rejection when another replica already rotated', async () => {
+    // 4xx from the token endpoint = invalid_grant (token consumed elsewhere).
+    mockFetch([
+      { url: DISCOVERY_URL, body: MOCK_DISCOVERY },
+      { url: MOCK_DISCOVERY.token_endpoint, body: { error: 'invalid_grant' }, ok: false },
+    ]);
+    const { configureOidcTokenRecoveryStore, refreshOidcAccessToken } = await import('../oidc');
+    const rotatedElsewhere = makeToken({
+      refreshToken: 'new-rt-from-pod-a',
+      accessToken: 'at-from-pod-a',
+      expiresAt: Date.now() + 180_000,
+    });
+    configureOidcTokenRecoveryStore({
+      get: vi.fn(async (key: string) => (key === 'old-rt' ? rotatedElsewhere : null)),
+      set: vi.fn(async () => {}),
+    });
+
+    const result = await refreshOidcAccessToken(makeToken({ refreshToken: 'old-rt' }), VALID_ENV);
+
+    expect(result.error).toBeUndefined();
+    expect(result.accessToken).toBe('at-from-pod-a');
+    expect(result.refreshToken).toBe('new-rt-from-pod-a');
+  });
+
+  it('treats a throwing store as a cache miss and still fails closed on rejection', async () => {
+    mockFetch([
+      { url: DISCOVERY_URL, body: MOCK_DISCOVERY },
+      { url: MOCK_DISCOVERY.token_endpoint, body: { error: 'invalid_grant' }, ok: false },
+    ]);
+    const { configureOidcTokenRecoveryStore, refreshOidcAccessToken } = await import('../oidc');
+    configureOidcTokenRecoveryStore({
+      get: vi.fn(async () => {
+        throw new Error('redis down');
+      }),
+      set: vi.fn(async () => {
+        throw new Error('redis down');
+      }),
+    });
+
+    const result = await refreshOidcAccessToken(makeToken({ refreshToken: 'old-rt' }), VALID_ENV);
+
+    expect(result.error).toBe('RefreshAccessTokenError');
+    expect(result.forceLogout).toBe(true);
   });
 });

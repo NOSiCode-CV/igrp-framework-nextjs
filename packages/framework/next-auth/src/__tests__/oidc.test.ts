@@ -53,9 +53,14 @@ function mockFetch(responses: FetchMockEntry[]) {
 
 // ─── Cache reset between tests ────────────────────────────────────────────────
 
-afterEach(() => {
+afterEach(async () => {
   vi.unstubAllGlobals();
   vi.resetModules(); // gives each test a fresh openIdConfigurationCache
+  // The recovery store lives on globalThis and survives resetModules — restore
+  // the default in-memory store so injected test doubles don't leak across tests.
+  const { configureOidcTokenRecoveryStore, createInMemoryTokenRecoveryStore } =
+    await import('../oidc');
+  configureOidcTokenRecoveryStore(createInMemoryTokenRecoveryStore());
 });
 
 // ─── refreshOidcAccessToken ───────────────────────────────────────────────────
@@ -560,6 +565,20 @@ describe('configureOidcTokenRecoveryStore', () => {
 
     expect(await getRecoveredToken('consumed-rt')).toEqual(stored);
     expect(await getRecoveredToken('other')).toBeNull();
+  });
+
+  it('shares the configured store across module copies via globalThis', async () => {
+    const first = await import('../oidc');
+    const stored = makeToken({ refreshToken: 'rt-shared', accessToken: 'at-shared' });
+    first.configureOidcTokenRecoveryStore({
+      get: vi.fn(async () => stored),
+      set: vi.fn(async () => {}),
+    });
+
+    vi.resetModules();
+    const second = await import('../oidc');
+
+    expect(await second.getRecoveredToken('anything')).toEqual(stored);
   });
 
   it('writes rotated results through the injected store', async () => {

@@ -136,14 +136,47 @@ const RECOVERY_TTL_MS = 180_000;
 // via configureOidcTokenRecoveryStore with a shared store (e.g. Redis through
 // createRedisTokenRecoveryStore) for multi-replica deployments without sticky
 // sessions — that closes the cross-pod rotation race the in-memory store can't.
-let recoveryStore: IGRPTokenRecoveryStore = createInMemoryTokenRecoveryStore();
+//
+// The store reference lives on globalThis (keyed by Symbol.for) rather than in
+// a module-level variable: tsup inlines this module into each entry chunk
+// (dist/config.js, dist/oidc.js, …) and Next.js can instantiate a module once
+// per server layer, so a plain `let` would exist as several independent
+// copies — configureOidcTokenRecoveryStore would then mutate a copy the jwt
+// callback never reads. Symbol.for resolves to the same slot in all copies.
+const RECOVERY_STORE_SLOT = Symbol.for('igrp.next-auth.oidc.tokenRecoveryStore');
+
+type RecoveryStoreSlot = { store: IGRPTokenRecoveryStore };
+
+function recoveryStoreSlot(): RecoveryStoreSlot {
+  const g = globalThis as { [RECOVERY_STORE_SLOT]?: RecoveryStoreSlot };
+  g[RECOVERY_STORE_SLOT] ??= { store: createInMemoryTokenRecoveryStore() };
+  return g[RECOVERY_STORE_SLOT];
+}
 
 /**
  * Replaces the rotation-recovery store. Call once at startup — `withIGRPAuth`
  * does this automatically when its `tokenRecoveryStore` option is set.
  */
 export function configureOidcTokenRecoveryStore(store: IGRPTokenRecoveryStore): void {
-  recoveryStore = store;
+  recoveryStoreSlot().store = store;
+}
+
+let warnedRecoveryStoreFailure = false;
+
+/**
+ * Store failures must never break a session read, but a silent catch hides a
+ * Redis outage behind sporadic forced logouts. Warn once per process so the
+ * operator can tell "store down" apart from "IdP rejected the grant" without
+ * flooding logs on every session read during an outage.
+ */
+function warnRecoveryStoreFailure(operation: 'get' | 'set', error: unknown): void {
+  if (warnedRecoveryStoreFailure) return;
+  warnedRecoveryStoreFailure = true;
+  console.warn(
+    `[oidc.tokenRecoveryStore] ${operation} failed — recovery degraded to cache miss; ` +
+      'rotated-token recovery is disabled until the store recovers:',
+    error instanceof Error ? `${error.name}: ${error.message}` : error,
+  );
 }
 
 /**
@@ -157,8 +190,9 @@ export function configureOidcTokenRecoveryStore(store: IGRPTokenRecoveryStore): 
 export async function getRecoveredToken(refreshToken: string | undefined): Promise<JWT | null> {
   if (!refreshToken) return null;
   try {
-    return await recoveryStore.get(refreshToken);
-  } catch {
+    return await recoveryStoreSlot().store.get(refreshToken);
+  } catch (error) {
+    warnRecoveryStoreFailure('get', error);
     return null;
   }
 }
@@ -253,13 +287,15 @@ async function performRefresh(
   }
 
   if (!response || !response.ok) {
-    // With a SHARED recovery store, a permanent rejection (invalid_grant) often
-    // means another replica already rotated this refresh token — its result may
-    // have landed in the store after our caller's pre-flight recovery check.
-    // Peek once more before declaring the session dead. With the default
-    // in-memory store this is a cheap no-op re-check.
+    // With a SHARED recovery store, a permanent rejection (invalid_grant) or an
+    // exhausted retry often means another replica already rotated this refresh
+    // token — its result may have landed in the store after our caller's
+    // pre-flight recovery check. Peek once more before declaring the session
+    // dead. With the default in-memory store this is a cheap no-op re-check.
     const recovered = await getRecoveredToken(token.refreshToken);
-    if (recovered) return recovered;
+    if (recovered && typeof recovered.accessToken === 'string' && !recovered.error) {
+      return recovered;
+    }
 
     return {
       ...token,
@@ -318,9 +354,10 @@ async function performRefresh(
   // outage must not fail a successful refresh.
   if (newRefreshToken !== oldRefreshToken) {
     try {
-      await recoveryStore.set(oldRefreshToken, refreshed, RECOVERY_TTL_MS);
-    } catch {
+      await recoveryStoreSlot().store.set(oldRefreshToken, refreshed, RECOVERY_TTL_MS);
+    } catch (error) {
       // Best-effort: losing the recovery entry re-opens only the RSC race window.
+      warnRecoveryStoreFailure('set', error);
     }
   }
 

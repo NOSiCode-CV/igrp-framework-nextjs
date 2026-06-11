@@ -11,7 +11,8 @@ vi.mock('../oidc', async (importOriginal) => {
     refreshOidcAccessToken: vi
       .fn()
       .mockResolvedValue({ accessToken: 'refreshed-at', forceLogout: false }),
-    getRecoveredToken: vi.fn().mockReturnValue(null),
+    getRecoveredToken: vi.fn().mockResolvedValue(null),
+    configureOidcTokenRecoveryStore: vi.fn(),
   };
 });
 
@@ -412,7 +413,7 @@ describe('withIGRPAuth — jwt callback rotation recovery', () => {
       error: undefined,
       forceLogout: false,
     };
-    (oidcModule.getRecoveredToken as ReturnType<typeof vi.fn>).mockReturnValue(recoveredToken);
+    (oidcModule.getRecoveredToken as ReturnType<typeof vi.fn>).mockResolvedValue(recoveredToken);
 
     // Expired access token; the cookie still holds the OLD refresh token.
     const expiredToken = {
@@ -436,7 +437,7 @@ describe('withIGRPAuth — jwt callback rotation recovery', () => {
     const instance = withIGRPAuth({ env: VALID_ENV });
     const jwtCb = instance.authOptions.callbacks?.jwt;
 
-    (oidcModule.getRecoveredToken as ReturnType<typeof vi.fn>).mockReturnValue(null);
+    (oidcModule.getRecoveredToken as ReturnType<typeof vi.fn>).mockResolvedValue(null);
 
     const expiredToken = {
       refreshToken: 'old-rt',
@@ -447,5 +448,28 @@ describe('withIGRPAuth — jwt callback rotation recovery', () => {
 
     expect(oidcModule.introspectOidcToken).toHaveBeenCalled();
     expect(oidcModule.refreshOidcAccessToken).toHaveBeenCalled();
+  });
+});
+
+describe('withIGRPAuth — tokenRecoveryStore option', () => {
+  beforeEach(() => {
+    vi.clearAllMocks();
+  });
+
+  it('forwards the store to configureOidcTokenRecoveryStore at construction', async () => {
+    const withIGRPAuth = await getFactory();
+    const store = { get: vi.fn(async () => null), set: vi.fn(async () => {}) };
+
+    withIGRPAuth({ env: VALID_ENV, tokenRecoveryStore: store });
+
+    expect(oidcModule.configureOidcTokenRecoveryStore).toHaveBeenCalledWith(store);
+  });
+
+  it('leaves the default store alone when the option is absent', async () => {
+    const withIGRPAuth = await getFactory();
+
+    withIGRPAuth({ env: VALID_ENV });
+
+    expect(oidcModule.configureOidcTokenRecoveryStore).not.toHaveBeenCalled();
   });
 });

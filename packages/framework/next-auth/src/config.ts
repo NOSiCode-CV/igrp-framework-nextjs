@@ -34,11 +34,13 @@ import {
   type AuthProviderId,
 } from './providers';
 import {
+  configureOidcTokenRecoveryStore,
   getRecoveredToken,
   introspectOidcToken,
   refreshOidcAccessToken,
   revokeOidcSession,
 } from './oidc';
+import type { IGRPTokenRecoveryStore } from './token-store';
 import { escapeHtml, sanitizeRedirectUrl } from './sanitize';
 
 // ─── Config Error ─────────────────────────────────────────────────────────────
@@ -176,6 +178,22 @@ export type IGRPAuthOptions = {
    * withIGRPAuth({ onSessionExpired: () => redirect("/logout") });
    */
   onSessionExpired?: () => void | never;
+
+  /**
+   * Shared store for rotated refresh-token recovery. Defaults to an in-memory,
+   * per-process store — correct for single-instance or sticky-routed
+   * deployments. Multi-replica deployments without sticky sessions should
+   * supply a shared store, e.g.:
+   *
+   * @example
+   * import { createClient } from 'redis';
+   * import { createRedisTokenRecoveryStore } from '@igrp/framework-next-auth/oidc';
+   *
+   * const redis = createClient({ url: process.env.REDIS_URL });
+   * await redis.connect();
+   * withIGRPAuth({ tokenRecoveryStore: createRedisTokenRecoveryStore(redis) });
+   */
+  tokenRecoveryStore?: IGRPTokenRecoveryStore;
 };
 
 export type IGRPAuthInstance = {
@@ -437,7 +455,12 @@ export function withIGRPAuth(options: IGRPAuthOptions = {}): IGRPAuthInstance {
     callbacks: callbackExtensions = {},
     middleware: middlewareOptions = {},
     onSessionExpired,
+    tokenRecoveryStore,
   } = options;
+
+  if (tokenRecoveryStore) {
+    configureOidcTokenRecoveryStore(tokenRecoveryStore);
+  }
 
   const {
     loginUrl = '/login',
@@ -534,7 +557,7 @@ export function withIGRPAuth(options: IGRPAuthOptions = {}): IGRPAuthInstance {
         // render). This MUST run before introspection: after rotation the old
         // refresh token reads `active: false`, so introspecting here would
         // short-circuit a recoverable session straight to forceLogout.
-        const recovered = getRecoveredToken(igrpToken.refreshToken);
+        const recovered = await getRecoveredToken(igrpToken.refreshToken);
         if (recovered) {
           igrpToken = recovered;
         } else {

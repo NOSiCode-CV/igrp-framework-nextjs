@@ -79,9 +79,10 @@ export function IGRPSessionWatcher({ children }: { children: React.ReactNode }) 
   // from the token itself (`session.expiresAt`, set by the jwt/session
   // callbacks on every rotation), so correctness no longer depends on that
   // tuning. getSession() hits /api/auth/session — a route handler, which CAN
-  // persist the rotated cookie — and broadcasts the new session to all
-  // useSession consumers, which reschedules this effect with the new
-  // expiresAt. On permanent refresh failure expiresAt is unchanged, so the
+  // persist the rotated cookie — and broadcasts the new session to OTHER tabs
+  // (storage events don't fire in the originating tab); this tab picks up the
+  // new expiresAt on the next poll or focus refetch, which reschedules this
+  // effect. On permanent refresh failure expiresAt is unchanged, so the
   // effect does NOT re-fire (no retry loop); the error-flag effect above
   // routes to /logout instead. The fixed poll stays on as a fallback.
   const expiresAt = (session as { expiresAt?: number } | null)?.expiresAt;

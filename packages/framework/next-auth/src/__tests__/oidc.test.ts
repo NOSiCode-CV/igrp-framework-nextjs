@@ -634,10 +634,10 @@ describe('configureOidcTokenRecoveryStore', () => {
     const { configureOidcTokenRecoveryStore, refreshOidcAccessToken } = await import('../oidc');
     configureOidcTokenRecoveryStore({
       get: vi.fn(async () => {
-        throw new Error('redis down');
+        throw new Error('store down');
       }),
       set: vi.fn(async () => {
-        throw new Error('redis down');
+        throw new Error('store down');
       }),
     });
 

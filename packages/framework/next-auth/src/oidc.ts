@@ -133,9 +133,9 @@ const inflightRefreshes = new Map<string, Promise<JWT>>();
 const RECOVERY_TTL_MS = 180_000;
 
 // Defaults to per-process memory (single instance / sticky routing). Replace
-// via configureOidcTokenRecoveryStore with a shared store (e.g. Redis through
-// createRedisTokenRecoveryStore) for multi-replica deployments without sticky
-// sessions — that closes the cross-pod rotation race the in-memory store can't.
+// via configureOidcTokenRecoveryStore with a store backed by shared
+// infrastructure for multi-replica deployments without sticky sessions — that
+// closes the cross-pod rotation race the in-memory store can't.
 //
 // The store reference lives on globalThis (keyed by Symbol.for) rather than in
 // a module-level variable: tsup inlines this module into each entry chunk
@@ -165,7 +165,7 @@ let warnedRecoveryStoreFailure = false;
 
 /**
  * Store failures must never break a session read, but a silent catch hides a
- * Redis outage behind sporadic forced logouts. Warn once per process so the
+ * store outage behind sporadic forced logouts. Warn once per process so the
  * operator can tell "store down" apart from "IdP rejected the grant" without
  * flooding logs on every session read during an outage.
  */

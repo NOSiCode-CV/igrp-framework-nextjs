@@ -183,15 +183,12 @@ export type IGRPAuthOptions = {
    * Shared store for rotated refresh-token recovery. Defaults to an in-memory,
    * per-process store — correct for single-instance or sticky-routed
    * deployments. Multi-replica deployments without sticky sessions should
-   * supply a shared store, e.g.:
+   * supply an `IGRPTokenRecoveryStore` implementation backed by infrastructure
+   * shared across replicas. Implementations must never let `get`/`set` block
+   * auth — callers treat thrown errors as cache misses.
    *
    * @example
-   * import { createClient } from 'redis';
-   * import { createRedisTokenRecoveryStore } from '@igrp/framework-next-auth/oidc';
-   *
-   * const redis = createClient({ url: process.env.REDIS_URL });
-   * await redis.connect();
-   * withIGRPAuth({ tokenRecoveryStore: createRedisTokenRecoveryStore(redis) });
+   * withIGRPAuth({ tokenRecoveryStore: mySharedStore });
    */
   tokenRecoveryStore?: IGRPTokenRecoveryStore;
 };

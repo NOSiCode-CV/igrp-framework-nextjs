@@ -13,8 +13,9 @@ import type { JWT } from './jwt';
  *
  * The default is an in-memory, per-process store (single instance / sticky
  * routing). Multi-replica deployments without sticky sessions should supply a
- * shared implementation (see {@link createRedisTokenRecoveryStore}) via the
- * `tokenRecoveryStore` option of `withIGRPAuth`.
+ * shared implementation of this interface (backed by whatever shared
+ * infrastructure the deployment has) via the `tokenRecoveryStore` option of
+ * `withIGRPAuth`.
  *
  * Implementations must be resilient: callers treat a thrown error as a cache
  * miss, but well-behaved stores should not throw on routine operations.
@@ -69,57 +70,6 @@ export function createInMemoryTokenRecoveryStore(
         }
       }
       entries.set(consumedRefreshToken, { result, expiresAt: now + ttlMs });
-    },
-  };
-}
-
-/**
- * Minimal redis-like client surface — matches node-redis v4 (`createClient()`)
- * out of the box. ioredis users: wrap it —
- * `{ get: (k) => redis.get(k), set: (k, v, o) => redis.set(k, v, 'PX', o.PX) }`.
- */
-export type IGRPRedisLikeClient = {
-  get(key: string): Promise<string | null>;
-  set(key: string, value: string, options: { PX: number }): Promise<unknown>;
-};
-
-/** SHA-256 hex via Web Crypto — avoids Node `crypto` so the module stays edge-safe. */
-async function sha256Hex(value: string): Promise<string> {
-  const digest = await crypto.subtle.digest('SHA-256', new TextEncoder().encode(value));
-  return Array.from(new Uint8Array(digest))
-    .map((b) => b.toString(16).padStart(2, '0'))
-    .join('');
-}
-
-/**
- * Shared recovery store backed by a redis-like client, for multi-replica
- * deployments without sticky sessions.
- *
- * Keys are `keyPrefix + sha256(consumedRefreshToken)` so raw refresh tokens
- * never appear as Redis keys. Values are JSON-serialized JWTs and DO contain
- * live tokens — point this at a trusted, access-controlled Redis only, and
- * keep the TTL short (the caller passes ~180s).
- */
-export function createRedisTokenRecoveryStore(
-  client: IGRPRedisLikeClient,
-  options: { keyPrefix?: string } = {},
-): IGRPTokenRecoveryStore {
-  const keyPrefix = options.keyPrefix ?? 'igrp:oidc:rotated:';
-
-  return {
-    async get(consumedRefreshToken) {
-      const key = keyPrefix + (await sha256Hex(consumedRefreshToken));
-      const raw = await client.get(key);
-      if (!raw) return null;
-      try {
-        return JSON.parse(raw) as JWT;
-      } catch {
-        return null;
-      }
-    },
-    async set(consumedRefreshToken, result, ttlMs) {
-      const key = keyPrefix + (await sha256Hex(consumedRefreshToken));
-      await client.set(key, JSON.stringify(result), { PX: ttlMs });
     },
   };
 }

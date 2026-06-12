@@ -1,10 +1,6 @@
 import { describe, it, expect, vi, afterEach } from 'vitest';
 import type { JWT } from '../jwt';
-import {
-  createInMemoryTokenRecoveryStore,
-  createRedisTokenRecoveryStore,
-  type IGRPRedisLikeClient,
-} from '../token-store';
+import { createInMemoryTokenRecoveryStore } from '../token-store';
 
 function makeJwt(overrides: Partial<JWT> = {}): JWT {
   return {
@@ -64,68 +60,5 @@ describe('createInMemoryTokenRecoveryStore', () => {
     await store.set('rt-2', makeJwt({ accessToken: 'at-updated' }), 180_000);
     expect(await store.get('rt-1')).not.toBeNull();
     expect((await store.get('rt-2'))?.accessToken).toBe('at-updated');
-  });
-});
-
-describe('createRedisTokenRecoveryStore', () => {
-  function makeFakeRedis() {
-    const data = new Map<string, string>();
-    const client: IGRPRedisLikeClient = {
-      get: vi.fn(async (key: string) => data.get(key) ?? null),
-      set: vi.fn(async (key: string, value: string, _options: { PX: number }) => {
-        data.set(key, value);
-        return 'OK';
-      }),
-    };
-    return { client, data };
-  }
-
-  it('returns null for an unknown key', async () => {
-    const { client } = makeFakeRedis();
-    const store = createRedisTokenRecoveryStore(client);
-    expect(await store.get('never-stored')).toBeNull();
-  });
-
-  it('round-trips a stored result through JSON', async () => {
-    const { client } = makeFakeRedis();
-    const store = createRedisTokenRecoveryStore(client);
-    const jwt = makeJwt();
-    await store.set('consumed-rt', jwt, 180_000);
-    expect(await store.get('consumed-rt')).toEqual(jwt);
-  });
-
-  it('passes the TTL to the client as PX milliseconds', async () => {
-    const { client } = makeFakeRedis();
-    const store = createRedisTokenRecoveryStore(client);
-    await store.set('consumed-rt', makeJwt(), 42_000);
-    expect(client.set).toHaveBeenCalledWith(expect.any(String), expect.any(String), {
-      PX: 42_000,
-    });
-  });
-
-  it('never uses the raw refresh token as a key (keys are hashed)', async () => {
-    const { client, data } = makeFakeRedis();
-    const store = createRedisTokenRecoveryStore(client);
-    await store.set('consumed-rt-secret-value', makeJwt(), 180_000);
-    for (const key of data.keys()) {
-      expect(key).not.toContain('consumed-rt-secret-value');
-      expect(key).toMatch(/^igrp:oidc:rotated:[0-9a-f]{64}$/);
-    }
-  });
-
-  it('honors a custom keyPrefix', async () => {
-    const { client, data } = makeFakeRedis();
-    const store = createRedisTokenRecoveryStore(client, { keyPrefix: 'custom:' });
-    await store.set('consumed-rt', makeJwt(), 180_000);
-    expect([...data.keys()][0]).toMatch(/^custom:[0-9a-f]{64}$/);
-  });
-
-  it('returns null on malformed JSON instead of throwing', async () => {
-    const { client, data } = makeFakeRedis();
-    const store = createRedisTokenRecoveryStore(client);
-    await store.set('consumed-rt', makeJwt(), 180_000);
-    const key = [...data.keys()][0]!;
-    data.set(key, 'not-json{');
-    expect(await store.get('consumed-rt')).toBeNull();
   });
 });

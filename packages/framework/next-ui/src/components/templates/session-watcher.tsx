@@ -73,7 +73,7 @@ export function IGRPSessionWatcher({ children }: { children: React.ReactNode }) 
     router.push(target);
   }, [status, session, router]);
 
-  // Adaptive silent-refresh scheduler. The fixed SessionProvider poll
+  // Adaptive silent-refresh scheduler. The fixed-interval SessionProvider poll
   // (IGRP_SESSION_REFETCH_INTERVAL, default 150s) only works when it is tuned
   // below the IdP access-token TTL; this timer derives the moment to refresh
   // from the token itself (`session.expiresAt`, set by the jwt/session
@@ -84,7 +84,7 @@ export function IGRPSessionWatcher({ children }: { children: React.ReactNode }) 
   // new expiresAt on the next poll or focus refetch, which reschedules this
   // effect. On permanent refresh failure expiresAt is unchanged, so the
   // effect does NOT re-fire (no retry loop); the error-flag effect above
-  // routes to /logout instead. The fixed poll stays on as a fallback.
+  // routes to /logout instead. The fixed-interval poll stays on as a fallback.
   const expiresAt = (session as { expiresAt?: number } | null)?.expiresAt;
   useEffect(() => {
     if (status !== 'authenticated' || typeof expiresAt !== 'number') return;

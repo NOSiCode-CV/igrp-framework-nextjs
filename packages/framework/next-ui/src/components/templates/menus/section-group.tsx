@@ -38,7 +38,7 @@ export function SectionGroup({ section, pathname }: SectionGroupProps) {
   if (section.label) {
     return (
       <SidebarGroup>
-        <Collapsible defaultOpen className={cn('group/collapsible-group')}>
+        <Collapsible defaultOpen className="group/collapsible-group">
           <CollapsibleTrigger
             className={cn(
               'flex h-8 w-full cursor-pointer items-center rounded-md px-2',

@@ -94,11 +94,7 @@ export function SearchResults({ sections, query, pathname }: SearchResultsProps)
                 href={result.href}
                 target={result.target ?? '_blank'}
                 rel="noopener noreferrer"
-                aria-label={
-                  result.target === '_blank'
-                    ? `${result.name} (opens in new tab)`
-                    : result.name
-                }
+                aria-label={result.target === '_blank' ? `${result.name} (opens in new tab)` : undefined}
                 className={cn('flex flex-col items-start gap-0.5')}
               >
                 <span className={cn('truncate')}>{result.name}</span>

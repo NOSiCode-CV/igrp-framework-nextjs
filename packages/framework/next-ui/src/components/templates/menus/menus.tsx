@@ -1,6 +1,6 @@
 'use client';
 
-import { useMemo, useState } from 'react';
+import { useCallback, useEffect, useMemo, useState } from 'react';
 import { usePathname } from 'next/navigation';
 import type { IGRPMenuItemArgs } from '@igrp/framework-next-types';
 import {
@@ -21,6 +21,15 @@ export function IGRPTemplateMenus({ menus = [] }: IGRPTemplateMenuArgs) {
   const pathname = usePathname();
   const [query, setQuery] = useState('');
   const sections = useMemo(() => buildMenuSections(menus), [menus]);
+
+  useEffect(() => {
+    setQuery('');
+  }, [menus]);
+
+  const handleQueryChange = useCallback(
+    (e: React.ChangeEvent<HTMLInputElement>) => setQuery(e.target.value),
+    [],
+  );
 
   if (sections.length === 0) {
     return (
@@ -57,7 +66,7 @@ export function IGRPTemplateMenus({ menus = [] }: IGRPTemplateMenuArgs) {
               type="search"
               placeholder="Pesquisar menus..."
               value={query}
-              onChange={(e) => setQuery(e.target.value)}
+              onChange={handleQueryChange}
               className={cn('h-8 pl-8 text-xs')}
             />
           </div>

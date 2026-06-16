@@ -35,12 +35,13 @@ export function LeafMenuItem({ node, pathname }: LeafMenuItemProps) {
             target={item.target ?? '_blank'}
             rel="noopener noreferrer"
             aria-label={item.target === '_blank' ? `${item.name} (opens in new tab)` : item.name}
+            aria-current={isActive ? 'page' : undefined}
           >
             {item.icon && <IGRPIcon iconName={item.icon} />}
             <span>{item.name}</span>
           </a>
         ) : (
-          <Link href={href} aria-label={item.name}>
+          <Link href={href} aria-label={item.name} aria-current={isActive ? 'page' : undefined}>
             {item.icon && <IGRPIcon iconName={item.icon} />}
             <span>{item.name}</span>
           </Link>

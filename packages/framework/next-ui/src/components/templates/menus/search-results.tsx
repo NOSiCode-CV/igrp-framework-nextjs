@@ -99,6 +99,7 @@ export function SearchResults({ sections, query, pathname }: SearchResultsProps)
                 target={result.target ?? '_blank'}
                 rel="noopener noreferrer"
                 aria-label={result.target === '_blank' ? `${result.name} (opens in new tab)` : undefined}
+                aria-current={result.isActive ? 'page' : undefined}
                 className={cn('flex flex-col items-start gap-0.5')}
               >
                 <span className={cn('truncate')}>{result.name}</span>
@@ -111,6 +112,7 @@ export function SearchResults({ sections, query, pathname }: SearchResultsProps)
             ) : (
               <Link
                 href={result.href}
+                aria-current={result.isActive ? 'page' : undefined}
                 className={cn('flex flex-col items-start gap-0.5')}
               >
                 <span className={cn('truncate')}>{result.name}</span>

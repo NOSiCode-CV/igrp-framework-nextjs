@@ -51,6 +51,8 @@ export function IGRPTemplateMenus({ menus = [] }: IGRPTemplateMenuArgs) {
     );
   }
 
+  const trimmedQuery = query.trim();
+
   return (
     <>
       <SidebarGroup className={cn('group-data-[collapsible=icon]:hidden')}>
@@ -64,6 +66,7 @@ export function IGRPTemplateMenus({ menus = [] }: IGRPTemplateMenuArgs) {
             />
             <Input
               type="search"
+              aria-label="Pesquisar menus"
               placeholder="Pesquisar menus..."
               value={query}
               onChange={handleQueryChange}
@@ -73,8 +76,8 @@ export function IGRPTemplateMenus({ menus = [] }: IGRPTemplateMenuArgs) {
         </SidebarGroupContent>
       </SidebarGroup>
 
-      {query.trim() ? (
-        <SearchResults sections={sections} query={query.trim()} pathname={pathname} />
+      {trimmedQuery ? (
+        <SearchResults sections={sections} query={trimmedQuery} pathname={pathname} />
       ) : (
         sections.map((section) => (
           <SectionGroup key={`grp-${section.key}`} section={section} pathname={pathname} />

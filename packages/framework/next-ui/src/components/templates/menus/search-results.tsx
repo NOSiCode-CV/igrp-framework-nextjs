@@ -1,5 +1,6 @@
 'use client';
 
+import { useMemo } from 'react';
 import Link from 'next/link';
 import {
   cn,
@@ -72,7 +73,10 @@ interface SearchResultsProps {
 }
 
 export function SearchResults({ sections, query, pathname }: SearchResultsProps) {
-  const results = buildResults(sections, query, pathname);
+  const results = useMemo(
+    () => buildResults(sections, query, pathname),
+    [sections, query, pathname],
+  );
 
   if (results.length === 0) {
     return (

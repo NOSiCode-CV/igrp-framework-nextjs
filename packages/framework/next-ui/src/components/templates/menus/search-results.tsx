@@ -87,7 +87,7 @@ export function SearchResults({ sections, query, pathname }: SearchResultsProps)
   return (
     <SidebarGroup>
       <SidebarGroupContent>
-        <SidebarMenu role="navigation">
+        <SidebarMenu>
           {results.map((result) => {
             const inner = result.isAnchor ? (
               <a
@@ -111,7 +111,6 @@ export function SearchResults({ sections, query, pathname }: SearchResultsProps)
             ) : (
               <Link
                 href={result.href}
-                aria-label={result.name}
                 className={cn('flex flex-col items-start gap-0.5')}
               >
                 <span className={cn('truncate')}>{result.name}</span>
@@ -124,9 +123,10 @@ export function SearchResults({ sections, query, pathname }: SearchResultsProps)
             );
 
             return (
-              <SidebarMenuItem key={result.id != null ? String(result.id) : result.name}>
+              <SidebarMenuItem key={result.id != null ? String(result.id) : `${result.breadcrumb.join('/')}/${result.name}`}>
                 <SidebarMenuButton
                   asChild
+                  size="lg"
                   isActive={result.isActive}
                   className={ACTIVE_MENU_ITEM_CLASS}
                 >

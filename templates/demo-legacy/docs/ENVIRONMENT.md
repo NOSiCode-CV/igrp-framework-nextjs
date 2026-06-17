@@ -21,7 +21,6 @@ All variables are documented inline in [`.env.example`](../.env.example). Requir
 | `NEXTAUTH_URL` | Public URL of the **NextAuth API root**. Under a basePath this must include `<basePath>/api/auth` (see callout below) |
 | `NEXTAUTH_URL_INTERNAL` | Server-to-server URL; same as `NEXTAUTH_URL` outside Docker/K8s |
 | `NEXTAUTH_SECRET` | JWE secret for tokens/cookies. Generate with `openssl rand -base64 32`. **Hard-fails in production if unset** |
-| `IGRP_SESSION_REFETCH_INTERVAL` | Client session poll interval (seconds). Set **below** the IdP access-token TTL so refresh lands in time. Defaults to `180` (suits a 5-min token) |
 
 > **`NEXTAUTH_URL` includes `/api/auth`.** NextAuth v4 treats this value as the URL of its API root and derives `signin`/`callback` from it — it does **not** auto-append `/api/auth` when a basePath is present. With `NEXT_PUBLIC_BASE_PATH=/apps/template`, the correct value is `http://localhost:3000/apps/template/api/auth`. Getting this wrong produces a login loop with a deeply nested `?callbackUrl=…?callbackUrl=…` chain.
 

@@ -1,5 +1,16 @@
 # @igrp/framework-next
 
+## 0.1.0-beta.153
+
+### Patch Changes
+
+- fc2fe20: - `next-auth`: add `console.error` diagnostics when introspection marks the refresh token inactive or when `refreshOidcAccessToken` returns an error flag or throws — makes login-loop root causes visible in server logs
+  - `next`: replace `unstable_cache` with `React.cache()` in `use-user` — prevents stale 401s caused by rotating access tokens being embedded in the `unstable_cache` key
+- Updated dependencies [fc2fe20]
+  - @igrp/framework-next-auth@0.1.0-beta.142
+  - @igrp/framework-next-types@0.1.0-beta.144
+  - @igrp/framework-next-ui@0.1.0-beta.152
+
 ## 0.1.0-beta.152
 
 ### Patch Changes

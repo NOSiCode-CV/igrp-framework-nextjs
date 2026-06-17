@@ -24,6 +24,7 @@
     "sidebar-menu-search-config-flag",
     "sidebar-trigger-restore",
     "silent-logs-cleanup",
-    "template-migrator-honest-rollback"
+    "template-migrator-honest-rollback",
+    "template-migrator-sidebar-search-config"
   ]
 }

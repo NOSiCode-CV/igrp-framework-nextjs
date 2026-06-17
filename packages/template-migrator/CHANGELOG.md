@@ -1,5 +1,11 @@
 # @igrp/template-migrator
 
+## 0.1.0-beta.127
+
+### Patch Changes
+
+- 4b31dc1: feat: migration 17 — showMenuSearch config flag + dep bumps to beta.151
+
 ## 0.1.0-beta.126
 
 ### Patch Changes

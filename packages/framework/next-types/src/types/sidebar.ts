@@ -13,4 +13,5 @@ export interface IGRPSidebarDataArgs {
   appCode?: string;
   showPreviewMode?: boolean;
   appCenterUrl?: string;
+  showMenuSearch?: boolean;
 }

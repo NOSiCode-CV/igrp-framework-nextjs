@@ -1,5 +1,17 @@
 # @igrp/framework-next-ui
 
+## 0.1.0-beta.150
+
+### Patch Changes
+
+- a9b2297: `IGRPSessionWatcher` now schedules an adaptive silent refresh 45s before access-token expiry, derived from `session.expiresAt`, so token-refresh timing no longer depends on hand-tuning `IGRP_SESSION_REFETCH_INTERVAL` to the IdP access-token TTL. The fixed `SessionProvider` poll remains as a fallback.
+- 331debd: feat: collapsible GROUP sections and inline menu search in sidebar
+- e51050a: feat: add showMenuSearch flag to IGRPSidebarDataArgs to control sidebar menu search visibility
+- Updated dependencies [a9b2297]
+- Updated dependencies [e51050a]
+  - @igrp/framework-next-auth@0.1.0-beta.141
+  - @igrp/framework-next-types@0.1.0-beta.143
+
 ## 0.1.0-beta.149
 
 ### Patch Changes

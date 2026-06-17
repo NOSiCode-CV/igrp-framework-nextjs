@@ -57,6 +57,7 @@ export function createConfig(
           showAppSwitcher: true,
           apps: apps ?? [],
           appCenterUrl: process.env.NEXT_IGRP_APP_CENTER_URL || "",
+          showMenuSearch: true,
         };
       },
     },

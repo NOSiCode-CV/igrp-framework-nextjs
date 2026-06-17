@@ -15,9 +15,9 @@ import { buildMenuSections } from './utils';
 import { SectionGroup } from './section-group';
 import { SearchResults } from './search-results';
 
-export type IGRPTemplateMenuArgs = { menus?: IGRPMenuItemArgs[] };
+export type IGRPTemplateMenuArgs = { menus?: IGRPMenuItemArgs[]; showSearch?: boolean };
 
-export function IGRPTemplateMenus({ menus = [] }: IGRPTemplateMenuArgs) {
+export function IGRPTemplateMenus({ menus = [], showSearch = false }: IGRPTemplateMenuArgs) {
   const pathname = usePathname();
   const [query, setQuery] = useState('');
   const sections = useMemo(() => buildMenuSections(menus), [menus]);
@@ -55,28 +55,30 @@ export function IGRPTemplateMenus({ menus = [] }: IGRPTemplateMenuArgs) {
 
   return (
     <>
-      <SidebarGroup className={cn('group-data-[collapsible=icon]:hidden')}>
-        <SidebarGroupContent>
-          <div className={cn('relative')}>
-            <IGRPIcon
-              iconName="Search"
-              className={cn(
-                'absolute left-2.5 top-1/2 size-3.5 -translate-y-1/2 text-muted-foreground',
-              )}
-            />
-            <Input
-              type="search"
-              aria-label="Pesquisar menus"
-              placeholder="Pesquisar menus..."
-              value={query}
-              onChange={handleQueryChange}
-              className={cn('h-8 pl-8 text-xs')}
-            />
-          </div>
-        </SidebarGroupContent>
-      </SidebarGroup>
+      {showSearch && (
+        <SidebarGroup className={cn('group-data-[collapsible=icon]:hidden')}>
+          <SidebarGroupContent>
+            <div className={cn('relative')}>
+              <IGRPIcon
+                iconName="Search"
+                className={cn(
+                  'absolute left-2.5 top-1/2 size-3.5 -translate-y-1/2 text-muted-foreground',
+                )}
+              />
+              <Input
+                type="search"
+                aria-label="Pesquisar menus"
+                placeholder="Pesquisar menus..."
+                value={query}
+                onChange={handleQueryChange}
+                className={cn('h-8 pl-8 text-xs')}
+              />
+            </div>
+          </SidebarGroupContent>
+        </SidebarGroup>
+      )}
 
-      {trimmedQuery ? (
+      {showSearch && trimmedQuery ? (
         <SearchResults sections={sections} query={trimmedQuery} pathname={pathname} />
       ) : (
         sections.map((section) => (

@@ -3,7 +3,7 @@
 import { useEffect, useState } from 'react';
 import Link from 'next/link';
 import { unstable_rethrow } from 'next/navigation';
-import { cn, IGRPButton } from '@igrp/igrp-framework-react-design-system';
+import { cn, IGRPButton, IGRPIcon } from '@igrp/igrp-framework-react-design-system';
 
 const RESET_DELAY_MS = 400;
 
@@ -124,14 +124,11 @@ function IGRPSegmentError({
             >
               <span>{isResetting ? retryingLabel : resetLabel}</span>
             </IGRPButton>
-            <IGRPButton
-              asChild
-              variant="outline"
-              showIcon
-              iconName="Home"
-              iconClassName={cn('mr-2 h-4 w-4')}
-            >
-              <Link href={homeHref}>{homeLabel}</Link>
+            <IGRPButton asChild variant="outline">
+              <Link href={homeHref}>
+                <IGRPIcon iconName="Home" className={cn('mr-2 h-4 w-4')} aria-hidden="true" />
+                {homeLabel}
+              </Link>
             </IGRPButton>
           </div>
         </div>

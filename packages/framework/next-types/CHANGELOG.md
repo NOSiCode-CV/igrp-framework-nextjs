@@ -1,5 +1,13 @@
 # @igrp/framework-next-types
 
+## 0.1.0-beta.143
+
+### Patch Changes
+
+- e51050a: feat: add showMenuSearch flag to IGRPSidebarDataArgs to control sidebar menu search visibility
+- Updated dependencies [a9b2297]
+  - @igrp/framework-next-auth@0.1.0-beta.141
+
 ## 0.1.0-beta.142
 
 ### Patch Changes

@@ -19,6 +19,7 @@
     "framework-next-appcode-case",
     "framework-next-config-schema",
     "migrator-migration-15",
+    "migrator-migration-18",
     "next-auth-introspection-timeout",
     "refresh-diagnostics-react-cache",
     "refresh-multipod-recovery-store",

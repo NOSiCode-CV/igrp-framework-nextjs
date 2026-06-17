@@ -107,13 +107,7 @@ function IGRPButton({
   // When asChild, Slot requires a single child — skip icon siblings entirely.
   if (asChild) {
     return (
-      <Button
-        {...props}
-        asChild
-        className={cn("relative", className)}
-        disabled={disabled}
-        id={ref}
-      >
+      <Button {...props} asChild className={cn("relative", className)} disabled={disabled} id={ref}>
         {children}
       </Button>
     )

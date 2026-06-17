@@ -98,7 +98,9 @@ export function SearchResults({ sections, query, pathname }: SearchResultsProps)
                 href={result.href}
                 target={result.target ?? '_blank'}
                 rel="noopener noreferrer"
-                aria-label={result.target === '_blank' ? `${result.name} (opens in new tab)` : undefined}
+                aria-label={
+                  result.target === '_blank' ? `${result.name} (opens in new tab)` : undefined
+                }
                 aria-current={result.isActive ? 'page' : undefined}
                 className={cn('flex flex-col items-start gap-0.5')}
               >
@@ -125,7 +127,13 @@ export function SearchResults({ sections, query, pathname }: SearchResultsProps)
             );
 
             return (
-              <SidebarMenuItem key={result.id != null ? String(result.id) : `${result.breadcrumb.join('/')}/${result.name}`}>
+              <SidebarMenuItem
+                key={
+                  result.id != null
+                    ? String(result.id)
+                    : `${result.breadcrumb.join('/')}/${result.name}`
+                }
+              >
                 <SidebarMenuButton
                   asChild
                   size="lg"

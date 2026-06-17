@@ -76,6 +76,26 @@ export function isIGRPAuthConfigError(error: unknown): error is IGRPAuthConfigEr
 
 // ─── Constants ───────────────────────────────────────────────────────────────
 
+// How many milliseconds before the access-token's `exp` the JWT callback
+// starts refreshing proactively. This is also the threshold used by
+// getSession() to decide "session expired" on the server side.
+//
+// CONSTRAINT: the client-side session-poll interval (IGRP_SESSION_REFETCH_INTERVAL,
+// in seconds) MUST be less than TOKEN_REFRESH_BUFFER_MS / 1000.
+//
+// If poll_interval_s >= TOKEN_REFRESH_BUFFER_MS / 1000, the last client poll
+// before the buffer window opens will find the token still "valid" (more than
+// TOKEN_REFRESH_BUFFER_MS remaining), so no client-side refresh fires. The window
+// then opens, server renders inside it trigger the JWT callback and refresh
+// correctly — but those refreshes run in read-only RSC context and cannot update
+// the session cookie. The cookie is only updated by the NEXT client poll (after
+// expiry), which triggers refresh there too. With rotating refresh tokens this
+// is handled by the recovery store; without rotation it works via repeated
+// refreshes. But if that client-side refresh fails for any reason, the dead
+// zone leaves callers with an expired token.
+//
+// Recommended: set IGRP_SESSION_REFETCH_INTERVAL to at most
+// (TOKEN_REFRESH_BUFFER_MS / 1000) - 15, i.e. ≤ 45 s for this default of 60 s.
 const TOKEN_REFRESH_BUFFER_MS = 60_000;
 
 // How long BEFORE actual access-token expiry middleware starts redirecting to
@@ -563,11 +583,30 @@ export function withIGRPAuth(options: IGRPAuthOptions = {}): IGRPAuthInstance {
           // never block refresh).
           const refreshTokenActive = await introspectOidcToken(igrpToken, env).catch(() => true);
           if (!refreshTokenActive) {
+            console.error(
+              '[next-auth] jwt: refresh token reported inactive by introspection endpoint — ' +
+                'logging user out. Check: (1) token was not manually revoked, ' +
+                '(2) IGRP_AUTH_CLIENT_ID / IGRP_AUTH_CLIENT_SECRET are correct for the introspection endpoint, ' +
+                '(3) introspection_endpoint in the IdP discovery document is reachable.',
+            );
             igrpToken = { ...igrpToken, error: 'RefreshAccessTokenError', forceLogout: true };
           } else {
             try {
               igrpToken = await refreshOidcAccessToken(igrpToken, env);
+              if (igrpToken.error) {
+                // refreshOidcAccessToken returns an error-flagged JWT on failure
+                // rather than throwing. Surface it here so the cause is visible.
+                console.error(
+                  '[next-auth] jwt: token refresh returned error flag — user will be logged out. ' +
+                    'Check: (1) IdP token endpoint is reachable, (2) refresh token has not expired, ' +
+                    '(3) client credentials are correct, (4) token rotation — if the IdP rotates refresh ' +
+                    'tokens and this is a multi-replica deployment without a shared tokenRecoveryStore, ' +
+                    'a concurrent refresh on another pod may have consumed this refresh token.',
+                  { error: igrpToken.error },
+                );
+              }
             } catch {
+              console.error('[next-auth] jwt: refreshOidcAccessToken threw unexpectedly — user will be logged out.');
               igrpToken = { ...igrpToken, error: 'RefreshAccessTokenError', forceLogout: true };
             }
           }

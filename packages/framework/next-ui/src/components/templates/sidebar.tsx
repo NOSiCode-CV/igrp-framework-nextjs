@@ -25,10 +25,10 @@ function IGRPTemplateSidebar({ data, baseUrl, ...props }: IGRPTemplateSidebarPro
   return (
     <Sidebar collapsible="icon" {...props}>
       <SidebarHeader className="flex-row items-center gap-0">
+        <SidebarTrigger className="shrink-0 group-data-[state=expanded]:order-2 group-data-[state=expanded]:ml-auto" />
         {showAppSwitcher && (
           <IGRPTemplateAppSwitcher apps={apps} appCode={appCode} appCenterUrl={appCenterUrl} />
         )}
-        <SidebarTrigger className="ml-auto shrink-0" />
       </SidebarHeader>
 
       <SidebarContent>

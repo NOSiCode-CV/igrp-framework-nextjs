@@ -1,5 +1,11 @@
 # @igrp/igrp-framework-react-design-system
 
+## 0.1.0-beta.137
+
+### Patch Changes
+
+- af28e9a: feat(ds): add asChild prop to IGRPButton for Slot-based rendering
+
 ## 0.1.0-beta.136
 
 ### Patch Changes

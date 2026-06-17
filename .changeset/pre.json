@@ -13,6 +13,7 @@
   },
   "changesets": [
     "adaptive-session-refetch",
+    "design-system-button-aschild",
     "design-system-datatable-autoreset",
     "framework-next-appcode-canonical-config",
     "framework-next-appcode-case",

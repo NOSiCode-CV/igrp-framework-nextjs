@@ -1,5 +1,13 @@
 # @igrp/framework-next
 
+## 0.1.0-beta.152
+
+### Patch Changes
+
+- af28e9a: feat(ds): add asChild prop to IGRPButton for Slot-based rendering
+- Updated dependencies [af28e9a]
+  - @igrp/framework-next-ui@0.1.0-beta.151
+
 ## 0.1.0-beta.151
 
 ### Patch Changes

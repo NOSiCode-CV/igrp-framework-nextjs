@@ -1,5 +1,11 @@
 # @igrp/framework-next-auth
 
+## 0.1.0-beta.143
+
+### Patch Changes
+
+- 5b335b8: fix(oidc): warn in production when the IdP returns no fresh id_token on refresh-token grant. Previously the warning was gated to dev only, so a misconfigured IdP silently broke RP-initiated logout in deployed environments — exactly where operators most need the signal.
+
 ## 0.1.0-beta.142
 
 ### Patch Changes

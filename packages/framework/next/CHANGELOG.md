@@ -1,5 +1,16 @@
 # @igrp/framework-next
 
+## 0.1.0-beta.155
+
+### Patch Changes
+
+- 5b335b8: chore: route data-fetch error logging in the layout hooks (menus, applications, user) through the package `logger` instead of bare `console.error`, for consistent `[Error]` prefixes and dev-only stack traces.
+- Updated dependencies [5b335b8]
+- Updated dependencies [5b335b8]
+  - @igrp/framework-next-types@0.1.0-beta.145
+  - @igrp/framework-next-ui@0.1.0-beta.154
+  - @igrp/framework-next-auth@0.1.0-beta.143
+
 ## 0.1.0-beta.154
 
 ### Patch Changes

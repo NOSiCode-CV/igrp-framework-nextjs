@@ -1,5 +1,15 @@
 # @igrp/framework-next-ui
 
+## 0.1.0-beta.154
+
+### Patch Changes
+
+- 5b335b8: feat: honor showNotifications flag in nav-user — hide the Notifications dropdown item (header and sidebar) when notifications are disabled, and add showNotifications to IGRPSidebarDataArgs
+- Updated dependencies [5b335b8]
+- Updated dependencies [5b335b8]
+  - @igrp/framework-next-types@0.1.0-beta.145
+  - @igrp/framework-next-auth@0.1.0-beta.143
+
 ## 0.1.0-beta.153
 
 ### Patch Changes

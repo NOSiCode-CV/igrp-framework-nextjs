@@ -1,0 +1,226 @@
+// Jest Snapshot v1, https://jestjs.io/docs/snapshot-testing
+
+exports[`Components/Input/FileInput Default smoke-test 1`] = `
+<div class="container my-10 mx-auto p-4 border rounded-lg shadow-sm">
+  <div class="*:not-first:mt-2">
+    <label data-slot="label"
+           class="flex items-center text-sm leading-none font-medium select-none group-data-[disabled=true]:pointer-events-none group-data-[disabled=true]:opacity-50 peer-disabled:cursor-not-allowed peer-disabled:opacity-50 gap-0.5"
+           for="_r_ID_"
+    >
+      Upload Document
+    </label>
+    <input data-slot="input"
+           class="placeholder:text-muted-foreground selection:bg-primary selection:text-primary-foreground dark:bg-input/30 border-input h-9 w-full min-w-0 rounded-md border bg-transparent text-base shadow-xs transition-[color,box-shadow] outline-none file:inline-flex disabled:pointer-events-none disabled:cursor-not-allowed disabled:opacity-50 md:text-sm focus-visible:border-ring focus-visible:ring-ring/50 focus-visible:ring-2 aria-invalid:ring-destructive/20 dark:aria-invalid:ring-destructive/40 aria-invalid:border-destructive file:text-foreground italic file:h-full file:border-solid file:bg-transparent file:text-sm file:font-medium file:not-italic p-0 pe-3 file:me-3 file:border-0 file:border-e file:border-input file:py-2 file:px-4 file:transition-colors cursor-pointer"
+           id="_r_ID_"
+           placeholder="Select a file to upload"
+           aria-invalid="false"
+           type="file"
+           name="_r_ID_"
+    >
+  </div>
+</div>
+`;
+
+exports[`Components/Input/FileInput Disabled smoke-test 1`] = `
+<div class="container my-10 mx-auto p-4 border rounded-lg shadow-sm">
+  <div class="*:not-first:mt-2">
+    <label data-slot="label"
+           class="flex items-center text-sm leading-none font-medium select-none group-data-[disabled=true]:pointer-events-none group-data-[disabled=true]:opacity-50 peer-disabled:cursor-not-allowed peer-disabled:opacity-50 gap-0.5"
+           for="_r_ID_"
+    >
+      Disabled File Input
+    </label>
+    <input data-slot="input"
+           class="placeholder:text-muted-foreground selection:bg-primary selection:text-primary-foreground dark:bg-input/30 border-input h-9 w-full min-w-0 rounded-md border bg-transparent text-base shadow-xs transition-[color,box-shadow] outline-none file:inline-flex disabled:pointer-events-none disabled:cursor-not-allowed disabled:opacity-50 md:text-sm focus-visible:border-ring focus-visible:ring-ring/50 focus-visible:ring-2 aria-invalid:ring-destructive/20 dark:aria-invalid:ring-destructive/40 aria-invalid:border-destructive file:text-foreground italic file:h-full file:border-solid file:bg-transparent file:text-sm file:font-medium file:not-italic p-0 pe-3 file:me-3 file:border-0 file:border-e file:border-input file:py-2 file:px-4 file:transition-colors cursor-pointer"
+           id="_r_ID_"
+           disabled
+           aria-invalid="false"
+           aria-describedby="_r_ID_-helper"
+           type="file"
+           name="_r_ID_"
+    >
+    <p id="_r_ID_-helper"
+       class="text-muted-foreground mt-2 text-xs"
+       role="region"
+       aria-live="polite"
+    >
+      This upload option is currently unavailable
+    </p>
+  </div>
+</div>
+`;
+
+exports[`Components/Input/FileInput HalfWidth smoke-test 1`] = `
+<div class="container my-10 mx-auto p-4 border rounded-lg shadow-sm">
+  <div class="*:not-first:mt-2">
+    <label data-slot="label"
+           class="flex items-center text-sm leading-none font-medium select-none group-data-[disabled=true]:pointer-events-none group-data-[disabled=true]:opacity-50 peer-disabled:cursor-not-allowed peer-disabled:opacity-50 gap-0.5"
+           for="_r_ID_"
+    >
+      Half Width File Input
+    </label>
+    <input data-slot="input"
+           class="placeholder:text-muted-foreground selection:bg-primary selection:text-primary-foreground dark:bg-input/30 border-input h-9 w-full min-w-0 rounded-md border bg-transparent text-base shadow-xs transition-[color,box-shadow] outline-none file:inline-flex disabled:pointer-events-none disabled:cursor-not-allowed disabled:opacity-50 md:text-sm focus-visible:border-ring focus-visible:ring-ring/50 focus-visible:ring-2 aria-invalid:ring-destructive/20 dark:aria-invalid:ring-destructive/40 aria-invalid:border-destructive file:text-foreground italic file:h-full file:border-solid file:bg-transparent file:text-sm file:font-medium file:not-italic p-0 pe-3 file:me-3 file:border-0 file:border-e file:border-input file:py-2 file:px-4 file:transition-colors cursor-pointer"
+           id="_r_ID_"
+           accept=".pdf,.doc,.docx"
+           aria-invalid="false"
+           aria-describedby="_r_ID_-helper"
+           gridsize="1/2"
+           type="file"
+           name="_r_ID_"
+    >
+    <p id="_r_ID_-helper"
+       class="text-muted-foreground mt-2 text-xs"
+       role="region"
+       aria-live="polite"
+    >
+      This file input takes half of the available width
+    </p>
+  </div>
+</div>
+`;
+
+exports[`Components/Input/FileInput MultipleFiles smoke-test 1`] = `
+<div class="container my-10 mx-auto p-4 border rounded-lg shadow-sm">
+  <div class="*:not-first:mt-2">
+    <label data-slot="label"
+           class="flex items-center text-sm leading-none font-medium select-none group-data-[disabled=true]:pointer-events-none group-data-[disabled=true]:opacity-50 peer-disabled:cursor-not-allowed peer-disabled:opacity-50 gap-0.5"
+           for="_r_ID_"
+    >
+      Upload Multiple Files
+    </label>
+    <input data-slot="input"
+           class="placeholder:text-muted-foreground selection:bg-primary selection:text-primary-foreground dark:bg-input/30 border-input h-9 w-full min-w-0 rounded-md border bg-transparent text-base shadow-xs transition-[color,box-shadow] outline-none file:inline-flex disabled:pointer-events-none disabled:cursor-not-allowed disabled:opacity-50 md:text-sm focus-visible:border-ring focus-visible:ring-ring/50 focus-visible:ring-2 aria-invalid:ring-destructive/20 dark:aria-invalid:ring-destructive/40 aria-invalid:border-destructive file:text-foreground italic file:h-full file:border-solid file:bg-transparent file:text-sm file:font-medium file:not-italic p-0 pe-3 file:me-3 file:border-0 file:border-e file:border-input file:py-2 file:px-4 file:transition-colors cursor-pointer"
+           id="_r_ID_"
+           accept=".jpg,.jpeg,.png,.pdf"
+           multiple
+           aria-invalid="false"
+           aria-describedby="_r_ID_-helper"
+           type="file"
+           name="_r_ID_"
+    >
+    <p id="_r_ID_-helper"
+       class="text-muted-foreground mt-2 text-xs"
+       role="region"
+       aria-live="polite"
+    >
+      Select multiple files to upload at once
+    </p>
+  </div>
+</div>
+`;
+
+exports[`Components/Input/FileInput PDFOnly smoke-test 1`] = `
+<div class="container my-10 mx-auto p-4 border rounded-lg shadow-sm">
+  <div class="*:not-first:mt-2">
+    <label data-slot="label"
+           class="flex items-center text-sm leading-none font-medium select-none group-data-[disabled=true]:pointer-events-none group-data-[disabled=true]:opacity-50 peer-disabled:cursor-not-allowed peer-disabled:opacity-50 gap-0.5"
+           for="_r_ID_"
+    >
+      PDF Document Upload
+    </label>
+    <input data-slot="input"
+           class="placeholder:text-muted-foreground selection:bg-primary selection:text-primary-foreground dark:bg-input/30 border-input h-9 w-full min-w-0 rounded-md border bg-transparent text-base shadow-xs transition-[color,box-shadow] outline-none file:inline-flex disabled:pointer-events-none disabled:cursor-not-allowed disabled:opacity-50 md:text-sm focus-visible:border-ring focus-visible:ring-ring/50 focus-visible:ring-2 aria-invalid:ring-destructive/20 dark:aria-invalid:ring-destructive/40 aria-invalid:border-destructive file:text-foreground italic file:h-full file:border-solid file:bg-transparent file:text-sm file:font-medium file:not-italic p-0 pe-3 file:me-3 file:border-0 file:border-e file:border-input file:py-2 file:px-4 file:transition-colors cursor-pointer"
+           id="_r_ID_"
+           accept=".pdf"
+           aria-invalid="false"
+           aria-describedby="_r_ID_-helper"
+           type="file"
+           name="_r_ID_"
+    >
+    <p id="_r_ID_-helper"
+       class="text-muted-foreground mt-2 text-xs"
+       role="region"
+       aria-live="polite"
+    >
+      Please upload a PDF document only
+    </p>
+  </div>
+</div>
+`;
+
+exports[`Components/Input/FileInput Required smoke-test 1`] = `
+<div class="container my-10 mx-auto p-4 border rounded-lg shadow-sm">
+  <div class="*:not-first:mt-2">
+    <label data-slot="label"
+           class="flex items-center text-sm leading-none font-medium select-none group-data-[disabled=true]:pointer-events-none group-data-[disabled=true]:opacity-50 peer-disabled:cursor-not-allowed peer-disabled:opacity-50 after:content-['*'] after:text-destructive gap-0.5"
+           for="_r_ID_"
+    >
+      Required Document
+    </label>
+    <input data-slot="input"
+           class="placeholder:text-muted-foreground selection:bg-primary selection:text-primary-foreground dark:bg-input/30 border-input h-9 w-full min-w-0 rounded-md border bg-transparent text-base shadow-xs transition-[color,box-shadow] outline-none file:inline-flex disabled:pointer-events-none disabled:cursor-not-allowed disabled:opacity-50 md:text-sm focus-visible:border-ring focus-visible:ring-ring/50 focus-visible:ring-2 aria-invalid:ring-destructive/20 dark:aria-invalid:ring-destructive/40 aria-invalid:border-destructive file:text-foreground italic file:h-full file:border-solid file:bg-transparent file:text-sm file:font-medium file:not-italic p-0 pe-3 file:me-3 file:border-0 file:border-e file:border-input file:py-2 file:px-4 file:transition-colors cursor-pointer"
+           id="_r_ID_"
+           accept=".pdf,.doc,.docx"
+           aria-invalid="false"
+           aria-describedby="_r_ID_-helper"
+           type="file"
+           name="_r_ID_"
+    >
+    <p id="_r_ID_-helper"
+       class="text-muted-foreground mt-2 text-xs"
+       role="region"
+       aria-live="polite"
+    >
+      You must upload a document to proceed
+    </p>
+  </div>
+</div>
+`;
+
+exports[`Components/Input/FileInput WithError smoke-test 1`] = `
+<div class="container my-10 mx-auto p-4 border rounded-lg shadow-sm">
+  <div class="*:not-first:mt-2">
+    <label data-slot="label"
+           class="flex items-center text-sm leading-none font-medium select-none group-data-[disabled=true]:pointer-events-none group-data-[disabled=true]:opacity-50 peer-disabled:cursor-not-allowed peer-disabled:opacity-50 gap-0.5"
+           for="_r_ID_"
+    >
+      Document Upload
+    </label>
+    <input data-slot="input"
+           class="placeholder:text-muted-foreground selection:bg-primary selection:text-primary-foreground dark:bg-input/30 h-9 w-full min-w-0 rounded-md border bg-transparent text-base shadow-xs transition-[color,box-shadow] outline-none file:inline-flex disabled:pointer-events-none disabled:cursor-not-allowed disabled:opacity-50 md:text-sm focus-visible:border-ring focus-visible:ring-2 aria-invalid:ring-destructive/20 dark:aria-invalid:ring-destructive/40 aria-invalid:border-destructive file:text-foreground italic file:h-full file:border-solid file:bg-transparent file:text-sm file:font-medium file:not-italic p-0 pe-3 file:me-3 file:border-0 file:border-e file:border-input file:py-2 file:px-4 file:transition-colors cursor-pointer border-destructive focus-visible:ring-destructive/20"
+           id="_r_ID_"
+           accept=".pdf"
+           aria-invalid="true"
+           aria-describedby="_r_ID_-error"
+           type="file"
+           name="_r_ID_"
+    >
+    <p id="_r_ID_-error"
+       class="text-destructive mt-2 text-xs"
+       role="alert"
+    >
+      The file exceeds the maximum size limit
+    </p>
+  </div>
+</div>
+`;
+
+exports[`Components/Input/FileInput WithHelperText smoke-test 1`] = `
+<div class="container my-10 mx-auto p-4 border rounded-lg shadow-sm">
+  <div class="*:not-first:mt-2">
+    <label data-slot="label"
+           class="flex items-center text-sm leading-none font-medium select-none group-data-[disabled=true]:pointer-events-none group-data-[disabled=true]:opacity-50 peer-disabled:cursor-not-allowed peer-disabled:opacity-50 gap-0.5"
+           for="_r_ID_"
+    >
+      Profile Picture
+    </label>
+    <input data-slot="input"
+           class="placeholder:text-muted-foreground selection:bg-primary selection:text-primary-foreground dark:bg-input/30 border-input h-9 w-full min-w-0 rounded-md border bg-transparent text-base shadow-xs transition-[color,box-shadow] outline-none file:inline-flex disabled:pointer-events-none disabled:cursor-not-allowed disabled:opacity-50 md:text-sm focus-visible:border-ring focus-visible:ring-ring/50 focus-visible:ring-2 aria-invalid:ring-destructive/20 dark:aria-invalid:ring-destructive/40 aria-invalid:border-destructive file:text-foreground italic file:h-full file:border-solid file:bg-transparent file:text-sm file:font-medium file:not-italic p-0 pe-3 file:me-3 file:border-0 file:border-e file:border-input file:py-2 file:px-4 file:transition-colors cursor-pointer"
+           id="_r_ID_"
+           accept=".jpg,.jpeg,.png"
+           aria-invalid="false"
+           aria-describedby="_r_ID_-helper"
+           type="file"
+           name="_r_ID_"
+    >
+    <p id="_r_ID_-helper"
+       class="text-muted-foreground mt-2 text-xs"
+       role="region"
+       aria-live="polite"
+    >
+      Upload a JPG or PNG image (max 2MB)
+    </p>
+  </div>
+</div>
+`;

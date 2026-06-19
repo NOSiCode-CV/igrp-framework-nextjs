@@ -1,0 +1,125 @@
+// Jest Snapshot v1, https://jestjs.io/docs/snapshot-testing
+
+exports[`Components/Chat CustomPlaceholder smoke-test 1`] = `
+<div class="h-[500px] w-full max-w-lg rounded-lg border p-4">
+  <div class="flex flex-col h-full"
+       id="_r_ID_"
+  >
+    <div dir="ltr"
+         data-slot="scroll-area"
+         class="relative pr-4 h-[80%]"
+         style="position: relative; --radix-ID 0px; --radix-ID 0px;"
+    >
+      <style>
+        [data-radix-ID>
+        <div data-radix-ID"" data-slot="scroll-area-viewport" class="focus-visible:ring-ring/50 size-full rounded-[inherit] transition-[color,box-shadow] outline-none focus-visible:ring-[3px] focus-visible:outline-1" style="overflow: hidden scroll;">
+        <div style="min-width: 100%; display: table;">
+        <div class="space-y-4" aria-live="polite" aria-atomic="false">
+        <div class="flex flex-col items-center justify-center h-40 text-muted-foreground">
+        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-bot size-12 mb-2 opacity-20" aria-hidden="true" id="Bot">
+        <path d="M12 8V4H8">
+        </path>
+        <rect width="16" height="12" x="4" y="8" rx="2">
+        </rect>
+        <path d="M2 14h2">
+        </path>
+        <path d="M20 14h2">
+        </path>
+        <path d="M15 13v2">
+        </path>
+        <path d="M9 13v2">
+        </path>
+        </svg>
+        <p>How can I help you today?
+        </p>
+        </div>
+        <div>
+        </div>
+        </div>
+        </div>
+        </div>
+        </div>
+        <form class="flex gap-2 mt-4 pt-4 border-t">
+        <div class="*:not-first:mt-2 flex-1">
+        <div class="relative">
+        <input data-slot="input" class="file:text-foreground placeholder:text-muted-foreground selection:bg-primary selection:text-primary-foreground dark:bg-input/30 border-input h-9 w-full min-w-0 rounded-md border px-3 shadow-xs transition-[color,box-shadow] file:inline-flex file:h-7 file:border-0 file:bg-transparent file:text-sm file:font-medium disabled:pointer-events-none disabled:cursor-not-allowed disabled:opacity-50 md:text-sm focus-visible:border-ring focus-visible:ring-ring/50 focus-visible:ring-2 aria-invalid:ring-destructive/20 dark:aria-invalid:ring-destructive/40 aria-invalid:border-destructive peer bg-background py-3 text-sm outline-hidden" id="_r_ID_" aria-invalid="false" placeholder="Type your message…" type="text" value="" name="_r_ID_">
+        </div>
+        </div>
+        <button data-slot="button" class="inline-flex items-center justify-center gap-1.5 whitespace-nowrap rounded-md text-sm font-medium transition-[color,box-shadow] disabled:pointer-events-none disabled:opacity-50 [&amp;_svg]:pointer-events-none [&amp;_svg:not([class*='size-'])]:size-4 shrink-0 [&amp;_svg]:shrink-0 outline-none focus-visible:border-ring focus-visible:ring-ring/50 focus-visible:ring-[3px] aria-invalid:ring-destructive/20 dark:aria-invalid:ring-destructive/40 aria-invalid:border-destructive bg-primary text-primary-foreground shadow-xs hover:bg-primary/90 hover:text-primary-foreground size-9" aria-label="Send message" type="submit" id="_r_ID_">
+        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-send size-4 h-4 w-4" aria-hidden="true" id="Send">
+        <path d="M14.536 21.686a.5.5 0 0 0 .937-.024l6.5-19a.496.496 0 0 0-.635-.635l-19 6.5a.5.5 0 0 0-.024.937l7.93 3.18a2 2 0 0 1 1.112 1.11z">
+        </path>
+        <path d="m21.854 2.147-10.94 10.939">
+        </path>
+        </svg>
+        </button>
+        </form>
+        </div>
+        </div>
+      </style>
+    </div>
+  </div>
+</div>
+`;
+
+exports[`Components/Chat Default smoke-test 1`] = `
+<div class="h-[500px] w-full max-w-lg rounded-lg border p-4">
+  <div class="flex flex-col h-full"
+       id="_r_ID_"
+  >
+    <div dir="ltr"
+         data-slot="scroll-area"
+         class="relative pr-4 h-[80%]"
+         style="position: relative; --radix-ID 0px; --radix-ID 0px;"
+    >
+      <style>
+        [data-radix-ID>
+        <div data-radix-ID"" data-slot="scroll-area-viewport" class="focus-visible:ring-ring/50 size-full rounded-[inherit] transition-[color,box-shadow] outline-none focus-visible:ring-[3px] focus-visible:outline-1" style="overflow: hidden scroll;">
+        <div style="min-width: 100%; display: table;">
+        <div class="space-y-4" aria-live="polite" aria-atomic="false">
+        <div class="flex flex-col items-center justify-center h-40 text-muted-foreground">
+        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-bot size-12 mb-2 opacity-20" aria-hidden="true" id="Bot">
+        <path d="M12 8V4H8">
+        </path>
+        <rect width="16" height="12" x="4" y="8" rx="2">
+        </rect>
+        <path d="M2 14h2">
+        </path>
+        <path d="M20 14h2">
+        </path>
+        <path d="M15 13v2">
+        </path>
+        <path d="M9 13v2">
+        </path>
+        </svg>
+        <p>Ask me anything!
+        </p>
+        </div>
+        <div>
+        </div>
+        </div>
+        </div>
+        </div>
+        </div>
+        <form class="flex gap-2 mt-4 pt-4 border-t">
+        <div class="*:not-first:mt-2 flex-1">
+        <div class="relative">
+        <input data-slot="input" class="file:text-foreground placeholder:text-muted-foreground selection:bg-primary selection:text-primary-foreground dark:bg-input/30 border-input h-9 w-full min-w-0 rounded-md border px-3 shadow-xs transition-[color,box-shadow] file:inline-flex file:h-7 file:border-0 file:bg-transparent file:text-sm file:font-medium disabled:pointer-events-none disabled:cursor-not-allowed disabled:opacity-50 md:text-sm focus-visible:border-ring focus-visible:ring-ring/50 focus-visible:ring-2 aria-invalid:ring-destructive/20 dark:aria-invalid:ring-destructive/40 aria-invalid:border-destructive peer bg-background py-3 text-sm outline-hidden" id="_r_ID_" aria-invalid="false" placeholder="Type your message…" type="text" value="" name="_r_ID_">
+        </div>
+        </div>
+        <button data-slot="button" class="inline-flex items-center justify-center gap-1.5 whitespace-nowrap rounded-md text-sm font-medium transition-[color,box-shadow] disabled:pointer-events-none disabled:opacity-50 [&amp;_svg]:pointer-events-none [&amp;_svg:not([class*='size-'])]:size-4 shrink-0 [&amp;_svg]:shrink-0 outline-none focus-visible:border-ring focus-visible:ring-ring/50 focus-visible:ring-[3px] aria-invalid:ring-destructive/20 dark:aria-invalid:ring-destructive/40 aria-invalid:border-destructive bg-primary text-primary-foreground shadow-xs hover:bg-primary/90 hover:text-primary-foreground size-9" aria-label="Send message" type="submit" id="_r_ID_">
+        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-send size-4 h-4 w-4" aria-hidden="true" id="Send">
+        <path d="M14.536 21.686a.5.5 0 0 0 .937-.024l6.5-19a.496.496 0 0 0-.635-.635l-19 6.5a.5.5 0 0 0-.024.937l7.93 3.18a2 2 0 0 1 1.112 1.11z">
+        </path>
+        <path d="m21.854 2.147-10.94 10.939">
+        </path>
+        </svg>
+        </button>
+        </form>
+        </div>
+        </div>
+      </style>
+    </div>
+  </div>
+</div>
+`;

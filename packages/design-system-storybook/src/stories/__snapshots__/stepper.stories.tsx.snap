@@ -1,0 +1,514 @@
+// Jest Snapshot v1, https://jestjs.io/docs/snapshot-testing
+
+exports[`Components/Stepper Default smoke-test 1`] = `
+<div class="space-y-6 px-4 py-8">
+  <div class="space-y-8 w-full"
+       id="_r_ID_"
+  >
+    <div class="flex items-center justify-center gap-4 relative">
+      <div class="w-[90vw]">
+        <div dir="ltr"
+             data-slot="scroll-area"
+             class="relative w-full"
+             style="position: relative; --radix-ID 0px; --radix-ID 0px;"
+        >
+          <style>
+            [data-radix-ID>
+            <div data-radix-ID"" data-slot="scroll-area-viewport" class="focus-visible:ring-ring/50 size-full rounded-[inherit] transition-[color,box-shadow] outline-none focus-visible:ring-[3px] focus-visible:outline-1" style="overflow: hidden scroll;">
+            <div style="min-width: 100%; display: table;">
+            <div data-slot="stepper" class="group/stepper inline-flex data-[orientation=horizontal]:w-full data-[orientation=horizontal]:flex-row data-[orientation=vertical]:flex-col gap-0.5" data-orientation="horizontal" role="navigation" aria-label="Process steps">
+            <div data-slot="stepper-item" class="group/step flex group-data-[orientation=horizontal]/stepper:flex-row group-data-[orientation=vertical]/stepper:flex-col group/step relative flex-1 text-center overflow-visible ml-1.5 mr-1.75 items-center justify-center max-md:items-start first:ml-0 first:rounded-tl-2xl first:rounded-bl-2xl first:pl-2.5 last:mr-0 last:rounded-tr-2xl last:rounded-br-2xl last:pr-2.5 bg-muted text-muted-foreground data-[state=completed]:bg-process-completed data-[state=completed]:text-background data-[state=active]:bg-process-active data-[state=active]:text-background hover:data-[state=active]:text-background data-[state=inactive]:bg-muted data-[state=inactive]:text-muted-foreground before:content-[&quot;&quot;] before:absolute before:-left-1 before:-right-1.25 before:cursor-pointer after:content-[&quot;&quot;] after:absolute after:-left-1 after:-right-1.25 after:cursor-pointer before:top-0 before:h-4.25 before:skew-x-28 before:translate-z-0 after:bottom-0 after:h-4 after:-skew-x-30 after:translate-z-0 first:before:left-4.5 first:after:left-4.5 last:before:right-4.5 last:after:right-4.5 data-[state=inactive]:before:bg-muted data-[state=inactive]:after:bg-muted data-[state=completed]:before:bg-process-completed data-[state=completed]:after:bg-process-completed data-[state=active]:before:bg-process-active data-[state=active]:after:bg-process-active" data-state="completed">
+            <button data-slot="stepper-trigger" class="whitespace-nowrap font-medium transition-[color,box-shadow] disabled:pointer-events-none disabled:opacity-50 [&amp;_svg]:pointer-events-none shrink-0 [&amp;_svg]:shrink-0 outline-none focus-visible:border-ring focus-visible:ring-ring/50 focus-visible:ring-[3px] aria-invalid:ring-destructive/20 dark:aria-invalid:ring-destructive/40 aria-invalid:border-destructive dark:hover:bg-accent/50 h-6 px-2 in-data-[slot=button-group]:rounded-lg has-data-[icon=inline-end]:pr-1.5 has-data-[icon=inline-start]:pl-1.5 [&amp;_svg:not([class*='size-'])]:size-3 gap-1 rounded max-md:flex-col z-10 cursor-pointer bg-transparent hover:bg-transparent text-center flex items-center justify-center shadow-none text-[10px] w-34 text-background hover:text-background">
+            <span class="flex items-center justify-center gap-2 w-full min-w-0" data-state="closed" data-slot="tooltip-trigger">
+            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-check stroke-[2.5] block group-hover/step:hidden shrink-0" aria-hidden="true">
+            <path d="M20 6 9 17l-5-5">
+            </path>
+            </svg>
+            <h3 data-slot="stepper-title" class="text-sm font-medium hidden group-hover/step:block truncate min-w-0">Lead Captured lorem ipsum dolor sit amet
+            </h3>
+            </span>
+            </button>
+            </div>
+            <div data-slot="stepper-item" class="group/step flex group-data-[orientation=horizontal]/stepper:flex-row group-data-[orientation=vertical]/stepper:flex-col group/step relative flex-1 text-center overflow-visible ml-1.5 mr-1.75 items-center justify-center max-md:items-start first:ml-0 first:rounded-tl-2xl first:rounded-bl-2xl first:pl-2.5 last:mr-0 last:rounded-tr-2xl last:rounded-br-2xl last:pr-2.5 bg-muted text-muted-foreground data-[state=completed]:bg-process-completed data-[state=completed]:text-background data-[state=active]:bg-process-active data-[state=active]:text-background hover:data-[state=active]:text-background data-[state=inactive]:bg-muted data-[state=inactive]:text-muted-foreground before:content-[&quot;&quot;] before:absolute before:-left-1 before:-right-1.25 before:cursor-pointer after:content-[&quot;&quot;] after:absolute after:-left-1 after:-right-1.25 after:cursor-pointer before:top-0 before:h-4.25 before:skew-x-28 before:translate-z-0 after:bottom-0 after:h-4 after:-skew-x-30 after:translate-z-0 first:before:left-4.5 first:after:left-4.5 last:before:right-4.5 last:after:right-4.5 data-[state=inactive]:before:bg-muted data-[state=inactive]:after:bg-muted data-[state=completed]:before:bg-process-completed data-[state=completed]:after:bg-process-completed data-[state=active]:before:bg-process-active data-[state=active]:after:bg-process-active" data-state="completed">
+            <button data-slot="stepper-trigger" class="whitespace-nowrap font-medium transition-[color,box-shadow] disabled:pointer-events-none disabled:opacity-50 [&amp;_svg]:pointer-events-none shrink-0 [&amp;_svg]:shrink-0 outline-none focus-visible:border-ring focus-visible:ring-ring/50 focus-visible:ring-[3px] aria-invalid:ring-destructive/20 dark:aria-invalid:ring-destructive/40 aria-invalid:border-destructive dark:hover:bg-accent/50 h-6 px-2 in-data-[slot=button-group]:rounded-lg has-data-[icon=inline-end]:pr-1.5 has-data-[icon=inline-start]:pl-1.5 [&amp;_svg:not([class*='size-'])]:size-3 gap-1 rounded max-md:flex-col z-10 cursor-pointer bg-transparent hover:bg-transparent text-center flex items-center justify-center shadow-none text-[10px] w-34 text-background hover:text-background">
+            <span class="flex items-center justify-center gap-2 w-full min-w-0" data-state="closed" data-slot="tooltip-trigger">
+            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-check stroke-[2.5] block group-hover/step:hidden shrink-0" aria-hidden="true">
+            <path d="M20 6 9 17l-5-5">
+            </path>
+            </svg>
+            <h3 data-slot="stepper-title" class="text-sm font-medium hidden group-hover/step:block truncate min-w-0">Lead Captured lorem ipsum dolor sit amet
+            </h3>
+            </span>
+            </button>
+            </div>
+            <div data-slot="stepper-item" class="group/step flex group-data-[orientation=horizontal]/stepper:flex-row group-data-[orientation=vertical]/stepper:flex-col group/step relative flex-1 text-center overflow-visible ml-1.5 mr-1.75 items-center justify-center max-md:items-start first:ml-0 first:rounded-tl-2xl first:rounded-bl-2xl first:pl-2.5 last:mr-0 last:rounded-tr-2xl last:rounded-br-2xl last:pr-2.5 bg-muted text-muted-foreground data-[state=completed]:bg-process-completed data-[state=completed]:text-background data-[state=active]:bg-process-active data-[state=active]:text-background hover:data-[state=active]:text-background data-[state=inactive]:bg-muted data-[state=inactive]:text-muted-foreground before:content-[&quot;&quot;] before:absolute before:-left-1 before:-right-1.25 before:cursor-pointer after:content-[&quot;&quot;] after:absolute after:-left-1 after:-right-1.25 after:cursor-pointer before:top-0 before:h-4.25 before:skew-x-28 before:translate-z-0 after:bottom-0 after:h-4 after:-skew-x-30 after:translate-z-0 first:before:left-4.5 first:after:left-4.5 last:before:right-4.5 last:after:right-4.5 data-[state=inactive]:before:bg-muted data-[state=inactive]:after:bg-muted data-[state=completed]:before:bg-process-completed data-[state=completed]:after:bg-process-completed data-[state=active]:before:bg-process-active data-[state=active]:after:bg-process-active" data-state="completed">
+            <button data-slot="stepper-trigger" class="whitespace-nowrap font-medium transition-[color,box-shadow] disabled:pointer-events-none disabled:opacity-50 [&amp;_svg]:pointer-events-none shrink-0 [&amp;_svg]:shrink-0 outline-none focus-visible:border-ring focus-visible:ring-ring/50 focus-visible:ring-[3px] aria-invalid:ring-destructive/20 dark:aria-invalid:ring-destructive/40 aria-invalid:border-destructive dark:hover:bg-accent/50 h-6 px-2 in-data-[slot=button-group]:rounded-lg has-data-[icon=inline-end]:pr-1.5 has-data-[icon=inline-start]:pl-1.5 [&amp;_svg:not([class*='size-'])]:size-3 gap-1 rounded max-md:flex-col z-10 cursor-pointer bg-transparent hover:bg-transparent text-center flex items-center justify-center shadow-none text-[10px] w-34 text-background hover:text-background">
+            <span class="flex items-center justify-center gap-2 w-full min-w-0" data-state="closed" data-slot="tooltip-trigger">
+            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-check stroke-[2.5] block group-hover/step:hidden shrink-0" aria-hidden="true">
+            <path d="M20 6 9 17l-5-5">
+            </path>
+            </svg>
+            <h3 data-slot="stepper-title" class="text-sm font-medium hidden group-hover/step:block truncate min-w-0">Lead Captured lorem ipsum dolor sit amet
+            </h3>
+            </span>
+            </button>
+            </div>
+            <div data-slot="stepper-item" class="group/step flex group-data-[orientation=horizontal]/stepper:flex-row group-data-[orientation=vertical]/stepper:flex-col group/step relative flex-1 text-center overflow-visible ml-1.5 mr-1.75 items-center justify-center max-md:items-start first:ml-0 first:rounded-tl-2xl first:rounded-bl-2xl first:pl-2.5 last:mr-0 last:rounded-tr-2xl last:rounded-br-2xl last:pr-2.5 bg-muted text-muted-foreground data-[state=completed]:bg-process-completed data-[state=completed]:text-background data-[state=active]:bg-process-active data-[state=active]:text-background hover:data-[state=active]:text-background data-[state=inactive]:bg-muted data-[state=inactive]:text-muted-foreground before:content-[&quot;&quot;] before:absolute before:-left-1 before:-right-1.25 before:cursor-pointer after:content-[&quot;&quot;] after:absolute after:-left-1 after:-right-1.25 after:cursor-pointer before:top-0 before:h-4.25 before:skew-x-28 before:translate-z-0 after:bottom-0 after:h-4 after:-skew-x-30 after:translate-z-0 first:before:left-4.5 first:after:left-4.5 last:before:right-4.5 last:after:right-4.5 data-[state=inactive]:before:bg-muted data-[state=inactive]:after:bg-muted data-[state=completed]:before:bg-process-completed data-[state=completed]:after:bg-process-completed data-[state=active]:before:bg-process-active data-[state=active]:after:bg-process-active" data-state="active" aria-current="step">
+            <button data-slot="stepper-trigger" class="whitespace-nowrap font-medium transition-[color,box-shadow] disabled:pointer-events-none disabled:opacity-50 [&amp;_svg]:pointer-events-none shrink-0 [&amp;_svg]:shrink-0 outline-none focus-visible:border-ring focus-visible:ring-ring/50 focus-visible:ring-[3px] aria-invalid:ring-destructive/20 dark:aria-invalid:ring-destructive/40 aria-invalid:border-destructive dark:hover:bg-accent/50 h-6 px-2 in-data-[slot=button-group]:rounded-lg has-data-[icon=inline-end]:pr-1.5 has-data-[icon=inline-start]:pl-1.5 [&amp;_svg:not([class*='size-'])]:size-3 gap-1 rounded max-md:flex-col z-10 cursor-pointer bg-transparent hover:bg-transparent text-center flex items-center justify-center shadow-none text-[10px] w-34 text-background hover:text-background">
+            <span class="flex items-center justify-center gap-2 w-full min-w-0" data-state="closed" data-slot="tooltip-trigger">
+            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-check hidden" aria-hidden="true">
+            <path d="M20 6 9 17l-5-5">
+            </path>
+            </svg>
+            <h3 data-slot="stepper-title" class="text-sm font-medium truncate w-full min-w-0">Nurturing lorem ipsum dolor sit amet
+            </h3>
+            </span>
+            </button>
+            </div>
+            <div data-slot="stepper-item" class="group/step flex group-data-[orientation=horizontal]/stepper:flex-row group-data-[orientation=vertical]/stepper:flex-col group/step relative flex-1 text-center overflow-visible ml-1.5 mr-1.75 items-center justify-center max-md:items-start first:ml-0 first:rounded-tl-2xl first:rounded-bl-2xl first:pl-2.5 last:mr-0 last:rounded-tr-2xl last:rounded-br-2xl last:pr-2.5 bg-muted text-muted-foreground data-[state=completed]:bg-process-completed data-[state=completed]:text-background data-[state=active]:bg-process-active data-[state=active]:text-background hover:data-[state=active]:text-background data-[state=inactive]:bg-muted data-[state=inactive]:text-muted-foreground before:content-[&quot;&quot;] before:absolute before:-left-1 before:-right-1.25 before:cursor-pointer after:content-[&quot;&quot;] after:absolute after:-left-1 after:-right-1.25 after:cursor-pointer before:top-0 before:h-4.25 before:skew-x-28 before:translate-z-0 after:bottom-0 after:h-4 after:-skew-x-30 after:translate-z-0 first:before:left-4.5 first:after:left-4.5 last:before:right-4.5 last:after:right-4.5 data-[state=inactive]:before:bg-muted data-[state=inactive]:after:bg-muted data-[state=completed]:before:bg-process-completed data-[state=completed]:after:bg-process-completed data-[state=active]:before:bg-process-active data-[state=active]:after:bg-process-active" data-state="inactive">
+            <button data-slot="stepper-trigger" class="whitespace-nowrap font-medium transition-[color,box-shadow] disabled:pointer-events-none disabled:opacity-50 [&amp;_svg]:pointer-events-none shrink-0 [&amp;_svg]:shrink-0 outline-none focus-visible:border-ring focus-visible:ring-ring/50 focus-visible:ring-[3px] aria-invalid:ring-destructive/20 dark:aria-invalid:ring-destructive/40 aria-invalid:border-destructive dark:hover:bg-accent/50 hover:text-accent-foreground h-6 px-2 in-data-[slot=button-group]:rounded-lg has-data-[icon=inline-end]:pr-1.5 has-data-[icon=inline-start]:pl-1.5 [&amp;_svg:not([class*='size-'])]:size-3 gap-1 rounded max-md:flex-col z-10 cursor-pointer bg-transparent hover:bg-transparent text-center flex items-center justify-center shadow-none text-[10px] w-34">
+            <span class="flex items-center justify-center gap-2 w-full min-w-0" data-state="closed" data-slot="tooltip-trigger">
+            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-check hidden" aria-hidden="true">
+            <path d="M20 6 9 17l-5-5">
+            </path>
+            </svg>
+            <h3 data-slot="stepper-title" class="text-sm font-medium truncate w-full min-w-0">Legal Review lorem ipsum dolor sit amet
+            </h3>
+            </span>
+            </button>
+            </div>
+            <div data-slot="stepper-item" class="group/step flex group-data-[orientation=horizontal]/stepper:flex-row group-data-[orientation=vertical]/stepper:flex-col group/step relative flex-1 text-center overflow-visible ml-1.5 mr-1.75 items-center justify-center max-md:items-start first:ml-0 first:rounded-tl-2xl first:rounded-bl-2xl first:pl-2.5 last:mr-0 last:rounded-tr-2xl last:rounded-br-2xl last:pr-2.5 bg-muted text-muted-foreground data-[state=completed]:bg-process-completed data-[state=completed]:text-background data-[state=active]:bg-process-active data-[state=active]:text-background hover:data-[state=active]:text-background data-[state=inactive]:bg-muted data-[state=inactive]:text-muted-foreground before:content-[&quot;&quot;] before:absolute before:-left-1 before:-right-1.25 before:cursor-pointer after:content-[&quot;&quot;] after:absolute after:-left-1 after:-right-1.25 after:cursor-pointer before:top-0 before:h-4.25 before:skew-x-28 before:translate-z-0 after:bottom-0 after:h-4 after:-skew-x-30 after:translate-z-0 first:before:left-4.5 first:after:left-4.5 last:before:right-4.5 last:after:right-4.5 data-[state=inactive]:before:bg-muted data-[state=inactive]:after:bg-muted data-[state=completed]:before:bg-process-completed data-[state=completed]:after:bg-process-completed data-[state=active]:before:bg-process-active data-[state=active]:after:bg-process-active" data-state="inactive">
+            <button data-slot="stepper-trigger" class="whitespace-nowrap font-medium transition-[color,box-shadow] disabled:pointer-events-none disabled:opacity-50 [&amp;_svg]:pointer-events-none shrink-0 [&amp;_svg]:shrink-0 outline-none focus-visible:border-ring focus-visible:ring-ring/50 focus-visible:ring-[3px] aria-invalid:ring-destructive/20 dark:aria-invalid:ring-destructive/40 aria-invalid:border-destructive dark:hover:bg-accent/50 hover:text-accent-foreground h-6 px-2 in-data-[slot=button-group]:rounded-lg has-data-[icon=inline-end]:pr-1.5 has-data-[icon=inline-start]:pl-1.5 [&amp;_svg:not([class*='size-'])]:size-3 gap-1 rounded max-md:flex-col z-10 cursor-pointer bg-transparent hover:bg-transparent text-center flex items-center justify-center shadow-none text-[10px] w-34">
+            <span class="flex items-center justify-center gap-2 w-full min-w-0" data-state="closed" data-slot="tooltip-trigger">
+            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-check hidden" aria-hidden="true">
+            <path d="M20 6 9 17l-5-5">
+            </path>
+            </svg>
+            <h3 data-slot="stepper-title" class="text-sm font-medium truncate w-full min-w-0">Closed Won lorem ipsum dolor sit amet
+            </h3>
+            </span>
+            </button>
+            </div>
+            <div data-slot="stepper-item" class="group/step flex group-data-[orientation=horizontal]/stepper:flex-row group-data-[orientation=vertical]/stepper:flex-col group/step relative flex-1 text-center overflow-visible ml-1.5 mr-1.75 items-center justify-center max-md:items-start first:ml-0 first:rounded-tl-2xl first:rounded-bl-2xl first:pl-2.5 last:mr-0 last:rounded-tr-2xl last:rounded-br-2xl last:pr-2.5 bg-muted text-muted-foreground data-[state=completed]:bg-process-completed data-[state=completed]:text-background data-[state=active]:bg-process-active data-[state=active]:text-background hover:data-[state=active]:text-background data-[state=inactive]:bg-muted data-[state=inactive]:text-muted-foreground before:content-[&quot;&quot;] before:absolute before:-left-1 before:-right-1.25 before:cursor-pointer after:content-[&quot;&quot;] after:absolute after:-left-1 after:-right-1.25 after:cursor-pointer before:top-0 before:h-4.25 before:skew-x-28 before:translate-z-0 after:bottom-0 after:h-4 after:-skew-x-30 after:translate-z-0 first:before:left-4.5 first:after:left-4.5 last:before:right-4.5 last:after:right-4.5 data-[state=inactive]:before:bg-muted data-[state=inactive]:after:bg-muted data-[state=completed]:before:bg-process-completed data-[state=completed]:after:bg-process-completed data-[state=active]:before:bg-process-active data-[state=active]:after:bg-process-active" data-state="inactive">
+            <button data-slot="stepper-trigger" class="whitespace-nowrap font-medium transition-[color,box-shadow] disabled:pointer-events-none disabled:opacity-50 [&amp;_svg]:pointer-events-none shrink-0 [&amp;_svg]:shrink-0 outline-none focus-visible:border-ring focus-visible:ring-ring/50 focus-visible:ring-[3px] aria-invalid:ring-destructive/20 dark:aria-invalid:ring-destructive/40 aria-invalid:border-destructive dark:hover:bg-accent/50 hover:text-accent-foreground h-6 px-2 in-data-[slot=button-group]:rounded-lg has-data-[icon=inline-end]:pr-1.5 has-data-[icon=inline-start]:pl-1.5 [&amp;_svg:not([class*='size-'])]:size-3 gap-1 rounded max-md:flex-col z-10 cursor-pointer bg-transparent hover:bg-transparent text-center flex items-center justify-center shadow-none text-[10px] w-34">
+            <span class="flex items-center justify-center gap-2 w-full min-w-0" data-state="closed" data-slot="tooltip-trigger">
+            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-check hidden" aria-hidden="true">
+            <path d="M20 6 9 17l-5-5">
+            </path>
+            </svg>
+            <h3 data-slot="stepper-title" class="text-sm font-medium truncate w-full min-w-0">Closed Won lorem ipsum dolor sit amet
+            </h3>
+            </span>
+            </button>
+            </div>
+            <div data-slot="stepper-item" class="group/step flex group-data-[orientation=horizontal]/stepper:flex-row group-data-[orientation=vertical]/stepper:flex-col group/step relative flex-1 text-center overflow-visible ml-1.5 mr-1.75 items-center justify-center max-md:items-start first:ml-0 first:rounded-tl-2xl first:rounded-bl-2xl first:pl-2.5 last:mr-0 last:rounded-tr-2xl last:rounded-br-2xl last:pr-2.5 bg-muted text-muted-foreground data-[state=completed]:bg-process-completed data-[state=completed]:text-background data-[state=active]:bg-process-active data-[state=active]:text-background hover:data-[state=active]:text-background data-[state=inactive]:bg-muted data-[state=inactive]:text-muted-foreground before:content-[&quot;&quot;] before:absolute before:-left-1 before:-right-1.25 before:cursor-pointer after:content-[&quot;&quot;] after:absolute after:-left-1 after:-right-1.25 after:cursor-pointer before:top-0 before:h-4.25 before:skew-x-28 before:translate-z-0 after:bottom-0 after:h-4 after:-skew-x-30 after:translate-z-0 first:before:left-4.5 first:after:left-4.5 last:before:right-4.5 last:after:right-4.5 data-[state=inactive]:before:bg-muted data-[state=inactive]:after:bg-muted data-[state=completed]:before:bg-process-completed data-[state=completed]:after:bg-process-completed data-[state=active]:before:bg-process-active data-[state=active]:after:bg-process-active" data-state="inactive">
+            <button data-slot="stepper-trigger" class="whitespace-nowrap font-medium transition-[color,box-shadow] disabled:pointer-events-none disabled:opacity-50 [&amp;_svg]:pointer-events-none shrink-0 [&amp;_svg]:shrink-0 outline-none focus-visible:border-ring focus-visible:ring-ring/50 focus-visible:ring-[3px] aria-invalid:ring-destructive/20 dark:aria-invalid:ring-destructive/40 aria-invalid:border-destructive dark:hover:bg-accent/50 hover:text-accent-foreground h-6 px-2 in-data-[slot=button-group]:rounded-lg has-data-[icon=inline-end]:pr-1.5 has-data-[icon=inline-start]:pl-1.5 [&amp;_svg:not([class*='size-'])]:size-3 gap-1 rounded max-md:flex-col z-10 cursor-pointer bg-transparent hover:bg-transparent text-center flex items-center justify-center shadow-none text-[10px] w-34">
+            <span class="flex items-center justify-center gap-2 w-full min-w-0" data-state="closed" data-slot="tooltip-trigger">
+            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-check hidden" aria-hidden="true">
+            <path d="M20 6 9 17l-5-5">
+            </path>
+            </svg>
+            <h3 data-slot="stepper-title" class="text-sm font-medium truncate w-full min-w-0">Closed Won lorem ipsum dolor sit amet
+            </h3>
+            </span>
+            </button>
+            </div>
+            </div>
+            </div>
+            </div>
+            </div>
+            </div>
+            <div class="flex items-center justify-center gap-1">
+            <button data-slot="button" class="inline-flex items-center justify-center gap-1.5 whitespace-nowrap text-sm font-medium transition-[color,box-shadow] disabled:pointer-events-none disabled:opacity-50 [&amp;_svg]:pointer-events-none [&amp;_svg:not([class*='size-'])]:size-4 [&amp;_svg]:shrink-0 outline-none focus-visible:border-ring focus-visible:ring-ring/50 focus-visible:ring-[3px] aria-invalid:ring-destructive/20 dark:aria-invalid:ring-destructive/40 aria-invalid:border-destructive border bg-background shadow-xs hover:bg-accent dark:bg-input/30 dark:border-input dark:hover:bg-input/50 hover:text-accent-foreground rounded-[min(var(--radius-md),12px)] in-data-[slot=button-group]:rounded-lg size-6 shrink-0 mb-3" aria-label="Scroll to previous steps" type="button" disabled="">
+            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-chevron-left size-3" aria-hidden="true">
+            <path d="m15 18-6-6 6-6">
+            </path>
+            </svg>
+            </button>
+            <button data-slot="button" class="inline-flex items-center justify-center gap-1.5 whitespace-nowrap text-sm font-medium transition-[color,box-shadow] disabled:pointer-events-none disabled:opacity-50 [&amp;_svg]:pointer-events-none [&amp;_svg:not([class*='size-'])]:size-4 [&amp;_svg]:shrink-0 outline-none focus-visible:border-ring focus-visible:ring-ring/50 focus-visible:ring-[3px] aria-invalid:ring-destructive/20 dark:aria-invalid:ring-destructive/40 aria-invalid:border-destructive border bg-background shadow-xs hover:bg-accent dark:bg-input/30 dark:border-input dark:hover:bg-input/50 hover:text-accent-foreground rounded-[min(var(--radius-md),12px)] in-data-[slot=button-group]:rounded-lg size-6 shrink-0 mb-3" aria-label="Scroll to next steps" type="button">
+            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-chevron-right size-3" aria-hidden="true">
+            <path d="m9 18 6-6-6-6">
+            </path>
+            </svg>
+            </button>
+            </div>
+            </div>
+            <div class="rounded-3xl border border-border/60 bg-background p-6 shadow-sm">
+            <p class="text-xs uppercase tracking-[0.3em] text-muted-foreground">Current Step
+            </p>
+            <h3 class="mt-2 text-2xl font-semibold">Nurturing lorem ipsum dolor sit amet
+            </h3>
+            <p class="mt-1 text-sm text-muted-foreground">
+            </p>
+            <div class="mt-6 grid gap-6 text-sm sm:grid-cols-3">
+            <div>
+            <p class="text-xs uppercase text-muted-foreground">Completed
+            </p>
+            <p class="text-xl font-semibold text-emerald-600">3
+            </p>
+            </div>
+            <div>
+            <p class="text-xs uppercase text-muted-foreground">Remaining
+            </p>
+            <p class="text-xl font-semibold text-blue-600">5
+            </p>
+            </div>
+            <div>
+            <p class="text-xs uppercase text-muted-foreground">Status
+            </p>
+            <p class="text-xl font-semibold">In progress
+            </p>
+            </div>
+            </div>
+            </div>
+            </div>
+            </div>
+          </style>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+`;
+
+exports[`Components/Stepper LoadingState smoke-test 1`] = `
+<div class="space-y-6 px-4 py-8">
+  <div class="space-y-8 w-full"
+       id="_r_ID_"
+  >
+    <div class="flex items-center justify-center gap-4 relative">
+      <div class="w-[90vw]">
+        <div dir="ltr"
+             data-slot="scroll-area"
+             class="relative w-full"
+             style="position: relative; --radix-ID 0px; --radix-ID 0px;"
+        >
+          <style>
+            [data-radix-ID>
+            <div data-radix-ID"" data-slot="scroll-area-viewport" class="focus-visible:ring-ring/50 size-full rounded-[inherit] transition-[color,box-shadow] outline-none focus-visible:ring-[3px] focus-visible:outline-1" style="overflow: hidden scroll;">
+            <div style="min-width: 100%; display: table;">
+            <div data-slot="stepper" class="group/stepper inline-flex data-[orientation=horizontal]:w-full data-[orientation=horizontal]:flex-row data-[orientation=vertical]:flex-col gap-0.5" data-orientation="horizontal" role="navigation" aria-label="Process steps">
+            <div data-slot="stepper-item" class="group/step flex group-data-[orientation=horizontal]/stepper:flex-row group-data-[orientation=vertical]/stepper:flex-col group/step relative flex-1 text-center overflow-visible ml-1.5 mr-1.75 items-center justify-center max-md:items-start first:ml-0 first:rounded-tl-2xl first:rounded-bl-2xl first:pl-2.5 last:mr-0 last:rounded-tr-2xl last:rounded-br-2xl last:pr-2.5 bg-muted text-muted-foreground data-[state=completed]:bg-process-completed data-[state=completed]:text-background data-[state=active]:bg-process-active data-[state=active]:text-background hover:data-[state=active]:text-background data-[state=inactive]:bg-muted data-[state=inactive]:text-muted-foreground before:content-[&quot;&quot;] before:absolute before:-left-1 before:-right-1.25 before:cursor-pointer after:content-[&quot;&quot;] after:absolute after:-left-1 after:-right-1.25 after:cursor-pointer before:top-0 before:h-4.25 before:skew-x-28 before:translate-z-0 after:bottom-0 after:h-4 after:-skew-x-30 after:translate-z-0 first:before:left-4.5 first:after:left-4.5 last:before:right-4.5 last:after:right-4.5 data-[state=inactive]:before:bg-muted data-[state=inactive]:after:bg-muted data-[state=completed]:before:bg-process-completed data-[state=completed]:after:bg-process-completed data-[state=active]:before:bg-process-active data-[state=active]:after:bg-process-active" data-state="completed">
+            <button data-slot="stepper-trigger" class="whitespace-nowrap font-medium transition-[color,box-shadow] disabled:pointer-events-none disabled:opacity-50 [&amp;_svg]:pointer-events-none shrink-0 [&amp;_svg]:shrink-0 outline-none focus-visible:border-ring focus-visible:ring-ring/50 focus-visible:ring-[3px] aria-invalid:ring-destructive/20 dark:aria-invalid:ring-destructive/40 aria-invalid:border-destructive dark:hover:bg-accent/50 h-6 px-2 in-data-[slot=button-group]:rounded-lg has-data-[icon=inline-end]:pr-1.5 has-data-[icon=inline-start]:pl-1.5 [&amp;_svg:not([class*='size-'])]:size-3 gap-1 rounded max-md:flex-col z-10 cursor-pointer bg-transparent hover:bg-transparent text-center flex items-center justify-center shadow-none text-[10px] w-34 text-background hover:text-background">
+            <span class="flex items-center justify-center gap-2 w-full min-w-0" data-state="closed" data-slot="tooltip-trigger">
+            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-check stroke-[2.5] block group-hover/step:hidden shrink-0" aria-hidden="true">
+            <path d="M20 6 9 17l-5-5">
+            </path>
+            </svg>
+            <h3 data-slot="stepper-title" class="text-sm font-medium hidden group-hover/step:block truncate min-w-0">Lead Captured lorem ipsum dolor sit amet
+            </h3>
+            </span>
+            </button>
+            </div>
+            <div data-slot="stepper-item" class="group/step flex group-data-[orientation=horizontal]/stepper:flex-row group-data-[orientation=vertical]/stepper:flex-col group/step relative flex-1 text-center overflow-visible ml-1.5 mr-1.75 items-center justify-center max-md:items-start first:ml-0 first:rounded-tl-2xl first:rounded-bl-2xl first:pl-2.5 last:mr-0 last:rounded-tr-2xl last:rounded-br-2xl last:pr-2.5 bg-muted text-muted-foreground data-[state=completed]:bg-process-completed data-[state=completed]:text-background data-[state=active]:bg-process-active data-[state=active]:text-background hover:data-[state=active]:text-background data-[state=inactive]:bg-muted data-[state=inactive]:text-muted-foreground before:content-[&quot;&quot;] before:absolute before:-left-1 before:-right-1.25 before:cursor-pointer after:content-[&quot;&quot;] after:absolute after:-left-1 after:-right-1.25 after:cursor-pointer before:top-0 before:h-4.25 before:skew-x-28 before:translate-z-0 after:bottom-0 after:h-4 after:-skew-x-30 after:translate-z-0 first:before:left-4.5 first:after:left-4.5 last:before:right-4.5 last:after:right-4.5 data-[state=inactive]:before:bg-muted data-[state=inactive]:after:bg-muted data-[state=completed]:before:bg-process-completed data-[state=completed]:after:bg-process-completed data-[state=active]:before:bg-process-active data-[state=active]:after:bg-process-active" data-state="completed">
+            <button data-slot="stepper-trigger" class="whitespace-nowrap font-medium transition-[color,box-shadow] disabled:pointer-events-none disabled:opacity-50 [&amp;_svg]:pointer-events-none shrink-0 [&amp;_svg]:shrink-0 outline-none focus-visible:border-ring focus-visible:ring-ring/50 focus-visible:ring-[3px] aria-invalid:ring-destructive/20 dark:aria-invalid:ring-destructive/40 aria-invalid:border-destructive dark:hover:bg-accent/50 h-6 px-2 in-data-[slot=button-group]:rounded-lg has-data-[icon=inline-end]:pr-1.5 has-data-[icon=inline-start]:pl-1.5 [&amp;_svg:not([class*='size-'])]:size-3 gap-1 rounded max-md:flex-col z-10 cursor-pointer bg-transparent hover:bg-transparent text-center flex items-center justify-center shadow-none text-[10px] w-34 text-background hover:text-background">
+            <span class="flex items-center justify-center gap-2 w-full min-w-0" data-state="closed" data-slot="tooltip-trigger">
+            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-check stroke-[2.5] block group-hover/step:hidden shrink-0" aria-hidden="true">
+            <path d="M20 6 9 17l-5-5">
+            </path>
+            </svg>
+            <h3 data-slot="stepper-title" class="text-sm font-medium hidden group-hover/step:block truncate min-w-0">Lead Captured lorem ipsum dolor sit amet
+            </h3>
+            </span>
+            </button>
+            </div>
+            <div data-slot="stepper-item" class="group/step flex group-data-[orientation=horizontal]/stepper:flex-row group-data-[orientation=vertical]/stepper:flex-col group/step relative flex-1 text-center overflow-visible ml-1.5 mr-1.75 items-center justify-center max-md:items-start first:ml-0 first:rounded-tl-2xl first:rounded-bl-2xl first:pl-2.5 last:mr-0 last:rounded-tr-2xl last:rounded-br-2xl last:pr-2.5 bg-muted text-muted-foreground data-[state=completed]:bg-process-completed data-[state=completed]:text-background data-[state=active]:bg-process-active data-[state=active]:text-background hover:data-[state=active]:text-background data-[state=inactive]:bg-muted data-[state=inactive]:text-muted-foreground before:content-[&quot;&quot;] before:absolute before:-left-1 before:-right-1.25 before:cursor-pointer after:content-[&quot;&quot;] after:absolute after:-left-1 after:-right-1.25 after:cursor-pointer before:top-0 before:h-4.25 before:skew-x-28 before:translate-z-0 after:bottom-0 after:h-4 after:-skew-x-30 after:translate-z-0 first:before:left-4.5 first:after:left-4.5 last:before:right-4.5 last:after:right-4.5 data-[state=inactive]:before:bg-muted data-[state=inactive]:after:bg-muted data-[state=completed]:before:bg-process-completed data-[state=completed]:after:bg-process-completed data-[state=active]:before:bg-process-active data-[state=active]:after:bg-process-active" data-state="completed">
+            <button data-slot="stepper-trigger" class="whitespace-nowrap font-medium transition-[color,box-shadow] disabled:pointer-events-none disabled:opacity-50 [&amp;_svg]:pointer-events-none shrink-0 [&amp;_svg]:shrink-0 outline-none focus-visible:border-ring focus-visible:ring-ring/50 focus-visible:ring-[3px] aria-invalid:ring-destructive/20 dark:aria-invalid:ring-destructive/40 aria-invalid:border-destructive dark:hover:bg-accent/50 h-6 px-2 in-data-[slot=button-group]:rounded-lg has-data-[icon=inline-end]:pr-1.5 has-data-[icon=inline-start]:pl-1.5 [&amp;_svg:not([class*='size-'])]:size-3 gap-1 rounded max-md:flex-col z-10 cursor-pointer bg-transparent hover:bg-transparent text-center flex items-center justify-center shadow-none text-[10px] w-34 text-background hover:text-background">
+            <span class="flex items-center justify-center gap-2 w-full min-w-0" data-state="closed" data-slot="tooltip-trigger">
+            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-check stroke-[2.5] block group-hover/step:hidden shrink-0" aria-hidden="true">
+            <path d="M20 6 9 17l-5-5">
+            </path>
+            </svg>
+            <h3 data-slot="stepper-title" class="text-sm font-medium hidden group-hover/step:block truncate min-w-0">Lead Captured lorem ipsum dolor sit amet
+            </h3>
+            </span>
+            </button>
+            </div>
+            <div data-slot="stepper-item" class="group/step flex group-data-[orientation=horizontal]/stepper:flex-row group-data-[orientation=vertical]/stepper:flex-col group/step relative flex-1 text-center overflow-visible ml-1.5 mr-1.75 items-center justify-center max-md:items-start first:ml-0 first:rounded-tl-2xl first:rounded-bl-2xl first:pl-2.5 last:mr-0 last:rounded-tr-2xl last:rounded-br-2xl last:pr-2.5 bg-muted text-muted-foreground data-[state=completed]:bg-process-completed data-[state=completed]:text-background data-[state=active]:bg-process-active data-[state=active]:text-background hover:data-[state=active]:text-background data-[state=inactive]:bg-muted data-[state=inactive]:text-muted-foreground before:content-[&quot;&quot;] before:absolute before:-left-1 before:-right-1.25 before:cursor-pointer after:content-[&quot;&quot;] after:absolute after:-left-1 after:-right-1.25 after:cursor-pointer before:top-0 before:h-4.25 before:skew-x-28 before:translate-z-0 after:bottom-0 after:h-4 after:-skew-x-30 after:translate-z-0 first:before:left-4.5 first:after:left-4.5 last:before:right-4.5 last:after:right-4.5 data-[state=inactive]:before:bg-muted data-[state=inactive]:after:bg-muted data-[state=completed]:before:bg-process-completed data-[state=completed]:after:bg-process-completed data-[state=active]:before:bg-process-active data-[state=active]:after:bg-process-active" data-state="active" data-loading="true" aria-current="step">
+            <button data-slot="stepper-trigger" class="whitespace-nowrap font-medium transition-[color,box-shadow] disabled:pointer-events-none disabled:opacity-50 [&amp;_svg]:pointer-events-none shrink-0 [&amp;_svg]:shrink-0 outline-none focus-visible:border-ring focus-visible:ring-ring/50 focus-visible:ring-[3px] aria-invalid:ring-destructive/20 dark:aria-invalid:ring-destructive/40 aria-invalid:border-destructive dark:hover:bg-accent/50 h-6 px-2 in-data-[slot=button-group]:rounded-lg has-data-[icon=inline-end]:pr-1.5 has-data-[icon=inline-start]:pl-1.5 [&amp;_svg:not([class*='size-'])]:size-3 gap-1 rounded max-md:flex-col z-10 cursor-pointer bg-transparent hover:bg-transparent text-center flex items-center justify-center shadow-none text-[10px] w-34 text-background hover:text-background">
+            <span class="flex items-center justify-center gap-2 w-full min-w-0" data-state="closed" data-slot="tooltip-trigger">
+            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-check hidden" aria-hidden="true">
+            <path d="M20 6 9 17l-5-5">
+            </path>
+            </svg>
+            <h3 data-slot="stepper-title" class="text-sm font-medium truncate w-full min-w-0">Nurturing lorem ipsum dolor sit amet
+            </h3>
+            </span>
+            </button>
+            </div>
+            <div data-slot="stepper-item" class="group/step flex group-data-[orientation=horizontal]/stepper:flex-row group-data-[orientation=vertical]/stepper:flex-col group/step relative flex-1 text-center overflow-visible ml-1.5 mr-1.75 items-center justify-center max-md:items-start first:ml-0 first:rounded-tl-2xl first:rounded-bl-2xl first:pl-2.5 last:mr-0 last:rounded-tr-2xl last:rounded-br-2xl last:pr-2.5 bg-muted text-muted-foreground data-[state=completed]:bg-process-completed data-[state=completed]:text-background data-[state=active]:bg-process-active data-[state=active]:text-background hover:data-[state=active]:text-background data-[state=inactive]:bg-muted data-[state=inactive]:text-muted-foreground before:content-[&quot;&quot;] before:absolute before:-left-1 before:-right-1.25 before:cursor-pointer after:content-[&quot;&quot;] after:absolute after:-left-1 after:-right-1.25 after:cursor-pointer before:top-0 before:h-4.25 before:skew-x-28 before:translate-z-0 after:bottom-0 after:h-4 after:-skew-x-30 after:translate-z-0 first:before:left-4.5 first:after:left-4.5 last:before:right-4.5 last:after:right-4.5 data-[state=inactive]:before:bg-muted data-[state=inactive]:after:bg-muted data-[state=completed]:before:bg-process-completed data-[state=completed]:after:bg-process-completed data-[state=active]:before:bg-process-active data-[state=active]:after:bg-process-active" data-state="inactive">
+            <button data-slot="stepper-trigger" class="whitespace-nowrap font-medium transition-[color,box-shadow] disabled:pointer-events-none disabled:opacity-50 [&amp;_svg]:pointer-events-none shrink-0 [&amp;_svg]:shrink-0 outline-none focus-visible:border-ring focus-visible:ring-ring/50 focus-visible:ring-[3px] aria-invalid:ring-destructive/20 dark:aria-invalid:ring-destructive/40 aria-invalid:border-destructive dark:hover:bg-accent/50 hover:text-accent-foreground h-6 px-2 in-data-[slot=button-group]:rounded-lg has-data-[icon=inline-end]:pr-1.5 has-data-[icon=inline-start]:pl-1.5 [&amp;_svg:not([class*='size-'])]:size-3 gap-1 rounded max-md:flex-col z-10 cursor-pointer bg-transparent hover:bg-transparent text-center flex items-center justify-center shadow-none text-[10px] w-34">
+            <span class="flex items-center justify-center gap-2 w-full min-w-0" data-state="closed" data-slot="tooltip-trigger">
+            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-check hidden" aria-hidden="true">
+            <path d="M20 6 9 17l-5-5">
+            </path>
+            </svg>
+            <h3 data-slot="stepper-title" class="text-sm font-medium truncate w-full min-w-0">Legal Review lorem ipsum dolor sit amet
+            </h3>
+            </span>
+            </button>
+            </div>
+            <div data-slot="stepper-item" class="group/step flex group-data-[orientation=horizontal]/stepper:flex-row group-data-[orientation=vertical]/stepper:flex-col group/step relative flex-1 text-center overflow-visible ml-1.5 mr-1.75 items-center justify-center max-md:items-start first:ml-0 first:rounded-tl-2xl first:rounded-bl-2xl first:pl-2.5 last:mr-0 last:rounded-tr-2xl last:rounded-br-2xl last:pr-2.5 bg-muted text-muted-foreground data-[state=completed]:bg-process-completed data-[state=completed]:text-background data-[state=active]:bg-process-active data-[state=active]:text-background hover:data-[state=active]:text-background data-[state=inactive]:bg-muted data-[state=inactive]:text-muted-foreground before:content-[&quot;&quot;] before:absolute before:-left-1 before:-right-1.25 before:cursor-pointer after:content-[&quot;&quot;] after:absolute after:-left-1 after:-right-1.25 after:cursor-pointer before:top-0 before:h-4.25 before:skew-x-28 before:translate-z-0 after:bottom-0 after:h-4 after:-skew-x-30 after:translate-z-0 first:before:left-4.5 first:after:left-4.5 last:before:right-4.5 last:after:right-4.5 data-[state=inactive]:before:bg-muted data-[state=inactive]:after:bg-muted data-[state=completed]:before:bg-process-completed data-[state=completed]:after:bg-process-completed data-[state=active]:before:bg-process-active data-[state=active]:after:bg-process-active" data-state="inactive">
+            <button data-slot="stepper-trigger" class="whitespace-nowrap font-medium transition-[color,box-shadow] disabled:pointer-events-none disabled:opacity-50 [&amp;_svg]:pointer-events-none shrink-0 [&amp;_svg]:shrink-0 outline-none focus-visible:border-ring focus-visible:ring-ring/50 focus-visible:ring-[3px] aria-invalid:ring-destructive/20 dark:aria-invalid:ring-destructive/40 aria-invalid:border-destructive dark:hover:bg-accent/50 hover:text-accent-foreground h-6 px-2 in-data-[slot=button-group]:rounded-lg has-data-[icon=inline-end]:pr-1.5 has-data-[icon=inline-start]:pl-1.5 [&amp;_svg:not([class*='size-'])]:size-3 gap-1 rounded max-md:flex-col z-10 cursor-pointer bg-transparent hover:bg-transparent text-center flex items-center justify-center shadow-none text-[10px] w-34">
+            <span class="flex items-center justify-center gap-2 w-full min-w-0" data-state="closed" data-slot="tooltip-trigger">
+            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-check hidden" aria-hidden="true">
+            <path d="M20 6 9 17l-5-5">
+            </path>
+            </svg>
+            <h3 data-slot="stepper-title" class="text-sm font-medium truncate w-full min-w-0">Closed Won lorem ipsum dolor sit amet
+            </h3>
+            </span>
+            </button>
+            </div>
+            <div data-slot="stepper-item" class="group/step flex group-data-[orientation=horizontal]/stepper:flex-row group-data-[orientation=vertical]/stepper:flex-col group/step relative flex-1 text-center overflow-visible ml-1.5 mr-1.75 items-center justify-center max-md:items-start first:ml-0 first:rounded-tl-2xl first:rounded-bl-2xl first:pl-2.5 last:mr-0 last:rounded-tr-2xl last:rounded-br-2xl last:pr-2.5 bg-muted text-muted-foreground data-[state=completed]:bg-process-completed data-[state=completed]:text-background data-[state=active]:bg-process-active data-[state=active]:text-background hover:data-[state=active]:text-background data-[state=inactive]:bg-muted data-[state=inactive]:text-muted-foreground before:content-[&quot;&quot;] before:absolute before:-left-1 before:-right-1.25 before:cursor-pointer after:content-[&quot;&quot;] after:absolute after:-left-1 after:-right-1.25 after:cursor-pointer before:top-0 before:h-4.25 before:skew-x-28 before:translate-z-0 after:bottom-0 after:h-4 after:-skew-x-30 after:translate-z-0 first:before:left-4.5 first:after:left-4.5 last:before:right-4.5 last:after:right-4.5 data-[state=inactive]:before:bg-muted data-[state=inactive]:after:bg-muted data-[state=completed]:before:bg-process-completed data-[state=completed]:after:bg-process-completed data-[state=active]:before:bg-process-active data-[state=active]:after:bg-process-active" data-state="inactive">
+            <button data-slot="stepper-trigger" class="whitespace-nowrap font-medium transition-[color,box-shadow] disabled:pointer-events-none disabled:opacity-50 [&amp;_svg]:pointer-events-none shrink-0 [&amp;_svg]:shrink-0 outline-none focus-visible:border-ring focus-visible:ring-ring/50 focus-visible:ring-[3px] aria-invalid:ring-destructive/20 dark:aria-invalid:ring-destructive/40 aria-invalid:border-destructive dark:hover:bg-accent/50 hover:text-accent-foreground h-6 px-2 in-data-[slot=button-group]:rounded-lg has-data-[icon=inline-end]:pr-1.5 has-data-[icon=inline-start]:pl-1.5 [&amp;_svg:not([class*='size-'])]:size-3 gap-1 rounded max-md:flex-col z-10 cursor-pointer bg-transparent hover:bg-transparent text-center flex items-center justify-center shadow-none text-[10px] w-34">
+            <span class="flex items-center justify-center gap-2 w-full min-w-0" data-state="closed" data-slot="tooltip-trigger">
+            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-check hidden" aria-hidden="true">
+            <path d="M20 6 9 17l-5-5">
+            </path>
+            </svg>
+            <h3 data-slot="stepper-title" class="text-sm font-medium truncate w-full min-w-0">Closed Won lorem ipsum dolor sit amet
+            </h3>
+            </span>
+            </button>
+            </div>
+            <div data-slot="stepper-item" class="group/step flex group-data-[orientation=horizontal]/stepper:flex-row group-data-[orientation=vertical]/stepper:flex-col group/step relative flex-1 text-center overflow-visible ml-1.5 mr-1.75 items-center justify-center max-md:items-start first:ml-0 first:rounded-tl-2xl first:rounded-bl-2xl first:pl-2.5 last:mr-0 last:rounded-tr-2xl last:rounded-br-2xl last:pr-2.5 bg-muted text-muted-foreground data-[state=completed]:bg-process-completed data-[state=completed]:text-background data-[state=active]:bg-process-active data-[state=active]:text-background hover:data-[state=active]:text-background data-[state=inactive]:bg-muted data-[state=inactive]:text-muted-foreground before:content-[&quot;&quot;] before:absolute before:-left-1 before:-right-1.25 before:cursor-pointer after:content-[&quot;&quot;] after:absolute after:-left-1 after:-right-1.25 after:cursor-pointer before:top-0 before:h-4.25 before:skew-x-28 before:translate-z-0 after:bottom-0 after:h-4 after:-skew-x-30 after:translate-z-0 first:before:left-4.5 first:after:left-4.5 last:before:right-4.5 last:after:right-4.5 data-[state=inactive]:before:bg-muted data-[state=inactive]:after:bg-muted data-[state=completed]:before:bg-process-completed data-[state=completed]:after:bg-process-completed data-[state=active]:before:bg-process-active data-[state=active]:after:bg-process-active" data-state="inactive">
+            <button data-slot="stepper-trigger" class="whitespace-nowrap font-medium transition-[color,box-shadow] disabled:pointer-events-none disabled:opacity-50 [&amp;_svg]:pointer-events-none shrink-0 [&amp;_svg]:shrink-0 outline-none focus-visible:border-ring focus-visible:ring-ring/50 focus-visible:ring-[3px] aria-invalid:ring-destructive/20 dark:aria-invalid:ring-destructive/40 aria-invalid:border-destructive dark:hover:bg-accent/50 hover:text-accent-foreground h-6 px-2 in-data-[slot=button-group]:rounded-lg has-data-[icon=inline-end]:pr-1.5 has-data-[icon=inline-start]:pl-1.5 [&amp;_svg:not([class*='size-'])]:size-3 gap-1 rounded max-md:flex-col z-10 cursor-pointer bg-transparent hover:bg-transparent text-center flex items-center justify-center shadow-none text-[10px] w-34">
+            <span class="flex items-center justify-center gap-2 w-full min-w-0" data-state="closed" data-slot="tooltip-trigger">
+            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-check hidden" aria-hidden="true">
+            <path d="M20 6 9 17l-5-5">
+            </path>
+            </svg>
+            <h3 data-slot="stepper-title" class="text-sm font-medium truncate w-full min-w-0">Closed Won lorem ipsum dolor sit amet
+            </h3>
+            </span>
+            </button>
+            </div>
+            </div>
+            </div>
+            </div>
+            </div>
+            </div>
+            <div class="flex items-center justify-center gap-1">
+            <button data-slot="button" class="inline-flex items-center justify-center gap-1.5 whitespace-nowrap text-sm font-medium transition-[color,box-shadow] disabled:pointer-events-none disabled:opacity-50 [&amp;_svg]:pointer-events-none [&amp;_svg:not([class*='size-'])]:size-4 [&amp;_svg]:shrink-0 outline-none focus-visible:border-ring focus-visible:ring-ring/50 focus-visible:ring-[3px] aria-invalid:ring-destructive/20 dark:aria-invalid:ring-destructive/40 aria-invalid:border-destructive border bg-background shadow-xs hover:bg-accent dark:bg-input/30 dark:border-input dark:hover:bg-input/50 hover:text-accent-foreground rounded-[min(var(--radius-md),12px)] in-data-[slot=button-group]:rounded-lg size-6 shrink-0 mb-3" aria-label="Scroll to previous steps" type="button" disabled="">
+            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-chevron-left size-3" aria-hidden="true">
+            <path d="m15 18-6-6 6-6">
+            </path>
+            </svg>
+            </button>
+            <button data-slot="button" class="inline-flex items-center justify-center gap-1.5 whitespace-nowrap text-sm font-medium transition-[color,box-shadow] disabled:pointer-events-none disabled:opacity-50 [&amp;_svg]:pointer-events-none [&amp;_svg:not([class*='size-'])]:size-4 [&amp;_svg]:shrink-0 outline-none focus-visible:border-ring focus-visible:ring-ring/50 focus-visible:ring-[3px] aria-invalid:ring-destructive/20 dark:aria-invalid:ring-destructive/40 aria-invalid:border-destructive border bg-background shadow-xs hover:bg-accent dark:bg-input/30 dark:border-input dark:hover:bg-input/50 hover:text-accent-foreground rounded-[min(var(--radius-md),12px)] in-data-[slot=button-group]:rounded-lg size-6 shrink-0 mb-3" aria-label="Scroll to next steps" type="button">
+            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-chevron-right size-3" aria-hidden="true">
+            <path d="m9 18 6-6-6-6">
+            </path>
+            </svg>
+            </button>
+            </div>
+            </div>
+            <div class="rounded-3xl border border-border/60 bg-background p-6 shadow-sm">
+            <p class="text-xs uppercase tracking-[0.3em] text-muted-foreground">Current Step
+            </p>
+            <h3 class="mt-2 text-2xl font-semibold">Nurturing lorem ipsum dolor sit amet
+            </h3>
+            <p class="mt-1 text-sm text-muted-foreground">
+            </p>
+            <div class="mt-6 grid gap-6 text-sm sm:grid-cols-3">
+            <div>
+            <p class="text-xs uppercase text-muted-foreground">Completed
+            </p>
+            <p class="text-xl font-semibold text-emerald-600">3
+            </p>
+            </div>
+            <div>
+            <p class="text-xs uppercase text-muted-foreground">Remaining
+            </p>
+            <p class="text-xl font-semibold text-blue-600">5
+            </p>
+            </div>
+            <div>
+            <p class="text-xs uppercase text-muted-foreground">Status
+            </p>
+            <p class="text-xl font-semibold">In progress
+            </p>
+            </div>
+            </div>
+            </div>
+            </div>
+            </div>
+          </style>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+`;
+
+exports[`Components/Stepper LongJourney smoke-test 1`] = `
+<div class="space-y-6 px-4 py-8">
+  <div class="space-y-8 w-full"
+       id="_r_ID_"
+  >
+    <div class="flex items-center justify-center gap-4 relative">
+      <div class="w-[90vw]">
+        <div dir="ltr"
+             data-slot="scroll-area"
+             class="relative w-full"
+             style="position: relative; --radix-ID 0px; --radix-ID 0px;"
+        >
+          <style>
+            [data-radix-ID>
+            <div data-radix-ID"" data-slot="scroll-area-viewport" class="focus-visible:ring-ring/50 size-full rounded-[inherit] transition-[color,box-shadow] outline-none focus-visible:ring-[3px] focus-visible:outline-1" style="overflow: hidden scroll;">
+            <div style="min-width: 100%; display: table;">
+            <div data-slot="stepper" class="group/stepper inline-flex data-[orientation=horizontal]:w-full data-[orientation=horizontal]:flex-row data-[orientation=vertical]:flex-col gap-0.5" data-orientation="horizontal" role="navigation" aria-label="Process steps">
+            <div data-slot="stepper-item" class="group/step flex group-data-[orientation=horizontal]/stepper:flex-row group-data-[orientation=vertical]/stepper:flex-col group/step relative flex-1 text-center overflow-visible ml-1.5 mr-1.75 items-center justify-center max-md:items-start first:ml-0 first:rounded-tl-2xl first:rounded-bl-2xl first:pl-2.5 last:mr-0 last:rounded-tr-2xl last:rounded-br-2xl last:pr-2.5 bg-muted text-muted-foreground data-[state=completed]:bg-process-completed data-[state=completed]:text-background data-[state=active]:bg-process-active data-[state=active]:text-background hover:data-[state=active]:text-background data-[state=inactive]:bg-muted data-[state=inactive]:text-muted-foreground before:content-[&quot;&quot;] before:absolute before:-left-1 before:-right-1.25 before:cursor-pointer after:content-[&quot;&quot;] after:absolute after:-left-1 after:-right-1.25 after:cursor-pointer before:top-0 before:h-4.25 before:skew-x-28 before:translate-z-0 after:bottom-0 after:h-4 after:-skew-x-30 after:translate-z-0 first:before:left-4.5 first:after:left-4.5 last:before:right-4.5 last:after:right-4.5 data-[state=inactive]:before:bg-muted data-[state=inactive]:after:bg-muted data-[state=completed]:before:bg-process-completed data-[state=completed]:after:bg-process-completed data-[state=active]:before:bg-process-active data-[state=active]:after:bg-process-active" data-state="completed">
+            <button data-slot="stepper-trigger" class="whitespace-nowrap font-medium transition-[color,box-shadow] disabled:pointer-events-none disabled:opacity-50 [&amp;_svg]:pointer-events-none shrink-0 [&amp;_svg]:shrink-0 outline-none focus-visible:border-ring focus-visible:ring-ring/50 focus-visible:ring-[3px] aria-invalid:ring-destructive/20 dark:aria-invalid:ring-destructive/40 aria-invalid:border-destructive dark:hover:bg-accent/50 h-6 px-2 in-data-[slot=button-group]:rounded-lg has-data-[icon=inline-end]:pr-1.5 has-data-[icon=inline-start]:pl-1.5 [&amp;_svg:not([class*='size-'])]:size-3 gap-1 rounded max-md:flex-col z-10 cursor-pointer bg-transparent hover:bg-transparent text-center flex items-center justify-center shadow-none text-[10px] w-34 text-background hover:text-background">
+            <span class="flex items-center justify-center gap-2 w-full min-w-0" data-state="closed" data-slot="tooltip-trigger">
+            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-check stroke-[2.5] block group-hover/step:hidden shrink-0" aria-hidden="true">
+            <path d="M20 6 9 17l-5-5">
+            </path>
+            </svg>
+            <h3 data-slot="stepper-title" class="text-sm font-medium hidden group-hover/step:block truncate min-w-0">Idea lorem ipsum dolor sit amet
+            </h3>
+            </span>
+            </button>
+            </div>
+            <div data-slot="stepper-item" class="group/step flex group-data-[orientation=horizontal]/stepper:flex-row group-data-[orientation=vertical]/stepper:flex-col group/step relative flex-1 text-center overflow-visible ml-1.5 mr-1.75 items-center justify-center max-md:items-start first:ml-0 first:rounded-tl-2xl first:rounded-bl-2xl first:pl-2.5 last:mr-0 last:rounded-tr-2xl last:rounded-br-2xl last:pr-2.5 bg-muted text-muted-foreground data-[state=completed]:bg-process-completed data-[state=completed]:text-background data-[state=active]:bg-process-active data-[state=active]:text-background hover:data-[state=active]:text-background data-[state=inactive]:bg-muted data-[state=inactive]:text-muted-foreground before:content-[&quot;&quot;] before:absolute before:-left-1 before:-right-1.25 before:cursor-pointer after:content-[&quot;&quot;] after:absolute after:-left-1 after:-right-1.25 after:cursor-pointer before:top-0 before:h-4.25 before:skew-x-28 before:translate-z-0 after:bottom-0 after:h-4 after:-skew-x-30 after:translate-z-0 first:before:left-4.5 first:after:left-4.5 last:before:right-4.5 last:after:right-4.5 data-[state=inactive]:before:bg-muted data-[state=inactive]:after:bg-muted data-[state=completed]:before:bg-process-completed data-[state=completed]:after:bg-process-completed data-[state=active]:before:bg-process-active data-[state=active]:after:bg-process-active" data-state="completed" aria-current="step">
+            <button data-slot="stepper-trigger" class="whitespace-nowrap font-medium transition-[color,box-shadow] disabled:pointer-events-none disabled:opacity-50 [&amp;_svg]:pointer-events-none shrink-0 [&amp;_svg]:shrink-0 outline-none focus-visible:border-ring focus-visible:ring-ring/50 focus-visible:ring-[3px] aria-invalid:ring-destructive/20 dark:aria-invalid:ring-destructive/40 aria-invalid:border-destructive dark:hover:bg-accent/50 h-6 px-2 in-data-[slot=button-group]:rounded-lg has-data-[icon=inline-end]:pr-1.5 has-data-[icon=inline-start]:pl-1.5 [&amp;_svg:not([class*='size-'])]:size-3 gap-1 rounded max-md:flex-col z-10 cursor-pointer bg-transparent hover:bg-transparent text-center flex items-center justify-center shadow-none text-[10px] w-34 text-background hover:text-background">
+            <span class="flex items-center justify-center gap-2 w-full min-w-0" data-state="closed" data-slot="tooltip-trigger">
+            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-check stroke-[2.5] block group-hover/step:hidden shrink-0" aria-hidden="true">
+            <path d="M20 6 9 17l-5-5">
+            </path>
+            </svg>
+            <h3 data-slot="stepper-title" class="text-sm font-medium hidden group-hover/step:block truncate min-w-0">Discovery
+            </h3>
+            </span>
+            </button>
+            </div>
+            <div data-slot="stepper-item" class="group/step flex group-data-[orientation=horizontal]/stepper:flex-row group-data-[orientation=vertical]/stepper:flex-col group/step relative flex-1 text-center overflow-visible ml-1.5 mr-1.75 items-center justify-center max-md:items-start first:ml-0 first:rounded-tl-2xl first:rounded-bl-2xl first:pl-2.5 last:mr-0 last:rounded-tr-2xl last:rounded-br-2xl last:pr-2.5 bg-muted text-muted-foreground data-[state=completed]:bg-process-completed data-[state=completed]:text-background data-[state=active]:bg-process-active data-[state=active]:text-background hover:data-[state=active]:text-background data-[state=inactive]:bg-muted data-[state=inactive]:text-muted-foreground before:content-[&quot;&quot;] before:absolute before:-left-1 before:-right-1.25 before:cursor-pointer after:content-[&quot;&quot;] after:absolute after:-left-1 after:-right-1.25 after:cursor-pointer before:top-0 before:h-4.25 before:skew-x-28 before:translate-z-0 after:bottom-0 after:h-4 after:-skew-x-30 after:translate-z-0 first:before:left-4.5 first:after:left-4.5 last:before:right-4.5 last:after:right-4.5 data-[state=inactive]:before:bg-muted data-[state=inactive]:after:bg-muted data-[state=completed]:before:bg-process-completed data-[state=completed]:after:bg-process-completed data-[state=active]:before:bg-process-active data-[state=active]:after:bg-process-active" data-state="active" aria-current="step">
+            <button data-slot="stepper-trigger" class="whitespace-nowrap font-medium transition-[color,box-shadow] disabled:pointer-events-none disabled:opacity-50 [&amp;_svg]:pointer-events-none shrink-0 [&amp;_svg]:shrink-0 outline-none focus-visible:border-ring focus-visible:ring-ring/50 focus-visible:ring-[3px] aria-invalid:ring-destructive/20 dark:aria-invalid:ring-destructive/40 aria-invalid:border-destructive dark:hover:bg-accent/50 h-6 px-2 in-data-[slot=button-group]:rounded-lg has-data-[icon=inline-end]:pr-1.5 has-data-[icon=inline-start]:pl-1.5 [&amp;_svg:not([class*='size-'])]:size-3 gap-1 rounded max-md:flex-col z-10 cursor-pointer bg-transparent hover:bg-transparent text-center flex items-center justify-center shadow-none text-[10px] w-34 text-background hover:text-background">
+            <span class="flex items-center justify-center gap-2 w-full min-w-0" data-state="closed" data-slot="tooltip-trigger">
+            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-check hidden" aria-hidden="true">
+            <path d="M20 6 9 17l-5-5">
+            </path>
+            </svg>
+            <h3 data-slot="stepper-title" class="text-sm font-medium truncate w-full min-w-0">Design
+            </h3>
+            </span>
+            </button>
+            </div>
+            <div data-slot="stepper-item" class="group/step flex group-data-[orientation=horizontal]/stepper:flex-row group-data-[orientation=vertical]/stepper:flex-col group/step relative flex-1 text-center overflow-visible ml-1.5 mr-1.75 items-center justify-center max-md:items-start first:ml-0 first:rounded-tl-2xl first:rounded-bl-2xl first:pl-2.5 last:mr-0 last:rounded-tr-2xl last:rounded-br-2xl last:pr-2.5 bg-muted text-muted-foreground data-[state=completed]:bg-process-completed data-[state=completed]:text-background data-[state=active]:bg-process-active data-[state=active]:text-background hover:data-[state=active]:text-background data-[state=inactive]:bg-muted data-[state=inactive]:text-muted-foreground before:content-[&quot;&quot;] before:absolute before:-left-1 before:-right-1.25 before:cursor-pointer after:content-[&quot;&quot;] after:absolute after:-left-1 after:-right-1.25 after:cursor-pointer before:top-0 before:h-4.25 before:skew-x-28 before:translate-z-0 after:bottom-0 after:h-4 after:-skew-x-30 after:translate-z-0 first:before:left-4.5 first:after:left-4.5 last:before:right-4.5 last:after:right-4.5 data-[state=inactive]:before:bg-muted data-[state=inactive]:after:bg-muted data-[state=completed]:before:bg-process-completed data-[state=completed]:after:bg-process-completed data-[state=active]:before:bg-process-active data-[state=active]:after:bg-process-active" data-state="inactive" aria-current="step">
+            <button data-slot="stepper-trigger" class="whitespace-nowrap font-medium transition-[color,box-shadow] disabled:pointer-events-none disabled:opacity-50 [&amp;_svg]:pointer-events-none shrink-0 [&amp;_svg]:shrink-0 outline-none focus-visible:border-ring focus-visible:ring-ring/50 focus-visible:ring-[3px] aria-invalid:ring-destructive/20 dark:aria-invalid:ring-destructive/40 aria-invalid:border-destructive dark:hover:bg-accent/50 h-6 px-2 in-data-[slot=button-group]:rounded-lg has-data-[icon=inline-end]:pr-1.5 has-data-[icon=inline-start]:pl-1.5 [&amp;_svg:not([class*='size-'])]:size-3 gap-1 rounded max-md:flex-col z-10 cursor-pointer bg-transparent hover:bg-transparent text-center flex items-center justify-center shadow-none text-[10px] w-34 text-background hover:text-background">
+            <span class="flex items-center justify-center gap-2 w-full min-w-0" data-state="closed" data-slot="tooltip-trigger">
+            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-check hidden" aria-hidden="true">
+            <path d="M20 6 9 17l-5-5">
+            </path>
+            </svg>
+            <h3 data-slot="stepper-title" class="text-sm font-medium truncate w-full min-w-0">Development
+            </h3>
+            </span>
+            </button>
+            </div>
+            <div data-slot="stepper-item" class="group/step flex group-data-[orientation=horizontal]/stepper:flex-row group-data-[orientation=vertical]/stepper:flex-col group/step relative flex-1 text-center overflow-visible ml-1.5 mr-1.75 items-center justify-center max-md:items-start first:ml-0 first:rounded-tl-2xl first:rounded-bl-2xl first:pl-2.5 last:mr-0 last:rounded-tr-2xl last:rounded-br-2xl last:pr-2.5 bg-muted text-muted-foreground data-[state=completed]:bg-process-completed data-[state=completed]:text-background data-[state=active]:bg-process-active data-[state=active]:text-background hover:data-[state=active]:text-background data-[state=inactive]:bg-muted data-[state=inactive]:text-muted-foreground before:content-[&quot;&quot;] before:absolute before:-left-1 before:-right-1.25 before:cursor-pointer after:content-[&quot;&quot;] after:absolute after:-left-1 after:-right-1.25 after:cursor-pointer before:top-0 before:h-4.25 before:skew-x-28 before:translate-z-0 after:bottom-0 after:h-4 after:-skew-x-30 after:translate-z-0 first:before:left-4.5 first:after:left-4.5 last:before:right-4.5 last:after:right-4.5 data-[state=inactive]:before:bg-muted data-[state=inactive]:after:bg-muted data-[state=completed]:before:bg-process-completed data-[state=completed]:after:bg-process-completed data-[state=active]:before:bg-process-active data-[state=active]:after:bg-process-active" data-state="inactive">
+            <button data-slot="stepper-trigger" class="whitespace-nowrap font-medium transition-[color,box-shadow] disabled:pointer-events-none disabled:opacity-50 [&amp;_svg]:pointer-events-none shrink-0 [&amp;_svg]:shrink-0 outline-none focus-visible:border-ring focus-visible:ring-ring/50 focus-visible:ring-[3px] aria-invalid:ring-destructive/20 dark:aria-invalid:ring-destructive/40 aria-invalid:border-destructive dark:hover:bg-accent/50 hover:text-accent-foreground h-6 px-2 in-data-[slot=button-group]:rounded-lg has-data-[icon=inline-end]:pr-1.5 has-data-[icon=inline-start]:pl-1.5 [&amp;_svg:not([class*='size-'])]:size-3 gap-1 rounded max-md:flex-col z-10 cursor-pointer bg-transparent hover:bg-transparent text-center flex items-center justify-center shadow-none text-[10px] w-34">
+            <span class="flex items-center justify-center gap-2 w-full min-w-0" data-state="closed" data-slot="tooltip-trigger">
+            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-check hidden" aria-hidden="true">
+            <path d="M20 6 9 17l-5-5">
+            </path>
+            </svg>
+            <h3 data-slot="stepper-title" class="text-sm font-medium truncate w-full min-w-0">QA &amp; Testing
+            </h3>
+            </span>
+            </button>
+            </div>
+            <div data-slot="stepper-item" class="group/step flex group-data-[orientation=horizontal]/stepper:flex-row group-data-[orientation=vertical]/stepper:flex-col group/step relative flex-1 text-center overflow-visible ml-1.5 mr-1.75 items-center justify-center max-md:items-start first:ml-0 first:rounded-tl-2xl first:rounded-bl-2xl first:pl-2.5 last:mr-0 last:rounded-tr-2xl last:rounded-br-2xl last:pr-2.5 bg-muted text-muted-foreground data-[state=completed]:bg-process-completed data-[state=completed]:text-background data-[state=active]:bg-process-active data-[state=active]:text-background hover:data-[state=active]:text-background data-[state=inactive]:bg-muted data-[state=inactive]:text-muted-foreground before:content-[&quot;&quot;] before:absolute before:-left-1 before:-right-1.25 before:cursor-pointer after:content-[&quot;&quot;] after:absolute after:-left-1 after:-right-1.25 after:cursor-pointer before:top-0 before:h-4.25 before:skew-x-28 before:translate-z-0 after:bottom-0 after:h-4 after:-skew-x-30 after:translate-z-0 first:before:left-4.5 first:after:left-4.5 last:before:right-4.5 last:after:right-4.5 data-[state=inactive]:before:bg-muted data-[state=inactive]:after:bg-muted data-[state=completed]:before:bg-process-completed data-[state=completed]:after:bg-process-completed data-[state=active]:before:bg-process-active data-[state=active]:after:bg-process-active" data-state="inactive">
+            <button data-slot="stepper-trigger" class="whitespace-nowrap font-medium transition-[color,box-shadow] disabled:pointer-events-none disabled:opacity-50 [&amp;_svg]:pointer-events-none shrink-0 [&amp;_svg]:shrink-0 outline-none focus-visible:border-ring focus-visible:ring-ring/50 focus-visible:ring-[3px] aria-invalid:ring-destructive/20 dark:aria-invalid:ring-destructive/40 aria-invalid:border-destructive dark:hover:bg-accent/50 hover:text-accent-foreground h-6 px-2 in-data-[slot=button-group]:rounded-lg has-data-[icon=inline-end]:pr-1.5 has-data-[icon=inline-start]:pl-1.5 [&amp;_svg:not([class*='size-'])]:size-3 gap-1 rounded max-md:flex-col z-10 cursor-pointer bg-transparent hover:bg-transparent text-center flex items-center justify-center shadow-none text-[10px] w-34">
+            <span class="flex items-center justify-center gap-2 w-full min-w-0" data-state="closed" data-slot="tooltip-trigger">
+            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-check hidden" aria-hidden="true">
+            <path d="M20 6 9 17l-5-5">
+            </path>
+            </svg>
+            <h3 data-slot="stepper-title" class="text-sm font-medium truncate w-full min-w-0">Launch
+            </h3>
+            </span>
+            </button>
+            </div>
+            <div data-slot="stepper-item" class="group/step flex group-data-[orientation=horizontal]/stepper:flex-row group-data-[orientation=vertical]/stepper:flex-col group/step relative flex-1 text-center overflow-visible ml-1.5 mr-1.75 items-center justify-center max-md:items-start first:ml-0 first:rounded-tl-2xl first:rounded-bl-2xl first:pl-2.5 last:mr-0 last:rounded-tr-2xl last:rounded-br-2xl last:pr-2.5 bg-muted text-muted-foreground data-[state=completed]:bg-process-completed data-[state=completed]:text-background data-[state=active]:bg-process-active data-[state=active]:text-background hover:data-[state=active]:text-background data-[state=inactive]:bg-muted data-[state=inactive]:text-muted-foreground before:content-[&quot;&quot;] before:absolute before:-left-1 before:-right-1.25 before:cursor-pointer after:content-[&quot;&quot;] after:absolute after:-left-1 after:-right-1.25 after:cursor-pointer before:top-0 before:h-4.25 before:skew-x-28 before:translate-z-0 after:bottom-0 after:h-4 after:-skew-x-30 after:translate-z-0 first:before:left-4.5 first:after:left-4.5 last:before:right-4.5 last:after:right-4.5 data-[state=inactive]:before:bg-muted data-[state=inactive]:after:bg-muted data-[state=completed]:before:bg-process-completed data-[state=completed]:after:bg-process-completed data-[state=active]:before:bg-process-active data-[state=active]:after:bg-process-active" data-state="inactive">
+            <button data-slot="stepper-trigger" class="whitespace-nowrap font-medium transition-[color,box-shadow] disabled:pointer-events-none disabled:opacity-50 [&amp;_svg]:pointer-events-none shrink-0 [&amp;_svg]:shrink-0 outline-none focus-visible:border-ring focus-visible:ring-ring/50 focus-visible:ring-[3px] aria-invalid:ring-destructive/20 dark:aria-invalid:ring-destructive/40 aria-invalid:border-destructive dark:hover:bg-accent/50 hover:text-accent-foreground h-6 px-2 in-data-[slot=button-group]:rounded-lg has-data-[icon=inline-end]:pr-1.5 has-data-[icon=inline-start]:pl-1.5 [&amp;_svg:not([class*='size-'])]:size-3 gap-1 rounded max-md:flex-col z-10 cursor-pointer bg-transparent hover:bg-transparent text-center flex items-center justify-center shadow-none text-[10px] w-34">
+            <span class="flex items-center justify-center gap-2 w-full min-w-0" data-state="closed" data-slot="tooltip-trigger">
+            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-check hidden" aria-hidden="true">
+            <path d="M20 6 9 17l-5-5">
+            </path>
+            </svg>
+            <h3 data-slot="stepper-title" class="text-sm font-medium truncate w-full min-w-0">Post Launch
+            </h3>
+            </span>
+            </button>
+            </div>
+            <div data-slot="stepper-item" class="group/step flex group-data-[orientation=horizontal]/stepper:flex-row group-data-[orientation=vertical]/stepper:flex-col group/step relative flex-1 text-center overflow-visible ml-1.5 mr-1.75 items-center justify-center max-md:items-start first:ml-0 first:rounded-tl-2xl first:rounded-bl-2xl first:pl-2.5 last:mr-0 last:rounded-tr-2xl last:rounded-br-2xl last:pr-2.5 bg-muted text-muted-foreground data-[state=completed]:bg-process-completed data-[state=completed]:text-background data-[state=active]:bg-process-active data-[state=active]:text-background hover:data-[state=active]:text-background data-[state=inactive]:bg-muted data-[state=inactive]:text-muted-foreground before:content-[&quot;&quot;] before:absolute before:-left-1 before:-right-1.25 before:cursor-pointer after:content-[&quot;&quot;] after:absolute after:-left-1 after:-right-1.25 after:cursor-pointer before:top-0 before:h-4.25 before:skew-x-28 before:translate-z-0 after:bottom-0 after:h-4 after:-skew-x-30 after:translate-z-0 first:before:left-4.5 first:after:left-4.5 last:before:right-4.5 last:after:right-4.5 data-[state=inactive]:before:bg-muted data-[state=inactive]:after:bg-muted data-[state=completed]:before:bg-process-completed data-[state=completed]:after:bg-process-completed data-[state=active]:before:bg-process-active data-[state=active]:after:bg-process-active" data-state="inactive">
+            <button data-slot="stepper-trigger" class="whitespace-nowrap font-medium transition-[color,box-shadow] disabled:pointer-events-none disabled:opacity-50 [&amp;_svg]:pointer-events-none shrink-0 [&amp;_svg]:shrink-0 outline-none focus-visible:border-ring focus-visible:ring-ring/50 focus-visible:ring-[3px] aria-invalid:ring-destructive/20 dark:aria-invalid:ring-destructive/40 aria-invalid:border-destructive dark:hover:bg-accent/50 hover:text-accent-foreground h-6 px-2 in-data-[slot=button-group]:rounded-lg has-data-[icon=inline-end]:pr-1.5 has-data-[icon=inline-start]:pl-1.5 [&amp;_svg:not([class*='size-'])]:size-3 gap-1 rounded max-md:flex-col z-10 cursor-pointer bg-transparent hover:bg-transparent text-center flex items-center justify-center shadow-none text-[10px] w-34">
+            <span class="flex items-center justify-center gap-2 w-full min-w-0" data-state="closed" data-slot="tooltip-trigger">
+            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-check hidden" aria-hidden="true">
+            <path d="M20 6 9 17l-5-5">
+            </path>
+            </svg>
+            <h3 data-slot="stepper-title" class="text-sm font-medium truncate w-full min-w-0">Post Launch
+            </h3>
+            </span>
+            </button>
+            </div>
+            </div>
+            </div>
+            </div>
+            </div>
+            </div>
+            <div class="flex items-center justify-center gap-1">
+            <button data-slot="button" class="inline-flex items-center justify-center gap-1.5 whitespace-nowrap text-sm font-medium transition-[color,box-shadow] disabled:pointer-events-none disabled:opacity-50 [&amp;_svg]:pointer-events-none [&amp;_svg:not([class*='size-'])]:size-4 [&amp;_svg]:shrink-0 outline-none focus-visible:border-ring focus-visible:ring-ring/50 focus-visible:ring-[3px] aria-invalid:ring-destructive/20 dark:aria-invalid:ring-destructive/40 aria-invalid:border-destructive border bg-background shadow-xs hover:bg-accent dark:bg-input/30 dark:border-input dark:hover:bg-input/50 hover:text-accent-foreground rounded-[min(var(--radius-md),12px)] in-data-[slot=button-group]:rounded-lg size-6 shrink-0 mb-3" aria-label="Scroll to previous steps" type="button" disabled="">
+            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-chevron-left size-3" aria-hidden="true">
+            <path d="m15 18-6-6 6-6">
+            </path>
+            </svg>
+            </button>
+            <button data-slot="button" class="inline-flex items-center justify-center gap-1.5 whitespace-nowrap text-sm font-medium transition-[color,box-shadow] disabled:pointer-events-none disabled:opacity-50 [&amp;_svg]:pointer-events-none [&amp;_svg:not([class*='size-'])]:size-4 [&amp;_svg]:shrink-0 outline-none focus-visible:border-ring focus-visible:ring-ring/50 focus-visible:ring-[3px] aria-invalid:ring-destructive/20 dark:aria-invalid:ring-destructive/40 aria-invalid:border-destructive border bg-background shadow-xs hover:bg-accent dark:bg-input/30 dark:border-input dark:hover:bg-input/50 hover:text-accent-foreground rounded-[min(var(--radius-md),12px)] in-data-[slot=button-group]:rounded-lg size-6 shrink-0 mb-3" aria-label="Scroll to next steps" type="button">
+            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-chevron-right size-3" aria-hidden="true">
+            <path d="m9 18 6-6-6-6">
+            </path>
+            </svg>
+            </button>
+            </div>
+            </div>
+            <div class="rounded-3xl border border-border/60 bg-background p-6 shadow-sm">
+            <p class="text-xs uppercase tracking-[0.3em] text-muted-foreground">Current Step
+            </p>
+            <h3 class="mt-2 text-2xl font-semibold">Design
+            </h3>
+            <p class="mt-1 text-sm text-muted-foreground">Wireframes and clickable prototypes are being created.
+            </p>
+            <div class="mt-6 grid gap-6 text-sm sm:grid-cols-3">
+            <div>
+            <p class="text-xs uppercase text-muted-foreground">Completed
+            </p>
+            <p class="text-xl font-semibold text-emerald-600">2
+            </p>
+            </div>
+            <div>
+            <p class="text-xs uppercase text-muted-foreground">Remaining
+            </p>
+            <p class="text-xl font-semibold text-blue-600">6
+            </p>
+            </div>
+            <div>
+            <p class="text-xs uppercase text-muted-foreground">Status
+            </p>
+            <p class="text-xl font-semibold">In progress
+            </p>
+            </div>
+            </div>
+            </div>
+            </div>
+            </div>
+          </style>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+`;

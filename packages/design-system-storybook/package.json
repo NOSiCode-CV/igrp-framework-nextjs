@@ -22,9 +22,9 @@
     "storybook": "storybook dev -p 6006 --ci",
     "build-storybook": "storybook build",
     "serve-storybook": "pnpm dlx serve storybook-static -l 6006",
-    "test-storybook": "test-storybook --url http://localhost:6006/storybook",
-    "test-storybook:ci": "test-storybook --url http://localhost:6006/storybook --ci",
-    "test-storybook:update-snapshots": "test-storybook --url http://localhost:6006/storybook -u",
+    "test-storybook": "test-storybook --url http://localhost:6006",
+    "test-storybook:ci": "test-storybook --url http://localhost:6006 --ci",
+    "test-storybook:update-snapshots": "test-storybook --url http://localhost:6006 -u",
     "test:vitest": "vitest run",
     "test:vitest:watch": "vitest",
     "chromatic": "chromatic --exit-zero-on-changes",
@@ -80,6 +80,6 @@
     "vitest": "^4.0.18"
   },
   "engines": {
-    "node": ">=20.x.x"
+    "node": ">=22.x.x"
   }
 }

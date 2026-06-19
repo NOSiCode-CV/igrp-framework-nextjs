@@ -104,7 +104,7 @@ const manyItems = () => (
     addButtonLabel='Add'
     iconName='FileText'
     addButtonIconName='Plus'
-    renderItem={(_: any, index: number) => (
+    renderItem={(_: unknown, index: number) => (
       <div className='grid sm:grid-cols-1 md:grid-cols-2 gap-4'>
         <IGRPCombobox
           id={`formList1.${index}.idTipoDocumento`}

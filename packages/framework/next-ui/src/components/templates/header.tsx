@@ -129,6 +129,7 @@ function IGRPTemplateHeader({
             isHeader={true}
             userProfileUrl={userProfileUrl}
             notificationsUrl={notificationsUrl}
+            showNotifications={showNotifications}
           />
         )}
       </div>

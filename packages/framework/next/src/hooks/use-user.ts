@@ -4,6 +4,7 @@ import { redirect } from 'next/navigation';
 import { headers } from 'next/headers';
 
 import { igrpGetAccessClientConfig } from '../lib/api-config';
+import { logger } from '../logger';
 
 // Per-request deduplication via React cache.
 //
@@ -34,7 +35,7 @@ export async function fetchCurrentUser() {
       const callbackUrl = h.get('x-current-path');
       redirect(callbackUrl ? `/login?callbackUrl=${encodeURIComponent(callbackUrl)}` : '/login');
     }
-    console.error('[igrp-user] Erro ao carregar os dados do utilizador atual.:', error);
+    logger.error('[igrp-user] Erro ao carregar os dados do utilizador atual.', error);
     return null;
   }
 }

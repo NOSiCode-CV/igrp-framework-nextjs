@@ -5,6 +5,7 @@ import { headers } from 'next/headers';
 
 import { igrpGetAccessClientConfig } from '../lib/api-config';
 import { mapperMenus } from '../mappers/menus-mapper';
+import { logger } from '../logger';
 
 async function fetchMenusRaw(appCode: string, token: string, baseUrl: string) {
   const client = AccessManagementClient.create({
@@ -53,7 +54,7 @@ export async function fetchMenus(appCode: string) {
       const callbackUrl = h.get('x-current-path');
       redirect(callbackUrl ? `/login?callbackUrl=${encodeURIComponent(callbackUrl)}` : '/login');
     }
-    console.error('[igrp-menus]: Erro ao carregar os menus da aplicação.:', error);
+    logger.error('[igrp-menus] Erro ao carregar os menus da aplicação.', error);
     return [];
   }
 }

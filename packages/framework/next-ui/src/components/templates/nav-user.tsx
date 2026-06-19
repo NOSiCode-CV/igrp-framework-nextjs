@@ -24,6 +24,7 @@ interface IGRPTemplateNavUserProps {
   userProfileUrl?: string;
   notificationsUrl?: string;
   settingsUrl?: string;
+  showNotifications?: boolean;
 }
 
 function IGRPTemplateNavUser({
@@ -32,6 +33,7 @@ function IGRPTemplateNavUser({
   userProfileUrl,
   notificationsUrl,
   settingsUrl,
+  showNotifications = true,
 }: IGRPTemplateNavUserProps) {
   const { isMobile } = useIGRPSidebar();
 
@@ -112,16 +114,20 @@ function IGRPTemplateNavUser({
             </DropdownMenuItem>
             <DropdownMenuSeparator />
 
-            <DropdownMenuItem
-              asChild
-              className="cursor-pointer hover:bg-primary! hover:text-primary-foreground!"
-            >
-              <Link href={handleNotificationsUrl()}>
-                <IGRPIcon iconName="Bell" className="mr-1 hover:text-primary-foreground!" />
-                <span>Notifications</span>
-              </Link>
-            </DropdownMenuItem>
-            <DropdownMenuSeparator />
+            {showNotifications && (
+              <>
+                <DropdownMenuItem
+                  asChild
+                  className="cursor-pointer hover:bg-primary! hover:text-primary-foreground!"
+                >
+                  <Link href={handleNotificationsUrl()}>
+                    <IGRPIcon iconName="Bell" className="mr-1 hover:text-primary-foreground!" />
+                    <span>Notifications</span>
+                  </Link>
+                </DropdownMenuItem>
+                <DropdownMenuSeparator />
+              </>
+            )}
 
             {!isHeader && (
               <DropdownMenuItem

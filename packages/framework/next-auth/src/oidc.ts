@@ -314,21 +314,21 @@ async function performRefresh(
     };
   }
 
-  // Dev-mode: verify the IdP honored the `scope=openid` request and
-  // returned a fresh id_token. If `gotFreshIdToken` is false here, OIDC
-  // logout will fail silently because our cached id_token's `sid` no longer
-  // matches the current servlet session.
-  if (env.NODE_ENV !== 'production') {
-    const gotFreshIdToken =
-      typeof refreshedToken.id_token === 'string' && refreshedToken.id_token.length > 0;
-    if (!gotFreshIdToken) {
-      console.warn(
-        '[oidc.refreshOidcAccessToken] IdP did not return a new id_token on refresh — ' +
-          'OIDC end-session may fail because the stored id_token references a stale session id. ' +
-          "Check the IdP's OIDC refresh-token grant configuration (Spring AS requires the " +
-          'refresh-token grant authentication-converter to include the openid scope).',
-      );
-    }
+  // Verify the IdP honored the `scope=openid` request and returned a fresh
+  // id_token. If `gotFreshIdToken` is false here, OIDC logout will fail
+  // silently because our cached id_token's `sid` no longer matches the current
+  // servlet session. This warns in production too — a misconfigured IdP breaks
+  // RP-initiated logout in deployed environments, where operators most need the
+  // signal, not just in dev.
+  const gotFreshIdToken =
+    typeof refreshedToken.id_token === 'string' && refreshedToken.id_token.length > 0;
+  if (!gotFreshIdToken) {
+    console.warn(
+      '[oidc.refreshOidcAccessToken] IdP did not return a new id_token on refresh — ' +
+        'OIDC end-session may fail because the stored id_token references a stale session id. ' +
+        "Check the IdP's OIDC refresh-token grant configuration (Spring AS requires the " +
+        'refresh-token grant authentication-converter to include the openid scope).',
+    );
   }
 
   const oldRefreshToken = token.refreshToken;

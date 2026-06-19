@@ -41,7 +41,6 @@ interface IGRPGlobalErrorProps {
   errorRefLabel?: string;
 }
 
-// TODO: check the image
 function IGRPGlobalError({
   error,
   reset,

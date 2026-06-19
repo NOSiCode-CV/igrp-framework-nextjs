@@ -5,6 +5,7 @@ import { headers } from 'next/headers';
 
 import { igrpGetAccessClientConfig } from '../lib/api-config';
 import { mapperApplications } from '../mappers/applications-mapper';
+import { logger } from '../logger';
 
 async function fetchAppsByUserRaw(token: string, baseUrl: string) {
   const client = AccessManagementClient.create({
@@ -68,7 +69,7 @@ export async function fetchAppsByUser() {
       const callbackUrl = h.get('x-current-path');
       redirect(callbackUrl ? `/login?callbackUrl=${encodeURIComponent(callbackUrl)}` : '/login');
     }
-    console.error('[apps-by-user] Erro ao carregar os dados da aplicação.:', error);
+    logger.error('[apps-by-user] Erro ao carregar os dados da aplicação.', error);
     return [];
   }
 }
@@ -87,7 +88,7 @@ export async function fetchAppByCode(appCode: string) {
       const callbackUrl = h.get('x-current-path');
       redirect(callbackUrl ? `/login?callbackUrl=${encodeURIComponent(callbackUrl)}` : '/login');
     }
-    console.error('[app-by-code] Não foi possível obter os dados da aplicação:', error);
+    logger.error('[app-by-code] Não foi possível obter os dados da aplicação.', error);
     return null;
   }
 }

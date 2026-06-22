@@ -72,6 +72,7 @@ function IGRPTemplateNavUser({
               size="lg"
             >
               <IGRPUserAvatar
+                image={user.picture}
                 alt={user.name}
                 fallbackContent={user && igrpGetInitials(user?.name)}
                 fallbackClass="text-xs"

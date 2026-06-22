@@ -419,8 +419,8 @@ importers:
         specifier: workspace:*
         version: link:../next-ui
       '@igrp/platform-access-management-client-ts':
-        specifier: 0.2.0-beta.10
-        version: 0.2.0-beta.10
+        specifier: 0.2.0-beta.11
+        version: 0.2.0-beta.11
       next:
         specifier: 15.5.19
         version: 15.5.19(@babel/core@7.29.7)(babel-plugin-react-compiler@19.1.0-rc.3)(react-dom@19.2.7(react@19.2.7))(react@19.2.7)
@@ -2058,9 +2058,6 @@ packages:
   '@humanwhocodes/retry@0.4.3':
     resolution: {integrity: sha512-bV0Tgo9K4hfPCek+aMAn81RppFKv2ySDQeMoSZuvTASywNTnVJCArCZE2FWqpvIatKu7VMRLWlR1EazvVhDyhQ==}
     engines: {node: '>=18.18'}
-
-  '@igrp/platform-access-management-client-ts@0.2.0-beta.10':
-    resolution: {integrity: sha512-lVg4pw87kOyP9Uh8Eb0EtvtU4eUoyXP3uTqClQNj4twy1Xn6A5wXK2A1ck6Jz6yMkP+gVnK1HFPl2GcHR4vNow==}
 
   '@igrp/platform-access-management-client-ts@0.2.0-beta.11':
     resolution: {integrity: sha512-xeOcQEctfUwaBoXAVvthon5+45XhvJJJzjRRoh7MzLEcXD6W9XmV9OM79YZaYNNnf7ILpjV6krirmpnfnWWTqQ==}
@@ -9832,8 +9829,6 @@ snapshots:
   '@humanwhocodes/module-importer@1.0.1': {}
 
   '@humanwhocodes/retry@0.4.3': {}
-
-  '@igrp/platform-access-management-client-ts@0.2.0-beta.10': {}
 
   '@igrp/platform-access-management-client-ts@0.2.0-beta.11': {}
 

@@ -1,5 +1,11 @@
 # @igrp/framework-next-ui
 
+## 0.1.0-beta.157
+
+### Patch Changes
+
+- 7d72168: - Move the sidebar collapse/expand `SidebarTrigger` out of the sidebar header and into the app header (`IGRPTemplateHeader`), gated by `showIGRPSidebarTrigger`, following the shadcn dashboard layout. The header trigger is aligned with `-ml-1`. The sidebar keeps `collapsible="icon"`, so the trigger toggles between the expanded panel and the icon rail; `SidebarRail` still re-expands from the collapsed state.
+
 ## 0.1.0-beta.156
 
 ### Patch Changes

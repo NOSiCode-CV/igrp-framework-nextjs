@@ -15,6 +15,7 @@
     "adaptive-session-refetch",
     "design-system-button-aschild",
     "design-system-datatable-autoreset",
+    "design-system-recharts-3-charts",
     "framework-next-appcode-canonical-config",
     "framework-next-appcode-case",
     "framework-next-config-schema",
@@ -30,11 +31,11 @@
     "refresh-multipod-recovery-store",
     "sidebar-group-collapse-search",
     "sidebar-menu-search-config-flag",
+    "sidebar-trigger-in-header",
     "sidebar-trigger-restore",
     "silent-logs-cleanup",
     "template-migrator-honest-rollback",
     "template-migrator-sidebar-search-config",
-    "toggle-order-styles-cleanup",
-    "design-system-recharts-3-charts"
+    "toggle-order-styles-cleanup"
   ]
 }

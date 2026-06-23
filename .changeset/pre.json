@@ -34,6 +34,7 @@
     "silent-logs-cleanup",
     "template-migrator-honest-rollback",
     "template-migrator-sidebar-search-config",
-    "toggle-order-styles-cleanup"
+    "toggle-order-styles-cleanup",
+    "design-system-recharts-3-charts"
   ]
 }

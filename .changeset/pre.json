@@ -22,6 +22,7 @@
     "migrator-migration-15",
     "migrator-migration-18",
     "migrator-migration-19",
+    "migrator-migration-20",
     "nav-user-notifications-config-flag",
     "next-auth-introspection-timeout",
     "next-data-hooks-use-logger",

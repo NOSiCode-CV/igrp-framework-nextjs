@@ -1,5 +1,11 @@
 # @igrp/template-migrator
 
+## 0.1.0-beta.130
+
+### Patch Changes
+
+- 0eaa118: - Add migration `20-sidebar-trigger-in-header`: flips the demo-legacy template's `showIGRPSidebarTrigger` to `true` and resyncs all `@igrp/*` deps to the beta.158 framework set (next-ui beta.157, next beta.158), matching what the create-template zip resolves for fresh scaffolds.
+
 ## 0.1.0-beta.129
 
 ### Patch Changes

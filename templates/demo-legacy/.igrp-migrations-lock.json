@@ -49,6 +49,118 @@
       "manifestHash": "1b251a4000bd7131",
       "undo": [],
       "fileHashes": {}
+    },
+    {
+      "id": "07-data-access-layer",
+      "appliedAt": "2026-05-06T00:00:00.000Z",
+      "cliVersion": "0.1.0-beta.130",
+      "manifestHash": "3ab5da4bc16d576f",
+      "undo": [],
+      "fileHashes": {}
+    },
+    {
+      "id": "08-m2m-oauth2-client-credentials",
+      "appliedAt": "2026-05-21T00:00:00.000Z",
+      "cliVersion": "0.1.0-beta.130",
+      "manifestHash": "effa2a13dc7437d9",
+      "undo": [],
+      "fileHashes": {}
+    },
+    {
+      "id": "09-sync-on-code-menus",
+      "appliedAt": "2026-05-25T00:00:00.000Z",
+      "cliVersion": "0.1.0-beta.130",
+      "manifestHash": "e5f1d534226dfef5",
+      "undo": [],
+      "fileHashes": {}
+    },
+    {
+      "id": "10-session-refetch-and-menu-role-sync",
+      "appliedAt": "2026-06-02T00:00:00.000Z",
+      "cliVersion": "0.1.0-beta.130",
+      "manifestHash": "2fe8951c4ef8b1af",
+      "undo": [],
+      "fileHashes": {}
+    },
+    {
+      "id": "11-callbackurl-hardening-and-error-copy",
+      "appliedAt": "2026-06-02T00:00:00.000Z",
+      "cliVersion": "0.1.0-beta.130",
+      "manifestHash": "9688a14cda39798d",
+      "undo": [],
+      "fileHashes": {}
+    },
+    {
+      "id": "12-template-resync",
+      "appliedAt": "2026-06-04T00:00:00.000Z",
+      "cliVersion": "0.1.0-beta.130",
+      "manifestHash": "8e0f381e9df1df50",
+      "undo": [],
+      "fileHashes": {}
+    },
+    {
+      "id": "13-resync-beta145",
+      "appliedAt": "2026-06-04T00:00:00.000Z",
+      "cliVersion": "0.1.0-beta.130",
+      "manifestHash": "94bab738249c2f0d",
+      "undo": [],
+      "fileHashes": {}
+    },
+    {
+      "id": "14-deferred-logout-and-cleanup",
+      "appliedAt": "2026-06-09T00:00:00.000Z",
+      "cliVersion": "0.1.0-beta.130",
+      "manifestHash": "a54fcd0150c31d62",
+      "undo": [],
+      "fileHashes": {}
+    },
+    {
+      "id": "15-resync-beta149",
+      "appliedAt": "2026-06-09T00:00:00.000Z",
+      "cliVersion": "0.1.0-beta.130",
+      "manifestHash": "b7c95bb649bfc7db",
+      "undo": [],
+      "fileHashes": {}
+    },
+    {
+      "id": "16-resync-beta150",
+      "appliedAt": "2026-06-10T00:00:00.000Z",
+      "cliVersion": "0.1.0-beta.130",
+      "manifestHash": "340b190700c7a031",
+      "undo": [],
+      "fileHashes": {}
+    },
+    {
+      "id": "17-sidebar-menu-search-config",
+      "appliedAt": "2026-06-16T00:00:00.000Z",
+      "cliVersion": "0.1.0-beta.130",
+      "manifestHash": "57627ccb90b3d406",
+      "undo": [],
+      "fileHashes": {}
+    },
+    {
+      "id": "18-email-scope-enable",
+      "appliedAt": "2026-06-17T00:00:00.000Z",
+      "cliVersion": "0.1.0-beta.130",
+      "manifestHash": "d46d9782319982aa",
+      "undo": [],
+      "fileHashes": {}
+    },
+    {
+      "id": "19-adaptive-session-refresh",
+      "appliedAt": "2026-06-17T00:00:00.000Z",
+      "cliVersion": "0.1.0-beta.130",
+      "manifestHash": "224da98e59a72fd3",
+      "undo": [],
+      "fileHashes": {}
+    },
+    {
+      "id": "20-sidebar-trigger-in-header",
+      "appliedAt": "2026-06-23T00:00:00.000Z",
+      "cliVersion": "0.1.0-beta.130",
+      "manifestHash": "55370aea174bfad6",
+      "undo": [],
+      "fileHashes": {}
     }
   ]
 }

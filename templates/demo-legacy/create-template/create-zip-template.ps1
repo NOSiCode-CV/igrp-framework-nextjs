@@ -2,14 +2,13 @@
 
 # === CONFIG ===
 $zipName = "igrp-next-template.zip"
-$excludeFolders = @(".next", "node_modules", ".git", "create-template", ".env", ".env.docker", "CHANGELOG.md")
-# The full .igrpmigrations/ tree (guides + payloads) is managed by the source
-# repo and bundled into @igrp/template-migrator - it must NOT go into the zip.
-# We move it out and replace it with a slim folder containing only lock.json,
-# so consumers of the template immediately see all migrations as applied.
+$excludeFolders = @(".next", "node_modules", ".git", "create-template", ".env", ".env.docker", "CHANGELOG.md", "docs/specs")
+# The template ships its migration state as a single flat file at the root,
+# .igrp-migrations-lock.json. It is a normal tracked file and is not excluded,
+# so it lands in the zip automatically and consumers immediately see all
+# migrations as applied. The full migration tree (guides + payloads) lives only
+# in the source repo / @igrp/template-migrator and never ships in the template.
 $excludeTemp = "_excluded"
-$migrationsDir = ".igrpmigrations"
-$migrationsLock = ".igrpmigrations/lock.json"
 
 # === READ VERSION FROM package.json ===
 $packageJsonPath = "./package.json"
@@ -148,22 +147,6 @@ try {
     Move-Item -Path $scriptPath -Destination $excludeTemp -Force
   }
 
-  # === SLIM .igrpmigrations/ ===
-  # Move the full folder (guides + payloads) to _excluded, then create a
-  # minimal replacement containing only lock.json so the zip ships a clean
-  # template that is already fully up-to-date per the migrator.
-  if (Test-Path $migrationsDir) {
-    Move-Item -Path $migrationsDir -Destination $excludeTemp -Force
-  }
-  New-Item -ItemType Directory -Path $migrationsDir | Out-Null
-  $lockSource = "$excludeTemp/$migrationsDir/lock.json"
-  if (Test-Path $lockSource) {
-    Copy-Item -Path $lockSource -Destination $migrationsLock -Force
-    Write-Host "Included slim .igrpmigrations/lock.json in zip"
-  } else {
-    Write-Host "Warning: lock.json not found at $lockSource - .igrpmigrations/ will be empty in zip"
-  }
-
   # === INJECT IGRP DESIGN-SYSTEM SKILL ===
   # Bundle the design-system skill so consumers of the template have AI context
   # for every supported tool (Claude Code via .claude/, Cursor / Codex / Trae /
@@ -280,12 +263,6 @@ Deep references are at ``.agents/skills/igrp-design-system/references/``. Load o
         Remove-Item $parentDir -Force
       }
     }
-  }
-
-  # Remove the slim .igrpmigrations/ we created for the zip before restoring
-  # the full original folder from _excluded.
-  if (Test-Path $migrationsDir) {
-    Remove-Item $migrationsDir -Recurse -Force
   }
 
   if (Test-Path $excludeTemp) {

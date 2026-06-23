@@ -4,7 +4,6 @@ import {
   SidebarFooter,
   SidebarHeader,
   SidebarRail,
-  SidebarTrigger,
 } from '@igrp/igrp-framework-react-design-system';
 import type { IGRPSidebarDataArgs } from '@igrp/framework-next-types';
 
@@ -33,8 +32,7 @@ function IGRPTemplateSidebar({ data, baseUrl, ...props }: IGRPTemplateSidebarPro
 
   return (
     <Sidebar collapsible="icon" {...props}>
-      <SidebarHeader className="flex-row items-center gap-0">
-        <SidebarTrigger className="shrink-0 group-data-[state=expanded]:order-2 group-data-[state=expanded]:ml-auto" />
+      <SidebarHeader>
         {showAppSwitcher && (
           <IGRPTemplateAppSwitcher apps={apps} appCode={appCode} appCenterUrl={appCenterUrl} />
         )}

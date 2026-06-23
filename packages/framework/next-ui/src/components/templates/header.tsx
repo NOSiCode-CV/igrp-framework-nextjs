@@ -74,7 +74,7 @@ function IGRPTemplateHeader({
       )}
     >
       <div className="flex items-center gap-2 h-12 min-w-0">
-        {showIGRPSidebarTrigger && <SidebarTrigger />}
+        {showIGRPSidebarTrigger && <SidebarTrigger className="-ml-1" />}
         {(showIGRPHeaderLogo || showIGRPHeaderTitle) && (
           <div className="flex items-center gap-2">
             {showIGRPHeaderLogo && (

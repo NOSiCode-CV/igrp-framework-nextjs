@@ -31,6 +31,8 @@ export function isIgrpAuthBypass(env: Record<string, string | undefined> = proce
  * per-request access token; a decode failure becomes a distinguishable error
  * state (never silently "no permissions"). Deduped per render via React.cache.
  */
+// Deduped per request — Next.js resets React's cache() boundary each request,
+// so reading process.env (via isIgrpAuthBypass) inside is per-request, not stale.
 export const igrpGetClaims = cache(async function igrpGetClaims(): Promise<IGRPClaimsState> {
   if (isIgrpAuthBypass()) {
     return { status: 'ok', claims: { ...SUPER_ADMIN_MOCK } };

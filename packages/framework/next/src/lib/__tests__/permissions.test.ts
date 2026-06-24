@@ -47,9 +47,19 @@ describe('isIgrpAuthBypass', () => {
     expect(isIgrpAuthBypass({ AUTH_PROVIDER: 'none' })).toBe(true);
     expect(isIgrpAuthBypass({})).toBe(false);
   });
+
+  it('normalizes IGRP_PREVIEW_MODE (trim/quotes/case) and AUTH_PROVIDER (case)', () => {
+    expect(isIgrpAuthBypass({ IGRP_PREVIEW_MODE: 'TRUE' })).toBe(true);
+    expect(isIgrpAuthBypass({ IGRP_PREVIEW_MODE: ' true ' })).toBe(true);
+    expect(isIgrpAuthBypass({ IGRP_PREVIEW_MODE: '"true"' })).toBe(true);
+    expect(isIgrpAuthBypass({ IGRP_PREVIEW_MODE: 'false' })).toBe(false);
+    expect(isIgrpAuthBypass({ AUTH_PROVIDER: 'None' })).toBe(true);
+    expect(isIgrpAuthBypass({ AUTH_PROVIDER: 'NONE' })).toBe(true);
+  });
 });
 
 describe('igrpGetClaims', () => {
+  // React.cache is pass-through outside an RSC render, so each call here executes fresh.
   it('returns a super-admin mock in bypass without decoding', async () => {
     process.env.IGRP_PREVIEW_MODE = 'true';
     getConfig.mockReturnValue({ token: 'preview-token', baseUrl: '' });

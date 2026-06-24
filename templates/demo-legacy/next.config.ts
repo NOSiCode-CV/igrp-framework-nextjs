@@ -49,6 +49,7 @@ const nextConfig: NextConfig = {
     root: turbopackRoot,
   },
   experimental: {
+    authInterrupts: true,
     typedEnv: true,
     browserDebugInfoInTerminal: {
       depthLimit: 5,

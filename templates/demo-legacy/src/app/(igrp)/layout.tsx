@@ -1,4 +1,5 @@
-import { IGRPLayoutFull } from "@igrp/framework-next";
+import { IGRPLayoutFull, igrpGetClaims } from "@igrp/framework-next";
+import { IGRPSectionPermissions } from "@igrp/framework-next-ui";
 import type { IGRPLayoutConfigArgs } from "@igrp/framework-next-types";
 
 import { configLayout } from "@/actions/igrp/layout";
@@ -18,6 +19,11 @@ export default async function IGRPRootLayout({
 
   const layoutConfig = await configLayout();
   const config = await createConfig(layoutConfig as IGRPLayoutConfigArgs);
+  const claims = await igrpGetClaims();
 
-  return <IGRPLayoutFull config={config}>{children}</IGRPLayoutFull>;
+  return (
+    <IGRPSectionPermissions state={claims}>
+      <IGRPLayoutFull config={config}>{children}</IGRPLayoutFull>
+    </IGRPSectionPermissions>
+  );
 }

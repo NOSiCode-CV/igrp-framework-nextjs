@@ -58,14 +58,14 @@ No other part of the spec depended on S1; D10 now stands as specified.
 | D4 | **Matching = bare name qualified by active department:** `can('manage_access')` matches `` `${org}.manage_access` `` in `permissions[]`; a string already containing `.` is treated as **fully-qualified** and matched as-is (cross-department checks); `is_super_admin` bypasses all. | The permission string is structured `${dept}.${suffix}` — the **prefix is the department** (token `org` = active dept), only the **suffix is arbitrary** (V3 relaxed the suffix, not the prefix). Bare-name + org-prefixing keeps gates **portable across departments** and restores dynamic active-dept scoping; `permissions[]` carries all departments, so prefixing by `org` selects the active one. |
 | D5 | **Fail closed, surface error.** Decode failure / missing claims → deny, but expose a distinguishable error state (not a silent empty screen). | Security default without hiding outages from operators. |
 | D6 | **Component gating unmounts by default**; `keepMounted` opt-in uses React 19 `<Activity mode="hidden">`. | `<Activity>` keeps denied markup in the DOM (inspectable) — unsafe as the default for an authorization primitive. Opt-in preserves the state/pre-render benefit for non-sensitive cases. |
-| D7 | **Page gating is server-side and authoritative** via `igrpAssertCan(perm)` in the RSC; client `<IGRPPageGuard>`/hook is convenience only. | Server enforcement can't be bypassed; runs before content streams (no flash). |
+| D7 | **Page gating is server-side and authoritative** via `igrpAssertAuthorize(perm)` in the RSC; client `<IGRPGuardPage>`/hook is convenience only. | Server enforcement can't be bypassed; runs before content streams (no flash). |
 | D8 | **403 via Next 15 `forbidden()` + `forbidden.tsx`** rendering `IGRPForbidden` (requires `experimental.authInterrupts`). **Render-path only** — used by page guards, *not* server actions (see D12). | Idiomatic 403: real status, URL preserved, in-chrome. ⚠️ `authInterrupts` is experimental — confirm the template's pinned Next version supports `forbidden()`; fallback `redirect("/403")` if not. |
 | D9 | **Menus:** trust AM's returned set entirely; **no client-side filtering**. | V1 confirmed: `getCurrentUserApplicationMenus` already scopes to the active role server-side. Client narrowing would risk hiding valid menus. |
 | D10 | **Active-role switch in scope, minimal:** `igrpSetActiveRole()` → `await setCurrentUserActiveRole` (commit first) → forced-refresh `update()` (jwt-callback extension, S1 ✅) → reseed provider. AS re-issues updated claims on refresh (V2 ✅), so the switch takes effect mid-session. Forced-refresh failure is retryable (does **not** force logout — see §0 refinement). | Required for correctness of active-role scoping without a full role-picker UX. |
 | D11 | **Preview / `AUTH_PROVIDER=none`:** claims = `{ isSuperAdmin: true }`. | Matches preview's "everything visible, no backend" intent; overridable later. |
-| D12 | **PDP escape hatch (opt-in, server-only):** `igrpAuthorize(resource, action)` + `igrpAssertAuthorized(...)` wrapping `checkAuthorization`. NOT wired into `<IGRPCan>`/`usePermissions`. **`igrpAuthorizeBatch` is dropped** (round-2 finding B): the client's `batchCheckAuthorization` returns a *single* `PermissionCheckResponseDTO` for N requests — no per-request mapping — so batch is unbuildable until the client returns an array. Flag upstream. | Token TTL ~180s → claims can be ~3 min stale; the PDP is the authoritative, always-fresh evaluator (`allowed` + `via_roles` grant-trail, server-cached). Token and PDP are **two views of one policy** (V4). |
+| D12 | **PDP escape hatch (opt-in, server-only):** `igrpCheckAccess(resource, action)` + `igrpAssertAccess(...)` wrapping `checkAuthorization`. NOT wired into `<IGRPAuthorization>`/`usePermissions`. **`igrpCheckAccessBatch` is dropped** (round-2 finding B): the client's `batchCheckAuthorization` returns a *single* `PermissionCheckResponseDTO` for N requests — no per-request mapping — so batch is unbuildable until the client returns an array. Flag upstream. | Token TTL ~180s → claims can be ~3 min stale; the PDP is the authoritative, always-fresh evaluator (`allowed` + `via_roles` grant-trail, server-cached). Token and PDP are **two views of one policy** (V4). |
 | D14 | **Page guard vs action guard return differently.** Page-render assertions call `forbidden()` (render interrupt). **Server-action** assertions return a structured `ActionResult<{ ok:false, code:'forbidden' }>` — they do **not** call `forbidden()` (a render-path interrupt has no clean meaning in an action). | `forbidden()`/`authInterrupts` is designed for the render tree; in an action it can't return a clean 403 to the caller. The template already uses the `ActionResult<T>` shape (`actions/index.ts`). |
-| D15 | **PDP helpers require the per-request access-client config to be established in the *same* async context.** A server action calling `igrpAuthorize` must first run `serverSession()` (which calls `igrpSetAccessClientConfig`) in that action — the `AsyncLocalStorage` store seeded during layout render does **not** propagate into a separately-invoked server action. The helper throws a clear error if the token is empty rather than silently 401ing. | `api-config.ts` uses `AsyncLocalStorage`/`enterWith` precisely because actions run outside the render context; the store is per async-chain, not global. |
+| D15 | **PDP helpers require the per-request access-client config to be established in the *same* async context.** A server action calling `igrpCheckAccess` must first run `serverSession()` (which calls `igrpSetAccessClientConfig`) in that action — the `AsyncLocalStorage` store seeded during layout render does **not** propagate into a separately-invoked server action. The helper throws a clear error if the token is empty rather than silently 401ing. | `api-config.ts` uses `AsyncLocalStorage`/`enterWith` precisely because actions run outside the render context; the store is per async-chain, not global. |
 | D13 | **Type-drift fix (reconcile-then-test):** first **align** the overlapping `next-types` shapes (`IGRPRoleArgs`/`IGRPPermissionArgs`/`IGRPUserArgs`) to the client DTOs (`RoleDTO`/`PermissionDTO`/`IGRPUserDTO`), **then** add the conformance test in `next`'s vitest. The test compares the two type sets (it lives in `next`, which has the client dep — so `next-types` gains no AM-client dependency). | Round-2 finding C: the types **genuinely diverge today** (e.g. `IGRPRoleArgs.permissions: IGRPPermissionArgs[]` vs `RoleDTO.permissions: string[]`), so a blanket conformance test can't go green until they're aligned. The `permissions` field flip is **breaking** — call it out in the changeset. |
 
 ---
@@ -78,18 +78,18 @@ Dependency order: `next-auth → next-types → design-system → next-ui → ne
 next-auth   ./claims  →  decodeIgrpClaims(accessToken): IGRPAccessClaims   (pure, edge-safe)
             config.ts →  jwt-callback: forced refresh on trigger:'update'+sentinel (S1)
 next-types            →  type IGRPAccessClaims
-next        (server)  →  igrpGetClaims(), igrpCan(), igrpAssertCan()        [token, page/render]
-                         igrpAuthorize(), igrpAuthorizeBatch(),
-                         igrpAssertAuthorized()                             [PDP, server-action]
+next        (server)  →  igrpGetClaims(), igrpAuthorize(), igrpAssertAuthorize()        [token, page/render]
+                         igrpCheckAccess(), igrpCheckAccessBatch(),
+                         igrpAssertAccess()                             [PDP, server-action]
                          igrpSetActiveRole()                                [ActionResult]
                          + permissions conformance test (vitest)
-next-ui     (client)  →  IGRPPermissionsProvider, usePermissions(),
-                         <IGRPCan>, <IGRPPageGuard>, IGRPForbidden,
+next-ui     (client)  →  IGRPSectionPermissions, usePermissions(),
+                         <IGRPAuthorization>, <IGRPGuardPage>, IGRPForbidden,
                          useSetActiveRole()  (commit → update() → revalidate)
 template              →  seed provider in (igrp)/layout.tsx;
                          enable experimental.authInterrupts + forbidden.tsx
                            (placed BELOW (igrp)/layout so 403 renders in-chrome — R2-G);
-                         one worked example (page guard + <IGRPCan>);
+                         one worked example (page guard + <IGRPAuthorization>);
                          preview super-admin mock
 ```
 
@@ -124,6 +124,8 @@ The permission string is `${dept}.${suffix}` — **prefix is the department** (t
 
 ## 4. API surface
 
+> **Naming convention (load-bearing — don't collapse).** `Authorize` = **token-claims gating** (zero-network, the default): `<IGRPAuthorization>`, `igrpAuthorize`, `igrpAssertAuthorize`, `usePermissions`. `Access` = **PDP** (live, authoritative, network): `igrpCheckAccess`, `igrpAssertAccess`. The two families intentionally never share a name — an earlier draft had `igrpAuthorize`(token) collide with the PDP and `igrpAssertAuthorize` sit one letter from the PDP assert.
+
 ### `@igrp/framework-next-auth` (new `./claims` export + jwt-callback change)
 - `decodeIgrpClaims(accessToken: string): IGRPAccessClaims`
 - re-export `IGRPAccessClaims` type
@@ -131,18 +133,18 @@ The permission string is `${dept}.${suffix}` — **prefix is the department** (t
 
 ### `@igrp/framework-next` (server)
 - `igrpGetClaims(): Promise<IGRPClaimsState>` — **branches on `isAuthBypass()` first** → returns super-admin mock without decoding (R2-H: the bypass session's `accessToken:"preview-token"` is not a JWT and would fail to decode → wrongly deny). Otherwise `getSession()` → `decodeIgrpClaims(accessToken)`; React.cache-deduped; decode failure → `{ status:'error' }` (distinct from deny — see §9).
-- `igrpCan(name: string): Promise<boolean>`
-- `igrpAssertCan(name: string): Promise<void>` — **page/render use** → denies via `forbidden()` (D8).
-- `igrpAuthorize(resource, action): Promise<{ allowed: boolean; viaRoles: string[] }>` — PDP via `igrpGetAccessClient().authorize.checkAuthorization`. Returns `via_roles` (grant-trail; semantics unverified — V7). **Requires the access-client config established in the same async context (D15)** — throws a descriptive error if the token is empty.
-- ~~`igrpAuthorizeBatch`~~ — **dropped** (B); client batch returns one result for N requests. Re-add once the client returns `PermissionCheckResponseDTO[]`.
-- `igrpAssertAuthorized(resource, action): Promise<ActionResult<void>>` — **server-action use** → returns `{ ok:false, code:'forbidden' }` on deny (D14), not a render interrupt.
+- `igrpAuthorize(name: string): Promise<boolean>`
+- `igrpAssertAuthorize(name: string): Promise<void>` — **page/render use** → denies via `forbidden()` (D8).
+- `igrpCheckAccess(resource, action): Promise<{ allowed: boolean; viaRoles: string[] }>` — PDP via `igrpGetAccessClient().authorize.checkAuthorization`. The decision is `allowed` (`true` = user has the permission; `false` = not — V7 ✅); `viaRoles` is diagnostic only. **Requires the access-client config established in the same async context (D15)** — throws a descriptive error if the token is empty.
+- ~~`igrpCheckAccessBatch`~~ — **dropped** (B); client batch returns one result for N requests. Re-add once the client returns `PermissionCheckResponseDTO[]`.
+- `igrpAssertAccess(resource, action): Promise<ActionResult<void>>` — **server-action use** → returns `{ ok:false, code:'forbidden' }` on deny (D14), not a render interrupt.
 - `igrpSetActiveRole(role: RoleDepartmentDTO): Promise<ActionResult<void>>` — `await setCurrentUserActiveRole` then force refresh + revalidate. **Mid-session behavior gated on Spike S1 (§0).**
 
 ### `@igrp/framework-next-ui` (client)
-- `IGRPPermissionsProvider` — seeded with `IGRPAccessClaims` (+ error state) from the server layout; exposes a `revalidate` action for role switch.
-- `usePermissions(): { can(name): boolean; permissions; roles; selectedRole; isSuperAdmin; status; error }` — **client-only hook** (reads context). Server components/actions use `igrpGetClaims`/`igrpCan` instead (R2-J).
-- `<IGRPCan permission={string|string[]} mode="all"|"any" fallback keepMounted>` — unmount by default; `mode` **defaults to `"all"`** (most restrictive) for an array (R2-I); `keepMounted` → `<Activity mode="hidden">`. ⚠️ Verify `Activity` is a stable export in the pinned React (not `unstable_Activity`); if unstable, ship without `keepMounted` and add it later.
-- `<IGRPPageGuard permission>` — client convenience (authoritative gate stays server-side).
+- `IGRPSectionPermissions` — seeded with `IGRPAccessClaims` (+ error state) from the server layout; exposes a `revalidate` action for role switch.
+- `usePermissions(): { can(name): boolean; permissions; roles; selectedRole; isSuperAdmin; status; error }` — **client-only hook** (reads context). Server components/actions use `igrpGetClaims`/`igrpAuthorize` instead (R2-J).
+- `<IGRPAuthorization permission={string|string[]} mode="all"|"any" fallback keepMounted>` — unmount by default; `mode` **defaults to `"all"`** (most restrictive) for an array (R2-I); `keepMounted` → `<Activity mode="hidden">`. ⚠️ Verify `Activity` is a stable export in the pinned React (not `unstable_Activity`); if unstable, ship without `keepMounted` and add it later.
+- `<IGRPGuardPage permission>` — client convenience (authoritative gate stays server-side).
 - `IGRPForbidden` — 403 UI for `forbidden.tsx`.
 - `useSetActiveRole()` — client side of the role switch (S1): calls the `igrpSetActiveRole` server action (commit), then `useSession().update({ igrpForceRefresh: true })` (mint new token), then `revalidate` the permissions provider. Returns `{ switch(role), pending, error }`; surfaces a retryable error without logging out on transient failure.
 
@@ -152,17 +154,17 @@ The permission string is `${dept}.${suffix}` — **prefix is the department** (t
 
 The design system stays **auth-agnostic** — DS components (Horizon `IGRP*` and primitives) are upstream of `next-ui` in the dependency order and must not import the permission layer. **Never add a `permission` prop to a DS component.** Gating is applied by the consumer:
 
-- **DS component (Horizon/primitive) you can't edit** → wrap with `<IGRPCan>`:
+- **DS component (Horizon/primitive) you can't edit** → wrap with `<IGRPAuthorization>`:
   ```tsx
-  <IGRPCan permission="manage_access"><IGRPButton>…</IGRPButton></IGRPCan>
+  <IGRPAuthorization permission="manage_access"><IGRPButton>…</IGRPButton></IGRPAuthorization>
   ```
-- **Custom component you own** → wrap with `<IGRPCan>`, or use `usePermissions().can(...)` inside when you need *disabled* vs *hidden*, or to gate a sub-part:
+- **Custom component you own** → wrap with `<IGRPAuthorization>`, or use `usePermissions().can(...)` inside when you need *disabled* vs *hidden*, or to gate a sub-part:
   ```tsx
   const { can } = usePermissions();
   <IGRPButton disabled={!can('read_invoice')}>Ver</IGRPButton>
   ```
 
-Rule of thumb: **wrap with `<IGRPCan>` by default; reach for `usePermissions()` only inside components you own when show/hide isn't granular enough.** Both resolve against the same zero-network token claims.
+Rule of thumb: **wrap with `<IGRPAuthorization>` by default; reach for `usePermissions()` only inside components you own when show/hide isn't granular enough.** Both resolve against the same zero-network token claims.
 
 ## 4.2 End-to-end flow (pages, menus, components)
 
@@ -172,32 +174,32 @@ request → NextAuth session (opaque accessToken)
         → (igrp)/layout.tsx [server]: igrpGetClaims()
             → getSession() → decodeIgrpClaims(session.accessToken)
             → { permissions[], roles[], selectedRole, org, isSuperAdmin }  (super-admin mock in preview)
-        → seeds <IGRPPermissionsProvider> (client context)
+        → seeds <IGRPSectionPermissions> (client context)
 ```
 Every scope below reads that one decoded object — zero extra network. `isSuperAdmin` short-circuits every check.
 
 **Pages — server-enforced → 403:**
 ```tsx
 // app/(igrp)/(myapp)/access/page.tsx  [server]
-import { igrpAssertCan } from '@igrp/framework-next';
+import { igrpAssertAuthorize } from '@igrp/framework-next';
 export default async function AccessPage() {
-  await igrpAssertCan('manage_access');   // deny → forbidden() → forbidden.tsx → <IGRPForbidden/>
+  await igrpAssertAuthorize('manage_access');   // deny → forbidden() → forbidden.tsx → <IGRPForbidden/>
   return <AccessManagementScreen />;
 }
 ```
-Runs before content streams; can't be bypassed client-side. `<IGRPPageGuard>` is a client convenience; the server assert is the real gate.
+Runs before content streams; can't be bypassed client-side. `<IGRPGuardPage>` is a client convenience; the server assert is the real gate.
 
-**Menus — AM-filtered, rendered as-is:** `getCurrentUserApplicationMenus(appCode)` returns only the active role's menus (V1). The framework writes **no** menu-filtering code. Menu hiding is navigation UX, **not** enforcement — a deep-linked page still needs its own `igrpAssertCan`.
+**Menus — AM-filtered, rendered as-is:** `getCurrentUserApplicationMenus(appCode)` returns only the active role's menus (V1). The framework writes **no** menu-filtering code. Menu hiding is navigation UX, **not** enforcement — a deep-linked page still needs its own `igrpAssertAuthorize`.
 
-**Components — client show/hide:** `<IGRPCan permission="…">` (unmount on deny) or `usePermissions().can(…)` for disable-not-hide. Cosmetic — see layering below.
+**Components — client show/hide:** `<IGRPAuthorization permission="…">` (unmount on deny) or `usePermissions().can(…)` for disable-not-hide. Cosmetic — see layering below.
 
 ### 4.3 Two vocabularies — the developer holds both
 
 UI/page gating uses **named permissions** (`"delete_invoice"`); the PDP wants **`{resource, action}`**. V4 confirms they're two views of one backend policy, but **the framework does not provide a name→(resource,action) mapping** — the app author supplies each string for its own surface. So a gated control and its authoritative action check look like:
 ```tsx
-<IGRPCan permission="delete_invoice"><DeleteButton/></IGRPCan>   // UI: named permission
+<IGRPAuthorization permission="delete_invoice"><DeleteButton/></IGRPAuthorization>   // UI: named permission
 // inside the server action:
-const res = await igrpAssertAuthorized('invoice', 'delete');     // PDP: resource+action
+const res = await igrpAssertAccess('invoice', 'delete');     // PDP: resource+action
 ```
 These two strings are **not derived from each other**. If a project wants them coupled, it owns that convention/table. Documented explicitly so nobody assumes the framework bridges them.
 
@@ -205,19 +207,19 @@ These two strings are **not derived from each other**. If a project wants them c
 
 | Scope | Default mechanism | Authoritative option |
 |---|---|---|
-| Component | `<IGRPCan>` (token, unmount) | — (cosmetic by nature) |
-| Page | server `igrpAssertCan(perm)` → `forbidden()` (token) | `igrpAssertAuthorized(resource, action)` (PDP) for high-stakes pages |
+| Component | `<IGRPAuthorization>` (token, unmount) | — (cosmetic by nature) |
+| Page | server `igrpAssertAuthorize(perm)` → `forbidden()` (token) | `igrpAssertAccess(resource, action)` (PDP) for high-stakes pages |
 | Menu | AM-returned set, rendered as-is (V1: AM scopes to active role) | — |
-| Server action | — | `igrpAuthorize` / `igrpAssertAuthorized` (PDP, single-check) |
+| Server action | — | `igrpCheckAccess` / `igrpAssertAccess` (PDP, single-check) |
 
 **The load-bearing distinction:** component/menu/page gating shapes *what the user sees*; the **server action** behind a control (and ultimately the AM API on every data call) is *what actually stops an unauthorized operation*.
 
 | Layer | Gate | Strength |
 |---|---|---|
-| Component | `<IGRPCan>` / `usePermissions` (token, client) | Cosmetic — hide UI |
+| Component | `<IGRPAuthorization>` / `usePermissions` (token, client) | Cosmetic — hide UI |
 | Menu | AM server-side scoping (V1) | Server-trusted navigation |
-| Page | `igrpAssertCan` → `forbidden()` (token, server) | Enforced render gate |
-| Action behind a control | `igrpAssertCan` (token) or `igrpAssertAuthorized` (PDP, fresh) in the server action | **Real enforcement** |
+| Page | `igrpAssertAuthorize` → `forbidden()` (token, server) | Enforced render gate |
+| Action behind a control | `igrpAssertAuthorize` (token) or `igrpAssertAccess` (PDP, fresh) in the server action | **Real enforcement** |
 
 Token-claims gating is fast and convenient; the AM API stays the source of truth for enforcement. A gated button with an *un*gated server action behind it is **not** secure.
 
@@ -232,7 +234,7 @@ Token-claims gating is fast and convenient; the AM API stays the source of truth
 - **V5:** ✅ **Resolved (versions).** Template is Next **15.5.18** → `forbidden()`/`experimental.authInterrupts` available; an `experimental` block already exists in `next.config.ts`. No `redirect("/403")` fallback needed.
 - **V6:** ✅ **Resolved (versions).** Template is React **19.2.6** → `Activity` is the stable export (shipped 19.2). `keepMounted` is buildable (still ships as opt-in polish, deferred per §10).
 - **S1:** ✅ **Resolved (spike).** Mid-session role-switch refresh is feasible via a `trigger:'update'` jwt-callback extension that forces `refreshOidcAccessToken` from the writable route-handler context (see §0). D10 stands. Implementation must add the forced-vs-expiry failure distinction.
-- **V7:** ⏳ Confirm `PermissionCheckResponseDTO.via_roles` semantics (inferred = role codes that granted the checked permission; not documented in the client README). Affects only the diagnostic value surfaced by `igrpAuthorize`.
+- **V7:** ✅ **Resolved (user).** The gate decision is `PermissionCheckResponseDTO.allowed` — `true` when the user has the checked permission, `false` otherwise. `igrpCheckAccess`/`igrpAssertAccess` key off `allowed`; `via_roles` is **diagnostic only** (grant-trail) and not load-bearing, so its exact semantics don't affect correctness.
 
 ---
 
@@ -240,7 +242,7 @@ Token-claims gating is fast and convenient; the AM API stays the source of truth
 
 - No role CRUD UI; no full role-picker UX (only the minimal `igrpSetActiveRole` helper).
 - No caching beyond per-request (`React.cache`).
-- PDP helpers are **not** wired into `<IGRPCan>`/`usePermissions` (those stay zero-network).
+- PDP helpers are **not** wired into `<IGRPAuthorization>`/`usePermissions` (those stay zero-network).
 - Template gets **one** worked example + 403 wiring — not a full app rewrite.
 
 ---
@@ -254,14 +256,25 @@ Token-claims gating is fast and convenient; the AM API stays the source of truth
 
 ---
 
-## 9. Known limitations (accepted, document for consumers)
+## 9. Limitations & implementation requirements
 
-- **Revocation latency on token-only gates.** Because gating reads token claims (D1), a server-side permission *revocation* is not reflected until the token refreshes (~180s TTL + 60s buffer) or the user re-logs-in. This applies to `<IGRPCan>`, `igrpCan`, **and `igrpAssertCan` page guards**. A page/action that must lock **the instant** access is revoked has to use the PDP path (`igrpAssertAuthorized`), which is always-fresh. State this in consumer docs so nobody assumes `igrpAssertCan` is real-time.
-- **Provider reseed depends on the `revalidate` action, not navigation.** Next.js does not re-execute `(igrp)/layout.tsx` on soft navigations within the segment, so the server-seeded claims won't refresh by themselves. `IGRPPermissionsProvider` must therefore (a) accept client-side state updates, not just an initial server prop, and (b) expose the `revalidate` action that `igrpSetActiveRole` calls. Without this, a role switch won't reflect until a hard reload.
-- **`igrpAssertCan` is render-only; actions return `ActionResult`.** Consumers must not call the page guard inside a server action expecting a 403 — use `igrpAssertAuthorized`/`igrpAuthorize` and branch on the returned `ActionResult` (D14).
-- **Decode-error ≠ deny on pages (R2-D).** A claims **decode error** (malformed token, transient AS issue) is *not* "forbidden". `igrpAssertCan` must distinguish: genuine missing-permission → `forbidden()` (403); decode/`status:'error'` → throw to `error.tsx` (5xx). Routing both to 403 mislabels outages and shows legitimately-permitted users a "not allowed" page during a blip.
-- **Token bloat → cookie chunking (R2-E).** `permissions[]` carries **all departments**, and the access token rides inside NextAuth's encrypted session cookie (~4KB/cookie, auto-chunked). A user in many departments / broad roles can inflate every request's cookie and force multi-chunk cookies. Confirm the AS omits `permissions` for `is_super_admin` (the example superadmin lists one), and set an expectation/ceiling. Surfaces in prod, not dev.
-- **No default-deny — per-page guards are opt-in (R2-F, decided: opt-in + documented).** Forgetting `igrpAssertCan` on a new protected page leaves it **silently open**; there's no runtime safety net (middleware only checks auth, not authorization). **Decision:** keep the flexible opt-in model; **do not** add a guarded-segment layout or lint enforcement now. Mitigation = **prominent documentation + a per-page guard checklist** in the template's docs and the worked example. Revisit a safety net (guarded segment / lint rule) only if omissions prove to be a real problem in practice.
+Split into what consumers must *accept* (inherent to the model or chosen) vs. what the *implementation* must do (these read like limitations but the design already mandates the correct behavior — they are build instructions, not tolerated gaps).
+
+### 9.1 Accepted limitations (inherent or by-decision)
+
+- **L1 — Revocation latency on token gates (inherent to D1).** Gating reads cached token claims, so a server-side permission *revocation* isn't reflected until the token refreshes (~180s TTL + 60s buffer) or re-login. Applies to `<IGRPAuthorization>`, `igrpAuthorize`, **and `igrpAssertAuthorize`**. This is the cost of the zero-network model — it **cannot be eliminated** without abandoning D1. **Mitigations (in priority order):**
+  1. **Must-be-instant gates → PDP.** Use `igrpAssertAccess` (always-fresh) for the handful of operations that must lock the instant access is pulled.
+  2. **Kill-session-on-revoke → forced re-auth.** When the backend revokes a permission/role, have it terminate affected sessions via the AM client's `AdminSessionClient.killSessionsByRole` / `killSessionsByDepartment`. The existing `IGRPSessionWatcher` then detects the dead session (`sid` in the token) and forces re-auth → fresh token, shrinking the window to the **session-poll interval** rather than the full token TTL. (Backend-coordinated; framework side already exists.)
+  3. The short ~180s TTL already keeps the default window small.
+  Document so nobody assumes `igrpAssertAuthorize` is real-time.
+- **L2 — Token size is backend-owned (R2-E).** `permissions[]` carries **all departments**, and the framework **must** keep the full access token in the session cookie (it's needed to call AM) — so it can't slim the payload. A user in many departments / broad roles can inflate every request's cookie and force NextAuth cookie chunking. **Not framework-fixable**; mitigations are backend/operational: confirm the AS omits `permissions` for `is_super_admin` (the example superadmin lists one), keep permission names compact, and monitor cookie size for wide-access users. Surfaces in prod, not dev.
+- **L3 — No default-deny; per-page guards are opt-in (R2-F, decided).** Forgetting `igrpAssertAuthorize` on a new protected page leaves it **silently open** (middleware only checks auth, not authorization). **Decision:** keep the flexible opt-in model; do **not** add a guarded-segment layout or lint rule now. Mitigation = prominent docs + a per-page guard checklist in the template. Revisit a safety net only if omissions prove to be a real problem.
+
+### 9.2 Implementation requirements (must-do, not optional)
+
+- **R-prov — Provider must be client-updatable, not just server-seeded.** Next.js doesn't re-execute `(igrp)/layout.tsx` on soft navigations, so `IGRPSectionPermissions` must (a) accept client-side state updates and (b) expose the `revalidate` action `useSetActiveRole`/`igrpSetActiveRole` call — otherwise a role switch won't reflect until a hard reload.
+- **R-err — Decode-error ≠ deny on pages (R2-D).** `igrpAssertAuthorize` must distinguish a genuine missing permission → `forbidden()` (403) from a claims **decode error** (`status:'error'`) → throw to `error.tsx` (5xx). Collapsing both into 403 mislabels outages and shows permitted users a "not allowed" page during a blip.
+- **R-api — Guard surface by context (D14).** Page/render gating uses `igrpAssertAuthorize` → `forbidden()`; server actions use `igrpAssertAccess`/`igrpCheckAccess` and return an `ActionResult`. Never call the render guard inside an action expecting a 403.
 
 ---
 
@@ -279,17 +292,17 @@ Build the goal first as a low-risk vertical slice; defer everything that adds ri
 In dependency order:
 1. **next-auth** — `decodeIgrpClaims` + `./claims` export.
 2. **next-types** — `IGRPAccessClaims`.
-3. **next** — `igrpGetClaims` + `igrpCan` (bypass-first, bare+org).
-4. **next-ui** — `IGRPPermissionsProvider` + `usePermissions` + `<IGRPCan>` → **component gating**.
-5. **next + next-ui + template** — `igrpAssertCan` + `IGRPForbidden` + `forbidden.tsx` (below `(igrp)/layout`) → **page gating** (decode-error → `error.tsx`, not 403 — R2-D).
-6. **template** — seed provider in `(igrp)/layout.tsx`, preview super-admin mock, **one worked example**, per-page guard checklist (R2-F).
+3. **next** — `igrpGetClaims` + `igrpAuthorize` (bypass-first, bare+org).
+4. **next-ui** — `IGRPSectionPermissions` + `usePermissions` + `<IGRPAuthorization>` → **component gating**.
+5. **next + next-ui + template** — `igrpAssertAuthorize` + `IGRPForbidden` + `forbidden.tsx` (below `(igrp)/layout`) → **page gating** (decode-error → `error.tsx`, not 403 — §9.2 R-err).
+6. **template** — seed provider in `(igrp)/layout.tsx`, preview super-admin mock, **one worked example**, per-page guard checklist (§9.1 L3).
 
 ✅ Exit criterion = the stated goal met: components + pages gated by the user's permissions; menus rendered as-is from AM (zero code). Shippable on its own.
 
 ### Phase 2 — deferred, each independent, only after Phase 1 is proven
 - **Active-role switch** — jwt-callback `trigger:'update'` extension (S1) + `igrpSetActiveRole` + `useSetActiveRole`. **Isolated change, own review** (only piece touching the auth critical path; full login→refresh→logout test walk). Until shipped, active role = login-time role.
-- **PDP escape hatch** — `igrpAuthorize` / `igrpAssertAuthorized` (D12). Add when a concrete sensitive server action needs a fresh authoritative check. (`igrpAuthorizeBatch` stays dropped pending the AM-client fix — finding B.)
+- **PDP escape hatch** — `igrpCheckAccess` / `igrpAssertAccess` (D12). Add when a concrete sensitive server action needs a fresh authoritative check. (`igrpCheckAccessBatch` stays dropped pending the AM-client fix — finding B.)
 - **Type-drift reconciliation** — D13 / finding C. Breaking `next-types` change; **own task + changeset**, not entangled with gating.
-- **`keepMounted` / `<Activity>`** — opt-in polish on `<IGRPCan>` (viable per V6); add after the unmount default is proven.
+- **`keepMounted` / `<Activity>`** — opt-in polish on `<IGRPAuthorization>` (viable per V6); add after the unmount default is proven.
 
 **Sequencing rationale:** Phase 1 proves token-claim gating end-to-end with the least code and zero blast radius on existing auth — fast feedback on whether it feels right in real screens. The Phase 2 items are risky, opt-in, or unrelated; isolating them keeps each reviewable and keeps the core delivery clean.

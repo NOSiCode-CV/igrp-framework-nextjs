@@ -44,11 +44,15 @@ describe('decodeIgrpClaims', () => {
   });
 
   it('throws on a missing token', () => {
-    expect(() => decodeIgrpClaims('')).toThrow();
+    expect(() => decodeIgrpClaims('')).toThrow('decodeIgrpClaims: missing access token');
   });
 
   it('throws on a non-JWT string', () => {
-    expect(() => decodeIgrpClaims('preview-token')).toThrow();
+    expect(() => decodeIgrpClaims('preview-token')).toThrow('decodeIgrpClaims: not a JWT');
+  });
+
+  it('throws on a string with the wrong segment count', () => {
+    expect(() => decodeIgrpClaims('a.b.c.d')).toThrow('decodeIgrpClaims: not a JWT');
   });
 });
 
@@ -67,5 +71,9 @@ describe('claimsAllow', () => {
 
   it('super admin bypasses everything', () => {
     expect(claimsAllow({ permissions: [], roles: [], isSuperAdmin: true }, 'anything')).toBe(true);
+  });
+
+  it('denies a bare name when there is no active org', () => {
+    expect(claimsAllow({ permissions: ['manage_access'], roles: [], isSuperAdmin: false }, 'manage_access')).toBe(false);
   });
 });

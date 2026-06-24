@@ -41,7 +41,7 @@ export function decodeIgrpClaims(accessToken: string): IGRPAccessClaims {
     throw new Error('decodeIgrpClaims: missing access token');
   }
   const parts = accessToken.split('.');
-  if (parts.length < 2) {
+  if (parts.length !== 3) {
     throw new Error('decodeIgrpClaims: not a JWT');
   }
   const payload = JSON.parse(base64UrlDecode(parts[1])) as Record<string, unknown>;
@@ -71,6 +71,7 @@ export function decodeIgrpClaims(accessToken: string): IGRPAccessClaims {
  */
 export function claimsAllow(claims: IGRPAccessClaims, name: string): boolean {
   if (claims.isSuperAdmin) return true;
-  const qualified = name.includes('.') ? name : claims.org ? `${claims.org}.${name}` : name;
+  if (!name.includes('.') && !claims.org) return false;
+  const qualified = name.includes('.') ? name : `${claims.org}.${name}`;
   return claims.permissions.includes(qualified);
 }

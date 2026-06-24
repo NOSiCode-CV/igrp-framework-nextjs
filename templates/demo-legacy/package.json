@@ -1,6 +1,6 @@
 {
   "name": "@igrp/framework-next-template",
-  "version": "0.1.0-beta.117",
+  "version": "0.1.0-beta.118",
   "private": true,
   "description": "igrp template",
   "displayName": "igrp template",
@@ -50,4 +50,5 @@
     "typescript": "^5.9.3"
   }
 }
+
 

@@ -21,6 +21,13 @@ export {
   igrpSetAccessClientConfig,
 } from './lib/api-config';
 
+export {
+  isIgrpAuthBypass,
+  igrpGetClaims,
+  igrpAuthorize,
+  igrpAssertAuthorize,
+} from './lib/permissions';
+
 export { igrpBuildQueryString } from './lib/build-query-string';
 
 export { igrpDeleteAuthCookies } from './lib/delete-auth-cookies';

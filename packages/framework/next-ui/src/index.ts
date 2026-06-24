@@ -104,3 +104,6 @@ export { IGRPSessionProvider } from './components/providers/session';
 // permissions
 export { IGRPSectionPermissions } from './permissions/section-permissions';
 export { usePermissions } from './permissions/use-permissions';
+export { IGRPForbidden, type IGRPForbiddenProps } from './permissions/forbidden';
+export { IGRPAuthorization, type IGRPAuthorizationProps } from './permissions/authorization';
+export { IGRPGuardPage } from './permissions/guard-page';

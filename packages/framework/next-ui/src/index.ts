@@ -100,3 +100,7 @@ export {
 export { IGRPRootProviders, type IGRPRootProvidersArgs } from './components/providers/root';
 
 export { IGRPSessionProvider } from './components/providers/session';
+
+// permissions
+export { IGRPSectionPermissions } from './permissions/section-permissions';
+export { usePermissions } from './permissions/use-permissions';

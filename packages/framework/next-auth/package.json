@@ -50,6 +50,10 @@
       "types": "./dist/types.d.ts",
       "import": "./dist/types.js"
     },
+    "./claims": {
+      "types": "./dist/claims.d.ts",
+      "import": "./dist/claims.js"
+    },
     "./package.json": "./package.json"
   },
   "files": [

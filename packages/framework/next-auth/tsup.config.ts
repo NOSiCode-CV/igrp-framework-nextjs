@@ -13,6 +13,7 @@ export default defineConfig({
     providers: 'src/providers.ts',
     sanitize: 'src/sanitize.ts',
     types: 'src/types.ts',
+    claims: 'src/claims.ts',
   },
   format: ['esm'],
   dts: {

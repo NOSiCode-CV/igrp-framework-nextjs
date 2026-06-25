@@ -116,8 +116,8 @@ igrp-next-template.zip
 .npmrc.example
 # Template ships a committed Cursor rules dir so consumers of the template
 # inherit IGRP design-system guidance the moment they open the project.
-!templates/demo-legacy/.cursor/
-!templates/demo-legacy/.cursor/**
+!templates/demo-v1/.cursor/
+!templates/demo-v1/.cursor/**
 .idea
 .claude/settings.local.json
 .claude/launch.json

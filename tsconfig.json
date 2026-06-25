@@ -19,7 +19,7 @@
   },
   "references": [   
     { "path": "./templates/demo" },
-    { "path": "./templates/demo-legacy" },
+    { "path": "./templates/demo-v1" },
     { "path": "./packages/design-system" },
     { "path": "./packages/design-system-storybook" },
     { "path": "./packages/framework/next" },    

@@ -6,7 +6,7 @@ import { readLock } from "../lock";
 import type { Manifest } from "../types";
 
 const manifestRef: { current: Manifest } = {
-  current: { version: 1, cliVersion: "test", template: "demo-legacy", migrations: [] },
+  current: { version: 1, cliVersion: "test", template: "demo-v1", migrations: [] },
 };
 
 vi.mock("../manifest", () => ({
@@ -44,7 +44,7 @@ describe("apply captures undo payloads (TM-1 phase 2a)", () => {
     manifestRef.current = {
       version: 1,
       cliVersion: "test",
-      template: "demo-legacy",
+      template: "demo-v1",
       migrations: [
         {
           id: "10-capture-test",
@@ -88,7 +88,7 @@ describe("apply captures undo payloads (TM-1 phase 2a)", () => {
     manifestRef.current = {
       version: 1,
       cliVersion: "test",
-      template: "demo-legacy",
+      template: "demo-v1",
       migrations: [
         {
           id: "11-twice-test",
@@ -117,7 +117,7 @@ describe("apply captures undo payloads (TM-1 phase 2a)", () => {
     manifestRef.current = {
       version: 1,
       cliVersion: "test",
-      template: "demo-legacy",
+      template: "demo-v1",
       migrations: [
         {
           id: "12-dir-delete-test",
@@ -139,5 +139,39 @@ describe("apply captures undo payloads (TM-1 phase 2a)", () => {
     expect(lock.applied).toHaveLength(1);
     // directories are not captured as undo payloads (text files only)
     expect(lock.applied[0].undoPayloads?.["src/dead-dir"]).toBeUndefined();
+  });
+});
+
+describe("apply self-heals the template identifier", () => {
+  it("upgrades a stale demo-legacy lock to the current manifest template", async () => {
+    // An app previously migrated under the former "demo-legacy" identifier.
+    writeFileSync(
+      join(appRoot, ".igrp-migrations-lock.json"),
+      JSON.stringify({ version: 1, template: "demo-legacy", applied: [] }),
+      "utf8"
+    );
+    writeFileAt(payloadDir, "21/src/new.ts", "NEW\n");
+
+    manifestRef.current = {
+      version: 1,
+      cliVersion: "test",
+      template: "demo-v1",
+      migrations: [
+        {
+          id: "21-heal-test",
+          date: "2026-06-25",
+          requires: [],
+          targetFrameworkVersion: null,
+          guideHref: "21.MIGRATIONS-25062026.md",
+          contentHash: "abcabcabcabcabca",
+          steps: [{ type: "file.create", path: "src/new.ts", from: "21/src/new.ts" }],
+        },
+      ],
+    };
+
+    await apply(appRoot, { yes: true, payloadDir });
+
+    expect(readLock(appRoot).applied).toHaveLength(1);
+    expect(readLock(appRoot).template).toBe("demo-v1");
   });
 });

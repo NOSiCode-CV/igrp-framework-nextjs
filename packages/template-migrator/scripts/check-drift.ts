@@ -5,8 +5,8 @@ import { parse as parseYaml } from "yaml";
 
 // Drift gate: verify that the migration payloads still match the live template.
 //
-// The payload tree (migrations/demo-legacy/payload/NN/) is a hand-maintained
-// copy of templates/demo-legacy. When someone edits the template but forgets to
+// The payload tree (migrations/demo-v1/payload/NN/) is a hand-maintained
+// copy of templates/demo-v1. When someone edits the template but forgets to
 // author a migration, the two trees silently diverge: new apps (scaffolded from
 // the zip) get the change, existing apps (upgraded via the migrator) never do.
 //
@@ -21,9 +21,9 @@ import { parse as parseYaml } from "yaml";
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);
 const ROOT = join(__dirname, "..");
-const MIGRATIONS_DIR = join(ROOT, "migrations/demo-legacy");
-// packages/template-migrator -> ../.. -> repo root -> templates/demo-legacy
-const TEMPLATE_DIR = join(ROOT, "../../templates/demo-legacy");
+const MIGRATIONS_DIR = join(ROOT, "migrations/demo-v1");
+// packages/template-migrator -> ../.. -> repo root -> templates/demo-v1
+const TEMPLATE_DIR = join(ROOT, "../../templates/demo-v1");
 const TEMPLATE_PKG = join(TEMPLATE_DIR, "package.json");
 const PACKAGES_DIR = join(ROOT, "../../packages");
 

@@ -24,7 +24,7 @@ export interface MigrationEntry {
 export interface Manifest {
   version: 1;
   cliVersion: string;
-  template: "demo-legacy";
+  template: "demo-v1";
   migrations: MigrationEntry[];
 }
 
@@ -50,7 +50,7 @@ export interface LockEntry {
 
 export interface LockFile {
   version: 1;
-  template: "demo-legacy";
+  template: "demo-v1";
   applied: LockEntry[];
 }
 

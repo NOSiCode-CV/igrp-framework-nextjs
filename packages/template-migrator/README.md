@@ -1,6 +1,6 @@
 # @igrp/template-migrator
 
-CLI that automates IGRP template upgrades. Bundles all migration guides for `templates/demo-legacy` into a single executable package — consumers run it with `pnpm dlx` to bring their app up to the latest framework version without manual file edits.
+CLI that automates IGRP template upgrades. Bundles all migration guides for `templates/demo-v1` into a single executable package — consumers run it with `pnpm dlx` to bring their app up to the latest framework version without manual file edits.
 
 ---
 
@@ -27,7 +27,7 @@ packages/template-migrator/
 │       └── check.ts         # igrp-migrate check  (CI gate)
 ```
 
-The **source of truth for migrations lives in this package at `migrations/demo-legacy/`**. `scripts/pack.ts` reads those files at build time and embeds everything into `dist/`.
+The **source of truth for migrations lives in this package at `migrations/demo-v1/`**. `scripts/pack.ts` reads those files at build time and embeds everything into `dist/`.
 
 ---
 
@@ -41,9 +41,9 @@ Three sequential steps (wired as `prebuild → build:js → build:types`):
 
 ### 1. `prebuild` — `scripts/pack.ts`
 
-Reads every `NN.MIGRATIONS-*.md` file in `migrations/demo-legacy/`, parses the YAML frontmatter, then:
+Reads every `NN.MIGRATIONS-*.md` file in `migrations/demo-v1/`, parses the YAML frontmatter, then:
 
-- **Copies payload files** from `migrations/demo-legacy/payload/NN/` → `dist/payload/NN/` (strips the `payload/` prefix from the `from` field so the dist layout is `dist/payload/NN/file`, not `dist/payload/payload/NN/file`).
+- **Copies payload files** from `migrations/demo-v1/payload/NN/` → `dist/payload/NN/` (strips the `payload/` prefix from the `from` field so the dist layout is `dist/payload/NN/file`, not `dist/payload/payload/NN/file`).
 - **Emits `dist/manifest.json`** — a single JSON object with all migration metadata and steps.
 
 Any `.md` guide without valid YAML frontmatter (between `---` fences) will throw and abort the build.
@@ -60,7 +60,7 @@ Emits `.d.ts` declaration files from `tsconfig.build.json` (no JS output, types 
 
 ## Adding a new migration
 
-1. **Write the prose guide** in `migrations/demo-legacy/`:
+1. **Write the prose guide** in `migrations/demo-v1/`:
 
    ```
    NN.MIGRATIONS-DDMMYYYY.md
@@ -98,7 +98,7 @@ Emits `.d.ts` declaration files from `tsconfig.build.json` (no JS output, types 
    ---
    ```
 
-3. **Create the payload files** in `migrations/demo-legacy/payload/NN/` — the final state of each file after the migration is applied.
+3. **Create the payload files** in `migrations/demo-v1/payload/NN/` — the final state of each file after the migration is applied.
 
 4. **Build and verify**:
 
@@ -108,7 +108,7 @@ Emits `.d.ts` declaration files from `tsconfig.build.json` (no JS output, types 
 
    All 6 (or N) migrations should print `packed <id>`. Check `dist/manifest.json` to confirm the new entry is present.
 
-5. **Test locally** against a copy of `demo-legacy`:
+5. **Test locally** against a copy of `demo-v1`:
 
    ```bash
    # From the consumer app directory
@@ -129,13 +129,13 @@ Emits `.d.ts` declaration files from `tsconfig.build.json` (no JS output, types 
 | `env.add` | `file`, `keys` | Appends missing keys (with doc comments) to an `.env` file |
 | `deps.bump` | `manifest`, `ranges` | Updates version ranges in `package.json` (deps or devDeps) |
 
-`from` values must be relative to `migrations/demo-legacy/` (e.g. `payload/NN/src/file.ts`). The pack script strips the leading `payload/` when copying to `dist/payload/`; the runtime in `apply.ts` does the same strip when resolving the source.
+`from` values must be relative to `migrations/demo-v1/` (e.g. `payload/NN/src/file.ts`). The pack script strips the leading `payload/` when copying to `dist/payload/`; the runtime in `apply.ts` does the same strip when resolving the source.
 
 ---
 
 ## Drift gate (`check:drift`)
 
-The `migrations/demo-legacy/payload/` tree is a **hand-maintained copy** of `templates/demo-legacy`. If you edit the template but forget to author a migration, the two silently diverge: apps scaffolded from the zip get the change, apps upgraded via this CLI never do.
+The `migrations/demo-v1/payload/` tree is a **hand-maintained copy** of `templates/demo-v1`. If you edit the template but forget to author a migration, the two silently diverge: apps scaffolded from the zip get the change, apps upgraded via this CLI never do.
 
 `scripts/check-drift.ts` reconciles them on two axes — **file payloads** and **dependency pins**. It collapses every migration into the final expected state per managed path and per bumped dependency, then compares against the live template:
 
@@ -237,7 +237,7 @@ The CLI writes `.igrp-migrations-lock.json` in the consumer app root after each 
 ```ts
 interface LockFile {
   version: 1;
-  template: "demo-legacy";
+  template: "demo-v1";
   applied: LockEntry[];
 }
 

@@ -1,6 +1,6 @@
 {
   "version": 1,
-  "template": "demo-legacy",
+  "template": "demo-v1",
   "applied": [
     {
       "id": "01-preview-mode-not-found",

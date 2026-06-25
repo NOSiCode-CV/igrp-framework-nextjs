@@ -83,7 +83,7 @@ pnpm start
 ## Project Structure
 
 ```
-templates/demo-legacy/
+templates/demo-v1/
 ├── src/
 │   ├── app/
 │   │   ├── (auth)/                       # Login / logout route group

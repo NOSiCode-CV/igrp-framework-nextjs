@@ -17,13 +17,13 @@ afterEach(() => {
 
 describe("readLock", () => {
   it("returns an empty lock when no lock file exists", () => {
-    expect(readLock(appRoot)).toEqual({ version: 1, template: "demo-legacy", applied: [] });
+    expect(readLock(appRoot)).toEqual({ version: 1, template: "demo-v1", applied: [] });
   });
 
   it("round-trips through writeLock", () => {
     const lock: LockFile = {
       version: 1,
-      template: "demo-legacy",
+      template: "demo-v1",
       applied: [
         {
           id: "01-test",

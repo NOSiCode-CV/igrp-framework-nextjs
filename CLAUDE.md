@@ -62,7 +62,7 @@ packages/
     next-ui/                  → @igrp/framework-next-ui     (client template chrome)
     next/                     → @igrp/framework-next        (server entry: IGRPLayout, IGRPRootLayout, igrpBuildConfig, API client)
 templates/
-  demo-legacy/                → @igrp/framework-next-template  (canonical reference template — the only one in the repo)
+  demo-v1/                → @igrp/framework-next-template  (canonical reference template — the only one in the repo)
 scripts/                      → repo utilities (e.g. migrate-primitive-names.mjs)
 ```
 
@@ -91,9 +91,9 @@ The distinction is load-bearing — mixing layers incorrectly produces inconsist
 - **`@igrp/framework-next-auth`** — NextAuth.js wrappers with multiple entry points (`./server`, `./client`, `./session`, `./jwt`, `./middleware`, `./config`, `./sanitize`, `./oidc`, `./providers`, `./types`). Respect these entry points instead of reaching into `dist/`.
 - **`@igrp/framework-next-types`** — shared TS types. Depends on `@igrp/framework-next-auth` for session/JWT types.
 
-### Template architecture (`templates/demo-legacy` — the only template)
+### Template architecture (`templates/demo-v1` — the only template)
 
-`demo-legacy` is the canonical example of how to consume the framework:
+`demo-v1` is the canonical example of how to consume the framework:
 
 1. **Middleware** (`src/middleware.ts`) validates the NextAuth session, bypasses public/login/logout/API routes, honors `IGRP_PREVIEW_MODE` / `AUTH_PROVIDER=none`, and sanitizes `callbackUrl` to prevent login loops and open-redirects.
 2. **Root layout** (`src/app/layout.tsx`) wraps the app in `IGRPRootLayout` + providers.
@@ -113,7 +113,7 @@ Critical env constraint: when `NEXT_PUBLIC_BASE_PATH` is set, `NEXTAUTH_URL` mus
 
 @.claude/shared/ui-rules.md
 
-Inside `templates/demo-legacy/**/*.{ts,tsx}`, if `templates/demo-legacy/skills/igrp-design-system/SKILL.md` is present, treat it as the authoritative component reference and load only the sub-files you need.
+Inside `templates/demo-v1/**/*.{ts,tsx}`, if `templates/demo-v1/skills/igrp-design-system/SKILL.md` is present, treat it as the authoritative component reference and load only the sub-files you need.
 
 ## Package API Quick Reference
 

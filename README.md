@@ -22,7 +22,7 @@ packages/
     next/                     → @igrp/framework-next
   template-migrator/          → @igrp/template-migrator
 templates/
-  demo-legacy/                → older reference template (maintenance mode)
+  demo-v1/                → older reference template (maintenance mode)
 ```
 
 ### What each package does
@@ -60,7 +60,7 @@ pnpm build:framework
 
 ```bash
 # Copy and fill in the template env file
-cp templates/demo-legacy/.env.example templates/demo-legacy/.env.local
+cp templates/demo-v1/.env.example templates/demo-v1/.env.local
 
 pnpm dev:demo       # Next.js 15 + Turbopack on http://localhost:3000
 ```
@@ -106,7 +106,7 @@ pnpm dev:demo           # demo template (needs build:framework first)
 ```bash
 pnpm lint               # ESLint (framework packages)
 pnpm format             # Prettier (framework packages)
-# templates/demo-legacy uses Biome — run from that directory
+# templates/demo-v1 uses Biome — run from that directory
 ```
 
 ### Storybook
@@ -157,7 +157,7 @@ Each package has its own README with setup, usage, and build details:
 - [packages/framework/next/README.md](packages/framework/next/README.md)
 - [packages/template-migrator/README.md](packages/template-migrator/README.md)
 - [packages/design-system-storybook/README.md](packages/design-system-storybook/README.md)
-- [templates/demo-legacy/README.md](templates/demo-legacy/README.md)
+- [templates/demo-v1/README.md](templates/demo-v1/README.md)
 
 ---
 

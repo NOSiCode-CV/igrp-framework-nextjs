@@ -20,6 +20,10 @@ export async function apply(
 ) {
   const manifest = getManifest();
   const lock = readLock(appRoot);
+  // Self-heal: stamp the current template identifier so apps migrated under an
+  // older identifier (e.g. the former "demo-legacy") converge on the current one.
+  // The field is cosmetic (only printed by `status`), so this is purely tidiness.
+  lock.template = manifest.template;
   const appliedIds = new Set(lock.applied.map((a) => a.id));
   let pending = manifest.migrations.filter((m) => !appliedIds.has(m.id));
   if (opts.toId) {

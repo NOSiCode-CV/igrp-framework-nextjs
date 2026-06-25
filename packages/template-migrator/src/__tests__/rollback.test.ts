@@ -9,7 +9,7 @@ vi.mock("../manifest", () => ({
   getManifest: () => ({
     version: 1,
     cliVersion: "test",
-    template: "demo-legacy",
+    template: "demo-v1",
     migrations: [],
   }),
 }));
@@ -27,7 +27,7 @@ function writeAppFile(rel: string, content: string) {
 function lockWith(entry: Partial<LockEntry>): LockFile {
   return {
     version: 1,
-    template: "demo-legacy",
+    template: "demo-v1",
     applied: [
       {
         id: "07-test-migration",
@@ -106,7 +106,7 @@ describe("rollback refusal (TM-1 phase 1)", () => {
   });
 
   it("returns false for a migration that is not applied", async () => {
-    writeLock(appRoot, { version: 1, template: "demo-legacy", applied: [] });
+    writeLock(appRoot, { version: 1, template: "demo-v1", applied: [] });
     const ok = await rollback(appRoot, "99-nope");
     expect(ok).toBe(false);
   });
@@ -160,5 +160,35 @@ describe("rollback executes undo steps in reverse order", () => {
 
     expect(ok).toBe(true);
     expect(readFileSync(join(appRoot, "src/x.ts"), "utf8")).toBe("TRUE ORIGINAL\n");
+  });
+});
+
+describe("rollback self-heals the template identifier", () => {
+  it("upgrades a stale demo-legacy lock to the current manifest template", async () => {
+    writeAppFile("src/created-by-migration.ts", "new file\n");
+    // Write a lock under the former identifier directly (bypasses typed writeLock).
+    writeFileSync(
+      join(appRoot, ".igrp-migrations-lock.json"),
+      JSON.stringify({
+        version: 1,
+        template: "demo-legacy",
+        applied: [
+          {
+            id: "07-test-migration",
+            appliedAt: "2026-06-01T00:00:00.000Z",
+            cliVersion: "test",
+            manifestHash: "cafebabecafebabe",
+            undo: [{ type: "file.delete", path: "src/created-by-migration.ts" }],
+            fileHashes: {},
+          },
+        ],
+      }),
+      "utf8"
+    );
+
+    const ok = await rollback(appRoot, "07-test-migration");
+
+    expect(ok).toBe(true);
+    expect(readLock(appRoot).template).toBe("demo-v1");
   });
 });

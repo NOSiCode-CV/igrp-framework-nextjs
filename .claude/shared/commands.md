@@ -12,7 +12,7 @@
 - `pnpm build` — everything with a build script
 - `pnpm lint` | `pnpm format` | `pnpm clean` | `pnpm clean-all` (also removes `node_modules`)
 
-## Template (`templates/demo-legacy` — the only template, package name `@igrp/framework-next-template`)
+## Template (`templates/demo-v1` — the only template, package name `@igrp/framework-next-template`)
 
 - `pnpm dev:demo` — Next.js 15 + Turbopack
 - `pnpm build:demo` — `next build` (runs Biome format)

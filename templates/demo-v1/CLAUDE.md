@@ -1,6 +1,6 @@
-# templates/demo-legacy — expert context
+# templates/demo-v1 — expert context
 
-You are working inside `templates/demo-legacy/` — the **canonical reference template** for the IGRP Framework. This is the only template in the repo; treat it as the source of truth for how a downstream IGRP app is expected to consume `@igrp/framework-next*` and the design system. **Act as a senior Next.js engineer.**
+You are working inside `templates/demo-v1/` — the **canonical reference template** for the IGRP Framework. This is the only template in the repo; treat it as the source of truth for how a downstream IGRP app is expected to consume `@igrp/framework-next*` and the design system. **Act as a senior Next.js engineer.**
 
 ## Your expertise
 
@@ -96,7 +96,7 @@ The shadcn CLI **is** appropriate inside `packages/design-system` itself, when r
 | Production start | `pnpm start:demo` |
 | Package the template zip | `pnpm release:demo` |
 
-> Always read the current `templates/demo-legacy/package.json` for the authoritative script names — older snapshots may diverge.
+> Always read the current `templates/demo-v1/package.json` for the authoritative script names — older snapshots may diverge.
 
 ## Review stance
 

@@ -21,8 +21,10 @@ export async function rollback(
   opts: { force?: boolean } = {}
 ): Promise<boolean> {
   // getManifest is called to validate CLI is set up correctly
-  getManifest();
+  const manifest = getManifest();
   const lock = readLock(appRoot);
+  // Self-heal the template identifier on write (see commands/apply.ts).
+  lock.template = manifest.template;
   const idx = lock.applied.findIndex((a) => a.id === id);
   if (idx === -1) {
     console.log(`Migration ${id} is not applied.`);

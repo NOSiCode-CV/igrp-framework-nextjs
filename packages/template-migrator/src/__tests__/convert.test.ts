@@ -20,7 +20,7 @@ afterEach(() => {
 describe("convert", () => {
   it("moves the legacy lock to the new path and removes the empty legacy dir", () => {
     mkdirSync(join(appRoot, LEGACY), { recursive: true });
-    const content = JSON.stringify({ version: 1, template: "demo-legacy", applied: [] });
+    const content = JSON.stringify({ version: 1, template: "demo-v1", applied: [] });
     writeFileSync(join(appRoot, LEGACY, "lock.json"), content, "utf8");
 
     convert(appRoot);

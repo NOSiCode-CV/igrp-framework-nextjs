@@ -19,6 +19,16 @@ export function resolveAnchorTag(item: IGRPMenuItemArgs): boolean {
   return isExternal || item.target === '_blank';
 }
 
+/**
+ * Active-state match for a menu item against the current pathname.
+ * Uses prefix matching: an item is active on its own route and any child route.
+ *
+ * NOTE: callers pass the value of next/navigation `usePathname()`, which is the
+ * route SOURCE path. `basePath` is handled (Next strips it), but apps that add
+ * `next.config` rewrites/Proxy may see a mismatch between this and the browser
+ * URL. If that ever applies, migrate the sidebar to `useSelectedLayoutSegments()`
+ * (router-state based, rewrite-immune) — the same hook breadcrumbs.tsx already uses.
+ */
 export function isItemActive(item: IGRPMenuItemArgs, pathname: string): boolean {
   const href = resolveHref(item);
   if (resolveAnchorTag(item) || href === '#') return false;

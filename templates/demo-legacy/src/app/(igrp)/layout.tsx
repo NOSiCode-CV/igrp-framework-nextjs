@@ -19,6 +19,7 @@ export default async function IGRPRootLayout({
 
   const layoutConfig = await configLayout();
   const config = await createConfig(layoutConfig as IGRPLayoutConfigArgs);
+  // verifySession() above seeds the per-request access-client config that igrpGetClaims() reads.
   const claims = await igrpGetClaims();
 
   return (

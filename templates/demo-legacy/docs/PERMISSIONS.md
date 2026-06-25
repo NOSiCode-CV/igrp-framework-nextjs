@@ -14,7 +14,7 @@ export default async function Page() {
 
 ## Component gate (client)
 ```tsx
-import { IGRPAuthorization } from "@igrp/framework-next-ui";
+import { IGRPAuthorization, usePermissions } from "@igrp/framework-next-ui";
 <IGRPAuthorization permission="delete_invoice"><DeleteButton /></IGRPAuthorization>
 // or, inside your own component:
 const { can } = usePermissions();

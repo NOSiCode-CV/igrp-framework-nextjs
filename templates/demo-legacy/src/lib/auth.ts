@@ -216,5 +216,16 @@ export async function serverSession() {
  */
 export async function getSession() {
   if (isAuthBypass()) return null;
-  return auth.getSession();
+  const session = await auth.getSession();
+  // Seed the per-request access-client config so downstream consumers in the
+  // same request (e.g. igrpGetClaims, server actions) can read the token.
+  // Mirrors serverSession(); IGRPLayoutFull also seeds later but renders after
+  // the (igrp) layout body where igrpGetClaims() runs.
+  if (session) {
+    igrpSetAccessClientConfig({
+      token: (session.accessToken as string) ?? "",
+      baseUrl: process.env.IGRP_ACCESS_MANAGEMENT_API || "",
+    });
+  }
+  return session;
 }

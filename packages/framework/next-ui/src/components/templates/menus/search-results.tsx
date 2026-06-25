@@ -1,7 +1,6 @@
 'use client';
 
 import { useMemo } from 'react';
-import Link from 'next/link';
 import {
   cn,
   SidebarGroup,
@@ -13,6 +12,7 @@ import {
 
 import type { Section } from './utils';
 import { resolveHref, resolveAnchorTag, isItemActive, ACTIVE_MENU_ITEM_CLASS } from './utils';
+import { MenuItemLink } from './menu-item-link';
 
 interface SearchResult {
   id: string | number | undefined;
@@ -93,15 +93,17 @@ export function SearchResults({ sections, query, pathname }: SearchResultsProps)
       <SidebarGroupContent>
         <SidebarMenu>
           {results.map((result) => {
-            const inner = result.isAnchor ? (
-              <a
+            const inner = (
+              <MenuItemLink
                 href={result.href}
-                target={result.target ?? '_blank'}
-                rel="noopener noreferrer"
+                isAnchor={result.isAnchor}
+                isActive={result.isActive}
+                target={result.target}
                 aria-label={
-                  result.target === '_blank' ? `${result.name} (opens in new tab)` : undefined
+                  result.isAnchor && result.target === '_blank'
+                    ? `${result.name} (opens in new tab)`
+                    : undefined
                 }
-                aria-current={result.isActive ? 'page' : undefined}
                 className={cn('flex flex-col items-start gap-0.5')}
               >
                 <span className={cn('truncate')}>{result.name}</span>
@@ -110,20 +112,7 @@ export function SearchResults({ sections, query, pathname }: SearchResultsProps)
                     {result.breadcrumb.join(' › ')}
                   </span>
                 )}
-              </a>
-            ) : (
-              <Link
-                href={result.href}
-                aria-current={result.isActive ? 'page' : undefined}
-                className={cn('flex flex-col items-start gap-0.5')}
-              >
-                <span className={cn('truncate')}>{result.name}</span>
-                {result.breadcrumb.length > 0 && (
-                  <span className={cn('truncate text-xs text-muted-foreground')}>
-                    {result.breadcrumb.join(' › ')}
-                  </span>
-                )}
-              </Link>
+              </MenuItemLink>
             );
 
             return (

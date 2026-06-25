@@ -1,6 +1,5 @@
 'use client';
 
-import Link from 'next/link';
 import {
   IGRPIcon,
   SidebarMenuButton,
@@ -9,6 +8,7 @@ import {
 
 import type { LeafNode } from './utils';
 import { resolveHref, resolveAnchorTag, isItemActive, ACTIVE_MENU_ITEM_CLASS } from './utils';
+import { MenuItemLink } from './menu-item-link';
 
 interface LeafMenuItemProps {
   node: LeafNode;
@@ -29,23 +29,16 @@ export function LeafMenuItem({ node, pathname }: LeafMenuItemProps) {
         isActive={isActive}
         className={ACTIVE_MENU_ITEM_CLASS}
       >
-        {isAnchor ? (
-          <a
-            href={href}
-            target={item.target ?? '_blank'}
-            rel="noopener noreferrer"
-            aria-label={item.target === '_blank' ? `${item.name} (opens in new tab)` : item.name}
-            aria-current={isActive ? 'page' : undefined}
-          >
-            {item.icon && <IGRPIcon iconName={item.icon} />}
-            <span>{item.name}</span>
-          </a>
-        ) : (
-          <Link href={href} aria-label={item.name} aria-current={isActive ? 'page' : undefined}>
-            {item.icon && <IGRPIcon iconName={item.icon} />}
-            <span>{item.name}</span>
-          </Link>
-        )}
+        <MenuItemLink
+          href={href}
+          isAnchor={isAnchor}
+          isActive={isActive}
+          target={item.target}
+          aria-label={item.target === '_blank' ? `${item.name} (opens in new tab)` : item.name}
+        >
+          {item.icon && <IGRPIcon iconName={item.icon} />}
+          <span>{item.name}</span>
+        </MenuItemLink>
       </SidebarMenuButton>
     </SidebarMenuItem>
   );

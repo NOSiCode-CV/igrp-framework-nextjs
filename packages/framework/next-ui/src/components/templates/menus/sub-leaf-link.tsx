@@ -1,6 +1,5 @@
 'use client';
 
-import Link from 'next/link';
 import {
   cn,
   IGRPIcon,
@@ -11,6 +10,7 @@ import {
 
 import type { LeafNode } from './utils';
 import { resolveHref, resolveAnchorTag, isItemActive, ACTIVE_MENU_ITEM_CLASS } from './utils';
+import { MenuItemLink } from './menu-item-link';
 
 interface SubLeafLinkProps {
   node: LeafNode;
@@ -24,28 +24,18 @@ export function SubLeafLink({ node, variant, pathname }: SubLeafLinkProps) {
   const isAnchor = resolveAnchorTag(item);
   const isActive = isItemActive(item, pathname);
 
-  const inner = isAnchor ? (
-    <a
+  const inner = (
+    <MenuItemLink
       href={href}
-      target={item.target ?? '_blank'}
-      rel="noopener noreferrer"
+      isAnchor={isAnchor}
+      isActive={isActive}
+      target={item.target}
       aria-label={item.target === '_blank' ? `${item.name} (opens in new tab)` : item.name}
-      aria-current={isActive ? 'page' : undefined}
       className={cn('flex items-center gap-2 w-full min-w-0')}
     >
       {item.icon && <IGRPIcon iconName={item.icon} className={cn('size-4 shrink-0')} />}
       <span className={cn('truncate')}>{item.name}</span>
-    </a>
-  ) : (
-    <Link
-      href={href}
-      aria-label={item.name}
-      aria-current={isActive ? 'page' : undefined}
-      className={cn('flex items-center gap-2 w-full min-w-0')}
-    >
-      {item.icon && <IGRPIcon iconName={item.icon} className={cn('size-4 shrink-0')} />}
-      <span className={cn('truncate')}>{item.name}</span>
-    </Link>
+    </MenuItemLink>
   );
 
   if (variant === 'dropdown') {

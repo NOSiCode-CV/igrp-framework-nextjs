@@ -136,6 +136,7 @@ Detailed topics live in [`docs/`](docs/):
 | [Environment Variables](docs/ENVIRONMENT.md) | Every env var (auth, NextAuth, framework, M2M, public) + required auth-server URI registration |
 | [Architecture](docs/ARCHITECTURE.md) | How the template wires middleware, root layout, IGRP layout, and the config builder; authenticated data flow |
 | [Authentication](docs/AUTHENTICATION.md) | Centralized `withIGRPAuth` instance, `callbackUrl` sanitization, the OIDC flow, and the preview-mode / `AUTH_PROVIDER=none` bypass |
+| [Permissions](docs/PERMISSIONS.md) | Token-claims gating for pages, components, and menus — `igrpAssertAuthorize`, `<IGRPAuthorization>`, `usePermissions` |
 | [Access Management Sync](docs/ACCESS_MANAGEMENT.md) | OAuth2 `client_credentials` sync of application/resources/menus to the Access Management API |
 | [Design System](docs/DESIGN_SYSTEM.md) | The `@igrp/igrp-framework-react-design-system` component layers and usage |
 | [Design Tokens](docs/TOKENS.md) | CSS-variable tokens and how to theme the template |
@@ -147,6 +148,10 @@ Detailed topics live in [`docs/`](docs/):
 Tailwind compiles **once here in the app**, not in the framework packages. Import **tokens only** (`@import "@igrp/igrp-framework-react-design-system/tokens";`) — never the prebuilt `styles.css`. All UI comes from the design system (Horizon `IGRP*` first), forms are always `IGRPForm` + Zod, and dark mode is driven by `next-themes`. Full details in [Design System](docs/DESIGN_SYSTEM.md) and [Design Tokens](docs/TOKENS.md).
 
 - **Do not run `npx shadcn add` here** — see `CLAUDE.md` § "Do not run `npx shadcn add` here". Use `IGRP*` from the design system instead.
+
+### Permissions — quick note
+
+Gate UI and routes by the user's access-token claims (zero network; the AM API is the real enforcement). Server pages: `await igrpAssertAuthorize("<perm>")` → 403 on deny. Client UI: wrap with `<IGRPAuthorization permission="…">` or read `usePermissions().can(…)`. In preview mode claims are super-admin (every gate passes). Full guide — including the per-page guard checklist (there is **no** default-deny) — in [Permissions](docs/PERMISSIONS.md).
 
 ### Upgrading — quick note
 

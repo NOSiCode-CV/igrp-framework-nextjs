@@ -14,6 +14,7 @@ export function IGRPGuardPage({
   permission,
   children,
 }: {
+  /** All listed permissions must be held. Use <IGRPAuthorization mode="any"> for any-of semantics. */
   permission: string | string[];
   children: ReactNode;
 }) {

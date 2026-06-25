@@ -31,14 +31,14 @@
     "@igrp/framework-next-auth": "workspace:*"
   },
   "devDependencies": {
-    "@types/node": "^25.9.1",
+    "@types/node": "25.9.1",
     "next-auth": "4.24.14",
-    "prettier": "^3.8.3",
-    "rimraf": "^6.1.3",
-    "typescript": "^5.9.3"
+    "prettier": "3.8.4",
+    "rimraf": "6.1.3",
+    "typescript": "5.9.3"
   },
   "engines": {
-    "node": ">=20.x.x"
+    "node": ">=22.x.x"
   },
   "publishConfig": {
     "registry": "https://sonatype.nosi.cv/repository/igrp/",

@@ -1,6 +1,6 @@
 {
   "name": "igrp-framework-nextjs",
-  "version": "0.0.1-beta.114",
+  "version": "0.0.1-beta.115",
   "description": "IGRP Framework for Next.js",
   "keywords": [
     "igrp",
@@ -44,10 +44,10 @@
     "template-migrations": "pnpm --filter @igrp/template-migrator build"
   },
   "devDependencies": {
-    "@changesets/cli": "^2.31.0",
-    "dotenv-cli": "^11.0.0",
-    "eslint": "^9.39.1",
-    "typescript": "^5.9.3"
+    "@changesets/cli": "2.31.0",
+    "dotenv-cli": "11.0.0",
+    "eslint": "9.39.4",
+    "typescript": "5.9.3"
   },
   "engines": {
     "node": ">=22.x.x"

@@ -48,6 +48,9 @@ interface IGRPTemplateBreadcrumbsProps {
    *   '/settings': 'Settings',
    *   '/settings/users': 'User Management',
    * }
+   *
+   * Define this object once at module scope (or memoize it). Passing a fresh
+   * object literal on every render re-runs the breadcrumb computation.
    */
   routeLabels?: Record<string, string>;
   /**
@@ -66,6 +69,9 @@ interface IGRPTemplateBreadcrumbsProps {
   itemsAfterCollapse?: number;
 }
 
+/** Stable reference so the default does not bust the useMemo dependency every render. */
+const EMPTY_ROUTE_LABELS: Record<string, string> = {};
+
 function formatSegmentLabel(segment: string): string {
   return segment
     .split(/[-_]/)
@@ -78,7 +84,7 @@ function formatSegmentLabel(segment: string): string {
 function IGRPTemplateBreadcrumbs({
   className,
   items,
-  routeLabels = {},
+  routeLabels = EMPTY_ROUTE_LABELS,
   formatLabel,
   homeLabel = 'Home',
   homeHref = '/',
@@ -86,6 +92,9 @@ function IGRPTemplateBreadcrumbs({
   itemsAfterCollapse = 1,
 }: IGRPTemplateBreadcrumbsProps) {
   // Always call — hooks cannot be conditional. Ignored when items is provided.
+  // Under Next `cacheComponents`/PPR this becomes a DYNAMIC read: if a consumer
+  // enables it and this renders inside a statically-cached shell, wrap the
+  // component in <Suspense> (a fallback can reuse controlled mode with items={[]}).
   const segments = useSelectedLayoutSegments();
   const isMobile = useIsMobile();
   const containerRef = useRef<HTMLOListElement>(null);

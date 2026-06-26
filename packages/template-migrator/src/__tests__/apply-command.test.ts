@@ -142,6 +142,41 @@ describe("apply captures undo payloads (TM-1 phase 2a)", () => {
   });
 });
 
+describe("apply rolls back already-executed steps on mid-migration failure", () => {
+  it("restores the overwritten file and writes no lock entry when a later step throws", async () => {
+    writeFileAt(appRoot, "src/a.ts", "ORIGINAL A\n");
+    writeFileAt(payloadDir, "30/src/a.ts", "MIGRATED A\n");
+    // NOTE: payload 30/src/b.ts is intentionally NOT written → step 2 throws ENOENT.
+
+    manifestRef.current = {
+      version: 1,
+      cliVersion: "test",
+      template: "demo-v1",
+      migrations: [
+        {
+          id: "30-partial-fail",
+          date: "2026-06-26",
+          requires: [],
+          targetFrameworkVersion: null,
+          guideHref: "30.MIGRATIONS-26062026.md",
+          contentHash: "30303030303030303",
+          steps: [
+            { type: "file.write", mode: "replace", path: "src/a.ts", from: "30/src/a.ts" },
+            { type: "file.write", mode: "replace", path: "src/b.ts", from: "30/src/b.ts" },
+          ],
+        },
+      ],
+    };
+
+    await apply(appRoot, { yes: true, payloadDir });
+
+    // Step 1's file was unwound back to its true pre-migration content.
+    expect(readFileSync(join(appRoot, "src/a.ts"), "utf8")).toBe("ORIGINAL A\n");
+    // No lock entry — migration is still pending, so a re-run re-baselines cleanly.
+    expect(readLock(appRoot).applied).toHaveLength(0);
+  });
+});
+
 describe("apply self-heals the template identifier", () => {
   it("upgrades a stale demo-legacy lock to the current manifest template", async () => {
     // An app previously migrated under the former "demo-legacy" identifier.

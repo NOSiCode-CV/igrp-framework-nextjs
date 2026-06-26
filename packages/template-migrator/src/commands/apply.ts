@@ -1,6 +1,6 @@
 import { createInterface } from "readline";
-import { existsSync, readFileSync, statSync } from "fs";
-import { join } from "path";
+import { existsSync, mkdirSync, readFileSync, statSync, writeFileSync } from "fs";
+import { dirname, join } from "path";
 import { getManifest } from "../manifest.js";
 import { readLock, writeLock } from "../lock.js";
 import { executeStep } from "../apply.js";
@@ -76,7 +76,30 @@ export async function apply(
       }
     } catch (err) {
       console.error(`  ✗ Error: ${(err as Error).message}`);
-      console.error("  Migration aborted. Run again to resume.");
+      // Transactional unwind: reverse the steps that already ran THIS migration
+      // so disk returns to its pre-migration state. Without this, a re-run
+      // re-captures undo baselines from already-mutated files, silently
+      // corrupting the recorded "original" content used by rollback.
+      for (const undo of [...undoSteps].reverse()) {
+        try {
+          const undoRec = undo as { path?: string; from?: string; patch?: string };
+          const isPlaceholder = undoRec.from === "__undo__" || undoRec.patch === "__undo__";
+          if (isPlaceholder) {
+            const p = undoRec.path;
+            const content = p !== undefined ? undoPayloads[p] : undefined;
+            if (p !== undefined && content !== undefined) {
+              const dest = join(appRoot, p);
+              mkdirSync(dirname(dest), { recursive: true });
+              writeFileSync(dest, content, "utf8");
+            }
+          } else {
+            executeStep(undo, appRoot, opts.payloadDir);
+          }
+        } catch (unwindErr) {
+          console.error(`  ✗ Unwind step failed: ${(unwindErr as Error).message}`);
+        }
+      }
+      console.error("  Migration aborted and rolled back. Fix the cause, then re-run.");
       return;
     }
 

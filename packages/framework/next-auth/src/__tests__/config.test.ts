@@ -379,6 +379,22 @@ describe('withIGRPAuth — callbacks.redirect', () => {
     );
   });
 
+  it('rejects a backslash protocol-relative bypass (open-redirect guard)', async () => {
+    const redirect = await getRedirect();
+    const result = await redirect({ url: '/\\evil.com', baseUrl: APP_BASE });
+    expect(result).toBe(
+      `${REDIRECT_ENV.NEXTAUTH_URL_INTERNAL}${REDIRECT_ENV.NEXT_PUBLIC_IGRP_APP_HOME_SLUG}`,
+    );
+  });
+
+  it('rejects a path-traversal callbackUrl', async () => {
+    const redirect = await getRedirect();
+    const result = await redirect({ url: '/a/../../admin', baseUrl: APP_BASE });
+    expect(result).toBe(
+      `${REDIRECT_ENV.NEXTAUTH_URL_INTERNAL}${REDIRECT_ENV.NEXT_PUBLIC_IGRP_APP_HOME_SLUG}`,
+    );
+  });
+
   it('defers to callbackExtensions.redirect when provided', async () => {
     const withIGRPAuth = await getFactory();
     const customRedirect = vi.fn().mockResolvedValue('/custom');

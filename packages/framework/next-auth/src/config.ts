@@ -656,10 +656,15 @@ export function withIGRPAuth(options: IGRPAuthOptions = {}): IGRPAuthInstance {
         // No useful callbackUrl — land on home.
         if (!url || url === baseUrl || url === `${baseUrl}/`) return home;
 
-        // Relative same-origin path (e.g. "/some/page") — resolve against baseUrl.
-        // Protocol-relative ("//evil.com/…") is rejected as an open-redirect vector.
+        // Relative same-origin path (e.g. "/some/page") — validate through the
+        // shared sanitizer (rejects "//", "/\", %5C, and "/../" traversal), then
+        // resolve against baseUrl. sanitizeRedirectUrl returns the relative path
+        // for relative input, so re-prefix baseUrl to honor NextAuth's
+        // absolute-URL redirect contract.
         if (url.startsWith('/') && !url.startsWith('//')) {
-          return `${baseUrl}${url}`;
+          const safe = sanitizeRedirectUrl(url, baseUrl, '');
+          if (safe && safe.startsWith('/')) return `${baseUrl}${safe}`;
+          return home;
         }
 
         // Absolute URL — only honor when it matches the app origin.

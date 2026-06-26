@@ -174,6 +174,8 @@ describe("apply rolls back already-executed steps on mid-migration failure", () 
     expect(readFileSync(join(appRoot, "src/a.ts"), "utf8")).toBe("ORIGINAL A\n");
     // No lock entry — migration is still pending, so a re-run re-baselines cleanly.
     expect(readLock(appRoot).applied).toHaveLength(0);
+    // step 2 threw before writing, so the half-written file must not exist
+    expect(existsSync(join(appRoot, "src/b.ts"))).toBe(false);
   });
 });
 

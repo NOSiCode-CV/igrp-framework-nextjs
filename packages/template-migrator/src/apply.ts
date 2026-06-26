@@ -51,6 +51,8 @@ export function executeStep(
         const newContent = existing.trimEnd() + "\n\n" + lines.join("\n");
         writeFileSync(envPath, newContent, "utf8");
       }
+      // NOTE: env.add additions are not unwound — replaying this undo is a no-op
+      // (executeStep skips keys already present). env keys are additive/idempotent.
       return { type: "env.add", file: step.file, keys: step.keys };
     }
     case "deps.bump": {

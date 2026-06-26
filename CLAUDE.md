@@ -61,6 +61,7 @@ packages/
     next-types/               → @igrp/framework-next-types  (shared TS types; depends on next-auth types)
     next-ui/                  → @igrp/framework-next-ui     (client template chrome)
     next/                     → @igrp/framework-next        (server entry: IGRPLayout, IGRPRootLayout, igrpBuildConfig, API client)
+  template-migrator/          → @igrp/template-migrator     (CLI `igrp-migrate`; applies template migrations to consumer apps; drift gate)
 templates/
   demo-v1/                → @igrp/framework-next-template  (canonical reference template — the only one in the repo)
 scripts/                      → repo utilities (e.g. migrate-primitive-names.mjs)
@@ -192,5 +193,15 @@ Source: `packages/design-system/src/components/` — horizon/, primitives/, cust
 | `design-system` | SWC + Babel | yes | yes |
 | `framework-next-ui` | SWC + Babel | yes | yes |
 | `framework-next` | SWC + Babel | yes | no |
+| `template-migrator` | tsup (+ `tsx scripts/pack.ts` prebuild) | no | no |
 
 SWC+Babel pipeline: `build:swc` → `build:babel` (React Compiler pass) → `build:types` (emit `.d.ts`). Escape hatch when the React Compiler misbehaves: `build:without_reactcompiler`.
+
+## Tests
+
+There is **no root `test` script** — tests live in two packages and use **Vitest**:
+
+- `pnpm --filter @igrp/template-migrator test` — runs `vitest run` (migration logic). Its `release` script runs `check:drift` first (`tsx scripts/check-drift.ts`), which fails the publish if `templates/demo-v1` has drifted from the shipped migrations.
+- `packages/design-system-storybook` — `test:vitest` (component) and `test-storybook` (Playwright snapshots; Storybook must be running).
+
+Run a **single test**: `pnpm --filter @igrp/template-migrator exec vitest run path/to/file.test.ts -t "test name"` (drop `run` for watch mode). The `-t` flag filters by test/describe name.

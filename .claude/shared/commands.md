@@ -35,3 +35,9 @@
 
 - `pnpm migrate:primitives` — dry-run
 - `pnpm migrate:primitives:apply` — rewrite files
+
+## Template migrator (`packages/template-migrator` — `@igrp/template-migrator`, CLI `igrp-migrate`)
+
+- `pnpm template-migrations` — build the migrator (`pnpm --filter @igrp/template-migrator build`)
+- `pnpm --filter @igrp/template-migrator test` — Vitest
+- `pnpm --filter @igrp/template-migrator check:drift` — fail if `templates/demo-v1` drifted from shipped migrations (runs in `release`)

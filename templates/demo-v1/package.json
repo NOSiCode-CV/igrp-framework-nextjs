@@ -12,6 +12,9 @@
   ],
   "author": "IGRP Team",
   "license": "MIT",
+  "engines": {
+    "node": ">=22.x.x"
+  },
   "scripts": {
     "dev": "next dev --turbopack",
     "build": "pnpm format && next build --turbopack",

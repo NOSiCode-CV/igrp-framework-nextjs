@@ -4,6 +4,9 @@
   "description": "IGRP Framework for Next.js | Auth",
   "license": "MIT",
   "type": "module",
+  "engines": {
+    "node": ">=22.x.x"
+  },
   "sideEffects": false,
   "exports": {
     ".": {

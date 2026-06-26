@@ -39,17 +39,24 @@ export async function fetchAppsByUser() {
       const callbackUrl = sanitizeRedirectUrl(h.get('x-current-path'), undefined, '');
       redirect(callbackUrl ? `/login?callbackUrl=${encodeURIComponent(callbackUrl)}` : '/login');
     }
+    // Non-auth failure (timeout / network / 5xx): surface it so the layout's
+    // error boundary engages instead of rendering an empty list that looks like
+    // a zero-permission user. The action layer (actions/index.ts) catches this
+    // into ActionResult; SidebarDataProvider propagates to its boundary.
     logger.error('[apps-by-user] Erro ao carregar os dados da aplicação.', error);
-    return [];
+    throw error;
   }
 }
 
 export async function fetchAppByCode(appCode: string) {
+  // Local validation: throw directly to the caller. Keeping this outside the
+  // try avoids mislabeling a missing-appCode bug as a generic AM-fetch failure
+  // and re-logging it under '[app-by-code] Não foi possível obter...'.
+  if (!appCode)
+    throw new Error(
+      '[app-by-code]: O Modo de Visualização não está ativo. Quando está desativado, é necessário indicar o código da aplicação. Não foi encontrado nenhum código da aplicação.',
+    );
   try {
-    if (!appCode)
-      throw new Error(
-        '[app-by-code]: O Modo de Visualização não está ativo. Quando está desativado, é necessário indicar o código da aplicação. Não foi encontrado nenhum código da aplicação.',
-      );
     return await getCachedAppByCode(appCode);
   } catch (error) {
     if (error instanceof ApiClientError && (error.status === 401 || error.status === 403)) {
@@ -57,7 +64,11 @@ export async function fetchAppByCode(appCode: string) {
       const callbackUrl = sanitizeRedirectUrl(h.get('x-current-path'), undefined, '');
       redirect(callbackUrl ? `/login?callbackUrl=${encodeURIComponent(callbackUrl)}` : '/login');
     }
+    // Non-auth failure (timeout / network / 5xx): surface it so the layout's
+    // error boundary engages instead of rendering a null app that silently
+    // breaks the layout. The action layer (actions/index.ts) catches this
+    // into ActionResult; SidebarDataProvider propagates to its boundary.
     logger.error('[app-by-code] Não foi possível obter os dados da aplicação.', error);
-    return null;
+    throw error;
   }
 }

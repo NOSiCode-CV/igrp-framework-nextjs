@@ -31,7 +31,11 @@ export async function fetchMenus(appCode: string) {
       const callbackUrl = sanitizeRedirectUrl(h.get('x-current-path'), undefined, '');
       redirect(callbackUrl ? `/login?callbackUrl=${encodeURIComponent(callbackUrl)}` : '/login');
     }
+    // Non-auth failure (timeout / network / 5xx): surface it so the layout's
+    // error boundary engages instead of rendering an empty menu that looks like
+    // a zero-permission user. The action layer (actions/index.ts) catches this
+    // into ActionResult; SidebarDataProvider propagates to its boundary.
     logger.error('[igrp-menus] Erro ao carregar os menus da aplicação.', error);
-    return [];
+    throw error;
   }
 }

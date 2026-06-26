@@ -222,7 +222,7 @@ interface IGRPComboboxProps extends Omit<IGRPInputProps, "onChange"> {
 function IGRPCombobox({
   variant = "single",
   options,
-  value = "",
+  value,
   onChange,
   placeholder = "Select items...",
   className,

@@ -2,7 +2,7 @@ import { type NextRequest, NextResponse } from "next/server";
 
 import { auth } from "@/lib/auth";
 import { LOGOUT_PENDING_COOKIE } from "@/lib/logout-pending";
-import { sanitizeCallbackUrl } from "@/lib/utils";
+import { isAuthBypass, sanitizeCallbackUrl } from "@/lib/utils";
 
 /** Security headers applied to all responses in production. */
 const SECURITY_HEADERS: Record<string, string> = {
@@ -87,7 +87,9 @@ export async function middleware(request: NextRequest) {
     return withSecurityHeaders(NextResponse.redirect(loginUrl));
   };
 
-  if (auth.isAuthDisabled() || auth.isPreviewMode()) {
+  // Use the template's single hardened bypass predicate (handles quoted /
+  // whitespaced env values) so middleware agrees with the rest of the app.
+  if (isAuthBypass()) {
     if (isAuthUiPath(pathname)) {
       return withSecurityHeaders(
         NextResponse.redirect(new URL(`${BASE_PATH}/`, request.url)),

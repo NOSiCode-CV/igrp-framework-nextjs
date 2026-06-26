@@ -35,7 +35,7 @@ export interface IGRPRoleDepartmentArgs {
 }
 
 export interface IGRPMenuItemArgs {
-  id: number;
+  id?: number;
   name: string;
   code: string;
   type: IGRPMenuType;

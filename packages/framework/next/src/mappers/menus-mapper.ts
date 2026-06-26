@@ -7,7 +7,7 @@ import type {
 } from '@igrp/framework-next-types';
 
 const mapMenu = (menu: MenuEntryDTO): IGRPMenuItemArgs => ({
-  id: menu.id as number,
+  id: menu.id,
   code: menu.code,
   name: menu.name,
   type: menu.type as IGRPMenuType,

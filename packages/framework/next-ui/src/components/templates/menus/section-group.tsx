@@ -26,9 +26,9 @@ export function SectionGroup({ section, pathname }: SectionGroupProps) {
       <SidebarMenu role="navigation">
         {section.nodes.map((node) =>
           node.kind === 'folder' ? (
-            <FolderMenuItem key={`folder-${node.item.id}`} node={node} pathname={pathname} />
+            <FolderMenuItem key={`folder-${node.item.id ?? node.item.code}`} node={node} pathname={pathname} />
           ) : (
-            <LeafMenuItem key={`leaf-${node.item.id}`} node={node} pathname={pathname} />
+            <LeafMenuItem key={`leaf-${node.item.id ?? node.item.code}`} node={node} pathname={pathname} />
           ),
         )}
       </SidebarMenu>

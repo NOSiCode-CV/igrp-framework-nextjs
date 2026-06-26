@@ -48,7 +48,7 @@ export function FolderMenuItem({ node, pathname }: FolderMenuItemProps) {
           <DropdownMenuContent side="right" align="start" className={cn('min-w-48')}>
             {children.map((child) => (
               <SubLeafLink
-                key={`dd-${child.item.id}`}
+                key={`dd-${child.item.id ?? child.item.code}`}
                 node={child}
                 variant="dropdown"
                 pathname={pathname}
@@ -86,7 +86,7 @@ export function FolderMenuItem({ node, pathname }: FolderMenuItemProps) {
             <SidebarMenuSub>
               {children.map((child) => (
                 <SubLeafLink
-                  key={`col-${child.item.id}`}
+                  key={`col-${child.item.id ?? child.item.code}`}
                   node={child}
                   variant="collapsible"
                   pathname={pathname}

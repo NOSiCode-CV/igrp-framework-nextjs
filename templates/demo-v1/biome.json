@@ -9,15 +9,18 @@
     "ignoreUnknown": true,
     "includes": [
       "**",
-      "!node_modules",
       "!.next",
+      "!.trae",
+      "!docs",
+      "!node_modules",      
       "!dist",
       "!build",
       "!**/*.css",
       "!.igrpstudio",
       "!src/app/(igrp)/(generated)",
       "!.igrp-migrations-lock.json",
-      "!.npmignore"
+      "!.npmignore",
+      "!.gitignore"
     ]
   },
   "formatter": {

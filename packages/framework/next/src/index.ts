@@ -1,5 +1,9 @@
-// IMPORTANT: this file cannot use any wildcard exports because it is wrapped in a `use client` boundary
-// IMPORTANT: do _not_ alias any of the exports in this file, this will cause a mismatch between the unbundled exports
+// IMPORTANT: this is the SERVER entry of @igrp/framework-next. Do NOT add a
+// `'use client'` directive here — it re-exports React Server Components
+// (IGRPRootLayout), `server-only` modules, and server-side helpers; marking it
+// client would pull server-only code into client bundles and break the build.
+// IMPORTANT: keep explicit named re-exports (no wildcard `export *`, no
+// aliasing) so the emitted unbundled exports match the source 1:1.
 
 export { IGRPGlobalLoading } from './components/global-loading';
 

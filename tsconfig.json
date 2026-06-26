@@ -17,8 +17,7 @@
     "sourceMap": true,
     "composite": true
   },
-  "references": [   
-    { "path": "./templates/demo" },
+  "references": [
     { "path": "./templates/demo-v1" },
     { "path": "./packages/design-system" },
     { "path": "./packages/design-system-storybook" },

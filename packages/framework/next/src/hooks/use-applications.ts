@@ -1,15 +1,15 @@
-import { unstable_cache } from 'next/cache';
+import { cache } from 'react';
 import { ApiClientError, AccessManagementClient } from '@igrp/platform-access-management-client-ts';
 import { redirect } from 'next/navigation';
 import { headers } from 'next/headers';
-
 import { sanitizeRedirectUrl } from '@igrp/framework-next-auth/sanitize';
 
 import { igrpGetAccessClientConfig } from '../lib/api-config';
 import { mapperApplications } from '../mappers/applications-mapper';
 import { logger } from '../logger';
 
-async function fetchAppsByUserRaw(token: string, baseUrl: string) {
+const getCachedAppsByUser = cache(async function fetchAppsByUserOnce() {
+  const { token, baseUrl } = igrpGetAccessClientConfig();
   const client = AccessManagementClient.create({
     baseUrl,
     timeout: 10_000,
@@ -17,9 +17,10 @@ async function fetchAppsByUserRaw(token: string, baseUrl: string) {
   });
   const result = await client.users.getCurrentUserApplications();
   return mapperApplications(result);
-}
+});
 
-async function fetchAppByCodeRaw(appCode: string, token: string, baseUrl: string) {
+const getCachedAppByCode = cache(async function fetchAppByCodeOnce(appCode: string) {
+  const { token, baseUrl } = igrpGetAccessClientConfig();
   const client = AccessManagementClient.create({
     baseUrl,
     timeout: 10_000,
@@ -27,44 +28,11 @@ async function fetchAppByCodeRaw(appCode: string, token: string, baseUrl: string
   });
   const result = await client.applications.getApplications({ code: appCode });
   return mapperApplications(result)[0] ?? null;
-}
-
-// Hoisted: static tag 'igrp-apps' allows module-level declaration.
-const getCachedAppsByUser = unstable_cache(fetchAppsByUserRaw, ['igrp-apps'], {
-  tags: ['igrp-apps'],
-  revalidate: 300,
 });
-
-// One unstable_cache wrapper per appCode — created lazily, stored in a Map.
-// Capped at MAX_CACHE_ENTRIES to prevent unbounded memory growth.
-const MAX_CACHE_ENTRIES = 50;
-const _appByCodeCaches = new Map<
-  string,
-  (token: string, baseUrl: string) => ReturnType<typeof fetchAppByCodeRaw>
->();
-
-function getAppByCodeCache(appCode: string) {
-  if (!_appByCodeCaches.has(appCode)) {
-    if (_appByCodeCaches.size >= MAX_CACHE_ENTRIES) {
-      const oldestKey = _appByCodeCaches.keys().next().value;
-      if (oldestKey !== undefined) _appByCodeCaches.delete(oldestKey);
-    }
-    _appByCodeCaches.set(
-      appCode,
-      unstable_cache(
-        (token: string, baseUrl: string) => fetchAppByCodeRaw(appCode, token, baseUrl),
-        ['igrp-app-by-code', appCode],
-        { tags: [`igrp-app-${appCode}`], revalidate: 300 },
-      ),
-    );
-  }
-  return _appByCodeCaches.get(appCode)!;
-}
 
 export async function fetchAppsByUser() {
   try {
-    const { token, baseUrl } = igrpGetAccessClientConfig();
-    return await getCachedAppsByUser(token, baseUrl);
+    return await getCachedAppsByUser();
   } catch (error) {
     if (error instanceof ApiClientError && (error.status === 401 || error.status === 403)) {
       const h = await headers();
@@ -82,8 +50,7 @@ export async function fetchAppByCode(appCode: string) {
       throw new Error(
         '[app-by-code]: O Modo de Visualização não está ativo. Quando está desativado, é necessário indicar o código da aplicação. Não foi encontrado nenhum código da aplicação.',
       );
-    const { token, baseUrl } = igrpGetAccessClientConfig();
-    return await getAppByCodeCache(appCode)(token, baseUrl);
+    return await getCachedAppByCode(appCode);
   } catch (error) {
     if (error instanceof ApiClientError && (error.status === 401 || error.status === 403)) {
       const h = await headers();

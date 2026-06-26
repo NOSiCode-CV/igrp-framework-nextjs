@@ -1,3 +1,5 @@
+'use client';
+
 import { cn, IGRPIcon } from '@igrp/igrp-framework-react-design-system';
 
 interface IGRPTemplateLoadingProps {

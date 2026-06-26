@@ -1,3 +1,5 @@
+'use client';
+
 import Link from 'next/link';
 import { IGRPButton, IGRPImage, cn } from '@igrp/igrp-framework-react-design-system';
 

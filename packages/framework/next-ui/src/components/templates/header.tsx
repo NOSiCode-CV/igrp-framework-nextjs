@@ -1,5 +1,6 @@
 'use client';
 
+import { useEffect } from 'react';
 import type { IGRPHeaderDataArgs } from '@igrp/framework-next-types';
 import {
   cn,
@@ -34,7 +35,12 @@ function IGRPTemplateHeader({
 }: IGRPTemplateHeaderProps) {
   const { igrpToast } = useIGRPToast();
 
-  if (!data) {
+  // Warn (dev) + toast when no header data is configured. This MUST run in an
+  // effect, not during render — calling igrpToast() during render updates the
+  // toaster provider mid-render (a React anti-pattern, and impure under the
+  // React Compiler).
+  useEffect(() => {
+    if (data) return;
     console.info(
       '[header-template] Cabeçalho do IGRP não tem dados, define os dados no src/igrp.template.config.',
     );
@@ -44,8 +50,9 @@ function IGRPTemplateHeader({
         '[header-template] Cabeçalho do IGRP não tem dados, define os dados no src/igrp.template.config.',
       duration: 10000,
     });
-    return;
-  }
+  }, [data, igrpToast]);
+
+  if (!data) return null;
 
   const {
     user,

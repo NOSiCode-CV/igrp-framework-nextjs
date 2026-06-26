@@ -73,16 +73,21 @@ function IGRPSegmentError({
   retryingLabel = 'A tentar...',
   errorRefLabel = 'ID de referência:',
 }: IGRPSegmentErrorProps) {
-  if (children) return <>{children}</>;
-
   const [isResetting, setIsResetting] = useState(false);
 
   useEffect(() => {
+    // When custom children are provided this boundary renders them verbatim and
+    // does nothing else — but the hooks above MUST still run on every render
+    // (Rules of Hooks), so the children short-circuit lives here and below the
+    // hooks, never before them.
+    if (children) return;
     unstable_rethrow(error);
     // Basic dev-time logging. Templates should compose a `reportError` hook
     // above this boundary for production observability.
     console.error('[IGRPSegmentError]', error);
-  }, [error]);
+  }, [error, children]);
+
+  if (children) return <>{children}</>;
 
   const { title, description } = resolveCopy?.(error) ?? DEFAULT_COPY;
 

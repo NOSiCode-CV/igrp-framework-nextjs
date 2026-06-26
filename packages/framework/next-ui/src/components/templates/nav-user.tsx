@@ -18,7 +18,6 @@ import {
   igrpGetInitials,
   IGRPIcon,
 } from '@igrp/igrp-framework-react-design-system';
-import { getLocationOriginURL } from '../../lib/utils';
 
 interface IGRPTemplateNavUserProps {
   user?: IGRPUserArgs;
@@ -50,17 +49,17 @@ function IGRPTemplateNavUser({
 
   const handleUserUrl = () => {
     if (userProfileUrl) return userProfileUrl;
-    return `${getLocationOriginURL()}/profile`;
+    return '/profile';
   };
 
   const handleNotificationsUrl = () => {
     if (notificationsUrl) return notificationsUrl;
-    return `${getLocationOriginURL()}/notifications`;
+    return '/notifications';
   };
 
   const handleSettingsUrl = () => {
     if (settingsUrl) return settingsUrl;
-    return `${getLocationOriginURL()}/setting`;
+    return '/setting';
   };
 
   return (

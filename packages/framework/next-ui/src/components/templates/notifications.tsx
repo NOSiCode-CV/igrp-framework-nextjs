@@ -15,7 +15,6 @@ import {
 } from '@igrp/igrp-framework-react-design-system';
 import type { IGRPNotificationArgs } from '@igrp/framework-next-types';
 import Link from 'next/link';
-import { getLocationOriginURL } from '../../lib/utils';
 
 interface IGRPTemplateNotificationsProps {
   notifications: IGRPNotificationArgs[];
@@ -32,8 +31,7 @@ function IGRPTemplateNotifications({
   const unreadCount = notifications.filter((n) => !n.isRead).length;
 
   const handleUrl = () => {
-    const _url = getLocationOriginURL();
-    return notificationsUrl ? notificationsUrl : `${_url}/notifications`;
+    return notificationsUrl ? notificationsUrl : '/notifications';
   };
 
   return (

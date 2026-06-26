@@ -43,4 +43,17 @@ describe('sanitizeRedirectUrl — open-redirect hardening', () => {
   it('allows a same-origin absolute URL (returns path+search)', () => {
     expect(sanitizeRedirectUrl('http://localhost:3000/x?a=1', ORIGIN, '/safe')).toBe('/x?a=1');
   });
+
+  it('rejects a tab-injection protocol-relative bypass', () => {
+    expect(sanitizeRedirectUrl('/\t/evil.com', ORIGIN, '/safe')).toBe('/safe');
+  });
+
+  it('rejects newline and carriage-return control characters', () => {
+    expect(sanitizeRedirectUrl('/\n/evil.com', ORIGIN, '/safe')).toBe('/safe');
+    expect(sanitizeRedirectUrl('/\r/evil.com', ORIGIN, '/safe')).toBe('/safe');
+  });
+
+  it('rejects a backslash when baseOrigin is absent (the hook call shape)', () => {
+    expect(sanitizeRedirectUrl('/\\evil.com', undefined, '')).toBe('');
+  });
 });

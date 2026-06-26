@@ -40,6 +40,13 @@ export function sanitizeRedirectUrl(
   }
   if (trimmed.includes('\\') || decoded.includes('\\')) return fallback;
 
+  // Reject C0 control characters and DEL (raw or decoded). WHATWG URL parsing
+  // strips \t \n \r, so "/\t/evil.com" normalizes to "//evil.com" — a
+  // protocol-relative off-origin redirect the "//" guard below would miss.
+  if (/[\x00-\x1f\x7f]/.test(trimmed) || /[\x00-\x1f\x7f]/.test(decoded)) {
+    return fallback;
+  }
+
   if (trimmed.startsWith('/') && !trimmed.startsWith('//')) {
     // Reject path traversal by segment (on the decoded path, ignoring query/hash),
     // so "/a/../b" and "/a/%2e%2e/b" are rejected while "/file..name" and a ".."

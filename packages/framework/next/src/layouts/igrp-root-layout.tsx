@@ -19,12 +19,9 @@ export async function IGRPRootLayout({ children, config }: IGRPRootLayoutArgs) {
     appInformation,
     apiManagementConfig,
     appCode,
-    layoutMockData,
   } = config;
 
   const { session, activeThemeValue, isScaled } = layout;
-
-  const sidebarData = await layoutMockData.getSidebarData();
 
   // Validate Access Management config synchronously during render. Any
   // misconfiguration throws `IgrpConfigError('IGRP_ACCESS_MANAGEMENT_CONFIG_MISSING')`,

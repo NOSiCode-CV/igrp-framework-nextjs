@@ -1,10 +1,10 @@
-import { Session } from '@igrp/framework-next-auth';
+import type { Session } from '@igrp/framework-next-auth';
 import type { SessionProviderProps } from '@igrp/framework-next-auth/client';
 
 import type { IGRPMenuItemArgs } from './access-management';
-import { IGRPHeaderDataArgs } from './header';
-import { IGRPSidebarDataArgs } from './sidebar';
-import { IGRPPackageJson, IGRPToasterPosition } from './globals';
+import type { IGRPHeaderDataArgs } from './header';
+import type { IGRPSidebarDataArgs } from './sidebar';
+import type { IGRPPackageJson, IGRPToasterPosition } from './globals';
 
 export type IGRPConfigArgs = {
   appCode: string;

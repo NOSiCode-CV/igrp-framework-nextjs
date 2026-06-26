@@ -3,6 +3,8 @@ import { ApiClientError, AccessManagementClient } from '@igrp/platform-access-ma
 import { redirect } from 'next/navigation';
 import { headers } from 'next/headers';
 
+import { sanitizeRedirectUrl } from '@igrp/framework-next-auth/sanitize';
+
 import { igrpGetAccessClientConfig } from '../lib/api-config';
 import { mapperApplications } from '../mappers/applications-mapper';
 import { logger } from '../logger';
@@ -66,7 +68,7 @@ export async function fetchAppsByUser() {
   } catch (error) {
     if (error instanceof ApiClientError && (error.status === 401 || error.status === 403)) {
       const h = await headers();
-      const callbackUrl = h.get('x-current-path');
+      const callbackUrl = sanitizeRedirectUrl(h.get('x-current-path'), undefined, '');
       redirect(callbackUrl ? `/login?callbackUrl=${encodeURIComponent(callbackUrl)}` : '/login');
     }
     logger.error('[apps-by-user] Erro ao carregar os dados da aplicação.', error);
@@ -85,7 +87,7 @@ export async function fetchAppByCode(appCode: string) {
   } catch (error) {
     if (error instanceof ApiClientError && (error.status === 401 || error.status === 403)) {
       const h = await headers();
-      const callbackUrl = h.get('x-current-path');
+      const callbackUrl = sanitizeRedirectUrl(h.get('x-current-path'), undefined, '');
       redirect(callbackUrl ? `/login?callbackUrl=${encodeURIComponent(callbackUrl)}` : '/login');
     }
     logger.error('[app-by-code] Não foi possível obter os dados da aplicação.', error);

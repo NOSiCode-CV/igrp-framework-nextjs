@@ -172,3 +172,15 @@ describe("executeStep: unknown type", () => {
     expect(() => executeStep(bogus, appRoot, payloadDir)).toThrow(/Unknown step type/);
   });
 });
+
+describe("executeStep rejects unimplemented patch mode cleanly", () => {
+  it("throws a clear error for file.write mode=patch (no from)", () => {
+    expect(() =>
+      executeStep(
+        { type: "file.write", path: "src/x.ts", mode: "patch", patch: "..." } as unknown as MigrationStep,
+        appRoot,
+        payloadDir,
+      ),
+    ).toThrow(/patch mode is not supported/i);
+  });
+});

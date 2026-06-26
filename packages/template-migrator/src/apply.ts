@@ -22,8 +22,17 @@ export function executeStep(
     case "file.write": {
       const dest = join(appRoot, step.path);
       const existed = existsSync(dest);
+      if (step.type === "file.write" && step.mode === "patch") {
+        throw new Error(
+          `file.write patch mode is not supported (path: ${step.path}). ` +
+            `Use mode: "replace" with a full-file payload via "from".`,
+        );
+      }
+      if (!step.from) {
+        throw new Error(`file.${step.type === "file.create" ? "create" : "write"} requires "from" (path: ${step.path}).`);
+      }
       // Strip leading "payload/" prefix — dist/payload/ is already the base dir
-      const fromRel = step.from!.startsWith("payload/") ? step.from!.slice("payload/".length) : step.from!;
+      const fromRel = step.from.startsWith("payload/") ? step.from.slice("payload/".length) : step.from;
       const src = join(payloadDir, fromRel);
       ensureDir(dest);
       copyFileSync(src, dest);

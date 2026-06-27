@@ -13,6 +13,6 @@ describe("IGRPCombobox uncontrolled mode", () => {
     render(<IGRPCombobox name="x" options={options} placeholder="Pick one" />)
     await userEvent.click(screen.getByRole("combobox"))
     await userEvent.click(screen.getByText("Alpha"))
-    expect(screen.getByRole("combobox")).toHaveTextContent("Alpha") // FAILS: stays "Pick one"
+    expect(screen.getByRole("combobox")).toHaveTextContent("Alpha")
   })
 })

@@ -46,4 +46,9 @@ describe('igrpGetAccessClient', () => {
       expect.objectContaining({ baseUrl: 'https://api.example.com' }),
     );
   });
+
+  it('throws when baseUrl is set but token is empty', async () => {
+    igrpSetAccessClientConfig({ token: '', baseUrl: 'http://am' });
+    expect(() => igrpGetAccessClient()).toThrow(/not configured/i);
+  });
 });

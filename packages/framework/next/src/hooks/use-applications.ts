@@ -27,7 +27,8 @@ const getCachedAppByCode = cache(async function fetchAppByCodeOnce(appCode: stri
     headers: { Authorization: `Bearer ${token}` },
   });
   const result = await client.applications.getApplications({ code: appCode });
-  return mapperApplications(result)[0] ?? null;
+  const apps = mapperApplications(result);
+  return apps.find((a) => a.code === appCode) ?? null;
 });
 
 export async function fetchAppsByUser() {

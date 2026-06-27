@@ -196,6 +196,23 @@ describe("migration 22 swaps isPreviewMode for isAuthBypass", () => {
   });
 });
 
+describe("apply enforces migration prerequisites", () => {
+  it("refuses a migration whose requires are not applied", async () => {
+    // Provide the payload so the step would succeed if the requires guard didn't fire.
+    writeFileAt(payloadDir, "x/src/x.ts", "export const x = 1;\n");
+    manifestRef.current = {
+      version: 1, cliVersion: "test", template: "demo-v1",
+      migrations: [{
+        id: "needs-missing", date: "2026-06-26", requires: ["not-applied"],
+        targetFrameworkVersion: null, guideHref: "x.md", contentHash: "f".repeat(16),
+        steps: [{ type: "file.create", path: "src/x.ts", from: "x/src/x.ts" }],
+      }],
+    };
+    await apply(appRoot, { yes: true, payloadDir });
+    expect(readLock(appRoot).applied).toHaveLength(0);
+  });
+});
+
 describe("apply self-heals the template identifier", () => {
   it("upgrades a stale demo-legacy lock to the current manifest template", async () => {
     // An app previously migrated under the former "demo-legacy" identifier.

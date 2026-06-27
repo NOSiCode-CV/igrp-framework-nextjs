@@ -7,6 +7,7 @@ import {
   existsSync,
   rmSync,
 } from "fs";
+import { join as joinPath } from "path";
 import { tmpdir } from "os";
 import { join, dirname } from "path";
 import { executeStep } from "../apply";
@@ -128,6 +129,45 @@ describe("executeStep: env.add", () => {
   });
 });
 
+describe("env.add idempotency is line-anchored", () => {
+  it("adds the key even when a commented-out occurrence exists", () => {
+    const envPath = joinPath(appRoot, ".env");
+    writeFileSync(envPath, "# AUTH_PROVIDER=none\n", "utf8");
+    executeStep({ type: "env.add", file: ".env", keys: { AUTH_PROVIDER: { doc: "auth", default: "none" } } }, appRoot, payloadDir);
+    const lines = readFileSync(envPath, "utf8").split(/\r?\n/).map((l) => l.trimStart());
+    expect(lines.some((l) => l.startsWith("AUTH_PROVIDER=none"))).toBe(true);
+  });
+});
+
+describe("env.add undo removes the keys it added", () => {
+  it("returns an env.remove undo that strips the key", () => {
+    const envPath = joinPath(appRoot, ".env");
+    writeFileSync(envPath, "EXISTING=1\n", "utf8");
+    const undo = executeStep({ type: "env.add", file: ".env", keys: { NEW_KEY: { doc: "d", default: "v" } } }, appRoot, payloadDir);
+    expect(undo.type).toBe("env.remove");
+    executeStep(undo, appRoot, payloadDir);
+    expect(readFileSync(envPath, "utf8")).not.toMatch(/^\s*NEW_KEY=/m);
+  });
+
+  it("undo lists only the keys this call actually added, not pre-existing ones", () => {
+    const envPath = joinPath(appRoot, ".env");
+    writeFileSync(envPath, "AUTH_PROVIDER=existing\n", "utf8");
+    const undo = executeStep(
+      { type: "env.add", file: ".env", keys: { AUTH_PROVIDER: { doc: "auth", default: "none" }, NEW_KEY: { doc: "d", default: "v" } } },
+      appRoot,
+      payloadDir,
+    );
+    expect(undo).toEqual({ type: "env.remove", file: ".env", keys: ["NEW_KEY"] });
+
+    executeStep(undo, appRoot, payloadDir);
+    const after = readFileSync(envPath, "utf8");
+    // Pre-existing key the consumer owned is left untouched.
+    expect(after).toMatch(/^\s*AUTH_PROVIDER=existing$/m);
+    // The key this call added is removed.
+    expect(after).not.toMatch(/^\s*NEW_KEY=/m);
+  });
+});
+
 describe("executeStep: deps.bump", () => {
   it("updates dependencies and devDependencies and returns previous ranges as undo", () => {
     writeAppFile(
@@ -163,6 +203,14 @@ describe("executeStep: deps.bump", () => {
       manifest: "package.json",
       ranges: { "@igrp/framework-next": "0.1.0-beta.140", typescript: "^5.8.0" },
     });
+  });
+});
+
+describe("executeStep refuses paths that escape the app root", () => {
+  it("throws on a traversal path", () => {
+    expect(() =>
+      executeStep({ type: "file.create", path: "../../escape.ts", from: "x" }, appRoot, payloadDir),
+    ).toThrow(/outside the app root/i);
   });
 });
 

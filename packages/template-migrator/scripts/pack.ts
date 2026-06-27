@@ -3,6 +3,7 @@ import { dirname, join } from "path";
 import { createHash } from "crypto";
 import { fileURLToPath, URL } from "url";
 import { parse as parseYaml } from "yaml";
+import { sortMigrationFiles } from "../src/migration-order.js";
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);
@@ -58,9 +59,9 @@ function main() {
   mkdirSync(OUT_DIR, { recursive: true });
   mkdirSync(PAYLOAD_OUT, { recursive: true });
 
-  const files = readdirSync(MIGRATIONS_DIR)
-    .filter((f) => f.match(/^\d+\.MIGRATIONS.*\.md$/))
-    .sort();
+  const files = sortMigrationFiles(
+    readdirSync(MIGRATIONS_DIR).filter((f) => f.match(/^\d+\.MIGRATIONS.*\.md$/)),
+  );
 
   const migrations = [];
   for (const file of files) {

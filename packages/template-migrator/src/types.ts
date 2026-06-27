@@ -9,6 +9,7 @@ export type MigrationStep =
   | { type: "file.write"; path: string; mode: "replace" | "patch"; from?: string; patch?: string }
   | { type: "file.delete"; path: string }
   | { type: "env.add"; file: string; keys: Record<string, EnvKeySpec> }
+  | { type: "env.remove"; file: string; keys: string[] }
   | { type: "deps.bump"; manifest: string; ranges: Record<string, string> };
 
 export interface MigrationEntry {

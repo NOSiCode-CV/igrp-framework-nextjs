@@ -2,6 +2,7 @@ import { existsSync, readFileSync, readdirSync } from "fs";
 import { dirname, join } from "path";
 import { fileURLToPath } from "url";
 import { parse as parseYaml } from "yaml";
+import { sortMigrationFiles } from "../src/migration-order.js";
 
 // Drift gate: verify that the migration payloads still match the live template.
 //
@@ -75,9 +76,9 @@ function main(): void {
     process.exit(1);
   }
 
-  const files = readdirSync(MIGRATIONS_DIR)
-    .filter((f) => f.match(/^\d+\.MIGRATIONS.*\.md$/))
-    .sort();
+  const files = sortMigrationFiles(
+    readdirSync(MIGRATIONS_DIR).filter((f) => f.match(/^\d+\.MIGRATIONS.*\.md$/)),
+  );
 
   // Collapse all migrations into the final expected state per managed path.
   // Later migrations override earlier ones for the same path.

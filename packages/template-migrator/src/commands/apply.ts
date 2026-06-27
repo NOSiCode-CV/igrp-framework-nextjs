@@ -37,6 +37,12 @@ export async function apply(
   for (const migration of pending) {
     const ver = migration.targetFrameworkVersion ? ` (→ framework ${migration.targetFrameworkVersion})` : "";
     console.log(`── ${migration.id}${ver}`);
+    const missingReqs = (migration.requires ?? []).filter((r) => !appliedIds.has(r));
+    if (missingReqs.length > 0) {
+      console.error(`  ✗ ${migration.id} requires unapplied migration(s): ${missingReqs.join(", ")}`);
+      console.error("  Aborting — apply the prerequisite(s) first.");
+      return;
+    }
     if (!opts.yes) {
       const ok = await confirm(`  Apply ${migration.steps.length} step(s)?`);
       if (!ok) { console.log("  Skipped.\n"); continue; }
@@ -114,6 +120,7 @@ export async function apply(
     };
     lock.applied.push(entry);
     writeLock(appRoot, lock);
+    appliedIds.add(migration.id);
     console.log(`  ✓ done\n`);
   }
 

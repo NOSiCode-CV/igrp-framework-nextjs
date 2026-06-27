@@ -213,6 +213,23 @@ describe("apply enforces migration prerequisites", () => {
   });
 });
 
+describe("migration 23 rewrites the routes helper", () => {
+  it("applies the get-routes payload", async () => {
+    writeFileAt(appRoot, "src/lib/config/get-routes.ts", "OLD\n");
+    writeFileAt(payloadDir, "23/lib/config/get-routes.ts", "let cached;\nexport function getRoutes() {}\n");
+    manifestRef.current = {
+      version: 1, cliVersion: "test", template: "demo-v1",
+      migrations: [{
+        id: "23-per-request-layout-and-routes-cache", date: "2026-06-27",
+        requires: [], targetFrameworkVersion: null, guideHref: "23.MIGRATIONS-27062026.md", contentHash: "3".repeat(16),
+        steps: [{ type: "file.write", mode: "replace", path: "src/lib/config/get-routes.ts", from: "23/lib/config/get-routes.ts" }],
+      }],
+    };
+    await apply(appRoot, { yes: true, payloadDir });
+    expect(readFileSync(join(appRoot, "src/lib/config/get-routes.ts"), "utf8")).toContain("cached");
+  });
+});
+
 describe("apply self-heals the template identifier", () => {
   it("upgrades a stale demo-legacy lock to the current manifest template", async () => {
     // An app previously migrated under the former "demo-legacy" identifier.

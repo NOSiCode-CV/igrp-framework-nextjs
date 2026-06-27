@@ -409,6 +409,15 @@ describe('withIGRPAuth — callbacks.redirect', () => {
     expect(customRedirect).toHaveBeenCalledWith({ url: '/some/page', baseUrl: APP_BASE });
     expect(result).toBe('/custom');
   });
+
+  it('joins NEXTAUTH_URL_INTERNAL and a slug with exactly one slash', async () => {
+    const redirect = await getRedirect({
+      NEXTAUTH_URL_INTERNAL: 'http://localhost:3000/app',
+      NEXT_PUBLIC_IGRP_APP_HOME_SLUG: 'home',
+    });
+    const result = await redirect({ url: APP_BASE, baseUrl: APP_BASE });
+    expect(result).toBe('http://localhost:3000/app/home');
+  });
 });
 
 describe('withIGRPAuth — jwt callback rotation recovery', () => {

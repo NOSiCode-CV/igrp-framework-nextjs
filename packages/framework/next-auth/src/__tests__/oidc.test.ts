@@ -554,6 +554,24 @@ describe('introspectOidcToken', () => {
 
 // ─── configureOidcTokenRecoveryStore ─────────────────────────────────────────
 
+describe('refreshOidcAccessToken — expires_in coercion', () => {
+  it('falls back to 3600s when the IdP returns a non-numeric expires_in', async () => {
+    vi.useFakeTimers();
+    vi.setSystemTime(new Date('2026-01-01T00:00:00.000Z'));
+    try {
+      mockFetch([
+        { url: DISCOVERY_URL, body: MOCK_DISCOVERY },
+        { url: MOCK_DISCOVERY.token_endpoint, body: { access_token: 'new-at', expires_in: 'not-a-number' } },
+      ]);
+      const { refreshOidcAccessToken } = await import('../oidc');
+      const result = await refreshOidcAccessToken(makeToken(), VALID_ENV);
+      expect(result.expiresAt).toBe(Date.now() + 3600 * 1000);
+    } finally {
+      vi.useRealTimers();
+    }
+  });
+});
+
 describe('configureOidcTokenRecoveryStore', () => {
   it('routes getRecoveredToken reads through the injected store', async () => {
     const { configureOidcTokenRecoveryStore, getRecoveredToken } = await import('../oidc');

@@ -333,11 +333,13 @@ async function performRefresh(
 
   const oldRefreshToken = token.refreshToken;
   const newRefreshToken: string = refreshedToken.refresh_token ?? token.refreshToken;
+  const expiresInSec = Number(refreshedToken.expires_in);
+  const safeExpiresIn = Number.isFinite(expiresInSec) && expiresInSec > 0 ? expiresInSec : 3600;
   const refreshed: JWT = {
     ...token,
     accessToken: refreshedToken.access_token,
     idToken: refreshedToken.id_token || token.idToken,
-    expiresAt: Date.now() + (refreshedToken.expires_in ?? 3600) * 1000,
+    expiresAt: Date.now() + safeExpiresIn * 1000,
     refreshToken: newRefreshToken,
     authProviderId: providerId,
     error: undefined,

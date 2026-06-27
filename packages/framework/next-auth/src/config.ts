@@ -649,8 +649,10 @@ export function withIGRPAuth(options: IGRPAuthOptions = {}): IGRPAuthInstance {
         const { url, baseUrl } = params;
         const nextInternalUrl = env.NEXTAUTH_URL_INTERNAL || '';
         const igrpAppHomeSlug = env.NEXT_PUBLIC_IGRP_APP_HOME_SLUG || '';
+        const joinHome = (base: string, slug: string) =>
+          slug ? `${base.replace(/\/+$/, '')}/${slug.replace(/^\/+/, '')}` : base;
         const home = nextInternalUrl
-          ? `${nextInternalUrl}${igrpAppHomeSlug}`
+          ? joinHome(nextInternalUrl, igrpAppHomeSlug)
           : sanitizeRedirectUrl(igrpAppHomeSlug || '/', env.NEXTAUTH_URL ?? baseUrl, '/');
 
         // No useful callbackUrl — land on home.

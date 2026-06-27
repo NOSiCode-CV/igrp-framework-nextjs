@@ -11,10 +11,12 @@ export const formatChartValue = (value: number, valueFormatter?: (value: number)
     return valueFormatter(value)
   }
 
-  if (value >= 1000000) {
-    return `${(value / 1000000).toFixed(1)}M`
-  } else if (value >= 1000) {
-    return `${(value / 1000).toFixed(1)}K`
+  const abs = Math.abs(value)
+  const sign = value < 0 ? "-" : ""
+  if (abs >= 1000000) {
+    return `${sign}${(abs / 1000000).toFixed(1)}M`
+  } else if (abs >= 1000) {
+    return `${sign}${(abs / 1000).toFixed(1)}K`
   }
   return value.toString()
 }
@@ -24,7 +26,7 @@ export const getChartHeight = (
   data: IGRPChartDataItem[] = [],
   height?: number | string,
 ): number | string => {
-  if (height) return typeof height === "number" ? height : height
+  if (height != null) return height
 
   const baseHeight = 40
   const headerHeight = 30
@@ -36,7 +38,7 @@ export const getChartHeight = (
 }
 
 export const getChartWidth = (width?: number | string): number | string => {
-  if (width) return typeof width === "number" ? width : width
+  if (width != null) return width
   return "100%"
 }
 

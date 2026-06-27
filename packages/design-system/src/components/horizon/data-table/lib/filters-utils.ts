@@ -18,7 +18,12 @@ export const IGRPDataTableDateRangeFilterFn: FilterFn<any> = (row, columnId, fil
   const start = new Date(filterValue.from)
   const end = filterValue.to ? new Date(filterValue.to) : undefined
 
-  if (start && end) {
+  // Invalid filter bound → do not filter (show all). Invalid cell date → cannot
+  // be "in range", so exclude. Prevents a misformatted column silently vanishing
+  // with no error.
+  if (Number.isNaN(start.getTime())) return true
+  if (Number.isNaN(date.getTime())) return false
+  if (end && !Number.isNaN(end.getTime())) {
     return date >= start && date <= end
   }
   return date >= start

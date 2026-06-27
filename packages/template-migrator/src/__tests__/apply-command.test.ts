@@ -179,6 +179,23 @@ describe("apply rolls back already-executed steps on mid-migration failure", () 
   });
 });
 
+describe("migration 22 swaps isPreviewMode for isAuthBypass", () => {
+  it("applies the get-session-args payload over the old file", async () => {
+    writeFileAt(appRoot, "src/lib/config/get-session-args.ts", 'import { isPreviewMode } from "../utils";\n');
+    writeFileAt(payloadDir, "22/lib/config/get-session-args.ts", 'import { isAuthBypass } from "../utils";\n');
+    manifestRef.current = {
+      version: 1, cliVersion: "test", template: "demo-v1",
+      migrations: [{
+        id: "22-session-args-auth-bypass", date: "2026-06-26", requires: [],
+        targetFrameworkVersion: null, guideHref: "22.MIGRATIONS-26062026.md", contentHash: "22222222222222222",
+        steps: [{ type: "file.write", mode: "replace", path: "src/lib/config/get-session-args.ts", from: "22/lib/config/get-session-args.ts" }],
+      }],
+    };
+    await apply(appRoot, { yes: true, payloadDir });
+    expect(readFileSync(join(appRoot, "src/lib/config/get-session-args.ts"), "utf8")).toContain("isAuthBypass");
+  });
+});
+
 describe("apply self-heals the template identifier", () => {
   it("upgrades a stale demo-legacy lock to the current manifest template", async () => {
     // An app previously migrated under the former "demo-legacy" identifier.

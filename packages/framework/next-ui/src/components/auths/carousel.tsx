@@ -43,7 +43,7 @@ function IGRPAuthCarousel({ carouselItems, intervalTime = 6000 }: IGRPAuthCarous
   };
 
   return (
-    <div className={cn('relative h-full w-full overflow-hidden bg-slate-900')}>
+    <div className={cn('relative h-full w-full overflow-hidden bg-muted')}>
       <div className={cn('relative h-full')}>
         {carouselItems.map((item, index) => (
           <div
@@ -62,13 +62,15 @@ function IGRPAuthCarousel({ carouselItems, intervalTime = 6000 }: IGRPAuthCarous
               sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
             />
 
+            {/* Fixed light-on-dark contrast: this caption sits over an arbitrary
+                photo, so theme-inverting semantic tokens would harm readability. */}
             <div className={cn('absolute inset-0 bg-black/40')} />
 
             <div className={cn('absolute bottom-0 left-0 right-0 p-8 text-white')}>
               <h2 className={cn('text-3xl font-bold')}>{item.title}</h2>
               <p className={cn('mt-2 text-md text-slate-200')}>{item.description}</p>
 
-              <div className={cn('mt-4 flex justify-start space-x-2')}>
+              <div className={cn('mt-4 flex justify-start gap-2')}>
                 {carouselItems.map((_, idx) => (
                   <Button
                     variant="ghost"

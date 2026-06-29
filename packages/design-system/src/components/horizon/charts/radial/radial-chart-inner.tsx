@@ -154,7 +154,7 @@ function IGRPRadialBarChartInner({
   width,
   className,
   valueFormatter,
-  gridColor = "#e5e7eb",
+  gridColor = "var(--border)",
   backgroundColor,
   footer,
   startAngle = 0,

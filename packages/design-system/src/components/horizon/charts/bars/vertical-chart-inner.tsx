@@ -70,10 +70,10 @@ function IGRPVerticalBarChartInner({
   barRadius = 5,
   barGap = 8,
   barCategoryGap = "30%",
-  gridColor = "#e5e7eb",
+  gridColor = "var(--border)",
   backgroundColor,
-  referenceLineColor = "#e5e7eb",
-  axisColor = "#d1d5db",
+  referenceLineColor = "var(--border)",
+  axisColor = "var(--muted-foreground)",
   tooltipIndicator = "line",
   footer,
 }: IGRPVerticalBarChartProps) {

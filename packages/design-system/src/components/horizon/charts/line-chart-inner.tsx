@@ -73,10 +73,10 @@ function IGRPLineChartInner({
   className,
   valueFormatter,
   labelFormatter = defaultLabelFormatter,
-  gridColor = "#e5e7eb",
+  gridColor = "var(--border)",
   backgroundColor,
-  referenceLineColor = "#e5e7eb",
-  axisColor = "#d1d5db",
+  referenceLineColor = "var(--border)",
+  axisColor = "var(--muted-foreground)",
   tooltipIndicator = "line",
   footer,
 }: IGRPLineChartProps) {

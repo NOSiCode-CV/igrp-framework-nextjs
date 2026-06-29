@@ -127,7 +127,7 @@ function IGRPDataTableButtonAlert({
       <AlertDialogContent className={className}>
         <AlertDialogHeader>
           <AlertDialogTitle>{modalTitle}</AlertDialogTitle>
-          <AlertDialogDescription>{children}</AlertDialogDescription>
+          {children && <AlertDialogDescription>{children}</AlertDialogDescription>}
         </AlertDialogHeader>
 
         {(showCancel || showConfirm) && (

@@ -618,6 +618,7 @@ export function withIGRPAuth(options: IGRPAuthOptions = {}): IGRPAuthInstance {
         return igrpToken;
       },
 
+      // SECURITY: copies accessToken + idToken onto the client session by design (the browser AM client needs accessToken); never log/serialize the session client-side. See the Session type JSDoc in session.ts.
       async session(params) {
         const { session, token } = params;
         const tokenTyped = token as JWT;

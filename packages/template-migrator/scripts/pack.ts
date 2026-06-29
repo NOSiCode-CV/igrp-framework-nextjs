@@ -4,6 +4,7 @@ import { createHash } from "crypto";
 import { fileURLToPath, URL } from "url";
 import { parse as parseYaml } from "yaml";
 import { sortMigrationFiles } from "../src/migration-order.js";
+import { validateRequires } from "../src/validate-requires.js";
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);
@@ -80,6 +81,10 @@ function main() {
     });
     console.log(`  packed ${fm.id}`);
   }
+
+  // Fail the pack if ids aren't unique or a `requires` points forward / at an
+  // unknown id — a bad manifest would permanently deadlock consumer `apply`.
+  validateRequires(migrations);
 
   const manifest = {
     version: 1,

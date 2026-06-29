@@ -8,7 +8,7 @@ import { Circle } from "lucide-react"
 import { igrpColorText } from "../../../lib/colors"
 import { cn } from "../../../lib/utils"
 import type { IGRPInputProps, IGRPOptionsProps } from "../../../types"
-import { FormControl, FormDescription, FormField, FormItem, FormLabel, FormMessage } from "../../primitives/form"
+import { useFormField, FormControl, FormDescription, FormField, FormItem, FormLabel, FormMessage } from "../../primitives/form"
 import { Input } from "../../primitives/input"
 import {
   Select,
@@ -97,6 +97,8 @@ function IGRPSelectField({
   className,
   triggerId,
   triggerAriaLabelledby,
+  triggerAriaInvalid,
+  triggerAriaDescribedBy,
   ...selectProps
 }: {
   value: string
@@ -117,6 +119,8 @@ function IGRPSelectField({
   className?: string
   triggerId?: string
   triggerAriaLabelledby?: string
+  triggerAriaInvalid?: boolean
+  triggerAriaDescribedBy?: string
 } & Omit<React.ComponentProps<typeof Select>, "value" | "onValueChange" | "onOpenChange" | "children">) {
   return (
     <Select value={value} onValueChange={onChange} onOpenChange={onOpenChange} disabled={disabled} {...selectProps}>
@@ -130,6 +134,8 @@ function IGRPSelectField({
         label={label}
         triggerId={triggerId}
         triggerAriaLabelledby={triggerAriaLabelledby}
+        triggerAriaInvalid={triggerAriaInvalid}
+        triggerAriaDescribedBy={triggerAriaDescribedBy}
       />
       <IGRPSelectContent
         showSearch={showSearch}
@@ -142,6 +148,24 @@ function IGRPSelectField({
         showGroup={showGroup}
       />
     </Select>
+  )
+}
+
+/**
+ * @internal Wrapper rendered inside FormItem that reads the form context to wire
+ * aria-invalid / aria-describedby onto the actual SelectTrigger button.
+ */
+function IGRPSelectFieldWithA11y(
+  props: React.ComponentProps<typeof IGRPSelectField>,
+) {
+  const { error, formItemId, formMessageId } = useFormField()
+  return (
+    <IGRPSelectField
+      {...props}
+      triggerId={formItemId}
+      triggerAriaInvalid={!!error}
+      triggerAriaDescribedBy={error ? formMessageId : undefined}
+    />
   )
 }
 
@@ -266,7 +290,7 @@ function IGRPSelect({
             </FormLabel>
           )}
           <FormControl>
-            <IGRPSelectField
+            <IGRPSelectFieldWithA11y
               {...selectFieldProps}
               value={field.value ?? ""}
               onChange={(val) => {
@@ -399,6 +423,8 @@ const IGRPSelectTrigger = ({
   className,
   triggerId,
   triggerAriaLabelledby,
+  triggerAriaInvalid,
+  triggerAriaDescribedBy,
 }: {
   value: string
   options: IGRPOptionsProps[]
@@ -409,10 +435,14 @@ const IGRPSelectTrigger = ({
   className?: string
   triggerId?: string
   triggerAriaLabelledby?: string
+  triggerAriaInvalid?: boolean
+  triggerAriaDescribedBy?: string
 }) => (
   <SelectTrigger
     id={triggerId}
     aria-labelledby={triggerAriaLabelledby}
+    aria-invalid={triggerAriaInvalid || undefined}
+    aria-describedby={triggerAriaDescribedBy}
     className={cn("w-full", className)}
     aria-expanded={isOpen}
   >

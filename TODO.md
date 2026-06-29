@@ -63,3 +63,6 @@ Add the following components to the design system:
 -- design system by registry
 -- design system new components
 -- i8n for template and packages
+-- design system, rich text editor
+-- design system server data table paginated
+

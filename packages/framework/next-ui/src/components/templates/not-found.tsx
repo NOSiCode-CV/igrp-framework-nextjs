@@ -27,7 +27,7 @@ function IGRPTemplateNotFound({
   return (
     <div
       className={cn(
-        'flex min-h-[calc(100vh-12rem)] items-center justify-center bg-background px-4 py-16',
+        'flex min-h-screen items-center justify-center bg-background px-4 py-16',
       )}
     >
       <div className={cn('w-full max-w-2xl')}>

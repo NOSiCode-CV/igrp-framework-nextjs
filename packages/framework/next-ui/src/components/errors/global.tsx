@@ -75,7 +75,7 @@ function IGRPGlobalError({
   const { title, description } = resolveCopy?.(error) ?? DEFAULT_COPY;
 
   return (
-    <div className={cn('flex min-h-[calc(100vh-12rem)] items-center justify-center bg-background')}>
+    <div className={cn('flex min-h-screen items-center justify-center bg-background')}>
       <div className={cn('w-full max-w-3xl')}>
         <div className={cn('text-center')}>
           <Image

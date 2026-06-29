@@ -4,7 +4,7 @@
 // lives in its own file without this directive so the compiler can still memoize it.
 "use no memo"
 
-import { Fragment, useCallback, useEffect, useId, useReducer } from "react"
+import { Fragment, useCallback, useEffect, useId, useMemo, useReducer } from "react"
 import {
   type ColumnDef,
   type ColumnFiltersState,
@@ -54,9 +54,23 @@ import {
  * @see IGRPDataTable
  */
 interface IGRPDataTableProps<TData, TValue> {
-  /** TanStack Table column definitions. */
+  /**
+   * TanStack Table column definitions.
+   *
+   * @remarks This component opts out of the React Compiler (`"use no memo"`,
+   * required by `useReactTable`). The table memoizes everything it derives from
+   * `columns`, but the array identity is the caller's responsibility: define it
+   * at module scope or wrap it in `useMemo`, otherwise a new array on every
+   * parent render rebuilds the column model and resets per-column caches.
+   */
   columns: ColumnDef<TData, TValue>[]
-  /** Table data rows. */
+  /**
+   * Table data rows.
+   *
+   * @remarks Like `columns`, `data` must be referentially stable across renders
+   * (module scope or `useMemo`) — a fresh array each render makes TanStack
+   * recompute its row models. The compiler is off here, so the caller owns this.
+   */
   data: TData[]
   /** Show pagination controls. */
   showPagination?: boolean
@@ -264,21 +278,29 @@ function IGRPDataTable<TData, TValue>({
   const _id = useId()
   const ref = id ?? _id
 
-  const tableHelper = createColumnHelper<TData>()
-  const actionColumn =
-    actions && actions.length > 0
-      ? [
-          tableHelper.display({
-            id: "__igrp_actions__",
-            header: "",
-            cell: ({ row }) => <IGRPDataTableRowActionsCell row={row} actions={actions} />,
-            enableSorting: false,
-            enableHiding: false,
-            size: actions.length <= 2 ? actions.length * 44 : 44,
-          }),
-        ]
-      : []
-  const allColumns = [...columns, ...actionColumn] as ColumnDef<TData, TValue>[]
+  // Column helper is identity-stable per instance (the compiler is off here via
+  // "use no memo", so React's own useMemo owns stabilization).
+  const tableHelper = useMemo(() => createColumnHelper<TData>(), [])
+
+  // allColumns is rebuilt only when the caller's columns or actions change.
+  // Re-running this every render forces useReactTable to reset its column model
+  // (and every faceted/grouped/sorted cache) on any unrelated parent re-render.
+  const allColumns = useMemo(() => {
+    const actionColumn =
+      actions && actions.length > 0
+        ? [
+            tableHelper.display({
+              id: "__igrp_actions__",
+              header: "",
+              cell: ({ row }) => <IGRPDataTableRowActionsCell row={row} actions={actions} />,
+              enableSorting: false,
+              enableHiding: false,
+              size: actions.length <= 2 ? actions.length * 44 : 44,
+            }),
+          ]
+        : []
+    return [...columns, ...actionColumn] as ColumnDef<TData, TValue>[]
+  }, [columns, actions, tableHelper])
 
   // eslint-disable-next-line react-hooks/incompatible-library
   const table = useReactTable({
@@ -342,15 +364,19 @@ function IGRPDataTable<TData, TValue>({
     })
   }, [pageIndex, pageSize, sorting, columnFilters, onQueryChange])
 
-  const filterDescriptors = (columns as IGRPAccessorColumnDef<TData>[])
-    .filter(
-      (col): col is IGRPAccessorColumnDef<TData> & { accessorKey: string } =>
-        "filter" in col &&
-        !!col.filter &&
-        "accessorKey" in col &&
-        typeof (col as { accessorKey?: unknown }).accessorKey === "string",
-    )
-    .map((col) => ({ columnId: col.accessorKey, descriptor: col.filter! }))
+  const filterDescriptors = useMemo(
+    () =>
+      (columns as IGRPAccessorColumnDef<TData>[])
+        .filter(
+          (col): col is IGRPAccessorColumnDef<TData> & { accessorKey: string } =>
+            "filter" in col &&
+            !!col.filter &&
+            "accessorKey" in col &&
+            typeof (col as { accessorKey?: unknown }).accessorKey === "string",
+        )
+        .map((col) => ({ columnId: col.accessorKey, descriptor: col.filter! })),
+    [columns],
+  )
 
   const NotFoundRowSubComponent = (
     <div className={cn("flex items-center gap-2 p-3")}>

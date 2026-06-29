@@ -268,8 +268,17 @@ function IGRPDataTableButtonModal({
         <DialogHeader className={cn("contents space-y-0 text-left")}>
           <DialogTitle className={cn(modalTitle && "border-b px-6 py-4 text-base")}>{modalTitle}</DialogTitle>
 
-          <div className={cn("overflow-y-auto", !modalTitle && "mt-4")}>
-            <DialogDescription asChild>{render ? render(close) : children}</DialogDescription>
+          {/*
+            Short, visually-hidden description satisfies Radix's aria-describedby
+            contract WITHOUT announcing the whole body subtree. The body below is
+            a plain <div>, not <DialogDescription asChild> — asChild cloned via
+            Slot.React.Children.only, which (a) announced the entire form as the
+            dialog description and (b) threw for any multi-root render().
+          */}
+          <DialogDescription className={cn("sr-only")}>{modalTitle || "Conteúdo do diálogo"}</DialogDescription>
+
+          <div data-slot="dialog-body" className={cn("overflow-y-auto", !modalTitle && "mt-4")}>
+            {render ? render(close) : children}
 
             {(showCancel || showConfirm) && (
               <DialogFooter className={cn("px-6 pb-6 sm:justify-start mt-4")}>

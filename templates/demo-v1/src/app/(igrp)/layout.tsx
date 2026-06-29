@@ -4,6 +4,7 @@ import type { IGRPLayoutConfigArgs } from "@igrp/framework-next-types";
 
 import { createConfig } from "@/igrp.template.config";
 import { getLayoutConfig, verifySession } from "@/lib/dal";
+import { IGRPQueryProvider } from "@/providers/query-client";
 
 // Every route under this layout is authenticated and reads the session
 // (cookies/headers) per request, so it can never be statically prerendered.
@@ -23,7 +24,9 @@ export default async function IGRPRootLayout({
 
   return (
     <IGRPSectionPermissions state={claims}>
-      <IGRPLayoutFull config={config}>{children}</IGRPLayoutFull>
+      <IGRPQueryProvider>
+        <IGRPLayoutFull config={config}>{children}</IGRPLayoutFull>
+      </IGRPQueryProvider>
     </IGRPSectionPermissions>
   );
 }

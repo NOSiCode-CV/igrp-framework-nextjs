@@ -62,3 +62,4 @@ Add the following components to the design system:
 -- shadcn latest
 -- design system by registry
 -- design system new components
+-- i8n for template and packages

@@ -10,7 +10,7 @@
 ## How to read this spec
 
 - This is **R2** — it sits on top of `docs/superpowers/specs/2026-06-26-monorepo-deep-review-remediation-design.md` (all 26 items of which have shipped). It does **not** repeat those; a handful of items here **extend** a prior item and say so explicitly (`extends #N`).
-- Items are numbered **1 → 52, highest severity first** (P0 Critical → P3 Low). Fix top-down; do not start a lower band until the band above is merged.
+- Items are numbered **1 → 52, highest severity first** (P0 Critical → P3 Low); **item 7 is withdrawn** (see its stub) — 51 actionable items. Fix top-down; do not start a lower band until the band above is merged.
 - Each item carries a **cluster tag** — `a11y` · `tokens` · `types` · `release` · `template` · `errors` · `perf` · `dx` — so the cross-cutting themes stay visible inside the severity bands. The two dominant net-new clusters are **a11y** (design-system) and **release/template hygiene**.
 - **Verdict** is from source verification: **CONFIRMED** = trigger + wrong output proven in current code; **PLAUSIBLE** = mechanism real but trigger depends on something not observable in-repo (backend response, future input, consumer wiring) — each PLAUSIBLE item names the decision that turns it into a fix or a no-op.
 - Each item lists **exact files**, the **problem**, the **impact**, the **fix direction**, **acceptance criteria**, and the **changeset** package. This is a spec, not a step-by-step plan — TDD steps and full code are produced per-band when the work is scheduled (R2 P0/P1/P2/P3 plan files).
@@ -106,15 +106,9 @@ Copied from `.claude/shared/hard-rules.md` and `dependency-order.md` — every t
 - **Acceptance:** exactly one labeled `navigation` landmark for the sidebar; `<ul>`s keep `list` semantics; axe/Storybook a11y passes. `pnpm build:next-ui` green.
 - **Changeset:** `@igrp/framework-next-ui` (patch).
 
-## 7. Root `release:publish` / `release:all` use `changeset publish` (→ `--tag beta`) — hard-rule violation
+## 7. (Withdrawn) Root `release:publish` / `release:all` scripts
 
-- **Severity:** High · **Verdict:** CONFIRMED · **Cluster:** release · **Package:** repo root (no changeset)
-- **Files:** `package.json:39` (`"release:publish": "changeset publish"`), `:40` (`"release:all": "pnpm release:version && pnpm release:build && pnpm release:publish"`)
-- **Problem:** `hard-rules.md` forbids `changeset publish`/`release:publish` because in pre-release mode it publishes with `--tag beta`; `.changeset/pre.json` confirms `mode: pre, tag: beta`. These scripts are live footguns — `pnpm release:all` ships beta-tagged artifacts, after which `pnpm view <pkg> version` no longer reflects `latest`.
-- **Impact:** A single accidental `pnpm release:all` mis-publishes every package to the wrong dist-tag, contradicting the documented release workflow (`/release-framework`).
-- **Fix:** Remove `release:publish` and `release:all`, or redefine them to fan out to each package's `release` script (`--tag latest`). `release:build`/`release:version` are fine. Add a comment pointing at the hard rule.
-- **Acceptance:** no root script invokes `changeset publish`; `pnpm release:all` (if kept) ends in per-package `release` calls with `--tag latest`, or the script is gone. Verify with the registry query step from `hard-rules.md` before any real publish.
-- **Changeset:** none (repo tooling).
+- **Status:** **Withdrawn 2026-06-29** by maintainer decision. The repo is intentionally on the `0.1.0-beta.*` pre-release line, so the `changeset publish` (`--tag beta`) release scripts are correct for now and are deliberately left as-is. Not an actionable item; do not re-file while the repo remains in beta pre-release mode. (Item number retained so the band plans' `spec #N` references stay stable.)
 
 ## 8. `.env.example` omits the `NEXTAUTH_URL` + basePath + `/api/auth` rule
 
@@ -156,15 +150,15 @@ Copied from `.claude/shared/hard-rules.md` and `dependency-order.md` — every t
 - **Acceptance:** packing a migration set with a forward/typo'd/duplicate `requires` fails at pack time with a clear error; a valid set packs unchanged. Test in `src/__tests__`. `pnpm --filter @igrp/template-migrator test` green.
 - **Changeset:** `@igrp/template-migrator` (patch).
 
-## 12. `index.css` has drifted from `tokens.css` (orphan file)
+## 12. `index.css` has drifted from `tokens.css` (Storybook root misrenders)
 
-- **Severity:** High (impact Low — orphan) · **Verdict:** CONFIRMED · **Cluster:** tokens · **Package:** `@igrp/igrp-framework-react-design-system`
-- **Files:** `packages/design-system/src/index.css` vs `packages/design-system/src/tokens.css`
-- **Problem:** `tokens.css` declares `--destructive-foreground`, `--indigo*`, `--sidebar-active*` (16 occurrences); `index.css` has **none** of them, yet `lib/colors.ts` actively emits `text-destructive-foreground`/`*-indigo`. `index.css` is imported **nowhere** in `src` or `package.json` (the Storybook root previously used it) — so today it is an orphan and the drift is near-zero impact, but it's a live trap if anything re-imports it.
-- **Impact:** Near-zero now (dead file); becomes a correctness bug (undefined custom properties) the moment `index.css` is wired back in.
-- **Fix:** Delete `index.css` if confirmed unused; or, if it must exist, make it `@import "./tokens.css"` and add only the extra (Tailwind/keyframes/reset) on top, plus a test asserting its token names are a superset of `tokens.css`.
-- **Acceptance:** either `index.css` is gone (grep confirms no importers) or it imports `tokens.css` and a superset test passes. `pnpm build:ds` green.
-- **Changeset:** `@igrp/igrp-framework-react-design-system` (patch) if the file ships; none if deleted-and-unreferenced.
+- **Severity:** High (impact Medium — Storybook only) · **Verdict:** CONFIRMED · **Cluster:** tokens · **Package:** `@igrp/igrp-framework-react-design-system`
+- **Files:** `packages/design-system/src/index.css` vs `packages/design-system/src/tokens.css`; importer `packages/design-system-storybook/.storybook/preview.ts:2`
+- **Problem:** `tokens.css` declares `--destructive-foreground`, `--indigo*`, `--sidebar-active*` (16 occurrences); `index.css` has **none** of them, yet `lib/colors.ts` actively emits `text-destructive-foreground`/`*-indigo`. `index.css` is the **Storybook root stylesheet** (`design-system-storybook/.storybook/preview.ts:2` imports `../src/index.css`) — so it is **not** an orphan (corrected from the initial review): the drift means Storybook renders destructive/indigo/sidebar-active variants with undefined custom properties, i.e. Storybook no longer faithfully previews what `/tokens`-importing consumers get.
+- **Impact:** Storybook misrenders the affected variants; the hand-maintained duplication will keep drifting.
+- **Fix:** Make `index.css` `@import "./tokens.css"` (then keep only the Storybook-specific Tailwind/keyframes/reset extras on top), eliminating the duplicated token blocks. Optionally add a test asserting `index.css`'s custom-property names are a superset of `tokens.css`.
+- **Acceptance:** `index.css` imports `tokens.css`; the drifted tokens resolve in Storybook; `pnpm build:ds` green.
+- **Changeset:** `@igrp/igrp-framework-react-design-system` (patch).
 
 ## 13. (doc-only) Session carries `accessToken` + `idToken` — document the trade-off, never log client-side
 
@@ -457,12 +451,12 @@ Copied from `.claude/shared/hard-rules.md` and `dependency-order.md` — every t
 | Band | Items |
 |---|---|
 | P0 Critical | 2 |
-| P1 High | 11 (incl. 1 doc-only, 1 `extends #18`) |
+| P1 High | 10 (incl. 1 doc-only, 1 `extends #18`; #7 withdrawn) |
 | P2 Medium | 17 (incl. 2 `extends #15`/`#19`) |
 | P3 Low | 22 |
-| **Total** | **52** |
+| **Total** | **51** (item 7 withdrawn) |
 
-Cluster distribution (net-new, primary tag): **dx** ×19, **template** ×9, **a11y** ×8, **types** ×4, **tokens** ×4, **errors** ×3, **release** ×3, **perf** ×1, **docs** ×1.
+Cluster distribution (net-new, primary tag): **dx** ×19, **template** ×9, **a11y** ×8, **types** ×4, **tokens** ×4, **errors** ×3, **release** ×2, **perf** ×1, **docs** ×1 (item 7 withdrawn).
 
 ## Next step
 

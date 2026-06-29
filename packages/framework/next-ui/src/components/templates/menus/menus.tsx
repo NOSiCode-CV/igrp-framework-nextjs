@@ -15,9 +15,13 @@ import { buildMenuSections } from './utils';
 import { SectionGroup } from './section-group';
 import { SearchResults } from './search-results';
 
-export type IGRPTemplateMenuArgs = { menus?: IGRPMenuItemArgs[]; showSearch?: boolean };
+export type IGRPTemplateMenuArgs = { menus?: IGRPMenuItemArgs[]; showSearch?: boolean; navAriaLabel?: string };
 
-export function IGRPTemplateMenus({ menus = [], showSearch = false }: IGRPTemplateMenuArgs) {
+export function IGRPTemplateMenus({
+  menus = [],
+  showSearch = false,
+  navAriaLabel = 'Menu principal',
+}: IGRPTemplateMenuArgs) {
   const pathname = usePathname();
   const [query, setQuery] = useState('');
   const sections = useMemo(() => buildMenuSections(menus), [menus]);
@@ -54,7 +58,7 @@ export function IGRPTemplateMenus({ menus = [], showSearch = false }: IGRPTempla
   const trimmedQuery = query.trim();
 
   return (
-    <>
+    <nav aria-label={navAriaLabel}>
       {showSearch && (
         <SidebarGroup className={cn('group-data-[collapsible=icon]:hidden')}>
           <SidebarGroupContent>
@@ -85,6 +89,6 @@ export function IGRPTemplateMenus({ menus = [], showSearch = false }: IGRPTempla
           <SectionGroup key={`grp-${section.key}`} section={section} pathname={pathname} />
         ))
       )}
-    </>
+    </nav>
   );
 }

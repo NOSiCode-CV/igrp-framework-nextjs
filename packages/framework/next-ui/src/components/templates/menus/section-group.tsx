@@ -23,7 +23,7 @@ interface SectionGroupProps {
 export function SectionGroup({ section, pathname }: SectionGroupProps) {
   const menuContent = (
     <SidebarGroupContent>
-      <SidebarMenu role="navigation">
+      <SidebarMenu>
         {section.nodes.map((node) =>
           node.kind === 'folder' ? (
             <FolderMenuItem key={`folder-${node.item.id ?? node.item.code}`} node={node} pathname={pathname} />

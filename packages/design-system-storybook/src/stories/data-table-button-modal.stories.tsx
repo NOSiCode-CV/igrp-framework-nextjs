@@ -42,15 +42,14 @@ export const WithFormBody: Story = {
       return el;
     });
 
-    // The aria-describedby target must NOT be the form body.
+    // The aria-describedby target must be present AND must NOT be the form body.
     const describedById = dialog.getAttribute('aria-describedby');
-    if (describedById) {
-      const desc = document.getElementById(describedById);
-      expect(desc).not.toBeNull();
-      // The description element must not contain the form field (i.e. it is the
-      // short fallback string, not the whole render() subtree).
-      expect(desc?.querySelector('input')).toBeNull();
-    }
+    expect(describedById).toBeTruthy();
+    const desc = document.getElementById(describedById!);
+    expect(desc).not.toBeNull();
+    // The description element must not contain the form field (i.e. it is the
+    // short fallback string, not the whole render() subtree).
+    expect(desc?.querySelector('input')).toBeNull();
 
     // The form actually rendered inside the dialog body.
     const body = dialog.querySelector('[data-slot="dialog-body"]');
@@ -84,6 +83,7 @@ export const WithFragmentBody: Story = {
       return el;
     });
     const body = dialog.querySelector('[data-slot="dialog-body"]');
+    expect(body).not.toBeNull();
     expect(body?.querySelectorAll('p')).toHaveLength(2);
   },
 };

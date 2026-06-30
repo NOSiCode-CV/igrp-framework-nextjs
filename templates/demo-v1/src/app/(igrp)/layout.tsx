@@ -1,6 +1,6 @@
 import { IGRPLayoutFull, igrpGetClaims } from "@igrp/framework-next";
-import { IGRPSectionPermissions } from "@igrp/framework-next-ui";
 import type { IGRPLayoutConfigArgs } from "@igrp/framework-next-types";
+import { IGRPSectionPermissions } from "@igrp/framework-next-ui";
 
 import { createConfig } from "@/igrp.template.config";
 import { getLayoutConfig, verifySession } from "@/lib/dal";

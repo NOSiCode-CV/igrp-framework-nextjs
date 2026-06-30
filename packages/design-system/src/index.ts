@@ -612,6 +612,7 @@ export { IGRPFormField, type IGRPFormFieldProps } from "./components/horizon/for
 export { IGRPForm, type IGRPFormProps, type IGRPFormHandle } from "./components/horizon/form/"
 export { convertValuesToFormData } from "./components/horizon/form/lib/utils"
 export { IGRPFormList, type IGRPFormListProps } from "./components/horizon/form/form-list"
+export { IGRPRepetitiveComponent, type IGRPRepetitiveComponentProps } from "./components/horizon/repetitive-component"
 
 export {
   IGRPIcon,

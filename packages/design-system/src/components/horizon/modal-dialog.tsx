@@ -14,14 +14,14 @@ import {
 } from "../primitives/dialog"
 import { cn } from "../../lib/utils"
 
-const igrpModalDialogContentVariants = cva("w-full sm:max-w-lg max-h-[90vh] overflow-auto", {
+const igrpModalDialogContentVariants = cva("w-full max-h-[90vh] overflow-auto", {
   variants: {
     size: {
       sm: "sm:max-w-md",
       md: "sm:max-w-lg",
       lg: "sm:max-w-2xl",
-      xl: "sm:max-w-4xl ",
-      full: "sm:max-w-[95vw] h-[95vh]",
+      xl: "sm:max-w-4xl",
+      full: "sm:max-w-[95vw] h-[95vh] max-h-[95vh]",
     },
   },
   defaultVariants: {
@@ -44,6 +44,11 @@ function IGRPModalDialogContent({
   contentClassName,
   ...props
 }: IGRPModalDialogContentProps) {
+  // A sticky header/footer must sit flush against the dialog edge. `DialogContent`'s
+  // `p-6` would otherwise clamp `sticky top-0`/`bottom-0` to the padded content box
+  // (sticky is constrained by its containing block), so we drop the matching padding
+  // when a sticky section is present. Reference equality is intentional — it survives
+  // minification, unlike a displayName string compare.
   const hasStickyHeader = Children.toArray(children).some(
     (child) =>
       isValidElement(child) &&
@@ -80,11 +85,19 @@ interface IGRPModalDialogHeaderProps extends React.ComponentProps<typeof DialogH
 
 /**
  * Modal dialog header with optional sticky positioning.
+ *
+ * `IGRPModalDialogContent` drops its top padding when this is sticky, so `top-0` pins
+ * flush to the dialog edge. The horizontal `-mx-6 px-6` lets the frosted bar span the
+ * full width while keeping its text aligned with the body.
  */
 function IGRPModalDialogHeader({ className, stickyHeader, ...props }: IGRPModalDialogHeaderProps) {
   return (
     <DialogHeader
-      className={cn(stickyHeader && "sticky top-0 z-5 backdrop-blur-2xl bg-background/80 border-b py-3", className)}
+      data-igrp-slot="modal-dialog-header"
+      className={cn(
+        stickyHeader && "sticky top-0 z-10 -mx-6 border-b bg-background/80 px-6 py-3 backdrop-blur-2xl",
+        className,
+      )}
       {...props}
     />
   )
@@ -97,9 +110,10 @@ interface IGRPModalDialogFooterProps extends React.ComponentProps<typeof DialogF
 function IGRPModalDialogFooter({ className, stickyFooter, ...props }: IGRPModalDialogFooterProps) {
   return (
     <DialogFooter
+      data-igrp-slot="modal-dialog-footer"
       className={cn(
-        "flex-col sm:justify-start",
-        stickyFooter && "sticky bottom-0 z-5 backdrop-blur-2xl bg-background/80 py-3",
+        "flex-col",
+        stickyFooter && "sticky bottom-0 z-10 -mx-6 bg-background/80 px-6 py-3 backdrop-blur-2xl",
         className,
       )}
       {...props}
@@ -111,7 +125,7 @@ function IGRPModalDialogFooter({ className, stickyFooter, ...props }: IGRPModalD
  * Modal dialog title.
  */
 function IGRPModalDialogTitle({ className, ...props }: React.ComponentProps<typeof DialogTitle>) {
-  return <DialogTitle className={cn(className)} {...props}></DialogTitle>
+  return <DialogTitle className={className} {...props} />
 }
 
 /**
@@ -119,14 +133,9 @@ function IGRPModalDialogTitle({ className, ...props }: React.ComponentProps<type
  */
 function IGRPModalDialogDescription({
   className,
-  name,
   ...props
-}: React.ComponentProps<typeof DialogDescription> & { name?: string }) {
-  return (
-    <DialogDescription className={cn(className)} {...props}>
-      {name}
-    </DialogDescription>
-  )
+}: React.ComponentProps<typeof DialogDescription>) {
+  return <DialogDescription className={className} {...props} />
 }
 
 export {

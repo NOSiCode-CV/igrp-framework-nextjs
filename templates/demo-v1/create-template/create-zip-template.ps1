@@ -2,7 +2,7 @@
 
 # === CONFIG ===
 $zipName = "igrp-next-template.zip"
-$excludeFolders = @(".next", "node_modules", ".git", "create-template", ".env", ".env.docker", "CHANGELOG.md", "docs/specs", "specs", "superpowers", "CLAUDE.md")
+$excludeFolders = @(".next", "node_modules", ".git", "create-template", ".env", ".env.docker", "CHANGELOG.md", "superpowers", "CLAUDE.md")
 # The template ships its migration state as a single flat file at the root,
 # .igrp-migrations-lock.json. It is a normal tracked file and is not excluded,
 # so it lands in the zip automatically and consumers immediately see all

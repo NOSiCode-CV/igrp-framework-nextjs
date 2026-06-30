@@ -1,5 +1,58 @@
 # @igrp/framework-next-ui
 
+## 0.1.0-beta.158
+
+### Patch Changes
+
+- ffa6994: fix(next-ui): stabilize IGRPTemplateBreadcrumbs routeLabels default so the memo is not busted every render
+
+  The `routeLabels` prop defaulted to a fresh `{}` literal, which changed identity on every render and broke the `useMemo` that derives breadcrumb items (the common case where the prop is omitted recomputed every render). It now defaults to a shared frozen module-level reference, so the memo is stable. No API change.
+
+- 3847b8b: Add token-claims permission gating: `decodeIgrpClaims`/`claimsAllow` (`@igrp/framework-next-auth/claims`), server helpers `igrpGetClaims`/`igrpAuthorize`/`igrpAssertAuthorize` (`@igrp/framework-next`), and client `IGRPSectionPermissions`/`usePermissions`/`IGRPAuthorization`/`IGRPGuardPage`/`IGRPForbidden` (`@igrp/framework-next-ui`).
+- 770c1bc: Client-boundary and render-safety hardening:
+
+  - Add the missing top-of-file `'use client'` directive to `IGRPTemplateSidebar`, `IGRPTemplateNavUser`, `IGRPTemplateNotFound`, `IGRPTemplateLoading`, and `IGRPThemeProvider`. They use client-only hooks / DS components and previously relied on the package barrel's boundary, which would break the moment any of them was imported via a deeper path.
+  - `IGRPTemplateHeader` no longer calls `igrpToast()` during render (a side effect that updated the toaster provider mid-render — a React anti-pattern and impure under the React Compiler). The no-data warning now runs in a `useEffect`, and the component returns `null` instead of `undefined`.
+
+- efdf17d: refactor(next-ui): extract a shared MenuItemLink for the sidebar menu surfaces
+
+  The identical `isAnchor ? <a> : <Link>` branch in `leaf-menu-item`, `sub-leaf-link`, and `search-results` is now a single internal `MenuItemLink` (forwardRef, single root element) so it still composes with the Radix `asChild` Slots (SidebarMenuButton / SidebarMenuSubButton / DropdownMenuItem). Pure dedup with no behavior change: external links still open in a new tab with `rel="noopener noreferrer"`, `aria-current="page"` and each call site's `aria-label`/`className` are preserved exactly, and active highlighting is unchanged. Internal component only — not added to the public export surface.
+
+- 770c1bc: Fix a Rules-of-Hooks violation in `IGRPSegmentError`: the `children` short-circuit `return` ran before `useState`/`useEffect`, so toggling the `children` prop between renders changed the hook count and could crash the error boundary itself (the worst place to crash). Hooks now run on every render; the `children` passthrough is guarded inside the effect and returned after the hooks, mirroring `IGRPGlobalError`.
+- 41d8a51: Menu tree React keys fall back to `code` when a menu entry has no `id`,
+  avoiding `folder-undefined`/`leaf-undefined` key collisions.
+- 3b91dc2: `IGRPTemplateNavUser` and `IGRPTemplateNotifications`: emit basePath-relative
+  `next/link` hrefs (`/profile`, `/notifications`, `/setting`) instead of
+  `window.location.origin`-based absolute URLs. Fixes the SSR/CSR hydration
+  mismatch, the full-page reload, and the 404 under a `NEXT_PUBLIC_BASE_PATH`
+  deployment.
+- 689b5ac: Memoize `IGRPActiveThemeProvider`'s context value (the React Compiler skips
+  provider files, so it must be manual). Auth carousel: root backdrop uses the
+  `bg-muted` token and the dot row uses `flex gap-2`; on-photo caption colors are
+  kept as a documented fixed-contrast exception.
+- eac3eca: Sidebar menus now expose exactly one labeled navigation landmark. Removed the
+  invalid `role="navigation"` from `SidebarMenu` (a `<ul>`, where it stripped list
+  semantics and emitted an unlabeled landmark per section) and wrapped
+  `IGRPTemplateMenus` once in `<nav aria-label>` — overridable via the new
+  `navAriaLabel` prop (default "Menu principal").
+- Updated dependencies [3847b8b]
+- Updated dependencies [a274c6e]
+- Updated dependencies [c9cd44b]
+- Updated dependencies [9e8e240]
+- Updated dependencies [781f753]
+- Updated dependencies [41d8a51]
+- Updated dependencies [aca828e]
+- Updated dependencies [3b808b8]
+- Updated dependencies [1da77de]
+- Updated dependencies [6467e14]
+- Updated dependencies [d8daf50]
+- Updated dependencies [8cb2fc5]
+- Updated dependencies [6cb1cec]
+- Updated dependencies [7d48f03]
+  - @igrp/framework-next-auth@0.1.0-beta.144
+  - @igrp/framework-next-types@0.1.0-beta.146
+  - @igrp/igrp-framework-react-design-system@0.1.0-beta.140
+
 ## 0.1.0-beta.157
 
 ### Patch Changes

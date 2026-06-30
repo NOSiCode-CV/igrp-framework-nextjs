@@ -1,5 +1,45 @@
 # @igrp/framework-next
 
+## 0.1.0-beta.159
+
+### Patch Changes
+
+- 3847b8b: Add token-claims permission gating: `decodeIgrpClaims`/`claimsAllow` (`@igrp/framework-next-auth/claims`), server helpers `igrpGetClaims`/`igrpAuthorize`/`igrpAssertAuthorize` (`@igrp/framework-next`), and client `IGRPSectionPermissions`/`usePermissions`/`IGRPAuthorization`/`IGRPGuardPage`/`IGRPForbidden` (`@igrp/framework-next-ui`).
+- 0467f47: Require Node `>=22` (`engines.node`), aligning with the rest of the framework (the repo standard is Node 22, and `@igrp/framework-next-types` already requires it). This package previously still advertised `>=20`.
+- 4069ab8: Sanitize the client-controlled `x-current-path` header through
+  `sanitizeRedirectUrl` before reflecting it into the `/login?callbackUrl=`
+  redirect in `fetchMenus`, `fetchAppsByUser`, `fetchAppByCode`, and
+  `fetchCurrentUser`. Prevents an open-redirect when a consumer's login page
+  trusts the framework-built callbackUrl.
+- a15db8b: Data hooks (`fetchMenus`, `fetchAppsByUser`, `fetchAppByCode`,
+  `fetchCurrentUser`): switch to request-scoped React `cache()` reading the
+  token inside (no token-in-cache-key, no cross-user leak), and rethrow
+  non-401/403 failures so transient/server errors hit the error boundary
+  instead of rendering an empty layout.
+- 41d8a51: `mapMenu` no longer casts `menu.id as number` — propagates the real
+  optionality now that `IGRPMenuItemArgs.id` is optional.
+- 62c2933: `igrpGetAccessClient` now requires a non-empty token (not just baseUrl),
+  throwing the clear "not configured" error instead of issuing `Authorization:
+Bearer ` (empty). `fetchAppByCode` selects the exact `code` match from the
+  list response instead of blindly taking `[0]`.
+- Updated dependencies [ffa6994]
+- Updated dependencies [3847b8b]
+- Updated dependencies [a274c6e]
+- Updated dependencies [770c1bc]
+- Updated dependencies [efdf17d]
+- Updated dependencies [770c1bc]
+- Updated dependencies [c9cd44b]
+- Updated dependencies [41d8a51]
+- Updated dependencies [41d8a51]
+- Updated dependencies [3b91dc2]
+- Updated dependencies [3b808b8]
+- Updated dependencies [689b5ac]
+- Updated dependencies [7d48f03]
+- Updated dependencies [eac3eca]
+  - @igrp/framework-next-ui@0.1.0-beta.158
+  - @igrp/framework-next-auth@0.1.0-beta.144
+  - @igrp/framework-next-types@0.1.0-beta.146
+
 ## 0.1.0-beta.158
 
 ### Patch Changes

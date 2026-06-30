@@ -1,5 +1,48 @@
 # @igrp/igrp-framework-react-design-system
 
+## 0.1.0-beta.140
+
+### Patch Changes
+
+- 9e8e240: `IGRPCombobox`: default `value` to `undefined` instead of `""` so standalone
+  uncontrolled usage persists the selection (previously the `localValue` path was
+  dead and the selection never displayed).
+- 781f753: `IGRPDataTable` client filter: derive `isFiltered` from the live column-filter
+  state each render instead of memoizing on the stable `table` reference, so the
+  Clear-filters button appears after a filter is applied.
+- aca828e: DataTable date-range filter guards invalid/unparseable dates instead of
+  silently dropping every row; `formatChartValue` abbreviates negative
+  magnitudes (`-2.5M`); `getChartHeight`/`getChartWidth` honor an explicit `0`
+  and drop their no-op ternaries.
+- 1da77de: Memoize `IGRPDataTable`'s column helper, derived `allColumns`, and
+  `filterDescriptors` (keyed on `columns`/`actions`). The component opts out of
+  the React Compiler (`"use no memo"`, required by `useReactTable`), so these
+  were rebuilt on every render and forced TanStack to reset its column model on
+  any unrelated parent re-render. Documents in `IGRPDataTableProps` that callers
+  must keep `data` and `columns` referentially stable.
+- 6467e14: `IGRPDataTableButtonModal` no longer hosts its body inside
+  `<DialogDescription asChild>`. That cloned arbitrary content (typically a whole
+  form) onto Radix's `Slot`, which announced the entire subtree as the dialog's
+  `aria-describedby` description and threw `React.Children.only` for any
+  multi-root `render()`. The body now renders in a plain `<div>`, with a separate
+  short visually-hidden `DialogDescription` satisfying the `aria-describedby`
+  contract. `DialogTitle` is unchanged.
+- d8daf50: `IGRPDataTableButtonAlert` no longer renders an empty `AlertDialogDescription`
+  when the action has no description. The description is now guarded on `children`,
+  so Radix gets no dangling `aria-describedby` and screen readers aren't handed an
+  empty description node. (`IGRPAlertDialog` already guards on `description`.)
+- 8cb2fc5: Default chart grid/axis/reference colors to semantic tokens instead of hardcoded
+  hex (`#e5e7eb`/`#d1d5db`). `gridColor`/`referenceLineColor` now default to
+  `var(--border)` and `axisColor` to `var(--muted-foreground)` across area, line,
+  radar, radial, and bar charts, so gridlines and axes adapt to dark mode without
+  per-chart overrides. The color props remain overridable.
+- 6cb1cec: `src/index.css` (the Storybook root stylesheet) now `@import`s `./tokens.css`
+  instead of carrying a hand-maintained duplicate of the `@theme inline` / `:root`
+  / `.dark` token blocks. The duplicate had drifted — it lacked
+  `--destructive-foreground`, `--indigo*`, and `--sidebar-active*` (which
+  `lib/colors.ts` emits), so Storybook rendered those variants with undefined
+  custom properties. `tokens.css` is now the single source of truth.
+
 ## 0.1.0-beta.139
 
 ### Patch Changes

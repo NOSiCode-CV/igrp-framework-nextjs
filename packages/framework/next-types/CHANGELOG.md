@@ -1,5 +1,19 @@
 # @igrp/framework-next-types
 
+## 0.1.0-beta.146
+
+### Patch Changes
+
+- 3847b8b: Add token-claims permission gating: `decodeIgrpClaims`/`claimsAllow` (`@igrp/framework-next-auth/claims`), server helpers `igrpGetClaims`/`igrpAuthorize`/`igrpAssertAuthorize` (`@igrp/framework-next`), and client `IGRPSectionPermissions`/`usePermissions`/`IGRPAuthorization`/`IGRPGuardPage`/`IGRPForbidden` (`@igrp/framework-next-ui`).
+- 41d8a51: `IGRPMenuItemArgs.id` is now optional (`id?: number`) to match the runtime
+  `MenuEntryDTO.id?: number`, removing a type that promised an always-present id.
+- Updated dependencies [3847b8b]
+- Updated dependencies [a274c6e]
+- Updated dependencies [c9cd44b]
+- Updated dependencies [3b808b8]
+- Updated dependencies [7d48f03]
+  - @igrp/framework-next-auth@0.1.0-beta.144
+
 ## 0.1.0-beta.145
 
 ### Patch Changes

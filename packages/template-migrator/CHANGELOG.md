@@ -1,5 +1,38 @@
 # @igrp/template-migrator
 
+## 0.1.0-beta.131
+
+### Patch Changes
+
+- b11b094: Make `apply` transactional: on a mid-migration step failure, unwind the
+  steps that already ran (restoring overwritten/deleted files from the
+  captured undo payloads) before aborting, instead of leaving files mutated
+  with no lock entry. Prevents a re-run from re-capturing a corrupted undo
+  baseline.
+- da6f8a6: Add migration 21 (template-resync-catchup): re-capture 9 demo-v1 files and the
+  next/react/react-dom dep pins that had drifted from the shipped migrations, so
+  `check:drift` passes again. No template behavior change — a drift-parity snapshot.
+- f80bda3: Add migration `22-session-args-auth-bypass`: rewrites the demo-v1
+  `get-session-args.ts` to gate session-refetch on `isAuthBypass()` instead of
+  `isPreviewMode()`, so `AUTH_PROVIDER=none` disables refetch per the bypass
+  contract.
+- 68956e9: `executeStep` now throws a clear error for `file.write` `mode: "patch"`
+  (unimplemented) and for a missing `from`, instead of a cryptic
+  `Cannot read properties of undefined` TypeError that aborted the whole apply.
+- a520fe9: Hardening: numeric migration-file ordering (9 < 10 < 100); line-anchored
+  `env.add` idempotency + a real `env.remove` undo (rollback now strips added
+  keys); path-containment guard in `executeStep`; and `apply` enforces each
+  migration's `requires` before running it.
+- d5233b0: Add migration `23-per-request-layout-and-routes-cache`: demo-v1 layouts use the
+  existing `getLayoutConfig` cache (one session decode per request) and
+  `getRoutes()` memoizes its routes-file read.
+- a7219e4: Validate migration `requires` at pack time. `pack.ts` now rejects duplicate
+  migration ids and any `requires` entry that doesn't resolve to a strictly earlier
+  migration (forward reference, typo, or unknown id). `apply` checks `requires`
+  against applied ids but executes in file order, so a bad `requires` would
+  otherwise ship in the manifest and permanently deadlock `apply` on consumer apps.
+- 2e8785b: Rename the template identifier from `demo-legacy` to `demo-v1`, tracking the template folder rename (`templates/demo-legacy` → `templates/demo-v1`). The migrations source tree moves to `migrations/demo-v1/`, and the manifest and lock-file `template` field is now `demo-v1` (it is cosmetic — only printed by `status`). Existing consumer lock files self-heal: the next `apply`/`rollback` stamps the current identifier. No migration `id`s, step content hashes, or applied-migration state change, so already-migrated apps are unaffected.
+
 ## 0.1.0-beta.130
 
 ### Patch Changes

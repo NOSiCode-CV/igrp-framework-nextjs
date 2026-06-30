@@ -1,5 +1,26 @@
 # @igrp/framework-next-auth
 
+## 0.1.0-beta.144
+
+### Patch Changes
+
+- 3847b8b: Add token-claims permission gating: `decodeIgrpClaims`/`claimsAllow` (`@igrp/framework-next-auth/claims`), server helpers `igrpGetClaims`/`igrpAuthorize`/`igrpAssertAuthorize` (`@igrp/framework-next`), and client `IGRPSectionPermissions`/`usePermissions`/`IGRPAuthorization`/`IGRPGuardPage`/`IGRPForbidden` (`@igrp/framework-next-ui`).
+- a274c6e: Require Node `>=22` (`engines.node`). As the root of the framework dependency chain this package previously declared no Node floor at all, leaving consumers and CI unconstrained while every other framework package requires Node 22.
+- c9cd44b: Harden redirect sanitization: reject backslash (raw and %5C-encoded),
+  path-traversal vectors, and control characters (tab/newline/CR, which URL
+  parsing strips into `//`) in `sanitizeRedirectUrl`, and route the NextAuth
+  `redirect` callback's relative-path branch through it. Closes a
+  protocol-relative open-redirect (`/\evil.com`) at the framework layer.
+- 3b808b8: Normalize the post-login `home` URL join when `NEXTAUTH_URL_INTERNAL` is set
+  (exactly one slash between base and slug); coerce a non-numeric/absent OIDC
+  `expires_in` to the 3600s default so a malformed value can no longer yield a
+  `NaN` token expiry.
+- 7d48f03: Document that the IGRP `Session` intentionally carries `accessToken` and
+  `idToken` to the client (the browser AM client reads `accessToken`;
+  `refreshToken` is omitted), and that consumers must never log or serialize the
+  session object client-side — telemetry must redact it. Added as JSDoc on the
+  `Session` type (ships in the published `.d.ts`) and a note at the session callback.
+
 ## 0.1.0-beta.143
 
 ### Patch Changes

@@ -23,6 +23,7 @@ export function IGRPAuthorization({
 }: IGRPAuthorizationProps) {
   const { isAllowed } = usePermissions();
   const names = Array.isArray(permission) ? permission : [permission];
-  const allowed = mode === 'any' ? names.some((n) => isAllowed(n)) : names.every((n) => isAllowed(n));
+  const allowed =
+    mode === 'any' ? names.some((n) => isAllowed(n)) : names.every((n) => isAllowed(n));
   return <>{allowed ? children : fallback}</>;
 }

@@ -151,7 +151,7 @@ Tailwind compiles **once here in the app**, not in the framework packages. Impor
 
 ### Permissions — quick note
 
-Gate UI and routes by the user's access-token claims (zero network; the AM API is the real enforcement). Server pages: `await igrpAssertAuthorize("<perm>")` → 403 on deny. Client UI: wrap with `<IGRPAuthorization permission="…">` or read `usePermissions().can(…)`. In preview mode claims are super-admin (every gate passes). Full guide — including the per-page guard checklist (there is **no** default-deny) — in [Permissions](docs/PERMISSIONS.md).
+Gate UI and routes by the user's access-token claims (zero network; the AM API is the real enforcement). Server pages: `await igrpAssertAuthorize("<perm>")` → 403 on deny. Client UI: wrap with `<IGRPAuthorization permission="…">` or read `usePermissions().isAllowed(…)`. In preview mode claims are super-admin (every gate passes). Full guide — including the per-page guard checklist (there is **no** default-deny) — in [Permissions](docs/PERMISSIONS.md).
 
 ### Upgrading — quick note
 

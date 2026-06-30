@@ -72,6 +72,7 @@ A consuming app sets this up **once** (already done in this template):
    ```
    > `verifySession()` must run **before** `igrpGetClaims()` — it seeds the per-request access-management token that `igrpGetClaims()` reads. Without that order, claims resolve to an error state off-preview.
 3. **403 boundary** — [`src/app/(igrp)/forbidden.tsx`](../src/app/(igrp)/forbidden.tsx):
+4. 
    ```tsx
    import { IGRPForbidden } from "@igrp/framework-next-ui";
    export default function Forbidden() { return <IGRPForbidden />; }
@@ -98,6 +99,7 @@ Worked example: [`exemplo-permissao/page.tsx`](../src/app/(igrp)/(demo)/exemplo-
 ## Gating a component (client)
 
 **Wrap (default):**
+
 ```tsx
 "use client";
 import { IGRPAuthorization } from "@igrp/framework-next-ui";
@@ -110,12 +112,13 @@ import { IGRPButton } from "@igrp/igrp-framework-react-design-system";
 Denied → renders `fallback` (default: nothing — unmounts). `permission` accepts an array with `mode="all"` (default) or `mode="any"`.
 
 **Hook** — when you need *disable* instead of *hide*, or several checks:
+
 ```tsx
 "use client";
 import { usePermissions } from "@igrp/framework-next-ui";
 
-const { can } = usePermissions();
-<IGRPButton disabled={!can("read_invoice")}>Ver</IGRPButton>
+const { isAllowed } = usePermissions();
+<IGRPButton disabled={!isAllowed("read_invoice")}>Ver</IGRPButton>
 ```
 
 The design system stays auth-agnostic — never add a `permission` prop to a DS component; gate it from the consumer with `<IGRPAuthorization>` or `usePermissions()`. Worked example: [`exemplo-permissao/_components/actions.tsx`](../src/app/(igrp)/(demo)/exemplo-permissao/_components/actions.tsx).
@@ -167,7 +170,7 @@ With `IGRP_PREVIEW_MODE=true` (or `AUTH_PROVIDER=none`), claims = **super-admin*
 | `igrpAuthorize(name)` | `@igrp/framework-next` | Boolean check (server actions / logic) |
 | `igrpAssertAuthorize(name)` | `@igrp/framework-next` | Page guard → `forbidden()` on deny |
 | `IGRPSectionPermissions` | `@igrp/framework-next-ui` | Provider; seed with `igrpGetClaims()` result |
-| `usePermissions()` | `@igrp/framework-next-ui` | `{ can, permissions, roles, selectedRole, isSuperAdmin, status, error }` |
+| `usePermissions()` | `@igrp/framework-next-ui` | `{ isAllowed, permissions, roles, selectedRole, isSuperAdmin, status, error }` |
 | `<IGRPAuthorization>` | `@igrp/framework-next-ui` | Wrap a component to show/hide by permission |
 | `<IGRPGuardPage>` | `@igrp/framework-next-ui` | Client-side page guard (convenience; server guard is authoritative) |
 | `IGRPForbidden` | `@igrp/framework-next-ui` | 403 UI for `forbidden.tsx` |

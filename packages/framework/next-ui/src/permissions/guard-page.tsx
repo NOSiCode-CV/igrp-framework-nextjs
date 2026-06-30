@@ -18,8 +18,8 @@ export function IGRPGuardPage({
   permission: string | string[];
   children: ReactNode;
 }) {
-  const { can } = usePermissions();
+  const { isAllowed } = usePermissions();
   const names = Array.isArray(permission) ? permission : [permission];
-  const allowed = names.every((n) => can(n));
+  const allowed = names.every((n) => isAllowed(n));
   return <>{allowed ? children : <IGRPForbidden />}</>;
 }

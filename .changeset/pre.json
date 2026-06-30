@@ -25,6 +25,7 @@
     "migrator-migration-18",
     "migrator-migration-19",
     "migrator-migration-20",
+    "modal-repetitive-migration24",
     "nav-user-notifications-config-flag",
     "next-auth-introspection-timeout",
     "next-auth-require-node-22",

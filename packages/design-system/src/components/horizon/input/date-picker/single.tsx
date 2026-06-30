@@ -8,7 +8,15 @@ import { CalendarIcon } from "lucide-react"
 import { DD_MM_YYYY } from "../../../../lib/constants"
 import { cn } from "../../../../lib/utils"
 import { type IGRPDatePickerBaseProps } from "../../../../types"
-import { useFormField, FormControl, FormDescription, FormField, FormItem, FormLabel, FormMessage } from "../../../primitives/form"
+import {
+  useFormField,
+  FormControl,
+  FormDescription,
+  FormField,
+  FormItem,
+  FormLabel,
+  FormMessage,
+} from "../../../primitives/form"
 import { Button } from "../../../primitives/button"
 import { Popover, PopoverContent, PopoverTrigger } from "../../../primitives/popover"
 import { IGRPButton } from "../../button"
@@ -96,9 +104,7 @@ function DatePickerSingleField({
  * @internal Wrapper rendered inside FormItem that reads the form context to wire
  * aria-invalid / aria-describedby onto the actual date Button element.
  */
-function DatePickerSingleFieldWithA11y(
-  props: React.ComponentProps<typeof DatePickerSingleField>,
-) {
+function DatePickerSingleFieldWithA11y(props: React.ComponentProps<typeof DatePickerSingleField>) {
   const { error, formItemId, formMessageId } = useFormField()
   return (
     <DatePickerSingleField

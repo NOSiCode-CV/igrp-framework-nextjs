@@ -8,7 +8,15 @@ import { Circle } from "lucide-react"
 import { igrpColorText } from "../../../lib/colors"
 import { cn } from "../../../lib/utils"
 import type { IGRPInputProps, IGRPOptionsProps } from "../../../types"
-import { useFormField, FormControl, FormDescription, FormField, FormItem, FormLabel, FormMessage } from "../../primitives/form"
+import {
+  useFormField,
+  FormControl,
+  FormDescription,
+  FormField,
+  FormItem,
+  FormLabel,
+  FormMessage,
+} from "../../primitives/form"
 import { Input } from "../../primitives/input"
 import {
   Select,
@@ -155,9 +163,7 @@ function IGRPSelectField({
  * @internal Wrapper rendered inside FormItem that reads the form context to wire
  * aria-invalid / aria-describedby onto the actual SelectTrigger button.
  */
-function IGRPSelectFieldWithA11y(
-  props: React.ComponentProps<typeof IGRPSelectField>,
-) {
+function IGRPSelectFieldWithA11y(props: React.ComponentProps<typeof IGRPSelectField>) {
   const { error, formItemId, formMessageId } = useFormField()
   return (
     <IGRPSelectField

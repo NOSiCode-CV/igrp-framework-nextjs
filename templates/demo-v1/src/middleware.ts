@@ -2,7 +2,7 @@ import { type NextRequest, NextResponse } from "next/server";
 
 import { auth } from "@/lib/auth";
 import { LOGOUT_PENDING_COOKIE } from "@/lib/logout-pending";
-import { isAuthBypass, sanitizeCallbackUrl } from "@/lib/utils";
+import { isAuthBypass, sanitizeCallbackUrl } from "@/lib/utilities";
 
 /** Security headers applied to all responses in production. */
 const SECURITY_HEADERS: Record<string, string> = {

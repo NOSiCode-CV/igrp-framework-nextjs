@@ -15,7 +15,11 @@ import { buildMenuSections } from './utils';
 import { SectionGroup } from './section-group';
 import { SearchResults } from './search-results';
 
-export type IGRPTemplateMenuArgs = { menus?: IGRPMenuItemArgs[]; showSearch?: boolean; navAriaLabel?: string };
+export type IGRPTemplateMenuArgs = {
+  menus?: IGRPMenuItemArgs[];
+  showSearch?: boolean;
+  navAriaLabel?: string;
+};
 
 export function IGRPTemplateMenus({
   menus = [],

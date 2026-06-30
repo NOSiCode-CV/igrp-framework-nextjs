@@ -1,4 +1,4 @@
-import { isAuthBypass } from "../utils";
+import { isAuthBypass } from "../utilities";
 import { getBasePath } from "./get-base-path";
 
 // Adaptive refresh is owned by IGRPSessionWatcher, which schedules a

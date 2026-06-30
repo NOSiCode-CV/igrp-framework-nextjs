@@ -6,7 +6,8 @@ import { redirect } from "next/navigation";
 import { carouselItems, loginConfig } from "@/config/login";
 import { siteConfig } from "@/config/site";
 import { LOGOUT_PENDING_COOKIE } from "@/lib/logout-pending";
-import { cn, isAuthBypass, sanitizeCallbackUrl } from "@/lib/utils";
+import { isAuthBypass, sanitizeCallbackUrl } from "@/lib/utilities";
+import { cn } from "@/lib/utils";
 
 import { LogoutCompletion } from "./logout-completion";
 

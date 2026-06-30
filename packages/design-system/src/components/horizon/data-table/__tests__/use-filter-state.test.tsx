@@ -1,11 +1,6 @@
 import { describe, it, expect } from "vitest"
 import { renderHook, act } from "@testing-library/react"
-import {
-  useReactTable,
-  getCoreRowModel,
-  getFilteredRowModel,
-  type ColumnDef,
-} from "@tanstack/react-table"
+import { useReactTable, getCoreRowModel, getFilteredRowModel, type ColumnDef } from "@tanstack/react-table"
 import { useFilterState } from "../hooks/use-filter-state"
 
 type Row = { id: number; name: string }

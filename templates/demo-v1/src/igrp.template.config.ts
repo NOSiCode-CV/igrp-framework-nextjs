@@ -4,7 +4,7 @@ import type {
   IGRPLayoutConfigArgs,
 } from "@igrp/framework-next-types";
 import { fontVariables } from "@/lib/fonts";
-import { isAuthBypass } from "@/lib/utils";
+import { isAuthBypass } from "@/lib/utilities";
 import { getMockApps } from "@/temp/applications/use-mock-apps";
 import { IGRP_DEFAULT_MENU } from "@/temp/menus/menus";
 import { getMockMenus } from "@/temp/menus/use-mock-menus";

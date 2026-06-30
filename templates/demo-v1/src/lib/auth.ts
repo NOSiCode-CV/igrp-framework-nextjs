@@ -6,7 +6,7 @@ import { withIGRPAuth } from "@igrp/framework-next-auth/config";
 import { assertAuthProviderEnv } from "@igrp/framework-next-auth/providers";
 
 import { reportError } from "@/lib/report-error";
-import { isAuthBypass } from "@/lib/utils";
+import { isAuthBypass } from "@/lib/utilities";
 
 /**
  * Minimal session shape used in bypass mode (IGRP_PREVIEW_MODE or

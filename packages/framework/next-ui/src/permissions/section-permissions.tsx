@@ -24,7 +24,9 @@ export function IGRPSectionPermissions({
 }) {
   const [state, setState] = useState<IGRPClaimsState>(initialState);
   return (
-    <PermissionsContext.Provider value={{ state, setState }}>{children}</PermissionsContext.Provider>
+    <PermissionsContext.Provider value={{ state, setState }}>
+      {children}
+    </PermissionsContext.Provider>
   );
 }
 

@@ -25,11 +25,7 @@ function IGRPTemplateNotFound({
   appCode,
 }: IGRPTemplateNotFoundProps) {
   return (
-    <div
-      className={cn(
-        'flex min-h-screen items-center justify-center bg-background px-4 py-16',
-      )}
-    >
+    <div className={cn('flex min-h-screen items-center justify-center bg-background px-4 py-16')}>
       <div className={cn('w-full max-w-2xl')}>
         <div className={cn('text-center')}>
           {image && (

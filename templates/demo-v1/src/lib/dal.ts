@@ -5,7 +5,7 @@ import { cache } from "react";
 
 import { configLayout } from "@/actions/igrp/layout";
 import { getSession, PREVIEW_SESSION_STUB } from "@/lib/auth";
-import { isAuthBypass, sanitizeCallbackUrl } from "@/lib/utils";
+import { isAuthBypass, sanitizeCallbackUrl } from "@/lib/utilities";
 
 /**
  * Verifies the current request is authenticated.

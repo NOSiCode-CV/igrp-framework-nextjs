@@ -3,7 +3,7 @@
 import { cookies } from "next/headers";
 
 import { PREVIEW_SESSION_STUB, serverSession } from "@/lib/auth";
-import { isAuthBypass } from "@/lib/utils";
+import { isAuthBypass } from "@/lib/utilities";
 
 export async function getTheme() {
   const cookieStore = await cookies();

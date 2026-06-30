@@ -21,6 +21,7 @@
     "framework-next-appcode-case",
     "framework-next-config-schema",
     "igrp-permission-gating",
+    "migration-26-catchup",
     "migrator-migration-15",
     "migrator-migration-18",
     "migrator-migration-19",

@@ -131,10 +131,7 @@ function IGRPModalDialogTitle({ className, ...props }: React.ComponentProps<type
 /**
  * Modal dialog description.
  */
-function IGRPModalDialogDescription({
-  className,
-  ...props
-}: React.ComponentProps<typeof DialogDescription>) {
+function IGRPModalDialogDescription({ className, ...props }: React.ComponentProps<typeof DialogDescription>) {
   return <DialogDescription className={className} {...props} />
 }
 

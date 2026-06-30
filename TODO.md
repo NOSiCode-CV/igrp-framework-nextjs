@@ -52,6 +52,7 @@ Add the following components to the design system:
 ## Next UI
 
 -- Get breadcrumbs via script
+-- Hide notifications, profile and settings from the sidebar
 
 ## Animations component see: <https://animations.dev/learn/animation-theory/the-easing-blueprint>
 

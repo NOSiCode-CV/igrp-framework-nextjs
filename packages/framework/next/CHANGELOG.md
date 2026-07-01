@@ -1,5 +1,11 @@
 # @igrp/framework-next
 
+## 0.1.0-beta.162
+
+### Patch Changes
+
+- 439f8c0: - Fix `IGRPLayoutFull` header/sidebar data providers failing to load the current user, menus, or apps with an "Invalid URL" error — the access-client credentials (token/baseUrl) weren't reliably reaching those providers once rendered inside their `<Suspense>` boundaries.
+
 ## 0.1.0-beta.161
 
 ### Patch Changes

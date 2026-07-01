@@ -39,6 +39,8 @@ export function IGRPTemplateMenus({
     [],
   );
 
+  const handleClearQuery = useCallback(() => setQuery(''), []);
+
   if (sections.length === 0) {
     return (
       <SidebarGroup>
@@ -70,7 +72,7 @@ export function IGRPTemplateMenus({
               <IGRPIcon
                 iconName="Search"
                 className={cn(
-                  'absolute left-2.5 top-1/2 size-3.5 -translate-y-1/2 text-muted-foreground',
+                  'pointer-events-none absolute left-2.5 top-1/2 size-3.5 -translate-y-1/2 text-muted-foreground',
                 )}
               />
               <Input
@@ -79,8 +81,24 @@ export function IGRPTemplateMenus({
                 placeholder="Pesquisar menus..."
                 value={query}
                 onChange={handleQueryChange}
-                className={cn('h-8 pl-8 text-xs')}
+                autoComplete="off"
+                autoCorrect="off"
+                spellCheck={false}
+                className={cn('h-8 pl-8 text-xs', trimmedQuery && 'pr-7')}
               />
+              {trimmedQuery && (
+                <button
+                  type="button"
+                  onClick={handleClearQuery}
+                  aria-label="Limpar pesquisa"
+                  className={cn(
+                    'absolute right-1.5 top-1/2 flex size-5 -translate-y-1/2 items-center justify-center rounded-sm',
+                    'text-muted-foreground transition-colors hover:bg-sidebar-accent hover:text-sidebar-accent-foreground',
+                  )}
+                >
+                  <IGRPIcon iconName="X" className={cn('size-3.5')} />
+                </button>
+              )}
             </div>
           </SidebarGroupContent>
         </SidebarGroup>

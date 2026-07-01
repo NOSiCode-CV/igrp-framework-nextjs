@@ -43,7 +43,10 @@ export async function HeaderDataProvider({
     const headerData = await layoutMockData.getHeaderData();
     return (
       <IGRPTemplateHeader
-        data={{ ...headerData, showIGRPSidebarTrigger: showSidebar && headerData.showIGRPSidebarTrigger }}
+        data={{
+          ...headerData,
+          showIGRPSidebarTrigger: showSidebar && headerData.showIGRPSidebarTrigger,
+        }}
         breadcrumbs={breadcrumbs}
         breadcrumbRouteLabels={breadcrumbRouteLabels}
       />

@@ -3,6 +3,7 @@
 import { useMemo } from 'react';
 import {
   cn,
+  IGRPIcon,
   SidebarGroup,
   SidebarGroupContent,
   SidebarMenu,
@@ -17,12 +18,28 @@ import { MenuItemLink } from './menu-item-link';
 interface SearchResult {
   id: string | number | undefined;
   name: string;
+  icon?: string;
   /** Label parts shown as "Grupo A › Documentos" — does NOT include the item name itself. */
   breadcrumb: string[];
   href: string;
   isAnchor: boolean;
   target?: string;
   isActive: boolean;
+}
+
+/** Wraps the substring of `text` that matches `query` in a `<mark>` so the reason a result surfaced is visible. */
+function HighlightedName({ text, query }: { text: string; query: string }) {
+  const start = text.toLowerCase().indexOf(query.toLowerCase());
+  if (start === -1) return <>{text}</>;
+  const end = start + query.length;
+
+  return (
+    <>
+      {text.slice(0, start)}
+      <mark className={cn('rounded-sm bg-primary/20 text-inherit')}>{text.slice(start, end)}</mark>
+      {text.slice(end)}
+    </>
+  );
 }
 
 function buildResults(sections: Section[], query: string, pathname: string): SearchResult[] {
@@ -38,6 +55,7 @@ function buildResults(sections: Section[], query: string, pathname: string): Sea
           results.push({
             id: node.item.id,
             name: node.item.name,
+            icon: node.item.icon,
             breadcrumb: sectionCrumb,
             href: resolveHref(node.item),
             isAnchor: resolveAnchorTag(node.item),
@@ -51,6 +69,7 @@ function buildResults(sections: Section[], query: string, pathname: string): Sea
             results.push({
               id: child.item.id,
               name: child.item.name,
+              icon: child.item.icon,
               breadcrumb: [...sectionCrumb, node.item.name],
               href: resolveHref(child.item),
               isAnchor: resolveAnchorTag(child.item),
@@ -82,7 +101,17 @@ export function SearchResults({ sections, query, pathname }: SearchResultsProps)
     return (
       <SidebarGroup>
         <SidebarGroupContent>
-          <p className={cn('px-2 py-3 text-xs text-muted-foreground')}>Sem resultados.</p>
+          <div
+            className={cn(
+              'flex flex-col items-center gap-2 rounded-md border border-dashed px-3 py-6 text-center',
+              'text-muted-foreground',
+            )}
+          >
+            <IGRPIcon iconName="SearchX" className={cn('size-5 shrink-0')} />
+            <p className={cn('text-xs')}>
+              Sem resultados para <span className={cn('font-medium text-foreground')}>"{query}"</span>.
+            </p>
+          </div>
         </SidebarGroupContent>
       </SidebarGroup>
     );
@@ -91,6 +120,9 @@ export function SearchResults({ sections, query, pathname }: SearchResultsProps)
   return (
     <SidebarGroup>
       <SidebarGroupContent>
+        <p className={cn('px-2 pb-1 text-xs font-medium text-sidebar-foreground/70')}>
+          {results.length} {results.length === 1 ? 'resultado' : 'resultados'}
+        </p>
         <SidebarMenu>
           {results.map((result) => {
             const inner = (
@@ -104,14 +136,19 @@ export function SearchResults({ sections, query, pathname }: SearchResultsProps)
                     ? `${result.name} (opens in new tab)`
                     : undefined
                 }
-                className={cn('flex flex-col items-start gap-0.5')}
+                className={cn('flex items-center gap-2')}
               >
-                <span className={cn('truncate')}>{result.name}</span>
-                {result.breadcrumb.length > 0 && (
-                  <span className={cn('truncate text-xs text-muted-foreground')}>
-                    {result.breadcrumb.join(' › ')}
+                {result.icon && <IGRPIcon iconName={result.icon} className={cn('size-4 shrink-0')} />}
+                <span className={cn('flex min-w-0 flex-col items-start')}>
+                  <span className={cn('truncate')}>
+                    <HighlightedName text={result.name} query={query} />
                   </span>
-                )}
+                  {result.breadcrumb.length > 0 && (
+                    <span className={cn('truncate text-xs text-muted-foreground')}>
+                      {result.breadcrumb.join(' › ')}
+                    </span>
+                  )}
+                </span>
               </MenuItemLink>
             );
 

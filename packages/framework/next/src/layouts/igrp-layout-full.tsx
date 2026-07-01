@@ -32,17 +32,24 @@ export async function IGRPLayoutFull({
   const { previewMode, layout, apiManagementConfig, toasterConfig } = config;
   const { session } = layout;
 
-  if (!previewMode && apiManagementConfig?.baseUrl) {
+  const accessToken = session?.accessToken || '';
+  const accessBaseUrl = apiManagementConfig?.baseUrl || '';
+
+  if (!previewMode && accessBaseUrl) {
     igrpSetAccessClientConfig({
-      token: session?.accessToken || '',
-      baseUrl: apiManagementConfig.baseUrl,
+      token: accessToken,
+      baseUrl: accessBaseUrl,
     });
   }
 
+  // token/baseUrl are also passed explicitly to the two providers below —
+  // each renders inside its own <Suspense> boundary, which resumes on a later
+  // tick that doesn't reliably inherit the AsyncLocalStorage store seeded by
+  // `igrpSetAccessClientConfig` above. They re-apply it themselves.
   const sidebarSlot = showSidebar ? (
     <IGRPLayoutErrorBoundary fallback={<IGRPSidebarError />}>
       <Suspense fallback={<IGRPSidebarSkeleton />}>
-        <SidebarDataProvider config={config} />
+        <SidebarDataProvider config={config} token={accessToken} baseUrl={accessBaseUrl} />
       </Suspense>
     </IGRPLayoutErrorBoundary>
   ) : undefined;
@@ -52,6 +59,9 @@ export async function IGRPLayoutFull({
       <Suspense fallback={<IGRPHeaderSkeleton />}>
         <HeaderDataProvider
           config={config}
+          token={accessToken}
+          baseUrl={accessBaseUrl}
+          showSidebar={showSidebar}
           breadcrumbs={breadcrumbs}
           breadcrumbRouteLabels={breadcrumbRouteLabels}
         />

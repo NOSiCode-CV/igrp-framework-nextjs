@@ -1,5 +1,11 @@
 # @igrp/framework-next
 
+## 0.1.0-beta.163
+
+### Patch Changes
+
+- ab6b8c9: - Fix the header's sidebar-toggle button still rendering when `IGRPLayoutFull` is configured with `showSidebar={false}` — the trigger is now hidden whenever there's no sidebar to toggle, instead of only depending on the app's own header config.
+
 ## 0.1.0-beta.162
 
 ### Patch Changes

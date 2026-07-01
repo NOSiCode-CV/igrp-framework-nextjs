@@ -1,5 +1,13 @@
 # @igrp/framework-next-ui
 
+## 0.1.0-beta.161
+
+### Patch Changes
+
+- 22b57b3: - Fixed the sidebar menu search: results now show the item's icon, highlight the matched text, and display a result count, matching the visual style of the rest of the menu.
+  - Added a clear ("×") button to the search field and disabled spellcheck/autocomplete, removing the browser's red squiggly underline on typed queries.
+  - Replaced the plain "no results" text with a dashed empty-state card (icon + quoted query), consistent with the existing "no menus" empty state.
+
 ## 0.1.0-beta.160
 
 ### Patch Changes

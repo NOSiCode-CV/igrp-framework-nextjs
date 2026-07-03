@@ -14,8 +14,6 @@ stages:
   - deploy
 build_storybook_image:
   stage: build
-  only:
-    - main
   rules:
     - changes:
         - packages/design-system-storybook/*
@@ -30,8 +28,6 @@ build_storybook_image:
 deploy_storybook:
   image: gcc:latest
   stage: deploy
-  only:
-    - main
   rules:
     - changes:
         - packages/design-system-storybook/*

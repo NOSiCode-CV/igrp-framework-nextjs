@@ -9,18 +9,15 @@
     "ignoreUnknown": true,
     "includes": [
       "**",
-      "!.next",
-      "!.trae",
-      "!docs",
       "!node_modules",
+      "!.next",
       "!dist",
       "!build",
       "!**/*.css",
       "!.igrpstudio",
       "!src/app/(igrp)/(generated)",
       "!.igrp-migrations-lock.json",
-      "!.npmignore",
-      "!.gitignore"
+      "!.npmignore"
     ]
   },
   "formatter": {
@@ -44,7 +41,22 @@
   "assist": {
     "actions": {
       "source": {
-        "organizeImports": "on"
+        "organizeImports": {
+          "level": "on",
+          "options": {
+            "groups": [
+              ":NODE:",
+              ":BLANK_LINE:",
+              ["react", "react-dom", "next", "next/**"],
+              ":BLANK_LINE:",
+              ":PACKAGE:",
+              ":BLANK_LINE:",
+              ["@/**"],
+              ":BLANK_LINE:",
+              [":PATH:", "./**", "../**"]
+            ]
+          }
+        }
       }
     }
   }

@@ -4,7 +4,7 @@ import { IGRPSectionPermissions } from "@igrp/framework-next-ui";
 
 import { createConfig } from "@/igrp.template.config";
 import { getLayoutConfig, verifySession } from "@/lib/dal";
-import { IGRPQueryProvider } from "@/providers/query-client";
+import { IGRPQueryProvider } from "@/providers/query-provider";
 
 // Every route under this layout is authenticated and reads the session
 // (cookies/headers) per request, so it can never be statically prerendered.

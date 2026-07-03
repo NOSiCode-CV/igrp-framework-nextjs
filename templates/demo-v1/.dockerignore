@@ -1,8 +1,12 @@
 node_modules
 .next
-build
-*.log
-.env*
-npm-debug.log
-README.md
 .git
+.turbo
+.vscode
+.idea
+npm-debug.log*
+pnpm-debug.log*
+.env
+.env.local
+.env.development
+.env.test

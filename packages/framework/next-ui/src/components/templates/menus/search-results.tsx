@@ -109,7 +109,8 @@ export function SearchResults({ sections, query, pathname }: SearchResultsProps)
           >
             <IGRPIcon iconName="SearchX" className={cn('size-5 shrink-0')} />
             <p className={cn('text-xs')}>
-              Sem resultados para <span className={cn('font-medium text-foreground')}>"{query}"</span>.
+              Sem resultados para{' '}
+              <span className={cn('font-medium text-foreground')}>"{query}"</span>.
             </p>
           </div>
         </SidebarGroupContent>
@@ -138,7 +139,9 @@ export function SearchResults({ sections, query, pathname }: SearchResultsProps)
                 }
                 className={cn('flex items-center gap-2')}
               >
-                {result.icon && <IGRPIcon iconName={result.icon} className={cn('size-4 shrink-0')} />}
+                {result.icon && (
+                  <IGRPIcon iconName={result.icon} className={cn('size-4 shrink-0')} />
+                )}
                 <span className={cn('flex min-w-0 flex-col items-start')}>
                   <span className={cn('truncate')}>
                     <HighlightedName text={result.name} query={query} />

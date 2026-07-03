@@ -1,5 +1,6 @@
-import { IGRPTemplateNotFound } from "@igrp/framework-next-ui";
 import type { Metadata } from "next";
+
+import { IGRPTemplateNotFound } from "@igrp/framework-next-ui";
 
 export const metadata: Metadata = {
   title: "404 - Página não encontrada",

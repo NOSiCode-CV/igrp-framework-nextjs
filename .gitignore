@@ -118,3 +118,4 @@ igrp-next-template.zip
 .idea
 .claude/settings.local.json
 .superpowers
+.claude/launch.json

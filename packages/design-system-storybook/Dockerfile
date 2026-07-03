@@ -22,6 +22,10 @@ COPY . .
 # Re-run install so workspace packages get correct node_modules layout
 RUN pnpm install --frozen-lockfile
 
+# Build the design system first — storybook resolves it via package "exports",
+# which point at dist/, and dist/ is gitignored (not present on a clean checkout)
+RUN pnpm --filter @igrp/igrp-framework-react-design-system build
+
 # Build Storybook from workspace
 WORKDIR /igrp-framework-nextjs/packages/design-system-storybook
 RUN pnpm exec storybook build --output-dir storybook-static --stats-json

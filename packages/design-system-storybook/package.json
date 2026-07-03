@@ -34,7 +34,7 @@
   },
   "dependencies": {
     "@hookform/resolvers": "5.4.0",
-    "@igrp/igrp-framework-react-design-system": "workspace:*",
+    "@igrp/igrp-framework-react-design-system": "0.1.0-beta.141",
     "@tailwindcss/vite": "4.3.1",
     "next": "15.5.19",
     "react": "19.2.7",

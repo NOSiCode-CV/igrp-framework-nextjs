@@ -14,6 +14,8 @@ stages:
   - deploy
 build_storybook_image:
   stage: build
+  only:
+    - main
   rules:
     - changes:
         - packages/design-system-storybook/*
@@ -24,8 +26,7 @@ build_storybook_image:
     - docker tag $DOCKER_REGISTRY/$DOCKER_PROJECT/$IMAGE_NAME $DOCKER_REGISTRY/$DOCKER_PROJECT/$IMAGE_NAME:$CI_PIPELINE_ID
     - docker push $DOCKER_REGISTRY/$DOCKER_PROJECT/$IMAGE_NAME
     - docker push $DOCKER_REGISTRY/$DOCKER_PROJECT/$IMAGE_NAME:$CI_PIPELINE_ID
-  only:
-    - main
+
 deploy_storybook:
   image: gcc:latest
   stage: deploy

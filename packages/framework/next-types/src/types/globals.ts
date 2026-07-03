@@ -1,5 +1,5 @@
-import { IGRPHeaderDataArgs } from './header';
-import { IGRPSidebarDataArgs } from './sidebar';
+import type { IGRPHeaderDataArgs } from './header';
+import type { IGRPSidebarDataArgs } from './sidebar';
 
 export interface IGRPMockDataAsync {
   getHeaderData: () => Promise<IGRPHeaderDataArgs>;
@@ -24,4 +24,5 @@ export type IGRPPackageJson = {
   version?: string;
   description?: string;
   displayName?: string;
+  slug?: string;
 };

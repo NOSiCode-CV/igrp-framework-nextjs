@@ -1,0 +1,54 @@
+// Jest Snapshot v1, https://jestjs.io/docs/snapshot-testing
+
+exports[`Components/Separator Horizontal smoke-test 1`] = `
+<div class="p-6 max-w-sm">
+  <div>
+    <h4 class="text-sm font-medium text-foreground">
+      IGRP Design System
+    </h4>
+    <p class="text-sm text-muted-foreground">
+      An open-source component library.
+    </p>
+  </div>
+  <div data-orientation="horizontal"
+       role="none"
+       data-slot="separator"
+       class="bg-border shrink-0 data-[orientation=horizontal]:h-px data-[orientation=horizontal]:w-full data-[orientation=vertical]:h-full data-[orientation=vertical]:w-px my-4"
+       id="_r_ID_"
+  >
+  </div>
+  <p class="text-sm text-muted-foreground">
+    Content below the divider.
+  </p>
+</div>
+`;
+
+exports[`Components/Separator Vertical smoke-test 1`] = `
+<div class="p-6">
+  <div class="flex h-5 items-center gap-4 text-sm">
+    <span>
+      Blog
+    </span>
+    <div data-orientation="vertical"
+         role="none"
+         data-slot="separator"
+         class="bg-border shrink-0 data-[orientation=horizontal]:h-px data-[orientation=horizontal]:w-full data-[orientation=vertical]:h-full data-[orientation=vertical]:w-px"
+         id="_r_ID_"
+    >
+    </div>
+    <span>
+      Docs
+    </span>
+    <div data-orientation="vertical"
+         role="none"
+         data-slot="separator"
+         class="bg-border shrink-0 data-[orientation=horizontal]:h-px data-[orientation=horizontal]:w-full data-[orientation=vertical]:h-full data-[orientation=vertical]:w-px"
+         id="_r_ID_"
+    >
+    </div>
+    <span>
+      Source
+    </span>
+  </div>
+</div>
+`;

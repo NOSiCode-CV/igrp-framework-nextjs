@@ -42,7 +42,11 @@ export {
   type BreadcrumbItem,
 } from './components/templates/breadcrumbs';
 
-export { IGRPTemplateCommandSearch } from './components/templates/command-search';
+export {
+  IGRPTemplateCommandSearch,
+  type IGRPTemplateCommandSearchProps,
+  type IGRPCommandItem,
+} from './components/templates/command-search';
 
 export { IGRPTemplateHeader } from './components/templates/header';
 
@@ -64,7 +68,10 @@ export {
   type IGRPTemplateNotFoundProps,
 } from './components/templates/not-found';
 
-export { IGRPTemplateNotifications } from './components/templates/notifications';
+export {
+  IGRPTemplateNotifications,
+  type IGRPTemplateNotificationsProps,
+} from './components/templates/notifications';
 
 export { IGRPSessionWatcher } from './components/templates/session-watcher';
 
@@ -79,6 +86,24 @@ export {
 
 export { IGRPNestedProviders, type IGRPNestedProvidersArgs } from './components/providers/nested';
 
-export { IGRPRootProviders } from './components/providers/root';
+export {
+  IGRPRootProvidersFull,
+  type IGRPRootProvidersFullProps,
+} from './components/providers/root-full';
+
+export {
+  IGRPRootProvidersBlank,
+  type IGRPRootProvidersBlankProps,
+} from './components/providers/root-blank';
+
+// @deprecated Use IGRPRootProvidersFull instead.
+export { IGRPRootProviders, type IGRPRootProvidersArgs } from './components/providers/root';
 
 export { IGRPSessionProvider } from './components/providers/session';
+
+// permissions
+export { IGRPSectionPermissions } from './permissions/section-permissions';
+export { usePermissions } from './permissions/use-permissions';
+export { IGRPForbidden, type IGRPForbiddenProps } from './permissions/forbidden';
+export { IGRPAuthorization, type IGRPAuthorizationProps } from './permissions/authorization';
+export { IGRPGuardPage } from './permissions/guard-page';

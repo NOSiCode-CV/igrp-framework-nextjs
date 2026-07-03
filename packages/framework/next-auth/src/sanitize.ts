@@ -29,9 +29,30 @@ export function sanitizeRedirectUrl(
   if (trimmed.length === 0 || trimmed.length > MAX_REDIRECT_LENGTH) return fallback;
   if (DANGEROUS_PROTOCOLS.test(trimmed)) return fallback;
 
+  // Reject backslashes, raw or percent-encoded. A browser normalizes a leading
+  // "/\" to "//", turning it into a protocol-relative off-origin redirect that
+  // the "//" check below would otherwise miss.
+  let decoded = trimmed;
+  try {
+    decoded = decodeURIComponent(trimmed);
+  } catch {
+    // Malformed escape sequence — keep the raw value and let the checks below run.
+  }
+  if (trimmed.includes('\\') || decoded.includes('\\')) return fallback;
+
+  // Reject C0 control characters and DEL (raw or decoded). WHATWG URL parsing
+  // strips \t \n \r, so "/\t/evil.com" normalizes to "//evil.com" — a
+  // protocol-relative off-origin redirect the "//" guard below would miss.
+  if (/[\x00-\x1f\x7f]/.test(trimmed) || /[\x00-\x1f\x7f]/.test(decoded)) {
+    return fallback;
+  }
+
   if (trimmed.startsWith('/') && !trimmed.startsWith('//')) {
-    const path = trimmed.split('?')[0];
-    if (path.includes('..')) return fallback;
+    // Reject path traversal by segment (on the decoded path, ignoring query/hash),
+    // so "/a/../b" and "/a/%2e%2e/b" are rejected while "/file..name" and a ".."
+    // inside a query value are allowed.
+    const pathOnly = decoded.split('?')[0].split('#')[0];
+    if (pathOnly.split('/').some((segment) => segment === '..')) return fallback;
     return trimmed;
   }
 

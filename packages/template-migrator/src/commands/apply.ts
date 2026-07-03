@@ -1,10 +1,11 @@
 import { createInterface } from "readline";
-import { join } from "path";
+import { existsSync, mkdirSync, readFileSync, statSync, writeFileSync } from "fs";
+import { dirname, join } from "path";
 import { getManifest } from "../manifest.js";
 import { readLock, writeLock } from "../lock.js";
 import { executeStep } from "../apply.js";
 import { hashFile } from "../hash.js";
-import type { LockEntry } from "../types.js";
+import type { LockEntry, MigrationStep } from "../types.js";
 
 async function confirm(question: string): Promise<boolean> {
   const rl = createInterface({ input: process.stdin, output: process.stdout });
@@ -13,9 +14,16 @@ async function confirm(question: string): Promise<boolean> {
   });
 }
 
-export async function apply(appRoot: string, opts: { toId?: string; yes?: boolean }) {
+export async function apply(
+  appRoot: string,
+  opts: { toId?: string; yes?: boolean; payloadDir?: string }
+) {
   const manifest = getManifest();
   const lock = readLock(appRoot);
+  // Self-heal: stamp the current template identifier so apps migrated under an
+  // older identifier (e.g. the former "demo-legacy") converge on the current one.
+  // The field is cosmetic (only printed by `status`), so this is purely tidiness.
+  lock.template = manifest.template;
   const appliedIds = new Set(lock.applied.map((a) => a.id));
   let pending = manifest.migrations.filter((m) => !appliedIds.has(m.id));
   if (opts.toId) {
@@ -29,13 +37,20 @@ export async function apply(appRoot: string, opts: { toId?: string; yes?: boolea
   for (const migration of pending) {
     const ver = migration.targetFrameworkVersion ? ` (→ framework ${migration.targetFrameworkVersion})` : "";
     console.log(`── ${migration.id}${ver}`);
+    const missingReqs = (migration.requires ?? []).filter((r) => !appliedIds.has(r));
+    if (missingReqs.length > 0) {
+      console.error(`  ✗ ${migration.id} requires unapplied migration(s): ${missingReqs.join(", ")}`);
+      console.error("  Aborting — apply the prerequisite(s) first.");
+      return;
+    }
     if (!opts.yes) {
       const ok = await confirm(`  Apply ${migration.steps.length} step(s)?`);
       if (!ok) { console.log("  Skipped.\n"); continue; }
     }
 
     const fileHashes: Record<string, string> = {};
-    const undoSteps: ReturnType<typeof executeStep>[] = [];
+    const undoPayloads: Record<string, string> = {};
+    const undoSteps: MigrationStep[] = [];
     try {
       for (const step of migration.steps) {
         const pathKey = (step as Record<string, unknown>).path ?? (step as Record<string, unknown>).file ?? (step as Record<string, unknown>).manifest;
@@ -43,13 +58,54 @@ export async function apply(appRoot: string, opts: { toId?: string; yes?: boolea
           const hash = hashFile(join(appRoot, pathKey));
           if (hash) fileHashes[pathKey] = hash;
         }
-        const undo = executeStep(step, appRoot);
+        // Capture prior content for steps whose undo would otherwise be an
+        // unrestorable __undo__ placeholder: an overwrite of an existing file,
+        // or a delete. (A file.create over nothing undoes cleanly via delete.)
+        if (
+          (step.type === "file.write" || step.type === "file.delete" || step.type === "file.create") &&
+          typeof (step as { path?: unknown }).path === "string"
+        ) {
+          const path = (step as { path: string }).path;
+          const target = join(appRoot, path);
+          // First capture wins: if a migration touches the same path twice,
+          // later captures would hold intermediate migrated content, not the
+          // true pre-migration original. Directories are never captured
+          // (file.delete may target one) — they fall into the rollback
+          // refusal path, which is correct.
+          if (!(path in undoPayloads) && existsSync(target) && statSync(target).isFile()) {
+            undoPayloads[path] = readFileSync(target, "utf8");
+          }
+        }
+        const undo = executeStep(step, appRoot, opts.payloadDir);
         undoSteps.push(undo);
         console.log(`  ✓ ${step.type}  ${pathKey}`);
       }
     } catch (err) {
       console.error(`  ✗ Error: ${(err as Error).message}`);
-      console.error("  Migration aborted. Run again to resume.");
+      // Transactional unwind: reverse the steps that already ran THIS migration
+      // so disk returns to its pre-migration state. Without this, a re-run
+      // re-captures undo baselines from already-mutated files, silently
+      // corrupting the recorded "original" content used by rollback.
+      for (const undo of [...undoSteps].reverse()) {
+        try {
+          const undoRec = undo as { path?: string; from?: string; patch?: string };
+          const isPlaceholder = undoRec.from === "__undo__" || undoRec.patch === "__undo__";
+          if (isPlaceholder) {
+            const p = undoRec.path;
+            const content = p !== undefined ? undoPayloads[p] : undefined;
+            if (p !== undefined && content !== undefined) {
+              const dest = join(appRoot, p);
+              mkdirSync(dirname(dest), { recursive: true });
+              writeFileSync(dest, content, "utf8");
+            }
+          } else {
+            executeStep(undo, appRoot, opts.payloadDir);
+          }
+        } catch (unwindErr) {
+          console.error(`  ✗ Unwind step failed: ${(unwindErr as Error).message}`);
+        }
+      }
+      console.error("  Migration aborted and rolled back. Fix the cause, then re-run.");
       return;
     }
 
@@ -60,9 +116,11 @@ export async function apply(appRoot: string, opts: { toId?: string; yes?: boolea
       manifestHash: migration.contentHash,
       undo: undoSteps,
       fileHashes,
+      ...(Object.keys(undoPayloads).length > 0 ? { undoPayloads } : {}),
     };
     lock.applied.push(entry);
     writeLock(appRoot, lock);
+    appliedIds.add(migration.id);
     console.log(`  ✓ done\n`);
   }
 

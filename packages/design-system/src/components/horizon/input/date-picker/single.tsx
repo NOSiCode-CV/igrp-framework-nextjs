@@ -8,7 +8,15 @@ import { CalendarIcon } from "lucide-react"
 import { DD_MM_YYYY } from "../../../../lib/constants"
 import { cn } from "../../../../lib/utils"
 import { type IGRPDatePickerBaseProps } from "../../../../types"
-import { FormControl, FormDescription, FormField, FormItem, FormLabel, FormMessage } from "../../../primitives/form"
+import {
+  useFormField,
+  FormControl,
+  FormDescription,
+  FormField,
+  FormItem,
+  FormLabel,
+  FormMessage,
+} from "../../../primitives/form"
 import { Button } from "../../../primitives/button"
 import { Popover, PopoverContent, PopoverTrigger } from "../../../primitives/popover"
 import { IGRPButton } from "../../button"
@@ -25,6 +33,8 @@ function DatePickerSingleField({
   dateFormat,
   disabled,
   disabledPicker,
+  ariaInvalid,
+  ariaDescribedBy,
 }: {
   value: Date | undefined
   onChange: (date: Date | undefined) => void
@@ -34,6 +44,8 @@ function DatePickerSingleField({
   dateFormat: string
   disabled?: boolean
   disabledPicker?: boolean
+  ariaInvalid?: boolean
+  ariaDescribedBy?: string
 }) {
   const displayText = value ? format(value, dateFormat) : placeholder
 
@@ -45,6 +57,8 @@ function DatePickerSingleField({
             id={fieldName}
             variant="outline"
             disabled={disabledPicker || disabled}
+            aria-invalid={ariaInvalid || undefined}
+            aria-describedby={ariaDescribedBy}
             className={cn(
               "group w-full justify-between font-normal shadow-xs",
               "bg-background hover:bg-accent border-input dark:bg-input/30 dark:border-input dark:hover:bg-input/50",
@@ -77,12 +91,28 @@ function DatePickerSingleField({
           className={cn("size-2 absolute right-2 top-1/2 h-3 w-3 -translate-y-1/2 text-muted-foreground z-100")}
           size="icon"
           iconName="X"
-          iconSize={10}
+          aria-label="Clear"
           disabled={disabledPicker}
           showIcon
         />
       )}
     </div>
+  )
+}
+
+/**
+ * @internal Wrapper rendered inside FormItem that reads the form context to wire
+ * aria-invalid / aria-describedby onto the actual date Button element.
+ */
+function DatePickerSingleFieldWithA11y(props: React.ComponentProps<typeof DatePickerSingleField>) {
+  const { error, formItemId, formMessageId } = useFormField()
+  return (
+    <DatePickerSingleField
+      {...props}
+      fieldName={formItemId}
+      ariaInvalid={!!error}
+      ariaDescribedBy={error ? formMessageId : undefined}
+    />
   )
 }
 
@@ -147,7 +177,7 @@ function IGRPDatePickerSingle({
                 </FormLabel>
               )}
               <FormControl>
-                <DatePickerSingleField
+                <DatePickerSingleFieldWithA11y
                   {...fieldProps}
                   value={field.value}
                   onChange={(val) => {

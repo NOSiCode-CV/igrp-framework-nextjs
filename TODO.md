@@ -23,8 +23,6 @@ Add the following components to the design system:
 
 ## Component Updates
 
-- [ ] Review banner from experimental
-
 ## New Components
 
 - [ ] Progress
@@ -36,10 +34,6 @@ Add the following components to the design system:
 - [ ] Charts
 - [ ] Banner status
 - [ ] IGRPColors
-
-## Exports
-
-- [ ] Implement exports separately:, `/horizon`, `/utilities` [2027]
 
 ## Research & Documentation
 
@@ -57,22 +51,22 @@ Add the following components to the design system:
 
 ## Next UI
 
-- Components:
-
--- [ ] Error component
--- [ ] Loading component
--- [ ] Not found component
-
-- Menu & Sidebar
-
--- [ ] Menu: When sidebar is closed, show separator between groups. Review scroll behavior for better design
-
 -- Get breadcrumbs via script
+-- Hide notifications, profile and settings from the sidebar
 
 ## Animations component see: <https://animations.dev/learn/animation-theory/the-easing-blueprint>
 
-## Skills
+## V2
 
--- Add dynamic import if the component is not loaded when the page start, example: dialog
+-- better auth
+-- nextjs 16
+-- shadcn latest
+-- design system by registry
+-- design system new components
+-- i8n for template and packages
+-- design system, rich text editor
+-- design system server data table paginated
+-- https://nextjs.org/blog/next-16-3-ai-improvements
+-- https://github.com/vercel-labs/next-skills
+-- https://github.com/vercel/next.js/tree/canary/skills
 
-## Async slug from applications

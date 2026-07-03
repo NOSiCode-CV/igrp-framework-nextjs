@@ -6,7 +6,7 @@ import { useFormContext } from "react-hook-form"
 import { cn } from "../../../lib/utils"
 import type { IGRPInputProps } from "../../../types"
 import { Input } from "../../primitives/input"
-import { IGRPFormField } from "../form/form-field"
+import { FormControl, FormDescription, FormField, FormItem, FormLabel, FormMessage } from "../../primitives/form"
 import { IGRPIcon } from "../icon"
 import { IGRPLabel } from "../label"
 
@@ -54,42 +54,54 @@ function IGRPInputText({
 
   if (formContext) {
     return (
-      <IGRPFormField
-        name={fieldName}
-        label={label}
-        helperText={helperText}
-        className={className}
-        required={required}
+      <FormField
         control={formContext.control}
-      >
-        {(field, fieldState) => (
-          <div className={cn("relative")}>
-            <Input
-              id={fieldName}
-              name={fieldName}
-              type={type}
-              required={required}
-              aria-required={required}
-              aria-describedby={helperText || error ? `${fieldName}-helper` : undefined}
-              className={cn(
-                "peer bg-background py-3 text-sm outline-hidden",
-                showIcon && positionParentIcon,
-                (fieldState.error || error) && "border-destructive focus-visible:ring-destructive/20",
-                inputClassName,
-              )}
-              value={field.value || ""}
-              onChange={field.onChange}
-              onBlur={field.onBlur}
-              {...props}
-            />
-            {showIcon && (
-              <div className={cn("absolute inset-y-0 flex items-center", positionIcon)}>
-                <IGRPIcon iconName={iconName} size={iconSize} className={iconClassName} />
-              </div>
+        name={fieldName}
+        render={({ field, fieldState }) => (
+          <FormItem className={className}>
+            {label && (
+              <FormLabel
+                className={cn("gap-0.5", required && 'after:content-["*"] after:text-destructive', labelClassName)}
+              >
+                {label}
+              </FormLabel>
             )}
-          </div>
+            <div className={cn("relative")}>
+              <FormControl>
+                <Input
+                  name={fieldName}
+                  type={type}
+                  required={required}
+                  aria-required={required}
+                  className={cn(
+                    "peer bg-background py-3 text-sm outline-hidden",
+                    showIcon && positionParentIcon,
+                    (fieldState.error || error) && "border-destructive focus-visible:ring-destructive/20",
+                    inputClassName,
+                  )}
+                  value={field.value ?? ""}
+                  onChange={field.onChange}
+                  onBlur={field.onBlur}
+                  {...props}
+                />
+              </FormControl>
+              {showIcon && (
+                <div className={cn("absolute inset-y-0 flex items-center pointer-events-none", positionIcon)}>
+                  <IGRPIcon iconName={iconName} size={iconSize} className={iconClassName} />
+                </div>
+              )}
+            </div>
+            {helperText && !fieldState.error && !error && <FormDescription>{helperText}</FormDescription>}
+            {error ? (
+              <p className={cn("text-destructive text-xs")} role="alert">
+                {error}
+              </p>
+            ) : (
+              <FormMessage className={cn("text-xs")} />
+            )}
+          </FormItem>
         )}
-      </IGRPFormField>
+      />
     )
   }
 
@@ -105,7 +117,7 @@ function IGRPInputText({
           required={required}
           aria-required={required}
           aria-invalid={!!error || !!props["aria-invalid"]}
-          aria-describedby={helperText || error ? `${fieldName}-helper` : undefined}
+          aria-describedby={error ? `${fieldName}-error` : helperText ? `${fieldName}-helper` : undefined}
           className={cn(
             "peer bg-background py-3 text-sm outline-hidden",
             showIcon && positionParentIcon,
@@ -115,7 +127,7 @@ function IGRPInputText({
           {...props}
         />
         {showIcon && (
-          <div className={cn("absolute inset-y-0 flex items-center", positionIcon)}>
+          <div className={cn("absolute inset-y-0 flex items-center pointer-events-none", positionIcon)}>
             <IGRPIcon iconName={iconName} size={iconSize} className={iconClassName} />
           </div>
         )}

@@ -1,15 +1,15 @@
 "use client"
 
-import { useId, useState, useCallback } from "react"
+import { useId, useState, useCallback, type ReactNode } from "react"
 import { useFormContext } from "react-hook-form"
 import type { VariantProps } from "class-variance-authority"
 
 import { cn } from "../../../lib/utils"
 import { type IGRPInputProps } from "../../../types"
 import { Input } from "../../primitives/input"
+import { FormControl, FormDescription, FormField, FormItem, FormLabel, FormMessage } from "../../primitives/form"
 import { IGRPButton } from "../button"
 import { IGRPFieldDescription } from "../field-description"
-import { IGRPFormField } from "../form/form-field"
 import { IGRPIcon, type IGRPIconName } from "../icon"
 import { IGRPLabel } from "../label"
 
@@ -48,78 +48,45 @@ interface IGRPInputSearchProps extends Omit<IGRPInputProps, "value" | "defaultVa
   loading?: boolean
 }
 
-/** @internal Search input field with icon and submit button. */
-function SearchInputField({
-  value,
-  onChange,
-  onKeyDown,
-  fieldName,
-  required,
-  error,
-  helperText,
-  helperId,
-  className,
+/**
+ * @internal Wraps the supplied input element with the start-icon and submit-button decorations.
+ * The caller owns the input element so it can optionally be wrapped in `<FormControl>` for proper
+ * label↔input id forwarding under form context.
+ */
+function SearchInputDecoration({
+  inputNode,
   showStartIcon,
   startIcon,
   showSubmitButton,
   submitButtonClassName,
   submitButtonLabel,
-  onSearch,
   submitIcon,
-  iconSize,
   submitVariant,
   loading,
+  onSearch,
+  value,
   iconPlacement,
   showIcon,
   disabled,
-  ...inputProps
 }: {
-  value: string
-  onChange: (e: React.ChangeEvent<HTMLInputElement>) => void
-  onKeyDown?: (e: React.KeyboardEvent<HTMLInputElement>) => void
-  fieldName: string
-  required: boolean
-  error?: string
-  helperText?: string
-  helperId?: string
-  className?: string
+  inputNode: ReactNode
   showStartIcon: boolean
   startIcon: IGRPIconName | string
   showSubmitButton: boolean
   submitButtonClassName?: string
   submitButtonLabel?: string
-  onSearch?: (value: string) => void
   submitIcon: IGRPIconName | string
-  iconSize?: number | string
   submitVariant: VariantProps<typeof IGRPButton>["variant"]
   loading?: boolean
+  onSearch?: (value: string) => void
+  value: string
   iconPlacement?: IGRPInputProps["iconPlacement"]
   showIcon?: boolean
   disabled?: boolean
-} & Omit<IGRPInputProps, "value" | "defaultValue">) {
+}) {
   return (
     <div className={cn("relative py-2")}>
-      <Input
-        id={fieldName}
-        name={fieldName}
-        type="search"
-        required={required}
-        aria-required={required}
-        aria-invalid={!!error || !!inputProps["aria-invalid"]}
-        aria-describedby={helperText || error ? helperId : undefined}
-        className={cn(
-          "peer py-3 text-sm outline-hidden flex w-full items-center",
-          showStartIcon && "ps-6.5",
-          showSubmitButton && "pe-9",
-          error && "border-destructive focus-visible:ring-destructive/20",
-          className,
-        )}
-        value={value}
-        onChange={onChange}
-        onKeyDown={onKeyDown}
-        disabled={disabled}
-        {...inputProps}
-      />
+      {inputNode}
 
       {showStartIcon && (
         <div
@@ -143,7 +110,6 @@ function SearchInputField({
           disabled={disabled}
           showIcon={showIcon}
           iconName={submitIcon}
-          iconSize={iconSize}
           variant={submitVariant}
           loading={loading}
           iconPlacement={iconPlacement}
@@ -189,7 +155,6 @@ function IGRPInputSearch({
   debounceMs = 2000,
   isDebounce = false,
   showIcon = true,
-  iconSize = 14,
   iconPlacement,
   submitVariant = "ghost",
   loading,
@@ -212,56 +177,82 @@ function IGRPInputSearch({
     [controlledValue, debouncedSearch, isDebounce, setValueChange],
   )
 
-  const inputFieldProps = {
-    fieldName,
-    required,
-    error,
-    helperText,
-    helperId: `${fieldName}-helper`,
-    className,
+  const inputClass = (hasError: boolean) =>
+    cn(
+      "peer py-3 text-sm outline-hidden flex w-full items-center",
+      showStartIcon && "ps-6.5",
+      showSubmitButton && "pe-9",
+      hasError && "border-destructive focus-visible:ring-destructive/20",
+      className,
+    )
+
+  const decorationProps = {
     showStartIcon,
     startIcon,
     showSubmitButton,
     submitButtonClassName,
     submitButtonLabel,
-    onSearch,
     submitIcon,
-    iconSize,
     submitVariant,
     loading,
+    onSearch,
     iconPlacement,
     showIcon,
     disabled: props.disabled,
-    ...props,
   }
 
   if (formContext) {
     return (
-      <IGRPFormField
-        name={fieldName}
-        label={label}
-        helperText={helperText}
-        className={className}
-        required={required}
+      <FormField
         control={formContext.control}
-      >
-        {(field) => (
-          <SearchInputField
-            {...inputFieldProps}
-            value={field.value ?? ""}
-            onChange={(e) => {
-              field.onChange(e.target.value)
-              handleInputChange(e.target.value)
-            }}
-            onKeyDown={(e) => {
-              if (e.key === "Enter") {
-                e.preventDefault()
-                onSearch?.(field.value)
+        name={fieldName}
+        render={({ field, fieldState }) => (
+          <FormItem className={className}>
+            {label && (
+              <FormLabel className={cn("gap-0.5", required && 'after:content-["*"] after:text-destructive')}>
+                {label}
+              </FormLabel>
+            )}
+            <SearchInputDecoration
+              {...decorationProps}
+              value={field.value ?? ""}
+              inputNode={
+                <FormControl>
+                  <Input
+                    name={fieldName}
+                    type="search"
+                    required={required}
+                    aria-required={required}
+                    className={inputClass(!!(fieldState.error || error))}
+                    value={field.value ?? ""}
+                    onChange={(e) => {
+                      field.onChange(e.target.value)
+                      handleInputChange(e.target.value)
+                    }}
+                    onKeyDown={(e) => {
+                      if (e.key === "Enter") {
+                        e.preventDefault()
+                        onSearch?.(field.value ?? "")
+                      }
+                    }}
+                    onBlur={field.onBlur}
+                    disabled={props.disabled}
+                    {...props}
+                  />
+                </FormControl>
               }
-            }}
-          />
+            />
+            {helperText && !fieldState.error && !error && <FormDescription>{helperText}</FormDescription>}
+            {error ? (
+              <p className={cn("text-destructive text-xs")} role="alert">
+                {error}
+              </p>
+            ) : (
+              <FormMessage className={cn("text-xs")} />
+            )}
+          </FormItem>
         )}
-      </IGRPFormField>
+      />
     )
   }
 
@@ -269,16 +260,31 @@ function IGRPInputSearch({
     <div className={cn("*:not-first:mt-2", className)}>
       {label && <IGRPLabel label={label} required={required} id={fieldName} />}
 
-      <SearchInputField
-        {...inputFieldProps}
+      <SearchInputDecoration
+        {...decorationProps}
         value={displayValue}
-        onChange={(e) => handleInputChange(e.target.value)}
-        onKeyDown={(e) => {
-          if (e.key === "Enter") {
-            e.preventDefault()
-            onSearch?.(displayValue)
-          }
-        }}
+        inputNode={
+          <Input
+            id={fieldName}
+            name={fieldName}
+            type="search"
+            required={required}
+            aria-required={required}
+            aria-invalid={!!error || !!props["aria-invalid"]}
+            aria-describedby={helperText || error ? `${fieldName}-helper` : undefined}
+            className={inputClass(!!error)}
+            value={displayValue}
+            onChange={(e) => handleInputChange(e.target.value)}
+            onKeyDown={(e) => {
+              if (e.key === "Enter") {
+                e.preventDefault()
+                onSearch?.(displayValue)
+              }
+            }}
+            disabled={props.disabled}
+            {...props}
+          />
+        }
       />
 
       <IGRPFieldDescription error={error} helperText={helperText} />

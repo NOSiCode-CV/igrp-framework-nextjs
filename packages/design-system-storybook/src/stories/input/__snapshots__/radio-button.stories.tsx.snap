@@ -1,0 +1,1403 @@
+// Jest Snapshot v1, https://jestjs.io/docs/snapshot-testing
+
+exports[`Components/input/RadioGroup Default smoke-test 1`] = `
+<div class="space-y-2">
+  <label data-slot="label"
+         class="flex items-center text-sm leading-none font-medium select-none group-data-[disabled=true]:pointer-events-none group-data-[disabled=true]:opacity-50 peer-disabled:cursor-not-allowed peer-disabled:opacity-50 gap-0.5"
+         for="_r_ID_"
+  >
+    Select an option
+  </label>
+  <div role="radiogroup"
+       aria-required="false"
+       dir="ltr"
+       data-slot="radio-group"
+       class="gap-3 flex flex-row"
+       aria-invalid="false"
+       tabindex="0"
+       style="outline: none;"
+  >
+    <div class="flex gap-2 items-center">
+      <button type="button"
+              role="radio"
+              aria-checked="true"
+              data-state="checked"
+              value="option1"
+              data-slot="radio-group-item"
+              class="text-primary focus-visible:border-ring focus-visible:ring-ring/50 aria-invalid:ring-destructive/20 dark:aria-invalid:ring-destructive/40 aria-invalid:border-destructive aspect-square shrink-0 rounded-full border transition-[color,box-shadow] outline-none focus-visible:ring-[3px] disabled:cursor-not-allowed disabled:opacity-50 border-input dark:bg-input/30 shadow-xs size-4 mt-0.5"
+              id="_r_ID_-option1"
+              tabindex="-1"
+              data-radix-id""
+      >
+        <span data-state="checked"
+              data-slot="radio-group-indicator"
+              class="relative flex items-center justify-center"
+        >
+          <svg xmlns="http://www.w3.org/2000/svg"
+               width="24"
+               height="24"
+               viewbox="0 0 24 24"
+               fill="none"
+               stroke="currentColor"
+               stroke-width="2"
+               stroke-linecap="round"
+               stroke-linejoin="round"
+               class="lucide lucide-circle fill-primary absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 size-2"
+               aria-hidden="true"
+          >
+            <circle cx="12"
+                    cy="12"
+                    r="10"
+            >
+            </circle>
+          </svg>
+        </span>
+      </button>
+      <div>
+        <label data-slot="label"
+               class="flex items-center select-none group-data-[disabled=true]:pointer-events-none group-data-[disabled=true]:opacity-50 peer-disabled:cursor-not-allowed peer-disabled:opacity-50 gap-0.5 text-sm font-medium leading-none"
+               for="_r_ID_-option1"
+        >
+          Option 1
+        </label>
+      </div>
+    </div>
+    <div class="flex gap-2 items-center">
+      <button type="button"
+              role="radio"
+              aria-checked="false"
+              data-state="unchecked"
+              value="option2"
+              data-slot="radio-group-item"
+              class="text-primary focus-visible:border-ring focus-visible:ring-ring/50 aria-invalid:ring-destructive/20 dark:aria-invalid:ring-destructive/40 aria-invalid:border-destructive aspect-square shrink-0 rounded-full border transition-[color,box-shadow] outline-none focus-visible:ring-[3px] disabled:cursor-not-allowed disabled:opacity-50 border-input dark:bg-input/30 shadow-xs size-4 mt-0.5"
+              id="_r_ID_-option2"
+              tabindex="-1"
+              data-radix-id""
+      >
+      </button>
+      <div>
+        <label data-slot="label"
+               class="flex items-center select-none group-data-[disabled=true]:pointer-events-none group-data-[disabled=true]:opacity-50 peer-disabled:cursor-not-allowed peer-disabled:opacity-50 gap-0.5 text-sm font-medium leading-none"
+               for="_r_ID_-option2"
+        >
+          Option 2
+        </label>
+      </div>
+    </div>
+    <div class="flex gap-2 items-center">
+      <button type="button"
+              role="radio"
+              aria-checked="false"
+              data-state="unchecked"
+              value="option3"
+              data-slot="radio-group-item"
+              class="text-primary focus-visible:border-ring focus-visible:ring-ring/50 aria-invalid:ring-destructive/20 dark:aria-invalid:ring-destructive/40 aria-invalid:border-destructive aspect-square shrink-0 rounded-full border transition-[color,box-shadow] outline-none focus-visible:ring-[3px] disabled:cursor-not-allowed disabled:opacity-50 border-input dark:bg-input/30 shadow-xs size-4 mt-0.5"
+              id="_r_ID_-option3"
+              tabindex="-1"
+              data-radix-id""
+      >
+      </button>
+      <div>
+        <label data-slot="label"
+               class="flex items-center select-none group-data-[disabled=true]:pointer-events-none group-data-[disabled=true]:opacity-50 peer-disabled:cursor-not-allowed peer-disabled:opacity-50 gap-0.5 text-sm font-medium leading-none"
+               for="_r_ID_-option3"
+        >
+          Option 3
+        </label>
+      </div>
+    </div>
+  </div>
+</div>
+`;
+
+exports[`Components/input/RadioGroup Disabled smoke-test 1`] = `
+<div class="space-y-2">
+  <label data-slot="label"
+         class="flex items-center text-sm leading-none font-medium select-none group-data-[disabled=true]:pointer-events-none group-data-[disabled=true]:opacity-50 peer-disabled:cursor-not-allowed peer-disabled:opacity-50 gap-0.5"
+         for="_r_ID_"
+  >
+    Disabled radio group
+  </label>
+  <div role="radiogroup"
+       aria-required="false"
+       data-disabled
+       dir="ltr"
+       data-slot="radio-group"
+       class="gap-3 flex flex-row"
+       aria-invalid="false"
+       tabindex="-1"
+       style="outline: none;"
+  >
+    <div class="flex gap-2 items-center">
+      <button type="button"
+              role="radio"
+              aria-checked="true"
+              data-state="checked"
+              data-disabled
+              disabled
+              value="option1"
+              data-slot="radio-group-item"
+              class="text-primary focus-visible:border-ring focus-visible:ring-ring/50 aria-invalid:ring-destructive/20 dark:aria-invalid:ring-destructive/40 aria-invalid:border-destructive aspect-square shrink-0 rounded-full border transition-[color,box-shadow] outline-none focus-visible:ring-[3px] disabled:cursor-not-allowed disabled:opacity-50 border-input dark:bg-input/30 shadow-xs size-4 mt-0.5"
+              id="_r_ID_-option1"
+              tabindex="-1"
+              data-radix-id""
+      >
+        <span data-state="checked"
+              data-disabled
+              data-slot="radio-group-indicator"
+              class="relative flex items-center justify-center"
+        >
+          <svg xmlns="http://www.w3.org/2000/svg"
+               width="24"
+               height="24"
+               viewbox="0 0 24 24"
+               fill="none"
+               stroke="currentColor"
+               stroke-width="2"
+               stroke-linecap="round"
+               stroke-linejoin="round"
+               class="lucide lucide-circle fill-primary absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 size-2"
+               aria-hidden="true"
+          >
+            <circle cx="12"
+                    cy="12"
+                    r="10"
+            >
+            </circle>
+          </svg>
+        </span>
+      </button>
+      <div>
+        <label data-slot="label"
+               class="flex items-center select-none group-data-[disabled=true]:pointer-events-none group-data-[disabled=true]:opacity-50 peer-disabled:cursor-not-allowed peer-disabled:opacity-50 gap-0.5 text-sm font-medium leading-none"
+               for="_r_ID_-option1"
+        >
+          Option 1
+        </label>
+      </div>
+    </div>
+    <div class="flex gap-2 items-center">
+      <button type="button"
+              role="radio"
+              aria-checked="false"
+              data-state="unchecked"
+              data-disabled
+              disabled
+              value="option2"
+              data-slot="radio-group-item"
+              class="text-primary focus-visible:border-ring focus-visible:ring-ring/50 aria-invalid:ring-destructive/20 dark:aria-invalid:ring-destructive/40 aria-invalid:border-destructive aspect-square shrink-0 rounded-full border transition-[color,box-shadow] outline-none focus-visible:ring-[3px] disabled:cursor-not-allowed disabled:opacity-50 border-input dark:bg-input/30 shadow-xs size-4 mt-0.5"
+              id="_r_ID_-option2"
+              tabindex="-1"
+              data-radix-id""
+      >
+      </button>
+      <div>
+        <label data-slot="label"
+               class="flex items-center select-none group-data-[disabled=true]:pointer-events-none group-data-[disabled=true]:opacity-50 peer-disabled:cursor-not-allowed peer-disabled:opacity-50 gap-0.5 text-sm font-medium leading-none"
+               for="_r_ID_-option2"
+        >
+          Option 2
+        </label>
+      </div>
+    </div>
+    <div class="flex gap-2 items-center">
+      <button type="button"
+              role="radio"
+              aria-checked="false"
+              data-state="unchecked"
+              data-disabled
+              disabled
+              value="option3"
+              data-slot="radio-group-item"
+              class="text-primary focus-visible:border-ring focus-visible:ring-ring/50 aria-invalid:ring-destructive/20 dark:aria-invalid:ring-destructive/40 aria-invalid:border-destructive aspect-square shrink-0 rounded-full border transition-[color,box-shadow] outline-none focus-visible:ring-[3px] disabled:cursor-not-allowed disabled:opacity-50 border-input dark:bg-input/30 shadow-xs size-4 mt-0.5"
+              id="_r_ID_-option3"
+              tabindex="-1"
+              data-radix-id""
+      >
+      </button>
+      <div>
+        <label data-slot="label"
+               class="flex items-center select-none group-data-[disabled=true]:pointer-events-none group-data-[disabled=true]:opacity-50 peer-disabled:cursor-not-allowed peer-disabled:opacity-50 gap-0.5 text-sm font-medium leading-none"
+               for="_r_ID_-option3"
+        >
+          Option 3
+        </label>
+      </div>
+    </div>
+  </div>
+</div>
+`;
+
+exports[`Components/input/RadioGroup IGRPGridSizes smoke-test 1`] = `
+<div class="grid grid-cols-12 gap-4 w-full max-w-4xl">
+  <div class="space-y-2">
+    <label data-slot="label"
+           class="flex items-center text-sm leading-none font-medium select-none group-data-[disabled=true]:pointer-events-none group-data-[disabled=true]:opacity-50 peer-disabled:cursor-not-allowed peer-disabled:opacity-50 gap-0.5"
+           for="_r_ID_"
+    >
+      1/2 Width
+    </label>
+    <div role="radiogroup"
+         aria-required="false"
+         dir="ltr"
+         data-slot="radio-group"
+         class="gap-3 flex flex-row"
+         aria-invalid="false"
+         gridsize="1/2"
+         tabindex="0"
+         style="outline: none;"
+    >
+      <div class="flex gap-2 items-center">
+        <button type="button"
+                role="radio"
+                aria-checked="true"
+                data-state="checked"
+                value="option1"
+                data-slot="radio-group-item"
+                class="text-primary focus-visible:border-ring focus-visible:ring-ring/50 aria-invalid:ring-destructive/20 dark:aria-invalid:ring-destructive/40 aria-invalid:border-destructive aspect-square shrink-0 rounded-full border transition-[color,box-shadow] outline-none focus-visible:ring-[3px] disabled:cursor-not-allowed disabled:opacity-50 border-input dark:bg-input/30 shadow-xs size-4 mt-0.5"
+                id="_r_ID_-option1"
+                tabindex="-1"
+                data-radix-id""
+        >
+          <span data-state="checked"
+                data-slot="radio-group-indicator"
+                class="relative flex items-center justify-center"
+          >
+            <svg xmlns="http://www.w3.org/2000/svg"
+                 width="24"
+                 height="24"
+                 viewbox="0 0 24 24"
+                 fill="none"
+                 stroke="currentColor"
+                 stroke-width="2"
+                 stroke-linecap="round"
+                 stroke-linejoin="round"
+                 class="lucide lucide-circle fill-primary absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 size-2"
+                 aria-hidden="true"
+            >
+              <circle cx="12"
+                      cy="12"
+                      r="10"
+              >
+              </circle>
+            </svg>
+          </span>
+        </button>
+        <div>
+          <label data-slot="label"
+                 class="flex items-center select-none group-data-[disabled=true]:pointer-events-none group-data-[disabled=true]:opacity-50 peer-disabled:cursor-not-allowed peer-disabled:opacity-50 gap-0.5 text-sm font-medium leading-none"
+                 for="_r_ID_-option1"
+          >
+            Option 1
+          </label>
+        </div>
+      </div>
+      <div class="flex gap-2 items-center">
+        <button type="button"
+                role="radio"
+                aria-checked="false"
+                data-state="unchecked"
+                value="option2"
+                data-slot="radio-group-item"
+                class="text-primary focus-visible:border-ring focus-visible:ring-ring/50 aria-invalid:ring-destructive/20 dark:aria-invalid:ring-destructive/40 aria-invalid:border-destructive aspect-square shrink-0 rounded-full border transition-[color,box-shadow] outline-none focus-visible:ring-[3px] disabled:cursor-not-allowed disabled:opacity-50 border-input dark:bg-input/30 shadow-xs size-4 mt-0.5"
+                id="_r_ID_-option2"
+                tabindex="-1"
+                data-radix-id""
+        >
+        </button>
+        <div>
+          <label data-slot="label"
+                 class="flex items-center select-none group-data-[disabled=true]:pointer-events-none group-data-[disabled=true]:opacity-50 peer-disabled:cursor-not-allowed peer-disabled:opacity-50 gap-0.5 text-sm font-medium leading-none"
+                 for="_r_ID_-option2"
+          >
+            Option 2
+          </label>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="space-y-2">
+    <label data-slot="label"
+           class="flex items-center text-sm leading-none font-medium select-none group-data-[disabled=true]:pointer-events-none group-data-[disabled=true]:opacity-50 peer-disabled:cursor-not-allowed peer-disabled:opacity-50 gap-0.5"
+           for="_r_ID_"
+    >
+      1/3 Width
+    </label>
+    <div role="radiogroup"
+         aria-required="false"
+         dir="ltr"
+         data-slot="radio-group"
+         class="gap-3 flex flex-row"
+         aria-invalid="false"
+         gridsize="1/3"
+         tabindex="0"
+         style="outline: none;"
+    >
+      <div class="flex gap-2 items-center">
+        <button type="button"
+                role="radio"
+                aria-checked="true"
+                data-state="checked"
+                value="option1"
+                data-slot="radio-group-item"
+                class="text-primary focus-visible:border-ring focus-visible:ring-ring/50 aria-invalid:ring-destructive/20 dark:aria-invalid:ring-destructive/40 aria-invalid:border-destructive aspect-square shrink-0 rounded-full border transition-[color,box-shadow] outline-none focus-visible:ring-[3px] disabled:cursor-not-allowed disabled:opacity-50 border-input dark:bg-input/30 shadow-xs size-4 mt-0.5"
+                id="_r_ID_-option1"
+                tabindex="-1"
+                data-radix-id""
+        >
+          <span data-state="checked"
+                data-slot="radio-group-indicator"
+                class="relative flex items-center justify-center"
+          >
+            <svg xmlns="http://www.w3.org/2000/svg"
+                 width="24"
+                 height="24"
+                 viewbox="0 0 24 24"
+                 fill="none"
+                 stroke="currentColor"
+                 stroke-width="2"
+                 stroke-linecap="round"
+                 stroke-linejoin="round"
+                 class="lucide lucide-circle fill-primary absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 size-2"
+                 aria-hidden="true"
+            >
+              <circle cx="12"
+                      cy="12"
+                      r="10"
+              >
+              </circle>
+            </svg>
+          </span>
+        </button>
+        <div>
+          <label data-slot="label"
+                 class="flex items-center select-none group-data-[disabled=true]:pointer-events-none group-data-[disabled=true]:opacity-50 peer-disabled:cursor-not-allowed peer-disabled:opacity-50 gap-0.5 text-sm font-medium leading-none"
+                 for="_r_ID_-option1"
+          >
+            Option 1
+          </label>
+        </div>
+      </div>
+      <div class="flex gap-2 items-center">
+        <button type="button"
+                role="radio"
+                aria-checked="false"
+                data-state="unchecked"
+                value="option2"
+                data-slot="radio-group-item"
+                class="text-primary focus-visible:border-ring focus-visible:ring-ring/50 aria-invalid:ring-destructive/20 dark:aria-invalid:ring-destructive/40 aria-invalid:border-destructive aspect-square shrink-0 rounded-full border transition-[color,box-shadow] outline-none focus-visible:ring-[3px] disabled:cursor-not-allowed disabled:opacity-50 border-input dark:bg-input/30 shadow-xs size-4 mt-0.5"
+                id="_r_ID_-option2"
+                tabindex="-1"
+                data-radix-id""
+        >
+        </button>
+        <div>
+          <label data-slot="label"
+                 class="flex items-center select-none group-data-[disabled=true]:pointer-events-none group-data-[disabled=true]:opacity-50 peer-disabled:cursor-not-allowed peer-disabled:opacity-50 gap-0.5 text-sm font-medium leading-none"
+                 for="_r_ID_-option2"
+          >
+            Option 2
+          </label>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="space-y-2">
+    <label data-slot="label"
+           class="flex items-center text-sm leading-none font-medium select-none group-data-[disabled=true]:pointer-events-none group-data-[disabled=true]:opacity-50 peer-disabled:cursor-not-allowed peer-disabled:opacity-50 gap-0.5"
+           for="_r_ID_"
+    >
+      2/3 Width
+    </label>
+    <div role="radiogroup"
+         aria-required="false"
+         dir="ltr"
+         data-slot="radio-group"
+         class="gap-3 flex flex-row"
+         aria-invalid="false"
+         gridsize="2/3"
+         tabindex="0"
+         style="outline: none;"
+    >
+      <div class="flex gap-2 items-center">
+        <button type="button"
+                role="radio"
+                aria-checked="true"
+                data-state="checked"
+                value="option1"
+                data-slot="radio-group-item"
+                class="text-primary focus-visible:border-ring focus-visible:ring-ring/50 aria-invalid:ring-destructive/20 dark:aria-invalid:ring-destructive/40 aria-invalid:border-destructive aspect-square shrink-0 rounded-full border transition-[color,box-shadow] outline-none focus-visible:ring-[3px] disabled:cursor-not-allowed disabled:opacity-50 border-input dark:bg-input/30 shadow-xs size-4 mt-0.5"
+                id="_r_ID_-option1"
+                tabindex="-1"
+                data-radix-id""
+        >
+          <span data-state="checked"
+                data-slot="radio-group-indicator"
+                class="relative flex items-center justify-center"
+          >
+            <svg xmlns="http://www.w3.org/2000/svg"
+                 width="24"
+                 height="24"
+                 viewbox="0 0 24 24"
+                 fill="none"
+                 stroke="currentColor"
+                 stroke-width="2"
+                 stroke-linecap="round"
+                 stroke-linejoin="round"
+                 class="lucide lucide-circle fill-primary absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 size-2"
+                 aria-hidden="true"
+            >
+              <circle cx="12"
+                      cy="12"
+                      r="10"
+              >
+              </circle>
+            </svg>
+          </span>
+        </button>
+        <div>
+          <label data-slot="label"
+                 class="flex items-center select-none group-data-[disabled=true]:pointer-events-none group-data-[disabled=true]:opacity-50 peer-disabled:cursor-not-allowed peer-disabled:opacity-50 gap-0.5 text-sm font-medium leading-none"
+                 for="_r_ID_-option1"
+          >
+            Option 1
+          </label>
+        </div>
+      </div>
+      <div class="flex gap-2 items-center">
+        <button type="button"
+                role="radio"
+                aria-checked="false"
+                data-state="unchecked"
+                value="option2"
+                data-slot="radio-group-item"
+                class="text-primary focus-visible:border-ring focus-visible:ring-ring/50 aria-invalid:ring-destructive/20 dark:aria-invalid:ring-destructive/40 aria-invalid:border-destructive aspect-square shrink-0 rounded-full border transition-[color,box-shadow] outline-none focus-visible:ring-[3px] disabled:cursor-not-allowed disabled:opacity-50 border-input dark:bg-input/30 shadow-xs size-4 mt-0.5"
+                id="_r_ID_-option2"
+                tabindex="-1"
+                data-radix-id""
+        >
+        </button>
+        <div>
+          <label data-slot="label"
+                 class="flex items-center select-none group-data-[disabled=true]:pointer-events-none group-data-[disabled=true]:opacity-50 peer-disabled:cursor-not-allowed peer-disabled:opacity-50 gap-0.5 text-sm font-medium leading-none"
+                 for="_r_ID_-option2"
+          >
+            Option 2
+          </label>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+`;
+
+exports[`Components/input/RadioGroup WithDescriptions smoke-test 1`] = `
+<div class="space-y-2">
+  <label data-slot="label"
+         class="flex items-center text-sm leading-none font-medium select-none group-data-[disabled=true]:pointer-events-none group-data-[disabled=true]:opacity-50 peer-disabled:cursor-not-allowed peer-disabled:opacity-50 gap-0.5"
+         for="_r_ID_"
+  >
+    Select an option
+  </label>
+  <div role="radiogroup"
+       aria-required="false"
+       dir="ltr"
+       data-slot="radio-group"
+       class="gap-3 flex flex-row"
+       aria-invalid="false"
+       aria-describedby="_r_ID_-helper"
+       tabindex="0"
+       style="outline: none;"
+  >
+    <div class="flex gap-2 items-center">
+      <button type="button"
+              role="radio"
+              aria-checked="true"
+              data-state="checked"
+              value="option1"
+              data-slot="radio-group-item"
+              class="text-primary focus-visible:border-ring focus-visible:ring-ring/50 aria-invalid:ring-destructive/20 dark:aria-invalid:ring-destructive/40 aria-invalid:border-destructive aspect-square shrink-0 rounded-full border transition-[color,box-shadow] outline-none focus-visible:ring-[3px] disabled:cursor-not-allowed disabled:opacity-50 border-input dark:bg-input/30 shadow-xs size-4 mt-0.5"
+              id="_r_ID_-option1"
+              tabindex="-1"
+              data-radix-id""
+      >
+        <span data-state="checked"
+              data-slot="radio-group-indicator"
+              class="relative flex items-center justify-center"
+        >
+          <svg xmlns="http://www.w3.org/2000/svg"
+               width="24"
+               height="24"
+               viewbox="0 0 24 24"
+               fill="none"
+               stroke="currentColor"
+               stroke-width="2"
+               stroke-linecap="round"
+               stroke-linejoin="round"
+               class="lucide lucide-circle fill-primary absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 size-2"
+               aria-hidden="true"
+          >
+            <circle cx="12"
+                    cy="12"
+                    r="10"
+            >
+            </circle>
+          </svg>
+        </span>
+      </button>
+      <div>
+        <label data-slot="label"
+               class="flex items-center select-none group-data-[disabled=true]:pointer-events-none group-data-[disabled=true]:opacity-50 peer-disabled:cursor-not-allowed peer-disabled:opacity-50 gap-0.5 text-sm font-medium leading-none"
+               for="_r_ID_-option1"
+        >
+          Option 1
+        </label>
+        <p class="text-muted-foreground mt-1 text-sm">
+          This is the first option
+        </p>
+      </div>
+    </div>
+    <div class="flex gap-2 items-center">
+      <button type="button"
+              role="radio"
+              aria-checked="false"
+              data-state="unchecked"
+              value="option2"
+              data-slot="radio-group-item"
+              class="text-primary focus-visible:border-ring focus-visible:ring-ring/50 aria-invalid:ring-destructive/20 dark:aria-invalid:ring-destructive/40 aria-invalid:border-destructive aspect-square shrink-0 rounded-full border transition-[color,box-shadow] outline-none focus-visible:ring-[3px] disabled:cursor-not-allowed disabled:opacity-50 border-input dark:bg-input/30 shadow-xs size-4 mt-0.5"
+              id="_r_ID_-option2"
+              tabindex="-1"
+              data-radix-id""
+      >
+      </button>
+      <div>
+        <label data-slot="label"
+               class="flex items-center select-none group-data-[disabled=true]:pointer-events-none group-data-[disabled=true]:opacity-50 peer-disabled:cursor-not-allowed peer-disabled:opacity-50 gap-0.5 text-sm font-medium leading-none"
+               for="_r_ID_-option2"
+        >
+          Option 2
+        </label>
+        <p class="text-muted-foreground mt-1 text-sm">
+          This is the second option
+        </p>
+      </div>
+    </div>
+    <div class="flex gap-2 items-center">
+      <button type="button"
+              role="radio"
+              aria-checked="false"
+              data-state="unchecked"
+              value="option3"
+              data-slot="radio-group-item"
+              class="text-primary focus-visible:border-ring focus-visible:ring-ring/50 aria-invalid:ring-destructive/20 dark:aria-invalid:ring-destructive/40 aria-invalid:border-destructive aspect-square shrink-0 rounded-full border transition-[color,box-shadow] outline-none focus-visible:ring-[3px] disabled:cursor-not-allowed disabled:opacity-50 border-input dark:bg-input/30 shadow-xs size-4 mt-0.5"
+              id="_r_ID_-option3"
+              tabindex="-1"
+              data-radix-id""
+      >
+      </button>
+      <div>
+        <label data-slot="label"
+               class="flex items-center select-none group-data-[disabled=true]:pointer-events-none group-data-[disabled=true]:opacity-50 peer-disabled:cursor-not-allowed peer-disabled:opacity-50 gap-0.5 text-sm font-medium leading-none"
+               for="_r_ID_-option3"
+        >
+          Option 3
+        </label>
+        <p class="text-muted-foreground mt-1 text-sm">
+          This is the third option
+        </p>
+      </div>
+    </div>
+  </div>
+  <p id="_r_ID_-helper"
+     class="text-muted-foreground mt-2 text-xs"
+     role="region"
+     aria-live="polite"
+  >
+    Choose one of the available options
+  </p>
+</div>
+`;
+
+exports[`Components/input/RadioGroup WithError smoke-test 1`] = `
+<div class="space-y-2">
+  <label data-slot="label"
+         class="flex items-center text-sm leading-none font-medium select-none group-data-[disabled=true]:pointer-events-none group-data-[disabled=true]:opacity-50 peer-disabled:cursor-not-allowed peer-disabled:opacity-50 gap-0.5"
+         for="_r_ID_"
+  >
+    Select an option
+  </label>
+  <div role="radiogroup"
+       aria-required="false"
+       dir="ltr"
+       data-slot="radio-group"
+       class="gap-3 flex flex-row"
+       aria-invalid="true"
+       aria-describedby="_r_ID_-error"
+       tabindex="0"
+       style="outline: none;"
+  >
+    <div class="flex gap-2 items-center">
+      <button type="button"
+              role="radio"
+              aria-checked="true"
+              data-state="checked"
+              value="option1"
+              data-slot="radio-group-item"
+              class="text-primary focus-visible:border-ring focus-visible:ring-ring/50 aria-invalid:ring-destructive/20 dark:aria-invalid:ring-destructive/40 aria-invalid:border-destructive aspect-square shrink-0 rounded-full border transition-[color,box-shadow] outline-none focus-visible:ring-[3px] disabled:cursor-not-allowed disabled:opacity-50 border-input dark:bg-input/30 shadow-xs size-4 mt-0.5"
+              id="_r_ID_-option1"
+              tabindex="-1"
+              data-radix-id""
+      >
+        <span data-state="checked"
+              data-slot="radio-group-indicator"
+              class="relative flex items-center justify-center"
+        >
+          <svg xmlns="http://www.w3.org/2000/svg"
+               width="24"
+               height="24"
+               viewbox="0 0 24 24"
+               fill="none"
+               stroke="currentColor"
+               stroke-width="2"
+               stroke-linecap="round"
+               stroke-linejoin="round"
+               class="lucide lucide-circle fill-primary absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 size-2"
+               aria-hidden="true"
+          >
+            <circle cx="12"
+                    cy="12"
+                    r="10"
+            >
+            </circle>
+          </svg>
+        </span>
+      </button>
+      <div>
+        <label data-slot="label"
+               class="flex items-center select-none group-data-[disabled=true]:pointer-events-none group-data-[disabled=true]:opacity-50 peer-disabled:cursor-not-allowed peer-disabled:opacity-50 gap-0.5 text-sm font-medium leading-none"
+               for="_r_ID_-option1"
+        >
+          Option 1
+        </label>
+      </div>
+    </div>
+    <div class="flex gap-2 items-center">
+      <button type="button"
+              role="radio"
+              aria-checked="false"
+              data-state="unchecked"
+              value="option2"
+              data-slot="radio-group-item"
+              class="text-primary focus-visible:border-ring focus-visible:ring-ring/50 aria-invalid:ring-destructive/20 dark:aria-invalid:ring-destructive/40 aria-invalid:border-destructive aspect-square shrink-0 rounded-full border transition-[color,box-shadow] outline-none focus-visible:ring-[3px] disabled:cursor-not-allowed disabled:opacity-50 border-input dark:bg-input/30 shadow-xs size-4 mt-0.5"
+              id="_r_ID_-option2"
+              tabindex="-1"
+              data-radix-id""
+      >
+      </button>
+      <div>
+        <label data-slot="label"
+               class="flex items-center select-none group-data-[disabled=true]:pointer-events-none group-data-[disabled=true]:opacity-50 peer-disabled:cursor-not-allowed peer-disabled:opacity-50 gap-0.5 text-sm font-medium leading-none"
+               for="_r_ID_-option2"
+        >
+          Option 2
+        </label>
+      </div>
+    </div>
+    <div class="flex gap-2 items-center">
+      <button type="button"
+              role="radio"
+              aria-checked="false"
+              data-state="unchecked"
+              value="option3"
+              data-slot="radio-group-item"
+              class="text-primary focus-visible:border-ring focus-visible:ring-ring/50 aria-invalid:ring-destructive/20 dark:aria-invalid:ring-destructive/40 aria-invalid:border-destructive aspect-square shrink-0 rounded-full border transition-[color,box-shadow] outline-none focus-visible:ring-[3px] disabled:cursor-not-allowed disabled:opacity-50 border-input dark:bg-input/30 shadow-xs size-4 mt-0.5"
+              id="_r_ID_-option3"
+              tabindex="-1"
+              data-radix-id""
+      >
+      </button>
+      <div>
+        <label data-slot="label"
+               class="flex items-center select-none group-data-[disabled=true]:pointer-events-none group-data-[disabled=true]:opacity-50 peer-disabled:cursor-not-allowed peer-disabled:opacity-50 gap-0.5 text-sm font-medium leading-none"
+               for="_r_ID_-option3"
+        >
+          Option 3
+        </label>
+      </div>
+    </div>
+  </div>
+  <p id="_r_ID_-error"
+     class="text-destructive mt-2 text-xs"
+     role="alert"
+  >
+    Please select a valid option
+  </p>
+</div>
+`;
+
+exports[`Components/input/RadioGroup WithFormIntegration smoke-test 1`] = `
+<div class="container my-10 mx-auto p-4 border rounded-lg shadow-sm max-w-lg">
+  <h2 class="text-xl font-semibold mb-4">
+    Form with Validation
+  </h2>
+  <p class="text-gray-500 mb-6">
+    Try submitting without selecting an option to see validation error.
+  </p>
+  <form class="space-y-4">
+    <div class="space-y-2">
+      <label data-slot="label"
+             class="flex items-center text-sm leading-none font-medium select-none group-data-[disabled=true]:pointer-events-none group-data-[disabled=true]:opacity-50 peer-disabled:cursor-not-allowed peer-disabled:opacity-50 after:content-['*'] after:text-destructive gap-0.5"
+             for="plan"
+      >
+        Select a plan
+      </label>
+      <div role="radiogroup"
+           aria-required="true"
+           dir="ltr"
+           data-slot="radio-group"
+           class="gap-3 flex flex-row"
+           aria-invalid="false"
+           tabindex="0"
+           style="outline: none;"
+      >
+        <div class="flex gap-2 items-center">
+          <button type="button"
+                  role="radio"
+                  aria-checked="false"
+                  data-state="unchecked"
+                  value="basic"
+                  data-slot="radio-group-item"
+                  class="text-primary focus-visible:border-ring focus-visible:ring-ring/50 aria-invalid:ring-destructive/20 dark:aria-invalid:ring-destructive/40 aria-invalid:border-destructive aspect-square shrink-0 rounded-full border transition-[color,box-shadow] outline-none focus-visible:ring-[3px] disabled:cursor-not-allowed disabled:opacity-50 border-input dark:bg-input/30 shadow-xs size-4 mt-0.5"
+                  id="plan-basic"
+                  tabindex="-1"
+                  data-radix-id""
+          >
+          </button>
+          <input aria-hidden="true"
+                 tabindex="-1"
+                 type="radio"
+                 value="basic"
+                 name="plan"
+                 style="position: absolute; pointer-events: none; opacity: 0; margin: 0px; transform: translateX(-100%); width: 16px; height: 16px;"
+          >
+          <div>
+            <label data-slot="label"
+                   class="flex items-center select-none group-data-[disabled=true]:pointer-events-none group-data-[disabled=true]:opacity-50 peer-disabled:cursor-not-allowed peer-disabled:opacity-50 gap-0.5 text-sm font-medium leading-none"
+                   for="plan-basic"
+            >
+              Basic Plan
+            </label>
+            <p class="text-muted-foreground mt-1 text-sm">
+              $10/month
+            </p>
+          </div>
+        </div>
+        <div class="flex gap-2 items-center">
+          <button type="button"
+                  role="radio"
+                  aria-checked="false"
+                  data-state="unchecked"
+                  value="pro"
+                  data-slot="radio-group-item"
+                  class="text-primary focus-visible:border-ring focus-visible:ring-ring/50 aria-invalid:ring-destructive/20 dark:aria-invalid:ring-destructive/40 aria-invalid:border-destructive aspect-square shrink-0 rounded-full border transition-[color,box-shadow] outline-none focus-visible:ring-[3px] disabled:cursor-not-allowed disabled:opacity-50 border-input dark:bg-input/30 shadow-xs size-4 mt-0.5"
+                  id="plan-pro"
+                  tabindex="-1"
+                  data-radix-id""
+          >
+          </button>
+          <input aria-hidden="true"
+                 tabindex="-1"
+                 type="radio"
+                 value="pro"
+                 name="plan"
+                 style="position: absolute; pointer-events: none; opacity: 0; margin: 0px; transform: translateX(-100%); width: 16px; height: 16px;"
+          >
+          <div>
+            <label data-slot="label"
+                   class="flex items-center select-none group-data-[disabled=true]:pointer-events-none group-data-[disabled=true]:opacity-50 peer-disabled:cursor-not-allowed peer-disabled:opacity-50 gap-0.5 text-sm font-medium leading-none"
+                   for="plan-pro"
+            >
+              Pro Plan
+            </label>
+            <p class="text-muted-foreground mt-1 text-sm">
+              $20/month
+            </p>
+          </div>
+        </div>
+        <div class="flex gap-2 items-center">
+          <button type="button"
+                  role="radio"
+                  aria-checked="false"
+                  data-state="unchecked"
+                  value="enterprise"
+                  data-slot="radio-group-item"
+                  class="text-primary focus-visible:border-ring focus-visible:ring-ring/50 aria-invalid:ring-destructive/20 dark:aria-invalid:ring-destructive/40 aria-invalid:border-destructive aspect-square shrink-0 rounded-full border transition-[color,box-shadow] outline-none focus-visible:ring-[3px] disabled:cursor-not-allowed disabled:opacity-50 border-input dark:bg-input/30 shadow-xs size-4 mt-0.5"
+                  id="plan-enterprise"
+                  tabindex="-1"
+                  data-radix-id""
+          >
+          </button>
+          <input aria-hidden="true"
+                 tabindex="-1"
+                 type="radio"
+                 value="enterprise"
+                 name="plan"
+                 style="position: absolute; pointer-events: none; opacity: 0; margin: 0px; transform: translateX(-100%); width: 16px; height: 16px;"
+          >
+          <div>
+            <label data-slot="label"
+                   class="flex items-center select-none group-data-[disabled=true]:pointer-events-none group-data-[disabled=true]:opacity-50 peer-disabled:cursor-not-allowed peer-disabled:opacity-50 gap-0.5 text-sm font-medium leading-none"
+                   for="plan-enterprise"
+            >
+              Enterprise Plan
+            </label>
+            <p class="text-muted-foreground mt-1 text-sm">
+              $50/month
+            </p>
+          </div>
+        </div>
+      </div>
+    </div>
+    <button data-slot="button"
+            class="inline-flex items-center justify-center gap-1.5 whitespace-nowrap rounded-md text-sm font-medium transition-[color,box-shadow] disabled:pointer-events-none disabled:opacity-50 [&amp;_svg]:pointer-events-none [&amp;_svg:not([class*='size-'])]:size-4 shrink-0 [&amp;_svg]:shrink-0 outline-none focus-visible:border-ring focus-visible:ring-ring/50 focus-visible:ring-[3px] aria-invalid:ring-destructive/20 dark:aria-invalid:ring-destructive/40 aria-invalid:border-destructive bg-primary text-primary-foreground shadow-xs hover:bg-primary/90 hover:text-primary-foreground h-9 px-2.5 has-data-[icon=inline-end]:pr-2 has-data-[icon=inline-start]:pl-2 relative w-full mt-4"
+            type="submit"
+            id="_r_ID_"
+    >
+      Confirmar
+    </button>
+  </form>
+</div>
+`;
+
+exports[`Components/input/RadioGroup WithOrientation smoke-test 1`] = `
+<div class="space-y-2">
+  <label data-slot="label"
+         class="flex items-center text-sm leading-none font-medium select-none group-data-[disabled=true]:pointer-events-none group-data-[disabled=true]:opacity-50 peer-disabled:cursor-not-allowed peer-disabled:opacity-50 gap-0.5"
+         for="_r_ID_"
+  >
+    Select an option
+  </label>
+  <div role="radiogroup"
+       aria-required="false"
+       dir="ltr"
+       data-slot="radio-group"
+       class="gap-3 flex flex-row"
+       aria-invalid="false"
+       tabindex="0"
+       style="outline: none;"
+  >
+    <div class="flex gap-2 items-center">
+      <button type="button"
+              role="radio"
+              aria-checked="true"
+              data-state="checked"
+              value="option1"
+              data-slot="radio-group-item"
+              class="text-primary focus-visible:border-ring focus-visible:ring-ring/50 aria-invalid:ring-destructive/20 dark:aria-invalid:ring-destructive/40 aria-invalid:border-destructive aspect-square shrink-0 rounded-full border transition-[color,box-shadow] outline-none focus-visible:ring-[3px] disabled:cursor-not-allowed disabled:opacity-50 border-input dark:bg-input/30 shadow-xs size-4 mt-0.5"
+              id="_r_ID_-option1"
+              tabindex="-1"
+              data-radix-id""
+      >
+        <span data-state="checked"
+              data-slot="radio-group-indicator"
+              class="relative flex items-center justify-center"
+        >
+          <svg xmlns="http://www.w3.org/2000/svg"
+               width="24"
+               height="24"
+               viewbox="0 0 24 24"
+               fill="none"
+               stroke="currentColor"
+               stroke-width="2"
+               stroke-linecap="round"
+               stroke-linejoin="round"
+               class="lucide lucide-circle fill-primary absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 size-2"
+               aria-hidden="true"
+          >
+            <circle cx="12"
+                    cy="12"
+                    r="10"
+            >
+            </circle>
+          </svg>
+        </span>
+      </button>
+      <div>
+        <label data-slot="label"
+               class="flex items-center select-none group-data-[disabled=true]:pointer-events-none group-data-[disabled=true]:opacity-50 peer-disabled:cursor-not-allowed peer-disabled:opacity-50 gap-0.5 text-sm font-medium leading-none"
+               for="_r_ID_-option1"
+        >
+          Option 1
+        </label>
+      </div>
+    </div>
+    <div class="flex gap-2 items-center">
+      <button type="button"
+              role="radio"
+              aria-checked="false"
+              data-state="unchecked"
+              value="option2"
+              data-slot="radio-group-item"
+              class="text-primary focus-visible:border-ring focus-visible:ring-ring/50 aria-invalid:ring-destructive/20 dark:aria-invalid:ring-destructive/40 aria-invalid:border-destructive aspect-square shrink-0 rounded-full border transition-[color,box-shadow] outline-none focus-visible:ring-[3px] disabled:cursor-not-allowed disabled:opacity-50 border-input dark:bg-input/30 shadow-xs size-4 mt-0.5"
+              id="_r_ID_-option2"
+              tabindex="-1"
+              data-radix-id""
+      >
+      </button>
+      <div>
+        <label data-slot="label"
+               class="flex items-center select-none group-data-[disabled=true]:pointer-events-none group-data-[disabled=true]:opacity-50 peer-disabled:cursor-not-allowed peer-disabled:opacity-50 gap-0.5 text-sm font-medium leading-none"
+               for="_r_ID_-option2"
+        >
+          Option 2
+        </label>
+      </div>
+    </div>
+    <div class="flex gap-2 items-center">
+      <button type="button"
+              role="radio"
+              aria-checked="false"
+              data-state="unchecked"
+              value="option3"
+              data-slot="radio-group-item"
+              class="text-primary focus-visible:border-ring focus-visible:ring-ring/50 aria-invalid:ring-destructive/20 dark:aria-invalid:ring-destructive/40 aria-invalid:border-destructive aspect-square shrink-0 rounded-full border transition-[color,box-shadow] outline-none focus-visible:ring-[3px] disabled:cursor-not-allowed disabled:opacity-50 border-input dark:bg-input/30 shadow-xs size-4 mt-0.5"
+              id="_r_ID_-option3"
+              tabindex="-1"
+              data-radix-id""
+      >
+      </button>
+      <div>
+        <label data-slot="label"
+               class="flex items-center select-none group-data-[disabled=true]:pointer-events-none group-data-[disabled=true]:opacity-50 peer-disabled:cursor-not-allowed peer-disabled:opacity-50 gap-0.5 text-sm font-medium leading-none"
+               for="_r_ID_-option3"
+        >
+          Option 3
+        </label>
+      </div>
+    </div>
+  </div>
+</div>
+`;
+
+exports[`Components/input/RadioGroup WithPosition smoke-test 1`] = `
+<div class="space-y-2">
+  <label data-slot="label"
+         class="flex items-center text-sm leading-none font-medium select-none group-data-[disabled=true]:pointer-events-none group-data-[disabled=true]:opacity-50 peer-disabled:cursor-not-allowed peer-disabled:opacity-50 gap-0.5"
+         for="_r_ID_"
+  >
+    Select an option
+  </label>
+  <div role="radiogroup"
+       aria-required="false"
+       dir="ltr"
+       data-slot="radio-group"
+       class="gap-3 flex flex-row"
+       aria-invalid="false"
+       tabindex="0"
+       style="outline: none;"
+  >
+    <div class="flex gap-2 items-center">
+      <button type="button"
+              role="radio"
+              aria-checked="true"
+              data-state="checked"
+              value="option1"
+              data-slot="radio-group-item"
+              class="text-primary focus-visible:border-ring focus-visible:ring-ring/50 aria-invalid:ring-destructive/20 dark:aria-invalid:ring-destructive/40 aria-invalid:border-destructive aspect-square shrink-0 rounded-full border transition-[color,box-shadow] outline-none focus-visible:ring-[3px] disabled:cursor-not-allowed disabled:opacity-50 border-input dark:bg-input/30 shadow-xs size-4 mt-0.5"
+              id="_r_ID_-option1"
+              tabindex="-1"
+              data-radix-id""
+      >
+        <span data-state="checked"
+              data-slot="radio-group-indicator"
+              class="relative flex items-center justify-center"
+        >
+          <svg xmlns="http://www.w3.org/2000/svg"
+               width="24"
+               height="24"
+               viewbox="0 0 24 24"
+               fill="none"
+               stroke="currentColor"
+               stroke-width="2"
+               stroke-linecap="round"
+               stroke-linejoin="round"
+               class="lucide lucide-circle fill-primary absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 size-2"
+               aria-hidden="true"
+          >
+            <circle cx="12"
+                    cy="12"
+                    r="10"
+            >
+            </circle>
+          </svg>
+        </span>
+      </button>
+      <div>
+        <label data-slot="label"
+               class="flex items-center select-none group-data-[disabled=true]:pointer-events-none group-data-[disabled=true]:opacity-50 peer-disabled:cursor-not-allowed peer-disabled:opacity-50 gap-0.5 text-sm font-medium leading-none"
+               for="_r_ID_-option1"
+        >
+          Option 1
+        </label>
+      </div>
+    </div>
+    <div class="flex gap-2 items-center">
+      <button type="button"
+              role="radio"
+              aria-checked="false"
+              data-state="unchecked"
+              value="option2"
+              data-slot="radio-group-item"
+              class="text-primary focus-visible:border-ring focus-visible:ring-ring/50 aria-invalid:ring-destructive/20 dark:aria-invalid:ring-destructive/40 aria-invalid:border-destructive aspect-square shrink-0 rounded-full border transition-[color,box-shadow] outline-none focus-visible:ring-[3px] disabled:cursor-not-allowed disabled:opacity-50 border-input dark:bg-input/30 shadow-xs size-4 mt-0.5"
+              id="_r_ID_-option2"
+              tabindex="-1"
+              data-radix-id""
+      >
+      </button>
+      <div>
+        <label data-slot="label"
+               class="flex items-center select-none group-data-[disabled=true]:pointer-events-none group-data-[disabled=true]:opacity-50 peer-disabled:cursor-not-allowed peer-disabled:opacity-50 gap-0.5 text-sm font-medium leading-none"
+               for="_r_ID_-option2"
+        >
+          Option 2
+        </label>
+      </div>
+    </div>
+    <div class="flex gap-2 items-center">
+      <button type="button"
+              role="radio"
+              aria-checked="false"
+              data-state="unchecked"
+              value="option3"
+              data-slot="radio-group-item"
+              class="text-primary focus-visible:border-ring focus-visible:ring-ring/50 aria-invalid:ring-destructive/20 dark:aria-invalid:ring-destructive/40 aria-invalid:border-destructive aspect-square shrink-0 rounded-full border transition-[color,box-shadow] outline-none focus-visible:ring-[3px] disabled:cursor-not-allowed disabled:opacity-50 border-input dark:bg-input/30 shadow-xs size-4 mt-0.5"
+              id="_r_ID_-option3"
+              tabindex="-1"
+              data-radix-id""
+      >
+      </button>
+      <div>
+        <label data-slot="label"
+               class="flex items-center select-none group-data-[disabled=true]:pointer-events-none group-data-[disabled=true]:opacity-50 peer-disabled:cursor-not-allowed peer-disabled:opacity-50 gap-0.5 text-sm font-medium leading-none"
+               for="_r_ID_-option3"
+        >
+          Option 3
+        </label>
+      </div>
+    </div>
+  </div>
+</div>
+`;
+
+exports[`Components/input/RadioGroup WithSize smoke-test 1`] = `
+<div class="space-y-8">
+  <div class="space-y-2">
+    <label data-slot="label"
+           class="flex items-center text-sm leading-none font-medium select-none group-data-[disabled=true]:pointer-events-none group-data-[disabled=true]:opacity-50 peer-disabled:cursor-not-allowed peer-disabled:opacity-50 gap-0.5"
+           for="_r_ID_"
+    >
+      Small
+    </label>
+    <div role="radiogroup"
+         aria-required="false"
+         dir="ltr"
+         data-slot="radio-group"
+         class="gap-3 flex flex-row"
+         aria-invalid="false"
+         tabindex="0"
+         style="outline: none;"
+    >
+      <div class="flex gap-2 items-center">
+        <button type="button"
+                role="radio"
+                aria-checked="true"
+                data-state="checked"
+                value="small"
+                data-slot="radio-group-item"
+                class="text-primary focus-visible:border-ring focus-visible:ring-ring/50 aria-invalid:ring-destructive/20 dark:aria-invalid:ring-destructive/40 aria-invalid:border-destructive aspect-square shrink-0 rounded-full border transition-[color,box-shadow] outline-none focus-visible:ring-[3px] disabled:cursor-not-allowed disabled:opacity-50 border-input dark:bg-input/30 shadow-xs size-3 mt-0.5"
+                id="_r_ID_-small"
+                tabindex="-1"
+                data-radix-id""
+        >
+          <span data-state="checked"
+                data-slot="radio-group-indicator"
+                class="relative flex items-center justify-center"
+          >
+            <svg xmlns="http://www.w3.org/2000/svg"
+                 width="24"
+                 height="24"
+                 viewbox="0 0 24 24"
+                 fill="none"
+                 stroke="currentColor"
+                 stroke-width="2"
+                 stroke-linecap="round"
+                 stroke-linejoin="round"
+                 class="lucide lucide-circle fill-primary absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 size-1.5"
+                 aria-hidden="true"
+            >
+              <circle cx="12"
+                      cy="12"
+                      r="10"
+              >
+              </circle>
+            </svg>
+          </span>
+        </button>
+        <div>
+          <label data-slot="label"
+                 class="flex items-center select-none group-data-[disabled=true]:pointer-events-none group-data-[disabled=true]:opacity-50 peer-disabled:cursor-not-allowed peer-disabled:opacity-50 gap-0.5 text-sm font-medium leading-none"
+                 for="_r_ID_-small"
+          >
+            Small Size
+          </label>
+          <p class="text-muted-foreground mt-1 text-xs">
+            A smaller radio button
+          </p>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="space-y-2">
+    <label data-slot="label"
+           class="flex items-center text-sm leading-none font-medium select-none group-data-[disabled=true]:pointer-events-none group-data-[disabled=true]:opacity-50 peer-disabled:cursor-not-allowed peer-disabled:opacity-50 gap-0.5"
+           for="_r_ID_"
+    >
+      Medium
+    </label>
+    <div role="radiogroup"
+         aria-required="false"
+         dir="ltr"
+         data-slot="radio-group"
+         class="gap-3 flex flex-row"
+         aria-invalid="false"
+         tabindex="0"
+         style="outline: none;"
+    >
+      <div class="flex gap-2 items-center">
+        <button type="button"
+                role="radio"
+                aria-checked="true"
+                data-state="checked"
+                value="medium"
+                data-slot="radio-group-item"
+                class="text-primary focus-visible:border-ring focus-visible:ring-ring/50 aria-invalid:ring-destructive/20 dark:aria-invalid:ring-destructive/40 aria-invalid:border-destructive aspect-square shrink-0 rounded-full border transition-[color,box-shadow] outline-none focus-visible:ring-[3px] disabled:cursor-not-allowed disabled:opacity-50 border-input dark:bg-input/30 shadow-xs size-4 mt-0.5"
+                id="_r_ID_-medium"
+                tabindex="-1"
+                data-radix-id""
+        >
+          <span data-state="checked"
+                data-slot="radio-group-indicator"
+                class="relative flex items-center justify-center"
+          >
+            <svg xmlns="http://www.w3.org/2000/svg"
+                 width="24"
+                 height="24"
+                 viewbox="0 0 24 24"
+                 fill="none"
+                 stroke="currentColor"
+                 stroke-width="2"
+                 stroke-linecap="round"
+                 stroke-linejoin="round"
+                 class="lucide lucide-circle fill-primary absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 size-2"
+                 aria-hidden="true"
+            >
+              <circle cx="12"
+                      cy="12"
+                      r="10"
+              >
+              </circle>
+            </svg>
+          </span>
+        </button>
+        <div>
+          <label data-slot="label"
+                 class="flex items-center select-none group-data-[disabled=true]:pointer-events-none group-data-[disabled=true]:opacity-50 peer-disabled:cursor-not-allowed peer-disabled:opacity-50 gap-0.5 text-sm font-medium leading-none"
+                 for="_r_ID_-medium"
+          >
+            Medium Size
+          </label>
+          <p class="text-muted-foreground mt-1 text-sm">
+            A medium radio button
+          </p>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="space-y-2">
+    <label data-slot="label"
+           class="flex items-center text-sm leading-none font-medium select-none group-data-[disabled=true]:pointer-events-none group-data-[disabled=true]:opacity-50 peer-disabled:cursor-not-allowed peer-disabled:opacity-50 gap-0.5"
+           for="_r_ID_"
+    >
+      Large
+    </label>
+    <div role="radiogroup"
+         aria-required="false"
+         dir="ltr"
+         data-slot="radio-group"
+         class="gap-3 flex flex-row"
+         aria-invalid="false"
+         tabindex="0"
+         style="outline: none;"
+    >
+      <div class="flex gap-2 items-center">
+        <button type="button"
+                role="radio"
+                aria-checked="true"
+                data-state="checked"
+                value="large"
+                data-slot="radio-group-item"
+                class="text-primary focus-visible:border-ring focus-visible:ring-ring/50 aria-invalid:ring-destructive/20 dark:aria-invalid:ring-destructive/40 aria-invalid:border-destructive aspect-square shrink-0 rounded-full border transition-[color,box-shadow] outline-none focus-visible:ring-[3px] disabled:cursor-not-allowed disabled:opacity-50 border-input dark:bg-input/30 shadow-xs size-5 mt-0.5"
+                id="_r_ID_-large"
+                tabindex="-1"
+                data-radix-id""
+        >
+          <span data-state="checked"
+                data-slot="radio-group-indicator"
+                class="relative flex items-center justify-center"
+          >
+            <svg xmlns="http://www.w3.org/2000/svg"
+                 width="24"
+                 height="24"
+                 viewbox="0 0 24 24"
+                 fill="none"
+                 stroke="currentColor"
+                 stroke-width="2"
+                 stroke-linecap="round"
+                 stroke-linejoin="round"
+                 class="lucide lucide-circle fill-primary absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 size-2.5"
+                 aria-hidden="true"
+            >
+              <circle cx="12"
+                      cy="12"
+                      r="10"
+              >
+              </circle>
+            </svg>
+          </span>
+        </button>
+        <div>
+          <label data-slot="label"
+                 class="flex items-center select-none group-data-[disabled=true]:pointer-events-none group-data-[disabled=true]:opacity-50 peer-disabled:cursor-not-allowed peer-disabled:opacity-50 gap-0.5 text-sm font-medium leading-none"
+                 for="_r_ID_-large"
+          >
+            Large Size
+          </label>
+          <p class="text-muted-foreground mt-1 text-sm">
+            A larger radio button
+          </p>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+`;
+
+exports[`Components/input/RadioGroup WithVariant smoke-test 1`] = `
+<div class="space-y-2">
+  <label data-slot="label"
+         class="flex items-center text-sm leading-none font-medium select-none group-data-[disabled=true]:pointer-events-none group-data-[disabled=true]:opacity-50 peer-disabled:cursor-not-allowed peer-disabled:opacity-50 gap-0.5"
+         for="_r_ID_"
+  >
+    Select an option
+  </label>
+  <div role="radiogroup"
+       aria-required="false"
+       dir="ltr"
+       data-slot="radio-group"
+       class="gap-3 flex flex-row"
+       aria-invalid="false"
+       tabindex="0"
+       style="outline: none;"
+  >
+    <div class="flex gap-2 items-center">
+      <button type="button"
+              role="radio"
+              aria-checked="true"
+              data-state="checked"
+              value="option1"
+              data-slot="radio-group-item"
+              class="text-primary focus-visible:border-ring focus-visible:ring-ring/50 aria-invalid:ring-destructive/20 dark:aria-invalid:ring-destructive/40 aria-invalid:border-destructive dark:bg-input/30 aspect-square shrink-0 rounded-full transition-[color,box-shadow] outline-none focus-visible:ring-[3px] disabled:cursor-not-allowed disabled:opacity-50 border-2 border-primary/30 data-[state=checked]:border-primary shadow-none size-4 mt-0.5"
+              id="_r_ID_-option1"
+              tabindex="-1"
+              data-radix-id""
+      >
+        <span data-state="checked"
+              data-slot="radio-group-indicator"
+              class="relative flex items-center justify-center"
+        >
+          <svg xmlns="http://www.w3.org/2000/svg"
+               width="24"
+               height="24"
+               viewbox="0 0 24 24"
+               fill="none"
+               stroke="currentColor"
+               stroke-width="2"
+               stroke-linecap="round"
+               stroke-linejoin="round"
+               class="lucide lucide-circle fill-primary absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 size-2"
+               aria-hidden="true"
+          >
+            <circle cx="12"
+                    cy="12"
+                    r="10"
+            >
+            </circle>
+          </svg>
+        </span>
+      </button>
+      <div>
+        <label data-slot="label"
+               class="flex items-center select-none group-data-[disabled=true]:pointer-events-none group-data-[disabled=true]:opacity-50 peer-disabled:cursor-not-allowed peer-disabled:opacity-50 gap-0.5 text-sm font-medium leading-none"
+               for="_r_ID_-option1"
+        >
+          Option 1
+        </label>
+      </div>
+    </div>
+    <div class="flex gap-2 items-center">
+      <button type="button"
+              role="radio"
+              aria-checked="false"
+              data-state="unchecked"
+              value="option2"
+              data-slot="radio-group-item"
+              class="text-primary focus-visible:border-ring focus-visible:ring-ring/50 aria-invalid:ring-destructive/20 dark:aria-invalid:ring-destructive/40 aria-invalid:border-destructive dark:bg-input/30 aspect-square shrink-0 rounded-full transition-[color,box-shadow] outline-none focus-visible:ring-[3px] disabled:cursor-not-allowed disabled:opacity-50 border-2 border-primary/30 data-[state=checked]:border-primary shadow-none size-4 mt-0.5"
+              id="_r_ID_-option2"
+              tabindex="-1"
+              data-radix-id""
+      >
+      </button>
+      <div>
+        <label data-slot="label"
+               class="flex items-center select-none group-data-[disabled=true]:pointer-events-none group-data-[disabled=true]:opacity-50 peer-disabled:cursor-not-allowed peer-disabled:opacity-50 gap-0.5 text-sm font-medium leading-none"
+               for="_r_ID_-option2"
+        >
+          Option 2
+        </label>
+      </div>
+    </div>
+    <div class="flex gap-2 items-center">
+      <button type="button"
+              role="radio"
+              aria-checked="false"
+              data-state="unchecked"
+              value="option3"
+              data-slot="radio-group-item"
+              class="text-primary focus-visible:border-ring focus-visible:ring-ring/50 aria-invalid:ring-destructive/20 dark:aria-invalid:ring-destructive/40 aria-invalid:border-destructive dark:bg-input/30 aspect-square shrink-0 rounded-full transition-[color,box-shadow] outline-none focus-visible:ring-[3px] disabled:cursor-not-allowed disabled:opacity-50 border-2 border-primary/30 data-[state=checked]:border-primary shadow-none size-4 mt-0.5"
+              id="_r_ID_-option3"
+              tabindex="-1"
+              data-radix-id""
+      >
+      </button>
+      <div>
+        <label data-slot="label"
+               class="flex items-center select-none group-data-[disabled=true]:pointer-events-none group-data-[disabled=true]:opacity-50 peer-disabled:cursor-not-allowed peer-disabled:opacity-50 gap-0.5 text-sm font-medium leading-none"
+               for="_r_ID_-option3"
+        >
+          Option 3
+        </label>
+      </div>
+    </div>
+  </div>
+</div>
+`;

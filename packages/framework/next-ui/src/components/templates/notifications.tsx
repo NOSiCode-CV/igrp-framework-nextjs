@@ -1,6 +1,5 @@
 'use client';
 
-import { useState } from 'react';
 import {
   cn,
   Badge,
@@ -16,24 +15,23 @@ import {
 } from '@igrp/igrp-framework-react-design-system';
 import type { IGRPNotificationArgs } from '@igrp/framework-next-types';
 import Link from 'next/link';
-import { getLocationOriginURL } from '../../lib/utils';
+
+interface IGRPTemplateNotificationsProps {
+  notifications: IGRPNotificationArgs[];
+  notificationsUrl?: string;
+  /** Called when the user clicks "Mark all as read". Consumer is responsible for updating the notifications array. */
+  onMarkAllRead?: () => void;
+}
 
 function IGRPTemplateNotifications({
   notifications,
   notificationsUrl,
-}: {
-  notifications: IGRPNotificationArgs[];
-  notificationsUrl?: string;
-}) {
-  const [notificationCount, setNotificationCount] = useState(3);
-
-  const markAsRead = () => {
-    setNotificationCount(0);
-  };
+  onMarkAllRead,
+}: IGRPTemplateNotificationsProps) {
+  const unreadCount = notifications.filter((n) => !n.isRead).length;
 
   const handleUrl = () => {
-    const _url = getLocationOriginURL();
-    return notificationsUrl ? notificationsUrl : `${_url}/notifications`;
+    return notificationsUrl ? notificationsUrl : '/notifications';
   };
 
   return (
@@ -41,12 +39,12 @@ function IGRPTemplateNotifications({
       <DropdownMenuTrigger asChild>
         <Button variant="ghost" size="icon" className="size-6 relative">
           <IGRPIcon iconName="Bell" strokeWidth={2} />
-          {notificationCount > 0 && (
+          {unreadCount > 0 && (
             <Badge
               className="absolute -top-1 -right-0.5 h-3.5 w-3.5 flex text-[10px] py-0 px-0"
               variant="destructive"
             >
-              {notificationCount}
+              {unreadCount}
             </Badge>
           )}
           <span className={cn('sr-only')}>Notifications</span>
@@ -55,8 +53,8 @@ function IGRPTemplateNotifications({
       <DropdownMenuContent align="end" className="max-w-80">
         <DropdownMenuLabel className={cn('flex items-center justify-between')}>
           <span>Notifications</span>
-          {notificationCount > 0 && (
-            <Button variant="ghost" size="sm" onClick={markAsRead} className="h-auto text-xs">
+          {unreadCount > 0 && onMarkAllRead && (
+            <Button variant="ghost" size="sm" onClick={onMarkAllRead} className="h-auto text-xs">
               Mark all as read
             </Button>
           )}
@@ -91,4 +89,4 @@ function IGRPTemplateNotifications({
   );
 }
 
-export { IGRPTemplateNotifications };
+export { IGRPTemplateNotifications, type IGRPTemplateNotificationsProps };

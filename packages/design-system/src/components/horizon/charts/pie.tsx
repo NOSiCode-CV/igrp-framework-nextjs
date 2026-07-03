@@ -15,7 +15,11 @@ function IGRPPieChart(props: IGRPPieChartProps) {
   return (
     <Suspense
       fallback={
-        <div className={cn("w-full overflow-hidden animate-pulse rounded-lg bg-muted min-h-[200px] aspect-video")} />
+        <div
+          className={cn(
+            "w-full overflow-hidden animate-pulse motion-reduce:animate-none rounded-lg bg-muted min-h-[200px] aspect-video",
+          )}
+        />
       }
     >
       <IGRPPieChartLazy {...props} />

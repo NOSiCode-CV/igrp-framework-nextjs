@@ -1,3 +1,4 @@
+// shadcn: 2026-05-18
 "use client"
 
 import * as ScrollAreaPrimitive from "@radix-ui/react-scroll-area"

@@ -11,10 +11,10 @@ const IGRPNotificationVariants = cva("bg-background z-50 rounded-md p-4 shadow-l
   variants: {
     variant: {
       default: "text-foreground",
-      error: "text-red-600 border-red-500/50",
-      info: "text-blue-600 border-blue-500/50",
-      success: "text-emerald-600 border-emerald-500/50",
-      warning: "text-amber-600 border-amber-500/50",
+      error: "text-destructive border-destructive/50",
+      info: "text-info border-info/50",
+      success: "text-success border-success/50",
+      warning: "text-warning border-warning/50",
     },
     border: {
       default: "border-0",
@@ -84,8 +84,12 @@ function IGRPNotification({
 
   const icon = iconName ?? typeIconMap[variant ?? "default"]
 
+  const isAssertive = variant === "error" || variant === "warning"
+
   return (
     <div
+      role={isAssertive ? "alert" : "status"}
+      aria-live={isAssertive ? "assertive" : "polite"}
       className={cn(
         IGRPNotificationVariants(),
         border === "colored" && IGRPNotificationVariants({ variant, border }),
@@ -128,7 +132,6 @@ function IGRPNotification({
               showIcon={true}
               size="icon"
               iconClassName={cn("opacity-60 transition-opacity group-hover:opacity-100")}
-              aria-hidden="true"
             />
           )}
         </div>

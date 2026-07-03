@@ -3,11 +3,13 @@ import { dirname, join } from "path";
 import { createHash } from "crypto";
 import { fileURLToPath, URL } from "url";
 import { parse as parseYaml } from "yaml";
+import { sortMigrationFiles } from "../src/migration-order.js";
+import { validateRequires } from "../src/validate-requires.js";
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);
 const ROOT = join(__dirname, "..");
-const MIGRATIONS_DIR = join(ROOT, "migrations/demo-legacy");
+const MIGRATIONS_DIR = join(ROOT, "migrations/demo-v1");
 const OUT_DIR = join(ROOT, "dist");
 const PAYLOAD_OUT = join(OUT_DIR, "payload");
 
@@ -58,9 +60,9 @@ function main() {
   mkdirSync(OUT_DIR, { recursive: true });
   mkdirSync(PAYLOAD_OUT, { recursive: true });
 
-  const files = readdirSync(MIGRATIONS_DIR)
-    .filter((f) => f.match(/^\d+\.MIGRATIONS.*\.md$/))
-    .sort();
+  const files = sortMigrationFiles(
+    readdirSync(MIGRATIONS_DIR).filter((f) => f.match(/^\d+\.MIGRATIONS.*\.md$/)),
+  );
 
   const migrations = [];
   for (const file of files) {
@@ -80,10 +82,14 @@ function main() {
     console.log(`  packed ${fm.id}`);
   }
 
+  // Fail the pack if ids aren't unique or a `requires` points forward / at an
+  // unknown id — a bad manifest would permanently deadlock consumer `apply`.
+  validateRequires(migrations);
+
   const manifest = {
     version: 1,
     cliVersion: pkg.version,
-    template: "demo-legacy",
+    template: "demo-v1",
     migrations,
   };
 

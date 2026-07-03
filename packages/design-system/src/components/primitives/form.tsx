@@ -1,3 +1,4 @@
+// shadcn: 2026-05-18
 /* eslint-disable react-refresh/only-export-components */
 
 // IGRP CUSTOM: THIS COMPONENT IS CHANGED FROM THE ORIGINAL
@@ -135,7 +136,13 @@ function FormMessage({ className, ...props }: React.ComponentProps<"p">) {
   }
 
   return (
-    <p data-slot="form-message" id={formMessageId} className={cn("text-destructive text-sm", className)} {...props}>
+    <p
+      data-slot="form-message"
+      id={formMessageId}
+      role="alert"
+      className={cn("text-destructive text-sm", className)}
+      {...props}
+    >
       {body}
     </p>
   )

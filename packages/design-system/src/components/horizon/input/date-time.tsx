@@ -113,7 +113,7 @@ function IGRPDateTimeInput({
           required={required}
           aria-required={required}
           aria-invalid={!!error || !!props["aria-invalid"]}
-          aria-describedby={helperText || error ? `${fieldName}-helper` : undefined}
+          aria-describedby={error ? `${fieldName}-error` : helperText ? `${fieldName}-helper` : undefined}
           className={cn(error && "border-destructive focus-visible:ring-destructive/20", inputClassName)}
           {...props}
         />
@@ -130,7 +130,7 @@ function IGRPDateTimeInput({
         )}
 
         {error && (
-          <p id={`${fieldName}-helper`} className={cn("text-destructive mt-2 text-xs")} role="alert">
+          <p id={`${fieldName}-error`} className={cn("text-destructive mt-2 text-xs")} role="alert">
             {error}
           </p>
         )}
@@ -179,7 +179,9 @@ function IGRPDateTimeInput({
               required={required}
               aria-required={required}
               aria-invalid={!!fieldState.error || !!error || !!props["aria-invalid"]}
-              aria-describedby={helperText || error || fieldState.error ? `${fieldName}-helper` : undefined}
+              aria-describedby={
+                error || fieldState.error ? `${fieldName}-error` : helperText ? `${fieldName}-helper` : undefined
+              }
               className={cn(
                 (fieldState.error || error) && "border-destructive focus-visible:ring-destructive/20",
                 inputClassName,

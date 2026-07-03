@@ -59,16 +59,15 @@ import {
 
 ### Package Exports
 
-| Export                                            | Description                                                                      |
-| ------------------------------------------------- | -------------------------------------------------------------------------------- |
-| `@igrp/igrp-framework-react-design-system`        | Main entry — components, hooks, utilities                                        |
-| `@igrp/igrp-framework-react-design-system/tokens` | CSS variables (theme tokens)                                                     |
-| `@igrp/igrp-framework-react-design-system/styles` | Full styles (Tailwind + base) — use only when not compiling Tailwind in your app |
+| Export                                            | Description                               |
+| ------------------------------------------------- | ----------------------------------------- |
+| `@igrp/igrp-framework-react-design-system`        | Main entry — components, hooks, utilities |
+| `@igrp/igrp-framework-react-design-system/tokens` | CSS variables (theme tokens)              |
 
 ### Component Categories
 
 - **Horizon** — High-level components (`IGRPButton`, `IGRPCard`, `IGRPForm`, etc.)
-- **Primitives** — Low-level building blocks (`IGRPButtonPrimitive`, `IGRPDialogPrimitive`, etc.)
+- **Primitives** — Low-level building blocks (`Button`, `Dialog`, etc.)
 - **Custom** — Domain-specific components (`IGRPStatusBanner`, `IGRPUserAvatar`, etc.)
 
 ### Primitives vs Horizon
@@ -89,7 +88,7 @@ import {
 
 ```tsx
 // Primitive: just a styled button, you control everything
-<IGRPButtonPrimitive variant="outline" size="sm">Click</IGRPButtonPrimitive>
+<Button variant="outline" size="sm">Click</Button>
 
 // Horizon: adds icons, loading state, IGRP attributes
 <IGRPButton showIcon iconName="ArrowRight" loading={isSubmitting} loadingText="Saving...">
@@ -101,7 +100,7 @@ import {
 
 ```tsx
 // Primitive: raw input, no label or form wiring
-<IGRPInputPrimitive placeholder="Enter value" />
+<Input placeholder="Enter value" />
 
 // Horizon: label, helper text, icon, form integration, error display
 <IGRPInputText
@@ -255,7 +254,17 @@ pnpm build
 
 # Watch mode
 pnpm dev
+
+# Unit tests
+pnpm test
+
+# Check primitives for drift from upstream shadcn (periodic maintenance, hits network)
+node scripts/check-shadcn-drift.mjs
 ```
+
+### Shadcn drift checker
+
+`scripts/check-shadcn-drift.mjs` reports drift between local primitives in `src/components/primitives/` and upstream shadcn. It is intended for periodic (~quarterly) maintenance — it hits the network, is slow, and is **not** wired into CI. Each primitive may carry a `// shadcn: YYYY-MM-DD` first-line stamp recording the last upstream sync. Exit code 1 if any primitive has drifted.
 
 ---
 

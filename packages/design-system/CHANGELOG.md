@@ -1,5 +1,177 @@
 # @igrp/igrp-framework-react-design-system
 
+## 0.1.0-beta.141
+
+### Patch Changes
+
+- 2d9bdef: - Add `IGRPRepetitiveComponent` — generic render-prop component for mapping a list of items with a key extractor, exported from the design system root
+  - Fix `IGRPModalDialog` sticky header/footer layout: use `-mx-6 px-6` for true edge-to-edge spanning, correct z-index to `z-10`, and add `max-h-[95vh]` on the full-size variant; simplify `IGRPModalDialogDescription` to accept standard `children` instead of a `name` shorthand prop
+  - Add template-migrator migration 24: resync `demo-v1` `(igrp)/layout.tsx` (hoists `IGRPQueryProvider`) and `.env.example` to beta.159, bumping all `@igrp/*` framework deps
+
+## 0.1.0-beta.140
+
+### Patch Changes
+
+- 9e8e240: `IGRPCombobox`: default `value` to `undefined` instead of `""` so standalone
+  uncontrolled usage persists the selection (previously the `localValue` path was
+  dead and the selection never displayed).
+- 781f753: `IGRPDataTable` client filter: derive `isFiltered` from the live column-filter
+  state each render instead of memoizing on the stable `table` reference, so the
+  Clear-filters button appears after a filter is applied.
+- aca828e: DataTable date-range filter guards invalid/unparseable dates instead of
+  silently dropping every row; `formatChartValue` abbreviates negative
+  magnitudes (`-2.5M`); `getChartHeight`/`getChartWidth` honor an explicit `0`
+  and drop their no-op ternaries.
+- 1da77de: Memoize `IGRPDataTable`'s column helper, derived `allColumns`, and
+  `filterDescriptors` (keyed on `columns`/`actions`). The component opts out of
+  the React Compiler (`"use no memo"`, required by `useReactTable`), so these
+  were rebuilt on every render and forced TanStack to reset its column model on
+  any unrelated parent re-render. Documents in `IGRPDataTableProps` that callers
+  must keep `data` and `columns` referentially stable.
+- 6467e14: `IGRPDataTableButtonModal` no longer hosts its body inside
+  `<DialogDescription asChild>`. That cloned arbitrary content (typically a whole
+  form) onto Radix's `Slot`, which announced the entire subtree as the dialog's
+  `aria-describedby` description and threw `React.Children.only` for any
+  multi-root `render()`. The body now renders in a plain `<div>`, with a separate
+  short visually-hidden `DialogDescription` satisfying the `aria-describedby`
+  contract. `DialogTitle` is unchanged.
+- d8daf50: `IGRPDataTableButtonAlert` no longer renders an empty `AlertDialogDescription`
+  when the action has no description. The description is now guarded on `children`,
+  so Radix gets no dangling `aria-describedby` and screen readers aren't handed an
+  empty description node. (`IGRPAlertDialog` already guards on `description`.)
+- 8cb2fc5: Default chart grid/axis/reference colors to semantic tokens instead of hardcoded
+  hex (`#e5e7eb`/`#d1d5db`). `gridColor`/`referenceLineColor` now default to
+  `var(--border)` and `axisColor` to `var(--muted-foreground)` across area, line,
+  radar, radial, and bar charts, so gridlines and axes adapt to dark mode without
+  per-chart overrides. The color props remain overridable.
+- 6cb1cec: `src/index.css` (the Storybook root stylesheet) now `@import`s `./tokens.css`
+  instead of carrying a hand-maintained duplicate of the `@theme inline` / `:root`
+  / `.dark` token blocks. The duplicate had drifted — it lacked
+  `--destructive-foreground`, `--indigo*`, and `--sidebar-active*` (which
+  `lib/colors.ts` emits), so Storybook rendered those variants with undefined
+  custom properties. `tokens.css` is now the single source of truth.
+
+## 0.1.0-beta.139
+
+### Patch Changes
+
+- 0850757: charts: migrate to recharts 3. The chart primitives (`ChartContainer`/`ChartTooltipContent`/`ChartLegendContent`) are re-synced with upstream shadcn for the recharts 3 type surface (`DefaultTooltipContentProps`/`DefaultLegendContentProps`, `ResponsiveContainer` `initialDimension`). Horizon chart fixes for recharts 3 breaking changes: pie drops the removed `Pie.activeIndex` prop (interactive active segment is now driven by hover/tooltip state); pie and radial manual legends move from the removed `<Legend payload>` prop to the `content` render prop via a shared `ChartCustomLegend`; radial `LabelList.formatter` is rewritten for the new `(value) => …` signature (previously received `{ payload }`). `recharts` peer dependency is now `3.8.1`.
+
+## 0.1.0-beta.138
+
+### Patch Changes
+
+- fc2fe20: - `next-auth`: add `console.error` diagnostics when introspection marks the refresh token inactive or when `refreshOidcAccessToken` returns an error flag or throws — makes login-loop root causes visible in server logs
+  - `next`: replace `unstable_cache` with `React.cache()` in `use-user` — prevents stale 401s caused by rotating access tokens being embedded in the `unstable_cache` key
+
+## 0.1.0-beta.137
+
+### Patch Changes
+
+- af28e9a: feat(ds): add asChild prop to IGRPButton for Slot-based rendering
+
+## 0.1.0-beta.136
+
+### Patch Changes
+
+- 033e1d7: `IGRPDataTable`: disable TanStack's `autoResetPageIndex`/`autoResetExpanded` — their microtask-based reset dispatches state updates before the component mounts under React 19 concurrent rendering ("Can't perform a React state update on a component that hasn't mounted yet"). The page-index reset on filter/sort changes is now handled synchronously in `tableReducer` instead, preserving the previous UX.
+
+## 0.1.0-beta.135
+
+### Patch Changes
+
+- 0eb0323: - `IGRPText`: deprecate the `variant` color prop and stop applying a hard-coded solid color class, so text color now inherits from `className` / semantic tokens instead of being forced to `primary`.
+  - `IGRPStatusBanner`: drop redundant `cn()` wrappers around static className strings.
+
+## 0.1.0-beta.134
+
+### Patch Changes
+
+- 6b42572: - Coordinated maintenance release: bump all framework packages to the next beta to keep versions aligned across the framework.
+
+## 0.1.0-beta.133
+
+### Patch Changes
+
+- 1829701: refactor(ds): streamline imports and formatting in Horizon inputs, form, and i18n
+
+  Non-functional readability pass — no API or runtime behavior change:
+  - Consolidate multi-line imports/exports onto single lines in `input/search.tsx`, `input/text.tsx`, `i18n/context.tsx`, and `i18n/index.ts`.
+  - Reformat the `IGRPForm` `useEffect` dependency array (same dependencies) and collapse a wrapper `div` className in `IGRPInputText`.
+
+## 0.1.0-beta.132
+
+### Patch Changes
+
+- 62faea7: Design-system audit follow-ups (no public API breaks):
+  - **`src/lib/colors.ts`**: replace raw Tailwind palette references (`text-emerald-700 dark:text-emerald-400`, `bg-red-500`, etc.) with semantic tokens (`text-success`, `bg-destructive`, …). Dark mode is now driven entirely by token theming. The `IGRPColors` shape and all exported types are unchanged.
+  - **`tokens.css`**: add `--destructive-foreground`, `--indigo`, `--indigo-foreground` light and dark values plus their `@theme inline` entries, so `colors.ts` (and downstream consumers) can express the full destructive/indigo roles via semantic tokens.
+  - **`IGRPForm`**: the `defaultValues` sync effect now skips reset when the form is dirty, so a parent re-rendering with a new `defaultValues` object reference no longer clobbers user input. Consumers that _want_ to overwrite dirty state should bump `resetKey` or call `formRef.current?.reset()` explicitly.
+  - **`IGRPDataTable`**: extract `IGRPDataTableRowActions` to a separate file (`data-table/row-actions-cell.tsx`) without the `"use no memo"` directive, so the React Compiler can memoize per-row renders. The parent table file still opts out (required for `useReactTable`).
+  - **Docs**: document the shadcn drift-checker script and the primitives-layer `dark:` policy in the package CLAUDE.md + README.
+  - **Tests**: add a Vitest + React Testing Library setup (jsdom) with focused unit tests for `IGRPForm` (submit/validation/global error/dirty guard/pristine sync), `IGRPInputText` (label, helper, error, required), and `IGRPDataTable` (smoke + empty-state).
+
+- 773b8b0: Design-system robustness pass — M1 (a11y), M2 (i18n + type safety), M3 (test breadth + side-effect hygiene). No breaking public API changes.
+
+  **M1 — Accessibility / Slot forwarding**
+  - `IGRPInputText` (form-context branch) and `IGRPInputSearch` (both branches) — fix shadcn `FormControl` Slot wiring: the `id` from `useFormField()` now lands on the `<input>` element instead of the positioning wrapper div, so the `<FormLabel htmlFor>` association is correct, screen readers announce labels, and clicking the label focuses the input. The positioning wrapper still exists as a sibling for icon overlays.
+  - New a11y assertions in the IGRPForm test suite: clicking `<FormLabel>` focuses the underlying input, and after validation failure the input carries `aria-invalid="true"` plus `aria-describedby` pointing at the form message id.
+
+  **M2 — i18n provider + IGRPForm type tightening**
+  - New `IGRPI18nProvider` + `useIGRPi18n()` hook + `IGRPI18nStrings` / `IGRPI18nStringsOverride` types under the new `i18n/` module. pt-PT defaults are exported as `IGRP_I18N_DEFAULTS_PT_PT`. Provider performs per-group shallow merge; missing keys fall back to defaults.
+  - Wired into `IGRPDataTable` (`clientClearLabel`, `notFoundLabel`), `IGRPInputPhone` (placeholder, country selector label, default option), `IGRPInputPassword` (toggle aria-label), `IGRPInputNumber` (increment/decrement labels, invalid-value message), `IGRPForm` (submission error toast title + fallback message). Component-level props still override the provider value when supplied.
+  - Removed file-level `eslint-disable @typescript-eslint/no-explicit-any` from `IGRPForm`. The remaining `any` is bounded to a single-line type alias (`type AnyZod = z.ZodType<Record<string, any>, any, any>`) that mirrors react-hook-form's `FieldValues` constraint — the `any`s exist to thread through to a third-party generic, not to weaken the public surface. Internal `useForm` / `Resolver` / `UseFormReturn` middle generics tightened from `any` → `unknown`.
+
+  **M3 — Test breadth + side-effect hygiene**
+  - New tests: `input-password.test.tsx`, `input-number.test.tsx`, `input-search.test.tsx`, `i18n/__tests__/context.test.tsx`, `scripts/side-effects.test.mjs`. Coverage now includes stepper math, visibility toggle, search submit/Enter, i18n provider merge semantics, and tree-shake hygiene. Suite: 85 tests across 10 files, all green.
+  - `scripts/side-effects.test.mjs` is a regression guard: every `.ts`/`.tsx` source file must be free of top-level CSS imports and bare top-level function calls. Catches patterns that would silently defeat consumer tree-shaking with `sideEffects: ["*.css"]`.
+  - `form-list.tsx`: replaced `Object.assign(IGRPFormList, { displayName: … })` with direct `IGRPFormList.displayName = …` assignment — equivalent behavior, doesn't trip the side-effect guard, more idiomatic.
+
+- b88c4b1: Add dedicated `--sidebar-active` / `--sidebar-active-foreground` tokens (light + dark, registered in `@theme inline`) for the selected sidebar menu item. Defaults to a `color-mix` tint of `--sidebar-primary` so the highlight tracks the active theme, while remaining independently overridable by consumers.
+
+## 0.1.0-beta.131
+
+### Patch Changes
+
+- 48d2818: Web Interface Guidelines a11y pass: fix dead expander button and inverted theme-color constants; default `aria-hidden` on `IGRPIcon` and enforce an accessible name on icon-only `IGRPButton`; standardize input `aria-describedby`/label wiring and password hardening; add live regions to alert/notification/chat/form; scope `transition-all` and add reduced-motion guards; correct invalid ARIA on stepper/menu-navigation; locale-aware date formatting via `Intl.DateTimeFormat`. Note: `IGRPDataTableCellDate` props change from `dateFormat` to `language`/`dateOptions`.
+- 48dd45c: - Use `move-cli` instead of the cmd.exe `move` builtin in the `build:babel` step so the build runs on non-Windows platforms.
+- 3377f52: chore(design-system): close-out Bundle A — finish /styles removal, catalogue deltas, add IGRPMenubar, harden drift script
+  - Remove the deprecated `/styles` export entirely: dropped from `publishConfig.exports`, the `tailwind:build` script and its build-chain invocation are gone, the generated `src/styles.css` is deleted, `@tailwindcss/cli` dropped from devDependencies. Templates import `/tokens` only and compile Tailwind in the app. README and CLAUDE.md updated to reflect the removal.
+  - Catalogue the four remaining IGRP-custom primitive deltas in `COMPONENTS.md` (Accordion, Form, Popover, RadioGroup) alongside the existing Button entry. Combined with Button, this is the complete intentional-divergence baseline the drift detector compares against.
+  - Drift detector hardening: spawn options now use `shell: process.platform === "win32"` so `npx`/`npm` shims resolve on Windows; removed the `#!/usr/bin/env node` shebang from the `.mjs` so vitest 4.1.x can import it without a parser error.
+  - `drift-baseline-2026-05.md`: first end-to-end run captured. The run revealed two further structural defects in the script (non-interactive `init` blocks on a prompt → no `components.json`; `hasDrift` swallows non-zero CLI exits as `ok`). No actionable baseline this cycle; the next baseline will be the first real one after those fixes land in a follow-up.
+  - Add `IGRPMenubar` Horizon wrapper — pure re-export of all 16 primitive `Menubar*` sub-components under `IGRP*` aliases, mirroring the `IGRPDropdownMenu` pattern. Closes the Horizon-layer Menubar gap.
+
+- db24347: Replace raw color utilities with semantic tokens: add a `--highlight` / `--highlight-foreground` token (used by `IGRPText` highlighting) and drop manual `dark:bg-zinc-900/60` overrides on `IGRPModalDialog` sticky header/footer. Reconcile the legacy `index.css` theme with `tokens.css` by adding the previously missing `success`/`warning`/`info` tokens so the `/styles` build matches the `/tokens` export.
+- c412311: refactor(design-system): peer-dep heavy libs, deprecate /styles export, add COMPONENTS.md + shadcn-drift detector
+  - Move `react-hook-form`, `zod`, `recharts`, `@tanstack/react-table`, `date-fns`, and `lucide-react` from `dependencies` to `peerDependencies` so consumers can upgrade them independently and avoid duplicate copies. Loosened semver ranges; mirrored as `devDependencies` so the DS still builds standalone.
+  - Deprecate the `/styles` export. Removed from the dev `exports` map; kept in `publishConfig.exports` for one more beta as a soft-deprecation window. Scheduled for removal in the next beta. Templates must import `/tokens` only and compile Tailwind in the app.
+  - Add `packages/design-system/COMPONENTS.md` — three-layer (Horizon / Primitive / Custom) reference map with IGRP deltas from upstream shadcn and the experimental-layer promotion criteria.
+  - Add `pnpm drift:shadcn` — periodic-maintenance script that compares each primitive against upstream shadcn via the CLI `--diff` flow. Not wired into CI.
+  - demo-legacy template: document that `npx shadcn add` must not be run inside the template (it collides with IGRP primitives).
+
+- 55b7077: design-system: define the missing `--chart-6/7/8` tokens (violet/red/lime, light + dark) that `IGRP_CHART_COLORS` already referenced, so charts with 6–8 series render correct fills instead of blanks. Replace the hardcoded `dark:border-slate-800/60` on the data-table header row with the semantic `border-border` token. Make the data-table input-filter accessible label configurable via a new `ariaLabel` prop (and matching `ariaLabel` on the filter descriptor); pt-PT default labels are unchanged.
+
+  template: extend the theme variants (blue/green/amber/default/mono) beyond `--primary` to also re-theme `--ring`, `--sidebar-primary`, and (for the colored themes) the primary `--chart-1` series, so a selected theme expresses brand identity across focus rings, the active sidebar item, and charts.
+
+## 0.1.0-beta.130
+
+### Patch Changes
+
+- 2a06c02: fix(design-system): add Spinner primitive; announce IGRPLoadingSpinner via role=status; next/image for cropper preview; autocomplete/inputmode on phone & url inputs; replace raw tailwind colors with semantic tokens; narrow transition-all in horizon layer; honor prefers-reduced-motion on animations
+- a1fbb7c: - Raise the minimum supported Node.js engine from `>=20.x.x` to `>=22.x.x` to match the rest of the monorepo.
+
+## 0.1.0-beta.129
+
+### Patch Changes
+
+- ac94a9c: Promote experimental components to Horizon: IGRPBreadcrumb (with size/color variants and dropdown collapsing), IGRPBanner (cookie and announcement variants), IGRPImageCropper (basic/circular/zoom/preview variants); add dropzone variant to IGRPInputFile with all UI strings configurable as props
+- a4ef1fe: Add success, warning, info as first-class semantic tokens; replace all raw Tailwind colors in IGRPStatsCard with semantic tokens; fix proportional icon sizing in IGRPStatsCard; standardize IGRPButton icon sizes to Tailwind scale and gap to gap-1.5
+- 9a0dd9b: fix(data-table): fix filter state desync, date range picker, clear-all button, select rendering, and a11y issues
+- 9f9ee3d: Add createIGRPColumnHelper with cellType shortcuts, unified actions prop, declarative filter descriptors, onQueryChange server-side callback, and pagination config prop to IGRPDataTable
+- 72268fd: a11y/polish pass: focus rings, motion-safe animations, tabular-nums, text-balance, onError callback, remove stale iconSize prop
+- ba86302: Remove dead experimental components (timeline, sheet, progress, appointment-picker); remove IGRPStandaloneList and IGRPRepetitiveComponent; fix sidebar cookie restore on mount; add shadcn audit date tracking to all primitives
+
 ## 0.1.0-beta.128
 
 ### Patch Changes

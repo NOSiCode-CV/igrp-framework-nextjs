@@ -1,6 +1,7 @@
 'use client';
 
-import { Fragment, useMemo, useRef, useEffect, useState } from 'react';
+import { Fragment, useMemo, useRef } from 'react';
+import { useBreadcrumbOverflow } from '../../hooks/use-breadcrumb-overflow';
 import Link from 'next/link';
 import { useSelectedLayoutSegments } from 'next/navigation';
 import {
@@ -47,6 +48,9 @@ interface IGRPTemplateBreadcrumbsProps {
    *   '/settings': 'Settings',
    *   '/settings/users': 'User Management',
    * }
+   *
+   * Define this object once at module scope (or memoize it). Passing a fresh
+   * object literal on every render re-runs the breadcrumb computation.
    */
   routeLabels?: Record<string, string>;
   /**
@@ -65,6 +69,9 @@ interface IGRPTemplateBreadcrumbsProps {
   itemsAfterCollapse?: number;
 }
 
+/** Stable reference so the default does not bust the useMemo dependency every render. */
+const EMPTY_ROUTE_LABELS: Record<string, string> = {};
+
 function formatSegmentLabel(segment: string): string {
   return segment
     .split(/[-_]/)
@@ -77,7 +84,7 @@ function formatSegmentLabel(segment: string): string {
 function IGRPTemplateBreadcrumbs({
   className,
   items,
-  routeLabels = {},
+  routeLabels = EMPTY_ROUTE_LABELS,
   formatLabel,
   homeLabel = 'Home',
   homeHref = '/',
@@ -85,10 +92,12 @@ function IGRPTemplateBreadcrumbs({
   itemsAfterCollapse = 1,
 }: IGRPTemplateBreadcrumbsProps) {
   // Always call — hooks cannot be conditional. Ignored when items is provided.
+  // Under Next `cacheComponents`/PPR this becomes a DYNAMIC read: if a consumer
+  // enables it and this renders inside a statically-cached shell, wrap the
+  // component in <Suspense> (a fallback can reuse controlled mode with items={[]}).
   const segments = useSelectedLayoutSegments();
   const isMobile = useIsMobile();
   const containerRef = useRef<HTMLOListElement>(null);
-  const [isOverflowing, setIsOverflowing] = useState(false);
 
   const breadcrumbItems = useMemo<BreadcrumbItem[]>(() => {
     // Controlled mode: items provided — skip all URL logic
@@ -115,45 +124,7 @@ function IGRPTemplateBreadcrumbs({
     });
   }, [items, segments, routeLabels, formatLabel]);
 
-  // Determine if we should check for overflow (only when not already collapsed)
-  const shouldCheckOverflow = breadcrumbItems.length <= maxItems && !isMobile;
-
-  // Check for overflow
-  useEffect(() => {
-    if (!shouldCheckOverflow) {
-      setIsOverflowing(false);
-      return;
-    }
-
-    const checkOverflow = () => {
-      if (!containerRef.current) return;
-      const container = containerRef.current;
-      // Add a small threshold to account for rounding differences
-      const isOverflow = container.scrollWidth > container.clientWidth + 1;
-      setIsOverflowing(isOverflow);
-    };
-
-    // Use requestAnimationFrame to ensure DOM is rendered
-    const timeoutId = setTimeout(() => {
-      checkOverflow();
-    }, 0);
-
-    // Use ResizeObserver to detect size changes
-    const resizeObserver = new ResizeObserver(() => {
-      if (shouldCheckOverflow) {
-        checkOverflow();
-      }
-    });
-
-    if (containerRef.current) {
-      resizeObserver.observe(containerRef.current);
-    }
-
-    return () => {
-      clearTimeout(timeoutId);
-      resizeObserver.disconnect();
-    };
-  }, [breadcrumbItems, shouldCheckOverflow, isMobile]);
+  const isOverflowing = useBreadcrumbOverflow(containerRef);
 
   if (breadcrumbItems.length === 0) {
     return null;

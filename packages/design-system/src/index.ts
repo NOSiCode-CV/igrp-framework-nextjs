@@ -346,6 +346,8 @@ export {
 
 export { Skeleton } from "./components/primitives/skeleton"
 
+export { Spinner } from "./components/primitives/spinner"
+
 export { Slider } from "./components/primitives/slider"
 
 export {
@@ -394,6 +396,8 @@ export { IGRPAlertDialog, type IGRPAlertDialogProps } from "./components/horizon
 export { IGRPAvatar, type IGRPAvatarProps } from "./components/horizon/avatar"
 
 export { IGRPBadge, type IGRPBadgeProps, igrpBadgeVariants } from "./components/horizon/badge"
+
+export { IGRPBanner, type IGRPBannerProps } from "./components/horizon/banner"
 
 export { IGRPButton, type IGRPButtonProps } from "./components/horizon/button"
 
@@ -564,6 +568,24 @@ export {
   IGRPDataTableFacetedFilterFn,
   IGRPDataTableTextFilterFn,
 } from "./components/horizon/data-table/lib/filters-utils"
+export { createIGRPColumnHelper } from "./components/horizon/data-table/column-helper"
+export type {
+  IGRPColumnHelper,
+  IGRPAccessorColumnDef,
+  IGRPCellType,
+  IGRPCellConfig,
+} from "./components/horizon/data-table/column-helper"
+export type {
+  IGRPDataTableAction,
+  IGRPDataTableActionLink,
+  IGRPDataTableActionAlert,
+  IGRPDataTableActionModal,
+  IGRPDataTableActionCustom,
+  IGRPDataTableFilterDescriptor,
+  IGRPDataTableFilterType,
+  IGRPDataTablePaginationConfig,
+  IGRPDataTableQuery,
+} from "./components/horizon/data-table/types"
 
 export {
   IGRPDropdownMenu,
@@ -590,7 +612,7 @@ export { IGRPFormField, type IGRPFormFieldProps } from "./components/horizon/for
 export { IGRPForm, type IGRPFormProps, type IGRPFormHandle } from "./components/horizon/form/"
 export { convertValuesToFormData } from "./components/horizon/form/lib/utils"
 export { IGRPFormList, type IGRPFormListProps } from "./components/horizon/form/form-list"
-export { IGRPStandaloneList, type IGRPStandaloneListProps } from "./components/horizon/form/standalone-list"
+export { IGRPRepetitiveComponent, type IGRPRepetitiveComponentProps } from "./components/horizon/repetitive-component"
 
 export {
   IGRPIcon,
@@ -602,6 +624,12 @@ export {
 } from "./components/horizon/icon"
 
 export { IGRPImage, type IGRPImageProps, type IGRPRatioType } from "./components/horizon/image"
+
+export {
+  IGRPImageCropper,
+  type IGRPImageCropperProps,
+  type IGRPImageCropperVariant,
+} from "./components/horizon/image-cropper"
 
 export {
   IGRPInfoCard,
@@ -666,6 +694,25 @@ export {
 } from "./components/horizon/menu-navigation"
 
 export {
+  IGRPMenubar,
+  IGRPMenubarPortal,
+  IGRPMenubarMenu,
+  IGRPMenubarTrigger,
+  IGRPMenubarContent,
+  IGRPMenubarGroup,
+  IGRPMenubarSeparator,
+  IGRPMenubarLabel,
+  IGRPMenubarItem,
+  IGRPMenubarShortcut,
+  IGRPMenubarCheckboxItem,
+  IGRPMenubarRadioGroup,
+  IGRPMenubarRadioItem,
+  IGRPMenubarSub,
+  IGRPMenubarSubTrigger,
+  IGRPMenubarSubContent,
+} from "./components/horizon/menubar"
+
+export {
   IGRPModalDialog,
   IGRPModalDialogClose,
   IGRPModalDialogContent,
@@ -700,8 +747,6 @@ export {
   type IGRPStepperProcessProps,
   type IGRPStepProcessProps,
 } from "./components/horizon/process/stepper"
-
-export { IGRPRepetitiveComponent, type IGRPRepetitiveComponentProps } from "./components/horizon/repetitive-component"
 
 export { IGRPSeparator } from "./components/horizon/separator"
 
@@ -817,6 +862,16 @@ export { igrpToPascalCase } from "./lib/pascal-case"
 export { igrpIsExternalUrl, igrpNormalizeUrl } from "./lib/url"
 export { cn, parseLocalDate } from "./lib/utils"
 export { colorToOklch, detectFormat, type ColorFormat } from "./lib/color-utils"
+
+// i18n
+
+export {
+  IGRPI18nProvider,
+  useIGRPi18n,
+  IGRP_I18N_DEFAULTS_PT_PT,
+  type IGRPI18nStrings,
+  type IGRPI18nStringsOverride,
+} from "./i18n"
 
 // external dependencies
 

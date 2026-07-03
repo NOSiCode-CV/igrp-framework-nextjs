@@ -1,3 +1,4 @@
+// shadcn: 2026-05-18
 import { createContext, useCallback, useContext, useState } from "react"
 import { CheckIcon, LoaderCircleIcon } from "lucide-react"
 import { Slot } from "@radix-ui/react-slot"
@@ -204,7 +205,11 @@ function StepperIndicator({ asChild = false, className, children, ...props }: St
           />
           {isLoading && (
             <span className={cn("absolute transition-all")}>
-              <LoaderCircleIcon className={cn("animate-spin")} size={14} aria-hidden="true" />
+              <LoaderCircleIcon
+                className={cn("animate-spin motion-reduce:animate-none")}
+                size={14}
+                aria-hidden="true"
+              />
             </span>
           )}
         </>

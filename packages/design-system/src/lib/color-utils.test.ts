@@ -1,10 +1,5 @@
 import { describe, it, expect } from "vitest"
-import {
-  hexToFormat,
-  formatToHex,
-  detectFormat,
-  colorToOklch,
-} from "./color-utils"
+import { hexToFormat, formatToHex, detectFormat, colorToOklch } from "./color-utils"
 
 describe("detectFormat", () => {
   it("detects hex", () => expect(detectFormat("#3b82f6")).toBe("hex"))
@@ -69,7 +64,7 @@ describe("round-trip conversions", () => {
     it(`${hex} → oklch → hex within ±1 per channel`, () => {
       const back = formatToHex(hexToFormat(hex, "oklch"), "oklch")!
       const orig = [parseInt(hex.slice(1, 3), 16), parseInt(hex.slice(3, 5), 16), parseInt(hex.slice(5, 7), 16)]
-      const got  = [parseInt(back.slice(1, 3), 16), parseInt(back.slice(3, 5), 16), parseInt(back.slice(5, 7), 16)]
+      const got = [parseInt(back.slice(1, 3), 16), parseInt(back.slice(3, 5), 16), parseInt(back.slice(5, 7), 16)]
       orig.forEach((v, i) => expect(Math.abs(v - got[i]!)).toBeLessThanOrEqual(1))
     })
   }

@@ -5,6 +5,13 @@ import { useCallback, useEffect, useId, useRef, useState } from "react"
 
 import { type IGRPColorRole, type IGRPColorVariants } from "../../lib/colors"
 import { cn } from "../../lib/utils"
+
+function getScrollBehavior(): ScrollBehavior {
+  if (typeof window !== "undefined" && window.matchMedia("(prefers-reduced-motion: reduce)").matches) {
+    return "auto"
+  }
+  return "smooth"
+}
 import { Button } from "../primitives/button"
 import { Tabs, TabsList, TabsTrigger, TabsContent } from "../primitives/tabs"
 import { IGRPBadge } from "./badge"
@@ -177,19 +184,20 @@ function IGRPTabs({
 
     const container = tabsListRef.current
     const scrollAmount = container.clientWidth * 0.7
+    const behavior = getScrollBehavior()
 
     switch (direction) {
       case "left":
-        container.scrollBy({ left: -scrollAmount, behavior: "smooth" })
+        container.scrollBy({ left: -scrollAmount, behavior })
         break
       case "right":
-        container.scrollBy({ left: scrollAmount, behavior: "smooth" })
+        container.scrollBy({ left: scrollAmount, behavior })
         break
       case "start":
-        container.scrollTo({ left: 0, behavior: "smooth" })
+        container.scrollTo({ left: 0, behavior })
         break
       case "end":
-        container.scrollTo({ left: container.scrollWidth, behavior: "smooth" })
+        container.scrollTo({ left: container.scrollWidth, behavior })
         break
     }
   }, [])
@@ -212,10 +220,12 @@ function IGRPTabs({
     const containerScrollRight = scrollLeft + containerRect.width
     const padding = 16
 
+    const behavior = getScrollBehavior()
+
     if (tabLeft < containerScrollLeft) {
-      container.scrollTo({ left: tabLeft - padding, behavior: "smooth" })
+      container.scrollTo({ left: tabLeft - padding, behavior })
     } else if (tabRight > containerScrollRight) {
-      container.scrollTo({ left: tabRight - containerRect.width + padding, behavior: "smooth" })
+      container.scrollTo({ left: tabRight - containerRect.width + padding, behavior })
     }
   }, [orientation])
 

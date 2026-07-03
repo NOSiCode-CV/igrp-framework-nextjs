@@ -1,3 +1,5 @@
+'use client';
+
 import {
   Sidebar,
   SidebarContent,
@@ -19,7 +21,16 @@ interface IGRPTemplateSidebarProps extends React.ComponentProps<typeof Sidebar> 
 function IGRPTemplateSidebar({ data, baseUrl, ...props }: IGRPTemplateSidebarProps) {
   if (!data) throw new Error('Dados de Sidebar é obrigatorio.');
 
-  const { menuItems, user, showAppSwitcher, apps, appCode, appCenterUrl } = data;
+  const {
+    menuItems,
+    user,
+    showAppSwitcher,
+    apps,
+    appCode,
+    appCenterUrl,
+    showMenuSearch,
+    showNotifications,
+  } = data;
 
   return (
     <Sidebar collapsible="icon" {...props}>
@@ -30,11 +41,11 @@ function IGRPTemplateSidebar({ data, baseUrl, ...props }: IGRPTemplateSidebarPro
       </SidebarHeader>
 
       <SidebarContent>
-        <IGRPTemplateMenus menus={menuItems} />
+        <IGRPTemplateMenus menus={menuItems} showSearch={showMenuSearch} />
       </SidebarContent>
 
       <SidebarFooter>
-        <IGRPTemplateNavUser user={user} />
+        <IGRPTemplateNavUser user={user} showNotifications={showNotifications} />
       </SidebarFooter>
 
       <SidebarRail />

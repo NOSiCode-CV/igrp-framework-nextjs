@@ -33,8 +33,15 @@ import {
   isAuthDisabled as isAuthDisabledFromEnv,
   type AuthProviderId,
 } from './providers';
-import { introspectOidcToken, refreshOidcAccessToken, revokeOidcSession } from './oidc';
-import { sanitizeRedirectUrl } from './sanitize';
+import {
+  configureOidcTokenRecoveryStore,
+  getRecoveredToken,
+  introspectOidcToken,
+  refreshOidcAccessToken,
+  revokeOidcSession,
+} from './oidc';
+import type { IGRPTokenRecoveryStore } from './token-store';
+import { escapeHtml, sanitizeRedirectUrl } from './sanitize';
 
 // ─── Config Error ─────────────────────────────────────────────────────────────
 
@@ -69,7 +76,36 @@ export function isIGRPAuthConfigError(error: unknown): error is IGRPAuthConfigEr
 
 // ─── Constants ───────────────────────────────────────────────────────────────
 
+// How many milliseconds before the access-token's `exp` the JWT callback
+// starts refreshing proactively. This is also the threshold used by
+// getSession() to decide "session expired" on the server side.
+//
+// CONSTRAINT: the client-side session-poll interval (IGRP_SESSION_REFETCH_INTERVAL,
+// in seconds) MUST be less than TOKEN_REFRESH_BUFFER_MS / 1000.
+//
+// If poll_interval_s >= TOKEN_REFRESH_BUFFER_MS / 1000, the last client poll
+// before the buffer window opens will find the token still "valid" (more than
+// TOKEN_REFRESH_BUFFER_MS remaining), so no client-side refresh fires. The window
+// then opens, server renders inside it trigger the JWT callback and refresh
+// correctly — but those refreshes run in read-only RSC context and cannot update
+// the session cookie. The cookie is only updated by the NEXT client poll (after
+// expiry), which triggers refresh there too. With rotating refresh tokens this
+// is handled by the recovery store; without rotation it works via repeated
+// refreshes. But if that client-side refresh fails for any reason, the dead
+// zone leaves callers with an expired token.
+//
+// Recommended: set IGRP_SESSION_REFETCH_INTERVAL to at most
+// (TOKEN_REFRESH_BUFFER_MS / 1000) - 15, i.e. ≤ 45 s for this default of 60 s.
 const TOKEN_REFRESH_BUFFER_MS = 60_000;
+
+// How long BEFORE actual access-token expiry middleware starts redirecting to
+// /login. Deliberately much smaller than TOKEN_REFRESH_BUFFER_MS: the jwt
+// callback begins refreshing proactively at `expiresAt - TOKEN_REFRESH_BUFFER_MS`
+// (60s out), so middleware must stay lenient past that point to give the client
+// session poll / focus-refetch a chance to rotate the cookie before a navigation
+// is bounced to /login. This is just a small grace to cover in-flight request
+// duration (the access token shouldn't die mid-render).
+const TOKEN_EXPIRY_GRACE_MS = 10_000;
 
 const DEFAULT_MATCHER = ['/', '/((?!apps|_next|favicon.ico|.*\\..*).*)', '/api/:path*'];
 
@@ -162,6 +198,19 @@ export type IGRPAuthOptions = {
    * withIGRPAuth({ onSessionExpired: () => redirect("/logout") });
    */
   onSessionExpired?: () => void | never;
+
+  /**
+   * Shared store for rotated refresh-token recovery. Defaults to an in-memory,
+   * per-process store — correct for single-instance or sticky-routed
+   * deployments. Multi-replica deployments without sticky sessions should
+   * supply an `IGRPTokenRecoveryStore` implementation backed by infrastructure
+   * shared across replicas. Implementations must never let `get`/`set` block
+   * auth — callers treat thrown errors as cache misses.
+   *
+   * @example
+   * withIGRPAuth({ tokenRecoveryStore: mySharedStore });
+   */
+  tokenRecoveryStore?: IGRPTokenRecoveryStore;
 };
 
 export type IGRPAuthInstance = {
@@ -281,6 +330,60 @@ function normalizePreviewMode(env: Record<string, string | undefined>): boolean 
   return env.IGRP_PREVIEW_MODE?.trim().replace(/^["']|["']$/g, '').toLowerCase() === 'true';
 }
 
+const SESSION_COOKIE_BASENAME = 'next-auth.session-token';
+const SECURE_SESSION_COOKIE_BASENAME = `__Secure-${SESSION_COOKIE_BASENAME}`;
+
+/**
+ * Resolve `getToken`'s `secureCookie` flag from the cookie names actually
+ * present on the request, instead of letting it infer the flag from
+ * `NEXTAUTH_URL`.
+ *
+ * Why this is necessary:
+ * `getToken` (next-auth/jwt) derives the session-cookie name purely from
+ * `process.env.NEXTAUTH_URL.startsWith('https://')`. But the cookie is WRITTEN
+ * by NextAuth's request handler, which decides the `__Secure-` prefix from the
+ * *request* origin — e.g. `x-forwarded-proto: https` when `AUTH_TRUST_HOST`/
+ * `VERCEL` is set, or a build-time-inlined `NEXTAUTH_URL` baked into the Edge
+ * middleware bundle. Behind a TLS-terminating proxy with `NEXTAUTH_URL` left
+ * `http`/unset at the Node runtime, the handler stores
+ * `__Secure-next-auth.session-token` while `getToken` looks for the bare
+ * `next-auth.session-token` — so it returns `null` for a perfectly valid
+ * session. Login still works (it runs through the request-aware handler), but
+ * `getAccessToken` silently fails, which is what breaks RP-initiated logout
+ * (`[getLogoutUrl] no active token found`).
+ *
+ * Reading the prefix off the real cookie keeps both sides in agreement
+ * regardless of how the scheme was detected. Returns `undefined` when no
+ * session cookie is present so `getToken` keeps its own default.
+ */
+function resolveSecureCookie(cookieNames: Iterable<string>): boolean | undefined {
+  let hasPlain = false;
+  for (const name of cookieNames) {
+    if (name.startsWith(SECURE_SESSION_COOKIE_BASENAME)) return true;
+    if (name.startsWith(SESSION_COOKIE_BASENAME)) hasPlain = true;
+  }
+  return hasPlain ? false : undefined;
+}
+
+/**
+ * Best-effort extraction of cookie names from an incoming request of unknown
+ * shape (NextRequest in Edge). Used only to pick the session-cookie prefix;
+ * any failure falls back to an empty list so `getToken` keeps its default.
+ */
+function extractCookieNames(request: unknown): string[] {
+  const cookies = (request as { cookies?: unknown } | null | undefined)?.cookies;
+  const getAll = (cookies as { getAll?: () => Array<{ name?: string }> } | undefined)?.getAll;
+  if (typeof getAll !== 'function') return [];
+  try {
+    return getAll
+      .call(cookies)
+      .map((c) => c?.name ?? '')
+      .filter(Boolean);
+  } catch {
+    return [];
+  }
+}
+
 /**
  * Lazily loads `next-auth` and returns a constructed handler.
  * Dynamic import so webpack doesn't pull `next-auth` (and transitively
@@ -313,8 +416,8 @@ function makeConfigErrorHandler(err: IGRPAuthConfigError): NextAuthHandler {
     '</style>',
     '</head><body>',
     '<h1>Authentication Configuration Error</h1>',
-    `<p><strong>Code:</strong> <code>${err.code}</code></p>`,
-    `<p>${err.message}</p>`,
+    `<p><strong>Code:</strong> <code>${escapeHtml(err.code)}</code></p>`,
+    `<p>${escapeHtml(err.message)}</p>`,
     '<p>Check your <code>AUTH_PROVIDER</code> environment variable and ensure all required env vars are set.</p>',
     '</body></html>',
   ].join('');
@@ -369,7 +472,12 @@ export function withIGRPAuth(options: IGRPAuthOptions = {}): IGRPAuthInstance {
     callbacks: callbackExtensions = {},
     middleware: middlewareOptions = {},
     onSessionExpired,
+    tokenRecoveryStore,
   } = options;
+
+  if (tokenRecoveryStore) {
+    configureOidcTokenRecoveryStore(tokenRecoveryStore);
+  }
 
   const {
     loginUrl = '/login',
@@ -405,7 +513,15 @@ export function withIGRPAuth(options: IGRPAuthOptions = {}): IGRPAuthInstance {
   // becomes Node-only when passed to NextAuth() below, which we defer.
 
   const authOptions: NextAuthOptions = {
-    useSecureCookies: process.env.NODE_ENV === 'production',
+    // Do NOT set useSecureCookies explicitly. NextAuth defaults to
+    // `NEXTAUTH_URL.startsWith('https://')`, which is exactly the same
+    // signal that `getToken` (next-auth/jwt) uses to derive the cookie name.
+    // Overriding it with `NODE_ENV === 'production'` diverges from that:
+    // a production build on HTTP (e.g. `next start` on localhost) would have
+    // NextAuth write `__Secure-next-auth.session-token` while the middleware's
+    // `getToken` reads `next-auth.session-token` → the cookie is never found
+    // → infinite redirect to /login. Let both sides default from NEXTAUTH_URL
+    // so they are always consistent.
     providers: resolvedProvider ? [resolvedProvider] : [],
     secret,
     ...(pages ? { pages } : {}),
@@ -431,23 +547,68 @@ export function withIGRPAuth(options: IGRPAuthOptions = {}): IGRPAuthInstance {
           };
         }
 
-        // Token still valid — return as-is (with 60s proactive refresh buffer)
+        // Token still valid — return as-is (with 60s proactive refresh buffer).
+        // Clear any stale `error` / `forceLogout` carried over from an earlier
+        // failed attempt: if `expiresAt` is comfortably in the future we are
+        // NOT going to refresh on this call, so a leftover error flag would
+        // stick to the cookie forever and trip the client-side session
+        // watcher into looping the user to /logout even though the access
+        // token is fine. This can happen when a successful refresh runs
+        // inside a server component (where cookies() is read-only and the
+        // rotated token can't be persisted) and the next route-handler poll
+        // sees a stale-but-still-valid token.
         if (igrpToken.expiresAt && Date.now() < igrpToken.expiresAt - TOKEN_REFRESH_BUFFER_MS) {
+          if (igrpToken.error || igrpToken.forceLogout) {
+            igrpToken = { ...igrpToken, error: undefined, forceLogout: false };
+          }
           if (callbackExtensions.jwt) {
             return callbackExtensions.jwt(params, igrpToken);
           }
           return igrpToken;
         }
 
-        // Token expired — introspect first to catch server-side revocations (fail-open)
-        const tokenIsActive = await introspectOidcToken(igrpToken, env).catch(() => true);
-        if (!tokenIsActive) {
-          igrpToken = { ...igrpToken, error: 'RefreshAccessTokenError', forceLogout: true };
+        // Access token expired (or within its refresh buffer).
+        //
+        // First, try to recover a rotated token from a recent refresh that
+        // could not persist its cookie (e.g. a refresh that ran inside an RSC
+        // render). This MUST run before introspection: after rotation the old
+        // refresh token reads `active: false`, so introspecting here would
+        // short-circuit a recoverable session straight to forceLogout.
+        const recovered = await getRecoveredToken(igrpToken.refreshToken);
+        if (recovered) {
+          igrpToken = recovered;
         } else {
-          try {
-            igrpToken = await refreshOidcAccessToken(igrpToken, env);
-          } catch {
+          // Introspect the refresh token to catch a server-side revocation
+          // before we try to use it (fail-open: a flaky introspection must
+          // never block refresh).
+          const refreshTokenActive = await introspectOidcToken(igrpToken, env).catch(() => true);
+          if (!refreshTokenActive) {
+            console.error(
+              '[next-auth] jwt: refresh token reported inactive by introspection endpoint — ' +
+                'logging user out. Check: (1) token was not manually revoked, ' +
+                '(2) IGRP_AUTH_CLIENT_ID / IGRP_AUTH_CLIENT_SECRET are correct for the introspection endpoint, ' +
+                '(3) introspection_endpoint in the IdP discovery document is reachable.',
+            );
             igrpToken = { ...igrpToken, error: 'RefreshAccessTokenError', forceLogout: true };
+          } else {
+            try {
+              igrpToken = await refreshOidcAccessToken(igrpToken, env);
+              if (igrpToken.error) {
+                // refreshOidcAccessToken returns an error-flagged JWT on failure
+                // rather than throwing. Surface it here so the cause is visible.
+                console.error(
+                  '[next-auth] jwt: token refresh returned error flag — user will be logged out. ' +
+                    'Check: (1) IdP token endpoint is reachable, (2) refresh token has not expired, ' +
+                    '(3) client credentials are correct, (4) token rotation — if the IdP rotates refresh ' +
+                    'tokens and this is a multi-replica deployment without a shared tokenRecoveryStore, ' +
+                    'a concurrent refresh on another pod may have consumed this refresh token.',
+                  { error: igrpToken.error },
+                );
+              }
+            } catch {
+              console.error('[next-auth] jwt: refreshOidcAccessToken threw unexpectedly — user will be logged out.');
+              igrpToken = { ...igrpToken, error: 'RefreshAccessTokenError', forceLogout: true };
+            }
           }
         }
 
@@ -457,6 +618,7 @@ export function withIGRPAuth(options: IGRPAuthOptions = {}): IGRPAuthInstance {
         return igrpToken;
       },
 
+      // SECURITY: copies accessToken + idToken onto the client session by design (the browser AM client needs accessToken); never log/serialize the session client-side. See the Session type JSDoc in session.ts.
       async session(params) {
         const { session, token } = params;
         const tokenTyped = token as JWT;
@@ -485,15 +647,36 @@ export function withIGRPAuth(options: IGRPAuthOptions = {}): IGRPAuthInstance {
           return callbackExtensions.redirect(params);
         }
 
-        const { url } = params;
+        const { url, baseUrl } = params;
         const nextInternalUrl = env.NEXTAUTH_URL_INTERNAL || '';
         const igrpAppHomeSlug = env.NEXT_PUBLIC_IGRP_APP_HOME_SLUG || '';
+        const joinHome = (base: string, slug: string) =>
+          slug ? `${base.replace(/\/+$/, '')}/${slug.replace(/^\/+/, '')}` : base;
+        const home = nextInternalUrl
+          ? joinHome(nextInternalUrl, igrpAppHomeSlug)
+          : sanitizeRedirectUrl(igrpAppHomeSlug || '/', env.NEXTAUTH_URL ?? baseUrl, '/');
 
-        if (nextInternalUrl) {
-          return `${nextInternalUrl}${igrpAppHomeSlug}`;
+        // No useful callbackUrl — land on home.
+        if (!url || url === baseUrl || url === `${baseUrl}/`) return home;
+
+        // Relative same-origin path (e.g. "/some/page") — validate through the
+        // shared sanitizer (rejects "//", "/\", %5C, and "/../" traversal), then
+        // resolve against baseUrl. sanitizeRedirectUrl returns the relative path
+        // for relative input, so re-prefix baseUrl to honor NextAuth's
+        // absolute-URL redirect contract.
+        if (url.startsWith('/') && !url.startsWith('//')) {
+          const safe = sanitizeRedirectUrl(url, baseUrl, '');
+          if (safe && safe.startsWith('/')) return `${baseUrl}${safe}`;
+          return home;
         }
 
-        return sanitizeRedirectUrl(url, env.NEXTAUTH_URL, '/');
+        // Absolute URL — only honor when it matches the app origin.
+        try {
+          if (new URL(url).origin === new URL(baseUrl).origin) return url;
+        } catch {
+          // fall through to home
+        }
+        return home;
       },
     },
 
@@ -507,11 +690,24 @@ export function withIGRPAuth(options: IGRPAuthOptions = {}): IGRPAuthInstance {
         const token = ('token' in message ? message.token : null) as JWT | null;
         if (!token) return;
 
-        // Fire-and-forget: revocation failure (network error, provider doesn't support
-        // RFC 7009, token already expired) must never block logout completing.
-        void revokeOidcSession(token, env).catch((err) => {
-          console.error('[next-auth] token revocation failed:', err);
-        });
+        // F1a — await revocation so the /api/auth/signout response is delayed
+        // until the IdP has confirmed (or refused) the revoke. This closes the
+        // race where the client called `window.location.replace(endSessionUrl)`
+        // before the revoke `fetch()` had finished — browser navigation aborts
+        // in-flight requests.
+        //
+        // Revocation must still never **throw** — local sign-out always
+        // succeeds, even if the IdP is unreachable. Errors surface as logs.
+        try {
+          const result = await revokeOidcSession(token, env);
+          if (!result.ok) {
+            console.warn('[next-auth.events.signOut] token revocation skipped/failed', result);
+          }
+        } catch (err) {
+          // Belt-and-braces — `revokeOidcSession` is supposed to catch its own
+          // network errors and tag them, but defend against future changes.
+          console.error('[next-auth.events.signOut] token revocation threw:', err);
+        }
       },
     },
   };
@@ -548,19 +744,26 @@ export function withIGRPAuth(options: IGRPAuthOptions = {}): IGRPAuthInstance {
   }
 
   async function getTokenFromRequest(request: unknown): Promise<JWT | null> {
+    const secureCookie = resolveSecureCookie(extractCookieNames(request));
     return (await getToken({
       req: request as Parameters<typeof getToken>[0]['req'],
+      secret: secret || process.env.NEXTAUTH_SECRET,
+      ...(secureCookie !== undefined ? { secureCookie } : {}),
     })) as JWT | null;
   }
 
   function isTokenExpiredOrFailed(token: JWT): boolean {
     const expiresAt = typeof token.expiresAt === 'number' ? token.expiresAt : undefined;
-    const isExpired = expiresAt !== undefined && expiresAt <= Date.now() + TOKEN_REFRESH_BUFFER_MS;
-    return isExpired || token.error === 'RefreshAccessTokenError' || token.error === 'invalid_grant';
+    const isExpired = expiresAt !== undefined && expiresAt <= Date.now() + TOKEN_EXPIRY_GRACE_MS;
+    // `token.error` is only ever set to 'RefreshAccessTokenError' (the refresh
+    // path flattens the IdP's OAuth error body into this single flag), so that
+    // is the only failure value to check here.
+    return isExpired || token.error === 'RefreshAccessTokenError';
   }
 
   function getLoginRedirectUrl(request: { url: string }): URL {
-    return new URL(loginUrl, env.NEXTAUTH_URL_INTERNAL ?? request.url);
+    const basePath = process.env.NEXT_PUBLIC_BASE_PATH ?? '';
+    return new URL(`${basePath}${loginUrl}`, env.NEXTAUTH_URL_INTERNAL ?? request.url);
   }
 
   // ── Server helpers (Node runtime only — dynamic imports) ──────────────────
@@ -568,11 +771,14 @@ export function withIGRPAuth(options: IGRPAuthOptions = {}): IGRPAuthInstance {
   async function getAccessToken(): Promise<JWT | null> {
     const { cookies } = await import('next/headers');
     const cookieStore = await cookies();
+    const all = cookieStore.getAll();
+    const secureCookie = resolveSecureCookie(all.map((c) => c.name));
     const token = await getToken({
       req: {
-        cookies: Object.fromEntries(cookieStore.getAll().map((c) => [c.name, c.value])),
+        cookies: Object.fromEntries(all.map((c) => [c.name, c.value])),
       } as NextApiRequest,
-      secret: secret || '',
+      secret: secret || process.env.NEXTAUTH_SECRET,
+      ...(secureCookie !== undefined ? { secureCookie } : {}),
     });
     return token as JWT | null;
   }
@@ -586,22 +792,30 @@ export function withIGRPAuth(options: IGRPAuthOptions = {}): IGRPAuthInstance {
 
   async function getSession(): Promise<Session | null> {
     if (configError) throw configError;
-    let session: Session | null;
 
+    let session: Session | null;
     try {
       session = await serverSession();
-      if (!session) return session;
-
-      const providerExp = typeof session.expiresAt === 'number' ? session.expiresAt : undefined;
-      const providerExpired = providerExp !== undefined && providerExp < Date.now() + TOKEN_REFRESH_BUFFER_MS;
-      const refreshFailed = session.error === 'RefreshAccessTokenError';
-
-      if (providerExpired || refreshFailed) {
-        onSessionExpired?.();
-        return null;
-      }
     } catch {
-      session = null;
+      // Cookie decode / transient session-read failure — treat as "no session".
+      return null;
+    }
+
+    if (!session) return null;
+
+    const providerExp = typeof session.expiresAt === 'number' ? session.expiresAt : undefined;
+    const providerExpired = providerExp !== undefined && providerExp < Date.now() + TOKEN_REFRESH_BUFFER_MS;
+    const refreshFailed = session.error === 'RefreshAccessTokenError';
+
+    // Expired access token or a failed refresh: hand control to onSessionExpired
+    // (typically `redirect('/logout')`). This MUST run outside the try/catch
+    // above — `redirect()` signals via a thrown NEXT_REDIRECT error, and
+    // swallowing it would silently cancel the redirect, leaving a dead session
+    // mounted until the next access-token-bearing request 401s into the error
+    // boundary.
+    if (providerExpired || refreshFailed) {
+      onSessionExpired?.();
+      return null;
     }
 
     return session;

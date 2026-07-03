@@ -1,3 +1,4 @@
+// shadcn: 2026-05-18
 "use client"
 
 import { Command as CommandPrimitive } from "cmdk"
@@ -21,7 +22,7 @@ function Command({ className, ...props }: React.ComponentProps<typeof CommandPri
 
 function CommandDialog({
   title = "Command Palette",
-  description = "Search for a command to run...",
+  description = "Search for a command to run…",
   children,
   className,
   showCloseButton = true,
@@ -54,7 +55,7 @@ function CommandDialog({
 function CommandInput({ className, ...props }: React.ComponentProps<typeof CommandPrimitive.Input>) {
   return (
     <div data-slot="command-input-wrapper" className={cn("flex h-9 items-center gap-2 border-b px-3")}>
-      <SearchIcon className={cn("size-4 shrink-0 opacity-50")} />
+      <SearchIcon className={cn("size-4 shrink-0 opacity-50")} aria-hidden="true" />
       <CommandPrimitive.Input
         data-slot="command-input"
         className={cn(

@@ -9,6 +9,7 @@ export type MigrationStep =
   | { type: "file.write"; path: string; mode: "replace" | "patch"; from?: string; patch?: string }
   | { type: "file.delete"; path: string }
   | { type: "env.add"; file: string; keys: Record<string, EnvKeySpec> }
+  | { type: "env.remove"; file: string; keys: string[] }
   | { type: "deps.bump"; manifest: string; ranges: Record<string, string> };
 
 export interface MigrationEntry {
@@ -24,7 +25,7 @@ export interface MigrationEntry {
 export interface Manifest {
   version: 1;
   cliVersion: string;
-  template: "demo-legacy";
+  template: "demo-v1";
   migrations: MigrationEntry[];
 }
 
@@ -35,11 +36,22 @@ export interface LockEntry {
   manifestHash: string;
   undo: MigrationStep[];
   fileHashes: Record<string, string>;
+  /**
+   * Pre-migration file contents keyed by app-relative path, captured at apply
+   * time for steps whose undo would otherwise be an unrestorable `__undo__`
+   * placeholder (file.write over an existing file, file.delete). Absent on
+   * lock entries written by older CLI versions. Payload contents are stored
+   * as UTF-8 text; binary files are not supported for undo capture
+   * (executeStep itself copies binary fine — only rollback restoration is
+   * text-only). First capture wins when a migration touches the same path
+   * more than once — the first snapshot is the true pre-migration content.
+   */
+  undoPayloads?: Record<string, string>;
 }
 
 export interface LockFile {
   version: 1;
-  template: "demo-legacy";
+  template: "demo-v1";
   applied: LockEntry[];
 }
 

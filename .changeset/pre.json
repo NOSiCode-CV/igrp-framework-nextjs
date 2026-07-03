@@ -12,23 +12,8 @@
     "@igrp/framework-next-template": "0.1.0-beta.115"
   },
   "changesets": [
-    "add-app-error-and-logger",
-    "auth-config-error-boundary",
-    "breadcrumbs-fixes",
-    "breadcrumbs-rebuild",
-    "bump-access-management-client-beta5",
-    "bump-access-management-client",
-    "bump-dev-deps-node25",
-    "fix-basurl-guard",
-    "fix-header-logo-and-dark-logo",
-    "fix-server-session-error-swallow",
-    "force-logout-usesafesession",
-    "framework-next-streaming",
-    "framework-next-ui-streaming",
-    "migrator-flat-lock",
-    "next-auth-fixes-batch",
-    "remove-react-cache-api-config",
-    "rename-provider-igrp-auth",
-    "token-revocation-on-logout"
+    "quiet-herons",
+    "silver-falcons",
+    "tiny-otters"
   ]
 }

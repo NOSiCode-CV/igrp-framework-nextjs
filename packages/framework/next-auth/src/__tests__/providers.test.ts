@@ -179,6 +179,16 @@ describe('createAuthProviderFromEnv', () => {
     expect(provider.clientId).toBe('igrp-example');
     expect(provider.clientSecret).toBe('psw');
   });
+
+  it('enables PKCE, state and nonce checks on the igrp-auth provider', () => {
+    const provider = createAuthProviderFromEnv(VALID_IGRP_AUTH_ENV) as { checks: string[] };
+    expect(provider.checks).toEqual(expect.arrayContaining(['pkce', 'state', 'nonce']));
+  });
+
+  it('includes pkce in the checks array (NextAuth applies S256 internally)', () => {
+    const provider = createAuthProviderFromEnv(VALID_IGRP_AUTH_ENV) as { checks: string[] };
+    expect(provider.checks).toContain('pkce');
+  });
 });
 
 describe('isAuthEnabled / isAuthDisabled', () => {

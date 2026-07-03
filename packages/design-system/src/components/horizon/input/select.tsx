@@ -8,7 +8,15 @@ import { Circle } from "lucide-react"
 import { igrpColorText } from "../../../lib/colors"
 import { cn } from "../../../lib/utils"
 import type { IGRPInputProps, IGRPOptionsProps } from "../../../types"
-import { FormControl, FormDescription, FormField, FormItem, FormLabel, FormMessage } from "../../primitives/form"
+import {
+  useFormField,
+  FormControl,
+  FormDescription,
+  FormField,
+  FormItem,
+  FormLabel,
+  FormMessage,
+} from "../../primitives/form"
 import { Input } from "../../primitives/input"
 import {
   Select,
@@ -95,6 +103,10 @@ function IGRPSelectField({
   showStatus,
   showGroup,
   className,
+  triggerId,
+  triggerAriaLabelledby,
+  triggerAriaInvalid,
+  triggerAriaDescribedBy,
   ...selectProps
 }: {
   value: string
@@ -113,6 +125,10 @@ function IGRPSelectField({
   showStatus: boolean
   showGroup: boolean
   className?: string
+  triggerId?: string
+  triggerAriaLabelledby?: string
+  triggerAriaInvalid?: boolean
+  triggerAriaDescribedBy?: string
 } & Omit<React.ComponentProps<typeof Select>, "value" | "onValueChange" | "onOpenChange" | "children">) {
   return (
     <Select value={value} onValueChange={onChange} onOpenChange={onOpenChange} disabled={disabled} {...selectProps}>
@@ -124,6 +140,10 @@ function IGRPSelectField({
         placeholder={placeholder}
         isOpen={isOpen}
         label={label}
+        triggerId={triggerId}
+        triggerAriaLabelledby={triggerAriaLabelledby}
+        triggerAriaInvalid={triggerAriaInvalid}
+        triggerAriaDescribedBy={triggerAriaDescribedBy}
       />
       <IGRPSelectContent
         showSearch={showSearch}
@@ -136,6 +156,22 @@ function IGRPSelectField({
         showGroup={showGroup}
       />
     </Select>
+  )
+}
+
+/**
+ * @internal Wrapper rendered inside FormItem that reads the form context to wire
+ * aria-invalid / aria-describedby onto the actual SelectTrigger button.
+ */
+function IGRPSelectFieldWithA11y(props: React.ComponentProps<typeof IGRPSelectField>) {
+  const { error, formItemId, formMessageId } = useFormField()
+  return (
+    <IGRPSelectField
+      {...props}
+      triggerId={formItemId}
+      triggerAriaInvalid={!!error}
+      triggerAriaDescribedBy={error ? formMessageId : undefined}
+    />
   )
 }
 
@@ -227,7 +263,7 @@ function IGRPSelect({
         <IGRPLabel id={fieldName} className={labelClassName} required={required} label={label} />
 
         <div className={cn("relative")}>
-          <IGRPSelectField {...selectFieldProps} value={state.selected} onChange={handleChange} />
+          <IGRPSelectField {...selectFieldProps} value={state.selected} onChange={handleChange} triggerId={fieldName} />
         </div>
 
         {helperText && !error && (
@@ -252,18 +288,22 @@ function IGRPSelect({
       render={({ field, fieldState }) => (
         <FormItem className={cn(className)}>
           {label && (
-            <FormLabel className={cn(labelClassName, required && 'after:content-["*"] after:text-destructive')}>
+            <FormLabel
+              id={`${fieldName}-label`}
+              className={cn(labelClassName, required && 'after:content-["*"] after:text-destructive')}
+            >
               {label}
             </FormLabel>
           )}
           <FormControl>
-            <IGRPSelectField
+            <IGRPSelectFieldWithA11y
               {...selectFieldProps}
               value={field.value ?? ""}
               onChange={(val) => {
                 field.onChange(val)
                 handleChange(val)
               }}
+              triggerAriaLabelledby={label ? `${fieldName}-label` : undefined}
             />
           </FormControl>
 
@@ -387,6 +427,10 @@ const IGRPSelectTrigger = ({
   label,
   isOpen,
   className,
+  triggerId,
+  triggerAriaLabelledby,
+  triggerAriaInvalid,
+  triggerAriaDescribedBy,
 }: {
   value: string
   options: IGRPOptionsProps[]
@@ -395,8 +439,19 @@ const IGRPSelectTrigger = ({
   label: string
   isOpen: boolean
   className?: string
+  triggerId?: string
+  triggerAriaLabelledby?: string
+  triggerAriaInvalid?: boolean
+  triggerAriaDescribedBy?: string
 }) => (
-  <SelectTrigger className={cn("w-full", className)} aria-expanded={isOpen}>
+  <SelectTrigger
+    id={triggerId}
+    aria-labelledby={triggerAriaLabelledby}
+    aria-invalid={triggerAriaInvalid || undefined}
+    aria-describedby={triggerAriaDescribedBy}
+    className={cn("w-full", className)}
+    aria-expanded={isOpen}
+  >
     <SelectValue placeholder={placeholder} className={cn("w-full")}>
       <div className={cn("w-full flex items-center gap-2 truncate")}>
         {showStatus && (

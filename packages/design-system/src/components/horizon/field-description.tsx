@@ -18,7 +18,7 @@ function IGRPFieldDescription({ helperText, error }: IGRPFieldDescriptionProps) 
   return (
     <>
       {helperText && !error && (
-        <p className={cn("text-muted-foreground text-xs mt-1")} role="note">
+        <p className={cn("text-muted-foreground text-xs mt-1")} role="note" aria-live="polite">
           {helperText}
         </p>
       )}

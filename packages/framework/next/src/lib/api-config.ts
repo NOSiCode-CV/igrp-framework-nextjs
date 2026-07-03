@@ -1,28 +1,46 @@
+import { AsyncLocalStorage } from 'async_hooks';
+
 export type IGRPClientRuntimeConfig = {
   token: string;
   baseUrl: string;
   timeout?: number;
 };
 
-// Module-level mutable object — intentionally shared across the module lifetime.
-// React.cache is NOT used here because it does not work across Server Actions
-// (each call returns a fresh instance, breaking set-then-read patterns).
-// This is an internal enterprise framework; the call pattern is always
-// "igrpSetAccessClientConfig() then synchronous reads in the same request handler".
-const _config: IGRPClientRuntimeConfig = {
-  token: '',
-  baseUrl: '',
-  timeout: 10_000,
-};
+const DEFAULT_TIMEOUT = 10_000;
+
+// AsyncLocalStorage propagates context through async call chains in both RSC
+// renders and Server Actions. React.cache only memoizes inside an active React
+// render tree, which means it returns a fresh default object in Server Actions
+// (which run as plain Node.js handlers outside any render context).
+//
+// enterWith() establishes a new store for the current async context and all
+// async operations that originate from it — set once per request/action, read
+// anywhere downstream in the same async chain.
+const storage = new AsyncLocalStorage<IGRPClientRuntimeConfig>();
+
+function getPerRequestConfig(): IGRPClientRuntimeConfig {
+  return storage.getStore() ?? { token: '', baseUrl: '', timeout: DEFAULT_TIMEOUT };
+}
 
 export function igrpSetAccessClientConfig(config: IGRPClientRuntimeConfig): void {
-  Object.assign(_config, config);
+  const current = storage.getStore();
+  if (current) {
+    // Store already established in this async context — update in place.
+    Object.assign(current, config);
+  } else {
+    // No store yet (e.g. first call in a Server Action or RSC render).
+    // enterWith propagates to all downstream async calls in this context.
+    storage.enterWith({ timeout: DEFAULT_TIMEOUT, ...config });
+  }
 }
 
 export function igrpGetAccessClientConfig(): IGRPClientRuntimeConfig {
-  return _config;
+  return getPerRequestConfig();
 }
 
 export function igrpResetAccessClientConfig(): void {
-  Object.assign(_config, { token: '', baseUrl: '', timeout: 10_000 });
+  const current = storage.getStore();
+  if (current) {
+    Object.assign(current, { token: '', baseUrl: '', timeout: DEFAULT_TIMEOUT });
+  }
 }

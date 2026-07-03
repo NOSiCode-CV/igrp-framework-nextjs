@@ -19,7 +19,7 @@ You are working inside `packages/framework/next/` — `@igrp/framework-next`. **
 - `igrpBuildConfig` — assembles layout + API + toaster + session config.
 - `igrpGetAccessClient`, `igrpGetAccessClientConfig` — access-management API client.
 
-Validate breaking changes against `templates/demo/src/app/layout.tsx`, `templates/demo/src/app/(igrp)/layout.tsx`, `templates/demo/src/igrp.template.config.ts`.
+Validate breaking changes against `templates/demo-v1/src/app/layout.tsx`, `templates/demo-v1/src/app/(igrp)/layout.tsx`, `templates/demo-v1/src/igrp.template.config.ts`.
 
 ## Rules unique to this package
 

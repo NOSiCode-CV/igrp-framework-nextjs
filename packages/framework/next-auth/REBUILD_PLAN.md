@@ -9,7 +9,7 @@
 
 ## 1. Context summary
 
-`packages/framework/next-auth` is a thin wrapper around **NextAuth v4** (`4.24.14`) that exposes a single factory, `withIGRPAuth()`, returning an `auth` object with `GET`/`POST` handlers, middleware primitives, and server-side session helpers. Both `templates/demo` and `templates/demo-legacy` consume it the same way:
+`packages/framework/next-auth` is a thin wrapper around **NextAuth v4** (`4.24.14`) that exposes a single factory, `withIGRPAuth()`, returning an `auth` object with `GET`/`POST` handlers, middleware primitives, and server-side session helpers. `templates/demo-legacy` (the only template) consumes it as follows:
 
 - `src/lib/auth.ts` → `withIGRPAuth({ onSessionExpired: () => redirect('/logout') })`
 - `src/app/api/auth/[...nextauth]/route.ts` → `export const { GET, POST } = auth`
@@ -29,8 +29,6 @@ Three issues combine to produce this error under Next 15.5.15 + Turbopack. Only 
 - Result: declaration files promise a runtime module that tsup never produced. The code *inside* `oidc.ts` / `providers.ts` does end up inlined into `dist/index.js` and `dist/config.js` (tsup bundles them), **but** `index.d.ts` advertises `export * from './providers'` → Turbopack's module graph, when following types to source, tries to resolve `./providers` and `./oidc` as siblings and gets an empty/undefined module record.
 - NextAuth v4 then walks `authOptions.providers` at request time, and for a provider whose `options` is `undefined` it dereferences `options.custom` in `src/core/lib/oauth/client.js` — producing the observed `Cannot read properties of undefined (reading 'custom')`.
 
-Why `templates/demo` still appears to work: its last successful build happened when the tree was coherent, and its env probably lands on a code path that short-circuits before the bad dereference. The bug is latent there too.
-
 ### 2.2 Contributing issue — `resolvedProvider` can be `null`
 
 `config.ts:271` calls `resolveProvider(provider, env)` which returns `null` when `AUTH_PROVIDER=none`. Line 277 filters it out with `.filter(Boolean)`, but NextAuth then receives `providers: []`, which NextAuth v4 does not tolerate at request time (several internals assume `providers[0]` exists and read `.options.custom`). Demo-legacy's `.env` uses Keycloak so this is not the active trigger, but it's the exact shape of the failure and worth fixing.
@@ -43,7 +41,7 @@ Why `templates/demo` still appears to work: its last successful build happened w
 
 **Goals**
 - Make `pnpm dev` in `templates/demo-legacy` run cleanly with the current `auth.ts` / `middleware.ts` / `route.ts` shape — no template changes beyond what's strictly needed.
-- Keep feature parity and keep `templates/demo` working (both consume the same package via `workspace:*`).
+- Keep feature parity. (At the time of writing,`templates/demo-legacy`)
 - Refactor package **structure** only (entry points, tsup, exports, runtime boundaries). No behavior change, no NextAuth v5 migration, no API renames.
 - Keep the public surface consumed by templates stable: `withIGRPAuth`, `assertAuthProviderEnv`, the subpath entries currently in use.
 
@@ -142,7 +140,7 @@ Own every Node-only bit: `cookies()`, `getServerSession()`, and the server sessi
 No changes expected — already `'use client'` boundary.
 
 ### 5.8 No consumer changes expected
-`templates/demo-legacy/src/lib/auth.ts`, `src/middleware.ts`, and `src/app/api/auth/[...nextauth]/route.ts` should work unchanged. Same for `templates/demo`.
+`templates/demo-legacy/src/lib/auth.ts`, `src/middleware.ts`, and `src/app/api/auth/[...nextauth]/route.ts` should work unchanged.
 
 ## 6. Build & verification steps
 

@@ -7,6 +7,7 @@ import React, { useState, type SVGAttributes } from "react"
 
 import { cn } from "../../../lib/utils"
 import { ChartContainer, ChartTooltip, ChartTooltipContent } from "../../primitives/chart"
+import { ChartCustomLegend } from "./custom-legend"
 import type { IGRPChartProps, PieConfig } from "./types"
 import {
   createChartConfig,
@@ -197,6 +198,7 @@ function IGRPPieChartInner({
         <div style={{ height: chartHeight, width: chartWidth }} className={cn("w-full overflow-hidden")}>
           <ChartContainer className={cn("h-full w-full")} config={chartConfig}>
             <PieChart
+              accessibilityLayer
               margin={{
                 top: 20,
                 right: 12,
@@ -213,11 +215,8 @@ function IGRPPieChartInner({
                   verticalAlign={getLegendVerticalAlign(legendPosition)}
                   align={getLegendHorizontalAlign(legendPosition)}
                   layout={getLegendLayout(legendPosition)}
-                  payload={legendPayload}
-                  iconSize={10}
-                  iconType="square"
                   wrapperStyle={{ paddingTop: 10 }}
-                  className={cn("text-xs fill-foreground")}
+                  content={() => <ChartCustomLegend payload={legendPayload} />}
                 />
               )}
 
@@ -235,7 +234,6 @@ function IGRPPieChartInner({
                   cornerRadius={pie.cornerRadius || 0}
                   startAngle={pie.startAngle || 0}
                   endAngle={pie.endAngle || 360}
-                  activeIndex={interactive ? activeIndex : pie.activeIndex}
                   activeShape={pie.activeShape ? renderActiveShape : undefined}
                   onMouseEnter={interactive ? (_, index) => setActiveIndex(index) : undefined}
                   onMouseLeave={interactive ? () => setActiveIndex(-1) : undefined}

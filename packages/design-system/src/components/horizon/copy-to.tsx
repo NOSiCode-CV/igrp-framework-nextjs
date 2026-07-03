@@ -70,7 +70,7 @@ function IGRPCopyTo({
       return
     }
 
-    const displayValue = value.length > 50 ? `${value.substring(0, 47)}...` : value
+    const displayValue = value.length > 50 ? `${value.substring(0, 47)}…` : value
 
     try {
       await navigator.clipboard.writeText(value)
@@ -120,10 +120,20 @@ function IGRPCopyTo({
             aria-label={copied ? successMessage : tooltipMessage}
             disabled={copied}
           >
-            <div className={cn("transition-all", copied ? "scale-100 opacity-100" : "scale-0 opacity-0")}>
+            <div
+              className={cn(
+                "transition-[transform,opacity] motion-reduce:transition-none",
+                copied ? "scale-100 opacity-100" : "scale-0 opacity-0",
+              )}
+            >
               <IGRPIcon iconName="Check" className={cn("stroke-primary")} strokeWidth={2} />
             </div>
-            <div className={cn("absolute transition-all", copied ? "scale-0 opacity-0" : "scale-100 opacity-100")}>
+            <div
+              className={cn(
+                "absolute transition-[transform,opacity] motion-reduce:transition-none",
+                copied ? "scale-0 opacity-0" : "scale-100 opacity-100",
+              )}
+            >
               <IGRPIcon iconName="Copy" strokeWidth={2} className={cn("size-3")} />
             </div>
           </Button>

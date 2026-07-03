@@ -1,0 +1,244 @@
+// Jest Snapshot v1, https://jestjs.io/docs/snapshot-testing
+
+exports[`Components/Input/Checkbox Checked smoke-test 1`] = `
+<div class="container my-10 mx-auto p-4 border rounded-lg shadow-sm">
+  <div class="*:not-first:mt-2">
+    <div class="flex items-center gap-2">
+      <button type="button"
+              role="checkbox"
+              aria-checked="true"
+              data-state="checked"
+              value="on"
+              data-slot="checkbox"
+              class="peer border-input dark:bg-input/30 data-[state=checked]:bg-primary data-[state=checked]:text-primary-foreground dark:data-[state=checked]:bg-primary data-[state=checked]:border-primary focus-visible:border-ring focus-visible:ring-ring/50 aria-invalid:ring-destructive/20 dark:aria-invalid:ring-destructive/40 aria-invalid:border-destructive size-4 shrink-0 rounded-[4px] border shadow-xs transition-shadow outline-none focus-visible:ring-[3px] disabled:cursor-not-allowed disabled:opacity-50"
+              id="preChecked"
+              aria-invalid="false"
+      >
+        <span data-state="checked"
+              data-slot="checkbox-indicator"
+              class="grid place-content-center text-current transition-none"
+              style="pointer-events: none;"
+        >
+          <svg xmlns="http://www.w3.org/2000/svg"
+               width="24"
+               height="24"
+               viewbox="0 0 24 24"
+               fill="none"
+               stroke="currentColor"
+               stroke-width="2"
+               stroke-linecap="round"
+               stroke-linejoin="round"
+               class="lucide lucide-check size-3.5"
+               aria-hidden="true"
+          >
+            <path d="M20 6 9 17l-5-5">
+            </path>
+          </svg>
+        </span>
+      </button>
+      <label data-slot="label"
+             class="flex items-center text-sm leading-none font-medium select-none group-data-[disabled=true]:pointer-events-none group-data-[disabled=true]:opacity-50 peer-disabled:cursor-not-allowed peer-disabled:opacity-50 gap-0.5"
+             for="preChecked"
+      >
+        Opção pré-selecionada
+      </label>
+    </div>
+  </div>
+</div>
+`;
+
+exports[`Components/Input/Checkbox Default smoke-test 1`] = `
+<div class="container my-10 mx-auto p-4 border rounded-lg shadow-sm">
+  <div class="*:not-first:mt-2">
+    <div class="flex items-center gap-2">
+      <button type="button"
+              role="checkbox"
+              aria-checked="false"
+              data-state="unchecked"
+              value="on"
+              data-slot="checkbox"
+              class="peer border-input dark:bg-input/30 data-[state=checked]:bg-primary data-[state=checked]:text-primary-foreground dark:data-[state=checked]:bg-primary data-[state=checked]:border-primary focus-visible:border-ring focus-visible:ring-ring/50 aria-invalid:ring-destructive/20 dark:aria-invalid:ring-destructive/40 aria-invalid:border-destructive size-4 shrink-0 rounded-[4px] border shadow-xs transition-shadow outline-none focus-visible:ring-[3px] disabled:cursor-not-allowed disabled:opacity-50"
+              id="agree"
+              aria-invalid="false"
+      >
+      </button>
+      <label data-slot="label"
+             class="flex items-center text-sm leading-none font-medium select-none group-data-[disabled=true]:pointer-events-none group-data-[disabled=true]:opacity-50 peer-disabled:cursor-not-allowed peer-disabled:opacity-50 gap-0.5"
+             for="agree"
+      >
+        Eu concordo com os termos
+      </label>
+    </div>
+  </div>
+</div>
+`;
+
+exports[`Components/Input/Checkbox Disabled smoke-test 1`] = `
+<div class="container my-10 mx-auto p-4 border rounded-lg shadow-sm">
+  <div class="*:not-first:mt-2">
+    <div class="flex items-center gap-2">
+      <button type="button"
+              role="checkbox"
+              aria-checked="false"
+              data-state="unchecked"
+              data-disabled
+              disabled
+              value="on"
+              data-slot="checkbox"
+              class="peer border-input dark:bg-input/30 data-[state=checked]:bg-primary data-[state=checked]:text-primary-foreground dark:data-[state=checked]:bg-primary data-[state=checked]:border-primary focus-visible:border-ring focus-visible:ring-ring/50 aria-invalid:ring-destructive/20 dark:aria-invalid:ring-destructive/40 aria-invalid:border-destructive size-4 shrink-0 rounded-[4px] border shadow-xs transition-shadow outline-none focus-visible:ring-[3px] disabled:cursor-not-allowed disabled:opacity-50"
+              id="disabledOption"
+              aria-invalid="false"
+      >
+      </button>
+      <label data-slot="label"
+             class="flex items-center text-sm leading-none font-medium select-none group-data-[disabled=true]:pointer-events-none group-data-[disabled=true]:opacity-50 peer-disabled:cursor-not-allowed peer-disabled:opacity-50 gap-0.5"
+             for="disabledOption"
+      >
+        Opção desabilitada
+      </label>
+    </div>
+  </div>
+</div>
+`;
+
+exports[`Components/Input/Checkbox Required smoke-test 1`] = `
+<div class="container my-10 mx-auto p-4 border rounded-lg shadow-sm">
+  <div class="*:not-first:mt-2">
+    <div class="flex items-center gap-2">
+      <button type="button"
+              role="checkbox"
+              aria-checked="false"
+              data-state="unchecked"
+              value="on"
+              data-slot="checkbox"
+              class="peer border-input dark:bg-input/30 data-[state=checked]:bg-primary data-[state=checked]:text-primary-foreground dark:data-[state=checked]:bg-primary data-[state=checked]:border-primary focus-visible:border-ring focus-visible:ring-ring/50 aria-invalid:ring-destructive/20 dark:aria-invalid:ring-destructive/40 aria-invalid:border-destructive size-4 shrink-0 rounded-[4px] border shadow-xs transition-shadow outline-none focus-visible:ring-[3px] disabled:cursor-not-allowed disabled:opacity-50"
+              id="requiredAgreement"
+              aria-invalid="false"
+      >
+      </button>
+      <label data-slot="label"
+             class="flex items-center text-sm leading-none font-medium select-none group-data-[disabled=true]:pointer-events-none group-data-[disabled=true]:opacity-50 peer-disabled:cursor-not-allowed peer-disabled:opacity-50 after:content-['*'] after:text-destructive gap-0.5"
+             for="requiredAgreement"
+      >
+        Aceitar termos e condições
+      </label>
+    </div>
+  </div>
+</div>
+`;
+
+exports[`Components/Input/Checkbox WithError smoke-test 1`] = `
+<div class="container my-10 mx-auto p-4 border rounded-lg shadow-sm">
+  <div class="*:not-first:mt-2">
+    <div class="flex items-center gap-2">
+      <button type="button"
+              role="checkbox"
+              aria-checked="false"
+              data-state="unchecked"
+              value="on"
+              data-slot="checkbox"
+              class="peer dark:bg-input/30 data-[state=checked]:bg-primary data-[state=checked]:text-primary-foreground dark:data-[state=checked]:bg-primary data-[state=checked]:border-primary focus-visible:border-ring aria-invalid:ring-destructive/20 dark:aria-invalid:ring-destructive/40 aria-invalid:border-destructive size-4 shrink-0 rounded-[4px] border shadow-xs transition-shadow outline-none focus-visible:ring-[3px] disabled:cursor-not-allowed disabled:opacity-50 border-destructive focus-visible:ring-destructive/20"
+              id="errorCheckbox"
+              aria-invalid="true"
+              aria-describedby="errorCheckbox-error"
+      >
+      </button>
+      <label data-slot="label"
+             class="flex items-center text-sm leading-none font-medium select-none group-data-[disabled=true]:pointer-events-none group-data-[disabled=true]:opacity-50 peer-disabled:cursor-not-allowed peer-disabled:opacity-50 gap-0.5 text-destructive"
+             for="errorCheckbox"
+      >
+        Opção com erro
+      </label>
+    </div>
+    <p id="errorCheckbox-error"
+       class="text-destructive mt-2 text-xs"
+       role="alert"
+    >
+      Este campo é obrigatório
+    </p>
+  </div>
+</div>
+`;
+
+exports[`Components/Input/Checkbox WithHelperText smoke-test 1`] = `
+<div class="container my-10 mx-auto p-4 border rounded-lg shadow-sm">
+  <div class="*:not-first:mt-2">
+    <div class="flex items-center gap-2">
+      <button type="button"
+              role="checkbox"
+              aria-checked="false"
+              data-state="unchecked"
+              value="on"
+              data-slot="checkbox"
+              class="peer border-input dark:bg-input/30 data-[state=checked]:bg-primary data-[state=checked]:text-primary-foreground dark:data-[state=checked]:bg-primary data-[state=checked]:border-primary focus-visible:border-ring focus-visible:ring-ring/50 aria-invalid:ring-destructive/20 dark:aria-invalid:ring-destructive/40 aria-invalid:border-destructive size-4 shrink-0 rounded-[4px] border shadow-xs transition-shadow outline-none focus-visible:ring-[3px] disabled:cursor-not-allowed disabled:opacity-50"
+              id="newsletter"
+              aria-invalid="false"
+              aria-describedby="newsletter-helper"
+      >
+      </button>
+      <label data-slot="label"
+             class="flex items-center text-sm leading-none font-medium select-none group-data-[disabled=true]:pointer-events-none group-data-[disabled=true]:opacity-50 peer-disabled:cursor-not-allowed peer-disabled:opacity-50 gap-0.5"
+             for="newsletter"
+      >
+        Inscrever na newsletter
+      </label>
+    </div>
+    <p id="newsletter-helper"
+       class="text-muted-foreground mt-2 text-xs"
+       role="region"
+       aria-live="polite"
+    >
+      Receba atualizações semanais sobre nossos produtos
+    </p>
+  </div>
+</div>
+`;
+
+exports[`Components/Input/Checkbox WithValidation smoke-test 1`] = `
+<div class="container my-10 mx-auto p-4 border rounded-lg shadow-sm max-w-md">
+  <form class="space-y-4">
+    <div class="*:not-first:mt-2">
+      <div class="flex items-center gap-2">
+        <button type="button"
+                role="checkbox"
+                aria-checked="false"
+                data-state="unchecked"
+                value="on"
+                data-slot="checkbox"
+                class="peer border-input dark:bg-input/30 data-[state=checked]:bg-primary data-[state=checked]:text-primary-foreground dark:data-[state=checked]:bg-primary data-[state=checked]:border-primary focus-visible:border-ring focus-visible:ring-ring/50 aria-invalid:ring-destructive/20 dark:aria-invalid:ring-destructive/40 aria-invalid:border-destructive size-4 shrink-0 rounded-[4px] border shadow-xs transition-shadow outline-none focus-visible:ring-[3px] disabled:cursor-not-allowed disabled:opacity-50"
+                id="termsAndConditions"
+                aria-invalid="false"
+                aria-describedby="termsAndConditions-helper"
+        >
+        </button>
+        <input aria-hidden="true"
+               tabindex="-1"
+               type="checkbox"
+               value="on"
+               name="termsAndConditions"
+               style="position: absolute; pointer-events: none; opacity: 0; margin: 0px; transform: translateX(-100%); width: 16px; height: 16px;"
+        >
+        <label data-slot="label"
+               class="flex items-center text-sm leading-none font-medium select-none group-data-[disabled=true]:pointer-events-none group-data-[disabled=true]:opacity-50 peer-disabled:cursor-not-allowed peer-disabled:opacity-50 after:content-['*'] after:text-destructive gap-0.5"
+               for="termsAndConditions"
+        >
+          Eu li e aceito os termos e condições
+        </label>
+      </div>
+      <p id="termsAndConditions-helper"
+         class="text-muted-foreground mt-2 text-xs"
+         role="region"
+         aria-live="polite"
+      >
+        Você precisa aceitar os termos para continuar
+      </p>
+    </div>
+    <button data-slot="button"
+            class="inline-flex items-center justify-center gap-1.5 whitespace-nowrap rounded-md text-sm font-medium transition-[color,box-shadow] disabled:pointer-events-none disabled:opacity-50 [&amp;_svg]:pointer-events-none [&amp;_svg:not([class*='size-'])]:size-4 shrink-0 [&amp;_svg]:shrink-0 outline-none focus-visible:border-ring focus-visible:ring-ring/50 focus-visible:ring-[3px] aria-invalid:ring-destructive/20 dark:aria-invalid:ring-destructive/40 aria-invalid:border-destructive bg-primary text-primary-foreground shadow-xs hover:bg-primary/90 hover:text-primary-foreground h-9 px-2.5 has-data-[icon=inline-end]:pr-2 has-data-[icon=inline-start]:pl-2 mt-4"
+            type="submit"
+    >
+      Enviar
+    </button>
+  </form>
+</div>
+`;

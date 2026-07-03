@@ -11,10 +11,12 @@ export const formatChartValue = (value: number, valueFormatter?: (value: number)
     return valueFormatter(value)
   }
 
-  if (value >= 1000000) {
-    return `${(value / 1000000).toFixed(1)}M`
-  } else if (value >= 1000) {
-    return `${(value / 1000).toFixed(1)}K`
+  const abs = Math.abs(value)
+  const sign = value < 0 ? "-" : ""
+  if (abs >= 1000000) {
+    return `${sign}${(abs / 1000000).toFixed(1)}M`
+  } else if (abs >= 1000) {
+    return `${sign}${(abs / 1000).toFixed(1)}K`
   }
   return value.toString()
 }
@@ -24,7 +26,7 @@ export const getChartHeight = (
   data: IGRPChartDataItem[] = [],
   height?: number | string,
 ): number | string => {
-  if (height) return typeof height === "number" ? height : height
+  if (height != null) return height
 
   const baseHeight = 40
   const headerHeight = 30
@@ -36,7 +38,7 @@ export const getChartHeight = (
 }
 
 export const getChartWidth = (width?: number | string): number | string => {
-  if (width) return typeof width === "number" ? width : width
+  if (width != null) return width
   return "100%"
 }
 
@@ -75,12 +77,12 @@ export const createChartConfig = (series: IGRPSeriesConfig[]): ShadCNChartConfig
 }
 
 export const IGRP_CHART_COLORS = [
-  "var(--chart-1)", // Azul (equivalente ao #3b82f6)
-  "var(--chart-2)", // Verde (equivalente ao #10b981)
-  "var(--chart-3)", // Laranja (equivalente ao #f59e0b)
-  "var(--chart-4)", // Roxo (equivalente ao #6366f1)
-  "var(--chart-5)", // Rosa (equivalente ao #ec4899)
-  "var(--chart-6)", // Violeta (equivalente ao #8b5cf6)
-  "var(--chart-7)", // Vermelho (equivalente ao #ef4444)
-  "var(--chart-8)", // Lima (equivalente ao #84cc16)
+  "var(--chart-1)",
+  "var(--chart-2)",
+  "var(--chart-3)",
+  "var(--chart-4)",
+  "var(--chart-5)",
+  "var(--chart-6)",
+  "var(--chart-7)",
+  "var(--chart-8)",
 ]

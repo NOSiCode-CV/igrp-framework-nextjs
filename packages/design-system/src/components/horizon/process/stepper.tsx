@@ -10,6 +10,13 @@ import { Stepper, StepperItem, StepperTitle, StepperTrigger } from "../../primit
 import { Button } from "../../primitives/button"
 import { Tooltip, TooltipTrigger, TooltipContent } from "../../primitives/tooltip"
 
+function getScrollBehavior(): ScrollBehavior {
+  if (typeof window !== "undefined" && window.matchMedia("(prefers-reduced-motion: reduce)").matches) {
+    return "auto"
+  }
+  return "smooth"
+}
+
 /**
  * Props for a single step in the process stepper.
  * @see IGRPStepperProcess
@@ -60,13 +67,13 @@ function getStepperItemClassName(): string {
     // Last child styles
     "last:mr-0 last:rounded-tr-2xl last:rounded-br-2xl last:pr-2.5",
     //'last:mr-0 last:rounded-tr-2xl last:rounded-br-2xl last:pr-2.5 last:overflow-hidden',
-    "bg-muted text-gray-600",
+    "bg-muted text-muted-foreground",
     // Completed state background
     "data-[state=completed]:bg-process-completed data-[state=completed]:text-background hover:data-[state=active]:text-background",
     // Active state background
     "data-[state=active]:bg-process-active data-[state=active]:text-background hover:data-[state=active]:text-background",
     // Incomplete/inactive state background
-    "data-[state=inactive]:bg-muted data-[state=inactive]:text-gray-600",
+    "data-[state=inactive]:bg-muted data-[state=inactive]:text-muted-foreground",
     // Pseudo-elements base styles
     'before:content-[""] before:absolute before:-left-1 before:-right-1.25 before:cursor-pointer',
     'after:content-[""] after:absolute after:-left-1 after:-right-1.25 after:cursor-pointer',
@@ -155,7 +162,7 @@ function IGRPStepperProcess({
     if (!viewport) return
 
     const scrollAmount = viewport.clientWidth * 0.8
-    viewport.scrollBy({ left: -scrollAmount, behavior: "smooth" })
+    viewport.scrollBy({ left: -scrollAmount, behavior: getScrollBehavior() })
   }, [])
 
   const scrollRight = useCallback(() => {
@@ -163,7 +170,7 @@ function IGRPStepperProcess({
     if (!viewport) return
 
     const scrollAmount = viewport.clientWidth * 0.8
-    viewport.scrollBy({ left: scrollAmount, behavior: "smooth" })
+    viewport.scrollBy({ left: scrollAmount, behavior: getScrollBehavior() })
   }, [])
 
   useEffect(() => {
@@ -200,9 +207,6 @@ function IGRPStepperProcess({
               className={cn("gap-0.5", stepperClassName)}
               role="navigation"
               aria-label="Process steps"
-              aria-valuenow={validCurrentStep + 1}
-              aria-valuemin={1}
-              aria-valuemax={steps.length}
             >
               {steps.map(({ step, stepKey, title, isCompleted, isActive }) => (
                 <StepperItem

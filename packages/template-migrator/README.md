@@ -1,6 +1,6 @@
 # @igrp/template-migrator
 
-CLI that automates IGRP template upgrades. Bundles all migration guides for `templates/demo-legacy` into a single executable package — consumers run it with `pnpm dlx` to bring their app up to the latest framework version without manual file edits.
+CLI that automates IGRP template upgrades. Bundles all migration guides for `templates/demo-v1` into a single executable package — consumers run it with `pnpm dlx` to bring their app up to the latest framework version without manual file edits.
 
 ---
 
@@ -16,7 +16,7 @@ packages/template-migrator/
 │   ├── types.ts             # Shared types: MigrationStep, Manifest, LockFile, …
 │   ├── manifest.ts          # Loads dist/manifest.json at runtime
 │   ├── apply.ts             # Executes a single MigrationStep against an app root
-│   ├── lock.ts              # Reads/writes .igrpmigrations/lock.json
+│   ├── lock.ts              # Reads/writes .igrp-migrations-lock.json (consumer project root)
 │   ├── hash.ts              # File hashing helpers
 │   └── commands/
 │       ├── status.ts        # igrp-migrate status
@@ -27,7 +27,7 @@ packages/template-migrator/
 │       └── check.ts         # igrp-migrate check  (CI gate)
 ```
 
-The **source of truth for migrations lives in `templates/demo-legacy/.igrpmigrations/`**, not in this package. `scripts/pack.ts` reads those files at build time and embeds everything into `dist/`.
+The **source of truth for migrations lives in this package at `migrations/demo-v1/`**. `scripts/pack.ts` reads those files at build time and embeds everything into `dist/`.
 
 ---
 
@@ -41,9 +41,9 @@ Three sequential steps (wired as `prebuild → build:js → build:types`):
 
 ### 1. `prebuild` — `scripts/pack.ts`
 
-Reads every `NN.MIGRATIONS-*.md` file in `templates/demo-legacy/.igrpmigrations/`, parses the YAML frontmatter, then:
+Reads every `NN.MIGRATIONS-*.md` file in `migrations/demo-v1/`, parses the YAML frontmatter, then:
 
-- **Copies payload files** from `.igrpmigrations/payload/NN/` → `dist/payload/NN/` (strips the `payload/` prefix from the `from` field so the dist layout is `dist/payload/NN/file`, not `dist/payload/payload/NN/file`).
+- **Copies payload files** from `migrations/demo-v1/payload/NN/` → `dist/payload/NN/` (strips the `payload/` prefix from the `from` field so the dist layout is `dist/payload/NN/file`, not `dist/payload/payload/NN/file`).
 - **Emits `dist/manifest.json`** — a single JSON object with all migration metadata and steps.
 
 Any `.md` guide without valid YAML frontmatter (between `---` fences) will throw and abort the build.
@@ -60,7 +60,7 @@ Emits `.d.ts` declaration files from `tsconfig.build.json` (no JS output, types 
 
 ## Adding a new migration
 
-1. **Write the prose guide** in `templates/demo-legacy/.igrpmigrations/`:
+1. **Write the prose guide** in `migrations/demo-v1/`:
 
    ```
    NN.MIGRATIONS-DDMMYYYY.md
@@ -98,7 +98,7 @@ Emits `.d.ts` declaration files from `tsconfig.build.json` (no JS output, types 
    ---
    ```
 
-3. **Create the payload files** in `templates/demo-legacy/.igrpmigrations/payload/NN/` — the final state of each file after the migration is applied.
+3. **Create the payload files** in `migrations/demo-v1/payload/NN/` — the final state of each file after the migration is applied.
 
 4. **Build and verify**:
 
@@ -108,7 +108,7 @@ Emits `.d.ts` declaration files from `tsconfig.build.json` (no JS output, types 
 
    All 6 (or N) migrations should print `packed <id>`. Check `dist/manifest.json` to confirm the new entry is present.
 
-5. **Test locally** against a copy of `demo-legacy`:
+5. **Test locally** against a copy of `demo-v1`:
 
    ```bash
    # From the consumer app directory
@@ -129,13 +129,37 @@ Emits `.d.ts` declaration files from `tsconfig.build.json` (no JS output, types 
 | `env.add` | `file`, `keys` | Appends missing keys (with doc comments) to an `.env` file |
 | `deps.bump` | `manifest`, `ranges` | Updates version ranges in `package.json` (deps or devDeps) |
 
-`from` values must be relative to `.igrpmigrations/` (e.g. `payload/NN/src/file.ts`). The pack script strips the leading `payload/` when copying to `dist/payload/`; the runtime in `apply.ts` does the same strip when resolving the source.
+`from` values must be relative to `migrations/demo-v1/` (e.g. `payload/NN/src/file.ts`). The pack script strips the leading `payload/` when copying to `dist/payload/`; the runtime in `apply.ts` does the same strip when resolving the source.
+
+---
+
+## Drift gate (`check:drift`)
+
+The `migrations/demo-v1/payload/` tree is a **hand-maintained copy** of `templates/demo-v1`. If you edit the template but forget to author a migration, the two silently diverge: apps scaffolded from the zip get the change, apps upgraded via this CLI never do.
+
+`scripts/check-drift.ts` reconciles them on two axes — **file payloads** and **dependency pins**. It collapses every migration into the final expected state per managed path and per bumped dependency, then compares against the live template:
+
+```bash
+pnpm --filter @igrp/template-migrator check:drift
+```
+
+It **fails** (exit 1) when:
+
+- a managed file changed in the template but no migration re-captured it,
+- a migration ships a file the template no longer has,
+- a referenced payload file is missing on disk,
+- a dependency a migration bumps has moved on in the template/workspace but no migration captured the new version (the template pins `@igrp/*` as `workspace:*`, so the comparison resolves each `workspace:*` to its current package version — what the zip would ship),
+- a migration bumps a dependency the template doesn't declare.
+
+It **warns** (exit 0) for `file.write` patch-mode paths (no full-file payload to diff), files a migration deletes that the template still has, and `@igrp/*` template deps no migration ever pins.
+
+The gate runs automatically at the start of `release` (see below), so a forgotten migration can't be published. **Limitation:** it only checks paths that already appear in some migration — a brand-new template file never added via `file.create` is invisible to it.
 
 ---
 
 ## Releasing
 
-This package follows the same changeset + Sonatype flow as the other `@igrp/*` packages.
+This package follows the same changeset + Sonatype flow as the other `@igrp/*` packages. The `release` script runs `check:drift` first, so the publish aborts if the payloads have drifted from the template.
 
 ### 1. Record a changeset
 
@@ -144,7 +168,7 @@ This package follows the same changeset + Sonatype flow as the other `@igrp/*` p
 pnpm changeset
 ```
 
-Select `@igrp/template-migrator`, choose the bump type (`patch` for a new migration or bug fix, `minor` for new CLI features), and write a summary.
+Select `@igrp/template-migrator` and write a summary. **Always choose `patch`** — never `minor` or `major`. This repo is in changeset pre-release mode (`beta` tag); a `minor`/`major` bump would advance the real semver minor/major and break the `0.1.0-beta.*` pattern. `patch` increments only the beta counter, which is what you want for both new migrations and CLI fixes.
 
 ### 2. Version
 
@@ -168,15 +192,13 @@ Verify the output:
 
 ### 4. Publish
 
-```bash
-pnpm --filter @igrp/template-migrator publish --no-git-checks --tag latest
-```
-
-Or via the root release script if one is wired up:
+Use the package's own `release` script — **never** bare `pnpm publish`, `changeset publish`, or `pnpm release:publish` (those use the `beta` tag in pre-release mode and would publish to the wrong tag):
 
 ```bash
-pnpm release
+pnpm --filter @igrp/template-migrator release
 ```
+
+The `release` script runs `pnpm build` then `pnpm publish --registry=https://sonatype.nosi.cv/repository/igrp/ --tag latest --no-git-checks`, pinning the Sonatype registry and `latest` tag.
 
 ### 5. Verify on the registry
 
@@ -198,22 +220,24 @@ The version tracks the framework release it is paired with:
 
 Example: when `@igrp/framework-next` ships `0.1.0-beta.116`, bump `template-migrator` to `0.1.0-beta.116` in the same changeset run.
 
-If you publish a **patch fix to the CLI itself** (no new migrations), bump the patch segment independently:
+Every change — new migration or CLI-only fix — uses a `patch` changeset, which advances only the beta counter:
 
 ```
-0.1.0-beta.115   →   0.1.1-beta.115
+0.1.0-beta.115   →   0.1.0-beta.116
 ```
+
+Never bump the `0.1.0` portion (that requires a `minor`/`major` changeset, which is disallowed here — see the hard rules and the **Releasing** section above).
 
 ---
 
 ## Lock file schema
 
-The CLI writes `.igrpmigrations/lock.json` in the consumer app root after each applied migration:
+The CLI writes `.igrp-migrations-lock.json` in the consumer app root after each applied migration:
 
 ```ts
 interface LockFile {
   version: 1;
-  template: "demo-legacy";
+  template: "demo-v1";
   applied: LockEntry[];
 }
 

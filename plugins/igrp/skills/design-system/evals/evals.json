@@ -1,0 +1,29 @@
+{
+  "skill_name": "igrp-design-system",
+  "evals": [
+    {
+      "id": 1,
+      "name": "user-create-form",
+      "prompt": "I'm building a 'Create user' page in an IGRP app (templates/demo-legacy style). I need a form with: full name, email, role (admin / editor / viewer), active toggle, and a phone number. Validate with Zod. Show me the React component.",
+      "expected_output": "A 'use client' file using IGRPForm + Zod schema, with IGRPInputText/IGRPInputPhone/IGRPSelect (or IGRPRadioGroup)/IGRPSwitch wired by `name`. No raw <form>, no react-hook-form imports, no primitive <Input>. Submit button is IGRPButton type='submit'.",
+      "files": [],
+      "assertions": []
+    },
+    {
+      "id": 2,
+      "name": "users-data-table",
+      "prompt": "Give me an IGRP data table component listing users with columns: name, email, status badge (active/blocked), created date, and a row actions menu (Edit / Delete). The data comes from a prop.",
+      "expected_output": "Uses IGRPDataTable + createIGRPColumnHelper<User>(). Status column uses IGRPDataTableCellBadge with a map. Row actions use IGRPDataTableRowAction (destructive variant for Delete). showPagination + showFilter enabled. 'use client'. No raw TanStack imports.",
+      "files": [],
+      "assertions": []
+    },
+    {
+      "id": 3,
+      "name": "kpi-dashboard-card",
+      "prompt": "I want a dashboard widget: a card with title 'Receita mensal', a small subtitle, and a bar chart inside showing monthly revenue for 6 months. Pick the right components and colors.",
+      "expected_output": "Uses IGRPCard wrapping IGRPVerticalBarChart (or IGRPHorizontalBarChart). Chart colors come from IGRP_CHART_COLORS, config from createChartConfig. Tokens only — no hex colors. 'use client'.",
+      "files": [],
+      "assertions": []
+    }
+  ]
+}

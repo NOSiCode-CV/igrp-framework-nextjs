@@ -1,0 +1,1502 @@
+// Jest Snapshot v1, https://jestjs.io/docs/snapshot-testing
+
+exports[`Components/Input/Combobox Default smoke-test 1`] = `
+<div class="container my-10 mx-auto p-4 border rounded-lg shadow-sm max-w-lg">
+  <div class="*:not-first:mt-2 w-full min-w-0 max-w-full">
+    <label data-slot="label"
+           class="flex items-center text-sm leading-none font-medium select-none group-data-[disabled=true]:pointer-events-none group-data-[disabled=true]:opacity-50 peer-disabled:cursor-not-allowed peer-disabled:opacity-50 gap-0.5"
+           for="_r_ID_"
+    >
+      Select a framework
+    </label>
+    <div class="w-full min-w-0 max-w-full">
+      <button data-slot="popover-trigger"
+              class="inline-flex items-center gap-1.5 whitespace-nowrap rounded-md text-sm font-medium transition-[color,box-shadow] disabled:pointer-events-none disabled:opacity-50 [&amp;_svg]:pointer-events-none [&amp;_svg:not([class*='size-'])]:size-4 shrink-0 [&amp;_svg]:shrink-0 outline-none focus-visible:border-ring focus-visible:ring-ring/50 focus-visible:ring-[3px] aria-invalid:ring-destructive/20 dark:aria-invalid:ring-destructive/40 aria-invalid:border-destructive border bg-background shadow-xs hover:bg-accent dark:bg-input/30 dark:border-input dark:hover:bg-input/50 hover:text-accent-foreground h-9 px-2.5 has-data-[icon=inline-end]:pr-2 has-data-[icon=inline-start]:pl-2 relative w-full justify-between overflow-hidden text-left max-w-full"
+              role="combobox"
+              aria-expanded="false"
+              aria-controls="_r_ID_"
+              aria-haspopup="dialog"
+              data-state="closed"
+              type="button"
+              id="_r_ID_"
+      >
+        <span class="flex items-center gap-2 min-w-0 flex-1 overflow-hidden"
+              style="max-width: 100%;"
+        >
+          <span class="truncate min-w-0 flex-1 block">
+            Select an option...
+          </span>
+        </span>
+        <svg xmlns="http://www.w3.org/2000/svg"
+             width="16"
+             height="16"
+             viewbox="0 0 24 24"
+             fill="none"
+             stroke="currentColor"
+             stroke-width="2"
+             stroke-linecap="round"
+             stroke-linejoin="round"
+             class="lucide lucide-chevrons-up-down size-4 ml-2 h-4 w-4 shrink-0 opacity-50"
+             aria-hidden="true"
+             id="ChevronsUpDown"
+        >
+          <path d="m7 15 5 5 5-5">
+          </path>
+          <path d="m7 9 5-5 5 5">
+          </path>
+        </svg>
+      </button>
+    </div>
+  </div>
+</div>
+`;
+
+exports[`Components/Input/Combobox Disabled smoke-test 1`] = `
+<div class="container my-10 mx-auto p-4 border rounded-lg shadow-sm max-w-lg">
+  <div class="*:not-first:mt-2 w-full min-w-0 max-w-full"
+       id="country"
+  >
+    <label data-slot="label"
+           class="flex items-center text-sm leading-none font-medium select-none group-data-[disabled=true]:pointer-events-none group-data-[disabled=true]:opacity-50 peer-disabled:cursor-not-allowed peer-disabled:opacity-50 gap-0.5"
+           for="country"
+    >
+      País
+    </label>
+    <div class="w-full min-w-0 max-w-full">
+      <button data-slot="popover-trigger"
+              class="inline-flex items-center gap-1.5 whitespace-nowrap rounded-md text-sm font-medium transition-[color,box-shadow] disabled:pointer-events-none disabled:opacity-50 [&amp;_svg]:pointer-events-none [&amp;_svg:not([class*='size-'])]:size-4 shrink-0 [&amp;_svg]:shrink-0 outline-none focus-visible:border-ring focus-visible:ring-ring/50 focus-visible:ring-[3px] aria-invalid:ring-destructive/20 dark:aria-invalid:ring-destructive/40 aria-invalid:border-destructive border bg-background shadow-xs hover:bg-accent dark:bg-input/30 dark:border-input dark:hover:bg-input/50 hover:text-accent-foreground h-9 px-2.5 has-data-[icon=inline-end]:pr-2 has-data-[icon=inline-start]:pl-2 relative w-full justify-between overflow-hidden text-left max-w-full cursor-not-allowed pointer-events-none opacity-50"
+              role="combobox"
+              aria-expanded="false"
+              aria-controls="_r_ID_"
+              aria-haspopup="dialog"
+              data-state="closed"
+              type="button"
+              id="country"
+      >
+        <span class="flex items-center gap-2 min-w-0 flex-1 overflow-hidden"
+              style="max-width: 100%;"
+        >
+          <span class="truncate min-w-0 flex-1 block">
+            Campo desativado
+          </span>
+        </span>
+        <svg xmlns="http://www.w3.org/2000/svg"
+             width="16"
+             height="16"
+             viewbox="0 0 24 24"
+             fill="none"
+             stroke="currentColor"
+             stroke-width="2"
+             stroke-linecap="round"
+             stroke-linejoin="round"
+             class="lucide lucide-chevrons-up-down size-4 ml-2 h-4 w-4 shrink-0 opacity-50"
+             aria-hidden="true"
+             id="ChevronsUpDown"
+        >
+          <path d="m7 15 5 5 5-5">
+          </path>
+          <path d="m7 9 5-5 5 5">
+          </path>
+        </svg>
+      </button>
+    </div>
+  </div>
+</div>
+`;
+
+exports[`Components/Input/Combobox Multi smoke-test 1`] = `
+<div class="m-20 flex flex-col gap-20">
+  <div data-slot="card"
+       class="bg-card text-card-foreground flex flex-col gap-6 rounded-xl border py-6 shadow-sm"
+       id="vinculoLaboral"
+       data-section-id="vinculoLaboral"
+  >
+    <div data-slot="card-content"
+         class="px-6 space-x-3 space-y-3"
+    >
+      <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
+        <div class="*:not-first:mt-2 w-full min-w-0 max-w-full"
+             id="numeroContribuinte"
+        >
+          <label data-slot="label"
+                 class="flex items-center text-sm leading-none font-medium select-none group-data-[disabled=true]:pointer-events-none group-data-[disabled=true]:opacity-50 peer-disabled:cursor-not-allowed peer-disabled:opacity-50 after:content-['*'] after:text-destructive gap-0.5"
+                 for="numeroContribuinte"
+          >
+            N Contribuinte
+          </label>
+          <div class="w-full min-w-0 max-w-full">
+            <button data-slot="popover-trigger"
+                    class="inline-flex items-center gap-1.5 whitespace-nowrap rounded-md text-sm font-medium transition-[color,box-shadow] disabled:pointer-events-none disabled:opacity-50 [&amp;_svg]:pointer-events-none [&amp;_svg:not([class*='size-'])]:size-4 shrink-0 [&amp;_svg]:shrink-0 outline-none focus-visible:border-ring focus-visible:ring-ring/50 focus-visible:ring-[3px] aria-invalid:ring-destructive/20 dark:aria-invalid:ring-destructive/40 aria-invalid:border-destructive border bg-background shadow-xs hover:bg-accent dark:bg-input/30 dark:border-input dark:hover:bg-input/50 hover:text-accent-foreground h-9 px-2.5 has-data-[icon=inline-end]:pr-2 has-data-[icon=inline-start]:pl-2 relative w-full justify-between overflow-hidden text-left max-w-full"
+                    role="combobox"
+                    aria-expanded="false"
+                    aria-controls="_r_ID_"
+                    aria-haspopup="dialog"
+                    data-state="closed"
+                    type="button"
+                    id="numeroContribuinte"
+            >
+              <span class="flex items-center gap-2 min-w-0 flex-1 overflow-hidden"
+                    style="max-width: 100%;"
+              >
+                <span class="truncate min-w-0 flex-1 block">
+                  Select an option...
+                </span>
+              </span>
+              <svg xmlns="http://www.w3.org/2000/svg"
+                   width="16"
+                   height="16"
+                   viewbox="0 0 24 24"
+                   fill="none"
+                   stroke="currentColor"
+                   stroke-width="2"
+                   stroke-linecap="round"
+                   stroke-linejoin="round"
+                   class="lucide lucide-chevrons-up-down size-4 ml-2 h-4 w-4 shrink-0 opacity-50"
+                   aria-hidden="true"
+                   id="ChevronsUpDown"
+              >
+                <path d="m7 15 5 5 5-5">
+                </path>
+                <path d="m7 9 5-5 5 5">
+                </path>
+              </svg>
+            </button>
+          </div>
+        </div>
+        <div class="*:not-first:mt-2 w-full min-w-0 max-w-full"
+             id="contribuinteUuid"
+        >
+          <label data-slot="label"
+                 class="flex items-center text-sm leading-none font-medium select-none group-data-[disabled=true]:pointer-events-none group-data-[disabled=true]:opacity-50 peer-disabled:cursor-not-allowed peer-disabled:opacity-50 after:content-['*'] after:text-destructive gap-0.5"
+                 for="contribuinteUuid"
+          >
+            Sede/Sucursal
+          </label>
+          <div class="w-full min-w-0 max-w-full">
+            <button data-slot="popover-trigger"
+                    class="inline-flex items-center gap-1.5 whitespace-nowrap rounded-md text-sm font-medium transition-[color,box-shadow] disabled:pointer-events-none disabled:opacity-50 [&amp;_svg]:pointer-events-none [&amp;_svg:not([class*='size-'])]:size-4 shrink-0 [&amp;_svg]:shrink-0 outline-none focus-visible:border-ring focus-visible:ring-ring/50 focus-visible:ring-[3px] aria-invalid:ring-destructive/20 dark:aria-invalid:ring-destructive/40 aria-invalid:border-destructive border bg-background shadow-xs hover:bg-accent dark:bg-input/30 dark:border-input dark:hover:bg-input/50 hover:text-accent-foreground h-9 px-2.5 has-data-[icon=inline-end]:pr-2 has-data-[icon=inline-start]:pl-2 relative w-full justify-between overflow-hidden text-left max-w-full"
+                    role="combobox"
+                    aria-expanded="false"
+                    aria-controls="_r_ID_"
+                    aria-haspopup="dialog"
+                    data-state="closed"
+                    type="button"
+                    id="contribuinteUuid"
+            >
+              <span class="flex items-center gap-2 min-w-0 flex-1 overflow-hidden"
+                    style="max-width: 100%;"
+              >
+                <span class="truncate min-w-0 flex-1 block">
+                  Select an option...
+                </span>
+              </span>
+              <svg xmlns="http://www.w3.org/2000/svg"
+                   width="16"
+                   height="16"
+                   viewbox="0 0 24 24"
+                   fill="none"
+                   stroke="currentColor"
+                   stroke-width="2"
+                   stroke-linecap="round"
+                   stroke-linejoin="round"
+                   class="lucide lucide-chevrons-up-down size-4 ml-2 h-4 w-4 shrink-0 opacity-50"
+                   aria-hidden="true"
+                   id="ChevronsUpDown"
+              >
+                <path d="m7 15 5 5 5-5">
+                </path>
+                <path d="m7 9 5-5 5 5">
+                </path>
+              </svg>
+            </button>
+          </div>
+        </div>
+        <div class="*:not-first:mt-2 w-full min-w-0 max-w-full"
+             id="idProfissao"
+        >
+          <label data-slot="label"
+                 class="flex items-center text-sm leading-none font-medium select-none group-data-[disabled=true]:pointer-events-none group-data-[disabled=true]:opacity-50 peer-disabled:cursor-not-allowed peer-disabled:opacity-50 gap-0.5"
+                 for="idProfissao"
+          >
+            Profissāo
+          </label>
+          <div class="w-full min-w-0 max-w-full">
+            <button data-slot="popover-trigger"
+                    class="inline-flex items-center gap-1.5 whitespace-nowrap rounded-md text-sm font-medium transition-[color,box-shadow] disabled:pointer-events-none disabled:opacity-50 [&amp;_svg]:pointer-events-none [&amp;_svg:not([class*='size-'])]:size-4 shrink-0 [&amp;_svg]:shrink-0 outline-none focus-visible:border-ring focus-visible:ring-ring/50 focus-visible:ring-[3px] aria-invalid:ring-destructive/20 dark:aria-invalid:ring-destructive/40 aria-invalid:border-destructive border bg-background shadow-xs hover:bg-accent dark:bg-input/30 dark:border-input dark:hover:bg-input/50 hover:text-accent-foreground h-9 px-2.5 has-data-[icon=inline-end]:pr-2 has-data-[icon=inline-start]:pl-2 relative w-full justify-between overflow-hidden text-left max-w-full"
+                    role="combobox"
+                    aria-expanded="false"
+                    aria-controls="_r_ID_"
+                    aria-haspopup="dialog"
+                    data-state="closed"
+                    type="button"
+                    id="idProfissao"
+            >
+              <span class="flex items-center gap-2 min-w-0 flex-1 overflow-hidden"
+                    style="max-width: 100%;"
+              >
+                <span class="truncate min-w-0 flex-1 block">
+                  Select an option...
+                </span>
+              </span>
+              <svg xmlns="http://www.w3.org/2000/svg"
+                   width="16"
+                   height="16"
+                   viewbox="0 0 24 24"
+                   fill="none"
+                   stroke="currentColor"
+                   stroke-width="2"
+                   stroke-linecap="round"
+                   stroke-linejoin="round"
+                   class="lucide lucide-chevrons-up-down size-4 ml-2 h-4 w-4 shrink-0 opacity-50"
+                   aria-hidden="true"
+                   id="ChevronsUpDown"
+              >
+                <path d="m7 15 5 5 5-5">
+                </path>
+                <path d="m7 9 5-5 5 5">
+                </path>
+              </svg>
+            </button>
+          </div>
+        </div>
+        <div class="*:not-first:mt-2 w-full min-w-0 max-w-full"
+             id="idCategoriaProfissao"
+        >
+          <label data-slot="label"
+                 class="flex items-center text-sm leading-none font-medium select-none group-data-[disabled=true]:pointer-events-none group-data-[disabled=true]:opacity-50 peer-disabled:cursor-not-allowed peer-disabled:opacity-50 gap-0.5"
+                 for="idCategoriaProfissao"
+          >
+            Categoria
+          </label>
+          <div class="w-full min-w-0 max-w-full">
+            <button data-slot="popover-trigger"
+                    class="inline-flex items-center gap-1.5 whitespace-nowrap rounded-md text-sm font-medium transition-[color,box-shadow] disabled:pointer-events-none disabled:opacity-50 [&amp;_svg]:pointer-events-none [&amp;_svg:not([class*='size-'])]:size-4 shrink-0 [&amp;_svg]:shrink-0 outline-none focus-visible:border-ring focus-visible:ring-ring/50 focus-visible:ring-[3px] aria-invalid:ring-destructive/20 dark:aria-invalid:ring-destructive/40 aria-invalid:border-destructive border bg-background shadow-xs hover:bg-accent dark:bg-input/30 dark:border-input dark:hover:bg-input/50 hover:text-accent-foreground h-9 px-2.5 has-data-[icon=inline-end]:pr-2 has-data-[icon=inline-start]:pl-2 relative w-full justify-between overflow-hidden text-left max-w-full"
+                    role="combobox"
+                    aria-expanded="false"
+                    aria-controls="_r_ID_"
+                    aria-haspopup="dialog"
+                    data-state="closed"
+                    type="button"
+                    id="idCategoriaProfissao"
+            >
+              <span class="flex items-center gap-2 min-w-0 flex-1 overflow-hidden"
+                    style="max-width: 100%;"
+              >
+                <span class="truncate min-w-0 flex-1 block">
+                  Select an option...
+                </span>
+              </span>
+              <svg xmlns="http://www.w3.org/2000/svg"
+                   width="16"
+                   height="16"
+                   viewbox="0 0 24 24"
+                   fill="none"
+                   stroke="currentColor"
+                   stroke-width="2"
+                   stroke-linecap="round"
+                   stroke-linejoin="round"
+                   class="lucide lucide-chevrons-up-down size-4 ml-2 h-4 w-4 shrink-0 opacity-50"
+                   aria-hidden="true"
+                   id="ChevronsUpDown"
+              >
+                <path d="m7 15 5 5 5-5">
+                </path>
+                <path d="m7 9 5-5 5 5">
+                </path>
+              </svg>
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="grid md:grid-cols-2 lg:grid-cols-4 gap-4">
+    <div class="*:not-first:mt-2 w-full min-w-0 max-w-full">
+      <label data-slot="label"
+             class="flex items-center text-sm leading-none font-medium select-none group-data-[disabled=true]:pointer-events-none group-data-[disabled=true]:opacity-50 peer-disabled:cursor-not-allowed peer-disabled:opacity-50 gap-0.5"
+             for="_r_ID_"
+      >
+        Select a framework
+      </label>
+      <div class="w-full min-w-0 max-w-full">
+        <button data-slot="popover-trigger"
+                class="inline-flex items-center gap-1.5 whitespace-nowrap rounded-md text-sm font-medium transition-[color,box-shadow] disabled:pointer-events-none disabled:opacity-50 [&amp;_svg]:pointer-events-none [&amp;_svg:not([class*='size-'])]:size-4 shrink-0 [&amp;_svg]:shrink-0 outline-none focus-visible:border-ring focus-visible:ring-ring/50 focus-visible:ring-[3px] aria-invalid:ring-destructive/20 dark:aria-invalid:ring-destructive/40 aria-invalid:border-destructive border bg-background shadow-xs hover:bg-accent dark:bg-input/30 dark:border-input dark:hover:bg-input/50 hover:text-accent-foreground h-9 px-2.5 has-data-[icon=inline-end]:pr-2 has-data-[icon=inline-start]:pl-2 relative w-full justify-between overflow-hidden text-left max-w-full"
+                role="combobox"
+                aria-expanded="false"
+                aria-controls="_r_ID_"
+                aria-haspopup="dialog"
+                data-state="closed"
+                type="button"
+                id="_r_ID_"
+        >
+          <span class="flex items-center gap-2 min-w-0 flex-1 overflow-hidden"
+                style="max-width: 100%;"
+          >
+            <span class="truncate min-w-0 flex-1 block">
+              Select an option...
+            </span>
+          </span>
+          <svg xmlns="http://www.w3.org/2000/svg"
+               width="16"
+               height="16"
+               viewbox="0 0 24 24"
+               fill="none"
+               stroke="currentColor"
+               stroke-width="2"
+               stroke-linecap="round"
+               stroke-linejoin="round"
+               class="lucide lucide-chevrons-up-down size-4 ml-2 h-4 w-4 shrink-0 opacity-50"
+               aria-hidden="true"
+               id="ChevronsUpDown"
+          >
+            <path d="m7 15 5 5 5-5">
+            </path>
+            <path d="m7 9 5-5 5 5">
+            </path>
+          </svg>
+        </button>
+      </div>
+    </div>
+    <div class="*:not-first:mt-2 w-full min-w-0 max-w-full">
+      <label data-slot="label"
+             class="flex items-center text-sm leading-none font-medium select-none group-data-[disabled=true]:pointer-events-none group-data-[disabled=true]:opacity-50 peer-disabled:cursor-not-allowed peer-disabled:opacity-50 gap-0.5"
+             for="_r_ID_"
+      >
+        Select a framework
+      </label>
+      <div class="w-full min-w-0 max-w-full">
+        <button data-slot="popover-trigger"
+                class="inline-flex items-center gap-1.5 whitespace-nowrap rounded-md text-sm font-medium transition-[color,box-shadow] disabled:pointer-events-none disabled:opacity-50 [&amp;_svg]:pointer-events-none [&amp;_svg:not([class*='size-'])]:size-4 shrink-0 [&amp;_svg]:shrink-0 outline-none focus-visible:border-ring focus-visible:ring-ring/50 focus-visible:ring-[3px] aria-invalid:ring-destructive/20 dark:aria-invalid:ring-destructive/40 aria-invalid:border-destructive border bg-background shadow-xs hover:bg-accent dark:bg-input/30 dark:border-input dark:hover:bg-input/50 hover:text-accent-foreground h-9 px-2.5 has-data-[icon=inline-end]:pr-2 has-data-[icon=inline-start]:pl-2 relative w-full justify-between overflow-hidden text-left max-w-full"
+                role="combobox"
+                aria-expanded="false"
+                aria-controls="_r_ID_"
+                aria-haspopup="dialog"
+                data-state="closed"
+                type="button"
+                id="_r_ID_"
+        >
+          <span class="flex items-center gap-2 min-w-0 flex-1 overflow-hidden"
+                style="max-width: 100%;"
+          >
+            <span class="truncate min-w-0 flex-1 block">
+              Select an option...
+            </span>
+          </span>
+          <svg xmlns="http://www.w3.org/2000/svg"
+               width="16"
+               height="16"
+               viewbox="0 0 24 24"
+               fill="none"
+               stroke="currentColor"
+               stroke-width="2"
+               stroke-linecap="round"
+               stroke-linejoin="round"
+               class="lucide lucide-chevrons-up-down size-4 ml-2 h-4 w-4 shrink-0 opacity-50"
+               aria-hidden="true"
+               id="ChevronsUpDown"
+          >
+            <path d="m7 15 5 5 5-5">
+            </path>
+            <path d="m7 9 5-5 5 5">
+            </path>
+          </svg>
+        </button>
+      </div>
+    </div>
+    <div class="*:not-first:mt-2 w-full min-w-0 max-w-full">
+      <label data-slot="label"
+             class="flex items-center text-sm leading-none font-medium select-none group-data-[disabled=true]:pointer-events-none group-data-[disabled=true]:opacity-50 peer-disabled:cursor-not-allowed peer-disabled:opacity-50 gap-0.5"
+             for="_r_ID_"
+      >
+        Select a framework
+      </label>
+      <div class="w-full min-w-0 max-w-full">
+        <button data-slot="popover-trigger"
+                class="inline-flex items-center gap-1.5 whitespace-nowrap rounded-md text-sm font-medium transition-[color,box-shadow] disabled:pointer-events-none disabled:opacity-50 [&amp;_svg]:pointer-events-none [&amp;_svg:not([class*='size-'])]:size-4 shrink-0 [&amp;_svg]:shrink-0 outline-none focus-visible:border-ring focus-visible:ring-ring/50 focus-visible:ring-[3px] aria-invalid:ring-destructive/20 dark:aria-invalid:ring-destructive/40 aria-invalid:border-destructive border bg-background shadow-xs hover:bg-accent dark:bg-input/30 dark:border-input dark:hover:bg-input/50 hover:text-accent-foreground h-9 px-2.5 has-data-[icon=inline-end]:pr-2 has-data-[icon=inline-start]:pl-2 relative w-full justify-between overflow-hidden text-left max-w-full"
+                role="combobox"
+                aria-expanded="false"
+                aria-controls="_r_ID_"
+                aria-haspopup="dialog"
+                data-state="closed"
+                type="button"
+                id="_r_ID_"
+        >
+          <span class="flex items-center gap-2 min-w-0 flex-1 overflow-hidden"
+                style="max-width: 100%;"
+          >
+            <span class="truncate min-w-0 flex-1 block">
+              Select an option...
+            </span>
+          </span>
+          <svg xmlns="http://www.w3.org/2000/svg"
+               width="16"
+               height="16"
+               viewbox="0 0 24 24"
+               fill="none"
+               stroke="currentColor"
+               stroke-width="2"
+               stroke-linecap="round"
+               stroke-linejoin="round"
+               class="lucide lucide-chevrons-up-down size-4 ml-2 h-4 w-4 shrink-0 opacity-50"
+               aria-hidden="true"
+               id="ChevronsUpDown"
+          >
+            <path d="m7 15 5 5 5-5">
+            </path>
+            <path d="m7 9 5-5 5 5">
+            </path>
+          </svg>
+        </button>
+      </div>
+    </div>
+    <div class="*:not-first:mt-2 w-full min-w-0 max-w-full">
+      <label data-slot="label"
+             class="flex items-center text-sm leading-none font-medium select-none group-data-[disabled=true]:pointer-events-none group-data-[disabled=true]:opacity-50 peer-disabled:cursor-not-allowed peer-disabled:opacity-50 gap-0.5"
+             for="_r_ID_"
+      >
+        Select a framework
+      </label>
+      <div class="w-full min-w-0 max-w-full">
+        <button data-slot="popover-trigger"
+                class="inline-flex items-center gap-1.5 whitespace-nowrap rounded-md text-sm font-medium transition-[color,box-shadow] disabled:pointer-events-none disabled:opacity-50 [&amp;_svg]:pointer-events-none [&amp;_svg:not([class*='size-'])]:size-4 shrink-0 [&amp;_svg]:shrink-0 outline-none focus-visible:border-ring focus-visible:ring-ring/50 focus-visible:ring-[3px] aria-invalid:ring-destructive/20 dark:aria-invalid:ring-destructive/40 aria-invalid:border-destructive border bg-background shadow-xs hover:bg-accent dark:bg-input/30 dark:border-input dark:hover:bg-input/50 hover:text-accent-foreground h-9 px-2.5 has-data-[icon=inline-end]:pr-2 has-data-[icon=inline-start]:pl-2 relative w-full justify-between overflow-hidden text-left max-w-full"
+                role="combobox"
+                aria-expanded="false"
+                aria-controls="_r_ID_"
+                aria-haspopup="dialog"
+                data-state="closed"
+                type="button"
+                id="_r_ID_"
+        >
+          <span class="flex items-center gap-2 min-w-0 flex-1 overflow-hidden"
+                style="max-width: 100%;"
+          >
+            <span class="truncate min-w-0 flex-1 block">
+              Select an option...
+            </span>
+          </span>
+          <svg xmlns="http://www.w3.org/2000/svg"
+               width="16"
+               height="16"
+               viewbox="0 0 24 24"
+               fill="none"
+               stroke="currentColor"
+               stroke-width="2"
+               stroke-linecap="round"
+               stroke-linejoin="round"
+               class="lucide lucide-chevrons-up-down size-4 ml-2 h-4 w-4 shrink-0 opacity-50"
+               aria-hidden="true"
+               id="ChevronsUpDown"
+          >
+            <path d="m7 15 5 5 5-5">
+            </path>
+            <path d="m7 9 5-5 5 5">
+            </path>
+          </svg>
+        </button>
+      </div>
+    </div>
+  </div>
+</div>
+`;
+
+exports[`Components/Input/Combobox Multiple smoke-test 1`] = `
+<div class="container my-10 mx-auto p-4 border rounded-lg shadow-sm max-w-lg">
+  <div class="*:not-first:mt-2 w-full min-w-0 max-w-full"
+       id="frameworks"
+  >
+    <label data-slot="label"
+           class="flex items-center text-sm leading-none font-medium select-none group-data-[disabled=true]:pointer-events-none group-data-[disabled=true]:opacity-50 peer-disabled:cursor-not-allowed peer-disabled:opacity-50 gap-0.5"
+           for="frameworks"
+    >
+      Select a framework
+    </label>
+    <div class="w-full min-w-0 max-w-full">
+      <button data-slot="popover-trigger"
+              class="inline-flex items-center gap-1.5 whitespace-nowrap rounded-md text-sm font-medium transition-[color,box-shadow] disabled:pointer-events-none disabled:opacity-50 [&amp;_svg]:pointer-events-none [&amp;_svg:not([class*='size-'])]:size-4 shrink-0 [&amp;_svg]:shrink-0 outline-none focus-visible:border-ring focus-visible:ring-ring/50 focus-visible:ring-[3px] aria-invalid:ring-destructive/20 dark:aria-invalid:ring-destructive/40 aria-invalid:border-destructive border bg-background shadow-xs hover:bg-accent dark:bg-input/30 dark:border-input dark:hover:bg-input/50 hover:text-accent-foreground h-9 px-2.5 has-data-[icon=inline-end]:pr-2 has-data-[icon=inline-start]:pl-2 relative w-full justify-between overflow-hidden text-left max-w-full"
+              role="combobox"
+              aria-expanded="false"
+              aria-controls="_r_ID_"
+              aria-haspopup="dialog"
+              data-state="closed"
+              type="button"
+              id="frameworks"
+      >
+        Select an option...
+        <svg xmlns="http://www.w3.org/2000/svg"
+             width="16"
+             height="16"
+             viewbox="0 0 24 24"
+             fill="none"
+             stroke="currentColor"
+             stroke-width="2"
+             stroke-linecap="round"
+             stroke-linejoin="round"
+             class="lucide lucide-chevrons-up-down size-4 ml-2 h-4 w-4 shrink-0 opacity-50"
+             aria-hidden="true"
+             id="ChevronsUpDown"
+        >
+          <path d="m7 15 5 5 5-5">
+          </path>
+          <path d="m7 9 5-5 5 5">
+          </path>
+        </svg>
+      </button>
+    </div>
+  </div>
+</div>
+`;
+
+exports[`Components/Input/Combobox PriorityColors smoke-test 1`] = `
+<div class="container my-10 mx-auto p-4 border rounded-lg shadow-sm max-w-lg">
+  <div class="*:not-first:mt-2 w-full min-w-0 max-w-full"
+       id="priority"
+  >
+    <label data-slot="label"
+           class="flex items-center text-sm leading-none font-medium select-none group-data-[disabled=true]:pointer-events-none group-data-[disabled=true]:opacity-50 peer-disabled:cursor-not-allowed peer-disabled:opacity-50 gap-0.5"
+           for="priority"
+    >
+      Nível de Prioridade
+    </label>
+    <div class="w-full min-w-0 max-w-full">
+      <button data-slot="popover-trigger"
+              class="inline-flex items-center gap-1.5 whitespace-nowrap rounded-md text-sm font-medium transition-[color,box-shadow] disabled:pointer-events-none disabled:opacity-50 [&amp;_svg]:pointer-events-none [&amp;_svg:not([class*='size-'])]:size-4 shrink-0 [&amp;_svg]:shrink-0 outline-none focus-visible:border-ring focus-visible:ring-ring/50 focus-visible:ring-[3px] aria-invalid:ring-destructive/20 dark:aria-invalid:ring-destructive/40 aria-invalid:border-destructive border bg-background shadow-xs hover:bg-accent dark:bg-input/30 dark:border-input dark:hover:bg-input/50 hover:text-accent-foreground h-9 px-2.5 has-data-[icon=inline-end]:pr-2 has-data-[icon=inline-start]:pl-2 relative w-full justify-between overflow-hidden text-left max-w-full"
+              role="combobox"
+              aria-expanded="false"
+              aria-controls="_r_ID_"
+              aria-haspopup="dialog"
+              data-state="closed"
+              type="button"
+              id="priority"
+      >
+        <span class="flex items-center gap-2 min-w-0 flex-1 overflow-hidden"
+              style="max-width: 100%;"
+        >
+          <span class="truncate min-w-0 flex-1 block">
+            Selecione a prioridade
+          </span>
+        </span>
+        <svg xmlns="http://www.w3.org/2000/svg"
+             width="16"
+             height="16"
+             viewbox="0 0 24 24"
+             fill="none"
+             stroke="currentColor"
+             stroke-width="2"
+             stroke-linecap="round"
+             stroke-linejoin="round"
+             class="lucide lucide-chevrons-up-down size-4 ml-2 h-4 w-4 shrink-0 opacity-50"
+             aria-hidden="true"
+             id="ChevronsUpDown"
+        >
+          <path d="m7 15 5 5 5-5">
+          </path>
+          <path d="m7 9 5-5 5 5">
+          </path>
+        </svg>
+      </button>
+    </div>
+    <p class="text-muted-foreground text-xs mt-1"
+       role="note"
+       aria-live="polite"
+    >
+      A cor do texto indica o nível de urgência
+    </p>
+  </div>
+</div>
+`;
+
+exports[`Components/Input/Combobox Required smoke-test 1`] = `
+<div class="container my-10 mx-auto p-4 border rounded-lg shadow-sm max-w-lg">
+  <div class="*:not-first:mt-2 w-full min-w-0 max-w-full"
+       id="status"
+  >
+    <label data-slot="label"
+           class="flex items-center text-sm leading-none font-medium select-none group-data-[disabled=true]:pointer-events-none group-data-[disabled=true]:opacity-50 peer-disabled:cursor-not-allowed peer-disabled:opacity-50 after:content-['*'] after:text-destructive gap-0.5"
+           for="status"
+    >
+      Estado da Tarefa
+    </label>
+    <div class="w-full min-w-0 max-w-full">
+      <button data-slot="popover-trigger"
+              class="inline-flex items-center gap-1.5 whitespace-nowrap rounded-md text-sm font-medium transition-[color,box-shadow] disabled:pointer-events-none disabled:opacity-50 [&amp;_svg]:pointer-events-none [&amp;_svg:not([class*='size-'])]:size-4 shrink-0 [&amp;_svg]:shrink-0 outline-none focus-visible:border-ring focus-visible:ring-ring/50 focus-visible:ring-[3px] aria-invalid:ring-destructive/20 dark:aria-invalid:ring-destructive/40 aria-invalid:border-destructive border bg-background shadow-xs hover:bg-accent dark:bg-input/30 dark:border-input dark:hover:bg-input/50 hover:text-accent-foreground h-9 px-2.5 has-data-[icon=inline-end]:pr-2 has-data-[icon=inline-start]:pl-2 relative w-full justify-between overflow-hidden text-left max-w-full"
+              role="combobox"
+              aria-expanded="false"
+              aria-controls="_r_ID_"
+              aria-haspopup="dialog"
+              data-state="closed"
+              type="button"
+              id="status"
+      >
+        <span class="flex items-center gap-2 min-w-0 flex-1 overflow-hidden"
+              style="max-width: 100%;"
+        >
+          <span class="truncate min-w-0 flex-1 block">
+            Selecione o estado (obrigatório)
+          </span>
+        </span>
+        <svg xmlns="http://www.w3.org/2000/svg"
+             width="16"
+             height="16"
+             viewbox="0 0 24 24"
+             fill="none"
+             stroke="currentColor"
+             stroke-width="2"
+             stroke-linecap="round"
+             stroke-linejoin="round"
+             class="lucide lucide-chevrons-up-down size-4 ml-2 h-4 w-4 shrink-0 opacity-50"
+             aria-hidden="true"
+             id="ChevronsUpDown"
+        >
+          <path d="m7 15 5 5 5-5">
+          </path>
+          <path d="m7 9 5-5 5 5">
+          </path>
+        </svg>
+      </button>
+    </div>
+  </div>
+</div>
+`;
+
+exports[`Components/Input/Combobox WithError smoke-test 1`] = `
+<div class="container my-10 mx-auto p-4 border rounded-lg shadow-sm max-w-lg">
+  <div class="*:not-first:mt-2 w-full min-w-0 max-w-full"
+       id="country"
+  >
+    <label data-slot="label"
+           class="flex items-center text-sm leading-none font-medium select-none group-data-[disabled=true]:pointer-events-none group-data-[disabled=true]:opacity-50 peer-disabled:cursor-not-allowed peer-disabled:opacity-50 gap-0.5"
+           for="country"
+    >
+      País
+    </label>
+    <div class="w-full min-w-0 max-w-full">
+      <button data-slot="popover-trigger"
+              class="inline-flex items-center gap-1.5 whitespace-nowrap rounded-md text-sm font-medium transition-[color,box-shadow] disabled:pointer-events-none disabled:opacity-50 [&amp;_svg]:pointer-events-none [&amp;_svg:not([class*='size-'])]:size-4 shrink-0 [&amp;_svg]:shrink-0 outline-none focus-visible:border-ring focus-visible:ring-ring/50 focus-visible:ring-[3px] aria-invalid:ring-destructive/20 dark:aria-invalid:ring-destructive/40 aria-invalid:border-destructive border bg-background shadow-xs hover:bg-accent dark:bg-input/30 dark:border-input dark:hover:bg-input/50 hover:text-accent-foreground h-9 px-2.5 has-data-[icon=inline-end]:pr-2 has-data-[icon=inline-start]:pl-2 relative w-full justify-between overflow-hidden text-left max-w-full"
+              role="combobox"
+              aria-expanded="false"
+              aria-controls="_r_ID_"
+              aria-haspopup="dialog"
+              data-state="closed"
+              type="button"
+              id="country"
+      >
+        <span class="flex items-center gap-2 min-w-0 flex-1 overflow-hidden"
+              style="max-width: 100%;"
+        >
+          <span class="truncate min-w-0 flex-1 block">
+            Selecione um país
+          </span>
+        </span>
+        <svg xmlns="http://www.w3.org/2000/svg"
+             width="16"
+             height="16"
+             viewbox="0 0 24 24"
+             fill="none"
+             stroke="currentColor"
+             stroke-width="2"
+             stroke-linecap="round"
+             stroke-linejoin="round"
+             class="lucide lucide-chevrons-up-down size-4 ml-2 h-4 w-4 shrink-0 opacity-50"
+             aria-hidden="true"
+             id="ChevronsUpDown"
+        >
+          <path d="m7 15 5 5 5-5">
+          </path>
+          <path d="m7 9 5-5 5 5">
+          </path>
+        </svg>
+      </button>
+    </div>
+    <p class="text-destructive text-xs mt-1"
+       role="alert"
+    >
+      Por favor, selecione um país para continuar
+    </p>
+  </div>
+</div>
+`;
+
+exports[`Components/Input/Combobox WithForm smoke-test 1`] = `
+<div class="container my-10 mx-auto p-4 border rounded-lg shadow-sm max-w-lg">
+  <form novalidate
+        id="_r_ID_"
+  >
+    <fieldset data-slot="field-set"
+              class="flex flex-col has-[&gt;[data-slot=checkbox-group]]:gap-3 has-[&gt;[data-slot=radio-group]]:gap-3 border-0 p-0 m-0 gap-0"
+    >
+      <div class="grid gap-4 space-y-4 w-80">
+        <div class="*:not-first:mt-2">
+          <div data-slot="form-item"
+               class="flex flex-col gap-2"
+          >
+            <div class="flex flex-col gap-2">
+              <label data-slot="form-label"
+                     class="flex items-center text-sm leading-none font-medium select-none group-data-[disabled=true]:pointer-events-none group-data-[disabled=true]:opacity-50 peer-disabled:cursor-not-allowed peer-disabled:opacity-50 data-[error=true]:text-destructive gap-0.5 after:content-[&quot;*&quot;] after:text-destructive"
+                     data-error="false"
+                     for="_r_ID_-form-item"
+              >
+                Select a framework
+              </label>
+              <div class="relative w-full min-w-0 max-w-full"
+                   data-slot="form-control"
+                   id="_r_ID_-form-item"
+                   aria-describedby="_r_ID_-form-item-description"
+                   aria-invalid="false"
+              >
+                <div class="w-full min-w-0 max-w-full">
+                  <button data-slot="popover-trigger"
+                          class="inline-flex items-center gap-1.5 whitespace-nowrap rounded-md text-sm font-medium transition-[color,box-shadow] disabled:pointer-events-none disabled:opacity-50 [&amp;_svg]:pointer-events-none [&amp;_svg:not([class*='size-'])]:size-4 shrink-0 [&amp;_svg]:shrink-0 outline-none focus-visible:border-ring focus-visible:ring-ring/50 focus-visible:ring-[3px] aria-invalid:ring-destructive/20 dark:aria-invalid:ring-destructive/40 aria-invalid:border-destructive border bg-background shadow-xs hover:bg-accent dark:bg-input/30 dark:border-input dark:hover:bg-input/50 hover:text-accent-foreground h-9 px-2.5 has-data-[icon=inline-end]:pr-2 has-data-[icon=inline-start]:pl-2 relative w-full justify-between overflow-hidden text-left max-w-full"
+                          role="combobox"
+                          aria-expanded="false"
+                          aria-controls="_r_ID_"
+                          aria-haspopup="dialog"
+                          data-state="closed"
+                          type="button"
+                          id="_r_ID_"
+                  >
+                    <span class="flex items-center gap-2 min-w-0 flex-1 overflow-hidden"
+                          style="max-width: 100%;"
+                    >
+                      <span class="truncate min-w-0 flex-1 block">
+                        Select a framework...
+                      </span>
+                    </span>
+                    <svg xmlns="http://www.w3.org/2000/svg"
+                         width="16"
+                         height="16"
+                         viewbox="0 0 24 24"
+                         fill="none"
+                         stroke="currentColor"
+                         stroke-width="2"
+                         stroke-linecap="round"
+                         stroke-linejoin="round"
+                         class="lucide lucide-chevrons-up-down size-4 ml-2 h-4 w-4 shrink-0 opacity-50"
+                         aria-hidden="true"
+                         id="ChevronsUpDown"
+                    >
+                      <path d="m7 15 5 5 5-5">
+                      </path>
+                      <path d="m7 9 5-5 5 5">
+                      </path>
+                    </svg>
+                  </button>
+                </div>
+              </div>
+            </div>
+            <p data-slot="form-description"
+               id="_r_ID_-form-item-description"
+               class="text-muted-foreground text-sm"
+            >
+              Choose a framework to submit
+            </p>
+          </div>
+        </div>
+      </div>
+    </fieldset>
+  </form>
+  <button data-slot="button"
+          class="inline-flex items-center justify-center gap-1.5 whitespace-nowrap rounded-md text-sm font-medium transition-[color,box-shadow] disabled:pointer-events-none disabled:opacity-50 [&amp;_svg]:pointer-events-none [&amp;_svg:not([class*='size-'])]:size-4 shrink-0 [&amp;_svg]:shrink-0 outline-none focus-visible:border-ring focus-visible:ring-ring/50 focus-visible:ring-[3px] aria-invalid:ring-destructive/20 dark:aria-invalid:ring-destructive/40 aria-invalid:border-destructive bg-primary text-primary-foreground shadow-xs hover:bg-primary/90 hover:text-primary-foreground h-9 px-2.5 has-data-[icon=inline-end]:pr-2 has-data-[icon=inline-start]:pl-2 relative w-full mt-4"
+          type="submit"
+          id="_r_ID_"
+  >
+    Enviar
+  </button>
+</div>
+`;
+
+exports[`Components/Input/Combobox WithFormContext smoke-test 1`] = `
+<div class="container my-10 mx-auto p-4 border rounded-lg shadow-sm max-w-lg">
+  <form novalidate
+        id="_r_ID_"
+  >
+    <fieldset data-slot="field-set"
+              class="flex flex-col has-[&gt;[data-slot=checkbox-group]]:gap-3 has-[&gt;[data-slot=radio-group]]:gap-3 border-0 p-0 m-0 gap-0"
+    >
+      <div class="grid gap-4 space-y-4 w-80">
+        <div class="*:not-first:mt-2">
+          <div data-slot="form-item"
+               class="flex flex-col gap-2"
+          >
+            <div class="flex flex-col gap-2">
+              <label data-slot="form-label"
+                     class="flex items-center text-sm leading-none font-medium select-none group-data-[disabled=true]:pointer-events-none group-data-[disabled=true]:opacity-50 peer-disabled:cursor-not-allowed peer-disabled:opacity-50 data-[error=true]:text-destructive gap-0.5"
+                     data-error="false"
+                     for="_r_ID_-form-item"
+              >
+                Estado da Tarefa
+              </label>
+              <div class="relative w-full min-w-0 max-w-full"
+                   data-slot="form-control"
+                   id="_r_ID_-form-item"
+                   aria-describedby="_r_ID_-form-item-description"
+                   aria-invalid="false"
+              >
+                <div class="w-full min-w-0 max-w-full">
+                  <button data-slot="popover-trigger"
+                          class="inline-flex items-center gap-1.5 whitespace-nowrap rounded-md text-sm font-medium transition-[color,box-shadow] disabled:pointer-events-none disabled:opacity-50 [&amp;_svg]:pointer-events-none [&amp;_svg:not([class*='size-'])]:size-4 shrink-0 [&amp;_svg]:shrink-0 outline-none focus-visible:border-ring focus-visible:ring-ring/50 focus-visible:ring-[3px] aria-invalid:ring-destructive/20 dark:aria-invalid:ring-destructive/40 aria-invalid:border-destructive border bg-background shadow-xs hover:bg-accent dark:bg-input/30 dark:border-input dark:hover:bg-input/50 hover:text-accent-foreground h-9 px-2.5 has-data-[icon=inline-end]:pr-2 has-data-[icon=inline-start]:pl-2 relative w-full justify-between overflow-hidden text-left max-w-full"
+                          role="combobox"
+                          aria-expanded="false"
+                          aria-controls="_r_ID_"
+                          aria-haspopup="dialog"
+                          data-state="closed"
+                          type="button"
+                          id="status"
+                  >
+                    <span class="flex items-center gap-2 min-w-0 flex-1 overflow-hidden"
+                          style="max-width: 100%;"
+                    >
+                      <span class="truncate min-w-0 flex-1 block">
+                        Selecione o estado (obrigatório)
+                      </span>
+                    </span>
+                    <svg xmlns="http://www.w3.org/2000/svg"
+                         width="16"
+                         height="16"
+                         viewbox="0 0 24 24"
+                         fill="none"
+                         stroke="currentColor"
+                         stroke-width="2"
+                         stroke-linecap="round"
+                         stroke-linejoin="round"
+                         class="lucide lucide-chevrons-up-down size-4 ml-2 h-4 w-4 shrink-0 opacity-50"
+                         aria-hidden="true"
+                         id="ChevronsUpDown"
+                    >
+                      <path d="m7 15 5 5 5-5">
+                      </path>
+                      <path d="m7 9 5-5 5 5">
+                      </path>
+                    </svg>
+                  </button>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </fieldset>
+  </form>
+  <button data-slot="button"
+          class="inline-flex items-center justify-center gap-1.5 whitespace-nowrap rounded-md text-sm font-medium transition-[color,box-shadow] disabled:pointer-events-none disabled:opacity-50 [&amp;_svg]:pointer-events-none [&amp;_svg:not([class*='size-'])]:size-4 shrink-0 [&amp;_svg]:shrink-0 outline-none focus-visible:border-ring focus-visible:ring-ring/50 focus-visible:ring-[3px] aria-invalid:ring-destructive/20 dark:aria-invalid:ring-destructive/40 aria-invalid:border-destructive bg-primary text-primary-foreground shadow-xs hover:bg-primary/90 hover:text-primary-foreground h-9 px-2.5 has-data-[icon=inline-end]:pr-2 has-data-[icon=inline-start]:pl-2 relative w-full mt-4"
+          type="submit"
+          id="_r_ID_"
+  >
+    Enviar
+  </button>
+</div>
+`;
+
+exports[`Components/Input/Combobox WithFormListStandalone smoke-test 1`] = `
+<div class="container my-10 mx-auto p-4 border rounded-lg shadow-sm max-w-4xl">
+  <div data-slot="card"
+       class="bg-card text-card-foreground flex flex-col border shadow-sm gap-0 rounded-lg py-0"
+       id="combobox-formlist-standalone"
+  >
+    <div data-slot="card-header"
+         class="@container/card-header auto-rows-min grid-rows-[auto_auto] gap-2 has-data-[slot=card-action]:grid-cols-[1fr_auto] p-4 border-b [.border-b]:pb-4 flex flex-row items-center justify-between"
+    >
+      <div class="flex items-center gap-2">
+        <div>
+          <div data-slot="card-title"
+               class="text-sm font-medium"
+          >
+            Itens com Comboboxes
+          </div>
+          <div data-slot="card-description"
+               class="text-muted-foreground text-xs"
+          >
+            Adicione múltiplos itens usando comboboxes (modo standalone)
+          </div>
+        </div>
+      </div>
+      <div data-slot="badge"
+           id="_r_ID_"
+           class="inline-flex items-center justify-center rounded-full shadow-none border px-3 py-0.5 font-medium w-fit whitespace-nowrap shrink-0 gap-1 [&amp;&gt;svg]:pointer-events-none focus-visible:border-ring focus-visible:ring-ring/50 focus-visible:ring-[3px] aria-invalid:ring-destructive/20 dark:aria-invalid:ring-destructive/40 aria-invalid:border-destructive transition-[color,box-shadow] overflow-hidden text-xs [&amp;&gt;svg]:size-2.5 text-primary-foreground bg-primary border-primary"
+      >
+        <div class="flex items-center">
+          <div class>
+            standalone
+          </div>
+        </div>
+      </div>
+    </div>
+    <div data-slot="card-content"
+         class="p-4"
+    >
+      <div data-slot="accordion"
+           class="w-full"
+           data-orientation="vertical"
+      >
+        <div data-state="open"
+             data-orientation="vertical"
+             data-slot="accordion-item"
+             class="border last:border-b rounded-sm mb-4"
+        >
+          <div class="flex justify-between items-center px-4 gap-2">
+            <div class="flex-1">
+              <h3 data-orientation="vertical"
+                  data-state="open"
+                  class="flex"
+              >
+                <button type="button"
+                        aria-controls="radix-ID"
+                        aria-expanded="true"
+                        data-state="open"
+                        data-orientation="vertical"
+                        id="radix-ID"
+                        data-slot="accordion-trigger"
+                        class="focus-visible:border-ring focus-visible:ring-ring/50 flex flex-1 items-start gap-4 rounded-md text-left text-sm font-medium transition-all outline-none focus-visible:ring-2 disabled:pointer-events-none disabled:opacity-50 [&amp;[data-state=open]&gt;svg]:rotate-180 justify-between hover:no-underline py-4"
+                        data-radix-id""
+                >
+                  <svg xmlns="http://www.w3.org/2000/svg"
+                       width="16"
+                       height="16"
+                       viewbox="0 0 24 24"
+                       fill="none"
+                       stroke="currentColor"
+                       stroke-width="2"
+                       stroke-linecap="round"
+                       stroke-linejoin="round"
+                       class="lucide lucide-chevron-down text-muted-foreground pointer-events-none size-4 shrink-0 translate-y-0.5 transition-transform duration-200 order-last"
+                       aria-hidden="true"
+                       id="ChevronDown"
+                  >
+                    <path d="m6 9 6 6 6-6">
+                    </path>
+                  </svg>
+                  <span class="font-medium text-sm">
+                    Item 1
+                  </span>
+                </button>
+              </h3>
+            </div>
+            <button data-slot="button"
+                    class="inline-flex items-center justify-center gap-1.5 whitespace-nowrap text-sm font-medium transition-[color,box-shadow] disabled:pointer-events-none disabled:opacity-50 [&amp;_svg]:pointer-events-none [&amp;_svg:not([class*='size-'])]:size-4 [&amp;_svg]:shrink-0 outline-none focus-visible:border-ring focus-visible:ring-ring/50 focus-visible:ring-[3px] aria-invalid:ring-destructive/20 dark:aria-invalid:ring-destructive/40 aria-invalid:border-destructive hover:bg-accent dark:hover:bg-accent/50 rounded-[min(var(--radius-md),12px)] in-data-[slot=button-group]:rounded-lg size-7 p-0 shrink-0 hover:text-destructive"
+                    type="button"
+                    aria-label="Remover item 1"
+            >
+              <svg xmlns="http://www.w3.org/2000/svg"
+                   width="16"
+                   height="16"
+                   viewbox="0 0 24 24"
+                   fill="none"
+                   stroke="currentColor"
+                   stroke-width="2"
+                   stroke-linecap="round"
+                   stroke-linejoin="round"
+                   class="lucide lucide-trash2 lucide-trash-2"
+                   aria-hidden="true"
+                   id="Trash2"
+              >
+                <path d="M10 11v6">
+                </path>
+                <path d="M14 11v6">
+                </path>
+                <path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6">
+                </path>
+                <path d="M3 6h18">
+                </path>
+                <path d="M8 6V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2">
+                </path>
+              </svg>
+            </button>
+          </div>
+          <div data-state="open"
+               id="radix-ID"
+               role="region"
+               aria-labelledby="radix-ID"
+               data-orientation="vertical"
+               data-slot="accordion-content"
+               class="data-[state=closed]:animate-accordion-up data-[state=open]:animate-accordion-down motion-reduce:animate-none overflow-hidden text-sm"
+               style="--radix-ID var(--radix-ID --radix-ID var(--radix-ID transition-duration: 0s; animation-name: none; --radix-ID 310px; --radix-ID 826px;"
+          >
+            <div class="p-4">
+              <div class="grid gap-4">
+                <div class="*:not-first:mt-2 w-full min-w-0 max-w-full">
+                  <label data-slot="label"
+                         class="flex items-center text-sm leading-none font-medium select-none group-data-[disabled=true]:pointer-events-none group-data-[disabled=true]:opacity-50 peer-disabled:cursor-not-allowed peer-disabled:opacity-50 gap-0.5"
+                         for="_r_ID_"
+                  >
+                    País
+                  </label>
+                  <div class="w-full min-w-0 max-w-full">
+                    <button data-slot="popover-trigger"
+                            class="inline-flex items-center gap-1.5 whitespace-nowrap rounded-md text-sm font-medium transition-[color,box-shadow] disabled:pointer-events-none disabled:opacity-50 [&amp;_svg]:pointer-events-none [&amp;_svg:not([class*='size-'])]:size-4 shrink-0 [&amp;_svg]:shrink-0 outline-none focus-visible:border-ring focus-visible:ring-ring/50 focus-visible:ring-[3px] aria-invalid:ring-destructive/20 dark:aria-invalid:ring-destructive/40 aria-invalid:border-destructive border bg-background shadow-xs hover:bg-accent dark:bg-input/30 dark:border-input dark:hover:bg-input/50 hover:text-accent-foreground h-9 px-2.5 has-data-[icon=inline-end]:pr-2 has-data-[icon=inline-start]:pl-2 relative w-full justify-between overflow-hidden text-left max-w-full"
+                            role="combobox"
+                            aria-expanded="false"
+                            aria-controls="_r_ID_"
+                            aria-haspopup="dialog"
+                            data-state="closed"
+                            type="button"
+                            id="_r_ID_"
+                    >
+                      <span class="flex items-center gap-2 min-w-0 flex-1 overflow-hidden"
+                            style="max-width: 100%;"
+                      >
+                        <span class="truncate min-w-0 flex-1 block">
+                          Selecione um país
+                        </span>
+                      </span>
+                      <svg xmlns="http://www.w3.org/2000/svg"
+                           width="16"
+                           height="16"
+                           viewbox="0 0 24 24"
+                           fill="none"
+                           stroke="currentColor"
+                           stroke-width="2"
+                           stroke-linecap="round"
+                           stroke-linejoin="round"
+                           class="lucide lucide-chevrons-up-down size-4 ml-2 h-4 w-4 shrink-0 opacity-50"
+                           aria-hidden="true"
+                           id="ChevronsUpDown"
+                      >
+                        <path d="m7 15 5 5 5-5">
+                        </path>
+                        <path d="m7 9 5-5 5 5">
+                        </path>
+                      </svg>
+                    </button>
+                  </div>
+                  <p class="text-muted-foreground text-xs mt-1"
+                     role="note"
+                     aria-live="polite"
+                  >
+                    Escolha o país de origem
+                  </p>
+                </div>
+                <div class="*:not-first:mt-2 w-full min-w-0 max-w-full">
+                  <label data-slot="label"
+                         class="flex items-center text-sm leading-none font-medium select-none group-data-[disabled=true]:pointer-events-none group-data-[disabled=true]:opacity-50 peer-disabled:cursor-not-allowed peer-disabled:opacity-50 gap-0.5"
+                         for="_r_ID_"
+                  >
+                    Prioridade
+                  </label>
+                  <div class="w-full min-w-0 max-w-full">
+                    <button data-slot="popover-trigger"
+                            class="inline-flex items-center gap-1.5 whitespace-nowrap rounded-md text-sm font-medium transition-[color,box-shadow] disabled:pointer-events-none disabled:opacity-50 [&amp;_svg]:pointer-events-none [&amp;_svg:not([class*='size-'])]:size-4 shrink-0 [&amp;_svg]:shrink-0 outline-none focus-visible:border-ring focus-visible:ring-ring/50 focus-visible:ring-[3px] aria-invalid:ring-destructive/20 dark:aria-invalid:ring-destructive/40 aria-invalid:border-destructive border bg-background shadow-xs hover:bg-accent dark:bg-input/30 dark:border-input dark:hover:bg-input/50 hover:text-accent-foreground h-9 px-2.5 has-data-[icon=inline-end]:pr-2 has-data-[icon=inline-start]:pl-2 relative w-full justify-between overflow-hidden text-left max-w-full"
+                            role="combobox"
+                            aria-expanded="false"
+                            aria-controls="_r_ID_"
+                            aria-haspopup="dialog"
+                            data-state="closed"
+                            type="button"
+                            id="_r_ID_"
+                    >
+                      <span class="flex items-center gap-2 min-w-0 flex-1 overflow-hidden"
+                            style="max-width: 100%;"
+                      >
+                        <span class="truncate min-w-0 flex-1 block">
+                          Selecione a prioridade
+                        </span>
+                      </span>
+                      <svg xmlns="http://www.w3.org/2000/svg"
+                           width="16"
+                           height="16"
+                           viewbox="0 0 24 24"
+                           fill="none"
+                           stroke="currentColor"
+                           stroke-width="2"
+                           stroke-linecap="round"
+                           stroke-linejoin="round"
+                           class="lucide lucide-chevrons-up-down size-4 ml-2 h-4 w-4 shrink-0 opacity-50"
+                           aria-hidden="true"
+                           id="ChevronsUpDown"
+                      >
+                        <path d="m7 15 5 5 5-5">
+                        </path>
+                        <path d="m7 9 5-5 5 5">
+                        </path>
+                      </svg>
+                    </button>
+                  </div>
+                  <p class="text-muted-foreground text-xs mt-1"
+                     role="note"
+                     aria-live="polite"
+                  >
+                    Nível de urgência
+                  </p>
+                </div>
+                <div class="*:not-first:mt-2 w-full min-w-0 max-w-full">
+                  <label data-slot="label"
+                         class="flex items-center text-sm leading-none font-medium select-none group-data-[disabled=true]:pointer-events-none group-data-[disabled=true]:opacity-50 peer-disabled:cursor-not-allowed peer-disabled:opacity-50 gap-0.5"
+                         for="_r_ID_"
+                  >
+                    Estado
+                  </label>
+                  <div class="w-full min-w-0 max-w-full">
+                    <button data-slot="popover-trigger"
+                            class="inline-flex items-center gap-1.5 whitespace-nowrap rounded-md text-sm font-medium transition-[color,box-shadow] disabled:pointer-events-none disabled:opacity-50 [&amp;_svg]:pointer-events-none [&amp;_svg:not([class*='size-'])]:size-4 shrink-0 [&amp;_svg]:shrink-0 outline-none focus-visible:border-ring focus-visible:ring-ring/50 focus-visible:ring-[3px] aria-invalid:ring-destructive/20 dark:aria-invalid:ring-destructive/40 aria-invalid:border-destructive border bg-background shadow-xs hover:bg-accent dark:bg-input/30 dark:border-input dark:hover:bg-input/50 hover:text-accent-foreground h-9 px-2.5 has-data-[icon=inline-end]:pr-2 has-data-[icon=inline-start]:pl-2 relative w-full justify-between overflow-hidden text-left max-w-full"
+                            role="combobox"
+                            aria-expanded="false"
+                            aria-controls="_r_ID_"
+                            aria-haspopup="dialog"
+                            data-state="closed"
+                            type="button"
+                            id="_r_ID_"
+                    >
+                      <span class="flex items-center gap-2 min-w-0 flex-1 overflow-hidden"
+                            style="max-width: 100%;"
+                      >
+                        <span class="truncate min-w-0 flex-1 block">
+                          Selecione o estado
+                        </span>
+                      </span>
+                      <svg xmlns="http://www.w3.org/2000/svg"
+                           width="16"
+                           height="16"
+                           viewbox="0 0 24 24"
+                           fill="none"
+                           stroke="currentColor"
+                           stroke-width="2"
+                           stroke-linecap="round"
+                           stroke-linejoin="round"
+                           class="lucide lucide-chevrons-up-down size-4 ml-2 h-4 w-4 shrink-0 opacity-50"
+                           aria-hidden="true"
+                           id="ChevronsUpDown"
+                      >
+                        <path d="m7 15 5 5 5-5">
+                        </path>
+                        <path d="m7 9 5-5 5 5">
+                        </path>
+                      </svg>
+                    </button>
+                  </div>
+                  <p class="text-muted-foreground text-xs mt-1"
+                     role="note"
+                     aria-live="polite"
+                  >
+                    Estado atual do item
+                  </p>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="flex justify-center">
+        <button data-slot="button"
+                class="inline-flex items-center justify-center gap-1.5 whitespace-nowrap rounded-md text-sm font-medium transition-[color,box-shadow] disabled:pointer-events-none disabled:opacity-50 [&amp;_svg]:pointer-events-none [&amp;_svg:not([class*='size-'])]:size-4 shrink-0 [&amp;_svg]:shrink-0 outline-none focus-visible:border-ring focus-visible:ring-ring/50 focus-visible:ring-[3px] aria-invalid:ring-destructive/20 dark:aria-invalid:ring-destructive/40 aria-invalid:border-destructive border bg-background shadow-xs hover:bg-accent dark:bg-input/30 dark:border-input dark:hover:bg-input/50 hover:text-accent-foreground h-9 px-2.5 has-data-[icon=inline-end]:pr-2 has-data-[icon=inline-start]:pl-2"
+                type="button"
+        >
+          <svg xmlns="http://www.w3.org/2000/svg"
+               width="16"
+               height="16"
+               viewbox="0 0 24 24"
+               fill="none"
+               stroke="currentColor"
+               stroke-width="2"
+               stroke-linecap="round"
+               stroke-linejoin="round"
+               class="lucide lucide-plus size-4 mr-1"
+               aria-hidden="true"
+               id="Plus"
+          >
+            <path d="M5 12h14">
+            </path>
+            <path d="M12 5v14">
+            </path>
+          </svg>
+          <span>
+            Adicionar
+          </span>
+        </button>
+      </div>
+    </div>
+  </div>
+  <div class="mt-4 p-4 bg-muted rounded-md">
+    <p class="text-sm text-muted-foreground mb-2">
+      Valores atuais:
+    </p>
+    <pre class="text-xs overflow-auto">
+      [
+  {
+    "country": "",
+    "priority": "",
+    "status": ""
+  }
+]
+    </pre>
+  </div>
+</div>
+`;
+
+exports[`Components/Input/Combobox WithGroup smoke-test 1`] = `
+<div class="container my-10 mx-auto p-4 border rounded-lg shadow-sm max-w-lg">
+  <div class="*:not-first:mt-2 w-full min-w-0 max-w-full">
+    <label data-slot="label"
+           class="flex items-center text-sm leading-none font-medium select-none group-data-[disabled=true]:pointer-events-none group-data-[disabled=true]:opacity-50 peer-disabled:cursor-not-allowed peer-disabled:opacity-50 gap-0.5"
+           for="_r_ID_"
+    >
+      Select a framework
+    </label>
+    <div class="w-full min-w-0 max-w-full">
+      <button data-slot="popover-trigger"
+              class="inline-flex items-center gap-1.5 whitespace-nowrap rounded-md text-sm font-medium transition-[color,box-shadow] disabled:pointer-events-none disabled:opacity-50 [&amp;_svg]:pointer-events-none [&amp;_svg:not([class*='size-'])]:size-4 shrink-0 [&amp;_svg]:shrink-0 outline-none focus-visible:border-ring focus-visible:ring-ring/50 focus-visible:ring-[3px] aria-invalid:ring-destructive/20 dark:aria-invalid:ring-destructive/40 aria-invalid:border-destructive border bg-background shadow-xs hover:bg-accent dark:bg-input/30 dark:border-input dark:hover:bg-input/50 hover:text-accent-foreground h-9 px-2.5 has-data-[icon=inline-end]:pr-2 has-data-[icon=inline-start]:pl-2 relative w-full justify-between overflow-hidden text-left max-w-full"
+              role="combobox"
+              aria-expanded="false"
+              aria-controls="_r_ID_"
+              aria-haspopup="dialog"
+              data-state="closed"
+              type="button"
+              id="_r_ID_"
+      >
+        <span class="flex items-center gap-2 min-w-0 flex-1 overflow-hidden"
+              style="max-width: 100%;"
+        >
+          <span class="truncate min-w-0 flex-1 block">
+            Select an option...
+          </span>
+        </span>
+        <svg xmlns="http://www.w3.org/2000/svg"
+             width="16"
+             height="16"
+             viewbox="0 0 24 24"
+             fill="none"
+             stroke="currentColor"
+             stroke-width="2"
+             stroke-linecap="round"
+             stroke-linejoin="round"
+             class="lucide lucide-chevrons-up-down size-4 ml-2 h-4 w-4 shrink-0 opacity-50"
+             aria-hidden="true"
+             id="ChevronsUpDown"
+        >
+          <path d="m7 15 5 5 5-5">
+          </path>
+          <path d="m7 9 5-5 5 5">
+          </path>
+        </svg>
+      </button>
+    </div>
+  </div>
+</div>
+`;
+
+exports[`Components/Input/Combobox WithHelper smoke-test 1`] = `
+<div class="container my-10 mx-auto p-4 border rounded-lg shadow-sm max-w-lg">
+  <div class="*:not-first:mt-2 w-full min-w-0 max-w-full"
+       id="country"
+  >
+    <label data-slot="label"
+           class="flex items-center text-sm leading-none font-medium select-none group-data-[disabled=true]:pointer-events-none group-data-[disabled=true]:opacity-50 peer-disabled:cursor-not-allowed peer-disabled:opacity-50 gap-0.5"
+           for="country"
+    >
+      País
+    </label>
+    <div class="w-full min-w-0 max-w-full">
+      <button data-slot="popover-trigger"
+              class="inline-flex items-center gap-1.5 whitespace-nowrap rounded-md text-sm font-medium transition-[color,box-shadow] disabled:pointer-events-none disabled:opacity-50 [&amp;_svg]:pointer-events-none [&amp;_svg:not([class*='size-'])]:size-4 shrink-0 [&amp;_svg]:shrink-0 outline-none focus-visible:border-ring focus-visible:ring-ring/50 focus-visible:ring-[3px] aria-invalid:ring-destructive/20 dark:aria-invalid:ring-destructive/40 aria-invalid:border-destructive border bg-background shadow-xs hover:bg-accent dark:bg-input/30 dark:border-input dark:hover:bg-input/50 hover:text-accent-foreground h-9 px-2.5 has-data-[icon=inline-end]:pr-2 has-data-[icon=inline-start]:pl-2 relative w-full justify-between overflow-hidden text-left max-w-full"
+              role="combobox"
+              aria-expanded="false"
+              aria-controls="_r_ID_"
+              aria-haspopup="dialog"
+              data-state="closed"
+              type="button"
+              id="country"
+      >
+        <span class="flex items-center gap-2 min-w-0 flex-1 overflow-hidden"
+              style="max-width: 100%;"
+        >
+          <span class="truncate min-w-0 flex-1 block">
+            Selecione um país
+          </span>
+        </span>
+        <svg xmlns="http://www.w3.org/2000/svg"
+             width="16"
+             height="16"
+             viewbox="0 0 24 24"
+             fill="none"
+             stroke="currentColor"
+             stroke-width="2"
+             stroke-linecap="round"
+             stroke-linejoin="round"
+             class="lucide lucide-chevrons-up-down size-4 ml-2 h-4 w-4 shrink-0 opacity-50"
+             aria-hidden="true"
+             id="ChevronsUpDown"
+        >
+          <path d="m7 15 5 5 5-5">
+          </path>
+          <path d="m7 9 5-5 5 5">
+          </path>
+        </svg>
+      </button>
+    </div>
+    <p class="text-muted-foreground text-xs mt-1"
+       role="note"
+       aria-live="polite"
+    >
+      Por favor, selecione um país para continuar
+    </p>
+  </div>
+</div>
+`;
+
+exports[`Components/Input/Combobox WithIcon smoke-test 1`] = `
+<div class="container my-10 mx-auto p-4 border rounded-lg shadow-sm max-w-lg">
+  <div class="*:not-first:mt-2 w-full min-w-0 max-w-full">
+    <label data-slot="label"
+           class="flex items-center text-sm leading-none font-medium select-none group-data-[disabled=true]:pointer-events-none group-data-[disabled=true]:opacity-50 peer-disabled:cursor-not-allowed peer-disabled:opacity-50 gap-0.5"
+           for="_r_ID_"
+    >
+      Select a framework
+    </label>
+    <div class="w-full min-w-0 max-w-full">
+      <button data-slot="popover-trigger"
+              class="inline-flex items-center gap-1.5 whitespace-nowrap rounded-md text-sm font-medium transition-[color,box-shadow] disabled:pointer-events-none disabled:opacity-50 [&amp;_svg]:pointer-events-none [&amp;_svg:not([class*='size-'])]:size-4 shrink-0 [&amp;_svg]:shrink-0 outline-none focus-visible:border-ring focus-visible:ring-ring/50 focus-visible:ring-[3px] aria-invalid:ring-destructive/20 dark:aria-invalid:ring-destructive/40 aria-invalid:border-destructive border bg-background shadow-xs hover:bg-accent dark:bg-input/30 dark:border-input dark:hover:bg-input/50 hover:text-accent-foreground h-9 px-2.5 has-data-[icon=inline-end]:pr-2 has-data-[icon=inline-start]:pl-2 relative w-full justify-between overflow-hidden text-left max-w-full"
+              role="combobox"
+              aria-expanded="false"
+              aria-controls="_r_ID_"
+              aria-haspopup="dialog"
+              data-state="closed"
+              type="button"
+              id="_r_ID_"
+      >
+        <span class="flex items-center gap-2 min-w-0 flex-1 overflow-hidden"
+              style="max-width: 100%;"
+        >
+          <svg xmlns="http://www.w3.org/2000/svg"
+               width="16"
+               height="16"
+               viewbox="0 0 24 24"
+               fill="none"
+               stroke="currentColor"
+               stroke-width="2"
+               stroke-linecap="round"
+               stroke-linejoin="round"
+               class="lucide lucide-corner-down-right shrink-0"
+               aria-hidden="true"
+               id="CornerDownRight"
+          >
+            <path d="m15 10 5 5-5 5">
+            </path>
+            <path d="M4 4v7a4 4 0 0 0 4 4h12">
+            </path>
+          </svg>
+          <span class="truncate min-w-0 flex-1 block">
+            Select an option...
+          </span>
+        </span>
+        <svg xmlns="http://www.w3.org/2000/svg"
+             width="16"
+             height="16"
+             viewbox="0 0 24 24"
+             fill="none"
+             stroke="currentColor"
+             stroke-width="2"
+             stroke-linecap="round"
+             stroke-linejoin="round"
+             class="lucide lucide-chevrons-up-down size-4 ml-2 h-4 w-4 shrink-0 opacity-50"
+             aria-hidden="true"
+             id="ChevronsUpDown"
+        >
+          <path d="m7 15 5 5 5-5">
+          </path>
+          <path d="m7 9 5-5 5 5">
+          </path>
+        </svg>
+      </button>
+    </div>
+  </div>
+</div>
+`;
+
+exports[`Components/Input/Combobox WithSearch smoke-test 1`] = `
+<div class="container my-10 mx-auto p-4 border rounded-lg shadow-sm max-w-lg">
+  <div class="*:not-first:mt-2 w-full min-w-0 max-w-full">
+    <label data-slot="label"
+           class="flex items-center text-sm leading-none font-medium select-none group-data-[disabled=true]:pointer-events-none group-data-[disabled=true]:opacity-50 peer-disabled:cursor-not-allowed peer-disabled:opacity-50 gap-0.5"
+           for="_r_ID_"
+    >
+      Select a framework
+    </label>
+    <div class="w-full min-w-0 max-w-full">
+      <button data-slot="popover-trigger"
+              class="inline-flex items-center gap-1.5 whitespace-nowrap rounded-md text-sm font-medium transition-[color,box-shadow] disabled:pointer-events-none disabled:opacity-50 [&amp;_svg]:pointer-events-none [&amp;_svg:not([class*='size-'])]:size-4 shrink-0 [&amp;_svg]:shrink-0 outline-none focus-visible:border-ring focus-visible:ring-ring/50 focus-visible:ring-[3px] aria-invalid:ring-destructive/20 dark:aria-invalid:ring-destructive/40 aria-invalid:border-destructive border bg-background shadow-xs hover:bg-accent dark:bg-input/30 dark:border-input dark:hover:bg-input/50 hover:text-accent-foreground h-9 px-2.5 has-data-[icon=inline-end]:pr-2 has-data-[icon=inline-start]:pl-2 relative w-full justify-between overflow-hidden text-left max-w-full"
+              role="combobox"
+              aria-expanded="false"
+              aria-controls="_r_ID_"
+              aria-haspopup="dialog"
+              data-state="closed"
+              type="button"
+              id="_r_ID_"
+      >
+        <span class="flex items-center gap-2 min-w-0 flex-1 overflow-hidden"
+              style="max-width: 100%;"
+        >
+          <span class="truncate min-w-0 flex-1 block">
+            Select an option...
+          </span>
+        </span>
+        <svg xmlns="http://www.w3.org/2000/svg"
+             width="16"
+             height="16"
+             viewbox="0 0 24 24"
+             fill="none"
+             stroke="currentColor"
+             stroke-width="2"
+             stroke-linecap="round"
+             stroke-linejoin="round"
+             class="lucide lucide-chevrons-up-down size-4 ml-2 h-4 w-4 shrink-0 opacity-50"
+             aria-hidden="true"
+             id="ChevronsUpDown"
+        >
+          <path d="m7 15 5 5 5-5">
+          </path>
+          <path d="m7 9 5-5 5 5">
+          </path>
+        </svg>
+      </button>
+    </div>
+  </div>
+</div>
+`;
+
+exports[`Components/Input/Combobox WithStatus smoke-test 1`] = `
+<div class="container my-10 mx-auto p-4 border rounded-lg shadow-sm max-w-lg">
+  <div class="*:not-first:mt-2 w-full min-w-0 max-w-full">
+    <label data-slot="label"
+           class="flex items-center text-sm leading-none font-medium select-none group-data-[disabled=true]:pointer-events-none group-data-[disabled=true]:opacity-50 peer-disabled:cursor-not-allowed peer-disabled:opacity-50 gap-0.5"
+           for="_r_ID_"
+    >
+      Select a framework
+    </label>
+    <div class="w-full min-w-0 max-w-full">
+      <button data-slot="popover-trigger"
+              class="inline-flex items-center gap-1.5 whitespace-nowrap rounded-md text-sm font-medium transition-[color,box-shadow] disabled:pointer-events-none disabled:opacity-50 [&amp;_svg]:pointer-events-none [&amp;_svg:not([class*='size-'])]:size-4 shrink-0 [&amp;_svg]:shrink-0 outline-none focus-visible:border-ring focus-visible:ring-ring/50 focus-visible:ring-[3px] aria-invalid:ring-destructive/20 dark:aria-invalid:ring-destructive/40 aria-invalid:border-destructive border bg-background shadow-xs hover:bg-accent dark:bg-input/30 dark:border-input dark:hover:bg-input/50 hover:text-accent-foreground h-9 px-2.5 has-data-[icon=inline-end]:pr-2 has-data-[icon=inline-start]:pl-2 relative w-full justify-between overflow-hidden text-left max-w-full"
+              role="combobox"
+              aria-expanded="false"
+              aria-controls="_r_ID_"
+              aria-haspopup="dialog"
+              data-state="closed"
+              type="button"
+              id="_r_ID_"
+      >
+        <span class="flex items-center gap-2 min-w-0 flex-1 overflow-hidden"
+              style="max-width: 100%;"
+        >
+          <span class="truncate min-w-0 flex-1 block">
+            Select an option...
+          </span>
+        </span>
+        <svg xmlns="http://www.w3.org/2000/svg"
+             width="16"
+             height="16"
+             viewbox="0 0 24 24"
+             fill="none"
+             stroke="currentColor"
+             stroke-width="2"
+             stroke-linecap="round"
+             stroke-linejoin="round"
+             class="lucide lucide-chevrons-up-down size-4 ml-2 h-4 w-4 shrink-0 opacity-50"
+             aria-hidden="true"
+             id="ChevronsUpDown"
+        >
+          <path d="m7 15 5 5 5-5">
+          </path>
+          <path d="m7 9 5-5 5 5">
+          </path>
+        </svg>
+      </button>
+    </div>
+  </div>
+</div>
+`;

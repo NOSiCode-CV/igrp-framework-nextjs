@@ -16,6 +16,14 @@ import {
 } from '@igrp/igrp-framework-react-design-system';
 import { IGRPTemplateModeSwitcher } from '../templates/mode-switcher';
 
+function withBasePath(src: string): string {
+  const basePath = process.env.NEXT_PUBLIC_BASE_PATH ?? '';
+  if (!basePath || !src.startsWith('/') || src.startsWith('//') || src.startsWith(`${basePath}/`)) {
+    return src;
+  }
+  return `${basePath}${src}`;
+}
+
 interface IGRPLoginTexts {
   welcome: string;
   description: string;
@@ -92,7 +100,7 @@ function IGRPAuthForm({
           )}
           <div className={cn('flex flex-col items-center')}>
             <Image
-              src={logo.src}
+              src={withBasePath(logo.src)}
               alt={name}
               width={logo.width}
               height={logo.height}
@@ -100,7 +108,7 @@ function IGRPAuthForm({
             />
             {logo.srcDark && (
               <Image
-                src={logo.srcDark}
+                src={withBasePath(logo.srcDark)}
                 alt={name}
                 width={logo.width}
                 height={logo.height}

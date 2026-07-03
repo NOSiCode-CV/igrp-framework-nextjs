@@ -1,5 +1,171 @@
 # @igrp/framework-next-types
 
+## 0.1.0-beta.146
+
+### Patch Changes
+
+- 3847b8b: Add token-claims permission gating: `decodeIgrpClaims`/`claimsAllow` (`@igrp/framework-next-auth/claims`), server helpers `igrpGetClaims`/`igrpAuthorize`/`igrpAssertAuthorize` (`@igrp/framework-next`), and client `IGRPSectionPermissions`/`usePermissions`/`IGRPAuthorization`/`IGRPGuardPage`/`IGRPForbidden` (`@igrp/framework-next-ui`).
+- 41d8a51: `IGRPMenuItemArgs.id` is now optional (`id?: number`) to match the runtime
+  `MenuEntryDTO.id?: number`, removing a type that promised an always-present id.
+- Updated dependencies [3847b8b]
+- Updated dependencies [a274c6e]
+- Updated dependencies [c9cd44b]
+- Updated dependencies [3b808b8]
+- Updated dependencies [7d48f03]
+  - @igrp/framework-next-auth@0.1.0-beta.144
+
+## 0.1.0-beta.145
+
+### Patch Changes
+
+- 5b335b8: feat: honor showNotifications flag in nav-user — hide the Notifications dropdown item (header and sidebar) when notifications are disabled, and add showNotifications to IGRPSidebarDataArgs
+- Updated dependencies [5b335b8]
+  - @igrp/framework-next-auth@0.1.0-beta.143
+
+## 0.1.0-beta.144
+
+### Patch Changes
+
+- fc2fe20: - `next-auth`: add `console.error` diagnostics when introspection marks the refresh token inactive or when `refreshOidcAccessToken` returns an error flag or throws — makes login-loop root causes visible in server logs
+  - `next`: replace `unstable_cache` with `React.cache()` in `use-user` — prevents stale 401s caused by rotating access tokens being embedded in the `unstable_cache` key
+- Updated dependencies [fc2fe20]
+  - @igrp/framework-next-auth@0.1.0-beta.142
+
+## 0.1.0-beta.143
+
+### Patch Changes
+
+- e51050a: feat: add showMenuSearch flag to IGRPSidebarDataArgs to control sidebar menu search visibility
+- Updated dependencies [a9b2297]
+  - @igrp/framework-next-auth@0.1.0-beta.141
+
+## 0.1.0-beta.142
+
+### Patch Changes
+
+- Updated dependencies [5ebe890]
+  - @igrp/framework-next-auth@0.1.0-beta.140
+
+## 0.1.0-beta.141
+
+### Patch Changes
+
+- Updated dependencies [4e0137a]
+  - @igrp/framework-next-auth@0.1.0-beta.139
+
+## 0.1.0-beta.140
+
+### Patch Changes
+
+- Updated dependencies
+  - @igrp/framework-next-auth@0.1.0-beta.138
+
+## 0.1.0-beta.139
+
+### Patch Changes
+
+- Updated dependencies
+  - @igrp/framework-next-auth@0.1.0-beta.137
+
+## 0.1.0-beta.138
+
+### Patch Changes
+
+- Updated dependencies [7a89144]
+  - @igrp/framework-next-auth@0.1.0-beta.136
+
+## 0.1.0-beta.137
+
+### Patch Changes
+
+- 6b42572: - Coordinated maintenance release: bump all framework packages to the next beta to keep versions aligned across the framework.
+- Updated dependencies [6b42572]
+  - @igrp/framework-next-auth@0.1.0-beta.135
+
+## 0.1.0-beta.136
+
+### Patch Changes
+
+- ba91edb: feat: gate menu-role sync on `IGRP_SYNC_ON_CODE_MENU_ROLES`
+
+  The on-code menu push can now control the `syncRoles` argument of
+  `client.m2m.syncApplicationMenus(appCode, menus, syncRoles)`.
+  - **next-types**: new optional `apiManagementConfig.syncOnCodeMenuRoles?: boolean`. Defaults to `true` (matching the AM client default) when omitted.
+  - **next**: `igrpSyncMenus` now requires a `syncRoles` arg and forwards it as the third parameter of `syncApplicationMenus`; `planAccessManagementSync` derives `syncOnCodeMenuRoles` from config (`true` unless explicitly `false`) and `igrpStartupSync` threads it through.
+
+  Only consulted when the on-code menu push actually runs (`IGRP_SYNC_ON_CODE_MENUS=true` plus the outer `IGRP_SYNC_ACCESS` / `IGRP_PREVIEW_MODE` gates). Outer gating is unchanged.
+
+- Updated dependencies [b88c4b1]
+  - @igrp/framework-next-auth@0.1.0-beta.134
+
+## 0.1.0-beta.135
+
+### Patch Changes
+
+- Updated dependencies [f89e1ab]
+- Updated dependencies [ec48e46]
+  - @igrp/framework-next-auth@0.1.0-beta.133
+
+## 0.1.0-beta.134
+
+### Patch Changes
+
+- 0cdef39: docs(next-types): remove stale m2mScope JSDoc
+
+  The JSDoc block above `appRoutes` in `apiManagementConfig` documented an `m2mScope` field that no longer exists (removed during the OAuth2 client_credentials migration 08). Removed the orphaned doc.
+
+- 123e361: feat(next-types): add `syncOnCodeMenus` and `onCodeMenus` to `apiManagementConfig`
+
+  Two new optional fields on `IGRPConfigArgs['apiManagementConfig']`:
+  - `syncOnCodeMenus?: boolean` — when true, the framework pushes `onCodeMenus` to Access Management at startup.
+  - `onCodeMenus?: IGRPMenuItemArgs[]` — the template-defined menu array used as the push payload.
+
+  Both are optional; omitting them keeps the current (post-migration-08) no-push behavior.
+
+- Updated dependencies [12cc11b]
+- Updated dependencies [12cc11b]
+- Updated dependencies [12cc11b]
+- Updated dependencies [cc40fef]
+- Updated dependencies [cc40fef]
+  - @igrp/framework-next-auth@0.1.0-beta.132
+
+## 0.1.0-beta.133
+
+### Patch Changes
+
+- 2196ef8: feat(types)!: migrate `apiManagementConfig` to OAuth2 `client_credentials`
+
+  **Breaking** changes to `IGRPConfigArgs['apiManagementConfig']`:
+  - **Removed** `m2mToken` — replaced by `m2mClientId` + `m2mClientSecret` (OAuth2 client_credentials). The downstream library (`@igrp/platform-access-management-client-ts`) still exposes `M2MClientConfig.token` as `@deprecated` for legacy pinning if needed.
+  - **Removed** `syncOnCodeMenus` — the field had no effect. All sync phases (application, routes, menus) are gated on the top-level `syncAccess` flag in `IGRPRootLayout`.
+  - **Renamed** `m2mServiceId` → `serviceId`. The value is service identity (resource name + `X-Machine-Service-ID` header), not an auth credential. The new prefix discipline: `m2m*` is reserved for OAuth2 credentials only.
+  - **Added** required `m2mClientId: string` and `m2mClientSecret: string` for OAuth2 client_credentials authentication.
+
+  Migration: rename `m2mServiceId` → `serviceId` and `m2mToken` → `m2mClientId`/`m2mClientSecret` in your `igrpBuildConfig` call. The TypeScript error guides the rename. See `templates/demo-legacy/src/igrp.template.config.ts` for the canonical shape.
+
+- Updated dependencies [2a0ef32]
+  - @igrp/framework-next-auth@0.1.0-beta.131
+
+## 0.1.0-beta.132
+
+### Patch Changes
+
+- Updated dependencies
+  - @igrp/framework-next-auth@0.1.0-beta.130
+
+## 0.1.0-beta.131
+
+### Patch Changes
+
+- f8dc318: feat: remove showSidebar/showHeader from IGRPConfigArgs
+
+## 0.1.0-beta.130
+
+### Patch Changes
+
+- Updated dependencies [f283926]
+  - @igrp/framework-next-auth@0.1.0-beta.129
+
 ## 0.1.0-beta.129
 
 ### Patch Changes

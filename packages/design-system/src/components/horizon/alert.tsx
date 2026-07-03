@@ -1,3 +1,5 @@
+"use client"
+
 import { useId } from "react"
 
 import { IGRPColors, type IGRPColorRole, type IGRPColorVariants } from "../../lib/colors"
@@ -76,8 +78,12 @@ function IGRPAlert({
   const alignmentClass =
     alignment === "start" ? "items-baseline" : alignment === "center" ? "items-center" : "items-end"
 
+  const isAssertive = color === "destructive"
+
   return (
     <div
+      role={isAssertive ? "alert" : "status"}
+      aria-live={isAssertive ? "assertive" : "polite"}
       className={cn(
         "rounded-md border px-4 py-3",
         colors.alert,

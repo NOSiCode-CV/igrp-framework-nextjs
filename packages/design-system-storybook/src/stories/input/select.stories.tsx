@@ -1,6 +1,7 @@
 import z from 'zod';
-import { useRef } from 'react';
+import { useRef, useEffect } from 'react';
 import type { Meta, StoryObj } from '@storybook/nextjs-vite';
+import { expect, within } from 'storybook/test';
 import {
   IGRPSelect,
   type IGRPOptionsProps,
@@ -148,4 +149,61 @@ export const WithError: Story = {
 
 export const Disabled: Story = {
   render: () => <Template disabled />,
+};
+
+/**
+ * Regression story: the SelectTrigger (combobox button) must carry
+ * aria-invalid="true" and an aria-describedby pointing at the error message
+ * when the field has a validation error.
+ *
+ * NOTE: test:vitest runner is currently broken in this environment (pre-existing
+ * "Failed to initialize projects" issue). Build gate: `pnpm build:ds`.
+ */
+const SelectErrorA11yTemplate: React.FC = () => {
+  const schema = z.object({ fruit: z.string().min(1, 'This field is required') });
+  const formRef = useRef<IGRPFormHandle<typeof schema>>(null);
+
+  useEffect(() => {
+    // Force the error immediately so the play function can query it synchronously.
+    formRef.current?.setError('fruit', { message: 'This field is required' });
+  }, []);
+
+  return (
+    <IGRPForm
+      schema={schema}
+      onSubmit={() => {}}
+      formRef={formRef}
+      gridClassName='space-y-4 w-80'
+    >
+      <IGRPSelect
+        name='fruit'
+        label='Fruit'
+        placeholder='Select one'
+        options={mockOptions}
+        required
+      />
+    </IGRPForm>
+  );
+};
+
+export const SelectErrorA11y: Story = {
+  name: 'SelectErrorA11y',
+  render: () => <SelectErrorA11yTemplate />,
+  play: async ({ canvasElement, step }) => {
+    const canvas = within(canvasElement);
+
+    await step('trigger carries aria-invalid when field has an error', async () => {
+      const trigger = canvas.getByRole('combobox');
+      expect(trigger.getAttribute('aria-invalid')).toBe('true');
+    });
+
+    await step('trigger aria-describedby resolves to the error message element', async () => {
+      const trigger = canvas.getByRole('combobox');
+      const describedById = trigger.getAttribute('aria-describedby');
+      expect(describedById).toBeTruthy();
+      const messageEl = document.getElementById(describedById!);
+      expect(messageEl).not.toBeNull();
+      expect(messageEl?.textContent).toMatch(/required/i);
+    });
+  },
 };

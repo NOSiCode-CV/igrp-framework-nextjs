@@ -1,6 +1,20 @@
+'use client';
+
 import { useEffect, useState } from 'react';
 import Image from 'next/image';
+import { unstable_rethrow } from 'next/navigation';
 import { cn, IGRPButton } from '@igrp/igrp-framework-react-design-system';
+
+const ANIMATION_DELAY_MS = 300;
+const RESET_DELAY_MS = 1000;
+
+function withBasePath(src: string): string {
+  const basePath = process.env.NEXT_PUBLIC_BASE_PATH ?? '';
+  if (!basePath || !src.startsWith('/') || src.startsWith('//') || src.startsWith(`${basePath}/`)) {
+    return src;
+  }
+  return `${basePath}${src}`;
+}
 
 const DEFAULT_COPY = {
   title: 'Ocorreu um erro inesperado.',
@@ -19,65 +33,76 @@ interface IGRPGlobalErrorProps {
    * `DEFAULT_COPY` when omitted or when the resolver returns nothing.
    */
   resolveCopy?: (error: Error) => { title: string; description: string };
+  /** Label for the retry button. Defaults to `'Tentar novamente'`. */
+  resetLabel?: string;
+  /** Label shown while the reset is in progress. Defaults to `'A tentar...'`. */
+  retryingLabel?: string;
+  /** Label prefix for the error reference ID. Defaults to `'ID de referência:'`. */
+  errorRefLabel?: string;
 }
 
-// TODO: check the image
-function IGRPGlobalError({ error, reset, children, resolveCopy }: IGRPGlobalErrorProps) {
-  if (children) return <>{children}</>;
-
+function IGRPGlobalError({
+  error,
+  reset,
+  children,
+  resolveCopy,
+  resetLabel = 'Tentar novamente',
+  retryingLabel = 'A tentar...',
+  errorRefLabel = 'ID de referência:',
+}: IGRPGlobalErrorProps) {
   const [isResetting, setIsResetting] = useState(false);
   const [errorVisible, setErrorVisible] = useState(false);
 
   useEffect(() => {
+    if (children) return;
+    unstable_rethrow(error);
     console.error(error);
 
-    const timer = setTimeout(() => setErrorVisible(true), 300);
+    const timer = setTimeout(() => setErrorVisible(true), ANIMATION_DELAY_MS);
     return () => clearTimeout(timer);
-  }, [error]);
+  }, [error, children]);
+
+  if (children) return <>{children}</>;
 
   const handleReset = () => {
     setIsResetting(true);
     setTimeout(() => {
       reset();
       setIsResetting(false);
-    }, 1000);
+    }, RESET_DELAY_MS);
   };
 
   const { title, description } = resolveCopy?.(error) ?? DEFAULT_COPY;
 
   return (
-    <div className={cn('flex min-h-[calc(100vh-12rem)] items-center justify-center bg-primary-50')}>
+    <div className={cn('flex min-h-screen items-center justify-center bg-background')}>
       <div className={cn('w-full max-w-3xl')}>
         <div className={cn('text-center')}>
           <Image
-            src="/error-img.webp"
+            src={withBasePath('/error-img.webp')}
             alt="Error Image"
             width={300}
             height={200}
             className={cn('mx-auto mb-2')}
           />
-          <h1 className={cn('text-2xl font-bold tracking-tight text-gray-900 dark:text-white')}>
-            {title}
-          </h1>
-          <p className={cn('mb-4 text-base text-gray-600 dark:text-gray-300')}>{description}</p>
+          <h1 className={cn('text-2xl font-bold tracking-tight text-foreground')}>{title}</h1>
+          <p className={cn('mb-4 text-base text-muted-foreground')}>{description}</p>
 
           {error.digest && (
             <div
               className={cn(
-                'mx-auto max-w-xl transform overflow-hidden rounded-lg p-3 mb-4 backdrop-blur transition-all duration-500 bg-stone-100 dark:bg-gray-800/50 shadow-xs',
+                'mx-auto max-w-xl transform overflow-hidden rounded-lg p-3 mb-4 backdrop-blur transition-all duration-500 bg-muted shadow-xs',
                 errorVisible ? 'translate-y-0 opacity-100' : 'translate-y-4 opacity-0',
               )}
             >
-              <p className={cn('text-xs text-gray-500')}>
-                ID de referência:{' '}
-                <code className={cn('rounded bg-gray-100 px-1 py-0.5 dark:bg-gray-700')}>
-                  {error.digest}
-                </code>
+              <p className={cn('text-xs text-muted-foreground')}>
+                {errorRefLabel}{' '}
+                <code className={cn('rounded bg-muted px-1 py-0.5')}>{error.digest}</code>
               </p>
             </div>
           )}
 
-          <div className={cn('flex flex-col items-center justify-center gap-4 sm:flex-row')}>
+          <div className="flex flex-col items-center justify-center gap-4 sm:flex-row">
             <IGRPButton
               onClick={handleReset}
               size="lg"
@@ -87,7 +112,7 @@ function IGRPGlobalError({ error, reset, children, resolveCopy }: IGRPGlobalErro
               iconName="RefreshCw"
               iconClassName={cn('mr-2 h-4 w-4 transition-transform', isResetting && 'animate-spin')}
             >
-              <span>{isResetting ? 'A tentar...' : 'Tentar novamente'}</span>
+              <span>{isResetting ? retryingLabel : resetLabel}</span>
             </IGRPButton>
           </div>
         </div>

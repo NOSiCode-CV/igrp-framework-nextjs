@@ -15,10 +15,15 @@ export const IGRPDataTableDateRangeFilterFn: FilterFn<any> = (row, columnId, fil
   if (!filterValue || !filterValue.from) return true
   const cellValue = row.getValue(columnId) as string
   const date = new Date(cellValue)
-  const start = filterValue.from
+  const start = new Date(filterValue.from)
   const end = filterValue.to ? new Date(filterValue.to) : undefined
 
-  if (start && end) {
+  // Invalid filter bound → do not filter (show all). Invalid cell date → cannot
+  // be "in range", so exclude. Prevents a misformatted column silently vanishing
+  // with no error.
+  if (Number.isNaN(start.getTime())) return true
+  if (Number.isNaN(date.getTime())) return false
+  if (end && !Number.isNaN(end.getTime())) {
     return date >= start && date <= end
   }
   return date >= start
@@ -35,8 +40,8 @@ export const IGRPDataTableDateRangeFilterFn: FilterFn<any> = (row, columnId, fil
  */
 export const IGRPDataTableFacetedFilterFn: FilterFn<any> = (row, columnId, filterValue: string[]) => {
   if (!filterValue?.length) return true
-  const status = row.getValue(columnId) as string
-  return filterValue.includes(status)
+  const cellValue = row.getValue(columnId)
+  return filterValue.some((v) => String(v) === String(cellValue))
 }
 
 /**
@@ -56,24 +61,3 @@ export const IGRPDataTableTextFilterFn: FilterFn<any> = (row, columnId, filterVa
   const cellValue = String(row.getValue(columnId) ?? "").toLowerCase()
   return cellValue.includes(term)
 }
-
-/**
- * Multi-column filter function for text searching across multiple columns.
- * Filters rows based on case-insensitive text search in both `name` and `description` fields.
- * Note: This function ignores the `columnId` parameter and searches across multiple columns.
- *
- * @deprecated This function is deprecated. Use `IGRPDataTableTextFilterFn` for single-column filtering instead.
- * @param row - The table row to filter
- * @param _columnId - The column ID (ignored in this filter)
- * @param filterValue - The text string to search for
- * @returns `true` if the row should be included (no filter or text found in name/description), `false` otherwise
- */
-// export const multiColumnFilterFn: FilterFn<any> = (row, _columnId, filterValue) => {
-//   const term = String(filterValue ?? '')
-//     .toLowerCase()
-//     .trim();
-//   if (!term) return true;
-//   const name = String(row.original?.name ?? '').toLowerCase();
-//   const desc = String(row.original?.description ?? '').toLowerCase();
-//   return name.includes(term) || desc.includes(term);
-// };

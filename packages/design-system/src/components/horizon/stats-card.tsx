@@ -11,7 +11,7 @@ import type { IGRPBaseAttributes } from "../../types"
 import { IGRPIcon, type IGRPIconName } from "./icon"
 
 const igrpStatsCardVariants = cva(
-  "flex items-center p-4 bg-card shadow-sm text-card-foreground transition-all overflow-hidden",
+  "flex items-center p-4 bg-card shadow-sm text-card-foreground transition-[box-shadow,border-color] overflow-hidden",
   {
     variants: {
       border: {
@@ -33,7 +33,7 @@ const igrpStatsCardVariants = cva(
         right: "border-r-4 border-t-0 border-l-0 border-b-0",
       },
       interactive: {
-        true: "cursor-pointer hover:shadow-md",
+        true: "cursor-pointer hover:shadow-md focus-visible:ring-2 focus-visible:ring-ring focus-visible:outline-none",
         false: "",
       },
     },
@@ -45,7 +45,7 @@ const igrpStatsCardVariants = cva(
   },
 )
 
-const igrpStatsCardTitleVariants = cva("font-medium tracking-tighter", {
+const igrpStatsCardTitleVariants = cva("font-medium tracking-tighter text-balance", {
   variants: {
     size: {
       xs: "text-xs",
@@ -60,7 +60,7 @@ const igrpStatsCardTitleVariants = cva("font-medium tracking-tighter", {
   },
 })
 
-const igrpStatsCardValueVariants = cva("font-bold", {
+const igrpStatsCardValueVariants = cva("font-bold tabular-nums", {
   variants: {
     size: {
       sm: "text-sm",
@@ -80,10 +80,10 @@ const igrpStatsCardValueVariants = cva("font-bold", {
 const igrpStstaCardIconVariants = cva("flex items-center justify-center shrink-0", {
   variants: {
     size: {
-      sm: "h-8 w-8",
-      md: "h-10 w-10",
-      lg: "h-12 w-12",
-      xl: "h-14 w-14",
+      sm: "size-8",
+      md: "size-10",
+      lg: "size-12",
+      xl: "size-14",
     },
     showBackground: {
       true: "",
@@ -120,37 +120,37 @@ const igrpStstaCardIconVariants = cva("flex items-center justify-center shrink-0
       showBackground: true,
       background: ["rounded", "square"],
       variant: "secondary",
-      className: "bg-gray-100 text-gray-600",
+      className: "bg-secondary text-secondary-foreground",
     },
     {
       showBackground: true,
       background: ["rounded", "square"],
       variant: "success",
-      className: "bg-green-100 text-green-500",
+      className: "bg-success/10 text-success",
     },
     {
       showBackground: true,
       background: ["rounded", "square"],
       variant: "destructive",
-      className: "bg-red-100 text-red-500",
+      className: "bg-destructive/10 text-destructive",
     },
     {
       showBackground: true,
       background: ["rounded", "square"],
       variant: "warning",
-      className: "bg-amber-100 text-amber-500",
+      className: "bg-warning/10 text-warning",
     },
     {
       showBackground: true,
       background: ["rounded", "square"],
       variant: "info",
-      className: "bg-blue-100 text-blue-500",
+      className: "bg-info/10 text-info",
     },
     {
       showBackground: true,
       background: ["rounded", "square"],
       variant: "indigo",
-      className: "bg-indigo-100 text-purple-500",
+      className: "bg-info/10 text-info",
     },
     {
       backgroundBorder: true,
@@ -160,32 +160,32 @@ const igrpStstaCardIconVariants = cva("flex items-center justify-center shrink-0
     {
       backgroundBorder: true,
       variant: "secondary",
-      className: "border border-gray-200",
+      className: "border border-secondary",
     },
     {
       backgroundBorder: true,
       variant: "success",
-      className: "border border-green-200",
+      className: "border border-success/20",
     },
     {
       backgroundBorder: true,
       variant: "destructive",
-      className: "border border-red-200",
+      className: "border border-destructive/20",
     },
     {
       backgroundBorder: true,
       variant: "warning",
-      className: "border border-amber-200",
+      className: "border border-warning/20",
     },
     {
       backgroundBorder: true,
       variant: "info",
-      className: "border border-blue-200",
+      className: "border border-info/20",
     },
     {
       backgroundBorder: true,
       variant: "indigo",
-      className: "border border-purple-200",
+      className: "border border-info/20",
     },
 
     // === No Background, Just Text Color ===
@@ -199,37 +199,37 @@ const igrpStstaCardIconVariants = cva("flex items-center justify-center shrink-0
       showBackground: false,
       background: "none",
       variant: "secondary",
-      className: "text-gray-500",
+      className: "text-secondary-foreground",
     },
     {
       showBackground: false,
       background: "none",
       variant: "success",
-      className: "text-green-500",
+      className: "text-success",
     },
     {
       showBackground: false,
       background: "none",
       variant: "destructive",
-      className: "text-red-500",
+      className: "text-destructive",
     },
     {
       showBackground: false,
       background: "none",
       variant: "warning",
-      className: "text-amber-500",
+      className: "text-warning",
     },
     {
       showBackground: false,
       background: "none",
       variant: "info",
-      className: "text-blue-500",
+      className: "text-info",
     },
     {
       showBackground: false,
       background: "none",
       variant: "indigo",
-      className: "text-indigo-500",
+      className: "text-info",
     },
   ],
   defaultVariants: {
@@ -363,7 +363,7 @@ function IGRPStatsCard({
       id={ref}
       {...props}
     >
-      <div className={cn("flex flex-col flex-1 mx-4")}>
+      <div className="flex flex-col flex-1 mx-4">
         {title && (
           <p
             className={cn(
@@ -395,7 +395,7 @@ function IGRPStatsCard({
         iconBackground={iconBackground}
         showIconBorder={showIconBorder}
         iconVariant={iconVariant}
-        iconClassName={cn(iconClassName)}
+        iconClassName={iconClassName}
         image={image}
         imageAlt={imageAlt}
       />
@@ -434,12 +434,32 @@ function IGRPStatsCardIcon({
 }: IGRPStatsCardIconProps) {
   if (!showIcon && !image) return null
 
+  const iconSizeClass =
+    (
+      {
+        sm: "size-4",
+        md: "size-5",
+        lg: "size-6",
+        xl: "size-7",
+      } as Record<string, string>
+    )[iconSize ?? "md"] ?? "size-5"
+
+  const imageSizes =
+    (
+      {
+        sm: "32px",
+        md: "40px",
+        lg: "48px",
+        xl: "56px",
+      } as Record<string, string>
+    )[iconSize ?? "md"] ?? "40px"
+
   const content = () => {
     if (image) {
-      return <Image src={image} alt={imageAlt || ""} fill sizes="56px" className={cn("object-cover")} unoptimized />
+      return <Image src={image} alt={imageAlt || ""} fill sizes={imageSizes} className="object-cover" unoptimized />
     }
     if (showIcon && iconName) {
-      return <IGRPIcon iconName={iconName} className={cn("h-6 w-6")} />
+      return <IGRPIcon iconName={iconName} className={iconSizeClass} />
     }
     return null
   }

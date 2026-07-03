@@ -16,7 +16,7 @@ export function readLock(appRoot: string): LockFile {
   }
   const p = lockPath(appRoot);
   if (!existsSync(p)) {
-    return { version: 1, template: "demo-legacy", applied: [] };
+    return { version: 1, template: "demo-v1", applied: [] };
   }
   return JSON.parse(readFileSync(p, "utf8")) as LockFile;
 }

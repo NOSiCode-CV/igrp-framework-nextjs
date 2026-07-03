@@ -222,7 +222,7 @@ interface IGRPComboboxProps extends Omit<IGRPInputProps, "onChange"> {
 function IGRPCombobox({
   variant = "single",
   options,
-  value = "",
+  value,
   onChange,
   placeholder = "Select items...",
   className,
@@ -299,7 +299,7 @@ function IGRPCombobox({
           if (!selected) return null
 
           return (
-            <span key={val} className={cn("flex items-center bg-gray-100 px-2 py-1 rounded-md gap-1")}>
+            <span key={val} className={cn("flex items-center bg-muted px-2 py-1 rounded-md gap-1")}>
               {showStatus && selected.status && <IGRPCircleFull className={igrpColorText(selected.status)} />}
 
               {showIcon && <IGRPIcon iconName={selected.icon ?? iconName} />}
@@ -307,7 +307,7 @@ function IGRPCombobox({
               <span className={selected.color}>{selected.label}</span>
 
               <IGRPButton
-                className={cn("ml-1 text-gray-400 hover:text-red-400 rounded-full size-5")}
+                className={cn("ml-1 text-muted-foreground hover:text-destructive rounded-full size-5")}
                 onKeyDown={(e) => {
                   if (e.key === "Enter") {
                     e.preventDefault()
@@ -320,7 +320,6 @@ function IGRPCombobox({
                 }}
                 onClick={() => removeValue(val)}
                 iconName="X"
-                iconSize={12}
                 size="icon"
                 showIcon
                 variant="outline"

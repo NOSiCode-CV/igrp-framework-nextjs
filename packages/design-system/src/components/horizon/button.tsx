@@ -15,7 +15,10 @@ import type { IGRPBaseAttributes } from "../../types"
  * @see IGRPButton
  */
 interface IGRPButtonProps
-  extends Omit<React.ComponentProps<typeof Button>, "name">, VariantProps<typeof buttonVariants>, IGRPBaseAttributes {
+  extends
+    Omit<React.ComponentProps<typeof Button>, "name">,
+    VariantProps<typeof buttonVariants>,
+    Omit<IGRPBaseAttributes, "iconSize"> {
   /** Button content. */
   children?: ReactNode
   /** Render as child component (Radix composition). */
@@ -32,14 +35,14 @@ interface IGRPButtonProps
  */
 function IGRPButton({
   children,
+  asChild = false,
   showIcon = false,
   iconName = "ArrowLeft",
   iconPlacement = "start",
   iconClassName,
-  iconSize = 14,
   className,
   loading = false,
-  loadingText = "Loading...",
+  loadingText = "Loading…",
   disabled,
   type = "button",
   name,
@@ -51,13 +54,38 @@ function IGRPButton({
 
   const { size } = props
 
-  const computedIconSize = iconSize || (size === "sm" ? 14 : size === "lg" ? 20 : size === "icon" ? 18 : 16)
+  const computedIconClassName =
+    (
+      {
+        xs: "size-3",
+        sm: "size-3.5",
+        lg: "size-5",
+        icon: "size-4",
+        "icon-xs": "size-3",
+        "icon-sm": "size-3.5",
+        "icon-lg": "size-5",
+      } as Record<string, string>
+    )[size as string] ?? "size-4"
 
-  const LoadingIcon = <IGRPIcon iconName="LoaderCircle" className={cn("animate-spin")} aria-hidden="true" />
+  const LoadingIcon = (
+    <IGRPIcon
+      iconName="LoaderCircle"
+      className={cn("animate-spin motion-reduce:animate-none", computedIconClassName)}
+      aria-hidden="true"
+    />
+  )
 
   if (size === "icon" || size === "icon-xs" || size === "icon-sm" || size === "icon-lg") {
+    const hasAccessibleName = Boolean(props["aria-label"] || props["aria-labelledby"])
+    if (process.env.NODE_ENV !== "production" && !hasAccessibleName) {
+      console.warn(
+        `IGRPButton: icon-only button (iconName="${iconName}") has no accessible name. Pass an "aria-label".`,
+      )
+    }
+
     return (
       <Button
+        aria-label={!hasAccessibleName ? iconName : undefined}
         {...props}
         className={cn(loading && "cursor-wait", className)}
         disabled={disabled || loading}
@@ -67,11 +95,20 @@ function IGRPButton({
         {loading ? (
           <>
             {LoadingIcon}
-            <span className={cn("sr-only")}>{loadingText}</span>
+            <span className="sr-only">{loadingText}</span>
           </>
         ) : (
-          <IGRPIcon iconName={iconName} className={cn(iconClassName)} aria-hidden="true" />
+          <IGRPIcon iconName={iconName} className={cn(computedIconClassName, iconClassName)} aria-hidden="true" />
         )}
+      </Button>
+    )
+  }
+
+  // When asChild, Slot requires a single child — skip icon siblings entirely.
+  if (asChild) {
+    return (
+      <Button {...props} asChild className={cn("relative", className)} disabled={disabled} id={ref}>
+        {children}
       </Button>
     )
   }
@@ -88,13 +125,13 @@ function IGRPButton({
         ? LoadingIcon
         : showIcon &&
           iconPlacement === "start" && (
-            <IGRPIcon iconName={iconName} className={cn(iconClassName)} size={computedIconSize} aria-hidden="true" />
+            <IGRPIcon iconName={iconName} className={cn(computedIconClassName, iconClassName)} aria-hidden="true" />
           )}
 
       {loading && loadingText ? loadingText : children}
 
       {!loading && showIcon && iconPlacement === "end" && (
-        <IGRPIcon iconName={iconName} className={cn(iconClassName)} size={computedIconSize} aria-hidden="true" />
+        <IGRPIcon iconName={iconName} className={cn(computedIconClassName, iconClassName)} aria-hidden="true" />
       )}
 
       {loading && iconPlacement === "end" && LoadingIcon}

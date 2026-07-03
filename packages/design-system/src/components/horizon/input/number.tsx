@@ -4,6 +4,7 @@ import { useState, useEffect, useId, useRef } from "react"
 import { useFormContext, Controller } from "react-hook-form"
 
 import { cn } from "../../../lib/utils"
+import { useIGRPi18n } from "../../../i18n"
 import type { IGRPInputProps } from "../../../types"
 import { Input } from "../../primitives/input"
 import { IGRPButton } from "../button"
@@ -102,6 +103,7 @@ function NumberInputField({
   getDisplayValue,
   ...inputProps
 }: NumberInputFieldProps) {
+  const i18n = useIGRPi18n()
   const displayValue = getDisplayValue(value)
 
   return (
@@ -175,10 +177,9 @@ function NumberInputField({
               className={cn(
                 "bg-background text-muted-foreground/80 hover:bg-accent hover:text-foreground flex h-1/2 w-8 items-center justify-center border-b text-xs transition-colors rounded-none",
               )}
-              aria-label="Increment"
+              aria-label={i18n.inputNumber.incrementLabel}
               iconName="ChevronUp"
               size="icon"
-              iconSize={10}
             />
             <IGRPButton
               type="button"
@@ -187,10 +188,9 @@ function NumberInputField({
               className={cn(
                 "bg-background text-muted-foreground/80 hover:bg-accent hover:text-foreground flex h-1/2 w-8 items-center justify-center text-xs transition-colors rounded-none",
               )}
-              aria-label="Decrement"
+              aria-label={i18n.inputNumber.decrementLabel}
               iconName="ChevronDown"
               size="icon"
-              iconSize={10}
             />
           </div>
         )}
@@ -300,10 +300,12 @@ function IGRPInputNumber({
   step = 1,
   onChange,
   error,
-  errorMessage = "Please enter a valid number",
+  errorMessage,
   required,
   ...props
 }: IGRPInputNumberProps) {
+  const i18n = useIGRPi18n()
+  const resolvedErrorMessage = errorMessage ?? i18n.inputNumber.invalidValueMessage
   const { onFocus: _onFocus, onBlur: _onBlur, ...inputProps } = props
   void _onFocus
   void _onBlur
@@ -430,7 +432,7 @@ function IGRPInputNumber({
 
         {(error || validationError) && (
           <p className={cn("text-destructive mt-2 text-xs")} role="alert">
-            {error || errorMessage}
+            {error || resolvedErrorMessage}
           </p>
         )}
       </div>
@@ -451,7 +453,7 @@ function IGRPInputNumber({
           numberInputFieldProps={numberInputFieldProps}
           helperOrDescription={helperOrDescription}
           error={error}
-          errorMessage={errorMessage}
+          errorMessage={resolvedErrorMessage}
           validationError={validationError}
           setValidationError={setValidationError}
           onValueChange={onChange}

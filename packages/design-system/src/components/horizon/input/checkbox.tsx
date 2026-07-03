@@ -51,7 +51,7 @@ function IGRPCheckbox({
             className={cn(className, error && "border-destructive focus-visible:ring-destructive/20")}
             onCheckedChange={onCheckedChange}
             aria-invalid={!!error}
-            aria-describedby={helperText || error ? `${fieldName}-helper` : undefined}
+            aria-describedby={error ? `${fieldName}-error` : helperText ? `${fieldName}-helper` : undefined}
             {...props}
           />
 
@@ -112,7 +112,6 @@ function IGRPCheckbox({
           }}
           onBlur={field.onBlur}
           aria-invalid={!!fieldState.error || !!error}
-          aria-describedby={helperText || error ? `${id}-helper` : undefined}
           {...props}
         />
       )}

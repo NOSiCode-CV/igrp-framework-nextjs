@@ -4,7 +4,7 @@ import { useId } from "react"
 import { cva, type VariantProps } from "class-variance-authority"
 
 import { IGRPIcon } from "../icon"
-import { type IGRPColorRole, type IGRPColorVariants, IGRPColors } from "../../../lib/colors"
+import { type IGRPColorRole, type IGRPColorVariants } from "../../../lib/colors"
 import { cn } from "../../../lib/utils"
 import type { IGRPBaseAttributes } from "../../../types"
 
@@ -38,8 +38,10 @@ interface IGRPHeadlineProps
   /** Optional description below the title. */
   description?: string
   /** Color role (solid, soft, outline). */
+  /** @deprecated Use className or headlineContentClassName instead.  */
   roleColor?: IGRPColorRole
   /** Color theme. */
+  /** @deprecated Use className or headlineContentClassName instead.  */
   color?: IGRPColorVariants
   /** HTML id attribute. */
   id?: string
@@ -56,8 +58,6 @@ function IGRPHeadline({
   className,
   name,
   id,
-  roleColor = "solid",
-  color = "primary",
   iconName = "Info",
   showIcon = false,
   iconClassName,
@@ -71,14 +71,11 @@ function IGRPHeadline({
 
   const Tag = variant as keyof React.JSX.IntrinsicElements
 
-  const colorClass = IGRPColors[roleColor][color]
-
   return (
     <div
       id={ref}
       className={cn(
-        "flex gap-2 items-start",
-        colorClass.text,
+        "flex gap-2 items-start text-primary",
         iconPlacement === "end" && "flex-row-reverse justify-between",
         className,
       )}
@@ -87,7 +84,7 @@ function IGRPHeadline({
       {showIcon && <IGRPIcon iconName={iconName} size={iconSize} className={cn("mt-1", iconClassName)} />}
       <div className={cn("flex flex-col gap-1", headlineContentClassName)}>
         <Tag className={cn(igrpHeadlineVariants({ variant }))}>{title}</Tag>
-        <p className={cn("text-sm")}>{description}</p>
+        <p className="text-sm">{description}</p>
       </div>
     </div>
   )

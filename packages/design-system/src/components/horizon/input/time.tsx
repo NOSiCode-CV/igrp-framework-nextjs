@@ -60,7 +60,7 @@ function IGRPInputTime({
             required={required}
             aria-required={required}
             aria-invalid={!!error || !!props["aria-invalid"]}
-            aria-describedby={helperText || error ? `${id}-helper` : undefined}
+            aria-describedby={error ? `${fieldName}-error` : helperText ? `${fieldName}-helper` : undefined}
             className={cn(
               "peer bg-background py-3 text-sm outline-hidden",
               error && "border-destructive focus-visible:ring-destructive/20",
@@ -110,7 +110,9 @@ function IGRPInputTime({
               required={required}
               aria-required={required}
               aria-invalid={!!fieldState.error || !!error || !!props["aria-invalid"]}
-              aria-describedby={helperText || error ? `${id}-helper` : undefined}
+              aria-describedby={
+                error || fieldState.error ? `${fieldName}-error` : helperText ? `${fieldName}-helper` : undefined
+              }
               className={cn(
                 "peer bg-background py-3 text-sm outline-hidden",
                 (fieldState.error || error) && "border-destructive focus-visible:ring-destructive/20",

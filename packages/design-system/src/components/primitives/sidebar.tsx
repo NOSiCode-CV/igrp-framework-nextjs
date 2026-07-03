@@ -1,3 +1,4 @@
+// shadcn: 2026-05-18
 /* eslint-disable react-refresh/only-export-components */
 
 "use client"
@@ -62,7 +63,12 @@ function SidebarProvider({
 
   // This is the internal state of the sidebar.
   // We use openProp and setOpenProp for control from outside the component.
-  const [_open, _setOpen] = useState<boolean | undefined>(undefined)
+  const [_open, _setOpen] = useState<boolean | undefined>(() => {
+    if (typeof document === "undefined") return undefined
+    const match = document.cookie.match(new RegExp(`(?:^|;\\s*)${SIDEBAR_COOKIE_NAME}=([^;]+)`))
+    if (!match) return undefined
+    return match[1] === "true"
+  })
   const open = openProp ?? _open ?? defaultOpen
   const setOpen = useCallback(
     (value: boolean | ((value: boolean) => boolean)) => {

@@ -1,49 +1,41 @@
-import { IGRPMenuItemArgs } from '@igrp/framework-next-types';
+import 'server-only';
+
+import type { IGRPMenuItemArgs } from '@igrp/framework-next-types';
 import {
-  AccessManagementClient,
-  ApiClientConfig,
-  M2MClientConfig,
-  MenuType,
-  Status,
+  type AccessManagementClient,
+  type MenuType,
+  type Status,
 } from '@igrp/platform-access-management-client-ts';
 
 export interface IGRPSyncMenusArgs {
+  client: AccessManagementClient;
   appCode: string;
   menus: IGRPMenuItemArgs[];
-  baseUrl: string;
-  m2mServiceId: string;
-  m2mToken: string;
   syncEnabled: boolean;
+  /**
+   * Forwarded as the `syncRoles` argument of
+   * `client.m2m.syncApplicationMenus`. When `true`, AM also reconciles the
+   * menu↔role assignments during the push. Required (no default) so a caller
+   * that forgets to thread it through fails compilation rather than silently
+   * changing behavior — the default lives at the config boundary
+   * (`IGRP_SYNC_ON_CODE_MENU_ROLES`).
+   */
+  syncRoles: boolean;
 }
 
 export async function igrpSyncMenus({
+  client,
   appCode,
   menus,
-  baseUrl,
-  m2mServiceId,
-  m2mToken,
   syncEnabled,
+  syncRoles,
 }: IGRPSyncMenusArgs) {
   if (!syncEnabled) {
-    console.warn(
-      'On code menus synchronization skipped due to disabling. ' +
-        'To re-enable it set IGRP_SYNC_ON_CODE_MENUS=true in environment variables.',
-    );
+    console.info('On-code menus sync skipped (IGRP_SYNC_ON_CODE_MENUS=false).');
     return;
   }
 
-  const config: ApiClientConfig = {
-    baseUrl: baseUrl,
-  };
-
-  const m2mConfig: M2MClientConfig = {
-    serviceId: m2mServiceId,
-    token: m2mToken,
-  };
-
-  const accessManagementClient = AccessManagementClient.create(config, m2mConfig);
-
-  await accessManagementClient.m2m.syncApplicationMenus(
+  await client.m2m.syncApplicationMenus(
     appCode,
     menus.map((i: IGRPMenuItemArgs) => {
       return {
@@ -52,9 +44,8 @@ export async function igrpSyncMenus({
         status: i.status as Status,
       };
     }),
+    syncRoles,
   );
 
-  console.info(
-    'On code menus synchronized successfully. To disable it set IGRP_SYNC_ON_CODE_MENUS as false in environment variables.',
-  );
+  console.info(`On-code menus synchronized successfully (syncRoles=${syncRoles}).`);
 }

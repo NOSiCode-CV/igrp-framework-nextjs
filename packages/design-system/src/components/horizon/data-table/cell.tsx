@@ -1,9 +1,7 @@
 "use client"
 
 import { type Row } from "@tanstack/react-table"
-import { format } from "date-fns"
 
-import { DD_MM_YYYY } from "../../../lib/constants"
 import { cn } from "../../../lib/utils"
 import { Button } from "../../primitives/button"
 import { Checkbox } from "../../primitives/checkbox"
@@ -74,19 +72,20 @@ interface IGRPDataTableCellExpanderProps<TData> extends React.ComponentProps<typ
 /** Button to expand/collapse row details. */
 function IGRPDataTableCellExpander<TData>({ row, label }: IGRPDataTableCellExpanderProps<TData>) {
   if (!row.getCanExpand()) return null
-  ;<Button
-    {...{
-      className: "shadow-none ",
-      onClick: row.getToggleExpandedHandler(),
-      "aria-expanded": row.getIsExpanded(),
-      "aria-label": row.getIsExpanded() ? `Collapse details` : `Expand for details`,
-      size: "sm",
-      variant: "ghost",
-    }}
-  >
-    <span>{label}</span>
-    {row.getIsExpanded() ? <IGRPIcon iconName="ChevronDown" /> : <IGRPIcon iconName="ChevronRight" />}
-  </Button>
+
+  return (
+    <Button
+      className="shadow-none"
+      onClick={row.getToggleExpandedHandler()}
+      aria-expanded={row.getIsExpanded()}
+      aria-label={row.getIsExpanded() ? `Collapse details` : `Expand for details`}
+      size="sm"
+      variant="ghost"
+    >
+      <span>{label}</span>
+      {row.getIsExpanded() ? <IGRPIcon iconName="ChevronDown" /> : <IGRPIcon iconName="ChevronRight" />}
+    </Button>
+  )
 }
 
 /**
@@ -146,14 +145,17 @@ function IGRPDataTableCellBadge({
 
 interface IGRPDataTableCellDateProps {
   date: string | Date
-  dateFormat?: string
+  /** Locale for formatting. */
+  language?: string
+  /** Intl.DateTimeFormat options. */
+  dateOptions?: Intl.DateTimeFormatOptions
 }
 
-function IGRPDataTableCellDate({ date, dateFormat = DD_MM_YYYY }: IGRPDataTableCellDateProps) {
+function IGRPDataTableCellDate({ date, language = "en-US", dateOptions }: IGRPDataTableCellDateProps) {
   if (!date) return null
   const d = date instanceof Date ? date : new Date(date)
   if (Number.isNaN(d.getTime())) return null
-  return <span>{format(d, dateFormat)}</span>
+  return <span>{new Intl.DateTimeFormat(language, dateOptions).format(d)}</span>
 }
 
 function IGRPDataTableCellLink({

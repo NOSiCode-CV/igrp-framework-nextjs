@@ -2,10 +2,8 @@
 
 import type React from "react"
 import { useCallback, useEffect, useId, useReducer, useRef, useState } from "react"
-import { format } from "date-fns"
 
 import { IGRPColors } from "../../lib/colors"
-import { DD_MM_YYYY } from "../../lib/constants"
 import { cn } from "../../lib/utils"
 import { Card, CardHeader, CardTitle } from "../primitives/card"
 import { Dialog, DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogTitle } from "../primitives/dialog"
@@ -106,7 +104,11 @@ const safeFormatDate = (date?: string | Date) => {
 
   if (Number.isNaN(parsed.getTime())) return "—"
 
-  return format(parsed, DD_MM_YYYY)
+  return new Intl.DateTimeFormat(undefined, {
+    day: "2-digit",
+    month: "2-digit",
+    year: "numeric",
+  }).format(parsed)
 }
 
 const openDocNewTab = (fileUrl: string) => {
@@ -236,7 +238,7 @@ function IGRPPdfViewerCard({ document, onView, clickable = true }: IGRPPdfViewer
   return (
     <Card
       key={document.id}
-      className={cn("transition-all py-3", clickable ? "cursor-pointer hover:shadow-md" : "")}
+      className={cn("transition-shadow py-3", clickable ? "cursor-pointer hover:shadow-md" : "")}
       onClick={clickable ? () => onView(document) : undefined}
       role={clickable ? "button" : undefined}
       tabIndex={clickable ? 0 : undefined}
@@ -344,7 +346,7 @@ function IGRPPdfViewerInline({
       </div>
 
       <div
-        className={cn("w-full bg-gray-100 rounded-lg overflow-hidden relative")}
+        className={cn("w-full bg-muted rounded-lg overflow-hidden relative")}
         style={{ height }}
         aria-busy={frameStatus === "loading"}
       >
@@ -471,7 +473,7 @@ function IGRPPdfViewerModal({
 
         <div className={cn("flex-1 mt-4")}>
           <div
-            className={cn("w-full h-[60vh] bg-gray-100 rounded-lg overflow-hidden relative")}
+            className={cn("w-full h-[60vh] bg-muted rounded-lg overflow-hidden relative")}
             aria-busy={frameStatus === "loading"}
           >
             {frameStatus === "loading" && (

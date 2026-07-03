@@ -31,6 +31,8 @@ interface IGRPDataTableActionProps {
   variant?: VariantProps<typeof buttonVariants>["variant"]
   /** CSS classes for dropdown item. */
   classNameItem?: string
+  /** Whether the trigger button is disabled. */
+  disabled?: boolean
   /** Tooltip side. */
   tooltipSide?: "top" | "right" | "bottom" | "left"
   /** Tooltip alignment. */
@@ -61,6 +63,8 @@ interface IGRPDataTableDialogProps
   variantConfirm?: VariantProps<typeof buttonVariants>["variant"]
   onClickConfirm?: () => void
   showStickyFooter?: boolean
+  /** Render prop for modal content — receives the real `close` callback. Takes precedence over `children`. */
+  render?: (close: () => void) => ReactNode
 }
 
 /**

@@ -25,7 +25,7 @@ Header, sidebar, menus, nav-user, breadcrumbs, command search, theme selector, a
 
 ## Review stance
 
-Default new components to client. Provider order matters — `ThemeProvider`, `SessionProvider`, toast, tooltip, and command providers must nest correctly to avoid context-missing bugs. Check for: accidental server imports, unstable prop identities that defeat the React Compiler, hydration mismatches from theme/auth reads, focus/keyboard regressions in menu/sidebar chrome. Canonical consumer: `templates/demo`'s root layout + `(igrp)/layout.tsx`.
+Default new components to client. Provider order matters — `ThemeProvider`, `SessionProvider`, toast, tooltip, and command providers must nest correctly to avoid context-missing bugs. Check for: accidental server imports, unstable prop identities that defeat the React Compiler, hydration mismatches from theme/auth reads, focus/keyboard regressions in menu/sidebar chrome. Canonical consumer: `templates/demo-v1`'s root layout + `(igrp)/layout.tsx`.
 
 ## Shared rules
 

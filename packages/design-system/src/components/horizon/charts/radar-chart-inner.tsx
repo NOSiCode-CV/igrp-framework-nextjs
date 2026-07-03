@@ -70,7 +70,7 @@ function IGRPRadarChartInner({
   width,
   className,
   valueFormatter,
-  gridColor = "#e5e7eb",
+  gridColor = "var(--border)",
   backgroundColor,
   tooltipIndicator = "line",
   footer,

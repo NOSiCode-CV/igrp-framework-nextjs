@@ -1,6 +1,6 @@
 "use client"
 
-import { useContext, type ReactElement } from "react"
+import { useCallback, useContext, useState, type ReactElement } from "react"
 import Link from "next/link"
 
 import { cn } from "../../../lib/utils"
@@ -83,6 +83,7 @@ function IGRPDataTableButtonAlert({
   iconClassName,
   children,
   variant = "default",
+  disabled,
   modalTitle,
   showCancel = true,
   labelCancel = "Cancel",
@@ -115,17 +116,18 @@ function IGRPDataTableButtonAlert({
           <IGRPButton
             variant={variant}
             size="icon-sm"
-            className={cn("size-7 flex justify-center items-center", classNameTrigger)}
+            className={cn("size-7", classNameTrigger)}
             iconName={icon}
             iconClassName={iconClassName}
             aria-label={labelTrigger}
+            disabled={disabled}
           />
         </AlertDialogTrigger>
       </IGRPDataTableActionTooltip>
       <AlertDialogContent className={className}>
         <AlertDialogHeader>
           <AlertDialogTitle>{modalTitle}</AlertDialogTitle>
-          <AlertDialogDescription>{children}</AlertDialogDescription>
+          {children && <AlertDialogDescription>{children}</AlertDialogDescription>}
         </AlertDialogHeader>
 
         {(showCancel || showConfirm) && (
@@ -160,6 +162,7 @@ function IGRPDataTableButtonLink({
   variant = "default",
   href,
   className,
+  disabled,
   tooltipSide,
   tooltipAlign,
   tooltipClassName,
@@ -179,7 +182,7 @@ function IGRPDataTableButtonLink({
 
   return href ? (
     <IGRPDataTableActionTooltip {...tooltipProps}>
-      <Button variant={variant} size="icon-sm" className={cn("h-8 w-8", className)} asChild>
+      <Button variant={variant} size="icon-sm" className={cn("size-8", className)} asChild disabled={disabled}>
         <Link href={href} className={cn("flex items-center")} aria-label={labelTrigger}>
           <IGRPIcon iconName={icon} />
           <span className={cn("sr-only")}>{labelTrigger}</span>
@@ -196,6 +199,7 @@ function IGRPDataTableButtonLink({
         iconName={icon}
         iconClassName="size-4"
         aria-label={labelTrigger}
+        disabled={disabled}
       />
     </IGRPDataTableActionTooltip>
   )
@@ -208,7 +212,9 @@ function IGRPDataTableButtonModal({
   classNameTrigger,
   icon = "ArrowRight",
   children,
+  render,
   variant = "default",
+  disabled,
   modalTitle = "",
   showCancel = true,
   labelCancel = "Cancel",
@@ -226,6 +232,9 @@ function IGRPDataTableButtonModal({
   tooltipSideOffset,
   tooltipDelayDuration,
 }: IGRPDataTableDialogProps) {
+  const [open, setOpen] = useState(false)
+  const close = useCallback(() => setOpen(false), [])
+
   const tooltipProps = {
     label: labelTrigger,
     tooltipSide,
@@ -236,15 +245,16 @@ function IGRPDataTableButtonModal({
   }
 
   return (
-    <Dialog>
+    <Dialog open={open} onOpenChange={setOpen}>
       <IGRPDataTableActionTooltip {...tooltipProps}>
         <DialogTrigger asChild>
           <IGRPButton
             variant={variant}
             size="icon-sm"
-            className={cn("size-7 flex justify-center items-center", classNameTrigger)}
+            className={cn("size-7", classNameTrigger)}
             iconName={icon}
             aria-label={labelTrigger}
+            disabled={disabled}
           />
         </DialogTrigger>
       </IGRPDataTableActionTooltip>
@@ -258,8 +268,17 @@ function IGRPDataTableButtonModal({
         <DialogHeader className={cn("contents space-y-0 text-left")}>
           <DialogTitle className={cn(modalTitle && "border-b px-6 py-4 text-base")}>{modalTitle}</DialogTitle>
 
-          <div className={cn("overflow-y-auto", !modalTitle && "mt-4")}>
-            <DialogDescription asChild>{children}</DialogDescription>
+          {/*
+            Short, visually-hidden description satisfies Radix's aria-describedby
+            contract WITHOUT announcing the whole body subtree. The body below is
+            a plain <div>, not <DialogDescription asChild> — asChild cloned via
+            Slot.React.Children.only, which (a) announced the entire form as the
+            dialog description and (b) threw for any multi-root render().
+          */}
+          <DialogDescription className={cn("sr-only")}>{modalTitle || "Conteúdo do diálogo"}</DialogDescription>
+
+          <div data-slot="dialog-body" className={cn("overflow-y-auto", !modalTitle && "mt-4")}>
+            {render ? render(close) : children}
 
             {(showCancel || showConfirm) && (
               <DialogFooter className={cn("px-6 pb-6 sm:justify-start mt-4")}>

@@ -5,7 +5,7 @@ export interface IGRPSidebarDataArgs {
   defaultOpen?: boolean;
   user?: IGRPUserArgs;
   /**
-   * @deprecated this property will be remove in next major release
+   * @deprecated this property will be removed in the next major release
    */
   footerItems?: IGRPMenuItemArgs[];
   showAppSwitcher?: boolean;
@@ -13,4 +13,6 @@ export interface IGRPSidebarDataArgs {
   appCode?: string;
   showPreviewMode?: boolean;
   appCenterUrl?: string;
+  showMenuSearch?: boolean;
+  showNotifications?: boolean;
 }

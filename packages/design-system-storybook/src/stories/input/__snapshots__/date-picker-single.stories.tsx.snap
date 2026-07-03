@@ -1,0 +1,129 @@
+// Jest Snapshot v1, https://jestjs.io/docs/snapshot-testing
+
+exports[`Components/Input/DatePicker/Single Default smoke-test 1`] = `
+<div class="container mx-auto px-4 py-10">
+  <div class="*:not-first:mt-2">
+    <label data-slot="label"
+           class="flex items-center text-sm leading-none font-medium select-none group-data-[disabled=true]:pointer-events-none group-data-[disabled=true]:opacity-50 peer-disabled:cursor-not-allowed peer-disabled:opacity-50 after:content-['*'] after:text-destructive gap-0.5"
+           for="_r_ID_"
+    >
+      Date of Birth
+    </label>
+    <div class="relative">
+      <button data-slot="popover-trigger"
+              class="inline-flex items-center gap-1.5 whitespace-nowrap rounded-md text-sm transition-[color,box-shadow] disabled:pointer-events-none disabled:opacity-50 [&amp;_svg]:pointer-events-none [&amp;_svg:not([class*='size-'])]:size-4 shrink-0 [&amp;_svg]:shrink-0 outline-none focus-visible:border-ring focus-visible:ring-ring/50 focus-visible:ring-[3px] aria-invalid:ring-destructive/20 dark:aria-invalid:ring-destructive/40 aria-invalid:border-destructive border hover:text-accent-foreground h-9 px-2.5 has-data-[icon=inline-end]:pr-2 has-data-[icon=inline-start]:pl-2 group w-full justify-between font-normal shadow-xs bg-background hover:bg-accent border-input dark:bg-input/30 dark:border-input dark:hover:bg-input/50 text-muted-foreground"
+              id="_r_ID_"
+              type="button"
+              aria-haspopup="dialog"
+              aria-expanded="false"
+              data-state="closed"
+      >
+        <span class="truncate text-muted-foreground">
+          Pick a date
+        </span>
+        <svg xmlns="http://www.w3.org/2000/svg"
+             width="24"
+             height="24"
+             viewbox="0 0 24 24"
+             fill="none"
+             stroke="currentColor"
+             stroke-width="2"
+             stroke-linecap="round"
+             stroke-linejoin="round"
+             class="lucide lucide-calendar text-muted-foreground/80 group-hover:text-foreground shrink-0 transition-colors"
+             aria-hidden="true"
+        >
+          <path d="M8 2v4">
+          </path>
+          <path d="M16 2v4">
+          </path>
+          <rect width="18"
+                height="18"
+                x="3"
+                y="4"
+                rx="2"
+          >
+          </rect>
+          <path d="M3 10h18">
+          </path>
+        </svg>
+      </button>
+    </div>
+    <p id="_r_ID_-helper"
+       class="text-muted-foreground mt-2 text-xs"
+       role="region"
+       aria-live="polite"
+    >
+      Select your date of birth
+    </p>
+  </div>
+  <p class="text-xs text-center">
+    Debug | Selected Date:
+  </p>
+</div>
+`;
+
+exports[`Components/Input/DatePicker/Single WithForm smoke-test 1`] = `
+<form class="space-y-4 max-w-md p-4">
+  <div class="*:not-first:mt-2">
+    <label data-slot="label"
+           class="flex items-center text-sm leading-none font-medium select-none group-data-[disabled=true]:pointer-events-none group-data-[disabled=true]:opacity-50 peer-disabled:cursor-not-allowed peer-disabled:opacity-50 after:content-['*'] after:text-destructive gap-0.5"
+           for="bookingDate"
+    >
+      Booking Date
+    </label>
+    <div class="relative">
+      <button data-slot="popover-trigger"
+              class="inline-flex items-center gap-1.5 whitespace-nowrap rounded-md text-sm transition-[color,box-shadow] disabled:pointer-events-none disabled:opacity-50 [&amp;_svg]:pointer-events-none [&amp;_svg:not([class*='size-'])]:size-4 shrink-0 [&amp;_svg]:shrink-0 outline-none focus-visible:border-ring focus-visible:ring-ring/50 focus-visible:ring-[3px] aria-invalid:ring-destructive/20 dark:aria-invalid:ring-destructive/40 aria-invalid:border-destructive border hover:text-accent-foreground h-9 px-2.5 has-data-[icon=inline-end]:pr-2 has-data-[icon=inline-start]:pl-2 group w-full justify-between font-normal shadow-xs bg-background hover:bg-accent border-input dark:bg-input/30 dark:border-input dark:hover:bg-input/50 text-muted-foreground"
+              id="bookingDate"
+              type="button"
+              aria-haspopup="dialog"
+              aria-expanded="false"
+              data-state="closed"
+      >
+        <span class="truncate text-muted-foreground">
+          Pick a date
+        </span>
+        <svg xmlns="http://www.w3.org/2000/svg"
+             width="24"
+             height="24"
+             viewbox="0 0 24 24"
+             fill="none"
+             stroke="currentColor"
+             stroke-width="2"
+             stroke-linecap="round"
+             stroke-linejoin="round"
+             class="lucide lucide-calendar text-muted-foreground/80 group-hover:text-foreground shrink-0 transition-colors"
+             aria-hidden="true"
+        >
+          <path d="M8 2v4">
+          </path>
+          <path d="M16 2v4">
+          </path>
+          <rect width="18"
+                height="18"
+                x="3"
+                y="4"
+                rx="2"
+          >
+          </rect>
+          <path d="M3 10h18">
+          </path>
+        </svg>
+      </button>
+    </div>
+    <p id="bookingDate-helper"
+       class="text-muted-foreground mt-2 text-xs"
+       role="region"
+       aria-live="polite"
+    >
+      Pick a range
+    </p>
+  </div>
+  <button type="submit"
+          class="bg-primary text-white px-4 py-2 rounded-md"
+  >
+    Submit
+  </button>
+</form>
+`;

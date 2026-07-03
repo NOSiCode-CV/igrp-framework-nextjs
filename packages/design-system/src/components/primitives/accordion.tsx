@@ -1,3 +1,4 @@
+// shadcn: 2026-05-18
 // IGRP CUSTOM: THIS COMPONENT IS CHANGED FROM THE ORIGINAL
 
 import * as AccordionPrimitive from "@radix-ui/react-accordion"
@@ -65,7 +66,7 @@ function AccordionContent({ className, children, ...props }: React.ComponentProp
     <AccordionPrimitive.Content
       data-slot="accordion-content"
       className={cn(
-        "data-[state=closed]:animate-accordion-up data-[state=open]:animate-accordion-down overflow-hidden text-sm",
+        "data-[state=closed]:animate-accordion-up data-[state=open]:animate-accordion-down motion-reduce:animate-none overflow-hidden text-sm",
       )}
       {...props}
     >

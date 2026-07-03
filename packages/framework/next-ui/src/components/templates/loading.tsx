@@ -1,3 +1,5 @@
+'use client';
+
 import { cn, IGRPIcon } from '@igrp/igrp-framework-react-design-system';
 
 interface IGRPTemplateLoadingProps {
@@ -14,7 +16,7 @@ function IGRPTemplateLoading({
   return (
     <div
       className={cn(
-        'flex min-h-[calc(100vh-12rem)] items-center justify-center bg-background px-4 py-16',
+        'flex min-h-screen items-center justify-center bg-background px-4 py-16',
         className,
       )}
       role="status"

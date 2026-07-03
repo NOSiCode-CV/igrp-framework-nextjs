@@ -1,0 +1,589 @@
+// Jest Snapshot v1, https://jestjs.io/docs/snapshot-testing
+
+exports[`Components/Input/Color Default smoke-test 1`] = `
+<div class="container my-10 mx-auto p-4 border rounded-lg shadow-sm max-w-lg">
+  <div class="*:not-first:mt-2">
+    <label data-slot="label"
+           class="flex items-center text-sm leading-none font-medium select-none group-data-[disabled=true]:pointer-events-none group-data-[disabled=true]:opacity-50 peer-disabled:cursor-not-allowed peer-disabled:opacity-50 gap-0.5"
+           for="themeColor"
+    >
+      Theme Color
+    </label>
+    <div class="flex items-center gap-2">
+      <div class="relative size-9 shrink-0 rounded-md border border-input shadow-xs has-[:focus-visible]:border-ring has-[:focus-visible]:ring-2 has-[:focus-visible]:ring-ring/50">
+        <input class="absolute inset-0 size-full cursor-pointer opacity-0"
+               aria-label="Theme Color color picker"
+               type="color"
+               value="#000000"
+        >
+        <div class="absolute inset-0 rounded-md pointer-events-none"
+             style="background-color: rgb(0, 0, 0);"
+        >
+        </div>
+      </div>
+      <div data-slot="input-group"
+           role="group"
+           class="group/input-group border-input dark:bg-input/30 relative flex w-full items-center rounded-md border shadow-xs transition-[color,box-shadow] outline-none h-9 min-w-0 has-[&gt;textarea]:h-auto has-[&gt;[data-align=inline-start]]:[&amp;&gt;input]:pl-2 has-[&gt;[data-align=inline-end]]:[&amp;&gt;input]:pr-2 has-[&gt;[data-align=block-start]]:h-auto has-[&gt;[data-align=block-start]]:flex-col has-[&gt;[data-align=block-start]]:[&amp;&gt;input]:pb-3 has-[&gt;[data-align=block-end]]:h-auto has-[&gt;[data-align=block-end]]:flex-col has-[&gt;[data-align=block-end]]:[&amp;&gt;input]:pt-3 has-[[data-slot=input-group-control]:focus-visible]:border-ring has-[[data-slot=input-group-control]:focus-visible]:ring-ring/50 has-[[data-slot=input-group-control]:focus-visible]:ring-[3px] has-[[data-slot][aria-invalid=true]]:ring-destructive/20 has-[[data-slot][aria-invalid=true]]:border-destructive dark:has-[[data-slot][aria-invalid=true]]:ring-destructive/40 flex-1"
+      >
+        <input data-slot="input-group-control"
+               class="file:text-foreground placeholder:text-muted-foreground selection:bg-primary selection:text-primary-foreground border-input h-9 w-full min-w-0 px-3 py-1 text-base transition-[color,box-shadow] outline-none file:inline-flex file:h-7 file:border-0 file:bg-transparent file:text-sm file:font-medium disabled:pointer-events-none disabled:cursor-not-allowed disabled:opacity-50 md:text-sm focus-visible:border-ring focus-visible:ring-ring/50 aria-invalid:ring-destructive/20 dark:aria-invalid:ring-destructive/40 aria-invalid:border-destructive flex-1 rounded-none border-0 bg-transparent shadow-none focus-visible:ring-0 dark:bg-transparent"
+               aria-label="Theme Color (OKLCH)"
+               value="oklch(0.000 0.000 0.000)"
+        >
+        <div role="group"
+             data-slot="input-group-addon"
+             data-align="inline-end"
+             tabindex="0"
+             class="text-muted-foreground flex h-auto cursor-text items-center justify-center gap-2 py-1.5 text-sm font-medium select-none [&amp;&gt;svg:not([class*='size-'])]:size-4 [&amp;&gt;kbd]:rounded-[calc(var(--radius)-5px)] group-data-[disabled=true]/input-group:opacity-50 order-last pr-3 has-[&gt;button]:mr-[-0.45rem] has-[&gt;kbd]:mr-[-0.35rem]"
+        >
+          <button data-slot="dropdown-menu-trigger"
+                  class="justify-center whitespace-nowrap font-medium transition-[color,box-shadow] disabled:pointer-events-none disabled:opacity-50 [&amp;_svg]:pointer-events-none [&amp;_svg:not([class*='size-'])]:size-4 shrink-0 [&amp;_svg]:shrink-0 outline-none focus-visible:border-ring focus-visible:ring-ring/50 focus-visible:ring-[3px] aria-invalid:ring-destructive/20 dark:aria-invalid:ring-destructive/40 aria-invalid:border-destructive hover:bg-accent dark:hover:bg-accent/50 hover:text-accent-foreground has-data-[icon=inline-end]:pr-2 has-data-[icon=inline-start]:pl-2 text-sm shadow-none flex items-center h-6 gap-1 px-2 rounded-[calc(var(--radius)-5px)] [&amp;&gt;svg:not([class*='size-'])]:size-3.5 has-[&gt;svg]:px-2"
+                  type="button"
+                  data-size="xs"
+                  id="radix-ID"
+                  aria-haspopup="menu"
+                  aria-expanded="false"
+                  data-state="closed"
+          >
+            OKLCH
+            <svg xmlns="http://www.w3.org/2000/svg"
+                 width="24"
+                 height="24"
+                 viewbox="0 0 24 24"
+                 fill="none"
+                 stroke="currentColor"
+                 stroke-width="2"
+                 stroke-linecap="round"
+                 stroke-linejoin="round"
+                 class="lucide lucide-chevron-down"
+                 aria-hidden="true"
+                 data-icon="inline-end"
+            >
+              <path d="m6 9 6 6 6-6">
+              </path>
+            </svg>
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+`;
+
+exports[`Components/Input/Color Disabled smoke-test 1`] = `
+<div class="container my-10 mx-auto p-4 border rounded-lg shadow-sm max-w-lg">
+  <div class="*:not-first:mt-2">
+    <label data-slot="label"
+           class="flex items-center text-sm leading-none font-medium select-none group-data-[disabled=true]:pointer-events-none group-data-[disabled=true]:opacity-50 peer-disabled:cursor-not-allowed peer-disabled:opacity-50 gap-0.5"
+           for="lockedColor"
+    >
+      Locked Color
+    </label>
+    <div class="flex items-center gap-2 opacity-50 pointer-events-none">
+      <div class="relative size-9 shrink-0 rounded-md border border-input shadow-xs has-[:focus-visible]:border-ring has-[:focus-visible]:ring-2 has-[:focus-visible]:ring-ring/50">
+        <input class="absolute inset-0 size-full cursor-pointer opacity-0"
+               disabled
+               aria-label="Locked Color color picker"
+               type="color"
+               value="#000000"
+        >
+        <div class="absolute inset-0 rounded-md pointer-events-none"
+             style="background-color: rgb(0, 0, 0);"
+        >
+        </div>
+      </div>
+      <div data-slot="input-group"
+           role="group"
+           class="group/input-group border-input dark:bg-input/30 relative flex w-full items-center rounded-md border shadow-xs transition-[color,box-shadow] outline-none h-9 min-w-0 has-[&gt;textarea]:h-auto has-[&gt;[data-align=inline-start]]:[&amp;&gt;input]:pl-2 has-[&gt;[data-align=inline-end]]:[&amp;&gt;input]:pr-2 has-[&gt;[data-align=block-start]]:h-auto has-[&gt;[data-align=block-start]]:flex-col has-[&gt;[data-align=block-start]]:[&amp;&gt;input]:pb-3 has-[&gt;[data-align=block-end]]:h-auto has-[&gt;[data-align=block-end]]:flex-col has-[&gt;[data-align=block-end]]:[&amp;&gt;input]:pt-3 has-[[data-slot=input-group-control]:focus-visible]:border-ring has-[[data-slot=input-group-control]:focus-visible]:ring-ring/50 has-[[data-slot=input-group-control]:focus-visible]:ring-[3px] has-[[data-slot][aria-invalid=true]]:ring-destructive/20 has-[[data-slot][aria-invalid=true]]:border-destructive dark:has-[[data-slot][aria-invalid=true]]:ring-destructive/40 flex-1"
+      >
+        <input data-slot="input-group-control"
+               class="file:text-foreground placeholder:text-muted-foreground selection:bg-primary selection:text-primary-foreground border-input h-9 w-full min-w-0 px-3 py-1 text-base transition-[color,box-shadow] outline-none file:inline-flex file:h-7 file:border-0 file:bg-transparent file:text-sm file:font-medium disabled:pointer-events-none disabled:cursor-not-allowed disabled:opacity-50 md:text-sm focus-visible:border-ring focus-visible:ring-ring/50 aria-invalid:ring-destructive/20 dark:aria-invalid:ring-destructive/40 aria-invalid:border-destructive flex-1 rounded-none border-0 bg-transparent shadow-none focus-visible:ring-0 dark:bg-transparent"
+               aria-label="Locked Color (OKLCH)"
+               value="oklch(0.000 0.000 0.000)"
+        >
+        <div role="group"
+             data-slot="input-group-addon"
+             data-align="inline-end"
+             tabindex="0"
+             class="text-muted-foreground flex h-auto cursor-text items-center justify-center gap-2 py-1.5 text-sm font-medium select-none [&amp;&gt;svg:not([class*='size-'])]:size-4 [&amp;&gt;kbd]:rounded-[calc(var(--radius)-5px)] group-data-[disabled=true]/input-group:opacity-50 order-last pr-3 has-[&gt;button]:mr-[-0.45rem] has-[&gt;kbd]:mr-[-0.35rem]"
+        >
+          <button data-slot="dropdown-menu-trigger"
+                  class="justify-center whitespace-nowrap font-medium transition-[color,box-shadow] disabled:pointer-events-none disabled:opacity-50 [&amp;_svg]:pointer-events-none [&amp;_svg:not([class*='size-'])]:size-4 shrink-0 [&amp;_svg]:shrink-0 outline-none focus-visible:border-ring focus-visible:ring-ring/50 focus-visible:ring-[3px] aria-invalid:ring-destructive/20 dark:aria-invalid:ring-destructive/40 aria-invalid:border-destructive hover:bg-accent dark:hover:bg-accent/50 hover:text-accent-foreground has-data-[icon=inline-end]:pr-2 has-data-[icon=inline-start]:pl-2 text-sm shadow-none flex items-center h-6 gap-1 px-2 rounded-[calc(var(--radius)-5px)] [&amp;&gt;svg:not([class*='size-'])]:size-3.5 has-[&gt;svg]:px-2"
+                  type="button"
+                  data-size="xs"
+                  id="radix-ID"
+                  aria-haspopup="menu"
+                  aria-expanded="false"
+                  data-state="closed"
+          >
+            OKLCH
+            <svg xmlns="http://www.w3.org/2000/svg"
+                 width="24"
+                 height="24"
+                 viewbox="0 0 24 24"
+                 fill="none"
+                 stroke="currentColor"
+                 stroke-width="2"
+                 stroke-linecap="round"
+                 stroke-linejoin="round"
+                 class="lucide lucide-chevron-down"
+                 aria-hidden="true"
+                 data-icon="inline-end"
+            >
+              <path d="m6 9 6 6 6-6">
+              </path>
+            </svg>
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+`;
+
+exports[`Components/Input/Color Required smoke-test 1`] = `
+<div class="container my-10 mx-auto p-4 border rounded-lg shadow-sm max-w-lg">
+  <div class="*:not-first:mt-2">
+    <label data-slot="label"
+           class="flex items-center text-sm leading-none font-medium select-none group-data-[disabled=true]:pointer-events-none group-data-[disabled=true]:opacity-50 peer-disabled:cursor-not-allowed peer-disabled:opacity-50 after:content-['*'] after:text-destructive gap-0.5"
+           for="brandColor"
+    >
+      Brand Color
+    </label>
+    <div class="flex items-center gap-2">
+      <div class="relative size-9 shrink-0 rounded-md border border-input shadow-xs has-[:focus-visible]:border-ring has-[:focus-visible]:ring-2 has-[:focus-visible]:ring-ring/50">
+        <input class="absolute inset-0 size-full cursor-pointer opacity-0"
+               aria-label="Brand Color color picker"
+               type="color"
+               value="#000000"
+        >
+        <div class="absolute inset-0 rounded-md pointer-events-none"
+             style="background-color: rgb(0, 0, 0);"
+        >
+        </div>
+      </div>
+      <div data-slot="input-group"
+           role="group"
+           class="group/input-group border-input dark:bg-input/30 relative flex w-full items-center rounded-md border shadow-xs transition-[color,box-shadow] outline-none h-9 min-w-0 has-[&gt;textarea]:h-auto has-[&gt;[data-align=inline-start]]:[&amp;&gt;input]:pl-2 has-[&gt;[data-align=inline-end]]:[&amp;&gt;input]:pr-2 has-[&gt;[data-align=block-start]]:h-auto has-[&gt;[data-align=block-start]]:flex-col has-[&gt;[data-align=block-start]]:[&amp;&gt;input]:pb-3 has-[&gt;[data-align=block-end]]:h-auto has-[&gt;[data-align=block-end]]:flex-col has-[&gt;[data-align=block-end]]:[&amp;&gt;input]:pt-3 has-[[data-slot=input-group-control]:focus-visible]:border-ring has-[[data-slot=input-group-control]:focus-visible]:ring-ring/50 has-[[data-slot=input-group-control]:focus-visible]:ring-[3px] has-[[data-slot][aria-invalid=true]]:ring-destructive/20 has-[[data-slot][aria-invalid=true]]:border-destructive dark:has-[[data-slot][aria-invalid=true]]:ring-destructive/40 flex-1"
+      >
+        <input data-slot="input-group-control"
+               class="file:text-foreground placeholder:text-muted-foreground selection:bg-primary selection:text-primary-foreground border-input h-9 w-full min-w-0 px-3 py-1 text-base transition-[color,box-shadow] outline-none file:inline-flex file:h-7 file:border-0 file:bg-transparent file:text-sm file:font-medium disabled:pointer-events-none disabled:cursor-not-allowed disabled:opacity-50 md:text-sm focus-visible:border-ring focus-visible:ring-ring/50 aria-invalid:ring-destructive/20 dark:aria-invalid:ring-destructive/40 aria-invalid:border-destructive flex-1 rounded-none border-0 bg-transparent shadow-none focus-visible:ring-0 dark:bg-transparent"
+               aria-label="Brand Color (OKLCH)"
+               value="oklch(0.000 0.000 0.000)"
+        >
+        <div role="group"
+             data-slot="input-group-addon"
+             data-align="inline-end"
+             tabindex="0"
+             class="text-muted-foreground flex h-auto cursor-text items-center justify-center gap-2 py-1.5 text-sm font-medium select-none [&amp;&gt;svg:not([class*='size-'])]:size-4 [&amp;&gt;kbd]:rounded-[calc(var(--radius)-5px)] group-data-[disabled=true]/input-group:opacity-50 order-last pr-3 has-[&gt;button]:mr-[-0.45rem] has-[&gt;kbd]:mr-[-0.35rem]"
+        >
+          <button data-slot="dropdown-menu-trigger"
+                  class="justify-center whitespace-nowrap font-medium transition-[color,box-shadow] disabled:pointer-events-none disabled:opacity-50 [&amp;_svg]:pointer-events-none [&amp;_svg:not([class*='size-'])]:size-4 shrink-0 [&amp;_svg]:shrink-0 outline-none focus-visible:border-ring focus-visible:ring-ring/50 focus-visible:ring-[3px] aria-invalid:ring-destructive/20 dark:aria-invalid:ring-destructive/40 aria-invalid:border-destructive hover:bg-accent dark:hover:bg-accent/50 hover:text-accent-foreground has-data-[icon=inline-end]:pr-2 has-data-[icon=inline-start]:pl-2 text-sm shadow-none flex items-center h-6 gap-1 px-2 rounded-[calc(var(--radius)-5px)] [&amp;&gt;svg:not([class*='size-'])]:size-3.5 has-[&gt;svg]:px-2"
+                  type="button"
+                  data-size="xs"
+                  id="radix-ID"
+                  aria-haspopup="menu"
+                  aria-expanded="false"
+                  data-state="closed"
+          >
+            OKLCH
+            <svg xmlns="http://www.w3.org/2000/svg"
+                 width="24"
+                 height="24"
+                 viewbox="0 0 24 24"
+                 fill="none"
+                 stroke="currentColor"
+                 stroke-width="2"
+                 stroke-linecap="round"
+                 stroke-linejoin="round"
+                 class="lucide lucide-chevron-down"
+                 aria-hidden="true"
+                 data-icon="inline-end"
+            >
+              <path d="m6 9 6 6 6-6">
+              </path>
+            </svg>
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+`;
+
+exports[`Components/Input/Color WithCustomDefaultValue smoke-test 1`] = `
+<div class="container my-10 mx-auto p-4 border rounded-lg shadow-sm max-w-lg">
+  <div class="*:not-first:mt-2">
+    <label data-slot="label"
+           class="flex items-center text-sm leading-none font-medium select-none group-data-[disabled=true]:pointer-events-none group-data-[disabled=true]:opacity-50 peer-disabled:cursor-not-allowed peer-disabled:opacity-50 gap-0.5"
+           for="themeColor"
+    >
+      Theme Color
+    </label>
+    <div class="flex items-center gap-2">
+      <div class="relative size-9 shrink-0 rounded-md border border-input shadow-xs has-[:focus-visible]:border-ring has-[:focus-visible]:ring-2 has-[:focus-visible]:ring-ring/50">
+        <input class="absolute inset-0 size-full cursor-pointer opacity-0"
+               aria-label="Theme Color color picker"
+               type="color"
+               value="#000000"
+        >
+        <div class="absolute inset-0 rounded-md pointer-events-none"
+             style="background-color: rgb(0, 0, 0);"
+        >
+        </div>
+      </div>
+      <div data-slot="input-group"
+           role="group"
+           class="group/input-group border-input dark:bg-input/30 relative flex w-full items-center rounded-md border shadow-xs transition-[color,box-shadow] outline-none h-9 min-w-0 has-[&gt;textarea]:h-auto has-[&gt;[data-align=inline-start]]:[&amp;&gt;input]:pl-2 has-[&gt;[data-align=inline-end]]:[&amp;&gt;input]:pr-2 has-[&gt;[data-align=block-start]]:h-auto has-[&gt;[data-align=block-start]]:flex-col has-[&gt;[data-align=block-start]]:[&amp;&gt;input]:pb-3 has-[&gt;[data-align=block-end]]:h-auto has-[&gt;[data-align=block-end]]:flex-col has-[&gt;[data-align=block-end]]:[&amp;&gt;input]:pt-3 has-[[data-slot=input-group-control]:focus-visible]:border-ring has-[[data-slot=input-group-control]:focus-visible]:ring-ring/50 has-[[data-slot=input-group-control]:focus-visible]:ring-[3px] has-[[data-slot][aria-invalid=true]]:ring-destructive/20 has-[[data-slot][aria-invalid=true]]:border-destructive dark:has-[[data-slot][aria-invalid=true]]:ring-destructive/40 flex-1"
+      >
+        <input data-slot="input-group-control"
+               class="file:text-foreground placeholder:text-muted-foreground selection:bg-primary selection:text-primary-foreground border-input h-9 w-full min-w-0 px-3 py-1 text-base transition-[color,box-shadow] outline-none file:inline-flex file:h-7 file:border-0 file:bg-transparent file:text-sm file:font-medium disabled:pointer-events-none disabled:cursor-not-allowed disabled:opacity-50 md:text-sm focus-visible:border-ring focus-visible:ring-ring/50 aria-invalid:ring-destructive/20 dark:aria-invalid:ring-destructive/40 aria-invalid:border-destructive flex-1 rounded-none border-0 bg-transparent shadow-none focus-visible:ring-0 dark:bg-transparent"
+               aria-label="Theme Color (OKLCH)"
+               value="oklch(0.000 0.000 0.000)"
+        >
+        <div role="group"
+             data-slot="input-group-addon"
+             data-align="inline-end"
+             tabindex="0"
+             class="text-muted-foreground flex h-auto cursor-text items-center justify-center gap-2 py-1.5 text-sm font-medium select-none [&amp;&gt;svg:not([class*='size-'])]:size-4 [&amp;&gt;kbd]:rounded-[calc(var(--radius)-5px)] group-data-[disabled=true]/input-group:opacity-50 order-last pr-3 has-[&gt;button]:mr-[-0.45rem] has-[&gt;kbd]:mr-[-0.35rem]"
+        >
+          <button data-slot="dropdown-menu-trigger"
+                  class="justify-center whitespace-nowrap font-medium transition-[color,box-shadow] disabled:pointer-events-none disabled:opacity-50 [&amp;_svg]:pointer-events-none [&amp;_svg:not([class*='size-'])]:size-4 shrink-0 [&amp;_svg]:shrink-0 outline-none focus-visible:border-ring focus-visible:ring-ring/50 focus-visible:ring-[3px] aria-invalid:ring-destructive/20 dark:aria-invalid:ring-destructive/40 aria-invalid:border-destructive hover:bg-accent dark:hover:bg-accent/50 hover:text-accent-foreground has-data-[icon=inline-end]:pr-2 has-data-[icon=inline-start]:pl-2 text-sm shadow-none flex items-center h-6 gap-1 px-2 rounded-[calc(var(--radius)-5px)] [&amp;&gt;svg:not([class*='size-'])]:size-3.5 has-[&gt;svg]:px-2"
+                  type="button"
+                  data-size="xs"
+                  id="radix-ID"
+                  aria-haspopup="menu"
+                  aria-expanded="false"
+                  data-state="closed"
+          >
+            OKLCH
+            <svg xmlns="http://www.w3.org/2000/svg"
+                 width="24"
+                 height="24"
+                 viewbox="0 0 24 24"
+                 fill="none"
+                 stroke="currentColor"
+                 stroke-width="2"
+                 stroke-linecap="round"
+                 stroke-linejoin="round"
+                 class="lucide lucide-chevron-down"
+                 aria-hidden="true"
+                 data-icon="inline-end"
+            >
+              <path d="m6 9 6 6 6-6">
+              </path>
+            </svg>
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+`;
+
+exports[`Components/Input/Color WithError smoke-test 1`] = `
+<div class="container my-10 mx-auto p-4 border rounded-lg shadow-sm max-w-lg">
+  <div class="*:not-first:mt-2">
+    <label data-slot="label"
+           class="flex items-center text-sm leading-none font-medium select-none group-data-[disabled=true]:pointer-events-none group-data-[disabled=true]:opacity-50 peer-disabled:cursor-not-allowed peer-disabled:opacity-50 gap-0.5"
+           for="errorColor"
+    >
+      Color with Error
+    </label>
+    <div class="flex items-center gap-2">
+      <div class="relative size-9 shrink-0 rounded-md border shadow-xs has-[:focus-visible]:border-ring has-[:focus-visible]:ring-2 has-[:focus-visible]:ring-ring/50 border-destructive">
+        <input class="absolute inset-0 size-full cursor-pointer opacity-0"
+               aria-label="Color with Error color picker"
+               type="color"
+               value="#000000"
+        >
+        <div class="absolute inset-0 rounded-md pointer-events-none"
+             style="background-color: rgb(0, 0, 0);"
+        >
+        </div>
+      </div>
+      <div data-slot="input-group"
+           role="group"
+           class="group/input-group dark:bg-input/30 relative flex w-full items-center rounded-md border shadow-xs transition-[color,box-shadow] outline-none h-9 min-w-0 has-[&gt;textarea]:h-auto has-[&gt;[data-align=inline-start]]:[&amp;&gt;input]:pl-2 has-[&gt;[data-align=inline-end]]:[&amp;&gt;input]:pr-2 has-[&gt;[data-align=block-start]]:h-auto has-[&gt;[data-align=block-start]]:flex-col has-[&gt;[data-align=block-start]]:[&amp;&gt;input]:pb-3 has-[&gt;[data-align=block-end]]:h-auto has-[&gt;[data-align=block-end]]:flex-col has-[&gt;[data-align=block-end]]:[&amp;&gt;input]:pt-3 has-[[data-slot=input-group-control]:focus-visible]:border-ring has-[[data-slot=input-group-control]:focus-visible]:ring-ring/50 has-[[data-slot=input-group-control]:focus-visible]:ring-[3px] has-[[data-slot][aria-invalid=true]]:ring-destructive/20 has-[[data-slot][aria-invalid=true]]:border-destructive dark:has-[[data-slot][aria-invalid=true]]:ring-destructive/40 flex-1 border-destructive"
+      >
+        <input data-slot="input-group-control"
+               class="file:text-foreground placeholder:text-muted-foreground selection:bg-primary selection:text-primary-foreground border-input h-9 w-full min-w-0 px-3 py-1 text-base transition-[color,box-shadow] outline-none file:inline-flex file:h-7 file:border-0 file:bg-transparent file:text-sm file:font-medium disabled:pointer-events-none disabled:cursor-not-allowed disabled:opacity-50 md:text-sm focus-visible:border-ring focus-visible:ring-ring/50 aria-invalid:ring-destructive/20 dark:aria-invalid:ring-destructive/40 aria-invalid:border-destructive flex-1 rounded-none border-0 bg-transparent shadow-none focus-visible:ring-0 dark:bg-transparent"
+               aria-label="Color with Error (OKLCH)"
+               aria-invalid="true"
+               value="oklch(0.000 0.000 0.000)"
+        >
+        <div role="group"
+             data-slot="input-group-addon"
+             data-align="inline-end"
+             tabindex="0"
+             class="text-muted-foreground flex h-auto cursor-text items-center justify-center gap-2 py-1.5 text-sm font-medium select-none [&amp;&gt;svg:not([class*='size-'])]:size-4 [&amp;&gt;kbd]:rounded-[calc(var(--radius)-5px)] group-data-[disabled=true]/input-group:opacity-50 order-last pr-3 has-[&gt;button]:mr-[-0.45rem] has-[&gt;kbd]:mr-[-0.35rem]"
+        >
+          <button data-slot="dropdown-menu-trigger"
+                  class="justify-center whitespace-nowrap font-medium transition-[color,box-shadow] disabled:pointer-events-none disabled:opacity-50 [&amp;_svg]:pointer-events-none [&amp;_svg:not([class*='size-'])]:size-4 shrink-0 [&amp;_svg]:shrink-0 outline-none focus-visible:border-ring focus-visible:ring-ring/50 focus-visible:ring-[3px] aria-invalid:ring-destructive/20 dark:aria-invalid:ring-destructive/40 aria-invalid:border-destructive hover:bg-accent dark:hover:bg-accent/50 hover:text-accent-foreground has-data-[icon=inline-end]:pr-2 has-data-[icon=inline-start]:pl-2 text-sm shadow-none flex items-center h-6 gap-1 px-2 rounded-[calc(var(--radius)-5px)] [&amp;&gt;svg:not([class*='size-'])]:size-3.5 has-[&gt;svg]:px-2"
+                  type="button"
+                  data-size="xs"
+                  id="radix-ID"
+                  aria-haspopup="menu"
+                  aria-expanded="false"
+                  data-state="closed"
+          >
+            OKLCH
+            <svg xmlns="http://www.w3.org/2000/svg"
+                 width="24"
+                 height="24"
+                 viewbox="0 0 24 24"
+                 fill="none"
+                 stroke="currentColor"
+                 stroke-width="2"
+                 stroke-linecap="round"
+                 stroke-linejoin="round"
+                 class="lucide lucide-chevron-down"
+                 aria-hidden="true"
+                 data-icon="inline-end"
+            >
+              <path d="m6 9 6 6 6-6">
+              </path>
+            </svg>
+          </button>
+        </div>
+      </div>
+    </div>
+    <p id="errorColor-error"
+       class="text-destructive mt-2 text-xs"
+       role="alert"
+    >
+      This color is not available for your selected theme
+    </p>
+  </div>
+</div>
+`;
+
+exports[`Components/Input/Color WithHelperText smoke-test 1`] = `
+<div class="container my-10 mx-auto p-4 border rounded-lg shadow-sm max-w-lg">
+  <div class="*:not-first:mt-2">
+    <label data-slot="label"
+           class="flex items-center text-sm leading-none font-medium select-none group-data-[disabled=true]:pointer-events-none group-data-[disabled=true]:opacity-50 peer-disabled:cursor-not-allowed peer-disabled:opacity-50 gap-0.5"
+           for="backgroundColor"
+    >
+      Background Color
+    </label>
+    <div class="flex items-center gap-2">
+      <div class="relative size-9 shrink-0 rounded-md border border-input shadow-xs has-[:focus-visible]:border-ring has-[:focus-visible]:ring-2 has-[:focus-visible]:ring-ring/50">
+        <input class="absolute inset-0 size-full cursor-pointer opacity-0"
+               aria-label="Background Color color picker"
+               type="color"
+               value="#000000"
+        >
+        <div class="absolute inset-0 rounded-md pointer-events-none"
+             style="background-color: rgb(0, 0, 0);"
+        >
+        </div>
+      </div>
+      <div data-slot="input-group"
+           role="group"
+           class="group/input-group border-input dark:bg-input/30 relative flex w-full items-center rounded-md border shadow-xs transition-[color,box-shadow] outline-none h-9 min-w-0 has-[&gt;textarea]:h-auto has-[&gt;[data-align=inline-start]]:[&amp;&gt;input]:pl-2 has-[&gt;[data-align=inline-end]]:[&amp;&gt;input]:pr-2 has-[&gt;[data-align=block-start]]:h-auto has-[&gt;[data-align=block-start]]:flex-col has-[&gt;[data-align=block-start]]:[&amp;&gt;input]:pb-3 has-[&gt;[data-align=block-end]]:h-auto has-[&gt;[data-align=block-end]]:flex-col has-[&gt;[data-align=block-end]]:[&amp;&gt;input]:pt-3 has-[[data-slot=input-group-control]:focus-visible]:border-ring has-[[data-slot=input-group-control]:focus-visible]:ring-ring/50 has-[[data-slot=input-group-control]:focus-visible]:ring-[3px] has-[[data-slot][aria-invalid=true]]:ring-destructive/20 has-[[data-slot][aria-invalid=true]]:border-destructive dark:has-[[data-slot][aria-invalid=true]]:ring-destructive/40 flex-1"
+      >
+        <input data-slot="input-group-control"
+               class="file:text-foreground placeholder:text-muted-foreground selection:bg-primary selection:text-primary-foreground border-input h-9 w-full min-w-0 px-3 py-1 text-base transition-[color,box-shadow] outline-none file:inline-flex file:h-7 file:border-0 file:bg-transparent file:text-sm file:font-medium disabled:pointer-events-none disabled:cursor-not-allowed disabled:opacity-50 md:text-sm focus-visible:border-ring focus-visible:ring-ring/50 aria-invalid:ring-destructive/20 dark:aria-invalid:ring-destructive/40 aria-invalid:border-destructive flex-1 rounded-none border-0 bg-transparent shadow-none focus-visible:ring-0 dark:bg-transparent"
+               aria-label="Background Color (OKLCH)"
+               value="oklch(0.000 0.000 0.000)"
+        >
+        <div role="group"
+             data-slot="input-group-addon"
+             data-align="inline-end"
+             tabindex="0"
+             class="text-muted-foreground flex h-auto cursor-text items-center justify-center gap-2 py-1.5 text-sm font-medium select-none [&amp;&gt;svg:not([class*='size-'])]:size-4 [&amp;&gt;kbd]:rounded-[calc(var(--radius)-5px)] group-data-[disabled=true]/input-group:opacity-50 order-last pr-3 has-[&gt;button]:mr-[-0.45rem] has-[&gt;kbd]:mr-[-0.35rem]"
+        >
+          <button data-slot="dropdown-menu-trigger"
+                  class="justify-center whitespace-nowrap font-medium transition-[color,box-shadow] disabled:pointer-events-none disabled:opacity-50 [&amp;_svg]:pointer-events-none [&amp;_svg:not([class*='size-'])]:size-4 shrink-0 [&amp;_svg]:shrink-0 outline-none focus-visible:border-ring focus-visible:ring-ring/50 focus-visible:ring-[3px] aria-invalid:ring-destructive/20 dark:aria-invalid:ring-destructive/40 aria-invalid:border-destructive hover:bg-accent dark:hover:bg-accent/50 hover:text-accent-foreground has-data-[icon=inline-end]:pr-2 has-data-[icon=inline-start]:pl-2 text-sm shadow-none flex items-center h-6 gap-1 px-2 rounded-[calc(var(--radius)-5px)] [&amp;&gt;svg:not([class*='size-'])]:size-3.5 has-[&gt;svg]:px-2"
+                  type="button"
+                  data-size="xs"
+                  id="radix-ID"
+                  aria-haspopup="menu"
+                  aria-expanded="false"
+                  data-state="closed"
+          >
+            OKLCH
+            <svg xmlns="http://www.w3.org/2000/svg"
+                 width="24"
+                 height="24"
+                 viewbox="0 0 24 24"
+                 fill="none"
+                 stroke="currentColor"
+                 stroke-width="2"
+                 stroke-linecap="round"
+                 stroke-linejoin="round"
+                 class="lucide lucide-chevron-down"
+                 aria-hidden="true"
+                 data-icon="inline-end"
+            >
+              <path d="m6 9 6 6 6-6">
+              </path>
+            </svg>
+          </button>
+        </div>
+      </div>
+    </div>
+    <p id="backgroundColor-helper"
+       class="text-muted-foreground mt-2 text-xs"
+       aria-live="polite"
+    >
+      Select a color for the background of your site
+    </p>
+  </div>
+</div>
+`;
+
+exports[`Components/Input/Color WithValidation smoke-test 1`] = `
+<div class="container my-10 mx-auto p-4 border rounded-lg shadow-sm max-w-lg">
+  <form class="space-y-4">
+    <div class="*:not-first:mt-2">
+      <label data-slot="label"
+             class="flex items-center text-sm leading-none font-medium select-none group-data-[disabled=true]:pointer-events-none group-data-[disabled=true]:opacity-50 peer-disabled:cursor-not-allowed peer-disabled:opacity-50 after:content-['*'] after:text-destructive gap-0.5"
+             for="validatedColor"
+      >
+        Select a Color
+      </label>
+      <div class="flex items-center gap-2">
+        <div class="relative size-9 shrink-0 rounded-md border border-input shadow-xs has-[:focus-visible]:border-ring has-[:focus-visible]:ring-2 has-[:focus-visible]:ring-ring/50">
+          <input class="absolute inset-0 size-full cursor-pointer opacity-0"
+                 aria-label="Select a Color color picker"
+                 type="color"
+                 value="#000000"
+          >
+          <div class="absolute inset-0 rounded-md pointer-events-none"
+               style="background-color: rgb(0, 0, 0);"
+          >
+          </div>
+        </div>
+        <div data-slot="input-group"
+             role="group"
+             class="group/input-group border-input dark:bg-input/30 relative flex w-full items-center rounded-md border shadow-xs transition-[color,box-shadow] outline-none h-9 min-w-0 has-[&gt;textarea]:h-auto has-[&gt;[data-align=inline-start]]:[&amp;&gt;input]:pl-2 has-[&gt;[data-align=inline-end]]:[&amp;&gt;input]:pr-2 has-[&gt;[data-align=block-start]]:h-auto has-[&gt;[data-align=block-start]]:flex-col has-[&gt;[data-align=block-start]]:[&amp;&gt;input]:pb-3 has-[&gt;[data-align=block-end]]:h-auto has-[&gt;[data-align=block-end]]:flex-col has-[&gt;[data-align=block-end]]:[&amp;&gt;input]:pt-3 has-[[data-slot=input-group-control]:focus-visible]:border-ring has-[[data-slot=input-group-control]:focus-visible]:ring-ring/50 has-[[data-slot=input-group-control]:focus-visible]:ring-[3px] has-[[data-slot][aria-invalid=true]]:ring-destructive/20 has-[[data-slot][aria-invalid=true]]:border-destructive dark:has-[[data-slot][aria-invalid=true]]:ring-destructive/40 flex-1"
+        >
+          <input data-slot="input-group-control"
+                 class="file:text-foreground placeholder:text-muted-foreground selection:bg-primary selection:text-primary-foreground border-input h-9 w-full min-w-0 px-3 py-1 text-base transition-[color,box-shadow] outline-none file:inline-flex file:h-7 file:border-0 file:bg-transparent file:text-sm file:font-medium disabled:pointer-events-none disabled:cursor-not-allowed disabled:opacity-50 md:text-sm focus-visible:border-ring focus-visible:ring-ring/50 aria-invalid:ring-destructive/20 dark:aria-invalid:ring-destructive/40 aria-invalid:border-destructive flex-1 rounded-none border-0 bg-transparent shadow-none focus-visible:ring-0 dark:bg-transparent"
+                 aria-label="Select a Color (OKLCH)"
+                 value="oklch(0.000 0.000 0.000)"
+          >
+          <div role="group"
+               data-slot="input-group-addon"
+               data-align="inline-end"
+               tabindex="0"
+               class="text-muted-foreground flex h-auto cursor-text items-center justify-center gap-2 py-1.5 text-sm font-medium select-none [&amp;&gt;svg:not([class*='size-'])]:size-4 [&amp;&gt;kbd]:rounded-[calc(var(--radius)-5px)] group-data-[disabled=true]/input-group:opacity-50 order-last pr-3 has-[&gt;button]:mr-[-0.45rem] has-[&gt;kbd]:mr-[-0.35rem]"
+          >
+            <button data-slot="dropdown-menu-trigger"
+                    class="justify-center whitespace-nowrap font-medium transition-[color,box-shadow] disabled:pointer-events-none disabled:opacity-50 [&amp;_svg]:pointer-events-none [&amp;_svg:not([class*='size-'])]:size-4 shrink-0 [&amp;_svg]:shrink-0 outline-none focus-visible:border-ring focus-visible:ring-ring/50 focus-visible:ring-[3px] aria-invalid:ring-destructive/20 dark:aria-invalid:ring-destructive/40 aria-invalid:border-destructive hover:bg-accent dark:hover:bg-accent/50 hover:text-accent-foreground has-data-[icon=inline-end]:pr-2 has-data-[icon=inline-start]:pl-2 text-sm shadow-none flex items-center h-6 gap-1 px-2 rounded-[calc(var(--radius)-5px)] [&amp;&gt;svg:not([class*='size-'])]:size-3.5 has-[&gt;svg]:px-2"
+                    type="button"
+                    data-size="xs"
+                    id="radix-ID"
+                    aria-haspopup="menu"
+                    aria-expanded="false"
+                    data-state="closed"
+            >
+              OKLCH
+              <svg xmlns="http://www.w3.org/2000/svg"
+                   width="24"
+                   height="24"
+                   viewbox="0 0 24 24"
+                   fill="none"
+                   stroke="currentColor"
+                   stroke-width="2"
+                   stroke-linecap="round"
+                   stroke-linejoin="round"
+                   class="lucide lucide-chevron-down"
+                   aria-hidden="true"
+                   data-icon="inline-end"
+              >
+                <path d="m6 9 6 6 6-6">
+                </path>
+              </svg>
+            </button>
+          </div>
+        </div>
+      </div>
+      <p id="validatedColor-helper"
+         class="text-muted-foreground mt-2 text-xs"
+         aria-live="polite"
+      >
+        Choose a color for your profile
+      </p>
+    </div>
+    <button data-slot="button"
+            class="inline-flex items-center justify-center gap-1.5 whitespace-nowrap rounded-md text-sm font-medium transition-[color,box-shadow] disabled:pointer-events-none disabled:opacity-50 [&amp;_svg]:pointer-events-none [&amp;_svg:not([class*='size-'])]:size-4 shrink-0 [&amp;_svg]:shrink-0 outline-none focus-visible:border-ring focus-visible:ring-ring/50 focus-visible:ring-[3px] aria-invalid:ring-destructive/20 dark:aria-invalid:ring-destructive/40 aria-invalid:border-destructive bg-primary text-primary-foreground shadow-xs hover:bg-primary/90 hover:text-primary-foreground h-9 px-2.5 has-data-[icon=inline-end]:pr-2 has-data-[icon=inline-start]:pl-2 w-full mt-4"
+            type="submit"
+    >
+      Enviar
+    </button>
+  </form>
+</div>
+`;
+
+exports[`Components/Input/Color WithoutHexValue smoke-test 1`] = `
+<div class="container my-10 mx-auto p-4 border rounded-lg shadow-sm max-w-lg">
+  <div class="*:not-first:mt-2">
+    <label data-slot="label"
+           class="flex items-center text-sm leading-none font-medium select-none group-data-[disabled=true]:pointer-events-none group-data-[disabled=true]:opacity-50 peer-disabled:cursor-not-allowed peer-disabled:opacity-50 gap-0.5"
+           for="accentColor"
+    >
+      Accent Color
+    </label>
+    <div class="flex items-center gap-2">
+      <div class="relative size-9 shrink-0 rounded-md border border-input shadow-xs has-[:focus-visible]:border-ring has-[:focus-visible]:ring-2 has-[:focus-visible]:ring-ring/50">
+        <input class="absolute inset-0 size-full cursor-pointer opacity-0"
+               aria-label="Accent Color color picker"
+               type="color"
+               value="#000000"
+        >
+        <div class="absolute inset-0 rounded-md pointer-events-none"
+             style="background-color: rgb(0, 0, 0);"
+        >
+        </div>
+      </div>
+      <div data-slot="input-group"
+           role="group"
+           class="group/input-group border-input dark:bg-input/30 relative flex w-full items-center rounded-md border shadow-xs transition-[color,box-shadow] outline-none h-9 min-w-0 has-[&gt;textarea]:h-auto has-[&gt;[data-align=inline-start]]:[&amp;&gt;input]:pl-2 has-[&gt;[data-align=inline-end]]:[&amp;&gt;input]:pr-2 has-[&gt;[data-align=block-start]]:h-auto has-[&gt;[data-align=block-start]]:flex-col has-[&gt;[data-align=block-start]]:[&amp;&gt;input]:pb-3 has-[&gt;[data-align=block-end]]:h-auto has-[&gt;[data-align=block-end]]:flex-col has-[&gt;[data-align=block-end]]:[&amp;&gt;input]:pt-3 has-[[data-slot=input-group-control]:focus-visible]:border-ring has-[[data-slot=input-group-control]:focus-visible]:ring-ring/50 has-[[data-slot=input-group-control]:focus-visible]:ring-[3px] has-[[data-slot][aria-invalid=true]]:ring-destructive/20 has-[[data-slot][aria-invalid=true]]:border-destructive dark:has-[[data-slot][aria-invalid=true]]:ring-destructive/40 flex-1"
+      >
+        <input data-slot="input-group-control"
+               class="file:text-foreground placeholder:text-muted-foreground selection:bg-primary selection:text-primary-foreground border-input h-9 w-full min-w-0 px-3 py-1 text-base transition-[color,box-shadow] outline-none file:inline-flex file:h-7 file:border-0 file:bg-transparent file:text-sm file:font-medium disabled:pointer-events-none disabled:cursor-not-allowed disabled:opacity-50 md:text-sm focus-visible:border-ring focus-visible:ring-ring/50 aria-invalid:ring-destructive/20 dark:aria-invalid:ring-destructive/40 aria-invalid:border-destructive flex-1 rounded-none border-0 bg-transparent shadow-none focus-visible:ring-0 dark:bg-transparent"
+               aria-label="Accent Color (OKLCH)"
+               value="oklch(0.000 0.000 0.000)"
+        >
+        <div role="group"
+             data-slot="input-group-addon"
+             data-align="inline-end"
+             tabindex="0"
+             class="text-muted-foreground flex h-auto cursor-text items-center justify-center gap-2 py-1.5 text-sm font-medium select-none [&amp;&gt;svg:not([class*='size-'])]:size-4 [&amp;&gt;kbd]:rounded-[calc(var(--radius)-5px)] group-data-[disabled=true]/input-group:opacity-50 order-last pr-3 has-[&gt;button]:mr-[-0.45rem] has-[&gt;kbd]:mr-[-0.35rem]"
+        >
+          <button data-slot="dropdown-menu-trigger"
+                  class="justify-center whitespace-nowrap font-medium transition-[color,box-shadow] disabled:pointer-events-none disabled:opacity-50 [&amp;_svg]:pointer-events-none [&amp;_svg:not([class*='size-'])]:size-4 shrink-0 [&amp;_svg]:shrink-0 outline-none focus-visible:border-ring focus-visible:ring-ring/50 focus-visible:ring-[3px] aria-invalid:ring-destructive/20 dark:aria-invalid:ring-destructive/40 aria-invalid:border-destructive hover:bg-accent dark:hover:bg-accent/50 hover:text-accent-foreground has-data-[icon=inline-end]:pr-2 has-data-[icon=inline-start]:pl-2 text-sm shadow-none flex items-center h-6 gap-1 px-2 rounded-[calc(var(--radius)-5px)] [&amp;&gt;svg:not([class*='size-'])]:size-3.5 has-[&gt;svg]:px-2"
+                  type="button"
+                  data-size="xs"
+                  id="radix-ID"
+                  aria-haspopup="menu"
+                  aria-expanded="false"
+                  data-state="closed"
+          >
+            OKLCH
+            <svg xmlns="http://www.w3.org/2000/svg"
+                 width="24"
+                 height="24"
+                 viewbox="0 0 24 24"
+                 fill="none"
+                 stroke="currentColor"
+                 stroke-width="2"
+                 stroke-linecap="round"
+                 stroke-linejoin="round"
+                 class="lucide lucide-chevron-down"
+                 aria-hidden="true"
+                 data-icon="inline-end"
+            >
+              <path d="m6 9 6 6 6-6">
+              </path>
+            </svg>
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+`;

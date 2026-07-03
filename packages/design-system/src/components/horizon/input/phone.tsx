@@ -6,6 +6,7 @@ import * as RPNInput from "react-phone-number-input"
 import flags from "react-phone-number-input/flags"
 
 import { cn } from "../../../lib/utils"
+import { useIGRPi18n } from "../../../i18n"
 import type { IGRPInputProps } from "../../../types"
 import { Input } from "../../primitives/input"
 import { IGRPIcon } from "../icon"
@@ -41,6 +42,7 @@ function PhoneInput({ className, ...props }: React.ComponentProps<"input">) {
   return (
     <Input
       data-slot="phone-input"
+      autoComplete="tel"
       className={cn("-ms-px rounded-s-none shadow-none focus-visible:z-10", className)}
       {...props}
     />
@@ -56,6 +58,7 @@ type CountrySelectProps = {
 }
 
 function CountrySelect({ disabled, value, onChange, options }: CountrySelectProps) {
+  const i18n = useIGRPi18n()
   const handleSelect = (event: React.ChangeEvent<HTMLSelectElement>) => {
     onChange(event.target.value as RPNInput.Country)
   }
@@ -77,10 +80,10 @@ function CountrySelect({ disabled, value, onChange, options }: CountrySelectProp
         value={value}
         onChange={handleSelect}
         className={cn("absolute inset-0 text-sm opacity-0")}
-        aria-label="Select country"
+        aria-label={i18n.inputPhone.countrySelectorLabel}
       >
         <option key="default" value="">
-          Select a country
+          {i18n.inputPhone.selectCountry}
         </option>
         {options
           .filter((x) => x.value)
@@ -115,7 +118,7 @@ function IGRPInputPhone({
   error,
   defaultValue,
   value,
-  placeholder = "Enter phone number",
+  placeholder,
   disabled,
   international = true,
   defaultCountry,
@@ -129,6 +132,8 @@ function IGRPInputPhone({
   const _id = useId()
   const fieldName = name ?? id ?? _id
   const formContext = useFormContext()
+  const i18n = useIGRPi18n()
+  const resolvedPlaceholder = placeholder ?? i18n.inputPhone.placeholder
   const [localValue, setLocalValue] = useState(value ?? defaultValue ?? "")
 
   const handleStandaloneChange = (newValue: string | undefined) => {
@@ -148,20 +153,30 @@ function IGRPInputPhone({
           countrySelectComponent={CountrySelect}
           inputComponent={PhoneInput}
           id={fieldName}
-          placeholder={placeholder}
+          placeholder={resolvedPlaceholder}
           value={value !== undefined ? value : localValue}
           onChange={handleStandaloneChange}
           disabled={disabled}
           defaultCountry={defaultCountry}
           countries={countries}
+          aria-invalid={!!error || undefined}
+          aria-describedby={
+            error ? `${fieldName}-error` : description || helperText ? `${fieldName}-helper` : undefined
+          }
           {...props}
         />
 
         {(description || helperText) && !error && (
-          <p className={cn("text-xs text-muted-foreground")}>{description || helperText}</p>
+          <p id={`${fieldName}-helper`} className={cn("text-xs text-muted-foreground")} aria-live="polite">
+            {description || helperText}
+          </p>
         )}
 
-        {error && <p className={cn("text-xs text-destructive")}>{error}</p>}
+        {error && (
+          <p id={`${fieldName}-error`} className={cn("text-xs text-destructive")} role="alert">
+            {error}
+          </p>
+        )}
       </div>
     )
   }
@@ -182,7 +197,7 @@ function IGRPInputPhone({
             countrySelectComponent={CountrySelect}
             inputComponent={PhoneInput}
             id={fieldName}
-            placeholder={placeholder}
+            placeholder={resolvedPlaceholder}
             value={field.value}
             onChange={(newValue) => {
               field.onChange(newValue)
@@ -192,15 +207,27 @@ function IGRPInputPhone({
             disabled={disabled}
             defaultCountry={defaultCountry}
             countries={countries}
+            aria-invalid={!!fieldState.error || !!error || undefined}
+            aria-describedby={
+              error || fieldState.error
+                ? `${fieldName}-error`
+                : description || helperText
+                  ? `${fieldName}-helper`
+                  : undefined
+            }
             {...props}
           />
 
           {(description || helperText) && !error && !fieldState.error && (
-            <p className={cn("text-xs text-muted-foreground")}>{description || helperText}</p>
+            <p id={`${fieldName}-helper`} className={cn("text-xs text-muted-foreground")} aria-live="polite">
+              {description || helperText}
+            </p>
           )}
 
           {(error || fieldState.error) && (
-            <p className={cn("text-xs text-destructive")}>{error || fieldState.error?.message}</p>
+            <p id={`${fieldName}-error`} className={cn("text-xs text-destructive")} role="alert">
+              {error || fieldState.error?.message}
+            </p>
           )}
         </div>
       )}

@@ -1,0 +1,939 @@
+// Jest Snapshot v1, https://jestjs.io/docs/snapshot-testing
+
+exports[`Components/PageHeader CompleteExample smoke-test 1`] = `
+<div class="container mx-auto px-4 py-10">
+  <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 sticky top-0 z-10 bg-background pt-6 pb-4"
+       id="_r_ID_"
+  >
+    <div class="flex items-center gap-2">
+      <a href="/dashboard"
+         aria-label="Go back"
+         data-slot="button"
+         class="inline-flex items-center justify-center whitespace-nowrap rounded-md text-sm font-medium transition-[color,box-shadow] disabled:pointer-events-none disabled:opacity-50 [&amp;_svg]:pointer-events-none [&amp;_svg:not([class*='size-'])]:size-4 shrink-0 [&amp;_svg]:shrink-0 outline-none focus-visible:border-ring focus-visible:ring-ring/50 focus-visible:ring-[3px] aria-invalid:ring-destructive/20 dark:aria-invalid:ring-destructive/40 aria-invalid:border-destructive border bg-background shadow-xs hover:bg-accent dark:bg-input/30 dark:border-input dark:hover:bg-input/50 hover:text-accent-foreground h-9 px-2.5 has-data-[icon=inline-end]:pr-2 has-data-[icon=inline-start]:pl-2 gap-2"
+      >
+        <svg xmlns="http://www.w3.org/2000/svg"
+             width="16"
+             height="16"
+             viewbox="0 0 24 24"
+             fill="none"
+             stroke="currentColor"
+             stroke-width="2"
+             stroke-linecap="round"
+             stroke-linejoin="round"
+             class="lucide lucide-arrow-left shrink-0"
+             aria-hidden="true"
+             id="ArrowLeft"
+        >
+          <path d="m12 19-7-7 7-7">
+          </path>
+          <path d="M19 12H5">
+          </path>
+        </svg>
+        <span class="sr-only ml-2">
+          Voltar ao Dashboard
+        </span>
+      </a>
+      <div id="h-undefined"
+           class="flex gap-2 items-start text-primary"
+      >
+        <div class="flex flex-col gap-1">
+          <h3 class="scroll-m-20 font-bold tracking-tight text-balance text-2xl lg:text-3xl">
+            Gestão de Benefícios
+          </h3>
+          <p class="text-sm">
+            Gerencie e monitore todos os benefícios oferecidos pelo sistema de segurança social.
+          </p>
+        </div>
+      </div>
+    </div>
+    <div class="flex gap-2">
+      <button data-slot="button"
+              class="inline-flex items-center justify-center gap-1.5 whitespace-nowrap rounded-md text-sm font-medium transition-[color,box-shadow] disabled:pointer-events-none disabled:opacity-50 [&amp;_svg]:pointer-events-none [&amp;_svg:not([class*='size-'])]:size-4 shrink-0 [&amp;_svg]:shrink-0 outline-none focus-visible:border-ring focus-visible:ring-ring/50 focus-visible:ring-[3px] aria-invalid:ring-destructive/20 dark:aria-invalid:ring-destructive/40 aria-invalid:border-destructive border bg-background shadow-xs hover:bg-accent dark:bg-input/30 dark:border-input dark:hover:bg-input/50 hover:text-accent-foreground h-9 px-2.5 has-data-[icon=inline-end]:pr-2 has-data-[icon=inline-start]:pl-2 relative"
+              type="button"
+              id="_r_ID_"
+      >
+        Exportar
+      </button>
+      <button data-slot="button"
+              class="inline-flex items-center justify-center gap-1.5 whitespace-nowrap rounded-md text-sm font-medium transition-[color,box-shadow] disabled:pointer-events-none disabled:opacity-50 [&amp;_svg]:pointer-events-none [&amp;_svg:not([class*='size-'])]:size-4 shrink-0 [&amp;_svg]:shrink-0 outline-none focus-visible:border-ring focus-visible:ring-ring/50 focus-visible:ring-[3px] aria-invalid:ring-destructive/20 dark:aria-invalid:ring-destructive/40 aria-invalid:border-destructive bg-primary text-primary-foreground shadow-xs hover:bg-primary/90 hover:text-primary-foreground h-9 px-2.5 has-data-[icon=inline-end]:pr-2 has-data-[icon=inline-start]:pl-2 relative"
+              type="button"
+              id="_r_ID_"
+      >
+        Novo Benefício
+      </button>
+    </div>
+  </div>
+  <div class="mt-8">
+    <p class="text-muted-foreground">
+      This is a complete example showing all features: back button with text, custom icon, actions, and sticky positioning.
+    </p>
+  </div>
+</div>
+`;
+
+exports[`Components/PageHeader Default smoke-test 1`] = `
+<div class="container mx-auto px-4 py-10">
+  <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4"
+       id="_r_ID_"
+  >
+    <div class="flex items-center gap-2">
+      <div id="h-undefined"
+           class="flex gap-2 items-start text-primary"
+      >
+        <div class="flex flex-col gap-1">
+          <h3 class="scroll-m-20 font-bold tracking-tight text-balance text-2xl lg:text-3xl">
+            Gestão de Benefícios
+          </h3>
+          <p class="text-sm">
+            Gerencie e monitore todos os benefícios oferecidos pelo sistema de segurança social.
+          </p>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+`;
+
+exports[`Components/PageHeader HeadlineVariants smoke-test 1`] = `
+<div class="container mx-auto px-4 py-10 space-y-8">
+  <div>
+    <h3 class="text-sm font-medium mb-4 text-muted-foreground">
+      Default
+    </h3>
+    <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4"
+         id="_r_ID_"
+    >
+      <div class="flex items-center gap-2">
+        <div id="h-undefined"
+             class="flex gap-2 items-start text-primary"
+        >
+          <div class="flex flex-col gap-1">
+            <h3 class="scroll-m-20 font-bold tracking-tight text-balance text-2xl lg:text-3xl">
+              Page Title
+            </h3>
+            <p class="text-sm">
+              Default variant
+            </p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div>
+    <h3 class="text-sm font-medium mb-4 text-muted-foreground">
+      H1
+    </h3>
+    <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4"
+         id="_r_ID_"
+    >
+      <div class="flex items-center gap-2">
+        <div id="h-undefined"
+             class="flex gap-2 items-start text-primary"
+        >
+          <div class="flex flex-col gap-1">
+            <h1 class="scroll-m-20 tracking-tight text-balance text-4xl font-extrabold lg:text-5xl">
+              Page Title
+            </h1>
+            <p class="text-sm">
+              H1 variant
+            </p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div>
+    <h3 class="text-sm font-medium mb-4 text-muted-foreground">
+      H2
+    </h3>
+    <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4"
+         id="_r_ID_"
+    >
+      <div class="flex items-center gap-2">
+        <div id="h-undefined"
+             class="flex gap-2 items-start text-primary"
+        >
+          <div class="flex flex-col gap-1">
+            <h2 class="scroll-m-20 font-bold tracking-tight text-balance text-3xl lg:text-4xl">
+              Page Title
+            </h2>
+            <p class="text-sm">
+              H2 variant
+            </p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div>
+    <h3 class="text-sm font-medium mb-4 text-muted-foreground">
+      H3
+    </h3>
+    <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4"
+         id="_r_ID_"
+    >
+      <div class="flex items-center gap-2">
+        <div id="h-undefined"
+             class="flex gap-2 items-start text-primary"
+        >
+          <div class="flex flex-col gap-1">
+            <h3 class="scroll-m-20 font-bold tracking-tight text-balance text-2xl lg:text-3xl">
+              Page Title
+            </h3>
+            <p class="text-sm">
+              H3 variant
+            </p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+`;
+
+exports[`Components/PageHeader Sticky smoke-test 1`] = `
+<div class="container mx-auto px-4">
+  <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 sticky top-0 z-10 bg-background pt-6 pb-4"
+       id="_r_ID_"
+  >
+    <div class="flex items-center gap-2">
+      <a href="/dashboard"
+         aria-label="Go back"
+         data-slot="button"
+         class="inline-flex items-center justify-center gap-1.5 whitespace-nowrap rounded-md text-sm font-medium transition-[color,box-shadow] disabled:pointer-events-none disabled:opacity-50 [&amp;_svg]:pointer-events-none [&amp;_svg:not([class*='size-'])]:size-4 shrink-0 [&amp;_svg]:shrink-0 outline-none focus-visible:border-ring focus-visible:ring-ring/50 focus-visible:ring-[3px] aria-invalid:ring-destructive/20 dark:aria-invalid:ring-destructive/40 aria-invalid:border-destructive border bg-background shadow-xs hover:bg-accent dark:bg-input/30 dark:border-input dark:hover:bg-input/50 hover:text-accent-foreground size-9"
+      >
+        <svg xmlns="http://www.w3.org/2000/svg"
+             width="16"
+             height="16"
+             viewbox="0 0 24 24"
+             fill="none"
+             stroke="currentColor"
+             stroke-width="2"
+             stroke-linecap="round"
+             stroke-linejoin="round"
+             class="lucide lucide-arrow-left shrink-0"
+             aria-hidden="true"
+             id="ArrowLeft"
+        >
+          <path d="m12 19-7-7 7-7">
+          </path>
+          <path d="M19 12H5">
+          </path>
+        </svg>
+      </a>
+      <div id="h-undefined"
+           class="flex gap-2 items-start text-primary"
+      >
+        <div class="flex flex-col gap-1">
+          <h3 class="scroll-m-20 font-bold tracking-tight text-balance text-2xl lg:text-3xl">
+            Gestão de Benefícios
+          </h3>
+          <p class="text-sm">
+            Gerencie e monitore todos os benefícios oferecidos pelo sistema de segurança social.
+          </p>
+        </div>
+      </div>
+    </div>
+    <button data-slot="button"
+            class="inline-flex items-center justify-center gap-1.5 whitespace-nowrap rounded-md text-sm font-medium transition-[color,box-shadow] disabled:pointer-events-none disabled:opacity-50 [&amp;_svg]:pointer-events-none [&amp;_svg:not([class*='size-'])]:size-4 shrink-0 [&amp;_svg]:shrink-0 outline-none focus-visible:border-ring focus-visible:ring-ring/50 focus-visible:ring-[3px] aria-invalid:ring-destructive/20 dark:aria-invalid:ring-destructive/40 aria-invalid:border-destructive bg-primary text-primary-foreground shadow-xs hover:bg-primary/90 hover:text-primary-foreground h-9 px-2.5 has-data-[icon=inline-end]:pr-2 has-data-[icon=inline-start]:pl-2 relative"
+            type="button"
+            id="_r_ID_"
+    >
+      Action
+    </button>
+  </div>
+  <div class="h-screen py-10">
+    <p class="text-muted-foreground">
+      Scroll down to see the sticky header behavior. The header will remain fixed at the top when scrolling.
+    </p>
+    <p class="py-4">
+      Content section 1
+    </p>
+    <p class="py-4">
+      Content section 2
+    </p>
+    <p class="py-4">
+      Content section 3
+    </p>
+    <p class="py-4">
+      Content section 4
+    </p>
+    <p class="py-4">
+      Content section 5
+    </p>
+    <p class="py-4">
+      Content section 6
+    </p>
+    <p class="py-4">
+      Content section 7
+    </p>
+    <p class="py-4">
+      Content section 8
+    </p>
+    <p class="py-4">
+      Content section 9
+    </p>
+    <p class="py-4">
+      Content section 10
+    </p>
+    <p class="py-4">
+      Content section 11
+    </p>
+    <p class="py-4">
+      Content section 12
+    </p>
+    <p class="py-4">
+      Content section 13
+    </p>
+    <p class="py-4">
+      Content section 14
+    </p>
+    <p class="py-4">
+      Content section 15
+    </p>
+    <p class="py-4">
+      Content section 16
+    </p>
+    <p class="py-4">
+      Content section 17
+    </p>
+    <p class="py-4">
+      Content section 18
+    </p>
+    <p class="py-4">
+      Content section 19
+    </p>
+    <p class="py-4">
+      Content section 20
+    </p>
+  </div>
+</div>
+`;
+
+exports[`Components/PageHeader WithActions smoke-test 1`] = `
+<div class="container mx-auto px-4 py-10">
+  <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4"
+       id="_r_ID_"
+  >
+    <div class="flex items-center gap-2">
+      <a href="/dashboard"
+         aria-label="Go back"
+         data-slot="button"
+         class="inline-flex items-center justify-center gap-1.5 whitespace-nowrap rounded-md text-sm font-medium transition-[color,box-shadow] disabled:pointer-events-none disabled:opacity-50 [&amp;_svg]:pointer-events-none [&amp;_svg:not([class*='size-'])]:size-4 shrink-0 [&amp;_svg]:shrink-0 outline-none focus-visible:border-ring focus-visible:ring-ring/50 focus-visible:ring-[3px] aria-invalid:ring-destructive/20 dark:aria-invalid:ring-destructive/40 aria-invalid:border-destructive border bg-background shadow-xs hover:bg-accent dark:bg-input/30 dark:border-input dark:hover:bg-input/50 hover:text-accent-foreground size-9"
+      >
+        <svg xmlns="http://www.w3.org/2000/svg"
+             width="16"
+             height="16"
+             viewbox="0 0 24 24"
+             fill="none"
+             stroke="currentColor"
+             stroke-width="2"
+             stroke-linecap="round"
+             stroke-linejoin="round"
+             class="lucide lucide-arrow-left shrink-0"
+             aria-hidden="true"
+             id="ArrowLeft"
+        >
+          <path d="m12 19-7-7 7-7">
+          </path>
+          <path d="M19 12H5">
+          </path>
+        </svg>
+      </a>
+      <div id="h-undefined"
+           class="flex gap-2 items-start text-primary"
+      >
+        <div class="flex flex-col gap-1">
+          <h3 class="scroll-m-20 font-bold tracking-tight text-balance text-2xl lg:text-3xl">
+            Gestão de Benefícios
+          </h3>
+          <p class="text-sm">
+            Gerencie e monitore todos os benefícios oferecidos pelo sistema de segurança social.
+          </p>
+        </div>
+      </div>
+    </div>
+    <div class="flex gap-2">
+      <button data-slot="button"
+              class="inline-flex items-center justify-center gap-1.5 whitespace-nowrap rounded-md text-sm font-medium transition-[color,box-shadow] disabled:pointer-events-none disabled:opacity-50 [&amp;_svg]:pointer-events-none [&amp;_svg:not([class*='size-'])]:size-4 shrink-0 [&amp;_svg]:shrink-0 outline-none focus-visible:border-ring focus-visible:ring-ring/50 focus-visible:ring-[3px] aria-invalid:ring-destructive/20 dark:aria-invalid:ring-destructive/40 aria-invalid:border-destructive border bg-background shadow-xs hover:bg-accent dark:bg-input/30 dark:border-input dark:hover:bg-input/50 hover:text-accent-foreground h-9 px-2.5 has-data-[icon=inline-end]:pr-2 has-data-[icon=inline-start]:pl-2 relative"
+              type="button"
+              id="_r_ID_"
+      >
+        Cancelar
+      </button>
+      <button data-slot="button"
+              class="inline-flex items-center justify-center gap-1.5 whitespace-nowrap rounded-md text-sm font-medium transition-[color,box-shadow] disabled:pointer-events-none disabled:opacity-50 [&amp;_svg]:pointer-events-none [&amp;_svg:not([class*='size-'])]:size-4 shrink-0 [&amp;_svg]:shrink-0 outline-none focus-visible:border-ring focus-visible:ring-ring/50 focus-visible:ring-[3px] aria-invalid:ring-destructive/20 dark:aria-invalid:ring-destructive/40 aria-invalid:border-destructive bg-primary text-primary-foreground shadow-xs hover:bg-primary/90 hover:text-primary-foreground h-9 px-2.5 has-data-[icon=inline-end]:pr-2 has-data-[icon=inline-start]:pl-2 relative"
+              type="button"
+              id="_r_ID_"
+      >
+        Salvar
+      </button>
+    </div>
+  </div>
+</div>
+`;
+
+exports[`Components/PageHeader WithBackButton smoke-test 1`] = `
+<div class="container mx-auto px-4 py-10">
+  <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4"
+       id="_r_ID_"
+  >
+    <div class="flex items-center gap-2">
+      <a href="/dashboard"
+         aria-label="Go back"
+         data-slot="button"
+         class="inline-flex items-center justify-center gap-1.5 whitespace-nowrap rounded-md text-sm font-medium transition-[color,box-shadow] disabled:pointer-events-none disabled:opacity-50 [&amp;_svg]:pointer-events-none [&amp;_svg:not([class*='size-'])]:size-4 shrink-0 [&amp;_svg]:shrink-0 outline-none focus-visible:border-ring focus-visible:ring-ring/50 focus-visible:ring-[3px] aria-invalid:ring-destructive/20 dark:aria-invalid:ring-destructive/40 aria-invalid:border-destructive border bg-background shadow-xs hover:bg-accent dark:bg-input/30 dark:border-input dark:hover:bg-input/50 hover:text-accent-foreground size-9"
+      >
+        <svg xmlns="http://www.w3.org/2000/svg"
+             width="16"
+             height="16"
+             viewbox="0 0 24 24"
+             fill="none"
+             stroke="currentColor"
+             stroke-width="2"
+             stroke-linecap="round"
+             stroke-linejoin="round"
+             class="lucide lucide-arrow-left shrink-0"
+             aria-hidden="true"
+             id="ArrowLeft"
+        >
+          <path d="m12 19-7-7 7-7">
+          </path>
+          <path d="M19 12H5">
+          </path>
+        </svg>
+      </a>
+      <div id="h-undefined"
+           class="flex gap-2 items-start text-primary"
+      >
+        <div class="flex flex-col gap-1">
+          <h3 class="scroll-m-20 font-bold tracking-tight text-balance text-2xl lg:text-3xl">
+            Gestão de Benefícios
+          </h3>
+          <p class="text-sm">
+            Gerencie e monitore todos os benefícios oferecidos pelo sistema de segurança social.
+          </p>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+`;
+
+exports[`Components/PageHeader WithBackButtonBrowserBack smoke-test 1`] = `
+<div class="container mx-auto px-4 py-10">
+  <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4"
+       id="_r_ID_"
+  >
+    <div class="flex items-center gap-2">
+      <button data-slot="button"
+              class="inline-flex items-center justify-center gap-1.5 whitespace-nowrap rounded-md text-sm font-medium transition-[color,box-shadow] disabled:pointer-events-none disabled:opacity-50 [&amp;_svg]:pointer-events-none [&amp;_svg:not([class*='size-'])]:size-4 shrink-0 [&amp;_svg]:shrink-0 outline-none focus-visible:border-ring focus-visible:ring-ring/50 focus-visible:ring-[3px] aria-invalid:ring-destructive/20 dark:aria-invalid:ring-destructive/40 aria-invalid:border-destructive border bg-background shadow-xs hover:bg-accent dark:bg-input/30 dark:border-input dark:hover:bg-input/50 hover:text-accent-foreground size-9"
+              aria-label="Go back"
+      >
+        <svg xmlns="http://www.w3.org/2000/svg"
+             width="16"
+             height="16"
+             viewbox="0 0 24 24"
+             fill="none"
+             stroke="currentColor"
+             stroke-width="2"
+             stroke-linecap="round"
+             stroke-linejoin="round"
+             class="lucide lucide-arrow-left shrink-0"
+             aria-hidden="true"
+             id="ArrowLeft"
+        >
+          <path d="m12 19-7-7 7-7">
+          </path>
+          <path d="M19 12H5">
+          </path>
+        </svg>
+      </button>
+      <div id="h-undefined"
+           class="flex gap-2 items-start text-primary"
+      >
+        <div class="flex flex-col gap-1">
+          <h3 class="scroll-m-20 font-bold tracking-tight text-balance text-2xl lg:text-3xl">
+            Gestão de Benefícios
+          </h3>
+          <p class="text-sm">
+            Gerencie e monitore todos os benefícios oferecidos pelo sistema de segurança social.
+          </p>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+`;
+
+exports[`Components/PageHeader WithBackButtonCustomHandler smoke-test 1`] = `
+<div class="container mx-auto px-4 py-10">
+  <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4"
+       id="_r_ID_"
+  >
+    <div class="flex items-center gap-2">
+      <button data-slot="button"
+              class="inline-flex items-center justify-center gap-1.5 whitespace-nowrap rounded-md text-sm font-medium transition-[color,box-shadow] disabled:pointer-events-none disabled:opacity-50 [&amp;_svg]:pointer-events-none [&amp;_svg:not([class*='size-'])]:size-4 shrink-0 [&amp;_svg]:shrink-0 outline-none focus-visible:border-ring focus-visible:ring-ring/50 focus-visible:ring-[3px] aria-invalid:ring-destructive/20 dark:aria-invalid:ring-destructive/40 aria-invalid:border-destructive border bg-background shadow-xs hover:bg-accent dark:bg-input/30 dark:border-input dark:hover:bg-input/50 hover:text-accent-foreground size-9"
+              aria-label="Go back"
+      >
+        <svg xmlns="http://www.w3.org/2000/svg"
+             width="16"
+             height="16"
+             viewbox="0 0 24 24"
+             fill="none"
+             stroke="currentColor"
+             stroke-width="2"
+             stroke-linecap="round"
+             stroke-linejoin="round"
+             class="lucide lucide-arrow-left shrink-0"
+             aria-hidden="true"
+             id="ArrowLeft"
+        >
+          <path d="m12 19-7-7 7-7">
+          </path>
+          <path d="M19 12H5">
+          </path>
+        </svg>
+      </button>
+      <div id="h-undefined"
+           class="flex gap-2 items-start text-primary"
+      >
+        <div class="flex flex-col gap-1">
+          <h3 class="scroll-m-20 font-bold tracking-tight text-balance text-2xl lg:text-3xl">
+            Page Title
+          </h3>
+          <p class="text-sm">
+            With custom onClick handler
+          </p>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+`;
+
+exports[`Components/PageHeader WithBackButtonCustomIcon smoke-test 1`] = `
+<div class="container mx-auto px-4 py-10">
+  <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4"
+       id="_r_ID_"
+  >
+    <div class="flex items-center gap-2">
+      <a href="/dashboard"
+         aria-label="Go back"
+         data-slot="button"
+         class="inline-flex items-center justify-center gap-1.5 whitespace-nowrap rounded-md text-sm font-medium transition-[color,box-shadow] disabled:pointer-events-none disabled:opacity-50 [&amp;_svg]:pointer-events-none [&amp;_svg:not([class*='size-'])]:size-4 shrink-0 [&amp;_svg]:shrink-0 outline-none focus-visible:border-ring focus-visible:ring-ring/50 focus-visible:ring-[3px] aria-invalid:ring-destructive/20 dark:aria-invalid:ring-destructive/40 aria-invalid:border-destructive border bg-background shadow-xs hover:bg-accent dark:bg-input/30 dark:border-input dark:hover:bg-input/50 hover:text-accent-foreground size-9"
+      >
+        <svg xmlns="http://www.w3.org/2000/svg"
+             width="16"
+             height="16"
+             viewbox="0 0 24 24"
+             fill="none"
+             stroke="currentColor"
+             stroke-width="2"
+             stroke-linecap="round"
+             stroke-linejoin="round"
+             class="lucide lucide-chevron-left shrink-0"
+             aria-hidden="true"
+             id="ChevronLeft"
+        >
+          <path d="m15 18-6-6 6-6">
+          </path>
+        </svg>
+      </a>
+      <div id="h-undefined"
+           class="flex gap-2 items-start text-primary"
+      >
+        <div class="flex flex-col gap-1">
+          <h3 class="scroll-m-20 font-bold tracking-tight text-balance text-2xl lg:text-3xl">
+            Gestão de Benefícios
+          </h3>
+          <p class="text-sm">
+            Gerencie e monitore todos os benefícios oferecidos pelo sistema de segurança social.
+          </p>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+`;
+
+exports[`Components/PageHeader WithBackButtonSizes smoke-test 1`] = `
+<div class="container mx-auto px-4 py-10 space-y-8">
+  <div>
+    <h3 class="text-sm font-medium mb-4 text-muted-foreground">
+      Icon (default)
+    </h3>
+    <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4"
+         id="_r_ID_"
+    >
+      <div class="flex items-center gap-2">
+        <a href="/dashboard"
+           aria-label="Go back"
+           data-slot="button"
+           class="inline-flex items-center justify-center gap-1.5 whitespace-nowrap rounded-md text-sm font-medium transition-[color,box-shadow] disabled:pointer-events-none disabled:opacity-50 [&amp;_svg]:pointer-events-none [&amp;_svg:not([class*='size-'])]:size-4 shrink-0 [&amp;_svg]:shrink-0 outline-none focus-visible:border-ring focus-visible:ring-ring/50 focus-visible:ring-[3px] aria-invalid:ring-destructive/20 dark:aria-invalid:ring-destructive/40 aria-invalid:border-destructive border bg-background shadow-xs hover:bg-accent dark:bg-input/30 dark:border-input dark:hover:bg-input/50 hover:text-accent-foreground size-9"
+        >
+          <svg xmlns="http://www.w3.org/2000/svg"
+               width="16"
+               height="16"
+               viewbox="0 0 24 24"
+               fill="none"
+               stroke="currentColor"
+               stroke-width="2"
+               stroke-linecap="round"
+               stroke-linejoin="round"
+               class="lucide lucide-arrow-left shrink-0"
+               aria-hidden="true"
+               id="ArrowLeft"
+          >
+            <path d="m12 19-7-7 7-7">
+            </path>
+            <path d="M19 12H5">
+            </path>
+          </svg>
+        </a>
+        <div id="h-undefined"
+             class="flex gap-2 items-start text-primary"
+        >
+          <div class="flex flex-col gap-1">
+            <h3 class="scroll-m-20 font-bold tracking-tight text-balance text-2xl lg:text-3xl">
+              Page Title
+            </h3>
+            <p class="text-sm">
+            </p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div>
+    <h3 class="text-sm font-medium mb-4 text-muted-foreground">
+      Icon Small
+    </h3>
+    <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4"
+         id="_r_ID_"
+    >
+      <div class="flex items-center gap-2">
+        <a href="/dashboard"
+           aria-label="Go back"
+           data-slot="button"
+           class="inline-flex items-center justify-center gap-1.5 whitespace-nowrap text-sm font-medium transition-[color,box-shadow] disabled:pointer-events-none disabled:opacity-50 [&amp;_svg]:pointer-events-none [&amp;_svg:not([class*='size-'])]:size-4 shrink-0 [&amp;_svg]:shrink-0 outline-none focus-visible:border-ring focus-visible:ring-ring/50 focus-visible:ring-[3px] aria-invalid:ring-destructive/20 dark:aria-invalid:ring-destructive/40 aria-invalid:border-destructive border bg-background shadow-xs hover:bg-accent dark:bg-input/30 dark:border-input dark:hover:bg-input/50 hover:text-accent-foreground size-7 rounded-[min(var(--radius-md),12px)] in-data-[slot=button-group]:rounded-lg"
+        >
+          <svg xmlns="http://www.w3.org/2000/svg"
+               width="16"
+               height="16"
+               viewbox="0 0 24 24"
+               fill="none"
+               stroke="currentColor"
+               stroke-width="2"
+               stroke-linecap="round"
+               stroke-linejoin="round"
+               class="lucide lucide-arrow-left shrink-0"
+               aria-hidden="true"
+               id="ArrowLeft"
+          >
+            <path d="m12 19-7-7 7-7">
+            </path>
+            <path d="M19 12H5">
+            </path>
+          </svg>
+        </a>
+        <div id="h-undefined"
+             class="flex gap-2 items-start text-primary"
+        >
+          <div class="flex flex-col gap-1">
+            <h3 class="scroll-m-20 font-bold tracking-tight text-balance text-2xl lg:text-3xl">
+              Page Title
+            </h3>
+            <p class="text-sm">
+            </p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div>
+    <h3 class="text-sm font-medium mb-4 text-muted-foreground">
+      Icon Large
+    </h3>
+    <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4"
+         id="_r_ID_"
+    >
+      <div class="flex items-center gap-2">
+        <a href="/dashboard"
+           aria-label="Go back"
+           data-slot="button"
+           class="inline-flex items-center justify-center gap-1.5 whitespace-nowrap rounded-md text-sm font-medium transition-[color,box-shadow] disabled:pointer-events-none disabled:opacity-50 [&amp;_svg]:pointer-events-none [&amp;_svg:not([class*='size-'])]:size-4 shrink-0 [&amp;_svg]:shrink-0 outline-none focus-visible:border-ring focus-visible:ring-ring/50 focus-visible:ring-[3px] aria-invalid:ring-destructive/20 dark:aria-invalid:ring-destructive/40 aria-invalid:border-destructive border bg-background shadow-xs hover:bg-accent dark:bg-input/30 dark:border-input dark:hover:bg-input/50 hover:text-accent-foreground size-10"
+        >
+          <svg xmlns="http://www.w3.org/2000/svg"
+               width="16"
+               height="16"
+               viewbox="0 0 24 24"
+               fill="none"
+               stroke="currentColor"
+               stroke-width="2"
+               stroke-linecap="round"
+               stroke-linejoin="round"
+               class="lucide lucide-arrow-left shrink-0"
+               aria-hidden="true"
+               id="ArrowLeft"
+          >
+            <path d="m12 19-7-7 7-7">
+            </path>
+            <path d="M19 12H5">
+            </path>
+          </svg>
+        </a>
+        <div id="h-undefined"
+             class="flex gap-2 items-start text-primary"
+        >
+          <div class="flex flex-col gap-1">
+            <h3 class="scroll-m-20 font-bold tracking-tight text-balance text-2xl lg:text-3xl">
+              Page Title
+            </h3>
+            <p class="text-sm">
+            </p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+`;
+
+exports[`Components/PageHeader WithBackButtonText smoke-test 1`] = `
+<div class="container mx-auto px-4 py-10">
+  <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4"
+       id="_r_ID_"
+  >
+    <div class="flex items-center gap-2">
+      <a href="/dashboard"
+         aria-label="Go back"
+         data-slot="button"
+         class="inline-flex items-center justify-center whitespace-nowrap rounded-md text-sm font-medium transition-[color,box-shadow] disabled:pointer-events-none disabled:opacity-50 [&amp;_svg]:pointer-events-none [&amp;_svg:not([class*='size-'])]:size-4 shrink-0 [&amp;_svg]:shrink-0 outline-none focus-visible:border-ring focus-visible:ring-ring/50 focus-visible:ring-[3px] aria-invalid:ring-destructive/20 dark:aria-invalid:ring-destructive/40 aria-invalid:border-destructive border bg-background shadow-xs hover:bg-accent dark:bg-input/30 dark:border-input dark:hover:bg-input/50 hover:text-accent-foreground h-9 px-2.5 has-data-[icon=inline-end]:pr-2 has-data-[icon=inline-start]:pl-2 gap-2"
+      >
+        <svg xmlns="http://www.w3.org/2000/svg"
+             width="16"
+             height="16"
+             viewbox="0 0 24 24"
+             fill="none"
+             stroke="currentColor"
+             stroke-width="2"
+             stroke-linecap="round"
+             stroke-linejoin="round"
+             class="lucide lucide-arrow-left shrink-0"
+             aria-hidden="true"
+             id="ArrowLeft"
+        >
+          <path d="m12 19-7-7 7-7">
+          </path>
+          <path d="M19 12H5">
+          </path>
+        </svg>
+        <span class="sr-only ml-2">
+          Voltar
+        </span>
+      </a>
+      <div id="h-undefined"
+           class="flex gap-2 items-start text-primary"
+      >
+        <div class="flex flex-col gap-1">
+          <h3 class="scroll-m-20 font-bold tracking-tight text-balance text-2xl lg:text-3xl">
+            Gestão de Benefícios
+          </h3>
+          <p class="text-sm">
+            Gerencie e monitore todos os benefícios oferecidos pelo sistema de segurança social.
+          </p>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+`;
+
+exports[`Components/PageHeader WithBackButtonVariants smoke-test 1`] = `
+<div class="container mx-auto px-4 py-10 space-y-8">
+  <div>
+    <h3 class="text-sm font-medium mb-4 text-muted-foreground">
+      Outline (default)
+    </h3>
+    <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4"
+         id="_r_ID_"
+    >
+      <div class="flex items-center gap-2">
+        <a href="/dashboard"
+           aria-label="Go back"
+           data-slot="button"
+           class="inline-flex items-center justify-center gap-1.5 whitespace-nowrap rounded-md text-sm font-medium transition-[color,box-shadow] disabled:pointer-events-none disabled:opacity-50 [&amp;_svg]:pointer-events-none [&amp;_svg:not([class*='size-'])]:size-4 shrink-0 [&amp;_svg]:shrink-0 outline-none focus-visible:border-ring focus-visible:ring-ring/50 focus-visible:ring-[3px] aria-invalid:ring-destructive/20 dark:aria-invalid:ring-destructive/40 aria-invalid:border-destructive border bg-background shadow-xs hover:bg-accent dark:bg-input/30 dark:border-input dark:hover:bg-input/50 hover:text-accent-foreground size-9"
+        >
+          <svg xmlns="http://www.w3.org/2000/svg"
+               width="16"
+               height="16"
+               viewbox="0 0 24 24"
+               fill="none"
+               stroke="currentColor"
+               stroke-width="2"
+               stroke-linecap="round"
+               stroke-linejoin="round"
+               class="lucide lucide-arrow-left shrink-0"
+               aria-hidden="true"
+               id="ArrowLeft"
+          >
+            <path d="m12 19-7-7 7-7">
+            </path>
+            <path d="M19 12H5">
+            </path>
+          </svg>
+        </a>
+        <div id="h-undefined"
+             class="flex gap-2 items-start text-primary"
+        >
+          <div class="flex flex-col gap-1">
+            <h3 class="scroll-m-20 font-bold tracking-tight text-balance text-2xl lg:text-3xl">
+              Page Title
+            </h3>
+            <p class="text-sm">
+            </p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div>
+    <h3 class="text-sm font-medium mb-4 text-muted-foreground">
+      Ghost
+    </h3>
+    <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4"
+         id="_r_ID_"
+    >
+      <div class="flex items-center gap-2">
+        <a href="/dashboard"
+           aria-label="Go back"
+           data-slot="button"
+           class="inline-flex items-center justify-center gap-1.5 whitespace-nowrap rounded-md text-sm font-medium transition-[color,box-shadow] disabled:pointer-events-none disabled:opacity-50 [&amp;_svg]:pointer-events-none [&amp;_svg:not([class*='size-'])]:size-4 shrink-0 [&amp;_svg]:shrink-0 outline-none focus-visible:border-ring focus-visible:ring-ring/50 focus-visible:ring-[3px] aria-invalid:ring-destructive/20 dark:aria-invalid:ring-destructive/40 aria-invalid:border-destructive hover:bg-accent dark:hover:bg-accent/50 hover:text-accent-foreground size-9"
+        >
+          <svg xmlns="http://www.w3.org/2000/svg"
+               width="16"
+               height="16"
+               viewbox="0 0 24 24"
+               fill="none"
+               stroke="currentColor"
+               stroke-width="2"
+               stroke-linecap="round"
+               stroke-linejoin="round"
+               class="lucide lucide-arrow-left shrink-0"
+               aria-hidden="true"
+               id="ArrowLeft"
+          >
+            <path d="m12 19-7-7 7-7">
+            </path>
+            <path d="M19 12H5">
+            </path>
+          </svg>
+        </a>
+        <div id="h-undefined"
+             class="flex gap-2 items-start text-primary"
+        >
+          <div class="flex flex-col gap-1">
+            <h3 class="scroll-m-20 font-bold tracking-tight text-balance text-2xl lg:text-3xl">
+              Page Title
+            </h3>
+            <p class="text-sm">
+            </p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div>
+    <h3 class="text-sm font-medium mb-4 text-muted-foreground">
+      Secondary
+    </h3>
+    <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4"
+         id="_r_ID_"
+    >
+      <div class="flex items-center gap-2">
+        <a href="/dashboard"
+           aria-label="Go back"
+           data-slot="button"
+           class="inline-flex items-center justify-center gap-1.5 whitespace-nowrap rounded-md text-sm font-medium transition-[color,box-shadow] disabled:pointer-events-none disabled:opacity-50 [&amp;_svg]:pointer-events-none [&amp;_svg:not([class*='size-'])]:size-4 shrink-0 [&amp;_svg]:shrink-0 outline-none focus-visible:border-ring focus-visible:ring-ring/50 focus-visible:ring-[3px] aria-invalid:ring-destructive/20 dark:aria-invalid:ring-destructive/40 aria-invalid:border-destructive bg-secondary text-secondary-foreground shadow-xs hover:bg-secondary/80 hover:text-secondary-foreground size-9"
+        >
+          <svg xmlns="http://www.w3.org/2000/svg"
+               width="16"
+               height="16"
+               viewbox="0 0 24 24"
+               fill="none"
+               stroke="currentColor"
+               stroke-width="2"
+               stroke-linecap="round"
+               stroke-linejoin="round"
+               class="lucide lucide-arrow-left shrink-0"
+               aria-hidden="true"
+               id="ArrowLeft"
+          >
+            <path d="m12 19-7-7 7-7">
+            </path>
+            <path d="M19 12H5">
+            </path>
+          </svg>
+        </a>
+        <div id="h-undefined"
+             class="flex gap-2 items-start text-primary"
+        >
+          <div class="flex flex-col gap-1">
+            <h3 class="scroll-m-20 font-bold tracking-tight text-balance text-2xl lg:text-3xl">
+              Page Title
+            </h3>
+            <p class="text-sm">
+            </p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+`;
+
+exports[`Components/PageHeader WithDescription smoke-test 1`] = `
+<div class="container mx-auto px-4 py-10">
+  <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4"
+       id="_r_ID_"
+  >
+    <div class="flex items-center gap-2">
+      <div id="h-undefined"
+           class="flex gap-2 items-start text-primary"
+      >
+        <div class="flex flex-col gap-1">
+          <h3 class="scroll-m-20 font-bold tracking-tight text-balance text-2xl lg:text-3xl">
+            Dashboard
+          </h3>
+          <p class="text-sm">
+            Visão geral do sistema e métricas principais
+          </p>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+`;
+
+exports[`Components/PageHeader WithoutDescription smoke-test 1`] = `
+<div class="container mx-auto px-4 py-10">
+  <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4"
+       id="_r_ID_"
+  >
+    <div class="flex items-center gap-2">
+      <div id="h-undefined"
+           class="flex gap-2 items-start text-primary"
+      >
+        <div class="flex flex-col gap-1">
+          <h3 class="scroll-m-20 font-bold tracking-tight text-balance text-2xl lg:text-3xl">
+            Configurações
+          </h3>
+          <p class="text-sm">
+          </p>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+`;

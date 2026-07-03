@@ -1,0 +1,28 @@
+---
+description: IGRP design system usage — three-layer picker (Horizon / Primitives / Custom), source-verified prop shapes for IGRPForm, IGRPDataTable, IGRP*Chart, and the repo-wide UI hard rules. Auto-applies when editing React/TSX code inside this IGRP template.
+globs:
+  - "src/**/*.{ts,tsx}"
+alwaysApply: false
+---
+
+# IGRP design system rules
+
+This project uses `@igrp/igrp-framework-react-design-system`. All UI must follow the conventions documented in the canonical skill.
+
+**Read `.agents/skills/igrp-design-system/SKILL.md` and follow its instructions** before writing any UI code. It documents:
+
+- The three-layer picker: Horizon (`IGRP*`) → Custom → Primitives (escape hatch only)
+- Hard rules: `'use client'`, `IGRPForm` + Zod for every form, semantic tokens only, `size-*` not `w-* h-*`, `flex gap-*` not `space-*`
+- Common pitfalls (raw `<Input>` inside `IGRPForm`, raw palette colors, missing `'use client'`, etc.)
+
+Deep references live alongside SKILL.md under `.agents/skills/igrp-design-system/references/` — load them on demand for the family you're working with:
+
+- `forms.md` — `IGRPForm` + Zod + all `IGRPInput*` (load when any form is in scope)
+- `data-table.md` — `IGRPDataTable`, `createIGRPColumnHelper`, the `actions` prop with typed row actions
+- `charts.md` — `IGRPAreaChart` / `IGRPVerticalBarChart` / `IGRPLineChart` / … with `categoryKey` + `bars: IGRPBarConfig[]` + `valueFormatter: (n) => string`
+- `horizon.md` — shared `IGRPInputProps`, naming conventions
+- `primitives.md` — when to drop down, CVA variants
+- `utilities.md` — `cn()`, `IGRPColors`, hooks
+- `custom.md` — domain pieces
+
+@.agents/skills/igrp-design-system/SKILL.md

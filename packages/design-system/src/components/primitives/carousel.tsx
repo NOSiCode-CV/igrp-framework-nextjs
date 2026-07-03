@@ -1,3 +1,4 @@
+// shadcn: 2026-05-18
 "use client"
 
 import { createContext, useCallback, useContext, useEffect, useState } from "react"
@@ -177,7 +178,7 @@ function CarouselPrevious({
       onClick={scrollPrev}
       {...props}
     >
-      <ArrowLeft />
+      <ArrowLeft aria-hidden="true" />
       <span className={cn("sr-only")}>Previous slide</span>
     </Button>
   )
@@ -207,7 +208,7 @@ function CarouselNext({
       onClick={scrollNext}
       {...props}
     >
-      <ArrowRight />
+      <ArrowRight aria-hidden="true" />
       <span className={cn("sr-only")}>Next slide</span>
     </Button>
   )

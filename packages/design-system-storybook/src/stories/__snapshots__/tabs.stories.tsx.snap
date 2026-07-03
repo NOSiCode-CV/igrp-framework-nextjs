@@ -1,0 +1,3559 @@
+// Jest Snapshot v1, https://jestjs.io/docs/snapshot-testing
+
+exports[`Components/Tabs AllVariants smoke-test 1`] = `
+<div class="container my-10 mx-auto">
+  <div dir="ltr"
+       data-orientation="horizontal"
+       data-slot="tabs"
+       class="flex flex-col gap-2 w-full"
+       id="_r_ID_"
+  >
+    <div class="relative flex gap-1.5 items-center w-full">
+      <div class="overflow-x-auto scrollbar-hide scroll-smooth [scrollbar-width:none] [-ms-overflow-style:none] [&amp;::-webkit-scrollbar]:hidden flex-1">
+        <div role="tablist"
+             aria-orientation="horizontal"
+             data-slot="tabs-list"
+             class="bg-muted text-muted-foreground inline-flex items-center justify-center rounded-lg p-1 gap-1.5 w-fit"
+             tabindex="0"
+             data-orientation="horizontal"
+             style="outline: none;"
+        >
+          <button type="button"
+                  role="tab"
+                  aria-selected="true"
+                  aria-controls="radix-ID"
+                  data-state="active"
+                  id="radix-ID"
+                  data-slot="tabs-trigger"
+                  class="data-[state=active]:bg-background dark:data-[state=active]:text-foreground focus-visible:border-ring focus-visible:ring-ring/50 focus-visible:outline-ring dark:data-[state=active]:border-input dark:data-[state=active]:bg-input/30 text-foreground dark:text-muted-foreground inline-flex h-[calc(100%-1px)] flex-1 items-center justify-center gap-1.5 rounded-md border border-transparent text-sm font-medium whitespace-nowrap transition-[color,box-shadow] focus-visible:ring-[3px] focus-visible:outline-1 disabled:pointer-events-none disabled:opacity-50 data-[state=active]:shadow-sm [&amp;_svg]:pointer-events-none [&amp;_svg]:shrink-0 [&amp;_svg:not([class*=&quot;size-&quot;])]:size-4 px-4 py-1.5"
+                  tabindex="-1"
+                  data-orientation="horizontal"
+                  data-radix-id""
+          >
+            <svg xmlns="http://www.w3.org/2000/svg"
+                 width="16"
+                 height="16"
+                 viewbox="0 0 24 24"
+                 fill="none"
+                 stroke="currentColor"
+                 stroke-width="2"
+                 stroke-linecap="round"
+                 stroke-linejoin="round"
+                 class="lucide lucide-user"
+                 aria-hidden="true"
+                 id="User"
+            >
+              <path d="M19 21v-2a4 4 0 0 0-4-4H9a4 4 0 0 0-4 4v2">
+              </path>
+              <circle cx="12"
+                      cy="7"
+                      r="4"
+              >
+              </circle>
+            </svg>
+            <span>
+              Account
+            </span>
+          </button>
+          <button type="button"
+                  role="tab"
+                  aria-selected="false"
+                  aria-controls="radix-ID"
+                  data-state="inactive"
+                  id="radix-ID"
+                  data-slot="tabs-trigger"
+                  class="data-[state=active]:bg-background dark:data-[state=active]:text-foreground focus-visible:border-ring focus-visible:ring-ring/50 focus-visible:outline-ring dark:data-[state=active]:border-input dark:data-[state=active]:bg-input/30 text-foreground dark:text-muted-foreground inline-flex h-[calc(100%-1px)] flex-1 items-center justify-center gap-1.5 rounded-md border border-transparent text-sm font-medium whitespace-nowrap transition-[color,box-shadow] focus-visible:ring-[3px] focus-visible:outline-1 disabled:pointer-events-none disabled:opacity-50 data-[state=active]:shadow-sm [&amp;_svg]:pointer-events-none [&amp;_svg]:shrink-0 [&amp;_svg:not([class*=&quot;size-&quot;])]:size-4 px-4 py-1.5"
+                  tabindex="-1"
+                  data-orientation="horizontal"
+                  data-radix-id""
+          >
+            <svg xmlns="http://www.w3.org/2000/svg"
+                 width="16"
+                 height="16"
+                 viewbox="0 0 24 24"
+                 fill="none"
+                 stroke="currentColor"
+                 stroke-width="2"
+                 stroke-linecap="round"
+                 stroke-linejoin="round"
+                 class="lucide lucide-lock"
+                 aria-hidden="true"
+                 id="Lock"
+            >
+              <rect width="18"
+                    height="11"
+                    x="3"
+                    y="11"
+                    rx="2"
+                    ry="2"
+              >
+              </rect>
+              <path d="M7 11V7a5 5 0 0 1 10 0v4">
+              </path>
+            </svg>
+            <span>
+              Password
+            </span>
+          </button>
+          <button type="button"
+                  role="tab"
+                  aria-selected="false"
+                  aria-controls="radix-ID"
+                  data-state="inactive"
+                  id="radix-ID"
+                  data-slot="tabs-trigger"
+                  class="data-[state=active]:bg-background dark:data-[state=active]:text-foreground focus-visible:border-ring focus-visible:ring-ring/50 focus-visible:outline-ring dark:data-[state=active]:border-input dark:data-[state=active]:bg-input/30 text-foreground dark:text-muted-foreground inline-flex h-[calc(100%-1px)] flex-1 items-center justify-center gap-1.5 rounded-md border border-transparent text-sm font-medium whitespace-nowrap transition-[color,box-shadow] focus-visible:ring-[3px] focus-visible:outline-1 disabled:pointer-events-none disabled:opacity-50 data-[state=active]:shadow-sm [&amp;_svg]:pointer-events-none [&amp;_svg]:shrink-0 [&amp;_svg:not([class*=&quot;size-&quot;])]:size-4 px-4 py-1.5"
+                  tabindex="-1"
+                  data-orientation="horizontal"
+                  data-radix-id""
+          >
+            <svg xmlns="http://www.w3.org/2000/svg"
+                 width="16"
+                 height="16"
+                 viewbox="0 0 24 24"
+                 fill="none"
+                 stroke="currentColor"
+                 stroke-width="2"
+                 stroke-linecap="round"
+                 stroke-linejoin="round"
+                 class="lucide lucide-bell"
+                 aria-hidden="true"
+                 id="Bell"
+            >
+              <path d="M10.268 21a2 2 0 0 0 3.464 0">
+              </path>
+              <path d="M3.262 15.326A1 1 0 0 0 4 17h16a1 1 0 0 0 .74-1.673C19.41 13.956 18 12.499 18 8A6 6 0 0 0 6 8c0 4.499-1.411 5.956-2.738 7.326">
+              </path>
+            </svg>
+            <span>
+              Notifications
+            </span>
+          </button>
+        </div>
+      </div>
+    </div>
+    <div data-state="active"
+         data-orientation="horizontal"
+         role="tabpanel"
+         aria-labelledby="radix-ID"
+         id="radix-ID"
+         tabindex="0"
+         data-slot="tabs-content"
+         class="flex-1 outline-none p-4 w-full border border-transparent rounded-md"
+         style="animation-duration: 0s;"
+    >
+      <div class="space-y-4">
+        <h3 class="text-lg font-medium">
+          Account Content
+        </h3>
+        <p>
+          This is the content for the account tab.
+        </p>
+      </div>
+    </div>
+    <div data-state="inactive"
+         data-orientation="horizontal"
+         role="tabpanel"
+         aria-labelledby="radix-ID"
+         hidden
+         id="radix-ID"
+         tabindex="0"
+         data-slot="tabs-content"
+         class="flex-1 outline-none p-4 w-full border border-transparent rounded-md"
+    >
+    </div>
+    <div data-state="inactive"
+         data-orientation="horizontal"
+         role="tabpanel"
+         aria-labelledby="radix-ID"
+         hidden
+         id="radix-ID"
+         tabindex="0"
+         data-slot="tabs-content"
+         class="flex-1 outline-none p-4 w-full border border-transparent rounded-md"
+    >
+    </div>
+  </div>
+</div>
+`;
+
+exports[`Components/Tabs Default smoke-test 1`] = `
+<div class="container my-10 mx-auto">
+  <div dir="ltr"
+       data-orientation="horizontal"
+       data-slot="tabs"
+       class="flex flex-col gap-2 w-full"
+       id="_r_ID_"
+  >
+    <div class="relative flex gap-1.5 items-center w-full">
+      <div class="overflow-x-auto scrollbar-hide scroll-smooth [scrollbar-width:none] [-ms-overflow-style:none] [&amp;::-webkit-scrollbar]:hidden flex-1">
+        <div role="tablist"
+             aria-orientation="horizontal"
+             data-slot="tabs-list"
+             class="bg-muted text-muted-foreground inline-flex items-center justify-center rounded-lg p-1 gap-1.5 w-fit"
+             tabindex="0"
+             data-orientation="horizontal"
+             style="outline: none;"
+        >
+          <button type="button"
+                  role="tab"
+                  aria-selected="true"
+                  aria-controls="radix-ID"
+                  data-state="active"
+                  id="radix-ID"
+                  data-slot="tabs-trigger"
+                  class="data-[state=active]:bg-background dark:data-[state=active]:text-foreground focus-visible:border-ring focus-visible:ring-ring/50 focus-visible:outline-ring dark:data-[state=active]:border-input dark:data-[state=active]:bg-input/30 text-foreground dark:text-muted-foreground inline-flex h-[calc(100%-1px)] flex-1 items-center justify-center gap-1.5 rounded-md border border-transparent text-sm font-medium whitespace-nowrap transition-[color,box-shadow] focus-visible:ring-[3px] focus-visible:outline-1 disabled:pointer-events-none disabled:opacity-50 data-[state=active]:shadow-sm [&amp;_svg]:pointer-events-none [&amp;_svg]:shrink-0 [&amp;_svg:not([class*=&quot;size-&quot;])]:size-4 px-4 py-1.5"
+                  tabindex="-1"
+                  data-orientation="horizontal"
+                  data-radix-id""
+          >
+            <span>
+              Account
+            </span>
+          </button>
+          <button type="button"
+                  role="tab"
+                  aria-selected="false"
+                  aria-controls="radix-ID"
+                  data-state="inactive"
+                  id="radix-ID"
+                  data-slot="tabs-trigger"
+                  class="data-[state=active]:bg-background dark:data-[state=active]:text-foreground focus-visible:border-ring focus-visible:ring-ring/50 focus-visible:outline-ring dark:data-[state=active]:border-input dark:data-[state=active]:bg-input/30 text-foreground dark:text-muted-foreground inline-flex h-[calc(100%-1px)] flex-1 items-center justify-center gap-1.5 rounded-md border border-transparent text-sm font-medium whitespace-nowrap transition-[color,box-shadow] focus-visible:ring-[3px] focus-visible:outline-1 disabled:pointer-events-none disabled:opacity-50 data-[state=active]:shadow-sm [&amp;_svg]:pointer-events-none [&amp;_svg]:shrink-0 [&amp;_svg:not([class*=&quot;size-&quot;])]:size-4 px-4 py-1.5"
+                  tabindex="-1"
+                  data-orientation="horizontal"
+                  data-radix-id""
+          >
+            <span>
+              Password
+            </span>
+          </button>
+          <button type="button"
+                  role="tab"
+                  aria-selected="false"
+                  aria-controls="radix-ID"
+                  data-state="inactive"
+                  id="radix-ID"
+                  data-slot="tabs-trigger"
+                  class="data-[state=active]:bg-background dark:data-[state=active]:text-foreground focus-visible:border-ring focus-visible:ring-ring/50 focus-visible:outline-ring dark:data-[state=active]:border-input dark:data-[state=active]:bg-input/30 text-foreground dark:text-muted-foreground inline-flex h-[calc(100%-1px)] flex-1 items-center justify-center gap-1.5 rounded-md border border-transparent text-sm font-medium whitespace-nowrap transition-[color,box-shadow] focus-visible:ring-[3px] focus-visible:outline-1 disabled:pointer-events-none disabled:opacity-50 data-[state=active]:shadow-sm [&amp;_svg]:pointer-events-none [&amp;_svg]:shrink-0 [&amp;_svg:not([class*=&quot;size-&quot;])]:size-4 px-4 py-1.5"
+                  tabindex="-1"
+                  data-orientation="horizontal"
+                  data-radix-id""
+          >
+            <span>
+              Notifications
+            </span>
+          </button>
+        </div>
+      </div>
+    </div>
+    <div data-state="active"
+         data-orientation="horizontal"
+         role="tabpanel"
+         aria-labelledby="radix-ID"
+         id="radix-ID"
+         tabindex="0"
+         data-slot="tabs-content"
+         class="flex-1 outline-none p-4 w-full border border-transparent rounded-md"
+         style="animation-duration: 0s;"
+    >
+      <div class="space-y-4">
+        <h3 class="text-lg font-medium">
+          Account Content
+        </h3>
+        <p>
+          This is the content for the account tab.
+        </p>
+      </div>
+    </div>
+    <div data-state="inactive"
+         data-orientation="horizontal"
+         role="tabpanel"
+         aria-labelledby="radix-ID"
+         hidden
+         id="radix-ID"
+         tabindex="0"
+         data-slot="tabs-content"
+         class="flex-1 outline-none p-4 w-full border border-transparent rounded-md"
+    >
+    </div>
+    <div data-state="inactive"
+         data-orientation="horizontal"
+         role="tabpanel"
+         aria-labelledby="radix-ID"
+         hidden
+         id="radix-ID"
+         tabindex="0"
+         data-slot="tabs-content"
+         class="flex-1 outline-none p-4 w-full border border-transparent rounded-md"
+    >
+    </div>
+  </div>
+</div>
+`;
+
+exports[`Components/Tabs IconsOnly smoke-test 1`] = `
+<div class="container my-10 mx-auto">
+  <div dir="ltr"
+       data-orientation="horizontal"
+       data-slot="tabs"
+       class="flex flex-col gap-2 w-full"
+       id="_r_ID_"
+  >
+    <div class="relative flex gap-1.5 items-center w-full">
+      <div class="overflow-x-auto scrollbar-hide scroll-smooth [scrollbar-width:none] [-ms-overflow-style:none] [&amp;::-webkit-scrollbar]:hidden flex-1">
+        <div role="tablist"
+             aria-orientation="horizontal"
+             data-slot="tabs-list"
+             class="text-muted-foreground inline-flex items-center justify-center rounded-lg p-1 gap-1.5 bg-transparent w-fit"
+             tabindex="0"
+             data-orientation="horizontal"
+             style="outline: none;"
+        >
+          <button type="button"
+                  role="tab"
+                  aria-selected="true"
+                  aria-controls="radix-ID"
+                  data-state="active"
+                  id="radix-ID"
+                  data-slot="tabs-trigger"
+                  class="dark:data-[state=active]:text-foreground focus-visible:border-ring focus-visible:ring-ring/50 focus-visible:outline-ring dark:data-[state=active]:border-input dark:data-[state=active]:bg-input/30 text-foreground dark:text-muted-foreground inline-flex h-[calc(100%-1px)] flex-1 items-center justify-center gap-1.5 border border-transparent text-sm font-medium whitespace-nowrap transition-[color,box-shadow] focus-visible:ring-[3px] focus-visible:outline-1 disabled:pointer-events-none disabled:opacity-50 [&amp;_svg]:pointer-events-none [&amp;_svg]:shrink-0 [&amp;_svg:not([class*=&quot;size-&quot;])]:size-4 px-4 py-1.5 data-[state=active]:bg-primary data-[state=active]:text-muted-foreground rounded-full data-[state=active]:shadow-none"
+                  tabindex="-1"
+                  data-orientation="horizontal"
+                  data-radix-id""
+          >
+            <svg xmlns="http://www.w3.org/2000/svg"
+                 width="16"
+                 height="16"
+                 viewbox="0 0 24 24"
+                 fill="none"
+                 stroke="currentColor"
+                 stroke-width="2"
+                 stroke-linecap="round"
+                 stroke-linejoin="round"
+                 class="lucide lucide-user"
+                 aria-hidden="true"
+                 id="User"
+            >
+              <path d="M19 21v-2a4 4 0 0 0-4-4H9a4 4 0 0 0-4 4v2">
+              </path>
+              <circle cx="12"
+                      cy="7"
+                      r="4"
+              >
+              </circle>
+            </svg>
+          </button>
+          <button type="button"
+                  role="tab"
+                  aria-selected="false"
+                  aria-controls="radix-ID"
+                  data-state="inactive"
+                  id="radix-ID"
+                  data-slot="tabs-trigger"
+                  class="dark:data-[state=active]:text-foreground focus-visible:border-ring focus-visible:ring-ring/50 focus-visible:outline-ring dark:data-[state=active]:border-input dark:data-[state=active]:bg-input/30 text-foreground dark:text-muted-foreground inline-flex h-[calc(100%-1px)] flex-1 items-center justify-center gap-1.5 border border-transparent text-sm font-medium whitespace-nowrap transition-[color,box-shadow] focus-visible:ring-[3px] focus-visible:outline-1 disabled:pointer-events-none disabled:opacity-50 [&amp;_svg]:pointer-events-none [&amp;_svg]:shrink-0 [&amp;_svg:not([class*=&quot;size-&quot;])]:size-4 px-4 py-1.5 data-[state=active]:bg-primary data-[state=active]:text-muted-foreground rounded-full data-[state=active]:shadow-none"
+                  tabindex="-1"
+                  data-orientation="horizontal"
+                  data-radix-id""
+          >
+            <svg xmlns="http://www.w3.org/2000/svg"
+                 width="16"
+                 height="16"
+                 viewbox="0 0 24 24"
+                 fill="none"
+                 stroke="currentColor"
+                 stroke-width="2"
+                 stroke-linecap="round"
+                 stroke-linejoin="round"
+                 class="lucide lucide-settings"
+                 aria-hidden="true"
+                 id="Settings"
+            >
+              <path d="M9.671 4.136a2.34 2.34 0 0 1 4.659 0 2.34 2.34 0 0 0 3.319 1.915 2.34 2.34 0 0 1 2.33 4.033 2.34 2.34 0 0 0 0 3.831 2.34 2.34 0 0 1-2.33 4.033 2.34 2.34 0 0 0-3.319 1.915 2.34 2.34 0 0 1-4.659 0 2.34 2.34 0 0 0-3.32-1.915 2.34 2.34 0 0 1-2.33-4.033 2.34 2.34 0 0 0 0-3.831A2.34 2.34 0 0 1 6.35 6.051a2.34 2.34 0 0 0 3.319-1.915">
+              </path>
+              <circle cx="12"
+                      cy="12"
+                      r="3"
+              >
+              </circle>
+            </svg>
+          </button>
+          <button type="button"
+                  role="tab"
+                  aria-selected="false"
+                  aria-controls="radix-ID"
+                  data-state="inactive"
+                  id="radix-ID"
+                  data-slot="tabs-trigger"
+                  class="dark:data-[state=active]:text-foreground focus-visible:border-ring focus-visible:ring-ring/50 focus-visible:outline-ring dark:data-[state=active]:border-input dark:data-[state=active]:bg-input/30 text-foreground dark:text-muted-foreground inline-flex h-[calc(100%-1px)] flex-1 items-center justify-center gap-1.5 border border-transparent text-sm font-medium whitespace-nowrap transition-[color,box-shadow] focus-visible:ring-[3px] focus-visible:outline-1 disabled:pointer-events-none disabled:opacity-50 [&amp;_svg]:pointer-events-none [&amp;_svg]:shrink-0 [&amp;_svg:not([class*=&quot;size-&quot;])]:size-4 px-4 py-1.5 data-[state=active]:bg-primary data-[state=active]:text-muted-foreground rounded-full data-[state=active]:shadow-none"
+                  tabindex="-1"
+                  data-orientation="horizontal"
+                  data-radix-id""
+          >
+            <svg xmlns="http://www.w3.org/2000/svg"
+                 width="16"
+                 height="16"
+                 viewbox="0 0 24 24"
+                 fill="none"
+                 stroke="currentColor"
+                 stroke-width="2"
+                 stroke-linecap="round"
+                 stroke-linejoin="round"
+                 class="lucide lucide-bell"
+                 aria-hidden="true"
+                 id="Bell"
+            >
+              <path d="M10.268 21a2 2 0 0 0 3.464 0">
+              </path>
+              <path d="M3.262 15.326A1 1 0 0 0 4 17h16a1 1 0 0 0 .74-1.673C19.41 13.956 18 12.499 18 8A6 6 0 0 0 6 8c0 4.499-1.411 5.956-2.738 7.326">
+              </path>
+            </svg>
+          </button>
+        </div>
+      </div>
+    </div>
+    <div data-state="active"
+         data-orientation="horizontal"
+         role="tabpanel"
+         aria-labelledby="radix-ID"
+         id="radix-ID"
+         tabindex="0"
+         data-slot="tabs-content"
+         class="flex-1 outline-none p-4 w-full border border-transparent rounded-md"
+         style="animation-duration: 0s;"
+    >
+      <div class="space-y-4">
+        <h3 class="text-lg font-medium">
+          User Content
+        </h3>
+        <p>
+          This is the content for the user tab.
+        </p>
+      </div>
+    </div>
+    <div data-state="inactive"
+         data-orientation="horizontal"
+         role="tabpanel"
+         aria-labelledby="radix-ID"
+         hidden
+         id="radix-ID"
+         tabindex="0"
+         data-slot="tabs-content"
+         class="flex-1 outline-none p-4 w-full border border-transparent rounded-md"
+    >
+    </div>
+    <div data-state="inactive"
+         data-orientation="horizontal"
+         role="tabpanel"
+         aria-labelledby="radix-ID"
+         hidden
+         id="radix-ID"
+         tabindex="0"
+         data-slot="tabs-content"
+         class="flex-1 outline-none p-4 w-full border border-transparent rounded-md"
+    >
+    </div>
+  </div>
+</div>
+`;
+
+exports[`Components/Tabs ManyTabs smoke-test 1`] = `
+<div class="container my-10 mx-auto">
+  <div dir="ltr"
+       data-orientation="horizontal"
+       data-slot="tabs"
+       class="flex flex-col gap-2 w-full"
+       id="_r_ID_"
+  >
+    <div class="relative flex gap-1.5 items-center w-full">
+      <div class="overflow-x-auto scrollbar-hide scroll-smooth [scrollbar-width:none] [-ms-overflow-style:none] [&amp;::-webkit-scrollbar]:hidden flex-1">
+        <div role="tablist"
+             aria-orientation="horizontal"
+             data-slot="tabs-list"
+             class="bg-muted text-muted-foreground inline-flex items-center justify-center rounded-lg p-1 gap-1.5 w-fit"
+             tabindex="0"
+             data-orientation="horizontal"
+             style="outline: none;"
+        >
+          <button type="button"
+                  role="tab"
+                  aria-selected="true"
+                  aria-controls="radix-ID"
+                  data-state="active"
+                  id="radix-ID"
+                  data-slot="tabs-trigger"
+                  class="data-[state=active]:bg-background dark:data-[state=active]:text-foreground focus-visible:border-ring focus-visible:ring-ring/50 focus-visible:outline-ring dark:data-[state=active]:border-input dark:data-[state=active]:bg-input/30 text-foreground dark:text-muted-foreground inline-flex h-[calc(100%-1px)] flex-1 items-center justify-center gap-1.5 rounded-md border border-transparent text-sm font-medium whitespace-nowrap transition-[color,box-shadow] focus-visible:ring-[3px] focus-visible:outline-1 disabled:pointer-events-none disabled:opacity-50 data-[state=active]:shadow-sm [&amp;_svg]:pointer-events-none [&amp;_svg]:shrink-0 [&amp;_svg:not([class*=&quot;size-&quot;])]:size-4 px-4 py-1.5"
+                  tabindex="-1"
+                  data-orientation="horizontal"
+                  data-radix-id""
+          >
+            <svg xmlns="http://www.w3.org/2000/svg"
+                 width="16"
+                 height="16"
+                 viewbox="0 0 24 24"
+                 fill="none"
+                 stroke="currentColor"
+                 stroke-width="2"
+                 stroke-linecap="round"
+                 stroke-linejoin="round"
+                 class="lucide lucide-user"
+                 aria-hidden="true"
+                 id="User"
+            >
+              <path d="M19 21v-2a4 4 0 0 0-4-4H9a4 4 0 0 0-4 4v2">
+              </path>
+              <circle cx="12"
+                      cy="7"
+                      r="4"
+              >
+              </circle>
+            </svg>
+            <span>
+              Account
+            </span>
+          </button>
+          <button type="button"
+                  role="tab"
+                  aria-selected="false"
+                  aria-controls="radix-ID"
+                  data-state="inactive"
+                  id="radix-ID"
+                  data-slot="tabs-trigger"
+                  class="data-[state=active]:bg-background dark:data-[state=active]:text-foreground focus-visible:border-ring focus-visible:ring-ring/50 focus-visible:outline-ring dark:data-[state=active]:border-input dark:data-[state=active]:bg-input/30 text-foreground dark:text-muted-foreground inline-flex h-[calc(100%-1px)] flex-1 items-center justify-center gap-1.5 rounded-md border border-transparent text-sm font-medium whitespace-nowrap transition-[color,box-shadow] focus-visible:ring-[3px] focus-visible:outline-1 disabled:pointer-events-none disabled:opacity-50 data-[state=active]:shadow-sm [&amp;_svg]:pointer-events-none [&amp;_svg]:shrink-0 [&amp;_svg:not([class*=&quot;size-&quot;])]:size-4 px-4 py-1.5"
+                  tabindex="-1"
+                  data-orientation="horizontal"
+                  data-radix-id""
+          >
+            <svg xmlns="http://www.w3.org/2000/svg"
+                 width="16"
+                 height="16"
+                 viewbox="0 0 24 24"
+                 fill="none"
+                 stroke="currentColor"
+                 stroke-width="2"
+                 stroke-linecap="round"
+                 stroke-linejoin="round"
+                 class="lucide lucide-lock"
+                 aria-hidden="true"
+                 id="Lock"
+            >
+              <rect width="18"
+                    height="11"
+                    x="3"
+                    y="11"
+                    rx="2"
+                    ry="2"
+              >
+              </rect>
+              <path d="M7 11V7a5 5 0 0 1 10 0v4">
+              </path>
+            </svg>
+            <span>
+              Password
+            </span>
+          </button>
+          <button type="button"
+                  role="tab"
+                  aria-selected="false"
+                  aria-controls="radix-ID"
+                  data-state="inactive"
+                  id="radix-ID"
+                  data-slot="tabs-trigger"
+                  class="data-[state=active]:bg-background dark:data-[state=active]:text-foreground focus-visible:border-ring focus-visible:ring-ring/50 focus-visible:outline-ring dark:data-[state=active]:border-input dark:data-[state=active]:bg-input/30 text-foreground dark:text-muted-foreground inline-flex h-[calc(100%-1px)] flex-1 items-center justify-center gap-1.5 rounded-md border border-transparent text-sm font-medium whitespace-nowrap transition-[color,box-shadow] focus-visible:ring-[3px] focus-visible:outline-1 disabled:pointer-events-none disabled:opacity-50 data-[state=active]:shadow-sm [&amp;_svg]:pointer-events-none [&amp;_svg]:shrink-0 [&amp;_svg:not([class*=&quot;size-&quot;])]:size-4 px-4 py-1.5"
+                  tabindex="-1"
+                  data-orientation="horizontal"
+                  data-radix-id""
+          >
+            <svg xmlns="http://www.w3.org/2000/svg"
+                 width="16"
+                 height="16"
+                 viewbox="0 0 24 24"
+                 fill="none"
+                 stroke="currentColor"
+                 stroke-width="2"
+                 stroke-linecap="round"
+                 stroke-linejoin="round"
+                 class="lucide lucide-bell"
+                 aria-hidden="true"
+                 id="Bell"
+            >
+              <path d="M10.268 21a2 2 0 0 0 3.464 0">
+              </path>
+              <path d="M3.262 15.326A1 1 0 0 0 4 17h16a1 1 0 0 0 .74-1.673C19.41 13.956 18 12.499 18 8A6 6 0 0 0 6 8c0 4.499-1.411 5.956-2.738 7.326">
+              </path>
+            </svg>
+            <span>
+              Notifications
+            </span>
+          </button>
+          <button type="button"
+                  role="tab"
+                  aria-selected="false"
+                  aria-controls="radix-ID"
+                  data-state="inactive"
+                  id="radix-ID"
+                  data-slot="tabs-trigger"
+                  class="data-[state=active]:bg-background dark:data-[state=active]:text-foreground focus-visible:border-ring focus-visible:ring-ring/50 focus-visible:outline-ring dark:data-[state=active]:border-input dark:data-[state=active]:bg-input/30 text-foreground dark:text-muted-foreground inline-flex h-[calc(100%-1px)] flex-1 items-center justify-center gap-1.5 rounded-md border border-transparent text-sm font-medium whitespace-nowrap transition-[color,box-shadow] focus-visible:ring-[3px] focus-visible:outline-1 disabled:pointer-events-none disabled:opacity-50 data-[state=active]:shadow-sm [&amp;_svg]:pointer-events-none [&amp;_svg]:shrink-0 [&amp;_svg:not([class*=&quot;size-&quot;])]:size-4 px-4 py-1.5"
+                  tabindex="-1"
+                  data-orientation="horizontal"
+                  data-radix-id""
+          >
+            <svg xmlns="http://www.w3.org/2000/svg"
+                 width="16"
+                 height="16"
+                 viewbox="0 0 24 24"
+                 fill="none"
+                 stroke="currentColor"
+                 stroke-width="2"
+                 stroke-linecap="round"
+                 stroke-linejoin="round"
+                 class="lucide lucide-settings"
+                 aria-hidden="true"
+                 id="Settings"
+            >
+              <path d="M9.671 4.136a2.34 2.34 0 0 1 4.659 0 2.34 2.34 0 0 0 3.319 1.915 2.34 2.34 0 0 1 2.33 4.033 2.34 2.34 0 0 0 0 3.831 2.34 2.34 0 0 1-2.33 4.033 2.34 2.34 0 0 0-3.319 1.915 2.34 2.34 0 0 1-4.659 0 2.34 2.34 0 0 0-3.32-1.915 2.34 2.34 0 0 1-2.33-4.033 2.34 2.34 0 0 0 0-3.831A2.34 2.34 0 0 1 6.35 6.051a2.34 2.34 0 0 0 3.319-1.915">
+              </path>
+              <circle cx="12"
+                      cy="12"
+                      r="3"
+              >
+              </circle>
+            </svg>
+            <span>
+              Settings
+            </span>
+          </button>
+          <button type="button"
+                  role="tab"
+                  aria-selected="false"
+                  aria-controls="radix-ID"
+                  data-state="inactive"
+                  id="radix-ID"
+                  data-slot="tabs-trigger"
+                  class="data-[state=active]:bg-background dark:data-[state=active]:text-foreground focus-visible:border-ring focus-visible:ring-ring/50 focus-visible:outline-ring dark:data-[state=active]:border-input dark:data-[state=active]:bg-input/30 text-foreground dark:text-muted-foreground inline-flex h-[calc(100%-1px)] flex-1 items-center justify-center gap-1.5 rounded-md border border-transparent text-sm font-medium whitespace-nowrap transition-[color,box-shadow] focus-visible:ring-[3px] focus-visible:outline-1 disabled:pointer-events-none disabled:opacity-50 data-[state=active]:shadow-sm [&amp;_svg]:pointer-events-none [&amp;_svg]:shrink-0 [&amp;_svg:not([class*=&quot;size-&quot;])]:size-4 px-4 py-1.5"
+                  tabindex="-1"
+                  data-orientation="horizontal"
+                  data-radix-id""
+          >
+            <svg xmlns="http://www.w3.org/2000/svg"
+                 width="16"
+                 height="16"
+                 viewbox="0 0 24 24"
+                 fill="none"
+                 stroke="currentColor"
+                 stroke-width="2"
+                 stroke-linecap="round"
+                 stroke-linejoin="round"
+                 class="lucide lucide-shield"
+                 aria-hidden="true"
+                 id="Shield"
+            >
+              <path d="M20 13c0 5-3.5 7.5-7.66 8.95a1 1 0 0 1-.67-.01C7.5 20.5 4 18 4 13V6a1 1 0 0 1 1-1c2 0 4.5-1.2 6.24-2.72a1.17 1.17 0 0 1 1.52 0C14.51 3.81 17 5 19 5a1 1 0 0 1 1 1z">
+              </path>
+            </svg>
+            <span>
+              Security
+            </span>
+          </button>
+          <button type="button"
+                  role="tab"
+                  aria-selected="false"
+                  aria-controls="radix-ID"
+                  data-state="inactive"
+                  id="radix-ID"
+                  data-slot="tabs-trigger"
+                  class="data-[state=active]:bg-background dark:data-[state=active]:text-foreground focus-visible:border-ring focus-visible:ring-ring/50 focus-visible:outline-ring dark:data-[state=active]:border-input dark:data-[state=active]:bg-input/30 text-foreground dark:text-muted-foreground inline-flex h-[calc(100%-1px)] flex-1 items-center justify-center gap-1.5 rounded-md border border-transparent text-sm font-medium whitespace-nowrap transition-[color,box-shadow] focus-visible:ring-[3px] focus-visible:outline-1 disabled:pointer-events-none disabled:opacity-50 data-[state=active]:shadow-sm [&amp;_svg]:pointer-events-none [&amp;_svg]:shrink-0 [&amp;_svg:not([class*=&quot;size-&quot;])]:size-4 px-4 py-1.5"
+                  tabindex="-1"
+                  data-orientation="horizontal"
+                  data-radix-id""
+          >
+            <svg xmlns="http://www.w3.org/2000/svg"
+                 width="16"
+                 height="16"
+                 viewbox="0 0 24 24"
+                 fill="none"
+                 stroke="currentColor"
+                 stroke-width="2"
+                 stroke-linecap="round"
+                 stroke-linejoin="round"
+                 class="lucide lucide-credit-card"
+                 aria-hidden="true"
+                 id="CreditCard"
+            >
+              <rect width="20"
+                    height="14"
+                    x="2"
+                    y="5"
+                    rx="2"
+              >
+              </rect>
+              <line x1="2"
+                    x2="22"
+                    y1="10"
+                    y2="10"
+              >
+              </line>
+            </svg>
+            <span>
+              Billing
+            </span>
+          </button>
+          <button type="button"
+                  role="tab"
+                  aria-selected="false"
+                  aria-controls="radix-ID"
+                  data-state="inactive"
+                  id="radix-ID"
+                  data-slot="tabs-trigger"
+                  class="data-[state=active]:bg-background dark:data-[state=active]:text-foreground focus-visible:border-ring focus-visible:ring-ring/50 focus-visible:outline-ring dark:data-[state=active]:border-input dark:data-[state=active]:bg-input/30 text-foreground dark:text-muted-foreground inline-flex h-[calc(100%-1px)] flex-1 items-center justify-center gap-1.5 rounded-md border border-transparent text-sm font-medium whitespace-nowrap transition-[color,box-shadow] focus-visible:ring-[3px] focus-visible:outline-1 disabled:pointer-events-none disabled:opacity-50 data-[state=active]:shadow-sm [&amp;_svg]:pointer-events-none [&amp;_svg]:shrink-0 [&amp;_svg:not([class*=&quot;size-&quot;])]:size-4 px-4 py-1.5"
+                  tabindex="-1"
+                  data-orientation="horizontal"
+                  data-radix-id""
+          >
+            <svg xmlns="http://www.w3.org/2000/svg"
+                 width="16"
+                 height="16"
+                 viewbox="0 0 24 24"
+                 fill="none"
+                 stroke="currentColor"
+                 stroke-width="2"
+                 stroke-linecap="round"
+                 stroke-linejoin="round"
+                 class="lucide lucide-code"
+                 aria-hidden="true"
+                 id="Code"
+            >
+              <path d="m16 18 6-6-6-6">
+              </path>
+              <path d="m8 6-6 6 6 6">
+              </path>
+            </svg>
+            <span>
+              API
+            </span>
+          </button>
+          <button type="button"
+                  role="tab"
+                  aria-selected="false"
+                  aria-controls="radix-ID"
+                  data-state="inactive"
+                  id="radix-ID"
+                  data-slot="tabs-trigger"
+                  class="data-[state=active]:bg-background dark:data-[state=active]:text-foreground focus-visible:border-ring focus-visible:ring-ring/50 focus-visible:outline-ring dark:data-[state=active]:border-input dark:data-[state=active]:bg-input/30 text-foreground dark:text-muted-foreground inline-flex h-[calc(100%-1px)] flex-1 items-center justify-center gap-1.5 rounded-md border border-transparent text-sm font-medium whitespace-nowrap transition-[color,box-shadow] focus-visible:ring-[3px] focus-visible:outline-1 disabled:pointer-events-none disabled:opacity-50 data-[state=active]:shadow-sm [&amp;_svg]:pointer-events-none [&amp;_svg]:shrink-0 [&amp;_svg:not([class*=&quot;size-&quot;])]:size-4 px-4 py-1.5"
+                  tabindex="-1"
+                  data-orientation="horizontal"
+                  data-radix-id""
+          >
+            <svg xmlns="http://www.w3.org/2000/svg"
+                 width="16"
+                 height="16"
+                 viewbox="0 0 24 24"
+                 fill="none"
+                 stroke="currentColor"
+                 stroke-width="2"
+                 stroke-linecap="round"
+                 stroke-linejoin="round"
+                 class="lucide lucide-file-text"
+                 aria-hidden="true"
+                 id="FileText"
+            >
+              <path d="M6 22a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h8a2.4 2.4 0 0 1 1.704.706l3.588 3.588A2.4 2.4 0 0 1 20 8v12a2 2 0 0 1-2 2z">
+              </path>
+              <path d="M14 2v5a1 1 0 0 0 1 1h5">
+              </path>
+              <path d="M10 9H8">
+              </path>
+              <path d="M16 13H8">
+              </path>
+              <path d="M16 17H8">
+              </path>
+            </svg>
+            <span>
+              Logs
+            </span>
+          </button>
+        </div>
+      </div>
+    </div>
+    <div data-state="active"
+         data-orientation="horizontal"
+         role="tabpanel"
+         aria-labelledby="radix-ID"
+         id="radix-ID"
+         tabindex="0"
+         data-slot="tabs-content"
+         class="flex-1 outline-none p-4 w-full border border-transparent rounded-md"
+         style="animation-duration: 0s;"
+    >
+      <div class="space-y-4">
+        <h3 class="text-lg font-medium">
+          Account Content
+        </h3>
+        <p>
+          This is the content for the account tab.
+        </p>
+      </div>
+    </div>
+    <div data-state="inactive"
+         data-orientation="horizontal"
+         role="tabpanel"
+         aria-labelledby="radix-ID"
+         hidden
+         id="radix-ID"
+         tabindex="0"
+         data-slot="tabs-content"
+         class="flex-1 outline-none p-4 w-full border border-transparent rounded-md"
+    >
+    </div>
+    <div data-state="inactive"
+         data-orientation="horizontal"
+         role="tabpanel"
+         aria-labelledby="radix-ID"
+         hidden
+         id="radix-ID"
+         tabindex="0"
+         data-slot="tabs-content"
+         class="flex-1 outline-none p-4 w-full border border-transparent rounded-md"
+    >
+    </div>
+    <div data-state="inactive"
+         data-orientation="horizontal"
+         role="tabpanel"
+         aria-labelledby="radix-ID"
+         hidden
+         id="radix-ID"
+         tabindex="0"
+         data-slot="tabs-content"
+         class="flex-1 outline-none p-4 w-full border border-transparent rounded-md"
+    >
+    </div>
+    <div data-state="inactive"
+         data-orientation="horizontal"
+         role="tabpanel"
+         aria-labelledby="radix-ID"
+         hidden
+         id="radix-ID"
+         tabindex="0"
+         data-slot="tabs-content"
+         class="flex-1 outline-none p-4 w-full border border-transparent rounded-md"
+    >
+    </div>
+    <div data-state="inactive"
+         data-orientation="horizontal"
+         role="tabpanel"
+         aria-labelledby="radix-ID"
+         hidden
+         id="radix-ID"
+         tabindex="0"
+         data-slot="tabs-content"
+         class="flex-1 outline-none p-4 w-full border border-transparent rounded-md"
+    >
+    </div>
+    <div data-state="inactive"
+         data-orientation="horizontal"
+         role="tabpanel"
+         aria-labelledby="radix-ID"
+         hidden
+         id="radix-ID"
+         tabindex="0"
+         data-slot="tabs-content"
+         class="flex-1 outline-none p-4 w-full border border-transparent rounded-md"
+    >
+    </div>
+    <div data-state="inactive"
+         data-orientation="horizontal"
+         role="tabpanel"
+         aria-labelledby="radix-ID"
+         hidden
+         id="radix-ID"
+         tabindex="0"
+         data-slot="tabs-content"
+         class="flex-1 outline-none p-4 w-full border border-transparent rounded-md"
+    >
+    </div>
+  </div>
+</div>
+`;
+
+exports[`Components/Tabs WithBadges smoke-test 1`] = `
+<div class="container my-10 mx-auto">
+  <div dir="ltr"
+       data-orientation="horizontal"
+       data-slot="tabs"
+       class="flex flex-col gap-2 w-full"
+       id="_r_ID_"
+  >
+    <div class="relative flex gap-1.5 items-center w-full">
+      <div class="overflow-x-auto scrollbar-hide scroll-smooth [scrollbar-width:none] [-ms-overflow-style:none] [&amp;::-webkit-scrollbar]:hidden flex-1">
+        <div role="tablist"
+             aria-orientation="horizontal"
+             data-slot="tabs-list"
+             class="bg-muted text-muted-foreground inline-flex items-center justify-center rounded-lg p-1 gap-1.5 w-fit"
+             tabindex="0"
+             data-orientation="horizontal"
+             style="outline: none;"
+        >
+          <button type="button"
+                  role="tab"
+                  aria-selected="true"
+                  aria-controls="radix-ID"
+                  data-state="active"
+                  id="radix-ID"
+                  data-slot="tabs-trigger"
+                  class="data-[state=active]:bg-background dark:data-[state=active]:text-foreground focus-visible:border-ring focus-visible:ring-ring/50 focus-visible:outline-ring dark:data-[state=active]:border-input dark:data-[state=active]:bg-input/30 text-foreground dark:text-muted-foreground inline-flex h-[calc(100%-1px)] flex-1 items-center justify-center gap-1.5 rounded-md border border-transparent text-sm font-medium whitespace-nowrap transition-[color,box-shadow] focus-visible:ring-[3px] focus-visible:outline-1 disabled:pointer-events-none disabled:opacity-50 data-[state=active]:shadow-sm [&amp;_svg]:pointer-events-none [&amp;_svg]:shrink-0 [&amp;_svg:not([class*=&quot;size-&quot;])]:size-4 px-4 py-1.5"
+                  tabindex="-1"
+                  data-orientation="horizontal"
+                  data-radix-id""
+          >
+            <svg xmlns="http://www.w3.org/2000/svg"
+                 width="16"
+                 height="16"
+                 viewbox="0 0 24 24"
+                 fill="none"
+                 stroke="currentColor"
+                 stroke-width="2"
+                 stroke-linecap="round"
+                 stroke-linejoin="round"
+                 class="lucide lucide-inbox"
+                 aria-hidden="true"
+                 id="Inbox"
+            >
+              <polyline points="22 12 16 12 14 15 10 15 8 12 2 12">
+              </polyline>
+              <path d="M5.45 5.11 2 12v6a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2v-6l-3.45-6.89A2 2 0 0 0 16.76 4H7.24a2 2 0 0 0-1.79 1.11z">
+              </path>
+            </svg>
+            <span>
+              Inbox
+            </span>
+            <div data-slot="badge"
+                 id="_r_ID_"
+                 class="inline-flex items-center justify-center shadow-none border py-0.5 font-medium w-fit whitespace-nowrap shrink-0 gap-1 [&amp;&gt;svg]:pointer-events-none focus-visible:border-ring focus-visible:ring-ring/50 focus-visible:ring-[3px] aria-invalid:ring-destructive/20 dark:aria-invalid:ring-destructive/40 aria-invalid:border-destructive transition-[color,box-shadow] overflow-hidden text-xs [&amp;&gt;svg]:size-2.5 text-primary-foreground bg-primary border-primary px-1.5 rounded-full"
+            >
+              <div class="flex items-center">
+                <div class>
+                  5
+                </div>
+              </div>
+            </div>
+          </button>
+          <button type="button"
+                  role="tab"
+                  aria-selected="false"
+                  aria-controls="radix-ID"
+                  data-state="inactive"
+                  id="radix-ID"
+                  data-slot="tabs-trigger"
+                  class="data-[state=active]:bg-background dark:data-[state=active]:text-foreground focus-visible:border-ring focus-visible:ring-ring/50 focus-visible:outline-ring dark:data-[state=active]:border-input dark:data-[state=active]:bg-input/30 text-foreground dark:text-muted-foreground inline-flex h-[calc(100%-1px)] flex-1 items-center justify-center gap-1.5 rounded-md border border-transparent text-sm font-medium whitespace-nowrap transition-[color,box-shadow] focus-visible:ring-[3px] focus-visible:outline-1 disabled:pointer-events-none disabled:opacity-50 data-[state=active]:shadow-sm [&amp;_svg]:pointer-events-none [&amp;_svg]:shrink-0 [&amp;_svg:not([class*=&quot;size-&quot;])]:size-4 px-4 py-1.5"
+                  tabindex="-1"
+                  data-orientation="horizontal"
+                  data-radix-id""
+          >
+            <svg xmlns="http://www.w3.org/2000/svg"
+                 width="16"
+                 height="16"
+                 viewbox="0 0 24 24"
+                 fill="none"
+                 stroke="currentColor"
+                 stroke-width="2"
+                 stroke-linecap="round"
+                 stroke-linejoin="round"
+                 class="lucide lucide-send"
+                 aria-hidden="true"
+                 id="Send"
+            >
+              <path d="M14.536 21.686a.5.5 0 0 0 .937-.024l6.5-19a.496.496 0 0 0-.635-.635l-19 6.5a.5.5 0 0 0-.024.937l7.93 3.18a2 2 0 0 1 1.112 1.11z">
+              </path>
+              <path d="m21.854 2.147-10.94 10.939">
+              </path>
+            </svg>
+            <span>
+              Sent
+            </span>
+            <div data-slot="badge"
+                 id="_r_ID_"
+                 class="inline-flex items-center justify-center rounded-full shadow-none border px-3 py-0.5 font-medium w-fit whitespace-nowrap shrink-0 gap-1 [&amp;&gt;svg]:pointer-events-none focus-visible:border-ring focus-visible:ring-ring/50 focus-visible:ring-[3px] aria-invalid:ring-destructive/20 dark:aria-invalid:ring-destructive/40 aria-invalid:border-destructive transition-[color,box-shadow] overflow-hidden text-xs [&amp;&gt;svg]:size-2.5 text-success bg-success/10 border-success/10"
+            >
+              <div class="flex items-center">
+                <div class>
+                  12
+                </div>
+              </div>
+            </div>
+          </button>
+          <button type="button"
+                  role="tab"
+                  aria-selected="false"
+                  aria-controls="radix-ID"
+                  data-state="inactive"
+                  id="radix-ID"
+                  data-slot="tabs-trigger"
+                  class="data-[state=active]:bg-background dark:data-[state=active]:text-foreground focus-visible:border-ring focus-visible:ring-ring/50 focus-visible:outline-ring dark:data-[state=active]:border-input dark:data-[state=active]:bg-input/30 text-foreground dark:text-muted-foreground inline-flex h-[calc(100%-1px)] flex-1 items-center justify-center gap-1.5 rounded-md border border-transparent text-sm font-medium whitespace-nowrap transition-[color,box-shadow] focus-visible:ring-[3px] focus-visible:outline-1 disabled:pointer-events-none disabled:opacity-50 data-[state=active]:shadow-sm [&amp;_svg]:pointer-events-none [&amp;_svg]:shrink-0 [&amp;_svg:not([class*=&quot;size-&quot;])]:size-4 px-4 py-1.5"
+                  tabindex="-1"
+                  data-orientation="horizontal"
+                  data-radix-id""
+          >
+            <svg xmlns="http://www.w3.org/2000/svg"
+                 width="16"
+                 height="16"
+                 viewbox="0 0 24 24"
+                 fill="none"
+                 stroke="currentColor"
+                 stroke-width="2"
+                 stroke-linecap="round"
+                 stroke-linejoin="round"
+                 class="lucide lucide-file-text"
+                 aria-hidden="true"
+                 id="FileText"
+            >
+              <path d="M6 22a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h8a2.4 2.4 0 0 1 1.704.706l3.588 3.588A2.4 2.4 0 0 1 20 8v12a2 2 0 0 1-2 2z">
+              </path>
+              <path d="M14 2v5a1 1 0 0 0 1 1h5">
+              </path>
+              <path d="M10 9H8">
+              </path>
+              <path d="M16 13H8">
+              </path>
+              <path d="M16 17H8">
+              </path>
+            </svg>
+            <span>
+              Drafts
+            </span>
+            <div data-slot="badge"
+                 id="_r_ID_"
+                 class="inline-flex items-center justify-center rounded-full shadow-none border px-3 py-0.5 font-medium w-fit whitespace-nowrap shrink-0 gap-1 [&amp;&gt;svg]:pointer-events-none focus-visible:border-ring focus-visible:ring-ring/50 focus-visible:ring-[3px] aria-invalid:ring-destructive/20 dark:aria-invalid:ring-destructive/40 aria-invalid:border-destructive transition-[color,box-shadow] overflow-hidden text-xs [&amp;&gt;svg]:size-2.5 text-warning-foreground bg-warning border-warning"
+            >
+              <div class="flex items-center">
+                <div class>
+                  3
+                </div>
+              </div>
+            </div>
+          </button>
+          <button type="button"
+                  role="tab"
+                  aria-selected="false"
+                  aria-controls="radix-ID"
+                  data-state="inactive"
+                  id="radix-ID"
+                  data-slot="tabs-trigger"
+                  class="data-[state=active]:bg-background dark:data-[state=active]:text-foreground focus-visible:border-ring focus-visible:ring-ring/50 focus-visible:outline-ring dark:data-[state=active]:border-input dark:data-[state=active]:bg-input/30 text-foreground dark:text-muted-foreground inline-flex h-[calc(100%-1px)] flex-1 items-center justify-center gap-1.5 rounded-md border border-transparent text-sm font-medium whitespace-nowrap transition-[color,box-shadow] focus-visible:ring-[3px] focus-visible:outline-1 disabled:pointer-events-none disabled:opacity-50 data-[state=active]:shadow-sm [&amp;_svg]:pointer-events-none [&amp;_svg]:shrink-0 [&amp;_svg:not([class*=&quot;size-&quot;])]:size-4 px-4 py-1.5"
+                  tabindex="-1"
+                  data-orientation="horizontal"
+                  data-radix-id""
+          >
+            <svg xmlns="http://www.w3.org/2000/svg"
+                 width="16"
+                 height="16"
+                 viewbox="0 0 24 24"
+                 fill="none"
+                 stroke="currentColor"
+                 stroke-width="2"
+                 stroke-linecap="round"
+                 stroke-linejoin="round"
+                 class="lucide lucide-bell"
+                 aria-hidden="true"
+                 id="Bell"
+            >
+              <path d="M10.268 21a2 2 0 0 0 3.464 0">
+              </path>
+              <path d="M3.262 15.326A1 1 0 0 0 4 17h16a1 1 0 0 0 .74-1.673C19.41 13.956 18 12.499 18 8A6 6 0 0 0 6 8c0 4.499-1.411 5.956-2.738 7.326">
+              </path>
+            </svg>
+            <span>
+              Spam
+            </span>
+            <div data-slot="badge"
+                 id="_r_ID_"
+                 class="inline-flex items-center justify-center rounded-full shadow-none border px-3 py-0.5 font-medium w-fit whitespace-nowrap shrink-0 gap-1 [&amp;&gt;svg]:pointer-events-none focus-visible:border-ring focus-visible:ring-ring/50 focus-visible:ring-[3px] aria-invalid:ring-destructive/20 dark:aria-invalid:ring-destructive/40 aria-invalid:border-destructive transition-[color,box-shadow] overflow-hidden text-xs [&amp;&gt;svg]:size-2.5 text-destructive-foreground bg-destructive border-destructive"
+            >
+              <div class="flex items-center">
+                <div class>
+                  99+
+                </div>
+              </div>
+            </div>
+          </button>
+        </div>
+      </div>
+    </div>
+    <div data-state="active"
+         data-orientation="horizontal"
+         role="tabpanel"
+         aria-labelledby="radix-ID"
+         id="radix-ID"
+         tabindex="0"
+         data-slot="tabs-content"
+         class="flex-1 outline-none p-4 w-full border border-transparent rounded-md"
+         style="animation-duration: 0s;"
+    >
+      <div class="space-y-4">
+        <h3 class="text-lg font-medium">
+          Inbox Content
+        </h3>
+        <p>
+          This is the content for the inbox tab.
+        </p>
+      </div>
+    </div>
+    <div data-state="inactive"
+         data-orientation="horizontal"
+         role="tabpanel"
+         aria-labelledby="radix-ID"
+         hidden
+         id="radix-ID"
+         tabindex="0"
+         data-slot="tabs-content"
+         class="flex-1 outline-none p-4 w-full border border-transparent rounded-md"
+    >
+    </div>
+    <div data-state="inactive"
+         data-orientation="horizontal"
+         role="tabpanel"
+         aria-labelledby="radix-ID"
+         hidden
+         id="radix-ID"
+         tabindex="0"
+         data-slot="tabs-content"
+         class="flex-1 outline-none p-4 w-full border border-transparent rounded-md"
+    >
+    </div>
+    <div data-state="inactive"
+         data-orientation="horizontal"
+         role="tabpanel"
+         aria-labelledby="radix-ID"
+         hidden
+         id="radix-ID"
+         tabindex="0"
+         data-slot="tabs-content"
+         class="flex-1 outline-none p-4 w-full border border-transparent rounded-md"
+    >
+    </div>
+  </div>
+</div>
+`;
+
+exports[`Components/Tabs WithBadgesStart smoke-test 1`] = `
+<div class="container my-10 mx-auto">
+  <div dir="ltr"
+       data-orientation="horizontal"
+       data-slot="tabs"
+       class="flex flex-col gap-2 w-full"
+       id="_r_ID_"
+  >
+    <div class="relative flex gap-1.5 items-center w-full">
+      <div class="overflow-x-auto scrollbar-hide scroll-smooth [scrollbar-width:none] [-ms-overflow-style:none] [&amp;::-webkit-scrollbar]:hidden flex-1">
+        <div role="tablist"
+             aria-orientation="horizontal"
+             data-slot="tabs-list"
+             class="bg-muted text-muted-foreground inline-flex items-center justify-center rounded-lg p-1 gap-1.5 w-fit"
+             tabindex="0"
+             data-orientation="horizontal"
+             style="outline: none;"
+        >
+          <button type="button"
+                  role="tab"
+                  aria-selected="true"
+                  aria-controls="radix-ID"
+                  data-state="active"
+                  id="radix-ID"
+                  data-slot="tabs-trigger"
+                  class="data-[state=active]:bg-background dark:data-[state=active]:text-foreground focus-visible:border-ring focus-visible:ring-ring/50 focus-visible:outline-ring dark:data-[state=active]:border-input dark:data-[state=active]:bg-input/30 text-foreground dark:text-muted-foreground inline-flex h-[calc(100%-1px)] flex-1 items-center justify-center gap-1.5 rounded-md border border-transparent text-sm font-medium whitespace-nowrap transition-[color,box-shadow] focus-visible:ring-[3px] focus-visible:outline-1 disabled:pointer-events-none disabled:opacity-50 data-[state=active]:shadow-sm [&amp;_svg]:pointer-events-none [&amp;_svg]:shrink-0 [&amp;_svg:not([class*=&quot;size-&quot;])]:size-4 px-4 py-1.5"
+                  tabindex="-1"
+                  data-orientation="horizontal"
+                  data-radix-id""
+          >
+            <div data-slot="badge"
+                 id="_r_ID_"
+                 class="inline-flex items-center justify-center shadow-none border py-0.5 font-medium w-fit whitespace-nowrap shrink-0 gap-1 [&amp;&gt;svg]:pointer-events-none focus-visible:border-ring focus-visible:ring-ring/50 focus-visible:ring-[3px] aria-invalid:ring-destructive/20 dark:aria-invalid:ring-destructive/40 aria-invalid:border-destructive transition-[color,box-shadow] overflow-hidden text-xs [&amp;&gt;svg]:size-2.5 text-primary-foreground bg-primary border-primary px-1.5 rounded-full"
+            >
+              <div class="flex items-center">
+                <div class>
+                  5
+                </div>
+              </div>
+            </div>
+            <span>
+              Inbox
+            </span>
+          </button>
+          <button type="button"
+                  role="tab"
+                  aria-selected="false"
+                  aria-controls="radix-ID"
+                  data-state="inactive"
+                  id="radix-ID"
+                  data-slot="tabs-trigger"
+                  class="data-[state=active]:bg-background dark:data-[state=active]:text-foreground focus-visible:border-ring focus-visible:ring-ring/50 focus-visible:outline-ring dark:data-[state=active]:border-input dark:data-[state=active]:bg-input/30 text-foreground dark:text-muted-foreground inline-flex h-[calc(100%-1px)] flex-1 items-center justify-center gap-1.5 rounded-md border border-transparent text-sm font-medium whitespace-nowrap transition-[color,box-shadow] focus-visible:ring-[3px] focus-visible:outline-1 disabled:pointer-events-none disabled:opacity-50 data-[state=active]:shadow-sm [&amp;_svg]:pointer-events-none [&amp;_svg]:shrink-0 [&amp;_svg:not([class*=&quot;size-&quot;])]:size-4 px-4 py-1.5"
+                  tabindex="-1"
+                  data-orientation="horizontal"
+                  data-radix-id""
+          >
+            <div data-slot="badge"
+                 id="_r_ID_"
+                 class="inline-flex items-center justify-center rounded-full shadow-none border px-3 py-0.5 font-medium w-fit whitespace-nowrap shrink-0 gap-1 [&amp;&gt;svg]:pointer-events-none focus-visible:border-ring focus-visible:ring-ring/50 focus-visible:ring-[3px] aria-invalid:ring-destructive/20 dark:aria-invalid:ring-destructive/40 aria-invalid:border-destructive transition-[color,box-shadow] overflow-hidden text-xs [&amp;&gt;svg]:size-2.5 text-success bg-success/10 border-success/10"
+            >
+              <div class="flex items-center">
+                <div class>
+                  12
+                </div>
+              </div>
+            </div>
+            <span>
+              Sent
+            </span>
+          </button>
+          <button type="button"
+                  role="tab"
+                  aria-selected="false"
+                  aria-controls="radix-ID"
+                  data-state="inactive"
+                  id="radix-ID"
+                  data-slot="tabs-trigger"
+                  class="data-[state=active]:bg-background dark:data-[state=active]:text-foreground focus-visible:border-ring focus-visible:ring-ring/50 focus-visible:outline-ring dark:data-[state=active]:border-input dark:data-[state=active]:bg-input/30 text-foreground dark:text-muted-foreground inline-flex h-[calc(100%-1px)] flex-1 items-center justify-center gap-1.5 rounded-md border border-transparent text-sm font-medium whitespace-nowrap transition-[color,box-shadow] focus-visible:ring-[3px] focus-visible:outline-1 disabled:pointer-events-none disabled:opacity-50 data-[state=active]:shadow-sm [&amp;_svg]:pointer-events-none [&amp;_svg]:shrink-0 [&amp;_svg:not([class*=&quot;size-&quot;])]:size-4 px-4 py-1.5"
+                  tabindex="-1"
+                  data-orientation="horizontal"
+                  data-radix-id""
+          >
+            <div data-slot="badge"
+                 id="_r_ID_"
+                 class="inline-flex items-center justify-center rounded-full shadow-none border px-3 py-0.5 font-medium w-fit whitespace-nowrap shrink-0 gap-1 [&amp;&gt;svg]:pointer-events-none focus-visible:border-ring focus-visible:ring-ring/50 focus-visible:ring-[3px] aria-invalid:ring-destructive/20 dark:aria-invalid:ring-destructive/40 aria-invalid:border-destructive transition-[color,box-shadow] overflow-hidden text-xs [&amp;&gt;svg]:size-2.5 text-warning-foreground bg-warning border-warning"
+            >
+              <div class="flex items-center">
+                <div class>
+                  3
+                </div>
+              </div>
+            </div>
+            <span>
+              Drafts
+            </span>
+          </button>
+          <button type="button"
+                  role="tab"
+                  aria-selected="false"
+                  aria-controls="radix-ID"
+                  data-state="inactive"
+                  id="radix-ID"
+                  data-slot="tabs-trigger"
+                  class="data-[state=active]:bg-background dark:data-[state=active]:text-foreground focus-visible:border-ring focus-visible:ring-ring/50 focus-visible:outline-ring dark:data-[state=active]:border-input dark:data-[state=active]:bg-input/30 text-foreground dark:text-muted-foreground inline-flex h-[calc(100%-1px)] flex-1 items-center justify-center gap-1.5 rounded-md border border-transparent text-sm font-medium whitespace-nowrap transition-[color,box-shadow] focus-visible:ring-[3px] focus-visible:outline-1 disabled:pointer-events-none disabled:opacity-50 data-[state=active]:shadow-sm [&amp;_svg]:pointer-events-none [&amp;_svg]:shrink-0 [&amp;_svg:not([class*=&quot;size-&quot;])]:size-4 px-4 py-1.5"
+                  tabindex="-1"
+                  data-orientation="horizontal"
+                  data-radix-id""
+          >
+            <div data-slot="badge"
+                 id="_r_ID_"
+                 class="inline-flex items-center justify-center rounded-full shadow-none border px-3 py-0.5 font-medium w-fit whitespace-nowrap shrink-0 gap-1 [&amp;&gt;svg]:pointer-events-none focus-visible:border-ring focus-visible:ring-ring/50 focus-visible:ring-[3px] aria-invalid:ring-destructive/20 dark:aria-invalid:ring-destructive/40 aria-invalid:border-destructive transition-[color,box-shadow] overflow-hidden text-xs [&amp;&gt;svg]:size-2.5 text-destructive-foreground bg-destructive border-destructive"
+            >
+              <div class="flex items-center">
+                <div class>
+                  99+
+                </div>
+              </div>
+            </div>
+            <span>
+              Spam
+            </span>
+          </button>
+        </div>
+      </div>
+    </div>
+    <div data-state="active"
+         data-orientation="horizontal"
+         role="tabpanel"
+         aria-labelledby="radix-ID"
+         id="radix-ID"
+         tabindex="0"
+         data-slot="tabs-content"
+         class="flex-1 outline-none p-4 w-full border border-transparent rounded-md"
+         style="animation-duration: 0s;"
+    >
+      <div class="space-y-4">
+        <h3 class="text-lg font-medium">
+          Inbox Content
+        </h3>
+        <p>
+          This is the content for the inbox tab.
+        </p>
+      </div>
+    </div>
+    <div data-state="inactive"
+         data-orientation="horizontal"
+         role="tabpanel"
+         aria-labelledby="radix-ID"
+         hidden
+         id="radix-ID"
+         tabindex="0"
+         data-slot="tabs-content"
+         class="flex-1 outline-none p-4 w-full border border-transparent rounded-md"
+    >
+    </div>
+    <div data-state="inactive"
+         data-orientation="horizontal"
+         role="tabpanel"
+         aria-labelledby="radix-ID"
+         hidden
+         id="radix-ID"
+         tabindex="0"
+         data-slot="tabs-content"
+         class="flex-1 outline-none p-4 w-full border border-transparent rounded-md"
+    >
+    </div>
+    <div data-state="inactive"
+         data-orientation="horizontal"
+         role="tabpanel"
+         aria-labelledby="radix-ID"
+         hidden
+         id="radix-ID"
+         tabindex="0"
+         data-slot="tabs-content"
+         class="flex-1 outline-none p-4 w-full border border-transparent rounded-md"
+    >
+    </div>
+  </div>
+</div>
+`;
+
+exports[`Components/Tabs WithBorderedContent smoke-test 1`] = `
+<div class="container my-10 mx-auto">
+  <div dir="ltr"
+       data-orientation="horizontal"
+       data-slot="tabs"
+       class="flex flex-col gap-2 w-full"
+       id="_r_ID_"
+  >
+    <div class="relative flex gap-1.5 items-center w-full">
+      <div class="overflow-x-auto scrollbar-hide scroll-smooth [scrollbar-width:none] [-ms-overflow-style:none] [&amp;::-webkit-scrollbar]:hidden flex-1">
+        <div role="tablist"
+             aria-orientation="horizontal"
+             data-slot="tabs-list"
+             class="bg-muted text-muted-foreground inline-flex items-center justify-center rounded-lg p-1 gap-1.5 w-fit"
+             tabindex="0"
+             data-orientation="horizontal"
+             style="outline: none;"
+        >
+          <button type="button"
+                  role="tab"
+                  aria-selected="true"
+                  aria-controls="radix-ID"
+                  data-state="active"
+                  id="radix-ID"
+                  data-slot="tabs-trigger"
+                  class="data-[state=active]:bg-background dark:data-[state=active]:text-foreground focus-visible:border-ring focus-visible:ring-ring/50 focus-visible:outline-ring dark:data-[state=active]:border-input dark:data-[state=active]:bg-input/30 text-foreground dark:text-muted-foreground inline-flex h-[calc(100%-1px)] flex-1 items-center justify-center gap-1.5 rounded-md border border-transparent text-sm font-medium whitespace-nowrap transition-[color,box-shadow] focus-visible:ring-[3px] focus-visible:outline-1 disabled:pointer-events-none disabled:opacity-50 data-[state=active]:shadow-sm [&amp;_svg]:pointer-events-none [&amp;_svg]:shrink-0 [&amp;_svg:not([class*=&quot;size-&quot;])]:size-4 px-4 py-1.5"
+                  tabindex="-1"
+                  data-orientation="horizontal"
+                  data-radix-id""
+          >
+            <svg xmlns="http://www.w3.org/2000/svg"
+                 width="16"
+                 height="16"
+                 viewbox="0 0 24 24"
+                 fill="none"
+                 stroke="currentColor"
+                 stroke-width="2"
+                 stroke-linecap="round"
+                 stroke-linejoin="round"
+                 class="lucide lucide-user"
+                 aria-hidden="true"
+                 id="User"
+            >
+              <path d="M19 21v-2a4 4 0 0 0-4-4H9a4 4 0 0 0-4 4v2">
+              </path>
+              <circle cx="12"
+                      cy="7"
+                      r="4"
+              >
+              </circle>
+            </svg>
+            <span>
+              Account
+            </span>
+          </button>
+          <button type="button"
+                  role="tab"
+                  aria-selected="false"
+                  aria-controls="radix-ID"
+                  data-state="inactive"
+                  id="radix-ID"
+                  data-slot="tabs-trigger"
+                  class="data-[state=active]:bg-background dark:data-[state=active]:text-foreground focus-visible:border-ring focus-visible:ring-ring/50 focus-visible:outline-ring dark:data-[state=active]:border-input dark:data-[state=active]:bg-input/30 text-foreground dark:text-muted-foreground inline-flex h-[calc(100%-1px)] flex-1 items-center justify-center gap-1.5 rounded-md border border-transparent text-sm font-medium whitespace-nowrap transition-[color,box-shadow] focus-visible:ring-[3px] focus-visible:outline-1 disabled:pointer-events-none disabled:opacity-50 data-[state=active]:shadow-sm [&amp;_svg]:pointer-events-none [&amp;_svg]:shrink-0 [&amp;_svg:not([class*=&quot;size-&quot;])]:size-4 px-4 py-1.5"
+                  tabindex="-1"
+                  data-orientation="horizontal"
+                  data-radix-id""
+          >
+            <svg xmlns="http://www.w3.org/2000/svg"
+                 width="16"
+                 height="16"
+                 viewbox="0 0 24 24"
+                 fill="none"
+                 stroke="currentColor"
+                 stroke-width="2"
+                 stroke-linecap="round"
+                 stroke-linejoin="round"
+                 class="lucide lucide-lock"
+                 aria-hidden="true"
+                 id="Lock"
+            >
+              <rect width="18"
+                    height="11"
+                    x="3"
+                    y="11"
+                    rx="2"
+                    ry="2"
+              >
+              </rect>
+              <path d="M7 11V7a5 5 0 0 1 10 0v4">
+              </path>
+            </svg>
+            <span>
+              Password
+            </span>
+          </button>
+          <button type="button"
+                  role="tab"
+                  aria-selected="false"
+                  aria-controls="radix-ID"
+                  data-state="inactive"
+                  id="radix-ID"
+                  data-slot="tabs-trigger"
+                  class="data-[state=active]:bg-background dark:data-[state=active]:text-foreground focus-visible:border-ring focus-visible:ring-ring/50 focus-visible:outline-ring dark:data-[state=active]:border-input dark:data-[state=active]:bg-input/30 text-foreground dark:text-muted-foreground inline-flex h-[calc(100%-1px)] flex-1 items-center justify-center gap-1.5 rounded-md border border-transparent text-sm font-medium whitespace-nowrap transition-[color,box-shadow] focus-visible:ring-[3px] focus-visible:outline-1 disabled:pointer-events-none disabled:opacity-50 data-[state=active]:shadow-sm [&amp;_svg]:pointer-events-none [&amp;_svg]:shrink-0 [&amp;_svg:not([class*=&quot;size-&quot;])]:size-4 px-4 py-1.5"
+                  tabindex="-1"
+                  data-orientation="horizontal"
+                  data-radix-id""
+          >
+            <svg xmlns="http://www.w3.org/2000/svg"
+                 width="16"
+                 height="16"
+                 viewbox="0 0 24 24"
+                 fill="none"
+                 stroke="currentColor"
+                 stroke-width="2"
+                 stroke-linecap="round"
+                 stroke-linejoin="round"
+                 class="lucide lucide-bell"
+                 aria-hidden="true"
+                 id="Bell"
+            >
+              <path d="M10.268 21a2 2 0 0 0 3.464 0">
+              </path>
+              <path d="M3.262 15.326A1 1 0 0 0 4 17h16a1 1 0 0 0 .74-1.673C19.41 13.956 18 12.499 18 8A6 6 0 0 0 6 8c0 4.499-1.411 5.956-2.738 7.326">
+              </path>
+            </svg>
+            <span>
+              Notifications
+            </span>
+          </button>
+        </div>
+      </div>
+    </div>
+    <div data-state="active"
+         data-orientation="horizontal"
+         role="tabpanel"
+         aria-labelledby="radix-ID"
+         id="radix-ID"
+         tabindex="0"
+         data-slot="tabs-content"
+         class="flex-1 outline-none p-4 w-full border rounded-md border-border"
+         style="animation-duration: 0s;"
+    >
+      <div class="space-y-4">
+        <h3 class="text-lg font-medium">
+          Account Content
+        </h3>
+        <p>
+          This is the content for the account tab.
+        </p>
+      </div>
+    </div>
+    <div data-state="inactive"
+         data-orientation="horizontal"
+         role="tabpanel"
+         aria-labelledby="radix-ID"
+         hidden
+         id="radix-ID"
+         tabindex="0"
+         data-slot="tabs-content"
+         class="flex-1 outline-none p-4 w-full border rounded-md border-border"
+    >
+    </div>
+    <div data-state="inactive"
+         data-orientation="horizontal"
+         role="tabpanel"
+         aria-labelledby="radix-ID"
+         hidden
+         id="radix-ID"
+         tabindex="0"
+         data-slot="tabs-content"
+         class="flex-1 outline-none p-4 w-full border rounded-md border-border"
+    >
+    </div>
+  </div>
+</div>
+`;
+
+exports[`Components/Tabs WithCustomClassNames smoke-test 1`] = `
+<div class="container my-10 mx-auto">
+  <div dir="ltr"
+       data-orientation="horizontal"
+       data-slot="tabs"
+       class="flex flex-col gap-2 w-full"
+       id="_r_ID_"
+  >
+    <div class="relative flex gap-1.5 items-center w-full">
+      <div class="overflow-x-auto scrollbar-hide scroll-smooth [scrollbar-width:none] [-ms-overflow-style:none] [&amp;::-webkit-scrollbar]:hidden flex-1">
+        <div role="tablist"
+             aria-orientation="horizontal"
+             data-slot="tabs-list"
+             class="bg-muted text-muted-foreground inline-flex items-center justify-center rounded-lg p-1 gap-1.5 w-fit"
+             tabindex="0"
+             data-orientation="horizontal"
+             style="outline: none;"
+        >
+          <button type="button"
+                  role="tab"
+                  aria-selected="true"
+                  aria-controls="radix-ID"
+                  data-state="active"
+                  id="radix-ID"
+                  data-slot="tabs-trigger"
+                  class="data-[state=active]:bg-background dark:data-[state=active]:text-foreground focus-visible:border-ring focus-visible:ring-ring/50 focus-visible:outline-ring dark:data-[state=active]:border-input dark:data-[state=active]:bg-input/30 dark:text-muted-foreground inline-flex h-[calc(100%-1px)] flex-1 items-center justify-center gap-1.5 rounded-md border border-transparent text-sm font-medium whitespace-nowrap transition-[color,box-shadow] focus-visible:ring-[3px] focus-visible:outline-1 disabled:pointer-events-none disabled:opacity-50 data-[state=active]:shadow-sm [&amp;_svg]:pointer-events-none [&amp;_svg]:shrink-0 [&amp;_svg:not([class*=&quot;size-&quot;])]:size-4 px-4 py-1.5 text-blue-600 data-[state=active]:text-blue-900"
+                  tabindex="-1"
+                  data-orientation="horizontal"
+                  data-radix-id""
+          >
+            <svg xmlns="http://www.w3.org/2000/svg"
+                 width="16"
+                 height="16"
+                 viewbox="0 0 24 24"
+                 fill="none"
+                 stroke="currentColor"
+                 stroke-width="2"
+                 stroke-linecap="round"
+                 stroke-linejoin="round"
+                 class="lucide lucide-user"
+                 aria-hidden="true"
+                 id="User"
+            >
+              <path d="M19 21v-2a4 4 0 0 0-4-4H9a4 4 0 0 0-4 4v2">
+              </path>
+              <circle cx="12"
+                      cy="7"
+                      r="4"
+              >
+              </circle>
+            </svg>
+            <span>
+              Account
+            </span>
+          </button>
+          <button type="button"
+                  role="tab"
+                  aria-selected="false"
+                  aria-controls="radix-ID"
+                  data-state="inactive"
+                  id="radix-ID"
+                  data-slot="tabs-trigger"
+                  class="data-[state=active]:bg-background dark:data-[state=active]:text-foreground focus-visible:border-ring focus-visible:ring-ring/50 focus-visible:outline-ring dark:data-[state=active]:border-input dark:data-[state=active]:bg-input/30 dark:text-muted-foreground inline-flex h-[calc(100%-1px)] flex-1 items-center justify-center gap-1.5 rounded-md border border-transparent text-sm font-medium whitespace-nowrap transition-[color,box-shadow] focus-visible:ring-[3px] focus-visible:outline-1 disabled:pointer-events-none disabled:opacity-50 data-[state=active]:shadow-sm [&amp;_svg]:pointer-events-none [&amp;_svg]:shrink-0 [&amp;_svg:not([class*=&quot;size-&quot;])]:size-4 px-4 py-1.5 text-blue-600 data-[state=active]:text-blue-900"
+                  tabindex="-1"
+                  data-orientation="horizontal"
+                  data-radix-id""
+          >
+            <svg xmlns="http://www.w3.org/2000/svg"
+                 width="16"
+                 height="16"
+                 viewbox="0 0 24 24"
+                 fill="none"
+                 stroke="currentColor"
+                 stroke-width="2"
+                 stroke-linecap="round"
+                 stroke-linejoin="round"
+                 class="lucide lucide-lock"
+                 aria-hidden="true"
+                 id="Lock"
+            >
+              <rect width="18"
+                    height="11"
+                    x="3"
+                    y="11"
+                    rx="2"
+                    ry="2"
+              >
+              </rect>
+              <path d="M7 11V7a5 5 0 0 1 10 0v4">
+              </path>
+            </svg>
+            <span>
+              Password
+            </span>
+          </button>
+          <button type="button"
+                  role="tab"
+                  aria-selected="false"
+                  aria-controls="radix-ID"
+                  data-state="inactive"
+                  id="radix-ID"
+                  data-slot="tabs-trigger"
+                  class="data-[state=active]:bg-background dark:data-[state=active]:text-foreground focus-visible:border-ring focus-visible:ring-ring/50 focus-visible:outline-ring dark:data-[state=active]:border-input dark:data-[state=active]:bg-input/30 dark:text-muted-foreground inline-flex h-[calc(100%-1px)] flex-1 items-center justify-center gap-1.5 rounded-md border border-transparent text-sm font-medium whitespace-nowrap transition-[color,box-shadow] focus-visible:ring-[3px] focus-visible:outline-1 disabled:pointer-events-none disabled:opacity-50 data-[state=active]:shadow-sm [&amp;_svg]:pointer-events-none [&amp;_svg]:shrink-0 [&amp;_svg:not([class*=&quot;size-&quot;])]:size-4 px-4 py-1.5 text-blue-600 data-[state=active]:text-blue-900"
+                  tabindex="-1"
+                  data-orientation="horizontal"
+                  data-radix-id""
+          >
+            <svg xmlns="http://www.w3.org/2000/svg"
+                 width="16"
+                 height="16"
+                 viewbox="0 0 24 24"
+                 fill="none"
+                 stroke="currentColor"
+                 stroke-width="2"
+                 stroke-linecap="round"
+                 stroke-linejoin="round"
+                 class="lucide lucide-bell"
+                 aria-hidden="true"
+                 id="Bell"
+            >
+              <path d="M10.268 21a2 2 0 0 0 3.464 0">
+              </path>
+              <path d="M3.262 15.326A1 1 0 0 0 4 17h16a1 1 0 0 0 .74-1.673C19.41 13.956 18 12.499 18 8A6 6 0 0 0 6 8c0 4.499-1.411 5.956-2.738 7.326">
+              </path>
+            </svg>
+            <span>
+              Notifications
+            </span>
+          </button>
+        </div>
+      </div>
+    </div>
+    <div data-state="active"
+         data-orientation="horizontal"
+         role="tabpanel"
+         aria-labelledby="radix-ID"
+         id="radix-ID"
+         tabindex="0"
+         data-slot="tabs-content"
+         class="flex-1 outline-none w-full border border-transparent bg-muted p-4 rounded-lg shadow"
+         style="animation-duration: 0s;"
+    >
+      <div class="space-y-4">
+        <h3 class="text-lg font-medium">
+          Account Content
+        </h3>
+        <p>
+          This is the content for the account tab.
+        </p>
+      </div>
+    </div>
+    <div data-state="inactive"
+         data-orientation="horizontal"
+         role="tabpanel"
+         aria-labelledby="radix-ID"
+         hidden
+         id="radix-ID"
+         tabindex="0"
+         data-slot="tabs-content"
+         class="flex-1 outline-none w-full border border-transparent bg-muted p-4 rounded-lg shadow"
+    >
+    </div>
+    <div data-state="inactive"
+         data-orientation="horizontal"
+         role="tabpanel"
+         aria-labelledby="radix-ID"
+         hidden
+         id="radix-ID"
+         tabindex="0"
+         data-slot="tabs-content"
+         class="flex-1 outline-none w-full border border-transparent bg-muted p-4 rounded-lg shadow"
+    >
+    </div>
+  </div>
+</div>
+`;
+
+exports[`Components/Tabs WithDisabled smoke-test 1`] = `
+<div class="container my-10 mx-auto">
+  <div dir="ltr"
+       data-orientation="horizontal"
+       data-slot="tabs"
+       class="flex flex-col gap-2 w-full"
+       id="_r_ID_"
+  >
+    <div class="relative flex gap-1.5 items-center w-full">
+      <div class="overflow-x-auto scrollbar-hide scroll-smooth [scrollbar-width:none] [-ms-overflow-style:none] [&amp;::-webkit-scrollbar]:hidden flex-1">
+        <div role="tablist"
+             aria-orientation="horizontal"
+             data-slot="tabs-list"
+             class="bg-muted text-muted-foreground inline-flex items-center justify-center rounded-lg p-1 gap-1.5 w-fit"
+             tabindex="0"
+             data-orientation="horizontal"
+             style="outline: none;"
+        >
+          <button type="button"
+                  role="tab"
+                  aria-selected="true"
+                  aria-controls="radix-ID"
+                  data-state="active"
+                  id="radix-ID"
+                  data-slot="tabs-trigger"
+                  class="data-[state=active]:bg-background dark:data-[state=active]:text-foreground focus-visible:border-ring focus-visible:ring-ring/50 focus-visible:outline-ring dark:data-[state=active]:border-input dark:data-[state=active]:bg-input/30 text-foreground dark:text-muted-foreground inline-flex h-[calc(100%-1px)] flex-1 items-center justify-center gap-1.5 rounded-md border border-transparent text-sm font-medium whitespace-nowrap transition-[color,box-shadow] focus-visible:ring-[3px] focus-visible:outline-1 disabled:pointer-events-none disabled:opacity-50 data-[state=active]:shadow-sm [&amp;_svg]:pointer-events-none [&amp;_svg]:shrink-0 [&amp;_svg:not([class*=&quot;size-&quot;])]:size-4 px-4 py-1.5"
+                  tabindex="-1"
+                  data-orientation="horizontal"
+                  data-radix-id""
+          >
+            <svg xmlns="http://www.w3.org/2000/svg"
+                 width="16"
+                 height="16"
+                 viewbox="0 0 24 24"
+                 fill="none"
+                 stroke="currentColor"
+                 stroke-width="2"
+                 stroke-linecap="round"
+                 stroke-linejoin="round"
+                 class="lucide lucide-check"
+                 aria-hidden="true"
+                 id="Check"
+            >
+              <path d="M20 6 9 17l-5-5">
+              </path>
+            </svg>
+            <span>
+              Active
+            </span>
+          </button>
+          <button type="button"
+                  role="tab"
+                  aria-selected="false"
+                  aria-controls="radix-ID"
+                  data-state="inactive"
+                  data-disabled
+                  disabled
+                  id="radix-ID"
+                  data-slot="tabs-trigger"
+                  class="data-[state=active]:bg-background dark:data-[state=active]:text-foreground focus-visible:border-ring focus-visible:ring-ring/50 focus-visible:outline-ring dark:data-[state=active]:border-input dark:data-[state=active]:bg-input/30 text-foreground dark:text-muted-foreground inline-flex h-[calc(100%-1px)] flex-1 items-center justify-center gap-1.5 rounded-md border border-transparent text-sm font-medium whitespace-nowrap transition-[color,box-shadow] focus-visible:ring-[3px] focus-visible:outline-1 disabled:pointer-events-none disabled:opacity-50 data-[state=active]:shadow-sm [&amp;_svg]:pointer-events-none [&amp;_svg]:shrink-0 [&amp;_svg:not([class*=&quot;size-&quot;])]:size-4 px-4 py-1.5"
+                  tabindex="-1"
+                  data-orientation="horizontal"
+                  data-radix-id""
+          >
+            <svg xmlns="http://www.w3.org/2000/svg"
+                 width="16"
+                 height="16"
+                 viewbox="0 0 24 24"
+                 fill="none"
+                 stroke="currentColor"
+                 stroke-width="2"
+                 stroke-linecap="round"
+                 stroke-linejoin="round"
+                 class="lucide lucide-clock"
+                 aria-hidden="true"
+                 id="Clock"
+            >
+              <circle cx="12"
+                      cy="12"
+                      r="10"
+              >
+              </circle>
+              <path d="M12 6v6l4 2">
+              </path>
+            </svg>
+            <span>
+              Pending
+            </span>
+          </button>
+          <button type="button"
+                  role="tab"
+                  aria-selected="false"
+                  aria-controls="radix-ID"
+                  data-state="inactive"
+                  id="radix-ID"
+                  data-slot="tabs-trigger"
+                  class="data-[state=active]:bg-background dark:data-[state=active]:text-foreground focus-visible:border-ring focus-visible:ring-ring/50 focus-visible:outline-ring dark:data-[state=active]:border-input dark:data-[state=active]:bg-input/30 text-foreground dark:text-muted-foreground inline-flex h-[calc(100%-1px)] flex-1 items-center justify-center gap-1.5 rounded-md border border-transparent text-sm font-medium whitespace-nowrap transition-[color,box-shadow] focus-visible:ring-[3px] focus-visible:outline-1 disabled:pointer-events-none disabled:opacity-50 data-[state=active]:shadow-sm [&amp;_svg]:pointer-events-none [&amp;_svg]:shrink-0 [&amp;_svg:not([class*=&quot;size-&quot;])]:size-4 px-4 py-1.5"
+                  tabindex="-1"
+                  data-orientation="horizontal"
+                  data-radix-id""
+          >
+            <svg xmlns="http://www.w3.org/2000/svg"
+                 width="16"
+                 height="16"
+                 viewbox="0 0 24 24"
+                 fill="none"
+                 stroke="currentColor"
+                 stroke-width="2"
+                 stroke-linecap="round"
+                 stroke-linejoin="round"
+                 class="lucide lucide-check"
+                 aria-hidden="true"
+                 id="Check"
+            >
+              <path d="M20 6 9 17l-5-5">
+              </path>
+            </svg>
+            <span>
+              Completed
+            </span>
+          </button>
+        </div>
+      </div>
+    </div>
+    <div data-state="active"
+         data-orientation="horizontal"
+         role="tabpanel"
+         aria-labelledby="radix-ID"
+         id="radix-ID"
+         tabindex="0"
+         data-slot="tabs-content"
+         class="flex-1 outline-none p-4 w-full border border-transparent rounded-md"
+         style="animation-duration: 0s;"
+    >
+      <div class="space-y-4">
+        <h3 class="text-lg font-medium">
+          Active Content
+        </h3>
+        <p>
+          This is the content for the active tab.
+        </p>
+      </div>
+    </div>
+    <div data-state="inactive"
+         data-orientation="horizontal"
+         role="tabpanel"
+         aria-labelledby="radix-ID"
+         hidden
+         id="radix-ID"
+         tabindex="0"
+         data-slot="tabs-content"
+         class="flex-1 outline-none p-4 w-full border border-transparent rounded-md"
+    >
+    </div>
+    <div data-state="inactive"
+         data-orientation="horizontal"
+         role="tabpanel"
+         aria-labelledby="radix-ID"
+         hidden
+         id="radix-ID"
+         tabindex="0"
+         data-slot="tabs-content"
+         class="flex-1 outline-none p-4 w-full border border-transparent rounded-md"
+    >
+    </div>
+  </div>
+</div>
+`;
+
+exports[`Components/Tabs WithFullWidth smoke-test 1`] = `
+<div class="container my-10 mx-auto">
+  <div dir="ltr"
+       data-orientation="horizontal"
+       data-slot="tabs"
+       class="flex flex-col gap-2 w-full"
+       id="_r_ID_"
+  >
+    <div class="relative flex gap-1.5 items-center w-full">
+      <div class="overflow-x-auto scrollbar-hide scroll-smooth [scrollbar-width:none] [-ms-overflow-style:none] [&amp;::-webkit-scrollbar]:hidden flex-1">
+        <div role="tablist"
+             aria-orientation="horizontal"
+             data-slot="tabs-list"
+             class="bg-muted text-muted-foreground inline-flex items-center justify-center rounded-lg p-1 gap-1.5 w-full"
+             tabindex="0"
+             data-orientation="horizontal"
+             style="outline: none;"
+        >
+          <button type="button"
+                  role="tab"
+                  aria-selected="true"
+                  aria-controls="radix-ID"
+                  data-state="active"
+                  id="radix-ID"
+                  data-slot="tabs-trigger"
+                  class="data-[state=active]:bg-background dark:data-[state=active]:text-foreground focus-visible:border-ring focus-visible:ring-ring/50 focus-visible:outline-ring dark:data-[state=active]:border-input dark:data-[state=active]:bg-input/30 text-foreground dark:text-muted-foreground inline-flex h-[calc(100%-1px)] flex-1 items-center justify-center gap-1.5 rounded-md border border-transparent text-sm font-medium whitespace-nowrap transition-[color,box-shadow] focus-visible:ring-[3px] focus-visible:outline-1 disabled:pointer-events-none disabled:opacity-50 data-[state=active]:shadow-sm [&amp;_svg]:pointer-events-none [&amp;_svg]:shrink-0 [&amp;_svg:not([class*=&quot;size-&quot;])]:size-4 px-4 py-1.5"
+                  tabindex="-1"
+                  data-orientation="horizontal"
+                  data-radix-id""
+          >
+            <svg xmlns="http://www.w3.org/2000/svg"
+                 width="16"
+                 height="16"
+                 viewbox="0 0 24 24"
+                 fill="none"
+                 stroke="currentColor"
+                 stroke-width="2"
+                 stroke-linecap="round"
+                 stroke-linejoin="round"
+                 class="lucide lucide-user"
+                 aria-hidden="true"
+                 id="User"
+            >
+              <path d="M19 21v-2a4 4 0 0 0-4-4H9a4 4 0 0 0-4 4v2">
+              </path>
+              <circle cx="12"
+                      cy="7"
+                      r="4"
+              >
+              </circle>
+            </svg>
+            <span>
+              Account
+            </span>
+          </button>
+          <button type="button"
+                  role="tab"
+                  aria-selected="false"
+                  aria-controls="radix-ID"
+                  data-state="inactive"
+                  id="radix-ID"
+                  data-slot="tabs-trigger"
+                  class="data-[state=active]:bg-background dark:data-[state=active]:text-foreground focus-visible:border-ring focus-visible:ring-ring/50 focus-visible:outline-ring dark:data-[state=active]:border-input dark:data-[state=active]:bg-input/30 text-foreground dark:text-muted-foreground inline-flex h-[calc(100%-1px)] flex-1 items-center justify-center gap-1.5 rounded-md border border-transparent text-sm font-medium whitespace-nowrap transition-[color,box-shadow] focus-visible:ring-[3px] focus-visible:outline-1 disabled:pointer-events-none disabled:opacity-50 data-[state=active]:shadow-sm [&amp;_svg]:pointer-events-none [&amp;_svg]:shrink-0 [&amp;_svg:not([class*=&quot;size-&quot;])]:size-4 px-4 py-1.5"
+                  tabindex="-1"
+                  data-orientation="horizontal"
+                  data-radix-id""
+          >
+            <svg xmlns="http://www.w3.org/2000/svg"
+                 width="16"
+                 height="16"
+                 viewbox="0 0 24 24"
+                 fill="none"
+                 stroke="currentColor"
+                 stroke-width="2"
+                 stroke-linecap="round"
+                 stroke-linejoin="round"
+                 class="lucide lucide-lock"
+                 aria-hidden="true"
+                 id="Lock"
+            >
+              <rect width="18"
+                    height="11"
+                    x="3"
+                    y="11"
+                    rx="2"
+                    ry="2"
+              >
+              </rect>
+              <path d="M7 11V7a5 5 0 0 1 10 0v4">
+              </path>
+            </svg>
+            <span>
+              Password
+            </span>
+          </button>
+          <button type="button"
+                  role="tab"
+                  aria-selected="false"
+                  aria-controls="radix-ID"
+                  data-state="inactive"
+                  id="radix-ID"
+                  data-slot="tabs-trigger"
+                  class="data-[state=active]:bg-background dark:data-[state=active]:text-foreground focus-visible:border-ring focus-visible:ring-ring/50 focus-visible:outline-ring dark:data-[state=active]:border-input dark:data-[state=active]:bg-input/30 text-foreground dark:text-muted-foreground inline-flex h-[calc(100%-1px)] flex-1 items-center justify-center gap-1.5 rounded-md border border-transparent text-sm font-medium whitespace-nowrap transition-[color,box-shadow] focus-visible:ring-[3px] focus-visible:outline-1 disabled:pointer-events-none disabled:opacity-50 data-[state=active]:shadow-sm [&amp;_svg]:pointer-events-none [&amp;_svg]:shrink-0 [&amp;_svg:not([class*=&quot;size-&quot;])]:size-4 px-4 py-1.5"
+                  tabindex="-1"
+                  data-orientation="horizontal"
+                  data-radix-id""
+          >
+            <svg xmlns="http://www.w3.org/2000/svg"
+                 width="16"
+                 height="16"
+                 viewbox="0 0 24 24"
+                 fill="none"
+                 stroke="currentColor"
+                 stroke-width="2"
+                 stroke-linecap="round"
+                 stroke-linejoin="round"
+                 class="lucide lucide-bell"
+                 aria-hidden="true"
+                 id="Bell"
+            >
+              <path d="M10.268 21a2 2 0 0 0 3.464 0">
+              </path>
+              <path d="M3.262 15.326A1 1 0 0 0 4 17h16a1 1 0 0 0 .74-1.673C19.41 13.956 18 12.499 18 8A6 6 0 0 0 6 8c0 4.499-1.411 5.956-2.738 7.326">
+              </path>
+            </svg>
+            <span>
+              Notifications
+            </span>
+          </button>
+        </div>
+      </div>
+    </div>
+    <div data-state="active"
+         data-orientation="horizontal"
+         role="tabpanel"
+         aria-labelledby="radix-ID"
+         id="radix-ID"
+         tabindex="0"
+         data-slot="tabs-content"
+         class="flex-1 outline-none p-4 w-full border border-transparent rounded-md"
+         style="animation-duration: 0s;"
+    >
+      <div class="space-y-4">
+        <h3 class="text-lg font-medium">
+          Account Content
+        </h3>
+        <p>
+          This is the content for the account tab.
+        </p>
+      </div>
+    </div>
+    <div data-state="inactive"
+         data-orientation="horizontal"
+         role="tabpanel"
+         aria-labelledby="radix-ID"
+         hidden
+         id="radix-ID"
+         tabindex="0"
+         data-slot="tabs-content"
+         class="flex-1 outline-none p-4 w-full border border-transparent rounded-md"
+    >
+    </div>
+    <div data-state="inactive"
+         data-orientation="horizontal"
+         role="tabpanel"
+         aria-labelledby="radix-ID"
+         hidden
+         id="radix-ID"
+         tabindex="0"
+         data-slot="tabs-content"
+         class="flex-1 outline-none p-4 w-full border border-transparent rounded-md"
+    >
+    </div>
+  </div>
+</div>
+`;
+
+exports[`Components/Tabs WithIconPlacement smoke-test 1`] = `
+<div class="container my-10 mx-auto">
+  <div dir="ltr"
+       data-orientation="horizontal"
+       data-slot="tabs"
+       class="flex flex-col gap-2 w-full"
+       id="_r_ID_"
+  >
+    <div class="relative flex gap-1.5 items-center w-full">
+      <div class="overflow-x-auto scrollbar-hide scroll-smooth [scrollbar-width:none] [-ms-overflow-style:none] [&amp;::-webkit-scrollbar]:hidden flex-1">
+        <div role="tablist"
+             aria-orientation="horizontal"
+             data-slot="tabs-list"
+             class="bg-muted text-muted-foreground inline-flex items-center justify-center rounded-lg p-1 gap-1.5 w-fit"
+             tabindex="0"
+             data-orientation="horizontal"
+             style="outline: none;"
+        >
+          <button type="button"
+                  role="tab"
+                  aria-selected="true"
+                  aria-controls="radix-ID"
+                  data-state="active"
+                  id="radix-ID"
+                  data-slot="tabs-trigger"
+                  class="data-[state=active]:bg-background dark:data-[state=active]:text-foreground focus-visible:border-ring focus-visible:ring-ring/50 focus-visible:outline-ring dark:data-[state=active]:border-input dark:data-[state=active]:bg-input/30 text-foreground dark:text-muted-foreground inline-flex h-[calc(100%-1px)] flex-1 items-center justify-center gap-1.5 rounded-md border border-transparent text-sm font-medium whitespace-nowrap transition-[color,box-shadow] focus-visible:ring-[3px] focus-visible:outline-1 disabled:pointer-events-none disabled:opacity-50 data-[state=active]:shadow-sm [&amp;_svg]:pointer-events-none [&amp;_svg]:shrink-0 [&amp;_svg:not([class*=&quot;size-&quot;])]:size-4 px-4 py-1.5 flex-col"
+                  tabindex="-1"
+                  data-orientation="horizontal"
+                  data-radix-id""
+          >
+            <svg xmlns="http://www.w3.org/2000/svg"
+                 width="16"
+                 height="16"
+                 viewbox="0 0 24 24"
+                 fill="none"
+                 stroke="currentColor"
+                 stroke-width="2"
+                 stroke-linecap="round"
+                 stroke-linejoin="round"
+                 class="lucide lucide-user"
+                 aria-hidden="true"
+                 id="User"
+            >
+              <path d="M19 21v-2a4 4 0 0 0-4-4H9a4 4 0 0 0-4 4v2">
+              </path>
+              <circle cx="12"
+                      cy="7"
+                      r="4"
+              >
+              </circle>
+            </svg>
+            <span>
+              Account
+            </span>
+          </button>
+          <button type="button"
+                  role="tab"
+                  aria-selected="false"
+                  aria-controls="radix-ID"
+                  data-state="inactive"
+                  id="radix-ID"
+                  data-slot="tabs-trigger"
+                  class="data-[state=active]:bg-background dark:data-[state=active]:text-foreground focus-visible:border-ring focus-visible:ring-ring/50 focus-visible:outline-ring dark:data-[state=active]:border-input dark:data-[state=active]:bg-input/30 text-foreground dark:text-muted-foreground inline-flex h-[calc(100%-1px)] flex-1 items-center justify-center gap-1.5 rounded-md border border-transparent text-sm font-medium whitespace-nowrap transition-[color,box-shadow] focus-visible:ring-[3px] focus-visible:outline-1 disabled:pointer-events-none disabled:opacity-50 data-[state=active]:shadow-sm [&amp;_svg]:pointer-events-none [&amp;_svg]:shrink-0 [&amp;_svg:not([class*=&quot;size-&quot;])]:size-4 px-4 py-1.5 flex-col"
+                  tabindex="-1"
+                  data-orientation="horizontal"
+                  data-radix-id""
+          >
+            <svg xmlns="http://www.w3.org/2000/svg"
+                 width="16"
+                 height="16"
+                 viewbox="0 0 24 24"
+                 fill="none"
+                 stroke="currentColor"
+                 stroke-width="2"
+                 stroke-linecap="round"
+                 stroke-linejoin="round"
+                 class="lucide lucide-lock"
+                 aria-hidden="true"
+                 id="Lock"
+            >
+              <rect width="18"
+                    height="11"
+                    x="3"
+                    y="11"
+                    rx="2"
+                    ry="2"
+              >
+              </rect>
+              <path d="M7 11V7a5 5 0 0 1 10 0v4">
+              </path>
+            </svg>
+            <span>
+              Password
+            </span>
+          </button>
+          <button type="button"
+                  role="tab"
+                  aria-selected="false"
+                  aria-controls="radix-ID"
+                  data-state="inactive"
+                  id="radix-ID"
+                  data-slot="tabs-trigger"
+                  class="data-[state=active]:bg-background dark:data-[state=active]:text-foreground focus-visible:border-ring focus-visible:ring-ring/50 focus-visible:outline-ring dark:data-[state=active]:border-input dark:data-[state=active]:bg-input/30 text-foreground dark:text-muted-foreground inline-flex h-[calc(100%-1px)] flex-1 items-center justify-center gap-1.5 rounded-md border border-transparent text-sm font-medium whitespace-nowrap transition-[color,box-shadow] focus-visible:ring-[3px] focus-visible:outline-1 disabled:pointer-events-none disabled:opacity-50 data-[state=active]:shadow-sm [&amp;_svg]:pointer-events-none [&amp;_svg]:shrink-0 [&amp;_svg:not([class*=&quot;size-&quot;])]:size-4 px-4 py-1.5 flex-col"
+                  tabindex="-1"
+                  data-orientation="horizontal"
+                  data-radix-id""
+          >
+            <svg xmlns="http://www.w3.org/2000/svg"
+                 width="16"
+                 height="16"
+                 viewbox="0 0 24 24"
+                 fill="none"
+                 stroke="currentColor"
+                 stroke-width="2"
+                 stroke-linecap="round"
+                 stroke-linejoin="round"
+                 class="lucide lucide-bell"
+                 aria-hidden="true"
+                 id="Bell"
+            >
+              <path d="M10.268 21a2 2 0 0 0 3.464 0">
+              </path>
+              <path d="M3.262 15.326A1 1 0 0 0 4 17h16a1 1 0 0 0 .74-1.673C19.41 13.956 18 12.499 18 8A6 6 0 0 0 6 8c0 4.499-1.411 5.956-2.738 7.326">
+              </path>
+            </svg>
+            <span>
+              Notifications
+            </span>
+          </button>
+        </div>
+      </div>
+    </div>
+    <div data-state="active"
+         data-orientation="horizontal"
+         role="tabpanel"
+         aria-labelledby="radix-ID"
+         id="radix-ID"
+         tabindex="0"
+         data-slot="tabs-content"
+         class="flex-1 outline-none p-4 w-full border border-transparent rounded-md"
+         style="animation-duration: 0s;"
+    >
+      <div class="space-y-4">
+        <h3 class="text-lg font-medium">
+          Account Content
+        </h3>
+        <p>
+          This is the content for the account tab.
+        </p>
+      </div>
+    </div>
+    <div data-state="inactive"
+         data-orientation="horizontal"
+         role="tabpanel"
+         aria-labelledby="radix-ID"
+         hidden
+         id="radix-ID"
+         tabindex="0"
+         data-slot="tabs-content"
+         class="flex-1 outline-none p-4 w-full border border-transparent rounded-md"
+    >
+    </div>
+    <div data-state="inactive"
+         data-orientation="horizontal"
+         role="tabpanel"
+         aria-labelledby="radix-ID"
+         hidden
+         id="radix-ID"
+         tabindex="0"
+         data-slot="tabs-content"
+         class="flex-1 outline-none p-4 w-full border border-transparent rounded-md"
+    >
+    </div>
+  </div>
+</div>
+`;
+
+exports[`Components/Tabs WithIcons smoke-test 1`] = `
+<div class="container my-10 mx-auto">
+  <div dir="ltr"
+       data-orientation="horizontal"
+       data-slot="tabs"
+       class="flex flex-col gap-2 w-full"
+       id="_r_ID_"
+  >
+    <div class="relative flex gap-1.5 items-center w-full">
+      <div class="overflow-x-auto scrollbar-hide scroll-smooth [scrollbar-width:none] [-ms-overflow-style:none] [&amp;::-webkit-scrollbar]:hidden flex-1">
+        <div role="tablist"
+             aria-orientation="horizontal"
+             data-slot="tabs-list"
+             class="bg-muted text-muted-foreground inline-flex items-center justify-center rounded-lg p-1 gap-1.5 w-fit"
+             tabindex="0"
+             data-orientation="horizontal"
+             style="outline: none;"
+        >
+          <button type="button"
+                  role="tab"
+                  aria-selected="true"
+                  aria-controls="radix-ID"
+                  data-state="active"
+                  id="radix-ID"
+                  data-slot="tabs-trigger"
+                  class="data-[state=active]:bg-background dark:data-[state=active]:text-foreground focus-visible:border-ring focus-visible:ring-ring/50 focus-visible:outline-ring dark:data-[state=active]:border-input dark:data-[state=active]:bg-input/30 text-foreground dark:text-muted-foreground inline-flex h-[calc(100%-1px)] flex-1 items-center justify-center gap-1.5 rounded-md border border-transparent text-sm font-medium whitespace-nowrap transition-[color,box-shadow] focus-visible:ring-[3px] focus-visible:outline-1 disabled:pointer-events-none disabled:opacity-50 data-[state=active]:shadow-sm [&amp;_svg]:pointer-events-none [&amp;_svg]:shrink-0 [&amp;_svg:not([class*=&quot;size-&quot;])]:size-4 px-4 py-1.5"
+                  tabindex="-1"
+                  data-orientation="horizontal"
+                  data-radix-id""
+          >
+            <svg xmlns="http://www.w3.org/2000/svg"
+                 width="16"
+                 height="16"
+                 viewbox="0 0 24 24"
+                 fill="none"
+                 stroke="currentColor"
+                 stroke-width="2"
+                 stroke-linecap="round"
+                 stroke-linejoin="round"
+                 class="lucide lucide-user"
+                 aria-hidden="true"
+                 id="User"
+            >
+              <path d="M19 21v-2a4 4 0 0 0-4-4H9a4 4 0 0 0-4 4v2">
+              </path>
+              <circle cx="12"
+                      cy="7"
+                      r="4"
+              >
+              </circle>
+            </svg>
+            <span>
+              Account
+            </span>
+          </button>
+          <button type="button"
+                  role="tab"
+                  aria-selected="false"
+                  aria-controls="radix-ID"
+                  data-state="inactive"
+                  id="radix-ID"
+                  data-slot="tabs-trigger"
+                  class="data-[state=active]:bg-background dark:data-[state=active]:text-foreground focus-visible:border-ring focus-visible:ring-ring/50 focus-visible:outline-ring dark:data-[state=active]:border-input dark:data-[state=active]:bg-input/30 text-foreground dark:text-muted-foreground inline-flex h-[calc(100%-1px)] flex-1 items-center justify-center gap-1.5 rounded-md border border-transparent text-sm font-medium whitespace-nowrap transition-[color,box-shadow] focus-visible:ring-[3px] focus-visible:outline-1 disabled:pointer-events-none disabled:opacity-50 data-[state=active]:shadow-sm [&amp;_svg]:pointer-events-none [&amp;_svg]:shrink-0 [&amp;_svg:not([class*=&quot;size-&quot;])]:size-4 px-4 py-1.5"
+                  tabindex="-1"
+                  data-orientation="horizontal"
+                  data-radix-id""
+          >
+            <svg xmlns="http://www.w3.org/2000/svg"
+                 width="16"
+                 height="16"
+                 viewbox="0 0 24 24"
+                 fill="none"
+                 stroke="currentColor"
+                 stroke-width="2"
+                 stroke-linecap="round"
+                 stroke-linejoin="round"
+                 class="lucide lucide-lock"
+                 aria-hidden="true"
+                 id="Lock"
+            >
+              <rect width="18"
+                    height="11"
+                    x="3"
+                    y="11"
+                    rx="2"
+                    ry="2"
+              >
+              </rect>
+              <path d="M7 11V7a5 5 0 0 1 10 0v4">
+              </path>
+            </svg>
+            <span>
+              Password
+            </span>
+          </button>
+          <button type="button"
+                  role="tab"
+                  aria-selected="false"
+                  aria-controls="radix-ID"
+                  data-state="inactive"
+                  id="radix-ID"
+                  data-slot="tabs-trigger"
+                  class="data-[state=active]:bg-background dark:data-[state=active]:text-foreground focus-visible:border-ring focus-visible:ring-ring/50 focus-visible:outline-ring dark:data-[state=active]:border-input dark:data-[state=active]:bg-input/30 text-foreground dark:text-muted-foreground inline-flex h-[calc(100%-1px)] flex-1 items-center justify-center gap-1.5 rounded-md border border-transparent text-sm font-medium whitespace-nowrap transition-[color,box-shadow] focus-visible:ring-[3px] focus-visible:outline-1 disabled:pointer-events-none disabled:opacity-50 data-[state=active]:shadow-sm [&amp;_svg]:pointer-events-none [&amp;_svg]:shrink-0 [&amp;_svg:not([class*=&quot;size-&quot;])]:size-4 px-4 py-1.5"
+                  tabindex="-1"
+                  data-orientation="horizontal"
+                  data-radix-id""
+          >
+            <svg xmlns="http://www.w3.org/2000/svg"
+                 width="16"
+                 height="16"
+                 viewbox="0 0 24 24"
+                 fill="none"
+                 stroke="currentColor"
+                 stroke-width="2"
+                 stroke-linecap="round"
+                 stroke-linejoin="round"
+                 class="lucide lucide-bell"
+                 aria-hidden="true"
+                 id="Bell"
+            >
+              <path d="M10.268 21a2 2 0 0 0 3.464 0">
+              </path>
+              <path d="M3.262 15.326A1 1 0 0 0 4 17h16a1 1 0 0 0 .74-1.673C19.41 13.956 18 12.499 18 8A6 6 0 0 0 6 8c0 4.499-1.411 5.956-2.738 7.326">
+              </path>
+            </svg>
+            <span>
+              Notifications
+            </span>
+          </button>
+        </div>
+      </div>
+    </div>
+    <div data-state="active"
+         data-orientation="horizontal"
+         role="tabpanel"
+         aria-labelledby="radix-ID"
+         id="radix-ID"
+         tabindex="0"
+         data-slot="tabs-content"
+         class="flex-1 outline-none p-4 w-full border border-transparent rounded-md"
+         style="animation-duration: 0s;"
+    >
+      <div class="space-y-4">
+        <h3 class="text-lg font-medium">
+          Account Content
+        </h3>
+        <p>
+          This is the content for the account tab.
+        </p>
+      </div>
+    </div>
+    <div data-state="inactive"
+         data-orientation="horizontal"
+         role="tabpanel"
+         aria-labelledby="radix-ID"
+         hidden
+         id="radix-ID"
+         tabindex="0"
+         data-slot="tabs-content"
+         class="flex-1 outline-none p-4 w-full border border-transparent rounded-md"
+    >
+    </div>
+    <div data-state="inactive"
+         data-orientation="horizontal"
+         role="tabpanel"
+         aria-labelledby="radix-ID"
+         hidden
+         id="radix-ID"
+         tabindex="0"
+         data-slot="tabs-content"
+         class="flex-1 outline-none p-4 w-full border border-transparent rounded-md"
+    >
+    </div>
+  </div>
+</div>
+`;
+
+exports[`Components/Tabs WithOrientation smoke-test 1`] = `
+<div class="container my-10 mx-auto">
+  <div dir="ltr"
+       data-orientation="vertical"
+       data-slot="tabs"
+       class="flex gap-2 w-full flex-row items-start"
+       id="_r_ID_"
+  >
+    <div class="relative flex gap-1.5 flex-col items-start self-start">
+      <div class="w-full">
+        <div role="tablist"
+             aria-orientation="vertical"
+             data-slot="tabs-list"
+             class="bg-muted text-muted-foreground inline-flex items-center justify-center rounded-lg p-1 flex-col h-fit gap-1.5 w-fit"
+             tabindex="0"
+             data-orientation="vertical"
+             style="outline: none;"
+        >
+          <button type="button"
+                  role="tab"
+                  aria-selected="true"
+                  aria-controls="radix-ID"
+                  data-state="active"
+                  id="radix-ID"
+                  data-slot="tabs-trigger"
+                  class="data-[state=active]:bg-background dark:data-[state=active]:text-foreground focus-visible:border-ring focus-visible:ring-ring/50 focus-visible:outline-ring dark:data-[state=active]:border-input dark:data-[state=active]:bg-input/30 text-foreground dark:text-muted-foreground inline-flex h-[calc(100%-1px)] flex-1 items-center gap-1.5 rounded-md border border-transparent text-sm font-medium whitespace-nowrap transition-[color,box-shadow] focus-visible:ring-[3px] focus-visible:outline-1 disabled:pointer-events-none disabled:opacity-50 data-[state=active]:shadow-sm [&amp;_svg]:pointer-events-none [&amp;_svg]:shrink-0 [&amp;_svg:not([class*=&quot;size-&quot;])]:size-4 px-4 py-1.5 w-full justify-start"
+                  tabindex="-1"
+                  data-orientation="vertical"
+                  data-radix-id""
+          >
+            <svg xmlns="http://www.w3.org/2000/svg"
+                 width="16"
+                 height="16"
+                 viewbox="0 0 24 24"
+                 fill="none"
+                 stroke="currentColor"
+                 stroke-width="2"
+                 stroke-linecap="round"
+                 stroke-linejoin="round"
+                 class="lucide lucide-user"
+                 aria-hidden="true"
+                 id="User"
+            >
+              <path d="M19 21v-2a4 4 0 0 0-4-4H9a4 4 0 0 0-4 4v2">
+              </path>
+              <circle cx="12"
+                      cy="7"
+                      r="4"
+              >
+              </circle>
+            </svg>
+            <span>
+              Account
+            </span>
+          </button>
+          <button type="button"
+                  role="tab"
+                  aria-selected="false"
+                  aria-controls="radix-ID"
+                  data-state="inactive"
+                  id="radix-ID"
+                  data-slot="tabs-trigger"
+                  class="data-[state=active]:bg-background dark:data-[state=active]:text-foreground focus-visible:border-ring focus-visible:ring-ring/50 focus-visible:outline-ring dark:data-[state=active]:border-input dark:data-[state=active]:bg-input/30 text-foreground dark:text-muted-foreground inline-flex h-[calc(100%-1px)] flex-1 items-center gap-1.5 rounded-md border border-transparent text-sm font-medium whitespace-nowrap transition-[color,box-shadow] focus-visible:ring-[3px] focus-visible:outline-1 disabled:pointer-events-none disabled:opacity-50 data-[state=active]:shadow-sm [&amp;_svg]:pointer-events-none [&amp;_svg]:shrink-0 [&amp;_svg:not([class*=&quot;size-&quot;])]:size-4 px-4 py-1.5 w-full justify-start"
+                  tabindex="-1"
+                  data-orientation="vertical"
+                  data-radix-id""
+          >
+            <svg xmlns="http://www.w3.org/2000/svg"
+                 width="16"
+                 height="16"
+                 viewbox="0 0 24 24"
+                 fill="none"
+                 stroke="currentColor"
+                 stroke-width="2"
+                 stroke-linecap="round"
+                 stroke-linejoin="round"
+                 class="lucide lucide-lock"
+                 aria-hidden="true"
+                 id="Lock"
+            >
+              <rect width="18"
+                    height="11"
+                    x="3"
+                    y="11"
+                    rx="2"
+                    ry="2"
+              >
+              </rect>
+              <path d="M7 11V7a5 5 0 0 1 10 0v4">
+              </path>
+            </svg>
+            <span>
+              Password
+            </span>
+          </button>
+          <button type="button"
+                  role="tab"
+                  aria-selected="false"
+                  aria-controls="radix-ID"
+                  data-state="inactive"
+                  id="radix-ID"
+                  data-slot="tabs-trigger"
+                  class="data-[state=active]:bg-background dark:data-[state=active]:text-foreground focus-visible:border-ring focus-visible:ring-ring/50 focus-visible:outline-ring dark:data-[state=active]:border-input dark:data-[state=active]:bg-input/30 text-foreground dark:text-muted-foreground inline-flex h-[calc(100%-1px)] flex-1 items-center gap-1.5 rounded-md border border-transparent text-sm font-medium whitespace-nowrap transition-[color,box-shadow] focus-visible:ring-[3px] focus-visible:outline-1 disabled:pointer-events-none disabled:opacity-50 data-[state=active]:shadow-sm [&amp;_svg]:pointer-events-none [&amp;_svg]:shrink-0 [&amp;_svg:not([class*=&quot;size-&quot;])]:size-4 px-4 py-1.5 w-full justify-start"
+                  tabindex="-1"
+                  data-orientation="vertical"
+                  data-radix-id""
+          >
+            <svg xmlns="http://www.w3.org/2000/svg"
+                 width="16"
+                 height="16"
+                 viewbox="0 0 24 24"
+                 fill="none"
+                 stroke="currentColor"
+                 stroke-width="2"
+                 stroke-linecap="round"
+                 stroke-linejoin="round"
+                 class="lucide lucide-bell"
+                 aria-hidden="true"
+                 id="Bell"
+            >
+              <path d="M10.268 21a2 2 0 0 0 3.464 0">
+              </path>
+              <path d="M3.262 15.326A1 1 0 0 0 4 17h16a1 1 0 0 0 .74-1.673C19.41 13.956 18 12.499 18 8A6 6 0 0 0 6 8c0 4.499-1.411 5.956-2.738 7.326">
+              </path>
+            </svg>
+            <span>
+              Notifications
+            </span>
+          </button>
+        </div>
+      </div>
+    </div>
+    <div data-state="active"
+         data-orientation="vertical"
+         role="tabpanel"
+         aria-labelledby="radix-ID"
+         id="radix-ID"
+         tabindex="0"
+         data-slot="tabs-content"
+         class="flex-1 outline-none p-4 w-full border border-transparent rounded-md"
+         style="animation-duration: 0s;"
+    >
+      <div class="space-y-4">
+        <h3 class="text-lg font-medium">
+          Account Content
+        </h3>
+        <p>
+          This is the content for the account tab.
+        </p>
+      </div>
+    </div>
+    <div data-state="inactive"
+         data-orientation="vertical"
+         role="tabpanel"
+         aria-labelledby="radix-ID"
+         hidden
+         id="radix-ID"
+         tabindex="0"
+         data-slot="tabs-content"
+         class="flex-1 outline-none p-4 w-full border border-transparent rounded-md"
+    >
+    </div>
+    <div data-state="inactive"
+         data-orientation="vertical"
+         role="tabpanel"
+         aria-labelledby="radix-ID"
+         hidden
+         id="radix-ID"
+         tabindex="0"
+         data-slot="tabs-content"
+         class="flex-1 outline-none p-4 w-full border border-transparent rounded-md"
+    >
+    </div>
+  </div>
+</div>
+`;
+
+exports[`Components/Tabs WithScrollIndicators smoke-test 1`] = `
+<div class="container my-10 mx-auto">
+  <div dir="ltr"
+       data-orientation="horizontal"
+       data-slot="tabs"
+       class="flex flex-col gap-2 w-full"
+       id="_r_ID_"
+  >
+    <div class="relative flex gap-1.5 items-center w-full">
+      <div class="overflow-x-auto scrollbar-hide scroll-smooth [scrollbar-width:none] [-ms-overflow-style:none] [&amp;::-webkit-scrollbar]:hidden flex-1">
+        <div role="tablist"
+             aria-orientation="horizontal"
+             data-slot="tabs-list"
+             class="bg-muted text-muted-foreground inline-flex items-center justify-center rounded-lg p-1 gap-1.5 w-fit"
+             tabindex="0"
+             data-orientation="horizontal"
+             style="outline: none;"
+        >
+          <button type="button"
+                  role="tab"
+                  aria-selected="true"
+                  aria-controls="radix-ID"
+                  data-state="active"
+                  id="radix-ID"
+                  data-slot="tabs-trigger"
+                  class="data-[state=active]:bg-background dark:data-[state=active]:text-foreground focus-visible:border-ring focus-visible:ring-ring/50 focus-visible:outline-ring dark:data-[state=active]:border-input dark:data-[state=active]:bg-input/30 text-foreground dark:text-muted-foreground inline-flex h-[calc(100%-1px)] flex-1 items-center justify-center gap-1.5 rounded-md border border-transparent text-sm font-medium whitespace-nowrap transition-[color,box-shadow] focus-visible:ring-[3px] focus-visible:outline-1 disabled:pointer-events-none disabled:opacity-50 data-[state=active]:shadow-sm [&amp;_svg]:pointer-events-none [&amp;_svg]:shrink-0 [&amp;_svg:not([class*=&quot;size-&quot;])]:size-4 px-4 py-1.5"
+                  tabindex="-1"
+                  data-orientation="horizontal"
+                  data-radix-id""
+          >
+            <svg xmlns="http://www.w3.org/2000/svg"
+                 width="16"
+                 height="16"
+                 viewbox="0 0 24 24"
+                 fill="none"
+                 stroke="currentColor"
+                 stroke-width="2"
+                 stroke-linecap="round"
+                 stroke-linejoin="round"
+                 class="lucide lucide-user"
+                 aria-hidden="true"
+                 id="User"
+            >
+              <path d="M19 21v-2a4 4 0 0 0-4-4H9a4 4 0 0 0-4 4v2">
+              </path>
+              <circle cx="12"
+                      cy="7"
+                      r="4"
+              >
+              </circle>
+            </svg>
+            <span>
+              Account
+            </span>
+          </button>
+          <button type="button"
+                  role="tab"
+                  aria-selected="false"
+                  aria-controls="radix-ID"
+                  data-state="inactive"
+                  id="radix-ID"
+                  data-slot="tabs-trigger"
+                  class="data-[state=active]:bg-background dark:data-[state=active]:text-foreground focus-visible:border-ring focus-visible:ring-ring/50 focus-visible:outline-ring dark:data-[state=active]:border-input dark:data-[state=active]:bg-input/30 text-foreground dark:text-muted-foreground inline-flex h-[calc(100%-1px)] flex-1 items-center justify-center gap-1.5 rounded-md border border-transparent text-sm font-medium whitespace-nowrap transition-[color,box-shadow] focus-visible:ring-[3px] focus-visible:outline-1 disabled:pointer-events-none disabled:opacity-50 data-[state=active]:shadow-sm [&amp;_svg]:pointer-events-none [&amp;_svg]:shrink-0 [&amp;_svg:not([class*=&quot;size-&quot;])]:size-4 px-4 py-1.5"
+                  tabindex="-1"
+                  data-orientation="horizontal"
+                  data-radix-id""
+          >
+            <svg xmlns="http://www.w3.org/2000/svg"
+                 width="16"
+                 height="16"
+                 viewbox="0 0 24 24"
+                 fill="none"
+                 stroke="currentColor"
+                 stroke-width="2"
+                 stroke-linecap="round"
+                 stroke-linejoin="round"
+                 class="lucide lucide-lock"
+                 aria-hidden="true"
+                 id="Lock"
+            >
+              <rect width="18"
+                    height="11"
+                    x="3"
+                    y="11"
+                    rx="2"
+                    ry="2"
+              >
+              </rect>
+              <path d="M7 11V7a5 5 0 0 1 10 0v4">
+              </path>
+            </svg>
+            <span>
+              Password
+            </span>
+          </button>
+          <button type="button"
+                  role="tab"
+                  aria-selected="false"
+                  aria-controls="radix-ID"
+                  data-state="inactive"
+                  id="radix-ID"
+                  data-slot="tabs-trigger"
+                  class="data-[state=active]:bg-background dark:data-[state=active]:text-foreground focus-visible:border-ring focus-visible:ring-ring/50 focus-visible:outline-ring dark:data-[state=active]:border-input dark:data-[state=active]:bg-input/30 text-foreground dark:text-muted-foreground inline-flex h-[calc(100%-1px)] flex-1 items-center justify-center gap-1.5 rounded-md border border-transparent text-sm font-medium whitespace-nowrap transition-[color,box-shadow] focus-visible:ring-[3px] focus-visible:outline-1 disabled:pointer-events-none disabled:opacity-50 data-[state=active]:shadow-sm [&amp;_svg]:pointer-events-none [&amp;_svg]:shrink-0 [&amp;_svg:not([class*=&quot;size-&quot;])]:size-4 px-4 py-1.5"
+                  tabindex="-1"
+                  data-orientation="horizontal"
+                  data-radix-id""
+          >
+            <svg xmlns="http://www.w3.org/2000/svg"
+                 width="16"
+                 height="16"
+                 viewbox="0 0 24 24"
+                 fill="none"
+                 stroke="currentColor"
+                 stroke-width="2"
+                 stroke-linecap="round"
+                 stroke-linejoin="round"
+                 class="lucide lucide-bell"
+                 aria-hidden="true"
+                 id="Bell"
+            >
+              <path d="M10.268 21a2 2 0 0 0 3.464 0">
+              </path>
+              <path d="M3.262 15.326A1 1 0 0 0 4 17h16a1 1 0 0 0 .74-1.673C19.41 13.956 18 12.499 18 8A6 6 0 0 0 6 8c0 4.499-1.411 5.956-2.738 7.326">
+              </path>
+            </svg>
+            <span>
+              Notifications
+            </span>
+          </button>
+          <button type="button"
+                  role="tab"
+                  aria-selected="false"
+                  aria-controls="radix-ID"
+                  data-state="inactive"
+                  id="radix-ID"
+                  data-slot="tabs-trigger"
+                  class="data-[state=active]:bg-background dark:data-[state=active]:text-foreground focus-visible:border-ring focus-visible:ring-ring/50 focus-visible:outline-ring dark:data-[state=active]:border-input dark:data-[state=active]:bg-input/30 text-foreground dark:text-muted-foreground inline-flex h-[calc(100%-1px)] flex-1 items-center justify-center gap-1.5 rounded-md border border-transparent text-sm font-medium whitespace-nowrap transition-[color,box-shadow] focus-visible:ring-[3px] focus-visible:outline-1 disabled:pointer-events-none disabled:opacity-50 data-[state=active]:shadow-sm [&amp;_svg]:pointer-events-none [&amp;_svg]:shrink-0 [&amp;_svg:not([class*=&quot;size-&quot;])]:size-4 px-4 py-1.5"
+                  tabindex="-1"
+                  data-orientation="horizontal"
+                  data-radix-id""
+          >
+            <svg xmlns="http://www.w3.org/2000/svg"
+                 width="16"
+                 height="16"
+                 viewbox="0 0 24 24"
+                 fill="none"
+                 stroke="currentColor"
+                 stroke-width="2"
+                 stroke-linecap="round"
+                 stroke-linejoin="round"
+                 class="lucide lucide-settings"
+                 aria-hidden="true"
+                 id="Settings"
+            >
+              <path d="M9.671 4.136a2.34 2.34 0 0 1 4.659 0 2.34 2.34 0 0 0 3.319 1.915 2.34 2.34 0 0 1 2.33 4.033 2.34 2.34 0 0 0 0 3.831 2.34 2.34 0 0 1-2.33 4.033 2.34 2.34 0 0 0-3.319 1.915 2.34 2.34 0 0 1-4.659 0 2.34 2.34 0 0 0-3.32-1.915 2.34 2.34 0 0 1-2.33-4.033 2.34 2.34 0 0 0 0-3.831A2.34 2.34 0 0 1 6.35 6.051a2.34 2.34 0 0 0 3.319-1.915">
+              </path>
+              <circle cx="12"
+                      cy="12"
+                      r="3"
+              >
+              </circle>
+            </svg>
+            <span>
+              Settings
+            </span>
+          </button>
+          <button type="button"
+                  role="tab"
+                  aria-selected="false"
+                  aria-controls="radix-ID"
+                  data-state="inactive"
+                  id="radix-ID"
+                  data-slot="tabs-trigger"
+                  class="data-[state=active]:bg-background dark:data-[state=active]:text-foreground focus-visible:border-ring focus-visible:ring-ring/50 focus-visible:outline-ring dark:data-[state=active]:border-input dark:data-[state=active]:bg-input/30 text-foreground dark:text-muted-foreground inline-flex h-[calc(100%-1px)] flex-1 items-center justify-center gap-1.5 rounded-md border border-transparent text-sm font-medium whitespace-nowrap transition-[color,box-shadow] focus-visible:ring-[3px] focus-visible:outline-1 disabled:pointer-events-none disabled:opacity-50 data-[state=active]:shadow-sm [&amp;_svg]:pointer-events-none [&amp;_svg]:shrink-0 [&amp;_svg:not([class*=&quot;size-&quot;])]:size-4 px-4 py-1.5"
+                  tabindex="-1"
+                  data-orientation="horizontal"
+                  data-radix-id""
+          >
+            <svg xmlns="http://www.w3.org/2000/svg"
+                 width="16"
+                 height="16"
+                 viewbox="0 0 24 24"
+                 fill="none"
+                 stroke="currentColor"
+                 stroke-width="2"
+                 stroke-linecap="round"
+                 stroke-linejoin="round"
+                 class="lucide lucide-shield"
+                 aria-hidden="true"
+                 id="Shield"
+            >
+              <path d="M20 13c0 5-3.5 7.5-7.66 8.95a1 1 0 0 1-.67-.01C7.5 20.5 4 18 4 13V6a1 1 0 0 1 1-1c2 0 4.5-1.2 6.24-2.72a1.17 1.17 0 0 1 1.52 0C14.51 3.81 17 5 19 5a1 1 0 0 1 1 1z">
+              </path>
+            </svg>
+            <span>
+              Security
+            </span>
+          </button>
+          <button type="button"
+                  role="tab"
+                  aria-selected="false"
+                  aria-controls="radix-ID"
+                  data-state="inactive"
+                  id="radix-ID"
+                  data-slot="tabs-trigger"
+                  class="data-[state=active]:bg-background dark:data-[state=active]:text-foreground focus-visible:border-ring focus-visible:ring-ring/50 focus-visible:outline-ring dark:data-[state=active]:border-input dark:data-[state=active]:bg-input/30 text-foreground dark:text-muted-foreground inline-flex h-[calc(100%-1px)] flex-1 items-center justify-center gap-1.5 rounded-md border border-transparent text-sm font-medium whitespace-nowrap transition-[color,box-shadow] focus-visible:ring-[3px] focus-visible:outline-1 disabled:pointer-events-none disabled:opacity-50 data-[state=active]:shadow-sm [&amp;_svg]:pointer-events-none [&amp;_svg]:shrink-0 [&amp;_svg:not([class*=&quot;size-&quot;])]:size-4 px-4 py-1.5"
+                  tabindex="-1"
+                  data-orientation="horizontal"
+                  data-radix-id""
+          >
+            <svg xmlns="http://www.w3.org/2000/svg"
+                 width="16"
+                 height="16"
+                 viewbox="0 0 24 24"
+                 fill="none"
+                 stroke="currentColor"
+                 stroke-width="2"
+                 stroke-linecap="round"
+                 stroke-linejoin="round"
+                 class="lucide lucide-credit-card"
+                 aria-hidden="true"
+                 id="CreditCard"
+            >
+              <rect width="20"
+                    height="14"
+                    x="2"
+                    y="5"
+                    rx="2"
+              >
+              </rect>
+              <line x1="2"
+                    x2="22"
+                    y1="10"
+                    y2="10"
+              >
+              </line>
+            </svg>
+            <span>
+              Billing
+            </span>
+          </button>
+          <button type="button"
+                  role="tab"
+                  aria-selected="false"
+                  aria-controls="radix-ID"
+                  data-state="inactive"
+                  id="radix-ID"
+                  data-slot="tabs-trigger"
+                  class="data-[state=active]:bg-background dark:data-[state=active]:text-foreground focus-visible:border-ring focus-visible:ring-ring/50 focus-visible:outline-ring dark:data-[state=active]:border-input dark:data-[state=active]:bg-input/30 text-foreground dark:text-muted-foreground inline-flex h-[calc(100%-1px)] flex-1 items-center justify-center gap-1.5 rounded-md border border-transparent text-sm font-medium whitespace-nowrap transition-[color,box-shadow] focus-visible:ring-[3px] focus-visible:outline-1 disabled:pointer-events-none disabled:opacity-50 data-[state=active]:shadow-sm [&amp;_svg]:pointer-events-none [&amp;_svg]:shrink-0 [&amp;_svg:not([class*=&quot;size-&quot;])]:size-4 px-4 py-1.5"
+                  tabindex="-1"
+                  data-orientation="horizontal"
+                  data-radix-id""
+          >
+            <svg xmlns="http://www.w3.org/2000/svg"
+                 width="16"
+                 height="16"
+                 viewbox="0 0 24 24"
+                 fill="none"
+                 stroke="currentColor"
+                 stroke-width="2"
+                 stroke-linecap="round"
+                 stroke-linejoin="round"
+                 class="lucide lucide-code"
+                 aria-hidden="true"
+                 id="Code"
+            >
+              <path d="m16 18 6-6-6-6">
+              </path>
+              <path d="m8 6-6 6 6 6">
+              </path>
+            </svg>
+            <span>
+              API
+            </span>
+          </button>
+          <button type="button"
+                  role="tab"
+                  aria-selected="false"
+                  aria-controls="radix-ID"
+                  data-state="inactive"
+                  id="radix-ID"
+                  data-slot="tabs-trigger"
+                  class="data-[state=active]:bg-background dark:data-[state=active]:text-foreground focus-visible:border-ring focus-visible:ring-ring/50 focus-visible:outline-ring dark:data-[state=active]:border-input dark:data-[state=active]:bg-input/30 text-foreground dark:text-muted-foreground inline-flex h-[calc(100%-1px)] flex-1 items-center justify-center gap-1.5 rounded-md border border-transparent text-sm font-medium whitespace-nowrap transition-[color,box-shadow] focus-visible:ring-[3px] focus-visible:outline-1 disabled:pointer-events-none disabled:opacity-50 data-[state=active]:shadow-sm [&amp;_svg]:pointer-events-none [&amp;_svg]:shrink-0 [&amp;_svg:not([class*=&quot;size-&quot;])]:size-4 px-4 py-1.5"
+                  tabindex="-1"
+                  data-orientation="horizontal"
+                  data-radix-id""
+          >
+            <svg xmlns="http://www.w3.org/2000/svg"
+                 width="16"
+                 height="16"
+                 viewbox="0 0 24 24"
+                 fill="none"
+                 stroke="currentColor"
+                 stroke-width="2"
+                 stroke-linecap="round"
+                 stroke-linejoin="round"
+                 class="lucide lucide-file-text"
+                 aria-hidden="true"
+                 id="FileText"
+            >
+              <path d="M6 22a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h8a2.4 2.4 0 0 1 1.704.706l3.588 3.588A2.4 2.4 0 0 1 20 8v12a2 2 0 0 1-2 2z">
+              </path>
+              <path d="M14 2v5a1 1 0 0 0 1 1h5">
+              </path>
+              <path d="M10 9H8">
+              </path>
+              <path d="M16 13H8">
+              </path>
+              <path d="M16 17H8">
+              </path>
+            </svg>
+            <span>
+              Logs
+            </span>
+          </button>
+        </div>
+      </div>
+    </div>
+    <div data-state="active"
+         data-orientation="horizontal"
+         role="tabpanel"
+         aria-labelledby="radix-ID"
+         id="radix-ID"
+         tabindex="0"
+         data-slot="tabs-content"
+         class="flex-1 outline-none p-4 w-full border border-transparent rounded-md"
+         style="animation-duration: 0s;"
+    >
+      <div class="space-y-4">
+        <h3 class="text-lg font-medium">
+          Account Content
+        </h3>
+        <p>
+          This is the content for the account tab.
+        </p>
+      </div>
+    </div>
+    <div data-state="inactive"
+         data-orientation="horizontal"
+         role="tabpanel"
+         aria-labelledby="radix-ID"
+         hidden
+         id="radix-ID"
+         tabindex="0"
+         data-slot="tabs-content"
+         class="flex-1 outline-none p-4 w-full border border-transparent rounded-md"
+    >
+    </div>
+    <div data-state="inactive"
+         data-orientation="horizontal"
+         role="tabpanel"
+         aria-labelledby="radix-ID"
+         hidden
+         id="radix-ID"
+         tabindex="0"
+         data-slot="tabs-content"
+         class="flex-1 outline-none p-4 w-full border border-transparent rounded-md"
+    >
+    </div>
+    <div data-state="inactive"
+         data-orientation="horizontal"
+         role="tabpanel"
+         aria-labelledby="radix-ID"
+         hidden
+         id="radix-ID"
+         tabindex="0"
+         data-slot="tabs-content"
+         class="flex-1 outline-none p-4 w-full border border-transparent rounded-md"
+    >
+    </div>
+    <div data-state="inactive"
+         data-orientation="horizontal"
+         role="tabpanel"
+         aria-labelledby="radix-ID"
+         hidden
+         id="radix-ID"
+         tabindex="0"
+         data-slot="tabs-content"
+         class="flex-1 outline-none p-4 w-full border border-transparent rounded-md"
+    >
+    </div>
+    <div data-state="inactive"
+         data-orientation="horizontal"
+         role="tabpanel"
+         aria-labelledby="radix-ID"
+         hidden
+         id="radix-ID"
+         tabindex="0"
+         data-slot="tabs-content"
+         class="flex-1 outline-none p-4 w-full border border-transparent rounded-md"
+    >
+    </div>
+    <div data-state="inactive"
+         data-orientation="horizontal"
+         role="tabpanel"
+         aria-labelledby="radix-ID"
+         hidden
+         id="radix-ID"
+         tabindex="0"
+         data-slot="tabs-content"
+         class="flex-1 outline-none p-4 w-full border border-transparent rounded-md"
+    >
+    </div>
+    <div data-state="inactive"
+         data-orientation="horizontal"
+         role="tabpanel"
+         aria-labelledby="radix-ID"
+         hidden
+         id="radix-ID"
+         tabindex="0"
+         data-slot="tabs-content"
+         class="flex-1 outline-none p-4 w-full border border-transparent rounded-md"
+    >
+    </div>
+  </div>
+</div>
+`;
+
+exports[`Components/Tabs WithVariant smoke-test 1`] = `
+<div class="container my-10 mx-auto">
+  <div dir="ltr"
+       data-orientation="horizontal"
+       data-slot="tabs"
+       class="flex flex-col gap-2 w-full"
+       id="_r_ID_"
+  >
+    <div class="relative flex gap-1.5 items-center w-full">
+      <div class="overflow-x-auto scrollbar-hide scroll-smooth [scrollbar-width:none] [-ms-overflow-style:none] [&amp;::-webkit-scrollbar]:hidden flex-1">
+        <div role="tablist"
+             aria-orientation="horizontal"
+             data-slot="tabs-list"
+             class="text-muted-foreground inline-flex items-center justify-center rounded-lg before:bg-border relative h-auto gap-0.5 bg-transparent p-0 before:absolute before:inset-x-0 before:bottom-0 before:h-px w-fit"
+             tabindex="0"
+             data-orientation="horizontal"
+             style="outline: none;"
+        >
+          <button type="button"
+                  role="tab"
+                  aria-selected="true"
+                  aria-controls="radix-ID"
+                  data-state="active"
+                  id="radix-ID"
+                  data-slot="tabs-trigger"
+                  class="data-[state=active]:bg-background dark:data-[state=active]:text-foreground focus-visible:border-ring focus-visible:ring-ring/50 focus-visible:outline-ring dark:data-[state=active]:border-input dark:data-[state=active]:bg-input/30 text-foreground dark:text-muted-foreground inline-flex h-[calc(100%-1px)] flex-1 items-center justify-center gap-1.5 rounded-md border border-transparent text-sm font-medium whitespace-nowrap transition-[color,box-shadow] focus-visible:ring-[3px] focus-visible:outline-1 disabled:pointer-events-none disabled:opacity-50 [&amp;_svg]:pointer-events-none [&amp;_svg]:shrink-0 [&amp;_svg:not([class*=&quot;size-&quot;])]:size-4 px-4 bg-muted overflow-hidden rounded-b-none border-x border-t py-2 data-[state=active]:z-10 data-[state=active]:shadow-none"
+                  tabindex="-1"
+                  data-orientation="horizontal"
+                  data-radix-id""
+          >
+            <svg xmlns="http://www.w3.org/2000/svg"
+                 width="16"
+                 height="16"
+                 viewbox="0 0 24 24"
+                 fill="none"
+                 stroke="currentColor"
+                 stroke-width="2"
+                 stroke-linecap="round"
+                 stroke-linejoin="round"
+                 class="lucide lucide-user"
+                 aria-hidden="true"
+                 id="User"
+            >
+              <path d="M19 21v-2a4 4 0 0 0-4-4H9a4 4 0 0 0-4 4v2">
+              </path>
+              <circle cx="12"
+                      cy="7"
+                      r="4"
+              >
+              </circle>
+            </svg>
+            <span>
+              Account
+            </span>
+          </button>
+          <button type="button"
+                  role="tab"
+                  aria-selected="false"
+                  aria-controls="radix-ID"
+                  data-state="inactive"
+                  id="radix-ID"
+                  data-slot="tabs-trigger"
+                  class="data-[state=active]:bg-background dark:data-[state=active]:text-foreground focus-visible:border-ring focus-visible:ring-ring/50 focus-visible:outline-ring dark:data-[state=active]:border-input dark:data-[state=active]:bg-input/30 text-foreground dark:text-muted-foreground inline-flex h-[calc(100%-1px)] flex-1 items-center justify-center gap-1.5 rounded-md border border-transparent text-sm font-medium whitespace-nowrap transition-[color,box-shadow] focus-visible:ring-[3px] focus-visible:outline-1 disabled:pointer-events-none disabled:opacity-50 [&amp;_svg]:pointer-events-none [&amp;_svg]:shrink-0 [&amp;_svg:not([class*=&quot;size-&quot;])]:size-4 px-4 bg-muted overflow-hidden rounded-b-none border-x border-t py-2 data-[state=active]:z-10 data-[state=active]:shadow-none"
+                  tabindex="-1"
+                  data-orientation="horizontal"
+                  data-radix-id""
+          >
+            <svg xmlns="http://www.w3.org/2000/svg"
+                 width="16"
+                 height="16"
+                 viewbox="0 0 24 24"
+                 fill="none"
+                 stroke="currentColor"
+                 stroke-width="2"
+                 stroke-linecap="round"
+                 stroke-linejoin="round"
+                 class="lucide lucide-lock"
+                 aria-hidden="true"
+                 id="Lock"
+            >
+              <rect width="18"
+                    height="11"
+                    x="3"
+                    y="11"
+                    rx="2"
+                    ry="2"
+              >
+              </rect>
+              <path d="M7 11V7a5 5 0 0 1 10 0v4">
+              </path>
+            </svg>
+            <span>
+              Password
+            </span>
+          </button>
+          <button type="button"
+                  role="tab"
+                  aria-selected="false"
+                  aria-controls="radix-ID"
+                  data-state="inactive"
+                  id="radix-ID"
+                  data-slot="tabs-trigger"
+                  class="data-[state=active]:bg-background dark:data-[state=active]:text-foreground focus-visible:border-ring focus-visible:ring-ring/50 focus-visible:outline-ring dark:data-[state=active]:border-input dark:data-[state=active]:bg-input/30 text-foreground dark:text-muted-foreground inline-flex h-[calc(100%-1px)] flex-1 items-center justify-center gap-1.5 rounded-md border border-transparent text-sm font-medium whitespace-nowrap transition-[color,box-shadow] focus-visible:ring-[3px] focus-visible:outline-1 disabled:pointer-events-none disabled:opacity-50 [&amp;_svg]:pointer-events-none [&amp;_svg]:shrink-0 [&amp;_svg:not([class*=&quot;size-&quot;])]:size-4 px-4 bg-muted overflow-hidden rounded-b-none border-x border-t py-2 data-[state=active]:z-10 data-[state=active]:shadow-none"
+                  tabindex="-1"
+                  data-orientation="horizontal"
+                  data-radix-id""
+          >
+            <svg xmlns="http://www.w3.org/2000/svg"
+                 width="16"
+                 height="16"
+                 viewbox="0 0 24 24"
+                 fill="none"
+                 stroke="currentColor"
+                 stroke-width="2"
+                 stroke-linecap="round"
+                 stroke-linejoin="round"
+                 class="lucide lucide-bell"
+                 aria-hidden="true"
+                 id="Bell"
+            >
+              <path d="M10.268 21a2 2 0 0 0 3.464 0">
+              </path>
+              <path d="M3.262 15.326A1 1 0 0 0 4 17h16a1 1 0 0 0 .74-1.673C19.41 13.956 18 12.499 18 8A6 6 0 0 0 6 8c0 4.499-1.411 5.956-2.738 7.326">
+              </path>
+            </svg>
+            <span>
+              Notifications
+            </span>
+          </button>
+        </div>
+      </div>
+    </div>
+    <div data-state="active"
+         data-orientation="horizontal"
+         role="tabpanel"
+         aria-labelledby="radix-ID"
+         id="radix-ID"
+         tabindex="0"
+         data-slot="tabs-content"
+         class="flex-1 outline-none p-4 w-full border border-transparent rounded-md"
+         style="animation-duration: 0s;"
+    >
+      <div class="space-y-4">
+        <h3 class="text-lg font-medium">
+          Account Content
+        </h3>
+        <p>
+          This is the content for the account tab.
+        </p>
+      </div>
+    </div>
+    <div data-state="inactive"
+         data-orientation="horizontal"
+         role="tabpanel"
+         aria-labelledby="radix-ID"
+         hidden
+         id="radix-ID"
+         tabindex="0"
+         data-slot="tabs-content"
+         class="flex-1 outline-none p-4 w-full border border-transparent rounded-md"
+    >
+    </div>
+    <div data-state="inactive"
+         data-orientation="horizontal"
+         role="tabpanel"
+         aria-labelledby="radix-ID"
+         hidden
+         id="radix-ID"
+         tabindex="0"
+         data-slot="tabs-content"
+         class="flex-1 outline-none p-4 w-full border border-transparent rounded-md"
+    >
+    </div>
+  </div>
+</div>
+`;
+
+exports[`Components/Tabs WithoutScrollIndicators smoke-test 1`] = `
+<div class="container my-10 mx-auto">
+  <div dir="ltr"
+       data-orientation="horizontal"
+       data-slot="tabs"
+       class="flex flex-col gap-2 w-full"
+       id="_r_ID_"
+  >
+    <div class="relative flex gap-1.5 items-center w-full">
+      <div class="overflow-x-auto scrollbar-hide scroll-smooth [scrollbar-width:none] [-ms-overflow-style:none] [&amp;::-webkit-scrollbar]:hidden flex-1">
+        <div role="tablist"
+             aria-orientation="horizontal"
+             data-slot="tabs-list"
+             class="bg-muted text-muted-foreground inline-flex items-center justify-center rounded-lg p-1 gap-1.5 w-fit"
+             tabindex="0"
+             data-orientation="horizontal"
+             style="outline: none;"
+        >
+          <button type="button"
+                  role="tab"
+                  aria-selected="true"
+                  aria-controls="radix-ID"
+                  data-state="active"
+                  id="radix-ID"
+                  data-slot="tabs-trigger"
+                  class="data-[state=active]:bg-background dark:data-[state=active]:text-foreground focus-visible:border-ring focus-visible:ring-ring/50 focus-visible:outline-ring dark:data-[state=active]:border-input dark:data-[state=active]:bg-input/30 text-foreground dark:text-muted-foreground inline-flex h-[calc(100%-1px)] flex-1 items-center justify-center gap-1.5 rounded-md border border-transparent text-sm font-medium whitespace-nowrap transition-[color,box-shadow] focus-visible:ring-[3px] focus-visible:outline-1 disabled:pointer-events-none disabled:opacity-50 data-[state=active]:shadow-sm [&amp;_svg]:pointer-events-none [&amp;_svg]:shrink-0 [&amp;_svg:not([class*=&quot;size-&quot;])]:size-4 px-4 py-1.5"
+                  tabindex="-1"
+                  data-orientation="horizontal"
+                  data-radix-id""
+          >
+            <svg xmlns="http://www.w3.org/2000/svg"
+                 width="16"
+                 height="16"
+                 viewbox="0 0 24 24"
+                 fill="none"
+                 stroke="currentColor"
+                 stroke-width="2"
+                 stroke-linecap="round"
+                 stroke-linejoin="round"
+                 class="lucide lucide-user"
+                 aria-hidden="true"
+                 id="User"
+            >
+              <path d="M19 21v-2a4 4 0 0 0-4-4H9a4 4 0 0 0-4 4v2">
+              </path>
+              <circle cx="12"
+                      cy="7"
+                      r="4"
+              >
+              </circle>
+            </svg>
+            <span>
+              Account
+            </span>
+          </button>
+          <button type="button"
+                  role="tab"
+                  aria-selected="false"
+                  aria-controls="radix-ID"
+                  data-state="inactive"
+                  id="radix-ID"
+                  data-slot="tabs-trigger"
+                  class="data-[state=active]:bg-background dark:data-[state=active]:text-foreground focus-visible:border-ring focus-visible:ring-ring/50 focus-visible:outline-ring dark:data-[state=active]:border-input dark:data-[state=active]:bg-input/30 text-foreground dark:text-muted-foreground inline-flex h-[calc(100%-1px)] flex-1 items-center justify-center gap-1.5 rounded-md border border-transparent text-sm font-medium whitespace-nowrap transition-[color,box-shadow] focus-visible:ring-[3px] focus-visible:outline-1 disabled:pointer-events-none disabled:opacity-50 data-[state=active]:shadow-sm [&amp;_svg]:pointer-events-none [&amp;_svg]:shrink-0 [&amp;_svg:not([class*=&quot;size-&quot;])]:size-4 px-4 py-1.5"
+                  tabindex="-1"
+                  data-orientation="horizontal"
+                  data-radix-id""
+          >
+            <svg xmlns="http://www.w3.org/2000/svg"
+                 width="16"
+                 height="16"
+                 viewbox="0 0 24 24"
+                 fill="none"
+                 stroke="currentColor"
+                 stroke-width="2"
+                 stroke-linecap="round"
+                 stroke-linejoin="round"
+                 class="lucide lucide-lock"
+                 aria-hidden="true"
+                 id="Lock"
+            >
+              <rect width="18"
+                    height="11"
+                    x="3"
+                    y="11"
+                    rx="2"
+                    ry="2"
+              >
+              </rect>
+              <path d="M7 11V7a5 5 0 0 1 10 0v4">
+              </path>
+            </svg>
+            <span>
+              Password
+            </span>
+          </button>
+          <button type="button"
+                  role="tab"
+                  aria-selected="false"
+                  aria-controls="radix-ID"
+                  data-state="inactive"
+                  id="radix-ID"
+                  data-slot="tabs-trigger"
+                  class="data-[state=active]:bg-background dark:data-[state=active]:text-foreground focus-visible:border-ring focus-visible:ring-ring/50 focus-visible:outline-ring dark:data-[state=active]:border-input dark:data-[state=active]:bg-input/30 text-foreground dark:text-muted-foreground inline-flex h-[calc(100%-1px)] flex-1 items-center justify-center gap-1.5 rounded-md border border-transparent text-sm font-medium whitespace-nowrap transition-[color,box-shadow] focus-visible:ring-[3px] focus-visible:outline-1 disabled:pointer-events-none disabled:opacity-50 data-[state=active]:shadow-sm [&amp;_svg]:pointer-events-none [&amp;_svg]:shrink-0 [&amp;_svg:not([class*=&quot;size-&quot;])]:size-4 px-4 py-1.5"
+                  tabindex="-1"
+                  data-orientation="horizontal"
+                  data-radix-id""
+          >
+            <svg xmlns="http://www.w3.org/2000/svg"
+                 width="16"
+                 height="16"
+                 viewbox="0 0 24 24"
+                 fill="none"
+                 stroke="currentColor"
+                 stroke-width="2"
+                 stroke-linecap="round"
+                 stroke-linejoin="round"
+                 class="lucide lucide-bell"
+                 aria-hidden="true"
+                 id="Bell"
+            >
+              <path d="M10.268 21a2 2 0 0 0 3.464 0">
+              </path>
+              <path d="M3.262 15.326A1 1 0 0 0 4 17h16a1 1 0 0 0 .74-1.673C19.41 13.956 18 12.499 18 8A6 6 0 0 0 6 8c0 4.499-1.411 5.956-2.738 7.326">
+              </path>
+            </svg>
+            <span>
+              Notifications
+            </span>
+          </button>
+          <button type="button"
+                  role="tab"
+                  aria-selected="false"
+                  aria-controls="radix-ID"
+                  data-state="inactive"
+                  id="radix-ID"
+                  data-slot="tabs-trigger"
+                  class="data-[state=active]:bg-background dark:data-[state=active]:text-foreground focus-visible:border-ring focus-visible:ring-ring/50 focus-visible:outline-ring dark:data-[state=active]:border-input dark:data-[state=active]:bg-input/30 text-foreground dark:text-muted-foreground inline-flex h-[calc(100%-1px)] flex-1 items-center justify-center gap-1.5 rounded-md border border-transparent text-sm font-medium whitespace-nowrap transition-[color,box-shadow] focus-visible:ring-[3px] focus-visible:outline-1 disabled:pointer-events-none disabled:opacity-50 data-[state=active]:shadow-sm [&amp;_svg]:pointer-events-none [&amp;_svg]:shrink-0 [&amp;_svg:not([class*=&quot;size-&quot;])]:size-4 px-4 py-1.5"
+                  tabindex="-1"
+                  data-orientation="horizontal"
+                  data-radix-id""
+          >
+            <svg xmlns="http://www.w3.org/2000/svg"
+                 width="16"
+                 height="16"
+                 viewbox="0 0 24 24"
+                 fill="none"
+                 stroke="currentColor"
+                 stroke-width="2"
+                 stroke-linecap="round"
+                 stroke-linejoin="round"
+                 class="lucide lucide-settings"
+                 aria-hidden="true"
+                 id="Settings"
+            >
+              <path d="M9.671 4.136a2.34 2.34 0 0 1 4.659 0 2.34 2.34 0 0 0 3.319 1.915 2.34 2.34 0 0 1 2.33 4.033 2.34 2.34 0 0 0 0 3.831 2.34 2.34 0 0 1-2.33 4.033 2.34 2.34 0 0 0-3.319 1.915 2.34 2.34 0 0 1-4.659 0 2.34 2.34 0 0 0-3.32-1.915 2.34 2.34 0 0 1-2.33-4.033 2.34 2.34 0 0 0 0-3.831A2.34 2.34 0 0 1 6.35 6.051a2.34 2.34 0 0 0 3.319-1.915">
+              </path>
+              <circle cx="12"
+                      cy="12"
+                      r="3"
+              >
+              </circle>
+            </svg>
+            <span>
+              Settings
+            </span>
+          </button>
+          <button type="button"
+                  role="tab"
+                  aria-selected="false"
+                  aria-controls="radix-ID"
+                  data-state="inactive"
+                  id="radix-ID"
+                  data-slot="tabs-trigger"
+                  class="data-[state=active]:bg-background dark:data-[state=active]:text-foreground focus-visible:border-ring focus-visible:ring-ring/50 focus-visible:outline-ring dark:data-[state=active]:border-input dark:data-[state=active]:bg-input/30 text-foreground dark:text-muted-foreground inline-flex h-[calc(100%-1px)] flex-1 items-center justify-center gap-1.5 rounded-md border border-transparent text-sm font-medium whitespace-nowrap transition-[color,box-shadow] focus-visible:ring-[3px] focus-visible:outline-1 disabled:pointer-events-none disabled:opacity-50 data-[state=active]:shadow-sm [&amp;_svg]:pointer-events-none [&amp;_svg]:shrink-0 [&amp;_svg:not([class*=&quot;size-&quot;])]:size-4 px-4 py-1.5"
+                  tabindex="-1"
+                  data-orientation="horizontal"
+                  data-radix-id""
+          >
+            <svg xmlns="http://www.w3.org/2000/svg"
+                 width="16"
+                 height="16"
+                 viewbox="0 0 24 24"
+                 fill="none"
+                 stroke="currentColor"
+                 stroke-width="2"
+                 stroke-linecap="round"
+                 stroke-linejoin="round"
+                 class="lucide lucide-shield"
+                 aria-hidden="true"
+                 id="Shield"
+            >
+              <path d="M20 13c0 5-3.5 7.5-7.66 8.95a1 1 0 0 1-.67-.01C7.5 20.5 4 18 4 13V6a1 1 0 0 1 1-1c2 0 4.5-1.2 6.24-2.72a1.17 1.17 0 0 1 1.52 0C14.51 3.81 17 5 19 5a1 1 0 0 1 1 1z">
+              </path>
+            </svg>
+            <span>
+              Security
+            </span>
+          </button>
+          <button type="button"
+                  role="tab"
+                  aria-selected="false"
+                  aria-controls="radix-ID"
+                  data-state="inactive"
+                  id="radix-ID"
+                  data-slot="tabs-trigger"
+                  class="data-[state=active]:bg-background dark:data-[state=active]:text-foreground focus-visible:border-ring focus-visible:ring-ring/50 focus-visible:outline-ring dark:data-[state=active]:border-input dark:data-[state=active]:bg-input/30 text-foreground dark:text-muted-foreground inline-flex h-[calc(100%-1px)] flex-1 items-center justify-center gap-1.5 rounded-md border border-transparent text-sm font-medium whitespace-nowrap transition-[color,box-shadow] focus-visible:ring-[3px] focus-visible:outline-1 disabled:pointer-events-none disabled:opacity-50 data-[state=active]:shadow-sm [&amp;_svg]:pointer-events-none [&amp;_svg]:shrink-0 [&amp;_svg:not([class*=&quot;size-&quot;])]:size-4 px-4 py-1.5"
+                  tabindex="-1"
+                  data-orientation="horizontal"
+                  data-radix-id""
+          >
+            <svg xmlns="http://www.w3.org/2000/svg"
+                 width="16"
+                 height="16"
+                 viewbox="0 0 24 24"
+                 fill="none"
+                 stroke="currentColor"
+                 stroke-width="2"
+                 stroke-linecap="round"
+                 stroke-linejoin="round"
+                 class="lucide lucide-credit-card"
+                 aria-hidden="true"
+                 id="CreditCard"
+            >
+              <rect width="20"
+                    height="14"
+                    x="2"
+                    y="5"
+                    rx="2"
+              >
+              </rect>
+              <line x1="2"
+                    x2="22"
+                    y1="10"
+                    y2="10"
+              >
+              </line>
+            </svg>
+            <span>
+              Billing
+            </span>
+          </button>
+          <button type="button"
+                  role="tab"
+                  aria-selected="false"
+                  aria-controls="radix-ID"
+                  data-state="inactive"
+                  id="radix-ID"
+                  data-slot="tabs-trigger"
+                  class="data-[state=active]:bg-background dark:data-[state=active]:text-foreground focus-visible:border-ring focus-visible:ring-ring/50 focus-visible:outline-ring dark:data-[state=active]:border-input dark:data-[state=active]:bg-input/30 text-foreground dark:text-muted-foreground inline-flex h-[calc(100%-1px)] flex-1 items-center justify-center gap-1.5 rounded-md border border-transparent text-sm font-medium whitespace-nowrap transition-[color,box-shadow] focus-visible:ring-[3px] focus-visible:outline-1 disabled:pointer-events-none disabled:opacity-50 data-[state=active]:shadow-sm [&amp;_svg]:pointer-events-none [&amp;_svg]:shrink-0 [&amp;_svg:not([class*=&quot;size-&quot;])]:size-4 px-4 py-1.5"
+                  tabindex="-1"
+                  data-orientation="horizontal"
+                  data-radix-id""
+          >
+            <svg xmlns="http://www.w3.org/2000/svg"
+                 width="16"
+                 height="16"
+                 viewbox="0 0 24 24"
+                 fill="none"
+                 stroke="currentColor"
+                 stroke-width="2"
+                 stroke-linecap="round"
+                 stroke-linejoin="round"
+                 class="lucide lucide-code"
+                 aria-hidden="true"
+                 id="Code"
+            >
+              <path d="m16 18 6-6-6-6">
+              </path>
+              <path d="m8 6-6 6 6 6">
+              </path>
+            </svg>
+            <span>
+              API
+            </span>
+          </button>
+          <button type="button"
+                  role="tab"
+                  aria-selected="false"
+                  aria-controls="radix-ID"
+                  data-state="inactive"
+                  id="radix-ID"
+                  data-slot="tabs-trigger"
+                  class="data-[state=active]:bg-background dark:data-[state=active]:text-foreground focus-visible:border-ring focus-visible:ring-ring/50 focus-visible:outline-ring dark:data-[state=active]:border-input dark:data-[state=active]:bg-input/30 text-foreground dark:text-muted-foreground inline-flex h-[calc(100%-1px)] flex-1 items-center justify-center gap-1.5 rounded-md border border-transparent text-sm font-medium whitespace-nowrap transition-[color,box-shadow] focus-visible:ring-[3px] focus-visible:outline-1 disabled:pointer-events-none disabled:opacity-50 data-[state=active]:shadow-sm [&amp;_svg]:pointer-events-none [&amp;_svg]:shrink-0 [&amp;_svg:not([class*=&quot;size-&quot;])]:size-4 px-4 py-1.5"
+                  tabindex="-1"
+                  data-orientation="horizontal"
+                  data-radix-id""
+          >
+            <svg xmlns="http://www.w3.org/2000/svg"
+                 width="16"
+                 height="16"
+                 viewbox="0 0 24 24"
+                 fill="none"
+                 stroke="currentColor"
+                 stroke-width="2"
+                 stroke-linecap="round"
+                 stroke-linejoin="round"
+                 class="lucide lucide-file-text"
+                 aria-hidden="true"
+                 id="FileText"
+            >
+              <path d="M6 22a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h8a2.4 2.4 0 0 1 1.704.706l3.588 3.588A2.4 2.4 0 0 1 20 8v12a2 2 0 0 1-2 2z">
+              </path>
+              <path d="M14 2v5a1 1 0 0 0 1 1h5">
+              </path>
+              <path d="M10 9H8">
+              </path>
+              <path d="M16 13H8">
+              </path>
+              <path d="M16 17H8">
+              </path>
+            </svg>
+            <span>
+              Logs
+            </span>
+          </button>
+        </div>
+      </div>
+    </div>
+    <div data-state="active"
+         data-orientation="horizontal"
+         role="tabpanel"
+         aria-labelledby="radix-ID"
+         id="radix-ID"
+         tabindex="0"
+         data-slot="tabs-content"
+         class="flex-1 outline-none p-4 w-full border border-transparent rounded-md"
+         style="animation-duration: 0s;"
+    >
+      <div class="space-y-4">
+        <h3 class="text-lg font-medium">
+          Account Content
+        </h3>
+        <p>
+          This is the content for the account tab.
+        </p>
+      </div>
+    </div>
+    <div data-state="inactive"
+         data-orientation="horizontal"
+         role="tabpanel"
+         aria-labelledby="radix-ID"
+         hidden
+         id="radix-ID"
+         tabindex="0"
+         data-slot="tabs-content"
+         class="flex-1 outline-none p-4 w-full border border-transparent rounded-md"
+    >
+    </div>
+    <div data-state="inactive"
+         data-orientation="horizontal"
+         role="tabpanel"
+         aria-labelledby="radix-ID"
+         hidden
+         id="radix-ID"
+         tabindex="0"
+         data-slot="tabs-content"
+         class="flex-1 outline-none p-4 w-full border border-transparent rounded-md"
+    >
+    </div>
+    <div data-state="inactive"
+         data-orientation="horizontal"
+         role="tabpanel"
+         aria-labelledby="radix-ID"
+         hidden
+         id="radix-ID"
+         tabindex="0"
+         data-slot="tabs-content"
+         class="flex-1 outline-none p-4 w-full border border-transparent rounded-md"
+    >
+    </div>
+    <div data-state="inactive"
+         data-orientation="horizontal"
+         role="tabpanel"
+         aria-labelledby="radix-ID"
+         hidden
+         id="radix-ID"
+         tabindex="0"
+         data-slot="tabs-content"
+         class="flex-1 outline-none p-4 w-full border border-transparent rounded-md"
+    >
+    </div>
+    <div data-state="inactive"
+         data-orientation="horizontal"
+         role="tabpanel"
+         aria-labelledby="radix-ID"
+         hidden
+         id="radix-ID"
+         tabindex="0"
+         data-slot="tabs-content"
+         class="flex-1 outline-none p-4 w-full border border-transparent rounded-md"
+    >
+    </div>
+    <div data-state="inactive"
+         data-orientation="horizontal"
+         role="tabpanel"
+         aria-labelledby="radix-ID"
+         hidden
+         id="radix-ID"
+         tabindex="0"
+         data-slot="tabs-content"
+         class="flex-1 outline-none p-4 w-full border border-transparent rounded-md"
+    >
+    </div>
+    <div data-state="inactive"
+         data-orientation="horizontal"
+         role="tabpanel"
+         aria-labelledby="radix-ID"
+         hidden
+         id="radix-ID"
+         tabindex="0"
+         data-slot="tabs-content"
+         class="flex-1 outline-none p-4 w-full border border-transparent rounded-md"
+    >
+    </div>
+  </div>
+</div>
+`;

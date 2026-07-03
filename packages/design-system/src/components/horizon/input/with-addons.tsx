@@ -63,12 +63,13 @@ function IGRPInputAddOn({
   }, [defaultValue, selectValue, onSelectValueChange])
 
   return (
-    <div className={cn("*:not-first:mt-2", classNameGlobal)} id={ref}>
+    <div className={cn("*:not-first:mt-2", classNameGlobal)}>
       {label && <IGRPLabel label={label} className={classNameLabel} id={ref} />}
 
       <div className={cn("flex rounded-md border overflow-hidden")}>
         <Select value={selectValue} onValueChange={onSelectValueChange}>
           <SelectTrigger
+            aria-label={optionLabel ?? "Select option"}
             className={cn(
               "border-0 border-r rounded-none min-w-20 px-3 py-2 focus:ring-0 focus-visible:ring-0 focus-visible:ring-offset-0 shadow-none",
             )}

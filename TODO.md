@@ -9,6 +9,7 @@
 - Review info-card orientation horizontal and see design for this, review the colors mode
 - Review the ```<TooltipProvider></TooltipProvider>``` usage
 - IGRPSelect see filter, not working well
+- IGRPSingleDatePicker, when load with default date, when choose a date and clean is choose the default date, not clean input
 
 ## New shadcn Components
 

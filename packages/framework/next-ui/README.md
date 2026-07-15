@@ -118,13 +118,13 @@ Built with **SWC + Babel** (React Compiler pass) + a Tailwind CSS prebuild step.
 
 ## CSS
 
-This package ships its own compiled CSS. Consumers should import **tokens only**:
+This package ships a `tokens` entry that re-exports the design-system tokens (single source of truth — no duplicate variable definitions):
 
 ```css
 @import '@igrp/framework-next-ui/tokens';
 ```
 
-Do not import `@igrp/framework-next-ui/styles` in templates that compile Tailwind themselves — it causes cascade conflicts.
+If your app already imports `@igrp/igrp-framework-react-design-system/tokens` directly (the pattern used by `templates/demo-v1`), you don't need this import. There is no `/styles` entry — prebuilt CSS bundles were removed because they cause cascade conflicts; apps compile Tailwind themselves and import tokens only.
 
 ---
 

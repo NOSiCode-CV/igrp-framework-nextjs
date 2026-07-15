@@ -23,6 +23,15 @@
     }
   ],
   "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "git+http://git.nosi.cv/igrp-3_0/igrp-framework-frontend/igrp-framework-nextjs.git",
+    "directory": "packages/design-system"
+  },
+  "homepage": "https://igrp.cv",
+  "bugs": {
+    "url": "http://git.nosi.cv/igrp-3_0/igrp-framework-frontend/igrp-framework-nextjs/-/issues"
+  },
   "scripts": {
     "dev": "tsc --watch",
     "build": "pnpm build:reactcompiler",
@@ -45,35 +54,15 @@
     "clean-all": "rimraf node_modules && rimraf dist && rimraf tsconfig.tsbuildinfo"
   },
   "peerDependencies": {
-    "@tanstack/react-table": "8.21.3",
-    "date-fns": "4.4.0",
-    "lucide-react": "0.577.0",
-    "next": "15.5.19",
-    "react": "19.2.7",
-    "react-dom": "19.2.7",
+    "@tanstack/react-table": "^8.21.0",
+    "date-fns": "^4.4.0",
+    "lucide-react": "^0.577.0",
+    "next": "^15.5.0",
+    "react": "^19.2.0",
+    "react-dom": "^19.2.0",
     "react-hook-form": "^7.80.0",
-    "recharts": "3.9.0",
-    "zod": "4.4.3"
-  },
-  "peerDependenciesMeta": {
-    "@tanstack/react-table": {
-      "optional": false
-    },
-    "date-fns": {
-      "optional": false
-    },
-    "lucide-react": {
-      "optional": false
-    },
-    "react-hook-form": {
-      "optional": false
-    },
-    "recharts": {
-      "optional": false
-    },
-    "zod": {
-      "optional": false
-    }
+    "recharts": "^3.9.0",
+    "zod": "^4.4.0"
   },
   "dependencies": {
     "@hookform/resolvers": "5.4.0",
@@ -116,10 +105,10 @@
     "react-resizable-panels": "3.0.6",
     "sonner": "2.0.7",
     "tailwind-merge": "3.6.0",
-    "tailwindcss": "4.3.1",
     "vaul": "1.1.2"
   },
   "devDependencies": {
+    "tailwindcss": "4.3.1",
     "@babel/cli": "8.0.1",
     "@babel/core": "8.0.1",
     "@babel/preset-env": "8.0.2",
@@ -169,17 +158,10 @@
       "import": "./dist/index.js",
       "default": "./dist/index.js"
     },
-    "./tokens": "./dist/tokens.css"
+    "./tokens": "./dist/tokens.css",
+    "./package.json": "./package.json"
   },
   "publishConfig": {
-    "exports": {
-      ".": {
-        "types": "./dist/index.d.ts",
-        "import": "./dist/index.js",
-        "default": "./dist/index.js"
-      },
-      "./tokens": "./dist/tokens.css"
-    },
     "registry": "https://sonatype.nosi.cv/repository/igrp/",
     "tag": "latest",
     "access": "public"
@@ -190,6 +172,6 @@
     "dist"
   ],
   "engines": {
-    "node": ">=22.x.x"
+    "node": ">=22"
   }
 }

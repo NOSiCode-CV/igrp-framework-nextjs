@@ -12,13 +12,22 @@
   ],
   "author": "IGRP Team",
   "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "git+http://git.nosi.cv/igrp-3_0/igrp-framework-frontend/igrp-framework-nextjs.git",
+    "directory": "packages/framework/next"
+  },
+  "homepage": "https://igrp.cv",
+  "bugs": {
+    "url": "http://git.nosi.cv/igrp-3_0/igrp-framework-frontend/igrp-framework-nextjs/-/issues"
+  },
   "scripts": {
     "dev": "tsc --watch",
     "clean": "pnpm clean:packages && pnpm clean:dist",
     "clean:dist": "rimraf dist && rimraf tsconfig.tsbuildinfo",
     "clean:packages": "rimraf node_modules",
     "build": "pnpm format && pnpm build:reactcompiler",
-    "build:babel": "rimraf dist_optimized && babel dist --out-dir dist_optimized --source-maps --extensions .ts,.js,.tsx,.jsx,.cjs,.mjs && rimraf dist && move dist_optimized dist",
+    "build:babel": "rimraf dist_optimized && babel dist --out-dir dist_optimized --source-maps --extensions .ts,.js,.tsx,.jsx,.cjs,.mjs && rimraf dist && move-cli dist_optimized dist",
     "build:reactcompiler": "pnpm clean:dist && pnpm build:swc && pnpm build:babel && pnpm build:types",
     "build:swc": "swc ./src -d dist --config-file .swcrc --strip-leading-paths",
     "build:types": "tsc --emitDeclarationOnly --outDir dist",
@@ -28,17 +37,22 @@
     "clean-all": "rimraf node_modules && rimraf dist && rimraf tsconfig.tsbuildinfo",
     "test": "vitest run"
   },
+  "peerDependencies": {
+    "next": "^15.5.0",
+    "react": "^19.2.0",
+    "react-dom": "^19.2.0"
+  },
   "dependencies": {
-    "next": "15.5.19",
-    "react": "19.2.7",
-    "react-dom": "19.2.7",
     "@igrp/framework-next-auth": "workspace:*",
     "@igrp/framework-next-types": "workspace:*",
     "@igrp/framework-next-ui": "workspace:*",
-    "@igrp/platform-access-management-client-ts": "0.2.0-beta.11",
+    "@igrp/platform-access-management-client-ts": "0.2.0-beta.12",
     "zod": "4.4.3"
   },
   "devDependencies": {
+    "next": "15.5.19",
+    "react": "19.2.7",
+    "react-dom": "19.2.7",
     "@babel/cli": "8.0.1",
     "@babel/core": "8.0.1",
     "@babel/preset-env": "8.0.2",
@@ -71,35 +85,36 @@
   "type": "module",
   "exports": {
     ".": {
-      "import": "./dist/index.js",
       "types": "./dist/index.d.ts",
+      "import": "./dist/index.js",
       "default": "./dist/index.js"
     },
     "./errors": {
-      "import": "./dist/errors.js",
       "types": "./dist/errors.d.ts",
+      "import": "./dist/errors.js",
       "default": "./dist/errors.js"
     },
     "./app-error": {
-      "import": "./dist/app-error.js",
       "types": "./dist/app-error.d.ts",
+      "import": "./dist/app-error.js",
       "default": "./dist/app-error.js"
     },
     "./logger": {
-      "import": "./dist/logger.js",
       "types": "./dist/logger.d.ts",
+      "import": "./dist/logger.js",
       "default": "./dist/logger.js"
     },
     "./actions": {
-      "import": "./dist/actions/index.js",
       "types": "./dist/actions/index.d.ts",
+      "import": "./dist/actions/index.js",
       "default": "./dist/actions/index.js"
     },
     "./client": {
-      "import": "./dist/client/use-layout-data.js",
       "types": "./dist/client/use-layout-data.d.ts",
+      "import": "./dist/client/use-layout-data.js",
       "default": "./dist/client/use-layout-data.js"
-    }
+    },
+    "./package.json": "./package.json"
   },
   "main": "./dist/index.js",
   "types": "./dist/index.d.ts",
@@ -107,7 +122,7 @@
     "dist"
   ],
   "engines": {
-    "node": ">=22.x.x"
+    "node": ">=22"
   },
   "publishConfig": {
     "registry": "https://sonatype.nosi.cv/repository/igrp/",

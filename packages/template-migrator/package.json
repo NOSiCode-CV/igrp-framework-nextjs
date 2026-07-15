@@ -2,16 +2,30 @@
   "name": "@igrp/template-migrator",
   "version": "0.1.0-beta.134",
   "description": "CLI to apply IGRP template migrations to consumer apps",
+  "author": "IGRP Team",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "git+http://git.nosi.cv/igrp-3_0/igrp-framework-frontend/igrp-framework-nextjs.git",
+    "directory": "packages/template-migrator"
+  },
+  "homepage": "https://igrp.cv",
+  "bugs": {
+    "url": "http://git.nosi.cv/igrp-3_0/igrp-framework-frontend/igrp-framework-nextjs/-/issues"
+  },
   "type": "module",
   "bin": {
     "igrp-migrate": "dist/cli.js"
   },
   "main": "dist/index.js",
+  "types": "./dist/index.d.ts",
   "exports": {
     ".": {
+      "types": "./dist/index.d.ts",
       "import": "./dist/index.js",
-      "types": "./dist/index.d.ts"
-    }
+      "default": "./dist/index.js"
+    },
+    "./package.json": "./package.json"
   },
   "scripts": {
     "prebuild": "tsx scripts/pack.ts",
@@ -19,25 +33,29 @@
     "build:types": "tsc -p tsconfig.build.json --emitDeclarationOnly",
     "build": "pnpm prebuild && pnpm build:js && pnpm build:types",
     "check:drift": "tsx scripts/check-drift.ts",
+    "check:drift:update-baseline": "tsx scripts/check-drift.ts --update-baseline",
     "test": "vitest run",
     "release": "pnpm check:drift && pnpm build && pnpm publish --registry=https://sonatype.nosi.cv/repository/igrp/ --tag latest --no-git-checks",
-    "clean": "rm -rf dist"
+    "clean": "rimraf dist"
   },
   "dependencies": {
     "yaml": "2.9.0"
   },
   "devDependencies": {
+    "@types/node": "25.9.1",
+    "rimraf": "6.1.3",
     "tsx": "4.22.4",
     "tsup": "8.5.1",
     "typescript": "5.9.3",
-    "vitest": "4.1.9",
-    "@types/node": "25.9.1"
+    "vitest": "4.1.9"
   },
   "engines": {
     "node": ">=22"
   },
   "publishConfig": {
-    "registry": "https://sonatype.nosi.cv/repository/igrp/"
+    "registry": "https://sonatype.nosi.cv/repository/igrp/",
+    "tag": "latest",
+    "access": "public"
   },
   "files": [
     "dist"

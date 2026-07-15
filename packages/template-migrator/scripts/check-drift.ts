@@ -1,8 +1,10 @@
-import { existsSync, readFileSync, readdirSync } from "fs";
+import { execSync } from "child_process";
+import { existsSync, readFileSync, readdirSync, writeFileSync } from "fs";
 import { dirname, join } from "path";
 import { fileURLToPath } from "url";
 import { parse as parseYaml } from "yaml";
 import { sortMigrationFiles } from "../src/migration-order.js";
+import { findOrphanFiles } from "./drift-orphans.js";
 
 // Drift gate: verify that the migration payloads still match the live template.
 //
@@ -15,9 +17,12 @@ import { sortMigrationFiles } from "../src/migration-order.js";
 // compares the LATEST payload state against the current template file and fails
 // if they differ — so a forgotten migration can't pass into a release.
 //
-// Limitation: it can only check paths that already appear in some migration. A
-// brand-new template file that was never added via a file.create migration is
-// invisible here — there is no way to know it *should* have been a migration.
+// It also runs the inverse check: every git-tracked template file must be
+// migration-managed, exempt (docs/AI-tooling/zip-excluded paths — see
+// drift-orphans.ts), or grandfathered in migrations/demo-v1/template-baseline.json.
+// A brand-new template file matching none of those is an "orphan" and fails the
+// gate: author a file.create migration for it, or — when it deliberately should
+// not ship to existing apps — regenerate the baseline with --update-baseline.
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);
@@ -27,6 +32,7 @@ const MIGRATIONS_DIR = join(ROOT, "migrations/demo-v1");
 const TEMPLATE_DIR = join(ROOT, "../../templates/demo-v1");
 const TEMPLATE_PKG = join(TEMPLATE_DIR, "package.json");
 const PACKAGES_DIR = join(ROOT, "../../packages");
+const BASELINE_FILE = join(MIGRATIONS_DIR, "template-baseline.json");
 
 interface FrontMatter {
   id: string;
@@ -65,6 +71,38 @@ function buildWorkspaceVersions(): Record<string, string> {
   return map;
 }
 
+// Files of the live template, relative POSIX paths: tracked plus
+// untracked-but-not-gitignored, so a freshly added file is caught before it is
+// even committed. Returns null when enumeration is impossible (git missing /
+// not a work tree) — the orphan check degrades to a warning rather than
+// failing the whole gate.
+function listTemplateFiles(): string[] | null {
+  try {
+    const out = execSync("git ls-files --cached --others --exclude-standard", {
+      cwd: TEMPLATE_DIR,
+      encoding: "utf8",
+    });
+    return out.split(/\r?\n/).filter((l) => l.length > 0);
+  } catch {
+    return null;
+  }
+}
+
+function readBaseline(): string[] | null {
+  if (!existsSync(BASELINE_FILE)) return null;
+  const parsed = JSON.parse(readFileSync(BASELINE_FILE, "utf8")) as { files?: string[] };
+  return parsed.files ?? [];
+}
+
+function writeBaseline(files: string[]): void {
+  const doc = {
+    comment:
+      "Template files grandfathered by the drift gate's new-file check: they predate migration coverage (or deliberately don't ship to existing apps) and no migration manages them. New template files must NOT be added here casually — author a file.create migration instead. Regenerate deliberately with: pnpm --filter @igrp/template-migrator check:drift:update-baseline",
+    files,
+  };
+  writeFileSync(BASELINE_FILE, JSON.stringify(doc, null, 2) + "\n", "utf8");
+}
+
 type FinalState =
   | { op: "present"; from: string; migrationId: string } // file.create / file.write replace
   | { op: "patch"; migrationId: string } // file.write patch — no full-file payload
@@ -85,6 +123,10 @@ function main(): void {
   const finalState = new Map<string, FinalState>();
   // Latest deps.bump range per dependency (last migration to pin it wins).
   const depRanges = new Map<string, { version: string; migrationId: string }>();
+  // Every path any migration step touches (file.*, env.add file, deps.bump
+  // manifest) — a migration already ships/maintains these, so the new-file
+  // (orphan) check must not flag them.
+  const managedPaths = new Set<string>();
 
   for (const file of files) {
     const raw = readFileSync(join(MIGRATIONS_DIR, file), "utf8");
@@ -92,14 +134,17 @@ function main(): void {
     for (const step of steps) {
       const type = step["type"] as string;
       if (type === "deps.bump") {
+        if (typeof step["manifest"] === "string") managedPaths.add(step["manifest"]);
         const ranges = (step["ranges"] as Record<string, string>) ?? {};
         for (const [dep, version] of Object.entries(ranges)) {
           depRanges.set(dep, { version, migrationId: id });
         }
         continue;
       }
+      if (typeof step["file"] === "string") managedPaths.add(step["file"]);
       const path = step["path"] as string | undefined;
       if (!path) continue; // env.add is not path-based file content
+      managedPaths.add(path);
       if (type === "file.create") {
         finalState.set(path, { op: "present", from: step["from"] as string, migrationId: id });
       } else if (type === "file.write") {
@@ -180,8 +225,35 @@ function main(): void {
     if (dep.startsWith("@igrp/") && !depRanges.has(dep)) depUnpinned.push(declared === "workspace:*" ? dep : `${dep} (${declared})`);
   }
 
+  // --- new-file (orphan) drift ---------------------------------------------
+  // Every tracked template file must be migration-managed, exempt, or in the
+  // baseline. Otherwise scaffolded apps get it but upgraded apps never do.
+  const updateBaseline = process.argv.includes("--update-baseline");
+  const templateFiles = listTemplateFiles();
+  let orphans: string[] = [];
+  let staleBaseline: string[] = [];
+  let orphanCheckSkipped = false;
+  let baselineMissing = false;
+
+  if (templateFiles === null) {
+    orphanCheckSkipped = true;
+  } else if (updateBaseline) {
+    // Full recompute: tracked − managed − exempt. Prunes stale entries too.
+    const regenerated = findOrphanFiles({ templateFiles, managedPaths, baseline: [] });
+    writeBaseline(regenerated.orphans);
+    console.log(`Baseline regenerated: ${regenerated.orphans.length} grandfathered file(s) written to ${BASELINE_FILE}\n`);
+  } else {
+    const baseline = readBaseline();
+    if (baseline === null) {
+      baselineMissing = true;
+    } else {
+      ({ orphans, staleBaseline } = findOrphanFiles({ templateFiles, managedPaths, baseline }));
+    }
+  }
+
   const managed = finalState.size;
-  console.log(`Checked ${managed} migration-managed path(s) and ${depRanges.size} dependency pin(s) against ${TEMPLATE_DIR}\n`);
+  const fileCount = templateFiles === null ? "?" : String(templateFiles.length);
+  console.log(`Checked ${managed} migration-managed path(s), ${depRanges.size} dependency pin(s), and ${fileCount} tracked template file(s) against ${TEMPLATE_DIR}\n`);
 
   // Soft warnings — informational, do not fail the gate.
   if (depUnpinned.length > 0) {
@@ -199,12 +271,21 @@ function main(): void {
     for (const s of staleDelete) console.log(`    ${s.path}  (${s.migrationId})`);
     console.log("");
   }
+  if (orphanCheckSkipped) {
+    console.log("⚠ new-file check skipped: could not enumerate template files (git ls-files failed).\n");
+  }
+  if (staleBaseline.length > 0) {
+    console.log(`⚠ ${staleBaseline.length} baseline entry(ies) the template no longer has (prune with --update-baseline):`);
+    for (const s of staleBaseline) console.log(`    ${s}`);
+    console.log("");
+  }
 
   // Hard failures — block the release.
   const failed =
-    drifted.length + missingTemplate.length + missingPayload.length + depDrift.length + depMissingInTemplate.length;
+    drifted.length + missingTemplate.length + missingPayload.length + depDrift.length + depMissingInTemplate.length +
+    orphans.length + (baselineMissing ? 1 : 0);
   if (failed === 0) {
-    console.log("✓ No drift: every migration-managed file and dependency pin matches the template.");
+    console.log("✓ No drift: every migration-managed file and dependency pin matches the template, and no unmanaged new files were found.");
     return;
   }
 
@@ -237,6 +318,18 @@ function main(): void {
     console.error(`✗ ${depMissingInTemplate.length} dependency(ies) a migration bumps but the template doesn't declare:`);
     for (const d of depMissingInTemplate) console.error(`    ${d.dep}  (${d.migrationId})`);
     console.error("");
+  }
+  if (baselineMissing) {
+    console.error(`✗ Baseline file missing: ${BASELINE_FILE}`);
+    console.error("  → Generate it with: pnpm --filter @igrp/template-migrator check:drift:update-baseline\n");
+  }
+  if (orphans.length > 0) {
+    console.error(`✗ ${orphans.length} new template file(s) no migration ships and the baseline doesn't grandfather:`);
+    for (const o of orphans) console.error(`    ${o}`);
+    console.error("");
+    console.error("  → Author a file.create migration shipping these to existing apps (preferred),");
+    console.error("    or, if they deliberately should not reach upgraded apps, regenerate the");
+    console.error("    baseline with: pnpm --filter @igrp/template-migrator check:drift:update-baseline\n");
   }
 
   process.exit(1);

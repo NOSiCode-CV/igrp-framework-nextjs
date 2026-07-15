@@ -35,6 +35,10 @@ yarn-error.log*
 !.env.example
 !.env.development
 
+# nexus registry credentials read by create-template/create-zip-template.ps1 — never commit
+# (use nexus-auth-example.txt as the tracked placeholder)
+/create-template/nexus-auth.txt
+
 # vercel
 .vercel
 

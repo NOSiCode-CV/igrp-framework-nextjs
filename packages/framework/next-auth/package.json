@@ -2,10 +2,20 @@
   "name": "@igrp/framework-next-auth",
   "version": "0.1.0-beta.144",
   "description": "IGRP Framework for Next.js | Auth",
+  "author": "IGRP Team",
   "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "git+http://git.nosi.cv/igrp-3_0/igrp-framework-frontend/igrp-framework-nextjs.git",
+    "directory": "packages/framework/next-auth"
+  },
+  "homepage": "https://igrp.cv",
+  "bugs": {
+    "url": "http://git.nosi.cv/igrp-3_0/igrp-framework-frontend/igrp-framework-nextjs/-/issues"
+  },
   "type": "module",
   "engines": {
-    "node": ">=22.x.x"
+    "node": ">=22"
   },
   "sideEffects": false,
   "exports": {
@@ -76,17 +86,9 @@
     "test": "vitest run"
   },
   "peerDependencies": {
-    "next": "15.5.19",
-    "next-auth": "4.24.14",
-    "react": "19.2.7"
-  },
-  "peerDependenciesMeta": {
-    "next": {
-      "optional": false
-    },
-    "next-auth": {
-      "optional": false
-    }
+    "next": "^15.5.0",
+    "next-auth": "^4.24.0",
+    "react": "^19.2.0"
   },
   "devDependencies": {
     "@types/node": "25.9.1",

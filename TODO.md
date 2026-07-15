@@ -70,4 +70,5 @@ Add the following components to the design system:
 -- https://nextjs.org/blog/next-16-3-ai-improvements
 -- https://github.com/vercel-labs/next-skills
 -- https://github.com/vercel/next.js/tree/canary/skills
+-- maps component
 

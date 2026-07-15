@@ -9,7 +9,9 @@ CLI that automates IGRP template upgrades. Bundles all migration guides for `tem
 ```
 packages/template-migrator/
 ├── scripts/
-│   └── pack.ts              # Prebuild: reads migration guides → emits dist/manifest.json + dist/payload/
+│   ├── pack.ts              # Prebuild: reads migration guides → emits dist/manifest.json + dist/payload/
+│   ├── check-drift.ts       # Release gate: payloads/deps/new files vs. the live template
+│   └── drift-orphans.ts     # New-file (orphan) detection logic + exemption lists
 ├── src/
 │   ├── cli.ts               # Binary entry point (bin: igrp-migrate)
 │   ├── index.ts             # Public API re-exports (for programmatic use)
@@ -137,7 +139,7 @@ Emits `.d.ts` declaration files from `tsconfig.build.json` (no JS output, types 
 
 The `migrations/demo-v1/payload/` tree is a **hand-maintained copy** of `templates/demo-v1`. If you edit the template but forget to author a migration, the two silently diverge: apps scaffolded from the zip get the change, apps upgraded via this CLI never do.
 
-`scripts/check-drift.ts` reconciles them on two axes — **file payloads** and **dependency pins**. It collapses every migration into the final expected state per managed path and per bumped dependency, then compares against the live template:
+`scripts/check-drift.ts` reconciles them on three axes — **file payloads**, **dependency pins**, and **new files**. It collapses every migration into the final expected state per managed path and per bumped dependency, then compares against the live template:
 
 ```bash
 pnpm --filter @igrp/template-migrator check:drift
@@ -149,11 +151,29 @@ It **fails** (exit 1) when:
 - a migration ships a file the template no longer has,
 - a referenced payload file is missing on disk,
 - a dependency a migration bumps has moved on in the template/workspace but no migration captured the new version (the template pins `@igrp/*` as `workspace:*`, so the comparison resolves each `workspace:*` to its current package version — what the zip would ship),
-- a migration bumps a dependency the template doesn't declare.
+- a migration bumps a dependency the template doesn't declare,
+- a **new template file** exists (tracked or untracked-but-not-gitignored) that no migration ships, is not exempt, and is not grandfathered in the baseline (see below).
 
-It **warns** (exit 0) for `file.write` patch-mode paths (no full-file payload to diff), files a migration deletes that the template still has, and `@igrp/*` template deps no migration ever pins.
+It **warns** (exit 0) for `file.write` patch-mode paths (no full-file payload to diff), files a migration deletes that the template still has, `@igrp/*` template deps no migration ever pins, and baseline entries the template no longer has.
 
-The gate runs automatically at the start of `release` (see below), so a forgotten migration can't be published. **Limitation:** it only checks paths that already appear in some migration — a brand-new template file never added via `file.create` is invisible to it.
+The gate runs automatically at the start of `release` (see below), so a forgotten migration can't be published.
+
+### New-file check (baseline)
+
+Every template file must be **migration-managed**, **exempt**, or listed in `migrations/demo-v1/template-baseline.json` (the grandfathered set that predates this check). Anything else is an *orphan*: scaffolded apps would get it, upgraded apps never would — so the gate fails.
+
+Exempt paths (see `scripts/drift-orphans.ts`) are zip-excluded content (`create-template/`, `CHANGELOG.md`, `CLAUDE.md`, …) and docs/AI-tooling content that ships in the zip but isn't runtime code (`docs/`, `specs/`, `.github/`, `.cursor/`, `.trae/`, `AGENTS.md`).
+
+When the gate flags a new file:
+
+1. **Preferred:** author a `file.create` migration shipping it to existing apps.
+2. **Deliberate opt-out** (the file genuinely shouldn't reach upgraded apps): regenerate the baseline —
+
+   ```bash
+   pnpm --filter @igrp/template-migrator check:drift:update-baseline
+   ```
+
+   This recomputes the baseline (current files − managed − exempt), pruning stale entries. Commit the result. Don't hand-edit the baseline to silence a failure — that recreates the blind spot this check exists to close.
 
 ---
 

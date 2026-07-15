@@ -11,6 +11,23 @@
   ],
   "author": "IGRP Team",
   "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "git+http://git.nosi.cv/igrp-3_0/igrp-framework-frontend/igrp-framework-nextjs.git",
+    "directory": "packages/framework/next-types"
+  },
+  "homepage": "https://igrp.cv",
+  "bugs": {
+    "url": "http://git.nosi.cv/igrp-3_0/igrp-framework-frontend/igrp-framework-nextjs/-/issues"
+  },
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "import": "./dist/index.js",
+      "default": "./dist/index.js"
+    },
+    "./package.json": "./package.json"
+  },
   "main": "./dist/index.js",
   "module": "./dist/index.js",
   "types": "./dist/index.d.ts",
@@ -25,7 +42,7 @@
     "clean-all": "rimraf node_modules && rimraf dist && rimraf tsconfig.tsbuildinfo"
   },
   "peerDependencies": {
-    "next-auth": "4.24.14"
+    "next-auth": "^4.24.0"
   },
   "dependencies": {
     "@igrp/framework-next-auth": "workspace:*"
@@ -38,7 +55,7 @@
     "typescript": "5.9.3"
   },
   "engines": {
-    "node": ">=22.x.x"
+    "node": ">=22"
   },
   "publishConfig": {
     "registry": "https://sonatype.nosi.cv/repository/igrp/",

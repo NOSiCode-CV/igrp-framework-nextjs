@@ -1,6 +1,17 @@
-import { lightFormat, parse } from "date-fns"
+import { addYears, lightFormat, parse, subYears } from "date-fns"
 import type { DateAfter, DateBefore, DateRange, DayOfWeek } from "react-day-picker"
 import type { IGRPCalendarProps } from "../types"
+
+/** Default navigation window around today for month/year dropdowns. */
+export const IGRP_CALENDAR_DEFAULT_YEAR_SPAN = 5
+
+/** Returns DayPicker `startMonth` / `endMonth` bounds around `from` (defaults to today). */
+export function getDefaultCalendarMonthBounds(from: Date = new Date()) {
+  return {
+    startMonth: subYears(from, IGRP_CALENDAR_DEFAULT_YEAR_SPAN),
+    endMonth: addYears(from, IGRP_CALENDAR_DEFAULT_YEAR_SPAN),
+  }
+}
 
 /** Formats a date range to string using date-fns lightFormat. */
 export function formatDateRange(range: DateRange | undefined, dateFormat: string) {

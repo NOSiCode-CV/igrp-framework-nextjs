@@ -2,7 +2,7 @@
 
 import { useId, useState } from "react"
 
-import { getDisabledDays } from "../../../lib/calendar-utils"
+import { getDefaultCalendarMonthBounds, getDisabledDays } from "../../../lib/calendar-utils"
 import { cn } from "../../../lib/utils"
 import type { IGRPCalendarProps } from "../../../types"
 import { Calendar } from "../../primitives/calendar"
@@ -20,6 +20,7 @@ type IGRPCalendarSingleProps = {
 
 /**
  * Single-date calendar picker.
+ * Defaults `startMonth` / `endMonth` to 5 years before and after today.
  */
 function IGRPCalendarSingle({
   name,
@@ -30,12 +31,15 @@ function IGRPCalendarSingle({
   disableBefore,
   disableAfter,
   disableDayOfWeek,
+  startMonth,
+  endMonth,
   ...props
 }: IGRPCalendarSingleProps) {
   const _id = useId()
   const ref = name ?? id ?? _id
 
   const [ownDate, setOwnDate] = useState<Date | undefined>(undefined)
+  const [{ startMonth: defaultStartMonth, endMonth: defaultEndMonth }] = useState(getDefaultCalendarMonthBounds)
   const selected = date ?? ownDate
   const disabled = getDisabledDays({ disableBefore, disableAfter, disableDayOfWeek })
 
@@ -51,6 +55,8 @@ function IGRPCalendarSingle({
       disabled={disabled}
       className={cn("rounded-lg border shadow-sm", className)}
       {...props}
+      startMonth={startMonth ?? defaultStartMonth}
+      endMonth={endMonth ?? defaultEndMonth}
     />
   )
 }

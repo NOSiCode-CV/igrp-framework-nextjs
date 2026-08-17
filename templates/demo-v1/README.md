@@ -159,7 +159,7 @@ Framework changes are delivered via `@igrp/template-migrator`; the applied set i
 
 ### Docker — quick note
 
-A `docker/development/Dockerfile` and `docker-compose.yml` are provided. See [Docker](docs/DOCKER-RUN.md).
+`docker/development/` builds a **production** standalone image (not `next dev`). From the template root: `docker compose -f docker/development/docker-compose.yml up --build` — app on [http://localhost:3001](http://localhost:3001). There is no root `Dockerfile`; pass `-f docker/development/Dockerfile` if you build with the Docker CLI. Env, ports, and auth URLs: [Docker](docs/DOCKER-RUN.md).
 
 ## Additional Resources
 

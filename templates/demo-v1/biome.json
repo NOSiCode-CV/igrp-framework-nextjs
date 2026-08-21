@@ -1,5 +1,5 @@
 {
-  "$schema": "https://biomejs.dev/schemas/2.5.1/schema.json",
+  "$schema": "https://biomejs.dev/schemas/2.5.9/schema.json",
   "vcs": {
     "enabled": true,
     "clientKind": "git",
@@ -17,7 +17,16 @@
       "!.igrpstudio",
       "!src/app/(igrp)/(generated)",
       "!.igrp-migrations-lock.json",
-      "!.npmignore"
+      "!.npmignore",
+      "!.claude",
+      "!.vscode",
+      "!.storybook",
+      "!.turbo",
+      "!.vitest",
+      "!.gitignore",
+      "!.prettierignore",
+      "!.prettierrc",
+      "!.prettierignore"
     ]
   },
   "formatter": {

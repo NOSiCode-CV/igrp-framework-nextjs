@@ -12,12 +12,7 @@ export type IGRPMockData = {
 };
 
 export type IGRPToasterPosition =
-  | 'top-left'
-  | 'top-right'
-  | 'bottom-left'
-  | 'bottom-right'
-  | 'top-center'
-  | 'bottom-center';
+  'top-left' | 'top-right' | 'bottom-left' | 'bottom-right' | 'top-center' | 'bottom-center';
 
 export type IGRPPackageJson = {
   name: string;

@@ -19,6 +19,9 @@ export default defineConfig([
     languageOptions: {
       ecmaVersion: 2022,
       globals: globals.browser,
+      parserOptions: {
+        tsconfigRootDir: import.meta.dirname,
+      },
     },
   },
   // Storybook-specific lint rules (story export hygiene, context usage, etc.).

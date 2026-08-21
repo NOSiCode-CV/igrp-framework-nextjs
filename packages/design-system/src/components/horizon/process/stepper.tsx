@@ -1,4 +1,4 @@
-"use client"
+'use client'
 
 import { useCallback, useEffect, useId, useMemo, useRef, useState } from "react"
 import type React from "react"
@@ -80,7 +80,7 @@ function getStepperItemClassName(): string {
     // Before pseudo-element
     "before:top-0 before:h-4.25 before:skew-x-28 before:translate-z-0",
     // After pseudo-element
-    "after:bottom-0 after:h-4 after:-skew-x-30 after:translate-z-0",
+    "after:bottom-0 after:h-4.25 after:-skew-x-30 after:translate-z-0",
     // First child pseudo-element positioning
     "first:before:left-4.5 first:after:left-4.5",
     // Last child - clip pseudo-elements at right edge
@@ -197,7 +197,7 @@ function IGRPStepperProcess({
   }
 
   return (
-    <div className={cn("space-y-8 w-full")} id={ref}>
+    <div className={cn("flex flex-col gap-8 w-full")} id={ref}>
       <div className={cn("flex items-center justify-center gap-4 relative")}>
         <div ref={scrollAreaRef} className={cn("w-[90vw]")}>
           <ScrollArea className={cn("w-full")}>
@@ -234,7 +234,8 @@ function IGRPStepperProcess({
                             <CheckIcon
                               className={cn(
                                 "hidden",
-                                isCompleted && "stroke-[2.5] block group-hover/step:hidden shrink-0",
+                                isCompleted &&
+                                  "stroke-[2.5] block opacity-70 group-hover/step:hidden shrink-0",
                               )}
                               aria-hidden="true"
                             />

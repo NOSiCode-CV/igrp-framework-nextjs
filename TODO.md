@@ -72,3 +72,10 @@ Add the following components to the design system:
 -- https://github.com/vercel/next.js/tree/canary/skills
 -- maps component
 
+
+[next-auth][debug][CHUNKING_SESSION_COOKIE] {
+  message: 'Session cookie exceeds allowed 4096 bytes.',
+  emptyCookieSize: 163,
+  valueSize: 3952,
+  chunks: [ 4096, 182 ]
+}

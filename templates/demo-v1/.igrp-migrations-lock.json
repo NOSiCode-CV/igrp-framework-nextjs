@@ -161,6 +161,78 @@
       "manifestHash": "55370aea174bfad6",
       "undo": [],
       "fileHashes": {}
+    },
+    {
+      "id": "21-template-resync-catchup",
+      "appliedAt": "2026-06-26T00:00:00.000Z",
+      "cliVersion": "0.1.0-beta.134",
+      "manifestHash": "fa00cbd4a064219d",
+      "undo": [],
+      "fileHashes": {}
+    },
+    {
+      "id": "22-session-args-auth-bypass",
+      "appliedAt": "2026-06-26T00:00:00.000Z",
+      "cliVersion": "0.1.0-beta.134",
+      "manifestHash": "e1692e5e035dd3fa",
+      "undo": [],
+      "fileHashes": {}
+    },
+    {
+      "id": "23-per-request-layout-and-routes-cache",
+      "appliedAt": "2026-06-27T00:00:00.000Z",
+      "cliVersion": "0.1.0-beta.134",
+      "manifestHash": "e859df151a7ef7fc",
+      "undo": [],
+      "fileHashes": {}
+    },
+    {
+      "id": "24-resync-beta159",
+      "appliedAt": "2026-06-30T00:00:00.000Z",
+      "cliVersion": "0.1.0-beta.134",
+      "manifestHash": "db2a98300e7da75d",
+      "undo": [],
+      "fileHashes": {}
+    },
+    {
+      "id": "25-resync-beta160",
+      "appliedAt": "2026-06-30T00:00:00.000Z",
+      "cliVersion": "0.1.0-beta.134",
+      "manifestHash": "30aef33acc9be79b",
+      "undo": [],
+      "fileHashes": {}
+    },
+    {
+      "id": "26-catchup-untracked-and-drifted",
+      "appliedAt": "2026-06-30T00:00:00.000Z",
+      "cliVersion": "0.1.0-beta.134",
+      "manifestHash": "1e607902dc8eb1f6",
+      "undo": [],
+      "fileHashes": {}
+    },
+    {
+      "id": "27-csp-hsts-headers",
+      "appliedAt": "2026-07-06T00:00:00.000Z",
+      "cliVersion": "0.1.0-beta.134",
+      "manifestHash": "1877394ce0706066",
+      "undo": [],
+      "fileHashes": {}
+    },
+    {
+      "id": "28-resync-beta165-query-provider-split",
+      "appliedAt": "2026-07-06T00:00:00.000Z",
+      "cliVersion": "0.1.0-beta.134",
+      "manifestHash": "35f20855016d8bce",
+      "undo": [],
+      "fileHashes": {}
+    },
+    {
+      "id": "29-permissions-catalog-sync",
+      "appliedAt": "2026-08-31T00:00:00.000Z",
+      "cliVersion": "0.1.0-beta.134",
+      "manifestHash": "91f5c658a584b08c",
+      "undo": [],
+      "fileHashes": {}
     }
   ]
 }

@@ -5,6 +5,12 @@ import { fileURLToPath } from "url";
 import { parse as parseYaml } from "yaml";
 import { sortMigrationFiles } from "../src/migration-order.js";
 import { findOrphanFiles } from "./drift-orphans.js";
+import {
+  diffTemplateLock,
+  isLockClean,
+  loadMigrationSummaries,
+  readTemplateLock,
+} from "./template-lock.js";
 
 // Drift gate: verify that the migration payloads still match the live template.
 //
@@ -23,6 +29,11 @@ import { findOrphanFiles } from "./drift-orphans.js";
 // A brand-new template file matching none of those is an "orphan" and fails the
 // gate: author a file.create migration for it, or — when it deliberately should
 // not ship to existing apps — regenerate the baseline with --update-baseline.
+//
+// Finally it reconciles the migration lock the template zip ships
+// (.igrp-migrations-lock.json) against the migration set, so a scaffolded app
+// never reports migrations it already contains as pending. See
+// scripts/template-lock.ts.
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);
@@ -31,6 +42,7 @@ const MIGRATIONS_DIR = join(ROOT, "migrations/demo-v1");
 // packages/template-migrator -> ../.. -> repo root -> templates/demo-v1
 const TEMPLATE_DIR = join(ROOT, "../../templates/demo-v1");
 const TEMPLATE_PKG = join(TEMPLATE_DIR, "package.json");
+const TEMPLATE_LOCK = join(TEMPLATE_DIR, ".igrp-migrations-lock.json");
 const PACKAGES_DIR = join(ROOT, "../../packages");
 const BASELINE_FILE = join(MIGRATIONS_DIR, "template-baseline.json");
 
@@ -225,6 +237,27 @@ function main(): void {
     if (dep.startsWith("@igrp/") && !depRanges.has(dep)) depUnpinned.push(declared === "workspace:*" ? dep : `${dep} (${declared})`);
   }
 
+  // --- template lock drift --------------------------------------------------
+  // The template ships .igrp-migrations-lock.json inside the zip so a freshly
+  // scaffolded app opens with every migration already marked applied. If the
+  // lock falls behind the migration set, a brand-new app reports migrations it
+  // already contains as pending: `igrp-migrate check` fails on day one and
+  // `apply` re-runs finished work. No other axis covers this file — the orphan
+  // check exempts it by path and no migration manages its content.
+  let lockDiff: ReturnType<typeof diffTemplateLock> | null = null;
+  let lockUnreadable: string | null = null;
+  try {
+    lockDiff = diffTemplateLock({
+      migrations: loadMigrationSummaries(MIGRATIONS_DIR),
+      lock: readTemplateLock(TEMPLATE_LOCK),
+    });
+  } catch (err) {
+    // A corrupt lock is a gate failure, not a crash — report it like every
+    // other axis rather than leaking a parse stack trace.
+    lockUnreadable = (err as Error).message;
+  }
+  const lockDrifted = lockUnreadable !== null || (lockDiff !== null && !isLockClean(lockDiff));
+
   // --- new-file (orphan) drift ---------------------------------------------
   // Every tracked template file must be migration-managed, exempt, or in the
   // baseline. Otherwise scaffolded apps get it but upgraded apps never do.
@@ -253,7 +286,7 @@ function main(): void {
 
   const managed = finalState.size;
   const fileCount = templateFiles === null ? "?" : String(templateFiles.length);
-  console.log(`Checked ${managed} migration-managed path(s), ${depRanges.size} dependency pin(s), and ${fileCount} tracked template file(s) against ${TEMPLATE_DIR}\n`);
+  console.log(`Checked ${managed} migration-managed path(s), ${depRanges.size} dependency pin(s), ${fileCount} tracked template file(s), and the shipped migration lock against ${TEMPLATE_DIR}\n`);
 
   // Soft warnings — informational, do not fail the gate.
   if (depUnpinned.length > 0) {
@@ -283,9 +316,9 @@ function main(): void {
   // Hard failures — block the release.
   const failed =
     drifted.length + missingTemplate.length + missingPayload.length + depDrift.length + depMissingInTemplate.length +
-    orphans.length + (baselineMissing ? 1 : 0);
+    orphans.length + (baselineMissing ? 1 : 0) + (lockDrifted ? 1 : 0);
   if (failed === 0) {
-    console.log("✓ No drift: every migration-managed file and dependency pin matches the template, and no unmanaged new files were found.");
+    console.log("✓ No drift: every migration-managed file and dependency pin matches the template, no unmanaged new files were found, and the shipped lock records every migration.");
     return;
   }
 
@@ -318,6 +351,31 @@ function main(): void {
     console.error(`✗ ${depMissingInTemplate.length} dependency(ies) a migration bumps but the template doesn't declare:`);
     for (const d of depMissingInTemplate) console.error(`    ${d.dep}  (${d.migrationId})`);
     console.error("");
+  }
+  if (lockUnreadable) {
+    console.error("✗ The template's shipped .igrp-migrations-lock.json could not be read:");
+    console.error(`    ${lockUnreadable}`);
+    console.error("");
+    console.error("  → Fix the file, or regenerate it with:");
+    console.error("    pnpm --filter @igrp/template-migrator sync:template-lock\n");
+  } else if (lockDiff && !isLockClean(lockDiff)) {
+    console.error("✗ The template's shipped .igrp-migrations-lock.json is out of date:");
+    if (lockDiff.missing.length > 0) {
+      console.error(`    ${lockDiff.missing.length} migration(s) not recorded as applied: ${lockDiff.missing.join(", ")}`);
+    }
+    if (lockDiff.unknown.length > 0) {
+      console.error(`    ${lockDiff.unknown.length} entry(ies) for migrations that no longer exist: ${lockDiff.unknown.join(", ")}`);
+    }
+    for (const m of lockDiff.hashMismatch) {
+      console.error(`    ${m.id}: recorded hash ${m.recorded}, migration steps now hash to ${m.expected}`);
+    }
+    if (lockDiff.outOfOrder) {
+      console.error("    entries are not in migration order");
+    }
+    console.error("");
+    console.error("  A scaffolded app would report these as pending and re-run them over a tree");
+    console.error("  that already has them. Regenerate the lock with:");
+    console.error("    pnpm --filter @igrp/template-migrator sync:template-lock\n");
   }
   if (baselineMissing) {
     console.error(`✗ Baseline file missing: ${BASELINE_FILE}`);

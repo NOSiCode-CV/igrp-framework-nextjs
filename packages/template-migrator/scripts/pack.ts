@@ -1,10 +1,11 @@
-import { copyFileSync, existsSync, mkdirSync, readFileSync, readdirSync, rmSync, writeFileSync } from "fs";
+import { existsSync, mkdirSync, readFileSync, readdirSync, rmSync, writeFileSync } from "fs";
 import { dirname, join } from "path";
-import { createHash } from "crypto";
 import { fileURLToPath, URL } from "url";
 import { parse as parseYaml } from "yaml";
+import { hashSteps } from "../src/hash.js";
 import { sortMigrationFiles } from "../src/migration-order.js";
 import { validateRequires } from "../src/validate-requires.js";
+import { copyPayloadFile } from "./payload-copy.js";
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);
@@ -30,11 +31,12 @@ function parseFrontMatter(content: string): { fm: FrontMatter; body: string } {
   return { fm, body: match[2] };
 }
 
-function hashString(s: string): string {
-  return createHash("sha256").update(s).digest("hex").slice(0, 16);
-}
-
-function copyPayloads(steps: Record<string, unknown>[], migrationsDir: string, payloadOut: string) {
+function copyPayloads(
+  steps: Record<string, unknown>[],
+  migrationsDir: string,
+  payloadOut: string,
+): number {
+  let normalised = 0;
   for (const step of steps) {
     const from = step["from"];
     if (typeof from === "string" && !from.startsWith("__")) {
@@ -47,10 +49,12 @@ function copyPayloads(steps: Record<string, unknown>[], migrationsDir: string, p
         console.warn(`Warning: payload not found: ${src}`);
         continue;
       }
-      mkdirSync(dirname(dest), { recursive: true });
-      copyFileSync(src, dest);
+      // Text payloads are normalised to LF on the way into dist/ so upgraded
+      // apps and freshly scaffolded ones agree byte-for-byte. See payload-copy.ts.
+      if (copyPayloadFile(src, dest)) normalised++;
     }
   }
+  return normalised;
 }
 
 function main() {
@@ -65,11 +69,12 @@ function main() {
   );
 
   const migrations = [];
+  let normalisedTotal = 0;
   for (const file of files) {
     const raw = readFileSync(join(MIGRATIONS_DIR, file), "utf8");
     const { fm } = parseFrontMatter(raw);
-    copyPayloads(fm.steps, MIGRATIONS_DIR, PAYLOAD_OUT);
-    const contentHash = hashString(JSON.stringify(fm.steps));
+    normalisedTotal += copyPayloads(fm.steps, MIGRATIONS_DIR, PAYLOAD_OUT);
+    const contentHash = hashSteps(fm.steps);
     migrations.push({
       id: fm.id,
       date: fm.date,
@@ -94,6 +99,9 @@ function main() {
   };
 
   writeFileSync(join(OUT_DIR, "manifest.json"), JSON.stringify(manifest, null, 2) + "\n");
+  if (normalisedTotal > 0) {
+    console.log(`\n  normalised ${normalisedTotal} payload file(s) to LF`);
+  }
   console.log(`\nManifest written: ${migrations.length} migrations\n`);
 }
 

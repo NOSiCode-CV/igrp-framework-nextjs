@@ -108,6 +108,7 @@ export function executeStep(
       assertInsideAppRoot(appRoot, pkgPath);
       const pkg = JSON.parse(readFileSync(pkgPath, "utf8"));
       const prevRanges: Record<string, string> = {};
+      const skipped: string[] = [];
       for (const [dep, version] of Object.entries(step.ranges)) {
         if (pkg.dependencies?.[dep]) {
           prevRanges[dep] = pkg.dependencies[dep];
@@ -115,9 +116,23 @@ export function executeStep(
         } else if (pkg.devDependencies?.[dep]) {
           prevRanges[dep] = pkg.devDependencies[dep];
           pkg.devDependencies[dep] = version;
+        } else {
+          // A dep the migration bumps but this app doesn't declare. Adding it
+          // would be wrong (the app may have removed it deliberately), but
+          // silence is worse: some bumps are load-bearing for the migration's
+          // own feature — e.g. 29-permissions-catalog-sync needs an AM client
+          // that actually has `syncPermissions` — and a quiet skip turns into
+          // a runtime failure long after `apply` reported success.
+          skipped.push(`${dep}@${version}`);
         }
       }
       writeFileSync(pkgPath, JSON.stringify(pkg, null, 2) + "\n", "utf8");
+      if (skipped.length > 0) {
+        console.warn(
+          `  ⚠ ${step.manifest}: not declared by this app, so NOT bumped: ${skipped.join(", ")}\n` +
+            `    If the migration's feature depends on one of these, add it manually.`,
+        );
+      }
       return { type: "deps.bump", manifest: step.manifest, ranges: prevRanges };
     }
     default:

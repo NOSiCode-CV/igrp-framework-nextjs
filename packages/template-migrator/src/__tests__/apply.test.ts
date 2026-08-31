@@ -1,4 +1,4 @@
-import { describe, it, expect, beforeEach, afterEach } from "vitest";
+import { describe, it, expect, beforeEach, afterEach, vi } from "vitest";
 import {
   mkdtempSync,
   mkdirSync,
@@ -203,6 +203,58 @@ describe("executeStep: deps.bump", () => {
       manifest: "package.json",
       ranges: { "@igrp/framework-next": "0.1.0-beta.140", typescript: "^5.8.0" },
     });
+  });
+
+  it("warns about deps the app does not declare instead of skipping silently", () => {
+    // Some bumps are load-bearing for the migration's own feature, so a quiet
+    // skip becomes a runtime failure long after `apply` reported success.
+    writeAppFile(
+      "package.json",
+      JSON.stringify({ name: "consumer", dependencies: { next: "15.5.19" } }, null, 2) + "\n",
+    );
+    const warnings: string[] = [];
+    const spy = vi.spyOn(console, "warn").mockImplementation((msg) => {
+      warnings.push(String(msg));
+    });
+
+    try {
+      executeStep(
+        {
+          type: "deps.bump",
+          manifest: "package.json",
+          ranges: { next: "15.5.22", "@igrp/platform-access-management-client-ts": "0.2.0-beta.15" },
+        },
+        appRoot,
+        payloadDir,
+      );
+    } finally {
+      spy.mockRestore();
+    }
+
+    expect(warnings).toHaveLength(1);
+    expect(warnings[0]).toContain("@igrp/platform-access-management-client-ts@0.2.0-beta.15");
+    // The dep it *could* bump must not be reported as skipped.
+    expect(warnings[0]).not.toContain("next@");
+  });
+
+  it("stays quiet when every bumped dep is present", () => {
+    writeAppFile(
+      "package.json",
+      JSON.stringify({ name: "consumer", dependencies: { next: "15.5.19" } }, null, 2) + "\n",
+    );
+    const spy = vi.spyOn(console, "warn").mockImplementation(() => {});
+
+    try {
+      executeStep(
+        { type: "deps.bump", manifest: "package.json", ranges: { next: "15.5.22" } },
+        appRoot,
+        payloadDir,
+      );
+    } finally {
+      spy.mockRestore();
+    }
+
+    expect(spy).not.toHaveBeenCalled();
   });
 });
 

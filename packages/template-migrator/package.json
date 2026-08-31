@@ -34,6 +34,7 @@
     "build": "pnpm prebuild && pnpm build:js && pnpm build:types",
     "check:drift": "tsx scripts/check-drift.ts",
     "check:drift:update-baseline": "tsx scripts/check-drift.ts --update-baseline",
+    "sync:template-lock": "tsx scripts/sync-template-lock.ts",
     "test": "vitest run",
     "release": "pnpm check:drift && pnpm build && pnpm publish --registry=https://sonatype.nosi.cv/repository/igrp/ --tag latest --no-git-checks",
     "clean": "rimraf dist"

@@ -34,6 +34,8 @@ export async function apply(
   if (pending.length === 0) { console.log("Nothing to apply — already up to date."); return; }
 
   console.log(`\nApplying ${pending.length} migration(s) to ${appRoot}\n`);
+  // .env files that actually gained keys during this run, for the closing hint.
+  const envFilesTouched = new Set<string>();
   for (const migration of pending) {
     const ver = migration.targetFrameworkVersion ? ` (→ framework ${migration.targetFrameworkVersion})` : "";
     console.log(`── ${migration.id}${ver}`);
@@ -78,6 +80,11 @@ export async function apply(
         }
         const undo = executeStep(step, appRoot, opts.payloadDir);
         undoSteps.push(undo);
+        // env.add's undo lists exactly the keys it appended — a non-empty list
+        // means this file really did gain keys (already-present ones are skipped).
+        if (undo.type === "env.remove" && undo.keys.length > 0) {
+          envFilesTouched.add(undo.file);
+        }
         console.log(`  ✓ ${step.type}  ${pathKey}`);
       }
     } catch (err) {
@@ -127,5 +134,14 @@ export async function apply(
   console.log("All done.\n");
   console.log("Next steps:");
   console.log("  pnpm install");
+  if (envFilesTouched.size > 0) {
+    // Migrations only ever write .env.example — the real .env holds secrets, is
+    // gitignored, and never ships in the template zip. So new keys land in the
+    // example file and the running app still lacks them until someone copies
+    // them across. Say so, or the next boot fails for a non-obvious reason.
+    const files = [...envFilesTouched].sort().join(", ");
+    console.log(`  # ${files} gained new keys — copy any you need into your .env`);
+    console.log("  #   (values without defaults, e.g. client IDs/secrets, must be filled in)");
+  }
   // console.log("  # (pnpm build:framework if inside the monorepo)\n");
 }

@@ -10,8 +10,11 @@ CLI that automates IGRP template upgrades. Bundles all migration guides for `tem
 packages/template-migrator/
 ├── scripts/
 │   ├── pack.ts              # Prebuild: reads migration guides → emits dist/manifest.json + dist/payload/
-│   ├── check-drift.ts       # Release gate: payloads/deps/new files vs. the live template
-│   └── drift-orphans.ts     # New-file (orphan) detection logic + exemption lists
+│   ├── check-drift.ts       # Release gate: payloads/deps/new files/lock vs. the live template
+│   ├── drift-orphans.ts     # New-file (orphan) detection logic + exemption lists
+│   ├── template-lock.ts     # Shared lock reconciliation (diff + rebuild), used by both scripts below
+│   ├── sync-template-lock.ts # Regenerates the template's shipped .igrp-migrations-lock.json
+│   └── payload-copy.ts      # Payload copy with LF normalisation + binary detection
 ├── src/
 │   ├── cli.ts               # Binary entry point (bin: igrp-migrate)
 │   ├── index.ts             # Public API re-exports (for programmatic use)
@@ -46,6 +49,7 @@ Three sequential steps (wired as `prebuild → build:js → build:types`):
 Reads every `NN.MIGRATIONS-*.md` file in `migrations/demo-v1/`, parses the YAML frontmatter, then:
 
 - **Copies payload files** from `migrations/demo-v1/payload/NN/` → `dist/payload/NN/` (strips the `payload/` prefix from the `from` field so the dist layout is `dist/payload/NN/file`, not `dist/payload/payload/NN/file`).
+- **Normalises text payloads to LF** on the way into `dist/` (see `scripts/payload-copy.ts`). Payloads are usually captured on Windows and carry CRLF, while the live template is LF — without this, an upgraded app ends up with CRLF where a scaffolded app has LF, the template's own Biome run rewrites every migrated file, and `git diff` after an `apply` shows whole-file churn. Binary payloads (detected by a NUL byte in the leading bytes) are copied verbatim. The build reports how many files it normalised.
 - **Emits `dist/manifest.json`** — a single JSON object with all migration metadata and steps.
 
 Any `.md` guide without valid YAML frontmatter (between `---` fences) will throw and abort the build.
@@ -108,9 +112,23 @@ Emits `.d.ts` declaration files from `tsconfig.build.json` (no JS output, types 
    pnpm --filter @igrp/template-migrator build
    ```
 
-   All 6 (or N) migrations should print `packed <id>`. Check `dist/manifest.json` to confirm the new entry is present.
+   All N migrations should print `packed <id>`. Check `dist/manifest.json` to confirm the new entry is present.
 
-5. **Test locally** against a copy of `demo-v1`:
+5. **Sync the template's shipped lock** so freshly scaffolded apps don't see the new migration as pending:
+
+   ```bash
+   pnpm --filter @igrp/template-migrator sync:template-lock
+   ```
+
+   Commit the updated `templates/demo-v1/.igrp-migrations-lock.json`. Skipping this fails the drift gate at release.
+
+6. **Confirm the gate is clean**:
+
+   ```bash
+   pnpm --filter @igrp/template-migrator check:drift
+   ```
+
+7. **Test locally** against a copy of `demo-v1`:
 
    ```bash
    # From the consumer app directory
@@ -125,11 +143,12 @@ Emits `.d.ts` declaration files from `tsconfig.build.json` (no JS output, types 
 
 | Type | Required fields | What it does |
 |---|---|---|
-| `file.create` | `path`, `from` | Copies payload file to `path`; fails if destination already exists |
+| `file.create` | `path`, `from` | Copies payload file to `path`. Overwrites if the destination already exists — the distinction from `file.write` is intent (a file the migration introduces), not enforcement. That tolerance is deliberate: it keeps a catch-up migration re-applied over an already-current tree from aborting |
 | `file.write` | `path`, `mode: "replace"`, `from` | Overwrites `path` with payload file |
 | `file.delete` | `path` | Deletes `path` from the app |
-| `env.add` | `file`, `keys` | Appends missing keys (with doc comments) to an `.env` file |
-| `deps.bump` | `manifest`, `ranges` | Updates version ranges in `package.json` (deps or devDeps) |
+| `env.add` | `file`, `keys` | Appends missing keys (with doc comments) to an `.env` file. Keys already present are left alone, and the undo lists only the keys this step actually appended. In practice migrations only ever target `.env.example` — a consumer's real `.env` holds secrets, is gitignored, and never ships in the zip, so `apply` prints a reminder to copy new keys across |
+| `env.remove` | `file`, `keys` | Removes the listed keys from an `.env` file, capturing their values so the undo can restore them. Mainly generated as the inverse of `env.add`, but valid to author directly |
+| `deps.bump` | `manifest`, `ranges` | Updates version ranges in `package.json` (deps or devDeps). A dep the app doesn't declare is **not added** — adding it could contradict a deliberate removal — but it is reported as a warning, since some bumps are load-bearing for the migration's own feature |
 
 `from` values must be relative to `migrations/demo-v1/` (e.g. `payload/NN/src/file.ts`). The pack script strips the leading `payload/` when copying to `dist/payload/`; the runtime in `apply.ts` does the same strip when resolving the source.
 
@@ -139,7 +158,7 @@ Emits `.d.ts` declaration files from `tsconfig.build.json` (no JS output, types 
 
 The `migrations/demo-v1/payload/` tree is a **hand-maintained copy** of `templates/demo-v1`. If you edit the template but forget to author a migration, the two silently diverge: apps scaffolded from the zip get the change, apps upgraded via this CLI never do.
 
-`scripts/check-drift.ts` reconciles them on three axes — **file payloads**, **dependency pins**, and **new files**. It collapses every migration into the final expected state per managed path and per bumped dependency, then compares against the live template:
+`scripts/check-drift.ts` reconciles them on four axes — **file payloads**, **dependency pins**, **new files**, and the **shipped migration lock**. It collapses every migration into the final expected state per managed path and per bumped dependency, then compares against the live template:
 
 ```bash
 pnpm --filter @igrp/template-migrator check:drift
@@ -152,7 +171,8 @@ It **fails** (exit 1) when:
 - a referenced payload file is missing on disk,
 - a dependency a migration bumps has moved on in the template/workspace but no migration captured the new version (the template pins `@igrp/*` as `workspace:*`, so the comparison resolves each `workspace:*` to its current package version — what the zip would ship),
 - a migration bumps a dependency the template doesn't declare,
-- a **new template file** exists (tracked or untracked-but-not-gitignored) that no migration ships, is not exempt, and is not grandfathered in the baseline (see below).
+- a **new template file** exists (tracked or untracked-but-not-gitignored) that no migration ships, is not exempt, and is not grandfathered in the baseline (see below),
+- the template's shipped **`.igrp-migrations-lock.json`** doesn't record every migration as applied, records one that no longer exists, has a stale `manifestHash`, or lists entries out of migration order (see below).
 
 It **warns** (exit 0) for `file.write` patch-mode paths (no full-file payload to diff), files a migration deletes that the template still has, `@igrp/*` template deps no migration ever pins, and baseline entries the template no longer has.
 
@@ -174,6 +194,24 @@ When the gate flags a new file:
    ```
 
    This recomputes the baseline (current files − managed − exempt), pruning stale entries. Commit the result. Don't hand-edit the baseline to silence a failure — that recreates the blind spot this check exists to close.
+
+### Template lock check
+
+`templates/demo-v1/.igrp-migrations-lock.json` is a tracked file that ships **inside the zip on purpose**: a freshly scaffolded app must open with every migration already marked applied, because the template tree already contains their result.
+
+That only holds while the lock keeps pace. When it falls behind, a brand-new app reports migrations it already has as pending — `igrp-migrate check` fails on day one, and `apply` re-runs finished migrations, writing `undo` entries that describe a state the app was never in. Neither of the other axes can see this: the orphan check exempts the lock by path, and no migration manages its content.
+
+So after adding a migration (or correcting one's `steps` in place), regenerate the lock:
+
+```bash
+pnpm --filter @igrp/template-migrator sync:template-lock
+```
+
+Add `--check` for a dry run that reports what's stale and exits 1 without writing — the same condition the gate enforces.
+
+Regeneration is **append-and-refresh, not rewrite**: existing entries keep their recorded `appliedAt` and `cliVersion` (that's history, and churning it every release would lose the record of which CLI stamped each migration). Only `manifestHash` is refreshed, missing entries are appended in migration order, and entries for deleted migrations are dropped.
+
+New entries carry an empty `undo`/`fileHashes`, which is the honest representation: nothing was executed against a file tree here — the template simply *is* the post-migration state, so rolling a scaffolded app back past its baseline isn't a supported operation.
 
 ---
 

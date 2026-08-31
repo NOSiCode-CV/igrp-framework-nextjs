@@ -10,8 +10,41 @@ variables:
   DOCKER_PROJECT: igrp
   IMAGE_NAME: igrp-storybook
 stages:
+  - verify
   - build
   - deploy
+
+# The migration payloads under packages/template-migrator/migrations/demo-v1/
+# are a hand-maintained copy of templates/demo-v1. Edit the template without
+# authoring a migration and the two diverge silently: apps scaffolded from the
+# zip get the change, apps upgraded via the CLI never do.
+#
+# The same gate runs at the start of `pnpm --filter @igrp/template-migrator
+# release`, but only catching it there means the drift is already committed and
+# has to be reconciled retroactively (see the several `*-resync` / `*-catchup`
+# migrations in the history). Running it per-MR turns those into a one-line
+# migration authored alongside the change that caused it.
+#
+# Needs no registry credentials: the migrator's own dependencies are all public,
+# and the filtered install pulls nothing from the @igrp scope.
+check_template_drift:
+  stage: verify
+  image: node:22
+  services: []
+  rules:
+    - changes:
+        - templates/demo-v1/**/*
+        - packages/template-migrator/**/*
+      when: always
+  before_script:
+    # corepack alone is enough — the root package.json `packageManager` field
+    # pins the exact pnpm version (with hash), so an explicit `corepack prepare`
+    # would only risk disagreeing with it.
+    - corepack enable
+    - pnpm install --filter @igrp/template-migrator --frozen-lockfile --ignore-scripts
+  script:
+    - pnpm --filter @igrp/template-migrator test
+    - pnpm --filter @igrp/template-migrator check:drift
 build_storybook_image:
   stage: build
   rules:

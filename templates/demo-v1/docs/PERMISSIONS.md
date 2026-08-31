@@ -49,6 +49,10 @@ request
 
 Everything reads from that **one** decoded claims object — no extra network calls. `igrpGetClaims()` is deduped per request (React `cache`). On a decode failure it returns a distinguishable **error** state (never a silent "no permissions").
 
+**In a Server Action or Route Handler** there is no layout above you and no `AsyncLocalStorage` store, so `igrpGetClaims()` recovers the access token from the session cookie itself (and seeds the store, so the Access-Management client works in the same call). You do **not** need to call `verifySession()` first just to check a permission.
+
+**Client-side**, claims are re-decoded from the live session rather than frozen at page load — the server-rendered state is the initial value only. A token rotation therefore updates what `usePermissions()` reports without a reload. Three guards apply: no `SessionProvider` mounted → keep the server state; session still `loading` → keep the server state; a non-JWT token (preview mode's `preview-token`) → keep the server state. Only a **JWT-shaped token that fails to decode** produces an error state.
+
 ## One-time wiring
 
 A consuming app sets this up **once** (already done in this template):
@@ -70,7 +74,7 @@ A consuming app sets this up **once** (already done in this template):
      </IGRPSectionPermissions>
    );
    ```
-   > `verifySession()` must run **before** `igrpGetClaims()` — it seeds the per-request access-management token that `igrpGetClaims()` reads. Without that order, claims resolve to an error state off-preview.
+   > Keep `verifySession()` **before** `igrpGetClaims()`: it is what enforces authentication, and it seeds the per-request access-management token. (Since `@igrp/framework-next` beta — see the changeset for this change — `igrpGetClaims()` also recovers the token from the session cookie on its own, so the order is no longer the difference between working claims and an error state. It is still the correct order: authenticate first, then read claims.)
 3. **403 boundary** — [`src/app/(igrp)/forbidden.tsx`](../src/app/(igrp)/forbidden.tsx):
 4. 
    ```tsx
@@ -93,6 +97,8 @@ export default async function InvoicesPage() {
 ```
 
 This is the real render gate: it runs before content streams and cannot be bypassed client-side. A genuine missing permission → `forbidden()` (403, in-chrome). A claims **decode error** throws instead (→ `error.tsx`, 5xx) so an outage is never mislabeled as a 403.
+
+> **`igrpAssertAuthorize` is for pages only.** In a Server Action there is no `forbidden.tsx` boundary, so both the deny and the error path surface as an unhandled action error. Use `igrpAuthorize` there — see below.
 
 Worked example: [`exemplo-permissao/page.tsx`](../src/app/(igrp)/(demo)/exemplo-permissao/page.tsx).
 
@@ -136,6 +142,8 @@ export async function deleteInvoice(id: string) {
 }
 ```
 
+No extra setup is needed: `igrpAuthorize` resolves the token itself in an action context. Use `igrpAuthorize`, **not** `igrpAssertAuthorize` — an action has no `forbidden.tsx` boundary, so the assert would surface as an unhandled action error instead of a 403.
+
 ## Permission names & the active department
 
 Pass the **bare suffix** (`"manage_access"`); it is auto-qualified with the user's active department (`org`) from the token. Pass a fully-qualified `"DEPT_X.manage_access"` for a cross-department check. A bare name with no `org` is denied (fail-closed). `is_super_admin` bypasses all checks.
@@ -145,11 +153,13 @@ Pass the **bare suffix** (`"manage_access"`); it is auto-qualified with the user
 | Scope | Gate | Strength |
 | --- | --- | --- |
 | Component | `<IGRPAuthorization>` / `usePermissions` (token, client) | Cosmetic — hide/show UI |
-| Menu | AM server-side scoping of `getCurrentUserApplicationMenus` | Server-trusted navigation |
+| Menu | Whatever AM returns from `getCurrentUserApplicationMenus` | Server-trusted **navigation only** — see the note below |
 | Page | `igrpAssertAuthorize` → `forbidden()` (token, server) | Enforced render gate |
 | Action behind a control | `igrpAuthorize` in the server action **+ the AM API** | **Real enforcement** |
 
 Token-claims gating is fast and convenient; the AM API is the source of truth. **A gated button with an un-gated server action behind it is not secure.**
+
+> **The menu row is not a gate.** A menu item's `roles` field is metadata: **nothing** in this template or in `@igrp/framework-next-ui` filters menus on it — the sidebar renders whatever list it is handed. In production that list is already scoped server-side by AM, which is why the row says "server-trusted"; in preview/bypass mode the list is the mock in `src/temp/menus/menus.ts`, so **every** item renders regardless of `roles`. Either way a user can deep-link straight to the route, so menu visibility never substitutes for a page guard.
 
 ## Preview mode
 
@@ -167,8 +177,8 @@ With `IGRP_PREVIEW_MODE=true` (or `AUTH_PROVIDER=none`), claims = **super-admin*
 | Symbol | Package | Use |
 | --- | --- | --- |
 | `igrpGetClaims()` | `@igrp/framework-next` | Resolve the request's claims (`IGRPClaimsState`); seed the provider |
-| `igrpAuthorize(name)` | `@igrp/framework-next` | Boolean check (server actions / logic) |
-| `igrpAssertAuthorize(name)` | `@igrp/framework-next` | Page guard → `forbidden()` on deny |
+| `igrpAuthorize(name)` | `@igrp/framework-next` | Boolean check — **the one to use in server actions** |
+| `igrpAssertAuthorize(name)` | `@igrp/framework-next` | Page guard → `forbidden()` on deny. **Pages only** (no `forbidden.tsx` boundary exists in an action) |
 | `IGRPSectionPermissions` | `@igrp/framework-next-ui` | Provider; seed with `igrpGetClaims()` result |
 | `usePermissions()` | `@igrp/framework-next-ui` | `{ isAllowed, permissions, roles, selectedRole, isSuperAdmin, status, error }` |
 | `<IGRPAuthorization>` | `@igrp/framework-next-ui` | Wrap a component to show/hide by permission |
@@ -178,6 +188,9 @@ With `IGRP_PREVIEW_MODE=true` (or `AUTH_PROVIDER=none`), claims = **super-admin*
 
 ## Limitations
 
-- **Revocation latency.** Gates read cached token claims, so a server-side permission *revocation* is not reflected until the token refreshes (short TTL) or the user re-logs-in. For an operation that must lock the instant access is pulled, enforce it on the AM API (which is always fresh).
-- **No default-deny.** Per-page guards are opt-in (see the checklist). A forgotten `igrpAssertAuthorize` leaves a page open.
-- **Active-role switching** (changing the active department/role mid-session) is not yet wired in this template — the active role is whatever the token carried at login.
+- **Revocation latency.** Gates read token claims, so a server-side permission *revocation* is not reflected until the token refreshes (short TTL) or the user re-logs-in. For an operation that must lock the instant access is pulled, enforce it on the AM API (which is always fresh).
+- **No default-deny.** Per-page guards are opt-in (see the checklist). A forgotten `igrpAssertAuthorize` leaves a page open. This is deliberate — the App Router has no seam for a layout to know a child page's required permission — which is why the rule lives in `AGENTS.md` for whoever (or whatever) writes the page.
+- **A claims error hides UI silently.** When claims cannot be resolved, `isAllowed()` returns `false` for everything, so gated controls simply vanish with nothing shown to the user. Nothing in this template reads `usePermissions().status` / `.error` — if a screen must distinguish "you lack access" from "we could not determine your access", read those fields and render accordingly.
+- **A token with no `org` denies every bare name.** `claimsAllow` qualifies a bare name with the active department and fail-closes without one, which looks identical to a genuine denial. Off-production, `igrpGetClaims()` warns once per request when this happens — check the server log before assuming a permission is missing.
+- **Menu `roles` is not enforced.** See the note under [Enforcement layering](#enforcement-layering).
+- **Active-role switching** (changing the active department/role mid-session) is not yet wired in this template — the active role is whatever the current token carries. The client provider's `setState` override is the seam for it.

@@ -84,32 +84,34 @@ await expect(igrpAssertAuthorize('manage_access'))
 
 There is no token to be right about: a super-admin is denied identically to an unprivileged user. The sibling failure is the same root cause — an action that reaches the AM client instead gets `Access Management client is not configured. Call igrpSetAccessClientConfig() first.`
 
-**Decision.** `igrpGetClaims` gains a fallback: when the ALS token is empty, resolve the session via `getServerSession()` (from `@igrp/framework-next-auth/server`, already a dependency of `framework-next`), **and seed the ALS store** with the recovered token before decoding.
+**Decision.** `igrpGetClaims` gains a fallback: when the ALS token is empty, recover the access token from the session cookie, **seed the ALS store**, then decode.
 
 Seeding — rather than only decoding — is deliberate: an action that needs claims almost always needs the AM client next, and that fails today for the same reason. One fix, one call site.
 
+> **Implementation note (this section was revised during implementation).** The original plan recovered the session via `getServerSession()`. That does not work and would have shipped a silent no-op: `getServerSession` requires the app's `NextAuthOptions`, which `framework-next` has no access to, and `accessToken` is copied onto the session only by the *app's own* `callbacks.session` — so it would have returned a session with no token and "fixed" nothing while appearing correct.
+>
+> As built, the recovery uses `getToken` (from `@igrp/framework-next-auth/jwt`) plus `cookies()`, which need only `NEXTAUTH_SECRET` — mirroring how `getAccessToken` in `framework-next-auth`'s own config factory already does it. The `secureCookie` prefix resolution (~10 lines) is duplicated rather than shared, because exporting it would mean changing `framework-next-auth` and dragging the full chain rebuild (C3).
+>
+> Two consequences worth recording:
+> 1. **The `next/headers` risk is moot.** Dynamic `import()` is the primary design, not the contingency, so the module graph is unchanged for every existing importer of the package root.
+> 2. **The store must be established synchronously, before the first `await`.** Seeding only after the await did not become visible to the caller. The object is therefore created up front (with an empty token) and mutated in place once the token is recovered.
+
 ```ts
-// packages/framework/next/src/lib/permissions.ts — shape, not final code
-export const igrpGetClaims = cache(async function igrpGetClaims(): Promise<IGRPClaimsState> {
-  if (isIgrpAuthBypass()) return { status: 'ok', claims: { ...SUPER_ADMIN_MOCK } };
-  try {
-    let { token } = igrpGetAccessClientConfig();
-    if (!token) {
-      // Fresh async context (Server Action / Route Handler): no ALS store was
-      // ever established. Recover the token from the session and seed the store
-      // so the AM client works in this same context too.
-      const session = await getServerSession();
-      token = (session as { accessToken?: string } | null)?.accessToken ?? '';
-      if (token) {
-        igrpSetAccessClientConfig({ token, baseUrl: resolveAccessBaseUrl() });
-      }
-    }
-    return { status: 'ok', claims: decodeIgrpClaims(token) };
-  } catch (error) { /* → { status: 'error', … } as today */ }
-});
+// packages/framework/next/src/lib/permissions.ts — as implemented (abridged)
+const current = igrpGetAccessClientConfig();
+let token = current.token;
+if (!token) {
+  const baseUrl = current.baseUrl || process.env.IGRP_ACCESS_MANAGEMENT_API || '';
+  igrpSetAccessClientConfig({ token: '', baseUrl });   // establish the store first
+  token = await recoverAccessTokenFromCookies();       // getToken + cookies(), dynamic imports
+  if (token) igrpSetAccessClientConfig({ token, baseUrl });
+}
+const claims = decodeIgrpClaims(token);
+warnOnMissingOrg(claims);
+return { status: 'ok', claims };
 ```
 
-**Open execution risk (must be verified during implementation, not assumed):** `getServerSession` pulls `next/headers` into `permissions.ts`, which is re-exported from the `framework-next` **root** entry. Confirm every current import site of that entry still builds — in particular any Edge or non-request context. If it does not hold, fall back to a lazy `await import()` inside the `if (!token)` branch so the module graph is only widened on the path that is broken today.
+**Next control-flow signals must not be swallowed.** Because the recovery path calls `cookies()`, this `try` can now raise the static-render bailout (digest `DYNAMIC_SERVER_USAGE`), `redirect()`, or `forbidden()` — none of which existed inside it before, since `decodeIgrpClaims` is pure and reading the ALS config is synchronous. Both the helper's `catch` and `igrpGetClaims`' own `catch` re-throw anything carrying a Next `digest`; a genuine cookie/JWT failure has none and still fail-closes. Swallowing the bailout would mask it as "no session", leaving the route un-marked as dynamic and failing the build with a confusing 5xx — the same hazard the template's `serverSession()` documents and guards against.
 
 **Related decision (F1b).** `igrpAssertAuthorize` is **page-only**. In an action it throws with no `forbidden.tsx` boundary, surfacing as an unhandled action error. Actions use `igrpAuthorize` and return a typed result (`{ok: false, code: 'forbidden'}`), which is already the shape PERMISSIONS.md shows. This is a **documentation + JSDoc** change, not a code change: no `igrpAssertAuthorizeAction` is added.
 
@@ -166,13 +168,16 @@ Also note in PERMISSIONS.md's Limitations that a client-side claims **error** st
 | T3 | Fallback **seeds** the store | `framework-next` | after `igrpGetClaims`, `igrpGetAccessClientConfig().token` is populated |
 | T4 | ALS store already seeded | `framework-next` | `getServerSession` is **not** called (no behavior change on the working path) |
 | T5 | `org` missing, not super-admin | `framework-next` | warning emitted once per request, dev only; silent in production |
+| T2c | `cookies()` raises a Next control-flow signal (bailout / redirect) | `framework-next` | re-thrown, **not** converted to a claims error state; a digest-less failure still fail-closes |
 | T6 | Provider mounted with **no** `SessionContext` | `framework-next-ui` | renders, does not throw, exposes the server-seeded claims (C1 / G1) |
 | T7 | Session status `loading` | `framework-next-ui` | server-seeded claims retained, **not** error state (G2) |
 | T8 | Non-JWT token (`preview-token`) | `framework-next-ui` | seeded super-admin state untouched; every gate still passes (G3 / C4) |
 | T9 | JWT token with different claims than the seed | `framework-next-ui` | `usePermissions()` reflects the **new** claims (F2 fixed) |
 | T10 | JWT-shaped token that fails to decode | `framework-next-ui` | error state entered (G2's "genuine failure" branch) |
 
-T1–T5 extend `packages/framework/next/src/lib/__tests__/permissions.test.ts` (it currently mocks `api-config`, so T1–T4 need a sibling file using the real module). T6–T10 are new for `framework-next-ui`.
+T1–T5 (+T2c) live in a **sibling** file, `permissions-action-context.test.ts`: the existing `permissions.test.ts` mocks `api-config`, which is exactly why it never caught F1 — with the mock a token is always reachable.
+
+**Implementation note.** `framework-next-ui` had **no test infrastructure at all** (no `test` script, no vitest config, no jsdom/RTL), which §5 assumed away. Rather than stand up jsdom + React Testing Library, the G1/G2/G3 decision was extracted into a pure `resolveLiveClaims()` and covered by a node-env vitest runner added to the package. Trade-off: the decision logic is fully covered (12 cases), but "the component does not throw without a provider" now rests on `useContext` + typecheck rather than a render test.
 
 ---
 

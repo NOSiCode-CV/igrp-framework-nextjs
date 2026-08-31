@@ -37,3 +37,14 @@ Open `.agents/skills/igrp-design-system/SKILL.md` and follow its three-layer pic
 | Class merge | `cn(...)` from the design system root |
 
 For anything more, read `.agents/skills/igrp-design-system/SKILL.md` and the relevant reference file.
+
+## Permissions — there is NO default-deny
+
+A page with no permission check is fully open and deep-linkable; hiding a menu item is navigation UX, not enforcement. For every page you suggest:
+
+- If it needs a permission, gate it on the **first line** of the server component: `await igrpAssertAuthorize("<perm>")` from `@igrp/framework-next` (denied → 403).
+- If it does not, say so in a one-line comment so the next reader knows it was a decision.
+- In a **server action** use `igrpAuthorize(name)` (boolean) and return `{ ok: false, code: "forbidden" }` — an action has no 403 boundary. Gate the action whenever it mutates: a hidden or disabled button is cosmetic.
+- Client-side, wrap with `<IGRPAuthorization permission="…">` or read `usePermissions().isAllowed(…)` from `@igrp/framework-next-ui`. Never add a `permission` prop to a design-system component.
+
+Full guide: `docs/PERMISSIONS.md`. Same rule in `AGENTS.md`.

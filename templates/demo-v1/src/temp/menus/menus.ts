@@ -23,7 +23,16 @@ import type { IGRPMenuItemArgs } from "@igrp/framework-next-types";
  *  • href           `pageSlug` wins over `url`; absolute/external `url` opens as a
  *                   real anchor, internal `pageSlug` routes via Next.js.
  *  • `icon`         any lucide icon name (string).
- *  • `roles`        role/department gating; empty array = visible to everyone.
+ *  • `roles`        role/department metadata, **carried but NOT enforced here**.
+ *                   Nothing in the template or in `@igrp/framework-next-ui`
+ *                   filters menus on this field — the sidebar renders whatever
+ *                   it is given. In production that list is already scoped
+ *                   server-side by Access Management
+ *                   (`getCurrentUserApplicationMenus`); in preview/bypass mode
+ *                   it is this mock, so EVERY item below renders regardless of
+ *                   `roles`. Do not treat a `roles` entry as a security
+ *                   boundary: gate the page itself with the server-side page
+ *                   guard (see `docs/PERMISSIONS.md`).
  */
 export const IGRP_DEFAULT_MENU: IGRPMenuItemArgs[] = [
   // ────────────────────────────────────────────────────────────────────────────

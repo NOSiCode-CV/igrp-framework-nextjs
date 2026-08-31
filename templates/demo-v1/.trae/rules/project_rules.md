@@ -23,3 +23,14 @@ Deep references for heavy families live alongside SKILL.md under `.agents/skills
 - Semantic tokens only (`bg-primary`, `text-destructive`, …) — never raw palette (`bg-blue-500`).
 - No manual `dark:` overrides — tokens handle dark mode.
 - `cn()` for class merging, `size-*` when w = h, `flex gap-*` not `space-x-*` / `space-y-*`.
+
+## Permissions — there is NO default-deny
+
+A page with no permission check is fully open and deep-linkable; a hidden menu item is navigation UX, not enforcement.
+
+- Page needing a permission → `await igrpAssertAuthorize("<perm>")` from `@igrp/framework-next` on the **first line** of the server component (denied → 403).
+- Page not needing one → say so in a one-line comment, so it reads as a decision rather than an omission.
+- Server action → `igrpAuthorize(name)` (boolean) + `{ ok: false, code: "forbidden" }`; an action has no 403 boundary. Always gate the action behind a mutating control — the control itself is cosmetic.
+- Client UI → `<IGRPAuthorization permission="…">` or `usePermissions().isAllowed(…)` from `@igrp/framework-next-ui`. Never add a `permission` prop to a design-system component.
+
+Full guide: `docs/PERMISSIONS.md`. Same rule in `AGENTS.md`.

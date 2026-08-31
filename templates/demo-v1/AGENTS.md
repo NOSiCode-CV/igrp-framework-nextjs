@@ -27,6 +27,26 @@ These come from the IGRP repo's shared UI rules. The skill repeats them in detai
 - `cn()` from the DS for class merging, `size-*` when w = h, `flex gap-*` for spacing.
 - Import tokens only: `@import "@igrp/igrp-framework-react-design-system/tokens";` — never the legacy `/styles` bundle.
 
+## Permissions — there is NO default-deny
+
+A page with no permission check is **fully open and deep-linkable**. Hiding a menu item is navigation UX, not enforcement. So, for every page you add:
+
+- Decide whether it needs a permission. If it does, gate it on the **first line** of the server component:
+  ```tsx
+  import { igrpAssertAuthorize } from "@igrp/framework-next";
+  export default async function Page() {
+    await igrpAssertAuthorize("manage_access");   // denied → forbidden() → 403
+    …
+  }
+  ```
+- If it does **not** need one, say so in a one-line comment (`// open to all authenticated users`) so the next reader knows it was a decision, not an omission.
+- `igrpAssertAuthorize` is **pages only**. In a server action use `igrpAuthorize(name)` (boolean) and return `{ ok: false, code: "forbidden" }` — an action has no `forbidden.tsx` boundary.
+- **Gate the server action too, whenever the control is a mutation.** A hidden or disabled button is cosmetic; the action behind it is the real entry point.
+- Client-side: wrap with `<IGRPAuthorization permission="…">` or read `usePermissions().isAllowed(…)` from `@igrp/framework-next-ui`. Never add a `permission` prop to a design-system component.
+- Permission names: pass the **bare suffix** (`"manage_access"`) — it is auto-qualified with the user's active department. Use `"DEPT_X.perm"` only for an explicit cross-department check.
+
+Full guide, including the request lifecycle and the enforcement-strength table: `docs/PERMISSIONS.md`.
+
 ## Project shape
 
 - `src/app/` — Next.js App Router routes.

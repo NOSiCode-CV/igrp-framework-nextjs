@@ -12,4 +12,8 @@ Fix three cases where the CLI reported success while leaving an app in a wrong s
 
 **`status` lists lock entries it doesn't ship** instead of only counting them. An app migrated by a newer CLI previously showed `30 applied` above a list of 29 rows, with nothing explaining the gap. Unknown entries are now printed with the CLI version that applied them, and the summary says how many came from a newer CLI.
 
+**The template zip now normalises line endings to LF too.** The previous release fixed this for the CLI channel (payloads are normalised into `dist/` at pack time), but the zip is built from the working tree — so on a Windows checkout with `core.autocrlf=true`, `pnpm release:demo` still produced a CRLF zip while the migrator shipped LF. `create-zip-template.ps1` now normalises the tree before `Compress-Archive`, using the same NUL-byte binary guard, so both channels agree regardless of who built the artifact.
+
+Verified by diffing a scaffolded app against a CLI-upgraded one: **0 differences across all 50 migration-managed paths** (previously 37 diverged).
+
 Also: the transient journal is exempt from the drift gate's new-file check, and the consumer guide documents crash recovery and the rollback refusal.

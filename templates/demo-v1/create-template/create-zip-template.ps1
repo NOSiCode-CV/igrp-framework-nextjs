@@ -217,6 +217,60 @@ Deep references are at ``.agents/skills/igrp-design-system/references/``. Load o
     Write-Host "Warning: skill source not found at $skillSource - design-system skill will not be bundled in zip"
   }
 
+  # === NORMALISE LINE ENDINGS TO LF ===
+  # Mirrors the pack-time normalisation in @igrp/template-migrator
+  # (packages/template-migrator/scripts/payload-copy.ts). A consumer must get the
+  # same bytes whichever channel they arrive through — scaffolded from this zip,
+  # or upgraded via `igrp-migrate apply`.
+  #
+  # Without this the two diverge on Windows: with core.autocrlf=true a checkout
+  # materialises the working tree as CRLF, so the zip would carry CRLF while the
+  # migrator ships LF. The app's own `pnpm lint` (Biome, LF) would then rewrite
+  # every affected file on first run.
+  #
+  # Runs after the skill injection so injected files are covered too, and after
+  # the excluded folders have been moved aside so node_modules/.next are skipped.
+  #
+  # This edits the working tree in place and deliberately does NOT restore it:
+  # the change is EOL-only, so with autocrlf git reports no diff, and LF is the
+  # state Biome formats to anyway. Restoring would only re-introduce the CRLF
+  # this exists to remove.
+  $normalisedCount = 0
+  $binaryExt = @(
+    '.png', '.jpg', '.jpeg', '.gif', '.webp', '.ico', '.avif',
+    '.woff', '.woff2', '.ttf', '.otf', '.eot',
+    '.pdf', '.zip', '.gz', '.mp4', '.webm', '.node'
+  )
+  $utf8NoBom = New-Object System.Text.UTF8Encoding $false
+
+  Get-ChildItem -Recurse -File -Force |
+    Where-Object { $_.FullName -notmatch "[\\/]($excludeTemp|node_modules|\.next|\.git)[\\/]" } |
+    ForEach-Object {
+      if ($binaryExt -contains $_.Extension.ToLower()) { return }
+
+      $bytes = [System.IO.File]::ReadAllBytes($_.FullName)
+      if ($bytes.Length -eq 0) { return }
+
+      # A NUL byte in the leading bytes means binary — the same heuristic git
+      # uses. Safer to misclassify text as binary (it just ships unchanged).
+      $sniff = [Math]::Min($bytes.Length, 8000)
+      for ($i = 0; $i -lt $sniff; $i++) {
+        if ($bytes[$i] -eq 0) { return }
+      }
+
+      # No CR anywhere: already LF, nothing to do.
+      if (-not ($bytes -contains 13)) { return }
+
+      $text = [System.Text.Encoding]::UTF8.GetString($bytes)
+      $lf = $text -replace "`r`n", "`n" -replace "`r", "`n"
+      if ($lf -ne $text) {
+        [System.IO.File]::WriteAllText($_.FullName, $lf, $utf8NoBom)
+        $script:normalisedCount++
+      }
+    }
+
+  Write-Host "Normalised $normalisedCount file(s) to LF before zipping"
+
   # Remove existing zip if it exists
   if (Test-Path $zipName) {
     Remove-Item $zipName -Force

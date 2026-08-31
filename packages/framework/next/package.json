@@ -40,17 +40,19 @@
   "peerDependencies": {
     "next": "^15.5.0",
     "react": "^19.2.0",
-    "react-dom": "^19.2.0"
+    "react-dom": "^19.2.0",
+    "zod": "4.5.0",
+    "@igrp/framework-next-auth": "^0.1.0-beta.0",
+    "@igrp/framework-next-types": "^0.1.0-beta.0",
+    "@igrp/framework-next-ui": "^0.1.0-beta.0",
+    "@igrp/platform-access-management-client-ts": "^0.2.0-beta.0"
   },
-  "dependencies": {
+  "devDependencies": {
     "@igrp/framework-next-auth": "workspace:*",
     "@igrp/framework-next-types": "workspace:*",
     "@igrp/framework-next-ui": "workspace:*",
-    "@igrp/platform-access-management-client-ts": "0.2.0-beta.15",
-    "zod": "4.4.3"
-  },
-  "devDependencies": {
-    "next": "15.5.22",
+    "@igrp/platform-access-management-client-ts": "^0.2.0-beta.15",
+    "next": "15.5.25",
     "react": "19.2.8",
     "react-dom": "19.2.8",
     "@babel/cli": "8.0.4",
@@ -63,21 +65,22 @@
     "@swc/core": "1.16.1",
     "@types/node": "25.9.1",
     "@types/react": "19.2.18",
-    "@types/react-dom": "19.2.4",
+    "@types/react-dom": "19.2.5",
     "babel-plugin-react-compiler": "19.1.0-rc.3",
     "cpy-cli": "7.0.0",
     "eslint": "9.39.4",
     "eslint-config-prettier": "10.1.8",
     "eslint-plugin-prettier": "5.5.6",
     "eslint-plugin-react-hooks": "7.1.1",
-    "eslint-plugin-react-refresh": "0.5.4",
+    "eslint-plugin-react-refresh": "0.5.5",
     "globals": "17.11.0",
     "move-cli": "2.0.0",
     "prettier": "3.9.6",
     "rimraf": "6.1.3",
     "typescript": "5.9.3",
-    "typescript-eslint": "8.67.0",
-    "vitest": "4.1.11"
+    "typescript-eslint": "8.68.0",
+    "vitest": "4.1.11",
+    "zod": "4.5.4"
   },
   "sideEffects": [
     "*.css"

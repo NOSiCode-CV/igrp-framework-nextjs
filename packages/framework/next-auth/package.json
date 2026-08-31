@@ -93,6 +93,7 @@
   "devDependencies": {
     "@types/node": "25.9.1",
     "@types/react": "19.2.18",
+    "next": "^15.5.25",
     "next-auth": "4.24.15",
     "prettier": "3.9.6",
     "react": "19.2.8",

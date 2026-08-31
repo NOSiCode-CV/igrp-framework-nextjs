@@ -42,7 +42,8 @@
     "clean-all": "rimraf node_modules && rimraf dist && rimraf tsconfig.tsbuildinfo"
   },
   "peerDependencies": {
-    "next-auth": "^4.24.0"
+    "next-auth": "^4.24.0",
+    "@igrp/framework-next-auth": "^0.1.0-beta.0"
   },
   "dependencies": {
     "@igrp/framework-next-auth": "workspace:*"

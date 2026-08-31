@@ -52,6 +52,8 @@ Reads every `NN.MIGRATIONS-*.md` file in `migrations/demo-v1/`, parses the YAML 
 
 - **Copies payload files** from `migrations/demo-v1/payload/NN/` → `dist/payload/NN/` (strips the `payload/` prefix from the `from` field so the dist layout is `dist/payload/NN/file`, not `dist/payload/payload/NN/file`).
 - **Normalises text payloads to LF** on the way into `dist/` (see `scripts/payload-copy.ts`). Payloads are usually captured on Windows and carry CRLF, while the live template is LF — without this, an upgraded app ends up with CRLF where a scaffolded app has LF, the template's own Biome run rewrites every migrated file, and `git diff` after an `apply` shows whole-file churn. Binary payloads (detected by a NUL byte in the leading bytes) are copied verbatim. The build reports how many files it normalised.
+
+  The **zip channel does the same thing at package time** — `templates/demo-v1/create-template/create-zip-template.ps1` normalises the tree to LF (same NUL-byte binary guard) before `Compress-Archive`. Both channels normalising is what makes them agree: whichever way a consumer arrives, they get identical bytes for every migration-managed path, regardless of the `core.autocrlf` setting on whoever built the artifact.
 - **Emits `dist/manifest.json`** — a single JSON object with all migration metadata and steps.
 
 Any `.md` guide without valid YAML frontmatter (between `---` fences) will throw and abort the build.

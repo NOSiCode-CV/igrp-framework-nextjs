@@ -235,10 +235,10 @@
       "fileHashes": {}
     },
     {
-      "id": "30-resync-beta166-deps",
+      "id": "30-resync-beta167-deps",
       "appliedAt": "2026-08-31T00:00:00.000Z",
-      "cliVersion": "0.1.0-beta.135",
-      "manifestHash": "e04dc78e6ba418cd",
+      "cliVersion": "0.1.0-beta.136",
+      "manifestHash": "1fc46adf391e01d2",
       "undo": [],
       "fileHashes": {}
     }

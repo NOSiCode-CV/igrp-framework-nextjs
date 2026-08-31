@@ -408,6 +408,19 @@ importers:
         version: 4.1.11(@types/node@25.9.1)(@vitest/coverage-v8@4.1.11)(jsdom@30.0.1)(vite@8.2.2(@types/node@25.9.1)(esbuild@0.28.1)(jiti@2.7.0)(tsx@4.23.13)(yaml@2.9.0))
 
   packages/framework/next:
+    dependencies:
+      '@igrp/framework-next-auth':
+        specifier: workspace:*
+        version: link:../next-auth
+      '@igrp/framework-next-types':
+        specifier: workspace:*
+        version: link:../next-types
+      '@igrp/framework-next-ui':
+        specifier: workspace:*
+        version: link:../next-ui
+      '@igrp/platform-access-management-client-ts':
+        specifier: ^0.2.0-beta.15
+        version: 0.2.0-beta.15
     devDependencies:
       '@babel/cli':
         specifier: 8.0.4
@@ -427,18 +440,6 @@ importers:
       '@eslint/js':
         specifier: 9.39.4
         version: 9.39.4
-      '@igrp/framework-next-auth':
-        specifier: workspace:*
-        version: link:../next-auth
-      '@igrp/framework-next-types':
-        specifier: workspace:*
-        version: link:../next-types
-      '@igrp/framework-next-ui':
-        specifier: workspace:*
-        version: link:../next-ui
-      '@igrp/platform-access-management-client-ts':
-        specifier: ^0.2.0-beta.15
-        version: 0.2.0-beta.15
       '@swc/cli':
         specifier: 0.8.1
         version: 0.8.1(@swc/core@1.16.1)(chokidar@5.0.0)
@@ -566,6 +567,15 @@ importers:
 
   packages/framework/next-ui:
     dependencies:
+      '@igrp/framework-next-auth':
+        specifier: workspace:*
+        version: link:../next-auth
+      '@igrp/framework-next-types':
+        specifier: workspace:*
+        version: link:../next-types
+      '@igrp/igrp-framework-react-design-system':
+        specifier: workspace:*
+        version: link:../../design-system
       class-variance-authority:
         specifier: 0.7.1
         version: 0.7.1
@@ -603,15 +613,6 @@ importers:
       '@babel/preset-typescript':
         specifier: 8.0.1
         version: 8.0.1(@babel/core@8.0.1)
-      '@igrp/framework-next-auth':
-        specifier: workspace:*
-        version: link:../next-auth
-      '@igrp/framework-next-types':
-        specifier: workspace:*
-        version: link:../next-types
-      '@igrp/igrp-framework-react-design-system':
-        specifier: workspace:*
-        version: link:../../design-system
       '@swc/cli':
         specifier: 0.8.1
         version: 0.8.1(@swc/core@1.16.1)(chokidar@5.0.0)

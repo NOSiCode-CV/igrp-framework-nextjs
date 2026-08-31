@@ -12,7 +12,13 @@
     "@igrp/framework-next-template": "0.1.0-beta.115"
   },
   "changesets": [
+    "brave-otters-repeat",
+    "calendar-month-bounds",
     "lazy-otters-migrate",
+    "lucky-donkeys-tickle",
+    "next-ui-tokens-import-fix",
+    "packaging-manifest-hygiene",
+    "permissions-hardening-claims-recovery",
     "quiet-herons",
     "silver-falcons",
     "thick-otters-relax",

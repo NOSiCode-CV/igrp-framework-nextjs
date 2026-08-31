@@ -1,5 +1,51 @@
 # @igrp/template-migrator
 
+## 0.1.0-beta.135
+
+### Patch Changes
+
+- ac117fe: Fix three cases where the CLI reported success while leaving an app in a wrong state.
+
+  **An interrupted `apply` no longer corrupts the recorded undo.** The lock entry is written only after a whole migration succeeds, so a signal (Ctrl-C, CI timeout, crash) between the last step and that write left files mutated with nothing recorded. The retry then captured its undo baseline from the _already-migrated_ files, so the lock claimed migrated content was the pre-migration original and a later `rollback` silently restored the wrong state. The in-process transactional unwind never covered this — it only runs inside `catch`.
+
+  `apply` now keeps a crash-durable journal (`.igrp-migration-journal.json`) in the app root, written before the first step and cleared once the lock entry is safe. On startup a surviving journal is replayed to revert the interrupted migration before anything else, then the migration re-applies from a clean baseline; if a path cannot be restored, `apply` aborts rather than proceeding on an unknown baseline. The unwind logic is now shared (`src/unwind.ts`) between the error path and crash recovery so both leave the tree in the same state.
+
+  **`rollback` refuses scaffold-baseline entries.** Entries with no undo steps and no stored payloads come from the template's shipped lock — a scaffolded app already contained the result, so nothing was executed and nothing was captured. Rolling one back previously printed `✓ rolled back`, changed no files, and removed the entry, leaving the app claiming the migration was unapplied so the next `apply` re-ran it. It now refuses and explains why; `--force` still drops the entry.
+
+  **`status` lists lock entries it doesn't ship** instead of only counting them. An app migrated by a newer CLI previously showed `30 applied` above a list of 29 rows, with nothing explaining the gap. Unknown entries are now printed with the CLI version that applied them, and the summary says how many came from a newer CLI.
+
+  **The template zip now normalises line endings to LF too.** The previous release fixed this for the CLI channel (payloads are normalised into `dist/` at pack time), but the zip is built from the working tree — so on a Windows checkout with `core.autocrlf=true`, `pnpm release:demo` still produced a CRLF zip while the migrator shipped LF. `create-zip-template.ps1` now normalises the tree before `Compress-Archive`, using the same NUL-byte binary guard, so both channels agree regardless of who built the artifact.
+
+  Verified by diffing a scaffolded app against a CLI-upgraded one: **0 differences across all 50 migration-managed paths** (previously 37 diverged).
+
+  Also: the transient journal is exempt from the drift gate's new-file check, and the consumer guide documents crash recovery and the rollback refusal.
+
+- db1cbeb: Add a template-lock axis to the drift gate, and fix the stale lock it caught.
+
+  The template ships `.igrp-migrations-lock.json` inside the zip so a scaffolded app opens with every migration already applied. That lock had fallen 9 migrations behind (it recorded through `20-sidebar-trigger-in-header` while the CLI ships 29), so a brand-new app reported migrations it already contained as pending: `igrp-migrate check` failed on day one and `apply` re-ran finished work, recording `undo` entries for a state the app was never in.
+
+  - `check:drift` now reconciles the shipped lock as a fourth axis — alongside file payloads, dependency pins, and new files — failing on unrecorded migrations, entries for migrations that no longer exist, stale `manifestHash` values, and out-of-order entries. Nothing else covered this file: the orphan check exempts it by path and no migration manages its content.
+  - New `sync:template-lock` script regenerates the lock (`--check` for a dry run). Regeneration is append-and-refresh: existing entries keep their recorded `appliedAt` and `cliVersion`.
+  - `pack.ts` and the new lock logic now share `hashSteps()`, so a lock entry's `manifestHash` and the manifest's `contentHash` cannot be computed differently.
+  - Docs: corrected the `file.create` step-type reference (it overwrites an existing destination rather than failing), documented the previously-undocumented `env.remove` step type, and documented the lock axis and sync workflow.
+
+  Also fixes three consumer-visible defects found by running a full 29-migration upgrade and diffing the result against the template (which moved it from 64 to 101 of 102 files byte-identical):
+
+  - **Text payloads are now normalised to LF when packed into `dist/`.** Payloads are captured on Windows and carried CRLF while the live template is LF, so an upgraded app diverged from a scaffolded one in 37 of 44 managed files — the template's own Biome run would rewrite every one of them, and `git diff` after an `apply` showed whole-file churn instead of the change that landed. Binary payloads (NUL-byte detection) are still copied verbatim.
+  - **`deps.bump` now warns about dependencies the app doesn't declare** instead of skipping them silently. It still won't add them (that could contradict a deliberate removal), but a silent skip turned a load-bearing bump — e.g. the AM client that `29-permissions-catalog-sync` needs for `syncPermissions` — into a runtime failure long after `apply` reported success.
+  - **`apply` now says when `.env.example` gained keys.** Migrations never touch a consumer's real `.env`, so new settings previously landed only in the example file with nothing prompting anyone to copy them across — including credentials with no defaults that the app needs to boot.
+  - A corrupt template lock is now reported as a normal gate failure rather than crashing `check:drift` with a raw `JSON.parse` stack trace.
+
+- f3e0c00: Library packaging hygiene across all published packages:
+
+  - `@igrp/framework-next`: `next`, `react`, `react-dom` moved from `dependencies` to `peerDependencies` (range-based) — prevents duplicate React copies in consumer apps.
+  - All packages: exact-pinned `peerDependencies` relaxed to caret ranges (`react ^19.2.0`, `next ^15.5.0`, `next-auth ^4.24.0`, `zod ^4.4.0`, etc.) so consumers on newer patch/minor versions no longer get unmet-peer errors.
+  - `@igrp/igrp-framework-react-design-system`, `@igrp/framework-next-ui`: `tailwindcss` moved to `devDependencies` (Tailwind compiles in the consuming app); unused `zod` dependency removed from `next-ui`; duplicated `publishConfig.exports` removed.
+  - `@igrp/framework-next-types`: added an `exports` map (blocks deep imports into `dist/`, consistent with the other packages).
+  - `@igrp/framework-next`, `@igrp/template-migrator`: `types` condition now listed first in `exports`.
+  - `@igrp/template-migrator`: added `license`, `author`, top-level `types`, `publishConfig.tag`/`access`; `clean` now uses cross-platform `rimraf`.
+  - All packages: added `repository`/`homepage`/`bugs` metadata, normalized `engines.node` to `>=22`, added `./package.json` export.
+
 ## 0.1.0-beta.134
 
 ### Patch Changes

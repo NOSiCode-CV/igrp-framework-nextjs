@@ -1,5 +1,6 @@
 ---
 "@igrp/framework-next": patch
+"@igrp/framework-next-types": patch
 "@igrp/framework-next-ui": patch
 ---
 
@@ -47,5 +48,33 @@ Permissions hardening: server-action claims recovery + live client claims
   via the new `homeLabel` / `homeHref` props; pass `homeHref={null}` to render
   no action when the surrounding shell already offers navigation.
 
-Both changes are additive: each affects only states that previously failed
-outright.
+**`@igrp/framework-next-types`**
+
+- New `IGRPPermissionCatalogEntry` (`{ name, description?, enabled }`) — a
+  permission an app **declares** for registration in the Access Management
+  catalog. Deliberately distinct from `IGRPPermissionArgs`, which is the record
+  AM *returns* (it carries AM's `id`, `status` and `departmentCode`), and from a
+  permission **claim** on the access token. Registering an entry does not make
+  it checkable.
+- New `apiManagementConfig.syncPermissions` (default `false`) and
+  `apiManagementConfig.onCodePermissions`.
+
+**`@igrp/framework-next` — permission catalog sync**
+
+- New `igrpSyncPermissions`, wired as a fourth arm of the existing startup-sync
+  pipeline alongside routes and menus. Gated by `syncPermissions` on top of the
+  existing `syncAccess` / `previewMode` gates, so enabling the capability cannot
+  make an existing deployment start writing to the shared AM without opting in.
+- Idempotent upsert keyed on `name`; entries removed from the catalog are not
+  deleted in AM. An empty catalog is skipped rather than sent as an empty upsert.
+- `planAccessManagementSync` validates catalog names against
+  `^[A-Za-z0-9._-]{1,255}$` and **skips** malformed entries with a warning
+  instead of throwing — one bad name should not stop an app from booting. It
+  also warns off-production when a catalog name contains a dot, because
+  `claimsAllow` treats such a name as already department-qualified and a
+  bare-name check would silently deny.
+- `id` is omitted from the wire payload rather than sent as `0`, which a backend
+  matching on id could misread as an update.
+
+Both permission-gating changes above are additive: each affects only states that
+previously failed outright.

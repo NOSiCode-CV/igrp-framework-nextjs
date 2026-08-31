@@ -14,6 +14,7 @@ export type {
   IGRPGlobalConfigurationArgs,
   IGRPFileUrlArgs,
   IGRPPermissionArgs,
+  IGRPPermissionCatalogEntry,
   IGRPResourceType,
   IGRPResourceItem,
   IGRPResourceArgs,

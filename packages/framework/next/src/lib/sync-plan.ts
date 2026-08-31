@@ -1,6 +1,11 @@
 import 'server-only';
 
-import type { IGRPConfigArgs, IGRPMenuItemArgs, IGRPPackageJson } from '@igrp/framework-next-types';
+import type {
+  IGRPConfigArgs,
+  IGRPMenuItemArgs,
+  IGRPPackageJson,
+  IGRPPermissionCatalogEntry,
+} from '@igrp/framework-next-types';
 import type { AccessManagementClient } from '@igrp/platform-access-management-client-ts';
 
 import { IgrpConfigError } from '../errors';
@@ -24,6 +29,9 @@ export type IGRPAccessManagementSyncPlan = {
   menus: IGRPMenuItemArgs[];
   syncOnCodeMenus: boolean;
   syncOnCodeMenuRoles: boolean;
+  /** Validated catalog — entries with malformed names have been dropped. */
+  permissions: IGRPPermissionCatalogEntry[];
+  syncPermissions: boolean;
   appRoutes?: string[];
   paramMapBody?: string;
 };
@@ -34,6 +42,8 @@ export type IGRPPlanAccessManagementSyncArgs = {
   appCode: string;
   appInformation: IGRPPackageJson;
   menus: IGRPMenuItemArgs[];
+  /** Optional so existing callers keep compiling; defaults to an empty catalog. */
+  permissions?: IGRPPermissionCatalogEntry[];
   apiManagementConfig: IGRPConfigArgs['apiManagementConfig'];
 };
 
@@ -51,6 +61,63 @@ export type IGRPPlanAccessManagementSyncArgs = {
  */
 const SERVICE_ID_PATTERN = /^[a-z0-9][a-z0-9_-]{0,62}[a-z0-9]$/i;
 const APP_CODE_PATTERN = /^[A-Z0-9][A-Z0-9_]{0,62}[A-Z0-9]$/;
+
+/**
+ * The AM contract for a permission `name`: `^[A-Za-z0-9._-]+$`, max 255 chars.
+ * Validated here rather than left to AM's `400`, because the sync runs
+ * post-stream inside `after()` where a rejection only reaches a server log.
+ */
+const PERMISSION_NAME_PATTERN = /^[A-Za-z0-9._-]{1,255}$/;
+
+/**
+ * Drop catalog entries AM would reject, keeping the rest.
+ *
+ * Deliberately NOT a thrown `IgrpConfigError` like `serviceId`/`appCode`:
+ * those are prerequisites for any sync at all, whereas one malformed name is
+ * partial data in an opt-in, best-effort push. Refusing to boot a production
+ * app over a typo in a catalog entry is disproportionate — so warn loudly,
+ * naming the offenders, and sync what is valid.
+ */
+function validatePermissionCatalog(
+  entries: IGRPPermissionCatalogEntry[],
+): IGRPPermissionCatalogEntry[] {
+  const valid: IGRPPermissionCatalogEntry[] = [];
+  const invalid: string[] = [];
+
+  for (const entry of entries) {
+    if (typeof entry?.name === 'string' && PERMISSION_NAME_PATTERN.test(entry.name)) {
+      valid.push(entry);
+    } else {
+      invalid.push(String(entry?.name));
+    }
+  }
+
+  if (invalid.length > 0) {
+    console.warn(
+      `[igrp] ${invalid.length} permission(s) skipped — a name must match ` +
+        `${PERMISSION_NAME_PATTERN.source}: ${invalid.join(', ')}`,
+    );
+  }
+
+  // Dev-only ergonomics warning. `claimsAllow` treats a name CONTAINING a dot
+  // as already department-qualified and matches it verbatim, so a bare-name
+  // check against a dotted suffix silently denies: with org `DEPT` and the
+  // permission `DEPT.invoice.delete`, `igrpAuthorize('invoice.delete')` is
+  // false. Catalog names should be bare suffixes (`manage_access`).
+  if (process.env.NODE_ENV !== 'production') {
+    const dotted = valid.filter((e) => e.name.includes('.')).map((e) => e.name);
+    if (dotted.length > 0) {
+      console.warn(
+        '[igrp] permission name(s) contain a dot: ' +
+          `${dotted.join(', ')}. A bare-name igrpAuthorize('<suffix>') will NOT match ` +
+          'these — it treats a dotted name as already department-qualified. Either use ' +
+          'bare suffixes in the catalog, or always pass the fully-qualified name.',
+      );
+    }
+  }
+
+  return valid;
+}
 
 /**
  * Synchronous validator+planner. Runs during `IGRPRootLayout` render so any
@@ -156,6 +223,8 @@ export function planAccessManagementSync(
     // Defaults to `true` (matches the AM client default) — only an explicit
     // `false` disables role sync during the on-code menu push.
     syncOnCodeMenuRoles: cfg!.syncOnCodeMenuRoles !== false,
+    permissions: validatePermissionCatalog(args.permissions ?? []),
+    syncPermissions: cfg!.syncPermissions === true,
     appRoutes: cfg!.appRoutes,
     paramMapBody: cfg!.paramMapBody,
   };

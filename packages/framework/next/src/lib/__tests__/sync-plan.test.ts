@@ -200,3 +200,76 @@ describe('planAccessManagementSync', () => {
     );
   });
 });
+
+describe('planAccessManagementSync — permission catalog', () => {
+  beforeEach(() => {
+    vi.restoreAllMocks();
+  });
+
+  it('defaults to an empty catalog and syncPermissions=false when omitted', () => {
+    const plan = planAccessManagementSync(makeArgs());
+    expect(plan?.permissions).toEqual([]);
+    expect(plan?.syncPermissions).toBe(false);
+  });
+
+  it('reads syncPermissions from apiManagementConfig', () => {
+    const plan = planAccessManagementSync(
+      makeArgs({
+        apiManagementConfig: {
+          baseUrl: 'https://am.example.com',
+          serviceId: 'test-service',
+          m2mClientId: 'cid',
+          m2mClientSecret: 'csecret',
+          syncPermissions: true,
+        },
+      }),
+    );
+    expect(plan?.syncPermissions).toBe(true);
+  });
+
+  it('keeps valid names and DROPS malformed ones with a warning (never throws)', () => {
+    const warn = vi.spyOn(console, 'warn').mockImplementation(() => {});
+
+    const plan = planAccessManagementSync(
+      makeArgs({
+        permissions: [
+          { name: 'manage_access', enabled: true },
+          { name: 'has space', enabled: true },
+          { name: 'has/slash', enabled: true },
+          { name: '', enabled: true },
+          { name: 'a'.repeat(256), enabled: true },
+          { name: 'valid.dotted-name_2', enabled: true },
+        ],
+      }),
+    );
+
+    expect(plan?.permissions.map((p) => p.name)).toEqual(['manage_access', 'valid.dotted-name_2']);
+    const messages = warn.mock.calls.map((c) => String(c[0])).join('\n');
+    expect(messages).toContain('4 permission(s) skipped');
+    expect(messages).toContain('has space');
+  });
+
+  it('warns that a dotted name breaks bare-name igrpAuthorize (dev only)', () => {
+    const warn = vi.spyOn(console, 'warn').mockImplementation(() => {});
+
+    planAccessManagementSync(
+      makeArgs({ permissions: [{ name: 'DEPT.invoice.delete', enabled: true }] }),
+    );
+
+    const messages = warn.mock.calls.map((c) => String(c[0])).join('\n');
+    expect(messages).toContain('contain a dot');
+    expect(messages).toContain('DEPT.invoice.delete');
+  });
+
+  it('stays silent about dotted names in production', () => {
+    const warn = vi.spyOn(console, 'warn').mockImplementation(() => {});
+    vi.stubEnv('NODE_ENV', 'production');
+
+    planAccessManagementSync(
+      makeArgs({ permissions: [{ name: 'DEPT.invoice.delete', enabled: true }] }),
+    );
+
+    expect(warn.mock.calls.map((c) => String(c[0])).join('\n')).not.toContain('contain a dot');
+    vi.unstubAllEnvs();
+  });
+});

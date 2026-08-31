@@ -1,7 +1,7 @@
 import type { Session } from '@igrp/framework-next-auth';
 import type { SessionProviderProps } from '@igrp/framework-next-auth/client';
 
-import type { IGRPMenuItemArgs } from './access-management';
+import type { IGRPMenuItemArgs, IGRPPermissionCatalogEntry } from './access-management';
 import type { IGRPHeaderDataArgs } from './header';
 import type { IGRPSidebarDataArgs } from './sidebar';
 import type { IGRPPackageJson, IGRPToasterPosition } from './globals';
@@ -94,6 +94,39 @@ export type IGRPConfigArgs = {
      * the template.
      */
     syncOnCodeMenuRoles?: boolean;
+    /**
+     * When `true`, the framework pushes `onCodePermissions` to the Access
+     * Management permission catalog at startup via
+     * `client.m2m.syncPermissions`. Like the menu push, it is an inner phase
+     * of the AM sync pipeline and only runs when the outer gates are also
+     * satisfied (`syncAccess === true` and `previewMode === false`).
+     *
+     * Default `false`: enabling the capability must never make an existing
+     * deployment start writing to the shared central AM without opting in.
+     *
+     * The sync is an **idempotent upsert keyed on `name`** — entries removed
+     * from the catalog are NOT deleted in AM (that would break tokens already
+     * granting them); retire them via the AM admin UI.
+     *
+     * Sourced from `process.env.IGRP_SYNC_PERMISSIONS === "true"` in the
+     * template.
+     */
+    syncPermissions?: boolean;
+    /**
+     * The permission catalog pushed to Access Management when
+     * `syncPermissions` is true. Typically loaded from
+     * `.igrpstudio/permissions.json` (maintained by iGRP Studio).
+     *
+     * Registering an entry does **not** make it checkable — AM must still
+     * grant it to a role and the user's token must carry the resulting claim.
+     * See `IGRPPermissionCatalogEntry` for the three distinct senses of
+     * "permission" in this codebase.
+     *
+     * Required only when `syncPermissions` is true. Omitting it (or passing an
+     * empty array) is a no-op: the push is skipped rather than sending an
+     * empty upsert.
+     */
+    onCodePermissions?: IGRPPermissionCatalogEntry[];
   };
   toasterConfig: {
     showToaster: boolean;

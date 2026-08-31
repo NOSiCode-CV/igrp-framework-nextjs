@@ -40,6 +40,7 @@ export async function IGRPRootLayout({ children, config }: IGRPRootLayoutArgs) {
     appCode,
     appInformation,
     menus: apiManagementConfig?.onCodeMenus ?? [],
+    permissions: apiManagementConfig?.onCodePermissions ?? [],
     apiManagementConfig,
   });
 

@@ -10,6 +10,7 @@ How the template gates **pages**, **components**, and **menus** by the current u
 - [Gating a server action](#gating-a-server-action)
 - [Permission names & the active department](#permission-names--the-active-department)
 - [Enforcement layering](#enforcement-layering)
+- [The catalog vs the claims](#the-catalog-vs-the-claims-three-senses-of-permission)
 - [Preview mode](#preview-mode)
 - [Per-page guard checklist](#per-page-guard-checklist-there-is-no-default-deny)
 - [API reference](#api-reference)
@@ -160,6 +161,29 @@ Pass the **bare suffix** (`"manage_access"`); it is auto-qualified with the user
 Token-claims gating is fast and convenient; the AM API is the source of truth. **A gated button with an un-gated server action behind it is not secure.**
 
 > **The menu row is not a gate.** A menu item's `roles` field is metadata: **nothing** in this template or in `@igrp/framework-next-ui` filters menus on it — the sidebar renders whatever list it is handed. In production that list is already scoped server-side by AM, which is why the row says "server-trusted"; in preview/bypass mode the list is the mock in `src/temp/menus/menus.ts`, so **every** item renders regardless of `roles`. Either way a user can deep-link straight to the route, so menu visibility never substitutes for a page guard.
+
+## The catalog vs the claims (three senses of "permission")
+
+The word means three different things here. Conflating them is the likeliest way to misuse this:
+
+| Sense | What it is | Where |
+| --- | --- | --- |
+| **Catalog entry** | A permission the app **declares** so AM knows it exists: `{ name, description, enabled }`. No id, no department. | `.igrpstudio/permissions.json` → `IGRPPermissionCatalogEntry` |
+| **AM record** | The permission **as AM returns it** — AM's `id`, `status`, `departmentCode`. A read model. | `IGRPPermissionArgs` |
+| **Token claim** | The string actually checked at runtime: `` `${org}.${name}` `` in the access token's `permissions[]`. | `claimsAllow` / `igrpAuthorize` |
+
+**Registering a permission does not make it checkable.** The catalog sync is *write-only*: it tells AM the permission exists so a department manager can bind it to a role. Until that binding happens and the user gets a fresh token, every gate on that permission still denies. The chain is:
+
+```
+.igrpstudio/permissions.json  →  AM catalog        (IGRP_SYNC_PERMISSIONS=true, at startup)
+AM catalog                    →  role             (manual, AM admin UI)
+role                          →  user's token     (on next login / token refresh)
+token claim                   →  igrpAuthorize()  (what the gates read)
+```
+
+**Keep catalog names bare** (`manage_access`, not `DEPT_IGRP.manage_access`). AM qualifies with the department when granting, so the token claim becomes `DEPT_IGRP.manage_access` and a bare-name gate matches. A catalog name **containing a dot** is treated by `claimsAllow` as already fully-qualified and matched verbatim — so with the permission `DEPT.invoice.delete`, `igrpAuthorize("invoice.delete")` **silently denies**. Off-production the framework warns when it sees a dotted catalog name.
+
+Enable the push with `IGRP_SYNC_PERMISSIONS=true` (requires `IGRP_SYNC_ACCESS=true` and `IGRP_PREVIEW_MODE=false`). It is an idempotent upsert keyed on `name`; entries you delete from the JSON are **not** removed in AM — retire those through the AM admin UI. A malformed name is skipped with a warning rather than blocking boot.
 
 ## Preview mode
 

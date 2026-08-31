@@ -3,6 +3,7 @@ import 'server-only';
 import type { IGRPAccessManagementSyncPlan } from './sync-plan';
 import { igrpSyncApplication } from './sync-application';
 import { igrpSyncMenus } from './sync-menus';
+import { igrpSyncPermissions } from './sync-permissions';
 import { igrpSyncRoutes } from './sync-routes';
 
 /**
@@ -39,9 +40,12 @@ export async function igrpStartupSync(plan: IGRPAccessManagementSyncPlan): Promi
         appCode: plan.appCode,
       });
 
-      // Routes and menus are independent of each other — run in parallel.
-      // Both share the same `plan.client`, so the OAuth2 token cache hits
-      // for the second call regardless of which finishes first.
+      // Routes, menus and the permission catalog are independent of each
+      // other — run in parallel. They share the same `plan.client`, so the
+      // OAuth2 token cache hits for the later calls regardless of order.
+      // Permissions carry no `applicationCode` and an empty `departmentCode`
+      // (a flat global catalog), so they have no ordering constraint against
+      // menus or routes.
       await Promise.all([
         igrpSyncRoutes({
           client: plan.client,
@@ -55,6 +59,11 @@ export async function igrpStartupSync(plan: IGRPAccessManagementSyncPlan): Promi
           menus: plan.menus,
           syncEnabled: plan.syncOnCodeMenus,
           syncRoles: plan.syncOnCodeMenuRoles,
+        }),
+        igrpSyncPermissions({
+          client: plan.client,
+          permissions: plan.permissions,
+          syncEnabled: plan.syncPermissions,
         }),
       ]);
 

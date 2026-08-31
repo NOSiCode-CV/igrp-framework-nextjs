@@ -1,10 +1,12 @@
 import { createInterface } from "readline";
-import { existsSync, mkdirSync, readFileSync, statSync, writeFileSync } from "fs";
-import { dirname, join } from "path";
+import { existsSync, readFileSync, statSync } from "fs";
+import { join } from "path";
 import { getManifest } from "../manifest.js";
 import { readLock, writeLock } from "../lock.js";
 import { executeStep } from "../apply.js";
 import { hashFile } from "../hash.js";
+import { clearJournal, readJournal, writeJournal, type Journal } from "../journal.js";
+import { unwindSteps } from "../unwind.js";
 import type { LockEntry, MigrationStep } from "../types.js";
 
 async function confirm(question: string): Promise<boolean> {
@@ -19,6 +21,32 @@ export async function apply(
   opts: { toId?: string; yes?: boolean; payloadDir?: string }
 ) {
   const manifest = getManifest();
+
+  // A journal on disk means a previous run died mid-migration (signal, crash,
+  // CI timeout) after mutating files but before recording them. Put the tree
+  // back before doing anything else: without this the migration re-runs and
+  // captures its undo baseline from already-migrated files, which silently
+  // makes a later rollback restore the wrong content. See journal.ts.
+  const pendingJournal = readJournal(appRoot);
+  if (pendingJournal) {
+    console.log(`\nRecovering from an interrupted run of ${pendingJournal.id}...`);
+    const { reverted, failures } = unwindSteps(
+      pendingJournal.undo,
+      pendingJournal.undoPayloads ?? {},
+      appRoot,
+      opts.payloadDir,
+    );
+    console.log(`  reverted ${reverted} step(s) from the interrupted migration`);
+    for (const failure of failures) console.error(`  ✗ ${failure}`);
+    if (failures.length > 0) {
+      console.error("\n  Recovery was incomplete — restore the listed paths (e.g. from git)");
+      console.error("  before re-running, or the migration may record a wrong undo baseline.\n");
+      return;
+    }
+    clearJournal(appRoot);
+    console.log("  ✓ recovered\n");
+  }
+
   const lock = readLock(appRoot);
   // Self-heal: stamp the current template identifier so apps migrated under an
   // older identifier (e.g. the former "demo-legacy") converge on the current one.
@@ -53,6 +81,17 @@ export async function apply(
     const fileHashes: Record<string, string> = {};
     const undoPayloads: Record<string, string> = {};
     const undoSteps: MigrationStep[] = [];
+    // Opened before the first step and cleared only once the lock entry is
+    // persisted, so an interruption anywhere in between is recoverable.
+    const journal: Journal = {
+      version: 1,
+      id: migration.id,
+      startedAt: new Date().toISOString(),
+      cliVersion: manifest.cliVersion,
+      undo: undoSteps,
+      undoPayloads,
+    };
+    writeJournal(appRoot, journal);
     try {
       for (const step of migration.steps) {
         const pathKey = (step as Record<string, unknown>).path ?? (step as Record<string, unknown>).file ?? (step as Record<string, unknown>).manifest;
@@ -85,6 +124,9 @@ export async function apply(
         if (undo.type === "env.remove" && undo.keys.length > 0) {
           envFilesTouched.add(undo.file);
         }
+        // Persist progress after every step — `undo`/`undoPayloads` are the same
+        // objects the journal holds, so this snapshots what has run so far.
+        writeJournal(appRoot, journal);
         console.log(`  ✓ ${step.type}  ${pathKey}`);
       }
     } catch (err) {
@@ -93,25 +135,9 @@ export async function apply(
       // so disk returns to its pre-migration state. Without this, a re-run
       // re-captures undo baselines from already-mutated files, silently
       // corrupting the recorded "original" content used by rollback.
-      for (const undo of [...undoSteps].reverse()) {
-        try {
-          const undoRec = undo as { path?: string; from?: string; patch?: string };
-          const isPlaceholder = undoRec.from === "__undo__" || undoRec.patch === "__undo__";
-          if (isPlaceholder) {
-            const p = undoRec.path;
-            const content = p !== undefined ? undoPayloads[p] : undefined;
-            if (p !== undefined && content !== undefined) {
-              const dest = join(appRoot, p);
-              mkdirSync(dirname(dest), { recursive: true });
-              writeFileSync(dest, content, "utf8");
-            }
-          } else {
-            executeStep(undo, appRoot, opts.payloadDir);
-          }
-        } catch (unwindErr) {
-          console.error(`  ✗ Unwind step failed: ${(unwindErr as Error).message}`);
-        }
-      }
+      const { failures } = unwindSteps(undoSteps, undoPayloads, appRoot, opts.payloadDir);
+      for (const failure of failures) console.error(`  ✗ Unwind step failed: ${failure}`);
+      clearJournal(appRoot);
       console.error("  Migration aborted and rolled back. Fix the cause, then re-run.");
       return;
     }
@@ -127,6 +153,8 @@ export async function apply(
     };
     lock.applied.push(entry);
     writeLock(appRoot, lock);
+    // The migration is now durably recorded — the journal has served its purpose.
+    clearJournal(appRoot);
     appliedIds.add(migration.id);
     console.log(`  ✓ done\n`);
   }

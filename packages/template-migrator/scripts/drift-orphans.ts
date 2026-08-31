@@ -39,6 +39,8 @@ export const TEMPLATE_EXEMPT_FILES: string[] = [
   "AGENTS.md",
   // migration state, written by the CLI itself in consumer apps
   ".igrp-migrations-lock.json",
+  // transient crash-recovery journal, written by `apply` and removed on success
+  ".igrp-migration-journal.json",
 ];
 
 export interface OrphanReport {

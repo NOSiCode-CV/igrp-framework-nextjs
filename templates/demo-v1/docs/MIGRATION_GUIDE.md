@@ -134,6 +134,14 @@ pnpm dlx @igrp/template-migrator@latest rollback 04-multi-auth-provider --force
 
 Rollback is not atomic: if it is interrupted, re-running it is safe — the restores are idempotent and the stored payloads stay in the lock until the final write.
 
+**Migrations that came with your app can't be rolled back.** If your app was scaffolded from the template zip, it arrived with every migration already recorded — the template already contained their result, so the CLI never ran them here and captured nothing to reverse. Rollback refuses those rather than quietly removing the record:
+
+```
+Cannot roll back 29-permissions-catalog-sync — nothing to reverse.
+```
+
+Revert the files yourself (from git) if you need to undo one. `--force` drops the lock entry without touching files, which makes the next `apply` re-run the migration.
+
 ---
 
 ### `convert` — upgrade a legacy lock file
@@ -231,7 +239,15 @@ Full prose guides with before/after code live in the framework repo under `packa
 
 ## Troubleshooting
 
-**Partially applied migration** — re-run `apply`. The lock file tracks the last completed migration, so only the interrupted one retries from the start.
+**Partially applied migration** — re-run `apply`. If a run was interrupted (Ctrl-C, a CI timeout, a crash) partway through a migration, the CLI leaves a `.igrp-migration-journal.json` in your project root recording what had already run. The next `apply` reverts those steps first, then re-applies the migration from a clean baseline:
+
+```
+Recovering from an interrupted run of 29-permissions-catalog-sync...
+  reverted 3 step(s) from the interrupted migration
+  ✓ recovered
+```
+
+This matters for more than tidiness — without it the retry would treat the half-migrated files as the "original" state and record an undo that restores the wrong content. The journal is transient: it exists only while a migration is in flight, and you should not commit it. If recovery reports a path it could not restore, fix that path (from git) before re-running.
 
 **Build fails after applying** — roll back, check that migration's prose guide for manual steps your app may need, then re-apply:
 

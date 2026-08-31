@@ -22,6 +22,8 @@ packages/template-migrator/
 │   ├── manifest.ts          # Loads dist/manifest.json at runtime
 │   ├── apply.ts             # Executes a single MigrationStep against an app root
 │   ├── lock.ts              # Reads/writes .igrp-migrations-lock.json (consumer project root)
+│   ├── journal.ts           # Crash-durable record of an in-flight migration
+│   ├── unwind.ts            # Reverses executed steps (shared: error path + crash recovery)
 │   ├── hash.ts              # File hashing helpers
 │   └── commands/
 │       ├── status.ts        # igrp-migrate status
@@ -310,6 +312,18 @@ interface LockEntry {
 ```
 
 The lock file is owned by the consumer — they commit it to version control. The CLI never deletes it; `rollback` removes the last entry and the files it wrote.
+
+An entry with an empty `undo` **and** no `undoPayloads` is a *baseline* entry: it came from the template's shipped lock, meaning a scaffolded app already contained that migration's result and the CLI never executed it there. `rollback` refuses those (unless `--force`), because removing one would report success, change no files, and leave the app claiming the migration is unapplied.
+
+## Crash recovery journal
+
+`apply` writes `.igrp-migration-journal.json` to the consumer's project root before a migration's first step, updates it after each step, and removes it once the lock entry is persisted.
+
+Its presence on startup means exactly one thing: a previous run died mid-migration. The in-process transactional unwind only runs inside `catch`, so a signal (Ctrl-C, CI timeout, power loss) bypasses it and leaves files mutated with nothing recorded. Without the journal, the retry would re-capture its undo baseline from the *already-migrated* files — so the lock would record migrated content as the pre-migration original, and a later `rollback` would silently restore the wrong state.
+
+On the next `apply` the recorded undo is replayed first (via `src/unwind.ts`, the same code the error path uses), then the migration re-applies from a clean baseline. If any path cannot be restored, `apply` aborts rather than proceeding on an unknown baseline.
+
+The journal is transient and consumer-local; it is exempt from the drift gate's new-file check.
 
 ---
 

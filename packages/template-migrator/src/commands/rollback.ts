@@ -32,6 +32,27 @@ export async function rollback(
   }
   const entry = lock.applied[idx];
 
+  // An entry with no undo steps and no stored payloads was never executed
+  // against this tree — it is a baseline entry from the template's shipped
+  // lock, recording that a freshly scaffolded app already contains the
+  // migration's result. There is nothing to reverse. Removing it anyway would
+  // report success, change no files, and leave the app claiming the migration
+  // is unapplied, so the next `apply` re-runs work that is already present.
+  const isBaselineEntry =
+    entry.undo.length === 0 && Object.keys(entry.undoPayloads ?? {}).length === 0;
+  if (isBaselineEntry && !opts.force) {
+    console.error(`\nCannot roll back ${id} — nothing to reverse.`);
+    console.error(
+      "\nThis migration is recorded as part of your app's scaffold baseline: the" +
+        "\ntemplate you were created from already contained its result, so the CLI" +
+        "\nnever executed it here and captured no undo content." +
+        "\n\nTo remove what it introduced, revert those files yourself (e.g. from git)." +
+        "\nRe-run with --force to drop the lock entry regardless — but note the files" +
+        "\nstay as they are, and the next `apply` will re-run the migration over them.\n",
+    );
+    return false;
+  }
+
   // A placeholder undo step is only restorable if apply stored the prior
   // content in undoPayloads (newer CLI versions do — see commands/apply.ts).
   const unrestorable = entry.undo.filter((step) => {

@@ -50,6 +50,60 @@ afterEach(() => {
   rmSync(appRoot, { recursive: true, force: true });
 });
 
+describe("rollback of a scaffold baseline entry", () => {
+  // The template's shipped lock records every migration with undo:[] — a
+  // scaffolded app already contains the result, so nothing was executed here.
+  // Removing such an entry would report success, change no files, and leave the
+  // app claiming the migration is unapplied.
+  it("refuses an entry with no undo steps and no stored payloads", async () => {
+    writeAppFile("src/untouched.ts", "SCAFFOLD CONTENT\n");
+    writeLock(appRoot, lockWith({ undo: [], fileHashes: {} }));
+
+    const ok = await rollback(appRoot, "07-test-migration");
+
+    expect(ok).toBe(false);
+    expect(readLock(appRoot).applied).toHaveLength(1);
+    expect(readFileSync(join(appRoot, "src/untouched.ts"), "utf8")).toBe("SCAFFOLD CONTENT\n");
+  });
+
+  it("drops the entry under --force, leaving files as they are", async () => {
+    writeAppFile("src/untouched.ts", "SCAFFOLD CONTENT\n");
+    writeLock(appRoot, lockWith({ undo: [], fileHashes: {} }));
+
+    const ok = await rollback(appRoot, "07-test-migration", { force: true });
+
+    expect(ok).toBe(true);
+    expect(readLock(appRoot).applied).toHaveLength(0);
+    expect(readFileSync(join(appRoot, "src/untouched.ts"), "utf8")).toBe("SCAFFOLD CONTENT\n");
+  });
+
+  it("still rolls back normally when the entry has real undo steps", async () => {
+    writeAppFile("src/created.ts", "CREATED BY MIGRATION\n");
+    writeLock(appRoot, lockWith({ undo: [{ type: "file.delete", path: "src/created.ts" }] }));
+
+    const ok = await rollback(appRoot, "07-test-migration");
+
+    expect(ok).toBe(true);
+    expect(existsSync(join(appRoot, "src/created.ts"))).toBe(false);
+  });
+
+  it("does not treat an entry carrying stored payloads as a baseline", async () => {
+    writeAppFile("src/edited.ts", "MIGRATED\n");
+    writeLock(
+      appRoot,
+      lockWith({
+        undo: [{ type: "file.write", mode: "replace", path: "src/edited.ts", from: "__undo__" }],
+        undoPayloads: { "src/edited.ts": "ORIGINAL\n" },
+      }),
+    );
+
+    const ok = await rollback(appRoot, "07-test-migration");
+
+    expect(ok).toBe(true);
+    expect(readFileSync(join(appRoot, "src/edited.ts"), "utf8")).toBe("ORIGINAL\n");
+  });
+});
+
 describe("rollback refusal (TM-1 phase 1)", () => {
   it("refuses when an undo step is a placeholder with no stored payload", async () => {
     writeAppFile("src/touched.ts", "migrated content\n");

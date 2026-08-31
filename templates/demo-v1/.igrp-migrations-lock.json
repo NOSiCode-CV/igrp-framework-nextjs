@@ -233,6 +233,14 @@
       "manifestHash": "91f5c658a584b08c",
       "undo": [],
       "fileHashes": {}
+    },
+    {
+      "id": "30-resync-beta166-deps",
+      "appliedAt": "2026-08-31T00:00:00.000Z",
+      "cliVersion": "0.1.0-beta.135",
+      "manifestHash": "e04dc78e6ba418cd",
+      "undo": [],
+      "fileHashes": {}
     }
   ]
 }

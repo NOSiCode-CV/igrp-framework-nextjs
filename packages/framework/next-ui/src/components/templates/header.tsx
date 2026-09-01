@@ -15,8 +15,12 @@ import { IGRPTemplateCommandSearch } from './command-search';
 import { IGRPTemplateModeSwitcher } from './mode-switcher';
 import { IGRPTemplateNavUser } from './nav-user';
 import { IGRPTemplateNotifications } from './notifications';
+import { IGRPTemplateImage } from './template-image';
 import Image from 'next/image';
 import Link from 'next/link';
+
+/** Bundled logo used when the header data carries no logo, or its logo fails to load. */
+const defaultHeaderLogo = `${process.env.NEXT_PUBLIC_BASE_PATH ?? ''}/logo-no-text.png`;
 
 interface IGRPTemplateHeaderProps {
   data: IGRPHeaderDataArgs;
@@ -86,13 +90,23 @@ function IGRPTemplateHeader({
           <div className="flex items-center gap-2">
             {showIGRPHeaderLogo && (
               <div className="size-10 rounded-lg overflow-hidden flex items-center justify-center">
-                <Image
-                  src={headerLogo || `${process.env.NEXT_PUBLIC_BASE_PATH ?? ''}/logo-no-text.png`}
+                <IGRPTemplateImage
+                  src={headerLogo || defaultHeaderLogo}
                   alt="IGRP"
                   width={40}
                   height={40}
                   className="object-contain size-10"
                   priority
+                  fallback={
+                    <Image
+                      src={defaultHeaderLogo}
+                      alt="IGRP"
+                      width={40}
+                      height={40}
+                      className="object-contain size-10"
+                      priority
+                    />
+                  }
                 />
               </div>
             )}

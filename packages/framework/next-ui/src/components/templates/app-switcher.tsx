@@ -15,9 +15,9 @@ import {
 } from '@igrp/igrp-framework-react-design-system';
 import type { IGRPApplicationArgs } from '@igrp/framework-next-types';
 import { useMemo } from 'react';
-import Image from 'next/image';
 
 import { getLocationOriginURL } from '../../lib/utils';
+import { IGRPTemplateImage } from './template-image';
 
 interface IGRPTemplateAppSwitcherProps {
   apps?: IGRPApplicationArgs[];
@@ -64,18 +64,15 @@ function IGRPTemplateAppSwitcher({ apps, appCode, appCenterUrl }: IGRPTemplateAp
                 <div
                   className={cn('flex aspect-square size-8 items-center justify-center rounded-lg')}
                 >
-                  {activeApp.picture ? (
-                    <Image
-                      src={activeApp.picture}
-                      alt={activeApp.name}
-                      width={32}
-                      height={32}
-                      className={cn('h-full w-full rounded-lg object-cover')}
-                      priority
-                    />
-                  ) : (
-                    <IGRPIcon iconName="GalleryVerticalEnd" />
-                  )}
+                  <IGRPTemplateImage
+                    src={activeApp.picture}
+                    alt={activeApp.name}
+                    width={32}
+                    height={32}
+                    className={cn('h-full w-full rounded-lg object-cover')}
+                    priority
+                    fallback={<IGRPIcon iconName="GalleryVerticalEnd" />}
+                  />
                 </div>
                 <div className={cn('grid flex-1 text-left text-sm leading-tight')}>
                   <span className={cn('truncate font-medium')}>{activeApp.name}</span>
@@ -97,18 +94,20 @@ function IGRPTemplateAppSwitcher({ apps, appCode, appCenterUrl }: IGRPTemplateAp
                       <div
                         className={cn('flex size-6 items-center justify-center rounded-md border')}
                       >
-                        {app.picture ? (
-                          <Image
-                            src={app.picture}
-                            alt={app.name}
-                            width={24}
-                            height={24}
-                            className={cn('h-full w-full rounded-md object-cover')}
-                            priority
-                          />
-                        ) : (
-                          <IGRPIcon iconName="AudioWaveform" className={cn('size-3.5 shrink-0')} />
-                        )}
+                        <IGRPTemplateImage
+                          src={app.picture}
+                          alt={app.name}
+                          width={24}
+                          height={24}
+                          className={cn('h-full w-full rounded-md object-cover')}
+                          priority
+                          fallback={
+                            <IGRPIcon
+                              iconName="AudioWaveform"
+                              className={cn('size-3.5 shrink-0')}
+                            />
+                          }
+                        />
                       </div>
                       {app.name}
                     </a>

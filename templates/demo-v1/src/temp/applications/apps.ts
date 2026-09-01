@@ -16,6 +16,10 @@ import type { IGRPApplicationArgs } from "@igrp/framework-next-types";
  *                   what the switcher's `appCode` prop selects as the active app.
  *  • href           `url` wins; otherwise `<origin>/<slug>`; otherwise `<origin>`.
  *  • `picture`       avatar shown in the switcher; empty/null falls back to an icon.
+ *                   Rendered with `next/image`: a path under `public/` always works,
+ *                   but an external URL needs its hostname whitelisted via
+ *                   `NEXT_PUBLIC_ALLOWED_DOMAINS` (see `next.config.ts`) or Next.js
+ *                   throws "hostname is not configured under images".
  *  • `description`   subtitle under the app name in the switcher.
  *  • `status`        lifecycle flag ("ACTIVE" | "INACTIVE" | "DELETED").
  *  • `departments`   department codes the app belongs to.
@@ -54,7 +58,7 @@ export const IGRP_MOCK_APPS_DATA: IGRPApplicationArgs[] = [
     status: "ACTIVE",
     type: "INTERNAL",
     owner: "superadmin",
-    picture: "https://avatar.vercel.sh/hr.png",
+    picture: "/logo-no-text.png",
     url: null,
     slug: "hr",
     departments: ["DEPT_HR"],

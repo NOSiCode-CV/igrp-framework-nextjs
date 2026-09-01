@@ -241,6 +241,14 @@
       "manifestHash": "1fc46adf391e01d2",
       "undo": [],
       "fileHashes": {}
+    },
+    {
+      "id": "31-resync-beta168-deps",
+      "appliedAt": "2026-08-31T00:00:00.000Z",
+      "cliVersion": "0.1.0-beta.137",
+      "manifestHash": "31f1c93c8c076064",
+      "undo": [],
+      "fileHashes": {}
     }
   ]
 }

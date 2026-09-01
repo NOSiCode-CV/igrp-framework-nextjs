@@ -1,5 +1,15 @@
 # @igrp/framework-next-ui
 
+## 0.1.0-beta.164
+
+### Patch Changes
+
+- 5a4ec99: - The design system now requires `zod` `^4.5.0` instead of `^4.4.0`, matching the range `@igrp/framework-next` already declares. Apps on zod `4.4.x` must upgrade to `4.5.x`.
+  - `@igrp/framework-next-ui` pins `react`, `react-dom` and `next-auth` as devDependencies so it builds and typechecks against the same versions every other framework package uses, instead of whatever the workspace happened to hoist.
+  - `@igrp/template-migrator` gains a typecheck config for its `scripts/` folder; no change to the published CLI or migration set.
+- Updated dependencies [5a4ec99]
+  - @igrp/igrp-framework-react-design-system@0.1.0-beta.143
+
 ## 0.1.0-beta.163
 
 ### Patch Changes

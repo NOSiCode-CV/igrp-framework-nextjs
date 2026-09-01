@@ -1,0 +1,653 @@
+// Jest Snapshot v1, https://jestjs.io/docs/snapshot-testing
+
+exports[`Components/InfoCard CompanyInfo smoke-test 1`] = `
+<div class="container px-6 py-12 mx-auto">
+  <div data-slot="card"
+       class="text-card-foreground flex flex-col gap-6 rounded-xl border py-6 shadow-sm bg-transparent"
+       id="_r_ID_"
+  >
+    <div data-slot="card-header"
+         class="@container/card-header grid auto-rows-min grid-rows-[auto_auto] items-start gap-2 px-6 has-data-[slot=card-action]:grid-cols-[1fr_auto] [.border-b]:pb-6"
+    >
+      <div data-slot="card-title"
+           class="text-2xl font-semibold leading-none tracking-tight"
+      >
+        Informações da Empresa
+      </div>
+    </div>
+    <div data-slot="card-content"
+         class="px-6 flex flex-col gap-4"
+    >
+      <div class="flex flex-col gap-0.5">
+        <span class="text-sm font-medium">
+          Razão Social
+        </span>
+        <div class="flex items-center gap-2">
+          <span>
+            TechCorp Solutions Lda
+          </span>
+        </div>
+      </div>
+      <div class="flex flex-col gap-0.5">
+        <span class="text-sm font-medium">
+          NIPC
+        </span>
+        <div class="flex items-center gap-2">
+          <span>
+            987654321
+          </span>
+        </div>
+      </div>
+      <div class="flex flex-col gap-0.5">
+        <span class="text-sm font-medium">
+          Setor
+        </span>
+        <div class="flex items-center gap-2">
+          <span>
+            Consultoria em TI
+          </span>
+        </div>
+      </div>
+      <div data-orientation="horizontal"
+           role="none"
+           data-slot="separator"
+           class="bg-border shrink-0 data-[orientation=horizontal]:h-px data-[orientation=horizontal]:w-full data-[orientation=vertical]:h-full data-[orientation=vertical]:w-px"
+      >
+      </div>
+      <div class="flex flex-col gap-0.5">
+        <span class="text-sm font-medium">
+          Website
+        </span>
+        <div class="flex items-center gap-2">
+          <span>
+            www.techcorp.pt
+          </span>
+        </div>
+      </div>
+      <div class="flex flex-col gap-0.5">
+        <span class="text-sm font-medium">
+          Email Corporativo
+        </span>
+        <div class="flex items-center gap-2">
+          <span>
+            info@techcorp.pt
+          </span>
+        </div>
+      </div>
+      <div class="flex flex-col gap-0.5">
+        <span class="text-sm font-medium">
+          Telefone Principal
+        </span>
+        <div class="flex items-center gap-2">
+          <span>
+            +351 210 123 456
+          </span>
+        </div>
+      </div>
+      <div data-orientation="horizontal"
+           role="none"
+           data-slot="separator"
+           class="bg-border shrink-0 data-[orientation=horizontal]:h-px data-[orientation=horizontal]:w-full data-[orientation=vertical]:h-full data-[orientation=vertical]:w-px"
+      >
+      </div>
+      <div class="flex flex-col gap-0.5">
+        <span class="text-sm font-medium">
+          Morada
+        </span>
+        <div class="flex items-center gap-2">
+          <span>
+            Av. da Liberdade, 200, Lisboa
+          </span>
+        </div>
+      </div>
+      <div class="flex flex-col gap-0.5">
+        <span class="text-sm font-medium">
+          Data de Constituição
+        </span>
+        <div class="flex items-center gap-2">
+          <span>
+            10/01/2020
+          </span>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+`;
+
+exports[`Components/InfoCard CustomTitle smoke-test 1`] = `
+<div class="container px-6 py-12 mx-auto">
+  <div data-slot="card"
+       class="text-card-foreground flex flex-col gap-6 rounded-xl border py-6 shadow-sm bg-transparent"
+       id="_r_ID_"
+  >
+    <div data-slot="card-header"
+         class="@container/card-header grid auto-rows-min grid-rows-[auto_auto] items-start gap-2 px-6 has-data-[slot=card-action]:grid-cols-[1fr_auto] [.border-b]:pb-6"
+    >
+      <div data-slot="card-title"
+           class="text-2xl font-semibold leading-none tracking-tight"
+      >
+        Perfil do Cliente Premium
+      </div>
+    </div>
+    <div data-slot="card-content"
+         class="px-6 flex flex-col gap-4"
+    >
+      <div class="flex flex-col gap-0.5">
+        <span class="text-sm font-medium">
+          Cliente ID
+        </span>
+        <div class="flex items-center gap-2">
+          <span>
+            PREM-2024-001
+          </span>
+        </div>
+      </div>
+      <div class="flex flex-col gap-0.5">
+        <span class="text-sm font-medium">
+          Nome
+        </span>
+        <div class="flex items-center gap-2">
+          <span>
+            Ana Costa
+          </span>
+        </div>
+      </div>
+      <div class="flex flex-col gap-0.5">
+        <span class="text-sm font-medium">
+          Nível
+        </span>
+        <div class="flex items-center gap-2">
+          <span>
+            Premium Gold
+          </span>
+        </div>
+      </div>
+      <div data-orientation="horizontal"
+           role="none"
+           data-slot="separator"
+           class="bg-border shrink-0 data-[orientation=horizontal]:h-px data-[orientation=horizontal]:w-full data-[orientation=vertical]:h-full data-[orientation=vertical]:w-px"
+      >
+      </div>
+      <div class="flex flex-col gap-0.5">
+        <span class="text-sm font-medium">
+          Email
+        </span>
+        <div class="flex items-center gap-2">
+          <span>
+            ana.costa@email.com
+          </span>
+        </div>
+      </div>
+      <div class="flex flex-col gap-0.5">
+        <span class="text-sm font-medium">
+          Membro desde
+        </span>
+        <div class="flex items-center gap-2">
+          <span>
+            15/06/2020
+          </span>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+`;
+
+exports[`Components/InfoCard Default smoke-test 1`] = `
+<div class="container px-6 py-12 mx-auto">
+  <div data-slot="card"
+       class="text-card-foreground flex flex-col gap-6 rounded-xl border py-6 shadow-sm bg-success hover:bg-success/90"
+       id="_r_ID_"
+  >
+    <div data-slot="card-header"
+         class="@container/card-header grid auto-rows-min grid-rows-[auto_auto] items-start gap-2 px-6 has-data-[slot=card-action]:grid-cols-[1fr_auto] [.border-b]:pb-6"
+    >
+      <div data-slot="card-title"
+           class="text-2xl font-semibold leading-none tracking-tight"
+      >
+        Informações Básicas
+      </div>
+    </div>
+    <div data-slot="card-content"
+         class="px-6 flex flex-col gap-4"
+    >
+      <div class="flex flex-col gap-0.5">
+        <span class="text-sm font-medium">
+          NIF
+        </span>
+        <div class="flex items-center gap-2">
+          <span>
+            123456789
+          </span>
+        </div>
+      </div>
+      <div class="flex flex-col gap-0.5">
+        <span class="text-sm font-medium">
+          Nome/Razão Social
+        </span>
+        <div class="flex items-center gap-2">
+          <span>
+            João Silva Lda
+          </span>
+        </div>
+      </div>
+      <div class="flex flex-col gap-0.5">
+        <span class="text-sm font-medium">
+          Setor
+        </span>
+        <div class="flex items-center gap-2">
+          <span>
+            Tecnologia
+          </span>
+        </div>
+      </div>
+      <div data-orientation="horizontal"
+           role="none"
+           data-slot="separator"
+           class="bg-border shrink-0 data-[orientation=horizontal]:h-px data-[orientation=horizontal]:w-full data-[orientation=vertical]:h-full data-[orientation=vertical]:w-px"
+      >
+      </div>
+      <div class="flex flex-col gap-0.5">
+        <span class="text-sm font-medium">
+          Email
+        </span>
+        <div class="flex items-center gap-2">
+          <span>
+            joao@exemplo.com
+          </span>
+        </div>
+      </div>
+      <div class="flex flex-col gap-0.5">
+        <span class="text-sm font-medium">
+          Telefone
+        </span>
+        <div class="flex items-center gap-2">
+          <span>
+            +351 912 345 678
+          </span>
+        </div>
+      </div>
+      <div class="flex flex-col gap-0.5">
+        <span class="text-sm font-medium">
+          Endereço
+        </span>
+        <div class="flex items-center gap-2">
+          <span>
+            Rua das Flores, 123, Lisboa
+          </span>
+        </div>
+      </div>
+      <div data-orientation="horizontal"
+           role="none"
+           data-slot="separator"
+           class="bg-border shrink-0 data-[orientation=horizontal]:h-px data-[orientation=horizontal]:w-full data-[orientation=vertical]:h-full data-[orientation=vertical]:w-px"
+      >
+      </div>
+      <div class="flex flex-col gap-0.5">
+        <span class="text-sm font-medium">
+          Data de Registro
+        </span>
+        <div class="flex items-center gap-2">
+          <span>
+            15/03/2024
+          </span>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+`;
+
+exports[`Components/InfoCard FinancialInfo smoke-test 1`] = `
+<div class="container px-6 py-12 mx-auto">
+  <div data-slot="card"
+       class="text-card-foreground flex flex-col gap-6 rounded-xl border py-6 shadow-sm bg-transparent"
+       id="_r_ID_"
+  >
+    <div data-slot="card-header"
+         class="@container/card-header grid auto-rows-min grid-rows-[auto_auto] items-start gap-2 px-6 has-data-[slot=card-action]:grid-cols-[1fr_auto] [.border-b]:pb-6"
+    >
+      <div data-slot="card-title"
+           class="text-2xl font-semibold leading-none tracking-tight"
+      >
+        Informações Financeiras
+      </div>
+    </div>
+    <div data-slot="card-content"
+         class="px-6 flex flex-col gap-4"
+    >
+      <div class="flex flex-col gap-0.5">
+        <span class="text-sm font-medium">
+          Número do Cartão
+        </span>
+        <div class="flex items-center gap-2">
+          <span>
+            **** **** **** 1234
+          </span>
+        </div>
+      </div>
+      <div class="flex flex-col gap-0.5">
+        <span class="text-sm font-medium">
+          Titular
+        </span>
+        <div class="flex items-center gap-2">
+          <span>
+            João Silva
+          </span>
+        </div>
+      </div>
+      <div class="flex flex-col gap-0.5">
+        <span class="text-sm font-medium">
+          Validade
+        </span>
+        <div class="flex items-center gap-2">
+          <span>
+            12/2027
+          </span>
+        </div>
+      </div>
+      <div data-orientation="horizontal"
+           role="none"
+           data-slot="separator"
+           class="bg-border shrink-0 data-[orientation=horizontal]:h-px data-[orientation=horizontal]:w-full data-[orientation=vertical]:h-full data-[orientation=vertical]:w-px"
+      >
+      </div>
+      <div class="flex flex-col gap-0.5">
+        <span class="text-sm font-medium">
+          Limite de Crédito
+        </span>
+        <div class="flex items-center gap-2">
+          <span>
+            €5,000.00
+          </span>
+        </div>
+      </div>
+      <div class="flex flex-col gap-0.5">
+        <span class="text-sm font-medium">
+          Saldo Disponível
+        </span>
+        <div class="flex items-center gap-2">
+          <span>
+            €3,250.00
+          </span>
+        </div>
+      </div>
+      <div class="flex flex-col gap-0.5">
+        <span class="text-sm font-medium">
+          Última Transação
+        </span>
+        <div class="flex items-center gap-2">
+          <span>
+            €45.99 - Supermercado
+          </span>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+`;
+
+exports[`Components/InfoCard LongContent smoke-test 1`] = `
+<div class="container px-6 py-12 mx-auto">
+  <div data-slot="card"
+       class="text-card-foreground flex flex-col gap-6 rounded-xl border py-6 shadow-sm bg-transparent"
+       id="_r_ID_"
+  >
+    <div data-slot="card-header"
+         class="@container/card-header grid auto-rows-min grid-rows-[auto_auto] items-start gap-2 px-6 has-data-[slot=card-action]:grid-cols-[1fr_auto] [.border-b]:pb-6"
+    >
+      <div data-slot="card-title"
+           class="text-2xl font-semibold leading-none tracking-tight"
+      >
+        Informações Detalhadas
+      </div>
+    </div>
+    <div data-slot="card-content"
+         class="px-6 flex flex-col gap-4"
+    >
+      <div class="flex flex-col gap-0.5">
+        <span class="text-sm font-medium">
+          Nome Completo
+        </span>
+        <div class="flex items-center gap-2">
+          <span>
+            João Pedro Silva Santos de Oliveira
+          </span>
+        </div>
+      </div>
+      <div class="flex flex-col gap-0.5">
+        <span class="text-sm font-medium">
+          Profissão
+        </span>
+        <div class="flex items-center gap-2">
+          <span>
+            Engenheiro de Software Sênior especializado em desenvolvimento web
+          </span>
+        </div>
+      </div>
+      <div class="flex flex-col gap-0.5">
+        <span class="text-sm font-medium">
+          Empresa
+        </span>
+        <div class="flex items-center gap-2">
+          <span>
+            TechCorp Solutions - Consultoria em Tecnologia da Informação Lda
+          </span>
+        </div>
+      </div>
+      <div data-orientation="horizontal"
+           role="none"
+           data-slot="separator"
+           class="bg-border shrink-0 data-[orientation=horizontal]:h-px data-[orientation=horizontal]:w-full data-[orientation=vertical]:h-full data-[orientation=vertical]:w-px"
+      >
+      </div>
+      <div class="flex flex-col gap-0.5">
+        <span class="text-sm font-medium">
+          Email Principal
+        </span>
+        <div class="flex items-center gap-2">
+          <span>
+            joao.pedro.silva.santos@techcorp-solutions.pt
+          </span>
+        </div>
+      </div>
+      <div class="flex flex-col gap-0.5">
+        <span class="text-sm font-medium">
+          Telefone
+        </span>
+        <div class="flex items-center gap-2">
+          <span>
+            +351 912 345 678
+          </span>
+        </div>
+      </div>
+      <div class="flex flex-col gap-0.5">
+        <span class="text-sm font-medium">
+          Endereço Completo
+        </span>
+        <div class="flex items-center gap-2">
+          <span>
+            Rua das Flores, número 123, 4º andar, apartamento B, 1200-001 Lisboa, Portugal
+          </span>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+`;
+
+exports[`Components/InfoCard Minimal smoke-test 1`] = `
+<div class="container px-6 py-12 mx-auto">
+  <div data-slot="card"
+       class="text-card-foreground flex flex-col gap-6 rounded-xl border py-6 shadow-sm bg-transparent"
+       id="_r_ID_"
+  >
+    <div data-slot="card-header"
+         class="@container/card-header grid auto-rows-min grid-rows-[auto_auto] items-start gap-2 px-6 has-data-[slot=card-action]:grid-cols-[1fr_auto] [.border-b]:pb-6"
+    >
+      <div data-slot="card-title"
+           class="text-2xl font-semibold leading-none tracking-tight"
+      >
+        Resumo
+      </div>
+    </div>
+    <div data-slot="card-content"
+         class="px-6 flex flex-col gap-4"
+    >
+      <div class="flex flex-col gap-0.5">
+        <span class="text-sm font-medium">
+          ID
+        </span>
+        <div class="flex items-center gap-2">
+          <span>
+            001
+          </span>
+        </div>
+      </div>
+      <div class="flex flex-col gap-0.5">
+        <span class="text-sm font-medium">
+          Status
+        </span>
+        <div class="flex items-center gap-2">
+          <span>
+            Ativo
+          </span>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+`;
+
+exports[`Components/InfoCard SingleSection smoke-test 1`] = `
+<div class="container px-6 py-12 mx-auto">
+  <div data-slot="card"
+       class="text-card-foreground flex flex-col gap-6 rounded-xl border py-6 shadow-sm bg-transparent"
+       id="_r_ID_"
+  >
+    <div data-slot="card-header"
+         class="@container/card-header grid auto-rows-min grid-rows-[auto_auto] items-start gap-2 px-6 has-data-[slot=card-action]:grid-cols-[1fr_auto] [.border-b]:pb-6"
+    >
+      <div data-slot="card-title"
+           class="text-2xl font-semibold leading-none tracking-tight"
+      >
+        Informações Pessoais
+      </div>
+    </div>
+    <div data-slot="card-content"
+         class="px-6 flex flex-col gap-4"
+    >
+      <div class="flex flex-col gap-0.5">
+        <span class="text-sm font-medium">
+          Nome
+        </span>
+        <div class="flex items-center gap-2">
+          <span>
+            Maria Santos
+          </span>
+        </div>
+      </div>
+      <div class="flex flex-col gap-0.5">
+        <span class="text-sm font-medium">
+          Email
+        </span>
+        <div class="flex items-center gap-2">
+          <span>
+            maria@exemplo.com
+          </span>
+        </div>
+      </div>
+      <div class="flex flex-col gap-0.5">
+        <span class="text-sm font-medium">
+          Telefone
+        </span>
+        <div class="flex items-center gap-2">
+          <span>
+            +351 987 654 321
+          </span>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+`;
+
+exports[`Components/InfoCard WithoutIcons smoke-test 1`] = `
+<div class="container px-6 py-12 mx-auto">
+  <div data-slot="card"
+       class="text-card-foreground flex flex-col gap-6 rounded-xl border py-6 shadow-sm bg-transparent"
+       id="_r_ID_"
+  >
+    <div data-slot="card-header"
+         class="@container/card-header grid auto-rows-min grid-rows-[auto_auto] items-start gap-2 px-6 has-data-[slot=card-action]:grid-cols-[1fr_auto] [.border-b]:pb-6"
+    >
+      <div data-slot="card-title"
+           class="text-2xl font-semibold leading-none tracking-tight"
+      >
+        Dados Simples
+      </div>
+    </div>
+    <div data-slot="card-content"
+         class="px-6 flex flex-col gap-4"
+    >
+      <div class="flex flex-col gap-0.5">
+        <span class="text-sm font-medium">
+          Código
+        </span>
+        <div class="flex items-center gap-2">
+          <span>
+            ABC123
+          </span>
+        </div>
+      </div>
+      <div class="flex flex-col gap-0.5">
+        <span class="text-sm font-medium">
+          Descrição
+        </span>
+        <div class="flex items-center gap-2">
+          <span>
+            Produto de exemplo
+          </span>
+        </div>
+      </div>
+      <div class="flex flex-col gap-0.5">
+        <span class="text-sm font-medium">
+          Categoria
+        </span>
+        <div class="flex items-center gap-2">
+          <span>
+            Eletrônicos
+          </span>
+        </div>
+      </div>
+      <div data-orientation="horizontal"
+           role="none"
+           data-slot="separator"
+           class="bg-border shrink-0 data-[orientation=horizontal]:h-px data-[orientation=horizontal]:w-full data-[orientation=vertical]:h-full data-[orientation=vertical]:w-px"
+      >
+      </div>
+      <div class="flex flex-col gap-0.5">
+        <span class="text-sm font-medium">
+          Preço
+        </span>
+        <div class="flex items-center gap-2">
+          <span>
+            €99.99
+          </span>
+        </div>
+      </div>
+      <div class="flex flex-col gap-0.5">
+        <span class="text-sm font-medium">
+          Stock
+        </span>
+        <div class="flex items-center gap-2">
+          <span>
+            25 unidades
+          </span>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+`;

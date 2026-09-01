@@ -1,5 +1,5 @@
-import { IGRPHeaderDataArgs } from './header';
-import { IGRPSidebarDataArgs } from './sidebar';
+import type { IGRPHeaderDataArgs } from './header';
+import type { IGRPSidebarDataArgs } from './sidebar';
 
 export interface IGRPMockDataAsync {
   getHeaderData: () => Promise<IGRPHeaderDataArgs>;
@@ -12,16 +12,12 @@ export type IGRPMockData = {
 };
 
 export type IGRPToasterPosition =
-  | 'top-left'
-  | 'top-right'
-  | 'bottom-left'
-  | 'bottom-right'
-  | 'top-center'
-  | 'bottom-center';
+  'top-left' | 'top-right' | 'bottom-left' | 'bottom-right' | 'top-center' | 'bottom-center';
 
 export type IGRPPackageJson = {
   name: string;
   version?: string;
   description?: string;
   displayName?: string;
+  slug?: string;
 };

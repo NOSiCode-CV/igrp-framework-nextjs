@@ -6,6 +6,11 @@ const meta = {
   component: IGRPPageHeader,
   parameters: {
     layout: 'padded',
+    // The back button uses Next's useRouter; mount the mocked app router so
+    // the back-button stories render in Storybook and the test-runner.
+    nextjs: {
+      appDirectory: true,
+    },
   },
 } satisfies Meta<typeof IGRPPageHeader>;
 
@@ -120,7 +125,7 @@ export const WithBackButtonVariants: Story = {
           title='Page Title'
           showBackButton
           urlBackButton='/dashboard'
-          {...({ backButtonVariant: 'outline' } as any)}
+          backButtonVariant='outline'
         />
       </div>
       <div>
@@ -129,7 +134,7 @@ export const WithBackButtonVariants: Story = {
           title='Page Title'
           showBackButton
           urlBackButton='/dashboard'
-          {...({ backButtonVariant: 'ghost' } as any)}
+          backButtonVariant='ghost'
         />
       </div>
       <div>
@@ -138,7 +143,7 @@ export const WithBackButtonVariants: Story = {
           title='Page Title'
           showBackButton
           urlBackButton='/dashboard'
-          {...({ backButtonVariant: 'secondary' } as any)}
+          backButtonVariant='secondary'
         />
       </div>
     </div>
@@ -155,7 +160,7 @@ export const WithBackButtonSizes: Story = {
           title='Page Title'
           showBackButton
           urlBackButton='/dashboard'
-          {...({ backButtonSize: 'icon' } as any)}
+          backButtonSize='icon'
         />
       </div>
       <div>
@@ -164,7 +169,7 @@ export const WithBackButtonSizes: Story = {
           title='Page Title'
           showBackButton
           urlBackButton='/dashboard'
-          {...({ backButtonSize: 'icon-sm' } as any)}
+          backButtonSize='icon-sm'
         />
       </div>
       <div>
@@ -173,7 +178,7 @@ export const WithBackButtonSizes: Story = {
           title='Page Title'
           showBackButton
           urlBackButton='/dashboard'
-          {...({ backButtonSize: 'icon-lg' } as any)}
+          backButtonSize='icon-lg'
         />
       </div>
     </div>
@@ -193,7 +198,7 @@ export const WithBackButtonCustomHandler: Story = {
           title='Page Title'
           description='With custom onClick handler'
           showBackButton
-          {...({ backButtonOnClick: handleCustomBack } as any)}
+          backButtonOnClick={handleCustomBack}
         />
       </div>
     );
@@ -285,11 +290,9 @@ export const CompleteExample: Story = {
         showBackButton
         urlBackButton='/dashboard'
         iconBackButton='ArrowLeft'
-        {...({
-          backButtonShowText: true,
-          backButtonText: 'Voltar ao Dashboard',
-          backButtonVariant: 'outline',
-        } as any)}
+        backButtonShowText
+        backButtonText='Voltar ao Dashboard'
+        backButtonVariant='outline'
         isSticky
       >
         <div className='flex gap-2'>

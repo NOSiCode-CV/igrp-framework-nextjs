@@ -1,0 +1,408 @@
+# @igrp/framework-next-types
+
+## 0.1.0-beta.148
+
+### Patch Changes
+
+- 658e6b8: - Framework packages no longer declare their internal `@igrp/*` siblings as exact-version peer dependencies. They are regular dependencies again, so installing or upgrading a single framework package no longer emits unmet-peer warnings across the whole set.
+  - `@igrp/framework-next` widens its `zod` peer range from the exact `4.5.0` to `^4.5.0`, so an app on any `4.5.x` (the template ships `4.5.4`) satisfies it.
+  - `@igrp/template-migrator` ships migration `30-resync-beta166-deps`, which carries a CLI-upgraded app's dependency set forward to the beta.166 framework release — including `zod`, `react-hook-form`, `@tanstack/react-query` and `@types/react-dom`, which no earlier migration had ever pinned.
+
+## 0.1.0-beta.147
+
+### Patch Changes
+
+- f3e0c00: Library packaging hygiene across all published packages:
+
+  - `@igrp/framework-next`: `next`, `react`, `react-dom` moved from `dependencies` to `peerDependencies` (range-based) — prevents duplicate React copies in consumer apps.
+  - All packages: exact-pinned `peerDependencies` relaxed to caret ranges (`react ^19.2.0`, `next ^15.5.0`, `next-auth ^4.24.0`, `zod ^4.4.0`, etc.) so consumers on newer patch/minor versions no longer get unmet-peer errors.
+  - `@igrp/igrp-framework-react-design-system`, `@igrp/framework-next-ui`: `tailwindcss` moved to `devDependencies` (Tailwind compiles in the consuming app); unused `zod` dependency removed from `next-ui`; duplicated `publishConfig.exports` removed.
+  - `@igrp/framework-next-types`: added an `exports` map (blocks deep imports into `dist/`, consistent with the other packages).
+  - `@igrp/framework-next`, `@igrp/template-migrator`: `types` condition now listed first in `exports`.
+  - `@igrp/template-migrator`: added `license`, `author`, top-level `types`, `publishConfig.tag`/`access`; `clean` now uses cross-platform `rimraf`.
+  - All packages: added `repository`/`homepage`/`bugs` metadata, normalized `engines.node` to `>=22`, added `./package.json` export.
+
+- 9e15f16: Permissions hardening: server-action claims recovery + live client claims
+
+  **`@igrp/framework-next`**
+
+  - `igrpGetClaims()` now recovers the access token from the session cookie when no
+    `AsyncLocalStorage` store was established, and seeds the store so the Access
+    Management client works in the same call. Previously, calling `igrpAuthorize()`
+    from a Server Action or Route Handler denied **every** user — super admins
+    included — because the token was only reachable through a store that a fresh
+    async context never enters. The recovery uses `getToken` + cookies (not
+    `getServerSession`, which needs the app's `NextAuthOptions` and would return a
+    session with no `accessToken`), behind dynamic imports so the module graph is
+    unchanged for existing importers.
+  - `igrpGetClaims()` no longer swallows Next.js control-flow signals. The
+    cookie-recovery path can raise the static-render bailout (`cookies()` read
+    during prerender), `redirect()`, or `forbidden()`; these are now re-thrown
+    instead of being converted into a claims error state, so Next still marks the
+    route dynamic rather than failing the build with a confusing 5xx. A genuine
+    cookie/JWT failure (no `digest`) still fail-closes as before.
+  - Dev-only diagnostic: `igrpGetClaims()` warns once per request when a
+    non-super-admin token carries no `org` claim, which silently denies every
+    bare-name permission check and is otherwise indistinguishable from a real
+    denial.
+  - `igrpAssertAuthorize` is documented as **pages only** — an action has no
+    `forbidden.tsx` boundary, so use `igrpAuthorize` there.
+
+  **`@igrp/framework-next-ui`**
+
+  - `IGRPSectionPermissions` now re-decodes claims from the live session instead of
+    freezing the server-seeded value for the whole page load. The seeded prop only
+    ever arrived once per full page load (token rotation does not call
+    `router.refresh()`, and shared layouts do not re-render on client navigation),
+    so client gating answered from login-time claims until a reload. Guarded three
+    ways: no `SessionProvider` mounted → keep the seeded state (read via
+    `SessionContext`, because `useSession()` throws without a provider); session
+    `loading` → keep the seeded state; non-JWT token (preview mode) → keep the
+    seeded state. `setState` now sets an explicit override, the seam for a future
+    active-role switch.
+  - `IGRPForbidden` gains a "Voltar à Página Inicial" action, matching
+    `IGRPTemplateNotFound`'s pattern (`IGRPButton asChild` + `next/link`, so
+    `basePath` is applied automatically). Label and destination are overridable
+    via the new `homeLabel` / `homeHref` props; pass `homeHref={null}` to render
+    no action when the surrounding shell already offers navigation.
+
+  **`@igrp/framework-next-types`**
+
+  - New `IGRPPermissionCatalogEntry` (`{ name, description?, enabled }`) — a
+    permission an app **declares** for registration in the Access Management
+    catalog. Deliberately distinct from `IGRPPermissionArgs`, which is the record
+    AM _returns_ (it carries AM's `id`, `status` and `departmentCode`), and from a
+    permission **claim** on the access token. Registering an entry does not make
+    it checkable.
+  - New `apiManagementConfig.syncPermissions` (default `false`) and
+    `apiManagementConfig.onCodePermissions`.
+
+  **`@igrp/framework-next` — permission catalog sync**
+
+  - New `igrpSyncPermissions`, wired as a fourth arm of the existing startup-sync
+    pipeline alongside routes and menus. Gated by `syncPermissions` on top of the
+    existing `syncAccess` / `previewMode` gates, so enabling the capability cannot
+    make an existing deployment start writing to the shared AM without opting in.
+  - Idempotent upsert keyed on `name`; entries removed from the catalog are not
+    deleted in AM. An empty catalog is skipped rather than sent as an empty upsert.
+  - `planAccessManagementSync` validates catalog names against
+    `^[A-Za-z0-9._-]{1,255}$` and **skips** malformed entries with a warning
+    instead of throwing — one bad name should not stop an app from booting. It
+    also warns off-production when a catalog name contains a dot, because
+    `claimsAllow` treats such a name as already department-qualified and a
+    bare-name check would silently deny.
+  - `id` is omitted from the wire payload rather than sent as `0`, which a backend
+    matching on id could misread as an update.
+
+  Both permission-gating changes above are additive: each affects only states that
+  previously failed outright.
+
+- Updated dependencies [f3e0c00]
+  - @igrp/framework-next-auth@0.1.0-beta.145
+
+## 0.1.0-beta.146
+
+### Patch Changes
+
+- 3847b8b: Add token-claims permission gating: `decodeIgrpClaims`/`claimsAllow` (`@igrp/framework-next-auth/claims`), server helpers `igrpGetClaims`/`igrpAuthorize`/`igrpAssertAuthorize` (`@igrp/framework-next`), and client `IGRPSectionPermissions`/`usePermissions`/`IGRPAuthorization`/`IGRPGuardPage`/`IGRPForbidden` (`@igrp/framework-next-ui`).
+- 41d8a51: `IGRPMenuItemArgs.id` is now optional (`id?: number`) to match the runtime
+  `MenuEntryDTO.id?: number`, removing a type that promised an always-present id.
+- Updated dependencies [3847b8b]
+- Updated dependencies [a274c6e]
+- Updated dependencies [c9cd44b]
+- Updated dependencies [3b808b8]
+- Updated dependencies [7d48f03]
+  - @igrp/framework-next-auth@0.1.0-beta.144
+
+## 0.1.0-beta.145
+
+### Patch Changes
+
+- 5b335b8: feat: honor showNotifications flag in nav-user — hide the Notifications dropdown item (header and sidebar) when notifications are disabled, and add showNotifications to IGRPSidebarDataArgs
+- Updated dependencies [5b335b8]
+  - @igrp/framework-next-auth@0.1.0-beta.143
+
+## 0.1.0-beta.144
+
+### Patch Changes
+
+- fc2fe20: - `next-auth`: add `console.error` diagnostics when introspection marks the refresh token inactive or when `refreshOidcAccessToken` returns an error flag or throws — makes login-loop root causes visible in server logs
+  - `next`: replace `unstable_cache` with `React.cache()` in `use-user` — prevents stale 401s caused by rotating access tokens being embedded in the `unstable_cache` key
+- Updated dependencies [fc2fe20]
+  - @igrp/framework-next-auth@0.1.0-beta.142
+
+## 0.1.0-beta.143
+
+### Patch Changes
+
+- e51050a: feat: add showMenuSearch flag to IGRPSidebarDataArgs to control sidebar menu search visibility
+- Updated dependencies [a9b2297]
+  - @igrp/framework-next-auth@0.1.0-beta.141
+
+## 0.1.0-beta.142
+
+### Patch Changes
+
+- Updated dependencies [5ebe890]
+  - @igrp/framework-next-auth@0.1.0-beta.140
+
+## 0.1.0-beta.141
+
+### Patch Changes
+
+- Updated dependencies [4e0137a]
+  - @igrp/framework-next-auth@0.1.0-beta.139
+
+## 0.1.0-beta.140
+
+### Patch Changes
+
+- Updated dependencies
+  - @igrp/framework-next-auth@0.1.0-beta.138
+
+## 0.1.0-beta.139
+
+### Patch Changes
+
+- Updated dependencies
+  - @igrp/framework-next-auth@0.1.0-beta.137
+
+## 0.1.0-beta.138
+
+### Patch Changes
+
+- Updated dependencies [7a89144]
+  - @igrp/framework-next-auth@0.1.0-beta.136
+
+## 0.1.0-beta.137
+
+### Patch Changes
+
+- 6b42572: - Coordinated maintenance release: bump all framework packages to the next beta to keep versions aligned across the framework.
+- Updated dependencies [6b42572]
+  - @igrp/framework-next-auth@0.1.0-beta.135
+
+## 0.1.0-beta.136
+
+### Patch Changes
+
+- ba91edb: feat: gate menu-role sync on `IGRP_SYNC_ON_CODE_MENU_ROLES`
+
+  The on-code menu push can now control the `syncRoles` argument of
+  `client.m2m.syncApplicationMenus(appCode, menus, syncRoles)`.
+  - **next-types**: new optional `apiManagementConfig.syncOnCodeMenuRoles?: boolean`. Defaults to `true` (matching the AM client default) when omitted.
+  - **next**: `igrpSyncMenus` now requires a `syncRoles` arg and forwards it as the third parameter of `syncApplicationMenus`; `planAccessManagementSync` derives `syncOnCodeMenuRoles` from config (`true` unless explicitly `false`) and `igrpStartupSync` threads it through.
+
+  Only consulted when the on-code menu push actually runs (`IGRP_SYNC_ON_CODE_MENUS=true` plus the outer `IGRP_SYNC_ACCESS` / `IGRP_PREVIEW_MODE` gates). Outer gating is unchanged.
+
+- Updated dependencies [b88c4b1]
+  - @igrp/framework-next-auth@0.1.0-beta.134
+
+## 0.1.0-beta.135
+
+### Patch Changes
+
+- Updated dependencies [f89e1ab]
+- Updated dependencies [ec48e46]
+  - @igrp/framework-next-auth@0.1.0-beta.133
+
+## 0.1.0-beta.134
+
+### Patch Changes
+
+- 0cdef39: docs(next-types): remove stale m2mScope JSDoc
+
+  The JSDoc block above `appRoutes` in `apiManagementConfig` documented an `m2mScope` field that no longer exists (removed during the OAuth2 client_credentials migration 08). Removed the orphaned doc.
+
+- 123e361: feat(next-types): add `syncOnCodeMenus` and `onCodeMenus` to `apiManagementConfig`
+
+  Two new optional fields on `IGRPConfigArgs['apiManagementConfig']`:
+  - `syncOnCodeMenus?: boolean` — when true, the framework pushes `onCodeMenus` to Access Management at startup.
+  - `onCodeMenus?: IGRPMenuItemArgs[]` — the template-defined menu array used as the push payload.
+
+  Both are optional; omitting them keeps the current (post-migration-08) no-push behavior.
+
+- Updated dependencies [12cc11b]
+- Updated dependencies [12cc11b]
+- Updated dependencies [12cc11b]
+- Updated dependencies [cc40fef]
+- Updated dependencies [cc40fef]
+  - @igrp/framework-next-auth@0.1.0-beta.132
+
+## 0.1.0-beta.133
+
+### Patch Changes
+
+- 2196ef8: feat(types)!: migrate `apiManagementConfig` to OAuth2 `client_credentials`
+
+  **Breaking** changes to `IGRPConfigArgs['apiManagementConfig']`:
+  - **Removed** `m2mToken` — replaced by `m2mClientId` + `m2mClientSecret` (OAuth2 client_credentials). The downstream library (`@igrp/platform-access-management-client-ts`) still exposes `M2MClientConfig.token` as `@deprecated` for legacy pinning if needed.
+  - **Removed** `syncOnCodeMenus` — the field had no effect. All sync phases (application, routes, menus) are gated on the top-level `syncAccess` flag in `IGRPRootLayout`.
+  - **Renamed** `m2mServiceId` → `serviceId`. The value is service identity (resource name + `X-Machine-Service-ID` header), not an auth credential. The new prefix discipline: `m2m*` is reserved for OAuth2 credentials only.
+  - **Added** required `m2mClientId: string` and `m2mClientSecret: string` for OAuth2 client_credentials authentication.
+
+  Migration: rename `m2mServiceId` → `serviceId` and `m2mToken` → `m2mClientId`/`m2mClientSecret` in your `igrpBuildConfig` call. The TypeScript error guides the rename. See `templates/demo-legacy/src/igrp.template.config.ts` for the canonical shape.
+
+- Updated dependencies [2a0ef32]
+  - @igrp/framework-next-auth@0.1.0-beta.131
+
+## 0.1.0-beta.132
+
+### Patch Changes
+
+- Updated dependencies
+  - @igrp/framework-next-auth@0.1.0-beta.130
+
+## 0.1.0-beta.131
+
+### Patch Changes
+
+- f8dc318: feat: remove showSidebar/showHeader from IGRPConfigArgs
+
+## 0.1.0-beta.130
+
+### Patch Changes
+
+- Updated dependencies [f283926]
+  - @igrp/framework-next-auth@0.1.0-beta.129
+
+## 0.1.0-beta.129
+
+### Patch Changes
+
+- fe2ed3d: - Update `@types/node` to v25.7.0 across all framework packages
+  - Bump `typescript-eslint` and `vitest` to latest versions
+- Updated dependencies [fe2ed3d]
+  - @igrp/framework-next-auth@0.1.0-beta.128
+
+## 0.1.0-beta.128
+
+### Patch Changes
+
+- Updated dependencies [4e9ecd5]
+  - @igrp/framework-next-auth@0.1.0-beta.127
+
+## 0.1.0-beta.120
+
+### Patch Changes
+
+- Updated dependencies [939446a]
+  - @igrp/framework-next-auth@0.1.0-beta.120
+
+## 0.1.0-beta.119
+
+### Patch Changes
+
+- Updated dependencies [20a0850]
+- Updated dependencies [2137c48]
+  - @igrp/framework-next-auth@0.1.0-beta.119
+
+## 0.1.0-beta.118
+
+### Patch Changes
+
+- Updated dependencies
+- Updated dependencies
+  - @igrp/framework-next-auth@0.1.0-beta.118
+
+## 0.1.0-beta.117
+
+### Patch Changes
+
+- 724398a: Replace Keycloak and Autentika providers with a single generic `oauth2` OIDC provider.
+
+  **Breaking changes:**
+  - `AUTH_PROVIDER` now accepts `oauth2` or `none` only (`keycloak` and `autentika` are removed)
+  - `AUTH_PROVIDER` defaults to `oauth2` (previously defaulted to `keycloak`)
+  - `KEYCLOAK_CLIENT_ID`, `KEYCLOAK_CLIENT_SECRET`, `KEYCLOAK_ISSUER` env vars removed
+  - `AUTENTIKA_CLIENT_ID`, `AUTENTIKA_CLIENT_SECRET`, `AUTENTIKA_HOST`, `AUTENTIKA_TENANT_NAME`, `AUTENTIKA_SCOPES` env vars removed
+  - `KEYCLOAK_PROVIDER_ID` and `AUTENTIKA_PROVIDER_ID` named exports removed from all entry points
+
+  **Migration:** Replace with `OAUTH2_CLIENT_ID`, `OAUTH2_CLIENT_SECRET`, `OAUTH2_ISSUER`, `OAUTH2_SCOPES` (optional, defaults to `openid`). The redirect URI to register on your server is `{NEXTAUTH_URL}/api/auth/callback/oauth2`.
+
+- Updated dependencies [724398a]
+  - @igrp/framework-next-auth@1.0.0-beta.117
+
+## 0.1.0-beta.116
+
+### Patch Changes
+
+- beta.116 — template migrator CLI, lock file relocation, and release tooling fixes.
+
+  @igrp/template-migrator
+  - New CLI package that automates IGRP template upgrades via `pnpm dlx @igrp/template-migrator@latest`.
+  - Bundles all 6 demo-legacy migration guides (01–06) as a cumulative manifest with embedded payloads.
+  - Commands: status, plan, apply (--yes / --to), list, rollback, check (CI gate).
+  - Lock file moved from root `.igrpmigrations.lock.json` → `.igrpmigrations/lock.json`; backward-compat read of old path on first run.
+  - Prebuild pack script cleans payload output on every run to prevent stale files.
+  - tsup config: shims disabled (no \_\_dirname polyfill injection before shebang), banner removed (shebang lives in src/cli.ts line 1).
+
+  @igrp/framework-next-template (templates/demo-legacy)
+  - `.igrpmigrations/lock.json` pre-seeded to mark all 6 migrations as applied.
+  - `create-zip-template.ps1` updated to strip migration guides and payloads from the published zip — only `lock.json` is included so consumers start fully up-to-date.
+  - `MIGRATING.md` added: end-user upgrade guide (status → plan → apply workflow).
+
+- Updated dependencies
+  - @igrp/framework-next-auth@0.1.0-beta.116
+
+## 0.1.0-beta.115
+
+### Patch Changes
+
+- Edge-safe auth refactor + App Router error-handling overhaul.
+
+  @igrp/framework-next-auth
+  - Split withIGRPAuth() into Edge-safe shell + lazy Node helpers; next-auth (main) and next/headers are no longer static imports. Fixes TypeError reading 'custom' from openid-client leaking into the Edge middleware bundle under Next.js 15.5.15.
+  - interopDefault() helper normalizes CJS/ESM default-import mismatch against next-auth v4 (KeycloakProvider, NextAuth).
+  - tsup is now the single producer of dist/; added ./oidc and ./providers subpath exports; trimmed root barrel to Edge-safe modules only.
+  - Tolerates AUTH_PROVIDER=none by returning a stub instance (404 on auth routes) instead of crashing NextAuth with an empty providers array.
+
+  @igrp/framework-next
+  - New ./errors subpath with typed IgrpError hierarchy (IgrpConfigError, IgrpAuthConfigError, IgrpLayoutDataError) and isIgrpError structural guard — designed to survive production error.message redaction via stable error.name.
+  - Access-management config validation moved from IGRPLayout into igrpBuildConfig so throws fire at root-segment render where global-error.tsx can catch them.
+  - IGRPLayout and fetchLayoutData now throw typed errors instead of raw Error.
+
+  @igrp/framework-next-ui
+  - New IGRPSegmentError component for segment-level error.tsx boundaries — renders inside layout chrome, offers reset + go-home actions, accepts resolveCopy(error) for i18n.
+
+  @igrp/framework-next-template (templates/demo-legacy)
+  - New isAuthBypass() helper unifies IGRP_PREVIEW_MODE=true and AUTH_PROVIDER=none; /login, /logout, /api/auth/\* are all 302'd to / when bypassed.
+  - Full App Router error boundary coverage: global-error.tsx, root error.tsx, (auth)/error.tsx, rewritten (igrp)/error.tsx to use IGRPSegmentError.
+  - New reportError() hook and error-messages.ts Portuguese copy keyed by IgrpError.code.
+  - serverSession() no longer swallows typed errors; logout page hardened with .catch + fallback redirect + 3 s safety timeout.
+
+  See templates/demo-legacy/.igrpmigrations/05.MIGRATIONS-23042026.md and 06.MIGRATIONS-23042026.md for the full migration guides.
+
+- Updated dependencies
+  - @igrp/framework-next-auth@0.1.0-beta.115
+
+## 0.1.0-beta.114
+
+### Patch Changes
+
+- Edge-safe auth refactor + App Router error-handling overhaul.
+
+  @igrp/framework-next-auth
+  - Split withIGRPAuth() into Edge-safe shell + lazy Node helpers; next-auth (main) and next/headers are no longer static imports. Fixes TypeError reading 'custom' from openid-client leaking into the Edge middleware bundle under Next.js 15.5.15.
+  - interopDefault() helper normalizes CJS/ESM default-import mismatch against next-auth v4 (KeycloakProvider, NextAuth).
+  - tsup is now the single producer of dist/; added ./oidc and ./providers subpath exports; trimmed root barrel to Edge-safe modules only.
+  - Tolerates AUTH_PROVIDER=none by returning a stub instance (404 on auth routes) instead of crashing NextAuth with an empty providers array.
+
+  @igrp/framework-next
+  - New ./errors subpath with typed IgrpError hierarchy (IgrpConfigError, IgrpAuthConfigError, IgrpLayoutDataError) and isIgrpError structural guard — designed to survive production error.message redaction via stable error.name.
+  - Access-management config validation moved from IGRPLayout into igrpBuildConfig so throws fire at root-segment render where global-error.tsx can catch them.
+  - IGRPLayout and fetchLayoutData now throw typed errors instead of raw Error.
+
+  @igrp/framework-next-ui
+  - New IGRPSegmentError component for segment-level error.tsx boundaries — renders inside layout chrome, offers reset + go-home actions, accepts resolveCopy(error) for i18n.
+
+  @igrp/framework-next-template (templates/demo-legacy)
+  - New isAuthBypass() helper unifies IGRP_PREVIEW_MODE=true and AUTH_PROVIDER=none; /login, /logout, /api/auth/\* are all 302'd to / when bypassed.
+  - Full App Router error boundary coverage: global-error.tsx, root error.tsx, (auth)/error.tsx, rewritten (igrp)/error.tsx to use IGRPSegmentError.
+  - New reportError() hook and error-messages.ts Portuguese copy keyed by IgrpError.code.
+  - serverSession() no longer swallows typed errors; logout page hardened with .catch + fallback redirect + 3 s safety timeout.
+
+  See templates/demo-legacy/.igrpmigrations/05.MIGRATIONS-23042026.md and 06.MIGRATIONS-23042026.md for the full migration guides.
+
+- Updated dependencies
+  - @igrp/framework-next-auth@0.1.0-beta.114

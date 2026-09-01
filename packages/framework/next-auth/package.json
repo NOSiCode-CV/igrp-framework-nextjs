@@ -1,9 +1,22 @@
 {
   "name": "@igrp/framework-next-auth",
-  "version": "0.1.0-beta.110",
+  "version": "0.1.0-beta.145",
   "description": "IGRP Framework for Next.js | Auth",
+  "author": "IGRP Team",
   "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "git+http://git.nosi.cv/igrp-3_0/igrp-framework-frontend/igrp-framework-nextjs.git",
+    "directory": "packages/framework/next-auth"
+  },
+  "homepage": "https://igrp.cv",
+  "bugs": {
+    "url": "http://git.nosi.cv/igrp-3_0/igrp-framework-frontend/igrp-framework-nextjs/-/issues"
+  },
   "type": "module",
+  "engines": {
+    "node": ">=22"
+  },
   "sideEffects": false,
   "exports": {
     ".": {
@@ -30,6 +43,30 @@
       "types": "./dist/middleware.d.ts",
       "import": "./dist/middleware.js"
     },
+    "./config": {
+      "types": "./dist/config.d.ts",
+      "import": "./dist/config.js"
+    },
+    "./oidc": {
+      "types": "./dist/oidc.d.ts",
+      "import": "./dist/oidc.js"
+    },
+    "./providers": {
+      "types": "./dist/providers.d.ts",
+      "import": "./dist/providers.js"
+    },
+    "./sanitize": {
+      "types": "./dist/sanitize.d.ts",
+      "import": "./dist/sanitize.js"
+    },
+    "./types": {
+      "types": "./dist/types.d.ts",
+      "import": "./dist/types.js"
+    },
+    "./claims": {
+      "types": "./dist/claims.d.ts",
+      "import": "./dist/claims.js"
+    },
     "./package.json": "./package.json"
   },
   "files": [
@@ -42,32 +79,33 @@
   "scripts": {
     "clean": "rimraf dist tsconfig.build.tsbuildinfo",
     "format": "prettier --write .",
-    "build:types": "tsc -p tsconfig.build.json --emitDeclarationOnly --outDir dist",
     "build:js": "tsup",
-    "build": "pnpm clean && pnpm build:js && pnpm build:types",
+    "build": "pnpm clean && pnpm build:js",
     "clean-all": "rimraf node_modules && rimraf dist && rimraf tsconfig.tsbuildinfo",
-    "release": "pnpm build && yarn publish --registry=https://sonatype.nosi.cv/repository/igrp/ --tag latest"
+    "release": "pnpm build && pnpm publish --registry=https://sonatype.nosi.cv/repository/igrp/ --tag latest --no-git-checks",
+    "test": "vitest run"
   },
   "peerDependencies": {
-    "next": "^15.5.13",
-    "next-auth": "^4.24.13",
-    "react": "^19.2.4"
+    "next": "^15.5.0",
+    "next-auth": "^4.24.0",
+    "react": "^19.2.0"
   },
-  "peerDependenciesMeta": {
-    "next-auth": {
-      "optional": false
-    }
-  },
-  "devDependencies": { 
-    "@types/node": "^25.5.0",
-    "next-auth": "^4.24.13",
-    "prettier": "^3.8.1",
-    "rimraf": "^6.1.3",
-    "tsup": "^8.5.0",
-    "typescript": "^5.9.3"    
+  "devDependencies": {
+    "@types/node": "25.9.1",
+    "@types/react": "19.2.18",
+    "next": "^15.5.25",
+    "next-auth": "4.24.15",
+    "prettier": "3.9.6",
+    "react": "19.2.8",
+    "rimraf": "6.1.3",
+    "tsup": "8.5.1",
+    "typescript": "5.9.3",
+    "vitest": "4.1.11"
   },
   "publishConfig": {
-    "access": "public"
+    "access": "public",
+    "registry": "https://sonatype.nosi.cv/repository/igrp/",
+    "tag": "latest"
   },
   "keywords": [
     "igrp",

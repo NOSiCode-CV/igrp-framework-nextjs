@@ -1,0 +1,141 @@
+// Jest Snapshot v1, https://jestjs.io/docs/snapshot-testing
+
+exports[`Components/Switch InsideForm smoke-test 1`] = `
+<form>
+  <div class="p-6 space-y-4 border rounded-lg px-12">
+    <div class="*:not-first:mt-2">
+      <div class="flex items-center gap-2">
+        <button type="button"
+                role="switch"
+                aria-checked="false"
+                data-state="unchecked"
+                value="on"
+                data-slot="switch"
+                class="peer data-[state=checked]:bg-primary data-[state=unchecked]:bg-input focus-visible:border-ring focus-visible:ring-ring/50 dark:data-[state=unchecked]:bg-input/80 inline-flex h-[1.15rem] w-8 shrink-0 items-center rounded-full border border-transparent shadow-xs transition-[transform,background-color,box-shadow] outline-none focus-visible:ring-[3px] disabled:cursor-not-allowed disabled:opacity-50"
+                id="notifications"
+                aria-invalid="false"
+                aria-describedby="notifications-helper"
+                gridsize="full"
+        >
+          <span data-state="unchecked"
+                data-slot="switch-thumb"
+                class="bg-background dark:data-[state=unchecked]:bg-foreground dark:data-[state=checked]:bg-primary-foreground pointer-events-none block size-4 rounded-full ring-0 transition-transform data-[state=checked]:translate-x-[calc(100%-2px)] data-[state=unchecked]:translate-x-0"
+          >
+          </span>
+        </button>
+        <input aria-hidden="true"
+               tabindex="-1"
+               type="checkbox"
+               value="on"
+               name="notifications"
+               style="position: absolute; pointer-events: none; opacity: 0; margin: 0px; transform: translateX(-100%); width: 32px; height: 18.3906px;"
+        >
+        <label data-slot="label"
+               class="flex items-center text-sm leading-none font-medium select-none group-data-[disabled=true]:pointer-events-none group-data-[disabled=true]:opacity-50 peer-disabled:cursor-not-allowed peer-disabled:opacity-50 after:content-['*'] after:text-destructive gap-0.5"
+               for="notifications"
+        >
+          Receive Email Alerts
+        </label>
+      </div>
+      <p id="notifications-helper"
+         class="text-muted-foreground mt-2 text-xs"
+         role="region"
+         aria-live="polite"
+      >
+        Allow us to send you updates.
+      </p>
+    </div>
+    <button data-slot="button"
+            class="inline-flex items-center justify-center gap-1.5 whitespace-nowrap rounded-md text-sm font-medium transition-[color,box-shadow] disabled:pointer-events-none disabled:opacity-50 [&amp;_svg]:pointer-events-none [&amp;_svg:not([class*='size-'])]:size-4 shrink-0 [&amp;_svg]:shrink-0 outline-none focus-visible:border-ring focus-visible:ring-ring/50 focus-visible:ring-[3px] aria-invalid:ring-destructive/20 dark:aria-invalid:ring-destructive/40 aria-invalid:border-destructive bg-primary text-primary-foreground shadow-xs hover:bg-primary/90 hover:text-primary-foreground h-9 px-2.5 has-data-[icon=inline-end]:pr-2 has-data-[icon=inline-start]:pl-2"
+            type="submit"
+    >
+      Submit
+    </button>
+  </div>
+</form>
+`;
+
+exports[`Components/Switch Standalone smoke-test 1`] = `
+<div class="p-6 space-y-4 border rounded-lg px-12">
+  <div class="*:not-first:mt-2">
+    <div class="flex items-center gap-2">
+      <button type="button"
+              role="switch"
+              aria-checked="false"
+              data-state="unchecked"
+              value="on"
+              data-slot="switch"
+              class="peer data-[state=checked]:bg-primary data-[state=unchecked]:bg-input focus-visible:border-ring focus-visible:ring-ring/50 dark:data-[state=unchecked]:bg-input/80 inline-flex h-[1.15rem] w-8 shrink-0 items-center rounded-full border border-transparent shadow-xs transition-[transform,background-color,box-shadow] outline-none focus-visible:ring-[3px] disabled:cursor-not-allowed disabled:opacity-50"
+              id="_r_ID_"
+              aria-invalid="false"
+              aria-describedby="_r_ID_-helper"
+              gridsize="full"
+      >
+        <span data-state="unchecked"
+              data-slot="switch-thumb"
+              class="bg-background dark:data-[state=unchecked]:bg-foreground dark:data-[state=checked]:bg-primary-foreground pointer-events-none block size-4 rounded-full ring-0 transition-transform data-[state=checked]:translate-x-[calc(100%-2px)] data-[state=unchecked]:translate-x-0"
+        >
+        </span>
+      </button>
+      <label data-slot="label"
+             class="flex items-center text-sm leading-none font-medium select-none group-data-[disabled=true]:pointer-events-none group-data-[disabled=true]:opacity-50 peer-disabled:cursor-not-allowed peer-disabled:opacity-50 gap-0.5"
+             for="_r_ID_"
+      >
+        Enable Notifications
+      </label>
+    </div>
+    <p id="_r_ID_-helper"
+       class="text-muted-foreground mt-2 text-xs"
+       role="region"
+       aria-live="polite"
+    >
+      Toggle to enable email alerts
+    </p>
+  </div>
+  <p class="text-sm">
+    Checked state:
+    <strong>
+      false
+    </strong>
+  </p>
+</div>
+`;
+
+exports[`Components/Switch WithError smoke-test 1`] = `
+<div class="p-6 space-y-4 border rounded-lg px-12">
+  <div class="*:not-first:mt-2">
+    <div class="flex items-center gap-2">
+      <button type="button"
+              role="switch"
+              aria-checked="false"
+              data-state="unchecked"
+              value="on"
+              data-slot="switch"
+              class="peer data-[state=checked]:bg-primary data-[state=unchecked]:bg-input focus-visible:border-ring dark:data-[state=unchecked]:bg-input/80 inline-flex h-[1.15rem] w-8 shrink-0 items-center rounded-full border shadow-xs transition-[transform,background-color,box-shadow] outline-none focus-visible:ring-[3px] disabled:cursor-not-allowed disabled:opacity-50 border-destructive focus-visible:ring-destructive/20"
+              id="terms"
+              aria-invalid="true"
+              aria-describedby="terms-error"
+              gridsize="full"
+      >
+        <span data-state="unchecked"
+              data-slot="switch-thumb"
+              class="bg-background dark:data-[state=unchecked]:bg-foreground dark:data-[state=checked]:bg-primary-foreground pointer-events-none block size-4 rounded-full ring-0 transition-transform data-[state=checked]:translate-x-[calc(100%-2px)] data-[state=unchecked]:translate-x-0"
+        >
+        </span>
+      </button>
+      <label data-slot="label"
+             class="flex items-center text-sm leading-none font-medium select-none group-data-[disabled=true]:pointer-events-none group-data-[disabled=true]:opacity-50 peer-disabled:cursor-not-allowed peer-disabled:opacity-50 gap-0.5 text-destructive"
+             for="terms"
+      >
+        Accept Terms &amp; Conditions
+      </label>
+    </div>
+    <p id="terms-error"
+       class="text-destructive mt-2 text-xs"
+       role="alert"
+    >
+      You must agree before proceeding.
+    </p>
+  </div>
+</div>
+`;

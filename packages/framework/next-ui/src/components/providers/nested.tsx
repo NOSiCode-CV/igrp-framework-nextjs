@@ -14,7 +14,6 @@ export type IGRPNestedProvidersArgs = {
   activeThemeValue?: string;
   children: React.ReactNode;
   sessionArgs?: Partial<SessionProviderProps>;
-  themeArgs?: React.ComponentProps<typeof IGRPThemeProvider>;
   className?: string;
 };
 
@@ -22,7 +21,6 @@ export function IGRPNestedProviders({
   session,
   activeThemeValue,
   sessionArgs,
-  themeArgs,
   children,
 }: IGRPNestedProvidersArgs) {
   return (
@@ -34,7 +32,6 @@ export function IGRPNestedProviders({
           enableSystem
           disableTransitionOnChange
           enableColorScheme
-          {...themeArgs}
         >
           <IGRPActiveThemeProvider initialTheme={activeThemeValue}>
             <IGRPSessionWatcher>{children}</IGRPSessionWatcher>

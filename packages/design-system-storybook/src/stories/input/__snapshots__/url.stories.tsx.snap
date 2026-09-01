@@ -1,0 +1,643 @@
+// Jest Snapshot v1, https://jestjs.io/docs/snapshot-testing
+
+exports[`Components/Input/URL CustomProtocols smoke-test 1`] = `
+<div class="container my-10 mx-auto p-4 border rounded-lg shadow-sm max-w-lg">
+  <div class="*:not-first:mt-2">
+    <label data-slot="label"
+           class="flex items-center text-sm leading-none font-medium select-none group-data-[disabled=true]:pointer-events-none group-data-[disabled=true]:opacity-50 peer-disabled:cursor-not-allowed peer-disabled:opacity-50 gap-0.5"
+           for="repository"
+    >
+      Repository URL
+    </label>
+    <div class="flex rounded-md shadow-xs">
+      <button type="button"
+              role="combobox"
+              aria-expanded="false"
+              aria-autocomplete="none"
+              dir="ltr"
+              data-state="closed"
+              data-slot="select-trigger"
+              data-size="default"
+              class="border-input data-placeholder:text-muted-foreground [&amp;_svg:not([class*='text-'])]:text-muted-foreground focus-visible:border-ring focus-visible:ring-ring/50 aria-invalid:ring-destructive/20 dark:aria-invalid:ring-destructive/40 aria-invalid:border-destructive dark:bg-input/30 dark:hover:bg-input/50 flex w-fit items-center justify-between gap-2 bg-transparent px-3 py-2 text-sm whitespace-nowrap transition-[color,box-shadow] outline-none focus-visible:ring-[3px] disabled:cursor-not-allowed disabled:opacity-50 data-[size=default]:h-9 data-[size=sm]:h-8 *:data-[slot=select-value]:line-clamp-1 *:data-[slot=select-value]:flex *:data-[slot=select-value]:items-center *:data-[slot=select-value]:gap-2 [&amp;_svg]:pointer-events-none [&amp;_svg]:shrink-0 [&amp;_svg:not([class*='size-'])]:size-4 border-0 shadow-none border-l border-b border-t rounded-none min-w-[100px]"
+              aria-label="Protocol"
+      >
+        <span data-slot="select-value"
+              style="pointer-events: none;"
+        >
+          Git
+        </span>
+        <svg xmlns="http://www.w3.org/2000/svg"
+             width="24"
+             height="24"
+             viewbox="0 0 24 24"
+             fill="none"
+             stroke="currentColor"
+             stroke-width="2"
+             stroke-linecap="round"
+             stroke-linejoin="round"
+             class="lucide lucide-chevron-down size-4 opacity-50"
+             aria-hidden="true"
+        >
+          <path d="m6 9 6 6 6-6">
+          </path>
+        </svg>
+      </button>
+      <input data-slot="input"
+             class="file:text-foreground placeholder:text-muted-foreground selection:bg-primary selection:text-primary-foreground dark:bg-input/30 border-input h-9 w-full min-w-0 rounded-md border bg-transparent px-3 py-1 text-base transition-[color,box-shadow] outline-none file:inline-flex file:h-7 file:border-0 file:bg-transparent file:text-sm file:font-medium disabled:pointer-events-none disabled:cursor-not-allowed disabled:opacity-50 md:text-sm focus-visible:border-ring focus-visible:ring-ring/50 focus-visible:ring-2 aria-invalid:ring-destructive/20 dark:aria-invalid:ring-destructive/40 aria-invalid:border-destructive rounded-s-none shadow-none focus-visible:z-10"
+             id="repository"
+             inputmode="url"
+             aria-required="false"
+             aria-invalid="false"
+             placeholder="Insira a URL do repositório"
+             type="url"
+             value
+             name="repository"
+      >
+    </div>
+  </div>
+</div>
+`;
+
+exports[`Components/Input/URL Default smoke-test 1`] = `
+<div class="container my-10 mx-auto p-4 border rounded-lg shadow-sm max-w-lg">
+  <div class="*:not-first:mt-2">
+    <label data-slot="label"
+           class="flex items-center text-sm leading-none font-medium select-none group-data-[disabled=true]:pointer-events-none group-data-[disabled=true]:opacity-50 peer-disabled:cursor-not-allowed peer-disabled:opacity-50 gap-0.5"
+           for="website"
+    >
+      Website URL
+    </label>
+    <div class="flex rounded-md shadow-xs">
+      <button type="button"
+              role="combobox"
+              aria-expanded="false"
+              aria-autocomplete="none"
+              dir="ltr"
+              data-state="closed"
+              data-slot="select-trigger"
+              data-size="default"
+              class="border-input data-placeholder:text-muted-foreground [&amp;_svg:not([class*='text-'])]:text-muted-foreground focus-visible:border-ring focus-visible:ring-ring/50 aria-invalid:ring-destructive/20 dark:aria-invalid:ring-destructive/40 aria-invalid:border-destructive dark:bg-input/30 dark:hover:bg-input/50 flex w-fit items-center justify-between gap-2 bg-transparent px-3 py-2 text-sm whitespace-nowrap transition-[color,box-shadow] outline-none focus-visible:ring-[3px] disabled:cursor-not-allowed disabled:opacity-50 data-[size=default]:h-9 data-[size=sm]:h-8 *:data-[slot=select-value]:line-clamp-1 *:data-[slot=select-value]:flex *:data-[slot=select-value]:items-center *:data-[slot=select-value]:gap-2 [&amp;_svg]:pointer-events-none [&amp;_svg]:shrink-0 [&amp;_svg:not([class*='size-'])]:size-4 border-0 shadow-none border-l border-b border-t rounded-none min-w-[100px]"
+              aria-label="Protocol"
+      >
+        <span data-slot="select-value"
+              style="pointer-events: none;"
+        >
+          https://
+        </span>
+        <svg xmlns="http://www.w3.org/2000/svg"
+             width="24"
+             height="24"
+             viewbox="0 0 24 24"
+             fill="none"
+             stroke="currentColor"
+             stroke-width="2"
+             stroke-linecap="round"
+             stroke-linejoin="round"
+             class="lucide lucide-chevron-down size-4 opacity-50"
+             aria-hidden="true"
+        >
+          <path d="m6 9 6 6 6-6">
+          </path>
+        </svg>
+      </button>
+      <input data-slot="input"
+             class="file:text-foreground placeholder:text-muted-foreground selection:bg-primary selection:text-primary-foreground dark:bg-input/30 border-input h-9 w-full min-w-0 rounded-md border bg-transparent px-3 py-1 text-base transition-[color,box-shadow] outline-none file:inline-flex file:h-7 file:border-0 file:bg-transparent file:text-sm file:font-medium disabled:pointer-events-none disabled:cursor-not-allowed disabled:opacity-50 md:text-sm focus-visible:border-ring focus-visible:ring-ring/50 focus-visible:ring-2 aria-invalid:ring-destructive/20 dark:aria-invalid:ring-destructive/40 aria-invalid:border-destructive rounded-s-none shadow-none focus-visible:z-10"
+             id="website"
+             inputmode="url"
+             aria-required="false"
+             aria-invalid="false"
+             placeholder="Insira a URL do site"
+             type="url"
+             value
+             name="website"
+      >
+    </div>
+  </div>
+</div>
+`;
+
+exports[`Components/Input/URL Disabled smoke-test 1`] = `
+<div class="container my-10 mx-auto p-4 border rounded-lg shadow-sm max-w-lg">
+  <div class="*:not-first:mt-2">
+    <label data-slot="label"
+           class="flex items-center text-sm leading-none font-medium select-none group-data-[disabled=true]:pointer-events-none group-data-[disabled=true]:opacity-50 peer-disabled:cursor-not-allowed peer-disabled:opacity-50 gap-0.5"
+           for="website"
+    >
+      Website URL
+    </label>
+    <div class="flex rounded-md shadow-xs">
+      <button type="button"
+              role="combobox"
+              aria-expanded="false"
+              aria-autocomplete="none"
+              dir="ltr"
+              data-state="closed"
+              disabled
+              data-disabled
+              data-slot="select-trigger"
+              data-size="default"
+              class="border-input data-placeholder:text-muted-foreground [&amp;_svg:not([class*='text-'])]:text-muted-foreground focus-visible:border-ring focus-visible:ring-ring/50 aria-invalid:ring-destructive/20 dark:aria-invalid:ring-destructive/40 aria-invalid:border-destructive dark:bg-input/30 dark:hover:bg-input/50 flex w-fit items-center justify-between gap-2 bg-transparent px-3 py-2 text-sm whitespace-nowrap transition-[color,box-shadow] outline-none focus-visible:ring-[3px] disabled:cursor-not-allowed disabled:opacity-50 data-[size=default]:h-9 data-[size=sm]:h-8 *:data-[slot=select-value]:line-clamp-1 *:data-[slot=select-value]:flex *:data-[slot=select-value]:items-center *:data-[slot=select-value]:gap-2 [&amp;_svg]:pointer-events-none [&amp;_svg]:shrink-0 [&amp;_svg:not([class*='size-'])]:size-4 border-0 shadow-none border-l border-b border-t rounded-none min-w-[100px]"
+              aria-label="Protocol"
+      >
+        <span data-slot="select-value"
+              style="pointer-events: none;"
+        >
+          https://
+        </span>
+        <svg xmlns="http://www.w3.org/2000/svg"
+             width="24"
+             height="24"
+             viewbox="0 0 24 24"
+             fill="none"
+             stroke="currentColor"
+             stroke-width="2"
+             stroke-linecap="round"
+             stroke-linejoin="round"
+             class="lucide lucide-chevron-down size-4 opacity-50"
+             aria-hidden="true"
+        >
+          <path d="m6 9 6 6 6-6">
+          </path>
+        </svg>
+      </button>
+      <input data-slot="input"
+             class="file:text-foreground placeholder:text-muted-foreground selection:bg-primary selection:text-primary-foreground dark:bg-input/30 border-input h-9 w-full min-w-0 rounded-md border bg-transparent px-3 py-1 text-base transition-[color,box-shadow] outline-none file:inline-flex file:h-7 file:border-0 file:bg-transparent file:text-sm file:font-medium disabled:pointer-events-none disabled:cursor-not-allowed disabled:opacity-50 md:text-sm focus-visible:border-ring focus-visible:ring-ring/50 focus-visible:ring-2 aria-invalid:ring-destructive/20 dark:aria-invalid:ring-destructive/40 aria-invalid:border-destructive rounded-s-none shadow-none focus-visible:z-10"
+             id="website"
+             inputmode="url"
+             aria-required="false"
+             aria-invalid="false"
+             disabled
+             placeholder="Campo desabilitado"
+             type="url"
+             value="example.com"
+             name="website"
+      >
+    </div>
+  </div>
+</div>
+`;
+
+exports[`Components/Input/URL HalfWidth smoke-test 1`] = `
+<div class="container my-10 mx-auto p-4 border rounded-lg shadow-sm max-w-lg">
+  <div class="*:not-first:mt-2">
+    <label data-slot="label"
+           class="flex items-center text-sm leading-none font-medium select-none group-data-[disabled=true]:pointer-events-none group-data-[disabled=true]:opacity-50 peer-disabled:cursor-not-allowed peer-disabled:opacity-50 gap-0.5"
+           for="website"
+    >
+      Website URL
+    </label>
+    <div class="flex rounded-md shadow-xs">
+      <button type="button"
+              role="combobox"
+              aria-expanded="false"
+              aria-autocomplete="none"
+              dir="ltr"
+              data-state="closed"
+              data-slot="select-trigger"
+              data-size="default"
+              class="border-input data-placeholder:text-muted-foreground [&amp;_svg:not([class*='text-'])]:text-muted-foreground focus-visible:border-ring focus-visible:ring-ring/50 aria-invalid:ring-destructive/20 dark:aria-invalid:ring-destructive/40 aria-invalid:border-destructive dark:bg-input/30 dark:hover:bg-input/50 flex w-fit items-center justify-between gap-2 bg-transparent px-3 py-2 text-sm whitespace-nowrap transition-[color,box-shadow] outline-none focus-visible:ring-[3px] disabled:cursor-not-allowed disabled:opacity-50 data-[size=default]:h-9 data-[size=sm]:h-8 *:data-[slot=select-value]:line-clamp-1 *:data-[slot=select-value]:flex *:data-[slot=select-value]:items-center *:data-[slot=select-value]:gap-2 [&amp;_svg]:pointer-events-none [&amp;_svg]:shrink-0 [&amp;_svg:not([class*='size-'])]:size-4 border-0 shadow-none border-l border-b border-t rounded-none min-w-[100px]"
+              aria-label="Protocol"
+      >
+        <span data-slot="select-value"
+              style="pointer-events: none;"
+        >
+          https://
+        </span>
+        <svg xmlns="http://www.w3.org/2000/svg"
+             width="24"
+             height="24"
+             viewbox="0 0 24 24"
+             fill="none"
+             stroke="currentColor"
+             stroke-width="2"
+             stroke-linecap="round"
+             stroke-linejoin="round"
+             class="lucide lucide-chevron-down size-4 opacity-50"
+             aria-hidden="true"
+        >
+          <path d="m6 9 6 6 6-6">
+          </path>
+        </svg>
+      </button>
+      <input data-slot="input"
+             class="file:text-foreground placeholder:text-muted-foreground selection:bg-primary selection:text-primary-foreground dark:bg-input/30 border-input h-9 w-full min-w-0 rounded-md border bg-transparent px-3 py-1 text-base transition-[color,box-shadow] outline-none file:inline-flex file:h-7 file:border-0 file:bg-transparent file:text-sm file:font-medium disabled:pointer-events-none disabled:cursor-not-allowed disabled:opacity-50 md:text-sm focus-visible:border-ring focus-visible:ring-ring/50 focus-visible:ring-2 aria-invalid:ring-destructive/20 dark:aria-invalid:ring-destructive/40 aria-invalid:border-destructive rounded-s-none shadow-none focus-visible:z-10"
+             id="website"
+             inputmode="url"
+             aria-required="false"
+             aria-invalid="false"
+             placeholder="Insira a URL do site"
+             gridsize="1/2"
+             type="url"
+             value
+             name="website"
+      >
+    </div>
+  </div>
+</div>
+`;
+
+exports[`Components/Input/URL Required smoke-test 1`] = `
+<div class="container my-10 mx-auto p-4 border rounded-lg shadow-sm max-w-lg">
+  <div class="*:not-first:mt-2">
+    <label data-slot="label"
+           class="flex items-center text-sm leading-none font-medium select-none group-data-[disabled=true]:pointer-events-none group-data-[disabled=true]:opacity-50 peer-disabled:cursor-not-allowed peer-disabled:opacity-50 after:content-['*'] after:text-destructive gap-0.5"
+           for="website"
+    >
+      Website URL
+    </label>
+    <div class="flex rounded-md shadow-xs">
+      <button type="button"
+              role="combobox"
+              aria-expanded="false"
+              aria-autocomplete="none"
+              dir="ltr"
+              data-state="closed"
+              data-slot="select-trigger"
+              data-size="default"
+              class="border-input data-placeholder:text-muted-foreground [&amp;_svg:not([class*='text-'])]:text-muted-foreground focus-visible:border-ring focus-visible:ring-ring/50 aria-invalid:ring-destructive/20 dark:aria-invalid:ring-destructive/40 aria-invalid:border-destructive dark:bg-input/30 dark:hover:bg-input/50 flex w-fit items-center justify-between gap-2 bg-transparent px-3 py-2 text-sm whitespace-nowrap transition-[color,box-shadow] outline-none focus-visible:ring-[3px] disabled:cursor-not-allowed disabled:opacity-50 data-[size=default]:h-9 data-[size=sm]:h-8 *:data-[slot=select-value]:line-clamp-1 *:data-[slot=select-value]:flex *:data-[slot=select-value]:items-center *:data-[slot=select-value]:gap-2 [&amp;_svg]:pointer-events-none [&amp;_svg]:shrink-0 [&amp;_svg:not([class*='size-'])]:size-4 border-0 shadow-none border-l border-b border-t rounded-none min-w-[100px]"
+              aria-label="Protocol"
+      >
+        <span data-slot="select-value"
+              style="pointer-events: none;"
+        >
+          https://
+        </span>
+        <svg xmlns="http://www.w3.org/2000/svg"
+             width="24"
+             height="24"
+             viewbox="0 0 24 24"
+             fill="none"
+             stroke="currentColor"
+             stroke-width="2"
+             stroke-linecap="round"
+             stroke-linejoin="round"
+             class="lucide lucide-chevron-down size-4 opacity-50"
+             aria-hidden="true"
+        >
+          <path d="m6 9 6 6 6-6">
+          </path>
+        </svg>
+      </button>
+      <input data-slot="input"
+             class="file:text-foreground placeholder:text-muted-foreground selection:bg-primary selection:text-primary-foreground dark:bg-input/30 border-input h-9 w-full min-w-0 rounded-md border bg-transparent px-3 py-1 text-base transition-[color,box-shadow] outline-none file:inline-flex file:h-7 file:border-0 file:bg-transparent file:text-sm file:font-medium disabled:pointer-events-none disabled:cursor-not-allowed disabled:opacity-50 md:text-sm focus-visible:border-ring focus-visible:ring-ring/50 focus-visible:ring-2 aria-invalid:ring-destructive/20 dark:aria-invalid:ring-destructive/40 aria-invalid:border-destructive rounded-s-none shadow-none focus-visible:z-10"
+             id="website"
+             inputmode="url"
+             required
+             aria-required="true"
+             aria-invalid="false"
+             placeholder="Insira a URL do site (obrigatório)"
+             type="url"
+             value
+             name="website"
+      >
+    </div>
+  </div>
+</div>
+`;
+
+exports[`Components/Input/URL WithDefaultValue smoke-test 1`] = `
+<div class="container my-10 mx-auto p-4 border rounded-lg shadow-sm max-w-lg">
+  <div class="*:not-first:mt-2">
+    <label data-slot="label"
+           class="flex items-center text-sm leading-none font-medium select-none group-data-[disabled=true]:pointer-events-none group-data-[disabled=true]:opacity-50 peer-disabled:cursor-not-allowed peer-disabled:opacity-50 gap-0.5"
+           for="website"
+    >
+      Website URL
+    </label>
+    <div class="flex rounded-md shadow-xs">
+      <button type="button"
+              role="combobox"
+              aria-expanded="false"
+              aria-autocomplete="none"
+              dir="ltr"
+              data-state="closed"
+              data-slot="select-trigger"
+              data-size="default"
+              class="border-input data-placeholder:text-muted-foreground [&amp;_svg:not([class*='text-'])]:text-muted-foreground focus-visible:border-ring focus-visible:ring-ring/50 aria-invalid:ring-destructive/20 dark:aria-invalid:ring-destructive/40 aria-invalid:border-destructive dark:bg-input/30 dark:hover:bg-input/50 flex w-fit items-center justify-between gap-2 bg-transparent px-3 py-2 text-sm whitespace-nowrap transition-[color,box-shadow] outline-none focus-visible:ring-[3px] disabled:cursor-not-allowed disabled:opacity-50 data-[size=default]:h-9 data-[size=sm]:h-8 *:data-[slot=select-value]:line-clamp-1 *:data-[slot=select-value]:flex *:data-[slot=select-value]:items-center *:data-[slot=select-value]:gap-2 [&amp;_svg]:pointer-events-none [&amp;_svg]:shrink-0 [&amp;_svg:not([class*='size-'])]:size-4 border-0 shadow-none border-l border-b border-t rounded-none min-w-[100px]"
+              aria-label="Protocol"
+      >
+        <span data-slot="select-value"
+              style="pointer-events: none;"
+        >
+          https://
+        </span>
+        <svg xmlns="http://www.w3.org/2000/svg"
+             width="24"
+             height="24"
+             viewbox="0 0 24 24"
+             fill="none"
+             stroke="currentColor"
+             stroke-width="2"
+             stroke-linecap="round"
+             stroke-linejoin="round"
+             class="lucide lucide-chevron-down size-4 opacity-50"
+             aria-hidden="true"
+        >
+          <path d="m6 9 6 6 6-6">
+          </path>
+        </svg>
+      </button>
+      <input data-slot="input"
+             class="file:text-foreground placeholder:text-muted-foreground selection:bg-primary selection:text-primary-foreground dark:bg-input/30 border-input h-9 w-full min-w-0 rounded-md border bg-transparent px-3 py-1 text-base transition-[color,box-shadow] outline-none file:inline-flex file:h-7 file:border-0 file:bg-transparent file:text-sm file:font-medium disabled:pointer-events-none disabled:cursor-not-allowed disabled:opacity-50 md:text-sm focus-visible:border-ring focus-visible:ring-ring/50 focus-visible:ring-2 aria-invalid:ring-destructive/20 dark:aria-invalid:ring-destructive/40 aria-invalid:border-destructive rounded-s-none shadow-none focus-visible:z-10"
+             id="website"
+             inputmode="url"
+             aria-required="false"
+             aria-invalid="false"
+             placeholder="Insira a URL do site"
+             type="url"
+             value="example.com"
+             name="website"
+      >
+    </div>
+  </div>
+</div>
+`;
+
+exports[`Components/Input/URL WithError smoke-test 1`] = `
+<div class="container my-10 mx-auto p-4 border rounded-lg shadow-sm max-w-lg">
+  <div class="*:not-first:mt-2">
+    <label data-slot="label"
+           class="flex items-center text-sm leading-none font-medium select-none group-data-[disabled=true]:pointer-events-none group-data-[disabled=true]:opacity-50 peer-disabled:cursor-not-allowed peer-disabled:opacity-50 gap-0.5"
+           for="website"
+    >
+      Website URL
+    </label>
+    <div class="flex rounded-md shadow-xs">
+      <button type="button"
+              role="combobox"
+              aria-expanded="false"
+              aria-autocomplete="none"
+              dir="ltr"
+              data-state="closed"
+              data-slot="select-trigger"
+              data-size="default"
+              class="border-input data-placeholder:text-muted-foreground [&amp;_svg:not([class*='text-'])]:text-muted-foreground focus-visible:border-ring focus-visible:ring-ring/50 aria-invalid:ring-destructive/20 dark:aria-invalid:ring-destructive/40 aria-invalid:border-destructive dark:bg-input/30 dark:hover:bg-input/50 flex w-fit items-center justify-between gap-2 bg-transparent px-3 py-2 text-sm whitespace-nowrap transition-[color,box-shadow] outline-none focus-visible:ring-[3px] disabled:cursor-not-allowed disabled:opacity-50 data-[size=default]:h-9 data-[size=sm]:h-8 *:data-[slot=select-value]:line-clamp-1 *:data-[slot=select-value]:flex *:data-[slot=select-value]:items-center *:data-[slot=select-value]:gap-2 [&amp;_svg]:pointer-events-none [&amp;_svg]:shrink-0 [&amp;_svg:not([class*='size-'])]:size-4 border-0 shadow-none border-l border-b border-t rounded-none min-w-[100px]"
+              aria-label="Protocol"
+      >
+        <span data-slot="select-value"
+              style="pointer-events: none;"
+        >
+          https://
+        </span>
+        <svg xmlns="http://www.w3.org/2000/svg"
+             width="24"
+             height="24"
+             viewbox="0 0 24 24"
+             fill="none"
+             stroke="currentColor"
+             stroke-width="2"
+             stroke-linecap="round"
+             stroke-linejoin="round"
+             class="lucide lucide-chevron-down size-4 opacity-50"
+             aria-hidden="true"
+        >
+          <path d="m6 9 6 6 6-6">
+          </path>
+        </svg>
+      </button>
+      <input data-slot="input"
+             class="file:text-foreground placeholder:text-muted-foreground selection:bg-primary selection:text-primary-foreground dark:bg-input/30 h-9 w-full min-w-0 rounded-md border bg-transparent px-3 py-1 text-base transition-[color,box-shadow] outline-none file:inline-flex file:h-7 file:border-0 file:bg-transparent file:text-sm file:font-medium disabled:pointer-events-none disabled:cursor-not-allowed disabled:opacity-50 md:text-sm focus-visible:border-ring focus-visible:ring-2 aria-invalid:ring-destructive/20 dark:aria-invalid:ring-destructive/40 aria-invalid:border-destructive rounded-s-none shadow-none focus-visible:z-10 border-destructive focus-visible:ring-destructive/20"
+             id="website"
+             inputmode="url"
+             aria-required="false"
+             aria-invalid="true"
+             aria-describedby="website-error"
+             placeholder="Insira a URL do site"
+             type="url"
+             value
+             name="website"
+      >
+    </div>
+    <p id="website-error"
+       class="text-destructive mt-2 text-xs"
+       role="alert"
+    >
+      URL inválida. A URL deve começar com um protocolo válido.
+    </p>
+  </div>
+</div>
+`;
+
+exports[`Components/Input/URL WithHelperText smoke-test 1`] = `
+<div class="container my-10 mx-auto p-4 border rounded-lg shadow-sm max-w-lg">
+  <div class="*:not-first:mt-2">
+    <label data-slot="label"
+           class="flex items-center text-sm leading-none font-medium select-none group-data-[disabled=true]:pointer-events-none group-data-[disabled=true]:opacity-50 peer-disabled:cursor-not-allowed peer-disabled:opacity-50 gap-0.5"
+           for="website"
+    >
+      Website URL
+    </label>
+    <div class="flex rounded-md shadow-xs">
+      <button type="button"
+              role="combobox"
+              aria-expanded="false"
+              aria-autocomplete="none"
+              dir="ltr"
+              data-state="closed"
+              data-slot="select-trigger"
+              data-size="default"
+              class="border-input data-placeholder:text-muted-foreground [&amp;_svg:not([class*='text-'])]:text-muted-foreground focus-visible:border-ring focus-visible:ring-ring/50 aria-invalid:ring-destructive/20 dark:aria-invalid:ring-destructive/40 aria-invalid:border-destructive dark:bg-input/30 dark:hover:bg-input/50 flex w-fit items-center justify-between gap-2 bg-transparent px-3 py-2 text-sm whitespace-nowrap transition-[color,box-shadow] outline-none focus-visible:ring-[3px] disabled:cursor-not-allowed disabled:opacity-50 data-[size=default]:h-9 data-[size=sm]:h-8 *:data-[slot=select-value]:line-clamp-1 *:data-[slot=select-value]:flex *:data-[slot=select-value]:items-center *:data-[slot=select-value]:gap-2 [&amp;_svg]:pointer-events-none [&amp;_svg]:shrink-0 [&amp;_svg:not([class*='size-'])]:size-4 border-0 shadow-none border-l border-b border-t rounded-none min-w-[100px]"
+              aria-label="Protocol"
+      >
+        <span data-slot="select-value"
+              style="pointer-events: none;"
+        >
+          https://
+        </span>
+        <svg xmlns="http://www.w3.org/2000/svg"
+             width="24"
+             height="24"
+             viewbox="0 0 24 24"
+             fill="none"
+             stroke="currentColor"
+             stroke-width="2"
+             stroke-linecap="round"
+             stroke-linejoin="round"
+             class="lucide lucide-chevron-down size-4 opacity-50"
+             aria-hidden="true"
+        >
+          <path d="m6 9 6 6 6-6">
+          </path>
+        </svg>
+      </button>
+      <input data-slot="input"
+             class="file:text-foreground placeholder:text-muted-foreground selection:bg-primary selection:text-primary-foreground dark:bg-input/30 border-input h-9 w-full min-w-0 rounded-md border bg-transparent px-3 py-1 text-base transition-[color,box-shadow] outline-none file:inline-flex file:h-7 file:border-0 file:bg-transparent file:text-sm file:font-medium disabled:pointer-events-none disabled:cursor-not-allowed disabled:opacity-50 md:text-sm focus-visible:border-ring focus-visible:ring-ring/50 focus-visible:ring-2 aria-invalid:ring-destructive/20 dark:aria-invalid:ring-destructive/40 aria-invalid:border-destructive rounded-s-none shadow-none focus-visible:z-10"
+             id="website"
+             inputmode="url"
+             aria-required="false"
+             aria-invalid="false"
+             aria-describedby="website-helper"
+             placeholder="Insira a URL do site"
+             type="url"
+             value
+             name="website"
+      >
+    </div>
+    <p id="website-helper"
+       class="text-muted-foreground mt-2 text-xs"
+       role="region"
+       aria-live="polite"
+    >
+      Insira a URL completa incluindo o protocolo
+    </p>
+  </div>
+</div>
+`;
+
+exports[`Components/Input/URL WithHttpDefaultProtocol smoke-test 1`] = `
+<div class="container my-10 mx-auto p-4 border rounded-lg shadow-sm max-w-lg">
+  <div class="*:not-first:mt-2">
+    <label data-slot="label"
+           class="flex items-center text-sm leading-none font-medium select-none group-data-[disabled=true]:pointer-events-none group-data-[disabled=true]:opacity-50 peer-disabled:cursor-not-allowed peer-disabled:opacity-50 gap-0.5"
+           for="website"
+    >
+      Website URL
+    </label>
+    <div class="flex rounded-md shadow-xs">
+      <button type="button"
+              role="combobox"
+              aria-expanded="false"
+              aria-autocomplete="none"
+              dir="ltr"
+              data-state="closed"
+              data-slot="select-trigger"
+              data-size="default"
+              class="border-input data-placeholder:text-muted-foreground [&amp;_svg:not([class*='text-'])]:text-muted-foreground focus-visible:border-ring focus-visible:ring-ring/50 aria-invalid:ring-destructive/20 dark:aria-invalid:ring-destructive/40 aria-invalid:border-destructive dark:bg-input/30 dark:hover:bg-input/50 flex w-fit items-center justify-between gap-2 bg-transparent px-3 py-2 text-sm whitespace-nowrap transition-[color,box-shadow] outline-none focus-visible:ring-[3px] disabled:cursor-not-allowed disabled:opacity-50 data-[size=default]:h-9 data-[size=sm]:h-8 *:data-[slot=select-value]:line-clamp-1 *:data-[slot=select-value]:flex *:data-[slot=select-value]:items-center *:data-[slot=select-value]:gap-2 [&amp;_svg]:pointer-events-none [&amp;_svg]:shrink-0 [&amp;_svg:not([class*='size-'])]:size-4 border-0 shadow-none border-l border-b border-t rounded-none min-w-[100px]"
+              aria-label="Protocol"
+      >
+        <span data-slot="select-value"
+              style="pointer-events: none;"
+        >
+          http://
+        </span>
+        <svg xmlns="http://www.w3.org/2000/svg"
+             width="24"
+             height="24"
+             viewbox="0 0 24 24"
+             fill="none"
+             stroke="currentColor"
+             stroke-width="2"
+             stroke-linecap="round"
+             stroke-linejoin="round"
+             class="lucide lucide-chevron-down size-4 opacity-50"
+             aria-hidden="true"
+        >
+          <path d="m6 9 6 6 6-6">
+          </path>
+        </svg>
+      </button>
+      <input data-slot="input"
+             class="file:text-foreground placeholder:text-muted-foreground selection:bg-primary selection:text-primary-foreground dark:bg-input/30 border-input h-9 w-full min-w-0 rounded-md border bg-transparent px-3 py-1 text-base transition-[color,box-shadow] outline-none file:inline-flex file:h-7 file:border-0 file:bg-transparent file:text-sm file:font-medium disabled:pointer-events-none disabled:cursor-not-allowed disabled:opacity-50 md:text-sm focus-visible:border-ring focus-visible:ring-ring/50 focus-visible:ring-2 aria-invalid:ring-destructive/20 dark:aria-invalid:ring-destructive/40 aria-invalid:border-destructive rounded-s-none shadow-none focus-visible:z-10"
+             id="website"
+             inputmode="url"
+             aria-required="false"
+             aria-invalid="false"
+             placeholder="Insira a URL do site"
+             type="url"
+             value
+             name="website"
+      >
+    </div>
+  </div>
+</div>
+`;
+
+exports[`Components/Input/URL WithValidation smoke-test 1`] = `
+<div class="container my-10 mx-auto p-4 border rounded-lg shadow-sm max-w-lg">
+  <form class="space-y-4">
+    <div class="*:not-first:mt-2">
+      <label data-slot="label"
+             class="flex items-center text-sm leading-none font-medium select-none group-data-[disabled=true]:pointer-events-none group-data-[disabled=true]:opacity-50 peer-disabled:cursor-not-allowed peer-disabled:opacity-50 after:content-['*'] after:text-destructive gap-0.5"
+             for="website"
+      >
+        Website URL
+      </label>
+      <div class="flex rounded-md shadow-xs">
+        <button type="button"
+                role="combobox"
+                aria-expanded="false"
+                aria-autocomplete="none"
+                dir="ltr"
+                data-state="closed"
+                data-slot="select-trigger"
+                data-size="default"
+                class="border-input data-placeholder:text-muted-foreground [&amp;_svg:not([class*='text-'])]:text-muted-foreground focus-visible:border-ring focus-visible:ring-ring/50 aria-invalid:ring-destructive/20 dark:aria-invalid:ring-destructive/40 aria-invalid:border-destructive dark:bg-input/30 dark:hover:bg-input/50 flex w-fit items-center justify-between gap-2 bg-transparent px-3 py-2 text-sm whitespace-nowrap transition-[color,box-shadow] outline-none focus-visible:ring-[3px] disabled:cursor-not-allowed disabled:opacity-50 data-[size=default]:h-9 data-[size=sm]:h-8 *:data-[slot=select-value]:line-clamp-1 *:data-[slot=select-value]:flex *:data-[slot=select-value]:items-center *:data-[slot=select-value]:gap-2 [&amp;_svg]:pointer-events-none [&amp;_svg]:shrink-0 [&amp;_svg:not([class*='size-'])]:size-4 border-0 shadow-none border-l border-b border-t rounded-none min-w-[100px]"
+                aria-label="Protocol"
+        >
+          <span data-slot="select-value"
+                style="pointer-events: none;"
+          >
+            https://
+          </span>
+          <svg xmlns="http://www.w3.org/2000/svg"
+               width="24"
+               height="24"
+               viewbox="0 0 24 24"
+               fill="none"
+               stroke="currentColor"
+               stroke-width="2"
+               stroke-linecap="round"
+               stroke-linejoin="round"
+               class="lucide lucide-chevron-down size-4 opacity-50"
+               aria-hidden="true"
+          >
+            <path d="m6 9 6 6 6-6">
+            </path>
+          </svg>
+        </button>
+        <select aria-hidden="true"
+                tabindex="-1"
+                style="position: absolute; border: 0px; width: 1px; height: 1px; padding: 0px; margin: -1px; overflow: hidden; clip: rect(0px, 0px, 0px, 0px); white-space: nowrap; overflow-wrap: normal;"
+        >
+          <option value="https://"
+                  selected
+          >
+            https://
+          </option>
+          <option value="http://">
+            http://
+          </option>
+          <option value="ftp://">
+            ftp://
+          </option>
+          <option value="sftp://">
+            sftp://
+          </option>
+          <option value="ws://">
+            ws://
+          </option>
+          <option value="wss://">
+            wss://
+          </option>
+        </select>
+        <input data-slot="input"
+               class="file:text-foreground placeholder:text-muted-foreground selection:bg-primary selection:text-primary-foreground dark:bg-input/30 border-input h-9 w-full min-w-0 rounded-md border bg-transparent px-3 py-1 text-base transition-[color,box-shadow] outline-none file:inline-flex file:h-7 file:border-0 file:bg-transparent file:text-sm file:font-medium disabled:pointer-events-none disabled:cursor-not-allowed disabled:opacity-50 md:text-sm focus-visible:border-ring focus-visible:ring-ring/50 focus-visible:ring-2 aria-invalid:ring-destructive/20 dark:aria-invalid:ring-destructive/40 aria-invalid:border-destructive rounded-s-none shadow-none focus-visible:z-10"
+               id="website"
+               inputmode="url"
+               required
+               aria-required="true"
+               aria-invalid="false"
+               aria-describedby="website-helper"
+               placeholder="Exemplo: https://example.com"
+               type="url"
+               value
+               name="website"
+        >
+      </div>
+      <p id="website-helper"
+         class="text-muted-foreground mt-2 text-xs"
+         role="region"
+         aria-live="polite"
+      >
+        Insira uma URL válida começando com http:// ou https://
+      </p>
+    </div>
+    <button data-slot="button"
+            class="inline-flex items-center justify-center gap-1.5 whitespace-nowrap rounded-md text-sm font-medium transition-[color,box-shadow] disabled:pointer-events-none disabled:opacity-50 [&amp;_svg]:pointer-events-none [&amp;_svg:not([class*='size-'])]:size-4 shrink-0 [&amp;_svg]:shrink-0 outline-none focus-visible:border-ring focus-visible:ring-ring/50 focus-visible:ring-[3px] aria-invalid:ring-destructive/20 dark:aria-invalid:ring-destructive/40 aria-invalid:border-destructive bg-primary text-primary-foreground shadow-xs hover:bg-primary/90 hover:text-primary-foreground h-9 px-2.5 has-data-[icon=inline-end]:pr-2 has-data-[icon=inline-start]:pl-2 w-full mt-4"
+            type="submit"
+    >
+      Enviar
+    </button>
+  </form>
+</div>
+`;

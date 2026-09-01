@@ -1,0 +1,86 @@
+// Jest Snapshot v1, https://jestjs.io/docs/snapshot-testing
+
+exports[`Components/Image BorderRadius smoke-test 1`] = `
+<div class="container my-10 mx-auto p-4">
+  <div data-radix-id""
+       style="position: relative; width: 100%; padding-bottom: 42.8571%;"
+  >
+    <div data-slot="aspect-ratio"
+         style="position: absolute; inset: 0px;"
+    >
+      <img id="_r_ID_"
+           loading="lazy"
+           decoding="async"
+           data-nimg="fill"
+           class="object-cover object-center rounded-md"
+           sizes="100vw"
+           srcset="/src/stories/assets/gradient.png?w=640&amp;q=75 640w, /src/stories/assets/gradient.png?w=750&amp;q=75 750w, /src/stories/assets/gradient.png?w=828&amp;q=75 828w, /src/stories/assets/gradient.png?w=1080&amp;q=75 1080w, /src/stories/assets/gradient.png?w=1200&amp;q=75 1200w, /src/stories/assets/gradient.png?w=1920&amp;q=75 1920w, /src/stories/assets/gradient.png?w=2048&amp;q=75 2048w, /src/stories/assets/gradient.png?w=3840&amp;q=75 3840w"
+           src="/src/stories/assets/gradient.png?w=3840&amp;q=75"
+           style="position: absolute; height: 100%; width: 100%; inset: 0px;"
+      >
+    </div>
+  </div>
+</div>
+`;
+
+exports[`Components/Image Default smoke-test 1`] = `
+<div class="container my-10 mx-auto p-4">
+  <div data-radix-id""
+       style="position: relative; width: 100%; padding-bottom: 56.25%;"
+  >
+    <div data-slot="aspect-ratio"
+         style="position: absolute; inset: 0px;"
+    >
+      <img id="_r_ID_"
+           loading="lazy"
+           decoding="async"
+           data-nimg="fill"
+           class="object-cover object-center rounded-md"
+           sizes="100vw"
+           srcset="/src/stories/assets/gradient.png?w=640&amp;q=75 640w, /src/stories/assets/gradient.png?w=750&amp;q=75 750w, /src/stories/assets/gradient.png?w=828&amp;q=75 828w, /src/stories/assets/gradient.png?w=1080&amp;q=75 1080w, /src/stories/assets/gradient.png?w=1200&amp;q=75 1200w, /src/stories/assets/gradient.png?w=1920&amp;q=75 1920w, /src/stories/assets/gradient.png?w=2048&amp;q=75 2048w, /src/stories/assets/gradient.png?w=3840&amp;q=75 3840w"
+           src="/src/stories/assets/gradient.png?w=3840&amp;q=75"
+           style="position: absolute; height: 100%; width: 100%; inset: 0px;"
+      >
+    </div>
+  </div>
+</div>
+`;
+
+exports[`Components/Image LabelClassName smoke-test 1`] = `
+<div class="container my-10 mx-auto p-4">
+  <img id="_r_ID_"
+       loading="lazy"
+       width="200"
+       height="200"
+       decoding="async"
+       data-nimg="1"
+       class="object-cover object-center rounded-md"
+       srcset="/src/stories/assets/gradient.png?w=256&amp;q=75 1x, /src/stories/assets/gradient.png?w=640&amp;q=75 2x"
+       src="/src/stories/assets/gradient.png?w=640&amp;q=75"
+       style
+  >
+</div>
+`;
+
+exports[`Components/Image Ratio smoke-test 1`] = `
+<div class="container my-10 mx-auto p-4">
+  <div data-radix-id""
+       style="position: relative; width: 100%; padding-bottom: 75%;"
+  >
+    <div data-slot="aspect-ratio"
+         style="position: absolute; inset: 0px;"
+    >
+      <img id="_r_ID_"
+           loading="lazy"
+           decoding="async"
+           data-nimg="fill"
+           class="object-cover object-center rounded-md"
+           sizes="100vw"
+           srcset="/src/stories/assets/gradient.png?w=640&amp;q=75 640w, /src/stories/assets/gradient.png?w=750&amp;q=75 750w, /src/stories/assets/gradient.png?w=828&amp;q=75 828w, /src/stories/assets/gradient.png?w=1080&amp;q=75 1080w, /src/stories/assets/gradient.png?w=1200&amp;q=75 1200w, /src/stories/assets/gradient.png?w=1920&amp;q=75 1920w, /src/stories/assets/gradient.png?w=2048&amp;q=75 2048w, /src/stories/assets/gradient.png?w=3840&amp;q=75 3840w"
+           src="/src/stories/assets/gradient.png?w=3840&amp;q=75"
+           style="position: absolute; height: 100%; width: 100%; inset: 0px;"
+      >
+    </div>
+  </div>
+</div>
+`;

@@ -14,10 +14,10 @@ import {
   useSidebar,
 } from '@igrp/igrp-framework-react-design-system';
 import type { IGRPApplicationArgs } from '@igrp/framework-next-types';
-import { useState, useEffect, useMemo } from 'react';
-import Image from 'next/image';
+import { useMemo } from 'react';
 
 import { getLocationOriginURL } from '../../lib/utils';
+import { IGRPTemplateImage } from './template-image';
 
 interface IGRPTemplateAppSwitcherProps {
   apps?: IGRPApplicationArgs[];
@@ -29,25 +29,15 @@ interface IGRPTemplateAppSwitcherProps {
 function IGRPTemplateAppSwitcher({ apps, appCode, appCenterUrl }: IGRPTemplateAppSwitcherProps) {
   const { isMobile } = useSidebar();
 
-  const currentApp = useMemo(() => {
+  const activeApp = useMemo(() => {
     if (!apps || apps.length === 0) return undefined;
     return appCode ? apps.find((item) => item.code === appCode) : apps[0];
   }, [apps, appCode]);
 
-  const [activeApp, setActiveApp] = useState<IGRPApplicationArgs | undefined>(currentApp);
-  const [listApps, setListApps] = useState<IGRPApplicationArgs[]>(() => {
-    if (!apps || !currentApp) return [];
-    return apps.filter((item) => item.id !== currentApp.id);
-  });
-
-  useEffect(() => {
-    if (currentApp) {
-      setActiveApp(currentApp);
-      if (apps) {
-        setListApps(apps.filter((item) => item.id !== currentApp.id));
-      }
-    }
-  }, [currentApp, apps]);
+  const listApps = useMemo(() => {
+    if (!apps || !activeApp) return [];
+    return apps.filter((item) => item.id !== activeApp.id);
+  }, [apps, activeApp]);
 
   const getAppUrl = (app: IGRPApplicationArgs): string => {
     if (app.url) return app.url;
@@ -74,18 +64,15 @@ function IGRPTemplateAppSwitcher({ apps, appCode, appCenterUrl }: IGRPTemplateAp
                 <div
                   className={cn('flex aspect-square size-8 items-center justify-center rounded-lg')}
                 >
-                  {activeApp.picture ? (
-                    <Image
-                      src={activeApp.picture}
-                      alt={activeApp.name}
-                      width={32}
-                      height={32}
-                      className={cn('h-full w-full rounded-lg object-cover')}
-                      priority
-                    />
-                  ) : (
-                    <IGRPIcon iconName="GalleryVerticalEnd" />
-                  )}
+                  <IGRPTemplateImage
+                    src={activeApp.picture}
+                    alt={activeApp.name}
+                    width={32}
+                    height={32}
+                    className={cn('h-full w-full rounded-lg object-cover')}
+                    priority
+                    fallback={<IGRPIcon iconName="GalleryVerticalEnd" />}
+                  />
                 </div>
                 <div className={cn('grid flex-1 text-left text-sm leading-tight')}>
                   <span className={cn('truncate font-medium')}>{activeApp.name}</span>
@@ -107,18 +94,20 @@ function IGRPTemplateAppSwitcher({ apps, appCode, appCenterUrl }: IGRPTemplateAp
                       <div
                         className={cn('flex size-6 items-center justify-center rounded-md border')}
                       >
-                        {app.picture ? (
-                          <Image
-                            src={app.picture}
-                            alt={app.name}
-                            width={24}
-                            height={24}
-                            className={cn('h-full w-full rounded-md object-cover')}
-                            priority
-                          />
-                        ) : (
-                          <IGRPIcon iconName="AudioWaveform" className={cn('size-3.5 shrink-0')} />
-                        )}
+                        <IGRPTemplateImage
+                          src={app.picture}
+                          alt={app.name}
+                          width={24}
+                          height={24}
+                          className={cn('h-full w-full rounded-md object-cover')}
+                          priority
+                          fallback={
+                            <IGRPIcon
+                              iconName="AudioWaveform"
+                              className={cn('size-3.5 shrink-0')}
+                            />
+                          }
+                        />
                       </div>
                       {app.name}
                     </a>

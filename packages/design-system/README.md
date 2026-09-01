@@ -4,7 +4,7 @@ IGRP Design System — React components built on Radix UI, Tailwind CSS v4, and 
 
 ## Requirements
 
-- **Node.js** ≥ 20.x
+- **Node.js** ≥ 22.x
 - **React** ^19.2.4
 - **Next.js** ^15.5.12
 - **Tailwind CSS** v4
@@ -29,8 +29,8 @@ The design system uses Tailwind v4 and CSS variables (tokens). Configure your ap
 In your main CSS file (e.g. `src/styles/globals.css`):
 
 ```css
-@import 'tailwindcss';
-@import 'tw-animate-css';
+@import "tailwindcss";
+@import "tw-animate-css";
 
 @custom-variant dark (&:is(.dark *));
 
@@ -39,10 +39,10 @@ In your main CSS file (e.g. `src/styles/globals.css`):
 @source "../../node_modules/@igrp/igrp-framework-react-design-system/dist/**/*.{js,jsx,ts,tsx,mjs,cjs}";
 
 /* Import tokens (CSS variables) */
-@import '@igrp/igrp-framework-react-design-system/tokens';
+@import "@igrp/igrp-framework-react-design-system/tokens";
 
 /* Optional: your theme overrides */
-@import './themes.css';
+@import "./themes.css";
 ```
 
 ### Importing Components
@@ -54,34 +54,31 @@ import {
   IGRPInputText,
   IGRPToaster,
   useIGRPToast,
-} from '@igrp/igrp-framework-react-design-system';
+} from "@igrp/igrp-framework-react-design-system"
 ```
 
 ### Package Exports
 
-| Export | Description |
-| ------ | ----------- |
-
-| `@igrp/igrp-framework-react-design-system` | Main entry — components, hooks, utilities |
-| `@igrp/igrp-framework-react-design-system/tokens` | CSS variables (theme tokens) |
-| `@igrp/igrp-framework-react-design-system/styles` | Full styles (Tailwind + base) — use only when not compiling Tailwind in your app |
+| Export                                            | Description                               |
+| ------------------------------------------------- | ----------------------------------------- |
+| `@igrp/igrp-framework-react-design-system`        | Main entry — components, hooks, utilities |
+| `@igrp/igrp-framework-react-design-system/tokens` | CSS variables (theme tokens)              |
 
 ### Component Categories
 
 - **Horizon** — High-level components (`IGRPButton`, `IGRPCard`, `IGRPForm`, etc.)
-- **Primitives** — Low-level building blocks (`Button`, `IGRPDialogPrimitive`, etc.)
+- **Primitives** — Low-level building blocks (`Button`, `Dialog`, etc.)
 - **Custom** — Domain-specific components (`IGRPStatusBanner`, `IGRPUserAvatar`, etc.)
 
 ### Primitives vs Horizon
 
-| Aspect | Primitives (`*Primitive`) | Horizon |
-| ------ | ------------------------- | ------- |
-
-| **Purpose** | Low-level building blocks; minimal styling, maximum flexibility | High-level, opinionated components for common IGRP patterns |
-| **Built on** | Radix UI primitives, CVA variants | Primitives (they wrap primitives) |
-| **Props** | Standard HTML/React props + variant props (`variant`, `size`, `asChild`) | IGRP-specific props (`label`, `helperText`, `showIcon`, `iconName`, `loading`, etc.) |
-| **Form integration** | None | Integrates with `IGRPFormField` and `react-hook-form` |
-| **Use when** | You need full control, custom composition, or are building your own patterns | You want ready-made forms, buttons with icons/loading, labeled inputs, etc. |
+| Aspect               | Primitives (`*Primitive`)                                                    | Horizon                                                                              |
+| -------------------- | ---------------------------------------------------------------------------- | ------------------------------------------------------------------------------------ |
+| **Purpose**          | Low-level building blocks; minimal styling, maximum flexibility              | High-level, opinionated components for common IGRP patterns                          |
+| **Built on**         | Radix UI primitives, CVA variants                                            | Primitives (they wrap primitives)                                                    |
+| **Props**            | Standard HTML/React props + variant props (`variant`, `size`, `asChild`)     | IGRP-specific props (`label`, `helperText`, `showIcon`, `iconName`, `loading`, etc.) |
+| **Form integration** | None                                                                         | Integrates with `IGRPFormField` and `react-hook-form`                                |
+| **Use when**         | You need full control, custom composition, or are building your own patterns | You want ready-made forms, buttons with icons/loading, labeled inputs, etc.          |
 
 **Primitives** are thin wrappers: they handle accessibility (Radix), apply base styles via Tailwind, and expose variants. Use them when you want to compose your own UI or need behavior without IGRP conventions.
 
@@ -123,31 +120,29 @@ The design system uses CSS custom properties for theming. Tokens are defined in 
 
 ### Core Tokens
 
-| Token | Purpose |
-| ----- | ------- |
-
-| `--background`, `--foreground` | Page background and text |
-| `--primary`, `--primary-foreground` | Primary actions and text |
-| `--secondary`, `--secondary-foreground` | Secondary elements |
-| `--muted`, `--muted-foreground` | Muted backgrounds and text |
-| `--accent`, `--accent-foreground` | Accent/hover states |
-| `--destructive` | Destructive actions |
-| `--border`, `--input`, `--ring` | Borders, inputs, focus ring |
-| `--radius` | Base border radius |
-| `--sidebar-*` | Sidebar-specific tokens |
-| `--chart-1` … `--chart-5` | Chart colors |
-| `--process-completed`, `--process-active` | Stepper/process states |
+| Token                                     | Purpose                     |
+| ----------------------------------------- | --------------------------- |
+| `--background`, `--foreground`            | Page background and text    |
+| `--primary`, `--primary-foreground`       | Primary actions and text    |
+| `--secondary`, `--secondary-foreground`   | Secondary elements          |
+| `--muted`, `--muted-foreground`           | Muted backgrounds and text  |
+| `--accent`, `--accent-foreground`         | Accent/hover states         |
+| `--destructive`                           | Destructive actions         |
+| `--border`, `--input`, `--ring`           | Borders, inputs, focus ring |
+| `--radius`                                | Base border radius          |
+| `--sidebar-*`                             | Sidebar-specific tokens     |
+| `--chart-1` … `--chart-5`                 | Chart colors                |
+| `--process-completed`, `--process-active` | Stepper/process states      |
 
 ### Dark Mode
 
 Dark mode is controlled by the `.dark` class on a parent element (e.g. `<html>`). Use `next-themes` for automatic switching:
 
 ```tsx
-import { ThemeProvider } from 'next-themes';
-
-<ThemeProvider attribute="class" defaultTheme="system">
+import { ThemeProvider } from "next-themes"
+;<ThemeProvider attribute="class" defaultTheme="system">
   {children}
-</ThemeProvider>;
+</ThemeProvider>
 ```
 
 ### Custom Themes
@@ -183,10 +178,10 @@ Override tokens in your own CSS (e.g. `themes.css`), loaded **after** the tokens
 For browser chrome (e.g. mobile address bar), use the provided hook:
 
 ```tsx
-import { IGRP_META_THEME_COLORS, useIGRPMetaColor } from '@igrp/igrp-framework-react-design-system';
+import { IGRP_META_THEME_COLORS, useIGRPMetaColor } from "@igrp/igrp-framework-react-design-system"
 
 // In layout or root component
-useIGRPMetaColor(); // Syncs theme-color meta tag with current theme
+useIGRPMetaColor() // Syncs theme-color meta tag with current theme
 ```
 
 ---
@@ -200,7 +195,7 @@ If you previously imported prebuilt styles:
 **Before:**
 
 ```css
-@import '@igrp/igrp-framework-react-design-system/styles.css';
+@import "@igrp/igrp-framework-react-design-system/styles.css";
 ```
 
 **After:**
@@ -214,7 +209,7 @@ If you previously imported prebuilt styles:
 2. Import tokens only:
 
    ```css
-   @import '@igrp/igrp-framework-react-design-system/tokens';
+   @import "@igrp/igrp-framework-react-design-system/tokens";
    ```
 
 3. Remove imports of `@igrp/*/styles.css` to avoid cascade conflicts and missing utilities.
@@ -259,7 +254,17 @@ pnpm build
 
 # Watch mode
 pnpm dev
+
+# Unit tests
+pnpm test
+
+# Check primitives for drift from upstream shadcn (periodic maintenance, hits network)
+node scripts/check-shadcn-drift.mjs
 ```
+
+### Shadcn drift checker
+
+`scripts/check-shadcn-drift.mjs` reports drift between local primitives in `src/components/primitives/` and upstream shadcn. It is intended for periodic (~quarterly) maintenance — it hits the network, is slow, and is **not** wired into CI. Each primitive may carry a `// shadcn: YYYY-MM-DD` first-line stamp recording the last upstream sync. Exit code 1 if any primitive has drifted.
 
 ---
 

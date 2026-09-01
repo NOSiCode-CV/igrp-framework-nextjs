@@ -22,6 +22,7 @@ export interface IGRPApplicationArgs {
   url?: string | null;
   slug?: string;
   departments: string[];
+  lastAccess?: string;
   createdBy?: string;
   createdDate?: string;
   lastModifiedBy?: string;
@@ -32,10 +33,11 @@ export interface IGRPRoleDepartmentArgs {
   roleCode: string;
   departmentCode: string;
 }
+
 export interface IGRPMenuItemArgs {
-  id: number;
-  code: string;
+  id?: number;
   name: string;
+  code: string;
   type: IGRPMenuType;
   position: number;
   icon?: string;
@@ -58,11 +60,14 @@ export type IGRPMenuCRUDArgs = Omit<IGRPMenuItemArgs, 'type'> & {
 
 export interface IGRPRoleArgs {
   id: number;
+  code: string;
   name: string;
+  icon?: string;
   description?: string;
   departmentCode: string;
   parentCode?: string;
   status: IGRPStatus;
+  permissions?: IGRPPermissionArgs[];
 }
 
 export interface IGRPRoleUserArgs {
@@ -74,6 +79,7 @@ export interface IGRPDepartmentArgs {
   id: number;
   code: string;
   name: string;
+  icon?: string;
   description?: string;
   status: IGRPStatus;
   parentCode?: string;
@@ -86,7 +92,7 @@ export interface IGRPGlobalConfigurationArgs {
 
 export interface IGRPFileUrlArgs {
   url: string;
-  expiration: Date;
+  expiration: string;
 }
 
 export interface IGRPPermissionArgs {
@@ -94,7 +100,35 @@ export interface IGRPPermissionArgs {
   name: string;
   description?: string;
   status: IGRPStatus;
-  applicationCode: string;
+  departmentCode: string;
+}
+
+/**
+ * A permission an application **declares** so it gets registered in the
+ * Access Management catalog. Distinct from the two neighbouring senses of
+ * "permission" in this codebase — keep them apart:
+ *
+ * - `IGRPPermissionCatalogEntry` (this type) — what the app declares. Carries
+ *   only what the app can legitimately know: a name, a human description, and
+ *   whether it is active. No `id` (AM assigns it), no `departmentCode` (a
+ *   manager binds the permission to roles/departments later in the AM UI).
+ * - `IGRPPermissionArgs` — a permission **as AM returns it**: has AM's `id`,
+ *   `status`, and `departmentCode`. A read model; never an input to the sync.
+ * - A permission **claim** on the access token — the string `${org}.${suffix}`
+ *   matched by `claimsAllow`. Registering an entry here does NOT make it
+ *   checkable: AM still has to grant it to a role, and the user's token has to
+ *   carry the resulting claim.
+ *
+ * `name` must match `^[A-Za-z0-9._-]+$` and be ≤ 255 chars (the AM contract);
+ * it is the upsert key, so never rename in place — retire and add instead.
+ */
+export interface IGRPPermissionCatalogEntry {
+  /** Upsert key. Prefer a bare suffix (`manage_access`) — see the note above. */
+  name: string;
+  /** Human-readable label; surfaces in the AM admin UI. */
+  description?: string;
+  /** `true` → `ACTIVE`, `false` → `INACTIVE`. Disabled entries still exist in AM. */
+  enabled: boolean;
 }
 
 export type IGRPResourceType = 'API' | 'UI';
@@ -105,6 +139,7 @@ export interface IGRPResourceItem {
   url?: string;
   permissionName?: string;
   resourceName: string;
+  permissions?: IGRPPermissionArgs[];
   createdBy?: string;
   createdDate?: string;
   lastModifiedBy?: string;
@@ -117,7 +152,8 @@ export interface IGRPResourceArgs {
   description?: string;
   type: IGRPResourceType;
   status: IGRPStatus;
-  applicationCode: string;
+  applications: string[];
+  permissions?: IGRPPermissionArgs[];
   items?: IGRPResourceItem[];
   externalId?: string;
   createdBy?: string;
@@ -127,7 +163,7 @@ export interface IGRPResourceArgs {
 }
 
 export interface IGRPUserArgs {
-  id: number;
+  id: string;
   name: string;
   username?: string;
   email: string;

@@ -1,0 +1,4059 @@
+// Jest Snapshot v1, https://jestjs.io/docs/snapshot-testing
+
+exports[`Components/Typography/List AnimatedList smoke-test 1`] = `
+<ul class="text-base space-y-4 text-primary-foreground"
+    id="_r_ID_"
+>
+  <div class="transition-[opacity,transform] duration-300 opacity-100 translate-x-0">
+    <div role="button"
+         tabindex="0"
+         class="flex items-center gap-2 transition-colors duration-200 hover:bg-muted p-2 rounded-md cursor-pointer focus-visible:ring-2 focus-visible:ring-ring focus-visible:outline-none"
+    >
+      <div class="shrink-0 mt-0.5">
+        <svg xmlns="http://www.w3.org/2000/svg"
+             width="16"
+             height="16"
+             viewbox="0 0 24 24"
+             fill="none"
+             stroke="currentColor"
+             stroke-width="2"
+             stroke-linecap="round"
+             stroke-linejoin="round"
+             class="lucide lucide-circle text-muted-foreground bg-transparent border-border h-1.5 w-1.5 fill-current"
+             aria-hidden="true"
+             id="Circle"
+        >
+          <circle cx="12"
+                  cy="12"
+                  r="10"
+          >
+          </circle>
+        </svg>
+      </div>
+      <div class="flex-1 min-w-0">
+        <div class="flex items-center gap-2">
+          <div class="flex-1">
+            First item appears
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="transition-[opacity,transform] duration-300 opacity-100 translate-x-0">
+    <div role="button"
+         tabindex="0"
+         class="flex items-center gap-2 transition-colors duration-200 hover:bg-muted p-2 rounded-md cursor-pointer focus-visible:ring-2 focus-visible:ring-ring focus-visible:outline-none"
+    >
+      <div class="shrink-0 mt-0.5">
+        <svg xmlns="http://www.w3.org/2000/svg"
+             width="16"
+             height="16"
+             viewbox="0 0 24 24"
+             fill="none"
+             stroke="currentColor"
+             stroke-width="2"
+             stroke-linecap="round"
+             stroke-linejoin="round"
+             class="lucide lucide-circle text-muted-foreground bg-transparent border-border h-1.5 w-1.5 fill-current"
+             aria-hidden="true"
+             id="Circle"
+        >
+          <circle cx="12"
+                  cy="12"
+                  r="10"
+          >
+          </circle>
+        </svg>
+      </div>
+      <div class="flex-1 min-w-0">
+        <div class="flex items-center gap-2">
+          <div class="flex-1">
+            Second item follows
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="transition-[opacity,transform] duration-300 opacity-100 translate-x-0">
+    <div role="button"
+         tabindex="0"
+         class="flex items-center gap-2 transition-colors duration-200 hover:bg-muted p-2 rounded-md cursor-pointer focus-visible:ring-2 focus-visible:ring-ring focus-visible:outline-none"
+    >
+      <div class="shrink-0 mt-0.5">
+        <svg xmlns="http://www.w3.org/2000/svg"
+             width="16"
+             height="16"
+             viewbox="0 0 24 24"
+             fill="none"
+             stroke="currentColor"
+             stroke-width="2"
+             stroke-linecap="round"
+             stroke-linejoin="round"
+             class="lucide lucide-circle text-muted-foreground bg-transparent border-border h-1.5 w-1.5 fill-current"
+             aria-hidden="true"
+             id="Circle"
+        >
+          <circle cx="12"
+                  cy="12"
+                  r="10"
+          >
+          </circle>
+        </svg>
+      </div>
+      <div class="flex-1 min-w-0">
+        <div class="flex items-center gap-2">
+          <div class="flex-1">
+            Third item comes next
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="transition-[opacity,transform] duration-300 opacity-100 translate-x-0">
+    <div role="button"
+         tabindex="0"
+         class="flex items-center gap-2 transition-colors duration-200 hover:bg-muted p-2 rounded-md cursor-pointer focus-visible:ring-2 focus-visible:ring-ring focus-visible:outline-none"
+    >
+      <div class="shrink-0 mt-0.5">
+        <svg xmlns="http://www.w3.org/2000/svg"
+             width="16"
+             height="16"
+             viewbox="0 0 24 24"
+             fill="none"
+             stroke="currentColor"
+             stroke-width="2"
+             stroke-linecap="round"
+             stroke-linejoin="round"
+             class="lucide lucide-circle text-muted-foreground bg-transparent border-border h-1.5 w-1.5 fill-current"
+             aria-hidden="true"
+             id="Circle"
+        >
+          <circle cx="12"
+                  cy="12"
+                  r="10"
+          >
+          </circle>
+        </svg>
+      </div>
+      <div class="flex-1 min-w-0">
+        <div class="flex items-center gap-2">
+          <div class="flex-1">
+            Fourth item completes the animation
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="transition-[opacity,transform] duration-300 opacity-100 translate-x-0">
+    <div role="button"
+         tabindex="0"
+         class="flex items-center gap-2 transition-colors duration-200 hover:bg-muted p-2 rounded-md cursor-pointer focus-visible:ring-2 focus-visible:ring-ring focus-visible:outline-none"
+    >
+      <div class="shrink-0 mt-0.5">
+        <svg xmlns="http://www.w3.org/2000/svg"
+             width="16"
+             height="16"
+             viewbox="0 0 24 24"
+             fill="none"
+             stroke="currentColor"
+             stroke-width="2"
+             stroke-linecap="round"
+             stroke-linejoin="round"
+             class="lucide lucide-circle text-muted-foreground bg-transparent border-border h-1.5 w-1.5 fill-current"
+             aria-hidden="true"
+             id="Circle"
+        >
+          <circle cx="12"
+                  cy="12"
+                  r="10"
+          >
+          </circle>
+        </svg>
+      </div>
+      <div class="flex-1 min-w-0">
+        <div class="flex items-center gap-2">
+          <div class="flex-1">
+            Fifth item finishes the sequence
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</ul>
+`;
+
+exports[`Components/Typography/List Checklist smoke-test 1`] = `
+<ul class="text-base space-y-2 text-primary-foreground"
+    id="_r_ID_"
+>
+  <div class="transition-[opacity,transform] duration-300 opacity-100 translate-x-0">
+    <div role="button"
+         tabindex="0"
+         class="flex items-center gap-2 transition-colors duration-200 hover:bg-muted p-2 rounded-md cursor-pointer focus-visible:ring-2 focus-visible:ring-ring focus-visible:outline-none opacity-60 line-through"
+    >
+      <div class="shrink-0 mt-0.5">
+        <svg xmlns="http://www.w3.org/2000/svg"
+             width="16"
+             height="16"
+             viewbox="0 0 24 24"
+             fill="none"
+             stroke="currentColor"
+             stroke-width="2"
+             stroke-linecap="round"
+             stroke-linejoin="round"
+             class="lucide lucide-check text-success-foreground"
+             aria-hidden="true"
+             id="Check"
+        >
+          <path d="M20 6 9 17l-5-5">
+          </path>
+        </svg>
+      </div>
+      <div class="flex-1 min-w-0">
+        <div class="flex items-center gap-2">
+          <div class="flex-1">
+            Set up development environment
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="transition-[opacity,transform] duration-300 opacity-100 translate-x-0">
+    <div role="button"
+         tabindex="0"
+         class="flex items-center gap-2 transition-colors duration-200 hover:bg-muted p-2 rounded-md cursor-pointer focus-visible:ring-2 focus-visible:ring-ring focus-visible:outline-none opacity-60 line-through"
+    >
+      <div class="shrink-0 mt-0.5">
+        <svg xmlns="http://www.w3.org/2000/svg"
+             width="16"
+             height="16"
+             viewbox="0 0 24 24"
+             fill="none"
+             stroke="currentColor"
+             stroke-width="2"
+             stroke-linecap="round"
+             stroke-linejoin="round"
+             class="lucide lucide-check text-success-foreground"
+             aria-hidden="true"
+             id="Check"
+        >
+          <path d="M20 6 9 17l-5-5">
+          </path>
+        </svg>
+      </div>
+      <div class="flex-1 min-w-0">
+        <div class="flex items-center gap-2">
+          <div class="flex-1">
+            Install required dependencies
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="transition-[opacity,transform] duration-300 opacity-100 translate-x-0">
+    <div role="button"
+         tabindex="0"
+         class="flex items-center gap-2 transition-colors duration-200 hover:bg-muted p-2 rounded-md cursor-pointer focus-visible:ring-2 focus-visible:ring-ring focus-visible:outline-none"
+    >
+      <div class="shrink-0 mt-0.5">
+        <svg xmlns="http://www.w3.org/2000/svg"
+             width="16"
+             height="16"
+             viewbox="0 0 24 24"
+             fill="none"
+             stroke="currentColor"
+             stroke-width="2"
+             stroke-linecap="round"
+             stroke-linejoin="round"
+             class="lucide lucide-check text-success-foreground"
+             aria-hidden="true"
+             id="Check"
+        >
+          <path d="M20 6 9 17l-5-5">
+          </path>
+        </svg>
+      </div>
+      <div class="flex-1 min-w-0">
+        <div class="flex items-center gap-2">
+          <div class="flex-1">
+            Write component logic
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="transition-[opacity,transform] duration-300 opacity-100 translate-x-0">
+    <div role="button"
+         tabindex="0"
+         class="flex items-center gap-2 transition-colors duration-200 hover:bg-muted p-2 rounded-md cursor-pointer focus-visible:ring-2 focus-visible:ring-ring focus-visible:outline-none"
+    >
+      <div class="shrink-0 mt-0.5">
+        <svg xmlns="http://www.w3.org/2000/svg"
+             width="16"
+             height="16"
+             viewbox="0 0 24 24"
+             fill="none"
+             stroke="currentColor"
+             stroke-width="2"
+             stroke-linecap="round"
+             stroke-linejoin="round"
+             class="lucide lucide-check text-success-foreground"
+             aria-hidden="true"
+             id="Check"
+        >
+          <path d="M20 6 9 17l-5-5">
+          </path>
+        </svg>
+      </div>
+      <div class="flex-1 min-w-0">
+        <div class="flex items-center gap-2">
+          <div class="flex-1">
+            Add styling and animations
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="transition-[opacity,transform] duration-300 opacity-100 translate-x-0">
+    <div role="button"
+         tabindex="0"
+         class="flex items-center gap-2 transition-colors duration-200 hover:bg-muted p-2 rounded-md cursor-pointer focus-visible:ring-2 focus-visible:ring-ring focus-visible:outline-none"
+    >
+      <div class="shrink-0 mt-0.5">
+        <svg xmlns="http://www.w3.org/2000/svg"
+             width="16"
+             height="16"
+             viewbox="0 0 24 24"
+             fill="none"
+             stroke="currentColor"
+             stroke-width="2"
+             stroke-linecap="round"
+             stroke-linejoin="round"
+             class="lucide lucide-check text-success-foreground"
+             aria-hidden="true"
+             id="Check"
+        >
+          <path d="M20 6 9 17l-5-5">
+          </path>
+        </svg>
+      </div>
+      <div class="flex-1 min-w-0">
+        <div class="flex items-center gap-2">
+          <div class="flex-1">
+            Write tests and documentation
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</ul>
+`;
+
+exports[`Components/Typography/List CollapsibleList smoke-test 1`] = `
+<ul class="text-base space-y-2 text-primary-foreground"
+    id="_r_ID_"
+>
+  <div class="transition-[opacity,transform] duration-300 opacity-100 translate-x-0">
+    <div role="button"
+         tabindex="0"
+         class="flex items-center gap-2 transition-colors duration-200 hover:bg-muted p-2 rounded-md cursor-pointer focus-visible:ring-2 focus-visible:ring-ring focus-visible:outline-none"
+    >
+      <div class="shrink-0 mt-0.5">
+        <div class="w-6 h-6 rounded-full flex items-center justify-center text-xs font-medium text-info-foreground border-info/50 bg-info hover:bg-info/90">
+          1
+        </div>
+      </div>
+      <div class="flex-1 min-w-0">
+        <div class="flex items-center gap-2">
+          <div class="flex-1">
+            Project Planning
+          </div>
+          <div data-slot="badge"
+               id="_r_ID_"
+               class="inline-flex items-center justify-center rounded-full shadow-none border font-medium w-fit whitespace-nowrap shrink-0 gap-1 [&amp;&gt;svg]:pointer-events-none focus-visible:border-ring focus-visible:ring-ring/50 focus-visible:ring-[3px] aria-invalid:ring-destructive/20 dark:aria-invalid:ring-destructive/40 aria-invalid:border-destructive transition-[color,box-shadow] overflow-hidden text-xs [&amp;&gt;svg]:size-2.5 text-muted-foreground bg-muted border-border px-2 py-1"
+          >
+            <div class="flex items-center">
+              <div class>
+                Phase 1
+              </div>
+            </div>
+          </div>
+          <div class="transition-transform duration-200 rotate-90">
+            <svg xmlns="http://www.w3.org/2000/svg"
+                 width="16"
+                 height="16"
+                 viewbox="0 0 24 24"
+                 fill="none"
+                 stroke="currentColor"
+                 stroke-width="2"
+                 stroke-linecap="round"
+                 stroke-linejoin="round"
+                 class="lucide lucide-arrow-right text-muted-foreground bg-transparent border-border"
+                 aria-hidden="true"
+                 id="ArrowRight"
+            >
+              <path d="M5 12h14">
+              </path>
+              <path d="m12 5 7 7-7 7">
+              </path>
+            </svg>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div>
+      <div class="transition-[opacity,transform] duration-300 opacity-100 translate-x-0">
+        <div role="button"
+             tabindex="0"
+             class="flex items-center gap-2 transition-colors duration-200 hover:bg-muted p-2 rounded-md cursor-pointer focus-visible:ring-2 focus-visible:ring-ring focus-visible:outline-none ml-6"
+        >
+          <div class="shrink-0 mt-0.5">
+            <div class="w-6 h-6 rounded-full flex items-center justify-center text-xs font-medium text-info-foreground border-info/50 bg-info hover:bg-info/90">
+              1
+            </div>
+          </div>
+          <div class="flex-1 min-w-0">
+            <div class="flex items-center gap-2">
+              <div class="flex-1">
+                Requirements gathering
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="transition-[opacity,transform] duration-300 opacity-100 translate-x-0">
+        <div role="button"
+             tabindex="0"
+             class="flex items-center gap-2 transition-colors duration-200 hover:bg-muted p-2 rounded-md cursor-pointer focus-visible:ring-2 focus-visible:ring-ring focus-visible:outline-none ml-6"
+        >
+          <div class="shrink-0 mt-0.5">
+            <div class="w-6 h-6 rounded-full flex items-center justify-center text-xs font-medium text-info-foreground border-info/50 bg-info hover:bg-info/90">
+              2
+            </div>
+          </div>
+          <div class="flex-1 min-w-0">
+            <div class="flex items-center gap-2">
+              <div class="flex-1">
+                Technical specifications
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="transition-[opacity,transform] duration-300 opacity-100 translate-x-0">
+        <div role="button"
+             tabindex="0"
+             class="flex items-center gap-2 transition-colors duration-200 hover:bg-muted p-2 rounded-md cursor-pointer focus-visible:ring-2 focus-visible:ring-ring focus-visible:outline-none ml-6"
+        >
+          <div class="shrink-0 mt-0.5">
+            <div class="w-6 h-6 rounded-full flex items-center justify-center text-xs font-medium text-info-foreground border-info/50 bg-info hover:bg-info/90">
+              3
+            </div>
+          </div>
+          <div class="flex-1 min-w-0">
+            <div class="flex items-center gap-2">
+              <div class="flex-1">
+                Timeline estimation
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="transition-[opacity,transform] duration-300 opacity-100 translate-x-0">
+    <div role="button"
+         tabindex="0"
+         class="flex items-center gap-2 transition-colors duration-200 hover:bg-muted p-2 rounded-md cursor-pointer focus-visible:ring-2 focus-visible:ring-ring focus-visible:outline-none"
+    >
+      <div class="shrink-0 mt-0.5">
+        <div class="w-6 h-6 rounded-full flex items-center justify-center text-xs font-medium text-info-foreground border-info/50 bg-info hover:bg-info/90">
+          2
+        </div>
+      </div>
+      <div class="flex-1 min-w-0">
+        <div class="flex items-center gap-2">
+          <div class="flex-1">
+            Development
+          </div>
+          <div data-slot="badge"
+               id="_r_ID_"
+               class="inline-flex items-center justify-center rounded-full shadow-none border font-medium w-fit whitespace-nowrap shrink-0 gap-1 [&amp;&gt;svg]:pointer-events-none focus-visible:border-ring focus-visible:ring-ring/50 focus-visible:ring-[3px] aria-invalid:ring-destructive/20 dark:aria-invalid:ring-destructive/40 aria-invalid:border-destructive transition-[color,box-shadow] overflow-hidden text-xs [&amp;&gt;svg]:size-2.5 text-muted-foreground bg-muted border-border px-2 py-1"
+          >
+            <div class="flex items-center">
+              <div class>
+                Phase 2
+              </div>
+            </div>
+          </div>
+          <div class="transition-transform duration-200 rotate-90">
+            <svg xmlns="http://www.w3.org/2000/svg"
+                 width="16"
+                 height="16"
+                 viewbox="0 0 24 24"
+                 fill="none"
+                 stroke="currentColor"
+                 stroke-width="2"
+                 stroke-linecap="round"
+                 stroke-linejoin="round"
+                 class="lucide lucide-arrow-right text-muted-foreground bg-transparent border-border"
+                 aria-hidden="true"
+                 id="ArrowRight"
+            >
+              <path d="M5 12h14">
+              </path>
+              <path d="m12 5 7 7-7 7">
+              </path>
+            </svg>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div>
+      <div class="transition-[opacity,transform] duration-300 opacity-100 translate-x-0">
+        <div role="button"
+             tabindex="0"
+             class="flex items-center gap-2 transition-colors duration-200 hover:bg-muted p-2 rounded-md cursor-pointer focus-visible:ring-2 focus-visible:ring-ring focus-visible:outline-none opacity-60 line-through ml-6"
+        >
+          <div class="shrink-0 mt-0.5">
+            <div class="w-6 h-6 rounded-full flex items-center justify-center text-xs font-medium text-info-foreground border-info/50 bg-info hover:bg-info/90">
+              1
+            </div>
+          </div>
+          <div class="flex-1 min-w-0">
+            <div class="flex items-center gap-2">
+              <div class="flex-1">
+                Setup development environment
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="transition-[opacity,transform] duration-300 opacity-100 translate-x-0">
+        <div role="button"
+             tabindex="0"
+             class="flex items-center gap-2 transition-colors duration-200 hover:bg-muted p-2 rounded-md cursor-pointer focus-visible:ring-2 focus-visible:ring-ring focus-visible:outline-none opacity-60 line-through ml-6"
+        >
+          <div class="shrink-0 mt-0.5">
+            <div class="w-6 h-6 rounded-full flex items-center justify-center text-xs font-medium text-info-foreground border-info/50 bg-info hover:bg-info/90">
+              2
+            </div>
+          </div>
+          <div class="flex-1 min-w-0">
+            <div class="flex items-center gap-2">
+              <div class="flex-1">
+                Create project structure
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="transition-[opacity,transform] duration-300 opacity-100 translate-x-0">
+        <div role="button"
+             tabindex="0"
+             class="flex items-center gap-2 transition-colors duration-200 hover:bg-muted p-2 rounded-md cursor-pointer focus-visible:ring-2 focus-visible:ring-ring focus-visible:outline-none ml-6"
+        >
+          <div class="shrink-0 mt-0.5">
+            <div class="w-6 h-6 rounded-full flex items-center justify-center text-xs font-medium text-info-foreground border-info/50 bg-info hover:bg-info/90">
+              3
+            </div>
+          </div>
+          <div class="flex-1 min-w-0">
+            <div class="flex items-center gap-2">
+              <div class="flex-1">
+                Implement core features
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="transition-[opacity,transform] duration-300 opacity-100 translate-x-0">
+        <div role="button"
+             tabindex="0"
+             class="flex items-center gap-2 transition-colors duration-200 hover:bg-muted p-2 rounded-md cursor-pointer focus-visible:ring-2 focus-visible:ring-ring focus-visible:outline-none ml-6"
+        >
+          <div class="shrink-0 mt-0.5">
+            <div class="w-6 h-6 rounded-full flex items-center justify-center text-xs font-medium text-info-foreground border-info/50 bg-info hover:bg-info/90">
+              4
+            </div>
+          </div>
+          <div class="flex-1 min-w-0">
+            <div class="flex items-center gap-2">
+              <div class="flex-1">
+                Add tests
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="transition-[opacity,transform] duration-300 opacity-100 translate-x-0">
+    <div role="button"
+         tabindex="0"
+         class="flex items-center gap-2 transition-colors duration-200 hover:bg-muted p-2 rounded-md cursor-pointer focus-visible:ring-2 focus-visible:ring-ring focus-visible:outline-none"
+    >
+      <div class="shrink-0 mt-0.5">
+        <div class="w-6 h-6 rounded-full flex items-center justify-center text-xs font-medium text-info-foreground border-info/50 bg-info hover:bg-info/90">
+          3
+        </div>
+      </div>
+      <div class="flex-1 min-w-0">
+        <div class="flex items-center gap-2">
+          <div class="flex-1">
+            Testing &amp; Deployment
+          </div>
+          <div data-slot="badge"
+               id="_r_ID_"
+               class="inline-flex items-center justify-center rounded-full shadow-none border font-medium w-fit whitespace-nowrap shrink-0 gap-1 [&amp;&gt;svg]:pointer-events-none focus-visible:border-ring focus-visible:ring-ring/50 focus-visible:ring-[3px] aria-invalid:ring-destructive/20 dark:aria-invalid:ring-destructive/40 aria-invalid:border-destructive transition-[color,box-shadow] overflow-hidden text-xs [&amp;&gt;svg]:size-2.5 text-muted-foreground bg-muted border-border px-2 py-1"
+          >
+            <div class="flex items-center">
+              <div class>
+                Phase 3
+              </div>
+            </div>
+          </div>
+          <div class="transition-transform duration-200 rotate-90">
+            <svg xmlns="http://www.w3.org/2000/svg"
+                 width="16"
+                 height="16"
+                 viewbox="0 0 24 24"
+                 fill="none"
+                 stroke="currentColor"
+                 stroke-width="2"
+                 stroke-linecap="round"
+                 stroke-linejoin="round"
+                 class="lucide lucide-arrow-right text-muted-foreground bg-transparent border-border"
+                 aria-hidden="true"
+                 id="ArrowRight"
+            >
+              <path d="M5 12h14">
+              </path>
+              <path d="m12 5 7 7-7 7">
+              </path>
+            </svg>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div>
+      <div class="transition-[opacity,transform] duration-300 opacity-100 translate-x-0">
+        <div role="button"
+             tabindex="0"
+             class="flex items-center gap-2 transition-colors duration-200 hover:bg-muted p-2 rounded-md cursor-pointer focus-visible:ring-2 focus-visible:ring-ring focus-visible:outline-none ml-6"
+        >
+          <div class="shrink-0 mt-0.5">
+            <div class="w-6 h-6 rounded-full flex items-center justify-center text-xs font-medium text-info-foreground border-info/50 bg-info hover:bg-info/90">
+              1
+            </div>
+          </div>
+          <div class="flex-1 min-w-0">
+            <div class="flex items-center gap-2">
+              <div class="flex-1">
+                Unit testing
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="transition-[opacity,transform] duration-300 opacity-100 translate-x-0">
+        <div role="button"
+             tabindex="0"
+             class="flex items-center gap-2 transition-colors duration-200 hover:bg-muted p-2 rounded-md cursor-pointer focus-visible:ring-2 focus-visible:ring-ring focus-visible:outline-none ml-6"
+        >
+          <div class="shrink-0 mt-0.5">
+            <div class="w-6 h-6 rounded-full flex items-center justify-center text-xs font-medium text-info-foreground border-info/50 bg-info hover:bg-info/90">
+              2
+            </div>
+          </div>
+          <div class="flex-1 min-w-0">
+            <div class="flex items-center gap-2">
+              <div class="flex-1">
+                Integration testing
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="transition-[opacity,transform] duration-300 opacity-100 translate-x-0">
+        <div role="button"
+             tabindex="0"
+             class="flex items-center gap-2 transition-colors duration-200 hover:bg-muted p-2 rounded-md cursor-pointer focus-visible:ring-2 focus-visible:ring-ring focus-visible:outline-none ml-6"
+        >
+          <div class="shrink-0 mt-0.5">
+            <div class="w-6 h-6 rounded-full flex items-center justify-center text-xs font-medium text-info-foreground border-info/50 bg-info hover:bg-info/90">
+              3
+            </div>
+          </div>
+          <div class="flex-1 min-w-0">
+            <div class="flex items-center gap-2">
+              <div class="flex-1">
+                Production deployment
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</ul>
+`;
+
+exports[`Components/Typography/List ComplexExample smoke-test 1`] = `
+<ul class="text-base space-y-4 text-primary-foreground"
+    id="_r_ID_"
+>
+  <div class="transition-[opacity,transform] duration-300 opacity-100 translate-x-0">
+    <div role="button"
+         tabindex="0"
+         class="flex items-center gap-2 transition-colors duration-200 hover:bg-muted p-2 rounded-md cursor-pointer focus-visible:ring-2 focus-visible:ring-ring focus-visible:outline-none"
+    >
+      <div class="shrink-0 mt-0.5">
+        <svg xmlns="http://www.w3.org/2000/svg"
+             width="16"
+             height="16"
+             viewbox="0 0 24 24"
+             fill="none"
+             stroke="currentColor"
+             stroke-width="2"
+             stroke-linecap="round"
+             stroke-linejoin="round"
+             class="lucide lucide-circle text-muted-foreground bg-transparent border-border h-1.5 w-1.5 fill-current"
+             aria-hidden="true"
+             id="Circle"
+        >
+          <circle cx="12"
+                  cy="12"
+                  r="10"
+          >
+          </circle>
+        </svg>
+      </div>
+      <div class="flex-1 min-w-0">
+        <div class="flex items-center gap-2">
+          <div class="flex-1 text-info-foreground">
+            User Authentication
+          </div>
+          <div data-slot="badge"
+               id="_r_ID_"
+               class="inline-flex items-center justify-center rounded-full shadow-none border font-medium w-fit whitespace-nowrap shrink-0 gap-1 [&amp;&gt;svg]:pointer-events-none focus-visible:border-ring focus-visible:ring-ring/50 focus-visible:ring-[3px] aria-invalid:ring-destructive/20 dark:aria-invalid:ring-destructive/40 aria-invalid:border-destructive transition-[color,box-shadow] overflow-hidden text-xs [&amp;&gt;svg]:size-2.5 text-muted-foreground bg-muted border-border px-2 py-1"
+          >
+            <div class="flex items-center">
+              <div class>
+                Critical
+              </div>
+            </div>
+          </div>
+          <div class="transition-transform duration-200 rotate-90">
+            <svg xmlns="http://www.w3.org/2000/svg"
+                 width="16"
+                 height="16"
+                 viewbox="0 0 24 24"
+                 fill="none"
+                 stroke="currentColor"
+                 stroke-width="2"
+                 stroke-linecap="round"
+                 stroke-linejoin="round"
+                 class="lucide lucide-arrow-right text-muted-foreground bg-transparent border-border"
+                 aria-hidden="true"
+                 id="ArrowRight"
+            >
+              <path d="M5 12h14">
+              </path>
+              <path d="m12 5 7 7-7 7">
+              </path>
+            </svg>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div>
+      <div class="transition-[opacity,transform] duration-300 opacity-100 translate-x-0">
+        <div role="button"
+             tabindex="0"
+             class="flex items-center gap-2 transition-colors duration-200 hover:bg-muted p-2 rounded-md cursor-pointer focus-visible:ring-2 focus-visible:ring-ring focus-visible:outline-none opacity-60 line-through ml-6"
+        >
+          <div class="shrink-0 mt-0.5">
+            <svg xmlns="http://www.w3.org/2000/svg"
+                 width="16"
+                 height="16"
+                 viewbox="0 0 24 24"
+                 fill="none"
+                 stroke="currentColor"
+                 stroke-width="2"
+                 stroke-linecap="round"
+                 stroke-linejoin="round"
+                 class="lucide lucide-circle text-muted-foreground bg-transparent border-border h-1.5 w-1.5 fill-current"
+                 aria-hidden="true"
+                 id="Circle"
+            >
+              <circle cx="12"
+                      cy="12"
+                      r="10"
+              >
+              </circle>
+            </svg>
+          </div>
+          <div class="flex-1 min-w-0">
+            <div class="flex items-center gap-2">
+              <div class="flex-1">
+                Login functionality
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="transition-[opacity,transform] duration-300 opacity-100 translate-x-0">
+        <div role="button"
+             tabindex="0"
+             class="flex items-center gap-2 transition-colors duration-200 hover:bg-muted p-2 rounded-md cursor-pointer focus-visible:ring-2 focus-visible:ring-ring focus-visible:outline-none opacity-60 line-through ml-6"
+        >
+          <div class="shrink-0 mt-0.5">
+            <svg xmlns="http://www.w3.org/2000/svg"
+                 width="16"
+                 height="16"
+                 viewbox="0 0 24 24"
+                 fill="none"
+                 stroke="currentColor"
+                 stroke-width="2"
+                 stroke-linecap="round"
+                 stroke-linejoin="round"
+                 class="lucide lucide-circle text-muted-foreground bg-transparent border-border h-1.5 w-1.5 fill-current"
+                 aria-hidden="true"
+                 id="Circle"
+            >
+              <circle cx="12"
+                      cy="12"
+                      r="10"
+              >
+              </circle>
+            </svg>
+          </div>
+          <div class="flex-1 min-w-0">
+            <div class="flex items-center gap-2">
+              <div class="flex-1">
+                Registration system
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="transition-[opacity,transform] duration-300 opacity-100 translate-x-0">
+        <div role="button"
+             tabindex="0"
+             class="flex items-center gap-2 transition-colors duration-200 hover:bg-muted p-2 rounded-md cursor-pointer focus-visible:ring-2 focus-visible:ring-ring focus-visible:outline-none ml-6"
+        >
+          <div class="shrink-0 mt-0.5">
+            <svg xmlns="http://www.w3.org/2000/svg"
+                 width="16"
+                 height="16"
+                 viewbox="0 0 24 24"
+                 fill="none"
+                 stroke="currentColor"
+                 stroke-width="2"
+                 stroke-linecap="round"
+                 stroke-linejoin="round"
+                 class="lucide lucide-circle text-muted-foreground bg-transparent border-border h-1.5 w-1.5 fill-current"
+                 aria-hidden="true"
+                 id="Circle"
+            >
+              <circle cx="12"
+                      cy="12"
+                      r="10"
+              >
+              </circle>
+            </svg>
+          </div>
+          <div class="flex-1 min-w-0">
+            <div class="flex items-center gap-2">
+              <div class="flex-1 text-warning-foreground">
+                Password reset
+              </div>
+              <div data-slot="badge"
+                   id="_r_ID_"
+                   class="inline-flex items-center justify-center rounded-full shadow-none border font-medium w-fit whitespace-nowrap shrink-0 gap-1 [&amp;&gt;svg]:pointer-events-none focus-visible:border-ring focus-visible:ring-ring/50 focus-visible:ring-[3px] aria-invalid:ring-destructive/20 dark:aria-invalid:ring-destructive/40 aria-invalid:border-destructive transition-[color,box-shadow] overflow-hidden text-xs [&amp;&gt;svg]:size-2.5 text-muted-foreground bg-muted border-border px-2 py-1"
+              >
+                <div class="flex items-center">
+                  <div class>
+                    In Progress
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="transition-[opacity,transform] duration-300 opacity-100 translate-x-0">
+        <div role="button"
+             tabindex="0"
+             class="flex items-center gap-2 transition-colors duration-200 hover:bg-muted p-2 rounded-md cursor-pointer focus-visible:ring-2 focus-visible:ring-ring focus-visible:outline-none ml-6"
+        >
+          <div class="shrink-0 mt-0.5">
+            <svg xmlns="http://www.w3.org/2000/svg"
+                 width="16"
+                 height="16"
+                 viewbox="0 0 24 24"
+                 fill="none"
+                 stroke="currentColor"
+                 stroke-width="2"
+                 stroke-linecap="round"
+                 stroke-linejoin="round"
+                 class="lucide lucide-circle text-muted-foreground bg-transparent border-border h-1.5 w-1.5 fill-current"
+                 aria-hidden="true"
+                 id="Circle"
+            >
+              <circle cx="12"
+                      cy="12"
+                      r="10"
+              >
+              </circle>
+            </svg>
+          </div>
+          <div class="flex-1 min-w-0">
+            <div class="flex items-center gap-2">
+              <div class="flex-1">
+                Two-factor authentication
+              </div>
+              <div data-slot="badge"
+                   id="_r_ID_"
+                   class="inline-flex items-center justify-center rounded-full shadow-none border font-medium w-fit whitespace-nowrap shrink-0 gap-1 [&amp;&gt;svg]:pointer-events-none focus-visible:border-ring focus-visible:ring-ring/50 focus-visible:ring-[3px] aria-invalid:ring-destructive/20 dark:aria-invalid:ring-destructive/40 aria-invalid:border-destructive transition-[color,box-shadow] overflow-hidden text-xs [&amp;&gt;svg]:size-2.5 text-muted-foreground bg-muted border-border px-2 py-1"
+              >
+                <div class="flex items-center">
+                  <div class>
+                    Planned
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="transition-[opacity,transform] duration-300 opacity-100 translate-x-0">
+    <div role="button"
+         tabindex="0"
+         class="flex items-center gap-2 transition-colors duration-200 hover:bg-muted p-2 rounded-md cursor-pointer focus-visible:ring-2 focus-visible:ring-ring focus-visible:outline-none"
+    >
+      <div class="shrink-0 mt-0.5">
+        <svg xmlns="http://www.w3.org/2000/svg"
+             width="16"
+             height="16"
+             viewbox="0 0 24 24"
+             fill="none"
+             stroke="currentColor"
+             stroke-width="2"
+             stroke-linecap="round"
+             stroke-linejoin="round"
+             class="lucide lucide-circle text-muted-foreground bg-transparent border-border h-1.5 w-1.5 fill-current"
+             aria-hidden="true"
+             id="Circle"
+        >
+          <circle cx="12"
+                  cy="12"
+                  r="10"
+          >
+          </circle>
+        </svg>
+      </div>
+      <div class="flex-1 min-w-0">
+        <div class="flex items-center gap-2">
+          <div class="flex-1 text-success-foreground">
+            Data Management
+          </div>
+          <div data-slot="badge"
+               id="_r_ID_"
+               class="inline-flex items-center justify-center rounded-full shadow-none border font-medium w-fit whitespace-nowrap shrink-0 gap-1 [&amp;&gt;svg]:pointer-events-none focus-visible:border-ring focus-visible:ring-ring/50 focus-visible:ring-[3px] aria-invalid:ring-destructive/20 dark:aria-invalid:ring-destructive/40 aria-invalid:border-destructive transition-[color,box-shadow] overflow-hidden text-xs [&amp;&gt;svg]:size-2.5 text-muted-foreground bg-muted border-border px-2 py-1"
+          >
+            <div class="flex items-center">
+              <div class>
+                Complete
+              </div>
+            </div>
+          </div>
+          <div class="transition-transform duration-200 rotate-90">
+            <svg xmlns="http://www.w3.org/2000/svg"
+                 width="16"
+                 height="16"
+                 viewbox="0 0 24 24"
+                 fill="none"
+                 stroke="currentColor"
+                 stroke-width="2"
+                 stroke-linecap="round"
+                 stroke-linejoin="round"
+                 class="lucide lucide-arrow-right text-muted-foreground bg-transparent border-border"
+                 aria-hidden="true"
+                 id="ArrowRight"
+            >
+              <path d="M5 12h14">
+              </path>
+              <path d="m12 5 7 7-7 7">
+              </path>
+            </svg>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div>
+      <div class="transition-[opacity,transform] duration-300 opacity-100 translate-x-0">
+        <div role="button"
+             tabindex="0"
+             class="flex items-center gap-2 transition-colors duration-200 hover:bg-muted p-2 rounded-md cursor-pointer focus-visible:ring-2 focus-visible:ring-ring focus-visible:outline-none ml-6"
+        >
+          <div class="shrink-0 mt-0.5">
+            <svg xmlns="http://www.w3.org/2000/svg"
+                 width="16"
+                 height="16"
+                 viewbox="0 0 24 24"
+                 fill="none"
+                 stroke="currentColor"
+                 stroke-width="2"
+                 stroke-linecap="round"
+                 stroke-linejoin="round"
+                 class="lucide lucide-circle text-muted-foreground bg-transparent border-border h-1.5 w-1.5 fill-current"
+                 aria-hidden="true"
+                 id="Circle"
+            >
+              <circle cx="12"
+                      cy="12"
+                      r="10"
+              >
+              </circle>
+            </svg>
+          </div>
+          <div class="flex-1 min-w-0">
+            <div class="flex items-center gap-2">
+              <div class="flex-1 text-success-foreground">
+                Database schema
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="transition-[opacity,transform] duration-300 opacity-100 translate-x-0">
+        <div role="button"
+             tabindex="0"
+             class="flex items-center gap-2 transition-colors duration-200 hover:bg-muted p-2 rounded-md cursor-pointer focus-visible:ring-2 focus-visible:ring-ring focus-visible:outline-none ml-6"
+        >
+          <div class="shrink-0 mt-0.5">
+            <svg xmlns="http://www.w3.org/2000/svg"
+                 width="16"
+                 height="16"
+                 viewbox="0 0 24 24"
+                 fill="none"
+                 stroke="currentColor"
+                 stroke-width="2"
+                 stroke-linecap="round"
+                 stroke-linejoin="round"
+                 class="lucide lucide-circle text-muted-foreground bg-transparent border-border h-1.5 w-1.5 fill-current"
+                 aria-hidden="true"
+                 id="Circle"
+            >
+              <circle cx="12"
+                      cy="12"
+                      r="10"
+              >
+              </circle>
+            </svg>
+          </div>
+          <div class="flex-1 min-w-0">
+            <div class="flex items-center gap-2">
+              <div class="flex-1 text-success-foreground">
+                CRUD operations
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="transition-[opacity,transform] duration-300 opacity-100 translate-x-0">
+        <div role="button"
+             tabindex="0"
+             class="flex items-center gap-2 transition-colors duration-200 hover:bg-muted p-2 rounded-md cursor-pointer focus-visible:ring-2 focus-visible:ring-ring focus-visible:outline-none ml-6"
+        >
+          <div class="shrink-0 mt-0.5">
+            <svg xmlns="http://www.w3.org/2000/svg"
+                 width="16"
+                 height="16"
+                 viewbox="0 0 24 24"
+                 fill="none"
+                 stroke="currentColor"
+                 stroke-width="2"
+                 stroke-linecap="round"
+                 stroke-linejoin="round"
+                 class="lucide lucide-circle text-muted-foreground bg-transparent border-border h-1.5 w-1.5 fill-current"
+                 aria-hidden="true"
+                 id="Circle"
+            >
+              <circle cx="12"
+                      cy="12"
+                      r="10"
+              >
+              </circle>
+            </svg>
+          </div>
+          <div class="flex-1 min-w-0">
+            <div class="flex items-center gap-2">
+              <div class="flex-1 text-success-foreground">
+                Data validation
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="transition-[opacity,transform] duration-300 opacity-100 translate-x-0">
+        <div role="button"
+             tabindex="0"
+             class="flex items-center gap-2 transition-colors duration-200 hover:bg-muted p-2 rounded-md cursor-pointer focus-visible:ring-2 focus-visible:ring-ring focus-visible:outline-none ml-6"
+        >
+          <div class="shrink-0 mt-0.5">
+            <svg xmlns="http://www.w3.org/2000/svg"
+                 width="16"
+                 height="16"
+                 viewbox="0 0 24 24"
+                 fill="none"
+                 stroke="currentColor"
+                 stroke-width="2"
+                 stroke-linecap="round"
+                 stroke-linejoin="round"
+                 class="lucide lucide-circle text-muted-foreground bg-transparent border-border h-1.5 w-1.5 fill-current"
+                 aria-hidden="true"
+                 id="Circle"
+            >
+              <circle cx="12"
+                      cy="12"
+                      r="10"
+              >
+              </circle>
+            </svg>
+          </div>
+          <div class="flex-1 min-w-0">
+            <div class="flex items-center gap-2">
+              <div class="flex-1 text-info-foreground">
+                Backup system
+              </div>
+              <div data-slot="badge"
+                   id="_r_ID_"
+                   class="inline-flex items-center justify-center rounded-full shadow-none border font-medium w-fit whitespace-nowrap shrink-0 gap-1 [&amp;&gt;svg]:pointer-events-none focus-visible:border-ring focus-visible:ring-ring/50 focus-visible:ring-[3px] aria-invalid:ring-destructive/20 dark:aria-invalid:ring-destructive/40 aria-invalid:border-destructive transition-[color,box-shadow] overflow-hidden text-xs [&amp;&gt;svg]:size-2.5 text-muted-foreground bg-muted border-border px-2 py-1"
+              >
+                <div class="flex items-center">
+                  <div class>
+                    Automated
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="transition-[opacity,transform] duration-300 opacity-100 translate-x-0">
+    <div role="button"
+         tabindex="0"
+         class="flex items-center gap-2 transition-colors duration-200 hover:bg-muted p-2 rounded-md cursor-pointer focus-visible:ring-2 focus-visible:ring-ring focus-visible:outline-none"
+    >
+      <div class="shrink-0 mt-0.5">
+        <svg xmlns="http://www.w3.org/2000/svg"
+             width="16"
+             height="16"
+             viewbox="0 0 24 24"
+             fill="none"
+             stroke="currentColor"
+             stroke-width="2"
+             stroke-linecap="round"
+             stroke-linejoin="round"
+             class="lucide lucide-circle text-muted-foreground bg-transparent border-border h-1.5 w-1.5 fill-current"
+             aria-hidden="true"
+             id="Circle"
+        >
+          <circle cx="12"
+                  cy="12"
+                  r="10"
+          >
+          </circle>
+        </svg>
+      </div>
+      <div class="flex-1 min-w-0">
+        <div class="flex items-center gap-2">
+          <div class="flex-1 text-warning-foreground">
+            User Interface
+          </div>
+          <div data-slot="badge"
+               id="_r_ID_"
+               class="inline-flex items-center justify-center rounded-full shadow-none border font-medium w-fit whitespace-nowrap shrink-0 gap-1 [&amp;&gt;svg]:pointer-events-none focus-visible:border-ring focus-visible:ring-ring/50 focus-visible:ring-[3px] aria-invalid:ring-destructive/20 dark:aria-invalid:ring-destructive/40 aria-invalid:border-destructive transition-[color,box-shadow] overflow-hidden text-xs [&amp;&gt;svg]:size-2.5 text-muted-foreground bg-muted border-border px-2 py-1"
+          >
+            <div class="flex items-center">
+              <div class>
+                In Review
+              </div>
+            </div>
+          </div>
+          <div class="transition-transform duration-200 rotate-90">
+            <svg xmlns="http://www.w3.org/2000/svg"
+                 width="16"
+                 height="16"
+                 viewbox="0 0 24 24"
+                 fill="none"
+                 stroke="currentColor"
+                 stroke-width="2"
+                 stroke-linecap="round"
+                 stroke-linejoin="round"
+                 class="lucide lucide-arrow-right text-muted-foreground bg-transparent border-border"
+                 aria-hidden="true"
+                 id="ArrowRight"
+            >
+              <path d="M5 12h14">
+              </path>
+              <path d="m12 5 7 7-7 7">
+              </path>
+            </svg>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div>
+      <div class="transition-[opacity,transform] duration-300 opacity-100 translate-x-0">
+        <div role="button"
+             tabindex="0"
+             class="flex items-center gap-2 transition-colors duration-200 hover:bg-muted p-2 rounded-md cursor-pointer focus-visible:ring-2 focus-visible:ring-ring focus-visible:outline-none opacity-60 line-through ml-6"
+        >
+          <div class="shrink-0 mt-0.5">
+            <svg xmlns="http://www.w3.org/2000/svg"
+                 width="16"
+                 height="16"
+                 viewbox="0 0 24 24"
+                 fill="none"
+                 stroke="currentColor"
+                 stroke-width="2"
+                 stroke-linecap="round"
+                 stroke-linejoin="round"
+                 class="lucide lucide-circle text-muted-foreground bg-transparent border-border h-1.5 w-1.5 fill-current"
+                 aria-hidden="true"
+                 id="Circle"
+            >
+              <circle cx="12"
+                      cy="12"
+                      r="10"
+              >
+              </circle>
+            </svg>
+          </div>
+          <div class="flex-1 min-w-0">
+            <div class="flex items-center gap-2">
+              <div class="flex-1">
+                Component library
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="transition-[opacity,transform] duration-300 opacity-100 translate-x-0">
+        <div role="button"
+             tabindex="0"
+             class="flex items-center gap-2 transition-colors duration-200 hover:bg-muted p-2 rounded-md cursor-pointer focus-visible:ring-2 focus-visible:ring-ring focus-visible:outline-none opacity-60 line-through ml-6"
+        >
+          <div class="shrink-0 mt-0.5">
+            <svg xmlns="http://www.w3.org/2000/svg"
+                 width="16"
+                 height="16"
+                 viewbox="0 0 24 24"
+                 fill="none"
+                 stroke="currentColor"
+                 stroke-width="2"
+                 stroke-linecap="round"
+                 stroke-linejoin="round"
+                 class="lucide lucide-circle text-muted-foreground bg-transparent border-border h-1.5 w-1.5 fill-current"
+                 aria-hidden="true"
+                 id="Circle"
+            >
+              <circle cx="12"
+                      cy="12"
+                      r="10"
+              >
+              </circle>
+            </svg>
+          </div>
+          <div class="flex-1 min-w-0">
+            <div class="flex items-center gap-2">
+              <div class="flex-1">
+                Responsive design
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="transition-[opacity,transform] duration-300 opacity-100 translate-x-0">
+        <div role="button"
+             tabindex="0"
+             class="flex items-center gap-2 transition-colors duration-200 hover:bg-muted p-2 rounded-md cursor-pointer focus-visible:ring-2 focus-visible:ring-ring focus-visible:outline-none ml-6"
+        >
+          <div class="shrink-0 mt-0.5">
+            <svg xmlns="http://www.w3.org/2000/svg"
+                 width="16"
+                 height="16"
+                 viewbox="0 0 24 24"
+                 fill="none"
+                 stroke="currentColor"
+                 stroke-width="2"
+                 stroke-linecap="round"
+                 stroke-linejoin="round"
+                 class="lucide lucide-circle text-muted-foreground bg-transparent border-border h-1.5 w-1.5 fill-current"
+                 aria-hidden="true"
+                 id="Circle"
+            >
+              <circle cx="12"
+                      cy="12"
+                      r="10"
+              >
+              </circle>
+            </svg>
+          </div>
+          <div class="flex-1 min-w-0">
+            <div class="flex items-center gap-2">
+              <div class="flex-1 text-destructive-foreground">
+                Accessibility audit
+              </div>
+              <div data-slot="badge"
+                   id="_r_ID_"
+                   class="inline-flex items-center justify-center rounded-full shadow-none border font-medium w-fit whitespace-nowrap shrink-0 gap-1 [&amp;&gt;svg]:pointer-events-none focus-visible:border-ring focus-visible:ring-ring/50 focus-visible:ring-[3px] aria-invalid:ring-destructive/20 dark:aria-invalid:ring-destructive/40 aria-invalid:border-destructive transition-[color,box-shadow] overflow-hidden text-xs [&amp;&gt;svg]:size-2.5 text-muted-foreground bg-muted border-border px-2 py-1"
+              >
+                <div class="flex items-center">
+                  <div class>
+                    Failed
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="transition-[opacity,transform] duration-300 opacity-100 translate-x-0">
+        <div role="button"
+             tabindex="0"
+             class="flex items-center gap-2 transition-colors duration-200 hover:bg-muted p-2 rounded-md cursor-pointer focus-visible:ring-2 focus-visible:ring-ring focus-visible:outline-none ml-6"
+        >
+          <div class="shrink-0 mt-0.5">
+            <svg xmlns="http://www.w3.org/2000/svg"
+                 width="16"
+                 height="16"
+                 viewbox="0 0 24 24"
+                 fill="none"
+                 stroke="currentColor"
+                 stroke-width="2"
+                 stroke-linecap="round"
+                 stroke-linejoin="round"
+                 class="lucide lucide-circle text-muted-foreground bg-transparent border-border h-1.5 w-1.5 fill-current"
+                 aria-hidden="true"
+                 id="Circle"
+            >
+              <circle cx="12"
+                      cy="12"
+                      r="10"
+              >
+              </circle>
+            </svg>
+          </div>
+          <div class="flex-1 min-w-0">
+            <div class="flex items-center gap-2">
+              <div class="flex-1">
+                Dark mode support
+              </div>
+              <div data-slot="badge"
+                   id="_r_ID_"
+                   class="inline-flex items-center justify-center rounded-full shadow-none border font-medium w-fit whitespace-nowrap shrink-0 gap-1 [&amp;&gt;svg]:pointer-events-none focus-visible:border-ring focus-visible:ring-ring/50 focus-visible:ring-[3px] aria-invalid:ring-destructive/20 dark:aria-invalid:ring-destructive/40 aria-invalid:border-destructive transition-[color,box-shadow] overflow-hidden text-xs [&amp;&gt;svg]:size-2.5 text-muted-foreground bg-muted border-border px-2 py-1"
+              >
+                <div class="flex items-center">
+                  <div class>
+                    New
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="transition-[opacity,transform] duration-300 opacity-100 translate-x-0">
+    <div role="button"
+         tabindex="0"
+         class="flex items-center gap-2 transition-colors duration-200 hover:bg-muted p-2 rounded-md focus-visible:ring-2 focus-visible:ring-ring focus-visible:outline-none opacity-50 cursor-not-allowed"
+    >
+      <div class="shrink-0 mt-0.5">
+        <svg xmlns="http://www.w3.org/2000/svg"
+             width="16"
+             height="16"
+             viewbox="0 0 24 24"
+             fill="none"
+             stroke="currentColor"
+             stroke-width="2"
+             stroke-linecap="round"
+             stroke-linejoin="round"
+             class="lucide lucide-circle text-muted-foreground bg-transparent border-border h-1.5 w-1.5 fill-current"
+             aria-hidden="true"
+             id="Circle"
+        >
+          <circle cx="12"
+                  cy="12"
+                  r="10"
+          >
+          </circle>
+        </svg>
+      </div>
+      <div class="flex-1 min-w-0">
+        <div class="flex items-center gap-2">
+          <div class="flex-1">
+            Performance Optimization
+          </div>
+          <div data-slot="badge"
+               id="_r_ID_"
+               class="inline-flex items-center justify-center rounded-full shadow-none border font-medium w-fit whitespace-nowrap shrink-0 gap-1 [&amp;&gt;svg]:pointer-events-none focus-visible:border-ring focus-visible:ring-ring/50 focus-visible:ring-[3px] aria-invalid:ring-destructive/20 dark:aria-invalid:ring-destructive/40 aria-invalid:border-destructive transition-[color,box-shadow] overflow-hidden text-xs [&amp;&gt;svg]:size-2.5 text-muted-foreground bg-muted border-border px-2 py-1"
+          >
+            <div class="flex items-center">
+              <div class>
+                Blocked
+              </div>
+            </div>
+          </div>
+          <div class="transition-transform duration-200 rotate-90">
+            <svg xmlns="http://www.w3.org/2000/svg"
+                 width="16"
+                 height="16"
+                 viewbox="0 0 24 24"
+                 fill="none"
+                 stroke="currentColor"
+                 stroke-width="2"
+                 stroke-linecap="round"
+                 stroke-linejoin="round"
+                 class="lucide lucide-arrow-right text-muted-foreground bg-transparent border-border"
+                 aria-hidden="true"
+                 id="ArrowRight"
+            >
+              <path d="M5 12h14">
+              </path>
+              <path d="m12 5 7 7-7 7">
+              </path>
+            </svg>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div>
+      <div class="transition-[opacity,transform] duration-300 opacity-100 translate-x-0">
+        <div role="button"
+             tabindex="0"
+             class="flex items-center gap-2 transition-colors duration-200 hover:bg-muted p-2 rounded-md cursor-pointer focus-visible:ring-2 focus-visible:ring-ring focus-visible:outline-none ml-6"
+        >
+          <div class="shrink-0 mt-0.5">
+            <svg xmlns="http://www.w3.org/2000/svg"
+                 width="16"
+                 height="16"
+                 viewbox="0 0 24 24"
+                 fill="none"
+                 stroke="currentColor"
+                 stroke-width="2"
+                 stroke-linecap="round"
+                 stroke-linejoin="round"
+                 class="lucide lucide-circle text-muted-foreground bg-transparent border-border h-1.5 w-1.5 fill-current"
+                 aria-hidden="true"
+                 id="Circle"
+            >
+              <circle cx="12"
+                      cy="12"
+                      r="10"
+              >
+              </circle>
+            </svg>
+          </div>
+          <div class="flex-1 min-w-0">
+            <div class="flex items-center gap-2">
+              <div class="flex-1">
+                Code splitting
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="transition-[opacity,transform] duration-300 opacity-100 translate-x-0">
+        <div role="button"
+             tabindex="0"
+             class="flex items-center gap-2 transition-colors duration-200 hover:bg-muted p-2 rounded-md cursor-pointer focus-visible:ring-2 focus-visible:ring-ring focus-visible:outline-none ml-6"
+        >
+          <div class="shrink-0 mt-0.5">
+            <svg xmlns="http://www.w3.org/2000/svg"
+                 width="16"
+                 height="16"
+                 viewbox="0 0 24 24"
+                 fill="none"
+                 stroke="currentColor"
+                 stroke-width="2"
+                 stroke-linecap="round"
+                 stroke-linejoin="round"
+                 class="lucide lucide-circle text-muted-foreground bg-transparent border-border h-1.5 w-1.5 fill-current"
+                 aria-hidden="true"
+                 id="Circle"
+            >
+              <circle cx="12"
+                      cy="12"
+                      r="10"
+              >
+              </circle>
+            </svg>
+          </div>
+          <div class="flex-1 min-w-0">
+            <div class="flex items-center gap-2">
+              <div class="flex-1">
+                Image optimization
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="transition-[opacity,transform] duration-300 opacity-100 translate-x-0">
+        <div role="button"
+             tabindex="0"
+             class="flex items-center gap-2 transition-colors duration-200 hover:bg-muted p-2 rounded-md cursor-pointer focus-visible:ring-2 focus-visible:ring-ring focus-visible:outline-none ml-6"
+        >
+          <div class="shrink-0 mt-0.5">
+            <svg xmlns="http://www.w3.org/2000/svg"
+                 width="16"
+                 height="16"
+                 viewbox="0 0 24 24"
+                 fill="none"
+                 stroke="currentColor"
+                 stroke-width="2"
+                 stroke-linecap="round"
+                 stroke-linejoin="round"
+                 class="lucide lucide-circle text-muted-foreground bg-transparent border-border h-1.5 w-1.5 fill-current"
+                 aria-hidden="true"
+                 id="Circle"
+            >
+              <circle cx="12"
+                      cy="12"
+                      r="10"
+              >
+              </circle>
+            </svg>
+          </div>
+          <div class="flex-1 min-w-0">
+            <div class="flex items-center gap-2">
+              <div class="flex-1">
+                Caching strategy
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</ul>
+`;
+
+exports[`Components/Typography/List CustomIconsList smoke-test 1`] = `
+<ul class="text-lg space-y-4 text-primary-foreground"
+    id="_r_ID_"
+>
+  <div class="transition-[opacity,transform] duration-300 opacity-100 translate-x-0">
+    <div role="button"
+         tabindex="0"
+         class="flex items-center gap-2 transition-colors duration-200 hover:bg-muted p-2 rounded-md cursor-pointer focus-visible:ring-2 focus-visible:ring-ring focus-visible:outline-none"
+    >
+      <div class="shrink-0 mt-0.5">
+        <svg xmlns="http://www.w3.org/2000/svg"
+             width="16"
+             height="16"
+             viewbox="0 0 24 24"
+             fill="none"
+             stroke="currentColor"
+             stroke-width="2"
+             stroke-linecap="round"
+             stroke-linejoin="round"
+             class="lucide lucide-users text-info bg-transparent border-info"
+             aria-hidden="true"
+             id="Users"
+        >
+          <path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2">
+          </path>
+          <path d="M16 3.128a4 4 0 0 1 0 7.744">
+          </path>
+          <path d="M22 21v-2a4 4 0 0 0-3-3.87">
+          </path>
+          <circle cx="9"
+                  cy="7"
+                  r="4"
+          >
+          </circle>
+        </svg>
+      </div>
+      <div class="flex-1 min-w-0">
+        <div class="flex items-center gap-2">
+          <div class="flex-1">
+            Community Driven
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="transition-[opacity,transform] duration-300 opacity-100 translate-x-0">
+    <div role="button"
+         tabindex="0"
+         class="flex items-center gap-2 transition-colors duration-200 hover:bg-muted p-2 rounded-md cursor-pointer focus-visible:ring-2 focus-visible:ring-ring focus-visible:outline-none"
+    >
+      <div class="shrink-0 mt-0.5">
+        <svg xmlns="http://www.w3.org/2000/svg"
+             width="16"
+             height="16"
+             viewbox="0 0 24 24"
+             fill="none"
+             stroke="currentColor"
+             stroke-width="2"
+             stroke-linecap="round"
+             stroke-linejoin="round"
+             class="lucide lucide-heart text-destructive bg-transparent border-destructive"
+             aria-hidden="true"
+             id="Heart"
+        >
+          <path d="M2 9.5a5.5 5.5 0 0 1 9.591-3.676.56.56 0 0 0 .818 0A5.49 5.49 0 0 1 22 9.5c0 2.29-1.5 4-3 5.5l-5.492 5.313a2 2 0 0 1-3 .019L5 15c-1.5-1.5-3-3.2-3-5.5">
+          </path>
+        </svg>
+      </div>
+      <div class="flex-1 min-w-0">
+        <div class="flex items-center gap-2">
+          <div class="flex-1">
+            Open Source
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="transition-[opacity,transform] duration-300 opacity-100 translate-x-0">
+    <div role="button"
+         tabindex="0"
+         class="flex items-center gap-2 transition-colors duration-200 hover:bg-muted p-2 rounded-md cursor-pointer focus-visible:ring-2 focus-visible:ring-ring focus-visible:outline-none"
+    >
+      <div class="shrink-0 mt-0.5">
+        <svg xmlns="http://www.w3.org/2000/svg"
+             width="16"
+             height="16"
+             viewbox="0 0 24 24"
+             fill="none"
+             stroke="currentColor"
+             stroke-width="2"
+             stroke-linecap="round"
+             stroke-linejoin="round"
+             class="lucide lucide-zap text-warning bg-transparent border-warning"
+             aria-hidden="true"
+             id="Zap"
+        >
+          <path d="M4 14a1 1 0 0 1-.78-1.63l9.9-10.2a.5.5 0 0 1 .86.46l-1.92 6.02A1 1 0 0 0 13 10h7a1 1 0 0 1 .78 1.63l-9.9 10.2a.5.5 0 0 1-.86-.46l1.92-6.02A1 1 0 0 0 11 14z">
+          </path>
+        </svg>
+      </div>
+      <div class="flex-1 min-w-0">
+        <div class="flex items-center gap-2">
+          <div class="flex-1">
+            High Performance
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="transition-[opacity,transform] duration-300 opacity-100 translate-x-0">
+    <div role="button"
+         tabindex="0"
+         class="flex items-center gap-2 transition-colors duration-200 hover:bg-muted p-2 rounded-md cursor-pointer focus-visible:ring-2 focus-visible:ring-ring focus-visible:outline-none"
+    >
+      <div class="shrink-0 mt-0.5">
+        <svg xmlns="http://www.w3.org/2000/svg"
+             width="16"
+             height="16"
+             viewbox="0 0 24 24"
+             fill="none"
+             stroke="currentColor"
+             stroke-width="2"
+             stroke-linecap="round"
+             stroke-linejoin="round"
+             class="lucide lucide-rocket text-success bg-transparent border-success"
+             aria-hidden="true"
+             id="Rocket"
+        >
+          <path d="M12 15v5s3.03-.55 4-2c1.08-1.62 0-5 0-5">
+          </path>
+          <path d="M4.5 16.5c-1.5 1.26-2 5-2 5s3.74-.5 5-2c.71-.84.7-2.13-.09-2.91a2.18 2.18 0 0 0-2.91-.09">
+          </path>
+          <path d="M9 12a22 22 0 0 1 2-3.95A12.88 12.88 0 0 1 22 2c0 2.72-.78 7.5-6 11a22.4 22.4 0 0 1-4 2z">
+          </path>
+          <path d="M9 12H4s.55-3.03 2-4c1.62-1.08 5 .05 5 .05">
+          </path>
+        </svg>
+      </div>
+      <div class="flex-1 min-w-0">
+        <div class="flex items-center gap-2">
+          <div class="flex-1">
+            Production Ready
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="transition-[opacity,transform] duration-300 opacity-100 translate-x-0">
+    <div role="button"
+         tabindex="0"
+         class="flex items-center gap-2 transition-colors duration-200 hover:bg-muted p-2 rounded-md cursor-pointer focus-visible:ring-2 focus-visible:ring-ring focus-visible:outline-none"
+    >
+      <div class="shrink-0 mt-0.5">
+        <svg xmlns="http://www.w3.org/2000/svg"
+             width="16"
+             height="16"
+             viewbox="0 0 24 24"
+             fill="none"
+             stroke="currentColor"
+             stroke-width="2"
+             stroke-linecap="round"
+             stroke-linejoin="round"
+             class="lucide lucide-shield text-indigo bg-transparent border-indigo"
+             aria-hidden="true"
+             id="Shield"
+        >
+          <path d="M20 13c0 5-3.5 7.5-7.66 8.95a1 1 0 0 1-.67-.01C7.5 20.5 4 18 4 13V6a1 1 0 0 1 1-1c2 0 4.5-1.2 6.24-2.72a1.17 1.17 0 0 1 1.52 0C14.51 3.81 17 5 19 5a1 1 0 0 1 1 1z">
+          </path>
+        </svg>
+      </div>
+      <div class="flex-1 min-w-0">
+        <div class="flex items-center gap-2">
+          <div class="flex-1">
+            Secure by Default
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</ul>
+`;
+
+exports[`Components/Typography/List Default smoke-test 1`] = `
+<ul class="text-base space-y-2 text-primary-foreground"
+    id="_r_ID_"
+>
+  <div class="transition-[opacity,transform] duration-300 opacity-100 translate-x-0">
+    <div role="button"
+         tabindex="0"
+         class="flex items-center gap-2 transition-colors duration-200 hover:bg-muted p-2 rounded-md cursor-pointer focus-visible:ring-2 focus-visible:ring-ring focus-visible:outline-none"
+    >
+      <div class="shrink-0 mt-0.5">
+        <svg xmlns="http://www.w3.org/2000/svg"
+             width="16"
+             height="16"
+             viewbox="0 0 24 24"
+             fill="none"
+             stroke="currentColor"
+             stroke-width="2"
+             stroke-linecap="round"
+             stroke-linejoin="round"
+             class="lucide lucide-circle text-muted-foreground bg-transparent border-border h-1.5 w-1.5 fill-current"
+             aria-hidden="true"
+             id="Circle"
+        >
+          <circle cx="12"
+                  cy="12"
+                  r="10"
+          >
+          </circle>
+        </svg>
+      </div>
+      <div class="flex-1 min-w-0">
+        <div class="flex items-center gap-2">
+          <div class="flex-1">
+            First item in the list
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="transition-[opacity,transform] duration-300 opacity-100 translate-x-0">
+    <div role="button"
+         tabindex="0"
+         class="flex items-center gap-2 transition-colors duration-200 hover:bg-muted p-2 rounded-md cursor-pointer focus-visible:ring-2 focus-visible:ring-ring focus-visible:outline-none"
+    >
+      <div class="shrink-0 mt-0.5">
+        <svg xmlns="http://www.w3.org/2000/svg"
+             width="16"
+             height="16"
+             viewbox="0 0 24 24"
+             fill="none"
+             stroke="currentColor"
+             stroke-width="2"
+             stroke-linecap="round"
+             stroke-linejoin="round"
+             class="lucide lucide-circle text-muted-foreground bg-transparent border-border h-1.5 w-1.5 fill-current"
+             aria-hidden="true"
+             id="Circle"
+        >
+          <circle cx="12"
+                  cy="12"
+                  r="10"
+          >
+          </circle>
+        </svg>
+      </div>
+      <div class="flex-1 min-w-0">
+        <div class="flex items-center gap-2">
+          <div class="flex-1">
+            Second item with more content
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="transition-[opacity,transform] duration-300 opacity-100 translate-x-0">
+    <div role="button"
+         tabindex="0"
+         class="flex items-center gap-2 transition-colors duration-200 hover:bg-muted p-2 rounded-md cursor-pointer focus-visible:ring-2 focus-visible:ring-ring focus-visible:outline-none"
+    >
+      <div class="shrink-0 mt-0.5">
+        <svg xmlns="http://www.w3.org/2000/svg"
+             width="16"
+             height="16"
+             viewbox="0 0 24 24"
+             fill="none"
+             stroke="currentColor"
+             stroke-width="2"
+             stroke-linecap="round"
+             stroke-linejoin="round"
+             class="lucide lucide-circle text-muted-foreground bg-transparent border-border h-1.5 w-1.5 fill-current"
+             aria-hidden="true"
+             id="Circle"
+        >
+          <circle cx="12"
+                  cy="12"
+                  r="10"
+          >
+          </circle>
+        </svg>
+      </div>
+      <div class="flex-1 min-w-0">
+        <div class="flex items-center gap-2">
+          <div class="flex-1">
+            Third item to complete the set
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="transition-[opacity,transform] duration-300 opacity-100 translate-x-0">
+    <div role="button"
+         tabindex="0"
+         class="flex items-center gap-2 transition-colors duration-200 hover:bg-muted p-2 rounded-md cursor-pointer focus-visible:ring-2 focus-visible:ring-ring focus-visible:outline-none"
+    >
+      <div class="shrink-0 mt-0.5">
+        <svg xmlns="http://www.w3.org/2000/svg"
+             width="16"
+             height="16"
+             viewbox="0 0 24 24"
+             fill="none"
+             stroke="currentColor"
+             stroke-width="2"
+             stroke-linecap="round"
+             stroke-linejoin="round"
+             class="lucide lucide-circle text-muted-foreground bg-transparent border-border h-1.5 w-1.5 fill-current"
+             aria-hidden="true"
+             id="Circle"
+        >
+          <circle cx="12"
+                  cy="12"
+                  r="10"
+          >
+          </circle>
+        </svg>
+      </div>
+      <div class="flex-1 min-w-0">
+        <div class="flex items-center gap-2">
+          <div class="flex-1">
+            Fourth item for good measure
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</ul>
+`;
+
+exports[`Components/Typography/List FeaturesList smoke-test 1`] = `
+<ul class="text-base space-y-2 text-primary-foreground"
+    id="_r_ID_"
+>
+  <div class="transition-[opacity,transform] duration-300 opacity-100 translate-x-0">
+    <div role="button"
+         tabindex="0"
+         class="flex items-center gap-2 transition-colors duration-200 hover:bg-muted p-2 rounded-md cursor-pointer focus-visible:ring-2 focus-visible:ring-ring focus-visible:outline-none"
+    >
+      <div class="shrink-0 mt-0.5">
+        <svg xmlns="http://www.w3.org/2000/svg"
+             width="16"
+             height="16"
+             viewbox="0 0 24 24"
+             fill="none"
+             stroke="currentColor"
+             stroke-width="2"
+             stroke-linecap="round"
+             stroke-linejoin="round"
+             class="lucide lucide-star text-warning-foreground"
+             aria-hidden="true"
+             id="Star"
+        >
+          <path d="M11.525 2.295a.53.53 0 0 1 .95 0l2.31 4.679a2.123 2.123 0 0 0 1.595 1.16l5.166.756a.53.53 0 0 1 .294.904l-3.736 3.638a2.123 2.123 0 0 0-.611 1.878l.882 5.14a.53.53 0 0 1-.771.56l-4.618-2.428a2.122 2.122 0 0 0-1.973 0L6.396 21.01a.53.53 0 0 1-.77-.56l.881-5.139a2.122 2.122 0 0 0-.611-1.879L2.16 9.795a.53.53 0 0 1 .294-.906l5.165-.755a2.122 2.122 0 0 0 1.597-1.16z">
+          </path>
+        </svg>
+      </div>
+      <div class="flex-1 min-w-0">
+        <div class="flex items-center gap-2">
+          <div class="flex-1 text-success-foreground">
+            Lightning fast performance
+          </div>
+          <div data-slot="badge"
+               id="_r_ID_"
+               class="inline-flex items-center justify-center rounded-full shadow-none border font-medium w-fit whitespace-nowrap shrink-0 gap-1 [&amp;&gt;svg]:pointer-events-none focus-visible:border-ring focus-visible:ring-ring/50 focus-visible:ring-[3px] aria-invalid:ring-destructive/20 dark:aria-invalid:ring-destructive/40 aria-invalid:border-destructive transition-[color,box-shadow] overflow-hidden text-xs [&amp;&gt;svg]:size-2.5 text-muted-foreground bg-muted border-border px-2 py-1"
+          >
+            <div class="flex items-center">
+              <div class>
+                New
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="transition-[opacity,transform] duration-300 opacity-100 translate-x-0">
+    <div role="button"
+         tabindex="0"
+         class="flex items-center gap-2 transition-colors duration-200 hover:bg-muted p-2 rounded-md cursor-pointer focus-visible:ring-2 focus-visible:ring-ring focus-visible:outline-none"
+    >
+      <div class="shrink-0 mt-0.5">
+        <svg xmlns="http://www.w3.org/2000/svg"
+             width="16"
+             height="16"
+             viewbox="0 0 24 24"
+             fill="none"
+             stroke="currentColor"
+             stroke-width="2"
+             stroke-linecap="round"
+             stroke-linejoin="round"
+             class="lucide lucide-star text-warning-foreground"
+             aria-hidden="true"
+             id="Star"
+        >
+          <path d="M11.525 2.295a.53.53 0 0 1 .95 0l2.31 4.679a2.123 2.123 0 0 0 1.595 1.16l5.166.756a.53.53 0 0 1 .294.904l-3.736 3.638a2.123 2.123 0 0 0-.611 1.878l.882 5.14a.53.53 0 0 1-.771.56l-4.618-2.428a2.122 2.122 0 0 0-1.973 0L6.396 21.01a.53.53 0 0 1-.77-.56l.881-5.139a2.122 2.122 0 0 0-.611-1.879L2.16 9.795a.53.53 0 0 1 .294-.906l5.165-.755a2.122 2.122 0 0 0 1.597-1.16z">
+          </path>
+        </svg>
+      </div>
+      <div class="flex-1 min-w-0">
+        <div class="flex items-center gap-2">
+          <div class="flex-1 text-info-foreground">
+            Flexible customization options
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="transition-[opacity,transform] duration-300 opacity-100 translate-x-0">
+    <div role="button"
+         tabindex="0"
+         class="flex items-center gap-2 transition-colors duration-200 hover:bg-muted p-2 rounded-md cursor-pointer focus-visible:ring-2 focus-visible:ring-ring focus-visible:outline-none"
+    >
+      <div class="shrink-0 mt-0.5">
+        <svg xmlns="http://www.w3.org/2000/svg"
+             width="16"
+             height="16"
+             viewbox="0 0 24 24"
+             fill="none"
+             stroke="currentColor"
+             stroke-width="2"
+             stroke-linecap="round"
+             stroke-linejoin="round"
+             class="lucide lucide-shield text-muted-foreground bg-transparent border-border"
+             aria-hidden="true"
+             id="Shield"
+        >
+          <path d="M20 13c0 5-3.5 7.5-7.66 8.95a1 1 0 0 1-.67-.01C7.5 20.5 4 18 4 13V6a1 1 0 0 1 1-1c2 0 4.5-1.2 6.24-2.72a1.17 1.17 0 0 1 1.52 0C14.51 3.81 17 5 19 5a1 1 0 0 1 1 1z">
+          </path>
+        </svg>
+      </div>
+      <div class="flex-1 min-w-0">
+        <div class="flex items-center gap-2">
+          <div class="flex-1">
+            Built-in accessibility
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="transition-[opacity,transform] duration-300 opacity-100 translate-x-0">
+    <div role="button"
+         tabindex="0"
+         class="flex items-center gap-2 transition-colors duration-200 hover:bg-muted p-2 rounded-md cursor-pointer focus-visible:ring-2 focus-visible:ring-ring focus-visible:outline-none"
+    >
+      <div class="shrink-0 mt-0.5">
+        <svg xmlns="http://www.w3.org/2000/svg"
+             width="16"
+             height="16"
+             viewbox="0 0 24 24"
+             fill="none"
+             stroke="currentColor"
+             stroke-width="2"
+             stroke-linecap="round"
+             stroke-linejoin="round"
+             class="lucide lucide-code text-muted-foreground bg-transparent border-border"
+             aria-hidden="true"
+             id="Code"
+        >
+          <path d="m16 18 6-6-6-6">
+          </path>
+          <path d="m8 6-6 6 6 6">
+          </path>
+        </svg>
+      </div>
+      <div class="flex-1 min-w-0">
+        <div class="flex items-center gap-2">
+          <div class="flex-1">
+            TypeScript support
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</ul>
+`;
+
+exports[`Components/Typography/List InteractiveList smoke-test 1`] = `
+<ul class="text-base space-y-2 text-primary-foreground"
+    id="_r_ID_"
+>
+  <div class="transition-[opacity,transform] duration-300 opacity-100 translate-x-0">
+    <div role="button"
+         tabindex="0"
+         class="flex items-center gap-2 transition-colors duration-200 hover:bg-muted p-2 rounded-md cursor-pointer focus-visible:ring-2 focus-visible:ring-ring focus-visible:outline-none"
+    >
+      <div class="shrink-0 mt-0.5">
+        <svg xmlns="http://www.w3.org/2000/svg"
+             width="16"
+             height="16"
+             viewbox="0 0 24 24"
+             fill="none"
+             stroke="currentColor"
+             stroke-width="2"
+             stroke-linecap="round"
+             stroke-linejoin="round"
+             class="lucide lucide-circle text-muted-foreground bg-transparent border-border h-1.5 w-1.5 fill-current"
+             aria-hidden="true"
+             id="Circle"
+        >
+          <circle cx="12"
+                  cy="12"
+                  r="10"
+          >
+          </circle>
+        </svg>
+      </div>
+      <div class="flex-1 min-w-0">
+        <div class="flex items-center gap-2">
+          <div class="flex-1">
+            Click me to see interaction
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="transition-[opacity,transform] duration-300 opacity-100 translate-x-0">
+    <div role="button"
+         tabindex="0"
+         class="flex items-center gap-2 transition-colors duration-200 hover:bg-muted p-2 rounded-md cursor-pointer focus-visible:ring-2 focus-visible:ring-ring focus-visible:outline-none"
+    >
+      <div class="shrink-0 mt-0.5">
+        <svg xmlns="http://www.w3.org/2000/svg"
+             width="16"
+             height="16"
+             viewbox="0 0 24 24"
+             fill="none"
+             stroke="currentColor"
+             stroke-width="2"
+             stroke-linecap="round"
+             stroke-linejoin="round"
+             class="lucide lucide-circle text-muted-foreground bg-transparent border-border h-1.5 w-1.5 fill-current"
+             aria-hidden="true"
+             id="Circle"
+        >
+          <circle cx="12"
+                  cy="12"
+                  r="10"
+          >
+          </circle>
+        </svg>
+      </div>
+      <div class="flex-1 min-w-0">
+        <div class="flex items-center gap-2">
+          <div class="flex-1">
+            Hover over me for effects
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="transition-[opacity,transform] duration-300 opacity-100 translate-x-0">
+    <div role="button"
+         tabindex="0"
+         class="flex items-center gap-2 transition-colors duration-200 hover:bg-muted p-2 rounded-md focus-visible:ring-2 focus-visible:ring-ring focus-visible:outline-none opacity-50 cursor-not-allowed"
+    >
+      <div class="shrink-0 mt-0.5">
+        <svg xmlns="http://www.w3.org/2000/svg"
+             width="16"
+             height="16"
+             viewbox="0 0 24 24"
+             fill="none"
+             stroke="currentColor"
+             stroke-width="2"
+             stroke-linecap="round"
+             stroke-linejoin="round"
+             class="lucide lucide-circle text-muted-foreground bg-transparent border-border h-1.5 w-1.5 fill-current"
+             aria-hidden="true"
+             id="Circle"
+        >
+          <circle cx="12"
+                  cy="12"
+                  r="10"
+          >
+          </circle>
+        </svg>
+      </div>
+      <div class="flex-1 min-w-0">
+        <div class="flex items-center gap-2">
+          <div class="flex-1">
+            I am disabled
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="transition-[opacity,transform] duration-300 opacity-100 translate-x-0">
+    <div role="button"
+         tabindex="0"
+         class="flex items-center gap-2 transition-colors duration-200 hover:bg-muted p-2 rounded-md cursor-pointer focus-visible:ring-2 focus-visible:ring-ring focus-visible:outline-none opacity-60 line-through"
+    >
+      <div class="shrink-0 mt-0.5">
+        <svg xmlns="http://www.w3.org/2000/svg"
+             width="16"
+             height="16"
+             viewbox="0 0 24 24"
+             fill="none"
+             stroke="currentColor"
+             stroke-width="2"
+             stroke-linecap="round"
+             stroke-linejoin="round"
+             class="lucide lucide-circle text-muted-foreground bg-transparent border-border h-1.5 w-1.5 fill-current"
+             aria-hidden="true"
+             id="Circle"
+        >
+          <circle cx="12"
+                  cy="12"
+                  r="10"
+          >
+          </circle>
+        </svg>
+      </div>
+      <div class="flex-1 min-w-0">
+        <div class="flex items-center gap-2">
+          <div class="flex-1">
+            I am completed
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</ul>
+`;
+
+exports[`Components/Typography/List NestedList smoke-test 1`] = `
+<ul class="text-base space-y-4 text-primary-foreground"
+    id="_r_ID_"
+>
+  <div class="transition-[opacity,transform] duration-300 opacity-100 translate-x-0">
+    <div role="button"
+         tabindex="0"
+         class="flex items-center gap-2 transition-colors duration-200 hover:bg-muted p-2 rounded-md cursor-pointer focus-visible:ring-2 focus-visible:ring-ring focus-visible:outline-none"
+    >
+      <div class="shrink-0 mt-0.5">
+        <svg xmlns="http://www.w3.org/2000/svg"
+             width="16"
+             height="16"
+             viewbox="0 0 24 24"
+             fill="none"
+             stroke="currentColor"
+             stroke-width="2"
+             stroke-linecap="round"
+             stroke-linejoin="round"
+             class="lucide lucide-circle text-muted-foreground bg-transparent border-border h-1.5 w-1.5 fill-current"
+             aria-hidden="true"
+             id="Circle"
+        >
+          <circle cx="12"
+                  cy="12"
+                  r="10"
+          >
+          </circle>
+        </svg>
+      </div>
+      <div class="flex-1 min-w-0">
+        <div class="flex items-center gap-2">
+          <div class="flex-1">
+            Frontend Development
+          </div>
+          <div class="transition-transform duration-200 rotate-90">
+            <svg xmlns="http://www.w3.org/2000/svg"
+                 width="16"
+                 height="16"
+                 viewbox="0 0 24 24"
+                 fill="none"
+                 stroke="currentColor"
+                 stroke-width="2"
+                 stroke-linecap="round"
+                 stroke-linejoin="round"
+                 class="lucide lucide-arrow-right text-muted-foreground bg-transparent border-border"
+                 aria-hidden="true"
+                 id="ArrowRight"
+            >
+              <path d="M5 12h14">
+              </path>
+              <path d="m12 5 7 7-7 7">
+              </path>
+            </svg>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div>
+      <div class="transition-[opacity,transform] duration-300 opacity-100 translate-x-0">
+        <div role="button"
+             tabindex="0"
+             class="flex items-center gap-2 transition-colors duration-200 hover:bg-muted p-2 rounded-md cursor-pointer focus-visible:ring-2 focus-visible:ring-ring focus-visible:outline-none ml-6"
+        >
+          <div class="shrink-0 mt-0.5">
+            <svg xmlns="http://www.w3.org/2000/svg"
+                 width="16"
+                 height="16"
+                 viewbox="0 0 24 24"
+                 fill="none"
+                 stroke="currentColor"
+                 stroke-width="2"
+                 stroke-linecap="round"
+                 stroke-linejoin="round"
+                 class="lucide lucide-code text-muted-foreground bg-transparent border-border"
+                 aria-hidden="true"
+                 id="Code"
+            >
+              <path d="m16 18 6-6-6-6">
+              </path>
+              <path d="m8 6-6 6 6 6">
+              </path>
+            </svg>
+          </div>
+          <div class="flex-1 min-w-0">
+            <div class="flex items-center gap-2">
+              <div class="flex-1">
+                React Components
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="transition-[opacity,transform] duration-300 opacity-100 translate-x-0">
+        <div role="button"
+             tabindex="0"
+             class="flex items-center gap-2 transition-colors duration-200 hover:bg-muted p-2 rounded-md cursor-pointer focus-visible:ring-2 focus-visible:ring-ring focus-visible:outline-none ml-6"
+        >
+          <div class="shrink-0 mt-0.5">
+            <svg xmlns="http://www.w3.org/2000/svg"
+                 width="16"
+                 height="16"
+                 viewbox="0 0 24 24"
+                 fill="none"
+                 stroke="currentColor"
+                 stroke-width="2"
+                 stroke-linecap="round"
+                 stroke-linejoin="round"
+                 class="lucide lucide-zap text-muted-foreground bg-transparent border-border"
+                 aria-hidden="true"
+                 id="Zap"
+            >
+              <path d="M4 14a1 1 0 0 1-.78-1.63l9.9-10.2a.5.5 0 0 1 .86.46l-1.92 6.02A1 1 0 0 0 13 10h7a1 1 0 0 1 .78 1.63l-9.9 10.2a.5.5 0 0 1-.86-.46l1.92-6.02A1 1 0 0 0 11 14z">
+              </path>
+            </svg>
+          </div>
+          <div class="flex-1 min-w-0">
+            <div class="flex items-center gap-2">
+              <div class="flex-1">
+                Styling &amp; CSS
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="transition-[opacity,transform] duration-300 opacity-100 translate-x-0">
+        <div role="button"
+             tabindex="0"
+             class="flex items-center gap-2 transition-colors duration-200 hover:bg-muted p-2 rounded-md cursor-pointer focus-visible:ring-2 focus-visible:ring-ring focus-visible:outline-none ml-6"
+        >
+          <div class="shrink-0 mt-0.5">
+            <svg xmlns="http://www.w3.org/2000/svg"
+                 width="16"
+                 height="16"
+                 viewbox="0 0 24 24"
+                 fill="none"
+                 stroke="currentColor"
+                 stroke-width="2"
+                 stroke-linecap="round"
+                 stroke-linejoin="round"
+                 class="lucide lucide-circle text-muted-foreground bg-transparent border-border h-1.5 w-1.5 fill-current"
+                 aria-hidden="true"
+                 id="Circle"
+            >
+              <circle cx="12"
+                      cy="12"
+                      r="10"
+              >
+              </circle>
+            </svg>
+          </div>
+          <div class="flex-1 min-w-0">
+            <div class="flex items-center gap-2">
+              <div class="flex-1">
+                State Management
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="transition-[opacity,transform] duration-300 opacity-100 translate-x-0">
+    <div role="button"
+         tabindex="0"
+         class="flex items-center gap-2 transition-colors duration-200 hover:bg-muted p-2 rounded-md cursor-pointer focus-visible:ring-2 focus-visible:ring-ring focus-visible:outline-none"
+    >
+      <div class="shrink-0 mt-0.5">
+        <svg xmlns="http://www.w3.org/2000/svg"
+             width="16"
+             height="16"
+             viewbox="0 0 24 24"
+             fill="none"
+             stroke="currentColor"
+             stroke-width="2"
+             stroke-linecap="round"
+             stroke-linejoin="round"
+             class="lucide lucide-circle text-muted-foreground bg-transparent border-border h-1.5 w-1.5 fill-current"
+             aria-hidden="true"
+             id="Circle"
+        >
+          <circle cx="12"
+                  cy="12"
+                  r="10"
+          >
+          </circle>
+        </svg>
+      </div>
+      <div class="flex-1 min-w-0">
+        <div class="flex items-center gap-2">
+          <div class="flex-1">
+            Backend Development
+          </div>
+          <div data-slot="badge"
+               id="_r_ID_"
+               class="inline-flex items-center justify-center rounded-full shadow-none border font-medium w-fit whitespace-nowrap shrink-0 gap-1 [&amp;&gt;svg]:pointer-events-none focus-visible:border-ring focus-visible:ring-ring/50 focus-visible:ring-[3px] aria-invalid:ring-destructive/20 dark:aria-invalid:ring-destructive/40 aria-invalid:border-destructive transition-[color,box-shadow] overflow-hidden text-xs [&amp;&gt;svg]:size-2.5 text-muted-foreground bg-muted border-border px-2 py-1"
+          >
+            <div class="flex items-center">
+              <div class>
+                API
+              </div>
+            </div>
+          </div>
+          <div class="transition-transform duration-200 rotate-90">
+            <svg xmlns="http://www.w3.org/2000/svg"
+                 width="16"
+                 height="16"
+                 viewbox="0 0 24 24"
+                 fill="none"
+                 stroke="currentColor"
+                 stroke-width="2"
+                 stroke-linecap="round"
+                 stroke-linejoin="round"
+                 class="lucide lucide-arrow-right text-muted-foreground bg-transparent border-border"
+                 aria-hidden="true"
+                 id="ArrowRight"
+            >
+              <path d="M5 12h14">
+              </path>
+              <path d="m12 5 7 7-7 7">
+              </path>
+            </svg>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div>
+      <div class="transition-[opacity,transform] duration-300 opacity-100 translate-x-0">
+        <div role="button"
+             tabindex="0"
+             class="flex items-center gap-2 transition-colors duration-200 hover:bg-muted p-2 rounded-md cursor-pointer focus-visible:ring-2 focus-visible:ring-ring focus-visible:outline-none ml-6"
+        >
+          <div class="shrink-0 mt-0.5">
+            <svg xmlns="http://www.w3.org/2000/svg"
+                 width="16"
+                 height="16"
+                 viewbox="0 0 24 24"
+                 fill="none"
+                 stroke="currentColor"
+                 stroke-width="2"
+                 stroke-linecap="round"
+                 stroke-linejoin="round"
+                 class="lucide lucide-database text-muted-foreground bg-transparent border-border"
+                 aria-hidden="true"
+                 id="Database"
+            >
+              <ellipse cx="12"
+                       cy="5"
+                       rx="9"
+                       ry="3"
+              >
+              </ellipse>
+              <path d="M3 5V19A9 3 0 0 0 21 19V5">
+              </path>
+              <path d="M3 12A9 3 0 0 0 21 12">
+              </path>
+            </svg>
+          </div>
+          <div class="flex-1 min-w-0">
+            <div class="flex items-center gap-2">
+              <div class="flex-1">
+                Database Design
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="transition-[opacity,transform] duration-300 opacity-100 translate-x-0">
+        <div role="button"
+             tabindex="0"
+             class="flex items-center gap-2 transition-colors duration-200 hover:bg-muted p-2 rounded-md cursor-pointer focus-visible:ring-2 focus-visible:ring-ring focus-visible:outline-none ml-6"
+        >
+          <div class="shrink-0 mt-0.5">
+            <svg xmlns="http://www.w3.org/2000/svg"
+                 width="16"
+                 height="16"
+                 viewbox="0 0 24 24"
+                 fill="none"
+                 stroke="currentColor"
+                 stroke-width="2"
+                 stroke-linecap="round"
+                 stroke-linejoin="round"
+                 class="lucide lucide-settings text-muted-foreground bg-transparent border-border"
+                 aria-hidden="true"
+                 id="Settings"
+            >
+              <path d="M9.671 4.136a2.34 2.34 0 0 1 4.659 0 2.34 2.34 0 0 0 3.319 1.915 2.34 2.34 0 0 1 2.33 4.033 2.34 2.34 0 0 0 0 3.831 2.34 2.34 0 0 1-2.33 4.033 2.34 2.34 0 0 0-3.319 1.915 2.34 2.34 0 0 1-4.659 0 2.34 2.34 0 0 0-3.32-1.915 2.34 2.34 0 0 1-2.33-4.033 2.34 2.34 0 0 0 0-3.831A2.34 2.34 0 0 1 6.35 6.051a2.34 2.34 0 0 0 3.319-1.915">
+              </path>
+              <circle cx="12"
+                      cy="12"
+                      r="3"
+              >
+              </circle>
+            </svg>
+          </div>
+          <div class="flex-1 min-w-0">
+            <div class="flex items-center gap-2">
+              <div class="flex-1">
+                Server Configuration
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="transition-[opacity,transform] duration-300 opacity-100 translate-x-0">
+        <div role="button"
+             tabindex="0"
+             class="flex items-center gap-2 transition-colors duration-200 hover:bg-muted p-2 rounded-md cursor-pointer focus-visible:ring-2 focus-visible:ring-ring focus-visible:outline-none ml-6"
+        >
+          <div class="shrink-0 mt-0.5">
+            <svg xmlns="http://www.w3.org/2000/svg"
+                 width="16"
+                 height="16"
+                 viewbox="0 0 24 24"
+                 fill="none"
+                 stroke="currentColor"
+                 stroke-width="2"
+                 stroke-linecap="round"
+                 stroke-linejoin="round"
+                 class="lucide lucide-globe text-muted-foreground bg-transparent border-border"
+                 aria-hidden="true"
+                 id="Globe"
+            >
+              <circle cx="12"
+                      cy="12"
+                      r="10"
+              >
+              </circle>
+              <path d="M12 2a14.5 14.5 0 0 0 0 20 14.5 14.5 0 0 0 0-20">
+              </path>
+              <path d="M2 12h20">
+              </path>
+            </svg>
+          </div>
+          <div class="flex-1 min-w-0">
+            <div class="flex items-center gap-2">
+              <div class="flex-1">
+                API Endpoints
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="transition-[opacity,transform] duration-300 opacity-100 translate-x-0">
+    <div role="button"
+         tabindex="0"
+         class="flex items-center gap-2 transition-colors duration-200 hover:bg-muted p-2 rounded-md cursor-pointer focus-visible:ring-2 focus-visible:ring-ring focus-visible:outline-none"
+    >
+      <div class="shrink-0 mt-0.5">
+        <svg xmlns="http://www.w3.org/2000/svg"
+             width="16"
+             height="16"
+             viewbox="0 0 24 24"
+             fill="none"
+             stroke="currentColor"
+             stroke-width="2"
+             stroke-linecap="round"
+             stroke-linejoin="round"
+             class="lucide lucide-circle text-muted-foreground bg-transparent border-border h-1.5 w-1.5 fill-current"
+             aria-hidden="true"
+             id="Circle"
+        >
+          <circle cx="12"
+                  cy="12"
+                  r="10"
+          >
+          </circle>
+        </svg>
+      </div>
+      <div class="flex-1 min-w-0">
+        <div class="flex items-center gap-2">
+          <div class="flex-1">
+            DevOps &amp; Deployment
+          </div>
+          <div class="transition-transform duration-200 rotate-90">
+            <svg xmlns="http://www.w3.org/2000/svg"
+                 width="16"
+                 height="16"
+                 viewbox="0 0 24 24"
+                 fill="none"
+                 stroke="currentColor"
+                 stroke-width="2"
+                 stroke-linecap="round"
+                 stroke-linejoin="round"
+                 class="lucide lucide-arrow-right text-muted-foreground bg-transparent border-border"
+                 aria-hidden="true"
+                 id="ArrowRight"
+            >
+              <path d="M5 12h14">
+              </path>
+              <path d="m12 5 7 7-7 7">
+              </path>
+            </svg>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div>
+      <div class="transition-[opacity,transform] duration-300 opacity-100 translate-x-0">
+        <div role="button"
+             tabindex="0"
+             class="flex items-center gap-2 transition-colors duration-200 hover:bg-muted p-2 rounded-md cursor-pointer focus-visible:ring-2 focus-visible:ring-ring focus-visible:outline-none ml-6"
+        >
+          <div class="shrink-0 mt-0.5">
+            <svg xmlns="http://www.w3.org/2000/svg"
+                 width="16"
+                 height="16"
+                 viewbox="0 0 24 24"
+                 fill="none"
+                 stroke="currentColor"
+                 stroke-width="2"
+                 stroke-linecap="round"
+                 stroke-linejoin="round"
+                 class="lucide lucide-circle text-muted-foreground bg-transparent border-border h-1.5 w-1.5 fill-current"
+                 aria-hidden="true"
+                 id="Circle"
+            >
+              <circle cx="12"
+                      cy="12"
+                      r="10"
+              >
+              </circle>
+            </svg>
+          </div>
+          <div class="flex-1 min-w-0">
+            <div class="flex items-center gap-2">
+              <div class="flex-1 text-success-foreground">
+                CI/CD Pipeline
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="transition-[opacity,transform] duration-300 opacity-100 translate-x-0">
+        <div role="button"
+             tabindex="0"
+             class="flex items-center gap-2 transition-colors duration-200 hover:bg-muted p-2 rounded-md cursor-pointer focus-visible:ring-2 focus-visible:ring-ring focus-visible:outline-none ml-6"
+        >
+          <div class="shrink-0 mt-0.5">
+            <svg xmlns="http://www.w3.org/2000/svg"
+                 width="16"
+                 height="16"
+                 viewbox="0 0 24 24"
+                 fill="none"
+                 stroke="currentColor"
+                 stroke-width="2"
+                 stroke-linecap="round"
+                 stroke-linejoin="round"
+                 class="lucide lucide-circle text-muted-foreground bg-transparent border-border h-1.5 w-1.5 fill-current"
+                 aria-hidden="true"
+                 id="Circle"
+            >
+              <circle cx="12"
+                      cy="12"
+                      r="10"
+              >
+              </circle>
+            </svg>
+          </div>
+          <div class="flex-1 min-w-0">
+            <div class="flex items-center gap-2">
+              <div class="flex-1 text-warning-foreground">
+                Security Audit
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="transition-[opacity,transform] duration-300 opacity-100 translate-x-0">
+        <div role="button"
+             tabindex="0"
+             class="flex items-center gap-2 transition-colors duration-200 hover:bg-muted p-2 rounded-md cursor-pointer focus-visible:ring-2 focus-visible:ring-ring focus-visible:outline-none ml-6"
+        >
+          <div class="shrink-0 mt-0.5">
+            <svg xmlns="http://www.w3.org/2000/svg"
+                 width="16"
+                 height="16"
+                 viewbox="0 0 24 24"
+                 fill="none"
+                 stroke="currentColor"
+                 stroke-width="2"
+                 stroke-linecap="round"
+                 stroke-linejoin="round"
+                 class="lucide lucide-circle text-muted-foreground bg-transparent border-border h-1.5 w-1.5 fill-current"
+                 aria-hidden="true"
+                 id="Circle"
+            >
+              <circle cx="12"
+                      cy="12"
+                      r="10"
+              >
+              </circle>
+            </svg>
+          </div>
+          <div class="flex-1 min-w-0">
+            <div class="flex items-center gap-2">
+              <div class="flex-1 text-destructive-foreground">
+                Performance Issues
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</ul>
+`;
+
+exports[`Components/Typography/List OrderedList smoke-test 1`] = `
+<ol class="text-base space-y-2 text-primary-foreground"
+    id="_r_ID_"
+>
+  <div class="transition-[opacity,transform] duration-300 opacity-100 translate-x-0">
+    <div role="button"
+         tabindex="0"
+         class="flex items-center gap-2 transition-colors duration-200 hover:bg-muted p-2 rounded-md cursor-pointer focus-visible:ring-2 focus-visible:ring-ring focus-visible:outline-none"
+    >
+      <div class="shrink-0 mt-0.5">
+        <span class="text-muted-foreground bg-transparent border-border font-medium min-w-6">
+          1.
+        </span>
+      </div>
+      <div class="flex-1 min-w-0">
+        <div class="flex items-center gap-2">
+          <div class="flex-1">
+            Step one: Initialize the project
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="transition-[opacity,transform] duration-300 opacity-100 translate-x-0">
+    <div role="button"
+         tabindex="0"
+         class="flex items-center gap-2 transition-colors duration-200 hover:bg-muted p-2 rounded-md cursor-pointer focus-visible:ring-2 focus-visible:ring-ring focus-visible:outline-none"
+    >
+      <div class="shrink-0 mt-0.5">
+        <span class="text-muted-foreground bg-transparent border-border font-medium min-w-6">
+          2.
+        </span>
+      </div>
+      <div class="flex-1 min-w-0">
+        <div class="flex items-center gap-2">
+          <div class="flex-1">
+            Step two: Configure the settings
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="transition-[opacity,transform] duration-300 opacity-100 translate-x-0">
+    <div role="button"
+         tabindex="0"
+         class="flex items-center gap-2 transition-colors duration-200 hover:bg-muted p-2 rounded-md cursor-pointer focus-visible:ring-2 focus-visible:ring-ring focus-visible:outline-none"
+    >
+      <div class="shrink-0 mt-0.5">
+        <span class="text-muted-foreground bg-transparent border-border font-medium min-w-6">
+          3.
+        </span>
+      </div>
+      <div class="flex-1 min-w-0">
+        <div class="flex items-center gap-2">
+          <div class="flex-1">
+            Step three: Install dependencies
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="transition-[opacity,transform] duration-300 opacity-100 translate-x-0">
+    <div role="button"
+         tabindex="0"
+         class="flex items-center gap-2 transition-colors duration-200 hover:bg-muted p-2 rounded-md cursor-pointer focus-visible:ring-2 focus-visible:ring-ring focus-visible:outline-none"
+    >
+      <div class="shrink-0 mt-0.5">
+        <span class="text-muted-foreground bg-transparent border-border font-medium min-w-6">
+          4.
+        </span>
+      </div>
+      <div class="flex-1 min-w-0">
+        <div class="flex items-center gap-2">
+          <div class="flex-1">
+            Step four: Start development
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</ol>
+`;
+
+exports[`Components/Typography/List Playground smoke-test 1`] = `
+<ul class="text-base space-y-2 text-primary-foreground"
+    id="_r_ID_"
+>
+  <div class="transition-[opacity,transform] duration-300 opacity-100 translate-x-0">
+    <div role="button"
+         tabindex="0"
+         class="flex items-center gap-2 transition-colors duration-200 hover:bg-muted p-2 rounded-md cursor-pointer focus-visible:ring-2 focus-visible:ring-ring focus-visible:outline-none"
+    >
+      <div class="shrink-0 mt-0.5">
+        <svg xmlns="http://www.w3.org/2000/svg"
+             width="16"
+             height="16"
+             viewbox="0 0 24 24"
+             fill="none"
+             stroke="currentColor"
+             stroke-width="2"
+             stroke-linecap="round"
+             stroke-linejoin="round"
+             class="lucide lucide-circle text-muted-foreground bg-transparent border-border h-1.5 w-1.5 fill-current"
+             aria-hidden="true"
+             id="Circle"
+        >
+          <circle cx="12"
+                  cy="12"
+                  r="10"
+          >
+          </circle>
+        </svg>
+      </div>
+      <div class="flex-1 min-w-0">
+        <div class="flex items-center gap-2">
+          <div class="flex-1">
+            Customizable list item
+          </div>
+          <div data-slot="badge"
+               id="_r_ID_"
+               class="inline-flex items-center justify-center rounded-full shadow-none border font-medium w-fit whitespace-nowrap shrink-0 gap-1 [&amp;&gt;svg]:pointer-events-none focus-visible:border-ring focus-visible:ring-ring/50 focus-visible:ring-[3px] aria-invalid:ring-destructive/20 dark:aria-invalid:ring-destructive/40 aria-invalid:border-destructive transition-[color,box-shadow] overflow-hidden text-xs [&amp;&gt;svg]:size-2.5 text-muted-foreground bg-muted border-border px-2 py-1"
+          >
+            <div class="flex items-center">
+              <div class>
+                Demo
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="transition-[opacity,transform] duration-300 opacity-100 translate-x-0">
+    <div role="button"
+         tabindex="0"
+         class="flex items-center gap-2 transition-colors duration-200 hover:bg-muted p-2 rounded-md cursor-pointer focus-visible:ring-2 focus-visible:ring-ring focus-visible:outline-none"
+    >
+      <div class="shrink-0 mt-0.5">
+        <svg xmlns="http://www.w3.org/2000/svg"
+             width="16"
+             height="16"
+             viewbox="0 0 24 24"
+             fill="none"
+             stroke="currentColor"
+             stroke-width="2"
+             stroke-linecap="round"
+             stroke-linejoin="round"
+             class="lucide lucide-circle text-muted-foreground bg-transparent border-border h-1.5 w-1.5 fill-current"
+             aria-hidden="true"
+             id="Circle"
+        >
+          <circle cx="12"
+                  cy="12"
+                  r="10"
+          >
+          </circle>
+        </svg>
+      </div>
+      <div class="flex-1 min-w-0">
+        <div class="flex items-center gap-2">
+          <div class="flex-1 text-success-foreground">
+            Success variant item
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="transition-[opacity,transform] duration-300 opacity-100 translate-x-0">
+    <div role="button"
+         tabindex="0"
+         class="flex items-center gap-2 transition-colors duration-200 hover:bg-muted p-2 rounded-md cursor-pointer focus-visible:ring-2 focus-visible:ring-ring focus-visible:outline-none"
+    >
+      <div class="shrink-0 mt-0.5">
+        <svg xmlns="http://www.w3.org/2000/svg"
+             width="16"
+             height="16"
+             viewbox="0 0 24 24"
+             fill="none"
+             stroke="currentColor"
+             stroke-width="2"
+             stroke-linecap="round"
+             stroke-linejoin="round"
+             class="lucide lucide-circle text-muted-foreground bg-transparent border-border h-1.5 w-1.5 fill-current"
+             aria-hidden="true"
+             id="Circle"
+        >
+          <circle cx="12"
+                  cy="12"
+                  r="10"
+          >
+          </circle>
+        </svg>
+      </div>
+      <div class="flex-1 min-w-0">
+        <div class="flex items-center gap-2">
+          <div class="flex-1 text-warning-foreground">
+            Warning variant item
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="transition-[opacity,transform] duration-300 opacity-100 translate-x-0">
+    <div role="button"
+         tabindex="0"
+         class="flex items-center gap-2 transition-colors duration-200 hover:bg-muted p-2 rounded-md cursor-pointer focus-visible:ring-2 focus-visible:ring-ring focus-visible:outline-none"
+    >
+      <div class="shrink-0 mt-0.5">
+        <svg xmlns="http://www.w3.org/2000/svg"
+             width="16"
+             height="16"
+             viewbox="0 0 24 24"
+             fill="none"
+             stroke="currentColor"
+             stroke-width="2"
+             stroke-linecap="round"
+             stroke-linejoin="round"
+             class="lucide lucide-circle text-muted-foreground bg-transparent border-border h-1.5 w-1.5 fill-current"
+             aria-hidden="true"
+             id="Circle"
+        >
+          <circle cx="12"
+                  cy="12"
+                  r="10"
+          >
+          </circle>
+        </svg>
+      </div>
+      <div class="flex-1 min-w-0">
+        <div class="flex items-center gap-2">
+          <div class="flex-1">
+            Interactive item with sub-items
+          </div>
+        </div>
+      </div>
+    </div>
+    <div>
+      <div class="transition-[opacity,transform] duration-300 opacity-100 translate-x-0">
+        <div role="button"
+             tabindex="0"
+             class="flex items-center gap-2 transition-colors duration-200 hover:bg-muted p-2 rounded-md cursor-pointer focus-visible:ring-2 focus-visible:ring-ring focus-visible:outline-none ml-6"
+        >
+          <div class="shrink-0 mt-0.5">
+            <svg xmlns="http://www.w3.org/2000/svg"
+                 width="16"
+                 height="16"
+                 viewbox="0 0 24 24"
+                 fill="none"
+                 stroke="currentColor"
+                 stroke-width="2"
+                 stroke-linecap="round"
+                 stroke-linejoin="round"
+                 class="lucide lucide-circle text-muted-foreground bg-transparent border-border h-1.5 w-1.5 fill-current"
+                 aria-hidden="true"
+                 id="Circle"
+            >
+              <circle cx="12"
+                      cy="12"
+                      r="10"
+              >
+              </circle>
+            </svg>
+          </div>
+          <div class="flex-1 min-w-0">
+            <div class="flex items-center gap-2">
+              <div class="flex-1">
+                Sub-item 1
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="transition-[opacity,transform] duration-300 opacity-100 translate-x-0">
+        <div role="button"
+             tabindex="0"
+             class="flex items-center gap-2 transition-colors duration-200 hover:bg-muted p-2 rounded-md cursor-pointer focus-visible:ring-2 focus-visible:ring-ring focus-visible:outline-none ml-6"
+        >
+          <div class="shrink-0 mt-0.5">
+            <svg xmlns="http://www.w3.org/2000/svg"
+                 width="16"
+                 height="16"
+                 viewbox="0 0 24 24"
+                 fill="none"
+                 stroke="currentColor"
+                 stroke-width="2"
+                 stroke-linecap="round"
+                 stroke-linejoin="round"
+                 class="lucide lucide-circle text-muted-foreground bg-transparent border-border h-1.5 w-1.5 fill-current"
+                 aria-hidden="true"
+                 id="Circle"
+            >
+              <circle cx="12"
+                      cy="12"
+                      r="10"
+              >
+              </circle>
+            </svg>
+          </div>
+          <div class="flex-1 min-w-0">
+            <div class="flex items-center gap-2">
+              <div class="flex-1">
+                Sub-item 2
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="transition-[opacity,transform] duration-300 opacity-100 translate-x-0">
+        <div role="button"
+             tabindex="0"
+             class="flex items-center gap-2 transition-colors duration-200 hover:bg-muted p-2 rounded-md cursor-pointer focus-visible:ring-2 focus-visible:ring-ring focus-visible:outline-none ml-6"
+        >
+          <div class="shrink-0 mt-0.5">
+            <svg xmlns="http://www.w3.org/2000/svg"
+                 width="16"
+                 height="16"
+                 viewbox="0 0 24 24"
+                 fill="none"
+                 stroke="currentColor"
+                 stroke-width="2"
+                 stroke-linecap="round"
+                 stroke-linejoin="round"
+                 class="lucide lucide-circle text-muted-foreground bg-transparent border-border h-1.5 w-1.5 fill-current"
+                 aria-hidden="true"
+                 id="Circle"
+            >
+              <circle cx="12"
+                      cy="12"
+                      r="10"
+              >
+              </circle>
+            </svg>
+          </div>
+          <div class="flex-1 min-w-0">
+            <div class="flex items-center gap-2">
+              <div class="flex-1 text-info-foreground">
+                Info sub-item
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="transition-[opacity,transform] duration-300 opacity-100 translate-x-0">
+    <div role="button"
+         tabindex="0"
+         class="flex items-center gap-2 transition-colors duration-200 hover:bg-muted p-2 rounded-md cursor-pointer focus-visible:ring-2 focus-visible:ring-ring focus-visible:outline-none"
+    >
+      <div class="shrink-0 mt-0.5">
+        <svg xmlns="http://www.w3.org/2000/svg"
+             width="16"
+             height="16"
+             viewbox="0 0 24 24"
+             fill="none"
+             stroke="currentColor"
+             stroke-width="2"
+             stroke-linecap="round"
+             stroke-linejoin="round"
+             class="lucide lucide-rocket text-muted-foreground bg-transparent border-border"
+             aria-hidden="true"
+             id="Rocket"
+        >
+          <path d="M12 15v5s3.03-.55 4-2c1.08-1.62 0-5 0-5">
+          </path>
+          <path d="M4.5 16.5c-1.5 1.26-2 5-2 5s3.74-.5 5-2c.71-.84.7-2.13-.09-2.91a2.18 2.18 0 0 0-2.91-.09">
+          </path>
+          <path d="M9 12a22 22 0 0 1 2-3.95A12.88 12.88 0 0 1 22 2c0 2.72-.78 7.5-6 11a22.4 22.4 0 0 1-4 2z">
+          </path>
+          <path d="M9 12H4s.55-3.03 2-4c1.62-1.08 5 .05 5 .05">
+          </path>
+        </svg>
+      </div>
+      <div class="flex-1 min-w-0">
+        <div class="flex items-center gap-2">
+          <div class="flex-1">
+            Custom icon item
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="transition-[opacity,transform] duration-300 opacity-100 translate-x-0">
+    <div role="button"
+         tabindex="0"
+         class="flex items-center gap-2 transition-colors duration-200 hover:bg-muted p-2 rounded-md focus-visible:ring-2 focus-visible:ring-ring focus-visible:outline-none opacity-50 cursor-not-allowed"
+    >
+      <div class="shrink-0 mt-0.5">
+        <svg xmlns="http://www.w3.org/2000/svg"
+             width="16"
+             height="16"
+             viewbox="0 0 24 24"
+             fill="none"
+             stroke="currentColor"
+             stroke-width="2"
+             stroke-linecap="round"
+             stroke-linejoin="round"
+             class="lucide lucide-circle text-muted-foreground bg-transparent border-border h-1.5 w-1.5 fill-current"
+             aria-hidden="true"
+             id="Circle"
+        >
+          <circle cx="12"
+                  cy="12"
+                  r="10"
+          >
+          </circle>
+        </svg>
+      </div>
+      <div class="flex-1 min-w-0">
+        <div class="flex items-center gap-2">
+          <div class="flex-1">
+            Disabled item
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</ul>
+`;
+
+exports[`Components/Typography/List SizeVariations smoke-test 1`] = `
+<div class="space-y-8">
+  <div>
+    <h3 class="text-lg font-semibold mb-3">
+      Small Size
+    </h3>
+    <ul class="text-sm space-y-2 text-primary-foreground"
+        id="_r_ID_"
+    >
+      <div class="transition-[opacity,transform] duration-300 opacity-100 translate-x-0">
+        <div class="flex items-center gap-2 transition-colors duration-200">
+          <div class="shrink-0 mt-0.5">
+            <svg xmlns="http://www.w3.org/2000/svg"
+                 width="16"
+                 height="16"
+                 viewbox="0 0 24 24"
+                 fill="none"
+                 stroke="currentColor"
+                 stroke-width="2"
+                 stroke-linecap="round"
+                 stroke-linejoin="round"
+                 class="lucide lucide-circle text-muted-foreground bg-transparent border-border h-1.5 w-1.5 fill-current"
+                 aria-hidden="true"
+                 id="Circle"
+            >
+              <circle cx="12"
+                      cy="12"
+                      r="10"
+              >
+              </circle>
+            </svg>
+          </div>
+          <div class="flex-1 min-w-0">
+            <div class="flex items-center gap-2">
+              <div class="flex-1">
+                Small text item
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="transition-[opacity,transform] duration-300 opacity-100 translate-x-0">
+        <div class="flex items-center gap-2 transition-colors duration-200">
+          <div class="shrink-0 mt-0.5">
+            <svg xmlns="http://www.w3.org/2000/svg"
+                 width="16"
+                 height="16"
+                 viewbox="0 0 24 24"
+                 fill="none"
+                 stroke="currentColor"
+                 stroke-width="2"
+                 stroke-linecap="round"
+                 stroke-linejoin="round"
+                 class="lucide lucide-circle text-muted-foreground bg-transparent border-border h-1.5 w-1.5 fill-current"
+                 aria-hidden="true"
+                 id="Circle"
+            >
+              <circle cx="12"
+                      cy="12"
+                      r="10"
+              >
+              </circle>
+            </svg>
+          </div>
+          <div class="flex-1 min-w-0">
+            <div class="flex items-center gap-2">
+              <div class="flex-1">
+                Another small item
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </ul>
+  </div>
+  <div>
+    <h3 class="text-lg font-semibold mb-3">
+      Default Size
+    </h3>
+    <ul class="text-base space-y-2 text-primary-foreground"
+        id="_r_ID_"
+    >
+      <div class="transition-[opacity,transform] duration-300 opacity-100 translate-x-0">
+        <div class="flex items-center gap-2 transition-colors duration-200">
+          <div class="shrink-0 mt-0.5">
+            <svg xmlns="http://www.w3.org/2000/svg"
+                 width="16"
+                 height="16"
+                 viewbox="0 0 24 24"
+                 fill="none"
+                 stroke="currentColor"
+                 stroke-width="2"
+                 stroke-linecap="round"
+                 stroke-linejoin="round"
+                 class="lucide lucide-circle text-muted-foreground bg-transparent border-border h-1.5 w-1.5 fill-current"
+                 aria-hidden="true"
+                 id="Circle"
+            >
+              <circle cx="12"
+                      cy="12"
+                      r="10"
+              >
+              </circle>
+            </svg>
+          </div>
+          <div class="flex-1 min-w-0">
+            <div class="flex items-center gap-2">
+              <div class="flex-1">
+                Default text item
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="transition-[opacity,transform] duration-300 opacity-100 translate-x-0">
+        <div class="flex items-center gap-2 transition-colors duration-200">
+          <div class="shrink-0 mt-0.5">
+            <svg xmlns="http://www.w3.org/2000/svg"
+                 width="16"
+                 height="16"
+                 viewbox="0 0 24 24"
+                 fill="none"
+                 stroke="currentColor"
+                 stroke-width="2"
+                 stroke-linecap="round"
+                 stroke-linejoin="round"
+                 class="lucide lucide-circle text-muted-foreground bg-transparent border-border h-1.5 w-1.5 fill-current"
+                 aria-hidden="true"
+                 id="Circle"
+            >
+              <circle cx="12"
+                      cy="12"
+                      r="10"
+              >
+              </circle>
+            </svg>
+          </div>
+          <div class="flex-1 min-w-0">
+            <div class="flex items-center gap-2">
+              <div class="flex-1">
+                Another default item
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </ul>
+  </div>
+  <div>
+    <h3 class="text-lg font-semibold mb-3">
+      Large Size
+    </h3>
+    <ul class="text-lg space-y-2 text-primary-foreground"
+        id="_r_ID_"
+    >
+      <div class="transition-[opacity,transform] duration-300 opacity-100 translate-x-0">
+        <div class="flex items-center gap-2 transition-colors duration-200">
+          <div class="shrink-0 mt-0.5">
+            <svg xmlns="http://www.w3.org/2000/svg"
+                 width="16"
+                 height="16"
+                 viewbox="0 0 24 24"
+                 fill="none"
+                 stroke="currentColor"
+                 stroke-width="2"
+                 stroke-linecap="round"
+                 stroke-linejoin="round"
+                 class="lucide lucide-circle text-muted-foreground bg-transparent border-border h-1.5 w-1.5 fill-current"
+                 aria-hidden="true"
+                 id="Circle"
+            >
+              <circle cx="12"
+                      cy="12"
+                      r="10"
+              >
+              </circle>
+            </svg>
+          </div>
+          <div class="flex-1 min-w-0">
+            <div class="flex items-center gap-2">
+              <div class="flex-1">
+                Large text item
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="transition-[opacity,transform] duration-300 opacity-100 translate-x-0">
+        <div class="flex items-center gap-2 transition-colors duration-200">
+          <div class="shrink-0 mt-0.5">
+            <svg xmlns="http://www.w3.org/2000/svg"
+                 width="16"
+                 height="16"
+                 viewbox="0 0 24 24"
+                 fill="none"
+                 stroke="currentColor"
+                 stroke-width="2"
+                 stroke-linecap="round"
+                 stroke-linejoin="round"
+                 class="lucide lucide-circle text-muted-foreground bg-transparent border-border h-1.5 w-1.5 fill-current"
+                 aria-hidden="true"
+                 id="Circle"
+            >
+              <circle cx="12"
+                      cy="12"
+                      r="10"
+              >
+              </circle>
+            </svg>
+          </div>
+          <div class="flex-1 min-w-0">
+            <div class="flex items-center gap-2">
+              <div class="flex-1">
+                Another large item
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </ul>
+  </div>
+  <div>
+    <h3 class="text-lg font-semibold mb-3">
+      Extra Large Size
+    </h3>
+    <ul class="text-xl space-y-2 text-primary-foreground"
+        id="_r_ID_"
+    >
+      <div class="transition-[opacity,transform] duration-300 opacity-100 translate-x-0">
+        <div class="flex items-center gap-2 transition-colors duration-200">
+          <div class="shrink-0 mt-0.5">
+            <svg xmlns="http://www.w3.org/2000/svg"
+                 width="16"
+                 height="16"
+                 viewbox="0 0 24 24"
+                 fill="none"
+                 stroke="currentColor"
+                 stroke-width="2"
+                 stroke-linecap="round"
+                 stroke-linejoin="round"
+                 class="lucide lucide-circle text-muted-foreground bg-transparent border-border h-1.5 w-1.5 fill-current"
+                 aria-hidden="true"
+                 id="Circle"
+            >
+              <circle cx="12"
+                      cy="12"
+                      r="10"
+              >
+              </circle>
+            </svg>
+          </div>
+          <div class="flex-1 min-w-0">
+            <div class="flex items-center gap-2">
+              <div class="flex-1">
+                Extra large text item
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="transition-[opacity,transform] duration-300 opacity-100 translate-x-0">
+        <div class="flex items-center gap-2 transition-colors duration-200">
+          <div class="shrink-0 mt-0.5">
+            <svg xmlns="http://www.w3.org/2000/svg"
+                 width="16"
+                 height="16"
+                 viewbox="0 0 24 24"
+                 fill="none"
+                 stroke="currentColor"
+                 stroke-width="2"
+                 stroke-linecap="round"
+                 stroke-linejoin="round"
+                 class="lucide lucide-circle text-muted-foreground bg-transparent border-border h-1.5 w-1.5 fill-current"
+                 aria-hidden="true"
+                 id="Circle"
+            >
+              <circle cx="12"
+                      cy="12"
+                      r="10"
+              >
+              </circle>
+            </svg>
+          </div>
+          <div class="flex-1 min-w-0">
+            <div class="flex items-center gap-2">
+              <div class="flex-1">
+                Another extra large item
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </ul>
+  </div>
+</div>
+`;
+
+exports[`Components/Typography/List SpacingVariations smoke-test 1`] = `
+<div class="space-y-8">
+  <div>
+    <h3 class="text-lg font-semibold mb-3">
+      Tight Spacing
+    </h3>
+    <ul class="text-base space-y-1 text-primary-foreground"
+        id="_r_ID_"
+    >
+      <div class="transition-[opacity,transform] duration-300 opacity-100 translate-x-0">
+        <div class="flex items-center gap-2 transition-colors duration-200">
+          <div class="shrink-0 mt-0.5">
+            <svg xmlns="http://www.w3.org/2000/svg"
+                 width="16"
+                 height="16"
+                 viewbox="0 0 24 24"
+                 fill="none"
+                 stroke="currentColor"
+                 stroke-width="2"
+                 stroke-linecap="round"
+                 stroke-linejoin="round"
+                 class="lucide lucide-circle text-muted-foreground bg-transparent border-border h-1.5 w-1.5 fill-current"
+                 aria-hidden="true"
+                 id="Circle"
+            >
+              <circle cx="12"
+                      cy="12"
+                      r="10"
+              >
+              </circle>
+            </svg>
+          </div>
+          <div class="flex-1 min-w-0">
+            <div class="flex items-center gap-2">
+              <div class="flex-1">
+                Tight spacing item 1
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="transition-[opacity,transform] duration-300 opacity-100 translate-x-0">
+        <div class="flex items-center gap-2 transition-colors duration-200">
+          <div class="shrink-0 mt-0.5">
+            <svg xmlns="http://www.w3.org/2000/svg"
+                 width="16"
+                 height="16"
+                 viewbox="0 0 24 24"
+                 fill="none"
+                 stroke="currentColor"
+                 stroke-width="2"
+                 stroke-linecap="round"
+                 stroke-linejoin="round"
+                 class="lucide lucide-circle text-muted-foreground bg-transparent border-border h-1.5 w-1.5 fill-current"
+                 aria-hidden="true"
+                 id="Circle"
+            >
+              <circle cx="12"
+                      cy="12"
+                      r="10"
+              >
+              </circle>
+            </svg>
+          </div>
+          <div class="flex-1 min-w-0">
+            <div class="flex items-center gap-2">
+              <div class="flex-1">
+                Tight spacing item 2
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="transition-[opacity,transform] duration-300 opacity-100 translate-x-0">
+        <div class="flex items-center gap-2 transition-colors duration-200">
+          <div class="shrink-0 mt-0.5">
+            <svg xmlns="http://www.w3.org/2000/svg"
+                 width="16"
+                 height="16"
+                 viewbox="0 0 24 24"
+                 fill="none"
+                 stroke="currentColor"
+                 stroke-width="2"
+                 stroke-linecap="round"
+                 stroke-linejoin="round"
+                 class="lucide lucide-circle text-muted-foreground bg-transparent border-border h-1.5 w-1.5 fill-current"
+                 aria-hidden="true"
+                 id="Circle"
+            >
+              <circle cx="12"
+                      cy="12"
+                      r="10"
+              >
+              </circle>
+            </svg>
+          </div>
+          <div class="flex-1 min-w-0">
+            <div class="flex items-center gap-2">
+              <div class="flex-1">
+                Tight spacing item 3
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </ul>
+  </div>
+  <div>
+    <h3 class="text-lg font-semibold mb-3">
+      Normal Spacing
+    </h3>
+    <ul class="text-base space-y-2 text-primary-foreground"
+        id="_r_ID_"
+    >
+      <div class="transition-[opacity,transform] duration-300 opacity-100 translate-x-0">
+        <div class="flex items-center gap-2 transition-colors duration-200">
+          <div class="shrink-0 mt-0.5">
+            <svg xmlns="http://www.w3.org/2000/svg"
+                 width="16"
+                 height="16"
+                 viewbox="0 0 24 24"
+                 fill="none"
+                 stroke="currentColor"
+                 stroke-width="2"
+                 stroke-linecap="round"
+                 stroke-linejoin="round"
+                 class="lucide lucide-circle text-muted-foreground bg-transparent border-border h-1.5 w-1.5 fill-current"
+                 aria-hidden="true"
+                 id="Circle"
+            >
+              <circle cx="12"
+                      cy="12"
+                      r="10"
+              >
+              </circle>
+            </svg>
+          </div>
+          <div class="flex-1 min-w-0">
+            <div class="flex items-center gap-2">
+              <div class="flex-1">
+                Normal spacing item 1
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="transition-[opacity,transform] duration-300 opacity-100 translate-x-0">
+        <div class="flex items-center gap-2 transition-colors duration-200">
+          <div class="shrink-0 mt-0.5">
+            <svg xmlns="http://www.w3.org/2000/svg"
+                 width="16"
+                 height="16"
+                 viewbox="0 0 24 24"
+                 fill="none"
+                 stroke="currentColor"
+                 stroke-width="2"
+                 stroke-linecap="round"
+                 stroke-linejoin="round"
+                 class="lucide lucide-circle text-muted-foreground bg-transparent border-border h-1.5 w-1.5 fill-current"
+                 aria-hidden="true"
+                 id="Circle"
+            >
+              <circle cx="12"
+                      cy="12"
+                      r="10"
+              >
+              </circle>
+            </svg>
+          </div>
+          <div class="flex-1 min-w-0">
+            <div class="flex items-center gap-2">
+              <div class="flex-1">
+                Normal spacing item 2
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="transition-[opacity,transform] duration-300 opacity-100 translate-x-0">
+        <div class="flex items-center gap-2 transition-colors duration-200">
+          <div class="shrink-0 mt-0.5">
+            <svg xmlns="http://www.w3.org/2000/svg"
+                 width="16"
+                 height="16"
+                 viewbox="0 0 24 24"
+                 fill="none"
+                 stroke="currentColor"
+                 stroke-width="2"
+                 stroke-linecap="round"
+                 stroke-linejoin="round"
+                 class="lucide lucide-circle text-muted-foreground bg-transparent border-border h-1.5 w-1.5 fill-current"
+                 aria-hidden="true"
+                 id="Circle"
+            >
+              <circle cx="12"
+                      cy="12"
+                      r="10"
+              >
+              </circle>
+            </svg>
+          </div>
+          <div class="flex-1 min-w-0">
+            <div class="flex items-center gap-2">
+              <div class="flex-1">
+                Normal spacing item 3
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </ul>
+  </div>
+  <div>
+    <h3 class="text-lg font-semibold mb-3">
+      Loose Spacing
+    </h3>
+    <ul class="text-base space-y-4 text-primary-foreground"
+        id="_r_ID_"
+    >
+      <div class="transition-[opacity,transform] duration-300 opacity-100 translate-x-0">
+        <div class="flex items-center gap-2 transition-colors duration-200">
+          <div class="shrink-0 mt-0.5">
+            <svg xmlns="http://www.w3.org/2000/svg"
+                 width="16"
+                 height="16"
+                 viewbox="0 0 24 24"
+                 fill="none"
+                 stroke="currentColor"
+                 stroke-width="2"
+                 stroke-linecap="round"
+                 stroke-linejoin="round"
+                 class="lucide lucide-circle text-muted-foreground bg-transparent border-border h-1.5 w-1.5 fill-current"
+                 aria-hidden="true"
+                 id="Circle"
+            >
+              <circle cx="12"
+                      cy="12"
+                      r="10"
+              >
+              </circle>
+            </svg>
+          </div>
+          <div class="flex-1 min-w-0">
+            <div class="flex items-center gap-2">
+              <div class="flex-1">
+                Loose spacing item 1
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="transition-[opacity,transform] duration-300 opacity-100 translate-x-0">
+        <div class="flex items-center gap-2 transition-colors duration-200">
+          <div class="shrink-0 mt-0.5">
+            <svg xmlns="http://www.w3.org/2000/svg"
+                 width="16"
+                 height="16"
+                 viewbox="0 0 24 24"
+                 fill="none"
+                 stroke="currentColor"
+                 stroke-width="2"
+                 stroke-linecap="round"
+                 stroke-linejoin="round"
+                 class="lucide lucide-circle text-muted-foreground bg-transparent border-border h-1.5 w-1.5 fill-current"
+                 aria-hidden="true"
+                 id="Circle"
+            >
+              <circle cx="12"
+                      cy="12"
+                      r="10"
+              >
+              </circle>
+            </svg>
+          </div>
+          <div class="flex-1 min-w-0">
+            <div class="flex items-center gap-2">
+              <div class="flex-1">
+                Loose spacing item 2
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="transition-[opacity,transform] duration-300 opacity-100 translate-x-0">
+        <div class="flex items-center gap-2 transition-colors duration-200">
+          <div class="shrink-0 mt-0.5">
+            <svg xmlns="http://www.w3.org/2000/svg"
+                 width="16"
+                 height="16"
+                 viewbox="0 0 24 24"
+                 fill="none"
+                 stroke="currentColor"
+                 stroke-width="2"
+                 stroke-linecap="round"
+                 stroke-linejoin="round"
+                 class="lucide lucide-circle text-muted-foreground bg-transparent border-border h-1.5 w-1.5 fill-current"
+                 aria-hidden="true"
+                 id="Circle"
+            >
+              <circle cx="12"
+                      cy="12"
+                      r="10"
+              >
+              </circle>
+            </svg>
+          </div>
+          <div class="flex-1 min-w-0">
+            <div class="flex items-center gap-2">
+              <div class="flex-1">
+                Loose spacing item 3
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </ul>
+  </div>
+</div>
+`;
+
+exports[`Components/Typography/List StepsList smoke-test 1`] = `
+<ul class="text-base space-y-4 text-primary-foreground"
+    id="_r_ID_"
+>
+  <div class="transition-[opacity,transform] duration-300 opacity-100 translate-x-0">
+    <div role="button"
+         tabindex="0"
+         class="flex items-center gap-2 transition-colors duration-200 hover:bg-muted p-2 rounded-md cursor-pointer focus-visible:ring-2 focus-visible:ring-ring focus-visible:outline-none"
+    >
+      <div class="shrink-0 mt-0.5">
+        <div class="w-6 h-6 rounded-full flex items-center justify-center text-xs font-medium text-success-foreground border-success/50 bg-success hover:bg-success/90">
+          1
+        </div>
+      </div>
+      <div class="flex-1 min-w-0">
+        <div class="flex items-center gap-2">
+          <div class="flex-1">
+            Choose your project template
+          </div>
+          <div data-slot="badge"
+               id="_r_ID_"
+               class="inline-flex items-center justify-center rounded-full shadow-none border font-medium w-fit whitespace-nowrap shrink-0 gap-1 [&amp;&gt;svg]:pointer-events-none focus-visible:border-ring focus-visible:ring-ring/50 focus-visible:ring-[3px] aria-invalid:ring-destructive/20 dark:aria-invalid:ring-destructive/40 aria-invalid:border-destructive transition-[color,box-shadow] overflow-hidden text-xs [&amp;&gt;svg]:size-2.5 text-muted-foreground bg-muted border-border px-2 py-1"
+          >
+            <div class="flex items-center">
+              <div class>
+                Required
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="transition-[opacity,transform] duration-300 opacity-100 translate-x-0">
+    <div role="button"
+         tabindex="0"
+         class="flex items-center gap-2 transition-colors duration-200 hover:bg-muted p-2 rounded-md cursor-pointer focus-visible:ring-2 focus-visible:ring-ring focus-visible:outline-none"
+    >
+      <div class="shrink-0 mt-0.5">
+        <div class="w-6 h-6 rounded-full flex items-center justify-center text-xs font-medium text-success-foreground border-success/50 bg-success hover:bg-success/90">
+          2
+        </div>
+      </div>
+      <div class="flex-1 min-w-0">
+        <div class="flex items-center gap-2">
+          <div class="flex-1">
+            Configure your settings
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="transition-[opacity,transform] duration-300 opacity-100 translate-x-0">
+    <div role="button"
+         tabindex="0"
+         class="flex items-center gap-2 transition-colors duration-200 hover:bg-muted p-2 rounded-md cursor-pointer focus-visible:ring-2 focus-visible:ring-ring focus-visible:outline-none"
+    >
+      <div class="shrink-0 mt-0.5">
+        <div class="w-6 h-6 rounded-full flex items-center justify-center text-xs font-medium text-success-foreground border-success/50 bg-success hover:bg-success/90">
+          3
+        </div>
+      </div>
+      <div class="flex-1 min-w-0">
+        <div class="flex items-center gap-2">
+          <div class="flex-1">
+            Install dependencies
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="transition-[opacity,transform] duration-300 opacity-100 translate-x-0">
+    <div role="button"
+         tabindex="0"
+         class="flex items-center gap-2 transition-colors duration-200 hover:bg-muted p-2 rounded-md cursor-pointer focus-visible:ring-2 focus-visible:ring-ring focus-visible:outline-none"
+    >
+      <div class="shrink-0 mt-0.5">
+        <div class="w-6 h-6 rounded-full flex items-center justify-center text-xs font-medium text-success-foreground border-success/50 bg-success hover:bg-success/90">
+          4
+        </div>
+      </div>
+      <div class="flex-1 min-w-0">
+        <div class="flex items-center gap-2">
+          <div class="flex-1">
+            Start building your application
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="transition-[opacity,transform] duration-300 opacity-100 translate-x-0">
+    <div role="button"
+         tabindex="0"
+         class="flex items-center gap-2 transition-colors duration-200 hover:bg-muted p-2 rounded-md cursor-pointer focus-visible:ring-2 focus-visible:ring-ring focus-visible:outline-none"
+    >
+      <div class="shrink-0 mt-0.5">
+        <div class="w-6 h-6 rounded-full flex items-center justify-center text-xs font-medium text-success-foreground border-success/50 bg-success hover:bg-success/90">
+          5
+        </div>
+      </div>
+      <div class="flex-1 min-w-0">
+        <div class="flex items-center gap-2">
+          <div class="flex-1">
+            Deploy to production
+          </div>
+          <div data-slot="badge"
+               id="_r_ID_"
+               class="inline-flex items-center justify-center rounded-full shadow-none border font-medium w-fit whitespace-nowrap shrink-0 gap-1 [&amp;&gt;svg]:pointer-events-none focus-visible:border-ring focus-visible:ring-ring/50 focus-visible:ring-[3px] aria-invalid:ring-destructive/20 dark:aria-invalid:ring-destructive/40 aria-invalid:border-destructive transition-[color,box-shadow] overflow-hidden text-xs [&amp;&gt;svg]:size-2.5 text-muted-foreground bg-muted border-border px-2 py-1"
+          >
+            <div class="flex items-center">
+              <div class>
+                Final
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</ul>
+`;
+
+exports[`Components/Typography/List VariantShowcase smoke-test 1`] = `
+<ul class="text-base space-y-2 text-primary-foreground"
+    id="_r_ID_"
+>
+  <div class="transition-[opacity,transform] duration-300 opacity-100 translate-x-0">
+    <div role="button"
+         tabindex="0"
+         class="flex items-center gap-2 transition-colors duration-200 hover:bg-muted p-2 rounded-md cursor-pointer focus-visible:ring-2 focus-visible:ring-ring focus-visible:outline-none"
+    >
+      <div class="shrink-0 mt-0.5">
+        <svg xmlns="http://www.w3.org/2000/svg"
+             width="16"
+             height="16"
+             viewbox="0 0 24 24"
+             fill="none"
+             stroke="currentColor"
+             stroke-width="2"
+             stroke-linecap="round"
+             stroke-linejoin="round"
+             class="lucide lucide-circle text-muted-foreground bg-transparent border-border h-1.5 w-1.5 fill-current"
+             aria-hidden="true"
+             id="Circle"
+        >
+          <circle cx="12"
+                  cy="12"
+                  r="10"
+          >
+          </circle>
+        </svg>
+      </div>
+      <div class="flex-1 min-w-0">
+        <div class="flex items-center gap-2">
+          <div class="flex-1 text-success-foreground">
+            Success: Operation completed successfully
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="transition-[opacity,transform] duration-300 opacity-100 translate-x-0">
+    <div role="button"
+         tabindex="0"
+         class="flex items-center gap-2 transition-colors duration-200 hover:bg-muted p-2 rounded-md cursor-pointer focus-visible:ring-2 focus-visible:ring-ring focus-visible:outline-none"
+    >
+      <div class="shrink-0 mt-0.5">
+        <svg xmlns="http://www.w3.org/2000/svg"
+             width="16"
+             height="16"
+             viewbox="0 0 24 24"
+             fill="none"
+             stroke="currentColor"
+             stroke-width="2"
+             stroke-linecap="round"
+             stroke-linejoin="round"
+             class="lucide lucide-circle text-muted-foreground bg-transparent border-border h-1.5 w-1.5 fill-current"
+             aria-hidden="true"
+             id="Circle"
+        >
+          <circle cx="12"
+                  cy="12"
+                  r="10"
+          >
+          </circle>
+        </svg>
+      </div>
+      <div class="flex-1 min-w-0">
+        <div class="flex items-center gap-2">
+          <div class="flex-1 text-destructive-foreground">
+            Error: Something went wrong
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="transition-[opacity,transform] duration-300 opacity-100 translate-x-0">
+    <div role="button"
+         tabindex="0"
+         class="flex items-center gap-2 transition-colors duration-200 hover:bg-muted p-2 rounded-md cursor-pointer focus-visible:ring-2 focus-visible:ring-ring focus-visible:outline-none"
+    >
+      <div class="shrink-0 mt-0.5">
+        <svg xmlns="http://www.w3.org/2000/svg"
+             width="16"
+             height="16"
+             viewbox="0 0 24 24"
+             fill="none"
+             stroke="currentColor"
+             stroke-width="2"
+             stroke-linecap="round"
+             stroke-linejoin="round"
+             class="lucide lucide-circle text-muted-foreground bg-transparent border-border h-1.5 w-1.5 fill-current"
+             aria-hidden="true"
+             id="Circle"
+        >
+          <circle cx="12"
+                  cy="12"
+                  r="10"
+          >
+          </circle>
+        </svg>
+      </div>
+      <div class="flex-1 min-w-0">
+        <div class="flex items-center gap-2">
+          <div class="flex-1 text-warning-foreground">
+            Warning: Please review your settings
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="transition-[opacity,transform] duration-300 opacity-100 translate-x-0">
+    <div role="button"
+         tabindex="0"
+         class="flex items-center gap-2 transition-colors duration-200 hover:bg-muted p-2 rounded-md cursor-pointer focus-visible:ring-2 focus-visible:ring-ring focus-visible:outline-none"
+    >
+      <div class="shrink-0 mt-0.5">
+        <svg xmlns="http://www.w3.org/2000/svg"
+             width="16"
+             height="16"
+             viewbox="0 0 24 24"
+             fill="none"
+             stroke="currentColor"
+             stroke-width="2"
+             stroke-linecap="round"
+             stroke-linejoin="round"
+             class="lucide lucide-circle text-muted-foreground bg-transparent border-border h-1.5 w-1.5 fill-current"
+             aria-hidden="true"
+             id="Circle"
+        >
+          <circle cx="12"
+                  cy="12"
+                  r="10"
+          >
+          </circle>
+        </svg>
+      </div>
+      <div class="flex-1 min-w-0">
+        <div class="flex items-center gap-2">
+          <div class="flex-1 text-info-foreground">
+            Info: New feature available
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="transition-[opacity,transform] duration-300 opacity-100 translate-x-0">
+    <div role="button"
+         tabindex="0"
+         class="flex items-center gap-2 transition-colors duration-200 hover:bg-muted p-2 rounded-md cursor-pointer focus-visible:ring-2 focus-visible:ring-ring focus-visible:outline-none"
+    >
+      <div class="shrink-0 mt-0.5">
+        <svg xmlns="http://www.w3.org/2000/svg"
+             width="16"
+             height="16"
+             viewbox="0 0 24 24"
+             fill="none"
+             stroke="currentColor"
+             stroke-width="2"
+             stroke-linecap="round"
+             stroke-linejoin="round"
+             class="lucide lucide-circle text-muted-foreground bg-transparent border-border h-1.5 w-1.5 fill-current"
+             aria-hidden="true"
+             id="Circle"
+        >
+          <circle cx="12"
+                  cy="12"
+                  r="10"
+          >
+          </circle>
+        </svg>
+      </div>
+      <div class="flex-1 min-w-0">
+        <div class="flex items-center gap-2">
+          <div class="flex-1">
+            Default: Regular list item
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="transition-[opacity,transform] duration-300 opacity-100 translate-x-0">
+    <div role="button"
+         tabindex="0"
+         class="flex items-center gap-2 transition-colors duration-200 hover:bg-muted p-2 rounded-md cursor-pointer focus-visible:ring-2 focus-visible:ring-ring focus-visible:outline-none"
+    >
+      <div class="shrink-0 mt-0.5">
+        <svg xmlns="http://www.w3.org/2000/svg"
+             width="16"
+             height="16"
+             viewbox="0 0 24 24"
+             fill="none"
+             stroke="currentColor"
+             stroke-width="2"
+             stroke-linecap="round"
+             stroke-linejoin="round"
+             class="lucide lucide-circle text-muted-foreground bg-transparent border-border h-1.5 w-1.5 fill-current"
+             aria-hidden="true"
+             id="Circle"
+        >
+          <circle cx="12"
+                  cy="12"
+                  r="10"
+          >
+          </circle>
+        </svg>
+      </div>
+      <div class="flex-1 min-w-0">
+        <div class="flex items-center gap-2">
+          <div class="flex-1 text-secondary-foreground">
+            Muted: Less prominent item
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</ul>
+`;

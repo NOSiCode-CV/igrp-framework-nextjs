@@ -1,0 +1,715 @@
+# @igrp/framework-next-ui
+
+## 0.1.0-beta.165
+
+### Patch Changes
+
+- 5c3ceba: fix(next-ui): make "Tentar novamente" actually retry in the header/sidebar error fallbacks
+
+  `IGRPLayoutErrorBoundary` latched `hasError` permanently, so the `router.refresh()`
+  behind the retry button re-fetched the server tree but the boundary kept rendering
+  `IGRPSidebarError` / `IGRPHeaderError` — the button appeared to do nothing.
+
+  The boundary now exposes a reset through context (`useIGRPLayoutErrorReset`), and
+  both fallbacks use the new `useIGRPLayoutRetry` hook: it refreshes inside a
+  transition and clears the boundary only once that transition settles, so the
+  boundary re-renders the freshly fetched tree instead of the failing one. The retry
+  button also shows a loading state while the refresh is in flight.
+
+  `useIGRPLayoutRetry` and `useIGRPLayoutErrorReset` are exported for consumers
+  writing their own layout error fallbacks.
+
+- a57d25e: fix(next-ui): don't crash the layout on runtime-supplied image hosts
+
+  `IGRPTemplateAppSwitcher` and `IGRPTemplateHeader` rendered app pictures and the
+  header logo with `next/image` using the default loader, which throws
+  "hostname is not configured under images" for any host missing from the
+  consuming app's `images.remotePatterns`. The throw escaped to
+  `IGRPLayoutErrorBoundary` and took the whole sidebar/header down. Since these
+  URLs come from the access-management backend at runtime, consumers cannot
+  whitelist every host up front.
+
+  Both now render through a new internal `IGRPTemplateImage`, which marks remote
+  sources `unoptimized` (bypassing the hostname check) and falls back to the icon
+  — or, for the header, to the bundled logo — when an image fails to load.
+
+## 0.1.0-beta.164
+
+### Patch Changes
+
+- 5a4ec99: - The design system now requires `zod` `^4.5.0` instead of `^4.4.0`, matching the range `@igrp/framework-next` already declares. Apps on zod `4.4.x` must upgrade to `4.5.x`.
+  - `@igrp/framework-next-ui` pins `react`, `react-dom` and `next-auth` as devDependencies so it builds and typechecks against the same versions every other framework package uses, instead of whatever the workspace happened to hoist.
+  - `@igrp/template-migrator` gains a typecheck config for its `scripts/` folder; no change to the published CLI or migration set.
+- Updated dependencies [5a4ec99]
+  - @igrp/igrp-framework-react-design-system@0.1.0-beta.143
+
+## 0.1.0-beta.163
+
+### Patch Changes
+
+- 658e6b8: - Framework packages no longer declare their internal `@igrp/*` siblings as exact-version peer dependencies. They are regular dependencies again, so installing or upgrading a single framework package no longer emits unmet-peer warnings across the whole set.
+  - `@igrp/framework-next` widens its `zod` peer range from the exact `4.5.0` to `^4.5.0`, so an app on any `4.5.x` (the template ships `4.5.4`) satisfies it.
+  - `@igrp/template-migrator` ships migration `30-resync-beta166-deps`, which carries a CLI-upgraded app's dependency set forward to the beta.166 framework release — including `zod`, `react-hook-form`, `@tanstack/react-query` and `@types/react-dom`, which no earlier migration had ever pinned.
+- Updated dependencies [658e6b8]
+  - @igrp/framework-next-types@0.1.0-beta.148
+
+## 0.1.0-beta.162
+
+### Patch Changes
+
+- f3e0c00: Fix `@igrp/framework-next-ui/tokens`: its CSS imported the design system's removed `/styles` entry, so any consumer importing the tokens entry (as documented in the README) failed to compile with `"./styles" is not exported`. It now re-exports `@igrp/igrp-framework-react-design-system/tokens`, and the README CSS section was updated to match.
+- f3e0c00: Library packaging hygiene across all published packages:
+
+  - `@igrp/framework-next`: `next`, `react`, `react-dom` moved from `dependencies` to `peerDependencies` (range-based) — prevents duplicate React copies in consumer apps.
+  - All packages: exact-pinned `peerDependencies` relaxed to caret ranges (`react ^19.2.0`, `next ^15.5.0`, `next-auth ^4.24.0`, `zod ^4.4.0`, etc.) so consumers on newer patch/minor versions no longer get unmet-peer errors.
+  - `@igrp/igrp-framework-react-design-system`, `@igrp/framework-next-ui`: `tailwindcss` moved to `devDependencies` (Tailwind compiles in the consuming app); unused `zod` dependency removed from `next-ui`; duplicated `publishConfig.exports` removed.
+  - `@igrp/framework-next-types`: added an `exports` map (blocks deep imports into `dist/`, consistent with the other packages).
+  - `@igrp/framework-next`, `@igrp/template-migrator`: `types` condition now listed first in `exports`.
+  - `@igrp/template-migrator`: added `license`, `author`, top-level `types`, `publishConfig.tag`/`access`; `clean` now uses cross-platform `rimraf`.
+  - All packages: added `repository`/`homepage`/`bugs` metadata, normalized `engines.node` to `>=22`, added `./package.json` export.
+
+- 9e15f16: Permissions hardening: server-action claims recovery + live client claims
+
+  **`@igrp/framework-next`**
+
+  - `igrpGetClaims()` now recovers the access token from the session cookie when no
+    `AsyncLocalStorage` store was established, and seeds the store so the Access
+    Management client works in the same call. Previously, calling `igrpAuthorize()`
+    from a Server Action or Route Handler denied **every** user — super admins
+    included — because the token was only reachable through a store that a fresh
+    async context never enters. The recovery uses `getToken` + cookies (not
+    `getServerSession`, which needs the app's `NextAuthOptions` and would return a
+    session with no `accessToken`), behind dynamic imports so the module graph is
+    unchanged for existing importers.
+  - `igrpGetClaims()` no longer swallows Next.js control-flow signals. The
+    cookie-recovery path can raise the static-render bailout (`cookies()` read
+    during prerender), `redirect()`, or `forbidden()`; these are now re-thrown
+    instead of being converted into a claims error state, so Next still marks the
+    route dynamic rather than failing the build with a confusing 5xx. A genuine
+    cookie/JWT failure (no `digest`) still fail-closes as before.
+  - Dev-only diagnostic: `igrpGetClaims()` warns once per request when a
+    non-super-admin token carries no `org` claim, which silently denies every
+    bare-name permission check and is otherwise indistinguishable from a real
+    denial.
+  - `igrpAssertAuthorize` is documented as **pages only** — an action has no
+    `forbidden.tsx` boundary, so use `igrpAuthorize` there.
+
+  **`@igrp/framework-next-ui`**
+
+  - `IGRPSectionPermissions` now re-decodes claims from the live session instead of
+    freezing the server-seeded value for the whole page load. The seeded prop only
+    ever arrived once per full page load (token rotation does not call
+    `router.refresh()`, and shared layouts do not re-render on client navigation),
+    so client gating answered from login-time claims until a reload. Guarded three
+    ways: no `SessionProvider` mounted → keep the seeded state (read via
+    `SessionContext`, because `useSession()` throws without a provider); session
+    `loading` → keep the seeded state; non-JWT token (preview mode) → keep the
+    seeded state. `setState` now sets an explicit override, the seam for a future
+    active-role switch.
+  - `IGRPForbidden` gains a "Voltar à Página Inicial" action, matching
+    `IGRPTemplateNotFound`'s pattern (`IGRPButton asChild` + `next/link`, so
+    `basePath` is applied automatically). Label and destination are overridable
+    via the new `homeLabel` / `homeHref` props; pass `homeHref={null}` to render
+    no action when the surrounding shell already offers navigation.
+
+  **`@igrp/framework-next-types`**
+
+  - New `IGRPPermissionCatalogEntry` (`{ name, description?, enabled }`) — a
+    permission an app **declares** for registration in the Access Management
+    catalog. Deliberately distinct from `IGRPPermissionArgs`, which is the record
+    AM _returns_ (it carries AM's `id`, `status` and `departmentCode`), and from a
+    permission **claim** on the access token. Registering an entry does not make
+    it checkable.
+  - New `apiManagementConfig.syncPermissions` (default `false`) and
+    `apiManagementConfig.onCodePermissions`.
+
+  **`@igrp/framework-next` — permission catalog sync**
+
+  - New `igrpSyncPermissions`, wired as a fourth arm of the existing startup-sync
+    pipeline alongside routes and menus. Gated by `syncPermissions` on top of the
+    existing `syncAccess` / `previewMode` gates, so enabling the capability cannot
+    make an existing deployment start writing to the shared AM without opting in.
+  - Idempotent upsert keyed on `name`; entries removed from the catalog are not
+    deleted in AM. An empty catalog is skipped rather than sent as an empty upsert.
+  - `planAccessManagementSync` validates catalog names against
+    `^[A-Za-z0-9._-]{1,255}$` and **skips** malformed entries with a warning
+    instead of throwing — one bad name should not stop an app from booting. It
+    also warns off-production when a catalog name contains a dot, because
+    `claimsAllow` treats such a name as already department-qualified and a
+    bare-name check would silently deny.
+  - `id` is omitted from the wire payload rather than sent as `0`, which a backend
+    matching on id could misread as an update.
+
+  Both permission-gating changes above are additive: each affects only states that
+  previously failed outright.
+
+- Updated dependencies [b501876]
+- Updated dependencies [f3e0c00]
+- Updated dependencies [9e15f16]
+  - @igrp/igrp-framework-react-design-system@0.1.0-beta.142
+  - @igrp/framework-next-auth@0.1.0-beta.145
+  - @igrp/framework-next-types@0.1.0-beta.147
+
+## 0.1.0-beta.161
+
+### Patch Changes
+
+- 22b57b3: - Fixed the sidebar menu search: results now show the item's icon, highlight the matched text, and display a result count, matching the visual style of the rest of the menu.
+  - Added a clear ("×") button to the search field and disabled spellcheck/autocomplete, removing the browser's red squiggly underline on typed queries.
+  - Replaced the plain "no results" text with a dashed empty-state card (icon + quoted query), consistent with the existing "no menus" empty state.
+
+## 0.1.0-beta.160
+
+### Patch Changes
+
+- 19a6edc: `usePermissions()` now exposes `isAllowed(name)` instead of `can(name)` — a clearer name for the permission-check function. `<IGRPAuthorization>` and `<IGRPGuardPage>` are updated accordingly. This is a breaking rename to the permission-gating client API; consumers calling `usePermissions().can(...)` must switch to `.isAllowed(...)`.
+
+## 0.1.0-beta.159
+
+### Patch Changes
+
+- 2d9bdef: - Add `IGRPRepetitiveComponent` — generic render-prop component for mapping a list of items with a key extractor, exported from the design system root
+  - Fix `IGRPModalDialog` sticky header/footer layout: use `-mx-6 px-6` for true edge-to-edge spanning, correct z-index to `z-10`, and add `max-h-[95vh]` on the full-size variant; simplify `IGRPModalDialogDescription` to accept standard `children` instead of a `name` shorthand prop
+  - Add template-migrator migration 24: resync `demo-v1` `(igrp)/layout.tsx` (hoists `IGRPQueryProvider`) and `.env.example` to beta.159, bumping all `@igrp/*` framework deps
+- Updated dependencies [2d9bdef]
+  - @igrp/igrp-framework-react-design-system@0.1.0-beta.141
+
+## 0.1.0-beta.158
+
+### Patch Changes
+
+- ffa6994: fix(next-ui): stabilize IGRPTemplateBreadcrumbs routeLabels default so the memo is not busted every render
+
+  The `routeLabels` prop defaulted to a fresh `{}` literal, which changed identity on every render and broke the `useMemo` that derives breadcrumb items (the common case where the prop is omitted recomputed every render). It now defaults to a shared frozen module-level reference, so the memo is stable. No API change.
+
+- 3847b8b: Add token-claims permission gating: `decodeIgrpClaims`/`claimsAllow` (`@igrp/framework-next-auth/claims`), server helpers `igrpGetClaims`/`igrpAuthorize`/`igrpAssertAuthorize` (`@igrp/framework-next`), and client `IGRPSectionPermissions`/`usePermissions`/`IGRPAuthorization`/`IGRPGuardPage`/`IGRPForbidden` (`@igrp/framework-next-ui`).
+- 770c1bc: Client-boundary and render-safety hardening:
+
+  - Add the missing top-of-file `'use client'` directive to `IGRPTemplateSidebar`, `IGRPTemplateNavUser`, `IGRPTemplateNotFound`, `IGRPTemplateLoading`, and `IGRPThemeProvider`. They use client-only hooks / DS components and previously relied on the package barrel's boundary, which would break the moment any of them was imported via a deeper path.
+  - `IGRPTemplateHeader` no longer calls `igrpToast()` during render (a side effect that updated the toaster provider mid-render — a React anti-pattern and impure under the React Compiler). The no-data warning now runs in a `useEffect`, and the component returns `null` instead of `undefined`.
+
+- efdf17d: refactor(next-ui): extract a shared MenuItemLink for the sidebar menu surfaces
+
+  The identical `isAnchor ? <a> : <Link>` branch in `leaf-menu-item`, `sub-leaf-link`, and `search-results` is now a single internal `MenuItemLink` (forwardRef, single root element) so it still composes with the Radix `asChild` Slots (SidebarMenuButton / SidebarMenuSubButton / DropdownMenuItem). Pure dedup with no behavior change: external links still open in a new tab with `rel="noopener noreferrer"`, `aria-current="page"` and each call site's `aria-label`/`className` are preserved exactly, and active highlighting is unchanged. Internal component only — not added to the public export surface.
+
+- 770c1bc: Fix a Rules-of-Hooks violation in `IGRPSegmentError`: the `children` short-circuit `return` ran before `useState`/`useEffect`, so toggling the `children` prop between renders changed the hook count and could crash the error boundary itself (the worst place to crash). Hooks now run on every render; the `children` passthrough is guarded inside the effect and returned after the hooks, mirroring `IGRPGlobalError`.
+- 41d8a51: Menu tree React keys fall back to `code` when a menu entry has no `id`,
+  avoiding `folder-undefined`/`leaf-undefined` key collisions.
+- 3b91dc2: `IGRPTemplateNavUser` and `IGRPTemplateNotifications`: emit basePath-relative
+  `next/link` hrefs (`/profile`, `/notifications`, `/setting`) instead of
+  `window.location.origin`-based absolute URLs. Fixes the SSR/CSR hydration
+  mismatch, the full-page reload, and the 404 under a `NEXT_PUBLIC_BASE_PATH`
+  deployment.
+- 689b5ac: Memoize `IGRPActiveThemeProvider`'s context value (the React Compiler skips
+  provider files, so it must be manual). Auth carousel: root backdrop uses the
+  `bg-muted` token and the dot row uses `flex gap-2`; on-photo caption colors are
+  kept as a documented fixed-contrast exception.
+- eac3eca: Sidebar menus now expose exactly one labeled navigation landmark. Removed the
+  invalid `role="navigation"` from `SidebarMenu` (a `<ul>`, where it stripped list
+  semantics and emitted an unlabeled landmark per section) and wrapped
+  `IGRPTemplateMenus` once in `<nav aria-label>` — overridable via the new
+  `navAriaLabel` prop (default "Menu principal").
+- Updated dependencies [3847b8b]
+- Updated dependencies [a274c6e]
+- Updated dependencies [c9cd44b]
+- Updated dependencies [9e8e240]
+- Updated dependencies [781f753]
+- Updated dependencies [41d8a51]
+- Updated dependencies [aca828e]
+- Updated dependencies [3b808b8]
+- Updated dependencies [1da77de]
+- Updated dependencies [6467e14]
+- Updated dependencies [d8daf50]
+- Updated dependencies [8cb2fc5]
+- Updated dependencies [6cb1cec]
+- Updated dependencies [7d48f03]
+  - @igrp/framework-next-auth@0.1.0-beta.144
+  - @igrp/framework-next-types@0.1.0-beta.146
+  - @igrp/igrp-framework-react-design-system@0.1.0-beta.140
+
+## 0.1.0-beta.157
+
+### Patch Changes
+
+- 7d72168: - Move the sidebar collapse/expand `SidebarTrigger` out of the sidebar header and into the app header (`IGRPTemplateHeader`), gated by `showIGRPSidebarTrigger`, following the shadcn dashboard layout. The header trigger is aligned with `-ml-1`. The sidebar keeps `collapsible="icon"`, so the trigger toggles between the expanded panel and the icon rail; `SidebarRail` still re-expands from the collapsed state.
+
+## 0.1.0-beta.156
+
+### Patch Changes
+
+- Updated dependencies [0850757]
+  - @igrp/igrp-framework-react-design-system@0.1.0-beta.139
+
+## 0.1.0-beta.155
+
+### Patch Changes
+
+- faf18ec: `IGRPTemplateNavUser` now passes `user.picture` to `IGRPUserAvatar`, so profile photos render in the nav-user dropdown trigger (header and sidebar). Previously `image` was never supplied, so the avatar always fell back to initials. Users without a `picture` are unaffected — the avatar still falls back to initials.
+
+## 0.1.0-beta.154
+
+### Patch Changes
+
+- 5b335b8: feat: honor showNotifications flag in nav-user — hide the Notifications dropdown item (header and sidebar) when notifications are disabled, and add showNotifications to IGRPSidebarDataArgs
+- Updated dependencies [5b335b8]
+- Updated dependencies [5b335b8]
+  - @igrp/framework-next-types@0.1.0-beta.145
+  - @igrp/framework-next-auth@0.1.0-beta.143
+
+## 0.1.0-beta.153
+
+### Patch Changes
+
+- cb57954: - Reorder sidebar header: `SidebarTrigger` is now first in DOM; in collapsed mode it leads before the app switcher, in expanded mode it stays right-aligned via CSS flex order
+  - Remove prebuilt Tailwind CSS bundle (`styles.css`, `./styles` export, `tailwind:build` script, `@tailwindcss/cli` dep) — Tailwind is compiled once in the consuming app
+  - Build pipeline: replace `move` with `move-cli`, drop `tailwind:build` step, bump required Node to ≥22
+
+## 0.1.0-beta.152
+
+### Patch Changes
+
+- fc2fe20: - `next-auth`: add `console.error` diagnostics when introspection marks the refresh token inactive or when `refreshOidcAccessToken` returns an error flag or throws — makes login-loop root causes visible in server logs
+  - `next`: replace `unstable_cache` with `React.cache()` in `use-user` — prevents stale 401s caused by rotating access tokens being embedded in the `unstable_cache` key
+- Updated dependencies [fc2fe20]
+  - @igrp/framework-next-auth@0.1.0-beta.142
+  - @igrp/framework-next-types@0.1.0-beta.144
+  - @igrp/igrp-framework-react-design-system@0.1.0-beta.138
+
+## 0.1.0-beta.151
+
+### Patch Changes
+
+- af28e9a: feat(ds): add asChild prop to IGRPButton for Slot-based rendering
+- Updated dependencies [af28e9a]
+  - @igrp/igrp-framework-react-design-system@0.1.0-beta.137
+
+## 0.1.0-beta.150
+
+### Patch Changes
+
+- a9b2297: `IGRPSessionWatcher` now schedules an adaptive silent refresh 45s before access-token expiry, derived from `session.expiresAt`, so token-refresh timing no longer depends on hand-tuning `IGRP_SESSION_REFETCH_INTERVAL` to the IdP access-token TTL. The fixed `SessionProvider` poll remains as a fallback.
+- 331debd: feat: collapsible GROUP sections and inline menu search in sidebar
+- e51050a: feat: add showMenuSearch flag to IGRPSidebarDataArgs to control sidebar menu search visibility
+- Updated dependencies [a9b2297]
+- Updated dependencies [e51050a]
+  - @igrp/framework-next-auth@0.1.0-beta.141
+  - @igrp/framework-next-types@0.1.0-beta.143
+
+## 0.1.0-beta.149
+
+### Patch Changes
+
+- Updated dependencies [033e1d7]
+- Updated dependencies [5ebe890]
+  - @igrp/igrp-framework-react-design-system@0.1.0-beta.136
+  - @igrp/framework-next-auth@0.1.0-beta.140
+  - @igrp/framework-next-types@0.1.0-beta.142
+
+## 0.1.0-beta.148
+
+### Patch Changes
+
+- 5c14726: - Restore sidebar collapse/expand trigger: add `SidebarTrigger` (PanelLeft icon) to the sidebar header alongside the app switcher, following the shadcn recommended sidebar block pattern
+
+## 0.1.0-beta.147
+
+### Patch Changes
+
+- Updated dependencies [4e0137a]
+  - @igrp/framework-next-auth@0.1.0-beta.139
+  - @igrp/framework-next-types@0.1.0-beta.141
+
+## 0.1.0-beta.146
+
+### Patch Changes
+
+- Updated dependencies
+  - @igrp/framework-next-auth@0.1.0-beta.138
+  - @igrp/framework-next-types@0.1.0-beta.140
+
+## 0.1.0-beta.145
+
+### Patch Changes
+
+- Updated dependencies
+  - @igrp/framework-next-auth@0.1.0-beta.137
+  - @igrp/framework-next-types@0.1.0-beta.139
+
+## 0.1.0-beta.144
+
+### Patch Changes
+
+- Updated dependencies [0eb0323]
+  - @igrp/igrp-framework-react-design-system@0.1.0-beta.135
+
+## 0.1.0-beta.143
+
+### Patch Changes
+
+- Updated dependencies [7a89144]
+  - @igrp/framework-next-auth@0.1.0-beta.136
+  - @igrp/framework-next-types@0.1.0-beta.138
+
+## 0.1.0-beta.142
+
+### Patch Changes
+
+- 6b42572: - Coordinated maintenance release: bump all framework packages to the next beta to keep versions aligned across the framework.
+- Updated dependencies [6b42572]
+  - @igrp/framework-next-auth@0.1.0-beta.135
+  - @igrp/framework-next-types@0.1.0-beta.137
+  - @igrp/igrp-framework-react-design-system@0.1.0-beta.134
+
+## 0.1.0-beta.141
+
+### Patch Changes
+
+- Updated dependencies [1829701]
+  - @igrp/igrp-framework-react-design-system@0.1.0-beta.133
+
+## 0.1.0-beta.140
+
+### Patch Changes
+
+- 7fb20b6: Fix sidebar menu active highlighting: submenu items inside FOLDER menus (collapsible and dropdown variants) now reflect the current route via `isActive`. Extract a shared `isItemActive` helper, thread `pathname` through `FolderMenuItem`/`SubLeafLink`, auto-open the collapsible and mark the folder trigger active when a child matches the current path.
+
+  Also strengthen the selected-item treatment: the active menu item now renders with a soft brand tint, clearly distinct from the faint `sidebar-accent` hover wash. The treatment is driven by the dedicated `--sidebar-active` / `--sidebar-active-foreground` design-system tokens (so integrators can recolor the highlight from their app CSS) and centralized in a shared `ACTIVE_MENU_ITEM_CLASS` constant using semantic tokens only. Also fixes the active FOLDER trigger losing its highlight on hover — the DS primitive's `data-[state=open]:hover:bg-sidebar-accent` was overriding the active styling; a higher-specificity `data-[active=true]:data-[state=open]:hover:` rule now holds it.
+
+- Updated dependencies [62faea7]
+- Updated dependencies [773b8b0]
+- Updated dependencies [b88c4b1]
+- Updated dependencies [b88c4b1]
+- Updated dependencies [ba91edb]
+  - @igrp/igrp-framework-react-design-system@0.1.0-beta.132
+  - @igrp/framework-next-auth@0.1.0-beta.134
+  - @igrp/framework-next-types@0.1.0-beta.136
+
+## 0.1.0-beta.139
+
+### Patch Changes
+
+- ec48e46: `IGRPSessionWatcher` no longer returns `null` on every `useSession` refetch. NextAuth briefly flips status to `'loading'` after `signOut`, on focus refetch, and on every polling interval; returning `null` there unmounted the whole subtree and forced child components to re-run their mount effects from scratch. The visible symptom was `/logout` running `signOut` twice and stalling on its loading template because the in-flight effect closure was racing the remount. The watcher now only renders `null` during the genuine initial probe (status `'loading'` AND no session data yet), which is the only state SSR can't already populate.
+- Updated dependencies [48d2818]
+- Updated dependencies [48dd45c]
+- Updated dependencies [3377f52]
+- Updated dependencies [db24347]
+- Updated dependencies [c412311]
+- Updated dependencies [55b7077]
+- Updated dependencies [f89e1ab]
+- Updated dependencies [ec48e46]
+  - @igrp/igrp-framework-react-design-system@0.1.0-beta.131
+  - @igrp/framework-next-auth@0.1.0-beta.133
+  - @igrp/framework-next-types@0.1.0-beta.135
+
+## 0.1.0-beta.138
+
+### Patch Changes
+
+- 12cc11b: fix(session-watcher): route to `/logout` when the session carries a failed-refresh error
+
+  After a failed token refresh the session cookie still decodes, so `useSession().status` stays `authenticated` even though the access token is dead. `IGRPSessionWatcher` previously only reacted to `status === 'unauthenticated'`, so it ignored this state — the broken session stayed mounted and the next access-token-bearing request 401'd into the global error boundary.
+
+  The watcher now also inspects `session.error`: when it equals `'RefreshAccessTokenError'` it navigates to `/logout` for a clean IdP single-logout (consistent with the server-side `onSessionExpired` contract). The existing auth-chrome skip (`/login*`, `/logout*`) still applies, so this can't loop.
+
+- Updated dependencies [2a06c02]
+- Updated dependencies [12cc11b]
+- Updated dependencies [12cc11b]
+- Updated dependencies [0cdef39]
+- Updated dependencies [12cc11b]
+- Updated dependencies [cc40fef]
+- Updated dependencies [a1fbb7c]
+- Updated dependencies [cc40fef]
+- Updated dependencies [123e361]
+  - @igrp/igrp-framework-react-design-system@0.1.0-beta.130
+  - @igrp/framework-next-auth@0.1.0-beta.132
+  - @igrp/framework-next-types@0.1.0-beta.134
+
+## 0.1.0-beta.137
+
+### Patch Changes
+
+- 1d4a0b7: - Prepend `NEXT_PUBLIC_BASE_PATH` to the error image in `IGRPGlobalError` so the asset resolves correctly when the app is hosted under a base path.
+
+## 0.1.0-beta.136
+
+### Patch Changes
+
+- b9c286f: fix: prepend NEXT_PUBLIC_BASE_PATH to auth carousel and login form images
+
+  When basePath is configured, IGRPAuthCarousel and IGRPAuthForm passed
+  consumer-provided image paths to next/image as-is. The optimizer fetched
+  them without the basePath prefix, causing 404s on `/login` for images
+  referenced by absolute root paths (e.g. `/logo-no-text.png`). The src
+  values are now resolved through an idempotent basePath prefixer so
+  consumers can keep passing raw `/foo.png` paths and existing already-
+  prefixed paths are not double-prefixed.
+
+- 2a0ef32: fix(session-watcher): don't push to /login when already on the auth UI
+
+  `IGRPSessionWatcher` is mounted globally via `IGRPNestedProviders`, so it runs on every route — including `/login` and `/logout`. Previously, an unauthenticated state on `/login` triggered `router.push('/login?callbackUrl=<window.location.href>')`, which:
+  - created a self-referential URL (`/login?callbackUrl=/apps/template/login`),
+  - overwrote any legitimate `callbackUrl` set by middleware (e.g. `/dashboard`) with `/login`, so post-sign-in always landed on `/` regardless of intended target.
+
+  The watcher now strips the configured `NEXT_PUBLIC_BASE_PATH` from `window.location.pathname` and skips the push when the path matches the auth chrome routes (`/login*`, `/logout*`). Genuine session-expiry on protected routes still triggers the push as before.
+
+- Updated dependencies [2a0ef32]
+- Updated dependencies [2196ef8]
+  - @igrp/framework-next-auth@0.1.0-beta.131
+  - @igrp/framework-next-types@0.1.0-beta.133
+
+## 0.1.0-beta.135
+
+### Patch Changes
+
+- 73b0e36: fix: prepend NEXT_PUBLIC_BASE_PATH to fallback logo src in header
+
+  When basePath is configured, the Next.js image optimizer fetches the source
+  image internally without the basePath prefix, causing a 500 error for local
+  public-folder images. The fallback src now reads NEXT_PUBLIC_BASE_PATH so the
+  optimizer resolves the correct path.
+
+## 0.1.0-beta.134
+
+### Patch Changes
+
+- 3cbddca: fix: replace fill with explicit dimensions on header logo image
+
+  The `fill` prop on the logo `<Image>` caused it to be invisible when
+  combined with a flex parent. Replaced with explicit `width={40} height={40}`
+  and added `overflow-hidden` to the container for correct rounded-corner clipping.
+
+## 0.1.0-beta.133
+
+### Patch Changes
+
+- 819f3b4: fix: header fails to load when showSidebar is false in IGRPLayoutFull
+
+  `IGRPTemplateNavUser` calls `useIGRPSidebar()` unconditionally, which throws when
+  no `SidebarProvider` is present. `IGRPRootProvidersFull` now always wraps with
+  `SidebarProvider` regardless of whether the sidebar slot is provided, so the header
+  renders correctly when `showSidebar={false}`.
+
+- Updated dependencies
+  - @igrp/framework-next-auth@0.1.0-beta.130
+  - @igrp/framework-next-types@0.1.0-beta.132
+
+## 0.1.0-beta.132
+
+### Patch Changes
+
+- 56b14c3: Add `showSidebar` prop to `IGRPLayoutFull` to render header-only chrome without a sidebar.
+
+  `IGRPRootProvidersFull` now accepts `sidebar` as optional — when absent, skips `SidebarProvider`/`SidebarInset` and renders a plain flex-column layout instead, avoiding sidebar CSS offsets.
+
+## 0.1.0-beta.131
+
+### Patch Changes
+
+- f8dc318: feat: add IGRPRootProvidersFull/Blank, split menus, fix global error colors, extract breadcrumb hook, remove themeArgs
+- Updated dependencies [f8dc318]
+  - @igrp/framework-next-types@0.1.0-beta.131
+
+## 0.1.0-beta.130
+
+### Patch Changes
+
+- 776aac2: Fix derived-state anti-pattern in app-switcher; bind notification unread count to prop; add unstable_rethrow to error boundaries; add i18n label props to error components; expose commands prop on command search
+- Updated dependencies [ac94a9c]
+- Updated dependencies [a4ef1fe]
+- Updated dependencies [9a0dd9b]
+- Updated dependencies [9f9ee3d]
+- Updated dependencies [72268fd]
+- Updated dependencies [ba86302]
+- Updated dependencies [f283926]
+  - @igrp/igrp-framework-react-design-system@0.1.0-beta.129
+  - @igrp/framework-next-auth@0.1.0-beta.129
+  - @igrp/framework-next-types@0.1.0-beta.130
+
+## 0.1.0-beta.129
+
+### Patch Changes
+
+- fe2ed3d: - Update `@types/node` to v25.7.0 across all framework packages
+  - Bump `typescript-eslint` and `vitest` to latest versions
+- Updated dependencies [fe2ed3d]
+  - @igrp/framework-next-auth@0.1.0-beta.128
+  - @igrp/framework-next-types@0.1.0-beta.129
+  - @igrp/igrp-framework-react-design-system@0.1.0-beta.128
+
+## 0.1.0-beta.128
+
+### Patch Changes
+
+- 420c647: fix(breadcrumbs): fix key collision and missing isMobile effect dep; add formatLabel prop for dynamic segments
+- 66a4bc3: feat(breadcrumbs): controlled-first architecture with useSelectedLayoutSegments fallback
+
+  IGRPTemplateBreadcrumbs now accepts `items?: BreadcrumbItem[]` for server-resolved labels (dynamic routes, user names, etc.) and `routeLabels?: Record<string, string>` as a shared config for static routes. When `items` is not provided, auto-derive mode uses `useSelectedLayoutSegments()` instead of `usePathname()` — route-context aware and handles parallel routes and route groups correctly.
+
+  IGRPTemplateHeader gains `breadcrumbs` and `breadcrumbRouteLabels` props that forward to the breadcrumb component. IGRPLayout (framework-next) accepts and threads the same props through HeaderDataProvider to the header, enabling server layouts to inject pre-resolved items at any nesting level.
+
+  `BreadcrumbItem` is now exported from `@igrp/framework-next-ui` for server component type annotations.
+
+  Breaking: `customLabels` prop removed — migrate to `routeLabels` (full-href keys) and `formatLabel` (segment escape hatch).
+
+- Updated dependencies [4e9ecd5]
+  - @igrp/framework-next-auth@0.1.0-beta.127
+  - @igrp/framework-next-types@0.1.0-beta.128
+
+## 0.1.0-beta.123
+
+### Patch Changes
+
+- Updated dependencies [939446a]
+  - @igrp/framework-next-auth@0.1.0-beta.120
+  - @igrp/framework-next-types@0.1.0-beta.120
+
+## 0.1.0-beta.122
+
+### Patch Changes
+
+- ef2342d: Add IGRPLayoutErrorBoundary, IGRPHeaderSkeleton, IGRPSidebarSkeleton, IGRPHeaderError, IGRPSidebarError components for streaming layout; export IGRPTemplateSidebar; IGRPRootProviders now accepts sidebar/header ReactNode slot props.
+
+## 0.1.0-beta.121
+
+### Patch Changes
+
+- Fix header logo visibility and add dark-mode logo support in auth form.
+
+  **Header logo (`IGRPTemplateHeader`):** `showIGRPHeaderLogo` and `showIGRPHeaderTitle` were inside a `!showIGRPSidebarTrigger` branch, making them silently ineffective whenever the sidebar trigger was enabled. They are now independent controls — the logo and title render based on their own flags regardless of whether the sidebar trigger is shown.
+
+  **Dark-mode logo (`IGRPAuthForm`):** `IGRPSiteLogo` now accepts an optional `srcDark` field. When provided, the light logo is hidden in dark mode (`dark:hidden`) and the dark logo is shown (`hidden dark:block`), using CSS only — no JavaScript theme detection required, no hydration mismatch.
+
+## 0.1.0-beta.120
+
+### Patch Changes
+
+- Updated dependencies [20a0850]
+- Updated dependencies [2137c48]
+  - @igrp/framework-next-auth@0.1.0-beta.119
+  - @igrp/framework-next-types@0.1.0-beta.119
+
+## 0.1.0-beta.119
+
+### Patch Changes
+
+- Rename provider ID from `oauth2` to `igrp-auth`.
+
+  **Breaking changes:**
+  - `AUTH_PROVIDER` now accepts `igrp-auth` or `none` only (`oauth2` is removed)
+  - `AUTH_PROVIDER` defaults to `igrp-auth`
+  - `OAUTH2_CLIENT_ID`, `OAUTH2_CLIENT_SECRET`, `OAUTH2_ISSUER`, `OAUTH2_SCOPES` env vars renamed to `IGRP_AUTH_CLIENT_ID`, `IGRP_AUTH_CLIENT_SECRET`, `IGRP_AUTH_ISSUER`, `IGRP_AUTH_SCOPES`
+  - `OAUTH2_PROVIDER_ID` named export renamed to `IGRP_AUTH_PROVIDER_ID`
+  - `AUTH_PROVIDER_IDS.OAUTH2` key renamed to `AUTH_PROVIDER_IDS.IGRP_AUTH`
+  - NextAuth callback URL changes from `/api/auth/callback/oauth2` → `/api/auth/callback/igrp-auth`
+
+  **Migration:** Update your `.env` file — replace `AUTH_PROVIDER=oauth2` with `AUTH_PROVIDER=igrp-auth`, and rename all `OAUTH2_*` vars to `IGRP_AUTH_*`. Re-register the redirect URI on your authorization server as `{NEXTAUTH_URL}/api/auth/callback/igrp-auth`.
+
+- Updated dependencies
+- Updated dependencies
+  - @igrp/framework-next-auth@0.1.0-beta.118
+  - @igrp/framework-next-types@0.1.0-beta.118
+
+## 0.1.0-beta.118
+
+### Patch Changes
+
+- 5ec3586: Fix: update auth form to use OAUTH2_PROVIDER_ID after Keycloak provider removal in next-auth.
+- Updated dependencies [724398a]
+  - @igrp/framework-next-auth@1.0.0-beta.117
+  - @igrp/framework-next-types@0.1.0-beta.117
+
+## 0.1.0-beta.117
+
+### Patch Changes
+
+- f594936: refactor(menus): rewrite IGRPTemplateMenus with tree-builder + type-dispatch renderer; fix isActive false-positive, filter INACTIVE items, handle SYSTEM_PAGE
+
+## 0.1.0-beta.116
+
+### Patch Changes
+
+- beta.116 — template migrator CLI, lock file relocation, and release tooling fixes.
+
+  @igrp/template-migrator
+  - New CLI package that automates IGRP template upgrades via `pnpm dlx @igrp/template-migrator@latest`.
+  - Bundles all 6 demo-legacy migration guides (01–06) as a cumulative manifest with embedded payloads.
+  - Commands: status, plan, apply (--yes / --to), list, rollback, check (CI gate).
+  - Lock file moved from root `.igrpmigrations.lock.json` → `.igrpmigrations/lock.json`; backward-compat read of old path on first run.
+  - Prebuild pack script cleans payload output on every run to prevent stale files.
+  - tsup config: shims disabled (no \_\_dirname polyfill injection before shebang), banner removed (shebang lives in src/cli.ts line 1).
+
+  @igrp/framework-next-template (templates/demo-legacy)
+  - `.igrpmigrations/lock.json` pre-seeded to mark all 6 migrations as applied.
+  - `create-zip-template.ps1` updated to strip migration guides and payloads from the published zip — only `lock.json` is included so consumers start fully up-to-date.
+  - `MIGRATING.md` added: end-user upgrade guide (status → plan → apply workflow).
+
+- Updated dependencies
+  - @igrp/igrp-framework-react-design-system@0.1.0-beta.116
+  - @igrp/framework-next-auth@0.1.0-beta.116
+  - @igrp/framework-next-types@0.1.0-beta.116
+
+## 0.1.0-beta.115
+
+### Patch Changes
+
+- Edge-safe auth refactor + App Router error-handling overhaul.
+
+  @igrp/framework-next-auth
+  - Split withIGRPAuth() into Edge-safe shell + lazy Node helpers; next-auth (main) and next/headers are no longer static imports. Fixes TypeError reading 'custom' from openid-client leaking into the Edge middleware bundle under Next.js 15.5.15.
+  - interopDefault() helper normalizes CJS/ESM default-import mismatch against next-auth v4 (KeycloakProvider, NextAuth).
+  - tsup is now the single producer of dist/; added ./oidc and ./providers subpath exports; trimmed root barrel to Edge-safe modules only.
+  - Tolerates AUTH_PROVIDER=none by returning a stub instance (404 on auth routes) instead of crashing NextAuth with an empty providers array.
+
+  @igrp/framework-next
+  - New ./errors subpath with typed IgrpError hierarchy (IgrpConfigError, IgrpAuthConfigError, IgrpLayoutDataError) and isIgrpError structural guard — designed to survive production error.message redaction via stable error.name.
+  - Access-management config validation moved from IGRPLayout into igrpBuildConfig so throws fire at root-segment render where global-error.tsx can catch them.
+  - IGRPLayout and fetchLayoutData now throw typed errors instead of raw Error.
+
+  @igrp/framework-next-ui
+  - New IGRPSegmentError component for segment-level error.tsx boundaries — renders inside layout chrome, offers reset + go-home actions, accepts resolveCopy(error) for i18n.
+
+  @igrp/framework-next-template (templates/demo-legacy)
+  - New isAuthBypass() helper unifies IGRP_PREVIEW_MODE=true and AUTH_PROVIDER=none; /login, /logout, /api/auth/\* are all 302'd to / when bypassed.
+  - Full App Router error boundary coverage: global-error.tsx, root error.tsx, (auth)/error.tsx, rewritten (igrp)/error.tsx to use IGRPSegmentError.
+  - New reportError() hook and error-messages.ts Portuguese copy keyed by IgrpError.code.
+  - serverSession() no longer swallows typed errors; logout page hardened with .catch + fallback redirect + 3 s safety timeout.
+
+  See templates/demo-legacy/.igrpmigrations/05.MIGRATIONS-23042026.md and 06.MIGRATIONS-23042026.md for the full migration guides.
+
+- Updated dependencies
+  - @igrp/framework-next-types@0.1.0-beta.115
+  - @igrp/framework-next-auth@0.1.0-beta.115
+  - @igrp/igrp-framework-react-design-system@0.1.0-beta.115
+
+## 0.1.0-beta.114
+
+### Patch Changes
+
+- Edge-safe auth refactor + App Router error-handling overhaul.
+
+  @igrp/framework-next-auth
+  - Split withIGRPAuth() into Edge-safe shell + lazy Node helpers; next-auth (main) and next/headers are no longer static imports. Fixes TypeError reading 'custom' from openid-client leaking into the Edge middleware bundle under Next.js 15.5.15.
+  - interopDefault() helper normalizes CJS/ESM default-import mismatch against next-auth v4 (KeycloakProvider, NextAuth).
+  - tsup is now the single producer of dist/; added ./oidc and ./providers subpath exports; trimmed root barrel to Edge-safe modules only.
+  - Tolerates AUTH_PROVIDER=none by returning a stub instance (404 on auth routes) instead of crashing NextAuth with an empty providers array.
+
+  @igrp/framework-next
+  - New ./errors subpath with typed IgrpError hierarchy (IgrpConfigError, IgrpAuthConfigError, IgrpLayoutDataError) and isIgrpError structural guard — designed to survive production error.message redaction via stable error.name.
+  - Access-management config validation moved from IGRPLayout into igrpBuildConfig so throws fire at root-segment render where global-error.tsx can catch them.
+  - IGRPLayout and fetchLayoutData now throw typed errors instead of raw Error.
+
+  @igrp/framework-next-ui
+  - New IGRPSegmentError component for segment-level error.tsx boundaries — renders inside layout chrome, offers reset + go-home actions, accepts resolveCopy(error) for i18n.
+
+  @igrp/framework-next-template (templates/demo-legacy)
+  - New isAuthBypass() helper unifies IGRP_PREVIEW_MODE=true and AUTH_PROVIDER=none; /login, /logout, /api/auth/\* are all 302'd to / when bypassed.
+  - Full App Router error boundary coverage: global-error.tsx, root error.tsx, (auth)/error.tsx, rewritten (igrp)/error.tsx to use IGRPSegmentError.
+  - New reportError() hook and error-messages.ts Portuguese copy keyed by IgrpError.code.
+  - serverSession() no longer swallows typed errors; logout page hardened with .catch + fallback redirect + 3 s safety timeout.
+
+  See templates/demo-legacy/.igrpmigrations/05.MIGRATIONS-23042026.md and 06.MIGRATIONS-23042026.md for the full migration guides.
+
+- Updated dependencies
+  - @igrp/framework-next-types@0.1.0-beta.114
+  - @igrp/framework-next-auth@0.1.0-beta.114
+  - @igrp/igrp-framework-react-design-system@0.1.0-beta.114

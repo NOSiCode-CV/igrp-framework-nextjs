@@ -1,3 +1,5 @@
+'use client';
+
 import Link from 'next/link';
 import { IGRPButton, IGRPImage, cn } from '@igrp/igrp-framework-react-design-system';
 
@@ -23,11 +25,7 @@ function IGRPTemplateNotFound({
   appCode,
 }: IGRPTemplateNotFoundProps) {
   return (
-    <div
-      className={cn(
-        'flex min-h-[calc(100vh-12rem)] items-center justify-center bg-background px-4 py-16',
-      )}
-    >
+    <div className={cn('flex min-h-screen items-center justify-center bg-background px-4 py-16')}>
       <div className={cn('w-full max-w-2xl')}>
         <div className={cn('text-center')}>
           {image && (

@@ -1,0 +1,158 @@
+// Jest Snapshot v1, https://jestjs.io/docs/snapshot-testing
+
+exports[`Components/Card Default smoke-test 1`] = `
+<div class="p-6 max-w-sm">
+  <div data-slot="card"
+       class="bg-card text-card-foreground flex flex-col gap-6 rounded-xl border py-6 shadow-sm"
+       id="_r_ID_"
+  >
+    <div data-slot="card-header"
+         class="@container/card-header grid auto-rows-min grid-rows-[auto_auto] items-start gap-2 px-6 has-data-[slot=card-action]:grid-cols-[1fr_auto] [.border-b]:pb-6"
+    >
+      <div data-slot="card-title"
+           class="leading-none font-semibold"
+      >
+        Project Atlas
+      </div>
+      <div data-slot="card-description"
+           class="text-muted-foreground text-sm"
+      >
+        Updated 3 hours ago
+      </div>
+      <div data-slot="card-action"
+           class="col-start-2 row-span-2 row-start-1 self-start justify-self-end"
+      >
+        <button data-slot="button"
+                class="inline-flex items-center justify-center gap-1.5 whitespace-nowrap rounded-md text-sm font-medium transition-[color,box-shadow] disabled:pointer-events-none disabled:opacity-50 [&amp;_svg]:pointer-events-none [&amp;_svg:not([class*='size-'])]:size-4 shrink-0 [&amp;_svg]:shrink-0 outline-none focus-visible:border-ring focus-visible:ring-ring/50 focus-visible:ring-[3px] aria-invalid:ring-destructive/20 dark:aria-invalid:ring-destructive/40 aria-invalid:border-destructive hover:bg-accent dark:hover:bg-accent/50 hover:text-accent-foreground size-9"
+                aria-label="More options"
+                type="button"
+                id="_r_ID_"
+        >
+          <svg xmlns="http://www.w3.org/2000/svg"
+               width="16"
+               height="16"
+               viewbox="0 0 24 24"
+               fill="none"
+               stroke="currentColor"
+               stroke-width="2"
+               stroke-linecap="round"
+               stroke-linejoin="round"
+               class="lucide lucide-ellipsis-vertical size-4"
+               aria-hidden="true"
+               id="EllipsisVertical"
+          >
+            <circle cx="12"
+                    cy="12"
+                    r="1"
+            >
+            </circle>
+            <circle cx="12"
+                    cy="5"
+                    r="1"
+            >
+            </circle>
+            <circle cx="12"
+                    cy="19"
+                    r="1"
+            >
+            </circle>
+          </svg>
+        </button>
+      </div>
+    </div>
+    <div data-slot="card-content"
+         class="px-6"
+    >
+      <p class="text-sm text-muted-foreground">
+        A card groups related content and actions. Compose it from the header, content and footer sub-components.
+      </p>
+    </div>
+    <div data-slot="card-footer"
+         class="flex items-center px-6 [.border-t]:pt-6 gap-2"
+    >
+      <button data-slot="button"
+              class="inline-flex items-center justify-center gap-1.5 whitespace-nowrap rounded-md text-sm font-medium transition-[color,box-shadow] disabled:pointer-events-none disabled:opacity-50 [&amp;_svg]:pointer-events-none [&amp;_svg:not([class*='size-'])]:size-4 shrink-0 [&amp;_svg]:shrink-0 outline-none focus-visible:border-ring focus-visible:ring-ring/50 focus-visible:ring-[3px] aria-invalid:ring-destructive/20 dark:aria-invalid:ring-destructive/40 aria-invalid:border-destructive border bg-background shadow-xs hover:bg-accent dark:bg-input/30 dark:border-input dark:hover:bg-input/50 hover:text-accent-foreground h-9 px-2.5 has-data-[icon=inline-end]:pr-2 has-data-[icon=inline-start]:pl-2 relative"
+              type="button"
+              id="_r_ID_"
+      >
+        Cancel
+      </button>
+      <button data-slot="button"
+              class="inline-flex items-center justify-center gap-1.5 whitespace-nowrap rounded-md text-sm font-medium transition-[color,box-shadow] disabled:pointer-events-none disabled:opacity-50 [&amp;_svg]:pointer-events-none [&amp;_svg:not([class*='size-'])]:size-4 shrink-0 [&amp;_svg]:shrink-0 outline-none focus-visible:border-ring focus-visible:ring-ring/50 focus-visible:ring-[3px] aria-invalid:ring-destructive/20 dark:aria-invalid:ring-destructive/40 aria-invalid:border-destructive bg-primary text-primary-foreground shadow-xs hover:bg-primary/90 hover:text-primary-foreground h-9 px-2.5 has-data-[icon=inline-end]:pr-2 has-data-[icon=inline-start]:pl-2 relative"
+              type="button"
+              id="_r_ID_"
+      >
+        Save
+      </button>
+    </div>
+  </div>
+</div>
+`;
+
+exports[`Components/Card Simple smoke-test 1`] = `
+<div class="p-6 max-w-sm">
+  <div data-slot="card"
+       class="bg-card text-card-foreground flex flex-col gap-6 rounded-xl border py-6 shadow-sm"
+       id="_r_ID_"
+  >
+    <div data-slot="card-header"
+         class="@container/card-header grid auto-rows-min grid-rows-[auto_auto] items-start gap-2 px-6 has-data-[slot=card-action]:grid-cols-[1fr_auto] [.border-b]:pb-6"
+    >
+      <div data-slot="card-title"
+           class="leading-none font-semibold"
+      >
+        Notifications
+      </div>
+    </div>
+    <div data-slot="card-content"
+         class="px-6"
+    >
+      <p class="text-sm text-muted-foreground">
+        You have 3 unread messages.
+      </p>
+    </div>
+  </div>
+</div>
+`;
+
+exports[`Components/Card WithAction smoke-test 1`] = `
+<div class="p-6 max-w-sm">
+  <div data-slot="card"
+       class="bg-card text-card-foreground flex flex-col gap-6 rounded-xl border py-6 shadow-sm"
+       id="_r_ID_"
+  >
+    <div data-slot="card-header"
+         class="@container/card-header grid auto-rows-min grid-rows-[auto_auto] items-start gap-2 px-6 has-data-[slot=card-action]:grid-cols-[1fr_auto] [.border-b]:pb-6"
+    >
+      <div data-slot="card-description"
+           class="text-muted-foreground text-sm"
+      >
+        Total revenue
+      </div>
+      <div data-slot="card-title"
+           class="font-semibold text-3xl"
+      >
+        € 45,231
+      </div>
+      <div data-slot="card-action"
+           class="col-start-2 row-span-2 row-start-1 self-start justify-self-end"
+      >
+        <button data-slot="button"
+                class="inline-flex items-center justify-center whitespace-nowrap font-medium transition-[color,box-shadow] disabled:pointer-events-none disabled:opacity-50 [&amp;_svg]:pointer-events-none shrink-0 [&amp;_svg]:shrink-0 outline-none focus-visible:border-ring focus-visible:ring-ring/50 focus-visible:ring-[3px] aria-invalid:ring-destructive/20 dark:aria-invalid:ring-destructive/40 aria-invalid:border-destructive border bg-background shadow-xs hover:bg-accent dark:bg-input/30 dark:border-input dark:hover:bg-input/50 hover:text-accent-foreground h-7 gap-1 rounded-[min(var(--radius-md),12px)] px-2.5 text-[0.8rem] in-data-[slot=button-group]:rounded-lg has-data-[icon=inline-end]:pr-1.5 has-data-[icon=inline-start]:pl-1.5 [&amp;_svg:not([class*='size-'])]:size-3.5 relative"
+                type="button"
+                id="_r_ID_"
+        >
+          View
+        </button>
+      </div>
+    </div>
+    <div data-slot="card-content"
+         class="px-6"
+    >
+      <p class="text-sm text-muted-foreground">
+        +20.1% from last month
+      </p>
+    </div>
+  </div>
+</div>
+`;

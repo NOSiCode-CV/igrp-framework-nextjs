@@ -1,0 +1,80 @@
+image: docker:29.1.2
+services:
+  - name: docker:29.1.2-dind
+    command: ['--tls=false', '--mtu=1240']
+variables:
+  DOCKER_DRIVER: overlay2
+  DOCKER_TLS_CERTDIR: ''
+  DOCKER_HOST: tcp://docker:2375
+  DOCKER_REGISTRY: registry.nosi.cv
+  DOCKER_PROJECT: igrp
+  IMAGE_NAME: igrp-storybook
+stages:
+  - verify
+  - build
+  - deploy
+
+# The migration payloads under packages/template-migrator/migrations/demo-v1/
+# are a hand-maintained copy of templates/demo-v1. Edit the template without
+# authoring a migration and the two diverge silently: apps scaffolded from the
+# zip get the change, apps upgraded via the CLI never do.
+#
+# The same gate runs at the start of `pnpm --filter @igrp/template-migrator
+# release`, but only catching it there means the drift is already committed and
+# has to be reconciled retroactively (see the several `*-resync` / `*-catchup`
+# migrations in the history). Running it per-MR turns those into a one-line
+# migration authored alongside the change that caused it.
+#
+# Needs no registry credentials: the migrator's own dependencies are all public,
+# and the filtered install pulls nothing from the @igrp scope.
+# check_template_drift:
+#   stage: verify
+#   image: node:22
+#   services: []
+#   rules:
+#     - changes:
+#         - templates/demo-v1/**/*
+#         - packages/template-migrator/**/*
+#       when: always
+#   before_script:
+#     # corepack alone is enough — the root package.json `packageManager` field
+#     # pins the exact pnpm version (with hash), so an explicit `corepack prepare`
+#     # would only risk disagreeing with it.
+#     - corepack enable
+#     - pnpm install --filter @igrp/template-migrator --frozen-lockfile --ignore-scripts
+#   script:
+#     - pnpm --filter @igrp/template-migrator test
+#     - pnpm --filter @igrp/template-migrator check:drift
+#     # templates/demo-v1/.github/copilot-instructions.md is generated from the
+#     # canonical rules in templates/demo-v1/.agents/rules/ (Copilot cannot
+#     # follow file references, so its copy has to be inlined). Fail the pipeline
+#     # if someone edited a rule without regenerating it. Plain node, no install.
+#     - node templates/demo-v1/.agents/build-copilot-instructions.mjs --check
+build_storybook_image:
+  stage: build
+  rules:
+    - changes:
+        - packages/design-system-storybook/*
+      when: always
+  script:
+    - docker login -u "$DOCKER_REGISTRY_USERNAME" -p "$DOCKER_REGISTRY_PASSWORD" "$DOCKER_REGISTRY"
+    - docker build -t $DOCKER_REGISTRY/$DOCKER_PROJECT/$IMAGE_NAME -f packages/design-system-storybook/Dockerfile .
+    - docker tag $DOCKER_REGISTRY/$DOCKER_PROJECT/$IMAGE_NAME $DOCKER_REGISTRY/$DOCKER_PROJECT/$IMAGE_NAME:$CI_PIPELINE_ID
+    - docker push $DOCKER_REGISTRY/$DOCKER_PROJECT/$IMAGE_NAME
+    - docker push $DOCKER_REGISTRY/$DOCKER_PROJECT/$IMAGE_NAME:$CI_PIPELINE_ID
+
+deploy_storybook:
+  image: gcc:latest
+  stage: deploy
+  rules:
+    - changes:
+        - packages/design-system-storybook/*
+      when: always
+  script:
+    - |
+      curl -u "$DEPLOY_USER:$DEPLOY_PASSWORD" \
+        -X POST \
+        -H 'Accept: application/json' \
+        -H 'Content-Type: application/json' \
+        'https://manager.nosi.cv/v3/project/c-kthdc:p-tn7qs/workloads/deployment:integration-hub:$IMAGE_NAME?action=redeploy'
+

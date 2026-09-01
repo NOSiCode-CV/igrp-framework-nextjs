@@ -2,15 +2,14 @@
 
 ## Design System
 
-- Review the input color
-
+- Review the input color [x]
 - Review Data-table filters
-
 - fix rthe pagination on mobile
-
 - Add Switch to the DataTable as checkbox
-
 - Review info-card orientation horizontal and see design for this, review the colors mode
+- Review the ```<TooltipProvider></TooltipProvider>``` usage
+- IGRPSelect see filter, not working well
+- IGRPSingleDatePicker, when load with default date, when choose a date and clean is choose the default date, not clean input
 
 ## New shadcn Components
 
@@ -25,8 +24,6 @@ Add the following components to the design system:
 
 ## Component Updates
 
-- [ ] Review banner from experimental
-
 ## New Components
 
 - [ ] Progress
@@ -38,10 +35,6 @@ Add the following components to the design system:
 - [ ] Charts
 - [ ] Banner status
 - [ ] IGRPColors
-
-## Exports
-
-- [ ] Implement exports separately:, `/horizon`, `/utilities` [2027]
 
 ## Research & Documentation
 
@@ -59,16 +52,45 @@ Add the following components to the design system:
 
 ## Next UI
 
-- Components:
-
--- [ ] Error component
--- [ ] Loading component
--- [ ] Not found component
-
-- Menu & Sidebar
-
--- [ ] Menu: When sidebar is closed, show separator between groups. Review scroll behavior for better design
-
 -- Get breadcrumbs via script
+-- Hide notifications, profile and settings from the sidebar
 
 ## Animations component see: <https://animations.dev/learn/animation-theory/the-easing-blueprint>
+
+## V2
+
+-- better auth
+-- nextjs 16
+-- shadcn latest
+-- design system by registry
+-- design system new components
+-- i8n for template and packages
+-- design system, rich text editor
+-- design system server data table paginated
+-- https://nextjs.org/blog/next-16-3-ai-improvements
+-- https://github.com/vercel-labs/next-skills
+-- https://github.com/vercel/next.js/tree/canary/skills
+-- maps component
+
+
+[next-auth][debug][CHUNKING_SESSION_COOKIE] {
+  message: 'Session cookie exceeds allowed 4096 bytes.',
+  emptyCookieSize: 163,
+  valueSize: 3952,
+  chunks: [ 4096, 182 ]
+}
+
+Fix Gap na tabela....
+Configuracao de cliente na app center...
+sync permissions
+Inject childreen component na header Next apps....
+
+Sync Permissions di frontend, para implementar a sincronização
+https://git.nosi.cv/igrp-3_0/igrp-auth/backend/igrp-platform-access-management/-/blob/version/0.2.0-beta/docs/IGRP_PERMISSIONS_SYNC_NEXTJS_GUIDE.md?ref_type=heads
+
+Auditoria com reports
+https://git.nosi.cv/igrp-3_0/igrp-auth/backend/igrp-platform-access-management/-/blob/version/0.2.0-beta/docs/AUDIT_REPORTS_INTEGRATION_GUIDE.md
+
+Client and Service Accounts Management
+https://git.nosi.cv/igrp-3_0/igrp-auth/backend/igrp-platform-access-management/-/blob/deploy/pre-release/docs/OAUTH_CLIENT_SERVICE_ACCOUNT_UI_GUIDE.md?ref_type=heads
+

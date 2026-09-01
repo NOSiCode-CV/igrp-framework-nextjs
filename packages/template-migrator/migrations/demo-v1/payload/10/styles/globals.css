@@ -1,0 +1,86 @@
+@import "tailwindcss";
+@import "tw-animate-css";
+
+@custom-variant dark (&:is(.dark *));
+
+@source "../**/*.{ts,tsx,js,jsx}";
+/* Also scan IGRP packages so Tailwind generates their utilities too */
+@source "../../node_modules/@igrp/framework-next-ui/dist/**/*.{js,jsx,ts,tsx,mjs,cjs}";
+@source "../../node_modules/@igrp/igrp-framework-react-design-system/dist/**/*.{js,jsx,ts,tsx,mjs,cjs}";
+
+/* Import tokens from design-system only (it has the most complete set of tokens) */
+@import "@igrp/igrp-framework-react-design-system/tokens";
+
+@import "./themes.css";
+
+/*
+  ── Sidebar appearance ─────────────────────────────────────────────────────
+  Recolor the sidebar and the active menu item by uncommenting and setting any
+  color below. Set BOTH :root (light) and .dark. Use OKLCH or any CSS color.
+
+  For colors that should change per preset theme, set them inside the .theme-*
+  blocks in themes.css instead. A global override here is NOT recolored by the
+  theme switcher (theme classes set --sidebar-primary, not --sidebar-active).
+
+  :root {
+    --sidebar:                   oklch(0.984 0.003 247.858);  panel background
+    --sidebar-foreground:        oklch(0.129 0.042 264.695);  panel text
+    --sidebar-active:            oklch(0.92 0.04 264);         selected item bg
+    --sidebar-active-foreground: oklch(0.20 0.04 264);         selected item text/icon
+    --sidebar-accent:            oklch(0.968 0.007 247.896);   hover wash
+    --sidebar-border:            oklch(0.929 0.013 255.508);   dividers / borders
+  }
+  .dark {
+    --sidebar:                   oklch(0.208 0.042 265.755);
+    --sidebar-foreground:        oklch(0.984 0.003 247.858);
+    --sidebar-active:            oklch(0.30 0.05 264);
+    --sidebar-active-foreground: oklch(0.984 0.003 247.858);
+  }
+*/
+
+@theme inline {
+ 
+  
+  --animate-accordion-down: accordion-down 0.2s ease-out;
+  --animate-accordion-up: accordion-up 0.2s ease-out;
+
+  @keyframes accordion-down {
+    from {
+      height: 0;
+    }
+
+    to {
+      height: var(--radix-accordion-content-height);
+    }
+  }
+
+  @keyframes accordion-up {
+    from {
+      height: var(--radix-accordion-content-height);
+    }
+
+    to {
+      height: 0;
+    }
+  }
+
+  --animate-wiggle: wiggle 1s ease-in-out infinite;
+  @keyframes wiggle {
+    0%,
+    100% {
+      transform: rotate(-3deg);
+    }
+    50% {
+      transform: rotate(3deg);
+    }
+  }
+}
+
+@layer base {
+  * {
+    @apply border-border outline-ring/50;
+  }
+  body {
+    @apply bg-background text-foreground;
+  }
+}

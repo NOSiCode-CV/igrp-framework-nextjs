@@ -1,33 +1,33 @@
-'use client';
+"use client"
 
-import { useId } from 'react';
-import { cva, type VariantProps } from 'class-variance-authority';
-import { cn } from '../../lib/utils';
+import { useId } from "react"
+import { cva, type VariantProps } from "class-variance-authority"
+import { cn } from "../../lib/utils"
 
 type IGRPVideoEmbedAllowFeature =
-  | 'autoplay'
-  | 'clipboard-write'
-  | 'encrypted-media'
-  | 'gyroscope'
-  | 'picture-in-picture'
-  | 'web-share'
-  | 'accelerometer';
+  | "autoplay"
+  | "clipboard-write"
+  | "encrypted-media"
+  | "gyroscope"
+  | "picture-in-picture"
+  | "web-share"
+  | "accelerometer"
 
-const videoVariants = cva('', {
+const videoVariants = cva("", {
   variants: {
     aspectRatio: {
-      '1/1': 'aspect-square',
-      '4/3': 'aspect-[4/3]',
-      '16/9': 'aspect-video',
-      '21/9': 'aspect-[21/9]',
-      '3/2': 'aspect-[3/2]',
-      auto: 'aspect-auto',
+      "1/1": "aspect-square",
+      "4/3": "aspect-[4/3]",
+      "16/9": "aspect-video",
+      "21/9": "aspect-[21/9]",
+      "3/2": "aspect-[3/2]",
+      auto: "aspect-auto",
     },
   },
   defaultVariants: {
-    aspectRatio: '16/9',
+    aspectRatio: "16/9",
   },
-});
+})
 
 /**
  * Props for the IGRPVideoEmbed component.
@@ -35,31 +35,31 @@ const videoVariants = cva('', {
  */
 interface IGRPVideoEmbedProps extends VariantProps<typeof videoVariants> {
   /** Video URL (YouTube, Vimeo, etc.). */
-  src: string;
+  src: string
   /** Accessible title for the iframe. */
-  title: string;
+  title: string
   /** Iframe loading strategy. */
-  loading?: 'eager' | 'lazy';
+  loading?: "eager" | "lazy"
   /** Allowed iframe features. */
-  allow?: IGRPVideoEmbedAllowFeature[];
+  allow?: IGRPVideoEmbedAllowFeature[]
   /** Allow fullscreen. */
-  allowFullScreen?: boolean;
+  allowFullScreen?: boolean
   /** Autoplay on load. */
-  autoplay?: boolean;
+  autoplay?: boolean
   /** Mute by default. */
-  muted?: boolean;
+  muted?: boolean
   /** Show controls. */
-  controls?: boolean;
+  controls?: boolean
   /** Loop video. */
-  loop?: boolean;
+  loop?: boolean
   /** Additional CSS classes. */
-  className?: string;
+  className?: string
   /** HTML name attribute. */
-  name?: string;
+  name?: string
   /** HTML id attribute. */
-  id?: string;
+  id?: string
   /** Start time in seconds. */
-  start?: number;
+  start?: number
 }
 
 /**
@@ -68,8 +68,8 @@ interface IGRPVideoEmbedProps extends VariantProps<typeof videoVariants> {
 function IGRPVideoEmbed({
   src,
   title,
-  loading = 'lazy',
-  allow = ['autoplay', 'encrypted-media', 'picture-in-picture'],
+  loading = "lazy",
+  allow = ["autoplay", "encrypted-media", "picture-in-picture"],
   allowFullScreen = true,
   autoplay = false,
   muted = false,
@@ -79,47 +79,47 @@ function IGRPVideoEmbed({
   name,
   id,
   start = 0,
-  aspectRatio = '16/9',
+  aspectRatio = "16/9",
 }: IGRPVideoEmbedProps) {
-  const _id = useId();
-  const ref = name ?? id ?? _id;
+  const _id = useId()
+  const ref = name ?? id ?? _id
 
-  let videoUrl: URL;
+  let videoUrl: URL
   try {
-    videoUrl = new URL(src);
+    videoUrl = new URL(src)
   } catch {
-    console.error('[VideoEmbed] Invalid URL provided:', src);
+    console.error("[VideoEmbed] Invalid URL provided:", src)
     return (
       <div
         className={cn(
-          'w-full overflow-hidden bg-muted flex items-center justify-center p-8',
+          "w-full overflow-hidden bg-muted flex items-center justify-center p-8",
           videoVariants({ aspectRatio }),
           className,
         )}
         id={ref}
       >
-        <p className={cn('text-muted-foreground text-sm')}>Invalid video URL</p>
+        <p className={cn("text-muted-foreground text-sm")}>Invalid video URL</p>
       </div>
-    );
+    )
   }
 
   if (start > 0) {
-    videoUrl.searchParams.set('start', start.toString());
+    videoUrl.searchParams.set("start", start.toString())
   }
 
-  videoUrl.searchParams.set('autoplay', autoplay ? '1' : '0');
-  videoUrl.searchParams.set('mute', muted ? '1' : '0');
-  videoUrl.searchParams.set('controls', controls ? '1' : '0');
-  videoUrl.searchParams.set('loop', loop ? '1' : '0');
+  videoUrl.searchParams.set("autoplay", autoplay ? "1" : "0")
+  videoUrl.searchParams.set("mute", muted ? "1" : "0")
+  videoUrl.searchParams.set("controls", controls ? "1" : "0")
+  videoUrl.searchParams.set("loop", loop ? "1" : "0")
 
-  const allowValue = allow.join('; ');
+  const allowValue = allow.join("; ")
 
   return (
-    <div className={cn('w-full overflow-hidden', className)} id={ref}>
+    <div className={cn("w-full overflow-hidden", className)} id={ref}>
       <iframe
         key={src}
         src={videoUrl.toString()}
-        className={cn('w-full h-full border-0', videoVariants({ aspectRatio }))}
+        className={cn("w-full h-full border-0", videoVariants({ aspectRatio }))}
         title={title}
         loading={loading}
         allowFullScreen={allowFullScreen}
@@ -128,7 +128,7 @@ function IGRPVideoEmbed({
         name={name}
       />
     </div>
-  );
+  )
 }
 
-export { IGRPVideoEmbed, type IGRPVideoEmbedProps, type IGRPVideoEmbedAllowFeature };
+export { IGRPVideoEmbed, type IGRPVideoEmbedProps, type IGRPVideoEmbedAllowFeature }

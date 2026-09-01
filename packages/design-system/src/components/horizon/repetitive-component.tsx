@@ -1,6 +1,6 @@
-'use client';
+"use client"
 
-import { Fragment, useId, type ReactNode } from 'react';
+import { Fragment, useId, type ReactNode } from "react"
 
 /**
  * Props for the IGRPRepetitiveComponent component.
@@ -8,37 +8,31 @@ import { Fragment, useId, type ReactNode } from 'react';
  */
 interface IGRPRepetitiveComponentProps<T> {
   /** Array of items to render. */
-  items: T[];
+  items: T[]
   /** Render function for each item. */
-  children: (item: T) => ReactNode;
+  children: (item: T) => ReactNode
   /** Extracts unique key from each item. */
-  keyExtractor: (item: T) => string;
+  keyExtractor: (item: T) => string
   /** HTML name attribute. */
-  name?: string;
+  name?: string
   /** HTML id attribute. */
-  id?: string;
+  id?: string
 }
 
 /**
  * Renders a list of items using a render prop.
  */
-function IGRPRepetitiveComponent<T>({
-  items,
-  children,
-  keyExtractor,
-  name,
-  id,
-}: IGRPRepetitiveComponentProps<T>) {
-  const _id = useId();
-  const ref = name ?? id ?? _id;
+function IGRPRepetitiveComponent<T>({ items, children, keyExtractor, id }: IGRPRepetitiveComponentProps<T>) {
+  const _id = useId()
+  const elementId = id ?? _id
 
   return (
-    <div id={ref}>
+    <div id={elementId}>
       {items.map((item) => (
         <Fragment key={keyExtractor(item)}>{children(item)}</Fragment>
       ))}
     </div>
-  );
+  )
 }
 
-export { IGRPRepetitiveComponent, type IGRPRepetitiveComponentProps };
+export { IGRPRepetitiveComponent, type IGRPRepetitiveComponentProps }

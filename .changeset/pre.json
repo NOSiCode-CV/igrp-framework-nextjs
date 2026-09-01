@@ -1,0 +1,33 @@
+{
+  "mode": "pre",
+  "tag": "beta",
+  "initialVersions": {
+    "@igrp/igrp-framework-react-design-system": "0.1.0-beta.114",
+    "@igrp/framework-next": "0.1.0-beta.114",
+    "@igrp/framework-next-auth": "0.1.0-beta.114",
+    "@igrp/framework-next-types": "0.1.0-beta.114",
+    "@igrp/framework-next-ui": "0.1.0-beta.114",
+    "@igrp/igrp-framework-react-design-system-storybook": "0.0.1",
+    "@igrp/template-migrator": "0.1.2-beta.115",
+    "@igrp/framework-next-template": "0.1.0-beta.115"
+  },
+  "changesets": [
+    "amber-pandas",
+    "brave-otters-repeat",
+    "calendar-month-bounds",
+    "copper-finches",
+    "lazy-otters-migrate",
+    "lazy-pots-repeat",
+    "lucky-donkeys-tickle",
+    "next-ui-tokens-import-fix",
+    "packaging-manifest-hygiene",
+    "permissions-hardening-claims-recovery",
+    "plucky-otters",
+    "quiet-herons",
+    "silver-falcons",
+    "thick-otters-relax",
+    "tidy-moons-shave",
+    "tiny-otters",
+    "witty-otters-render"
+  ]
+}

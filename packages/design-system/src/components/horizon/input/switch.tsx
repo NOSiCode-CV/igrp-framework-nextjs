@@ -1,26 +1,23 @@
-'use client';
+"use client"
 
-import { useId } from 'react';
-import { useFormContext } from 'react-hook-form';
+import { useId } from "react"
+import { useFormContext } from "react-hook-form"
 
-import { cn } from '../../../lib/utils';
-import type { IGRPInputProps } from '../../../types';
-import { Switch } from '../../ui/switch';
-import { IGRPFormField } from '../form/form-field';
-import { IGRPLabel } from '../label';
+import { cn } from "../../../lib/utils"
+import type { IGRPInputProps } from "../../../types"
+import { Switch } from "../../primitives/switch"
+import { IGRPFormField } from "../form/form-field"
+import { IGRPLabel } from "../label"
 
 /**
  * Props for the IGRPSwitch component.
  * @see IGRPSwitch
  */
-interface IGRPSwitchProps
-  extends
-    React.ComponentProps<typeof Switch>,
-    Pick<IGRPInputProps, 'helperText' | 'label' | 'gridSize'> {
+interface IGRPSwitchProps extends React.ComponentProps<typeof Switch>, Pick<IGRPInputProps, "helperText" | "label"> {
   /** CSS classes for the label. */
-  labelClassName?: string;
+  labelClassName?: string
   /** Validation error message. */
-  error?: string;
+  error?: string
 }
 
 /**
@@ -38,32 +35,29 @@ function IGRPSwitch({
   onCheckedChange,
   ...props
 }: IGRPSwitchProps) {
-  const _id = useId();
-  const fielName = name ?? id ?? _id;
+  const _id = useId()
+  const fielName = name ?? id ?? _id
 
-  const formContext = useFormContext();
+  const formContext = useFormContext()
 
   if (!formContext) {
     return (
-      <div className={cn('*:not-first:mt-2')}>
-        <div className={cn('flex items-center gap-2')}>
+      <div className={cn("*:not-first:mt-2")}>
+        <div className={cn("flex items-center gap-2")}>
           <Switch
             id={fielName}
             name={fielName}
-            className={cn(
-              className,
-              error && 'border-destructive focus-visible:ring-destructive/20',
-            )}
+            className={cn(className, error && "border-destructive focus-visible:ring-destructive/20")}
             onCheckedChange={onCheckedChange}
             aria-invalid={!!error}
-            aria-describedby={helperText || error ? `${fielName}-helper` : undefined}
+            aria-describedby={error ? `${fielName}-error` : helperText ? `${fielName}-helper` : undefined}
             {...props}
           />
 
           {label && (
             <IGRPLabel
               label={label}
-              className={cn(labelClassName, error && 'text-destructive')}
+              className={cn(labelClassName, error && "text-destructive")}
               required={required}
               id={fielName}
             />
@@ -73,7 +67,7 @@ function IGRPSwitch({
         {helperText && !error && (
           <p
             id={`${fielName}-helper`}
-            className={cn('text-muted-foreground mt-2 text-xs')}
+            className={cn("text-muted-foreground mt-2 text-xs")}
             role="region"
             aria-live="polite"
           >
@@ -82,12 +76,12 @@ function IGRPSwitch({
         )}
 
         {error && (
-          <p id={`${fielName}-error`} className={cn('text-destructive mt-2 text-xs')} role="alert">
+          <p id={`${fielName}-error`} className={cn("text-destructive mt-2 text-xs")} role="alert">
             {error}
           </p>
         )}
       </div>
-    );
+    )
   }
 
   return (
@@ -101,35 +95,28 @@ function IGRPSwitch({
       isToggle
     >
       {(field, fieldState) => (
-        <div className={cn('*:not-first:mt-2')}>
-          <div className={cn('flex items-center gap-2')}>
-            <Switch
-              id={fielName}
-              name={fielName}
-              required={required}
-              className={cn(
-                'bg-backsground',
-                (fieldState.error || error) &&
-                  'border-destructive focus-visible:ring-destructive/20',
-                className,
-              )}
-              checked={field.value === true}
-              onCheckedChange={(checked) => {
-                field.onChange(checked);
-                if (onCheckedChange) {
-                  onCheckedChange(checked);
-                }
-              }}
-              onBlur={field.onBlur}
-              aria-invalid={!!fieldState.error || !!error}
-              aria-describedby={helperText || error ? `${id}-helper` : undefined}
-              {...props}
-            />
-          </div>
-        </div>
+        <Switch
+          name={fielName}
+          required={required}
+          className={cn(
+            "bg-backsground",
+            (fieldState.error || error) && "border-destructive focus-visible:ring-destructive/20",
+            className,
+          )}
+          checked={field.value === true}
+          onCheckedChange={(checked) => {
+            field.onChange(checked)
+            if (onCheckedChange) {
+              onCheckedChange(checked)
+            }
+          }}
+          onBlur={field.onBlur}
+          aria-invalid={!!fieldState.error || !!error}
+          {...props}
+        />
       )}
     </IGRPFormField>
-  );
+  )
 }
 
-export { IGRPSwitch, type IGRPSwitchProps };
+export { IGRPSwitch, type IGRPSwitchProps }

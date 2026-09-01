@@ -1,10 +1,14 @@
-'use client';
-'use no memo';
+"use client"
+// React Compiler opt-out: required for `useReactTable` (TanStack mutates state
+// in ways the compiler can't model). Per-row rendering (IGRPDataTableRowActionsCell)
+// lives in its own file without this directive so the compiler can still memoize it.
+"use no memo"
 
-import { Fragment, useCallback, useId, useReducer } from 'react';
+import { Fragment, useCallback, useEffect, useId, useMemo, useReducer } from "react"
 import {
   type ColumnDef,
   type ColumnFiltersState,
+  createColumnHelper,
   type ExpandedState,
   flexRender,
   getCoreRowModel,
@@ -24,109 +28,150 @@ import {
   useReactTable,
   type Row,
   type TableOptions,
-} from '@tanstack/react-table';
+} from "@tanstack/react-table"
 
-import { cn } from '../../../lib/utils';
+import { cn } from "../../../lib/utils"
+import { useIGRPi18n } from "../../../i18n"
+import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "../../primitives/table"
+import { IGRPIcon } from "../icon"
+import { type IGRPDataTableClientFilterListProps, IGRPDataTableClientFilter } from "./client-filter"
+import { IGRPDataTablePagination, IGRPDataTablePaginationNumeric } from "./pagination"
+import { IGRPDataTableToggleVisibility } from "./toggle-visibility"
+import type { IGRPDataTableAction, IGRPDataTablePaginationConfig, IGRPDataTableQuery } from "./types"
+import { IGRPDataTableRowActionsCell } from "./row-actions-cell"
+import type { IGRPAccessorColumnDef } from "./column-helper"
 import {
-  Table,
-  TableBody,
-  TableCell,
-  TableHead,
-  TableHeader,
-  TableRow,
-} from '../../ui/table';
-import { IGRPIcon } from '../icon';
-import {
-  type IGRPDataTableClientFilterListProps,
-  IGRPDataTableClientFilter,
-} from './client-filter';
-import { IGRPDataTablePagination, IGRPDataTablePaginationNumeric } from './pagination';
-import { IGRPDataTableToggleVisibility } from './toggle-visibility';
+  IGRPDataTableFilterDate,
+  IGRPDataTableFilterDropdown,
+  IGRPDataTableFilterFaceted,
+  IGRPDataTableFilterInput,
+  IGRPDataTableFilterMinMax,
+  IGRPDataTableFilterSelect,
+} from "./filter"
 
 /**
  * Props for the IGRPDataTable component.
  * @see IGRPDataTable
  */
 interface IGRPDataTableProps<TData, TValue> {
-  /** TanStack Table column definitions. */
-  columns: ColumnDef<TData, TValue>[];
-  /** Table data rows. */
-  data: TData[];
+  /**
+   * TanStack Table column definitions.
+   *
+   * @remarks This component opts out of the React Compiler (`"use no memo"`,
+   * required by `useReactTable`). The table memoizes everything it derives from
+   * `columns`, but the array identity is the caller's responsibility: define it
+   * at module scope or wrap it in `useMemo`, otherwise a new array on every
+   * parent render rebuilds the column model and resets per-column caches.
+   */
+  columns: ColumnDef<TData, TValue>[]
+  /**
+   * Table data rows.
+   *
+   * @remarks Like `columns`, `data` must be referentially stable across renders
+   * (module scope or `useMemo`) — a fresh array each render makes TanStack
+   * recompute its row models. The compiler is off here, so the caller owns this.
+   */
+  data: TData[]
   /** Show pagination controls. */
-  showPagination?: boolean;
+  showPagination?: boolean
   /** Use numeric page selector instead of prev/next. */
-  isNumericPagination?: boolean;
+  isNumericPagination?: boolean
   /** Available page size options. */
-  pageSizePagination?: number[];
+  pageSizePagination?: number[]
   /** Use server-side filtering (requires serverFilterComponent). */
-  isServerSide?: boolean;
+  isServerSide?: boolean
   /** Show filter UI. */
-  showFilter?: boolean;
+  showFilter?: boolean
   /** Client-side filter configurations. */
-  clientFilters?: IGRPDataTableClientFilterListProps<TData>[];
+  clientFilters?: IGRPDataTableClientFilterListProps<TData>[]
   /** Label for clear filters button. */
-  clientClearLabel?: string;
+  clientClearLabel?: string
   /** Show column visibility toggle. */
-  showToggleColumn?: boolean;
+  showToggleColumn?: boolean
   /** Label for column visibility toggle button. */
-  toggleLabel?: string;
+  toggleLabel?: string
   /** Label for column visibility dropdown. */
-  toggleOptionsLabel?: string;
+  toggleOptionsLabel?: string
   /** CSS classes for the wrapper. */
-  className?: string;
+  className?: string
   /** CSS classes for the table element. */
-  tableClassName?: string;
+  tableClassName?: string
   /** CSS classes for the table header. */
-  tableHeaderClassName?: string;
+  tableHeaderClassName?: string
   /** CSS classes for the table body. */
-  tableBodyClassName?: string;
+  tableBodyClassName?: string
   /** CSS classes for pagination. */
-  paginationClassName?: string;
+  paginationClassName?: string
   /** Custom filter component for server-side mode. */
-  serverFilterComponent?: React.ReactNode;
+  serverFilterComponent?: React.ReactNode
   /** Message when no rows match. */
-  notFoundLabel?: string;
+  notFoundLabel?: string
   /** Whether a row can be expanded. */
-  getRowCanExpand?: TableOptions<TData>['getRowCanExpand'];
+  getRowCanExpand?: TableOptions<TData>["getRowCanExpand"]
   /** Render expanded row content. */
-  renderSubComponent?: (row: Row<TData>) => React.ReactElement | undefined;
+  renderSubComponent?: (row: Row<TData>) => React.ReactElement | undefined
   /** HTML id attribute. */
-  id?: string;
+  id?: string
+  /** Called after all client-side column filters are cleared via the clear button. */
+  onFiltersCleared?: () => void
+  /**
+   * Row actions. ≤2 actions render as inline icon buttons; >2 render as a dropdown menu.
+   * Use `hidden` / `disabled` per-action callbacks to control visibility per row.
+   */
+  actions?: IGRPDataTableAction<TData>[]
+  /** Total row count for server-side pagination display (use with onQueryChange). */
+  rowCount?: number
+  /** Called whenever pagination, sorting, or filters change. Enables server-side mode. */
+  onQueryChange?: (query: IGRPDataTableQuery) => void
+  /** Pagination display configuration. */
+  pagination?: IGRPDataTablePaginationConfig
 }
 
 type TableState = {
-  columnFilters: ColumnFiltersState;
-  columnVisibility: VisibilityState;
-  pagination: PaginationState;
-  sorting: SortingState;
-  expanded: ExpandedState;
-  rowSelection: RowSelectionState;
-};
+  columnFilters: ColumnFiltersState
+  columnVisibility: VisibilityState
+  pagination: PaginationState
+  sorting: SortingState
+  expanded: ExpandedState
+  rowSelection: RowSelectionState
+}
 
 type TableAction =
-  | { type: 'columnFilters'; payload: ColumnFiltersState }
-  | { type: 'columnVisibility'; payload: VisibilityState }
-  | { type: 'pagination'; payload: PaginationState }
-  | { type: 'sorting'; payload: SortingState }
-  | { type: 'expanded'; payload: ExpandedState }
-  | { type: 'rowSelection'; payload: RowSelectionState };
+  | { type: "columnFilters"; payload: ColumnFiltersState }
+  | { type: "columnVisibility"; payload: VisibilityState }
+  | { type: "pagination"; payload: PaginationState }
+  | { type: "sorting"; payload: SortingState }
+  | { type: "expanded"; payload: ExpandedState }
+  | { type: "rowSelection"; payload: RowSelectionState }
 
 function tableReducer(state: TableState, action: TableAction): TableState {
   switch (action.type) {
-    case 'columnFilters':
-      return { ...state, columnFilters: action.payload };
-    case 'columnVisibility':
-      return { ...state, columnVisibility: action.payload };
-    case 'pagination':
-      return { ...state, pagination: action.payload };
-    case 'sorting':
-      return { ...state, sorting: action.payload };
-    case 'expanded':
-      return { ...state, expanded: action.payload };
-    case 'rowSelection':
-      return { ...state, rowSelection: action.payload };
+    // Filter/sort changes reset to the first page here (synchronously) because
+    // TanStack's autoResetPageIndex is disabled — its microtask-based reset
+    // dispatches state updates before the component mounts under React 19
+    // (https://github.com/TanStack/table/issues/5026).
+    case "columnFilters":
+      return {
+        ...state,
+        columnFilters: action.payload,
+        pagination: { ...state.pagination, pageIndex: 0 },
+      }
+    case "columnVisibility":
+      return { ...state, columnVisibility: action.payload }
+    case "pagination":
+      return { ...state, pagination: action.payload }
+    case "sorting":
+      return {
+        ...state,
+        sorting: action.payload,
+        pagination: { ...state.pagination, pageIndex: 0 },
+      }
+    case "expanded":
+      return { ...state, expanded: action.payload }
+    case "rowSelection":
+      return { ...state, rowSelection: action.payload }
     default:
-      return state;
+      return state
   }
 }
 
@@ -143,7 +188,7 @@ function IGRPDataTable<TData, TValue>({
   isServerSide = false,
   showFilter = false,
   clientFilters,
-  clientClearLabel = 'Limpar',
+  clientClearLabel,
   showToggleColumn = false,
   toggleLabel,
   toggleOptionsLabel,
@@ -153,13 +198,22 @@ function IGRPDataTable<TData, TValue>({
   tableBodyClassName,
   paginationClassName,
   serverFilterComponent,
-  notFoundLabel = 'Nenhum registo encontrado.',
+  notFoundLabel,
   // rowSelection,
   // onRowSelectionChange,
   getRowCanExpand = () => false,
   renderSubComponent,
   id,
+  onFiltersCleared,
+  actions,
+  rowCount,
+  onQueryChange,
+  pagination,
 }: IGRPDataTableProps<TData, TValue>) {
+  const i18n = useIGRPi18n()
+  const resolvedClearLabel = clientClearLabel ?? i18n.dataTable.clearFilters
+  const resolvedNotFoundLabel = notFoundLabel ?? i18n.dataTable.notFound
+
   const [state, dispatch] = useReducer(tableReducer, {
     columnFilters: [],
     columnVisibility: {},
@@ -170,64 +224,88 @@ function IGRPDataTable<TData, TValue>({
     sorting: [],
     expanded: {},
     rowSelection: {},
-  });
+  })
 
   const setColumnFilters = useCallback(
     (updater: Updater<ColumnFiltersState>) =>
       dispatch({
-        type: 'columnFilters',
-        payload: typeof updater === 'function' ? updater(state.columnFilters) : updater,
+        type: "columnFilters",
+        payload: typeof updater === "function" ? updater(state.columnFilters) : updater,
       }),
     [state.columnFilters],
-  );
+  )
   const setColumnVisibility = useCallback(
     (updater: Updater<VisibilityState>) =>
       dispatch({
-        type: 'columnVisibility',
-        payload: typeof updater === 'function' ? updater(state.columnVisibility) : updater,
+        type: "columnVisibility",
+        payload: typeof updater === "function" ? updater(state.columnVisibility) : updater,
       }),
     [state.columnVisibility],
-  );
+  )
   const setPagination = useCallback(
     (updater: Updater<PaginationState>) =>
       dispatch({
-        type: 'pagination',
-        payload: typeof updater === 'function' ? updater(state.pagination) : updater,
+        type: "pagination",
+        payload: typeof updater === "function" ? updater(state.pagination) : updater,
       }),
     [state.pagination],
-  );
+  )
   const setSorting = useCallback(
     (updater: Updater<SortingState>) =>
       dispatch({
-        type: 'sorting',
-        payload: typeof updater === 'function' ? updater(state.sorting) : updater,
+        type: "sorting",
+        payload: typeof updater === "function" ? updater(state.sorting) : updater,
       }),
     [state.sorting],
-  );
+  )
   const setExpanded = useCallback(
     (updater: Updater<ExpandedState>) =>
       dispatch({
-        type: 'expanded',
-        payload: typeof updater === 'function' ? updater(state.expanded) : updater,
+        type: "expanded",
+        payload: typeof updater === "function" ? updater(state.expanded) : updater,
       }),
     [state.expanded],
-  );
+  )
   const setRowSelection = useCallback(
     (updater: Updater<RowSelectionState>) =>
       dispatch({
-        type: 'rowSelection',
-        payload: typeof updater === 'function' ? updater(state.rowSelection) : updater,
+        type: "rowSelection",
+        payload: typeof updater === "function" ? updater(state.rowSelection) : updater,
       }),
     [state.rowSelection],
-  );
+  )
 
-  const _id = useId();
-  const ref = id ?? _id;
+  const _id = useId()
+  const ref = id ?? _id
+
+  // Column helper is identity-stable per instance (the compiler is off here via
+  // "use no memo", so React's own useMemo owns stabilization).
+  const tableHelper = useMemo(() => createColumnHelper<TData>(), [])
+
+  // allColumns is rebuilt only when the caller's columns or actions change.
+  // Re-running this every render forces useReactTable to reset its column model
+  // (and every faceted/grouped/sorted cache) on any unrelated parent re-render.
+  const allColumns = useMemo(() => {
+    const actionColumn =
+      actions && actions.length > 0
+        ? [
+            tableHelper.display({
+              id: "__igrp_actions__",
+              header: "",
+              cell: ({ row }) => <IGRPDataTableRowActionsCell row={row} actions={actions} />,
+              enableSorting: false,
+              enableHiding: false,
+              size: actions.length <= 2 ? actions.length * 44 : 44,
+            }),
+          ]
+        : []
+    return [...columns, ...actionColumn] as ColumnDef<TData, TValue>[]
+  }, [columns, actions, tableHelper])
 
   // eslint-disable-next-line react-hooks/incompatible-library
   const table = useReactTable({
     data,
-    columns,
+    columns: allColumns,
 
     getCoreRowModel: getCoreRowModel(),
     getFilteredRowModel: getFilteredRowModel(),
@@ -258,59 +336,130 @@ function IGRPDataTable<TData, TValue>({
 
     enableRowSelection: true,
     enableSortingRemoval: false,
-  });
+
+    // TanStack's auto-reset queues a setPagination/setExpanded in a microtask,
+    // which fires before mount under React 19 concurrent rendering and triggers
+    // "Can't perform a React state update on a component that hasn't mounted yet".
+    // Page-index reset on filter/sort changes is handled in tableReducer instead.
+    autoResetPageIndex: false,
+    autoResetExpanded: false,
+
+    manualPagination: !!onQueryChange,
+    manualSorting: !!onQueryChange,
+    manualFiltering: !!onQueryChange,
+    rowCount: onQueryChange ? (rowCount ?? 0) : undefined,
+  })
+
+  const { pageIndex, pageSize } = table.getState().pagination
+  const sorting = table.getState().sorting
+  const columnFilters = table.getState().columnFilters
+
+  useEffect(() => {
+    if (!onQueryChange) return
+    onQueryChange({
+      page: pageIndex,
+      pageSize,
+      sorting: sorting.map((s) => ({ id: s.id, desc: s.desc })),
+      filters: columnFilters.map((f) => ({ id: f.id, value: f.value })),
+    })
+  }, [pageIndex, pageSize, sorting, columnFilters, onQueryChange])
+
+  const filterDescriptors = useMemo(
+    () =>
+      (columns as IGRPAccessorColumnDef<TData>[])
+        .filter(
+          (col): col is IGRPAccessorColumnDef<TData> & { accessorKey: string } =>
+            "filter" in col &&
+            !!col.filter &&
+            "accessorKey" in col &&
+            typeof (col as { accessorKey?: unknown }).accessorKey === "string",
+        )
+        .map((col) => ({ columnId: col.accessorKey, descriptor: col.filter! })),
+    [columns],
+  )
 
   const NotFoundRowSubComponent = (
-    <div className={cn('flex items-center gap-2 p-3')}>
+    <div className={cn("flex items-center gap-2 p-3")}>
       <IGRPIcon iconName="OctagonAlert" />
       <span>N/A</span>
     </div>
-  );
+  )
 
   return (
-    <div className={cn('flex flex-col gap-4', className)} id={ref}>
-      <div
-        className={cn(
-          'flex flex-col md:flex-row md:items-center md:justify-between md:flex-1 gap-3',
-        )}
-      >
-        {showFilter &&
-          (isServerSide ? (
-            serverFilterComponent
-          ) : (
-            <IGRPDataTableClientFilter
-              table={table}
-              filterList={clientFilters || []}
-              filterLabel={clientClearLabel}
-            />
-          ))}
+    <div className={cn("flex flex-col gap-4", className)} id={ref}>
+      <div className={cn("flex flex-col md:flex-row md:items-center md:justify-between md:flex-1 gap-3")}>
+        <div className="flex md:flex-row flex-col gap-2">
+          {showFilter &&
+            (isServerSide ? (
+              serverFilterComponent
+            ) : (
+              <IGRPDataTableClientFilter
+                table={table}
+                filterList={clientFilters || []}
+                filterLabel={resolvedClearLabel}
+                onFiltersCleared={onFiltersCleared}
+              />
+            ))}
+          {filterDescriptors.length > 0 && (
+            <div className={cn("flex md:items-center gap-2 flex-col md:flex-row")}>
+              {filterDescriptors.map(({ columnId, descriptor }) => {
+                const column = table.getColumn(columnId)
+                if (!column) return null
+
+                switch (descriptor.type) {
+                  case "input":
+                    return (
+                      <IGRPDataTableFilterInput
+                        key={columnId}
+                        column={column}
+                        placeholder={descriptor.placeholder}
+                        ariaLabel={descriptor.ariaLabel}
+                      />
+                    )
+                  case "select":
+                    return (
+                      <IGRPDataTableFilterSelect key={columnId} column={column} options={descriptor.options ?? []} />
+                    )
+                  case "faceted":
+                    return (
+                      <IGRPDataTableFilterFaceted key={columnId} column={column} options={descriptor.options ?? []} />
+                    )
+                  case "date":
+                    return <IGRPDataTableFilterDate key={columnId} column={column} />
+                  case "range":
+                    return <IGRPDataTableFilterMinMax key={columnId} column={column} />
+                  case "dropdown":
+                    return (
+                      <IGRPDataTableFilterDropdown key={columnId} column={column} options={descriptor.options ?? []} />
+                    )
+                  default:
+                    return descriptor.render?.(column) ?? null
+                }
+              })}
+            </div>
+          )}
+        </div>
         {showToggleColumn && (
-          <IGRPDataTableToggleVisibility
-            table={table}
-            label={toggleLabel}
-            optionsLabel={toggleOptionsLabel}
-          />
+          <IGRPDataTableToggleVisibility table={table} label={toggleLabel} optionsLabel={toggleOptionsLabel} />
         )}
       </div>
 
-      <div className={cn('overflow-hidden rounded-md border')}>
+      <div className={cn("overflow-hidden rounded-md border")}>
         <Table className={tableClassName}>
           <TableHeader className={tableHeaderClassName}>
             {table.getHeaderGroups().map((headerGroup) => (
-              <TableRow key={headerGroup.id} className={cn('border-b dark:border-slate-800/60')}>
+              <TableRow key={headerGroup.id} className={cn("border-b")}>
                 {headerGroup.headers.map((header) => {
                   return (
                     <TableHead
                       key={header.id}
                       colSpan={header.colSpan}
                       style={{ width: `${header.getSize()}px` }}
-                      className={cn('font-semibold px-3')}
+                      className={cn("font-semibold px-3")}
                     >
-                      {header.isPlaceholder
-                        ? null
-                        : flexRender(header.column.columnDef.header, header.getContext())}
+                      {header.isPlaceholder ? null : flexRender(header.column.columnDef.header, header.getContext())}
                     </TableHead>
-                  );
+                  )
                 })}
               </TableRow>
             ))}
@@ -323,7 +472,7 @@ function IGRPDataTable<TData, TValue>({
                   <Fragment key={row.id}>
                     <TableRow
                       key={row.id}
-                      data-state={row.getIsSelected() && 'selected'}
+                      data-state={row.getIsSelected() && "selected"}
                       // className={cn(
                       //   'border-0 [&:first-child>td:first-child]:rounded-tl-lg',
                       //   '[&:first-child>td:last-child]:rounded-tr-lg',
@@ -335,7 +484,7 @@ function IGRPDataTable<TData, TValue>({
                         <TableCell
                           key={cell.id}
                           className={cn(
-                            'p-3 truncate h-[inherit] [&:has([aria-expanded])]:w-px [&:has([aria-expanded])]:py-0 [&:has([aria-expanded])]:pr-0',
+                            "p-3 truncate h-[inherit] [&:has([aria-expanded])]:w-px [&:has([aria-expanded])]:py-0 [&:has([aria-expanded])]:pr-0",
                           )}
                         >
                           {flexRender(cell.column.columnDef.cell, cell.getContext())}
@@ -351,7 +500,7 @@ function IGRPDataTable<TData, TValue>({
                       </TableRow>
                     )}
                   </Fragment>
-                );
+                )
               })
             ) : (
               <TableRow
@@ -362,36 +511,33 @@ function IGRPDataTable<TData, TValue>({
               //   '[&:last-child>td:last-child]:rounded-br-lg',
               // )}
               >
-                <TableCell
-                  colSpan={columns.length}
-                  className={cn('h-24 text-center font-semibold')}
-                >
-                  {notFoundLabel}
+                <TableCell colSpan={allColumns.length} className={cn("h-24 text-center font-semibold")}>
+                  {resolvedNotFoundLabel}
                 </TableCell>
               </TableRow>
             )}
           </TableBody>
-          <tbody aria-hidden="true" className={cn('table-row h-1')}></tbody>
+          <tbody aria-hidden="true" className={cn("table-row h-1")}></tbody>
         </Table>
       </div>
 
       {table.getRowCount() > state.pagination.pageSize &&
         showPagination &&
-        (isNumericPagination ? (
+        (isNumericPagination || pagination?.type === "numeric" ? (
           <IGRPDataTablePaginationNumeric
             table={table}
-            pageSize={pageSizePagination}
+            pageSize={pagination?.pageSizeOptions ?? pageSizePagination}
             className={paginationClassName}
           />
         ) : (
           <IGRPDataTablePagination
             table={table}
-            pageSize={pageSizePagination}
+            pageSize={pagination?.pageSizeOptions ?? pageSizePagination}
             className={paginationClassName}
           />
         ))}
     </div>
-  );
+  )
 }
 
-export { IGRPDataTable, type IGRPDataTableProps };
+export { IGRPDataTable, type IGRPDataTableProps }

@@ -1,0 +1,108 @@
+// Jest Snapshot v1, https://jestjs.io/docs/snapshot-testing
+
+exports[`Components/Banner Announcement smoke-test 1`] = `
+<div class="flex items-center justify-between gap-4 bg-primary px-6 py-3 text-primary-foreground motion-safe:animate-in motion-safe:fade-in motion-safe:duration-150">
+  <p class="text-sm">
+    🎉 IGRP 3 is now available with a refreshed design system.
+    <a href="https://nosi.cv"
+       class="ml-2 underline underline-offset-4 hover:opacity-80 rounded-sm focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-1 focus-visible:ring-offset-background"
+       target="_blank"
+       rel="noopener noreferrer"
+    >
+      Learn more
+    </a>
+  </p>
+  <button type="button"
+          aria-label="Dismiss"
+          class="shrink-0 rounded-sm opacity-70 hover:opacity-100 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2"
+  >
+    <svg xmlns="http://www.w3.org/2000/svg"
+         width="24"
+         height="24"
+         viewbox="0 0 24 24"
+         fill="none"
+         stroke="currentColor"
+         stroke-width="2"
+         stroke-linecap="round"
+         stroke-linejoin="round"
+         class="lucide lucide-x size-4"
+         aria-hidden="true"
+    >
+      <path d="M18 6 6 18">
+      </path>
+      <path d="m6 6 12 12">
+      </path>
+    </svg>
+  </button>
+</div>
+`;
+
+exports[`Components/Banner AnnouncementNoLink smoke-test 1`] = `
+<div class="flex items-center justify-between gap-4 bg-primary px-6 py-3 text-primary-foreground motion-safe:animate-in motion-safe:fade-in motion-safe:duration-150">
+  <p class="text-sm">
+    Scheduled maintenance this weekend. Some services may be unavailable.
+  </p>
+  <button type="button"
+          aria-label="Dismiss"
+          class="shrink-0 rounded-sm opacity-70 hover:opacity-100 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2"
+  >
+    <svg xmlns="http://www.w3.org/2000/svg"
+         width="24"
+         height="24"
+         viewbox="0 0 24 24"
+         fill="none"
+         stroke="currentColor"
+         stroke-width="2"
+         stroke-linecap="round"
+         stroke-linejoin="round"
+         class="lucide lucide-x size-4"
+         aria-hidden="true"
+    >
+      <path d="M18 6 6 18">
+      </path>
+      <path d="m6 6 12 12">
+      </path>
+    </svg>
+  </button>
+</div>
+`;
+
+exports[`Components/Banner Cookie smoke-test 1`] = `
+<div class="fixed bottom-0 left-0 right-0 z-50 flex items-center justify-between gap-4 border-t bg-background px-6 py-4 shadow-lg motion-safe:animate-in motion-safe:slide-in-from-bottom-2 motion-safe:duration-200">
+  <p class="min-w-0 text-sm text-foreground">
+    We use cookies to improve your experience. By continuing, you accept our cookie policy.
+  </p>
+  <div class="flex shrink-0 gap-2">
+    <button data-slot="button"
+            class="inline-flex items-center justify-center whitespace-nowrap font-medium transition-[color,box-shadow] disabled:pointer-events-none disabled:opacity-50 [&amp;_svg]:pointer-events-none shrink-0 [&amp;_svg]:shrink-0 outline-none focus-visible:border-ring focus-visible:ring-ring/50 focus-visible:ring-[3px] aria-invalid:ring-destructive/20 dark:aria-invalid:ring-destructive/40 aria-invalid:border-destructive border bg-background shadow-xs hover:bg-accent dark:bg-input/30 dark:border-input dark:hover:bg-input/50 hover:text-accent-foreground h-7 gap-1 rounded-[min(var(--radius-md),12px)] px-2.5 text-[0.8rem] in-data-[slot=button-group]:rounded-lg has-data-[icon=inline-end]:pr-1.5 has-data-[icon=inline-start]:pl-1.5 [&amp;_svg:not([class*='size-'])]:size-3.5"
+    >
+      Decline
+    </button>
+    <button data-slot="button"
+            class="inline-flex items-center justify-center whitespace-nowrap font-medium transition-[color,box-shadow] disabled:pointer-events-none disabled:opacity-50 [&amp;_svg]:pointer-events-none shrink-0 [&amp;_svg]:shrink-0 outline-none focus-visible:border-ring focus-visible:ring-ring/50 focus-visible:ring-[3px] aria-invalid:ring-destructive/20 dark:aria-invalid:ring-destructive/40 aria-invalid:border-destructive bg-primary text-primary-foreground shadow-xs hover:bg-primary/90 hover:text-primary-foreground h-7 gap-1 rounded-[min(var(--radius-md),12px)] px-2.5 text-[0.8rem] in-data-[slot=button-group]:rounded-lg has-data-[icon=inline-end]:pr-1.5 has-data-[icon=inline-start]:pl-1.5 [&amp;_svg:not([class*='size-'])]:size-3.5"
+    >
+      Accept
+    </button>
+  </div>
+</div>
+`;
+
+exports[`Components/Banner CookieLocalized smoke-test 1`] = `
+<div class="fixed bottom-0 left-0 right-0 z-50 flex items-center justify-between gap-4 border-t bg-background px-6 py-4 shadow-lg motion-safe:animate-in motion-safe:slide-in-from-bottom-2 motion-safe:duration-200">
+  <p class="min-w-0 text-sm text-foreground">
+    Utilizamos cookies para melhorar a sua experiência.
+  </p>
+  <div class="flex shrink-0 gap-2">
+    <button data-slot="button"
+            class="inline-flex items-center justify-center whitespace-nowrap font-medium transition-[color,box-shadow] disabled:pointer-events-none disabled:opacity-50 [&amp;_svg]:pointer-events-none shrink-0 [&amp;_svg]:shrink-0 outline-none focus-visible:border-ring focus-visible:ring-ring/50 focus-visible:ring-[3px] aria-invalid:ring-destructive/20 dark:aria-invalid:ring-destructive/40 aria-invalid:border-destructive border bg-background shadow-xs hover:bg-accent dark:bg-input/30 dark:border-input dark:hover:bg-input/50 hover:text-accent-foreground h-7 gap-1 rounded-[min(var(--radius-md),12px)] px-2.5 text-[0.8rem] in-data-[slot=button-group]:rounded-lg has-data-[icon=inline-end]:pr-1.5 has-data-[icon=inline-start]:pl-1.5 [&amp;_svg:not([class*='size-'])]:size-3.5"
+    >
+      Recusar
+    </button>
+    <button data-slot="button"
+            class="inline-flex items-center justify-center whitespace-nowrap font-medium transition-[color,box-shadow] disabled:pointer-events-none disabled:opacity-50 [&amp;_svg]:pointer-events-none shrink-0 [&amp;_svg]:shrink-0 outline-none focus-visible:border-ring focus-visible:ring-ring/50 focus-visible:ring-[3px] aria-invalid:ring-destructive/20 dark:aria-invalid:ring-destructive/40 aria-invalid:border-destructive bg-primary text-primary-foreground shadow-xs hover:bg-primary/90 hover:text-primary-foreground h-7 gap-1 rounded-[min(var(--radius-md),12px)] px-2.5 text-[0.8rem] in-data-[slot=button-group]:rounded-lg has-data-[icon=inline-end]:pr-1.5 has-data-[icon=inline-start]:pl-1.5 [&amp;_svg:not([class*='size-'])]:size-3.5"
+    >
+      Aceitar
+    </button>
+  </div>
+</div>
+`;

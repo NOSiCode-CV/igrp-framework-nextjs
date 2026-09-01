@@ -1,0 +1,56 @@
+// Jest Snapshot v1, https://jestjs.io/docs/snapshot-testing
+
+exports[`Components/Menubar Default smoke-test 1`] = `
+<div class="p-6">
+  <div role="menubar"
+       data-slot="menubar"
+       class="bg-background flex h-9 items-center gap-1 rounded-md border p-1 shadow-xs"
+       tabindex="0"
+       data-orientation="horizontal"
+       style="outline: none;"
+  >
+    <button type="button"
+            role="menuitem"
+            id="radix-ID"
+            aria-haspopup="menu"
+            aria-expanded="false"
+            data-state="closed"
+            data-slot="menubar-trigger"
+            class="focus:bg-accent focus:text-accent-foreground data-[state=open]:bg-accent data-[state=open]:text-accent-foreground flex items-center rounded-sm px-2 py-1 text-sm font-medium outline-hidden select-none"
+            tabindex="-1"
+            data-orientation="horizontal"
+            data-radix-id""
+    >
+      File
+    </button>
+    <button type="button"
+            role="menuitem"
+            id="radix-ID"
+            aria-haspopup="menu"
+            aria-expanded="false"
+            data-state="closed"
+            data-slot="menubar-trigger"
+            class="focus:bg-accent focus:text-accent-foreground data-[state=open]:bg-accent data-[state=open]:text-accent-foreground flex items-center rounded-sm px-2 py-1 text-sm font-medium outline-hidden select-none"
+            tabindex="-1"
+            data-orientation="horizontal"
+            data-radix-id""
+    >
+      Edit
+    </button>
+    <button type="button"
+            role="menuitem"
+            id="radix-ID"
+            aria-haspopup="menu"
+            aria-expanded="false"
+            data-state="closed"
+            data-slot="menubar-trigger"
+            class="focus:bg-accent focus:text-accent-foreground data-[state=open]:bg-accent data-[state=open]:text-accent-foreground flex items-center rounded-sm px-2 py-1 text-sm font-medium outline-hidden select-none"
+            tabindex="-1"
+            data-orientation="horizontal"
+            data-radix-id""
+    >
+      View
+    </button>
+  </div>
+</div>
+`;

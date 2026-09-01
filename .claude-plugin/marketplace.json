@@ -1,0 +1,24 @@
+{
+  "$schema": "https://json.schemastore.org/claude-code-marketplace.json",
+  "name": "nosi",
+  "description": "NOSi-internal Claude Code marketplace — hosts the umbrella IGRP plugin and any future team-authored plugins.",
+  "owner": {
+    "name": "NOSi IGRP Framework Team",
+    "email": "framework@nosi.cv"
+  },
+  "metadata": {
+    "pluginRoot": "./plugins"
+  },
+  "plugins": [
+    {
+      "name": "igrp",
+      "source": "./plugins/igrp",
+      "displayName": "IGRP Framework Skills",
+      "description": "Umbrella plugin for IGRP framework skills. Currently ships the design-system usage skill; future additions (framework-next, next-auth, etc.) will live alongside it under the same /igrp:<skill> namespace.",
+      "category": "framework",
+      "tags": ["igrp", "nosi", "design-system", "react", "nextjs", "shadcn", "tailwind"],
+      "homepage": "http://git.nosi.cv/igrp-3_0/igrp-framework-frontend/igrp-framework-nextjs/-/tree/dev/plugins/igrp",
+      "repository": "http://git.nosi.cv/igrp-3_0/igrp-framework-frontend/igrp-framework-nextjs"
+    }
+  ]
+}

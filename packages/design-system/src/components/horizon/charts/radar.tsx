@@ -1,13 +1,11 @@
-'use client';
+"use client"
 
-import { Suspense, lazy } from 'react';
+import { Suspense, lazy } from "react"
 
-import { cn } from '../../../lib/utils';
-import type { IGRPRadarChartProps } from './radar-chart-inner';
+import { cn } from "../../../lib/utils"
+import type { IGRPRadarChartProps } from "./radar-chart-inner"
 
-const IGRPRadarChartLazy = lazy(() =>
-  import('./radar-chart-inner').then((m) => ({ default: m.default })),
-);
+const IGRPRadarChartLazy = lazy(() => import("./radar-chart-inner").then((m) => ({ default: m.default })))
 
 /**
  * Radar/spider chart with polar grid and configurable axes.
@@ -19,14 +17,14 @@ function IGRPRadarChart(props: IGRPRadarChartProps) {
       fallback={
         <div
           className={cn(
-            'w-full overflow-hidden animate-pulse rounded-lg bg-muted min-h-[200px] aspect-video',
+            "w-full overflow-hidden animate-pulse motion-reduce:animate-none rounded-lg bg-muted min-h-[200px] aspect-video",
           )}
         />
       }
     >
       <IGRPRadarChartLazy {...props} />
     </Suspense>
-  );
+  )
 }
 
-export { IGRPRadarChart, type IGRPRadarChartProps };
+export { IGRPRadarChart, type IGRPRadarChartProps }

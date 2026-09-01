@@ -1,13 +1,14 @@
 'use client';
 
-import { Fragment, useMemo, useRef, useEffect, useState } from 'react';
+import { Fragment, useMemo, useRef } from 'react';
+import { useBreadcrumbOverflow } from '../../hooks/use-breadcrumb-overflow';
 import Link from 'next/link';
-import { usePathname } from 'next/navigation';
+import { useSelectedLayoutSegments } from 'next/navigation';
 import {
   IGRPIcon,
   Breadcrumb,
   BreadcrumbList,
-  BreadcrumbItem,
+  BreadcrumbItem as BreadcrumbListItem,
   BreadcrumbLink,
   BreadcrumbPage,
   BreadcrumbSeparator,
@@ -20,7 +21,11 @@ import {
   cn,
 } from '@igrp/igrp-framework-react-design-system';
 
-interface BreadcrumbItem {
+/**
+ * A single breadcrumb segment. Exported so server layouts can type their
+ * item arrays without importing from deep paths.
+ */
+export interface BreadcrumbItem {
   label: string;
   href: string;
 }
@@ -28,27 +33,44 @@ interface BreadcrumbItem {
 interface IGRPTemplateBreadcrumbsProps {
   className?: string;
   /**
-   * Custom labels for specific path segments.
-   * Key should be the path segment (e.g., 'users' or '/users/123')
+   * Pre-resolved breadcrumb items. When provided, all URL logic is skipped.
+   * Pass from a server component that has access to route params and can fetch
+   * data. The home item is always rendered by the component — do not include it.
    */
-  customLabels?: Record<string, string>;
+  items?: BreadcrumbItem[];
   /**
-   * Custom home label. Defaults to 'Home'
+   * App-level route → label map. Keys are full hrefs.
+   * Define once in a shared config and import the same object in generateMetadata
+   * for a single source of truth between page titles and breadcrumb labels.
+   *
+   * @example
+   * const ROUTE_LABELS = {
+   *   '/settings': 'Settings',
+   *   '/settings/users': 'User Management',
+   * }
+   *
+   * Define this object once at module scope (or memoize it). Passing a fresh
+   * object literal on every render re-runs the breadcrumb computation.
    */
+  routeLabels?: Record<string, string>;
+  /**
+   * Per-instance escape hatch for segments not covered by routeLabels.
+   * Return undefined to fall through to auto-formatting.
+   * Wrap in useCallback to avoid triggering a recompute on every parent render.
+   */
+  formatLabel?: (segment: string, href: string) => string | undefined;
+  /** Screen-reader label for the home icon. Defaults to 'Home' */
   homeLabel?: string;
-  /**
-   * Custom home href. Defaults to '/'
-   */
+  /** Home link destination. Defaults to '/' */
   homeHref?: string;
-  /**
-   * Maximum number of items to show before collapsing. Defaults to 4
-   */
+  /** Collapse threshold (item count). Defaults to 4 */
   maxItems?: number;
-  /**
-   * Number of items to show at the end when collapsed. Defaults to 1
-   */
+  /** Items visible after the ellipsis when collapsed. Defaults to 1 */
   itemsAfterCollapse?: number;
 }
+
+/** Stable reference so the default does not bust the useMemo dependency every render. */
+const EMPTY_ROUTE_LABELS: Record<string, string> = {};
 
 function formatSegmentLabel(segment: string): string {
   return segment
@@ -61,78 +83,48 @@ function formatSegmentLabel(segment: string): string {
 
 function IGRPTemplateBreadcrumbs({
   className,
-  customLabels = {},
+  items,
+  routeLabels = EMPTY_ROUTE_LABELS,
+  formatLabel,
   homeLabel = 'Home',
   homeHref = '/',
   maxItems = 4,
   itemsAfterCollapse = 1,
 }: IGRPTemplateBreadcrumbsProps) {
-  const pathname = usePathname();
+  // Always call — hooks cannot be conditional. Ignored when items is provided.
+  // Under Next `cacheComponents`/PPR this becomes a DYNAMIC read: if a consumer
+  // enables it and this renders inside a statically-cached shell, wrap the
+  // component in <Suspense> (a fallback can reuse controlled mode with items={[]}).
+  const segments = useSelectedLayoutSegments();
   const isMobile = useIsMobile();
   const containerRef = useRef<HTMLOListElement>(null);
-  const [isOverflowing, setIsOverflowing] = useState(false);
 
   const breadcrumbItems = useMemo<BreadcrumbItem[]>(() => {
-    if (!pathname) {
+    // Controlled mode: items provided — skip all URL logic
+    if (items !== undefined) {
+      return items;
+    }
+
+    // Auto-derive mode: use useSelectedLayoutSegments()
+    // Filter route groups like (igrp) and parallel route slots like @slot
+    const filteredSegments = segments.filter(
+      (segment) => !/^\(.*\)$/.test(segment) && !segment.startsWith('@'),
+    );
+
+    if (filteredSegments.length === 0) {
       return [];
     }
 
-    const cleanPathname = pathname.split('?')[0]?.split('#')[0] ?? '';
-
-    if (!cleanPathname || cleanPathname === homeHref) {
-      return [];
-    }
-
-    const segments = cleanPathname.split('/').filter(Boolean);
-
-    return segments.map((segment, index) => {
-      const href = `/${segments.slice(0, index + 1).join('/')}`;
-      const label = customLabels[segment] ?? customLabels[href] ?? formatSegmentLabel(segment);
+    return filteredSegments.map((segment, index) => {
+      const href = `/${filteredSegments.slice(0, index + 1).join('/')}`;
+      const label =
+        routeLabels[href] ?? formatLabel?.(segment, href) ?? formatSegmentLabel(segment);
 
       return { label, href };
     });
-  }, [pathname, homeHref, customLabels]);
+  }, [items, segments, routeLabels, formatLabel]);
 
-  // Determine if we should check for overflow (only when not already collapsed)
-  const shouldCheckOverflow = breadcrumbItems.length <= maxItems && !isMobile;
-
-  // Check for overflow
-  useEffect(() => {
-    if (!shouldCheckOverflow) {
-      setIsOverflowing(false);
-      return;
-    }
-
-    const checkOverflow = () => {
-      if (!containerRef.current) return;
-
-      const container = containerRef.current;
-      // Add a small threshold to account for rounding differences
-      const isOverflow = container.scrollWidth > container.clientWidth + 1;
-      setIsOverflowing(isOverflow);
-    };
-
-    // Use requestAnimationFrame to ensure DOM is rendered
-    const timeoutId = setTimeout(() => {
-      checkOverflow();
-    }, 0);
-
-    // Use ResizeObserver to detect size changes
-    const resizeObserver = new ResizeObserver(() => {
-      if (shouldCheckOverflow) {
-        checkOverflow();
-      }
-    });
-
-    if (containerRef.current) {
-      resizeObserver.observe(containerRef.current);
-    }
-
-    return () => {
-      clearTimeout(timeoutId);
-      resizeObserver.disconnect();
-    };
-  }, [breadcrumbItems, shouldCheckOverflow]);
+  const isOverflowing = useBreadcrumbOverflow(containerRef);
 
   if (breadcrumbItems.length === 0) {
     return null;
@@ -147,7 +139,7 @@ function IGRPTemplateBreadcrumbs({
       <BreadcrumbSeparator>
         <IGRPIcon iconName="ChevronRight" className={cn('h-3 w-3')} strokeWidth={2} />
       </BreadcrumbSeparator>
-      <BreadcrumbItem>
+      <BreadcrumbListItem>
         {isLast ? (
           <BreadcrumbPage className={cn('text-xs')}>{item.label}</BreadcrumbPage>
         ) : (
@@ -157,7 +149,7 @@ function IGRPTemplateBreadcrumbs({
             </Link>
           </BreadcrumbLink>
         )}
-      </BreadcrumbItem>
+      </BreadcrumbListItem>
     </Fragment>
   );
 
@@ -167,7 +159,7 @@ function IGRPTemplateBreadcrumbs({
         ref={containerRef}
         className={cn('gap-0.5 sm:gap-0.5 text-xs overflow-hidden')}
       >
-        <BreadcrumbItem>
+        <BreadcrumbListItem>
           <BreadcrumbLink asChild>
             <Link
               href={homeHref}
@@ -179,14 +171,14 @@ function IGRPTemplateBreadcrumbs({
               <span className={cn('sr-only')}>{homeLabel}</span>
             </Link>
           </BreadcrumbLink>
-        </BreadcrumbItem>
+        </BreadcrumbListItem>
 
         {shouldCollapse && middleItems.length > 0 ? (
           <>
             <BreadcrumbSeparator>
               <IGRPIcon iconName="ChevronRight" className={cn('h-3 w-3')} strokeWidth={2} />
             </BreadcrumbSeparator>
-            <BreadcrumbItem>
+            <BreadcrumbListItem>
               <DropdownMenu>
                 <DropdownMenuTrigger className={cn('flex items-center gap-1 focus:outline-none')}>
                   <BreadcrumbEllipsis />
@@ -202,7 +194,7 @@ function IGRPTemplateBreadcrumbs({
                   ))}
                 </DropdownMenuContent>
               </DropdownMenu>
-            </BreadcrumbItem>
+            </BreadcrumbListItem>
             {lastItems.map((item, index) => {
               const isLast = index === lastItems.length - 1;
               return renderBreadcrumbItem(item, isLast, `collapsed-${item.href}-${index}`);
@@ -211,7 +203,7 @@ function IGRPTemplateBreadcrumbs({
         ) : (
           breadcrumbItems.map((item, index) => {
             const isLast = index === breadcrumbItems.length - 1;
-            return renderBreadcrumbItem(item, isLast, item.href);
+            return renderBreadcrumbItem(item, isLast, `${item.href}-${index}`);
           })
         )}
       </BreadcrumbList>

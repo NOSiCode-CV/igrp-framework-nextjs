@@ -1,3 +1,5 @@
+'use client';
+
 import Link from 'next/link';
 import type { IGRPUserArgs } from '@igrp/framework-next-types';
 import {
@@ -16,7 +18,6 @@ import {
   igrpGetInitials,
   IGRPIcon,
 } from '@igrp/igrp-framework-react-design-system';
-import { getLocationOriginURL } from '../../lib/utils';
 
 interface IGRPTemplateNavUserProps {
   user?: IGRPUserArgs;
@@ -24,6 +25,7 @@ interface IGRPTemplateNavUserProps {
   userProfileUrl?: string;
   notificationsUrl?: string;
   settingsUrl?: string;
+  showNotifications?: boolean;
 }
 
 function IGRPTemplateNavUser({
@@ -32,6 +34,7 @@ function IGRPTemplateNavUser({
   userProfileUrl,
   notificationsUrl,
   settingsUrl,
+  showNotifications = true,
 }: IGRPTemplateNavUserProps) {
   const { isMobile } = useIGRPSidebar();
 
@@ -46,17 +49,17 @@ function IGRPTemplateNavUser({
 
   const handleUserUrl = () => {
     if (userProfileUrl) return userProfileUrl;
-    return `${getLocationOriginURL()}/profile`;
+    return '/profile';
   };
 
   const handleNotificationsUrl = () => {
     if (notificationsUrl) return notificationsUrl;
-    return `${getLocationOriginURL()}/notifications`;
+    return '/notifications';
   };
 
   const handleSettingsUrl = () => {
     if (settingsUrl) return settingsUrl;
-    return `${getLocationOriginURL()}/setting`;
+    return '/setting';
   };
 
   return (
@@ -65,45 +68,46 @@ function IGRPTemplateNavUser({
         <DropdownMenu>
           <DropdownMenuTrigger asChild>
             <SidebarMenuButton
-              className='group data-[state=open]:bg-sidebar-accent data-[state=open]:text-sidebar-accent-foreground'
+              className="group data-[state=open]:bg-sidebar-accent data-[state=open]:text-sidebar-accent-foreground"
               tooltip={user.email}
               size="lg"
             >
               <IGRPUserAvatar
+                image={user.picture}
                 alt={user.name}
                 fallbackContent={user && igrpGetInitials(user?.name)}
                 fallbackClass="text-xs"
-                className='shadow-md'
+                className="shadow-md"
               />
               {!isHeader && (
                 <>
-                  <div className='grid flex-1 text-left text-sm leading-tight'>
-                    <span className='truncate font-semibold'>{user.name || 'N/A'}</span>
-                    <span className='truncate text-xs'>{user.email}</span>
+                  <div className="grid flex-1 text-left text-sm leading-tight">
+                    <span className="truncate font-semibold">{user.name || 'N/A'}</span>
+                    <span className="truncate text-xs">{user.email}</span>
                   </div>
-                  <IGRPIcon iconName="ChevronsUpDown" className='ml-auto' />
+                  <IGRPIcon iconName="ChevronsUpDown" className="ml-auto" />
                 </>
               )}
             </SidebarMenuButton>
           </DropdownMenuTrigger>
 
           <DropdownMenuContent
-            className='min-w-56 rounded-lg'
+            className="min-w-56 rounded-lg"
             side={renderMobile()}
             align="end"
             sideOffset={4}
           >
-            <DropdownMenuLabel className='font-normal'>
-              <div className='flex flex-col space-y-1'>
-                <p className='text-sm font-medium leading-none'>{user.name}</p>
-                <p className='text-xs leading-none text-muted-foreground'>{user.email}</p>
+            <DropdownMenuLabel className="font-normal">
+              <div className="flex flex-col space-y-1">
+                <p className="text-sm font-medium leading-none">{user.name}</p>
+                <p className="text-xs leading-none text-muted-foreground">{user.email}</p>
               </div>
             </DropdownMenuLabel>
             <DropdownMenuSeparator />
 
             <DropdownMenuItem
               asChild
-              className='cursor-pointer hover:bg-primary! hover:text-primary-foreground!'
+              className="cursor-pointer hover:bg-primary! hover:text-primary-foreground!"
             >
               <Link href={handleUserUrl()}>
                 <IGRPIcon iconName="User" className={iconClassName} />
@@ -112,16 +116,20 @@ function IGRPTemplateNavUser({
             </DropdownMenuItem>
             <DropdownMenuSeparator />
 
-            <DropdownMenuItem
-              asChild
-              className='cursor-pointer hover:bg-primary! hover:text-primary-foreground!'
-            >
-              <Link href={handleNotificationsUrl()}>
-                <IGRPIcon iconName="Bell" className='mr-1 hover:text-primary-foreground!' />
-                <span>Notifications</span>
-              </Link>
-            </DropdownMenuItem>
-            <DropdownMenuSeparator />
+            {showNotifications && (
+              <>
+                <DropdownMenuItem
+                  asChild
+                  className="cursor-pointer hover:bg-primary! hover:text-primary-foreground!"
+                >
+                  <Link href={handleNotificationsUrl()}>
+                    <IGRPIcon iconName="Bell" className="mr-1 hover:text-primary-foreground!" />
+                    <span>Notifications</span>
+                  </Link>
+                </DropdownMenuItem>
+                <DropdownMenuSeparator />
+              </>
+            )}
 
             {!isHeader && (
               <DropdownMenuItem
@@ -129,10 +137,7 @@ function IGRPTemplateNavUser({
                 className={cn('cursor-pointer hover:bg-primary! hover:text-primary-foreground!')}
               >
                 <Link href={handleSettingsUrl()}>
-                  <IGRPIcon
-                    iconName="Settings"
-                    className='mr-1 hover:text-primary-foreground!'
-                  />
+                  <IGRPIcon iconName="Settings" className="mr-1 hover:text-primary-foreground!" />
                   <span>Settings</span>
                 </Link>
               </DropdownMenuItem>
@@ -142,7 +147,7 @@ function IGRPTemplateNavUser({
 
             <DropdownMenuItem
               asChild
-              className='cursor-pointer hover:bg-primary! hover:text-primary-foreground!'
+              className="cursor-pointer hover:bg-primary! hover:text-primary-foreground!"
             >
               <Link href="/logout">
                 <IGRPIcon iconName="LogOut" className={iconClassName} />

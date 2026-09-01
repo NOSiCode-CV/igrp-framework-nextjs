@@ -27,7 +27,7 @@ import {
   SidebarSeparator as IGRPSidebarSeparator,
   SidebarTrigger as IGRPSidebarTrigger,
   useSidebar as useIGRPSidebar,
-} from '../ui/sidebar';
+} from "../primitives/sidebar"
 
 export {
   IGRPSidebarProvider,
@@ -55,4 +55,4 @@ export {
   IGRPSidebarMenuSubButton,
   // eslint-disable-next-line react-refresh/only-export-components
   useIGRPSidebar,
-};
+}

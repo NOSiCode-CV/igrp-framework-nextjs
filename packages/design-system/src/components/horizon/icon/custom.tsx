@@ -1,4 +1,4 @@
-'use client';
+"use client"
 
 /** Small circular icon (4x4). */
 function IGRPCircleFull({ className }: { className?: string }) {
@@ -14,7 +14,7 @@ function IGRPCircleFull({ className }: { className?: string }) {
     >
       <circle cx="4" cy="4" r="4" />
     </svg>
-  );
+  )
 }
 
-export { IGRPCircleFull };
+export { IGRPCircleFull }

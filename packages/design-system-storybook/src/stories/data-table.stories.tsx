@@ -15,6 +15,8 @@ import {
   type ColumnDef,
   type IGRPDataTableProps,
 } from '@igrp/igrp-framework-react-design-system';
+import { useReducer } from 'react';
+import { expect, userEvent, waitFor, within } from 'storybook/test';
 
 type UserRow = {
   id: number;
@@ -291,4 +293,47 @@ export const WithExpandableRows: Story = {
       <IGRPDataTable {...args} />
     </div>
   ),
+};
+
+/**
+ * Regression guard for R2 P0 #1: an unrelated parent re-render must not rebuild
+ * the table's column model. We snapshot the rendered <th> cells, bump an
+ * unrelated counter in the parent (forcing IGRPDataTable to re-render with the
+ * SAME `columns`/`data` references), and assert the header markup is unchanged.
+ * Before the useMemo fix, allColumns/filterDescriptors/the column helper were
+ * rebuilt every render and TanStack reset its column model.
+ */
+export const ColumnModelStable: Story = {
+  args: { data: rows, columns },
+  render: (args) => {
+    const [count, bump] = useReducer((n: number) => n + 1, 0);
+    return (
+      <div className="mx-auto w-full max-w-7xl p-4">
+        <button type="button" data-testid="bump" onClick={bump}>
+          unrelated re-render: {count}
+        </button>
+        <IGRPDataTable {...args} />
+      </div>
+    );
+  },
+  play: async ({ canvasElement, step }) => {
+    const canvas = within(canvasElement);
+
+    const headerText = async () => {
+      const cells = await canvas.findAllByRole('columnheader');
+      return cells.map((c) => c.textContent).join('|');
+    };
+
+    const before = await headerText();
+    expect(before).toContain('Name');
+
+    await step('force an unrelated parent re-render', async () => {
+      await userEvent.click(canvas.getByTestId('bump'));
+      await waitFor(() => expect(canvas.getByTestId('bump')).toHaveTextContent('1'));
+    });
+
+    const after = await headerText();
+    // Identical header markup ⇒ the column model was not rebuilt on the parent re-render.
+    expect(after).toBe(before);
+  },
 };

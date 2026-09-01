@@ -1,6 +1,6 @@
 'use client';
 
-import { createContext, useContext, useEffect, useState } from 'react';
+import { createContext, useContext, useEffect, useMemo, useState } from 'react';
 
 const COOKIE_NAME = 'igrp_active_theme';
 const DEFAULT_THEME = 'default';
@@ -41,11 +41,9 @@ function IGRPActiveThemeProvider({ children, initialTheme }: IGRPActiveThemeProv
     }
   }, [activeTheme]);
 
-  return (
-    <ThemeContext.Provider value={{ activeTheme, setActiveTheme }}>
-      {children}
-    </ThemeContext.Provider>
-  );
+  const value = useMemo(() => ({ activeTheme, setActiveTheme }), [activeTheme]);
+
+  return <ThemeContext.Provider value={value}>{children}</ThemeContext.Provider>;
 }
 
 export function useIGRPThemeConfig() {

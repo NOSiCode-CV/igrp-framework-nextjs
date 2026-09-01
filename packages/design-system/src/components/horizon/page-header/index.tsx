@@ -1,74 +1,74 @@
-'use client';
+"use client"
 
-import { type VariantProps } from 'class-variance-authority';
-import { useId } from 'react';
+import { type VariantProps } from "class-variance-authority"
+import { useId } from "react"
 
-import { IGRPPageHeaderBackButton } from './back-button';
-import type { IGRPIconName } from '../icon';
-import { IGRPHeadline, igrpHeadlineVariants } from '../typography/headline';
-import { cn } from '../../../lib/utils';
-import { type IGRPBaseAttributes } from '../../../types';
+import { IGRPPageHeaderBackButton } from "./back-button"
+import type { IGRPIconName } from "../icon"
+import { IGRPHeadline, igrpHeadlineVariants } from "../typography/headline"
+import { cn } from "../../../lib/utils"
+import { type IGRPBaseAttributes } from "../../../types"
 
 /**
  * Props for the IGRPPageHeader component.
  * @see IGRPPageHeader
  */
-interface IGRPPageHeaderProps extends Pick<IGRPBaseAttributes, 'name'> {
+interface IGRPPageHeaderProps extends Pick<IGRPBaseAttributes, "name"> {
   /** Page title. */
-  title: string;
+  title: string
   /** Optional description. */
-  description?: string;
+  description?: string
   /** Headline variant. */
-  variant?: VariantProps<typeof igrpHeadlineVariants>['variant'];
+  variant?: VariantProps<typeof igrpHeadlineVariants>["variant"]
   /** Additional CSS classes. */
-  className?: string;
+  className?: string
   /** CSS classes for the headline. */
-  headlineClassName?: string;
+  headlineClassName?: string
   /** Right-side content (e.g. actions). */
-  children?: React.ReactNode;
+  children?: React.ReactNode
   /** Stick to top when scrolling. */
-  isSticky?: boolean;
+  isSticky?: boolean
   /** Show back button. */
-  showBackButton?: boolean;
+  showBackButton?: boolean
   /** URL for back button (link mode). */
-  urlBackButton?: string;
+  urlBackButton?: string
   /** Back button icon. */
-  iconBackButton?: IGRPIconName | string;
+  iconBackButton?: IGRPIconName | string
   /** Back button variant. */
-  backButtonVariant?: React.ComponentProps<typeof IGRPPageHeaderBackButton>['variant'];
+  backButtonVariant?: React.ComponentProps<typeof IGRPPageHeaderBackButton>["variant"]
   /** Back button size. */
-  backButtonSize?: React.ComponentProps<typeof IGRPPageHeaderBackButton>['size'];
+  backButtonSize?: React.ComponentProps<typeof IGRPPageHeaderBackButton>["size"]
   /** Back button aria-label. */
-  backButtonAriaLabel?: string;
+  backButtonAriaLabel?: string
   /** Show text on back button. */
-  backButtonShowText?: boolean;
+  backButtonShowText?: boolean
   /** Back button text. */
-  backButtonText?: string;
+  backButtonText?: string
   /** CSS classes for back button. */
-  backButtonClassName?: string;
+  backButtonClassName?: string
   /** Use browser history back. */
-  backButtonUseBrowserBack?: boolean;
+  backButtonUseBrowserBack?: boolean
   /** Custom back button click handler. */
-  backButtonOnClick?: React.ComponentProps<typeof IGRPPageHeaderBackButton>['onClick'];
+  backButtonOnClick?: React.ComponentProps<typeof IGRPPageHeaderBackButton>["onClick"]
   /** HTML id attribute. */
-  id?: string;
-  headlineContentClassName?: string;
-  pageHeaderContentClassName?: string;
+  id?: string
+  headlineContentClassName?: string
+  pageHeaderContentClassName?: string
 }
 
 /** @internal */
 type BackButtonProps = {
-  iconBackButton?: IGRPIconName | string;
-  backButtonVariant?: React.ComponentProps<typeof IGRPPageHeaderBackButton>['variant'];
-  backButtonSize?: React.ComponentProps<typeof IGRPPageHeaderBackButton>['size'];
-  backButtonAriaLabel?: string;
-  backButtonShowText?: boolean;
-  backButtonText?: string;
-  backButtonClassName?: string;
-  urlBackButton?: string;
-  backButtonUseBrowserBack?: boolean;
-  backButtonOnClick?: React.ComponentProps<typeof IGRPPageHeaderBackButton>['onClick'];
-};
+  iconBackButton?: IGRPIconName | string
+  backButtonVariant?: React.ComponentProps<typeof IGRPPageHeaderBackButton>["variant"]
+  backButtonSize?: React.ComponentProps<typeof IGRPPageHeaderBackButton>["size"]
+  backButtonAriaLabel?: string
+  backButtonShowText?: boolean
+  backButtonText?: string
+  backButtonClassName?: string
+  urlBackButton?: string
+  backButtonUseBrowserBack?: boolean
+  backButtonOnClick?: React.ComponentProps<typeof IGRPPageHeaderBackButton>["onClick"]
+}
 
 function renderBackButton({
   iconBackButton,
@@ -90,22 +90,20 @@ function renderBackButton({
     showText: backButtonShowText,
     text: backButtonText,
     className: backButtonClassName,
-  };
+  }
 
   // Browser back mode - url must not be passed
   if (backButtonUseBrowserBack) {
-    return (
-      <IGRPPageHeaderBackButton {...baseProps} useBrowserBack={true} onClick={backButtonOnClick} />
-    );
+    return <IGRPPageHeaderBackButton {...baseProps} useBrowserBack={true} onClick={backButtonOnClick} />
   }
 
   // Custom onClick handler mode - url must not be passed
   if (backButtonOnClick) {
-    return <IGRPPageHeaderBackButton {...baseProps} onClick={backButtonOnClick} />;
+    return <IGRPPageHeaderBackButton {...baseProps} onClick={backButtonOnClick} />
   }
 
   // Link navigation mode (default) - onClick must not be passed
-  return <IGRPPageHeaderBackButton {...baseProps} url={urlBackButton} />;
+  return <IGRPPageHeaderBackButton {...baseProps} url={urlBackButton} />
 }
 
 /**
@@ -135,19 +133,19 @@ function IGRPPageHeader({
   backButtonOnClick,
   pageHeaderContentClassName,
 }: IGRPPageHeaderProps) {
-  const _id = useId();
-  const ref = name ?? id ?? _id;
+  const _id = useId()
+  const ref = name ?? id ?? _id
 
   return (
     <div
       className={cn(
-        'flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4',
-        isSticky && 'sticky top-0 z-10 bg-background pt-6 pb-4',
+        "flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4",
+        isSticky && "sticky top-0 z-10 bg-background pt-6 pb-4",
         className,
       )}
       id={ref}
     >
-      <div className={cn('flex items-center gap-2', pageHeaderContentClassName)}>
+      <div className={cn("flex items-center gap-2", pageHeaderContentClassName)}>
         {showBackButton &&
           renderBackButton({
             iconBackButton,
@@ -174,7 +172,7 @@ function IGRPPageHeader({
 
       {children}
     </div>
-  );
+  )
 }
 
-export { IGRPPageHeader, type IGRPPageHeaderProps };
+export { IGRPPageHeader, type IGRPPageHeaderProps }

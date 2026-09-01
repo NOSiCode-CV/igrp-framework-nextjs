@@ -1,0 +1,226 @@
+// Jest Snapshot v1, https://jestjs.io/docs/snapshot-testing
+
+exports[`Components/Alert Default smoke-test 1`] = `
+<div class="container mx-auto px-4 py-10">
+  <div role="status"
+       aria-live="polite"
+       class="rounded-md border px-4 py-3 text-info bg-info/10 border-info/20"
+       id="_r_ID_"
+  >
+    <div class="flex gap-3 items-baseline">
+      <svg xmlns="http://www.w3.org/2000/svg"
+           width="16"
+           height="16"
+           viewbox="0 0 24 24"
+           fill="none"
+           stroke="currentColor"
+           stroke-width="2"
+           stroke-linecap="round"
+           stroke-linejoin="round"
+           class="lucide lucide-info shrink-0 size-5 text-info"
+           aria-hidden="true"
+           id="Info"
+      >
+        <circle cx="12"
+                cy="12"
+                r="10"
+        >
+        </circle>
+        <path d="M12 16v-4">
+        </path>
+        <path d="M12 8h.01">
+        </path>
+      </svg>
+      <div class="flex grow justify-between gap-3">
+        <div class="grow space-y-1">
+          <p class="text-sm font-medium">
+            Password does not meet requirements:
+          </p>
+          <ul class="list-inside list-disc text-sm opacity-80">
+            <li>
+              Minimum 8 characters
+            </li>
+            <li>
+              Inlcude a special character
+            </li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+`;
+
+exports[`Components/Alert NoColors smoke-test 1`] = `
+<div class="container mx-auto px-4 py-10">
+  <div role="alert"
+       aria-live="assertive"
+       class="rounded-md border px-4 py-3 text-destructive border-transparent bg-transparent"
+       id="_r_ID_"
+  >
+    <div class="flex gap-3 items-baseline">
+      <svg xmlns="http://www.w3.org/2000/svg"
+           width="16"
+           height="16"
+           viewbox="0 0 24 24"
+           fill="none"
+           stroke="currentColor"
+           stroke-width="2"
+           stroke-linecap="round"
+           stroke-linejoin="round"
+           class="lucide lucide-circle-alert shrink-0 size-5"
+           aria-hidden="true"
+           id="CircleAlert"
+      >
+        <circle cx="12"
+                cy="12"
+                r="10"
+        >
+        </circle>
+        <line x1="12"
+              x2="12"
+              y1="8"
+              y2="12"
+        >
+        </line>
+        <line x1="12"
+              x2="12.01"
+              y1="16"
+              y2="16"
+        >
+        </line>
+      </svg>
+      <div class="flex grow justify-between gap-3">
+        <div class="grow space-y-1">
+          <p>
+            This alert has no colored text, background, or border.
+          </p>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+`;
+
+exports[`Components/Alert SubtleWarning smoke-test 1`] = `
+<div class="container mx-auto px-4 py-10">
+  <div role="status"
+       aria-live="polite"
+       class="rounded-md border px-4 py-3 text-warning bg-transparent border-warning/50"
+       id="_r_ID_"
+  >
+    <div class="flex gap-3 items-baseline">
+      <svg xmlns="http://www.w3.org/2000/svg"
+           width="24"
+           height="24"
+           viewbox="0 0 24 24"
+           fill="none"
+           stroke="currentColor"
+           stroke-width="2"
+           stroke-linecap="round"
+           stroke-linejoin="round"
+           class="lucide lucide-circle-alert text-destructive"
+           aria-hidden="true"
+      >
+        <circle cx="12"
+                cy="12"
+                r="10"
+        >
+        </circle>
+        <line x1="12"
+              x2="12"
+              y1="8"
+              y2="12"
+        >
+        </line>
+        <line x1="12"
+              x2="12.01"
+              y1="16"
+              y2="16"
+        >
+        </line>
+      </svg>
+      <div class="flex grow justify-between gap-3">
+        <div class="grow space-y-1">
+          <p>
+            This is a
+            <strong>
+              subtle
+            </strong>
+            warning message.
+          </p>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+`;
+
+exports[`Components/Alert WithLink smoke-test 1`] = `
+<div class="container mx-auto px-4 py-10">
+  <div role="status"
+       aria-live="polite"
+       class="rounded-md border px-4 py-3 text-info-foreground bg-info border-info/50"
+       id="_r_ID_"
+  >
+    <div class="flex gap-3 items-baseline">
+      <svg xmlns="http://www.w3.org/2000/svg"
+           width="16"
+           height="16"
+           viewbox="0 0 24 24"
+           fill="none"
+           stroke="currentColor"
+           stroke-width="2"
+           stroke-linecap="round"
+           stroke-linejoin="round"
+           class="lucide lucide-info shrink-0 size-5 text-info-foreground"
+           aria-hidden="true"
+           id="Info"
+      >
+        <circle cx="12"
+                cy="12"
+                r="10"
+        >
+        </circle>
+        <path d="M12 16v-4">
+        </path>
+        <path d="M12 8h.01">
+        </path>
+      </svg>
+      <div class="flex grow justify-between gap-3">
+        <div class="grow space-y-1">
+          <p>
+            There is more information available on this topic.
+          </p>
+        </div>
+        <a href="#"
+           class="transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 text-base no-underline hover:underline underline-offset-3 text-info-foreground bg-info border-info/50"
+           id="_r_ID_"
+        >
+          <span class="group flex gap-1 items-center whitespace-nowrap flex-row-reverse">
+            <svg xmlns="http://www.w3.org/2000/svg"
+                 width="14"
+                 height="14"
+                 viewbox="0 0 24 24"
+                 fill="none"
+                 stroke="currentColor"
+                 stroke-width="2"
+                 stroke-linecap="round"
+                 stroke-linejoin="round"
+                 class="lucide lucide-arrow-right inline-flex transition-transform group-hover:translate-x-0.5"
+                 aria-hidden="true"
+                 id="ArrowRight"
+            >
+              <path d="M5 12h14">
+              </path>
+              <path d="m12 5 7 7-7 7">
+              </path>
+            </svg>
+            link
+          </span>
+        </a>
+      </div>
+    </div>
+  </div>
+</div>
+`;

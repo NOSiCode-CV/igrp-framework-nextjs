@@ -1,7 +1,9 @@
 import type { Meta, StoryFn, StoryObj } from '@storybook/nextjs-vite';
-import { IGRPDatePickerSingle } from '@igrp/igrp-framework-react-design-system';
+import { expect, within } from 'storybook/test';
+import { IGRPDatePickerSingle, IGRPForm, type IGRPFormHandle } from '@igrp/igrp-framework-react-design-system';
 import { useForm, FormProvider } from 'react-hook-form';
-import { useState } from 'react';
+import { useRef, useEffect, useState } from 'react';
+import { z } from 'zod';
 
 const meta: Meta<typeof IGRPDatePickerSingle> = {
   title: 'Components/Input/DatePicker/Single',
@@ -70,5 +72,59 @@ export const WithForm: Story = {
         </form>
       </FormProvider>
     );
+  },
+};
+
+/**
+ * Regression story: the date picker button must carry aria-invalid="true" and
+ * an aria-describedby pointing at the error message when the field is in error.
+ *
+ * NOTE: test:vitest runner is currently broken in this environment (pre-existing
+ * "Failed to initialize projects" issue). Build gate: `pnpm build:ds`.
+ */
+const DatePickerErrorA11ySchema = z.object({ birthDate: z.date({ required_error: 'Date is required' }) });
+
+const DatePickerErrorA11yTemplate: React.FC = () => {
+  const formRef = useRef<IGRPFormHandle<typeof DatePickerErrorA11ySchema>>(null);
+
+  useEffect(() => {
+    formRef.current?.setError('birthDate', { message: 'Date is required' });
+  }, []);
+
+  return (
+    <IGRPForm
+      schema={DatePickerErrorA11ySchema}
+      onSubmit={() => {}}
+      formRef={formRef}
+      gridClassName='space-y-4 w-80'
+    >
+      <IGRPDatePickerSingle
+        name='birthDate'
+        label='Date of Birth'
+        required
+      />
+    </IGRPForm>
+  );
+};
+
+export const DatePickerErrorA11y: Story = {
+  name: 'DatePickerErrorA11y',
+  render: () => <DatePickerErrorA11yTemplate />,
+  play: async ({ canvasElement, step }) => {
+    const canvas = within(canvasElement);
+
+    await step('date button carries aria-invalid when field has an error', async () => {
+      const button = canvas.getByRole('button', { name: /pick a date/i });
+      expect(button.getAttribute('aria-invalid')).toBe('true');
+    });
+
+    await step('date button aria-describedby resolves to the error message element', async () => {
+      const button = canvas.getByRole('button', { name: /pick a date/i });
+      const describedById = button.getAttribute('aria-describedby');
+      expect(describedById).toBeTruthy();
+      const messageEl = document.getElementById(describedById!);
+      expect(messageEl).not.toBeNull();
+      expect(messageEl?.textContent).toMatch(/required/i);
+    });
   },
 };

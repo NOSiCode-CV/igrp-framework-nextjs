@@ -1,0 +1,11 @@
+export { convert } from "./commands/convert.js";
+export { status } from "./commands/status.js";
+export { plan } from "./commands/plan.js";
+export { apply } from "./commands/apply.js";
+export { list } from "./commands/list.js";
+export { rollback } from "./commands/rollback.js";
+export { check } from "./commands/check.js";
+export { getManifest } from "./manifest.js";
+export { readLock, writeLock } from "./lock.js";
+export type { Manifest, MigrationEntry, MigrationStep, LockFile, LockEntry } from "./types.js";
+export { LegacyLockError } from "./types.js";

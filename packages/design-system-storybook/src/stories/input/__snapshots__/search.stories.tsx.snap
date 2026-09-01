@@ -1,0 +1,802 @@
+// Jest Snapshot v1, https://jestjs.io/docs/snapshot-testing
+
+exports[`Components/Input/Search Default smoke-test 1`] = `
+<div class="container my-10 mx-auto p-4 border rounded-lg shadow-sm">
+  <div class="*:not-first:mt-2">
+    <label data-slot="label"
+           class="flex items-center text-sm leading-none font-medium select-none group-data-[disabled=true]:pointer-events-none group-data-[disabled=true]:opacity-50 peer-disabled:cursor-not-allowed peer-disabled:opacity-50 gap-0.5"
+           for="search"
+    >
+      Search
+    </label>
+    <div class="relative py-2">
+      <input data-slot="input"
+             class="file:text-foreground placeholder:text-muted-foreground selection:bg-primary selection:text-primary-foreground dark:bg-input/30 border-input h-9 min-w-0 rounded-md border bg-transparent px-3 shadow-xs transition-[color,box-shadow] file:inline-flex file:h-7 file:border-0 file:bg-transparent file:text-sm file:font-medium disabled:pointer-events-none disabled:cursor-not-allowed disabled:opacity-50 md:text-sm focus-visible:border-ring focus-visible:ring-ring/50 focus-visible:ring-2 aria-invalid:ring-destructive/20 dark:aria-invalid:ring-destructive/40 aria-invalid:border-destructive [&amp;::-webkit-search-cancel-button]:appearance-none [&amp;::-webkit-search-decoration]:appearance-none [&amp;::-webkit-search-results-button]:appearance-none [&amp;::-webkit-search-results-decoration]:appearance-none peer py-3 text-sm outline-hidden flex w-full items-center ps-6.5 pe-9"
+             id="search"
+             aria-required="false"
+             aria-invalid="false"
+             placeholder="Type to search..."
+             type="search"
+             value
+             name="search"
+      >
+      <div class="text-muted-foreground/80 pointer-events-none absolute inset-y-0 inset-s-0 flex items-center justify-center ps-1.5 peer-disabled:opacity-50">
+        <svg xmlns="http://www.w3.org/2000/svg"
+             width="14"
+             height="14"
+             viewbox="0 0 24 24"
+             fill="none"
+             stroke="currentColor"
+             stroke-width="2"
+             stroke-linecap="round"
+             stroke-linejoin="round"
+             class="lucide lucide-search"
+             aria-hidden="true"
+             id="Search"
+        >
+          <path d="m21 21-4.34-4.34">
+          </path>
+          <circle cx="11"
+                  cy="11"
+                  r="8"
+          >
+          </circle>
+        </svg>
+      </div>
+      <button data-slot="button"
+              class="whitespace-nowrap text-sm font-medium disabled:pointer-events-none disabled:opacity-50 [&amp;_svg]:pointer-events-none [&amp;_svg:not([class*='size-'])]:size-4 shrink-0 [&amp;_svg]:shrink-0 focus-visible:border-ring focus-visible:ring-ring/50 aria-invalid:ring-destructive/20 dark:aria-invalid:ring-destructive/40 aria-invalid:border-destructive hover:bg-accent dark:hover:bg-accent/50 hover:text-accent-foreground h-9 px-2.5 has-data-[icon=inline-end]:pr-2 has-data-[icon=inline-start]:pl-2 absolute top-1/2 -translate-y-1/2 inset-e-0 flex items-center justify-center rounded-md transition-[color,box-shadow] outline-none z-10 focus-visible:ring-[3px] gap-0"
+              aria-label="Search here..."
+              type="button"
+              id="_r_ID_"
+      >
+        <svg xmlns="http://www.w3.org/2000/svg"
+             width="16"
+             height="16"
+             viewbox="0 0 24 24"
+             fill="none"
+             stroke="currentColor"
+             stroke-width="2"
+             stroke-linecap="round"
+             stroke-linejoin="round"
+             class="lucide lucide-arrow-right size-4"
+             aria-hidden="true"
+             id="ArrowRight"
+        >
+          <path d="M5 12h14">
+          </path>
+          <path d="m12 5 7 7-7 7">
+          </path>
+        </svg>
+        Search here...
+      </button>
+    </div>
+  </div>
+</div>
+`;
+
+exports[`Components/Input/Search Disabled smoke-test 1`] = `
+<div class="container my-10 mx-auto p-4 border rounded-lg shadow-sm">
+  <div class="*:not-first:mt-2">
+    <label data-slot="label"
+           class="flex items-center text-sm leading-none font-medium select-none group-data-[disabled=true]:pointer-events-none group-data-[disabled=true]:opacity-50 peer-disabled:cursor-not-allowed peer-disabled:opacity-50 gap-0.5"
+           for="search"
+    >
+      Search
+    </label>
+    <div class="relative py-2">
+      <input data-slot="input"
+             class="file:text-foreground placeholder:text-muted-foreground selection:bg-primary selection:text-primary-foreground dark:bg-input/30 border-input h-9 min-w-0 rounded-md border bg-transparent px-3 shadow-xs transition-[color,box-shadow] file:inline-flex file:h-7 file:border-0 file:bg-transparent file:text-sm file:font-medium disabled:pointer-events-none disabled:cursor-not-allowed disabled:opacity-50 md:text-sm focus-visible:border-ring focus-visible:ring-ring/50 focus-visible:ring-2 aria-invalid:ring-destructive/20 dark:aria-invalid:ring-destructive/40 aria-invalid:border-destructive [&amp;::-webkit-search-cancel-button]:appearance-none [&amp;::-webkit-search-decoration]:appearance-none [&amp;::-webkit-search-results-button]:appearance-none [&amp;::-webkit-search-results-decoration]:appearance-none peer py-3 text-sm outline-hidden flex w-full items-center ps-6.5 pe-9"
+             id="search"
+             aria-required="false"
+             aria-invalid="false"
+             disabled
+             placeholder="Search is disabled"
+             type="search"
+             value="locked search"
+             name="search"
+      >
+      <div class="text-muted-foreground/80 pointer-events-none absolute inset-y-0 inset-s-0 flex items-center justify-center ps-1.5 peer-disabled:opacity-50">
+        <svg xmlns="http://www.w3.org/2000/svg"
+             width="14"
+             height="14"
+             viewbox="0 0 24 24"
+             fill="none"
+             stroke="currentColor"
+             stroke-width="2"
+             stroke-linecap="round"
+             stroke-linejoin="round"
+             class="lucide lucide-search"
+             aria-hidden="true"
+             id="Search"
+        >
+          <path d="m21 21-4.34-4.34">
+          </path>
+          <circle cx="11"
+                  cy="11"
+                  r="8"
+          >
+          </circle>
+        </svg>
+      </div>
+      <button data-slot="button"
+              class="whitespace-nowrap text-sm font-medium disabled:pointer-events-none disabled:opacity-50 [&amp;_svg]:pointer-events-none [&amp;_svg:not([class*='size-'])]:size-4 shrink-0 [&amp;_svg]:shrink-0 focus-visible:border-ring focus-visible:ring-ring/50 aria-invalid:ring-destructive/20 dark:aria-invalid:ring-destructive/40 aria-invalid:border-destructive hover:bg-accent dark:hover:bg-accent/50 hover:text-accent-foreground h-9 px-2.5 has-data-[icon=inline-end]:pr-2 has-data-[icon=inline-start]:pl-2 absolute top-1/2 -translate-y-1/2 inset-e-0 flex items-center justify-center rounded-md transition-[color,box-shadow] outline-none z-10 focus-visible:ring-[3px] gap-0"
+              disabled
+              type="button"
+              id="_r_ID_"
+      >
+        <svg xmlns="http://www.w3.org/2000/svg"
+             width="16"
+             height="16"
+             viewbox="0 0 24 24"
+             fill="none"
+             stroke="currentColor"
+             stroke-width="2"
+             stroke-linecap="round"
+             stroke-linejoin="round"
+             class="lucide lucide-arrow-right size-4"
+             aria-hidden="true"
+             id="ArrowRight"
+        >
+          <path d="M5 12h14">
+          </path>
+          <path d="m12 5 7 7-7 7">
+          </path>
+        </svg>
+      </button>
+    </div>
+  </div>
+</div>
+`;
+
+exports[`Components/Input/Search HalfWidth smoke-test 1`] = `
+<div class="container my-10 mx-auto p-4 border rounded-lg shadow-sm">
+  <div class="*:not-first:mt-2">
+    <label data-slot="label"
+           class="flex items-center text-sm leading-none font-medium select-none group-data-[disabled=true]:pointer-events-none group-data-[disabled=true]:opacity-50 peer-disabled:cursor-not-allowed peer-disabled:opacity-50 gap-0.5"
+           for="search"
+    >
+      Search
+    </label>
+    <div class="relative py-2">
+      <input data-slot="input"
+             class="file:text-foreground placeholder:text-muted-foreground selection:bg-primary selection:text-primary-foreground dark:bg-input/30 border-input h-9 min-w-0 rounded-md border bg-transparent px-3 shadow-xs transition-[color,box-shadow] file:inline-flex file:h-7 file:border-0 file:bg-transparent file:text-sm file:font-medium disabled:pointer-events-none disabled:cursor-not-allowed disabled:opacity-50 md:text-sm focus-visible:border-ring focus-visible:ring-ring/50 focus-visible:ring-2 aria-invalid:ring-destructive/20 dark:aria-invalid:ring-destructive/40 aria-invalid:border-destructive [&amp;::-webkit-search-cancel-button]:appearance-none [&amp;::-webkit-search-decoration]:appearance-none [&amp;::-webkit-search-results-button]:appearance-none [&amp;::-webkit-search-results-decoration]:appearance-none peer py-3 text-sm outline-hidden flex w-full items-center ps-6.5 pe-9"
+             id="search"
+             aria-required="false"
+             aria-invalid="false"
+             placeholder="Type to search..."
+             gridsize="1/2"
+             type="search"
+             value
+             name="search"
+      >
+      <div class="text-muted-foreground/80 pointer-events-none absolute inset-y-0 inset-s-0 flex items-center justify-center ps-1.5 peer-disabled:opacity-50">
+        <svg xmlns="http://www.w3.org/2000/svg"
+             width="14"
+             height="14"
+             viewbox="0 0 24 24"
+             fill="none"
+             stroke="currentColor"
+             stroke-width="2"
+             stroke-linecap="round"
+             stroke-linejoin="round"
+             class="lucide lucide-search"
+             aria-hidden="true"
+             id="Search"
+        >
+          <path d="m21 21-4.34-4.34">
+          </path>
+          <circle cx="11"
+                  cy="11"
+                  r="8"
+          >
+          </circle>
+        </svg>
+      </div>
+      <button data-slot="button"
+              class="whitespace-nowrap text-sm font-medium disabled:pointer-events-none disabled:opacity-50 [&amp;_svg]:pointer-events-none [&amp;_svg:not([class*='size-'])]:size-4 shrink-0 [&amp;_svg]:shrink-0 focus-visible:border-ring focus-visible:ring-ring/50 aria-invalid:ring-destructive/20 dark:aria-invalid:ring-destructive/40 aria-invalid:border-destructive hover:bg-accent dark:hover:bg-accent/50 hover:text-accent-foreground h-9 px-2.5 has-data-[icon=inline-end]:pr-2 has-data-[icon=inline-start]:pl-2 absolute top-1/2 -translate-y-1/2 inset-e-0 flex items-center justify-center rounded-md transition-[color,box-shadow] outline-none z-10 focus-visible:ring-[3px] gap-0"
+              type="button"
+              id="_r_ID_"
+      >
+        <svg xmlns="http://www.w3.org/2000/svg"
+             width="16"
+             height="16"
+             viewbox="0 0 24 24"
+             fill="none"
+             stroke="currentColor"
+             stroke-width="2"
+             stroke-linecap="round"
+             stroke-linejoin="round"
+             class="lucide lucide-arrow-right size-4"
+             aria-hidden="true"
+             id="ArrowRight"
+        >
+          <path d="M5 12h14">
+          </path>
+          <path d="m12 5 7 7-7 7">
+          </path>
+        </svg>
+      </button>
+    </div>
+  </div>
+</div>
+`;
+
+exports[`Components/Input/Search Required smoke-test 1`] = `
+<div class="container my-10 mx-auto p-4 border rounded-lg shadow-sm">
+  <div class="*:not-first:mt-2">
+    <label data-slot="label"
+           class="flex items-center text-sm leading-none font-medium select-none group-data-[disabled=true]:pointer-events-none group-data-[disabled=true]:opacity-50 peer-disabled:cursor-not-allowed peer-disabled:opacity-50 after:content-['*'] after:text-destructive gap-0.5"
+           for="search"
+    >
+      Search
+    </label>
+    <div class="relative py-2">
+      <input data-slot="input"
+             class="file:text-foreground placeholder:text-muted-foreground selection:bg-primary selection:text-primary-foreground dark:bg-input/30 border-input h-9 min-w-0 rounded-md border bg-transparent px-3 shadow-xs transition-[color,box-shadow] file:inline-flex file:h-7 file:border-0 file:bg-transparent file:text-sm file:font-medium disabled:pointer-events-none disabled:cursor-not-allowed disabled:opacity-50 md:text-sm focus-visible:border-ring focus-visible:ring-ring/50 focus-visible:ring-2 aria-invalid:ring-destructive/20 dark:aria-invalid:ring-destructive/40 aria-invalid:border-destructive [&amp;::-webkit-search-cancel-button]:appearance-none [&amp;::-webkit-search-decoration]:appearance-none [&amp;::-webkit-search-results-button]:appearance-none [&amp;::-webkit-search-results-decoration]:appearance-none peer py-3 text-sm outline-hidden flex w-full items-center ps-6.5 pe-9"
+             id="search"
+             required
+             aria-required="true"
+             aria-invalid="false"
+             placeholder="Type to search..."
+             type="search"
+             value
+             name="search"
+      >
+      <div class="text-muted-foreground/80 pointer-events-none absolute inset-y-0 inset-s-0 flex items-center justify-center ps-1.5 peer-disabled:opacity-50">
+        <svg xmlns="http://www.w3.org/2000/svg"
+             width="14"
+             height="14"
+             viewbox="0 0 24 24"
+             fill="none"
+             stroke="currentColor"
+             stroke-width="2"
+             stroke-linecap="round"
+             stroke-linejoin="round"
+             class="lucide lucide-search"
+             aria-hidden="true"
+             id="Search"
+        >
+          <path d="m21 21-4.34-4.34">
+          </path>
+          <circle cx="11"
+                  cy="11"
+                  r="8"
+          >
+          </circle>
+        </svg>
+      </div>
+      <button data-slot="button"
+              class="whitespace-nowrap text-sm font-medium disabled:pointer-events-none disabled:opacity-50 [&amp;_svg]:pointer-events-none [&amp;_svg:not([class*='size-'])]:size-4 shrink-0 [&amp;_svg]:shrink-0 focus-visible:border-ring focus-visible:ring-ring/50 aria-invalid:ring-destructive/20 dark:aria-invalid:ring-destructive/40 aria-invalid:border-destructive hover:bg-accent dark:hover:bg-accent/50 hover:text-accent-foreground h-9 px-2.5 has-data-[icon=inline-end]:pr-2 has-data-[icon=inline-start]:pl-2 absolute top-1/2 -translate-y-1/2 inset-e-0 flex items-center justify-center rounded-md transition-[color,box-shadow] outline-none z-10 focus-visible:ring-[3px] gap-0"
+              type="button"
+              id="_r_ID_"
+      >
+        <svg xmlns="http://www.w3.org/2000/svg"
+             width="16"
+             height="16"
+             viewbox="0 0 24 24"
+             fill="none"
+             stroke="currentColor"
+             stroke-width="2"
+             stroke-linecap="round"
+             stroke-linejoin="round"
+             class="lucide lucide-arrow-right size-4"
+             aria-hidden="true"
+             id="ArrowRight"
+        >
+          <path d="M5 12h14">
+          </path>
+          <path d="m12 5 7 7-7 7">
+          </path>
+        </svg>
+      </button>
+    </div>
+  </div>
+</div>
+`;
+
+exports[`Components/Input/Search WithCustomIcons smoke-test 1`] = `
+<div class="container my-10 mx-auto p-4 border rounded-lg shadow-sm">
+  <div class="*:not-first:mt-2">
+    <label data-slot="label"
+           class="flex items-center text-sm leading-none font-medium select-none group-data-[disabled=true]:pointer-events-none group-data-[disabled=true]:opacity-50 peer-disabled:cursor-not-allowed peer-disabled:opacity-50 gap-0.5"
+           for="search"
+    >
+      Search GitHub Repositories
+    </label>
+    <div class="relative py-2">
+      <input data-slot="input"
+             class="file:text-foreground placeholder:text-muted-foreground selection:bg-primary selection:text-primary-foreground dark:bg-input/30 border-input h-9 min-w-0 rounded-md border bg-transparent px-3 shadow-xs transition-[color,box-shadow] file:inline-flex file:h-7 file:border-0 file:bg-transparent file:text-sm file:font-medium disabled:pointer-events-none disabled:cursor-not-allowed disabled:opacity-50 md:text-sm focus-visible:border-ring focus-visible:ring-ring/50 focus-visible:ring-2 aria-invalid:ring-destructive/20 dark:aria-invalid:ring-destructive/40 aria-invalid:border-destructive [&amp;::-webkit-search-cancel-button]:appearance-none [&amp;::-webkit-search-decoration]:appearance-none [&amp;::-webkit-search-results-button]:appearance-none [&amp;::-webkit-search-results-decoration]:appearance-none peer py-3 text-sm outline-hidden flex w-full items-center ps-6.5 pe-9"
+             id="search"
+             aria-required="false"
+             aria-invalid="false"
+             placeholder="Enter repository name..."
+             type="search"
+             value
+             name="search"
+      >
+      <div class="text-muted-foreground/80 pointer-events-none absolute inset-y-0 inset-s-0 flex items-center justify-center ps-1.5 peer-disabled:opacity-50">
+        <svg xmlns="http://www.w3.org/2000/svg"
+             width="14"
+             height="14"
+             viewbox="0 0 24 24"
+             fill="none"
+             stroke="currentColor"
+             stroke-width="2"
+             stroke-linecap="round"
+             stroke-linejoin="round"
+             class="lucide lucide-git-graph"
+             aria-hidden="true"
+             id="GitGraph"
+        >
+          <circle cx="5"
+                  cy="6"
+                  r="3"
+          >
+          </circle>
+          <path d="M5 9v6">
+          </path>
+          <circle cx="5"
+                  cy="18"
+                  r="3"
+          >
+          </circle>
+          <path d="M12 3v18">
+          </path>
+          <circle cx="19"
+                  cy="6"
+                  r="3"
+          >
+          </circle>
+          <path d="M16 15.7A9 9 0 0 0 19 9">
+          </path>
+        </svg>
+      </div>
+      <button data-slot="button"
+              class="whitespace-nowrap text-sm font-medium disabled:pointer-events-none disabled:opacity-50 [&amp;_svg]:pointer-events-none [&amp;_svg:not([class*='size-'])]:size-4 shrink-0 [&amp;_svg]:shrink-0 focus-visible:border-ring focus-visible:ring-ring/50 aria-invalid:ring-destructive/20 dark:aria-invalid:ring-destructive/40 aria-invalid:border-destructive hover:bg-accent dark:hover:bg-accent/50 hover:text-accent-foreground h-9 px-2.5 has-data-[icon=inline-end]:pr-2 has-data-[icon=inline-start]:pl-2 absolute top-1/2 -translate-y-1/2 inset-e-0 flex items-center justify-center rounded-md transition-[color,box-shadow] outline-none z-10 focus-visible:ring-[3px] gap-0"
+              aria-label="Send search"
+              type="button"
+              id="_r_ID_"
+      >
+        <svg xmlns="http://www.w3.org/2000/svg"
+             width="16"
+             height="16"
+             viewbox="0 0 24 24"
+             fill="none"
+             stroke="currentColor"
+             stroke-width="2"
+             stroke-linecap="round"
+             stroke-linejoin="round"
+             class="lucide lucide-mail size-4"
+             aria-hidden="true"
+             id="Mail"
+        >
+          <path d="m22 7-8.991 5.727a2 2 0 0 1-2.009 0L2 7">
+          </path>
+          <rect x="2"
+                y="4"
+                width="20"
+                height="16"
+                rx="2"
+          >
+          </rect>
+        </svg>
+        Send search
+      </button>
+    </div>
+  </div>
+</div>
+`;
+
+exports[`Components/Input/Search WithDefaultValue smoke-test 1`] = `
+<div class="container my-10 mx-auto p-4 border rounded-lg shadow-sm">
+  <div class="*:not-first:mt-2">
+    <label data-slot="label"
+           class="flex items-center text-sm leading-none font-medium select-none group-data-[disabled=true]:pointer-events-none group-data-[disabled=true]:opacity-50 peer-disabled:cursor-not-allowed peer-disabled:opacity-50 gap-0.5"
+           for="search"
+    >
+      Search
+    </label>
+    <div class="relative py-2">
+      <input data-slot="input"
+             class="file:text-foreground placeholder:text-muted-foreground selection:bg-primary selection:text-primary-foreground dark:bg-input/30 border-input h-9 min-w-0 rounded-md border bg-transparent px-3 shadow-xs transition-[color,box-shadow] file:inline-flex file:h-7 file:border-0 file:bg-transparent file:text-sm file:font-medium disabled:pointer-events-none disabled:cursor-not-allowed disabled:opacity-50 md:text-sm focus-visible:border-ring focus-visible:ring-ring/50 focus-visible:ring-2 aria-invalid:ring-destructive/20 dark:aria-invalid:ring-destructive/40 aria-invalid:border-destructive [&amp;::-webkit-search-cancel-button]:appearance-none [&amp;::-webkit-search-decoration]:appearance-none [&amp;::-webkit-search-results-button]:appearance-none [&amp;::-webkit-search-results-decoration]:appearance-none peer py-3 text-sm outline-hidden flex w-full items-center ps-6.5 pe-9"
+             id="search"
+             aria-required="false"
+             aria-invalid="false"
+             placeholder="Type to search..."
+             type="search"
+             value="initial query"
+             name="search"
+      >
+      <div class="text-muted-foreground/80 pointer-events-none absolute inset-y-0 inset-s-0 flex items-center justify-center ps-1.5 peer-disabled:opacity-50">
+        <svg xmlns="http://www.w3.org/2000/svg"
+             width="14"
+             height="14"
+             viewbox="0 0 24 24"
+             fill="none"
+             stroke="currentColor"
+             stroke-width="2"
+             stroke-linecap="round"
+             stroke-linejoin="round"
+             class="lucide lucide-search"
+             aria-hidden="true"
+             id="Search"
+        >
+          <path d="m21 21-4.34-4.34">
+          </path>
+          <circle cx="11"
+                  cy="11"
+                  r="8"
+          >
+          </circle>
+        </svg>
+      </div>
+      <button data-slot="button"
+              class="whitespace-nowrap text-sm font-medium disabled:pointer-events-none disabled:opacity-50 [&amp;_svg]:pointer-events-none [&amp;_svg:not([class*='size-'])]:size-4 shrink-0 [&amp;_svg]:shrink-0 focus-visible:border-ring focus-visible:ring-ring/50 aria-invalid:ring-destructive/20 dark:aria-invalid:ring-destructive/40 aria-invalid:border-destructive hover:bg-accent dark:hover:bg-accent/50 hover:text-accent-foreground h-9 px-2.5 has-data-[icon=inline-end]:pr-2 has-data-[icon=inline-start]:pl-2 absolute top-1/2 -translate-y-1/2 inset-e-0 flex items-center justify-center rounded-md transition-[color,box-shadow] outline-none z-10 focus-visible:ring-[3px] gap-0"
+              type="button"
+              id="_r_ID_"
+      >
+        <svg xmlns="http://www.w3.org/2000/svg"
+             width="16"
+             height="16"
+             viewbox="0 0 24 24"
+             fill="none"
+             stroke="currentColor"
+             stroke-width="2"
+             stroke-linecap="round"
+             stroke-linejoin="round"
+             class="lucide lucide-arrow-right size-4"
+             aria-hidden="true"
+             id="ArrowRight"
+        >
+          <path d="M5 12h14">
+          </path>
+          <path d="m12 5 7 7-7 7">
+          </path>
+        </svg>
+      </button>
+    </div>
+  </div>
+</div>
+`;
+
+exports[`Components/Input/Search WithError smoke-test 1`] = `
+<div class="container my-10 mx-auto p-4 border rounded-lg shadow-sm">
+  <div class="*:not-first:mt-2">
+    <label data-slot="label"
+           class="flex items-center text-sm leading-none font-medium select-none group-data-[disabled=true]:pointer-events-none group-data-[disabled=true]:opacity-50 peer-disabled:cursor-not-allowed peer-disabled:opacity-50 gap-0.5"
+           for="search"
+    >
+      Search
+    </label>
+    <div class="relative py-2">
+      <input data-slot="input"
+             class="file:text-foreground placeholder:text-muted-foreground selection:bg-primary selection:text-primary-foreground dark:bg-input/30 h-9 min-w-0 rounded-md border bg-transparent px-3 shadow-xs transition-[color,box-shadow] file:inline-flex file:h-7 file:border-0 file:bg-transparent file:text-sm file:font-medium disabled:pointer-events-none disabled:cursor-not-allowed disabled:opacity-50 md:text-sm focus-visible:border-ring focus-visible:ring-2 aria-invalid:ring-destructive/20 dark:aria-invalid:ring-destructive/40 aria-invalid:border-destructive [&amp;::-webkit-search-cancel-button]:appearance-none [&amp;::-webkit-search-decoration]:appearance-none [&amp;::-webkit-search-results-button]:appearance-none [&amp;::-webkit-search-results-decoration]:appearance-none peer py-3 text-sm outline-hidden flex w-full items-center ps-6.5 pe-9 border-destructive focus-visible:ring-destructive/20"
+             id="search"
+             aria-required="false"
+             aria-invalid="true"
+             aria-describedby="search-helper"
+             placeholder="Type to search..."
+             type="search"
+             value
+             name="search"
+      >
+      <div class="text-muted-foreground/80 pointer-events-none absolute inset-y-0 inset-s-0 flex items-center justify-center ps-1.5 peer-disabled:opacity-50">
+        <svg xmlns="http://www.w3.org/2000/svg"
+             width="14"
+             height="14"
+             viewbox="0 0 24 24"
+             fill="none"
+             stroke="currentColor"
+             stroke-width="2"
+             stroke-linecap="round"
+             stroke-linejoin="round"
+             class="lucide lucide-search"
+             aria-hidden="true"
+             id="Search"
+        >
+          <path d="m21 21-4.34-4.34">
+          </path>
+          <circle cx="11"
+                  cy="11"
+                  r="8"
+          >
+          </circle>
+        </svg>
+      </div>
+      <button data-slot="button"
+              class="whitespace-nowrap text-sm font-medium disabled:pointer-events-none disabled:opacity-50 [&amp;_svg]:pointer-events-none [&amp;_svg:not([class*='size-'])]:size-4 shrink-0 [&amp;_svg]:shrink-0 focus-visible:border-ring focus-visible:ring-ring/50 aria-invalid:ring-destructive/20 dark:aria-invalid:ring-destructive/40 aria-invalid:border-destructive hover:bg-accent dark:hover:bg-accent/50 hover:text-accent-foreground h-9 px-2.5 has-data-[icon=inline-end]:pr-2 has-data-[icon=inline-start]:pl-2 absolute top-1/2 -translate-y-1/2 inset-e-0 flex items-center justify-center rounded-md transition-[color,box-shadow] outline-none z-10 focus-visible:ring-[3px] gap-0"
+              type="button"
+              id="_r_ID_"
+      >
+        <svg xmlns="http://www.w3.org/2000/svg"
+             width="16"
+             height="16"
+             viewbox="0 0 24 24"
+             fill="none"
+             stroke="currentColor"
+             stroke-width="2"
+             stroke-linecap="round"
+             stroke-linejoin="round"
+             class="lucide lucide-arrow-right size-4"
+             aria-hidden="true"
+             id="ArrowRight"
+        >
+          <path d="M5 12h14">
+          </path>
+          <path d="m12 5 7 7-7 7">
+          </path>
+        </svg>
+      </button>
+    </div>
+    <p class="text-destructive text-xs mt-1"
+       role="alert"
+    >
+      Invalid search query
+    </p>
+  </div>
+</div>
+`;
+
+exports[`Components/Input/Search WithFormValidation smoke-test 1`] = `
+<div class="container my-10 mx-auto p-4 border rounded-lg shadow-sm">
+  <form class="space-y-4">
+    <div class="*:not-first:mt-2">
+      <label data-slot="label"
+             class="flex items-center text-sm leading-none font-medium select-none group-data-[disabled=true]:pointer-events-none group-data-[disabled=true]:opacity-50 peer-disabled:cursor-not-allowed peer-disabled:opacity-50 after:content-['*'] after:text-destructive gap-0.5"
+             for="searchQuery"
+      >
+        Search
+      </label>
+      <div class="relative py-2">
+        <input data-slot="input"
+               class="file:text-foreground placeholder:text-muted-foreground selection:bg-primary selection:text-primary-foreground dark:bg-input/30 border-input h-9 min-w-0 rounded-md border bg-transparent px-3 shadow-xs transition-[color,box-shadow] file:inline-flex file:h-7 file:border-0 file:bg-transparent file:text-sm file:font-medium disabled:pointer-events-none disabled:cursor-not-allowed disabled:opacity-50 md:text-sm focus-visible:border-ring focus-visible:ring-ring/50 focus-visible:ring-2 aria-invalid:ring-destructive/20 dark:aria-invalid:ring-destructive/40 aria-invalid:border-destructive [&amp;::-webkit-search-cancel-button]:appearance-none [&amp;::-webkit-search-decoration]:appearance-none [&amp;::-webkit-search-results-button]:appearance-none [&amp;::-webkit-search-results-decoration]:appearance-none peer py-3 text-sm outline-hidden flex w-full items-center ps-6.5 pe-9"
+               id="searchQuery"
+               required
+               aria-required="true"
+               aria-invalid="false"
+               aria-describedby="searchQuery-helper"
+               placeholder="Type and press enter or click search..."
+               type="search"
+               value
+               name="searchQuery"
+        >
+        <div class="text-muted-foreground/80 pointer-events-none absolute inset-y-0 inset-s-0 flex items-center justify-center ps-1.5 peer-disabled:opacity-50">
+          <svg xmlns="http://www.w3.org/2000/svg"
+               width="14"
+               height="14"
+               viewbox="0 0 24 24"
+               fill="none"
+               stroke="currentColor"
+               stroke-width="2"
+               stroke-linecap="round"
+               stroke-linejoin="round"
+               class="lucide lucide-search"
+               aria-hidden="true"
+               id="Search"
+          >
+            <path d="m21 21-4.34-4.34">
+            </path>
+            <circle cx="11"
+                    cy="11"
+                    r="8"
+            >
+            </circle>
+          </svg>
+        </div>
+        <button data-slot="button"
+                class="whitespace-nowrap text-sm font-medium disabled:pointer-events-none disabled:opacity-50 [&amp;_svg]:pointer-events-none [&amp;_svg:not([class*='size-'])]:size-4 shrink-0 [&amp;_svg]:shrink-0 focus-visible:border-ring focus-visible:ring-ring/50 aria-invalid:ring-destructive/20 dark:aria-invalid:ring-destructive/40 aria-invalid:border-destructive hover:bg-accent dark:hover:bg-accent/50 hover:text-accent-foreground h-9 px-2.5 has-data-[icon=inline-end]:pr-2 has-data-[icon=inline-start]:pl-2 absolute top-1/2 -translate-y-1/2 inset-e-0 flex items-center justify-center rounded-md transition-[color,box-shadow] outline-none z-10 focus-visible:ring-[3px] gap-0"
+                type="button"
+                id="_r_ID_"
+        >
+          <svg xmlns="http://www.w3.org/2000/svg"
+               width="16"
+               height="16"
+               viewbox="0 0 24 24"
+               fill="none"
+               stroke="currentColor"
+               stroke-width="2"
+               stroke-linecap="round"
+               stroke-linejoin="round"
+               class="lucide lucide-arrow-right size-4"
+               aria-hidden="true"
+               id="ArrowRight"
+          >
+            <path d="M5 12h14">
+            </path>
+            <path d="m12 5 7 7-7 7">
+            </path>
+          </svg>
+        </button>
+      </div>
+      <p class="text-muted-foreground text-xs mt-1"
+         role="note"
+         aria-live="polite"
+      >
+        Enter at least 2 characters
+      </p>
+    </div>
+    <button data-slot="button"
+            class="inline-flex items-center justify-center gap-1.5 whitespace-nowrap rounded-md text-sm font-medium transition-[color,box-shadow] disabled:pointer-events-none disabled:opacity-50 [&amp;_svg]:pointer-events-none [&amp;_svg:not([class*='size-'])]:size-4 shrink-0 [&amp;_svg]:shrink-0 outline-none focus-visible:border-ring focus-visible:ring-ring/50 focus-visible:ring-[3px] aria-invalid:ring-destructive/20 dark:aria-invalid:ring-destructive/40 aria-invalid:border-destructive bg-primary text-primary-foreground shadow-xs hover:bg-primary/90 hover:text-primary-foreground h-9 px-2.5 has-data-[icon=inline-end]:pr-2 has-data-[icon=inline-start]:pl-2 w-full mt-4"
+            type="submit"
+    >
+      Pesquisar
+    </button>
+  </form>
+</div>
+`;
+
+exports[`Components/Input/Search WithHelperText smoke-test 1`] = `
+<div class="container my-10 mx-auto p-4 border rounded-lg shadow-sm">
+  <div class="*:not-first:mt-2">
+    <label data-slot="label"
+           class="flex items-center text-sm leading-none font-medium select-none group-data-[disabled=true]:pointer-events-none group-data-[disabled=true]:opacity-50 peer-disabled:cursor-not-allowed peer-disabled:opacity-50 gap-0.5"
+           for="search"
+    >
+      Product Search
+    </label>
+    <div class="relative py-2">
+      <input data-slot="input"
+             class="file:text-foreground placeholder:text-muted-foreground selection:bg-primary selection:text-primary-foreground dark:bg-input/30 border-input h-9 min-w-0 rounded-md border bg-transparent px-3 shadow-xs transition-[color,box-shadow] file:inline-flex file:h-7 file:border-0 file:bg-transparent file:text-sm file:font-medium disabled:pointer-events-none disabled:cursor-not-allowed disabled:opacity-50 md:text-sm focus-visible:border-ring focus-visible:ring-ring/50 focus-visible:ring-2 aria-invalid:ring-destructive/20 dark:aria-invalid:ring-destructive/40 aria-invalid:border-destructive [&amp;::-webkit-search-cancel-button]:appearance-none [&amp;::-webkit-search-decoration]:appearance-none [&amp;::-webkit-search-results-button]:appearance-none [&amp;::-webkit-search-results-decoration]:appearance-none peer py-3 text-sm outline-hidden flex w-full items-center ps-6.5 pe-9"
+             id="search"
+             aria-required="false"
+             aria-invalid="false"
+             aria-describedby="search-helper"
+             placeholder="Enter product name..."
+             type="search"
+             value
+             name="search"
+      >
+      <div class="text-muted-foreground/80 pointer-events-none absolute inset-y-0 inset-s-0 flex items-center justify-center ps-1.5 peer-disabled:opacity-50">
+        <svg xmlns="http://www.w3.org/2000/svg"
+             width="14"
+             height="14"
+             viewbox="0 0 24 24"
+             fill="none"
+             stroke="currentColor"
+             stroke-width="2"
+             stroke-linecap="round"
+             stroke-linejoin="round"
+             class="lucide lucide-search"
+             aria-hidden="true"
+             id="Search"
+        >
+          <path d="m21 21-4.34-4.34">
+          </path>
+          <circle cx="11"
+                  cy="11"
+                  r="8"
+          >
+          </circle>
+        </svg>
+      </div>
+      <button data-slot="button"
+              class="whitespace-nowrap text-sm font-medium disabled:pointer-events-none disabled:opacity-50 [&amp;_svg]:pointer-events-none [&amp;_svg:not([class*='size-'])]:size-4 shrink-0 [&amp;_svg]:shrink-0 focus-visible:border-ring focus-visible:ring-ring/50 aria-invalid:ring-destructive/20 dark:aria-invalid:ring-destructive/40 aria-invalid:border-destructive hover:bg-accent dark:hover:bg-accent/50 hover:text-accent-foreground h-9 px-2.5 has-data-[icon=inline-end]:pr-2 has-data-[icon=inline-start]:pl-2 absolute top-1/2 -translate-y-1/2 inset-e-0 flex items-center justify-center rounded-md transition-[color,box-shadow] outline-none z-10 focus-visible:ring-[3px] gap-0"
+              type="button"
+              id="_r_ID_"
+      >
+        <svg xmlns="http://www.w3.org/2000/svg"
+             width="16"
+             height="16"
+             viewbox="0 0 24 24"
+             fill="none"
+             stroke="currentColor"
+             stroke-width="2"
+             stroke-linecap="round"
+             stroke-linejoin="round"
+             class="lucide lucide-arrow-right size-4"
+             aria-hidden="true"
+             id="ArrowRight"
+        >
+          <path d="M5 12h14">
+          </path>
+          <path d="m12 5 7 7-7 7">
+          </path>
+        </svg>
+      </button>
+    </div>
+    <p class="text-muted-foreground text-xs mt-1"
+       role="note"
+       aria-live="polite"
+    >
+      Search for products by name or code
+    </p>
+  </div>
+</div>
+`;
+
+exports[`Components/Input/Search WithoutIcon smoke-test 1`] = `
+<div class="container my-10 mx-auto p-4 border rounded-lg shadow-sm">
+  <div class="*:not-first:mt-2">
+    <label data-slot="label"
+           class="flex items-center text-sm leading-none font-medium select-none group-data-[disabled=true]:pointer-events-none group-data-[disabled=true]:opacity-50 peer-disabled:cursor-not-allowed peer-disabled:opacity-50 gap-0.5"
+           for="search"
+    >
+      Search
+    </label>
+    <div class="relative py-2">
+      <input data-slot="input"
+             class="file:text-foreground placeholder:text-muted-foreground selection:bg-primary selection:text-primary-foreground dark:bg-input/30 border-input h-9 min-w-0 rounded-md border bg-transparent px-3 shadow-xs transition-[color,box-shadow] file:inline-flex file:h-7 file:border-0 file:bg-transparent file:text-sm file:font-medium disabled:pointer-events-none disabled:cursor-not-allowed disabled:opacity-50 md:text-sm focus-visible:border-ring focus-visible:ring-ring/50 focus-visible:ring-2 aria-invalid:ring-destructive/20 dark:aria-invalid:ring-destructive/40 aria-invalid:border-destructive [&amp;::-webkit-search-cancel-button]:appearance-none [&amp;::-webkit-search-decoration]:appearance-none [&amp;::-webkit-search-results-button]:appearance-none [&amp;::-webkit-search-results-decoration]:appearance-none peer py-3 text-sm outline-hidden flex w-full items-center pe-9"
+             id="search"
+             aria-required="false"
+             aria-invalid="false"
+             placeholder="Type to search..."
+             type="search"
+             value
+             name="search"
+      >
+      <button data-slot="button"
+              class="whitespace-nowrap text-sm font-medium disabled:pointer-events-none disabled:opacity-50 [&amp;_svg]:pointer-events-none [&amp;_svg:not([class*='size-'])]:size-4 shrink-0 [&amp;_svg]:shrink-0 focus-visible:border-ring focus-visible:ring-ring/50 aria-invalid:ring-destructive/20 dark:aria-invalid:ring-destructive/40 aria-invalid:border-destructive hover:bg-accent dark:hover:bg-accent/50 hover:text-accent-foreground h-9 px-2.5 has-data-[icon=inline-end]:pr-2 has-data-[icon=inline-start]:pl-2 absolute top-1/2 -translate-y-1/2 inset-e-0 flex items-center justify-center rounded-md transition-[color,box-shadow] outline-none z-10 focus-visible:ring-[3px] gap-0"
+              type="button"
+              id="_r_ID_"
+      >
+        <svg xmlns="http://www.w3.org/2000/svg"
+             width="16"
+             height="16"
+             viewbox="0 0 24 24"
+             fill="none"
+             stroke="currentColor"
+             stroke-width="2"
+             stroke-linecap="round"
+             stroke-linejoin="round"
+             class="lucide lucide-arrow-right size-4"
+             aria-hidden="true"
+             id="ArrowRight"
+        >
+          <path d="M5 12h14">
+          </path>
+          <path d="m12 5 7 7-7 7">
+          </path>
+        </svg>
+      </button>
+    </div>
+  </div>
+</div>
+`;
+
+exports[`Components/Input/Search WithoutSubmitButton smoke-test 1`] = `
+<div class="container my-10 mx-auto p-4 border rounded-lg shadow-sm">
+  <div class="*:not-first:mt-2">
+    <label data-slot="label"
+           class="flex items-center text-sm leading-none font-medium select-none group-data-[disabled=true]:pointer-events-none group-data-[disabled=true]:opacity-50 peer-disabled:cursor-not-allowed peer-disabled:opacity-50 gap-0.5"
+           for="search"
+    >
+      Search
+    </label>
+    <div class="relative py-2">
+      <input data-slot="input"
+             class="file:text-foreground placeholder:text-muted-foreground selection:bg-primary selection:text-primary-foreground dark:bg-input/30 border-input h-9 min-w-0 rounded-md border bg-transparent px-3 shadow-xs transition-[color,box-shadow] file:inline-flex file:h-7 file:border-0 file:bg-transparent file:text-sm file:font-medium disabled:pointer-events-none disabled:cursor-not-allowed disabled:opacity-50 md:text-sm focus-visible:border-ring focus-visible:ring-ring/50 focus-visible:ring-2 aria-invalid:ring-destructive/20 dark:aria-invalid:ring-destructive/40 aria-invalid:border-destructive [&amp;::-webkit-search-cancel-button]:appearance-none [&amp;::-webkit-search-decoration]:appearance-none [&amp;::-webkit-search-results-button]:appearance-none [&amp;::-webkit-search-results-decoration]:appearance-none peer py-3 text-sm outline-hidden flex w-full items-center ps-6.5"
+             id="search"
+             aria-required="false"
+             aria-invalid="false"
+             placeholder="Press Enter to search..."
+             type="search"
+             value
+             name="search"
+      >
+      <div class="text-muted-foreground/80 pointer-events-none absolute inset-y-0 inset-s-0 flex items-center justify-center ps-1.5 peer-disabled:opacity-50">
+        <svg xmlns="http://www.w3.org/2000/svg"
+             width="14"
+             height="14"
+             viewbox="0 0 24 24"
+             fill="none"
+             stroke="currentColor"
+             stroke-width="2"
+             stroke-linecap="round"
+             stroke-linejoin="round"
+             class="lucide lucide-search"
+             aria-hidden="true"
+             id="Search"
+        >
+          <path d="m21 21-4.34-4.34">
+          </path>
+          <circle cx="11"
+                  cy="11"
+                  r="8"
+          >
+          </circle>
+        </svg>
+      </div>
+    </div>
+  </div>
+</div>
+`;

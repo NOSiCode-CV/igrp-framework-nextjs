@@ -1,0 +1,404 @@
+// Jest Snapshot v1, https://jestjs.io/docs/snapshot-testing
+
+exports[`Components/Accordion Default smoke-test 1`] = `
+<div class="container my-10 mx-auto p-4">
+  <div data-slot="accordion"
+       id="_r_ID_"
+       class
+       data-orientation="vertical"
+  >
+    <div data-state="open"
+         data-orientation="vertical"
+         data-slot="accordion-item"
+         class="border-b last:border-b-0"
+    >
+      <h3 data-orientation="vertical"
+          data-state="open"
+          class="flex"
+      >
+        <button type="button"
+                aria-controls="radix-ID"
+                aria-expanded="true"
+                data-state="open"
+                data-orientation="vertical"
+                id="radix-ID"
+                data-slot="accordion-trigger"
+                class="focus-visible:border-ring focus-visible:ring-ring/50 flex flex-1 items-start gap-4 rounded-md py-4 text-left text-sm font-medium transition-all outline-none focus-visible:ring-2 disabled:pointer-events-none disabled:opacity-50 [&amp;[data-state=open]&gt;svg]:rotate-180 justify-between"
+                data-radix-id""
+        >
+          <svg xmlns="http://www.w3.org/2000/svg"
+               width="16"
+               height="16"
+               viewbox="0 0 24 24"
+               fill="none"
+               stroke="currentColor"
+               stroke-width="2"
+               stroke-linecap="round"
+               stroke-linejoin="round"
+               class="lucide lucide-minus text-muted-foreground pointer-events-none size-4 shrink-0 translate-y-0.5 transition-transform duration-200 order-last"
+               aria-hidden="true"
+               id="Minus"
+          >
+            <path d="M5 12h14">
+            </path>
+          </svg>
+          First Item
+        </button>
+      </h3>
+      <div data-state="open"
+           id="radix-ID"
+           role="region"
+           aria-labelledby="radix-ID"
+           data-orientation="vertical"
+           data-slot="accordion-content"
+           class="data-[state=closed]:animate-accordion-up data-[state=open]:animate-accordion-down motion-reduce:animate-none overflow-hidden text-sm"
+           style="--radix-ID var(--radix-ID --radix-ID var(--radix-ID transition-duration: 0s; animation-name: none; --radix-ID 36px; --radix-ID 1248px;"
+      >
+        <div class="pt-0 pb-4">
+          This is the content of the first accordion item.
+        </div>
+      </div>
+    </div>
+    <div data-state="closed"
+         data-orientation="vertical"
+         data-slot="accordion-item"
+         class="border-b last:border-b-0"
+    >
+      <h3 data-orientation="vertical"
+          data-state="closed"
+          class="flex"
+      >
+        <button type="button"
+                aria-expanded="false"
+                data-state="closed"
+                data-orientation="vertical"
+                id="radix-ID"
+                data-slot="accordion-trigger"
+                class="focus-visible:border-ring focus-visible:ring-ring/50 flex flex-1 items-start gap-4 rounded-md py-4 text-left text-sm font-medium transition-all outline-none focus-visible:ring-2 disabled:pointer-events-none disabled:opacity-50 [&amp;[data-state=open]&gt;svg]:rotate-180 justify-between"
+                data-radix-id""
+        >
+          Second Item
+        </button>
+      </h3>
+      <div data-state="closed"
+           id="radix-ID"
+           hidden
+           role="region"
+           aria-labelledby="radix-ID"
+           data-orientation="vertical"
+           data-slot="accordion-content"
+           class="data-[state=closed]:animate-accordion-up data-[state=open]:animate-accordion-down motion-reduce:animate-none overflow-hidden text-sm"
+           style="--radix-ID var(--radix-ID --radix-ID var(--radix-ID"
+      >
+      </div>
+    </div>
+    <div data-state="closed"
+         data-orientation="vertical"
+         data-slot="accordion-item"
+         class="border-b last:border-b-0"
+    >
+      <h3 data-orientation="vertical"
+          data-state="closed"
+          class="flex"
+      >
+        <button type="button"
+                aria-expanded="false"
+                data-state="closed"
+                data-orientation="vertical"
+                id="radix-ID"
+                data-slot="accordion-trigger"
+                class="focus-visible:border-ring focus-visible:ring-ring/50 flex flex-1 items-start gap-4 rounded-md py-4 text-left text-sm font-medium transition-all outline-none focus-visible:ring-2 disabled:pointer-events-none disabled:opacity-50 [&amp;[data-state=open]&gt;svg]:rotate-180 justify-between"
+                data-radix-id""
+        >
+          <svg xmlns="http://www.w3.org/2000/svg"
+               width="16"
+               height="16"
+               viewbox="0 0 24 24"
+               fill="none"
+               stroke="currentColor"
+               stroke-width="2"
+               stroke-linecap="round"
+               stroke-linejoin="round"
+               class="lucide lucide-minus text-muted-foreground pointer-events-none size-4 shrink-0 translate-y-0.5 transition-transform duration-200 order-last"
+               aria-hidden="true"
+               id="Minus"
+          >
+            <path d="M5 12h14">
+            </path>
+          </svg>
+          Third Item
+        </button>
+      </h3>
+      <div data-state="closed"
+           id="radix-ID"
+           hidden
+           role="region"
+           aria-labelledby="radix-ID"
+           data-orientation="vertical"
+           data-slot="accordion-content"
+           class="data-[state=closed]:animate-accordion-up data-[state=open]:animate-accordion-down motion-reduce:animate-none overflow-hidden text-sm"
+           style="--radix-ID var(--radix-ID --radix-ID var(--radix-ID"
+      >
+      </div>
+    </div>
+  </div>
+</div>
+`;
+
+exports[`Components/Accordion LeftArrowTrigger smoke-test 1`] = `
+<div class="container my-10 mx-auto p-4">
+  <div data-slot="accordion"
+       id="_r_ID_"
+       class
+       data-orientation="vertical"
+  >
+    <div data-state="open"
+         data-orientation="vertical"
+         data-slot="accordion-item"
+         class="border-b last:border-b-0"
+    >
+      <h3 data-orientation="vertical"
+          data-state="open"
+          class="flex"
+      >
+        <button type="button"
+                aria-controls="radix-ID"
+                aria-expanded="true"
+                data-state="open"
+                data-orientation="vertical"
+                id="radix-ID"
+                data-slot="accordion-trigger"
+                class="focus-visible:border-ring focus-visible:ring-ring/50 flex flex-1 items-start gap-4 rounded-md py-4 text-left text-sm font-medium transition-all outline-none focus-visible:ring-2 disabled:pointer-events-none disabled:opacity-50 [&amp;[data-state=open]&gt;svg]:rotate-180"
+                data-radix-id""
+        >
+          <svg xmlns="http://www.w3.org/2000/svg"
+               width="16"
+               height="16"
+               viewbox="0 0 24 24"
+               fill="none"
+               stroke="currentColor"
+               stroke-width="2"
+               stroke-linecap="round"
+               stroke-linejoin="round"
+               class="lucide lucide-minus text-muted-foreground pointer-events-none size-4 shrink-0 translate-y-0.5 transition-transform duration-200"
+               aria-hidden="true"
+               id="Minus"
+          >
+            <path d="M5 12h14">
+            </path>
+          </svg>
+          First Item
+        </button>
+      </h3>
+      <div data-state="open"
+           id="radix-ID"
+           role="region"
+           aria-labelledby="radix-ID"
+           data-orientation="vertical"
+           data-slot="accordion-content"
+           class="data-[state=closed]:animate-accordion-up data-[state=open]:animate-accordion-down motion-reduce:animate-none overflow-hidden text-sm"
+           style="--radix-ID var(--radix-ID --radix-ID var(--radix-ID transition-duration: 0s; animation-name: none; --radix-ID 36px; --radix-ID 1248px;"
+      >
+        <div class="pt-0 pb-4">
+          This is the content of the first accordion item.
+        </div>
+      </div>
+    </div>
+    <div data-state="closed"
+         data-orientation="vertical"
+         data-slot="accordion-item"
+         class="border-b last:border-b-0"
+    >
+      <h3 data-orientation="vertical"
+          data-state="closed"
+          class="flex"
+      >
+        <button type="button"
+                aria-expanded="false"
+                data-state="closed"
+                data-orientation="vertical"
+                id="radix-ID"
+                data-slot="accordion-trigger"
+                class="focus-visible:border-ring focus-visible:ring-ring/50 flex flex-1 items-start gap-4 rounded-md py-4 text-left text-sm font-medium transition-all outline-none focus-visible:ring-2 disabled:pointer-events-none disabled:opacity-50 [&amp;[data-state=open]&gt;svg]:rotate-180"
+                data-radix-id""
+        >
+          Second Item
+        </button>
+      </h3>
+      <div data-state="closed"
+           id="radix-ID"
+           hidden
+           role="region"
+           aria-labelledby="radix-ID"
+           data-orientation="vertical"
+           data-slot="accordion-content"
+           class="data-[state=closed]:animate-accordion-up data-[state=open]:animate-accordion-down motion-reduce:animate-none overflow-hidden text-sm"
+           style="--radix-ID var(--radix-ID --radix-ID var(--radix-ID"
+      >
+      </div>
+    </div>
+    <div data-state="closed"
+         data-orientation="vertical"
+         data-slot="accordion-item"
+         class="border-b last:border-b-0"
+    >
+      <h3 data-orientation="vertical"
+          data-state="closed"
+          class="flex"
+      >
+        <button type="button"
+                aria-expanded="false"
+                data-state="closed"
+                data-orientation="vertical"
+                id="radix-ID"
+                data-slot="accordion-trigger"
+                class="focus-visible:border-ring focus-visible:ring-ring/50 flex flex-1 items-start gap-4 rounded-md py-4 text-left text-sm font-medium transition-all outline-none focus-visible:ring-2 disabled:pointer-events-none disabled:opacity-50 [&amp;[data-state=open]&gt;svg]:rotate-180"
+                data-radix-id""
+        >
+          <svg xmlns="http://www.w3.org/2000/svg"
+               width="16"
+               height="16"
+               viewbox="0 0 24 24"
+               fill="none"
+               stroke="currentColor"
+               stroke-width="2"
+               stroke-linecap="round"
+               stroke-linejoin="round"
+               class="lucide lucide-chevron-down text-muted-foreground pointer-events-none size-4 shrink-0 translate-y-0.5 transition-transform duration-200"
+               aria-hidden="true"
+               id="ChevronDown"
+          >
+            <path d="m6 9 6 6 6-6">
+            </path>
+          </svg>
+          Third Item
+        </button>
+      </h3>
+      <div data-state="closed"
+           id="radix-ID"
+           hidden
+           role="region"
+           aria-labelledby="radix-ID"
+           data-orientation="vertical"
+           data-slot="accordion-content"
+           class="data-[state=closed]:animate-accordion-up data-[state=open]:animate-accordion-down motion-reduce:animate-none overflow-hidden text-sm"
+           style="--radix-ID var(--radix-ID --radix-ID var(--radix-ID"
+      >
+      </div>
+    </div>
+  </div>
+</div>
+`;
+
+exports[`Components/Accordion NoIcon smoke-test 1`] = `
+<div class="container my-10 mx-auto p-4">
+  <div data-slot="accordion"
+       id="_r_ID_"
+       class
+       data-orientation="vertical"
+  >
+    <div data-state="open"
+         data-orientation="vertical"
+         data-slot="accordion-item"
+         class="border-b last:border-b-0"
+    >
+      <h3 data-orientation="vertical"
+          data-state="open"
+          class="flex"
+      >
+        <button type="button"
+                aria-controls="radix-ID"
+                aria-expanded="true"
+                data-state="open"
+                data-orientation="vertical"
+                id="radix-ID"
+                data-slot="accordion-trigger"
+                class="focus-visible:border-ring focus-visible:ring-ring/50 flex flex-1 items-start gap-4 rounded-md py-4 text-left text-sm font-medium transition-all outline-none focus-visible:ring-2 disabled:pointer-events-none disabled:opacity-50 [&amp;[data-state=open]&gt;svg]:rotate-180 justify-between"
+                data-radix-id""
+        >
+          First Item
+        </button>
+      </h3>
+      <div data-state="open"
+           id="radix-ID"
+           role="region"
+           aria-labelledby="radix-ID"
+           data-orientation="vertical"
+           data-slot="accordion-content"
+           class="data-[state=closed]:animate-accordion-up data-[state=open]:animate-accordion-down motion-reduce:animate-none overflow-hidden text-sm"
+           style="--radix-ID var(--radix-ID --radix-ID var(--radix-ID transition-duration: 0s; animation-name: none; --radix-ID 36px; --radix-ID 1248px;"
+      >
+        <div class="pt-0 pb-4">
+          This is the content of the first accordion item.
+        </div>
+      </div>
+    </div>
+    <div data-state="closed"
+         data-orientation="vertical"
+         data-slot="accordion-item"
+         class="border-b last:border-b-0"
+    >
+      <h3 data-orientation="vertical"
+          data-state="closed"
+          class="flex"
+      >
+        <button type="button"
+                aria-expanded="false"
+                data-state="closed"
+                data-orientation="vertical"
+                id="radix-ID"
+                data-slot="accordion-trigger"
+                class="focus-visible:border-ring focus-visible:ring-ring/50 flex flex-1 items-start gap-4 rounded-md py-4 text-left text-sm font-medium transition-all outline-none focus-visible:ring-2 disabled:pointer-events-none disabled:opacity-50 [&amp;[data-state=open]&gt;svg]:rotate-180 justify-between"
+                data-radix-id""
+        >
+          Second Item
+        </button>
+      </h3>
+      <div data-state="closed"
+           id="radix-ID"
+           hidden
+           role="region"
+           aria-labelledby="radix-ID"
+           data-orientation="vertical"
+           data-slot="accordion-content"
+           class="data-[state=closed]:animate-accordion-up data-[state=open]:animate-accordion-down motion-reduce:animate-none overflow-hidden text-sm"
+           style="--radix-ID var(--radix-ID --radix-ID var(--radix-ID"
+      >
+      </div>
+    </div>
+    <div data-state="closed"
+         data-orientation="vertical"
+         data-slot="accordion-item"
+         class="border-b last:border-b-0"
+    >
+      <h3 data-orientation="vertical"
+          data-state="closed"
+          class="flex"
+      >
+        <button type="button"
+                aria-expanded="false"
+                data-state="closed"
+                data-orientation="vertical"
+                id="radix-ID"
+                data-slot="accordion-trigger"
+                class="focus-visible:border-ring focus-visible:ring-ring/50 flex flex-1 items-start gap-4 rounded-md py-4 text-left text-sm font-medium transition-all outline-none focus-visible:ring-2 disabled:pointer-events-none disabled:opacity-50 [&amp;[data-state=open]&gt;svg]:rotate-180 justify-between"
+                data-radix-id""
+        >
+          Third Item
+        </button>
+      </h3>
+      <div data-state="closed"
+           id="radix-ID"
+           hidden
+           role="region"
+           aria-labelledby="radix-ID"
+           data-orientation="vertical"
+           data-slot="accordion-content"
+           class="data-[state=closed]:animate-accordion-up data-[state=open]:animate-accordion-down motion-reduce:animate-none overflow-hidden text-sm"
+           style="--radix-ID var(--radix-ID --radix-ID var(--radix-ID"
+      >
+      </div>
+    </div>
+  </div>
+</div>
+`;

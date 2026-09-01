@@ -1,5 +1,6 @@
 'use client';
 
+import { useEffect } from 'react';
 import type { IGRPHeaderDataArgs } from '@igrp/framework-next-types';
 import {
   cn,
@@ -9,23 +10,41 @@ import {
   useIGRPToast,
 } from '@igrp/igrp-framework-react-design-system';
 
-import { IGRPTemplateBreadcrumbs } from './breadcrumbs';
+import { type BreadcrumbItem, IGRPTemplateBreadcrumbs } from './breadcrumbs';
 import { IGRPTemplateCommandSearch } from './command-search';
 import { IGRPTemplateModeSwitcher } from './mode-switcher';
 import { IGRPTemplateNavUser } from './nav-user';
 import { IGRPTemplateNotifications } from './notifications';
+import { IGRPTemplateImage } from './template-image';
 import Image from 'next/image';
 import Link from 'next/link';
+
+/** Bundled logo used when the header data carries no logo, or its logo fails to load. */
+const defaultHeaderLogo = `${process.env.NEXT_PUBLIC_BASE_PATH ?? ''}/logo-no-text.png`;
 
 interface IGRPTemplateHeaderProps {
   data: IGRPHeaderDataArgs;
   className?: string;
+  /** Pre-resolved breadcrumb items. Forwarded to IGRPTemplateBreadcrumbs. */
+  breadcrumbs?: BreadcrumbItem[];
+  /** App-level route → label map. Forwarded to IGRPTemplateBreadcrumbs. */
+  breadcrumbRouteLabels?: Record<string, string>;
 }
 
-function IGRPTemplateHeader({ data, className }: IGRPTemplateHeaderProps) {
+function IGRPTemplateHeader({
+  data,
+  className,
+  breadcrumbs,
+  breadcrumbRouteLabels,
+}: IGRPTemplateHeaderProps) {
   const { igrpToast } = useIGRPToast();
 
-  if (!data) {
+  // Warn (dev) + toast when no header data is configured. This MUST run in an
+  // effect, not during render — calling igrpToast() during render updates the
+  // toaster provider mid-render (a React anti-pattern, and impure under the
+  // React Compiler).
+  useEffect(() => {
+    if (data) return;
     console.info(
       '[header-template] Cabeçalho do IGRP não tem dados, define os dados no src/igrp.template.config.',
     );
@@ -35,8 +54,9 @@ function IGRPTemplateHeader({ data, className }: IGRPTemplateHeaderProps) {
         '[header-template] Cabeçalho do IGRP não tem dados, define os dados no src/igrp.template.config.',
       duration: 10000,
     });
-    return;
-  }
+  }, [data, igrpToast]);
+
+  if (!data) return null;
 
   const {
     user,
@@ -64,24 +84,33 @@ function IGRPTemplateHeader({ data, className }: IGRPTemplateHeaderProps) {
         className,
       )}
     >
-      <div className={cn('flex items-center gap-2 h-12 min-w-0')}>
-        {showIGRPSidebarTrigger && <SidebarTrigger />}
-        {!showIGRPSidebarTrigger && (
-          <div className={cn('flex items-center gap-2')}>
+      <div className="flex items-center gap-2 h-12 min-w-0">
+        {showIGRPSidebarTrigger && <SidebarTrigger className="-ml-1" />}
+        {(showIGRPHeaderLogo || showIGRPHeaderTitle) && (
+          <div className="flex items-center gap-2">
             {showIGRPHeaderLogo && (
-              <div className={cn('h-10 w-10 relative rounded-lg flex items-center justify-center')}>
-                <Image
-                  src={headerLogo || '/logo-no-text.png'}
-                  alt="IGRP Logo"
-                  fill
-                  className={cn('object-contain')}
-                  quality={100}
-                  sizes="46px"
+              <div className="size-10 rounded-lg overflow-hidden flex items-center justify-center">
+                <IGRPTemplateImage
+                  src={headerLogo || defaultHeaderLogo}
+                  alt="IGRP"
+                  width={40}
+                  height={40}
+                  className="object-contain size-10"
                   priority
+                  fallback={
+                    <Image
+                      src={defaultHeaderLogo}
+                      alt="IGRP"
+                      width={40}
+                      height={40}
+                      className="object-contain size-10"
+                      priority
+                    />
+                  }
                 />
               </div>
             )}
-            {showIGRPHeaderTitle && <span className={cn('text-base font-semibold')}>iGRP</span>}
+            {showIGRPHeaderTitle && <span className="text-base font-semibold">iGRP</span>}
           </div>
         )}
 
@@ -91,7 +120,7 @@ function IGRPTemplateHeader({ data, className }: IGRPTemplateHeaderProps) {
               orientation="vertical"
               className={cn('mr-2 data-[orientation=vertical]:h-4')}
             />
-            <IGRPTemplateBreadcrumbs />
+            <IGRPTemplateBreadcrumbs items={breadcrumbs} routeLabels={breadcrumbRouteLabels} />
           </>
         )}
       </div>
@@ -121,6 +150,7 @@ function IGRPTemplateHeader({ data, className }: IGRPTemplateHeaderProps) {
             isHeader={true}
             userProfileUrl={userProfileUrl}
             notificationsUrl={notificationsUrl}
+            showNotifications={showNotifications}
           />
         )}
       </div>

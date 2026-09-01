@@ -1,0 +1,577 @@
+// Jest Snapshot v1, https://jestjs.io/docs/snapshot-testing
+
+exports[`Components/StatsCard AllVariants smoke-test 1`] = `
+<div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 px-4 py-12">
+  <div class="flex-row-reverse justify-start text-left flex items-center p-4 bg-card shadow-sm text-card-foreground transition-[box-shadow,border-color] overflow-hidden rounded-xl border border-border"
+       id="_r_ID_"
+  >
+    <div class="flex flex-col flex-1 mx-4">
+      <p class="font-medium tracking-tighter text-balance text-sm">
+        Primary
+      </p>
+      <div class="font-bold tabular-nums text-2xl">
+        123
+      </div>
+    </div>
+    <div class="relative overflow-hidden flex items-center justify-center shrink-0 size-10 rounded-full bg-primary/10 text-primary">
+      <svg xmlns="http://www.w3.org/2000/svg"
+           width="16"
+           height="16"
+           viewbox="0 0 24 24"
+           fill="none"
+           stroke="currentColor"
+           stroke-width="2"
+           stroke-linecap="round"
+           stroke-linejoin="round"
+           class="lucide lucide-star size-5"
+           aria-hidden="true"
+           id="Star"
+      >
+        <path d="M11.525 2.295a.53.53 0 0 1 .95 0l2.31 4.679a2.123 2.123 0 0 0 1.595 1.16l5.166.756a.53.53 0 0 1 .294.904l-3.736 3.638a2.123 2.123 0 0 0-.611 1.878l.882 5.14a.53.53 0 0 1-.771.56l-4.618-2.428a2.122 2.122 0 0 0-1.973 0L6.396 21.01a.53.53 0 0 1-.77-.56l.881-5.139a2.122 2.122 0 0 0-.611-1.879L2.16 9.795a.53.53 0 0 1 .294-.906l5.165-.755a2.122 2.122 0 0 0 1.597-1.16z">
+        </path>
+      </svg>
+    </div>
+  </div>
+  <div class="flex-row-reverse justify-start text-left flex items-center p-4 bg-card shadow-sm text-card-foreground transition-[box-shadow,border-color] overflow-hidden rounded-xl border border-border"
+       id="_r_ID_"
+  >
+    <div class="flex flex-col flex-1 mx-4">
+      <p class="font-medium tracking-tighter text-balance text-sm">
+        Success
+      </p>
+      <div class="font-bold tabular-nums text-2xl">
+        456
+      </div>
+    </div>
+    <div class="relative overflow-hidden flex items-center justify-center shrink-0 size-10 rounded-full bg-success/10 text-success">
+      <svg xmlns="http://www.w3.org/2000/svg"
+           width="16"
+           height="16"
+           viewbox="0 0 24 24"
+           fill="none"
+           stroke="currentColor"
+           stroke-width="2"
+           stroke-linecap="round"
+           stroke-linejoin="round"
+           class="lucide lucide-circle-check size-5"
+           aria-hidden="true"
+           id="CircleCheck"
+      >
+        <circle cx="12"
+                cy="12"
+                r="10"
+        >
+        </circle>
+        <path d="m9 12 2 2 4-4">
+        </path>
+      </svg>
+    </div>
+  </div>
+  <div class="flex-row-reverse justify-start text-left flex items-center p-4 bg-card shadow-sm text-card-foreground transition-[box-shadow,border-color] overflow-hidden rounded-xl border border-border"
+       id="_r_ID_"
+  >
+    <div class="flex flex-col flex-1 mx-4">
+      <p class="font-medium tracking-tighter text-balance text-sm">
+        Warning
+      </p>
+      <div class="font-bold tabular-nums text-2xl">
+        789
+      </div>
+    </div>
+    <div class="relative overflow-hidden flex items-center justify-center shrink-0 size-10 rounded-full bg-warning/10 text-warning">
+      <svg xmlns="http://www.w3.org/2000/svg"
+           width="16"
+           height="16"
+           viewbox="0 0 24 24"
+           fill="none"
+           stroke="currentColor"
+           stroke-width="2"
+           stroke-linecap="round"
+           stroke-linejoin="round"
+           class="lucide lucide-triangle-alert size-5"
+           aria-hidden="true"
+           id="TriangleAlert"
+      >
+        <path d="m21.73 18-8-14a2 2 0 0 0-3.48 0l-8 14A2 2 0 0 0 4 21h16a2 2 0 0 0 1.73-3">
+        </path>
+        <path d="M12 9v4">
+        </path>
+        <path d="M12 17h.01">
+        </path>
+      </svg>
+    </div>
+  </div>
+  <div class="flex-row-reverse justify-start text-left flex items-center p-4 bg-card shadow-sm text-card-foreground transition-[box-shadow,border-color] overflow-hidden rounded-xl border border-border"
+       id="_r_ID_"
+  >
+    <div class="flex flex-col flex-1 mx-4">
+      <p class="font-medium tracking-tighter text-balance text-sm">
+        Destructive
+      </p>
+      <div class="font-bold tabular-nums text-2xl">
+        012
+      </div>
+    </div>
+    <div class="relative overflow-hidden flex items-center justify-center shrink-0 size-10 rounded-full bg-destructive/10 text-destructive">
+      <svg xmlns="http://www.w3.org/2000/svg"
+           width="16"
+           height="16"
+           viewbox="0 0 24 24"
+           fill="none"
+           stroke="currentColor"
+           stroke-width="2"
+           stroke-linecap="round"
+           stroke-linejoin="round"
+           class="lucide lucide-circle-x size-5"
+           aria-hidden="true"
+           id="CircleX"
+      >
+        <circle cx="12"
+                cy="12"
+                r="10"
+        >
+        </circle>
+        <path d="m15 9-6 6">
+        </path>
+        <path d="m9 9 6 6">
+        </path>
+      </svg>
+    </div>
+  </div>
+  <div class="flex-row-reverse justify-start text-left flex items-center p-4 bg-card shadow-sm text-card-foreground transition-[box-shadow,border-color] overflow-hidden rounded-xl border border-border"
+       id="_r_ID_"
+  >
+    <div class="flex flex-col flex-1 mx-4">
+      <p class="font-medium tracking-tighter text-balance text-sm">
+        Info
+      </p>
+      <div class="font-bold tabular-nums text-2xl">
+        345
+      </div>
+    </div>
+    <div class="relative overflow-hidden flex items-center justify-center shrink-0 size-10 rounded-full bg-info/10 text-info">
+      <svg xmlns="http://www.w3.org/2000/svg"
+           width="16"
+           height="16"
+           viewbox="0 0 24 24"
+           fill="none"
+           stroke="currentColor"
+           stroke-width="2"
+           stroke-linecap="round"
+           stroke-linejoin="round"
+           class="lucide lucide-info size-5"
+           aria-hidden="true"
+           id="Info"
+      >
+        <circle cx="12"
+                cy="12"
+                r="10"
+        >
+        </circle>
+        <path d="M12 16v-4">
+        </path>
+        <path d="M12 8h.01">
+        </path>
+      </svg>
+    </div>
+  </div>
+  <div class="flex-row-reverse justify-start text-left flex items-center p-4 bg-card shadow-sm text-card-foreground transition-[box-shadow,border-color] overflow-hidden rounded-xl border border-border"
+       id="_r_ID_"
+  >
+    <div class="flex flex-col flex-1 mx-4">
+      <p class="font-medium tracking-tighter text-balance text-sm">
+        Indigo
+      </p>
+      <div class="font-bold tabular-nums text-2xl">
+        678
+      </div>
+    </div>
+    <div class="relative overflow-hidden flex items-center justify-center shrink-0 size-10 rounded-full bg-info/10 text-info">
+      <svg xmlns="http://www.w3.org/2000/svg"
+           width="16"
+           height="16"
+           viewbox="0 0 24 24"
+           fill="none"
+           stroke="currentColor"
+           stroke-width="2"
+           stroke-linecap="round"
+           stroke-linejoin="round"
+           class="lucide lucide-sparkles size-5"
+           aria-hidden="true"
+           id="Sparkles"
+      >
+        <path d="M11.017 2.814a1 1 0 0 1 1.966 0l1.051 5.558a2 2 0 0 0 1.594 1.594l5.558 1.051a1 1 0 0 1 0 1.966l-5.558 1.051a2 2 0 0 0-1.594 1.594l-1.051 5.558a1 1 0 0 1-1.966 0l-1.051-5.558a2 2 0 0 0-1.594-1.594l-5.558-1.051a1 1 0 0 1 0-1.966l5.558-1.051a2 2 0 0 0 1.594-1.594z">
+        </path>
+        <path d="M20 2v4">
+        </path>
+        <path d="M22 4h-4">
+        </path>
+        <circle cx="4"
+                cy="20"
+                r="2"
+        >
+        </circle>
+      </svg>
+    </div>
+  </div>
+</div>
+`;
+
+exports[`Components/StatsCard Default smoke-test 1`] = `
+<div class="container mx-auto px-4 py-12">
+  <div class="flex-row justify-start text-left flex items-center p-4 bg-card shadow-sm text-card-foreground transition-[box-shadow,border-color] overflow-hidden rounded-xl border border-border"
+       id="_r_ID_"
+  >
+    <div class="flex flex-col flex-1 mx-4">
+      <p class="font-medium tracking-tighter text-balance text-sm">
+        Total Users
+      </p>
+      <div class="font-bold tabular-nums text-2xl">
+        1,234
+      </div>
+    </div>
+    <div class="relative overflow-hidden flex items-center justify-center shrink-0 size-10 text-primary">
+      <svg xmlns="http://www.w3.org/2000/svg"
+           width="16"
+           height="16"
+           viewbox="0 0 24 24"
+           fill="none"
+           stroke="currentColor"
+           stroke-width="2"
+           stroke-linecap="round"
+           stroke-linejoin="round"
+           class="lucide lucide-users size-5"
+           aria-hidden="true"
+           id="Users"
+      >
+        <path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2">
+        </path>
+        <path d="M16 3.128a4 4 0 0 1 0 7.744">
+        </path>
+        <path d="M22 21v-2a4 4 0 0 0-3-3.87">
+        </path>
+        <circle cx="9"
+                cy="7"
+                r="4"
+        >
+        </circle>
+      </svg>
+    </div>
+  </div>
+</div>
+`;
+
+exports[`Components/StatsCard Interactive smoke-test 1`] = `
+<div class="container mx-auto px-4 py-12">
+  <div class="flex-row-reverse justify-start text-left flex items-center p-4 bg-card shadow-sm text-card-foreground transition-[box-shadow,border-color] overflow-hidden rounded-xl border border-l-4 border-t-0 border-r-0 border-b-0 cursor-pointer hover:shadow-md focus-visible:ring-2 focus-visible:ring-ring focus-visible:outline-none border-primary"
+       role="button"
+       tabindex="0"
+       id="_r_ID_"
+  >
+    <div class="flex flex-col flex-1 mx-4">
+      <p class="font-medium tracking-tighter text-balance text-sm">
+        Click Me
+      </p>
+      <div class="font-bold tabular-nums text-2xl">
+        999
+      </div>
+    </div>
+    <div class="relative overflow-hidden flex items-center justify-center shrink-0 size-10 rounded-full bg-primary/10 text-primary">
+      <svg xmlns="http://www.w3.org/2000/svg"
+           width="16"
+           height="16"
+           viewbox="0 0 24 24"
+           fill="none"
+           stroke="currentColor"
+           stroke-width="2"
+           stroke-linecap="round"
+           stroke-linejoin="round"
+           class="lucide lucide-mouse-pointer size-5"
+           aria-hidden="true"
+           id="MousePointer"
+      >
+        <path d="M12.586 12.586 19 19">
+        </path>
+        <path d="M3.688 3.037a.497.497 0 0 0-.651.651l6.5 15.999a.501.501 0 0 0 .947-.062l1.569-6.083a2 2 0 0 1 1.448-1.479l6.124-1.579a.5.5 0 0 0 .063-.947z">
+        </path>
+      </svg>
+    </div>
+  </div>
+</div>
+`;
+
+exports[`Components/StatsCard ItemPlacementVariants smoke-test 1`] = `
+<div class="space-y-6 px-4 py-12">
+  <div class="flex-row-reverse justify-start text-left flex items-center p-4 bg-card shadow-sm text-card-foreground transition-[box-shadow,border-color] overflow-hidden rounded-xl border border-border"
+       id="_r_ID_"
+  >
+    <div class="flex flex-col flex-1 mx-4">
+      <p class="font-medium tracking-tighter text-balance text-sm">
+        Start / Start
+      </p>
+      <div class="font-bold tabular-nums text-2xl">
+        1,234
+      </div>
+    </div>
+    <div class="relative overflow-hidden flex items-center justify-center shrink-0 size-10 text-primary">
+      <svg xmlns="http://www.w3.org/2000/svg"
+           width="16"
+           height="16"
+           viewbox="0 0 24 24"
+           fill="none"
+           stroke="currentColor"
+           stroke-width="2"
+           stroke-linecap="round"
+           stroke-linejoin="round"
+           class="lucide lucide-users size-5"
+           aria-hidden="true"
+           id="Users"
+      >
+        <path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2">
+        </path>
+        <path d="M16 3.128a4 4 0 0 1 0 7.744">
+        </path>
+        <path d="M22 21v-2a4 4 0 0 0-3-3.87">
+        </path>
+        <circle cx="9"
+                cy="7"
+                r="4"
+        >
+        </circle>
+      </svg>
+    </div>
+  </div>
+  <div class="flex-row justify-start text-left flex items-center p-4 bg-card shadow-sm text-card-foreground transition-[box-shadow,border-color] overflow-hidden rounded-xl border border-border"
+       id="_r_ID_"
+  >
+    <div class="flex flex-col flex-1 mx-4">
+      <p class="font-medium tracking-tighter text-balance text-sm">
+        End / Start
+      </p>
+      <div class="font-bold tabular-nums text-2xl">
+        1,234
+      </div>
+    </div>
+    <div class="relative overflow-hidden flex items-center justify-center shrink-0 size-10 text-primary">
+      <svg xmlns="http://www.w3.org/2000/svg"
+           width="16"
+           height="16"
+           viewbox="0 0 24 24"
+           fill="none"
+           stroke="currentColor"
+           stroke-width="2"
+           stroke-linecap="round"
+           stroke-linejoin="round"
+           class="lucide lucide-users size-5"
+           aria-hidden="true"
+           id="Users"
+      >
+        <path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2">
+        </path>
+        <path d="M16 3.128a4 4 0 0 1 0 7.744">
+        </path>
+        <path d="M22 21v-2a4 4 0 0 0-3-3.87">
+        </path>
+        <circle cx="9"
+                cy="7"
+                r="4"
+        >
+        </circle>
+      </svg>
+    </div>
+  </div>
+  <div class="flex-row-reverse justify-end text-right flex items-center p-4 bg-card shadow-sm text-card-foreground transition-[box-shadow,border-color] overflow-hidden rounded-xl border border-border"
+       id="_r_ID_"
+  >
+    <div class="flex flex-col flex-1 mx-4">
+      <p class="font-medium tracking-tighter text-balance text-sm">
+        Start / End
+      </p>
+      <div class="font-bold tabular-nums text-2xl">
+        1,234
+      </div>
+    </div>
+    <div class="relative overflow-hidden flex items-center justify-center shrink-0 size-10 text-primary">
+      <svg xmlns="http://www.w3.org/2000/svg"
+           width="16"
+           height="16"
+           viewbox="0 0 24 24"
+           fill="none"
+           stroke="currentColor"
+           stroke-width="2"
+           stroke-linecap="round"
+           stroke-linejoin="round"
+           class="lucide lucide-users size-5"
+           aria-hidden="true"
+           id="Users"
+      >
+        <path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2">
+        </path>
+        <path d="M16 3.128a4 4 0 0 1 0 7.744">
+        </path>
+        <path d="M22 21v-2a4 4 0 0 0-3-3.87">
+        </path>
+        <circle cx="9"
+                cy="7"
+                r="4"
+        >
+        </circle>
+      </svg>
+    </div>
+  </div>
+  <div class="flex-row justify-end text-right flex items-center p-4 bg-card shadow-sm text-card-foreground transition-[box-shadow,border-color] overflow-hidden rounded-xl border border-border"
+       id="_r_ID_"
+  >
+    <div class="flex flex-col flex-1 mx-4">
+      <p class="font-medium tracking-tighter text-balance text-sm">
+        End / End
+      </p>
+      <div class="font-bold tabular-nums text-2xl">
+        1,234
+      </div>
+    </div>
+    <div class="relative overflow-hidden flex items-center justify-center shrink-0 size-10 text-primary">
+      <svg xmlns="http://www.w3.org/2000/svg"
+           width="16"
+           height="16"
+           viewbox="0 0 24 24"
+           fill="none"
+           stroke="currentColor"
+           stroke-width="2"
+           stroke-linecap="round"
+           stroke-linejoin="round"
+           class="lucide lucide-users size-5"
+           aria-hidden="true"
+           id="Users"
+      >
+        <path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2">
+        </path>
+        <path d="M16 3.128a4 4 0 0 1 0 7.744">
+        </path>
+        <path d="M22 21v-2a4 4 0 0 0-3-3.87">
+        </path>
+        <circle cx="9"
+                cy="7"
+                r="4"
+        >
+        </circle>
+      </svg>
+    </div>
+  </div>
+</div>
+`;
+
+exports[`Components/StatsCard MinimalStyle smoke-test 1`] = `
+<div class="container mx-auto px-4 py-12">
+  <div class="flex-row-reverse justify-start text-left flex items-center p-4 bg-card shadow-sm text-card-foreground transition-[box-shadow,border-color] overflow-hidden border border-border"
+       id="_r_ID_"
+  >
+    <div class="flex flex-col flex-1 mx-4">
+      <p class="font-medium tracking-tighter text-balance text-sm">
+        Downloads
+      </p>
+      <div class="font-bold tabular-nums text-2xl">
+        2.4K
+      </div>
+    </div>
+    <div class="relative overflow-hidden flex items-center justify-center shrink-0 size-10 rounded-md border border-primary/20">
+      <svg xmlns="http://www.w3.org/2000/svg"
+           width="16"
+           height="16"
+           viewbox="0 0 24 24"
+           fill="none"
+           stroke="currentColor"
+           stroke-width="2"
+           stroke-linecap="round"
+           stroke-linejoin="round"
+           class="lucide lucide-download size-5"
+           aria-hidden="true"
+           id="Download"
+      >
+        <path d="M12 15V3">
+        </path>
+        <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4">
+        </path>
+        <path d="m7 10 5 5 5-5">
+        </path>
+      </svg>
+    </div>
+  </div>
+</div>
+`;
+
+exports[`Components/StatsCard WithBackground smoke-test 1`] = `
+<div class="container mx-auto px-4 py-12">
+  <div class="flex-row justify-start text-left flex items-center p-4 bg-card shadow-sm text-card-foreground transition-[box-shadow,border-color] overflow-hidden rounded-xl border border-border"
+       id="_r_ID_"
+  >
+    <div class="flex flex-col flex-1 mx-4">
+      <p class="font-medium tracking-tighter text-balance text-sm">
+        Revenue
+      </p>
+      <div class="font-bold tabular-nums text-2xl">
+        $12,345
+      </div>
+    </div>
+    <div class="relative overflow-hidden flex items-center justify-center shrink-0 size-10 rounded-full bg-success/10 text-success">
+      <svg xmlns="http://www.w3.org/2000/svg"
+           width="16"
+           height="16"
+           viewbox="0 0 24 24"
+           fill="none"
+           stroke="currentColor"
+           stroke-width="2"
+           stroke-linecap="round"
+           stroke-linejoin="round"
+           class="lucide lucide-dollar-sign size-5"
+           aria-hidden="true"
+           id="DollarSign"
+      >
+        <line x1="12"
+              x2="12"
+              y1="2"
+              y2="22"
+        >
+        </line>
+        <path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6">
+        </path>
+      </svg>
+    </div>
+  </div>
+</div>
+`;
+
+exports[`Components/StatsCard WithBorder smoke-test 1`] = `
+<div class="container mx-auto px-4 py-12">
+  <div class="flex-row-reverse justify-start text-left flex items-center p-4 bg-card shadow-sm text-card-foreground transition-[box-shadow,border-color] overflow-hidden rounded-lg border border-l-4 border-t-0 border-r-0 border-b-0 border-info"
+       id="_r_ID_"
+  >
+    <div class="flex flex-col flex-1 mx-4">
+      <p class="font-medium tracking-tighter text-balance text-sm">
+        Active Projects
+      </p>
+      <div class="font-bold tabular-nums text-3xl">
+        42
+      </div>
+    </div>
+    <div class="relative overflow-hidden flex items-center justify-center shrink-0 size-12 rounded-md border border-info/20">
+      <svg xmlns="http://www.w3.org/2000/svg"
+           width="16"
+           height="16"
+           viewbox="0 0 24 24"
+           fill="none"
+           stroke="currentColor"
+           stroke-width="2"
+           stroke-linecap="round"
+           stroke-linejoin="round"
+           class="lucide lucide-folder-open size-6"
+           aria-hidden="true"
+           id="FolderOpen"
+      >
+        <path d="m6 14 1.5-2.9A2 2 0 0 1 9.24 10H20a2 2 0 0 1 1.94 2.5l-1.54 6a2 2 0 0 1-1.95 1.5H4a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h3.9a2 2 0 0 1 1.69.9l.81 1.2a2 2 0 0 0 1.67.9H18a2 2 0 0 1 2 2v2">
+        </path>
+      </svg>
+    </div>
+  </div>
+</div>
+`;

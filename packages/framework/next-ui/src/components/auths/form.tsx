@@ -2,7 +2,11 @@
 
 import { useState } from 'react';
 import Image from 'next/image';
-import { signIn } from '@igrp/framework-next-auth/client';
+import {
+  IGRP_AUTH_PROVIDER_ID,
+  signIn,
+  type AuthProviderId,
+} from '@igrp/framework-next-auth/client';
 import {
   cn,
   Alert,
@@ -11,6 +15,14 @@ import {
   IGRPIcon,
 } from '@igrp/igrp-framework-react-design-system';
 import { IGRPTemplateModeSwitcher } from '../templates/mode-switcher';
+
+function withBasePath(src: string): string {
+  const basePath = process.env.NEXT_PUBLIC_BASE_PATH ?? '';
+  if (!basePath || !src.startsWith('/') || src.startsWith('//') || src.startsWith(`${basePath}/`)) {
+    return src;
+  }
+  return `${basePath}${src}`;
+}
 
 interface IGRPLoginTexts {
   welcome: string;
@@ -25,6 +37,7 @@ interface IGRPLoginTexts {
 
 interface IGRPSiteLogo {
   src: string;
+  srcDark?: string;
   width: number;
   height: number;
 }
@@ -34,9 +47,16 @@ interface IGRPAuthFormProps {
   logo: IGRPSiteLogo;
   name: string;
   callbackUrl?: string;
+  providerId?: AuthProviderId;
 }
 
-function IGRPAuthForm({ texts, logo, name, callbackUrl = '/' }: IGRPAuthFormProps) {
+function IGRPAuthForm({
+  texts,
+  logo,
+  name,
+  callbackUrl = '/',
+  providerId = IGRP_AUTH_PROVIDER_ID,
+}: IGRPAuthFormProps) {
   const [isLoading, setIsLoading] = useState(false);
   const [authError, setAuthError] = useState<string | null>(null);
 
@@ -45,7 +65,7 @@ function IGRPAuthForm({ texts, logo, name, callbackUrl = '/' }: IGRPAuthFormProp
     setAuthError(null);
 
     try {
-      await signIn('keycloak', { callbackUrl });
+      await signIn(providerId, { callbackUrl });
     } catch (error) {
       console.error('Authentication error:', error);
       setAuthError(error instanceof Error ? error.message : 'Failed to sign in. Please try again.');
@@ -80,12 +100,21 @@ function IGRPAuthForm({ texts, logo, name, callbackUrl = '/' }: IGRPAuthFormProp
           )}
           <div className={cn('flex flex-col items-center')}>
             <Image
-              src={logo.src}
+              src={withBasePath(logo.src)}
               alt={name}
               width={logo.width}
               height={logo.height}
-              className={cn('w-auto h-auto')}
+              className={cn('w-auto h-auto', logo.srcDark && 'dark:hidden')}
             />
+            {logo.srcDark && (
+              <Image
+                src={withBasePath(logo.srcDark)}
+                alt={name}
+                width={logo.width}
+                height={logo.height}
+                className={cn('w-auto h-auto hidden dark:block')}
+              />
+            )}
             <h3 className={cn('mt-6 text-center')}>
               <p>{texts.welcome}</p>
               <p>{texts.description}</p>

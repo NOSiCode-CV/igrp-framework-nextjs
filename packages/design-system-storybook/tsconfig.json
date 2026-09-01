@@ -39,10 +39,8 @@
     "src"
   ],
   "exclude": [
-    "src/**/__docs__",
-    "src/**/__test__",
-    "src/test",
     "node_modules",
-    "src/components/exprimental",
+    "dist",
+    "storybook-static"
   ]
 }

@@ -1,0 +1,95 @@
+// Jest Snapshot v1, https://jestjs.io/docs/snapshot-testing
+
+exports[`Components/ModalDialog Default smoke-test 1`] = `
+<div class="container mx-auto p-10 flex items-center justify-center">
+  <button data-slot="dialog-trigger"
+          class="inline-flex items-center justify-center gap-1.5 whitespace-nowrap rounded-md text-sm font-medium transition-[color,box-shadow] disabled:pointer-events-none disabled:opacity-50 [&amp;_svg]:pointer-events-none [&amp;_svg:not([class*='size-'])]:size-4 shrink-0 [&amp;_svg]:shrink-0 outline-none focus-visible:border-ring focus-visible:ring-ring/50 focus-visible:ring-[3px] aria-invalid:ring-destructive/20 dark:aria-invalid:ring-destructive/40 aria-invalid:border-destructive bg-primary text-primary-foreground shadow-xs hover:bg-primary/90 hover:text-primary-foreground h-9 px-2.5 has-data-[icon=inline-end]:pr-2 has-data-[icon=inline-start]:pl-2"
+          type="button"
+          aria-haspopup="dialog"
+          aria-expanded="false"
+          data-state="closed"
+  >
+    Open Modal
+  </button>
+</div>
+`;
+
+exports[`Components/ModalDialog ExtraLargeWithStickyHeader smoke-test 1`] = `
+<div class="container mx-auto p-10 flex items-center justify-center">
+  <button data-slot="dialog-trigger"
+          class="inline-flex items-center justify-center gap-1.5 whitespace-nowrap rounded-md text-sm font-medium transition-[color,box-shadow] disabled:pointer-events-none disabled:opacity-50 [&amp;_svg]:pointer-events-none [&amp;_svg:not([class*='size-'])]:size-4 shrink-0 [&amp;_svg]:shrink-0 outline-none focus-visible:border-ring focus-visible:ring-ring/50 focus-visible:ring-[3px] aria-invalid:ring-destructive/20 dark:aria-invalid:ring-destructive/40 aria-invalid:border-destructive bg-primary text-primary-foreground shadow-xs hover:bg-primary/90 hover:text-primary-foreground h-9 px-2.5 has-data-[icon=inline-end]:pr-2 has-data-[icon=inline-start]:pl-2"
+          type="button"
+          aria-haspopup="dialog"
+          aria-expanded="false"
+          data-state="closed"
+  >
+    Open Modal
+  </button>
+</div>
+`;
+
+exports[`Components/ModalDialog FullSizeWithStickyFooter smoke-test 1`] = `
+<div class="container mx-auto p-10 flex items-center justify-center">
+  <button data-slot="dialog-trigger"
+          class="inline-flex items-center justify-center gap-1.5 whitespace-nowrap rounded-md text-sm font-medium transition-[color,box-shadow] disabled:pointer-events-none disabled:opacity-50 [&amp;_svg]:pointer-events-none [&amp;_svg:not([class*='size-'])]:size-4 shrink-0 [&amp;_svg]:shrink-0 outline-none focus-visible:border-ring focus-visible:ring-ring/50 focus-visible:ring-[3px] aria-invalid:ring-destructive/20 dark:aria-invalid:ring-destructive/40 aria-invalid:border-destructive bg-primary text-primary-foreground shadow-xs hover:bg-primary/90 hover:text-primary-foreground h-9 px-2.5 has-data-[icon=inline-end]:pr-2 has-data-[icon=inline-start]:pl-2"
+          type="button"
+          aria-haspopup="dialog"
+          aria-expanded="false"
+          data-state="closed"
+  >
+    Open Modal
+  </button>
+</div>
+`;
+
+exports[`Components/ModalDialog Small smoke-test 1`] = `
+<div class="container mx-auto p-10 flex items-center justify-center">
+  <button data-slot="dialog-trigger"
+          class="inline-flex items-center justify-center gap-1.5 whitespace-nowrap rounded-md text-sm font-medium transition-[color,box-shadow] disabled:pointer-events-none disabled:opacity-50 [&amp;_svg]:pointer-events-none [&amp;_svg:not([class*='size-'])]:size-4 shrink-0 [&amp;_svg]:shrink-0 outline-none focus-visible:border-ring focus-visible:ring-ring/50 focus-visible:ring-[3px] aria-invalid:ring-destructive/20 dark:aria-invalid:ring-destructive/40 aria-invalid:border-destructive bg-primary text-primary-foreground shadow-xs hover:bg-primary/90 hover:text-primary-foreground h-9 px-2.5 has-data-[icon=inline-end]:pr-2 has-data-[icon=inline-start]:pl-2"
+          type="button"
+          aria-haspopup="dialog"
+          aria-expanded="false"
+          data-state="closed"
+  >
+    Open Modal
+  </button>
+</div>
+`;
+
+exports[`Components/ModalDialog WithFormContent smoke-test 1`] = `
+<div class="container mx-auto p-10 flex items-center justify-center">
+  <button data-slot="dialog-trigger"
+          class="inline-flex items-center justify-center gap-1.5 whitespace-nowrap rounded-md text-sm font-medium transition-[color,box-shadow] disabled:pointer-events-none disabled:opacity-50 [&amp;_svg]:pointer-events-none [&amp;_svg:not([class*='size-'])]:size-4 shrink-0 [&amp;_svg]:shrink-0 outline-none focus-visible:border-ring focus-visible:ring-ring/50 focus-visible:ring-[3px] aria-invalid:ring-destructive/20 dark:aria-invalid:ring-destructive/40 aria-invalid:border-destructive bg-primary text-primary-foreground shadow-xs hover:bg-primary/90 hover:text-primary-foreground h-9 px-2.5 has-data-[icon=inline-end]:pr-2 has-data-[icon=inline-start]:pl-2"
+          type="button"
+          aria-haspopup="dialog"
+          aria-expanded="false"
+          data-state="closed"
+  >
+    Open Modal
+  </button>
+</div>
+`;
+
+exports[`Components/ModalDialog WithOutsideButton smoke-test 1`] = `
+<div class="container mx-auto p-10 flex flex-col items-center justify-center gap-4">
+  <button data-slot="button"
+          class="inline-flex items-center justify-center gap-1.5 whitespace-nowrap rounded-md text-sm font-medium transition-[color,box-shadow] disabled:pointer-events-none disabled:opacity-50 [&amp;_svg]:pointer-events-none [&amp;_svg:not([class*='size-'])]:size-4 shrink-0 [&amp;_svg]:shrink-0 outline-none focus-visible:border-ring focus-visible:ring-ring/50 focus-visible:ring-[3px] aria-invalid:ring-destructive/20 dark:aria-invalid:ring-destructive/40 aria-invalid:border-destructive bg-primary text-primary-foreground shadow-xs hover:bg-primary/90 hover:text-primary-foreground h-9 px-2.5 has-data-[icon=inline-end]:pr-2 has-data-[icon=inline-start]:pl-2"
+  >
+    Open Modal from Outside Button
+  </button>
+</div>
+`;
+
+exports[`Components/ModalDialog WithStickyHeaderAndFooter smoke-test 1`] = `
+<div class="container mx-auto p-10 flex items-center justify-center">
+  <button data-slot="dialog-trigger"
+          class="inline-flex items-center justify-center gap-1.5 whitespace-nowrap rounded-md text-sm font-medium transition-[color,box-shadow] disabled:pointer-events-none disabled:opacity-50 [&amp;_svg]:pointer-events-none [&amp;_svg:not([class*='size-'])]:size-4 shrink-0 [&amp;_svg]:shrink-0 outline-none focus-visible:border-ring focus-visible:ring-ring/50 focus-visible:ring-[3px] aria-invalid:ring-destructive/20 dark:aria-invalid:ring-destructive/40 aria-invalid:border-destructive bg-primary text-primary-foreground shadow-xs hover:bg-primary/90 hover:text-primary-foreground h-9 px-2.5 has-data-[icon=inline-end]:pr-2 has-data-[icon=inline-start]:pl-2"
+          type="button"
+          aria-haspopup="dialog"
+          aria-expanded="false"
+          data-state="closed"
+  >
+    Open Modal
+  </button>
+</div>
+`;

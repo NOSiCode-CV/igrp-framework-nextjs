@@ -14,6 +14,7 @@ export type {
   IGRPGlobalConfigurationArgs,
   IGRPFileUrlArgs,
   IGRPPermissionArgs,
+  IGRPPermissionCatalogEntry,
   IGRPResourceType,
   IGRPResourceItem,
   IGRPResourceArgs,
@@ -32,3 +33,5 @@ export type { IGRPHeaderDataArgs, IGRPNotificationArgs } from './types/header';
 export type { IGRPConfigArgs, IGRPConfigClient, IGRPLayoutConfigArgs } from './types/igrp';
 
 export type { IGRPSidebarDataArgs } from './types/sidebar';
+
+export type { IGRPAccessClaims, IGRPClaimsState } from '@igrp/framework-next-auth/claims';

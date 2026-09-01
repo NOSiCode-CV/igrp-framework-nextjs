@@ -1,17 +1,11 @@
-version: '3.8'
-
+# Builds the static Storybook (packages/design-system-storybook/Dockerfile) and serves it.
+# The Dockerfile COPYs repo-root workspace files, so the build context must be the repo root.
 services:
-  storybook-dev:
+  storybook:
     build:
-      context: .
-      dockerfile: docker/development/storybook/Dockerfile
+      context: ../..
+      dockerfile: packages/design-system-storybook/Dockerfile
     container_name: igrp-design-system-storybook
     ports:
       - '6006:6006'
-    volumes:
-      - .:/app
-      - /app/node_modules
-    environment:
-      - NODE_ENV=development
-      - CHOKIDAR_USEPOLLING=true
     restart: unless-stopped

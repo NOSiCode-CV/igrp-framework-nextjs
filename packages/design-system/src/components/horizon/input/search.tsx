@@ -1,130 +1,97 @@
-'use client';
+"use client"
 
-import { useId, useState, useCallback } from 'react';
-import { useFormContext } from 'react-hook-form';
-import type { VariantProps } from 'class-variance-authority';
+import { useId, useState, useCallback, type ReactNode } from "react"
+import { useFormContext } from "react-hook-form"
+import type { VariantProps } from "class-variance-authority"
 
-import { cn } from '../../../lib/utils';
-import { type IGRPInputProps } from '../../../types';
-import { Input } from '../../ui/input';
-import { IGRPButton } from '../button';
-import { IGRPFieldDescription } from '../field-description';
-import { IGRPFormField } from '../form/form-field';
-import { IGRPIcon, type IGRPIconName } from '../icon';
-import { IGRPLabel } from '../label';
+import { cn } from "../../../lib/utils"
+import { type IGRPInputProps } from "../../../types"
+import { Input } from "../../primitives/input"
+import { FormControl, FormDescription, FormField, FormItem, FormLabel, FormMessage } from "../../primitives/form"
+import { IGRPButton } from "../button"
+import { IGRPFieldDescription } from "../field-description"
+import { IGRPIcon, type IGRPIconName } from "../icon"
+import { IGRPLabel } from "../label"
 
 /**
  * Props for the IGRPInputSearch component.
  * @see IGRPInputSearch
  */
-interface IGRPInputSearchProps extends Omit<IGRPInputProps, 'value' | 'defaultValue'> {
+interface IGRPInputSearchProps extends Omit<IGRPInputProps, "value" | "defaultValue"> {
   /** Controlled search value. */
-  value?: string;
+  value?: string
   /** Default search value. */
-  defaultValue?: string;
+  defaultValue?: string
   /** Called on search (with optional debounce). */
-  onSearch?: (value: string) => void;
+  onSearch?: (value: string) => void
   /** Called when input value changes. */
-  setValueChange?: (value: string) => void;
+  setValueChange?: (value: string) => void
   /** Show icon at start of input. */
-  showStartIcon?: boolean;
+  showStartIcon?: boolean
   /** Icon name for start icon. */
-  startIcon?: IGRPIconName | string;
+  startIcon?: IGRPIconName | string
   /** Show submit button. */
-  showSubmitButton?: boolean;
+  showSubmitButton?: boolean
   /** Icon for submit button. */
-  submitIcon?: IGRPIconName | string;
+  submitIcon?: IGRPIconName | string
   /** Label for submit button. */
-  submitButtonLabel?: string;
+  submitButtonLabel?: string
   /** CSS classes for submit button. */
-  submitButtonClassName?: string;
+  submitButtonClassName?: string
   /** Enable debounce for onSearch. */
-  isDebounce?: boolean;
+  isDebounce?: boolean
   /** Debounce delay in ms. */
-  debounceMs?: number;
+  debounceMs?: number
   /** Submit button variant. */
-  submitVariant?: VariantProps<typeof IGRPButton>['variant'];
+  submitVariant?: VariantProps<typeof IGRPButton>["variant"]
   /** Show loading state. */
-  loading?: boolean;
+  loading?: boolean
 }
 
-/** @internal Search input field with icon and submit button. */
-function SearchInputField({
-  value,
-  onChange,
-  onKeyDown,
-  fieldName,
-  required,
-  error,
-  helperText,
-  helperId,
-  className,
+/**
+ * @internal Wraps the supplied input element with the start-icon and submit-button decorations.
+ * The caller owns the input element so it can optionally be wrapped in `<FormControl>` for proper
+ * label↔input id forwarding under form context.
+ */
+function SearchInputDecoration({
+  inputNode,
   showStartIcon,
   startIcon,
   showSubmitButton,
   submitButtonClassName,
   submitButtonLabel,
-  onSearch,
   submitIcon,
-  iconSize,
   submitVariant,
   loading,
+  onSearch,
+  value,
   iconPlacement,
   showIcon,
   disabled,
-  ...inputProps
 }: {
-  value: string;
-  onChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
-  onKeyDown?: (e: React.KeyboardEvent<HTMLInputElement>) => void;
-  fieldName: string;
-  required: boolean;
-  error?: string;
-  helperText?: string;
-  helperId?: string;
-  className?: string;
-  showStartIcon: boolean;
-  startIcon: IGRPIconName | string;
-  showSubmitButton: boolean;
-  submitButtonClassName?: string;
-  submitButtonLabel?: string;
-  onSearch?: (value: string) => void;
-  submitIcon: IGRPIconName | string;
-  iconSize?: number | string;
-  submitVariant: VariantProps<typeof IGRPButton>['variant'];
-  loading?: boolean;
-  iconPlacement?: IGRPInputProps['iconPlacement'];
-  showIcon?: boolean;
-  disabled?: boolean;
-} & Omit<IGRPInputProps, 'value' | 'defaultValue'>) {
+  inputNode: ReactNode
+  showStartIcon: boolean
+  startIcon: IGRPIconName | string
+  showSubmitButton: boolean
+  submitButtonClassName?: string
+  submitButtonLabel?: string
+  submitIcon: IGRPIconName | string
+  submitVariant: VariantProps<typeof IGRPButton>["variant"]
+  loading?: boolean
+  onSearch?: (value: string) => void
+  value: string
+  iconPlacement?: IGRPInputProps["iconPlacement"]
+  showIcon?: boolean
+  disabled?: boolean
+}) {
   return (
-    <div className={cn('relative py-2')}>
-      <Input
-        id={fieldName}
-        name={fieldName}
-        type="search"
-        required={required}
-        aria-required={required}
-        aria-invalid={!!error || !!inputProps['aria-invalid']}
-        aria-describedby={helperText || error ? helperId : undefined}
-        className={cn(
-          'peer py-3 text-sm outline-hidden flex w-full items-center',
-          showStartIcon && 'ps-6.5',
-          showSubmitButton && 'pe-9',
-          error && 'border-destructive focus-visible:ring-destructive/20',
-          className,
-        )}
-        value={value}
-        onChange={onChange}
-        onKeyDown={onKeyDown}
-        disabled={disabled}
-        {...inputProps}
-      />
+    <div className={cn("relative py-2")}>
+      {inputNode}
 
       {showStartIcon && (
         <div
           className={cn(
-            'text-muted-foreground/80 pointer-events-none absolute inset-y-0 inset-s-0 flex items-center justify-center ps-1.5 peer-disabled:opacity-50',
+            "text-muted-foreground/80 pointer-events-none absolute inset-y-0 inset-s-0 flex items-center justify-center ps-1.5 peer-disabled:opacity-50",
           )}
         >
           <IGRPIcon iconName={startIcon} aria-hidden="true" size={14} />
@@ -134,7 +101,7 @@ function SearchInputField({
       {showSubmitButton && (
         <IGRPButton
           className={cn(
-            'absolute top-1/2 -translate-y-1/2 inset-e-0 flex items-center justify-center rounded-md transition-[color,box-shadow] outline-none z-10 focus-visible:ring-[3px] gap-0',
+            "absolute top-1/2 -translate-y-1/2 inset-e-0 flex items-center justify-center rounded-md transition-[color,box-shadow] outline-none z-10 focus-visible:ring-[3px] gap-0",
             submitButtonClassName,
           )}
           aria-label={submitButtonLabel}
@@ -143,7 +110,6 @@ function SearchInputField({
           disabled={disabled}
           showIcon={showIcon}
           iconName={submitIcon}
-          iconSize={iconSize}
           variant={submitVariant}
           loading={loading}
           iconPlacement={iconPlacement}
@@ -152,18 +118,18 @@ function SearchInputField({
         </IGRPButton>
       )}
     </div>
-  );
+  )
 }
 
 const isDebouncedCallback = (callback?: (val: string) => void, delay = 2000) => {
-  if (!callback) return null;
+  if (!callback) return null
 
-  let timeout: ReturnType<typeof setTimeout>;
+  let timeout: ReturnType<typeof setTimeout>
   return (value: string) => {
-    clearTimeout(timeout);
-    timeout = setTimeout(() => callback(value), delay);
-  };
-};
+    clearTimeout(timeout)
+    timeout = setTimeout(() => callback(value), delay)
+  }
+}
 
 /**
  * Search input with optional icon, submit button, and debounce. Integrates with react-hook-form.
@@ -177,113 +143,153 @@ function IGRPInputSearch({
   required = false,
   error,
   value: controlledValue,
-  defaultValue = '',
+  defaultValue = "",
   onSearch,
   setValueChange,
   showStartIcon = true,
-  startIcon = 'Search',
+  startIcon = "Search",
   showSubmitButton = true,
-  submitIcon = 'ArrowRight',
+  submitIcon = "ArrowRight",
   submitButtonLabel,
   submitButtonClassName,
   debounceMs = 2000,
   isDebounce = false,
   showIcon = true,
-  iconSize = 14,
   iconPlacement,
-  submitVariant = 'ghost',
+  submitVariant = "ghost",
   loading,
   ...props
 }: IGRPInputSearchProps) {
-  const _id = useId();
-  const fieldName = name ?? id ?? _id;
+  const _id = useId()
+  const fieldName = name ?? id ?? _id
 
-  const formContext = useFormContext();
-  const [localValue, setLocalValue] = useState(controlledValue ?? defaultValue);
-  const debouncedSearch = isDebouncedCallback(onSearch, debounceMs);
-  const displayValue = controlledValue !== undefined ? controlledValue : localValue;
+  const formContext = useFormContext()
+  const [localValue, setLocalValue] = useState(controlledValue ?? defaultValue)
+  const debouncedSearch = isDebouncedCallback(onSearch, debounceMs)
+  const displayValue = controlledValue !== undefined ? controlledValue : localValue
 
   const handleInputChange = useCallback(
     (value: string) => {
-      if (controlledValue === undefined) setLocalValue(value);
-      setValueChange?.(value);
-      if (isDebounce) debouncedSearch?.(value);
+      if (controlledValue === undefined) setLocalValue(value)
+      setValueChange?.(value)
+      if (isDebounce) debouncedSearch?.(value)
     },
     [controlledValue, debouncedSearch, isDebounce, setValueChange],
-  );
+  )
 
-  const inputFieldProps = {
-    fieldName,
-    required,
-    error,
-    helperText,
-    helperId: `${fieldName}-helper`,
-    className,
+  const inputClass = (hasError: boolean) =>
+    cn(
+      "peer py-3 text-sm outline-hidden flex w-full items-center",
+      showStartIcon && "ps-6.5",
+      showSubmitButton && "pe-9",
+      hasError && "border-destructive focus-visible:ring-destructive/20",
+      className,
+    )
+
+  const decorationProps = {
     showStartIcon,
     startIcon,
     showSubmitButton,
     submitButtonClassName,
     submitButtonLabel,
-    onSearch,
     submitIcon,
-    iconSize,
     submitVariant,
     loading,
+    onSearch,
     iconPlacement,
     showIcon,
     disabled: props.disabled,
-    ...props,
-  };
+  }
 
   if (formContext) {
     return (
-      <IGRPFormField
-        name={fieldName}
-        label={label}
-        helperText={helperText}
-        className={className}
-        required={required}
+      <FormField
         control={formContext.control}
-      >
-        {(field) => (
-          <SearchInputField
-            {...inputFieldProps}
-            value={field.value ?? ''}
-            onChange={(e) => {
-              field.onChange(e.target.value);
-              handleInputChange(e.target.value);
-            }}
-            onKeyDown={(e) => {
-              if (e.key === 'Enter') {
-                e.preventDefault();
-                onSearch?.(field.value);
+        name={fieldName}
+        render={({ field, fieldState }) => (
+          <FormItem className={className}>
+            {label && (
+              <FormLabel className={cn("gap-0.5", required && 'after:content-["*"] after:text-destructive')}>
+                {label}
+              </FormLabel>
+            )}
+            <SearchInputDecoration
+              {...decorationProps}
+              value={field.value ?? ""}
+              inputNode={
+                <FormControl>
+                  <Input
+                    name={fieldName}
+                    type="search"
+                    required={required}
+                    aria-required={required}
+                    className={inputClass(!!(fieldState.error || error))}
+                    value={field.value ?? ""}
+                    onChange={(e) => {
+                      field.onChange(e.target.value)
+                      handleInputChange(e.target.value)
+                    }}
+                    onKeyDown={(e) => {
+                      if (e.key === "Enter") {
+                        e.preventDefault()
+                        onSearch?.(field.value ?? "")
+                      }
+                    }}
+                    onBlur={field.onBlur}
+                    disabled={props.disabled}
+                    {...props}
+                  />
+                </FormControl>
               }
-            }}
-          />
+            />
+            {helperText && !fieldState.error && !error && <FormDescription>{helperText}</FormDescription>}
+            {error ? (
+              <p className={cn("text-destructive text-xs")} role="alert">
+                {error}
+              </p>
+            ) : (
+              <FormMessage className={cn("text-xs")} />
+            )}
+          </FormItem>
         )}
-      </IGRPFormField>
-    );
+      />
+    )
   }
 
   return (
-    <div className={cn('*:not-first:mt-2', className)}>
+    <div className={cn("*:not-first:mt-2", className)}>
       {label && <IGRPLabel label={label} required={required} id={fieldName} />}
 
-      <SearchInputField
-        {...inputFieldProps}
+      <SearchInputDecoration
+        {...decorationProps}
         value={displayValue}
-        onChange={(e) => handleInputChange(e.target.value)}
-        onKeyDown={(e) => {
-          if (e.key === 'Enter') {
-            e.preventDefault();
-            onSearch?.(displayValue);
-          }
-        }}
+        inputNode={
+          <Input
+            id={fieldName}
+            name={fieldName}
+            type="search"
+            required={required}
+            aria-required={required}
+            aria-invalid={!!error || !!props["aria-invalid"]}
+            aria-describedby={helperText || error ? `${fieldName}-helper` : undefined}
+            className={inputClass(!!error)}
+            value={displayValue}
+            onChange={(e) => handleInputChange(e.target.value)}
+            onKeyDown={(e) => {
+              if (e.key === "Enter") {
+                e.preventDefault()
+                onSearch?.(displayValue)
+              }
+            }}
+            disabled={props.disabled}
+            {...props}
+          />
+        }
       />
 
       <IGRPFieldDescription error={error} helperText={helperText} />
     </div>
-  );
+  )
 }
 
-export { IGRPInputSearch, type IGRPInputSearchProps };
+export { IGRPInputSearch, type IGRPInputSearchProps }

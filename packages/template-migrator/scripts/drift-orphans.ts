@@ -24,6 +24,10 @@ export const TEMPLATE_EXEMPT_PREFIXES: string[] = [
   // docs / AI-tooling content — ships in the zip, but not runtime code
   "docs/",
   "specs/",
+  // .agents/ is the canonical AI rule hub; .github/.cursor/.trae are thin
+  // bridges that point at it. All four are instructions for coding agents,
+  // never app runtime code.
+  ".agents/",
   ".github/",
   ".cursor/",
   ".trae/",

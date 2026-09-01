@@ -1,58 +1,41 @@
 # Agent instructions — IGRP Next.js template
 
-This project is built on the IGRP framework (`@igrp/framework-next`, `@igrp/framework-next-ui`, `@igrp/framework-next-auth`, `@igrp/igrp-framework-react-design-system`). When working on UI in `src/**/*.{ts,tsx}`, follow the IGRP design system skill.
+This project is built on the IGRP framework (`@igrp/framework-next`,
+`@igrp/framework-next-ui`, `@igrp/framework-next-auth`,
+`@igrp/igrp-framework-react-design-system`).
 
-## IGRP design system — required reading before UI work
+## Required reading
 
-The canonical skill that documents which `IGRP*` component to pick and the exact prop shapes the design system exports lives at:
+All agent rules live in one place — `.agents/`. Read these before touching code:
 
-@.agents/skills/igrp-design-system/SKILL.md
+- **`.agents/rules/ui.md`** — design-system hard rules, three-layer picker,
+  component cheat sheet. Required before any work in `src/**/*.{ts,tsx}`.
+- **`.agents/rules/permissions.md`** — permission gating. There is **no
+  default-deny**: an ungated page is fully open and deep-linkable. Required
+  before adding any page or server action.
+- **`.agents/skills/igrp-design-system/SKILL.md`** — the full component
+  reference and source-verified prop shapes. Required before writing any form,
+  table, chart, modal, or design-system import. Deep references for the heavy
+  families are under `.agents/skills/igrp-design-system/references/` — load
+  only the one relevant to your task.
 
-Read it before writing any form, table, chart, modal, or component import from `@igrp/igrp-framework-react-design-system`. Deep references for the heavy families are alongside it under `.agents/skills/igrp-design-system/references/` — load only the one relevant to your task:
+@.agents/rules/ui.md
+@.agents/rules/permissions.md
 
-- `references/forms.md` — `IGRPForm` + Zod + all `IGRPInput*` (load when any form is in scope)
-- `references/data-table.md` — `IGRPDataTable`, `createIGRPColumnHelper`, row actions, cell renderers
-- `references/charts.md` — `IGRPAreaChart` / `IGRPVerticalBarChart` / `IGRPLineChart` / etc.
-- `references/horizon.md`, `references/primitives.md`, `references/utilities.md`, `references/custom.md`
-
-## Hard rules (non-negotiable)
-
-These come from the IGRP repo's shared UI rules. The skill repeats them in detail with examples; high-level summary:
-
-- All UI from `@igrp/igrp-framework-react-design-system`. Never raw shadcn, MUI, Mantine, etc.
-- `'use client'` on every file that imports from the design system.
-- Forms are **always** `IGRPForm` + Zod. Never raw `<form>` or direct `react-hook-form`.
-- Only semantic tokens (`bg-background`, `text-foreground`, `bg-primary`, `bg-destructive`, …). Never raw Tailwind palette colors (`bg-blue-500`).
-- No manual `dark:` overrides in app code. Tokens handle dark mode.
-- `cn()` from the DS for class merging, `size-*` when w = h, `flex gap-*` for spacing.
-- Import tokens only: `@import "@igrp/igrp-framework-react-design-system/tokens";` — never the legacy `/styles` bundle.
-
-## Permissions — there is NO default-deny
-
-A page with no permission check is **fully open and deep-linkable**. Hiding a menu item is navigation UX, not enforcement. So, for every page you add:
-
-- Decide whether it needs a permission. If it does, gate it on the **first line** of the server component:
-  ```tsx
-  import { igrpAssertAuthorize } from "@igrp/framework-next";
-  export default async function Page() {
-    await igrpAssertAuthorize("manage_access");   // denied → forbidden() → 403
-    …
-  }
-  ```
-- If it does **not** need one, say so in a one-line comment (`// open to all authenticated users`) so the next reader knows it was a decision, not an omission.
-- `igrpAssertAuthorize` is **pages only**. In a server action use `igrpAuthorize(name)` (boolean) and return `{ ok: false, code: "forbidden" }` — an action has no `forbidden.tsx` boundary.
-- **Gate the server action too, whenever the control is a mutation.** A hidden or disabled button is cosmetic; the action behind it is the real entry point.
-- Client-side: wrap with `<IGRPAuthorization permission="…">` or read `usePermissions().isAllowed(…)` from `@igrp/framework-next-ui`. Never add a `permission` prop to a design-system component.
-- Permission names: pass the **bare suffix** (`"manage_access"`) — it is auto-qualified with the user's active department. Use `"DEPT_X.perm"` only for an explicit cross-department check.
-
-Full guide, including the request lifecycle and the enforcement-strength table: `docs/PERMISSIONS.md`.
+`.agents/README.md` explains the layout and how the tool-specific bridge files
+(`.cursor/`, `.trae/`, `.github/`) relate to it. Put rule content in
+`.agents/rules/`, never in a bridge.
 
 ## Project shape
 
 - `src/app/` — Next.js App Router routes.
-- `src/app/(igrp)/layout.tsx` — runs auth checks, loads session, wraps the route group in `IGRPLayout`.
-- `src/middleware.ts` — NextAuth session validation, honors `IGRP_PREVIEW_MODE` / `AUTH_PROVIDER=none`.
-- `src/igrp.template.config.ts` — assembles the IGRP runtime config via `igrpBuildConfig`.
-- `src/actions/igrp/` — server actions; `src/app/api/auth/*` holds NextAuth routes.
+- `src/app/(igrp)/layout.tsx` — runs auth checks, loads session, wraps the route
+  group in `IGRPLayout`.
+- `src/middleware.ts` — NextAuth session validation, honors
+  `IGRP_PREVIEW_MODE` / `AUTH_PROVIDER=none`.
+- `src/igrp.template.config.ts` — assembles the IGRP runtime config via
+  `igrpBuildConfig`.
+- `src/actions/igrp/` — server actions; `src/app/api/auth/*` holds NextAuth
+  routes.
 
 For Claude-Code-specific guidance see `CLAUDE.md`.

@@ -43,9 +43,9 @@ src/
   - drop `/logout*` targets so a successful login doesn't immediately log out.
   Any new code that consumes `callbackUrl` must go through this helper.
 - **Preview mode (`IGRP_PREVIEW_MODE=true`) and `AUTH_PROVIDER=none` are the auth-bypass paths.** Both checks live behind `isAuthBypass()`. Every branch that mentions auth (middleware, root layout, `(igrp)/layout.tsx`, `igrp.template.config.ts`, the login page itself) must work with bypass **on** and **off**. The login page redirects to `/` when bypass is on, because there's no real provider to sign into.
-- **All UI comes from `@igrp/igrp-framework-react-design-system`.** Horizon (`IGRP*`) first; Primitives only when Horizon is too opinionated. Forms are **always** `IGRPForm` + Zod — never raw `<form>` or direct `react-hook-form`. Only semantic tokens (`bg-background`, `text-foreground`, `border-input`, …) — never raw Tailwind colors. No manual `dark:` overrides — tokens drive dark mode. Use `cn()` for class merging, `size-*` when width = height, `flex gap-*` instead of `space-x-*`/`space-y-*`. Every file importing from the DS needs `'use client'`.
+- **All UI comes from `@igrp/igrp-framework-react-design-system`.** Horizon (`IGRP*`) first; Primitives only as an escape hatch; `IGRPForm` + Zod for every form; semantic tokens only; `'use client'` on every file importing from the DS. The canonical statement of these rules — with the cheat sheet and the three-layer picker — is `.agents/rules/ui.md`, imported below. Edit it there, not here.
 - **Don't import package internals.** Use documented subpath exports (`@igrp/framework-next-auth/client`, `/server`, `/config`, `/providers`, …) — never `…/dist/…`.
-- **Permissions have NO default-deny.** A page without a guard is fully open and deep-linkable; a hidden menu item is navigation UX, not enforcement. Every new page either calls `await igrpAssertAuthorize("<perm>")` on the first line of its server component, or carries a one-line comment saying it is open to all authenticated users. `igrpAssertAuthorize` is **pages only** — a server action has no `forbidden.tsx` boundary, so use `igrpAuthorize(name)` and return a typed `{ ok: false, code: "forbidden" }`. Gate the **action** as well as the control whenever it mutates: a disabled button is cosmetic. Client-side gating is `<IGRPAuthorization>` / `usePermissions().isAllowed()`; never add a `permission` prop to a design-system component. See `docs/PERMISSIONS.md`. The same rule is in `AGENTS.md`, which is the copy that ships to consumers — keep the two in sync.
+- **Permissions have NO default-deny.** A page without a guard is fully open and deep-linkable; a hidden menu item is navigation UX, not enforcement. Every new page either calls `await igrpAssertAuthorize("<perm>")` on the first line of its server component, or carries a one-line comment saying it is open to all authenticated users. `igrpAssertAuthorize` is **pages only** — a server action has no `forbidden.tsx` boundary, so use `igrpAuthorize(name)` and return a typed `{ ok: false, code: "forbidden" }`. Gate the **action** as well as the control whenever it mutates: a disabled button is cosmetic. Client-side gating is `<IGRPAuthorization>` / `usePermissions().isAllowed()`; never add a `permission` prop to a design-system component. See `docs/PERMISSIONS.md`. The canonical statement of this rule is `.agents/rules/permissions.md` — edit it there, not here.
 
 ## Do not run `npx shadcn add` here
 
@@ -106,6 +106,21 @@ The shadcn CLI **is** appropriate inside `packages/design-system` itself, when r
 - **Framework API changes ripple here.** If a `@igrp/*` public API changes, run `pnpm build:framework` and confirm this template still compiles before declaring the framework change done.
 - **Surface, don't silently update.** If you discover this template no longer compiles against the current framework packages, report it to the user rather than guessing the migration.
 - **Don't delete this package or its scripts as part of cleanup** — it's load-bearing for existing consumers.
+
+## Agent rules for this template
+
+The rules an agent must follow while editing this template are canonical in
+`.agents/`, shared by every tool:
+
+@.agents/rules/ui.md
+
+@.agents/rules/permissions.md
+
+`AGENTS.md`, `.cursor/rules/`, `.trae/rules/` and `.github/copilot-instructions.md`
+are **bridges** — they exist only because each tool auto-discovers its own path.
+Put rule content in `.agents/rules/`, never in a bridge, and regenerate the
+Copilot file after any edit (`pnpm agents:sync`; `pnpm agents:check` verifies).
+See `.agents/README.md`.
 
 ## Shared rules
 

@@ -21,6 +21,8 @@
     "start": "next start",
     "lint": "biome check --write",
     "format": "biome format --write",
+    "agents:sync": "node .agents/build-copilot-instructions.mjs",
+    "agents:check": "node .agents/build-copilot-instructions.mjs --check",
     "publish:template": "pwsh -ExecutionPolicy Bypass -File ./create-template/create-zip-template.ps1"
   },
   "dependencies": {

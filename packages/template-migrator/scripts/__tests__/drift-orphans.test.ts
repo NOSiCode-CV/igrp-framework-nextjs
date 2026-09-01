@@ -98,4 +98,11 @@ describe("findOrphanFiles", () => {
     expect(TEMPLATE_EXEMPT_PREFIXES).toContain("create-template/");
     expect(TEMPLATE_EXEMPT_FILES).toContain("CLAUDE.md");
   });
+
+  it("exempts the .agents/ AI rule hub and every tool bridge that points at it", () => {
+    for (const prefix of [".agents/", ".github/", ".cursor/", ".trae/"]) {
+      expect(TEMPLATE_EXEMPT_PREFIXES).toContain(prefix);
+    }
+    expect(TEMPLATE_EXEMPT_FILES).toContain("AGENTS.md");
+  });
 });

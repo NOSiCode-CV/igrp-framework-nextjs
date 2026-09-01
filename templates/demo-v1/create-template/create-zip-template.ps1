@@ -156,6 +156,9 @@ try {
   # for every supported tool (Claude Code via .claude/, Cursor / Codex / Trae /
   # Copilot via the static bridge files committed in the template, all reading
   # from the canonical at .agents/skills/igrp-design-system/).
+  # NOTE: only the skills/ subtree is injected. .agents/rules/ and
+  # .agents/README.md are normal tracked files in the template and ship as-is;
+  # the cleanup in the finally block must not touch them.
   # Source of truth is the plugin at <monorepo>/plugins/igrp/skills/design-system/.
   # These dirs are tracked via $skillInjected and removed in the finally block
   # so the monorepo working tree is unchanged after the script runs.
@@ -312,7 +315,9 @@ Deep references are at ``.agents/skills/igrp-design-system/references/``. Load o
 } finally {
   # Remove the injected design-system skill content so the monorepo working
   # tree returns to its pre-script state. We touch only what we created;
-  # static bridges (.cursor/, AGENTS.md, .trae/, .github/) stay put.
+  # static bridges (.cursor/, AGENTS.md, .trae/, .github/) and the tracked
+  # .agents/rules/ + .agents/README.md stay put — the parent-dir removals below
+  # only fire when the directory is left empty.
   if ($skillInjected) {
     if (Test-Path $skillTargetAgents) { Remove-Item $skillTargetAgents -Recurse -Force }
     if (Test-Path $skillTargetClaude) { Remove-Item $skillTargetClaude -Recurse -Force }

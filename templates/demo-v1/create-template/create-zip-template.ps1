@@ -1,5 +1,3 @@
-# create-template/create-zip-template.ps1
-
 # === CONFIG ===
 $zipName = "igrp-next-template.zip"
 $excludeFolders = @(".next", "node_modules", ".git", "create-template", ".env", ".env.docker", "CHANGELOG.md", "superpowers", "CLAUDE.md", "specs")
@@ -76,25 +74,19 @@ if ($packageJson.scripts -and $packageJson.scripts.PSObject.Properties.Name -con
   $packageJson.scripts.PSObject.Properties.Remove("publish:template")
 }
 
-# Write the sanitized + resolved package.json to disk (restored in finally block)
-try {
-  $packageJson | ConvertTo-Json -Depth 32 | Set-Content -Path $packageJsonPath -Encoding UTF8
-  $packageJsonSanitized = $true
-} catch {
-  Write-Host "Failed to write resolved package.json."
-  if ($packageJsonRaw) {
-    Set-Content -Path $packageJsonPath -Value $packageJsonRaw -Encoding UTF8
-  }
-  exit 1
-}
-
+# === PRE-FLIGHT VALIDATION ===
+# Everything below this point up to the package.json write must be pure
+# validation. The write that follows mutates a tracked file in the working
+# tree and is only undone by the finally block further down, so any `exit`
+# between the write and that try/finally would leave the template's
+# package.json rewritten with resolved versions. Validate first, mutate after.
 # === FINAL NEXUS TARGET ===
 $nexusRepo = "igrp-templates"
 $nexusBaseUrl = "https://sonatype.nosi.cv/repository"
 $groupPath = "@igrp/framework-next/$version"
 $nexusUploadUrl = "$nexusBaseUrl/$nexusRepo/$groupPath/$zipName"
 
-# === LOAD CREDENTIALS FROM FILE (BEFORE MOVING FOLDERS) ===
+# === LOAD CREDENTIALS FROM FILE (BEFORE ANY FILE MUTATION) ===
 $authFile = "create-template/nexus-auth.txt"
 if (-not (Test-Path $authFile)) {
   Write-Host "Auth file '$authFile' not found."
@@ -117,6 +109,18 @@ $password = $authMap["password"]
 
 if (-not $username -or -not $password) {
   Write-Host "username or password missing in nexus-auth.txt"
+  exit 1
+}
+
+# Write the sanitized + resolved package.json to disk (restored in finally block)
+try {
+  $packageJson | ConvertTo-Json -Depth 32 | Set-Content -Path $packageJsonPath -Encoding UTF8
+  $packageJsonSanitized = $true
+} catch {
+  Write-Host "Failed to write resolved package.json."
+  if ($packageJsonRaw) {
+    Set-Content -Path $packageJsonPath -Value $packageJsonRaw -Encoding UTF8
+  }
   exit 1
 }
 

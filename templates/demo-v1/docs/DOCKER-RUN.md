@@ -124,20 +124,41 @@ env_file:
 
 ## Image internals
 
-The Dockerfile is three stages on `node:22-alpine`:
+The Dockerfile is five stages on `node:22-alpine`:
 
-1. **deps** — `pnpm i --frozen-lockfile --ignore-scripts`
-2. **builder** — copies sources, copies `docker/development/.env.development` → `.env.production`, runs `pnpm build`
-3. **runner** — copies `.next/standalone`, `.next/static`, and `public`; runs as user `nextjs` (`node server.js`)
+1. **base** — `libc6-compat` only. Deliberately thin: `runner` inherits from it, so no build tooling reaches the final image.
+2. **toolchain** — `base` + `pnpm`. Used by the build stages only.
+3. **deps** — `pnpm install --frozen-lockfile --ignore-scripts`
+4. **builder** — copies sources, copies `docker/development/.env.development` → `.env.production`, runs `pnpm exec next build --turbopack`
+5. **runner** — copies `.next/standalone`, `.next/static`, and `public`; runs as user `nextjs` (`node server.js`)
+
+The image build runs `next build` directly rather than the `build` script, because
+`pnpm build` is `biome check --write && next build` — an image build must not rewrite
+sources, and a lint finding should not fail the image. Run `pnpm lint` locally or in CI.
 
 The process binds `HOSTNAME=0.0.0.0` and `PORT=3000`. Telemetry is disabled.
+
+### Healthcheck
+
+The image declares a `HEALTHCHECK` that polls `/api/health` (30s interval, 20s start
+period, 3 retries), so `docker ps` and Compose report real readiness. If you set
+`NEXT_PUBLIC_BASE_PATH`, the route moves with it — override the probe to match:
+
+```bash
+docker run -e HEALTHCHECK_PATH=/my-base/api/health ...
+```
 
 ## Troubleshooting
 
 | Symptom | Likely cause |
 | --- | --- |
 | `docker build` cannot find a Dockerfile | You ran `docker build .` from the app root. Use `-f docker/development/Dockerfile` or Compose. |
+| `NEXTAUTH_SECRET must be set in production` **during `pnpm build` / `next build`** | A prerender-time failure, not a runtime one. Fixed by `export const dynamic = "force-dynamic"` in `src/app/layout.tsx` — the root layout reads the session, so nothing under it may be statically prerendered. The build must never require runtime secrets; if this reappears, something re-enabled prerendering of a session-reading route. |
+| `Missing required authentication environment variables for "igrp-auth"` during the build | Same cause and same fix as the row above (`assertAuthProviderEnv` is the guard immediately after the `NEXTAUTH_SECRET` one in `src/lib/auth.ts`). |
+| `EPERM: operation not permitted, symlink` at **Collecting build traces** (Windows only) | `output: "standalone"` recreates pnpm's symlinked `node_modules`, and Windows forbids symlinks unless **Developer Mode** is on. Enable *Settings → System → For developers → Developer Mode*, or run the build in Docker/WSL. Does not affect the Docker build (Linux). |
 | `ERR_PNPM_NO_LOCKFILE` / frozen lockfile error | No `pnpm-lock.yaml` in the build context. Run `pnpm install` in the app first. |
+| `ERR_PNPM_OUTDATED_LOCKFILE` | `pnpm-lock.yaml` is out of sync with `package.json`. The build uses `--frozen-lockfile` on purpose so this fails loudly instead of silently resolving different versions. Run `pnpm install` locally and commit the lockfile. |
+| Container stuck `health: starting` / `unhealthy` | The healthcheck probes `/api/health`. With `NEXT_PUBLIC_BASE_PATH` set, pass a matching `HEALTHCHECK_PATH`. |
 | 404 from registry.npmjs.org for `@igrp/…` | Docker’s `.npmrc` has no Sonatype auth. Add credentials locally (uncommitted) before building. |
 | `workspace:*` cannot be resolved | You are building the monorepo template folder. Use a generated app, or develop with `pnpm dev:demo`. |
 | Login loop, nested `callbackUrl` | `NEXTAUTH_URL` missing `/api/auth`, or it uses container port `3000` while the browser uses `3001`. See [ENVIRONMENT.md](ENVIRONMENT.md). |

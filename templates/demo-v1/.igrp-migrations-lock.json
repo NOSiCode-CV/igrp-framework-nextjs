@@ -249,6 +249,14 @@
       "manifestHash": "31f1c93c8c076064",
       "undo": [],
       "fileHashes": {}
+    },
+    {
+      "id": "32-turbopack-root-probe-and-beta169-deps",
+      "appliedAt": "2026-09-01T00:00:00.000Z",
+      "cliVersion": "0.1.0-beta.137",
+      "manifestHash": "4360e3437ed47868",
+      "undo": [],
+      "fileHashes": {}
     }
   ]
 }

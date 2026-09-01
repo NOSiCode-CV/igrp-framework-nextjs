@@ -87,9 +87,10 @@ export function buildMenuSections(menus: IGRPMenuItemArgs[]): Section[] {
 
   const toNode = (item: IGRPMenuItemArgs): TreeNode => {
     if (item.type === 'FOLDER') {
-      const children = (childrenMap.get(item.code) ?? []).map(
-        (child): LeafNode => ({ kind: 'leaf', item: child }),
-      );
+      const children = (childrenMap.get(item.code) ?? []).map((child): LeafNode => ({
+        kind: 'leaf',
+        item: child,
+      }));
       return { kind: 'folder', item, children };
     }
     return { kind: 'leaf', item };

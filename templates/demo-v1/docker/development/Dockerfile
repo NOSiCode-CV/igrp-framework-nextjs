@@ -6,8 +6,8 @@ WORKDIR /app
 
 FROM base AS deps
 
-COPY package.json .npmrc ./
-RUN pnpm i --frozen-lockfile --ignore-scripts
+COPY package.json pnpm-lock.yaml* .npmrc ./
+RUN pnpm install --prefer-frozen-lockfile --ignore-scripts
 
 FROM base AS builder
 WORKDIR /app

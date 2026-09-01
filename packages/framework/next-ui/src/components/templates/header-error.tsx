@@ -1,11 +1,12 @@
 // packages/framework/next-ui/src/components/templates/header-error.tsx
 'use client';
 
-import { useRouter } from 'next/navigation';
 import { cn, IGRPButton } from '@igrp/igrp-framework-react-design-system';
 
+import { useIGRPLayoutRetry } from '../../hooks/use-igrp-layout-retry';
+
 export function IGRPHeaderError() {
-  const router = useRouter();
+  const { retry, isRetrying } = useIGRPLayoutRetry();
 
   return (
     <div
@@ -17,7 +18,9 @@ export function IGRPHeaderError() {
       <IGRPButton
         variant="ghost"
         size="sm"
-        onClick={() => router.refresh()}
+        onClick={retry}
+        loading={isRetrying}
+        loadingText="A tentar…"
         showIcon
         iconName="RefreshCw"
       >

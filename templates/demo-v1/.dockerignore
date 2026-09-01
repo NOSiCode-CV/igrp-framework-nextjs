@@ -8,7 +8,7 @@ coverage
 
 # Git and editor
 .git
-.gitignore
+# .gitignore is needed by biome (vcs.useIgnoreFile) during pnpm build
 .gitattributes
 .vscode
 .idea

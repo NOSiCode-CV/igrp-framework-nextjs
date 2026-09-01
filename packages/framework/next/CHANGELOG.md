@@ -1,5 +1,13 @@
 # @igrp/framework-next
 
+## 0.1.0-beta.169
+
+### Patch Changes
+
+- Updated dependencies [5c3ceba]
+- Updated dependencies [a57d25e]
+  - @igrp/framework-next-ui@0.1.0-beta.165
+
 ## 0.1.0-beta.168
 
 ### Patch Changes

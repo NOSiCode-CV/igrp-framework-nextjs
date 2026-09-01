@@ -1,5 +1,38 @@
 # @igrp/framework-next-ui
 
+## 0.1.0-beta.165
+
+### Patch Changes
+
+- 5c3ceba: fix(next-ui): make "Tentar novamente" actually retry in the header/sidebar error fallbacks
+
+  `IGRPLayoutErrorBoundary` latched `hasError` permanently, so the `router.refresh()`
+  behind the retry button re-fetched the server tree but the boundary kept rendering
+  `IGRPSidebarError` / `IGRPHeaderError` — the button appeared to do nothing.
+
+  The boundary now exposes a reset through context (`useIGRPLayoutErrorReset`), and
+  both fallbacks use the new `useIGRPLayoutRetry` hook: it refreshes inside a
+  transition and clears the boundary only once that transition settles, so the
+  boundary re-renders the freshly fetched tree instead of the failing one. The retry
+  button also shows a loading state while the refresh is in flight.
+
+  `useIGRPLayoutRetry` and `useIGRPLayoutErrorReset` are exported for consumers
+  writing their own layout error fallbacks.
+
+- a57d25e: fix(next-ui): don't crash the layout on runtime-supplied image hosts
+
+  `IGRPTemplateAppSwitcher` and `IGRPTemplateHeader` rendered app pictures and the
+  header logo with `next/image` using the default loader, which throws
+  "hostname is not configured under images" for any host missing from the
+  consuming app's `images.remotePatterns`. The throw escaped to
+  `IGRPLayoutErrorBoundary` and took the whole sidebar/header down. Since these
+  URLs come from the access-management backend at runtime, consumers cannot
+  whitelist every host up front.
+
+  Both now render through a new internal `IGRPTemplateImage`, which marks remote
+  sources `unoptimized` (bypassing the hostname check) and falls back to the icon
+  — or, for the header, to the bundled logo — when an image fails to load.
+
 ## 0.1.0-beta.164
 
 ### Patch Changes

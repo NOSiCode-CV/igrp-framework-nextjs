@@ -257,6 +257,14 @@
       "manifestHash": "4360e3437ed47868",
       "undo": [],
       "fileHashes": {}
+    },
+    {
+      "id": "33-force-dynamic-root-layout",
+      "appliedAt": "2026-09-01T00:00:00.000Z",
+      "cliVersion": "0.1.0-beta.138",
+      "manifestHash": "5f184d42b9ccfe66",
+      "undo": [],
+      "fileHashes": {}
     }
   ]
 }

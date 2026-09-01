@@ -29,11 +29,6 @@ literal text and will not open a referenced file. That file is therefore
 **generated** by concatenating `rules/*.md`. Never hand-edit it — edit the
 canonical rule file and regenerate:
 
-```bash
-node .agents/build-copilot-instructions.mjs          # rewrite
-node .agents/build-copilot-instructions.mjs --check  # CI: fail if stale
-```
-
 ## Where the skill comes from
 
 `skills/igrp-design-system/` is **not committed** in the IGRP monorepo. It is

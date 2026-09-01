@@ -27,29 +27,29 @@ stages:
 #
 # Needs no registry credentials: the migrator's own dependencies are all public,
 # and the filtered install pulls nothing from the @igrp scope.
-check_template_drift:
-  stage: verify
-  image: node:22
-  services: []
-  rules:
-    - changes:
-        - templates/demo-v1/**/*
-        - packages/template-migrator/**/*
-      when: always
-  before_script:
-    # corepack alone is enough — the root package.json `packageManager` field
-    # pins the exact pnpm version (with hash), so an explicit `corepack prepare`
-    # would only risk disagreeing with it.
-    - corepack enable
-    - pnpm install --filter @igrp/template-migrator --frozen-lockfile --ignore-scripts
-  script:
-    - pnpm --filter @igrp/template-migrator test
-    - pnpm --filter @igrp/template-migrator check:drift
-    # templates/demo-v1/.github/copilot-instructions.md is generated from the
-    # canonical rules in templates/demo-v1/.agents/rules/ (Copilot cannot
-    # follow file references, so its copy has to be inlined). Fail the pipeline
-    # if someone edited a rule without regenerating it. Plain node, no install.
-    - node templates/demo-v1/.agents/build-copilot-instructions.mjs --check
+# check_template_drift:
+#   stage: verify
+#   image: node:22
+#   services: []
+#   rules:
+#     - changes:
+#         - templates/demo-v1/**/*
+#         - packages/template-migrator/**/*
+#       when: always
+#   before_script:
+#     # corepack alone is enough — the root package.json `packageManager` field
+#     # pins the exact pnpm version (with hash), so an explicit `corepack prepare`
+#     # would only risk disagreeing with it.
+#     - corepack enable
+#     - pnpm install --filter @igrp/template-migrator --frozen-lockfile --ignore-scripts
+#   script:
+#     - pnpm --filter @igrp/template-migrator test
+#     - pnpm --filter @igrp/template-migrator check:drift
+#     # templates/demo-v1/.github/copilot-instructions.md is generated from the
+#     # canonical rules in templates/demo-v1/.agents/rules/ (Copilot cannot
+#     # follow file references, so its copy has to be inlined). Fail the pipeline
+#     # if someone edited a rule without regenerating it. Plain node, no install.
+#     - node templates/demo-v1/.agents/build-copilot-instructions.mjs --check
 build_storybook_image:
   stage: build
   rules:

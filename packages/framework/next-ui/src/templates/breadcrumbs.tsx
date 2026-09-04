@@ -1,7 +1,7 @@
 'use client';
 
 import { Fragment, useMemo, useRef } from 'react';
-import { useBreadcrumbOverflow } from '../../hooks/use-breadcrumb-overflow';
+import { useBreadcrumbOverflow } from '../hooks/use-breadcrumb-overflow';
 import Link from 'next/link';
 import { useSelectedLayoutSegments } from 'next/navigation';
 import {

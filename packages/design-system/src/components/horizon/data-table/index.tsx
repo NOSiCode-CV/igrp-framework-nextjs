@@ -1,7 +1,4 @@
 "use client"
-// React Compiler opt-out: required for `useReactTable` (TanStack mutates state
-// in ways the compiler can't model). Per-row rendering (IGRPDataTableRowActionsCell)
-// lives in its own file without this directive so the compiler can still memoize it.
 "use no memo"
 
 import { Fragment, useCallback, useEffect, useId, useMemo, useReducer } from "react"
@@ -30,15 +27,21 @@ import {
   type TableOptions,
 } from "@tanstack/react-table"
 
-import { cn } from "../../../lib/utils"
 import { useIGRPi18n } from "../../../i18n"
-import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "../../primitives/table"
+import { cn } from "../../../lib/utils"
+import {
+  Table,
+  TableBody,
+  TableCell,
+  TableHead,
+  TableHeader,
+  TableRow
+} from "../../primitives/table"
 import { IGRPIcon } from "../icon"
-import { type IGRPDataTableClientFilterListProps, IGRPDataTableClientFilter } from "./client-filter"
-import { IGRPDataTablePagination, IGRPDataTablePaginationNumeric } from "./pagination"
-import { IGRPDataTableToggleVisibility } from "./toggle-visibility"
-import type { IGRPDataTableAction, IGRPDataTablePaginationConfig, IGRPDataTableQuery } from "./types"
-import { IGRPDataTableRowActionsCell } from "./row-actions-cell"
+import {
+  type IGRPDataTableClientFilterListProps,
+  IGRPDataTableClientFilter
+} from "./client-filter"
 import type { IGRPAccessorColumnDef } from "./column-helper"
 import {
   IGRPDataTableFilterDate,
@@ -48,6 +51,14 @@ import {
   IGRPDataTableFilterMinMax,
   IGRPDataTableFilterSelect,
 } from "./filter"
+import { IGRPDataTablePagination, IGRPDataTablePaginationNumeric } from "./pagination"
+import { IGRPDataTableRowActionsCell } from "./row-actions-cell"
+import { IGRPDataTableToggleVisibility } from "./toggle-visibility"
+import type {
+  IGRPDataTableAction,
+  IGRPDataTablePaginationConfig,
+  IGRPDataTableQuery
+} from "./types"
 
 /**
  * Props for the IGRPDataTable component.
@@ -94,6 +105,8 @@ interface IGRPDataTableProps<TData, TValue> {
   toggleOptionsLabel?: string
   /** CSS classes for the wrapper. */
   className?: string
+  /** CSS classes for the filter wrapper. */
+  filterClassName?: string
   /** CSS classes for the table element. */
   tableClassName?: string
   /** CSS classes for the table header. */
@@ -146,10 +159,6 @@ type TableAction =
 
 function tableReducer(state: TableState, action: TableAction): TableState {
   switch (action.type) {
-    // Filter/sort changes reset to the first page here (synchronously) because
-    // TanStack's autoResetPageIndex is disabled — its microtask-based reset
-    // dispatches state updates before the component mounts under React 19
-    // (https://github.com/TanStack/table/issues/5026).
     case "columnFilters":
       return {
         ...state,
@@ -193,6 +202,7 @@ function IGRPDataTable<TData, TValue>({
   toggleLabel,
   toggleOptionsLabel,
   className,
+  filterClassName,
   tableClassName,
   tableHeaderClassName,
   tableBodyClassName,
@@ -289,15 +299,15 @@ function IGRPDataTable<TData, TValue>({
     const actionColumn =
       actions && actions.length > 0
         ? [
-            tableHelper.display({
-              id: "__igrp_actions__",
-              header: "",
-              cell: ({ row }) => <IGRPDataTableRowActionsCell row={row} actions={actions} />,
-              enableSorting: false,
-              enableHiding: false,
-              size: actions.length <= 2 ? actions.length * 44 : 44,
-            }),
-          ]
+          tableHelper.display({
+            id: "__igrp_actions__",
+            header: "",
+            cell: ({ row }) => <IGRPDataTableRowActionsCell row={row} actions={actions} />,
+            enableSorting: false,
+            enableHiding: false,
+            size: actions.length <= 2 ? actions.length * 44 : 44,
+          }),
+        ]
         : []
     return [...columns, ...actionColumn] as ColumnDef<TData, TValue>[]
   }, [columns, actions, tableHelper])
@@ -387,62 +397,88 @@ function IGRPDataTable<TData, TValue>({
 
   return (
     <div className={cn("flex flex-col gap-4", className)} id={ref}>
-      <div className={cn("flex flex-col md:flex-row md:items-center md:justify-between md:flex-1 gap-3")}>
-        <div className="flex md:flex-row flex-col gap-2">
-          {showFilter &&
-            (isServerSide ? (
-              serverFilterComponent
-            ) : (
-              <IGRPDataTableClientFilter
-                table={table}
-                filterList={clientFilters || []}
-                filterLabel={resolvedClearLabel}
-                onFiltersCleared={onFiltersCleared}
-              />
-            ))}
-          {filterDescriptors.length > 0 && (
-            <div className={cn("flex md:items-center gap-2 flex-col md:flex-row")}>
-              {filterDescriptors.map(({ columnId, descriptor }) => {
-                const column = table.getColumn(columnId)
-                if (!column) return null
-
-                switch (descriptor.type) {
-                  case "input":
-                    return (
-                      <IGRPDataTableFilterInput
-                        key={columnId}
-                        column={column}
-                        placeholder={descriptor.placeholder}
-                        ariaLabel={descriptor.ariaLabel}
-                      />
-                    )
-                  case "select":
-                    return (
-                      <IGRPDataTableFilterSelect key={columnId} column={column} options={descriptor.options ?? []} />
-                    )
-                  case "faceted":
-                    return (
-                      <IGRPDataTableFilterFaceted key={columnId} column={column} options={descriptor.options ?? []} />
-                    )
-                  case "date":
-                    return <IGRPDataTableFilterDate key={columnId} column={column} />
-                  case "range":
-                    return <IGRPDataTableFilterMinMax key={columnId} column={column} />
-                  case "dropdown":
-                    return (
-                      <IGRPDataTableFilterDropdown key={columnId} column={column} options={descriptor.options ?? []} />
-                    )
-                  default:
-                    return descriptor.render?.(column) ?? null
-                }
-              })}
-            </div>
+      {showFilter || showToggleColumn ?
+        (
+          <div className={cn(
+            "flex flex-col md:flex-row md:items-center md:justify-between md:flex-1 gap-3",
+            filterClassName
           )}
-        </div>
-        {showToggleColumn && (
-          <IGRPDataTableToggleVisibility table={table} label={toggleLabel} optionsLabel={toggleOptionsLabel} />
-        )}
-      </div>
+          >
+            <div className="flex md:flex-row flex-col gap-2">
+              {isServerSide ? (
+                serverFilterComponent
+              ) : (
+                <IGRPDataTableClientFilter
+                  table={table}
+                  filterList={clientFilters || []}
+                  filterLabel={resolvedClearLabel}
+                  onFiltersCleared={onFiltersCleared}
+                />
+              )}
+              {filterDescriptors.length > 0 && (
+                <div className={cn("flex md:items-center gap-2 flex-col md:flex-row")}>
+                  {filterDescriptors.map(({ columnId, descriptor }) => {
+                    const column = table.getColumn(columnId)
+                    if (!column) return null
+
+                    switch (descriptor.type) {
+                      case "input":
+                        return (
+                          <IGRPDataTableFilterInput
+                            key={columnId}
+                            column={column}
+                            placeholder={descriptor.placeholder}
+                            ariaLabel={descriptor.ariaLabel}
+                          />
+                        )
+                      case "select":
+                        return (
+                          <IGRPDataTableFilterSelect
+                            key={columnId}
+                            column={column}
+                            options={descriptor.options ?? []}
+                          />
+                        )
+                      case "faceted":
+                        return (
+                          <IGRPDataTableFilterFaceted
+                            key={columnId}
+                            column={column}
+                            options={descriptor.options ?? []}
+                          />
+                        )
+                      case "date":
+                        return <IGRPDataTableFilterDate key={columnId} column={column} />
+                      case "range":
+                        return <IGRPDataTableFilterMinMax key={columnId} column={column} />
+                      case "dropdown":
+                        return (
+                          <IGRPDataTableFilterDropdown
+                            key={columnId}
+                            column={column}
+                            options={descriptor.options ?? []}
+                          />
+                        )
+                      default:
+                        return descriptor.render?.(column) ?? null
+                    }
+                  })}
+                </div>
+              )}
+            </div>
+
+            {showToggleColumn && (
+              <IGRPDataTableToggleVisibility
+                table={table}
+                label={toggleLabel}
+                optionsLabel={toggleOptionsLabel}
+              />
+            )}
+          </div>
+
+        )
+        : null}
+
 
       <div className={cn("overflow-hidden rounded-md border")}>
         <Table className={tableClassName}>
@@ -473,12 +509,12 @@ function IGRPDataTable<TData, TValue>({
                     <TableRow
                       key={row.id}
                       data-state={row.getIsSelected() && "selected"}
-                      // className={cn(
-                      //   'border-0 [&:first-child>td:first-child]:rounded-tl-lg',
-                      //   '[&:first-child>td:last-child]:rounded-tr-lg',
-                      //   '[&:last-child>td:first-child]:rounded-bl-lg',
-                      //   '[&:last-child>td:last-child]:rounded-br-lg h-px hover:bg-accent/50',
-                      // )}
+                    // className={cn(
+                    //   'border-0 [&:first-child>td:first-child]:rounded-tl-lg',
+                    //   '[&:first-child>td:last-child]:rounded-tr-lg',
+                    //   '[&:last-child>td:first-child]:rounded-bl-lg',
+                    //   '[&:last-child>td:last-child]:rounded-br-lg h-px hover:bg-accent/50',
+                    // )}
                     >
                       {row.getVisibleCells().map((cell) => (
                         <TableCell

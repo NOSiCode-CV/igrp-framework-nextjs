@@ -10,100 +10,100 @@ export {
   IGRPAuthCarousel,
   type IGRPAuthCarouselProps,
   type IGRPCarousel,
-} from './components/auths/carousel';
+} from './auths/carousel';
 
 export {
   IGRPAuthForm,
   type IGRPAuthFormProps,
   type IGRPLoginTexts,
   type IGRPSiteLogo,
-} from './components/auths/form';
+} from './auths/form';
 
 // erros components
 
-export { IGRPGlobalError, type IGRPGlobalErrorProps } from './components/errors/global';
-export { IGRPSegmentError, type IGRPSegmentErrorProps } from './components/errors/segment';
+export { IGRPGlobalError, type IGRPGlobalErrorProps } from './errors/global';
+export { IGRPSegmentError, type IGRPSegmentErrorProps } from './errors/segment';
 export {
   IGRPLayoutErrorBoundary,
   useIGRPLayoutErrorReset,
-} from './components/templates/layout-error-boundary';
+} from './templates/layout-error-boundary';
 export { useIGRPLayoutRetry } from './hooks/use-igrp-layout-retry';
-export { IGRPHeaderSkeleton } from './components/templates/header-skeleton';
-export { IGRPSidebarSkeleton } from './components/templates/sidebar-skeleton';
-export { IGRPHeaderError } from './components/templates/header-error';
-export { IGRPSidebarError } from './components/templates/sidebar-error';
+export { IGRPHeaderSkeleton } from './templates/header-skeleton';
+export { IGRPSidebarSkeleton } from './templates/sidebar-skeleton';
+export { IGRPHeaderError } from './templates/header-error';
+export { IGRPSidebarError } from './templates/sidebar-error';
 
 // templates
 
 export {
   IGRPTemplateAppSwitcher,
   type IGRPTemplateAppSwitcherProps,
-} from './components/templates/app-switcher';
+} from './templates/app-switcher';
 
 export {
   IGRPTemplateBreadcrumbs,
   type IGRPTemplateBreadcrumbsProps,
   type BreadcrumbItem,
-} from './components/templates/breadcrumbs';
+} from './templates/breadcrumbs';
 
 export {
   IGRPTemplateCommandSearch,
   type IGRPTemplateCommandSearchProps,
   type IGRPCommandItem,
-} from './components/templates/command-search';
+} from './templates/command-search';
 
-export { IGRPTemplateHeader } from './components/templates/header';
+export { IGRPTemplateHeader } from './templates/header';
 
-export { IGRPTemplateSidebar, type IGRPTemplateSidebarProps } from './components/templates/sidebar';
+export { IGRPTemplateSidebar, type IGRPTemplateSidebarProps } from './templates/sidebar';
 
-export { IGRPTemplateLoading, type IGRPTemplateLoadingProps } from './components/templates/loading';
+export { IGRPTemplateLoading, type IGRPTemplateLoadingProps } from './templates/loading';
 
-export { IGRPTemplateMenus, type IGRPTemplateMenuArgs } from './components/templates/menus';
+export { IGRPTemplateMenus, type IGRPTemplateMenuArgs } from './templates/menus';
 
-export { IGRPTemplateModeSwitcher } from './components/templates/mode-switcher';
+export { IGRPTemplateModeSwitcher } from './templates/mode-switcher';
 
 export {
   IGRPTemplateNavUser,
   type IGRPTemplateNavUserProps,
-} from './components/templates/nav-user';
+} from './templates/nav-user';
 
 export {
   IGRPTemplateNotFound,
   type IGRPTemplateNotFoundProps,
-} from './components/templates/not-found';
+} from './templates/not-found';
 
 export {
   IGRPTemplateNotifications,
   type IGRPTemplateNotificationsProps,
-} from './components/templates/notifications';
+} from './templates/notifications';
 
-export { IGRPSessionWatcher } from './components/templates/session-watcher';
+export { IGRPSessionWatcher } from './templates/session-watcher';
 
-export { IGRPTemplateThemeSelector } from './components/templates/theme-selector';
+export { IGRPTemplateThemeSelector } from './templates/theme-selector';
 
 // providers
 
 export {
   IGRPActiveThemeProvider,
   type IGRPActiveThemeProviderArgs,
-} from './components/providers/active-theme';
+} from './providers/active-theme';
 
-export { IGRPNestedProviders, type IGRPNestedProvidersArgs } from './components/providers/nested';
+export { IGRPNestedProviders, type IGRPNestedProvidersArgs } from './providers/nested';
 
 export {
   IGRPRootProvidersFull,
   type IGRPRootProvidersFullProps,
-} from './components/providers/root-full';
+} from './providers/root-full';
 
 export {
   IGRPRootProvidersBlank,
   type IGRPRootProvidersBlankProps,
-} from './components/providers/root-blank';
+} from './providers/root-blank';
 
 // @deprecated Use IGRPRootProvidersFull instead.
-export { IGRPRootProviders, type IGRPRootProvidersArgs } from './components/providers/root';
+export { IGRPRootProviders, type IGRPRootProvidersArgs } from './providers/root';
 
-export { IGRPSessionProvider } from './components/providers/session';
+export { IGRPSessionProvider } from './providers/session';
 
 // permissions
 export { IGRPSectionPermissions } from './permissions/section-permissions';

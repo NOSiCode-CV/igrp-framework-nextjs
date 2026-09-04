@@ -45,6 +45,8 @@ function IGRPDataTableClientFilter<TData>({
 }: IGRPDataTableFilterClientProps<TData>) {
   const { isFiltered, handleClear } = useFilterState(table, onFiltersCleared)
 
+  if (!filterList) return null
+
   return (
     <div className={cn("flex md:items-center gap-2 flex-col md:flex-row")}>
       {filterList.map(({ columnId, component }) => {

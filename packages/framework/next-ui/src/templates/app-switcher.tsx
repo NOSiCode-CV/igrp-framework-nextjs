@@ -16,7 +16,7 @@ import {
 import type { IGRPApplicationArgs } from '@igrp/framework-next-types';
 import { useMemo } from 'react';
 
-import { getLocationOriginURL } from '../../lib/utils';
+import { getLocationOriginURL } from '../lib/utils';
 import { IGRPTemplateImage } from './template-image';
 
 interface IGRPTemplateAppSwitcherProps {

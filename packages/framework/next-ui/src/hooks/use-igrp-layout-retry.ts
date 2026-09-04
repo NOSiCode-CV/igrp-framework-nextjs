@@ -3,7 +3,7 @@
 import { useCallback, useEffect, useState, useTransition } from 'react';
 import { useRouter } from 'next/navigation';
 
-import { useIGRPLayoutErrorReset } from '../components/templates/layout-error-boundary';
+import { useIGRPLayoutErrorReset } from '../templates/layout-error-boundary';
 
 /**
  * Retry behaviour shared by the layout-level error fallbacks (header, sidebar).
@@ -35,8 +35,6 @@ function useIGRPLayoutRetry() {
 
     setIsRetrying(false);
 
-    // No boundary above us (fallback rendered directly): the refresh alone is
-    // the whole retry.
     resetBoundary?.();
   }, [isRetrying, isPending, resetBoundary]);
 

@@ -3,7 +3,7 @@
 
 import { cn, IGRPButton } from '@igrp/igrp-framework-react-design-system';
 
-import { useIGRPLayoutRetry } from '../../hooks/use-igrp-layout-retry';
+import { useIGRPLayoutRetry } from '../hooks/use-igrp-layout-retry';
 
 export function IGRPHeaderError() {
   const { retry, isRetrying } = useIGRPLayoutRetry();

@@ -7,6 +7,7 @@ import {
   IGRPHeaderError,
   IGRPSidebarError,
   type BreadcrumbItem,
+  type IGRPHeaderSlots,
 } from '@igrp/framework-next-ui';
 import type { IGRPConfigArgs } from '@igrp/framework-next-types';
 
@@ -20,6 +21,13 @@ export type IGRPLayoutFullArgs = {
   readonly showSidebar?: boolean;
   readonly breadcrumbs?: BreadcrumbItem[];
   readonly breadcrumbRouteLabels?: Record<string, string>;
+  /**
+   * Consumer-injected header content. The framework still fetches and owns all
+   * header data (user, logo, breadcrumbs, sidebar trigger) — a slot only decides
+   * what renders in its position. Slots must be elements, not components: they
+   * cross the Server→Client boundary into IGRPTemplateHeader.
+   */
+  readonly headerSlots?: IGRPHeaderSlots;
 };
 
 export async function IGRPLayoutFull({
@@ -28,6 +36,7 @@ export async function IGRPLayoutFull({
   showSidebar = true,
   breadcrumbs,
   breadcrumbRouteLabels,
+  headerSlots,
 }: IGRPLayoutFullArgs) {
   const { previewMode, layout, apiManagementConfig, toasterConfig } = config;
   const { session } = layout;
@@ -64,6 +73,7 @@ export async function IGRPLayoutFull({
           showSidebar={showSidebar}
           breadcrumbs={breadcrumbs}
           breadcrumbRouteLabels={breadcrumbRouteLabels}
+          headerSlots={headerSlots}
         />
       </Suspense>
     </IGRPLayoutErrorBoundary>

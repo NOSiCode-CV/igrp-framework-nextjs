@@ -52,7 +52,7 @@ export {
   type IGRPCommandItem,
 } from './templates/command-search';
 
-export { IGRPTemplateHeader } from './templates/header';
+export { IGRPTemplateHeader, type IGRPHeaderSlots } from './templates/header';
 
 export { IGRPTemplateSidebar, type IGRPTemplateSidebarProps } from './templates/sidebar';
 

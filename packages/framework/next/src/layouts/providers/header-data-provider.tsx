@@ -1,7 +1,7 @@
 // packages/framework/next/src/layouts/providers/header-data-provider.tsx
 import type { IGRPConfigArgs } from '@igrp/framework-next-types';
 import { IGRPTemplateHeader } from '@igrp/framework-next-ui';
-import type { BreadcrumbItem } from '@igrp/framework-next-ui';
+import type { BreadcrumbItem, IGRPHeaderSlots } from '@igrp/framework-next-ui';
 
 import { igrpSetAccessClientConfig } from '../../lib/api-config';
 import { fetchCurrentUser } from '../../hooks/use-user';
@@ -23,6 +23,9 @@ type HeaderDataProviderProps = {
   showSidebar: boolean;
   breadcrumbs?: BreadcrumbItem[];
   breadcrumbRouteLabels?: Record<string, string>;
+  // Consumer-injected header content, forwarded verbatim. Header data is still
+  // fetched here regardless — a slot replaces rendering, never the data.
+  headerSlots?: IGRPHeaderSlots;
 };
 
 export async function HeaderDataProvider({
@@ -32,6 +35,7 @@ export async function HeaderDataProvider({
   showSidebar,
   breadcrumbs,
   breadcrumbRouteLabels,
+  headerSlots,
 }: HeaderDataProviderProps) {
   const { previewMode, layoutMockData } = config;
 
@@ -49,6 +53,7 @@ export async function HeaderDataProvider({
         }}
         breadcrumbs={breadcrumbs}
         breadcrumbRouteLabels={breadcrumbRouteLabels}
+        slots={headerSlots}
       />
     );
   }
@@ -68,6 +73,7 @@ export async function HeaderDataProvider({
       }}
       breadcrumbs={breadcrumbs}
       breadcrumbRouteLabels={breadcrumbRouteLabels}
+      slots={headerSlots}
     />
   );
 }

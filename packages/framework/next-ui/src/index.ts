@@ -6,11 +6,7 @@
 
 // Auth components
 
-export {
-  IGRPAuthCarousel,
-  type IGRPAuthCarouselProps,
-  type IGRPCarousel,
-} from './auths/carousel';
+export { IGRPAuthCarousel, type IGRPAuthCarouselProps, type IGRPCarousel } from './auths/carousel';
 
 export {
   IGRPAuthForm,
@@ -62,15 +58,9 @@ export { IGRPTemplateMenus, type IGRPTemplateMenuArgs } from './templates/menus'
 
 export { IGRPTemplateModeSwitcher } from './templates/mode-switcher';
 
-export {
-  IGRPTemplateNavUser,
-  type IGRPTemplateNavUserProps,
-} from './templates/nav-user';
+export { IGRPTemplateNavUser, type IGRPTemplateNavUserProps } from './templates/nav-user';
 
-export {
-  IGRPTemplateNotFound,
-  type IGRPTemplateNotFoundProps,
-} from './templates/not-found';
+export { IGRPTemplateNotFound, type IGRPTemplateNotFoundProps } from './templates/not-found';
 
 export {
   IGRPTemplateNotifications,
@@ -90,15 +80,9 @@ export {
 
 export { IGRPNestedProviders, type IGRPNestedProvidersArgs } from './providers/nested';
 
-export {
-  IGRPRootProvidersFull,
-  type IGRPRootProvidersFullProps,
-} from './providers/root-full';
+export { IGRPRootProvidersFull, type IGRPRootProvidersFullProps } from './providers/root-full';
 
-export {
-  IGRPRootProvidersBlank,
-  type IGRPRootProvidersBlankProps,
-} from './providers/root-blank';
+export { IGRPRootProvidersBlank, type IGRPRootProvidersBlankProps } from './providers/root-blank';
 
 // @deprecated Use IGRPRootProvidersFull instead.
 export { IGRPRootProviders, type IGRPRootProvidersArgs } from './providers/root';

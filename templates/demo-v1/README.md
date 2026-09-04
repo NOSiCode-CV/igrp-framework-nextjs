@@ -135,6 +135,7 @@ Detailed topics live in [`docs/`](docs/):
 | --- | --- |
 | [Environment Variables](docs/ENVIRONMENT.md) | Every env var (auth, NextAuth, framework, M2M, public) + required auth-server URI registration |
 | [Architecture](docs/ARCHITECTURE.md) | How the template wires middleware, root layout, IGRP layout, and the config builder; authenticated data flow |
+| [Header Slots](docs/HEADER_SLOTS.md) | Injecting your own components into the header — replacing search, notifications or settings, and adding new actions via `headerSlots` |
 | [Authentication](docs/AUTHENTICATION.md) | Centralized `withIGRPAuth` instance, `callbackUrl` sanitization, the OIDC flow, and the preview-mode / `AUTH_PROVIDER=none` bypass |
 | [Permissions](docs/PERMISSIONS.md) | Token-claims gating for pages, components, and menus — `igrpAssertAuthorize`, `<IGRPAuthorization>`, `usePermissions` |
 | [Access Management Sync](docs/ACCESS_MANAGEMENT.md) | OAuth2 `client_credentials` sync of application/resources/menus to the Access Management API |
@@ -148,6 +149,10 @@ Detailed topics live in [`docs/`](docs/):
 Tailwind compiles **once here in the app**, not in the framework packages. Import **tokens only** (`@import "@igrp/igrp-framework-react-design-system/tokens";`) — never the prebuilt `styles.css`. All UI comes from the design system (Horizon `IGRP*` first), forms are always `IGRPForm` + Zod, and dark mode is driven by `next-themes`. Full details in [Design System](docs/DESIGN_SYSTEM.md) and [Design Tokens](docs/TOKENS.md).
 
 - **Do not run `npx shadcn add` here** — see `CLAUDE.md` § "Do not run `npx shadcn add` here". Use `IGRP*` from the design system instead.
+
+### Header slots — quick note
+
+Render your own components in the header by passing `headerSlots` to `IGRPLayoutFull`: `start` (left, after the logo), and `search`, `settings`, `notifications` and `actions` in the right cluster. The framework still fetches and owns all header data (user, logo, breadcrumbs) — a slot only replaces what renders in its position. Slots must be **elements**, not component references, since they cross the Server→Client boundary. This template's command palette is the worked example: [`src/lib/header-search.ts`](src/lib/header-search.ts) (server data) + [`src/components/header/app-search.tsx`](src/components/header/app-search.tsx) (client handlers), wired in [`src/app/(igrp)/layout.tsx`](src/app/(igrp)/layout.tsx). Full guide in [Header Slots](docs/HEADER_SLOTS.md).
 
 ### Permissions — quick note
 

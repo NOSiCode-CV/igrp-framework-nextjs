@@ -31,11 +31,7 @@ export interface IGRPCellSimpleConfig {
 }
 
 export type IGRPCellConfig =
-  | IGRPCellBadgeConfig
-  | IGRPCellDateConfig
-  | IGRPCellAmountConfig
-  | IGRPCellLinkConfig
-  | IGRPCellSimpleConfig
+  IGRPCellBadgeConfig | IGRPCellDateConfig | IGRPCellAmountConfig | IGRPCellLinkConfig | IGRPCellSimpleConfig
 
 // ─── Extended column definition ──────────────────────────────────────────────
 

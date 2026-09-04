@@ -2,7 +2,6 @@
 "@igrp/framework-next-ui": patch
 "@igrp/framework-next": patch
 "@igrp/template-migrator": patch
-"@igrp/framework-next-template": patch
 ---
 
 feat(header): inject consumer components into the template header via `headerSlots`

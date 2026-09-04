@@ -52,9 +52,7 @@ type IGRPPageHeaderBackButtonWithOnClick = IGRPPageHeaderBackButtonPropsBase & {
  * @see IGRPPageHeaderBackButton
  */
 type IGRPPageHeaderBackButtonProps =
-  | IGRPPageHeaderBackButtonWithUrl
-  | IGRPPageHeaderBackButtonWithBrowserBack
-  | IGRPPageHeaderBackButtonWithOnClick
+  IGRPPageHeaderBackButtonWithUrl | IGRPPageHeaderBackButtonWithBrowserBack | IGRPPageHeaderBackButtonWithOnClick
 
 /**
  * Back button for page headers. Navigates via URL link, browser back, or custom onClick.

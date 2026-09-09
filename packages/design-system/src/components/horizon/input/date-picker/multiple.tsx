@@ -4,6 +4,7 @@ import { useId, useState, useEffect } from "react"
 import { format } from "date-fns"
 import { useFormContext } from "react-hook-form"
 
+import { toLocalDates } from "../../../../lib/calendar-utils"
 import { cn } from "../../../../lib/utils"
 import type { IGRPDatePickerBaseProps } from "../../../../types"
 import { FormControl, FormDescription, FormField, FormItem, FormLabel, FormMessage } from "../../../primitives/form"
@@ -180,7 +181,7 @@ function IGRPDatePickerMultiple({
             <FormControl>
               <DatePickerMultipleField
                 {...fieldProps}
-                value={field.value}
+                value={toLocalDates(field.value)}
                 onChange={(val) => {
                   field.onChange(val)
                   onDateChange?.(val)

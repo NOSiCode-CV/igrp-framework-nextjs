@@ -91,3 +91,50 @@ export function parseStringToRange(rangeString: string, dateFormat: string) {
 
   return parsedDate
 }
+
+const DATE_ONLY_RE = /^(\d{4})-(\d{2})-(\d{2})$/
+
+/**
+ * Coerces a form value into a Date anchored at **local** midnight.
+ *
+ * Date pickers declare their value as `Date | undefined`, but react-hook-form hands over
+ * whatever the API put in the form — typically a date-only ISO string such as `"2026-08-26"`.
+ * ECMAScript reads a date-only string as **UTC** midnight, so `new Date("2026-08-26")` is
+ * 23:00 on the 25th in any UTC-N zone (Atlantic/Cape_Verde included). Formatting that value
+ * renders the previous day, and the calendar highlights it — so clicking the highlighted day
+ * writes the wrong date back to the form.
+ *
+ * Date-only strings are therefore rebuilt from their components at local midnight. Everything
+ * else is passed through untouched: `Date` instances are already absolute, and strings that
+ * carry a time (with or without an offset) mean a specific instant that must not be shifted.
+ */
+export function toLocalDate(value: unknown): Date | undefined {
+  if (value instanceof Date) return value
+  if (typeof value === "number") return new Date(value)
+  if (typeof value !== "string" || value === "") return undefined
+
+  const match = DATE_ONLY_RE.exec(value)
+  if (!match) {
+    const parsed = new Date(value)
+    return isValidDate(parsed) ? parsed : undefined
+  }
+
+  const parsed = new Date(Number(match[1]), Number(match[2]) - 1, Number(match[3]))
+  return isValidDate(parsed) ? parsed : undefined
+}
+
+/** Applies {@link toLocalDate} to both ends of a range value. */
+export function toLocalDateRange(value: unknown): DateRange | undefined {
+  if (!value || typeof value !== "object") return undefined
+  const { from, to } = value as { from?: unknown; to?: unknown }
+  const localFrom = toLocalDate(from)
+  if (!localFrom) return undefined
+  return { from: localFrom, to: toLocalDate(to) }
+}
+
+/** Applies {@link toLocalDate} to every entry of a multi-date value. */
+export function toLocalDates(value: unknown): Date[] | undefined {
+  if (!Array.isArray(value)) return undefined
+  const dates = value.map(toLocalDate).filter((date): date is Date => date !== undefined)
+  return dates.length > 0 ? dates : undefined
+}

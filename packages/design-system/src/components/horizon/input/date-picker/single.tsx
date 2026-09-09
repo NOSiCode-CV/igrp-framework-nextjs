@@ -5,6 +5,7 @@ import { format } from "date-fns"
 import { useFormContext } from "react-hook-form"
 import { CalendarIcon } from "lucide-react"
 
+import { toLocalDate } from "../../../../lib/calendar-utils"
 import { DD_MM_YYYY } from "../../../../lib/constants"
 import { cn } from "../../../../lib/utils"
 import { type IGRPDatePickerBaseProps } from "../../../../types"
@@ -179,7 +180,7 @@ function IGRPDatePickerSingle({
               <FormControl>
                 <DatePickerSingleFieldWithA11y
                   {...fieldProps}
-                  value={field.value}
+                  value={toLocalDate(field.value)}
                   onChange={(val) => {
                     field.onChange(val)
                     onDateChange?.(val)

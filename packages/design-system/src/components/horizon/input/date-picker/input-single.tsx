@@ -4,7 +4,13 @@ import { useId, useState, useEffect, useRef, useReducer, useCallback } from "rea
 import { useFormContext, useWatch, type Control } from "react-hook-form"
 import { CalendarIcon, XIcon } from "lucide-react"
 
-import { formatDateToString, getDisabledDays, isValidDate, parseStringToDate } from "../../../../lib/calendar-utils"
+import {
+  formatDateToString,
+  getDisabledDays,
+  isValidDate,
+  parseStringToDate,
+  toLocalDate,
+} from "../../../../lib/calendar-utils"
 import { DD_MM_YYYY } from "../../../../lib/constants"
 import { cn } from "../../../../lib/utils"
 import { type IGRPDatePickerBaseProps } from "../../../../types"
@@ -97,7 +103,9 @@ function FormConnectedDatePickerSync({
       prevDateRef.current = date
     }
 
-    const valueToSync = (dateChanged ? date : watchedValue) as Date | undefined
+    // `watchedValue` is whatever the form holds — usually a date-only ISO string from the
+    // API, which must be read as local midnight rather than UTC. See toLocalDate.
+    const valueToSync = dateChanged ? date : toLocalDate(watchedValue)
     dispatch({ type: "SYNC", date: valueToSync, dateFormat })
 
     if (dateChanged && watchedValue !== date) {

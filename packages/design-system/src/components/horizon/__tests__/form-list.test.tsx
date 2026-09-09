@@ -8,9 +8,7 @@ import { IGRPFormList } from "../form/form-list"
 import { IGRPInputText } from "../input/text"
 
 const schema = z.object({
-  anexos: z
-    .array(z.object({ idTipoDocumento: z.coerce.number(), url: z.string().optional() }))
-    .optional(),
+  anexos: z.array(z.object({ idTipoDocumento: z.coerce.number(), url: z.string().optional() })).optional(),
 })
 type Schema = typeof schema
 
@@ -29,12 +27,7 @@ function Harness({
   const [stableItem] = useState(STABLE_ITEM)
 
   return (
-    <IGRPForm
-      schema={schema}
-      formRef={formRef}
-      onSubmit={() => {}}
-      defaultValues={defaultValues}
-    >
+    <IGRPForm schema={schema} formRef={formRef} onSubmit={() => {}} defaultValues={defaultValues}>
       <IGRPFormList
         id="anexos"
         label="Anexos"
@@ -100,7 +93,12 @@ describe("IGRPFormList seeding in form mode", () => {
   it("renders every pre-filled row", async () => {
     render(
       <Harness
-        defaultValues={{ anexos: [{ idTipoDocumento: 3, url: "a" }, { idTipoDocumento: 4, url: "b" }] }}
+        defaultValues={{
+          anexos: [
+            { idTipoDocumento: 3, url: "a" },
+            { idTipoDocumento: 4, url: "b" },
+          ],
+        }}
       />,
     )
     await settle()

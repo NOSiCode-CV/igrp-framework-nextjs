@@ -515,9 +515,11 @@ function FormListFormMode<TItem>({
 }) {
   const formContext = useContext(IGRPFormContext)
   const disabled = formContext?.disabled
+  const form = formContext?.form
 
   const { fields, append, remove } = useFieldArray({ name: groupId })
   const appendRef = useRef(append)
+  const getValuesRef = useRef(form?.getValues)
 
   // eslint-disable-next-line react-hooks/exhaustive-deps
   const values = useWatch({ name: groupId }) ?? []
@@ -527,13 +529,27 @@ function FormListFormMode<TItem>({
 
   useEffect(() => {
     appendRef.current = append
+    getValuesRef.current = form?.getValues
   })
 
+  // Seed one item when the list would otherwise be empty and allowEmpty is off.
+  //
+  // The guard reads the *live* form value rather than the `fields` snapshot closed
+  // over by this render. `fields` is React state and lags the underlying array, so a
+  // second invocation of this effect against the same render (React StrictMode's
+  // double-invoke in dev, or any re-run before the field-array state flushes) would
+  // still see `fields.length === 0` and append a duplicate — producing two rows where
+  // exactly one was expected. `getValues` reflects the append immediately, so the
+  // second invocation short-circuits.
   useEffect(() => {
-    if (fields.length === 0 && defaultItem !== undefined && !allowEmpty) {
-      appendRef.current(defaultItem)
-    }
-  }, [defaultItem, fields.length, allowEmpty])
+    if (allowEmpty || defaultItem === undefined) return
+    if (fields.length > 0) return
+
+    const current = getValuesRef.current?.(groupId)
+    if (Array.isArray(current) && current.length > 0) return
+
+    appendRef.current(defaultItem)
+  }, [defaultItem, fields.length, allowEmpty, groupId])
 
   // Derive effective open state from user selection + fields.length
   const openItem = useMemo(() => {

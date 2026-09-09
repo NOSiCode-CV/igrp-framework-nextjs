@@ -112,16 +112,26 @@ function IGRPForm<TSchema extends AnyZod>({
     mode: validationMode,
   })
 
-  // Sync defaultValues to form when they change. Two safety rails to avoid clobbering user input:
+  // Sync defaultValues to form when they change. Three safety rails to avoid clobbering state:
   //   1. If the consumer opts into `resetKey`, prop sync is disabled (they reset explicitly via remount).
-  //   2. If the form is dirty (user has typed), skip the reset — only refresh untouched defaults.
+  //   2. Defaults already applied are never re-applied. `useForm` consumes `defaultValues` on the
+  //      first render, so a mount-time `reset()` is redundant — and destructive: it runs *after*
+  //      child effects and wipes rows that a child seeded (e.g. IGRPFormList with allowEmpty={false}),
+  //      leaving an empty list that never re-seeds.
+  //   3. If the form is dirty (user has typed), skip the reset — only refresh untouched defaults.
   // Consumers that *need* to overwrite dirty state with new defaults should bump `resetKey` or call `formRef.current?.reset()` themselves.
+  // Read during render so react-hook-form registers the `isDirty` subscription; reading it
+  // only inside the effect below would leave it unsubscribed on the runs that return early.
+  const isDirty = form.formState.isDirty
+  const syncedDefaultsRef = useRef(defaultValues)
   useEffect(() => {
     if (resetKey !== undefined) return
     if (!defaultValues) return
-    if (form.formState.isDirty) return
+    if (syncedDefaultsRef.current === defaultValues) return
+    if (isDirty) return
+    syncedDefaultsRef.current = defaultValues
     form.reset(defaultValues)
-  }, [form, defaultValues, resetKey])
+  }, [form, defaultValues, resetKey, isDirty])
 
   const clearGlobalError = useCallback(() => setFormError(undefined), [])
   const setGlobalError = useCallback((message: string) => setFormError(message), [])

@@ -38,7 +38,7 @@
     "build:babel": "rimraf dist_optimized && babel dist --out-dir dist_optimized --source-maps --extensions .ts,.js,.tsx,.jsx,.cjs,.mjs && node scripts/swap-dist.mjs && cpy src/*.css dist/",
     "build:reactcompiler": "pnpm clean:dist && pnpm build:swc && pnpm build:babel && pnpm build:types",
     "build:swc": "swc ./src -d dist --config-file .swcrc --strip-leading-paths --ignore \"**/components/experimental/**\" && cpy src/*.css dist/",
-    "build:types": "tsc --emitDeclarationOnly --outDir dist/",
+    "build:types": "tsc -p tsconfig.build.json --emitDeclarationOnly --outDir dist/",
     "build:without_reactcompiler": "pnpm clean:dist && pnpm build:types && pnpm build:swc",
     "clean": "pnpm clean:dist && pnpm clean:packages",
     "clean:dist": "rimraf dist && rimraf tsconfig.tsbuildinfo",

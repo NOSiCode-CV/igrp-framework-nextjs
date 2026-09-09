@@ -843,6 +843,147 @@ export const FormListWithDefaultValues: StoryObj = {
   render: () => <WithDefaultValuesTemplate />,
 };
 
+// ---------------------------------------------------------------------------
+// Mirrors an iGRP Studio generated step: form mode, allowEmpty off (default),
+// defaultValues seeding exactly one row, defaultItem held outside render.
+// Guards the "shows 2 rows instead of 1" regression (double seed append).
+// ---------------------------------------------------------------------------
+
+const AnexoSchema = z.object({
+  anexos: z.array(
+    z.object({
+      idTipoDocumento: z.coerce.number().positive(),
+      url: z.string().optional(),
+    }),
+  ),
+});
+
+type AnexoFormValues = z.infer<typeof AnexoSchema>;
+
+// Module scope, not useState({}) inside the component: a new object identity every
+// render makes the seeding effect re-run on every render.
+const anexoDefaultItem = { idTipoDocumento: 0, url: '' };
+
+const tipoDocumentoOptions: IGRPOptionsProps[] = [
+  { value: '1', label: 'Atestado médico' },
+  { value: '2', label: 'Declaração de baixa' },
+  { value: '3', label: 'Recibo' },
+];
+
+const SeededSingleRowTemplate = () => {
+  const formRef = useRef<IGRPFormHandle<typeof AnexoSchema>>(null);
+
+  // State, so the identity is stable between loads. An inline object literal here
+  // would make IGRPForm re-sync defaultValues on every render.
+  const [formData] = useState<AnexoFormValues>({
+    anexos: [{ idTipoDocumento: 0, url: '' }],
+  });
+
+  return (
+    <div className='mx-auto px-6 py-8'>
+      <div className='mb-4 p-4 bg-muted rounded-md'>
+        <p className='text-sm font-medium mb-1'>Seeded single row</p>
+        <p className='text-xs text-muted-foreground'>
+          defaultValues seeds one row and allowEmpty is off. Exactly one row must render —
+          two means the seeding effect appended a duplicate.
+        </p>
+      </div>
+      <IGRPForm
+        schema={AnexoSchema}
+        formRef={formRef}
+        validationMode='onBlur'
+        defaultValues={formData}
+        onSubmit={(data) => console.log('Form submitted (seeded single row):', data)}
+      >
+        <IGRPFormList
+          id='anexos'
+          label='Anexos'
+          color='primary'
+          variant='solid'
+          addButtonLabel='Adicionar Anexo'
+          addButtonIconName='Plus'
+          defaultItem={anexoDefaultItem}
+          renderItem={(_: AnexoFormValues['anexos'][0], index: number) => (
+            <div className={cn('grid', 'md:grid-cols-2', 'gap-4')}>
+              {/* In form mode the field owns its value. Passing `value` with a no-op
+                  `onChange` (or a single state shared by every row) makes all rows
+                  render the same value and never write back to the form. */}
+              <IGRPCombobox
+                name={`anexos.${index}.idTipoDocumento`}
+                label='Tipo de documento'
+                variant='single'
+                placeholder='Seleccione...'
+                required
+                selectLabel='Sem opções'
+                showSearch
+                options={tipoDocumentoOptions}
+                className={cn('col-span-1')}
+              />
+              <IGRPInputText
+                name={`anexos.${index}.url`}
+                label='URL'
+                className={cn('col-span-1')}
+              />
+            </div>
+          )}
+          computeLabel={(item: AnexoFormValues['anexos'][0], index: number) =>
+            // Option values are strings, the coerced form value is a number — compare as strings.
+            tipoDocumentoOptions.find((o) => String(o.value) === String(item?.idTipoDocumento))
+              ?.label ?? `Novo Documento ${index + 1}`
+          }
+          className={cn('space-y-3')}
+        />
+      </IGRPForm>
+    </div>
+  );
+};
+
+export const FormListSeededSingleRow: StoryObj = {
+  render: () => <SeededSingleRowTemplate />,
+};
+
+// Same shape, but defaultValues carry an explicitly empty array. allowEmpty is off,
+// so the component must seed exactly one row (not zero).
+const SeededFromEmptyArrayTemplate = () => {
+  const formRef = useRef<IGRPFormHandle<typeof AnexoSchema>>(null);
+  const [formData] = useState<AnexoFormValues>({ anexos: [] });
+
+  return (
+    <div className='mx-auto px-6 py-8'>
+      <div className='mb-4 p-4 bg-muted rounded-md'>
+        <p className='text-sm font-medium mb-1'>Seeded from an empty array</p>
+        <p className='text-xs text-muted-foreground'>
+          defaultValues is <code>{'{ anexos: [] }'}</code> and allowEmpty is off. Exactly one
+          seeded row must render — zero means the defaultValues sync wiped it.
+        </p>
+      </div>
+      <IGRPForm
+        schema={AnexoSchema}
+        formRef={formRef}
+        defaultValues={formData}
+        onSubmit={(data) => console.log('Form submitted (seeded from empty):', data)}
+      >
+        <IGRPFormList
+          id='anexos'
+          label='Anexos'
+          addButtonLabel='Adicionar Anexo'
+          defaultItem={anexoDefaultItem}
+          renderItem={(_: AnexoFormValues['anexos'][0], index: number) => (
+            <IGRPInputText name={`anexos.${index}.url`} label='URL' />
+          )}
+          computeLabel={(_: AnexoFormValues['anexos'][0], index: number) =>
+            `Novo Documento ${index + 1}`
+          }
+        />
+      </IGRPForm>
+    </div>
+  );
+};
+
+export const FormListSeededFromEmptyArray: StoryObj = {
+  render: () => <SeededFromEmptyArrayTemplate />,
+};
+
 // Version with disabled form
 const DisabledTemplate = () => {
   const formRef = useRef<IGRPFormHandle<typeof schema>>(null);

@@ -1,5 +1,43 @@
 # @igrp/igrp-framework-react-design-system
 
+## 0.1.0-beta.145
+
+### Patch Changes
+
+- 7ffc339: fix(date-picker): render date-only ISO form values on the correct day west of Greenwich
+
+  The date pickers declare their value as `Date | undefined`, but react-hook-form hands over
+  whatever the API put in the form — typically a date-only ISO string such as `"2026-08-26"`.
+  ECMAScript reads a date-only string as UTC midnight, so date-fns formatted it as the
+  previous day in any UTC-N zone: `Atlantic/Cape_Verde` showed `26-08-2026` as `25-08-2026`.
+  The calendar received the same value and highlighted the wrong day, so clicking the
+  highlighted day wrote that wrong date back to the form.
+
+  All four components were affected — `IGRPDatePickerSingle`, `IGRPDatePickerInputSingle`,
+  `IGRPDatePickerRange` and `IGRPDatePickerMultiple`. Each now coerces the form value at the
+  `field.value` boundary via the new `toLocalDate` / `toLocalDateRange` / `toLocalDates`
+  helpers in `calendar-utils`. Strings that carry a time denote an instant and are passed
+  through unshifted; `Date` values are untouched.
+
+  Regression tests are pinned to a UTC-N zone, since these assertions pass in UTC and east of
+  Greenwich with or without the fix.
+
+- 928c46b: fix(form-list): stop `IGRPFormList` from seeding two rows instead of one
+
+  `IGRPFormList` in form mode seeds one row when the array is empty and `allowEmpty` is
+  off. The guard read the `fields` snapshot closed over by its own render, and `fields` is
+  React state that lags the underlying array — so any second invocation of the effect
+  against that same snapshot (React StrictMode's dev double-invoke, or a re-run before the
+  field-array state flushed) still saw an empty list and appended a duplicate. Consumers
+  saw two rows where exactly one was expected. The guard now reads the live form value,
+  which reflects the append immediately.
+
+  `IGRPForm` also no longer re-applies `defaultValues` that `useForm` already consumed on
+  the first render. That mount-time `reset()` ran after child effects and wiped the row
+  `IGRPFormList` had just seeded, leaving a list that rendered zero rows and never
+  re-seeded. `isDirty` is now read during render so its subscription is registered on every
+  run, not only on the runs that reach the guard.
+
 ## 0.1.0-beta.144
 
 ### Patch Changes

@@ -155,7 +155,7 @@ Each package has its own README with setup, usage, and build details:
 - [packages/design-system/README.md](packages/design-system/README.md)
 - [packages/framework/next-ui/README.md](packages/framework/next-ui/README.md)
 - [packages/framework/next/README.md](packages/framework/next/README.md)
-- [packages/template-migrator/README.md](packages/template-migrator/README.md)
+- [packages/framework/template-migrator/README.md](packages/framework/template-migrator/README.md)
 - [packages/design-system-storybook/README.md](packages/design-system-storybook/README.md)
 - [templates/demo-v1/README.md](templates/demo-v1/README.md)
 

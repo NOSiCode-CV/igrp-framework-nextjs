@@ -7,7 +7,7 @@ CLI that automates IGRP template upgrades. Bundles all migration guides for `tem
 ## Package structure
 
 ```
-packages/template-migrator/
+packages/framework/template-migrator/
 ├── scripts/
 │   ├── pack.ts              # Prebuild: reads migration guides → emits dist/manifest.json + dist/payload/
 │   ├── check-drift.ts       # Release gate: payloads/deps/new files/lock vs. the live template
@@ -136,9 +136,9 @@ Emits `.d.ts` declaration files from `tsconfig.build.json` (no JS output, types 
 
    ```bash
    # From the consumer app directory
-   node path/to/packages/template-migrator/dist/cli.js status
-   node path/to/packages/template-migrator/dist/cli.js plan
-   node path/to/packages/template-migrator/dist/cli.js apply --yes
+   node path/to/packages/framework/template-migrator/dist/cli.js status
+   node path/to/packages/framework/template-migrator/dist/cli.js plan
+   node path/to/packages/framework/template-migrator/dist/cli.js apply --yes
    ```
 
 ---
@@ -334,7 +334,7 @@ The journal is transient and consumer-local; it is exempt from the drift gate's 
 - **Run the pack script in isolation** to iterate on frontmatter parsing without a full build:
 
   ```bash
-  cd packages/template-migrator
+  cd packages/framework/template-migrator
   pnpm tsx scripts/pack.ts
   ```
 

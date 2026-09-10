@@ -39,7 +39,7 @@ const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);
 const ROOT = join(__dirname, "..");
 const MIGRATIONS_DIR = join(ROOT, "migrations/demo-v1");
-// packages/template-migrator -> ../.. -> repo root -> templates/demo-v1
+// packages/framework/template-migrator -> ../.. -> repo root -> templates/demo-v1
 const TEMPLATE_DIR = join(ROOT, "../../templates/demo-v1");
 const TEMPLATE_PKG = join(TEMPLATE_DIR, "package.json");
 const TEMPLATE_LOCK = join(TEMPLATE_DIR, ".igrp-migrations-lock.json");

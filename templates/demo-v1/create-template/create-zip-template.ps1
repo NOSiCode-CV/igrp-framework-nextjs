@@ -226,7 +226,7 @@ Deep references are at ``.agents/skills/igrp-design-system/references/``. Load o
 
   # === NORMALISE LINE ENDINGS TO LF ===
   # Mirrors the pack-time normalisation in @igrp/template-migrator
-  # (packages/template-migrator/scripts/payload-copy.ts). A consumer must get the
+  # (packages/framework/template-migrator/scripts/payload-copy.ts). A consumer must get the
   # same bytes whichever channel they arrive through — scaffolded from this zip,
   # or upgraded via `igrp-migrate apply`.
   #

@@ -233,7 +233,7 @@ This table is a snapshot. For the authoritative list shipped by the CLI you are 
 pnpm dlx @igrp/template-migrator@latest list
 ```
 
-Full prose guides with before/after code live in the framework repo under `packages/template-migrator/migrations/demo-v1/`; each migration's guide file is named in the manifest as `guideHref`.
+Full prose guides with before/after code live in the framework repo under `packages/framework/template-migrator/migrations/demo-v1/`; each migration's guide file is named in the manifest as `guideHref`.
 
 ---
 

@@ -17,7 +17,7 @@ Run `git diff HEAD` and `git status --short` to find modified files. Map files t
 | `packages/design-system/` | `@igrp/igrp-framework-react-design-system` | `pnpm build:ds` | `pnpm --filter @igrp/igrp-framework-react-design-system release` |
 | `packages/framework/next-ui/` | `@igrp/framework-next-ui` | `pnpm build:next-ui` | `pnpm --filter @igrp/framework-next-ui release` |
 | `packages/framework/next/` | `@igrp/framework-next` | `pnpm build:next` | `pnpm --filter @igrp/framework-next release` |
-| `packages/template-migrator/` | `@igrp/template-migrator` | `pnpm template-migrations` | `pnpm --filter @igrp/template-migrator release` |
+| `packages/framework/template-migrator/` | `@igrp/template-migrator` | `pnpm template-migrations` | `pnpm --filter @igrp/template-migrator release` |
 
 Files outside these prefixes (templates, apps, scripts, docs, `.claude/`) are ignored.
 

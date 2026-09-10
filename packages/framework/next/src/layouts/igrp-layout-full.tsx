@@ -38,7 +38,7 @@ export async function IGRPLayoutFull({
   breadcrumbs,
   breadcrumbRouteLabels,
   headerSlots,
-  rootProviderClassName
+  rootProviderClassName,
 }: IGRPLayoutFullArgs) {
   const { previewMode, layout, apiManagementConfig, toasterConfig } = config;
   const { session } = layout;

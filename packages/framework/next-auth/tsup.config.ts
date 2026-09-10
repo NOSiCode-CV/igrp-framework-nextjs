@@ -20,6 +20,7 @@ export default defineConfig({
     compilerOptions: {
       composite: false,
       incremental: false,
+      ignoreDeprecations: '6.0',
     },
   },
   sourcemap: true,

@@ -419,8 +419,8 @@ importers:
         specifier: workspace:*
         version: link:../next-ui
       '@igrp/platform-access-management-client-ts':
-        specifier: ^0.2.0-beta.15
-        version: 0.2.0-beta.15
+        specifier: ^0.2.0-beta.16
+        version: 0.2.0-beta.16
     devDependencies:
       '@babel/cli':
         specifier: 8.0.4
@@ -717,8 +717,8 @@ importers:
         specifier: workspace:*
         version: link:../../packages/design-system
       '@igrp/platform-access-management-client-ts':
-        specifier: 0.2.0-beta.15
-        version: 0.2.0-beta.15
+        specifier: 0.2.0-beta.16
+        version: 0.2.0-beta.16
       '@tanstack/react-query':
         specifier: 5.102.8
         version: 5.102.8(react@19.2.8)
@@ -2182,8 +2182,8 @@ packages:
     resolution: {integrity: sha512-bV0Tgo9K4hfPCek+aMAn81RppFKv2ySDQeMoSZuvTASywNTnVJCArCZE2FWqpvIatKu7VMRLWlR1EazvVhDyhQ==}
     engines: {node: '>=18.18'}
 
-  '@igrp/platform-access-management-client-ts@0.2.0-beta.15':
-    resolution: {integrity: sha512-NloOf3zULA/2U0wIiY1Cv7Z/tHld9IqS3mVkaC7+sITKpvXW8w4ijjAgeFdM6x8kFlfngMsuw16moKD/ifUWZQ==}
+  '@igrp/platform-access-management-client-ts@0.2.0-beta.16':
+    resolution: {integrity: sha512-l6ktg348XrxiLFhwB4pqveRG3w7KvrvHO9d+7xo2S2JFhAcO+CWHjdwnGyrsaJGUY53ltvWfCg7NaEfKAEGfvQ==}
 
   '@img/colour@1.1.0':
     resolution: {integrity: sha512-Td76q7j57o/tLVdgS746cYARfSyxk8iEfRxewL9h4OMzYhbW4TAcppl0mT4eyqXddh6L/jwoM75mo7ixa/pCeQ==}
@@ -9797,7 +9797,7 @@ snapshots:
 
   '@humanwhocodes/retry@0.4.3': {}
 
-  '@igrp/platform-access-management-client-ts@0.2.0-beta.15': {}
+  '@igrp/platform-access-management-client-ts@0.2.0-beta.16': {}
 
   '@img/colour@1.1.0':
     optional: true

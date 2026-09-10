@@ -28,6 +28,7 @@ export type IGRPLayoutFullArgs = {
    * cross the Server→Client boundary into IGRPTemplateHeader.
    */
   readonly headerSlots?: IGRPHeaderSlots;
+  rootProviderClassName?: string;
 };
 
 export async function IGRPLayoutFull({
@@ -37,6 +38,7 @@ export async function IGRPLayoutFull({
   breadcrumbs,
   breadcrumbRouteLabels,
   headerSlots,
+  rootProviderClassName
 }: IGRPLayoutFullArgs) {
   const { previewMode, layout, apiManagementConfig, toasterConfig } = config;
   const { session } = layout;
@@ -85,6 +87,7 @@ export async function IGRPLayoutFull({
       toasterConfig={toasterConfig}
       sidebar={sidebarSlot}
       header={headerSlot}
+      className={rootProviderClassName}
     >
       {children}
     </IGRPRootProvidersFull>

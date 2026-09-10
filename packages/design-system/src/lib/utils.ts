@@ -1,4 +1,4 @@
-export { cn } from "cn";
+export { cn } from "cn"
 
 /** Parses "yyyy-mm-dd" or "y-m-d" string to local Date. Throws on invalid input. */
 export function parseLocalDate(dateStr: string): Date {

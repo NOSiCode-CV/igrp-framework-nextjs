@@ -11,13 +11,13 @@
   - Resizable primitives updated to the react-resizable-panels v4 API (`Group`/`Separator`, `aria-orientation` variants); the drag handle grip icon is replaced by a slimmer bar.
   - Build configuration fixes for `next-auth` (TypeScript deprecation flag) and `template-migrator` (explicit `node` types).
 - feat(header): inject consumer components into the template header via `headerSlots`
-  
+
   `IGRPLayoutFull` accepts a new `headerSlots` prop, letting an app render its own
   components in positions the framework owns: `start` (left region, after the
   logo/title), and `search`, `notifications`, `settings` and `actions` in the right
   cluster. `IGRPTemplateHeader` gains the matching `slots` prop and exports the
   `IGRPHeaderSlots` type.
-  
+
   The framework still fetches and owns all header data — user, logo, breadcrumbs,
   sidebar trigger. A slot only replaces what renders in its position. `showSearch`,
   `showNotifications` and `showSettings` continue to gate their positions; `start`
@@ -25,13 +25,14 @@
   own `<Suspense>`, so an async Server Component slot cannot delay the rest of the
   bar. Supplying a `notifications` slot also suppresses nav-user's link-only
   Notifications entry, which the injected component doesn't own.
-  
+
   Also fixes the built-in command palette, which `IGRPTemplateHeader` mounted with
   no `commands` prop — `⌘K` opened a palette that could never contain anything. The
   template now supplies a menu-derived palette through the `search` slot, shipped as
   template migration `34-header-slots-and-app-search`.
+
 - Library packaging hygiene across all published packages:
-  
+
   - `@igrp/framework-next`: `next`, `react`, `react-dom` moved from `dependencies` to `peerDependencies` (range-based) — prevents duplicate React copies in consumer apps.
   - All packages: exact-pinned `peerDependencies` relaxed to caret ranges (`react ^19.2.0`, `next ^15.5.0`, `next-auth ^4.24.0`, `zod ^4.4.0`, etc.) so consumers on newer patch/minor versions no longer get unmet-peer errors.
   - `@igrp/igrp-framework-react-design-system`, `@igrp/framework-next-ui`: `tailwindcss` moved to `devDependencies` (Tailwind compiles in the consuming app); unused `zod` dependency removed from `next-ui`; duplicated `publishConfig.exports` removed.
@@ -39,10 +40,11 @@
   - `@igrp/framework-next`, `@igrp/template-migrator`: `types` condition now listed first in `exports`.
   - `@igrp/template-migrator`: added `license`, `author`, top-level `types`, `publishConfig.tag`/`access`; `clean` now uses cross-platform `rimraf`.
   - All packages: added `repository`/`homepage`/`bugs` metadata, normalized `engines.node` to `>=22`, added `./package.json` export.
+
 - Permissions hardening: server-action claims recovery + live client claims
-  
+
   **`@igrp/framework-next`**
-  
+
   - `igrpGetClaims()` now recovers the access token from the session cookie when no
     `AsyncLocalStorage` store was established, and seeds the store so the Access
     Management client works in the same call. Previously, calling `igrpAuthorize()`
@@ -64,9 +66,9 @@
     denial.
   - `igrpAssertAuthorize` is documented as **pages only** — an action has no
     `forbidden.tsx` boundary, so use `igrpAuthorize` there.
-  
+
   **`@igrp/framework-next-ui`**
-  
+
   - `IGRPSectionPermissions` now re-decodes claims from the live session instead of
     freezing the server-seeded value for the whole page load. The seeded prop only
     ever arrived once per full page load (token rotation does not call
@@ -82,20 +84,20 @@
     `basePath` is applied automatically). Label and destination are overridable
     via the new `homeLabel` / `homeHref` props; pass `homeHref={null}` to render
     no action when the surrounding shell already offers navigation.
-  
+
   **`@igrp/framework-next-types`**
-  
+
   - New `IGRPPermissionCatalogEntry` (`{ name, description?, enabled }`) — a
     permission an app **declares** for registration in the Access Management
     catalog. Deliberately distinct from `IGRPPermissionArgs`, which is the record
-    AM *returns* (it carries AM's `id`, `status` and `departmentCode`), and from a
+    AM _returns_ (it carries AM's `id`, `status` and `departmentCode`), and from a
     permission **claim** on the access token. Registering an entry does not make
     it checkable.
   - New `apiManagementConfig.syncPermissions` (default `false`) and
     `apiManagementConfig.onCodePermissions`.
-  
+
   **`@igrp/framework-next` — permission catalog sync**
-  
+
   - New `igrpSyncPermissions`, wired as a fourth arm of the existing startup-sync
     pipeline alongside routes and menus. Gated by `syncPermissions` on top of the
     existing `syncAccess` / `previewMode` gates, so enabling the capability cannot
@@ -110,9 +112,10 @@
     bare-name check would silently deny.
   - `id` is omitted from the wire payload rather than sent as `0`, which a backend
     matching on id could misread as an update.
-  
+
   Both permission-gating changes above are additive: each affects only states that
   previously failed outright.
+
 - - Fix the header's sidebar-toggle button still rendering when `IGRPLayoutFull` is configured with `showSidebar={false}` — the trigger is now hidden whenever there's no sidebar to toggle, instead of only depending on the app's own header config.
 - - Fixed `fetchMenusAction`, `fetchCurrentUserAction`, `fetchAppsByUserAction`, and `fetchAppByCodeAction` swallowing the redirect to `/login` that `fetchMenus`/`fetchCurrentUser`/`fetchAppsByUser`/`fetchAppByCode` trigger on a 401/403 from the access-management API — a generic `catch` was flattening Next's internal `NEXT_REDIRECT` control-flow error into a plain `ActionResult` failure instead of letting the redirect happen. These actions now use `unstable_rethrow` so Next's own redirect/not-found signals propagate correctly.
   - `revalidateMenusAction`/`revalidateAppsAction` no longer call `revalidateTag` on tags that nothing ever sets — a no-op left over from an earlier caching design. They're now explicit no-ops; data freshness continues to come from the caller's `router.refresh()` (see `useLayoutData`).

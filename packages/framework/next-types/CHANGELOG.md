@@ -8,7 +8,7 @@
   - `@igrp/framework-next` widens its `zod` peer range from the exact `4.5.0` to `^4.5.0`, so an app on any `4.5.x` (the template ships `4.5.4`) satisfies it.
   - `@igrp/template-migrator` ships migration `30-resync-beta166-deps`, which carries a CLI-upgraded app's dependency set forward to the beta.166 framework release — including `zod`, `react-hook-form`, `@tanstack/react-query` and `@types/react-dom`, which no earlier migration had ever pinned.
 - Library packaging hygiene across all published packages:
-  
+
   - `@igrp/framework-next`: `next`, `react`, `react-dom` moved from `dependencies` to `peerDependencies` (range-based) — prevents duplicate React copies in consumer apps.
   - All packages: exact-pinned `peerDependencies` relaxed to caret ranges (`react ^19.2.0`, `next ^15.5.0`, `next-auth ^4.24.0`, `zod ^4.4.0`, etc.) so consumers on newer patch/minor versions no longer get unmet-peer errors.
   - `@igrp/igrp-framework-react-design-system`, `@igrp/framework-next-ui`: `tailwindcss` moved to `devDependencies` (Tailwind compiles in the consuming app); unused `zod` dependency removed from `next-ui`; duplicated `publishConfig.exports` removed.
@@ -16,10 +16,11 @@
   - `@igrp/framework-next`, `@igrp/template-migrator`: `types` condition now listed first in `exports`.
   - `@igrp/template-migrator`: added `license`, `author`, top-level `types`, `publishConfig.tag`/`access`; `clean` now uses cross-platform `rimraf`.
   - All packages: added `repository`/`homepage`/`bugs` metadata, normalized `engines.node` to `>=22`, added `./package.json` export.
+
 - Permissions hardening: server-action claims recovery + live client claims
-  
+
   **`@igrp/framework-next`**
-  
+
   - `igrpGetClaims()` now recovers the access token from the session cookie when no
     `AsyncLocalStorage` store was established, and seeds the store so the Access
     Management client works in the same call. Previously, calling `igrpAuthorize()`
@@ -41,9 +42,9 @@
     denial.
   - `igrpAssertAuthorize` is documented as **pages only** — an action has no
     `forbidden.tsx` boundary, so use `igrpAuthorize` there.
-  
+
   **`@igrp/framework-next-ui`**
-  
+
   - `IGRPSectionPermissions` now re-decodes claims from the live session instead of
     freezing the server-seeded value for the whole page load. The seeded prop only
     ever arrived once per full page load (token rotation does not call
@@ -59,20 +60,20 @@
     `basePath` is applied automatically). Label and destination are overridable
     via the new `homeLabel` / `homeHref` props; pass `homeHref={null}` to render
     no action when the surrounding shell already offers navigation.
-  
+
   **`@igrp/framework-next-types`**
-  
+
   - New `IGRPPermissionCatalogEntry` (`{ name, description?, enabled }`) — a
     permission an app **declares** for registration in the Access Management
     catalog. Deliberately distinct from `IGRPPermissionArgs`, which is the record
-    AM *returns* (it carries AM's `id`, `status` and `departmentCode`), and from a
+    AM _returns_ (it carries AM's `id`, `status` and `departmentCode`), and from a
     permission **claim** on the access token. Registering an entry does not make
     it checkable.
   - New `apiManagementConfig.syncPermissions` (default `false`) and
     `apiManagementConfig.onCodePermissions`.
-  
+
   **`@igrp/framework-next` — permission catalog sync**
-  
+
   - New `igrpSyncPermissions`, wired as a fourth arm of the existing startup-sync
     pipeline alongside routes and menus. Gated by `syncPermissions` on top of the
     existing `syncAccess` / `previewMode` gates, so enabling the capability cannot
@@ -87,9 +88,10 @@
     bare-name check would silently deny.
   - `id` is omitted from the wire payload rather than sent as `0`, which a backend
     matching on id could misread as an update.
-  
+
   Both permission-gating changes above are additive: each affects only states that
   previously failed outright.
+
 - Updated dependencies [fd98d4c]
 - Updated dependencies
   - @igrp/framework-next-auth@0.1.0-beta.146

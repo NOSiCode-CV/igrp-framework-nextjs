@@ -12,24 +12,25 @@
   - `@igrp/framework-next-ui` pins `react`, `react-dom` and `next-auth` as devDependencies so it builds and typechecks against the same versions every other framework package uses, instead of whatever the workspace happened to hoist.
   - `@igrp/template-migrator` gains a typecheck config for its `scripts/` folder; no change to the published CLI or migration set.
 - fix(date-picker): render date-only ISO form values on the correct day west of Greenwich
-  
+
   The date pickers declare their value as `Date | undefined`, but react-hook-form hands over
   whatever the API put in the form — typically a date-only ISO string such as `"2026-08-26"`.
   ECMAScript reads a date-only string as UTC midnight, so date-fns formatted it as the
   previous day in any UTC-N zone: `Atlantic/Cape_Verde` showed `26-08-2026` as `25-08-2026`.
   The calendar received the same value and highlighted the wrong day, so clicking the
   highlighted day wrote that wrong date back to the form.
-  
+
   All four components were affected — `IGRPDatePickerSingle`, `IGRPDatePickerInputSingle`,
   `IGRPDatePickerRange` and `IGRPDatePickerMultiple`. Each now coerces the form value at the
   `field.value` boundary via the new `toLocalDate` / `toLocalDateRange` / `toLocalDates`
   helpers in `calendar-utils`. Strings that carry a time denote an instant and are passed
   through unshifted; `Date` values are untouched.
-  
+
   Regression tests are pinned to a UTC-N zone, since these assertions pass in UTC and east of
   Greenwich with or without the fix.
+
 - fix(form-list): stop `IGRPFormList` from seeding two rows instead of one
-  
+
   `IGRPFormList` in form mode seeds one row when the array is empty and `allowEmpty` is
   off. The guard read the `fields` snapshot closed over by its own render, and `fields` is
   React state that lags the underlying array — so any second invocation of the effect
@@ -37,14 +38,15 @@
   field-array state flushed) still saw an empty list and appended a duplicate. Consumers
   saw two rows where exactly one was expected. The guard now reads the live form value,
   which reflects the append immediately.
-  
+
   `IGRPForm` also no longer re-applies `defaultValues` that `useForm` already consumed on
   the first render. That mount-time `reset()` ran after child effects and wiped the row
   `IGRPFormList` had just seeded, leaving a list that rendered zero rows and never
   re-seeded. `isDirty` is now read during render so its subscription is registered on every
   run, not only on the runs that reach the guard.
+
 - Library packaging hygiene across all published packages:
-  
+
   - `@igrp/framework-next`: `next`, `react`, `react-dom` moved from `dependencies` to `peerDependencies` (range-based) — prevents duplicate React copies in consumer apps.
   - All packages: exact-pinned `peerDependencies` relaxed to caret ranges (`react ^19.2.0`, `next ^15.5.0`, `next-auth ^4.24.0`, `zod ^4.4.0`, etc.) so consumers on newer patch/minor versions no longer get unmet-peer errors.
   - `@igrp/igrp-framework-react-design-system`, `@igrp/framework-next-ui`: `tailwindcss` moved to `devDependencies` (Tailwind compiles in the consuming app); unused `zod` dependency removed from `next-ui`; duplicated `publishConfig.exports` removed.
@@ -52,20 +54,21 @@
   - `@igrp/framework-next`, `@igrp/template-migrator`: `types` condition now listed first in `exports`.
   - `@igrp/template-migrator`: added `license`, `author`, top-level `types`, `publishConfig.tag`/`access`; `clean` now uses cross-platform `rimraf`.
   - All packages: added `repository`/`homepage`/`bugs` metadata, normalized `engines.node` to `>=22`, added `./package.json` export.
+
 - fix(stepper): render `IGRPStepperProcess` separators as a single-apex chevron
-  
+
   The arrow between steps was drawn with two skewed pseudo-elements, each `h-4.25` (17px) and
   skewed about its own centre (y=8.5 and y=15.5) rather than the row's middle. On the `h-6`
   (24px) row this put the widest points at y=7 and y=17 with a dip at y=12, and pulled the top
   and bottom corners ~4.5px inward — a blunt, jogged, asymmetric separator (the mismatched
   `28deg`/`30deg` angles added to it). Any row taller than 34px also left a bald band across
   the middle, since two 17px halves cannot cover it.
-  
+
   The shape is now a single `clip-path` polygon with its apex at `50%`, painted on a dedicated
   background layer inside each step, so it is symmetric, correct at any row height, and
   identical in light and dark. Rounded end caps moved to that layer; keeping the shape off the
   step itself means a focus ring on the step trigger is no longer clipped by the chevron.
-  
+
   Step title behaviour is unchanged.
 
 ## 0.1.0-beta.145

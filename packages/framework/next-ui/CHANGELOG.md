@@ -11,13 +11,13 @@
   - `@igrp/framework-next-ui` pins `react`, `react-dom` and `next-auth` as devDependencies so it builds and typechecks against the same versions every other framework package uses, instead of whatever the workspace happened to hoist.
   - `@igrp/template-migrator` gains a typecheck config for its `scripts/` folder; no change to the published CLI or migration set.
 - feat(header): inject consumer components into the template header via `headerSlots`
-  
+
   `IGRPLayoutFull` accepts a new `headerSlots` prop, letting an app render its own
   components in positions the framework owns: `start` (left region, after the
   logo/title), and `search`, `notifications`, `settings` and `actions` in the right
   cluster. `IGRPTemplateHeader` gains the matching `slots` prop and exports the
   `IGRPHeaderSlots` type.
-  
+
   The framework still fetches and owns all header data — user, logo, breadcrumbs,
   sidebar trigger. A slot only replaces what renders in its position. `showSearch`,
   `showNotifications` and `showSettings` continue to gate their positions; `start`
@@ -25,28 +25,30 @@
   own `<Suspense>`, so an async Server Component slot cannot delay the rest of the
   bar. Supplying a `notifications` slot also suppresses nav-user's link-only
   Notifications entry, which the injected component doesn't own.
-  
+
   Also fixes the built-in command palette, which `IGRPTemplateHeader` mounted with
   no `commands` prop — `⌘K` opened a palette that could never contain anything. The
   template now supplies a menu-derived palette through the `search` slot, shipped as
   template migration `34-header-slots-and-app-search`.
+
 - fix(next-ui): make "Tentar novamente" actually retry in the header/sidebar error fallbacks
-  
+
   `IGRPLayoutErrorBoundary` latched `hasError` permanently, so the `router.refresh()`
   behind the retry button re-fetched the server tree but the boundary kept rendering
   `IGRPSidebarError` / `IGRPHeaderError` — the button appeared to do nothing.
-  
+
   The boundary now exposes a reset through context (`useIGRPLayoutErrorReset`), and
   both fallbacks use the new `useIGRPLayoutRetry` hook: it refreshes inside a
   transition and clears the boundary only once that transition settles, so the
   boundary re-renders the freshly fetched tree instead of the failing one. The retry
   button also shows a loading state while the refresh is in flight.
-  
+
   `useIGRPLayoutRetry` and `useIGRPLayoutErrorReset` are exported for consumers
   writing their own layout error fallbacks.
+
 - Fix `@igrp/framework-next-ui/tokens`: its CSS imported the design system's removed `/styles` entry, so any consumer importing the tokens entry (as documented in the README) failed to compile with `"./styles" is not exported`. It now re-exports `@igrp/igrp-framework-react-design-system/tokens`, and the README CSS section was updated to match.
 - Library packaging hygiene across all published packages:
-  
+
   - `@igrp/framework-next`: `next`, `react`, `react-dom` moved from `dependencies` to `peerDependencies` (range-based) — prevents duplicate React copies in consumer apps.
   - All packages: exact-pinned `peerDependencies` relaxed to caret ranges (`react ^19.2.0`, `next ^15.5.0`, `next-auth ^4.24.0`, `zod ^4.4.0`, etc.) so consumers on newer patch/minor versions no longer get unmet-peer errors.
   - `@igrp/igrp-framework-react-design-system`, `@igrp/framework-next-ui`: `tailwindcss` moved to `devDependencies` (Tailwind compiles in the consuming app); unused `zod` dependency removed from `next-ui`; duplicated `publishConfig.exports` removed.
@@ -54,10 +56,11 @@
   - `@igrp/framework-next`, `@igrp/template-migrator`: `types` condition now listed first in `exports`.
   - `@igrp/template-migrator`: added `license`, `author`, top-level `types`, `publishConfig.tag`/`access`; `clean` now uses cross-platform `rimraf`.
   - All packages: added `repository`/`homepage`/`bugs` metadata, normalized `engines.node` to `>=22`, added `./package.json` export.
+
 - Permissions hardening: server-action claims recovery + live client claims
-  
+
   **`@igrp/framework-next`**
-  
+
   - `igrpGetClaims()` now recovers the access token from the session cookie when no
     `AsyncLocalStorage` store was established, and seeds the store so the Access
     Management client works in the same call. Previously, calling `igrpAuthorize()`
@@ -79,9 +82,9 @@
     denial.
   - `igrpAssertAuthorize` is documented as **pages only** — an action has no
     `forbidden.tsx` boundary, so use `igrpAuthorize` there.
-  
+
   **`@igrp/framework-next-ui`**
-  
+
   - `IGRPSectionPermissions` now re-decodes claims from the live session instead of
     freezing the server-seeded value for the whole page load. The seeded prop only
     ever arrived once per full page load (token rotation does not call
@@ -97,20 +100,20 @@
     `basePath` is applied automatically). Label and destination are overridable
     via the new `homeLabel` / `homeHref` props; pass `homeHref={null}` to render
     no action when the surrounding shell already offers navigation.
-  
+
   **`@igrp/framework-next-types`**
-  
+
   - New `IGRPPermissionCatalogEntry` (`{ name, description?, enabled }`) — a
     permission an app **declares** for registration in the Access Management
     catalog. Deliberately distinct from `IGRPPermissionArgs`, which is the record
-    AM *returns* (it carries AM's `id`, `status` and `departmentCode`), and from a
+    AM _returns_ (it carries AM's `id`, `status` and `departmentCode`), and from a
     permission **claim** on the access token. Registering an entry does not make
     it checkable.
   - New `apiManagementConfig.syncPermissions` (default `false`) and
     `apiManagementConfig.onCodePermissions`.
-  
+
   **`@igrp/framework-next` — permission catalog sync**
-  
+
   - New `igrpSyncPermissions`, wired as a fourth arm of the existing startup-sync
     pipeline alongside routes and menus. Gated by `syncPermissions` on top of the
     existing `syncAccess` / `previewMode` gates, so enabling the capability cannot
@@ -125,14 +128,15 @@
     bare-name check would silently deny.
   - `id` is omitted from the wire payload rather than sent as `0`, which a backend
     matching on id could misread as an update.
-  
+
   Both permission-gating changes above are additive: each affects only states that
   previously failed outright.
+
 - - Fixed the sidebar menu search: results now show the item's icon, highlight the matched text, and display a result count, matching the visual style of the rest of the menu.
   - Added a clear ("×") button to the search field and disabled spellcheck/autocomplete, removing the browser's red squiggly underline on typed queries.
   - Replaced the plain "no results" text with a dashed empty-state card (icon + quoted query), consistent with the existing "no menus" empty state.
 - fix(next-ui): don't crash the layout on runtime-supplied image hosts
-  
+
   `IGRPTemplateAppSwitcher` and `IGRPTemplateHeader` rendered app pictures and the
   header logo with `next/image` using the default loader, which throws
   "hostname is not configured under images" for any host missing from the
@@ -140,10 +144,11 @@
   `IGRPLayoutErrorBoundary` and took the whole sidebar/header down. Since these
   URLs come from the access-management backend at runtime, consumers cannot
   whitelist every host up front.
-  
+
   Both now render through a new internal `IGRPTemplateImage`, which marks remote
   sources `unoptimized` (bypassing the hostname check) and falls back to the icon
   — or, for the header, to the bundled logo — when an image fails to load.
+
 - Updated dependencies
 - Updated dependencies [fd98d4c]
 - Updated dependencies

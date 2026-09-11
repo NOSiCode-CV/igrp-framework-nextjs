@@ -1,5 +1,97 @@
 # @igrp/igrp-framework-react-design-system
 
+## 0.1.0-beta.147
+
+### Patch Changes
+
+- 2c09827: fix(info-card): wire up `orientation` and the color variants; drop the no-op `variantItem`
+  
+  `IGRPInfoCard` declared several props that were never read — the destructures
+  sat commented out in the component, so passing them did nothing.
+  
+  - `orientation` now works. `vertical` (the default, unchanged) stacks the label
+    above the value; `horizontal` places them side by side.
+  - New `columns` prop (`1` | `2` | `3`, default `1`) flows a section's items into
+    a responsive grid instead of a single column.
+  - Both responsive behaviours key off the **card's own width** via a container
+    query, not the viewport. An info card is routinely placed in a narrow grid
+    cell or sidebar, where a viewport breakpoint reports far more room than the
+    card actually has.
+  - `variantSection` / `colorSection` applied only the background class, so the
+    card kept the `text-card-foreground` it inherits from the `Card` primitive.
+    `solid` therefore painted dark text on a filled background — a contrast
+    failure — while `outline` rendered as a plain card because its border and
+    accent were dropped. All three variants now apply their full slot.
+  - Sections render as a description list (`dl` / `dt` / `dd`), so assistive
+    technology reads each value as the value *of* its label instead of as loose
+    adjacent text. **This changes the rendered markup**: each section is now a
+    `dl`, and each field a `div` wrapping a `dt` and `dd` rather than nested
+    `div`/`span`. Selectors or snapshots targeting the old structure need updating.
+  - Labels use `text-muted-foreground` for hierarchy, dimming to `opacity-80` on
+    solid fills where a second color token would not read.
+  - The header is no longer rendered when no `title` is given, instead of leaving
+    an empty heading block.
+  
+  **Removed:** `variantItem` on `IGRPInfoItem`. Every role in `IGRPColors` maps to
+  the same `textCard` class, so the prop could not affect rendering no matter what
+  it was set to. Per-item accenting is now `colorItem` alone; drop `variantItem`
+  from any call site. It is ignored under `variantSection="solid"`, where a
+  per-item color cannot contrast against the filled background.
+  
+  **Added:** a `bgStatic` slot on every `IGRPColors` entry — the background with
+  interactive state variants removed, for non-interactive surfaces. The `solid`
+  backgrounds carry a `hover:` class intended for buttons, which an info card
+  should never apply. `colors.test.ts` asserts `bgStatic` stays in sync with `bg`.
+  
+  `orientation` and `columns` default to the previous behaviour, so existing usage
+  is unaffected apart from the markup change noted above.
+- 2c09827: fix(input-color): bind to the form value, and fix disabled / a11y / parsing
+  
+  `IGRPInputColor` kept the selected color in component state and never read the
+  field value, so `defaultValues`, `setValue()` and `reset()` never reached the
+  swatch or the value field — an untouched field could submit a value that did not
+  match what was on screen.
+  
+  - The committed color now comes from the field value (or `value` when
+    controlled); only the in-progress text edit is local state.
+  - The displayed format follows the format the stored value declares, so a saved
+    `#3b82f6` is no longer rewritten as `oklch(…)` before the user touches it.
+    `defaultFormat` applies when the value declares none.
+  - `disabled` now disables the value field and the format selector too — both
+    stayed keyboard-reachable and editable behind a `pointer-events-none` wrapper.
+  - The visible label is associated with the picker, and `aria-describedby` /
+    `aria-invalid` reach the controls instead of the wrapper element.
+  - User-facing strings moved to the i18n catalog (new `inputColor` group,
+    pt-PT defaults) — they were hardcoded in English.
+  - The value field accepts the full CSS syntax (`rgb(255 0 0 / 50%)`,
+    `hsl(210 40% 50%)`, `oklch(62.8% 0.25 29)`, `#rgba` / `#rrggbbaa`, `deg` and
+    `%` units; alpha is discarded) and an unparseable entry now shows a message
+    instead of silently reverting. Override it with `invalidValueMessage`.
+  - Unparseable text is published as typed instead of being held back, so the
+    field value and the value on screen never disagree and the consumer schema
+    decides whether to reject it; the swatch keeps the last color that parsed. The
+    built-in message is suppressed when the field already carries an error, so a
+    schema message is not doubled up.
+  - Props declared by the type (`placeholder`, `readOnly`, `inputClassName`, …)
+    are forwarded to the value field instead of being dropped.
+- 02bc0a8: fix(input-number): make decimal input actually typable
+  
+  `IGRPInputNumber` re-parsed the field on every keystroke and wrote the parsed
+  number straight back to the input, which dropped the decimal separator ("3." ->
+  3, so "3.14" became 31) and, for formatted fields, stripped the locale group /
+  decimal separators ("12,55" + "5" -> 12555).
+  
+  - The text being typed is now kept as-is until the field is left; the parsed
+    value is still published on every keystroke.
+  - Focusing a formatted field swaps the formatted text for an editable,
+    unformatted one (percent fields are edited in percent units) and re-formats
+    on blur, so a displayed value can be edited in place.
+  - Formatted input is parsed with the same locale separators used to display it.
+  - `min` / `max` are applied on blur instead of per keystroke, so values such as
+    15 stay reachable in a field whose `min` is 10.
+  - Stepper results are rounded to the precision of the step, removing floating
+    point drift (12.50 + five 0.01 steps is 12.55, not 12.549999999999999).
+
 ## 0.1.0-beta.146
 
 ### Patch Changes

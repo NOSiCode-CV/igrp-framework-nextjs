@@ -18,11 +18,7 @@ export default {
     max: { control: 'number' },
     step: { control: 'number' },
     defaultValue: { control: 'number' },
-    errorMessage: { control: 'text' },
-    IGRPGridSize: {
-      control: 'select',
-      options: ['full', '1/2', '1/3', '2/3', '1/4', '3/4'],
-    },
+    errorMessage: { control: 'text' },    
     error: { control: 'text' },
   },
 } as Meta;
@@ -89,7 +85,7 @@ export const Percentage: StoryObj<IGRPInputNumberProps> = {
     defaultValue: 0.25,
     formatOptions: { style: 'percent' },
     min: 0,
-    max: 1,
+    max: 100,
     step: 0.05,
   },
 };
@@ -135,5 +131,31 @@ export const WithError: StoryObj<IGRPInputNumberProps> = {
     error: 'Value exceeds maximum allowed',
     min: 0,
     max: 100,
+  },
+};
+
+export const Decimals: StoryObj<IGRPInputNumberProps> = {
+  render: Template,
+  args: {
+    name: 'weight',
+    label: 'Weight (kg)',
+    helperText: 'Type a decimal (3.14) or step in 0.25 increments',
+    defaultValue: 1.75,
+    min: 0,
+    max: 100,
+    step: 0.25,
+  },
+};
+
+export const DecimalsWithFixedPrecision: StoryObj<IGRPInputNumberProps> = {
+  render: Template,
+  args: {
+    name: 'unitPrice',
+    label: 'Unit price',
+    helperText: 'Always shown with 2 decimal places',
+    defaultValue: 12.5,
+    min: 0,
+    step: 0.01,
+    formatOptions: { minimumFractionDigits: 2, maximumFractionDigits: 2 },
   },
 };

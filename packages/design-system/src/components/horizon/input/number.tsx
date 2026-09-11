@@ -7,8 +7,9 @@ import { cn } from "../../../lib/utils"
 import { useIGRPi18n } from "../../../i18n"
 import type { IGRPInputProps } from "../../../types"
 import { Input } from "../../primitives/input"
-import { IGRPButton } from "../button"
 import { IGRPLabel } from "../label"
+import { Button } from "../../primitives/button"
+import { ChevronDown, ChevronUp } from "lucide-react"
 
 /**
  * Props for the IGRPInputNumber component.
@@ -43,10 +44,69 @@ interface IGRPInputNumberProps extends Omit<IGRPInputProps, "onChange"> {
 
 type NumberValue = number | ""
 
+/** @internal Group/decimal separators of the runtime's default locale. */
+function getLocaleSeparators(): { group: string; decimal: string } {
+  const parts = new Intl.NumberFormat(undefined, { minimumFractionDigits: 1 }).formatToParts(12345.6)
+  return {
+    group: parts.find((part) => part.type === "group")?.value ?? ",",
+    decimal: parts.find((part) => part.type === "decimal")?.value ?? ".",
+  }
+}
+
+/**
+ * @internal Parses what the user typed into a number.
+ * Unformatted fields are parsed with "." as the decimal separator; formatted
+ * fields are parsed with the locale separators used to display them, so a
+ * value such as "1 234,56" can be edited in place instead of collapsing into
+ * 123456.
+ */
 function parseInputToNumber(inputValue: string, formatOptions?: Intl.NumberFormatOptions): number {
-  const cleaned = inputValue.replace(/[^\d.-]/g, "")
+  if (!formatOptions) {
+    return parseFloat(inputValue.replace(/[^\d.-]/g, ""))
+  }
+
+  const { group, decimal } = getLocaleSeparators()
+  let cleaned = inputValue.split(group).join("")
+  cleaned = cleaned.replace(/[\s\u00a0\u202f]/g, "")
+  if (decimal !== ".") cleaned = cleaned.split(decimal).join(".")
+  cleaned = cleaned.replace(/[^\d.-]/g, "")
+
   const parsed = parseFloat(cleaned)
-  return formatOptions?.style === "percent" ? parsed / 100 : parsed
+  return formatOptions.style === "percent" ? parsed / 100 : parsed
+}
+
+/** @internal Decimal places held by a value, capped at a sane precision. */
+function countDecimals(value: number): number {
+  if (!Number.isFinite(value)) return 0
+
+  const text = String(value)
+  if (text.includes("e-")) {
+    const [mantissa, exponent] = text.split("e-")
+    return Math.min(10, countDecimals(Number(mantissa)) + Number(exponent))
+  }
+
+  const separator = text.indexOf(".")
+  return separator === -1 ? 0 : Math.min(10, text.length - separator - 1)
+}
+
+/** @internal Rounds away binary floating point noise (12.549999999999999 -> 12.55). */
+function roundToPrecision(value: number, decimals: number): number {
+  if (!Number.isFinite(value)) return value
+  const factor = 10 ** Math.min(10, Math.max(0, decimals))
+  return Math.round(value * factor) / factor
+}
+
+/**
+ * @internal Turns the stored value into the string the user edits while the
+ * field is focused — unformatted, and in the same unit they type in (percent
+ * fields are edited as 25, not 0.25).
+ */
+function toEditableString(value: NumberValue, formatOptions?: Intl.NumberFormatOptions): string {
+  if (value === "") return ""
+  if (formatOptions?.style === "percent") {
+    return String(roundToPrecision(value * 100, countDecimals(value) + 2))
+  }
+  return String(value)
 }
 
 /** @internal Props for the number input field UI. */
@@ -58,8 +118,11 @@ type NumberInputFieldProps = {
   fieldName: string
   labelClassName?: string
   isFocused: boolean
-  onFocus: React.FocusEventHandler<HTMLInputElement>
-  onBlur: React.FocusEventHandler<HTMLInputElement>
+  /** Raw text being typed; `null` when the field is not being edited. */
+  draft: string | null
+  onFieldFocus: (val: NumberValue) => void
+  onFieldBlur: (updateFn?: (v: NumberValue) => void) => void
+  onInputChange: (raw: string, updateFn?: (v: NumberValue) => void) => void
   error?: string
   validationError: boolean
   formatOptions?: Intl.NumberFormatOptions
@@ -68,9 +131,6 @@ type NumberInputFieldProps = {
   disabled: boolean
   readOnly: boolean
   required?: boolean
-  constrainValue: (v: number) => number
-  setValidationError: (v: boolean) => void
-  onStandaloneInputChange: (e: React.ChangeEvent<HTMLInputElement>) => void
   onIncrement: (val: NumberValue, updateFn?: (v: NumberValue) => void) => void
   onDecrement: (val: NumberValue, updateFn?: (v: NumberValue) => void) => void
   getDisplayValue: (v: NumberValue) => string
@@ -85,26 +145,30 @@ function NumberInputField({
   fieldName,
   labelClassName,
   isFocused,
-  onFocus,
-  onBlur,
+  draft,
+  onFieldFocus,
+  onFieldBlur,
+  onInputChange,
   error,
   validationError,
-  formatOptions,
+  // Destructured only to keep it out of `inputProps` — formatting happens in
+  // `getDisplayValue`, and the option object must never reach the DOM.
+  formatOptions: _formatOptions,
   min,
   max,
   disabled,
   readOnly,
   required,
-  constrainValue,
-  setValidationError,
-  onStandaloneInputChange,
   onIncrement,
   onDecrement,
   getDisplayValue,
   ...inputProps
 }: NumberInputFieldProps) {
   const i18n = useIGRPi18n()
-  const displayValue = getDisplayValue(value)
+  void _formatOptions
+  // While editing, show exactly what was typed — reformatting per keystroke
+  // would swallow a half-typed decimal such as "3.".
+  const displayValue = draft ?? getDisplayValue(value)
 
   return (
     <div className={cn("*:not-first:mt-2")}>
@@ -122,29 +186,7 @@ function NumberInputField({
           name={fieldName}
           type="text"
           value={displayValue}
-          onChange={(e) => {
-            if (onValueChange) {
-              try {
-                const inputValue = e.target.value
-                if (inputValue.trim() === "") {
-                  onValueChange("")
-                  setValidationError(false)
-                  return
-                }
-                const numValue = parseInputToNumber(inputValue, formatOptions)
-                if (!isNaN(numValue)) {
-                  onValueChange(constrainValue(numValue))
-                  setValidationError(false)
-                } else {
-                  setValidationError(true)
-                }
-              } catch {
-                setValidationError(true)
-              }
-            } else {
-              onStandaloneInputChange(e)
-            }
-          }}
+          onChange={(e) => onInputChange(e.target.value, onValueChange)}
           onKeyDown={(e) => {
             if (e.key === "ArrowUp") {
               e.preventDefault()
@@ -154,8 +196,8 @@ function NumberInputField({
               onDecrement(value, onValueChange)
             }
           }}
-          onFocus={onFocus}
-          onBlur={onBlur}
+          onFocus={() => onFieldFocus(value)}
+          onBlur={() => onFieldBlur(onValueChange)}
           className={cn(
             "bg-background text-foreground flex-1 px-3 py-2 tabular-nums outline-none border-none focus-visible:outline-none focus-visible:ring-ring/0 focus-visible:ring-0 rounded-none",
           )}
@@ -170,7 +212,7 @@ function NumberInputField({
         />
         {!readOnly && (
           <div className={cn("flex h-full flex-col border-l")}>
-            <IGRPButton
+            <Button
               type="button"
               onClick={() => onIncrement(value, onValueChange)}
               disabled={disabled || (max !== undefined && typeof value === "number" && value >= max)}
@@ -178,10 +220,11 @@ function NumberInputField({
                 "bg-background text-muted-foreground/80 hover:bg-accent hover:text-foreground flex h-1/2 w-8 items-center justify-center border-b text-xs transition-colors rounded-none",
               )}
               aria-label={i18n.inputNumber.incrementLabel}
-              iconName="ChevronUp"
               size="icon"
-            />
-            <IGRPButton
+            >
+              <ChevronUp />
+            </Button>
+            <Button
               type="button"
               onClick={() => onDecrement(value, onValueChange)}
               disabled={disabled || (min !== undefined && typeof value === "number" && value <= min)}
@@ -189,9 +232,10 @@ function NumberInputField({
                 "bg-background text-muted-foreground/80 hover:bg-accent hover:text-foreground flex h-1/2 w-8 items-center justify-center text-xs transition-colors rounded-none",
               )}
               aria-label={i18n.inputNumber.decrementLabel}
-              iconName="ChevronDown"
               size="icon"
-            />
+            >
+              <ChevronDown />
+            </Button>
           </div>
         )}
       </div>
@@ -315,6 +359,9 @@ function IGRPInputNumber({
   const [localValue, setLocalValue] = useState<NumberValue>(controlledValue ?? defaultValue ?? "")
   const [isFocused, setIsFocused] = useState(false)
   const [validationError, setValidationError] = useState(false)
+  // Raw text while the field is being edited. Kept verbatim so half-typed
+  // decimals ("3.", "-", "1,2") survive until the field is left.
+  const [draft, setDraft] = useState<string | null>(null)
   const formContext = useFormContext()
   const prevControlledValueRef = useRef<number | undefined>(controlledValue)
 
@@ -338,51 +385,94 @@ function IGRPInputNumber({
     onChange?.(constrainedValue)
   }
 
-  const increment = (currentValue: NumberValue, updateFn?: (value: NumberValue) => void) => {
-    if (!disabled && !readOnly) {
-      const base = typeof currentValue === "number" ? currentValue : 0
-      const newValue = constrainValue(base + step)
-      if (updateFn) {
-        updateFn(newValue)
-      } else {
-        updateStandaloneValue(newValue)
-      }
+  /** Writes a value through the form field when there is one, local state otherwise. */
+  const writeValue = (newValue: NumberValue, updateFn?: (value: NumberValue) => void) => {
+    if (updateFn) {
+      updateFn(newValue)
+      return
     }
+    setLocalValue(newValue)
+    if (newValue !== "") onChange?.(newValue)
+  }
+
+  const stepBy = (currentValue: NumberValue, direction: 1 | -1, updateFn?: (value: NumberValue) => void) => {
+    if (disabled || readOnly) return
+
+    const base = typeof currentValue === "number" ? currentValue : 0
+    const decimals = Math.max(countDecimals(base), countDecimals(step))
+    const newValue = constrainValue(roundToPrecision(base + direction * step, decimals))
+
+    if (updateFn) {
+      updateFn(newValue)
+    } else {
+      updateStandaloneValue(newValue)
+    }
+    // Keep the edited text in sync when stepping with the arrow keys.
+    if (draft !== null) setDraft(toEditableString(newValue, formatOptions))
+  }
+
+  const increment = (currentValue: NumberValue, updateFn?: (value: NumberValue) => void) => {
+    stepBy(currentValue, 1, updateFn)
   }
 
   const decrement = (currentValue: NumberValue, updateFn?: (value: NumberValue) => void) => {
-    if (!disabled && !readOnly) {
-      const base = typeof currentValue === "number" ? currentValue : 0
-      const newValue = constrainValue(base - step)
-      if (updateFn) {
-        updateFn(newValue)
-      } else {
-        updateStandaloneValue(newValue)
-      }
-    }
+    stepBy(currentValue, -1, updateFn)
   }
 
-  const handleStandaloneInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+  /**
+   * Records the typed text and publishes the parsed value. Min/max are NOT
+   * applied here — clamping mid-typing makes values such as "15" unreachable
+   * when `min` is 10. Clamping happens on blur.
+   */
+  const handleInputChange = (raw: string, updateFn?: (value: NumberValue) => void) => {
     if (disabled || readOnly) return
 
-    const inputValue = e.target.value
-    if (inputValue.trim() === "") {
-      setLocalValue("")
+    setDraft(raw)
+
+    if (raw.trim() === "") {
       setValidationError(false)
+      writeValue("", updateFn)
       return
     }
 
-    try {
-      const numValue = parseInputToNumber(inputValue, formatOptions)
-      if (!isNaN(numValue)) {
-        updateStandaloneValue(numValue)
-        setValidationError(false)
-      } else {
-        setValidationError(true)
-      }
-    } catch {
+    const numValue = parseInputToNumber(raw, formatOptions)
+    if (isNaN(numValue)) {
       setValidationError(true)
+      return
     }
+
+    setValidationError(false)
+    writeValue(numValue, updateFn)
+  }
+
+  const handleFieldFocus = (currentValue: NumberValue) => {
+    setIsFocused(true)
+    if (disabled || readOnly) return
+    // Swap the formatted display for an editable one while the user types.
+    setDraft(toEditableString(currentValue, formatOptions))
+  }
+
+  const handleFieldBlur = (updateFn?: (value: NumberValue) => void) => {
+    setIsFocused(false)
+
+    const editedText = draft
+    setDraft(null)
+    if (editedText === null) return
+
+    if (editedText.trim() === "") {
+      setValidationError(false)
+      writeValue("", updateFn)
+      return
+    }
+
+    const parsed = parseInputToNumber(editedText, formatOptions)
+    if (isNaN(parsed)) {
+      setValidationError(true)
+      return
+    }
+
+    setValidationError(false)
+    writeValue(roundToPrecision(constrainValue(parsed), countDecimals(parsed)), updateFn)
   }
 
   const getDisplayValue = (value: NumberValue) => {
@@ -398,8 +488,10 @@ function IGRPInputNumber({
     fieldName,
     labelClassName: className,
     isFocused,
-    onFocus: () => setIsFocused(true),
-    onBlur: () => setIsFocused(false),
+    draft,
+    onFieldFocus: handleFieldFocus,
+    onFieldBlur: handleFieldBlur,
+    onInputChange: handleInputChange,
     error,
     validationError,
     formatOptions,
@@ -408,9 +500,6 @@ function IGRPInputNumber({
     disabled,
     readOnly,
     required,
-    constrainValue,
-    setValidationError,
-    onStandaloneInputChange: handleStandaloneInputChange,
     onIncrement: increment,
     onDecrement: decrement,
     getDisplayValue,

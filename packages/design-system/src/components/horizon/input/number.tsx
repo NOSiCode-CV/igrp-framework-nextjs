@@ -172,7 +172,14 @@ function NumberInputField({
 
   return (
     <div className={cn("*:not-first:mt-2")}>
-      {label && <IGRPLabel label={label} className={labelClassName} required={required} id={fieldName} />}
+      {label ? (
+        <IGRPLabel 
+          label={label}
+          className={labelClassName} 
+          required={required} 
+          id={fieldName} 
+        />) : null
+      }
       <div
         className={cn(
           "border-input outline-none relative inline-flex h-10 w-full items-center overflow-hidden rounded-md border text-sm whitespace-nowrap shadow-xs transition-[color,box-shadow]",
@@ -217,10 +224,10 @@ function NumberInputField({
               onClick={() => onIncrement(value, onValueChange)}
               disabled={disabled || (max !== undefined && typeof value === "number" && value >= max)}
               className={cn(
-                "bg-background text-muted-foreground/80 hover:bg-accent hover:text-foreground flex h-1/2 w-8 items-center justify-center border-b text-xs transition-colors rounded-none",
+                "bg-background text-muted-foreground hover:bg-accent hover:text-foreground flex h-1/2 w-8 items-center justify-center border-b transition-colors rounded-none",
               )}
               aria-label={i18n.inputNumber.incrementLabel}
-              size="icon"
+              size="icon-xs"
             >
               <ChevronUp />
             </Button>
@@ -232,7 +239,7 @@ function NumberInputField({
                 "bg-background text-muted-foreground/80 hover:bg-accent hover:text-foreground flex h-1/2 w-8 items-center justify-center text-xs transition-colors rounded-none",
               )}
               aria-label={i18n.inputNumber.decrementLabel}
-              size="icon"
+              size="icon-xs"
             >
               <ChevronDown />
             </Button>

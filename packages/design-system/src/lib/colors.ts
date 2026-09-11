@@ -10,11 +10,18 @@
  * - `outline`: transparent bg, colored text + border (low-emphasis chip)
  * - `solid`:   filled bg with high-contrast foreground (emphasis CTA)
  * - `soft`:    tinted bg (10% opacity) with colored text (info chip)
+ *
+ * Slot keys of note:
+ * - `bg`:       background including any interactive state (`hover:`, …).
+ * - `bgStatic`: the same background with interactive states removed, for
+ *               non-interactive surfaces (cards, panels). Keep it in sync with
+ *               `bg` — `colors.test.ts` asserts it carries no state variants.
  */
 export const IGRPColors = {
   outline: {
     primary: {
       bg: "bg-transparent",
+      bgStatic: "bg-transparent",
       text: "text-primary",
       border: "border-primary",
       bgForeground: "bg-primary",
@@ -26,6 +33,7 @@ export const IGRPColors = {
     },
     success: {
       bg: "bg-transparent",
+      bgStatic: "bg-transparent",
       text: "text-success",
       border: "border-success",
       bgForeground: "bg-success",
@@ -37,6 +45,7 @@ export const IGRPColors = {
     },
     destructive: {
       bg: "bg-transparent",
+      bgStatic: "bg-transparent",
       text: "text-destructive",
       border: "border-destructive",
       bgForeground: "bg-destructive",
@@ -48,6 +57,7 @@ export const IGRPColors = {
     },
     warning: {
       bg: "bg-transparent",
+      bgStatic: "bg-transparent",
       text: "text-warning",
       border: "border-warning",
       bgForeground: "bg-warning",
@@ -59,6 +69,7 @@ export const IGRPColors = {
     },
     info: {
       bg: "bg-transparent",
+      bgStatic: "bg-transparent",
       text: "text-info",
       border: "border-info",
       bgForeground: "bg-info",
@@ -70,6 +81,7 @@ export const IGRPColors = {
     },
     secondary: {
       bg: "bg-transparent",
+      bgStatic: "bg-transparent",
       text: "text-muted-foreground",
       border: "border-border",
       bgForeground: "bg-muted-foreground",
@@ -81,6 +93,7 @@ export const IGRPColors = {
     },
     indigo: {
       bg: "bg-transparent",
+      bgStatic: "bg-transparent",
       text: "text-indigo",
       border: "border-indigo",
       bgForeground: "bg-indigo",
@@ -94,6 +107,7 @@ export const IGRPColors = {
   solid: {
     primary: {
       bg: "bg-primary hover:bg-primary/90",
+      bgStatic: "bg-primary",
       text: "text-primary-foreground",
       border: "border-primary",
       bgForeground: "bg-primary",
@@ -105,6 +119,7 @@ export const IGRPColors = {
     },
     success: {
       bg: "bg-success hover:bg-success/90",
+      bgStatic: "bg-success",
       text: "text-success-foreground",
       border: "border-success",
       bgForeground: "bg-success",
@@ -116,6 +131,7 @@ export const IGRPColors = {
     },
     destructive: {
       bg: "bg-destructive hover:bg-destructive/90",
+      bgStatic: "bg-destructive",
       text: "text-destructive-foreground",
       border: "border-destructive",
       bgForeground: "bg-destructive",
@@ -127,6 +143,7 @@ export const IGRPColors = {
     },
     warning: {
       bg: "bg-warning hover:bg-warning/90",
+      bgStatic: "bg-warning",
       text: "text-warning-foreground",
       border: "border-warning",
       bgForeground: "bg-warning",
@@ -138,6 +155,7 @@ export const IGRPColors = {
     },
     info: {
       bg: "bg-info hover:bg-info/90",
+      bgStatic: "bg-info",
       text: "text-info-foreground",
       border: "border-info",
       bgForeground: "bg-info",
@@ -149,6 +167,7 @@ export const IGRPColors = {
     },
     secondary: {
       bg: "bg-secondary hover:bg-secondary/80",
+      bgStatic: "bg-secondary",
       text: "text-secondary-foreground",
       border: "border-border",
       bgForeground: "bg-muted-foreground",
@@ -160,6 +179,7 @@ export const IGRPColors = {
     },
     indigo: {
       bg: "bg-indigo hover:bg-indigo/90",
+      bgStatic: "bg-indigo",
       text: "text-indigo-foreground",
       border: "border-indigo",
       bgForeground: "bg-indigo",
@@ -173,6 +193,7 @@ export const IGRPColors = {
   soft: {
     primary: {
       bg: "bg-primary/10",
+      bgStatic: "bg-primary/10",
       text: "text-primary",
       border: "border-transparent",
       bgForeground: "bg-primary",
@@ -184,6 +205,7 @@ export const IGRPColors = {
     },
     success: {
       bg: "bg-success/10",
+      bgStatic: "bg-success/10",
       text: "text-success",
       border: "border-transparent",
       bgForeground: "bg-success",
@@ -195,6 +217,7 @@ export const IGRPColors = {
     },
     destructive: {
       bg: "bg-destructive/10",
+      bgStatic: "bg-destructive/10",
       text: "text-destructive",
       border: "border-transparent",
       bgForeground: "bg-destructive",
@@ -206,6 +229,7 @@ export const IGRPColors = {
     },
     warning: {
       bg: "bg-warning/10",
+      bgStatic: "bg-warning/10",
       text: "text-warning",
       border: "border-transparent",
       bgForeground: "bg-warning",
@@ -217,6 +241,7 @@ export const IGRPColors = {
     },
     info: {
       bg: "bg-info/10",
+      bgStatic: "bg-info/10",
       text: "text-info",
       border: "border-transparent",
       bgForeground: "bg-info",
@@ -228,6 +253,7 @@ export const IGRPColors = {
     },
     secondary: {
       bg: "bg-muted",
+      bgStatic: "bg-muted",
       text: "text-muted-foreground",
       border: "border-transparent",
       bgForeground: "bg-muted-foreground",
@@ -239,6 +265,7 @@ export const IGRPColors = {
     },
     indigo: {
       bg: "bg-indigo/10",
+      bgStatic: "bg-indigo/10",
       text: "text-indigo",
       border: "border-transparent",
       bgForeground: "bg-indigo",

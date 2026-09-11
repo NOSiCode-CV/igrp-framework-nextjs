@@ -37,6 +37,12 @@ const meta: Meta<typeof IGRPInfoCard> = {
     orientation: {
       control: 'select',
       options: ['vertical', 'horizontal'],
+      description: 'Label/value direction of each field',
+    },
+    columns: {
+      control: 'select',
+      options: [1, 2, 3],
+      description: 'Responsive columns items flow into within a section',
     },
     // size: {
     //   control: 'select',
@@ -103,21 +109,18 @@ export const SingleSection: Story = {
             label: 'Nome',
             text: 'Maria Santos',
             icon: 'User',
-            variantItem: 'outline',
             colorItem: 'success',
           },
           {
             label: 'Email',
             text: 'maria@exemplo.com',
             icon: 'Mail',
-            variantItem: 'soft',
             colorItem: 'destructive',
           },
           {
             label: 'Telefone',
             text: '+351 987 654 321',
             icon: 'Phone',
-            variantItem: 'solid',
             colorItem: 'warning',
           },
         ],
@@ -191,17 +194,15 @@ export const FinancialInfo: Story = {
             label: 'Número do Cartão',
             text: '**** **** **** 1234',
             icon: 'CreditCard',
-            variantItem: 'soft',
             colorItem: 'secondary',
           },
           {
             label: 'Titular',
             text: 'João Silva',
             icon: 'User',
-            variantItem: 'soft',
             colorItem: 'indigo',
           },
-          { label: 'Validade', text: '12/2027', icon: 'Clock', variantItem: 'soft' },
+          { label: 'Validade', text: '12/2027', icon: 'Clock', showIcon: true },
         ],
       },
       {
@@ -292,3 +293,71 @@ export const CustomTitle: Story = {
     ],
   },
 };
+
+const identity = [
+  { label: 'NIF', text: '123456789' },
+  { label: 'Nome/Razão Social', text: 'João Silva Lda' },
+  { label: 'Setor', text: 'Tecnologia', icon: 'Building2', showIcon: true },
+];
+
+const contacts = [
+  { label: 'Email', text: 'joao@exemplo.com', icon: 'Mail', showIcon: true },
+  { label: 'Telefone', text: '+351 912 345 678', icon: 'Phone', showIcon: true },
+  { label: 'Endereço', text: 'Rua das Flores, 123, Lisboa', icon: 'MapPin', showIcon: true },
+];
+
+// Label and value side by side instead of stacked.
+export const HorizontalOrientation: Story = {
+  render: Template,
+  args: {
+    title: 'Informações Básicas',
+    orientation: 'horizontal',
+    sections: [{ items: identity }, { items: contacts }],
+  },
+};
+
+// Horizontal fields flowing into a responsive two-column grid.
+export const HorizontalTwoColumns: Story = {
+  render: Template,
+  args: {
+    title: 'Informações Básicas',
+    orientation: 'horizontal',
+    columns: 2,
+    variantSection: 'soft',
+    colorSection: 'info',
+    sections: [{ items: identity }, { items: contacts }],
+  },
+};
+
+// Vertical fields in a three-column grid — dense summary layout.
+export const ThreeColumns: Story = {
+  render: Template,
+  args: {
+    title: 'Resumo',
+    columns: 3,
+    sections: [{ items: [...identity, ...contacts] }],
+  },
+};
+
+// Every color role rendered against every variant, to check contrast in both modes.
+export const ColorMatrix: StoryFn<IGRPInfoCardProps> = () => (
+  <div className='container px-6 py-12 mx-auto flex flex-col gap-8'>
+    {(['outline', 'soft', 'solid'] as const).map((variant) => (
+      <div key={variant} className='flex flex-col gap-3'>
+        <h3 className='text-sm font-semibold text-muted-foreground uppercase tracking-wide'>{variant}</h3>
+        <div className='grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-4'>
+          {IGRPColorObjectVariants.map((color) => (
+            <IGRPInfoCard
+              key={color}
+              title={color}
+              variantSection={variant}
+              colorSection={color}
+              orientation='horizontal'
+              sections={[{ items: identity }]}
+            />
+          ))}
+        </div>
+      </div>
+    ))}
+  </div>
+);

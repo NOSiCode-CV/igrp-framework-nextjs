@@ -35,6 +35,16 @@ export interface IGRPI18nStrings {
     /** Message shown when input doesn't parse as a valid number. */
     invalidValueMessage: string
   }
+  inputColor: {
+    /** aria-label for the native colour swatch/picker when no visible label is set. */
+    pickerLabel: string
+    /** aria-label prefix for the colour value text field (the active format is appended). */
+    valueLabel: string
+    /** aria-label for the colour format selector trigger. */
+    formatSelectorLabel: string
+    /** Message shown when the typed colour string can't be parsed. */
+    invalidValueMessage: string
+  }
   form: {
     /** Toast title shown when an onSubmit handler throws (when showToastOnError). */
     submissionErrorTitle: string
@@ -65,6 +75,12 @@ export const IGRP_I18N_DEFAULTS_PT_PT: IGRPI18nStrings = {
     incrementLabel: "Incrementar",
     decrementLabel: "Decrementar",
     invalidValueMessage: "Introduza um número válido",
+  },
+  inputColor: {
+    pickerLabel: "Seletor de cor",
+    valueLabel: "Valor da cor",
+    formatSelectorLabel: "Formato da cor",
+    invalidValueMessage: "Introduza uma cor válida",
   },
   form: {
     submissionErrorTitle: "Erro ao submeter formulário",

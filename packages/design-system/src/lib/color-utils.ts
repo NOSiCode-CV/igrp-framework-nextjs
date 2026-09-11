@@ -107,30 +107,86 @@ function oklchToHex(L: number, C: number, H: number): string {
 
 // ─── String parsers ──────────────────────────────────────────────────────────
 
+/** A single numeric token, optionally suffixed with `%` or an angle unit. */
+const TOKEN = /^([-+]?(?:\d+\.?\d*|\.\d+))(%|deg)?$/i
+
+/**
+ * Split a CSS colour function into its first three component tokens.
+ * Accepts both the legacy comma syntax (`rgb(0, 0, 0)`) and the modern space
+ * syntax (`rgb(0 0 0 / 50%)`). Any alpha component is discarded — this module
+ * models opaque colours only.
+ */
+function parseFunctional(value: string, names: readonly string[]): string[] | null {
+  const m = value.trim().match(/^([a-zA-Z]+)\(([^()]*)\)$/)
+  if (!m || !names.includes(m[1]!.toLowerCase())) return null
+  const tokens = m[2]!.split("/")[0]!.trim().split(/[\s,]+/).filter(Boolean)
+  return tokens.length >= 3 ? tokens.slice(0, 3) : null
+}
+
+/** Parse a token as a 0–1 ratio: `%` is relative to 100, a bare number to `scale`. */
+function ratio(token: string | undefined, scale: number): number | null {
+  const m = token?.match(TOKEN)
+  if (!m || (m[2] && m[2] !== "%")) return null
+  const n = Number(m[1])
+  if (!Number.isFinite(n)) return null
+  return clamp(m[2] === "%" ? n / 100 : n / scale, 0, 1)
+}
+
+/** Parse a token as a hue in degrees, normalised to [0, 360). */
+function angle(token: string | undefined): number | null {
+  const m = token?.match(TOKEN)
+  if (!m || m[2] === "%") return null
+  const n = Number(m[1])
+  if (!Number.isFinite(n)) return null
+  return ((n % 360) + 360) % 360
+}
+
+/** Parse `#rgb`, `#rgba`, `#rrggbb` or `#rrggbbaa`. Alpha is discarded. */
 function parseHex(value: string): string | null {
-  const m = value.trim().match(/^#([0-9a-fA-F]{3}|[0-9a-fA-F]{6})$/)
+  const m = value.trim().match(/^#([0-9a-fA-F]{3,4}|[0-9a-fA-F]{6}|[0-9a-fA-F]{8})$/)
   if (!m) return null
   const h = m[1]!
-  const full = h.length === 3 ? h.charAt(0) + h.charAt(0) + h.charAt(1) + h.charAt(1) + h.charAt(2) + h.charAt(2) : h
+  const full =
+    h.length <= 4
+      ? h
+          .slice(0, 3)
+          .split("")
+          .map((c) => c + c)
+          .join("")
+      : h.slice(0, 6)
   return `#${full.toLowerCase()}`
 }
 
 function parseRgb(value: string): [number, number, number] | null {
-  const m = value.trim().match(/^rgb\(\s*([\d.]+)\s*,\s*([\d.]+)\s*,\s*([\d.]+)\s*\)$/)
-  if (!m) return null
-  return [Number(m[1]) / 255, Number(m[2]) / 255, Number(m[3]) / 255]
+  const tokens = parseFunctional(value, ["rgb", "rgba"])
+  if (!tokens) return null
+  const r = ratio(tokens[0], 255)
+  const g = ratio(tokens[1], 255)
+  const b = ratio(tokens[2], 255)
+  return r === null || g === null || b === null ? null : [r, g, b]
 }
 
 function parseHsl(value: string): [number, number, number] | null {
-  const m = value.trim().match(/^hsl\(\s*([\d.]+)\s*,\s*([\d.]+)%\s*,\s*([\d.]+)%\s*\)$/)
-  if (!m) return null
-  return [Number(m[1]), Number(m[2]) / 100, Number(m[3]) / 100]
+  const tokens = parseFunctional(value, ["hsl", "hsla"])
+  if (!tokens) return null
+  // Bare saturation/lightness numbers are percentages, per the modern CSS syntax.
+  const h = angle(tokens[0])
+  const s = ratio(tokens[1], 100)
+  const l = ratio(tokens[2], 100)
+  return h === null || s === null || l === null ? null : [h, s, l]
 }
 
 function parseOklch(value: string): [number, number, number] | null {
-  const m = value.trim().match(/^oklch\(\s*([\d.]+)\s+([\d.]+)\s+([\d.]+)\s*\)$/)
-  if (!m) return null
-  return [Number(m[1]), Number(m[2]), Number(m[3])]
+  const tokens = parseFunctional(value, ["oklch"])
+  if (!tokens) return null
+  const L = ratio(tokens[0], 1)
+  const H = angle(tokens[2])
+  const cm = tokens[1]?.match(TOKEN)
+  if (L === null || H === null || !cm || (cm[2] && cm[2] !== "%")) return null
+  const c = Number(cm[1])
+  if (!Number.isFinite(c)) return null
+  // CSS defines 100% chroma as 0.4 for oklch().
+  return [L, clamp(cm[2] === "%" ? (c / 100) * 0.4 : c, 0, 1), H]
 }
 
 // ─── Public API ──────────────────────────────────────────────────────────────
@@ -138,10 +194,11 @@ function parseOklch(value: string): [number, number, number] | null {
 /** Detect the format of a color string. Returns null if unrecognised. */
 export function detectFormat(value: string): ColorFormat | null {
   const v = value.trim()
-  if (/^#([0-9a-fA-F]{3}|[0-9a-fA-F]{6})$/.test(v)) return "hex"
-  if (/^rgb\(/.test(v)) return "rgb"
-  if (/^hsl\(/.test(v)) return "hsl"
-  if (/^oklch\(/.test(v)) return "oklch"
+  if (v.startsWith("#")) return parseHex(v) ? "hex" : null
+  const fn = v.match(/^([a-zA-Z]+)\(/)?.[1]?.toLowerCase()
+  if (fn === "rgb" || fn === "rgba") return "rgb"
+  if (fn === "hsl" || fn === "hsla") return "hsl"
+  if (fn === "oklch") return "oklch"
   return null
 }
 

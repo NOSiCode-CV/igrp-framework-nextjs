@@ -43,6 +43,7 @@ function IGRPI18nProvider({
       inputPhone: { ...IGRP_I18N_DEFAULTS_PT_PT.inputPhone, ...strings.inputPhone },
       inputPassword: { ...IGRP_I18N_DEFAULTS_PT_PT.inputPassword, ...strings.inputPassword },
       inputNumber: { ...IGRP_I18N_DEFAULTS_PT_PT.inputNumber, ...strings.inputNumber },
+      inputColor: { ...IGRP_I18N_DEFAULTS_PT_PT.inputColor, ...strings.inputColor },
       form: { ...IGRP_I18N_DEFAULTS_PT_PT.form, ...strings.form },
     }
   }, [strings])

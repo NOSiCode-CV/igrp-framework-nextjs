@@ -457,8 +457,8 @@ importers:
         specifier: 5.0.0
         version: 5.0.0(@vitest/browser@5.0.0)(vitest@5.0.0)
       chromatic:
-        specifier: 18.7.3
-        version: 18.7.3
+        specifier: 18.8.0
+        version: 18.8.0
       eslint:
         specifier: 10.10.0
         version: 10.10.0(jiti@2.7.0)(supports-color@8.1.1)
@@ -742,8 +742,8 @@ importers:
         specifier: ^4.24.15
         version: 4.24.15(next@15.5.25(@babel/core@8.0.1)(@types/node@25.9.1)(babel-plugin-react-compiler@19.1.0-rc.3)(react-dom@19.2.8(react@19.2.8))(react@19.2.8))(react-dom@19.2.8(react@19.2.8))(react@19.2.8)
       postcss:
-        specifier: 8.5.26
-        version: 8.5.26
+        specifier: 8.5.28
+        version: 8.5.28
       prettier:
         specifier: 3.9.6
         version: 3.9.6
@@ -5178,8 +5178,8 @@ packages:
     resolution: {integrity: sha512-TQMmc3w+5AxjpL8iIiwebF73dRDF4fBIieAqGn9RGCWaEVwQ6Fb2cGe31Yns0RRIzii5goJ1Y7xbMwo1TxMplw==}
     engines: {node: '>= 20.19.0'}
 
-  chromatic@18.7.3:
-    resolution: {integrity: sha512-Hk4RJqabj4+kuD5c5XGNVzsI9p/2hGvBfbyZSkNE1M32RlDfzj4LpgOJFh5YsaBzswetOsfi3Zze/gvwuuHB9g==}
+  chromatic@18.8.0:
+    resolution: {integrity: sha512-ezPCgDJXpQDHhzZZFwzplM9+xIzzklu40cc3Op8v5xP3MG+UeMEaZ6Hrh9FCzmN9ZdW/oATBZrhszxjfSseiYA==}
     engines: {node: '>=22.0.0'}
     hasBin: true
     peerDependencies:
@@ -7241,10 +7241,6 @@ packages:
 
   postcss@8.4.31:
     resolution: {integrity: sha512-PS08Iboia9mts/2ygV3eLpY5ghnUcfLV/EXTOW1E2qYxJKGGBUtNjN76FYHnMs36RmARn41bC0AZmn+rR0OVpQ==}
-    engines: {node: ^10 || ^12 || >=14}
-
-  postcss@8.5.26:
-    resolution: {integrity: sha512-u82N74LFzG8ca+dD8puPnplTXoGH4fTPpVGuIbt36G3qvNlkvfD0lEAZSxaly3KX8TS/L1A1gsCEmvKmBcVbkQ==}
     engines: {node: ^10 || ^12 || >=14}
 
   postcss@8.5.28:
@@ -9479,7 +9475,7 @@ snapshots:
   '@chromatic-com/storybook@5.3.1(storybook@10.6.0(@types/react@19.2.18)(prettier@3.9.6)(react@19.2.8))':
     dependencies:
       '@neoconfetti/react': 1.0.0
-      chromatic: 18.7.3
+      chromatic: 18.8.0
       jsonfile: 6.2.1
       storybook: 10.6.0(@types/react@19.2.18)(prettier@3.9.6)(react@19.2.8)
       strip-ansi: 7.2.0
@@ -12639,7 +12635,7 @@ snapshots:
     dependencies:
       readdirp: 5.1.1
 
-  chromatic@18.7.3:
+  chromatic@18.8.0:
     dependencies:
       semver: 7.8.5
 
@@ -15026,12 +15022,6 @@ snapshots:
       yaml: 2.9.0
 
   postcss@8.4.31:
-    dependencies:
-      nanoid: 3.3.18
-      picocolors: 1.1.1
-      source-map-js: 1.2.1
-
-  postcss@8.5.26:
     dependencies:
       nanoid: 3.3.18
       picocolors: 1.1.1

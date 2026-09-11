@@ -4,11 +4,47 @@ import { hexToFormat, formatToHex, detectFormat, colorToOklch } from "./color-ut
 describe("detectFormat", () => {
   it("detects hex", () => expect(detectFormat("#3b82f6")).toBe("hex"))
   it("detects short hex", () => expect(detectFormat("#fff")).toBe("hex"))
-  it("returns null for 4-char hex", () => expect(detectFormat("#ffff")).toBeNull())
+  it("detects 4-char hex (alpha discarded)", () => expect(detectFormat("#ffff")).toBe("hex"))
+  it("detects 8-char hex (alpha discarded)", () => expect(detectFormat("#ff000080")).toBe("hex"))
+  it("returns null for 5-char hex", () => expect(detectFormat("#fffff")).toBeNull())
   it("detects rgb", () => expect(detectFormat("rgb(59, 130, 246)")).toBe("rgb"))
+  it("detects rgba", () => expect(detectFormat("rgba(59 130 246 / 50%)")).toBe("rgb"))
   it("detects hsl", () => expect(detectFormat("hsl(217, 91%, 60%)")).toBe("hsl"))
+  it("detects hsla", () => expect(detectFormat("hsla(217 91% 60% / 0.5)")).toBe("hsl"))
   it("detects oklch", () => expect(detectFormat("oklch(0.546 0.245 262.881)")).toBe("oklch"))
+  it("detects oklch with percentage lightness", () => expect(detectFormat("oklch(62.8% 0.25 29)")).toBe("oklch"))
   it("returns null for unknown", () => expect(detectFormat("blue")).toBeNull())
+})
+
+describe("formatToHex — CSS syntax coverage", () => {
+  it("accepts the modern space syntax", () => {
+    expect(formatToHex("rgb(255 0 0)", "rgb")).toBe("#ff0000")
+    expect(formatToHex("hsl(0 100% 50%)", "hsl")).toBe("#ff0000")
+  })
+  it("accepts percentage and angle units", () => {
+    expect(formatToHex("rgb(100% 0% 0%)", "rgb")).toBe("#ff0000")
+    expect(formatToHex("hsl(0deg 100 50)", "hsl")).toBe("#ff0000")
+  })
+  it("discards alpha", () => {
+    expect(formatToHex("rgba(255, 0, 0, 0.5)", "rgb")).toBe("#ff0000")
+    expect(formatToHex("rgb(255 0 0 / 50%)", "rgb")).toBe("#ff0000")
+    expect(formatToHex("#ff000080", "hex")).toBe("#ff0000")
+    expect(formatToHex("#f008", "hex")).toBe("#ff0000")
+  })
+  it("reads an oklch lightness given as a percentage", () => {
+    expect(formatToHex("oklch(62.8% 0.2577 29.234)", "oklch")).toBe(formatToHex("oklch(0.628 0.2577 29.234)", "oklch"))
+  })
+  it("normalises hue outside [0, 360)", () => {
+    expect(formatToHex("hsl(360 100% 50%)", "hsl")).toBe("#ff0000")
+    expect(formatToHex("hsl(-360 100% 50%)", "hsl")).toBe("#ff0000")
+  })
+  it("still rejects malformed input", () => {
+    expect(formatToHex("rgb(255, 0)", "rgb")).toBeNull()
+    expect(formatToHex("rgb(a, b, c)", "rgb")).toBeNull()
+    expect(formatToHex("hsl(0 100% 50%)", "rgb")).toBeNull()
+    expect(formatToHex("oklch(0.6 0.1)", "oklch")).toBeNull()
+    expect(formatToHex("#12345", "hex")).toBeNull()
+  })
 })
 
 describe("hexToFormat", () => {

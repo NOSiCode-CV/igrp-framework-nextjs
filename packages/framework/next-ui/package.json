@@ -72,7 +72,7 @@
     "move-cli": "2.0.0",
     "next": "15.5.25",
     "next-auth": "^4.24.15",
-    "postcss": "8.5.26",
+    "postcss": "8.5.28",
     "prettier": "3.9.6",
     "react": "19.2.8",
     "react-dom": "^19.2.8",

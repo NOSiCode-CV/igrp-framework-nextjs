@@ -636,6 +636,8 @@ export {
   type IGRPInfoCardProps,
   type IGRPInfoItem,
   type IGRPInfoSection,
+  type IGRPInfoCardOrientation,
+  type IGRPInfoCardColumns,
 } from "./components/horizon/info-card"
 
 export { IGRPCheckbox, type IGRPCheckboxProps } from "./components/horizon/input/checkbox"

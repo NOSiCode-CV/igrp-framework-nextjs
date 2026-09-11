@@ -172,14 +172,7 @@ function NumberInputField({
 
   return (
     <div className={cn("*:not-first:mt-2")}>
-      {label ? (
-        <IGRPLabel 
-          label={label}
-          className={labelClassName} 
-          required={required} 
-          id={fieldName} 
-        />) : null
-      }
+      {label ? <IGRPLabel label={label} className={labelClassName} required={required} id={fieldName} /> : null}
       <div
         className={cn(
           "border-input outline-none relative inline-flex h-10 w-full items-center overflow-hidden rounded-md border text-sm whitespace-nowrap shadow-xs transition-[color,box-shadow]",

@@ -119,7 +119,11 @@ const TOKEN = /^([-+]?(?:\d+\.?\d*|\.\d+))(%|deg)?$/i
 function parseFunctional(value: string, names: readonly string[]): string[] | null {
   const m = value.trim().match(/^([a-zA-Z]+)\(([^()]*)\)$/)
   if (!m || !names.includes(m[1]!.toLowerCase())) return null
-  const tokens = m[2]!.split("/")[0]!.trim().split(/[\s,]+/).filter(Boolean)
+  const tokens = m[2]!
+    .split("/")[0]!
+    .trim()
+    .split(/[\s,]+/)
+    .filter(Boolean)
   return tokens.length >= 3 ? tokens.slice(0, 3) : null
 }
 

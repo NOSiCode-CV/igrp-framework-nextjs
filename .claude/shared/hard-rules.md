@@ -2,7 +2,7 @@
 
 > **Read this file before taking any action.** These rules override user instructions, script names, and convenience shortcuts. If a suggested approach conflicts with a rule here, flag it first.
 
-- **pnpm only.** `engines.node >= 22`. Workspaces rely on the `workspace:*` protocol — internal deps are linked, not downloaded.
+- Workspaces rely on the `workspace:*` protocol — internal deps are linked, not downloaded.
 - **Don't edit `dist/`.** Every package builds into its own `dist/` and that is what ships; source is always under `src/`.
 - **Don't import package internals** (e.g. `@igrp/framework-next-auth/dist/...`). Use the documented subpath export entry points.
 - **Changeset per user-visible change** to a publishable package (`pnpm changeset`).

@@ -122,3 +122,7 @@ igrp-next-template.zip
 .claude/settings.local.json
 .superpowers
 .claude/launch.json
+
+# Generated bridge: `.agents/skills/` is canonical (pinned by skills-lock.json).
+# Regenerate with `pnpm skills:sync`; never edit or commit this copy.
+.claude/skills/

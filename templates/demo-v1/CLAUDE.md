@@ -11,27 +11,6 @@ You are working inside `templates/demo-v1/` — the **canonical reference templa
 - **Tailwind v4** — Tailwind compiles **once here** in the app, not in framework packages. `@source` must point at this app's `src/` **and** the consumed `dist/` of each `@igrp/*` package. Import tokens only (`@igrp/igrp-framework-react-design-system/tokens`) — never the prebuilt `styles.css`.
 - **Biome** — this template uses **Biome** for lint/format. Don't introduce ESLint/Prettier configs here; framework packages have their own (ESLint + Prettier) and the toolchains don't cross-apply.
 
-## What lives here
-
-```
-src/
-  middleware.ts                 → auth gate + security headers + basePath-aware redirects
-  app/
-    layout.tsx                  → IGRPRootLayout + providers
-    (igrp)/layout.tsx           → IGRPLayout (header + sidebar shell)
-    (auth)/login/page.tsx       → IGRPAuthForm launcher
-    (auth)/logout/…             → logout flow
-    api/auth/[...nextauth]/route.ts → NextAuth route handler from `auth.ts`
-  actions/igrp/                 → server actions (fetchMenusAction, fetchCurrentUserAction, …)
-  config/                       → site/login/menu config consumed by igrpBuildConfig
-  lib/
-    auth.ts                     → `withIGRPAuth` instance, `serverSession`, `getSession`
-    utils.ts                    → `cn`, `isPreviewMode`, `isAuthDisabled`, `isAuthBypass`, `sanitizeCallbackUrl`
-  igrp.template.config.ts       → `igrpBuildConfig` assembly, preview-mode mock swap
-  temp/                         → mock users/menus/applications for preview mode
-  styles/                       → tokens + theme variants (imported after tokens)
-```
-
 ## Hard rules unique to this template
 
 - **`NEXTAUTH_URL` must include the basePath and `/api/auth`.** With `NEXT_PUBLIC_BASE_PATH=/apps/template`, the correct value is `NEXTAUTH_URL=http://localhost:3000/apps/template/api/auth`. NextAuth treats this as the URL of its API root and derives `signin`/`callback` endpoints from it. Getting this wrong produces a login loop with a deeply nested `?callbackUrl=…?callbackUrl=…` chain.
@@ -86,18 +65,16 @@ The shadcn CLI **is** appropriate inside `packages/design-system` itself, when r
 - `src/app/(igrp)/layout.tsx` runs auth check, loads session via `serverSession()`, calls `igrpBuildConfig(...)`, renders `IGRPLayout` (header + sidebar + nav-user + breadcrumbs + command search) around `children`.
 - Route groups: `(auth)` for login/logout, `(igrp)` for the authenticated shell, `(myapp)` for the demo app pages.
 
-## Build & dev commands (from repo root)
+### Config builder and server actions
 
-| Goal | Command |
-|---|---|
-| Install (with private-registry creds from root `.env`) | `pnpm install:deps` |
-| Build framework packages in order | `pnpm build:framework` |
-| Dev this template (Turbopack) | `pnpm dev:demo` *(legacy script name — check `package.json` if unsure)* |
-| Production build | `pnpm build:demo` (runs Biome format first) |
-| Production start | `pnpm start:demo` |
-| Package the template zip | `pnpm release:demo` |
+- `src/igrp.template.config.ts` uses `igrpBuildConfig` to assemble layout + API + toaster + session config, and swaps in the `src/temp/*` mocks when bypass is on.
+- `src/actions/igrp/` fetches layout + session server-side; `api/auth/*` holds the NextAuth routes.
 
-> Always read the current `templates/demo-v1/package.json` for the authoritative script names — older snapshots may diverge.
+## Build & dev commands
+
+Root-level scripts are in `.claude/shared/commands.md` (imported by the root
+`CLAUDE.md`); this template's own scripts are in its `package.json`. Read those
+rather than a copy here — script names drift.
 
 ## Review stance
 

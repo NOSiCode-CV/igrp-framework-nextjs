@@ -39,13 +39,9 @@ Each package's public surface is its `exports` map in `package.json` plus `src/`
 
 ### Template architecture (`templates/demo-v1` — the only template)
 
-`demo-v1` is the canonical example of how to consume the framework:
-
-1. **Middleware** (`src/middleware.ts`) validates the NextAuth session, bypasses public/login/logout/API routes, honors `IGRP_PREVIEW_MODE` / `AUTH_PROVIDER=none`, and sanitizes `callbackUrl` to prevent login loops and open-redirects.
-2. **Root layout** (`src/app/layout.tsx`) wraps the app in `IGRPRootLayout` + providers.
-3. **IGRP layout** (`src/app/(igrp)/layout.tsx`) runs auth checks, loads session, renders `IGRPLayout` with header/sidebar around the route group.
-4. **Config builder** (`src/igrp.template.config.ts`) uses `igrpBuildConfig` to assemble layout + API + toaster + session config, and swaps in mock data when bypass is on.
-5. **Server actions** (`src/actions/igrp/`) fetch layout + session server-side; `api/auth/*` holds NextAuth routes.
+`demo-v1` is the canonical example of how to consume the framework. Its layer-by-layer
+walkthrough lives in `templates/demo-v1/CLAUDE.md`, which loads when you work in
+that directory.
 
 Critical env constraint: when `NEXT_PUBLIC_BASE_PATH` is set, `NEXTAUTH_URL` must include both the basePath **and** `/api/auth` (e.g. `http://localhost:3000/apps/template/api/auth`). NextAuth treats `NEXTAUTH_URL` as the API root, not the app root — getting this wrong produces a login loop with a growing nested `callbackUrl` chain.
 
@@ -65,6 +61,12 @@ Each package's build pipeline is its `scripts` block in `package.json`. Two thin
 
 - The SWC+Babel packages (`design-system`, `framework-next-ui`, `framework-next`) run `build:swc` → `build:babel` (React Compiler pass) → `build:types` (emit `.d.ts`), in that order.
 - Escape hatch when the React Compiler misbehaves: `build:without_reactcompiler`.
+
+### Vendored agent skills
+
+Third-party skills live in `.agents/skills/`, pinned to their upstream source and content hash by `skills-lock.json`. `.claude/skills/` is a **generated, gitignored bridge** over that directory — run `pnpm skills:sync` after a fresh clone (or after editing `.agents/skills/` or `skills-lock.json`), or Claude Code won't load any of them. Never edit `.claude/skills/` directly; the next sync overwrites it.
+
+Real file copies rather than symlinks, deliberately: this repo is developed on Windows clones with `core.symlinks=false`, where a committed symlink is materialised as a regular file and the bridge silently becomes a second committed copy that drifts past the lockfile's hash check. `pnpm skills:sync:check` verifies the local bridge; CI runs `--verify-lock` instead, since a clean checkout has no bridge to compare.
 
 ## Tests
 

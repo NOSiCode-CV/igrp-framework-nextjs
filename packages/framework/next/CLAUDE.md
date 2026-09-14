@@ -26,7 +26,7 @@ Validate breaking changes against `templates/demo-v1/src/app/layout.tsx`, `templ
 - **Server-only entry.** Client pieces belong in `@igrp/framework-next-ui`.
 - Respect `@igrp/framework-next-auth` entry points — `/server`, `/config`, `/middleware`. Never `/dist/`.
 - **`igrpBuildConfig` must honor `IGRP_PREVIEW_MODE`** — swap in mock data and disable session refetch. Every config-shape change has to keep the preview branch working.
-- Build: SWC + Babel with React Compiler. `pnpm build:next`. Escape: `build:without_reactcompiler`.
+- Build: a single Babel pass over `src/` (`build:js`: TypeScript strip + JSX + React Compiler) → `tsc --emitDeclarationOnly`. `pnpm build:next`. Escape: `build:without_reactcompiler`.
 
 ## Design stance
 

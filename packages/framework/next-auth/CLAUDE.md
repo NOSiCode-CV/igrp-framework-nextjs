@@ -14,7 +14,7 @@ You are working inside `packages/framework/next-auth/` — `@igrp/framework-next
 ## Rules unique to this package
 
 - Public entry points: `./server`, `./client`, `./session`, `./jwt`, `./middleware`, `./config`, `./sanitize`, `./oidc`, `./providers`, `./types`. **Don't collapse them** — they keep server code out of client bundles. New symbols go behind the right entry, not the root barrel.
-- Builds with **tsup**, not SWC+Babel. **No React Compiler step.**
+- Builds with **tsup**, not Babel. **No React Compiler step.**
 - `@igrp/framework-next-types` re-exports types from here — run `pnpm build:framework` after type changes.
 - `pnpm build:auth` from repo root.
 

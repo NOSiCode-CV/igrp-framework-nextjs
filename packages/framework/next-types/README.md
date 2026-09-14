@@ -49,7 +49,7 @@ pnpm build:next-types
 pnpm build
 ```
 
-Built with plain **`tsc -b`** — no SWC, no Babel, no tsup. Emits only `.d.ts` declaration files; there is no runtime JS to import.
+Built with plain **`tsc -b`** — no Babel, no tsup. Emits only `.d.ts` declaration files; there is no runtime JS to import.
 
 ---
 

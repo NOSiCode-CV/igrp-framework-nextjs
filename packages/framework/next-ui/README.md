@@ -112,7 +112,7 @@ pnpm build:next-ui
 pnpm build
 ```
 
-Built with **SWC + Babel** (React Compiler pass) + a Tailwind CSS prebuild step. Escape hatch when the React Compiler misbehaves: `pnpm build:without_reactcompiler`.
+Built with **Babel** in a single pass over `src/` (TypeScript strip, JSX, React Compiler). CSS under `src/` is copied verbatim — there is no Tailwind prebuild. Escape hatch when the React Compiler misbehaves: `pnpm build:without_reactcompiler`.
 
 ---
 

@@ -59,7 +59,7 @@ The full component reference is the skill at `templates/demo-v1/.agents/skills/i
 
 Each package's build pipeline is its `scripts` block in `package.json`. Two things that aren't obvious from reading them:
 
-- The SWC+Babel packages (`design-system`, `framework-next-ui`, `framework-next`) run `build:swc` → `build:babel` (React Compiler pass) → `build:types` (emit `.d.ts`), in that order.
+- The React packages (`design-system`, `framework-next-ui`, `framework-next`) run `build:js` (Babel: strip TS, transform JSX, React Compiler — one pass over `src/`) → `build:types` (`tsc --emitDeclarationOnly`). Babel emits untouched ESM at esnext, file-per-module, directives preserved; there is deliberately no `@babel/preset-env` and no bundler, because `templates/demo-v1` consumes `dist/` directly (`use client` boundaries, `optimizePackageImports`, Tailwind `@source` scanning). Shared config: `scripts/react-compiler-babel-config.cjs`.
 - Escape hatch when the React Compiler misbehaves: `build:without_reactcompiler`.
 
 ### Vendored agent skills

@@ -133,7 +133,7 @@ pnpm build:next
 pnpm build
 ```
 
-Built with **SWC + Babel** (React Compiler pass). Escape hatch: `pnpm build:without_reactcompiler`.
+Built with **Babel** in a single pass over `src/` (TypeScript strip, JSX, React Compiler). Escape hatch: `pnpm build:without_reactcompiler`.
 
 ---
 

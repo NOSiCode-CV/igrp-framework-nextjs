@@ -1,3 +1,5 @@
+"use client"
+
 import {
   Menubar as IGRPMenubar,
   MenubarPortal as IGRPMenubarPortal,

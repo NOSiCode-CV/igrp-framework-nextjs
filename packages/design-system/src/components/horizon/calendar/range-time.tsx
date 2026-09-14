@@ -54,11 +54,11 @@ function IGRPCalendarRangeTime({
 
   return (
     <div id={ref}>
-      <div className={cn("space-y-4")}>
+      <div className={cn("flex flex-col gap-4")}>
         <IGRPCalendarRange id={ref} {...props} />
 
-        <div className={cn("space-y-4 pt-4 border-t")}>
-          <div className={cn("space-y-2")}>
+        <div className={cn("flex flex-col gap-4 pt-4 border-t")}>
+          <div className={cn("flex flex-col gap-2")}>
             <Label htmlFor={`${ref}-start-time`}>{startTimeLabel}</Label>
             <Input
               id={`${ref}-start-time`}
@@ -72,7 +72,7 @@ function IGRPCalendarRangeTime({
           </div>
 
           {!hideEndTimePicker && (
-            <div className={cn("space-y-2")}>
+            <div className={cn("flex flex-col gap-2")}>
               <Label htmlFor={`${ref}-end-time`}>{endTimeLabel}</Label>
               <Input
                 id={`${ref}-end-time`}

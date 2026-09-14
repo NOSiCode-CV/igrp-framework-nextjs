@@ -130,7 +130,7 @@ function IGRPChat({ apiEndpoint, labelDescription = "Ask me anything!", name, id
   return (
     <div className={cn("flex flex-col h-full")} id={ref}>
       <ScrollArea className={cn("pr-4 h-[80%]")}>
-        <div className={cn("space-y-4")} aria-live="polite" aria-atomic="false">
+        <div className={cn("flex flex-col gap-4")} aria-live="polite" aria-atomic="false">
           {messages.length === 0 && (
             <div className={cn("flex flex-col items-center justify-center h-40 text-muted-foreground")}>
               <IGRPIcon iconName="Bot" className={cn("size-12 mb-2 opacity-20")} />
@@ -140,10 +140,7 @@ function IGRPChat({ apiEndpoint, labelDescription = "Ask me anything!", name, id
           {messages.map((message) => (
             <div
               key={message.id ?? `${message.timestamp}-${message.content.slice(0, 20)}`}
-              className={cn(
-                "flex items-start space-x-2",
-                message.role === "user" ? "flex-row-reverse space-x-reverse" : "flex-row",
-              )}
+              className={cn("flex items-start gap-2", message.role === "user" ? "flex-row-reverse" : "flex-row")}
             >
               <div className={cn("shrink-0 rounded-full p-2", message.role === "user" ? "bg-primary" : "bg-muted")}>
                 {message.role === "user" ? (

@@ -524,7 +524,9 @@ function IGRPDataTable<TData, TValue>({
               </TableRow>
             )}
           </TableBody>
-          <tbody aria-hidden="true" className={cn("table-row h-1")}></tbody>
+          <tbody aria-hidden="true">
+            <tr className={cn("h-1")} />
+          </tbody>
         </Table>
       </div>
 

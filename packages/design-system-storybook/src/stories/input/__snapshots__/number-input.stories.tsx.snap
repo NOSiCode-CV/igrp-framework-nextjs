@@ -592,7 +592,7 @@ exports[`Components/Input/Number WithError smoke-test 1`] = `
       >
         Value with Error
       </label>
-      <div class="outline-none relative inline-flex h-10 w-full items-center overflow-hidden rounded-md border text-sm whitespace-nowrap shadow-xs transition-[color,box-shadow] ring-destructive/20 dark:ring-destructive/40 border-destructive">
+      <div class="outline-none relative inline-flex h-10 w-full items-center overflow-hidden rounded-md border text-sm whitespace-nowrap shadow-xs transition-[color,box-shadow] ring-ring-invalid border-destructive">
         <input data-slot="input"
                class="file:text-foreground placeholder:text-muted-foreground selection:bg-primary selection:text-primary-foreground dark:bg-input/30 border-input h-9 w-full min-w-0 border text-base shadow-xs transition-[color,box-shadow] file:inline-flex file:h-7 file:border-0 file:bg-transparent file:text-sm file:font-medium disabled:pointer-events-none disabled:cursor-not-allowed disabled:opacity-50 md:text-sm focus-visible:border-ring aria-invalid:ring-destructive/20 dark:aria-invalid:ring-destructive/40 aria-invalid:border-destructive bg-background text-foreground flex-1 px-3 py-2 tabular-nums outline-none border-none focus-visible:outline-none focus-visible:ring-ring/0 focus-visible:ring-0 rounded-none"
                id="errorValue"

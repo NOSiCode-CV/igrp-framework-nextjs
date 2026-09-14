@@ -3,7 +3,7 @@
 exports[`Components/Calendar/MultipleTime Basic smoke-test 1`] = `
 <div class="flex flex-col gap-4">
   <div id="_r_ID_">
-    <div class="space-y-4">
+    <div class="flex flex-col gap-4">
       <div data-slot="calendar"
            class="w-fit rdp-root bg-background group/calendar p-3 [--cell-size:--spacing(8)] in-data-[slot=card-content]:bg-transparent in-data-[slot=popover-content]:bg-transparent rtl:**:[.rdp-button\\_next&gt;svg]:rotate-180 rtl:**:[.rdp-button\\_previous&gt;svg]:rotate-180 rounded-lg border shadow-sm"
            id="_r_ID_"
@@ -1207,8 +1207,8 @@ exports[`Components/Calendar/MultipleTime Basic smoke-test 1`] = `
           </div>
         </div>
       </div>
-      <div class="space-y-4 pt-4 border-t">
-        <div class="space-y-2">
+      <div class="flex flex-col gap-4 pt-4 border-t">
+        <div class="flex flex-col gap-2">
           <label data-slot="label"
                  class="flex items-center gap-2 text-sm leading-none font-medium select-none group-data-[disabled=true]:pointer-events-none group-data-[disabled=true]:opacity-50 peer-disabled:cursor-not-allowed peer-disabled:opacity-50"
                  for="_r_ID_-start-time"
@@ -1223,7 +1223,7 @@ exports[`Components/Calendar/MultipleTime Basic smoke-test 1`] = `
                  value
           >
         </div>
-        <div class="space-y-2">
+        <div class="flex flex-col gap-2">
           <label data-slot="label"
                  class="flex items-center gap-2 text-sm leading-none font-medium select-none group-data-[disabled=true]:pointer-events-none group-data-[disabled=true]:opacity-50 peer-disabled:cursor-not-allowed peer-disabled:opacity-50"
                  for="_r_ID_-end-time"

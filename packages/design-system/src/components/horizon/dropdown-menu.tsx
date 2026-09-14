@@ -1,3 +1,5 @@
+"use client"
+
 import {
   DropdownMenu as IGRPDropdownMenu,
   DropdownMenuPortal as IGRPDropdownMenuPortal,

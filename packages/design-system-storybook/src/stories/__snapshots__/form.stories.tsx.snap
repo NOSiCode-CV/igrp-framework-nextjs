@@ -763,7 +763,7 @@ exports[`Components/Form FormExamples smoke-test 1`] = `
                 </circle>
               </svg>
               <div class="flex grow justify-between gap-3">
-                <div class="grow space-y-1">
+                <div class="grow flex flex-col gap-1">
                   <div class="transition-[font-size,line-height] duration-300 ease-in-out text-base leading-6 font-semibold text-left mb-0"
                        id="text3"
                        variant="info"

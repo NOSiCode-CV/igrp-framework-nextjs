@@ -1,3 +1,5 @@
+"use client"
+
 /**
  * Re-exports of sidebar primitives for collapsible app navigation.
  * @module

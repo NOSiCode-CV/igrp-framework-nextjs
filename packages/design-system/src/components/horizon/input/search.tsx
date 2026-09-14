@@ -6,7 +6,7 @@ import type { VariantProps } from "class-variance-authority"
 
 import { cn } from "../../../lib/utils"
 import { type IGRPInputProps } from "../../../types"
-import { Input } from "../../primitives/input"
+import { InputGroup, InputGroupAddon, InputGroupInput } from "../../primitives/input-group"
 import { FormControl, FormDescription, FormField, FormItem, FormLabel, FormMessage } from "../../primitives/form"
 import { IGRPButton } from "../button"
 import { IGRPFieldDescription } from "../field-description"
@@ -86,39 +86,34 @@ function SearchInputDecoration({
   disabled?: boolean
 }) {
   return (
-    <div className={cn("relative py-2")}>
+    <InputGroup>
+      {showStartIcon && (
+        <InputGroupAddon align="inline-start">
+          <IGRPIcon iconName={startIcon} aria-hidden="true" />
+        </InputGroupAddon>
+      )}
+
       {inputNode}
 
-      {showStartIcon && (
-        <div
-          className={cn(
-            "text-muted-foreground/80 pointer-events-none absolute inset-y-0 inset-s-0 flex items-center justify-center ps-1.5 peer-disabled:opacity-50",
-          )}
-        >
-          <IGRPIcon iconName={startIcon} aria-hidden="true" size={14} />
-        </div>
-      )}
-
       {showSubmitButton && (
-        <IGRPButton
-          className={cn(
-            "absolute top-1/2 -translate-y-1/2 inset-e-0 flex items-center justify-center rounded-md transition-[color,box-shadow] outline-none z-10 focus-visible:ring-[3px] gap-0",
-            submitButtonClassName,
-          )}
-          aria-label={submitButtonLabel}
-          type="button"
-          onClick={() => onSearch?.(value)}
-          disabled={disabled}
-          showIcon={showIcon}
-          iconName={submitIcon}
-          variant={submitVariant}
-          loading={loading}
-          iconPlacement={iconPlacement}
-        >
-          {submitButtonLabel}
-        </IGRPButton>
+        <InputGroupAddon align="inline-end">
+          <IGRPButton
+            className={cn(submitButtonClassName)}
+            aria-label={submitButtonLabel}
+            type="button"
+            onClick={() => onSearch?.(value)}
+            disabled={disabled}
+            showIcon={showIcon}
+            iconName={submitIcon}
+            variant={submitVariant}
+            loading={loading}
+            iconPlacement={iconPlacement}
+          >
+            {submitButtonLabel}
+          </IGRPButton>
+        </InputGroupAddon>
       )}
-    </div>
+    </InputGroup>
   )
 }
 
@@ -178,14 +173,9 @@ function IGRPInputSearch({
     [controlledValue, debouncedSearch, isDebounce, setValueChange],
   )
 
-  const inputClass = (hasError: boolean) =>
-    cn(
-      "peer py-3 text-sm outline-hidden flex w-full items-center",
-      showStartIcon && "ps-6.5",
-      showSubmitButton && "pe-9",
-      hasError && "border-destructive focus-visible:ring-destructive/20",
-      className,
-    )
+  // InputGroup owns the border, focus ring, addon padding and aria-invalid
+  // styling, so the control only carries caller overrides.
+  const inputClassName = cn(className)
 
   const decorationProps = {
     showStartIcon,
@@ -219,12 +209,12 @@ function IGRPInputSearch({
               value={field.value ?? ""}
               inputNode={
                 <FormControl>
-                  <Input
+                  <InputGroupInput
                     name={fieldName}
                     type="search"
                     required={required}
                     aria-required={required}
-                    className={inputClass(!!(fieldState.error || error))}
+                    className={inputClassName}
                     value={field.value ?? ""}
                     onChange={(e) => {
                       field.onChange(e.target.value)
@@ -259,7 +249,7 @@ function IGRPInputSearch({
         {...decorationProps}
         value={displayValue}
         inputNode={
-          <Input
+          <InputGroupInput
             id={fieldName}
             name={fieldName}
             type="search"
@@ -267,7 +257,7 @@ function IGRPInputSearch({
             aria-required={required}
             aria-invalid={!!error || !!props["aria-invalid"]}
             aria-describedby={helperText || error ? `${fieldName}-helper` : undefined}
-            className={inputClass(!!error)}
+            className={inputClassName}
             value={displayValue}
             onChange={(e) => handleInputChange(e.target.value)}
             onKeyDown={(e) => {

@@ -1660,9 +1660,9 @@ exports[`Components/DataTable ColumnModelStable play-test 1`] = `
               </td>
             </tr>
           </tbody>
-          <tbody aria-hidden="true"
-                 class="table-row h-1"
-          >
+          <tbody aria-hidden="true">
+            <tr class="h-1">
+            </tr>
           </tbody>
         </table>
       </div>
@@ -3326,9 +3326,9 @@ exports[`Components/DataTable Default smoke-test 1`] = `
               </td>
             </tr>
           </tbody>
-          <tbody aria-hidden="true"
-                 class="table-row h-1"
-          >
+          <tbody aria-hidden="true">
+            <tr class="h-1">
+            </tr>
           </tbody>
         </table>
       </div>
@@ -4999,9 +4999,9 @@ exports[`Components/DataTable ServerSideFilterMode smoke-test 1`] = `
               </td>
             </tr>
           </tbody>
-          <tbody aria-hidden="true"
-                 class="table-row h-1"
-          >
+          <tbody aria-hidden="true">
+            <tr class="h-1">
+            </tr>
           </tbody>
         </table>
       </div>
@@ -6763,9 +6763,9 @@ exports[`Components/DataTable WithClientFilters smoke-test 1`] = `
               </td>
             </tr>
           </tbody>
-          <tbody aria-hidden="true"
-                 class="table-row h-1"
-          >
+          <tbody aria-hidden="true">
+            <tr class="h-1">
+            </tr>
           </tbody>
         </table>
       </div>
@@ -8883,9 +8883,9 @@ exports[`Components/DataTable WithExpandableRows smoke-test 1`] = `
               </td>
             </tr>
           </tbody>
-          <tbody aria-hidden="true"
-                 class="table-row h-1"
-          >
+          <tbody aria-hidden="true">
+            <tr class="h-1">
+            </tr>
           </tbody>
         </table>
       </div>
@@ -9581,9 +9581,9 @@ exports[`Components/DataTable WithNumericPagination smoke-test 1`] = `
               </td>
             </tr>
           </tbody>
-          <tbody aria-hidden="true"
-                 class="table-row h-1"
-          >
+          <tbody aria-hidden="true">
+            <tr class="h-1">
+            </tr>
           </tbody>
         </table>
       </div>
@@ -10452,9 +10452,9 @@ exports[`Components/DataTable WithPagination smoke-test 1`] = `
               </td>
             </tr>
           </tbody>
-          <tbody aria-hidden="true"
-                 class="table-row h-1"
-          >
+          <tbody aria-hidden="true">
+            <tr class="h-1">
+            </tr>
           </tbody>
         </table>
       </div>
@@ -12320,9 +12320,9 @@ exports[`Components/DataTable WithToggleColumns smoke-test 1`] = `
               </td>
             </tr>
           </tbody>
-          <tbody aria-hidden="true"
-                 class="table-row h-1"
-          >
+          <tbody aria-hidden="true">
+            <tr class="h-1">
+            </tr>
           </tbody>
         </table>
       </div>

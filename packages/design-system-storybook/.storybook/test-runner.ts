@@ -55,6 +55,18 @@ const config: TestRunnerConfig = {
     // Wait for the story to be fully rendered
     await page.waitForSelector('#storybook-root', { state: 'attached' });
 
+    // #storybook-root is attached before the story module has been compiled and
+    // mounted. Under Vite's on-demand dev compilation a cold server can serve the
+    // shell while a story is still building, and the snapshot below would then
+    // capture an empty root and "fail" as a diff against real markup. Wait for
+    // content before going any further. Bounded, so a story that legitimately
+    // renders nothing still reaches its assertion instead of hanging.
+    await page
+      .waitForFunction(() => (document.querySelector('#storybook-root')?.innerHTML ?? '').trim().length > 0, {
+        timeout: 15000,
+      })
+      .catch(() => {});
+
     // Let remote resources (e.g. avatar images) finish loading. Bounded: live
     // embeds (e.g. YouTube iframes) never reach network idle, so cap the wait.
     await page.waitForLoadState('networkidle', { timeout: 3000 }).catch(() => {});

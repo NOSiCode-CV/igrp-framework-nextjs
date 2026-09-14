@@ -32,7 +32,7 @@ exports[`Components/Alert Default smoke-test 1`] = `
         </path>
       </svg>
       <div class="flex grow justify-between gap-3">
-        <div class="grow space-y-1">
+        <div class="grow flex flex-col gap-1">
           <p class="text-sm font-medium">
             Password does not meet requirements:
           </p>
@@ -91,7 +91,7 @@ exports[`Components/Alert NoColors smoke-test 1`] = `
         </line>
       </svg>
       <div class="flex grow justify-between gap-3">
-        <div class="grow space-y-1">
+        <div class="grow flex flex-col gap-1">
           <p>
             This alert has no colored text, background, or border.
           </p>
@@ -141,7 +141,7 @@ exports[`Components/Alert SubtleWarning smoke-test 1`] = `
         </line>
       </svg>
       <div class="flex grow justify-between gap-3">
-        <div class="grow space-y-1">
+        <div class="grow flex flex-col gap-1">
           <p>
             This is a
             <strong>
@@ -188,7 +188,7 @@ exports[`Components/Alert WithLink smoke-test 1`] = `
         </path>
       </svg>
       <div class="flex grow justify-between gap-3">
-        <div class="grow space-y-1">
+        <div class="grow flex flex-col gap-1">
           <p>
             There is more information available on this topic.
           </p>

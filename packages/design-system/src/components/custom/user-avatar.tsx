@@ -1,3 +1,5 @@
+"use client"
+
 import { useId } from "react"
 
 import { Avatar, AvatarImage, AvatarFallback } from "../primitives/avatar"

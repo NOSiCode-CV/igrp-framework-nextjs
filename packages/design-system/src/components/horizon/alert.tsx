@@ -103,7 +103,7 @@ function IGRPAlert({
         )}
 
         <div className="flex grow justify-between gap-3">
-          <div className="grow space-y-1">{children}</div>
+          <div className="grow flex flex-col gap-1">{children}</div>
 
           {showLink && (
             <IGRPLink

@@ -178,7 +178,7 @@ function NumberInputField({
         className={cn(
           "border-input outline-none relative inline-flex h-10 w-full items-center overflow-hidden rounded-md border text-sm whitespace-nowrap shadow-xs transition-[color,box-shadow]",
           isFocused && "border-ring ring-2 ring-ring/50",
-          (error || validationError || fieldError) && "ring-destructive/20 dark:ring-destructive/40 border-destructive",
+          (error || validationError || fieldError) && "ring-ring-invalid border-destructive",
           disabled && "opacity-50",
         )}
       >

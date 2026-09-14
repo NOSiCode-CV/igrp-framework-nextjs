@@ -14,7 +14,7 @@ exports[`Components/Chat CustomPlaceholder smoke-test 1`] = `
         [data-radix-ID>
         <div data-radix-ID"" data-slot="scroll-area-viewport" class="focus-visible:ring-ring/50 size-full rounded-[inherit] transition-[color,box-shadow] outline-none focus-visible:ring-[3px] focus-visible:outline-1" style="overflow: hidden scroll;">
         <div style="min-width: 100%; display: table;">
-        <div class="space-y-4" aria-live="polite" aria-atomic="false">
+        <div class="flex flex-col gap-4" aria-live="polite" aria-atomic="false">
         <div class="flex flex-col items-center justify-center h-40 text-muted-foreground">
         <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-bot size-12 mb-2 opacity-20" aria-hidden="true" id="Bot">
         <path d="M12 8V4H8">
@@ -76,7 +76,7 @@ exports[`Components/Chat Default smoke-test 1`] = `
         [data-radix-ID>
         <div data-radix-ID"" data-slot="scroll-area-viewport" class="focus-visible:ring-ring/50 size-full rounded-[inherit] transition-[color,box-shadow] outline-none focus-visible:ring-[3px] focus-visible:outline-1" style="overflow: hidden scroll;">
         <div style="min-width: 100%; display: table;">
-        <div class="space-y-4" aria-live="polite" aria-atomic="false">
+        <div class="flex flex-col gap-4" aria-live="polite" aria-atomic="false">
         <div class="flex flex-col items-center justify-center h-40 text-muted-foreground">
         <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-bot size-12 mb-2 opacity-20" aria-hidden="true" id="Bot">
         <path d="M12 8V4H8">

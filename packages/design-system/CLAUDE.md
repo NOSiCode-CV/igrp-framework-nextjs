@@ -32,7 +32,7 @@ The plugin is distributed via the in-repo Claude Code marketplace (`.claude-plug
 
 ## `dark:` selector policy
 
-The repo-wide rule is "no manual `dark:` overrides — tokens handle dark mode" (see `.claude/shared/ui-rules.md`). That rule has one **explicit exception** inside the Primitives layer:
+Consumer app code follows a "no manual `dark:` overrides — tokens handle dark mode" rule (`templates/demo-v1/.agents/rules/ui.md`). That rule is about consuming the design system; inside this package it has one **explicit exception** in the Primitives layer:
 
 - **Allowed in `src/components/primitives/*`:** shadcn-idiomatic `dark:` _opacity adjustments of already-semantic tokens_ (e.g. `dark:bg-input/30`, `dark:aria-invalid:ring-destructive/40`, `dark:bg-destructive/60`). These exist because OKLCH tokens need different alpha values to read correctly against a dark background. The drift checker (`scripts/check-shadcn-drift.mjs`) keeps these aligned with upstream shadcn — ripping them out creates permanent drift on every shadcn release.
 - **Not allowed anywhere:** raw Tailwind palette colors (`bg-emerald-500`, `text-red-600 dark:text-red-400`, etc.). Use semantic tokens (`bg-success`, `text-destructive`). If a needed color role is missing, **add a new token** to `tokens.css` (light + dark blocks + `@theme inline`) — don't reach for the palette.
@@ -48,8 +48,4 @@ When auditing for `dark:` violations, grep specifically for raw palette names (`
 
 @../../.claude/shared/hard-rules.md
 
-@../../.claude/shared/three-layer-ui.md
-
 @../../.claude/shared/tailwind-v4.md
-
-@../../.claude/shared/ui-rules.md

@@ -18,7 +18,6 @@
 - `pnpm build:demo` — `next build` (runs Biome format)
 - `pnpm start:demo` — `next start`
 - `pnpm release:demo` — create the publishable zip template
-- `pnpm dev:app-center` — if `apps/` is present
 
 ## Storybook & visual tests
 

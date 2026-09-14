@@ -11,8 +11,7 @@
   "license": "MIT",
   "workspaces": [
     "packages/**",
-    "templates/**",
-    "apps/**"
+    "templates/**"
   ],
   "scripts": {
     "build": "pnpm -r run build",

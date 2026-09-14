@@ -26,9 +26,7 @@ Each package/template has its own `CLAUDE.md` with package-specific expertise. C
 
 ### Three-layer UI model (design system)
 
-@.claude/shared/three-layer-ui.md
-
-The distinction is load-bearing — mixing layers incorrectly produces inconsistent UI and breaks form wiring.
+The design system has three layers — **Horizon** (`IGRP*`), **Primitives** (unprefixed, shadcn-style Radix + CVA wrappers), and **Custom** (`IGRP*`, built on Horizon). The distinction is load-bearing: mixing them incorrectly produces inconsistent UI and breaks form wiring. Which layer to reach for is a *consumer* rule and lives with the consumer — `templates/demo-v1/.agents/rules/ui.md`. Authoring rules for the layers themselves are in `packages/design-system/CLAUDE.md`.
 
 ### Framework runtime layering
 
@@ -56,10 +54,6 @@ Critical env constraint: when `NEXT_PUBLIC_BASE_PATH` is set, `NEXTAUTH_URL` mus
 ### Tailwind v4 + design tokens
 
 @.claude/shared/tailwind-v4.md
-
-### UI rules (design system consumers + templates)
-
-@.claude/shared/ui-rules.md
 
 Inside `templates/demo-v1/**/*.{ts,tsx}`, the template's agent rules are canonical in `templates/demo-v1/.agents/` — `rules/ui.md` (design-system hard rules) and `rules/permissions.md` (permission gating). `AGENTS.md`, `.cursor/`, `.trae/` and `.github/` are thin bridges that point there; rule content belongs in `.agents/rules/`, never in a bridge. `.github/copilot-instructions.md` is **generated** (`pnpm --filter @igrp/framework-next-template agents:sync`) because Copilot cannot follow references.
 

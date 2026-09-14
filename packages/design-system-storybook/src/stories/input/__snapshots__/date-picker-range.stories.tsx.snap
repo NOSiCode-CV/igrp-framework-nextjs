@@ -2,7 +2,11 @@
 
 exports[`Components/Input/DatePicker/Range Default smoke-test 1`] = `
 <div class="flex flex-col gap-4 m-10">
-  <div class="*:not-first:mt-2">
+  <div role="group"
+       data-slot="field"
+       data-orientation="vertical"
+       class="group/field flex w-full gap-3 data-[invalid=true]:text-destructive flex-col [&amp;&gt;*]:w-full [&amp;&gt;.sr-only]:w-auto"
+  >
     <label data-slot="label"
            class="flex items-center text-sm leading-none font-medium select-none group-data-[disabled=true]:pointer-events-none group-data-[disabled=true]:opacity-50 peer-disabled:cursor-not-allowed peer-disabled:opacity-50 after:content-['*'] after:text-destructive gap-0.5"
            for="_r_ID_"
@@ -10,7 +14,7 @@ exports[`Components/Input/DatePicker/Range Default smoke-test 1`] = `
       Date of Birth
     </label>
     <button data-slot="popover-trigger"
-            class="inline-flex items-center gap-1.5 whitespace-nowrap rounded-md text-sm font-medium transition-[color,box-shadow] disabled:pointer-events-none disabled:opacity-50 [&amp;_svg]:pointer-events-none [&amp;_svg:not([class*='size-'])]:size-4 shrink-0 [&amp;_svg]:shrink-0 outline-none focus-visible:border-ring focus-visible:ring-ring/50 focus-visible:ring-[3px] aria-invalid:ring-destructive/20 dark:aria-invalid:ring-destructive/40 aria-invalid:border-destructive border hover:text-accent-foreground h-9 px-2.5 has-data-[icon=inline-end]:pr-2 has-data-[icon=inline-start]:pl-2 group w-full shadow-xs justify-start bg-background hover:bg-accent border-input dark:bg-input/30 dark:border-input dark:hover:bg-input/50 text-muted-foreground"
+            class="inline-flex items-center gap-1.5 whitespace-nowrap rounded-md text-sm font-medium transition-[color,box-shadow] disabled:pointer-events-none disabled:opacity-50 [&amp;_svg]:pointer-events-none [&amp;_svg:not([class*='size-'])]:size-4 shrink-0 [&amp;_svg]:shrink-0 outline-none focus-visible:border-ring focus-visible:ring-ring/50 focus-visible:ring-[3px] aria-invalid:ring-destructive/20 dark:aria-invalid:ring-destructive/40 aria-invalid:border-destructive border bg-background hover:bg-accent dark:bg-input/30 dark:border-input dark:hover:bg-input/50 hover:text-accent-foreground h-9 px-2.5 has-data-[icon=inline-end]:pr-2 has-data-[icon=inline-start]:pl-2 group w-full shadow-xs justify-start text-muted-foreground"
             id="_r_ID_"
             type="button"
             aria-haspopup="dialog"
@@ -62,15 +66,18 @@ exports[`Components/Input/DatePicker/Range Default smoke-test 1`] = `
 
 exports[`Components/Input/DatePicker/Range WithForm smoke-test 1`] = `
 <form class="space-y-4 max-w-md p-4">
-  <div class="*:not-first:mt-2">
-    <label data-slot="label"
-           class="flex items-center text-sm leading-none font-medium select-none group-data-[disabled=true]:pointer-events-none group-data-[disabled=true]:opacity-50 peer-disabled:cursor-not-allowed peer-disabled:opacity-50 after:content-['*'] after:text-destructive gap-0.5"
-           for="bookingDate"
+  <div data-slot="form-item"
+       class="flex flex-col gap-2"
+  >
+    <label data-slot="form-label"
+           class="flex items-center gap-2 text-sm leading-none font-medium select-none group-data-[disabled=true]:pointer-events-none group-data-[disabled=true]:opacity-50 peer-disabled:cursor-not-allowed peer-disabled:opacity-50 data-[error=true]:text-destructive after:content-[&quot;*&quot;] after:text-destructive"
+           data-error="false"
+           for="_r_ID_-form-item"
     >
       Booking Date
     </label>
     <button data-slot="popover-trigger"
-            class="inline-flex items-center gap-1.5 whitespace-nowrap rounded-md text-sm font-medium transition-[color,box-shadow] disabled:pointer-events-none disabled:opacity-50 [&amp;_svg]:pointer-events-none [&amp;_svg:not([class*='size-'])]:size-4 shrink-0 [&amp;_svg]:shrink-0 outline-none focus-visible:border-ring focus-visible:ring-ring/50 focus-visible:ring-[3px] aria-invalid:ring-destructive/20 dark:aria-invalid:ring-destructive/40 aria-invalid:border-destructive border hover:text-accent-foreground h-9 px-2.5 has-data-[icon=inline-end]:pr-2 has-data-[icon=inline-start]:pl-2 group w-full shadow-xs justify-start bg-background hover:bg-accent border-input dark:bg-input/30 dark:border-input dark:hover:bg-input/50 text-muted-foreground"
+            class="inline-flex items-center gap-1.5 whitespace-nowrap rounded-md text-sm font-medium transition-[color,box-shadow] disabled:pointer-events-none disabled:opacity-50 [&amp;_svg]:pointer-events-none [&amp;_svg:not([class*='size-'])]:size-4 shrink-0 [&amp;_svg]:shrink-0 outline-none focus-visible:border-ring focus-visible:ring-ring/50 focus-visible:ring-[3px] aria-invalid:ring-destructive/20 dark:aria-invalid:ring-destructive/40 aria-invalid:border-destructive border bg-background hover:bg-accent dark:bg-input/30 dark:border-input dark:hover:bg-input/50 hover:text-accent-foreground h-9 px-2.5 has-data-[icon=inline-end]:pr-2 has-data-[icon=inline-start]:pl-2 group w-full shadow-xs justify-start text-muted-foreground"
             id="bookingDate"
             type="button"
             aria-haspopup="dialog"
@@ -107,7 +114,10 @@ exports[`Components/Input/DatePicker/Range WithForm smoke-test 1`] = `
         Pick a date
       </span>
     </button>
-    <p class="text-sm text-muted-foreground mt-1">
+    <p data-slot="form-description"
+       id="_r_ID_-form-item-description"
+       class="text-muted-foreground text-sm"
+    >
       Pick a range
     </p>
   </div>

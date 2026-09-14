@@ -359,7 +359,7 @@ exports[`Components/Typography/List CollapsibleList smoke-test 1`] = `
          class="flex items-center gap-2 transition-colors duration-200 hover:bg-muted p-2 rounded-md cursor-pointer focus-visible:ring-2 focus-visible:ring-ring focus-visible:outline-none"
     >
       <div class="shrink-0 mt-0.5">
-        <div class="w-6 h-6 rounded-full flex items-center justify-center text-xs font-medium text-info-foreground border-info/50 bg-info hover:bg-info/90">
+        <div class="size-6 rounded-full flex items-center justify-center text-xs font-medium text-info-foreground border-info/50 bg-info hover:bg-info/90">
           1
         </div>
       </div>
@@ -370,7 +370,7 @@ exports[`Components/Typography/List CollapsibleList smoke-test 1`] = `
           </div>
           <div data-slot="badge"
                id="_r_ID_"
-               class="inline-flex items-center justify-center rounded-full shadow-none border font-medium w-fit whitespace-nowrap shrink-0 gap-1 [&amp;&gt;svg]:pointer-events-none focus-visible:border-ring focus-visible:ring-ring/50 focus-visible:ring-[3px] aria-invalid:ring-destructive/20 dark:aria-invalid:ring-destructive/40 aria-invalid:border-destructive transition-[color,box-shadow] overflow-hidden text-xs [&amp;&gt;svg]:size-2.5 text-muted-foreground bg-muted border-border px-2 py-1"
+               class="inline-flex items-center justify-center rounded-full shadow-none border font-medium w-fit whitespace-nowrap shrink-0 gap-1 [&amp;&gt;svg]:pointer-events-none focus-visible:border-ring focus-visible:ring-ring/50 focus-visible:ring-[3px] transition-[color,box-shadow] overflow-hidden text-xs [&amp;&gt;svg]:size-2.5 text-muted-foreground bg-muted border-border px-2 py-1"
           >
             <div class="flex items-center">
               <div class>
@@ -408,7 +408,7 @@ exports[`Components/Typography/List CollapsibleList smoke-test 1`] = `
              class="flex items-center gap-2 transition-colors duration-200 hover:bg-muted p-2 rounded-md cursor-pointer focus-visible:ring-2 focus-visible:ring-ring focus-visible:outline-none ml-6"
         >
           <div class="shrink-0 mt-0.5">
-            <div class="w-6 h-6 rounded-full flex items-center justify-center text-xs font-medium text-info-foreground border-info/50 bg-info hover:bg-info/90">
+            <div class="size-6 rounded-full flex items-center justify-center text-xs font-medium text-info-foreground border-info/50 bg-info hover:bg-info/90">
               1
             </div>
           </div>
@@ -427,7 +427,7 @@ exports[`Components/Typography/List CollapsibleList smoke-test 1`] = `
              class="flex items-center gap-2 transition-colors duration-200 hover:bg-muted p-2 rounded-md cursor-pointer focus-visible:ring-2 focus-visible:ring-ring focus-visible:outline-none ml-6"
         >
           <div class="shrink-0 mt-0.5">
-            <div class="w-6 h-6 rounded-full flex items-center justify-center text-xs font-medium text-info-foreground border-info/50 bg-info hover:bg-info/90">
+            <div class="size-6 rounded-full flex items-center justify-center text-xs font-medium text-info-foreground border-info/50 bg-info hover:bg-info/90">
               2
             </div>
           </div>
@@ -446,7 +446,7 @@ exports[`Components/Typography/List CollapsibleList smoke-test 1`] = `
              class="flex items-center gap-2 transition-colors duration-200 hover:bg-muted p-2 rounded-md cursor-pointer focus-visible:ring-2 focus-visible:ring-ring focus-visible:outline-none ml-6"
         >
           <div class="shrink-0 mt-0.5">
-            <div class="w-6 h-6 rounded-full flex items-center justify-center text-xs font-medium text-info-foreground border-info/50 bg-info hover:bg-info/90">
+            <div class="size-6 rounded-full flex items-center justify-center text-xs font-medium text-info-foreground border-info/50 bg-info hover:bg-info/90">
               3
             </div>
           </div>
@@ -467,7 +467,7 @@ exports[`Components/Typography/List CollapsibleList smoke-test 1`] = `
          class="flex items-center gap-2 transition-colors duration-200 hover:bg-muted p-2 rounded-md cursor-pointer focus-visible:ring-2 focus-visible:ring-ring focus-visible:outline-none"
     >
       <div class="shrink-0 mt-0.5">
-        <div class="w-6 h-6 rounded-full flex items-center justify-center text-xs font-medium text-info-foreground border-info/50 bg-info hover:bg-info/90">
+        <div class="size-6 rounded-full flex items-center justify-center text-xs font-medium text-info-foreground border-info/50 bg-info hover:bg-info/90">
           2
         </div>
       </div>
@@ -478,7 +478,7 @@ exports[`Components/Typography/List CollapsibleList smoke-test 1`] = `
           </div>
           <div data-slot="badge"
                id="_r_ID_"
-               class="inline-flex items-center justify-center rounded-full shadow-none border font-medium w-fit whitespace-nowrap shrink-0 gap-1 [&amp;&gt;svg]:pointer-events-none focus-visible:border-ring focus-visible:ring-ring/50 focus-visible:ring-[3px] aria-invalid:ring-destructive/20 dark:aria-invalid:ring-destructive/40 aria-invalid:border-destructive transition-[color,box-shadow] overflow-hidden text-xs [&amp;&gt;svg]:size-2.5 text-muted-foreground bg-muted border-border px-2 py-1"
+               class="inline-flex items-center justify-center rounded-full shadow-none border font-medium w-fit whitespace-nowrap shrink-0 gap-1 [&amp;&gt;svg]:pointer-events-none focus-visible:border-ring focus-visible:ring-ring/50 focus-visible:ring-[3px] transition-[color,box-shadow] overflow-hidden text-xs [&amp;&gt;svg]:size-2.5 text-muted-foreground bg-muted border-border px-2 py-1"
           >
             <div class="flex items-center">
               <div class>
@@ -516,7 +516,7 @@ exports[`Components/Typography/List CollapsibleList smoke-test 1`] = `
              class="flex items-center gap-2 transition-colors duration-200 hover:bg-muted p-2 rounded-md cursor-pointer focus-visible:ring-2 focus-visible:ring-ring focus-visible:outline-none opacity-60 line-through ml-6"
         >
           <div class="shrink-0 mt-0.5">
-            <div class="w-6 h-6 rounded-full flex items-center justify-center text-xs font-medium text-info-foreground border-info/50 bg-info hover:bg-info/90">
+            <div class="size-6 rounded-full flex items-center justify-center text-xs font-medium text-info-foreground border-info/50 bg-info hover:bg-info/90">
               1
             </div>
           </div>
@@ -535,7 +535,7 @@ exports[`Components/Typography/List CollapsibleList smoke-test 1`] = `
              class="flex items-center gap-2 transition-colors duration-200 hover:bg-muted p-2 rounded-md cursor-pointer focus-visible:ring-2 focus-visible:ring-ring focus-visible:outline-none opacity-60 line-through ml-6"
         >
           <div class="shrink-0 mt-0.5">
-            <div class="w-6 h-6 rounded-full flex items-center justify-center text-xs font-medium text-info-foreground border-info/50 bg-info hover:bg-info/90">
+            <div class="size-6 rounded-full flex items-center justify-center text-xs font-medium text-info-foreground border-info/50 bg-info hover:bg-info/90">
               2
             </div>
           </div>
@@ -554,7 +554,7 @@ exports[`Components/Typography/List CollapsibleList smoke-test 1`] = `
              class="flex items-center gap-2 transition-colors duration-200 hover:bg-muted p-2 rounded-md cursor-pointer focus-visible:ring-2 focus-visible:ring-ring focus-visible:outline-none ml-6"
         >
           <div class="shrink-0 mt-0.5">
-            <div class="w-6 h-6 rounded-full flex items-center justify-center text-xs font-medium text-info-foreground border-info/50 bg-info hover:bg-info/90">
+            <div class="size-6 rounded-full flex items-center justify-center text-xs font-medium text-info-foreground border-info/50 bg-info hover:bg-info/90">
               3
             </div>
           </div>
@@ -573,7 +573,7 @@ exports[`Components/Typography/List CollapsibleList smoke-test 1`] = `
              class="flex items-center gap-2 transition-colors duration-200 hover:bg-muted p-2 rounded-md cursor-pointer focus-visible:ring-2 focus-visible:ring-ring focus-visible:outline-none ml-6"
         >
           <div class="shrink-0 mt-0.5">
-            <div class="w-6 h-6 rounded-full flex items-center justify-center text-xs font-medium text-info-foreground border-info/50 bg-info hover:bg-info/90">
+            <div class="size-6 rounded-full flex items-center justify-center text-xs font-medium text-info-foreground border-info/50 bg-info hover:bg-info/90">
               4
             </div>
           </div>
@@ -594,7 +594,7 @@ exports[`Components/Typography/List CollapsibleList smoke-test 1`] = `
          class="flex items-center gap-2 transition-colors duration-200 hover:bg-muted p-2 rounded-md cursor-pointer focus-visible:ring-2 focus-visible:ring-ring focus-visible:outline-none"
     >
       <div class="shrink-0 mt-0.5">
-        <div class="w-6 h-6 rounded-full flex items-center justify-center text-xs font-medium text-info-foreground border-info/50 bg-info hover:bg-info/90">
+        <div class="size-6 rounded-full flex items-center justify-center text-xs font-medium text-info-foreground border-info/50 bg-info hover:bg-info/90">
           3
         </div>
       </div>
@@ -605,7 +605,7 @@ exports[`Components/Typography/List CollapsibleList smoke-test 1`] = `
           </div>
           <div data-slot="badge"
                id="_r_ID_"
-               class="inline-flex items-center justify-center rounded-full shadow-none border font-medium w-fit whitespace-nowrap shrink-0 gap-1 [&amp;&gt;svg]:pointer-events-none focus-visible:border-ring focus-visible:ring-ring/50 focus-visible:ring-[3px] aria-invalid:ring-destructive/20 dark:aria-invalid:ring-destructive/40 aria-invalid:border-destructive transition-[color,box-shadow] overflow-hidden text-xs [&amp;&gt;svg]:size-2.5 text-muted-foreground bg-muted border-border px-2 py-1"
+               class="inline-flex items-center justify-center rounded-full shadow-none border font-medium w-fit whitespace-nowrap shrink-0 gap-1 [&amp;&gt;svg]:pointer-events-none focus-visible:border-ring focus-visible:ring-ring/50 focus-visible:ring-[3px] transition-[color,box-shadow] overflow-hidden text-xs [&amp;&gt;svg]:size-2.5 text-muted-foreground bg-muted border-border px-2 py-1"
           >
             <div class="flex items-center">
               <div class>
@@ -643,7 +643,7 @@ exports[`Components/Typography/List CollapsibleList smoke-test 1`] = `
              class="flex items-center gap-2 transition-colors duration-200 hover:bg-muted p-2 rounded-md cursor-pointer focus-visible:ring-2 focus-visible:ring-ring focus-visible:outline-none ml-6"
         >
           <div class="shrink-0 mt-0.5">
-            <div class="w-6 h-6 rounded-full flex items-center justify-center text-xs font-medium text-info-foreground border-info/50 bg-info hover:bg-info/90">
+            <div class="size-6 rounded-full flex items-center justify-center text-xs font-medium text-info-foreground border-info/50 bg-info hover:bg-info/90">
               1
             </div>
           </div>
@@ -662,7 +662,7 @@ exports[`Components/Typography/List CollapsibleList smoke-test 1`] = `
              class="flex items-center gap-2 transition-colors duration-200 hover:bg-muted p-2 rounded-md cursor-pointer focus-visible:ring-2 focus-visible:ring-ring focus-visible:outline-none ml-6"
         >
           <div class="shrink-0 mt-0.5">
-            <div class="w-6 h-6 rounded-full flex items-center justify-center text-xs font-medium text-info-foreground border-info/50 bg-info hover:bg-info/90">
+            <div class="size-6 rounded-full flex items-center justify-center text-xs font-medium text-info-foreground border-info/50 bg-info hover:bg-info/90">
               2
             </div>
           </div>
@@ -681,7 +681,7 @@ exports[`Components/Typography/List CollapsibleList smoke-test 1`] = `
              class="flex items-center gap-2 transition-colors duration-200 hover:bg-muted p-2 rounded-md cursor-pointer focus-visible:ring-2 focus-visible:ring-ring focus-visible:outline-none ml-6"
         >
           <div class="shrink-0 mt-0.5">
-            <div class="w-6 h-6 rounded-full flex items-center justify-center text-xs font-medium text-info-foreground border-info/50 bg-info hover:bg-info/90">
+            <div class="size-6 rounded-full flex items-center justify-center text-xs font-medium text-info-foreground border-info/50 bg-info hover:bg-info/90">
               3
             </div>
           </div>
@@ -736,7 +736,7 @@ exports[`Components/Typography/List ComplexExample smoke-test 1`] = `
           </div>
           <div data-slot="badge"
                id="_r_ID_"
-               class="inline-flex items-center justify-center rounded-full shadow-none border font-medium w-fit whitespace-nowrap shrink-0 gap-1 [&amp;&gt;svg]:pointer-events-none focus-visible:border-ring focus-visible:ring-ring/50 focus-visible:ring-[3px] aria-invalid:ring-destructive/20 dark:aria-invalid:ring-destructive/40 aria-invalid:border-destructive transition-[color,box-shadow] overflow-hidden text-xs [&amp;&gt;svg]:size-2.5 text-muted-foreground bg-muted border-border px-2 py-1"
+               class="inline-flex items-center justify-center rounded-full shadow-none border font-medium w-fit whitespace-nowrap shrink-0 gap-1 [&amp;&gt;svg]:pointer-events-none focus-visible:border-ring focus-visible:ring-ring/50 focus-visible:ring-[3px] transition-[color,box-shadow] overflow-hidden text-xs [&amp;&gt;svg]:size-2.5 text-muted-foreground bg-muted border-border px-2 py-1"
           >
             <div class="flex items-center">
               <div class>
@@ -871,7 +871,7 @@ exports[`Components/Typography/List ComplexExample smoke-test 1`] = `
               </div>
               <div data-slot="badge"
                    id="_r_ID_"
-                   class="inline-flex items-center justify-center rounded-full shadow-none border font-medium w-fit whitespace-nowrap shrink-0 gap-1 [&amp;&gt;svg]:pointer-events-none focus-visible:border-ring focus-visible:ring-ring/50 focus-visible:ring-[3px] aria-invalid:ring-destructive/20 dark:aria-invalid:ring-destructive/40 aria-invalid:border-destructive transition-[color,box-shadow] overflow-hidden text-xs [&amp;&gt;svg]:size-2.5 text-muted-foreground bg-muted border-border px-2 py-1"
+                   class="inline-flex items-center justify-center rounded-full shadow-none border font-medium w-fit whitespace-nowrap shrink-0 gap-1 [&amp;&gt;svg]:pointer-events-none focus-visible:border-ring focus-visible:ring-ring/50 focus-visible:ring-[3px] transition-[color,box-shadow] overflow-hidden text-xs [&amp;&gt;svg]:size-2.5 text-muted-foreground bg-muted border-border px-2 py-1"
               >
                 <div class="flex items-center">
                   <div class>
@@ -916,7 +916,7 @@ exports[`Components/Typography/List ComplexExample smoke-test 1`] = `
               </div>
               <div data-slot="badge"
                    id="_r_ID_"
-                   class="inline-flex items-center justify-center rounded-full shadow-none border font-medium w-fit whitespace-nowrap shrink-0 gap-1 [&amp;&gt;svg]:pointer-events-none focus-visible:border-ring focus-visible:ring-ring/50 focus-visible:ring-[3px] aria-invalid:ring-destructive/20 dark:aria-invalid:ring-destructive/40 aria-invalid:border-destructive transition-[color,box-shadow] overflow-hidden text-xs [&amp;&gt;svg]:size-2.5 text-muted-foreground bg-muted border-border px-2 py-1"
+                   class="inline-flex items-center justify-center rounded-full shadow-none border font-medium w-fit whitespace-nowrap shrink-0 gap-1 [&amp;&gt;svg]:pointer-events-none focus-visible:border-ring focus-visible:ring-ring/50 focus-visible:ring-[3px] transition-[color,box-shadow] overflow-hidden text-xs [&amp;&gt;svg]:size-2.5 text-muted-foreground bg-muted border-border px-2 py-1"
               >
                 <div class="flex items-center">
                   <div class>
@@ -963,7 +963,7 @@ exports[`Components/Typography/List ComplexExample smoke-test 1`] = `
           </div>
           <div data-slot="badge"
                id="_r_ID_"
-               class="inline-flex items-center justify-center rounded-full shadow-none border font-medium w-fit whitespace-nowrap shrink-0 gap-1 [&amp;&gt;svg]:pointer-events-none focus-visible:border-ring focus-visible:ring-ring/50 focus-visible:ring-[3px] aria-invalid:ring-destructive/20 dark:aria-invalid:ring-destructive/40 aria-invalid:border-destructive transition-[color,box-shadow] overflow-hidden text-xs [&amp;&gt;svg]:size-2.5 text-muted-foreground bg-muted border-border px-2 py-1"
+               class="inline-flex items-center justify-center rounded-full shadow-none border font-medium w-fit whitespace-nowrap shrink-0 gap-1 [&amp;&gt;svg]:pointer-events-none focus-visible:border-ring focus-visible:ring-ring/50 focus-visible:ring-[3px] transition-[color,box-shadow] overflow-hidden text-xs [&amp;&gt;svg]:size-2.5 text-muted-foreground bg-muted border-border px-2 py-1"
           >
             <div class="flex items-center">
               <div class>
@@ -1133,7 +1133,7 @@ exports[`Components/Typography/List ComplexExample smoke-test 1`] = `
               </div>
               <div data-slot="badge"
                    id="_r_ID_"
-                   class="inline-flex items-center justify-center rounded-full shadow-none border font-medium w-fit whitespace-nowrap shrink-0 gap-1 [&amp;&gt;svg]:pointer-events-none focus-visible:border-ring focus-visible:ring-ring/50 focus-visible:ring-[3px] aria-invalid:ring-destructive/20 dark:aria-invalid:ring-destructive/40 aria-invalid:border-destructive transition-[color,box-shadow] overflow-hidden text-xs [&amp;&gt;svg]:size-2.5 text-muted-foreground bg-muted border-border px-2 py-1"
+                   class="inline-flex items-center justify-center rounded-full shadow-none border font-medium w-fit whitespace-nowrap shrink-0 gap-1 [&amp;&gt;svg]:pointer-events-none focus-visible:border-ring focus-visible:ring-ring/50 focus-visible:ring-[3px] transition-[color,box-shadow] overflow-hidden text-xs [&amp;&gt;svg]:size-2.5 text-muted-foreground bg-muted border-border px-2 py-1"
               >
                 <div class="flex items-center">
                   <div class>
@@ -1180,7 +1180,7 @@ exports[`Components/Typography/List ComplexExample smoke-test 1`] = `
           </div>
           <div data-slot="badge"
                id="_r_ID_"
-               class="inline-flex items-center justify-center rounded-full shadow-none border font-medium w-fit whitespace-nowrap shrink-0 gap-1 [&amp;&gt;svg]:pointer-events-none focus-visible:border-ring focus-visible:ring-ring/50 focus-visible:ring-[3px] aria-invalid:ring-destructive/20 dark:aria-invalid:ring-destructive/40 aria-invalid:border-destructive transition-[color,box-shadow] overflow-hidden text-xs [&amp;&gt;svg]:size-2.5 text-muted-foreground bg-muted border-border px-2 py-1"
+               class="inline-flex items-center justify-center rounded-full shadow-none border font-medium w-fit whitespace-nowrap shrink-0 gap-1 [&amp;&gt;svg]:pointer-events-none focus-visible:border-ring focus-visible:ring-ring/50 focus-visible:ring-[3px] transition-[color,box-shadow] overflow-hidden text-xs [&amp;&gt;svg]:size-2.5 text-muted-foreground bg-muted border-border px-2 py-1"
           >
             <div class="flex items-center">
               <div class>
@@ -1315,7 +1315,7 @@ exports[`Components/Typography/List ComplexExample smoke-test 1`] = `
               </div>
               <div data-slot="badge"
                    id="_r_ID_"
-                   class="inline-flex items-center justify-center rounded-full shadow-none border font-medium w-fit whitespace-nowrap shrink-0 gap-1 [&amp;&gt;svg]:pointer-events-none focus-visible:border-ring focus-visible:ring-ring/50 focus-visible:ring-[3px] aria-invalid:ring-destructive/20 dark:aria-invalid:ring-destructive/40 aria-invalid:border-destructive transition-[color,box-shadow] overflow-hidden text-xs [&amp;&gt;svg]:size-2.5 text-muted-foreground bg-muted border-border px-2 py-1"
+                   class="inline-flex items-center justify-center rounded-full shadow-none border font-medium w-fit whitespace-nowrap shrink-0 gap-1 [&amp;&gt;svg]:pointer-events-none focus-visible:border-ring focus-visible:ring-ring/50 focus-visible:ring-[3px] transition-[color,box-shadow] overflow-hidden text-xs [&amp;&gt;svg]:size-2.5 text-muted-foreground bg-muted border-border px-2 py-1"
               >
                 <div class="flex items-center">
                   <div class>
@@ -1360,7 +1360,7 @@ exports[`Components/Typography/List ComplexExample smoke-test 1`] = `
               </div>
               <div data-slot="badge"
                    id="_r_ID_"
-                   class="inline-flex items-center justify-center rounded-full shadow-none border font-medium w-fit whitespace-nowrap shrink-0 gap-1 [&amp;&gt;svg]:pointer-events-none focus-visible:border-ring focus-visible:ring-ring/50 focus-visible:ring-[3px] aria-invalid:ring-destructive/20 dark:aria-invalid:ring-destructive/40 aria-invalid:border-destructive transition-[color,box-shadow] overflow-hidden text-xs [&amp;&gt;svg]:size-2.5 text-muted-foreground bg-muted border-border px-2 py-1"
+                   class="inline-flex items-center justify-center rounded-full shadow-none border font-medium w-fit whitespace-nowrap shrink-0 gap-1 [&amp;&gt;svg]:pointer-events-none focus-visible:border-ring focus-visible:ring-ring/50 focus-visible:ring-[3px] transition-[color,box-shadow] overflow-hidden text-xs [&amp;&gt;svg]:size-2.5 text-muted-foreground bg-muted border-border px-2 py-1"
               >
                 <div class="flex items-center">
                   <div class>
@@ -1407,7 +1407,7 @@ exports[`Components/Typography/List ComplexExample smoke-test 1`] = `
           </div>
           <div data-slot="badge"
                id="_r_ID_"
-               class="inline-flex items-center justify-center rounded-full shadow-none border font-medium w-fit whitespace-nowrap shrink-0 gap-1 [&amp;&gt;svg]:pointer-events-none focus-visible:border-ring focus-visible:ring-ring/50 focus-visible:ring-[3px] aria-invalid:ring-destructive/20 dark:aria-invalid:ring-destructive/40 aria-invalid:border-destructive transition-[color,box-shadow] overflow-hidden text-xs [&amp;&gt;svg]:size-2.5 text-muted-foreground bg-muted border-border px-2 py-1"
+               class="inline-flex items-center justify-center rounded-full shadow-none border font-medium w-fit whitespace-nowrap shrink-0 gap-1 [&amp;&gt;svg]:pointer-events-none focus-visible:border-ring focus-visible:ring-ring/50 focus-visible:ring-[3px] transition-[color,box-shadow] overflow-hidden text-xs [&amp;&gt;svg]:size-2.5 text-muted-foreground bg-muted border-border px-2 py-1"
           >
             <div class="flex items-center">
               <div class>
@@ -1912,7 +1912,7 @@ exports[`Components/Typography/List FeaturesList smoke-test 1`] = `
           </div>
           <div data-slot="badge"
                id="_r_ID_"
-               class="inline-flex items-center justify-center rounded-full shadow-none border font-medium w-fit whitespace-nowrap shrink-0 gap-1 [&amp;&gt;svg]:pointer-events-none focus-visible:border-ring focus-visible:ring-ring/50 focus-visible:ring-[3px] aria-invalid:ring-destructive/20 dark:aria-invalid:ring-destructive/40 aria-invalid:border-destructive transition-[color,box-shadow] overflow-hidden text-xs [&amp;&gt;svg]:size-2.5 text-muted-foreground bg-muted border-border px-2 py-1"
+               class="inline-flex items-center justify-center rounded-full shadow-none border font-medium w-fit whitespace-nowrap shrink-0 gap-1 [&amp;&gt;svg]:pointer-events-none focus-visible:border-ring focus-visible:ring-ring/50 focus-visible:ring-[3px] transition-[color,box-shadow] overflow-hidden text-xs [&amp;&gt;svg]:size-2.5 text-muted-foreground bg-muted border-border px-2 py-1"
           >
             <div class="flex items-center">
               <div class>
@@ -2367,7 +2367,7 @@ exports[`Components/Typography/List NestedList smoke-test 1`] = `
           </div>
           <div data-slot="badge"
                id="_r_ID_"
-               class="inline-flex items-center justify-center rounded-full shadow-none border font-medium w-fit whitespace-nowrap shrink-0 gap-1 [&amp;&gt;svg]:pointer-events-none focus-visible:border-ring focus-visible:ring-ring/50 focus-visible:ring-[3px] aria-invalid:ring-destructive/20 dark:aria-invalid:ring-destructive/40 aria-invalid:border-destructive transition-[color,box-shadow] overflow-hidden text-xs [&amp;&gt;svg]:size-2.5 text-muted-foreground bg-muted border-border px-2 py-1"
+               class="inline-flex items-center justify-center rounded-full shadow-none border font-medium w-fit whitespace-nowrap shrink-0 gap-1 [&amp;&gt;svg]:pointer-events-none focus-visible:border-ring focus-visible:ring-ring/50 focus-visible:ring-[3px] transition-[color,box-shadow] overflow-hidden text-xs [&amp;&gt;svg]:size-2.5 text-muted-foreground bg-muted border-border px-2 py-1"
           >
             <div class="flex items-center">
               <div class>
@@ -2802,7 +2802,7 @@ exports[`Components/Typography/List Playground smoke-test 1`] = `
           </div>
           <div data-slot="badge"
                id="_r_ID_"
-               class="inline-flex items-center justify-center rounded-full shadow-none border font-medium w-fit whitespace-nowrap shrink-0 gap-1 [&amp;&gt;svg]:pointer-events-none focus-visible:border-ring focus-visible:ring-ring/50 focus-visible:ring-[3px] aria-invalid:ring-destructive/20 dark:aria-invalid:ring-destructive/40 aria-invalid:border-destructive transition-[color,box-shadow] overflow-hidden text-xs [&amp;&gt;svg]:size-2.5 text-muted-foreground bg-muted border-border px-2 py-1"
+               class="inline-flex items-center justify-center rounded-full shadow-none border font-medium w-fit whitespace-nowrap shrink-0 gap-1 [&amp;&gt;svg]:pointer-events-none focus-visible:border-ring focus-visible:ring-ring/50 focus-visible:ring-[3px] transition-[color,box-shadow] overflow-hidden text-xs [&amp;&gt;svg]:size-2.5 text-muted-foreground bg-muted border-border px-2 py-1"
           >
             <div class="flex items-center">
               <div class>
@@ -3729,7 +3729,7 @@ exports[`Components/Typography/List StepsList smoke-test 1`] = `
          class="flex items-center gap-2 transition-colors duration-200 hover:bg-muted p-2 rounded-md cursor-pointer focus-visible:ring-2 focus-visible:ring-ring focus-visible:outline-none"
     >
       <div class="shrink-0 mt-0.5">
-        <div class="w-6 h-6 rounded-full flex items-center justify-center text-xs font-medium text-success-foreground border-success/50 bg-success hover:bg-success/90">
+        <div class="size-6 rounded-full flex items-center justify-center text-xs font-medium text-success-foreground border-success/50 bg-success hover:bg-success/90">
           1
         </div>
       </div>
@@ -3740,7 +3740,7 @@ exports[`Components/Typography/List StepsList smoke-test 1`] = `
           </div>
           <div data-slot="badge"
                id="_r_ID_"
-               class="inline-flex items-center justify-center rounded-full shadow-none border font-medium w-fit whitespace-nowrap shrink-0 gap-1 [&amp;&gt;svg]:pointer-events-none focus-visible:border-ring focus-visible:ring-ring/50 focus-visible:ring-[3px] aria-invalid:ring-destructive/20 dark:aria-invalid:ring-destructive/40 aria-invalid:border-destructive transition-[color,box-shadow] overflow-hidden text-xs [&amp;&gt;svg]:size-2.5 text-muted-foreground bg-muted border-border px-2 py-1"
+               class="inline-flex items-center justify-center rounded-full shadow-none border font-medium w-fit whitespace-nowrap shrink-0 gap-1 [&amp;&gt;svg]:pointer-events-none focus-visible:border-ring focus-visible:ring-ring/50 focus-visible:ring-[3px] transition-[color,box-shadow] overflow-hidden text-xs [&amp;&gt;svg]:size-2.5 text-muted-foreground bg-muted border-border px-2 py-1"
           >
             <div class="flex items-center">
               <div class>
@@ -3758,7 +3758,7 @@ exports[`Components/Typography/List StepsList smoke-test 1`] = `
          class="flex items-center gap-2 transition-colors duration-200 hover:bg-muted p-2 rounded-md cursor-pointer focus-visible:ring-2 focus-visible:ring-ring focus-visible:outline-none"
     >
       <div class="shrink-0 mt-0.5">
-        <div class="w-6 h-6 rounded-full flex items-center justify-center text-xs font-medium text-success-foreground border-success/50 bg-success hover:bg-success/90">
+        <div class="size-6 rounded-full flex items-center justify-center text-xs font-medium text-success-foreground border-success/50 bg-success hover:bg-success/90">
           2
         </div>
       </div>
@@ -3777,7 +3777,7 @@ exports[`Components/Typography/List StepsList smoke-test 1`] = `
          class="flex items-center gap-2 transition-colors duration-200 hover:bg-muted p-2 rounded-md cursor-pointer focus-visible:ring-2 focus-visible:ring-ring focus-visible:outline-none"
     >
       <div class="shrink-0 mt-0.5">
-        <div class="w-6 h-6 rounded-full flex items-center justify-center text-xs font-medium text-success-foreground border-success/50 bg-success hover:bg-success/90">
+        <div class="size-6 rounded-full flex items-center justify-center text-xs font-medium text-success-foreground border-success/50 bg-success hover:bg-success/90">
           3
         </div>
       </div>
@@ -3796,7 +3796,7 @@ exports[`Components/Typography/List StepsList smoke-test 1`] = `
          class="flex items-center gap-2 transition-colors duration-200 hover:bg-muted p-2 rounded-md cursor-pointer focus-visible:ring-2 focus-visible:ring-ring focus-visible:outline-none"
     >
       <div class="shrink-0 mt-0.5">
-        <div class="w-6 h-6 rounded-full flex items-center justify-center text-xs font-medium text-success-foreground border-success/50 bg-success hover:bg-success/90">
+        <div class="size-6 rounded-full flex items-center justify-center text-xs font-medium text-success-foreground border-success/50 bg-success hover:bg-success/90">
           4
         </div>
       </div>
@@ -3815,7 +3815,7 @@ exports[`Components/Typography/List StepsList smoke-test 1`] = `
          class="flex items-center gap-2 transition-colors duration-200 hover:bg-muted p-2 rounded-md cursor-pointer focus-visible:ring-2 focus-visible:ring-ring focus-visible:outline-none"
     >
       <div class="shrink-0 mt-0.5">
-        <div class="w-6 h-6 rounded-full flex items-center justify-center text-xs font-medium text-success-foreground border-success/50 bg-success hover:bg-success/90">
+        <div class="size-6 rounded-full flex items-center justify-center text-xs font-medium text-success-foreground border-success/50 bg-success hover:bg-success/90">
           5
         </div>
       </div>
@@ -3826,7 +3826,7 @@ exports[`Components/Typography/List StepsList smoke-test 1`] = `
           </div>
           <div data-slot="badge"
                id="_r_ID_"
-               class="inline-flex items-center justify-center rounded-full shadow-none border font-medium w-fit whitespace-nowrap shrink-0 gap-1 [&amp;&gt;svg]:pointer-events-none focus-visible:border-ring focus-visible:ring-ring/50 focus-visible:ring-[3px] aria-invalid:ring-destructive/20 dark:aria-invalid:ring-destructive/40 aria-invalid:border-destructive transition-[color,box-shadow] overflow-hidden text-xs [&amp;&gt;svg]:size-2.5 text-muted-foreground bg-muted border-border px-2 py-1"
+               class="inline-flex items-center justify-center rounded-full shadow-none border font-medium w-fit whitespace-nowrap shrink-0 gap-1 [&amp;&gt;svg]:pointer-events-none focus-visible:border-ring focus-visible:ring-ring/50 focus-visible:ring-[3px] transition-[color,box-shadow] overflow-hidden text-xs [&amp;&gt;svg]:size-2.5 text-muted-foreground bg-muted border-border px-2 py-1"
           >
             <div class="flex items-center">
               <div class>

@@ -21,6 +21,8 @@ import { Input } from "../../../primitives/input"
 import { Popover, PopoverContent, PopoverTrigger } from "../../../primitives/popover"
 import { type IGRPCalendarSingleProps } from "../../calendar/single"
 import { IGRPLabel } from "../../label"
+import { Field, FieldDescription } from "../../../primitives/field"
+import { useIGRPi18n } from "../../../../i18n"
 
 /**
  * Props for the IGRPDatePickerInputSingle component.
@@ -150,6 +152,7 @@ function DatePickerInputSingleField({
   onSelect: (date: Date | undefined) => void
   onMonthChange?: (month: Date | undefined) => void
 }) {
+  const i18n = useIGRPi18n()
   return (
     <div className={cn("relative flex gap-2")}>
       <Input
@@ -175,7 +178,7 @@ function DatePickerInputSingleField({
           variant="ghost"
           className={cn("absolute top-1/2 right-8 size-6 -translate-y-1/2")}
           disabled={disabledPicker}
-          aria-label="Remover Data"
+          aria-label={i18n.datePicker.clear}
           onClick={onClear}
         >
           <XIcon className={cn("size-3.5")} />
@@ -315,7 +318,7 @@ function IGRPDatePickerInputSingle({
 
   if (formContext) {
     return (
-      <div className={cn("*:not-first:mt-2", className)}>
+      <Field className={className}>
         <FormConnectedDatePickerSync
           fieldName={fieldName}
           date={date}
@@ -378,12 +381,12 @@ function IGRPDatePickerInputSingle({
             </FormItem>
           )}
         />
-      </div>
+      </Field>
     )
   }
 
   return (
-    <div className={cn("*:not-first:mt-2", className)}>
+    <Field className={className}>
       {label && <IGRPLabel label={label} className={labelClassName} required={required} id={name} />}
 
       <DatePickerInputSingleField
@@ -404,17 +407,8 @@ function IGRPDatePickerInputSingle({
         onMonthChange={(m) => dispatch({ type: "SET_MONTH", month: m })}
       />
 
-      {helperText && (
-        <p
-          id={`${fieldName}-helper`}
-          className={cn("text-muted-foreground mt-2 text-xs")}
-          role="region"
-          aria-live="polite"
-        >
-          {helperText}
-        </p>
-      )}
-    </div>
+      {helperText && <FieldDescription id={`${fieldName}-helper`}>{helperText}</FieldDescription>}
+    </Field>
   )
 }
 

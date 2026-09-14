@@ -2,7 +2,11 @@
 
 exports[`Components/Input/Time Default smoke-test 1`] = `
 <div class="container my-10 mx-auto p-4 border rounded-lg shadow-sm">
-  <div class="*:not-first:mt-2">
+  <div role="group"
+       data-slot="field"
+       data-orientation="vertical"
+       class="group/field flex w-full gap-3 data-[invalid=true]:text-destructive flex-col [&amp;&gt;*]:w-full [&amp;&gt;.sr-only]:w-auto"
+  >
     <label data-slot="label"
            class="flex items-center text-sm leading-none font-medium select-none group-data-[disabled=true]:pointer-events-none group-data-[disabled=true]:opacity-50 peer-disabled:cursor-not-allowed peer-disabled:opacity-50 gap-0.5"
            for="_r_ID_"
@@ -26,7 +30,11 @@ exports[`Components/Input/Time Default smoke-test 1`] = `
 
 exports[`Components/Input/Time Disabled smoke-test 1`] = `
 <div class="container my-10 mx-auto p-4 border rounded-lg shadow-sm">
-  <div class="*:not-first:mt-2">
+  <div role="group"
+       data-slot="field"
+       data-orientation="vertical"
+       class="group/field flex w-full gap-3 data-[invalid=true]:text-destructive flex-col [&amp;&gt;*]:w-full [&amp;&gt;.sr-only]:w-auto"
+  >
     <label data-slot="label"
            class="flex items-center text-sm leading-none font-medium select-none group-data-[disabled=true]:pointer-events-none group-data-[disabled=true]:opacity-50 peer-disabled:cursor-not-allowed peer-disabled:opacity-50 gap-0.5"
            for="_r_ID_"
@@ -51,7 +59,11 @@ exports[`Components/Input/Time Disabled smoke-test 1`] = `
 
 exports[`Components/Input/Time Required smoke-test 1`] = `
 <div class="container my-10 mx-auto p-4 border rounded-lg shadow-sm">
-  <div class="*:not-first:mt-2">
+  <div role="group"
+       data-slot="field"
+       data-orientation="vertical"
+       class="group/field flex w-full gap-3 data-[invalid=true]:text-destructive flex-col [&amp;&gt;*]:w-full [&amp;&gt;.sr-only]:w-auto"
+  >
     <label data-slot="label"
            class="flex items-center text-sm leading-none font-medium select-none group-data-[disabled=true]:pointer-events-none group-data-[disabled=true]:opacity-50 peer-disabled:cursor-not-allowed peer-disabled:opacity-50 after:content-['*'] after:text-destructive gap-0.5"
            for="_r_ID_"
@@ -75,7 +87,11 @@ exports[`Components/Input/Time Required smoke-test 1`] = `
 
 exports[`Components/Input/Time WithError smoke-test 1`] = `
 <div class="container my-10 mx-auto p-4 border rounded-lg shadow-sm">
-  <div class="*:not-first:mt-2">
+  <div role="group"
+       data-slot="field"
+       data-orientation="vertical"
+       class="group/field flex w-full gap-3 data-[invalid=true]:text-destructive flex-col [&amp;&gt;*]:w-full [&amp;&gt;.sr-only]:w-auto"
+  >
     <label data-slot="label"
            class="flex items-center text-sm leading-none font-medium select-none group-data-[disabled=true]:pointer-events-none group-data-[disabled=true]:opacity-50 peer-disabled:cursor-not-allowed peer-disabled:opacity-50 gap-0.5"
            for="_r_ID_"
@@ -93,19 +109,24 @@ exports[`Components/Input/Time WithError smoke-test 1`] = `
              name="_r_ID_"
       >
     </div>
-    <p id="_r_ID_-error"
-       class="text-destructive mt-2 text-xs"
-       role="alert"
+    <div role="alert"
+         data-slot="field-error"
+         class="text-destructive text-sm font-normal"
+         id="_r_ID_-error"
     >
       Please select a valid time
-    </p>
+    </div>
   </div>
 </div>
 `;
 
 exports[`Components/Input/Time WithHelperText smoke-test 1`] = `
 <div class="container my-10 mx-auto p-4 border rounded-lg shadow-sm">
-  <div class="*:not-first:mt-2">
+  <div role="group"
+       data-slot="field"
+       data-orientation="vertical"
+       class="group/field flex w-full gap-3 data-[invalid=true]:text-destructive flex-col [&amp;&gt;*]:w-full [&amp;&gt;.sr-only]:w-auto"
+  >
     <label data-slot="label"
            class="flex items-center text-sm leading-none font-medium select-none group-data-[disabled=true]:pointer-events-none group-data-[disabled=true]:opacity-50 peer-disabled:cursor-not-allowed peer-disabled:opacity-50 gap-0.5"
            for="_r_ID_"
@@ -124,10 +145,9 @@ exports[`Components/Input/Time WithHelperText smoke-test 1`] = `
              name="_r_ID_"
       >
     </div>
-    <p id="_r_ID_-helper"
-       class="text-muted-foreground mt-2 text-xs"
-       role="region"
-       aria-live="polite"
+    <p data-slot="field-description"
+       class="text-muted-foreground text-sm leading-normal font-normal group-has-data-[orientation=horizontal]/field:text-balance last:mt-0 nth-last-2:-mt-1 [[data-variant=legend]+&amp;]:-mt-1.5 [&amp;&gt;a:hover]:text-primary [&amp;&gt;a]:underline [&amp;&gt;a]:underline-offset-4"
+       id="_r_ID_-helper"
     >
       Please select a time between 9:00 and 17:00
     </p>

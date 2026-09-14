@@ -120,7 +120,7 @@ function RadialChartTooltipContent({
       <div className={cn("flex flex-col gap-1")}>
         <div className={cn("text-sm font-medium")}>{name}</div>
         <div className={cn("flex items-center gap-2")}>
-          <div className={cn("h-3 w-3 rounded-full")} style={{ backgroundColor: fill }} />
+          <div className={cn("size-3 rounded-full")} style={{ backgroundColor: fill }} />
           <span className={cn("text-sm")}>{formatValue(Number(value))}</span>
         </div>
       </div>
@@ -259,10 +259,7 @@ function IGRPRadialBarChartInner({
   )
 
   return (
-    <div
-      className={`w-full overflow-hidden ${className || ""}`}
-      style={backgroundColor ? { backgroundColor } : undefined}
-    >
+    <div className={cn("w-full overflow-hidden", className)} style={backgroundColor ? { backgroundColor } : undefined}>
       <RadialChartHeader title={title} description={description} />
 
       <div className={cn("overflow-hidden")}>

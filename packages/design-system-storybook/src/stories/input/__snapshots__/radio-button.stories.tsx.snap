@@ -1,7 +1,11 @@
 // Jest Snapshot v1, https://jestjs.io/docs/snapshot-testing
 
 exports[`Components/input/RadioGroup Default smoke-test 1`] = `
-<div class="space-y-2">
+<div role="group"
+     data-slot="field"
+     data-orientation="vertical"
+     class="group/field flex w-full gap-3 data-[invalid=true]:text-destructive flex-col [&amp;&gt;*]:w-full [&amp;&gt;.sr-only]:w-auto"
+>
   <label data-slot="label"
          class="flex items-center text-sm leading-none font-medium select-none group-data-[disabled=true]:pointer-events-none group-data-[disabled=true]:opacity-50 peer-disabled:cursor-not-allowed peer-disabled:opacity-50 gap-0.5"
          for="_r_ID_"
@@ -111,7 +115,11 @@ exports[`Components/input/RadioGroup Default smoke-test 1`] = `
 `;
 
 exports[`Components/input/RadioGroup Disabled smoke-test 1`] = `
-<div class="space-y-2">
+<div role="group"
+     data-slot="field"
+     data-orientation="vertical"
+     class="group/field flex w-full gap-3 data-[invalid=true]:text-destructive flex-col [&amp;&gt;*]:w-full [&amp;&gt;.sr-only]:w-auto"
+>
   <label data-slot="label"
          class="flex items-center text-sm leading-none font-medium select-none group-data-[disabled=true]:pointer-events-none group-data-[disabled=true]:opacity-50 peer-disabled:cursor-not-allowed peer-disabled:opacity-50 gap-0.5"
          for="_r_ID_"
@@ -230,7 +238,11 @@ exports[`Components/input/RadioGroup Disabled smoke-test 1`] = `
 
 exports[`Components/input/RadioGroup IGRPGridSizes smoke-test 1`] = `
 <div class="grid grid-cols-12 gap-4 w-full max-w-4xl">
-  <div class="space-y-2">
+  <div role="group"
+       data-slot="field"
+       data-orientation="vertical"
+       class="group/field flex w-full gap-3 data-[invalid=true]:text-destructive flex-col [&amp;&gt;*]:w-full [&amp;&gt;.sr-only]:w-auto"
+  >
     <label data-slot="label"
            class="flex items-center text-sm leading-none font-medium select-none group-data-[disabled=true]:pointer-events-none group-data-[disabled=true]:opacity-50 peer-disabled:cursor-not-allowed peer-disabled:opacity-50 gap-0.5"
            for="_r_ID_"
@@ -316,7 +328,11 @@ exports[`Components/input/RadioGroup IGRPGridSizes smoke-test 1`] = `
       </div>
     </div>
   </div>
-  <div class="space-y-2">
+  <div role="group"
+       data-slot="field"
+       data-orientation="vertical"
+       class="group/field flex w-full gap-3 data-[invalid=true]:text-destructive flex-col [&amp;&gt;*]:w-full [&amp;&gt;.sr-only]:w-auto"
+  >
     <label data-slot="label"
            class="flex items-center text-sm leading-none font-medium select-none group-data-[disabled=true]:pointer-events-none group-data-[disabled=true]:opacity-50 peer-disabled:cursor-not-allowed peer-disabled:opacity-50 gap-0.5"
            for="_r_ID_"
@@ -402,7 +418,11 @@ exports[`Components/input/RadioGroup IGRPGridSizes smoke-test 1`] = `
       </div>
     </div>
   </div>
-  <div class="space-y-2">
+  <div role="group"
+       data-slot="field"
+       data-orientation="vertical"
+       class="group/field flex w-full gap-3 data-[invalid=true]:text-destructive flex-col [&amp;&gt;*]:w-full [&amp;&gt;.sr-only]:w-auto"
+  >
     <label data-slot="label"
            class="flex items-center text-sm leading-none font-medium select-none group-data-[disabled=true]:pointer-events-none group-data-[disabled=true]:opacity-50 peer-disabled:cursor-not-allowed peer-disabled:opacity-50 gap-0.5"
            for="_r_ID_"
@@ -492,7 +512,11 @@ exports[`Components/input/RadioGroup IGRPGridSizes smoke-test 1`] = `
 `;
 
 exports[`Components/input/RadioGroup WithDescriptions smoke-test 1`] = `
-<div class="space-y-2">
+<div role="group"
+     data-slot="field"
+     data-orientation="vertical"
+     class="group/field flex w-full gap-3 data-[invalid=true]:text-destructive flex-col [&amp;&gt;*]:w-full [&amp;&gt;.sr-only]:w-auto"
+>
   <label data-slot="label"
          class="flex items-center text-sm leading-none font-medium select-none group-data-[disabled=true]:pointer-events-none group-data-[disabled=true]:opacity-50 peer-disabled:cursor-not-allowed peer-disabled:opacity-50 gap-0.5"
          for="_r_ID_"
@@ -608,10 +632,9 @@ exports[`Components/input/RadioGroup WithDescriptions smoke-test 1`] = `
       </div>
     </div>
   </div>
-  <p id="_r_ID_-helper"
-     class="text-muted-foreground mt-2 text-xs"
-     role="region"
-     aria-live="polite"
+  <p data-slot="field-description"
+     class="text-muted-foreground text-sm leading-normal font-normal group-has-data-[orientation=horizontal]/field:text-balance last:mt-0 nth-last-2:-mt-1 [[data-variant=legend]+&amp;]:-mt-1.5 [&amp;&gt;a:hover]:text-primary [&amp;&gt;a]:underline [&amp;&gt;a]:underline-offset-4"
+     id="_r_ID_-helper"
   >
     Choose one of the available options
   </p>
@@ -619,7 +642,12 @@ exports[`Components/input/RadioGroup WithDescriptions smoke-test 1`] = `
 `;
 
 exports[`Components/input/RadioGroup WithError smoke-test 1`] = `
-<div class="space-y-2">
+<div role="group"
+     data-slot="field"
+     data-orientation="vertical"
+     class="group/field flex w-full gap-3 data-[invalid=true]:text-destructive flex-col [&amp;&gt;*]:w-full [&amp;&gt;.sr-only]:w-auto"
+     data-invalid="true"
+>
   <label data-slot="label"
          class="flex items-center text-sm leading-none font-medium select-none group-data-[disabled=true]:pointer-events-none group-data-[disabled=true]:opacity-50 peer-disabled:cursor-not-allowed peer-disabled:opacity-50 gap-0.5"
          for="_r_ID_"
@@ -726,12 +754,13 @@ exports[`Components/input/RadioGroup WithError smoke-test 1`] = `
       </div>
     </div>
   </div>
-  <p id="_r_ID_-error"
-     class="text-destructive mt-2 text-xs"
-     role="alert"
+  <div role="alert"
+       data-slot="field-error"
+       class="text-destructive text-sm font-normal"
+       id="_r_ID_-error"
   >
     Please select a valid option
-  </p>
+  </div>
 </div>
 `;
 
@@ -744,116 +773,130 @@ exports[`Components/input/RadioGroup WithFormIntegration smoke-test 1`] = `
     Try submitting without selecting an option to see validation error.
   </p>
   <form class="space-y-4">
-    <div class="space-y-2">
-      <label data-slot="label"
-             class="flex items-center text-sm leading-none font-medium select-none group-data-[disabled=true]:pointer-events-none group-data-[disabled=true]:opacity-50 peer-disabled:cursor-not-allowed peer-disabled:opacity-50 after:content-['*'] after:text-destructive gap-0.5"
-             for="plan"
+    <div>
+      <div data-slot="form-item"
+           class="flex flex-col gap-2"
       >
-        Select a plan
-      </label>
-      <div role="radiogroup"
-           aria-required="true"
-           dir="ltr"
-           data-slot="radio-group"
-           class="gap-3 flex flex-row"
-           aria-invalid="false"
-           tabindex="0"
-           style="outline: none;"
-      >
-        <div class="flex gap-2 items-center">
-          <button type="button"
-                  role="radio"
-                  aria-checked="false"
-                  data-state="unchecked"
-                  value="basic"
-                  data-slot="radio-group-item"
-                  class="text-primary focus-visible:border-ring focus-visible:ring-ring/50 aria-invalid:ring-destructive/20 dark:aria-invalid:ring-destructive/40 aria-invalid:border-destructive aspect-square shrink-0 rounded-full border transition-[color,box-shadow] outline-none focus-visible:ring-[3px] disabled:cursor-not-allowed disabled:opacity-50 border-input dark:bg-input/30 shadow-xs size-4 mt-0.5"
-                  id="plan-basic"
-                  tabindex="-1"
-                  data-radix-id""
+        <div class="flex flex-col gap-2">
+          <label data-slot="form-label"
+                 class="flex items-center text-sm leading-none font-medium select-none group-data-[disabled=true]:pointer-events-none group-data-[disabled=true]:opacity-50 peer-disabled:cursor-not-allowed peer-disabled:opacity-50 data-[error=true]:text-destructive gap-0.5 after:content-[&quot;*&quot;] after:text-destructive"
+                 data-error="false"
+                 for="_r_ID_-form-item"
           >
-          </button>
-          <input aria-hidden="true"
-                 tabindex="-1"
-                 type="radio"
-                 value="basic"
-                 name="plan"
-                 style="position: absolute; pointer-events: none; opacity: 0; margin: 0px; transform: translateX(-100%); width: 16px; height: 16px;"
+            Select a plan
+          </label>
+          <div class="relative"
+               data-slot="form-control"
+               id="_r_ID_-form-item"
+               aria-describedby="_r_ID_-form-item-description"
+               aria-invalid="false"
           >
-          <div>
-            <label data-slot="label"
-                   class="flex items-center select-none group-data-[disabled=true]:pointer-events-none group-data-[disabled=true]:opacity-50 peer-disabled:cursor-not-allowed peer-disabled:opacity-50 gap-0.5 text-sm font-medium leading-none"
-                   for="plan-basic"
+            <div role="radiogroup"
+                 aria-required="true"
+                 dir="ltr"
+                 data-slot="radio-group"
+                 class="gap-3 flex flex-row"
+                 aria-invalid="false"
+                 tabindex="0"
+                 style="outline: none;"
             >
-              Basic Plan
-            </label>
-            <p class="text-muted-foreground mt-1 text-sm">
-              $10/month
-            </p>
-          </div>
-        </div>
-        <div class="flex gap-2 items-center">
-          <button type="button"
-                  role="radio"
-                  aria-checked="false"
-                  data-state="unchecked"
-                  value="pro"
-                  data-slot="radio-group-item"
-                  class="text-primary focus-visible:border-ring focus-visible:ring-ring/50 aria-invalid:ring-destructive/20 dark:aria-invalid:ring-destructive/40 aria-invalid:border-destructive aspect-square shrink-0 rounded-full border transition-[color,box-shadow] outline-none focus-visible:ring-[3px] disabled:cursor-not-allowed disabled:opacity-50 border-input dark:bg-input/30 shadow-xs size-4 mt-0.5"
-                  id="plan-pro"
-                  tabindex="-1"
-                  data-radix-id""
-          >
-          </button>
-          <input aria-hidden="true"
-                 tabindex="-1"
-                 type="radio"
-                 value="pro"
-                 name="plan"
-                 style="position: absolute; pointer-events: none; opacity: 0; margin: 0px; transform: translateX(-100%); width: 16px; height: 16px;"
-          >
-          <div>
-            <label data-slot="label"
-                   class="flex items-center select-none group-data-[disabled=true]:pointer-events-none group-data-[disabled=true]:opacity-50 peer-disabled:cursor-not-allowed peer-disabled:opacity-50 gap-0.5 text-sm font-medium leading-none"
-                   for="plan-pro"
-            >
-              Pro Plan
-            </label>
-            <p class="text-muted-foreground mt-1 text-sm">
-              $20/month
-            </p>
-          </div>
-        </div>
-        <div class="flex gap-2 items-center">
-          <button type="button"
-                  role="radio"
-                  aria-checked="false"
-                  data-state="unchecked"
-                  value="enterprise"
-                  data-slot="radio-group-item"
-                  class="text-primary focus-visible:border-ring focus-visible:ring-ring/50 aria-invalid:ring-destructive/20 dark:aria-invalid:ring-destructive/40 aria-invalid:border-destructive aspect-square shrink-0 rounded-full border transition-[color,box-shadow] outline-none focus-visible:ring-[3px] disabled:cursor-not-allowed disabled:opacity-50 border-input dark:bg-input/30 shadow-xs size-4 mt-0.5"
-                  id="plan-enterprise"
-                  tabindex="-1"
-                  data-radix-id""
-          >
-          </button>
-          <input aria-hidden="true"
-                 tabindex="-1"
-                 type="radio"
-                 value="enterprise"
-                 name="plan"
-                 style="position: absolute; pointer-events: none; opacity: 0; margin: 0px; transform: translateX(-100%); width: 16px; height: 16px;"
-          >
-          <div>
-            <label data-slot="label"
-                   class="flex items-center select-none group-data-[disabled=true]:pointer-events-none group-data-[disabled=true]:opacity-50 peer-disabled:cursor-not-allowed peer-disabled:opacity-50 gap-0.5 text-sm font-medium leading-none"
-                   for="plan-enterprise"
-            >
-              Enterprise Plan
-            </label>
-            <p class="text-muted-foreground mt-1 text-sm">
-              $50/month
-            </p>
+              <div class="flex gap-2 items-center">
+                <button type="button"
+                        role="radio"
+                        aria-checked="false"
+                        data-state="unchecked"
+                        value="basic"
+                        data-slot="radio-group-item"
+                        class="text-primary focus-visible:border-ring focus-visible:ring-ring/50 aria-invalid:ring-destructive/20 dark:aria-invalid:ring-destructive/40 aria-invalid:border-destructive aspect-square shrink-0 rounded-full border transition-[color,box-shadow] outline-none focus-visible:ring-[3px] disabled:cursor-not-allowed disabled:opacity-50 border-input dark:bg-input/30 shadow-xs size-4 mt-0.5"
+                        id="plan-basic"
+                        tabindex="-1"
+                        data-radix-id""
+                >
+                </button>
+                <input aria-hidden="true"
+                       tabindex="-1"
+                       type="radio"
+                       value="basic"
+                       name="plan"
+                       style="position: absolute; pointer-events: none; opacity: 0; margin: 0px; transform: translateX(-100%); width: 16px; height: 16px;"
+                >
+                <div>
+                  <label data-slot="label"
+                         class="flex items-center select-none group-data-[disabled=true]:pointer-events-none group-data-[disabled=true]:opacity-50 peer-disabled:cursor-not-allowed peer-disabled:opacity-50 gap-0.5 text-sm font-medium leading-none"
+                         for="plan-basic"
+                  >
+                    Basic Plan
+                  </label>
+                  <p class="text-muted-foreground mt-1 text-sm">
+                    $10/month
+                  </p>
+                </div>
+              </div>
+              <div class="flex gap-2 items-center">
+                <button type="button"
+                        role="radio"
+                        aria-checked="false"
+                        data-state="unchecked"
+                        value="pro"
+                        data-slot="radio-group-item"
+                        class="text-primary focus-visible:border-ring focus-visible:ring-ring/50 aria-invalid:ring-destructive/20 dark:aria-invalid:ring-destructive/40 aria-invalid:border-destructive aspect-square shrink-0 rounded-full border transition-[color,box-shadow] outline-none focus-visible:ring-[3px] disabled:cursor-not-allowed disabled:opacity-50 border-input dark:bg-input/30 shadow-xs size-4 mt-0.5"
+                        id="plan-pro"
+                        tabindex="-1"
+                        data-radix-id""
+                >
+                </button>
+                <input aria-hidden="true"
+                       tabindex="-1"
+                       type="radio"
+                       value="pro"
+                       name="plan"
+                       style="position: absolute; pointer-events: none; opacity: 0; margin: 0px; transform: translateX(-100%); width: 16px; height: 16px;"
+                >
+                <div>
+                  <label data-slot="label"
+                         class="flex items-center select-none group-data-[disabled=true]:pointer-events-none group-data-[disabled=true]:opacity-50 peer-disabled:cursor-not-allowed peer-disabled:opacity-50 gap-0.5 text-sm font-medium leading-none"
+                         for="plan-pro"
+                  >
+                    Pro Plan
+                  </label>
+                  <p class="text-muted-foreground mt-1 text-sm">
+                    $20/month
+                  </p>
+                </div>
+              </div>
+              <div class="flex gap-2 items-center">
+                <button type="button"
+                        role="radio"
+                        aria-checked="false"
+                        data-state="unchecked"
+                        value="enterprise"
+                        data-slot="radio-group-item"
+                        class="text-primary focus-visible:border-ring focus-visible:ring-ring/50 aria-invalid:ring-destructive/20 dark:aria-invalid:ring-destructive/40 aria-invalid:border-destructive aspect-square shrink-0 rounded-full border transition-[color,box-shadow] outline-none focus-visible:ring-[3px] disabled:cursor-not-allowed disabled:opacity-50 border-input dark:bg-input/30 shadow-xs size-4 mt-0.5"
+                        id="plan-enterprise"
+                        tabindex="-1"
+                        data-radix-id""
+                >
+                </button>
+                <input aria-hidden="true"
+                       tabindex="-1"
+                       type="radio"
+                       value="enterprise"
+                       name="plan"
+                       style="position: absolute; pointer-events: none; opacity: 0; margin: 0px; transform: translateX(-100%); width: 16px; height: 16px;"
+                >
+                <div>
+                  <label data-slot="label"
+                         class="flex items-center select-none group-data-[disabled=true]:pointer-events-none group-data-[disabled=true]:opacity-50 peer-disabled:cursor-not-allowed peer-disabled:opacity-50 gap-0.5 text-sm font-medium leading-none"
+                         for="plan-enterprise"
+                  >
+                    Enterprise Plan
+                  </label>
+                  <p class="text-muted-foreground mt-1 text-sm">
+                    $50/month
+                  </p>
+                </div>
+              </div>
+            </div>
           </div>
         </div>
       </div>
@@ -870,7 +913,11 @@ exports[`Components/input/RadioGroup WithFormIntegration smoke-test 1`] = `
 `;
 
 exports[`Components/input/RadioGroup WithOrientation smoke-test 1`] = `
-<div class="space-y-2">
+<div role="group"
+     data-slot="field"
+     data-orientation="vertical"
+     class="group/field flex w-full gap-3 data-[invalid=true]:text-destructive flex-col [&amp;&gt;*]:w-full [&amp;&gt;.sr-only]:w-auto"
+>
   <label data-slot="label"
          class="flex items-center text-sm leading-none font-medium select-none group-data-[disabled=true]:pointer-events-none group-data-[disabled=true]:opacity-50 peer-disabled:cursor-not-allowed peer-disabled:opacity-50 gap-0.5"
          for="_r_ID_"
@@ -980,7 +1027,11 @@ exports[`Components/input/RadioGroup WithOrientation smoke-test 1`] = `
 `;
 
 exports[`Components/input/RadioGroup WithPosition smoke-test 1`] = `
-<div class="space-y-2">
+<div role="group"
+     data-slot="field"
+     data-orientation="vertical"
+     class="group/field flex w-full gap-3 data-[invalid=true]:text-destructive flex-col [&amp;&gt;*]:w-full [&amp;&gt;.sr-only]:w-auto"
+>
   <label data-slot="label"
          class="flex items-center text-sm leading-none font-medium select-none group-data-[disabled=true]:pointer-events-none group-data-[disabled=true]:opacity-50 peer-disabled:cursor-not-allowed peer-disabled:opacity-50 gap-0.5"
          for="_r_ID_"
@@ -1091,7 +1142,11 @@ exports[`Components/input/RadioGroup WithPosition smoke-test 1`] = `
 
 exports[`Components/input/RadioGroup WithSize smoke-test 1`] = `
 <div class="space-y-8">
-  <div class="space-y-2">
+  <div role="group"
+       data-slot="field"
+       data-orientation="vertical"
+       class="group/field flex w-full gap-3 data-[invalid=true]:text-destructive flex-col [&amp;&gt;*]:w-full [&amp;&gt;.sr-only]:w-auto"
+  >
     <label data-slot="label"
            class="flex items-center text-sm leading-none font-medium select-none group-data-[disabled=true]:pointer-events-none group-data-[disabled=true]:opacity-50 peer-disabled:cursor-not-allowed peer-disabled:opacity-50 gap-0.5"
            for="_r_ID_"
@@ -1157,7 +1212,11 @@ exports[`Components/input/RadioGroup WithSize smoke-test 1`] = `
       </div>
     </div>
   </div>
-  <div class="space-y-2">
+  <div role="group"
+       data-slot="field"
+       data-orientation="vertical"
+       class="group/field flex w-full gap-3 data-[invalid=true]:text-destructive flex-col [&amp;&gt;*]:w-full [&amp;&gt;.sr-only]:w-auto"
+  >
     <label data-slot="label"
            class="flex items-center text-sm leading-none font-medium select-none group-data-[disabled=true]:pointer-events-none group-data-[disabled=true]:opacity-50 peer-disabled:cursor-not-allowed peer-disabled:opacity-50 gap-0.5"
            for="_r_ID_"
@@ -1223,7 +1282,11 @@ exports[`Components/input/RadioGroup WithSize smoke-test 1`] = `
       </div>
     </div>
   </div>
-  <div class="space-y-2">
+  <div role="group"
+       data-slot="field"
+       data-orientation="vertical"
+       class="group/field flex w-full gap-3 data-[invalid=true]:text-destructive flex-col [&amp;&gt;*]:w-full [&amp;&gt;.sr-only]:w-auto"
+  >
     <label data-slot="label"
            class="flex items-center text-sm leading-none font-medium select-none group-data-[disabled=true]:pointer-events-none group-data-[disabled=true]:opacity-50 peer-disabled:cursor-not-allowed peer-disabled:opacity-50 gap-0.5"
            for="_r_ID_"
@@ -1293,7 +1356,11 @@ exports[`Components/input/RadioGroup WithSize smoke-test 1`] = `
 `;
 
 exports[`Components/input/RadioGroup WithVariant smoke-test 1`] = `
-<div class="space-y-2">
+<div role="group"
+     data-slot="field"
+     data-orientation="vertical"
+     class="group/field flex w-full gap-3 data-[invalid=true]:text-destructive flex-col [&amp;&gt;*]:w-full [&amp;&gt;.sr-only]:w-auto"
+>
   <label data-slot="label"
          class="flex items-center text-sm leading-none font-medium select-none group-data-[disabled=true]:pointer-events-none group-data-[disabled=true]:opacity-50 peer-disabled:cursor-not-allowed peer-disabled:opacity-50 gap-0.5"
          for="_r_ID_"

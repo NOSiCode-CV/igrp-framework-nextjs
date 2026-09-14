@@ -2,7 +2,11 @@
 
 exports[`Components/Input/Search Default smoke-test 1`] = `
 <div class="container my-10 mx-auto p-4 border rounded-lg shadow-sm">
-  <div class="*:not-first:mt-2">
+  <div role="group"
+       data-slot="field"
+       data-orientation="vertical"
+       class="group/field flex w-full gap-3 data-[invalid=true]:text-destructive flex-col [&amp;&gt;*]:w-full [&amp;&gt;.sr-only]:w-auto"
+  >
     <label data-slot="label"
            class="flex items-center text-sm leading-none font-medium select-none group-data-[disabled=true]:pointer-events-none group-data-[disabled=true]:opacity-50 peer-disabled:cursor-not-allowed peer-disabled:opacity-50 gap-0.5"
            for="search"
@@ -58,9 +62,10 @@ exports[`Components/Input/Search Default smoke-test 1`] = `
              stroke-width="2"
              stroke-linecap="round"
              stroke-linejoin="round"
-             class="lucide lucide-arrow-right size-4"
+             class="lucide lucide-arrow-right"
              aria-hidden="true"
              id="ArrowRight"
+             data-icon="inline-start"
         >
           <path d="M5 12h14">
           </path>
@@ -76,7 +81,11 @@ exports[`Components/Input/Search Default smoke-test 1`] = `
 
 exports[`Components/Input/Search Disabled smoke-test 1`] = `
 <div class="container my-10 mx-auto p-4 border rounded-lg shadow-sm">
-  <div class="*:not-first:mt-2">
+  <div role="group"
+       data-slot="field"
+       data-orientation="vertical"
+       class="group/field flex w-full gap-3 data-[invalid=true]:text-destructive flex-col [&amp;&gt;*]:w-full [&amp;&gt;.sr-only]:w-auto"
+  >
     <label data-slot="label"
            class="flex items-center text-sm leading-none font-medium select-none group-data-[disabled=true]:pointer-events-none group-data-[disabled=true]:opacity-50 peer-disabled:cursor-not-allowed peer-disabled:opacity-50 gap-0.5"
            for="search"
@@ -133,9 +142,10 @@ exports[`Components/Input/Search Disabled smoke-test 1`] = `
              stroke-width="2"
              stroke-linecap="round"
              stroke-linejoin="round"
-             class="lucide lucide-arrow-right size-4"
+             class="lucide lucide-arrow-right"
              aria-hidden="true"
              id="ArrowRight"
+             data-icon="inline-start"
         >
           <path d="M5 12h14">
           </path>
@@ -150,7 +160,11 @@ exports[`Components/Input/Search Disabled smoke-test 1`] = `
 
 exports[`Components/Input/Search HalfWidth smoke-test 1`] = `
 <div class="container my-10 mx-auto p-4 border rounded-lg shadow-sm">
-  <div class="*:not-first:mt-2">
+  <div role="group"
+       data-slot="field"
+       data-orientation="vertical"
+       class="group/field flex w-full gap-3 data-[invalid=true]:text-destructive flex-col [&amp;&gt;*]:w-full [&amp;&gt;.sr-only]:w-auto"
+  >
     <label data-slot="label"
            class="flex items-center text-sm leading-none font-medium select-none group-data-[disabled=true]:pointer-events-none group-data-[disabled=true]:opacity-50 peer-disabled:cursor-not-allowed peer-disabled:opacity-50 gap-0.5"
            for="search"
@@ -206,9 +220,10 @@ exports[`Components/Input/Search HalfWidth smoke-test 1`] = `
              stroke-width="2"
              stroke-linecap="round"
              stroke-linejoin="round"
-             class="lucide lucide-arrow-right size-4"
+             class="lucide lucide-arrow-right"
              aria-hidden="true"
              id="ArrowRight"
+             data-icon="inline-start"
         >
           <path d="M5 12h14">
           </path>
@@ -223,7 +238,11 @@ exports[`Components/Input/Search HalfWidth smoke-test 1`] = `
 
 exports[`Components/Input/Search Required smoke-test 1`] = `
 <div class="container my-10 mx-auto p-4 border rounded-lg shadow-sm">
-  <div class="*:not-first:mt-2">
+  <div role="group"
+       data-slot="field"
+       data-orientation="vertical"
+       class="group/field flex w-full gap-3 data-[invalid=true]:text-destructive flex-col [&amp;&gt;*]:w-full [&amp;&gt;.sr-only]:w-auto"
+  >
     <label data-slot="label"
            class="flex items-center text-sm leading-none font-medium select-none group-data-[disabled=true]:pointer-events-none group-data-[disabled=true]:opacity-50 peer-disabled:cursor-not-allowed peer-disabled:opacity-50 after:content-['*'] after:text-destructive gap-0.5"
            for="search"
@@ -279,9 +298,10 @@ exports[`Components/Input/Search Required smoke-test 1`] = `
              stroke-width="2"
              stroke-linecap="round"
              stroke-linejoin="round"
-             class="lucide lucide-arrow-right size-4"
+             class="lucide lucide-arrow-right"
              aria-hidden="true"
              id="ArrowRight"
+             data-icon="inline-start"
         >
           <path d="M5 12h14">
           </path>
@@ -296,7 +316,11 @@ exports[`Components/Input/Search Required smoke-test 1`] = `
 
 exports[`Components/Input/Search WithCustomIcons smoke-test 1`] = `
 <div class="container my-10 mx-auto p-4 border rounded-lg shadow-sm">
-  <div class="*:not-first:mt-2">
+  <div role="group"
+       data-slot="field"
+       data-orientation="vertical"
+       class="group/field flex w-full gap-3 data-[invalid=true]:text-destructive flex-col [&amp;&gt;*]:w-full [&amp;&gt;.sr-only]:w-auto"
+  >
     <label data-slot="label"
            class="flex items-center text-sm leading-none font-medium select-none group-data-[disabled=true]:pointer-events-none group-data-[disabled=true]:opacity-50 peer-disabled:cursor-not-allowed peer-disabled:opacity-50 gap-0.5"
            for="search"
@@ -366,9 +390,10 @@ exports[`Components/Input/Search WithCustomIcons smoke-test 1`] = `
              stroke-width="2"
              stroke-linecap="round"
              stroke-linejoin="round"
-             class="lucide lucide-mail size-4"
+             class="lucide lucide-mail"
              aria-hidden="true"
              id="Mail"
+             data-icon="inline-start"
         >
           <path d="m22 7-8.991 5.727a2 2 0 0 1-2.009 0L2 7">
           </path>
@@ -389,7 +414,11 @@ exports[`Components/Input/Search WithCustomIcons smoke-test 1`] = `
 
 exports[`Components/Input/Search WithDefaultValue smoke-test 1`] = `
 <div class="container my-10 mx-auto p-4 border rounded-lg shadow-sm">
-  <div class="*:not-first:mt-2">
+  <div role="group"
+       data-slot="field"
+       data-orientation="vertical"
+       class="group/field flex w-full gap-3 data-[invalid=true]:text-destructive flex-col [&amp;&gt;*]:w-full [&amp;&gt;.sr-only]:w-auto"
+  >
     <label data-slot="label"
            class="flex items-center text-sm leading-none font-medium select-none group-data-[disabled=true]:pointer-events-none group-data-[disabled=true]:opacity-50 peer-disabled:cursor-not-allowed peer-disabled:opacity-50 gap-0.5"
            for="search"
@@ -444,9 +473,10 @@ exports[`Components/Input/Search WithDefaultValue smoke-test 1`] = `
              stroke-width="2"
              stroke-linecap="round"
              stroke-linejoin="round"
-             class="lucide lucide-arrow-right size-4"
+             class="lucide lucide-arrow-right"
              aria-hidden="true"
              id="ArrowRight"
+             data-icon="inline-start"
         >
           <path d="M5 12h14">
           </path>
@@ -461,7 +491,11 @@ exports[`Components/Input/Search WithDefaultValue smoke-test 1`] = `
 
 exports[`Components/Input/Search WithError smoke-test 1`] = `
 <div class="container my-10 mx-auto p-4 border rounded-lg shadow-sm">
-  <div class="*:not-first:mt-2">
+  <div role="group"
+       data-slot="field"
+       data-orientation="vertical"
+       class="group/field flex w-full gap-3 data-[invalid=true]:text-destructive flex-col [&amp;&gt;*]:w-full [&amp;&gt;.sr-only]:w-auto"
+  >
     <label data-slot="label"
            class="flex items-center text-sm leading-none font-medium select-none group-data-[disabled=true]:pointer-events-none group-data-[disabled=true]:opacity-50 peer-disabled:cursor-not-allowed peer-disabled:opacity-50 gap-0.5"
            for="search"
@@ -517,9 +551,10 @@ exports[`Components/Input/Search WithError smoke-test 1`] = `
              stroke-width="2"
              stroke-linecap="round"
              stroke-linejoin="round"
-             class="lucide lucide-arrow-right size-4"
+             class="lucide lucide-arrow-right"
              aria-hidden="true"
              id="ArrowRight"
+             data-icon="inline-start"
         >
           <path d="M5 12h14">
           </path>
@@ -528,11 +563,12 @@ exports[`Components/Input/Search WithError smoke-test 1`] = `
         </svg>
       </button>
     </div>
-    <p class="text-destructive text-xs mt-1"
-       role="alert"
+    <div role="alert"
+         data-slot="field-error"
+         class="text-destructive text-sm font-normal"
     >
       Invalid search query
-    </p>
+    </div>
   </div>
 </div>
 `;
@@ -540,22 +576,25 @@ exports[`Components/Input/Search WithError smoke-test 1`] = `
 exports[`Components/Input/Search WithFormValidation smoke-test 1`] = `
 <div class="container my-10 mx-auto p-4 border rounded-lg shadow-sm">
   <form class="space-y-4">
-    <div class="*:not-first:mt-2">
-      <label data-slot="label"
-             class="flex items-center text-sm leading-none font-medium select-none group-data-[disabled=true]:pointer-events-none group-data-[disabled=true]:opacity-50 peer-disabled:cursor-not-allowed peer-disabled:opacity-50 after:content-['*'] after:text-destructive gap-0.5"
-             for="searchQuery"
+    <div data-slot="form-item"
+         class="flex flex-col gap-2"
+    >
+      <label data-slot="form-label"
+             class="flex items-center text-sm leading-none font-medium select-none group-data-[disabled=true]:pointer-events-none group-data-[disabled=true]:opacity-50 peer-disabled:cursor-not-allowed peer-disabled:opacity-50 data-[error=true]:text-destructive gap-0.5 after:content-[&quot;*&quot;] after:text-destructive"
+             data-error="false"
+             for="_r_ID_-form-item"
       >
         Search
       </label>
       <div class="relative py-2">
-        <input data-slot="input"
+        <input data-slot="form-control"
                class="file:text-foreground placeholder:text-muted-foreground selection:bg-primary selection:text-primary-foreground dark:bg-input/30 border-input h-9 min-w-0 rounded-md border bg-transparent px-3 shadow-xs transition-[color,box-shadow] file:inline-flex file:h-7 file:border-0 file:bg-transparent file:text-sm file:font-medium disabled:pointer-events-none disabled:cursor-not-allowed disabled:opacity-50 md:text-sm focus-visible:border-ring focus-visible:ring-ring/50 focus-visible:ring-2 aria-invalid:ring-destructive/20 dark:aria-invalid:ring-destructive/40 aria-invalid:border-destructive [&amp;::-webkit-search-cancel-button]:appearance-none [&amp;::-webkit-search-decoration]:appearance-none [&amp;::-webkit-search-results-button]:appearance-none [&amp;::-webkit-search-results-decoration]:appearance-none peer py-3 text-sm outline-hidden flex w-full items-center ps-6.5 pe-9"
-               id="searchQuery"
                required
                aria-required="true"
-               aria-invalid="false"
-               aria-describedby="searchQuery-helper"
                placeholder="Type and press enter or click search..."
+               id="_r_ID_-form-item"
+               aria-describedby="_r_ID_-form-item-description"
+               aria-invalid="false"
                type="search"
                value
                name="searchQuery"
@@ -597,9 +636,10 @@ exports[`Components/Input/Search WithFormValidation smoke-test 1`] = `
                stroke-width="2"
                stroke-linecap="round"
                stroke-linejoin="round"
-               class="lucide lucide-arrow-right size-4"
+               class="lucide lucide-arrow-right"
                aria-hidden="true"
                id="ArrowRight"
+               data-icon="inline-start"
           >
             <path d="M5 12h14">
             </path>
@@ -608,9 +648,9 @@ exports[`Components/Input/Search WithFormValidation smoke-test 1`] = `
           </svg>
         </button>
       </div>
-      <p class="text-muted-foreground text-xs mt-1"
-         role="note"
-         aria-live="polite"
+      <p data-slot="form-description"
+         id="_r_ID_-form-item-description"
+         class="text-muted-foreground text-sm"
       >
         Enter at least 2 characters
       </p>
@@ -627,7 +667,11 @@ exports[`Components/Input/Search WithFormValidation smoke-test 1`] = `
 
 exports[`Components/Input/Search WithHelperText smoke-test 1`] = `
 <div class="container my-10 mx-auto p-4 border rounded-lg shadow-sm">
-  <div class="*:not-first:mt-2">
+  <div role="group"
+       data-slot="field"
+       data-orientation="vertical"
+       class="group/field flex w-full gap-3 data-[invalid=true]:text-destructive flex-col [&amp;&gt;*]:w-full [&amp;&gt;.sr-only]:w-auto"
+  >
     <label data-slot="label"
            class="flex items-center text-sm leading-none font-medium select-none group-data-[disabled=true]:pointer-events-none group-data-[disabled=true]:opacity-50 peer-disabled:cursor-not-allowed peer-disabled:opacity-50 gap-0.5"
            for="search"
@@ -683,9 +727,10 @@ exports[`Components/Input/Search WithHelperText smoke-test 1`] = `
              stroke-width="2"
              stroke-linecap="round"
              stroke-linejoin="round"
-             class="lucide lucide-arrow-right size-4"
+             class="lucide lucide-arrow-right"
              aria-hidden="true"
              id="ArrowRight"
+             data-icon="inline-start"
         >
           <path d="M5 12h14">
           </path>
@@ -694,9 +739,8 @@ exports[`Components/Input/Search WithHelperText smoke-test 1`] = `
         </svg>
       </button>
     </div>
-    <p class="text-muted-foreground text-xs mt-1"
-       role="note"
-       aria-live="polite"
+    <p data-slot="field-description"
+       class="text-muted-foreground text-sm leading-normal font-normal group-has-data-[orientation=horizontal]/field:text-balance last:mt-0 nth-last-2:-mt-1 [[data-variant=legend]+&amp;]:-mt-1.5 [&amp;&gt;a:hover]:text-primary [&amp;&gt;a]:underline [&amp;&gt;a]:underline-offset-4"
     >
       Search for products by name or code
     </p>
@@ -706,7 +750,11 @@ exports[`Components/Input/Search WithHelperText smoke-test 1`] = `
 
 exports[`Components/Input/Search WithoutIcon smoke-test 1`] = `
 <div class="container my-10 mx-auto p-4 border rounded-lg shadow-sm">
-  <div class="*:not-first:mt-2">
+  <div role="group"
+       data-slot="field"
+       data-orientation="vertical"
+       class="group/field flex w-full gap-3 data-[invalid=true]:text-destructive flex-col [&amp;&gt;*]:w-full [&amp;&gt;.sr-only]:w-auto"
+  >
     <label data-slot="label"
            class="flex items-center text-sm leading-none font-medium select-none group-data-[disabled=true]:pointer-events-none group-data-[disabled=true]:opacity-50 peer-disabled:cursor-not-allowed peer-disabled:opacity-50 gap-0.5"
            for="search"
@@ -738,9 +786,10 @@ exports[`Components/Input/Search WithoutIcon smoke-test 1`] = `
              stroke-width="2"
              stroke-linecap="round"
              stroke-linejoin="round"
-             class="lucide lucide-arrow-right size-4"
+             class="lucide lucide-arrow-right"
              aria-hidden="true"
              id="ArrowRight"
+             data-icon="inline-start"
         >
           <path d="M5 12h14">
           </path>
@@ -755,7 +804,11 @@ exports[`Components/Input/Search WithoutIcon smoke-test 1`] = `
 
 exports[`Components/Input/Search WithoutSubmitButton smoke-test 1`] = `
 <div class="container my-10 mx-auto p-4 border rounded-lg shadow-sm">
-  <div class="*:not-first:mt-2">
+  <div role="group"
+       data-slot="field"
+       data-orientation="vertical"
+       class="group/field flex w-full gap-3 data-[invalid=true]:text-destructive flex-col [&amp;&gt;*]:w-full [&amp;&gt;.sr-only]:w-auto"
+  >
     <label data-slot="label"
            class="flex items-center text-sm leading-none font-medium select-none group-data-[disabled=true]:pointer-events-none group-data-[disabled=true]:opacity-50 peer-disabled:cursor-not-allowed peer-disabled:opacity-50 gap-0.5"
            for="search"

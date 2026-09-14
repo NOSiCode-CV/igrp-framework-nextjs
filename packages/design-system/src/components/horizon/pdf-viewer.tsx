@@ -13,6 +13,7 @@ import { IGRPIcon } from "./icon"
 import { IGRPLoadingSpinner } from "./loading-spinner"
 import { IGRPHeadline } from "./typography/headline"
 import { IGRPText } from "./typography/text"
+import { useIGRPi18n } from "../../i18n"
 
 /**
  * Document item shape for PDF viewer.
@@ -127,14 +128,15 @@ function IGRPPdfViewer({
   labelButtonCancel = "Close",
   labelButtonNewTab = "Open in new tab",
   inlineHeight = "50vh",
-  loadErrorLabel = "Could not load PDF",
+  loadErrorLabel,
   loadTimeoutMs = 8000,
   viewerPreference = "google",
-  notFoundLabel = "No File found",
+  notFoundLabel,
   name,
   id,
   className,
 }: IGRPPdfViewerProps) {
+  const i18n = useIGRPi18n()
   const [selectedDocument, setSelectedDocument] = useState<IGRPDocumentItem>()
   const [isModalOpen, setIsModalOpen] = useState(false)
   const [loading, setLoading] = useState(true)
@@ -167,7 +169,7 @@ function IGRPPdfViewer({
       <div className={cn("flex items-center gap-3")} id={ref}>
         <IGRPIcon iconName="FileX2" className={cn(IGRPColors.solid.destructive.text)} />
         <IGRPText as="p" size="default" weight="semibold" spacing="none">
-          {notFoundLabel}
+          {notFoundLabel ?? i18n.pdfViewer.notFound}
         </IGRPText>
       </div>
     )
@@ -181,7 +183,7 @@ function IGRPPdfViewer({
           document={document}
           labelButtonNewTab={labelButtonNewTab}
           height={inlineHeight}
-          loadErrorLabel={loadErrorLabel}
+          loadErrorLabel={loadErrorLabel ?? i18n.pdfViewer.loadError}
           loadTimeoutMs={loadTimeoutMs}
           viewerPreference={viewerPreference}
         />
@@ -202,7 +204,7 @@ function IGRPPdfViewer({
             document={selectedDocument || null}
             labelButtonCancel={labelButtonCancel}
             labelButtonNewTab={labelButtonNewTab}
-            loadErrorLabel={loadErrorLabel}
+            loadErrorLabel={loadErrorLabel ?? i18n.pdfViewer.loadError}
             loadTimeoutMs={loadTimeoutMs}
             viewerPreference={viewerPreference}
           />
@@ -282,10 +284,11 @@ function IGRPPdfViewerInline({
   document,
   labelButtonNewTab = "Open in new tab",
   height = "50vh",
-  loadErrorLabel = "Could not load PDF",
+  loadErrorLabel,
   loadTimeoutMs = 8000,
   viewerPreference = "auto",
 }: IGRPPdfViewerInlineProps) {
+  const i18n = useIGRPi18n()
   const { fileUrl, title, author, date } = document
   const [state, dispatch] = useReducer(pdfViewerReducer, viewerPreference, getInitialPdfViewerState)
   const { frameStatus, viewerEngine } = state
@@ -363,7 +366,7 @@ function IGRPPdfViewerInline({
             )}
           >
             <IGRPIcon iconName="AlertCircle" className={cn("text-destructive")} />
-            <span>{loadErrorLabel}</span>
+            <span>{loadErrorLabel ?? i18n.pdfViewer.loadError}</span>
           </div>
         )}
 
@@ -410,10 +413,11 @@ function IGRPPdfViewerModal({
   onClose,
   labelButtonCancel,
   labelButtonNewTab,
-  loadErrorLabel = "Could not load PDF",
+  loadErrorLabel,
   loadTimeoutMs = 8000,
   viewerPreference = "auto",
 }: IGRPPdfViewerModalProps) {
+  const i18n = useIGRPi18n()
   const [state, dispatch] = useReducer(pdfViewerReducer, viewerPreference, getInitialPdfViewerState)
   const { frameStatus, viewerEngine } = state
 
@@ -489,7 +493,7 @@ function IGRPPdfViewerModal({
                 )}
               >
                 <IGRPIcon iconName="AlertCircle" className={cn("text-destructive")} />
-                <span>{loadErrorLabel}</span>
+                <span>{loadErrorLabel ?? i18n.pdfViewer.loadError}</span>
               </div>
             )}
 

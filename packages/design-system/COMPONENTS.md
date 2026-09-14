@@ -80,10 +80,6 @@ These primitives are intentionally divergent. **Audit them when refreshing from 
 - **`Popover`** — `PopoverContent` exposes a `container` prop forwarded to `PopoverPrimitive.Portal` and adds `motion-reduce:animate-none` to the enter/exit animations. Reason: required so popovers (combobox, date picker) can portal into a parent `Dialog`/`Drawer` instead of `document.body`, which otherwise breaks focus management.
 - **`RadioGroup`** — `RadioGroupItem` adopts a `radioItemVariants` CVA with `variant` (`default` / `outline` / `soft`) and `size` (`sm` / `md` / `lg`) props, and the inner `CircleIcon` indicator scales (`size-1.5` / `size-2` / `size-2.5`) to match the chosen size. Reason: pre-dating this catalogue; preserved as-is.
 
-## Experimental layer
-
-Components under `src/components/experimental/` (currently: `progress/`, `sheet/`, `timeline/`) are **excluded from the SWC build** and not exported. They are work-in-progress and may break without a changeset. Promotion criteria: stable API, tests in `design-system-storybook`, no `experimental/` imports from other layers.
-
 ## Adding a new component — decision flow
 
 1. Does the shadcn skill component table list it? → Add as a Primitive first (copy from upstream via the shadcn CLI's `--diff` flow against a scratch directory).

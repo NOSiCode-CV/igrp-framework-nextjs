@@ -3,6 +3,7 @@
 import { Suspense, lazy } from "react"
 
 import { cn } from "../../../../lib/utils"
+import { Skeleton } from "../../../primitives/skeleton"
 import type { IGRPRadialBarChartProps } from "./radial-chart-inner"
 
 const IGRPRadialBarChartLazy = lazy(() => import("./radial-chart-inner").then((m) => ({ default: m.default })))
@@ -13,15 +14,7 @@ const IGRPRadialBarChartLazy = lazy(() => import("./radial-chart-inner").then((m
  */
 function IGRPRadialBarChart(props: IGRPRadialBarChartProps) {
   return (
-    <Suspense
-      fallback={
-        <div
-          className={cn(
-            "w-full overflow-hidden animate-pulse motion-reduce:animate-none rounded-lg bg-muted min-h-[200px] aspect-video",
-          )}
-        />
-      }
-    >
+    <Suspense fallback={<Skeleton className={cn("aspect-video min-h-[200px] w-full rounded-lg", props.className)} />}>
       <IGRPRadialBarChartLazy {...props} />
     </Suspense>
   )

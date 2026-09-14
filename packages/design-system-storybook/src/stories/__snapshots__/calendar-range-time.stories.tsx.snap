@@ -7,13 +7,12 @@ exports[`Components/Calendar/RangeTime Basic smoke-test 1`] = `
       <div data-slot="calendar"
            class="w-fit rdp-root bg-background group/calendar p-3 [--cell-size:--spacing(8)] in-data-[slot=card-content]:bg-transparent in-data-[slot=popover-content]:bg-transparent rtl:**:[.rdp-button\\_next&gt;svg]:rotate-180 rtl:**:[.rdp-button\\_previous&gt;svg]:rotate-180 rounded-lg border shadow-sm"
            id="_r_ID_"
-           lang="en-US"
            data-mode="range"
            data-multiple-months="true"
       >
         <div class="flex gap-4 flex-col md:flex-row relative rdp-months">
           <nav class="flex items-center gap-1 w-full absolute top-0 inset-x-0 justify-between rdp-nav"
-               aria-label="Navigation bar"
+               aria-label
           >
             <button type="button"
                     class="inline-flex items-center justify-center gap-1.5 whitespace-nowrap rounded-md text-sm font-medium transition-[color,box-shadow] disabled:pointer-events-none disabled:opacity-50 [&amp;_svg]:pointer-events-none [&amp;_svg:not([class*='size-'])]:size-4 shrink-0 [&amp;_svg]:shrink-0 outline-none focus-visible:border-ring focus-visible:ring-ring/50 focus-visible:ring-[3px] aria-invalid:ring-destructive/20 dark:aria-invalid:ring-destructive/40 aria-invalid:border-destructive hover:bg-accent dark:hover:bg-accent/50 hover:text-accent-foreground has-data-[icon=inline-end]:pr-2 has-data-[icon=inline-start]:pl-2 size-(--cell-size) aria-disabled:opacity-50 p-0 select-none rdp-button_previous"

@@ -18,6 +18,7 @@ import {
   AlertDialogTitle,
 } from "../primitives/alert-dialog"
 import { IGRPIcon, type IGRPIconName } from "./icon"
+import { useIGRPi18n } from "../../i18n"
 
 /**
  * Props for the IGRPAlertDialog component.
@@ -80,8 +81,8 @@ function IGRPAlertDialog({
   descriptionClassName,
   children,
   footerClassName,
-  actionLabel = "Continue",
-  cancelLabel = "Cancel",
+  actionLabel,
+  cancelLabel,
   onAction,
   onCancel,
   showCancel = true,
@@ -90,6 +91,7 @@ function IGRPAlertDialog({
   name,
   id,
 }: IGRPAlertDialogProps) {
+  const i18n = useIGRPi18n()
   const _id = useId()
   const ref = name ?? id ?? _id
 
@@ -145,11 +147,11 @@ function IGRPAlertDialog({
               >
                 {showCancel && (
                   <AlertDialogCancel onClick={handleCancel} {...cancelProps}>
-                    {cancelLabel}
+                    {cancelLabel ?? i18n.alertDialog.cancel}
                   </AlertDialogCancel>
                 )}
                 <AlertDialogAction onClick={handleAction} className={actionClassName} {...actionProps}>
-                  {actionLabel}
+                  {actionLabel ?? i18n.alertDialog.action}
                 </AlertDialogAction>
               </AlertDialogFooter>
             </div>

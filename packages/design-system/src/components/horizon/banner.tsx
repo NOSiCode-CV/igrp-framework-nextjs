@@ -4,6 +4,7 @@ import { X } from "lucide-react"
 import { useState } from "react"
 import { cn } from "../../lib/utils"
 import { Button } from "../primitives/button"
+import { useIGRPi18n } from "../../i18n"
 
 interface IGRPBannerProps {
   variant: "cookie" | "announcement"
@@ -22,14 +23,15 @@ function IGRPBanner({
   variant,
   message,
   learnMoreHref,
-  learnMoreLabel = "Learn more",
-  acceptLabel = "Accept",
-  declineLabel = "Decline",
+  learnMoreLabel,
+  acceptLabel,
+  declineLabel,
   onAccept,
   onDecline,
   onDismiss,
   className,
 }: IGRPBannerProps) {
+  const i18n = useIGRPi18n()
   const [visible, setVisible] = useState(true)
 
   if (!visible) return null
@@ -53,7 +55,7 @@ function IGRPBanner({
               onDecline?.()
             }}
           >
-            {declineLabel}
+            {declineLabel ?? i18n.banner.decline}
           </Button>
           <Button
             size="sm"
@@ -62,7 +64,7 @@ function IGRPBanner({
               onAccept?.()
             }}
           >
-            {acceptLabel}
+            {acceptLabel ?? i18n.banner.accept}
           </Button>
         </div>
       </div>
@@ -87,13 +89,13 @@ function IGRPBanner({
             target="_blank"
             rel="noopener noreferrer"
           >
-            {learnMoreLabel}
+            {learnMoreLabel ?? i18n.banner.learnMore}
           </a>
         )}
       </p>
       <button
         type="button"
-        aria-label="Dismiss"
+        aria-label={i18n.banner.dismiss}
         className="shrink-0 rounded-sm opacity-70 hover:opacity-100 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2"
         onClick={() => {
           setVisible(false)

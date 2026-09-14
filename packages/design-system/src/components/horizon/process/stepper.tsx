@@ -9,6 +9,7 @@ import { ScrollArea } from "../../primitives/scroll-area"
 import { Stepper, StepperItem, StepperTitle, StepperTrigger } from "../../primitives/stepper"
 import { Button } from "../../primitives/button"
 import { Tooltip, TooltipTrigger, TooltipContent } from "../../primitives/tooltip"
+import { useIGRPi18n } from "../../../i18n"
 
 function getScrollBehavior(): ScrollBehavior {
   if (typeof window !== "undefined" && window.matchMedia("(prefers-reduced-motion: reduce)").matches) {
@@ -119,6 +120,7 @@ function IGRPStepperProcess({
   stepperClassName,
   stepperItemsClassName,
 }: IGRPStepperProcessProps) {
+  const i18n = useIGRPi18n()
   const _id = useId()
   const ref = id ?? _id
   const scrollAreaRef = useRef<HTMLDivElement>(null)
@@ -214,7 +216,7 @@ function IGRPStepperProcess({
               onValueChange={handleStepChange}
               className={cn(stepperClassName)}
               role="navigation"
-              aria-label="Process steps"
+              aria-label={i18n.stepper.processSteps}
             >
               {steps.map(({ step, stepKey, title, isCompleted, isActive }, index) => {
                 const isFirst = index === 0
@@ -291,7 +293,7 @@ function IGRPStepperProcess({
             size="icon-sm"
             className={cn("size-6 shrink-0 mb-3")}
             onClick={scrollLeft}
-            aria-label="Scroll to previous steps"
+            aria-label={i18n.stepper.scrollPrevious}
             type="button"
             disabled={!canScrollLeft}
           >
@@ -303,7 +305,7 @@ function IGRPStepperProcess({
             size="icon-sm"
             className={cn("size-6 shrink-0 mb-3")}
             onClick={scrollRight}
-            aria-label="Scroll to next steps"
+            aria-label={i18n.stepper.scrollNext}
             type="button"
             disabled={!canScrollRight}
           >

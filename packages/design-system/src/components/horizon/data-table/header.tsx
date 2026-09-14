@@ -14,6 +14,7 @@ import {
 } from "../../primitives/dropdown-menu"
 
 import { cn } from "../../../lib/utils"
+import { useIGRPi18n } from "../../../i18n"
 
 /**
  * Props for data table header components.
@@ -37,6 +38,7 @@ function IGRPDataTableHeaderSortToggle<T>({
   className,
   ...props
 }: Omit<IGRPDataTableHeaderProps<T>, "table"> & React.ComponentProps<"div">) {
+  const i18n = useIGRPi18n()
   const canSort = column.getCanSort()
   const isSorted = column.getIsSorted()
 
@@ -54,7 +56,7 @@ function IGRPDataTableHeaderSortToggle<T>({
           variant="ghost"
           onClick={(e) => column.toggleSorting(undefined, e.shiftKey)}
           className={cn("px-0 py-0 has-[>svg]:px-0 data-[state=open]:bg-accent")}
-          title="Ordenar"
+          title={i18n.dataTable.sortLabel}
           size="sm"
         >
           <span>{title}</span>
@@ -81,6 +83,7 @@ function IGRPDataTableHeaderSortDropdown<T>({
   className,
   ...props
 }: Omit<IGRPDataTableHeaderProps<T>, "table"> & React.ComponentProps<"div">) {
+  const i18n = useIGRPi18n()
   const canSort = column.getCanSort()
   const isSorted = column.getIsSorted()
 
@@ -108,13 +111,13 @@ function IGRPDataTableHeaderSortDropdown<T>({
             </Button>
           </DropdownMenuTrigger>
           <DropdownMenuContent align="start">
-            <DropdownMenuItem onClick={handleSortAsc} aria-label="Sort ascending">
+            <DropdownMenuItem onClick={handleSortAsc} aria-label={i18n.dataTable.sortAscending}>
               <ArrowUp className={cn("text-muted-foreground/70 size-3.5")} />
-              Asc
+              {i18n.dataTable.sortAscendingShort}
             </DropdownMenuItem>
-            <DropdownMenuItem onClick={handleSortDesc} aria-label="Sort descending">
+            <DropdownMenuItem onClick={handleSortDesc} aria-label={i18n.dataTable.sortDescending}>
               <ArrowDown className={cn("text-muted-foreground/70 size-3.5")} />
-              Desc
+              {i18n.dataTable.sortDescendingShort}
             </DropdownMenuItem>
             <DropdownMenuSeparator />
           </DropdownMenuContent>
@@ -132,11 +135,12 @@ function IGRPDataTableHeaderRowsSelect<T>({
   className,
   ...props
 }: Omit<IGRPDataTableHeaderProps<T>, "column" | "title"> & React.ComponentProps<typeof Checkbox>) {
+  const i18n = useIGRPi18n()
   return (
     <Checkbox
       checked={table.getIsAllPageRowsSelected() || (table.getIsSomePageRowsSelected() && "indeterminate")}
       onCheckedChange={(value) => table.toggleAllRowsSelected?.(!!value)}
-      aria-label="Select all"
+      aria-label={i18n.dataTable.selectAll}
       className={className}
       {...props}
     />

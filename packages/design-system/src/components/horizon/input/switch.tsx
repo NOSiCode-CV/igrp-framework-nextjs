@@ -8,6 +8,7 @@ import type { IGRPInputProps } from "../../../types"
 import { Switch } from "../../primitives/switch"
 import { IGRPFormField } from "../form/form-field"
 import { IGRPLabel } from "../label"
+import { Field, FieldDescription, FieldError } from "../../primitives/field"
 
 /**
  * Props for the IGRPSwitch component.
@@ -42,7 +43,7 @@ function IGRPSwitch({
 
   if (!formContext) {
     return (
-      <div className={cn("*:not-first:mt-2")}>
+      <Field>
         <div className={cn("flex items-center gap-2")}>
           <Switch
             id={fielName}
@@ -64,23 +65,10 @@ function IGRPSwitch({
           )}
         </div>
 
-        {helperText && !error && (
-          <p
-            id={`${fielName}-helper`}
-            className={cn("text-muted-foreground mt-2 text-xs")}
-            role="region"
-            aria-live="polite"
-          >
-            {helperText}
-          </p>
-        )}
+        {helperText && !error && <FieldDescription id={`${fielName}-helper`}>{helperText}</FieldDescription>}
 
-        {error && (
-          <p id={`${fielName}-error`} className={cn("text-destructive mt-2 text-xs")} role="alert">
-            {error}
-          </p>
-        )}
-      </div>
+        {error && <FieldError id={`${fielName}-error`}>{error}</FieldError>}
+      </Field>
     )
   }
 

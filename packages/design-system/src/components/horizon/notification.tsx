@@ -1,11 +1,15 @@
 "use client"
 
+// IGRPNotificationVariants is the component's CVA object and part of the public API.
+/* eslint-disable react-refresh/only-export-components */
+
 import { cva, type VariantProps } from "class-variance-authority"
 import { useId } from "react"
 
 import { cn } from "../../lib/utils"
 import { IGRPButton } from "./button"
 import { IGRPIcon, type IGRPIconName } from "./icon"
+import { useIGRPi18n } from "../../i18n"
 
 const IGRPNotificationVariants = cva("bg-background z-50 rounded-md p-4 shadow-lg", {
   variants: {
@@ -79,6 +83,7 @@ function IGRPNotification({
   customActions,
   id,
 }: IGRPNotificationProps) {
+  const i18n = useIGRPi18n()
   const _id = useId()
   const ref = id ?? _id
 
@@ -127,7 +132,7 @@ function IGRPNotification({
             <IGRPButton
               variant="ghost"
               className={cn("group -my-1.5 -me-2 size-8 shrink-0 p-0 hover:bg-transparent")}
-              aria-label="Close notification"
+              aria-label={i18n.notification.close}
               iconName="X"
               showIcon={true}
               size="icon"

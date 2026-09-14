@@ -13,7 +13,7 @@ exports[`Components/Banner Announcement smoke-test 1`] = `
     </a>
   </p>
   <button type="button"
-          aria-label="Dismiss"
+          aria-label="Dispensar"
           class="shrink-0 rounded-sm opacity-70 hover:opacity-100 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2"
   >
     <svg xmlns="http://www.w3.org/2000/svg"
@@ -43,7 +43,7 @@ exports[`Components/Banner AnnouncementNoLink smoke-test 1`] = `
     Scheduled maintenance this weekend. Some services may be unavailable.
   </p>
   <button type="button"
-          aria-label="Dismiss"
+          aria-label="Dispensar"
           class="shrink-0 rounded-sm opacity-70 hover:opacity-100 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2"
   >
     <svg xmlns="http://www.w3.org/2000/svg"

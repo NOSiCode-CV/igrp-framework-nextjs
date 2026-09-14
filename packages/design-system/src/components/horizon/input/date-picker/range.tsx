@@ -16,6 +16,7 @@ import { Popover, PopoverContent, PopoverTrigger } from "../../../primitives/pop
 import { IGRPLabel } from "../../label"
 import { type IGRPCalendarRangeProps } from "../../calendar/range"
 import { DD_MM_YYYY } from "../../../../lib/constants"
+import { Field } from "../../../primitives/field"
 
 /** @internal Popover + calendar + clear button for date range. */
 function DatePickerRangeField({
@@ -51,11 +52,7 @@ function DatePickerRangeField({
           id={fieldName}
           variant="outline"
           disabled={disabledPicker}
-          className={cn(
-            "group w-full shadow-xs justify-start",
-            "bg-background hover:bg-accent border-input dark:bg-input/30 dark:border-input dark:hover:bg-input/50",
-            !value?.from && "text-muted-foreground",
-          )}
+          className={cn("group w-full shadow-xs justify-start", !value?.from && "text-muted-foreground")}
         >
           <CalendarIcon
             className="text-muted-foreground/80 group-hover:text-foreground shrink-0 transition-colors"
@@ -164,7 +161,7 @@ function IGRPDatePickerRange({
   }
 
   return (
-    <div className={cn("*:not-first:mt-2", className)}>
+    <Field className={className}>
       {label && <IGRPLabel label={label} required={required} id={name} className={labelClassName} />}
 
       <DatePickerRangeField
@@ -177,7 +174,7 @@ function IGRPDatePickerRange({
       />
 
       {helperText && <p className={cn("text-sm text-muted-foreground mt-1")}>{helperText}</p>}
-    </div>
+    </Field>
   )
 }
 

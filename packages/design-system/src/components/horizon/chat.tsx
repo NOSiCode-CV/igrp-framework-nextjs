@@ -8,6 +8,7 @@ import { ScrollArea } from "../primitives/scroll-area"
 import { IGRPButton } from "./button"
 import { IGRPInputText } from "./input/text"
 import { IGRPIcon } from "./icon"
+import { useIGRPi18n } from "../../i18n"
 
 /**
  * Chat message shape for IGRPChat.
@@ -48,6 +49,7 @@ interface IGRPChatProps {
  * Sends user messages to the endpoint and displays responses.
  */
 function IGRPChat({ apiEndpoint, labelDescription = "Ask me anything!", name, id }: IGRPChatProps) {
+  const i18n = useIGRPi18n()
   const [messages, setMessages] = useState<IGRPChatMessage[]>([])
   const [input, setInput] = useState("")
   const [isLoading, setIsLoading] = useState(false)
@@ -145,9 +147,9 @@ function IGRPChat({ apiEndpoint, labelDescription = "Ask me anything!", name, id
             >
               <div className={cn("shrink-0 rounded-full p-2", message.role === "user" ? "bg-primary" : "bg-muted")}>
                 {message.role === "user" ? (
-                  <IGRPIcon iconName="User" className={cn("h-4 w-4 text-muted-foreground")} />
+                  <IGRPIcon iconName="User" className={cn("size-4 text-muted-foreground")} />
                 ) : (
-                  <IGRPIcon iconName="Bot" className={cn("h-4 w-4")} />
+                  <IGRPIcon iconName="Bot" className={cn("size-4")} />
                 )}
               </div>
 
@@ -193,7 +195,7 @@ function IGRPChat({ apiEndpoint, labelDescription = "Ask me anything!", name, id
         <IGRPInputText
           value={input}
           onChange={(e) => setInput(e.target.value)}
-          placeholder="Type your message…"
+          placeholder={i18n.chat.messagePlaceholder}
           disabled={isLoading}
           className={cn("flex-1")}
           type="text"
@@ -201,10 +203,10 @@ function IGRPChat({ apiEndpoint, labelDescription = "Ask me anything!", name, id
         <IGRPButton
           type="submit"
           disabled={isLoading}
-          aria-label="Send message"
+          aria-label={i18n.chat.sendMessage}
           size="icon"
           iconName={isLoading ? "Loader" : "Send"}
-          iconClassName={cn(isLoading ? "animate-spin motion-reduce:animate-none h-4 w-4" : "h-4 w-4")}
+          iconClassName={cn(isLoading ? "animate-spin motion-reduce:animate-none size-4" : "size-4")}
         />
       </form>
     </div>

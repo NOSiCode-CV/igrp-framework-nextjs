@@ -7,6 +7,7 @@ import { useRouter } from "next/navigation"
 import { Button } from "../../primitives/button"
 import { IGRPIcon, type IGRPIconName } from "../icon"
 import { cn } from "../../../lib/utils"
+import { useIGRPi18n } from "../../../i18n"
 
 /** @internal Base props shared by all back button variants. */
 type IGRPPageHeaderBackButtonPropsBase = Omit<
@@ -60,7 +61,7 @@ type IGRPPageHeaderBackButtonProps =
 function IGRPPageHeaderBackButton({
   url,
   iconName = "ArrowLeft",
-  ariaLabel = "Go back",
+  ariaLabel,
   useBrowserBack = false,
   showText = false,
   text,
@@ -70,6 +71,8 @@ function IGRPPageHeaderBackButton({
   onClick,
   ...buttonProps
 }: IGRPPageHeaderBackButtonProps) {
+  const i18n = useIGRPi18n()
+  const resolvedAriaLabel = ariaLabel ?? i18n.pageHeader.back
   const router = useRouter()
 
   const handleBrowserBack = useCallback(
@@ -85,7 +88,7 @@ function IGRPPageHeaderBackButton({
   const iconElement = <IGRPIcon iconName={iconName} aria-hidden="true" className={cn("shrink-0")} />
 
   const textElement = showText ? (
-    <span className={cn(size === "icon" && "sr-only", "ml-2")}>{text || ariaLabel}</span>
+    <span className={cn(size === "icon" && "sr-only", "ml-2")}>{text || resolvedAriaLabel}</span>
   ) : null
 
   const buttonSize = showText && size === "icon" ? "default" : size
@@ -97,7 +100,7 @@ function IGRPPageHeaderBackButton({
       <Button
         variant={variant}
         size={buttonSize}
-        aria-label={ariaLabel}
+        aria-label={resolvedAriaLabel}
         onClick={handleBrowserBack}
         className={buttonClassName}
         {...buttonProps}
@@ -114,7 +117,7 @@ function IGRPPageHeaderBackButton({
       <Button
         variant={variant}
         size={buttonSize}
-        aria-label={ariaLabel}
+        aria-label={resolvedAriaLabel}
         onClick={onClick}
         className={buttonClassName}
         {...buttonProps}
@@ -129,7 +132,7 @@ function IGRPPageHeaderBackButton({
   if (url) {
     return (
       <Button variant={variant} size={buttonSize} asChild className={buttonClassName} {...buttonProps}>
-        <Link href={url} aria-label={ariaLabel}>
+        <Link href={url} aria-label={resolvedAriaLabel}>
           {iconElement}
           {textElement}
         </Link>
@@ -142,7 +145,7 @@ function IGRPPageHeaderBackButton({
     <Button
       variant={variant}
       size={buttonSize}
-      aria-label={ariaLabel}
+      aria-label={resolvedAriaLabel}
       onClick={handleBrowserBack}
       className={buttonClassName}
       {...buttonProps}

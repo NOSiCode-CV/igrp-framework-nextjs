@@ -7,6 +7,7 @@ import { cn } from "../../../lib/utils"
 import type { IGRPInputProps } from "../../../types"
 import { Input } from "../../primitives/input"
 import { FormControl, FormDescription, FormField, FormItem, FormLabel, FormMessage } from "../../primitives/form"
+import { Field, FieldDescription, FieldError } from "../../primitives/field"
 import { IGRPIcon } from "../icon"
 import { IGRPLabel } from "../label"
 
@@ -106,7 +107,7 @@ function IGRPInputText({
   }
 
   return (
-    <div className={cn("*:not-first:mt-2", className)}>
+    <Field className={className} data-invalid={error ? true : undefined}>
       {label && <IGRPLabel label={label} className={labelClassName} required={required} id={fieldName} />}
 
       <div className={cn("relative")}>
@@ -133,23 +134,10 @@ function IGRPInputText({
         )}
       </div>
 
-      {helperText && !error && (
-        <p
-          id={`${fieldName}-helper`}
-          className={cn("text-muted-foreground mt-2 text-xs")}
-          role="region"
-          aria-live="polite"
-        >
-          {helperText}
-        </p>
-      )}
+      {helperText && !error && <FieldDescription id={`${fieldName}-helper`}>{helperText}</FieldDescription>}
 
-      {error && (
-        <p id={`${fieldName}-error`} className={cn("text-destructive mt-2 text-xs")} role="alert">
-          {error}
-        </p>
-      )}
-    </div>
+      {error && <FieldError id={`${fieldName}-error`}>{error}</FieldError>}
+    </Field>
   )
 }
 

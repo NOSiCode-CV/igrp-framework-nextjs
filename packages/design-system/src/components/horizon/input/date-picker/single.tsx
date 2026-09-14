@@ -23,6 +23,8 @@ import { Popover, PopoverContent, PopoverTrigger } from "../../../primitives/pop
 import { IGRPButton } from "../../button"
 import { IGRPCalendarSingle, type IGRPCalendarSingleProps } from "../../calendar/single"
 import { IGRPLabel } from "../../label"
+import { Field, FieldDescription } from "../../../primitives/field"
+import { useIGRPi18n } from "../../../../i18n"
 
 /** @internal Popover + calendar + clear button. */
 function DatePickerSingleField({
@@ -48,6 +50,7 @@ function DatePickerSingleField({
   ariaInvalid?: boolean
   ariaDescribedBy?: string
 }) {
+  const i18n = useIGRPi18n()
   const displayText = value ? format(value, dateFormat) : placeholder
 
   return (
@@ -60,11 +63,7 @@ function DatePickerSingleField({
             disabled={disabledPicker || disabled}
             aria-invalid={ariaInvalid || undefined}
             aria-describedby={ariaDescribedBy}
-            className={cn(
-              "group w-full justify-between font-normal shadow-xs",
-              "bg-background hover:bg-accent border-input dark:bg-input/30 dark:border-input dark:hover:bg-input/50",
-              !value && "text-muted-foreground",
-            )}
+            className={cn("group w-full justify-between font-normal shadow-xs", !value && "text-muted-foreground")}
           >
             <span className={cn("truncate", !value && "text-muted-foreground")}>{displayText}</span>
             {!value && (
@@ -89,10 +88,10 @@ function DatePickerSingleField({
         <IGRPButton
           onClick={() => onChange(undefined)}
           variant="link"
-          className={cn("size-2 absolute right-2 top-1/2 h-3 w-3 -translate-y-1/2 text-muted-foreground z-100")}
+          className={cn("absolute right-2 top-1/2 size-3 -translate-y-1/2 text-muted-foreground z-100")}
           size="icon"
           iconName="X"
-          aria-label="Clear"
+          aria-label={i18n.datePicker.clear}
           disabled={disabledPicker}
           showIcon
         />
@@ -166,7 +165,7 @@ function IGRPDatePickerSingle({
 
   if (formContext) {
     return (
-      <div className={cn("*:not-first:mt-2", className)}>
+      <Field className={className}>
         <FormField
           control={formContext.control}
           name={fieldName}
@@ -193,12 +192,12 @@ function IGRPDatePickerSingle({
             </FormItem>
           )}
         />
-      </div>
+      </Field>
     )
   }
 
   return (
-    <div className={cn("*:not-first:mt-2", className)}>
+    <Field className={className}>
       {label && <IGRPLabel label={label} className={labelClassName} required={required} id={name} />}
       <DatePickerSingleField
         {...fieldProps}
@@ -209,17 +208,8 @@ function IGRPDatePickerSingle({
         }}
       />
 
-      {helperText && (
-        <p
-          id={`${fieldName}-helper`}
-          className={cn("text-muted-foreground mt-2 text-xs")}
-          role="region"
-          aria-live="polite"
-        >
-          {helperText}
-        </p>
-      )}
-    </div>
+      {helperText && <FieldDescription id={`${fieldName}-helper`}>{helperText}</FieldDescription>}
+    </Field>
   )
 }
 

@@ -3,6 +3,7 @@
 import { Suspense, lazy } from "react"
 
 import { cn } from "../../../../lib/utils"
+import { Skeleton } from "../../../primitives/skeleton"
 import type { IGRPHorizontalBarChartProps } from "./horizontal-chart-inner"
 
 const IGRPHorizontalBarChartLazy = lazy(() => import("./horizontal-chart-inner").then((m) => ({ default: m.default })))
@@ -13,15 +14,7 @@ const IGRPHorizontalBarChartLazy = lazy(() => import("./horizontal-chart-inner")
  */
 function IGRPHorizontalBarChart(props: IGRPHorizontalBarChartProps) {
   return (
-    <Suspense
-      fallback={
-        <div
-          className={cn(
-            "w-full overflow-hidden animate-pulse motion-reduce:animate-none rounded-lg bg-muted min-h-[200px] aspect-video",
-          )}
-        />
-      }
-    >
+    <Suspense fallback={<Skeleton className={cn("aspect-video min-h-[200px] w-full rounded-lg", props.className)} />}>
       <IGRPHorizontalBarChartLazy {...props} />
     </Suspense>
   )

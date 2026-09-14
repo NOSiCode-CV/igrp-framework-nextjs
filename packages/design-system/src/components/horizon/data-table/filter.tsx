@@ -18,11 +18,12 @@ import {
 import { Input } from "../../primitives/input"
 import { Calendar } from "../../primitives/calendar"
 import { Popover, PopoverContent, PopoverTrigger } from "../../primitives/popover"
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "../../primitives/select"
+import { Select, SelectContent, SelectGroup, SelectItem, SelectTrigger, SelectValue } from "../../primitives/select"
 import { Separator } from "../../primitives/separator"
 import { IGRPBadge } from "../badge"
 import { IGRPButton } from "../button"
 import { IGRPIcon, type IGRPIconName } from "../icon"
+import { useIGRPi18n } from "../../../i18n"
 
 /**
  * Base props for data table filter components.
@@ -107,8 +108,9 @@ function IGRPDataTableFilterDropdown<TData>({
   className,
   disabled,
   showFilter = false,
-  notFoundText = "No Item found.",
+  notFoundText,
 }: IGRPDataTableFilterDropdownProps<TData>) {
+  const i18n = useIGRPi18n()
   const id = useId()
   const listId = useId()
   const [open, setOpen] = useState(false)
@@ -147,7 +149,7 @@ function IGRPDataTableFilterDropdown<TData>({
           <Command>
             {showFilter && <CommandInput placeholder={placeholder} className={cn("h-8")} />}
             <CommandList id={listId}>
-              <CommandEmpty>{notFoundText}</CommandEmpty>
+              <CommandEmpty>{notFoundText ?? i18n.combobox.notFound}</CommandEmpty>
               <CommandGroup>
                 {options?.map((opt) => (
                   <CommandItem
@@ -158,7 +160,7 @@ function IGRPDataTableFilterDropdown<TData>({
                     <span className={opt.color}>{opt.label}</span>
                     <IGRPIcon
                       iconName="Check"
-                      className={cn("ml-auto w-4 h-4", selectedValue === opt.value ? "opacity-100" : "opacity-0")}
+                      className={cn("ml-auto size-4", selectedValue === opt.value ? "opacity-100" : "opacity-0")}
                     />
                   </CommandItem>
                 ))}
@@ -195,11 +197,8 @@ function IGRPDataTableFilterFaceted<TData>({
   const id = useId()
 
   const facets = column?.getFacetedUniqueValues()
-  // eslint-disable-next-line react-hooks/exhaustive-deps
-  const selectedValues = useMemo(
-    () => new Set<string | number>((column?.getFilterValue() as (string | number)[]) ?? []),
-    [column?.getFilterValue()],
-  )
+  const filterValue = column?.getFilterValue() as (string | number)[] | undefined
+  const selectedValues = useMemo(() => new Set<string | number>(filterValue ?? []), [filterValue])
 
   const handleSelect = useCallback(
     (value: string | number) => {
@@ -294,10 +293,12 @@ function IGRPDataTableFilterInput<TData>({
   placeholder = "Pesquisar...",
   className,
   iconName = "ListFilter",
-  ariaLabel = "Filtrar",
+  ariaLabel,
 }: IGRPDataTableFilterInputProps<TData>) {
+  const i18n = useIGRPi18n()
   const id = useId()
   const inputRef = useRef<HTMLInputElement>(null)
+  const resolvedAriaLabel = ariaLabel ?? i18n.dataTable.filterLabel
 
   return (
     <div className={cn("relative")}>
@@ -309,7 +310,7 @@ function IGRPDataTableFilterInput<TData>({
         name={`text-${id}`}
         ref={inputRef}
         type="text"
-        aria-label={ariaLabel}
+        aria-label={resolvedAriaLabel}
       />
       <div
         className={cn(
@@ -323,7 +324,7 @@ function IGRPDataTableFilterInput<TData>({
           className={cn(
             "absolute inset-y-0 inset-e-0 flex h-full w-9 items-center justify-center rounded-e-md text-muted-foreground/80 transition-[color,box-shadow] outline-none hover:text-foreground focus:z-10 focus-visible:border-ring focus-visible:ring-[3px] focus-visible:ring-ring/50 disabled:pointer-events-none disabled:cursor-not-allowed disabled:opacity-50",
           )}
-          aria-label="Limpar Filtro"
+          aria-label={i18n.dataTable.clearFilter}
           onClick={() => {
             column?.setFilterValue("")
             if (inputRef.current) {
@@ -406,12 +407,14 @@ function IGRPDataTableFilterSelect<TData>({
         <SelectValue placeholder={placeholder} />
       </SelectTrigger>
       <SelectContent className={cn(className)}>
-        <SelectItem value="all">{placeholder}</SelectItem>
-        {options?.map((opt) => (
-          <SelectItem key={String(opt.value)} value={String(opt.value)}>
-            {opt.label}
-          </SelectItem>
-        ))}
+        <SelectGroup>
+          <SelectItem value="all">{placeholder}</SelectItem>
+          {options?.map((opt) => (
+            <SelectItem key={String(opt.value)} value={String(opt.value)}>
+              {opt.label}
+            </SelectItem>
+          ))}
+        </SelectGroup>
       </SelectContent>
     </Select>
   )

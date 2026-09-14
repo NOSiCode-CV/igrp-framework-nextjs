@@ -21,7 +21,6 @@ For every rename the format is **`old name` → `new name`** (same for props).
 
 | Old                                        | New                                | Note                                                                                              |
 | ------------------------------------------ | ---------------------------------- | ------------------------------------------------------------------------------------------------- |
-| `components/exprimental/`                  | `components/experimental/`         | Typo fixed; folder is now **empty** + build-excluded (`--ignore "**/components/experimental/**"`) |
 | `horizon/proccess/`                        | `horizon/process/`                 | Typo fixed; junk files (`_stepper`, `stepper copy`) removed                                       |
 | `horizon/loading-spiner.tsx`               | `horizon/loading-spinner.tsx`      | Filename typo fixed (export name unchanged)                                                       |
 | `horizon/charts/radial.d.ts` (single file) | `horizon/charts/radial/` (folder)  | Split into a folder                                                                               |

@@ -15,6 +15,7 @@ import {
   SelectValue,
 } from "../../primitives/select"
 import { IGRPLabel } from "../label"
+import { Field } from "../../primitives/field"
 
 /**
  * Props for the IGRPInputAddOn component.
@@ -63,7 +64,7 @@ function IGRPInputAddOn({
   }, [defaultValue, selectValue, onSelectValueChange])
 
   return (
-    <div className={cn("*:not-first:mt-2", classNameGlobal)}>
+    <Field className={classNameGlobal}>
       {label && <IGRPLabel label={label} className={classNameLabel} id={ref} />}
 
       <div className={cn("flex rounded-md border overflow-hidden")}>
@@ -105,7 +106,7 @@ function IGRPInputAddOn({
           {...props}
         />
       </div>
-    </div>
+    </Field>
   )
 }
 

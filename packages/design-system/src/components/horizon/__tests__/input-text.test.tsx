@@ -12,12 +12,14 @@ describe("IGRPInputText (standalone, no form context)", () => {
     expect(input).toHaveAttribute("name", "email")
   })
 
-  it("renders helper text with role=region and aria-live=polite when no error", () => {
+  it("renders helper text as a plain field description when no error", () => {
     render(<IGRPInputText name="email" label="Email" helperText="We never share your email." />)
 
     const helper = screen.getByText("We never share your email.")
-    expect(helper).toHaveAttribute("role", "region")
-    expect(helper).toHaveAttribute("aria-live", "polite")
+    expect(helper).toHaveAttribute("data-slot", "field-description")
+    // Static helper text must not be a landmark or a live region.
+    expect(helper).not.toHaveAttribute("role")
+    expect(helper).not.toHaveAttribute("aria-live")
   })
 
   it("renders error message with role=alert and wires aria-invalid + aria-describedby", () => {

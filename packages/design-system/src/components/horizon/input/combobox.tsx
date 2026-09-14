@@ -22,6 +22,8 @@ import { IGRPFormField } from "../form/form-field"
 import { IGRPLabel } from "../label"
 import { IGRPIcon } from "../icon"
 import { IGRPCircleFull } from "../icon/custom"
+import { Field } from "../../primitives/field"
+import { useIGRPi18n } from "../../../i18n"
 
 /** @internal Options list for combobox dropdown. */
 function ComboboxOptionsList({
@@ -62,7 +64,7 @@ function ComboboxOptionsList({
                 </div>
                 <IGRPIcon
                   iconName="Check"
-                  className={cn("ml-auto w-4 h-4 opacity-0", isSelected(value, currentValue) && "opacity-100")}
+                  className={cn("ml-auto size-4 opacity-0", isSelected(value, currentValue) && "opacity-100")}
                 />
               </CommandItem>
             ))}
@@ -121,6 +123,7 @@ function ComboboxField({
   isSelected: (optValue: string, currentValue: string | string[]) => boolean
   iconName?: string
 }) {
+  const i18n = useIGRPi18n()
   return (
     <div className={cn("w-full min-w-0 max-w-full")}>
       <Popover open={open} onOpenChange={setOpen} modal>
@@ -138,7 +141,7 @@ function ComboboxField({
             )}
             iconName="ChevronsUpDown"
             iconPlacement="end"
-            iconClassName="ml-2 h-4 w-4 shrink-0 opacity-50"
+            iconClassName="ml-2 size-4 shrink-0 opacity-50"
             showIcon
           >
             {setSelectValue(currentValue, onChangeHandler)}
@@ -148,8 +151,8 @@ function ComboboxField({
           <Command>
             {showSearch && (
               <div className={cn("relative p-2")}>
-                <CommandInput placeholder={searchText} className={cn("h-8")} />
-                <CommandEmpty>{selectLabel}</CommandEmpty>
+                <CommandInput placeholder={searchText ?? i18n.combobox.searchPlaceholder} className={cn("h-8")} />
+                <CommandEmpty>{selectLabel ?? i18n.combobox.notFound}</CommandEmpty>
               </div>
             )}
             <CommandList id={listId}>
@@ -235,9 +238,9 @@ function IGRPCombobox({
   labelClassName,
   errorText,
   helperText,
-  selectLabel = "No Item found.",
+  selectLabel,
   showSearch = true,
-  searchText = "Search...",
+  searchText,
   showGroup,
   showStatus,
   showIcon = false,
@@ -412,7 +415,7 @@ function IGRPCombobox({
   }
 
   return (
-    <div className={cn("*:not-first:mt-2 w-full min-w-0 max-w-full")} id={name}>
+    <Field className={cn("w-full min-w-0 max-w-full")} id={name}>
       {label && <IGRPLabel label={label} className={labelClassName} required={required} id={fieldName} />}
 
       <ComboboxField
@@ -442,7 +445,7 @@ function IGRPCombobox({
       />
 
       <IGRPFieldDescription error={errorText} helperText={helperText} />
-    </div>
+    </Field>
   )
 }
 

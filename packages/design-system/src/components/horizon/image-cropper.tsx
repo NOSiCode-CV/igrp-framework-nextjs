@@ -7,6 +7,7 @@ import { Button } from "../primitives/button"
 import { Cropper, CropperCropArea, CropperDescription, CropperImage } from "../primitives/cropper"
 import { Slider } from "../primitives/slider"
 import { cn } from "../../lib/utils"
+import { useIGRPi18n } from "../../i18n"
 
 // ─── Types ───────────────────────────────────────────────────────────────────
 
@@ -72,9 +73,10 @@ export function IGRPImageCropper({
   variant = "basic",
   onCrop,
   onError,
-  cropLabel = "Crop",
+  cropLabel,
   className,
 }: IGRPImageCropperProps) {
+  const i18n = useIGRPi18n()
   const [croppedAreaPixels, setCroppedAreaPixels] = useState<Area | null>(null)
   const [zoom, setZoom] = useState(1)
   const [croppedImageUrl, setCroppedImageUrl] = useState<string | null>(null)
@@ -143,7 +145,7 @@ export function IGRPImageCropper({
                 max={3}
                 step={0.01}
                 onValueChange={(value) => setZoom(value[0] ?? 1)}
-                aria-label="Zoom slider"
+                aria-label={i18n.imageCropper.zoomSlider}
               />
               <output className={cn("block w-10 shrink-0 text-right text-sm font-medium tabular-nums text-foreground")}>
                 {parseFloat(zoom.toFixed(1))}x
@@ -152,7 +154,7 @@ export function IGRPImageCropper({
           )}
 
           <Button onClick={handleCrop} disabled={!croppedAreaPixels} className={cn("w-full")}>
-            {cropLabel}
+            {cropLabel ?? i18n.imageCropper.crop}
           </Button>
         </div>
 

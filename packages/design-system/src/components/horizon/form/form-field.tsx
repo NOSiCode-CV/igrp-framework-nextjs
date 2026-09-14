@@ -54,7 +54,7 @@ function IGRPFormField({
       control={control}
       name={name}
       render={({ field, fieldState }) => (
-        <div className={cn("*:not-first:mt-2", className)}>
+        <div className={className}>
           <FormItem>
             <div className={cn("flex flex-col gap-2", isToggle && "flex-row items-center")}>
               {label && (

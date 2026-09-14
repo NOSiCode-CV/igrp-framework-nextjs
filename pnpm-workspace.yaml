@@ -7,3 +7,5 @@ allowBuilds:
   esbuild: true
   sharp: true
   unrs-resolver: true
+patchedDependencies:
+  storybook@10.6.0: patches/storybook@10.6.0.patch

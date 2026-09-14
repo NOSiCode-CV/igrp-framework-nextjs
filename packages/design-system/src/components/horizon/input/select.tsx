@@ -30,6 +30,8 @@ import {
 import { IGRPButton } from "../button"
 import { IGRPIcon } from "../icon"
 import { IGRPLabel } from "../label"
+import { Field, FieldDescription } from "../../primitives/field"
+import { useIGRPi18n } from "../../../i18n"
 
 type SelectState = {
   selected: string
@@ -259,25 +261,21 @@ function IGRPSelect({
 
   if (!formContext) {
     return (
-      <div className={cn("space-y-2", className)}>
+      <Field className={className} data-invalid={error ? true : undefined}>
         <IGRPLabel id={fieldName} className={labelClassName} required={required} label={label} />
 
         <div className={cn("relative")}>
           <IGRPSelectField {...selectFieldProps} value={state.selected} onChange={handleChange} triggerId={fieldName} />
         </div>
 
-        {helperText && !error && (
-          <p className={cn("text-muted-foreground text-xs mt-1")} role="note">
-            {helperText}
-          </p>
-        )}
+        {helperText && !error && <FieldDescription>{helperText}</FieldDescription>}
 
         {error && (
           <p className={cn("text-destructive text-xs mt-1")} role="alert">
             {error}
           </p>
         )}
-      </div>
+      </Field>
     )
   }
 
@@ -324,43 +322,47 @@ const IGRPSelectSearch = memo(
     search: string
     setSearch: Dispatch<SetStateAction<string>>
     onResetSearch: () => void
-  }) => (
-    <div className={cn("flex items-center gap-2 pb-3 mb-2 border-b")}>
-      <div className={cn("relative flex-1")}>
-        <IGRPIcon
-          iconName="Search"
-          className={cn("absolute left-2 top-1/2 h-3 w-3 -translate-y-1/2 text-muted-foreground")}
-        />
-        <Input
-          type="text"
-          className={cn("pl-7 h-8 text-sm")}
-          placeholder="Search..."
-          aria-label="Search options"
-          value={search}
-          onChange={(e) => setSearch(e.target.value.trimStart())}
-        />
+  }) => {
+    const i18n = useIGRPi18n()
+
+    return (
+      <div className={cn("flex items-center gap-2 pb-3 mb-2 border-b")}>
+        <div className={cn("relative flex-1")}>
+          <IGRPIcon
+            iconName="Search"
+            className={cn("absolute left-2 top-1/2 size-3 -translate-y-1/2 text-muted-foreground")}
+          />
+          <Input
+            type="text"
+            className={cn("pl-7 h-8 text-sm")}
+            placeholder={i18n.inputSelect.searchPlaceholder}
+            aria-label={i18n.inputSelect.searchLabel}
+            value={search}
+            onChange={(e) => setSearch(e.target.value.trimStart())}
+          />
+        </div>
+        {search && (
+          <IGRPButton
+            onClick={onResetSearch}
+            aria-label={i18n.inputSelect.clearSearch}
+            variant="ghost"
+            size="icon"
+            className={cn("size-8 p-0")}
+            iconName="X"
+          />
+        )}
       </div>
-      {search && (
-        <IGRPButton
-          onClick={onResetSearch}
-          aria-label="Clear search"
-          variant="ghost"
-          size="icon"
-          className={cn("h-8 w-8 p-0")}
-          iconName="X"
-        />
-      )}
-    </div>
-  ),
+    )
+  },
 )
 
 const IGRPSelectItem = memo(({ item, showStatus }: { item: IGRPOptionsProps; showStatus: boolean }) => (
   <SelectItem value={String(item.value)} className={cn("flex items-center gap-2 truncate")}>
     <div className={cn("flex items-center gap-2 w-full")}>
-      {showStatus && <Circle className={cn("h-2 w-2 fill-current", igrpColorText(item.status || "primary"))} />}
+      {showStatus && <Circle className={cn("size-2 fill-current", igrpColorText(item.status || "primary"))} />}
       {item.image && (
         <Image
-          className={cn("h-5 w-5 rounded")}
+          className={cn("size-5 rounded")}
           src={item.image || "/placeholder.svg"}
           alt={item.label}
           width={20}
@@ -457,7 +459,7 @@ const IGRPSelectTrigger = ({
         {showStatus && (
           <Circle
             className={cn(
-              "h-2 w-2 fill-current",
+              "size-2 fill-current",
               igrpColorText(options.find((o) => o.value === value)?.status || "primary"),
             )}
           />

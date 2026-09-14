@@ -21,7 +21,7 @@ Header, sidebar, menus, nav-user, breadcrumbs, command search, theme selector, a
 - UI comes from `@igrp/igrp-framework-react-design-system` (Horizon first). **Don't reinvent DS components here.**
 - Respect `@igrp/framework-next-auth` entry points — import `/client` or `/session`, never `/dist/`.
 - **No server-side code.** Server pieces belong in `@igrp/framework-next`.
-- Build: SWC + Babel with React Compiler + `tailwind:build` prebuild. `pnpm build:next-ui`. Escape: `build:without_reactcompiler`.
+- Build: SWC (transpile-only, file-per-module) → Babel/React Compiler over `dist/` → `tsc --emitDeclarationOnly`. CSS under `src/` (`index.css`, `tokens.css`) is copied verbatim by the `cpy` step — there is no Tailwind prebuild. `pnpm build:next-ui`. Escape: `build:without_reactcompiler`.
 
 ## Review stance
 

@@ -20,7 +20,7 @@ exports[`Components/MenuNavigation BadgeColors smoke-test 1`] = `
           </div>
           <div data-slot="badge"
                id="_r_ID_"
-               class="inline-flex items-center justify-center rounded-full shadow-none border px-3 py-0.5 font-medium w-fit whitespace-nowrap shrink-0 gap-1 [&amp;&gt;svg]:pointer-events-none focus-visible:border-ring focus-visible:ring-ring/50 focus-visible:ring-[3px] aria-invalid:ring-destructive/20 dark:aria-invalid:ring-destructive/40 aria-invalid:border-destructive transition-[color,box-shadow] overflow-hidden text-xs [&amp;&gt;svg]:size-2.5 text-primary-foreground bg-primary border-primary"
+               class="inline-flex items-center justify-center rounded-full shadow-none border px-3 py-0.5 font-medium w-fit whitespace-nowrap shrink-0 gap-1 [&amp;&gt;svg]:pointer-events-none focus-visible:border-ring focus-visible:ring-ring/50 focus-visible:ring-[3px] transition-[color,box-shadow] overflow-hidden text-xs [&amp;&gt;svg]:size-2.5 text-primary-foreground bg-primary border-primary"
           >
             <div class="flex items-center">
               <div class>
@@ -251,7 +251,7 @@ exports[`Components/MenuNavigation BadgeColors smoke-test 1`] = `
           </div>
           <div data-slot="badge"
                id="_r_ID_"
-               class="inline-flex items-center justify-center rounded-full shadow-none border px-3 py-0.5 font-medium w-fit whitespace-nowrap shrink-0 gap-1 [&amp;&gt;svg]:pointer-events-none focus-visible:border-ring focus-visible:ring-ring/50 focus-visible:ring-[3px] aria-invalid:ring-destructive/20 dark:aria-invalid:ring-destructive/40 aria-invalid:border-destructive transition-[color,box-shadow] overflow-hidden text-xs [&amp;&gt;svg]:size-2.5 text-success-foreground bg-success border-success"
+               class="inline-flex items-center justify-center rounded-full shadow-none border px-3 py-0.5 font-medium w-fit whitespace-nowrap shrink-0 gap-1 [&amp;&gt;svg]:pointer-events-none focus-visible:border-ring focus-visible:ring-ring/50 focus-visible:ring-[3px] transition-[color,box-shadow] overflow-hidden text-xs [&amp;&gt;svg]:size-2.5 text-success-foreground bg-success border-success"
           >
             <div class="flex items-center">
               <div class>
@@ -482,7 +482,7 @@ exports[`Components/MenuNavigation BadgeColors smoke-test 1`] = `
           </div>
           <div data-slot="badge"
                id="_r_ID_"
-               class="inline-flex items-center justify-center rounded-full shadow-none border px-3 py-0.5 font-medium w-fit whitespace-nowrap shrink-0 gap-1 [&amp;&gt;svg]:pointer-events-none focus-visible:border-ring focus-visible:ring-ring/50 focus-visible:ring-[3px] aria-invalid:ring-destructive/20 dark:aria-invalid:ring-destructive/40 aria-invalid:border-destructive transition-[color,box-shadow] overflow-hidden text-xs [&amp;&gt;svg]:size-2.5 text-warning-foreground bg-warning border-warning"
+               class="inline-flex items-center justify-center rounded-full shadow-none border px-3 py-0.5 font-medium w-fit whitespace-nowrap shrink-0 gap-1 [&amp;&gt;svg]:pointer-events-none focus-visible:border-ring focus-visible:ring-ring/50 focus-visible:ring-[3px] transition-[color,box-shadow] overflow-hidden text-xs [&amp;&gt;svg]:size-2.5 text-warning-foreground bg-warning border-warning"
           >
             <div class="flex items-center">
               <div class>
@@ -713,7 +713,7 @@ exports[`Components/MenuNavigation BadgeColors smoke-test 1`] = `
           </div>
           <div data-slot="badge"
                id="_r_ID_"
-               class="inline-flex items-center justify-center rounded-full shadow-none border px-3 py-0.5 font-medium w-fit whitespace-nowrap shrink-0 gap-1 [&amp;&gt;svg]:pointer-events-none focus-visible:border-ring focus-visible:ring-ring/50 focus-visible:ring-[3px] aria-invalid:ring-destructive/20 dark:aria-invalid:ring-destructive/40 aria-invalid:border-destructive transition-[color,box-shadow] overflow-hidden text-xs [&amp;&gt;svg]:size-2.5 text-destructive-foreground bg-destructive border-destructive"
+               class="inline-flex items-center justify-center rounded-full shadow-none border px-3 py-0.5 font-medium w-fit whitespace-nowrap shrink-0 gap-1 [&amp;&gt;svg]:pointer-events-none focus-visible:border-ring focus-visible:ring-ring/50 focus-visible:ring-[3px] transition-[color,box-shadow] overflow-hidden text-xs [&amp;&gt;svg]:size-2.5 text-destructive-foreground bg-destructive border-destructive"
           >
             <div class="flex items-center">
               <div class>
@@ -944,7 +944,7 @@ exports[`Components/MenuNavigation BadgeColors smoke-test 1`] = `
           </div>
           <div data-slot="badge"
                id="_r_ID_"
-               class="inline-flex items-center justify-center rounded-full shadow-none border px-3 py-0.5 font-medium w-fit whitespace-nowrap shrink-0 gap-1 [&amp;&gt;svg]:pointer-events-none focus-visible:border-ring focus-visible:ring-ring/50 focus-visible:ring-[3px] aria-invalid:ring-destructive/20 dark:aria-invalid:ring-destructive/40 aria-invalid:border-destructive transition-[color,box-shadow] overflow-hidden text-xs [&amp;&gt;svg]:size-2.5 text-info-foreground bg-info border-info"
+               class="inline-flex items-center justify-center rounded-full shadow-none border px-3 py-0.5 font-medium w-fit whitespace-nowrap shrink-0 gap-1 [&amp;&gt;svg]:pointer-events-none focus-visible:border-ring focus-visible:ring-ring/50 focus-visible:ring-[3px] transition-[color,box-shadow] overflow-hidden text-xs [&amp;&gt;svg]:size-2.5 text-info-foreground bg-info border-info"
           >
             <div class="flex items-center">
               <div class>
@@ -1180,7 +1180,7 @@ exports[`Components/MenuNavigation BadgeVariants smoke-test 1`] = `
           </div>
           <div data-slot="badge"
                id="_r_ID_"
-               class="inline-flex items-center justify-center rounded-full shadow-none border px-3 py-0.5 font-medium w-fit whitespace-nowrap shrink-0 gap-1 [&amp;&gt;svg]:pointer-events-none focus-visible:border-ring focus-visible:ring-ring/50 focus-visible:ring-[3px] aria-invalid:ring-destructive/20 dark:aria-invalid:ring-destructive/40 aria-invalid:border-destructive transition-[color,box-shadow] overflow-hidden text-xs [&amp;&gt;svg]:size-2.5 text-primary-foreground bg-primary border-primary"
+               class="inline-flex items-center justify-center rounded-full shadow-none border px-3 py-0.5 font-medium w-fit whitespace-nowrap shrink-0 gap-1 [&amp;&gt;svg]:pointer-events-none focus-visible:border-ring focus-visible:ring-ring/50 focus-visible:ring-[3px] transition-[color,box-shadow] overflow-hidden text-xs [&amp;&gt;svg]:size-2.5 text-primary-foreground bg-primary border-primary"
           >
             <div class="flex items-center">
               <div class>
@@ -1411,7 +1411,7 @@ exports[`Components/MenuNavigation BadgeVariants smoke-test 1`] = `
           </div>
           <div data-slot="badge"
                id="_r_ID_"
-               class="inline-flex items-center justify-center rounded-full shadow-none border px-3 py-0.5 font-medium w-fit whitespace-nowrap shrink-0 gap-1 [&amp;&gt;svg]:pointer-events-none focus-visible:border-ring focus-visible:ring-ring/50 focus-visible:ring-[3px] aria-invalid:ring-destructive/20 dark:aria-invalid:ring-destructive/40 aria-invalid:border-destructive transition-[color,box-shadow] overflow-hidden text-xs [&amp;&gt;svg]:size-2.5 text-success bg-success/10 border-success/10"
+               class="inline-flex items-center justify-center rounded-full shadow-none border px-3 py-0.5 font-medium w-fit whitespace-nowrap shrink-0 gap-1 [&amp;&gt;svg]:pointer-events-none focus-visible:border-ring focus-visible:ring-ring/50 focus-visible:ring-[3px] transition-[color,box-shadow] overflow-hidden text-xs [&amp;&gt;svg]:size-2.5 text-success bg-success/10 border-success/10"
           >
             <div class="flex items-center">
               <div class>
@@ -1642,7 +1642,7 @@ exports[`Components/MenuNavigation BadgeVariants smoke-test 1`] = `
           </div>
           <div data-slot="badge"
                id="_r_ID_"
-               class="inline-flex items-center justify-center rounded-full shadow-none border px-3 py-0.5 font-medium w-fit whitespace-nowrap shrink-0 gap-1 [&amp;&gt;svg]:pointer-events-none focus-visible:border-ring focus-visible:ring-ring/50 focus-visible:ring-[3px] aria-invalid:ring-destructive/20 dark:aria-invalid:ring-destructive/40 aria-invalid:border-destructive transition-[color,box-shadow] overflow-hidden text-xs [&amp;&gt;svg]:size-2.5 text-warning bg-transparent border-warning"
+               class="inline-flex items-center justify-center rounded-full shadow-none border px-3 py-0.5 font-medium w-fit whitespace-nowrap shrink-0 gap-1 [&amp;&gt;svg]:pointer-events-none focus-visible:border-ring focus-visible:ring-ring/50 focus-visible:ring-[3px] transition-[color,box-shadow] overflow-hidden text-xs [&amp;&gt;svg]:size-2.5 text-warning bg-transparent border-warning"
           >
             <div class="flex items-center">
               <div class>
@@ -2338,7 +2338,7 @@ exports[`Components/MenuNavigation InteractiveExample smoke-test 1`] = `
           </div>
           <div data-slot="badge"
                id="_r_ID_"
-               class="inline-flex items-center justify-center rounded-full shadow-none border px-3 py-0.5 font-medium w-fit whitespace-nowrap shrink-0 gap-1 [&amp;&gt;svg]:pointer-events-none focus-visible:border-ring focus-visible:ring-ring/50 focus-visible:ring-[3px] aria-invalid:ring-destructive/20 dark:aria-invalid:ring-destructive/40 aria-invalid:border-destructive transition-[color,box-shadow] overflow-hidden text-xs [&amp;&gt;svg]:size-2.5 text-primary bg-primary/10 border-primary/10"
+               class="inline-flex items-center justify-center rounded-full shadow-none border px-3 py-0.5 font-medium w-fit whitespace-nowrap shrink-0 gap-1 [&amp;&gt;svg]:pointer-events-none focus-visible:border-ring focus-visible:ring-ring/50 focus-visible:ring-[3px] transition-[color,box-shadow] overflow-hidden text-xs [&amp;&gt;svg]:size-2.5 text-primary bg-primary/10 border-primary/10"
           >
             <div class="flex items-center">
               <div class>
@@ -3273,7 +3273,7 @@ exports[`Components/MenuNavigation WithBadge smoke-test 1`] = `
           </div>
           <div data-slot="badge"
                id="_r_ID_"
-               class="inline-flex items-center justify-center rounded-full shadow-none border px-3 py-0.5 font-medium w-fit whitespace-nowrap shrink-0 gap-1 [&amp;&gt;svg]:pointer-events-none focus-visible:border-ring focus-visible:ring-ring/50 focus-visible:ring-[3px] aria-invalid:ring-destructive/20 dark:aria-invalid:ring-destructive/40 aria-invalid:border-destructive transition-[color,box-shadow] overflow-hidden text-xs [&amp;&gt;svg]:size-2.5 text-primary-foreground bg-primary border-primary"
+               class="inline-flex items-center justify-center rounded-full shadow-none border px-3 py-0.5 font-medium w-fit whitespace-nowrap shrink-0 gap-1 [&amp;&gt;svg]:pointer-events-none focus-visible:border-ring focus-visible:ring-ring/50 focus-visible:ring-[3px] transition-[color,box-shadow] overflow-hidden text-xs [&amp;&gt;svg]:size-2.5 text-primary-foreground bg-primary border-primary"
           >
             <div class="flex items-center">
               <div class>
@@ -3509,7 +3509,7 @@ exports[`Components/MenuNavigation WithCustomTitle smoke-test 1`] = `
           </div>
           <div data-slot="badge"
                id="_r_ID_"
-               class="inline-flex items-center justify-center rounded-full shadow-none border px-3 py-0.5 font-medium w-fit whitespace-nowrap shrink-0 gap-1 [&amp;&gt;svg]:pointer-events-none focus-visible:border-ring focus-visible:ring-ring/50 focus-visible:ring-[3px] aria-invalid:ring-destructive/20 dark:aria-invalid:ring-destructive/40 aria-invalid:border-destructive transition-[color,box-shadow] overflow-hidden text-xs [&amp;&gt;svg]:size-2.5 text-success bg-success/10 border-success/10"
+               class="inline-flex items-center justify-center rounded-full shadow-none border px-3 py-0.5 font-medium w-fit whitespace-nowrap shrink-0 gap-1 [&amp;&gt;svg]:pointer-events-none focus-visible:border-ring focus-visible:ring-ring/50 focus-visible:ring-[3px] transition-[color,box-shadow] overflow-hidden text-xs [&amp;&gt;svg]:size-2.5 text-success bg-success/10 border-success/10"
           >
             <div class="flex items-center">
               <div class>
@@ -3982,7 +3982,7 @@ exports[`Components/MenuNavigation WithFormList smoke-test 1`] = `
                     </div>
                     <div data-slot="badge"
                          id="_r_ID_"
-                         class="inline-flex items-center justify-center rounded-full shadow-none border px-3 py-0.5 font-medium w-fit whitespace-nowrap shrink-0 gap-1 [&amp;&gt;svg]:pointer-events-none focus-visible:border-ring focus-visible:ring-ring/50 focus-visible:ring-[3px] aria-invalid:ring-destructive/20 dark:aria-invalid:ring-destructive/40 aria-invalid:border-destructive transition-[color,box-shadow] overflow-hidden text-xs [&amp;&gt;svg]:size-2.5 text-primary bg-primary/10 border-primary/10"
+                         class="inline-flex items-center justify-center rounded-full shadow-none border px-3 py-0.5 font-medium w-fit whitespace-nowrap shrink-0 gap-1 [&amp;&gt;svg]:pointer-events-none focus-visible:border-ring focus-visible:ring-ring/50 focus-visible:ring-[3px] transition-[color,box-shadow] overflow-hidden text-xs [&amp;&gt;svg]:size-2.5 text-primary bg-primary/10 border-primary/10"
                     >
                       <div class="flex items-center">
                         <div class>
@@ -4207,7 +4207,7 @@ exports[`Components/MenuNavigation WithFormList smoke-test 1`] = `
                 </div>
                 <div data-slot="badge"
                      id="_r_ID_"
-                     class="inline-flex items-center justify-center rounded-full shadow-none border px-3 py-0.5 font-medium w-fit whitespace-nowrap shrink-0 gap-1 [&amp;&gt;svg]:pointer-events-none focus-visible:border-ring focus-visible:ring-ring/50 focus-visible:ring-[3px] aria-invalid:ring-destructive/20 dark:aria-invalid:ring-destructive/40 aria-invalid:border-destructive transition-[color,box-shadow] overflow-hidden text-xs [&amp;&gt;svg]:size-2.5 text-primary bg-primary/10 border-primary/10"
+                     class="inline-flex items-center justify-center rounded-full shadow-none border px-3 py-0.5 font-medium w-fit whitespace-nowrap shrink-0 gap-1 [&amp;&gt;svg]:pointer-events-none focus-visible:border-ring focus-visible:ring-ring/50 focus-visible:ring-[3px] transition-[color,box-shadow] overflow-hidden text-xs [&amp;&gt;svg]:size-2.5 text-primary bg-primary/10 border-primary/10"
                 >
                   <div class="flex items-center">
                     <div class>
@@ -4329,6 +4329,7 @@ exports[`Components/MenuNavigation WithFormList smoke-test 1`] = `
                                     data-slot="select-trigger"
                                     data-size="default"
                                     class="border-input data-placeholder:text-muted-foreground [&amp;_svg:not([class*='text-'])]:text-muted-foreground focus-visible:border-ring focus-visible:ring-ring/50 aria-invalid:ring-destructive/20 dark:aria-invalid:ring-destructive/40 aria-invalid:border-destructive dark:bg-input/30 dark:hover:bg-input/50 flex items-center justify-between gap-2 rounded-md border bg-transparent px-3 py-2 text-sm whitespace-nowrap shadow-xs transition-[color,box-shadow] outline-none focus-visible:ring-[3px] disabled:cursor-not-allowed disabled:opacity-50 data-[size=default]:h-9 data-[size=sm]:h-8 *:data-[slot=select-value]:line-clamp-1 *:data-[slot=select-value]:flex *:data-[slot=select-value]:items-center *:data-[slot=select-value]:gap-2 [&amp;_svg]:pointer-events-none [&amp;_svg]:shrink-0 [&amp;_svg:not([class*='size-'])]:size-4 w-full"
+                                    id="_r_ID_-form-item"
                                     aria-labelledby="socials.0.platform-label"
                             >
                               <span data-slot="select-value"

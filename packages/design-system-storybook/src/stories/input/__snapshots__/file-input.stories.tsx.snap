@@ -2,7 +2,11 @@
 
 exports[`Components/Input/FileInput Default smoke-test 1`] = `
 <div class="container my-10 mx-auto p-4 border rounded-lg shadow-sm">
-  <div class="*:not-first:mt-2">
+  <div role="group"
+       data-slot="field"
+       data-orientation="vertical"
+       class="group/field flex w-full gap-3 data-[invalid=true]:text-destructive flex-col [&amp;&gt;*]:w-full [&amp;&gt;.sr-only]:w-auto"
+  >
     <label data-slot="label"
            class="flex items-center text-sm leading-none font-medium select-none group-data-[disabled=true]:pointer-events-none group-data-[disabled=true]:opacity-50 peer-disabled:cursor-not-allowed peer-disabled:opacity-50 gap-0.5"
            for="_r_ID_"
@@ -23,7 +27,11 @@ exports[`Components/Input/FileInput Default smoke-test 1`] = `
 
 exports[`Components/Input/FileInput Disabled smoke-test 1`] = `
 <div class="container my-10 mx-auto p-4 border rounded-lg shadow-sm">
-  <div class="*:not-first:mt-2">
+  <div role="group"
+       data-slot="field"
+       data-orientation="vertical"
+       class="group/field flex w-full gap-3 data-[invalid=true]:text-destructive flex-col [&amp;&gt;*]:w-full [&amp;&gt;.sr-only]:w-auto"
+  >
     <label data-slot="label"
            class="flex items-center text-sm leading-none font-medium select-none group-data-[disabled=true]:pointer-events-none group-data-[disabled=true]:opacity-50 peer-disabled:cursor-not-allowed peer-disabled:opacity-50 gap-0.5"
            for="_r_ID_"
@@ -39,10 +47,9 @@ exports[`Components/Input/FileInput Disabled smoke-test 1`] = `
            type="file"
            name="_r_ID_"
     >
-    <p id="_r_ID_-helper"
-       class="text-muted-foreground mt-2 text-xs"
-       role="region"
-       aria-live="polite"
+    <p data-slot="field-description"
+       class="text-muted-foreground text-sm leading-normal font-normal group-has-data-[orientation=horizontal]/field:text-balance last:mt-0 nth-last-2:-mt-1 [[data-variant=legend]+&amp;]:-mt-1.5 [&amp;&gt;a:hover]:text-primary [&amp;&gt;a]:underline [&amp;&gt;a]:underline-offset-4"
+       id="_r_ID_-helper"
     >
       This upload option is currently unavailable
     </p>
@@ -52,7 +59,11 @@ exports[`Components/Input/FileInput Disabled smoke-test 1`] = `
 
 exports[`Components/Input/FileInput HalfWidth smoke-test 1`] = `
 <div class="container my-10 mx-auto p-4 border rounded-lg shadow-sm">
-  <div class="*:not-first:mt-2">
+  <div role="group"
+       data-slot="field"
+       data-orientation="vertical"
+       class="group/field flex w-full gap-3 data-[invalid=true]:text-destructive flex-col [&amp;&gt;*]:w-full [&amp;&gt;.sr-only]:w-auto"
+  >
     <label data-slot="label"
            class="flex items-center text-sm leading-none font-medium select-none group-data-[disabled=true]:pointer-events-none group-data-[disabled=true]:opacity-50 peer-disabled:cursor-not-allowed peer-disabled:opacity-50 gap-0.5"
            for="_r_ID_"
@@ -69,10 +80,9 @@ exports[`Components/Input/FileInput HalfWidth smoke-test 1`] = `
            type="file"
            name="_r_ID_"
     >
-    <p id="_r_ID_-helper"
-       class="text-muted-foreground mt-2 text-xs"
-       role="region"
-       aria-live="polite"
+    <p data-slot="field-description"
+       class="text-muted-foreground text-sm leading-normal font-normal group-has-data-[orientation=horizontal]/field:text-balance last:mt-0 nth-last-2:-mt-1 [[data-variant=legend]+&amp;]:-mt-1.5 [&amp;&gt;a:hover]:text-primary [&amp;&gt;a]:underline [&amp;&gt;a]:underline-offset-4"
+       id="_r_ID_-helper"
     >
       This file input takes half of the available width
     </p>
@@ -82,7 +92,11 @@ exports[`Components/Input/FileInput HalfWidth smoke-test 1`] = `
 
 exports[`Components/Input/FileInput MultipleFiles smoke-test 1`] = `
 <div class="container my-10 mx-auto p-4 border rounded-lg shadow-sm">
-  <div class="*:not-first:mt-2">
+  <div role="group"
+       data-slot="field"
+       data-orientation="vertical"
+       class="group/field flex w-full gap-3 data-[invalid=true]:text-destructive flex-col [&amp;&gt;*]:w-full [&amp;&gt;.sr-only]:w-auto"
+  >
     <label data-slot="label"
            class="flex items-center text-sm leading-none font-medium select-none group-data-[disabled=true]:pointer-events-none group-data-[disabled=true]:opacity-50 peer-disabled:cursor-not-allowed peer-disabled:opacity-50 gap-0.5"
            for="_r_ID_"
@@ -99,10 +113,9 @@ exports[`Components/Input/FileInput MultipleFiles smoke-test 1`] = `
            type="file"
            name="_r_ID_"
     >
-    <p id="_r_ID_-helper"
-       class="text-muted-foreground mt-2 text-xs"
-       role="region"
-       aria-live="polite"
+    <p data-slot="field-description"
+       class="text-muted-foreground text-sm leading-normal font-normal group-has-data-[orientation=horizontal]/field:text-balance last:mt-0 nth-last-2:-mt-1 [[data-variant=legend]+&amp;]:-mt-1.5 [&amp;&gt;a:hover]:text-primary [&amp;&gt;a]:underline [&amp;&gt;a]:underline-offset-4"
+       id="_r_ID_-helper"
     >
       Select multiple files to upload at once
     </p>
@@ -112,7 +125,11 @@ exports[`Components/Input/FileInput MultipleFiles smoke-test 1`] = `
 
 exports[`Components/Input/FileInput PDFOnly smoke-test 1`] = `
 <div class="container my-10 mx-auto p-4 border rounded-lg shadow-sm">
-  <div class="*:not-first:mt-2">
+  <div role="group"
+       data-slot="field"
+       data-orientation="vertical"
+       class="group/field flex w-full gap-3 data-[invalid=true]:text-destructive flex-col [&amp;&gt;*]:w-full [&amp;&gt;.sr-only]:w-auto"
+  >
     <label data-slot="label"
            class="flex items-center text-sm leading-none font-medium select-none group-data-[disabled=true]:pointer-events-none group-data-[disabled=true]:opacity-50 peer-disabled:cursor-not-allowed peer-disabled:opacity-50 gap-0.5"
            for="_r_ID_"
@@ -128,10 +145,9 @@ exports[`Components/Input/FileInput PDFOnly smoke-test 1`] = `
            type="file"
            name="_r_ID_"
     >
-    <p id="_r_ID_-helper"
-       class="text-muted-foreground mt-2 text-xs"
-       role="region"
-       aria-live="polite"
+    <p data-slot="field-description"
+       class="text-muted-foreground text-sm leading-normal font-normal group-has-data-[orientation=horizontal]/field:text-balance last:mt-0 nth-last-2:-mt-1 [[data-variant=legend]+&amp;]:-mt-1.5 [&amp;&gt;a:hover]:text-primary [&amp;&gt;a]:underline [&amp;&gt;a]:underline-offset-4"
+       id="_r_ID_-helper"
     >
       Please upload a PDF document only
     </p>
@@ -141,7 +157,11 @@ exports[`Components/Input/FileInput PDFOnly smoke-test 1`] = `
 
 exports[`Components/Input/FileInput Required smoke-test 1`] = `
 <div class="container my-10 mx-auto p-4 border rounded-lg shadow-sm">
-  <div class="*:not-first:mt-2">
+  <div role="group"
+       data-slot="field"
+       data-orientation="vertical"
+       class="group/field flex w-full gap-3 data-[invalid=true]:text-destructive flex-col [&amp;&gt;*]:w-full [&amp;&gt;.sr-only]:w-auto"
+  >
     <label data-slot="label"
            class="flex items-center text-sm leading-none font-medium select-none group-data-[disabled=true]:pointer-events-none group-data-[disabled=true]:opacity-50 peer-disabled:cursor-not-allowed peer-disabled:opacity-50 after:content-['*'] after:text-destructive gap-0.5"
            for="_r_ID_"
@@ -157,10 +177,9 @@ exports[`Components/Input/FileInput Required smoke-test 1`] = `
            type="file"
            name="_r_ID_"
     >
-    <p id="_r_ID_-helper"
-       class="text-muted-foreground mt-2 text-xs"
-       role="region"
-       aria-live="polite"
+    <p data-slot="field-description"
+       class="text-muted-foreground text-sm leading-normal font-normal group-has-data-[orientation=horizontal]/field:text-balance last:mt-0 nth-last-2:-mt-1 [[data-variant=legend]+&amp;]:-mt-1.5 [&amp;&gt;a:hover]:text-primary [&amp;&gt;a]:underline [&amp;&gt;a]:underline-offset-4"
+       id="_r_ID_-helper"
     >
       You must upload a document to proceed
     </p>
@@ -170,7 +189,11 @@ exports[`Components/Input/FileInput Required smoke-test 1`] = `
 
 exports[`Components/Input/FileInput WithError smoke-test 1`] = `
 <div class="container my-10 mx-auto p-4 border rounded-lg shadow-sm">
-  <div class="*:not-first:mt-2">
+  <div role="group"
+       data-slot="field"
+       data-orientation="vertical"
+       class="group/field flex w-full gap-3 data-[invalid=true]:text-destructive flex-col [&amp;&gt;*]:w-full [&amp;&gt;.sr-only]:w-auto"
+  >
     <label data-slot="label"
            class="flex items-center text-sm leading-none font-medium select-none group-data-[disabled=true]:pointer-events-none group-data-[disabled=true]:opacity-50 peer-disabled:cursor-not-allowed peer-disabled:opacity-50 gap-0.5"
            for="_r_ID_"
@@ -186,19 +209,24 @@ exports[`Components/Input/FileInput WithError smoke-test 1`] = `
            type="file"
            name="_r_ID_"
     >
-    <p id="_r_ID_-error"
-       class="text-destructive mt-2 text-xs"
-       role="alert"
+    <div role="alert"
+         data-slot="field-error"
+         class="text-destructive text-sm font-normal"
+         id="_r_ID_-error"
     >
       The file exceeds the maximum size limit
-    </p>
+    </div>
   </div>
 </div>
 `;
 
 exports[`Components/Input/FileInput WithHelperText smoke-test 1`] = `
 <div class="container my-10 mx-auto p-4 border rounded-lg shadow-sm">
-  <div class="*:not-first:mt-2">
+  <div role="group"
+       data-slot="field"
+       data-orientation="vertical"
+       class="group/field flex w-full gap-3 data-[invalid=true]:text-destructive flex-col [&amp;&gt;*]:w-full [&amp;&gt;.sr-only]:w-auto"
+  >
     <label data-slot="label"
            class="flex items-center text-sm leading-none font-medium select-none group-data-[disabled=true]:pointer-events-none group-data-[disabled=true]:opacity-50 peer-disabled:cursor-not-allowed peer-disabled:opacity-50 gap-0.5"
            for="_r_ID_"
@@ -214,10 +242,9 @@ exports[`Components/Input/FileInput WithHelperText smoke-test 1`] = `
            type="file"
            name="_r_ID_"
     >
-    <p id="_r_ID_-helper"
-       class="text-muted-foreground mt-2 text-xs"
-       role="region"
-       aria-live="polite"
+    <p data-slot="field-description"
+       class="text-muted-foreground text-sm leading-normal font-normal group-has-data-[orientation=horizontal]/field:text-balance last:mt-0 nth-last-2:-mt-1 [[data-variant=legend]+&amp;]:-mt-1.5 [&amp;&gt;a:hover]:text-primary [&amp;&gt;a]:underline [&amp;&gt;a]:underline-offset-4"
+       id="_r_ID_-helper"
     >
       Upload a JPG or PNG image (max 2MB)
     </p>

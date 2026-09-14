@@ -87,10 +87,7 @@ function IGRPVerticalBarChartInner({
   const chartConfig = createChartConfig(bars)
 
   return (
-    <div
-      className={`w-full overflow-hidden ${className || ""}`}
-      style={backgroundColor ? { backgroundColor } : undefined}
-    >
+    <div className={cn("w-full overflow-hidden", className)} style={backgroundColor ? { backgroundColor } : undefined}>
       {(title || description) && (
         <div className={cn("pb-3")}>
           {title && <div className={cn("text-xl font-semibold")}>{title}</div>}

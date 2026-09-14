@@ -13,6 +13,7 @@ import { Button } from "../../primitives/button"
 import { Alert, AlertDescription, AlertTitle } from "../../primitives/alert"
 import { Progress } from "../../primitives/progress"
 import { IGRPLabel } from "../label"
+import { Field, FieldDescription, FieldError } from "../../primitives/field"
 
 // ---------------------------------------------------------------------------
 // Types
@@ -210,7 +211,7 @@ function IGRPDropzoneInternal({
   }
 
   return (
-    <div className={cn("space-y-4", className)}>
+    <Field className={cn("gap-4", className)}>
       {label && <IGRPLabel label={label} required={required} id={name} />}
 
       <Card
@@ -232,7 +233,7 @@ function IGRPDropzoneInternal({
             isDragReject && "text-destructive",
           )}
         />
-        <div className="space-y-1">
+        <div className="flex flex-col gap-1">
           <p className="text-sm font-medium">
             {isDragActive ? (isDragReject ? dragRejectLabel : dragActiveLabel) : dropzoneLabel}
           </p>
@@ -286,7 +287,7 @@ function IGRPDropzoneInternal({
       )}
 
       {files.length > 0 && (
-        <div className="space-y-2">
+        <div className="flex flex-col gap-2">
           {files.map((item, index) => (
             <div key={index} className="flex items-center justify-between border border-input rounded-md p-2 gap-2">
               <div className="flex-1 min-w-0">
@@ -310,18 +311,10 @@ function IGRPDropzoneInternal({
         </div>
       )}
 
-      {helperText && !error && (
-        <p id={`${name}-helper`} className="text-muted-foreground text-xs" role="region" aria-live="polite">
-          {helperText}
-        </p>
-      )}
+      {helperText && !error && <FieldDescription id={`${name}-helper`}>{helperText}</FieldDescription>}
 
-      {error && (
-        <p id={`${name}-error`} className="text-destructive text-xs" role="alert">
-          {error}
-        </p>
-      )}
-    </div>
+      {error && <FieldError id={`${name}-error`}>{error}</FieldError>}
+    </Field>
   )
 }
 
@@ -440,7 +433,7 @@ function IGRPInputFile({
   // ── Default variant ───────────────────────────────────────────────────────
   if (!formContext) {
     return (
-      <div className={cn("*:not-first:mt-2")}>
+      <Field>
         {label && <IGRPLabel label={label} className={className} required={required} id={fieldName} />}
         <Input
           ref={inputRef}
@@ -462,23 +455,10 @@ function IGRPInputFile({
           {...props}
         />
 
-        {helperText && !error && (
-          <p
-            id={`${fieldName}-helper`}
-            className={cn("text-muted-foreground mt-2 text-xs")}
-            role="region"
-            aria-live="polite"
-          >
-            {helperText}
-          </p>
-        )}
+        {helperText && !error && <FieldDescription id={`${fieldName}-helper`}>{helperText}</FieldDescription>}
 
-        {error && (
-          <p id={`${fieldName}-error`} className={cn("text-destructive mt-2 text-xs")} role="alert">
-            {error}
-          </p>
-        )}
-      </div>
+        {error && <FieldError id={`${fieldName}-error`}>{error}</FieldError>}
+      </Field>
     )
   }
 
@@ -496,7 +476,7 @@ function IGRPInputFile({
         }
 
         return (
-          <div className={cn("*:not-first:mt-2")}>
+          <Field>
             {label && <IGRPLabel label={label} className={className} required={required} id={fieldName} />}
             <Input
               ref={inputRef}
@@ -531,22 +511,13 @@ function IGRPInputFile({
             />
 
             {helperText && !errorMessage && !fieldState.error && (
-              <p
-                id={`${fieldName}-helper`}
-                className={cn("text-muted-foreground mt-2 text-xs")}
-                role="region"
-                aria-live="polite"
-              >
-                {helperText}
-              </p>
+              <FieldDescription id={`${fieldName}-helper`}>{helperText}</FieldDescription>
             )}
 
             {(errorMessage || fieldState.error) && (
-              <p id={`${fieldName}-error`} className={cn("text-destructive mt-2 text-xs")} role="alert">
-                {errorMessage || fieldState.error?.message}
-              </p>
+              <FieldError id={`${fieldName}-error`}>{errorMessage || fieldState.error?.message}</FieldError>
             )}
-          </div>
+          </Field>
         )
       }}
     />

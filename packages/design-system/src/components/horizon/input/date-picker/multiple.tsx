@@ -13,6 +13,8 @@ import { IGRPButton } from "../../button"
 import { IGRPLabel } from "../../label"
 import { IGRPCalendarMultiple, type IGRPCalendarMultipleProps } from "../../calendar/multiple"
 import { DD_MM_YYYY } from "../../../../lib/constants"
+import { Field } from "../../../primitives/field"
+import { useIGRPi18n } from "../../../../i18n"
 
 /** @internal Trigger button showing the selected date(s). */
 function DatePickerMultipleTrigger({
@@ -81,6 +83,7 @@ function DatePickerMultipleField({
   disabled?: IGRPCalendarMultipleProps["disabled"]
   disabledPicker?: boolean
 }) {
+  const i18n = useIGRPi18n()
   return (
     <div className={cn("relative")}>
       <Popover>
@@ -107,10 +110,10 @@ function DatePickerMultipleField({
         <IGRPButton
           onClick={() => onChange(undefined)}
           variant="link"
-          className={cn("size-2 absolute right-2 top-1/2 h-3 w-3 -translate-y-1/2 text-muted-foreground z-100")}
+          className={cn("absolute right-2 top-1/2 size-3 -translate-y-1/2 text-muted-foreground z-100")}
           size="icon"
           iconName="X"
-          aria-label="Clear"
+          aria-label={i18n.datePicker.clear}
           disabled={disabledPicker}
           showIcon
         />
@@ -198,7 +201,7 @@ function IGRPDatePickerMultiple({
   }
 
   return (
-    <div className={cn("*:not-first:mt-2", className)}>
+    <Field className={className}>
       {label && <IGRPLabel label={label} required={required} id={name} className={labelClassName} />}
 
       <DatePickerMultipleField
@@ -211,7 +214,7 @@ function IGRPDatePickerMultiple({
       />
 
       {helperText && <p className={cn("text-sm text-muted-foreground mt-1")}>{helperText}</p>}
-    </div>
+    </Field>
   )
 }
 

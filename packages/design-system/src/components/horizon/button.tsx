@@ -5,9 +5,11 @@ import { useId, type ReactNode } from "react"
 import type { VariantProps } from "class-variance-authority"
 
 import { Button, buttonVariants } from "../primitives/button"
+import { Spinner } from "../primitives/spinner"
 import { IGRPIcon } from "./icon"
 import { cn } from "../../lib/utils"
 import type { IGRPBaseAttributes } from "../../types"
+import { useIGRPi18n } from "../../i18n"
 
 /**
  * Props for the IGRPButton component.
@@ -42,38 +44,24 @@ function IGRPButton({
   iconClassName,
   className,
   loading = false,
-  loadingText = "Loading…",
+  loadingText,
   disabled,
   type = "button",
   name,
   id,
   ...props
 }: IGRPButtonProps) {
+  const i18n = useIGRPi18n()
   const _id = useId()
   const ref = name ?? id ?? _id
+  const resolvedLoadingText = loadingText ?? i18n.button.loadingText
 
   const { size } = props
 
-  const computedIconClassName =
-    (
-      {
-        xs: "size-3",
-        sm: "size-3.5",
-        lg: "size-5",
-        icon: "size-4",
-        "icon-xs": "size-3",
-        "icon-sm": "size-3.5",
-        "icon-lg": "size-5",
-      } as Record<string, string>
-    )[size as string] ?? "size-4"
-
-  const LoadingIcon = (
-    <IGRPIcon
-      iconName="LoaderCircle"
-      className={cn("animate-spin motion-reduce:animate-none", computedIconClassName)}
-      aria-hidden="true"
-    />
-  )
+  // Icons are sized by the button primitive via `[&_svg:not([class*='size-'])]`.
+  // Spinner ships a literal `size-4`, which defeats that guard — mirror the
+  // primitive's three size overrides for it only.
+  const spinnerSizeClassName = size === "xs" || size === "icon-xs" ? "size-3" : size === "sm" ? "size-3.5" : undefined
 
   if (size === "icon" || size === "icon-xs" || size === "icon-sm" || size === "icon-lg") {
     const hasAccessibleName = Boolean(props["aria-label"] || props["aria-labelledby"])
@@ -94,11 +82,11 @@ function IGRPButton({
       >
         {loading ? (
           <>
-            {LoadingIcon}
-            <span className="sr-only">{loadingText}</span>
+            <Spinner className={cn(spinnerSizeClassName, iconClassName)} aria-hidden="true" />
+            <span className="sr-only">{resolvedLoadingText}</span>
           </>
         ) : (
-          <IGRPIcon iconName={iconName} className={cn(computedIconClassName, iconClassName)} aria-hidden="true" />
+          <IGRPIcon iconName={iconName} className={iconClassName} aria-hidden="true" />
         )}
       </Button>
     )
@@ -107,7 +95,14 @@ function IGRPButton({
   // When asChild, Slot requires a single child — skip icon siblings entirely.
   if (asChild) {
     return (
-      <Button {...props} asChild className={cn("relative", className)} disabled={disabled} id={ref}>
+      <Button
+        {...props}
+        asChild
+        className={cn("relative", loading && "cursor-wait pointer-events-none", className)}
+        disabled={disabled || loading}
+        aria-disabled={disabled || loading || undefined}
+        id={ref}
+      >
         {children}
       </Button>
     )
@@ -121,20 +116,24 @@ function IGRPButton({
       type={type}
       id={ref}
     >
-      {loading && iconPlacement === "start"
-        ? LoadingIcon
-        : showIcon &&
-          iconPlacement === "start" && (
-            <IGRPIcon iconName={iconName} className={cn(computedIconClassName, iconClassName)} aria-hidden="true" />
-          )}
-
-      {loading && loadingText ? loadingText : children}
-
-      {!loading && showIcon && iconPlacement === "end" && (
-        <IGRPIcon iconName={iconName} className={cn(computedIconClassName, iconClassName)} aria-hidden="true" />
+      {loading && iconPlacement === "start" ? (
+        <Spinner data-icon="inline-start" className={cn(spinnerSizeClassName, iconClassName)} aria-hidden="true" />
+      ) : (
+        showIcon &&
+        iconPlacement === "start" && (
+          <IGRPIcon iconName={iconName} data-icon="inline-start" className={iconClassName} aria-hidden="true" />
+        )
       )}
 
-      {loading && iconPlacement === "end" && LoadingIcon}
+      {loading ? resolvedLoadingText : children}
+
+      {!loading && showIcon && iconPlacement === "end" && (
+        <IGRPIcon iconName={iconName} data-icon="inline-end" className={iconClassName} aria-hidden="true" />
+      )}
+
+      {loading && iconPlacement === "end" && (
+        <Spinner data-icon="inline-end" className={cn(spinnerSizeClassName, iconClassName)} aria-hidden="true" />
+      )}
     </Button>
   )
 }

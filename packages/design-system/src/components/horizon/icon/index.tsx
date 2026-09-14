@@ -1,5 +1,9 @@
 "use client"
 
+// IGRPIconObject / IGRPIconList are published alongside the component and are derived
+// from the same lucide import; splitting them would duplicate that import.
+/* eslint-disable react-refresh/only-export-components */
+
 import { AlertCircle, type LucideProps, icons } from "lucide-react"
 
 import { cn } from "../../../lib/utils"

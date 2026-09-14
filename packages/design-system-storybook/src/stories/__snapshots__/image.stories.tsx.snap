@@ -16,7 +16,7 @@ exports[`Components/Image BorderRadius smoke-test 1`] = `
            sizes="100vw"
            srcset="/src/stories/assets/gradient.png?w=640&amp;q=75 640w, /src/stories/assets/gradient.png?w=750&amp;q=75 750w, /src/stories/assets/gradient.png?w=828&amp;q=75 828w, /src/stories/assets/gradient.png?w=1080&amp;q=75 1080w, /src/stories/assets/gradient.png?w=1200&amp;q=75 1200w, /src/stories/assets/gradient.png?w=1920&amp;q=75 1920w, /src/stories/assets/gradient.png?w=2048&amp;q=75 2048w, /src/stories/assets/gradient.png?w=3840&amp;q=75 3840w"
            src="/src/stories/assets/gradient.png?w=3840&amp;q=75"
-           style="position: absolute; height: 100%; width: 100%; inset: 0px;"
+           style="position: absolute; height: 100%; width: 100%; inset: 0px; color: transparent;"
       >
     </div>
   </div>
@@ -39,7 +39,7 @@ exports[`Components/Image Default smoke-test 1`] = `
            sizes="100vw"
            srcset="/src/stories/assets/gradient.png?w=640&amp;q=75 640w, /src/stories/assets/gradient.png?w=750&amp;q=75 750w, /src/stories/assets/gradient.png?w=828&amp;q=75 828w, /src/stories/assets/gradient.png?w=1080&amp;q=75 1080w, /src/stories/assets/gradient.png?w=1200&amp;q=75 1200w, /src/stories/assets/gradient.png?w=1920&amp;q=75 1920w, /src/stories/assets/gradient.png?w=2048&amp;q=75 2048w, /src/stories/assets/gradient.png?w=3840&amp;q=75 3840w"
            src="/src/stories/assets/gradient.png?w=3840&amp;q=75"
-           style="position: absolute; height: 100%; width: 100%; inset: 0px;"
+           style="position: absolute; height: 100%; width: 100%; inset: 0px; color: transparent;"
       >
     </div>
   </div>
@@ -57,7 +57,7 @@ exports[`Components/Image LabelClassName smoke-test 1`] = `
        class="object-cover object-center rounded-md"
        srcset="/src/stories/assets/gradient.png?w=256&amp;q=75 1x, /src/stories/assets/gradient.png?w=640&amp;q=75 2x"
        src="/src/stories/assets/gradient.png?w=640&amp;q=75"
-       style
+       style="color: transparent;"
   >
 </div>
 `;
@@ -78,7 +78,7 @@ exports[`Components/Image Ratio smoke-test 1`] = `
            sizes="100vw"
            srcset="/src/stories/assets/gradient.png?w=640&amp;q=75 640w, /src/stories/assets/gradient.png?w=750&amp;q=75 750w, /src/stories/assets/gradient.png?w=828&amp;q=75 828w, /src/stories/assets/gradient.png?w=1080&amp;q=75 1080w, /src/stories/assets/gradient.png?w=1200&amp;q=75 1200w, /src/stories/assets/gradient.png?w=1920&amp;q=75 1920w, /src/stories/assets/gradient.png?w=2048&amp;q=75 2048w, /src/stories/assets/gradient.png?w=3840&amp;q=75 3840w"
            src="/src/stories/assets/gradient.png?w=3840&amp;q=75"
-           style="position: absolute; height: 100%; width: 100%; inset: 0px;"
+           style="position: absolute; height: 100%; width: 100%; inset: 0px; color: transparent;"
       >
     </div>
   </div>

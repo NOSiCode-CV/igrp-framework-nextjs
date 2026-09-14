@@ -128,20 +128,22 @@ function IGRPPieChartInner({
 
     const RADIAN = Math.PI / 180
 
-    let radius = 0
-    let textAnchor: SVGAttributes<SVGTextElement>["textAnchor"] = "middle"
-
-    if (labelPosition === "outside") {
-      radius = (outerRadius || 0) + 30
-      textAnchor = midAngle > 270 || midAngle < 90 ? "start" : "end"
-    } else {
-      radius = innerRadius && outerRadius ? innerRadius + (outerRadius - innerRadius) / 2 : (outerRadius || 0) * 0.7
-    }
+    const isOutside = labelPosition === "outside"
+    const radius = isOutside
+      ? (outerRadius || 0) + 30
+      : innerRadius && outerRadius
+        ? innerRadius + (outerRadius - innerRadius) / 2
+        : (outerRadius || 0) * 0.7
+    const textAnchor: SVGAttributes<SVGTextElement>["textAnchor"] = isOutside
+      ? midAngle > 270 || midAngle < 90
+        ? "start"
+        : "end"
+      : "middle"
 
     const x = cx + radius * Math.cos(-midAngle * RADIAN)
     const y = cy + radius * Math.sin(-midAngle * RADIAN)
 
-    let content = ""
+    let content: string
     switch (labelType) {
       case "name":
         content = name || ""
@@ -183,10 +185,7 @@ function IGRPPieChartInner({
   }
 
   return (
-    <div
-      className={`w-full overflow-hidden ${className || ""}`}
-      style={backgroundColor ? { backgroundColor } : undefined}
-    >
+    <div className={cn("w-full overflow-hidden", className)} style={backgroundColor ? { backgroundColor } : undefined}>
       {(title || description) && (
         <div className={cn("pb-3")}>
           {title && <div className={cn("text-xl font-semibold")}>{title}</div>}

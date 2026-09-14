@@ -27,6 +27,7 @@ import {
 import { buttonVariants } from "../../primitives/button"
 import { IGRPIcon, type IGRPIconName } from "../icon"
 import { type IGRPDataTableDialogProps, type IGRPDataTableLinkProps } from "./row-actions"
+import { useIGRPi18n } from "../../../i18n"
 
 /**
  * Base props for dropdown menu items.
@@ -266,9 +267,10 @@ type IGRPDataTableDropdownMenuProps = {
 }
 
 function IGRPDataTableDropdownMenu({ items, iconName = "Ellipsis" }: IGRPDataTableDropdownMenuProps) {
+  const i18n = useIGRPi18n()
   return (
     <DropdownMenu>
-      <DropdownMenuTrigger className={cn("flex items-center justify-center")} aria-label="Open actions">
+      <DropdownMenuTrigger className={cn("flex items-center justify-center")} aria-label={i18n.dataTable.openActions}>
         <IGRPIcon iconName={iconName} className={cn("shadow-none")} />
       </DropdownMenuTrigger>
       <DropdownMenuContent align="end">

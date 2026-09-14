@@ -7,6 +7,7 @@ import { cn } from "../../../lib/utils"
 import type { IGRPInputProps } from "../../../types"
 import { Textarea } from "../../primitives/textarea"
 import { IGRPLabel } from "../label"
+import { Field, FieldDescription, FieldError } from "../../primitives/field"
 
 /**
  * Props for the IGRPTextarea component.
@@ -38,7 +39,7 @@ function IGRPTextarea({
 
   if (!formContext) {
     return (
-      <div className={cn("*:not-first:mt-2")}>
+      <Field>
         {label && <IGRPLabel label={label} className={className} required={required} id={fieldName} />}
 
         <div className={cn("relative")}>
@@ -59,23 +60,10 @@ function IGRPTextarea({
           />
         </div>
 
-        {helperText && !error && (
-          <p
-            id={`${fieldName}-helper`}
-            className={cn("text-muted-foreground mt-2 text-xs")}
-            role="region"
-            aria-live="polite"
-          >
-            {helperText}
-          </p>
-        )}
+        {helperText && !error && <FieldDescription id={`${fieldName}-helper`}>{helperText}</FieldDescription>}
 
-        {error && (
-          <p id={`${fieldName}-error`} className={cn("text-destructive mt-2 text-xs")} role="alert">
-            {error}
-          </p>
-        )}
-      </div>
+        {error && <FieldError id={`${fieldName}-error`}>{error}</FieldError>}
+      </Field>
     )
   }
 
@@ -87,7 +75,7 @@ function IGRPTextarea({
       name={fieldName}
       control={formContext.control}
       render={({ field, fieldState }) => (
-        <div className={cn("*:not-first:mt-2")}>
+        <Field>
           {label && <IGRPLabel label={label} className={className} required={required} id={fieldName} />}
 
           <div className={cn("relative")}>
@@ -114,22 +102,13 @@ function IGRPTextarea({
           </div>
 
           {helperText && !errorMessage && !fieldState.error && (
-            <p
-              id={`${fieldName}-helper`}
-              className={cn("text-muted-foreground mt-2 text-xs")}
-              role="region"
-              aria-live="polite"
-            >
-              {helperText}
-            </p>
+            <FieldDescription id={`${fieldName}-helper`}>{helperText}</FieldDescription>
           )}
 
           {(errorMessage || fieldState.error) && (
-            <p id={`${fieldName}-error`} className={cn("text-destructive mt-2 text-xs")} role="alert">
-              {errorMessage || fieldState.error?.message}
-            </p>
+            <FieldError id={`${fieldName}-error`}>{errorMessage || fieldState.error?.message}</FieldError>
           )}
-        </div>
+        </Field>
       )}
     />
   )

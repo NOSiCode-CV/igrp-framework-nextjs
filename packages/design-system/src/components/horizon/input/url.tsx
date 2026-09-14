@@ -5,9 +5,11 @@ import { useFormContext, Controller } from "react-hook-form"
 
 import { cn } from "../../../lib/utils"
 import type { IGRPInputProps, IGRPOptionsProps } from "../../../types"
-import { Input } from "../../primitives/input"
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "../../primitives/select"
+import { InputGroup, InputGroupAddon, InputGroupInput } from "../../primitives/input-group"
+import { Select, SelectContent, SelectGroup, SelectItem, SelectTrigger, SelectValue } from "../../primitives/select"
 import { IGRPLabel } from "../label"
+import { Field, FieldDescription, FieldError } from "../../primitives/field"
+import { useIGRPi18n } from "../../../i18n"
 
 /**
  * Props for the IGRPInputUrl component.
@@ -63,6 +65,7 @@ function IGRPInputUrl({
   defaultProtocol = "https://",
   ...props
 }: IGRPInputUrlProps) {
+  const i18n = useIGRPi18n()
   const _id = useId()
   const fieldName = name ?? id ?? _id
 
@@ -110,27 +113,31 @@ function IGRPInputUrl({
 
   if (!formContext) {
     return (
-      <div className={cn("*:not-first:mt-2")}>
-        {label && <IGRPLabel label={label} className={className} required={required} id={fieldName} />}
+      <Field className={className} data-invalid={error ? true : undefined}>
+        {label && <IGRPLabel label={label} required={required} id={fieldName} />}
 
-        <div className={cn("flex rounded-md shadow-xs")}>
-          <Select value={displayProtocol} onValueChange={handleStandaloneProtocolChange} disabled={props.disabled}>
-            <SelectTrigger
-              aria-label="Protocol"
-              className={cn("border-0 shadow-none border-l border-b border-t rounded-l-2xl rounded-none min-w-[100px]")}
-            >
-              <SelectValue placeholder={defaultProtocol} />
-            </SelectTrigger>
-            <SelectContent>
-              {protocols.map((option) => (
-                <SelectItem key={option.value} value={String(option.value)}>
-                  {option.label}
-                </SelectItem>
-              ))}
-            </SelectContent>
-          </Select>
+        <InputGroup>
+          <InputGroupAddon align="inline-start" className={cn("p-0")}>
+            <Select value={displayProtocol} onValueChange={handleStandaloneProtocolChange} disabled={props.disabled}>
+              <SelectTrigger
+                aria-label={i18n.inputUrl.protocolLabel}
+                className={cn("h-auto min-w-[100px] border-0 bg-transparent shadow-none focus-visible:ring-0")}
+              >
+                <SelectValue placeholder={defaultProtocol} />
+              </SelectTrigger>
+              <SelectContent>
+                <SelectGroup>
+                  {protocols.map((option) => (
+                    <SelectItem key={option.value} value={String(option.value)}>
+                      {option.label}
+                    </SelectItem>
+                  ))}
+                </SelectGroup>
+              </SelectContent>
+            </Select>
+          </InputGroupAddon>
 
-          <Input
+          <InputGroupInput
             id={fieldName}
             name={fieldName}
             type="url"
@@ -141,32 +148,14 @@ function IGRPInputUrl({
             aria-required={required}
             aria-invalid={!!error || !!props["aria-invalid"]}
             aria-describedby={error ? `${fieldName}-error` : helperText ? `${fieldName}-helper` : undefined}
-            className={cn(
-              "rounded-s-none shadow-none focus-visible:z-10",
-              error && "border-destructive focus-visible:ring-destructive/20",
-              className,
-            )}
             {...props}
           />
-        </div>
+        </InputGroup>
 
-        {helperText && !error && (
-          <p
-            id={`${fieldName}-helper`}
-            className={cn("text-muted-foreground mt-2 text-xs")}
-            role="region"
-            aria-live="polite"
-          >
-            {helperText}
-          </p>
-        )}
+        {helperText && !error && <FieldDescription id={`${fieldName}-helper`}>{helperText}</FieldDescription>}
 
-        {error && (
-          <p id={`${fieldName}-error`} className={cn("text-destructive mt-2 text-xs")} role="alert">
-            {error}
-          </p>
-        )}
-      </div>
+        {error && <FieldError id={`${fieldName}-error`}>{error}</FieldError>}
+      </Field>
     )
   }
 
@@ -192,34 +181,36 @@ function IGRPInputUrl({
         }
 
         return (
-          <div className={cn("*:not-first:mt-2")}>
-            {label && <IGRPLabel label={label} className={className} required={required} id={fieldName} />}
+          <Field className={className} data-invalid={fieldState.error || error ? true : undefined}>
+            {label && <IGRPLabel label={label} required={required} id={fieldName} />}
 
-            <div className={cn("flex rounded-md shadow-xs")}>
-              <Select
-                value={String(fieldProtocol)}
-                onValueChange={handleProtocolChange}
-                disabled={props.disabled}
-                onOpenChange={() => field.onBlur()}
-              >
-                <SelectTrigger
-                  aria-label="Protocol"
-                  className={cn(
-                    "border-0 shadow-none border-l border-b border-t rounded-l-2xl rounded-none min-w-[100px]",
-                  )}
+            <InputGroup>
+              <InputGroupAddon align="inline-start" className={cn("p-0")}>
+                <Select
+                  value={String(fieldProtocol)}
+                  onValueChange={handleProtocolChange}
+                  disabled={props.disabled}
+                  onOpenChange={() => field.onBlur()}
                 >
-                  <SelectValue placeholder={defaultProtocol} />
-                </SelectTrigger>
-                <SelectContent>
-                  {protocols.map((option) => (
-                    <SelectItem key={option.value} value={String(option.value)}>
-                      {option.label}
-                    </SelectItem>
-                  ))}
-                </SelectContent>
-              </Select>
+                  <SelectTrigger
+                    aria-label={i18n.inputUrl.protocolLabel}
+                    className={cn("h-auto min-w-[100px] border-0 bg-transparent shadow-none focus-visible:ring-0")}
+                  >
+                    <SelectValue placeholder={defaultProtocol} />
+                  </SelectTrigger>
+                  <SelectContent>
+                    <SelectGroup>
+                      {protocols.map((option) => (
+                        <SelectItem key={option.value} value={String(option.value)}>
+                          {option.label}
+                        </SelectItem>
+                      ))}
+                    </SelectGroup>
+                  </SelectContent>
+                </Select>
+              </InputGroupAddon>
 
-              <Input
+              <InputGroupInput
                 id={fieldName}
                 name={fieldName}
                 type="url"
@@ -233,32 +224,18 @@ function IGRPInputUrl({
                 aria-describedby={
                   error || fieldState.error ? `${fieldName}-error` : helperText ? `${fieldName}-helper` : undefined
                 }
-                className={cn(
-                  "rounded-s-none shadow-none focus-visible:z-10",
-                  (fieldState.error || error) && "border-destructive focus-visible:ring-destructive/20",
-                  className,
-                )}
                 {...props}
               />
-            </div>
+            </InputGroup>
 
             {helperText && !error && !fieldState.error && (
-              <p
-                id={`${fieldName}-helper`}
-                className={cn("text-muted-foreground mt-2 text-xs")}
-                role="region"
-                aria-live="polite"
-              >
-                {helperText}
-              </p>
+              <FieldDescription id={`${fieldName}-helper`}>{helperText}</FieldDescription>
             )}
 
             {(error || fieldState.error) && (
-              <p id={`${fieldName}-error`} className={cn("text-destructive mt-2 text-xs")} role="alert">
-                {error || fieldState.error?.message}
-              </p>
+              <FieldError id={`${fieldName}-error`}>{error || fieldState.error?.message}</FieldError>
             )}
-          </div>
+          </Field>
         )
       }}
     />

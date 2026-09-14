@@ -9,11 +9,12 @@ exports[`Components/FieldDescription Error smoke-test 1`] = `
          type="email"
          value="not-an-email"
   >
-  <p class="text-destructive text-xs mt-1"
-     role="alert"
+  <div role="alert"
+       data-slot="field-error"
+       class="text-destructive text-sm font-normal"
   >
     Please enter a valid email address.
-  </p>
+  </div>
 </div>
 `;
 
@@ -26,11 +27,12 @@ exports[`Components/FieldDescription ErrorOverridesHelper smoke-test 1`] = `
          type="password"
          value="123"
   >
-  <p class="text-destructive text-xs mt-1"
-     role="alert"
+  <div role="alert"
+       data-slot="field-error"
+       class="text-destructive text-sm font-normal"
   >
     Password is too short.
-  </p>
+  </div>
 </div>
 `;
 
@@ -42,9 +44,8 @@ exports[`Components/FieldDescription HelperText smoke-test 1`] = `
          placeholder="you@example.com"
          type="email"
   >
-  <p class="text-muted-foreground text-xs mt-1"
-     role="note"
-     aria-live="polite"
+  <p data-slot="field-description"
+     class="text-muted-foreground text-sm leading-normal font-normal group-has-data-[orientation=horizontal]/field:text-balance last:mt-0 nth-last-2:-mt-1 [[data-variant=legend]+&amp;]:-mt-1.5 [&amp;&gt;a:hover]:text-primary [&amp;&gt;a]:underline [&amp;&gt;a]:underline-offset-4"
   >
     We will never share your email with anyone.
   </p>

@@ -18,6 +18,7 @@ import { IGRPFormField } from "../form/form-field"
 import { IGRPLabel } from "../label"
 import { useIGRPi18n } from "../../../i18n"
 import { hexToFormat, formatToHex, detectFormat, type ColorFormat } from "../../../lib/color-utils"
+import { Field, FieldError } from "../../primitives/field"
 
 interface IGRPInputColorProps extends Omit<IGRPInputProps, "onChange" | "value" | "defaultValue"> {
   /** Initial color in any supported format. Default: "#000000" */
@@ -249,9 +250,7 @@ function ColorField({
       </div>
 
       {showInvalidMessage && (
-        <p id={messageId} className="text-destructive text-xs" role="alert">
-          {invalidValueMessage ?? i18n.inputColor.invalidValueMessage}
-        </p>
+        <FieldError id={messageId}>{invalidValueMessage ?? i18n.inputColor.invalidValueMessage}</FieldError>
       )}
     </div>
   )
@@ -326,7 +325,7 @@ function IGRPInputColor({
   }
 
   return (
-    <div className={cn("*:not-first:mt-2", className)}>
+    <Field className={className}>
       {label && <IGRPLabel label={label} className={labelClassName} required={required} id={controlId} />}
 
       <ColorField
@@ -348,12 +347,8 @@ function IGRPInputColor({
         </p>
       )}
 
-      {error && (
-        <p id={`${fieldName}-error`} className="text-destructive mt-2 text-xs" role="alert">
-          {error}
-        </p>
-      )}
-    </div>
+      {error && <FieldError id={`${fieldName}-error`}>{error}</FieldError>}
+    </Field>
   )
 }
 

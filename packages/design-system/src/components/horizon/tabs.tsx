@@ -16,6 +16,7 @@ import { Button } from "../primitives/button"
 import { Tabs, TabsList, TabsTrigger, TabsContent } from "../primitives/tabs"
 import { IGRPBadge } from "./badge"
 import { IGRPIcon, type IGRPIconName } from "./icon"
+import { useIGRPi18n } from "../../i18n"
 
 const tabListVariants = cva("gap-1.5", {
   variants: {
@@ -146,6 +147,7 @@ function IGRPTabs({
   scrollButtonClassName,
   ...restProps
 }: IGRPTabsProps) {
+  const i18n = useIGRPi18n()
   const isControlled = controlledValue !== undefined
 
   const initialValue = defaultValue ?? items[0]?.value ?? ""
@@ -300,7 +302,7 @@ function IGRPTabs({
               scrollButtonClassName,
             )}
             onClick={() => scrollToTab("left")}
-            aria-label="Scroll tabs left"
+            aria-label={i18n.tabs.scrollLeft}
             type="button"
           >
             <IGRPIcon iconName="ChevronLeft" size={12} />
@@ -382,7 +384,7 @@ function IGRPTabs({
               scrollButtonClassName,
             )}
             onClick={() => scrollToTab("right")}
-            aria-label="Scroll tabs right"
+            aria-label={i18n.tabs.scrollRight}
             type="button"
           >
             <IGRPIcon iconName="ChevronRight" size={12} />

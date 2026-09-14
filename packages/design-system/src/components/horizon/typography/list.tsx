@@ -116,7 +116,7 @@ const getDefaultIcon = (type: IGRPTextListType, iconColor?: IGRPColorVariants, i
       return (
         <div
           className={cn(
-            "w-6 h-6 rounded-full flex items-center justify-center text-xs font-medium",
+            "size-6 rounded-full flex items-center justify-center text-xs font-medium",
             IGRPColors.solid[iconColor || "info"].alert,
             IGRPColors.solid[iconColor || "info"].bg,
           )}

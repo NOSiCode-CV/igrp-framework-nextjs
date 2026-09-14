@@ -9,6 +9,7 @@ import type { IGRPBaseAttributes, IGRPGridSize } from "../../../types"
 import { RadioGroup, RadioGroupItem, radioItemVariants } from "../../primitives/radio-group"
 import { IGRPFormField } from "../form/form-field"
 import { IGRPLabel } from "../label"
+import { Field, FieldDescription, FieldError } from "../../primitives/field"
 
 /**
  * Option for radio group.
@@ -196,28 +197,15 @@ function IGRPRadioGroup({
   }
 
   return (
-    <div className={cn("space-y-2", className)}>
+    <Field className={className} data-invalid={error ? true : undefined}>
       {label && <IGRPLabel label={label} required={required} id={fieldName} className={labelClassName} />}
 
       <RadioGroupOptionsField {...radioFieldProps} value={value} onValueChange={onValueChange ?? (() => {})} />
 
-      {helperText && !error && (
-        <p
-          id={`${fieldName}-helper`}
-          className={cn("text-muted-foreground mt-2 text-xs")}
-          role="region"
-          aria-live="polite"
-        >
-          {helperText}
-        </p>
-      )}
+      {helperText && !error && <FieldDescription id={`${fieldName}-helper`}>{helperText}</FieldDescription>}
 
-      {error && (
-        <p id={`${fieldName}-error`} className={cn("text-destructive mt-2 text-xs")} role="alert">
-          {error}
-        </p>
-      )}
-    </div>
+      {error && <FieldError id={`${fieldName}-error`}>{error}</FieldError>}
+    </Field>
   )
 }
 

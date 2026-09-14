@@ -37,7 +37,7 @@ exports[`Components/Card Default smoke-test 1`] = `
                stroke-width="2"
                stroke-linecap="round"
                stroke-linejoin="round"
-               class="lucide lucide-ellipsis-vertical size-4"
+               class="lucide lucide-ellipsis-vertical"
                aria-hidden="true"
                id="EllipsisVertical"
           >

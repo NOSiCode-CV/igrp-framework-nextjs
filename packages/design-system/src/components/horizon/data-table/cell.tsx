@@ -10,6 +10,7 @@ import { Switch } from "../../primitives/switch"
 import { IGRPBadge, type IGRPBadgeProps } from "../badge"
 import { IGRPIcon } from "../icon"
 import { IGRPLink, type IGRPLinkProps } from "../typography/link"
+import { useIGRPi18n } from "../../../i18n"
 
 /**
  * Props for the IGRPDataTableCellCheckbox component.
@@ -22,12 +23,14 @@ interface IGRPDataTableCellCheckboxProps<TData> extends React.ComponentProps<typ
 
 /** Checkbox for row selection. */
 function IGRPDataTableCellCheckbox<TData>({ row, className, ...props }: IGRPDataTableCellCheckboxProps<TData>) {
+  const i18n = useIGRPi18n()
+
   return (
     <Checkbox
       checked={row.getIsSelected()}
       disabled={!row.getCanSelect()}
       onCheckedChange={(value) => row.toggleSelected(!!value)}
-      aria-label="Select row"
+      aria-label={i18n.dataTable.selectRow}
       className={className}
       {...props}
     />
@@ -44,12 +47,14 @@ interface IGRPDataTableCellSwitchProps<TData> extends React.ComponentProps<typeo
 
 /** Switch for row selection. */
 function IGRPDataTableCellSwitch<TData>({ row, className, ...props }: IGRPDataTableCellSwitchProps<TData>) {
+  const i18n = useIGRPi18n()
+
   return (
     <Switch
       checked={row.getIsSelected()}
       disabled={!row.getCanSelect()}
       onCheckedChange={(value) => row.toggleSelected(!!value)}
-      aria-label="Toggle row"
+      aria-label={i18n.dataTable.toggleRow}
       className={className}
       {...props}
     />

@@ -1,5 +1,8 @@
 "use client"
 
+// IGRPLinkVariants is the component's CVA object and part of the public API.
+/* eslint-disable react-refresh/only-export-components */
+
 import { useId, type ReactNode } from "react"
 import Link, { type LinkProps } from "next/link"
 import { cva, type VariantProps } from "class-variance-authority"

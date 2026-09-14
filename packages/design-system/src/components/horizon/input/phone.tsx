@@ -11,6 +11,7 @@ import type { IGRPInputProps } from "../../../types"
 import { Input } from "../../primitives/input"
 import { IGRPIcon } from "../icon"
 import { IGRPLabel } from "../label"
+import { Field, FieldError } from "../../primitives/field"
 
 /**
  * Props for the IGRPInputPhone component.
@@ -143,7 +144,7 @@ function IGRPInputPhone({
 
   if (!formContext) {
     return (
-      <div className={cn("*:not-first:mt-2", className)} dir={dir}>
+      <Field className={className} dir={dir}>
         {label && <IGRPLabel label={label} className={className} required={required} id={fieldName} />}
 
         <RPNInput.default
@@ -172,12 +173,8 @@ function IGRPInputPhone({
           </p>
         )}
 
-        {error && (
-          <p id={`${fieldName}-error`} className={cn("text-xs text-destructive")} role="alert">
-            {error}
-          </p>
-        )}
-      </div>
+        {error && <FieldError id={`${fieldName}-error`}>{error}</FieldError>}
+      </Field>
     )
   }
 
@@ -187,7 +184,7 @@ function IGRPInputPhone({
       control={formContext.control}
       defaultValue={defaultValue || ""}
       render={({ field, fieldState }) => (
-        <div className={cn("*:not-first:mt-2", className)} dir={dir}>
+        <Field className={className} dir={dir}>
           {label && <IGRPLabel label={label} className={className} required={required} id={fieldName} />}
 
           <RPNInput.default
@@ -225,11 +222,9 @@ function IGRPInputPhone({
           )}
 
           {(error || fieldState.error) && (
-            <p id={`${fieldName}-error`} className={cn("text-xs text-destructive")} role="alert">
-              {error || fieldState.error?.message}
-            </p>
+            <FieldError id={`${fieldName}-error`}>{error || fieldState.error?.message}</FieldError>
           )}
-        </div>
+        </Field>
       )}
     />
   )

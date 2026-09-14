@@ -8,6 +8,7 @@ import type { IGRPInputProps } from "../../../types"
 import { Checkbox } from "../../primitives/checkbox"
 import { IGRPFormField } from "../form/form-field"
 import { IGRPLabel } from "../label"
+import { Field, FieldDescription, FieldError } from "../../primitives/field"
 
 /**
  * Props for the IGRPCheckbox component.
@@ -43,7 +44,7 @@ function IGRPCheckbox({
 
   if (!formContext) {
     return (
-      <div className={cn("*:not-first:mt-2")}>
+      <Field>
         <div className={cn("flex items-center gap-2")}>
           <Checkbox
             id={fieldName}
@@ -65,23 +66,10 @@ function IGRPCheckbox({
           )}
         </div>
 
-        {helperText && !error && (
-          <p
-            id={`${fieldName}-helper`}
-            className={cn("text-muted-foreground mt-2 text-xs")}
-            role="region"
-            aria-live="polite"
-          >
-            {helperText}
-          </p>
-        )}
+        {helperText && !error && <FieldDescription id={`${fieldName}-helper`}>{helperText}</FieldDescription>}
 
-        {error && (
-          <p id={`${fieldName}-error`} className={cn("text-destructive mt-2 text-xs")} role="alert">
-            {error}
-          </p>
-        )}
-      </div>
+        {error && <FieldError id={`${fieldName}-error`}>{error}</FieldError>}
+      </Field>
     )
   }
 

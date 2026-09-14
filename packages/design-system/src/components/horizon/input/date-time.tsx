@@ -9,6 +9,7 @@ import type { IGRPInputProps } from "../../../types"
 
 import { Input } from "../../primitives/input"
 import { IGRPLabel } from "../label"
+import { Field, FieldDescription, FieldError } from "../../primitives/field"
 
 const DEFAULT_PLACEHOLDER = `${DD_MM_YYYY}, --:--`
 
@@ -99,7 +100,7 @@ function IGRPDateTimeInput({
 
   if (!formContext) {
     return (
-      <div className={cn("*:not-first:mt-2")}>
+      <Field>
         {label && <IGRPLabel label={label} className={className} required={required} id={fieldName} />}
 
         <Input
@@ -118,23 +119,10 @@ function IGRPDateTimeInput({
           {...props}
         />
 
-        {helperText && !error && (
-          <p
-            id={`${fieldName}-helper`}
-            className={cn("text-muted-foreground mt-2 text-xs")}
-            role="region"
-            aria-live="polite"
-          >
-            {helperText}
-          </p>
-        )}
+        {helperText && !error && <FieldDescription id={`${fieldName}-helper`}>{helperText}</FieldDescription>}
 
-        {error && (
-          <p id={`${fieldName}-error`} className={cn("text-destructive mt-2 text-xs")} role="alert">
-            {error}
-          </p>
-        )}
-      </div>
+        {error && <FieldError id={`${fieldName}-error`}>{error}</FieldError>}
+      </Field>
     )
   }
 
@@ -166,7 +154,7 @@ function IGRPDateTimeInput({
         }
 
         return (
-          <div className={cn("*:not-first:mt-2")}>
+          <Field>
             {label && <IGRPLabel label={label} className={className} required={required} id={fieldName} />}
 
             <Input
@@ -190,22 +178,13 @@ function IGRPDateTimeInput({
             />
 
             {helperText && !error && !fieldState.error && (
-              <p
-                id={`${fieldName}-helper`}
-                className={cn("text-muted-foreground mt-2 text-xs")}
-                role="region"
-                aria-live="polite"
-              >
-                {helperText}
-              </p>
+              <FieldDescription id={`${fieldName}-helper`}>{helperText}</FieldDescription>
             )}
 
             {(error || fieldState.error) && (
-              <p id={`${fieldName}-error`} className={cn("text-destructive mt-2 text-xs")} role="alert">
-                {error || fieldState.error?.message}
-              </p>
+              <FieldError id={`${fieldName}-error`}>{error || fieldState.error?.message}</FieldError>
             )}
-          </div>
+          </Field>
         )
       }}
     />

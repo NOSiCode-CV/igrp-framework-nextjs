@@ -1,115 +1,1701 @@
 // Jest Snapshot v1, https://jestjs.io/docs/snapshot-testing
 
+exports[`Components/InfoCard ColorMatrix smoke-test 1`] = `
+<div class="container px-6 py-12 mx-auto flex flex-col gap-8">
+  <div class="flex flex-col gap-3">
+    <h3 class="text-sm font-semibold text-muted-foreground uppercase tracking-wide">
+      outline
+    </h3>
+    <div class="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-4">
+      <div data-slot="card"
+           class="flex flex-col gap-6 rounded-xl border py-6 shadow-sm bg-transparent text-card-foreground border-primary"
+           id="_r_ID_"
+      >
+        <div data-slot="card-header"
+             class="@container/card-header grid auto-rows-min grid-rows-[auto_auto] items-start gap-2 px-6 has-data-[slot=card-action]:grid-cols-[1fr_auto] [.border-b]:pb-6"
+        >
+          <div data-slot="card-title"
+               class="text-2xl font-semibold leading-none tracking-tight text-primary"
+          >
+            primary
+          </div>
+        </div>
+        <div data-slot="card-content"
+             class="px-6 @container/igrp-info-card flex flex-col gap-4"
+        >
+          <dl class="grid gap-4 grid-cols-1">
+            <div class="flex min-w-0 flex-col gap-0.5 @sm/igrp-info-card:flex-row @sm/igrp-info-card:items-baseline @sm/igrp-info-card:gap-3">
+              <dt class="text-sm font-medium text-muted-foreground @sm/igrp-info-card:w-2/5 @sm/igrp-info-card:shrink-0">
+                NIF
+              </dt>
+              <dd class="m-0 flex min-w-0 items-center gap-2">
+                <span class="min-w-0 break-words">
+                  123456789
+                </span>
+              </dd>
+            </div>
+            <div class="flex min-w-0 flex-col gap-0.5 @sm/igrp-info-card:flex-row @sm/igrp-info-card:items-baseline @sm/igrp-info-card:gap-3">
+              <dt class="text-sm font-medium text-muted-foreground @sm/igrp-info-card:w-2/5 @sm/igrp-info-card:shrink-0">
+                Nome/Razão Social
+              </dt>
+              <dd class="m-0 flex min-w-0 items-center gap-2">
+                <span class="min-w-0 break-words">
+                  João Silva Lda
+                </span>
+              </dd>
+            </div>
+            <div class="flex min-w-0 flex-col gap-0.5 @sm/igrp-info-card:flex-row @sm/igrp-info-card:items-baseline @sm/igrp-info-card:gap-3">
+              <dt class="text-sm font-medium text-muted-foreground @sm/igrp-info-card:w-2/5 @sm/igrp-info-card:shrink-0">
+                Setor
+              </dt>
+              <dd class="m-0 flex min-w-0 items-center gap-2">
+                <svg xmlns="http://www.w3.org/2000/svg"
+                     width="16"
+                     height="16"
+                     viewbox="0 0 24 24"
+                     fill="none"
+                     stroke="currentColor"
+                     stroke-width="2"
+                     stroke-linecap="round"
+                     stroke-linejoin="round"
+                     class="lucide lucide-building2 lucide-building-2 shrink-0"
+                     aria-hidden="true"
+                     id="Building2"
+                >
+                  <path d="M10 12h4">
+                  </path>
+                  <path d="M10 8h4">
+                  </path>
+                  <path d="M14 21v-3a2 2 0 0 0-4 0v3">
+                  </path>
+                  <path d="M6 10H4a2 2 0 0 0-2 2v7a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2V9a2 2 0 0 0-2-2h-2">
+                  </path>
+                  <path d="M6 21V5a2 2 0 0 1 2-2h8a2 2 0 0 1 2 2v16">
+                  </path>
+                </svg>
+                <span class="min-w-0 break-words">
+                  Tecnologia
+                </span>
+              </dd>
+            </div>
+          </dl>
+        </div>
+      </div>
+      <div data-slot="card"
+           class="flex flex-col gap-6 rounded-xl border py-6 shadow-sm bg-transparent text-card-foreground border-success"
+           id="_r_ID_"
+      >
+        <div data-slot="card-header"
+             class="@container/card-header grid auto-rows-min grid-rows-[auto_auto] items-start gap-2 px-6 has-data-[slot=card-action]:grid-cols-[1fr_auto] [.border-b]:pb-6"
+        >
+          <div data-slot="card-title"
+               class="text-2xl font-semibold leading-none tracking-tight text-success"
+          >
+            success
+          </div>
+        </div>
+        <div data-slot="card-content"
+             class="px-6 @container/igrp-info-card flex flex-col gap-4"
+        >
+          <dl class="grid gap-4 grid-cols-1">
+            <div class="flex min-w-0 flex-col gap-0.5 @sm/igrp-info-card:flex-row @sm/igrp-info-card:items-baseline @sm/igrp-info-card:gap-3">
+              <dt class="text-sm font-medium text-muted-foreground @sm/igrp-info-card:w-2/5 @sm/igrp-info-card:shrink-0">
+                NIF
+              </dt>
+              <dd class="m-0 flex min-w-0 items-center gap-2">
+                <span class="min-w-0 break-words">
+                  123456789
+                </span>
+              </dd>
+            </div>
+            <div class="flex min-w-0 flex-col gap-0.5 @sm/igrp-info-card:flex-row @sm/igrp-info-card:items-baseline @sm/igrp-info-card:gap-3">
+              <dt class="text-sm font-medium text-muted-foreground @sm/igrp-info-card:w-2/5 @sm/igrp-info-card:shrink-0">
+                Nome/Razão Social
+              </dt>
+              <dd class="m-0 flex min-w-0 items-center gap-2">
+                <span class="min-w-0 break-words">
+                  João Silva Lda
+                </span>
+              </dd>
+            </div>
+            <div class="flex min-w-0 flex-col gap-0.5 @sm/igrp-info-card:flex-row @sm/igrp-info-card:items-baseline @sm/igrp-info-card:gap-3">
+              <dt class="text-sm font-medium text-muted-foreground @sm/igrp-info-card:w-2/5 @sm/igrp-info-card:shrink-0">
+                Setor
+              </dt>
+              <dd class="m-0 flex min-w-0 items-center gap-2">
+                <svg xmlns="http://www.w3.org/2000/svg"
+                     width="16"
+                     height="16"
+                     viewbox="0 0 24 24"
+                     fill="none"
+                     stroke="currentColor"
+                     stroke-width="2"
+                     stroke-linecap="round"
+                     stroke-linejoin="round"
+                     class="lucide lucide-building2 lucide-building-2 shrink-0"
+                     aria-hidden="true"
+                     id="Building2"
+                >
+                  <path d="M10 12h4">
+                  </path>
+                  <path d="M10 8h4">
+                  </path>
+                  <path d="M14 21v-3a2 2 0 0 0-4 0v3">
+                  </path>
+                  <path d="M6 10H4a2 2 0 0 0-2 2v7a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2V9a2 2 0 0 0-2-2h-2">
+                  </path>
+                  <path d="M6 21V5a2 2 0 0 1 2-2h8a2 2 0 0 1 2 2v16">
+                  </path>
+                </svg>
+                <span class="min-w-0 break-words">
+                  Tecnologia
+                </span>
+              </dd>
+            </div>
+          </dl>
+        </div>
+      </div>
+      <div data-slot="card"
+           class="flex flex-col gap-6 rounded-xl border py-6 shadow-sm bg-transparent text-card-foreground border-destructive"
+           id="_r_ID_"
+      >
+        <div data-slot="card-header"
+             class="@container/card-header grid auto-rows-min grid-rows-[auto_auto] items-start gap-2 px-6 has-data-[slot=card-action]:grid-cols-[1fr_auto] [.border-b]:pb-6"
+        >
+          <div data-slot="card-title"
+               class="text-2xl font-semibold leading-none tracking-tight text-destructive"
+          >
+            destructive
+          </div>
+        </div>
+        <div data-slot="card-content"
+             class="px-6 @container/igrp-info-card flex flex-col gap-4"
+        >
+          <dl class="grid gap-4 grid-cols-1">
+            <div class="flex min-w-0 flex-col gap-0.5 @sm/igrp-info-card:flex-row @sm/igrp-info-card:items-baseline @sm/igrp-info-card:gap-3">
+              <dt class="text-sm font-medium text-muted-foreground @sm/igrp-info-card:w-2/5 @sm/igrp-info-card:shrink-0">
+                NIF
+              </dt>
+              <dd class="m-0 flex min-w-0 items-center gap-2">
+                <span class="min-w-0 break-words">
+                  123456789
+                </span>
+              </dd>
+            </div>
+            <div class="flex min-w-0 flex-col gap-0.5 @sm/igrp-info-card:flex-row @sm/igrp-info-card:items-baseline @sm/igrp-info-card:gap-3">
+              <dt class="text-sm font-medium text-muted-foreground @sm/igrp-info-card:w-2/5 @sm/igrp-info-card:shrink-0">
+                Nome/Razão Social
+              </dt>
+              <dd class="m-0 flex min-w-0 items-center gap-2">
+                <span class="min-w-0 break-words">
+                  João Silva Lda
+                </span>
+              </dd>
+            </div>
+            <div class="flex min-w-0 flex-col gap-0.5 @sm/igrp-info-card:flex-row @sm/igrp-info-card:items-baseline @sm/igrp-info-card:gap-3">
+              <dt class="text-sm font-medium text-muted-foreground @sm/igrp-info-card:w-2/5 @sm/igrp-info-card:shrink-0">
+                Setor
+              </dt>
+              <dd class="m-0 flex min-w-0 items-center gap-2">
+                <svg xmlns="http://www.w3.org/2000/svg"
+                     width="16"
+                     height="16"
+                     viewbox="0 0 24 24"
+                     fill="none"
+                     stroke="currentColor"
+                     stroke-width="2"
+                     stroke-linecap="round"
+                     stroke-linejoin="round"
+                     class="lucide lucide-building2 lucide-building-2 shrink-0"
+                     aria-hidden="true"
+                     id="Building2"
+                >
+                  <path d="M10 12h4">
+                  </path>
+                  <path d="M10 8h4">
+                  </path>
+                  <path d="M14 21v-3a2 2 0 0 0-4 0v3">
+                  </path>
+                  <path d="M6 10H4a2 2 0 0 0-2 2v7a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2V9a2 2 0 0 0-2-2h-2">
+                  </path>
+                  <path d="M6 21V5a2 2 0 0 1 2-2h8a2 2 0 0 1 2 2v16">
+                  </path>
+                </svg>
+                <span class="min-w-0 break-words">
+                  Tecnologia
+                </span>
+              </dd>
+            </div>
+          </dl>
+        </div>
+      </div>
+      <div data-slot="card"
+           class="flex flex-col gap-6 rounded-xl border py-6 shadow-sm bg-transparent text-card-foreground border-warning"
+           id="_r_ID_"
+      >
+        <div data-slot="card-header"
+             class="@container/card-header grid auto-rows-min grid-rows-[auto_auto] items-start gap-2 px-6 has-data-[slot=card-action]:grid-cols-[1fr_auto] [.border-b]:pb-6"
+        >
+          <div data-slot="card-title"
+               class="text-2xl font-semibold leading-none tracking-tight text-warning"
+          >
+            warning
+          </div>
+        </div>
+        <div data-slot="card-content"
+             class="px-6 @container/igrp-info-card flex flex-col gap-4"
+        >
+          <dl class="grid gap-4 grid-cols-1">
+            <div class="flex min-w-0 flex-col gap-0.5 @sm/igrp-info-card:flex-row @sm/igrp-info-card:items-baseline @sm/igrp-info-card:gap-3">
+              <dt class="text-sm font-medium text-muted-foreground @sm/igrp-info-card:w-2/5 @sm/igrp-info-card:shrink-0">
+                NIF
+              </dt>
+              <dd class="m-0 flex min-w-0 items-center gap-2">
+                <span class="min-w-0 break-words">
+                  123456789
+                </span>
+              </dd>
+            </div>
+            <div class="flex min-w-0 flex-col gap-0.5 @sm/igrp-info-card:flex-row @sm/igrp-info-card:items-baseline @sm/igrp-info-card:gap-3">
+              <dt class="text-sm font-medium text-muted-foreground @sm/igrp-info-card:w-2/5 @sm/igrp-info-card:shrink-0">
+                Nome/Razão Social
+              </dt>
+              <dd class="m-0 flex min-w-0 items-center gap-2">
+                <span class="min-w-0 break-words">
+                  João Silva Lda
+                </span>
+              </dd>
+            </div>
+            <div class="flex min-w-0 flex-col gap-0.5 @sm/igrp-info-card:flex-row @sm/igrp-info-card:items-baseline @sm/igrp-info-card:gap-3">
+              <dt class="text-sm font-medium text-muted-foreground @sm/igrp-info-card:w-2/5 @sm/igrp-info-card:shrink-0">
+                Setor
+              </dt>
+              <dd class="m-0 flex min-w-0 items-center gap-2">
+                <svg xmlns="http://www.w3.org/2000/svg"
+                     width="16"
+                     height="16"
+                     viewbox="0 0 24 24"
+                     fill="none"
+                     stroke="currentColor"
+                     stroke-width="2"
+                     stroke-linecap="round"
+                     stroke-linejoin="round"
+                     class="lucide lucide-building2 lucide-building-2 shrink-0"
+                     aria-hidden="true"
+                     id="Building2"
+                >
+                  <path d="M10 12h4">
+                  </path>
+                  <path d="M10 8h4">
+                  </path>
+                  <path d="M14 21v-3a2 2 0 0 0-4 0v3">
+                  </path>
+                  <path d="M6 10H4a2 2 0 0 0-2 2v7a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2V9a2 2 0 0 0-2-2h-2">
+                  </path>
+                  <path d="M6 21V5a2 2 0 0 1 2-2h8a2 2 0 0 1 2 2v16">
+                  </path>
+                </svg>
+                <span class="min-w-0 break-words">
+                  Tecnologia
+                </span>
+              </dd>
+            </div>
+          </dl>
+        </div>
+      </div>
+      <div data-slot="card"
+           class="flex flex-col gap-6 rounded-xl border py-6 shadow-sm bg-transparent text-card-foreground border-info"
+           id="_r_ID_"
+      >
+        <div data-slot="card-header"
+             class="@container/card-header grid auto-rows-min grid-rows-[auto_auto] items-start gap-2 px-6 has-data-[slot=card-action]:grid-cols-[1fr_auto] [.border-b]:pb-6"
+        >
+          <div data-slot="card-title"
+               class="text-2xl font-semibold leading-none tracking-tight text-info"
+          >
+            info
+          </div>
+        </div>
+        <div data-slot="card-content"
+             class="px-6 @container/igrp-info-card flex flex-col gap-4"
+        >
+          <dl class="grid gap-4 grid-cols-1">
+            <div class="flex min-w-0 flex-col gap-0.5 @sm/igrp-info-card:flex-row @sm/igrp-info-card:items-baseline @sm/igrp-info-card:gap-3">
+              <dt class="text-sm font-medium text-muted-foreground @sm/igrp-info-card:w-2/5 @sm/igrp-info-card:shrink-0">
+                NIF
+              </dt>
+              <dd class="m-0 flex min-w-0 items-center gap-2">
+                <span class="min-w-0 break-words">
+                  123456789
+                </span>
+              </dd>
+            </div>
+            <div class="flex min-w-0 flex-col gap-0.5 @sm/igrp-info-card:flex-row @sm/igrp-info-card:items-baseline @sm/igrp-info-card:gap-3">
+              <dt class="text-sm font-medium text-muted-foreground @sm/igrp-info-card:w-2/5 @sm/igrp-info-card:shrink-0">
+                Nome/Razão Social
+              </dt>
+              <dd class="m-0 flex min-w-0 items-center gap-2">
+                <span class="min-w-0 break-words">
+                  João Silva Lda
+                </span>
+              </dd>
+            </div>
+            <div class="flex min-w-0 flex-col gap-0.5 @sm/igrp-info-card:flex-row @sm/igrp-info-card:items-baseline @sm/igrp-info-card:gap-3">
+              <dt class="text-sm font-medium text-muted-foreground @sm/igrp-info-card:w-2/5 @sm/igrp-info-card:shrink-0">
+                Setor
+              </dt>
+              <dd class="m-0 flex min-w-0 items-center gap-2">
+                <svg xmlns="http://www.w3.org/2000/svg"
+                     width="16"
+                     height="16"
+                     viewbox="0 0 24 24"
+                     fill="none"
+                     stroke="currentColor"
+                     stroke-width="2"
+                     stroke-linecap="round"
+                     stroke-linejoin="round"
+                     class="lucide lucide-building2 lucide-building-2 shrink-0"
+                     aria-hidden="true"
+                     id="Building2"
+                >
+                  <path d="M10 12h4">
+                  </path>
+                  <path d="M10 8h4">
+                  </path>
+                  <path d="M14 21v-3a2 2 0 0 0-4 0v3">
+                  </path>
+                  <path d="M6 10H4a2 2 0 0 0-2 2v7a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2V9a2 2 0 0 0-2-2h-2">
+                  </path>
+                  <path d="M6 21V5a2 2 0 0 1 2-2h8a2 2 0 0 1 2 2v16">
+                  </path>
+                </svg>
+                <span class="min-w-0 break-words">
+                  Tecnologia
+                </span>
+              </dd>
+            </div>
+          </dl>
+        </div>
+      </div>
+      <div data-slot="card"
+           class="flex flex-col gap-6 rounded-xl border py-6 shadow-sm bg-transparent text-card-foreground border-border"
+           id="_r_ID_"
+      >
+        <div data-slot="card-header"
+             class="@container/card-header grid auto-rows-min grid-rows-[auto_auto] items-start gap-2 px-6 has-data-[slot=card-action]:grid-cols-[1fr_auto] [.border-b]:pb-6"
+        >
+          <div data-slot="card-title"
+               class="text-2xl font-semibold leading-none tracking-tight text-muted-foreground"
+          >
+            secondary
+          </div>
+        </div>
+        <div data-slot="card-content"
+             class="px-6 @container/igrp-info-card flex flex-col gap-4"
+        >
+          <dl class="grid gap-4 grid-cols-1">
+            <div class="flex min-w-0 flex-col gap-0.5 @sm/igrp-info-card:flex-row @sm/igrp-info-card:items-baseline @sm/igrp-info-card:gap-3">
+              <dt class="text-sm font-medium text-muted-foreground @sm/igrp-info-card:w-2/5 @sm/igrp-info-card:shrink-0">
+                NIF
+              </dt>
+              <dd class="m-0 flex min-w-0 items-center gap-2">
+                <span class="min-w-0 break-words">
+                  123456789
+                </span>
+              </dd>
+            </div>
+            <div class="flex min-w-0 flex-col gap-0.5 @sm/igrp-info-card:flex-row @sm/igrp-info-card:items-baseline @sm/igrp-info-card:gap-3">
+              <dt class="text-sm font-medium text-muted-foreground @sm/igrp-info-card:w-2/5 @sm/igrp-info-card:shrink-0">
+                Nome/Razão Social
+              </dt>
+              <dd class="m-0 flex min-w-0 items-center gap-2">
+                <span class="min-w-0 break-words">
+                  João Silva Lda
+                </span>
+              </dd>
+            </div>
+            <div class="flex min-w-0 flex-col gap-0.5 @sm/igrp-info-card:flex-row @sm/igrp-info-card:items-baseline @sm/igrp-info-card:gap-3">
+              <dt class="text-sm font-medium text-muted-foreground @sm/igrp-info-card:w-2/5 @sm/igrp-info-card:shrink-0">
+                Setor
+              </dt>
+              <dd class="m-0 flex min-w-0 items-center gap-2">
+                <svg xmlns="http://www.w3.org/2000/svg"
+                     width="16"
+                     height="16"
+                     viewbox="0 0 24 24"
+                     fill="none"
+                     stroke="currentColor"
+                     stroke-width="2"
+                     stroke-linecap="round"
+                     stroke-linejoin="round"
+                     class="lucide lucide-building2 lucide-building-2 shrink-0"
+                     aria-hidden="true"
+                     id="Building2"
+                >
+                  <path d="M10 12h4">
+                  </path>
+                  <path d="M10 8h4">
+                  </path>
+                  <path d="M14 21v-3a2 2 0 0 0-4 0v3">
+                  </path>
+                  <path d="M6 10H4a2 2 0 0 0-2 2v7a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2V9a2 2 0 0 0-2-2h-2">
+                  </path>
+                  <path d="M6 21V5a2 2 0 0 1 2-2h8a2 2 0 0 1 2 2v16">
+                  </path>
+                </svg>
+                <span class="min-w-0 break-words">
+                  Tecnologia
+                </span>
+              </dd>
+            </div>
+          </dl>
+        </div>
+      </div>
+      <div data-slot="card"
+           class="flex flex-col gap-6 rounded-xl border py-6 shadow-sm bg-transparent text-card-foreground border-indigo"
+           id="_r_ID_"
+      >
+        <div data-slot="card-header"
+             class="@container/card-header grid auto-rows-min grid-rows-[auto_auto] items-start gap-2 px-6 has-data-[slot=card-action]:grid-cols-[1fr_auto] [.border-b]:pb-6"
+        >
+          <div data-slot="card-title"
+               class="text-2xl font-semibold leading-none tracking-tight text-indigo"
+          >
+            indigo
+          </div>
+        </div>
+        <div data-slot="card-content"
+             class="px-6 @container/igrp-info-card flex flex-col gap-4"
+        >
+          <dl class="grid gap-4 grid-cols-1">
+            <div class="flex min-w-0 flex-col gap-0.5 @sm/igrp-info-card:flex-row @sm/igrp-info-card:items-baseline @sm/igrp-info-card:gap-3">
+              <dt class="text-sm font-medium text-muted-foreground @sm/igrp-info-card:w-2/5 @sm/igrp-info-card:shrink-0">
+                NIF
+              </dt>
+              <dd class="m-0 flex min-w-0 items-center gap-2">
+                <span class="min-w-0 break-words">
+                  123456789
+                </span>
+              </dd>
+            </div>
+            <div class="flex min-w-0 flex-col gap-0.5 @sm/igrp-info-card:flex-row @sm/igrp-info-card:items-baseline @sm/igrp-info-card:gap-3">
+              <dt class="text-sm font-medium text-muted-foreground @sm/igrp-info-card:w-2/5 @sm/igrp-info-card:shrink-0">
+                Nome/Razão Social
+              </dt>
+              <dd class="m-0 flex min-w-0 items-center gap-2">
+                <span class="min-w-0 break-words">
+                  João Silva Lda
+                </span>
+              </dd>
+            </div>
+            <div class="flex min-w-0 flex-col gap-0.5 @sm/igrp-info-card:flex-row @sm/igrp-info-card:items-baseline @sm/igrp-info-card:gap-3">
+              <dt class="text-sm font-medium text-muted-foreground @sm/igrp-info-card:w-2/5 @sm/igrp-info-card:shrink-0">
+                Setor
+              </dt>
+              <dd class="m-0 flex min-w-0 items-center gap-2">
+                <svg xmlns="http://www.w3.org/2000/svg"
+                     width="16"
+                     height="16"
+                     viewbox="0 0 24 24"
+                     fill="none"
+                     stroke="currentColor"
+                     stroke-width="2"
+                     stroke-linecap="round"
+                     stroke-linejoin="round"
+                     class="lucide lucide-building2 lucide-building-2 shrink-0"
+                     aria-hidden="true"
+                     id="Building2"
+                >
+                  <path d="M10 12h4">
+                  </path>
+                  <path d="M10 8h4">
+                  </path>
+                  <path d="M14 21v-3a2 2 0 0 0-4 0v3">
+                  </path>
+                  <path d="M6 10H4a2 2 0 0 0-2 2v7a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2V9a2 2 0 0 0-2-2h-2">
+                  </path>
+                  <path d="M6 21V5a2 2 0 0 1 2-2h8a2 2 0 0 1 2 2v16">
+                  </path>
+                </svg>
+                <span class="min-w-0 break-words">
+                  Tecnologia
+                </span>
+              </dd>
+            </div>
+          </dl>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="flex flex-col gap-3">
+    <h3 class="text-sm font-semibold text-muted-foreground uppercase tracking-wide">
+      soft
+    </h3>
+    <div class="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-4">
+      <div data-slot="card"
+           class="flex flex-col gap-6 rounded-xl border py-6 shadow-sm bg-primary/10 text-card-foreground border-transparent"
+           id="_r_ID_"
+      >
+        <div data-slot="card-header"
+             class="@container/card-header grid auto-rows-min grid-rows-[auto_auto] items-start gap-2 px-6 has-data-[slot=card-action]:grid-cols-[1fr_auto] [.border-b]:pb-6"
+        >
+          <div data-slot="card-title"
+               class="text-2xl font-semibold leading-none tracking-tight text-primary"
+          >
+            primary
+          </div>
+        </div>
+        <div data-slot="card-content"
+             class="px-6 @container/igrp-info-card flex flex-col gap-4"
+        >
+          <dl class="grid gap-4 grid-cols-1">
+            <div class="flex min-w-0 flex-col gap-0.5 @sm/igrp-info-card:flex-row @sm/igrp-info-card:items-baseline @sm/igrp-info-card:gap-3">
+              <dt class="text-sm font-medium text-muted-foreground @sm/igrp-info-card:w-2/5 @sm/igrp-info-card:shrink-0">
+                NIF
+              </dt>
+              <dd class="m-0 flex min-w-0 items-center gap-2">
+                <span class="min-w-0 break-words">
+                  123456789
+                </span>
+              </dd>
+            </div>
+            <div class="flex min-w-0 flex-col gap-0.5 @sm/igrp-info-card:flex-row @sm/igrp-info-card:items-baseline @sm/igrp-info-card:gap-3">
+              <dt class="text-sm font-medium text-muted-foreground @sm/igrp-info-card:w-2/5 @sm/igrp-info-card:shrink-0">
+                Nome/Razão Social
+              </dt>
+              <dd class="m-0 flex min-w-0 items-center gap-2">
+                <span class="min-w-0 break-words">
+                  João Silva Lda
+                </span>
+              </dd>
+            </div>
+            <div class="flex min-w-0 flex-col gap-0.5 @sm/igrp-info-card:flex-row @sm/igrp-info-card:items-baseline @sm/igrp-info-card:gap-3">
+              <dt class="text-sm font-medium text-muted-foreground @sm/igrp-info-card:w-2/5 @sm/igrp-info-card:shrink-0">
+                Setor
+              </dt>
+              <dd class="m-0 flex min-w-0 items-center gap-2">
+                <svg xmlns="http://www.w3.org/2000/svg"
+                     width="16"
+                     height="16"
+                     viewbox="0 0 24 24"
+                     fill="none"
+                     stroke="currentColor"
+                     stroke-width="2"
+                     stroke-linecap="round"
+                     stroke-linejoin="round"
+                     class="lucide lucide-building2 lucide-building-2 shrink-0"
+                     aria-hidden="true"
+                     id="Building2"
+                >
+                  <path d="M10 12h4">
+                  </path>
+                  <path d="M10 8h4">
+                  </path>
+                  <path d="M14 21v-3a2 2 0 0 0-4 0v3">
+                  </path>
+                  <path d="M6 10H4a2 2 0 0 0-2 2v7a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2V9a2 2 0 0 0-2-2h-2">
+                  </path>
+                  <path d="M6 21V5a2 2 0 0 1 2-2h8a2 2 0 0 1 2 2v16">
+                  </path>
+                </svg>
+                <span class="min-w-0 break-words">
+                  Tecnologia
+                </span>
+              </dd>
+            </div>
+          </dl>
+        </div>
+      </div>
+      <div data-slot="card"
+           class="flex flex-col gap-6 rounded-xl border py-6 shadow-sm bg-success/10 text-card-foreground border-transparent"
+           id="_r_ID_"
+      >
+        <div data-slot="card-header"
+             class="@container/card-header grid auto-rows-min grid-rows-[auto_auto] items-start gap-2 px-6 has-data-[slot=card-action]:grid-cols-[1fr_auto] [.border-b]:pb-6"
+        >
+          <div data-slot="card-title"
+               class="text-2xl font-semibold leading-none tracking-tight text-success"
+          >
+            success
+          </div>
+        </div>
+        <div data-slot="card-content"
+             class="px-6 @container/igrp-info-card flex flex-col gap-4"
+        >
+          <dl class="grid gap-4 grid-cols-1">
+            <div class="flex min-w-0 flex-col gap-0.5 @sm/igrp-info-card:flex-row @sm/igrp-info-card:items-baseline @sm/igrp-info-card:gap-3">
+              <dt class="text-sm font-medium text-muted-foreground @sm/igrp-info-card:w-2/5 @sm/igrp-info-card:shrink-0">
+                NIF
+              </dt>
+              <dd class="m-0 flex min-w-0 items-center gap-2">
+                <span class="min-w-0 break-words">
+                  123456789
+                </span>
+              </dd>
+            </div>
+            <div class="flex min-w-0 flex-col gap-0.5 @sm/igrp-info-card:flex-row @sm/igrp-info-card:items-baseline @sm/igrp-info-card:gap-3">
+              <dt class="text-sm font-medium text-muted-foreground @sm/igrp-info-card:w-2/5 @sm/igrp-info-card:shrink-0">
+                Nome/Razão Social
+              </dt>
+              <dd class="m-0 flex min-w-0 items-center gap-2">
+                <span class="min-w-0 break-words">
+                  João Silva Lda
+                </span>
+              </dd>
+            </div>
+            <div class="flex min-w-0 flex-col gap-0.5 @sm/igrp-info-card:flex-row @sm/igrp-info-card:items-baseline @sm/igrp-info-card:gap-3">
+              <dt class="text-sm font-medium text-muted-foreground @sm/igrp-info-card:w-2/5 @sm/igrp-info-card:shrink-0">
+                Setor
+              </dt>
+              <dd class="m-0 flex min-w-0 items-center gap-2">
+                <svg xmlns="http://www.w3.org/2000/svg"
+                     width="16"
+                     height="16"
+                     viewbox="0 0 24 24"
+                     fill="none"
+                     stroke="currentColor"
+                     stroke-width="2"
+                     stroke-linecap="round"
+                     stroke-linejoin="round"
+                     class="lucide lucide-building2 lucide-building-2 shrink-0"
+                     aria-hidden="true"
+                     id="Building2"
+                >
+                  <path d="M10 12h4">
+                  </path>
+                  <path d="M10 8h4">
+                  </path>
+                  <path d="M14 21v-3a2 2 0 0 0-4 0v3">
+                  </path>
+                  <path d="M6 10H4a2 2 0 0 0-2 2v7a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2V9a2 2 0 0 0-2-2h-2">
+                  </path>
+                  <path d="M6 21V5a2 2 0 0 1 2-2h8a2 2 0 0 1 2 2v16">
+                  </path>
+                </svg>
+                <span class="min-w-0 break-words">
+                  Tecnologia
+                </span>
+              </dd>
+            </div>
+          </dl>
+        </div>
+      </div>
+      <div data-slot="card"
+           class="flex flex-col gap-6 rounded-xl border py-6 shadow-sm bg-destructive/10 text-card-foreground border-transparent"
+           id="_r_ID_"
+      >
+        <div data-slot="card-header"
+             class="@container/card-header grid auto-rows-min grid-rows-[auto_auto] items-start gap-2 px-6 has-data-[slot=card-action]:grid-cols-[1fr_auto] [.border-b]:pb-6"
+        >
+          <div data-slot="card-title"
+               class="text-2xl font-semibold leading-none tracking-tight text-destructive"
+          >
+            destructive
+          </div>
+        </div>
+        <div data-slot="card-content"
+             class="px-6 @container/igrp-info-card flex flex-col gap-4"
+        >
+          <dl class="grid gap-4 grid-cols-1">
+            <div class="flex min-w-0 flex-col gap-0.5 @sm/igrp-info-card:flex-row @sm/igrp-info-card:items-baseline @sm/igrp-info-card:gap-3">
+              <dt class="text-sm font-medium text-muted-foreground @sm/igrp-info-card:w-2/5 @sm/igrp-info-card:shrink-0">
+                NIF
+              </dt>
+              <dd class="m-0 flex min-w-0 items-center gap-2">
+                <span class="min-w-0 break-words">
+                  123456789
+                </span>
+              </dd>
+            </div>
+            <div class="flex min-w-0 flex-col gap-0.5 @sm/igrp-info-card:flex-row @sm/igrp-info-card:items-baseline @sm/igrp-info-card:gap-3">
+              <dt class="text-sm font-medium text-muted-foreground @sm/igrp-info-card:w-2/5 @sm/igrp-info-card:shrink-0">
+                Nome/Razão Social
+              </dt>
+              <dd class="m-0 flex min-w-0 items-center gap-2">
+                <span class="min-w-0 break-words">
+                  João Silva Lda
+                </span>
+              </dd>
+            </div>
+            <div class="flex min-w-0 flex-col gap-0.5 @sm/igrp-info-card:flex-row @sm/igrp-info-card:items-baseline @sm/igrp-info-card:gap-3">
+              <dt class="text-sm font-medium text-muted-foreground @sm/igrp-info-card:w-2/5 @sm/igrp-info-card:shrink-0">
+                Setor
+              </dt>
+              <dd class="m-0 flex min-w-0 items-center gap-2">
+                <svg xmlns="http://www.w3.org/2000/svg"
+                     width="16"
+                     height="16"
+                     viewbox="0 0 24 24"
+                     fill="none"
+                     stroke="currentColor"
+                     stroke-width="2"
+                     stroke-linecap="round"
+                     stroke-linejoin="round"
+                     class="lucide lucide-building2 lucide-building-2 shrink-0"
+                     aria-hidden="true"
+                     id="Building2"
+                >
+                  <path d="M10 12h4">
+                  </path>
+                  <path d="M10 8h4">
+                  </path>
+                  <path d="M14 21v-3a2 2 0 0 0-4 0v3">
+                  </path>
+                  <path d="M6 10H4a2 2 0 0 0-2 2v7a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2V9a2 2 0 0 0-2-2h-2">
+                  </path>
+                  <path d="M6 21V5a2 2 0 0 1 2-2h8a2 2 0 0 1 2 2v16">
+                  </path>
+                </svg>
+                <span class="min-w-0 break-words">
+                  Tecnologia
+                </span>
+              </dd>
+            </div>
+          </dl>
+        </div>
+      </div>
+      <div data-slot="card"
+           class="flex flex-col gap-6 rounded-xl border py-6 shadow-sm bg-warning/10 text-card-foreground border-transparent"
+           id="_r_ID_"
+      >
+        <div data-slot="card-header"
+             class="@container/card-header grid auto-rows-min grid-rows-[auto_auto] items-start gap-2 px-6 has-data-[slot=card-action]:grid-cols-[1fr_auto] [.border-b]:pb-6"
+        >
+          <div data-slot="card-title"
+               class="text-2xl font-semibold leading-none tracking-tight text-warning"
+          >
+            warning
+          </div>
+        </div>
+        <div data-slot="card-content"
+             class="px-6 @container/igrp-info-card flex flex-col gap-4"
+        >
+          <dl class="grid gap-4 grid-cols-1">
+            <div class="flex min-w-0 flex-col gap-0.5 @sm/igrp-info-card:flex-row @sm/igrp-info-card:items-baseline @sm/igrp-info-card:gap-3">
+              <dt class="text-sm font-medium text-muted-foreground @sm/igrp-info-card:w-2/5 @sm/igrp-info-card:shrink-0">
+                NIF
+              </dt>
+              <dd class="m-0 flex min-w-0 items-center gap-2">
+                <span class="min-w-0 break-words">
+                  123456789
+                </span>
+              </dd>
+            </div>
+            <div class="flex min-w-0 flex-col gap-0.5 @sm/igrp-info-card:flex-row @sm/igrp-info-card:items-baseline @sm/igrp-info-card:gap-3">
+              <dt class="text-sm font-medium text-muted-foreground @sm/igrp-info-card:w-2/5 @sm/igrp-info-card:shrink-0">
+                Nome/Razão Social
+              </dt>
+              <dd class="m-0 flex min-w-0 items-center gap-2">
+                <span class="min-w-0 break-words">
+                  João Silva Lda
+                </span>
+              </dd>
+            </div>
+            <div class="flex min-w-0 flex-col gap-0.5 @sm/igrp-info-card:flex-row @sm/igrp-info-card:items-baseline @sm/igrp-info-card:gap-3">
+              <dt class="text-sm font-medium text-muted-foreground @sm/igrp-info-card:w-2/5 @sm/igrp-info-card:shrink-0">
+                Setor
+              </dt>
+              <dd class="m-0 flex min-w-0 items-center gap-2">
+                <svg xmlns="http://www.w3.org/2000/svg"
+                     width="16"
+                     height="16"
+                     viewbox="0 0 24 24"
+                     fill="none"
+                     stroke="currentColor"
+                     stroke-width="2"
+                     stroke-linecap="round"
+                     stroke-linejoin="round"
+                     class="lucide lucide-building2 lucide-building-2 shrink-0"
+                     aria-hidden="true"
+                     id="Building2"
+                >
+                  <path d="M10 12h4">
+                  </path>
+                  <path d="M10 8h4">
+                  </path>
+                  <path d="M14 21v-3a2 2 0 0 0-4 0v3">
+                  </path>
+                  <path d="M6 10H4a2 2 0 0 0-2 2v7a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2V9a2 2 0 0 0-2-2h-2">
+                  </path>
+                  <path d="M6 21V5a2 2 0 0 1 2-2h8a2 2 0 0 1 2 2v16">
+                  </path>
+                </svg>
+                <span class="min-w-0 break-words">
+                  Tecnologia
+                </span>
+              </dd>
+            </div>
+          </dl>
+        </div>
+      </div>
+      <div data-slot="card"
+           class="flex flex-col gap-6 rounded-xl border py-6 shadow-sm bg-info/10 text-card-foreground border-transparent"
+           id="_r_ID_"
+      >
+        <div data-slot="card-header"
+             class="@container/card-header grid auto-rows-min grid-rows-[auto_auto] items-start gap-2 px-6 has-data-[slot=card-action]:grid-cols-[1fr_auto] [.border-b]:pb-6"
+        >
+          <div data-slot="card-title"
+               class="text-2xl font-semibold leading-none tracking-tight text-info"
+          >
+            info
+          </div>
+        </div>
+        <div data-slot="card-content"
+             class="px-6 @container/igrp-info-card flex flex-col gap-4"
+        >
+          <dl class="grid gap-4 grid-cols-1">
+            <div class="flex min-w-0 flex-col gap-0.5 @sm/igrp-info-card:flex-row @sm/igrp-info-card:items-baseline @sm/igrp-info-card:gap-3">
+              <dt class="text-sm font-medium text-muted-foreground @sm/igrp-info-card:w-2/5 @sm/igrp-info-card:shrink-0">
+                NIF
+              </dt>
+              <dd class="m-0 flex min-w-0 items-center gap-2">
+                <span class="min-w-0 break-words">
+                  123456789
+                </span>
+              </dd>
+            </div>
+            <div class="flex min-w-0 flex-col gap-0.5 @sm/igrp-info-card:flex-row @sm/igrp-info-card:items-baseline @sm/igrp-info-card:gap-3">
+              <dt class="text-sm font-medium text-muted-foreground @sm/igrp-info-card:w-2/5 @sm/igrp-info-card:shrink-0">
+                Nome/Razão Social
+              </dt>
+              <dd class="m-0 flex min-w-0 items-center gap-2">
+                <span class="min-w-0 break-words">
+                  João Silva Lda
+                </span>
+              </dd>
+            </div>
+            <div class="flex min-w-0 flex-col gap-0.5 @sm/igrp-info-card:flex-row @sm/igrp-info-card:items-baseline @sm/igrp-info-card:gap-3">
+              <dt class="text-sm font-medium text-muted-foreground @sm/igrp-info-card:w-2/5 @sm/igrp-info-card:shrink-0">
+                Setor
+              </dt>
+              <dd class="m-0 flex min-w-0 items-center gap-2">
+                <svg xmlns="http://www.w3.org/2000/svg"
+                     width="16"
+                     height="16"
+                     viewbox="0 0 24 24"
+                     fill="none"
+                     stroke="currentColor"
+                     stroke-width="2"
+                     stroke-linecap="round"
+                     stroke-linejoin="round"
+                     class="lucide lucide-building2 lucide-building-2 shrink-0"
+                     aria-hidden="true"
+                     id="Building2"
+                >
+                  <path d="M10 12h4">
+                  </path>
+                  <path d="M10 8h4">
+                  </path>
+                  <path d="M14 21v-3a2 2 0 0 0-4 0v3">
+                  </path>
+                  <path d="M6 10H4a2 2 0 0 0-2 2v7a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2V9a2 2 0 0 0-2-2h-2">
+                  </path>
+                  <path d="M6 21V5a2 2 0 0 1 2-2h8a2 2 0 0 1 2 2v16">
+                  </path>
+                </svg>
+                <span class="min-w-0 break-words">
+                  Tecnologia
+                </span>
+              </dd>
+            </div>
+          </dl>
+        </div>
+      </div>
+      <div data-slot="card"
+           class="flex flex-col gap-6 rounded-xl border py-6 shadow-sm bg-muted text-card-foreground border-transparent"
+           id="_r_ID_"
+      >
+        <div data-slot="card-header"
+             class="@container/card-header grid auto-rows-min grid-rows-[auto_auto] items-start gap-2 px-6 has-data-[slot=card-action]:grid-cols-[1fr_auto] [.border-b]:pb-6"
+        >
+          <div data-slot="card-title"
+               class="text-2xl font-semibold leading-none tracking-tight text-muted-foreground"
+          >
+            secondary
+          </div>
+        </div>
+        <div data-slot="card-content"
+             class="px-6 @container/igrp-info-card flex flex-col gap-4"
+        >
+          <dl class="grid gap-4 grid-cols-1">
+            <div class="flex min-w-0 flex-col gap-0.5 @sm/igrp-info-card:flex-row @sm/igrp-info-card:items-baseline @sm/igrp-info-card:gap-3">
+              <dt class="text-sm font-medium text-muted-foreground @sm/igrp-info-card:w-2/5 @sm/igrp-info-card:shrink-0">
+                NIF
+              </dt>
+              <dd class="m-0 flex min-w-0 items-center gap-2">
+                <span class="min-w-0 break-words">
+                  123456789
+                </span>
+              </dd>
+            </div>
+            <div class="flex min-w-0 flex-col gap-0.5 @sm/igrp-info-card:flex-row @sm/igrp-info-card:items-baseline @sm/igrp-info-card:gap-3">
+              <dt class="text-sm font-medium text-muted-foreground @sm/igrp-info-card:w-2/5 @sm/igrp-info-card:shrink-0">
+                Nome/Razão Social
+              </dt>
+              <dd class="m-0 flex min-w-0 items-center gap-2">
+                <span class="min-w-0 break-words">
+                  João Silva Lda
+                </span>
+              </dd>
+            </div>
+            <div class="flex min-w-0 flex-col gap-0.5 @sm/igrp-info-card:flex-row @sm/igrp-info-card:items-baseline @sm/igrp-info-card:gap-3">
+              <dt class="text-sm font-medium text-muted-foreground @sm/igrp-info-card:w-2/5 @sm/igrp-info-card:shrink-0">
+                Setor
+              </dt>
+              <dd class="m-0 flex min-w-0 items-center gap-2">
+                <svg xmlns="http://www.w3.org/2000/svg"
+                     width="16"
+                     height="16"
+                     viewbox="0 0 24 24"
+                     fill="none"
+                     stroke="currentColor"
+                     stroke-width="2"
+                     stroke-linecap="round"
+                     stroke-linejoin="round"
+                     class="lucide lucide-building2 lucide-building-2 shrink-0"
+                     aria-hidden="true"
+                     id="Building2"
+                >
+                  <path d="M10 12h4">
+                  </path>
+                  <path d="M10 8h4">
+                  </path>
+                  <path d="M14 21v-3a2 2 0 0 0-4 0v3">
+                  </path>
+                  <path d="M6 10H4a2 2 0 0 0-2 2v7a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2V9a2 2 0 0 0-2-2h-2">
+                  </path>
+                  <path d="M6 21V5a2 2 0 0 1 2-2h8a2 2 0 0 1 2 2v16">
+                  </path>
+                </svg>
+                <span class="min-w-0 break-words">
+                  Tecnologia
+                </span>
+              </dd>
+            </div>
+          </dl>
+        </div>
+      </div>
+      <div data-slot="card"
+           class="flex flex-col gap-6 rounded-xl border py-6 shadow-sm bg-indigo/10 text-card-foreground border-transparent"
+           id="_r_ID_"
+      >
+        <div data-slot="card-header"
+             class="@container/card-header grid auto-rows-min grid-rows-[auto_auto] items-start gap-2 px-6 has-data-[slot=card-action]:grid-cols-[1fr_auto] [.border-b]:pb-6"
+        >
+          <div data-slot="card-title"
+               class="text-2xl font-semibold leading-none tracking-tight text-indigo"
+          >
+            indigo
+          </div>
+        </div>
+        <div data-slot="card-content"
+             class="px-6 @container/igrp-info-card flex flex-col gap-4"
+        >
+          <dl class="grid gap-4 grid-cols-1">
+            <div class="flex min-w-0 flex-col gap-0.5 @sm/igrp-info-card:flex-row @sm/igrp-info-card:items-baseline @sm/igrp-info-card:gap-3">
+              <dt class="text-sm font-medium text-muted-foreground @sm/igrp-info-card:w-2/5 @sm/igrp-info-card:shrink-0">
+                NIF
+              </dt>
+              <dd class="m-0 flex min-w-0 items-center gap-2">
+                <span class="min-w-0 break-words">
+                  123456789
+                </span>
+              </dd>
+            </div>
+            <div class="flex min-w-0 flex-col gap-0.5 @sm/igrp-info-card:flex-row @sm/igrp-info-card:items-baseline @sm/igrp-info-card:gap-3">
+              <dt class="text-sm font-medium text-muted-foreground @sm/igrp-info-card:w-2/5 @sm/igrp-info-card:shrink-0">
+                Nome/Razão Social
+              </dt>
+              <dd class="m-0 flex min-w-0 items-center gap-2">
+                <span class="min-w-0 break-words">
+                  João Silva Lda
+                </span>
+              </dd>
+            </div>
+            <div class="flex min-w-0 flex-col gap-0.5 @sm/igrp-info-card:flex-row @sm/igrp-info-card:items-baseline @sm/igrp-info-card:gap-3">
+              <dt class="text-sm font-medium text-muted-foreground @sm/igrp-info-card:w-2/5 @sm/igrp-info-card:shrink-0">
+                Setor
+              </dt>
+              <dd class="m-0 flex min-w-0 items-center gap-2">
+                <svg xmlns="http://www.w3.org/2000/svg"
+                     width="16"
+                     height="16"
+                     viewbox="0 0 24 24"
+                     fill="none"
+                     stroke="currentColor"
+                     stroke-width="2"
+                     stroke-linecap="round"
+                     stroke-linejoin="round"
+                     class="lucide lucide-building2 lucide-building-2 shrink-0"
+                     aria-hidden="true"
+                     id="Building2"
+                >
+                  <path d="M10 12h4">
+                  </path>
+                  <path d="M10 8h4">
+                  </path>
+                  <path d="M14 21v-3a2 2 0 0 0-4 0v3">
+                  </path>
+                  <path d="M6 10H4a2 2 0 0 0-2 2v7a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2V9a2 2 0 0 0-2-2h-2">
+                  </path>
+                  <path d="M6 21V5a2 2 0 0 1 2-2h8a2 2 0 0 1 2 2v16">
+                  </path>
+                </svg>
+                <span class="min-w-0 break-words">
+                  Tecnologia
+                </span>
+              </dd>
+            </div>
+          </dl>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="flex flex-col gap-3">
+    <h3 class="text-sm font-semibold text-muted-foreground uppercase tracking-wide">
+      solid
+    </h3>
+    <div class="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-4">
+      <div data-slot="card"
+           class="flex flex-col gap-6 rounded-xl border py-6 shadow-sm bg-primary text-primary-foreground border-primary"
+           id="_r_ID_"
+      >
+        <div data-slot="card-header"
+             class="@container/card-header grid auto-rows-min grid-rows-[auto_auto] items-start gap-2 px-6 has-data-[slot=card-action]:grid-cols-[1fr_auto] [.border-b]:pb-6"
+        >
+          <div data-slot="card-title"
+               class="text-2xl font-semibold leading-none tracking-tight text-primary-foreground"
+          >
+            primary
+          </div>
+        </div>
+        <div data-slot="card-content"
+             class="px-6 @container/igrp-info-card flex flex-col gap-4"
+        >
+          <dl class="grid gap-4 grid-cols-1">
+            <div class="flex min-w-0 flex-col gap-0.5 @sm/igrp-info-card:flex-row @sm/igrp-info-card:items-baseline @sm/igrp-info-card:gap-3">
+              <dt class="text-sm font-medium opacity-80 @sm/igrp-info-card:w-2/5 @sm/igrp-info-card:shrink-0">
+                NIF
+              </dt>
+              <dd class="m-0 flex min-w-0 items-center gap-2">
+                <span class="min-w-0 break-words">
+                  123456789
+                </span>
+              </dd>
+            </div>
+            <div class="flex min-w-0 flex-col gap-0.5 @sm/igrp-info-card:flex-row @sm/igrp-info-card:items-baseline @sm/igrp-info-card:gap-3">
+              <dt class="text-sm font-medium opacity-80 @sm/igrp-info-card:w-2/5 @sm/igrp-info-card:shrink-0">
+                Nome/Razão Social
+              </dt>
+              <dd class="m-0 flex min-w-0 items-center gap-2">
+                <span class="min-w-0 break-words">
+                  João Silva Lda
+                </span>
+              </dd>
+            </div>
+            <div class="flex min-w-0 flex-col gap-0.5 @sm/igrp-info-card:flex-row @sm/igrp-info-card:items-baseline @sm/igrp-info-card:gap-3">
+              <dt class="text-sm font-medium opacity-80 @sm/igrp-info-card:w-2/5 @sm/igrp-info-card:shrink-0">
+                Setor
+              </dt>
+              <dd class="m-0 flex min-w-0 items-center gap-2">
+                <svg xmlns="http://www.w3.org/2000/svg"
+                     width="16"
+                     height="16"
+                     viewbox="0 0 24 24"
+                     fill="none"
+                     stroke="currentColor"
+                     stroke-width="2"
+                     stroke-linecap="round"
+                     stroke-linejoin="round"
+                     class="lucide lucide-building2 lucide-building-2 shrink-0"
+                     aria-hidden="true"
+                     id="Building2"
+                >
+                  <path d="M10 12h4">
+                  </path>
+                  <path d="M10 8h4">
+                  </path>
+                  <path d="M14 21v-3a2 2 0 0 0-4 0v3">
+                  </path>
+                  <path d="M6 10H4a2 2 0 0 0-2 2v7a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2V9a2 2 0 0 0-2-2h-2">
+                  </path>
+                  <path d="M6 21V5a2 2 0 0 1 2-2h8a2 2 0 0 1 2 2v16">
+                  </path>
+                </svg>
+                <span class="min-w-0 break-words">
+                  Tecnologia
+                </span>
+              </dd>
+            </div>
+          </dl>
+        </div>
+      </div>
+      <div data-slot="card"
+           class="flex flex-col gap-6 rounded-xl border py-6 shadow-sm bg-success text-success-foreground border-success"
+           id="_r_ID_"
+      >
+        <div data-slot="card-header"
+             class="@container/card-header grid auto-rows-min grid-rows-[auto_auto] items-start gap-2 px-6 has-data-[slot=card-action]:grid-cols-[1fr_auto] [.border-b]:pb-6"
+        >
+          <div data-slot="card-title"
+               class="text-2xl font-semibold leading-none tracking-tight text-success-foreground"
+          >
+            success
+          </div>
+        </div>
+        <div data-slot="card-content"
+             class="px-6 @container/igrp-info-card flex flex-col gap-4"
+        >
+          <dl class="grid gap-4 grid-cols-1">
+            <div class="flex min-w-0 flex-col gap-0.5 @sm/igrp-info-card:flex-row @sm/igrp-info-card:items-baseline @sm/igrp-info-card:gap-3">
+              <dt class="text-sm font-medium opacity-80 @sm/igrp-info-card:w-2/5 @sm/igrp-info-card:shrink-0">
+                NIF
+              </dt>
+              <dd class="m-0 flex min-w-0 items-center gap-2">
+                <span class="min-w-0 break-words">
+                  123456789
+                </span>
+              </dd>
+            </div>
+            <div class="flex min-w-0 flex-col gap-0.5 @sm/igrp-info-card:flex-row @sm/igrp-info-card:items-baseline @sm/igrp-info-card:gap-3">
+              <dt class="text-sm font-medium opacity-80 @sm/igrp-info-card:w-2/5 @sm/igrp-info-card:shrink-0">
+                Nome/Razão Social
+              </dt>
+              <dd class="m-0 flex min-w-0 items-center gap-2">
+                <span class="min-w-0 break-words">
+                  João Silva Lda
+                </span>
+              </dd>
+            </div>
+            <div class="flex min-w-0 flex-col gap-0.5 @sm/igrp-info-card:flex-row @sm/igrp-info-card:items-baseline @sm/igrp-info-card:gap-3">
+              <dt class="text-sm font-medium opacity-80 @sm/igrp-info-card:w-2/5 @sm/igrp-info-card:shrink-0">
+                Setor
+              </dt>
+              <dd class="m-0 flex min-w-0 items-center gap-2">
+                <svg xmlns="http://www.w3.org/2000/svg"
+                     width="16"
+                     height="16"
+                     viewbox="0 0 24 24"
+                     fill="none"
+                     stroke="currentColor"
+                     stroke-width="2"
+                     stroke-linecap="round"
+                     stroke-linejoin="round"
+                     class="lucide lucide-building2 lucide-building-2 shrink-0"
+                     aria-hidden="true"
+                     id="Building2"
+                >
+                  <path d="M10 12h4">
+                  </path>
+                  <path d="M10 8h4">
+                  </path>
+                  <path d="M14 21v-3a2 2 0 0 0-4 0v3">
+                  </path>
+                  <path d="M6 10H4a2 2 0 0 0-2 2v7a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2V9a2 2 0 0 0-2-2h-2">
+                  </path>
+                  <path d="M6 21V5a2 2 0 0 1 2-2h8a2 2 0 0 1 2 2v16">
+                  </path>
+                </svg>
+                <span class="min-w-0 break-words">
+                  Tecnologia
+                </span>
+              </dd>
+            </div>
+          </dl>
+        </div>
+      </div>
+      <div data-slot="card"
+           class="flex flex-col gap-6 rounded-xl border py-6 shadow-sm bg-destructive text-destructive-foreground border-destructive"
+           id="_r_ID_"
+      >
+        <div data-slot="card-header"
+             class="@container/card-header grid auto-rows-min grid-rows-[auto_auto] items-start gap-2 px-6 has-data-[slot=card-action]:grid-cols-[1fr_auto] [.border-b]:pb-6"
+        >
+          <div data-slot="card-title"
+               class="text-2xl font-semibold leading-none tracking-tight text-destructive-foreground"
+          >
+            destructive
+          </div>
+        </div>
+        <div data-slot="card-content"
+             class="px-6 @container/igrp-info-card flex flex-col gap-4"
+        >
+          <dl class="grid gap-4 grid-cols-1">
+            <div class="flex min-w-0 flex-col gap-0.5 @sm/igrp-info-card:flex-row @sm/igrp-info-card:items-baseline @sm/igrp-info-card:gap-3">
+              <dt class="text-sm font-medium opacity-80 @sm/igrp-info-card:w-2/5 @sm/igrp-info-card:shrink-0">
+                NIF
+              </dt>
+              <dd class="m-0 flex min-w-0 items-center gap-2">
+                <span class="min-w-0 break-words">
+                  123456789
+                </span>
+              </dd>
+            </div>
+            <div class="flex min-w-0 flex-col gap-0.5 @sm/igrp-info-card:flex-row @sm/igrp-info-card:items-baseline @sm/igrp-info-card:gap-3">
+              <dt class="text-sm font-medium opacity-80 @sm/igrp-info-card:w-2/5 @sm/igrp-info-card:shrink-0">
+                Nome/Razão Social
+              </dt>
+              <dd class="m-0 flex min-w-0 items-center gap-2">
+                <span class="min-w-0 break-words">
+                  João Silva Lda
+                </span>
+              </dd>
+            </div>
+            <div class="flex min-w-0 flex-col gap-0.5 @sm/igrp-info-card:flex-row @sm/igrp-info-card:items-baseline @sm/igrp-info-card:gap-3">
+              <dt class="text-sm font-medium opacity-80 @sm/igrp-info-card:w-2/5 @sm/igrp-info-card:shrink-0">
+                Setor
+              </dt>
+              <dd class="m-0 flex min-w-0 items-center gap-2">
+                <svg xmlns="http://www.w3.org/2000/svg"
+                     width="16"
+                     height="16"
+                     viewbox="0 0 24 24"
+                     fill="none"
+                     stroke="currentColor"
+                     stroke-width="2"
+                     stroke-linecap="round"
+                     stroke-linejoin="round"
+                     class="lucide lucide-building2 lucide-building-2 shrink-0"
+                     aria-hidden="true"
+                     id="Building2"
+                >
+                  <path d="M10 12h4">
+                  </path>
+                  <path d="M10 8h4">
+                  </path>
+                  <path d="M14 21v-3a2 2 0 0 0-4 0v3">
+                  </path>
+                  <path d="M6 10H4a2 2 0 0 0-2 2v7a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2V9a2 2 0 0 0-2-2h-2">
+                  </path>
+                  <path d="M6 21V5a2 2 0 0 1 2-2h8a2 2 0 0 1 2 2v16">
+                  </path>
+                </svg>
+                <span class="min-w-0 break-words">
+                  Tecnologia
+                </span>
+              </dd>
+            </div>
+          </dl>
+        </div>
+      </div>
+      <div data-slot="card"
+           class="flex flex-col gap-6 rounded-xl border py-6 shadow-sm bg-warning text-warning-foreground border-warning"
+           id="_r_ID_"
+      >
+        <div data-slot="card-header"
+             class="@container/card-header grid auto-rows-min grid-rows-[auto_auto] items-start gap-2 px-6 has-data-[slot=card-action]:grid-cols-[1fr_auto] [.border-b]:pb-6"
+        >
+          <div data-slot="card-title"
+               class="text-2xl font-semibold leading-none tracking-tight text-warning-foreground"
+          >
+            warning
+          </div>
+        </div>
+        <div data-slot="card-content"
+             class="px-6 @container/igrp-info-card flex flex-col gap-4"
+        >
+          <dl class="grid gap-4 grid-cols-1">
+            <div class="flex min-w-0 flex-col gap-0.5 @sm/igrp-info-card:flex-row @sm/igrp-info-card:items-baseline @sm/igrp-info-card:gap-3">
+              <dt class="text-sm font-medium opacity-80 @sm/igrp-info-card:w-2/5 @sm/igrp-info-card:shrink-0">
+                NIF
+              </dt>
+              <dd class="m-0 flex min-w-0 items-center gap-2">
+                <span class="min-w-0 break-words">
+                  123456789
+                </span>
+              </dd>
+            </div>
+            <div class="flex min-w-0 flex-col gap-0.5 @sm/igrp-info-card:flex-row @sm/igrp-info-card:items-baseline @sm/igrp-info-card:gap-3">
+              <dt class="text-sm font-medium opacity-80 @sm/igrp-info-card:w-2/5 @sm/igrp-info-card:shrink-0">
+                Nome/Razão Social
+              </dt>
+              <dd class="m-0 flex min-w-0 items-center gap-2">
+                <span class="min-w-0 break-words">
+                  João Silva Lda
+                </span>
+              </dd>
+            </div>
+            <div class="flex min-w-0 flex-col gap-0.5 @sm/igrp-info-card:flex-row @sm/igrp-info-card:items-baseline @sm/igrp-info-card:gap-3">
+              <dt class="text-sm font-medium opacity-80 @sm/igrp-info-card:w-2/5 @sm/igrp-info-card:shrink-0">
+                Setor
+              </dt>
+              <dd class="m-0 flex min-w-0 items-center gap-2">
+                <svg xmlns="http://www.w3.org/2000/svg"
+                     width="16"
+                     height="16"
+                     viewbox="0 0 24 24"
+                     fill="none"
+                     stroke="currentColor"
+                     stroke-width="2"
+                     stroke-linecap="round"
+                     stroke-linejoin="round"
+                     class="lucide lucide-building2 lucide-building-2 shrink-0"
+                     aria-hidden="true"
+                     id="Building2"
+                >
+                  <path d="M10 12h4">
+                  </path>
+                  <path d="M10 8h4">
+                  </path>
+                  <path d="M14 21v-3a2 2 0 0 0-4 0v3">
+                  </path>
+                  <path d="M6 10H4a2 2 0 0 0-2 2v7a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2V9a2 2 0 0 0-2-2h-2">
+                  </path>
+                  <path d="M6 21V5a2 2 0 0 1 2-2h8a2 2 0 0 1 2 2v16">
+                  </path>
+                </svg>
+                <span class="min-w-0 break-words">
+                  Tecnologia
+                </span>
+              </dd>
+            </div>
+          </dl>
+        </div>
+      </div>
+      <div data-slot="card"
+           class="flex flex-col gap-6 rounded-xl border py-6 shadow-sm bg-info text-info-foreground border-info"
+           id="_r_ID_"
+      >
+        <div data-slot="card-header"
+             class="@container/card-header grid auto-rows-min grid-rows-[auto_auto] items-start gap-2 px-6 has-data-[slot=card-action]:grid-cols-[1fr_auto] [.border-b]:pb-6"
+        >
+          <div data-slot="card-title"
+               class="text-2xl font-semibold leading-none tracking-tight text-info-foreground"
+          >
+            info
+          </div>
+        </div>
+        <div data-slot="card-content"
+             class="px-6 @container/igrp-info-card flex flex-col gap-4"
+        >
+          <dl class="grid gap-4 grid-cols-1">
+            <div class="flex min-w-0 flex-col gap-0.5 @sm/igrp-info-card:flex-row @sm/igrp-info-card:items-baseline @sm/igrp-info-card:gap-3">
+              <dt class="text-sm font-medium opacity-80 @sm/igrp-info-card:w-2/5 @sm/igrp-info-card:shrink-0">
+                NIF
+              </dt>
+              <dd class="m-0 flex min-w-0 items-center gap-2">
+                <span class="min-w-0 break-words">
+                  123456789
+                </span>
+              </dd>
+            </div>
+            <div class="flex min-w-0 flex-col gap-0.5 @sm/igrp-info-card:flex-row @sm/igrp-info-card:items-baseline @sm/igrp-info-card:gap-3">
+              <dt class="text-sm font-medium opacity-80 @sm/igrp-info-card:w-2/5 @sm/igrp-info-card:shrink-0">
+                Nome/Razão Social
+              </dt>
+              <dd class="m-0 flex min-w-0 items-center gap-2">
+                <span class="min-w-0 break-words">
+                  João Silva Lda
+                </span>
+              </dd>
+            </div>
+            <div class="flex min-w-0 flex-col gap-0.5 @sm/igrp-info-card:flex-row @sm/igrp-info-card:items-baseline @sm/igrp-info-card:gap-3">
+              <dt class="text-sm font-medium opacity-80 @sm/igrp-info-card:w-2/5 @sm/igrp-info-card:shrink-0">
+                Setor
+              </dt>
+              <dd class="m-0 flex min-w-0 items-center gap-2">
+                <svg xmlns="http://www.w3.org/2000/svg"
+                     width="16"
+                     height="16"
+                     viewbox="0 0 24 24"
+                     fill="none"
+                     stroke="currentColor"
+                     stroke-width="2"
+                     stroke-linecap="round"
+                     stroke-linejoin="round"
+                     class="lucide lucide-building2 lucide-building-2 shrink-0"
+                     aria-hidden="true"
+                     id="Building2"
+                >
+                  <path d="M10 12h4">
+                  </path>
+                  <path d="M10 8h4">
+                  </path>
+                  <path d="M14 21v-3a2 2 0 0 0-4 0v3">
+                  </path>
+                  <path d="M6 10H4a2 2 0 0 0-2 2v7a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2V9a2 2 0 0 0-2-2h-2">
+                  </path>
+                  <path d="M6 21V5a2 2 0 0 1 2-2h8a2 2 0 0 1 2 2v16">
+                  </path>
+                </svg>
+                <span class="min-w-0 break-words">
+                  Tecnologia
+                </span>
+              </dd>
+            </div>
+          </dl>
+        </div>
+      </div>
+      <div data-slot="card"
+           class="flex flex-col gap-6 rounded-xl border py-6 shadow-sm bg-secondary text-secondary-foreground border-border"
+           id="_r_ID_"
+      >
+        <div data-slot="card-header"
+             class="@container/card-header grid auto-rows-min grid-rows-[auto_auto] items-start gap-2 px-6 has-data-[slot=card-action]:grid-cols-[1fr_auto] [.border-b]:pb-6"
+        >
+          <div data-slot="card-title"
+               class="text-2xl font-semibold leading-none tracking-tight text-secondary-foreground"
+          >
+            secondary
+          </div>
+        </div>
+        <div data-slot="card-content"
+             class="px-6 @container/igrp-info-card flex flex-col gap-4"
+        >
+          <dl class="grid gap-4 grid-cols-1">
+            <div class="flex min-w-0 flex-col gap-0.5 @sm/igrp-info-card:flex-row @sm/igrp-info-card:items-baseline @sm/igrp-info-card:gap-3">
+              <dt class="text-sm font-medium opacity-80 @sm/igrp-info-card:w-2/5 @sm/igrp-info-card:shrink-0">
+                NIF
+              </dt>
+              <dd class="m-0 flex min-w-0 items-center gap-2">
+                <span class="min-w-0 break-words">
+                  123456789
+                </span>
+              </dd>
+            </div>
+            <div class="flex min-w-0 flex-col gap-0.5 @sm/igrp-info-card:flex-row @sm/igrp-info-card:items-baseline @sm/igrp-info-card:gap-3">
+              <dt class="text-sm font-medium opacity-80 @sm/igrp-info-card:w-2/5 @sm/igrp-info-card:shrink-0">
+                Nome/Razão Social
+              </dt>
+              <dd class="m-0 flex min-w-0 items-center gap-2">
+                <span class="min-w-0 break-words">
+                  João Silva Lda
+                </span>
+              </dd>
+            </div>
+            <div class="flex min-w-0 flex-col gap-0.5 @sm/igrp-info-card:flex-row @sm/igrp-info-card:items-baseline @sm/igrp-info-card:gap-3">
+              <dt class="text-sm font-medium opacity-80 @sm/igrp-info-card:w-2/5 @sm/igrp-info-card:shrink-0">
+                Setor
+              </dt>
+              <dd class="m-0 flex min-w-0 items-center gap-2">
+                <svg xmlns="http://www.w3.org/2000/svg"
+                     width="16"
+                     height="16"
+                     viewbox="0 0 24 24"
+                     fill="none"
+                     stroke="currentColor"
+                     stroke-width="2"
+                     stroke-linecap="round"
+                     stroke-linejoin="round"
+                     class="lucide lucide-building2 lucide-building-2 shrink-0"
+                     aria-hidden="true"
+                     id="Building2"
+                >
+                  <path d="M10 12h4">
+                  </path>
+                  <path d="M10 8h4">
+                  </path>
+                  <path d="M14 21v-3a2 2 0 0 0-4 0v3">
+                  </path>
+                  <path d="M6 10H4a2 2 0 0 0-2 2v7a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2V9a2 2 0 0 0-2-2h-2">
+                  </path>
+                  <path d="M6 21V5a2 2 0 0 1 2-2h8a2 2 0 0 1 2 2v16">
+                  </path>
+                </svg>
+                <span class="min-w-0 break-words">
+                  Tecnologia
+                </span>
+              </dd>
+            </div>
+          </dl>
+        </div>
+      </div>
+      <div data-slot="card"
+           class="flex flex-col gap-6 rounded-xl border py-6 shadow-sm bg-indigo text-indigo-foreground border-indigo"
+           id="_r_ID_"
+      >
+        <div data-slot="card-header"
+             class="@container/card-header grid auto-rows-min grid-rows-[auto_auto] items-start gap-2 px-6 has-data-[slot=card-action]:grid-cols-[1fr_auto] [.border-b]:pb-6"
+        >
+          <div data-slot="card-title"
+               class="text-2xl font-semibold leading-none tracking-tight text-indigo-foreground"
+          >
+            indigo
+          </div>
+        </div>
+        <div data-slot="card-content"
+             class="px-6 @container/igrp-info-card flex flex-col gap-4"
+        >
+          <dl class="grid gap-4 grid-cols-1">
+            <div class="flex min-w-0 flex-col gap-0.5 @sm/igrp-info-card:flex-row @sm/igrp-info-card:items-baseline @sm/igrp-info-card:gap-3">
+              <dt class="text-sm font-medium opacity-80 @sm/igrp-info-card:w-2/5 @sm/igrp-info-card:shrink-0">
+                NIF
+              </dt>
+              <dd class="m-0 flex min-w-0 items-center gap-2">
+                <span class="min-w-0 break-words">
+                  123456789
+                </span>
+              </dd>
+            </div>
+            <div class="flex min-w-0 flex-col gap-0.5 @sm/igrp-info-card:flex-row @sm/igrp-info-card:items-baseline @sm/igrp-info-card:gap-3">
+              <dt class="text-sm font-medium opacity-80 @sm/igrp-info-card:w-2/5 @sm/igrp-info-card:shrink-0">
+                Nome/Razão Social
+              </dt>
+              <dd class="m-0 flex min-w-0 items-center gap-2">
+                <span class="min-w-0 break-words">
+                  João Silva Lda
+                </span>
+              </dd>
+            </div>
+            <div class="flex min-w-0 flex-col gap-0.5 @sm/igrp-info-card:flex-row @sm/igrp-info-card:items-baseline @sm/igrp-info-card:gap-3">
+              <dt class="text-sm font-medium opacity-80 @sm/igrp-info-card:w-2/5 @sm/igrp-info-card:shrink-0">
+                Setor
+              </dt>
+              <dd class="m-0 flex min-w-0 items-center gap-2">
+                <svg xmlns="http://www.w3.org/2000/svg"
+                     width="16"
+                     height="16"
+                     viewbox="0 0 24 24"
+                     fill="none"
+                     stroke="currentColor"
+                     stroke-width="2"
+                     stroke-linecap="round"
+                     stroke-linejoin="round"
+                     class="lucide lucide-building2 lucide-building-2 shrink-0"
+                     aria-hidden="true"
+                     id="Building2"
+                >
+                  <path d="M10 12h4">
+                  </path>
+                  <path d="M10 8h4">
+                  </path>
+                  <path d="M14 21v-3a2 2 0 0 0-4 0v3">
+                  </path>
+                  <path d="M6 10H4a2 2 0 0 0-2 2v7a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2V9a2 2 0 0 0-2-2h-2">
+                  </path>
+                  <path d="M6 21V5a2 2 0 0 1 2-2h8a2 2 0 0 1 2 2v16">
+                  </path>
+                </svg>
+                <span class="min-w-0 break-words">
+                  Tecnologia
+                </span>
+              </dd>
+            </div>
+          </dl>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+`;
+
 exports[`Components/InfoCard CompanyInfo smoke-test 1`] = `
 <div class="container px-6 py-12 mx-auto">
   <div data-slot="card"
-       class="text-card-foreground flex flex-col gap-6 rounded-xl border py-6 shadow-sm bg-transparent"
+       class="flex flex-col gap-6 rounded-xl border py-6 shadow-sm bg-transparent text-card-foreground border-primary"
        id="_r_ID_"
   >
     <div data-slot="card-header"
          class="@container/card-header grid auto-rows-min grid-rows-[auto_auto] items-start gap-2 px-6 has-data-[slot=card-action]:grid-cols-[1fr_auto] [.border-b]:pb-6"
     >
       <div data-slot="card-title"
-           class="text-2xl font-semibold leading-none tracking-tight"
+           class="text-2xl font-semibold leading-none tracking-tight text-primary"
       >
         Informações da Empresa
       </div>
     </div>
     <div data-slot="card-content"
-         class="px-6 flex flex-col gap-4"
+         class="px-6 @container/igrp-info-card flex flex-col gap-4"
     >
-      <div class="flex flex-col gap-0.5">
-        <span class="text-sm font-medium">
-          Razão Social
-        </span>
-        <div class="flex items-center gap-2">
-          <span>
-            TechCorp Solutions Lda
-          </span>
+      <dl class="grid gap-4 grid-cols-1">
+        <div class="flex min-w-0 flex-col gap-0.5">
+          <dt class="text-sm font-medium text-muted-foreground">
+            Razão Social
+          </dt>
+          <dd class="m-0 flex min-w-0 items-center gap-2">
+            <span class="min-w-0 break-words">
+              TechCorp Solutions Lda
+            </span>
+          </dd>
         </div>
-      </div>
-      <div class="flex flex-col gap-0.5">
-        <span class="text-sm font-medium">
-          NIPC
-        </span>
-        <div class="flex items-center gap-2">
-          <span>
-            987654321
-          </span>
+        <div class="flex min-w-0 flex-col gap-0.5">
+          <dt class="text-sm font-medium text-muted-foreground">
+            NIPC
+          </dt>
+          <dd class="m-0 flex min-w-0 items-center gap-2">
+            <span class="min-w-0 break-words">
+              987654321
+            </span>
+          </dd>
         </div>
-      </div>
-      <div class="flex flex-col gap-0.5">
-        <span class="text-sm font-medium">
-          Setor
-        </span>
-        <div class="flex items-center gap-2">
-          <span>
-            Consultoria em TI
-          </span>
+        <div class="flex min-w-0 flex-col gap-0.5">
+          <dt class="text-sm font-medium text-muted-foreground">
+            Setor
+          </dt>
+          <dd class="m-0 flex min-w-0 items-center gap-2">
+            <span class="min-w-0 break-words">
+              Consultoria em TI
+            </span>
+          </dd>
         </div>
-      </div>
+      </dl>
       <div data-orientation="horizontal"
            role="none"
            data-slot="separator"
            class="bg-border shrink-0 data-[orientation=horizontal]:h-px data-[orientation=horizontal]:w-full data-[orientation=vertical]:h-full data-[orientation=vertical]:w-px"
       >
       </div>
-      <div class="flex flex-col gap-0.5">
-        <span class="text-sm font-medium">
-          Website
-        </span>
-        <div class="flex items-center gap-2">
-          <span>
-            www.techcorp.pt
-          </span>
+      <dl class="grid gap-4 grid-cols-1">
+        <div class="flex min-w-0 flex-col gap-0.5">
+          <dt class="text-sm font-medium text-muted-foreground">
+            Website
+          </dt>
+          <dd class="m-0 flex min-w-0 items-center gap-2">
+            <span class="min-w-0 break-words">
+              www.techcorp.pt
+            </span>
+          </dd>
         </div>
-      </div>
-      <div class="flex flex-col gap-0.5">
-        <span class="text-sm font-medium">
-          Email Corporativo
-        </span>
-        <div class="flex items-center gap-2">
-          <span>
-            info@techcorp.pt
-          </span>
+        <div class="flex min-w-0 flex-col gap-0.5">
+          <dt class="text-sm font-medium text-muted-foreground">
+            Email Corporativo
+          </dt>
+          <dd class="m-0 flex min-w-0 items-center gap-2">
+            <span class="min-w-0 break-words">
+              info@techcorp.pt
+            </span>
+          </dd>
         </div>
-      </div>
-      <div class="flex flex-col gap-0.5">
-        <span class="text-sm font-medium">
-          Telefone Principal
-        </span>
-        <div class="flex items-center gap-2">
-          <span>
-            +351 210 123 456
-          </span>
+        <div class="flex min-w-0 flex-col gap-0.5">
+          <dt class="text-sm font-medium text-muted-foreground">
+            Telefone Principal
+          </dt>
+          <dd class="m-0 flex min-w-0 items-center gap-2">
+            <span class="min-w-0 break-words">
+              +351 210 123 456
+            </span>
+          </dd>
         </div>
-      </div>
+      </dl>
       <div data-orientation="horizontal"
            role="none"
            data-slot="separator"
            class="bg-border shrink-0 data-[orientation=horizontal]:h-px data-[orientation=horizontal]:w-full data-[orientation=vertical]:h-full data-[orientation=vertical]:w-px"
       >
       </div>
-      <div class="flex flex-col gap-0.5">
-        <span class="text-sm font-medium">
-          Morada
-        </span>
-        <div class="flex items-center gap-2">
-          <span>
-            Av. da Liberdade, 200, Lisboa
-          </span>
+      <dl class="grid gap-4 grid-cols-1">
+        <div class="flex min-w-0 flex-col gap-0.5">
+          <dt class="text-sm font-medium text-muted-foreground">
+            Morada
+          </dt>
+          <dd class="m-0 flex min-w-0 items-center gap-2">
+            <span class="min-w-0 break-words">
+              Av. da Liberdade, 200, Lisboa
+            </span>
+          </dd>
         </div>
-      </div>
-      <div class="flex flex-col gap-0.5">
-        <span class="text-sm font-medium">
-          Data de Constituição
-        </span>
-        <div class="flex items-center gap-2">
-          <span>
-            10/01/2020
-          </span>
+        <div class="flex min-w-0 flex-col gap-0.5">
+          <dt class="text-sm font-medium text-muted-foreground">
+            Data de Constituição
+          </dt>
+          <dd class="m-0 flex min-w-0 items-center gap-2">
+            <span class="min-w-0 break-words">
+              10/01/2020
+            </span>
+          </dd>
         </div>
-      </div>
+      </dl>
     </div>
   </div>
 </div>
@@ -118,77 +1704,81 @@ exports[`Components/InfoCard CompanyInfo smoke-test 1`] = `
 exports[`Components/InfoCard CustomTitle smoke-test 1`] = `
 <div class="container px-6 py-12 mx-auto">
   <div data-slot="card"
-       class="text-card-foreground flex flex-col gap-6 rounded-xl border py-6 shadow-sm bg-transparent"
+       class="flex flex-col gap-6 rounded-xl border py-6 shadow-sm bg-transparent text-card-foreground border-primary"
        id="_r_ID_"
   >
     <div data-slot="card-header"
          class="@container/card-header grid auto-rows-min grid-rows-[auto_auto] items-start gap-2 px-6 has-data-[slot=card-action]:grid-cols-[1fr_auto] [.border-b]:pb-6"
     >
       <div data-slot="card-title"
-           class="text-2xl font-semibold leading-none tracking-tight"
+           class="text-2xl font-semibold leading-none tracking-tight text-primary"
       >
         Perfil do Cliente Premium
       </div>
     </div>
     <div data-slot="card-content"
-         class="px-6 flex flex-col gap-4"
+         class="px-6 @container/igrp-info-card flex flex-col gap-4"
     >
-      <div class="flex flex-col gap-0.5">
-        <span class="text-sm font-medium">
-          Cliente ID
-        </span>
-        <div class="flex items-center gap-2">
-          <span>
-            PREM-2024-001
-          </span>
+      <dl class="grid gap-4 grid-cols-1">
+        <div class="flex min-w-0 flex-col gap-0.5">
+          <dt class="text-sm font-medium text-muted-foreground">
+            Cliente ID
+          </dt>
+          <dd class="m-0 flex min-w-0 items-center gap-2">
+            <span class="min-w-0 break-words">
+              PREM-2024-001
+            </span>
+          </dd>
         </div>
-      </div>
-      <div class="flex flex-col gap-0.5">
-        <span class="text-sm font-medium">
-          Nome
-        </span>
-        <div class="flex items-center gap-2">
-          <span>
-            Ana Costa
-          </span>
+        <div class="flex min-w-0 flex-col gap-0.5">
+          <dt class="text-sm font-medium text-muted-foreground">
+            Nome
+          </dt>
+          <dd class="m-0 flex min-w-0 items-center gap-2">
+            <span class="min-w-0 break-words">
+              Ana Costa
+            </span>
+          </dd>
         </div>
-      </div>
-      <div class="flex flex-col gap-0.5">
-        <span class="text-sm font-medium">
-          Nível
-        </span>
-        <div class="flex items-center gap-2">
-          <span>
-            Premium Gold
-          </span>
+        <div class="flex min-w-0 flex-col gap-0.5">
+          <dt class="text-sm font-medium text-muted-foreground">
+            Nível
+          </dt>
+          <dd class="m-0 flex min-w-0 items-center gap-2">
+            <span class="min-w-0 break-words">
+              Premium Gold
+            </span>
+          </dd>
         </div>
-      </div>
+      </dl>
       <div data-orientation="horizontal"
            role="none"
            data-slot="separator"
            class="bg-border shrink-0 data-[orientation=horizontal]:h-px data-[orientation=horizontal]:w-full data-[orientation=vertical]:h-full data-[orientation=vertical]:w-px"
       >
       </div>
-      <div class="flex flex-col gap-0.5">
-        <span class="text-sm font-medium">
-          Email
-        </span>
-        <div class="flex items-center gap-2">
-          <span>
-            ana.costa@email.com
-          </span>
+      <dl class="grid gap-4 grid-cols-1">
+        <div class="flex min-w-0 flex-col gap-0.5">
+          <dt class="text-sm font-medium text-muted-foreground">
+            Email
+          </dt>
+          <dd class="m-0 flex min-w-0 items-center gap-2">
+            <span class="min-w-0 break-words">
+              ana.costa@email.com
+            </span>
+          </dd>
         </div>
-      </div>
-      <div class="flex flex-col gap-0.5">
-        <span class="text-sm font-medium">
-          Membro desde
-        </span>
-        <div class="flex items-center gap-2">
-          <span>
-            15/06/2020
-          </span>
+        <div class="flex min-w-0 flex-col gap-0.5">
+          <dt class="text-sm font-medium text-muted-foreground">
+            Membro desde
+          </dt>
+          <dd class="m-0 flex min-w-0 items-center gap-2">
+            <span class="min-w-0 break-words">
+              15/06/2020
+            </span>
+          </dd>
         </div>
-      </div>
+      </dl>
     </div>
   </div>
 </div>
@@ -197,103 +1787,109 @@ exports[`Components/InfoCard CustomTitle smoke-test 1`] = `
 exports[`Components/InfoCard Default smoke-test 1`] = `
 <div class="container px-6 py-12 mx-auto">
   <div data-slot="card"
-       class="text-card-foreground flex flex-col gap-6 rounded-xl border py-6 shadow-sm bg-success hover:bg-success/90"
+       class="flex flex-col gap-6 rounded-xl border py-6 shadow-sm bg-success text-success-foreground border-success"
        id="_r_ID_"
   >
     <div data-slot="card-header"
          class="@container/card-header grid auto-rows-min grid-rows-[auto_auto] items-start gap-2 px-6 has-data-[slot=card-action]:grid-cols-[1fr_auto] [.border-b]:pb-6"
     >
       <div data-slot="card-title"
-           class="text-2xl font-semibold leading-none tracking-tight"
+           class="text-2xl font-semibold leading-none tracking-tight text-success-foreground"
       >
         Informações Básicas
       </div>
     </div>
     <div data-slot="card-content"
-         class="px-6 flex flex-col gap-4"
+         class="px-6 @container/igrp-info-card flex flex-col gap-4"
     >
-      <div class="flex flex-col gap-0.5">
-        <span class="text-sm font-medium">
-          NIF
-        </span>
-        <div class="flex items-center gap-2">
-          <span>
-            123456789
-          </span>
+      <dl class="grid gap-4 grid-cols-1">
+        <div class="flex min-w-0 flex-col gap-0.5">
+          <dt class="text-sm font-medium opacity-80">
+            NIF
+          </dt>
+          <dd class="m-0 flex min-w-0 items-center gap-2">
+            <span class="min-w-0 break-words">
+              123456789
+            </span>
+          </dd>
         </div>
-      </div>
-      <div class="flex flex-col gap-0.5">
-        <span class="text-sm font-medium">
-          Nome/Razão Social
-        </span>
-        <div class="flex items-center gap-2">
-          <span>
-            João Silva Lda
-          </span>
+        <div class="flex min-w-0 flex-col gap-0.5">
+          <dt class="text-sm font-medium opacity-80">
+            Nome/Razão Social
+          </dt>
+          <dd class="m-0 flex min-w-0 items-center gap-2">
+            <span class="min-w-0 break-words">
+              João Silva Lda
+            </span>
+          </dd>
         </div>
-      </div>
-      <div class="flex flex-col gap-0.5">
-        <span class="text-sm font-medium">
-          Setor
-        </span>
-        <div class="flex items-center gap-2">
-          <span>
-            Tecnologia
-          </span>
+        <div class="flex min-w-0 flex-col gap-0.5">
+          <dt class="text-sm font-medium opacity-80">
+            Setor
+          </dt>
+          <dd class="m-0 flex min-w-0 items-center gap-2">
+            <span class="min-w-0 break-words">
+              Tecnologia
+            </span>
+          </dd>
         </div>
-      </div>
+      </dl>
       <div data-orientation="horizontal"
            role="none"
            data-slot="separator"
-           class="bg-border shrink-0 data-[orientation=horizontal]:h-px data-[orientation=horizontal]:w-full data-[orientation=vertical]:h-full data-[orientation=vertical]:w-px"
+           class="shrink-0 data-[orientation=horizontal]:h-px data-[orientation=horizontal]:w-full data-[orientation=vertical]:h-full data-[orientation=vertical]:w-px bg-current opacity-30"
       >
       </div>
-      <div class="flex flex-col gap-0.5">
-        <span class="text-sm font-medium">
-          Email
-        </span>
-        <div class="flex items-center gap-2">
-          <span>
-            joao@exemplo.com
-          </span>
+      <dl class="grid gap-4 grid-cols-1">
+        <div class="flex min-w-0 flex-col gap-0.5">
+          <dt class="text-sm font-medium opacity-80">
+            Email
+          </dt>
+          <dd class="m-0 flex min-w-0 items-center gap-2">
+            <span class="min-w-0 break-words">
+              joao@exemplo.com
+            </span>
+          </dd>
         </div>
-      </div>
-      <div class="flex flex-col gap-0.5">
-        <span class="text-sm font-medium">
-          Telefone
-        </span>
-        <div class="flex items-center gap-2">
-          <span>
-            +351 912 345 678
-          </span>
+        <div class="flex min-w-0 flex-col gap-0.5">
+          <dt class="text-sm font-medium opacity-80">
+            Telefone
+          </dt>
+          <dd class="m-0 flex min-w-0 items-center gap-2">
+            <span class="min-w-0 break-words">
+              +351 912 345 678
+            </span>
+          </dd>
         </div>
-      </div>
-      <div class="flex flex-col gap-0.5">
-        <span class="text-sm font-medium">
-          Endereço
-        </span>
-        <div class="flex items-center gap-2">
-          <span>
-            Rua das Flores, 123, Lisboa
-          </span>
+        <div class="flex min-w-0 flex-col gap-0.5">
+          <dt class="text-sm font-medium opacity-80">
+            Endereço
+          </dt>
+          <dd class="m-0 flex min-w-0 items-center gap-2">
+            <span class="min-w-0 break-words">
+              Rua das Flores, 123, Lisboa
+            </span>
+          </dd>
         </div>
-      </div>
+      </dl>
       <div data-orientation="horizontal"
            role="none"
            data-slot="separator"
-           class="bg-border shrink-0 data-[orientation=horizontal]:h-px data-[orientation=horizontal]:w-full data-[orientation=vertical]:h-full data-[orientation=vertical]:w-px"
+           class="shrink-0 data-[orientation=horizontal]:h-px data-[orientation=horizontal]:w-full data-[orientation=vertical]:h-full data-[orientation=vertical]:w-px bg-current opacity-30"
       >
       </div>
-      <div class="flex flex-col gap-0.5">
-        <span class="text-sm font-medium">
-          Data de Registro
-        </span>
-        <div class="flex items-center gap-2">
-          <span>
-            15/03/2024
-          </span>
+      <dl class="grid gap-4 grid-cols-1">
+        <div class="flex min-w-0 flex-col gap-0.5">
+          <dt class="text-sm font-medium opacity-80">
+            Data de Registro
+          </dt>
+          <dd class="m-0 flex min-w-0 items-center gap-2">
+            <span class="min-w-0 break-words">
+              15/03/2024
+            </span>
+          </dd>
         </div>
-      </div>
+      </dl>
     </div>
   </div>
 </div>
@@ -302,87 +1898,466 @@ exports[`Components/InfoCard Default smoke-test 1`] = `
 exports[`Components/InfoCard FinancialInfo smoke-test 1`] = `
 <div class="container px-6 py-12 mx-auto">
   <div data-slot="card"
-       class="text-card-foreground flex flex-col gap-6 rounded-xl border py-6 shadow-sm bg-transparent"
+       class="flex flex-col gap-6 rounded-xl border py-6 shadow-sm bg-transparent text-card-foreground border-primary"
        id="_r_ID_"
   >
     <div data-slot="card-header"
          class="@container/card-header grid auto-rows-min grid-rows-[auto_auto] items-start gap-2 px-6 has-data-[slot=card-action]:grid-cols-[1fr_auto] [.border-b]:pb-6"
     >
       <div data-slot="card-title"
-           class="text-2xl font-semibold leading-none tracking-tight"
+           class="text-2xl font-semibold leading-none tracking-tight text-primary"
       >
         Informações Financeiras
       </div>
     </div>
     <div data-slot="card-content"
-         class="px-6 flex flex-col gap-4"
+         class="px-6 @container/igrp-info-card flex flex-col gap-4"
     >
-      <div class="flex flex-col gap-0.5">
-        <span class="text-sm font-medium">
-          Número do Cartão
-        </span>
-        <div class="flex items-center gap-2">
-          <span>
-            **** **** **** 1234
-          </span>
+      <dl class="grid gap-4 grid-cols-1">
+        <div class="flex min-w-0 flex-col gap-0.5">
+          <dt class="text-sm font-medium text-muted-foreground">
+            Número do Cartão
+          </dt>
+          <dd class="m-0 flex min-w-0 items-center gap-2 text-muted-foreground">
+            <span class="min-w-0 break-words">
+              **** **** **** 1234
+            </span>
+          </dd>
         </div>
-      </div>
-      <div class="flex flex-col gap-0.5">
-        <span class="text-sm font-medium">
-          Titular
-        </span>
-        <div class="flex items-center gap-2">
-          <span>
-            João Silva
-          </span>
+        <div class="flex min-w-0 flex-col gap-0.5">
+          <dt class="text-sm font-medium text-muted-foreground">
+            Titular
+          </dt>
+          <dd class="m-0 flex min-w-0 items-center gap-2 text-indigo">
+            <span class="min-w-0 break-words">
+              João Silva
+            </span>
+          </dd>
         </div>
-      </div>
-      <div class="flex flex-col gap-0.5">
-        <span class="text-sm font-medium">
-          Validade
-        </span>
-        <div class="flex items-center gap-2">
-          <span>
-            12/2027
-          </span>
+        <div class="flex min-w-0 flex-col gap-0.5">
+          <dt class="text-sm font-medium text-muted-foreground">
+            Validade
+          </dt>
+          <dd class="m-0 flex min-w-0 items-center gap-2">
+            <svg xmlns="http://www.w3.org/2000/svg"
+                 width="16"
+                 height="16"
+                 viewbox="0 0 24 24"
+                 fill="none"
+                 stroke="currentColor"
+                 stroke-width="2"
+                 stroke-linecap="round"
+                 stroke-linejoin="round"
+                 class="lucide lucide-clock shrink-0"
+                 aria-hidden="true"
+                 id="Clock"
+            >
+              <circle cx="12"
+                      cy="12"
+                      r="10"
+              >
+              </circle>
+              <path d="M12 6v6l4 2">
+              </path>
+            </svg>
+            <span class="min-w-0 break-words">
+              12/2027
+            </span>
+          </dd>
         </div>
-      </div>
+      </dl>
       <div data-orientation="horizontal"
            role="none"
            data-slot="separator"
            class="bg-border shrink-0 data-[orientation=horizontal]:h-px data-[orientation=horizontal]:w-full data-[orientation=vertical]:h-full data-[orientation=vertical]:w-px"
       >
       </div>
-      <div class="flex flex-col gap-0.5">
-        <span class="text-sm font-medium">
-          Limite de Crédito
-        </span>
-        <div class="flex items-center gap-2">
-          <span>
-            €5,000.00
-          </span>
+      <dl class="grid gap-4 grid-cols-1">
+        <div class="flex min-w-0 flex-col gap-0.5">
+          <dt class="text-sm font-medium text-muted-foreground">
+            Limite de Crédito
+          </dt>
+          <dd class="m-0 flex min-w-0 items-center gap-2">
+            <span class="min-w-0 break-words">
+              €5,000.00
+            </span>
+          </dd>
         </div>
-      </div>
-      <div class="flex flex-col gap-0.5">
-        <span class="text-sm font-medium">
-          Saldo Disponível
-        </span>
-        <div class="flex items-center gap-2">
-          <span>
-            €3,250.00
-          </span>
+        <div class="flex min-w-0 flex-col gap-0.5">
+          <dt class="text-sm font-medium text-muted-foreground">
+            Saldo Disponível
+          </dt>
+          <dd class="m-0 flex min-w-0 items-center gap-2">
+            <span class="min-w-0 break-words">
+              €3,250.00
+            </span>
+          </dd>
         </div>
-      </div>
-      <div class="flex flex-col gap-0.5">
-        <span class="text-sm font-medium">
-          Última Transação
-        </span>
-        <div class="flex items-center gap-2">
-          <span>
-            €45.99 - Supermercado
-          </span>
+        <div class="flex min-w-0 flex-col gap-0.5">
+          <dt class="text-sm font-medium text-muted-foreground">
+            Última Transação
+          </dt>
+          <dd class="m-0 flex min-w-0 items-center gap-2">
+            <span class="min-w-0 break-words">
+              €45.99 - Supermercado
+            </span>
+          </dd>
         </div>
+      </dl>
+    </div>
+  </div>
+</div>
+`;
+
+exports[`Components/InfoCard HorizontalOrientation smoke-test 1`] = `
+<div class="container px-6 py-12 mx-auto">
+  <div data-slot="card"
+       class="flex flex-col gap-6 rounded-xl border py-6 shadow-sm bg-transparent text-card-foreground border-primary"
+       id="_r_ID_"
+  >
+    <div data-slot="card-header"
+         class="@container/card-header grid auto-rows-min grid-rows-[auto_auto] items-start gap-2 px-6 has-data-[slot=card-action]:grid-cols-[1fr_auto] [.border-b]:pb-6"
+    >
+      <div data-slot="card-title"
+           class="text-2xl font-semibold leading-none tracking-tight text-primary"
+      >
+        Informações Básicas
       </div>
+    </div>
+    <div data-slot="card-content"
+         class="px-6 @container/igrp-info-card flex flex-col gap-4"
+    >
+      <dl class="grid gap-4 grid-cols-1">
+        <div class="flex min-w-0 flex-col gap-0.5 @sm/igrp-info-card:flex-row @sm/igrp-info-card:items-baseline @sm/igrp-info-card:gap-3">
+          <dt class="text-sm font-medium text-muted-foreground @sm/igrp-info-card:w-2/5 @sm/igrp-info-card:shrink-0">
+            NIF
+          </dt>
+          <dd class="m-0 flex min-w-0 items-center gap-2">
+            <span class="min-w-0 break-words">
+              123456789
+            </span>
+          </dd>
+        </div>
+        <div class="flex min-w-0 flex-col gap-0.5 @sm/igrp-info-card:flex-row @sm/igrp-info-card:items-baseline @sm/igrp-info-card:gap-3">
+          <dt class="text-sm font-medium text-muted-foreground @sm/igrp-info-card:w-2/5 @sm/igrp-info-card:shrink-0">
+            Nome/Razão Social
+          </dt>
+          <dd class="m-0 flex min-w-0 items-center gap-2">
+            <span class="min-w-0 break-words">
+              João Silva Lda
+            </span>
+          </dd>
+        </div>
+        <div class="flex min-w-0 flex-col gap-0.5 @sm/igrp-info-card:flex-row @sm/igrp-info-card:items-baseline @sm/igrp-info-card:gap-3">
+          <dt class="text-sm font-medium text-muted-foreground @sm/igrp-info-card:w-2/5 @sm/igrp-info-card:shrink-0">
+            Setor
+          </dt>
+          <dd class="m-0 flex min-w-0 items-center gap-2">
+            <svg xmlns="http://www.w3.org/2000/svg"
+                 width="16"
+                 height="16"
+                 viewbox="0 0 24 24"
+                 fill="none"
+                 stroke="currentColor"
+                 stroke-width="2"
+                 stroke-linecap="round"
+                 stroke-linejoin="round"
+                 class="lucide lucide-building2 lucide-building-2 shrink-0"
+                 aria-hidden="true"
+                 id="Building2"
+            >
+              <path d="M10 12h4">
+              </path>
+              <path d="M10 8h4">
+              </path>
+              <path d="M14 21v-3a2 2 0 0 0-4 0v3">
+              </path>
+              <path d="M6 10H4a2 2 0 0 0-2 2v7a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2V9a2 2 0 0 0-2-2h-2">
+              </path>
+              <path d="M6 21V5a2 2 0 0 1 2-2h8a2 2 0 0 1 2 2v16">
+              </path>
+            </svg>
+            <span class="min-w-0 break-words">
+              Tecnologia
+            </span>
+          </dd>
+        </div>
+      </dl>
+      <div data-orientation="horizontal"
+           role="none"
+           data-slot="separator"
+           class="bg-border shrink-0 data-[orientation=horizontal]:h-px data-[orientation=horizontal]:w-full data-[orientation=vertical]:h-full data-[orientation=vertical]:w-px"
+      >
+      </div>
+      <dl class="grid gap-4 grid-cols-1">
+        <div class="flex min-w-0 flex-col gap-0.5 @sm/igrp-info-card:flex-row @sm/igrp-info-card:items-baseline @sm/igrp-info-card:gap-3">
+          <dt class="text-sm font-medium text-muted-foreground @sm/igrp-info-card:w-2/5 @sm/igrp-info-card:shrink-0">
+            Email
+          </dt>
+          <dd class="m-0 flex min-w-0 items-center gap-2">
+            <svg xmlns="http://www.w3.org/2000/svg"
+                 width="16"
+                 height="16"
+                 viewbox="0 0 24 24"
+                 fill="none"
+                 stroke="currentColor"
+                 stroke-width="2"
+                 stroke-linecap="round"
+                 stroke-linejoin="round"
+                 class="lucide lucide-mail shrink-0"
+                 aria-hidden="true"
+                 id="Mail"
+            >
+              <path d="m22 7-8.991 5.727a2 2 0 0 1-2.009 0L2 7">
+              </path>
+              <rect x="2"
+                    y="4"
+                    width="20"
+                    height="16"
+                    rx="2"
+              >
+              </rect>
+            </svg>
+            <span class="min-w-0 break-words">
+              joao@exemplo.com
+            </span>
+          </dd>
+        </div>
+        <div class="flex min-w-0 flex-col gap-0.5 @sm/igrp-info-card:flex-row @sm/igrp-info-card:items-baseline @sm/igrp-info-card:gap-3">
+          <dt class="text-sm font-medium text-muted-foreground @sm/igrp-info-card:w-2/5 @sm/igrp-info-card:shrink-0">
+            Telefone
+          </dt>
+          <dd class="m-0 flex min-w-0 items-center gap-2">
+            <svg xmlns="http://www.w3.org/2000/svg"
+                 width="16"
+                 height="16"
+                 viewbox="0 0 24 24"
+                 fill="none"
+                 stroke="currentColor"
+                 stroke-width="2"
+                 stroke-linecap="round"
+                 stroke-linejoin="round"
+                 class="lucide lucide-phone shrink-0"
+                 aria-hidden="true"
+                 id="Phone"
+            >
+              <path d="M13.832 16.568a1 1 0 0 0 1.213-.303l.355-.465A2 2 0 0 1 17 15h3a2 2 0 0 1 2 2v3a2 2 0 0 1-2 2A18 18 0 0 1 2 4a2 2 0 0 1 2-2h3a2 2 0 0 1 2 2v3a2 2 0 0 1-.8 1.6l-.468.351a1 1 0 0 0-.292 1.233 14 14 0 0 0 6.392 6.384">
+              </path>
+            </svg>
+            <span class="min-w-0 break-words">
+              +351 912 345 678
+            </span>
+          </dd>
+        </div>
+        <div class="flex min-w-0 flex-col gap-0.5 @sm/igrp-info-card:flex-row @sm/igrp-info-card:items-baseline @sm/igrp-info-card:gap-3">
+          <dt class="text-sm font-medium text-muted-foreground @sm/igrp-info-card:w-2/5 @sm/igrp-info-card:shrink-0">
+            Endereço
+          </dt>
+          <dd class="m-0 flex min-w-0 items-center gap-2">
+            <svg xmlns="http://www.w3.org/2000/svg"
+                 width="16"
+                 height="16"
+                 viewbox="0 0 24 24"
+                 fill="none"
+                 stroke="currentColor"
+                 stroke-width="2"
+                 stroke-linecap="round"
+                 stroke-linejoin="round"
+                 class="lucide lucide-map-pin shrink-0"
+                 aria-hidden="true"
+                 id="MapPin"
+            >
+              <path d="M20 10c0 4.993-5.539 10.193-7.399 11.799a1 1 0 0 1-1.202 0C9.539 20.193 4 14.993 4 10a8 8 0 0 1 16 0">
+              </path>
+              <circle cx="12"
+                      cy="10"
+                      r="3"
+              >
+              </circle>
+            </svg>
+            <span class="min-w-0 break-words">
+              Rua das Flores, 123, Lisboa
+            </span>
+          </dd>
+        </div>
+      </dl>
+    </div>
+  </div>
+</div>
+`;
+
+exports[`Components/InfoCard HorizontalTwoColumns smoke-test 1`] = `
+<div class="container px-6 py-12 mx-auto">
+  <div data-slot="card"
+       class="flex flex-col gap-6 rounded-xl border py-6 shadow-sm bg-info/10 text-card-foreground border-transparent"
+       id="_r_ID_"
+  >
+    <div data-slot="card-header"
+         class="@container/card-header grid auto-rows-min grid-rows-[auto_auto] items-start gap-2 px-6 has-data-[slot=card-action]:grid-cols-[1fr_auto] [.border-b]:pb-6"
+    >
+      <div data-slot="card-title"
+           class="text-2xl font-semibold leading-none tracking-tight text-info"
+      >
+        Informações Básicas
+      </div>
+    </div>
+    <div data-slot="card-content"
+         class="px-6 @container/igrp-info-card flex flex-col gap-4"
+    >
+      <dl class="grid gap-4 grid-cols-1 @2xl/igrp-info-card:grid-cols-2">
+        <div class="flex min-w-0 flex-col gap-0.5 @2xl/igrp-info-card:flex-row @2xl/igrp-info-card:items-baseline @2xl/igrp-info-card:gap-3">
+          <dt class="text-sm font-medium text-muted-foreground @2xl/igrp-info-card:w-2/5 @2xl/igrp-info-card:shrink-0">
+            NIF
+          </dt>
+          <dd class="m-0 flex min-w-0 items-center gap-2">
+            <span class="min-w-0 break-words">
+              123456789
+            </span>
+          </dd>
+        </div>
+        <div class="flex min-w-0 flex-col gap-0.5 @2xl/igrp-info-card:flex-row @2xl/igrp-info-card:items-baseline @2xl/igrp-info-card:gap-3">
+          <dt class="text-sm font-medium text-muted-foreground @2xl/igrp-info-card:w-2/5 @2xl/igrp-info-card:shrink-0">
+            Nome/Razão Social
+          </dt>
+          <dd class="m-0 flex min-w-0 items-center gap-2">
+            <span class="min-w-0 break-words">
+              João Silva Lda
+            </span>
+          </dd>
+        </div>
+        <div class="flex min-w-0 flex-col gap-0.5 @2xl/igrp-info-card:flex-row @2xl/igrp-info-card:items-baseline @2xl/igrp-info-card:gap-3">
+          <dt class="text-sm font-medium text-muted-foreground @2xl/igrp-info-card:w-2/5 @2xl/igrp-info-card:shrink-0">
+            Setor
+          </dt>
+          <dd class="m-0 flex min-w-0 items-center gap-2">
+            <svg xmlns="http://www.w3.org/2000/svg"
+                 width="16"
+                 height="16"
+                 viewbox="0 0 24 24"
+                 fill="none"
+                 stroke="currentColor"
+                 stroke-width="2"
+                 stroke-linecap="round"
+                 stroke-linejoin="round"
+                 class="lucide lucide-building2 lucide-building-2 shrink-0"
+                 aria-hidden="true"
+                 id="Building2"
+            >
+              <path d="M10 12h4">
+              </path>
+              <path d="M10 8h4">
+              </path>
+              <path d="M14 21v-3a2 2 0 0 0-4 0v3">
+              </path>
+              <path d="M6 10H4a2 2 0 0 0-2 2v7a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2V9a2 2 0 0 0-2-2h-2">
+              </path>
+              <path d="M6 21V5a2 2 0 0 1 2-2h8a2 2 0 0 1 2 2v16">
+              </path>
+            </svg>
+            <span class="min-w-0 break-words">
+              Tecnologia
+            </span>
+          </dd>
+        </div>
+      </dl>
+      <div data-orientation="horizontal"
+           role="none"
+           data-slot="separator"
+           class="bg-border shrink-0 data-[orientation=horizontal]:h-px data-[orientation=horizontal]:w-full data-[orientation=vertical]:h-full data-[orientation=vertical]:w-px"
+      >
+      </div>
+      <dl class="grid gap-4 grid-cols-1 @2xl/igrp-info-card:grid-cols-2">
+        <div class="flex min-w-0 flex-col gap-0.5 @2xl/igrp-info-card:flex-row @2xl/igrp-info-card:items-baseline @2xl/igrp-info-card:gap-3">
+          <dt class="text-sm font-medium text-muted-foreground @2xl/igrp-info-card:w-2/5 @2xl/igrp-info-card:shrink-0">
+            Email
+          </dt>
+          <dd class="m-0 flex min-w-0 items-center gap-2">
+            <svg xmlns="http://www.w3.org/2000/svg"
+                 width="16"
+                 height="16"
+                 viewbox="0 0 24 24"
+                 fill="none"
+                 stroke="currentColor"
+                 stroke-width="2"
+                 stroke-linecap="round"
+                 stroke-linejoin="round"
+                 class="lucide lucide-mail shrink-0"
+                 aria-hidden="true"
+                 id="Mail"
+            >
+              <path d="m22 7-8.991 5.727a2 2 0 0 1-2.009 0L2 7">
+              </path>
+              <rect x="2"
+                    y="4"
+                    width="20"
+                    height="16"
+                    rx="2"
+              >
+              </rect>
+            </svg>
+            <span class="min-w-0 break-words">
+              joao@exemplo.com
+            </span>
+          </dd>
+        </div>
+        <div class="flex min-w-0 flex-col gap-0.5 @2xl/igrp-info-card:flex-row @2xl/igrp-info-card:items-baseline @2xl/igrp-info-card:gap-3">
+          <dt class="text-sm font-medium text-muted-foreground @2xl/igrp-info-card:w-2/5 @2xl/igrp-info-card:shrink-0">
+            Telefone
+          </dt>
+          <dd class="m-0 flex min-w-0 items-center gap-2">
+            <svg xmlns="http://www.w3.org/2000/svg"
+                 width="16"
+                 height="16"
+                 viewbox="0 0 24 24"
+                 fill="none"
+                 stroke="currentColor"
+                 stroke-width="2"
+                 stroke-linecap="round"
+                 stroke-linejoin="round"
+                 class="lucide lucide-phone shrink-0"
+                 aria-hidden="true"
+                 id="Phone"
+            >
+              <path d="M13.832 16.568a1 1 0 0 0 1.213-.303l.355-.465A2 2 0 0 1 17 15h3a2 2 0 0 1 2 2v3a2 2 0 0 1-2 2A18 18 0 0 1 2 4a2 2 0 0 1 2-2h3a2 2 0 0 1 2 2v3a2 2 0 0 1-.8 1.6l-.468.351a1 1 0 0 0-.292 1.233 14 14 0 0 0 6.392 6.384">
+              </path>
+            </svg>
+            <span class="min-w-0 break-words">
+              +351 912 345 678
+            </span>
+          </dd>
+        </div>
+        <div class="flex min-w-0 flex-col gap-0.5 @2xl/igrp-info-card:flex-row @2xl/igrp-info-card:items-baseline @2xl/igrp-info-card:gap-3">
+          <dt class="text-sm font-medium text-muted-foreground @2xl/igrp-info-card:w-2/5 @2xl/igrp-info-card:shrink-0">
+            Endereço
+          </dt>
+          <dd class="m-0 flex min-w-0 items-center gap-2">
+            <svg xmlns="http://www.w3.org/2000/svg"
+                 width="16"
+                 height="16"
+                 viewbox="0 0 24 24"
+                 fill="none"
+                 stroke="currentColor"
+                 stroke-width="2"
+                 stroke-linecap="round"
+                 stroke-linejoin="round"
+                 class="lucide lucide-map-pin shrink-0"
+                 aria-hidden="true"
+                 id="MapPin"
+            >
+              <path d="M20 10c0 4.993-5.539 10.193-7.399 11.799a1 1 0 0 1-1.202 0C9.539 20.193 4 14.993 4 10a8 8 0 0 1 16 0">
+              </path>
+              <circle cx="12"
+                      cy="10"
+                      r="3"
+              >
+              </circle>
+            </svg>
+            <span class="min-w-0 break-words">
+              Rua das Flores, 123, Lisboa
+            </span>
+          </dd>
+        </div>
+      </dl>
     </div>
   </div>
 </div>
@@ -391,87 +2366,91 @@ exports[`Components/InfoCard FinancialInfo smoke-test 1`] = `
 exports[`Components/InfoCard LongContent smoke-test 1`] = `
 <div class="container px-6 py-12 mx-auto">
   <div data-slot="card"
-       class="text-card-foreground flex flex-col gap-6 rounded-xl border py-6 shadow-sm bg-transparent"
+       class="flex flex-col gap-6 rounded-xl border py-6 shadow-sm bg-transparent text-card-foreground border-primary"
        id="_r_ID_"
   >
     <div data-slot="card-header"
          class="@container/card-header grid auto-rows-min grid-rows-[auto_auto] items-start gap-2 px-6 has-data-[slot=card-action]:grid-cols-[1fr_auto] [.border-b]:pb-6"
     >
       <div data-slot="card-title"
-           class="text-2xl font-semibold leading-none tracking-tight"
+           class="text-2xl font-semibold leading-none tracking-tight text-primary"
       >
         Informações Detalhadas
       </div>
     </div>
     <div data-slot="card-content"
-         class="px-6 flex flex-col gap-4"
+         class="px-6 @container/igrp-info-card flex flex-col gap-4"
     >
-      <div class="flex flex-col gap-0.5">
-        <span class="text-sm font-medium">
-          Nome Completo
-        </span>
-        <div class="flex items-center gap-2">
-          <span>
-            João Pedro Silva Santos de Oliveira
-          </span>
+      <dl class="grid gap-4 grid-cols-1">
+        <div class="flex min-w-0 flex-col gap-0.5">
+          <dt class="text-sm font-medium text-muted-foreground">
+            Nome Completo
+          </dt>
+          <dd class="m-0 flex min-w-0 items-center gap-2">
+            <span class="min-w-0 break-words">
+              João Pedro Silva Santos de Oliveira
+            </span>
+          </dd>
         </div>
-      </div>
-      <div class="flex flex-col gap-0.5">
-        <span class="text-sm font-medium">
-          Profissão
-        </span>
-        <div class="flex items-center gap-2">
-          <span>
-            Engenheiro de Software Sênior especializado em desenvolvimento web
-          </span>
+        <div class="flex min-w-0 flex-col gap-0.5">
+          <dt class="text-sm font-medium text-muted-foreground">
+            Profissão
+          </dt>
+          <dd class="m-0 flex min-w-0 items-center gap-2">
+            <span class="min-w-0 break-words">
+              Engenheiro de Software Sênior especializado em desenvolvimento web
+            </span>
+          </dd>
         </div>
-      </div>
-      <div class="flex flex-col gap-0.5">
-        <span class="text-sm font-medium">
-          Empresa
-        </span>
-        <div class="flex items-center gap-2">
-          <span>
-            TechCorp Solutions - Consultoria em Tecnologia da Informação Lda
-          </span>
+        <div class="flex min-w-0 flex-col gap-0.5">
+          <dt class="text-sm font-medium text-muted-foreground">
+            Empresa
+          </dt>
+          <dd class="m-0 flex min-w-0 items-center gap-2">
+            <span class="min-w-0 break-words">
+              TechCorp Solutions - Consultoria em Tecnologia da Informação Lda
+            </span>
+          </dd>
         </div>
-      </div>
+      </dl>
       <div data-orientation="horizontal"
            role="none"
            data-slot="separator"
            class="bg-border shrink-0 data-[orientation=horizontal]:h-px data-[orientation=horizontal]:w-full data-[orientation=vertical]:h-full data-[orientation=vertical]:w-px"
       >
       </div>
-      <div class="flex flex-col gap-0.5">
-        <span class="text-sm font-medium">
-          Email Principal
-        </span>
-        <div class="flex items-center gap-2">
-          <span>
-            joao.pedro.silva.santos@techcorp-solutions.pt
-          </span>
+      <dl class="grid gap-4 grid-cols-1">
+        <div class="flex min-w-0 flex-col gap-0.5">
+          <dt class="text-sm font-medium text-muted-foreground">
+            Email Principal
+          </dt>
+          <dd class="m-0 flex min-w-0 items-center gap-2">
+            <span class="min-w-0 break-words">
+              joao.pedro.silva.santos@techcorp-solutions.pt
+            </span>
+          </dd>
         </div>
-      </div>
-      <div class="flex flex-col gap-0.5">
-        <span class="text-sm font-medium">
-          Telefone
-        </span>
-        <div class="flex items-center gap-2">
-          <span>
-            +351 912 345 678
-          </span>
+        <div class="flex min-w-0 flex-col gap-0.5">
+          <dt class="text-sm font-medium text-muted-foreground">
+            Telefone
+          </dt>
+          <dd class="m-0 flex min-w-0 items-center gap-2">
+            <span class="min-w-0 break-words">
+              +351 912 345 678
+            </span>
+          </dd>
         </div>
-      </div>
-      <div class="flex flex-col gap-0.5">
-        <span class="text-sm font-medium">
-          Endereço Completo
-        </span>
-        <div class="flex items-center gap-2">
-          <span>
-            Rua das Flores, número 123, 4º andar, apartamento B, 1200-001 Lisboa, Portugal
-          </span>
+        <div class="flex min-w-0 flex-col gap-0.5">
+          <dt class="text-sm font-medium text-muted-foreground">
+            Endereço Completo
+          </dt>
+          <dd class="m-0 flex min-w-0 items-center gap-2">
+            <span class="min-w-0 break-words">
+              Rua das Flores, número 123, 4º andar, apartamento B, 1200-001 Lisboa, Portugal
+            </span>
+          </dd>
         </div>
-      </div>
+      </dl>
     </div>
   </div>
 </div>
@@ -480,41 +2459,43 @@ exports[`Components/InfoCard LongContent smoke-test 1`] = `
 exports[`Components/InfoCard Minimal smoke-test 1`] = `
 <div class="container px-6 py-12 mx-auto">
   <div data-slot="card"
-       class="text-card-foreground flex flex-col gap-6 rounded-xl border py-6 shadow-sm bg-transparent"
+       class="flex flex-col gap-6 rounded-xl border py-6 shadow-sm bg-transparent text-card-foreground border-primary"
        id="_r_ID_"
   >
     <div data-slot="card-header"
          class="@container/card-header grid auto-rows-min grid-rows-[auto_auto] items-start gap-2 px-6 has-data-[slot=card-action]:grid-cols-[1fr_auto] [.border-b]:pb-6"
     >
       <div data-slot="card-title"
-           class="text-2xl font-semibold leading-none tracking-tight"
+           class="text-2xl font-semibold leading-none tracking-tight text-primary"
       >
         Resumo
       </div>
     </div>
     <div data-slot="card-content"
-         class="px-6 flex flex-col gap-4"
+         class="px-6 @container/igrp-info-card flex flex-col gap-4"
     >
-      <div class="flex flex-col gap-0.5">
-        <span class="text-sm font-medium">
-          ID
-        </span>
-        <div class="flex items-center gap-2">
-          <span>
-            001
-          </span>
+      <dl class="grid gap-4 grid-cols-1">
+        <div class="flex min-w-0 flex-col gap-0.5">
+          <dt class="text-sm font-medium text-muted-foreground">
+            ID
+          </dt>
+          <dd class="m-0 flex min-w-0 items-center gap-2">
+            <span class="min-w-0 break-words">
+              001
+            </span>
+          </dd>
         </div>
-      </div>
-      <div class="flex flex-col gap-0.5">
-        <span class="text-sm font-medium">
-          Status
-        </span>
-        <div class="flex items-center gap-2">
-          <span>
-            Ativo
-          </span>
+        <div class="flex min-w-0 flex-col gap-0.5">
+          <dt class="text-sm font-medium text-muted-foreground">
+            Status
+          </dt>
+          <dd class="m-0 flex min-w-0 items-center gap-2">
+            <span class="min-w-0 break-words">
+              Ativo
+            </span>
+          </dd>
         </div>
-      </div>
+      </dl>
     </div>
   </div>
 </div>
@@ -523,51 +2504,222 @@ exports[`Components/InfoCard Minimal smoke-test 1`] = `
 exports[`Components/InfoCard SingleSection smoke-test 1`] = `
 <div class="container px-6 py-12 mx-auto">
   <div data-slot="card"
-       class="text-card-foreground flex flex-col gap-6 rounded-xl border py-6 shadow-sm bg-transparent"
+       class="flex flex-col gap-6 rounded-xl border py-6 shadow-sm bg-transparent text-card-foreground border-primary"
        id="_r_ID_"
   >
     <div data-slot="card-header"
          class="@container/card-header grid auto-rows-min grid-rows-[auto_auto] items-start gap-2 px-6 has-data-[slot=card-action]:grid-cols-[1fr_auto] [.border-b]:pb-6"
     >
       <div data-slot="card-title"
-           class="text-2xl font-semibold leading-none tracking-tight"
+           class="text-2xl font-semibold leading-none tracking-tight text-primary"
       >
         Informações Pessoais
       </div>
     </div>
     <div data-slot="card-content"
-         class="px-6 flex flex-col gap-4"
+         class="px-6 @container/igrp-info-card flex flex-col gap-4"
     >
-      <div class="flex flex-col gap-0.5">
-        <span class="text-sm font-medium">
-          Nome
-        </span>
-        <div class="flex items-center gap-2">
-          <span>
-            Maria Santos
-          </span>
+      <dl class="grid gap-4 grid-cols-1">
+        <div class="flex min-w-0 flex-col gap-0.5">
+          <dt class="text-sm font-medium text-muted-foreground">
+            Nome
+          </dt>
+          <dd class="m-0 flex min-w-0 items-center gap-2 text-success">
+            <span class="min-w-0 break-words">
+              Maria Santos
+            </span>
+          </dd>
         </div>
-      </div>
-      <div class="flex flex-col gap-0.5">
-        <span class="text-sm font-medium">
-          Email
-        </span>
-        <div class="flex items-center gap-2">
-          <span>
-            maria@exemplo.com
-          </span>
+        <div class="flex min-w-0 flex-col gap-0.5">
+          <dt class="text-sm font-medium text-muted-foreground">
+            Email
+          </dt>
+          <dd class="m-0 flex min-w-0 items-center gap-2 text-destructive">
+            <span class="min-w-0 break-words">
+              maria@exemplo.com
+            </span>
+          </dd>
         </div>
-      </div>
-      <div class="flex flex-col gap-0.5">
-        <span class="text-sm font-medium">
-          Telefone
-        </span>
-        <div class="flex items-center gap-2">
-          <span>
-            +351 987 654 321
-          </span>
+        <div class="flex min-w-0 flex-col gap-0.5">
+          <dt class="text-sm font-medium text-muted-foreground">
+            Telefone
+          </dt>
+          <dd class="m-0 flex min-w-0 items-center gap-2 text-warning">
+            <span class="min-w-0 break-words">
+              +351 987 654 321
+            </span>
+          </dd>
         </div>
+      </dl>
+    </div>
+  </div>
+</div>
+`;
+
+exports[`Components/InfoCard ThreeColumns smoke-test 1`] = `
+<div class="container px-6 py-12 mx-auto">
+  <div data-slot="card"
+       class="flex flex-col gap-6 rounded-xl border py-6 shadow-sm bg-transparent text-card-foreground border-primary"
+       id="_r_ID_"
+  >
+    <div data-slot="card-header"
+         class="@container/card-header grid auto-rows-min grid-rows-[auto_auto] items-start gap-2 px-6 has-data-[slot=card-action]:grid-cols-[1fr_auto] [.border-b]:pb-6"
+    >
+      <div data-slot="card-title"
+           class="text-2xl font-semibold leading-none tracking-tight text-primary"
+      >
+        Resumo
       </div>
+    </div>
+    <div data-slot="card-content"
+         class="px-6 @container/igrp-info-card flex flex-col gap-4"
+    >
+      <dl class="grid gap-4 grid-cols-1 @2xl/igrp-info-card:grid-cols-2 @5xl/igrp-info-card:grid-cols-3">
+        <div class="flex min-w-0 flex-col gap-0.5">
+          <dt class="text-sm font-medium text-muted-foreground">
+            NIF
+          </dt>
+          <dd class="m-0 flex min-w-0 items-center gap-2">
+            <span class="min-w-0 break-words">
+              123456789
+            </span>
+          </dd>
+        </div>
+        <div class="flex min-w-0 flex-col gap-0.5">
+          <dt class="text-sm font-medium text-muted-foreground">
+            Nome/Razão Social
+          </dt>
+          <dd class="m-0 flex min-w-0 items-center gap-2">
+            <span class="min-w-0 break-words">
+              João Silva Lda
+            </span>
+          </dd>
+        </div>
+        <div class="flex min-w-0 flex-col gap-0.5">
+          <dt class="text-sm font-medium text-muted-foreground">
+            Setor
+          </dt>
+          <dd class="m-0 flex min-w-0 items-center gap-2">
+            <svg xmlns="http://www.w3.org/2000/svg"
+                 width="16"
+                 height="16"
+                 viewbox="0 0 24 24"
+                 fill="none"
+                 stroke="currentColor"
+                 stroke-width="2"
+                 stroke-linecap="round"
+                 stroke-linejoin="round"
+                 class="lucide lucide-building2 lucide-building-2 shrink-0"
+                 aria-hidden="true"
+                 id="Building2"
+            >
+              <path d="M10 12h4">
+              </path>
+              <path d="M10 8h4">
+              </path>
+              <path d="M14 21v-3a2 2 0 0 0-4 0v3">
+              </path>
+              <path d="M6 10H4a2 2 0 0 0-2 2v7a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2V9a2 2 0 0 0-2-2h-2">
+              </path>
+              <path d="M6 21V5a2 2 0 0 1 2-2h8a2 2 0 0 1 2 2v16">
+              </path>
+            </svg>
+            <span class="min-w-0 break-words">
+              Tecnologia
+            </span>
+          </dd>
+        </div>
+        <div class="flex min-w-0 flex-col gap-0.5">
+          <dt class="text-sm font-medium text-muted-foreground">
+            Email
+          </dt>
+          <dd class="m-0 flex min-w-0 items-center gap-2">
+            <svg xmlns="http://www.w3.org/2000/svg"
+                 width="16"
+                 height="16"
+                 viewbox="0 0 24 24"
+                 fill="none"
+                 stroke="currentColor"
+                 stroke-width="2"
+                 stroke-linecap="round"
+                 stroke-linejoin="round"
+                 class="lucide lucide-mail shrink-0"
+                 aria-hidden="true"
+                 id="Mail"
+            >
+              <path d="m22 7-8.991 5.727a2 2 0 0 1-2.009 0L2 7">
+              </path>
+              <rect x="2"
+                    y="4"
+                    width="20"
+                    height="16"
+                    rx="2"
+              >
+              </rect>
+            </svg>
+            <span class="min-w-0 break-words">
+              joao@exemplo.com
+            </span>
+          </dd>
+        </div>
+        <div class="flex min-w-0 flex-col gap-0.5">
+          <dt class="text-sm font-medium text-muted-foreground">
+            Telefone
+          </dt>
+          <dd class="m-0 flex min-w-0 items-center gap-2">
+            <svg xmlns="http://www.w3.org/2000/svg"
+                 width="16"
+                 height="16"
+                 viewbox="0 0 24 24"
+                 fill="none"
+                 stroke="currentColor"
+                 stroke-width="2"
+                 stroke-linecap="round"
+                 stroke-linejoin="round"
+                 class="lucide lucide-phone shrink-0"
+                 aria-hidden="true"
+                 id="Phone"
+            >
+              <path d="M13.832 16.568a1 1 0 0 0 1.213-.303l.355-.465A2 2 0 0 1 17 15h3a2 2 0 0 1 2 2v3a2 2 0 0 1-2 2A18 18 0 0 1 2 4a2 2 0 0 1 2-2h3a2 2 0 0 1 2 2v3a2 2 0 0 1-.8 1.6l-.468.351a1 1 0 0 0-.292 1.233 14 14 0 0 0 6.392 6.384">
+              </path>
+            </svg>
+            <span class="min-w-0 break-words">
+              +351 912 345 678
+            </span>
+          </dd>
+        </div>
+        <div class="flex min-w-0 flex-col gap-0.5">
+          <dt class="text-sm font-medium text-muted-foreground">
+            Endereço
+          </dt>
+          <dd class="m-0 flex min-w-0 items-center gap-2">
+            <svg xmlns="http://www.w3.org/2000/svg"
+                 width="16"
+                 height="16"
+                 viewbox="0 0 24 24"
+                 fill="none"
+                 stroke="currentColor"
+                 stroke-width="2"
+                 stroke-linecap="round"
+                 stroke-linejoin="round"
+                 class="lucide lucide-map-pin shrink-0"
+                 aria-hidden="true"
+                 id="MapPin"
+            >
+              <path d="M20 10c0 4.993-5.539 10.193-7.399 11.799a1 1 0 0 1-1.202 0C9.539 20.193 4 14.993 4 10a8 8 0 0 1 16 0">
+              </path>
+              <circle cx="12"
+                      cy="10"
+                      r="3"
+              >
+              </circle>
+            </svg>
+            <span class="min-w-0 break-words">
+              Rua das Flores, 123, Lisboa
+            </span>
+          </dd>
+        </div>
+      </dl>
     </div>
   </div>
 </div>
@@ -576,77 +2728,81 @@ exports[`Components/InfoCard SingleSection smoke-test 1`] = `
 exports[`Components/InfoCard WithoutIcons smoke-test 1`] = `
 <div class="container px-6 py-12 mx-auto">
   <div data-slot="card"
-       class="text-card-foreground flex flex-col gap-6 rounded-xl border py-6 shadow-sm bg-transparent"
+       class="flex flex-col gap-6 rounded-xl border py-6 shadow-sm bg-transparent text-card-foreground border-primary"
        id="_r_ID_"
   >
     <div data-slot="card-header"
          class="@container/card-header grid auto-rows-min grid-rows-[auto_auto] items-start gap-2 px-6 has-data-[slot=card-action]:grid-cols-[1fr_auto] [.border-b]:pb-6"
     >
       <div data-slot="card-title"
-           class="text-2xl font-semibold leading-none tracking-tight"
+           class="text-2xl font-semibold leading-none tracking-tight text-primary"
       >
         Dados Simples
       </div>
     </div>
     <div data-slot="card-content"
-         class="px-6 flex flex-col gap-4"
+         class="px-6 @container/igrp-info-card flex flex-col gap-4"
     >
-      <div class="flex flex-col gap-0.5">
-        <span class="text-sm font-medium">
-          Código
-        </span>
-        <div class="flex items-center gap-2">
-          <span>
-            ABC123
-          </span>
+      <dl class="grid gap-4 grid-cols-1">
+        <div class="flex min-w-0 flex-col gap-0.5">
+          <dt class="text-sm font-medium text-muted-foreground">
+            Código
+          </dt>
+          <dd class="m-0 flex min-w-0 items-center gap-2">
+            <span class="min-w-0 break-words">
+              ABC123
+            </span>
+          </dd>
         </div>
-      </div>
-      <div class="flex flex-col gap-0.5">
-        <span class="text-sm font-medium">
-          Descrição
-        </span>
-        <div class="flex items-center gap-2">
-          <span>
-            Produto de exemplo
-          </span>
+        <div class="flex min-w-0 flex-col gap-0.5">
+          <dt class="text-sm font-medium text-muted-foreground">
+            Descrição
+          </dt>
+          <dd class="m-0 flex min-w-0 items-center gap-2">
+            <span class="min-w-0 break-words">
+              Produto de exemplo
+            </span>
+          </dd>
         </div>
-      </div>
-      <div class="flex flex-col gap-0.5">
-        <span class="text-sm font-medium">
-          Categoria
-        </span>
-        <div class="flex items-center gap-2">
-          <span>
-            Eletrônicos
-          </span>
+        <div class="flex min-w-0 flex-col gap-0.5">
+          <dt class="text-sm font-medium text-muted-foreground">
+            Categoria
+          </dt>
+          <dd class="m-0 flex min-w-0 items-center gap-2">
+            <span class="min-w-0 break-words">
+              Eletrônicos
+            </span>
+          </dd>
         </div>
-      </div>
+      </dl>
       <div data-orientation="horizontal"
            role="none"
            data-slot="separator"
            class="bg-border shrink-0 data-[orientation=horizontal]:h-px data-[orientation=horizontal]:w-full data-[orientation=vertical]:h-full data-[orientation=vertical]:w-px"
       >
       </div>
-      <div class="flex flex-col gap-0.5">
-        <span class="text-sm font-medium">
-          Preço
-        </span>
-        <div class="flex items-center gap-2">
-          <span>
-            €99.99
-          </span>
+      <dl class="grid gap-4 grid-cols-1">
+        <div class="flex min-w-0 flex-col gap-0.5">
+          <dt class="text-sm font-medium text-muted-foreground">
+            Preço
+          </dt>
+          <dd class="m-0 flex min-w-0 items-center gap-2">
+            <span class="min-w-0 break-words">
+              €99.99
+            </span>
+          </dd>
         </div>
-      </div>
-      <div class="flex flex-col gap-0.5">
-        <span class="text-sm font-medium">
-          Stock
-        </span>
-        <div class="flex items-center gap-2">
-          <span>
-            25 unidades
-          </span>
+        <div class="flex min-w-0 flex-col gap-0.5">
+          <dt class="text-sm font-medium text-muted-foreground">
+            Stock
+          </dt>
+          <dd class="m-0 flex min-w-0 items-center gap-2">
+            <span class="min-w-0 break-words">
+              25 unidades
+            </span>
+          </dd>
         </div>
-      </div>
+      </dl>
     </div>
   </div>
 </div>

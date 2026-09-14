@@ -9,6 +9,7 @@ import type { IGRPBaseAttributes } from "../../types"
 import { Avatar, AvatarImage, AvatarFallback } from "../primitives/avatar"
 import { IGRPBadge } from "./badge"
 import { IGRPIcon, type IGRPIconName } from "./icon"
+import { useIGRPi18n } from "../../i18n"
 
 function convertFallback(fallback?: string) {
   return fallback
@@ -165,6 +166,7 @@ function IGRPAvatar({
   id,
   ...avatarProps
 }: IGRPAvatarProps) {
+  const i18n = useIGRPi18n()
   const _id = useId()
   const ref = name ?? id ?? _id
 
@@ -185,7 +187,7 @@ function IGRPAvatar({
       )}
 
       {showIcon && iconName && (
-        <span className={cn(iconVariants({ size }), iconClassName)} aria-label="Icon indicator">
+        <span className={cn(iconVariants({ size }), iconClassName)} aria-label={i18n.avatar.iconIndicator}>
           <IGRPIcon iconName={iconName} color={iconColor} />
         </span>
       )}

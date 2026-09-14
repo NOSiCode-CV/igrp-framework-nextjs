@@ -3,6 +3,7 @@
 import { Suspense, lazy } from "react"
 
 import { cn } from "../../../lib/utils"
+import { Skeleton } from "../../primitives/skeleton"
 import type { IGRPPieChartProps } from "./pie-chart-inner"
 
 const IGRPPieChartLazy = lazy(() => import("./pie-chart-inner").then((m) => ({ default: m.default })))
@@ -13,15 +14,7 @@ const IGRPPieChartLazy = lazy(() => import("./pie-chart-inner").then((m) => ({ d
  */
 function IGRPPieChart(props: IGRPPieChartProps) {
   return (
-    <Suspense
-      fallback={
-        <div
-          className={cn(
-            "w-full overflow-hidden animate-pulse motion-reduce:animate-none rounded-lg bg-muted min-h-[200px] aspect-video",
-          )}
-        />
-      }
-    >
+    <Suspense fallback={<Skeleton className={cn("aspect-video min-h-[200px] w-full rounded-lg", props.className)} />}>
       <IGRPPieChartLazy {...props} />
     </Suspense>
   )

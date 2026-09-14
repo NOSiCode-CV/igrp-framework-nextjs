@@ -33,7 +33,7 @@ exports[`Components/FormList FormListAllowEmpty smoke-test 1`] = `
       </div>
       <div data-slot="badge"
            id="_r_ID_"
-           class="inline-flex items-center justify-center rounded-full shadow-none border px-3 py-0.5 font-medium w-fit whitespace-nowrap shrink-0 gap-1 [&amp;&gt;svg]:pointer-events-none focus-visible:border-ring focus-visible:ring-ring/50 focus-visible:ring-[3px] aria-invalid:ring-destructive/20 dark:aria-invalid:ring-destructive/40 aria-invalid:border-destructive transition-[color,box-shadow] overflow-hidden text-xs [&amp;&gt;svg]:size-2.5 text-primary-foreground bg-primary border-primary"
+           class="inline-flex items-center justify-center rounded-full shadow-none border px-3 py-0.5 font-medium w-fit whitespace-nowrap shrink-0 gap-1 [&amp;&gt;svg]:pointer-events-none focus-visible:border-ring focus-visible:ring-ring/50 focus-visible:ring-[3px] transition-[color,box-shadow] overflow-hidden text-xs [&amp;&gt;svg]:size-2.5 text-primary-foreground bg-primary border-primary"
       >
         <div class="flex items-center">
           <div class>
@@ -131,7 +131,7 @@ exports[`Components/FormList FormListAllowEmptyForm smoke-test 1`] = `
             </div>
             <div data-slot="badge"
                  id="_r_ID_"
-                 class="inline-flex items-center justify-center rounded-full shadow-none border px-3 py-0.5 font-medium w-fit whitespace-nowrap shrink-0 gap-1 [&amp;&gt;svg]:pointer-events-none focus-visible:border-ring focus-visible:ring-ring/50 focus-visible:ring-[3px] aria-invalid:ring-destructive/20 dark:aria-invalid:ring-destructive/40 aria-invalid:border-destructive transition-[color,box-shadow] overflow-hidden text-xs [&amp;&gt;svg]:size-2.5 text-primary-foreground bg-primary border-primary"
+                 class="inline-flex items-center justify-center rounded-full shadow-none border px-3 py-0.5 font-medium w-fit whitespace-nowrap shrink-0 gap-1 [&amp;&gt;svg]:pointer-events-none focus-visible:border-ring focus-visible:ring-ring/50 focus-visible:ring-[3px] transition-[color,box-shadow] overflow-hidden text-xs [&amp;&gt;svg]:size-2.5 text-primary-foreground bg-primary border-primary"
             >
               <div class="flex items-center">
                 <div class>
@@ -236,7 +236,7 @@ exports[`Components/FormList FormListAllowMultipleOpen smoke-test 1`] = `
             </div>
             <div data-slot="badge"
                  id="_r_ID_"
-                 class="inline-flex items-center justify-center rounded-full shadow-none border px-3 py-0.5 font-medium w-fit whitespace-nowrap shrink-0 gap-1 [&amp;&gt;svg]:pointer-events-none focus-visible:border-ring focus-visible:ring-ring/50 focus-visible:ring-[3px] aria-invalid:ring-destructive/20 dark:aria-invalid:ring-destructive/40 aria-invalid:border-destructive transition-[color,box-shadow] overflow-hidden text-xs [&amp;&gt;svg]:size-2.5 text-primary-foreground bg-primary border-primary"
+                 class="inline-flex items-center justify-center rounded-full shadow-none border px-3 py-0.5 font-medium w-fit whitespace-nowrap shrink-0 gap-1 [&amp;&gt;svg]:pointer-events-none focus-visible:border-ring focus-visible:ring-ring/50 focus-visible:ring-[3px] transition-[color,box-shadow] overflow-hidden text-xs [&amp;&gt;svg]:size-2.5 text-primary-foreground bg-primary border-primary"
             >
               <div class="flex items-center">
                 <div class>
@@ -387,6 +387,7 @@ exports[`Components/FormList FormListAllowMultipleOpen smoke-test 1`] = `
                                 data-slot="select-trigger"
                                 data-size="default"
                                 class="border-input data-placeholder:text-muted-foreground [&amp;_svg:not([class*='text-'])]:text-muted-foreground focus-visible:border-ring focus-visible:ring-ring/50 aria-invalid:ring-destructive/20 dark:aria-invalid:ring-destructive/40 aria-invalid:border-destructive dark:bg-input/30 dark:hover:bg-input/50 flex items-center justify-between gap-2 rounded-md border bg-transparent px-3 py-2 text-sm whitespace-nowrap shadow-xs transition-[color,box-shadow] outline-none focus-visible:ring-[3px] disabled:cursor-not-allowed disabled:opacity-50 data-[size=default]:h-9 data-[size=sm]:h-8 *:data-[slot=select-value]:line-clamp-1 *:data-[slot=select-value]:flex *:data-[slot=select-value]:items-center *:data-[slot=select-value]:gap-2 [&amp;_svg]:pointer-events-none [&amp;_svg]:shrink-0 [&amp;_svg:not([class*='size-'])]:size-4 w-full"
+                                id="_r_ID_-form-item"
                                 aria-labelledby="socials.0.label1-label"
                         >
                           <span data-slot="select-value"
@@ -402,7 +403,7 @@ exports[`Components/FormList FormListAllowMultipleOpen smoke-test 1`] = `
                                    stroke-width="2"
                                    stroke-linecap="round"
                                    stroke-linejoin="round"
-                                   class="lucide lucide-circle h-2 w-2 fill-current text-primary-foreground"
+                                   class="lucide lucide-circle size-2 fill-current text-primary-foreground"
                                    aria-hidden="true"
                               >
                                 <circle cx="12"
@@ -711,7 +712,7 @@ exports[`Components/FormList FormListBasic smoke-test 1`] = `
             </div>
             <div data-slot="badge"
                  id="_r_ID_"
-                 class="inline-flex items-center justify-center rounded-full shadow-none border px-3 py-0.5 font-medium w-fit whitespace-nowrap shrink-0 gap-1 [&amp;&gt;svg]:pointer-events-none focus-visible:border-ring focus-visible:ring-ring/50 focus-visible:ring-[3px] aria-invalid:ring-destructive/20 dark:aria-invalid:ring-destructive/40 aria-invalid:border-destructive transition-[color,box-shadow] overflow-hidden text-xs [&amp;&gt;svg]:size-2.5 text-primary-foreground bg-primary border-primary"
+                 class="inline-flex items-center justify-center rounded-full shadow-none border px-3 py-0.5 font-medium w-fit whitespace-nowrap shrink-0 gap-1 [&amp;&gt;svg]:pointer-events-none focus-visible:border-ring focus-visible:ring-ring/50 focus-visible:ring-[3px] transition-[color,box-shadow] overflow-hidden text-xs [&amp;&gt;svg]:size-2.5 text-primary-foreground bg-primary border-primary"
             >
               <div class="flex items-center">
                 <div class>
@@ -863,6 +864,7 @@ exports[`Components/FormList FormListBasic smoke-test 1`] = `
                                 data-slot="select-trigger"
                                 data-size="default"
                                 class="border-input data-placeholder:text-muted-foreground [&amp;_svg:not([class*='text-'])]:text-muted-foreground focus-visible:border-ring focus-visible:ring-ring/50 aria-invalid:ring-destructive/20 dark:aria-invalid:ring-destructive/40 aria-invalid:border-destructive dark:bg-input/30 dark:hover:bg-input/50 flex items-center justify-between gap-2 rounded-md border bg-transparent px-3 py-2 text-sm whitespace-nowrap shadow-xs transition-[color,box-shadow] outline-none focus-visible:ring-[3px] disabled:cursor-not-allowed disabled:opacity-50 data-[size=default]:h-9 data-[size=sm]:h-8 *:data-[slot=select-value]:line-clamp-1 *:data-[slot=select-value]:flex *:data-[slot=select-value]:items-center *:data-[slot=select-value]:gap-2 [&amp;_svg]:pointer-events-none [&amp;_svg]:shrink-0 [&amp;_svg:not([class*='size-'])]:size-4 w-full"
+                                id="_r_ID_-form-item"
                                 aria-labelledby="socials.0.label1-label"
                         >
                           <span data-slot="select-value"
@@ -1000,7 +1002,7 @@ exports[`Components/FormList FormListDisabled smoke-test 1`] = `
             </div>
             <div data-slot="badge"
                  id="_r_ID_"
-                 class="inline-flex items-center justify-center rounded-full shadow-none border px-3 py-0.5 font-medium w-fit whitespace-nowrap shrink-0 gap-1 [&amp;&gt;svg]:pointer-events-none focus-visible:border-ring focus-visible:ring-ring/50 focus-visible:ring-[3px] aria-invalid:ring-destructive/20 dark:aria-invalid:ring-destructive/40 aria-invalid:border-destructive transition-[color,box-shadow] overflow-hidden text-xs [&amp;&gt;svg]:size-2.5 text-primary-foreground bg-primary border-primary"
+                 class="inline-flex items-center justify-center rounded-full shadow-none border px-3 py-0.5 font-medium w-fit whitespace-nowrap shrink-0 gap-1 [&amp;&gt;svg]:pointer-events-none focus-visible:border-ring focus-visible:ring-ring/50 focus-visible:ring-[3px] transition-[color,box-shadow] overflow-hidden text-xs [&amp;&gt;svg]:size-2.5 text-primary-foreground bg-primary border-primary"
             >
               <div class="flex items-center">
                 <div class>
@@ -1121,6 +1123,7 @@ exports[`Components/FormList FormListDisabled smoke-test 1`] = `
                                 data-slot="select-trigger"
                                 data-size="default"
                                 class="border-input data-placeholder:text-muted-foreground [&amp;_svg:not([class*='text-'])]:text-muted-foreground focus-visible:border-ring focus-visible:ring-ring/50 aria-invalid:ring-destructive/20 dark:aria-invalid:ring-destructive/40 aria-invalid:border-destructive dark:bg-input/30 dark:hover:bg-input/50 flex items-center justify-between gap-2 rounded-md border bg-transparent px-3 py-2 text-sm whitespace-nowrap shadow-xs transition-[color,box-shadow] outline-none focus-visible:ring-[3px] disabled:cursor-not-allowed disabled:opacity-50 data-[size=default]:h-9 data-[size=sm]:h-8 *:data-[slot=select-value]:line-clamp-1 *:data-[slot=select-value]:flex *:data-[slot=select-value]:items-center *:data-[slot=select-value]:gap-2 [&amp;_svg]:pointer-events-none [&amp;_svg]:shrink-0 [&amp;_svg:not([class*='size-'])]:size-4 w-full"
+                                id="_r_ID_-form-item"
                                 aria-labelledby="socials.0.label1-label"
                         >
                           <span data-slot="select-value"
@@ -1136,7 +1139,7 @@ exports[`Components/FormList FormListDisabled smoke-test 1`] = `
                                    stroke-width="2"
                                    stroke-linecap="round"
                                    stroke-linejoin="round"
-                                   class="lucide lucide-circle h-2 w-2 fill-current text-primary-foreground"
+                                   class="lucide lucide-circle size-2 fill-current text-primary-foreground"
                                    aria-hidden="true"
                               >
                                 <circle cx="12"
@@ -1340,7 +1343,7 @@ exports[`Components/FormList FormListEconomicActivities smoke-test 1`] = `
     </div>
     <div data-slot="badge"
          id="_r_ID_"
-         class="inline-flex items-center justify-center rounded-full shadow-none border px-3 py-0.5 font-medium w-fit whitespace-nowrap shrink-0 gap-1 [&amp;&gt;svg]:pointer-events-none focus-visible:border-ring focus-visible:ring-ring/50 focus-visible:ring-[3px] aria-invalid:ring-destructive/20 dark:aria-invalid:ring-destructive/40 aria-invalid:border-destructive transition-[color,box-shadow] overflow-hidden text-xs [&amp;&gt;svg]:size-2.5 text-primary-foreground bg-primary border-primary"
+         class="inline-flex items-center justify-center rounded-full shadow-none border px-3 py-0.5 font-medium w-fit whitespace-nowrap shrink-0 gap-1 [&amp;&gt;svg]:pointer-events-none focus-visible:border-ring focus-visible:ring-ring/50 focus-visible:ring-[3px] transition-[color,box-shadow] overflow-hidden text-xs [&amp;&gt;svg]:size-2.5 text-primary-foreground bg-primary border-primary"
     >
       <div class="flex items-center">
         <div class>
@@ -1437,11 +1440,15 @@ exports[`Components/FormList FormListEconomicActivities smoke-test 1`] = `
              data-orientation="vertical"
              data-slot="accordion-content"
              class="data-[state=closed]:animate-accordion-up data-[state=open]:animate-accordion-down motion-reduce:animate-none overflow-hidden text-sm"
-             style="--radix-ID var(--radix-ID --radix-ID var(--radix-ID transition-duration: 0s; animation-name: none; --radix-ID 126px; --radix-ID 1244px;"
+             style="--radix-ID var(--radix-ID --radix-ID var(--radix-ID transition-duration: 0s; animation-name: none; --radix-ID 130px; --radix-ID 1244px;"
         >
           <div class="p-4">
             <div class="grid grid-cols-2 md:grid-cols-2 lg:grid-cols-2 gap-4">
-              <div class="*:not-first:mt-2 w-full min-w-0 max-w-full">
+              <div role="group"
+                   data-slot="field"
+                   data-orientation="vertical"
+                   class="group/field flex gap-3 data-[invalid=true]:text-destructive flex-col [&amp;&gt;*]:w-full [&amp;&gt;.sr-only]:w-auto w-full min-w-0 max-w-full"
+              >
                 <label data-slot="label"
                        class="flex items-center text-sm leading-none font-medium select-none group-data-[disabled=true]:pointer-events-none group-data-[disabled=true]:opacity-50 peer-disabled:cursor-not-allowed peer-disabled:opacity-50 after:content-['*'] after:text-destructive gap-0.5"
                        for="actividadesEconomicas.0.idActividadeEconomica"
@@ -1475,9 +1482,10 @@ exports[`Components/FormList FormListEconomicActivities smoke-test 1`] = `
                          stroke-width="2"
                          stroke-linecap="round"
                          stroke-linejoin="round"
-                         class="lucide lucide-chevrons-up-down size-4 ml-2 h-4 w-4 shrink-0 opacity-50"
+                         class="lucide lucide-chevrons-up-down ml-2 size-4 shrink-0 opacity-50"
                          aria-hidden="true"
                          id="ChevronsUpDown"
+                         data-icon="inline-end"
                     >
                       <path d="m7 15 5 5 5-5">
                       </path>
@@ -1488,7 +1496,11 @@ exports[`Components/FormList FormListEconomicActivities smoke-test 1`] = `
                 </div>
               </div>
               <div class="w-full col-span-1">
-                <div class="*:not-first:mt-2">
+                <div role="group"
+                     data-slot="field"
+                     data-orientation="vertical"
+                     class="group/field flex w-full gap-3 data-[invalid=true]:text-destructive flex-col [&amp;&gt;*]:w-full [&amp;&gt;.sr-only]:w-auto"
+                >
                   <label data-slot="label"
                          class="flex items-center text-sm leading-none font-medium select-none group-data-[disabled=true]:pointer-events-none group-data-[disabled=true]:opacity-50 peer-disabled:cursor-not-allowed peer-disabled:opacity-50 after:content-['*'] after:text-destructive gap-0.5 col-span-1"
                          for="actividadesEconomicas.0.taxa"
@@ -1510,48 +1522,44 @@ exports[`Components/FormList FormListEconomicActivities smoke-test 1`] = `
                     >
                     <div class="flex h-full flex-col border-l">
                       <button data-slot="button"
-                              class="gap-1.5 whitespace-nowrap font-medium disabled:pointer-events-none disabled:opacity-50 [&amp;_svg]:pointer-events-none [&amp;_svg:not([class*='size-'])]:size-4 shrink-0 [&amp;_svg]:shrink-0 outline-none focus-visible:border-ring focus-visible:ring-ring/50 focus-visible:ring-[3px] aria-invalid:ring-destructive/20 dark:aria-invalid:ring-destructive/40 aria-invalid:border-destructive shadow-xs size-9 bg-background text-muted-foreground/80 hover:bg-accent hover:text-foreground flex h-1/2 w-8 items-center justify-center border-b text-xs transition-colors rounded-none"
-                              aria-label="Incrementar"
-                              disabled
+                              class="gap-1.5 whitespace-nowrap text-sm font-medium disabled:pointer-events-none disabled:opacity-50 [&amp;_svg]:pointer-events-none shrink-0 [&amp;_svg]:shrink-0 outline-none focus-visible:border-ring focus-visible:ring-ring/50 focus-visible:ring-[3px] aria-invalid:ring-destructive/20 dark:aria-invalid:ring-destructive/40 aria-invalid:border-destructive shadow-xs size-6 in-data-[slot=button-group]:rounded-lg [&amp;_svg:not([class*='size-'])]:size-3 bg-background text-muted-foreground hover:bg-accent hover:text-foreground flex h-1/2 w-8 items-center justify-center border-b transition-colors rounded-none"
                               type="button"
-                              id="_r_ID_"
+                              disabled
+                              aria-label="Incrementar"
                       >
                         <svg xmlns="http://www.w3.org/2000/svg"
-                             width="16"
-                             height="16"
+                             width="24"
+                             height="24"
                              viewbox="0 0 24 24"
                              fill="none"
                              stroke="currentColor"
                              stroke-width="2"
                              stroke-linecap="round"
                              stroke-linejoin="round"
-                             class="lucide lucide-chevron-up size-4"
+                             class="lucide lucide-chevron-up"
                              aria-hidden="true"
-                             id="ChevronUp"
                         >
                           <path d="m18 15-6-6-6 6">
                           </path>
                         </svg>
                       </button>
                       <button data-slot="button"
-                              class="gap-1.5 whitespace-nowrap font-medium disabled:pointer-events-none disabled:opacity-50 [&amp;_svg]:pointer-events-none [&amp;_svg:not([class*='size-'])]:size-4 shrink-0 [&amp;_svg]:shrink-0 outline-none focus-visible:border-ring focus-visible:ring-ring/50 focus-visible:ring-[3px] aria-invalid:ring-destructive/20 dark:aria-invalid:ring-destructive/40 aria-invalid:border-destructive shadow-xs size-9 bg-background text-muted-foreground/80 hover:bg-accent hover:text-foreground flex h-1/2 w-8 items-center justify-center text-xs transition-colors rounded-none"
-                              aria-label="Decrementar"
-                              disabled
+                              class="gap-1.5 whitespace-nowrap font-medium disabled:pointer-events-none disabled:opacity-50 [&amp;_svg]:pointer-events-none shrink-0 [&amp;_svg]:shrink-0 outline-none focus-visible:border-ring focus-visible:ring-ring/50 focus-visible:ring-[3px] aria-invalid:ring-destructive/20 dark:aria-invalid:ring-destructive/40 aria-invalid:border-destructive shadow-xs size-6 in-data-[slot=button-group]:rounded-lg [&amp;_svg:not([class*='size-'])]:size-3 bg-background text-muted-foreground/80 hover:bg-accent hover:text-foreground flex h-1/2 w-8 items-center justify-center text-xs transition-colors rounded-none"
                               type="button"
-                              id="_r_ID_"
+                              disabled
+                              aria-label="Decrementar"
                       >
                         <svg xmlns="http://www.w3.org/2000/svg"
-                             width="16"
-                             height="16"
+                             width="24"
+                             height="24"
                              viewbox="0 0 24 24"
                              fill="none"
                              stroke="currentColor"
                              stroke-width="2"
                              stroke-linecap="round"
                              stroke-linejoin="round"
-                             class="lucide lucide-chevron-down size-4"
+                             class="lucide lucide-chevron-down"
                              aria-hidden="true"
-                             id="ChevronDown"
                         >
                           <path d="m6 9 6 6 6-6">
                           </path>
@@ -1561,7 +1569,11 @@ exports[`Components/FormList FormListEconomicActivities smoke-test 1`] = `
                   </div>
                 </div>
               </div>
-              <div class="*:not-first:mt-2">
+              <div role="group"
+                   data-slot="field"
+                   data-orientation="vertical"
+                   class="group/field flex w-full gap-3 data-[invalid=true]:text-destructive flex-col [&amp;&gt;*]:w-full [&amp;&gt;.sr-only]:w-auto"
+              >
                 <div class="flex items-center gap-2">
                   <button type="button"
                           role="checkbox"
@@ -1665,7 +1677,7 @@ exports[`Components/FormList FormListOptional smoke-test 1`] = `
             </div>
             <div data-slot="badge"
                  id="_r_ID_"
-                 class="inline-flex items-center justify-center rounded-full shadow-none border px-3 py-0.5 font-medium w-fit whitespace-nowrap shrink-0 gap-1 [&amp;&gt;svg]:pointer-events-none focus-visible:border-ring focus-visible:ring-ring/50 focus-visible:ring-[3px] aria-invalid:ring-destructive/20 dark:aria-invalid:ring-destructive/40 aria-invalid:border-destructive transition-[color,box-shadow] overflow-hidden text-xs [&amp;&gt;svg]:size-2.5 text-primary-foreground bg-primary border-primary"
+                 class="inline-flex items-center justify-center rounded-full shadow-none border px-3 py-0.5 font-medium w-fit whitespace-nowrap shrink-0 gap-1 [&amp;&gt;svg]:pointer-events-none focus-visible:border-ring focus-visible:ring-ring/50 focus-visible:ring-[3px] transition-[color,box-shadow] overflow-hidden text-xs [&amp;&gt;svg]:size-2.5 text-primary-foreground bg-primary border-primary"
             >
               <div class="flex items-center">
                 <div class>
@@ -1750,7 +1762,7 @@ exports[`Components/FormList FormListRenderRemoveActionAlertDialog smoke-test 1`
             </div>
             <div data-slot="badge"
                  id="_r_ID_"
-                 class="inline-flex items-center justify-center rounded-full shadow-none border px-3 py-0.5 font-medium w-fit whitespace-nowrap shrink-0 gap-1 [&amp;&gt;svg]:pointer-events-none focus-visible:border-ring focus-visible:ring-ring/50 focus-visible:ring-[3px] aria-invalid:ring-destructive/20 dark:aria-invalid:ring-destructive/40 aria-invalid:border-destructive transition-[color,box-shadow] overflow-hidden text-xs [&amp;&gt;svg]:size-2.5 text-primary-foreground bg-primary border-primary"
+                 class="inline-flex items-center justify-center rounded-full shadow-none border px-3 py-0.5 font-medium w-fit whitespace-nowrap shrink-0 gap-1 [&amp;&gt;svg]:pointer-events-none focus-visible:border-ring focus-visible:ring-ring/50 focus-visible:ring-[3px] transition-[color,box-shadow] overflow-hidden text-xs [&amp;&gt;svg]:size-2.5 text-primary-foreground bg-primary border-primary"
             >
               <div class="flex items-center">
                 <div class>
@@ -1827,7 +1839,7 @@ exports[`Components/FormList FormListRenderRemoveActionAlertDialog smoke-test 1`
                          stroke-width="2"
                          stroke-linecap="round"
                          stroke-linejoin="round"
-                         class="lucide lucide-arrow-left size-3.5"
+                         class="lucide lucide-arrow-left"
                          aria-hidden="true"
                          id="ArrowLeft"
                     >
@@ -1899,6 +1911,7 @@ exports[`Components/FormList FormListRenderRemoveActionAlertDialog smoke-test 1`
                                 data-slot="select-trigger"
                                 data-size="default"
                                 class="border-input data-placeholder:text-muted-foreground [&amp;_svg:not([class*='text-'])]:text-muted-foreground focus-visible:border-ring focus-visible:ring-ring/50 aria-invalid:ring-destructive/20 dark:aria-invalid:ring-destructive/40 aria-invalid:border-destructive dark:bg-input/30 dark:hover:bg-input/50 flex items-center justify-between gap-2 rounded-md border bg-transparent px-3 py-2 text-sm whitespace-nowrap shadow-xs transition-[color,box-shadow] outline-none focus-visible:ring-[3px] disabled:cursor-not-allowed disabled:opacity-50 data-[size=default]:h-9 data-[size=sm]:h-8 *:data-[slot=select-value]:line-clamp-1 *:data-[slot=select-value]:flex *:data-[slot=select-value]:items-center *:data-[slot=select-value]:gap-2 [&amp;_svg]:pointer-events-none [&amp;_svg]:shrink-0 [&amp;_svg:not([class*='size-'])]:size-4 w-full"
+                                id="_r_ID_-form-item"
                                 aria-labelledby="socials.0.label1-label"
                         >
                           <span data-slot="select-value"
@@ -1914,7 +1927,7 @@ exports[`Components/FormList FormListRenderRemoveActionAlertDialog smoke-test 1`
                                    stroke-width="2"
                                    stroke-linecap="round"
                                    stroke-linejoin="round"
-                                   class="lucide lucide-circle h-2 w-2 fill-current text-primary-foreground"
+                                   class="lucide lucide-circle size-2 fill-current text-primary-foreground"
                                    aria-hidden="true"
                               >
                                 <circle cx="12"
@@ -2044,7 +2057,7 @@ exports[`Components/FormList FormListRenderRemoveActionAlertDialog smoke-test 1`
                          stroke-width="2"
                          stroke-linecap="round"
                          stroke-linejoin="round"
-                         class="lucide lucide-arrow-left size-3.5"
+                         class="lucide lucide-arrow-left"
                          aria-hidden="true"
                          id="ArrowLeft"
                     >
@@ -2124,6 +2137,447 @@ exports[`Components/FormList FormListRenderRemoveActionAlertDialog smoke-test 1`
 </div>
 `;
 
+exports[`Components/FormList FormListSeededFromEmptyArray smoke-test 1`] = `
+<div class="mx-auto px-6 py-8">
+  <div class="mb-4 p-4 bg-muted rounded-md">
+    <p class="text-sm font-medium mb-1">
+      Seeded from an empty array
+    </p>
+    <p class="text-xs text-muted-foreground">
+      defaultValues is
+      <code>
+        { anexos: [] }
+      </code>
+      and allowEmpty is off. Exactly one seeded row must render — zero means the defaultValues sync wiped it.
+    </p>
+  </div>
+  <form novalidate
+        id="_r_ID_"
+  >
+    <fieldset data-slot="field-set"
+              class="flex flex-col has-[&gt;[data-slot=checkbox-group]]:gap-3 has-[&gt;[data-slot=radio-group]]:gap-3 border-0 p-0 m-0 gap-0"
+    >
+      <div class="grid gap-4">
+        <div data-slot="card"
+             class="bg-card text-card-foreground flex flex-col border shadow-sm gap-0 rounded-lg py-0"
+             id="anexos"
+        >
+          <div data-slot="card-header"
+               class="@container/card-header auto-rows-min grid-rows-[auto_auto] gap-2 has-data-[slot=card-action]:grid-cols-[1fr_auto] p-4 border-b [.border-b]:pb-4 flex flex-row items-center justify-between"
+          >
+            <div class="flex items-center gap-2">
+              <div>
+                <div data-slot="card-title"
+                     class="text-sm font-medium"
+                >
+                  Anexos
+                </div>
+              </div>
+            </div>
+          </div>
+          <div data-slot="card-content"
+               class="p-4"
+          >
+            <div data-slot="accordion"
+                 class="w-full"
+                 data-orientation="vertical"
+            >
+              <div data-state="open"
+                   data-orientation="vertical"
+                   data-slot="accordion-item"
+                   class="border last:border-b rounded-sm mb-4"
+              >
+                <div class="flex justify-between items-center px-4 gap-2">
+                  <div class="flex-1">
+                    <h3 data-orientation="vertical"
+                        data-state="open"
+                        class="flex"
+                    >
+                      <button type="button"
+                              aria-controls="radix-ID"
+                              aria-expanded="true"
+                              data-state="open"
+                              data-orientation="vertical"
+                              id="radix-ID"
+                              data-slot="accordion-trigger"
+                              class="focus-visible:border-ring focus-visible:ring-ring/50 flex flex-1 items-start gap-4 rounded-md text-left text-sm font-medium transition-all outline-none focus-visible:ring-2 disabled:pointer-events-none disabled:opacity-50 [&amp;[data-state=open]&gt;svg]:rotate-180 justify-between hover:no-underline py-4"
+                              data-radix-id""
+                      >
+                        <svg xmlns="http://www.w3.org/2000/svg"
+                             width="16"
+                             height="16"
+                             viewbox="0 0 24 24"
+                             fill="none"
+                             stroke="currentColor"
+                             stroke-width="2"
+                             stroke-linecap="round"
+                             stroke-linejoin="round"
+                             class="lucide lucide-chevron-down text-muted-foreground pointer-events-none size-4 shrink-0 translate-y-0.5 transition-transform duration-200 order-last"
+                             aria-hidden="true"
+                             id="ChevronDown"
+                        >
+                          <path d="m6 9 6 6 6-6">
+                          </path>
+                        </svg>
+                        <span class="font-medium text-sm">
+                          Novo Documento 1
+                        </span>
+                      </button>
+                    </h3>
+                  </div>
+                  <button data-slot="button"
+                          class="inline-flex items-center justify-center gap-1.5 whitespace-nowrap text-sm font-medium transition-[color,box-shadow] disabled:pointer-events-none disabled:opacity-50 [&amp;_svg]:pointer-events-none [&amp;_svg:not([class*='size-'])]:size-4 [&amp;_svg]:shrink-0 outline-none focus-visible:border-ring focus-visible:ring-ring/50 focus-visible:ring-[3px] aria-invalid:ring-destructive/20 dark:aria-invalid:ring-destructive/40 aria-invalid:border-destructive hover:bg-accent dark:hover:bg-accent/50 rounded-[min(var(--radius-md),12px)] in-data-[slot=button-group]:rounded-lg size-7 p-0 shrink-0 hover:text-destructive"
+                          type="button"
+                          aria-label="Remover item 1"
+                  >
+                    <svg xmlns="http://www.w3.org/2000/svg"
+                         width="16"
+                         height="16"
+                         viewbox="0 0 24 24"
+                         fill="none"
+                         stroke="currentColor"
+                         stroke-width="2"
+                         stroke-linecap="round"
+                         stroke-linejoin="round"
+                         class="lucide lucide-trash2 lucide-trash-2"
+                         aria-hidden="true"
+                         id="Trash2"
+                    >
+                      <path d="M10 11v6">
+                      </path>
+                      <path d="M14 11v6">
+                      </path>
+                      <path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6">
+                      </path>
+                      <path d="M3 6h18">
+                      </path>
+                      <path d="M8 6V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2">
+                      </path>
+                    </svg>
+                  </button>
+                </div>
+                <div data-state="open"
+                     id="radix-ID"
+                     role="region"
+                     aria-labelledby="radix-ID"
+                     data-orientation="vertical"
+                     data-slot="accordion-content"
+                     class="data-[state=closed]:animate-accordion-up data-[state=open]:animate-accordion-down motion-reduce:animate-none overflow-hidden text-sm"
+                     style="--radix-ID var(--radix-ID --radix-ID var(--radix-ID transition-duration: 0s; animation-name: none; --radix-ID 90px; --radix-ID 1196px;"
+                >
+                  <div class="p-4">
+                    <div data-slot="form-item"
+                         class="flex flex-col gap-2"
+                    >
+                      <label data-slot="form-label"
+                             class="flex items-center text-sm leading-none font-medium select-none group-data-[disabled=true]:pointer-events-none group-data-[disabled=true]:opacity-50 peer-disabled:cursor-not-allowed peer-disabled:opacity-50 data-[error=true]:text-destructive gap-0.5"
+                             data-error="false"
+                             for="_r_ID_-form-item"
+                      >
+                        URL
+                      </label>
+                      <div class="relative">
+                        <input data-slot="form-control"
+                               class="file:text-foreground placeholder:text-muted-foreground selection:bg-primary selection:text-primary-foreground dark:bg-input/30 border-input h-9 w-full min-w-0 rounded-md border px-3 shadow-xs transition-[color,box-shadow] file:inline-flex file:h-7 file:border-0 file:bg-transparent file:text-sm file:font-medium disabled:pointer-events-none disabled:cursor-not-allowed disabled:opacity-50 md:text-sm focus-visible:border-ring focus-visible:ring-ring/50 focus-visible:ring-2 aria-invalid:ring-destructive/20 dark:aria-invalid:ring-destructive/40 aria-invalid:border-destructive peer bg-background py-3 text-sm outline-hidden"
+                               id="_r_ID_-form-item"
+                               aria-describedby="_r_ID_-form-item-description"
+                               aria-invalid="false"
+                               type="text"
+                               value
+                               name="anexos.0.url"
+                        >
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="flex justify-center">
+              <button data-slot="button"
+                      class="inline-flex items-center justify-center gap-1.5 whitespace-nowrap rounded-md text-sm font-medium transition-[color,box-shadow] disabled:pointer-events-none disabled:opacity-50 [&amp;_svg]:pointer-events-none [&amp;_svg:not([class*='size-'])]:size-4 shrink-0 [&amp;_svg]:shrink-0 outline-none focus-visible:border-ring focus-visible:ring-ring/50 focus-visible:ring-[3px] aria-invalid:ring-destructive/20 dark:aria-invalid:ring-destructive/40 aria-invalid:border-destructive border bg-background shadow-xs hover:bg-accent dark:bg-input/30 dark:border-input dark:hover:bg-input/50 hover:text-accent-foreground h-9 px-2.5 has-data-[icon=inline-end]:pr-2 has-data-[icon=inline-start]:pl-2"
+                      type="button"
+              >
+                <svg xmlns="http://www.w3.org/2000/svg"
+                     width="16"
+                     height="16"
+                     viewbox="0 0 24 24"
+                     fill="none"
+                     stroke="currentColor"
+                     stroke-width="2"
+                     stroke-linecap="round"
+                     stroke-linejoin="round"
+                     class="lucide lucide-plus size-4 mr-1"
+                     aria-hidden="true"
+                     id="Plus"
+                >
+                  <path d="M5 12h14">
+                  </path>
+                  <path d="M12 5v14">
+                  </path>
+                </svg>
+                <span>
+                  Adicionar Anexo
+                </span>
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </fieldset>
+  </form>
+</div>
+`;
+
+exports[`Components/FormList FormListSeededSingleRow smoke-test 1`] = `
+<div class="mx-auto px-6 py-8">
+  <div class="mb-4 p-4 bg-muted rounded-md">
+    <p class="text-sm font-medium mb-1">
+      Seeded single row
+    </p>
+    <p class="text-xs text-muted-foreground">
+      defaultValues seeds one row and allowEmpty is off. Exactly one row must render — two means the seeding effect appended a duplicate.
+    </p>
+  </div>
+  <form novalidate
+        id="_r_ID_"
+  >
+    <fieldset data-slot="field-set"
+              class="flex flex-col has-[&gt;[data-slot=checkbox-group]]:gap-3 has-[&gt;[data-slot=radio-group]]:gap-3 border-0 p-0 m-0 gap-0"
+    >
+      <div class="grid gap-4">
+        <div data-slot="card"
+             class="bg-card text-card-foreground flex flex-col border shadow-sm gap-0 rounded-lg py-0 space-y-3"
+             id="anexos"
+        >
+          <div data-slot="card-header"
+               class="@container/card-header auto-rows-min grid-rows-[auto_auto] gap-2 has-data-[slot=card-action]:grid-cols-[1fr_auto] p-4 border-b [.border-b]:pb-4 flex flex-row items-center justify-between"
+          >
+            <div class="flex items-center gap-2">
+              <div>
+                <div data-slot="card-title"
+                     class="text-sm font-medium"
+                >
+                  Anexos
+                </div>
+              </div>
+            </div>
+          </div>
+          <div data-slot="card-content"
+               class="p-4"
+          >
+            <div data-slot="accordion"
+                 class="w-full"
+                 data-orientation="vertical"
+            >
+              <div data-state="open"
+                   data-orientation="vertical"
+                   data-slot="accordion-item"
+                   class="border last:border-b rounded-sm mb-4"
+              >
+                <div class="flex justify-between items-center px-4 gap-2">
+                  <div class="flex-1">
+                    <h3 data-orientation="vertical"
+                        data-state="open"
+                        class="flex"
+                    >
+                      <button type="button"
+                              aria-controls="radix-ID"
+                              aria-expanded="true"
+                              data-state="open"
+                              data-orientation="vertical"
+                              id="radix-ID"
+                              data-slot="accordion-trigger"
+                              class="focus-visible:border-ring focus-visible:ring-ring/50 flex flex-1 items-start gap-4 rounded-md text-left text-sm font-medium transition-all outline-none focus-visible:ring-2 disabled:pointer-events-none disabled:opacity-50 [&amp;[data-state=open]&gt;svg]:rotate-180 justify-between hover:no-underline py-4"
+                              data-radix-id""
+                      >
+                        <svg xmlns="http://www.w3.org/2000/svg"
+                             width="16"
+                             height="16"
+                             viewbox="0 0 24 24"
+                             fill="none"
+                             stroke="currentColor"
+                             stroke-width="2"
+                             stroke-linecap="round"
+                             stroke-linejoin="round"
+                             class="lucide lucide-chevron-down text-muted-foreground pointer-events-none size-4 shrink-0 translate-y-0.5 transition-transform duration-200 order-last"
+                             aria-hidden="true"
+                             id="ChevronDown"
+                        >
+                          <path d="m6 9 6 6 6-6">
+                          </path>
+                        </svg>
+                        <span class="font-medium text-sm">
+                          Novo Documento 1
+                        </span>
+                      </button>
+                    </h3>
+                  </div>
+                  <button data-slot="button"
+                          class="inline-flex items-center justify-center gap-1.5 whitespace-nowrap text-sm font-medium transition-[color,box-shadow] disabled:pointer-events-none disabled:opacity-50 [&amp;_svg]:pointer-events-none [&amp;_svg:not([class*='size-'])]:size-4 [&amp;_svg]:shrink-0 outline-none focus-visible:border-ring focus-visible:ring-ring/50 focus-visible:ring-[3px] aria-invalid:ring-destructive/20 dark:aria-invalid:ring-destructive/40 aria-invalid:border-destructive hover:bg-accent dark:hover:bg-accent/50 rounded-[min(var(--radius-md),12px)] in-data-[slot=button-group]:rounded-lg size-7 p-0 shrink-0 hover:text-destructive"
+                          type="button"
+                          aria-label="Remover item 1"
+                  >
+                    <svg xmlns="http://www.w3.org/2000/svg"
+                         width="16"
+                         height="16"
+                         viewbox="0 0 24 24"
+                         fill="none"
+                         stroke="currentColor"
+                         stroke-width="2"
+                         stroke-linecap="round"
+                         stroke-linejoin="round"
+                         class="lucide lucide-trash2 lucide-trash-2"
+                         aria-hidden="true"
+                         id="Trash2"
+                    >
+                      <path d="M10 11v6">
+                      </path>
+                      <path d="M14 11v6">
+                      </path>
+                      <path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6">
+                      </path>
+                      <path d="M3 6h18">
+                      </path>
+                      <path d="M8 6V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2">
+                      </path>
+                    </svg>
+                  </button>
+                </div>
+                <div data-state="open"
+                     id="radix-ID"
+                     role="region"
+                     aria-labelledby="radix-ID"
+                     data-orientation="vertical"
+                     data-slot="accordion-content"
+                     class="data-[state=closed]:animate-accordion-up data-[state=open]:animate-accordion-down motion-reduce:animate-none overflow-hidden text-sm"
+                     style="--radix-ID var(--radix-ID --radix-ID var(--radix-ID transition-duration: 0s; animation-name: none; --radix-ID 90px; --radix-ID 1196px;"
+                >
+                  <div class="p-4">
+                    <div class="grid md:grid-cols-2 gap-4">
+                      <div class="col-span-1">
+                        <div data-slot="form-item"
+                             class="flex flex-col gap-2"
+                        >
+                          <div class="flex flex-col gap-2">
+                            <label data-slot="form-label"
+                                   class="flex items-center text-sm leading-none font-medium select-none group-data-[disabled=true]:pointer-events-none group-data-[disabled=true]:opacity-50 peer-disabled:cursor-not-allowed peer-disabled:opacity-50 data-[error=true]:text-destructive gap-0.5 after:content-[&quot;*&quot;] after:text-destructive"
+                                   data-error="false"
+                                   for="_r_ID_-form-item"
+                            >
+                              Tipo de documento
+                            </label>
+                            <div class="relative w-full min-w-0 max-w-full"
+                                 data-slot="form-control"
+                                 id="_r_ID_-form-item"
+                                 aria-describedby="_r_ID_-form-item-description"
+                                 aria-invalid="false"
+                            >
+                              <div class="w-full min-w-0 max-w-full">
+                                <button data-slot="popover-trigger"
+                                        class="inline-flex items-center gap-1.5 whitespace-nowrap rounded-md text-sm font-medium transition-[color,box-shadow] disabled:pointer-events-none disabled:opacity-50 [&amp;_svg]:pointer-events-none [&amp;_svg:not([class*='size-'])]:size-4 shrink-0 [&amp;_svg]:shrink-0 outline-none focus-visible:border-ring focus-visible:ring-ring/50 focus-visible:ring-[3px] aria-invalid:ring-destructive/20 dark:aria-invalid:ring-destructive/40 aria-invalid:border-destructive border bg-background shadow-xs hover:bg-accent dark:bg-input/30 dark:border-input dark:hover:bg-input/50 hover:text-accent-foreground h-9 px-2.5 has-data-[icon=inline-end]:pr-2 has-data-[icon=inline-start]:pl-2 relative w-full justify-between overflow-hidden text-left max-w-full col-span-1"
+                                        role="combobox"
+                                        aria-expanded="false"
+                                        aria-controls="_r_ID_"
+                                        aria-haspopup="dialog"
+                                        data-state="closed"
+                                        type="button"
+                                        id="anexos.0.idTipoDocumento"
+                                >
+                                  <span class="flex items-center gap-2 min-w-0 flex-1 overflow-hidden"
+                                        style="max-width: 100%;"
+                                  >
+                                    <span class="truncate min-w-0 flex-1 block">
+                                      Seleccione...
+                                    </span>
+                                  </span>
+                                  <svg xmlns="http://www.w3.org/2000/svg"
+                                       width="16"
+                                       height="16"
+                                       viewbox="0 0 24 24"
+                                       fill="none"
+                                       stroke="currentColor"
+                                       stroke-width="2"
+                                       stroke-linecap="round"
+                                       stroke-linejoin="round"
+                                       class="lucide lucide-chevrons-up-down ml-2 size-4 shrink-0 opacity-50"
+                                       aria-hidden="true"
+                                       id="ChevronsUpDown"
+                                       data-icon="inline-end"
+                                  >
+                                    <path d="m7 15 5 5 5-5">
+                                    </path>
+                                    <path d="m7 9 5-5 5 5">
+                                    </path>
+                                  </svg>
+                                </button>
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                      <div data-slot="form-item"
+                           class="flex flex-col gap-2 col-span-1"
+                      >
+                        <label data-slot="form-label"
+                               class="flex items-center text-sm leading-none font-medium select-none group-data-[disabled=true]:pointer-events-none group-data-[disabled=true]:opacity-50 peer-disabled:cursor-not-allowed peer-disabled:opacity-50 data-[error=true]:text-destructive gap-0.5"
+                               data-error="false"
+                               for="_r_ID_-form-item"
+                        >
+                          URL
+                        </label>
+                        <div class="relative">
+                          <input data-slot="form-control"
+                                 class="file:text-foreground placeholder:text-muted-foreground selection:bg-primary selection:text-primary-foreground dark:bg-input/30 border-input h-9 w-full min-w-0 rounded-md border px-3 shadow-xs transition-[color,box-shadow] file:inline-flex file:h-7 file:border-0 file:bg-transparent file:text-sm file:font-medium disabled:pointer-events-none disabled:cursor-not-allowed disabled:opacity-50 md:text-sm focus-visible:border-ring focus-visible:ring-ring/50 focus-visible:ring-2 aria-invalid:ring-destructive/20 dark:aria-invalid:ring-destructive/40 aria-invalid:border-destructive peer bg-background py-3 text-sm outline-hidden"
+                                 id="_r_ID_-form-item"
+                                 aria-describedby="_r_ID_-form-item-description"
+                                 aria-invalid="false"
+                                 type="text"
+                                 value
+                                 name="anexos.0.url"
+                          >
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="flex justify-center">
+              <button data-slot="button"
+                      class="inline-flex items-center justify-center gap-1.5 whitespace-nowrap rounded-md text-sm font-medium transition-[color,box-shadow] disabled:pointer-events-none disabled:opacity-50 [&amp;_svg]:pointer-events-none [&amp;_svg:not([class*='size-'])]:size-4 shrink-0 [&amp;_svg]:shrink-0 outline-none focus-visible:border-ring focus-visible:ring-ring/50 focus-visible:ring-[3px] aria-invalid:ring-destructive/20 dark:aria-invalid:ring-destructive/40 aria-invalid:border-destructive border bg-background shadow-xs hover:bg-accent dark:bg-input/30 dark:border-input dark:hover:bg-input/50 hover:text-accent-foreground h-9 px-2.5 has-data-[icon=inline-end]:pr-2 has-data-[icon=inline-start]:pl-2"
+                      type="button"
+              >
+                <svg xmlns="http://www.w3.org/2000/svg"
+                     width="16"
+                     height="16"
+                     viewbox="0 0 24 24"
+                     fill="none"
+                     stroke="currentColor"
+                     stroke-width="2"
+                     stroke-linecap="round"
+                     stroke-linejoin="round"
+                     class="lucide lucide-plus size-4 mr-1"
+                     aria-hidden="true"
+                     id="Plus"
+                >
+                  <path d="M5 12h14">
+                  </path>
+                  <path d="M12 5v14">
+                  </path>
+                </svg>
+                <span>
+                  Adicionar Anexo
+                </span>
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </fieldset>
+  </form>
+</div>
+`;
+
 exports[`Components/FormList FormListWithDefaultValues smoke-test 1`] = `
 <div class="mx-auto px-6 py-8">
   <form novalidate
@@ -2156,7 +2610,7 @@ exports[`Components/FormList FormListWithDefaultValues smoke-test 1`] = `
             </div>
             <div data-slot="badge"
                  id="_r_ID_"
-                 class="inline-flex items-center justify-center rounded-full shadow-none border px-3 py-0.5 font-medium w-fit whitespace-nowrap shrink-0 gap-1 [&amp;&gt;svg]:pointer-events-none focus-visible:border-ring focus-visible:ring-ring/50 focus-visible:ring-[3px] aria-invalid:ring-destructive/20 dark:aria-invalid:ring-destructive/40 aria-invalid:border-destructive transition-[color,box-shadow] overflow-hidden text-xs [&amp;&gt;svg]:size-2.5 text-primary-foreground bg-primary border-primary"
+                 class="inline-flex items-center justify-center rounded-full shadow-none border px-3 py-0.5 font-medium w-fit whitespace-nowrap shrink-0 gap-1 [&amp;&gt;svg]:pointer-events-none focus-visible:border-ring focus-visible:ring-ring/50 focus-visible:ring-[3px] transition-[color,box-shadow] overflow-hidden text-xs [&amp;&gt;svg]:size-2.5 text-primary-foreground bg-primary border-primary"
             >
               <div class="flex items-center">
                 <div class>
@@ -2307,6 +2761,7 @@ exports[`Components/FormList FormListWithDefaultValues smoke-test 1`] = `
                                 data-slot="select-trigger"
                                 data-size="default"
                                 class="border-input data-placeholder:text-muted-foreground [&amp;_svg:not([class*='text-'])]:text-muted-foreground focus-visible:border-ring focus-visible:ring-ring/50 aria-invalid:ring-destructive/20 dark:aria-invalid:ring-destructive/40 aria-invalid:border-destructive dark:bg-input/30 dark:hover:bg-input/50 flex items-center justify-between gap-2 rounded-md border bg-transparent px-3 py-2 text-sm whitespace-nowrap shadow-xs transition-[color,box-shadow] outline-none focus-visible:ring-[3px] disabled:cursor-not-allowed disabled:opacity-50 data-[size=default]:h-9 data-[size=sm]:h-8 *:data-[slot=select-value]:line-clamp-1 *:data-[slot=select-value]:flex *:data-[slot=select-value]:items-center *:data-[slot=select-value]:gap-2 [&amp;_svg]:pointer-events-none [&amp;_svg]:shrink-0 [&amp;_svg:not([class*='size-'])]:size-4 w-full"
+                                id="_r_ID_-form-item"
                                 aria-labelledby="socials.0.label1-label"
                         >
                           <span data-slot="select-value"
@@ -2322,7 +2777,7 @@ exports[`Components/FormList FormListWithDefaultValues smoke-test 1`] = `
                                    stroke-width="2"
                                    stroke-linecap="round"
                                    stroke-linejoin="round"
-                                   class="lucide lucide-circle h-2 w-2 fill-current text-primary-foreground"
+                                   class="lucide lucide-circle size-2 fill-current text-primary-foreground"
                                    aria-hidden="true"
                               >
                                 <circle cx="12"
@@ -2624,7 +3079,7 @@ exports[`Components/FormList Standalone smoke-test 1`] = `
       </div>
       <div data-slot="badge"
            id="_r_ID_"
-           class="inline-flex items-center justify-center rounded-full shadow-none border px-3 py-0.5 font-medium w-fit whitespace-nowrap shrink-0 gap-1 [&amp;&gt;svg]:pointer-events-none focus-visible:border-ring focus-visible:ring-ring/50 focus-visible:ring-[3px] aria-invalid:ring-destructive/20 dark:aria-invalid:ring-destructive/40 aria-invalid:border-destructive transition-[color,box-shadow] overflow-hidden text-xs [&amp;&gt;svg]:size-2.5 text-primary-foreground bg-primary border-primary"
+           class="inline-flex items-center justify-center rounded-full shadow-none border px-3 py-0.5 font-medium w-fit whitespace-nowrap shrink-0 gap-1 [&amp;&gt;svg]:pointer-events-none focus-visible:border-ring focus-visible:ring-ring/50 focus-visible:ring-[3px] transition-[color,box-shadow] overflow-hidden text-xs [&amp;&gt;svg]:size-2.5 text-primary-foreground bg-primary border-primary"
       >
         <div class="flex items-center">
           <div class>
@@ -2721,11 +3176,15 @@ exports[`Components/FormList Standalone smoke-test 1`] = `
                data-orientation="vertical"
                data-slot="accordion-content"
                class="data-[state=closed]:animate-accordion-up data-[state=open]:animate-accordion-down motion-reduce:animate-none overflow-hidden text-sm"
-               style="--radix-ID var(--radix-ID --radix-ID var(--radix-ID transition-duration: 0s; animation-name: none; --radix-ID 212px; --radix-ID 1196px;"
+               style="--radix-ID var(--radix-ID --radix-ID var(--radix-ID transition-duration: 0s; animation-name: none; --radix-ID 238px; --radix-ID 1196px;"
           >
             <div class="p-4">
               <div class="grid gap-4">
-                <div class="*:not-first:mt-2">
+                <div role="group"
+                     data-slot="field"
+                     data-orientation="vertical"
+                     class="group/field flex w-full gap-3 data-[invalid=true]:text-destructive flex-col [&amp;&gt;*]:w-full [&amp;&gt;.sr-only]:w-auto"
+                >
                   <label data-slot="label"
                          class="flex items-center text-sm leading-none font-medium select-none group-data-[disabled=true]:pointer-events-none group-data-[disabled=true]:opacity-50 peer-disabled:cursor-not-allowed peer-disabled:opacity-50 after:content-['*'] after:text-destructive gap-0.5"
                          for="_r_ID_"
@@ -2745,15 +3204,18 @@ exports[`Components/FormList Standalone smoke-test 1`] = `
                            name="_r_ID_"
                     >
                   </div>
-                  <p id="_r_ID_-helper"
-                     class="text-muted-foreground mt-2 text-xs"
-                     role="region"
-                     aria-live="polite"
+                  <p data-slot="field-description"
+                     class="text-muted-foreground text-sm leading-normal font-normal group-has-data-[orientation=horizontal]/field:text-balance last:mt-0 nth-last-2:-mt-1 [[data-variant=legend]+&amp;]:-mt-1.5 [&amp;&gt;a:hover]:text-primary [&amp;&gt;a]:underline [&amp;&gt;a]:underline-offset-4"
+                     id="_r_ID_-helper"
                   >
                     Insira seu Nome
                   </p>
                 </div>
-                <div class="*:not-first:mt-2 w-full min-w-0 max-w-full">
+                <div role="group"
+                     data-slot="field"
+                     data-orientation="vertical"
+                     class="group/field flex gap-3 data-[invalid=true]:text-destructive flex-col [&amp;&gt;*]:w-full [&amp;&gt;.sr-only]:w-auto w-full min-w-0 max-w-full"
+                >
                   <label data-slot="label"
                          class="flex items-center text-sm leading-none font-medium select-none group-data-[disabled=true]:pointer-events-none group-data-[disabled=true]:opacity-50 peer-disabled:cursor-not-allowed peer-disabled:opacity-50 gap-0.5"
                          for="_r_ID_"
@@ -2787,9 +3249,10 @@ exports[`Components/FormList Standalone smoke-test 1`] = `
                            stroke-width="2"
                            stroke-linecap="round"
                            stroke-linejoin="round"
-                           class="lucide lucide-chevrons-up-down size-4 ml-2 h-4 w-4 shrink-0 opacity-50"
+                           class="lucide lucide-chevrons-up-down ml-2 size-4 shrink-0 opacity-50"
                            aria-hidden="true"
                            id="ChevronsUpDown"
+                           data-icon="inline-end"
                       >
                         <path d="m7 15 5 5 5-5">
                         </path>
@@ -2798,9 +3261,8 @@ exports[`Components/FormList Standalone smoke-test 1`] = `
                       </svg>
                     </button>
                   </div>
-                  <p class="text-muted-foreground text-xs mt-1"
-                     role="note"
-                     aria-live="polite"
+                  <p data-slot="field-description"
+                     class="text-muted-foreground text-sm leading-normal font-normal group-has-data-[orientation=horizontal]/field:text-balance last:mt-0 nth-last-2:-mt-1 [[data-variant=legend]+&amp;]:-mt-1.5 [&amp;&gt;a:hover]:text-primary [&amp;&gt;a]:underline [&amp;&gt;a]:underline-offset-4"
                   >
                     You can search by name
                   </p>
@@ -2881,7 +3343,7 @@ exports[`Components/FormList StandaloneWithDefaultValues smoke-test 1`] = `
       </div>
       <div data-slot="badge"
            id="_r_ID_"
-           class="inline-flex items-center justify-center rounded-full shadow-none border px-3 py-0.5 font-medium w-fit whitespace-nowrap shrink-0 gap-1 [&amp;&gt;svg]:pointer-events-none focus-visible:border-ring focus-visible:ring-ring/50 focus-visible:ring-[3px] aria-invalid:ring-destructive/20 dark:aria-invalid:ring-destructive/40 aria-invalid:border-destructive transition-[color,box-shadow] overflow-hidden text-xs [&amp;&gt;svg]:size-2.5 text-primary-foreground bg-primary border-primary"
+           class="inline-flex items-center justify-center rounded-full shadow-none border px-3 py-0.5 font-medium w-fit whitespace-nowrap shrink-0 gap-1 [&amp;&gt;svg]:pointer-events-none focus-visible:border-ring focus-visible:ring-ring/50 focus-visible:ring-[3px] transition-[color,box-shadow] overflow-hidden text-xs [&amp;&gt;svg]:size-2.5 text-primary-foreground bg-primary border-primary"
       >
         <div class="flex items-center">
           <div class>
@@ -2978,11 +3440,15 @@ exports[`Components/FormList StandaloneWithDefaultValues smoke-test 1`] = `
                data-orientation="vertical"
                data-slot="accordion-content"
                class="data-[state=closed]:animate-accordion-up data-[state=open]:animate-accordion-down motion-reduce:animate-none overflow-hidden text-sm"
-               style="--radix-ID var(--radix-ID --radix-ID var(--radix-ID transition-duration: 0s; animation-name: none; --radix-ID 212px; --radix-ID 1196px;"
+               style="--radix-ID var(--radix-ID --radix-ID var(--radix-ID transition-duration: 0s; animation-name: none; --radix-ID 238px; --radix-ID 1196px;"
           >
             <div class="p-4">
               <div class="grid gap-4">
-                <div class="*:not-first:mt-2">
+                <div role="group"
+                     data-slot="field"
+                     data-orientation="vertical"
+                     class="group/field flex w-full gap-3 data-[invalid=true]:text-destructive flex-col [&amp;&gt;*]:w-full [&amp;&gt;.sr-only]:w-auto"
+                >
                   <label data-slot="label"
                          class="flex items-center text-sm leading-none font-medium select-none group-data-[disabled=true]:pointer-events-none group-data-[disabled=true]:opacity-50 peer-disabled:cursor-not-allowed peer-disabled:opacity-50 after:content-['*'] after:text-destructive gap-0.5"
                          for="_r_ID_"
@@ -3002,15 +3468,18 @@ exports[`Components/FormList StandaloneWithDefaultValues smoke-test 1`] = `
                            name="_r_ID_"
                     >
                   </div>
-                  <p id="_r_ID_-helper"
-                     class="text-muted-foreground mt-2 text-xs"
-                     role="region"
-                     aria-live="polite"
+                  <p data-slot="field-description"
+                     class="text-muted-foreground text-sm leading-normal font-normal group-has-data-[orientation=horizontal]/field:text-balance last:mt-0 nth-last-2:-mt-1 [[data-variant=legend]+&amp;]:-mt-1.5 [&amp;&gt;a:hover]:text-primary [&amp;&gt;a]:underline [&amp;&gt;a]:underline-offset-4"
+                     id="_r_ID_-helper"
                   >
                     Insira seu Nome
                   </p>
                 </div>
-                <div class="space-y-2">
+                <div role="group"
+                     data-slot="field"
+                     data-orientation="vertical"
+                     class="group/field flex w-full gap-3 data-[invalid=true]:text-destructive flex-col [&amp;&gt;*]:w-full [&amp;&gt;.sr-only]:w-auto"
+                >
                   <label data-slot="label"
                          class="flex items-center text-sm leading-none font-medium select-none group-data-[disabled=true]:pointer-events-none group-data-[disabled=true]:opacity-50 peer-disabled:cursor-not-allowed peer-disabled:opacity-50 gap-0.5"
                          for="_r_ID_"
@@ -3042,7 +3511,7 @@ exports[`Components/FormList StandaloneWithDefaultValues smoke-test 1`] = `
                                stroke-width="2"
                                stroke-linecap="round"
                                stroke-linejoin="round"
-                               class="lucide lucide-circle h-2 w-2 fill-current text-primary-foreground"
+                               class="lucide lucide-circle size-2 fill-current text-primary-foreground"
                                aria-hidden="true"
                           >
                             <circle cx="12"
@@ -3071,8 +3540,8 @@ exports[`Components/FormList StandaloneWithDefaultValues smoke-test 1`] = `
                       </svg>
                     </button>
                   </div>
-                  <p class="text-muted-foreground text-xs mt-1"
-                     role="note"
+                  <p data-slot="field-description"
+                     class="text-muted-foreground text-sm leading-normal font-normal group-has-data-[orientation=horizontal]/field:text-balance last:mt-0 nth-last-2:-mt-1 [[data-variant=legend]+&amp;]:-mt-1.5 [&amp;&gt;a:hover]:text-primary [&amp;&gt;a]:underline [&amp;&gt;a]:underline-offset-4"
                   >
                     You can search by name
                   </p>

@@ -10,6 +10,7 @@ import { Input } from "../../primitives/input"
 import { IGRPLabel } from "../label"
 import { Button } from "../../primitives/button"
 import { ChevronDown, ChevronUp } from "lucide-react"
+import { Field, FieldDescription, FieldError } from "../../primitives/field"
 
 /**
  * Props for the IGRPInputNumber component.
@@ -171,15 +172,8 @@ function NumberInputField({
   const displayValue = draft ?? getDisplayValue(value)
 
   return (
-    <div className={cn("*:not-first:mt-2")}>
-      {label ? (
-        <IGRPLabel 
-          label={label}
-          className={labelClassName} 
-          required={required} 
-          id={fieldName} 
-        />) : null
-      }
+    <Field>
+      {label ? <IGRPLabel label={label} className={labelClassName} required={required} id={fieldName} /> : null}
       <div
         className={cn(
           "border-input outline-none relative inline-flex h-10 w-full items-center overflow-hidden rounded-md border text-sm whitespace-nowrap shadow-xs transition-[color,box-shadow]",
@@ -246,7 +240,7 @@ function NumberInputField({
           </div>
         )}
       </div>
-    </div>
+    </Field>
   )
 }
 
@@ -318,14 +312,10 @@ function FormNumberInput({
         fieldError={!!fieldState.error}
       />
       {helperOrDescription && !error && !fieldState.error && !validationError && (
-        <p className={cn("text-muted-foreground mt-2 text-xs")} role="region" aria-live="polite">
-          {helperOrDescription}
-        </p>
+        <FieldDescription>{helperOrDescription}</FieldDescription>
       )}
       {(error || fieldState.error || validationError) && (
-        <p className={cn("text-destructive mt-2 text-xs")} role="alert">
-          {error || fieldState.error?.message || errorMessage}
-        </p>
+        <FieldError>{error || fieldState.error?.message || errorMessage}</FieldError>
       )}
     </div>
   )
@@ -521,16 +511,10 @@ function IGRPInputNumber({
         <NumberInputField {...numberInputFieldProps} value={displayValue} />
 
         {helperOrDescription && !error && !validationError && (
-          <p className={cn("text-muted-foreground mt-2 text-xs")} role="region" aria-live="polite">
-            {helperOrDescription}
-          </p>
+          <FieldDescription>{helperOrDescription}</FieldDescription>
         )}
 
-        {(error || validationError) && (
-          <p className={cn("text-destructive mt-2 text-xs")} role="alert">
-            {error || resolvedErrorMessage}
-          </p>
-        )}
+        {(error || validationError) && <FieldError>{error || resolvedErrorMessage}</FieldError>}
       </div>
     )
   }

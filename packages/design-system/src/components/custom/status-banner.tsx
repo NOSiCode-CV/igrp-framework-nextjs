@@ -54,7 +54,7 @@ function IGRPStatusBanner({
       variant={variant}
       color={color}
       iconName="Circle"
-      iconClassName="h-3 w-3 fill-current"
+      iconClassName="size-3 fill-current"
       className={cn("p-4 rounded-lg items-center", className)}
       alignment="center"
       name={ref}

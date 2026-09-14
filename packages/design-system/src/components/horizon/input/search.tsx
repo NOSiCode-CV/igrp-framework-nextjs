@@ -12,6 +12,7 @@ import { IGRPButton } from "../button"
 import { IGRPFieldDescription } from "../field-description"
 import { IGRPIcon, type IGRPIconName } from "../icon"
 import { IGRPLabel } from "../label"
+import { Field, FieldError } from "../../primitives/field"
 
 /**
  * Props for the IGRPInputSearch component.
@@ -243,13 +244,7 @@ function IGRPInputSearch({
               }
             />
             {helperText && !fieldState.error && !error && <FormDescription>{helperText}</FormDescription>}
-            {error ? (
-              <p className={cn("text-destructive text-xs")} role="alert">
-                {error}
-              </p>
-            ) : (
-              <FormMessage className={cn("text-xs")} />
-            )}
+            {error ? <FieldError>{error}</FieldError> : <FormMessage className={cn("text-xs")} />}
           </FormItem>
         )}
       />
@@ -257,7 +252,7 @@ function IGRPInputSearch({
   }
 
   return (
-    <div className={cn("*:not-first:mt-2", className)}>
+    <Field className={className}>
       {label && <IGRPLabel label={label} required={required} id={fieldName} />}
 
       <SearchInputDecoration
@@ -288,7 +283,7 @@ function IGRPInputSearch({
       />
 
       <IGRPFieldDescription error={error} helperText={helperText} />
-    </div>
+    </Field>
   )
 }
 

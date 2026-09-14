@@ -3,47 +3,54 @@
 exports[`Components/Switch InsideForm smoke-test 1`] = `
 <form>
   <div class="p-6 space-y-4 border rounded-lg px-12">
-    <div class="*:not-first:mt-2">
-      <div class="flex items-center gap-2">
-        <button type="button"
-                role="switch"
-                aria-checked="false"
-                data-state="unchecked"
-                value="on"
-                data-slot="switch"
-                class="peer data-[state=checked]:bg-primary data-[state=unchecked]:bg-input focus-visible:border-ring focus-visible:ring-ring/50 dark:data-[state=unchecked]:bg-input/80 inline-flex h-[1.15rem] w-8 shrink-0 items-center rounded-full border border-transparent shadow-xs transition-[transform,background-color,box-shadow] outline-none focus-visible:ring-[3px] disabled:cursor-not-allowed disabled:opacity-50"
-                id="notifications"
-                aria-invalid="false"
-                aria-describedby="notifications-helper"
-                gridsize="full"
-        >
-          <span data-state="unchecked"
-                data-slot="switch-thumb"
-                class="bg-background dark:data-[state=unchecked]:bg-foreground dark:data-[state=checked]:bg-primary-foreground pointer-events-none block size-4 rounded-full ring-0 transition-transform data-[state=checked]:translate-x-[calc(100%-2px)] data-[state=unchecked]:translate-x-0"
-          >
-          </span>
-        </button>
-        <input aria-hidden="true"
-               tabindex="-1"
-               type="checkbox"
-               value="on"
-               name="notifications"
-               style="position: absolute; pointer-events: none; opacity: 0; margin: 0px; transform: translateX(-100%); width: 32px; height: 18.3906px;"
-        >
-        <label data-slot="label"
-               class="flex items-center text-sm leading-none font-medium select-none group-data-[disabled=true]:pointer-events-none group-data-[disabled=true]:opacity-50 peer-disabled:cursor-not-allowed peer-disabled:opacity-50 after:content-['*'] after:text-destructive gap-0.5"
-               for="notifications"
-        >
-          Receive Email Alerts
-        </label>
-      </div>
-      <p id="notifications-helper"
-         class="text-muted-foreground mt-2 text-xs"
-         role="region"
-         aria-live="polite"
+    <div>
+      <div data-slot="form-item"
+           class="flex flex-col gap-2"
       >
-        Allow us to send you updates.
-      </p>
+        <div class="flex gap-2 flex-row items-center">
+          <label data-slot="form-label"
+                 class="flex items-center text-sm leading-none font-medium select-none group-data-[disabled=true]:pointer-events-none group-data-[disabled=true]:opacity-50 peer-disabled:cursor-not-allowed peer-disabled:opacity-50 data-[error=true]:text-destructive order-last gap-0.5 after:content-[&quot;*&quot;] after:text-destructive"
+                 data-error="false"
+                 for="_r_ID_-form-item"
+          >
+            Receive Email Alerts
+          </label>
+          <button type="button"
+                  role="switch"
+                  aria-checked="true"
+                  aria-required="true"
+                  data-state="checked"
+                  value="on"
+                  data-slot="form-control"
+                  class="peer data-[state=checked]:bg-primary data-[state=unchecked]:bg-input focus-visible:border-ring focus-visible:ring-ring/50 dark:data-[state=unchecked]:bg-input/80 inline-flex h-[1.15rem] w-8 shrink-0 items-center rounded-full border border-transparent shadow-xs transition-[transform,background-color,box-shadow] outline-none focus-visible:ring-[3px] disabled:cursor-not-allowed disabled:opacity-50 bg-backsground"
+                  aria-invalid="false"
+                  gridsize="full"
+                  id="_r_ID_-form-item"
+                  aria-describedby="_r_ID_-form-item-description"
+          >
+            <span data-state="checked"
+                  data-slot="switch-thumb"
+                  class="bg-background dark:data-[state=unchecked]:bg-foreground dark:data-[state=checked]:bg-primary-foreground pointer-events-none block size-4 rounded-full ring-0 transition-transform data-[state=checked]:translate-x-[calc(100%-2px)] data-[state=unchecked]:translate-x-0"
+            >
+            </span>
+          </button>
+          <input aria-hidden="true"
+                 required
+                 tabindex="-1"
+                 type="checkbox"
+                 value="on"
+                 checked
+                 name="notifications"
+                 style="position: absolute; pointer-events: none; opacity: 0; margin: 0px; transform: translateX(-100%); width: 32px; height: 18.3906px;"
+          >
+        </div>
+        <p data-slot="form-description"
+           id="_r_ID_-form-item-description"
+           class="text-muted-foreground text-sm"
+        >
+          Allow us to send you updates.
+        </p>
+      </div>
     </div>
     <button data-slot="button"
             class="inline-flex items-center justify-center gap-1.5 whitespace-nowrap rounded-md text-sm font-medium transition-[color,box-shadow] disabled:pointer-events-none disabled:opacity-50 [&amp;_svg]:pointer-events-none [&amp;_svg:not([class*='size-'])]:size-4 shrink-0 [&amp;_svg]:shrink-0 outline-none focus-visible:border-ring focus-visible:ring-ring/50 focus-visible:ring-[3px] aria-invalid:ring-destructive/20 dark:aria-invalid:ring-destructive/40 aria-invalid:border-destructive bg-primary text-primary-foreground shadow-xs hover:bg-primary/90 hover:text-primary-foreground h-9 px-2.5 has-data-[icon=inline-end]:pr-2 has-data-[icon=inline-start]:pl-2"
@@ -57,7 +64,11 @@ exports[`Components/Switch InsideForm smoke-test 1`] = `
 
 exports[`Components/Switch Standalone smoke-test 1`] = `
 <div class="p-6 space-y-4 border rounded-lg px-12">
-  <div class="*:not-first:mt-2">
+  <div role="group"
+       data-slot="field"
+       data-orientation="vertical"
+       class="group/field flex w-full gap-3 data-[invalid=true]:text-destructive flex-col [&amp;&gt;*]:w-full [&amp;&gt;.sr-only]:w-auto"
+  >
     <div class="flex items-center gap-2">
       <button type="button"
               role="switch"
@@ -84,10 +95,9 @@ exports[`Components/Switch Standalone smoke-test 1`] = `
         Enable Notifications
       </label>
     </div>
-    <p id="_r_ID_-helper"
-       class="text-muted-foreground mt-2 text-xs"
-       role="region"
-       aria-live="polite"
+    <p data-slot="field-description"
+       class="text-muted-foreground text-sm leading-normal font-normal group-has-data-[orientation=horizontal]/field:text-balance last:mt-0 nth-last-2:-mt-1 [[data-variant=legend]+&amp;]:-mt-1.5 [&amp;&gt;a:hover]:text-primary [&amp;&gt;a]:underline [&amp;&gt;a]:underline-offset-4"
+       id="_r_ID_-helper"
     >
       Toggle to enable email alerts
     </p>
@@ -103,7 +113,11 @@ exports[`Components/Switch Standalone smoke-test 1`] = `
 
 exports[`Components/Switch WithError smoke-test 1`] = `
 <div class="p-6 space-y-4 border rounded-lg px-12">
-  <div class="*:not-first:mt-2">
+  <div role="group"
+       data-slot="field"
+       data-orientation="vertical"
+       class="group/field flex w-full gap-3 data-[invalid=true]:text-destructive flex-col [&amp;&gt;*]:w-full [&amp;&gt;.sr-only]:w-auto"
+  >
     <div class="flex items-center gap-2">
       <button type="button"
               role="switch"
@@ -130,12 +144,13 @@ exports[`Components/Switch WithError smoke-test 1`] = `
         Accept Terms &amp; Conditions
       </label>
     </div>
-    <p id="terms-error"
-       class="text-destructive mt-2 text-xs"
-       role="alert"
+    <div role="alert"
+         data-slot="field-error"
+         class="text-destructive text-sm font-normal"
+         id="terms-error"
     >
       You must agree before proceeding.
-    </p>
+    </div>
   </div>
 </div>
 `;

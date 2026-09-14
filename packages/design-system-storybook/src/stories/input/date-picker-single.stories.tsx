@@ -114,12 +114,12 @@ export const DatePickerErrorA11y: Story = {
     const canvas = within(canvasElement);
 
     await step('date button carries aria-invalid when field has an error', async () => {
-      const button = canvas.getByRole('button', { name: /pick a date/i });
+      const button = canvas.getByRole('button', { name: /date of birth/i });
       expect(button.getAttribute('aria-invalid')).toBe('true');
     });
 
     await step('date button aria-describedby resolves to the error message element', async () => {
-      const button = canvas.getByRole('button', { name: /pick a date/i });
+      const button = canvas.getByRole('button', { name: /date of birth/i });
       const describedById = button.getAttribute('aria-describedby');
       expect(describedById).toBeTruthy();
       const messageEl = document.getElementById(describedById!);

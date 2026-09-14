@@ -50,6 +50,49 @@ stages:
 #     # follow file references, so its copy has to be inlined). Fail the pipeline
 #     # if someone edited a rule without regenerating it. Plain node, no install.
 #     - node templates/demo-v1/.agents/build-copilot-instructions.mjs --check
+# The Storybook visual suite is the design system's only UI regression gate — there
+# is no root-level unit test suite. It silently died on 2026-06-25 when Storybook
+# went to 10.x (`@storybook/test-runner` crashed during setup, so *zero* tests ran
+# while the command still looked plausible), and nothing noticed for three months:
+# by the time it was fixed, 26 commits across 52 design-system files had landed
+# un-snapshotted. Running it per-MR is what stops that recurring.
+#
+# Runs against `storybook dev`, NOT a static build. The two are not
+# interchangeable: next/image emits `color: transparent` under the dev server and
+# omits it in a production build, so the Image and PdfViewer stories diff by
+# environment (verified — 5 failures against `storybook build`). The committed
+# baselines are dev-server output, which is also the workflow documented in the
+# package's CLAUDE.md and in .storybook/test-runner.ts. Keep the two in step: if
+# this job ever moves to a static build, every baseline has to be regenerated the
+# same way.
+#
+# The image tag must track the `playwright` version in
+# packages/design-system-storybook/package.json, or the bundled browsers and the
+# client library disagree.
+test_storybook:
+  stage: verify
+  image: mcr.microsoft.com/playwright:v1.63.0-jammy
+  services: []
+  rules:
+    - changes:
+        - packages/design-system/**/*
+        - packages/design-system-storybook/**/*
+      when: always
+  before_script:
+    - corepack enable
+    - pnpm install --frozen-lockfile
+    # Storybook resolves @igrp/igrp-framework-react-design-system through its
+    # package "exports", which point at dist/ — gitignored, so absent on a clean
+    # checkout and it must be built before Storybook can compile.
+    - pnpm --filter @igrp/igrp-framework-react-design-system build
+  script:
+    - pnpm --filter @igrp/igrp-framework-react-design-system-storybook storybook &
+    # Plain poll rather than `npx wait-on`: no extra package to resolve at job time.
+    - for i in $(seq 1 60); do curl -sf -o /dev/null http://localhost:6006 && break; sleep 5; done
+    - curl -sf -o /dev/null http://localhost:6006
+    # --ci so a missing baseline fails loudly instead of being written and passed.
+    - pnpm --filter @igrp/igrp-framework-react-design-system-storybook test-storybook:ci
+
 build_storybook_image:
   stage: build
   rules:

@@ -3,7 +3,7 @@
 import { useId } from "react"
 
 import { cn } from "../../lib/utils"
-import { igrpCleanString } from "../../lib/strings"
+import { igrpCleanString } from "../../lib/utilities"
 import { Card, CardHeader, CardTitle, CardDescription, CardContent } from "../primitives/card"
 import { Separator } from "../primitives/separator"
 import { IGRPCopyTo } from "./copy-to"

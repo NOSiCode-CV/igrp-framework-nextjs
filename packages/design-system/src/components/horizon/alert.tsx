@@ -3,7 +3,7 @@
 import { useId } from "react"
 
 import { IGRPColors, type IGRPColorRole, type IGRPColorVariants } from "../../lib/colors"
-import { igrpAlertIconMappings } from "../../lib/constants"
+import { igrpAlertIconMappings } from "../../lib/utilities"
 import { cn } from "../../lib/utils"
 import type { IGRPBaseAttributes, IGRPPlacementProps } from "../../types"
 import { IGRPIcon, type IGRPIconName } from "./icon"
@@ -86,8 +86,9 @@ function IGRPAlert({
       aria-live={isAssertive ? "assertive" : "polite"}
       className={cn(
         "rounded-md border px-4 py-3",
+        // colors.alert already pairs each solid fill with its own *-foreground token;
+        // overriding it with the page background breaks contrast on light fills.
         colors.alert,
-        !textColored && variant === "solid" && "text-background",
         !borderColored && "border-transparent",
         !bgColored && "bg-transparent",
         className,

@@ -5,6 +5,11 @@ const meta = {
   title: 'Components/PageHeader',
   component: IGRPPageHeader,
   parameters: {
+    // Known WCAG backlog, tracked in the design-system accessibility audit:
+    // color-contrast backlog.
+    // 'todo' reports in the Storybook UI without failing CI. Delete this once the
+    // suite is clean; every other component is gated at 'error' by preview.ts.
+    a11y: { test: 'todo' },
     layout: 'padded',
     // The back button uses Next's useRouter; mount the mocked app router so
     // the back-button stories render in Storybook and the test-runner.

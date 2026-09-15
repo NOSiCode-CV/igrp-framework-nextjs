@@ -10,7 +10,7 @@ import { cva, type VariantProps } from "class-variance-authority"
 import { IGRPIcon, type IGRPIconName } from "../icon"
 import { IGRPColors, type IGRPColorRole, type IGRPColorVariants } from "../../../lib/colors"
 import { igrpColorText } from "../../../lib/colors"
-import { igrpIsExternalUrl } from "../../../lib/url"
+import { igrpIsExternalUrl } from "../../../lib/utilities"
 import { cn } from "../../../lib/utils"
 import type { IGRPBaseAttributes, IGRPPlacementProps } from "../../../types"
 

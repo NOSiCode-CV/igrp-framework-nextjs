@@ -92,7 +92,6 @@ function IGRPInputPassword({
               <InputGroupButton
                 size="icon-xs"
                 onClick={togglePasswordVisibility}
-                tabIndex={-1}
                 aria-label={toggleLabel}
                 name="toggle-password-visibility"
               >
@@ -144,7 +143,6 @@ function IGRPInputPassword({
                 <InputGroupButton
                   size="icon-xs"
                   onClick={togglePasswordVisibility}
-                  tabIndex={-1}
                   aria-label={toggleLabel}
                 >
                   <IGRPIcon iconName={showPassword ? "EyeOff" : "Eye"} aria-hidden="true" />

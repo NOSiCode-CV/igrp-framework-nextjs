@@ -2,7 +2,7 @@
 
 import { useId } from "react"
 
-import { igrpCleanString } from "../../lib/strings"
+import { igrpCleanString } from "../../lib/utilities"
 import { cn } from "../../lib/utils"
 import {
   Accordion,

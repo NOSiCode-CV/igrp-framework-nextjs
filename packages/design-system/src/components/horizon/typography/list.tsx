@@ -109,9 +109,9 @@ interface IGRPTextListProps extends React.HTMLAttributes<HTMLElement>, VariantPr
 const getDefaultIcon = (type: IGRPTextListType, iconColor?: IGRPColorVariants, index?: number) => {
   switch (type) {
     case "checklist":
-      return <IGRPIcon iconName="Check" className={IGRPColors.solid[iconColor || "success"].text} />
+      return <IGRPIcon iconName="Check" className={IGRPColors.outline[iconColor || "success"].text} />
     case "features":
-      return <IGRPIcon iconName="Star" className={IGRPColors.solid[iconColor || "warning"].text} />
+      return <IGRPIcon iconName="Star" className={IGRPColors.outline[iconColor || "warning"].text} />
     case "steps":
       return (
         <div
@@ -248,16 +248,18 @@ function IGRPTextList({
     const isInteractive = interactive || collapsible || !!onItemClick
 
     return (
-      <div
+      <li
         key={item.id || index}
-        className={cn("transition-[opacity,transform] duration-300", {
+        className={cn("list-none", "transition-[opacity,transform] duration-300 motion-reduce:transition-none", {
           "opacity-0 translate-x-4": animate && !isVisible,
           "opacity-100 translate-x-0": !animate || isVisible,
         })}
       >
         <div
           role={isInteractive ? "button" : undefined}
-          tabIndex={isInteractive ? 0 : undefined}
+          tabIndex={isInteractive && !item.disabled ? 0 : undefined}
+          aria-disabled={isInteractive && item.disabled ? true : undefined}
+          aria-expanded={collapsible && hasSubItems ? !isCollapsed : undefined}
           className={cn(
             igrpTextlistItemVariants({
               interactive: isInteractive,
@@ -277,7 +279,7 @@ function IGRPTextList({
           {/* Content */}
           <div className={cn("flex-1 min-w-0")}>
             <div className={cn("flex items-center gap-2")}>
-              <div className={cn("flex-1", item.variant && IGRPColors.solid[item.variant].text)}>{item.content}</div>
+              <div className={cn("flex-1", item.variant && IGRPColors.outline[item.variant].text)}>{item.content}</div>
 
               {/* Badge */}
               {item.badgeText && (
@@ -303,14 +305,17 @@ function IGRPTextList({
 
         {/* Sub-items */}
         {shouldShowSubItems && (
-          <div>{item.subItems!.map((subItem, subIndex) => renderListItem(subItem, subIndex, depth + 1))}</div>
+          <ul className={cn("list-none")}>
+            {item.subItems!.map((subItem, subIndex) => renderListItem(subItem, subIndex, depth + 1))}
+          </ul>
         )}
-      </div>
+      </li>
     )
   }
 
   const Component = type === "ordered" ? "ol" : "ul"
-  const colorClass = IGRPColors.solid[variant]
+  // outline, not solid: these sit on the page background, not on a filled surface.
+  const colorClass = IGRPColors.outline[variant]
 
   return (
     <Component className={cn(igrpTextlistVariants({ size, spacing }), colorClass.text, className)} id={ref} {...props}>

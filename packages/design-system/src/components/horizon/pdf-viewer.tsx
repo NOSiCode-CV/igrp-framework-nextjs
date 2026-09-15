@@ -240,7 +240,11 @@ function IGRPPdfViewerCard({ document, onView, clickable = true }: IGRPPdfViewer
   return (
     <Card
       key={document.id}
-      className={cn("transition-shadow py-3", clickable ? "cursor-pointer hover:shadow-md" : "")}
+      className={cn(
+        "transition-shadow py-3",
+        clickable &&
+          "cursor-pointer hover:shadow-md focus-visible:ring-2 focus-visible:ring-ring focus-visible:outline-none",
+      )}
       onClick={clickable ? () => onView(document) : undefined}
       role={clickable ? "button" : undefined}
       tabIndex={clickable ? 0 : undefined}

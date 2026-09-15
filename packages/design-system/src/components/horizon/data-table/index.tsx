@@ -457,12 +457,24 @@ function IGRPDataTable<TData, TValue>({
             {table.getHeaderGroups().map((headerGroup) => (
               <TableRow key={headerGroup.id} className={cn("border-b")}>
                 {headerGroup.headers.map((header) => {
+                  // aria-sort is only honoured on the columnheader itself, never on a
+                  // wrapper inside it — so it is resolved here rather than in header.tsx.
+                  const sorted = header.column.getIsSorted()
+                  const ariaSort = !header.column.getCanSort()
+                    ? undefined
+                    : sorted === "asc"
+                      ? "ascending"
+                      : sorted === "desc"
+                        ? "descending"
+                        : "none"
+
                   return (
                     <TableHead
                       key={header.id}
                       colSpan={header.colSpan}
                       style={{ width: `${header.getSize()}px` }}
                       className={cn("font-semibold px-3")}
+                      aria-sort={ariaSort}
                     >
                       {header.isPlaceholder ? null : flexRender(header.column.columnDef.header, header.getContext())}
                     </TableHead>

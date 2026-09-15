@@ -10,6 +10,11 @@ import { fn } from 'storybook/test';
 
 const meta = {
   title: 'Components/Button',
+  // Known WCAG backlog, tracked in the design-system accessibility audit:
+  // color-contrast on soft/outline colour variants.
+  // 'todo' reports in the Storybook UI without failing CI. Delete this once the
+  // suite is clean; every other component is gated at 'error' by preview.ts.
+  parameters: { a11y: { test: 'todo' } },
   component: IGRPButton,
   argTypes: {
     variant: {

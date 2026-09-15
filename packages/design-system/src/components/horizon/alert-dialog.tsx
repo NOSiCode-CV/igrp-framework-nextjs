@@ -1,10 +1,10 @@
 "use client"
 
 import { useId } from "react"
-import { Slot } from "@radix-ui/react-slot"
+import { Slot } from "radix-ui"
 
 import { IGRPColors, type IGRPColorVariants } from "../../lib/colors"
-import { igrpAlertIconMappings } from "../../lib/constants"
+import { igrpAlertIconMappings } from "../../lib/utilities"
 import { cn } from "../../lib/utils"
 import { type IGRPBaseAttributes, type IGRPPlacementProps } from "../../types"
 import {

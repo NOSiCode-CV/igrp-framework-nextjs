@@ -4,6 +4,8 @@
 // from the same lucide import; splitting them would duplicate that import.
 /* eslint-disable react-refresh/only-export-components */
 
+import { useId } from "react"
+
 import { AlertCircle, type LucideProps, icons } from "lucide-react"
 
 import { cn } from "../../../lib/utils"
@@ -29,6 +31,7 @@ interface IGRPIconProps extends Omit<LucideProps, "ref"> {
  * Renders a Lucide icon by name.
  */
 function IGRPIcon({ iconName, className, size = 16, color = "currentColor", id, ...props }: IGRPIconProps) {
+  const _id = useId()
   const LucideIcon = icons[iconName as IGRPIconName]
 
   if (!LucideIcon) {
@@ -36,7 +39,9 @@ function IGRPIcon({ iconName, className, size = 16, color = "currentColor", id, 
     return <AlertCircle className={cn("text-destructive")} />
   }
 
-  const ref = id ?? iconName
+  // Falling back to iconName would emit duplicate DOM ids for every repeat of the
+  // same icon on a page, which breaks any aria-* reference pointing at one.
+  const ref = id ?? _id
 
   return <LucideIcon aria-hidden="true" className={className} id={ref} color={color} size={size} {...props} />
 }

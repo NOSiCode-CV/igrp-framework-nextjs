@@ -858,11 +858,16 @@ export {
   IGRPColorObjectRole,
   igrpColorText,
 } from "./lib/colors"
-export { igrpGridSizeClasses, igrpAlertIconMappings } from "./lib/constants"
-export { igrpGetInitials } from "./lib/initials"
-export { igrpToPascalCase } from "./lib/pascal-case"
-export { igrpIsExternalUrl, igrpNormalizeUrl } from "./lib/url"
-export { cn, parseLocalDate } from "./lib/utils"
+export {
+  igrpGridSizeClasses,
+  igrpAlertIconMappings,
+  igrpGetInitials,
+  igrpToPascalCase,
+  igrpIsExternalUrl,
+  igrpNormalizeUrl,
+  parseLocalDate
+} from "./lib/utilities"
+export { cn, } from "./lib/utils"
 export { colorToOklch, detectFormat, type ColorFormat } from "./lib/color-utils"
 
 // i18n

@@ -12,7 +12,7 @@ import { Popover, PopoverContent, PopoverTrigger } from "../../../primitives/pop
 import { IGRPButton } from "../../button"
 import { IGRPLabel } from "../../label"
 import { IGRPCalendarMultiple, type IGRPCalendarMultipleProps } from "../../calendar/multiple"
-import { DD_MM_YYYY } from "../../../../lib/constants"
+import { DD_MM_YYYY } from "../../../../lib/utilities"
 import { Field } from "../../../primitives/field"
 import { useIGRPi18n } from "../../../../i18n"
 

@@ -11,7 +11,7 @@ import {
   parseStringToDate,
   toLocalDate,
 } from "../../../../lib/calendar-utils"
-import { DD_MM_YYYY } from "../../../../lib/constants"
+import { DD_MM_YYYY } from "../../../../lib/utilities"
 import { cn } from "../../../../lib/utils"
 import { type IGRPDatePickerBaseProps } from "../../../../types"
 import { Button } from "../../../primitives/button"

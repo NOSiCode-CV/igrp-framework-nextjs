@@ -42,15 +42,8 @@ function IGRPDataTableHeaderSortToggle<T>({
   const canSort = column.getCanSort()
   const isSorted = column.getIsSorted()
 
-  const ariaSort = isSorted === "asc" ? "ascending" : isSorted === "desc" ? "descending" : "none"
-
   return (
-    <div
-      aria-label={`Ordenar por ${title}`}
-      className={cn(className)}
-      aria-sort={ariaSort as React.AriaAttributes["aria-sort"]}
-      {...props}
-    >
+    <div className={cn(className)} {...props}>
       {canSort ? (
         <Button
           variant="ghost"
@@ -91,7 +84,7 @@ function IGRPDataTableHeaderSortDropdown<T>({
   const handleSortDesc = () => column.toggleSorting(true)
 
   return (
-    <div aria-label={`Sort by ${title}`} className={cn(className)} {...props}>
+    <div className={cn(className)} {...props}>
       {canSort ? (
         <DropdownMenu>
           <DropdownMenuTrigger asChild>

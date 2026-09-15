@@ -2,7 +2,7 @@
 
 import { useId, useState } from "react"
 
-import { DEFAULT_HIDE_TIME_INDICATOR } from "../../../lib/constants"
+import { DEFAULT_HIDE_TIME_INDICATOR } from "../../../lib/utilities"
 import type { IGRPCalendarTimeProps } from "../../../types"
 import { Input } from "../../primitives/input"
 import { Label } from "../../primitives/label"

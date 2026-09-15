@@ -38,11 +38,27 @@ Consumer app code follows a "no manual `dark:` overrides — tokens handle dark 
 - **Not allowed anywhere:** raw Tailwind palette colors (`bg-emerald-500`, `text-red-600 dark:text-red-400`, etc.). Use semantic tokens (`bg-success`, `text-destructive`). If a needed color role is missing, **add a new token** to `tokens.css` (light + dark blocks + `@theme inline`) — don't reach for the palette.
 - **Horizon / Custom layers (`src/components/horizon/*`, `src/components/custom/*`):** no `dark:` of any kind. These layers compose Primitives + semantic tokens only.
 
-When auditing for `dark:` violations, grep specifically for raw palette names (`emerald-`, `red-`, `blue-`, etc.) — `dark:bg-input/30` style adjustments are intentional and not a violation.
+This policy is **enforced by `pnpm lint`**, not by review: the local rule `igrp/token-policy` (`eslint-rules/token-policy.js`) flags raw palette colours in every layer and any `dark:` in Horizon/Custom, while exempting Primitives from the `dark:` check. It reads string literals and template-literal quasis, so `className`, `cva()` and `` cn(`…`) `` are all covered. Don't disable it to land a colour — add the token instead.
 
 ## Shadcn drift checker
 
 `scripts/check-shadcn-drift.mjs` is a periodic (~quarterly) maintenance tool. For each `.tsx` under `src/components/primitives/`, it runs `npx shadcn@latest add <name> --dry-run --diff` against a scratch project and reports drift from upstream. It hits the network, is slow, and is **not** wired into CI. Run manually before a major shadcn version bump or when revisiting the Primitives layer. Each primitive file may carry a `// shadcn: YYYY-MM-DD` first-line stamp recording the last upstream sync date.
+
+## Authoring a primitive from shadcn
+
+There is **no `components.json` in this package, deliberately** — `npx shadcn@latest info` reports `config: null`. Never run `shadcn add` inside `packages/design-system`: it would init a config that doesn't match this layout, write to `src/components/ui/`, and rewrite imports to `@/…` (this package uses relative paths).
+
+Reading upstream needs no config and is safe anywhere — `npx shadcn@latest view @shadcn/<name>`, `docs <name>`, `search @shadcn -q "…"`.
+
+To add a new primitive, init a throwaway project in a scratch directory, `add` the component there, then hand-port it into `src/components/primitives/<name>.tsx`:
+
+- **`--base radix` is mandatory**, on both `init` and `add`. Preset codes do not encode the base, so the CLI defaults to Base UI in a fresh directory and emits a `render`-prop API instead of Radix's `asChild` — incompatible with every existing primitive. `scripts/check-shadcn-drift.mjs` pins the flag for the same reason; match it by hand.
+- Line 1 is the `// shadcn: YYYY-MM-DD` stamp — the drift checker reads it. All 55 current primitives carry one.
+- Keep upstream's `"use client"` (it goes after the stamp comment — see `primitives/sidebar.tsx`).
+- Rewrite `@/lib/utils` → `../../lib/utils` and `@/components/ui/x` → `./x`.
+- Export explicitly from `src/index.ts`. No wildcards — that barrel is a `"use client"` boundary.
+- New Radix dependency goes in this package's `dependencies`, pinned exact like its neighbours.
+- Changeset (`patch`), then decide via `COMPONENTS.md` whether it also needs a Horizon `IGRP*` wrapper.
 
 ## Shared rules
 

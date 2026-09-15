@@ -1,5 +1,5 @@
 import { type IGRPIconName } from "./components/horizon/icon"
-import { igrpGridSizeClasses } from "./lib/constants"
+import { igrpGridSizeClasses } from "./lib/utilities"
 import type { IGRPColorVariants } from "./lib/colors"
 import { Calendar } from "./components/primitives/calendar"
 

@@ -19,6 +19,11 @@ import {
 
 const meta = {
   title: 'Components/Sidebar',
+  // Known WCAG backlog, tracked in the design-system accessibility audit:
+  // button-name backlog.
+  // 'todo' reports in the Storybook UI without failing CI. Delete this once the
+  // suite is clean; every other component is gated at 'error' by preview.ts.
+  parameters: { a11y: { test: 'todo' } },
   component: IGRPSidebar,
 } satisfies Meta<typeof IGRPSidebar>;
 

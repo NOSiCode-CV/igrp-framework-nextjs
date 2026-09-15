@@ -176,37 +176,40 @@ function IGRPMenuNavigation({
         <CardContent className={cn("p-0")}>
           <div className={cn("divide-y")} role="list">
             {sections.map((section) => (
-              <button
-                key={section.id}
-                type="button"
-                role="listitem"
-                onClick={() => handleSectionClick(section.id)}
-                disabled={section.disabled}
-                aria-current={activeSection === section.id ? "page" : undefined}
-                className={cn(
-                  "flex items-center justify-between w-full text-left transition-colors",
-                  "py-2.5 px-4 text-sm",
-                  section.disabled ? "opacity-50 cursor-not-allowed" : "cursor-pointer",
-                  activeSection === section.id
-                    ? "bg-primary/5 text-primary font-medium"
-                    : "hover:bg-muted/30 text-muted-foreground",
-                )}
-              >
-                <div className={cn("flex items-center gap-2")}>
-                  <IGRPIcon iconName={section.icon} className={cn("size-4 shrink-0")} aria-hidden="true" />
-                  <span className={cn("truncate")}>{section.label}</span>
-                </div>
-                {showChevron && (
-                  <IGRPIcon
-                    iconName="ChevronRight"
-                    className={cn(
-                      "size-4 transition-colors shrink-0",
-                      activeSection === section.id ? "text-primary" : "text-muted-foreground",
-                    )}
-                    aria-hidden="true"
-                  />
-                )}
-              </button>
+              // The listitem role belongs to the row, not the control: putting it on the
+              // button would replace the button role and the item stops announcing as
+              // clickable.
+              <div key={section.id} role="listitem">
+                <button
+                  type="button"
+                  onClick={() => handleSectionClick(section.id)}
+                  disabled={section.disabled}
+                  aria-current={activeSection === section.id ? "page" : undefined}
+                  className={cn(
+                    "flex items-center justify-between w-full text-left transition-colors",
+                    "py-2.5 px-4 text-sm",
+                    section.disabled ? "opacity-50 cursor-not-allowed" : "cursor-pointer",
+                    activeSection === section.id
+                      ? "bg-primary/5 text-primary font-medium"
+                      : "hover:bg-muted/30 text-muted-foreground",
+                  )}
+                >
+                  <div className={cn("flex items-center gap-2")}>
+                    <IGRPIcon iconName={section.icon} className={cn("size-4 shrink-0")} aria-hidden="true" />
+                    <span className={cn("truncate")}>{section.label}</span>
+                  </div>
+                  {showChevron && (
+                    <IGRPIcon
+                      iconName="ChevronRight"
+                      className={cn(
+                        "size-4 transition-colors shrink-0",
+                        activeSection === section.id ? "text-primary" : "text-muted-foreground",
+                      )}
+                      aria-hidden="true"
+                    />
+                  )}
+                </button>
+              </div>
             ))}
           </div>
         </CardContent>

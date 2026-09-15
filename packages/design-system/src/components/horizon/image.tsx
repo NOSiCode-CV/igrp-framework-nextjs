@@ -3,7 +3,7 @@
 import { useId } from "react"
 import Image, { type ImageProps } from "next/image"
 
-import { igrpRounded } from "../../lib/rounded-classes"
+import { igrpRounded } from "../../lib/utilities"
 import { cn } from "../../lib/utils"
 import { AspectRatio } from "../primitives/aspect-ratio"
 import type { VariantProps } from "class-variance-authority"

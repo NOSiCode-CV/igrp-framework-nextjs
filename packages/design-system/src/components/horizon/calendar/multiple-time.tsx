@@ -6,7 +6,7 @@ import { Input } from "../../primitives/input"
 import { Label } from "../../primitives/label"
 import type { IGRPCalendarTimeProps } from "../../../types"
 import { IGRPCalendarMultiple, type IGRPCalendarMultipleProps } from "./multiple"
-import { DEFAULT_HIDE_TIME_INDICATOR } from "../../../lib/constants"
+import { DEFAULT_HIDE_TIME_INDICATOR } from "../../../lib/utilities"
 import { cn } from "../../../lib/utils"
 
 /**

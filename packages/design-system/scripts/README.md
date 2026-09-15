@@ -11,7 +11,10 @@ using the shadcn CLI's `--diff` mode in a scratch directory.
 **What it does:**
 
 - Reads the `// shadcn: YYYY-MM-DD` stamp at the top of each primitive.
-- Runs `npx shadcn@latest add <name> --dry-run --diff` in a temp dir.
+- Runs `npx shadcn@latest add <name> --dry-run --diff --base radix` in a temp dir.
+  **`--base radix` is load-bearing:** preset codes do not encode the base, so without
+  it the CLI initialises the scratch project with Base UI and every primitive
+  reports drift against a `render`-prop API this package does not use.
 - Reports primitives that have drifted from upstream.
 
 **What to do with drift:**

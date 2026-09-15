@@ -15,7 +15,7 @@ import { FormControl, FormDescription, FormField, FormItem, FormLabel, FormMessa
 import { Popover, PopoverContent, PopoverTrigger } from "../../../primitives/popover"
 import { IGRPLabel } from "../../label"
 import { type IGRPCalendarRangeProps } from "../../calendar/range"
-import { DD_MM_YYYY } from "../../../../lib/constants"
+import { DD_MM_YYYY } from "../../../../lib/utilities"
 import { Field } from "../../../primitives/field"
 
 /** @internal Popover + calendar + clear button for date range. */

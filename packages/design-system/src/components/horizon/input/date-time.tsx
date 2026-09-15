@@ -3,7 +3,7 @@
 import { useId, useState } from "react"
 import { useFormContext, Controller } from "react-hook-form"
 
-import { DD_MM_YYYY } from "../../../lib/constants"
+import { DD_MM_YYYY } from "../../../lib/utilities"
 import { cn } from "../../../lib/utils"
 import type { IGRPInputProps } from "../../../types"
 

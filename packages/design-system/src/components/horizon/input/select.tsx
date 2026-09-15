@@ -364,7 +364,8 @@ const IGRPSelectItem = memo(({ item, showStatus }: { item: IGRPOptionsProps; sho
         <Image
           className={cn("size-5 rounded")}
           src={item.image || "/placeholder.svg"}
-          alt={item.label}
+          // Decorative: item.label is rendered as text immediately after this.
+          alt=""
           width={20}
           height={20}
         />

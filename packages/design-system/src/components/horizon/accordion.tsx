@@ -3,7 +3,7 @@
 import { useId } from "react"
 
 import { igrpCleanString } from "../../lib/utilities"
-import { cn } from "../../lib/utils"
+import { cn } from "cn"
 import {
   Accordion,
   AccordionContent,

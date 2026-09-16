@@ -5,7 +5,7 @@ import { cva, type VariantProps } from "class-variance-authority"
 
 import { IGRPIcon } from "../icon"
 import { type IGRPColorRole, type IGRPColorVariants } from "../../../lib/colors"
-import { cn } from "../../../lib/utils"
+import { cn } from "../cn"
 import type { IGRPBaseAttributes } from "../../../types"
 
 const igrpHeadlineVariants = cva("scroll-m-20 font-bold tracking-tight text-balance", {

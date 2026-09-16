@@ -7,7 +7,7 @@ import type { VariantProps } from "class-variance-authority"
 import { Button, buttonVariants } from "../primitives/button"
 import { Spinner } from "../primitives/spinner"
 import { IGRPIcon } from "./icon"
-import { cn } from "../../lib/utils"
+import { cn } from "cn"
 import type { IGRPBaseAttributes } from "../../types"
 import { useIGRPi18n } from "../../i18n"
 

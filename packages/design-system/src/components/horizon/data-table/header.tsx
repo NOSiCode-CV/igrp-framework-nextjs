@@ -13,7 +13,7 @@ import {
   DropdownMenuTrigger,
 } from "../../primitives/dropdown-menu"
 
-import { cn } from "../../../lib/utils"
+import { cn } from "../cn"
 import { useIGRPi18n } from "../../../i18n"
 
 /**

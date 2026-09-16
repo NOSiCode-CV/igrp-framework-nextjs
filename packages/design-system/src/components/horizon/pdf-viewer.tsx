@@ -4,7 +4,7 @@ import type React from "react"
 import { useCallback, useEffect, useId, useReducer, useRef, useState } from "react"
 
 import { IGRPColors } from "../../lib/colors"
-import { cn } from "../../lib/utils"
+import { cn } from "cn"
 import { Card, CardHeader, CardTitle } from "../primitives/card"
 import { Dialog, DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogTitle } from "../primitives/dialog"
 import { IGRPBadge } from "./badge"
@@ -13,7 +13,7 @@ import { IGRPIcon } from "./icon"
 import { IGRPLoadingSpinner } from "./loading-spinner"
 import { IGRPHeadline } from "./typography/headline"
 import { IGRPText } from "./typography/text"
-import { useIGRPi18n } from "../../i18n"
+import { useIGRPi18n, useIGRPLocale } from "../../i18n"
 
 /**
  * Document item shape for PDF viewer.
@@ -98,14 +98,14 @@ function getInitialPdfViewerState(viewerPreference: string): PdfViewerState {
   }
 }
 
-const safeFormatDate = (date?: string | Date) => {
+const safeFormatDate = (date: string | Date | undefined, locale: string) => {
   if (!date) return "—"
 
   const parsed = date instanceof Date ? date : new Date(date)
 
   if (Number.isNaN(parsed.getTime())) return "—"
 
-  return new Intl.DateTimeFormat(undefined, {
+  return new Intl.DateTimeFormat(locale, {
     day: "2-digit",
     month: "2-digit",
     year: "numeric",
@@ -159,7 +159,7 @@ function IGRPPdfViewer({
         setIsModalOpen(true)
       }
     },
-    [displayMode],
+    [displayMode]
   )
 
   if (loading) return <IGRPLoadingSpinner />
@@ -241,9 +241,9 @@ function IGRPPdfViewerCard({ document, onView, clickable = true }: IGRPPdfViewer
     <Card
       key={document.id}
       className={cn(
-        "transition-shadow py-3",
+        "py-3 transition-shadow",
         clickable &&
-          "cursor-pointer hover:shadow-md focus-visible:ring-2 focus-visible:ring-ring focus-visible:outline-none",
+          "cursor-pointer hover:shadow-md focus-visible:ring-2 focus-visible:ring-ring focus-visible:outline-none"
       )}
       onClick={clickable ? () => onView(document) : undefined}
       role={clickable ? "button" : undefined}
@@ -254,7 +254,7 @@ function IGRPPdfViewerCard({ document, onView, clickable = true }: IGRPPdfViewer
         <div className={cn("flex items-start justify-between")}>
           <div className={cn("flex items-center gap-2")}>
             <IGRPIcon iconName="FileText" className={cn("text-muted-foreground")} />
-            <CardTitle className={cn("text-sm font-medium leading-tight")}>{document.title}</CardTitle>
+            <CardTitle className={cn("text-sm leading-tight font-medium")}>{document.title}</CardTitle>
           </div>
           <IGRPBadge variant="soft" color="destructive" badgeClassName={cn("px-3")}>
             PDF
@@ -293,6 +293,7 @@ function IGRPPdfViewerInline({
   viewerPreference = "auto",
 }: IGRPPdfViewerInlineProps) {
   const i18n = useIGRPi18n()
+  const locale = useIGRPLocale()
   const { fileUrl, title, author, date } = document
   const [state, dispatch] = useReducer(pdfViewerReducer, viewerPreference, getInitialPdfViewerState)
   const { frameStatus, viewerEngine } = state
@@ -334,7 +335,7 @@ function IGRPPdfViewerInline({
               </div>
               <div className={cn("flex items-center gap-1 text-xs")}>
                 <IGRPIcon iconName="Calendar" className={cn("text-primary")} />
-                {safeFormatDate(date)}
+                {safeFormatDate(date, locale)}
               </div>
             </div>
           </div>
@@ -353,7 +354,7 @@ function IGRPPdfViewerInline({
       </div>
 
       <div
-        className={cn("w-full bg-muted rounded-lg overflow-hidden relative")}
+        className={cn("relative w-full overflow-hidden rounded-lg bg-muted")}
         style={{ height }}
         aria-busy={frameStatus === "loading"}
       >
@@ -366,7 +367,7 @@ function IGRPPdfViewerInline({
         {frameStatus === "error" && (
           <div
             className={cn(
-              "absolute inset-0 flex flex-col items-center justify-center gap-2 bg-background/80 text-sm text-muted-foreground",
+              "absolute inset-0 flex flex-col items-center justify-center gap-2 bg-background/80 text-sm text-muted-foreground"
             )}
           >
             <IGRPIcon iconName="AlertCircle" className={cn("text-destructive")} />
@@ -376,7 +377,7 @@ function IGRPPdfViewerInline({
 
         <iframe
           src={iframeSrc}
-          className={cn("w-full h-full border-0", frameStatus === "error" ? "hidden" : "block")}
+          className={cn("h-full w-full border-0", frameStatus === "error" ? "hidden" : "block")}
           title={`PDF Viewer - ${title}`}
           aria-label={`PDF Viewer for ${title}`}
           loading="lazy"
@@ -422,6 +423,7 @@ function IGRPPdfViewerModal({
   viewerPreference = "auto",
 }: IGRPPdfViewerModalProps) {
   const i18n = useIGRPi18n()
+  const locale = useIGRPLocale()
   const [state, dispatch] = useReducer(pdfViewerReducer, viewerPreference, getInitialPdfViewerState)
   const { frameStatus, viewerEngine } = state
 
@@ -464,24 +466,24 @@ function IGRPPdfViewerModal({
 
   return (
     <Dialog open={open} onOpenChange={onClose}>
-      <DialogContent className={cn("sm:max-w-6xl w-[95vw] max-h-[95vh] overflow-auto flex flex-col gap-0")}>
+      <DialogContent className={cn("flex max-h-[95vh] w-[95vw] flex-col gap-0 overflow-auto sm:max-w-6xl")}>
         <DialogHeader>
           <DialogTitle className={cn("text-xl font-semibold")}>{title}</DialogTitle>
-          <DialogDescription className={cn("flex items-center gap-4 mt-1")}>
+          <DialogDescription className={cn("mt-1 flex items-center gap-4")}>
             <div className={cn("flex items-center gap-1")}>
               <IGRPIcon iconName="User" className={cn("text-primary")} />
               {author}
             </div>
             <div className={cn("flex items-center gap-1")}>
               <IGRPIcon iconName="Calendar" className={cn("text-primary")} />
-              {safeFormatDate(date)}
+              {safeFormatDate(date, locale)}
             </div>
           </DialogDescription>
         </DialogHeader>
 
-        <div className={cn("flex-1 mt-4")}>
+        <div className={cn("mt-4 flex-1")}>
           <div
-            className={cn("w-full h-[60vh] bg-muted rounded-lg overflow-hidden relative")}
+            className={cn("relative h-[60vh] w-full overflow-hidden rounded-lg bg-muted")}
             aria-busy={frameStatus === "loading"}
           >
             {frameStatus === "loading" && (
@@ -493,7 +495,7 @@ function IGRPPdfViewerModal({
             {frameStatus === "error" && (
               <div
                 className={cn(
-                  "absolute inset-0 flex flex-col items-center justify-center gap-2 bg-background/80 text-sm text-muted-foreground",
+                  "absolute inset-0 flex flex-col items-center justify-center gap-2 bg-background/80 text-sm text-muted-foreground"
                 )}
               >
                 <IGRPIcon iconName="AlertCircle" className={cn("text-destructive")} />
@@ -503,7 +505,7 @@ function IGRPPdfViewerModal({
 
             <iframe
               src={iframeSrc}
-              className={cn("w-full h-full border-0", frameStatus === "error" ? "hidden" : "block")}
+              className={cn("h-full w-full border-0", frameStatus === "error" ? "hidden" : "block")}
               title={`PDF Viewer - ${title}`}
               aria-label={`PDF Viewer for ${title}`}
               loading="lazy"

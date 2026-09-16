@@ -3,7 +3,7 @@
 import { useId } from "react"
 
 import type { IGRPColorRole, IGRPColorVariants } from "../../lib/colors"
-import { cn } from "../../lib/utils"
+import { cn } from "cn"
 import { IGRPAlert } from "../horizon/alert"
 import { IGRPBadge } from "../horizon/badge"
 

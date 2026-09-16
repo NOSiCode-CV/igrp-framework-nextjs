@@ -5,7 +5,7 @@ import { Pie, PieChart, Sector, Cell, Label, Legend, type LegendType } from "rec
 import type { PieSectorDataItem } from "recharts/types/polar/Pie"
 import React, { useState, type SVGAttributes } from "react"
 
-import { cn } from "../../../lib/utils"
+import { cn } from "../cn"
 import { ChartContainer, ChartTooltip, ChartTooltipContent } from "../../primitives/chart"
 import { ChartCustomLegend } from "./custom-legend"
 import type { IGRPChartProps, PieConfig } from "./types"

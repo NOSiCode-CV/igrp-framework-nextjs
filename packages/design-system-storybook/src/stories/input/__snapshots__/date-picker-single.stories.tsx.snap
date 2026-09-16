@@ -11,13 +11,13 @@ exports[`Components/Input/DatePicker/Single DatePickerErrorA11y play-test 1`] = 
       <div role="group"
            data-slot="field"
            data-orientation="vertical"
-           class="group/field flex w-full gap-3 data-[invalid=true]:text-destructive flex-col [&amp;&gt;*]:w-full [&amp;&gt;.sr-only]:w-auto"
+           class="group/field flex w-full gap-3 data-[invalid=true]:text-destructive flex-col *:w-full [&amp;&gt;.sr-only]:w-auto"
       >
         <div data-slot="form-item"
              class="flex flex-col gap-2"
         >
           <label data-slot="form-label"
-                 class="flex items-center gap-2 text-sm leading-none font-medium select-none group-data-[disabled=true]:pointer-events-none group-data-[disabled=true]:opacity-50 peer-disabled:cursor-not-allowed peer-disabled:opacity-50 data-[error=true]:text-destructive after:content-[&quot;*&quot;] after:text-destructive"
+                 class="flex items-center gap-2 text-sm leading-none font-medium select-none group-data-[disabled=true]:pointer-events-none group-data-[disabled=true]:opacity-50 peer-disabled:cursor-not-allowed peer-disabled:opacity-50 data-[error=true]:text-destructive after:text-destructive after:content-[&quot;*&quot;]"
                  data-error="true"
                  for="_r_ID_-form-item"
           >
@@ -25,7 +25,9 @@ exports[`Components/Input/DatePicker/Single DatePickerErrorA11y play-test 1`] = 
           </label>
           <div class="relative">
             <button data-slot="popover-trigger"
-                    class="inline-flex items-center gap-1.5 whitespace-nowrap rounded-md text-sm transition-[color,box-shadow] disabled:pointer-events-none disabled:opacity-50 [&amp;_svg]:pointer-events-none [&amp;_svg:not([class*='size-'])]:size-4 shrink-0 [&amp;_svg]:shrink-0 outline-none focus-visible:border-ring focus-visible:ring-ring/50 focus-visible:ring-[3px] aria-invalid:ring-destructive/20 dark:aria-invalid:ring-destructive/40 aria-invalid:border-destructive border bg-background hover:bg-accent dark:bg-input/30 dark:border-input dark:hover:bg-input/50 hover:text-accent-foreground h-9 px-2.5 has-data-[icon=inline-end]:pr-2 has-data-[icon=inline-start]:pl-2 group w-full justify-between font-normal shadow-xs text-muted-foreground"
+                    data-variant="outline"
+                    data-size="default"
+                    class="group/button inline-flex shrink-0 items-center rounded-md border bg-clip-padding text-sm whitespace-nowrap transition-all outline-none select-none focus-visible:border-ring focus-visible:ring-3 focus-visible:ring-ring/50 active:not-aria-[haspopup]:translate-y-px disabled:pointer-events-none disabled:opacity-50 aria-invalid:border-destructive aria-invalid:ring-3 aria-invalid:ring-destructive/20 dark:aria-invalid:border-destructive/50 dark:aria-invalid:ring-destructive/40 [&amp;_svg]:pointer-events-none [&amp;_svg]:shrink-0 [&amp;_svg:not([class*='size-'])]:size-4 border-border bg-background hover:bg-muted hover:text-foreground aria-expanded:bg-muted aria-expanded:text-foreground dark:border-input dark:bg-input/30 dark:hover:bg-input/50 h-9 gap-1.5 px-2.5 in-data-[slot=button-group]:rounded-md has-data-[icon=inline-end]:pr-2 has-data-[icon=inline-start]:pl-2 group w-full justify-between font-normal shadow-xs text-muted-foreground"
                     id="_r_ID_-form-item"
                     type="button"
                     aria-haspopup="dialog"
@@ -35,7 +37,7 @@ exports[`Components/Input/DatePicker/Single DatePickerErrorA11y play-test 1`] = 
                     aria-describedby="_r_ID_-form-item-message"
             >
               <span class="truncate text-muted-foreground">
-                Pick a date
+                Selecionar data
               </span>
               <svg xmlns="http://www.w3.org/2000/svg"
                    width="24"
@@ -46,7 +48,7 @@ exports[`Components/Input/DatePicker/Single DatePickerErrorA11y play-test 1`] = 
                    stroke-width="2"
                    stroke-linecap="round"
                    stroke-linejoin="round"
-                   class="lucide lucide-calendar text-muted-foreground/80 group-hover:text-foreground shrink-0 transition-colors"
+                   class="lucide lucide-calendar shrink-0 text-muted-foreground/80 transition-colors group-hover:text-foreground"
                    aria-hidden="true"
               >
                 <path d="M8 2v4">
@@ -84,7 +86,7 @@ exports[`Components/Input/DatePicker/Single Default smoke-test 1`] = `
   <div role="group"
        data-slot="field"
        data-orientation="vertical"
-       class="group/field flex w-full gap-3 data-[invalid=true]:text-destructive flex-col [&amp;&gt;*]:w-full [&amp;&gt;.sr-only]:w-auto"
+       class="group/field flex w-full gap-3 data-[invalid=true]:text-destructive flex-col *:w-full [&amp;&gt;.sr-only]:w-auto"
   >
     <label data-slot="label"
            class="flex items-center text-sm leading-none font-medium select-none group-data-[disabled=true]:pointer-events-none group-data-[disabled=true]:opacity-50 peer-disabled:cursor-not-allowed peer-disabled:opacity-50 after:content-['*'] after:text-destructive gap-0.5"
@@ -94,7 +96,9 @@ exports[`Components/Input/DatePicker/Single Default smoke-test 1`] = `
     </label>
     <div class="relative">
       <button data-slot="popover-trigger"
-              class="inline-flex items-center gap-1.5 whitespace-nowrap rounded-md text-sm transition-[color,box-shadow] disabled:pointer-events-none disabled:opacity-50 [&amp;_svg]:pointer-events-none [&amp;_svg:not([class*='size-'])]:size-4 shrink-0 [&amp;_svg]:shrink-0 outline-none focus-visible:border-ring focus-visible:ring-ring/50 focus-visible:ring-[3px] aria-invalid:ring-destructive/20 dark:aria-invalid:ring-destructive/40 aria-invalid:border-destructive border bg-background hover:bg-accent dark:bg-input/30 dark:border-input dark:hover:bg-input/50 hover:text-accent-foreground h-9 px-2.5 has-data-[icon=inline-end]:pr-2 has-data-[icon=inline-start]:pl-2 group w-full justify-between font-normal shadow-xs text-muted-foreground"
+              data-variant="outline"
+              data-size="default"
+              class="group/button inline-flex shrink-0 items-center rounded-md border bg-clip-padding text-sm whitespace-nowrap transition-all outline-none select-none focus-visible:border-ring focus-visible:ring-3 focus-visible:ring-ring/50 active:not-aria-[haspopup]:translate-y-px disabled:pointer-events-none disabled:opacity-50 aria-invalid:border-destructive aria-invalid:ring-3 aria-invalid:ring-destructive/20 dark:aria-invalid:border-destructive/50 dark:aria-invalid:ring-destructive/40 [&amp;_svg]:pointer-events-none [&amp;_svg]:shrink-0 [&amp;_svg:not([class*='size-'])]:size-4 border-border bg-background hover:bg-muted hover:text-foreground aria-expanded:bg-muted aria-expanded:text-foreground dark:border-input dark:bg-input/30 dark:hover:bg-input/50 h-9 gap-1.5 px-2.5 in-data-[slot=button-group]:rounded-md has-data-[icon=inline-end]:pr-2 has-data-[icon=inline-start]:pl-2 group w-full justify-between font-normal shadow-xs text-muted-foreground"
               id="_r_ID_"
               type="button"
               aria-haspopup="dialog"
@@ -102,7 +106,7 @@ exports[`Components/Input/DatePicker/Single Default smoke-test 1`] = `
               data-state="closed"
       >
         <span class="truncate text-muted-foreground">
-          Pick a date
+          Selecionar data
         </span>
         <svg xmlns="http://www.w3.org/2000/svg"
              width="24"
@@ -113,7 +117,7 @@ exports[`Components/Input/DatePicker/Single Default smoke-test 1`] = `
              stroke-width="2"
              stroke-linecap="round"
              stroke-linejoin="round"
-             class="lucide lucide-calendar text-muted-foreground/80 group-hover:text-foreground shrink-0 transition-colors"
+             class="lucide lucide-calendar shrink-0 text-muted-foreground/80 transition-colors group-hover:text-foreground"
              aria-hidden="true"
         >
           <path d="M8 2v4">
@@ -133,7 +137,7 @@ exports[`Components/Input/DatePicker/Single Default smoke-test 1`] = `
       </button>
     </div>
     <p data-slot="field-description"
-       class="text-muted-foreground text-sm leading-normal font-normal group-has-data-[orientation=horizontal]/field:text-balance last:mt-0 nth-last-2:-mt-1 [[data-variant=legend]+&amp;]:-mt-1.5 [&amp;&gt;a:hover]:text-primary [&amp;&gt;a]:underline [&amp;&gt;a]:underline-offset-4"
+       class="text-left text-sm leading-normal font-normal text-muted-foreground group-has-data-horizontal/field:text-balance [[data-variant=legend]+&amp;]:-mt-1.5 last:mt-0 nth-last-2:-mt-1 [&amp;&gt;a]:underline [&amp;&gt;a]:underline-offset-4 [&amp;&gt;a:hover]:text-primary"
        id="_r_ID_-helper"
     >
       Select your date of birth
@@ -150,13 +154,13 @@ exports[`Components/Input/DatePicker/Single WithForm smoke-test 1`] = `
   <div role="group"
        data-slot="field"
        data-orientation="vertical"
-       class="group/field flex w-full gap-3 data-[invalid=true]:text-destructive flex-col [&amp;&gt;*]:w-full [&amp;&gt;.sr-only]:w-auto"
+       class="group/field flex w-full gap-3 data-[invalid=true]:text-destructive flex-col *:w-full [&amp;&gt;.sr-only]:w-auto"
   >
     <div data-slot="form-item"
          class="flex flex-col gap-2"
     >
       <label data-slot="form-label"
-             class="flex items-center gap-2 text-sm leading-none font-medium select-none group-data-[disabled=true]:pointer-events-none group-data-[disabled=true]:opacity-50 peer-disabled:cursor-not-allowed peer-disabled:opacity-50 data-[error=true]:text-destructive after:content-[&quot;*&quot;] after:text-destructive"
+             class="flex items-center gap-2 text-sm leading-none font-medium select-none group-data-[disabled=true]:pointer-events-none group-data-[disabled=true]:opacity-50 peer-disabled:cursor-not-allowed peer-disabled:opacity-50 data-[error=true]:text-destructive after:text-destructive after:content-[&quot;*&quot;]"
              data-error="false"
              for="_r_ID_-form-item"
       >
@@ -164,7 +168,9 @@ exports[`Components/Input/DatePicker/Single WithForm smoke-test 1`] = `
       </label>
       <div class="relative">
         <button data-slot="popover-trigger"
-                class="inline-flex items-center gap-1.5 whitespace-nowrap rounded-md text-sm transition-[color,box-shadow] disabled:pointer-events-none disabled:opacity-50 [&amp;_svg]:pointer-events-none [&amp;_svg:not([class*='size-'])]:size-4 shrink-0 [&amp;_svg]:shrink-0 outline-none focus-visible:border-ring focus-visible:ring-ring/50 focus-visible:ring-[3px] aria-invalid:ring-destructive/20 dark:aria-invalid:ring-destructive/40 aria-invalid:border-destructive border bg-background hover:bg-accent dark:bg-input/30 dark:border-input dark:hover:bg-input/50 hover:text-accent-foreground h-9 px-2.5 has-data-[icon=inline-end]:pr-2 has-data-[icon=inline-start]:pl-2 group w-full justify-between font-normal shadow-xs text-muted-foreground"
+                data-variant="outline"
+                data-size="default"
+                class="group/button inline-flex shrink-0 items-center rounded-md border bg-clip-padding text-sm whitespace-nowrap transition-all outline-none select-none focus-visible:border-ring focus-visible:ring-3 focus-visible:ring-ring/50 active:not-aria-[haspopup]:translate-y-px disabled:pointer-events-none disabled:opacity-50 aria-invalid:border-destructive aria-invalid:ring-3 aria-invalid:ring-destructive/20 dark:aria-invalid:border-destructive/50 dark:aria-invalid:ring-destructive/40 [&amp;_svg]:pointer-events-none [&amp;_svg]:shrink-0 [&amp;_svg:not([class*='size-'])]:size-4 border-border bg-background hover:bg-muted hover:text-foreground aria-expanded:bg-muted aria-expanded:text-foreground dark:border-input dark:bg-input/30 dark:hover:bg-input/50 h-9 gap-1.5 px-2.5 in-data-[slot=button-group]:rounded-md has-data-[icon=inline-end]:pr-2 has-data-[icon=inline-start]:pl-2 group w-full justify-between font-normal shadow-xs text-muted-foreground"
                 id="_r_ID_-form-item"
                 type="button"
                 aria-haspopup="dialog"
@@ -172,7 +178,7 @@ exports[`Components/Input/DatePicker/Single WithForm smoke-test 1`] = `
                 data-state="closed"
         >
           <span class="truncate text-muted-foreground">
-            Pick a date
+            Selecionar data
           </span>
           <svg xmlns="http://www.w3.org/2000/svg"
                width="24"
@@ -183,7 +189,7 @@ exports[`Components/Input/DatePicker/Single WithForm smoke-test 1`] = `
                stroke-width="2"
                stroke-linecap="round"
                stroke-linejoin="round"
-               class="lucide lucide-calendar text-muted-foreground/80 group-hover:text-foreground shrink-0 transition-colors"
+               class="lucide lucide-calendar shrink-0 text-muted-foreground/80 transition-colors group-hover:text-foreground"
                aria-hidden="true"
           >
             <path d="M8 2v4">

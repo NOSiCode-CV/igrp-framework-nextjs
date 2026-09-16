@@ -6,7 +6,7 @@ import NextImage from "next/image"
 import { Button } from "../primitives/button"
 import { Cropper, CropperCropArea, CropperDescription, CropperImage } from "../primitives/cropper"
 import { Slider } from "../primitives/slider"
-import { cn } from "../../lib/utils"
+import { cn } from "cn"
 import { useIGRPi18n } from "../../i18n"
 
 // ─── Types ───────────────────────────────────────────────────────────────────

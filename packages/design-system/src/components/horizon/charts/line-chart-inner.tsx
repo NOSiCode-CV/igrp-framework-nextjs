@@ -1,7 +1,7 @@
 "use client"
 
 import { Line, LineChart, CartesianGrid, Legend, XAxis, YAxis, ReferenceLine, LabelList } from "recharts"
-import { cn } from "../../../lib/utils"
+import { cn } from "../cn"
 import {
   ChartContainer,
   ChartTooltip,

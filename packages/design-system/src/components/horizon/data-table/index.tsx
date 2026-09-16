@@ -28,7 +28,7 @@ import {
 } from "@tanstack/react-table"
 
 import { useIGRPi18n } from "../../../i18n"
-import { cn } from "../../../lib/utils"
+import { cn } from "../cn"
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "../../primitives/table"
 import { IGRPIcon } from "../icon"
 import { type IGRPDataTableClientFilterListProps, IGRPDataTableClientFilter } from "./client-filter"

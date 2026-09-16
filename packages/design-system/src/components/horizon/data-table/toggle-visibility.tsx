@@ -9,7 +9,7 @@ import {
   DropdownMenuLabel,
   DropdownMenuTrigger,
 } from "../../primitives/dropdown-menu"
-import { cn } from "../../../lib/utils"
+import { cn } from "../cn"
 import { IGRPButton } from "../button"
 import { useIGRPi18n } from "../../../i18n"
 

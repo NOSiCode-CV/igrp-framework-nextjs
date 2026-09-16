@@ -4,7 +4,7 @@ import { useId, useState } from "react"
 import { useFormContext } from "react-hook-form"
 import { ChevronDown } from "lucide-react"
 
-import { cn } from "../../../lib/utils"
+import { cn } from "../cn"
 import type { IGRPInputProps } from "../../../types"
 import { InputGroup, InputGroupInput, InputGroupAddon, InputGroupButton } from "../../primitives/input-group"
 import {

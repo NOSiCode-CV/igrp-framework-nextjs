@@ -3,7 +3,7 @@
 import { useId, useState } from "react"
 
 import { getDefaultCalendarMonthBounds, getDisabledDays } from "../../../lib/calendar-utils"
-import { cn } from "../../../lib/utils"
+import { cn } from "../cn"
 import type { IGRPCalendarProps } from "../../../types"
 import { Calendar } from "../../primitives/calendar"
 
@@ -22,25 +22,32 @@ type IGRPCalendarSingleProps = {
  * Single-date calendar picker.
  * Defaults `startMonth` / `endMonth` to 5 years before and after today.
  */
-function IGRPCalendarSingle({
-  name,
-  id,
-  date,
-  onDateChange,
-  className,
-  disableBefore,
-  disableAfter,
-  disableDayOfWeek,
-  startMonth,
-  endMonth,
-  ...props
-}: IGRPCalendarSingleProps) {
+function IGRPCalendarSingle(allProps: IGRPCalendarSingleProps) {
+  // `date ?? ownDate` cannot express a cleared selection: once `ownDate` is set, a parent
+  // passing `date={undefined}` can never deselect the day. Whether `date` was *passed* is the
+  // real question, so read it off the props object before destructuring flattens it away.
+  const isControlled = "date" in allProps
+
+  const {
+    name,
+    id,
+    date,
+    onDateChange,
+    className,
+    disableBefore,
+    disableAfter,
+    disableDayOfWeek,
+    startMonth,
+    endMonth,
+    ...props
+  } = allProps
+
   const _id = useId()
   const ref = name ?? id ?? _id
 
   const [ownDate, setOwnDate] = useState<Date | undefined>(undefined)
   const [{ startMonth: defaultStartMonth, endMonth: defaultEndMonth }] = useState(getDefaultCalendarMonthBounds)
-  const selected = date ?? ownDate
+  const selected = isControlled ? date : ownDate
   const disabled = getDisabledDays({ disableBefore, disableAfter, disableDayOfWeek })
 
   return (

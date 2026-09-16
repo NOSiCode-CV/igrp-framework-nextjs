@@ -2,7 +2,7 @@
 
 import { useId } from "react"
 import { IGRPStatsCard, type IGRPStatsCardProps } from "../horizon/stats-card"
-import { cn } from "../../lib/utils"
+import { cn } from "cn"
 
 /**
  * Props for the IGRPStatsCardTopBorderColored component.

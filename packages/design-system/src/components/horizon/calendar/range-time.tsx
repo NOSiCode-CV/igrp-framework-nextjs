@@ -7,7 +7,7 @@ import { Label } from "../../primitives/label"
 import type { IGRPCalendarTimeProps } from "../../../types"
 import { IGRPCalendarRange, type IGRPCalendarRangeProps } from "./range"
 import { DEFAULT_HIDE_TIME_INDICATOR } from "../../../lib/utilities"
-import { cn } from "../../../lib/utils"
+import { cn } from "../cn"
 
 /**
  * Props for the IGRPCalendarRangeTime component.

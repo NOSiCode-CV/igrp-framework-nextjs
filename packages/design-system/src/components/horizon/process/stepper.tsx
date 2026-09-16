@@ -4,7 +4,7 @@ import { useCallback, useEffect, useId, useMemo, useRef, useState } from "react"
 import type React from "react"
 import { CheckIcon, ChevronLeft, ChevronRight } from "lucide-react"
 
-import { cn } from "../../../lib/utils"
+import { cn } from "../cn"
 import { ScrollArea } from "../../primitives/scroll-area"
 import { Stepper, StepperItem, StepperTitle, StepperTrigger } from "../../primitives/stepper"
 import { Button } from "../../primitives/button"

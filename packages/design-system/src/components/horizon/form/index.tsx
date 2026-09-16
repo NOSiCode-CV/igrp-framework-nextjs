@@ -8,7 +8,7 @@ import { zodResolver } from "@hookform/resolvers/zod"
 
 import { Form } from "../../primitives/form"
 import { FieldSet } from "../../primitives/field"
-import { cn } from "../../../lib/utils"
+import { cn } from "../cn"
 import { useIGRPi18n } from "../../../i18n"
 import { IGRPFormContext } from "./form-context"
 

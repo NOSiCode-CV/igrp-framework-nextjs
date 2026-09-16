@@ -2,7 +2,7 @@
 "use client"
 
 import { RadarChart, Radar, PolarGrid, PolarAngleAxis, PolarRadiusAxis, Legend } from "recharts"
-import { cn } from "../../../lib/utils"
+import { cn } from "../cn"
 import {
   ChartContainer,
   ChartTooltip,

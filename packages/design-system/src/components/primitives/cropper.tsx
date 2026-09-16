@@ -1,9 +1,12 @@
-// shadcn: 2026-05-18
+/* shadcn: 2026-09-15 */
+
 import { Cropper as CropperPrimitive } from "@origin-space/image-cropper"
+import { cn } from "cn"
 
-import { cn } from "../../lib/utils"
-
-function Cropper({ className, ...props }: React.ComponentProps<typeof CropperPrimitive.Root>) {
+function Cropper({ 
+  className, 
+  ...props 
+}: React.ComponentProps<typeof CropperPrimitive.Root>) {
   return (
     <CropperPrimitive.Root
       data-slot="cropper"
@@ -16,9 +19,16 @@ function Cropper({ className, ...props }: React.ComponentProps<typeof CropperPri
   )
 }
 
-function CropperDescription({ className, ...props }: React.ComponentProps<typeof CropperPrimitive.Description>) {
+function CropperDescription({ 
+  className, 
+  ...props 
+}: React.ComponentProps<typeof CropperPrimitive.Description>) {
   return (
-    <CropperPrimitive.Description data-slot="cropper-description" className={cn("sr-only", className)} {...props} />
+    <CropperPrimitive.Description 
+      data-slot="cropper-description" 
+      className={cn("sr-only", className)} 
+      {...props} 
+    />
   )
 }
 
@@ -45,4 +55,9 @@ function CropperCropArea({ className, ...props }: React.ComponentProps<typeof Cr
   )
 }
 
-export { Cropper, CropperDescription, CropperImage, CropperCropArea }
+export { 
+  Cropper, 
+  CropperDescription, 
+  CropperImage, 
+  CropperCropArea 
+}

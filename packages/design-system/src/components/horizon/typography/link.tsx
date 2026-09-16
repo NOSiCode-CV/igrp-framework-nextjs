@@ -11,7 +11,7 @@ import { IGRPIcon, type IGRPIconName } from "../icon"
 import { IGRPColors, type IGRPColorRole, type IGRPColorVariants } from "../../../lib/colors"
 import { igrpColorText } from "../../../lib/colors"
 import { igrpIsExternalUrl } from "../../../lib/utilities"
-import { cn } from "../../../lib/utils"
+import { cn } from "../cn"
 import type { IGRPBaseAttributes, IGRPPlacementProps } from "../../../types"
 
 const IGRPLinkVariants = cva(

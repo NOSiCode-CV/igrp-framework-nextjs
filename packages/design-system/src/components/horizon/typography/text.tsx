@@ -5,7 +5,7 @@ import { useId } from "react"
 import { cva, type VariantProps } from "class-variance-authority"
 
 import { type IGRPColorVariants } from "../../../lib/colors"
-import { cn } from "../../../lib/utils"
+import { cn } from "../cn"
 
 const EMPTY_HIGHLIGHT: string[] = []
 

@@ -1,19 +1,19 @@
 "use client"
 
-// IMPORTANT: this file cannot use any wildcard exports because it is wrapped in a `use client` boundary
-// IMPORTANT: do _not_ alias any of the exports in this file, this will cause a mismatch between the unbundled exports
+/* IMPORTANT: this file cannot use any wildcard exports because it is wrapped in a `use client` boundary */
+/* IMPORTANT: do _not_ alias any of the exports in this file, this will cause a mismatch between the unbundled exports */
 
-// custom components
+/* custom components */
 
 export { IGRPStatsCardMini, type IGRPStatsCardMiniProps } from "./components/custom/stats-card-mini"
-export { IGRPStatusBanner, type IGRPStatusBannerProps } from "./components/custom/status-banner"
 export {
   IGRPStatsCardTopBorderColored,
   type IGRPStatsCardTopBorderColoredProps,
 } from "./components/custom/stats-card-top-border-colored"
+export { IGRPStatusBanner, type IGRPStatusBannerProps } from "./components/custom/status-banner"
 export { IGRPUserAvatar, type IGRPUserAvatarProps } from "./components/custom/user-avatar"
 
-// primitives components
+/* primitives components */
 
 export {
   Accordion,
@@ -32,17 +32,25 @@ export {
   AlertDialogContent,
   AlertDialogHeader,
   AlertDialogFooter,
+  AlertDialogMedia,
   AlertDialogTitle,
   AlertDialogDescription,
   AlertDialogAction,
   AlertDialogCancel,
 } from "./components/primitives/alert-dialog"
 
-export { Alert, AlertTitle, AlertDescription } from "./components/primitives/alert"
+export { Alert, AlertTitle, AlertDescription, AlertAction } from "./components/primitives/alert"
 
 export { AspectRatio } from "./components/primitives/aspect-ratio"
 
-export { Avatar, AvatarImage, AvatarFallback } from "./components/primitives/avatar"
+export {
+  Avatar,
+  AvatarImage,
+  AvatarFallback,
+  AvatarBadge,
+  AvatarGroup,
+  AvatarGroupCount,
+} from "./components/primitives/avatar"
 
 export { Badge, badgeVariants } from "./components/primitives/badge"
 
@@ -84,6 +92,7 @@ export {
   CarouselItem,
   CarouselPrevious,
   CarouselNext,
+  useCarousel,
 } from "./components/primitives/carousel"
 
 export {
@@ -259,6 +268,8 @@ export {
   MenubarSubContent,
 } from "./components/primitives/menubar"
 
+export { NativeSelect, NativeSelectOptGroup, NativeSelectOption } from "./components/primitives/native-select"
+
 export {
   NavigationMenu,
   NavigationMenuList,
@@ -274,18 +285,26 @@ export {
 export {
   Pagination,
   PaginationContent,
-  PaginationLink,
-  PaginationItem,
-  PaginationPrevious,
-  PaginationNext,
   PaginationEllipsis,
+  PaginationItem,
+  PaginationLink,
+  PaginationNext,
+  PaginationPrevious,
 } from "./components/primitives/pagination"
 
-export { Popover, PopoverTrigger, PopoverContent, PopoverAnchor } from "./components/primitives/popover"
+export {
+  Popover,
+  PopoverAnchor,
+  PopoverContent,
+  PopoverDescription,
+  PopoverHeader,
+  PopoverTitle,
+  PopoverTrigger,
+} from "./components/primitives/popover"
 
 export { Progress } from "./components/primitives/progress"
 
-export { RadioGroup, RadioGroupItem, radioItemVariants } from "./components/primitives/radio-group"
+export { RadioGroup, RadioGroupItem } from "./components/primitives/radio-group"
 
 export { ResizablePanelGroup, ResizablePanel, ResizableHandle } from "./components/primitives/resizable"
 
@@ -346,9 +365,9 @@ export {
 
 export { Skeleton } from "./components/primitives/skeleton"
 
-export { Spinner } from "./components/primitives/spinner"
-
 export { Slider } from "./components/primitives/slider"
+
+export { Spinner } from "./components/primitives/spinner"
 
 export {
   Stepper,
@@ -373,7 +392,7 @@ export {
   TableCaption,
 } from "./components/primitives/table"
 
-export { Tabs, TabsList, TabsTrigger, TabsContent } from "./components/primitives/tabs"
+export { Tabs, TabsList, TabsTrigger, TabsContent, tabsListVariants } from "./components/primitives/tabs"
 
 export { Textarea } from "./components/primitives/textarea"
 
@@ -383,7 +402,7 @@ export { ToggleGroup, ToggleGroupItem } from "./components/primitives/toggle-gro
 
 export { Toggle, toggleVariants } from "./components/primitives/toggle"
 
-export { Tooltip, TooltipTrigger, TooltipContent, TooltipProvider } from "./components/primitives/tooltip"
+export { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "./components/primitives/tooltip"
 
 // horizon components
 
@@ -849,6 +868,7 @@ export {
   parseStringToDate,
   parseStringToRange,
 } from "./lib/calendar-utils"
+export { getDateFormatMaxLength, getDateFormatParts, maskDateInput, parseDateInput } from "./lib/date-input-format"
 export {
   IGRPColors,
   type IGRPColorType,
@@ -865,9 +885,9 @@ export {
   igrpToPascalCase,
   igrpIsExternalUrl,
   igrpNormalizeUrl,
-  parseLocalDate
+  parseLocalDate,
 } from "./lib/utilities"
-export { cn, } from "./lib/utils"
+export { cn } from "cn"
 export { colorToOklch, detectFormat, type ColorFormat } from "./lib/color-utils"
 
 // i18n
@@ -875,6 +895,9 @@ export { colorToOklch, detectFormat, type ColorFormat } from "./lib/color-utils"
 export {
   IGRPI18nProvider,
   useIGRPi18n,
+  useIGRPLocale,
+  igrpFormatMessage,
+  IGRP_DEFAULT_LOCALE,
   IGRP_I18N_DEFAULTS_PT_PT,
   type IGRPI18nStrings,
   type IGRPI18nStringsOverride,

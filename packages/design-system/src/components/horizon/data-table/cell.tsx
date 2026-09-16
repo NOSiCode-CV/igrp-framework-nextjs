@@ -2,7 +2,7 @@
 
 import { type Row } from "@tanstack/react-table"
 
-import { cn } from "../../../lib/utils"
+import { cn } from "../cn"
 import { Button } from "../../primitives/button"
 import { Checkbox } from "../../primitives/checkbox"
 import { Tooltip, TooltipTrigger, TooltipContent, TooltipProvider } from "../../primitives/tooltip"

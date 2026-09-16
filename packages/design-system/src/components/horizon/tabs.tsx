@@ -4,7 +4,7 @@ import { cva, type VariantProps } from "class-variance-authority"
 import { useCallback, useEffect, useId, useRef, useState } from "react"
 
 import { type IGRPColorRole, type IGRPColorVariants } from "../../lib/colors"
-import { cn } from "../../lib/utils"
+import { cn } from "cn"
 
 function getScrollBehavior(): ScrollBehavior {
   if (typeof window !== "undefined" && window.matchMedia("(prefers-reduced-motion: reduce)").matches) {

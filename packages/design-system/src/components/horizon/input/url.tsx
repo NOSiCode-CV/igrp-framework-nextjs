@@ -3,7 +3,7 @@
 import { useId, useState, useCallback } from "react"
 import { useFormContext, Controller } from "react-hook-form"
 
-import { cn } from "../../../lib/utils"
+import { cn } from "../cn"
 import type { IGRPInputProps, IGRPOptionsProps } from "../../../types"
 import { InputGroup, InputGroupAddon, InputGroupInput } from "../../primitives/input-group"
 import { Select, SelectContent, SelectGroup, SelectItem, SelectTrigger, SelectValue } from "../../primitives/select"

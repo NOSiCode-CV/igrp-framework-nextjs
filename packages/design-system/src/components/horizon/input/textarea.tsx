@@ -3,7 +3,7 @@
 import { useId } from "react"
 import { useFormContext, Controller } from "react-hook-form"
 
-import { cn } from "../../../lib/utils"
+import { cn } from "../cn"
 import type { IGRPInputProps } from "../../../types"
 import { Textarea } from "../../primitives/textarea"
 import { IGRPLabel } from "../label"

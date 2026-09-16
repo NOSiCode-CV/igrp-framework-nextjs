@@ -1,0 +1,222 @@
+{
+  "style": "new-york-v4",
+  "base": "radix",
+  "primitives": {
+    "accordion": {
+      "upstreamHash": "99de242681eb4312",
+      "checkedAt": "2026-09-15"
+    },
+    "alert-dialog": {
+      "upstreamHash": "e3b77f9def7d5afe",
+      "checkedAt": "2026-09-15"
+    },
+    "alert": {
+      "upstreamHash": "d03dcae5cdb63c38",
+      "checkedAt": "2026-09-15"
+    },
+    "aspect-ratio": {
+      "upstreamHash": "b1c157886236782c",
+      "checkedAt": "2026-09-15"
+    },
+    "avatar": {
+      "upstreamHash": "0c5c48b8a1dff4fd",
+      "checkedAt": "2026-09-15"
+    },
+    "badge": {
+      "upstreamHash": "13a9380dfff853ee",
+      "checkedAt": "2026-09-15"
+    },
+    "breadcrumb": {
+      "upstreamHash": "c75fcd3d9e847018",
+      "checkedAt": "2026-09-15"
+    },
+    "button-group": {
+      "upstreamHash": "d3a6cb04656e4de4",
+      "checkedAt": "2026-09-15"
+    },
+    "button": {
+      "upstreamHash": "79dd6f75f8136394",
+      "checkedAt": "2026-09-15"
+    },
+    "calendar": {
+      "upstreamHash": "090ffa07ce98761c",
+      "checkedAt": "2026-09-15"
+    },
+    "card": {
+      "upstreamHash": "ef8305b12c3112da",
+      "checkedAt": "2026-09-15"
+    },
+    "carousel": {
+      "upstreamHash": "5e7f54dfbf8c807f",
+      "checkedAt": "2026-09-15"
+    },
+    "chart": {
+      "upstreamHash": "35e2fa755465ef8e",
+      "checkedAt": "2026-09-15"
+    },
+    "checkbox": {
+      "upstreamHash": "ba0ac64064e2d8fa",
+      "checkedAt": "2026-09-15"
+    },
+    "collapsible": {
+      "upstreamHash": "c6598e5584f4258b",
+      "checkedAt": "2026-09-15"
+    },
+    "command": {
+      "upstreamHash": "0eb61a0e054810ea",
+      "checkedAt": "2026-09-15"
+    },
+    "context-menu": {
+      "upstreamHash": "bcde5df1ed9887bb",
+      "checkedAt": "2026-09-15"
+    },
+    "dialog": {
+      "upstreamHash": "d975bf83be3af559",
+      "checkedAt": "2026-09-15"
+    },
+    "drawer": {
+      "upstreamHash": "63f04fe50a4bf29b",
+      "checkedAt": "2026-09-15"
+    },
+    "dropdown-menu": {
+      "upstreamHash": "d954efb735f13734",
+      "checkedAt": "2026-09-15"
+    },
+    "empty": {
+      "upstreamHash": "54f529ccf72c18c4",
+      "checkedAt": "2026-09-15"
+    },
+    "field": {
+      "upstreamHash": "8d70ded602e98792",
+      "checkedAt": "2026-09-15"
+    },
+    "form": {
+      "upstreamHash": "cf1f23689c5c7f67",
+      "checkedAt": "2026-09-15"
+    },
+    "hover-card": {
+      "upstreamHash": "73f59aa759656501",
+      "checkedAt": "2026-09-15"
+    },
+    "input-group": {
+      "upstreamHash": "ae0845f75a8443bc",
+      "checkedAt": "2026-09-15"
+    },
+    "input-otp": {
+      "upstreamHash": "9f81898aeaabbb10",
+      "checkedAt": "2026-09-15"
+    },
+    "input": {
+      "upstreamHash": "0c9457181f6ddc80",
+      "checkedAt": "2026-09-15"
+    },
+    "item": {
+      "upstreamHash": "85e320b9868ad4de",
+      "checkedAt": "2026-09-15"
+    },
+    "kbd": {
+      "upstreamHash": "c0c0ae6a7d1adb77",
+      "checkedAt": "2026-09-15"
+    },
+    "label": {
+      "upstreamHash": "344bde38b8531615",
+      "checkedAt": "2026-09-15"
+    },
+    "menubar": {
+      "upstreamHash": "ca1a7f6775f90951",
+      "checkedAt": "2026-09-15"
+    },
+    "native-select": {
+      "upstreamHash": "4bdbce5575dce610",
+      "checkedAt": "2026-09-15"
+    },
+    "navigation-menu": {
+      "upstreamHash": "fbe81d7c358df0d2",
+      "checkedAt": "2026-09-15"
+    },
+    "pagination": {
+      "upstreamHash": "8f5ed6763062e259",
+      "checkedAt": "2026-09-15"
+    },
+    "popover": {
+      "upstreamHash": "3f99d3add6c9fa4f",
+      "checkedAt": "2026-09-15"
+    },
+    "progress": {
+      "upstreamHash": "e012e1f7e6e66d11",
+      "checkedAt": "2026-09-15"
+    },
+    "radio-group": {
+      "upstreamHash": "cfc4f99ee68be2fb",
+      "checkedAt": "2026-09-15"
+    },
+    "resizable": {
+      "upstreamHash": "aaf3ea20e8060c75",
+      "checkedAt": "2026-09-15"
+    },
+    "scroll-area": {
+      "upstreamHash": "8b73bb9be5130007",
+      "checkedAt": "2026-09-15"
+    },
+    "select": {
+      "upstreamHash": "962830436bd0b7ee",
+      "checkedAt": "2026-09-15"
+    },
+    "separator": {
+      "upstreamHash": "ad7d5403fe337160",
+      "checkedAt": "2026-09-15"
+    },
+    "sheet": {
+      "upstreamHash": "ea473d38a26a9b0b",
+      "checkedAt": "2026-09-15"
+    },
+    "sidebar": {
+      "upstreamHash": "006a11901c85d3e5",
+      "checkedAt": "2026-09-15"
+    },
+    "skeleton": {
+      "upstreamHash": "f51ce0fcd31e5c31",
+      "checkedAt": "2026-09-15"
+    },
+    "slider": {
+      "upstreamHash": "6a531f6182de6efe",
+      "checkedAt": "2026-09-15"
+    },
+    "sonner": {
+      "upstreamHash": "13ccc9b0fe4248e6",
+      "checkedAt": "2026-09-15"
+    },
+    "spinner": {
+      "upstreamHash": "5d040fc49cb54c02",
+      "checkedAt": "2026-09-15"
+    },
+    "switch": {
+      "upstreamHash": "743676f33f823ffa",
+      "checkedAt": "2026-09-15"
+    },
+    "table": {
+      "upstreamHash": "bd1a9fc83a5a2149",
+      "checkedAt": "2026-09-15"
+    },
+    "tabs": {
+      "upstreamHash": "e1df6e2f95ece373",
+      "checkedAt": "2026-09-15"
+    },
+    "textarea": {
+      "upstreamHash": "5cafcfeeee29534f",
+      "checkedAt": "2026-09-15"
+    },
+    "toggle-group": {
+      "upstreamHash": "5aa7d76746d8e7bf",
+      "checkedAt": "2026-09-15"
+    },
+    "toggle": {
+      "upstreamHash": "28ae7d72730890a3",
+      "checkedAt": "2026-09-15"
+    },
+    "tooltip": {
+      "upstreamHash": "611e4305879b2773",
+      "checkedAt": "2026-09-15"
+    }
+  }
+}

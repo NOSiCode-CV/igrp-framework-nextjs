@@ -6,7 +6,7 @@ import { useFormContext } from "react-hook-form"
 import { Circle } from "lucide-react"
 
 import { igrpColorText } from "../../../lib/colors"
-import { cn } from "../../../lib/utils"
+import { cn } from "../cn"
 import type { IGRPInputProps, IGRPOptionsProps } from "../../../types"
 import {
   useFormField,

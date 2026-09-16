@@ -28,31 +28,31 @@ export default defineConfig([
     },
   },
   {
-    // Primitives: raw palette banned, but shadcn's `dark:` opacity adjustments
-    // of semantic tokens are kept so the layer stays alignable with upstream.
+    // Primitives are ported verbatim from the shadcn registry and kept aligned by
+    // `scripts/check-shadcn-drift.mjs`. Rules that upstream does not satisfy are
+    // switched off here rather than fixed in the file: editing them to please a
+    // linter creates permanent drift on every shadcn release.
     files: ["src/components/primitives/**/*.{ts,tsx}"],
     plugins: { igrp },
     rules: {
       "igrp/token-policy": ["error", { allowDarkVariant: true }],
-
-      // Same rationale as `allowDarkVariant`: these three fire on *unmodified*
-      // upstream shadcn markup, so enforcing them here would create permanent
-      // drift that `scripts/check-shadcn-drift.mjs` reports on every release.
-      //   - input-group's addon is a focusable role="group" that forwards clicks
-      //     and keys to the input it wraps (no-noninteractive-*).
-      //   - pagination's <a> takes its content through {...props} (anchor-has-content).
-      // They stay errors in the Horizon and Custom layers, which we do own.
       "jsx-a11y/no-noninteractive-element-interactions": "off",
       "jsx-a11y/no-noninteractive-tabindex": "off",
       "jsx-a11y/anchor-has-content": "off",
+      "jsx-a11y/click-events-have-key-events": "off",
     },
   },
   {
-    // Horizon and Custom compose Primitives + semantic tokens: no `dark:` at all.
-    files: [
-      "src/components/horizon/**/*.{ts,tsx}",
-      "src/components/custom/**/*.{ts,tsx}",
-    ],
+    // `use-mobile` is the upstream shadcn hook, shipped with its sidebar. Its
+    // mount-time `setIsMobile` is the documented pattern for reading a media
+    // query before first paint; same drift reasoning as the primitives above.
+    files: ["src/hooks/use-mobile.ts"],
+    rules: {
+      "react-hooks/set-state-in-effect": "off",
+    },
+  },
+  {
+    files: ["src/components/horizon/**/*.{ts,tsx}", "src/components/custom/**/*.{ts,tsx}"],
     plugins: { igrp },
     rules: {
       "igrp/token-policy": "error",

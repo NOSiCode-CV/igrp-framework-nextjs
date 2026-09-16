@@ -4,7 +4,7 @@ import { useId, useState } from "react"
 import type { DateRange } from "react-day-picker"
 
 import { getDisabledDays } from "../../../lib/calendar-utils"
-import { cn } from "../../../lib/utils"
+import { cn } from "../cn"
 import type { IGRPCalendarProps } from "../../../types"
 import { Calendar } from "../../primitives/calendar"
 

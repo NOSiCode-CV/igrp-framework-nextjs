@@ -1,7 +1,4 @@
-// shadcn: 2026-05-18
-"use client"
-
-// import { buttonVariants } from "./button"
+/* shadcn: 2026-09-15 */
 
 import * as React from "react"
 import { cn } from "cn"

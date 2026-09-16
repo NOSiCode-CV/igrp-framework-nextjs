@@ -1,7 +1,11 @@
-// shadcn: 2026-05-18
-import * as AspectRatioPrimitive from "@radix-ui/react-aspect-ratio"
+/* shadcn: 2026-09-15 */
+"use client"
 
-function AspectRatio({ ...props }: React.ComponentProps<typeof AspectRatioPrimitive.Root>) {
+import { AspectRatio as AspectRatioPrimitive } from "radix-ui"
+
+function AspectRatio({
+  ...props
+}: React.ComponentProps<typeof AspectRatioPrimitive.Root>) {
   return <AspectRatioPrimitive.Root data-slot="aspect-ratio" {...props} />
 }
 

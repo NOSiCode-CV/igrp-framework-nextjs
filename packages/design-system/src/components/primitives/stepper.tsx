@@ -1,9 +1,10 @@
-// shadcn: 2026-05-18
-import { createContext, useCallback, useContext, useState } from "react"
-import { CheckIcon, LoaderCircleIcon } from "lucide-react"
-import { Slot } from "@radix-ui/react-slot"
+/* shadcn: 2026-09-15 */
+"use client"
 
-import { cn } from "../../lib/utils"
+import * as React from "react"
+import { CheckIcon, LoaderCircleIcon } from "lucide-react"
+import { Slot } from "radix-ui"
+import { cn } from "cn"
 
 type StepperContextValue = {
   activeStep: number
@@ -20,11 +21,11 @@ type StepItemContextValue = {
 
 type StepState = "active" | "completed" | "inactive" | "loading"
 
-const StepperContext = createContext<StepperContextValue | undefined>(undefined)
-const StepItemContext = createContext<StepItemContextValue | undefined>(undefined)
+const StepperContext = React.createContext<StepperContextValue | undefined>(undefined)
+const StepItemContext = React.createContext<StepItemContextValue | undefined>(undefined)
 
 const useStepper = () => {
-  const context = useContext(StepperContext)
+  const context = React.useContext(StepperContext)
   if (!context) {
     throw new Error("useStepper must be used within a Stepper")
   }
@@ -32,7 +33,7 @@ const useStepper = () => {
 }
 
 const useStepItem = () => {
-  const context = useContext(StepItemContext)
+  const context = React.useContext(StepItemContext)
   if (!context) {
     throw new Error("useStepItem must be used within a StepperItem")
   }
@@ -54,9 +55,9 @@ function Stepper({
   className,
   ...props
 }: StepperProps) {
-  const [activeStep, setInternalStep] = useState<number | undefined>(undefined)
+  const [activeStep, setInternalStep] = React.useState<number | undefined>(undefined)
 
-  const setActiveStep = useCallback(
+  const setActiveStep = React.useCallback(
     (step: number) => {
       if (value === undefined) {
         setInternalStep(step)
@@ -133,7 +134,12 @@ interface StepperTriggerProps extends React.ButtonHTMLAttributes<HTMLButtonEleme
   asChild?: boolean
 }
 
-function StepperTrigger({ asChild = false, className, children, ...props }: StepperTriggerProps) {
+function StepperTrigger({ 
+  asChild = false, 
+  className, 
+  children, 
+  ...props 
+}: StepperTriggerProps) {
   const { setActiveStep } = useStepper()
   const { step, isDisabled } = useStepItem()
 
@@ -145,9 +151,14 @@ function StepperTrigger({ asChild = false, className, children, ...props }: Step
 
   if (asChild) {
     return (
-      <Slot data-slot="stepper-trigger" onClick={handleClick} className={className} {...props}>
+      <Slot.Root 
+        data-slot="stepper-trigger" 
+        onClick={handleClick} 
+        className={className} 
+        {...props}
+      >
         {children}
-      </Slot>
+      </Slot.Root>
     )
   }
 
@@ -172,7 +183,12 @@ interface StepperIndicatorProps extends React.HTMLAttributes<HTMLDivElement> {
   asChild?: boolean
 }
 
-function StepperIndicator({ asChild = false, className, children, ...props }: StepperIndicatorProps) {
+function StepperIndicator({ 
+  asChild = false, 
+  className, 
+  children, 
+  ...props 
+}: StepperIndicatorProps) {
   const { state, step, isLoading } = useStepItem()
 
   return (
@@ -218,7 +234,11 @@ function StepperIndicator({ asChild = false, className, children, ...props }: St
   )
 }
 
-function StepperTitle({ className, children, ...props }: React.HTMLAttributes<HTMLHeadingElement>) {
+function StepperTitle({ 
+  className, 
+  children, 
+  ...props 
+}: React.HTMLAttributes<HTMLHeadingElement>) {
   return (
     <h3 data-slot="stepper-title" className={cn("text-sm font-medium", className)} {...props}>
       {children ?? <span className="sr-only">Step</span>}
@@ -226,11 +246,23 @@ function StepperTitle({ className, children, ...props }: React.HTMLAttributes<HT
   )
 }
 
-function StepperDescription({ className, ...props }: React.HTMLAttributes<HTMLParagraphElement>) {
-  return <p data-slot="stepper-description" className={cn("text-muted-foreground text-sm", className)} {...props} />
+function StepperDescription({ 
+  className, 
+  ...props 
+}: React.HTMLAttributes<HTMLParagraphElement>) {
+  return (
+    <p 
+      data-slot="stepper-description" 
+      className={cn("text-muted-foreground text-sm", className)} 
+      {...props} 
+    />
+  )
 }
 
-function StepperSeparator({ className, ...props }: React.HTMLAttributes<HTMLDivElement>) {
+function StepperSeparator({ 
+  className, 
+  ...props 
+}: React.HTMLAttributes<HTMLDivElement>) {
   return (
     <div
       data-slot="stepper-separator"
@@ -243,4 +275,12 @@ function StepperSeparator({ className, ...props }: React.HTMLAttributes<HTMLDivE
   )
 }
 
-export { Stepper, StepperDescription, StepperIndicator, StepperItem, StepperSeparator, StepperTitle, StepperTrigger }
+export { 
+  Stepper, 
+  StepperDescription, 
+  StepperIndicator, 
+  StepperItem, 
+  StepperSeparator, 
+  StepperTitle, 
+  StepperTrigger 
+}

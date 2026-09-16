@@ -1,22 +1,25 @@
 "use client"
 
-import { useId, useState, useEffect, useRef, useReducer, useCallback } from "react"
-import { useFormContext, useWatch, type Control } from "react-hook-form"
+import { useCallback, useEffect, useId, useState } from "react"
+import { useFormContext } from "react-hook-form"
 import { CalendarIcon, XIcon } from "lucide-react"
 
-import {
-  formatDateToString,
-  getDisabledDays,
-  isValidDate,
-  parseStringToDate,
-  toLocalDate,
-} from "../../../../lib/calendar-utils"
+import { formatDateToString, getDisabledDays, toLocalDate } from "../../../../lib/calendar-utils"
+import { getDateFormatMaxLength, maskDateInput, parseDateInput } from "../../../../lib/date-input-format"
 import { DD_MM_YYYY } from "../../../../lib/utilities"
-import { cn } from "../../../../lib/utils"
+import { cn } from "../../cn"
 import { type IGRPDatePickerBaseProps } from "../../../../types"
 import { Button } from "../../../primitives/button"
 import { Calendar } from "../../../primitives/calendar"
-import { FormControl, FormDescription, FormField, FormItem, FormLabel, FormMessage } from "../../../primitives/form"
+import {
+  useFormField,
+  FormControl,
+  FormDescription,
+  FormField,
+  FormItem,
+  FormLabel,
+  FormMessage,
+} from "../../../primitives/form"
 import { Input } from "../../../primitives/input"
 import { Popover, PopoverContent, PopoverTrigger } from "../../../primitives/popover"
 import { type IGRPCalendarSingleProps } from "../../calendar/single"
@@ -34,135 +37,82 @@ type IGRPDatePickerInputSingleProps = IGRPCalendarSingleProps &
     inputGroupClassName?: string
   }
 
-type DatePickerInputState = {
-  localDate: Date | undefined
-  value: string
-  month: Date | undefined
-}
-
-type DatePickerInputAction =
-  | { type: "SYNC"; date: Date | undefined; dateFormat: string }
-  | { type: "SET_FROM_INPUT"; value: string; date: Date | undefined }
-  | { type: "CLEAR" }
-  | { type: "SELECT"; date: Date | undefined; dateFormat: string }
-  | { type: "SET_MONTH"; month: Date | undefined }
-
-function datePickerInputReducer(state: DatePickerInputState, action: DatePickerInputAction): DatePickerInputState {
-  switch (action.type) {
-    case "SYNC":
-      return {
-        localDate: action.date,
-        value: formatDateToString(action.date, action.dateFormat),
-        month: action.date ?? state.month,
-      }
-    case "SET_FROM_INPUT":
-      return {
-        localDate: action.date,
-        value: action.value,
-        month: action.date ?? state.month,
-      }
-    case "CLEAR":
-      return { localDate: undefined, value: "", month: undefined }
-    case "SELECT":
-      return {
-        localDate: action.date,
-        value: action.date ? formatDateToString(action.date, action.dateFormat) : "",
-        month: action.date ?? state.month,
-      }
-    case "SET_MONTH":
-      return { ...state, month: action.month }
-    default:
-      return state
-  }
-}
-
-/** @internal Props for form sync component. */
-type FormSyncProps = {
-  fieldName: string
-  date: Date | undefined
-  dateFormat: string
-  dispatch: React.Dispatch<DatePickerInputAction>
-  prevDateRef: React.MutableRefObject<Date | undefined>
-  setValueForm: (name: string, value: Date | undefined) => void
-  control: Control
-}
-
-/** @internal Syncs form value with local date/input state. */
-function FormConnectedDatePickerSync({
-  fieldName,
-  date,
-  dateFormat,
-  dispatch,
-  prevDateRef,
-  setValueForm,
-  control,
-}: FormSyncProps) {
-  const watchedValue = useWatch({ control, name: fieldName, defaultValue: undefined })
-
-  useEffect(() => {
-    const dateChanged = prevDateRef.current !== date
-    if (dateChanged) {
-      prevDateRef.current = date
-    }
-
-    // `watchedValue` is whatever the form holds — usually a date-only ISO string from the
-    // API, which must be read as local midnight rather than UTC. See toLocalDate.
-    const valueToSync = dateChanged ? date : toLocalDate(watchedValue)
-    dispatch({ type: "SYNC", date: valueToSync, dateFormat })
-
-    if (dateChanged && watchedValue !== date) {
-      setValueForm(fieldName, date)
-    }
-  }, [watchedValue, date, dateFormat, fieldName, dispatch, setValueForm, prevDateRef])
-
-  return null
+/** @internal The handlers a field needs, built once per commit target. */
+type DatePickerInputHandlers = {
+  onInputChange: (rawValue: string) => void
+  onInputBlur: () => void
+  onClear: () => void
+  onSelect: (date: Date | undefined) => void
 }
 
 /** @internal Input + calendar popover field. */
 function DatePickerInputSingleField({
-  fieldName,
-  displayDate,
+  inputId,
+  calendarId,
+  value,
   displayValue,
-  displayMonth,
   placeholder,
   disabledPicker,
-  disabled,
-  open,
-  setOpen,
+  disabledDays,
   calendarProps,
   className,
+  maxLength,
+  inputMode,
+  ariaInvalid,
+  ariaDescribedBy,
   onInputChange,
+  onInputBlur,
   onClear,
   onSelect,
-  onMonthChange,
-}: {
-  fieldName: string
-  displayDate: Date | undefined
+}: DatePickerInputHandlers & {
+  inputId: string
+  calendarId: string
+  value: Date | undefined
   displayValue: string
-  displayMonth: Date | undefined
   placeholder: string
   disabledPicker: boolean
-  disabled: ReturnType<typeof getDisabledDays>
-  open: boolean
-  setOpen: (v: boolean) => void
+  disabledDays: ReturnType<typeof getDisabledDays>
   calendarProps: Omit<IGRPCalendarSingleProps, "date" | "onDateChange">
   className?: string
-  onInputChange: (value: string) => void
-  onClear: () => void
-  onSelect: (date: Date | undefined) => void
-  onMonthChange?: (month: Date | undefined) => void
+  maxLength?: number
+  inputMode?: "numeric"
+  ariaInvalid?: boolean
+  ariaDescribedBy?: string
 }) {
   const i18n = useIGRPi18n()
+  const [open, setOpen] = useState(false)
+  const [month, setMonth] = useState<Date | undefined>(value)
+  const [syncedValueTime, setSyncedValueTime] = useState<number | undefined>(value?.getTime())
+
+  // Follow the field: typing a date scrolls the calendar to it, while a month the user
+  // navigated to by hand survives until the value itself changes. Adjusted during render
+  // rather than in an effect — https://react.dev/learn/you-might-not-need-an-effect
+  const valueTime = value?.getTime()
+  if (valueTime !== syncedValueTime) {
+    setSyncedValueTime(valueTime)
+    if (valueTime !== undefined) setMonth(new Date(valueTime))
+  }
+
+  const hasText = displayValue.length > 0
+
   return (
     <div className={cn("relative flex gap-2")}>
       <Input
-        id={fieldName}
-        name={fieldName}
+        id={inputId}
+        name={inputId}
         value={displayValue}
         placeholder={placeholder}
-        className={cn("bg-background pr-10")}
+        // Browser form-history suggestions arrive as plain text that rarely matches
+        // `dateFormat`, and the dropdown covers the calendar. The calendar is the picker.
+        autoComplete="off"
+        inputMode={inputMode}
+        maxLength={maxLength}
+        aria-invalid={ariaInvalid || undefined}
+        aria-describedby={ariaDescribedBy}
+        className={cn("bg-background", hasText ? "pr-14" : "pr-10")}
         disabled={disabledPicker}
         onChange={(e) => onInputChange(e.target.value)}
+        onBlur={onInputBlur}
         onKeyDown={(e) => {
           if (e.key === "ArrowDown" && !disabledPicker) {
             e.preventDefault()
@@ -171,10 +121,10 @@ function DatePickerInputSingleField({
         }}
       />
 
-      {displayDate && (
+      {hasText && (
         <Button
           type="button"
-          id={`${fieldName}-clean`}
+          id={`${inputId}-clean`}
           variant="ghost"
           className={cn("absolute top-1/2 right-8 size-6 -translate-y-1/2")}
           disabled={disabledPicker}
@@ -191,30 +141,34 @@ function DatePickerInputSingleField({
           if (!disabledPicker) setOpen(v)
         }}
       >
+        {/* Rendered unconditionally: hiding the trigger once a date was picked left the
+            popover with no anchor, and no way back into the calendar but an undiscoverable
+            ArrowDown. */}
         <PopoverTrigger asChild>
-          {!displayDate && (
-            <Button
-              type="button"
-              id={`date-picker-btn-${fieldName}`}
-              variant="ghost"
-              className={cn("absolute top-1/2 right-2 size-6 -translate-y-1/2")}
-              disabled={disabledPicker}
-            >
-              <CalendarIcon className={cn("size-3.5")} />
-              <span className={cn("sr-only")}>Selecionar Data</span>
-            </Button>
-          )}
+          <Button
+            type="button"
+            id={`date-picker-btn-${inputId}`}
+            variant="ghost"
+            className={cn("absolute top-1/2 right-2 size-6 -translate-y-1/2")}
+            disabled={disabledPicker}
+          >
+            <CalendarIcon className={cn("size-3.5")} />
+            <span className={cn("sr-only")}>{i18n.datePicker.open}</span>
+          </Button>
         </PopoverTrigger>
-        <PopoverContent className={cn("p-0 w-auto shadow-none")} align="start" alignOffset={-8} sideOffset={10}>
+        <PopoverContent className={cn("w-auto p-0 shadow-none")} align="start" alignOffset={-8} sideOffset={10}>
           <Calendar
             mode="single"
-            id={fieldName}
-            selected={displayDate}
+            id={calendarId}
+            selected={value}
             captionLayout="dropdown"
-            month={displayMonth}
-            onMonthChange={onMonthChange}
-            onSelect={onSelect}
-            disabled={disabled}
+            month={month}
+            onMonthChange={setMonth}
+            onSelect={(next) => {
+              onSelect(next)
+              setOpen(false)
+            }}
+            disabled={disabledDays}
             className={cn("rounded-lg border shadow-sm", className)}
             {...calendarProps}
           />
@@ -225,47 +179,70 @@ function DatePickerInputSingleField({
 }
 
 /**
+ * @internal Wrapper rendered inside FormItem that reads the form context, so the generated id
+ * and the error wiring land on the real `input` element rather than on the wrapper.
+ */
+function DatePickerInputSingleFieldWithA11y(
+  props: Omit<React.ComponentProps<typeof DatePickerInputSingleField>, "inputId" | "ariaInvalid" | "ariaDescribedBy">
+) {
+  const { error, formItemId, formMessageId, formDescriptionId } = useFormField()
+  return (
+    <DatePickerInputSingleField
+      {...props}
+      inputId={formItemId}
+      ariaInvalid={!!error}
+      ariaDescribedBy={error ? formMessageId : formDescriptionId}
+    />
+  )
+}
+
+/**
  * Single-date picker with text input and calendar popover.
  * Supports typing dates and picking from calendar. Integrates with react-hook-form.
  */
-function IGRPDatePickerInputSingle({
-  name,
-  id,
-  date,
-  onDateChange,
-  label,
-  labelClassName,
-  helperText,
-  className,
-  required = false,
-  disabledPicker = false,
-  dateFormat = DD_MM_YYYY,
-  placeholder: placeholderProp,
-  disableBefore,
-  disableAfter,
-  disableDayOfWeek,
-  inputGroupClassName,
-  ...calendarProps
-}: IGRPDatePickerInputSingleProps) {
+function IGRPDatePickerInputSingle(allProps: IGRPDatePickerInputSingleProps) {
+  // See IGRPCalendarSingle: `date ?? localDate` cannot express "cleared".
+  const isControlled = "date" in allProps
+
+  const {
+    name,
+    id,
+    date,
+    onDateChange,
+    label,
+    labelClassName,
+    helperText,
+    className,
+    required = false,
+    disabledPicker = false,
+    dateFormat = DD_MM_YYYY,
+    placeholder: placeholderProp,
+    disableBefore,
+    disableAfter,
+    disableDayOfWeek,
+    inputGroupClassName,
+    ...calendarProps
+  } = allProps
+
   const _id = useId()
   const fieldName = name ?? id ?? _id
 
   const formContext = useFormContext()
 
-  const [state, dispatch] = useReducer(datePickerInputReducer, {
-    localDate: undefined,
-    value: "",
-    month: undefined,
-  })
-  const { localDate, value, month } = state
-  const [open, setOpen] = useState(false)
-  const prevDateRef = useRef<Date | undefined>(date)
-
-  const displayDate = date ?? localDate
-  const displayValue = formContext ? value : date !== undefined ? formatDateToString(date, dateFormat) : value
-  const displayMonth = date ?? localDate ?? month
+  /**
+   * Raw text while the field is being edited; `null` once it settles, so the display falls
+   * back to the committed date formatted with `dateFormat`.
+   *
+   * The draft is what keeps a half-typed date alive. The previous implementation pushed every
+   * keystroke into the form and re-read the answer, so the first backspace on `26-08-2026`
+   * parsed as invalid, wrote `undefined`, and the sync effect wiped the input.
+   */
+  const [draft, setDraft] = useState<string | null>(null)
+  const [localDate, setLocalDate] = useState<Date | undefined>(undefined)
 
   const placeholder = placeholderProp ?? dateFormat
+  const disabledDays = getDisabledDays({ disableBefore, disableAfter, disableDayOfWeek })
+  const maxLength = getDateFormatMaxLength(dateFormat)
 
   useEffect(() => {
     if (!formContext && typeof onDateChange !== "function") {
@@ -273,138 +250,106 @@ function IGRPDatePickerInputSingle({
     }
   }, [formContext, onDateChange])
 
-  const disabled = getDisabledDays({ disableBefore, disableAfter, disableDayOfWeek })
+  /**
+   * Builds the field handlers around a single commit path, so `onDateChange` fires exactly
+   * once per change — it used to be invoked by both the handler and its own callback.
+   */
+  const buildHandlers = useCallback(
+    (commit: (next: Date | null) => void): DatePickerInputHandlers => ({
+      onInputChange: (rawValue) => {
+        const masked = maskDateInput(rawValue, dateFormat)
+        setDraft(masked)
 
-  const handleInputChange = useCallback(
-    (newValue: string, onChange: (date: Date | undefined) => void) => {
-      if (!newValue) {
-        dispatch({ type: "CLEAR" })
-        onChange(undefined)
-        onDateChange?.(undefined)
-        return
-      }
-      const parsedDate = parseStringToDate(newValue, dateFormat)
-      if (isValidDate(parsedDate)) {
-        dispatch({ type: "SET_FROM_INPUT", value: newValue, date: parsedDate })
-        onChange(parsedDate)
-        onDateChange?.(parsedDate)
-      } else {
-        dispatch({ type: "SET_FROM_INPUT", value: newValue, date: undefined })
-        onChange(undefined)
-        onDateChange?.(undefined)
-      }
-    },
-    [dateFormat, onDateChange],
+        if (!masked.trim()) {
+          commit(null)
+          return
+        }
+
+        // Half-typed text is not a new value. Committing `undefined` on every keystroke
+        // dropped the stored date and fired validation for something nobody finished typing.
+        const parsed = parseDateInput(masked, dateFormat)
+        if (parsed) commit(parsed)
+      },
+      onInputBlur: () => setDraft(null),
+      onClear: () => {
+        setDraft(null)
+        commit(null)
+      },
+      onSelect: (next) => {
+        setDraft(null)
+        commit(next ?? null)
+      },
+    }),
+    [dateFormat]
   )
 
-  const handleClear = useCallback(
-    (onChange: (date: Date | undefined) => void) => {
-      dispatch({ type: "CLEAR" })
-      setOpen(false)
-      onChange(undefined)
-      onDateChange?.(undefined)
-    },
-    [onDateChange],
-  )
-
-  const handleSelect = useCallback(
-    (selectedDate: Date | undefined, onChange: (date: Date | undefined) => void) => {
-      dispatch({ type: "SELECT", date: selectedDate, dateFormat })
-      onChange(selectedDate)
-      setOpen(false)
-    },
-    [dateFormat],
-  )
+  const sharedProps = {
+    calendarId: `${fieldName}-calendar`,
+    placeholder,
+    disabledPicker,
+    disabledDays,
+    calendarProps,
+    className,
+    maxLength,
+    inputMode: maxLength === undefined ? undefined : ("numeric" as const),
+  }
 
   if (formContext) {
     return (
       <Field className={className}>
-        <FormConnectedDatePickerSync
-          fieldName={fieldName}
-          date={date}
-          dateFormat={dateFormat}
-          dispatch={dispatch}
-          prevDateRef={prevDateRef}
-          setValueForm={formContext.setValue}
-          control={formContext.control}
-        />
         <FormField
           control={formContext.control}
           name={fieldName}
-          render={({ field, fieldState }) => (
-            <FormItem className={inputGroupClassName}>
-              {label && (
-                <FormLabel
-                  htmlFor={fieldName}
-                  className={cn(labelClassName, required && 'after:content-["*"] after:text-destructive')}
-                >
-                  {label}
-                </FormLabel>
-              )}
-              <FormControl>
-                <DatePickerInputSingleField
-                  fieldName={fieldName}
-                  displayDate={displayDate}
-                  displayValue={displayValue}
-                  displayMonth={displayMonth}
-                  placeholder={placeholder}
-                  disabledPicker={disabledPicker}
-                  disabled={disabled}
-                  open={open}
-                  setOpen={setOpen}
-                  calendarProps={calendarProps}
-                  className={className}
-                  onInputChange={(v) =>
-                    handleInputChange(v, (d) => {
-                      field.onChange(d)
-                      onDateChange?.(d)
-                    })
-                  }
-                  onClear={() =>
-                    handleClear((d) => {
-                      field.onChange(d)
-                      onDateChange?.(d)
-                    })
-                  }
-                  onSelect={(d) =>
-                    handleSelect(d, (v) => {
-                      field.onChange(v)
-                      onDateChange?.(v)
-                    })
-                  }
-                  onMonthChange={(m) => dispatch({ type: "SET_MONTH", month: m })}
-                />
-              </FormControl>
+          render={({ field, fieldState }) => {
+            const selected = toLocalDate(field.value)
+            return (
+              <FormItem className={inputGroupClassName}>
+                {label && (
+                  <FormLabel className={cn(labelClassName, required && 'after:text-destructive after:content-["*"]')}>
+                    {label}
+                  </FormLabel>
+                )}
+                <FormControl>
+                  <DatePickerInputSingleFieldWithA11y
+                    {...sharedProps}
+                    value={selected}
+                    displayValue={draft ?? formatDateToString(selected, dateFormat)}
+                    {...buildHandlers((next) => {
+                      // `null`, not `undefined`: react-hook-form reads an `undefined` field as
+                      // "no value set" and `useWatch` hands back the *default*, so a cleared
+                      // picker re-rendered the date it had just dropped.
+                      field.onChange(next)
+                      onDateChange?.(next ?? undefined)
+                    })}
+                  />
+                </FormControl>
 
-              {helperText && !fieldState.error && <FormDescription>{helperText}</FormDescription>}
-              <FormMessage className={cn("text-xs")} />
-            </FormItem>
-          )}
+                {helperText && !fieldState.error && <FormDescription>{helperText}</FormDescription>}
+                <FormMessage className={cn("text-xs")} />
+              </FormItem>
+            )
+          }}
         />
       </Field>
     )
   }
 
+  const selected = isControlled ? date : localDate
+
   return (
     <Field className={className}>
-      {label && <IGRPLabel label={label} className={labelClassName} required={required} id={name} />}
+      {label && <IGRPLabel label={label} className={labelClassName} required={required} id={fieldName} />}
 
       <DatePickerInputSingleField
-        fieldName={fieldName}
-        displayDate={displayDate}
-        displayValue={displayValue}
-        displayMonth={displayMonth}
-        placeholder={placeholder}
-        disabledPicker={disabledPicker}
-        disabled={disabled}
-        open={open}
-        setOpen={setOpen}
-        calendarProps={calendarProps}
-        className={className}
-        onInputChange={(v) => handleInputChange(v, onDateChange ?? (() => {}))}
-        onClear={() => handleClear(onDateChange ?? (() => {}))}
-        onSelect={(d) => handleSelect(d, onDateChange ?? (() => {}))}
-        onMonthChange={(m) => dispatch({ type: "SET_MONTH", month: m })}
+        {...sharedProps}
+        inputId={fieldName}
+        value={selected}
+        displayValue={draft ?? formatDateToString(selected, dateFormat)}
+        ariaDescribedBy={helperText ? `${fieldName}-helper` : undefined}
+        {...buildHandlers((next) => {
+          setLocalDate(next ?? undefined)
+          onDateChange?.(next ?? undefined)
+        })}
       />
 
       {helperText && <FieldDescription id={`${fieldName}-helper`}>{helperText}</FieldDescription>}

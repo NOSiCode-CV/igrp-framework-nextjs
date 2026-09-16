@@ -14,7 +14,7 @@ import {
   type LegendType,
 } from "recharts"
 
-import { cn } from "../../../../lib/utils"
+import { cn } from "../../cn"
 import { ChartContainer, ChartTooltip } from "../../../primitives/chart"
 import { ChartCustomLegend } from "../custom-legend"
 import {

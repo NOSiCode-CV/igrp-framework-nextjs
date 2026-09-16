@@ -12,7 +12,7 @@ import {
   DialogTitle,
   DialogDescription,
 } from "../primitives/dialog"
-import { cn } from "../../lib/utils"
+import { cn } from "cn"
 
 const igrpModalDialogContentVariants = cva("w-full max-h-[90vh] overflow-auto", {
   variants: {

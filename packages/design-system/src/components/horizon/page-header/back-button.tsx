@@ -6,7 +6,7 @@ import { useRouter } from "next/navigation"
 
 import { Button } from "../../primitives/button"
 import { IGRPIcon, type IGRPIconName } from "../icon"
-import { cn } from "../../../lib/utils"
+import { cn } from "../cn"
 import { useIGRPi18n } from "../../../i18n"
 
 /** @internal Base props shared by all back button variants. */

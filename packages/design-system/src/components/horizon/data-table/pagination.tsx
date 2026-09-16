@@ -10,7 +10,7 @@ import { Button } from "../../primitives/button"
 import { Pagination, PaginationContent, PaginationEllipsis, PaginationItem } from "../../primitives/pagination"
 import { Select, SelectContent, SelectGroup, SelectItem, SelectTrigger, SelectValue } from "../../primitives/select"
 import { usePagination } from "./hooks/use-pagination"
-import { cn } from "../../../lib/utils"
+import { cn } from "../cn"
 import { useIGRPi18n } from "../../../i18n"
 
 /**

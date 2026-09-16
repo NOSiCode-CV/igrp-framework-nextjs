@@ -52,6 +52,14 @@ export interface IGRPI18nStrings {
     resultsPerPagePlaceholder: string
     /** Suffix appended to a page-size option. */
     perPageSuffix: string
+    /** Placeholder for the date-range filter trigger. */
+    filterDatePlaceholder: string
+    /** Placeholder for the faceted and select filter triggers. */
+    filterSelectPlaceholder: string
+    /** Placeholder for the text filter input. */
+    filterSearchPlaceholder: string
+    /** Empty-state message inside a faceted filter's option list. */
+    filterNoResults: string
   }
   inputPhone: {
     /** Default placeholder for the phone input. */
@@ -92,6 +100,10 @@ export interface IGRPI18nStrings {
   datePicker: {
     /** aria-label for the button that clears the selected date. */
     clear: string
+    /** Accessible name for the button that opens the calendar popover. */
+    open: string
+    /** Placeholder shown by a date picker with no value and no `placeholder` prop. */
+    placeholder: string
   }
   inputSelect: {
     /** Placeholder for the in-dropdown search box. */
@@ -140,6 +152,8 @@ export interface IGRPI18nStrings {
     messagePlaceholder: string
     /** aria-label for the send button. */
     sendMessage: string
+    /** System message shown in the transcript when a request to the endpoint fails. */
+    errorMessage: string
   }
   imageCropper: {
     /** aria-label for the zoom slider. */
@@ -177,6 +191,42 @@ export interface IGRPI18nStrings {
     /** Fallback global error message when the thrown error isn't an Error instance. */
     submissionErrorFallback: string
   }
+  formList: {
+    /** Add-item button label. */
+    addItem: string
+    /**
+     * Accessible name of an item's remove button. `{index}` is replaced with the
+     * item's 1-based position.
+     */
+    removeItem: string
+  }
+  inputFile: {
+    /** Drop-zone prompt. */
+    dropzoneLabel: string
+    /** Prefix for the list of accepted file types. */
+    dropzoneHint: string
+    /**
+     * Accessible name of a file's remove button. `{name}` is replaced with the
+     * file name, so each button in the list gets a distinct name.
+     */
+    removeFile: string
+    /** Remove-all-files button label. */
+    removeAllFiles: string
+    /** Drop-zone label while a valid drag is over it. */
+    dragActive: string
+    /** Drop-zone label while a drag contains files that would be rejected. */
+    dragReject: string
+    /** Prefix for the max-file-size constraint. */
+    maxSize: string
+    /** Prefix for the max-file-count constraint. */
+    maxFiles: string
+    /** Title of the rejected-files alert. */
+    rejectedTitle: string
+  }
+  copyTo: {
+    /** Message shown when there is nothing to copy. */
+    nothingToCopy: string
+  }
 }
 
 /**
@@ -207,6 +257,10 @@ export const IGRP_I18N_DEFAULTS_PT_PT: IGRPI18nStrings = {
     resultsPerPage: "Resultados por página",
     resultsPerPagePlaceholder: "Selecionar número de resultados",
     perPageSuffix: "/ página",
+    filterDatePlaceholder: "Selecionar data…",
+    filterSelectPlaceholder: "Selecionar…",
+    filterSearchPlaceholder: "Pesquisar…",
+    filterNoResults: "Nenhum resultado encontrado.",
   },
   inputPhone: {
     placeholder: "Introduza o número de telefone",
@@ -233,6 +287,8 @@ export const IGRP_I18N_DEFAULTS_PT_PT: IGRPI18nStrings = {
   },
   datePicker: {
     clear: "Limpar data",
+    open: "Selecionar data",
+    placeholder: "Selecionar data",
   },
   inputSelect: {
     searchPlaceholder: "Pesquisar...",
@@ -265,6 +321,7 @@ export const IGRP_I18N_DEFAULTS_PT_PT: IGRPI18nStrings = {
   chat: {
     messagePlaceholder: "Escreva a sua mensagem…",
     sendMessage: "Enviar mensagem",
+    errorMessage: "Ocorreu um erro. Por favor tente novamente.",
   },
   imageCropper: {
     zoomSlider: "Ampliação",
@@ -290,7 +347,34 @@ export const IGRP_I18N_DEFAULTS_PT_PT: IGRPI18nStrings = {
     submissionErrorTitle: "Erro ao submeter formulário",
     submissionErrorFallback: "Ocorreu um erro inesperado",
   },
+  formList: {
+    addItem: "Adicionar",
+    removeItem: "Remover item {index}",
+  },
+  inputFile: {
+    dropzoneLabel: "Arraste ficheiros aqui ou clique para selecionar",
+    dropzoneHint: "Tipos aceites",
+    removeFile: "Remover {name}",
+    removeAllFiles: "Remover todos",
+    dragActive: "Solte os ficheiros aqui",
+    dragReject: "Alguns ficheiros serão rejeitados",
+    maxSize: "Tamanho máx:",
+    maxFiles: "Máx de ficheiros:",
+    rejectedTitle: "Erro no upload",
+  },
+  copyTo: {
+    nothingToCopy: "Nenhum conteúdo para copiar",
+  },
 }
+
+/**
+ * Locale used for `Intl` formatting inside the design system (numbers, dates).
+ *
+ * It has to be an explicit value rather than `undefined`: `undefined` resolves to
+ * the *runtime* locale, which is the server's under SSR and the browser's on the
+ * client, so any formatted value rendered on both sides hydrates with a mismatch.
+ */
+export const IGRP_DEFAULT_LOCALE = "pt-PT"
 
 /** Deep-partial of {@link IGRPI18nStrings} — what consumers pass to `IGRPI18nProvider`. */
 export type IGRPI18nStringsOverride = {

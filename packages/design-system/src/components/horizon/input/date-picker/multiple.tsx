@@ -5,7 +5,7 @@ import { format } from "date-fns"
 import { useFormContext } from "react-hook-form"
 
 import { toLocalDates } from "../../../../lib/calendar-utils"
-import { cn } from "../../../../lib/utils"
+import { cn } from "../../cn"
 import type { IGRPDatePickerBaseProps } from "../../../../types"
 import { FormControl, FormDescription, FormField, FormItem, FormLabel, FormMessage } from "../../../primitives/form"
 import { Popover, PopoverContent, PopoverTrigger } from "../../../primitives/popover"

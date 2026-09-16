@@ -2,7 +2,7 @@
 
 import { Bar, BarChart, CartesianGrid, Legend, XAxis, YAxis, ReferenceLine } from "recharts"
 
-import { cn } from "../../../../lib/utils"
+import { cn } from "../../cn"
 import {
   ChartContainer,
   ChartTooltip,

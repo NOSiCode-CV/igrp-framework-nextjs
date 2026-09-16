@@ -82,6 +82,7 @@ Add the following components to the design system:
   chunks: [ 4096, 182 ]
 }
 
+igrp-hidden is a hidden input but still show in the html
 Fix Gap na tabela....
 Configuracao de cliente na app center...
 sync permissions

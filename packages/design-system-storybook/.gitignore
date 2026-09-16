@@ -36,3 +36,6 @@ tsconfig.tsbuildinfo
 
 # Storybook
 /storybook-static
+
+# Vitest (v5 unified artifact dir: attachments, failure screenshots, blob/json/junit reports)
+.vitest

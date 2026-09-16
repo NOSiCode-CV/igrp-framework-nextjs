@@ -2,7 +2,7 @@
 
 import { X } from "lucide-react"
 import { useState } from "react"
-import { cn } from "../../lib/utils"
+import { cn } from "cn"
 import { Button } from "../primitives/button"
 import { useIGRPi18n } from "../../i18n"
 

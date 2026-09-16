@@ -2,7 +2,7 @@
 
 import { useId } from "react"
 
-import { cn } from "../../lib/utils"
+import { cn } from "cn"
 import { igrpCleanString } from "../../lib/utilities"
 import { Card, CardHeader, CardTitle, CardDescription, CardContent } from "../primitives/card"
 import { Separator } from "../primitives/separator"

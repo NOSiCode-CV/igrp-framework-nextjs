@@ -14,6 +14,20 @@
  * `src/` removes the intermediate `dist_optimized` directory and the
  * `swap-dist.mjs` rename dance with it.
  *
+ * The Babel toolchain is pinned to **7.x on purpose**. `babel-plugin-react-compiler`
+ * (through 1.0.0) is built against the Babel 7 AST, and under `@babel/core` 8 its
+ * HIR lowering fails on every destructured parameter that carries a default value:
+ *
+ *   function Foo({ a = 1 }) {}
+ *   -> CompileError: (BuildHIR::lowerAssignment) Expected object property value
+ *      to be an LVal, got: AssignmentPattern
+ *
+ * The compiler swallows those errors per function and emits the original code, so
+ * the build stays green while memoization silently disappears from most of the
+ * package. On Babel 8 that was 443 bailouts across 71 design-system files. Do not
+ * bump `@babel/*` to 8 until the compiler ships Babel 8 support — and if you do,
+ * check the memoized-module count, not just that the build passes.
+ *
  * Deliberately NO `@babel/preset-env`: output must stay untouched ESM at
  * esnext, matching what the old `.swcrc` emitted. Consumers (Next/Turbopack)
  * do the downleveling.
@@ -79,12 +93,25 @@ const createReactCompilerConfig = ({ verbose = false } = {}) => ({
  * via `scripts/babel-config.no-react-compiler.cjs`. It is a separate config
  * file rather than an env var because `VAR=x cmd` is not portable to the
  * Windows shells pnpm runs scripts in.
+ *
+ * `development: false` is pinned deliberately. On `@babel/preset-react` 7 it is
+ * already the default, so today it changes nothing — but on 8 the flag follows
+ * `api.env()` instead, and the build scripts set no `NODE_ENV`, so Babel
+ * resolves the env to "development" and every package emits
+ * `react/jsx-dev-runtime` imports in place of `react/jsx-runtime`. That is a
+ * silent regression: the build stays green and the dev runtime resolves fine,
+ * the published package just runs dev-only element validation in production for
+ * every component. Measured on 8.0.1: 159 of the design system's 184 emitted
+ * modules. Keep the pin so a future Babel 8 bump cannot reintroduce it.
  */
 const createBabelConfig = ({ reactCompiler = true, ...options } = {}) => (api) => {
   api.cache(false);
 
   return {
-    presets: ['@babel/preset-typescript', ['@babel/preset-react', { runtime: 'automatic' }]],
+    presets: [
+      '@babel/preset-typescript',
+      ['@babel/preset-react', { runtime: 'automatic', development: false }],
+    ],
     plugins: reactCompiler
       ? [['babel-plugin-react-compiler', createReactCompilerConfig(options)]]
       : [],

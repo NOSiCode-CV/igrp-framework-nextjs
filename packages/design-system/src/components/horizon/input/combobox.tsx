@@ -4,7 +4,7 @@ import { useId, useMemo, useState } from "react"
 import { useFormContext } from "react-hook-form"
 
 import { igrpColorText } from "../../../lib/colors"
-import { cn } from "../../../lib/utils"
+import { cn } from "../cn"
 import type { IGRPInputProps, IGRPOptionsProps } from "../../../types"
 import {
   Command,

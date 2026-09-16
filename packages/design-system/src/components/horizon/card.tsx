@@ -11,7 +11,7 @@ import {
   CardHeader as IGRPCardHeader,
   CardTitle as IGRPCardTitle,
 } from "../primitives/card"
-import { cn } from "../../lib/utils"
+import { cn } from "cn"
 
 /**
  * Props for the IGRPCard component.

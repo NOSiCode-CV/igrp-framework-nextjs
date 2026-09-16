@@ -2,7 +2,8 @@
 
 import { useEffect, useRef, useState } from "react"
 
-import { cn } from "../../lib/utils"
+import { cn } from "cn"
+import { useIGRPi18n } from "../../i18n"
 import { Button } from "../primitives/button"
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "../primitives/tooltip"
 import { IGRPIcon } from "./icon"
@@ -49,6 +50,7 @@ function IGRPCopyTo({
 }: IGRPCopyToProps) {
   const [copied, setCopied] = useState(false)
   const { igrpToast } = useIGRPToast()
+  const i18n = useIGRPi18n()
   const timeoutRef = useRef<NodeJS.Timeout | null>(null)
 
   useEffect(() => {
@@ -64,7 +66,7 @@ function IGRPCopyTo({
       igrpToast({
         type: "error",
         title: errorMessage,
-        description: "Nenhum conteúdo para copiar",
+        description: i18n.copyTo.nothingToCopy,
         duration: toastDuration,
       })
       return
@@ -115,7 +117,7 @@ function IGRPCopyTo({
           <Button
             variant="ghost"
             size="icon"
-            className={cn("disabled:opacity-100 size-7", triggerClassName)}
+            className={cn("size-7 disabled:opacity-100", triggerClassName)}
             onClick={handleCopy}
             aria-label={copied ? successMessage : tooltipMessage}
             disabled={copied}
@@ -123,7 +125,7 @@ function IGRPCopyTo({
             <div
               className={cn(
                 "transition-[transform,opacity] motion-reduce:transition-none",
-                copied ? "scale-100 opacity-100" : "scale-0 opacity-0",
+                copied ? "scale-100 opacity-100" : "scale-0 opacity-0"
               )}
             >
               <IGRPIcon iconName="Check" className={cn("stroke-primary")} strokeWidth={2} />
@@ -131,7 +133,7 @@ function IGRPCopyTo({
             <div
               className={cn(
                 "absolute transition-[transform,opacity] motion-reduce:transition-none",
-                copied ? "scale-0 opacity-0" : "scale-100 opacity-100",
+                copied ? "scale-0 opacity-0" : "scale-100 opacity-100"
               )}
             >
               <IGRPIcon iconName="Copy" strokeWidth={2} className={cn("size-3")} />

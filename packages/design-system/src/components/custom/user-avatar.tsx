@@ -3,7 +3,7 @@
 import { useId } from "react"
 
 import { Avatar, AvatarImage, AvatarFallback } from "../primitives/avatar"
-import { cn } from "../../lib/utils"
+import { cn } from "cn"
 
 /**
  * Props for the IGRPUserAvatar component.

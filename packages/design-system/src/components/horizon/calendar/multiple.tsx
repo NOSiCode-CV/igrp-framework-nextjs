@@ -4,7 +4,7 @@ import { useId, useMemo, useState } from "react"
 import { addDays } from "date-fns"
 
 import { getDisabledDays } from "../../../lib/calendar-utils"
-import { cn } from "../../../lib/utils"
+import { cn } from "../cn"
 import type { IGRPCalendarProps } from "../../../types"
 import { Calendar } from "../../primitives/calendar"
 

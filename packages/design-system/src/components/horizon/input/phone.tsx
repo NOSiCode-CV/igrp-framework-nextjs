@@ -5,7 +5,7 @@ import { useFormContext, Controller } from "react-hook-form"
 import * as RPNInput from "react-phone-number-input"
 import flags from "react-phone-number-input/flags"
 
-import { cn } from "../../../lib/utils"
+import { cn } from "../cn"
 import { useIGRPi18n } from "../../../i18n"
 import type { IGRPInputProps } from "../../../types"
 import { Input } from "../../primitives/input"

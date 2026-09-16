@@ -7,7 +7,7 @@ import type { IGRPCalendarTimeProps } from "../../../types"
 import { Input } from "../../primitives/input"
 import { Label } from "../../primitives/label"
 import { IGRPCalendarSingle, type IGRPCalendarSingleProps } from "./single"
-import { cn } from "../../../lib/utils"
+import { cn } from "../cn"
 
 /**
  * Props for the IGRPCalendarSingleTime component.

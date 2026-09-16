@@ -2,7 +2,7 @@
 
 import { useId, type ReactNode } from "react"
 
-import { cn } from "../../lib/utils"
+import { cn } from "cn"
 import { Table, TableBody, TableCell, TableFooter, TableHead, TableHeader, TableRow } from "../primitives/table"
 
 /** @internal Renders cell content with optional custom render function. */

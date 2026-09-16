@@ -7,7 +7,7 @@ import { CalendarIcon } from "lucide-react"
 
 import { toLocalDate } from "../../../../lib/calendar-utils"
 import { DD_MM_YYYY } from "../../../../lib/utilities"
-import { cn } from "../../../../lib/utils"
+import { cn } from "../../cn"
 import { type IGRPDatePickerBaseProps } from "../../../../types"
 import {
   useFormField,
@@ -30,6 +30,7 @@ import { useIGRPi18n } from "../../../../i18n"
 function DatePickerSingleField({
   value,
   onChange,
+  onClear,
   fieldName,
   calendarProps,
   placeholder,
@@ -41,6 +42,7 @@ function DatePickerSingleField({
 }: {
   value: Date | undefined
   onChange: (date: Date | undefined) => void
+  onClear: () => void
   fieldName: string
   calendarProps: Omit<IGRPCalendarSingleProps, "date" | "onDateChange" | "id">
   placeholder: string
@@ -51,16 +53,23 @@ function DatePickerSingleField({
   ariaDescribedBy?: string
 }) {
   const i18n = useIGRPi18n()
+  const [open, setOpen] = useState(false)
+  const isDisabled = disabledPicker || disabled
   const displayText = value ? format(value, dateFormat) : placeholder
 
   return (
     <div className={cn("relative")}>
-      <Popover>
+      <Popover
+        open={isDisabled ? false : open}
+        onOpenChange={(next) => {
+          if (!isDisabled) setOpen(next)
+        }}
+      >
         <PopoverTrigger asChild>
           <Button
             id={fieldName}
             variant="outline"
-            disabled={disabledPicker || disabled}
+            disabled={isDisabled}
             aria-invalid={ariaInvalid || undefined}
             aria-describedby={ariaDescribedBy}
             className={cn("group w-full justify-between font-normal shadow-xs", !value && "text-muted-foreground")}
@@ -68,17 +77,20 @@ function DatePickerSingleField({
             <span className={cn("truncate", !value && "text-muted-foreground")}>{displayText}</span>
             {!value && (
               <CalendarIcon
-                className="text-muted-foreground/80 group-hover:text-foreground shrink-0 transition-colors"
+                className="shrink-0 text-muted-foreground/80 transition-colors group-hover:text-foreground"
                 aria-hidden="true"
               />
             )}
           </Button>
         </PopoverTrigger>
-        <PopoverContent className={cn("p-0 w-auto shadow-none")} align="start">
+        <PopoverContent className={cn("w-auto p-0 shadow-none")} align="start">
           <IGRPCalendarSingle
             id={fieldName}
             date={value}
-            onDateChange={onChange}
+            onDateChange={(next) => {
+              onChange(next)
+              setOpen(false)
+            }}
             captionLayout="dropdown"
             {...calendarProps}
           />
@@ -86,13 +98,13 @@ function DatePickerSingleField({
       </Popover>
       {value && (
         <IGRPButton
-          onClick={() => onChange(undefined)}
+          onClick={onClear}
           variant="link"
-          className={cn("absolute right-2 top-1/2 size-3 -translate-y-1/2 text-muted-foreground z-100")}
+          className={cn("absolute top-1/2 right-2 z-[100] size-3 -translate-y-1/2 text-muted-foreground")}
           size="icon"
           iconName="X"
           aria-label={i18n.datePicker.clear}
-          disabled={disabledPicker}
+          disabled={isDisabled}
           showIcon
         />
       )}
@@ -125,27 +137,33 @@ type IGRPDatePickerSingleProps = IGRPCalendarSingleProps & IGRPDatePickerBasePro
 /**
  * Single-date picker with popover calendar. Integrates with react-hook-form.
  */
-function IGRPDatePickerSingle({
-  name,
-  id,
-  date,
-  onDateChange,
-  label,
-  labelClassName,
-  helperText,
-  className,
-  required = false,
-  disabledPicker = false,
-  disabled,
-  dateFormat = DD_MM_YYYY,
-  placeholder = "Pick a date",
-  ...calendarProps
-}: IGRPDatePickerSingleProps) {
+function IGRPDatePickerSingle(allProps: IGRPDatePickerSingleProps) {
+  // See IGRPCalendarSingle: `date ?? localDate` cannot express "cleared".
+  const isControlled = "date" in allProps
+
+  const {
+    name,
+    id,
+    date,
+    onDateChange,
+    label,
+    labelClassName,
+    helperText,
+    className,
+    required = false,
+    disabledPicker = false,
+    disabled,
+    dateFormat = DD_MM_YYYY,
+    placeholder,
+    ...calendarProps
+  } = allProps
+
+  const i18n = useIGRPi18n()
   const _id = useId()
   const fieldName = name ?? id ?? _id
 
   const [localDate, setLocalDate] = useState<Date | undefined>(undefined)
-  const displayDate = date ?? localDate
+  const displayDate = isControlled ? date : localDate
   const formContext = useFormContext()
 
   useEffect(() => {
@@ -157,7 +175,7 @@ function IGRPDatePickerSingle({
   const fieldProps = {
     fieldName,
     calendarProps,
-    placeholder,
+    placeholder: placeholder ?? i18n.datePicker.placeholder,
     dateFormat,
     disabled: !!disabled,
     disabledPicker,
@@ -172,7 +190,7 @@ function IGRPDatePickerSingle({
           render={({ field, fieldState }) => (
             <FormItem>
               {label && (
-                <FormLabel className={cn(labelClassName, required && 'after:content-["*"] after:text-destructive')}>
+                <FormLabel className={cn(labelClassName, required && 'after:text-destructive after:content-["*"]')}>
                   {label}
                 </FormLabel>
               )}
@@ -183,6 +201,13 @@ function IGRPDatePickerSingle({
                   onChange={(val) => {
                     field.onChange(val)
                     onDateChange?.(val)
+                  }}
+                  // `null`, not `undefined`: react-hook-form reads an `undefined` field as
+                  // "no value set" and `useWatch` hands back the *default* instead, so a
+                  // cleared picker immediately re-rendered the date it had just dropped.
+                  onClear={() => {
+                    field.onChange(null)
+                    onDateChange?.(undefined)
                   }}
                 />
               </FormControl>
@@ -205,6 +230,10 @@ function IGRPDatePickerSingle({
         onChange={(val) => {
           setLocalDate(val)
           onDateChange?.(val)
+        }}
+        onClear={() => {
+          setLocalDate(undefined)
+          onDateChange?.(undefined)
         }}
       />
 

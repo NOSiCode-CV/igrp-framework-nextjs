@@ -4,7 +4,7 @@ import { useId } from "react"
 
 import { IGRPColors, type IGRPColorRole, type IGRPColorVariants } from "../../lib/colors"
 import { igrpAlertIconMappings } from "../../lib/utilities"
-import { cn } from "../../lib/utils"
+import { cn } from "cn"
 import type { IGRPBaseAttributes, IGRPPlacementProps } from "../../types"
 import { IGRPIcon, type IGRPIconName } from "./icon"
 import { IGRPLink } from "./typography/link"

@@ -5,7 +5,7 @@ import { Slot } from "radix-ui"
 
 import { IGRPColors, type IGRPColorVariants } from "../../lib/colors"
 import { igrpAlertIconMappings } from "../../lib/utilities"
-import { cn } from "../../lib/utils"
+import { cn } from "cn"
 import { type IGRPBaseAttributes, type IGRPPlacementProps } from "../../types"
 import {
   AlertDialog,
@@ -111,7 +111,7 @@ function IGRPAlertDialog({
   }
 
   return (
-    <Slot id={ref}>
+    <Slot.Root id={ref}>
       <AlertDialog open={open} onOpenChange={onOpenChange}>
         <AlertDialogContent className={className}>
           {showIcon && iconPlacement === "center" && (
@@ -158,7 +158,7 @@ function IGRPAlertDialog({
           </div>
         </AlertDialogContent>
       </AlertDialog>
-    </Slot>
+    </Slot.Root>
   )
 }
 

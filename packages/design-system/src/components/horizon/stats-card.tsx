@@ -8,12 +8,12 @@ import { useCallback, useId } from "react"
 import Image from "next/image"
 
 import { IGRPColors, type IGRPColorVariants } from "../../lib/colors"
-import { cn } from "../../lib/utils"
+import { cn } from "cn"
 import type { IGRPBaseAttributes } from "../../types"
 import { IGRPIcon, type IGRPIconName } from "./icon"
 
 const igrpStatsCardVariants = cva(
-  "flex items-center p-4 bg-card shadow-sm text-card-foreground transition-[box-shadow,border-color] overflow-hidden",
+  "flex items-center overflow-hidden bg-card p-4 text-card-foreground shadow-sm transition-[box-shadow,border-color]",
   {
     variants: {
       border: {
@@ -29,10 +29,10 @@ const igrpStatsCardVariants = cva(
       },
       borderPosition: {
         none: "",
-        top: "border-t-4 border-l-0 border-r-0 border-b-0",
-        bottom: "border-b-4 border-l-0 border-r-0 border-t-0",
-        left: "border-l-4 border-t-0 border-r-0 border-b-0",
-        right: "border-r-4 border-t-0 border-l-0 border-b-0",
+        top: "border-t-4 border-r-0 border-b-0 border-l-0",
+        bottom: "border-t-0 border-r-0 border-b-4 border-l-0",
+        left: "border-t-0 border-r-0 border-b-0 border-l-4",
+        right: "border-t-0 border-r-4 border-b-0 border-l-0",
       },
       interactive: {
         true: "cursor-pointer hover:shadow-md focus-visible:ring-2 focus-visible:ring-ring focus-visible:outline-none",
@@ -44,7 +44,7 @@ const igrpStatsCardVariants = cva(
       borderPosition: "none",
       interactive: false,
     },
-  },
+  }
 )
 
 const igrpStatsCardTitleVariants = cva("font-medium tracking-tighter text-balance", {
@@ -79,7 +79,7 @@ const igrpStatsCardValueVariants = cva("font-bold tabular-nums", {
   },
 })
 
-const igrpStstaCardIconVariants = cva("flex items-center justify-center shrink-0", {
+const igrpStstaCardIconVariants = cva("flex shrink-0 items-center justify-center", {
   variants: {
     size: {
       sm: "size-8",
@@ -340,38 +340,38 @@ function IGRPStatsCard({
         onClick?.()
       }
     },
-    [isInteractive, onClick],
+    [isInteractive, onClick]
   )
 
   return (
     <div
       className={cn(
         iconPlacement === "start" ? "flex-row-reverse" : "flex-row",
-        itemPlacement === "end" ? "justify-end text-right items-end" : "justify-start text-left items-start",
+        itemPlacement === "end" ? "items-end justify-end text-right" : "items-start justify-start text-left",
         igrpStatsCardVariants({
           border: cardBorder,
           borderPosition: cardBorderPosition,
           interactive: isInteractive,
         }),
         cardBorderPosition !== "none" && outlineColors.border,
-        className,
+        className
       )}
+      id={ref}
+      {...props}
       {...(isInteractive && {
         role: "button",
         tabIndex: 0,
         onClick,
         onKeyDown: handleKeyDown,
       })}
-      id={ref}
-      {...props}
     >
-      <div className="flex flex-col flex-1 mx-4">
+      <div className="mx-4 flex flex-1 flex-col">
         {title && (
           <p
             className={cn(
               igrpStatsCardTitleVariants({ size: titleSize }),
               titleColored && solidColors.text,
-              titleClassName,
+              titleClassName
             )}
           >
             {title}
@@ -382,7 +382,7 @@ function IGRPStatsCard({
             className={cn(
               igrpStatsCardValueVariants({ size: valueSize }),
               valueColored && solidColors.text,
-              valueClassName,
+              valueClassName
             )}
           >
             {value}
@@ -477,7 +477,7 @@ function IGRPStatsCardIcon({
           backgroundBorder: showIconBorder,
           variant: iconVariant,
         }),
-        iconClassName,
+        iconClassName
       )}
     >
       {content()}

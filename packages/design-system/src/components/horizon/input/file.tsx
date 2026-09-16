@@ -5,7 +5,8 @@ import { useFormContext, Controller } from "react-hook-form"
 import { useDropzone, type FileRejection } from "react-dropzone"
 import { AlertCircle, UploadCloud, X } from "lucide-react"
 
-import { cn } from "../../../lib/utils"
+import { cn } from "../cn"
+import { igrpFormatMessage, useIGRPi18n } from "../../../i18n"
 import type { IGRPInputProps } from "../../../types"
 import { Input } from "../../primitives/input"
 import { Card } from "../../primitives/card"
@@ -105,6 +106,16 @@ interface IGRPDropzoneInternalProps {
   onFilesChange?: (files: File[]) => void
   /** react-hook-form field onChange (when inside a form). */
   onFieldChange?: (value: File | FileList | File[] | null) => void
+  /** react-hook-form field value (when inside a form), so `reset()` can clear the list. */
+  fieldValue?: unknown
+}
+
+/**
+ * Key for a file row. Index keys re-map every row after a removal onto its
+ * neighbour, which restarts the wrong progress bar and moves focus.
+ */
+function fileKey(file: File): string {
+  return `${file.name}:${file.size}:${file.lastModified}`
 }
 
 function IGRPDropzoneInternal({
@@ -130,9 +141,24 @@ function IGRPDropzoneInternal({
   rejectedAlertTitle,
   onFilesChange,
   onFieldChange,
+  fieldValue,
 }: IGRPDropzoneInternalProps) {
   const [files, setFiles] = useState<FileWithProgress[]>([])
   const [rejectedFiles, setRejectedFiles] = useState<FileRejection[]>([])
+
+  // The picked files live in local state (they carry upload progress, which the
+  // form value does not). That left the list stranded on `form.reset()`: the form
+  // value went empty while the UI still showed every file. Mirror the clear.
+  const fieldIsEmpty =
+    fieldValue === undefined || fieldValue === null || (Array.isArray(fieldValue) && fieldValue.length === 0)
+  const [lastFieldIsEmpty, setLastFieldIsEmpty] = useState(fieldIsEmpty)
+  if (lastFieldIsEmpty !== fieldIsEmpty) {
+    setLastFieldIsEmpty(fieldIsEmpty)
+    if (fieldIsEmpty) {
+      setFiles([])
+      setRejectedFiles([])
+    }
+  }
 
   const updateFiles = useCallback(
     (next: FileWithProgress[]) => {
@@ -147,7 +173,7 @@ function IGRPDropzoneInternal({
         }
       }
     },
-    [multiple, onFilesChange, onFieldChange],
+    [multiple, onFilesChange, onFieldChange]
   )
 
   const onDrop = useCallback(
@@ -170,7 +196,7 @@ function IGRPDropzoneInternal({
         updateFiles(newItems)
       }
     },
-    [multiple, files, updateFiles],
+    [multiple, files, updateFiles]
   )
 
   const { getRootProps, getInputProps, isDragActive, isDragReject } = useDropzone({
@@ -186,7 +212,7 @@ function IGRPDropzoneInternal({
     (fileToRemove: File) => {
       updateFiles(files.filter((item) => item.file !== fileToRemove))
     },
-    [files, updateFiles],
+    [files, updateFiles]
   )
 
   const removeAllFiles = useCallback(() => {
@@ -217,12 +243,12 @@ function IGRPDropzoneInternal({
       <Card
         {...getRootProps()}
         className={cn(
-          "border-dashed cursor-pointer transition-[color,background-color,border-color,box-shadow] duration-200",
-          "hover:shadow-md hover:border-primary",
-          "p-6 text-center flex flex-col items-center gap-2",
+          "cursor-pointer border-dashed transition-[color,background-color,border-color,box-shadow] duration-200",
+          "hover:border-primary hover:shadow-md",
+          "flex flex-col items-center gap-2 p-6 text-center",
           isDragActive && !isDragReject && "border-primary bg-primary/5",
           isDragReject && "border-destructive bg-destructive/10",
-          disabled && "opacity-50 pointer-events-none",
+          disabled && "pointer-events-none opacity-50"
         )}
       >
         <input {...getInputProps()} name={name} />
@@ -230,7 +256,7 @@ function IGRPDropzoneInternal({
           className={cn(
             "size-10",
             isDragActive && !isDragReject ? "text-primary" : "text-muted-foreground",
-            isDragReject && "text-destructive",
+            isDragReject && "text-destructive"
           )}
         />
         <div className="flex flex-col gap-1">
@@ -243,18 +269,18 @@ function IGRPDropzoneInternal({
                 {dropzoneHint}: {formatAcceptedTypes()}
               </span>
             )}
-            {maxSize && acceptTypes && <span> · </span>}
-            {maxSize && (
+            {maxSize !== undefined && acceptTypes ? <span> · </span> : null}
+            {maxSize !== undefined ? (
               <span>
                 {maxSizeLabel} {formatFileSize(maxSize)}
               </span>
-            )}
-            {maxFiles && (maxSize || acceptTypes) && <span> · </span>}
-            {maxFiles && (
+            ) : null}
+            {maxFiles !== undefined && (maxSize !== undefined || acceptTypes) ? <span> · </span> : null}
+            {maxFiles !== undefined ? (
               <span>
                 {maxFilesLabel} {maxFiles}
               </span>
-            )}
+            ) : null}
           </p>
         </div>
       </Card>
@@ -264,9 +290,9 @@ function IGRPDropzoneInternal({
           <AlertCircle className="size-4" />
           <AlertTitle>{rejectedAlertTitle}</AlertTitle>
           <AlertDescription>
-            <ul className="mt-2 text-sm list-disc pl-5 space-y-1">
+            <ul className="mt-2 list-disc space-y-1 pl-5 text-sm">
               {rejectedFiles.map((item, index) => (
-                <li key={index} className="flex items-center justify-between">
+                <li key={fileKey(item.file)} className="flex items-center justify-between">
                   <span>
                     {item.file.name} — {item.errors.map((e) => e.message).join(", ")}
                   </span>
@@ -275,7 +301,7 @@ function IGRPDropzoneInternal({
                     variant="ghost"
                     type="button"
                     onClick={() => removeRejectedFile(index)}
-                    aria-label={removeLabel}
+                    aria-label={igrpFormatMessage(removeLabel, { name: item.file.name })}
                   >
                     <X className="size-4" />
                   </Button>
@@ -288,18 +314,21 @@ function IGRPDropzoneInternal({
 
       {files.length > 0 && (
         <div className="flex flex-col gap-2">
-          {files.map((item, index) => (
-            <div key={index} className="flex items-center justify-between border border-input rounded-md p-2 gap-2">
-              <div className="flex-1 min-w-0">
-                <p className="text-sm font-medium truncate">{item.file.name}</p>
-                <Progress value={item.progress} className="h-1 mt-1" />
+          {files.map((item) => (
+            <div
+              key={fileKey(item.file)}
+              className="flex items-center justify-between gap-2 rounded-md border border-input p-2"
+            >
+              <div className="min-w-0 flex-1">
+                <p className="truncate text-sm font-medium">{item.file.name}</p>
+                <Progress value={item.progress} className="mt-1 h-1" />
               </div>
               <Button
                 size="icon"
                 variant="ghost"
                 type="button"
                 onClick={() => removeFile(item.file)}
-                aria-label={removeLabel}
+                aria-label={igrpFormatMessage(removeLabel, { name: item.file.name })}
               >
                 <X className="size-4" />
               </Button>
@@ -341,15 +370,15 @@ function IGRPInputFile({
   maxSize,
   maxFiles,
   acceptTypes,
-  dropzoneLabel = "Arraste arquivos aqui ou clique para selecionar",
-  dropzoneHint = "Tipos aceitos",
-  removeLabel = "Remover",
-  removeAllLabel = "Remover todos",
-  dragActiveLabel = "Solte os arquivos aqui",
-  dragRejectLabel = "Alguns arquivos serão rejeitados",
-  maxSizeLabel = "Tamanho máx:",
-  maxFilesLabel = "Máx de arquivos:",
-  rejectedAlertTitle = "Erro no upload",
+  dropzoneLabel,
+  dropzoneHint,
+  removeLabel,
+  removeAllLabel,
+  dragActiveLabel,
+  dragRejectLabel,
+  maxSizeLabel,
+  maxFilesLabel,
+  rejectedAlertTitle,
   onFilesChange,
   placeholder,
   onChange,
@@ -359,6 +388,21 @@ function IGRPInputFile({
 }: IGRPInputFileProps) {
   const _id = useId()
   const fieldName = name ?? id ?? _id
+  const i18n = useIGRPi18n()
+
+  // Props still win; the catalog only supplies what the caller left out, so a
+  // consumer that overrides these strings via IGRPI18nProvider gets them here too.
+  const labels = {
+    dropzoneLabel: dropzoneLabel ?? i18n.inputFile.dropzoneLabel,
+    dropzoneHint: dropzoneHint ?? i18n.inputFile.dropzoneHint,
+    removeLabel: removeLabel ?? i18n.inputFile.removeFile,
+    removeAllLabel: removeAllLabel ?? i18n.inputFile.removeAllFiles,
+    dragActiveLabel: dragActiveLabel ?? i18n.inputFile.dragActive,
+    dragRejectLabel: dragRejectLabel ?? i18n.inputFile.dragReject,
+    maxSizeLabel: maxSizeLabel ?? i18n.inputFile.maxSize,
+    maxFilesLabel: maxFilesLabel ?? i18n.inputFile.maxFiles,
+    rejectedAlertTitle: rejectedAlertTitle ?? i18n.inputFile.rejectedTitle,
+  }
 
   const inputRef = useRef<HTMLInputElement>(null)
   const formContext = useFormContext()
@@ -379,15 +423,15 @@ function IGRPInputFile({
           maxSize={maxSize}
           maxFiles={maxFiles}
           acceptTypes={acceptTypes}
-          dropzoneLabel={dropzoneLabel}
-          dropzoneHint={dropzoneHint}
-          removeLabel={removeLabel}
-          removeAllLabel={removeAllLabel}
-          dragActiveLabel={dragActiveLabel}
-          dragRejectLabel={dragRejectLabel}
-          maxSizeLabel={maxSizeLabel}
-          maxFilesLabel={maxFilesLabel}
-          rejectedAlertTitle={rejectedAlertTitle}
+          dropzoneLabel={labels.dropzoneLabel}
+          dropzoneHint={labels.dropzoneHint}
+          removeLabel={labels.removeLabel}
+          removeAllLabel={labels.removeAllLabel}
+          dragActiveLabel={labels.dragActiveLabel}
+          dragRejectLabel={labels.dragRejectLabel}
+          maxSizeLabel={labels.maxSizeLabel}
+          maxFilesLabel={labels.maxFilesLabel}
+          rejectedAlertTitle={labels.rejectedAlertTitle}
           onFilesChange={onFilesChange}
         />
       )
@@ -402,6 +446,7 @@ function IGRPInputFile({
         control={formContext.control}
         render={({ field, fieldState }) => (
           <IGRPDropzoneInternal
+            fieldValue={field.value}
             name={fieldName}
             label={label}
             required={required}
@@ -413,15 +458,15 @@ function IGRPInputFile({
             maxSize={maxSize}
             maxFiles={maxFiles}
             acceptTypes={acceptTypes}
-            dropzoneLabel={dropzoneLabel}
-            dropzoneHint={dropzoneHint}
-            removeLabel={removeLabel}
-            removeAllLabel={removeAllLabel}
-            dragActiveLabel={dragActiveLabel}
-            dragRejectLabel={dragRejectLabel}
-            maxSizeLabel={maxSizeLabel}
-            maxFilesLabel={maxFilesLabel}
-            rejectedAlertTitle={rejectedAlertTitle}
+            dropzoneLabel={labels.dropzoneLabel}
+            dropzoneHint={labels.dropzoneHint}
+            removeLabel={labels.removeLabel}
+            removeAllLabel={labels.removeAllLabel}
+            dragActiveLabel={labels.dragActiveLabel}
+            dragRejectLabel={labels.dragRejectLabel}
+            maxSizeLabel={labels.maxSizeLabel}
+            maxFilesLabel={labels.maxFilesLabel}
+            rejectedAlertTitle={labels.rejectedAlertTitle}
             onFilesChange={onFilesChange}
             onFieldChange={field.onChange}
           />
@@ -440,9 +485,9 @@ function IGRPInputFile({
           id={fieldName}
           name={fieldName}
           className={cn(
-            "p-0 pe-3 file:me-3 file:border-0 file:border-e file:border-input file:py-2 file:px-4 file:transition-colors cursor-pointer",
+            "cursor-pointer p-0 pe-3 file:me-3 file:border-0 file:border-e file:border-input file:px-4 file:py-2 file:transition-colors",
             error && "border-destructive focus-visible:ring-destructive/20",
-            className,
+            className
           )}
           type="file"
           disabled={disabled}
@@ -482,9 +527,9 @@ function IGRPInputFile({
               ref={inputRef}
               id={fieldName}
               className={cn(
-                "p-0 pe-3 file:me-3 file:border-0 file:border-e file:border-input file:py-2 file:px-4 file:transition-colors cursor-pointer",
+                "cursor-pointer p-0 pe-3 file:me-3 file:border-0 file:border-e file:border-input file:px-4 file:py-2 file:transition-colors",
                 (fieldState.error || error) && "border-destructive focus-visible:ring-destructive/20",
-                className,
+                className
               )}
               type="file"
               disabled={disabled}

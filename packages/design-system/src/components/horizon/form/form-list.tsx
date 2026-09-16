@@ -1,9 +1,10 @@
 "use client"
 
-import { forwardRef, useCallback, useContext, useEffect, useId, useMemo, useRef, useState } from "react"
+import { useCallback, useContext, useEffect, useId, useMemo, useRef, useState } from "react"
 import { useFieldArray, useWatch } from "react-hook-form"
 
-import { cn } from "../../../lib/utils"
+import { cn } from "../cn"
+import { igrpFormatMessage, useIGRPi18n } from "../../../i18n"
 import { type IGRPBaseAttributes } from "../../../types"
 
 import { Accordion, AccordionItem, AccordionTrigger, AccordionContent } from "../../primitives/accordion"
@@ -14,7 +15,7 @@ import { IGRPIcon, type IGRPIconName } from "../icon"
 import { IGRPFormContext } from "./form-context"
 
 const ACCORDION_ITEM_PREFIX = "item-"
-const getRemoveItemAriaLabel = (index: number) => `Remover item ${index + 1}`
+
 type RemoveBehavior = "direct" | "confirm"
 
 const getAccordionValue = (index: number) => `${ACCORDION_ITEM_PREFIX}${index}`
@@ -41,6 +42,14 @@ interface IGRPFormListProps<TItem>
   id: string
   defaultItem?: TItem
   description?: string
+  /**
+   * Renders one item's body.
+   *
+   * The third argument is only supplied in **standalone mode** (`value`/`onChange`),
+   * where this component owns the item array. In form mode it is `undefined` by
+   * design: react-hook-form owns the values, and item fields write to the form
+   * through their own `name` — writing twice would fight the field array.
+   */
   renderItem: (item: TItem, index: number, onChange?: (item: TItem) => void) => React.ReactNode
   computeLabel?: (item: TItem, index: number) => string
   badgeValue?: string
@@ -106,9 +115,10 @@ type FormListLayoutProps<TItem> = {
   onRemove?: (index: number) => void
   openItem?: string
   openItems?: string[]
-  onOpenChange: (value: string | undefined) => void
+  /** `null` means the user collapsed everything; `string` is the newly opened item. */
+  onOpenChange: (value: string | null) => void
   onOpenItemsChange?: (value: string[]) => void
-  addButtonLabel: string
+  addButtonLabel?: string
   addButtonIconName?: IGRPIconName | string
   addButtonClassName?: string
   onAdd?: () => void
@@ -152,8 +162,8 @@ function FormListHeader({
   return (
     <CardHeader
       className={cn(
-        "px-0 p-4 border-b [.border-b]:pb-4 flex flex-row items-center justify-between",
-        cardHeaderClassName,
+        "flex flex-row items-center justify-between border-b p-4 px-0 [.border-b]:pb-4",
+        cardHeaderClassName
       )}
     >
       <div className={cn("flex items-center gap-2")}>
@@ -199,11 +209,13 @@ function FormListAddButton({
 }: Pick<FormListLayoutProps<unknown>, "onAdd" | "addButtonIconName" | "addButtonLabel" | "addButtonClassName"> & {
   disabled?: boolean
 }) {
+  const i18n = useIGRPi18n()
+
   return (
     <div className="flex justify-center">
       <Button type="button" variant="outline" onClick={onAdd} disabled={disabled} className={addButtonClassName}>
-        <IGRPIcon iconName={addButtonIconName ?? "Plus"} className={cn("size-4 mr-1")} strokeWidth={2} />
-        <span>{addButtonLabel}</span>
+        <IGRPIcon iconName={addButtonIconName ?? "Plus"} className={cn("mr-1 size-4")} strokeWidth={2} />
+        <span>{addButtonLabel ?? i18n.formList.addItem}</span>
       </Button>
     </div>
   )
@@ -247,7 +259,8 @@ function FormListLayout<TItem>({
   disabled,
   ref,
 }: FormListLayoutProps<TItem>) {
-  const canRemove = (items.length > 0 || allowEmpty) && !!onRemove && !disabled
+  const i18n = useIGRPi18n()
+  const canRemove = (items.length > 1 || allowEmpty) && !!onRemove && !disabled
   const getItemKey = (index: number) => itemKeys?.[index] ?? `${ACCORDION_ITEM_PREFIX}${index}`
 
   const accordionItems = items.map((item, index) => {
@@ -255,7 +268,7 @@ function FormListLayout<TItem>({
     const itemKey = getItemKey(index)
     const labelValue = computeLabel?.(item, index) ?? ""
     const onItemRemove = onRemove ? () => onRemove(index) : undefined
-    const removeAriaLabel = getRemoveItemAriaLabel(index)
+    const removeAriaLabel = igrpFormatMessage(i18n.formList.removeItem, { index: index + 1 })
     const onRemoveTriggerClick = (e: React.MouseEvent<HTMLElement>) => {
       e.stopPropagation()
     }
@@ -263,15 +276,15 @@ function FormListLayout<TItem>({
     const normalizedOnItemChange = onItemChange as ((item: TItem) => void) | undefined
 
     return (
-      <AccordionItem key={itemKey} value={accordionValue} className="border last:border-b rounded-sm mb-4">
-        <div className="flex justify-between items-center px-4 gap-2">
+      <AccordionItem key={itemKey} value={accordionValue} className="mb-4 rounded-sm border last:border-b">
+        <div className="flex items-center justify-between gap-2 px-4">
           <div className="flex-1">
             <AccordionTrigger
               className={cn("hover:no-underline", computeLabel ? "py-4" : "py-2")}
               showIcon
               iconPlacement="end"
             >
-              <span className="font-medium text-sm">{labelValue}</span>
+              <span className="text-sm font-medium">{labelValue}</span>
             </AccordionTrigger>
           </div>
 
@@ -293,7 +306,7 @@ function FormListLayout<TItem>({
                   onRemoveTriggerClick(e)
                   onItemRemove()
                 }}
-                className="size-7 p-0 shrink-0 hover:text-destructive"
+                className="size-7 shrink-0 p-0 hover:text-destructive"
                 aria-label={removeAriaLabel}
               >
                 <IGRPIcon iconName="Trash2" />
@@ -314,7 +327,7 @@ function FormListLayout<TItem>({
   })
 
   return (
-    <Card className={cn("shadow-sm gap-0 rounded-lg py-0", className)} id={groupId} ref={ref}>
+    <Card className={cn("gap-0 rounded-lg py-0 shadow-sm", className)} id={groupId} ref={ref}>
       <FormListHeader
         label={label}
         labelClassName={labelClassName}
@@ -346,7 +359,7 @@ function FormListLayout<TItem>({
             type="single"
             collapsible
             value={openItem ?? ""}
-            onValueChange={(value) => onOpenChange(value || undefined)}
+            onValueChange={(value) => onOpenChange(value || null)}
             className="w-full"
           >
             {accordionItems}
@@ -369,41 +382,39 @@ function FormListLayout<TItem>({
  * Dynamic list of items with add/remove, accordion UI, and optional form integration.
  * Use inside IGRPForm for form mode, or with value/onChange for standalone.
  */
-const IGRPFormListInner = <TItem,>(
-  {
-    id,
-    name,
-    defaultItem,
-    description,
-    renderItem,
-    computeLabel,
-    badgeValue,
-    className,
-    cardHeaderClassName,
-    cardContentClassName,
-    label,
-    labelClassName,
-    iconName = "",
-    iconClassName,
-    iconSize,
-    showIcon = true,
-    dot = false,
-    variant,
-    color,
-    badgeClassName,
-    addButtonLabel = "Adicionar",
-    addButtonIconName = "Plus",
-    addButtonClassName,
-    allowEmpty = false,
-    allowMultipleOpen = false,
-    renderRemoveAction,
-    onItemRemove,
-    value,
-    defaultValue,
-    onChange,
-  }: IGRPFormListProps<TItem>,
-  ref: React.Ref<HTMLDivElement>,
-) => {
+function IGRPFormList<TItem>({
+  id,
+  name,
+  defaultItem,
+  description,
+  renderItem,
+  computeLabel,
+  badgeValue,
+  className,
+  cardHeaderClassName,
+  cardContentClassName,
+  label,
+  labelClassName,
+  iconName = "",
+  iconClassName,
+  iconSize,
+  showIcon = true,
+  dot = false,
+  variant,
+  color,
+  badgeClassName,
+  addButtonLabel,
+  addButtonIconName = "Plus",
+  addButtonClassName,
+  allowEmpty = false,
+  allowMultipleOpen = false,
+  renderRemoveAction,
+  onItemRemove,
+  value,
+  defaultValue,
+  onChange,
+  ref,
+}: IGRPFormListProps<TItem> & { ref?: React.Ref<HTMLDivElement> }) {
   const _id = useId()
   const groupId = name ?? id ?? _id
 
@@ -501,7 +512,7 @@ function FormListFormMode<TItem>({
   variant,
   color,
   badgeClassName,
-  addButtonLabel = "Adicionar",
+  addButtonLabel,
   addButtonIconName = "Plus",
   addButtonClassName,
   allowEmpty = false,
@@ -524,8 +535,11 @@ function FormListFormMode<TItem>({
   // eslint-disable-next-line react-hooks/exhaustive-deps
   const values = useWatch({ name: groupId }) ?? []
 
-  const [userOpenItem, setUserOpenItem] = useState<string | undefined>(undefined)
-  const [userOpenItems, setUserOpenItems] = useState<string[]>([])
+  // `undefined` = the user has not touched the accordion yet (fall back to the
+  // first item). `null` = the user explicitly collapsed everything. Collapsing
+  // used to be indistinguishable from "untouched", so item 0 sprang back open.
+  const [userOpenItem, setUserOpenItem] = useState<string | null | undefined>(undefined)
+  const [userOpenItems, setUserOpenItems] = useState<string[] | undefined>(undefined)
 
   useEffect(() => {
     appendRef.current = append
@@ -554,15 +568,16 @@ function FormListFormMode<TItem>({
   // Derive effective open state from user selection + fields.length
   const openItem = useMemo(() => {
     if (fields.length === 0) return undefined
-    if (!userOpenItem) return getAccordionValue(0)
+    if (userOpenItem === null) return undefined
+    if (userOpenItem === undefined) return getAccordionValue(0)
     const idx = parseAccordionIndex(userOpenItem)
     return idx >= fields.length ? getAccordionValue(0) : userOpenItem
   }, [fields.length, userOpenItem])
 
   const openItems = useMemo(() => {
     if (fields.length === 0) return []
-    const valid = userOpenItems.filter((v) => parseAccordionIndex(v) < fields.length)
-    return valid.length > 0 ? valid : [getAccordionValue(0)]
+    if (userOpenItems === undefined) return [getAccordionValue(0)]
+    return userOpenItems.filter((v) => parseAccordionIndex(v) < fields.length)
   }, [fields.length, userOpenItems])
 
   const handleRemove = useCallback(
@@ -589,7 +604,7 @@ function FormListFormMode<TItem>({
       remove(index)
 
       if (allowMultipleOpen) {
-        setUserOpenItems((prev) => mapOpenItemsAfterRemove(prev, index))
+        setUserOpenItems((prev) => mapOpenItemsAfterRemove(prev ?? [], index))
       } else if (wasOpen) {
         if (willHaveItems) {
           const newIndex = Math.max(0, index - 1)
@@ -615,7 +630,7 @@ function FormListFormMode<TItem>({
       values,
       defaultItem,
       onItemRemove,
-    ],
+    ]
   )
 
   return (
@@ -659,7 +674,8 @@ function FormListFormMode<TItem>({
               if (allowMultipleOpen) {
                 setUserOpenItems((prev) => {
                   const newVal = getAccordionValue(fields.length)
-                  return prev.includes(newVal) ? prev : [...prev, newVal]
+                  const current = prev ?? []
+                  return current.includes(newVal) ? current : [...current, newVal]
                 })
               }
             }
@@ -693,7 +709,7 @@ function FormListStandaloneMode<TItem>({
   variant,
   color,
   badgeClassName,
-  addButtonLabel = "Adicionar",
+  addButtonLabel,
   addButtonIconName = "Plus",
   addButtonClassName,
   allowEmpty = false,
@@ -714,11 +730,29 @@ function FormListStandaloneMode<TItem>({
     if (defaultItem !== undefined && !allowEmpty) return [defaultItem]
     return []
   })
-  const [userOpenItem, setUserOpenItem] = useState<string | undefined>(undefined)
-  const [userOpenItems, setUserOpenItems] = useState<string[]>([])
+  // `undefined` = the user has not touched the accordion yet (fall back to the
+  // first item). `null` = the user explicitly collapsed everything. Collapsing
+  // used to be indistinguishable from "untouched", so item 0 sprang back open.
+  const [userOpenItem, setUserOpenItem] = useState<string | null | undefined>(undefined)
+  const [userOpenItems, setUserOpenItems] = useState<string[] | undefined>(undefined)
 
   // Controlled: use value. Uncontrolled: use internalItems.
   const items = value ?? internalItems
+
+  const [itemKeys, setItemKeys] = useState<string[]>(() => items.map((_, index) => `${groupId}-item-${index}`))
+  // Seeded past the initial keys so a later append never collides with them.
+  // Only ever advanced from an event handler, never during render.
+  const keySeedRef = useRef(items.length)
+  const nextItemKey = useCallback(() => `${groupId}-item-${keySeedRef.current++}`, [groupId])
+
+  // Items can also arrive from outside (a changing `value`), so pad or trim to
+  // match rather than assuming every change came through add/remove below.
+  const resolvedItemKeys = useMemo(() => {
+    if (itemKeys.length === items.length) return itemKeys
+    const keys = itemKeys.slice(0, items.length)
+    while (keys.length < items.length) keys.push(`${groupId}-item-external-${keys.length}`)
+    return keys
+  }, [itemKeys, items.length, groupId])
 
   // Bootstrap: notify parent of initial items when we seeded from defaultItem (no setState)
   const bootstrappedRef = useRef(false)
@@ -736,15 +770,16 @@ function FormListStandaloneMode<TItem>({
   // Derive effective open state (no setState in effect)
   const openItem = useMemo(() => {
     if (items.length === 0) return undefined
-    if (!userOpenItem) return getAccordionValue(0)
+    if (userOpenItem === null) return undefined
+    if (userOpenItem === undefined) return getAccordionValue(0)
     const idx = parseAccordionIndex(userOpenItem)
     return idx >= items.length ? getAccordionValue(0) : userOpenItem
   }, [items.length, userOpenItem])
 
   const openItems = useMemo(() => {
     if (items.length === 0) return []
-    const valid = userOpenItems.filter((v) => parseAccordionIndex(v) < items.length)
-    return valid.length > 0 ? valid : [getAccordionValue(0)]
+    if (userOpenItems === undefined) return [getAccordionValue(0)]
+    return userOpenItems.filter((v) => parseAccordionIndex(v) < items.length)
   }, [items.length, userOpenItems])
 
   const handleItemChange = useCallback(
@@ -756,24 +791,25 @@ function FormListStandaloneMode<TItem>({
       }
       onChange?.(newItems)
     },
-    [items, value, onChange],
+    [items, value, onChange]
   )
 
   const handleAdd = useCallback(() => {
     if (defaultItem !== undefined) {
       const newItems = [...items, defaultItem]
+      setItemKeys((prev) => [...prev, nextItemKey()])
       if (value === undefined) {
         setInternalItems(newItems)
       }
       const newValue = getAccordionValue(items.length)
       if (allowMultipleOpen) {
-        setUserOpenItems((prev) => (prev.includes(newValue) ? prev : [...prev, newValue]))
+        setUserOpenItems((prev) => ((prev ?? []).includes(newValue) ? (prev ?? []) : [...(prev ?? []), newValue]))
       } else {
         setUserOpenItem(newValue)
       }
       onChange?.(newItems)
     }
-  }, [items, defaultItem, value, onChange, allowMultipleOpen])
+  }, [items, defaultItem, value, onChange, allowMultipleOpen, nextItemKey])
 
   const handleRemove = useCallback(
     (index: number) => {
@@ -793,13 +829,14 @@ function FormListStandaloneMode<TItem>({
         }
 
         const newItems = items.filter((_, i) => i !== index)
+        setItemKeys((prev) => prev.filter((_, i) => i !== index))
         if (value === undefined) {
           setInternalItems(newItems)
         }
         onChange?.(newItems)
 
         if (allowMultipleOpen) {
-          setUserOpenItems((prev) => mapOpenItemsAfterRemove(prev, index))
+          setUserOpenItems((prev) => mapOpenItemsAfterRemove(prev ?? [], index))
         } else if (wasOpen) {
           if (newItems.length > 0) {
             const newIndex = Math.max(0, index - 1)
@@ -815,7 +852,7 @@ function FormListStandaloneMode<TItem>({
         }
       }
     },
-    [items, value, onChange, openItem, openItems, userOpenItem, allowEmpty, allowMultipleOpen, onItemRemove],
+    [items, value, onChange, openItem, openItems, userOpenItem, allowEmpty, allowMultipleOpen, onItemRemove]
   )
 
   return (
@@ -837,6 +874,7 @@ function FormListStandaloneMode<TItem>({
       dot={dot}
       badgeClassName={badgeClassName}
       items={items.map((item) => (item ?? defaultItem ?? ({} as TItem)) as TItem)}
+      itemKeys={resolvedItemKeys}
       computeLabel={(item, index) => computeLabel?.(item, index) ?? ""}
       renderItem={(item, index, onChange?: (value: TItem) => void) => renderItem(item, index, onChange)}
       allowEmpty={allowEmpty}
@@ -860,11 +898,6 @@ function FormListStandaloneMode<TItem>({
   )
 }
 
-const IGRPFormList = forwardRef(IGRPFormListInner) as <TItem>(
-  props: IGRPFormListProps<TItem> & { ref?: React.Ref<HTMLDivElement> },
-) => React.ReactElement
-
-// @ts-expect-error: displayName lives on the function reference; the cast above narrows to a callable.
 IGRPFormList.displayName = "IGRPFormList"
 
 export { IGRPFormList, type IGRPFormListProps }

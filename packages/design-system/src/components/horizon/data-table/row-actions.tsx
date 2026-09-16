@@ -6,7 +6,7 @@ import { type VariantProps } from "class-variance-authority"
 import { buttonVariants } from "../../primitives/button"
 import { type IGRPIconName } from "../icon"
 import type { igrpModalDialogContentVariants } from "../modal-dialog"
-import { cn } from "../../../lib/utils"
+import { cn } from "../cn"
 import { IGRPDataTableTooltipProvider } from "./tooltip-provider"
 
 /**

@@ -7,9 +7,15 @@
 
 import { createContext, useContext, useMemo, type ReactNode } from "react"
 
-import { IGRP_I18N_DEFAULTS_PT_PT, type IGRPI18nStrings, type IGRPI18nStringsOverride } from "./strings"
+import {
+  IGRP_DEFAULT_LOCALE,
+  IGRP_I18N_DEFAULTS_PT_PT,
+  type IGRPI18nStrings,
+  type IGRPI18nStringsOverride,
+} from "./strings"
 
 const IGRPI18nContext = createContext<IGRPI18nStrings>(IGRP_I18N_DEFAULTS_PT_PT)
+const IGRPLocaleContext = createContext<string>(IGRP_DEFAULT_LOCALE)
 
 /**
  * Provider for IGRP design-system user-facing strings. Wrap your app tree (typically
@@ -30,10 +36,17 @@ const IGRPI18nContext = createContext<IGRPI18nStrings>(IGRP_I18N_DEFAULTS_PT_PT)
  */
 function IGRPI18nProvider({
   strings,
+  locale = IGRP_DEFAULT_LOCALE,
   children,
 }: {
   /** Partial override of the default catalog. Missing keys fall back to pt-PT. */
   strings?: IGRPI18nStringsOverride
+  /**
+   * BCP-47 tag used for `Intl` number/date formatting inside the design system.
+   * Defaults to `pt-PT`, matching the string catalog. Must be explicit and stable
+   * across server and client — see {@link IGRP_DEFAULT_LOCALE}.
+   */
+  locale?: string
   children: ReactNode
 }) {
   const merged = useMemo<IGRPI18nStrings>(() => {
@@ -60,10 +73,17 @@ function IGRPI18nProvider({
       pageHeader: { ...IGRP_I18N_DEFAULTS_PT_PT.pageHeader, ...strings.pageHeader },
       pdfViewer: { ...IGRP_I18N_DEFAULTS_PT_PT.pdfViewer, ...strings.pdfViewer },
       form: { ...IGRP_I18N_DEFAULTS_PT_PT.form, ...strings.form },
+      formList: { ...IGRP_I18N_DEFAULTS_PT_PT.formList, ...strings.formList },
+      inputFile: { ...IGRP_I18N_DEFAULTS_PT_PT.inputFile, ...strings.inputFile },
+      copyTo: { ...IGRP_I18N_DEFAULTS_PT_PT.copyTo, ...strings.copyTo },
     }
   }, [strings])
 
-  return <IGRPI18nContext.Provider value={merged}>{children}</IGRPI18nContext.Provider>
+  return (
+    <IGRPLocaleContext.Provider value={locale}>
+      <IGRPI18nContext.Provider value={merged}>{children}</IGRPI18nContext.Provider>
+    </IGRPLocaleContext.Provider>
+  )
 }
 
 /** Read the resolved IGRP string catalog. Returns pt-PT defaults if no provider is mounted. */
@@ -71,4 +91,20 @@ function useIGRPi18n(): IGRPI18nStrings {
   return useContext(IGRPI18nContext)
 }
 
-export { IGRPI18nProvider, useIGRPi18n }
+/**
+ * Read the locale used for `Intl` formatting. Returns {@link IGRP_DEFAULT_LOCALE}
+ * if no provider is mounted — never `undefined`, so SSR and client agree.
+ */
+function useIGRPLocale(): string {
+  return useContext(IGRPLocaleContext)
+}
+
+/** Substitutes `{token}` placeholders in a catalog string. */
+function igrpFormatMessage(template: string, values: Record<string, string | number>): string {
+  return template.replace(/\{(\w+)\}/g, (match, key) => {
+    const value = values[key]
+    return value === undefined ? match : String(value)
+  })
+}
+
+export { IGRPI18nProvider, useIGRPi18n, useIGRPLocale, igrpFormatMessage }

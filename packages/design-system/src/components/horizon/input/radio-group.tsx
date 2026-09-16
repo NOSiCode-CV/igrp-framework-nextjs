@@ -2,14 +2,13 @@
 
 import { useId } from "react"
 import { useFormContext } from "react-hook-form"
-import { type VariantProps } from "class-variance-authority"
 
-import { cn } from "../../../lib/utils"
-import type { IGRPBaseAttributes, IGRPGridSize } from "../../../types"
-import { RadioGroup, RadioGroupItem, radioItemVariants } from "../../primitives/radio-group"
+import { cn } from "../cn"
+import type { IGRPBaseAttributes } from "../../../types"
+import { Field, FieldDescription, FieldError } from "../../primitives/field"
+import { RadioGroup, RadioGroupItem } from "../../primitives/radio-group"
 import { IGRPFormField } from "../form/form-field"
 import { IGRPLabel } from "../label"
-import { Field, FieldDescription, FieldError } from "../../primitives/field"
 
 /**
  * Option for radio group.
@@ -31,13 +30,9 @@ type IGRPRadioOption = {
  * @see IGRPRadioGroup
  */
 interface IGRPRadioGroupProps
-  extends IGRPBaseAttributes, VariantProps<typeof radioItemVariants>, React.ComponentProps<typeof RadioGroup> {
+  extends IGRPBaseAttributes, React.ComponentProps<typeof RadioGroup> {
   options: IGRPRadioOption[]
   error?: string
-  /**
-   * @deprecated This props will be deprecated in the next major release.
-   */
-  gridSize?: IGRPGridSize
 }
 
 /** @internal Radio group with options. */
@@ -54,8 +49,6 @@ function RadioGroupOptionsField({
   error,
   describedById,
   dir,
-  size,
-  variant,
   ...radioGroupProps
 }: {
   value?: string | null
@@ -70,8 +63,6 @@ function RadioGroupOptionsField({
   error?: string
   describedById?: string
   dir?: "ltr" | "rtl"
-  size: VariantProps<typeof radioItemVariants>["size"]
-  variant?: VariantProps<typeof radioItemVariants>["variant"]
 } & Omit<React.ComponentProps<typeof RadioGroup>, "value" | "onValueChange" | "name" | "children">) {
   return (
     <RadioGroup
@@ -99,9 +90,7 @@ function RadioGroupOptionsField({
             value={option.value}
             id={`${fieldName}-${option.value}`}
             disabled={option.disabled || disabled}
-            className={cn("mt-0.5")}
-            size={size}
-            variant={variant}
+            className="mt-0.5"
           />
           {(option.label || option.description) && (
             <div>
@@ -113,7 +102,7 @@ function RadioGroupOptionsField({
                 />
               )}
               {option.description && (
-                <p className={cn("text-muted-foreground mt-1 text-sm", size === "sm" && "text-xs")}>
+                <p className="text-muted-foreground mt-1 text-sm">
                   {option.description}
                 </p>
               )}
@@ -140,8 +129,6 @@ function IGRPRadioGroup({
   onValueChange,
   className,
   options,
-  variant,
-  size = "md",
   label,
   labelClassName,
   helperText,
@@ -165,8 +152,6 @@ function IGRPRadioGroup({
     error,
     describedById,
     dir,
-    size,
-    variant,
     ...props,
   }
 

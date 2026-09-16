@@ -1,5 +1,6 @@
-import { addYears, lightFormat, parse, subYears } from "date-fns"
+import { addYears, format, subYears } from "date-fns"
 import type { DateAfter, DateBefore, DateRange, DayOfWeek } from "react-day-picker"
+import { parseDateInput } from "./date-input-format"
 import type { IGRPCalendarProps } from "../types"
 
 /** Default navigation window around today for month/year dropdowns. */
@@ -13,7 +14,7 @@ export function getDefaultCalendarMonthBounds(from: Date = new Date()) {
   }
 }
 
-/** Formats a date range to string using date-fns lightFormat. */
+/** Formats a date range to string. */
 export function formatDateRange(range: DateRange | undefined, dateFormat: string) {
   if (!range?.from) {
     return ""
@@ -25,14 +26,20 @@ export function formatDateRange(range: DateRange | undefined, dateFormat: string
     return fromDate
   }
 
-  const toDate = formatDateToString(range.from, dateFormat)
+  const toDate = formatDateToString(range.to, dateFormat)
 
   return `${fromDate} / ${toDate}`
 }
 
-/** Formats a date to string using date-fns lightFormat. */
+/**
+ * Formats a date to string using date-fns `format`.
+ *
+ * Deliberately `format` and not `lightFormat`: the latter understands only numeric tokens and
+ * silently renders the rest as digits, so `dd MMM yyyy` came out as `26 08 2026` while the
+ * matching `parse` read it as a month name. One engine formats and parses, or the two disagree.
+ */
 export function formatDateToString(date: Date | undefined, dateFormat: string) {
-  return date ? lightFormat(date, dateFormat) : ""
+  return date ? format(date, dateFormat) : ""
 }
 
 /**
@@ -63,33 +70,24 @@ export function isValidDate(date: Date | undefined) {
   return !isNaN(date.getTime())
 }
 
-/** Parses a date string to Date using date-fns parse. Returns undefined if invalid. */
+/**
+ * Parses a date string to Date. Returns undefined if the string is incomplete or invalid.
+ *
+ * Widths are tolerated the way a person types them — `1-8-2026` parses as readily as
+ * `01-08-2026` — while half-typed input is still rejected. See {@link parseDateInput}.
+ */
 export function parseStringToDate(dateString: string, dateFormat: string) {
-  if (dateString.length !== dateFormat.length) return
-
-  const parsedDate = parse(dateString, dateFormat, new Date())
-
-  if (isValidDate(parsedDate)) {
-    return parsedDate
-  }
+  return parseDateInput(dateString, dateFormat)
 }
 
-/** Parses "from / to" range string to DateRange. Returns undefined if invalid. */
+/** Parses a "from / to" range string to DateRange. Ends that are incomplete come back undefined. */
 export function parseStringToRange(rangeString: string, dateFormat: string) {
   const [from, to] = rangeString.trim().split("/")
 
-  if (!from || from.length !== dateFormat.length) return { from: undefined, to: undefined }
-
-  const parsedFrom = parse(from, dateFormat, new Date())
-
-  if (!to || to.length !== dateFormat.length) return { from: parsedFrom, to: undefined }
-
-  const parsedDate = {
-    from: parsedFrom,
-    to: parse(to, dateFormat, new Date()),
+  return {
+    from: from ? parseDateInput(from, dateFormat) : undefined,
+    to: to ? parseDateInput(to, dateFormat) : undefined,
   }
-
-  return parsedDate
 }
 
 const DATE_ONLY_RE = /^(\d{4})-(\d{2})-(\d{2})$/

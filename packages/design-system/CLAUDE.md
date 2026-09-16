@@ -17,10 +17,12 @@ The plugin is distributed via the in-repo Claude Code marketplace (`.claude-plug
 - **Tailwind CSS v4** — `@theme`, `@source`, `@utility`, `@layer`, CSS-first config, container queries, logical properties, OKLCH tokens.
 - **shadcn-style composition** — slot-friendly primitives, `cn()` = `tailwind-merge` + `clsx`.
 - **Client-boundary-safe packaging** — `"use client"` on barrels, no wildcard re-exports on boundary files, correct `exports` map with `types`/`import`/`require`/`default` conditions.
-- **Babel toolchain** — a single `build:js` pass over `src/` (TypeScript strip + JSX + React Compiler), then `tsc --emitDeclarationOnly`. CSS sources under `src/` (`tokens.css`) are copied verbatim to `dist/` by the `cpy` step in `build:js`; there is no Tailwind prebuild.
+- **Babel toolchain** — a single `build:js` pass over `src/` (TypeScript strip + JSX + React Compiler), then `tsc --emitDeclarationOnly`. CSS sources under `src/` (`tokens.css`) are copied verbatim to `dist/` by the `cpy` step in `build:js`; there is no Tailwind prebuild. **Babel is pinned to 7.x** — the React Compiler cannot lower default-valued destructured parameters under Babel 8 and bails silently on most of the package. `src/build-pipeline.test.ts` asserts on the emitted output so that cannot recur unnoticed; read the header of `scripts/react-compiler-babel-config.cjs` before touching `@babel/*` versions.
 
 ## Rules unique to this package
 
+- **Never hardcode a user-visible string in a component.** Add the key to `src/i18n/strings.ts` with a pt-PT default and read it with `useIGRPi18n()`. A component prop may still override it — the catalog supplies the fallback, not the final value.
+- **Never format with `Intl` at the runtime default locale.** `new Intl.NumberFormat(undefined, …)` resolves to the server's locale under SSR and the browser's on the client, which hydrates mismatched. Take the locale from `useIGRPLocale()` (default `pt-PT`, set via `IGRPI18nProvider`).
 - **No wildcard exports / no aliasing** in `src/index.ts` or `src/components/custom/*` — both sit inside `"use client"` boundaries and wildcards break the unbundled build.
 - Consumers import **tokens only** (`@igrp/igrp-framework-react-design-system/tokens`), not `/styles` (legacy).
 - Visual/interaction tests live in `packages/design-system-storybook` — hand off for snapshot/a11y work.
@@ -42,7 +44,11 @@ This policy is **enforced by `pnpm lint`**, not by review: the local rule `igrp/
 
 ## Shadcn drift checker
 
-`scripts/check-shadcn-drift.mjs` is a periodic (~quarterly) maintenance tool. For each `.tsx` under `src/components/primitives/`, it runs `npx shadcn@latest add <name> --dry-run --diff` against a scratch project and reports drift from upstream. It hits the network, is slow, and is **not** wired into CI. Run manually before a major shadcn version bump or when revisiting the Primitives layer. Each primitive file may carry a `// shadcn: YYYY-MM-DD` first-line stamp recording the last upstream sync date.
+`scripts/check-shadcn-drift.mjs` is a periodic (~quarterly) maintenance tool. It fetches each primitive from the shadcn registry over HTTP (`https://ui.shadcn.com/r/styles/new-york-v4/<name>.json?base=radix` — the Radix/`asChild` variant) and reports whether **upstream has moved since the last baseline**, recorded as hashes in `scripts/shadcn-upstream.lock.json`. It does **not** shell out to the `shadcn` CLI: `init` prompts for a project name and exits 0 without creating anything on closed stdin, `add` has no `--base` flag, and `add --diff` compares the registry against the scratch project rather than against this package.
+
+Run `pnpm drift:shadcn` to report and `pnpm drift:shadcn:update` to re-baseline after reviewing. A primitive that cannot be compared is reported as `unavailable` and **fails** the run — never as a pass. `cropper` and `stepper` are IGRP-authored and correctly report `local-only`. Full detail in `scripts/README.md`.
+
+Each primitive carries a `shadcn: YYYY-MM-DD` stamp in its leading comment block recording the last upstream sync date.
 
 ## Authoring a primitive from shadcn
 
@@ -52,8 +58,8 @@ Reading upstream needs no config and is safe anywhere — `npx shadcn@latest vie
 
 To add a new primitive, init a throwaway project in a scratch directory, `add` the component there, then hand-port it into `src/components/primitives/<name>.tsx`:
 
-- **`--base radix` is mandatory**, on both `init` and `add`. Preset codes do not encode the base, so the CLI defaults to Base UI in a fresh directory and emits a `render`-prop API instead of Radix's `asChild` — incompatible with every existing primitive. `scripts/check-shadcn-drift.mjs` pins the flag for the same reason; match it by hand.
-- Line 1 is the `// shadcn: YYYY-MM-DD` stamp — the drift checker reads it. All 55 current primitives carry one.
+- **`--base radix` is mandatory on `init`** (it does not exist on `add` — `shadcn@4.21.0` rejects it with `unknown option '--base'`). Preset codes do not encode the base, so the CLI defaults to Base UI in a fresh directory and emits a `render`-prop API instead of Radix's `asChild` — incompatible with every existing primitive. Note that `init` prompts for a project name even with `--yes --defaults`, so run it interactively or seed the directory with a `package.json` first.
+- The leading comment block carries the `shadcn: YYYY-MM-DD` stamp — the drift checker reads it. All 56 current primitives carry one. Both `// shadcn: …` and `/* shadcn: … */` are accepted, and it may sit below another leading comment such as an `eslint-disable`; a unit test fails if any primitive lacks a stamp.
 - Keep upstream's `"use client"` (it goes after the stamp comment — see `primitives/sidebar.tsx`).
 - Rewrite `@/lib/utils` → `../../lib/utils` and `@/components/ui/x` → `./x`.
 - Export explicitly from `src/index.ts`. No wildcards — that barrel is a `"use client"` boundary.
@@ -63,5 +69,3 @@ To add a new primitive, init a throwaway project in a scratch directory, `add` t
 ## Shared rules
 
 @../../.claude/shared/hard-rules.md
-
-@../../.claude/shared/tailwind-v4.md

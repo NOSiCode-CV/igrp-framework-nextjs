@@ -1,15 +1,16 @@
-// shadcn: 2026-09-14
-import { Loader2Icon } from "lucide-react"
+/* shadcn: 2026-09-15 */
 
-import { cn } from "../../lib/utils"
+import { cn } from "cn"
+import { Loader2Icon } from "lucide-react"
 
 function Spinner({ className, ...props }: React.ComponentProps<"svg">) {
   return (
-    <Loader2Icon
-      role="status"
-      aria-label="Loading"
-      className={cn("size-4 animate-spin motion-reduce:animate-none", className)}
-      {...props}
+    <Loader2Icon 
+      data-slot="spinner" 
+      role="status" 
+      aria-label="Loading" 
+      className={cn("size-4 animate-spin", className)} 
+      {...props} 
     />
   )
 }

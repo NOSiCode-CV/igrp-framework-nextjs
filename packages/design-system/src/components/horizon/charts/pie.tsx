@@ -2,7 +2,7 @@
 
 import { Suspense, lazy } from "react"
 
-import { cn } from "../../../lib/utils"
+import { cn } from "../cn"
 import { Skeleton } from "../../primitives/skeleton"
 import type { IGRPPieChartProps } from "./pie-chart-inner"
 

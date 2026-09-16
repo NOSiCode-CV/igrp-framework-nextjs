@@ -6,7 +6,7 @@ import { useId } from "react"
 import { IGRPPageHeaderBackButton } from "./back-button"
 import type { IGRPIconName } from "../icon"
 import { IGRPHeadline, igrpHeadlineVariants } from "../typography/headline"
-import { cn } from "../../../lib/utils"
+import { cn } from "../cn"
 import { type IGRPBaseAttributes } from "../../../types"
 
 /**

@@ -1,24 +1,27 @@
-// shadcn: 2026-05-18
-import * as ProgressPrimitive from "@radix-ui/react-progress"
+/* shadcn: 2026-09-15 */
+"use client"
 
-import { cn } from "../../lib/utils"
+import * as React from "react"
+import { cn } from "cn"
+import { Progress as ProgressPrimitive } from "radix-ui"
 
-interface ProgressProps extends React.ComponentPropsWithoutRef<typeof ProgressPrimitive.Root> {
-  indicatorClassName?: string
-}
-function Progress({ className, indicatorClassName, value, ...props }: ProgressProps) {
+function Progress({
+  className,
+  value,
+  ...props
+}: React.ComponentProps<typeof ProgressPrimitive.Root>) {
   return (
     <ProgressPrimitive.Root
       data-slot="progress"
-      className={cn("bg-primary/20 relative h-2 w-full overflow-hidden rounded-full", className)}
+      className={cn(
+        "relative flex h-1.5 w-full items-center overflow-x-hidden rounded-full bg-muted",
+        className
+      )}
       {...props}
     >
       <ProgressPrimitive.Indicator
         data-slot="progress-indicator"
-        className={cn(
-          "bg-primary h-full w-full flex-1 transition-transform motion-reduce:transition-none",
-          indicatorClassName,
-        )}
+        className="size-full flex-1 bg-primary transition-all"
         style={{ transform: `translateX(-${100 - (value || 0)}%)` }}
       />
     </ProgressPrimitive.Root>

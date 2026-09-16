@@ -1,10 +1,10 @@
 "use client"
 
-import { useState, useEffect, useId, useRef } from "react"
+import { useState, useEffect, useId, useMemo, useRef } from "react"
 import { useFormContext, Controller } from "react-hook-form"
 
-import { cn } from "../../../lib/utils"
-import { useIGRPi18n } from "../../../i18n"
+import { cn } from "../cn"
+import { useIGRPi18n, useIGRPLocale } from "../../../i18n"
 import type { IGRPInputProps } from "../../../types"
 import { Input } from "../../primitives/input"
 import { IGRPLabel } from "../label"
@@ -35,8 +35,12 @@ interface IGRPInputNumberProps extends Omit<IGRPInputProps, "onChange"> {
   max?: number
   /** Step for increment/decrement. @deprecated This props will be deprecated in the next maojor release. */
   step?: number
-  /** Called when value changes. */
-  onChange?: (value: number) => void
+  /**
+   * Called when the value changes. Receives `undefined` when the field is
+   * cleared — clearing used to be unobservable, which made "no value" and
+   * "unchanged" indistinguishable to the caller.
+   */
+  onChange?: (value: number | undefined) => void
   /** Validation error message. */
   error?: string
   /** Message shown when validation fails. */
@@ -45,13 +49,25 @@ interface IGRPInputNumberProps extends Omit<IGRPInputProps, "onChange"> {
 
 type NumberValue = number | ""
 
-/** @internal Group/decimal separators of the runtime's default locale. */
-function getLocaleSeparators(): { group: string; decimal: string } {
-  const parts = new Intl.NumberFormat(undefined, { minimumFractionDigits: 1 }).formatToParts(12345.6)
-  return {
+const separatorCache = new Map<string, { group: string; decimal: string }>()
+
+/**
+ * @internal Group/decimal separators of `locale`.
+ *
+ * Cached per locale: this runs on every keystroke, and constructing an
+ * `Intl.NumberFormat` is one of the more expensive things in the input path.
+ */
+function getLocaleSeparators(locale: string): { group: string; decimal: string } {
+  const cached = separatorCache.get(locale)
+  if (cached) return cached
+
+  const parts = new Intl.NumberFormat(locale, { minimumFractionDigits: 1 }).formatToParts(12345.6)
+  const separators = {
     group: parts.find((part) => part.type === "group")?.value ?? ",",
     decimal: parts.find((part) => part.type === "decimal")?.value ?? ".",
   }
+  separatorCache.set(locale, separators)
+  return separators
 }
 
 /**
@@ -61,12 +77,12 @@ function getLocaleSeparators(): { group: string; decimal: string } {
  * value such as "1 234,56" can be edited in place instead of collapsing into
  * 123456.
  */
-function parseInputToNumber(inputValue: string, formatOptions?: Intl.NumberFormatOptions): number {
+function parseInputToNumber(inputValue: string, locale: string, formatOptions?: Intl.NumberFormatOptions): number {
   if (!formatOptions) {
     return parseFloat(inputValue.replace(/[^\d.-]/g, ""))
   }
 
-  const { group, decimal } = getLocaleSeparators()
+  const { group, decimal } = getLocaleSeparators(locale)
   let cleaned = inputValue.split(group).join("")
   cleaned = cleaned.replace(/[\s\u00a0\u202f]/g, "")
   if (decimal !== ".") cleaned = cleaned.split(decimal).join(".")
@@ -176,10 +192,10 @@ function NumberInputField({
       {label ? <IGRPLabel label={label} className={labelClassName} required={required} id={fieldName} /> : null}
       <div
         className={cn(
-          "border-input outline-none relative inline-flex h-10 w-full items-center overflow-hidden rounded-md border text-sm whitespace-nowrap shadow-xs transition-[color,box-shadow]",
+          "relative inline-flex h-10 w-full items-center overflow-hidden rounded-md border border-input text-sm whitespace-nowrap shadow-xs transition-[color,box-shadow] outline-none",
           isFocused && "border-ring ring-2 ring-ring/50",
-          (error || validationError || fieldError) && "ring-ring-invalid border-destructive",
-          disabled && "opacity-50",
+          (error || validationError || fieldError) && "border-destructive ring-ring-invalid",
+          disabled && "opacity-50"
         )}
       >
         <Input
@@ -200,7 +216,7 @@ function NumberInputField({
           onFocus={() => onFieldFocus(value)}
           onBlur={() => onFieldBlur(onValueChange)}
           className={cn(
-            "bg-background text-foreground flex-1 px-3 py-2 tabular-nums outline-none border-none focus-visible:outline-none focus-visible:ring-ring/0 focus-visible:ring-0 rounded-none",
+            "flex-1 rounded-none border-none bg-background px-3 py-2 text-foreground tabular-nums outline-none focus-visible:ring-0 focus-visible:ring-ring/0 focus-visible:outline-none"
           )}
           disabled={disabled}
           readOnly={readOnly}
@@ -218,7 +234,7 @@ function NumberInputField({
               onClick={() => onIncrement(value, onValueChange)}
               disabled={disabled || (max !== undefined && typeof value === "number" && value >= max)}
               className={cn(
-                "bg-background text-muted-foreground hover:bg-accent hover:text-foreground flex h-1/2 w-8 items-center justify-center border-b transition-colors rounded-none",
+                "flex h-1/2 w-8 items-center justify-center rounded-none border-b bg-background text-muted-foreground transition-colors hover:bg-accent hover:text-foreground"
               )}
               aria-label={i18n.inputNumber.incrementLabel}
               size="icon-xs"
@@ -230,7 +246,7 @@ function NumberInputField({
               onClick={() => onDecrement(value, onValueChange)}
               disabled={disabled || (min !== undefined && typeof value === "number" && value <= min)}
               className={cn(
-                "bg-background text-muted-foreground/80 hover:bg-accent hover:text-foreground flex h-1/2 w-8 items-center justify-center text-xs transition-colors rounded-none",
+                "flex h-1/2 w-8 items-center justify-center rounded-none bg-background text-xs text-muted-foreground/80 transition-colors hover:bg-accent hover:text-foreground"
               )}
               aria-label={i18n.inputNumber.decrementLabel}
               size="icon-xs"
@@ -328,6 +344,7 @@ function IGRPInputNumber({
   name,
   id,
   label,
+  labelClassName,
   helperText,
   description,
   className,
@@ -346,6 +363,7 @@ function IGRPInputNumber({
   ...props
 }: IGRPInputNumberProps) {
   const i18n = useIGRPi18n()
+  const locale = useIGRPLocale()
   const resolvedErrorMessage = errorMessage ?? i18n.inputNumber.invalidValueMessage
   const { onFocus: _onFocus, onBlur: _onBlur, ...inputProps } = props
   void _onFocus
@@ -362,7 +380,10 @@ function IGRPInputNumber({
   const formContext = useFormContext()
   const prevControlledValueRef = useRef<number | undefined>(controlledValue)
 
-  const formatter = new Intl.NumberFormat(undefined, formatOptions)
+  // Rebuilt only when the locale or the format options actually change. This used
+  // to be constructed on every render, and `Intl.NumberFormat` construction is
+  // expensive enough to show up in a table full of number inputs.
+  const formatter = useMemo(() => new Intl.NumberFormat(locale, formatOptions), [locale, formatOptions])
 
   const displayValue = !formContext && controlledValue !== undefined ? controlledValue : localValue
 
@@ -389,7 +410,7 @@ function IGRPInputNumber({
       return
     }
     setLocalValue(newValue)
-    if (newValue !== "") onChange?.(newValue)
+    onChange?.(newValue === "" ? undefined : newValue)
   }
 
   const stepBy = (currentValue: NumberValue, direction: 1 | -1, updateFn?: (value: NumberValue) => void) => {
@@ -432,7 +453,7 @@ function IGRPInputNumber({
       return
     }
 
-    const numValue = parseInputToNumber(raw, formatOptions)
+    const numValue = parseInputToNumber(raw, locale, formatOptions)
     if (isNaN(numValue)) {
       setValidationError(true)
       return
@@ -462,7 +483,7 @@ function IGRPInputNumber({
       return
     }
 
-    const parsed = parseInputToNumber(editedText, formatOptions)
+    const parsed = parseInputToNumber(editedText, locale, formatOptions)
     if (isNaN(parsed)) {
       setValidationError(true)
       return
@@ -483,7 +504,7 @@ function IGRPInputNumber({
   const numberInputFieldProps: Omit<NumberInputFieldProps, "value" | "onValueChange" | "fieldError"> = {
     label,
     fieldName,
-    labelClassName: className,
+    labelClassName,
     isFocused,
     draft,
     onFieldFocus: handleFieldFocus,
@@ -523,7 +544,11 @@ function IGRPInputNumber({
     <Controller
       name={fieldName}
       control={formContext.control}
-      defaultValue={defaultValue ?? ""}
+      // No `?? ""`: registering an empty string makes an untouched empty field
+      // submit "" while a cleared one submits undefined, and `z.number()`
+      // rejects the former. Falling through to the form-level default keeps
+      // both paths on undefined.
+      defaultValue={defaultValue}
       render={({ field, fieldState }) => (
         <FormNumberInput
           field={field}

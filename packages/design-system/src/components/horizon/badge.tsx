@@ -5,7 +5,7 @@ import { cva, type VariantProps } from "class-variance-authority"
 import { useId } from "react"
 
 import { type IGRPColorRole, IGRPColors, type IGRPColorVariants } from "../../lib/colors"
-import { cn } from "../../lib/utils"
+import { cn } from "cn"
 import { type IGRPBaseAttributes } from "../../types"
 import { IGRPIcon } from "./icon"
 

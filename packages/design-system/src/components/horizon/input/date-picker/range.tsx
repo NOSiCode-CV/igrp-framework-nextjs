@@ -7,7 +7,7 @@ import { type DateRange } from "react-day-picker"
 import { CalendarIcon } from "lucide-react"
 
 import { toLocalDateRange } from "../../../../lib/calendar-utils"
-import { cn } from "../../../../lib/utils"
+import { cn } from "../../cn"
 import type { IGRPDatePickerBaseProps } from "../../../../types"
 import { Button } from "../../../primitives/button"
 import { Calendar } from "../../../primitives/calendar"

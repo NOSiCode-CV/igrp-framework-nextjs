@@ -4,7 +4,7 @@ import { useId, useState, useCallback, type ReactNode } from "react"
 import { useFormContext } from "react-hook-form"
 import type { VariantProps } from "class-variance-authority"
 
-import { cn } from "../../../lib/utils"
+import { cn } from "../cn"
 import { type IGRPInputProps } from "../../../types"
 import { InputGroup, InputGroupAddon, InputGroupInput } from "../../primitives/input-group"
 import { FormControl, FormDescription, FormField, FormItem, FormLabel, FormMessage } from "../../primitives/form"

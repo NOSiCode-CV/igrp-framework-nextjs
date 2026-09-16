@@ -4,7 +4,7 @@
 import { type Column, type Table } from "@tanstack/react-table"
 import { Fragment, type JSX } from "react"
 
-import { cn } from "../../../lib/utils"
+import { cn } from "../cn"
 import { useFilterState } from "./hooks/use-filter-state"
 import { IGRPButton } from "../button"
 

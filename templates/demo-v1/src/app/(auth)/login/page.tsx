@@ -3,12 +3,12 @@ import { redirect } from "next/navigation";
 
 import { getAuthProviderIdFromEnv } from "@igrp/framework-next-auth";
 import { IGRPAuthCarousel, IGRPAuthForm } from "@igrp/framework-next-ui";
+import { cn } from "cn";
 
 import { carouselItems, loginConfig } from "@/config/login";
 import { siteConfig } from "@/config/site";
 import { LOGOUT_PENDING_COOKIE } from "@/lib/logout-pending";
 import { isAuthBypass, sanitizeCallbackUrl } from "@/lib/utilities";
-import { cn } from "@/lib/utils";
 
 import { LogoutCompletion } from "./logout-completion";
 

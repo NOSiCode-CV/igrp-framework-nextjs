@@ -48,7 +48,7 @@
     "@igrp/framework-next-auth": "workspace:*"
   },
   "devDependencies": {
-    "@types/node": "25.9.1",
+    "@types/node": "^24",
     "next-auth": "4.24.15",
     "prettier": "3.9.6",
     "rimraf": "6.1.3",

@@ -7,13 +7,5 @@ allowBuilds:
   esbuild: true
   sharp: true
   unrs-resolver: true
-minimumReleaseAgeExclude:
-  - '@vitest/browser-playwright@5.0.1'
-  - '@vitest/browser@5.0.1'
-  - '@vitest/mocker@5.0.1'
-  - '@vitest/pretty-format@5.0.1'
-  - '@vitest/spy@5.0.1'
-  - '@vitest/ui@5.0.1'
-  - '@vitest/utils@5.0.1'
 patchedDependencies:
   storybook@10.6.0: patches/storybook@10.6.0.patch

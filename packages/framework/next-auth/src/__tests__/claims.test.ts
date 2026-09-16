@@ -4,7 +4,11 @@ import { decodeIgrpClaims, claimsAllow, type IGRPAccessClaims } from '../claims'
 // Build a JWT with the given payload (header.payload.signature; signature unused).
 function makeJwt(payload: Record<string, unknown>): string {
   const b64url = (o: unknown) =>
-    Buffer.from(JSON.stringify(o)).toString('base64').replace(/\+/g, '-').replace(/\//g, '_').replace(/=+$/, '');
+    Buffer.from(JSON.stringify(o))
+      .toString('base64')
+      .replace(/\+/g, '-')
+      .replace(/\//g, '_')
+      .replace(/=+$/, '');
   return `${b64url({ alg: 'none' })}.${b64url(payload)}.sig`;
 }
 
@@ -32,7 +36,11 @@ describe('decodeIgrpClaims', () => {
   });
 
   it('handles aud as an array', () => {
-    const t = makeJwt({ aud: ['igrp-access-management'], resource_access: { 'igrp-access-management': { roles: ['R'] } }, permissions: [] });
+    const t = makeJwt({
+      aud: ['igrp-access-management'],
+      resource_access: { 'igrp-access-management': { roles: ['R'] } },
+      permissions: [],
+    });
     expect(decodeIgrpClaims(t).roles).toEqual(['R']);
   });
 
@@ -57,7 +65,12 @@ describe('decodeIgrpClaims', () => {
 });
 
 describe('claimsAllow', () => {
-  const claims: IGRPAccessClaims = { permissions: ['DEPT_IGRP.manage_access'], roles: [], org: 'DEPT_IGRP', isSuperAdmin: false };
+  const claims: IGRPAccessClaims = {
+    permissions: ['DEPT_IGRP.manage_access'],
+    roles: [],
+    org: 'DEPT_IGRP',
+    isSuperAdmin: false,
+  };
 
   it('matches a bare name qualified by org', () => {
     expect(claimsAllow(claims, 'manage_access')).toBe(true);
@@ -74,6 +87,80 @@ describe('claimsAllow', () => {
   });
 
   it('denies a bare name when there is no active org', () => {
-    expect(claimsAllow({ permissions: ['manage_access'], roles: [], isSuperAdmin: false }, 'manage_access')).toBe(false);
+    expect(
+      claimsAllow(
+        { permissions: ['manage_access'], roles: [], isSuperAdmin: false },
+        'manage_access',
+      ),
+    ).toBe(false);
+  });
+});
+
+describe('decodeIgrpClaims — resource_access selection', () => {
+  function makeJwt(payload: Record<string, unknown>): string {
+    const b64 = (value: string) =>
+      Buffer.from(value, 'utf-8')
+        .toString('base64')
+        .replace(/\+/g, '-')
+        .replace(/\//g, '_')
+        .replace(/=+$/, '');
+    return [b64('{"alg":"none"}'), b64(JSON.stringify(payload)), 'sig'].join('.');
+  }
+
+  it('does not take aud[0] when the first audience is Keycloak\'s "account"', () => {
+    // Regression: aud[0] resolved to resource_access.account, so the app's own
+    // roles vanished and looked identical to "user has no roles".
+    const claims = decodeIgrpClaims(
+      makeJwt({
+        aud: ['account', 'igrp-client'],
+        resource_access: {
+          account: { roles: ['manage-account'] },
+          'igrp-client': { roles: ['admin', 'editor'] },
+        },
+      }),
+    );
+    expect(claims.roles).toEqual(['admin', 'editor']);
+  });
+
+  it('prefers azp over the audience list', () => {
+    const claims = decodeIgrpClaims(
+      makeJwt({
+        azp: 'igrp-client',
+        aud: ['account', 'other-client'],
+        resource_access: {
+          account: { roles: ['manage-account'] },
+          'other-client': { roles: ['wrong'] },
+          'igrp-client': { roles: ['right'] },
+        },
+      }),
+    );
+    expect(claims.roles).toEqual(['right']);
+  });
+
+  it('falls back to the sole resource_access entry when nothing matches', () => {
+    const claims = decodeIgrpClaims(
+      makeJwt({
+        aud: ['unrelated'],
+        resource_access: { 'igrp-client': { roles: ['only'] } },
+      }),
+    );
+    expect(claims.roles).toEqual(['only']);
+  });
+
+  it('returns [] rather than guessing between several unmatched clients', () => {
+    const claims = decodeIgrpClaims(
+      makeJwt({
+        aud: ['unrelated'],
+        resource_access: { a: { roles: ['x'] }, b: { roles: ['y'] } },
+      }),
+    );
+    expect(claims.roles).toEqual([]);
+  });
+
+  it('still reads roles from a plain string aud', () => {
+    const claims = decodeIgrpClaims(
+      makeJwt({ aud: 'igrp-client', resource_access: { 'igrp-client': { roles: ['r'] } } }),
+    );
+    expect(claims.roles).toEqual(['r']);
   });
 });

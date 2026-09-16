@@ -13,7 +13,9 @@ You are working inside `packages/framework/next-auth/` — `@igrp/framework-next
 
 ## Rules unique to this package
 
-- Public entry points: `./server`, `./client`, `./session`, `./jwt`, `./middleware`, `./config`, `./sanitize`, `./oidc`, `./providers`, `./types`. **Don't collapse them** — they keep server code out of client bundles. New symbols go behind the right entry, not the root barrel.
+- Public entry points: `./server`, `./client`, `./session`, `./jwt`, `./middleware`, `./config`, `./sanitize`, `./oidc`, `./providers`, `./claims`, `./types`. **Don't collapse them** — they keep server code out of client bundles. New symbols go behind the right entry, not the root barrel.
+- The **root barrel** (`./`) is restricted to the pure modules (`session`, `providers`, `sanitize`) plus type-only re-exports. Never add a symbol there that pulls in `next-auth/*` or the OIDC client — a single root import from a page drags it into that page's bundle.
+- `./client` is a real client boundary. `src/client.ts` starts with `'use client'` and `tsup.config.ts` re-adds the directive to `dist/client.js` after bundling (esbuild strips it). If you add another browser-only entry, add it to `CLIENT_ENTRIES` there.
 - Builds with **tsup**, not Babel. **No React Compiler step.**
 - `@igrp/framework-next-types` re-exports types from here — run `pnpm build:framework` after type changes.
 - `pnpm build:auth` from repo root.

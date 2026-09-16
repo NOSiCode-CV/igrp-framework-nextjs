@@ -100,6 +100,28 @@ function getClientCredentials(env: AuthEnvironment) {
   };
 }
 
+/**
+ * HTTP Basic client authentication per RFC 6749 §2.3.1.
+ *
+ * Two details a plain `btoa(`${id}:${secret}`)` gets wrong:
+ *
+ * 1. The spec requires both parts to be form-urlencoded *before* base64. Real
+ *    client secrets are usually base64-ish and contain `+` `/` `=`, which a
+ *    spec-compliant server (Keycloak, Spring Authorization Server) URL-decodes
+ *    on receipt — sending them raw can mismatch.
+ * 2. `btoa` is Latin-1 only and THROWS on any non-ASCII character. In
+ *    `introspectOidcToken` that throw is swallowed by the outer catch and
+ *    turned into a fail-open `true`, silently disabling the revocation gate
+ *    for the whole process. Encoding to UTF-8 bytes first removes the throw.
+ */
+function buildBasicAuthHeader(clientId: string, clientSecret: string): string {
+  const encoded = `${encodeURIComponent(clientId)}:${encodeURIComponent(clientSecret)}`;
+  const bytes = new TextEncoder().encode(encoded);
+  let binary = '';
+  for (const byte of bytes) binary += String.fromCharCode(byte);
+  return `Basic ${btoa(binary)}`;
+}
+
 // In-flight refresh deduplication. NextAuth invokes the jwt callback once per
 // session read; near token expiry, multiple concurrent requests (a server
 // component RSC tree + a `useSession` poll + a server action) decode the
@@ -386,6 +408,17 @@ export type RevokeOidcSessionResult =
       error?: unknown;
     };
 
+/**
+ * Revokes the session at the IdP (RFC 7009).
+ *
+ * SECURITY ASSUMPTION: only the **refresh** token is submitted. This relies on
+ * the IdP treating a refresh-token revocation as revoking the whole grant —
+ * which Keycloak and Spring Authorization Server both do. Against an IdP that
+ * revokes only the presented token, the already-issued access token stays
+ * usable at resource servers until its own `exp` (~3 min for the IGRP IdP)
+ * even though the user has signed out locally. If this package ever targets
+ * such an IdP, revoke the access token in a second call.
+ */
 export async function revokeOidcSession(
   token: JWT,
   env: AuthEnvironment,
@@ -502,7 +535,6 @@ export async function introspectOidcToken(token: JWT, env: AuthEnvironment): Pro
     if (!openIdConfiguration.introspection_endpoint) return true;
 
     const { clientId, clientSecret } = getClientCredentials(env);
-    const credentials = btoa(`${clientId}:${clientSecret}`);
 
     const response = await fetchWithTimeout(
       openIdConfiguration.introspection_endpoint,
@@ -510,7 +542,7 @@ export async function introspectOidcToken(token: JWT, env: AuthEnvironment): Pro
         method: 'POST',
         headers: {
           'Content-Type': 'application/x-www-form-urlencoded',
-          Authorization: `Basic ${credentials}`,
+          Authorization: buildBasicAuthHeader(clientId, clientSecret),
         },
         body: new URLSearchParams({
           token: token.refreshToken,

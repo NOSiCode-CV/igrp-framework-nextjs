@@ -41,7 +41,7 @@ import {
   revokeOidcSession,
 } from './oidc';
 import type { IGRPTokenRecoveryStore } from './token-store';
-import { escapeHtml, sanitizeRedirectUrl } from './sanitize';
+import { escapeHtml, sanitizeRedirectUrl, stripAuthApiSuffix } from './sanitize';
 
 // ─── Config Error ─────────────────────────────────────────────────────────────
 
@@ -129,7 +129,10 @@ type IGRPAuthCallbackExtensions = {
    * Runs after the IGRP jwt callback has processed the token.
    * Return the token with any additional custom fields.
    */
-  jwt?: (params: Parameters<NonNullable<NonNullable<NextAuthOptions['callbacks']>['jwt']>>[0], igrpToken: JWT) => Promise<JWT>;
+  jwt?: (
+    params: Parameters<NonNullable<NonNullable<NextAuthOptions['callbacks']>['jwt']>>[0],
+    igrpToken: JWT,
+  ) => Promise<JWT>;
 
   /**
    * Runs after the IGRP session callback has processed the session.
@@ -321,13 +324,72 @@ function resolveProvider(
   env: Record<string, string | undefined>,
 ): AnyProvider | null {
   if (provider == null || typeof provider === 'string') {
-    return createAuthProviderFromEnv(env, provider as AuthProviderId | undefined) as AnyProvider | null;
+    return createAuthProviderFromEnv(
+      env,
+      provider as AuthProviderId | undefined,
+    ) as AnyProvider | null;
   }
   return provider;
 }
 
 function normalizePreviewMode(env: Record<string, string | undefined>): boolean {
-  return env.IGRP_PREVIEW_MODE?.trim().replace(/^["']|["']$/g, '').toLowerCase() === 'true';
+  return (
+    env.IGRP_PREVIEW_MODE?.trim()
+      .replace(/^["']|["']$/g, '')
+      .toLowerCase() === 'true'
+  );
+}
+
+/**
+ * The auth chrome itself (`/login`, `/logout`) is never a valid post-auth
+ * destination — redirecting there after a successful sign-in bounces the user
+ * straight back through the flow they just completed.
+ */
+const AUTH_CHROME_PATH = /^\/(login|logout)(\/|$|\?)/;
+
+/**
+ * `env` is the documented environment source for the whole factory, but
+ * `NODE_ENV` is not something a caller normally puts in a validated env map —
+ * fall back to the real process env rather than silently treating a custom map
+ * as "production".
+ */
+function resolveNodeEnv(env: Record<string, string | undefined>): string | undefined {
+  return env.NODE_ENV ?? process.env.NODE_ENV;
+}
+
+function isAuthChromePath(pathOrUrl: string): boolean {
+  return AUTH_CHROME_PATH.test(pathOrUrl.split('?')[0] || '');
+}
+
+/**
+ * Warns once, in development only, when the client session-poll interval is
+ * too long for the proactive-refresh buffer to help.
+ *
+ * See the TOKEN_REFRESH_BUFFER_MS comment above: when the poll interval is at
+ * or beyond the buffer, the last poll before the buffer window opens still
+ * sees a "valid" token, so no persist-capable refresh fires; refreshes that do
+ * run inside the window happen in read-only RSC context and cannot write the
+ * cookie. The constraint was documented but never checked, which made the
+ * resulting dead zone look like a random logout.
+ */
+let warnedRefetchInterval = false;
+function warnOnRefetchIntervalMisconfiguration(env: Record<string, string | undefined>): void {
+  if (warnedRefetchInterval) return;
+  const raw = env.IGRP_SESSION_REFETCH_INTERVAL?.trim();
+  if (!raw) return;
+  const seconds = Number.parseInt(raw, 10);
+  if (!Number.isFinite(seconds) || seconds <= 0) return;
+
+  const maxSeconds = TOKEN_REFRESH_BUFFER_MS / 1000;
+  if (seconds < maxSeconds) return;
+
+  warnedRefetchInterval = true;
+  console.warn(
+    `[withIGRPAuth] IGRP_SESSION_REFETCH_INTERVAL=${seconds}s is >= the proactive refresh ` +
+      `buffer (${maxSeconds}s). The client session poll will never fire inside the refresh ` +
+      'window, so refreshes only run in read-only RSC context and cannot persist the rotated ' +
+      `cookie. Recommended: at most ${maxSeconds - 15}s.`,
+  );
 }
 
 const SESSION_COOKIE_BASENAME = 'next-auth.session-token';
@@ -389,12 +451,15 @@ function extractCookieNames(request: unknown): string[] {
  * Dynamic import so webpack doesn't pull `next-auth` (and transitively
  * `openid-client`) into any Edge bundle that imports `withIGRPAuth`.
  */
-async function createNextAuthHandler(authOptions: NextAuthOptions): Promise<NextAuthHandler> {
+async function createNextAuthHandler(
+  authOptions: NextAuthOptions,
+  env: Record<string, string | undefined>,
+): Promise<NextAuthHandler> {
   const NextAuthModule = await import('next-auth');
   const NextAuth = interopDefault(NextAuthModule as unknown as typeof NextAuthModule.default);
   return NextAuth({
     ...authOptions,
-    debug: process.env.NODE_ENV === 'development',
+    debug: resolveNodeEnv(env) === 'development',
   }) as unknown as NextAuthHandler;
 }
 
@@ -466,7 +531,6 @@ export function withIGRPAuth(options: IGRPAuthOptions = {}): IGRPAuthInstance {
   const {
     provider,
     env = process.env,
-    secret = process.env.NEXTAUTH_SECRET,
     pages,
     session: sessionConfig,
     callbacks: callbackExtensions = {},
@@ -475,14 +539,17 @@ export function withIGRPAuth(options: IGRPAuthOptions = {}): IGRPAuthInstance {
     tokenRecoveryStore,
   } = options;
 
+  // Resolved once, from the caller's `env` first: a caller that passes a
+  // validated env map should not silently get half its config from
+  // `process.env`. The process fallback stays so the common case
+  // (`env` omitted, or a partial map) is unchanged.
+  const secret = options.secret ?? env.NEXTAUTH_SECRET ?? process.env.NEXTAUTH_SECRET;
+
   if (tokenRecoveryStore) {
     configureOidcTokenRecoveryStore(tokenRecoveryStore);
   }
 
-  const {
-    loginUrl = '/login',
-    matcher = DEFAULT_MATCHER,
-  } = middlewareOptions;
+  const { loginUrl = '/login', matcher = DEFAULT_MATCHER } = middlewareOptions;
 
   // ── Provider resolution (non-throwing) ────────────────────────────────────
   // Errors here (unsupported AUTH_PROVIDER, missing env vars) used to throw
@@ -502,11 +569,36 @@ export function withIGRPAuth(options: IGRPAuthOptions = {}): IGRPAuthInstance {
     resolvedProvider = resolveProvider(provider, env);
   } catch (err) {
     const msg = err instanceof Error ? err.message : String(err);
-    const code = msg.includes('Unsupported AUTH_PROVIDER') ? 'AUTH_PROVIDER_INVALID' : 'AUTH_CONFIG_INVALID';
+    const code = msg.includes('Unsupported AUTH_PROVIDER')
+      ? 'AUTH_PROVIDER_INVALID'
+      : 'AUTH_CONFIG_INVALID';
     configError = new IGRPAuthConfigError(msg, code);
   }
 
   const authIsDisabled = !configError && resolvedProvider === null;
+
+  if (resolveNodeEnv(env) !== 'production') {
+    warnOnRefetchIntervalMisconfiguration(env);
+  }
+
+  /**
+   * Browser-reachable app origin, with NextAuth's `/api/auth` suffix removed.
+   *
+   * Prefers the `baseUrl` NextAuth passes (derived from NEXTAUTH_URL or the
+   * request) and falls back to NEXTAUTH_URL directly. NEXTAUTH_URL_INTERNAL is
+   * deliberately NOT consulted — it names a server-to-server origin.
+   */
+  function resolveAppBaseUrl(baseUrl?: string): string {
+    return stripAuthApiSuffix(baseUrl || env.NEXTAUTH_URL || '');
+  }
+
+  /** Post-auth landing URL: app base + NEXT_PUBLIC_IGRP_APP_HOME_SLUG. */
+  function buildHomeUrl(appBaseUrl: string): string {
+    const rawSlug = env.NEXT_PUBLIC_IGRP_APP_HOME_SLUG?.trim() || '/';
+    const withLeadingSlash = rawSlug.startsWith('/') ? rawSlug : `/${rawSlug}`;
+    const safeSlug = sanitizeRedirectUrl(withLeadingSlash, appBaseUrl, '/');
+    return `${appBaseUrl}${safeSlug === '/' ? '/' : safeSlug}`;
+  }
 
   // ── authOptions ────────────────────────────────────────────────────────────
   // Built synchronously. The options *object* has no Node-only deps; it only
@@ -606,7 +698,9 @@ export function withIGRPAuth(options: IGRPAuthOptions = {}): IGRPAuthInstance {
                 );
               }
             } catch {
-              console.error('[next-auth] jwt: refreshOidcAccessToken threw unexpectedly — user will be logged out.');
+              console.error(
+                '[next-auth] jwt: refreshOidcAccessToken threw unexpectedly — user will be logged out.',
+              );
               igrpToken = { ...igrpToken, error: 'RefreshAccessTokenError', forceLogout: true };
             }
           }
@@ -634,6 +728,21 @@ export function withIGRPAuth(options: IGRPAuthOptions = {}): IGRPAuthInstance {
             expiresAt: tokenTyped.expiresAt,
             forceLogout: tokenTyped.forceLogout,
           };
+
+          // `Session['user'].id` is part of this package's public type (and of
+          // the `next-auth` module augmentation in ./types), but this callback
+          // fully replaces NextAuth's default session callback — which is what
+          // would otherwise be the only thing touching `session.user`. Without
+          // this, `user.id` was declared and permanently `undefined`. NextAuth
+          // puts the provider's subject in `token.sub`; `token.user.id` wins
+          // when a `callbacks.jwt` extension has set a more specific value.
+          const tokenUserId = tokenTyped.user?.id ?? tokenTyped.sub;
+          if (tokenUserId) {
+            igrpSession = {
+              ...igrpSession,
+              user: { ...igrpSession.user, id: tokenUserId },
+            };
+          }
         }
 
         if (callbackExtensions.session) {
@@ -648,31 +757,55 @@ export function withIGRPAuth(options: IGRPAuthOptions = {}): IGRPAuthInstance {
         }
 
         const { url, baseUrl } = params;
-        const nextInternalUrl = env.NEXTAUTH_URL_INTERNAL || '';
-        const igrpAppHomeSlug = env.NEXT_PUBLIC_IGRP_APP_HOME_SLUG || '';
-        const joinHome = (base: string, slug: string) =>
-          slug ? `${base.replace(/\/+$/, '')}/${slug.replace(/^\/+/, '')}` : base;
-        const home = nextInternalUrl
-          ? joinHome(nextInternalUrl, igrpAppHomeSlug)
-          : sanitizeRedirectUrl(igrpAppHomeSlug || '/', env.NEXTAUTH_URL ?? baseUrl, '/');
 
-        // No useful callbackUrl — land on home.
-        if (!url || url === baseUrl || url === `${baseUrl}/`) return home;
+        // Resolve every destination against the *app* base URL, never
+        // NEXTAUTH_URL_INTERNAL: that variable names a server-reachable origin
+        // (container DNS / cluster service) and must never become a `Location`
+        // header — in the only deployments that set it, it is by definition not
+        // reachable from the browser. `baseUrl` is NextAuth's own value derived
+        // from NEXTAUTH_URL / the request, which is what the browser used.
+        const appBaseUrl = resolveAppBaseUrl(baseUrl);
+        const home = buildHomeUrl(appBaseUrl);
+
+        // No useful callbackUrl — land on home. Compare against both the raw
+        // baseUrl (which may still carry /api/auth) and the stripped app base.
+        if (
+          !url ||
+          url === baseUrl ||
+          url === `${baseUrl}/` ||
+          url === appBaseUrl ||
+          url === `${appBaseUrl}/`
+        ) {
+          return home;
+        }
 
         // Relative same-origin path (e.g. "/some/page") — validate through the
         // shared sanitizer (rejects "//", "/\", %5C, and "/../" traversal), then
-        // resolve against baseUrl. sanitizeRedirectUrl returns the relative path
-        // for relative input, so re-prefix baseUrl to honor NextAuth's
+        // resolve against the app base. sanitizeRedirectUrl returns the relative
+        // path for relative input, so re-prefix appBaseUrl to honor NextAuth's
         // absolute-URL redirect contract.
         if (url.startsWith('/') && !url.startsWith('//')) {
-          const safe = sanitizeRedirectUrl(url, baseUrl, '');
-          if (safe && safe.startsWith('/')) return `${baseUrl}${safe}`;
-          return home;
+          const safe = sanitizeRedirectUrl(url, appBaseUrl, '');
+          if (!safe || !safe.startsWith('/')) return home;
+          if (isAuthChromePath(safe)) return home;
+          return `${appBaseUrl}${safe}`;
         }
 
         // Absolute URL — only honor when it matches the app origin.
         try {
-          if (new URL(url).origin === new URL(baseUrl).origin) return url;
+          const parsed = new URL(url);
+          const base = new URL(appBaseUrl);
+          if (parsed.origin === base.origin) {
+            // Compare the path *relative to the app base* — under a basePath
+            // the login page is `/apps/template/login`, which would not match
+            // an anchored `^/login` check.
+            const basePathname = base.pathname.replace(/\/+$/, '');
+            const relative =
+              basePathname && parsed.pathname.startsWith(basePathname)
+                ? parsed.pathname.slice(basePathname.length) || '/'
+                : parsed.pathname;
+            return isAuthChromePath(relative) ? home : url;
+          }
         } catch {
           // fall through to home
         }
@@ -720,7 +853,7 @@ export function withIGRPAuth(options: IGRPAuthOptions = {}): IGRPAuthInstance {
   let cachedHandler: NextAuthHandler | null = null;
   async function ensureHandler(): Promise<NextAuthHandler> {
     if (cachedHandler) return cachedHandler;
-    cachedHandler = await createNextAuthHandler(authOptions);
+    cachedHandler = await createNextAuthHandler(authOptions, env);
     return cachedHandler;
   }
 
@@ -747,7 +880,7 @@ export function withIGRPAuth(options: IGRPAuthOptions = {}): IGRPAuthInstance {
     const secureCookie = resolveSecureCookie(extractCookieNames(request));
     return (await getToken({
       req: request as Parameters<typeof getToken>[0]['req'],
-      secret: secret || process.env.NEXTAUTH_SECRET,
+      secret,
       ...(secureCookie !== undefined ? { secureCookie } : {}),
     })) as JWT | null;
   }
@@ -762,8 +895,27 @@ export function withIGRPAuth(options: IGRPAuthOptions = {}): IGRPAuthInstance {
   }
 
   function getLoginRedirectUrl(request: { url: string }): URL {
-    const basePath = process.env.NEXT_PUBLIC_BASE_PATH ?? '';
-    return new URL(`${basePath}${loginUrl}`, env.NEXTAUTH_URL_INTERNAL ?? request.url);
+    const explicitBasePath = env.NEXT_PUBLIC_BASE_PATH ?? process.env.NEXT_PUBLIC_BASE_PATH ?? '';
+
+    // NEXTAUTH_URL_INTERNAL is a server-to-server origin and must never end up
+    // in a `Location` header — this URL is handed straight to
+    // NextResponse.redirect(). Use the public NEXTAUTH_URL (minus its
+    // `/api/auth` suffix), falling back to the request's own origin.
+    const configuredBase = stripAuthApiSuffix(env.NEXTAUTH_URL ?? '');
+    if (configuredBase) {
+      try {
+        const base = new URL(configuredBase);
+        // When NEXT_PUBLIC_BASE_PATH is unset, recover the basePath from
+        // NEXTAUTH_URL's own path — `new URL('/login', 'https://h/app')`
+        // would otherwise resolve to `https://h/login` and drop it.
+        const prefix = explicitBasePath || base.pathname.replace(/\/+$/, '');
+        return new URL(`${prefix}${loginUrl}`, base.origin);
+      } catch {
+        // Malformed NEXTAUTH_URL — fall through to the request origin.
+      }
+    }
+
+    return new URL(`${explicitBasePath}${loginUrl}`, request.url);
   }
 
   // ── Server helpers (Node runtime only — dynamic imports) ──────────────────
@@ -777,7 +929,7 @@ export function withIGRPAuth(options: IGRPAuthOptions = {}): IGRPAuthInstance {
       req: {
         cookies: Object.fromEntries(all.map((c) => [c.name, c.value])),
       } as NextApiRequest,
-      secret: secret || process.env.NEXTAUTH_SECRET,
+      secret,
       ...(secureCookie !== undefined ? { secureCookie } : {}),
     });
     return token as JWT | null;
@@ -804,7 +956,8 @@ export function withIGRPAuth(options: IGRPAuthOptions = {}): IGRPAuthInstance {
     if (!session) return null;
 
     const providerExp = typeof session.expiresAt === 'number' ? session.expiresAt : undefined;
-    const providerExpired = providerExp !== undefined && providerExp < Date.now() + TOKEN_REFRESH_BUFFER_MS;
+    const providerExpired =
+      providerExp !== undefined && providerExp < Date.now() + TOKEN_REFRESH_BUFFER_MS;
     const refreshFailed = session.error === 'RefreshAccessTokenError';
 
     // Expired access token or a failed refresh: hand control to onSessionExpired

@@ -561,7 +561,10 @@ describe('refreshOidcAccessToken — expires_in coercion', () => {
     try {
       mockFetch([
         { url: DISCOVERY_URL, body: MOCK_DISCOVERY },
-        { url: MOCK_DISCOVERY.token_endpoint, body: { access_token: 'new-at', expires_in: 'not-a-number' } },
+        {
+          url: MOCK_DISCOVERY.token_endpoint,
+          body: { access_token: 'new-at', expires_in: 'not-a-number' },
+        },
       ]);
       const { refreshOidcAccessToken } = await import('../oidc');
       const result = await refreshOidcAccessToken(makeToken(), VALID_ENV);

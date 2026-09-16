@@ -1,5 +1,5 @@
 import { describe, it, expect } from 'vitest';
-import { sanitizeRedirectUrl } from '../sanitize';
+import { sanitizePath, sanitizeRedirectUrl, stripAuthApiSuffix } from '../sanitize';
 
 describe('sanitizeRedirectUrl — open-redirect hardening', () => {
   const ORIGIN = 'http://localhost:3000';
@@ -55,5 +55,49 @@ describe('sanitizeRedirectUrl — open-redirect hardening', () => {
 
   it('rejects a backslash when baseOrigin is absent (the hook call shape)', () => {
     expect(sanitizeRedirectUrl('/\\evil.com', undefined, '')).toBe('');
+  });
+});
+
+describe('sanitizePath', () => {
+  it('rejects protocol-relative paths', () => {
+    // Previously `startsWith('/')` alone let "//evil.com" through.
+    expect(sanitizePath('//evil.com')).toBe('/');
+    expect(sanitizePath('//evil.com/x', '/fallback')).toBe('/fallback');
+  });
+
+  it('rejects backslash and control-character bypasses', () => {
+    expect(sanitizePath('/\\evil.com')).toBe('/');
+    expect(sanitizePath('/%5Cevil.com')).toBe('/');
+    expect(sanitizePath('/' + String.fromCharCode(9) + '/evil.com')).toBe('/');
+  });
+
+  it('rejects traversal by segment', () => {
+    expect(sanitizePath('/a/../b')).toBe('/');
+    expect(sanitizePath('/a/%2e%2e/b')).toBe('/');
+  });
+
+  it('allows a legitimate path containing ".." inside a segment', () => {
+    // The old `includes('..')` check rejected this.
+    expect(sanitizePath('/reports/q1..q2')).toBe('/reports/q1..q2');
+    expect(sanitizePath('/file..name')).toBe('/file..name');
+  });
+
+  it('still rejects non-relative and empty input', () => {
+    expect(sanitizePath('https://evil.com')).toBe('/');
+    expect(sanitizePath('   ')).toBe('/');
+    expect(sanitizePath(null)).toBe('/');
+  });
+});
+
+describe('stripAuthApiSuffix', () => {
+  it('strips the NextAuth /api/auth suffix and trailing slashes', () => {
+    expect(stripAuthApiSuffix('http://h:3000/apps/t/api/auth')).toBe('http://h:3000/apps/t');
+    expect(stripAuthApiSuffix('http://h:3000/apps/t/api/auth/')).toBe('http://h:3000/apps/t');
+  });
+
+  it('leaves a base URL without the suffix alone (beyond trailing slashes)', () => {
+    expect(stripAuthApiSuffix('http://h:3000/apps/t')).toBe('http://h:3000/apps/t');
+    expect(stripAuthApiSuffix('http://h:3000/')).toBe('http://h:3000');
+    expect(stripAuthApiSuffix('')).toBe('');
   });
 });

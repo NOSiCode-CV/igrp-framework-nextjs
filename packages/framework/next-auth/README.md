@@ -6,28 +6,35 @@ route-protection middleware primitives.
 
 ## Entry points
 
-| Import path | Runtime | Purpose |
-|---|---|---|
-| `@igrp/framework-next-auth/config` | Node + Edge | `withIGRPAuth()` factory |
-| `@igrp/framework-next-auth/client` | Browser | `useSafeSession()`, `signIn`, `signOut`, `SessionProvider` |
-| `@igrp/framework-next-auth/server` | Node | `getServerSession` |
-| `@igrp/framework-next-auth/session` | Node | Session types |
-| `@igrp/framework-next-auth/jwt` | Node | JWT types |
-| `@igrp/framework-next-auth/middleware` | Edge | NextAuth middleware |
-| `@igrp/framework-next-auth/oidc` | Node | `refreshOidcAccessToken`, `revokeOidcSession` |
-| `@igrp/framework-next-auth/providers` | Node | Provider registry helpers |
-| `@igrp/framework-next-auth/sanitize` | Node + Edge | URL/redirect sanitization |
-| `@igrp/framework-next-auth/types` | types only | Session/JWT module augmentation |
+| Import path                            | Runtime               | Purpose                                                    |
+| -------------------------------------- | --------------------- | ---------------------------------------------------------- |
+| `@igrp/framework-next-auth/config`     | Node + Edge           | `withIGRPAuth()` factory                                   |
+| `@igrp/framework-next-auth/client`     | Browser               | `useSafeSession()`, `signIn`, `signOut`, `SessionProvider` |
+| `@igrp/framework-next-auth/server`     | Node                  | `getServerSession`                                         |
+| `@igrp/framework-next-auth/session`    | Node                  | Session types                                              |
+| `@igrp/framework-next-auth/jwt`        | Node                  | JWT types                                                  |
+| `@igrp/framework-next-auth/middleware` | Edge                  | NextAuth middleware                                        |
+| `@igrp/framework-next-auth/oidc`       | Node                  | `refreshOidcAccessToken`, `revokeOidcSession`              |
+| `@igrp/framework-next-auth/providers`  | Node                  | Provider registry helpers                                  |
+| `@igrp/framework-next-auth/sanitize`   | Node + Edge           | URL/redirect sanitization                                  |
+| `@igrp/framework-next-auth/claims`     | Node + Edge + Browser | `decodeIgrpClaims`, `claimsAllow` (pure, no deps)          |
+| `@igrp/framework-next-auth/types`      | types only            | Session/JWT module augmentation                            |
+
+The package root (`@igrp/framework-next-auth`) re-exports only the pure modules
+— `session`, `providers`, `sanitize`, plus types. `middleware`, `jwt` and `oidc`
+are **not** in the root barrel: importing them from there pulled
+`next-auth/middleware` and the server-side token machinery into whatever bundle
+touched it. Use their subpath entries.
 
 ## Quick start
 
 ```ts
 // src/lib/auth.ts
-import { withIGRPAuth } from "@igrp/framework-next-auth/config";
-import { redirect } from "next/navigation";
+import { withIGRPAuth } from '@igrp/framework-next-auth/config';
+import { redirect } from 'next/navigation';
 
 export const auth = withIGRPAuth({
-  onSessionExpired: () => redirect("/logout"),
+  onSessionExpired: () => redirect('/logout'),
 });
 
 // src/app/api/auth/[...nextauth]/route.ts
@@ -77,10 +84,10 @@ causing the client to sign the user out. This is safe behaviour, but avoidable.
 
 ## Supported providers
 
-| `AUTH_PROVIDER` value | Description |
-|---|---|
+| `AUTH_PROVIDER` value | Description                                                                |
+| --------------------- | -------------------------------------------------------------------------- |
 | `igrp-auth` (default) | Generic OIDC — works with Keycloak, WSO2IS, or any OIDC-compliant provider |
-| `none` | Disables authentication entirely |
+| `none`                | Disables authentication entirely                                           |
 
 The OIDC callback URL to register on your provider is:
 `{NEXTAUTH_URL}/api/auth/callback/igrp-auth`
@@ -88,15 +95,15 @@ The OIDC callback URL to register on your provider is:
 ## Session shape
 
 ```ts
-import type { Session } from "next-auth";
+import type { Session } from 'next-auth';
 
 // Augmented fields (from @igrp/framework-next-auth/types):
-session.accessToken    // OIDC access token
-session.idToken        // OIDC ID token
-session.authProviderId // "igrp-auth" | "none"
-session.expiresAt      // Unix ms when access token expires
-session.error          // "RefreshAccessTokenError" on failed refresh
-session.forceLogout    // true when refresh has failed — client should signOut()
+session.accessToken; // OIDC access token
+session.idToken; // OIDC ID token
+session.authProviderId; // "igrp-auth" | "none"
+session.expiresAt; // Unix ms when access token expires
+session.error; // "RefreshAccessTokenError" on failed refresh
+session.forceLogout; // true when refresh has failed — client should signOut()
 ```
 
 ## License

@@ -1,11 +1,16 @@
+'use client';
+
+// This entry is a real client boundary, not just a naming convention.
+// `next-auth`'s own `react` entry (v4, CJS) ships no directive, so without
+// this line the module graph below is server-first: importing
+// `SessionProvider` or `useSafeSession` from a file that isn't already
+// marked `'use client'` fails at render with a confusing RSC error instead
+// of being handled by the bundler. Keep it as the first statement.
+
 import { useSession as useSessionBase } from 'next-auth/react';
 import type { Session } from './session';
 
-export {
-  AUTH_PROVIDER_IDS,
-  IGRP_AUTH_PROVIDER_ID,
-  NONE_PROVIDER_ID,
-} from './providers';
+export { AUTH_PROVIDER_IDS, IGRP_AUTH_PROVIDER_ID, NONE_PROVIDER_ID } from './providers';
 export type { AuthProviderId } from './providers';
 
 export {

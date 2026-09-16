@@ -19,8 +19,7 @@ export interface IGRPAccessClaims {
 }
 
 export type IGRPClaimsState =
-  | { status: 'ok'; claims: IGRPAccessClaims }
-  | { status: 'error'; error: string };
+  { status: 'ok'; claims: IGRPAccessClaims } | { status: 'error'; error: string };
 
 function base64UrlDecode(input: string): string {
   const padLen = input.length % 4;
@@ -29,6 +28,69 @@ function base64UrlDecode(input: string): string {
   const binary = atob(b64);
   const bytes = Uint8Array.from(binary, (ch) => ch.charCodeAt(0));
   return new TextDecoder().decode(bytes);
+}
+
+function rolesAt(
+  resourceAccess: Record<string, { roles?: string[] }>,
+  key: string | undefined,
+): string[] | undefined {
+  if (!key) return undefined;
+  const roles = resourceAccess[key]?.roles;
+  return Array.isArray(roles) ? roles : undefined;
+}
+
+/**
+ * Built-in IdP clients that appear in `aud` / `resource_access` on nearly every
+ * Keycloak token but never carry application roles. They are considered only
+ * as a last resort, so they can't shadow the real client.
+ */
+const INTERNAL_IDP_CLIENTS = new Set(['account', 'account-console', 'broker', 'realm-management']);
+
+/**
+ * Picks the `resource_access` entry that belongs to *this* client.
+ *
+ * Taking `aud[0]` is wrong for a multi-audience token: Keycloak routinely
+ * issues `aud: ["account", "<client-id>"]`, so the first element resolves to
+ * `resource_access.account` and the app's own roles silently disappear —
+ * indistinguishable from "user has no roles", because the fallback is `[]`.
+ *
+ * Resolution order, most to least specific:
+ *   1. `azp` (authorized party) — the client the token was actually issued to.
+ *   2. The first audience carrying roles that is not a built-in IdP client.
+ *   3. The sole application entry in `resource_access`, when there is one.
+ *   4. The first audience carrying roles at all (built-ins included), so a
+ *      deployment that really does gate on them still works.
+ *
+ * Deliberately never unions across clients: these roles feed UI gating, and
+ * over-granting is the worse failure.
+ */
+function resolveClientRoles(
+  payload: Record<string, unknown>,
+  resourceAccess: Record<string, { roles?: string[] }>,
+): string[] {
+  const byAzp = rolesAt(resourceAccess, typeof payload.azp === 'string' ? payload.azp : undefined);
+  if (byAzp) return byAzp;
+
+  const aud = payload.aud;
+  const audiences = (Array.isArray(aud) ? aud : typeof aud === 'string' ? [aud] : []).filter(
+    (value): value is string => typeof value === 'string',
+  );
+
+  for (const audience of audiences) {
+    if (INTERNAL_IDP_CLIENTS.has(audience)) continue;
+    const roles = rolesAt(resourceAccess, audience);
+    if (roles) return roles;
+  }
+
+  const appKeys = Object.keys(resourceAccess).filter((key) => !INTERNAL_IDP_CLIENTS.has(key));
+  if (appKeys.length === 1) return rolesAt(resourceAccess, appKeys[0]) ?? [];
+
+  for (const audience of audiences) {
+    const roles = rolesAt(resourceAccess, audience);
+    if (roles) return roles;
+  }
+
+  return [];
 }
 
 /**
@@ -46,13 +108,8 @@ export function decodeIgrpClaims(accessToken: string): IGRPAccessClaims {
   }
   const payload = JSON.parse(base64UrlDecode(parts[1])) as Record<string, unknown>;
 
-  const aud = payload.aud;
-  const audKey = Array.isArray(aud) ? aud[0] : aud;
   const resourceAccess = (payload.resource_access ?? {}) as Record<string, { roles?: string[] }>;
-  const roles =
-    typeof audKey === 'string' && Array.isArray(resourceAccess[audKey]?.roles)
-      ? (resourceAccess[audKey]!.roles as string[])
-      : [];
+  const roles = resolveClientRoles(payload, resourceAccess);
 
   return {
     permissions: Array.isArray(payload.permissions) ? (payload.permissions as string[]) : [],

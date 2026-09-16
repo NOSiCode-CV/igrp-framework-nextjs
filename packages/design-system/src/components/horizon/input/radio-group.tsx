@@ -4,6 +4,7 @@ import { useId } from "react"
 import { useFormContext } from "react-hook-form"
 
 import { cn } from "../cn"
+import { igrpOmitNonDomProps } from "../../../lib/dom-props"
 import type { IGRPBaseAttributes } from "../../../types"
 import { Field, FieldDescription, FieldError } from "../../primitives/field"
 import { RadioGroup, RadioGroupItem } from "../../primitives/radio-group"
@@ -29,8 +30,7 @@ type IGRPRadioOption = {
  * Props for the IGRPRadioGroup component.
  * @see IGRPRadioGroup
  */
-interface IGRPRadioGroupProps
-  extends IGRPBaseAttributes, React.ComponentProps<typeof RadioGroup> {
+interface IGRPRadioGroupProps extends IGRPBaseAttributes, React.ComponentProps<typeof RadioGroup> {
   options: IGRPRadioOption[]
   error?: string
 }
@@ -75,15 +75,15 @@ function RadioGroupOptionsField({
       aria-required={required}
       aria-invalid={!!error}
       aria-describedby={describedById}
-      {...radioGroupProps}
+      {...igrpOmitNonDomProps(radioGroupProps)}
     >
       {options.map((option) => (
         <div
           key={option.value}
           className={cn(
-            "flex gap-2 items-center",
+            "flex items-center gap-2",
             dir === "rtl" && "flex-row-reverse justify-between",
-            option.disabled && "opacity-50 cursor-not-allowed",
+            option.disabled && "cursor-not-allowed opacity-50"
           )}
         >
           <RadioGroupItem
@@ -98,14 +98,10 @@ function RadioGroupOptionsField({
                 <IGRPLabel
                   htmlFor={`${fieldName}-${option.value}`}
                   label={option.label}
-                  className={cn("text-sm font-medium leading-none", option.disabled && "cursor-not-allowed opacity-70")}
+                  className={cn("text-sm leading-none font-medium", option.disabled && "cursor-not-allowed opacity-70")}
                 />
               )}
-              {option.description && (
-                <p className="text-muted-foreground mt-1 text-sm">
-                  {option.description}
-                </p>
-              )}
+              {option.description && <p className="mt-1 text-sm text-muted-foreground">{option.description}</p>}
             </div>
           )}
         </div>

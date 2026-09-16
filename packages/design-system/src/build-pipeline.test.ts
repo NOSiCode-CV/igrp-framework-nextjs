@@ -105,6 +105,22 @@ describe("babel build pipeline", () => {
     expect(memoized.length).toBeGreaterThanOrEqual(100)
   })
 
+  it("emits fully specified relative specifiers", { timeout: 120_000 }, () => {
+    // The package is `"type": "module"`, so Node applies ESM resolution to dist
+    // and rejects an extensionless relative specifier. Bundlers probe extensions
+    // themselves, which is why this shipped unnoticed for so long.
+    const offenders: string[] = []
+
+    for (const { file, code } of compileAll()) {
+      for (const match of code.matchAll(/froms+"(.[^"]*)"/g)) {
+        const specifier = match[1] as string
+        if (!/.(js|css|json|svg)$/.test(specifier)) offenders.push(`${file}: ${specifier}`)
+      }
+    }
+
+    expect(offenders).toEqual([])
+  })
+
   it("has no widespread compiler bailouts", { timeout: 120_000 }, () => {
     const failing = compileAll().filter((r) => r.bailouts.length > 0)
 

@@ -4,6 +4,7 @@ import { useState, useEffect, useId, useMemo, useRef } from "react"
 import { useFormContext, Controller } from "react-hook-form"
 
 import { cn } from "../cn"
+import { igrpOmitNonDomProps } from "../../../lib/dom-props"
 import { useIGRPi18n, useIGRPLocale } from "../../../i18n"
 import type { IGRPInputProps } from "../../../types"
 import { Input } from "../../primitives/input"
@@ -225,7 +226,7 @@ function NumberInputField({
           aria-valuemin={min}
           aria-valuemax={max}
           role="spinbutton"
-          {...inputProps}
+          {...igrpOmitNonDomProps(inputProps)}
         />
         {!readOnly && (
           <div className={cn("flex h-full flex-col border-l")}>

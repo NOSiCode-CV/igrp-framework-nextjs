@@ -52,7 +52,11 @@ export default defineConfig([
     },
   },
   {
-    files: ["src/components/horizon/**/*.{ts,tsx}", "src/components/custom/**/*.{ts,tsx}"],
+    // `src/lib` is in here deliberately: IGRPColors lives there, and it is the
+    // class map every badge, alert, card and stats-card pulls from. Scoping the
+    // policy to components only meant a raw palette colour added to that map
+    // passed lint and shipped to every consumer of the slot.
+    files: ["src/components/horizon/**/*.{ts,tsx}", "src/components/custom/**/*.{ts,tsx}", "src/lib/**/*.{ts,tsx}"],
     plugins: { igrp },
     rules: {
       "igrp/token-policy": "error",

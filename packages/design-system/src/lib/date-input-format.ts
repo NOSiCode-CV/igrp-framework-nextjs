@@ -1,4 +1,4 @@
-import { isValid, parse } from "date-fns"
+import { format, isValid, parse } from "date-fns"
 
 /**
  * Numeric date tokens a typed date input can mask and parse on its own.
@@ -70,7 +70,12 @@ export function maskDateInput(rawValue: string, dateFormat: string): string {
     }
 
     if (buffer.length > 0) {
-      values[index] = buffer.padStart(tokens[index]!.length, "0")
+      // Day and month are zero-padded when a separator closes them early, so the natural
+      // `1-8-2026` becomes `01-08-2026`. A four-digit year is not: padding `26` to `0026`
+      // invents a date in the year 26 that then looks perfectly well-formed to the parser.
+      // Leaving it short keeps it a half-typed year, which `parseDateInput` rejects.
+      const { length } = tokens[index]!
+      values[index] = length > 2 ? buffer : buffer.padStart(length, "0")
       index += 1
       buffer = ""
     }
@@ -107,39 +112,49 @@ export function getDateFormatMaxLength(dateFormat: string): number | undefined {
 }
 
 /**
- * Parses typed text against `dateFormat`, tolerating the widths a person actually types.
+ * Widens single-letter `d` / `M` to their zero-padded form, leaving every other token alone.
  *
- * `date-fns` already accepts `1-8-2026` for `dd-MM-yyyy`; what it will not do is tell a
- * half-typed string from a wrong one. Every token must therefore be present and non-empty
- * before the string is parsed, so `26-08-20` is rejected as incomplete rather than read as
- * the year 20. Impossible calendar days (`31-02-2026`) are rejected by `date-fns` itself.
+ * `MMM` and `MMMM` are month *names*, not widths, so only an exactly-one-character chunk is
+ * doubled.
+ */
+function padNumericTokens(dateFormat: string): string {
+  const chunks = dateFormat.match(/([a-zA-Z])\1*|[^a-zA-Z]+/g)
+  if (!chunks) return dateFormat
+  return chunks.map((chunk) => (chunk === "d" || chunk === "M" ? chunk + chunk : chunk)).join("")
+}
+
+/**
+ * Parses typed text against `dateFormat`, accepting it only when it is written the way
+ * `dateFormat` renders a date.
+ *
+ * The test is a round trip: parse the text, format the result with the same `dateFormat`, and
+ * require the two strings to match. That is the literal reading of "the value must be in
+ * `dateFormat`", and it holds for every format without special cases:
+ *
+ * - `dd-MM-yyyy` renders `01-08-2026`, so `1-8-2026` and `26-8-2026` are rejected — `dd`
+ *   means two digits. This is the case that used to slip through.
+ * - `26-08-20` parses to the year 20, re-renders as `26-08-0020`, and is rejected — a
+ *   half-typed year is not a date in the year 20.
+ * - `26/08/2026` never matches a `-` separator, and `31-02-2026` is rejected by `date-fns`
+ *   before the round trip is reached.
+ * - Named tokens work on the same terms: `dd MMM yyyy` takes `26 Aug 2026` and rejects
+ *   `26 aug 2026`.
+ *
+ * The zero-padded rendering is accepted as well, which only widens anything for a format
+ * whose tokens are single letters. `maskDateInput` has to commit to a width while the user is
+ * still typing and pads to two, so a strict-only rule would reject every value a `d-M-yyyy`
+ * field can produce — the mask would fight the parser and the field would never accept input.
+ * For `dd-MM-yyyy` and friends the padded form *is* the format, so nothing is loosened.
  */
 export function parseDateInput(value: string, dateFormat: string): Date | undefined {
   const trimmed = value.trim()
   if (!trimmed) return undefined
 
-  const parts = getDateFormatParts(dateFormat)
-
-  if (!parts) {
-    // Unmaskable format (`dd MMM yyyy` and friends): only an exact-width string can be trusted.
-    if (trimmed.length !== dateFormat.length) return undefined
-    const parsed = parse(trimmed, dateFormat, new Date())
-    return isValid(parsed) ? parsed : undefined
-  }
-
-  const tokens = parts.filter((part) => part.kind === "token")
-  const segments = trimmed.split(/[^0-9]+/).filter((segment) => segment.length > 0)
-
-  if (segments.length !== tokens.length) return undefined
-
-  const complete = segments.every((segment, i) => {
-    const { length } = tokens[i] as { length: number }
-    // Years must be typed in full — `20` for `yyyy` is a half-typed `2026`, not the year 20.
-    return length === 2 ? segment.length <= 2 : segment.length === length
-  })
-
-  if (!complete) return undefined
-
   const parsed = parse(trimmed, dateFormat, new Date())
-  return isValid(parsed) ? parsed : undefined
+  if (!isValid(parsed)) return undefined
+
+  if (format(parsed, dateFormat) === trimmed) return parsed
+
+  const padded = padNumericTokens(dateFormat)
+  return padded !== dateFormat && format(parsed, padded) === trimmed ? parsed : undefined
 }

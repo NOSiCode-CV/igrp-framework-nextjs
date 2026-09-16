@@ -53,9 +53,44 @@ describe("maskDateInput", () => {
 describe("parseDateInput", () => {
   const iso = (d: Date | undefined) => (d ? [d.getFullYear(), d.getMonth() + 1, d.getDate()] : undefined)
 
-  it("accepts the padded and the natural spelling alike", () => {
+  it("accepts a value written exactly as the format renders it", () => {
     expect(iso(parseDateInput("26-08-2026", FMT))).toEqual([2026, 8, 26])
-    expect(iso(parseDateInput("1-8-2026", FMT))).toEqual([2026, 8, 1])
+    expect(iso(parseDateInput("01-08-2026", FMT))).toEqual([2026, 8, 1])
+  })
+
+  it("rejects a value whose token widths do not match the format", () => {
+    // `dd-MM-yyyy` renders `01-08-2026`; a one-digit day or month is a different shape.
+    // `maskDateInput` pads these while the user types, so this only bites on paste or on a
+    // value set programmatically — which is exactly where a wrong format must not slip in.
+    expect(parseDateInput("1-8-2026", FMT)).toBeUndefined()
+    expect(parseDateInput("1-08-2026", FMT)).toBeUndefined()
+    expect(parseDateInput("26-8-2026", FMT)).toBeUndefined()
+  })
+
+  it("rejects a value written in a different format", () => {
+    expect(parseDateInput("26/08/2026", FMT)).toBeUndefined()
+    expect(parseDateInput("2026-08-26", FMT)).toBeUndefined()
+    expect(parseDateInput("26 Aug 2026", FMT)).toBeUndefined()
+  })
+
+  it("honours single-letter tokens, which render unpadded", () => {
+    expect(iso(parseDateInput("1-8-2026", "d-M-yyyy"))).toEqual([2026, 8, 1])
+    expect(iso(parseDateInput("26-8-2026", "d-M-yyyy"))).toEqual([2026, 8, 26])
+    // The mask has to commit to a width while typing and pads to two, so the padded
+    // spelling has to keep working for these formats or the field accepts nothing at all.
+    expect(iso(parseDateInput("01-08-2026", "d-M-yyyy"))).toEqual([2026, 8, 1])
+  })
+
+  it("applies the same rule to named-month formats", () => {
+    expect(iso(parseDateInput("26 Aug 2026", "dd MMM yyyy"))).toEqual([2026, 8, 26])
+    expect(parseDateInput("26 aug 2026", "dd MMM yyyy")).toBeUndefined()
+    expect(parseDateInput("26 August 2026", "dd MMM yyyy")).toBeUndefined()
+  })
+
+  it("does not read a two-digit year as a four-digit one", () => {
+    // The mask leaves a short year short precisely so this stays rejected.
+    expect(parseDateInput("26-08-20", "yyyy-MM-dd")).toBeUndefined()
+    expect(iso(parseDateInput("2026-08-26", "yyyy-MM-dd"))).toEqual([2026, 8, 26])
   })
 
   it("rejects half-typed input rather than guessing", () => {

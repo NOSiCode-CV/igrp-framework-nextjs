@@ -4,6 +4,7 @@ import { useId } from "react"
 import { useFormContext } from "react-hook-form"
 
 import { cn } from "../cn"
+import { igrpOmitNonDomProps } from "../../../lib/dom-props"
 import type { IGRPInputProps } from "../../../types"
 import { Switch } from "../../primitives/switch"
 import { IGRPFormField } from "../form/form-field"
@@ -52,7 +53,7 @@ function IGRPSwitch({
             onCheckedChange={onCheckedChange}
             aria-invalid={!!error}
             aria-describedby={error ? `${fielName}-error` : helperText ? `${fielName}-helper` : undefined}
-            {...props}
+            {...igrpOmitNonDomProps(props)}
           />
 
           {label && (
@@ -89,7 +90,7 @@ function IGRPSwitch({
           className={cn(
             "bg-backsground",
             (fieldState.error || error) && "border-destructive focus-visible:ring-destructive/20",
-            className,
+            className
           )}
           checked={field.value === true}
           onCheckedChange={(checked) => {
@@ -100,7 +101,7 @@ function IGRPSwitch({
           }}
           onBlur={field.onBlur}
           aria-invalid={!!fieldState.error || !!error}
-          {...props}
+          {...igrpOmitNonDomProps(props)}
         />
       )}
     </IGRPFormField>

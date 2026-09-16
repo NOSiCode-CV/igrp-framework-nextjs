@@ -8,6 +8,7 @@ import { Button, buttonVariants } from "../primitives/button"
 import { Spinner } from "../primitives/spinner"
 import { IGRPIcon } from "./icon"
 import { cn } from "cn"
+import { igrpOmitNonDomProps } from "../../lib/dom-props"
 import type { IGRPBaseAttributes } from "../../types"
 import { useIGRPi18n } from "../../i18n"
 
@@ -67,14 +68,14 @@ function IGRPButton({
     const hasAccessibleName = Boolean(props["aria-label"] || props["aria-labelledby"])
     if (process.env.NODE_ENV !== "production" && !hasAccessibleName) {
       console.warn(
-        `IGRPButton: icon-only button (iconName="${iconName}") has no accessible name. Pass an "aria-label".`,
+        `IGRPButton: icon-only button (iconName="${iconName}") has no accessible name. Pass an "aria-label".`
       )
     }
 
     return (
       <Button
         aria-label={!hasAccessibleName ? iconName : undefined}
-        {...props}
+        {...igrpOmitNonDomProps(props)}
         className={cn(loading && "cursor-wait", className)}
         disabled={disabled || loading}
         type={type}
@@ -96,9 +97,9 @@ function IGRPButton({
   if (asChild) {
     return (
       <Button
-        {...props}
+        {...igrpOmitNonDomProps(props)}
         asChild
-        className={cn("relative", loading && "cursor-wait pointer-events-none", className)}
+        className={cn("relative", loading && "pointer-events-none cursor-wait", className)}
         disabled={disabled || loading}
         aria-disabled={disabled || loading || undefined}
         id={ref}
@@ -110,7 +111,7 @@ function IGRPButton({
 
   return (
     <Button
-      {...props}
+      {...igrpOmitNonDomProps(props)}
       className={cn("relative", loading && "cursor-wait", className)}
       disabled={disabled || loading}
       type={type}

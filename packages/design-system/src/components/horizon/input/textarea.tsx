@@ -4,6 +4,7 @@ import { useId } from "react"
 import { useFormContext, Controller } from "react-hook-form"
 
 import { cn } from "../cn"
+import { igrpOmitNonDomProps } from "../../../lib/dom-props"
 import type { IGRPInputProps } from "../../../types"
 import { Textarea } from "../../primitives/textarea"
 import { IGRPLabel } from "../label"
@@ -16,7 +17,10 @@ import { Field, FieldDescription, FieldError } from "../../primitives/field"
 interface IGRPTextareaProps
   extends
     React.ComponentProps<typeof Textarea>,
-    Pick<IGRPInputProps, "label" | "helperText" | "className" | "required" | "error"> {}
+    Pick<
+      IGRPInputProps,
+      "label" | "labelClassName" | "helperText" | "className" | "inputClassName" | "required" | "error"
+    > {}
 
 /**
  * Textarea with label, helper text, and form integration.
@@ -25,13 +29,18 @@ function IGRPTextarea({
   name,
   id,
   label,
+  labelClassName,
   helperText,
   className,
+  inputClassName,
   required = false,
   error,
   rows = 3,
   ...props
 }: IGRPTextareaProps) {
+  // Whatever is left belongs to the native element; the IGRP-only keys would
+  // otherwise be rendered as invalid DOM attributes.
+  const domProps = igrpOmitNonDomProps(props)
   const _id = useId()
   const fieldName = name ?? id ?? _id
 
@@ -40,7 +49,7 @@ function IGRPTextarea({
   if (!formContext) {
     return (
       <Field>
-        {label && <IGRPLabel label={label} className={className} required={required} id={fieldName} />}
+        {label && <IGRPLabel label={label} className={labelClassName} required={required} id={fieldName} />}
 
         <div className={cn("relative")}>
           <Textarea
@@ -54,9 +63,10 @@ function IGRPTextarea({
               "peer bg-background py-3 text-sm outline-hidden",
               error && "border-destructive focus-visible:ring-destructive/20",
               className,
+              inputClassName
             )}
             rows={rows}
-            {...props}
+            {...domProps}
           />
         </div>
 
@@ -76,7 +86,7 @@ function IGRPTextarea({
       control={formContext.control}
       render={({ field, fieldState }) => (
         <Field>
-          {label && <IGRPLabel label={label} className={className} required={required} id={fieldName} />}
+          {label && <IGRPLabel label={label} className={labelClassName} required={required} id={fieldName} />}
 
           <div className={cn("relative")}>
             <Textarea
@@ -92,12 +102,13 @@ function IGRPTextarea({
                 "peer bg-background py-3 text-sm outline-hidden",
                 (fieldState.error || error) && "border-destructive focus-visible:ring-destructive/20",
                 className,
+                inputClassName
               )}
               rows={rows}
               value={field.value || ""}
               onChange={field.onChange}
               onBlur={field.onBlur}
-              {...props}
+              {...domProps}
             />
           </div>
 

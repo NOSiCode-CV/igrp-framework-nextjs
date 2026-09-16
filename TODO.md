@@ -83,13 +83,8 @@ Add the following components to the design system:
 }
 
 igrp-hidden is a hidden input but still show in the html
-Fix Gap na tabela....
-Configuracao de cliente na app center...
-sync permissions
-Inject childreen component na header Next apps....
 
-Sync Permissions di frontend, para implementar a sincronização
-https://git.nosi.cv/igrp-3_0/igrp-auth/backend/igrp-platform-access-management/-/blob/version/0.2.0-beta/docs/IGRP_PERMISSIONS_SYNC_NEXTJS_GUIDE.md?ref_type=heads
+Configuracao de cliente na app center...
 
 Auditoria com reports
 https://git.nosi.cv/igrp-3_0/igrp-auth/backend/igrp-platform-access-management/-/blob/version/0.2.0-beta/docs/AUDIT_REPORTS_INTEGRATION_GUIDE.md

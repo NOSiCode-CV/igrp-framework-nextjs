@@ -7,6 +7,7 @@ import { cn } from "../cn"
 import type { IGRPInputProps, IGRPOptionsProps } from "../../../types"
 import { InputGroup, InputGroupAddon, InputGroupInput } from "../../primitives/input-group"
 import { Select, SelectContent, SelectGroup, SelectItem, SelectTrigger, SelectValue } from "../../primitives/select"
+import { igrpOmitNonDomProps } from "../../../lib/dom-props"
 import { IGRPLabel } from "../label"
 import { Field, FieldDescription, FieldError } from "../../primitives/field"
 import { useIGRPi18n } from "../../../i18n"
@@ -54,8 +55,10 @@ function IGRPInputUrl({
   name,
   id,
   label,
+  labelClassName,
   helperText,
   className,
+  inputClassName,
   required = false,
   error,
   value,
@@ -68,6 +71,9 @@ function IGRPInputUrl({
   const i18n = useIGRPi18n()
   const _id = useId()
   const fieldName = name ?? id ?? _id
+  // Whatever is left belongs to the native element; the IGRP-only keys would
+  // otherwise be rendered as invalid DOM attributes.
+  const domProps = igrpOmitNonDomProps(props)
 
   const formContext = useFormContext()
 
@@ -85,7 +91,7 @@ function IGRPInputUrl({
         address: url,
       }
     },
-    [defaultProtocol, protocols],
+    [defaultProtocol, protocols]
   )
 
   const initialUrl = value ?? defaultValue ?? ""
@@ -114,7 +120,7 @@ function IGRPInputUrl({
   if (!formContext) {
     return (
       <Field className={className} data-invalid={error ? true : undefined}>
-        {label && <IGRPLabel label={label} required={required} id={fieldName} />}
+        {label && <IGRPLabel label={label} className={labelClassName} required={required} id={fieldName} />}
 
         <InputGroup>
           <InputGroupAddon align="inline-start" className={cn("p-0")}>
@@ -138,6 +144,7 @@ function IGRPInputUrl({
           </InputGroupAddon>
 
           <InputGroupInput
+            className={inputClassName}
             id={fieldName}
             name={fieldName}
             type="url"
@@ -148,7 +155,7 @@ function IGRPInputUrl({
             aria-required={required}
             aria-invalid={!!error || !!props["aria-invalid"]}
             aria-describedby={error ? `${fieldName}-error` : helperText ? `${fieldName}-helper` : undefined}
-            {...props}
+            {...domProps}
           />
         </InputGroup>
 
@@ -182,7 +189,7 @@ function IGRPInputUrl({
 
         return (
           <Field className={className} data-invalid={fieldState.error || error ? true : undefined}>
-            {label && <IGRPLabel label={label} required={required} id={fieldName} />}
+            {label && <IGRPLabel label={label} className={labelClassName} required={required} id={fieldName} />}
 
             <InputGroup>
               <InputGroupAddon align="inline-start" className={cn("p-0")}>
@@ -211,6 +218,7 @@ function IGRPInputUrl({
               </InputGroupAddon>
 
               <InputGroupInput
+                className={inputClassName}
                 id={fieldName}
                 name={fieldName}
                 type="url"
@@ -224,7 +232,7 @@ function IGRPInputUrl({
                 aria-describedby={
                   error || fieldState.error ? `${fieldName}-error` : helperText ? `${fieldName}-helper` : undefined
                 }
-                {...props}
+                {...domProps}
               />
             </InputGroup>
 

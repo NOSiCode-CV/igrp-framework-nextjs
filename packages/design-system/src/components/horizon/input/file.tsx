@@ -6,6 +6,7 @@ import { useDropzone, type FileRejection } from "react-dropzone"
 import { AlertCircle, UploadCloud, X } from "lucide-react"
 
 import { cn } from "../cn"
+import { igrpOmitNonDomProps } from "../../../lib/dom-props"
 import { igrpFormatMessage, useIGRPi18n } from "../../../i18n"
 import type { IGRPInputProps } from "../../../types"
 import { Input } from "../../primitives/input"
@@ -364,6 +365,7 @@ function IGRPInputFile({
   className,
   required = false,
   disabled = false,
+  labelClassName,
   accept,
   multiple = false,
   variant = "default",
@@ -479,7 +481,7 @@ function IGRPInputFile({
   if (!formContext) {
     return (
       <Field>
-        {label && <IGRPLabel label={label} className={className} required={required} id={fieldName} />}
+        {label && <IGRPLabel label={label} className={labelClassName} required={required} id={fieldName} />}
         <Input
           ref={inputRef}
           id={fieldName}
@@ -497,7 +499,7 @@ function IGRPInputFile({
           onChange={onChange}
           aria-invalid={!!error}
           aria-describedby={error ? `${fieldName}-error` : helperText ? `${fieldName}-helper` : undefined}
-          {...props}
+          {...igrpOmitNonDomProps(props)}
         />
 
         {helperText && !error && <FieldDescription id={`${fieldName}-helper`}>{helperText}</FieldDescription>}
@@ -522,7 +524,7 @@ function IGRPInputFile({
 
         return (
           <Field>
-            {label && <IGRPLabel label={label} className={className} required={required} id={fieldName} />}
+            {label && <IGRPLabel label={label} className={labelClassName} required={required} id={fieldName} />}
             <Input
               ref={inputRef}
               id={fieldName}
@@ -551,7 +553,7 @@ function IGRPInputFile({
                 errorMessage || fieldState.error ? `${fieldName}-error` : helperText ? `${fieldName}-helper` : undefined
               }
               {...safeFieldProps}
-              {...props}
+              {...igrpOmitNonDomProps(props)}
               name={fieldName}
             />
 

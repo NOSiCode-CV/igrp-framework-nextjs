@@ -4,6 +4,7 @@ import { useId } from "react"
 import { useFormContext, Controller } from "react-hook-form"
 
 import { cn } from "../cn"
+import { igrpOmitNonDomProps } from "../../../lib/dom-props"
 import type { IGRPInputProps } from "../../../types"
 import { Input } from "../../primitives/input"
 import { IGRPLabel } from "../label"
@@ -29,8 +30,10 @@ function IGRPInputTime({
   name,
   id,
   label,
+  labelClassName,
   helperText = "",
   className,
+  inputClassName,
   required = false,
   error,
   value,
@@ -40,6 +43,9 @@ function IGRPInputTime({
 }: IGRPInputTimeProps) {
   const _id = useId()
   const fieldName = name ?? id ?? _id
+  // Whatever is left belongs to the native element; the IGRP-only keys would
+  // otherwise be rendered as invalid DOM attributes.
+  const domProps = igrpOmitNonDomProps(props)
 
   const formContext = useFormContext()
 
@@ -51,7 +57,7 @@ function IGRPInputTime({
   if (!formContext) {
     return (
       <Field>
-        {label && <IGRPLabel label={label} className={className} required={required} id={fieldName} />}
+        {label && <IGRPLabel label={label} className={labelClassName} required={required} id={fieldName} />}
 
         <div className={cn("relative")}>
           <Input
@@ -66,11 +72,12 @@ function IGRPInputTime({
               "peer bg-background py-3 text-sm outline-hidden",
               error && "border-destructive focus-visible:ring-destructive/20",
               className,
+              inputClassName
             )}
             value={value}
             defaultValue={defaultValue}
             onChange={handleChange}
-            {...props}
+            {...domProps}
           />
         </div>
 
@@ -88,7 +95,7 @@ function IGRPInputTime({
       defaultValue={defaultValue || ""}
       render={({ field, fieldState }) => (
         <Field>
-          {label && <IGRPLabel label={label} className={className} required={required} id={fieldName} />}
+          {label && <IGRPLabel label={label} className={labelClassName} required={required} id={fieldName} />}
 
           <div className={cn("relative")}>
             <Input
@@ -105,6 +112,7 @@ function IGRPInputTime({
                 "peer bg-background py-3 text-sm outline-hidden",
                 (fieldState.error || error) && "border-destructive focus-visible:ring-destructive/20",
                 className,
+                inputClassName
               )}
               value={field.value}
               onChange={(e) => {
@@ -112,7 +120,7 @@ function IGRPInputTime({
                 handleChange(e)
               }}
               onBlur={field.onBlur}
-              {...props}
+              {...domProps}
             />
           </div>
 

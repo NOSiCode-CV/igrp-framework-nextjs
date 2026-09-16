@@ -5,6 +5,7 @@ import { useFormContext, Controller } from "react-hook-form"
 
 import { DD_MM_YYYY } from "../../../lib/utilities"
 import { cn } from "../cn"
+import { igrpOmitNonDomProps } from "../../../lib/dom-props"
 import type { IGRPInputProps } from "../../../types"
 
 import { Input } from "../../primitives/input"
@@ -43,6 +44,7 @@ function IGRPDateTimeInput({
   defaultValue = "",
   placeholder = DEFAULT_PLACEHOLDER,
   className,
+  labelClassName,
   inputClassName,
   onChange,
   onBlur,
@@ -100,8 +102,8 @@ function IGRPDateTimeInput({
 
   if (!formContext) {
     return (
-      <Field>
-        {label && <IGRPLabel label={label} className={className} required={required} id={fieldName} />}
+      <Field className={className}>
+        {label && <IGRPLabel label={label} className={labelClassName} required={required} id={fieldName} />}
 
         <Input
           id={fieldName}
@@ -116,7 +118,7 @@ function IGRPDateTimeInput({
           aria-invalid={!!error || !!props["aria-invalid"]}
           aria-describedby={error ? `${fieldName}-error` : helperText ? `${fieldName}-helper` : undefined}
           className={cn(error && "border-destructive focus-visible:ring-destructive/20", inputClassName)}
-          {...props}
+          {...igrpOmitNonDomProps(props)}
         />
 
         {helperText && !error && <FieldDescription id={`${fieldName}-helper`}>{helperText}</FieldDescription>}
@@ -154,8 +156,8 @@ function IGRPDateTimeInput({
         }
 
         return (
-          <Field>
-            {label && <IGRPLabel label={label} className={className} required={required} id={fieldName} />}
+          <Field className={className}>
+            {label && <IGRPLabel label={label} className={labelClassName} required={required} id={fieldName} />}
 
             <Input
               id={fieldName}
@@ -172,9 +174,9 @@ function IGRPDateTimeInput({
               }
               className={cn(
                 (fieldState.error || error) && "border-destructive focus-visible:ring-destructive/20",
-                inputClassName,
+                inputClassName
               )}
-              {...props}
+              {...igrpOmitNonDomProps(props)}
             />
 
             {helperText && !error && !fieldState.error && (

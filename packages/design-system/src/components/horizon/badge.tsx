@@ -6,11 +6,12 @@ import { useId } from "react"
 
 import { type IGRPColorRole, IGRPColors, type IGRPColorVariants } from "../../lib/colors"
 import { cn } from "cn"
+import { igrpOmitNonDomProps } from "../../lib/dom-props"
 import { type IGRPBaseAttributes } from "../../types"
 import { IGRPIcon } from "./icon"
 
 const igrpBadgeVariants = cva(
-  "inline-flex items-center justify-center rounded-full shadow-none border px-3 py-0.5 text-xs font-medium w-fit whitespace-nowrap shrink-0 [&>svg]:size-3 gap-1 [&>svg]:pointer-events-none focus-visible:border-ring focus-visible:ring-ring/50 focus-visible:ring-[3px] transition-[color,box-shadow] overflow-hidden",
+  "inline-flex w-fit shrink-0 items-center justify-center gap-1 overflow-hidden rounded-full border px-3 py-0.5 text-xs font-medium whitespace-nowrap shadow-none transition-[color,box-shadow] focus-visible:border-ring focus-visible:ring-[3px] focus-visible:ring-ring/50 [&>svg]:pointer-events-none [&>svg]:size-3",
   {
     variants: {
       size: {
@@ -22,7 +23,7 @@ const igrpBadgeVariants = cva(
     defaultVariants: {
       size: "sm",
     },
-  },
+  }
 )
 
 /**
@@ -84,12 +85,12 @@ function IGRPBadge({
       className={cn(
         igrpBadgeVariants({ size }),
         colorClasses.badge,
-        isCircular && "aspect-square flex items-center justify-center",
+        isCircular && "flex aspect-square items-center justify-center",
         isCircular && getCircularSizeClass(),
         className,
-        badgeClassName,
+        badgeClassName
       )}
-      {...props}
+      {...igrpOmitNonDomProps(props)}
     >
       {dot && <div className={cn("size-1.5 rounded-full", colorClasses.bgForeground)} />}
 

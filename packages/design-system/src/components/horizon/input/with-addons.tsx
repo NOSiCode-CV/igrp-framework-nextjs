@@ -3,6 +3,7 @@
 import { useEffect, useId, useMemo } from "react"
 
 import { cn } from "../cn"
+import { igrpOmitNonDomProps } from "../../../lib/dom-props"
 import type { IGRPInputProps, IGRPOptionsProps } from "../../../types"
 import { Input } from "../../primitives/input"
 import {
@@ -67,12 +68,12 @@ function IGRPInputAddOn({
     <Field className={classNameGlobal}>
       {label && <IGRPLabel label={label} className={classNameLabel} id={ref} />}
 
-      <div className={cn("flex rounded-md border overflow-hidden")}>
+      <div className={cn("flex overflow-hidden rounded-md border")}>
         <Select value={selectValue} onValueChange={onSelectValueChange}>
           <SelectTrigger
             aria-label={optionLabel ?? "Select option"}
             className={cn(
-              "border-0 border-r rounded-none min-w-20 px-3 py-2 focus:ring-0 focus-visible:ring-0 focus-visible:ring-offset-0 shadow-none",
+              "min-w-20 rounded-none border-0 border-r px-3 py-2 shadow-none focus:ring-0 focus-visible:ring-0 focus-visible:ring-offset-0"
             )}
           >
             <SelectValue>
@@ -85,7 +86,7 @@ function IGRPInputAddOn({
           </SelectTrigger>
           <SelectContent>
             <SelectGroup>
-              {optionLabel && <SelectLabel className={cn("font-light text-sm")}>{optionLabel}</SelectLabel>}
+              {optionLabel && <SelectLabel className={cn("text-sm font-light")}>{optionLabel}</SelectLabel>}
               {options?.map((option) => (
                 <SelectItem
                   key={option.value}
@@ -101,9 +102,9 @@ function IGRPInputAddOn({
         <Input
           id={ref}
           className={cn(
-            "border-0 rounded-none flex-1 focus-visible:ring-0 focus-visible:ring-offset-0 px-3 py-2 shadow-none",
+            "flex-1 rounded-none border-0 px-3 py-2 shadow-none focus-visible:ring-0 focus-visible:ring-offset-0"
           )}
-          {...props}
+          {...igrpOmitNonDomProps(props)}
         />
       </div>
     </Field>

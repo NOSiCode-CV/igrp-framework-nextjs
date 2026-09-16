@@ -4,6 +4,7 @@ import { useId, useState } from "react"
 import { useFormContext, Controller } from "react-hook-form"
 
 import { useIGRPi18n } from "../../../i18n"
+import { igrpOmitNonDomProps } from "../../../lib/dom-props"
 import type { IGRPGridSize, IGRPInputProps } from "../../../types"
 import { InputGroup, InputGroupAddon, InputGroupButton, InputGroupInput } from "../../primitives/input-group"
 import { IGRPIcon } from "../icon"
@@ -36,8 +37,10 @@ function IGRPInputPassword({
   name,
   id,
   label,
+  labelClassName,
   helperText,
   className,
+  inputClassName,
   required = false,
   error,
   value,
@@ -48,6 +51,9 @@ function IGRPInputPassword({
 }: IGRPInputPasswordProps) {
   const _id = useId()
   const fieldName = name ?? id ?? _id
+  // Whatever is left belongs to the native element; the IGRP-only keys would
+  // otherwise be rendered as invalid DOM attributes.
+  const domProps = igrpOmitNonDomProps(props)
 
   const [showPassword, setShowPassword] = useState(false)
   const formContext = useFormContext()
@@ -68,10 +74,11 @@ function IGRPInputPassword({
   if (!formContext) {
     return (
       <Field className={className} data-invalid={error ? true : undefined}>
-        {label && <IGRPLabel label={label} required={required} id={fieldName} />}
+        {label && <IGRPLabel label={label} className={labelClassName} required={required} id={fieldName} />}
 
         <InputGroup>
           <InputGroupInput
+            className={inputClassName}
             id={fieldName}
             name={fieldName}
             type={showPassword ? "text" : "password"}
@@ -84,7 +91,7 @@ function IGRPInputPassword({
             value={value !== undefined ? value : localValue}
             defaultValue={defaultValue}
             onChange={handleStandaloneChange}
-            {...props}
+            {...domProps}
           />
 
           {showPasswordToggle && (
@@ -115,10 +122,11 @@ function IGRPInputPassword({
       defaultValue={defaultValue || ""}
       render={({ field, fieldState }) => (
         <Field className={className} data-invalid={fieldState.error || error ? true : undefined}>
-          {label && <IGRPLabel label={label} required={required} id={fieldName} />}
+          {label && <IGRPLabel label={label} className={labelClassName} required={required} id={fieldName} />}
 
           <InputGroup>
             <InputGroupInput
+              className={inputClassName}
               id={fieldName}
               type={showPassword ? "text" : "password"}
               spellCheck={false}
@@ -135,16 +143,12 @@ function IGRPInputPassword({
                 onChange?.(e.target.value)
               }}
               onBlur={field.onBlur}
-              {...props}
+              {...domProps}
             />
 
             {showPasswordToggle && (
               <InputGroupAddon align="inline-end">
-                <InputGroupButton
-                  size="icon-xs"
-                  onClick={togglePasswordVisibility}
-                  aria-label={toggleLabel}
-                >
+                <InputGroupButton size="icon-xs" onClick={togglePasswordVisibility} aria-label={toggleLabel}>
                   <IGRPIcon iconName={showPassword ? "EyeOff" : "Eye"} aria-hidden="true" />
                 </InputGroupButton>
               </InputGroupAddon>

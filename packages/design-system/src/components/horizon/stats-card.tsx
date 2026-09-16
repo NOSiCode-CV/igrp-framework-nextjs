@@ -9,6 +9,7 @@ import Image from "next/image"
 
 import { IGRPColors, type IGRPColorVariants } from "../../lib/colors"
 import { cn } from "cn"
+import { igrpOmitNonDomProps } from "../../lib/dom-props"
 import type { IGRPBaseAttributes } from "../../types"
 import { IGRPIcon, type IGRPIconName } from "./icon"
 
@@ -357,7 +358,7 @@ function IGRPStatsCard({
         className
       )}
       id={ref}
-      {...props}
+      {...igrpOmitNonDomProps(props)}
       {...(isInteractive && {
         role: "button",
         tabIndex: 0,

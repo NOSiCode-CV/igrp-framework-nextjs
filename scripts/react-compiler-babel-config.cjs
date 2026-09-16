@@ -35,6 +35,7 @@
  * Plugin options: https://github.com/facebook/react/blob/main/compiler/packages/babel-plugin-react-compiler/src/Entrypoint/Options.ts
  */
 const fs = require('node:fs');
+const addImportExtension = require('./babel-plugin-add-import-extension.cjs');
 
 /**
  * Matches a `use client` directive regardless of quote style.
@@ -112,9 +113,13 @@ const createBabelConfig = ({ reactCompiler = true, ...options } = {}) => (api) =
       '@babel/preset-typescript',
       ['@babel/preset-react', { runtime: 'automatic', development: false }],
     ],
-    plugins: reactCompiler
-      ? [['babel-plugin-react-compiler', createReactCompilerConfig(options)]]
-      : [],
+    plugins: [
+      // Must run in every build, compiler or not: these packages are
+      // `"type": "module"`, so Node applies ESM resolution to dist and rejects
+      // extensionless relative specifiers. See the plugin's header.
+      addImportExtension,
+      ...(reactCompiler ? [['babel-plugin-react-compiler', createReactCompilerConfig(options)]] : []),
+    ],
   };
 };
 

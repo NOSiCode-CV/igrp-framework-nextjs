@@ -17,7 +17,7 @@ import { useIGRPi18n, useIGRPLocale } from "../../i18n"
 
 /**
  * Document item shape for PDF viewer.
- * Represents a single document with metadata and file URL.
+ * Represents a single pdfDocument with metadata and file URL.
  */
 type IGRPDocumentItem = {
   id: number
@@ -49,7 +49,7 @@ interface IGRPPdfViewerProps {
   loadTimeoutMs?: number
   /** PDF viewer engine: 'google' (Docs viewer), 'native' (iframe), or 'auto' (fallback). */
   viewerPreference?: "google" | "native" | "auto"
-  /** Message shown when no document is provided. */
+  /** Message shown when no pdfDocument is provided. */
   notFoundLabel?: string
   /** HTML name attribute. */
   name?: string
@@ -123,14 +123,14 @@ const openDocNewTab = (fileUrl: string) => {
  * Uses Google Docs viewer or native iframe with fallback on load failure.
  */
 function IGRPPdfViewer({
-  document,
+  document: pdfDocument,
   displayMode = "modal",
   labelButtonCancel = "Close",
   labelButtonNewTab = "Open in new tab",
   inlineHeight = "50vh",
   loadErrorLabel,
   loadTimeoutMs = 8000,
-  viewerPreference = "google",
+  viewerPreference = "native",
   notFoundLabel,
   name,
   id,
@@ -139,18 +139,9 @@ function IGRPPdfViewer({
   const i18n = useIGRPi18n()
   const [selectedDocument, setSelectedDocument] = useState<IGRPDocumentItem>()
   const [isModalOpen, setIsModalOpen] = useState(false)
-  const [loading, setLoading] = useState(true)
 
   const _id = useId()
   const ref = name ?? id ?? _id
-
-  useEffect(() => {
-    const timeout = setTimeout(() => {
-      setLoading(false)
-    }, 1000)
-
-    return () => clearTimeout(timeout)
-  }, [])
 
   const handleDocumentClick = useCallback(
     (doc: IGRPDocumentItem) => {
@@ -162,9 +153,7 @@ function IGRPPdfViewer({
     [displayMode]
   )
 
-  if (loading) return <IGRPLoadingSpinner />
-
-  if (!document) {
+  if (!pdfDocument) {
     return (
       <div className={cn("flex items-center gap-3")} id={ref}>
         <IGRPIcon iconName="FileX2" className={cn(IGRPColors.solid.destructive.text)} />
@@ -179,8 +168,8 @@ function IGRPPdfViewer({
     <div className={cn("flex flex-col", className)} id={ref}>
       {displayMode === "inline" && (
         <IGRPPdfViewerInline
-          key={`${document.fileUrl}-${viewerPreference}`}
-          document={document}
+          key={`${pdfDocument.fileUrl}-${viewerPreference}`}
+          document={pdfDocument}
           labelButtonNewTab={labelButtonNewTab}
           height={inlineHeight}
           loadErrorLabel={loadErrorLabel ?? i18n.pdfViewer.loadError}
@@ -192,8 +181,8 @@ function IGRPPdfViewer({
       {displayMode === "modal" && (
         <>
           <IGRPPdfViewerCard
-            key={document.id}
-            document={document}
+            key={pdfDocument.id}
+            document={pdfDocument}
             onView={handleDocumentClick}
             clickable={displayMode === "modal"}
           />
@@ -220,32 +209,32 @@ function IGRPPdfViewer({
 type IGRPPdfViewerCardProps = {
   /** Document to display in the card. */
   document: IGRPDocumentItem
-  /** Callback when the user requests to view the document. */
+  /** Callback when the user requests to view the pdfDocument. */
   onView: (doc: IGRPDocumentItem) => void
   /** Whether the card is clickable to open the modal. */
   clickable?: boolean
 }
 
-/** Card preview for a PDF document in modal mode. */
-function IGRPPdfViewerCard({ document, onView, clickable = true }: IGRPPdfViewerCardProps) {
+/** Card preview for a PDF pdfDocument in modal mode. */
+function IGRPPdfViewerCard({ document: pdfDocument, onView, clickable = true }: IGRPPdfViewerCardProps) {
   const handleKeyDown = (event: React.KeyboardEvent<HTMLDivElement>) => {
     if (!clickable) return
 
     if (event.key === "Enter" || event.key === " ") {
       event.preventDefault()
-      onView(document)
+      onView(pdfDocument)
     }
   }
 
   return (
     <Card
-      key={document.id}
+      key={pdfDocument.id}
       className={cn(
         "py-3 transition-shadow",
         clickable &&
           "cursor-pointer hover:shadow-md focus-visible:ring-2 focus-visible:ring-ring focus-visible:outline-none"
       )}
-      onClick={clickable ? () => onView(document) : undefined}
+      onClick={clickable ? () => onView(pdfDocument) : undefined}
       role={clickable ? "button" : undefined}
       tabIndex={clickable ? 0 : undefined}
       onKeyDown={handleKeyDown}
@@ -254,7 +243,7 @@ function IGRPPdfViewerCard({ document, onView, clickable = true }: IGRPPdfViewer
         <div className={cn("flex items-start justify-between")}>
           <div className={cn("flex items-center gap-2")}>
             <IGRPIcon iconName="FileText" className={cn("text-muted-foreground")} />
-            <CardTitle className={cn("text-sm leading-tight font-medium")}>{document.title}</CardTitle>
+            <CardTitle className={cn("text-sm leading-tight font-medium")}>{pdfDocument.title}</CardTitle>
           </div>
           <IGRPBadge variant="soft" color="destructive" badgeClassName={cn("px-3")}>
             PDF
@@ -285,7 +274,7 @@ type IGRPPdfViewerInlineProps = {
 
 /** Inline PDF viewer with embedded iframe. */
 function IGRPPdfViewerInline({
-  document,
+  document: pdfDocument,
   labelButtonNewTab = "Open in new tab",
   height = "50vh",
   loadErrorLabel,
@@ -294,7 +283,7 @@ function IGRPPdfViewerInline({
 }: IGRPPdfViewerInlineProps) {
   const i18n = useIGRPi18n()
   const locale = useIGRPLocale()
-  const { fileUrl, title, author, date } = document
+  const { fileUrl, title, author, date } = pdfDocument
   const [state, dispatch] = useReducer(pdfViewerReducer, viewerPreference, getInitialPdfViewerState)
   const { frameStatus, viewerEngine } = state
 
@@ -414,7 +403,7 @@ type IGRPPdfViewerModalProps = {
 /** Modal dialog containing the PDF viewer. */
 function IGRPPdfViewerModal({
   open,
-  document,
+  document: pdfDocument,
   onClose,
   labelButtonCancel,
   labelButtonNewTab,
@@ -438,13 +427,13 @@ function IGRPPdfViewerModal({
 
   const prevDocIdRef = useRef<number | null>(null)
   useEffect(() => {
-    if (document && document.id !== prevDocIdRef.current) {
-      prevDocIdRef.current = document.id
+    if (pdfDocument && pdfDocument.id !== prevDocIdRef.current) {
+      prevDocIdRef.current = pdfDocument.id
       dispatch({ type: "RESET", viewerPreference })
-    } else if (!document) {
+    } else if (!pdfDocument) {
       prevDocIdRef.current = null
     }
-  }, [document, viewerPreference])
+  }, [pdfDocument, viewerPreference])
 
   useEffect(() => {
     if (frameStatus !== "loading") return
@@ -456,9 +445,9 @@ function IGRPPdfViewerModal({
     return () => clearTimeout(timeout)
   }, [frameStatus, loadTimeoutMs, viewerEngine, viewerPreference])
 
-  if (!document) return null
+  if (!pdfDocument) return null
 
-  const { fileUrl, title, author, date } = document
+  const { fileUrl, title, author, date } = pdfDocument
   const iframeSrc =
     viewerEngine === "google"
       ? `https://docs.google.com/viewer?url=${encodeURIComponent(fileUrl)}&embedded=true`

@@ -6,6 +6,7 @@ import { cva, type VariantProps } from "class-variance-authority"
 import { IGRPIcon } from "../icon"
 import { type IGRPColorRole, type IGRPColorVariants } from "../../../lib/colors"
 import { cn } from "../cn"
+import { igrpOmitNonDomProps } from "../../../lib/dom-props"
 import type { IGRPBaseAttributes } from "../../../types"
 
 const igrpHeadlineVariants = cva("scroll-m-20 font-bold tracking-tight text-balance", {
@@ -14,7 +15,7 @@ const igrpHeadlineVariants = cva("scroll-m-20 font-bold tracking-tight text-bala
       h1: "text-4xl font-extrabold lg:text-5xl",
       h2: "text-3xl lg:text-4xl",
       h3: "text-2xl lg:text-3xl",
-      h4: "text-xl lg:text-2xl ",
+      h4: "text-xl lg:text-2xl",
       h5: "text-lg lg:text-xl",
       h6: "text-base lg:text-lg",
     },
@@ -75,11 +76,11 @@ function IGRPHeadline({
     <div
       id={ref}
       className={cn(
-        "flex gap-2 items-start text-primary",
+        "flex items-start gap-2 text-primary",
         iconPlacement === "end" && "flex-row-reverse justify-between",
-        className,
+        className
       )}
-      {...props}
+      {...igrpOmitNonDomProps(props)}
     >
       {showIcon && <IGRPIcon iconName={iconName} size={iconSize} className={cn("mt-1", iconClassName)} />}
       <div className={cn("flex flex-col gap-1", headlineContentClassName)}>

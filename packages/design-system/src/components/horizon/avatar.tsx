@@ -6,6 +6,7 @@ import { useId } from "react"
 import { useIGRPi18n } from "../../i18n"
 import { IGRPColors, type IGRPColorVariants } from "../../lib/colors"
 import { cn } from "cn"
+import { igrpOmitNonDomProps } from "../../lib/dom-props"
 import type { IGRPBaseAttributes } from "../../types"
 import { Avatar, AvatarImage, AvatarFallback } from "../primitives/avatar"
 import { IGRPBadge } from "./badge"
@@ -53,51 +54,45 @@ const iconVariants = cva(
   {
     variants: {
       scale: {
-        sm: "size-4 -bottom-0.5 -right-0.5",
-        md: "size-5 -bottom-1 -right-1",
-        lg: "size-6 -bottom-1 -right-1",
-        xl: "size-7 -bottom-1 -right-1",
+        sm: "-right-0.5 -bottom-0.5 size-4",
+        md: "-right-1 -bottom-1 size-5",
+        lg: "-right-1 -bottom-1 size-6",
+        xl: "-right-1 -bottom-1 size-7",
       },
     },
     defaultVariants: {
       scale: "md",
+    },
+  }
+)
+
+const statusVariants = cva("absolute right-0 bottom-0 rounded-full border-2 border-background", {
+  variants: {
+    scale: {
+      sm: "size-2",
+      md: "size-3",
+      lg: "size-4",
+      xl: "size-5",
     },
   },
-)
+  defaultVariants: {
+    scale: "md",
+  },
+})
 
-const statusVariants = cva(
-  "absolute bottom-0 right-0 rounded-full border-2 border-background", 
-  {
-    variants: {
-      scale: {
-        sm: "size-2",
-        md: "size-3",
-        lg: "size-4",
-        xl: "size-5",
-      },
+const badgeVariants = cva("absolute flex items-center justify-center rounded-full border-2 px-0 text-xs", {
+  variants: {
+    scale: {
+      sm: "-top-1 -right-1 size-4",
+      md: "-top-1.5 -right-1.5 size-5",
+      lg: "-top-2 -right-2 size-6",
+      xl: "-top-2 -right-2 size-7",
     },
-    defaultVariants: {
-      scale: "md",
-    },
-  }
-)
-
-const badgeVariants = cva(
-  "absolute flex items-center justify-center rounded-full border-2 text-xs px-0", 
-  {
-    variants: {
-      scale: {
-        sm: "size-4 -top-1 -right-1",
-        md: "size-5 -top-1.5 -right-1.5",
-        lg: "size-6 -top-2 -right-2",
-        xl: "size-7 -top-2 -right-2",
-      },
-    },
-    defaultVariants: {
-      scale: "md",
-    },
-  }
-)
+  },
+  defaultVariants: {
+    scale: "md",
+  },
+})
 
 /**
  * Props for the IGRPAvatar component.
@@ -181,7 +176,7 @@ function IGRPAvatar({
 
   return (
     <div className={cn("relative", avatarVariants({ scale, rounded }), className)} id={ref}>
-      <Avatar className="size-full" {...avatarProps}>
+      <Avatar className="size-full" {...igrpOmitNonDomProps(avatarProps)}>
         <AvatarImage src={src} alt={alt} />
         <AvatarFallback className={cn("text-sm font-medium", fallbackClassName)}>
           {hasFallbackIcon ? <IGRPIcon iconName={fallbackIcon} /> : upperFallBack}
@@ -189,19 +184,11 @@ function IGRPAvatar({
       </Avatar>
 
       {hasStatus && status && (
-        <span 
-          className={cn(
-            statusVariants({ scale }), 
-            colorClasses.bgForeground)} 
-            aria-label={`Status: ${status}`} 
-          />
+        <span className={cn(statusVariants({ scale }), colorClasses.bgForeground)} aria-label={`Status: ${status}`} />
       )}
 
       {showIcon && iconName && (
-        <span 
-          className={cn(iconVariants({ scale }), iconClassName)} 
-          aria-label={i18n.avatar.iconIndicator}
-        >
+        <span className={cn(iconVariants({ scale }), iconClassName)} aria-label={i18n.avatar.iconIndicator}>
           <IGRPIcon iconName={iconName} color={iconColor} />
         </span>
       )}

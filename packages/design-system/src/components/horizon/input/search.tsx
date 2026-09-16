@@ -1,10 +1,11 @@
 "use client"
 
-import { useId, useState, useCallback, type ReactNode } from "react"
+import { useCallback, useEffect, useId, useRef, useState, type ReactNode } from "react"
 import { useFormContext } from "react-hook-form"
 import type { VariantProps } from "class-variance-authority"
 
 import { cn } from "../cn"
+import { igrpOmitNonDomProps } from "../../../lib/dom-props"
 import { type IGRPInputProps } from "../../../types"
 import { InputGroup, InputGroupAddon, InputGroupInput } from "../../primitives/input-group"
 import { FormControl, FormDescription, FormField, FormItem, FormLabel, FormMessage } from "../../primitives/form"
@@ -117,14 +118,42 @@ function SearchInputDecoration({
   )
 }
 
-const isDebouncedCallback = (callback?: (val: string) => void, delay = 2000) => {
-  if (!callback) return null
+/**
+ * Trailing-edge debounce whose pending timer survives re-renders.
+ *
+ * The timer lives in a ref and the callback in another, so neither a re-render
+ * nor a changing `onSearch` identity restarts the debounce or strands a timer.
+ * A previous version built the debouncer during render, which gave every render
+ * a fresh `timeout` binding — nothing was ever cancelled and `onSearch` fired
+ * once per keystroke.
+ */
+function useDebouncedCallback(callback: ((value: string) => void) | undefined, delay: number) {
+  const timeoutRef = useRef<ReturnType<typeof setTimeout> | null>(null)
+  const callbackRef = useRef(callback)
 
-  let timeout: ReturnType<typeof setTimeout>
-  return (value: string) => {
-    clearTimeout(timeout)
-    timeout = setTimeout(() => callback(value), delay)
-  }
+  // Synced in an effect rather than during render: the pending timer fires well
+  // after commit, so it always sees the latest callback either way.
+  useEffect(() => {
+    callbackRef.current = callback
+  }, [callback])
+
+  useEffect(
+    () => () => {
+      if (timeoutRef.current) clearTimeout(timeoutRef.current)
+    },
+    []
+  )
+
+  return useCallback(
+    (value: string) => {
+      if (timeoutRef.current) clearTimeout(timeoutRef.current)
+      timeoutRef.current = setTimeout(() => {
+        timeoutRef.current = null
+        callbackRef.current?.(value)
+      }, delay)
+    },
+    [delay]
+  )
 }
 
 /**
@@ -161,16 +190,16 @@ function IGRPInputSearch({
 
   const formContext = useFormContext()
   const [localValue, setLocalValue] = useState(controlledValue ?? defaultValue)
-  const debouncedSearch = isDebouncedCallback(onSearch, debounceMs)
+  const debouncedSearch = useDebouncedCallback(onSearch, debounceMs)
   const displayValue = controlledValue !== undefined ? controlledValue : localValue
 
   const handleInputChange = useCallback(
     (value: string) => {
       if (controlledValue === undefined) setLocalValue(value)
       setValueChange?.(value)
-      if (isDebounce) debouncedSearch?.(value)
+      if (isDebounce) debouncedSearch(value)
     },
-    [controlledValue, debouncedSearch, isDebounce, setValueChange],
+    [controlledValue, debouncedSearch, isDebounce, setValueChange]
   )
 
   // InputGroup owns the border, focus ring, addon padding and aria-invalid
@@ -200,7 +229,7 @@ function IGRPInputSearch({
         render={({ field, fieldState }) => (
           <FormItem className={className}>
             {label && (
-              <FormLabel className={cn("gap-0.5", required && 'after:content-["*"] after:text-destructive')}>
+              <FormLabel className={cn("gap-0.5", required && 'after:text-destructive after:content-["*"]')}>
                 {label}
               </FormLabel>
             )}
@@ -228,7 +257,7 @@ function IGRPInputSearch({
                     }}
                     onBlur={field.onBlur}
                     disabled={props.disabled}
-                    {...props}
+                    {...igrpOmitNonDomProps(props)}
                   />
                 </FormControl>
               }
@@ -267,7 +296,7 @@ function IGRPInputSearch({
               }
             }}
             disabled={props.disabled}
-            {...props}
+            {...igrpOmitNonDomProps(props)}
           />
         }
       />

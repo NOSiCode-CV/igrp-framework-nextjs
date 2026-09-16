@@ -148,3 +148,21 @@ Typing is unchanged: the mask still rewrites keystrokes into `dateFormat`, so `1
 `dd-MM-yyyy` field still becomes `01-08-2026` and commits. What now gets rejected is text the
 mask cannot bring into shape — a pasted `2026-08-26` in a day-first field, a short year, a
 named month in the wrong case.
+
+**Dependency updates**
+
+`cn` 0.2.6 → 0.3.0 and `react-dropzone` 20.1.1 → 20.1.2 (runtime), plus `vitest`,
+`zod`, `react-hook-form` and `eslint-plugin-react-refresh` on the dev side, aligned
+across the workspace.
+
+`cn` is the class merger behind all 85 of its call sites, so it was diffed against
+0.2.6 rather than assumed: 1 624 cases built from the design system's own 712 class
+strings (single, base-plus-override and conditional forms) plus 31 Tailwind conflict
+pairs produced zero differences, and the export surface is unchanged. Its one real
+break is dropping `./package.json` from the exports map, which nothing here imports.
+
+**`@babel/*` is deliberately NOT updated to 8.x.** Re-tested against the current
+releases — `@babel/core` 8.0.5 with `babel-plugin-react-compiler` 1.0.0 — and it still
+fails exactly as before: the compiler cannot lower a destructured parameter with a
+default value, and `@babel/preset-react` 8 emits `react/jsx-dev-runtime` under the env
+the build scripts run in. See the header of `scripts/react-compiler-babel-config.cjs`.

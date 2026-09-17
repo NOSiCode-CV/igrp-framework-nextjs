@@ -1,5 +1,11 @@
 import { describe, it, expect } from 'vitest';
-import { decodeIgrpClaims, claimsAllow, type IGRPAccessClaims } from '../claims';
+import {
+  decodeIgrpClaims,
+  claimsAllow,
+  claimsExpired,
+  CLAIMS_CLOCK_SKEW_MS,
+  type IGRPAccessClaims,
+} from '../claims';
 
 // Build a JWT with the given payload (header.payload.signature; signature unused).
 function makeJwt(payload: Record<string, unknown>): string {
@@ -162,5 +168,34 @@ describe('decodeIgrpClaims — resource_access selection', () => {
       makeJwt({ aud: 'igrp-client', resource_access: { 'igrp-client': { roles: ['r'] } } }),
     );
     expect(claims.roles).toEqual(['r']);
+  });
+});
+
+describe('decodeIgrpClaims — exp / claimsExpired', () => {
+  const NOW = 1_700_000_000_000;
+
+  it('decodes exp from seconds into milliseconds', () => {
+    const claims = decodeIgrpClaims(makeJwt({ exp: NOW / 1000 }));
+    expect(claims.expiresAt).toBe(NOW);
+  });
+
+  it('leaves expiresAt undefined when the token carries no exp', () => {
+    expect(decodeIgrpClaims(makeJwt({})).expiresAt).toBeUndefined();
+    expect(decodeIgrpClaims(makeJwt({ exp: 'soon' })).expiresAt).toBeUndefined();
+  });
+
+  it('treats a token past exp (plus skew) as expired', () => {
+    const claims = decodeIgrpClaims(makeJwt({ exp: NOW / 1000 }));
+    expect(claimsExpired(claims, NOW - 1)).toBe(false);
+    // Inside the skew allowance — still usable.
+    expect(claimsExpired(claims, NOW + 10_000)).toBe(false);
+    expect(claimsExpired(claims, NOW + CLAIMS_CLOCK_SKEW_MS)).toBe(true);
+    expect(claimsExpired(claims, NOW + 120_000)).toBe(true);
+  });
+
+  it('never treats claims without exp as expired', () => {
+    // Some deployments issue tokens with no exp; inventing one would deny forever.
+    const claims = decodeIgrpClaims(makeJwt({}));
+    expect(claimsExpired(claims, NOW + 10 ** 12)).toBe(false);
   });
 });

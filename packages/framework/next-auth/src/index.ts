@@ -15,6 +15,8 @@
 export * from './session';
 export * from './providers';
 export * from './sanitize';
+export * from './runtime';
+export * from './cookies';
 
 // Types only — erased at build time, so they cost nothing at runtime and stay
 // importable from the root for convenience.

@@ -3,59 +3,22 @@ import { forbidden } from 'next/navigation';
 import {
   decodeIgrpClaims,
   claimsAllow,
+  claimsExpired,
   type IGRPAccessClaims,
   type IGRPClaimsState,
 } from '@igrp/framework-next-auth/claims';
+import { resolveSecureCookie } from '@igrp/framework-next-auth/cookies';
+import { isNextControlFlowError } from '@igrp/framework-next-auth/runtime';
 
 import { igrpGetAccessClientConfig, igrpSetAccessClientConfig } from './api-config';
 
 const SUPER_ADMIN_MOCK: IGRPAccessClaims = { permissions: [], roles: [], isSuperAdmin: true };
 
-const SESSION_COOKIE_BASENAME = 'next-auth.session-token';
-const SECURE_SESSION_COOKIE_BASENAME = `__Secure-${SESSION_COOKIE_BASENAME}`;
-
-/**
- * Resolve `getToken`'s `secureCookie` flag from the cookie names actually
- * present, instead of letting it infer the flag from `NEXTAUTH_URL`.
- *
- * Mirrors the identical helper inside `@igrp/framework-next-auth`'s config
- * factory (see its `resolveSecureCookie` / `getAccessToken`). Duplicated rather
- * than shared because exporting it would mean changing `framework-next-auth`,
- * the root of the build chain, dragging a full
- * `auth → types → ds → next-ui → next` rebuild for ten lines.
- *
- * Returns `undefined` when no session cookie is present, so `getToken` keeps
- * its own default.
- */
-function resolveSecureCookie(cookieNames: Iterable<string>): boolean | undefined {
-  let hasPlain = false;
-  for (const name of cookieNames) {
-    if (name.startsWith(SECURE_SESSION_COOKIE_BASENAME)) return true;
-    if (name.startsWith(SESSION_COOKIE_BASENAME)) hasPlain = true;
-  }
-  return hasPlain ? false : undefined;
-}
-
-/**
- * True for Next.js **control-flow** signals, which are thrown rather than
- * returned: the static-render bailout (`cookies()`/`headers()` read during
- * prerender, digest `DYNAMIC_SERVER_USAGE`), `redirect()`, `notFound()`,
- * `forbidden()`, and the client-side-rendering bailout.
- *
- * These must never be swallowed. Catching the prerender bailout would mask it
- * as "no session", so Next would not mark the route dynamic and the build
- * would fail with a confusing 5xx instead of bailing out cleanly — the exact
- * hazard the template's own `serverSession()` documents and re-throws for.
- *
- * Next tags every one of these with a string `digest`; a genuine failure from
- * `getToken`/cookie decode does not have one.
- */
-function isNextControlFlowError(error: unknown): boolean {
-  if (typeof error !== 'object' || error === null) return false;
-  if (typeof (error as { digest?: unknown }).digest === 'string') return true;
-  const name = (error as { name?: unknown }).name;
-  return name === 'DynamicServerError' || name === 'StaticGenBailoutError';
-}
+// `resolveSecureCookie` and `isNextControlFlowError` are imported from
+// @igrp/framework-next-auth rather than redefined. They used to be copied here
+// to avoid changing the root of the build chain for a few lines — but two
+// hand-synced copies of security-relevant cookie logic is the worse trade, and
+// the originals now ship behind the `/cookies` and `/runtime` entry points.
 
 /**
  * Recover the access token straight from the session cookie.
@@ -172,6 +135,23 @@ export const igrpGetClaims = cache(async function igrpGetClaims(): Promise<IGRPC
       }
     }
     const claims = decodeIgrpClaims(token);
+
+    // An access token recovered straight from the session cookie has NOT been
+    // through the `jwt` callback — `getToken` decrypts, it does not refresh —
+    // so it can easily be past `exp`. Honouring its permissions would mean a
+    // revoked role keeps working until the COOKIE expires rather than the
+    // token. Fail closed, distinguishably: `status: 'error'` already denies
+    // everywhere, and the client session watcher is what recovers the user.
+    if (claimsExpired(claims)) {
+      return {
+        status: 'error',
+        error:
+          'access token expired — claims refused. The client session poll should ' +
+          'refresh it; if this persists, IGRP_SESSION_REFETCH_INTERVAL is too high ' +
+          "(it must stay below the framework's 60s proactive-refresh buffer).",
+      };
+    }
+
     warnOnMissingOrg(claims);
     return { status: 'ok', claims };
   } catch (error) {

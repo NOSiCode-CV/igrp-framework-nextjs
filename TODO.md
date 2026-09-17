@@ -71,8 +71,12 @@ Add the following components to the design system:
 - https://github.com/vercel-labs/next-skills
 - https://github.com/vercel/next.js/tree/canary/skills
 - maps component
-- pdfcn
-- review marcadores web 
+- pdfcn: https://www.pdfcn.dev/
+- review marcadores web
+- editorcn: https://www.rtecn.space
+- emailcn: https://www.emailcn.run/
+- mcpcn: https://www.mcpcn.dev
+- ogimage: https://www.ogimagecn.com/
 
 
 [next-auth][debug][CHUNKING_SESSION_COOKIE] {

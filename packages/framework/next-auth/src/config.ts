@@ -34,6 +34,7 @@ import {
   type AuthProviderId,
 } from './providers';
 import {
+  applyRecoveredToken,
   configureOidcTokenRecoveryStore,
   getRecoveredToken,
   introspectOidcToken,
@@ -42,6 +43,8 @@ import {
 } from './oidc';
 import type { IGRPTokenRecoveryStore } from './token-store';
 import { escapeHtml, sanitizeRedirectUrl, stripAuthApiSuffix } from './sanitize';
+import { buildAuthCookies, resolveSecureCookie, sessionCookieName } from './cookies';
+import { isNextControlFlowError } from './runtime';
 
 // ─── Config Error ─────────────────────────────────────────────────────────────
 
@@ -106,6 +109,12 @@ const TOKEN_REFRESH_BUFFER_MS = 60_000;
 // is bounced to /login. This is just a small grace to cover in-flight request
 // duration (the access token shouldn't die mid-render).
 const TOKEN_EXPIRY_GRACE_MS = 10_000;
+
+// Total wall-clock budget for IdP revocation during sign-out. `events.signOut`
+// blocks the /api/auth/signout response — and therefore the cookie clear —
+// until it settles, and revocation is discovery + revoke in series, so bounding
+// the individual fetches is not the same as bounding the user's wait.
+const SIGNOUT_REVOCATION_BUDGET_MS = 5000;
 
 const DEFAULT_MATCHER = ['/', '/((?!apps|_next|favicon.ico|.*\\..*).*)', '/api/:path*'];
 
@@ -201,6 +210,23 @@ export type IGRPAuthOptions = {
    * withIGRPAuth({ onSessionExpired: () => redirect("/logout") });
    */
   onSessionExpired?: () => void | never;
+
+  /**
+   * How auth cookies are named when the app runs under a `basePath`.
+   *
+   * - `"basePath"` (default) — every NextAuth cookie name is suffixed with a
+   *   slug derived from `NEXT_PUBLIC_BASE_PATH`, so two IGRP apps on the same
+   *   host under `/apps/a` and `/apps/b` stop overwriting each other's session.
+   * - `"none"` — keep NextAuth's stock names.
+   *
+   * Only takes effect when a basePath is actually set; a single app at the
+   * host root is unaffected either way.
+   *
+   * NOTE: switching an existing deployment from `"none"` to `"basePath"` (or
+   * changing the basePath) renames the cookie, which signs every current
+   * session out exactly once.
+   */
+  cookieIsolation?: 'basePath' | 'none';
 
   /**
    * Shared store for rotated refresh-token recovery. Defaults to an in-memory,
@@ -392,41 +418,6 @@ function warnOnRefetchIntervalMisconfiguration(env: Record<string, string | unde
   );
 }
 
-const SESSION_COOKIE_BASENAME = 'next-auth.session-token';
-const SECURE_SESSION_COOKIE_BASENAME = `__Secure-${SESSION_COOKIE_BASENAME}`;
-
-/**
- * Resolve `getToken`'s `secureCookie` flag from the cookie names actually
- * present on the request, instead of letting it infer the flag from
- * `NEXTAUTH_URL`.
- *
- * Why this is necessary:
- * `getToken` (next-auth/jwt) derives the session-cookie name purely from
- * `process.env.NEXTAUTH_URL.startsWith('https://')`. But the cookie is WRITTEN
- * by NextAuth's request handler, which decides the `__Secure-` prefix from the
- * *request* origin — e.g. `x-forwarded-proto: https` when `AUTH_TRUST_HOST`/
- * `VERCEL` is set, or a build-time-inlined `NEXTAUTH_URL` baked into the Edge
- * middleware bundle. Behind a TLS-terminating proxy with `NEXTAUTH_URL` left
- * `http`/unset at the Node runtime, the handler stores
- * `__Secure-next-auth.session-token` while `getToken` looks for the bare
- * `next-auth.session-token` — so it returns `null` for a perfectly valid
- * session. Login still works (it runs through the request-aware handler), but
- * `getAccessToken` silently fails, which is what breaks RP-initiated logout
- * (`[getLogoutUrl] no active token found`).
- *
- * Reading the prefix off the real cookie keeps both sides in agreement
- * regardless of how the scheme was detected. Returns `undefined` when no
- * session cookie is present so `getToken` keeps its own default.
- */
-function resolveSecureCookie(cookieNames: Iterable<string>): boolean | undefined {
-  let hasPlain = false;
-  for (const name of cookieNames) {
-    if (name.startsWith(SECURE_SESSION_COOKIE_BASENAME)) return true;
-    if (name.startsWith(SESSION_COOKIE_BASENAME)) hasPlain = true;
-  }
-  return hasPlain ? false : undefined;
-}
-
 /**
  * Best-effort extraction of cookie names from an incoming request of unknown
  * shape (NextRequest in Edge). Used only to pick the session-cookie prefix;
@@ -461,6 +452,23 @@ async function createNextAuthHandler(
     ...authOptions,
     debug: resolveNodeEnv(env) === 'development',
   }) as unknown as NextAuthHandler;
+}
+
+/**
+ * Resolves to `fallback` if `promise` has not settled within `ms`. The promise
+ * itself is not cancelled — it is left to finish (or fail) in the background;
+ * this only bounds how long the caller waits on it.
+ */
+async function withDeadline<T>(promise: Promise<T>, ms: number, fallback: T): Promise<T> {
+  let timer: ReturnType<typeof setTimeout> | undefined;
+  const deadline = new Promise<T>((resolve) => {
+    timer = setTimeout(() => resolve(fallback), ms);
+  });
+  try {
+    return await Promise.race([promise, deadline]);
+  } finally {
+    if (timer) clearTimeout(timer);
+  }
 }
 
 /** Stub handler used when AUTH_PROVIDER=none — avoids constructing NextAuth with empty providers. */
@@ -537,6 +545,7 @@ export function withIGRPAuth(options: IGRPAuthOptions = {}): IGRPAuthInstance {
     middleware: middlewareOptions = {},
     onSessionExpired,
     tokenRecoveryStore,
+    cookieIsolation = 'basePath',
   } = options;
 
   // Resolved once, from the caller's `env` first: a caller that passes a
@@ -600,6 +609,19 @@ export function withIGRPAuth(options: IGRPAuthOptions = {}): IGRPAuthInstance {
     return `${appBaseUrl}${safeSlug === '/' ? '/' : safeSlug}`;
   }
 
+  // ── Cookie naming ──────────────────────────────────────────────────────────
+  // `useSecureCookies` is left to NextAuth (see the note on authOptions below),
+  // and it derives the flag from NEXTAUTH_URL's scheme — so mirror exactly that
+  // signal here, or the names we write and the names `getToken` reads would
+  // disagree.
+  const basePath = env.NEXT_PUBLIC_BASE_PATH ?? process.env.NEXT_PUBLIC_BASE_PATH ?? '';
+  const secureCookies = (env.NEXTAUTH_URL ?? '').startsWith('https://');
+  const authCookies =
+    cookieIsolation === 'basePath' ? buildAuthCookies(basePath, secureCookies) : undefined;
+  // What `getToken` must look for. Only meaningful when we overrode the names;
+  // otherwise `getToken` keeps its own derivation.
+  const resolvedSessionCookieName = authCookies ? authCookies.sessionToken.name : undefined;
+
   // ── authOptions ────────────────────────────────────────────────────────────
   // Built synchronously. The options *object* has no Node-only deps; it only
   // becomes Node-only when passed to NextAuth() below, which we defer.
@@ -616,6 +638,9 @@ export function withIGRPAuth(options: IGRPAuthOptions = {}): IGRPAuthInstance {
     // so they are always consistent.
     providers: resolvedProvider ? [resolvedProvider] : [],
     secret,
+    // Scoped cookie names when the app runs under a basePath — see ./cookies.
+    // Absent (undefined) for a root-path app, leaving NextAuth's defaults.
+    ...(authCookies ? { cookies: authCookies } : {}),
     ...(pages ? { pages } : {}),
     ...(sessionConfig ? { session: sessionConfig } : {}),
 
@@ -668,7 +693,10 @@ export function withIGRPAuth(options: IGRPAuthOptions = {}): IGRPAuthInstance {
         // short-circuit a recoverable session straight to forceLogout.
         const recovered = await getRecoveredToken(igrpToken.refreshToken);
         if (recovered) {
-          igrpToken = recovered;
+          // Take only the auth material: the stored token was built by whichever
+          // caller performed the rotation, so adopting it wholesale would import
+          // that caller's custom claims into this session.
+          igrpToken = applyRecoveredToken(igrpToken, recovered);
         } else {
           // Introspect the refresh token to catch a server-side revocation
           // before we try to use it (fail-open: a flaky introspection must
@@ -829,10 +857,19 @@ export function withIGRPAuth(options: IGRPAuthOptions = {}): IGRPAuthInstance {
         // before the revoke `fetch()` had finished — browser navigation aborts
         // in-flight requests.
         //
+        // Bounded as a WHOLE rather than per hop: revocation does discovery
+        // (one timeout) and then the revoke call (another), serially, so the
+        // per-fetch ceiling alone allows roughly double the wait on a cold
+        // discovery cache — all of it delaying the session-cookie clear.
+        //
         // Revocation must still never **throw** — local sign-out always
         // succeeds, even if the IdP is unreachable. Errors surface as logs.
         try {
-          const result = await revokeOidcSession(token, env);
+          const result = await withDeadline(
+            revokeOidcSession(token, env),
+            SIGNOUT_REVOCATION_BUDGET_MS,
+            { ok: false as const, reason: 'timeout' as const },
+          );
           if (!result.ok) {
             console.warn('[next-auth.events.signOut] token revocation skipped/failed', result);
           }
@@ -882,6 +919,11 @@ export function withIGRPAuth(options: IGRPAuthOptions = {}): IGRPAuthInstance {
       req: request as Parameters<typeof getToken>[0]['req'],
       secret,
       ...(secureCookie !== undefined ? { secureCookie } : {}),
+      // When we renamed the cookies, `getToken`'s own derivation would look for
+      // the stock name and find nothing.
+      ...(resolvedSessionCookieName
+        ? { cookieName: sessionCookieName(basePath, secureCookie ?? secureCookies) }
+        : {}),
     })) as JWT | null;
   }
 
@@ -931,6 +973,9 @@ export function withIGRPAuth(options: IGRPAuthOptions = {}): IGRPAuthInstance {
       } as NextApiRequest,
       secret,
       ...(secureCookie !== undefined ? { secureCookie } : {}),
+      ...(resolvedSessionCookieName
+        ? { cookieName: sessionCookieName(basePath, secureCookie ?? secureCookies) }
+        : {}),
     });
     return token as JWT | null;
   }
@@ -948,8 +993,16 @@ export function withIGRPAuth(options: IGRPAuthOptions = {}): IGRPAuthInstance {
     let session: Session | null;
     try {
       session = await serverSession();
-    } catch {
-      // Cookie decode / transient session-read failure — treat as "no session".
+    } catch (error) {
+      // `getServerSession` reads cookies/headers, so during a prerender it
+      // throws Next's static-render bailout. That is control flow, not a
+      // failure: swallowing it reports "no session", the route never gets
+      // marked dynamic, and the page renders (and can be cached) as logged
+      // out. The same applies to a redirect()/notFound() raised from a
+      // caller-supplied callback. Only genuine read failures — cookie decode,
+      // a changed NEXTAUTH_SECRET — become "no session".
+      if (isNextControlFlowError(error)) throw error;
+      if (isIGRPAuthConfigError(error)) throw error;
       return null;
     }
 

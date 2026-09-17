@@ -67,6 +67,14 @@
       "types": "./dist/claims.d.ts",
       "import": "./dist/claims.js"
     },
+    "./cookies": {
+      "types": "./dist/cookies.d.ts",
+      "import": "./dist/cookies.js"
+    },
+    "./runtime": {
+      "types": "./dist/runtime.d.ts",
+      "import": "./dist/runtime.js"
+    },
     "./package.json": "./package.json"
   },
   "files": [

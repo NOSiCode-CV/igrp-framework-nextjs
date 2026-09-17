@@ -26,6 +26,16 @@ export interface Session extends DefaultSession {
   } & DefaultSession['user'];
 }
 
-export function hasAccessToken(s: unknown): s is Session {
-  return !!(s && typeof s === 'object' && 'accessToken' in (s as any));
+/**
+ * Narrows to a session that actually carries a usable `accessToken`.
+ *
+ * Checks the VALUE, not just the key: the previous `'accessToken' in s` test
+ * asserted `s is Session` for any object that merely had the property — a
+ * `{ accessToken: undefined }` placeholder included — so callers got a
+ * non-optional-looking token that was empty at runtime.
+ */
+export function hasAccessToken(s: unknown): s is Session & { accessToken: string } {
+  if (typeof s !== 'object' || s === null) return false;
+  const accessToken = (s as { accessToken?: unknown }).accessToken;
+  return typeof accessToken === 'string' && accessToken.length > 0;
 }

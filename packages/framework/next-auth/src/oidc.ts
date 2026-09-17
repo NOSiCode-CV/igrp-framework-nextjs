@@ -6,6 +6,7 @@ import {
   type AuthProviderId,
 } from './providers';
 import { createInMemoryTokenRecoveryStore, type IGRPTokenRecoveryStore } from './token-store';
+import { sanitizeRedirectUrl, stripAuthApiSuffix } from './sanitize';
 
 export * from './token-store';
 
@@ -134,7 +135,7 @@ function buildBasicAuthHeader(clientId: string, clientSecret: string): string {
 //
 // In-memory only; multi-instance deployments can still race across pods.
 // Single-process dev is fully covered; sticky routing covers most prod.
-const inflightRefreshes = new Map<string, Promise<JWT>>();
+const inflightRefreshes = new Map<string, Promise<RefreshOutcome>>();
 
 // Rotation-result recovery cache. NextAuth runs the jwt callback on every
 // session read, including RSC renders where `cookies()` is read-only. When the
@@ -219,31 +220,88 @@ export async function getRecoveredToken(refreshToken: string | undefined): Promi
   }
 }
 
+/**
+ * The auth material a refresh produces. Deliberately NOT a whole JWT: the
+ * in-flight dedup below shares one network round-trip between every concurrent
+ * caller, and those callers do not necessarily hold the same token — a
+ * `callbacks.jwt` extension may have put different custom fields on each. When
+ * the shared promise resolved to a fully-merged JWT built from whichever
+ * caller happened to arrive first, those fields leaked across sessions. Each
+ * caller now applies this delta to its OWN token.
+ */
+type RefreshDelta = {
+  accessToken: string;
+  idToken?: string;
+  expiresAt: number;
+  refreshToken: string;
+  authProviderId: AuthProviderId;
+};
+
+type RefreshOutcome =
+  | { status: 'refreshed'; delta: RefreshDelta }
+  | { status: 'recovered'; token: JWT }
+  | { status: 'failed' };
+
+/** Auth-material fields, i.e. everything a refresh is allowed to overwrite. */
+export function applyRefreshDelta(token: JWT, delta: RefreshDelta): JWT {
+  return {
+    ...token,
+    accessToken: delta.accessToken,
+    idToken: delta.idToken || token.idToken,
+    expiresAt: delta.expiresAt,
+    refreshToken: delta.refreshToken,
+    authProviderId: delta.authProviderId,
+    error: undefined,
+    forceLogout: false,
+  };
+}
+
+/**
+ * Copies only the auth material out of a token recovered from the rotation
+ * store onto the caller's current token. The stored token was built by whoever
+ * performed the rotation, so adopting it wholesale would import that caller's
+ * custom claims — the same cross-contamination {@link RefreshDelta} avoids.
+ */
+export function applyRecoveredToken(current: JWT, recovered: JWT): JWT {
+  return {
+    ...current,
+    accessToken: recovered.accessToken,
+    idToken: recovered.idToken || current.idToken,
+    expiresAt: recovered.expiresAt,
+    refreshToken: recovered.refreshToken,
+    authProviderId: recovered.authProviderId ?? current.authProviderId,
+    error: undefined,
+    forceLogout: false,
+  };
+}
+
+function failedRefresh(token: JWT): JWT {
+  return { ...token, error: 'RefreshAccessTokenError', forceLogout: true };
+}
+
 export async function refreshOidcAccessToken(token: JWT, env: AuthEnvironment): Promise<JWT> {
-  if (!token.refreshToken) {
-    return {
-      ...token,
-      error: 'RefreshAccessTokenError',
-      forceLogout: true,
-    };
-  }
+  if (!token.refreshToken) return failedRefresh(token);
 
   const refreshKey = token.refreshToken;
-  const existing = inflightRefreshes.get(refreshKey);
-  if (existing) return existing;
+  let inflight = inflightRefreshes.get(refreshKey);
+  if (!inflight) {
+    const tokenWithRefresh = token as JWT & { refreshToken: string };
+    inflight = performRefresh(tokenWithRefresh, env).finally(() => {
+      inflightRefreshes.delete(refreshKey);
+    });
+    inflightRefreshes.set(refreshKey, inflight);
+  }
 
-  const tokenWithRefresh = token as JWT & { refreshToken: string };
-  const promise = performRefresh(tokenWithRefresh, env).finally(() => {
-    inflightRefreshes.delete(refreshKey);
-  });
-  inflightRefreshes.set(refreshKey, promise);
-  return promise;
+  const outcome = await inflight;
+  if (outcome.status === 'refreshed') return applyRefreshDelta(token, outcome.delta);
+  if (outcome.status === 'recovered') return applyRecoveredToken(token, outcome.token);
+  return failedRefresh(token);
 }
 
 async function performRefresh(
   token: JWT & { refreshToken: string },
   env: AuthEnvironment,
-): Promise<JWT> {
+): Promise<RefreshOutcome> {
   const providerId = getProviderIdFromTokenOrEnv(token, env);
 
   assertAuthProviderEnv(env, providerId);
@@ -316,24 +374,16 @@ async function performRefresh(
     // dead. With the default in-memory store this is a cheap no-op re-check.
     const recovered = await getRecoveredToken(token.refreshToken);
     if (recovered && typeof recovered.accessToken === 'string' && !recovered.error) {
-      return recovered;
+      return { status: 'recovered', token: recovered };
     }
 
-    return {
-      ...token,
-      error: 'RefreshAccessTokenError',
-      forceLogout: true,
-    };
+    return { status: 'failed' };
   }
 
   const refreshedToken = await response.json();
 
   if (!refreshedToken.access_token || typeof refreshedToken.access_token !== 'string') {
-    return {
-      ...token,
-      error: 'RefreshAccessTokenError',
-      forceLogout: true,
-    };
+    return { status: 'failed' };
   }
 
   // Verify the IdP honored the `scope=openid` request and returned a fresh
@@ -357,16 +407,14 @@ async function performRefresh(
   const newRefreshToken: string = refreshedToken.refresh_token ?? token.refreshToken;
   const expiresInSec = Number(refreshedToken.expires_in);
   const safeExpiresIn = Number.isFinite(expiresInSec) && expiresInSec > 0 ? expiresInSec : 3600;
-  const refreshed: JWT = {
-    ...token,
+  const delta: RefreshDelta = {
     accessToken: refreshedToken.access_token,
     idToken: refreshedToken.id_token || token.idToken,
     expiresAt: Date.now() + safeExpiresIn * 1000,
     refreshToken: newRefreshToken,
     authProviderId: providerId,
-    error: undefined,
-    forceLogout: false,
   };
+  const refreshed: JWT = applyRefreshDelta(token, delta);
 
   // The IdP rotated the refresh token. If this refresh ran where the cookie
   // can't be persisted (an RSC render), the rotated token would be lost and the
@@ -385,7 +433,7 @@ async function performRefresh(
     }
   }
 
-  return refreshed;
+  return { status: 'refreshed', delta };
 }
 
 /**
@@ -402,7 +450,14 @@ export type RevokeOidcSessionResult =
   | { ok: true; status: number }
   | {
       ok: false;
-      reason: 'no_refresh_token' | 'no_revocation_endpoint' | 'http_error' | 'network_error';
+      reason:
+        | 'no_refresh_token'
+        | 'no_revocation_endpoint'
+        | 'http_error'
+        | 'network_error'
+        // Caller-side deadline: revocation did not settle within the
+        // budget the sign-out path allows it (see SIGNOUT_REVOCATION_BUDGET_MS).
+        | 'timeout';
       status?: number;
       body?: string;
       error?: unknown;
@@ -476,6 +531,94 @@ export async function revokeOidcSession(
   return { ok: true, status: response.status };
 }
 
+/**
+ * Origins a post-logout redirect may target, beyond the app's own.
+ *
+ * `IGRP_AUTH_POST_LOGOUT_ALLOWED_ORIGINS` is a comma-separated allowlist for
+ * the deliberate case (logging out to a portal on another host). Empty by
+ * default — same-origin only.
+ */
+function allowedPostLogoutOrigins(env: AuthEnvironment): string[] {
+  const appOrigin = (() => {
+    try {
+      return new URL(stripAuthApiSuffix(env.NEXTAUTH_URL ?? '')).origin;
+    } catch {
+      return '';
+    }
+  })();
+  const extra = (env.IGRP_AUTH_POST_LOGOUT_ALLOWED_ORIGINS ?? '')
+    .split(',')
+    .map((value) => value.trim())
+    .filter(Boolean)
+    .map((value) => {
+      try {
+        return new URL(value).origin;
+      } catch {
+        return '';
+      }
+    })
+    .filter(Boolean);
+  return [appOrigin, ...extra].filter(Boolean);
+}
+
+/**
+ * Validates the caller's `post_logout_redirect_uri` before it is handed to the
+ * IdP. Returns a safe value, or `null` when nothing usable remains.
+ *
+ * This parameter reaches the framework from application code that typically
+ * derives it from `window.location.origin` and passes it through a Server
+ * Action — a publicly callable HTTP endpoint, so the value is attacker
+ * controlled. Unvalidated, it is an open redirect wearing the IdP's domain,
+ * gated only by whether that IdP happens to enforce byte-for-byte
+ * registration. Every other redirect surface in this package is guarded; this
+ * is the one that actually leaves the origin.
+ */
+function sanitizePostLogoutRedirectUri(value: string, env: AuthEnvironment): string | null {
+  const allowed = allowedPostLogoutOrigins(env);
+  const fallback = allowed[0] ?? null;
+
+  if (typeof value !== 'string' || value.trim().length === 0) return fallback;
+  const trimmed = value.trim();
+
+  // Relative path — resolve against the app origin through the shared sanitizer.
+  if (trimmed.startsWith('/')) {
+    if (!fallback) return null;
+    const safePath = sanitizeRedirectUrl(trimmed, fallback, '');
+    return safePath ? `${fallback}${safePath}` : fallback;
+  }
+
+  let parsed: URL;
+  try {
+    parsed = new URL(trimmed);
+  } catch {
+    return fallback;
+  }
+  if (parsed.protocol !== 'http:' && parsed.protocol !== 'https:') return fallback;
+
+  // No allowlist could be derived (NEXTAUTH_URL unset or malformed, no explicit
+  // origins). We have no basis to judge the value, and dropping it would break
+  // the redirect back from the IdP for an app that is merely under-configured —
+  // so accept it and say so. The IdP's own registration check remains the
+  // control in that case.
+  if (allowed.length === 0) {
+    console.warn(
+      '[oidc.buildEndSessionUrl] cannot validate post_logout_redirect_uri — NEXTAUTH_URL is ' +
+        'unset or malformed, so the app origin is unknown. Set NEXTAUTH_URL (or ' +
+        'IGRP_AUTH_POST_LOGOUT_ALLOWED_ORIGINS) to enable the origin check.',
+    );
+    return parsed.toString();
+  }
+
+  if (!allowed.includes(parsed.origin)) {
+    console.warn(
+      `[oidc.buildEndSessionUrl] post_logout_redirect_uri origin ${parsed.origin} is not allowed — ` +
+        'falling back to the app origin. Add it to IGRP_AUTH_POST_LOGOUT_ALLOWED_ORIGINS if this is intentional.',
+    );
+    return fallback;
+  }
+  return parsed.toString();
+}
+
 export async function buildEndSessionUrl(
   token: JWT,
   env: AuthEnvironment,
@@ -507,13 +650,42 @@ export async function buildEndSessionUrl(
   const { clientId } = getClientCredentials(env);
   const url = new URL(openIdConfiguration.end_session_endpoint);
   url.searchParams.set('client_id', clientId);
-  url.searchParams.set('post_logout_redirect_uri', postLogoutRedirectUri);
+
+  const safeRedirectUri = sanitizePostLogoutRedirectUri(postLogoutRedirectUri, env);
+  if (safeRedirectUri) {
+    url.searchParams.set('post_logout_redirect_uri', safeRedirectUri);
+  } else if (isDev) {
+    console.warn(
+      '[oidc.buildEndSessionUrl] no usable post_logout_redirect_uri (none supplied and NEXTAUTH_URL ' +
+        'is unset/malformed) — the IdP will apply its own default after logout.',
+    );
+  }
   const hasIdToken = typeof token.idToken === 'string' && token.idToken.length > 0;
   if (hasIdToken) {
     url.searchParams.set('id_token_hint', token.idToken as string);
   }
 
   return url.toString();
+}
+
+const warnedIntrospection = new Set<string>();
+
+/**
+ * Introspection deliberately fails OPEN — a flaky or misconfigured
+ * introspection endpoint must never block a refresh. But failing open in
+ * silence means an operator cannot tell "the IdP says this token is live" from
+ * "introspection has been returning 401 for a month", and the gate that is
+ * supposed to catch server-side revocation is simply gone. Warn once per
+ * reason, per process.
+ */
+function warnIntrospectionDisabled(reason: string, detail?: unknown): void {
+  if (warnedIntrospection.has(reason)) return;
+  warnedIntrospection.add(reason);
+  console.warn(
+    `[oidc.introspectOidcToken] failing open (${reason}) — server-side revocation is NOT being ` +
+      'detected until this is resolved; refresh will proceed regardless.',
+    detail instanceof Error ? `${detail.name}: ${detail.message}` : (detail ?? ''),
+  );
 }
 
 export async function introspectOidcToken(token: JWT, env: AuthEnvironment): Promise<boolean> {
@@ -532,7 +704,10 @@ export async function introspectOidcToken(token: JWT, env: AuthEnvironment): Pro
   try {
     const discoveryUrl = getAuthProviderDiscoveryUrl(env, providerId);
     const openIdConfiguration = await getOpenIdConfiguration(discoveryUrl);
-    if (!openIdConfiguration.introspection_endpoint) return true;
+    if (!openIdConfiguration.introspection_endpoint) {
+      warnIntrospectionDisabled('no introspection_endpoint in the IdP discovery document');
+      return true;
+    }
 
     const { clientId, clientSecret } = getClientCredentials(env);
 
@@ -552,11 +727,20 @@ export async function introspectOidcToken(token: JWT, env: AuthEnvironment): Pro
       IDP_FETCH_TIMEOUT_MS,
     );
 
-    if (!response.ok) return true;
+    if (!response.ok) {
+      warnIntrospectionDisabled(
+        `introspection endpoint returned HTTP ${response.status}`,
+        response.status === 401 || response.status === 403
+          ? 'check IGRP_AUTH_CLIENT_ID / IGRP_AUTH_CLIENT_SECRET'
+          : undefined,
+      );
+      return true;
+    }
 
     const result = (await response.json()) as { active?: boolean };
     return result.active !== false;
-  } catch {
+  } catch (error) {
+    warnIntrospectionDisabled('introspection request threw', error);
     return true;
   }
 }

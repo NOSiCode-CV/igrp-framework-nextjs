@@ -1,8 +1,12 @@
 /**
  * Pure, runtime-agnostic decoding + matching for IGRP access-token claims.
  * No `Buffer` (Edge has none); uses `atob` + `TextDecoder`, available in
- * Node 18+, Edge, and browsers. No signature verification — server-side the
- * token is sealed in the NextAuth cookie; client-side gating is cosmetic.
+ * Node 18+, Edge, and browsers.
+ *
+ * No SIGNATURE verification: server-side the token is sealed in the NextAuth
+ * cookie, and client-side gating is cosmetic. That covers authenticity but says
+ * nothing about FRESHNESS, so `exp` is decoded too — a caller making a real
+ * authorization decision must reject stale claims with `claimsExpired()`.
  */
 
 export interface IGRPAccessClaims {
@@ -16,6 +20,43 @@ export interface IGRPAccessClaims {
   isSuperAdmin: boolean;
   sub?: string;
   email?: string;
+  /**
+   * `exp` in MILLISECONDS (the raw claim is seconds), or `undefined` when the
+   * token carries no `exp`. Exposed so authorization callers can refuse claims
+   * from a dead token — see {@link claimsExpired}.
+   */
+  expiresAt?: number;
+}
+
+/**
+ * Clock-skew allowance when judging `expiresAt`. The IdP and the app server
+ * are different machines; a token is not treated as dead until it is past
+ * `exp` by more than this.
+ */
+export const CLAIMS_CLOCK_SKEW_MS = 30_000;
+
+/**
+ * True when the token these claims came from is past its `exp` (plus skew).
+ *
+ * Claims with no `exp` are NOT treated as expired — some deployments issue
+ * tokens without one, and inventing an expiry would deny them permanently.
+ *
+ * Why this matters: `decodeIgrpClaims` deliberately performs no signature
+ * verification, on the grounds that server-side the token arrives sealed
+ * inside the NextAuth cookie. That argument covers authenticity, not
+ * freshness. A caller that reads the access token straight from the cookie —
+ * `getToken` decrypts only, it does not run the `jwt` callback, so no refresh
+ * and no expiry gate runs — otherwise honours permissions from a token that
+ * expired minutes ago. Revocation then takes effect when the COOKIE dies
+ * rather than when the token does.
+ */
+export function claimsExpired(
+  claims: IGRPAccessClaims,
+  now: number = Date.now(),
+  skewMs: number = CLAIMS_CLOCK_SKEW_MS,
+): boolean {
+  if (typeof claims.expiresAt !== 'number') return false;
+  return claims.expiresAt + skewMs <= now;
 }
 
 export type IGRPClaimsState =
@@ -119,6 +160,12 @@ export function decodeIgrpClaims(accessToken: string): IGRPAccessClaims {
     isSuperAdmin: payload.is_super_admin === true,
     sub: typeof payload.sub === 'string' ? payload.sub : undefined,
     email: typeof payload.email === 'string' ? payload.email : undefined,
+    // `exp` is seconds since the epoch per RFC 7519; normalise to ms so it is
+    // directly comparable with Date.now() and with the JWT's own `expiresAt`.
+    expiresAt:
+      typeof payload.exp === 'number' && Number.isFinite(payload.exp)
+        ? payload.exp * 1000
+        : undefined,
   };
 }
 

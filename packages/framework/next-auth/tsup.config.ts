@@ -40,6 +40,8 @@ export default defineConfig({
     sanitize: 'src/sanitize.ts',
     types: 'src/types.ts',
     claims: 'src/claims.ts',
+    cookies: 'src/cookies.ts',
+    runtime: 'src/runtime.ts',
   },
   format: ['esm'],
   dts: {

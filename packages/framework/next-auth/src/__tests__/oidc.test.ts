@@ -668,3 +668,88 @@ describe('configureOidcTokenRecoveryStore', () => {
     expect(result.forceLogout).toBe(true);
   });
 });
+
+describe('buildEndSessionUrl — post_logout_redirect_uri validation', () => {
+  const ENV_WITH_URL = { ...VALID_ENV, NEXTAUTH_URL: 'http://app.example/apps/t/api/auth' };
+
+  it('honours a same-origin absolute URI', async () => {
+    mockFetch([{ url: DISCOVERY_URL, body: MOCK_DISCOVERY }]);
+    const { buildEndSessionUrl } = await import('../oidc');
+    const url = await buildEndSessionUrl(
+      makeToken(),
+      ENV_WITH_URL,
+      'http://app.example/apps/t/login',
+    );
+    expect(new URL(url!).searchParams.get('post_logout_redirect_uri')).toBe(
+      'http://app.example/apps/t/login',
+    );
+  });
+
+  it('rejects an off-origin URI and falls back to the app origin', async () => {
+    // The value reaches the framework from a Server Action parameter — a
+    // publicly callable endpoint — so it is attacker controlled.
+    mockFetch([{ url: DISCOVERY_URL, body: MOCK_DISCOVERY }]);
+    const { buildEndSessionUrl } = await import('../oidc');
+    const url = await buildEndSessionUrl(makeToken(), ENV_WITH_URL, 'https://evil.example/steal');
+    expect(new URL(url!).searchParams.get('post_logout_redirect_uri')).toBe('http://app.example');
+  });
+
+  it('rejects a javascript: URI', async () => {
+    mockFetch([{ url: DISCOVERY_URL, body: MOCK_DISCOVERY }]);
+    const { buildEndSessionUrl } = await import('../oidc');
+    const url = await buildEndSessionUrl(makeToken(), ENV_WITH_URL, 'javascript:alert(1)');
+    expect(new URL(url!).searchParams.get('post_logout_redirect_uri')).toBe('http://app.example');
+  });
+
+  it('resolves a relative path against the app origin', async () => {
+    mockFetch([{ url: DISCOVERY_URL, body: MOCK_DISCOVERY }]);
+    const { buildEndSessionUrl } = await import('../oidc');
+    const url = await buildEndSessionUrl(makeToken(), ENV_WITH_URL, '/apps/t/login');
+    expect(new URL(url!).searchParams.get('post_logout_redirect_uri')).toBe(
+      'http://app.example/apps/t/login',
+    );
+  });
+
+  it('honours an explicitly allowlisted foreign origin', async () => {
+    mockFetch([{ url: DISCOVERY_URL, body: MOCK_DISCOVERY }]);
+    const { buildEndSessionUrl } = await import('../oidc');
+    const url = await buildEndSessionUrl(
+      makeToken(),
+      { ...ENV_WITH_URL, IGRP_AUTH_POST_LOGOUT_ALLOWED_ORIGINS: 'https://portal.example' },
+      'https://portal.example/bye',
+    );
+    expect(new URL(url!).searchParams.get('post_logout_redirect_uri')).toBe(
+      'https://portal.example/bye',
+    );
+  });
+});
+
+describe('refreshOidcAccessToken — concurrent callers do not share custom fields', () => {
+  it("applies the shared refresh result to each caller's OWN token", async () => {
+    mockFetch([
+      { url: DISCOVERY_URL, body: MOCK_DISCOVERY },
+      {
+        url: MOCK_DISCOVERY.token_endpoint,
+        body: { access_token: 'new-at', id_token: 'new-it', expires_in: 300 },
+      },
+    ]);
+    const { refreshOidcAccessToken } = await import('../oidc');
+
+    // Same refresh token (so the in-flight dedup collapses them), different
+    // custom fields put there by a callbacks.jwt extension.
+    const a = { ...makeToken(), tenant: 'alpha' } as never;
+    const b = { ...makeToken(), tenant: 'beta' } as never;
+
+    const [ra, rb] = await Promise.all([
+      refreshOidcAccessToken(a, VALID_ENV),
+      refreshOidcAccessToken(b, VALID_ENV),
+    ]);
+
+    // Both get the same refreshed auth material...
+    expect(ra.accessToken).toBe('new-at');
+    expect(rb.accessToken).toBe('new-at');
+    // ...and each keeps its own custom claim.
+    expect((ra as unknown as { tenant: string }).tenant).toBe('alpha');
+    expect((rb as unknown as { tenant: string }).tenant).toBe('beta');
+  });
+});

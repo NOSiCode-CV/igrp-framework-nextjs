@@ -13,9 +13,11 @@ You are working inside `packages/framework/next-auth/` — `@igrp/framework-next
 
 ## Rules unique to this package
 
-- Public entry points: `./server`, `./client`, `./session`, `./jwt`, `./middleware`, `./config`, `./sanitize`, `./oidc`, `./providers`, `./claims`, `./types`. **Don't collapse them** — they keep server code out of client bundles. New symbols go behind the right entry, not the root barrel.
+- Public entry points: `./server`, `./client`, `./session`, `./jwt`, `./middleware`, `./config`, `./sanitize`, `./oidc`, `./providers`, `./claims`, `./cookies`, `./runtime`, `./types`. **Don't collapse them** — they keep server code out of client bundles. New symbols go behind the right entry, not the root barrel.
 - The **root barrel** (`./`) is restricted to the pure modules (`session`, `providers`, `sanitize`) plus type-only re-exports. Never add a symbol there that pulls in `next-auth/*` or the OIDC client — a single root import from a page drags it into that page's bundle.
 - `./client` is a real client boundary. `src/client.ts` starts with `'use client'` and `tsup.config.ts` re-adds the directive to `dist/client.js` after bundling (esbuild strips it). If you add another browser-only entry, add it to `CLIENT_ENTRIES` there.
+- `./cookies` and `./runtime` are the **shared-with-downstream** entries: pure, dependency-free helpers that `@igrp/framework-next` imports instead of keeping its own copy. Cookie naming and Next control-flow detection live there and nowhere else — a second copy is how they drift.
+- Auth cookie names are scoped by `NEXT_PUBLIC_BASE_PATH` (see `src/cookies.ts`). Anything that reads the session cookie must go through `sessionCookieName()` / `resolveSecureCookie()`, never a hardcoded `next-auth.session-token`.
 - Builds with **tsup**, not Babel. **No React Compiler step.**
 - `@igrp/framework-next-types` re-exports types from here — run `pnpm build:framework` after type changes.
 - `pnpm build:auth` from repo root.

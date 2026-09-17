@@ -273,6 +273,14 @@
       "manifestHash": "1f19e8feb99b8a60",
       "undo": [],
       "fileHashes": {}
+    },
+    {
+      "id": "35-framework-owned-redirect-and-refetch-ceiling",
+      "appliedAt": "2026-09-16T00:00:00.000Z",
+      "cliVersion": "0.1.0-beta.141",
+      "manifestHash": "41da7422e2519c90",
+      "undo": [],
+      "fileHashes": {}
     }
   ]
 }

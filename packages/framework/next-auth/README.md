@@ -6,19 +6,21 @@ route-protection middleware primitives.
 
 ## Entry points
 
-| Import path                            | Runtime               | Purpose                                                    |
-| -------------------------------------- | --------------------- | ---------------------------------------------------------- |
-| `@igrp/framework-next-auth/config`     | Node + Edge           | `withIGRPAuth()` factory                                   |
-| `@igrp/framework-next-auth/client`     | Browser               | `useSafeSession()`, `signIn`, `signOut`, `SessionProvider` |
-| `@igrp/framework-next-auth/server`     | Node                  | `getServerSession`                                         |
-| `@igrp/framework-next-auth/session`    | Node                  | Session types                                              |
-| `@igrp/framework-next-auth/jwt`        | Node                  | JWT types                                                  |
-| `@igrp/framework-next-auth/middleware` | Edge                  | NextAuth middleware                                        |
-| `@igrp/framework-next-auth/oidc`       | Node                  | `refreshOidcAccessToken`, `revokeOidcSession`              |
-| `@igrp/framework-next-auth/providers`  | Node                  | Provider registry helpers                                  |
-| `@igrp/framework-next-auth/sanitize`   | Node + Edge           | URL/redirect sanitization                                  |
-| `@igrp/framework-next-auth/claims`     | Node + Edge + Browser | `decodeIgrpClaims`, `claimsAllow` (pure, no deps)          |
-| `@igrp/framework-next-auth/types`      | types only            | Session/JWT module augmentation                            |
+| Import path                            | Runtime               | Purpose                                                                            |
+| -------------------------------------- | --------------------- | ---------------------------------------------------------------------------------- |
+| `@igrp/framework-next-auth/config`     | Node + Edge           | `withIGRPAuth()` factory                                                           |
+| `@igrp/framework-next-auth/client`     | Browser               | `useSafeSession()`, `signIn`, `signOut`, `SessionProvider`                         |
+| `@igrp/framework-next-auth/server`     | Node                  | `getServerSession`                                                                 |
+| `@igrp/framework-next-auth/session`    | Node                  | Session types                                                                      |
+| `@igrp/framework-next-auth/jwt`        | Node                  | JWT types                                                                          |
+| `@igrp/framework-next-auth/middleware` | Edge                  | NextAuth middleware                                                                |
+| `@igrp/framework-next-auth/oidc`       | Node                  | `refreshOidcAccessToken`, `revokeOidcSession`                                      |
+| `@igrp/framework-next-auth/providers`  | Node                  | Provider registry helpers                                                          |
+| `@igrp/framework-next-auth/sanitize`   | Node + Edge           | URL/redirect sanitization                                                          |
+| `@igrp/framework-next-auth/claims`     | Node + Edge + Browser | `decodeIgrpClaims`, `claimsAllow`, `claimsExpired`                                 |
+| `@igrp/framework-next-auth/cookies`    | Node + Edge + Browser | Auth cookie naming: `sessionCookieName`, `buildAuthCookies`, `resolveSecureCookie` |
+| `@igrp/framework-next-auth/runtime`    | Node + Edge           | `isNextControlFlowError`                                                           |
+| `@igrp/framework-next-auth/types`      | types only            | Session/JWT module augmentation                                                    |
 
 The package root (`@igrp/framework-next-auth`) re-exports only the pure modules
 — `session`, `providers`, `sanitize`, plus types. `middleware`, `jwt` and `oidc`

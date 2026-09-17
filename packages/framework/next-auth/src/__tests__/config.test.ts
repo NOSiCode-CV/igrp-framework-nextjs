@@ -574,3 +574,82 @@ describe('withIGRPAuth — tokenRecoveryStore option', () => {
     expect(oidcModule.configureOidcTokenRecoveryStore).not.toHaveBeenCalled();
   });
 });
+
+describe('withIGRPAuth — getSession does not swallow Next control flow', () => {
+  async function instanceWithFailingSession(error: unknown) {
+    vi.resetModules();
+    const getServerSession = vi.fn().mockRejectedValue(error);
+    vi.doMock('next-auth', () => ({ default: vi.fn(), getServerSession }));
+    const { withIGRPAuth } = await import('../config');
+    return withIGRPAuth({ env: VALID_ENV });
+  }
+
+  it('rethrows the static-render bailout instead of reporting "no session"', async () => {
+    // Swallowing it means the route is never marked dynamic and the page
+    // renders — and can be cached — as logged out.
+    const bailout = Object.assign(new Error('Dynamic server usage'), {
+      digest: 'DYNAMIC_SERVER_USAGE',
+    });
+    const instance = await instanceWithFailingSession(bailout);
+    await expect(instance.getSession()).rejects.toBe(bailout);
+    vi.doUnmock('next-auth');
+    vi.resetModules();
+  });
+
+  it('rethrows a redirect() raised during the session read', async () => {
+    const redirectSignal = Object.assign(new Error('NEXT_REDIRECT'), { digest: 'NEXT_REDIRECT' });
+    const instance = await instanceWithFailingSession(redirectSignal);
+    await expect(instance.getSession()).rejects.toBe(redirectSignal);
+    vi.doUnmock('next-auth');
+    vi.resetModules();
+  });
+
+  it('still treats a genuine cookie-decode failure as "no session"', async () => {
+    const instance = await instanceWithFailingSession(new Error('JWE decryption failed'));
+    await expect(instance.getSession()).resolves.toBeNull();
+    vi.doUnmock('next-auth');
+    vi.resetModules();
+  });
+});
+
+describe('withIGRPAuth — cookie isolation', () => {
+  it('scopes cookie names to the basePath so co-hosted apps stop colliding', async () => {
+    const withIGRPAuth = await getFactory();
+    const a = withIGRPAuth({ env: { ...VALID_ENV, NEXT_PUBLIC_BASE_PATH: '/apps/a' } });
+    const b = withIGRPAuth({ env: { ...VALID_ENV, NEXT_PUBLIC_BASE_PATH: '/apps/b' } });
+
+    const nameA = a.authOptions.cookies!.sessionToken!.name;
+    const nameB = b.authOptions.cookies!.sessionToken!.name;
+    expect(nameA).toBe('next-auth.session-token.apps-a');
+    expect(nameB).toBe('next-auth.session-token.apps-b');
+  });
+
+  it('leaves NextAuth defaults alone for a root-path app', async () => {
+    const withIGRPAuth = await getFactory();
+    const instance = withIGRPAuth({ env: VALID_ENV });
+    expect(instance.authOptions.cookies).toBeUndefined();
+  });
+
+  it('uses the __Secure- prefix when NEXTAUTH_URL is https', async () => {
+    const withIGRPAuth = await getFactory();
+    const instance = withIGRPAuth({
+      env: {
+        ...VALID_ENV,
+        NEXT_PUBLIC_BASE_PATH: '/apps/a',
+        NEXTAUTH_URL: 'https://host/apps/a/api/auth',
+      },
+    });
+    expect(instance.authOptions.cookies!.sessionToken!.name).toBe(
+      '__Secure-next-auth.session-token.apps-a',
+    );
+  });
+
+  it('can be opted out of', async () => {
+    const withIGRPAuth = await getFactory();
+    const instance = withIGRPAuth({
+      env: { ...VALID_ENV, NEXT_PUBLIC_BASE_PATH: '/apps/a' },
+      cookieIsolation: 'none',
+    });
+    expect(instance.authOptions.cookies).toBeUndefined();
+  });
+});

@@ -23,7 +23,7 @@ import {
 const __dirname = dirname(fileURLToPath(import.meta.url));
 const ROOT = join(__dirname, "..");
 const MIGRATIONS_DIR = join(ROOT, "migrations/demo-v1");
-const TEMPLATE_LOCK = join(ROOT, "../../templates/demo-v1/.igrp-migrations-lock.json");
+const TEMPLATE_LOCK = join(ROOT, "../../../templates/demo-v1/.igrp-migrations-lock.json");
 
 function main(): void {
   const checkOnly = process.argv.includes("--check");

@@ -126,6 +126,20 @@ const SIGNOUT_REVOCATION_BUDGET_MS = 5000;
 // refreshes and the IdP's real `expires_in` takes over.
 const UNKNOWN_EXPIRY_FALLBACK_MS = 5 * 60_000;
 
+// Default middleware matcher, exposed as `auth.config` for a template to
+// re-export.
+//
+// Matchers are basePath-RELATIVE: Next strips `basePath` before matching (the
+// same reason `request.nextUrl.pathname` arrives without it). So the `apps`
+// alternative excludes a top-level `/apps` *inside* the app — it does NOT
+// refer to a deployment mounted at `/apps/<name>`, and an app whose basePath
+// is `/apps/template` is matched normally. It is kept only for consumers that
+// really do have an `/apps` route; it protects nothing by itself.
+//
+// Consumers that additionally filter inside the middleware body (static
+// prefixes, extension checks) are duplicating `_next|favicon.ico|.*\..*`
+// here — harmless, but the matcher is the cheaper place to do it, since a
+// non-matching request never wakes the middleware at all.
 const DEFAULT_MATCHER = ['/', '/((?!apps|_next|favicon.ico|.*\\..*).*)', '/api/:path*'];
 
 // ─── Types ────────────────────────────────────────────────────────────────────
@@ -192,6 +206,18 @@ export type IGRPAuthOptions = {
   /**
    * Environment source. Defaults to process.env.
    * Override if you need to pass a custom env map (e.g. validated env object).
+   *
+   * LIMIT: this map governs everything **this package** reads, but it cannot
+   * reach inside `next-auth` itself. `next-auth`'s `detectOrigin()` reads
+   * `process.env.NEXTAUTH_URL` / `VERCEL` / `AUTH_TRUST_HOST` directly, and
+   * that origin is what it uses for its own `callbackUrl` and for the
+   * `baseUrl` handed to `callbacks.redirect`. So a caller that passes `env`
+   * WITHOUT also setting the corresponding `process.env` values gets a split
+   * brain: our cookie naming, redirects and secret follow the map, while
+   * next-auth's internals fall back to `http://localhost:3000`.
+   *
+   * In practice: use `env` to narrow or validate what is already in
+   * `process.env`, not to replace it.
    */
   env?: Record<string, string | undefined>;
 
@@ -334,9 +360,28 @@ export type IGRPAuthInstance = {
   isTokenExpiredOrFailed: (token: JWT) => boolean;
 
   /**
-   * Builds the login redirect URL from NEXTAUTH_URL_INTERNAL (or the
-   * request origin as fallback) combined with the configured loginUrl.
+   * Resolves an app-relative path against the app's **browser-reachable**
+   * origin, including its basePath.
+   *
+   * This is the single origin resolver for anything that becomes a `Location`
+   * header. Middleware that builds its own redirects (`/login`, `/`, …) should
+   * go through this rather than `new URL(path, request.url)`: behind a
+   * TLS-terminating proxy `request.url` is the *internal* origin
+   * (`http://pod:3000/…`), so redirecting to it sends the browser somewhere it
+   * cannot reach. Prefers `NEXTAUTH_URL` (minus its `/api/auth` suffix) and
+   * falls back to the request origin. `NEXTAUTH_URL_INTERNAL` is never used —
+   * it names a server-to-server origin by definition.
+   *
    * Accepts `{ url: string }` so it works with any NextRequest version.
+   *
+   * @example
+   * return NextResponse.redirect(auth.resolveAppUrl('/', request));
+   */
+  resolveAppUrl: (path: string, request: { url: string }) => URL;
+
+  /**
+   * `resolveAppUrl` applied to the configured `middleware.loginUrl`
+   * (default `/login`). Equivalent to `auth.resolveAppUrl('/login', request)`.
    *
    * @example
    * return NextResponse.redirect(auth.getLoginRedirectUrl(request));
@@ -1031,8 +1076,9 @@ export function withIGRPAuth(options: IGRPAuthOptions = {}): IGRPAuthInstance {
     return isExpired || token.error === 'RefreshAccessTokenError';
   }
 
-  function getLoginRedirectUrl(request: { url: string }): URL {
+  function resolveAppUrl(path: string, request: { url: string }): URL {
     const explicitBasePath = env.NEXT_PUBLIC_BASE_PATH ?? process.env.NEXT_PUBLIC_BASE_PATH ?? '';
+    const relative = path.startsWith('/') ? path : `/${path}`;
 
     // NEXTAUTH_URL_INTERNAL is a server-to-server origin and must never end up
     // in a `Location` header — this URL is handed straight to
@@ -1046,13 +1092,17 @@ export function withIGRPAuth(options: IGRPAuthOptions = {}): IGRPAuthInstance {
         // NEXTAUTH_URL's own path — `new URL('/login', 'https://h/app')`
         // would otherwise resolve to `https://h/login` and drop it.
         const prefix = explicitBasePath || base.pathname.replace(/\/+$/, '');
-        return new URL(`${prefix}${loginUrl}`, base.origin);
+        return new URL(`${prefix}${relative}`, base.origin);
       } catch {
         // Malformed NEXTAUTH_URL — fall through to the request origin.
       }
     }
 
-    return new URL(`${explicitBasePath}${loginUrl}`, request.url);
+    return new URL(`${explicitBasePath}${relative}`, request.url);
+  }
+
+  function getLoginRedirectUrl(request: { url: string }): URL {
+    return resolveAppUrl(loginUrl, request);
   }
 
   // ── Server helpers (Node runtime only — dynamic imports) ──────────────────
@@ -1137,6 +1187,7 @@ export function withIGRPAuth(options: IGRPAuthOptions = {}): IGRPAuthInstance {
     isPreviewMode,
     getTokenFromRequest,
     isTokenExpiredOrFailed,
+    resolveAppUrl,
     getLoginRedirectUrl,
     getAccessToken,
     serverSession,

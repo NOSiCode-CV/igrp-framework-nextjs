@@ -762,3 +762,63 @@ describe('withIGRPAuth — initial access-token expiry', () => {
     expect(t.expiresAt).toBeLessThan(NOW + 3600 * 1000);
   });
 });
+
+describe('withIGRPAuth — resolveAppUrl', () => {
+  const ENV = {
+    ...VALID_ENV,
+    NEXTAUTH_URL: 'https://public.example/apps/t/api/auth',
+    NEXTAUTH_URL_INTERNAL: 'http://pod:3000/apps/t/api/auth',
+  };
+
+  async function instance(overrides: Record<string, string | undefined> = {}) {
+    const withIGRPAuth = await getFactory();
+    return withIGRPAuth({ env: { ...ENV, ...overrides } });
+  }
+
+  it('resolves against the public origin, not the internal request origin', async () => {
+    // Behind a TLS-terminating proxy request.url is the pod URL; redirecting
+    // there sends the browser somewhere it cannot reach.
+    const auth = await instance();
+    expect(auth.resolveAppUrl('/', { url: 'http://pod:3000/apps/t/x' }).toString()).toBe(
+      'https://public.example/apps/t/',
+    );
+    expect(auth.resolveAppUrl('/some/page', { url: 'http://pod:3000/apps/t/x' }).toString()).toBe(
+      'https://public.example/apps/t/some/page',
+    );
+  });
+
+  it('never resolves against NEXTAUTH_URL_INTERNAL', async () => {
+    const auth = await instance();
+    expect(auth.resolveAppUrl('/', { url: 'http://pod:3000/x' }).host).not.toBe('pod:3000');
+  });
+
+  it('accepts a path with or without a leading slash', async () => {
+    const auth = await instance();
+    expect(auth.resolveAppUrl('login', { url: 'https://public.example/' }).pathname).toBe(
+      '/apps/t/login',
+    );
+  });
+
+  it('falls back to the request origin when NEXTAUTH_URL is unset', async () => {
+    const auth = await instance({ NEXTAUTH_URL: undefined });
+    expect(auth.resolveAppUrl('/x', { url: 'https://req.example/anything' }).toString()).toBe(
+      'https://req.example/x',
+    );
+  });
+
+  it('getLoginRedirectUrl is resolveAppUrl applied to the configured loginUrl', async () => {
+    const auth = await instance();
+    const req = { url: 'http://pod:3000/apps/t/x' };
+    expect(auth.getLoginRedirectUrl(req).toString()).toBe(
+      auth.resolveAppUrl('/login', req).toString(),
+    );
+  });
+
+  it('honours a custom middleware.loginUrl', async () => {
+    const withIGRPAuth = await getFactory();
+    const auth = withIGRPAuth({ env: ENV, middleware: { loginUrl: '/auth/signin' } });
+    expect(auth.getLoginRedirectUrl({ url: 'https://public.example/' }).pathname).toBe(
+      '/apps/t/auth/signin',
+    );
+  });
+});

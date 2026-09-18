@@ -281,6 +281,14 @@
       "manifestHash": "41da7422e2519c90",
       "undo": [],
       "fileHashes": {}
+    },
+    {
+      "id": "36-framework-owned-origin-resolution",
+      "appliedAt": "2026-09-18T00:00:00.000Z",
+      "cliVersion": "0.1.0-beta.141",
+      "manifestHash": "8c37fd6b3a5a98b6",
+      "undo": [],
+      "fileHashes": {}
     }
   ]
 }

@@ -1,0 +1,21 @@
+{
+  "//": "Type-check only. Proves contract/am-contract.ts against the AM client DTOs without emitting anything and without letting the client leak into the published dist/.",
+  "compilerOptions": {
+    "target": "esnext",
+    "module": "esnext",
+    "moduleResolution": "bundler",
+    "allowSyntheticDefaultImports": true,
+    "esModuleInterop": true,
+    "strict": true,
+    "isolatedModules": true,
+    "skipLibCheck": true,
+    "forceConsistentCasingInFileNames": true,
+    "resolveJsonModule": true,
+    "noEmit": true,
+    "composite": false,
+    "declaration": false,
+    "declarationMap": false
+  },
+  "include": ["src/**/*", "contract/**/*"],
+  "exclude": ["node_modules", "dist"]
+}

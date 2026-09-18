@@ -7,6 +7,7 @@ export type {
   IGRPConfigurationType,
   IGRPApplicationArgs,
   IGRPMenuItemArgs,
+  IGRPRoleDepartmentArgs,
   IGRPMenuCRUDArgs,
   IGRPRoleArgs,
   IGRPRoleUserArgs,

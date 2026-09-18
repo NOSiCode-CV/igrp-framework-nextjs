@@ -1,20 +1,15 @@
 import type { ApiResponse, MenuEntryDTO } from '@igrp/platform-access-management-client-ts';
-import type {
-  IGRPStatus,
-  IGRPMenuItemArgs,
-  IGRPMenuType,
-  IGRPTargetType,
-} from '@igrp/framework-next-types';
+import type { IGRPMenuItemArgs } from '@igrp/framework-next-types';
 
 const mapMenu = (menu: MenuEntryDTO): IGRPMenuItemArgs => ({
   id: menu.id,
   code: menu.code,
   name: menu.name,
-  type: menu.type as IGRPMenuType,
+  type: menu.type,
   position: menu.position,
   icon: menu.icon || undefined,
-  status: menu.status as IGRPStatus,
-  target: menu.target as IGRPTargetType,
+  status: menu.status,
+  target: menu.target,
   url: menu.url,
   pageSlug: menu.pageSlug,
   applicationCode: menu.applicationCode,

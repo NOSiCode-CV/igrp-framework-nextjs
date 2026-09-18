@@ -12,9 +12,10 @@ You are working inside `packages/framework/next-types/` — `@igrp/framework-nex
 
 ## Rules unique to this package
 
-- Depends on `@igrp/framework-next-auth` for session/JWT types; consumed by `design-system`, `next-ui`, `next`. A single type change can break every downstream package.
+- Depends on `@igrp/framework-next-auth` for session/claims types; consumed by `next-ui`, `next` and `templates/demo-v1` (**not** `design-system` — it has no dependency on this package, despite sitting between them in the build order). A single type change can break every downstream package.
 - Prefer **additive** changes. For renames, keep the old alias for at least one release unless doing a coordinated major bump.
-- **No runtime exports.** Runtime (Zod schemas, type guards, constants) lives in the owning runtime package; only its _types_ come here.
+- **No runtime exports.** Runtime (Zod schemas, type guards, constants) lives in the owning runtime package; only its _types_ come here. The manifest advertises **no** JS entry point — `exports` carries a `types` condition only.
+- **The AM types are gated, not trusted.** `src/types/access-management.ts` mirrors `@igrp/platform-access-management-client-ts` DTOs by hand (templates author menus as string literals; the client uses `declare enum`s). `contract/am-contract.ts` asserts DTO → framework assignability at build time. Touch a type there → run `pnpm check:contract`. Never silence it with a cast.
 - Build: plain **`tsc -b`** — no Babel, no React Compiler, no tsup. `pnpm build:next-types` from repo root.
 - After public type changes → `pnpm build:framework` to catch downstream breakage.
 

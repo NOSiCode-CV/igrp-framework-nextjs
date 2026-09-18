@@ -1,20 +1,15 @@
-import type { Session } from '@igrp/framework-next-auth';
+import type { Session } from '@igrp/framework-next-auth/session';
 import type { SessionProviderProps } from '@igrp/framework-next-auth/client';
 
 import type { IGRPMenuItemArgs, IGRPPermissionCatalogEntry } from './access-management';
-import type { IGRPHeaderDataArgs } from './header';
-import type { IGRPSidebarDataArgs } from './sidebar';
-import type { IGRPPackageJson, IGRPToasterPosition } from './globals';
+import type { IGRPMockDataAsync, IGRPPackageJson, IGRPToasterPosition } from './globals';
 
 export type IGRPConfigArgs = {
   appCode: string;
   previewMode: boolean;
   syncAccess: boolean;
   appInformation: IGRPPackageJson;
-  layoutMockData: {
-    getHeaderData: () => Promise<IGRPHeaderDataArgs>;
-    getSidebarData: () => Promise<IGRPSidebarDataArgs>;
-  };
+  layoutMockData: IGRPMockDataAsync;
   font?: string;
   showLanguageSelector?: boolean;
   layout: IGRPLayoutConfigArgs;

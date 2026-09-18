@@ -95,4 +95,8 @@ function IGRPCardDetails({
   )
 }
 
-export { IGRPCardDetails, type IGRPCardDetailsProps, type IGRPCardDetailsItemProps }
+export { 
+  IGRPCardDetails, 
+  type IGRPCardDetailsProps, 
+  type IGRPCardDetailsItemProps 
+}

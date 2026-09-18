@@ -653,3 +653,112 @@ describe('withIGRPAuth — cookie isolation', () => {
     expect(instance.authOptions.cookies).toBeUndefined();
   });
 });
+
+describe('withIGRPAuth — secure-cookie derivation', () => {
+  const BASE = { ...VALID_ENV, NEXT_PUBLIC_BASE_PATH: '/apps/a' };
+
+  it('follows NEXTAUTH_URL when it is set', async () => {
+    const withIGRPAuth = await getFactory();
+    const https = withIGRPAuth({ env: { ...BASE, NEXTAUTH_URL: 'https://h/apps/a/api/auth' } });
+    const http = withIGRPAuth({ env: { ...BASE, NEXTAUTH_URL: 'http://h/apps/a/api/auth' } });
+
+    expect(https.authOptions.cookies!.sessionToken!.name).toContain('__Secure-');
+    expect(https.authOptions.useSecureCookies).toBe(true);
+    expect(http.authOptions.cookies!.sessionToken!.name).not.toContain('__Secure-');
+    expect(http.authOptions.useSecureCookies).toBe(false);
+  });
+
+  it('assumes https under AUTH_TRUST_HOST when NEXTAUTH_URL is unset', async () => {
+    // Regression: reading NEXTAUTH_URL alone stripped the Secure flag from a
+    // session cookie served over HTTPS behind a TLS-terminating proxy, because
+    // next-auth's own detectOrigin() falls back to x-forwarded-proto here.
+    const withIGRPAuth = await getFactory();
+    const instance = withIGRPAuth({
+      env: { ...BASE, NEXTAUTH_URL: undefined, AUTH_TRUST_HOST: '1' },
+    });
+    expect(instance.authOptions.cookies!.sessionToken!.name).toContain('__Secure-');
+    expect(instance.authOptions.cookies!.sessionToken!.options.secure).toBe(true);
+    expect(instance.authOptions.useSecureCookies).toBe(true);
+  });
+
+  it('assumes https under VERCEL too', async () => {
+    const withIGRPAuth = await getFactory();
+    const instance = withIGRPAuth({ env: { ...BASE, NEXTAUTH_URL: undefined, VERCEL: '1' } });
+    expect(instance.authOptions.useSecureCookies).toBe(true);
+  });
+
+  it('falls back to insecure when nothing indicates https', async () => {
+    const withIGRPAuth = await getFactory();
+    const instance = withIGRPAuth({ env: { ...BASE, NEXTAUTH_URL: undefined } });
+    expect(instance.authOptions.useSecureCookies).toBe(false);
+  });
+
+  it('honours an explicit secureCookies override', async () => {
+    const withIGRPAuth = await getFactory();
+    const instance = withIGRPAuth({
+      env: { ...BASE, NEXTAUTH_URL: undefined, AUTH_TRUST_HOST: '1' },
+      secureCookies: false,
+    });
+    expect(instance.authOptions.useSecureCookies).toBe(false);
+    expect(instance.authOptions.cookies!.sessionToken!.name).not.toContain('__Secure-');
+  });
+
+  it('leaves useSecureCookies unset for a root-path app', async () => {
+    // No cookie override there, so next-auth keeps deriving both sides itself.
+    const withIGRPAuth = await getFactory();
+    const instance = withIGRPAuth({ env: VALID_ENV });
+    expect(instance.authOptions.useSecureCookies).toBeUndefined();
+    expect(instance.authOptions.cookies).toBeUndefined();
+  });
+});
+
+describe('withIGRPAuth — initial access-token expiry', () => {
+  const NOW = 1_700_000_000_000;
+
+  function jwtWithExp(expSeconds: number): string {
+    const b64 = (v: string) =>
+      Buffer.from(v, 'utf-8')
+        .toString('base64')
+        .replace(/\+/g, '-')
+        .replace(/\//g, '_')
+        .replace(/=+$/, '');
+    return [b64('{"alg":"none"}'), b64(JSON.stringify({ exp: expSeconds })), 'sig'].join('.');
+  }
+
+  async function signIn(account: Record<string, unknown>) {
+    const withIGRPAuth = await getFactory();
+    const instance = withIGRPAuth({ env: VALID_ENV });
+    return (await instance.authOptions.callbacks!.jwt!({
+      token: {},
+      account,
+    } as never)) as { expiresAt?: number };
+  }
+
+  beforeEach(() => {
+    vi.clearAllMocks();
+    vi.spyOn(Date, 'now').mockReturnValue(NOW);
+  });
+
+  it('prefers account.expires_at', async () => {
+    const t = await signIn({ access_token: 'at', expires_at: NOW / 1000 + 180 });
+    expect(t.expiresAt).toBe(NOW + 180_000);
+  });
+
+  it('falls back to account.expires_in', async () => {
+    const t = await signIn({ access_token: 'at', expires_in: 180 });
+    expect(t.expiresAt).toBe(NOW + 180_000);
+  });
+
+  it("reads the access token's own exp when the IdP sent neither", async () => {
+    // Previously this invented a full hour, so a ~3-minute token looked healthy
+    // for 57 minutes of guaranteed 401s.
+    const t = await signIn({ access_token: jwtWithExp(NOW / 1000 + 180) });
+    expect(t.expiresAt).toBe(NOW + 180_000);
+  });
+
+  it('uses a short, self-correcting fallback for an opaque token with no hints', async () => {
+    const t = await signIn({ access_token: 'opaque-not-a-jwt' });
+    expect(t.expiresAt).toBe(NOW + 5 * 60_000);
+    expect(t.expiresAt).toBeLessThan(NOW + 3600 * 1000);
+  });
+});

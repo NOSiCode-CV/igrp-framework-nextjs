@@ -45,6 +45,7 @@ import type { IGRPTokenRecoveryStore } from './token-store';
 import { escapeHtml, sanitizeRedirectUrl, stripAuthApiSuffix } from './sanitize';
 import { buildAuthCookies, resolveSecureCookie, sessionCookieName } from './cookies';
 import { isNextControlFlowError } from './runtime';
+import { decodeIgrpClaims } from './claims';
 
 // ─── Config Error ─────────────────────────────────────────────────────────────
 
@@ -115,6 +116,15 @@ const TOKEN_EXPIRY_GRACE_MS = 10_000;
 // until it settles, and revocation is discovery + revoke in series, so bounding
 // the individual fetches is not the same as bounding the user's wait.
 const SIGNOUT_REVOCATION_BUDGET_MS = 5000;
+
+// Access-token lifetime assumed only when the IdP told us nothing AND the
+// token itself carries no `exp`. Deliberately short: the previous one-hour
+// guess meant a token that really died in ~3 minutes was treated as healthy for
+// the rest of the hour — middleware never bounced, the jwt callback never
+// refreshed, and every access-management call 401'd with nothing in the session
+// explaining why. A short value is self-correcting: the next jwt callback
+// refreshes and the IdP's real `expires_in` takes over.
+const UNKNOWN_EXPIRY_FALLBACK_MS = 5 * 60_000;
 
 const DEFAULT_MATCHER = ['/', '/((?!apps|_next|favicon.ico|.*\\..*).*)', '/api/:path*'];
 
@@ -227,6 +237,17 @@ export type IGRPAuthOptions = {
    * session out exactly once.
    */
   cookieIsolation?: 'basePath' | 'none';
+
+  /**
+   * Overrides whether auth cookies are marked `Secure` (and carry the
+   * `__Secure-` / `__Host-` prefixes).
+   *
+   * Defaults to the same signal `next-auth` uses — see
+   * `resolveSecureCookiesFlag`. Set it explicitly only for a deployment that
+   * terminates plain http behind a trusted proxy, where the default's
+   * https assumption is wrong.
+   */
+  secureCookies?: boolean;
 
   /**
    * Shared store for rotated refresh-token recovery. Defaults to an in-memory,
@@ -374,6 +395,35 @@ function normalizePreviewMode(env: Record<string, string | undefined>): boolean 
 const AUTH_CHROME_PATH = /^\/(login|logout)(\/|$|\?)/;
 
 /**
+ * Mirrors how `next-auth` itself decides whether cookies are secure, so the
+ * names we write and the names it writes can never disagree.
+ *
+ * v4's `detectOrigin()` (utils/detect-origin.js) resolves, in order:
+ *   1. `NEXTAUTH_URL` — use its scheme.
+ *   2. `VERCEL` or `AUTH_TRUST_HOST` — derive from the request's
+ *      `x-forwarded-proto`, defaulting to **https**.
+ *   3. neither — fall back to `http://localhost:3000`.
+ *
+ * Reading only `NEXTAUTH_URL` (as an earlier version of this did) gets case 2
+ * wrong: behind a TLS-terminating proxy with `AUTH_TRUST_HOST` set and no
+ * `NEXTAUTH_URL`, next-auth writes `__Secure-…` while we would name the cookie
+ * unprefixed AND mark it `secure: false` — stripping the Secure flag from a
+ * session cookie served over HTTPS.
+ *
+ * Case 2 cannot be resolved at construction time (there is no request yet), so
+ * it assumes https, matching next-auth's own default. A deployment that really
+ * terminates plain http behind a trusted proxy must set `NEXTAUTH_URL` — or
+ * pass `secureCookies` explicitly.
+ */
+function resolveSecureCookiesFlag(env: Record<string, string | undefined>): boolean {
+  const nextAuthUrl = env.NEXTAUTH_URL ?? process.env.NEXTAUTH_URL;
+  if (nextAuthUrl) return nextAuthUrl.startsWith('https://');
+  const trustsHost =
+    env.VERCEL ?? process.env.VERCEL ?? env.AUTH_TRUST_HOST ?? process.env.AUTH_TRUST_HOST;
+  return Boolean(trustsHost);
+}
+
+/**
  * `env` is the documented environment source for the whole factory, but
  * `NODE_ENV` is not something a caller normally puts in a validated env map —
  * fall back to the real process env rather than silently treating a custom map
@@ -452,6 +502,44 @@ async function createNextAuthHandler(
     ...authOptions,
     debug: resolveNodeEnv(env) === 'development',
   }) as unknown as NextAuthHandler;
+}
+
+/**
+ * Best available expiry for a freshly issued access token, most to least
+ * authoritative:
+ *   1. `account.expires_at` — what next-auth derived from the token response.
+ *   2. `account.expires_in` — present when next-auth could not normalise it.
+ *   3. the access token's OWN `exp` claim, when it is a JWT.
+ *   4. {@link UNKNOWN_EXPIRY_FALLBACK_MS}.
+ *
+ * Step 3 matters because an IdP that omits `expires_in` still stamps `exp` into
+ * the token it just issued — so "we don't know" is much rarer than a bare
+ * `expires_at` check suggests.
+ */
+function resolveInitialExpiry(account: {
+  expires_at?: number;
+  expires_in?: number;
+  access_token?: string;
+}): number {
+  if (typeof account.expires_at === 'number' && Number.isFinite(account.expires_at)) {
+    return account.expires_at * 1000;
+  }
+  if (typeof account.expires_in === 'number' && Number.isFinite(account.expires_in)) {
+    return Date.now() + account.expires_in * 1000;
+  }
+  if (typeof account.access_token === 'string') {
+    try {
+      const claims = decodeIgrpClaims(account.access_token);
+      if (typeof claims.expiresAt === 'number') return claims.expiresAt;
+    } catch {
+      // Opaque (non-JWT) access token, or malformed — fall through.
+    }
+  }
+  console.warn(
+    '[next-auth] jwt: the IdP returned no expires_at/expires_in and the access token carries no ' +
+      `exp claim — assuming ${UNKNOWN_EXPIRY_FALLBACK_MS / 1000}s. The first refresh will correct it.`,
+  );
+  return Date.now() + UNKNOWN_EXPIRY_FALLBACK_MS;
 }
 
 /**
@@ -546,6 +634,7 @@ export function withIGRPAuth(options: IGRPAuthOptions = {}): IGRPAuthInstance {
     onSessionExpired,
     tokenRecoveryStore,
     cookieIsolation = 'basePath',
+    secureCookies: secureCookiesOption,
   } = options;
 
   // Resolved once, from the caller's `env` first: a caller that passes a
@@ -615,7 +704,7 @@ export function withIGRPAuth(options: IGRPAuthOptions = {}): IGRPAuthInstance {
   // signal here, or the names we write and the names `getToken` reads would
   // disagree.
   const basePath = env.NEXT_PUBLIC_BASE_PATH ?? process.env.NEXT_PUBLIC_BASE_PATH ?? '';
-  const secureCookies = (env.NEXTAUTH_URL ?? '').startsWith('https://');
+  const secureCookies = secureCookiesOption ?? resolveSecureCookiesFlag(env);
   const authCookies =
     cookieIsolation === 'basePath' ? buildAuthCookies(basePath, secureCookies) : undefined;
   // What `getToken` must look for. Only meaningful when we overrode the names;
@@ -640,7 +729,15 @@ export function withIGRPAuth(options: IGRPAuthOptions = {}): IGRPAuthInstance {
     secret,
     // Scoped cookie names when the app runs under a basePath — see ./cookies.
     // Absent (undefined) for a root-path app, leaving NextAuth's defaults.
-    ...(authCookies ? { cookies: authCookies } : {}),
+    //
+    // `useSecureCookies` is pinned to the SAME value used to build those names.
+    // The long-standing note below says not to set it explicitly, because doing
+    // so with a *different* signal (NODE_ENV) desynchronised the writer from
+    // `getToken`. Once we override the names we are already committed to a
+    // scheme decision, so stating it makes both sides agree by construction
+    // rather than by both happening to derive it the same way. Only set
+    // alongside `cookies`, so the no-basePath path behaves exactly as before.
+    ...(authCookies ? { cookies: authCookies, useSecureCookies: secureCookies } : {}),
     ...(pages ? { pages } : {}),
     ...(sessionConfig ? { session: sessionConfig } : {}),
 
@@ -651,15 +748,13 @@ export function withIGRPAuth(options: IGRPAuthOptions = {}): IGRPAuthInstance {
 
         // Initial sign-in: map account fields onto the JWT
         if (account) {
-          const accountTyped = account as Account & { expires_at?: number };
+          const accountTyped = account as Account & { expires_at?: number; expires_in?: number };
           igrpToken = {
             ...igrpToken,
             authProviderId: getAuthProviderIdFromEnv(env) as JWT['authProviderId'],
             accessToken: accountTyped.access_token,
             idToken: accountTyped.id_token,
-            expiresAt: accountTyped.expires_at
-              ? accountTyped.expires_at * 1000
-              : Date.now() + 3600 * 1000,
+            expiresAt: resolveInitialExpiry(accountTyped),
             refreshToken: accountTyped.refresh_token,
           };
         }

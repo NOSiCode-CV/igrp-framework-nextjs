@@ -7,6 +7,7 @@ import {
 } from './providers';
 import { createInMemoryTokenRecoveryStore, type IGRPTokenRecoveryStore } from './token-store';
 import { sanitizeRedirectUrl, stripAuthApiSuffix } from './sanitize';
+import { globalSlot, warnOnce } from './_global-state';
 
 export * from './token-store';
 
@@ -54,10 +55,16 @@ function fetchWithTimeout(input: string, init: RequestInit, timeoutMs: number): 
 
 type DiscoveryCacheEntry = { promise: Promise<OpenIdConfiguration>; expiresAt: number };
 
-const openIdConfigurationCache = new Map<string, DiscoveryCacheEntry>();
+// Process-wide (see ./_global-state). Per-chunk copies meant the `/oidc` entry
+// re-fetched the discovery document that the `/config` entry had already
+// cached — an extra IdP round-trip on the user-blocking logout path.
+function openIdConfigurationCache(): Map<string, DiscoveryCacheEntry> {
+  return globalSlot('oidc.discoveryCache', () => new Map<string, DiscoveryCacheEntry>());
+}
 
 function getOpenIdConfiguration(discoveryUrl: string) {
-  const cached = openIdConfigurationCache.get(discoveryUrl);
+  const cache = openIdConfigurationCache();
+  const cached = cache.get(discoveryUrl);
 
   if (cached && cached.expiresAt > Date.now()) {
     return cached.promise;
@@ -79,13 +86,13 @@ function getOpenIdConfiguration(discoveryUrl: string) {
     return (await response.json()) as OpenIdConfiguration;
   });
 
-  openIdConfigurationCache.set(discoveryUrl, {
+  cache.set(discoveryUrl, {
     promise,
     expiresAt: Date.now() + DISCOVERY_CACHE_TTL_MS,
   });
 
   // Remove poisoned entry so the next call retries
-  promise.catch(() => openIdConfigurationCache.delete(discoveryUrl));
+  promise.catch(() => cache.delete(discoveryUrl));
 
   return promise;
 }
@@ -135,7 +142,14 @@ function buildBasicAuthHeader(clientId: string, clientSecret: string): string {
 //
 // In-memory only; multi-instance deployments can still race across pods.
 // Single-process dev is fully covered; sticky routing covers most prod.
-const inflightRefreshes = new Map<string, Promise<RefreshOutcome>>();
+//
+// Process-wide (see ./_global-state): a per-chunk copy would silently split the
+// dedup the moment anything refreshed through a second entry point, and the
+// whole purpose of this map is that a split produces `invalid_grant` and logs
+// the user out of a healthy session.
+function inflightRefreshes(): Map<string, Promise<RefreshOutcome>> {
+  return globalSlot('oidc.inflightRefreshes', () => new Map<string, Promise<RefreshOutcome>>());
+}
 
 // Rotation-result recovery cache. NextAuth runs the jwt callback on every
 // session read, including RSC renders where `cookies()` is read-only. When the
@@ -160,20 +174,16 @@ const RECOVERY_TTL_MS = 180_000;
 // infrastructure for multi-replica deployments without sticky sessions — that
 // closes the cross-pod rotation race the in-memory store can't.
 //
-// The store reference lives on globalThis (keyed by Symbol.for) rather than in
-// a module-level variable: tsup inlines this module into each entry chunk
-// (dist/config.js, dist/oidc.js, …) and Next.js can instantiate a module once
-// per server layer, so a plain `let` would exist as several independent
-// copies — configureOidcTokenRecoveryStore would then mutate a copy the jwt
-// callback never reads. Symbol.for resolves to the same slot in all copies.
-const RECOVERY_STORE_SLOT = Symbol.for('igrp.next-auth.oidc.tokenRecoveryStore');
-
+// Process-wide (see ./_global-state), and a HOLDER object rather than the store
+// itself because configureOidcTokenRecoveryStore replaces it — every copy has
+// to read through the same reference or the jwt callback keeps using a store
+// the caller thinks it swapped out.
 type RecoveryStoreSlot = { store: IGRPTokenRecoveryStore };
 
 function recoveryStoreSlot(): RecoveryStoreSlot {
-  const g = globalThis as { [RECOVERY_STORE_SLOT]?: RecoveryStoreSlot };
-  g[RECOVERY_STORE_SLOT] ??= { store: createInMemoryTokenRecoveryStore() };
-  return g[RECOVERY_STORE_SLOT];
+  return globalSlot('oidc.tokenRecoveryStore', () => ({
+    store: createInMemoryTokenRecoveryStore(),
+  }));
 }
 
 /**
@@ -184,8 +194,6 @@ export function configureOidcTokenRecoveryStore(store: IGRPTokenRecoveryStore): 
   recoveryStoreSlot().store = store;
 }
 
-let warnedRecoveryStoreFailure = false;
-
 /**
  * Store failures must never break a session read, but a silent catch hides a
  * store outage behind sporadic forced logouts. Warn once per process so the
@@ -193,12 +201,12 @@ let warnedRecoveryStoreFailure = false;
  * flooding logs on every session read during an outage.
  */
 function warnRecoveryStoreFailure(operation: 'get' | 'set', error: unknown): void {
-  if (warnedRecoveryStoreFailure) return;
-  warnedRecoveryStoreFailure = true;
-  console.warn(
-    `[oidc.tokenRecoveryStore] ${operation} failed — recovery degraded to cache miss; ` +
-      'rotated-token recovery is disabled until the store recovers:',
-    error instanceof Error ? `${error.name}: ${error.message}` : error,
+  warnOnce('oidc.tokenRecoveryStore', () =>
+    console.warn(
+      `[oidc.tokenRecoveryStore] ${operation} failed — recovery degraded to cache miss; ` +
+        'rotated-token recovery is disabled until the store recovers:',
+      error instanceof Error ? `${error.name}: ${error.message}` : error,
+    ),
   );
 }
 
@@ -283,13 +291,14 @@ export async function refreshOidcAccessToken(token: JWT, env: AuthEnvironment): 
   if (!token.refreshToken) return failedRefresh(token);
 
   const refreshKey = token.refreshToken;
-  let inflight = inflightRefreshes.get(refreshKey);
+  const inflightMap = inflightRefreshes();
+  let inflight = inflightMap.get(refreshKey);
   if (!inflight) {
     const tokenWithRefresh = token as JWT & { refreshToken: string };
     inflight = performRefresh(tokenWithRefresh, env).finally(() => {
-      inflightRefreshes.delete(refreshKey);
+      inflightMap.delete(refreshKey);
     });
-    inflightRefreshes.set(refreshKey, inflight);
+    inflightMap.set(refreshKey, inflight);
   }
 
   const outcome = await inflight;
@@ -668,8 +677,6 @@ export async function buildEndSessionUrl(
   return url.toString();
 }
 
-const warnedIntrospection = new Set<string>();
-
 /**
  * Introspection deliberately fails OPEN — a flaky or misconfigured
  * introspection endpoint must never block a refresh. But failing open in
@@ -679,12 +686,12 @@ const warnedIntrospection = new Set<string>();
  * reason, per process.
  */
 function warnIntrospectionDisabled(reason: string, detail?: unknown): void {
-  if (warnedIntrospection.has(reason)) return;
-  warnedIntrospection.add(reason);
-  console.warn(
-    `[oidc.introspectOidcToken] failing open (${reason}) — server-side revocation is NOT being ` +
-      'detected until this is resolved; refresh will proceed regardless.',
-    detail instanceof Error ? `${detail.name}: ${detail.message}` : (detail ?? ''),
+  warnOnce(`oidc.introspection.${reason}`, () =>
+    console.warn(
+      `[oidc.introspectOidcToken] failing open (${reason}) — server-side revocation is NOT being ` +
+        'detected until this is resolved; refresh will proceed regardless.',
+      detail instanceof Error ? `${detail.name}: ${detail.message}` : (detail ?? ''),
+    ),
   );
 }
 

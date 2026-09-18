@@ -46,6 +46,7 @@ import { escapeHtml, sanitizeRedirectUrl, stripAuthApiSuffix } from './sanitize'
 import { buildAuthCookies, resolveSecureCookie, sessionCookieName } from './cookies';
 import { isNextControlFlowError } from './runtime';
 import { decodeIgrpClaims } from './claims';
+import { warnOnce } from './_global-state';
 
 // ─── Config Error ─────────────────────────────────────────────────────────────
 
@@ -493,9 +494,7 @@ function isAuthChromePath(pathOrUrl: string): boolean {
  * cookie. The constraint was documented but never checked, which made the
  * resulting dead zone look like a random logout.
  */
-let warnedRefetchInterval = false;
 function warnOnRefetchIntervalMisconfiguration(env: Record<string, string | undefined>): void {
-  if (warnedRefetchInterval) return;
   const raw = env.IGRP_SESSION_REFETCH_INTERVAL?.trim();
   if (!raw) return;
   const seconds = Number.parseInt(raw, 10);
@@ -504,12 +503,13 @@ function warnOnRefetchIntervalMisconfiguration(env: Record<string, string | unde
   const maxSeconds = TOKEN_REFRESH_BUFFER_MS / 1000;
   if (seconds < maxSeconds) return;
 
-  warnedRefetchInterval = true;
-  console.warn(
-    `[withIGRPAuth] IGRP_SESSION_REFETCH_INTERVAL=${seconds}s is >= the proactive refresh ` +
-      `buffer (${maxSeconds}s). The client session poll will never fire inside the refresh ` +
-      'window, so refreshes only run in read-only RSC context and cannot persist the rotated ' +
-      `cookie. Recommended: at most ${maxSeconds - 15}s.`,
+  warnOnce('config.refetchInterval', () =>
+    console.warn(
+      `[withIGRPAuth] IGRP_SESSION_REFETCH_INTERVAL=${seconds}s is >= the proactive refresh ` +
+        `buffer (${maxSeconds}s). The client session poll will never fire inside the refresh ` +
+        'window, so refreshes only run in read-only RSC context and cannot persist the rotated ' +
+        `cookie. Recommended: at most ${maxSeconds - 15}s.`,
+    ),
   );
 }
 

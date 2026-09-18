@@ -59,9 +59,50 @@ NEXTAUTH_SECRET=some-random-secret
 
 # Optional
 IGRP_AUTH_SCOPES=openid profile email   # defaults to "openid"; "openid" is always injected automatically
-NEXTAUTH_URL_INTERNAL=http://app:3000   # internal URL for server-to-server calls
 IGRP_PREVIEW_MODE=true                  # bypass auth for local dev (no OIDC needed)
+
+# Deployment shape
+NEXT_PUBLIC_BASE_PATH=/apps/template    # scopes auth cookie names (see "Cookies" below)
+NEXT_PUBLIC_IGRP_APP_HOME_SLUG=/home    # post-login landing path, relative to the app base
+AUTH_TRUST_HOST=1                       # read by next-auth: derive the origin from x-forwarded-* when NEXTAUTH_URL is unset
+
+# Session lifecycle
+IGRP_SESSION_REFETCH_INTERVAL=45        # client session-poll seconds; MUST stay below 60 (see below)
+
+# Logout
+IGRP_AUTH_POST_LOGOUT_ALLOWED_ORIGINS=https://portal.example
+                                        # extra origins accepted as post_logout_redirect_uri;
+                                        # the app's own origin is always allowed
 ```
+
+> **`NEXTAUTH_URL_INTERNAL` is no longer used by this package.** It previously
+> fed post-login and login redirects, which was a bug: it names a
+> _server-to-server_ origin, so in the very deployments that set it the browser
+> was handed a `Location` it could not reach. Redirects now resolve against
+> `NEXTAUTH_URL`, falling back to the request origin. Setting the variable is
+> harmless — `next-auth` still uses it for its own server-side calls — but it no
+> longer influences anything here.
+
+### `IGRP_SESSION_REFETCH_INTERVAL` has a hard ceiling
+
+The `jwt` callback only refreshes once the access token is within **60s** of
+expiry. A poll interval at or above that never lands inside the refresh window,
+so the only refreshes that run happen during RSC renders, where `cookies()` is
+read-only and the rotated token cannot be persisted — the session then dies in a
+gap users experience as a random bounce to `/login`. `withIGRPAuth` warns in
+development when the value is 60 or above. 45 leaves margin for jitter.
+
+### Cookies
+
+When `NEXT_PUBLIC_BASE_PATH` is set, every NextAuth cookie name is suffixed with
+a slug derived from it (`next-auth.session-token.apps-template`). Without it,
+two IGRP apps on the same host under `/apps/a` and `/apps/b` write the _same_
+cookie name at the same path and overwrite each other's sessions. Apps at the
+host root keep the stock names.
+
+The `Secure` flag (and the `__Secure-` / `__Host-` prefixes) follows the same
+signal `next-auth` uses: `NEXTAUTH_URL`'s scheme, else https when `VERCEL` /
+`AUTH_TRUST_HOST` is set, else http.
 
 ### Scopes and refresh tokens
 
@@ -83,6 +124,33 @@ causing the client to sign the user out. This is safe behaviour, but avoidable.
 
 > **Note:** Some providers (e.g. WSO2IS) issue refresh tokens by default regardless of
 > `offline_access`. Check your provider's documentation.
+
+## `withIGRPAuth` options
+
+Beyond `provider`, `env`, `secret`, `pages`, `session` and `callbacks`:
+
+| Option                | Default               | Purpose                                                                                                                                                              |
+| --------------------- | --------------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `onSessionExpired`    | —                     | Called by `getSession()` when the token is expired or refresh failed. Typically `() => redirect('/logout')`.                                                         |
+| `middleware.loginUrl` | `/login`              | Path `getLoginRedirectUrl()` resolves.                                                                                                                               |
+| `middleware.matcher`  | see `DEFAULT_MATCHER` | Matcher re-exported as `auth.config`. Matchers are basePath-_relative_.                                                                                              |
+| `tokenRecoveryStore`  | in-memory             | Shared store for rotated-refresh-token recovery. Supply a cross-replica implementation for multi-pod deployments without sticky routing; the default is per-process. |
+| `cookieIsolation`     | `'basePath'`          | `'none'` keeps NextAuth's stock cookie names. Only has an effect when a basePath is set.                                                                             |
+| `secureCookies`       | derived               | Overrides the `Secure` flag derivation described above.                                                                                                              |
+
+### Middleware primitives
+
+`auth` exposes the pieces a template's `middleware.ts` needs, so the middleware
+body stays yours:
+
+| Member                                 | Purpose                                                                                                                                                                                 |
+| -------------------------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `isAuthDisabled()` / `isPreviewMode()` | Bypass checks.                                                                                                                                                                          |
+| `getTokenFromRequest(request)`         | Decodes the session JWT from an Edge request.                                                                                                                                           |
+| `isTokenExpiredOrFailed(token)`        | Expiry + refresh-error check, with the middleware grace window.                                                                                                                         |
+| `resolveAppUrl(path, request)`         | Resolves a path against the app's **browser-reachable** origin. Use this instead of `new URL(path, request.url)` — behind a TLS-terminating proxy `request.url` is the internal origin. |
+| `getLoginRedirectUrl(request)`         | `resolveAppUrl` applied to `middleware.loginUrl`.                                                                                                                                       |
+| `config`                               | `{ matcher }` for re-export.                                                                                                                                                            |
 
 ## Supported providers
 

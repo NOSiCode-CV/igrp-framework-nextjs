@@ -1,5 +1,7 @@
 import type { OAuthConfig } from 'next-auth/providers/oauth';
 
+import { warnOnce } from './_global-state';
+
 export const IGRP_AUTH_PROVIDER_ID = 'igrp-auth' as const;
 export const NONE_PROVIDER_ID = 'none' as const;
 
@@ -47,6 +49,35 @@ function getRequiredEnvValue(env: AuthEnvironment, key: string) {
   return value;
 }
 
+/**
+ * Subject identifier for a profile, with a loud fallback.
+ *
+ * Returns `sub` when present. Otherwise falls back to `preferred_username`,
+ * then `email`, warning once — those are user-changeable, so an identity keyed
+ * on them is not stable across a rename. Returns `''` when nothing usable
+ * exists, which NextAuth surfaces as a failed sign-in rather than a session
+ * with a silently missing id.
+ */
+function resolveProfileId(profile: OAuth2Profile): string {
+  if (typeof profile.sub === 'string' && profile.sub.length > 0) return profile.sub;
+
+  const fallback =
+    (typeof profile.preferred_username === 'string' ? profile.preferred_username : '') ||
+    (typeof profile.email === 'string' ? profile.email : '');
+
+  warnOnce('providers.profileMissingSub', () =>
+    console.warn(
+      '[providers] the IdP profile has no `sub` claim, which OIDC requires. ' +
+        (fallback
+          ? `Falling back to ${profile.preferred_username ? 'preferred_username' : 'email'} as the user id — ` +
+            'this is NOT stable across a username/email change.'
+          : 'No usable fallback either; sign-in will fail.'),
+    ),
+  );
+
+  return fallback;
+}
+
 function stripTrailingSlash(value: string) {
   return value.replace(/\/+$/, '');
 }
@@ -76,7 +107,13 @@ const AUTH_PROVIDER_REGISTRY: Record<AuthProviderId, AuthProviderDefinition> = {
       },
       profile(profile: OAuth2Profile) {
         return {
-          id: profile.sub,
+          // `sub` is mandatory in OIDC and is the only stable identifier here,
+          // so it is what NextAuth turns into `token.sub` / `session.user.id`.
+          // It was the one field in this mapper with no fallback: an IdP that
+          // omits it produced `id: undefined`, which sign-in tolerates and then
+          // surfaces much later as a permanently empty `session.user.id`.
+          // Degrade to a less-stable identifier rather than none, and say so.
+          id: resolveProfileId(profile),
           name: profile.name ?? profile.preferred_username ?? null,
           email: profile.email ?? null,
           image: typeof profile.picture === 'string' ? profile.picture : null,

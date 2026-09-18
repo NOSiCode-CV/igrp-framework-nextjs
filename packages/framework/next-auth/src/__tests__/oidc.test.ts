@@ -1,5 +1,15 @@
-import { describe, it, expect, vi, afterEach } from 'vitest';
+import { describe, it, expect, vi, afterEach, beforeEach } from 'vitest';
 import type { JWT } from '../jwt';
+import { resetGlobalStateForTests } from '../_global-state';
+
+// The discovery cache, the in-flight refresh map and the warn-once flags are
+// process-wide (globalThis + Symbol.for) so that the /config and /oidc entry
+// chunks share them. That means `vi.resetModules()` no longer hands each case a
+// fresh cache -- reset it explicitly, or one test's discovery document leaks
+// into the next.
+beforeEach(() => {
+  resetGlobalStateForTests();
+});
 
 // ─── Shared fixtures ──────────────────────────────────────────────────────────
 

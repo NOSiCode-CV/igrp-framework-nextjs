@@ -18,6 +18,7 @@ You are working inside `packages/framework/next-auth/` — `@igrp/framework-next
 - `./client` is a real client boundary. `src/client.ts` starts with `'use client'` and `tsup.config.ts` re-adds the directive to `dist/client.js` after bundling (esbuild strips it). If you add another browser-only entry, add it to `CLIENT_ENTRIES` there.
 - `./cookies` and `./runtime` are the **shared-with-downstream** entries: pure, dependency-free helpers that `@igrp/framework-next` imports instead of keeping its own copy. Cookie naming and Next control-flow detection live there and nowhere else — a second copy is how they drift.
 - Auth cookie names are scoped by `NEXT_PUBLIC_BASE_PATH` (see `src/cookies.ts`). Anything that reads the session cookie must go through `sessionCookieName()` / `resolveSecureCookie()`, never a hardcoded `next-auth.session-token`.
+- `src/__tests__/dist-contract.test.ts` asserts properties that exist only in the BUILD: the `"use client"` directive, the root barrel's purity, the Edge-safety contract (what `dist/config.js` *statically* imports), and one `Symbol.for` namespace across chunks. Source review cannot see any of them — two regressions reached a green build before it existed. It skips when `dist/` is absent, and `release` runs `build && test && publish` so it gates every publish.
 - Builds with **tsup**, not Babel. **No React Compiler step.**
 - `@igrp/framework-next-types` re-exports types from here — run `pnpm build:framework` after type changes.
 - `pnpm build:auth` from repo root.

@@ -91,7 +91,7 @@
     "build:js": "tsup",
     "build": "pnpm clean && pnpm build:js",
     "clean-all": "rimraf node_modules && rimraf dist && rimraf tsconfig.tsbuildinfo",
-    "release": "pnpm build && pnpm publish --registry=https://sonatype.nosi.cv/repository/igrp/ --tag latest --no-git-checks",
+    "release": "pnpm build && pnpm test && pnpm publish --registry=https://sonatype.nosi.cv/repository/igrp/ --tag latest --no-git-checks",
     "test": "vitest run"
   },
   "peerDependencies": {

@@ -1,4 +1,16 @@
 {
+  // Type-check / editor config ONLY — this project does not emit.
+  //
+  // It used to carry `composite: true`, `noEmit: false` and `outDir: ./dist`
+  // on a package whose `dist/` is produced entirely by tsup. Any bare `tsc`
+  // or `tsc -b` in this directory therefore wrote a second, competing build
+  // over the tsup output. Nothing ran it, so nothing caught it.
+  //
+  // Emission lives in `tsconfig.build.json`, which is composite and
+  // declaration-only. Note that a TypeScript project reference may not point
+  // at a project with `noEmit` (TS6310), so this file can never be a
+  // reference target — `tsconfig.build.json` is the one to reference if the
+  // package ever moves its `.d.ts` emit off tsup.
   "compilerOptions": {
     "target": "esnext",
     "module": "ESNext",
@@ -7,8 +19,8 @@
     "jsx": "react-jsx",
 
     "strict": true,
-    "noEmit": false,
-    "composite": true,
+    "noEmit": true,
+    "composite": false,
 
     "verbatimModuleSyntax": true,
     "skipLibCheck": true,
@@ -18,7 +30,6 @@
     "forceConsistentCasingInFileNames": true,
     "resolveJsonModule": true,
 
-    "outDir": "./dist",
     "rootDir": "./src"
   },
   "include": ["src"],

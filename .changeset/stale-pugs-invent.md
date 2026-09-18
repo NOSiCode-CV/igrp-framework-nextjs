@@ -1,6 +1,7 @@
 ---
 '@igrp/framework-next-types': patch
 '@igrp/framework-next-ui': patch
+'@igrp/framework-next-auth': patch
 '@igrp/framework-next': patch
 ---
 
@@ -24,6 +25,10 @@ Fix the `next-types` package boundary and gate its Access Management types again
 
 - Dropped the unchecked `as IGRPStatus` / `as IGRPMenuType` / `as IGRPTargetType` casts from the application and menu mappers. TypeScript accepts a string enum where its literal union is expected, so the casts were never load-bearing — they only hid drift, and the contract gate now proves the assignment is sound.
 - `mapApplication` no longer silently drops `lastAccess`.
+
+**`@igrp/framework-next-auth`**
+
+- Split the type-check and emit configs. `tsconfig.json` carried `composite: true`, `noEmit: false` and `outDir: ./dist` on a package whose `dist/` is produced entirely by tsup, so any stray `tsc` or `tsc -b` in the package wrote a second, competing build over the tsup output. It is now type-check-only (`noEmit`, non-composite) with a `typecheck` script; `tsconfig.build.json` remains the composite, declaration-only emitting config. tsup's `dts` pass pins `noEmit: false` so the new config cannot silence declaration output — the `dist-contract` suite is what catches that if it regresses. No change to the published build.
 
 **`@igrp/framework-next-ui`**
 

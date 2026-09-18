@@ -1,29 +1,35 @@
 {
+  // Repo-root placeholder. It compiles nothing and references nothing, by design.
+  //
+  // This file used to carry `composite: true` plus a `references` array naming
+  // all seven workspace projects. Every one of those projects is composite with
+  // emit enabled and an `outDir` of `./dist` — but not one of them is actually
+  // built by `tsc`: design-system, next-ui and next emit via Babel, next-auth
+  // via tsup, demo-v1 via Next. So `tsc -b` from the repo root (which nothing
+  // runs, which is why this went unnoticed) would have written a second,
+  // competing tsc build over all five of those `dist/` directories.
+  //
+  // Build order is enforced by `pnpm build:framework`, which runs the packages
+  // in the sequence documented in `.claude/shared/dependency-order.md`. Each
+  // package owns its own tsconfig; editors resolve the nearest one.
+  //
+  // The one remaining reference is `next-types`, the only workspace project
+  // whose `dist/` really is produced by `tsc -b` — so a solution build here
+  // stays safe and meaningful. `files: []` keeps a bare `tsc` a no-op rather
+  // than an attempt to compile the whole repository.
+  "files": [],
+  "references": [{ "path": "./packages/framework/next-types" }],
   "compilerOptions": {
     "target": "ES2023",
-    "module": "commonjs",
-    "lib": [
-      "es2023"
-    ],
+    "module": "esnext",
+    "moduleResolution": "bundler",
+    "lib": ["ES2023"],
     "strict": true,
     "esModuleInterop": true,
     "skipLibCheck": true,
     "forceConsistentCasingInFileNames": true,
     "resolveJsonModule": true,
-    "allowJs": true,
-    "declaration": true,
-    "declarationMap": true,
     "isolatedModules": true,
-    "sourceMap": true,
-    "composite": true
-  },
-  "references": [
-    { "path": "./templates/demo-v1" },
-    { "path": "./packages/design-system" },
-    { "path": "./packages/design-system-storybook" },
-    { "path": "./packages/framework/next" },    
-    { "path": "./packages/framework/next-auth" },    
-    { "path": "./packages/framework/next-types" },
-    { "path": "./packages/framework/next-ui" }
-  ]
+    "noEmit": true
+  }
 }

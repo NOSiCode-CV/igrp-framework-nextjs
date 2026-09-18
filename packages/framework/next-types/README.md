@@ -73,7 +73,9 @@ pnpm build
 
 Plain **`tsc -b`** — no Babel, no tsup. Emits only `.d.ts` and `.d.ts.map`. The sources those maps point at ship alongside them, so "go to definition" lands in real code.
 
-This package declares `composite: true` because the root `tsconfig.json` references it. It deliberately does **not** declare a project reference to `@igrp/framework-next-auth`: that package's `tsconfig.json` is composite but JS-emitting, so `tsc -b` would write a second, competing build into the `dist/` that `tsup` owns. Build ordering is enforced by `pnpm build:framework` instead — see `.claude/shared/dependency-order.md`.
+This package declares `composite: true` because it is the one workspace project genuinely built by `tsc -b`, and the only one the root `tsconfig.json` still references.
+
+It deliberately does **not** declare a project reference to `@igrp/framework-next-auth`. Two things block it: a reference target may not disable emit (TS6310), and the only config over there that does emit would write `.d.ts` into the `dist/` that `tsup` already owns. Moving that emit off tsup would change the published declarations from bundled to file-per-module, which is not worth it for build ordering that `pnpm build:framework` already guarantees — see `.claude/shared/dependency-order.md`.
 
 ---
 

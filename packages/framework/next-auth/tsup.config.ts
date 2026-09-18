@@ -46,6 +46,10 @@ export default defineConfig({
   format: ['esm'],
   dts: {
     compilerOptions: {
+      // tsconfig.json is type-check-only (noEmit, non-composite). The dts pass
+      // reads it, so both have to be overridden here or the build silently
+      // ships no .d.ts at all — `dist-contract.test.ts` is what catches that.
+      noEmit: false,
       composite: false,
       incremental: false,
       ignoreDeprecations: '6.0',

@@ -289,6 +289,14 @@
       "manifestHash": "8c37fd6b3a5a98b6",
       "undo": [],
       "fileHashes": {}
+    },
+    {
+      "id": "37-cn-package-and-utils-removal",
+      "appliedAt": "2026-09-18T00:00:00.000Z",
+      "cliVersion": "0.1.0-beta.141",
+      "manifestHash": "a5c93138d0801e80",
+      "undo": [],
+      "fileHashes": {}
     }
   ]
 }

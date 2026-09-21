@@ -18,11 +18,24 @@
  *
  * WHAT IT ASSERTS
  * ---------------
- * That each DTO is **assignable to** its framework counterpart — the direction
- * the mappers in `@igrp/framework-next` actually go (AM response → framework
- * shape). It is deliberately not a bidirectional equality check: the framework
- * unions are supersets in two places (`SYSTEM_PAGE`, `SYSTEM`) and the
- * application mapper normalises `slug: string | null` down to `string`.
+ * Two directions, because the framework moves data both ways.
+ *
+ * INBOUND (AM response → framework shape), what the mappers in
+ * `@igrp/framework-next` do: each DTO must be assignable to its framework
+ * counterpart. Not an equality check — the framework unions are supersets in
+ * two places and the application mapper normalises `slug: string | null`.
+ *
+ * OUTBOUND (framework → AM request), what the on-code menu / permission sync
+ * does: structural assignability can never hold here, because the client types
+ * `type` and `status` as `declare enum`s and a string literal is not
+ * assignable to an enum member. So the outbound gate pins the *narrowed*
+ * unions instead — `IGRPMenuTypeSyncable` and `IGRPApplicationTypeSyncable`
+ * must be exactly the client's enums, member for member. The sync converts
+ * through an exhaustive lookup keyed on those unions, so a new member on
+ * either side breaks the build instead of reaching the wire.
+ *
+ * This is the gap that let `igrpSyncMenus` cast `type as MenuType` and push
+ * `SYSTEM_PAGE` — a value AM does not define — for any template declaring one.
  *
  * HOW IT RUNS
  * -----------
@@ -62,12 +75,14 @@ import type {
 import type {
   IGRPApplicationArgs,
   IGRPApplicationType,
+  IGRPApplicationTypeSyncable,
   IGRPConfigurationType,
   IGRPDepartmentArgs,
   IGRPFileUrlArgs,
   IGRPGlobalConfigurationArgs,
   IGRPMenuItemArgs,
   IGRPMenuType,
+  IGRPMenuTypeSyncable,
   IGRPPermissionArgs,
   IGRPResourceArgs,
   IGRPResourceItem,
@@ -103,6 +118,20 @@ export type _ApplicationType = AssignableTo<ApplicationType, IGRPApplicationType
 export type _ResourceType = AssignableTo<ResourceType, IGRPResourceType>;
 export type _ConfigurationType = AssignableTo<GlobalConfigurationType, IGRPConfigurationType>;
 export type _TargetType = Equivalent<MenuTargetType, IGRPTargetType>;
+
+/* -- Outbound: narrowed unions must equal the client enums ---------------- */
+// `${Enum}` is the enum's literal union. Equivalence (not one-way
+// assignability) is the point: if AM adds a MenuType the framework cannot
+// produce, or the framework adds one AM will reject, this fails here rather
+// than at the wire. The sync's exhaustive `satisfies Record<...>` lookup then
+// fails too, naming the missing member.
+
+export type _MenuTypeSyncable = Equivalent<`${MenuType}`, IGRPMenuTypeSyncable>;
+export type _ApplicationTypeSyncable = Equivalent<
+  `${ApplicationType}`,
+  IGRPApplicationTypeSyncable
+>;
+export type _StatusSyncable = Equivalent<`${Status}`, IGRPStatus>;
 
 /* -- Whole-object shapes -------------------------------------------------- */
 
@@ -142,6 +171,9 @@ const assertions: [
   _ResourceType,
   _ConfigurationType,
   _TargetType,
+  _MenuTypeSyncable,
+  _ApplicationTypeSyncable,
+  _StatusSyncable,
   _RoleDepartment,
   _MenuEntry,
   _Permission,
@@ -156,6 +188,9 @@ const assertions: [
   _Application,
   _ApplicationSlug,
 ] = [
+  true,
+  true,
+  true,
   true,
   true,
   true,

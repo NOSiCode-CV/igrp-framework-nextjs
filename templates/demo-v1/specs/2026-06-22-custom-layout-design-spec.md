@@ -5,7 +5,7 @@
 | **Status** | Draft — awaiting manager approval |
 | **Author** | Fidel da Luz |
 | **Date** | 2026-06-22 |
-| **Scope** | `templates/demo-legacy` (template-only). One optional, additive framework enhancement flagged for a separate decision. |
+| **Scope** | `templates/demo-v1` (template-only). One optional, additive framework enhancement flagged for a separate decision. |
 | **Affects** | `@igrp/framework-next-template` consumers; igrp-studio generated apps |
 | **Risk** | Low (default path unchanged; fail-safe fallback) |
 
@@ -481,4 +481,4 @@ No `globals.css` change: `@source` already globs `../src/**/*.{ts,tsx}` and toke
 - `packages/framework/next/src/layouts/providers/sidebar-data-provider.tsx` — private fetch logic to mirror.
 - `packages/framework/next/src/actions/index.ts` — public data actions.
 - `packages/framework/next-types/src/types/sidebar.ts` — `IGRPSidebarDataArgs`.
-- `templates/demo-legacy/src/app/(igrp)/layout.tsx` — switch site.
+- `templates/demo-v1/src/app/(igrp)/layout.tsx` — switch site.

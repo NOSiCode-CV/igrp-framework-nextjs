@@ -11,9 +11,10 @@ import pkg from '../../package.json' with { type: 'json' };
  * this package's load-bearing properties exist only after bundling and are
  * therefore invisible to source review and to every other test:
  *
- * - `"use client"` on the client entry is re-added by a tsup `onSuccess` hook,
- *   because esbuild strips top-level directives. Source has the directive; only
- *   the build proves it survived.
+ * - `"use client"` on the client entry comes ONLY from a tsup `onSuccess` hook,
+ *   because esbuild strips module-level directives when bundling. `src/client.ts`
+ *   deliberately does not declare one, so the build is the only place the
+ *   boundary exists — and this is the only thing that checks it.
  * - The Edge-safety contract is about what `dist/config.js` STATICALLY imports.
  *   `await import('next-auth')` and `import ... from 'next-auth'` look similar
  *   in source and are completely different in the bundle.
@@ -74,9 +75,10 @@ describe.skipIf(!hasDist)('dist contract', () => {
   });
 
   it('keeps the "use client" directive on the client entry', () => {
-    // esbuild strips it; tsup's onSuccess hook puts it back. If that hook
-    // breaks, `/client` silently stops being a client boundary and only fails
-    // in a consumer's app.
+    // The hook in tsup.config.ts is the ONLY source of this directive —
+    // src/client.ts does not declare one. If the hook breaks, or is swapped for
+    // a directive-preserving plugin that finds nothing to preserve, `/client`
+    // silently stops being a client boundary and only fails in a consumer's app.
     const first = read('client.js').trimStart().split('\n')[0].trim();
     expect(first).toMatch(/^["']use client["'];?$/);
   });

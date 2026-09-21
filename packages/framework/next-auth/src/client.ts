@@ -1,11 +1,28 @@
-'use client';
-
-// This entry is a real client boundary, not just a naming convention.
-// `next-auth`'s own `react` entry (v4, CJS) ships no directive, so without
-// this line the module graph below is server-first: importing
-// `SessionProvider` or `useSafeSession` from a file that isn't already
-// marked `'use client'` fails at render with a confusing RSC error instead
-// of being handled by the bundler. Keep it as the first statement.
+// ─────────────────────────────────────────────────────────────────────────────
+// THIS FILE DELIBERATELY HAS NO `'use client'` DIRECTIVE.
+//
+// The shipped `dist/client.js` DOES have one — `tsup.config.ts` injects it in
+// an `onSuccess` hook after bundling. Declaring it here as well achieved
+// nothing (esbuild strips module-level directives when bundling) except a
+// warning on every single build that reads as though the client boundary were
+// broken:
+//
+//   dist/client.js (1:0): Module level directives cause errors when bundled,
+//   "use client" in "dist/client.js" was ignored.
+//
+// This entry IS a real client boundary, not a naming convention: `next-auth`'s
+// own `react` entry (v4, CJS) carries no directive either, so without the
+// injected one the graph below is server-first and importing `SessionProvider`
+// or `useSafeSession` from a file that is not already a client component fails
+// at render with a confusing RSC error.
+//
+// The single source of truth is therefore the build, and it is enforced by
+// `__tests__/dist-contract.test.ts`, which asserts the directive on the real
+// output. That test is also what protects this arrangement: if anyone later
+// replaces the hook with a directive-PRESERVING plugin, there will be no
+// directive here to preserve and the test fails loudly rather than shipping a
+// silently server-first entry.
+// ─────────────────────────────────────────────────────────────────────────────
 
 import { useSession as useSessionBase } from 'next-auth/react';
 import type { Session } from './session';

@@ -1,9 +1,11 @@
 export type {
   IGRPMenuType,
   IGRPMenuTypeCRUD,
+  IGRPMenuTypeSyncable,
   IGRPStatus,
   IGRPTargetType,
   IGRPApplicationType,
+  IGRPApplicationTypeSyncable,
   IGRPConfigurationType,
   IGRPApplicationArgs,
   IGRPMenuItemArgs,

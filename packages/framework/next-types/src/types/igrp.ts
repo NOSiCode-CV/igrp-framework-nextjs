@@ -138,6 +138,12 @@ export type IGRPConfigArgs = {
   sessionArgs?: Partial<SessionProviderProps>;
 };
 
+/**
+ * Shape of a template's config factory — annotate the default export of
+ * `src/igrp.template.config.ts` with this to have the whole config object
+ * checked at its definition site rather than only where `igrpBuildConfig`
+ * consumes it.
+ */
 export type IGRPConfigClient = () => Promise<IGRPConfigArgs>;
 
 export type IGRPLayoutConfigArgs = {

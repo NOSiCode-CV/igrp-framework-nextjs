@@ -218,14 +218,14 @@ describe("rollback executes undo steps in reverse order", () => {
 });
 
 describe("rollback self-heals the template identifier", () => {
-  it("upgrades a stale demo-legacy lock to the current manifest template", async () => {
+  it("upgrades a stale demo-v1 lock to the current manifest template", async () => {
     writeAppFile("src/created-by-migration.ts", "new file\n");
     // Write a lock under the former identifier directly (bypasses typed writeLock).
     writeFileSync(
       join(appRoot, ".igrp-migrations-lock.json"),
       JSON.stringify({
         version: 1,
-        template: "demo-legacy",
+        template: "demo-v1",
         applied: [
           {
             id: "07-test-migration",

@@ -20,13 +20,13 @@
   @igrp/framework-next-ui
   - New IGRPSegmentError component for segment-level error.tsx boundaries — renders inside layout chrome, offers reset + go-home actions, accepts resolveCopy(error) for i18n.
 
-  @igrp/framework-next-template (templates/demo-legacy)
+  @igrp/framework-next-template (templates/demo-v1)
   - New isAuthBypass() helper unifies IGRP_PREVIEW_MODE=true and AUTH_PROVIDER=none; /login, /logout, /api/auth/\* are all 302'd to / when bypassed.
   - Full App Router error boundary coverage: global-error.tsx, root error.tsx, (auth)/error.tsx, rewritten (igrp)/error.tsx to use IGRPSegmentError.
   - New reportError() hook and error-messages.ts Portuguese copy keyed by IgrpError.code.
   - serverSession() no longer swallows typed errors; logout page hardened with .catch + fallback redirect + 3 s safety timeout.
 
-  See templates/demo-legacy/.igrpmigrations/05.MIGRATIONS-23042026.md and 06.MIGRATIONS-23042026.md for the full migration guides.
+  See templates/demo-v1/.igrpmigrations/05.MIGRATIONS-23042026.md and 06.MIGRATIONS-23042026.md for the full migration guides.
 
 - Updated dependencies
   - @igrp/framework-next-types@0.1.0-beta.115
@@ -55,13 +55,13 @@
   @igrp/framework-next-ui
   - New IGRPSegmentError component for segment-level error.tsx boundaries — renders inside layout chrome, offers reset + go-home actions, accepts resolveCopy(error) for i18n.
 
-  @igrp/framework-next-template (templates/demo-legacy)
+  @igrp/framework-next-template (templates/demo-v1)
   - New isAuthBypass() helper unifies IGRP_PREVIEW_MODE=true and AUTH_PROVIDER=none; /login, /logout, /api/auth/\* are all 302'd to / when bypassed.
   - Full App Router error boundary coverage: global-error.tsx, root error.tsx, (auth)/error.tsx, rewritten (igrp)/error.tsx to use IGRPSegmentError.
   - New reportError() hook and error-messages.ts Portuguese copy keyed by IgrpError.code.
   - serverSession() no longer swallows typed errors; logout page hardened with .catch + fallback redirect + 3 s safety timeout.
 
-  See templates/demo-legacy/.igrpmigrations/05.MIGRATIONS-23042026.md and 06.MIGRATIONS-23042026.md for the full migration guides.
+  See templates/demo-v1/.igrpmigrations/05.MIGRATIONS-23042026.md and 06.MIGRATIONS-23042026.md for the full migration guides.
 
 - Updated dependencies
   - @igrp/framework-next-types@0.1.0-beta.114

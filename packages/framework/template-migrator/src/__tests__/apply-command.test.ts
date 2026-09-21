@@ -231,11 +231,11 @@ describe("migration 23 rewrites the routes helper", () => {
 });
 
 describe("apply self-heals the template identifier", () => {
-  it("upgrades a stale demo-legacy lock to the current manifest template", async () => {
-    // An app previously migrated under the former "demo-legacy" identifier.
+  it("upgrades a stale demo-v1 lock to the current manifest template", async () => {
+    // An app previously migrated under the former "demo-v1" identifier.
     writeFileSync(
       join(appRoot, ".igrp-migrations-lock.json"),
-      JSON.stringify({ version: 1, template: "demo-legacy", applied: [] }),
+      JSON.stringify({ version: 1, template: "demo-v1", applied: [] }),
       "utf8"
     );
     writeFileAt(payloadDir, "21/src/new.ts", "NEW\n");

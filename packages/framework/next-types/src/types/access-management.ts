@@ -28,6 +28,22 @@ export type IGRPMenuType = 'FOLDER' | 'MENU_PAGE' | 'EXTERNAL_PAGE' | 'GROUP' | 
 /** The subset of {@link IGRPMenuType} a menu-editing UI may create or update. */
 export type IGRPMenuTypeCRUD = 'FOLDER' | 'MENU_PAGE' | 'EXTERNAL_PAGE';
 
+/**
+ * The subset of {@link IGRPMenuType} that Access Management actually accepts —
+ * i.e. `IGRPMenuType` minus the framework-only members.
+ *
+ * This exists because the framework's superset is safe **inbound** (AM can
+ * never send `SYSTEM_PAGE`) and unsafe **outbound**: the on-code menu push in
+ * `igrpSyncMenus` used to cast `type as MenuType`, which would have put an
+ * enum value AM does not define on the wire for any template declaring a
+ * `SYSTEM_PAGE` entry. The push now narrows to this type instead of casting.
+ *
+ * `contract/am-contract.ts` asserts this is *exactly* the client's `MenuType`
+ * enum, in both directions — so adding a member on either side fails the build
+ * rather than silently widening what gets pushed.
+ */
+export type IGRPMenuTypeSyncable = Exclude<IGRPMenuType, 'SYSTEM_PAGE'>;
+
 export type IGRPStatus = 'ACTIVE' | 'INACTIVE' | 'DELETED';
 
 export type IGRPTargetType = '_self' | '_blank';
@@ -37,6 +53,13 @@ export type IGRPTargetType = '_self' | '_blank';
  * and is never returned by Access Management.
  */
 export type IGRPApplicationType = 'INTERNAL' | 'EXTERNAL' | 'SYSTEM';
+
+/**
+ * {@link IGRPApplicationType} minus the framework-only members — the subset
+ * Access Management accepts. Same rationale as {@link IGRPMenuTypeSyncable},
+ * and asserted the same way.
+ */
+export type IGRPApplicationTypeSyncable = Exclude<IGRPApplicationType, 'SYSTEM'>;
 
 /**
  * @deprecated Unused by the framework and a pure mirror of the AM client's

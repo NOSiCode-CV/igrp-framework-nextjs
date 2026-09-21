@@ -238,13 +238,13 @@
   migration (forward reference, typo, or unknown id). `apply` checks `requires`
   against applied ids but executes in file order, so a bad `requires` would
   otherwise ship in the manifest and permanently deadlock `apply` on consumer apps.
-- 2e8785b: Rename the template identifier from `demo-legacy` to `demo-v1`, tracking the template folder rename (`templates/demo-legacy` → `templates/demo-v1`). The migrations source tree moves to `migrations/demo-v1/`, and the manifest and lock-file `template` field is now `demo-v1` (it is cosmetic — only printed by `status`). Existing consumer lock files self-heal: the next `apply`/`rollback` stamps the current identifier. No migration `id`s, step content hashes, or applied-migration state change, so already-migrated apps are unaffected.
+- 2e8785b: Rename the template identifier from `demo-v1` to `demo-v1`, tracking the template folder rename (`templates/demo-v1` → `templates/demo-v1`). The migrations source tree moves to `migrations/demo-v1/`, and the manifest and lock-file `template` field is now `demo-v1` (it is cosmetic — only printed by `status`). Existing consumer lock files self-heal: the next `apply`/`rollback` stamps the current identifier. No migration `id`s, step content hashes, or applied-migration state change, so already-migrated apps are unaffected.
 
 ## 0.1.0-beta.130
 
 ### Patch Changes
 
-- 0eaa118: - Add migration `20-sidebar-trigger-in-header`: flips the demo-legacy template's `showIGRPSidebarTrigger` to `true` and resyncs all `@igrp/*` deps to the beta.158 framework set (next-ui beta.157, next beta.158), matching what the create-template zip resolves for fresh scaffolds.
+- 0eaa118: - Add migration `20-sidebar-trigger-in-header`: flips the demo-v1 template's `showIGRPSidebarTrigger` to `true` and resyncs all `@igrp/*` deps to the beta.158 framework set (next-ui beta.157, next beta.158), matching what the create-template zip resolves for fresh scaffolds.
 
 ## 0.1.0-beta.129
 
@@ -287,14 +287,14 @@
 ### Patch Changes
 
 - 0d15a61: Add migration `12-template-resync` and a `check:drift` release gate.
-  - **New migration `12-template-resync`** re-captures 13 `templates/demo-legacy` files that had been edited directly without an accompanying migration (so the changes had shipped only to apps scaffolded from the zip, never to apps upgraded via `igrp-migrate`): the layout server action, the `lib/config/*` helpers, `lib/auth.ts`, `lib/dal.ts`, `lib/report-error.ts`, the NextAuth route handler, the three `error.tsx` boundaries, the logout page, and `.env.example`. It also deletes the stale `src/app/[...not-found]/page.tsx` catch-all route, bumps the `@igrp/*` deps to the `framework-next@0.1.0-beta.144` set, and aligns the React/Next runtime (`next ^15.5.18`, `react`/`react-dom 19.2.6`) which had advanced in the template since migration 04 without an intervening migration.
+  - **New migration `12-template-resync`** re-captures 13 `templates/demo-v1` files that had been edited directly without an accompanying migration (so the changes had shipped only to apps scaffolded from the zip, never to apps upgraded via `igrp-migrate`): the layout server action, the `lib/config/*` helpers, `lib/auth.ts`, `lib/dal.ts`, `lib/report-error.ts`, the NextAuth route handler, the three `error.tsx` boundaries, the logout page, and `.env.example`. It also deletes the stale `src/app/[...not-found]/page.tsx` catch-all route, bumps the `@igrp/*` deps to the `framework-next@0.1.0-beta.144` set, and aligns the React/Next runtime (`next ^15.5.18`, `react`/`react-dom 19.2.6`) which had advanced in the template since migration 04 without an intervening migration.
   - **New `check:drift` script** (`scripts/check-drift.ts`) reconciles both the payload tree and the dependency pins against the live template, and fails if a managed file changed without a migration, a migration ships a file the template removed, a payload is missing, or a bumped dependency drifted from the template's current (workspace-resolved) version. It runs automatically at the start of the `release` script, preventing this drift from recurring.
 
 ## 0.1.0-beta.122
 
 ### Patch Changes
 
-- 667e3af: Add migration `11-callbackurl-hardening-and-error-copy` for `demo-legacy`, back-filling template changes that were never captured by a migration:
+- 667e3af: Add migration `11-callbackurl-hardening-and-error-copy` for `demo-v1`, back-filling template changes that were never captured by a migration:
   - **callbackUrl hardening** (open-redirect + login-loop prevention) across `middleware.ts`, `lib/auth.ts`, `lib/dal.ts`, and `app/(auth)/login/page.tsx` — basePath-aware sanitized `callbackUrl` and the `x-current-path` header contract (relies on `sanitizeCallbackUrl`, shipped in migration 10).
   - **AppError error-copy surfacing** — new `lib/errors.ts`, plus `config/error-messages.ts` and `app/global-error.tsx` wiring `parsePublicDigest`/`resolveCopy` so server-thrown errors show their public message.
   - Adds the `slug` field to `lib/config/get-pkj.ts`.
@@ -309,7 +309,7 @@
 
 ### Patch Changes
 
-- 195508a: Add migration `10-session-refetch-and-menu-role-sync` for `demo-legacy`, capturing the template changes since migration 09:
+- 195508a: Add migration `10-session-refetch-and-menu-role-sync` for `demo-v1`, capturing the template changes since migration 09:
   - `IGRP_SESSION_REFETCH_INTERVAL` — configurable client session-refetch cadence (default 180s), replacing the hard-coded 5-minute poll in `src/lib/config/get-session-args.ts`
   - `IGRP_SYNC_ON_CODE_MENU_ROLES` — forwards `syncRoles` to the on-code menu push so menu↔role assignments can be reconciled (or left untouched)
   - Removes the dead `IGRP_M2M_SCOPE` env var and documents `NEXT_PUBLIC_IGRP_SETTINGS_URL`
@@ -330,7 +330,7 @@
 
 - feat(template-migrator): bundle migration 08 — M2M OAuth2 `client_credentials`
 
-  Adds `migrations/demo-legacy/08.MIGRATIONS-21052026.md` and `payload/08/{.env.example,igrp.template.config.ts}` to the CLI bundle so consumers can apply the OAuth2 `client_credentials` AM-sync migration via `pnpm dlx @igrp/template-migrator@latest apply`.
+  Adds `migrations/demo-v1/08.MIGRATIONS-21052026.md` and `payload/08/{.env.example,igrp.template.config.ts}` to the CLI bundle so consumers can apply the OAuth2 `client_credentials` AM-sync migration via `pnpm dlx @igrp/template-migrator@latest apply`.
 
   Pins `targetFrameworkVersion: 0.1.0-beta.137` and bumps `@igrp/framework-next` / `@igrp/framework-next-types` to the published beta versions that ship the new OAuth2 flow.
 
@@ -340,7 +340,7 @@
 
 ### Patch Changes
 
-- 761e9c3: - Move migration guides and payloads from `templates/demo-legacy/.igrpmigrations/` into the CLI package at `migrations/demo-legacy/`
+- 761e9c3: - Move migration guides and payloads from `templates/demo-v1/.igrpmigrations/` into the CLI package at `migrations/demo-v1/`
   - Replace `.igrpmigrations/lock.json` with a flat `.igrp-migrations-lock.json` at the project root (same pattern as `skills-lock.json`)
   - Add `igrp-migrate convert` command to upgrade existing consumers from the legacy lock path; all other commands block with a clear message if the legacy path is detected
 
@@ -352,13 +352,13 @@
 
   @igrp/template-migrator
   - New CLI package that automates IGRP template upgrades via `pnpm dlx @igrp/template-migrator@latest`.
-  - Bundles all 6 demo-legacy migration guides (01–06) as a cumulative manifest with embedded payloads.
+  - Bundles all 6 demo-v1 migration guides (01–06) as a cumulative manifest with embedded payloads.
   - Commands: status, plan, apply (--yes / --to), list, rollback, check (CI gate).
   - Lock file moved from root `.igrpmigrations.lock.json` → `.igrpmigrations/lock.json`; backward-compat read of old path on first run.
   - Prebuild pack script cleans payload output on every run to prevent stale files.
   - tsup config: shims disabled (no \_\_dirname polyfill injection before shebang), banner removed (shebang lives in src/cli.ts line 1).
 
-  @igrp/framework-next-template (templates/demo-legacy)
+  @igrp/framework-next-template (templates/demo-v1)
   - `.igrpmigrations/lock.json` pre-seeded to mark all 6 migrations as applied.
   - `create-zip-template.ps1` updated to strip migration guides and payloads from the published zip — only `lock.json` is included so consumers start fully up-to-date.
   - `MIGRATING.md` added: end-user upgrade guide (status → plan → apply workflow).

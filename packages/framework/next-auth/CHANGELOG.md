@@ -188,7 +188,7 @@
   - `events.signOut` now **awaits** `revokeOidcSession`. NextAuth holds the `/api/auth/signout` response until revoke settles, so the browser does not navigate to the end-session URL with a still-in-flight revoke request that the navigation would abort.
   - Dev-only diagnostics: `buildEndSessionUrl` logs the built URL shape (which of `client_id`, `post_logout_redirect_uri`, `id_token_hint` were set); `refreshOidcAccessToken` warns when the IdP did not return a new id_token on refresh; `events.signOut` logs `{ hasIdToken, hasAccessToken, hasRefreshToken, authProviderId, expiresAt, error }` (booleans only — never token values). Gated behind `NODE_ENV !== 'production'`.
 
-  Companion change in `templates/demo-legacy`: `/logout` page logs the end-session URL just before navigating, and warns when no URL was built. `.env`, `.env.example`, and `README.md` document the post-logout redirect URI registration requirement and clarify scope alignment with the IdP discovery doc.
+  Companion change in `templates/demo-v1`: `/logout` page logs the end-session URL just before navigating, and warns when no URL was built. `.env`, `.env.example`, and `README.md` document the post-logout redirect URI registration requirement and clarify scope alignment with the IdP discovery doc.
 
 ## 0.1.0-beta.130
 
@@ -285,13 +285,13 @@
 
   @igrp/template-migrator
   - New CLI package that automates IGRP template upgrades via `pnpm dlx @igrp/template-migrator@latest`.
-  - Bundles all 6 demo-legacy migration guides (01–06) as a cumulative manifest with embedded payloads.
+  - Bundles all 6 demo-v1 migration guides (01–06) as a cumulative manifest with embedded payloads.
   - Commands: status, plan, apply (--yes / --to), list, rollback, check (CI gate).
   - Lock file moved from root `.igrpmigrations.lock.json` → `.igrpmigrations/lock.json`; backward-compat read of old path on first run.
   - Prebuild pack script cleans payload output on every run to prevent stale files.
   - tsup config: shims disabled (no \_\_dirname polyfill injection before shebang), banner removed (shebang lives in src/cli.ts line 1).
 
-  @igrp/framework-next-template (templates/demo-legacy)
+  @igrp/framework-next-template (templates/demo-v1)
   - `.igrpmigrations/lock.json` pre-seeded to mark all 6 migrations as applied.
   - `create-zip-template.ps1` updated to strip migration guides and payloads from the published zip — only `lock.json` is included so consumers start fully up-to-date.
   - `MIGRATING.md` added: end-user upgrade guide (status → plan → apply workflow).
@@ -316,13 +316,13 @@
   @igrp/framework-next-ui
   - New IGRPSegmentError component for segment-level error.tsx boundaries — renders inside layout chrome, offers reset + go-home actions, accepts resolveCopy(error) for i18n.
 
-  @igrp/framework-next-template (templates/demo-legacy)
+  @igrp/framework-next-template (templates/demo-v1)
   - New isAuthBypass() helper unifies IGRP_PREVIEW_MODE=true and AUTH_PROVIDER=none; /login, /logout, /api/auth/\* are all 302'd to / when bypassed.
   - Full App Router error boundary coverage: global-error.tsx, root error.tsx, (auth)/error.tsx, rewritten (igrp)/error.tsx to use IGRPSegmentError.
   - New reportError() hook and error-messages.ts Portuguese copy keyed by IgrpError.code.
   - serverSession() no longer swallows typed errors; logout page hardened with .catch + fallback redirect + 3 s safety timeout.
 
-  See templates/demo-legacy/.igrpmigrations/05.MIGRATIONS-23042026.md and 06.MIGRATIONS-23042026.md for the full migration guides.
+  See templates/demo-v1/.igrpmigrations/05.MIGRATIONS-23042026.md and 06.MIGRATIONS-23042026.md for the full migration guides.
 
 ## 0.1.0-beta.114
 
@@ -344,10 +344,10 @@
   @igrp/framework-next-ui
   - New IGRPSegmentError component for segment-level error.tsx boundaries — renders inside layout chrome, offers reset + go-home actions, accepts resolveCopy(error) for i18n.
 
-  @igrp/framework-next-template (templates/demo-legacy)
+  @igrp/framework-next-template (templates/demo-v1)
   - New isAuthBypass() helper unifies IGRP_PREVIEW_MODE=true and AUTH_PROVIDER=none; /login, /logout, /api/auth/\* are all 302'd to / when bypassed.
   - Full App Router error boundary coverage: global-error.tsx, root error.tsx, (auth)/error.tsx, rewritten (igrp)/error.tsx to use IGRPSegmentError.
   - New reportError() hook and error-messages.ts Portuguese copy keyed by IgrpError.code.
   - serverSession() no longer swallows typed errors; logout page hardened with .catch + fallback redirect + 3 s safety timeout.
 
-  See templates/demo-legacy/.igrpmigrations/05.MIGRATIONS-23042026.md and 06.MIGRATIONS-23042026.md for the full migration guides.
+  See templates/demo-v1/.igrpmigrations/05.MIGRATIONS-23042026.md and 06.MIGRATIONS-23042026.md for the full migration guides.

@@ -6,25 +6,23 @@ import { defineConfig } from 'tsup';
 /**
  * Entries that must ship a `"use client"` directive.
  *
- * esbuild drops unrecognised top-level directives from bundled output, so the
- * `'use client'` at the top of `src/client.ts` does not survive on its own —
- * and `next-auth`'s own CJS `react` entry has never carried one. Without the
- * directive, `@igrp/framework-next-auth/client` is a server-first module and
- * importing `SessionProvider` / `useSafeSession` from a file that isn't
- * already a client component fails at render. Re-add it after the bundle is
- * written; `clean: true` means this always runs against fresh output.
+ * esbuild drops module-level directives when bundling, so a `'use client'` in
+ * `src/client.ts` cannot survive on its own — and `next-auth`'s own CJS `react`
+ * entry has never carried one. Without the directive,
+ * `@igrp/framework-next-auth/client` is a server-first module and importing
+ * `SessionProvider` / `useSafeSession` from a file that isn't already a client
+ * component fails at render.
  *
- * EXPECTED BUILD WARNING — this is not a failure:
+ * This hook is therefore the ONLY place the directive comes from; `src/client.ts`
+ * deliberately does not declare it, because doing so only re-triggered the
+ * "Module level directives cause errors when bundled … was ignored" warning on
+ * every build without changing the output. `clean: true` means this always runs
+ * against fresh output.
  *
- *   dist/client.js (1:0): Module level directives cause errors when bundled,
- *   "use client" in "dist/client.js" was ignored.
- *
- * That is the bundler announcing the very strip this hook repairs. It is
- * emitted during the ESM phase, before `onSuccess` runs, so it describes an
- * intermediate state, not the shipped file. The directive IS present in the
- * final `dist/client.js`, and `src/__tests__/dist-contract.test.ts` asserts it
- * on every build — that test, not the absence of this warning, is the signal
- * to trust.
+ * `src/__tests__/dist-contract.test.ts` asserts the directive on the real build,
+ * which is what keeps this honest — including if someone later swaps this hook
+ * for a directive-preserving plugin, where the absent source directive would
+ * otherwise ship a silently server-first entry.
  */
 const CLIENT_ENTRIES = ['client.js'];
 

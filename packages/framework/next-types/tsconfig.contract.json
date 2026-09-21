@@ -1,20 +1,13 @@
 {
-  "//": "Type-check only. Proves contract/am-contract.ts against the AM client DTOs without emitting anything and without letting the client leak into the published dist/.",
+  "//": "Type-check only. Extends the real build config so the gate always checks under the same strictness that ships; overrides only what must differ (no emit, not composite, and the contract/ dir added to the inputs).",
+  "extends": "./tsconfig.json",
   "compilerOptions": {
-    "target": "esnext",
-    "module": "esnext",
-    "moduleResolution": "bundler",
-    "allowSyntheticDefaultImports": true,
-    "esModuleInterop": true,
-    "strict": true,
-    "isolatedModules": true,
-    "skipLibCheck": true,
-    "forceConsistentCasingInFileNames": true,
-    "resolveJsonModule": true,
     "noEmit": true,
     "composite": false,
     "declaration": false,
-    "declarationMap": false
+    "declarationMap": false,
+    "emitDeclarationOnly": false,
+    "rootDir": "."
   },
   "include": ["src/**/*", "contract/**/*"],
   "exclude": ["node_modules", "dist"]

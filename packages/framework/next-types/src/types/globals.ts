@@ -6,6 +6,11 @@ export interface IGRPMockDataAsync {
   getSidebarData: () => Promise<IGRPSidebarDataArgs>;
 }
 
+/**
+ * @deprecated Synchronous twin of {@link IGRPMockDataAsync} with no consumer
+ * anywhere — `IGRPConfigArgs.layoutMockData` is the async form. Kept for one
+ * release; use `IGRPMockDataAsync`.
+ */
 export type IGRPMockData = {
   headerData: IGRPHeaderDataArgs;
   sidebarData: IGRPSidebarDataArgs;

@@ -9,7 +9,12 @@ export interface IGRPSidebarDataArgs {
    */
   footerItems?: IGRPMenuItemArgs[];
   showAppSwitcher?: boolean;
-  apps: IGRPApplicationArgs[];
+  /**
+   * Applications for the app switcher. Optional and defaults to empty — the
+   * switcher is gated by the optional `showAppSwitcher`, so requiring this
+   * only forced every consumer to pass `apps: []` to keep the feature off.
+   */
+  apps?: IGRPApplicationArgs[];
   appCode?: string;
   showPreviewMode?: boolean;
   appCenterUrl?: string;

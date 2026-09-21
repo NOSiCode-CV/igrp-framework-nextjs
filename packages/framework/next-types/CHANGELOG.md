@@ -337,7 +337,7 @@
   - **Renamed** `m2mServiceId` → `serviceId`. The value is service identity (resource name + `X-Machine-Service-ID` header), not an auth credential. The new prefix discipline: `m2m*` is reserved for OAuth2 credentials only.
   - **Added** required `m2mClientId: string` and `m2mClientSecret: string` for OAuth2 client_credentials authentication.
 
-  Migration: rename `m2mServiceId` → `serviceId` and `m2mToken` → `m2mClientId`/`m2mClientSecret` in your `igrpBuildConfig` call. The TypeScript error guides the rename. See `templates/demo-legacy/src/igrp.template.config.ts` for the canonical shape.
+  Migration: rename `m2mServiceId` → `serviceId` and `m2mToken` → `m2mClientId`/`m2mClientSecret` in your `igrpBuildConfig` call. The TypeScript error guides the rename. See `templates/demo-v1/src/igrp.template.config.ts` for the canonical shape.
 
 - Updated dependencies [2a0ef32]
   - @igrp/framework-next-auth@0.1.0-beta.131
@@ -427,13 +427,13 @@
 
   @igrp/template-migrator
   - New CLI package that automates IGRP template upgrades via `pnpm dlx @igrp/template-migrator@latest`.
-  - Bundles all 6 demo-legacy migration guides (01–06) as a cumulative manifest with embedded payloads.
+  - Bundles all 6 demo-v1 migration guides (01–06) as a cumulative manifest with embedded payloads.
   - Commands: status, plan, apply (--yes / --to), list, rollback, check (CI gate).
   - Lock file moved from root `.igrpmigrations.lock.json` → `.igrpmigrations/lock.json`; backward-compat read of old path on first run.
   - Prebuild pack script cleans payload output on every run to prevent stale files.
   - tsup config: shims disabled (no \_\_dirname polyfill injection before shebang), banner removed (shebang lives in src/cli.ts line 1).
 
-  @igrp/framework-next-template (templates/demo-legacy)
+  @igrp/framework-next-template (templates/demo-v1)
   - `.igrpmigrations/lock.json` pre-seeded to mark all 6 migrations as applied.
   - `create-zip-template.ps1` updated to strip migration guides and payloads from the published zip — only `lock.json` is included so consumers start fully up-to-date.
   - `MIGRATING.md` added: end-user upgrade guide (status → plan → apply workflow).
@@ -461,13 +461,13 @@
   @igrp/framework-next-ui
   - New IGRPSegmentError component for segment-level error.tsx boundaries — renders inside layout chrome, offers reset + go-home actions, accepts resolveCopy(error) for i18n.
 
-  @igrp/framework-next-template (templates/demo-legacy)
+  @igrp/framework-next-template (templates/demo-v1)
   - New isAuthBypass() helper unifies IGRP_PREVIEW_MODE=true and AUTH_PROVIDER=none; /login, /logout, /api/auth/\* are all 302'd to / when bypassed.
   - Full App Router error boundary coverage: global-error.tsx, root error.tsx, (auth)/error.tsx, rewritten (igrp)/error.tsx to use IGRPSegmentError.
   - New reportError() hook and error-messages.ts Portuguese copy keyed by IgrpError.code.
   - serverSession() no longer swallows typed errors; logout page hardened with .catch + fallback redirect + 3 s safety timeout.
 
-  See templates/demo-legacy/.igrpmigrations/05.MIGRATIONS-23042026.md and 06.MIGRATIONS-23042026.md for the full migration guides.
+  See templates/demo-v1/.igrpmigrations/05.MIGRATIONS-23042026.md and 06.MIGRATIONS-23042026.md for the full migration guides.
 
 - Updated dependencies
   - @igrp/framework-next-auth@0.1.0-beta.115
@@ -492,13 +492,13 @@
   @igrp/framework-next-ui
   - New IGRPSegmentError component for segment-level error.tsx boundaries — renders inside layout chrome, offers reset + go-home actions, accepts resolveCopy(error) for i18n.
 
-  @igrp/framework-next-template (templates/demo-legacy)
+  @igrp/framework-next-template (templates/demo-v1)
   - New isAuthBypass() helper unifies IGRP_PREVIEW_MODE=true and AUTH_PROVIDER=none; /login, /logout, /api/auth/\* are all 302'd to / when bypassed.
   - Full App Router error boundary coverage: global-error.tsx, root error.tsx, (auth)/error.tsx, rewritten (igrp)/error.tsx to use IGRPSegmentError.
   - New reportError() hook and error-messages.ts Portuguese copy keyed by IgrpError.code.
   - serverSession() no longer swallows typed errors; logout page hardened with .catch + fallback redirect + 3 s safety timeout.
 
-  See templates/demo-legacy/.igrpmigrations/05.MIGRATIONS-23042026.md and 06.MIGRATIONS-23042026.md for the full migration guides.
+  See templates/demo-v1/.igrpmigrations/05.MIGRATIONS-23042026.md and 06.MIGRATIONS-23042026.md for the full migration guides.
 
 - Updated dependencies
   - @igrp/framework-next-auth@0.1.0-beta.114

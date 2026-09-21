@@ -5,7 +5,7 @@
 | **Status** | Draft — awaiting manager approval |
 | **Author** | Fidel da Luz |
 | **Date** | 2026-06-22 |
-| **Scope** | `templates/demo-legacy` (login is template-only) + one additive `@igrp/framework-next-ui` change (logout teardown extraction). |
+| **Scope** | `templates/demo-v1` (login is template-only) + one additive `@igrp/framework-next-ui` change (logout teardown extraction). |
 | **Affects** | `@igrp/framework-next-template` consumers; igrp-studio generated apps; `@igrp/framework-next-ui` |
 | **Risk** | Low (login default path unchanged + fail-safe fallback; logout logic lifted verbatim, behavior-preserving) |
 | **Companion** | Mirrors `docs/2026-06-22-custom-layout-design-spec.md` (same frame/canvas model, same env-switch pattern) |
@@ -478,11 +478,11 @@ No `globals.css` change: `@source` already globs `../src/**/*.{ts,tsx}` and the 
 
 ## 14. Appendix — referenced source
 
-- `templates/demo-legacy/src/app/(auth)/login/page.tsx` — login server frame + switch site.
-- `templates/demo-legacy/src/app/(auth)/logout/page.tsx` — teardown to extract.
-- `templates/demo-legacy/src/app/(auth)/login/logout-completion.tsx` — completion to extract.
-- `templates/demo-legacy/src/actions/igrp/auth.ts` — `getLogoutUrl` (stays template-owned).
-- `templates/demo-legacy/src/lib/logout-pending.ts` — cookie contract (stays template-owned, edge-safe).
+- `templates/demo-v1/src/app/(auth)/login/page.tsx` — login server frame + switch site.
+- `templates/demo-v1/src/app/(auth)/logout/page.tsx` — teardown to extract.
+- `templates/demo-v1/src/app/(auth)/login/logout-completion.tsx` — completion to extract.
+- `templates/demo-v1/src/actions/igrp/auth.ts` — `getLogoutUrl` (stays template-owned).
+- `templates/demo-v1/src/lib/logout-pending.ts` — cookie contract (stays template-owned, edge-safe).
 - `packages/framework/next-ui/src/components/auths/form.tsx` — `IGRPAuthForm` (`signIn` reference).
 - `packages/framework/next-ui/src/components/auths/carousel.tsx` — `IGRPAuthCarousel` (decorative).
 - `packages/framework/next-auth/src/oidc.ts` — `buildEndSessionUrl`.

@@ -56,9 +56,34 @@ export function resolveSecureCookie(cookieNames: Iterable<string>): boolean | un
 }
 
 /**
+ * Terminator character closing every basePath suffix.
+ *
+ * WHY: NextAuth reads the session cookie through `SessionStore`, which collects
+ * every cookie whose name `startsWith` the configured one — that is how it
+ * reassembles the `.0` / `.1` chunks of an oversized token. An un-terminated
+ * suffix therefore makes any app whose slug is a PREFIX of another app's slug
+ * swallow that other app's cookie: `/apps/hr` reads
+ * `next-auth.session-token.apps-hr` AND `next-auth.session-token.apps-hr-admin`,
+ * concatenates the two values, fails to decrypt the result, and sees no session
+ * at all — a permanent redirect loop to /login with a perfectly valid cookie in
+ * the jar. Worse, `SessionStore#clean()` then expires every name it collected,
+ * so signing in or out of `/apps/hr` DELETES `/apps/hr-admin`'s session. That is
+ * the exact cross-app interference this module exists to prevent.
+ *
+ * `~` is a valid cookie-name token character (RFC 6265 → RFC 7230 `token`) and
+ * can never appear in a slug, which is `[a-z0-9-]` only. Closing the suffix with
+ * it makes the suffix set prefix-free: `.apps-hr~` is not a prefix of
+ * `.apps-hr-admin~`, while `.apps-hr~.0` still chunks cleanly.
+ */
+const SUFFIX_TERMINATOR = '~';
+
+/**
  * Turns a basePath into a cookie-name-safe suffix: `/apps/template` →
- * `.apps-template`. Returns `''` for an empty or root basePath, which is what
+ * `.apps-template~`. Returns `''` for an empty or root basePath, which is what
  * keeps single-app deployments on the stock NextAuth names.
+ *
+ * The trailing {@link SUFFIX_TERMINATOR} is load-bearing, not decoration — see
+ * its doc comment.
  */
 export function basePathCookieSuffix(basePath: string | undefined): string {
   const trimmed = (basePath ?? '').trim();
@@ -68,7 +93,7 @@ export function basePathCookieSuffix(basePath: string | undefined): string {
     .replace(/[^a-zA-Z0-9]+/g, '-')
     .replace(/^-+|-+$/g, '')
     .toLowerCase();
-  return slug ? `.${slug}` : '';
+  return slug ? `.${slug}${SUFFIX_TERMINATOR}` : '';
 }
 
 /** Shape of one NextAuth v4 cookie definition, restated to avoid importing `next-auth`. */

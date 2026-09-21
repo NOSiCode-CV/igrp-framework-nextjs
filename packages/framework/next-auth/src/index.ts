@@ -1,8 +1,11 @@
-// Root barrel — deliberately limited to the pure, dependency-free modules.
+// Root barrel — deliberately limited to the pure, dependency-free modules:
+// `./session`, `./providers`, `./sanitize`, `./runtime` and `./cookies`.
 //
-// `./session`, `./providers` and `./sanitize` import nothing but types, so a
-// consumer that reaches for `getAuthProviderIdFromEnv` or `sanitizeRedirectUrl`
-// from a page pays nothing at runtime.
+// All five import nothing but types, so a consumer that reaches for
+// `getAuthProviderIdFromEnv`, `sanitizeRedirectUrl` or `sessionCookieName` from
+// a page pays nothing at runtime. `dist-contract.test.ts` asserts that the built
+// barrel has no external static imports at all — that assertion, not this
+// comment, is the contract. Anything added here must keep it green.
 //
 // `./middleware`, `./jwt` and `./oidc` are NOT re-exported here: the first two
 // pull `next-auth/middleware` / `next-auth/jwt` into whatever bundle touches

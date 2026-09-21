@@ -6,6 +6,11 @@
  * their tsconfig, so if the augmentation stops applying (or drifts from the
  * exported interfaces it is derived from), `tsc` fails here rather than in
  * someone's app.
+ *
+ * `tsc -p tsconfig.json` is the only thing that runs this file — vitest's
+ * include matches `.test.ts` only, and this is not a tsup dts entry either.
+ * That is why `typecheck` is wired into the package's `release` script: without
+ * it, the one guard against augmentation drift never ran anywhere.
  */
 import '../types';
 import type { Session } from 'next-auth';
@@ -21,6 +26,9 @@ export const _session: {
   forceLogout: boolean | undefined;
   userId: string | undefined;
   userName: string | null | undefined;
+  // Widened to accept a custom provider's own id — `withIGRPAuth` stamps
+  // whatever the resolved provider calls itself, not just the registry ids.
+  authProviderId: string | undefined;
 } = {
   accessToken: s.accessToken,
   idToken: s.idToken,
@@ -28,6 +36,7 @@ export const _session: {
   forceLogout: s.forceLogout,
   userId: s.user?.id,
   userName: s.user?.name,
+  authProviderId: s.authProviderId,
 };
 
 export const _jwt: {
@@ -38,6 +47,7 @@ export const _jwt: {
   forceLogout: boolean | undefined;
   userId: string | undefined;
   sub: string | undefined;
+  authProviderId: string | undefined;
 } = {
   accessToken: j.accessToken,
   refreshToken: j.refreshToken,
@@ -46,4 +56,5 @@ export const _jwt: {
   forceLogout: j.forceLogout,
   userId: j.user?.id,
   sub: j.sub,
+  authProviderId: j.authProviderId,
 };

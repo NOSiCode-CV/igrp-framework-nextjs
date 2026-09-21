@@ -515,7 +515,7 @@ describe('introspectOidcToken', () => {
   });
 
   it('passes an abort signal (timeout) to the introspection request (NA-1)', async () => {
-    const fetchSpy = vi.fn(async (url: string | URL, init?: RequestInit) => {
+    const fetchSpy = vi.fn(async (url: string | URL, _init?: RequestInit) => {
       const u = String(url);
       if (u.includes('.well-known')) {
         return { ok: true, json: async () => MOCK_DISCOVERY } as Response;
@@ -761,5 +761,96 @@ describe('refreshOidcAccessToken — concurrent callers do not share custom fiel
     // ...and each keeps its own custom claim.
     expect((ra as unknown as { tenant: string }).tenant).toBe('alpha');
     expect((rb as unknown as { tenant: string }).tenant).toBe('beta');
+  });
+});
+
+// ─── Custom (unmanaged) providers ─────────────────────────────────────────────
+
+describe('OIDC helpers — a provider this package does not manage', () => {
+  // Regression: a custom provider passed to `withIGRPAuth` has no entry in the
+  // registry, so `getAuthProviderDiscoveryUrl` resolved to '' and `fetch('')`
+  // threw — turning every first refresh of a healthy session into a forced
+  // logout. There is nothing to refresh, revoke or introspect against, so the
+  // helpers must no-op rather than fail destructively.
+  const customToken = () => makeToken({ authProviderId: 'github' });
+
+  it('refreshOidcAccessToken leaves the token alone instead of forcing a logout', async () => {
+    const fetchSpy = vi.fn();
+    vi.stubGlobal('fetch', fetchSpy);
+    const { refreshOidcAccessToken } = await import('../oidc');
+
+    const token = customToken();
+    const result = await refreshOidcAccessToken(token, VALID_ENV);
+
+    expect(result.error).toBeUndefined();
+    expect(result.forceLogout).toBeFalsy();
+    expect(result.accessToken).toBe(token.accessToken);
+    expect(fetchSpy).not.toHaveBeenCalled();
+  });
+
+  it('revokeOidcSession reports why it skipped', async () => {
+    const { revokeOidcSession } = await import('../oidc');
+    const result = await revokeOidcSession(customToken(), VALID_ENV);
+    expect(result).toEqual({ ok: false, reason: 'provider_not_managed' });
+  });
+
+  it('introspectOidcToken fails open without a network call', async () => {
+    const fetchSpy = vi.fn();
+    vi.stubGlobal('fetch', fetchSpy);
+    const { introspectOidcToken } = await import('../oidc');
+    expect(await introspectOidcToken(customToken(), VALID_ENV)).toBe(true);
+    expect(fetchSpy).not.toHaveBeenCalled();
+  });
+
+  it('buildEndSessionUrl returns null rather than a malformed URL', async () => {
+    const { buildEndSessionUrl } = await import('../oidc');
+    expect(await buildEndSessionUrl(customToken(), VALID_ENV, 'http://localhost:3000')).toBeNull();
+  });
+});
+
+// ─── Recovery-store lifecycle ─────────────────────────────────────────────────
+
+describe('forgetRecoveredToken', () => {
+  it('drops the entry so a signed-out session is not left in the store', async () => {
+    const {
+      createInMemoryTokenRecoveryStore,
+      configureOidcTokenRecoveryStore,
+      getRecoveredToken,
+      forgetRecoveredToken,
+    } = await import('../oidc');
+    const store = createInMemoryTokenRecoveryStore();
+    configureOidcTokenRecoveryStore(store);
+
+    await store.set('consumed-rt', makeToken({ accessToken: 'rotated' }), 60_000);
+    expect(await getRecoveredToken('consumed-rt')).not.toBeNull();
+
+    await forgetRecoveredToken('consumed-rt');
+    expect(await getRecoveredToken('consumed-rt')).toBeNull();
+  });
+
+  it('is a no-op for a store that does not implement delete', async () => {
+    const { configureOidcTokenRecoveryStore, forgetRecoveredToken } = await import('../oidc');
+    configureOidcTokenRecoveryStore({
+      get: async () => null,
+      set: async () => {},
+    });
+    await expect(forgetRecoveredToken('anything')).resolves.toBeUndefined();
+  });
+});
+
+describe('isUsableRecoveredToken', () => {
+  it('accepts a stale entry — it still carries the rotated refresh token', async () => {
+    const { isUsableRecoveredToken } = await import('../oidc');
+    expect(
+      isUsableRecoveredToken(makeToken({ accessToken: 'at', expiresAt: Date.now() - 60_000 })),
+    ).toBe(true);
+  });
+
+  it('rejects entries with no access token or a carried error', async () => {
+    const { isUsableRecoveredToken } = await import('../oidc');
+    expect(isUsableRecoveredToken(null)).toBe(false);
+    expect(isUsableRecoveredToken(makeToken({ accessToken: undefined }))).toBe(false);
+    expect(isUsableRecoveredToken(makeToken({ accessToken: '' }))).toBe(false);
+    expect(isUsableRecoveredToken(makeToken({ error: 'RefreshAccessTokenError' }))).toBe(false);
   });
 });

@@ -8,6 +8,14 @@ Read `.claude/shared/hard-rules.md` before doing anything — including when the
 
 For release/publish tasks specifically: always query the registry to verify actual published state before drawing conclusions. Use per-package `release` scripts (not `changeset publish`) to ensure `--tag latest` is always respected.
 
+## Open items
+
+Before reviewing or making non-trivial changes to a package, read
+`KNOWN-ISSUES.md` at the repo root (cross-package defects) and the one in that
+package's directory, if present. They are handover notes for defects that are
+diagnosed but deliberately not yet fixed — fix the entry that names the package
+you are in, and delete it when it lands.
+
 ## Release workflow — when the user says "bump and release"
 
 Run the `/release-framework` command. It automates the full workflow (verify registry state → detect changed packages → create changeset → version → build in dependency order → publish per-package → verify) with no manual steps. The non-negotiable constraints it enforces live in `.claude/shared/hard-rules.md`.
@@ -26,7 +34,7 @@ Each package/template has its own `CLAUDE.md` with package-specific expertise. C
 
 ### Three-layer UI model (design system)
 
-The design system has three layers — **Horizon** (`IGRP*`), **Primitives** (unprefixed, shadcn-style Radix + CVA wrappers), and **Custom** (`IGRP*`, built on Horizon). The distinction is load-bearing: mixing them incorrectly produces inconsistent UI and breaks form wiring. Which layer to reach for is a *consumer* rule and lives with the consumer — `templates/demo-v1/.agents/rules/ui.md`. Authoring rules for the layers themselves are in `packages/design-system/CLAUDE.md`.
+The design system has three layers — **Horizon** (`IGRP*`), **Primitives** (unprefixed, shadcn-style Radix + CVA wrappers), and **Custom** (`IGRP*`, built on Horizon). The distinction is load-bearing: mixing them incorrectly produces inconsistent UI and breaks form wiring. Which layer to reach for is a _consumer_ rule and lives with the consumer — `templates/demo-v1/.agents/rules/ui.md`. Authoring rules for the layers themselves are in `packages/design-system/CLAUDE.md`.
 
 ### Framework runtime layering
 

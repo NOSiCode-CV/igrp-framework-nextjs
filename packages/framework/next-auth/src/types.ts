@@ -1,5 +1,5 @@
 import type { DefaultSession, User as NextAuthUser } from 'next-auth';
-import type { AuthProviderId } from './providers';
+import type { SessionAuthProviderId } from './providers';
 
 /**
  * Module augmentation for next-auth.
@@ -41,7 +41,7 @@ declare module 'next-auth' {
   interface Session extends DefaultSession {
     accessToken?: string;
     idToken?: string;
-    authProviderId?: AuthProviderId;
+    authProviderId?: SessionAuthProviderId;
     error?: string;
     expiresAt?: number;
     forceLogout?: boolean;
@@ -56,7 +56,7 @@ declare module 'next-auth/jwt' {
     accessToken?: string;
     refreshToken?: string;
     idToken?: string;
-    authProviderId?: AuthProviderId;
+    authProviderId?: SessionAuthProviderId;
     expiresAt?: number;
     error?: 'RefreshAccessTokenError' | string;
     forceLogout?: boolean;

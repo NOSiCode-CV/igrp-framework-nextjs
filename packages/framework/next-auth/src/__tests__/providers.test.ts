@@ -9,6 +9,8 @@ import {
   isAuthDisabled,
   IGRP_AUTH_PROVIDER_ID,
   NONE_PROVIDER_ID,
+  isOidcManagedProviderId,
+  getAuthProviderDefinition,
   AUTH_PROVIDER_IDS,
 } from '../providers';
 
@@ -24,8 +26,10 @@ describe('getAuthProviderIdFromEnv', () => {
     expect(getAuthProviderIdFromEnv({ AUTH_PROVIDER: 'igrp-auth' })).toBe('igrp-auth');
   });
 
-  it('defaults to none when AUTH_PROVIDER is not set', () => {
-    expect(getAuthProviderIdFromEnv({})).toBe('none');
+  it('defaults to the real provider when AUTH_PROVIDER is not set', () => {
+    // Was `none` — i.e. an app that never set the variable ran with auth OFF,
+    // while the README documented `igrp-auth` as the default. Fail closed.
+    expect(getAuthProviderIdFromEnv({})).toBe('igrp-auth');
   });
 
   it('returns none when AUTH_PROVIDER=none', () => {
@@ -205,8 +209,9 @@ describe('isAuthEnabled / isAuthDisabled', () => {
     expect(isAuthDisabled({ AUTH_PROVIDER: 'igrp-auth' })).toBe(false);
   });
 
-  it('isAuthEnabled returns false when AUTH_PROVIDER is not set', () => {
-    expect(isAuthEnabled({})).toBe(false);
+  it('isAuthEnabled returns true when AUTH_PROVIDER is not set', () => {
+    // Disabling auth is explicit-only now; an absent variable no longer does it.
+    expect(isAuthEnabled({})).toBe(true);
   });
 });
 
@@ -221,5 +226,78 @@ describe('exported constants', () => {
 
   it('AUTH_PROVIDER_IDS contains IGRP_AUTH and NONE only', () => {
     expect(Object.values(AUTH_PROVIDER_IDS)).toEqual(['igrp-auth', 'none']);
+  });
+});
+
+describe('getAuthProviderIdFromEnv — empty AUTH_PROVIDER must never default', () => {
+  // An earlier attempt at this treated `AUTH_PROVIDER=` as "unset" and let it
+  // fall back. That is the wrong direction for THIS variable: the fallback
+  // decides whether auth runs, so an empty assignment resolved to a provider,
+  // `isAuthDisabled()` answered true, and a middleware following this package's
+  // documented "use as the first check" pattern let every request through. A
+  // typo must not be able to switch authentication off.
+  it('refuses an empty or blank value instead of defaulting', () => {
+    expect(() => getAuthProviderIdFromEnv({ AUTH_PROVIDER: '' })).toThrow(
+      /AUTH_PROVIDER is set but empty/,
+    );
+    expect(() => getAuthProviderIdFromEnv({ AUTH_PROVIDER: '   ' })).toThrow(
+      /AUTH_PROVIDER is set but empty/,
+    );
+  });
+
+  it('refuses it even when an explicit fallback was passed', () => {
+    expect(() => getAuthProviderIdFromEnv({ AUTH_PROVIDER: '' }, IGRP_AUTH_PROVIDER_ID)).toThrow(
+      /AUTH_PROVIDER is set but empty/,
+    );
+  });
+
+  it('fails CLOSED — auth stays enabled, it does not fall through to disabled', () => {
+    expect(isAuthEnabled({ AUTH_PROVIDER: '' })).toBe(true);
+    expect(isAuthDisabled({ AUTH_PROVIDER: '' })).toBe(false);
+  });
+
+  it('still rejects a genuinely unsupported value', () => {
+    expect(() => getAuthProviderIdFromEnv({ AUTH_PROVIDER: 'okta' })).toThrow(
+      /Unsupported AUTH_PROVIDER/,
+    );
+  });
+});
+
+describe('getAuthProviderIdFromEnv — absent AUTH_PROVIDER defaults closed', () => {
+  // The default used to be `none`, so an app that never set the variable ran
+  // with authentication disabled — while the README documented the opposite.
+  it('resolves to the real provider, not the auth-disabled bypass', () => {
+    expect(getAuthProviderIdFromEnv({})).toBe(IGRP_AUTH_PROVIDER_ID);
+    expect(isAuthEnabled({})).toBe(true);
+  });
+
+  it('still lets a deployment disable auth, but only explicitly', () => {
+    expect(getAuthProviderIdFromEnv({ AUTH_PROVIDER: 'none' })).toBe(NONE_PROVIDER_ID);
+    expect(isAuthDisabled({ AUTH_PROVIDER: 'none' })).toBe(true);
+  });
+});
+
+describe('isOidcManagedProviderId', () => {
+  it('is true only for a real IGRP-registry provider', () => {
+    expect(isOidcManagedProviderId(IGRP_AUTH_PROVIDER_ID)).toBe(true);
+    expect(isOidcManagedProviderId(NONE_PROVIDER_ID)).toBe(false);
+    expect(isOidcManagedProviderId('github')).toBe(false);
+    expect(isOidcManagedProviderId(undefined)).toBe(false);
+  });
+
+  it('is not fooled by inherited Object properties', () => {
+    expect(isOidcManagedProviderId('constructor')).toBe(false);
+    expect(isOidcManagedProviderId('toString')).toBe(false);
+  });
+});
+
+describe('getAuthProviderDefinition — unknown id', () => {
+  it('throws a named error instead of a TypeError three frames later', () => {
+    // It used to spread `undefined` into a half-built definition whose
+    // requiredEnvKeys was missing; the failure surfaced as a bare
+    // "Cannot read properties of undefined (reading 'filter')".
+    expect(() => getAuthProviderDefinition({}, 'github' as never)).toThrow(
+      /No IGRP auth provider definition for "github"/,
+    );
   });
 });

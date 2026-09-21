@@ -6,7 +6,11 @@ vi.mock('../oidc', async (importOriginal) => {
   const original = await importOriginal<typeof oidcModule>();
   return {
     ...original,
-    revokeOidcSession: vi.fn().mockResolvedValue(undefined),
+    // Must resolve a real RevokeOidcSessionResult. Resolving `undefined` made
+    // `if (!result.ok)` throw a TypeError that the event's own catch swallowed,
+    // so every test in the signOut suite passed while the code under test never
+    // once reached its success path.
+    revokeOidcSession: vi.fn().mockResolvedValue({ ok: true, status: 200 }),
     introspectOidcToken: vi.fn().mockResolvedValue(true),
     refreshOidcAccessToken: vi
       .fn()
@@ -33,6 +37,24 @@ const VALID_ENV = {
 describe('withIGRPAuth — events.signOut', () => {
   beforeEach(() => {
     vi.clearAllMocks();
+    vi.mocked(oidcModule.revokeOidcSession).mockResolvedValue({ ok: true, status: 200 });
+  });
+
+  it('completes the success path without logging a failure (guards mock fidelity)', async () => {
+    // Regression guard for the suite itself: with a mock that resolved
+    // `undefined`, every case below still passed while `if (!result.ok)` threw
+    // and was swallowed. Assert the happy path is actually the happy path.
+    const error = vi.spyOn(console, 'error').mockImplementation(() => {});
+    const warn = vi.spyOn(console, 'warn').mockImplementation(() => {});
+
+    const withIGRPAuth = await getFactory();
+    const instance = withIGRPAuth({ env: VALID_ENV });
+    await instance.authOptions.events!.signOut!({ token: { refreshToken: 'rt' } } as never);
+
+    const logged = [...error.mock.calls, ...warn.mock.calls].map((c) => String(c[0]));
+    error.mockRestore();
+    warn.mockRestore();
+    expect(logged, 'a successful revocation must log nothing').toEqual([]);
   });
 
   it('calls revokeOidcSession with the token on signOut for JWT sessions', async () => {
@@ -620,8 +642,8 @@ describe('withIGRPAuth — cookie isolation', () => {
 
     const nameA = a.authOptions.cookies!.sessionToken!.name;
     const nameB = b.authOptions.cookies!.sessionToken!.name;
-    expect(nameA).toBe('next-auth.session-token.apps-a');
-    expect(nameB).toBe('next-auth.session-token.apps-b');
+    expect(nameA).toBe('next-auth.session-token.apps-a~');
+    expect(nameB).toBe('next-auth.session-token.apps-b~');
   });
 
   it('leaves NextAuth defaults alone for a root-path app', async () => {
@@ -640,7 +662,7 @@ describe('withIGRPAuth — cookie isolation', () => {
       },
     });
     expect(instance.authOptions.cookies!.sessionToken!.name).toBe(
-      '__Secure-next-auth.session-token.apps-a',
+      '__Secure-next-auth.session-token.apps-a~',
     );
   });
 
@@ -820,5 +842,162 @@ describe('withIGRPAuth — resolveAppUrl', () => {
     expect(auth.getLoginRedirectUrl({ url: 'https://public.example/' }).pathname).toBe(
       '/apps/t/auth/signin',
     );
+  });
+});
+
+describe('withIGRPAuth — provider id stamped on the JWT', () => {
+  beforeEach(() => {
+    vi.clearAllMocks();
+  });
+
+  it('stamps a custom provider’s OWN id, not the env fallback', async () => {
+    // Regression: `withIGRPAuth` documents `provider: GitHubProvider({...})`,
+    // but the id was read from AUTH_PROVIDER — unset for a custom provider, so
+    // every such session was stamped "none". Every OIDC helper then treated it
+    // as the auth-disabled bypass: discovery resolved to '', fetch('') threw,
+    // and the first refresh force-logged the user out of a healthy session.
+    const withIGRPAuth = await getFactory();
+    const instance = withIGRPAuth({
+      provider: { id: 'github', name: 'GitHub', type: 'oauth' } as never,
+      env: { NEXTAUTH_SECRET: 's' },
+    });
+
+    const token = (await instance.authOptions.callbacks!.jwt!({
+      token: {},
+      account: { access_token: 'at', refresh_token: 'rt', expires_in: 3600 },
+    } as never)) as { authProviderId?: string };
+
+    expect(token.authProviderId).toBe('github');
+  });
+
+  it('still stamps the env provider when no custom provider was passed', async () => {
+    const withIGRPAuth = await getFactory();
+    const instance = withIGRPAuth({ env: VALID_ENV });
+
+    const token = (await instance.authOptions.callbacks!.jwt!({
+      token: {},
+      account: { access_token: 'at', refresh_token: 'rt', expires_in: 3600 },
+    } as never)) as { authProviderId?: string };
+
+    expect(token.authProviderId).toBe('igrp-auth');
+  });
+});
+
+describe('withIGRPAuth — missing NEXTAUTH_SECRET', () => {
+  beforeEach(() => {
+    vi.clearAllMocks();
+  });
+
+  const envWithoutSecret = {
+    AUTH_PROVIDER: 'igrp-auth',
+    IGRP_AUTH_CLIENT_ID: 'c',
+    IGRP_AUTH_CLIENT_SECRET: 's',
+    IGRP_AUTH_ISSUER: 'http://localhost:9090',
+  };
+
+  it('is a config error in production, not a silent /login loop', async () => {
+    // getToken() does not throw on a missing secret — it fails to decrypt and
+    // returns null, so middleware saw "no session" on every request.
+    const withIGRPAuth = await getFactory();
+    const instance = withIGRPAuth({ env: { ...envWithoutSecret, NODE_ENV: 'production' } });
+
+    expect(instance.configError).not.toBeNull();
+    expect(instance.configError?.code).toBe('AUTH_SECRET_MISSING');
+    const response = await instance.GET(new Request('http://localhost/api/auth/session'));
+    expect(response.status).toBe(500);
+  });
+
+  it('only warns in development, so a first-run `pnpm dev` still boots', async () => {
+    const warn = vi.spyOn(console, 'warn').mockImplementation(() => {});
+    const withIGRPAuth = await getFactory();
+    const instance = withIGRPAuth({ env: { ...envWithoutSecret, NODE_ENV: 'development' } });
+
+    expect(instance.configError).toBeNull();
+    expect(warn.mock.calls.flat().join(' ')).toContain('NEXTAUTH_SECRET');
+    warn.mockRestore();
+  });
+
+  it('stays quiet when auth is disabled entirely', async () => {
+    const withIGRPAuth = await getFactory();
+    const instance = withIGRPAuth({ env: { AUTH_PROVIDER: 'none', NODE_ENV: 'production' } });
+    expect(instance.configError).toBeNull();
+  });
+});
+
+describe('withIGRPAuth — short access-token lifetime', () => {
+  beforeEach(() => {
+    vi.clearAllMocks();
+  });
+
+  it('warns when the whole token lifetime sits inside the refresh buffer', async () => {
+    // At that point a JUST-issued token is already "expired" to getSession,
+    // which calls onSessionExpired (redirect to /logout) on every render.
+    const warn = vi.spyOn(console, 'warn').mockImplementation(() => {});
+    const withIGRPAuth = await getFactory();
+    const instance = withIGRPAuth({ env: VALID_ENV });
+
+    await instance.authOptions.callbacks!.jwt!({
+      token: {},
+      account: { access_token: 'at', refresh_token: 'rt', expires_in: 30 },
+    } as never);
+
+    expect(warn.mock.calls.flat().join(' ')).toContain('proactive-refresh buffer');
+    warn.mockRestore();
+  });
+});
+
+describe('withIGRPAuth — recovered token freshness', () => {
+  beforeEach(() => {
+    vi.clearAllMocks();
+    vi.mocked(oidcModule.introspectOidcToken).mockResolvedValue(true);
+    vi.mocked(oidcModule.refreshOidcAccessToken).mockImplementation(async (token) => ({
+      ...token,
+      accessToken: 'refreshed-at',
+    }));
+  });
+
+  it('adopts a STALE recovered token and then refreshes with its rotated refresh token', async () => {
+    // The recovery entry outlives the access token it holds, so a cache hit can
+    // be expired on arrival. Adopting it is still right — it carries the only
+    // refresh token the IdP will still accept — but returning it as-is handed
+    // callers a dead access token for the rest of the request.
+    const withIGRPAuth = await getFactory();
+    const instance = withIGRPAuth({ env: VALID_ENV });
+
+    vi.mocked(oidcModule.getRecoveredToken).mockResolvedValue({
+      accessToken: 'stale-at',
+      refreshToken: 'rotated-rt',
+      expiresAt: Date.now() - 5_000,
+    } as never);
+
+    const result = (await instance.authOptions.callbacks!.jwt!({
+      token: { accessToken: 'old-at', refreshToken: 'consumed-rt', expiresAt: Date.now() - 1000 },
+      account: undefined,
+    } as never)) as { accessToken?: string; refreshToken?: string };
+
+    expect(oidcModule.refreshOidcAccessToken).toHaveBeenCalled();
+    // The refresh ran against the ROTATED token, not the consumed one.
+    expect(vi.mocked(oidcModule.refreshOidcAccessToken).mock.calls[0]![0]).toMatchObject({
+      refreshToken: 'rotated-rt',
+    });
+    expect(result.accessToken).toBe('refreshed-at');
+  });
+
+  it('ignores a malformed store entry instead of adopting an empty access token', async () => {
+    const withIGRPAuth = await getFactory();
+    const instance = withIGRPAuth({ env: VALID_ENV });
+
+    vi.mocked(oidcModule.getRecoveredToken).mockResolvedValue({ error: 'boom' } as never);
+
+    const result = (await instance.authOptions.callbacks!.jwt!({
+      token: { accessToken: 'old-at', refreshToken: 'consumed-rt', expiresAt: Date.now() - 1000 },
+      account: undefined,
+    } as never)) as { refreshToken?: string };
+
+    // Fell through to the normal path with the token untouched by the bad entry.
+    expect(vi.mocked(oidcModule.refreshOidcAccessToken).mock.calls[0]![0]).toMatchObject({
+      refreshToken: 'consumed-rt',
+    });
+    expect(result.refreshToken).toBe('consumed-rt');
   });
 });

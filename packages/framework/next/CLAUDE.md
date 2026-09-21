@@ -28,6 +28,12 @@ Validate breaking changes against `templates/demo-v1/src/app/layout.tsx`, `templ
 - **`igrpBuildConfig` must honor `IGRP_PREVIEW_MODE`** — swap in mock data and disable session refetch. Every config-shape change has to keep the preview branch working.
 - Build: a single Babel pass over `src/` (`build:js`: TypeScript strip + JSX + React Compiler) → `tsc --emitDeclarationOnly`. `pnpm build:next`. Escape: `build:without_reactcompiler`.
 
+## Open items
+
+`KNOWN-ISSUES.md` in this directory lists diagnosed-but-unfixed defects for this
+package, and `../../../KNOWN-ISSUES.md` the cross-package ones. Read both before
+a review; close the entries you fix.
+
 ## Design stance
 
 Mentally tag every symbol as server-only, client-safe, or shared — ensure it can't be imported from the wrong side. For new fetch paths, explicitly pick a cache/revalidate strategy — don't rely on implicit defaults. Validate both `IGRP_PREVIEW_MODE` branches on every config change.

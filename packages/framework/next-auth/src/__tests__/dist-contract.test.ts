@@ -74,6 +74,28 @@ describe.skipIf(!hasDist)('dist contract', () => {
     expect(missing).toEqual([]);
   });
 
+  it('ships .d.ts files that actually declare something', () => {
+    // Existence alone is not the contract: the dts pass reads the type-check-only
+    // tsconfig (noEmit, non-composite), and when its overrides in tsup.config.ts
+    // are wrong it can emit a file that declares nothing. Every consumer then
+    // silently types this package as `any` while the build stays green.
+    // The degenerate emit to catch is a file that exports NOTHING — empty, or
+    // just `export {};`. Requiring a declaration is too strict (`index.d.ts`
+    // and `middleware.d.ts` are pure re-export barrels and correctly declare
+    // nothing); matching /declare|export/ was too loose (`export {};` passed).
+    // The real contract is "names at least one thing".
+    const DECLARES = /\b(?:declare|interface\s+\w|type\s+\w+\s*[=<]|export\s+(?:default|=))/;
+    const REEXPORTS_A_NAME = /export\s*(?:type\s*)?\{\s*[^}\s]/;
+    const empty: string[] = [];
+    for (const [subpath, target] of subpaths) {
+      const source = readFileSync(join(DIST, '..', target.types), 'utf8');
+      if (!DECLARES.test(source) && !REEXPORTS_A_NAME.test(source)) {
+        empty.push(`${subpath} -> ${target.types}`);
+      }
+    }
+    expect(empty).toEqual([]);
+  });
+
   it('keeps the "use client" directive on the client entry', () => {
     // The hook in tsup.config.ts is the ONLY source of this directive —
     // src/client.ts does not declare one. If the hook breaks, or is swapped for

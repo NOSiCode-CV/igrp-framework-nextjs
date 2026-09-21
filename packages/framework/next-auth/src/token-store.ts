@@ -25,6 +25,12 @@ export type IGRPTokenRecoveryStore = {
   get(consumedRefreshToken: string): Promise<JWT | null>;
   /** Caches the rotated JWT keyed by the consumed refresh token for `ttlMs`. */
   set(consumedRefreshToken: string, result: JWT, ttlMs: number): Promise<void>;
+  /**
+   * Drops an entry early — called on sign-out, so a signed-out session's tokens
+   * are not sitting in the store for the rest of the TTL. Optional: a store that
+   * omits it simply lets the entry expire, which is the pre-existing behaviour.
+   */
+  delete?(consumedRefreshToken: string): Promise<void>;
 };
 
 const IN_MEMORY_MAX_ENTRIES = 5000;
@@ -70,6 +76,9 @@ export function createInMemoryTokenRecoveryStore(
         }
       }
       entries.set(consumedRefreshToken, { result, expiresAt: now + ttlMs });
+    },
+    async delete(consumedRefreshToken) {
+      entries.delete(consumedRefreshToken);
     },
   };
 }

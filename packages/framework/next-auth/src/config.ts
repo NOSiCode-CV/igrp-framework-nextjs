@@ -31,13 +31,17 @@ import {
   createAuthProviderFromEnv,
   getAuthProviderIdFromEnv,
   isAuthDisabled as isAuthDisabledFromEnv,
+  isOidcManagedProviderId,
   type AuthProviderId,
+  type SessionAuthProviderId,
 } from './providers';
 import {
   applyRecoveredToken,
   configureOidcTokenRecoveryStore,
+  forgetRecoveredToken,
   getRecoveredToken,
   introspectOidcToken,
+  isUsableRecoveredToken,
   refreshOidcAccessToken,
   revokeOidcSession,
 } from './oidc';
@@ -484,6 +488,37 @@ function isAuthChromePath(pathOrUrl: string): boolean {
 }
 
 /**
+ * Warns once when the IdP issues access tokens whose whole lifetime is inside
+ * the proactive-refresh buffer.
+ *
+ * At that point `expiresAt - TOKEN_REFRESH_BUFFER_MS` is already in the past
+ * for a token that was JUST issued, so: the jwt callback refreshes on every
+ * single session read (one IdP round-trip per read), and `getSession` — which
+ * uses the same buffer to decide "expired" — calls `onSessionExpired()` on a
+ * freshly refreshed session, i.e. redirects to /logout forever. The poll-interval
+ * constraint below was checked; this one, which is the more destructive half,
+ * was not.
+ *
+ * Unlike the poll-interval check this also warns in production: the condition is
+ * a property of the IdP's client configuration, which is exactly what differs
+ * between a working dev realm and a broken deployed one.
+ */
+function warnOnShortTokenLifetime(expiresAt: number): void {
+  const lifetimeMs = expiresAt - Date.now();
+  if (lifetimeMs > TOKEN_REFRESH_BUFFER_MS) return;
+
+  warnOnce('config.shortTokenLifetime', () =>
+    console.warn(
+      `[withIGRPAuth] the IdP issued an access token that lives ~${Math.max(0, Math.round(lifetimeMs / 1000))}s, ` +
+        `which is inside the ${TOKEN_REFRESH_BUFFER_MS / 1000}s proactive-refresh buffer. Every session read will ` +
+        'refresh, and every server render will treat the fresh session as expired and run onSessionExpired ' +
+        "(typically a redirect to /logout). Raise the IdP client's access-token lifetime above " +
+        `${TOKEN_REFRESH_BUFFER_MS / 1000}s.`,
+    ),
+  );
+}
+
+/**
  * Warns once, in development only, when the client session-poll interval is
  * too long for the proactive-refresh buffer to help.
  *
@@ -561,11 +596,14 @@ async function createNextAuthHandler(
  * the token it just issued — so "we don't know" is much rarer than a bare
  * `expires_at` check suggests.
  */
-function resolveInitialExpiry(account: {
-  expires_at?: number;
-  expires_in?: number;
-  access_token?: string;
-}): number {
+function resolveInitialExpiry(
+  account: {
+    expires_at?: number;
+    expires_in?: number;
+    access_token?: string;
+  },
+  isManagedProvider: boolean,
+): number | undefined {
   if (typeof account.expires_at === 'number' && Number.isFinite(account.expires_at)) {
     return account.expires_at * 1000;
   }
@@ -580,6 +618,15 @@ function resolveInitialExpiry(account: {
       // Opaque (non-JWT) access token, or malformed — fall through.
     }
   }
+  // A provider this package does not manage has no refresh path to "correct"
+  // an invented expiry: the guess would simply become the moment the session
+  // dies. A GitHub token, for instance, does not expire and reports no
+  // `expires_in`, so the 5-minute fallback used to redirect the user to /logout
+  // five minutes after sign-in. Leaving `expiresAt` undefined is what the
+  // expiry gates read as "this provider has no token expiry", handing the
+  // session's lifetime to the NextAuth cookie — standard NextAuth behaviour.
+  if (!isManagedProvider) return undefined;
+
   console.warn(
     '[next-auth] jwt: the IdP returned no expires_at/expires_in and the access token carries no ' +
       `exp claim — assuming ${UNKNOWN_EXPIRY_FALLBACK_MS / 1000}s. The first refresh will correct it.`,
@@ -712,13 +759,43 @@ export function withIGRPAuth(options: IGRPAuthOptions = {}): IGRPAuthInstance {
     resolvedProvider = resolveProvider(provider, env);
   } catch (err) {
     const msg = err instanceof Error ? err.message : String(err);
-    const code = msg.includes('Unsupported AUTH_PROVIDER')
-      ? 'AUTH_PROVIDER_INVALID'
-      : 'AUTH_CONFIG_INVALID';
+    const code = msg.includes('AUTH_PROVIDER is set but empty')
+      ? 'AUTH_PROVIDER_EMPTY'
+      : msg.includes('Unsupported AUTH_PROVIDER')
+        ? 'AUTH_PROVIDER_INVALID'
+        : 'AUTH_CONFIG_INVALID';
     configError = new IGRPAuthConfigError(msg, code);
   }
 
   const authIsDisabled = !configError && resolvedProvider === null;
+
+  // ── Secret ────────────────────────────────────────────────────────────────
+  // A missing secret is not a soft failure: `getToken` does not throw on one,
+  // it fails to decrypt and returns null, so middleware sees "no session" on
+  // every request and loops to /login while the route handler separately 500s
+  // from NextAuth's own MissingSecret. That reads as "auth is flaky" in a log.
+  // Surface it through the same lazy mechanism as a bad provider.
+  //
+  // Production only, mirroring NextAuth v4 (which derives a throwaway secret in
+  // development): dev without a secret is already degraded, but failing the
+  // whole app there would break a first-run `pnpm dev` before the user has
+  // written their .env.
+  if (!configError && !authIsDisabled && !secret) {
+    if (resolveNodeEnv(env) === 'production') {
+      configError = new IGRPAuthConfigError(
+        'NEXTAUTH_SECRET is not set. Without it the session cookie cannot be decrypted: ' +
+          'getToken() returns null for every request, so middleware redirects to /login in a loop.',
+        'AUTH_SECRET_MISSING',
+      );
+    } else {
+      warnOnce('config.missingSecret', () =>
+        console.warn(
+          '[withIGRPAuth] NEXTAUTH_SECRET is not set. Session cookies cannot be read by ' +
+            'getToken()/middleware, which looks like a /login redirect loop. Required in production.',
+        ),
+      );
+    }
+  }
 
   if (resolveNodeEnv(env) !== 'production') {
     warnOnRefetchIntervalMisconfiguration(env);
@@ -733,6 +810,43 @@ export function withIGRPAuth(options: IGRPAuthOptions = {}): IGRPAuthInstance {
    */
   function resolveAppBaseUrl(baseUrl?: string): string {
     return stripAuthApiSuffix(baseUrl || env.NEXTAUTH_URL || '');
+  }
+
+  /**
+   * The provider id stamped onto the JWT at sign-in.
+   *
+   * Reads the RESOLVED provider, not the environment. `withIGRPAuth` documents
+   * `provider: GitHubProvider({...})` as a supported way to bring your own
+   * provider, but the env var is untouched in that case — so every custom-provider
+   * session used to be stamped `"none"`, and every OIDC helper then treated it as
+   * the auth-disabled bypass: discovery resolved to `''`, `fetch('')` threw, and
+   * the first refresh force-logged the user out of a healthy session.
+   */
+  function resolveTokenProviderId(): SessionAuthProviderId {
+    if (provider != null && typeof provider === 'object') return provider.id;
+    return getAuthProviderIdFromEnv(env);
+  }
+
+  /**
+   * Whether the OIDC token lifecycle applies to the session this token belongs
+   * to.
+   *
+   * A token minted before `authProviderId` was stamped carries no id at all.
+   * Reading that as "unmanaged" would silently strand every live session at the
+   * moment of upgrade — no refresh, ever — so it falls back to the environment,
+   * exactly as `oidc.getProviderIdFromTokenOrEnv` does. A throwing environment
+   * means `configError` is already set and the handlers are replaced; answering
+   * "managed" there keeps the pre-existing code path.
+   */
+  function isManagedSessionToken(token: JWT): boolean {
+    if (token.authProviderId !== undefined) {
+      return isOidcManagedProviderId(token.authProviderId);
+    }
+    try {
+      return isOidcManagedProviderId(resolveTokenProviderId());
+    } catch {
+      return true;
+    }
   }
 
   /** Post-auth landing URL: app base + NEXT_PUBLIC_IGRP_APP_HOME_SLUG. */
@@ -794,14 +908,31 @@ export function withIGRPAuth(options: IGRPAuthOptions = {}): IGRPAuthInstance {
         // Initial sign-in: map account fields onto the JWT
         if (account) {
           const accountTyped = account as Account & { expires_at?: number; expires_in?: number };
+          const providerId = resolveTokenProviderId();
+          const expiresAt = resolveInitialExpiry(accountTyped, isOidcManagedProviderId(providerId));
+          if (expiresAt !== undefined) warnOnShortTokenLifetime(expiresAt);
           igrpToken = {
             ...igrpToken,
-            authProviderId: getAuthProviderIdFromEnv(env) as JWT['authProviderId'],
+            authProviderId: providerId,
             accessToken: accountTyped.access_token,
             idToken: accountTyped.id_token,
-            expiresAt: resolveInitialExpiry(accountTyped),
+            expiresAt,
             refreshToken: accountTyped.refresh_token,
           };
+        }
+
+        // A provider this package does not manage owns its own token lifecycle:
+        // there is no discovery document, no token endpoint and no credentials
+        // to refresh with. Everything below — the expiry buffer, the recovery
+        // store, introspection, refresh — is OIDC machinery that cannot apply,
+        // and running it anyway is what used to end custom-provider sessions on
+        // a schedule (first by forcing a logout, then by inventing an expiry).
+        // Hand the token straight to the caller's extension instead.
+        if (!isManagedSessionToken(igrpToken)) {
+          if (callbackExtensions.jwt) {
+            return callbackExtensions.jwt(params, igrpToken);
+          }
+          return igrpToken;
         }
 
         // Token still valid — return as-is (with 60s proactive refresh buffer).
@@ -832,12 +963,23 @@ export function withIGRPAuth(options: IGRPAuthOptions = {}): IGRPAuthInstance {
         // refresh token reads `active: false`, so introspecting here would
         // short-circuit a recoverable session straight to forceLogout.
         const recovered = await getRecoveredToken(igrpToken.refreshToken);
-        if (recovered) {
+        if (isUsableRecoveredToken(recovered)) {
           // Take only the auth material: the stored token was built by whichever
           // caller performed the rotation, so adopting it wholesale would import
           // that caller's custom claims into this session.
           igrpToken = applyRecoveredToken(igrpToken, recovered);
-        } else {
+        }
+
+        // Recovery may hand back an entry whose ACCESS token is already spent —
+        // the entry lives for RECOVERY_TTL_MS, which can outlast it. Adopting it
+        // is still right (it carries the rotated, still-valid refresh token),
+        // but the session is not healthy yet, so re-check rather than returning
+        // a token that is expired on arrival. Re-reading `expiresAt` here is
+        // also what makes a garbage store entry recoverable instead of sticky.
+        const stillNeedsRefresh =
+          !igrpToken.expiresAt || Date.now() >= igrpToken.expiresAt - TOKEN_REFRESH_BUFFER_MS;
+
+        if (stillNeedsRefresh) {
           // Introspect the refresh token to catch a server-side revocation
           // before we try to use it (fail-open: a flaky introspection must
           // never block refresh).
@@ -864,6 +1006,12 @@ export function withIGRPAuth(options: IGRPAuthOptions = {}): IGRPAuthInstance {
                     'a concurrent refresh on another pod may have consumed this refresh token.',
                   { error: igrpToken.error },
                 );
+              } else if (typeof igrpToken.expiresAt === 'number') {
+                // Also check REFRESHED tokens, not just the one minted at
+                // sign-in: an IdP client whose access-token lifetime is
+                // shortened after deployment would otherwise never trip the
+                // warning, and that is precisely when the refresh storm starts.
+                warnOnShortTokenLifetime(igrpToken.expiresAt);
               }
             } catch {
               console.error(
@@ -1004,12 +1152,19 @@ export function withIGRPAuth(options: IGRPAuthOptions = {}): IGRPAuthInstance {
         //
         // Revocation must still never **throw** — local sign-out always
         // succeeds, even if the IdP is unreachable. Errors surface as logs.
+        //
+        // The budget covers EVERY remote hop this event makes, not just the
+        // revoke: the recovery-store cleanup below can also be a network call
+        // when a shared store is configured, and an unbounded await there would
+        // hold the cookie clear open for exactly as long as that store is down.
+        const signOutDeadline = Date.now() + SIGNOUT_REVOCATION_BUDGET_MS;
+        const remainingBudget = () => Math.max(0, signOutDeadline - Date.now());
+
         try {
-          const result = await withDeadline(
-            revokeOidcSession(token, env),
-            SIGNOUT_REVOCATION_BUDGET_MS,
-            { ok: false as const, reason: 'timeout' as const },
-          );
+          const result = await withDeadline(revokeOidcSession(token, env), remainingBudget(), {
+            ok: false as const,
+            reason: 'timeout' as const,
+          });
           if (!result.ok) {
             console.warn('[next-auth.events.signOut] token revocation skipped/failed', result);
           }
@@ -1018,6 +1173,18 @@ export function withIGRPAuth(options: IGRPAuthOptions = {}): IGRPAuthInstance {
           // network errors and tag them, but defend against future changes.
           console.error('[next-auth.events.signOut] token revocation threw:', err);
         }
+
+        // Drop this session's rotation-recovery entry. The entry exists to
+        // bridge an RSC rotation to the next persisting read; once the user has
+        // signed out there is no next read, and leaving it would keep a token
+        // bundle for a dead session in the store for the rest of its TTL.
+        //
+        // Entries are keyed by the CONSUMED refresh token, so this clears the
+        // case that matters — a rotation whose cookie was never persisted, i.e.
+        // the cookie still holds the consumed token. A rotation that DID persist
+        // leaves an entry keyed by a token this session no longer knows; that
+        // one still expires by TTL. Bounded by the shared sign-out budget above.
+        await withDeadline(forgetRecoveredToken(token.refreshToken), remainingBudget(), undefined);
       },
     },
   };

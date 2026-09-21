@@ -19,6 +19,11 @@
     "jsx": "react-jsx",
 
     "strict": true,
+    // Unused imports/locals are errors here because this package has no
+    // ESLint config: `pnpm lint` is `pnpm -r run lint`, which silently skips
+    // any package without the script, so `tsc` is the only gate there is.
+    "noUnusedLocals": true,
+    "noUnusedParameters": true,
     "noEmit": true,
     "composite": false,
 

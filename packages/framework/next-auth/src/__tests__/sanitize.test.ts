@@ -101,3 +101,24 @@ describe('stripAuthApiSuffix', () => {
     expect(stripAuthApiSuffix('')).toBe('');
   });
 });
+
+describe('sanitizeRedirectUrl — fragments', () => {
+  // The relative branch returns the input verbatim, fragment included. Dropping
+  // it on the absolute branch made the same destination keep or lose its anchor
+  // depending only on how the caller happened to spell it.
+  it('keeps the fragment on a same-origin absolute URL', () => {
+    expect(sanitizeRedirectUrl('https://app.example/reports#q1', 'https://app.example')).toBe(
+      '/reports#q1',
+    );
+  });
+
+  it('round-trips a deep link the same way whether absolute or relative', () => {
+    const origin = 'https://app.example';
+    expect(sanitizeRedirectUrl(`${origin}/a/b?x=1#frag`, origin)).toBe('/a/b?x=1#frag');
+    expect(sanitizeRedirectUrl('/a/b?x=1#frag', origin)).toBe('/a/b?x=1#frag');
+  });
+
+  it('still refuses a cross-origin URL that carries a fragment', () => {
+    expect(sanitizeRedirectUrl('https://evil.example/x#y', 'https://app.example')).toBe('/');
+  });
+});

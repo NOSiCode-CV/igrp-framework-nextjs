@@ -103,7 +103,12 @@ export function sanitizeRedirectUrl(
         parsed.protocol === base.protocol &&
         parsed.hostname === base.hostname
       ) {
-        return parsed.pathname + parsed.search;
+        // Keep the fragment: the relative branch above returns the input
+        // verbatim (fragment included), so dropping it here made the same
+        // destination survive or lose its anchor depending on whether the
+        // caller happened to pass it absolute — which silently broke
+        // deep-links in menu entries resolved through this helper.
+        return parsed.pathname + parsed.search + parsed.hash;
       }
     } catch {
       return fallback;

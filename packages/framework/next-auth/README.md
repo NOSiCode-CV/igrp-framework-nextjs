@@ -95,10 +95,24 @@ development when the value is 60 or above. 45 leaves margin for jitter.
 ### Cookies
 
 When `NEXT_PUBLIC_BASE_PATH` is set, every NextAuth cookie name is suffixed with
-a slug derived from it (`next-auth.session-token.apps-template`). Without it,
-two IGRP apps on the same host under `/apps/a` and `/apps/b` write the _same_
-cookie name at the same path and overwrite each other's sessions. Apps at the
-host root keep the stock names.
+a slug derived from it, closed by a `~`
+(`next-auth.session-token.apps-template~`). Without it, two IGRP apps on the
+same host under `/apps/a` and `/apps/b` write the _same_ cookie name at the same
+path and overwrite each other's sessions. Apps at the host root keep the stock
+names.
+
+The trailing `~` is load-bearing. NextAuth reassembles chunked cookies by
+collecting every name that _starts with_ the configured one, so without a
+terminator an app under `/apps/hr` would swallow `/apps/hr-admin`'s cookie as if
+it were one of its own chunks — and clear it on sign-out. The terminator makes
+the suffix set prefix-free.
+
+> **Upgrading:** the `~` renames the cookie, so every current session under a
+> basePath is signed out once. The pre-rename cookie is not cleared
+> automatically (NextAuth only clears names matching the one it is configured
+> with) and lingers until it expires. To sweep it, call
+> `igrpDeleteAuthCookies()` from `@igrp/framework-next` — it matches by
+> basename, so it removes both the old and new forms.
 
 The `Secure` flag (and the `__Secure-` / `__Host-` prefixes) follows the same
 signal `next-auth` uses: `NEXTAUTH_URL`'s scheme, else https when `VERCEL` /
@@ -157,7 +171,22 @@ body stays yours:
 | `AUTH_PROVIDER` value | Description                                                                |
 | --------------------- | -------------------------------------------------------------------------- |
 | `igrp-auth` (default) | Generic OIDC — works with Keycloak, WSO2IS, or any OIDC-compliant provider |
-| `none`                | Disables authentication entirely                                           |
+| `none`                | Disables authentication entirely — must be set **explicitly**              |
+
+An **absent** `AUTH_PROVIDER` resolves to `igrp-auth`, so an unconfigured app
+fails closed with the configuration-error page rather than serving
+unauthenticated traffic. An **empty** `AUTH_PROVIDER=` is refused outright
+(`AUTH_PROVIDER_EMPTY`) instead of being treated as absent — defaulting it could
+silently switch authentication off.
+
+### Custom providers
+
+Passing a provider object (`provider: GitHubProvider({ ... })`) is supported, but
+that provider is **not managed** by this package: it has no IGRP issuer,
+discovery document or client credentials, so refresh, introspection, revocation
+and RP-initiated logout all no-op for it, and no access-token expiry is stamped
+on the session. Its lifetime is the NextAuth session cookie, and its token
+lifecycle is the application's responsibility.
 
 The OIDC callback URL to register on your provider is:
 `{NEXTAUTH_URL}/api/auth/callback/igrp-auth`
@@ -170,7 +199,7 @@ import type { Session } from 'next-auth';
 // Augmented fields (from @igrp/framework-next-auth/types):
 session.accessToken; // OIDC access token
 session.idToken; // OIDC ID token
-session.authProviderId; // "igrp-auth" | "none"
+session.authProviderId; // "igrp-auth" | "none" | a custom provider's own id
 session.expiresAt; // Unix ms when access token expires
 session.error; // "RefreshAccessTokenError" on failed refresh
 session.forceLogout; // true when refresh has failed — client should signOut()

@@ -3,7 +3,9 @@ import {
   assertAuthProviderEnv,
   getAuthProviderDiscoveryUrl,
   getAuthProviderIdFromEnv,
+  isOidcManagedProviderId,
   type AuthProviderId,
+  type SessionAuthProviderId,
 } from './providers';
 import { createInMemoryTokenRecoveryStore, type IGRPTokenRecoveryStore } from './token-store';
 import { sanitizeRedirectUrl, stripAuthApiSuffix } from './sanitize';
@@ -97,8 +99,23 @@ function getOpenIdConfiguration(discoveryUrl: string) {
   return promise;
 }
 
-function getProviderIdFromTokenOrEnv(token: JWT, env: AuthEnvironment): AuthProviderId {
-  return (token.authProviderId as AuthProviderId | undefined) ?? getAuthProviderIdFromEnv(env);
+function getProviderIdFromTokenOrEnv(token: JWT, env: AuthEnvironment): SessionAuthProviderId {
+  return token.authProviderId ?? getAuthProviderIdFromEnv(env);
+}
+
+/**
+ * Warns once that an OIDC operation was skipped because the session belongs to
+ * a provider this package does not manage (a custom provider object passed to
+ * `withIGRPAuth`). Silence here reads as "refresh mysteriously stopped".
+ */
+function warnUnmanagedProvider(operation: string, providerId: SessionAuthProviderId): void {
+  warnOnce(`oidc.unmanagedProvider.${operation}`, () =>
+    console.warn(
+      `[oidc.${operation}] skipped — "${providerId}" is not an IGRP-managed provider, so this ` +
+        'package has no issuer, discovery document or client credentials for it. Token lifecycle ' +
+        "for a custom provider is the application's responsibility.",
+    ),
+  );
 }
 
 function getClientCredentials(env: AuthEnvironment) {
@@ -200,7 +217,7 @@ export function configureOidcTokenRecoveryStore(store: IGRPTokenRecoveryStore): 
  * operator can tell "store down" apart from "IdP rejected the grant" without
  * flooding logs on every session read during an outage.
  */
-function warnRecoveryStoreFailure(operation: 'get' | 'set', error: unknown): void {
+function warnRecoveryStoreFailure(operation: 'get' | 'set' | 'delete', error: unknown): void {
   warnOnce('oidc.tokenRecoveryStore', () =>
     console.warn(
       `[oidc.tokenRecoveryStore] ${operation} failed — recovery degraded to cache miss; ` +
@@ -229,6 +246,40 @@ export async function getRecoveredToken(refreshToken: string | undefined): Promi
 }
 
 /**
+ * Drops a recovery entry, e.g. once its session has been signed out. Best
+ * effort: a store without `delete`, or one that throws, simply leaves the entry
+ * to expire by TTL.
+ */
+export async function forgetRecoveredToken(refreshToken: string | undefined): Promise<void> {
+  if (!refreshToken) return;
+  const { store } = recoveryStoreSlot();
+  if (!store.delete) return;
+  try {
+    await store.delete(refreshToken);
+  } catch (error) {
+    warnRecoveryStoreFailure('delete', error);
+  }
+}
+
+/**
+ * Whether a token read back from the recovery store carries usable auth
+ * material. Shape only — freshness is deliberately NOT checked here.
+ *
+ * A recovered token can legitimately be past its own `expires_at`: the entry
+ * lives for RECOVERY_TTL_MS, which can outlast the access token it holds. That
+ * entry is still worth adopting, because it carries the ROTATED refresh token —
+ * the only one the IdP will still accept. The caller adopts it and then, if the
+ * access token is spent, refreshes with that live refresh token. Rejecting it
+ * for staleness would send the caller back to replaying the consumed token,
+ * which is exactly the `invalid_grant` logout this cache exists to prevent.
+ */
+export function isUsableRecoveredToken(token: JWT | null | undefined): token is JWT {
+  return (
+    !!token && typeof token.accessToken === 'string' && token.accessToken.length > 0 && !token.error
+  );
+}
+
+/**
  * The auth material a refresh produces. Deliberately NOT a whole JWT: the
  * in-flight dedup below shares one network round-trip between every concurrent
  * caller, and those callers do not necessarily hold the same token — a
@@ -242,7 +293,7 @@ type RefreshDelta = {
   idToken?: string;
   expiresAt: number;
   refreshToken: string;
-  authProviderId: AuthProviderId;
+  authProviderId: SessionAuthProviderId;
 };
 
 type RefreshOutcome =
@@ -288,6 +339,17 @@ function failedRefresh(token: JWT): JWT {
 }
 
 export async function refreshOidcAccessToken(token: JWT, env: AuthEnvironment): Promise<JWT> {
+  // A provider this package does not manage has no token endpoint we could
+  // call. Returning the token untouched leaves the session to live out its
+  // NextAuth cookie, which is what a plain NextAuth app does; the previous
+  // behaviour walked into `getAuthProviderDiscoveryUrl` → `''` → `fetch('')`
+  // and force-logged the user out at the first refresh.
+  const providerId = getProviderIdFromTokenOrEnv(token, env);
+  if (!isOidcManagedProviderId(providerId)) {
+    warnUnmanagedProvider('refreshOidcAccessToken', providerId);
+    return token;
+  }
+
   if (!token.refreshToken) return failedRefresh(token);
 
   const refreshKey = token.refreshToken;
@@ -295,7 +357,7 @@ export async function refreshOidcAccessToken(token: JWT, env: AuthEnvironment): 
   let inflight = inflightMap.get(refreshKey);
   if (!inflight) {
     const tokenWithRefresh = token as JWT & { refreshToken: string };
-    inflight = performRefresh(tokenWithRefresh, env).finally(() => {
+    inflight = performRefresh(tokenWithRefresh, env, providerId).finally(() => {
       inflightMap.delete(refreshKey);
     });
     inflightMap.set(refreshKey, inflight);
@@ -310,9 +372,8 @@ export async function refreshOidcAccessToken(token: JWT, env: AuthEnvironment): 
 async function performRefresh(
   token: JWT & { refreshToken: string },
   env: AuthEnvironment,
+  providerId: AuthProviderId,
 ): Promise<RefreshOutcome> {
-  const providerId = getProviderIdFromTokenOrEnv(token, env);
-
   assertAuthProviderEnv(env, providerId);
 
   const discoveryUrl = getAuthProviderDiscoveryUrl(env, providerId);
@@ -382,7 +443,7 @@ async function performRefresh(
     // pre-flight recovery check. Peek once more before declaring the session
     // dead. With the default in-memory store this is a cheap no-op re-check.
     const recovered = await getRecoveredToken(token.refreshToken);
-    if (recovered && typeof recovered.accessToken === 'string' && !recovered.error) {
+    if (isUsableRecoveredToken(recovered)) {
       return { status: 'recovered', token: recovered };
     }
 
@@ -462,6 +523,9 @@ export type RevokeOidcSessionResult =
       reason:
         | 'no_refresh_token'
         | 'no_revocation_endpoint'
+        // The session belongs to a custom provider this package does not
+        // manage, so there is no endpoint (and no credentials) to revoke with.
+        | 'provider_not_managed'
         | 'http_error'
         | 'network_error'
         // Caller-side deadline: revocation did not settle within the
@@ -488,6 +552,10 @@ export async function revokeOidcSession(
   env: AuthEnvironment,
 ): Promise<RevokeOidcSessionResult> {
   const providerId = getProviderIdFromTokenOrEnv(token, env);
+  if (!isOidcManagedProviderId(providerId)) {
+    warnUnmanagedProvider('revokeOidcSession', providerId);
+    return { ok: false, reason: 'provider_not_managed' };
+  }
 
   assertAuthProviderEnv(env, providerId);
 
@@ -636,11 +704,15 @@ export async function buildEndSessionUrl(
   const isDev = env.NODE_ENV !== 'production';
 
   const providerId = getProviderIdFromTokenOrEnv(token, env);
-  if (providerId === 'none') {
-    if (isDev) {
-      console.warn(
-        '[oidc.buildEndSessionUrl] returning null — provider is "none" (AUTH_PROVIDER=none)',
-      );
+  if (!isOidcManagedProviderId(providerId)) {
+    if (providerId === 'none') {
+      if (isDev) {
+        console.warn(
+          '[oidc.buildEndSessionUrl] returning null — provider is "none" (AUTH_PROVIDER=none)',
+        );
+      }
+    } else {
+      warnUnmanagedProvider('buildEndSessionUrl', providerId);
     }
     return null;
   }
@@ -706,7 +778,12 @@ export async function introspectOidcToken(token: JWT, env: AuthEnvironment): Pro
   if (!token.refreshToken) return true;
 
   const providerId = getProviderIdFromTokenOrEnv(token, env);
-  if (providerId === 'none') return true;
+  // Not managed here (AUTH_PROVIDER=none, or a custom provider) — nothing to
+  // introspect against, and the gate fails open by design.
+  if (!isOidcManagedProviderId(providerId)) {
+    if (providerId !== 'none') warnUnmanagedProvider('introspectOidcToken', providerId);
+    return true;
+  }
 
   try {
     const discoveryUrl = getAuthProviderDiscoveryUrl(env, providerId);

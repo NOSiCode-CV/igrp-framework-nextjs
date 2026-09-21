@@ -13,6 +13,18 @@ import { defineConfig } from 'tsup';
  * importing `SessionProvider` / `useSafeSession` from a file that isn't
  * already a client component fails at render. Re-add it after the bundle is
  * written; `clean: true` means this always runs against fresh output.
+ *
+ * EXPECTED BUILD WARNING — this is not a failure:
+ *
+ *   dist/client.js (1:0): Module level directives cause errors when bundled,
+ *   "use client" in "dist/client.js" was ignored.
+ *
+ * That is the bundler announcing the very strip this hook repairs. It is
+ * emitted during the ESM phase, before `onSuccess` runs, so it describes an
+ * intermediate state, not the shipped file. The directive IS present in the
+ * final `dist/client.js`, and `src/__tests__/dist-contract.test.ts` asserts it
+ * on every build — that test, not the absence of this warning, is the signal
+ * to trust.
  */
 const CLIENT_ENTRIES = ['client.js'];
 

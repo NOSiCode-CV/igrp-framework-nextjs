@@ -4,9 +4,9 @@ import { redirect } from 'next/navigation';
 import { headers } from 'next/headers';
 import { sanitizeRedirectUrl } from '@igrp/framework-next-auth/sanitize';
 
-import { igrpGetAccessClientConfig } from '../lib/api-config';
-import { mapperApplications } from '../mappers/applications-mapper';
-import { logger } from '../logger';
+import { igrpGetAccessClientConfig } from '../lib/api-config.js';
+import { mapperApplications } from '../mappers/applications-mapper.js';
+import { logger } from '../logger.js';
 
 const getCachedAppsByUser = cache(async function fetchAppsByUserOnce() {
   const { token, baseUrl } = igrpGetAccessClientConfig();

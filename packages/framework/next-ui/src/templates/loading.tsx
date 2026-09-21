@@ -21,8 +21,10 @@ function IGRPTemplateLoading({
       )}
       role="status"
       aria-live="polite"
-      aria-label={text}
     >
+      {/* No `aria-label` here: it would override the element's content, so the
+          visible text below would stop being the accessible name the moment the
+          two diverge. `role="status"` already announces that content. */}
       <div className={cn('w-full max-w-md')}>
         <div className={cn('text-center')}>
           <IGRPIcon

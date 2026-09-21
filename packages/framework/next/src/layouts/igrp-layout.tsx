@@ -3,4 +3,4 @@
 export {
   IGRPLayoutFull as IGRPLayout,
   type IGRPLayoutFullArgs as IGRPLayoutArgs,
-} from './igrp-layout-full';
+} from './igrp-layout-full.js';

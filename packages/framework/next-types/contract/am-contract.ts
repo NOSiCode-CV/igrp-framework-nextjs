@@ -93,7 +93,7 @@ import type {
   IGRPStatus,
   IGRPTargetType,
   IGRPUserArgs,
-} from '../src/index';
+} from '../src/index.js';
 
 /** Compile error unless every member of `From` is assignable to `To`. */
 type AssignableTo<From, To> = [From] extends [To]
@@ -106,6 +106,38 @@ type Equivalent<A, B> = [A] extends [B]
     ? true
     : { error: 'B not assignable to A'; a: A; b: B }
   : { error: 'A not assignable to B'; a: A; b: B };
+
+/**
+ * Fails when `From` carries a property `To` does not mirror.
+ *
+ * This is the blind spot the assignability checks below cannot see, and it is
+ * not hypothetical: `IGRPUserDTO` grew `nic`, `phoneNumber`, `emailVerified`
+ * and `metadata`, and every `AssignableTo<IGRPUserDTO, IGRPUserArgs>` check
+ * stayed green throughout — a DTO with *extra* fields is still assignable to a
+ * narrower target. The drift only surfaced by reading the client's `.d.ts` by
+ * hand. `mapperUser` had been silently dropping all four.
+ *
+ * `Ignored` is for fields the framework deliberately does not carry. Naming
+ * one is a decision that has to be written down here, which is the point:
+ * an omission becomes visible in review instead of being indistinguishable
+ * from an oversight.
+ *
+ * It is constrained to `keyof From` so the exemption cannot outlive the field
+ * it exempts — if the AM client ever drops the property, the ignore stops
+ * compiling instead of quietly persisting as a claim nobody re-checked.
+ */
+type MissingKeys<From, To, Ignored extends PropertyKey> = Exclude<keyof From, keyof To | Ignored>;
+
+type MirrorsAllKeys<From, To, Ignored extends keyof From = never> = [
+  MissingKeys<From, To, Ignored>,
+] extends [never]
+  ? true
+  : {
+      error: 'DTO carries fields the framework type does not mirror';
+      missing: MissingKeys<From, To, Ignored>;
+      from: From;
+      to: To;
+    };
 
 /* -- Enum → literal union ------------------------------------------------- */
 // These are what the mappers used to cast away with `as`. TypeScript accepts a
@@ -159,6 +191,49 @@ type ApplicationPassThrough = Omit<ApplicationDTO, 'slug'>;
 export type _Application = AssignableTo<ApplicationPassThrough, Omit<IGRPApplicationArgs, 'slug'>>;
 export type _ApplicationSlug = AssignableTo<NonNullable<ApplicationDTO['slug']>, string | null>;
 
+/* -- Field coverage: every DTO property must be mirrored ------------------ */
+// The assignability block above proves the framework type is not *wider* than
+// the DTO. This block proves it is not *narrower* — i.e. that the AM client
+// has not grown a field the framework silently drops. Together they pin the
+// key sets; optionality and value types stay the assignability block's job.
+
+export type _RoleDepartmentKeys = MirrorsAllKeys<RoleDepartmentDTO, IGRPRoleDepartmentArgs>;
+export type _MenuEntryKeys = MirrorsAllKeys<MenuEntryDTO, IGRPMenuItemArgs>;
+export type _PermissionKeys = MirrorsAllKeys<PermissionDTO, IGRPPermissionArgs>;
+export type _RoleKeys = MirrorsAllKeys<RoleDTO, IGRPRoleArgs>;
+export type _DepartmentKeys = MirrorsAllKeys<DepartmentDTO, IGRPDepartmentArgs>;
+export type _RoleUserKeys = MirrorsAllKeys<RoleUserDTO, IGRPRoleUserArgs>;
+export type _GlobalConfigurationKeys = MirrorsAllKeys<
+  GlobalConfigurationDTO,
+  IGRPGlobalConfigurationArgs
+>;
+export type _FileUrlKeys = MirrorsAllKeys<FileUrlDTO, IGRPFileUrlArgs>;
+export type _ResourceItemKeys = MirrorsAllKeys<ResourceItemDTO, IGRPResourceItem>;
+export type _ResourceKeys = MirrorsAllKeys<ResourceDTO, IGRPResourceArgs>;
+export type _ApplicationKeys = MirrorsAllKeys<ApplicationDTO, IGRPApplicationArgs>;
+
+/*
+ * `IGRPUserArgs` is the one framework shape that is serialized to the browser
+ * (it is a prop of `'use client'` header and sidebar components), so it is a
+ * deliberate subset rather than a mirror. Each exclusion is named here, and
+ * the `keyof IGRPUserDTO` constraint means an exclusion cannot outlive the
+ * field it excludes:
+ *
+ * - `metadata`    — free-form `Record<string, unknown>` owned by the
+ *                   authorization server and enriched into issued JWTs.
+ * - `nic`         — national identity number; personal data no component renders.
+ * - `phoneNumber` — same.
+ * - `emailVerified` — no consumer today.
+ *
+ * Any *other* new `IGRPUserDTO` field fails here, which is the point: adding
+ * one to the browser payload has to be a decision someone writes down.
+ */
+export type _UserKeys = MirrorsAllKeys<
+  IGRPUserDTO,
+  IGRPUserArgs,
+  'metadata' | 'nic' | 'phoneNumber' | 'emailVerified'
+>;
+
 /* -- Force evaluation ----------------------------------------------------- */
 // Type aliases alone are lazy; assigning them pins every check to `true` and
 // surfaces the `{ error, From, To }` object in the compiler message when one
@@ -187,7 +262,31 @@ const assertions: [
   _Resource,
   _Application,
   _ApplicationSlug,
+  _RoleDepartmentKeys,
+  _MenuEntryKeys,
+  _PermissionKeys,
+  _RoleKeys,
+  _DepartmentKeys,
+  _RoleUserKeys,
+  _GlobalConfigurationKeys,
+  _FileUrlKeys,
+  _ResourceItemKeys,
+  _ResourceKeys,
+  _ApplicationKeys,
+  _UserKeys,
 ] = [
+  true,
+  true,
+  true,
+  true,
+  true,
+  true,
+  true,
+  true,
+  true,
+  true,
+  true,
+  true,
   true,
   true,
   true,

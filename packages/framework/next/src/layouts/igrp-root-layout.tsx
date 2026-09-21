@@ -1,8 +1,8 @@
 import { after } from 'next/server';
 import { IGRPNestedProviders } from '@igrp/framework-next-ui';
 import type { IGRPConfigArgs } from '@igrp/framework-next-types';
-import { igrpStartupSync } from '../lib/startup-sync';
-import { planAccessManagementSync } from '../lib/sync-plan';
+import { igrpStartupSync } from '../lib/startup-sync.js';
+import { planAccessManagementSync } from '../lib/sync-plan.js';
 
 export type IGRPRootLayoutArgs = {
   readonly children: React.ReactNode;

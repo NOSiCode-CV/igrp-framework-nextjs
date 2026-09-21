@@ -1,7 +1,7 @@
 'use client';
 
 import { useEffect } from 'react';
-import { useRouter } from 'next/navigation';
+import { usePathname, useRouter } from 'next/navigation';
 import { getSession, useSession } from '@igrp/framework-next-auth/client';
 
 /**
@@ -27,28 +27,20 @@ const ADAPTIVE_REFRESH_LEAD_MS = 45_000;
  */
 const ADAPTIVE_REFRESH_MIN_DELAY_MS = 5_000;
 
-/**
- * Strips the configured `basePath` from a browser pathname so the regex above
- * matches `/apps/template/login` the same as `/login`. `NEXT_PUBLIC_BASE_PATH`
- * is baked into the client bundle by Next.js at build time.
- */
-function stripBasePath(pathname: string): string {
-  const basePath = process.env.NEXT_PUBLIC_BASE_PATH ?? '';
-  if (!basePath) return pathname;
-  if (pathname === basePath) return '/';
-  if (pathname.startsWith(`${basePath}/`)) return pathname.slice(basePath.length);
-  return pathname;
-}
-
 export function IGRPSessionWatcher({ children }: { children: React.ReactNode }) {
   const { data: session, status } = useSession();
   const router = useRouter();
+  // `usePathname()` is already basePath-stripped by Next; it is here as a
+  // DEPENDENCY, not just a value. Reading `window.location.pathname` inside the
+  // effect while depending only on `[status, session, router]` meant an
+  // unauthenticated user who client-navigated from /login into a protected
+  // route never re-triggered the redirect — `status` had not changed.
+  const pathname = usePathname();
 
   useEffect(() => {
     // Already on the auth UI — that's the correct destination for an
     // unauthenticated/expired user. Navigating again would loop and stomp the
     // existing `?callbackUrl=…` set by middleware.
-    const pathname = stripBasePath(window.location.pathname);
     if (AUTH_UI_PATH.test(pathname)) return;
 
     // Refresh failed: the session cookie still decodes, so `status` stays
@@ -65,13 +57,15 @@ export function IGRPSessionWatcher({ children }: { children: React.ReactNode }) 
 
     if (status !== 'unauthenticated') return;
 
+    // The query string is not in `usePathname()`, and it is the part that
+    // carries the state the user should come back to.
     const currentPath = pathname + window.location.search;
     const target =
       currentPath && currentPath !== '/'
         ? `/login?callbackUrl=${encodeURIComponent(currentPath)}`
         : '/login';
     router.push(target);
-  }, [status, session, router]);
+  }, [status, session, router, pathname]);
 
   // Adaptive silent-refresh scheduler. The fixed-interval SessionProvider poll
   // (IGRP_SESSION_REFETCH_INTERVAL, default 150s) only works when it is tuned

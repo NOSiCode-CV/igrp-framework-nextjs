@@ -1,10 +1,10 @@
 import 'server-only';
 
-import type { IGRPAccessManagementSyncPlan } from './sync-plan';
-import { igrpSyncApplication } from './sync-application';
-import { igrpSyncMenus } from './sync-menus';
-import { igrpSyncPermissions } from './sync-permissions';
-import { igrpSyncRoutes } from './sync-routes';
+import type { IGRPAccessManagementSyncPlan } from './sync-plan.js';
+import { igrpSyncApplication } from './sync-application.js';
+import { igrpSyncMenus } from './sync-menus.js';
+import { igrpSyncPermissions } from './sync-permissions.js';
+import { igrpSyncRoutes } from './sync-routes.js';
 
 /**
  * Module-level promise-mutex: set on first invocation, subsequent calls share

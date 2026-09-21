@@ -1,16 +1,27 @@
 import type { Session } from '@igrp/framework-next-auth/session';
 import type { SessionProviderProps } from '@igrp/framework-next-auth/client';
 
-import type { IGRPMenuItemArgs, IGRPPermissionCatalogEntry } from './access-management';
-import type { IGRPMockDataAsync, IGRPPackageJson, IGRPToasterPosition } from './globals';
+import type { IGRPMenuItemArgs, IGRPPermissionCatalogEntry } from './access-management.js';
+import type { IGRPMockDataAsync, IGRPPackageJson, IGRPToasterPosition } from './globals.js';
 
 export type IGRPConfigArgs = {
   appCode: string;
   previewMode: boolean;
   syncAccess: boolean;
   appInformation: IGRPPackageJson;
+  /**
+   * Header and sidebar data source — **required in production too, not just in
+   * preview mode**. The name is a misnomer: the framework calls it on every
+   * render and keeps most of what it returns. See {@link IGRPMockDataAsync} for
+   * exactly which fields production overrides and which stay live.
+   */
   layoutMockData: IGRPMockDataAsync;
   font?: string;
+  /**
+   * @deprecated Read by nothing in `@igrp/framework-next` or
+   * `@igrp/framework-next-ui` — there is no language selector to show. Setting
+   * it has never had an effect. Kept for one release, then removed.
+   */
   showLanguageSelector?: boolean;
   layout: IGRPLayoutConfigArgs;
   apiManagementConfig?: {
@@ -132,19 +143,45 @@ export type IGRPConfigArgs = {
     duration?: number;
     closeButton?: boolean;
   };
+  /**
+   * @deprecated Read by nothing in `@igrp/framework-next` or
+   * `@igrp/framework-next-ui`. Login/logout redirects are driven by NextAuth
+   * and the template's `middleware.ts`, not by this field. Kept for one
+   * release, then removed.
+   */
   loginUrl?: string;
+  /**
+   * @deprecated Read by nothing — see {@link IGRPConfigArgs.loginUrl}. Kept
+   * for one release, then removed.
+   */
   logoutUrl?: string;
+  /**
+   * @deprecated Read by nothing at this level, and easily mistaken for the one
+   * that works: the settings link is gated by
+   * {@link IGRPHeaderDataArgs.showSettings}, set inside
+   * `layoutMockData.getHeaderData()`. Move the flag there. Kept for one
+   * release, then removed.
+   */
   showSettings?: boolean;
   sessionArgs?: Partial<SessionProviderProps>;
 };
 
 /**
- * Shape of a template's config factory — annotate the default export of
+ * Shape of a template's config factory — annotate `createConfig` in
  * `src/igrp.template.config.ts` with this to have the whole config object
  * checked at its definition site rather than only where `igrpBuildConfig`
- * consumes it.
+ * consumes it:
+ *
+ * ```ts
+ * export const createConfig: IGRPConfigClient = (config) => igrpBuildConfig({ ... });
+ * ```
+ *
+ * It previously read `() => Promise<IGRPConfigArgs>` and its docs pointed at a
+ * *default* export — neither matched any template. The real factory is a named
+ * export taking the per-request layout config, which is why nothing could
+ * apply this type.
  */
-export type IGRPConfigClient = () => Promise<IGRPConfigArgs>;
+export type IGRPConfigClient = (config: IGRPLayoutConfigArgs) => Promise<IGRPConfigArgs>;
 
 export type IGRPLayoutConfigArgs = {
   session: Session | null;

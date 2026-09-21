@@ -11,9 +11,9 @@ import {
 } from '@igrp/framework-next-ui';
 import type { IGRPConfigArgs } from '@igrp/framework-next-types';
 
-import { igrpSetAccessClientConfig } from '../lib/api-config';
-import { HeaderDataProvider } from './providers/header-data-provider';
-import { SidebarDataProvider } from './providers/sidebar-data-provider';
+import { igrpSetAccessClientConfig } from '../lib/api-config.js';
+import { HeaderDataProvider } from './providers/header-data-provider.js';
+import { SidebarDataProvider } from './providers/sidebar-data-provider.js';
 
 export type IGRPLayoutFullArgs = {
   readonly children: React.ReactNode;

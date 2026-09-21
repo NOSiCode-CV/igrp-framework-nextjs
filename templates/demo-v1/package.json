@@ -27,7 +27,6 @@
     "@hookform/resolvers": "5.9.1",
     "@igrp/framework-next": "workspace:*",
     "@igrp/framework-next-auth": "workspace:*",
-    "@igrp/framework-next-types": "workspace:*",
     "@igrp/framework-next-ui": "workspace:*",
     "@igrp/igrp-framework-react-design-system": "workspace:*",
     "@igrp/platform-access-management-client-ts": "0.2.0-beta.16",
@@ -43,6 +42,7 @@
     "zod": "4.6.5"
   },
   "devDependencies": {
+    "@igrp/framework-next-types": "workspace:*",
     "@biomejs/biome": "2.5.13",
     "@tailwindcss/postcss": "4.3.3",
     "@types/node": "25.9.1",

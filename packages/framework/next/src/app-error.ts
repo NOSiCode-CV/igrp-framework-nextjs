@@ -24,7 +24,7 @@
 //   const { message } = parsePublicDigest(error.digest);
 // ─────────────────────────────────────────────────────────────────────────────
 
-import { logger } from './logger';
+import { logger } from './logger.js';
 
 /**
  * Delimiter used in digest to pass user-friendly messages through production

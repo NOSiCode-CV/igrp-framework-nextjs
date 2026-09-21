@@ -16,7 +16,7 @@ vi.mock('react', async (importOriginal) => {
 
 // Import AFTER vi.mock so the mock is in place when the module initialises.
 const { igrpSetAccessClientConfig, igrpGetAccessClientConfig, igrpResetAccessClientConfig } =
-  await import('../api-config');
+  await import('../api-config.js');
 
 describe('igrpSetAccessClientConfig / igrpGetAccessClientConfig', () => {
   beforeEach(() => {

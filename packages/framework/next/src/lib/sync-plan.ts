@@ -8,8 +8,8 @@ import type {
 } from '@igrp/framework-next-types';
 import type { AccessManagementClient } from '@igrp/platform-access-management-client-ts';
 
-import { IgrpConfigError } from '../errors';
-import { igrpGetAccessManagementClient } from './sync-client';
+import { IgrpConfigError } from '../errors.js';
+import { igrpGetAccessManagementClient } from './sync-client.js';
 
 /**
  * Validated, ready-to-execute plan for the Access Management startup sync.

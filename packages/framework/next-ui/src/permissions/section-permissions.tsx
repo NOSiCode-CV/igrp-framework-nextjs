@@ -1,10 +1,10 @@
 'use client';
 
 import { createContext, useContext, useMemo, useState, type ReactNode } from 'react';
-import { SessionContext } from 'next-auth/react';
+import { useOptionalSession } from '@igrp/framework-next-auth/client';
 import type { IGRPClaimsState } from '@igrp/framework-next-auth/claims';
 
-import { resolveLiveClaims, type LiveClaimsSession } from './resolve-live-claims';
+import { resolveLiveClaims } from './resolve-live-claims.js';
 
 type PermissionsContextValue = {
   state: IGRPClaimsState;
@@ -14,14 +14,6 @@ type PermissionsContextValue = {
 const PermissionsContext = createContext<PermissionsContextValue | null>(null);
 
 /**
- * Stand-in used when `next-auth/react` did not create its context (it declares
- * it with an optional-call `createContext?.(…)`, so it can be undefined). Keeps
- * the `useContext` call unconditional — a hook must never be called
- * conditionally.
- */
-const NoSessionContext = createContext<unknown>(undefined);
-
-/**
  * Seeds permission claims into client context, then keeps them live.
  *
  * `state` is the server-rendered `IGRPClaimsState` (from `igrpGetClaims()`) and
@@ -29,6 +21,12 @@ const NoSessionContext = createContext<unknown>(undefined);
  * full page load, the claims are additionally re-decoded from the live session
  * — see `resolveLiveClaims` for the three guards (no provider / loading /
  * non-JWT token) and why each is required.
+ *
+ * The session is read through `useOptionalSession()` from
+ * `@igrp/framework-next-auth/client`, NOT `useSession()`, which throws without
+ * a provider — this component works standalone today and must keep working.
+ * That helper lives behind the auth package's client entry rather than here so
+ * this package does not reach into `next-auth/react` directly.
  *
  * `setState` sets an explicit override that wins over both the seed and the
  * live decode. It is the seam for a future active-role switch; nothing consumes
@@ -43,18 +41,10 @@ export function IGRPSectionPermissions({
 }) {
   const [override, setOverride] = useState<IGRPClaimsState | null>(null);
 
-  // Read the session context DIRECTLY. `useSession()` throws
-  // ("must be wrapped in a <SessionProvider />") when no provider is mounted,
-  // which would turn a standalone-capable component into one with a hard
-  // precondition — a breaking change for existing consumers. `useSafeSession`
-  // is not safe either: it delegates straight to the same hook.
-  const sessionCtx = useContext((SessionContext ?? NoSessionContext) as typeof NoSessionContext) as
-    | { data?: { accessToken?: string } | null; status?: LiveClaimsSession['status'] }
-    | null
-    | undefined;
-
+  const sessionCtx = useOptionalSession();
   const status = sessionCtx?.status;
-  const accessToken = sessionCtx?.data?.accessToken;
+  const accessToken = (sessionCtx?.data as { accessToken?: string } | null | undefined)
+    ?.accessToken;
 
   const live = useMemo(
     () =>

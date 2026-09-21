@@ -5,10 +5,20 @@
     "moduleResolution": "bundler",
     "allowSyntheticDefaultImports": true,
     "esModuleInterop": true,
-    "allowJs": true,
     "strict": true,
+    // No ESLint in the framework packages (repo KNOWN-ISSUES #1); these are the
+    // compiler-side stand-in, mirroring what next-auth adopted.
+    "noUnusedLocals": true,
+    "noUnusedParameters": true,
     "noEmit": false,
     "isolatedModules": true,
+    // Guards the package invariant: every import/export is erased exactly as
+    // written, so a value import cannot slip into a package that ships no JS.
+    "verbatimModuleSyntax": true,
+    // Declaration-only package: every export must be emittable from its own
+    // declaration alone, with no cross-file inference. `allowJs` is deliberately
+    // absent — there is no JS under `src/`, and it is mutually exclusive with this.
+    "isolatedDeclarations": true,
     "skipLibCheck": true,
     "forceConsistentCasingInFileNames": true,
     "resolveJsonModule": true,

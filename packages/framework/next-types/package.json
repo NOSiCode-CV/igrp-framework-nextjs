@@ -33,15 +33,16 @@
   ],
   "scripts": {
     "dev": "tsc --watch",
-    "build": "rimraf dist tsconfig.tsbuildinfo && pnpm format && pnpm check:barrel && pnpm check:contract && tsc -b",
+    "build": "rimraf dist tsconfig.tsbuildinfo && pnpm format && pnpm check:barrel && pnpm check:contract && tsc -b && pnpm check:dist",
     "format": "prettier --write .",
     "release": "pnpm build && pnpm publish --registry=https://sonatype.nosi.cv/repository/igrp/ --tag latest --no-git-checks",
     "clean-all": "rimraf node_modules && rimraf dist && rimraf tsconfig.tsbuildinfo",
+    "typecheck": "tsc -p tsconfig.contract.json",
     "check:contract": "tsc -p tsconfig.contract.json",
-    "check:barrel": "node scripts/check-barrel.mjs"
+    "check:barrel": "node scripts/check-barrel.mjs",
+    "check:dist": "node scripts/check-dist.mjs"
   },
   "peerDependencies": {
-    "next": "^15.5.0",
     "next-auth": "^4.24.0",
     "react": "^19.0.0"
   },
@@ -52,7 +53,6 @@
     "@igrp/platform-access-management-client-ts": "^0.2.0-beta.16",
     "@types/node": "^24",
     "@types/react": "^19",
-    "next": "15.5.25",
     "next-auth": "4.24.15",
     "prettier": "3.9.6",
     "react": "19.2.8",
@@ -68,9 +68,6 @@
     "access": "public"
   },
   "peerDependenciesMeta": {
-    "next": {
-      "optional": true
-    },
     "react": {
       "optional": true
     }

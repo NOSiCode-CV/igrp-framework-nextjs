@@ -2,7 +2,7 @@
 
 import { claimsAllow } from '@igrp/framework-next-auth/claims';
 
-import { usePermissionsContext } from './section-permissions';
+import { usePermissionsContext } from './section-permissions.js';
 
 /** Read permission claims from context. `isAllowed(name)` follows the matching rule. */
 export function usePermissions() {

@@ -2,11 +2,11 @@
 import type { IGRPConfigArgs } from '@igrp/framework-next-types';
 import { IGRPTemplateSidebar } from '@igrp/framework-next-ui';
 
-import { IgrpLayoutDataError } from '../../errors';
-import { igrpSetAccessClientConfig } from '../../lib/api-config';
-import { fetchAppsByUser } from '../../hooks/use-applications';
-import { fetchMenus } from '../../hooks/use-menus';
-import { fetchCurrentUser } from '../../hooks/use-user';
+import { IgrpLayoutDataError } from '../../errors.js';
+import { igrpSetAccessClientConfig } from '../../lib/api-config.js';
+import { fetchAppsByUser } from '../../hooks/use-applications.js';
+import { fetchMenus } from '../../hooks/use-menus.js';
+import { fetchCurrentUser } from '../../hooks/use-user.js';
 
 type SidebarDataProviderProps = {
   config: Pick<IGRPConfigArgs, 'appCode' | 'layoutMockData' | 'previewMode'>;

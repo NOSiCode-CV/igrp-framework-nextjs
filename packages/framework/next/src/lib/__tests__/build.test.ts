@@ -1,6 +1,6 @@
 import { describe, it, expect } from 'vitest';
 
-import { igrpBuildConfig } from '../build';
+import { igrpBuildConfig } from '../build.js';
 import type { IGRPConfigArgs } from '@igrp/framework-next-types';
 
 // Loose builder — runtime configs are looser than the declared type

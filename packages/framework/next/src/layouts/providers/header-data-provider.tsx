@@ -3,8 +3,8 @@ import type { IGRPConfigArgs } from '@igrp/framework-next-types';
 import { IGRPTemplateHeader } from '@igrp/framework-next-ui';
 import type { BreadcrumbItem, IGRPHeaderSlots } from '@igrp/framework-next-ui';
 
-import { igrpSetAccessClientConfig } from '../../lib/api-config';
-import { fetchCurrentUser } from '../../hooks/use-user';
+import { igrpSetAccessClientConfig } from '../../lib/api-config.js';
+import { fetchCurrentUser } from '../../hooks/use-user.js';
 
 type HeaderDataProviderProps = {
   config: Pick<IGRPConfigArgs, 'layoutMockData' | 'previewMode'>;

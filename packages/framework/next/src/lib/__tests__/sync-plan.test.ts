@@ -8,8 +8,8 @@ vi.mock('../sync-client', () => ({
   })),
 }));
 
-import { planAccessManagementSync, type IGRPPlanAccessManagementSyncArgs } from '../sync-plan';
-import { IgrpConfigError } from '../../errors';
+import { planAccessManagementSync, type IGRPPlanAccessManagementSyncArgs } from '../sync-plan.js';
+import { IgrpConfigError } from '../../errors.js';
 
 const makeArgs = (
   overrides: Partial<IGRPPlanAccessManagementSyncArgs> = {},

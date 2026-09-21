@@ -1,7 +1,7 @@
 import { describe, it, expect } from 'vitest';
 import type { IGRPClaimsState } from '@igrp/framework-next-auth/claims';
 
-import { resolveLiveClaims } from '../resolve-live-claims';
+import { resolveLiveClaims } from '../resolve-live-claims.js';
 
 /**
  * Regression cover for: client permission claims frozen for the whole page

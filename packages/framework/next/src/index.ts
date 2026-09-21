@@ -5,36 +5,36 @@
 // IMPORTANT: keep explicit named re-exports (no wildcard `export *`, no
 // aliasing) so the emitted unbundled exports match the source 1:1.
 
-export { IGRPGlobalLoading } from './components/global-loading';
+export { IGRPGlobalLoading } from './components/global-loading.js';
 
-export { IGRPLayoutFull, type IGRPLayoutFullArgs } from './layouts/igrp-layout-full';
-export { IGRPLayoutBlank, type IGRPLayoutBlankArgs } from './layouts/igrp-layout-blank';
+export { IGRPLayoutFull, type IGRPLayoutFullArgs } from './layouts/igrp-layout-full.js';
+export { IGRPLayoutBlank, type IGRPLayoutBlankArgs } from './layouts/igrp-layout-blank.js';
 // @deprecated Use IGRPLayoutFull instead.
-export { IGRPLayout, type IGRPLayoutArgs } from './layouts/igrp-layout';
+export { IGRPLayout, type IGRPLayoutArgs } from './layouts/igrp-layout.js';
 
-export { IGRPRootLayout, type IGRPRootLayoutArgs } from './layouts/igrp-root-layout';
+export { IGRPRootLayout, type IGRPRootLayoutArgs } from './layouts/igrp-root-layout.js';
 
-export { igrpBuildConfig } from './lib/build';
+export { igrpBuildConfig } from './lib/build.js';
 
-export { igrpGetAccessClient, igrpResetAccessClient } from './lib/api-client';
+export { igrpGetAccessClient, igrpResetAccessClient } from './lib/api-client.js';
 
 export {
   type IGRPClientRuntimeConfig,
   igrpGetAccessClientConfig,
   igrpResetAccessClientConfig,
   igrpSetAccessClientConfig,
-} from './lib/api-config';
+} from './lib/api-config.js';
 
 export {
   isIgrpAuthBypass,
   igrpGetClaims,
   igrpAuthorize,
   igrpAssertAuthorize,
-} from './lib/permissions';
+} from './lib/permissions.js';
 
-export { igrpBuildQueryString } from './lib/build-query-string';
+export { igrpBuildQueryString } from './lib/build-query-string.js';
 
-export { igrpDeleteAuthCookies } from './lib/delete-auth-cookies';
+export { igrpDeleteAuthCookies } from './lib/delete-auth-cookies.js';
 
 // Typed errors — also importable via `@igrp/framework-next/errors` for
 // consumers who want to isolate error imports from the server entry.
@@ -47,4 +47,4 @@ export {
   type IgrpErrorCode,
   type IgrpErrorContext,
   type IgrpErrorShape,
-} from './errors';
+} from './errors.js';

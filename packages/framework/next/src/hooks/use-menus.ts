@@ -4,9 +4,9 @@ import { redirect } from 'next/navigation';
 import { headers } from 'next/headers';
 import { sanitizeRedirectUrl } from '@igrp/framework-next-auth/sanitize';
 
-import { igrpGetAccessClientConfig } from '../lib/api-config';
-import { mapperMenus } from '../mappers/menus-mapper';
-import { logger } from '../logger';
+import { igrpGetAccessClientConfig } from '../lib/api-config.js';
+import { mapperMenus } from '../mappers/menus-mapper.js';
+import { logger } from '../logger.js';
 
 // Per-request dedup via React cache. The token is read INSIDE the cached fn (not
 // passed as an argument), so it is never embedded in a cross-request cache key

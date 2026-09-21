@@ -1,4 +1,4 @@
-import type { IGRPUserArgs } from './access-management';
+import type { IGRPUserArgs } from './access-management.js';
 
 /**
  * Data for the framework header bar.

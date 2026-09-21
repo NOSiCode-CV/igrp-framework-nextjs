@@ -1,20 +1,14 @@
 'use client';
 
-import { useEffect, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import Image from 'next/image';
 import { unstable_rethrow } from 'next/navigation';
 import { cn, IGRPButton } from '@igrp/igrp-framework-react-design-system';
 
+import { withBasePath } from '../lib/utils.js';
+
 const ANIMATION_DELAY_MS = 300;
 const RESET_DELAY_MS = 1000;
-
-function withBasePath(src: string): string {
-  const basePath = process.env.NEXT_PUBLIC_BASE_PATH ?? '';
-  if (!basePath || !src.startsWith('/') || src.startsWith('//') || src.startsWith(`${basePath}/`)) {
-    return src;
-  }
-  return `${basePath}${src}`;
-}
 
 const DEFAULT_COPY = {
   title: 'Ocorreu um erro inesperado.',
@@ -52,6 +46,16 @@ function IGRPGlobalError({
 }: IGRPGlobalErrorProps) {
   const [isResetting, setIsResetting] = useState(false);
   const [errorVisible, setErrorVisible] = useState(false);
+  const resetTimer = useRef<ReturnType<typeof setTimeout> | null>(null);
+
+  // The reset timer outlives the component whenever `reset()` succeeds, which
+  // is the normal case: it re-renders the segment and unmounts this fallback.
+  useEffect(
+    () => () => {
+      if (resetTimer.current !== null) clearTimeout(resetTimer.current);
+    },
+    [],
+  );
 
   useEffect(() => {
     if (children) return;
@@ -66,7 +70,8 @@ function IGRPGlobalError({
 
   const handleReset = () => {
     setIsResetting(true);
-    setTimeout(() => {
+    resetTimer.current = setTimeout(() => {
+      resetTimer.current = null;
       reset();
       setIsResetting(false);
     }, RESET_DELAY_MS);

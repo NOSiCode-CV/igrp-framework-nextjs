@@ -297,6 +297,14 @@
       "manifestHash": "a5c93138d0801e80",
       "undo": [],
       "fileHashes": {}
+    },
+    {
+      "id": "38-config-client-annotation",
+      "appliedAt": "2026-09-21T00:00:00.000Z",
+      "cliVersion": "0.1.0-beta.141",
+      "manifestHash": "4b086c104c4be8a7",
+      "undo": [],
+      "fileHashes": {}
     }
   ]
 }

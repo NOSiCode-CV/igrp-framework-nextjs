@@ -6,16 +6,18 @@ import {
   SidebarMenuItem,
 } from '@igrp/igrp-framework-react-design-system';
 
-import type { LeafNode } from './utils';
-import { resolveHref, resolveAnchorTag, isItemActive, ACTIVE_MENU_ITEM_CLASS } from './utils';
-import { MenuItemLink } from './menu-item-link';
+import type { LeafNode } from './utils.js';
+import { resolveHref, resolveAnchorTag, isItemActive, ACTIVE_MENU_ITEM_CLASS } from './utils.js';
+import { menuLinkAriaLabel, type IGRPMenuLabels } from './labels.js';
+import { MenuItemLink } from './menu-item-link.js';
 
 interface LeafMenuItemProps {
   node: LeafNode;
   pathname: string;
+  labels: IGRPMenuLabels;
 }
 
-export function LeafMenuItem({ node, pathname }: LeafMenuItemProps) {
+export function LeafMenuItem({ node, pathname, labels }: LeafMenuItemProps) {
   const { item } = node;
   const href = resolveHref(item);
   const isAnchor = resolveAnchorTag(item);
@@ -34,7 +36,7 @@ export function LeafMenuItem({ node, pathname }: LeafMenuItemProps) {
           isAnchor={isAnchor}
           isActive={isActive}
           target={item.target}
-          aria-label={item.target === '_blank' ? `${item.name} (opens in new tab)` : item.name}
+          aria-label={menuLinkAriaLabel(item.name, item.target, labels)}
         >
           {item.icon && <IGRPIcon iconName={item.icon} />}
           <span>{item.name}</span>

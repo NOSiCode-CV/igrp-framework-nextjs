@@ -16,9 +16,9 @@ vi.mock('../../mappers/applications-mapper', () => ({
   mapperApplications: (r: { data: unknown[] }) => r.data,
 }));
 
-const { fetchAppByCode } = await import('../use-applications');
+const { fetchAppByCode } = await import('../use-applications.js');
 const { igrpSetAccessClientConfig, igrpResetAccessClientConfig } =
-  await import('../../lib/api-config');
+  await import('../../lib/api-config.js');
 
 describe('fetchAppByCode selects the exact code match', () => {
   beforeEach(() => {

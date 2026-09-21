@@ -1,6 +1,30 @@
-import type { IGRPHeaderDataArgs } from './header';
-import type { IGRPSidebarDataArgs } from './sidebar';
+import type { IGRPHeaderDataArgs } from './header.js';
+import type { IGRPSidebarDataArgs } from './sidebar.js';
 
+/**
+ * The app's layout data source for the framework header and sidebar.
+ *
+ * **Despite the name, this is not preview-only.** Both functions are invoked on
+ * every render in *both* modes — `SidebarDataProvider` calls `getSidebarData()`
+ * before it branches on `previewMode` at all, and `HeaderDataProvider` calls
+ * `getHeaderData()` in each branch. In production the framework overrides only
+ * the fields it can fetch from Access Management and keeps everything else
+ * exactly as returned here:
+ *
+ * | Returned by            | Overridden in production                              | Live in production                                                                               |
+ * | ---------------------- | ----------------------------------------------------- | ------------------------------------------------------------------------------------------------ |
+ * | `getHeaderData()`      | `user`, `showIGRPSidebarTrigger`                       | every other `show*` flag, `settingsUrl`, `settingsIcon`, `notificationsUrl`, `userProfileUrl`, `headerLogo` |
+ * | `getSidebarData()`     | `user`, `menuItems`, `apps`, `appCode`, `showPreviewMode` | `defaultOpen`, `showAppSwitcher`, `appCenterUrl`, `showMenuSearch`, `showNotifications`          |
+ *
+ * So returning a stub from these "because it's only mock data" silently drops
+ * the entire header and sidebar configuration in production — no error, no type
+ * complaint, just chrome that renders nothing. Configure them unconditionally
+ * and let `previewMode` decide only what the *fetched* values stand in for,
+ * which is what `templates/demo-v1` does.
+ *
+ * The name is a misnomer kept for compatibility; see the repo `KNOWN-ISSUES.md`
+ * for the planned rename.
+ */
 export interface IGRPMockDataAsync {
   getHeaderData: () => Promise<IGRPHeaderDataArgs>;
   getSidebarData: () => Promise<IGRPSidebarDataArgs>;

@@ -1,5 +1,5 @@
 import { AccessManagementClient } from '@igrp/platform-access-management-client-ts';
-import { igrpGetAccessClientConfig, igrpResetAccessClientConfig } from './api-config';
+import { igrpGetAccessClientConfig, igrpResetAccessClientConfig } from './api-config.js';
 
 export function igrpGetAccessClient(): AccessManagementClient {
   const { baseUrl, token, timeout } = igrpGetAccessClientConfig();

@@ -10,17 +10,29 @@ import {
   useIGRPToast,
 } from '@igrp/igrp-framework-react-design-system';
 
-import { type BreadcrumbItem, IGRPTemplateBreadcrumbs } from './breadcrumbs';
-import { IGRPTemplateCommandSearch } from './command-search';
-import { IGRPTemplateModeSwitcher } from './mode-switcher';
-import { IGRPTemplateNavUser } from './nav-user';
-import { IGRPTemplateNotifications } from './notifications';
-import { IGRPTemplateImage } from './template-image';
+import { type BreadcrumbItem, IGRPTemplateBreadcrumbs } from './breadcrumbs.js';
+import {
+  IGRPTemplateCommandSearch,
+  type IGRPCommandItem,
+  type IGRPCommandSearchLabels,
+} from './command-search.js';
+import { IGRPTemplateModeSwitcher, type IGRPModeSwitcherLabels } from './mode-switcher.js';
+import { IGRPTemplateNavUser, type IGRPNavUserLabels } from './nav-user.js';
+import { IGRPTemplateNotifications, type IGRPNotificationsLabels } from './notifications.js';
+import { IGRPTemplateImage } from './template-image.js';
+import { withBasePath } from '../lib/utils.js';
 import Image from 'next/image';
 import Link from 'next/link';
 
-/** Bundled logo used when the header data carries no logo, or its logo fails to load. */
-const defaultHeaderLogo = `${process.env.NEXT_PUBLIC_BASE_PATH ?? ''}/logo-no-text.png`;
+/**
+ * Logo used when the header data carries no logo, or its logo fails to load.
+ *
+ * This package publishes only `dist`, so the file is NOT shipped with it — the
+ * path is a contract with the consuming app's `public/` directory. Apps that do
+ * not have it should pass `fallbackLogo`, otherwise the fallback is itself a
+ * broken image, which is the one case a fallback exists to prevent.
+ */
+const DEFAULT_HEADER_LOGO = '/logo-no-text.png';
 
 /**
  * Consumer-injected header content, positioned by the framework.
@@ -61,7 +73,8 @@ function HeaderSlot({ children }: { children: React.ReactNode }) {
 }
 
 interface IGRPTemplateHeaderProps {
-  data: IGRPHeaderDataArgs;
+  /** Optional because the component already renders nothing without it. */
+  data?: IGRPHeaderDataArgs;
   className?: string;
   /** Pre-resolved breadcrumb items. Forwarded to IGRPTemplateBreadcrumbs. */
   breadcrumbs?: BreadcrumbItem[];
@@ -69,6 +82,37 @@ interface IGRPTemplateHeaderProps {
   breadcrumbRouteLabels?: Record<string, string>;
   /** Consumer-injected content. See IGRPHeaderSlots for positions and gating. */
   slots?: IGRPHeaderSlots;
+  /**
+   * Items for the built-in command palette, gated by `showSearch`.
+   *
+   * Without these the palette opens empty on every ⌘K — the only way to give it
+   * contents used to be replacing it wholesale through `slots.search`.
+   */
+  commands?: IGRPCommandItem[];
+  /** App-relative path to the logo used when `headerLogo` is absent or fails. */
+  fallbackLogo?: string;
+  /**
+   * Accessible name of the built-in settings link. pt-PT default.
+   *
+   * The link renders an icon and nothing else, so without this a screen reader
+   * announces only the href.
+   */
+  settingsLabel?: string;
+  /**
+   * Partial overrides of the pt-PT strings of the header's children.
+   *
+   * Each child owns its own catalog, but the header is how apps actually mount
+   * them — without these pass-throughs the override props existed and were
+   * unreachable.
+   */
+  navUserLabels?: Partial<IGRPNavUserLabels>;
+  commandSearchLabels?: Partial<IGRPCommandSearchLabels>;
+  notificationsLabels?: Partial<IGRPNotificationsLabels>;
+  modeSwitcherLabels?: Partial<IGRPModeSwitcherLabels>;
+  /** Screen-reader label for the breadcrumb home link. pt-PT default. */
+  breadcrumbHomeLabel?: string;
+  /** Screen-reader label for the collapsed-breadcrumbs menu. pt-PT default. */
+  breadcrumbEllipsisLabel?: string;
 }
 
 function IGRPTemplateHeader({
@@ -77,6 +121,15 @@ function IGRPTemplateHeader({
   breadcrumbs,
   breadcrumbRouteLabels,
   slots,
+  commands,
+  fallbackLogo = DEFAULT_HEADER_LOGO,
+  settingsLabel = 'Definições',
+  navUserLabels,
+  commandSearchLabels,
+  notificationsLabels,
+  modeSwitcherLabels,
+  breadcrumbHomeLabel,
+  breadcrumbEllipsisLabel,
 }: IGRPTemplateHeaderProps) {
   const { igrpToast } = useIGRPToast();
 
@@ -143,7 +196,7 @@ function IGRPTemplateHeader({
             {showIGRPHeaderLogo && (
               <div className="size-10 rounded-lg overflow-hidden flex items-center justify-center">
                 <IGRPTemplateImage
-                  src={headerLogo || defaultHeaderLogo}
+                  src={headerLogo || withBasePath(fallbackLogo)}
                   alt="IGRP"
                   width={40}
                   height={40}
@@ -151,7 +204,7 @@ function IGRPTemplateHeader({
                   priority
                   fallback={
                     <Image
-                      src={defaultHeaderLogo}
+                      src={withBasePath(fallbackLogo)}
                       alt="IGRP"
                       width={40}
                       height={40}
@@ -184,20 +237,31 @@ function IGRPTemplateHeader({
               orientation="vertical"
               className={cn('mr-2 data-[orientation=vertical]:h-4')}
             />
-            <IGRPTemplateBreadcrumbs items={breadcrumbs} routeLabels={breadcrumbRouteLabels} />
+            <IGRPTemplateBreadcrumbs
+              items={breadcrumbs}
+              routeLabels={breadcrumbRouteLabels}
+              homeLabel={breadcrumbHomeLabel}
+              ellipsisLabel={breadcrumbEllipsisLabel}
+            />
           </>
         )}
       </div>
       <div className={cn('flex items-center gap-2 shrink-0')}>
         {showSearch &&
-          (slots?.search ? <HeaderSlot>{slots.search}</HeaderSlot> : <IGRPTemplateCommandSearch />)}
+          (slots?.search ? (
+            <HeaderSlot>{slots.search}</HeaderSlot>
+          ) : (
+            <IGRPTemplateCommandSearch commands={commands} labels={commandSearchLabels} />
+          ))}
 
         {showSettings &&
           (slots?.settings ? (
             <HeaderSlot>{slots.settings}</HeaderSlot>
           ) : (
-            <Link href={settingsUrl || '/settings'}>
-              <IGRPIcon iconName={settingsIcon ?? 'Settings'} />
+            // `aria-label` IS the accessible name here — it overrides element
+            // content, so an additional sr-only span would never be announced.
+            <Link href={settingsUrl || '/settings'} aria-label={settingsLabel}>
+              <IGRPIcon iconName={settingsIcon ?? 'Settings'} aria-hidden="true" />
             </Link>
           ))}
 
@@ -214,13 +278,14 @@ function IGRPTemplateHeader({
               <IGRPTemplateNotifications
                 notifications={notifications || []}
                 notificationsUrl={notificationsUrl}
+                labels={notificationsLabels}
               />
             </span>
           ))}
 
         {slots?.actions && <HeaderSlot>{slots.actions}</HeaderSlot>}
 
-        {showThemeSwitcher && <IGRPTemplateModeSwitcher />}
+        {showThemeSwitcher && <IGRPTemplateModeSwitcher labels={modeSwitcherLabels} />}
 
         {showUser && (
           <IGRPTemplateNavUser
@@ -229,6 +294,7 @@ function IGRPTemplateHeader({
             userProfileUrl={userProfileUrl}
             notificationsUrl={notificationsUrl}
             showNotifications={showNotifications && !hasCustomNotifications}
+            labels={navUserLabels}
           />
         )}
       </div>

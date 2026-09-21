@@ -11,9 +11,10 @@ import {
   SidebarMenuButton,
 } from '@igrp/igrp-framework-react-design-system';
 
-import type { Section } from './utils';
-import { resolveHref, resolveAnchorTag, isItemActive, ACTIVE_MENU_ITEM_CLASS } from './utils';
-import { MenuItemLink } from './menu-item-link';
+import type { Section } from './utils.js';
+import { resolveHref, resolveAnchorTag, isItemActive, ACTIVE_MENU_ITEM_CLASS } from './utils.js';
+import { formatMenuLabel, menuLinkAriaLabel, type IGRPMenuLabels } from './labels.js';
+import { MenuItemLink } from './menu-item-link.js';
 
 interface SearchResult {
   id: string | number | undefined;
@@ -89,9 +90,10 @@ interface SearchResultsProps {
   sections: Section[];
   query: string;
   pathname: string;
+  labels: IGRPMenuLabels;
 }
 
-export function SearchResults({ sections, query, pathname }: SearchResultsProps) {
+export function SearchResults({ sections, query, pathname, labels }: SearchResultsProps) {
   const results = useMemo(
     () => buildResults(sections, query, pathname),
     [sections, query, pathname],
@@ -108,10 +110,7 @@ export function SearchResults({ sections, query, pathname }: SearchResultsProps)
             )}
           >
             <IGRPIcon iconName="SearchX" className={cn('size-5 shrink-0')} />
-            <p className={cn('text-xs')}>
-              Sem resultados para{' '}
-              <span className={cn('font-medium text-foreground')}>"{query}"</span>.
-            </p>
+            <p className={cn('text-xs')}>{formatMenuLabel(labels.noResults, { query })}</p>
           </div>
         </SidebarGroupContent>
       </SidebarGroup>
@@ -122,7 +121,9 @@ export function SearchResults({ sections, query, pathname }: SearchResultsProps)
     <SidebarGroup>
       <SidebarGroupContent>
         <p className={cn('px-2 pb-1 text-xs font-medium text-sidebar-foreground/70')}>
-          {results.length} {results.length === 1 ? 'resultado' : 'resultados'}
+          {formatMenuLabel(results.length === 1 ? labels.resultCountOne : labels.resultCountOther, {
+            count: results.length,
+          })}
         </p>
         <SidebarMenu>
           {results.map((result) => {
@@ -132,11 +133,7 @@ export function SearchResults({ sections, query, pathname }: SearchResultsProps)
                 isAnchor={result.isAnchor}
                 isActive={result.isActive}
                 target={result.target}
-                aria-label={
-                  result.isAnchor && result.target === '_blank'
-                    ? `${result.name} (opens in new tab)`
-                    : undefined
-                }
+                aria-label={menuLinkAriaLabel(result.name, result.target, labels)}
                 className={cn('flex items-center gap-2')}
               >
                 {result.icon && (

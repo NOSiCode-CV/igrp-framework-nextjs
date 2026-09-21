@@ -41,9 +41,9 @@ vi.mock('react', async (importOriginal) => {
   return { ...actual, cache: <T>(fn: T) => fn };
 });
 
-const { fetchMenus } = await import('../use-menus');
-const { fetchAppsByUser, fetchAppByCode } = await import('../use-applications');
-const { fetchCurrentUser } = await import('../use-user');
+const { fetchMenus } = await import('../use-menus.js');
+const { fetchAppsByUser, fetchAppByCode } = await import('../use-applications.js');
+const { fetchCurrentUser } = await import('../use-user.js');
 
 describe('framework hooks sanitize x-current-path before /login redirect', () => {
   beforeEach(() => {

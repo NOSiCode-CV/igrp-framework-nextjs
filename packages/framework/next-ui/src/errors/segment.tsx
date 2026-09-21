@@ -1,6 +1,6 @@
 'use client';
 
-import { useEffect, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import Link from 'next/link';
 import { unstable_rethrow } from 'next/navigation';
 import { cn, IGRPButton, IGRPIcon } from '@igrp/igrp-framework-react-design-system';
@@ -74,6 +74,16 @@ function IGRPSegmentError({
   errorRefLabel = 'ID de referência:',
 }: IGRPSegmentErrorProps) {
   const [isResetting, setIsResetting] = useState(false);
+  const resetTimer = useRef<ReturnType<typeof setTimeout> | null>(null);
+
+  // `reset()` unmounts this fallback on success, so the pending timer has to be
+  // cancellable from outside its own callback.
+  useEffect(
+    () => () => {
+      if (resetTimer.current !== null) clearTimeout(resetTimer.current);
+    },
+    [],
+  );
 
   useEffect(() => {
     // When custom children are provided this boundary renders them verbatim and
@@ -93,7 +103,8 @@ function IGRPSegmentError({
 
   const handleReset = () => {
     setIsResetting(true);
-    setTimeout(() => {
+    resetTimer.current = setTimeout(() => {
+      resetTimer.current = null;
       reset();
       setIsResetting(false);
     }, RESET_DELAY_MS);

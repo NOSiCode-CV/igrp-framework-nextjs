@@ -28,9 +28,9 @@ vi.mock('@igrp/framework-next-auth/jwt', () => ({
   getToken: (...args: unknown[]) => getToken(...args),
 }));
 
-const { igrpGetClaims, igrpAuthorize } = await import('../permissions');
+const { igrpGetClaims, igrpAuthorize } = await import('../permissions.js');
 const { igrpGetAccessClientConfig, igrpSetAccessClientConfig, igrpResetAccessClientConfig } =
-  await import('../api-config');
+  await import('../api-config.js');
 
 function makeJwt(payload: Record<string, unknown>): string {
   const b64 = (o: unknown) =>

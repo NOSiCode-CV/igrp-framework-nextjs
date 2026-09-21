@@ -1,10 +1,20 @@
 'use client';
 
-import { Component, createContext, useContext, type ReactNode } from 'react';
+import { Component, createContext, useContext, type ErrorInfo, type ReactNode } from 'react';
 
 interface Props {
   fallback: ReactNode;
   children: ReactNode;
+  /**
+   * Reporting hook, called once per caught error with React's component stack.
+   *
+   * Without it this boundary was a black hole: it rendered `fallback` and
+   * dropped the error entirely — no `console.error`, no stack, nothing for an
+   * observability tool to attach to. The App Router's own `error.tsx` at least
+   * receives the error; a layout slot failing here left no trace at all.
+   * Templates should pass their reporter (Sentry, etc.); the default logs.
+   */
+  onError?: (error: Error, info: ErrorInfo) => void;
 }
 
 interface State {
@@ -29,6 +39,14 @@ export class IGRPLayoutErrorBoundary extends Component<Props, State> {
 
   static getDerivedStateFromError(): State {
     return { hasError: true };
+  }
+
+  override componentDidCatch(error: Error, info: ErrorInfo) {
+    if (this.props.onError) {
+      this.props.onError(error, info);
+      return;
+    }
+    console.error('[IGRPLayoutErrorBoundary]', error, info.componentStack);
   }
 
   private reset = () => {

@@ -4,17 +4,16 @@ import { type Session } from '@igrp/framework-next-auth';
 import type { SessionProviderProps } from '@igrp/framework-next-auth/client';
 import { TooltipProvider } from '@igrp/igrp-framework-react-design-system';
 
-import { IGRPActiveThemeProvider } from './active-theme';
-import { IGRPSessionProvider } from './session';
-import { IGRPThemeProvider } from './theme';
-import { IGRPSessionWatcher } from '../templates/session-watcher';
+import { IGRPActiveThemeProvider } from './active-theme.js';
+import { IGRPSessionProvider } from './session.js';
+import { IGRPThemeProvider } from './theme.js';
+import { IGRPSessionWatcher } from '../templates/session-watcher.js';
 
 export type IGRPNestedProvidersArgs = {
   session?: Session | null;
   activeThemeValue?: string;
   children: React.ReactNode;
   sessionArgs?: Partial<SessionProviderProps>;
-  className?: string;
 };
 
 export function IGRPNestedProviders({

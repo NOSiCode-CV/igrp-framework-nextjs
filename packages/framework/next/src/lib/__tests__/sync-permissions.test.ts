@@ -2,7 +2,7 @@ import { describe, it, expect, vi, beforeEach } from 'vitest';
 
 vi.mock('server-only', () => ({}));
 
-import { igrpSyncPermissions } from '../sync-permissions';
+import { igrpSyncPermissions } from '../sync-permissions.js';
 
 const makeClient = () => ({
   m2m: {

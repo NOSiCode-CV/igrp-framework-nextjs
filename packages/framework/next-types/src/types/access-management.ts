@@ -25,7 +25,15 @@
  */
 export type IGRPMenuType = 'FOLDER' | 'MENU_PAGE' | 'EXTERNAL_PAGE' | 'GROUP' | 'SYSTEM_PAGE';
 
-/** The subset of {@link IGRPMenuType} a menu-editing UI may create or update. */
+/**
+ * The subset of {@link IGRPMenuType} a menu-editing UI may create or update.
+ *
+ * Narrower than {@link IGRPMenuTypeSyncable} on purpose: `GROUP` is a section
+ * header AM understands but a menu editor has no business minting, and
+ * `SYSTEM_PAGE` is framework-owned. Nothing in this repo consumes it — it is
+ * public surface for menu-management screens built on top of the framework
+ * (iGRP Studio and app-side admin UIs). Keep it.
+ */
 export type IGRPMenuTypeCRUD = 'FOLDER' | 'MENU_PAGE' | 'EXTERNAL_PAGE';
 
 /**
@@ -116,6 +124,11 @@ export interface IGRPMenuItemArgs {
   roles: IGRPRoleDepartmentArgs[];
 }
 
+/**
+ * {@link IGRPMenuItemArgs} restricted to what a menu-editing UI may submit —
+ * see {@link IGRPMenuTypeCRUD}. Public surface for consumers; unused in this
+ * repo.
+ */
 export type IGRPMenuCRUDArgs = Omit<IGRPMenuItemArgs, 'type'> & {
   type: IGRPMenuTypeCRUD;
 };
@@ -130,7 +143,14 @@ export interface IGRPRoleArgs {
   departmentCode: string;
   parentCode?: string | null;
   status: IGRPStatus;
-  /** Permission **names**, not permission objects — matches `RoleDTO`. */
+  /**
+   * Permission **names**, not permission objects.
+   *
+   * Required on `RoleDTO` — AM always sends the array, empty if the role
+   * grants nothing. Kept optional here because this shape is also authored by
+   * hand in template mock data, where forcing `permissions: []` on every role
+   * buys nothing. Read it as "AM always populates it; you may omit it".
+   */
   permissions?: string[];
 }
 
@@ -260,6 +280,28 @@ export interface IGRPResourceArgs {
   lastModifiedDate?: string;
 }
 
+/**
+ * A user as the framework's own chrome carries it — header nav-user, sidebar,
+ * mock data.
+ *
+ * **This shape is serialized to the browser.** It is reached through
+ * `IGRPHeaderDataArgs.user` and `IGRPSidebarDataArgs.user`, both of which are
+ * props of `'use client'` components, so every field declared here ends up in
+ * the RSC payload on every authenticated render.
+ *
+ * It is therefore a deliberate *subset* of `IGRPUserDTO`, not a mirror of it:
+ * only what the framework chrome actually renders. Four DTO fields are left
+ * out on purpose, and `contract/am-contract.ts` names each one so the
+ * key-coverage gate stays green without hiding a future field:
+ *
+ * - `metadata` — free-form `Record<string, unknown>` owned by the
+ *   authorization server and enriched into issued JWTs.
+ * - `nic`, `phoneNumber` — personal data no framework component renders.
+ * - `emailVerified` — no consumer; add it back with one, not ahead of one.
+ *
+ * An app that needs any of them should read the DTO server-side and pass down
+ * the specific field, rather than widening the shape every browser receives.
+ */
 export interface IGRPUserArgs {
   id: string;
   name: string;

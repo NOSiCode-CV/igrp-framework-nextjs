@@ -2,18 +2,47 @@ import type { IGRPUserArgs } from '@igrp/framework-next-types';
 import type { ApiResponse, IGRPUserDTO } from '@igrp/platform-access-management-client-ts';
 
 /**
- * Maps to the framework's `IGRPUserArgs`, like the application and menu
- * mappers do for their own shapes.
+ * Narrows an Access Management user DTO to the framework's `IGRPUserArgs`.
  *
- * This used to return `IGRPUserDTO` unchanged, which made `framework-next` the
- * one place that leaked an Access Management DTO straight into framework-facing
- * code — while `IGRPHeaderDataArgs.user` expected `IGRPUserArgs`. The seam
- * worked only because the DTO happens to be assignable; `next-types`' contract
- * gate now asserts that, and this mapper no longer relies on it.
+ * **This is a privacy boundary, not a formality.** `IGRPUserArgs` is reached
+ * through `IGRPHeaderDataArgs.user` and `IGRPSidebarDataArgs.user`, both of
+ * which are handed to `'use client'` components — so whatever this function
+ * returns is serialized into the RSC payload and delivered to the browser.
+ *
+ * `IGRPUserDTO` is wider than `IGRPUserArgs`: it also carries `metadata` (a
+ * free-form `Record<string, unknown>` the authorization server owns and
+ * enriches into issued JWTs), `nic` and `phoneNumber` (personal data no
+ * framework component renders) and `emailVerified`. Assigning the DTO
+ * straight through type-checks
+ * — that is precisely what `next-types`' `AssignableTo<IGRPUserDTO,
+ * IGRPUserArgs>` contract assertion proves, and a variable (unlike a fresh
+ * object literal) gets no excess-property check — so nothing in the compiler
+ * stands between the DTO and the client. This function is that thing.
+ *
+ * Every field is listed explicitly for that reason: a new DTO field reaches the
+ * browser only if someone adds it here on purpose. `next-types`' key-coverage
+ * gate fails the build when a DTO field is not mirrored, so the decision cannot
+ * be skipped silently either.
+ */
+export const mapUserDTO = (user: IGRPUserDTO): IGRPUserArgs => ({
+  id: user.id,
+  name: user.name,
+  username: user.username,
+  email: user.email,
+  status: user.status,
+  picture: user.picture,
+  signature: user.signature,
+  // `metadata`, `nic`, `phoneNumber` and `emailVerified` are deliberately
+  // withheld — see above, and the named exclusions in `next-types`'
+  // `contract/am-contract.ts`.
+});
+
+/**
+ * `ApiResponse` wrapper around {@link mapUserDTO} for the call sites that hold
+ * a whole response. Throws on an empty payload rather than fabricating a user.
  */
 export const mapperUser = (user: ApiResponse<IGRPUserDTO>): IGRPUserArgs => {
   if (!user.data) throw new Error('[igrp-users]: O utilizador não foi encontrado.');
 
-  const { id, name, username, email, status, picture, signature } = user.data;
-  return { id, name, username, email, status, picture, signature };
+  return mapUserDTO(user.data);
 };

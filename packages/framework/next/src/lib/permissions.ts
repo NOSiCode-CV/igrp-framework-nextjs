@@ -10,7 +10,7 @@ import {
 import { resolveSecureCookie } from '@igrp/framework-next-auth/cookies';
 import { isNextControlFlowError } from '@igrp/framework-next-auth/runtime';
 
-import { igrpGetAccessClientConfig, igrpSetAccessClientConfig } from './api-config';
+import { igrpGetAccessClientConfig, igrpSetAccessClientConfig } from './api-config.js';
 
 const SUPER_ADMIN_MOCK: IGRPAccessClaims = { permissions: [], roles: [], isSuperAdmin: true };
 

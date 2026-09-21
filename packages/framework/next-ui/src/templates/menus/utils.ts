@@ -1,5 +1,5 @@
 import type { IGRPMenuItemArgs } from '@igrp/framework-next-types';
-import { igrpIsExternalUrl, igrpNormalizeUrl } from '@igrp/igrp-framework-react-design-system';
+import { igrpNormalizeUrl } from '@igrp/igrp-framework-react-design-system';
 
 export type LeafNode = { kind: 'leaf'; item: IGRPMenuItemArgs };
 export type FolderNode = { kind: 'folder'; item: IGRPMenuItemArgs; children: LeafNode[] };
@@ -14,8 +14,26 @@ export function resolveHref(item: IGRPMenuItemArgs): string {
   return '#';
 }
 
+/**
+ * Whether a URL leaves the app, decided WITHOUT reading `window`.
+ *
+ * The design system's `igrpIsExternalUrl` compares against
+ * `window.location.origin` inside a `try`, so on the server the ReferenceError
+ * is swallowed and it answers `false` for everything. The sidebar renders on the
+ * server first, so every external menu item came out as a `next/link`, then
+ * re-rendered as an `<a target="_blank">` on the client — a hydration mismatch
+ * on the element type, plus a window in which the link had no `rel="noopener"`.
+ *
+ * A menu item addresses an in-app route through `pageSlug`; a `url` carrying a
+ * scheme or protocol-relative prefix means "leave the app", which is the same
+ * answer on both sides of hydration.
+ */
+function isAbsoluteUrl(url: string): boolean {
+  return /^(?:[a-z][a-z0-9+.-]*:)?\/\//i.test(url);
+}
+
 export function resolveAnchorTag(item: IGRPMenuItemArgs): boolean {
-  const isExternal = !item.pageSlug && !!item.url && igrpIsExternalUrl(item.url);
+  const isExternal = !item.pageSlug && !!item.url && isAbsoluteUrl(item.url);
   return isExternal || item.target === '_blank';
 }
 
@@ -85,13 +103,33 @@ export function buildMenuSections(menus: IGRPMenuItemArgs[]): Section[] {
     }
   }
 
+  const isContainer = (item: IGRPMenuItemArgs) => item.type === 'FOLDER' || item.type === 'GROUP';
+
+  /**
+   * Every descendant leaf of `code`, in document order.
+   *
+   * The sidebar renders exactly two levels (folder → sub-item), because that is
+   * what `SidebarMenuSub` and the icon-mode dropdown express. A menu tree deeper
+   * than that used to be typed as `LeafNode` and rendered as a leaf, which
+   * silently dropped its entire subtree from both the sidebar and the search
+   * index. Hoisting the descendants keeps every reachable route reachable; only
+   * the intermediate grouping is flattened away.
+   *
+   * `seen` guards a `parentCode` cycle. A cycle among top-level candidates still
+   * makes every member non-top-level and therefore unrendered — bad data, but
+   * bounded and silent rather than a hang.
+   */
+  const collectLeaves = (code: string, seen: Set<string>): LeafNode[] => {
+    if (seen.has(code)) return [];
+    seen.add(code);
+    return (childrenMap.get(code) ?? []).flatMap((child): LeafNode[] =>
+      isContainer(child) ? collectLeaves(child.code, seen) : [{ kind: 'leaf', item: child }],
+    );
+  };
+
   const toNode = (item: IGRPMenuItemArgs): TreeNode => {
     if (item.type === 'FOLDER') {
-      const children = (childrenMap.get(item.code) ?? []).map((child): LeafNode => ({
-        kind: 'leaf',
-        item: child,
-      }));
-      return { kind: 'folder', item, children };
+      return { kind: 'folder', item, children: collectLeaves(item.code, new Set()) };
     }
     return { kind: 'leaf', item };
   };

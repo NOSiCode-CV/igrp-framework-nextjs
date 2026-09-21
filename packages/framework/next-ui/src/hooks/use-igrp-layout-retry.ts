@@ -3,7 +3,7 @@
 import { useCallback, useEffect, useState, useTransition } from 'react';
 import { useRouter } from 'next/navigation';
 
-import { useIGRPLayoutErrorReset } from '../templates/layout-error-boundary';
+import { useIGRPLayoutErrorReset } from '../templates/layout-error-boundary.js';
 
 /**
  * Retry behaviour shared by the layout-level error fallbacks (header, sidebar).

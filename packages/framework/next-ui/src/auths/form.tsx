@@ -14,15 +14,8 @@ import {
   Button,
   IGRPIcon,
 } from '@igrp/igrp-framework-react-design-system';
-import { IGRPTemplateModeSwitcher } from '../templates/mode-switcher';
-
-function withBasePath(src: string): string {
-  const basePath = process.env.NEXT_PUBLIC_BASE_PATH ?? '';
-  if (!basePath || !src.startsWith('/') || src.startsWith('//') || src.startsWith(`${basePath}/`)) {
-    return src;
-  }
-  return `${basePath}${src}`;
-}
+import { IGRPTemplateModeSwitcher } from '../templates/mode-switcher.js';
+import { withBasePath } from '../lib/utils.js';
 
 interface IGRPLoginTexts {
   welcome: string;
@@ -33,6 +26,8 @@ interface IGRPLoginTexts {
   igrpUrl: string;
   nosiLabel: string;
   nosiUrl: string;
+  /** Shown when `signIn()` rejects before it can redirect. pt-PT default. */
+  signInError?: string;
 }
 
 interface IGRPSiteLogo {
@@ -60,6 +55,19 @@ function IGRPAuthForm({
   const [isLoading, setIsLoading] = useState(false);
   const [authError, setAuthError] = useState<string | null>(null);
 
+  // NO `finally` CLAUSE HERE. Two independent reasons, both easy to undo by
+  // accident:
+  //
+  // 1. `babel-plugin-react-compiler` (through 1.0.0) cannot lower a
+  //    `TryStatement` with a finalizer — "Todo: (BuildHIR::lowerStatement)".
+  //    It swallows that per function and emits the module UNCOMPILED, so the
+  //    build stays green while this component silently loses memoization.
+  //    Verify with: `grep -l compiler-runtime dist/auths/form.js`.
+  // 2. On the happy path `signIn()` never resolves — it navigates away. Clearing
+  //    the flag there un-spins the button mid-redirect.
+  //
+  // The flag is therefore cleared only on the failure path, where the component
+  // is still mounted and the user needs the button back.
   async function onSubmit() {
     setIsLoading(true);
     setAuthError(null);
@@ -68,8 +76,11 @@ function IGRPAuthForm({
       await signIn(providerId, { callbackUrl });
     } catch (error) {
       console.error('Authentication error:', error);
-      setAuthError(error instanceof Error ? error.message : 'Failed to sign in. Please try again.');
-    } finally {
+      setAuthError(
+        error instanceof Error
+          ? error.message
+          : (texts.signInError ?? 'Não foi possível iniciar sessão. Tente novamente.'),
+      );
       setIsLoading(false);
     }
   }
@@ -115,10 +126,12 @@ function IGRPAuthForm({
                 className={cn('w-auto h-auto hidden dark:block')}
               />
             )}
-            <h3 className={cn('mt-6 text-center')}>
-              <p>{texts.welcome}</p>
+            <div className={cn('mt-6 text-center')}>
+              {/* `<p>` inside `<h3>` is invalid: the parser closes the heading
+                  early, so the DOM React hydrates differs from the one it built. */}
+              <h3>{texts.welcome}</h3>
               <p>{texts.description}</p>
-            </h3>
+            </div>
           </div>
 
           <Button

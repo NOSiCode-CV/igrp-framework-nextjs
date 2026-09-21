@@ -10,12 +10,37 @@ import {
   cn,
 } from '@igrp/igrp-framework-react-design-system';
 
-function IGRPTemplateModeSwitcher() {
+/** pt-PT defaults for the light/dark toggle. Override individually. */
+export interface IGRPModeSwitcherLabels {
+  /** Accessible name while the resolved theme is still unknown. */
+  toggle: string;
+  /** Accessible name when the current theme is dark (the action switches to light). */
+  switchToLight: string;
+  /** Accessible name when the current theme is light (the action switches to dark). */
+  switchToDark: string;
+}
+
+export const IGRP_MODE_SWITCHER_LABELS_PT_PT: IGRPModeSwitcherLabels = {
+  toggle: 'Alternar tema',
+  switchToLight: 'Mudar para o tema claro',
+  switchToDark: 'Mudar para o tema escuro',
+};
+
+interface IGRPTemplateModeSwitcherProps {
+  /** Partial override of the pt-PT strings. Missing keys keep their default. */
+  labels?: Partial<IGRPModeSwitcherLabels>;
+}
+
+function IGRPTemplateModeSwitcher({ labels: labelOverrides }: IGRPTemplateModeSwitcherProps = {}) {
   const { setTheme, resolvedTheme } = useTheme();
   const { setMetaColor } = useIGRPMetaColor();
 
   const [mounted, setMounted] = useState(false);
   useEffect(() => setMounted(true), []);
+
+  const labels = labelOverrides
+    ? { ...IGRP_MODE_SWITCHER_LABELS_PT_PT, ...labelOverrides }
+    : IGRP_MODE_SWITCHER_LABELS_PT_PT;
 
   const isDark = resolvedTheme === 'dark';
 
@@ -31,14 +56,16 @@ function IGRPTemplateModeSwitcher() {
         variant="ghost"
         size="icon"
         className={cn('size-6')}
-        aria-label="Toggle theme"
+        aria-label={labels.toggle}
         disabled
       >
         <div className={cn('size-4')} aria-hidden="true" />
-        <span className={cn('sr-only')}>Toggle theme</span>
+        <span className={cn('sr-only')}>{labels.toggle}</span>
       </Button>
     );
   }
+
+  const actionLabel = isDark ? labels.switchToLight : labels.switchToDark;
 
   return (
     <Button
@@ -46,7 +73,7 @@ function IGRPTemplateModeSwitcher() {
       size="icon"
       className={cn('size-6 relative overflow-hidden')}
       onClick={toggleTheme}
-      aria-label={isDark ? 'Switch to light mode' : 'Switch to dark mode'}
+      aria-label={actionLabel}
       aria-pressed={isDark}
     >
       <div className={cn('relative size-4 flex items-center justify-center')}>
@@ -69,11 +96,9 @@ function IGRPTemplateModeSwitcher() {
           aria-hidden="true"
         />
       </div>
-      <span className={cn('sr-only')}>
-        {isDark ? 'Switch to light mode' : 'Switch to dark mode'}
-      </span>
+      <span className={cn('sr-only')}>{actionLabel}</span>
     </Button>
   );
 }
 
-export { IGRPTemplateModeSwitcher };
+export { IGRPTemplateModeSwitcher, type IGRPTemplateModeSwitcherProps };

@@ -26,9 +26,9 @@ vi.mock('react', async (importOriginal) => {
 });
 vi.mock('@igrp/framework-next-auth/sanitize', () => ({ sanitizeRedirectUrl: () => '' }));
 
-const { fetchMenus } = await import('../use-menus');
+const { fetchMenus } = await import('../use-menus.js');
 const { igrpSetAccessClientConfig, igrpResetAccessClientConfig } =
-  await import('../../lib/api-config');
+  await import('../../lib/api-config.js');
 
 describe('fetchMenus reads the token fresh from config (no token in cache key)', () => {
   beforeEach(() => {

@@ -1,7 +1,7 @@
 import type { IGRPConfigArgs } from '@igrp/framework-next-types';
 import { z } from 'zod';
 
-import { IgrpConfigError, type IgrpErrorCode } from '../errors';
+import { IgrpConfigError, type IgrpErrorCode } from '../errors.js';
 
 const isFunction = (v: unknown): boolean => typeof v === 'function';
 const isBlank = (v: unknown): boolean => typeof v !== 'string' || v.trim() === '';

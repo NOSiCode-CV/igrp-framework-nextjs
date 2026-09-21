@@ -12,6 +12,8 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
   IGRPIcon,
+  igrpFormatMessage,
+  useIGRPLocale,
 } from '@igrp/igrp-framework-react-design-system';
 import type { IGRPNotificationArgs } from '@igrp/framework-next-types';
 import Link from 'next/link';
@@ -42,26 +44,58 @@ function toIsoString(value: string | Date): string | undefined {
   return Number.isNaN(date.getTime()) ? undefined : date.toISOString();
 }
 
+/** pt-PT defaults for the notifications dropdown. Override individually. */
+export interface IGRPNotificationsLabels {
+  /** Dropdown heading and the trigger's screen-reader name. */
+  title: string;
+  /** Action that clears the unread state. */
+  markAllRead: string;
+  /** Empty state. */
+  empty: string;
+  /** Footer link to the full notifications page. */
+  viewAll: string;
+  /** Unread-count announcement. `{count}` is substituted. */
+  unreadCount: string;
+}
+
+export const IGRP_NOTIFICATIONS_LABELS_PT_PT: IGRPNotificationsLabels = {
+  title: 'Notificações',
+  markAllRead: 'Marcar todas como lidas',
+  empty: 'Sem notificações',
+  viewAll: 'Todas as notificações',
+  unreadCount: '{count} por ler',
+};
+
 interface IGRPTemplateNotificationsProps {
   notifications: IGRPNotificationArgs[];
   notificationsUrl?: string;
-  /** Called when the user clicks "Mark all as read". Consumer is responsible for updating the notifications array. */
+  /** Called when the user clicks "mark all as read". Consumer is responsible for updating the notifications array. */
   onMarkAllRead?: () => void;
-  /** Locale used to format notification timestamps. Defaults to `pt-PT`. */
+  /**
+   * Locale used to format notification timestamps. Defaults to the design
+   * system's `useIGRPLocale()` (itself `pt-PT` unless an `IGRPI18nProvider`
+   * says otherwise) — never the ambient runtime locale, which resolves to the
+   * server's under SSR and the browser's on the client and hydrates mismatched.
+   */
   locale?: string;
+  /** Partial override of the pt-PT strings. Missing keys keep their default. */
+  labels?: Partial<IGRPNotificationsLabels>;
 }
 
 function IGRPTemplateNotifications({
   notifications,
-  notificationsUrl,
+  notificationsUrl = '/notifications',
   onMarkAllRead,
-  locale = 'pt-PT',
+  locale,
+  labels: labelOverrides,
 }: IGRPTemplateNotificationsProps) {
-  const unreadCount = notifications.filter((n) => !n.isRead).length;
+  const providerLocale = useIGRPLocale();
+  const resolvedLocale = locale ?? providerLocale;
+  const labels = labelOverrides
+    ? { ...IGRP_NOTIFICATIONS_LABELS_PT_PT, ...labelOverrides }
+    : IGRP_NOTIFICATIONS_LABELS_PT_PT;
 
-  const handleUrl = () => {
-    return notificationsUrl ? notificationsUrl : '/notifications';
-  };
+  const unreadCount = notifications.filter((n) => !n.isRead).length;
 
   return (
     <DropdownMenu>
@@ -69,22 +103,31 @@ function IGRPTemplateNotifications({
         <Button variant="ghost" size="icon" className="size-6 relative">
           <IGRPIcon iconName="Bell" strokeWidth={2} />
           {unreadCount > 0 && (
+            // The badge is a fixed 14px circle, so a three-digit count would
+            // overflow it. Cap the glyph; the exact figure stays in the
+            // screen-reader text below.
             <Badge
-              className="absolute -top-1 -right-0.5 h-3.5 w-3.5 flex text-[10px] py-0 px-0"
+              className="absolute -top-1 -right-0.5 h-3.5 min-w-3.5 w-auto flex text-[10px] py-0 px-0.5"
               variant="destructive"
+              aria-hidden
             >
-              {unreadCount}
+              {unreadCount > 99 ? '99+' : unreadCount}
             </Badge>
           )}
-          <span className={cn('sr-only')}>Notifications</span>
+          <span className={cn('sr-only')}>
+            {labels.title}
+            {unreadCount > 0
+              ? `, ${igrpFormatMessage(labels.unreadCount, { count: unreadCount })}`
+              : ''}
+          </span>
         </Button>
       </DropdownMenuTrigger>
       <DropdownMenuContent align="end" className="max-w-80">
         <DropdownMenuLabel className={cn('flex items-center justify-between')}>
-          <span>Notifications</span>
+          <span>{labels.title}</span>
           {unreadCount > 0 && onMarkAllRead && (
             <Button variant="ghost" size="sm" onClick={onMarkAllRead} className="h-auto text-xs">
-              Mark all as read
+              {labels.markAllRead}
             </Button>
           )}
         </DropdownMenuLabel>
@@ -103,19 +146,17 @@ function IGRPTemplateNotifications({
                   suppressHydrationWarning
                   className={cn('text-xs text-muted-foreground mt-1')}
                 >
-                  {formatTimestamp(notification.timestamp, locale)}
+                  {formatTimestamp(notification.timestamp, resolvedLocale)}
                 </time>
               </DropdownMenuItem>
             ))
           ) : (
-            <div className={cn('py-4 px-2 text-center text-muted-foreground')}>
-              Sem notificações
-            </div>
+            <div className={cn('py-4 px-2 text-center text-muted-foreground')}>{labels.empty}</div>
           )}
         </DropdownMenuGroup>
         <DropdownMenuSeparator />
         <DropdownMenuItem className={cn('justify-center')} asChild>
-          <Link href={handleUrl()}>Todas as notificações</Link>
+          <Link href={notificationsUrl}>{labels.viewAll}</Link>
         </DropdownMenuItem>
       </DropdownMenuContent>
     </DropdownMenu>

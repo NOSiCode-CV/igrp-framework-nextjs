@@ -2,10 +2,10 @@
 
 import { unstable_rethrow } from 'next/navigation';
 
-import { fetchAppByCode, fetchAppsByUser } from '../hooks/use-applications';
-import { fetchMenus } from '../hooks/use-menus';
-import { fetchCurrentUser } from '../hooks/use-user';
-import { logger } from '../logger';
+import { fetchAppByCode, fetchAppsByUser } from '../hooks/use-applications.js';
+import { fetchMenus } from '../hooks/use-menus.js';
+import { fetchCurrentUser } from '../hooks/use-user.js';
+import { logger } from '../logger.js';
 
 export type ActionResult<T> = { ok: true; data: T } | { ok: false; error: string };
 

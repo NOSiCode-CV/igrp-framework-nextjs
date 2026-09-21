@@ -11,16 +11,18 @@ import {
   SidebarMenu,
 } from '@igrp/igrp-framework-react-design-system';
 
-import type { Section } from './utils';
-import { FolderMenuItem } from './folder-menu-item';
-import { LeafMenuItem } from './leaf-menu-item';
+import type { Section } from './utils.js';
+import type { IGRPMenuLabels } from './labels.js';
+import { FolderMenuItem } from './folder-menu-item.js';
+import { LeafMenuItem } from './leaf-menu-item.js';
 
 interface SectionGroupProps {
   section: Section;
   pathname: string;
+  labels: IGRPMenuLabels;
 }
 
-export function SectionGroup({ section, pathname }: SectionGroupProps) {
+export function SectionGroup({ section, pathname, labels }: SectionGroupProps) {
   const menuContent = (
     <SidebarGroupContent>
       <SidebarMenu>
@@ -30,12 +32,14 @@ export function SectionGroup({ section, pathname }: SectionGroupProps) {
               key={`folder-${node.item.id ?? node.item.code}`}
               node={node}
               pathname={pathname}
+              labels={labels}
             />
           ) : (
             <LeafMenuItem
               key={`leaf-${node.item.id ?? node.item.code}`}
               node={node}
               pathname={pathname}
+              labels={labels}
             />
           ),
         )}

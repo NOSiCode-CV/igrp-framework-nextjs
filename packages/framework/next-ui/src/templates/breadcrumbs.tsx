@@ -1,7 +1,7 @@
 'use client';
 
 import { Fragment, useMemo, useRef } from 'react';
-import { useBreadcrumbOverflow } from '../hooks/use-breadcrumb-overflow';
+import { useBreadcrumbOverflow } from '../hooks/use-breadcrumb-overflow.js';
 import Link from 'next/link';
 import { useSelectedLayoutSegments } from 'next/navigation';
 import {
@@ -59,8 +59,10 @@ interface IGRPTemplateBreadcrumbsProps {
    * Wrap in useCallback to avoid triggering a recompute on every parent render.
    */
   formatLabel?: (segment: string, href: string) => string | undefined;
-  /** Screen-reader label for the home icon. Defaults to 'Home' */
+  /** Screen-reader label for the home icon. pt-PT default; override for other locales. */
   homeLabel?: string;
+  /** Screen-reader label for the collapsed-items menu. pt-PT default. */
+  ellipsisLabel?: string;
   /** Home link destination. Defaults to '/' */
   homeHref?: string;
   /** Collapse threshold (item count). Defaults to 4 */
@@ -86,7 +88,8 @@ function IGRPTemplateBreadcrumbs({
   items,
   routeLabels = EMPTY_ROUTE_LABELS,
   formatLabel,
-  homeLabel = 'Home',
+  homeLabel = 'Página inicial',
+  ellipsisLabel = 'Mostrar restantes níveis',
   homeHref = '/',
   maxItems = 4,
   itemsAfterCollapse = 1,
@@ -124,7 +127,11 @@ function IGRPTemplateBreadcrumbs({
     });
   }, [items, segments, routeLabels, formatLabel]);
 
-  const isOverflowing = useBreadcrumbOverflow(containerRef);
+  // Derived from the ITEMS, never from the rendered output. Keying it off the
+  // collapsed markup instead would oscillate: collapsing removes the overflow,
+  // which un-collapses, which restores it.
+  const contentKey = breadcrumbItems.map((item) => item.href).join('|');
+  const isOverflowing = useBreadcrumbOverflow(containerRef, contentKey);
 
   if (breadcrumbItems.length === 0) {
     return null;
@@ -182,7 +189,7 @@ function IGRPTemplateBreadcrumbs({
               <DropdownMenu>
                 <DropdownMenuTrigger className={cn('flex items-center gap-1 focus:outline-none')}>
                   <BreadcrumbEllipsis />
-                  <span className={cn('sr-only')}>Toggle menu</span>
+                  <span className={cn('sr-only')}>{ellipsisLabel}</span>
                 </DropdownMenuTrigger>
                 <DropdownMenuContent align="start">
                   {middleItems.map((item, index) => (

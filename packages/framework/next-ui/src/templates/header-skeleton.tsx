@@ -1,4 +1,3 @@
-// packages/framework/next-ui/src/components/templates/header-skeleton.tsx
 'use client';
 
 import { cn } from '@igrp/igrp-framework-react-design-system';

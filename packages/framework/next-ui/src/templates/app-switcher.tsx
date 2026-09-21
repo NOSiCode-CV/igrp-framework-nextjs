@@ -11,23 +11,35 @@ import {
   SidebarMenu,
   SidebarMenuButton,
   SidebarMenuItem,
-  useSidebar,
+  useIGRPSidebar,
 } from '@igrp/igrp-framework-react-design-system';
 import type { IGRPApplicationArgs } from '@igrp/framework-next-types';
 import { useMemo } from 'react';
 
-import { getLocationOriginURL } from '../lib/utils';
-import { IGRPTemplateImage } from './template-image';
+import { getLocationOriginURL } from '../lib/utils.js';
+import { IGRPTemplateImage } from './template-image.js';
 
 interface IGRPTemplateAppSwitcherProps {
   apps?: IGRPApplicationArgs[];
   appCode?: string;
   appCenterUrl?: string;
-  baseUrl?: string;
+  /** Label of the Applications Center entry. pt-PT default. */
+  appCenterLabel?: string;
+  /** Shown in place of a missing application name. */
+  unknownLabel?: string;
 }
 
-function IGRPTemplateAppSwitcher({ apps, appCode, appCenterUrl }: IGRPTemplateAppSwitcherProps) {
-  const { isMobile } = useSidebar();
+function IGRPTemplateAppSwitcher({
+  apps,
+  appCode,
+  appCenterUrl,
+  appCenterLabel = 'Centro de Aplicações',
+  unknownLabel = 'N/D',
+}: IGRPTemplateAppSwitcherProps) {
+  // The Horizon alias of the same hook the rest of this package uses. Both names
+  // resolve to one context (`horizon/sidebar` re-exports `useSidebar`), so this
+  // is consistency, not a fix.
+  const { isMobile } = useIGRPSidebar();
 
   const activeApp = useMemo(() => {
     if (!apps || apps.length === 0) return undefined;
@@ -114,7 +126,10 @@ function IGRPTemplateAppSwitcher({ apps, appCode, appCenterUrl }: IGRPTemplateAp
                   </DropdownMenuItem>
                 ))}
 
-              {appCenterUrl && (listApps?.length ?? 0) > 1 && (
+              {/* `> 1` here hid the Applications Center from every two-app
+                  tenant. The entry is about leaving for the catalogue, so the
+                  only precondition is having a URL for it. */}
+              {appCenterUrl && (
                 <>
                   <DropdownMenuSeparator />
                   <DropdownMenuItem className={cn('gap-2 p-2')} asChild>
@@ -127,7 +142,7 @@ function IGRPTemplateAppSwitcher({ apps, appCode, appCenterUrl }: IGRPTemplateAp
                         <IGRPIcon iconName="CornerDownLeft" className={cn('size-3 shrink-0')} />
                       </div>
                       <div className={cn('text-muted-foreground font-medium')}>
-                        Applications Center
+                        {appCenterLabel}
                       </div>
                     </a>
                   </DropdownMenuItem>
@@ -147,8 +162,8 @@ function IGRPTemplateAppSwitcher({ apps, appCode, appCenterUrl }: IGRPTemplateAp
               <IGRPIcon iconName="Command" />
             </div>
             <div className={cn('grid flex-1 text-left text-sm leading-tight')}>
-              <span className={cn('truncate font-medium')}>N/A</span>
-              <span className={cn('truncate text-xs')}>N/A</span>
+              <span className={cn('truncate font-medium')}>{unknownLabel}</span>
+              <span className={cn('truncate text-xs')}>{unknownLabel}</span>
             </div>
             <IGRPIcon iconName="ChevronsUpDown" className={cn('ml-auto')} />
           </SidebarMenuButton>

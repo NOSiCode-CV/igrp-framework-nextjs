@@ -13,7 +13,7 @@ import {
   igrpGetClaims,
   igrpAuthorize,
   igrpAssertAuthorize,
-} from '../permissions';
+} from '../permissions.js';
 
 function makeJwt(payload: Record<string, unknown>): string {
   const b64 = (o: unknown) =>

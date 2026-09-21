@@ -569,9 +569,6 @@ importers:
       '@types/react':
         specifier: ^19
         version: 19.2.18
-      next:
-        specifier: 15.5.25
-        version: 15.5.25
       next-auth:
         specifier: 4.24.15
         version: 4.24.15(next@15.5.25(@types/node@24.13.4)(babel-plugin-react-compiler@1.0.0)(react-dom@19.2.8(react@19.2.8))(react@19.2.8))(react-dom@19.2.8(react@19.2.8))(react@19.2.8)
@@ -712,9 +709,6 @@ importers:
       '@igrp/framework-next-auth':
         specifier: workspace:*
         version: link:../../packages/framework/next-auth
-      '@igrp/framework-next-types':
-        specifier: workspace:*
-        version: link:../../packages/framework/next-types
       '@igrp/framework-next-ui':
         specifier: workspace:*
         version: link:../../packages/framework/next-ui
@@ -758,6 +752,9 @@ importers:
       '@biomejs/biome':
         specifier: 2.5.13
         version: 2.5.13
+      '@igrp/framework-next-types':
+        specifier: workspace:*
+        version: link:../../packages/framework/next-types
       '@tailwindcss/postcss':
         specifier: 4.3.3
         version: 4.3.3

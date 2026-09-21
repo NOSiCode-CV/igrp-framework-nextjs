@@ -3,7 +3,7 @@
 import { useCallback, useTransition } from 'react';
 import { useRouter } from 'next/navigation';
 
-import { revalidateAppsAction, revalidateMenusAction } from '../actions/index';
+import { revalidateAppsAction, revalidateMenusAction } from '../actions/index.js';
 
 export function useLayoutData(appCode: string) {
   const router = useRouter();

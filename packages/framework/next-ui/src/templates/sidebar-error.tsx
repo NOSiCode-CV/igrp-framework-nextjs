@@ -1,9 +1,8 @@
-// packages/framework/next-ui/src/components/templates/sidebar-error.tsx
 'use client';
 
 import { cn, IGRPButton } from '@igrp/igrp-framework-react-design-system';
 
-import { useIGRPLayoutRetry } from '../hooks/use-igrp-layout-retry';
+import { useIGRPLayoutRetry } from '../hooks/use-igrp-layout-retry.js';
 
 export function IGRPSidebarError() {
   const { retry, isRetrying } = useIGRPLayoutRetry();

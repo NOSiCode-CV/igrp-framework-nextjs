@@ -7,6 +7,9 @@
     "declaration": false,
     "declarationMap": false,
     "emitDeclarationOnly": false,
+    // Type-check only: nothing is emitted, so the rule has nothing to
+    // guarantee, and TS rejects it alongside declaration/composite false.
+    "isolatedDeclarations": false,
     "rootDir": "."
   },
   "include": ["src/**/*", "contract/**/*"],

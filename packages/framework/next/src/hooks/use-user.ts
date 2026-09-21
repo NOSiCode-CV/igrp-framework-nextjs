@@ -5,8 +5,9 @@ import { headers } from 'next/headers';
 
 import { sanitizeRedirectUrl } from '@igrp/framework-next-auth/sanitize';
 
-import { igrpGetAccessClientConfig } from '../lib/api-config';
-import { logger } from '../logger';
+import { igrpGetAccessClientConfig } from '../lib/api-config.js';
+import { mapUserDTO } from '../mappers/users-mapper.js';
+import { logger } from '../logger.js';
 
 // Per-request deduplication via React cache.
 //
@@ -25,7 +26,13 @@ const getCachedCurrentUser = cache(async function fetchCurrentUserOnce() {
     headers: { Authorization: `Bearer ${token}` },
   });
   const result = await client.users.getCurrentUser();
-  return result.data;
+  // Narrow at the fetch boundary, not at the render site. Both callers hand
+  // this straight to a `'use client'` component, so anything returned here is
+  // serialized into the RSC payload — returning `result.data` shipped the whole
+  // `IGRPUserDTO` (including the server-owned `metadata` bag) to the browser.
+  // It type-checked because the DTO is assignable to `IGRPUserArgs`; see
+  // `mapUserDTO`.
+  return result.data ? mapUserDTO(result.data) : null;
 });
 
 export async function fetchCurrentUser() {

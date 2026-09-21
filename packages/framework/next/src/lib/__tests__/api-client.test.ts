@@ -21,8 +21,8 @@ vi.mock('react', async (importOriginal) => {
 });
 
 // Dynamic imports AFTER vi.mock so both mocks are in place when modules initialise.
-const { igrpGetAccessClient } = await import('../api-client');
-const { igrpSetAccessClientConfig, igrpResetAccessClientConfig } = await import('../api-config');
+const { igrpGetAccessClient } = await import('../api-client.js');
+const { igrpSetAccessClientConfig, igrpResetAccessClientConfig } = await import('../api-config.js');
 const { AccessManagementClient } = await import('@igrp/platform-access-management-client-ts');
 
 describe('igrpGetAccessClient', () => {

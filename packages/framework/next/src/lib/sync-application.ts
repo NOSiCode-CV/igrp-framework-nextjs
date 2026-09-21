@@ -8,7 +8,7 @@ import {
   type Status,
 } from '@igrp/platform-access-management-client-ts';
 
-import { toUpperCaseIdentifier } from './utils';
+import { toUpperCaseIdentifier } from './utils.js';
 
 export type IGRPSyncApplicationArgs = {
   client: AccessManagementClient;

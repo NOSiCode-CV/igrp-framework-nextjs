@@ -25,6 +25,11 @@ export function IGRPRootProvidersFull({
   children,
   className,
 }: IGRPRootProvidersFullProps) {
+  // `closeButton` is destructured explicitly rather than swept in by a trailing
+  // `{...toasterConfig}` spread. That spread put `showToaster` — a framework
+  // flag with no meaning to sonner — onto the toaster, and re-applied every raw
+  // value AFTER the defaults resolved, so an explicit `position: undefined`
+  // silently beat the 'bottom-right' default.
   const {
     showToaster = true,
     position = 'bottom-right',
@@ -32,6 +37,7 @@ export function IGRPRootProvidersFull({
     richColors = true,
     expand = false,
     duration = 5000,
+    closeButton,
   } = toasterConfig ?? {};
 
   const toaster = showToaster && (
@@ -41,7 +47,7 @@ export function IGRPRootProvidersFull({
       richColors={richColors}
       expand={expand}
       duration={duration}
-      {...toasterConfig}
+      closeButton={closeButton}
     />
   );
 

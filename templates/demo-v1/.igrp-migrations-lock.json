@@ -241,6 +241,12 @@
       "appliedAt": "2026-09-22T00:00:00.000Z",
       "cliVersion": "0.1.0-beta.141",
       "manifestHash": "1881370caacd961f"
+    },
+    {
+      "id": "41-query-client-comment-trim",
+      "appliedAt": "2026-09-22T00:00:00.000Z",
+      "cliVersion": "0.1.0-beta.141",
+      "manifestHash": "df587cec908f3bc9"
     }
   ]
 }

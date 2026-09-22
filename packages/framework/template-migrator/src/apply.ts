@@ -44,6 +44,18 @@ function envHasKey(content: string, key: string): boolean {
   });
 }
 
+/**
+ * Resolve a step's `from` to a file inside the shipped payload tree.
+ *
+ * `from` is authored relative to `migrations/demo-v1/` (e.g.
+ * `payload/41/src/x.ts`), but the packer drops the `payload/` prefix on the way
+ * into `dist/payload/`, so it has to come off again here.
+ */
+export function resolvePayload(from: string, payloadDir: string = PAYLOAD_DIR): string {
+  const rel = from.startsWith("payload/") ? from.slice("payload/".length) : from;
+  return join(payloadDir, rel);
+}
+
 export function executeStep(
   step: MigrationStep,
   appRoot: string,
@@ -64,9 +76,7 @@ export function executeStep(
       if (!step.from) {
         throw new Error(`file.${step.type === "file.create" ? "create" : "write"} requires "from" (path: ${step.path}).`);
       }
-      // Strip leading "payload/" prefix — dist/payload/ is already the base dir
-      const fromRel = step.from.startsWith("payload/") ? step.from.slice("payload/".length) : step.from;
-      const src = join(payloadDir, fromRel);
+      const src = resolvePayload(step.from, payloadDir);
       ensureDir(dest);
       copyFileSync(src, dest);
       // Return undo step
@@ -89,7 +99,10 @@ export function executeStep(
       for (const [key, spec] of Object.entries(step.keys)) {
         if (envHasKey(existing, key)) continue;
         addedKeys.push(key);
-        lines.push(`# ${spec.doc}`);
+        // An undocumented key gets no comment line. Writing `# ` unconditionally
+        // meant a remove/undo round-trip of a key that never had a comment
+        // *added* an empty one.
+        if (spec.doc) lines.push(`# ${spec.doc}`);
         if (spec.required_if) lines.push(`# ${REQUIRED_IF_PREFIX}${spec.required_if}`);
         lines.push(`${key}=${spec.default ?? ""}`);
         lines.push("");
@@ -122,16 +135,34 @@ export function executeStep(
         // Take the contiguous comment block directly above the key with it.
         // `env.add` wrote that block, so its undo has to remove it again —
         // otherwise every apply/rollback cycle leaves another orphaned `# doc`
-        // line behind and the file accumulates comment cruft forever. The rule
-        // reads the same way for a hand-authored env.remove: a comment sitting
-        // immediately above a key documents that key, so it goes when it goes.
+        // line behind and the file accumulates comment cruft forever.
+        //
+        // Only when the key is the last line of its block, though. `env.add`
+        // always writes `# doc` / `KEY=` / blank, so a blank line (or EOF)
+        // below is the signature of a block it owns. A section header reads
+        // identically from above:
+        //
+        //     # ===== OIDC settings =====
+        //     OIDC_A=1      <- removing this must NOT take the header
+        //     OIDC_B=2         with it and orphan OIDC_B
+        //
+        // The difference is what follows, so that is what decides it.
+        const ownsCommentBlock = lines[i + 1] === "" || i + 1 >= lines.length;
         const doc: string[] = [];
-        for (let j = i - 1; j >= 0 && lines[j].trimStart().startsWith("#"); j--) {
-          doc.unshift(lines[j].trimStart().replace(/^#\s?/, ""));
-          drop.add(j);
+        if (ownsCommentBlock) {
+          for (let j = i - 1; j >= 0; j--) {
+            const c = lines[j].trimStart();
+            if (!c.startsWith("#")) break;
+            const text = c.replace(/^#\s?/, "");
+            // A commented-out setting is the consumer's own data, not prose
+            // about this key. Stop rather than absorb it as documentation.
+            if (/^[A-Za-z_][A-Za-z0-9_]*\s*=/.test(text)) break;
+            doc.unshift(text);
+            drop.add(j);
+          }
+          // ...and the single blank line `env.add` appends as a separator.
+          if (lines[i + 1] === "") drop.add(i + 1);
         }
-        // ...and the single blank line `env.add` appends as a separator.
-        if (lines[i + 1] === "") drop.add(i + 1);
         if (hit in removed) return; // duplicate declaration: the first one wins
         // Recover `doc` / `required_if` from that comment block, so the undo
         // restores the real documentation instead of a bare `# ` line.

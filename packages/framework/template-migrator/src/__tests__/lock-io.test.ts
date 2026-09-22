@@ -37,7 +37,7 @@ describe("writeLock", () => {
     expect(readdirSync(appRoot).filter((f) => f.endsWith(".tmp"))).toEqual([]);
   });
 
-  it("round-trips, including postHashes", () => {
+  it("round-trips a fully populated entry", () => {
     const lock = {
       version: 1 as const,
       template: "demo-v1" as const,
@@ -48,8 +48,7 @@ describe("writeLock", () => {
           cliVersion: "test",
           manifestHash: "abcd",
           undo: [],
-          fileHashes: {},
-          postHashes: { "a.ts": "ff" },
+          fileHashes: { "a.ts": "ff" },
         },
       ],
     };

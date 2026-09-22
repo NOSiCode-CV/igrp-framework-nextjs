@@ -3,8 +3,8 @@ import { existsSync, readFileSync, statSync } from "fs";
 import { join } from "path";
 import { getManifest } from "../manifest.js";
 import { readLock, writeLock } from "../lock.js";
-import { executeStep } from "../apply.js";
-import { hashFile } from "../hash.js";
+import { executeStep, resolvePayload } from "../apply.js";
+import { hashFile, hashFileIgnoringEol } from "../hash.js";
 import { clearJournal, readJournal, writeJournal, type Journal } from "../journal.js";
 import { unwindSteps } from "../unwind.js";
 import type { LockEntry, MigrationStep } from "../types.js";
@@ -66,14 +66,26 @@ export async function apply(
   lock.template = manifest.template;
   const appliedIds = new Set(lock.applied.map((a) => a.id));
 
-  // Hash each managed path was left with by the migration that last wrote it.
-  // Walked in applied order so a later migration's value wins, which is what
-  // "the state this app was migrated into" means. Entries from CLI versions
-  // before `postHashes` contribute nothing and are simply not checked.
+  // For each managed path, the payload the last APPLIED migration put there.
+  //
+  // Derived from the manifest + the shipped payload tree, not from the lock.
+  // The first version of this read `postHashes` off lock entries, which only
+  // exist for migrations the CLI actually executed — so a freshly scaffolded
+  // app, whose lock is forty-one baseline entries, had an empty baseline and
+  // the guard below protected nothing at all. That is the common case, not an
+  // edge case. The payloads are right there in dist/, and they are the same
+  // bytes the migration wrote, so they answer the question directly and for
+  // every app regardless of how it got here.
   const lastWritten = new Map<string, string>();
-  for (const entry of lock.applied) {
-    for (const [path, hash] of Object.entries(entry.postHashes ?? {})) {
-      lastWritten.set(path, hash);
+  for (const migration of manifest.migrations) {
+    if (!appliedIds.has(migration.id)) continue;
+    for (const step of migration.steps) {
+      if (step.type === "file.create" || step.type === "file.write") {
+        if (step.from) lastWritten.set(step.path, step.from);
+      } else if (step.type === "file.delete") {
+        // Nothing manages this path any more until something rewrites it.
+        lastWritten.delete(step.path);
+      }
     }
   }
 
@@ -98,20 +110,23 @@ export async function apply(
       return;
     }
     // Refuse to overwrite a managed file the consumer has edited since the
-    // migration that last wrote it. `apply` used to clobber these silently,
-    // while collecting exactly the hashes needed to notice — the data was
-    // recorded and never read. A local edit is far more likely to be
-    // deliberate than accidental, so this stops rather than warns.
+    // migration that last wrote it. `apply` used to clobber these silently.
+    // A local edit is far more likely to be deliberate than accidental, so
+    // this stops rather than warns.
     const locallyModified: string[] = [];
     for (const step of migration.steps) {
       if (step.type !== "file.write" && step.type !== "file.create" && step.type !== "file.delete") continue;
-      const recorded = lastWritten.get(step.path);
-      if (recorded === undefined) continue;
-      const current = hashFile(join(appRoot, step.path));
+      const from = lastWritten.get(step.path);
+      if (from === undefined) continue;
+      const expected = hashFileIgnoringEol(resolvePayload(from, opts.payloadDir));
+      // No payload on disk (a hand-authored `from`, or a trimmed install) means
+      // no baseline to judge against — say nothing rather than guess.
+      if (expected === null) continue;
+      const current = hashFileIgnoringEol(join(appRoot, step.path));
       // A missing file is not a modification: a later migration may have
       // deleted it, or the consumer may have removed something they never
       // wanted. Re-creating it is the migration's job either way.
-      if (current !== null && current !== recorded) locallyModified.push(step.path);
+      if (current !== null && current !== expected) locallyModified.push(step.path);
     }
     if (locallyModified.length > 0 && !opts.force) {
       console.error(`  ✗ ${migration.id} would overwrite ${locallyModified.length} locally modified file(s):`);
@@ -129,7 +144,6 @@ export async function apply(
     }
 
     const fileHashes: Record<string, string> = {};
-    const postHashes: Record<string, string> = {};
     const undoPayloads: Record<string, string> = {};
     const undoSteps: MigrationStep[] = [];
     // Opened before the first step and cleared only once the lock entry is
@@ -170,13 +184,11 @@ export async function apply(
         }
         const undo = executeStep(step, appRoot, opts.payloadDir);
         undoSteps.push(undo);
-        // Post-write hash: the baseline the NEXT apply compares against to tell
-        // a consumer's edit apart from this migration's own output.
+        // Keep the in-run baseline in step with what just happened, so a second
+        // migration in the SAME run is judged against this one's output.
         if (step.type === "file.create" || step.type === "file.write") {
-          const after = hashFile(join(appRoot, step.path));
-          if (after) postHashes[step.path] = after;
+          if (step.from) lastWritten.set(step.path, step.from);
         } else if (step.type === "file.delete") {
-          delete postHashes[step.path];
           lastWritten.delete(step.path);
         }
         // env.add's undo lists exactly the keys it appended — a non-empty list
@@ -210,11 +222,9 @@ export async function apply(
       undo: undoSteps,
       fileHashes,
       ...(Object.keys(undoPayloads).length > 0 ? { undoPayloads } : {}),
-      ...(Object.keys(postHashes).length > 0 ? { postHashes } : {}),
     };
     lock.applied.push(entry);
     writeLock(appRoot, lock);
-    for (const [path, hash] of Object.entries(postHashes)) lastWritten.set(path, hash);
     // The migration is now durably recorded — the journal has served its purpose.
     clearJournal(appRoot);
     appliedIds.add(migration.id);

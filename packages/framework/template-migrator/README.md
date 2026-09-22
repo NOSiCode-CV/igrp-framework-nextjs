@@ -334,7 +334,6 @@ interface LockEntry {
   undo?: MigrationStep[];                // inverse steps for rollback
   fileHashes?: Record<string, string>;   // PRE-migration hash of each touched path
   undoPayloads?: Record<string, string>; // pre-migration contents, for rollback
-  postHashes?: Record<string, string>;   // POST-write hash of each file written
 }
 ```
 
@@ -342,10 +341,15 @@ Hashes are the first 16 hex characters of a SHA-256 of the file's UTF-8 text.
 
 **Baseline entries carry only the first four fields.** The template ships its own lock so a scaffolded app opens with every migration already applied — but nothing was executed against a file tree there, the template simply *is* the post-migration state. There is no undo to record, so the fields are absent rather than written empty. Read them as `entry.undo ?? []`. `scripts/sync-template-lock.ts` regenerates the file in this shape; it rewrites on a byte difference, not only a semantic one, so a lock left in an outdated shape is something it can actually fix.
 
-`fileHashes` and `postHashes` are not the same thing and are not interchangeable:
+`fileHashes` is the state *before* the migration ran. It is a forensic record only — nothing reads it.
 
-- **`fileHashes`** is the state *before* the migration ran. It is a forensic record only — nothing reads it.
-- **`postHashes`** is what the migration *left* in each file it wrote, and is the baseline the next `apply` compares against to tell "the consumer edited this managed file" apart from "the previous migration left it this way". When they differ, `apply` refuses to overwrite and names the paths; `--force` proceeds anyway. Entries written before this field existed simply aren't checked, which is why it is a separate field rather than a redefinition of `fileHashes`.
+### How `apply` detects a locally modified file
+
+Nothing in the lock. The baseline comes from the **shipped payloads**: for each path, `apply` finds the last *applied* migration with a `file.create`/`file.write` step for it, hashes that migration's payload, and compares against the file on disk. Differences mean the edit is yours — `apply` names the paths and aborts before running any step, and `--force` overwrites.
+
+Deriving it from the payloads rather than recording hashes in the lock is what makes it work at all for a **freshly scaffolded app**. That app's lock is nothing but baseline entries, so any scheme keyed on "what did the CLI write here" has no data for it — which is the common case, not an edge case. The payloads are the same bytes the migration wrote and they ship in `dist/`, so they answer the question for every app regardless of how it arrived.
+
+The comparison ignores line endings. Payloads are normalised to LF at pack time, but a consumer on Windows with `core.autocrlf=true` has CRLF on disk; without that allowance every managed file would look modified on every Windows checkout. EOL is the one difference that is never a real edit.
 
 `manifestHash` is compared against the manifest by `check` and `status`: a migration whose steps were corrected in place after release leaves apps that applied the old version holding the old result, and nothing else would ever say so.
 

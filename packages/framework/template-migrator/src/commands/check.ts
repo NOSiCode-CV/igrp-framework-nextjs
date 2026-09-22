@@ -35,6 +35,14 @@ export function check(appRoot: string): boolean {
     console.error(`\n  Re-applying is not automatic: remove the lock entry (or roll the migration`);
     console.error("  back) and run apply again, after checking what changed in the guide.");
   }
-  console.error(`\nRun: pnpm dlx @igrp/template-migrator apply\n`);
+  // Only when there is something `apply` would act on. It filters out ids the
+  // lock already records, so a stale-but-applied migration is skipped entirely
+  // — printing this unconditionally told CI to run a no-op, two lines after
+  // saying that re-applying is not automatic.
+  if (pending.length > 0) {
+    console.error(`\nRun: pnpm dlx @igrp/template-migrator apply\n`);
+  } else {
+    console.error("");
+  }
   return false;
 }

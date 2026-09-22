@@ -141,9 +141,13 @@ describe("apply refuses to clobber a locally modified managed file", () => {
     expect(readFileSync(join(appRoot, "src/edited.ts"), "utf8")).toBe("MIGRATED AGAIN\n");
   });
 
-  it("records a post-write hash so the next run has a baseline", async () => {
+  it("writes no hashes into the lock — the baseline comes from the payloads", async () => {
     writeFileAt(appRoot, "src/edited.ts", "ORIGINAL\n");
     await apply(appRoot, { yes: true, payloadDir });
-    expect(readLock(appRoot).applied[0].postHashes).toHaveProperty("src/edited.ts");
+    // The guard reads the shipped payload for the last applied migration that
+    // wrote each path, so nothing has to be recorded here. That is what makes
+    // it work for scaffolded apps, whose lock entries carry no hashes at all.
+    const entry = readLock(appRoot).applied[0];
+    expect(entry).not.toHaveProperty("postHashes");
   });
 });

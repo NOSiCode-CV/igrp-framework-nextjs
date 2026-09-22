@@ -13,6 +13,20 @@ export function hashFile(filePath: string): string | null {
 }
 
 /**
+ * Hash a file ignoring line endings.
+ *
+ * Used to compare a consumer's file against the payload that produced it.
+ * Payloads are normalised to LF at pack time, but a consumer on Windows with
+ * `core.autocrlf=true` has CRLF on disk — so a byte hash would call every
+ * managed file "locally modified" on every Windows checkout. EOL is the one
+ * difference that is never a real edit; everything else is.
+ */
+export function hashFileIgnoringEol(filePath: string): string | null {
+  if (!existsSync(filePath) || !statSync(filePath).isFile()) return null;
+  return hashContent(readFileSync(filePath, "utf8").replace(/\r\n/g, "\n").replace(/\r/g, "\n"));
+}
+
+/**
  * Canonical hash of a migration's `steps` array.
  *
  * Shared by the packer (which stamps `contentHash` into dist/manifest.json),

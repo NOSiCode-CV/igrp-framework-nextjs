@@ -178,7 +178,6 @@ describe("buildTemplateLock", () => {
       undo: [{ type: "file.delete", path: "src/added.ts" }],
       fileHashes: { "src/added.ts": "abcd" },
       undoPayloads: { "src/added.ts": "before" },
-      postHashes: { "src/added.ts": "ef01" },
     });
     const built = buildTemplateLock({
       migrations: [m],

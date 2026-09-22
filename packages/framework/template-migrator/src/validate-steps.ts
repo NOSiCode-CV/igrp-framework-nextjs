@@ -40,10 +40,16 @@ function requireStringArray(step: Record<string, unknown>, field: string, where:
  * root at runtime; catching it here means the migration never ships at all.
  */
 function requireAppRelative(path: string, where: string): void {
-  if (path.startsWith("/") || /^[A-Za-z]:/.test(path)) {
+  // Normalise separators FIRST, then apply every rule to the result. Checking
+  // the raw string means each rule has to remember both separators, and the
+  // first version of this function got that wrong: it split on `/` alone, so
+  // `..\escape.ts` and `\\server\share\x.ts` both passed.
+  const normalised = path.replace(/\\/g, "/");
+
+  if (normalised.startsWith("/") || /^[A-Za-z]:/.test(normalised)) {
     throw new Error(`${where}: path "${path}" must be relative to the app root.`);
   }
-  if (path.split(/[\/]/).includes("..")) {
+  if (normalised.split("/").includes("..")) {
     throw new Error(`${where}: path "${path}" must not contain "..".`);
   }
 }

@@ -14,7 +14,7 @@ export function status(appRoot: string) {
     // An applied migration whose steps were corrected in place after release:
     // this app has the OLD result and nothing else would ever say so.
     const stale = entry !== undefined && entry.manifestHash !== m.contentHash;
-    const state = stale ? "! changed " : entry ? "✓ applied" : "• pending";
+    const state = stale ? "! changed" : entry ? "✓ applied" : "• pending";
     const ver = m.targetFrameworkVersion ? ` (→ ${m.targetFrameworkVersion})` : "";
     console.log(`  ${state}  ${m.id}${ver}`);
   }

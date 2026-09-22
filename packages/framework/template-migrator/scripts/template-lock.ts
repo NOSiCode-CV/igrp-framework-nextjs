@@ -146,7 +146,6 @@ export function buildTemplateLock(opts: {
         ? { fileHashes: prior.fileHashes }
         : {}),
       ...(prior?.undoPayloads ? { undoPayloads: prior.undoPayloads } : {}),
-      ...(prior?.postHashes ? { postHashes: prior.postHashes } : {}),
     };
   });
 

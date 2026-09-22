@@ -69,18 +69,6 @@ export interface LockEntry {
    * more than once — the first snapshot is the true pre-migration content.
    */
   undoPayloads?: Record<string, string>;
-  /**
-   * Hash of every file this migration wrote, taken AFTER the write.
-   *
-   * This is what lets a later `apply` tell "the consumer edited this managed
-   * file" apart from "the previous migration left it this way", and refuse to
-   * clobber the former. Deliberately separate from `fileHashes` (which records
-   * the PRE-migration state and exists only as a forensic record): repurposing
-   * that field would make every entry written by an older CLI look like a local
-   * modification. Absent on entries from CLI versions before this field, which
-   * are simply not checked.
-   */
-  postHashes?: Record<string, string>;
 }
 
 export interface LockFile {

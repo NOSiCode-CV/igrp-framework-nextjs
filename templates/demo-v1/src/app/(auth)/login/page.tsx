@@ -3,6 +3,10 @@ import { redirect } from "next/navigation";
 
 import { getAuthProviderIdFromEnv } from "@igrp/framework-next-auth";
 import { IGRPAuthCarousel, IGRPAuthForm } from "@igrp/framework-next-ui";
+// Server component: `cn` MUST come from the `/cn` subpath, not the root barrel.
+// The root is a `"use client"` boundary, so calling it from here throws during
+// `next build` ("Attempted to call cn() from the server but cn is on the
+// client") — a failure neither tsc nor Biome can see.
 import { cn } from "@igrp/igrp-framework-react-design-system/cn";
 
 import { carouselItems, loginConfig } from "@/config/login";

@@ -10,7 +10,25 @@ import {
 describe('basePathCookieSuffix', () => {
   it('slugifies a basePath', () => {
     expect(basePathCookieSuffix('/apps/template')).toBe('.apps-template~');
-    expect(basePathCookieSuffix('/Apps/My_App')).toBe('.apps-my-app~');
+  });
+
+  it('leaves an unambiguous basePath on its bare slug', () => {
+    // The overwhelmingly common shape: lowercase alphanumeric segments, so the
+    // only substitution is `/` -> `-` and the slug is reversible. These MUST
+    // keep the name they already have in the wild — a rename signs every user
+    // out and orphans a second cookie in the jar.
+    expect(basePathCookieSuffix('/apps/template')).toBe('.apps-template~');
+    expect(basePathCookieSuffix('/apps/hr')).toBe('.apps-hr~');
+    expect(basePathCookieSuffix('/apps/a/b')).toBe('.apps-a-b~');
+    expect(basePathCookieSuffix('/portal2')).toBe('.portal2~');
+  });
+
+  it('appends a disambiguating hash when slugging is lossy', () => {
+    // Uppercase, `_`, `.` and a literal `-` are all folded into the same slug
+    // as some other basePath would be, so each carries a hash.
+    for (const basePath of ['/Apps/My_App', '/apps/a-b', '/apps/hr_admin', '/apps/HR']) {
+      expect(basePathCookieSuffix(basePath)).toMatch(/^\.[a-z0-9-]+\.[0-9a-f]{8}~$/);
+    }
   });
 
   it('returns empty for the root or an absent basePath', () => {
@@ -161,5 +179,47 @@ describe('basePathCookieSuffix — prefix-free suffixes', () => {
     for (const basePath of ['/apps/hr', '/Apps/My_App', '/a/b/c']) {
       expect(sessionCookieName(basePath, true)).toMatch(/^[\w!#$%&'*+.^`|~-]+$/);
     }
+  });
+});
+
+describe('basePathCookieSuffix — distinct basePaths never share a suffix', () => {
+  /**
+   * The prefix-free property that `SUFFIX_TERMINATOR` buys says no suffix is a
+   * PREFIX of another. It says nothing about two basePaths producing the
+   * IDENTICAL suffix, which the slug transform used to allow: every
+   * non-alphanumeric run folds to `-` and the whole thing is lowercased, so
+   * `/apps/a/b` and `/apps/a-b` both slugged to `apps-a-b`.
+   *
+   * Two co-hosted apps that collide get exactly the interference this module
+   * exists to prevent: the same cookie name at the same path on the same host,
+   * so one app decodes the other's token (wrong audience, wrong roles) and
+   * `SessionStore#clean()` deletes the other's session on sign-out.
+   */
+  const COLLIDING_GROUPS = [
+    ['/apps/a-b', '/apps/a/b'],
+    ['/apps/hr-admin', '/apps/hr_admin', '/apps/hr.admin', '/apps/hr admin', '/apps/hr/admin'],
+    ['/apps/hr', '/apps/HR'],
+    ['/a/b/c', '/a-b-c', '/a/b-c', '/a-b/c'],
+  ];
+
+  it.each(COLLIDING_GROUPS)('keeps %s distinct from its slug-mates', (...group) => {
+    const suffixes = group.map(basePathCookieSuffix);
+    expect(new Set(suffixes).size).toBe(group.length);
+  });
+
+  it('stays prefix-free across the hashed and unhashed classes', () => {
+    const all = [...COLLIDING_GROUPS.flat(), '/apps/template', '/apps/hr-admin-extra'].map(
+      basePathCookieSuffix,
+    );
+    for (const a of all) {
+      for (const b of all) {
+        if (a === b) continue;
+        expect(b.startsWith(a)).toBe(false);
+      }
+    }
+  });
+
+  it('is deterministic', () => {
+    expect(basePathCookieSuffix('/apps/a-b')).toBe(basePathCookieSuffix('/apps/a-b'));
   });
 });

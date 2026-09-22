@@ -3,16 +3,16 @@
 import { useCallback, useContext, useEffect, useId, useMemo, useRef, useState } from "react"
 import { useFieldArray, useWatch } from "react-hook-form"
 
-import { cn } from "../cn"
-import { igrpFormatMessage, useIGRPi18n } from "../../../i18n"
-import { type IGRPBaseAttributes } from "../../../types"
+import { cn } from "../cn.js"
+import { igrpFormatMessage, useIGRPi18n } from "../../../i18n/index.js"
+import { type IGRPBaseAttributes } from "../../../types.js"
 
-import { Accordion, AccordionItem, AccordionTrigger, AccordionContent } from "../../primitives/accordion"
-import { Button } from "../../primitives/button"
-import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "../../primitives/card"
-import { IGRPBadge, type IGRPBadgeProps } from "../badge"
-import { IGRPIcon, type IGRPIconName } from "../icon"
-import { IGRPFormContext } from "./form-context"
+import { Accordion, AccordionItem, AccordionTrigger, AccordionContent } from "../../primitives/accordion.js"
+import { Button } from "../../primitives/button.js"
+import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "../../primitives/card.js"
+import { IGRPBadge, type IGRPBadgeProps } from "../badge.js"
+import { IGRPIcon, type IGRPIconName } from "../icon/index.js"
+import { IGRPFormContext } from "./form-context.js"
 
 const ACCORDION_ITEM_PREFIX = "item-"
 

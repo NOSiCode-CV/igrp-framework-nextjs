@@ -4,12 +4,12 @@ import { useCallback, useEffect, useId, useMemo, useRef, useState } from "react"
 import type React from "react"
 import { CheckIcon, ChevronLeft, ChevronRight } from "lucide-react"
 
-import { cn } from "../cn"
-import { ScrollArea } from "../../primitives/scroll-area"
-import { Stepper, StepperItem, StepperTitle, StepperTrigger } from "../../primitives/stepper"
-import { Button } from "../../primitives/button"
-import { Tooltip, TooltipTrigger, TooltipContent } from "../../primitives/tooltip"
-import { useIGRPi18n } from "../../../i18n"
+import { cn } from "../cn.js"
+import { ScrollArea } from "../../primitives/scroll-area.js"
+import { Stepper, StepperItem, StepperTitle, StepperTrigger } from "../../primitives/stepper.js"
+import { Button } from "../../primitives/button.js"
+import { Tooltip, TooltipTrigger, TooltipContent } from "../../primitives/tooltip.js"
+import { useIGRPi18n } from "../../../i18n/index.js"
 
 function getScrollBehavior(): ScrollBehavior {
   if (typeof window !== "undefined" && window.matchMedia("(prefers-reduced-motion: reduce)").matches) {

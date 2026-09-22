@@ -3,7 +3,7 @@
 import { cva, type VariantProps } from "class-variance-authority"
 import { useCallback, useEffect, useId, useRef, useState } from "react"
 
-import { type IGRPColorRole, type IGRPColorVariants } from "../../lib/colors"
+import { type IGRPColorRole, type IGRPColorVariants } from "../../lib/colors.js"
 import { cn } from "cn"
 
 function getScrollBehavior(): ScrollBehavior {
@@ -12,11 +12,11 @@ function getScrollBehavior(): ScrollBehavior {
   }
   return "smooth"
 }
-import { Button } from "../primitives/button"
-import { Tabs, TabsList, TabsTrigger, TabsContent } from "../primitives/tabs"
-import { IGRPBadge } from "./badge"
-import { IGRPIcon, type IGRPIconName } from "./icon"
-import { useIGRPi18n } from "../../i18n"
+import { Button } from "../primitives/button.js"
+import { Tabs, TabsList, TabsTrigger, TabsContent } from "../primitives/tabs.js"
+import { IGRPBadge } from "./badge.js"
+import { IGRPIcon, type IGRPIconName } from "./icon/index.js"
+import { useIGRPi18n } from "../../i18n/index.js"
 
 const tabListVariants = cva("gap-1.5", {
   variants: {

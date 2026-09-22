@@ -2,8 +2,8 @@ import { describe, expect, it, vi } from "vitest"
 import { render, screen } from "@testing-library/react"
 import userEvent from "@testing-library/user-event"
 
-import { IGRPInputPassword } from "../input/password"
-import { IGRPI18nProvider } from "../../../i18n"
+import { IGRPInputPassword } from "../input/password.js"
+import { IGRPI18nProvider } from "../../../i18n/index.js"
 
 describe("IGRPInputPassword", () => {
   it("renders as type=password by default and toggles to type=text", async () => {

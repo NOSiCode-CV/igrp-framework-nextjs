@@ -3,13 +3,13 @@
 import { useId } from "react"
 import { useFormContext } from "react-hook-form"
 
-import { cn } from "../cn"
-import { igrpOmitNonDomProps } from "../../../lib/dom-props"
-import type { IGRPBaseAttributes } from "../../../types"
-import { Field, FieldDescription, FieldError } from "../../primitives/field"
-import { RadioGroup, RadioGroupItem } from "../../primitives/radio-group"
-import { IGRPFormField } from "../form/form-field"
-import { IGRPLabel } from "../label"
+import { cn } from "../cn.js"
+import { igrpOmitNonDomProps } from "../../../lib/dom-props.js"
+import type { IGRPBaseAttributes } from "../../../types.js"
+import { Field, FieldDescription, FieldError } from "../../primitives/field.js"
+import { RadioGroup, RadioGroupItem } from "../../primitives/radio-group.js"
+import { IGRPFormField } from "../form/form-field.js"
+import { IGRPLabel } from "../label.js"
 
 /**
  * Option for radio group.

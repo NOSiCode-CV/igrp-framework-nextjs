@@ -4,11 +4,11 @@
 import { cva, type VariantProps } from "class-variance-authority"
 import { useId } from "react"
 
-import { type IGRPColorRole, IGRPColors, type IGRPColorVariants } from "../../lib/colors"
+import { type IGRPColorRole, IGRPColors, type IGRPColorVariants } from "../../lib/colors.js"
 import { cn } from "cn"
-import { igrpOmitNonDomProps } from "../../lib/dom-props"
-import { type IGRPBaseAttributes } from "../../types"
-import { IGRPIcon } from "./icon"
+import { igrpOmitNonDomProps } from "../../lib/dom-props.js"
+import { type IGRPBaseAttributes } from "../../types.js"
+import { IGRPIcon } from "./icon/index.js"
 
 const igrpBadgeVariants = cva(
   "inline-flex w-fit shrink-0 items-center justify-center gap-1 overflow-hidden rounded-full border px-3 py-0.5 text-xs font-medium whitespace-nowrap shadow-none transition-[color,box-shadow] focus-visible:border-ring focus-visible:ring-[3px] focus-visible:ring-ring/50 [&>svg]:pointer-events-none [&>svg]:size-3",

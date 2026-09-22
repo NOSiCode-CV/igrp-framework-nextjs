@@ -2,7 +2,7 @@
 
 import { toast, type ExternalToast } from "sonner"
 import { useCallback, useMemo } from "react"
-import { Toaster } from "../primitives/sonner"
+import { Toaster } from "../primitives/sonner.js"
 
 /** Default duration (ms) for success toasts. */
 const DEFAULT_SUCCESS_DURATION = 4000

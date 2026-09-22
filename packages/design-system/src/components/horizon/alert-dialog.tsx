@@ -3,10 +3,10 @@
 import { useId } from "react"
 import { Slot } from "radix-ui"
 
-import { IGRPColors, type IGRPColorVariants } from "../../lib/colors"
-import { igrpAlertIconMappings } from "../../lib/utilities"
+import { IGRPColors, type IGRPColorVariants } from "../../lib/colors.js"
+import { igrpAlertIconMappings } from "../../lib/utilities.js"
 import { cn } from "cn"
-import { type IGRPBaseAttributes, type IGRPPlacementProps } from "../../types"
+import { type IGRPBaseAttributes, type IGRPPlacementProps } from "../../types.js"
 import {
   AlertDialog,
   AlertDialogAction,
@@ -16,9 +16,9 @@ import {
   AlertDialogFooter,
   AlertDialogHeader,
   AlertDialogTitle,
-} from "../primitives/alert-dialog"
-import { IGRPIcon, type IGRPIconName } from "./icon"
-import { useIGRPi18n } from "../../i18n"
+} from "../primitives/alert-dialog.js"
+import { IGRPIcon, type IGRPIconName } from "./icon/index.js"
+import { useIGRPi18n } from "../../i18n/index.js"
 
 /**
  * Props for the IGRPAlertDialog component.

@@ -1,15 +1,15 @@
 "use client"
 
 import { Line, LineChart, CartesianGrid, Legend, XAxis, YAxis, ReferenceLine, LabelList } from "recharts"
-import { cn } from "../cn"
+import { cn } from "../cn.js"
 import {
   ChartContainer,
   ChartTooltip,
   ChartTooltipContent,
   ChartLegend,
   ChartLegendContent,
-} from "../../primitives/chart"
-import type { IGRPChartProps, IGRPSeriesConfig } from "./types"
+} from "../../primitives/chart.js"
+import type { IGRPChartProps, IGRPSeriesConfig } from "./types.js"
 import {
   createChartConfig,
   formatChartValue,
@@ -19,7 +19,7 @@ import {
   getLegendLayout,
   getLegendVerticalAlign,
   hasNegativeValues,
-} from "./lib"
+} from "./lib.js"
 
 function defaultLabelFormatter(value: unknown): string {
   return String(value ?? "")

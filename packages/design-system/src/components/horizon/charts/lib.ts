@@ -1,10 +1,10 @@
-import type { ChartConfig as ShadCNChartConfig } from "../../primitives/chart"
+import type { ChartConfig as ShadCNChartConfig } from "../../primitives/chart.js"
 import {
   type IGRPChartDataItem,
   type IGRPChartLegendPosition,
   type IGRPChartSize,
   type IGRPSeriesConfig,
-} from "./types"
+} from "./types.js"
 
 export const formatChartValue = (value: number, valueFormatter?: (value: number) => string): string => {
   if (valueFormatter) {

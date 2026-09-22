@@ -3,11 +3,11 @@
 import { type VariantProps } from "class-variance-authority"
 import { useId } from "react"
 
-import { IGRPPageHeaderBackButton } from "./back-button"
-import type { IGRPIconName } from "../icon"
-import { IGRPHeadline, igrpHeadlineVariants } from "../typography/headline"
-import { cn } from "../cn"
-import { type IGRPBaseAttributes } from "../../../types"
+import { IGRPPageHeaderBackButton } from "./back-button.js"
+import type { IGRPIconName } from "../icon/index.js"
+import { IGRPHeadline, igrpHeadlineVariants } from "../typography/headline.js"
+import { cn } from "../cn.js"
+import { type IGRPBaseAttributes } from "../../../types.js"
 
 /**
  * Props for the IGRPPageHeader component.

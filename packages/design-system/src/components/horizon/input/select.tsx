@@ -5,9 +5,9 @@ import Image from "next/image"
 import { useFormContext } from "react-hook-form"
 import { Circle } from "lucide-react"
 
-import { igrpColorText } from "../../../lib/colors"
-import { cn } from "../cn"
-import type { IGRPInputProps, IGRPOptionsProps } from "../../../types"
+import { igrpColorText } from "../../../lib/colors.js"
+import { cn } from "../cn.js"
+import type { IGRPInputProps, IGRPOptionsProps } from "../../../types.js"
 import {
   useFormField,
   FormControl,
@@ -16,8 +16,8 @@ import {
   FormItem,
   FormLabel,
   FormMessage,
-} from "../../primitives/form"
-import { Input } from "../../primitives/input"
+} from "../../primitives/form.js"
+import { Input } from "../../primitives/input.js"
 import {
   Select,
   SelectContent,
@@ -26,12 +26,12 @@ import {
   SelectLabel,
   SelectTrigger,
   SelectValue,
-} from "../../primitives/select"
-import { IGRPButton } from "../button"
-import { IGRPIcon } from "../icon"
-import { IGRPLabel } from "../label"
-import { Field, FieldDescription } from "../../primitives/field"
-import { useIGRPi18n } from "../../../i18n"
+} from "../../primitives/select.js"
+import { IGRPButton } from "../button.js"
+import { IGRPIcon } from "../icon/index.js"
+import { IGRPLabel } from "../label.js"
+import { Field, FieldDescription } from "../../primitives/field.js"
+import { useIGRPi18n } from "../../../i18n/index.js"
 
 type SelectState = {
   selected: string

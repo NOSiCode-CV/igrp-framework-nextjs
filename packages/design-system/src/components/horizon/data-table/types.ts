@@ -1,6 +1,6 @@
 import type { ReactNode } from "react"
 import type { Row } from "@tanstack/react-table"
-import type { IGRPIconName } from "../icon"
+import type { IGRPIconName } from "../icon/index.js"
 
 // ─── Actions ────────────────────────────────────────────────────────────────
 

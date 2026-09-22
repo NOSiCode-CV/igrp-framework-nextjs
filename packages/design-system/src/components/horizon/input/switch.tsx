@@ -3,13 +3,13 @@
 import { useId } from "react"
 import { useFormContext } from "react-hook-form"
 
-import { cn } from "../cn"
-import { igrpOmitNonDomProps } from "../../../lib/dom-props"
-import type { IGRPInputProps } from "../../../types"
-import { Switch } from "../../primitives/switch"
-import { IGRPFormField } from "../form/form-field"
-import { IGRPLabel } from "../label"
-import { Field, FieldDescription, FieldError } from "../../primitives/field"
+import { cn } from "../cn.js"
+import { igrpOmitNonDomProps } from "../../../lib/dom-props.js"
+import type { IGRPInputProps } from "../../../types.js"
+import { Switch } from "../../primitives/switch.js"
+import { IGRPFormField } from "../form/form-field.js"
+import { IGRPLabel } from "../label.js"
+import { Field, FieldDescription, FieldError } from "../../primitives/field.js"
 
 /**
  * Props for the IGRPSwitch component.

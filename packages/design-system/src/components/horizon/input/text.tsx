@@ -3,13 +3,13 @@
 import { useId } from "react"
 import { useFormContext } from "react-hook-form"
 
-import { cn } from "../cn"
-import type { IGRPInputProps } from "../../../types"
-import { Input } from "../../primitives/input"
-import { FormControl, FormDescription, FormField, FormItem, FormLabel, FormMessage } from "../../primitives/form"
-import { Field, FieldDescription, FieldError } from "../../primitives/field"
-import { IGRPIcon } from "../icon"
-import { IGRPLabel } from "../label"
+import { cn } from "../cn.js"
+import type { IGRPInputProps } from "../../../types.js"
+import { Input } from "../../primitives/input.js"
+import { FormControl, FormDescription, FormField, FormItem, FormLabel, FormMessage } from "../../primitives/form.js"
+import { Field, FieldDescription, FieldError } from "../../primitives/field.js"
+import { IGRPIcon } from "../icon/index.js"
+import { IGRPLabel } from "../label.js"
 
 /**
  * Props for the IGRPInputText component.

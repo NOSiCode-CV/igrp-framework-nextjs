@@ -109,16 +109,28 @@ describe("babel build pipeline", () => {
     // The package is `"type": "module"`, so Node applies ESM resolution to dist
     // and rejects an extensionless relative specifier. Bundlers probe extensions
     // themselves, which is why this shipped unnoticed for so long.
+    //
+    // This assertion was itself broken until 2026-09-21: the pattern had lost
+    // its backslashes (`/froms+"(.[^"]*)"/`), so it looked for the literal text
+    // `froms` and matched NOTHING. `offenders` was unconditionally `[]` and the
+    // test passed without ever inspecting a specifier — the same shape of
+    // silent-no-op guard as the `'use client'` quote bug in
+    // `scripts/react-compiler-babel-config.cjs`. Hence `inspected` below: a
+    // guard that can pass while checking nothing is not a guard, so this one
+    // now has to prove it did some work.
     const offenders: string[] = []
+    let inspected = 0
 
     for (const { file, code } of compileAll()) {
-      for (const match of code.matchAll(/froms+"(.[^"]*)"/g)) {
+      for (const match of code.matchAll(/from\s+"(\.[^"]*)"/g)) {
         const specifier = match[1] as string
-        if (!/.(js|css|json|svg)$/.test(specifier)) offenders.push(`${file}: ${specifier}`)
+        inspected += 1
+        if (!/\.(js|css|json|svg)$/.test(specifier)) offenders.push(`${file}: ${specifier}`)
       }
     }
 
     expect(offenders).toEqual([])
+    expect(inspected).toBeGreaterThan(100)
   })
 
   it("has no widespread compiler bailouts", { timeout: 120_000 }, () => {

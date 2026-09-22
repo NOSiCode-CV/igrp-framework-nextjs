@@ -9,7 +9,7 @@ import { describe, expect, it, vi } from "vitest"
 import { act, render } from "@testing-library/react"
 import userEvent from "@testing-library/user-event"
 
-import { IGRPDatePickerInputSingle } from "../date-picker/input-single"
+import { IGRPDatePickerInputSingle } from "../date-picker/input-single.js"
 
 const settle = async () => {
   await act(async () => {

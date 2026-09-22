@@ -10,7 +10,7 @@ import {
   CardFooter as IGRPCardFooter,
   CardHeader as IGRPCardHeader,
   CardTitle as IGRPCardTitle,
-} from "../primitives/card"
+} from "../primitives/card.js"
 import { cn } from "cn"
 
 /**

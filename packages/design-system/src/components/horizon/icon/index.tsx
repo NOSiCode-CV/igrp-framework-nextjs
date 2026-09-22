@@ -8,7 +8,7 @@ import { useId } from "react"
 
 import { AlertCircle, type LucideProps, icons } from "lucide-react"
 
-import { cn } from "../cn"
+import { cn } from "../cn.js"
 
 /** Lucide icon names. */
 type IGRPIconName = keyof typeof icons

@@ -2,7 +2,7 @@ import { describe, expect, it } from "vitest"
 import { render, screen } from "@testing-library/react"
 import type { ColumnDef } from "@tanstack/react-table"
 
-import { IGRPDataTable } from "../data-table"
+import { IGRPDataTable } from "../data-table/index.js"
 
 type Row = { id: number; name: string; status: string }
 

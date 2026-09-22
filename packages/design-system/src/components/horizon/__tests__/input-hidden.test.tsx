@@ -12,8 +12,8 @@ import { describe, expect, it } from "vitest"
 import { render, screen } from "@testing-library/react"
 import { z } from "zod"
 
-import { IGRPForm, type IGRPFormHandle } from "../form"
-import { IGRPInputHidden } from "../input/hidden"
+import { IGRPForm, type IGRPFormHandle } from "../form/index.js"
+import { IGRPInputHidden } from "../input/hidden.js"
 
 const schema = z.object({ token: z.string().optional() })
 

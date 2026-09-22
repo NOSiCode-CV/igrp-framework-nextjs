@@ -3,7 +3,7 @@
 import { useId, type ReactNode } from "react"
 
 import { cn } from "cn"
-import { Table, TableBody, TableCell, TableFooter, TableHead, TableHeader, TableRow } from "../primitives/table"
+import { Table, TableBody, TableCell, TableFooter, TableHead, TableHeader, TableRow } from "../primitives/table.js"
 
 /** @internal Renders cell content with optional custom render function. */
 function TableCellContent<T>({ value, render }: { value: T; render?: (value: T) => ReactNode }) {

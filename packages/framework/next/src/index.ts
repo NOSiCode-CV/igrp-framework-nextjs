@@ -27,6 +27,8 @@ export {
   igrpGetAccessClientConfig,
   igrpResetAccessClientConfig,
   igrpSetAccessClientConfig,
+  igrpWithAccessClientConfig,
+  igrpResolveDefaultTimeout,
 } from './lib/api-config.js';
 
 export {

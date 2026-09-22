@@ -5,8 +5,8 @@ import { FormProvider, useForm, type Resolver, type UseFormReturn } from "react-
 import { zodResolver } from "@hookform/resolvers/zod"
 import { z } from "zod"
 
-import { IGRPInputColor } from "../input/color"
-import { IGRPI18nProvider } from "../../../i18n"
+import { IGRPInputColor } from "../input/color.js"
+import { IGRPI18nProvider } from "../../../i18n/index.js"
 
 function FormHarness({
   defaultValue = "#ff0000",

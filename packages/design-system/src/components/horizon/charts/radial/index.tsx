@@ -2,11 +2,11 @@
 
 import { Suspense, lazy } from "react"
 
-import { cn } from "../../cn"
-import { Skeleton } from "../../../primitives/skeleton"
-import type { IGRPRadialBarChartProps } from "./radial-chart-inner"
+import { cn } from "../../cn.js"
+import { Skeleton } from "../../../primitives/skeleton.js"
+import type { IGRPRadialBarChartProps } from "./radial-chart-inner.js"
 
-const IGRPRadialBarChartLazy = lazy(() => import("./radial-chart-inner").then((m) => ({ default: m.default })))
+const IGRPRadialBarChartLazy = lazy(() => import("./radial-chart-inner.js").then((m) => ({ default: m.default })))
 
 /**
  * Radial bar chart with optional center text and polar grid.

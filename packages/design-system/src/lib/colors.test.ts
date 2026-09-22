@@ -1,6 +1,6 @@
 import { describe, expect, it } from "vitest"
 
-import { IGRPColors, IGRPColorObjectRole, IGRPColorObjectVariants } from "./colors"
+import { IGRPColors, IGRPColorObjectRole, IGRPColorObjectVariants } from "./colors.js"
 
 /** Every slot, flattened to `[role, color, slot]` for exhaustive assertions. */
 const everySlot = IGRPColorObjectRole.flatMap((role) =>

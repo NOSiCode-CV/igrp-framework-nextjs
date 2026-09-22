@@ -1,6 +1,6 @@
 "use client"
 
-import { FieldDescription, FieldError } from "../primitives/field"
+import { FieldDescription, FieldError } from "../primitives/field.js"
 
 /**
  * Props for the IGRPFieldDescription component.

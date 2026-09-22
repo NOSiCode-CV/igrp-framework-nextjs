@@ -2,14 +2,14 @@
 "use client"
 
 import { RadarChart, Radar, PolarGrid, PolarAngleAxis, PolarRadiusAxis, Legend } from "recharts"
-import { cn } from "../cn"
+import { cn } from "../cn.js"
 import {
   ChartContainer,
   ChartTooltip,
   ChartTooltipContent,
   ChartLegend,
   ChartLegendContent,
-} from "../../primitives/chart"
+} from "../../primitives/chart.js"
 import {
   createChartConfig,
   formatChartValue,
@@ -18,8 +18,8 @@ import {
   getLegendHorizontalAlign,
   getLegendLayout,
   getLegendVerticalAlign,
-} from "./lib"
-import { type IGRPChartProps, type IGRPRadarConfig } from "./types"
+} from "./lib.js"
+import { type IGRPChartProps, type IGRPRadarConfig } from "./types.js"
 
 /**
  * Props for the IGRPRadarChart component.

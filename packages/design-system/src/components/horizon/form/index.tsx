@@ -6,11 +6,11 @@ import { toast } from "sonner"
 import { z } from "zod"
 import { zodResolver } from "@hookform/resolvers/zod"
 
-import { Form } from "../../primitives/form"
-import { FieldSet } from "../../primitives/field"
-import { cn } from "../cn"
-import { useIGRPi18n } from "../../../i18n"
-import { IGRPFormContext } from "./form-context"
+import { Form } from "../../primitives/form.js"
+import { FieldSet } from "../../primitives/field.js"
+import { cn } from "../cn.js"
+import { useIGRPi18n } from "../../../i18n/index.js"
+import { IGRPFormContext } from "./form-context.js"
 
 // `useForm`'s `TFieldValues` generic is constrained to react-hook-form's
 // `FieldValues`, which is `Record<string, any>`. To satisfy that constraint

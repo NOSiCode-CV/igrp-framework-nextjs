@@ -3,8 +3,8 @@
 import { useState } from "react"
 import Link from "next/link"
 
-import { cn } from "../cn"
-import { type IGRPPlacementProps } from "../../../types"
+import { cn } from "../cn.js"
+import { type IGRPPlacementProps } from "../../../types.js"
 
 import {
   AlertDialog,
@@ -16,18 +16,18 @@ import {
   AlertDialogHeader,
   AlertDialogTitle,
   AlertDialogTrigger,
-} from "../../primitives/alert-dialog"
+} from "../../primitives/alert-dialog.js"
 
 import {
   DropdownMenu,
   DropdownMenuContent,
   DropdownMenuItem,
   DropdownMenuTrigger,
-} from "../../primitives/dropdown-menu"
-import { buttonVariants } from "../../primitives/button"
-import { IGRPIcon, type IGRPIconName } from "../icon"
-import { type IGRPDataTableDialogProps, type IGRPDataTableLinkProps } from "./row-actions"
-import { useIGRPi18n } from "../../../i18n"
+} from "../../primitives/dropdown-menu.js"
+import { buttonVariants } from "../../primitives/button.js"
+import { IGRPIcon, type IGRPIconName } from "../icon/index.js"
+import { type IGRPDataTableDialogProps, type IGRPDataTableLinkProps } from "./row-actions.js"
+import { useIGRPi18n } from "../../../i18n/index.js"
 
 /**
  * Base props for dropdown menu items.

@@ -2,11 +2,11 @@
 
 import { Suspense, lazy } from "react"
 
-import { cn } from "../../cn"
-import { Skeleton } from "../../../primitives/skeleton"
-import type { IGRPVerticalBarChartProps } from "./vertical-chart-inner"
+import { cn } from "../../cn.js"
+import { Skeleton } from "../../../primitives/skeleton.js"
+import type { IGRPVerticalBarChartProps } from "./vertical-chart-inner.js"
 
-const IGRPVerticalBarChartLazy = lazy(() => import("./vertical-chart-inner").then((m) => ({ default: m.default })))
+const IGRPVerticalBarChartLazy = lazy(() => import("./vertical-chart-inner.js").then((m) => ({ default: m.default })))
 
 /**
  * Vertical bar chart with optional stacking and grid.

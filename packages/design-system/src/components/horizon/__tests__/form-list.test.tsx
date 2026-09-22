@@ -3,9 +3,9 @@ import { describe, expect, it } from "vitest"
 import { render, screen, act } from "@testing-library/react"
 import { z } from "zod"
 
-import { IGRPForm, type IGRPFormHandle } from "../form"
-import { IGRPFormList } from "../form/form-list"
-import { IGRPInputText } from "../input/text"
+import { IGRPForm, type IGRPFormHandle } from "../form/index.js"
+import { IGRPFormList } from "../form/form-list.js"
+import { IGRPInputText } from "../input/text.js"
 
 const schema = z.object({
   anexos: z.array(z.object({ idTipoDocumento: z.coerce.number(), url: z.string().optional() })).optional(),

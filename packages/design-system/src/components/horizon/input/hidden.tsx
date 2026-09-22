@@ -3,8 +3,8 @@
 import { useId } from "react"
 import { Controller, useFormContext } from "react-hook-form"
 
-import { igrpOmitNonDomProps } from "../../../lib/dom-props"
-import type { IGRPInputProps } from "../../../types"
+import { igrpOmitNonDomProps } from "../../../lib/dom-props.js"
+import type { IGRPInputProps } from "../../../types.js"
 
 /**
  * Hidden input for form values. Integrates with react-hook-form.

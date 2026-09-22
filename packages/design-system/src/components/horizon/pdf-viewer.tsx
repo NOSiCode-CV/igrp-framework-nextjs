@@ -3,17 +3,17 @@
 import type React from "react"
 import { useCallback, useEffect, useId, useReducer, useRef, useState } from "react"
 
-import { IGRPColors } from "../../lib/colors"
+import { IGRPColors } from "../../lib/colors.js"
 import { cn } from "cn"
-import { Card, CardHeader, CardTitle } from "../primitives/card"
-import { Dialog, DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogTitle } from "../primitives/dialog"
-import { IGRPBadge } from "./badge"
-import { IGRPButton } from "./button"
-import { IGRPIcon } from "./icon"
-import { IGRPLoadingSpinner } from "./loading-spinner"
-import { IGRPHeadline } from "./typography/headline"
-import { IGRPText } from "./typography/text"
-import { useIGRPi18n, useIGRPLocale } from "../../i18n"
+import { Card, CardHeader, CardTitle } from "../primitives/card.js"
+import { Dialog, DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogTitle } from "../primitives/dialog.js"
+import { IGRPBadge } from "./badge.js"
+import { IGRPButton } from "./button.js"
+import { IGRPIcon } from "./icon/index.js"
+import { IGRPLoadingSpinner } from "./loading-spinner.js"
+import { IGRPHeadline } from "./typography/headline.js"
+import { IGRPText } from "./typography/text.js"
+import { useIGRPi18n, useIGRPLocale } from "../../i18n/index.js"
 
 /**
  * Document item shape for PDF viewer.

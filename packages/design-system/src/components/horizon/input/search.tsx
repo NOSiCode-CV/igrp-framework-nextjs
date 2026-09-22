@@ -4,16 +4,16 @@ import { useCallback, useEffect, useId, useRef, useState, type ReactNode } from 
 import { useFormContext } from "react-hook-form"
 import type { VariantProps } from "class-variance-authority"
 
-import { cn } from "../cn"
-import { igrpOmitNonDomProps } from "../../../lib/dom-props"
-import { type IGRPInputProps } from "../../../types"
-import { InputGroup, InputGroupAddon, InputGroupInput } from "../../primitives/input-group"
-import { FormControl, FormDescription, FormField, FormItem, FormLabel, FormMessage } from "../../primitives/form"
-import { IGRPButton } from "../button"
-import { IGRPFieldDescription } from "../field-description"
-import { IGRPIcon, type IGRPIconName } from "../icon"
-import { IGRPLabel } from "../label"
-import { Field, FieldError } from "../../primitives/field"
+import { cn } from "../cn.js"
+import { igrpOmitNonDomProps } from "../../../lib/dom-props.js"
+import { type IGRPInputProps } from "../../../types.js"
+import { InputGroup, InputGroupAddon, InputGroupInput } from "../../primitives/input-group.js"
+import { FormControl, FormDescription, FormField, FormItem, FormLabel, FormMessage } from "../../primitives/form.js"
+import { IGRPButton } from "../button.js"
+import { IGRPFieldDescription } from "../field-description.js"
+import { IGRPIcon, type IGRPIconName } from "../icon/index.js"
+import { IGRPLabel } from "../label.js"
+import { Field, FieldError } from "../../primitives/field.js"
 
 /**
  * Props for the IGRPInputSearch component.

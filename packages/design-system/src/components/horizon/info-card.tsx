@@ -2,11 +2,11 @@
 
 import { Fragment, useId } from "react"
 
-import { IGRPColors, type IGRPColorRole, type IGRPColorVariants } from "../../lib/colors"
+import { IGRPColors, type IGRPColorRole, type IGRPColorVariants } from "../../lib/colors.js"
 import { cn } from "cn"
-import { Card, CardContent, CardHeader, CardTitle } from "../primitives/card"
-import { Separator } from "../primitives/separator"
-import { IGRPIcon, type IGRPIconName } from "./icon"
+import { Card, CardContent, CardHeader, CardTitle } from "../primitives/card.js"
+import { Separator } from "../primitives/separator.js"
+import { IGRPIcon, type IGRPIconName } from "./icon/index.js"
 
 /** Layout direction for a field's label and value. */
 type IGRPInfoCardOrientation = "horizontal" | "vertical"

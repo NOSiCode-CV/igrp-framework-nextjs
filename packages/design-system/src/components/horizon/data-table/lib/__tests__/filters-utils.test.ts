@@ -1,5 +1,5 @@
 import { describe, it, expect } from "vitest"
-import { IGRPDataTableDateRangeFilterFn } from "../filters-utils"
+import { IGRPDataTableDateRangeFilterFn } from "../filters-utils.js"
 
 const row = (v: unknown) => ({ getValue: () => v }) as never
 const noMeta = () => {}

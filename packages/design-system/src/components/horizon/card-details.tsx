@@ -3,10 +3,10 @@
 import { useId } from "react"
 
 import { cn } from "cn"
-import { igrpCleanString } from "../../lib/utilities"
-import { Card, CardHeader, CardTitle, CardDescription, CardContent } from "../primitives/card"
-import { Separator } from "../primitives/separator"
-import { IGRPCopyTo } from "./copy-to"
+import { igrpCleanString } from "../../lib/utilities.js"
+import { Card, CardHeader, CardTitle, CardDescription, CardContent } from "../primitives/card.js"
+import { Separator } from "../primitives/separator.js"
+import { IGRPCopyTo } from "./copy-to.js"
 
 /**
  * Single detail item (label + content).

@@ -2,12 +2,12 @@
 
 import { useId } from "react"
 
-import { IGRPColors, type IGRPColorRole, type IGRPColorVariants } from "../../lib/colors"
-import { igrpAlertIconMappings } from "../../lib/utilities"
+import { IGRPColors, type IGRPColorRole, type IGRPColorVariants } from "../../lib/colors.js"
+import { igrpAlertIconMappings } from "../../lib/utilities.js"
 import { cn } from "cn"
-import type { IGRPBaseAttributes, IGRPPlacementProps } from "../../types"
-import { IGRPIcon, type IGRPIconName } from "./icon"
-import { IGRPLink } from "./typography/link"
+import type { IGRPBaseAttributes, IGRPPlacementProps } from "../../types.js"
+import { IGRPIcon, type IGRPIconName } from "./icon/index.js"
+import { IGRPLink } from "./typography/link.js"
 
 /**
  * Props for the IGRPAlert component.

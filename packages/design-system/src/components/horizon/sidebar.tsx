@@ -29,7 +29,7 @@ import {
   SidebarSeparator as IGRPSidebarSeparator,
   SidebarTrigger as IGRPSidebarTrigger,
   useSidebar as useIGRPSidebar,
-} from "../primitives/sidebar"
+} from "../primitives/sidebar.js"
 
 export {
   IGRPSidebarProvider,

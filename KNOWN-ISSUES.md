@@ -78,6 +78,37 @@ have it now. **When a gate is added to one framework package, check whether its
 siblings have the same exposure**; three of these four packages share a build
 shape, so most gates generalise.
 
+> **2026-09-22 — that generalisation was itself too narrow, and it cost us.**
+> The paragraph above scoped the sweep to the *framework* packages and stopped.
+> `packages/design-system` is the fourth `"type": "module"` Babel-built package,
+> it had no `check:dist`, and **all 169 relative specifiers in its
+> `dist/index.d.ts` were extensionless** — its entire public type surface was
+> `any` for every `node16`/`nodenext` consumer, demonstrated with a `tsc` run
+> that accepted `IGRPButton({ totallyMadeUpProp: 12345 })` and exited 0.
+>
+> Fixed on 2026-09-22: 786 source specifiers now carry `.js`, `check:dist` runs
+> in `build`, and `release` runs `lint` + `typecheck` + `test`. The design system
+> was the **only** package in the repo with a test suite *and* an ESLint config
+> that gated on neither, and it had no `typecheck` script, so `pnpm -r run
+> typecheck` silently skipped it — the same `pnpm -r` skip this entry opens with.
+> Root `typecheck` now covers **five** packages, not four.
+>
+> Two lessons, both already paid for twice:
+>
+> 1. **"All four framework packages" is the wrong unit.** The unit is "every
+>    package that shares the build shape", and `design-system` is one of them.
+>    Sweep by property, not by directory.
+> 2. **A guard that can pass while checking nothing is not a guard.** The design
+>    system already had an assertion for this exact defect —
+>    `build-pipeline.test.ts` → "emits fully specified relative specifiers" — and
+>    it had never once run: the pattern had lost its backslashes
+>    (`/froms+"(.[^"]*)"/`), so it matched the literal text `froms`, found
+>    nothing, and passed unconditionally. This is the third instance of the
+>    silent-no-op guard in this repo, after the `'use client'` quote bug in
+>    `scripts/react-compiler-babel-config.cjs` and the missing `check:dist`.
+>    Every new guard should assert that it *did some work* — the repaired test
+>    and `check-dist.mjs` both now fail when they inspect zero items.
+
 ### Fix
 
 Pick one of two directions; don't do both.

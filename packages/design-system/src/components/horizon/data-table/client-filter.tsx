@@ -4,9 +4,9 @@
 import { type Column, type Table } from "@tanstack/react-table"
 import { Fragment, type JSX } from "react"
 
-import { cn } from "../cn"
-import { useFilterState } from "./hooks/use-filter-state"
-import { IGRPButton } from "../button"
+import { cn } from "../cn.js"
+import { useFilterState } from "./hooks/use-filter-state.js"
+import { IGRPButton } from "../button.js"
 
 /**
  * Single filter config for client-side filtering.

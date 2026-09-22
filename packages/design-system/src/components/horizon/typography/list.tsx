@@ -4,10 +4,10 @@
 import { useEffect, useId, useMemo, useReducer, useState } from "react"
 import { cva, type VariantProps } from "class-variance-authority"
 
-import { IGRPColors, type IGRPColorRole, type IGRPColorVariants } from "../../../lib/colors"
-import { cn } from "../cn"
-import { IGRPBadge } from "../badge"
-import { IGRPIcon, type IGRPIconName } from "../icon"
+import { IGRPColors, type IGRPColorRole, type IGRPColorVariants } from "../../../lib/colors.js"
+import { cn } from "../cn.js"
+import { IGRPBadge } from "../badge.js"
+import { IGRPIcon, type IGRPIconName } from "../icon/index.js"
 
 const igrpTextlistVariants = cva("", {
   variants: {

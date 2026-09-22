@@ -10,8 +10,8 @@ import { act, render, screen } from "@testing-library/react"
 import userEvent from "@testing-library/user-event"
 import { z } from "zod"
 
-import { IGRPForm, type IGRPFormHandle } from "../form"
-import { IGRPSelect } from "../input/select"
+import { IGRPForm, type IGRPFormHandle } from "../form/index.js"
+import { IGRPSelect } from "../input/select.js"
 
 const OPTIONS = [
   { label: "Praia", value: "praia" },

@@ -3,11 +3,11 @@
 import { useCallback, useEffect, useState } from "react"
 import NextImage from "next/image"
 
-import { Button } from "../primitives/button"
-import { Cropper, CropperCropArea, CropperDescription, CropperImage } from "../primitives/cropper"
-import { Slider } from "../primitives/slider"
+import { Button } from "../primitives/button.js"
+import { Cropper, CropperCropArea, CropperDescription, CropperImage } from "../primitives/cropper.js"
+import { Slider } from "../primitives/slider.js"
 import { cn } from "cn"
-import { useIGRPi18n } from "../../i18n"
+import { useIGRPi18n } from "../../i18n/index.js"
 
 // ─── Types ───────────────────────────────────────────────────────────────────
 

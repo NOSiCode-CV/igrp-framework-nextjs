@@ -4,13 +4,13 @@ import { useCallback, useEffect, useId, useState } from "react"
 import { useFormContext } from "react-hook-form"
 import { CalendarIcon, XIcon } from "lucide-react"
 
-import { formatDateToString, getDisabledDays, toLocalDate } from "../../../../lib/calendar-utils"
-import { getDateFormatMaxLength, maskDateInput, parseDateInput } from "../../../../lib/date-input-format"
-import { DD_MM_YYYY } from "../../../../lib/utilities"
-import { cn } from "../../cn"
-import { type IGRPDatePickerBaseProps } from "../../../../types"
-import { Button } from "../../../primitives/button"
-import { Calendar } from "../../../primitives/calendar"
+import { formatDateToString, getDisabledDays, toLocalDate } from "../../../../lib/calendar-utils.js"
+import { getDateFormatMaxLength, maskDateInput, parseDateInput } from "../../../../lib/date-input-format.js"
+import { DD_MM_YYYY } from "../../../../lib/utilities.js"
+import { cn } from "../../cn.js"
+import { type IGRPDatePickerBaseProps } from "../../../../types.js"
+import { Button } from "../../../primitives/button.js"
+import { Calendar } from "../../../primitives/calendar.js"
 import {
   useFormField,
   FormControl,
@@ -19,13 +19,13 @@ import {
   FormItem,
   FormLabel,
   FormMessage,
-} from "../../../primitives/form"
-import { Input } from "../../../primitives/input"
-import { Popover, PopoverContent, PopoverTrigger } from "../../../primitives/popover"
-import { type IGRPCalendarSingleProps } from "../../calendar/single"
-import { IGRPLabel } from "../../label"
-import { Field, FieldDescription } from "../../../primitives/field"
-import { useIGRPi18n } from "../../../../i18n"
+} from "../../../primitives/form.js"
+import { Input } from "../../../primitives/input.js"
+import { Popover, PopoverContent, PopoverTrigger } from "../../../primitives/popover.js"
+import { type IGRPCalendarSingleProps } from "../../calendar/single.js"
+import { IGRPLabel } from "../../label.js"
+import { Field, FieldDescription } from "../../../primitives/field.js"
+import { useIGRPi18n } from "../../../../i18n/index.js"
 
 /**
  * Props for the IGRPDatePickerInputSingle component.

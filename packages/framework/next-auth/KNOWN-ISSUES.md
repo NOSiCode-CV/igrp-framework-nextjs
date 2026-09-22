@@ -14,6 +14,19 @@ cookie-terminator fix (2026-09-21) · documented rather than automated
 **Severity:** low, but it grows with cookie size — see "why it is not purely
 cosmetic".
 
+> **2026-09-22 — a second, narrower rename now exists.** The injectivity fix in
+> `basePathCookieSuffix` appends a disambiguating hash when slugging is lossy,
+> so a basePath containing uppercase, `_`, `.` or a literal `-` renames once
+> more and orphans one more cookie. Deployments on the ordinary shape
+> (lowercase alphanumeric segments — `/apps/template`, `/apps/hr`, `/apps/a/b`)
+> are deliberately **unaffected**: the hash is conditional precisely so the
+> common case keeps the name it already has and this entry does not get worse
+> for everyone. The remediation below is unchanged and covers both renames —
+> `igrpDeleteAuthCookies()` matches by basename.
+>
+> This is the second rename in as many changes, which strengthens the closing
+> argument: **do the sweep before the next basePath-affecting cookie change.**
+
 ### Symptom
 
 After upgrading an app that sets `NEXT_PUBLIC_BASE_PATH`, every existing user's

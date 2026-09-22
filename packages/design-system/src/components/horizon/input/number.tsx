@@ -3,15 +3,15 @@
 import { useState, useEffect, useId, useMemo, useRef } from "react"
 import { useFormContext, Controller } from "react-hook-form"
 
-import { cn } from "../cn"
-import { igrpOmitNonDomProps } from "../../../lib/dom-props"
-import { useIGRPi18n, useIGRPLocale } from "../../../i18n"
-import type { IGRPInputProps } from "../../../types"
-import { Input } from "../../primitives/input"
-import { IGRPLabel } from "../label"
-import { Button } from "../../primitives/button"
+import { cn } from "../cn.js"
+import { igrpOmitNonDomProps } from "../../../lib/dom-props.js"
+import { useIGRPi18n, useIGRPLocale } from "../../../i18n/index.js"
+import type { IGRPInputProps } from "../../../types.js"
+import { Input } from "../../primitives/input.js"
+import { IGRPLabel } from "../label.js"
+import { Button } from "../../primitives/button.js"
 import { ChevronDown, ChevronUp } from "lucide-react"
-import { Field, FieldDescription, FieldError } from "../../primitives/field"
+import { Field, FieldDescription, FieldError } from "../../primitives/field.js"
 
 /**
  * Props for the IGRPInputNumber component.

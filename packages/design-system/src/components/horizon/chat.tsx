@@ -4,11 +4,11 @@ import { useState, useEffect, useRef, useCallback, useId } from "react"
 import Image from "next/image"
 
 import { cn } from "cn"
-import { ScrollArea } from "../primitives/scroll-area"
-import { IGRPButton } from "./button"
-import { IGRPInputText } from "./input/text"
-import { IGRPIcon } from "./icon"
-import { useIGRPi18n } from "../../i18n"
+import { ScrollArea } from "../primitives/scroll-area.js"
+import { IGRPButton } from "./button.js"
+import { IGRPInputText } from "./input/text.js"
+import { IGRPIcon } from "./icon/index.js"
+import { useIGRPi18n } from "../../i18n/index.js"
 
 /**
  * Chat message shape for IGRPChat.

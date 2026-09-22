@@ -2,8 +2,8 @@
 
 import type { DateRange } from "react-day-picker"
 
-import { IGRPDatePickerRange, type IGRPDatePickerRangeProps } from "./range"
-import { IGRPDatePickerSingle, type IGRPDatePickerSingleProps } from "./single"
+import { IGRPDatePickerRange, type IGRPDatePickerRangeProps } from "./range.js"
+import { IGRPDatePickerSingle, type IGRPDatePickerSingleProps } from "./single.js"
 
 type IGRPDatePickerSingleModeProps = IGRPDatePickerSingleProps & {
   mode: "single"

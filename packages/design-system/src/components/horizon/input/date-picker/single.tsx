@@ -5,10 +5,10 @@ import { format } from "date-fns"
 import { useFormContext } from "react-hook-form"
 import { CalendarIcon } from "lucide-react"
 
-import { toLocalDate } from "../../../../lib/calendar-utils"
-import { DD_MM_YYYY } from "../../../../lib/utilities"
-import { cn } from "../../cn"
-import { type IGRPDatePickerBaseProps } from "../../../../types"
+import { toLocalDate } from "../../../../lib/calendar-utils.js"
+import { DD_MM_YYYY } from "../../../../lib/utilities.js"
+import { cn } from "../../cn.js"
+import { type IGRPDatePickerBaseProps } from "../../../../types.js"
 import {
   useFormField,
   FormControl,
@@ -17,14 +17,14 @@ import {
   FormItem,
   FormLabel,
   FormMessage,
-} from "../../../primitives/form"
-import { Button } from "../../../primitives/button"
-import { Popover, PopoverContent, PopoverTrigger } from "../../../primitives/popover"
-import { IGRPButton } from "../../button"
-import { IGRPCalendarSingle, type IGRPCalendarSingleProps } from "../../calendar/single"
-import { IGRPLabel } from "../../label"
-import { Field, FieldDescription } from "../../../primitives/field"
-import { useIGRPi18n } from "../../../../i18n"
+} from "../../../primitives/form.js"
+import { Button } from "../../../primitives/button.js"
+import { Popover, PopoverContent, PopoverTrigger } from "../../../primitives/popover.js"
+import { IGRPButton } from "../../button.js"
+import { IGRPCalendarSingle, type IGRPCalendarSingleProps } from "../../calendar/single.js"
+import { IGRPLabel } from "../../label.js"
+import { Field, FieldDescription } from "../../../primitives/field.js"
+import { useIGRPi18n } from "../../../../i18n/index.js"
 
 /** @internal Popover + calendar + clear button. */
 function DatePickerSingleField({

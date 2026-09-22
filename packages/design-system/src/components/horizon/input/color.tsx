@@ -4,21 +4,21 @@ import { useId, useState } from "react"
 import { useFormContext } from "react-hook-form"
 import { ChevronDown } from "lucide-react"
 
-import { cn } from "../cn"
-import type { IGRPInputProps } from "../../../types"
-import { InputGroup, InputGroupInput, InputGroupAddon, InputGroupButton } from "../../primitives/input-group"
+import { cn } from "../cn.js"
+import type { IGRPInputProps } from "../../../types.js"
+import { InputGroup, InputGroupInput, InputGroupAddon, InputGroupButton } from "../../primitives/input-group.js"
 import {
   DropdownMenu,
   DropdownMenuTrigger,
   DropdownMenuContent,
   DropdownMenuGroup,
   DropdownMenuItem,
-} from "../../primitives/dropdown-menu"
-import { IGRPFormField } from "../form/form-field"
-import { IGRPLabel } from "../label"
-import { useIGRPi18n } from "../../../i18n"
-import { hexToFormat, formatToHex, detectFormat, type ColorFormat } from "../../../lib/color-utils"
-import { Field, FieldError } from "../../primitives/field"
+} from "../../primitives/dropdown-menu.js"
+import { IGRPFormField } from "../form/form-field.js"
+import { IGRPLabel } from "../label.js"
+import { useIGRPi18n } from "../../../i18n/index.js"
+import { hexToFormat, formatToHex, detectFormat, type ColorFormat } from "../../../lib/color-utils.js"
+import { Field, FieldError } from "../../primitives/field.js"
 
 interface IGRPInputColorProps extends Omit<IGRPInputProps, "onChange" | "value" | "defaultValue"> {
   /** Initial color in any supported format. Default: "#000000" */

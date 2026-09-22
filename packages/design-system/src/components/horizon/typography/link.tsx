@@ -7,13 +7,13 @@ import { useId, type ReactNode } from "react"
 import Link, { type LinkProps } from "next/link"
 import { cva, type VariantProps } from "class-variance-authority"
 
-import { IGRPIcon, type IGRPIconName } from "../icon"
-import { IGRPColors, type IGRPColorRole, type IGRPColorVariants } from "../../../lib/colors"
-import { igrpColorText } from "../../../lib/colors"
-import { igrpIsExternalUrl } from "../../../lib/utilities"
-import { cn } from "../cn"
-import { igrpOmitNonDomProps } from "../../../lib/dom-props"
-import type { IGRPBaseAttributes, IGRPPlacementProps } from "../../../types"
+import { IGRPIcon, type IGRPIconName } from "../icon/index.js"
+import { IGRPColors, type IGRPColorRole, type IGRPColorVariants } from "../../../lib/colors.js"
+import { igrpColorText } from "../../../lib/colors.js"
+import { igrpIsExternalUrl } from "../../../lib/utilities.js"
+import { cn } from "../cn.js"
+import { igrpOmitNonDomProps } from "../../../lib/dom-props.js"
+import type { IGRPBaseAttributes, IGRPPlacementProps } from "../../../types.js"
 
 const IGRPLinkVariants = cva(
   "transition-colors focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 focus-visible:outline-none",

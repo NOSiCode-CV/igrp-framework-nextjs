@@ -2,12 +2,12 @@
 
 import { useId, useState } from "react"
 
-import { DEFAULT_HIDE_TIME_INDICATOR } from "../../../lib/utilities"
-import type { IGRPCalendarTimeProps } from "../../../types"
-import { Input } from "../../primitives/input"
-import { Label } from "../../primitives/label"
-import { IGRPCalendarSingle, type IGRPCalendarSingleProps } from "./single"
-import { cn } from "../cn"
+import { DEFAULT_HIDE_TIME_INDICATOR } from "../../../lib/utilities.js"
+import type { IGRPCalendarTimeProps } from "../../../types.js"
+import { Input } from "../../primitives/input.js"
+import { Label } from "../../primitives/label.js"
+import { IGRPCalendarSingle, type IGRPCalendarSingleProps } from "./single.js"
+import { cn } from "../cn.js"
 
 /**
  * Props for the IGRPCalendarSingleTime component.

@@ -1,5 +1,5 @@
 import { describe, it, expect } from "vitest"
-import { hexToFormat, formatToHex, detectFormat, colorToOklch } from "./color-utils"
+import { hexToFormat, formatToHex, detectFormat, colorToOklch } from "./color-utils.js"
 
 describe("detectFormat", () => {
   it("detects hex", () => expect(detectFormat("#3b82f6")).toBe("hex"))

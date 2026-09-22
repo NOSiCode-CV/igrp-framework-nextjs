@@ -3,8 +3,8 @@ import { render, screen } from "@testing-library/react"
 import userEvent from "@testing-library/user-event"
 import { FormProvider, useForm } from "react-hook-form"
 
-import { IGRPInputNumber } from "../input/number"
-import { IGRPI18nProvider } from "../../../i18n"
+import { IGRPInputNumber } from "../input/number.js"
+import { IGRPI18nProvider } from "../../../i18n/index.js"
 
 describe("IGRPInputNumber", () => {
   it("renders with role=spinbutton and the pt-PT increment/decrement labels", () => {

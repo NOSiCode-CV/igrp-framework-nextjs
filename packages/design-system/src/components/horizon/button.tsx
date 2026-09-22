@@ -4,13 +4,13 @@ import * as React from "react"
 import { useId, type ReactNode } from "react"
 import type { VariantProps } from "class-variance-authority"
 
-import { Button, buttonVariants } from "../primitives/button"
-import { Spinner } from "../primitives/spinner"
-import { IGRPIcon } from "./icon"
+import { Button, buttonVariants } from "../primitives/button.js"
+import { Spinner } from "../primitives/spinner.js"
+import { IGRPIcon } from "./icon/index.js"
 import { cn } from "cn"
-import { igrpOmitNonDomProps } from "../../lib/dom-props"
-import type { IGRPBaseAttributes } from "../../types"
-import { useIGRPi18n } from "../../i18n"
+import { igrpOmitNonDomProps } from "../../lib/dom-props.js"
+import type { IGRPBaseAttributes } from "../../types.js"
+import { useIGRPi18n } from "../../i18n/index.js"
 
 /**
  * Props for the IGRPButton component.

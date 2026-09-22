@@ -2,11 +2,11 @@
 
 import { Suspense, lazy } from "react"
 
-import { cn } from "../cn"
-import { Skeleton } from "../../primitives/skeleton"
-import type { IGRPRadarChartProps } from "./radar-chart-inner"
+import { cn } from "../cn.js"
+import { Skeleton } from "../../primitives/skeleton.js"
+import type { IGRPRadarChartProps } from "./radar-chart-inner.js"
 
-const IGRPRadarChartLazy = lazy(() => import("./radar-chart-inner").then((m) => ({ default: m.default })))
+const IGRPRadarChartLazy = lazy(() => import("./radar-chart-inner.js").then((m) => ({ default: m.default })))
 
 /**
  * Radar/spider chart with polar grid and configurable axes.

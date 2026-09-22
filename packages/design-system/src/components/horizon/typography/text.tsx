@@ -4,8 +4,8 @@
 import { useId } from "react"
 import { cva, type VariantProps } from "class-variance-authority"
 
-import { type IGRPColorVariants } from "../../../lib/colors"
-import { cn } from "../cn"
+import { type IGRPColorVariants } from "../../../lib/colors.js"
+import { cn } from "../cn.js"
 
 const EMPTY_HIGHLIGHT: string[] = []
 

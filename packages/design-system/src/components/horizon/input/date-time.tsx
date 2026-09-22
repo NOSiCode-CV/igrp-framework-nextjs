@@ -3,14 +3,14 @@
 import { useId, useState } from "react"
 import { useFormContext, Controller } from "react-hook-form"
 
-import { DD_MM_YYYY } from "../../../lib/utilities"
-import { cn } from "../cn"
-import { igrpOmitNonDomProps } from "../../../lib/dom-props"
-import type { IGRPInputProps } from "../../../types"
+import { DD_MM_YYYY } from "../../../lib/utilities.js"
+import { cn } from "../cn.js"
+import { igrpOmitNonDomProps } from "../../../lib/dom-props.js"
+import type { IGRPInputProps } from "../../../types.js"
 
-import { Input } from "../../primitives/input"
-import { IGRPLabel } from "../label"
-import { Field, FieldDescription, FieldError } from "../../primitives/field"
+import { Input } from "../../primitives/input.js"
+import { IGRPLabel } from "../label.js"
+import { Field, FieldDescription, FieldError } from "../../primitives/field.js"
 
 const DEFAULT_PLACEHOLDER = `${DD_MM_YYYY}, --:--`
 

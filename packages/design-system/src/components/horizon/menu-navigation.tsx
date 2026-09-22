@@ -2,11 +2,11 @@
 
 import { useRef, useState, useCallback, createContext, useContext, useId } from "react"
 
-import type { IGRPColorRole, IGRPColorVariants } from "../../lib/colors"
+import type { IGRPColorRole, IGRPColorVariants } from "../../lib/colors.js"
 import { cn } from "cn"
-import { Card, CardContent, CardHeader, CardTitle } from "../primitives/card"
-import { IGRPBadge } from "./badge"
-import { IGRPIcon } from "./icon"
+import { Card, CardContent, CardHeader, CardTitle } from "../primitives/card.js"
+import { IGRPBadge } from "./badge.js"
+import { IGRPIcon } from "./icon/index.js"
 
 function getScrollBehavior(): ScrollBehavior {
   if (typeof window !== "undefined" && window.matchMedia("(prefers-reduced-motion: reduce)").matches) {

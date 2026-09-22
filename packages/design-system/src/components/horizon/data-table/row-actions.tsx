@@ -3,11 +3,11 @@
 import { type ReactNode } from "react"
 import { type VariantProps } from "class-variance-authority"
 
-import { buttonVariants } from "../../primitives/button"
-import { type IGRPIconName } from "../icon"
-import type { igrpModalDialogContentVariants } from "../modal-dialog"
-import { cn } from "../cn"
-import { IGRPDataTableTooltipProvider } from "./tooltip-provider"
+import { buttonVariants } from "../../primitives/button.js"
+import { type IGRPIconName } from "../icon/index.js"
+import type { igrpModalDialogContentVariants } from "../modal-dialog.js"
+import { cn } from "../cn.js"
+import { IGRPDataTableTooltipProvider } from "./tooltip-provider.js"
 
 /**
  * Base props for data table row actions (buttons, links, dialogs).

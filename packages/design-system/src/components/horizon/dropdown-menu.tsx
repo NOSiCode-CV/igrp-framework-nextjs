@@ -16,7 +16,7 @@ import {
   DropdownMenuSub as IGRPDropdownMenuSub,
   DropdownMenuSubTrigger as IGRPDropdownMenuSubTrigger,
   DropdownMenuSubContent as IGRPDropdownMenuSubContent,
-} from "../primitives/dropdown-menu"
+} from "../primitives/dropdown-menu.js"
 
 export {
   IGRPDropdownMenu,

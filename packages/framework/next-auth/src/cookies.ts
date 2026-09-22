@@ -71,16 +71,81 @@ export function resolveSecureCookie(cookieNames: Iterable<string>): boolean | un
  * the exact cross-app interference this module exists to prevent.
  *
  * `~` is a valid cookie-name token character (RFC 6265 → RFC 7230 `token`) and
- * can never appear in a slug, which is `[a-z0-9-]` only. Closing the suffix with
- * it makes the suffix set prefix-free: `.apps-hr~` is not a prefix of
- * `.apps-hr-admin~`, while `.apps-hr~.0` still chunks cleanly.
+ * can never appear in a slug, which is `[a-z0-9-]` plus an optional
+ * `.<hash>` tail. Closing the suffix with it makes the suffix set prefix-free:
+ * `.apps-hr~` is not a prefix of `.apps-hr-admin~` nor of `.apps-hr.1f2c3d04~`,
+ * while `.apps-hr~.0` still chunks cleanly.
+ *
+ * Prefix-free is NOT the same as injective, and the terminator only buys the
+ * former — see {@link isLosslessSlug} for the collision half of the problem.
  */
 const SUFFIX_TERMINATOR = '~';
+
+/**
+ * Separator between the slug and its disambiguating hash.
+ *
+ * Must be a character the slug itself can never contain, or the two classes of
+ * suffix could still collide: `/apps/a/b/1f2c3d` slugs to `apps-a-b-1f2c3d`,
+ * which is exactly what `-` as a separator would produce for a hashed
+ * `/apps/a-b`. `.` cannot survive slugging (it is folded into `-` like every
+ * other non-alphanumeric), so it partitions the two classes cleanly. It is also
+ * already how NextAuth spells its own cookie names (`next-auth.session-token`).
+ */
+const HASH_SEPARATOR = '.';
+
+/**
+ * 32-bit FNV-1a, as 8 lowercase hex characters.
+ *
+ * Deliberately NOT a cryptographic hash: this disambiguates a handful of
+ * co-hosted basePaths, it does not authenticate anything, and the value is
+ * visible in a cookie name either way. Web Crypto's `digest()` is async and
+ * this must stay synchronous and dependency-free to keep working in Edge, Node
+ * and the browser alike.
+ */
+function shortHash(value: string): string {
+  let hash = 0x811c9dc5;
+  for (let i = 0; i < value.length; i += 1) {
+    hash ^= value.charCodeAt(i);
+    // `Math.imul` keeps the multiply in 32-bit space; `>>> 0` forces unsigned.
+    hash = Math.imul(hash, 0x01000193) >>> 0;
+  }
+  return hash.toString(16).padStart(8, '0');
+}
+
+/**
+ * True when `slug` uniquely determines the basePath it came from, so no
+ * disambiguating hash is needed.
+ *
+ * The slug transform folds EVERY non-alphanumeric run to `-` and lowercases, so
+ * it is many-to-one: `/apps/a/b` and `/apps/a-b` both produce `apps-a-b`, as do
+ * `/apps/hr_admin`, `/apps/hr.admin` and `/apps/HR-ADMIN` for `apps-hr-admin`.
+ * Two co-hosted apps that collide get precisely the cross-app interference this
+ * module exists to prevent — the `~` terminator makes the suffix set
+ * prefix-free, which is a different property from injective.
+ *
+ * The lossless class is the one where the only substitution performed was
+ * `/` → `-`: the path is already lowercase, has no `-` of its own (or it would
+ * be ambiguous with a `/`), and contains no other character that slugging would
+ * rewrite. Within that class the mapping is reversible, hence collision-free.
+ *
+ * Checking rather than always hashing is deliberate. `/apps/template`,
+ * `/apps/hr` and every other ordinary single-segment-per-level basePath is
+ * lossless, so it keeps the cookie name it has today — an unconditional hash
+ * would rename every deployment's auth cookies, signing every user out and
+ * orphaning a second cookie in each jar (see KNOWN-ISSUES.md #1).
+ */
+function isLosslessSlug(canonical: string): boolean {
+  return /^[a-z0-9]+(?:\/[a-z0-9]+)*$/.test(canonical);
+}
 
 /**
  * Turns a basePath into a cookie-name-safe suffix: `/apps/template` →
  * `.apps-template~`. Returns `''` for an empty or root basePath, which is what
  * keeps single-app deployments on the stock NextAuth names.
+ *
+ * A basePath whose slug is ambiguous (see {@link isLosslessSlug}) additionally
+ * carries a short hash of the original path — `/apps/a-b` → `.apps-a-b.9f2b1c04~`
+ * — so it can never share a cookie name with `/apps/a/b`.
  *
  * The trailing {@link SUFFIX_TERMINATOR} is load-bearing, not decoration — see
  * its doc comment.
@@ -88,12 +153,19 @@ const SUFFIX_TERMINATOR = '~';
 export function basePathCookieSuffix(basePath: string | undefined): string {
   const trimmed = (basePath ?? '').trim();
   if (!trimmed || trimmed === '/') return '';
+  const canonical = trimmed.replace(/^\/+|\/+$/g, '');
   const slug = trimmed
     .replace(/^\/+|\/+$/g, '')
     .replace(/[^a-zA-Z0-9]+/g, '-')
     .replace(/^-+|-+$/g, '')
     .toLowerCase();
-  return slug ? `.${slug}${SUFFIX_TERMINATOR}` : '';
+  if (!slug) return '';
+  // Hash the ORIGINAL basePath, not the slug — the slug is exactly the lossy
+  // value we are disambiguating, so hashing it would collide identically.
+  const disambiguator = isLosslessSlug(canonical)
+    ? ''
+    : `${HASH_SEPARATOR}${shortHash(canonical)}`;
+  return `.${slug}${disambiguator}${SUFFIX_TERMINATOR}`;
 }
 
 /** Shape of one NextAuth v4 cookie definition, restated to avoid importing `next-auth`. */

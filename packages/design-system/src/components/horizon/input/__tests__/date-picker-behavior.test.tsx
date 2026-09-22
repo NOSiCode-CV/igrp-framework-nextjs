@@ -5,10 +5,10 @@ import userEvent from "@testing-library/user-event"
 import { useFormContext } from "react-hook-form"
 import { z } from "zod"
 
-import { IGRPForm, type IGRPFormHandle } from "../../form"
-import { IGRPCalendarSingle } from "../../calendar/single"
-import { IGRPDatePickerSingle } from "../date-picker/single"
-import { IGRPDatePickerInputSingle } from "../date-picker/input-single"
+import { IGRPForm, type IGRPFormHandle } from "../../form/index.js"
+import { IGRPCalendarSingle } from "../../calendar/single.js"
+import { IGRPDatePickerSingle } from "../date-picker/single.js"
+import { IGRPDatePickerInputSingle } from "../date-picker/input-single.js"
 
 const schema = z.object({ d: z.any() })
 

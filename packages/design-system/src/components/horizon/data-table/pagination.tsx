@@ -5,13 +5,13 @@ import { useId } from "react"
 import { type Table } from "@tanstack/react-table"
 import { ChevronFirst, ChevronLast, ChevronLeft, ChevronRight } from "lucide-react"
 
-import { Label } from "../../primitives/label"
-import { Button } from "../../primitives/button"
-import { Pagination, PaginationContent, PaginationEllipsis, PaginationItem } from "../../primitives/pagination"
-import { Select, SelectContent, SelectGroup, SelectItem, SelectTrigger, SelectValue } from "../../primitives/select"
-import { usePagination } from "./hooks/use-pagination"
-import { cn } from "../cn"
-import { useIGRPi18n } from "../../../i18n"
+import { Label } from "../../primitives/label.js"
+import { Button } from "../../primitives/button.js"
+import { Pagination, PaginationContent, PaginationEllipsis, PaginationItem } from "../../primitives/pagination.js"
+import { Select, SelectContent, SelectGroup, SelectItem, SelectTrigger, SelectValue } from "../../primitives/select.js"
+import { usePagination } from "./hooks/use-pagination.js"
+import { cn } from "../cn.js"
+import { useIGRPi18n } from "../../../i18n/index.js"
 
 /**
  * Props for the IGRPDataTablePagination components.

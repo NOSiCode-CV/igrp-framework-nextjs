@@ -3,7 +3,7 @@
 import { useId } from "react"
 
 import { cn } from "cn"
-import { Spinner } from "../primitives/spinner"
+import { Spinner } from "../primitives/spinner.js"
 
 /**
  * Props for the IGRPLoadingSpinner component.

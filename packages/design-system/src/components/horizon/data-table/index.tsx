@@ -27,12 +27,12 @@ import {
   type TableOptions,
 } from "@tanstack/react-table"
 
-import { useIGRPi18n } from "../../../i18n"
-import { cn } from "../cn"
-import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "../../primitives/table"
-import { IGRPIcon } from "../icon"
-import { type IGRPDataTableClientFilterListProps, IGRPDataTableClientFilter } from "./client-filter"
-import type { IGRPAccessorColumnDef } from "./column-helper"
+import { useIGRPi18n } from "../../../i18n/index.js"
+import { cn } from "../cn.js"
+import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "../../primitives/table.js"
+import { IGRPIcon } from "../icon/index.js"
+import { type IGRPDataTableClientFilterListProps, IGRPDataTableClientFilter } from "./client-filter.js"
+import type { IGRPAccessorColumnDef } from "./column-helper.js"
 import {
   IGRPDataTableFilterDate,
   IGRPDataTableFilterDropdown,
@@ -40,11 +40,11 @@ import {
   IGRPDataTableFilterInput,
   IGRPDataTableFilterMinMax,
   IGRPDataTableFilterSelect,
-} from "./filter"
-import { IGRPDataTablePagination, IGRPDataTablePaginationNumeric } from "./pagination"
-import { IGRPDataTableRowActionsCell } from "./row-actions-cell"
-import { IGRPDataTableToggleVisibility } from "./toggle-visibility"
-import type { IGRPDataTableAction, IGRPDataTablePaginationConfig, IGRPDataTableQuery } from "./types"
+} from "./filter.js"
+import { IGRPDataTablePagination, IGRPDataTablePaginationNumeric } from "./pagination.js"
+import { IGRPDataTableRowActionsCell } from "./row-actions-cell.js"
+import { IGRPDataTableToggleVisibility } from "./toggle-visibility.js"
+import type { IGRPDataTableAction, IGRPDataTablePaginationConfig, IGRPDataTableQuery } from "./types.js"
 
 /**
  * Props for the IGRPDataTable component.

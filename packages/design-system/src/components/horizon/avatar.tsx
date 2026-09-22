@@ -3,14 +3,14 @@
 import { cva, type VariantProps } from "class-variance-authority"
 import { useId } from "react"
 
-import { useIGRPi18n } from "../../i18n"
-import { IGRPColors, type IGRPColorVariants } from "../../lib/colors"
+import { useIGRPi18n } from "../../i18n/index.js"
+import { IGRPColors, type IGRPColorVariants } from "../../lib/colors.js"
 import { cn } from "cn"
-import { igrpOmitNonDomProps } from "../../lib/dom-props"
-import type { IGRPBaseAttributes } from "../../types"
-import { Avatar, AvatarImage, AvatarFallback } from "../primitives/avatar"
-import { IGRPBadge } from "./badge"
-import { IGRPIcon, type IGRPIconName } from "./icon"
+import { igrpOmitNonDomProps } from "../../lib/dom-props.js"
+import type { IGRPBaseAttributes } from "../../types.js"
+import { Avatar, AvatarImage, AvatarFallback } from "../primitives/avatar.js"
+import { IGRPBadge } from "./badge.js"
+import { IGRPIcon, type IGRPIconName } from "./icon/index.js"
 
 function convertFallback(fallback?: string) {
   return fallback

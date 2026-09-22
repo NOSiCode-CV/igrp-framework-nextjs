@@ -14,9 +14,9 @@ import {
   type LegendType,
 } from "recharts"
 
-import { cn } from "../../cn"
-import { ChartContainer, ChartTooltip } from "../../../primitives/chart"
-import { ChartCustomLegend } from "../custom-legend"
+import { cn } from "../../cn.js"
+import { ChartContainer, ChartTooltip } from "../../../primitives/chart.js"
+import { ChartCustomLegend } from "../custom-legend.js"
 import {
   createChartConfig,
   formatChartValue,
@@ -25,8 +25,8 @@ import {
   getLegendHorizontalAlign,
   getLegendLayout,
   getLegendVerticalAlign,
-} from "../lib"
-import { type IGRPChartProps, type RadialBarConfig } from "../types"
+} from "../lib.js"
+import { type IGRPChartProps, type RadialBarConfig } from "../types.js"
 
 /**
  * Props for the IGRPRadialBarChart component.

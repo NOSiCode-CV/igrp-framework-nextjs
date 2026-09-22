@@ -2,11 +2,11 @@
 
 import { Suspense, lazy } from "react"
 
-import { cn } from "../cn"
-import { Skeleton } from "../../primitives/skeleton"
-import type { IGRPLineChartProps, LineConfig } from "./line-chart-inner"
+import { cn } from "../cn.js"
+import { Skeleton } from "../../primitives/skeleton.js"
+import type { IGRPLineChartProps, LineConfig } from "./line-chart-inner.js"
 
-const IGRPLineChartLazy = lazy(() => import("./line-chart-inner").then((m) => ({ default: m.default })))
+const IGRPLineChartLazy = lazy(() => import("./line-chart-inner.js").then((m) => ({ default: m.default })))
 
 /**
  * Line chart with optional grid, tooltip, and legend.

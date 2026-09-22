@@ -2,10 +2,10 @@
 
 import { useId } from "react"
 
-import type { IGRPColorRole, IGRPColorVariants } from "../../lib/colors"
+import type { IGRPColorRole, IGRPColorVariants } from "../../lib/colors.js"
 import { cn } from "cn"
-import { IGRPAlert } from "../horizon/alert"
-import { IGRPBadge } from "../horizon/badge"
+import { IGRPAlert } from "../horizon/alert.js"
+import { IGRPBadge } from "../horizon/badge.js"
 
 /**
  * Props for the IGRPStatusBanner component.

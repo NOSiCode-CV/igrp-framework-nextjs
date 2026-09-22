@@ -3,18 +3,18 @@
 import { type Column, type Table } from "@tanstack/react-table"
 import { ArrowDown, ArrowUp, ArrowUpDown, ChevronDown, ChevronsUpDown, ChevronUp } from "lucide-react"
 
-import { Button } from "../../primitives/button"
-import { Checkbox } from "../../primitives/checkbox"
+import { Button } from "../../primitives/button.js"
+import { Checkbox } from "../../primitives/checkbox.js"
 import {
   DropdownMenu,
   DropdownMenuContent,
   DropdownMenuItem,
   DropdownMenuSeparator,
   DropdownMenuTrigger,
-} from "../../primitives/dropdown-menu"
+} from "../../primitives/dropdown-menu.js"
 
-import { cn } from "../cn"
-import { useIGRPi18n } from "../../../i18n"
+import { cn } from "../cn.js"
+import { useIGRPi18n } from "../../../i18n/index.js"
 
 /**
  * Props for data table header components.

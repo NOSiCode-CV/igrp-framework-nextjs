@@ -1,7 +1,7 @@
 import { describe, it, expect } from "vitest"
 import { render, screen } from "@testing-library/react"
 import userEvent from "@testing-library/user-event"
-import { IGRPCombobox } from "../combobox"
+import { IGRPCombobox } from "../combobox.js"
 
 const options = [
   { label: "Alpha", value: "a" },

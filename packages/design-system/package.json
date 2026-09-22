@@ -34,14 +34,16 @@
   },
   "scripts": {
     "dev": "tsc --watch",
+    "typecheck": "tsc -p tsconfig.build.json --noEmit",
     "build": "pnpm build:reactcompiler",
-    "build:reactcompiler": "pnpm clean:dist && pnpm build:js && pnpm build:types",
+    "build:reactcompiler": "pnpm clean:dist && pnpm build:js && pnpm build:types && pnpm check:dist",
     "build:js": "babel src --out-dir dist --extensions .ts,.tsx --source-maps --ignore \"src/**/__tests__,src/**/*.test.ts,src/**/*.test.tsx,src/**/*.d.ts\" && cpy src/*.css dist/",
     "build:types": "tsc -p tsconfig.build.json --emitDeclarationOnly --outDir dist/",
-    "build:without_reactcompiler": "pnpm clean:dist && babel src --out-dir dist --extensions .ts,.tsx --source-maps --config-file ../../scripts/babel-config.no-react-compiler.cjs --ignore \"src/**/__tests__,src/**/*.test.ts,src/**/*.test.tsx,src/**/*.d.ts\" && cpy src/*.css dist/ && pnpm build:types",
+    "build:without_reactcompiler": "pnpm clean:dist && babel src --out-dir dist --extensions .ts,.tsx --source-maps --config-file ../../scripts/babel-config.no-react-compiler.cjs --ignore \"src/**/__tests__,src/**/*.test.ts,src/**/*.test.tsx,src/**/*.d.ts\" && cpy src/*.css dist/ && pnpm build:types && pnpm check:dist",
     "clean": "pnpm clean:dist && pnpm clean:packages",
     "clean:dist": "rimraf dist tsconfig.tsbuildinfo tsconfig.build.tsbuildinfo",
     "clean:packages": "rimraf node_modules",
+    "check:dist": "node scripts/check-dist.mjs",
     "drift:shadcn": "node scripts/check-shadcn-drift.mjs",
     "drift:shadcn:update": "node scripts/check-shadcn-drift.mjs --update",
     "format": "prettier --write .",
@@ -50,7 +52,7 @@
     "lint:fix": "eslint . --fix",
     "test": "vitest run",
     "test:watch": "vitest",
-    "release": "pnpm format && pnpm build && pnpm publish --registry=https://sonatype.nosi.cv/repository/igrp/ --tag latest --no-git-checks",
+    "release": "pnpm format && pnpm lint && pnpm typecheck && pnpm test && pnpm build && pnpm publish --registry=https://sonatype.nosi.cv/repository/igrp/ --tag latest --no-git-checks",
     "clean-all": "rimraf node_modules && rimraf dist && rimraf tsconfig.tsbuildinfo"
   },
   "peerDependencies": {

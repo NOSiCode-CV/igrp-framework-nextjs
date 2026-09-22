@@ -2,12 +2,12 @@
 
 import { useId, useState } from "react"
 
-import { Input } from "../../primitives/input"
-import { Label } from "../../primitives/label"
-import type { IGRPCalendarTimeProps } from "../../../types"
-import { IGRPCalendarMultiple, type IGRPCalendarMultipleProps } from "./multiple"
-import { DEFAULT_HIDE_TIME_INDICATOR } from "../../../lib/utilities"
-import { cn } from "../cn"
+import { Input } from "../../primitives/input.js"
+import { Label } from "../../primitives/label.js"
+import type { IGRPCalendarTimeProps } from "../../../types.js"
+import { IGRPCalendarMultiple, type IGRPCalendarMultipleProps } from "./multiple.js"
+import { DEFAULT_HIDE_TIME_INDICATOR } from "../../../lib/utilities.js"
+import { cn } from "../cn.js"
 
 /**
  * Props for the IGRPCalendarMultipleTime component.

@@ -2,7 +2,7 @@
 
 import type { LegendType } from "recharts"
 
-import { cn } from "../cn"
+import { cn } from "../cn.js"
 
 /**
  * Legend entry shape produced by the chart components for manually-built legends.

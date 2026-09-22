@@ -1,7 +1,7 @@
 import { describe, expect, it } from "vitest"
 import { render, screen } from "@testing-library/react"
 
-import { IGRPI18nProvider, useIGRPi18n, IGRP_I18N_DEFAULTS_PT_PT } from "../index"
+import { IGRPI18nProvider, useIGRPi18n, IGRP_I18N_DEFAULTS_PT_PT } from "../index.js"
 
 function StringsProbe({ keyPath }: { keyPath: keyof typeof IGRP_I18N_DEFAULTS_PT_PT.dataTable }) {
   const strings = useIGRPi18n()

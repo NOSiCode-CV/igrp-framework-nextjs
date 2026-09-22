@@ -1,6 +1,6 @@
 import { createColumnHelper } from "@tanstack/react-table"
 import type { ColumnDef, ColumnHelper } from "@tanstack/react-table"
-import type { IGRPDataTableFilterDescriptor } from "./types"
+import type { IGRPDataTableFilterDescriptor } from "./types.js"
 
 // ─── Cell type shortcuts ─────────────────────────────────────────────────────
 

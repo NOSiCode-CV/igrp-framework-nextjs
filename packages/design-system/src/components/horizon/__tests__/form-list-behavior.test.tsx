@@ -8,7 +8,7 @@ import { describe, expect, it } from "vitest"
 import { act, render, screen } from "@testing-library/react"
 import userEvent from "@testing-library/user-event"
 
-import { IGRPFormList } from "../form/form-list"
+import { IGRPFormList } from "../form/form-list.js"
 
 type Item = { label: string }
 

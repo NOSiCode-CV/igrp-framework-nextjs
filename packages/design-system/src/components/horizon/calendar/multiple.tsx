@@ -3,10 +3,10 @@
 import { useId, useMemo, useState } from "react"
 import { addDays } from "date-fns"
 
-import { getDisabledDays } from "../../../lib/calendar-utils"
-import { cn } from "../cn"
-import type { IGRPCalendarProps } from "../../../types"
-import { Calendar } from "../../primitives/calendar"
+import { getDisabledDays } from "../../../lib/calendar-utils.js"
+import { cn } from "../cn.js"
+import type { IGRPCalendarProps } from "../../../types.js"
+import { Calendar } from "../../primitives/calendar.js"
 
 function getDefaultMultipleDates(): Date[] {
   return [new Date(), addDays(new Date(), 5)]

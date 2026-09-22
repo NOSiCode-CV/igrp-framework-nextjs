@@ -2,14 +2,14 @@
 
 import { Area, AreaChart, CartesianGrid, Legend, XAxis, YAxis, ReferenceLine } from "recharts"
 
-import { cn } from "../cn"
+import { cn } from "../cn.js"
 import {
   ChartContainer,
   ChartTooltip,
   ChartTooltipContent,
   ChartLegend,
   ChartLegendContent,
-} from "../../primitives/chart"
+} from "../../primitives/chart.js"
 import {
   createChartConfig,
   formatChartValue,
@@ -19,8 +19,8 @@ import {
   getLegendLayout,
   getLegendVerticalAlign,
   hasNegativeValues,
-} from "./lib"
-import type { IGRPAreaConfig, IGRPChartProps } from "./types"
+} from "./lib.js"
+import type { IGRPAreaConfig, IGRPChartProps } from "./types.js"
 
 const defaultLabelFormatter = (value: unknown) => (typeof value === "string" ? value : String(value))
 

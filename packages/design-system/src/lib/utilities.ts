@@ -1,6 +1,6 @@
 import { cva } from "class-variance-authority"
-import type { IGRPIconName } from "../components/horizon/icon"
-import type { IGRPColorVariants } from "./colors"
+import type { IGRPIconName } from "../components/horizon/icon/index.js"
+import type { IGRPColorVariants } from "./colors.js"
 
 /** Parses "yyyy-mm-dd" or "y-m-d" string to local Date. Throws on invalid input. */
 export function parseLocalDate(dateStr: string): Date {

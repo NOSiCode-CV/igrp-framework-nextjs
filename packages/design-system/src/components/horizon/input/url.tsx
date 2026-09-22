@@ -3,14 +3,14 @@
 import { useId, useState, useCallback } from "react"
 import { useFormContext, Controller } from "react-hook-form"
 
-import { cn } from "../cn"
-import type { IGRPInputProps, IGRPOptionsProps } from "../../../types"
-import { InputGroup, InputGroupAddon, InputGroupInput } from "../../primitives/input-group"
-import { Select, SelectContent, SelectGroup, SelectItem, SelectTrigger, SelectValue } from "../../primitives/select"
-import { igrpOmitNonDomProps } from "../../../lib/dom-props"
-import { IGRPLabel } from "../label"
-import { Field, FieldDescription, FieldError } from "../../primitives/field"
-import { useIGRPi18n } from "../../../i18n"
+import { cn } from "../cn.js"
+import type { IGRPInputProps, IGRPOptionsProps } from "../../../types.js"
+import { InputGroup, InputGroupAddon, InputGroupInput } from "../../primitives/input-group.js"
+import { Select, SelectContent, SelectGroup, SelectItem, SelectTrigger, SelectValue } from "../../primitives/select.js"
+import { igrpOmitNonDomProps } from "../../../lib/dom-props.js"
+import { IGRPLabel } from "../label.js"
+import { Field, FieldDescription, FieldError } from "../../primitives/field.js"
+import { useIGRPi18n } from "../../../i18n/index.js"
 
 /**
  * Props for the IGRPInputUrl component.

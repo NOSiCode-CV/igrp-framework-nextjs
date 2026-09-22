@@ -2,10 +2,10 @@
 
 import { useEffect, useId, useMemo } from "react"
 
-import { cn } from "../cn"
-import { igrpOmitNonDomProps } from "../../../lib/dom-props"
-import type { IGRPInputProps, IGRPOptionsProps } from "../../../types"
-import { Input } from "../../primitives/input"
+import { cn } from "../cn.js"
+import { igrpOmitNonDomProps } from "../../../lib/dom-props.js"
+import type { IGRPInputProps, IGRPOptionsProps } from "../../../types.js"
+import { Input } from "../../primitives/input.js"
 import {
   Select,
   SelectContent,
@@ -14,9 +14,9 @@ import {
   SelectLabel,
   SelectTrigger,
   SelectValue,
-} from "../../primitives/select"
-import { IGRPLabel } from "../label"
-import { Field } from "../../primitives/field"
+} from "../../primitives/select.js"
+import { IGRPLabel } from "../label.js"
+import { Field } from "../../primitives/field.js"
 
 /**
  * Props for the IGRPInputAddOn component.

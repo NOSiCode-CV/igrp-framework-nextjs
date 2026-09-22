@@ -1,5 +1,5 @@
 import { describe, it, expect } from "vitest"
-import { formatChartValue, getChartHeight, getChartWidth } from "../lib"
+import { formatChartValue, getChartHeight, getChartWidth } from "../lib.js"
 
 describe("formatChartValue", () => {
   it("abbreviates positive magnitudes", () => {

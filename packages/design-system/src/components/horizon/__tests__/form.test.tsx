@@ -4,8 +4,8 @@ import { render, screen, waitFor } from "@testing-library/react"
 import userEvent from "@testing-library/user-event"
 import { z } from "zod"
 
-import { IGRPForm, type IGRPFormHandle } from "../form"
-import { IGRPInputText } from "../input/text"
+import { IGRPForm, type IGRPFormHandle } from "../form/index.js"
+import { IGRPInputText } from "../input/text.js"
 
 const schema = z.object({
   name: z.string().min(1, "Name is required"),

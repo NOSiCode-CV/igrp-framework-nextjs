@@ -2,10 +2,10 @@
 
 import { useCallback, useId, useMemo, useRef, useState } from "react"
 import { type Column, type Table } from "@tanstack/react-table"
-import { cn } from "../cn"
-import type { IGRPOptionsProps } from "../../../types"
-import { Button } from "../../primitives/button"
-import { Checkbox } from "../../primitives/checkbox"
+import { cn } from "../cn.js"
+import type { IGRPOptionsProps } from "../../../types.js"
+import { Button } from "../../primitives/button.js"
+import { Checkbox } from "../../primitives/checkbox.js"
 import {
   Command,
   CommandEmpty,
@@ -14,16 +14,16 @@ import {
   CommandItem,
   CommandList,
   CommandSeparator,
-} from "../../primitives/command"
-import { Input } from "../../primitives/input"
-import { Calendar } from "../../primitives/calendar"
-import { Popover, PopoverContent, PopoverTrigger } from "../../primitives/popover"
-import { Select, SelectContent, SelectGroup, SelectItem, SelectTrigger, SelectValue } from "../../primitives/select"
-import { Separator } from "../../primitives/separator"
-import { IGRPBadge } from "../badge"
-import { IGRPButton } from "../button"
-import { IGRPIcon, type IGRPIconName } from "../icon"
-import { useIGRPi18n, useIGRPLocale } from "../../../i18n"
+} from "../../primitives/command.js"
+import { Input } from "../../primitives/input.js"
+import { Calendar } from "../../primitives/calendar.js"
+import { Popover, PopoverContent, PopoverTrigger } from "../../primitives/popover.js"
+import { Select, SelectContent, SelectGroup, SelectItem, SelectTrigger, SelectValue } from "../../primitives/select.js"
+import { Separator } from "../../primitives/separator.js"
+import { IGRPBadge } from "../badge.js"
+import { IGRPButton } from "../button.js"
+import { IGRPIcon, type IGRPIconName } from "../icon/index.js"
+import { useIGRPi18n, useIGRPLocale } from "../../../i18n/index.js"
 
 /**
  * Base props for data table filter components.

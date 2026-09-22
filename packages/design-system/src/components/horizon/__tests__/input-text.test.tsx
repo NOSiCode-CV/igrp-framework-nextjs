@@ -1,7 +1,7 @@
 import { describe, expect, it } from "vitest"
 import { render, screen } from "@testing-library/react"
 
-import { IGRPInputText } from "../input/text"
+import { IGRPInputText } from "../input/text.js"
 
 describe("IGRPInputText (standalone, no form context)", () => {
   it("renders the label and associates it with the input via id", () => {

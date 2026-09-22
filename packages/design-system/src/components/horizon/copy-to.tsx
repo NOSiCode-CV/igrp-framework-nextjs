@@ -3,11 +3,11 @@
 import { useEffect, useRef, useState } from "react"
 
 import { cn } from "cn"
-import { useIGRPi18n } from "../../i18n"
-import { Button } from "../primitives/button"
-import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "../primitives/tooltip"
-import { IGRPIcon } from "./icon"
-import { useIGRPToast } from "./toaster"
+import { useIGRPi18n } from "../../i18n/index.js"
+import { Button } from "../primitives/button.js"
+import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "../primitives/tooltip.js"
+import { IGRPIcon } from "./icon/index.js"
+import { useIGRPToast } from "./toaster.js"
 
 /**
  * Props for the IGRPCopyTo component.

@@ -1,8 +1,8 @@
 import type { Control, ControllerFieldState, ControllerRenderProps, FieldValues } from "react-hook-form"
 
-import { FormControl, FormDescription, FormField, FormItem, FormLabel, FormMessage } from "../../primitives/form"
-import { cn } from "../cn"
-import { type IGRPPlacementProps } from "../../../types"
+import { FormControl, FormDescription, FormField, FormItem, FormLabel, FormMessage } from "../../primitives/form.js"
+import { cn } from "../cn.js"
+import { type IGRPPlacementProps } from "../../../types.js"
 
 /**
  * Props for the IGRPFormField component.

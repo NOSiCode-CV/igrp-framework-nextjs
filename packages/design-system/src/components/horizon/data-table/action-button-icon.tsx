@@ -3,7 +3,7 @@
 import { useCallback, useContext, useState, type ReactElement } from "react"
 import Link from "next/link"
 
-import { cn } from "../cn"
+import { cn } from "../cn.js"
 import {
   AlertDialog,
   AlertDialogAction,
@@ -14,8 +14,8 @@ import {
   AlertDialogHeader,
   AlertDialogTitle,
   AlertDialogTrigger,
-} from "../../primitives/alert-dialog"
-import { Button, buttonVariants } from "../../primitives/button"
+} from "../../primitives/alert-dialog.js"
+import { Button, buttonVariants } from "../../primitives/button.js"
 import {
   Dialog,
   DialogClose,
@@ -25,13 +25,13 @@ import {
   DialogHeader,
   DialogTitle,
   DialogTrigger,
-} from "../../primitives/dialog"
-import { Tooltip, TooltipContent, TooltipTrigger } from "../../primitives/tooltip"
-import { IGRPButton } from "../button"
-import { IGRPIcon } from "../icon"
-import { igrpModalDialogContentVariants } from "../modal-dialog"
-import { type IGRPDataTableDialogProps, type IGRPDataTableLinkProps } from "./row-actions"
-import { IGRPDataTableTooltipContext, IGRPDataTableTooltipProvider } from "./tooltip-provider"
+} from "../../primitives/dialog.js"
+import { Tooltip, TooltipContent, TooltipTrigger } from "../../primitives/tooltip.js"
+import { IGRPButton } from "../button.js"
+import { IGRPIcon } from "../icon/index.js"
+import { igrpModalDialogContentVariants } from "../modal-dialog.js"
+import { type IGRPDataTableDialogProps, type IGRPDataTableLinkProps } from "./row-actions.js"
+import { IGRPDataTableTooltipContext, IGRPDataTableTooltipProvider } from "./tooltip-provider.js"
 
 /** @internal Wraps action button with tooltip when label is provided. */
 function IGRPDataTableActionTooltip({

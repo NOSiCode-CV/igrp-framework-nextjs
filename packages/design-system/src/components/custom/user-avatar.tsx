@@ -2,7 +2,7 @@
 
 import { useId } from "react"
 
-import { Avatar, AvatarImage, AvatarFallback } from "../primitives/avatar"
+import { Avatar, AvatarImage, AvatarFallback } from "../primitives/avatar.js"
 import { cn } from "cn"
 
 /**

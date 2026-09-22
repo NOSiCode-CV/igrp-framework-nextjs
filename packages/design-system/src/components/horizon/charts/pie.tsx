@@ -2,11 +2,11 @@
 
 import { Suspense, lazy } from "react"
 
-import { cn } from "../cn"
-import { Skeleton } from "../../primitives/skeleton"
-import type { IGRPPieChartProps } from "./pie-chart-inner"
+import { cn } from "../cn.js"
+import { Skeleton } from "../../primitives/skeleton.js"
+import type { IGRPPieChartProps } from "./pie-chart-inner.js"
 
-const IGRPPieChartLazy = lazy(() => import("./pie-chart-inner").then((m) => ({ default: m.default })))
+const IGRPPieChartLazy = lazy(() => import("./pie-chart-inner.js").then((m) => ({ default: m.default })))
 
 /**
  * Pie chart with optional center label, labels, and interactive hover.

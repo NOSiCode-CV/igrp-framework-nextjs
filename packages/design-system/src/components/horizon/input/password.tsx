@@ -3,13 +3,13 @@
 import { useId, useState } from "react"
 import { useFormContext, Controller } from "react-hook-form"
 
-import { useIGRPi18n } from "../../../i18n"
-import { igrpOmitNonDomProps } from "../../../lib/dom-props"
-import type { IGRPGridSize, IGRPInputProps } from "../../../types"
-import { InputGroup, InputGroupAddon, InputGroupButton, InputGroupInput } from "../../primitives/input-group"
-import { IGRPIcon } from "../icon"
-import { IGRPLabel } from "../label"
-import { Field, FieldDescription, FieldError } from "../../primitives/field"
+import { useIGRPi18n } from "../../../i18n/index.js"
+import { igrpOmitNonDomProps } from "../../../lib/dom-props.js"
+import type { IGRPGridSize, IGRPInputProps } from "../../../types.js"
+import { InputGroup, InputGroupAddon, InputGroupButton, InputGroupInput } from "../../primitives/input-group.js"
+import { IGRPIcon } from "../icon/index.js"
+import { IGRPLabel } from "../label.js"
+import { Field, FieldDescription, FieldError } from "../../primitives/field.js"
 
 /**
  * Props for the IGRPInputPassword component.

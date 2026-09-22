@@ -3,7 +3,7 @@ import { resolve } from "node:path"
 
 import { describe, expect, it } from "vitest"
 
-import { IGRPColors } from "./colors"
+import { IGRPColors } from "./colors.js"
 
 /**
  * WCAG 2.1 AA contrast gate over `tokens.css`.

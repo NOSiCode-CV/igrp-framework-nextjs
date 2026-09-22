@@ -8,12 +8,12 @@ import { describe, expect, it } from "vitest"
 import { render, screen } from "@testing-library/react"
 import { z } from "zod"
 
-import { IGRPForm, type IGRPFormHandle } from "../../form"
-import { IGRPDatePickerSingle } from "../date-picker/single"
-import { IGRPDatePickerInputSingle } from "../date-picker/input-single"
-import { IGRPDatePickerRange } from "../date-picker/range"
-import { IGRPDatePickerMultiple } from "../date-picker/multiple"
-import { toLocalDate, toLocalDateRange, toLocalDates } from "../../../../lib/calendar-utils"
+import { IGRPForm, type IGRPFormHandle } from "../../form/index.js"
+import { IGRPDatePickerSingle } from "../date-picker/single.js"
+import { IGRPDatePickerInputSingle } from "../date-picker/input-single.js"
+import { IGRPDatePickerRange } from "../date-picker/range.js"
+import { IGRPDatePickerMultiple } from "../date-picker/multiple.js"
+import { toLocalDate, toLocalDateRange, toLocalDates } from "../../../../lib/calendar-utils.js"
 
 // Guard the guard: if the runtime ignored the TZ assignment, every assertion below would
 // pass vacuously and the suite would report false confidence.

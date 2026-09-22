@@ -2,7 +2,7 @@ import { describe, expect, it, vi } from "vitest"
 import { render, screen } from "@testing-library/react"
 import userEvent from "@testing-library/user-event"
 
-import { IGRPInputSearch } from "../input/search"
+import { IGRPInputSearch } from "../input/search.js"
 
 describe("IGRPInputSearch", () => {
   it("calls onSearch with the current value when the submit button is clicked", async () => {

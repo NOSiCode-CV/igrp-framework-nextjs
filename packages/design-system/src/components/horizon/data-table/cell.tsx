@@ -2,15 +2,15 @@
 
 import { type Row } from "@tanstack/react-table"
 
-import { cn } from "../cn"
-import { Button } from "../../primitives/button"
-import { Checkbox } from "../../primitives/checkbox"
-import { Tooltip, TooltipTrigger, TooltipContent, TooltipProvider } from "../../primitives/tooltip"
-import { Switch } from "../../primitives/switch"
-import { IGRPBadge, type IGRPBadgeProps } from "../badge"
-import { IGRPIcon } from "../icon"
-import { IGRPLink, type IGRPLinkProps } from "../typography/link"
-import { useIGRPi18n } from "../../../i18n"
+import { cn } from "../cn.js"
+import { Button } from "../../primitives/button.js"
+import { Checkbox } from "../../primitives/checkbox.js"
+import { Tooltip, TooltipTrigger, TooltipContent, TooltipProvider } from "../../primitives/tooltip.js"
+import { Switch } from "../../primitives/switch.js"
+import { IGRPBadge, type IGRPBadgeProps } from "../badge.js"
+import { IGRPIcon } from "../icon/index.js"
+import { IGRPLink, type IGRPLinkProps } from "../typography/link.js"
+import { useIGRPi18n } from "../../../i18n/index.js"
 
 /**
  * Props for the IGRPDataTableCellCheckbox component.

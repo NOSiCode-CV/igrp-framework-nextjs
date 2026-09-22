@@ -2,15 +2,15 @@
 
 import type { Row } from "@tanstack/react-table"
 
-import { IGRPDataTableButtonAlert, IGRPDataTableButtonLink, IGRPDataTableButtonModal } from "./action-button-icon"
+import { IGRPDataTableButtonAlert, IGRPDataTableButtonLink, IGRPDataTableButtonModal } from "./action-button-icon.js"
 import {
   IGRPDataTableDropdownMenu,
   IGRPDataTableDropdownMenuAlert,
   IGRPDataTableDropdownMenuLink,
   IGRPDataTableDropdownMenuCustom,
   type IGRPDataTableActionDropdown,
-} from "./action-dropdown-menu"
-import type { IGRPDataTableAction } from "./types"
+} from "./action-dropdown-menu.js"
+import type { IGRPDataTableAction } from "./types.js"
 
 interface IGRPDataTableRowActionsCellProps<TData> {
   row: Row<TData>

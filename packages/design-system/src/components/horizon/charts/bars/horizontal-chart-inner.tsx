@@ -2,14 +2,14 @@
 
 import { Bar, BarChart, CartesianGrid, Legend, XAxis, YAxis, ReferenceLine } from "recharts"
 
-import { cn } from "../../cn"
+import { cn } from "../../cn.js"
 import {
   ChartContainer,
   ChartTooltip,
   ChartTooltipContent,
   ChartLegend,
   ChartLegendContent,
-} from "../../../primitives/chart"
+} from "../../../primitives/chart.js"
 import {
   formatChartValue,
   getChartHeight,
@@ -19,8 +19,8 @@ import {
   getLegendHorizontalAlign,
   hasNegativeValues,
   createChartConfig,
-} from "../lib"
-import type { IGRPBarConfig, IGRPChartProps } from "../types"
+} from "../lib.js"
+import type { IGRPBarConfig, IGRPChartProps } from "../types.js"
 
 function defaultLabelFormatter(value: unknown): string {
   return typeof value === "string" ? value : String(value)

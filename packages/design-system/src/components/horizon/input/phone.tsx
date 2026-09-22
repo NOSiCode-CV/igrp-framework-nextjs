@@ -5,14 +5,14 @@ import { useFormContext, Controller } from "react-hook-form"
 import * as RPNInput from "react-phone-number-input"
 import flags from "react-phone-number-input/flags"
 
-import { cn } from "../cn"
-import { useIGRPi18n } from "../../../i18n"
-import type { IGRPInputProps } from "../../../types"
-import { Input } from "../../primitives/input"
-import { IGRPIcon } from "../icon"
-import { igrpOmitNonDomProps } from "../../../lib/dom-props"
-import { IGRPLabel } from "../label"
-import { Field, FieldError } from "../../primitives/field"
+import { cn } from "../cn.js"
+import { useIGRPi18n } from "../../../i18n/index.js"
+import type { IGRPInputProps } from "../../../types.js"
+import { Input } from "../../primitives/input.js"
+import { IGRPIcon } from "../icon/index.js"
+import { igrpOmitNonDomProps } from "../../../lib/dom-props.js"
+import { IGRPLabel } from "../label.js"
+import { Field, FieldError } from "../../primitives/field.js"
 
 /**
  * Props for the IGRPInputPhone component.

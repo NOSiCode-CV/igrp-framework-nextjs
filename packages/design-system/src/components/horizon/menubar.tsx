@@ -17,7 +17,7 @@ import {
   MenubarSub as IGRPMenubarSub,
   MenubarSubTrigger as IGRPMenubarSubTrigger,
   MenubarSubContent as IGRPMenubarSubContent,
-} from "../primitives/menubar"
+} from "../primitives/menubar.js"
 
 export {
   IGRPMenubar,

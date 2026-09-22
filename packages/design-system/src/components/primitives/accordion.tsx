@@ -4,7 +4,7 @@
 import * as React from "react"
 import { cn } from "cn"
 import { Accordion as AccordionPrimitive } from "radix-ui"
-import { IGRPIcon, type IGRPIconName } from "../horizon/icon"
+import { IGRPIcon, type IGRPIconName } from "../horizon/icon/index.js"
 
 function Accordion({
   className,

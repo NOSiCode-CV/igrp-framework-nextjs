@@ -1,7 +1,7 @@
 import { addYears, format, subYears } from "date-fns"
 import type { DateAfter, DateBefore, DateRange, DayOfWeek } from "react-day-picker"
-import { parseDateInput } from "./date-input-format"
-import type { IGRPCalendarProps } from "../types"
+import { parseDateInput } from "./date-input-format.js"
+import type { IGRPCalendarProps } from "../types.js"
 
 /** Default navigation window around today for month/year dropdowns. */
 export const IGRP_CALENDAR_DEFAULT_YEAR_SPAN = 5

@@ -3,9 +3,9 @@
 import { useId, useMemo, useState } from "react"
 import { useFormContext } from "react-hook-form"
 
-import { igrpColorText } from "../../../lib/colors"
-import { cn } from "../cn"
-import type { IGRPInputProps, IGRPOptionsProps } from "../../../types"
+import { igrpColorText } from "../../../lib/colors.js"
+import { cn } from "../cn.js"
+import type { IGRPInputProps, IGRPOptionsProps } from "../../../types.js"
 import {
   Command,
   CommandEmpty,
@@ -14,16 +14,16 @@ import {
   CommandItem,
   CommandList,
   CommandSeparator,
-} from "../../primitives/command"
-import { Popover, PopoverContent, PopoverTrigger } from "../../primitives/popover"
-import { IGRPButton } from "../button"
-import { IGRPFieldDescription } from "../field-description"
-import { IGRPFormField } from "../form/form-field"
-import { IGRPLabel } from "../label"
-import { IGRPIcon } from "../icon"
-import { IGRPCircleFull } from "../icon/custom"
-import { Field } from "../../primitives/field"
-import { useIGRPi18n } from "../../../i18n"
+} from "../../primitives/command.js"
+import { Popover, PopoverContent, PopoverTrigger } from "../../primitives/popover.js"
+import { IGRPButton } from "../button.js"
+import { IGRPFieldDescription } from "../field-description.js"
+import { IGRPFormField } from "../form/form-field.js"
+import { IGRPLabel } from "../label.js"
+import { IGRPIcon } from "../icon/index.js"
+import { IGRPCircleFull } from "../icon/custom.js"
+import { Field } from "../../primitives/field.js"
+import { useIGRPi18n } from "../../../i18n/index.js"
 
 /** @internal Options list for combobox dropdown. */
 function ComboboxOptionsList({

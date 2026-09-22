@@ -3,8 +3,8 @@
 import { X } from "lucide-react"
 import { useState } from "react"
 import { cn } from "cn"
-import { Button } from "../primitives/button"
-import { useIGRPi18n } from "../../i18n"
+import { Button } from "../primitives/button.js"
+import { useIGRPi18n } from "../../i18n/index.js"
 
 interface IGRPBannerProps {
   variant: "cookie" | "announcement"

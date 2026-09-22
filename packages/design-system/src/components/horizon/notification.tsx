@@ -7,9 +7,9 @@ import { cva, type VariantProps } from "class-variance-authority"
 import { useId } from "react"
 
 import { cn } from "cn"
-import { IGRPButton } from "./button"
-import { IGRPIcon, type IGRPIconName } from "./icon"
-import { useIGRPi18n } from "../../i18n"
+import { IGRPButton } from "./button.js"
+import { IGRPIcon, type IGRPIconName } from "./icon/index.js"
+import { useIGRPi18n } from "../../i18n/index.js"
 
 const IGRPNotificationVariants = cva("bg-background z-50 rounded-md p-4 shadow-lg", {
   variants: {

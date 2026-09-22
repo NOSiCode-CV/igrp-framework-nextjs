@@ -5,3 +5,9 @@ pnpm-lock.yaml
 package-lock.json
 pnpm-lock.yaml
 yarn.lock
+
+# Build output. `format` is the first step of `release`, so without this the
+# publish path spends its time rewriting 368 generated files that the `build`
+# two steps later regenerates anyway — and `format:check` reports them as drift.
+dist/
+*.tsbuildinfo

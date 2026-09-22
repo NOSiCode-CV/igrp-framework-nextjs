@@ -7,7 +7,7 @@ import { describe, expect, it, vi } from "vitest"
 import { act, render, screen } from "@testing-library/react"
 import userEvent from "@testing-library/user-event"
 
-import { IGRPInputSearch } from "../input/search"
+import { IGRPInputSearch } from "../input/search.js"
 
 const wait = (ms: number) =>
   act(async () => {

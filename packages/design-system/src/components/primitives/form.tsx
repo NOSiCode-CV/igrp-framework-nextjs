@@ -17,7 +17,7 @@ import {
 } from "react-hook-form"
 import { cn } from "cn"
 
-import { Label } from "./label"
+import { Label } from "./label.js"
 
 // Explicit annotation avoids non-portable inferred type referencing local @types/react path
 const Form: typeof FormProvider = FormProvider

@@ -2,7 +2,7 @@
 
 import { useId } from "react"
 
-import { igrpCleanString } from "../../lib/utilities"
+import { igrpCleanString } from "../../lib/utilities.js"
 import { cn } from "cn"
 import {
   Accordion,
@@ -10,7 +10,7 @@ import {
   AccordionItem,
   AccordionTrigger,
   type AccordionTriggerArgs,
-} from "../primitives/accordion"
+} from "../primitives/accordion.js"
 
 /**
  * Single accordion item with title and content.

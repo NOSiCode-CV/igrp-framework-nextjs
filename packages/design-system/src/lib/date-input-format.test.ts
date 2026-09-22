@@ -1,6 +1,6 @@
 import { describe, expect, it } from "vitest"
 
-import { getDateFormatMaxLength, getDateFormatParts, maskDateInput, parseDateInput } from "./date-input-format"
+import { getDateFormatMaxLength, getDateFormatParts, maskDateInput, parseDateInput } from "./date-input-format.js"
 
 const FMT = "dd-MM-yyyy"
 

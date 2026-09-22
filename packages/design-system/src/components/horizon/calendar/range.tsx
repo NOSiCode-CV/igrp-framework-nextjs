@@ -3,10 +3,10 @@
 import { useId, useState } from "react"
 import type { DateRange } from "react-day-picker"
 
-import { getDisabledDays } from "../../../lib/calendar-utils"
-import { cn } from "../cn"
-import type { IGRPCalendarProps } from "../../../types"
-import { Calendar } from "../../primitives/calendar"
+import { getDisabledDays } from "../../../lib/calendar-utils.js"
+import { cn } from "../cn.js"
+import type { IGRPCalendarProps } from "../../../types.js"
+import { Calendar } from "../../primitives/calendar.js"
 
 /**
  * Props for the IGRPCalendarRange component.

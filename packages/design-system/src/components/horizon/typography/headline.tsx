@@ -3,11 +3,11 @@
 import { useId } from "react"
 import { cva, type VariantProps } from "class-variance-authority"
 
-import { IGRPIcon } from "../icon"
-import { type IGRPColorRole, type IGRPColorVariants } from "../../../lib/colors"
-import { cn } from "../cn"
-import { igrpOmitNonDomProps } from "../../../lib/dom-props"
-import type { IGRPBaseAttributes } from "../../../types"
+import { IGRPIcon } from "../icon/index.js"
+import { type IGRPColorRole, type IGRPColorVariants } from "../../../lib/colors.js"
+import { cn } from "../cn.js"
+import { igrpOmitNonDomProps } from "../../../lib/dom-props.js"
+import type { IGRPBaseAttributes } from "../../../types.js"
 
 const igrpHeadlineVariants = cva("scroll-m-20 font-bold tracking-tight text-balance", {
   variants: {

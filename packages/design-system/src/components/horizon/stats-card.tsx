@@ -7,11 +7,11 @@ import { cva, type VariantProps } from "class-variance-authority"
 import { useCallback, useId } from "react"
 import Image from "next/image"
 
-import { IGRPColors, type IGRPColorVariants } from "../../lib/colors"
+import { IGRPColors, type IGRPColorVariants } from "../../lib/colors.js"
 import { cn } from "cn"
-import { igrpOmitNonDomProps } from "../../lib/dom-props"
-import type { IGRPBaseAttributes } from "../../types"
-import { IGRPIcon, type IGRPIconName } from "./icon"
+import { igrpOmitNonDomProps } from "../../lib/dom-props.js"
+import type { IGRPBaseAttributes } from "../../types.js"
+import { IGRPIcon, type IGRPIconName } from "./icon/index.js"
 
 const igrpStatsCardVariants = cva(
   "flex items-center overflow-hidden bg-card p-4 text-card-foreground shadow-sm transition-[box-shadow,border-color]",

@@ -8,10 +8,10 @@ import {
   DropdownMenuContent,
   DropdownMenuLabel,
   DropdownMenuTrigger,
-} from "../../primitives/dropdown-menu"
-import { cn } from "../cn"
-import { IGRPButton } from "../button"
-import { useIGRPi18n } from "../../../i18n"
+} from "../../primitives/dropdown-menu.js"
+import { cn } from "../cn.js"
+import { IGRPButton } from "../button.js"
+import { useIGRPi18n } from "../../../i18n/index.js"
 
 /**
  * Props for the IGRPDataTableToggleVisibility component.

@@ -3,7 +3,7 @@
 import * as React from "react"
 import { cn } from "cn"
 
-import { Button } from "./button"
+import { Button } from "./button.js"
 import { ChevronLeftIcon, ChevronRightIcon, MoreHorizontalIcon } from "lucide-react"
 
 function Pagination({ className, ...props }: React.ComponentProps<"nav">) {

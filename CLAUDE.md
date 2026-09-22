@@ -59,7 +59,7 @@ Critical env constraint: when `NEXT_PUBLIC_BASE_PATH` is set, `NEXTAUTH_URL` mus
 
 @.claude/shared/tailwind-v4.md
 
-Inside `templates/demo-v1/**/*.{ts,tsx}`, the template's agent rules are canonical in `templates/demo-v1/.agents/` — `rules/ui.md` (design-system hard rules) and `rules/permissions.md` (permission gating). `AGENTS.md`, `.cursor/`, `.trae/` and `.github/` are thin bridges that point there; rule content belongs in `.agents/rules/`, never in a bridge. `.github/copilot-instructions.md` is **generated** (`pnpm --filter @igrp/framework-next-template agents:sync`) because Copilot cannot follow references.
+Inside `templates/demo-v1/**/*.{ts,tsx}`, the template's agent rules are canonical in `templates/demo-v1/.agents/` — `rules/ui.md` (design-system hard rules) and `rules/permissions.md` (permission gating). `AGENTS.md` is a thin bridge that points there; rule content belongs in `.agents/rules/`, never in a bridge.
 
 The full component reference is the skill at `templates/demo-v1/.agents/skills/igrp-design-system/SKILL.md`. That subtree is **not committed** — the zip script injects it from `plugins/igrp/skills/design-system/`, which is the copy to edit in this repo. Treat it as authoritative and load only the sub-files you need.
 

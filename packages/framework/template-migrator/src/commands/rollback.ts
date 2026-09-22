@@ -30,6 +30,8 @@ export async function rollback(
     return false;
   }
   const entry = lock.applied[idx];
+  // Baseline entries omit `undo` entirely rather than carrying an empty array.
+  const undoSteps = entry.undo ?? [];
 
   // Migrations declare `requires`, and `apply` refuses to run one whose
   // prerequisite is unapplied. Rolling a prerequisite out from under a migration
@@ -57,7 +59,7 @@ export async function rollback(
   // report success, change no files, and leave the app claiming the migration
   // is unapplied, so the next `apply` re-runs work that is already present.
   const isBaselineEntry =
-    entry.undo.length === 0 && Object.keys(entry.undoPayloads ?? {}).length === 0;
+    undoSteps.length === 0 && Object.keys(entry.undoPayloads ?? {}).length === 0;
   if (isBaselineEntry && !opts.force) {
     console.error(`\nCannot roll back ${id} — nothing to reverse.`);
     console.error(
@@ -73,7 +75,7 @@ export async function rollback(
 
   // A placeholder undo step is only restorable if apply stored the prior
   // content in undoPayloads (newer CLI versions do — see commands/apply.ts).
-  const unrestorable = entry.undo.filter((step) => {
+  const unrestorable = undoSteps.filter((step) => {
     if (!isPlaceholder(step)) return false;
     const p = stepPath(step);
     return p === undefined || entry.undoPayloads?.[p] === undefined;
@@ -93,14 +95,14 @@ export async function rollback(
     return false;
   }
 
-  console.log(`\nRolling back ${id} (${entry.undo.length} undo step(s))\n`);
+  console.log(`\nRolling back ${id} (${undoSteps.length} undo step(s))\n`);
   // Undo steps must run in REVERSE apply order so multi-step touches of the
   // same path unwind correctly (e.g. delete-then-recreate: first remove the
   // recreated file, then restore the original).
   // Note: rollback is not atomic — a crash mid-loop leaves the lock entry in
   // place, and re-running rollback is safe because restores are idempotent
   // overwrites/deletes and payloads persist in the lock until the final write.
-  for (const step of [...entry.undo].reverse()) {
+  for (const step of [...undoSteps].reverse()) {
     const pathKey =
       stepPath(step) ??
       (step as Record<string, unknown>).file ??

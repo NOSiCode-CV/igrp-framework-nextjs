@@ -17,14 +17,17 @@ function migration(id: string, date = "2026-01-01", steps: unknown = [{ type: "n
   return { id, date, contentHash: hashSteps(steps) };
 }
 
+/**
+ * A baseline entry: the four keys the template's shipped lock carries. Nothing
+ * was executed against a file tree, so there is no `undo`/`fileHashes` to
+ * record and the fields are absent rather than empty.
+ */
 function entry(m: MigrationSummary, overrides: Partial<LockEntry> = {}): LockEntry {
   return {
     id: m.id,
     appliedAt: `${m.date}T00:00:00.000Z`,
     cliVersion: "0.1.0-beta.100",
     manifestHash: m.contentHash,
-    undo: [],
-    fileHashes: {},
     ...overrides,
   };
 }
@@ -104,13 +107,11 @@ describe("buildTemplateLock", () => {
     expect(built.applied).toHaveLength(2);
     // History preserved verbatim — regenerating must not churn prior entries.
     expect(built.applied[0]).toEqual(existing.applied[0]);
-    expect(built.applied[1]).toMatchObject({
+    expect(built.applied[1]).toEqual({
       id: "02-b",
       appliedAt: "2026-03-04T00:00:00.000Z",
       cliVersion: "0.1.0-beta.134",
       manifestHash: second.contentHash,
-      undo: [],
-      fileHashes: {},
     });
   });
 
@@ -155,11 +156,36 @@ describe("buildTemplateLock", () => {
           appliedAt: "2025-11-10T00:00:00.000Z",
           cliVersion: "0.1.0-beta.134",
           manifestHash: migrations[0].contentHash,
-          undo: [],
-          fileHashes: {},
         },
       ],
     });
+  });
+
+  it("omits undo/fileHashes rather than writing them empty", () => {
+    const m = migration("01-a");
+    const built = buildTemplateLock({ migrations: [m], existing: null, cliVersion: "0.1.0-beta.134" });
+    expect(Object.keys(built.applied[0])).toEqual([
+      "id",
+      "appliedAt",
+      "cliVersion",
+      "manifestHash",
+    ]);
+  });
+
+  it("keeps a prior entry's real undo content — that came from an actual run", () => {
+    const m = migration("01-a");
+    const prior = entry(m, {
+      undo: [{ type: "file.delete", path: "src/added.ts" }],
+      fileHashes: { "src/added.ts": "abcd" },
+      undoPayloads: { "src/added.ts": "before" },
+      postHashes: { "src/added.ts": "ef01" },
+    });
+    const built = buildTemplateLock({
+      migrations: [m],
+      existing: lockOf([prior]),
+      cliVersion: "0.1.0-beta.134",
+    });
+    expect(built.applied[0]).toEqual(prior);
   });
 
   it("produces a lock that the diff then considers clean", () => {

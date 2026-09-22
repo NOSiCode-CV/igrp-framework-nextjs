@@ -44,8 +44,20 @@ export interface LockEntry {
   appliedAt: string;
   cliVersion: string;
   manifestHash: string;
-  undo: MigrationStep[];
-  fileHashes: Record<string, string>;
+  /**
+   * Inverse steps for rollback.
+   *
+   * Optional because a *baseline* entry has none. The template ships its own
+   * lock so a scaffolded app opens with every migration already applied, but
+   * nothing was executed against a file tree there — the template simply IS the
+   * post-migration state. Writing `undo: []` and `fileHashes: {}` into all forty
+   * of those entries stated nothing the absence of the fields does not.
+   * Treat missing as empty: `entry.undo ?? []`.
+   */
+  undo?: MigrationStep[];
+  /** Pre-migration hash of each path the migration touched. Forensic only —
+   *  nothing reads it. Absent on baseline entries (see `undo`). */
+  fileHashes?: Record<string, string>;
   /**
    * Pre-migration file contents keyed by app-relative path, captured at apply
    * time for steps whose undo would otherwise be an unrestorable `__undo__`

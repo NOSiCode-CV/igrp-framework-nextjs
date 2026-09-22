@@ -18,16 +18,8 @@ auto-discovers its own path; they are **thin bridges** that point here.
 | File | Read by | Contains |
 |---|---|---|
 | `AGENTS.md` | Codex, Amp, Jules, generic agents | pointers + project shape |
-| `.cursor/rules/igrp-design-system.mdc` | Cursor (glob-scoped) | pointers via `@`-refs |
-| `.trae/rules/project_rules.md` | Trae | pointers via `@`-refs |
-| `.github/copilot-instructions.md` | GitHub Copilot | **generated** — see below |
 | `.claude/skills/igrp-design-system/SKILL.md` | Claude Code | pointer to the skill |
 | `CLAUDE.md` | Claude Code (monorepo only, not shipped) | pointers + template internals |
-
-Copilot is the exception: it ingests `.github/copilot-instructions.md` as
-literal text and will not open a referenced file. That file is therefore
-**generated** by concatenating `rules/*.md`. Never hand-edit it — edit the
-canonical rule file and regenerate:
 
 ## Where the skill comes from
 

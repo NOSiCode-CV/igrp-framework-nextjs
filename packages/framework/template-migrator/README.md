@@ -235,7 +235,7 @@ Add `--check` for a dry run that reports what's stale and exits 1 without writin
 
 Regeneration is **append-and-refresh, not rewrite**: existing entries keep their recorded `appliedAt` and `cliVersion` (that's history, and churning it every release would lose the record of which CLI stamped each migration). Only `manifestHash` is refreshed, missing entries are appended in migration order, and entries for deleted migrations are dropped.
 
-New entries carry an empty `undo`/`fileHashes`, which is the honest representation: nothing was executed against a file tree here — the template simply *is* the post-migration state, so rolling a scaffolded app back past its baseline isn't a supported operation.
+New entries carry **no** `undo`/`fileHashes` at all, which is the honest representation: nothing was executed against a file tree here — the template simply *is* the post-migration state, so rolling a scaffolded app back past its baseline isn't a supported operation. Omitting the fields says that more plainly than forty copies of `[]` and `{}`. A prior entry that does carry real content keeps it: that can only come from a lock some consumer actually ran against, which isn't ours to discard.
 
 ---
 
@@ -324,18 +324,23 @@ interface LockFile {
 }
 
 interface LockEntry {
+  // Always present.
   id: string;               // migration ID, e.g. "04-multi-auth-provider"
   appliedAt: string;        // ISO 8601 timestamp
   cliVersion: string;       // CLI version that applied this migration
   manifestHash: string;     // the migration's `contentHash` at apply time
-  undo: MigrationStep[];    // inverse steps for rollback
-  fileHashes: Record<string, string>;   // PRE-migration hash of each touched path
+
+  // Present only when the CLI actually executed the migration here.
+  undo?: MigrationStep[];                // inverse steps for rollback
+  fileHashes?: Record<string, string>;   // PRE-migration hash of each touched path
   undoPayloads?: Record<string, string>; // pre-migration contents, for rollback
   postHashes?: Record<string, string>;   // POST-write hash of each file written
 }
 ```
 
 Hashes are the first 16 hex characters of a SHA-256 of the file's UTF-8 text.
+
+**Baseline entries carry only the first four fields.** The template ships its own lock so a scaffolded app opens with every migration already applied — but nothing was executed against a file tree there, the template simply *is* the post-migration state. There is no undo to record, so the fields are absent rather than written empty. Read them as `entry.undo ?? []`. `scripts/sync-template-lock.ts` regenerates the file in this shape; it rewrites on a byte difference, not only a semantic one, so a lock left in an outdated shape is something it can actually fix.
 
 `fileHashes` and `postHashes` are not the same thing and are not interchangeable:
 
@@ -346,7 +351,7 @@ Hashes are the first 16 hex characters of a SHA-256 of the file's UTF-8 text.
 
 The lock file is owned by the consumer — they commit it to version control. The CLI never deletes it; `rollback <id>` removes that entry and reverses the files it wrote. It refuses (unless `--force`) when another **still-applied** migration declares the target in its `requires`: `apply` will not run a migration whose prerequisite is unapplied, and rolling the prerequisite out from under it reaches that same state from the other side.
 
-An entry with an empty `undo` **and** no `undoPayloads` is a *baseline* entry: it came from the template's shipped lock, meaning a scaffolded app already contained that migration's result and the CLI never executed it there. `rollback` refuses those (unless `--force`), because removing one would report success, change no files, and leave the app claiming the migration is unapplied.
+An entry with no `undo` (or an empty one) **and** no `undoPayloads` is a *baseline* entry: it came from the template's shipped lock, meaning a scaffolded app already contained that migration's result and the CLI never executed it there. `rollback` refuses those (unless `--force`), because removing one would report success, change no files, and leave the app claiming the migration is unapplied.
 
 ## Crash recovery journal
 

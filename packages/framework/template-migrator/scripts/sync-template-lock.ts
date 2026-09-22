@@ -17,6 +17,7 @@ import {
   isLockClean,
   loadMigrationSummaries,
   readTemplateLock,
+  serialiseTemplateLock,
   writeTemplateLock,
 } from "./template-lock.js";
 
@@ -52,8 +53,18 @@ function main(): void {
     existing = null;
   }
   const diff = diffTemplateLock({ migrations, lock: existing });
+  const lock = buildTemplateLock({ migrations, existing, cliVersion: pkg.version });
 
-  if (isLockClean(diff)) {
+  // Compare the BYTES, not just the semantics. `diffTemplateLock` answers "does
+  // the lock record the right migrations?"; it cannot see a lock that records
+  // them in an outdated shape (e.g. still carrying the `undo: []` /
+  // `fileHashes: {}` that baseline entries no longer write). Without this the
+  // script reported "already up to date" and refused to fix a file it owns.
+  const current = existsSync(TEMPLATE_LOCK) ? readFileSync(TEMPLATE_LOCK, "utf8") : null;
+  const desired = serialiseTemplateLock(lock);
+  const shapeStale = current !== null && current !== desired;
+
+  if (isLockClean(diff) && !shapeStale) {
     console.log(`✓ Template lock already records all ${migrations.length} migration(s).`);
     return;
   }
@@ -68,13 +79,15 @@ function main(): void {
     console.log(`  ~ ${m.id}: hash ${m.recorded} → ${m.expected}`);
   }
   if (diff.outOfOrder) console.log("  ~ entries reordered to match migration order");
+  if (isLockClean(diff) && shapeStale) {
+    console.log("  ~ entries rewritten to the current shape (no semantic change)");
+  }
 
   if (checkOnly) {
     console.error("\n✗ Template lock is out of date (--check: nothing written).");
     process.exit(1);
   }
 
-  const lock = buildTemplateLock({ migrations, existing, cliVersion: pkg.version });
   writeTemplateLock(TEMPLATE_LOCK, lock);
   console.log(`\n✓ Wrote ${lock.applied.length} applied migration(s) to ${TEMPLATE_LOCK}`);
 }

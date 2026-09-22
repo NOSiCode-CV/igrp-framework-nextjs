@@ -117,10 +117,12 @@ export function diffTemplateLock(opts: {
  * refreshed (a migration's steps may have been corrected in place) and missing
  * entries are appended. Entries for migrations that no longer exist are dropped.
  *
- * New entries carry empty `undo`/`fileHashes`: nothing was actually executed
- * against a file tree here, the template simply *is* the post-migration state.
- * Rollback of a scaffolded app's baseline migrations is not a supported
- * operation, and an empty undo is the honest representation of that.
+ * New entries carry NO `undo`/`fileHashes`: nothing was executed against a file
+ * tree here, the template simply *is* the post-migration state. Rollback of a
+ * scaffolded app's baseline migrations is not a supported operation, and
+ * omitting the fields says that more plainly than forty copies of `[]` and `{}`.
+ * A prior entry that does carry real content keeps it — that can only come from
+ * a lock some consumer actually ran against, which is not ours to discard.
  */
 export function buildTemplateLock(opts: {
   migrations: MigrationSummary[];
@@ -138,9 +140,13 @@ export function buildTemplateLock(opts: {
       appliedAt: prior?.appliedAt ?? isoFromDate(migration.date),
       cliVersion: prior?.cliVersion ?? cliVersion,
       manifestHash: migration.contentHash,
-      undo: prior?.undo ?? [],
-      fileHashes: prior?.fileHashes ?? {},
+      // Only carried when there is something to carry — see the note above.
+      ...(prior?.undo?.length ? { undo: prior.undo } : {}),
+      ...(prior?.fileHashes && Object.keys(prior.fileHashes).length
+        ? { fileHashes: prior.fileHashes }
+        : {}),
       ...(prior?.undoPayloads ? { undoPayloads: prior.undoPayloads } : {}),
+      ...(prior?.postHashes ? { postHashes: prior.postHashes } : {}),
     };
   });
 
@@ -197,6 +203,11 @@ export function readTemplateLock(lockPath: string): LockFile | null {
   }
 }
 
+/** The exact bytes a correct lock file holds. */
+export function serialiseTemplateLock(lock: LockFile): string {
+  return JSON.stringify(lock, null, 2) + "\n";
+}
+
 export function writeTemplateLock(lockPath: string, lock: LockFile): void {
-  writeFileSync(lockPath, JSON.stringify(lock, null, 2) + "\n", "utf8");
+  writeFileSync(lockPath, serialiseTemplateLock(lock), "utf8");
 }

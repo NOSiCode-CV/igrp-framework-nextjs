@@ -1,3 +1,4 @@
+// Permission: open to all authenticated users — demo page with no sensitive data.
 // Reached via the `DASHBOARD` menu item (pageSlug: "dashboard").
 export default function DashboardPage() {
   return (

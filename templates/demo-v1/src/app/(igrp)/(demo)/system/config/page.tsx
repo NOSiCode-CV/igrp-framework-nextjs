@@ -2,7 +2,7 @@
 // The menu item carries a `roles` entry, but that is metadata only — nothing
 // filters menus on it (see src/temp/menus/menus.ts).
 //
-// This page is open to all authenticated users: it is a demo with no sensitive
+// Permission: open to all authenticated users — it is a demo with no sensitive
 // content. A real settings page adds the server-side page guard on its first
 // line — see docs/PERMISSIONS.md. (Deliberately not naming the guard function
 // here: auditing which pages are gated is a grep for the call, and a mention in

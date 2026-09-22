@@ -133,6 +133,11 @@
       "import": "./dist/index.js",
       "default": "./dist/index.js"
     },
+    "./cn": {
+      "types": "./dist/cn.d.ts",
+      "import": "./dist/cn.js",
+      "default": "./dist/cn.js"
+    },
     "./tokens": "./dist/tokens.css",
     "./package.json": "./package.json"
   },

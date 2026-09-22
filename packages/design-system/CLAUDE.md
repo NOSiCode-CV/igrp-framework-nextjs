@@ -28,6 +28,12 @@ The plugin is distributed via the in-repo Claude Code marketplace (`.claude-plug
 - **Write relative imports with a `.js` extension, in the source.** In ESM a specifier is a *runtime* path, and `tsc` never rewrites it — whatever you type is copied verbatim into both `dist/*.js` and `dist/*.d.ts`. The package is `"type": "module"`, so Node applies ESM resolution to `dist` and rejects an extensionless specifier; `moduleResolution: "bundler"` (this package, and `templates/demo-v1`) accepts both spellings and hides it. `scripts/babel-plugin-add-import-extension.cjs` is a safety net for the emitted JS only — it has no counterpart for declarations, which is how the package shipped with **all 169** specifiers in `dist/index.d.ts` extensionless and its entire public type surface degraded to `any` for `nodenext` consumers (fixed 2026-09-22). Two gates now cover it: `pnpm check:dist` (declarations, runs in `build`) and `src/build-pipeline.test.ts` → "emits fully specified relative specifiers" (emitted JS). **That test was a no-op until 2026-09-22** — its pattern had lost its backslashes and matched nothing — so it also asserts it inspected something. Keep that shape for any new guard here.
 - **No wildcard exports / no aliasing** in `src/index.ts` or `src/components/custom/*` — both sit inside `"use client"` boundaries and wildcards break the unbundled build.
 - Consumers import **tokens only** (`@igrp/igrp-framework-react-design-system/tokens`), not `/styles` (legacy).
+- **`./cn` is the server-safe entry** (`src/cn.ts` → `dist/cn.js`). The root barrel is a
+  `"use client"` boundary, so server code importing `cn` from `.` fails at `next build`
+  with "Attempted to call cn() from the server but cn is on the client" — invisible to
+  `tsc` and to lint. `src/cn.ts` must never declare a directive or import anything that
+  does; `src/server-safe-entries.test.ts` asserts that on the built output and asserts
+  it inspected something. Add any future server-safe entry to `SERVER_SAFE_ENTRIES` there.
 - Visual/interaction tests live in `packages/design-system-storybook` — hand off for snapshot/a11y work.
 - Build: `pnpm build:ds`. Escape hatch: `pnpm --filter @igrp/igrp-framework-react-design-system build:without_reactcompiler`.
 

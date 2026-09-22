@@ -10,7 +10,17 @@ export type MigrationStep =
   | { type: "file.delete"; path: string }
   | { type: "env.add"; file: string; keys: Record<string, EnvKeySpec> }
   | { type: "env.remove"; file: string; keys: string[] }
-  | { type: "deps.bump"; manifest: string; ranges: Record<string, string> };
+  | { type: "deps.bump"; manifest: string; ranges: Record<string, string> }
+  | { type: "deps.remove"; manifest: string; deps: string[] }
+  // Undo of deps.remove. `deps.bump` cannot serve as the inverse: it only
+  // updates a dependency that is already declared and will not re-add one.
+  // Carries the original field so a devDependency is restored as a
+  // devDependency rather than promoted into `dependencies`.
+  | {
+      type: "deps.restore";
+      manifest: string;
+      removed: Record<string, { field: "dependencies" | "devDependencies"; range: string }>;
+    };
 
 export interface MigrationEntry {
   id: string;

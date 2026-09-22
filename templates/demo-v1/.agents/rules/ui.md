@@ -21,8 +21,19 @@ before writing any form, table, chart, modal, or design-system import.
   `text-muted-foreground`, `border-input`, `bg-primary`, `bg-destructive`, …
   Never a raw palette colour (`bg-blue-500`, `text-red-600`).
 - **No manual `dark:` overrides** in app code — tokens handle dark mode.
-- **`cn()`** from the design system for class merging, not `clsx` or
-  `classnames` directly.
+- **`cn()`** from the design system for class merging, never `clsx`,
+  `classnames`, or a direct dependency on the `cn` package. **Which entry
+  depends on the boundary:**
+  - Client file (`'use client'`) → `@igrp/igrp-framework-react-design-system`
+  - Server file (no directive — a server component, `layout.tsx`, anything under
+    `src/lib` reached from one) → `@igrp/igrp-framework-react-design-system/cn`
+
+  The root barrel is a `'use client'` boundary. Importing `cn` from it in server
+  code throws during `next build` — *Attempted to call cn() from the server but
+  cn is on the client* — and **neither `tsc` nor `biome` catches it**, so a
+  typecheck-and-lint CI gate reports green. Worse, the error is attributed to
+  whichever route pulled the root layout in first, not to the file at fault.
+  The `/cn` subpath is the same function with no directive.
 - **`size-N`** when width equals height (`size-10`, not `w-10 h-10`).
 - **`flex gap-N`** for spacing, not `space-x-N` / `space-y-N`.
 - **Import tokens only**, never the removed `/styles` bundle:
@@ -50,7 +61,7 @@ Horizon first, always. Don't mix layers in one component without a reason.
 | Chart | `IGRPAreaChart` / `IGRPLineChart` / etc.; colours from `IGRP_CHART_COLORS` |
 | Card | `IGRPCard` + separate exports `IGRPCardHeader` / `IGRPCardTitle` / `IGRPCardDescription` / `IGRPCardContent` / `IGRPCardFooter` (NOT dot notation) |
 | Page header | `IGRPPageHeader` |
-| Class merge | `cn(...)` from the design system root |
+| Class merge | `cn(...)` — DS root in client files, `…/cn` in server files |
 
 ## Deep references
 

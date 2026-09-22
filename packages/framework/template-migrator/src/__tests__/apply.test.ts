@@ -284,3 +284,109 @@ describe("executeStep rejects unimplemented patch mode cleanly", () => {
     ).toThrow(/patch mode is not supported/i);
   });
 });
+
+describe("executeStep: deps.remove / deps.restore", () => {
+  it("removes a dependency and returns a restore undo that names its original field", () => {
+    writeAppFile(
+      "package.json",
+      JSON.stringify(
+        {
+          name: "consumer",
+          dependencies: { cn: "^0.3.0", next: "15.5.25" },
+          devDependencies: { typescript: "5.9.3" },
+        },
+        null,
+        2,
+      ) + "\n",
+    );
+
+    const undo = executeStep(
+      { type: "deps.remove", manifest: "package.json", deps: ["cn", "typescript"] },
+      appRoot,
+      payloadDir,
+    );
+
+    const pkg = JSON.parse(readAppFile("package.json"));
+    expect(pkg.dependencies.cn).toBeUndefined();
+    expect(pkg.devDependencies.typescript).toBeUndefined();
+    // Untouched neighbours survive.
+    expect(pkg.dependencies.next).toBe("15.5.25");
+    // The undo has to remember WHICH field each dep came from — restoring a
+    // devDependency into `dependencies` would change what a production install
+    // pulls down.
+    expect(undo).toEqual({
+      type: "deps.restore",
+      manifest: "package.json",
+      removed: {
+        cn: { field: "dependencies", range: "^0.3.0" },
+        typescript: { field: "devDependencies", range: "5.9.3" },
+      },
+    });
+  });
+
+  it("round-trips: remove then restore returns the manifest to its original state", () => {
+    const original =
+      JSON.stringify(
+        {
+          name: "consumer",
+          dependencies: { cn: "0.3.0", next: "15.5.25" },
+          devDependencies: { typescript: "5.9.3" },
+        },
+        null,
+        2,
+      ) + "\n";
+    writeAppFile("package.json", original);
+
+    const undo = executeStep(
+      { type: "deps.remove", manifest: "package.json", deps: ["cn"] },
+      appRoot,
+      payloadDir,
+    );
+    expect(JSON.parse(readAppFile("package.json")).dependencies.cn).toBeUndefined();
+
+    executeStep(undo, appRoot, payloadDir);
+    expect(readAppFile("package.json")).toBe(original);
+  });
+
+  it("warns instead of throwing when the dep is already absent", () => {
+    // A catch-up migration re-applied over an already-current tree must not
+    // abort — but "removed nothing" and "removed something" must not look the
+    // same in the output either.
+    writeAppFile(
+      "package.json",
+      JSON.stringify({ name: "consumer", dependencies: { next: "15.5.25" } }, null, 2) + "\n",
+    );
+    const warnings: string[] = [];
+    const spy = vi.spyOn(console, "warn").mockImplementation((m: unknown) => {
+      warnings.push(String(m));
+    });
+
+    const undo = executeStep(
+      { type: "deps.remove", manifest: "package.json", deps: ["cn"] },
+      appRoot,
+      payloadDir,
+    );
+    spy.mockRestore();
+
+    expect(warnings.join("\n")).toContain("nothing to remove");
+    expect(warnings.join("\n")).toContain("cn");
+    // Nothing was removed, so the undo must not claim otherwise.
+    expect(undo).toEqual({ type: "deps.restore", manifest: "package.json", removed: {} });
+  });
+
+  it("restores into a manifest that no longer has the field at all", () => {
+    writeAppFile("package.json", JSON.stringify({ name: "consumer" }, null, 2) + "\n");
+
+    executeStep(
+      {
+        type: "deps.restore",
+        manifest: "package.json",
+        removed: { cn: { field: "dependencies", range: "0.3.0" } },
+      },
+      appRoot,
+      payloadDir,
+    );
+
+    expect(JSON.parse(readAppFile("package.json")).dependencies).toEqual({ cn: "0.3.0" });
+  });
+});

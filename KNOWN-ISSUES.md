@@ -109,6 +109,31 @@ shape, so most gates generalise.
 >    Every new guard should assert that it *did some work* — the repaired test
 >    and `check-dist.mjs` both now fail when they inspect zero items.
 
+> **2026-09-22 — a fourth instance, found reviewing `templates/demo-v1`.** Same
+> family, new failure mode: not a guard that checked nothing, but a guard that
+> checked **the wrong thing**.
+>
+> `warnOnRefetchIntervalMisconfiguration` (`next-auth/src/config.ts`) compared
+> `IGRP_SESSION_REFETCH_INTERVAL` against the 60s proactive-refresh buffer. No
+> code anywhere reads that variable — the client poll cadence is whatever the app
+> passes as `sessionArgs.refetchInterval`, which in `demo-v1` is a hardcoded
+> 600s. So the guard inspected the documented `45`, passed, and stayed silent
+> while the effective value was `600`: ten times past the ceiling it existed to
+> enforce. `.env.example` meanwhile instructed every consumer to set a variable
+> with no effect, under a heading asserting a hard ceiling — advice that could
+> only waste their time.
+>
+> Fixed 2026-09-22: the check now warns that the variable is set and inert,
+> which is the one thing it can observe and be right about; `.env.example`
+> records that the knob's absence is deliberate (migration 40); and the README,
+> the `TOKEN_REFRESH_BUFFER_MS` comment and the claims-expired error in
+> `framework-next` no longer point at it.
+>
+> The lesson to add to the two above: **a guard must read the same value the
+> thing it protects reads.** Assert the subject, not a proxy for it. When the
+> effective value lives somewhere the guard cannot see, that is a signal the
+> check belongs at the other end — not that a nearby variable will do.
+
 ### Fix
 
 Pick one of two directions; don't do both.

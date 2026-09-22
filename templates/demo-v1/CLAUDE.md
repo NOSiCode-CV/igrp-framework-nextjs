@@ -16,7 +16,7 @@ You are working inside `templates/demo-v1/` — the **canonical reference templa
 - **`NEXTAUTH_URL` must include the basePath and `/api/auth`.** With `NEXT_PUBLIC_BASE_PATH=/apps/template`, the correct value is `NEXTAUTH_URL=http://localhost:3000/apps/template/api/auth`. NextAuth treats this as the URL of its API root and derives `signin`/`callback` endpoints from it. Getting this wrong produces a login loop with a deeply nested `?callbackUrl=…?callbackUrl=…` chain.
 - **`redirect_uri` registered on the IGRP auth server must exactly match** what NextAuth builds: `<NEXTAUTH_URL>/callback/<provider-id>`. The OIDC spec requires an exact match.
 - **`post_logout_redirect_uri` must be registered on the IGRP auth server too** — same exact-match rule as `redirect_uri`, but for logout. The logout page (`(auth)/logout/page.tsx`) sends the app's login URL (`<origin><basePath>/login`, built by `buildLoginUrl()`) as `post_logout_redirect_uri` on the IdP `end_session_endpoint`. Spring Authorization Server only redirects the browser back to that URL when **both** hold: (a) it is registered byte-for-byte in the client's `postLogoutRedirectUris` (scheme, host, port, basePath, trailing slash), **and** (b) a valid `id_token_hint` is present (Spring resolves the client from the hint's `aud`, not from `client_id`). If either fails, the user is left on Spring's own "logged out" page instead of returning to `/login` — the SSO session is still terminated, but the redirect-back silently doesn't happen. The RP side already forces the `openid` scope and always sends `id_token_hint` when an `id_token` is held; confirm the IdP **re-issues `id_token` on the refresh grant** so the hint's `sid` doesn't go stale. Diagnose with the dev log line `[oidc.buildEndSessionUrl] built URL { …, hasIdTokenHint, postLogoutRedirectUri }`. See `docs/2026-06-02-spring-as-logout-redirect-report.md`.
-- **`callbackUrl` is always sanitized.** Both middleware and the login page pass user-supplied values through `sanitizeCallbackUrl()` (in `lib/utils.ts`) to:
+- **`callbackUrl` is always sanitized.** Both middleware and the login page pass user-supplied values through `sanitizeCallbackUrl()` (in `lib/utilities.ts`) to:
   - reject scheme-relative (`//…`) and absolute URLs (open-redirect),
   - collapse `/login` and `/<basePath>/login` so we never bounce back to login,
   - drop `/logout*` targets so a successful login doesn't immediately log out.
@@ -63,7 +63,14 @@ The shadcn CLI **is** appropriate inside `packages/design-system` itself, when r
 
 - `src/app/layout.tsx` mounts `IGRPRootLayout` + providers (`IGRPRootProviders`, `IGRPSessionProvider`, theme provider).
 - `src/app/(igrp)/layout.tsx` runs auth check, loads session via `serverSession()`, calls `igrpBuildConfig(...)`, renders `IGRPLayout` (header + sidebar + nav-user + breadcrumbs + command search) around `children`.
-- Route groups: `(auth)` for login/logout, `(igrp)` for the authenticated shell, `(myapp)` for the demo app pages.
+- Route groups: `(auth)` for login/logout, `(igrp)` for the authenticated shell.
+  Demo pages live in `(igrp)/(demo)`; Studio-regenerated route shells in
+  `(igrp)/(generated)`. **`(myapp)` is a sibling of `(igrp)`, not a child** — it
+  holds only underscore-prefixed, non-routable folders (`_features`, `_lib`,
+  `_components`). Never put a `page.tsx` directly in `(myapp)`: it would render
+  outside `(igrp)/layout.tsx`, so `verifySession()` never runs, the permission
+  claims are never seeded, and the header/sidebar chrome is absent. Routes go
+  under `(igrp)`; the feature code they import goes under `(myapp)/_features`.
 
 ### Config builder and server actions
 

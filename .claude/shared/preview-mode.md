@@ -2,7 +2,7 @@
 
 `IGRP_PREVIEW_MODE=true` in `templates/demo-v1/.env` is the fastest dev loop without auth/backend setup.
 
-`AUTH_PROVIDER=none` is the parallel bypass path. Both are unified behind `isAuthBypass()` in `templates/demo-v1/src/lib/utils.ts` — every auth-aware code path must use that helper, not check the raw env directly.
+`AUTH_PROVIDER=none` is the parallel bypass path. Both are unified behind `isAuthBypass()` in `templates/demo-v1/src/lib/utilities.ts` — every auth-aware code path must use that helper, not check the raw env directly.
 
 **Effect:**
 - Bypasses NextAuth session checks in `src/middleware.ts`.

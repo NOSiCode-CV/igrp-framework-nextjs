@@ -700,9 +700,6 @@ importers:
       class-variance-authority:
         specifier: 0.7.1
         version: 0.7.1
-      cn:
-        specifier: ^0.3.0
-        version: 0.3.0
       next:
         specifier: 15.5.25
         version: 15.5.25(@types/node@25.9.1)(babel-plugin-react-compiler@1.0.0)(react-dom@19.2.8(react@19.2.8))(react@19.2.8)

@@ -105,6 +105,9 @@ Emits `.d.ts` declaration files from `tsconfig.build.json` (no JS output, types 
        manifest: package.json
        ranges:
          "@igrp/framework-next": "0.1.0-beta.XXX"
+     - type: deps.remove
+       manifest: package.json
+       deps: ["some-dropped-package"]
    ---
    ```
 
@@ -153,6 +156,8 @@ Emits `.d.ts` declaration files from `tsconfig.build.json` (no JS output, types 
 | `env.add` | `file`, `keys` | Appends missing keys (with doc comments) to an `.env` file. Keys already present are left alone, and the undo lists only the keys this step actually appended. In practice migrations only ever target `.env.example` — a consumer's real `.env` holds secrets, is gitignored, and never ships in the zip, so `apply` prints a reminder to copy new keys across |
 | `env.remove` | `file`, `keys` | Removes the listed keys from an `.env` file, capturing their values so the undo can restore them. Mainly generated as the inverse of `env.add`, but valid to author directly |
 | `deps.bump` | `manifest`, `ranges` | Updates version ranges in `package.json` (deps or devDeps). A dep the app doesn't declare is **not added** — adding it could contradict a deliberate removal — but it is reported as a warning, since some bumps are load-bearing for the migration's own feature |
+| `deps.remove` | `manifest`, `deps` | Removes dependencies from `package.json`, capturing each one's field (`dependencies` vs `devDependencies`) and range so the undo restores it exactly. Use when the template **drops** a dependency: without it a removal reaches scaffolded apps through the zip but never reaches upgraded ones, and `check:drift` fails on the divergence. A dep already absent is a warning, not an error, so a catch-up re-apply doesn't abort |
+| `deps.restore` | `manifest`, `removed` | Generated as the inverse of `deps.remove`; valid to author directly. `deps.bump` cannot serve as that inverse — it only updates a dep that is already declared and will not re-add one |
 
 `from` values must be relative to `migrations/demo-v1/` (e.g. `payload/NN/src/file.ts`). The pack script strips the leading `payload/` when copying to `dist/payload/`; the runtime in `apply.ts` does the same strip when resolving the source.
 
@@ -174,7 +179,7 @@ It **fails** (exit 1) when:
 - a migration ships a file the template no longer has,
 - a referenced payload file is missing on disk,
 - a dependency a migration bumps has moved on in the template/workspace but no migration captured the new version (the template pins `@igrp/*` as `workspace:*`, so the comparison resolves each `workspace:*` to its current package version — what the zip would ship),
-- a migration bumps a dependency the template doesn't declare,
+- a migration bumps a dependency the template doesn't declare **and no later migration removes it** (a `deps.remove` retires an earlier `deps.bump`, the same collapse-to-final-state rule the file checks use),
 - a **new template file** exists (tracked or untracked-but-not-gitignored) that no migration ships, is not exempt, and is not grandfathered in the baseline (see below),
 - the template's shipped **`.igrp-migrations-lock.json`** doesn't record every migration as applied, records one that no longer exists, has a stale `manifestHash`, or lists entries out of migration order (see below).
 

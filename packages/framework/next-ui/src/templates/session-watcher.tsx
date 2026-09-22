@@ -68,8 +68,8 @@ export function IGRPSessionWatcher({ children }: { children: React.ReactNode }) 
   }, [status, session, router, pathname]);
 
   // Adaptive silent-refresh scheduler. The fixed-interval SessionProvider poll
-  // (IGRP_SESSION_REFETCH_INTERVAL, default 150s) only works when it is tuned
-  // below the IdP access-token TTL; this timer derives the moment to refresh
+  // (`sessionArgs.refetchInterval`; there is no env var for it) only works when
+  // it is tuned below the IdP access-token TTL; this timer derives the moment to refresh
   // from the token itself (`session.expiresAt`, set by the jwt/session
   // callbacks on every rotation), so correctness no longer depends on that
   // tuning. getSession() hits /api/auth/session — a route handler, which CAN

@@ -34,6 +34,7 @@ All variables are documented inline in [`.env.example`](../.env.example). Requir
 | `IGRP_SYNC_ACCESS` | Sync application/resources/menus to Access Management at startup | `false` |
 | `IGRP_SYNC_ON_CODE_MENUS` | Push `src/temp/menus/menus.ts` to AM (overwrites AM menus). Requires sync on + preview off | `false` |
 | `IGRP_SYNC_ON_CODE_MENU_ROLES` | Forward `syncRoles` to `syncApplicationMenus` during the on-code menu push — reconcile menu↔role assignments too. Only consulted when the push runs | `true` |
+| `IGRP_SYNC_PERMISSIONS` | Push the `.igrpstudio/permissions.json` catalog to AM at startup (idempotent upsert keyed on `name`; removals are NOT deleted in AM). Requires sync on + preview off | `false` |
 
 ## Access Management M2M (required when `IGRP_SYNC_ACCESS=true`)
 
@@ -48,6 +49,7 @@ All variables are documented inline in [`.env.example`](../.env.example). Requir
 | Variable | Description | Default |
 | --- | --- | --- |
 | `NEXT_PUBLIC_BASE_PATH` | Subdirectory mount path (empty for root) | — |
+| `NEXT_PUBLIC_IGRP_APP_CODE` | Client-readable copy of `IGRP_APP_CODE`. The logout / teardown loading screens render it client-side, where the server-only `IGRP_APP_CODE` is unavailable. Set it to the same value | — |
 | `NEXT_PUBLIC_IGRP_APP_HOME_SLUG` | Route to land on after login | `/` |
 | `NEXT_IGRP_APP_CENTER_URL` | Application Center URL (app switcher) | — |
 | `NEXT_PUBLIC_ALLOWED_DOMAINS` | Comma-separated image domains for `next/image` | — |

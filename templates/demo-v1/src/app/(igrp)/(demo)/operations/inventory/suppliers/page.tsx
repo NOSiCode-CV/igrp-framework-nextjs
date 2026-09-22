@@ -1,3 +1,4 @@
+// Permission: open to all authenticated users — demo page with no sensitive data.
 // Reached via the `OPS_SUPPLIERS` menu item (pageSlug: "operations/inventory/suppliers").
 export default function OperationsSuppliersPage() {
   return (

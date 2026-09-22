@@ -211,9 +211,9 @@ export const igrpGetClaims = cache(async function igrpGetClaims(): Promise<IGRPC
       return {
         status: 'error',
         error:
-          'access token expired — claims refused. The client session poll should ' +
-          'refresh it; if this persists, IGRP_SESSION_REFETCH_INTERVAL is too high ' +
-          "(it must stay below the framework's 60s proactive-refresh buffer).",
+          'access token expired — claims refused. IGRPSessionWatcher schedules a ' +
+          'silent refresh from `session.expiresAt`; if this persists, check that ' +
+          'the watcher is mounted and that the IdP is still issuing refresh tokens.',
       };
     }
 

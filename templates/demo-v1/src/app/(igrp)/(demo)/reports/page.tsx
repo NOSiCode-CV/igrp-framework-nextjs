@@ -1,3 +1,4 @@
+// Permission: open to all authenticated users — demo page with no sensitive data.
 // Reached via the `REPORTS` menu item (url: "/reports").
 export default function ReportsPage() {
   return (

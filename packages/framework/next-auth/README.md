@@ -66,9 +66,6 @@ NEXT_PUBLIC_BASE_PATH=/apps/template    # scopes auth cookie names (see "Cookies
 NEXT_PUBLIC_IGRP_APP_HOME_SLUG=/home    # post-login landing path, relative to the app base
 AUTH_TRUST_HOST=1                       # read by next-auth: derive the origin from x-forwarded-* when NEXTAUTH_URL is unset
 
-# Session lifecycle
-IGRP_SESSION_REFETCH_INTERVAL=45        # client session-poll seconds; MUST stay below 60 (see below)
-
 # Logout
 IGRP_AUTH_POST_LOGOUT_ALLOWED_ORIGINS=https://portal.example
                                         # extra origins accepted as post_logout_redirect_uri;
@@ -83,14 +80,23 @@ IGRP_AUTH_POST_LOGOUT_ALLOWED_ORIGINS=https://portal.example
 > harmless — `next-auth` still uses it for its own server-side calls — but it no
 > longer influences anything here.
 
-### `IGRP_SESSION_REFETCH_INTERVAL` has a hard ceiling
+### There is no env var for the session-poll interval
 
-The `jwt` callback only refreshes once the access token is within **60s** of
-expiry. A poll interval at or above that never lands inside the refresh window,
-so the only refreshes that run happen during RSC renders, where `cookies()` is
-read-only and the rotated token cannot be persisted — the session then dies in a
-gap users experience as a random bounce to `/login`. `withIGRPAuth` warns in
-development when the value is 60 or above. 45 leaves margin for jitter.
+`IGRP_SESSION_REFETCH_INTERVAL` is **not read by anything**. If you have it set,
+`withIGRPAuth` warns in development and you should delete it.
+
+The fixed poll cadence is whatever the app passes as
+`sessionArgs.refetchInterval`. It does not need tuning, because it is not what
+drives token refresh: `IGRPSessionWatcher` (in `@igrp/framework-next-ui`)
+schedules a silent `getSession()` from `session.expiresAt` and reschedules on
+every rotation, so refresh timing tracks the token instead of a guess. The fixed
+poll is only a backstop for cases the timer cannot cover, such as a suspended
+laptop waking up — so a long interval (`demo-v1` uses 600s) is correct.
+
+The constraint that used to live here — poll interval must stay below the 60s
+proactive-refresh buffer, or refreshes only run in read-only RSC context and
+cannot persist the rotated cookie — is real, and it is why the watcher exists.
+It is not something you configure.
 
 ### Cookies
 

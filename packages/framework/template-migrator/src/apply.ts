@@ -135,6 +135,63 @@ export function executeStep(
       }
       return { type: "deps.bump", manifest: step.manifest, ranges: prevRanges };
     }
+    case "deps.remove": {
+      // The inverse of deps.bump, for a dependency the template has DROPPED.
+      // Without this, a removal can only ever reach scaffolded apps (via the
+      // zip): the migrate channel had no way to express it, so upgraded apps
+      // kept carrying a dependency the template no longer declares and the two
+      // channels silently diverged. `check:drift` fails on exactly that.
+      const pkgPath = join(appRoot, step.manifest);
+      assertInsideAppRoot(appRoot, pkgPath);
+      const pkg = JSON.parse(readFileSync(pkgPath, "utf8"));
+      // Capture which FIELD each dep came from so the undo restores it to the
+      // same place — putting a devDependency back under `dependencies` would
+      // quietly change what ships in a production install.
+      const removed: Record<string, { field: "dependencies" | "devDependencies"; range: string }> = {};
+      const absent: string[] = [];
+      for (const dep of step.deps) {
+        if (pkg.dependencies?.[dep] !== undefined) {
+          removed[dep] = { field: "dependencies", range: pkg.dependencies[dep] };
+          delete pkg.dependencies[dep];
+        } else if (pkg.devDependencies?.[dep] !== undefined) {
+          removed[dep] = { field: "devDependencies", range: pkg.devDependencies[dep] };
+          delete pkg.devDependencies[dep];
+        } else {
+          // Already gone. Not an error — a catch-up migration re-applied over an
+          // already-current tree must not abort — but say so, because "removed
+          // nothing" and "removed something" look identical in the output.
+          absent.push(dep);
+        }
+      }
+      writeFileSync(pkgPath, `${JSON.stringify(pkg, null, 2)}\n`, "utf8");
+      if (absent.length > 0) {
+        console.warn(
+          `  ⚠ ${step.manifest}: not declared by this app, so nothing to remove: ${absent.join(", ")}`,
+        );
+      }
+      return { type: "deps.restore", manifest: step.manifest, removed };
+    }
+    case "deps.restore": {
+      // Undo of deps.remove — re-declares each dependency in the field it came
+      // from, with the range it had. Keys are re-sorted so the restored manifest
+      // matches the ordering npm/pnpm write, rather than appending to the end.
+      const pkgPath = join(appRoot, step.manifest);
+      assertInsideAppRoot(appRoot, pkgPath);
+      const pkg = JSON.parse(readFileSync(pkgPath, "utf8"));
+      const touched = new Set<string>();
+      for (const [dep, { field, range }] of Object.entries(step.removed)) {
+        pkg[field] ??= {};
+        pkg[field][dep] = range;
+        touched.add(field);
+      }
+      for (const field of touched) {
+        pkg[field] = Object.fromEntries(
+          Object.entries(pkg[field] as Record<string, string>).sort(([a], [b]) => a.localeCompare(b)),
+        );
+      }
+      writeFileSync(pkgPath, `${JSON.stringify(pkg, null, 2)}\n`, "utf8");
+      return { type: "deps.remove", manifest: step.manifest, deps: Object.keys(step.removed) };
+    }
     default:
       throw new Error(`Unknown step type: ${(step as { type: string }).type}`);
   }

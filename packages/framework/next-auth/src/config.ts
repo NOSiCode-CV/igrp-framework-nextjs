@@ -94,8 +94,8 @@ export function isIGRPAuthConfigError(error: unknown): error is IGRPAuthConfigEr
 // starts refreshing proactively. This is also the threshold used by
 // getSession() to decide "session expired" on the server side.
 //
-// CONSTRAINT: the client-side session-poll interval (IGRP_SESSION_REFETCH_INTERVAL,
-// in seconds) MUST be less than TOKEN_REFRESH_BUFFER_MS / 1000.
+// CONSTRAINT: the client-side session-poll interval — `sessionArgs.refetchInterval`,
+// set by the app, NOT by any env var — interacts with this buffer.
 //
 // If poll_interval_s >= TOKEN_REFRESH_BUFFER_MS / 1000, the last client poll
 // before the buffer window opens will find the token still "valid" (more than
@@ -108,8 +108,9 @@ export function isIGRPAuthConfigError(error: unknown): error is IGRPAuthConfigEr
 // refreshes. But if that client-side refresh fails for any reason, the dead
 // zone leaves callers with an expired token.
 //
-// Recommended: set IGRP_SESSION_REFETCH_INTERVAL to at most
-// (TOKEN_REFRESH_BUFFER_MS / 1000) - 15, i.e. ≤ 45 s for this default of 60 s.
+// This is why IGRPSessionWatcher exists: it schedules the refresh from
+// `session.expiresAt` instead, so correctness no longer depends on tuning the
+// fixed poll at all, and the poll is free to be a long backstop.
 const TOKEN_REFRESH_BUFFER_MS = 60_000;
 
 // How long BEFORE actual access-token expiry middleware starts redirecting to
@@ -496,31 +497,35 @@ function warnOnShortTokenLifetime(expiresAt: number): void {
 }
 
 /**
- * Warns once, in development only, when the client session-poll interval is
- * too long for the proactive-refresh buffer to help.
+ * Warns once, in development only, when `IGRP_SESSION_REFETCH_INTERVAL` is set.
  *
- * See the TOKEN_REFRESH_BUFFER_MS comment above: when the poll interval is at
- * or beyond the buffer, the last poll before the buffer window opens still
- * sees a "valid" token, so no persist-capable refresh fires; refreshes that do
- * run inside the window happen in read-only RSC context and cannot write the
- * cookie. The constraint was documented but never checked, which made the
- * resulting dead zone look like a random logout.
+ * NOTHING READS THIS VARIABLE. The client poll cadence is whatever the app puts
+ * in `sessionArgs.refetchInterval` (in `demo-v1`, a fixed 600s backstop in
+ * `src/lib/config/get-session-args.ts`), and the real silent refresh is
+ * scheduled adaptively by `IGRPSessionWatcher` from `session.expiresAt`.
+ *
+ * This check previously compared the env value against TOKEN_REFRESH_BUFFER_MS
+ * and warned when it was too large. That could never work: it inspected a
+ * variable with no effect on the interval it was guarding, so it passed on the
+ * documented `45` while the value that actually reached `SessionProvider` was
+ * `600` — ten times past the ceiling it existed to enforce. A guard that reads
+ * one value and protects another is not a guard.
+ *
+ * It now warns about the only thing it can actually observe and be right about:
+ * the variable is set, and setting it does nothing. That makes the check
+ * *capable of firing correctly*, which the previous version was not.
  */
 function warnOnRefetchIntervalMisconfiguration(env: Record<string, string | undefined>): void {
   const raw = env.IGRP_SESSION_REFETCH_INTERVAL?.trim();
   if (!raw) return;
-  const seconds = Number.parseInt(raw, 10);
-  if (!Number.isFinite(seconds) || seconds <= 0) return;
-
-  const maxSeconds = TOKEN_REFRESH_BUFFER_MS / 1000;
-  if (seconds < maxSeconds) return;
 
   warnOnce('config.refetchInterval', () =>
     console.warn(
-      `[withIGRPAuth] IGRP_SESSION_REFETCH_INTERVAL=${seconds}s is >= the proactive refresh ` +
-        `buffer (${maxSeconds}s). The client session poll will never fire inside the refresh ` +
-        'window, so refreshes only run in read-only RSC context and cannot persist the rotated ' +
-        `cookie. Recommended: at most ${maxSeconds - 15}s.`,
+      `[withIGRPAuth] IGRP_SESSION_REFETCH_INTERVAL is set (${raw}) but nothing reads it — ` +
+        'it has no effect on the client session-poll cadence. That is set by the app via ' +
+        '`sessionArgs.refetchInterval`, and silent token refresh is scheduled adaptively by ' +
+        'IGRPSessionWatcher from `session.expiresAt`, so it needs no tuning. Remove the ' +
+        'variable from your .env.',
     ),
   );
 }

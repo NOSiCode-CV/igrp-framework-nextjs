@@ -153,6 +153,15 @@ function main(): void {
         }
         continue;
       }
+      if (type === "deps.remove") {
+        // A later removal retires an earlier bump. Migrations are walked in
+        // order, so dropping the entry here is what makes "the template no
+        // longer declares this dep" a satisfied state rather than drift — the
+        // same collapse-to-final-state rule the file checks already use.
+        if (typeof step["manifest"] === "string") managedPaths.add(step["manifest"]);
+        for (const dep of (step["deps"] as string[]) ?? []) depRanges.delete(dep);
+        continue;
+      }
       if (typeof step["file"] === "string") managedPaths.add(step["file"]);
       const path = step["path"] as string | undefined;
       if (!path) continue; // env.add is not path-based file content

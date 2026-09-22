@@ -1,3 +1,12 @@
+# Targets a STANDALONE app scaffolded from this template — published @igrp/*
+# versions plus a local pnpm-lock.yaml in the app root.
+#
+# It does NOT build from the monorepo checkout of templates/demo-v1: the COPY
+# below needs pnpm-lock.yaml / pnpm-workspace.yaml in the build context (they
+# live at the monorepo root, not here), and package.json pins @igrp/* as
+# `workspace:*`, which no registry can resolve. Use `pnpm dev:demo` from the
+# monorepo root for in-repo work. Full walkthrough: docs/DOCKER-RUN.md.
+#
 # Runtime base — kept deliberately thin: no pnpm, no build tooling.
 # `runner` inherits from here so none of that reaches the final image.
 FROM node:22-alpine AS base

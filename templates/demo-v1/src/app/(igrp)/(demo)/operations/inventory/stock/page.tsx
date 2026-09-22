@@ -1,3 +1,4 @@
+// Permission: open to all authenticated users — demo page with no sensitive data.
 // Reached via the `OPS_STOCK` menu item (pageSlug: "operations/inventory/stock").
 export default function OperationsStockPage() {
   return (

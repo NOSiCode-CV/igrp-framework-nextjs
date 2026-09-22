@@ -1,40 +1,25 @@
-# Exclude source files
-/src
+# This package is `private: true` and is never published to a registry. It ships
+# as a zip built by `create-template/create-zip-template.ps1`, and that script
+# decides what is included — not this file.
+#
+# The previous contents were copied from a library package and excluded `/src`,
+# `/dist/*-*.js`, `webpack.config.js` and Storybook output. None of those apply:
+# `src` IS the deliverable here, and the other paths do not exist. Had anyone
+# ever flipped `private` to false, it would have published an empty package.
+#
+# Kept as a backstop only for things that must never leave this directory.
 
-# Exclude local configuration
-/.babelrc
-/webpack.config.js
+# Registry credentials read by create-template/create-zip-template.ps1
+/create-template/nexus-auth.txt
 
-# Exclude node_modules
+# Local secrets
+.env
+.env.*
+!.env.example
+
+# Build output and dependencies
+/.next
 /node_modules
 
-# Exclude test files and directories
-/tests
-/__tests__
-/test
-/spec
-/*.test.js
-/*.spec.js
-
-# Exclude miscellaneous files
-/.DS_Store
-/npm-debug.log*
-/yarn-debug.log*
-/yarn-error.log*
-
-#
-.npmrc
-
-# Deny shared chunks
-/dist/*-*.js
-/dist/*-*.cjs
-/dist/*-*.css
-/dist/*.map
-
-# create template zip
-/create-template/nexus-auth.txt
+# The generated artifact itself
 igrp-next-template.zip
-
-# Storybook
-/storybook-static
-*storybook.log

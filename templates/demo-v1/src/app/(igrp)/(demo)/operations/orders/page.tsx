@@ -1,3 +1,4 @@
+// Permission: open to all authenticated users — demo page with no sensitive data.
 // Reached via the `OPS_ORDERS` menu item (pageSlug: "operations/orders").
 export default function OperationsOrdersPage() {
   return (

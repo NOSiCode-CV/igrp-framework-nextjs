@@ -1,7 +1,11 @@
 {
   "extends": "./tsconfig.json",
   "compilerOptions": {
-    "emitDeclarationOnly": true
+    "emitDeclarationOnly": true,
+    // `files` publishes only dist/, so a .d.ts.map pointing at src/ paths that
+    // aren't in the tarball is a broken map — same reason tsup emits no JS
+    // sourcemaps. The root tsconfig keeps declarationMap on for editor use.
+    "declarationMap": false
   },
   "exclude": ["node_modules", "dist", "src/**/__tests__/**"]
 }

@@ -7,7 +7,7 @@
 
 import { mkdirSync, writeFileSync } from "fs";
 import { dirname, join } from "path";
-import { executeStep } from "./apply.js";
+import { assertInsideAppRoot, executeStep } from "./apply.js";
 import type { MigrationStep } from "./types.js";
 
 /** An undo step that can only be satisfied from a stored payload. */
@@ -50,6 +50,10 @@ export function unwindSteps(
           continue;
         }
         const dest = join(appRoot, path);
+        // `executeStep` guards every path it touches; this branch writes
+        // directly, so it has to run the same check. The path comes from a
+        // lock/journal file on disk, which can be hand-edited or badly merged.
+        assertInsideAppRoot(appRoot, dest);
         mkdirSync(dirname(dest), { recursive: true });
         writeFileSync(dest, content, "utf8");
       } else {

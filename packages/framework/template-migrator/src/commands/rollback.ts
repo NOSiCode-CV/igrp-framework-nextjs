@@ -2,7 +2,7 @@ import { mkdirSync, writeFileSync } from "fs";
 import { join, dirname } from "path";
 import { getManifest } from "../manifest.js";
 import { readLock, writeLock } from "../lock.js";
-import { executeStep } from "../apply.js";
+import { assertInsideAppRoot, executeStep } from "../apply.js";
 import type { MigrationStep } from "../types.js";
 
 function isPlaceholder(step: MigrationStep): boolean {
@@ -20,7 +20,6 @@ export async function rollback(
   id: string,
   opts: { force?: boolean } = {}
 ): Promise<boolean> {
-  // getManifest is called to validate CLI is set up correctly
   const manifest = getManifest();
   const lock = readLock(appRoot);
   // Self-heal the template identifier on write (see commands/apply.ts).
@@ -31,6 +30,25 @@ export async function rollback(
     return false;
   }
   const entry = lock.applied[idx];
+
+  // Migrations declare `requires`, and `apply` refuses to run one whose
+  // prerequisite is unapplied. Rolling a prerequisite out from under a migration
+  // that is still applied produces exactly the state `apply` refuses to create,
+  // except silently and after the fact: the dependent migration's files stay on
+  // disk expecting a foundation that is no longer there.
+  const stillApplied = new Set(lock.applied.map((a) => a.id));
+  const dependents = manifest.migrations
+    .filter((m) => stillApplied.has(m.id) && (m.requires ?? []).includes(id))
+    .map((m) => m.id);
+  if (dependents.length > 0 && !opts.force) {
+    console.error(`\nCannot roll back ${id} — ${dependents.length} applied migration(s) require it:`);
+    for (const dependent of dependents) console.error(`  - ${dependent}`);
+    console.error(
+      "\nRoll those back first (most recent first), or re-run with --force to" +
+        "\nremove this one anyway and leave them standing on a missing prerequisite.\n",
+    );
+    return false;
+  }
 
   // An entry with no undo steps and no stored payloads was never executed
   // against this tree — it is a baseline entry from the template's shipped
@@ -93,6 +111,9 @@ export async function rollback(
       const content = p !== undefined ? entry.undoPayloads?.[p] : undefined;
       if (p !== undefined && content !== undefined) {
         const dest = join(appRoot, p);
+        // Same guard `executeStep` applies — this branch writes directly, and
+        // the path comes from the app's own lock file.
+        assertInsideAppRoot(appRoot, dest);
         mkdirSync(dirname(dest), { recursive: true });
         writeFileSync(dest, content, "utf8");
         console.log("    restored from stored undo payload");

@@ -4,7 +4,9 @@ const shared = {
   format: ["esm"] as const,
   dts: false,
   clean: false,
-  sourcemap: true,
+  // No sourcemaps: `files` publishes only dist/, so a shipped .map would point
+  // at src/ paths that are not in the tarball — a broken map is worse than none.
+  sourcemap: false,
   outDir: "dist",
   splitting: false,
   // Do NOT enable shims — shims inject import statements before the bundle

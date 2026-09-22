@@ -18,9 +18,14 @@ async function confirm(question: string): Promise<boolean> {
 
 export async function apply(
   appRoot: string,
-  opts: { toId?: string; yes?: boolean; payloadDir?: string }
+  opts: { toId?: string; yes?: boolean; force?: boolean; payloadDir?: string }
 ) {
   const manifest = getManifest();
+
+  // Read the lock BEFORE any recovery: a legacy lock must abort while the tree
+  // is still untouched, and the recovery decision below depends on what the
+  // lock already records.
+  const lock = readLock(appRoot);
 
   // A journal on disk means a previous run died mid-migration (signal, crash,
   // CI timeout) after mutating files but before recording them. Put the tree
@@ -28,7 +33,15 @@ export async function apply(
   // captures its undo baseline from already-migrated files, which silently
   // makes a later rollback restore the wrong content. See journal.ts.
   const pendingJournal = readJournal(appRoot);
-  if (pendingJournal) {
+  if (pendingJournal && lock.applied.some((a) => a.id === pendingJournal.id)) {
+    // The lock ALREADY records this migration, so the run died in the narrow
+    // window between `writeLock` and `clearJournal` — after the migration had
+    // fully succeeded. Unwinding here would revert the files while leaving the
+    // lock claiming the migration applied: `apply` would then report "nothing
+    // to apply", `check` would pass, and the app would silently lack the
+    // migration forever. The journal is stale, not a recovery signal.
+    clearJournal(appRoot);
+  } else if (pendingJournal) {
     console.log(`\nRecovering from an interrupted run of ${pendingJournal.id}...`);
     const { reverted, failures } = unwindSteps(
       pendingJournal.undo,
@@ -47,12 +60,23 @@ export async function apply(
     console.log("  ✓ recovered\n");
   }
 
-  const lock = readLock(appRoot);
   // Self-heal: stamp the current template identifier so apps migrated under an
   // older identifier (e.g. the former "demo-v1") converge on the current one.
   // The field is cosmetic (only printed by `status`), so this is purely tidiness.
   lock.template = manifest.template;
   const appliedIds = new Set(lock.applied.map((a) => a.id));
+
+  // Hash each managed path was left with by the migration that last wrote it.
+  // Walked in applied order so a later migration's value wins, which is what
+  // "the state this app was migrated into" means. Entries from CLI versions
+  // before `postHashes` contribute nothing and are simply not checked.
+  const lastWritten = new Map<string, string>();
+  for (const entry of lock.applied) {
+    for (const [path, hash] of Object.entries(entry.postHashes ?? {})) {
+      lastWritten.set(path, hash);
+    }
+  }
+
   let pending = manifest.migrations.filter((m) => !appliedIds.has(m.id));
   if (opts.toId) {
     const idx = pending.findIndex((m) => m.id === opts.toId);
@@ -73,12 +97,39 @@ export async function apply(
       console.error("  Aborting — apply the prerequisite(s) first.");
       return;
     }
+    // Refuse to overwrite a managed file the consumer has edited since the
+    // migration that last wrote it. `apply` used to clobber these silently,
+    // while collecting exactly the hashes needed to notice — the data was
+    // recorded and never read. A local edit is far more likely to be
+    // deliberate than accidental, so this stops rather than warns.
+    const locallyModified: string[] = [];
+    for (const step of migration.steps) {
+      if (step.type !== "file.write" && step.type !== "file.create" && step.type !== "file.delete") continue;
+      const recorded = lastWritten.get(step.path);
+      if (recorded === undefined) continue;
+      const current = hashFile(join(appRoot, step.path));
+      // A missing file is not a modification: a later migration may have
+      // deleted it, or the consumer may have removed something they never
+      // wanted. Re-creating it is the migration's job either way.
+      if (current !== null && current !== recorded) locallyModified.push(step.path);
+    }
+    if (locallyModified.length > 0 && !opts.force) {
+      console.error(`  ✗ ${migration.id} would overwrite ${locallyModified.length} locally modified file(s):`);
+      for (const path of locallyModified) console.error(`      ${path}`);
+      console.error("");
+      console.error("  These differ from what the last migration left in them, so the changes");
+      console.error("  are yours. Commit or stash them and re-run, or pass --force to overwrite.");
+      console.error("  Aborting before any step ran.\n");
+      return;
+    }
+
     if (!opts.yes) {
       const ok = await confirm(`  Apply ${migration.steps.length} step(s)?`);
       if (!ok) { console.log("  Skipped.\n"); continue; }
     }
 
     const fileHashes: Record<string, string> = {};
+    const postHashes: Record<string, string> = {};
     const undoPayloads: Record<string, string> = {};
     const undoSteps: MigrationStep[] = [];
     // Opened before the first step and cleared only once the lock entry is
@@ -119,6 +170,15 @@ export async function apply(
         }
         const undo = executeStep(step, appRoot, opts.payloadDir);
         undoSteps.push(undo);
+        // Post-write hash: the baseline the NEXT apply compares against to tell
+        // a consumer's edit apart from this migration's own output.
+        if (step.type === "file.create" || step.type === "file.write") {
+          const after = hashFile(join(appRoot, step.path));
+          if (after) postHashes[step.path] = after;
+        } else if (step.type === "file.delete") {
+          delete postHashes[step.path];
+          lastWritten.delete(step.path);
+        }
         // env.add's undo lists exactly the keys it appended — a non-empty list
         // means this file really did gain keys (already-present ones are skipped).
         if (undo.type === "env.remove" && undo.keys.length > 0) {
@@ -150,9 +210,11 @@ export async function apply(
       undo: undoSteps,
       fileHashes,
       ...(Object.keys(undoPayloads).length > 0 ? { undoPayloads } : {}),
+      ...(Object.keys(postHashes).length > 0 ? { postHashes } : {}),
     };
     lock.applied.push(entry);
     writeLock(appRoot, lock);
+    for (const [path, hash] of Object.entries(postHashes)) lastWritten.set(path, hash);
     // The migration is now durably recorded — the journal has served its purpose.
     clearJournal(appRoot);
     appliedIds.add(migration.id);

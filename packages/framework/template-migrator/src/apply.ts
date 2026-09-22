@@ -12,12 +12,29 @@ function ensureDir(filePath: string) {
   mkdirSync(dirname(filePath), { recursive: true });
 }
 
-function assertInsideAppRoot(appRoot: string, target: string): void {
+/**
+ * Every write this package performs must land inside the consumer's app root.
+ *
+ * Exported because the rollback/unwind paths restore files from stored undo
+ * payloads with a bare `writeFileSync` rather than through `executeStep`, and
+ * must not be the one door left unlocked: the paths they use come from the
+ * app's own lock/journal, which is a file on disk that can be hand-edited,
+ * corrupted, or merged badly.
+ */
+export function assertInsideAppRoot(appRoot: string, target: string): void {
   const root = resolve(appRoot);
   const resolved = resolve(target);
   if (resolved !== root && !resolved.startsWith(root + sep)) {
     throw new Error(`Refusing to operate outside the app root: ${target}`);
   }
+}
+
+/** Marker `env.add` writes for `required_if`, and `env.remove` reads back. */
+const REQUIRED_IF_PREFIX = "Required if: ";
+
+/** Keep an existing file's line endings rather than forcing LF into a CRLF file. */
+function detectEol(content: string): string {
+  return content.includes("\r\n") ? "\r\n" : "\n";
 }
 
 function envHasKey(content: string, key: string): boolean {
@@ -66,19 +83,22 @@ export function executeStep(
       const envPath = join(appRoot, step.file);
       assertInsideAppRoot(appRoot, envPath);
       const existing = existsSync(envPath) ? readFileSync(envPath, "utf8") : "";
+      const eol = detectEol(existing);
       const lines: string[] = [];
       const addedKeys: string[] = [];
       for (const [key, spec] of Object.entries(step.keys)) {
         if (envHasKey(existing, key)) continue;
         addedKeys.push(key);
         lines.push(`# ${spec.doc}`);
-        if (spec.required_if) lines.push(`# Required if: ${spec.required_if}`);
+        if (spec.required_if) lines.push(`# ${REQUIRED_IF_PREFIX}${spec.required_if}`);
         lines.push(`${key}=${spec.default ?? ""}`);
         lines.push("");
       }
       if (lines.length > 0) {
-        const newContent = existing.trimEnd() + "\n\n" + lines.join("\n");
-        writeFileSync(envPath, newContent, "utf8");
+        // An empty (or whitespace-only) file gets no leading blank lines —
+        // `"".trimEnd() + eol + eol` would open every fresh .env with two.
+        const prefix = existing.trim() === "" ? "" : existing.trimEnd() + eol + eol;
+        writeFileSync(envPath, prefix + lines.join(eol), "utf8");
       }
       // Undo must list only keys THIS call actually appended — never keys that
       // were already present, or rollback would delete the consumer's own data.
@@ -89,17 +109,42 @@ export function executeStep(
       assertInsideAppRoot(appRoot, envPath);
       if (!existsSync(envPath)) return { type: "env.add", file: step.file, keys: {} };
       const original = readFileSync(envPath, "utf8");
+      const eol = detectEol(original);
+      const lines = original.split(/\r?\n/);
       const removed: Record<string, EnvKeySpec> = {};
-      const kept = original.split(/\r?\n/).filter((line) => {
+      const drop = new Set<number>();
+
+      lines.forEach((line, i) => {
         const t = line.trimStart();
         const hit = step.keys.find((k) => t.startsWith(`${k}=`) || t.startsWith(`${k} =`));
-        if (hit) {
-          removed[hit] = { doc: "", default: t.slice(t.indexOf("=") + 1) };
-          return false;
+        if (!hit) return;
+        drop.add(i);
+        // Take the contiguous comment block directly above the key with it.
+        // `env.add` wrote that block, so its undo has to remove it again —
+        // otherwise every apply/rollback cycle leaves another orphaned `# doc`
+        // line behind and the file accumulates comment cruft forever. The rule
+        // reads the same way for a hand-authored env.remove: a comment sitting
+        // immediately above a key documents that key, so it goes when it goes.
+        const doc: string[] = [];
+        for (let j = i - 1; j >= 0 && lines[j].trimStart().startsWith("#"); j--) {
+          doc.unshift(lines[j].trimStart().replace(/^#\s?/, ""));
+          drop.add(j);
         }
-        return true;
+        // ...and the single blank line `env.add` appends as a separator.
+        if (lines[i + 1] === "") drop.add(i + 1);
+        if (hit in removed) return; // duplicate declaration: the first one wins
+        // Recover `doc` / `required_if` from that comment block, so the undo
+        // restores the real documentation instead of a bare `# ` line.
+        const reqIdx = doc.findIndex((d) => d.startsWith(REQUIRED_IF_PREFIX));
+        removed[hit] = {
+          doc: doc.filter((_, k) => k !== reqIdx).join(" ").trim(),
+          default: t.slice(t.indexOf("=") + 1),
+          ...(reqIdx !== -1 ? { required_if: doc[reqIdx].slice(REQUIRED_IF_PREFIX.length) } : {}),
+        };
       });
-      writeFileSync(envPath, kept.join("\n"), "utf8");
+
+      const kept = lines.filter((_, i) => !drop.has(i));
+      writeFileSync(envPath, kept.join(eol), "utf8");
       // Undo of a remove is re-adding the captured keys.
       return { type: "env.add", file: step.file, keys: removed };
     }

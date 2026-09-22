@@ -66,15 +66,31 @@ function normalise(s: string): string {
 
 // name -> version map of every workspace package, so a template `workspace:*`
 // dep can be resolved to the concrete version a consumer would actually receive.
+// Directories never worth descending into when looking for workspace manifests.
+// `node_modules` is the one that matters: a recursive readdir of PACKAGES_DIR
+// enumerates the entire installed dependency tree — hundreds of thousands of
+// entries — and then throws all of it away.
+const SCAN_SKIP_DIRS = new Set(["node_modules", "dist", ".next", ".turbo", ".git"]);
+
+function collectManifests(dir: string, found: string[]): void {
+  for (const entry of readdirSync(dir, { withFileTypes: true })) {
+    if (entry.isDirectory()) {
+      if (SCAN_SKIP_DIRS.has(entry.name)) continue;
+      collectManifests(join(dir, entry.name), found);
+    } else if (entry.name === "package.json") {
+      found.push(join(dir, entry.name));
+    }
+  }
+}
+
 function buildWorkspaceVersions(): Record<string, string> {
   const map: Record<string, string> = {};
   if (!existsSync(PACKAGES_DIR)) return map;
-  const entries = readdirSync(PACKAGES_DIR, { recursive: true }) as string[];
-  for (const rel of entries) {
-    if (!rel.endsWith("package.json")) continue;
-    if (rel.split(/[\\/]/).includes("node_modules")) continue;
+  const manifests: string[] = [];
+  collectManifests(PACKAGES_DIR, manifests);
+  for (const path of manifests) {
     try {
-      const pkg = JSON.parse(readFileSync(join(PACKAGES_DIR, rel), "utf8"));
+      const pkg = JSON.parse(readFileSync(path, "utf8"));
       if (pkg.name && pkg.version) map[pkg.name] = pkg.version;
     } catch {
       /* unparsable package.json — skip */
@@ -102,8 +118,17 @@ function listTemplateFiles(): string[] | null {
 
 function readBaseline(): string[] | null {
   if (!existsSync(BASELINE_FILE)) return null;
-  const parsed = JSON.parse(readFileSync(BASELINE_FILE, "utf8")) as { files?: string[] };
-  return parsed.files ?? [];
+  try {
+    const parsed = JSON.parse(readFileSync(BASELINE_FILE, "utf8")) as { files?: string[] };
+    return parsed.files ?? [];
+  } catch (err) {
+    // Same treatment the lock axis already gets: a corrupt input file is a
+    // reportable gate failure, not a raw JSON.parse stack trace.
+    throw new Error(
+      `${BASELINE_FILE} is not valid JSON: ${(err as Error).message}` +
+        `\nRegenerate it with: pnpm --filter @igrp/template-migrator check:drift:update-baseline`,
+    );
+  }
 }
 
 function writeBaseline(files: string[]): void {
@@ -308,11 +333,6 @@ function main(): void {
     for (const u of unverifiable) console.log(`    ${u.path}  (${u.migrationId})`);
     console.log("");
   }
-  if (staleDelete.length > 0) {
-    console.log(`⚠ ${staleDelete.length} path(s) a migration deletes but the template still has:`);
-    for (const s of staleDelete) console.log(`    ${s.path}  (${s.migrationId})`);
-    console.log("");
-  }
   if (orphanCheckSkipped) {
     console.log("⚠ new-file check skipped: could not enumerate template files (git ls-files failed).\n");
   }
@@ -325,7 +345,7 @@ function main(): void {
   // Hard failures — block the release.
   const failed =
     drifted.length + missingTemplate.length + missingPayload.length + depDrift.length + depMissingInTemplate.length +
-    orphans.length + (baselineMissing ? 1 : 0) + (lockDrifted ? 1 : 0);
+    staleDelete.length + orphans.length + (baselineMissing ? 1 : 0) + (lockDrifted ? 1 : 0);
   if (failed === 0) {
     console.log("✓ No drift: every migration-managed file and dependency pin matches the template, no unmanaged new files were found, and the shipped lock records every migration.");
     return;
@@ -341,6 +361,17 @@ function main(): void {
   if (missingTemplate.length > 0) {
     console.error(`✗ ${missingTemplate.length} file(s) a migration ships but the template no longer has:`);
     for (const m of missingTemplate) console.error(`    ${m.path}  (${m.migrationId})`);
+    console.error("");
+  }
+  if (staleDelete.length > 0) {
+    // Was a soft warning, which made it the one divergence axis the gate
+    // reported and then let through. It is the exact mirror of
+    // `missingTemplate` (a hard failure): scaffolded apps keep the file,
+    // upgraded apps lose it, and the two delivery channels disagree.
+    console.error(`✗ ${staleDelete.length} path(s) a migration deletes but the template still has:`);
+    for (const s of staleDelete) console.error(`    ${s.path}  (${s.migrationId})`);
+    console.error("");
+    console.error("  → Delete them from the template too, or drop the file.delete step.");
     console.error("");
   }
   if (missingPayload.length > 0) {

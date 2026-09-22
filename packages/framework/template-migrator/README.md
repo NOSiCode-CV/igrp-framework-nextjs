@@ -25,14 +25,26 @@ packages/framework/template-migrator/
 │   ├── journal.ts           # Crash-durable record of an in-flight migration
 │   ├── unwind.ts            # Reverses executed steps (shared: error path + crash recovery)
 │   ├── hash.ts              # File hashing helpers
+│   ├── migration-order.ts   # Numeric-prefix sort, so 9 < 10 < 100
+│   ├── validate-requires.ts # Pack-time: unique ids, no forward `requires`
+│   ├── validate-steps.ts    # Pack-time: every step's shape
 │   └── commands/
 │       ├── status.ts        # igrp-migrate status
 │       ├── plan.ts          # igrp-migrate plan [--to <id>]
-│       ├── apply.ts         # igrp-migrate apply [--to <id>] [--yes]
+│       ├── apply.ts         # igrp-migrate apply [--to <id>] [--yes] [--force]
 │       ├── list.ts          # igrp-migrate list
-│       ├── rollback.ts      # igrp-migrate rollback <id>
+│       ├── rollback.ts      # igrp-migrate rollback <id> [--force]
 │       └── check.ts         # igrp-migrate check  (CI gate)
 ```
+
+Flags worth knowing:
+
+| Flag | Effect |
+|---|---|
+| `apply --yes` | Skip the per-migration confirmation prompt (the CI path) |
+| `apply --force` | Overwrite managed files the consumer has modified locally. Without it, `apply` names them and aborts before running any step |
+| `rollback --force` | Proceed despite missing undo content, a scaffold baseline entry, or still-applied migrations that `require` this one |
+| `check` | Exits 1 on pending migrations **and** on an applied migration whose steps have changed since |
 
 The **source of truth for migrations lives in this package at `migrations/demo-v1/`**. `scripts/pack.ts` reads those files at build time and embeds everything into `dist/`.
 
@@ -54,13 +66,15 @@ Reads every `NN.MIGRATIONS-*.md` file in `migrations/demo-v1/`, parses the YAML 
 - **Normalises text payloads to LF** on the way into `dist/` (see `scripts/payload-copy.ts`). Payloads are usually captured on Windows and carry CRLF, while the live template is LF — without this, an upgraded app ends up with CRLF where a scaffolded app has LF, the template's own Biome run rewrites every migrated file, and `git diff` after an `apply` shows whole-file churn. Binary payloads (detected by a NUL byte in the leading bytes) are copied verbatim. The build reports how many files it normalised.
 
   The **zip channel does the same thing at package time** — `templates/demo-v1/create-template/create-zip-template.ps1` normalises the tree to LF (same NUL-byte binary guard) before `Compress-Archive`. Both channels normalising is what makes them agree: whichever way a consumer arrives, they get identical bytes for every migration-managed path, regardless of the `core.autocrlf` setting on whoever built the artifact.
+- **Validates every step's shape** (`src/validate-steps.ts`) — the same constraints `executeStep` enforces at runtime, checked where failing is free. A typo'd `type`, a `file.write` with no `from`, an unsupported `mode: "patch"`, or a path containing `..` aborts the build. Without this they shipped in the manifest and first surfaced in a consumer's app, thrown *part way through* a migration.
+- **Validates ids and `requires`** (`src/validate-requires.ts`) — ids must be unique and every `requires` must point at a strictly earlier migration.
 - **Emits `dist/manifest.json`** — a single JSON object with all migration metadata and steps.
 
 Any `.md` guide without valid YAML frontmatter (between `---` fences) will throw and abort the build.
 
 ### 2. `build:js` — tsup
 
-Bundles `src/cli.ts` and `src/index.ts` as ESM into `dist/cli.js` and `dist/index.js`. Source maps are included.
+Bundles `src/cli.ts` and `src/index.ts` as ESM into `dist/cli.js` and `dist/index.js`. No source maps: `files` publishes only `dist/`, so a shipped `.map` would point at `src/` paths that aren't in the tarball.
 
 ### 3. `build:types` — tsc
 
@@ -151,10 +165,10 @@ Emits `.d.ts` declaration files from `tsconfig.build.json` (no JS output, types 
 | Type | Required fields | What it does |
 |---|---|---|
 | `file.create` | `path`, `from` | Copies payload file to `path`. Overwrites if the destination already exists — the distinction from `file.write` is intent (a file the migration introduces), not enforcement. That tolerance is deliberate: it keeps a catch-up migration re-applied over an already-current tree from aborting |
-| `file.write` | `path`, `mode: "replace"`, `from` | Overwrites `path` with payload file |
+| `file.write` | `path`, `mode: "replace"`, `from` | Overwrites `path` with payload file. `mode: "patch"` is **rejected at pack time** — it is in the step union but was never implemented, and `executeStep` throws on it, which would fail a consumer's `apply` part way through a migration |
 | `file.delete` | `path` | Deletes `path` from the app |
 | `env.add` | `file`, `keys` | Appends missing keys (with doc comments) to an `.env` file. Keys already present are left alone, and the undo lists only the keys this step actually appended. In practice migrations only ever target `.env.example` — a consumer's real `.env` holds secrets, is gitignored, and never ships in the zip, so `apply` prints a reminder to copy new keys across |
-| `env.remove` | `file`, `keys` | Removes the listed keys from an `.env` file, capturing their values so the undo can restore them. Mainly generated as the inverse of `env.add`, but valid to author directly |
+| `env.remove` | `file`, `keys` | Removes the listed keys from an `.env` file, along with the contiguous comment block directly above each one and the single blank line after it — `env.add` wrote that block, so its undo has to take it away again, or every apply/rollback cycle leaves another orphaned `# …` line behind. The captured `doc` / `required_if` are recovered from those comments, so a re-add restores the real documentation rather than a bare `# `. Mainly generated as the inverse of `env.add`, but valid to author directly |
 | `deps.bump` | `manifest`, `ranges` | Updates version ranges in `package.json` (deps or devDeps). A dep the app doesn't declare is **not added** — adding it could contradict a deliberate removal — but it is reported as a warning, since some bumps are load-bearing for the migration's own feature |
 | `deps.remove` | `manifest`, `deps` | Removes dependencies from `package.json`, capturing each one's field (`dependencies` vs `devDependencies`) and range so the undo restores it exactly. Use when the template **drops** a dependency: without it a removal reaches scaffolded apps through the zip but never reaches upgraded ones, and `check:drift` fails on the divergence. A dep already absent is a warning, not an error, so a catch-up re-apply doesn't abort |
 | `deps.restore` | `manifest`, `removed` | Generated as the inverse of `deps.remove`; valid to author directly. `deps.bump` cannot serve as that inverse — it only updates a dep that is already declared and will not re-add one |
@@ -181,11 +195,12 @@ It **fails** (exit 1) when:
 - a dependency a migration bumps has moved on in the template/workspace but no migration captured the new version (the template pins `@igrp/*` as `workspace:*`, so the comparison resolves each `workspace:*` to its current package version — what the zip would ship),
 - a migration bumps a dependency the template doesn't declare **and no later migration removes it** (a `deps.remove` retires an earlier `deps.bump`, the same collapse-to-final-state rule the file checks use),
 - a **new template file** exists (tracked or untracked-but-not-gitignored) that no migration ships, is not exempt, and is not grandfathered in the baseline (see below),
+- a migration **deletes** a path the live template still ships — the exact mirror of "a migration ships a file the template no longer has": scaffolded apps keep the file, upgraded apps lose it,
 - the template's shipped **`.igrp-migrations-lock.json`** doesn't record every migration as applied, records one that no longer exists, has a stale `manifestHash`, or lists entries out of migration order (see below).
 
-It **warns** (exit 0) for `file.write` patch-mode paths (no full-file payload to diff), files a migration deletes that the template still has, `@igrp/*` template deps no migration ever pins, and baseline entries the template no longer has.
+It **warns** (exit 0) for `@igrp/*` template deps no migration ever pins, and baseline entries the template no longer has.
 
-The gate runs automatically at the start of `release` (see below), so a forgotten migration can't be published.
+The gate runs at the start of `release`, and per-MR in `.gitlab-ci.yml` (`check_template_drift`, which also runs `typecheck` and `test`). Catching drift only at release time means it is already committed and has to be reconciled retroactively — the several `*-resync` / `*-catchup` migrations in the history are what that looks like.
 
 ### New-file check (baseline)
 
@@ -265,7 +280,7 @@ Use the package's own `release` script — **never** bare `pnpm publish`, `chang
 pnpm --filter @igrp/template-migrator release
 ```
 
-The `release` script runs `pnpm build` then `pnpm publish --registry=https://sonatype.nosi.cv/repository/igrp/ --tag latest --no-git-checks`, pinning the Sonatype registry and `latest` tag.
+The `release` script runs, in order: `typecheck` → `test` → `check:drift` → `build` → `pnpm publish --registry=https://sonatype.nosi.cv/repository/igrp/ --tag latest --no-git-checks`, pinning the Sonatype registry and `latest` tag. All four gates have to pass before anything reaches the registry.
 
 ### 5. Verify on the registry
 
@@ -312,13 +327,24 @@ interface LockEntry {
   id: string;               // migration ID, e.g. "04-multi-auth-provider"
   appliedAt: string;        // ISO 8601 timestamp
   cliVersion: string;       // CLI version that applied this migration
-  manifestHash: string;     // hash of the migration's steps at apply time
+  manifestHash: string;     // the migration's `contentHash` at apply time
   undo: MigrationStep[];    // inverse steps for rollback
-  fileHashes: Record<string, string>;  // SHA-256 of each written file
+  fileHashes: Record<string, string>;   // PRE-migration hash of each touched path
+  undoPayloads?: Record<string, string>; // pre-migration contents, for rollback
+  postHashes?: Record<string, string>;   // POST-write hash of each file written
 }
 ```
 
-The lock file is owned by the consumer — they commit it to version control. The CLI never deletes it; `rollback` removes the last entry and the files it wrote.
+Hashes are the first 16 hex characters of a SHA-256 of the file's UTF-8 text.
+
+`fileHashes` and `postHashes` are not the same thing and are not interchangeable:
+
+- **`fileHashes`** is the state *before* the migration ran. It is a forensic record only — nothing reads it.
+- **`postHashes`** is what the migration *left* in each file it wrote, and is the baseline the next `apply` compares against to tell "the consumer edited this managed file" apart from "the previous migration left it this way". When they differ, `apply` refuses to overwrite and names the paths; `--force` proceeds anyway. Entries written before this field existed simply aren't checked, which is why it is a separate field rather than a redefinition of `fileHashes`.
+
+`manifestHash` is compared against the manifest by `check` and `status`: a migration whose steps were corrected in place after release leaves apps that applied the old version holding the old result, and nothing else would ever say so.
+
+The lock file is owned by the consumer — they commit it to version control. The CLI never deletes it; `rollback <id>` removes that entry and reverses the files it wrote. It refuses (unless `--force`) when another **still-applied** migration declares the target in its `requires`: `apply` will not run a migration whose prerequisite is unapplied, and rolling the prerequisite out from under it reaches that same state from the other side.
 
 An entry with an empty `undo` **and** no `undoPayloads` is a *baseline* entry: it came from the template's shipped lock, meaning a scaffolded app already contained that migration's result and the CLI never executed it there. `rollback` refuses those (unless `--force`), because removing one would report success, change no files, and leave the app claiming the migration is unapplied.
 
@@ -329,6 +355,8 @@ An entry with an empty `undo` **and** no `undoPayloads` is a *baseline* entry: i
 Its presence on startup means exactly one thing: a previous run died mid-migration. The in-process transactional unwind only runs inside `catch`, so a signal (Ctrl-C, CI timeout, power loss) bypasses it and leaves files mutated with nothing recorded. Without the journal, the retry would re-capture its undo baseline from the *already-migrated* files — so the lock would record migrated content as the pre-migration original, and a later `rollback` would silently restore the wrong state.
 
 On the next `apply` the recorded undo is replayed first (via `src/unwind.ts`, the same code the error path uses), then the migration re-applies from a clean baseline. If any path cannot be restored, `apply` aborts rather than proceeding on an unknown baseline.
+
+**One exception, and it matters.** If the lock *already records* the journalled migration, the run died in the narrow window between `writeLock` and `clearJournal` — after the migration had fully succeeded. The journal is stale, not a recovery signal, and replaying its undo would revert the files while the lock kept claiming the migration was applied: `apply` would then report "nothing to apply", `check` would pass, and the app would silently lack the migration forever, unrecoverable without hand-editing the lock. In that case `apply` simply drops the journal.
 
 The journal is transient and consumer-local; it is exempt from the drift gate's new-file check.
 

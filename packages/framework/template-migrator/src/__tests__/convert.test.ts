@@ -23,7 +23,7 @@ describe("convert", () => {
     const content = JSON.stringify({ version: 1, template: "demo-v1", applied: [] });
     writeFileSync(join(appRoot, LEGACY, "lock.json"), content, "utf8");
 
-    convert(appRoot);
+    expect(convert(appRoot)).toBe(true);
 
     expect(readFileSync(join(appRoot, NEW_LOCK), "utf8")).toBe(content);
     expect(existsSync(join(appRoot, LEGACY, "lock.json"))).toBe(false);
@@ -36,31 +36,29 @@ describe("convert", () => {
     const newContent = "{\"version\":1}";
     writeFileSync(join(appRoot, NEW_LOCK), newContent, "utf8");
 
-    convert(appRoot);
+    expect(convert(appRoot)).toBe(true);
 
     expect(existsSync(join(appRoot, LEGACY, "lock.json"))).toBe(false);
     expect(readFileSync(join(appRoot, NEW_LOCK), "utf8")).toBe(newContent);
   });
 
-  it("exits 1 when there is no legacy lock to convert", () => {
+  it("reports failure when there is no legacy lock to convert", () => {
     const exitSpy = vi.spyOn(process, "exit").mockImplementation((() => {
       throw new Error("process.exit called");
     }) as never);
 
-    expect(() => convert(appRoot)).toThrow("process.exit called");
-    expect(exitSpy).toHaveBeenCalledWith(1);
+    expect(convert(appRoot)).toBe(false);
+    // `convert` is exported from the package root: a library function must
+    // never take the host process down with it.
+    expect(exitSpy).not.toHaveBeenCalled();
   });
 
-  it("exits 1 when only the new lock exists (no legacy lock to convert)", () => {
+  it("reports failure when only the new lock exists (no legacy lock)", () => {
     // legacy missing + new lock present → "no legacy lock" branch fires first
     writeFileSync(join(appRoot, NEW_LOCK), "{}", "utf8");
     const errorSpy = vi.spyOn(console, "error").mockImplementation(() => {});
-    const exitSpy = vi.spyOn(process, "exit").mockImplementation((() => {
-      throw new Error("process.exit called");
-    }) as never);
 
-    expect(() => convert(appRoot)).toThrow("process.exit called");
-    expect(exitSpy).toHaveBeenCalledWith(1);
+    expect(convert(appRoot)).toBe(false);
     expect(errorSpy).toHaveBeenCalledWith(expect.stringContaining("No legacy lock file found"));
   });
 });

@@ -5,7 +5,12 @@ const LEGACY_DIR = ".igrpmigrations";
 const LEGACY_LOCK = join(LEGACY_DIR, "lock.json");
 const NEW_LOCK = ".igrp-migrations-lock.json";
 
-export function convert(appRoot: string): void {
+/**
+ * Returns false when there was nothing to convert, so the CLI can set the exit
+ * code. `convert` is exported from the package root, and a library function
+ * that calls `process.exit` takes the host process down with it.
+ */
+export function convert(appRoot: string): boolean {
   const legacyPath = join(appRoot, LEGACY_LOCK);
   const newPath = join(appRoot, NEW_LOCK);
 
@@ -17,17 +22,17 @@ export function convert(appRoot: string): void {
       if (readdirSync(legacyDir).length === 0) rmdirSync(legacyDir);
     } catch { /* already gone or not empty */ }
     console.log(`Recovered interrupted convert: removed stale ${LEGACY_LOCK}`);
-    return;
+    return true;
   }
 
   if (!existsSync(legacyPath)) {
     console.error(`No legacy lock file found at ${LEGACY_LOCK}. Nothing to convert.`);
-    process.exit(1);
+    return false;
   }
 
   if (existsSync(newPath)) {
     console.error(`Already converted. ${NEW_LOCK} exists.`);
-    process.exit(1);
+    return false;
   }
 
   const content = readFileSync(legacyPath, "utf8");
@@ -44,4 +49,5 @@ export function convert(appRoot: string): void {
   }
 
   console.log(`Converted ${LEGACY_LOCK} → ${NEW_LOCK}`);
+  return true;
 }

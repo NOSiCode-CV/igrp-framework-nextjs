@@ -5,6 +5,7 @@ import { parse as parseYaml } from "yaml";
 import { hashSteps } from "../src/hash.js";
 import { sortMigrationFiles } from "../src/migration-order.js";
 import { validateRequires } from "../src/validate-requires.js";
+import { validateSteps } from "../src/validate-steps.js";
 import { copyPayloadFile } from "./payload-copy.js";
 
 const __filename = fileURLToPath(import.meta.url);
@@ -73,6 +74,10 @@ function main() {
   for (const file of files) {
     const raw = readFileSync(join(MIGRATIONS_DIR, file), "utf8");
     const { fm } = parseFrontMatter(raw);
+    // Shape-check before anything is copied: an unsupported mode, a missing
+    // `from`, or a typo'd type must fail the build, not a consumer's `apply`
+    // halfway through a migration.
+    validateSteps(fm.id, fm.steps);
     normalisedTotal += copyPayloads(fm.steps, MIGRATIONS_DIR, PAYLOAD_OUT);
     const contentHash = hashSteps(fm.steps);
     migrations.push({

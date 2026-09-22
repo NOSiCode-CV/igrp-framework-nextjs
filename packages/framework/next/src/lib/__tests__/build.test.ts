@@ -127,3 +127,76 @@ describe('igrpBuildConfig appCode canonicalization', () => {
     await expect(igrpBuildConfig(cfg)).resolves.toBe(cfg);
   });
 });
+
+/**
+ * `appInformation` and `layout` are required by `IGRPConfigArgs` but were not
+ * in the schema, so the validator that exists to route config errors to
+ * `global-error.tsx` let both through:
+ *
+ *  • a missing `layout` is a bare `TypeError` on the first line of
+ *    `IGRPRootLayout`'s render, with no framework code attached;
+ *  • a missing `appInformation.name` surfaces inside `igrpSyncApplication`,
+ *    which runs in `after()` — post-stream, where nothing but a server log
+ *    ever sees it. That is the exact blind spot the synchronous validation
+ *    was built to avoid.
+ */
+describe('igrpBuildConfig validates the rest of the required contract', () => {
+  it('rejects a config with no layout', async () => {
+    const cfg = baseConfig();
+    delete (cfg as Record<string, unknown>).layout;
+    await expect(igrpBuildConfig(cfg)).rejects.toMatchObject({ code: 'IGRP_CONFIG_INVALID' });
+  });
+
+  it('rejects a blank appInformation.name when sync is on', async () => {
+    const cfg = baseConfig({
+      previewMode: false,
+      syncAccess: true,
+      appInformation: { name: '   ' },
+      apiManagementConfig: {
+        baseUrl: 'https://am.example.com',
+        serviceId: 'svc',
+        m2mClientId: 'id',
+        m2mClientSecret: 'secret',
+      },
+    });
+    await expect(igrpBuildConfig(cfg)).rejects.toMatchObject({ code: 'IGRP_CONFIG_INVALID' });
+  });
+
+  it('does not require appInformation.name when sync is off', async () => {
+    const cfg = baseConfig({ appInformation: {} });
+    await expect(igrpBuildConfig(cfg)).resolves.toBe(cfg);
+  });
+});
+
+/**
+ * `layoutMockData` is production configuration wearing a preview-mode name —
+ * both providers call it on every render in both modes and keep most of what it
+ * returns. `layoutData` is the honest name; the old one stays readable for one
+ * release, and setting both is a conflict rather than a merge.
+ */
+describe('layoutData supersedes layoutMockData', () => {
+  it('accepts the new name on its own', async () => {
+    const cfg = baseConfig({
+      layoutData: { getHeaderData: async () => ({}), getSidebarData: async () => ({}) },
+      layoutMockData: undefined,
+    });
+    await expect(igrpBuildConfig(cfg)).resolves.toBe(cfg);
+  });
+
+  it('still accepts the deprecated name on its own', async () => {
+    const cfg = baseConfig();
+    await expect(igrpBuildConfig(cfg)).resolves.toBe(cfg);
+  });
+
+  it('rejects a config that sets neither', async () => {
+    const cfg = baseConfig({ layoutMockData: undefined });
+    await expect(igrpBuildConfig(cfg)).rejects.toMatchObject({ code: 'IGRP_CONFIG_INVALID' });
+  });
+
+  it('rejects a config that sets both', async () => {
+    const cfg = baseConfig({
+      layoutData: { getHeaderData: async () => ({}), getSidebarData: async () => ({}) },
+    });
+    await expect(igrpBuildConfig(cfg)).rejects.toMatchObject({ code: 'IGRP_CONFIG_INVALID' });
+  });
+});

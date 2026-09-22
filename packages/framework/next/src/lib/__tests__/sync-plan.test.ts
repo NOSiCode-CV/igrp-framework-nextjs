@@ -1,7 +1,5 @@
 import { describe, it, expect, vi, beforeEach } from 'vitest';
 
-vi.mock('server-only', () => ({}));
-
 vi.mock('../sync-client', () => ({
   igrpGetAccessManagementClient: vi.fn(() => ({
     m2m: { syncApplicationMenus: vi.fn() },

@@ -47,7 +47,12 @@ import {
 } from './oidc';
 import type { IGRPTokenRecoveryStore } from './token-store';
 import { escapeHtml, sanitizeRedirectUrl, stripAuthApiSuffix } from './sanitize';
-import { buildAuthCookies, resolveSecureCookie, sessionCookieName } from './cookies';
+import {
+  buildAuthCookies,
+  resolveSecureCookie,
+  resolveSecureCookiesFlag,
+  sessionCookieName,
+} from './cookies';
 import { isNextControlFlowError } from './runtime';
 import { decodeIgrpClaims } from './claims';
 import { warnOnce } from './_global-state';
@@ -444,34 +449,6 @@ function normalizePreviewMode(env: Record<string, string | undefined>): boolean 
  */
 const AUTH_CHROME_PATH = /^\/(login|logout)(\/|$|\?)/;
 
-/**
- * Mirrors how `next-auth` itself decides whether cookies are secure, so the
- * names we write and the names it writes can never disagree.
- *
- * v4's `detectOrigin()` (utils/detect-origin.js) resolves, in order:
- *   1. `NEXTAUTH_URL` — use its scheme.
- *   2. `VERCEL` or `AUTH_TRUST_HOST` — derive from the request's
- *      `x-forwarded-proto`, defaulting to **https**.
- *   3. neither — fall back to `http://localhost:3000`.
- *
- * Reading only `NEXTAUTH_URL` (as an earlier version of this did) gets case 2
- * wrong: behind a TLS-terminating proxy with `AUTH_TRUST_HOST` set and no
- * `NEXTAUTH_URL`, next-auth writes `__Secure-…` while we would name the cookie
- * unprefixed AND mark it `secure: false` — stripping the Secure flag from a
- * session cookie served over HTTPS.
- *
- * Case 2 cannot be resolved at construction time (there is no request yet), so
- * it assumes https, matching next-auth's own default. A deployment that really
- * terminates plain http behind a trusted proxy must set `NEXTAUTH_URL` — or
- * pass `secureCookies` explicitly.
- */
-function resolveSecureCookiesFlag(env: Record<string, string | undefined>): boolean {
-  const nextAuthUrl = env.NEXTAUTH_URL ?? process.env.NEXTAUTH_URL;
-  if (nextAuthUrl) return nextAuthUrl.startsWith('https://');
-  const trustsHost =
-    env.VERCEL ?? process.env.VERCEL ?? env.AUTH_TRUST_HOST ?? process.env.AUTH_TRUST_HOST;
-  return Boolean(trustsHost);
-}
 
 /**
  * `env` is the documented environment source for the whole factory, but

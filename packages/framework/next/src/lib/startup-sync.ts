@@ -18,6 +18,27 @@ import { igrpSyncRoutes } from './sync-routes.js';
 let syncPromise: Promise<void> | null = null;
 
 /**
+ * Earliest wall-clock time a retry may start, set after a failure.
+ *
+ * `IGRPRootLayout` schedules this via `after()` on EVERY request. Resetting the
+ * mutex on failure without a cooldown therefore meant a persistently
+ * unreachable Access Management server got a full four-call sync attempt per
+ * request, each one logging `igrp.am.sync_failed` — a retry storm that also
+ * buries the first, useful error. The cooldown keeps the retry (a transient
+ * outage still recovers on its own) while bounding the rate.
+ */
+let retryNotBefore = 0;
+
+/** Cooldown between sync attempts after a failure. */
+const RETRY_COOLDOWN_MS = 60_000;
+
+/** Test seam — drops the mutex and the cooldown. */
+export function igrpResetStartupSync(): void {
+  syncPromise = null;
+  retryNotBefore = 0;
+}
+
+/**
  * Pure executor. Caller (`IGRPRootLayout` via `after()`) has already
  * validated the plan in `planAccessManagementSync` — this function never
  * inspects env vars and never throws config errors. Network/runtime errors
@@ -30,6 +51,7 @@ let syncPromise: Promise<void> | null = null;
  */
 export async function igrpStartupSync(plan: IGRPAccessManagementSyncPlan): Promise<void> {
   if (syncPromise) return syncPromise;
+  if (Date.now() < retryNotBefore) return;
 
   syncPromise = (async () => {
     try {
@@ -69,8 +91,10 @@ export async function igrpStartupSync(plan: IGRPAccessManagementSyncPlan): Promi
 
       console.info('Access Management sync completed.');
     } catch (e) {
-      // Reset so the next request can attempt a retry.
+      // Reset so a later request can attempt a retry — but not the very next
+      // one; see `retryNotBefore`.
       syncPromise = null;
+      retryNotBefore = Date.now() + RETRY_COOLDOWN_MS;
       // Structured log so operators can grep for the event. We deliberately
       // log only the error name+message — never the client secret, the
       // bearer token, or the client id. `serviceId` is a public identifier
@@ -82,6 +106,7 @@ export async function igrpStartupSync(plan: IGRPAccessManagementSyncPlan): Promi
           event: 'igrp.am.sync_failed',
           serviceId: plan.serviceId,
           appCode: plan.appCode,
+          retryAfterMs: RETRY_COOLDOWN_MS,
           error,
         }),
       );

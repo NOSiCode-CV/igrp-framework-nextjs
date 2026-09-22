@@ -13,7 +13,16 @@ const isBlank = (v: unknown): boolean => typeof v !== 'string' || v.trim() === '
  * gates in `planAccessManagementSync` so a config that boots also syncs:
  *
  *   • `previewMode` / `syncAccess` must be real booleans.
- *   • `layoutMockData.getHeaderData/getSidebarData` must be functions.
+ *   • exactly one of `layoutData` / `layoutMockData` (deprecated) is set,
+ *     and its `getHeaderData` / `getSidebarData` are functions.
+ *   • `layout` must be present — `IGRPRootLayout` destructures it on the first
+ *     line of its render, so a missing one is a bare `TypeError` in the root
+ *     layout with no framework error code attached.
+ *   • `syncAccess && !previewMode` ⇒ `appInformation.name` must be a non-blank
+ *     string. `igrpSyncApplication` dereferences it inside `after()`, which is
+ *     post-stream: a `TypeError` there reaches a server log and nothing else.
+ *     That is precisely the blind spot this synchronous validation exists to
+ *     keep config errors out of.
  *   • `!previewMode` ⇒ `apiManagementConfig.baseUrl` is required.
  *   • `syncAccess && !previewMode` ⇒ `serviceId`, `m2mClientId`,
  *     `m2mClientSecret` and `appCode` must be non-blank.
@@ -21,19 +30,31 @@ const isBlank = (v: unknown): boolean => typeof v !== 'string' || v.trim() === '
  * Unknown keys pass through untouched — the schema validates, it never
  * replaces the config object.
  */
+const layoutDataSourceSchema = (field: string) =>
+  z.object({
+    getHeaderData: z.custom<() => Promise<unknown>>(isFunction, {
+      message: `${field}.getHeaderData deve ser uma função assíncrona.`,
+    }),
+    getSidebarData: z.custom<() => Promise<unknown>>(isFunction, {
+      message: `${field}.getSidebarData deve ser uma função assíncrona.`,
+    }),
+  });
+
 const igrpConfigSchema = z
   .object({
     appCode: z.string().optional(),
     previewMode: z.boolean(),
     syncAccess: z.boolean(),
-    layoutMockData: z.object({
-      getHeaderData: z.custom<() => Promise<unknown>>(isFunction, {
-        message: 'layoutMockData.getHeaderData deve ser uma função assíncrona.',
-      }),
-      getSidebarData: z.custom<() => Promise<unknown>>(isFunction, {
-        message: 'layoutMockData.getSidebarData deve ser uma função assíncrona.',
-      }),
-    }),
+    // Required by `IGRPConfigArgs`, and read unconditionally by
+    // `IGRPRootLayout`. Kept structurally loose (`session` may legitimately be
+    // null, the rest are optional) — the point is that the object exists.
+    layout: z.object({}).catchall(z.unknown()),
+    appInformation: z.object({ name: z.string().optional() }).catchall(z.unknown()).optional(),
+    // `layoutData` supersedes `layoutMockData`; both are optional at the field
+    // level and the "exactly one" rule lives in `superRefine` below, so the
+    // error names the conflict rather than a missing key.
+    layoutData: layoutDataSourceSchema('layoutData').optional(),
+    layoutMockData: layoutDataSourceSchema('layoutMockData').optional(),
     toasterConfig: z.object({ showToaster: z.boolean() }).catchall(z.unknown()),
     apiManagementConfig: z
       .object({
@@ -47,6 +68,21 @@ const igrpConfigSchema = z
   })
   .catchall(z.unknown())
   .superRefine((cfg, ctx) => {
+    if (!cfg.layoutData && !cfg.layoutMockData) {
+      ctx.addIssue({
+        code: 'custom',
+        path: ['layoutData'],
+        message:
+          'É necessária a fonte de dados do layout: defina `layoutData` (ou o descontinuado `layoutMockData`).',
+      });
+    }
+    if (cfg.layoutData && cfg.layoutMockData) {
+      ctx.addIssue({
+        code: 'custom',
+        path: ['layoutData'],
+        message: 'Defina `layoutData` OU `layoutMockData` (descontinuado), não ambos.',
+      });
+    }
     if (!cfg.previewMode && isBlank(cfg.apiManagementConfig?.baseUrl)) {
       ctx.addIssue({
         code: 'custom',
@@ -72,6 +108,17 @@ const igrpConfigSchema = z
           message: 'IGRP_SYNC_ACCESS=true requer um appCode não-vazio (IGRP_APP_CODE).',
         });
       }
+      // `igrpSyncApplication` reads `appInformation.displayName ?? .name` and
+      // `.description` / `.slug` inside `after()`. Validate it here, where the
+      // failure can still reach `global-error.tsx`.
+      if (isBlank(cfg.appInformation?.name)) {
+        ctx.addIssue({
+          code: 'custom',
+          path: ['appInformation', 'name'],
+          message:
+            'IGRP_SYNC_ACCESS=true requer appInformation.name não-vazio (package.json da aplicação).',
+        });
+      }
     }
   });
 
@@ -79,6 +126,8 @@ const igrpConfigSchema = z
 function codeForIssuePath(path: ReadonlyArray<PropertyKey>): IgrpErrorCode {
   if (path[0] === 'appCode') return 'IGRP_APP_CODE_MISSING';
   if (path[0] === 'apiManagementConfig') return 'IGRP_ACCESS_MANAGEMENT_CONFIG_MISSING';
+  // `appInformation` / `layout` are structural — they have no dedicated code,
+  // and inventing one would widen `IgrpErrorCode` for no consumer.
   return 'IGRP_CONFIG_INVALID';
 }
 

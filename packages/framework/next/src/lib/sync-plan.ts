@@ -78,6 +78,20 @@ const PERMISSION_NAME_PATTERN = /^[A-Za-z0-9._-]{1,255}$/;
  * app over a typo in a catalog entry is disproportionate — so warn loudly,
  * naming the offenders, and sync what is valid.
  */
+/**
+ * `planAccessManagementSync` runs on every `IGRPRootLayout` render, i.e. every
+ * request. Without this the two diagnostics below reprinted per request,
+ * burying the rest of the log in a message whose content cannot change until
+ * the catalog does.
+ */
+const warnedCatalogs = new Set<string>();
+
+function warnOncePerCatalog(key: string, message: string): void {
+  if (warnedCatalogs.has(key)) return;
+  warnedCatalogs.add(key);
+  console.warn(message);
+}
+
 function validatePermissionCatalog(
   entries: IGRPPermissionCatalogEntry[],
 ): IGRPPermissionCatalogEntry[] {
@@ -93,7 +107,8 @@ function validatePermissionCatalog(
   }
 
   if (invalid.length > 0) {
-    console.warn(
+    warnOncePerCatalog(
+      `invalid:${invalid.join(',')}`,
       `[igrp] ${invalid.length} permission(s) skipped — a name must match ` +
         `${PERMISSION_NAME_PATTERN.source}: ${invalid.join(', ')}`,
     );
@@ -107,7 +122,8 @@ function validatePermissionCatalog(
   if (process.env.NODE_ENV !== 'production') {
     const dotted = valid.filter((e) => e.name.includes('.')).map((e) => e.name);
     if (dotted.length > 0) {
-      console.warn(
+      warnOncePerCatalog(
+        `dotted:${dotted.join(',')}`,
         '[igrp] permission name(s) contain a dot: ' +
           `${dotted.join(', ')}. A bare-name igrpAuthorize('<suffix>') will NOT match ` +
           'these — it treats a dotted name as already department-qualified. Either use ' +
@@ -141,7 +157,8 @@ export function planAccessManagementSync(
   if (args.previewMode) {
     // Both flags on is almost always a developer-config slip — surface it
     // loudly but don't refuse to boot. The sync itself stays skipped.
-    console.warn(
+    warnOncePerCatalog(
+      'preview-vs-sync',
       '[igrp] IGRP_SYNC_ACCESS=true is being ignored because IGRP_PREVIEW_MODE=true. ' +
         'Unset one of them.',
     );

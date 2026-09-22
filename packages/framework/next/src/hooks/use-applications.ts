@@ -1,31 +1,23 @@
+import 'server-only';
+
 import { cache } from 'react';
-import { ApiClientError, AccessManagementClient } from '@igrp/platform-access-management-client-ts';
+import { ApiClientError } from '@igrp/platform-access-management-client-ts';
 import { redirect } from 'next/navigation';
 import { headers } from 'next/headers';
 import { sanitizeRedirectUrl } from '@igrp/framework-next-auth/sanitize';
 
-import { igrpGetAccessClientConfig } from '../lib/api-config.js';
+import { igrpGetAccessClient } from '../lib/api-client.js';
 import { mapperApplications } from '../mappers/applications-mapper.js';
 import { logger } from '../logger.js';
 
 const getCachedAppsByUser = cache(async function fetchAppsByUserOnce() {
-  const { token, baseUrl } = igrpGetAccessClientConfig();
-  const client = AccessManagementClient.create({
-    baseUrl,
-    timeout: 10_000,
-    headers: { Authorization: `Bearer ${token}` },
-  });
+  const client = igrpGetAccessClient();
   const result = await client.users.getCurrentUserApplications();
   return mapperApplications(result);
 });
 
 const getCachedAppByCode = cache(async function fetchAppByCodeOnce(appCode: string) {
-  const { token, baseUrl } = igrpGetAccessClientConfig();
-  const client = AccessManagementClient.create({
-    baseUrl,
-    timeout: 10_000,
-    headers: { Authorization: `Bearer ${token}` },
-  });
+  const client = igrpGetAccessClient();
   const result = await client.applications.getApplications({ code: appCode });
   const apps = mapperApplications(result);
   return apps.find((a) => a.code === appCode) ?? null;

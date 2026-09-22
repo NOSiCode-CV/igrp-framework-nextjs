@@ -64,10 +64,10 @@ which covers `src/` and `contract/` with no emit, and its `build` already
 type-checks, so `release` is not doubled up. Both packages therefore close the
 unused-symbol class of defect.
 
-The root `typecheck` (`pnpm -r run typecheck`) consequently covers **3 of the
-4** framework packages. `next-ui` now defines `typecheck` (and runs it, plus
-`test`, in `release`); **`next`** is the only one still skipped silently. No
-framework package has ESLint.
+The root `typecheck` (`pnpm -r run typecheck`) now covers **all four**
+framework packages — `next` gained a `typecheck` script on 2026-09-21 and runs
+`typecheck` + `test` in `release`, matching `next-ui`. **No framework package
+has ESLint**, which is the part of this entry that remains open.
 
 A second, sharper instance of the same shape was found on 2026-09-21: the
 `check:dist` gate that `next-types` added — which catches extensionless
@@ -90,9 +90,8 @@ Pick one of two directions; don't do both.
    packages, say so in `.claude/shared/hard-rules.md` and give each package
    `typecheck` + `noUnusedLocals` instead, mirroring what `next-auth` has.
 
-Either way, also add a `typecheck` script to the package still missing one —
-**`next`** — so the root `pnpm typecheck` covers all four. `next-auth`,
-`next-types` and `next-ui` are done.
+The `typecheck` half of this entry is **done** — all four packages define one
+and the root `pnpm typecheck` covers them. Only the ESLint decision is left.
 
 ### References
 
@@ -104,77 +103,26 @@ Either way, also add a `typecheck` script to the package still missing one —
 
 ---
 
-## 2. `layoutMockData` is production configuration wearing a preview-mode name
+## 2. ~~`layoutMockData` is production configuration wearing a preview-mode name~~
 
-**Status:** open · pre-existing · found 2026-09-21 during a review of
-`@igrp/framework-next-types`
+**Status: FIXED 2026-09-21** during the review of `@igrp/framework-next`.
 
-**Affects:** `packages/framework/next` (providers), `packages/framework/next-types`
-(the type + field name), `templates/demo-v1` (migration)
+`IGRPConfigArgs.layoutData` (type `IGRPLayoutDataSource`) is the honest name.
+`layoutMockData` / `IGRPMockDataAsync` remain as a deprecated optional field and
+a type alias for one release; `igrpResolveLayoutDataSource` reads either and
+**rejects a config that sets both** — the two can disagree and there is no
+principled winner. `templates/demo-v1` is switched, shipped as migration
+`39-layout-data-source-rename`.
 
-**Severity:** medium — no current misbehaviour, but the name invites a change
-that breaks production silently.
-
-### Symptom
-
-`IGRPConfigArgs.layoutMockData` and its type `IGRPMockDataAsync` read as
-preview-only scaffolding. They are the framework's primary header/sidebar
-configuration source whenever auth is real.
-
-### Root cause
-
-Both providers call it unconditionally, outside the `previewMode` branch:
-
-- `packages/framework/next/src/layouts/providers/sidebar-data-provider.tsx:27`
-  calls `layoutMockData.getSidebarData()` **before** the `previewMode` check on
-  line 29.
-- `packages/framework/next/src/layouts/providers/header-data-provider.tsx:47`
-  and `:63` call `getHeaderData()` in *each* branch.
-
-Production overrides only what Access Management can supply:
-
-| Source             | Overridden in production                                  | Live in production                                                                                         |
-| ------------------ | --------------------------------------------------------- | ---------------------------------------------------------------------------------------------------------- |
-| `getHeaderData()`  | `user`, `showIGRPSidebarTrigger`                           | every other `show*` flag, `settingsUrl`, `settingsIcon`, `notificationsUrl`, `userProfileUrl`, `headerLogo` |
-| `getSidebarData()` | `user`, `menuItems`, `apps`, `appCode`, `showPreviewMode`  | `defaultOpen`, `showAppSwitcher`, `appCenterUrl`, `showMenuSearch`, `showNotifications`                    |
-
-### Why it matters
-
-An app author who reads the name and returns a stub in production — or gates the
-whole factory behind `previewMode` — loses the entire header and sidebar
-configuration. There is no error and no type complaint; the chrome just renders
-nothing.
-
-### Already mitigated
-
-`@igrp/framework-next-types` now documents the real semantics on
-`IGRPMockDataAsync` and on the `layoutMockData` field, including the override
-table above. That removes the trap for anyone who reads the type.
-
-### Fix when reviewing `@igrp/framework-next`
-
-Rename the concept to something honest — `layoutData` / `IGRPLayoutDataSource` —
-keeping `layoutMockData` / `IGRPMockDataAsync` as deprecated aliases for one
-release, per the additive-only rule in
-`packages/framework/next-types/CLAUDE.md`. Needs, in order:
-
-1. `next-types`: add the new names, deprecate the old, keep both assignable.
-2. `next`: read the new field with a fallback to the old one in `igrpBuildConfig`
-   and both providers.
-3. `templates/demo-v1`: switch `igrp.template.config.ts`, shipped as a
-   template-migrator migration.
-
-### References
-
-- `packages/framework/next/src/layouts/providers/sidebar-data-provider.tsx:27`
-- `packages/framework/next/src/layouts/providers/header-data-provider.tsx:47,63`
-- `packages/framework/next-types/src/types/globals.ts` — `IGRPMockDataAsync`
+Remaining: delete `layoutMockData` / `IGRPMockDataAsync` when the deprecation
+window closes.
 
 ---
 
 ## 3. `IGRPSidebarDataArgs.showPreviewMode` is written by one package and read by none
 
-**Status:** open · **decision taken 2026-09-21** during the `@igrp/framework-next-ui`
+**Status:** writer removed 2026-09-21; the deprecated field itself is still
+declared in `next-types`. **Decision taken 2026-09-21** during the `@igrp/framework-next-ui`
 review: **delete both ends**, on the schedule the deprecation already sets.
 
 **Affects:** `packages/framework/next` (writes it), `packages/framework/next-types`
@@ -207,10 +155,12 @@ A preview-mode indicator is still a reasonable feature — it just should not ri
 on this field. If it is wanted, add it as an explicit prop on
 `IGRPTemplateSidebar` alongside `menuLabels` / `navUserLabels`.
 
-### Remaining work (not in `next-ui`)
+### Remaining work
 
-1. `next`: drop the `showPreviewMode` write in `sidebar-data-provider.tsx:54`.
-2. `next-types`: remove the field when its deprecation window closes.
+1. ~~`next`: drop the `showPreviewMode` write in `sidebar-data-provider.tsx:54`.~~
+   **Done 2026-09-21** — the write is gone, with a comment recording why it is
+   not coming back.
+2. `next-types`: remove the field when its deprecation window closes. *(open)*
 
 ### References
 
@@ -239,7 +189,9 @@ whose `check:drift` gate fails.
     zod, react-hook-form, @types/react-dom
 ```
 
-File drift is zero; this is dependency drift only.
+File drift is zero; this is dependency drift only. (Re-verified 2026-09-21
+after migration `39-layout-data-source-rename` landed: still zero file drift,
+still the same 9 pins.)
 
 ### Why it is not fixed yet
 

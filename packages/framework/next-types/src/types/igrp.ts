@@ -2,7 +2,12 @@ import type { Session } from '@igrp/framework-next-auth/session';
 import type { SessionProviderProps } from '@igrp/framework-next-auth/client';
 
 import type { IGRPMenuItemArgs, IGRPPermissionCatalogEntry } from './access-management.js';
-import type { IGRPMockDataAsync, IGRPPackageJson, IGRPToasterPosition } from './globals.js';
+import type {
+  IGRPLayoutDataSource,
+  IGRPMockDataAsync,
+  IGRPPackageJson,
+  IGRPToasterPosition,
+} from './globals.js';
 
 export type IGRPConfigArgs = {
   appCode: string;
@@ -11,11 +16,22 @@ export type IGRPConfigArgs = {
   appInformation: IGRPPackageJson;
   /**
    * Header and sidebar data source — **required in production too, not just in
-   * preview mode**. The name is a misnomer: the framework calls it on every
-   * render and keeps most of what it returns. See {@link IGRPMockDataAsync} for
-   * exactly which fields production overrides and which stay live.
+   * preview mode**. The framework calls it on every render and keeps most of
+   * what it returns; see {@link IGRPLayoutDataSource} for exactly which fields
+   * production overrides and which stay live.
+   *
+   * Supersedes {@link IGRPConfigArgs.layoutMockData}, whose name said "mock"
+   * and led app authors to stub it in production, silently dropping the whole
+   * header/sidebar configuration. Set either one — the framework prefers
+   * `layoutData` and falls back to `layoutMockData` — but not both.
    */
-  layoutMockData: IGRPMockDataAsync;
+  layoutData?: IGRPLayoutDataSource;
+  /**
+   * @deprecated Renamed to {@link IGRPConfigArgs.layoutData}. Still read (as a
+   * fallback) for one release, then removed. Optional only so the two can
+   * coexist during the window; **exactly one of the two must be set.**
+   */
+  layoutMockData?: IGRPMockDataAsync;
   font?: string;
   /**
    * @deprecated Read by nothing in `@igrp/framework-next` or

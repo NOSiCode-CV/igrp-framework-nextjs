@@ -1,3 +1,5 @@
+import 'server-only';
+
 import { cache } from 'react';
 import { forbidden } from 'next/navigation';
 import {
@@ -7,10 +9,18 @@ import {
   type IGRPAccessClaims,
   type IGRPClaimsState,
 } from '@igrp/framework-next-auth/claims';
-import { resolveSecureCookie } from '@igrp/framework-next-auth/cookies';
+import {
+  resolveSecureCookie,
+  resolveSecureCookiesFlag,
+  sessionCookieName,
+} from '@igrp/framework-next-auth/cookies';
 import { isNextControlFlowError } from '@igrp/framework-next-auth/runtime';
 
-import { igrpGetAccessClientConfig, igrpSetAccessClientConfig } from './api-config.js';
+import {
+  igrpGetAccessClientConfig,
+  igrpSetAccessClientConfig,
+  type IGRPClientRuntimeConfig,
+} from './api-config.js';
 
 const SUPER_ADMIN_MOCK: IGRPAccessClaims = { permissions: [], roles: [], isSuperAdmin: true };
 
@@ -39,6 +49,38 @@ const SUPER_ADMIN_MOCK: IGRPAccessClaims = { permissions: [], roles: [], isSuper
  * Returns '' on a genuine failure — the caller maps that to the error state —
  * but re-throws Next's control-flow signals (see `isNextControlFlowError`).
  */
+/**
+ * The `cookieName` option `getToken` needs, or `{}` to leave it to `getToken`'s
+ * own derivation.
+ *
+ * **Decided from the cookie jar, not from configuration.** `withIGRPAuth`
+ * suffixes every auth cookie name with the basePath only when `cookieIsolation`
+ * is `'basePath'` (its default) — under `cookieIsolation: 'none'` it writes the
+ * STOCK names even with a basePath set. It also reads the basePath from a
+ * caller-supplied `env` map before falling back to `process.env`, and recovers
+ * it from `NEXTAUTH_URL` when `NEXT_PUBLIC_BASE_PATH` is unset.
+ *
+ * This package can see none of that: the `withIGRPAuth` instance lives in the
+ * app. Gating purely on `NEXT_PUBLIC_BASE_PATH` — as an earlier version of this
+ * did — therefore fixed the default configuration and broke
+ * `cookieIsolation: 'none'`, sending `getToken` after a suffixed name for a
+ * cookie written with the stock one.
+ *
+ * Probing the jar sidesteps the whole question. `startsWith` is the right test
+ * rather than equality because NextAuth chunks an oversized token into
+ * `<name>.0` / `<name>.1`, and `SessionStore` reassembles by prefix.
+ */
+function scopedCookieNameOption(
+  cookieNames: string[],
+  secureCookie: boolean | undefined,
+): { cookieName?: string } {
+  const basePath = process.env.NEXT_PUBLIC_BASE_PATH ?? '';
+  if (!basePath) return {};
+
+  const scoped = sessionCookieName(basePath, secureCookie ?? resolveSecureCookiesFlag(process.env));
+  return cookieNames.some((name) => name.startsWith(scoped)) ? { cookieName: scoped } : {};
+}
+
 async function recoverAccessTokenFromCookies(): Promise<string> {
   try {
     const [{ cookies }, { getToken }] = await Promise.all([
@@ -46,13 +88,15 @@ async function recoverAccessTokenFromCookies(): Promise<string> {
       import('@igrp/framework-next-auth/jwt'),
     ]);
     const all = (await cookies()).getAll();
-    const secureCookie = resolveSecureCookie(all.map((c) => c.name));
+    const names = all.map((c) => c.name);
+    const secureCookie = resolveSecureCookie(names);
     const token = await getToken({
       req: {
         cookies: Object.fromEntries(all.map((c) => [c.name, c.value])),
       } as Parameters<typeof getToken>[0]['req'],
       secret: process.env.NEXTAUTH_SECRET,
       ...(secureCookie !== undefined ? { secureCookie } : {}),
+      ...scopedCookieNameOption(names, secureCookie),
     });
     return (token as { accessToken?: string } | null)?.accessToken ?? '';
   } catch (error) {
@@ -93,6 +137,50 @@ export function isIgrpAuthBypass(env: Record<string, string | undefined> = proce
 }
 
 /**
+ * Guarantee that the per-request access-client store holds a token, recovering
+ * it from the session cookie when no `AsyncLocalStorage` store was established
+ * — i.e. in a Server Action or Route Handler, where the layout/DAL path that
+ * normally seeds it never ran.
+ *
+ * Returns the resulting config; `token === ''` means no session could be
+ * recovered and every downstream Access Management call will fail. Callers
+ * should treat that as unauthenticated and stop, rather than issuing a request
+ * with an empty bearer token against an empty base URL.
+ *
+ * Idempotent and cheap once seeded: a store that already carries a token is
+ * returned untouched.
+ */
+export async function igrpEnsureAccessClientConfig(): Promise<IGRPClientRuntimeConfig> {
+  const current = igrpGetAccessClientConfig();
+  if (current.token) return current;
+
+  // No ALS store established (Server Action / Route Handler), or a store seeded
+  // with an empty token. Either way the current code path is guaranteed to
+  // fail, so recovering here cannot regress a working caller.
+  //
+  // Establish the store SYNCHRONOUSLY, before the first await, so the object
+  // lives in the CALLER's async context; the write after the await then mutates
+  // that same object in place. Seeding only after the await relies on
+  // `enterWith` propagating out of a nested async frame, which did not hold in
+  // practice (see the T3 case in __tests__/permissions-action-context.test.ts).
+  // This is also why the synchronous prologue must stay ahead of the first
+  // `await` in THIS function — an async function body runs synchronously up to
+  // its first await, in its caller's context.
+  const baseUrl = current.baseUrl || process.env.IGRP_ACCESS_MANAGEMENT_API || '';
+  igrpSetAccessClientConfig({ token: '', baseUrl });
+
+  const token = await recoverAccessTokenFromCookies();
+  if (token) {
+    // Seed the token too: a caller that needs claims almost always needs the
+    // Access Management client next, and that fails in exactly the same
+    // contexts for the same reason.
+    igrpSetAccessClientConfig({ token, baseUrl });
+  }
+
+  return igrpGetAccessClientConfig();
+}
+
+/**
  * Resolve the current request's permission claims. Bypass → super-admin mock
  * (does NOT attempt to decode the non-JWT preview token). Otherwise decode the
  * per-request access token; a decode failure becomes a distinguishable error
@@ -110,30 +198,7 @@ export const igrpGetClaims = cache(async function igrpGetClaims(): Promise<IGRPC
     return { status: 'ok', claims: { ...SUPER_ADMIN_MOCK } };
   }
   try {
-    const current = igrpGetAccessClientConfig();
-    let token = current.token;
-    if (!token) {
-      // No ALS store established (Server Action / Route Handler), or a store
-      // seeded with an empty token. Either way the current code path is
-      // guaranteed to fail, so recovering here cannot regress a working caller.
-      //
-      // Establish the store SYNCHRONOUSLY, before the first await, so the
-      // object lives in the caller's async context; the write after the await
-      // then mutates that same object in place. Seeding only after the await
-      // relies on `enterWith` propagating out of a nested async frame, which
-      // did not hold in practice (see the T3 case in
-      // __tests__/permissions-action-context.test.ts).
-      const baseUrl = current.baseUrl || process.env.IGRP_ACCESS_MANAGEMENT_API || '';
-      igrpSetAccessClientConfig({ token: '', baseUrl });
-
-      token = await recoverAccessTokenFromCookies();
-      if (token) {
-        // Seed the token too: a caller that needs claims almost always needs
-        // the Access Management client next, and that fails in exactly the
-        // same contexts for the same reason.
-        igrpSetAccessClientConfig({ token, baseUrl });
-      }
-    }
+    const { token } = await igrpEnsureAccessClientConfig();
     const claims = decodeIgrpClaims(token);
 
     // An access token recovered straight from the session cookie has NOT been

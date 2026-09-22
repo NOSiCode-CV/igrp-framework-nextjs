@@ -1,10 +1,12 @@
+import 'server-only';
+
 import { cache } from 'react';
-import { ApiClientError, AccessManagementClient } from '@igrp/platform-access-management-client-ts';
+import { ApiClientError } from '@igrp/platform-access-management-client-ts';
 import { redirect } from 'next/navigation';
 import { headers } from 'next/headers';
 import { sanitizeRedirectUrl } from '@igrp/framework-next-auth/sanitize';
 
-import { igrpGetAccessClientConfig } from '../lib/api-config.js';
+import { igrpGetAccessClient } from '../lib/api-client.js';
 import { mapperMenus } from '../mappers/menus-mapper.js';
 import { logger } from '../logger.js';
 
@@ -12,12 +14,7 @@ import { logger } from '../logger.js';
 // passed as an argument), so it is never embedded in a cross-request cache key
 // and per-user menus are never shared across requests. See use-user.ts.
 const getCachedMenus = cache(async function fetchMenusOnce(appCode: string) {
-  const { token, baseUrl } = igrpGetAccessClientConfig();
-  const client = AccessManagementClient.create({
-    baseUrl,
-    timeout: 10_000,
-    headers: { Authorization: `Bearer ${token}` },
-  });
+  const client = igrpGetAccessClient();
   const result = await client.users.getCurrentUserApplicationMenus(appCode);
   return mapperMenus(result);
 });

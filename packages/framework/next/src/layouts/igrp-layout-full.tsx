@@ -28,6 +28,16 @@ export type IGRPLayoutFullArgs = {
    * cross the Server→Client boundary into IGRPTemplateHeader.
    */
   readonly headerSlots?: IGRPHeaderSlots;
+  /**
+   * Initial open state of the sidebar shell.
+   *
+   * It cannot be read from the sidebar data source: that is fetched inside
+   * `SidebarDataProvider`, behind a `<Suspense>` boundary nested in the shell
+   * this value configures — the shell has to render before the data exists.
+   * Hence an explicit prop. Defaults to `true`, the value that was previously
+   * hardcoded here.
+   */
+  readonly defaultSidebarOpen?: boolean;
   rootProviderClassName?: string;
 };
 
@@ -38,6 +48,7 @@ export async function IGRPLayoutFull({
   breadcrumbs,
   breadcrumbRouteLabels,
   headerSlots,
+  defaultSidebarOpen = true,
   rootProviderClassName,
 }: IGRPLayoutFullArgs) {
   const { previewMode, layout, apiManagementConfig, toasterConfig } = config;
@@ -45,11 +56,16 @@ export async function IGRPLayoutFull({
 
   const accessToken = session?.accessToken || '';
   const accessBaseUrl = apiManagementConfig?.baseUrl || '';
+  // Threaded explicitly: `igrpSetAccessClientConfig` only defaults `timeout`
+  // when it CREATES the store, so omitting it here left every read-path client
+  // on the 10s default and made `apiManagementConfig.timeout` dead config.
+  const accessTimeout = apiManagementConfig?.timeout;
 
   if (!previewMode && accessBaseUrl) {
     igrpSetAccessClientConfig({
       token: accessToken,
       baseUrl: accessBaseUrl,
+      ...(accessTimeout !== undefined ? { timeout: accessTimeout } : {}),
     });
   }
 
@@ -60,7 +76,12 @@ export async function IGRPLayoutFull({
   const sidebarSlot = showSidebar ? (
     <IGRPLayoutErrorBoundary fallback={<IGRPSidebarError />}>
       <Suspense fallback={<IGRPSidebarSkeleton />}>
-        <SidebarDataProvider config={config} token={accessToken} baseUrl={accessBaseUrl} />
+        <SidebarDataProvider
+          config={config}
+          token={accessToken}
+          baseUrl={accessBaseUrl}
+          timeout={accessTimeout}
+        />
       </Suspense>
     </IGRPLayoutErrorBoundary>
   ) : undefined;
@@ -72,6 +93,7 @@ export async function IGRPLayoutFull({
           config={config}
           token={accessToken}
           baseUrl={accessBaseUrl}
+          timeout={accessTimeout}
           showSidebar={showSidebar}
           breadcrumbs={breadcrumbs}
           breadcrumbRouteLabels={breadcrumbRouteLabels}
@@ -83,7 +105,7 @@ export async function IGRPLayoutFull({
 
   return (
     <IGRPRootProvidersFull
-      defaultOpen={true}
+      defaultOpen={defaultSidebarOpen}
       toasterConfig={toasterConfig}
       sidebar={sidebarSlot}
       header={headerSlot}

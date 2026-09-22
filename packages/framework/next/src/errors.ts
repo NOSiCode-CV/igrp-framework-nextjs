@@ -33,7 +33,9 @@ export type IgrpErrorCode =
   | 'IGRP_CONFIG_INVALID'
   | 'IGRP_ACCESS_MANAGEMENT_CONFIG_MISSING'
   | 'IGRP_APP_CODE_MISSING'
+  /** @deprecated Never thrown by the framework. Removed one release from now. */
   | 'IGRP_APP_HOME_SLUG_INVALID'
+  /** @deprecated Never thrown by the framework. Removed one release from now. */
   | 'IGRP_AUTH_CONFIG_INVALID'
   | 'IGRP_LAYOUT_DATA_FAILED';
 
@@ -59,12 +61,22 @@ export class IgrpError extends Error implements IgrpErrorShape {
   readonly code: string;
   readonly context?: IgrpErrorContext;
 
-  constructor(code: string, message?: string, context?: IgrpErrorContext) {
-    super(message ?? code);
+  constructor(
+    code: string,
+    message?: string,
+    context?: IgrpErrorContext,
+    options?: { cause?: unknown },
+  ) {
+    // `cause` is forwarded so a wrapped failure keeps its original stack. The
+    // context bag cannot carry it: that is constrained to serializable scalars
+    // so React's boundary serializer never chokes on it.
+    super(message ?? code, options);
     this.name = 'IgrpError';
     this.code = code;
     this.context = context;
-    // Preserve the prototype chain across the ES5-target transpile tsc/SWC emit.
+    // Keep `instanceof` working for subclasses. `new.target.prototype` (rather
+    // than a fixed class) is what makes a subclass constructed through `super()`
+    // land on its OWN prototype.
     Object.setPrototypeOf(this, new.target.prototype);
   }
 }
@@ -81,7 +93,13 @@ export class IgrpConfigError extends IgrpError {
   }
 }
 
-/** Auth-config failure surfaced above `@igrp/framework-next-auth`. */
+/**
+ * Auth-config failure surfaced above `@igrp/framework-next-auth`.
+ *
+ * @deprecated Never constructed by the framework — auth configuration errors
+ * are raised inside `@igrp/framework-next-auth` with its own error type. Kept
+ * for one release in case a template throws it; removed after that.
+ */
 export class IgrpAuthConfigError extends IgrpError {
   constructor(code: IgrpErrorCode | (string & {}), message?: string, context?: IgrpErrorContext) {
     super(code, message, context);
@@ -89,10 +107,22 @@ export class IgrpAuthConfigError extends IgrpError {
   }
 }
 
-/** Layout-data fetch failure (menu / user / apps bootstrap). */
+/**
+ * Layout-data fetch failure (menu / user / apps bootstrap).
+ *
+ * Thrown by the header and sidebar providers with code
+ * `IGRP_LAYOUT_DATA_FAILED`, wrapping the underlying transport error as
+ * `cause`. That gives a consumer's `IGRPLayoutErrorBoundary onError` reporter a
+ * stable code to discriminate on instead of a bare `ApiClientError`.
+ */
 export class IgrpLayoutDataError extends IgrpError {
-  constructor(code: IgrpErrorCode | (string & {}), message?: string, context?: IgrpErrorContext) {
-    super(code, message, context);
+  constructor(
+    code: IgrpErrorCode | (string & {}),
+    message?: string,
+    context?: IgrpErrorContext,
+    options?: { cause?: unknown },
+  ) {
+    super(code, message, context, options);
     this.name = 'IgrpLayoutDataError';
   }
 }

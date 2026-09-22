@@ -93,7 +93,7 @@ export const getConfig = cache(async () => {
   return igrpBuildConfig({
     appCode: process.env.IGRP_APP_CODE!,
     previewMode: process.env.IGRP_PREVIEW_MODE === 'true',
-    // layoutMockData, apiManagementConfig, toasterConfig, sessionArgs ...
+    // layoutData, apiManagementConfig, toasterConfig, sessionArgs ...
   });
 });
 ```

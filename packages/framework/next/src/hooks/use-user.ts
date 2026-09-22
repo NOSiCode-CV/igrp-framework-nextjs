@@ -1,11 +1,13 @@
+import 'server-only';
+
 import { cache } from 'react';
-import { ApiClientError, AccessManagementClient } from '@igrp/platform-access-management-client-ts';
+import { ApiClientError } from '@igrp/platform-access-management-client-ts';
 import { redirect } from 'next/navigation';
 import { headers } from 'next/headers';
 
 import { sanitizeRedirectUrl } from '@igrp/framework-next-auth/sanitize';
 
-import { igrpGetAccessClientConfig } from '../lib/api-config.js';
+import { igrpGetAccessClient } from '../lib/api-client.js';
 import { mapUserDTO } from '../mappers/users-mapper.js';
 import { logger } from '../logger.js';
 
@@ -19,12 +21,7 @@ import { logger } from '../logger.js';
 // render tree, which is all we need — the token changes on every refresh anyway,
 // so cross-request caching by token value has no hit rate.
 const getCachedCurrentUser = cache(async function fetchCurrentUserOnce() {
-  const { token, baseUrl } = igrpGetAccessClientConfig();
-  const client = AccessManagementClient.create({
-    baseUrl,
-    timeout: 10_000,
-    headers: { Authorization: `Bearer ${token}` },
-  });
+  const client = igrpGetAccessClient();
   const result = await client.users.getCurrentUser();
   // Narrow at the fetch boundary, not at the render site. Both callers hand
   // this straight to a `'use client'` component, so anything returned here is

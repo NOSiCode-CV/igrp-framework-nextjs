@@ -7,9 +7,17 @@ import { planAccessManagementSync } from '../lib/sync-plan.js';
 export type IGRPRootLayoutArgs = {
   readonly children: React.ReactNode;
   readonly config: IGRPConfigArgs;
+  /**
+   * `lang` for the `<html>` element. Defaults to `'pt'` — the previous
+   * hardcoded value, kept as the default so nothing changes for existing
+   * templates — but it is the document's language, which assistive technology
+   * and the browser's own translation prompt both read, so an app serving any
+   * other locale needs to be able to say so.
+   */
+  readonly lang?: string;
 };
 
-export async function IGRPRootLayout({ children, config }: IGRPRootLayoutArgs) {
+export async function IGRPRootLayout({ children, config, lang = 'pt' }: IGRPRootLayoutArgs) {
   const {
     font,
     layout,
@@ -49,13 +57,19 @@ export async function IGRPRootLayout({ children, config }: IGRPRootLayoutArgs) {
     after(() => igrpStartupSync(syncPlan));
   }
 
+  // Built by join rather than a multi-line template literal: the literal
+  // embedded its own newlines and indentation into the class attribute.
+  const bodyClassName = [
+    'bg-background overscroll-none h-screen font-sans antialiased',
+    activeThemeValue ? `theme-${activeThemeValue}` : '',
+    isScaled ? 'theme-scaled' : '',
+  ]
+    .filter(Boolean)
+    .join(' ');
+
   return (
-    <html lang="pt" suppressHydrationWarning className={font}>
-      <body
-        className={`bg-background overscroll-none h-screen font-sans antialiased
-          ${activeThemeValue ? ` theme-${activeThemeValue}` : ''}
-          ${isScaled ? ' theme-scaled' : ''}`}
-      >
+    <html lang={lang} suppressHydrationWarning className={font}>
+      <body className={bodyClassName}>
         <IGRPNestedProviders
           session={session}
           activeThemeValue={activeThemeValue}

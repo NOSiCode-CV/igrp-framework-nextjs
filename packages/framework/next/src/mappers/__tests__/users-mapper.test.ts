@@ -1,7 +1,7 @@
 import { describe, expect, it } from 'vitest';
 import { Status, type IGRPUserDTO } from '@igrp/platform-access-management-client-ts';
 
-import { mapUserDTO, mapperUser } from '../users-mapper.js';
+import { mapUserDTO } from '../users-mapper.js';
 
 /**
  * `mapUserDTO` is a privacy boundary: its result reaches `'use client'`
@@ -66,21 +66,5 @@ describe('mapUserDTO', () => {
 
     expect(mapped).not.toHaveProperty('nic');
     expect(mapped).not.toHaveProperty('phoneNumber');
-  });
-});
-
-describe('mapperUser', () => {
-  it('narrows the response payload the same way', () => {
-    const mapped = mapperUser({ data: dto, status: 200, statusText: 'OK' });
-
-    expect(mapped).not.toHaveProperty('metadata');
-    expect(mapped).not.toHaveProperty('nic');
-    expect(mapped.id).toBe('u-1');
-  });
-
-  it('throws on an empty payload instead of fabricating a user', () => {
-    expect(() =>
-      mapperUser({ data: undefined as unknown as IGRPUserDTO, status: 200, statusText: 'OK' }),
-    ).toThrow(/não foi encontrado/);
   });
 });

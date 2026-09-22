@@ -1,3 +1,5 @@
+import 'server-only';
+
 import { cookies } from 'next/headers';
 
 import { SESSION_COOKIE_BASENAME } from '@igrp/framework-next-auth/cookies';

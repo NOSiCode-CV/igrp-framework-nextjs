@@ -1,5 +1,5 @@
 import type { IGRPUserArgs } from '@igrp/framework-next-types';
-import type { ApiResponse, IGRPUserDTO } from '@igrp/platform-access-management-client-ts';
+import type { IGRPUserDTO } from '@igrp/platform-access-management-client-ts';
 
 /**
  * Narrows an Access Management user DTO to the framework's `IGRPUserArgs`.
@@ -36,13 +36,3 @@ export const mapUserDTO = (user: IGRPUserDTO): IGRPUserArgs => ({
   // withheld — see above, and the named exclusions in `next-types`'
   // `contract/am-contract.ts`.
 });
-
-/**
- * `ApiResponse` wrapper around {@link mapUserDTO} for the call sites that hold
- * a whole response. Throws on an empty payload rather than fabricating a user.
- */
-export const mapperUser = (user: ApiResponse<IGRPUserDTO>): IGRPUserArgs => {
-  if (!user.data) throw new Error('[igrp-users]: O utilizador não foi encontrado.');
-
-  return mapUserDTO(user.data);
-};

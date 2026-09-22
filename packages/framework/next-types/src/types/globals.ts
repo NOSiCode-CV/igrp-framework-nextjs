@@ -22,16 +22,24 @@ import type { IGRPSidebarDataArgs } from './sidebar.js';
  * and let `previewMode` decide only what the *fetched* values stand in for,
  * which is what `templates/demo-v1` does.
  *
- * The name is a misnomer kept for compatibility; see the repo `KNOWN-ISSUES.md`
- * for the planned rename.
+ * Named {@link IGRPLayoutDataSource} as of this release. `IGRPMockDataAsync`
+ * remains an alias of it for one release.
  */
-export interface IGRPMockDataAsync {
+export interface IGRPLayoutDataSource {
   getHeaderData: () => Promise<IGRPHeaderDataArgs>;
   getSidebarData: () => Promise<IGRPSidebarDataArgs>;
 }
 
 /**
- * @deprecated Synchronous twin of {@link IGRPMockDataAsync} with no consumer
+ * @deprecated Renamed to {@link IGRPLayoutDataSource}. Identical type — the old
+ * name said "mock", which is what made app authors gate the factory behind
+ * `previewMode` and silently lose their entire production header and sidebar
+ * configuration. Kept as an alias for one release.
+ */
+export type IGRPMockDataAsync = IGRPLayoutDataSource;
+
+/**
+ * @deprecated Synchronous twin of {@link IGRPLayoutDataSource} with no consumer
  * anywhere — `IGRPConfigArgs.layoutMockData` is the async form. Kept for one
  * release; use `IGRPMockDataAsync`.
  */

@@ -38,6 +38,7 @@ export type {
 } from './types/access-management.js';
 
 export type {
+  IGRPLayoutDataSource,
   IGRPMockDataAsync,
   IGRPMockData,
   IGRPToasterPosition,

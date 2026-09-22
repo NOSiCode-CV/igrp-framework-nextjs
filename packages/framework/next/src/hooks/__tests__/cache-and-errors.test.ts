@@ -54,15 +54,17 @@ describe('fetchMenus reads the token fresh from config (no token in cache key)',
 describe('data hooks throw on non-auth failures (no silent empty render)', () => {
   beforeEach(() => {
     igrpResetAccessClientConfig();
-    igrpSetAccessClientConfig({ token: 'T', baseUrl: 'http://am' });
   });
 
+  // See the note above: enterWith does not cross the beforeEach → it boundary.
   it('fetchMenus throws on a 500 instead of returning []', async () => {
+    igrpSetAccessClientConfig({ token: 'T', baseUrl: 'http://am' });
     getCurrentUserApplicationMenus.mockRejectedValueOnce(new ApiClientError(500));
     await expect(fetchMenus('app')).rejects.toBeInstanceOf(ApiClientError);
   });
 
   it('fetchMenus still returns the data on success', async () => {
+    igrpSetAccessClientConfig({ token: 'T', baseUrl: 'http://am' });
     getCurrentUserApplicationMenus.mockResolvedValueOnce({ data: [] });
     await expect(fetchMenus('app')).resolves.toEqual([]);
   });

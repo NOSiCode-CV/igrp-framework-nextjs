@@ -444,6 +444,9 @@ importers:
       '@igrp/platform-access-management-client-ts':
         specifier: ^0.2.0-beta.16
         version: 0.2.0-beta.16
+      server-only:
+        specifier: ^0.0.1
+        version: 0.0.1
     devDependencies:
       '@babel/cli':
         specifier: 7.29.7
@@ -457,9 +460,6 @@ importers:
       '@babel/preset-typescript':
         specifier: 7.29.7
         version: 7.29.7(@babel/core@7.29.7(supports-color@8.1.1))(supports-color@8.1.1)
-      '@eslint/js':
-        specifier: 10.0.1
-        version: 10.0.1(eslint@10.10.0(jiti@2.7.0)(supports-color@8.1.1))
       '@types/node':
         specifier: ^24
         version: 24.13.4
@@ -472,27 +472,6 @@ importers:
       babel-plugin-react-compiler:
         specifier: 1.0.0
         version: 1.0.0
-      cpy-cli:
-        specifier: 7.0.0
-        version: 7.0.0
-      eslint:
-        specifier: 10.10.0
-        version: 10.10.0(jiti@2.7.0)(supports-color@8.1.1)
-      eslint-config-prettier:
-        specifier: 10.1.8
-        version: 10.1.8(eslint@10.10.0(jiti@2.7.0)(supports-color@8.1.1))
-      eslint-plugin-prettier:
-        specifier: 5.5.6
-        version: 5.5.6(eslint-config-prettier@10.1.8(eslint@10.10.0(jiti@2.7.0)(supports-color@8.1.1)))(eslint@10.10.0(jiti@2.7.0)(supports-color@8.1.1))(prettier@3.9.6)
-      eslint-plugin-react-hooks:
-        specifier: 7.1.1
-        version: 7.1.1(eslint@10.10.0(jiti@2.7.0)(supports-color@8.1.1))(supports-color@8.1.1)
-      eslint-plugin-react-refresh:
-        specifier: 0.5.7
-        version: 0.5.7(eslint@10.10.0(jiti@2.7.0)(supports-color@8.1.1))
-      globals:
-        specifier: 17.12.0
-        version: 17.12.0
       next:
         specifier: 15.5.25
         version: 15.5.25(@babel/core@7.29.7(supports-color@8.1.1))(@types/node@24.13.4)(babel-plugin-react-compiler@1.0.0)(react-dom@19.2.8(react@19.2.8))(react@19.2.8)
@@ -511,9 +490,6 @@ importers:
       typescript:
         specifier: ~6.0.3
         version: 6.0.3
-      typescript-eslint:
-        specifier: 8.70.0
-        version: 8.70.0(eslint@10.10.0(jiti@2.7.0)(supports-color@8.1.1))(supports-color@8.1.1)(typescript@6.0.3)
       vitest:
         specifier: 5.0.1
         version: 5.0.1(@types/node@24.13.4)(@vitest/browser-playwright@5.0.1)(@vitest/coverage-v8@5.0.1)(@vitest/ui@5.0.1)(jsdom@30.0.1)(vite@8.3.0(@types/node@24.13.4)(esbuild@0.28.2)(jiti@2.7.0)(tsx@4.23.13)(yaml@2.9.0))
@@ -7466,6 +7442,9 @@ packages:
   serve-static@2.2.1:
     resolution: {integrity: sha512-xRXBn0pPqQTVQiC8wyQrKs2MOlX24zQ0POGaj0kultvoOCstBQM5yvOhAVSUwOMjQtTvsPWoNCHfPGwaaQJhTw==}
     engines: {node: '>= 18'}
+
+  server-only@0.0.1:
+    resolution: {integrity: sha512-qepMx2JxAa5jjfzxG79yPPq+8BuFToHd1hm7kI+Z4zAq1ftQiP7HcxMhDDItrbtwVeLg/cY2JnKnrcFkmiswNA==}
 
   set-blocking@2.0.0:
     resolution: {integrity: sha512-KiKBS8AnWGEyLzofFfmvKwpdPzqiy16LvQfK3yv/fVH7Bj13/wl3JSR1J+rfgRE9q7xUJK4qvgS8raSOeLUehw==}
@@ -15352,6 +15331,8 @@ snapshots:
       send: 1.2.1(supports-color@8.1.1)
     transitivePeerDependencies:
       - supports-color
+
+  server-only@0.0.1: {}
 
   set-blocking@2.0.0: {}
 

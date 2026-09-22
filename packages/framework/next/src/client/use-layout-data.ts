@@ -3,31 +3,25 @@
 import { useCallback, useTransition } from 'react';
 import { useRouter } from 'next/navigation';
 
-import { revalidateAppsAction, revalidateMenusAction } from '../actions/index.js';
-
-export function useLayoutData(appCode: string) {
+/**
+ * Refresh helpers for the layout chrome (menus / apps / user).
+ *
+ * All three are `router.refresh()`. The layout data comes from `React.cache()`
+ * helpers, which are request-scoped — there is no tagged cache entry to
+ * invalidate, so a new request *is* the invalidation. This hook used to `await`
+ * `revalidateMenusAction` / `revalidateAppsAction` first; both are documented
+ * no-ops kept only for API stability, so that was a Server Action round-trip
+ * that delayed the refresh and changed nothing.
+ */
+export function useLayoutData(_appCode: string) {
   const router = useRouter();
   const [, startTransition] = useTransition();
 
-  const refreshMenus = useCallback(() => {
-    startTransition(async () => {
-      await revalidateMenusAction(appCode);
-      router.refresh();
-    });
-  }, [appCode, router, startTransition]);
-
-  const refreshApps = useCallback(() => {
-    startTransition(async () => {
-      await revalidateAppsAction();
-      router.refresh();
-    });
-  }, [router, startTransition]);
-
-  const refreshUser = useCallback(() => {
+  const refresh = useCallback(() => {
     startTransition(() => {
       router.refresh();
     });
   }, [router, startTransition]);
 
-  return { refreshMenus, refreshApps, refreshUser };
+  return { refreshMenus: refresh, refreshApps: refresh, refreshUser: refresh };
 }

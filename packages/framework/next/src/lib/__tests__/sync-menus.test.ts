@@ -1,7 +1,5 @@
 import { describe, it, expect, vi, beforeEach } from 'vitest';
 
-vi.mock('server-only', () => ({}));
-
 import { igrpSyncMenus } from '../sync-menus.js';
 
 const makeClient = () => ({

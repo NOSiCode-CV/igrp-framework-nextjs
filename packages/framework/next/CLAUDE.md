@@ -18,6 +18,14 @@ You are working inside `packages/framework/next/` — `@igrp/framework-next`. **
 - `IGRPLayout` — route-group server layout (header/sidebar chrome).
 - `igrpBuildConfig` — assembles layout + API + toaster + session config.
 - `igrpGetAccessClient`, `igrpGetAccessClientConfig` — access-management API client.
+- `igrpGetClaims`, `igrpAuthorize`, `igrpAssertAuthorize`, `isIgrpAuthBypass` — permission checks.
+- `igrpEnsureAccessClientConfig` — seeds the per-request access-client store from
+  the session cookie. **Anything reachable from a Server Action or Route Handler
+  must call it first**: those run in a fresh async context where the store the
+  layout seeds does not exist. See `src/actions/index.ts` for the gate that
+  pairs with it (no recoverable session ⇒ refuse before any AM call).
+- `igrpResolveLayoutDataSource` — reads `layoutData`, falling back to the
+  deprecated `layoutMockData`; rejects a config that sets both.
 
 Validate breaking changes against `templates/demo-v1/src/app/layout.tsx`, `templates/demo-v1/src/app/(igrp)/layout.tsx`, `templates/demo-v1/src/igrp.template.config.ts`.
 
@@ -25,6 +33,10 @@ Validate breaking changes against `templates/demo-v1/src/app/layout.tsx`, `templ
 
 - **Server-only entry.** Client pieces belong in `@igrp/framework-next-ui`.
 - Respect `@igrp/framework-next-auth` entry points — `/server`, `/config`, `/middleware`. Never `/dist/`.
+- **Never let an error boundary latch a Next control-flow throw.** `redirect()`,
+  `notFound()`, `forbidden()` and `unauthorized()` all signal by throwing, and
+  the data providers redirect on a 401/403. Any boundary between them and Next's
+  own must `unstable_rethrow` first — see `IGRPLayoutErrorBoundary` in `next-ui`.
 - **`igrpBuildConfig` must honor `IGRP_PREVIEW_MODE`** — swap in mock data and disable session refetch. Every config-shape change has to keep the preview branch working.
 - Build: a single Babel pass over `src/` (`build:js`: TypeScript strip + JSX + React Compiler) → `tsc --emitDeclarationOnly`. `pnpm build:next`. Escape: `build:without_reactcompiler`.
 

@@ -39,5 +39,6 @@
 
 - `pnpm template-migrations` — build the migrator (`pnpm --filter @igrp/template-migrator build`)
 - `pnpm --filter @igrp/template-migrator test` — Vitest
-- `pnpm --filter @igrp/template-migrator check:drift` — fail if `templates/demo-v1` drifted from shipped migrations (runs in `release`, and per-MR in `.gitlab-ci.yml`)
+- `pnpm --filter @igrp/template-migrator typecheck` — `tsc --noEmit` over `src/` **and** `scripts/`
+- `pnpm --filter @igrp/template-migrator check:drift` — fail if `templates/demo-v1` drifted from shipped migrations. Runs in `release` (after `typecheck` and `test`), and per-MR via the `check_template_drift` job in `.gitlab-ci.yml`
 - `pnpm --filter @igrp/template-migrator sync:template-lock` — regenerate `templates/demo-v1/.igrp-migrations-lock.json` so the zip marks every migration applied. **Run after adding a migration** — `check:drift` fails until you do. Add `--check` for a dry run.

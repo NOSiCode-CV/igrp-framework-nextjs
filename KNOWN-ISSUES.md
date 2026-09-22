@@ -226,47 +226,23 @@ on this field. If it is wanted, add it as an explicit prop on
 
 ---
 
-## 4. The shipped migrations are 9 dependency pins behind the workspace
+## 4. ~~The shipped migrations are 9 dependency pins behind the workspace~~
 
-**Status:** open · pre-existing · found 2026-09-21
+**Status: FIXED 2026-09-22** by migration `40-review-hardening`
+(`migrations/demo-v1/40.MIGRATIONS-22092026.md`), which pins all nine in a
+single `deps.bump` — `@igrp/framework-next` `0.1.0-beta.172`,
+`@igrp/framework-next-auth` `0.1.0-beta.146`, `@igrp/framework-next-types`
+`0.1.0-beta.149` (the pin migration `38-config-client-annotation` depends on),
+`@igrp/framework-next-ui` `0.1.0-beta.168`,
+`@igrp/igrp-framework-react-design-system` `0.1.0-beta.146`,
+`@igrp/platform-access-management-client-ts` `0.2.0-beta.16`, `zod` `4.6.5`,
+`react-hook-form` `7.88.0`, `@types/react-dom` `19.2.7`. The same migration
+carries a `deps.remove` for `cn`, which migration 37 had added and which the
+template dropped when the design system gained its server-safe `/cn` entry.
 
-**Affects:** `packages/framework/template-migrator`, `templates/demo-v1`
-
-**Severity:** medium — it blocks `pnpm --filter @igrp/template-migrator release`,
-whose `check:drift` gate fails.
-
-### Symptom
-
-```
-✗ 9 dependency(ies) bumped in the workspace but NOT captured in a migration:
-    @igrp/framework-next: template resolves to 0.1.0-beta.172, latest migration pins 0.1.0-beta.170
-    @igrp/framework-next-auth, @igrp/framework-next-types, @igrp/framework-next-ui,
-    @igrp/igrp-framework-react-design-system, @igrp/platform-access-management-client-ts,
-    zod, react-hook-form, @types/react-dom
-```
-
-File drift is zero; this is dependency drift only. (Re-verified 2026-09-21
-after migration `39-layout-data-source-rename` landed: still zero file drift,
-still the same 9 pins.)
-
-### Why it is not fixed yet
-
-A resync migration has to pin exact versions, and the ones for the current wave
-do not exist until `pnpm version:changesets` runs. Writing it earlier means
-guessing version numbers.
-
-### Fix at release time
-
-Author the resync migration **after** versioning, as migrations 30 and 31 were.
-It must also carry the `@igrp/framework-next-types` pin that migration
-`38-config-client-annotation` depends on — that migration's payload does not
-compile against an older `IGRPConfigClient`.
-
-### References
-
-- `packages/framework/template-migrator/scripts/check-drift.ts`
-- `packages/framework/template-migrator/migrations/demo-v1/31.MIGRATIONS-31082026.md` — the pattern
-- `packages/framework/template-migrator/migrations/demo-v1/38.MIGRATIONS-21092026.md` — the dependent migration
+Verified 2026-09-22: `check:drift` reports zero dependency drift across 13 pins,
+and no file, orphan, or lock drift either — the gate is green, so
+`pnpm --filter @igrp/template-migrator release` is no longer blocked by this.
 
 ---
 

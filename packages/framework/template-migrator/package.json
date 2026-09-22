@@ -32,11 +32,12 @@
     "build:js": "tsup",
     "build:types": "tsc -p tsconfig.build.json --emitDeclarationOnly",
     "build": "pnpm prebuild && pnpm build:js && pnpm build:types",
+    "typecheck": "tsc -p scripts/tsconfig.json --noEmit",
     "check:drift": "tsx scripts/check-drift.ts",
     "check:drift:update-baseline": "tsx scripts/check-drift.ts --update-baseline",
     "sync:template-lock": "tsx scripts/sync-template-lock.ts",
     "test": "vitest run",
-    "release": "pnpm check:drift && pnpm build && pnpm publish --registry=https://sonatype.nosi.cv/repository/igrp/ --tag latest --no-git-checks",
+    "release": "pnpm typecheck && pnpm test && pnpm check:drift && pnpm build && pnpm publish --registry=https://sonatype.nosi.cv/repository/igrp/ --tag latest --no-git-checks",
     "clean": "rimraf dist"
   },
   "dependencies": {

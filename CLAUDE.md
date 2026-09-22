@@ -80,7 +80,7 @@ Real file copies rather than symlinks, deliberately: this repo is developed on W
 
 There is **no root `test` script** — tests live in two packages and use **Vitest**:
 
-- `pnpm --filter @igrp/template-migrator test` — runs `vitest run` (migration logic). Its `release` script runs `check:drift` first (`tsx scripts/check-drift.ts`), which fails the publish if `templates/demo-v1` has drifted from the shipped migrations.
+- `pnpm --filter @igrp/template-migrator test` — runs `vitest run` (migration logic). Its `release` script gates the publish on `typecheck` → `test` → `check:drift` (`tsx scripts/check-drift.ts`), the last of which fails if `templates/demo-v1` has drifted from the shipped migrations. The same three run per-MR as the `check_template_drift` job in `.gitlab-ci.yml`.
 - `packages/design-system-storybook` — `test:vitest` (component) and `test-storybook` (Playwright snapshots; Storybook must be running).
 
 Run a **single test**: `pnpm --filter @igrp/template-migrator exec vitest run path/to/file.test.ts -t "test name"` (drop `run` for watch mode). The `-t` flag filters by test/describe name.

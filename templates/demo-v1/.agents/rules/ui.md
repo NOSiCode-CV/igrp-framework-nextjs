@@ -1,7 +1,7 @@
 # UI rules — IGRP design system
 
-> Canonical. Every AI tooling bridge in this template (`AGENTS.md`, `.cursor/`,
-> `.trae/`, `.github/`) points here. Edit this file, not the copies.
+> Canonical. Every AI tooling bridge in this template (`AGENTS.md`, and the
+> Claude Code skill pointer) points here. Edit this file, not the copies.
 
 All UI in this project comes from `@igrp/igrp-framework-react-design-system`.
 The full component reference — the three-layer picker and source-verified prop
@@ -12,8 +12,11 @@ before writing any form, table, chart, modal, or design-system import.
 
 - **All UI from `@igrp/igrp-framework-react-design-system`.** Never raw shadcn,
   MUI, Mantine, Chakra, Ant Design, or any other kit.
-- **`'use client'`** on every file that imports from the design system — the
-  package is wrapped in a client boundary.
+- **`'use client'`** on every file that renders design-system components.
+  They are client components: a server file cannot hand them event handlers,
+  render props or any other function, and that mistake only surfaces at
+  runtime. The directive rules it out. (The one exception is `cn` in server
+  code — see below.)
 - **Forms are always `IGRPForm` + Zod.** Never a raw `<form>` and never
   `react-hook-form` directly. `IGRPInput*` components auto-wire to the form via
   context using their `name` prop.
@@ -28,12 +31,16 @@ before writing any form, table, chart, modal, or design-system import.
   - Server file (no directive — a server component, `layout.tsx`, anything under
     `src/lib` reached from one) → `@igrp/igrp-framework-react-design-system/cn`
 
-  The root barrel is a `'use client'` boundary. Importing `cn` from it in server
-  code throws during `next build` — *Attempted to call cn() from the server but
-  cn is on the client* — and **neither `tsc` nor `biome` catches it**, so a
-  typecheck-and-lint CI gate reports green. Worse, the error is attributed to
-  whichever route pulled the root layout in first, not to the file at fault.
-  The `/cn` subpath is the same function with no directive.
+  `/cn` is the same function as a standalone module, so a server file that
+  imports it loads nothing else from the package. The root works on the server
+  too, but it re-exports the whole design system and leaves the rest to the
+  bundler's tree-shaking.
+
+  Design-system versions up to `0.1.0-beta.146` marked the root barrel
+  `'use client'`, and calling its `cn` from server code failed in `next build`
+  with *Attempted to call cn() from the server but cn is on the client* —
+  invisible to `tsc` and `biome`, and reported against an unrelated route. If
+  you see that error, you are on one of those versions: import from `/cn`.
 - **`size-N`** when width equals height (`size-10`, not `w-10 h-10`).
 - **`flex gap-N`** for spacing, not `space-x-N` / `space-y-N`.
 - **Import tokens only**, never the removed `/styles` bundle:

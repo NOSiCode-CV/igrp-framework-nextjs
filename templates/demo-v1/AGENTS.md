@@ -23,8 +23,7 @@ All agent rules live in one place — `.agents/`. Read these before touching cod
 @.agents/rules/permissions.md
 
 `.agents/README.md` explains the layout and how the tool-specific bridge files
-(`.cursor/`, `.trae/`, `.github/`) relate to it. Put rule content in
-`.agents/rules/`, never in a bridge.
+relate to it. Put rule content in `.agents/rules/`, never in a bridge.
 
 ## Project shape
 

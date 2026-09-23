@@ -44,6 +44,7 @@
     "clean:dist": "rimraf dist tsconfig.tsbuildinfo tsconfig.build.tsbuildinfo",
     "clean:packages": "rimraf node_modules",
     "check:dist": "node scripts/check-dist.mjs",
+    "generate:icon-names": "node scripts/generate-icon-names.mjs",
     "drift:shadcn": "node scripts/check-shadcn-drift.mjs",
     "drift:shadcn:update": "node scripts/check-shadcn-drift.mjs --update",
     "format": "prettier --write .",

@@ -1,7 +1,21 @@
-"use client"
-
-/* IMPORTANT: this file cannot use any wildcard exports because it is wrapped in a `use client` boundary */
-/* IMPORTANT: do _not_ alias any of the exports in this file, this will cause a mismatch between the unbundled exports */
+/*
+ * IMPORTANT: this barrel must NOT carry "use client".
+ *
+ * A "use client" barrel is ONE client module: every server component that
+ * imports anything from it registers the whole barrel as its client reference,
+ * so every page shipped every component (phone input, flags, charts, tables,
+ * date pickers…) — ~340 KB gzipped even on /login. It also silently broke
+ * server reads of plain values (`IGRP_META_THEME_COLORS.light` was a client
+ * reference stub, so `undefined`).
+ *
+ * The directive lives on each leaf that needs it instead (hooks, context,
+ * event handlers, browser APIs, or a third-party import that lacks its own
+ * directive). A leaf WITHOUT the directive is evaluated on the server when the
+ * barrel is imported there, so it must be server-safe: no module-scope
+ * `createContext`, no hooks, no handlers. `src/__tests__/client-boundaries.test.ts`
+ * enforces both halves.
+ */
+/* IMPORTANT: keep exports explicit (no wildcards) and do _not_ alias them — optimizePackageImports maps each name to its leaf module by name */
 
 /* custom components */
 
@@ -453,7 +467,10 @@ export {
 
 export { IGRPAreaChart, type IGRPAreaChartProps } from "./components/horizon/charts/area.js"
 
-export { IGRPHorizontalBarChart, type IGRPHorizontalBarChartProps } from "./components/horizon/charts/bars/horizontal.js"
+export {
+  IGRPHorizontalBarChart,
+  type IGRPHorizontalBarChartProps,
+} from "./components/horizon/charts/bars/horizontal.js"
 
 export { IGRPVerticalBarChart, type IGRPVerticalBarChartProps } from "./components/horizon/charts/bars/vertical.js"
 
@@ -626,21 +643,23 @@ export {
 
 export { IGRPFieldDescription, type IGRPFieldDescriptionProps } from "./components/horizon/field-description.js"
 
-export { type IGRPFormContextValue, useIGRPFormContext, IGRPFormContext } from "./components/horizon/form/form-context.js"
+export {
+  type IGRPFormContextValue,
+  useIGRPFormContext,
+  IGRPFormContext,
+} from "./components/horizon/form/form-context.js"
 export { IGRPFormField, type IGRPFormFieldProps } from "./components/horizon/form/form-field.js"
 export { IGRPForm, type IGRPFormProps, type IGRPFormHandle } from "./components/horizon/form/index.js"
 export { convertValuesToFormData } from "./components/horizon/form/lib/utils.js"
 export { IGRPFormList, type IGRPFormListProps } from "./components/horizon/form/form-list.js"
-export { IGRPRepetitiveComponent, type IGRPRepetitiveComponentProps } from "./components/horizon/repetitive-component.js"
-
 export {
-  IGRPIcon,
-  IGRPIconObject,
-  type IGRPIconProps,
-  type IGRPIconName,
-  type LucideProps,
-  IGRPIconList,
-} from "./components/horizon/icon/index.js"
+  IGRPRepetitiveComponent,
+  type IGRPRepetitiveComponentProps,
+} from "./components/horizon/repetitive-component.js"
+
+export { IGRPIcon, type IGRPIconProps, type IGRPIconName, type LucideProps } from "./components/horizon/icon/index.js"
+export { IGRPIconObject } from "./components/horizon/icon/catalog.js"
+export { IGRPIconList } from "./components/horizon/icon/icon-list.js"
 
 export { IGRPImage, type IGRPImageProps, type IGRPRatioType } from "./components/horizon/image.js"
 
@@ -855,7 +874,8 @@ export type {
 
 // hooks
 
-export { IGRP_META_THEME_COLORS, useIGRPMetaColor } from "./hooks/use-meta-color.js"
+export { useIGRPMetaColor } from "./hooks/use-meta-color.js"
+export { IGRP_META_THEME_COLORS } from "./lib/meta-theme-colors.js"
 export { useIsMobile } from "./hooks/use-mobile.js"
 
 // libs

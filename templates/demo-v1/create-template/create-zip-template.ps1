@@ -165,9 +165,9 @@ try {
 
   # === INJECT IGRP DESIGN-SYSTEM SKILL ===
   # Bundle the design-system skill so consumers of the template have AI context
-  # for every supported tool (Claude Code via .claude/, Cursor / Codex / Trae /
-  # Copilot via the static bridge files committed in the template, all reading
-  # from the canonical at .agents/skills/igrp-design-system/).
+  # for every supported tool (Claude Code via .claude/, Codex and other generic
+  # agents via the committed AGENTS.md bridge, all reading from the canonical
+  # at .agents/skills/igrp-design-system/).
   # NOTE: only the skills/ subtree is injected. .agents/rules/ and
   # .agents/README.md are normal tracked files in the template and ship as-is;
   # the cleanup in the finally block must not touch them.
@@ -327,7 +327,7 @@ Deep references are at ``.agents/skills/igrp-design-system/references/``. Load o
 } finally {
   # Remove the injected design-system skill content so the monorepo working
   # tree returns to its pre-script state. We touch only what we created;
-  # static bridges (.cursor/, AGENTS.md, .trae/, .github/) and the tracked
+  # the static AGENTS.md bridge and the tracked
   # .agents/rules/ + .agents/README.md stay put — the parent-dir removals below
   # only fire when the directory is left empty.
   if ($skillInjected) {

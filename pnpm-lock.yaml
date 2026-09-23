@@ -357,6 +357,9 @@ importers:
       '@storybook/test-runner':
         specifier: 0.24.5
         version: 0.24.5(@types/node@24.13.4)(debug@4.4.3(supports-color@8.1.1))(storybook@10.6.0(patch_hash=359f180a8ae12d5d8dcf3921b11f43ae7d8566baf6967d15b156da90f2e541c8)(@types/react@19.2.18)(prettier@3.9.6)(react@19.2.8))(supports-color@8.1.1)
+      '@tailwindcss/postcss':
+        specifier: 4.3.3
+        version: 4.3.3
       '@types/jest':
         specifier: 30.0.0
         version: 30.0.0

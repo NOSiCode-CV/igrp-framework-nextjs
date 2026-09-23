@@ -1,7 +1,7 @@
 # Permissions — there is NO default-deny
 
-> Canonical. Every AI tooling bridge in this template (`AGENTS.md`, `.cursor/`,
-> `.trae/`, `.github/`) points here. Edit this file, not the copies.
+> Canonical. Every AI tooling bridge in this template (`AGENTS.md`, and the
+> Claude Code skill pointer) points here. Edit this file, not the copies.
 
 A page with no permission check is **fully open and deep-linkable**. Hiding a
 menu item is navigation UX, not enforcement.

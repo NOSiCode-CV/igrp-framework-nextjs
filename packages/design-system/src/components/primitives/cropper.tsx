@@ -1,5 +1,7 @@
 /* shadcn: 2026-09-15 */
 
+"use client"
+
 import { Cropper as CropperPrimitive } from "@origin-space/image-cropper"
 import { cn } from "cn"
 

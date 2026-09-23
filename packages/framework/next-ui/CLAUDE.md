@@ -6,11 +6,11 @@ You are working inside `packages/framework/next-ui/` — `@igrp/framework-next-u
 
 - **React 19 client runtime** — `"use client"` semantics, Context + provider composition, refs-as-props, `useSyncExternalStore`, `useTransition`/`useDeferredValue`, portal/focus patterns, hydration pitfalls (mismatch causes, surgical `suppressHydrationWarning`).
 - **React Compiler** — memoization rules, prop stability requirements for memoized children, provider interaction, `"use no memo"` escape, `build:without_reactcompiler` fallback.
-- **Next.js 15 client boundary** — `"use client"` barrel hygiene, keeping server-only imports out, `next/dynamic` with `ssr: false`, navigation via `useRouter`/`usePathname`/`useSearchParams`, `Link` prefetching.
+- **Next.js 15 client boundary** — leaf-level `"use client"` (no directive on the barrel), keeping server-only imports out, `next/dynamic` with `ssr: false`, navigation via `useRouter`/`usePathname`/`useSearchParams`, `Link` prefetching.
 - **next-themes** — `ThemeProvider` config, `attribute="class"` + `.dark` cascade, `suppressHydrationWarning` on `<html>`, FOUC avoidance, `useTheme` SSR safety.
 - **Radix UI** — menus, sidebars, command palettes, dialogs, popovers; focus management (`FocusScope`), controlled/uncontrolled, portal rendering.
 - **Tailwind CSS v4** — token-driven theming, `.dark` class cascade, `@layer` ordering. Tailwind is compiled **once in the app**, not in this package.
-- **Client-safe library packaging** — top-of-file `"use client"` on barrels, avoiding accidental Node imports, `exports` conditions, predictable bundle size.
+- **Client-safe library packaging** — `"use client"` on each leaf module, **never on `src/index.ts`** (a directive-carrying barrel is one client module, so every page shipped all of next-ui; `src/__tests__/client-boundaries.test.ts` guards it), avoiding accidental Node imports, `exports` conditions, predictable bundle size.
 
 ## What lives here
 

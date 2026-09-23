@@ -1,8 +1,13 @@
 /* eslint-disable perfectionist/sort-exports */
-'use client';
 
-// IMPORTANT: this file cannot use any wildcard exports because it is wrapped in a `use client` boundary
-// IMPORTANT: do not alias any of the exports in this file, this will cause a mismatch between the unbundled exports
+// IMPORTANT: this barrel must NOT carry 'use client'. With it, the whole barrel is
+// ONE client module: any server component importing anything from this package
+// (framework-next's layouts, a template page) registered all of next-ui as its
+// client reference, so every page of every app shipped every template component.
+// The directive lives on each leaf module instead; a leaf without it is evaluated
+// on the server when this barrel is imported there, so it must be server-safe.
+// `src/__tests__/client-boundaries.test.ts` enforces both.
+// IMPORTANT: keep exports explicit (no wildcards) and do not alias them.
 
 // Auth components
 

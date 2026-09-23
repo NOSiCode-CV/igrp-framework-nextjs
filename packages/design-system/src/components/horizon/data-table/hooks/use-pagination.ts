@@ -1,3 +1,5 @@
+"use client"
+
 /**
  * Props for the usePagination hook.
  * @see usePagination

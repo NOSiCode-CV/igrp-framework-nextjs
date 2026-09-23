@@ -1,3 +1,5 @@
+"use client"
+
 // The context is module-private API consumed by sibling data-table components;
 // exporting it here avoids a one-symbol file. Fast refresh's "components only" rule doesn't apply.
 /* eslint-disable react-refresh/only-export-components */

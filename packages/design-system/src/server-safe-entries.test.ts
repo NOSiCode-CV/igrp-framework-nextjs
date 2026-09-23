@@ -52,18 +52,27 @@ describe.skipIf(!existsSync(distRoot))("server-safe entry points", () => {
     }
   })
 
-  it("does not reach the client barrel from a server-safe entry", () => {
+  it("does not reach the root barrel from a server-safe entry", () => {
     for (const entry of SERVER_SAFE_ENTRIES) {
       const code = readFileSync(path.join(distRoot, entry), "utf8")
-      // A relative import of the barrel re-introduces the boundary transitively.
-      expect(code, `${entry} imports the client barrel`).not.toMatch(/from\s+["']\.\/index\.js["']/)
+      // Importing the barrel would evaluate every directive-free module in the
+      // package on the server — the opposite of what a narrow entry is for.
+      expect(code, `${entry} imports the root barrel`).not.toMatch(/from\s+["']\.\/index\.js["']/)
     }
   })
 
-  it("proves the check is meaningful: the root barrel IS a client boundary", () => {
-    // If this ever fails, the root stopped being a client boundary and the
-    // assertions above are no longer distinguishing anything.
+  it("proves the check is meaningful: a client leaf IS detected as a client boundary", () => {
+    // If this ever fails, CLIENT_DIRECTIVE no longer matches what the build emits,
+    // and the "no directive" assertions above would pass vacuously.
+    const clientLeaf = readFileSync(path.join(distRoot, "components/horizon/icon/index.js"), "utf8")
+    expect(CLIENT_DIRECTIVE.test(clientLeaf)).toBe(true)
+  })
+
+  it('emits the root barrel WITHOUT "use client" (the boundary lives on the leaves)', () => {
+    // A directive-carrying barrel is one client module: every server component
+    // importing anything from the package shipped the whole package. The source
+    // twin of this check is src/__tests__/client-boundaries.test.ts.
     const barrel = readFileSync(path.join(distRoot, "index.js"), "utf8")
-    expect(CLIENT_DIRECTIVE.test(barrel)).toBe(true)
+    expect(CLIENT_DIRECTIVE.test(barrel)).toBe(false)
   })
 })

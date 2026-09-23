@@ -3,11 +3,7 @@
 import { useTheme } from "next-themes"
 import { useCallback, useMemo } from "react"
 
-/** Theme colors for meta theme-color (browser chrome). */
-export const IGRP_META_THEME_COLORS = {
-  light: "#ffffff",
-  dark: "#09090b",
-}
+import { IGRP_META_THEME_COLORS } from "../lib/meta-theme-colors.js"
 
 /**
  * Returns the current meta theme-color and a setter to update it.

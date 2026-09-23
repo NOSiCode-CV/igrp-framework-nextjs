@@ -1,9 +1,10 @@
-import { useState, useMemo, useCallback, useRef, useEffect } from 'react';
+import { createElement, useState, useMemo, useCallback, useRef, useEffect } from 'react';
 import type { Meta, StoryObj } from '@storybook/nextjs-vite';
 import {
   IGRPIcon,
   type IGRPIconProps,
   IGRPIconObject,
+  IGRPIconList,
   AlertDialog,
   AlertDialogContent,
   AlertDialogHeader,
@@ -155,10 +156,14 @@ function IconGalleryComponent() {
                           className='w-5 h-5 animate-spin'
                         />
                       ) : (
-                        <IGRPIcon
-                          iconName={iconName}
-                          size='24'
-                        />
+                        // A gallery shows EVERY icon, so it renders from the full
+                        // component map (one static bundle). IGRPIcon lazy-loads
+                        // one chunk per icon, which is right for a page's handful
+                        // of runtime-named icons and wrong for all 1,700 at once.
+                        createElement(IGRPIconList[iconName as keyof typeof IGRPIconList], {
+                          size: 24,
+                          'aria-hidden': true,
+                        })
                       )}
                       <span className='sr-only'>{iconName}</span>
                     </Button>

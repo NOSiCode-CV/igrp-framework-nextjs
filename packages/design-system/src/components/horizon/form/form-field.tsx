@@ -1,3 +1,5 @@
+"use client"
+
 import type { Control, ControllerFieldState, ControllerRenderProps, FieldValues } from "react-hook-form"
 
 import { FormControl, FormDescription, FormField, FormItem, FormLabel, FormMessage } from "../../primitives/form.js"

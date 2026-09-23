@@ -100,11 +100,9 @@ The rules an agent must follow while editing this template are canonical in
 
 @.agents/rules/permissions.md
 
-`AGENTS.md`, `.cursor/rules/`, `.trae/rules/` and `.github/copilot-instructions.md`
-are **bridges** — they exist only because each tool auto-discovers its own path.
-Put rule content in `.agents/rules/`, never in a bridge, and regenerate the
-Copilot file after any edit (`pnpm agents:sync`; `pnpm agents:check` verifies).
-See `.agents/README.md`.
+`AGENTS.md` is a **bridge** — it exists only because Codex and other generic
+agents auto-discover that path. Put rule content in `.agents/rules/`, never in
+a bridge. See `.agents/README.md`.
 
 ## Shared rules
 

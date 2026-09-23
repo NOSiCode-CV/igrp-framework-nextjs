@@ -1,3 +1,4 @@
+"use client"
 "use no memo"
 
 import { type Table } from "@tanstack/react-table"

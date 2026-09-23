@@ -253,6 +253,18 @@
       "appliedAt": "2026-09-23T00:00:00.000Z",
       "cliVersion": "0.1.0-beta.141",
       "manifestHash": "26361872e1cf3a5c"
+    },
+    {
+      "id": "43-public-health-route",
+      "appliedAt": "2026-09-23T00:00:00.000Z",
+      "cliVersion": "0.1.0-beta.141",
+      "manifestHash": "090f9cd657463d86"
+    },
+    {
+      "id": "44-edge-safe-auth-instance",
+      "appliedAt": "2026-09-23T00:00:00.000Z",
+      "cliVersion": "0.1.0-beta.141",
+      "manifestHash": "41148901ea74caa7"
     }
   ]
 }

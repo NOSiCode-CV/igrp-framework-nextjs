@@ -7,9 +7,11 @@ import { planAccessManagementSync } from '../lib/sync-plan';
 export type IGRPRootLayoutArgs = {
   readonly children: React.ReactNode;
   readonly config: IGRPConfigArgs;
+  /** BCP-47 language of the document (`<html lang>`). Defaults to `"pt"`. */
+  readonly lang?: string;
 };
 
-export async function IGRPRootLayout({ children, config }: IGRPRootLayoutArgs) {
+export async function IGRPRootLayout({ children, config, lang = 'pt' }: IGRPRootLayoutArgs) {
   const {
     font,
     layout,
@@ -49,7 +51,7 @@ export async function IGRPRootLayout({ children, config }: IGRPRootLayoutArgs) {
   }
 
   return (
-    <html lang="pt" suppressHydrationWarning className={font}>
+    <html lang={lang} suppressHydrationWarning className={font}>
       <body
         className={`bg-background overscroll-none h-screen font-sans antialiased
           ${activeThemeValue ? ` theme-${activeThemeValue}` : ''}

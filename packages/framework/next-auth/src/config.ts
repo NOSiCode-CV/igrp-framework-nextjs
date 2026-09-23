@@ -1274,11 +1274,25 @@ export function withIGRPAuth(options: IGRPAuthOptions = {}): IGRPAuthInstance {
     return token as JWT | null;
   }
 
+  // One `getServerSession` per request. A layout tree reads the session from
+  // several places that render in parallel (the root layout for the client
+  // SessionProvider, the authenticated layout via `getSession`), and each read
+  // decrypts the cookie and runs the `jwt` + `session` callbacks again.
+  // React.cache scopes the memo to the current RSC render; outside one (Route
+  // Handlers, Server Actions) it is a passthrough, so nothing is ever shared
+  // across requests. `react` is loaded lazily next to `next-auth` so the
+  // Edge-reachable static graph of this module is unchanged. The init promise
+  // is memoized so concurrent first calls share one wrapper.
+  let readSessionOnce: Promise<() => Promise<Session | null>> | undefined;
+
   async function serverSession(): Promise<Session | null> {
     if (configError) throw configError;
     if (authIsDisabled) return null;
-    const { getServerSession } = await import('next-auth');
-    return (await getServerSession(authOptions)) as Session | null;
+    readSessionOnce ??= Promise.all([import('next-auth'), import('react')]).then(
+      ([{ getServerSession }, { cache }]) =>
+        cache(async () => (await getServerSession(authOptions)) as Session | null),
+    );
+    return (await readSessionOnce)();
   }
 
   async function getSession(): Promise<Session | null> {

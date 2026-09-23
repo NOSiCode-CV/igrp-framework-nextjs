@@ -159,6 +159,23 @@ describe('withIGRPAuth — serverSession', () => {
     const instance = withIGRPAuth({ env: { AUTH_PROVIDER: 'igrp-auth' } });
     await expect(instance.serverSession()).rejects.toThrow();
   });
+
+  it('re-reads the session on every call outside an RSC render (the React.cache memo never outlives a request)', async () => {
+    const getServerSession = vi
+      .fn()
+      .mockResolvedValueOnce({ accessToken: 'user-a' })
+      .mockResolvedValueOnce({ accessToken: 'user-b' });
+    vi.doMock('next-auth', () => ({ getServerSession }));
+    const withIGRPAuth = await getFactory();
+    const instance = withIGRPAuth({ env: VALID_ENV });
+
+    // No React render scope here — as in a Route Handler or Server Action — so
+    // cache() is a passthrough. If it memoized, the second caller would be
+    // handed the first caller's session.
+    await expect(instance.serverSession()).resolves.toMatchObject({ accessToken: 'user-a' });
+    await expect(instance.serverSession()).resolves.toMatchObject({ accessToken: 'user-b' });
+    expect(getServerSession).toHaveBeenCalledTimes(2);
+  });
 });
 
 describe('withIGRPAuth — getSession', () => {

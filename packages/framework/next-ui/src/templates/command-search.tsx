@@ -4,6 +4,7 @@ import { Fragment, useCallback, useEffect, useMemo, useState } from 'react';
 import {
   IGRPIcon,
   Button,
+  Command,
   CommandDialog,
   CommandEmpty,
   CommandGroup,
@@ -132,26 +133,32 @@ function IGRPTemplateCommandSearch({
         title={labels.dialogTitle}
         description={labels.dialogDescription}
       >
-        <CommandInput placeholder={labels.placeholder} />
-        <CommandList>
-          <CommandEmpty>{labels.empty}</CommandEmpty>
-          {Array.from(grouped.entries()).map(([group, items], groupIndex) => (
-            <Fragment key={group ?? 'ungrouped'}>
-              {groupIndex > 0 && <CommandSeparator />}
-              <CommandGroup heading={group}>
-                {items.map((item) => (
-                  <CommandItem
-                    key={item.id ?? item.label}
-                    onSelect={() => runCommand(item.onSelect)}
-                  >
-                    {item.icon && <IGRPIcon iconName={item.icon} className="mr-2" />}
-                    <span>{item.label}</span>
-                  </CommandItem>
-                ))}
-              </CommandGroup>
-            </Fragment>
-          ))}
-        </CommandList>
+        {/* The design system's `CommandDialog` (current shadcn shape) renders its
+            children straight into `DialogContent` — it no longer supplies the cmdk
+            root. Without this `Command`, cmdk's store context is undefined and
+            `CommandInput` throws on mount, taking the whole header down. */}
+        <Command>
+          <CommandInput placeholder={labels.placeholder} />
+          <CommandList>
+            <CommandEmpty>{labels.empty}</CommandEmpty>
+            {Array.from(grouped.entries()).map(([group, items], groupIndex) => (
+              <Fragment key={group ?? 'ungrouped'}>
+                {groupIndex > 0 && <CommandSeparator />}
+                <CommandGroup heading={group}>
+                  {items.map((item) => (
+                    <CommandItem
+                      key={item.id ?? item.label}
+                      onSelect={() => runCommand(item.onSelect)}
+                    >
+                      {item.icon && <IGRPIcon iconName={item.icon} className="mr-2" />}
+                      <span>{item.label}</span>
+                    </CommandItem>
+                  ))}
+                </CommandGroup>
+              </Fragment>
+            ))}
+          </CommandList>
+        </Command>
       </CommandDialog>
     </>
   );

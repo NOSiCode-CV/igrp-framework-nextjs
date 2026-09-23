@@ -84,15 +84,18 @@ export const InDialog: Story = {
             <IGRPCommandShortcut>⌘K</IGRPCommandShortcut>
           </IGRPButton>
           <IGRPCommandDialog open={open} onOpenChange={setOpen}>
-            <IGRPCommandInput placeholder='Type a command or search…' />
-            <IGRPCommandList>
-              <IGRPCommandEmpty>No results found.</IGRPCommandEmpty>
-              <IGRPCommandGroup heading='Navigation'>
-                <IGRPCommandItem onSelect={() => setOpen(false)}>Dashboard</IGRPCommandItem>
-                <IGRPCommandItem onSelect={() => setOpen(false)}>Reports</IGRPCommandItem>
-                <IGRPCommandItem onSelect={() => setOpen(false)}>Users</IGRPCommandItem>
-              </IGRPCommandGroup>
-            </IGRPCommandList>
+            {/* CommandDialog does not supply the cmdk root — wrap in IGRPCommand. */}
+            <IGRPCommand>
+              <IGRPCommandInput placeholder='Type a command or search…' />
+              <IGRPCommandList>
+                <IGRPCommandEmpty>No results found.</IGRPCommandEmpty>
+                <IGRPCommandGroup heading='Navigation'>
+                  <IGRPCommandItem onSelect={() => setOpen(false)}>Dashboard</IGRPCommandItem>
+                  <IGRPCommandItem onSelect={() => setOpen(false)}>Reports</IGRPCommandItem>
+                  <IGRPCommandItem onSelect={() => setOpen(false)}>Users</IGRPCommandItem>
+                </IGRPCommandGroup>
+              </IGRPCommandList>
+            </IGRPCommand>
           </IGRPCommandDialog>
         </div>
       );

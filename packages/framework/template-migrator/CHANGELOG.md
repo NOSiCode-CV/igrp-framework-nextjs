@@ -5,6 +5,7 @@
 ### Minor Changes
 
 - Start the `0.2.0-beta` pre-release line (from `0.1.0-beta.*`). No code changes relative to the last `0.1.0-beta` build on this branch.
+- Migration `47-framework-0-2-0-beta`: bumps the template's `@igrp/*` framework pins to `0.2.0-beta.0` and `@igrp/platform-access-management-client-ts` to `0.2.0-beta.17`.
 
 ## 0.1.0-beta.141
 

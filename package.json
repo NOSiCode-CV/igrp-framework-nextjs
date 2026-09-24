@@ -46,9 +46,9 @@
     "template-migrations": "pnpm --filter @igrp/template-migrator build"
   },
   "devDependencies": {
-    "@changesets/cli": "3.0.2",
+    "@changesets/cli": "3.0.3",
     "dotenv-cli": "11.0.0",
-    "eslint": "10.10.0",
+    "eslint": "10.11.0",
     "typescript": "~6.0.3"
   },
   "engines": {

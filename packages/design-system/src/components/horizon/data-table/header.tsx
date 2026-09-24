@@ -91,7 +91,7 @@ function IGRPDataTableHeaderSortDropdown<T>({
             <Button
               variant="ghost"
               size="sm"
-              className={cn("data-[state=open]:bg-accent data-[state=open]:border-accent")}
+              className={cn("data-[state=open]:border-accent data-[state=open]:bg-accent")}
             >
               <span>{title}</span>
               {isSorted === "desc" ? (
@@ -105,11 +105,11 @@ function IGRPDataTableHeaderSortDropdown<T>({
           </DropdownMenuTrigger>
           <DropdownMenuContent align="start">
             <DropdownMenuItem onClick={handleSortAsc} aria-label={i18n.dataTable.sortAscending}>
-              <ArrowUp className={cn("text-muted-foreground/70 size-3.5")} />
+              <ArrowUp className={cn("size-3.5 text-muted-foreground/70")} />
               {i18n.dataTable.sortAscendingShort}
             </DropdownMenuItem>
             <DropdownMenuItem onClick={handleSortDesc} aria-label={i18n.dataTable.sortDescending}>
-              <ArrowDown className={cn("text-muted-foreground/70 size-3.5")} />
+              <ArrowDown className={cn("size-3.5 text-muted-foreground/70")} />
               {i18n.dataTable.sortDescendingShort}
             </DropdownMenuItem>
             <DropdownMenuSeparator />

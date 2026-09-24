@@ -12,7 +12,7 @@ halves of that claim: there is no HTML-rendering component, and — to your cred
 — no `dangerouslySetInnerHTML` anywhere in the package either. So the DS neither
 solves this nor currently has the hole; it simply leaves every app to solve it,
 and the default solution is the unsafe one. The obvious alternative,
-`dangerouslySetInnerHTML`, is an XSS sink, and in SIGOVP it is a *live* one:
+`dangerouslySetInnerHTML`, is an XSS sink, and in SIGOVP it is a _live_ one:
 `document-templates/preview` does **not** sanitise — it echoes its input
 verbatim, `<script>`, `<iframe>` and `onerror` included. Whatever renders that
 response is the only thing between it and the DOM.
@@ -22,7 +22,7 @@ therefore acts as an allow-list: elements with no matching node or mark rule are
 dropped, and attributes the schema does not declare (`onerror`, `onclick`) never
 reach the DOM. This is why §9 and §10 must share one schema and be lifted
 together — a viewer narrower than the editor silently eats saved content, and a
-viewer *wider* than the editor is a hole.
+viewer _wider_ than the editor is a hole.
 
 Sixty lines including the empty-state guard. Low cost, high value.
 
@@ -41,10 +41,10 @@ Sixty lines including the empty-state guard. Low cost, high value.
 
 ## §10.2 Current props
 
-| Prop | Type | Notes |
-|---|---|---|
-| `html` | `string` | Stored template body, from the API. |
-| `className` | `string?` | Merged after the prose/table classes. |
+| Prop         | Type                      | Notes                                           |
+| ------------ | ------------------------- | ----------------------------------------------- |
+| `html`       | `string`                  | Stored template body, from the API.             |
+| `className`  | `string?`                 | Merged after the prose/table classes.           |
 | `emptyLabel` | `string?` (default `"—"`) | Rendered as a plain `<p>` when `html` is blank. |
 
 ---
@@ -56,7 +56,7 @@ Sixty lines including the empty-state guard. Low cost, high value.
    instance exists. The resumo screens render several of these per page, so
    this is not a micro-optimisation.
 2. **Re-parse, don't inject.** `useEditor({ extensions, content: html, editable:
-   false, immediatelyRender: false })`. `immediatelyRender: false` is required
+false, immediatelyRender: false })`. `immediatelyRender: false` is required
    under Next.js app router or TipTap warns on every mount.
 3. **Updates re-set content** with `emitUpdate: false`, and only when the HTML
    actually differs from `editor.getHTML()`.
@@ -69,8 +69,8 @@ Sixty lines including the empty-state guard. Low cost, high value.
 
 ## §10.4 Gaps to close while lifting
 
-1. **It is not a sanitiser, and must not be sold as one.** It is a *renderer
-   with an allow-list*. Two consequences worth stating in the DS docs:
+1. **It is not a sanitiser, and must not be sold as one.** It is a _renderer
+   with an allow-list_. Two consequences worth stating in the DS docs:
    - it protects the **DOM**, not the database — the unsanitised HTML is still
      stored and still reaches any other consumer (a PDF renderer, a mail
      client, another app);
@@ -90,14 +90,14 @@ Sixty lines including the empty-state guard. Low cost, high value.
 
 ```ts
 export interface IGRPRichTextViewProps {
-  html: string;
+  html: string
   /** Must be the schema the matching editor writes with. Defaults to the DS
    *  default schema; pass the same value you passed the editor when you
    *  customised it. */
-  preset?: "minimal" | "email" | "full";
-  emptyLabel?: React.ReactNode;   // default "—"
-  maxHeight?: number | string;    // new, see §10.4.2
-  className?: string;
+  preset?: "minimal" | "email" | "full"
+  emptyLabel?: React.ReactNode // default "—"
+  maxHeight?: number | string // new, see §10.4.2
+  className?: string
 }
 ```
 
@@ -136,16 +136,16 @@ same function the editor uses, and that sharing is the whole point (see §10).
 ### `src/app/(myapp)/_components/rich-text-view.tsx`
 
 ```tsx
-"use client";
+"use client"
 
-import { cn } from "@igrp/igrp-framework-react-design-system";
+import { cn } from "@igrp/igrp-framework-react-design-system"
 import {
   createRichTextExtensions,
   RICH_TEXT_PROSE_CLASS,
   RICH_TEXT_TABLE_CLASS,
-} from "@myapp/_lib/rich-text-extensions";
-import { EditorContent, useEditor } from "@tiptap/react";
-import { useEffect, useMemo } from "react";
+} from "@myapp/_lib/rich-text-extensions"
+import { EditorContent, useEditor } from "@tiptap/react"
+import { useEffect, useMemo } from "react"
 
 /**
  * Read-only renderer for stored rich text (e-mail bodies, preview output).
@@ -161,29 +161,21 @@ export function RichTextView({
   className,
   emptyLabel = "—",
 }: {
-  html: string;
-  className?: string;
-  emptyLabel?: string;
+  html: string
+  className?: string
+  emptyLabel?: string
 }) {
   // Split so the empty case never pays for a ProseMirror instance — these
   // render several to a page on the resumo screens.
   if (!html?.trim()) {
-    return (
-      <p className={cn("text-sm text-foreground", className)}>{emptyLabel}</p>
-    );
+    return <p className={cn("text-sm text-foreground", className)}>{emptyLabel}</p>
   }
 
-  return <RichTextDocument html={html} className={className} />;
+  return <RichTextDocument html={html} className={className} />
 }
 
-function RichTextDocument({
-  html,
-  className,
-}: {
-  html: string;
-  className?: string;
-}) {
-  const extensions = useMemo(() => createRichTextExtensions(), []);
+function RichTextDocument({ html, className }: { html: string; className?: string }) {
+  const extensions = useMemo(() => createRichTextExtensions(), [])
   const editor = useEditor({
     extensions,
     content: html,
@@ -191,26 +183,21 @@ function RichTextDocument({
     // Client-only by design; without this TipTap logs a Next.js warning on
     // every mount.
     immediatelyRender: false,
-  });
+  })
 
   useEffect(() => {
-    if (!editor) return;
-    const next = html ?? "";
+    if (!editor) return
+    const next = html ?? ""
     if (next !== editor.getHTML()) {
-      editor.commands.setContent(next, { emitUpdate: false });
+      editor.commands.setContent(next, { emitUpdate: false })
     }
-  }, [html, editor]);
+  }, [html, editor])
 
   return (
     <EditorContent
       editor={editor}
-      className={cn(
-        RICH_TEXT_PROSE_CLASS,
-        RICH_TEXT_TABLE_CLASS,
-        "text-foreground",
-        className,
-      )}
+      className={cn(RICH_TEXT_PROSE_CLASS, RICH_TEXT_TABLE_CLASS, "text-foreground", className)}
     />
-  );
+  )
 }
 ```

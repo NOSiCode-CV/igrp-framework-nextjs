@@ -141,7 +141,7 @@ function IGRPDataTableDropdownMenuLink({
   variant = "default",
 }: IGRPDataTableDropdownMenuLinkProps) {
   const iconClass = iconPlacement === "end" ? "flex-row-reverse" : ""
-  const customClss = cn("flex items-center gap-2 w-full", iconClass, classNameItem)
+  const customClss = cn("flex w-full items-center gap-2", iconClass, classNameItem)
 
   const RenderContent = (
     <>
@@ -198,7 +198,7 @@ function IGRPDataTableDropdownMenuCustom({
 
   return (
     <DropdownMenuItem
-      className={cn("flex items-center gap-2 w-full", iconClass, classNameItem)}
+      className={cn("flex w-full items-center gap-2", iconClass, classNameItem)}
       onSelect={handlerAction}
       variant={variant}
     >
@@ -231,7 +231,7 @@ function IGRPDataTableDropdownMenuItem({
   return (
     <DropdownMenuItem
       onClick={onClick}
-      className={cn("flex items-center w-full gap-2", iconClass, classNameItem)}
+      className={cn("flex w-full items-center gap-2", iconClass, classNameItem)}
       onSelect={(e) => {
         e.preventDefault()
       }}

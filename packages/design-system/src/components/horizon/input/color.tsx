@@ -178,7 +178,7 @@ function ColorField({
             "relative size-9 shrink-0 rounded-md border border-input shadow-xs",
             "has-[:focus-visible]:border-ring has-[:focus-visible]:ring-2 has-[:focus-visible]:ring-ring/50",
             invalid && "border-destructive",
-            disabled && "opacity-50",
+            disabled && "opacity-50"
           )}
         >
           <input
@@ -193,7 +193,7 @@ function ColorField({
             aria-invalid={invalid || undefined}
             aria-describedby={describedByIds}
           />
-          <div className="absolute inset-0 rounded-md pointer-events-none" style={{ backgroundColor: hexValue }} />
+          <div className="pointer-events-none absolute inset-0 rounded-md" style={{ backgroundColor: hexValue }} />
         </div>
 
         {showFormatValue && (
@@ -342,7 +342,7 @@ function IGRPInputColor({
       />
 
       {helperText && !error && (
-        <p id={`${fieldName}-helper`} className="text-muted-foreground mt-2 text-xs" aria-live="polite">
+        <p id={`${fieldName}-helper`} className="mt-2 text-xs text-muted-foreground" aria-live="polite">
           {helperText}
         </p>
       )}

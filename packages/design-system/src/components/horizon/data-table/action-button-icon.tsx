@@ -262,7 +262,7 @@ function IGRPDataTableButtonModal({
         className={cn(
           "flex flex-col gap-0 p-0 sm:max-h-[min(640px,90vh)] [&>button:last-child]:top-3.5",
           igrpModalDialogContentVariants({ size }),
-          className,
+          className
         )}
       >
         <DialogHeader className={cn("contents space-y-0 text-left")}>
@@ -281,7 +281,7 @@ function IGRPDataTableButtonModal({
             {render ? render(close) : children}
 
             {(showCancel || showConfirm) && (
-              <DialogFooter className={cn("px-6 pb-6 sm:justify-start mt-4")}>
+              <DialogFooter className={cn("mt-4 px-6 pb-6 sm:justify-start")}>
                 <DialogClose
                   className={cn(buttonVariants({ variant: variantCancel }), "cursor-pointer", classNameCancel)}
                 >

@@ -30,7 +30,7 @@ function IGRPLoadingSpinner({ parentClassName, className, id, label = "Loadingâ€
 
   return (
     <div
-      className={cn("flex justify-center items-center h-64", parentClassName)}
+      className={cn("flex h-64 items-center justify-center", parentClassName)}
       id={ref}
       role="status"
       aria-live="polite"

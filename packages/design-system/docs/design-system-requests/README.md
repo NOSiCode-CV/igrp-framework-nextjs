@@ -20,16 +20,16 @@ file in this folder is self-contained.** Each one carries:
   port it directly rather than re-deriving it.
 
 File paths such as `src/app/(myapp)/_components/lookup-field.tsx` appear only as
-*provenance* for the code quoted below them. They are not links you need to
+_provenance_ for the code quoted below them. They are not links you need to
 follow, and nothing in these documents depends on reading our repository.
 
 Source comments are a mix of English and Portuguese (the app is Portuguese
 language, for Cabo Verde). We left them as written rather than translating —
-several of them record *why* a line exists, which is the part worth keeping.
+several of them record _why_ a line exists, which is the part worth keeping.
 
 ## What the application is
 
-**SIGOVP** — *SIMple | Gestão de Ocupação de Via Pública* — a municipal
+**SIGOVP** — _SIMple | Gestão de Ocupação de Via Pública_ — a municipal
 public-space occupation authorization system: categories of occupation, zones
 and locations, fees, required documents, licences, inspections and
 notifications. It is a standalone Next.js app built on the IGRP Framework, with
@@ -43,17 +43,17 @@ the generic pieces every IGRP back-office will need.
 
 ## Environment these were built and tested against
 
-| Package | Version |
-|---|---|
-| `@igrp/igrp-framework-react-design-system` | `0.1.0-beta.145` |
-| `@igrp/framework-next` | `0.1.0-beta.171` |
-| `next` | `15.5.25` (App Router, Turbopack) |
-| `react` | `19.2.8` |
-| `@tanstack/react-table` | `8.21.3` |
-| `react-hook-form` + `zod` | via `IGRPForm` |
-| `@tiptap/*` | `3.31.3` (§9, §10 only) |
-| `motion` | `13.2.0` (§7 only) |
-| Tailwind | v4, semantic tokens only |
+| Package                                    | Version                           |
+| ------------------------------------------ | --------------------------------- |
+| `@igrp/igrp-framework-react-design-system` | `0.1.0-beta.145`                  |
+| `@igrp/framework-next`                     | `0.1.0-beta.171`                  |
+| `next`                                     | `15.5.25` (App Router, Turbopack) |
+| `react`                                    | `19.2.8`                          |
+| `@tanstack/react-table`                    | `8.21.3`                          |
+| `react-hook-form` + `zod`                  | via `IGRPForm`                    |
+| `@tiptap/*`                                | `3.31.3` (§9, §10 only)           |
+| `motion`                                   | `13.2.0` (§7 only)                |
+| Tailwind                                   | v4, semantic tokens only          |
 
 House rules the reference implementations follow, so they should read like DS
 code already: Horizon (`IGRP*`) components first and primitives only when
@@ -69,18 +69,18 @@ candidate, and the compiled `.js` where the types did not settle it. Two
 requests changed shape as a result, and two defects fell out of it. The claim
 "the DS has no X" appears in these documents only where we verified it.
 
-| § | Nearest thing you already ship | Verdict |
-|---|---|---|
-| 1 | `IGRPDataTable` (has a server mode) | **Still needed.** `manualPagination`/`manualSorting`/`manualFiltering` are all set from `!!onQueryChange` — one switch. All table state is internal. `getRowId` is neither passed nor exposed. |
-| 2 | `IGRPLink`, `IGRPDataTableButtonLink` | **Still needed** — neither is a button-shaped link, and nothing in `dist` uses `useLinkStatus`. **Plus a defect: see §2.0.** |
-| 3 | `IGRPDataTableActionTooltip` (internal), raw Radix `Tooltip*` | **Still needed**, but reframed: you have the pattern inside `data-table`; the ask is to generalise it. No `IGRPTooltip` export exists. |
-| 4 | **`IGRPAccordion`** | **Substantially reframed.** It hardcodes `type: "single"` and `Omit`s `type` from its props, so N independently-open sections are not expressible. Now filed as *props on `IGRPAccordion`*, not a new component. |
-| 5 | `IGRPTextarea` | **Still needed.** No counter logic in either the Horizon or primitive textarea; `maxLength` only passes through to the DOM. |
-| 6 | `IGRPInputSearch`, `IGRPInputAddOn`, `InputGroup*` | **Still needed**, reframed: you ship the layout primitives, and our reference implementation should have used them. The gap is the form-bound Horizon component and the §6.4 two-field pairing. |
-| 7 | `Stepper*` primitives, `IGRPStepperProcess` | **Still needed.** Both are presentational; neither gates a step on validation. |
-| 8 | `IGRPInputNumber` | **Defect report, not a component request** — it already exists and is richer than ours. |
-| 9 | — | **Still needed.** No `tiptap`, `ProseMirror`, `contentEditable` or `execCommand` anywhere in `dist`. |
-| 10 | — | **Still needed.** No HTML renderer — and, to your credit, no `dangerouslySetInnerHTML` in the package either. |
+| §   | Nearest thing you already ship                                | Verdict                                                                                                                                                                                                          |
+| --- | ------------------------------------------------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| 1   | `IGRPDataTable` (has a server mode)                           | **Still needed.** `manualPagination`/`manualSorting`/`manualFiltering` are all set from `!!onQueryChange` — one switch. All table state is internal. `getRowId` is neither passed nor exposed.                   |
+| 2   | `IGRPLink`, `IGRPDataTableButtonLink`                         | **Still needed** — neither is a button-shaped link, and nothing in `dist` uses `useLinkStatus`. **Plus a defect: see §2.0.**                                                                                     |
+| 3   | `IGRPDataTableActionTooltip` (internal), raw Radix `Tooltip*` | **Still needed**, but reframed: you have the pattern inside `data-table`; the ask is to generalise it. No `IGRPTooltip` export exists.                                                                           |
+| 4   | **`IGRPAccordion`**                                           | **Substantially reframed.** It hardcodes `type: "single"` and `Omit`s `type` from its props, so N independently-open sections are not expressible. Now filed as _props on `IGRPAccordion`_, not a new component. |
+| 5   | `IGRPTextarea`                                                | **Still needed.** No counter logic in either the Horizon or primitive textarea; `maxLength` only passes through to the DOM.                                                                                      |
+| 6   | `IGRPInputSearch`, `IGRPInputAddOn`, `InputGroup*`            | **Still needed**, reframed: you ship the layout primitives, and our reference implementation should have used them. The gap is the form-bound Horizon component and the §6.4 two-field pairing.                  |
+| 7   | `Stepper*` primitives, `IGRPStepperProcess`                   | **Still needed.** Both are presentational; neither gates a step on validation.                                                                                                                                   |
+| 8   | `IGRPInputNumber`                                             | **Defect report, not a component request** — it already exists and is richer than ours.                                                                                                                          |
+| 9   | —                                                             | **Still needed.** No `tiptap`, `ProseMirror`, `contentEditable` or `execCommand` anywhere in `dist`.                                                                                                             |
+| 10  | —                                                             | **Still needed.** No HTML renderer — and, to your credit, no `dangerouslySetInnerHTML` in the package either.                                                                                                    |
 
 ### Two defects, independent of every request below
 
@@ -100,18 +100,18 @@ passes `href`).
 
 ## The requests
 
-| § | Request | Our local component | Used in | Size |
-|---|---|---|---|---|
-| [1](01-igrp-server-data-table.md) | `IGRPServerDataTable` — controlled, server-paginated table | `server-paginated-data-table.tsx` | 10 list screens | L |
-| [2](02-igrp-button-link.md) | `IGRPButtonLink` — button-shaped link with navigation pending state | `button-link.tsx` | **none** — see below | S |
-| [3](03-igrp-button-link-tooltip.md) | …its icon-only + tooltip variant (a prop on §2, not a component) | `button-link-tooltip.tsx` | **none** — see below | XS |
-| [4](04-igrp-collapsible-section.md) | Multi-open sections — filed as **props on `IGRPAccordion`** | `collapsible-section.tsx` | 3 summary screens | S |
-| [5](05-igrp-textarea-counter.md) | `IGRPTextarea` — character counter + value-level cap | `limited-textarea-field.tsx` | **17 call sites** | S |
-| [6](06-igrp-lookup-field.md) | `IGRPLookupField` — input whose value is picked, not typed | `lookup-field.tsx` (+3 wrappers) | request wizard | M |
-| [7](07-igrp-multi-step-form.md) | `IGRPMultiStepForm` — form-aware wizard, + 2 fixes to `Stepper` | `multi-step-viewer.tsx`, `use-multi-step-viewer.tsx`, `stepper.tsx` | 2 wizards | L |
-| [8](08-igrp-input-number.md) | `IGRPInputNumber` — **defect report**, not a new component | `numeric-field.tsx` | 3 fee forms | S |
-| [9](09-igrp-rich-text-editor.md) | `IGRPRichTextEditor` — form-bound WYSIWYG | `rich-text-editor.tsx` | 2 template forms | XL |
-| [10](10-igrp-rich-text-view.md) | `IGRPRichTextView` — render stored HTML without `dangerouslySetInnerHTML` | `rich-text-view.tsx` | 2 template forms | S |
+| §                                   | Request                                                                   | Our local component                                                 | Used in              | Size |
+| ----------------------------------- | ------------------------------------------------------------------------- | ------------------------------------------------------------------- | -------------------- | ---- |
+| [1](01-igrp-server-data-table.md)   | `IGRPServerDataTable` — controlled, server-paginated table                | `server-paginated-data-table.tsx`                                   | 10 list screens      | L    |
+| [2](02-igrp-button-link.md)         | `IGRPButtonLink` — button-shaped link with navigation pending state       | `button-link.tsx`                                                   | **none** — see below | S    |
+| [3](03-igrp-button-link-tooltip.md) | …its icon-only + tooltip variant (a prop on §2, not a component)          | `button-link-tooltip.tsx`                                           | **none** — see below | XS   |
+| [4](04-igrp-collapsible-section.md) | Multi-open sections — filed as **props on `IGRPAccordion`**               | `collapsible-section.tsx`                                           | 3 summary screens    | S    |
+| [5](05-igrp-textarea-counter.md)    | `IGRPTextarea` — character counter + value-level cap                      | `limited-textarea-field.tsx`                                        | **17 call sites**    | S    |
+| [6](06-igrp-lookup-field.md)        | `IGRPLookupField` — input whose value is picked, not typed                | `lookup-field.tsx` (+3 wrappers)                                    | request wizard       | M    |
+| [7](07-igrp-multi-step-form.md)     | `IGRPMultiStepForm` — form-aware wizard, + 2 fixes to `Stepper`           | `multi-step-viewer.tsx`, `use-multi-step-viewer.tsx`, `stepper.tsx` | 2 wizards            | L    |
+| [8](08-igrp-input-number.md)        | `IGRPInputNumber` — **defect report**, not a new component                | `numeric-field.tsx`                                                 | 3 fee forms          | S    |
+| [9](09-igrp-rich-text-editor.md)    | `IGRPRichTextEditor` — form-bound WYSIWYG                                 | `rich-text-editor.tsx`                                              | 2 template forms     | XL   |
+| [10](10-igrp-rich-text-view.md)     | `IGRPRichTextView` — render stored HTML without `dangerouslySetInnerHTML` | `rich-text-view.tsx`                                                | 2 template forms     | S    |
 
 ## What we are asking for
 

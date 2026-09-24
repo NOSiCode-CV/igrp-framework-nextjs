@@ -2,7 +2,6 @@
 
 > Part of the SIGOVP design-system request bundle — see [README.md](README.md). Cite as `§1`.
 
-
 **Local workaround.** `src/app/(myapp)/_components/server-paginated-data-table.tsx`
 (`ServerPaginatedDataTable`), plus the layout helpers in
 `src/app/(myapp)/_lib/data-table-layout.ts`,
@@ -11,7 +10,7 @@ the page mapper `src/app/(myapp)/_lib/pagination-from-api.ts`
 and the `.simple-dt-*` rules in `src/styles/simple.css`.
 
 **Why it exists.** `IGRPDataTable` does have a server-side mode
-(`rowCount` + `onQueryChange`), but it is *uncontrolled and all-or-nothing*.
+(`rowCount` + `onQueryChange`), but it is _uncontrolled and all-or-nothing_.
 This is not an impression — it is what `horizon/data-table/index.js` does:
 
 ```js
@@ -27,7 +26,7 @@ rowCount: onQueryChange ? rowCount ?? 0 : undefined
 
 The three `manual*` flags are one switch. Every SIGOVP list needs server
 pagination with **client-side sorting of the loaded page** and its own filter
-bar, and needs to *own* the page index — reset it to 0 on a filter change,
+bar, and needs to _own_ the page index — reset it to 0 on a filter change,
 restore the server's actual `number`/`size` after a fetch, rehydrate it from a
 URL. With pagination state held internally and `onQueryChange` reported from an
 effect, none of that is reachable.
@@ -44,7 +43,7 @@ using `IGRPDataTable` for these screens:
   A single-page result renders no bar at all, so the user cannot change the page
   size to see more. We need it visible whenever there are rows (§1.3, item 5).
 - **`enableSortingRemoval: false` is already set**, matching what we need — so
-  that is one thing we are *not* asking you to change, and §1.3 item 3 is a
+  that is one thing we are _not_ asking you to change, and §1.3 item 3 is a
   "please keep this", not a request.
 
 ---
@@ -99,31 +98,31 @@ loading state (see §1.6, item 1).
 
 ## §1.2 Current props (the surface to preserve)
 
-| Prop | Type | Notes |
-|---|---|---|
-| `columns` | `ColumnDef<TData, TValue>[]` | Caller must memoize (same contract as `IGRPDataTable`). |
-| `data` | `TData[]` | One page's rows, already fetched. |
-| `pagination` | `ServerPaginationState` | **Controlled**: `{ pageIndex, pageSize, totalElements, totalPages }`. |
-| `onPaginationChange` | `(pageIndex: number, pageSize: number) => void` | Flat args, not a TanStack `Updater`. |
-| `pageSizeOptions` | `number[]` | Defaults to `DEFAULT_SERVER_TABLE_PAGE_SIZES = [5, 10, 30, 50]`. |
-| `enablePagination` | `boolean` (default `true`) | `false` renders the table only, no bar. |
-| `sorting` / `onSortingChange` | `SortingState` / `(s: SortingState) => void` | **Both or neither.** Both ⇒ `manualSorting`; omitted ⇒ the table sorts the loaded page itself. |
-| `getRowId` | `TableOptions<TData>["getRowId"]` | Required in practice whenever `renderSubComponent` is used — see §1.4. |
-| `getRowCanExpand` | `TableOptions<TData>["getRowCanExpand"]` | Defaults to `() => false`. |
-| `renderSubComponent` | `(row: Row<TData>) => ReactElement \| undefined` | Rendered in a full-width row under the expanded row. |
-| `notFoundLabel` | `string` | Defaults to `"Nenhum registo encontrado."` — the DS default should be locale-neutral or English. |
-| `id`, `className`, `tableClassName`, `tableHeaderClassName`, `tableBodyClassName`, `paginationClassName` | `string` | Same names/roles as `IGRPDataTableProps`. |
+| Prop                                                                                                     | Type                                             | Notes                                                                                            |
+| -------------------------------------------------------------------------------------------------------- | ------------------------------------------------ | ------------------------------------------------------------------------------------------------ |
+| `columns`                                                                                                | `ColumnDef<TData, TValue>[]`                     | Caller must memoize (same contract as `IGRPDataTable`).                                          |
+| `data`                                                                                                   | `TData[]`                                        | One page's rows, already fetched.                                                                |
+| `pagination`                                                                                             | `ServerPaginationState`                          | **Controlled**: `{ pageIndex, pageSize, totalElements, totalPages }`.                            |
+| `onPaginationChange`                                                                                     | `(pageIndex: number, pageSize: number) => void`  | Flat args, not a TanStack `Updater`.                                                             |
+| `pageSizeOptions`                                                                                        | `number[]`                                       | Defaults to `DEFAULT_SERVER_TABLE_PAGE_SIZES = [5, 10, 30, 50]`.                                 |
+| `enablePagination`                                                                                       | `boolean` (default `true`)                       | `false` renders the table only, no bar.                                                          |
+| `sorting` / `onSortingChange`                                                                            | `SortingState` / `(s: SortingState) => void`     | **Both or neither.** Both ⇒ `manualSorting`; omitted ⇒ the table sorts the loaded page itself.   |
+| `getRowId`                                                                                               | `TableOptions<TData>["getRowId"]`                | Required in practice whenever `renderSubComponent` is used — see §1.4.                           |
+| `getRowCanExpand`                                                                                        | `TableOptions<TData>["getRowCanExpand"]`         | Defaults to `() => false`.                                                                       |
+| `renderSubComponent`                                                                                     | `(row: Row<TData>) => ReactElement \| undefined` | Rendered in a full-width row under the expanded row.                                             |
+| `notFoundLabel`                                                                                          | `string`                                         | Defaults to `"Nenhum registo encontrado."` — the DS default should be locale-neutral or English. |
+| `id`, `className`, `tableClassName`, `tableHeaderClassName`, `tableBodyClassName`, `paginationClassName` | `string`                                         | Same names/roles as `IGRPDataTableProps`.                                                        |
 
 `ServerPaginationState` (`src/app/(myapp)/_types.ts`) is the
 client mirror of Spring page metadata:
 
 ```ts
 type ServerPaginationState = {
-  pageIndex: number;   // 0-based
-  pageSize: number;
-  totalElements: number;
-  totalPages: number;
-};
+  pageIndex: number // 0-based
+  pageSize: number
+  totalElements: number
+  totalPages: number
+}
 ```
 
 ---
@@ -132,12 +131,12 @@ type ServerPaginationState = {
 
 1. **Pagination is fully controlled.** `manualPagination: true` always;
    `pageCount: pagination.totalPages` **and** `rowCount:
-   pagination.totalElements` are both fed to the table. Page index/size come
+pagination.totalElements` are both fed to the table. Page index/size come
    from props on every render — the component keeps no pagination state of its
    own, so a caller can reset to page 0 on a filter change or rehydrate from a
    URL.
 2. **Pagination is independent of sorting and filtering.** Server pagination
-   must not force `manualSorting`/`manualFiltering`. Sorting is manual *only*
+   must not force `manualSorting`/`manualFiltering`. Sorting is manual _only_
    when `sorting` and `onSortingChange` are both supplied.
 3. **`enableSortingRemoval: false`** — header toggles cycle asc → desc → asc,
    never back to unsorted.
@@ -146,8 +145,8 @@ type ServerPaginationState = {
    `(pageIndex, pageSize)`.
 5. **The bar shows whenever there are rows** (`enablePagination && data.length
    > 0`) — *not* only when `rowCount > pageSize`, which is what `IGRPDataTable`
-   does today. On a single-page result the user must still be able to change
-   page size.
+   > does today. On a single-page result the user must still be able to change
+   > page size.
 6. **Sorting callback tolerates the functional updater** — resolve it against
    `sorting ?? []` before calling `onSortingChange`.
 7. **Empty state** — one row, `colSpan={columns.length}`, `notFoundLabel`.
@@ -161,7 +160,7 @@ type ServerPaginationState = {
 
 Expansion state is keyed by row id, and TanStack's default row id is the row's
 **index**. Without a stable `getRowId`, an expanded row stays open at that
-index across a re-sort or a page change and reveals a *different* record's
+index across a re-sort or a page change and reveals a _different_ record's
 sub-component. Both grouped lists pass `getRowId={(g) => g.key}` for exactly
 this reason.
 
@@ -228,7 +227,7 @@ just the server one.
 2. **`notFoundLabel` default** is Portuguese in the local component; the DS
    default must not be.
 3. **Page-metadata mapper.** `paginationFromApiPage()` maps Spring page JSON
-   (camelCase *and* snake_case, with fallbacks when the API omits totals) into
+   (camelCase _and_ snake_case, with fallbacks when the API omits totals) into
    `ServerPaginationState`. Exporting that — or a
    `useIGRPServerPagination()`/`IGRPServerPaginationState` pair — from the DS
    would stop every app from re-deriving `totalPages`.
@@ -251,34 +250,34 @@ the uncontrolled reducer and the controlled page prop do not coexist cleanly.
 
 ```ts
 export type IGRPServerPaginationState = {
-  pageIndex: number;
-  pageSize: number;
-  totalElements: number;
-  totalPages: number;
-};
+  pageIndex: number
+  pageSize: number
+  totalElements: number
+  totalPages: number
+}
 
 export interface IGRPServerDataTableProps<TData, TValue> {
-  columns: ColumnDef<TData, TValue>[];
-  data: TData[];
-  pagination: IGRPServerPaginationState;
-  onPaginationChange: (pageIndex: number, pageSize: number) => void;
-  pageSizeOptions?: number[];        // default [5, 10, 30, 50]
-  enablePagination?: boolean;        // default true
-  paginationType?: "simple" | "numeric";   // new: reuse IGRPDataTablePaginationNumeric
-  sorting?: SortingState;            // with onSortingChange ⇒ manualSorting
-  onSortingChange?: (sorting: SortingState) => void;
-  isLoading?: boolean;               // new, see §1.6.1
-  layout?: "auto" | "fixed";         // new, replaces the .simple-dt-fixed class
-  getRowId?: TableOptions<TData>["getRowId"];
-  getRowCanExpand?: TableOptions<TData>["getRowCanExpand"];
-  renderSubComponent?: (row: Row<TData>) => ReactElement | undefined;
-  notFoundLabel?: string;
-  id?: string;
-  className?: string;
-  tableClassName?: string;
-  tableHeaderClassName?: string;
-  tableBodyClassName?: string;
-  paginationClassName?: string;
+  columns: ColumnDef<TData, TValue>[]
+  data: TData[]
+  pagination: IGRPServerPaginationState
+  onPaginationChange: (pageIndex: number, pageSize: number) => void
+  pageSizeOptions?: number[] // default [5, 10, 30, 50]
+  enablePagination?: boolean // default true
+  paginationType?: "simple" | "numeric" // new: reuse IGRPDataTablePaginationNumeric
+  sorting?: SortingState // with onSortingChange ⇒ manualSorting
+  onSortingChange?: (sorting: SortingState) => void
+  isLoading?: boolean // new, see §1.6.1
+  layout?: "auto" | "fixed" // new, replaces the .simple-dt-fixed class
+  getRowId?: TableOptions<TData>["getRowId"]
+  getRowCanExpand?: TableOptions<TData>["getRowCanExpand"]
+  renderSubComponent?: (row: Row<TData>) => ReactElement | undefined
+  notFoundLabel?: string
+  id?: string
+  className?: string
+  tableClassName?: string
+  tableHeaderClassName?: string
+  tableBodyClassName?: string
+  paginationClassName?: string
 }
 ```
 
@@ -286,9 +285,9 @@ Column `meta` additions to publish alongside it:
 
 ```ts
 export type IGRPDataTableColumnMeta = {
-  isActionsColumn?: boolean;
-  cellClassName?: string;
-};
+  isActionsColumn?: boolean
+  cellClassName?: string
+}
 ```
 
 Reuse `IGRPDataTablePagination` / `IGRPDataTablePaginationNumeric` as-is — the
@@ -333,7 +332,7 @@ for any of it.
 ### `src/app/(myapp)/_components/server-paginated-data-table.tsx`
 
 ```tsx
-"use client";
+"use client"
 
 import {
   cn,
@@ -344,7 +343,7 @@ import {
   TableHead,
   TableHeader,
   TableRow,
-} from "@igrp/igrp-framework-react-design-system";
+} from "@igrp/igrp-framework-react-design-system"
 import {
   DATA_TABLE_ACTIONS_CELL_CLASS,
   DATA_TABLE_ROW_EXPANDER_ATTR,
@@ -352,8 +351,8 @@ import {
   getDataTableLayoutClassName,
   hasTrailingActionsColumn,
   isActionsColumnDef,
-} from "@myapp/_lib/data-table-layout";
-import type { ServerPaginationState } from "@myapp/_types";
+} from "@myapp/_lib/data-table-layout"
+import type { ServerPaginationState } from "@myapp/_types"
 import {
   type ColumnDef,
   type ExpandedState,
@@ -367,27 +366,27 @@ import {
   type TableOptions,
   type Updater,
   useReactTable,
-} from "@tanstack/react-table";
-import type { ReactElement } from "react";
-import { Fragment, useCallback, useMemo, useState } from "react";
+} from "@tanstack/react-table"
+import type { ReactElement } from "react"
+import { Fragment, useCallback, useMemo, useState } from "react"
 
-export const DEFAULT_SERVER_TABLE_PAGE_SIZES = [5, 10, 30, 50] as const;
+export const DEFAULT_SERVER_TABLE_PAGE_SIZES = [5, 10, 30, 50] as const
 
 export type ServerPaginatedDataTableProps<TData, TValue = unknown> = {
-  id?: string;
-  columns: ColumnDef<TData, TValue>[];
-  data: TData[];
-  pagination: ServerPaginationState;
-  onPaginationChange: (pageIndex: number, pageSize: number) => void;
-  pageSizeOptions?: number[];
-  className?: string;
-  tableClassName?: string;
-  tableHeaderClassName?: string;
-  tableBodyClassName?: string;
-  paginationClassName?: string;
-  notFoundLabel?: string;
+  id?: string
+  columns: ColumnDef<TData, TValue>[]
+  data: TData[]
+  pagination: ServerPaginationState
+  onPaginationChange: (pageIndex: number, pageSize: number) => void
+  pageSizeOptions?: number[]
+  className?: string
+  tableClassName?: string
+  tableHeaderClassName?: string
+  tableBodyClassName?: string
+  paginationClassName?: string
+  notFoundLabel?: string
   /** When false, only the table is rendered (no IGRP pagination bar). */
-  enablePagination?: boolean;
+  enablePagination?: boolean
   /**
    * Current sort, for lists that sort server-side. Pass it together with
    * `onSortingChange`: the table then stops sorting the loaded page itself
@@ -395,8 +394,8 @@ export type ServerPaginatedDataTableProps<TData, TValue = unknown> = {
    * the API for the ordered page. Omit both to keep the default behaviour —
    * the header toggles reorder only the rows currently loaded.
    */
-  sorting?: SortingState;
-  onSortingChange?: (sorting: SortingState) => void;
+  sorting?: SortingState
+  onSortingChange?: (sorting: SortingState) => void
   /**
    * Stable identity for a row, e.g. `(row) => row.key`. Expansion state is
    * keyed by row id, and the default id is the row's *index*, so without this
@@ -404,10 +403,10 @@ export type ServerPaginatedDataTableProps<TData, TValue = unknown> = {
    * paged — revealing a different record's sub-component. Pass it whenever
    * `renderSubComponent` is used over data that can reorder.
    */
-  getRowId?: TableOptions<TData>["getRowId"];
-  getRowCanExpand?: TableOptions<TData>["getRowCanExpand"];
-  renderSubComponent?: (row: Row<TData>) => ReactElement | undefined;
-};
+  getRowId?: TableOptions<TData>["getRowId"]
+  getRowCanExpand?: TableOptions<TData>["getRowCanExpand"]
+  renderSubComponent?: (row: Row<TData>) => ReactElement | undefined
+}
 
 export function ServerPaginatedDataTable<TData, TValue>({
   id,
@@ -429,31 +428,29 @@ export function ServerPaginatedDataTable<TData, TValue>({
   getRowId,
   getRowCanExpand = () => false,
 }: ServerPaginatedDataTableProps<TData, TValue>) {
-  const [expanded, setExpanded] = useState<ExpandedState>({});
-  const manualSorting = Boolean(sorting && onSortingChange);
+  const [expanded, setExpanded] = useState<ExpandedState>({})
+  const manualSorting = Boolean(sorting && onSortingChange)
 
   const handleSortingChange = useCallback(
     (updater: Updater<SortingState>) => {
-      if (!onSortingChange) return;
-      const current = sorting ?? [];
-      onSortingChange(
-        typeof updater === "function" ? updater(current) : updater,
-      );
+      if (!onSortingChange) return
+      const current = sorting ?? []
+      onSortingChange(typeof updater === "function" ? updater(current) : updater)
     },
-    [onSortingChange, sorting],
-  );
+    [onSortingChange, sorting]
+  )
 
   const handlePaginationChange = useCallback(
     (updater: Updater<PaginationState>) => {
       const current: PaginationState = {
         pageIndex: pagination.pageIndex,
         pageSize: pagination.pageSize,
-      };
-      const next = typeof updater === "function" ? updater(current) : updater;
-      onPaginationChange(next.pageIndex, next.pageSize);
+      }
+      const next = typeof updater === "function" ? updater(current) : updater
+      onPaginationChange(next.pageIndex, next.pageSize)
     },
-    [onPaginationChange, pagination.pageIndex, pagination.pageSize],
-  );
+    [onPaginationChange, pagination.pageIndex, pagination.pageSize]
+  )
 
   const table = useReactTable({
     data,
@@ -479,32 +476,23 @@ export function ServerPaginatedDataTable<TData, TValue>({
     ...(getRowId ? { getRowId } : {}),
     getRowCanExpand,
     enableSortingRemoval: false,
-  });
+  })
 
-  const showBar =
-    enablePagination && Boolean(onPaginationChange) && data.length > 0;
+  const showBar = enablePagination && Boolean(onPaginationChange) && data.length > 0
 
-  const hasActionsColumn = useMemo(
-    () => hasTrailingActionsColumn(columns),
-    [columns],
-  );
+  const hasActionsColumn = useMemo(() => hasTrailingActionsColumn(columns), [columns])
 
   const layoutClassName = useMemo(
     () =>
       getDataTableLayoutClassName(hasActionsColumn, className, {
         stacked: true,
       }),
-    [className, hasActionsColumn],
-  );
+    [className, hasActionsColumn]
+  )
 
   return (
     <div className={layoutClassName} id={id}>
-      <div
-        className={cn(
-          DATA_TABLE_TABLE_SHELL_CLASS,
-          "overflow-hidden rounded-md border",
-        )}
-      >
+      <div className={cn(DATA_TABLE_TABLE_SHELL_CLASS, "overflow-hidden rounded-md border")}>
         <Table className={cn("w-full", tableClassName)}>
           <TableHeader className={tableHeaderClassName}>
             {table.getHeaderGroups().map((headerGroup) => (
@@ -514,14 +502,9 @@ export function ServerPaginatedDataTable<TData, TValue>({
                     key={header.id}
                     colSpan={header.colSpan}
                     style={{ width: `${header.getSize()}px` }}
-                    className="font-semibold p-2"
+                    className="p-2 font-semibold"
                   >
-                    {header.isPlaceholder
-                      ? null
-                      : flexRender(
-                          header.column.columnDef.header,
-                          header.getContext(),
-                        )}
+                    {header.isPlaceholder ? null : flexRender(header.column.columnDef.header, header.getContext())}
                   </TableHead>
                 ))}
               </TableRow>
@@ -533,40 +516,28 @@ export function ServerPaginatedDataTable<TData, TValue>({
                 <Fragment key={row.id}>
                   <TableRow data-state={row.getIsSelected() && "selected"}>
                     {row.getVisibleCells().map((cell) => {
-                      const columnDef = cell.column.columnDef;
-                      const cellClassNameOverride = (
-                        columnDef.meta as { cellClassName?: string } | undefined
-                      )?.cellClassName;
-                      const isActionsCell = isActionsColumnDef(
-                        columnDef as Parameters<typeof isActionsColumnDef>[0],
-                      );
-                      const expanderCellClass = `[&:has([${DATA_TABLE_ROW_EXPANDER_ATTR}])]:w-px [&:has([${DATA_TABLE_ROW_EXPANDER_ATTR}])]:py-0 [&:has([${DATA_TABLE_ROW_EXPANDER_ATTR}])]:pr-0`;
+                      const columnDef = cell.column.columnDef
+                      const cellClassNameOverride = (columnDef.meta as { cellClassName?: string } | undefined)
+                        ?.cellClassName
+                      const isActionsCell = isActionsColumnDef(columnDef as Parameters<typeof isActionsColumnDef>[0])
+                      const expanderCellClass = `[&:has([${DATA_TABLE_ROW_EXPANDER_ATTR}])]:w-px [&:has([${DATA_TABLE_ROW_EXPANDER_ATTR}])]:py-0 [&:has([${DATA_TABLE_ROW_EXPANDER_ATTR}])]:pr-0`
                       return (
                         <TableCell
                           key={cell.id}
                           className={cn(
-                            "p-2 h-[inherit]",
+                            "h-[inherit] p-2",
                             expanderCellClass,
-                            cellClassNameOverride ??
-                              (isActionsCell
-                                ? DATA_TABLE_ACTIONS_CELL_CLASS
-                                : "truncate"),
+                            cellClassNameOverride ?? (isActionsCell ? DATA_TABLE_ACTIONS_CELL_CLASS : "truncate")
                           )}
                         >
-                          {flexRender(
-                            cell.column.columnDef.cell,
-                            cell.getContext(),
-                          )}
+                          {flexRender(cell.column.columnDef.cell, cell.getContext())}
                         </TableCell>
-                      );
+                      )
                     })}
                   </TableRow>
                   {row.getIsExpanded() && (
                     <TableRow>
-                      <TableCell
-                        colSpan={row.getVisibleCells().length}
-                        className="p-0"
-                      >
+                      <TableCell colSpan={row.getVisibleCells().length} className="p-0">
                         {renderSubComponent ? (
                           renderSubComponent(row)
                         ) : (
@@ -581,10 +552,7 @@ export function ServerPaginatedDataTable<TData, TValue>({
               ))
             ) : (
               <TableRow>
-                <TableCell
-                  colSpan={columns.length}
-                  className="h-24 text-center font-semibold"
-                >
+                <TableCell colSpan={columns.length} className="h-24 text-center font-semibold">
                   {notFoundLabel}
                 </TableCell>
               </TableRow>
@@ -597,97 +565,88 @@ export function ServerPaginatedDataTable<TData, TValue>({
         <IGRPDataTablePagination
           table={table}
           pageSize={pageSizeOptions}
-          className={cn(
-            "justify-between max-sm:flex-col max-sm:items-stretch",
-            paginationClassName,
-          )}
+          className={cn("justify-between max-sm:flex-col max-sm:items-stretch", paginationClassName)}
         />
       )}
     </div>
-  );
+  )
 }
 ```
 
 ### `src/app/(myapp)/_lib/data-table-layout.ts`
 
 ```ts
-import type { ColumnDef } from "@igrp/igrp-framework-react-design-system";
-import { cn } from "@/lib/utils";
+import type { ColumnDef } from "@igrp/igrp-framework-react-design-system"
+import { cn } from "@/lib/utils"
 
 export type DataTableColumnMeta = {
-  isActionsColumn?: boolean;
-};
+  isActionsColumn?: boolean
+}
 
 export const DATA_TABLE_ACTIONS_COLUMN_META: DataTableColumnMeta = {
   isActionsColumn: true,
-};
+}
 
-export const DATA_TABLE_ACTIONS_CELL_CLASS = "whitespace-nowrap";
+export const DATA_TABLE_ACTIONS_CELL_CLASS = "whitespace-nowrap"
 
-export const DATA_TABLE_ROW_EXPANDER_ATTR = "data-land-dt-expander";
+export const DATA_TABLE_ROW_EXPANDER_ATTR = "data-land-dt-expander"
 
-export const DATA_TABLE_LAYOUT_ROOT_CLASS = "simple-dt-layout";
-export const DATA_TABLE_LAYOUT_ACTIONS_CLASS = "simple-dt-has-actions";
-export const DATA_TABLE_TABLE_SHELL_CLASS = "simple-dt-table-shell";
+export const DATA_TABLE_LAYOUT_ROOT_CLASS = "simple-dt-layout"
+export const DATA_TABLE_LAYOUT_ACTIONS_CLASS = "simple-dt-has-actions"
+export const DATA_TABLE_TABLE_SHELL_CLASS = "simple-dt-table-shell"
 
 function getColumnKey(col: ColumnDef<unknown, unknown>): string | undefined {
   if ("accessorKey" in col && col.accessorKey != null) {
-    return String(col.accessorKey);
+    return String(col.accessorKey)
   }
   if ("id" in col && col.id != null) {
-    return String(col.id);
+    return String(col.id)
   }
-  return undefined;
+  return undefined
 }
 
 export function isActionsColumnDef(col: ColumnDef<unknown, unknown>): boolean {
-  const meta = col.meta as DataTableColumnMeta | undefined;
-  if (meta?.isActionsColumn) return true;
+  const meta = col.meta as DataTableColumnMeta | undefined
+  if (meta?.isActionsColumn) return true
 
-  const key = getColumnKey(col);
-  if (!key) return false;
+  const key = getColumnKey(col)
+  if (!key) return false
 
-  const normalized = key.toLowerCase();
-  return (
-    normalized === "actions" ||
-    normalized.endsWith("actions") ||
-    normalized.endsWith("_actions")
-  );
+  const normalized = key.toLowerCase()
+  return normalized === "actions" || normalized.endsWith("actions") || normalized.endsWith("_actions")
 }
 
-export function hasTrailingActionsColumn<TData, TValue>(
-  columns: ColumnDef<TData, TValue>[],
-): boolean {
-  const last = columns[columns.length - 1];
-  if (!last) return false;
-  return isActionsColumnDef(last as ColumnDef<unknown, unknown>);
+export function hasTrailingActionsColumn<TData, TValue>(columns: ColumnDef<TData, TValue>[]): boolean {
+  const last = columns[columns.length - 1]
+  if (!last) return false
+  return isActionsColumnDef(last as ColumnDef<unknown, unknown>)
 }
 
 export function getDataTableLayoutClassName(
   hasActionsColumn = false,
   className?: string,
-  options?: { stacked?: boolean },
+  options?: { stacked?: boolean }
 ): string {
   return cn(
     options?.stacked && "flex flex-col gap-4",
     "min-w-0",
     DATA_TABLE_LAYOUT_ROOT_CLASS,
     hasActionsColumn && DATA_TABLE_LAYOUT_ACTIONS_CLASS,
-    className,
-  );
+    className
+  )
 }
 ```
 
 ### `src/app/(myapp)/_lib/pagination-from-api.ts`
 
 ```ts
-import type { PaginatedResponse, ServerPaginationState } from "@myapp/_types";
+import type { PaginatedResponse, ServerPaginationState } from "@myapp/_types"
 
 type ApiPage<T> = PaginatedResponse<T> & {
-  total_elements?: number;
-  total_pages?: number;
-  total?: number;
-};
+  total_elements?: number
+  total_pages?: number
+  total?: number
+}
 
 /**
  * Maps Spring-style page JSON (camelCase or snake_case) into UI pagination state.
@@ -697,21 +656,21 @@ export function paginationFromApiPage<T>(
   result: ApiPage<T> | null | undefined,
   content: T[],
   pageIndex: number,
-  pageSize: number,
+  pageSize: number
 ): ServerPaginationState {
-  const r = result;
+  const r = result
 
-  let totalElements = r?.totalElements ?? r?.total_elements ?? r?.total ?? 0;
+  let totalElements = r?.totalElements ?? r?.total_elements ?? r?.total ?? 0
   if (!(totalElements > 0) && content.length > 0) {
-    totalElements = content.length;
+    totalElements = content.length
   }
 
-  let totalPages = r?.totalPages ?? r?.total_pages ?? 0;
+  let totalPages = r?.totalPages ?? r?.total_pages ?? 0
   if (totalPages <= 0 && totalElements > 0 && pageSize > 0) {
-    totalPages = Math.ceil(totalElements / pageSize);
+    totalPages = Math.ceil(totalElements / pageSize)
   }
   if (totalPages <= 0) {
-    totalPages = 1;
+    totalPages = 1
   }
 
   return {
@@ -719,7 +678,7 @@ export function paginationFromApiPage<T>(
     pageSize: r?.size ?? pageSize,
     totalElements,
     totalPages: Math.max(1, totalPages),
-  };
+  }
 }
 ```
 
@@ -727,17 +686,16 @@ export function paginationFromApiPage<T>(
 
 ```ts
 export type ServerPaginationState = {
-  pageIndex: number;   // 0-based
-  pageSize: number;
-  totalElements: number;
-  totalPages: number;
-};
+  pageIndex: number // 0-based
+  pageSize: number
+  totalElements: number
+  totalPages: number
+}
 ```
 
 ### `src/styles/simple.css` (the `.simple-dt-*` block)
 
 ```css
-
 /* IGRP data tables: below lg scroll horizontally; from lg fit width with wrapping cells. */
 .simple-dt-layout .simple-dt-table-shell,
 .simple-dt-layout > div.overflow-hidden.rounded-md {

@@ -82,7 +82,7 @@ function IGRPPageHeaderBackButton({
         router.back()
       }
     },
-    [router, onClick],
+    [router, onClick]
   )
 
   const iconElement = <IGRPIcon iconName={iconName} aria-hidden="true" className={cn("shrink-0")} />

@@ -48,7 +48,7 @@ function IGRPDataTableClientFilter<TData>({
   if (!filterList) return null
 
   return (
-    <div className={cn("flex md:items-center gap-2 flex-col md:flex-row")}>
+    <div className={cn("flex flex-col gap-2 md:flex-row md:items-center")}>
       {filterList.map(({ columnId, component }) => {
         const column = table.getColumn(columnId as string)
         return column && <Fragment key={columnId as string}>{component({ column })}</Fragment>

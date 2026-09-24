@@ -30,13 +30,13 @@ function IGRPPageFooter({ className, children, name, isSticky, id }: IGRPPageFoo
   return (
     <div
       className={cn(
-        "mt-6 bg-background border-t shadow-md py-2 px-4",
-        isSticky && "sticky bottom-0 left-0 right-0 z-10",
-        className,
+        "mt-6 border-t bg-background px-4 py-2 shadow-md",
+        isSticky && "sticky right-0 bottom-0 left-0 z-10",
+        className
       )}
       id={ref}
     >
-      <div className={cn("flex justify-between items-center w-full")}>{children}</div>
+      <div className={cn("flex w-full items-center justify-between")}>{children}</div>
     </div>
   )
 }

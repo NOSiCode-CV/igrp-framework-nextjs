@@ -29,7 +29,7 @@ describe("IGRPInputColor", () => {
     render(
       <FormHarness>
         <IGRPInputColor name="brand" label="Cor" />
-      </FormHarness>,
+      </FormHarness>
     )
     expect(screen.getByLabelText("Cor")).toHaveValue("#ff0000")
     expect(screen.getByRole("textbox", { name: /Cor/ })).toHaveValue("#ff0000")
@@ -40,7 +40,7 @@ describe("IGRPInputColor", () => {
     render(
       <FormHarness onReady={(f) => (form = f)}>
         <IGRPInputColor name="brand" label="Cor" />
-      </FormHarness>,
+      </FormHarness>
     )
 
     await act(async () => form.setValue("brand", "#00ff00"))
@@ -64,7 +64,7 @@ describe("IGRPInputColor", () => {
     render(
       <IGRPI18nProvider strings={{ inputColor: { pickerLabel: "Colour picker" } }}>
         <IGRPInputColor name="brand" />
-      </IGRPI18nProvider>,
+      </IGRPI18nProvider>
     )
     expect(screen.getByLabelText("Colour picker")).toBeInTheDocument()
   })
@@ -121,7 +121,7 @@ describe("IGRPInputColor", () => {
         resolver={zodResolver(z.object({ brand: z.string().regex(/^#[0-9a-f]{6}$/i, "Cor inválida") }))}
       >
         <IGRPInputColor name="brand" label="Cor" format="hex" />
-      </FormHarness>,
+      </FormHarness>
     )
 
     const input = screen.getByRole("textbox", { name: /Cor/ })
@@ -213,7 +213,7 @@ describe("IGRPInputColor — regression probes", () => {
     render(
       <FormHarness onReady={(f) => (form = f)}>
         <IGRPInputColor name="brand" label="Cor" />
-      </FormHarness>,
+      </FormHarness>
     )
 
     const input = screen.getByRole("textbox", { name: /Cor/ })

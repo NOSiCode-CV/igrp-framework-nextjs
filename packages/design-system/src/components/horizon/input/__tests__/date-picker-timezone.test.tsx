@@ -80,7 +80,7 @@ describe("date pickers render a date-only ISO form value on the correct day", ()
     render(
       <Wrapper schema={singleSchema} defaultValues={{ d: "2026-08-26" }}>
         <IGRPDatePickerSingle name="d" label="Data" />
-      </Wrapper>,
+      </Wrapper>
     )
     // The trigger is labelled by its <label>, so assert on the rendered text, not the name.
     expect(screen.getByText("26-08-2026")).toBeInTheDocument()
@@ -90,7 +90,7 @@ describe("date pickers render a date-only ISO form value on the correct day", ()
     render(
       <Wrapper schema={singleSchema} defaultValues={{ d: "2026-08-26" }}>
         <IGRPDatePickerInputSingle name="d" label="Data" />
-      </Wrapper>,
+      </Wrapper>
     )
     expect(screen.getByRole("textbox")).toHaveValue("26-08-2026")
   })
@@ -99,7 +99,7 @@ describe("date pickers render a date-only ISO form value on the correct day", ()
     render(
       <Wrapper schema={rangeSchema} defaultValues={{ r: { from: "2026-08-26", to: "2026-08-28" } }}>
         <IGRPDatePickerRange name="r" label="Intervalo" />
-      </Wrapper>,
+      </Wrapper>
     )
     expect(screen.getByText("26-08-2026 - 28-08-2026")).toBeInTheDocument()
   })
@@ -108,7 +108,7 @@ describe("date pickers render a date-only ISO form value on the correct day", ()
     render(
       <Wrapper schema={multipleSchema} defaultValues={{ m: ["2026-08-26", "2026-08-28"] }}>
         <IGRPDatePickerMultiple name="m" label="Datas" />
-      </Wrapper>,
+      </Wrapper>
     )
     expect(screen.getByText(/26-08-2026 - 28-08-2026/)).toBeInTheDocument()
   })

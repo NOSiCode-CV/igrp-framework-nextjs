@@ -27,7 +27,7 @@ describe("IGRPForm a11y", () => {
         defaultValues={{ name: "" }}
       >
         <IGRPInputText name="name" label="Email address" />
-      </IGRPForm>,
+      </IGRPForm>
     )
 
     const input = screen.getByRole("textbox", { name: "Email address" }) as HTMLInputElement
@@ -44,7 +44,7 @@ describe("IGRPForm a11y", () => {
     render(
       <IGRPForm schema={schema} formRef={formRef} onSubmit={vi.fn()} defaultValues={{ name: "" }}>
         <IGRPInputText name="name" label="Name" />
-      </IGRPForm>,
+      </IGRPForm>
     )
 
     await formRef.current!.submit()
@@ -65,7 +65,7 @@ describe("IGRPForm", () => {
     render(
       <IGRPForm schema={schema} formRef={formRef} onSubmit={onSubmit} defaultValues={{ name: "" }}>
         <IGRPInputText name="name" label="Name" />
-      </IGRPForm>,
+      </IGRPForm>
     )
 
     const input = screen.getByRole("textbox", { name: "Name" }) as HTMLInputElement
@@ -86,7 +86,7 @@ describe("IGRPForm", () => {
     render(
       <IGRPForm schema={schema} formRef={formRef} onSubmit={onSubmit} defaultValues={{ name: "" }}>
         <IGRPInputText name="name" label="Name" />
-      </IGRPForm>,
+      </IGRPForm>
     )
 
     await formRef.current!.submit()
@@ -104,7 +104,7 @@ describe("IGRPForm", () => {
     render(
       <IGRPForm schema={schema} formRef={formRef} onSubmit={onSubmit} defaultValues={{ name: "Bob" }}>
         <IGRPInputText name="name" label="Name" />
-      </IGRPForm>,
+      </IGRPForm>
     )
 
     await formRef.current!.submit()

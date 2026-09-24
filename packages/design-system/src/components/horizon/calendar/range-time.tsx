@@ -57,7 +57,7 @@ function IGRPCalendarRangeTime({
       <div className={cn("flex flex-col gap-4")}>
         <IGRPCalendarRange id={ref} {...props} />
 
-        <div className={cn("flex flex-col gap-4 pt-4 border-t")}>
+        <div className={cn("flex flex-col gap-4 border-t pt-4")}>
           <div className={cn("flex flex-col gap-2")}>
             <Label htmlFor={`${ref}-start-time`}>{startTimeLabel}</Label>
             <Input

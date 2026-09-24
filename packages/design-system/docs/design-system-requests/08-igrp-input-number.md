@@ -30,7 +30,7 @@ schema (and therefore the message) take effect.
 There is a second, subtler trap the workaround documents, and it is worth
 keeping in mind for whatever fix lands: `IGRPInputText` spreads its incoming
 props **after** `onChange: field.onChange`, so a caller-supplied `onChange`
-*replaces* react-hook-form's rather than running alongside it. Without the
+_replaces_ react-hook-form's rather than running alongside it. Without the
 explicit `setValue` the field would not update at all. If the DS number input
 composes handlers the same way, a consumer-supplied `onChange` is silently
 destructive there too.
@@ -59,14 +59,14 @@ Three `taxas` forms — money and quantity fields, every one of them validated:
 
 ## §8.3 Current props
 
-| Prop | Type | Notes |
-|---|---|---|
-| `name` | `string` | Form field name. |
-| `label` | `string` | |
-| `required`, `disabled`, `helperText`, `placeholder`, `className` | | Forwarded. Placeholder defaults to `` `Introduzca ${label}` ``. |
-| `min` | `number?` (default `0`) | Also decides whether `-` is typeable. Pass `undefined` for fields that accept negatives. |
-| `max` | `number?` | |
-| `decimais` | `boolean` (default `true`) | `false` also blocks typing `.` and sets `step={1}`. |
+| Prop                                                             | Type                       | Notes                                                                                    |
+| ---------------------------------------------------------------- | -------------------------- | ---------------------------------------------------------------------------------------- |
+| `name`                                                           | `string`                   | Form field name.                                                                         |
+| `label`                                                          | `string`                   |                                                                                          |
+| `required`, `disabled`, `helperText`, `placeholder`, `className` |                            | Forwarded. Placeholder defaults to `` `Introduzca ${label}` ``.                          |
+| `min`                                                            | `number?` (default `0`)    | Also decides whether `-` is typeable. Pass `undefined` for fields that accept negatives. |
+| `max`                                                            | `number?`                  |                                                                                          |
+| `decimais`                                                       | `boolean` (default `true`) | `false` also blocks typing `.` and sets `step={1}`.                                      |
 
 ---
 
@@ -77,7 +77,7 @@ Three `taxas` forms — money and quantity fields, every one of them validated:
 - **`e` / `E` / `+`** — scientific notation. `1e5` is a valid number input value
   and is not what anyone means in a currency field.
 - **`,`** — never reaches the value at all. A browser reports `"12,50"` as an
-  **empty string**, so allowing the comma only makes the field *look* filled
+  **empty string**, so allowing the comma only makes the field _look_ filled
   while it is empty. In pt-CV/pt-PT, where the comma is the decimal separator,
   this is the single most likely thing a user types.
 
@@ -143,20 +143,20 @@ and two contract guarantees:
 ## §8.7 Reference implementation
 
 Verbatim. Note this deliberately renders `IGRPInputText type="number"` rather
-than `IGRPInputNumber` — that substitution *is* the workaround being reported.
+than `IGRPInputNumber` — that substitution _is_ the workaround being reported.
 
 ### `src/app/(myapp)/_components/numeric-field.tsx`
 
 ```tsx
-"use client";
+"use client"
 
-import { IGRPInputText } from "@igrp/igrp-framework-react-design-system";
-import { useFormContext } from "react-hook-form";
+import { IGRPInputText } from "@igrp/igrp-framework-react-design-system"
+import { useFormContext } from "react-hook-form"
 
 /** Always refused: `type="number"` accepts scientific notation, and the comma
  *  never reaches the value — a browser reports "12,50" as an empty string, so
  *  letting it be typed only makes the field look filled while it is not. */
-const TECLAS_SEMPRE_BLOQUEADAS = ["e", "E", "+", ","];
+const TECLAS_SEMPRE_BLOQUEADAS = ["e", "E", "+", ","]
 
 /**
  * A numeric form field that actually surfaces its Zod errors.
@@ -188,26 +188,26 @@ export function NumericField({
   max,
   decimais = true,
 }: {
-  name: string;
-  label: string;
-  required?: boolean;
-  disabled?: boolean;
-  helperText?: string;
-  placeholder?: string;
-  className?: string;
+  name: string
+  label: string
+  required?: boolean
+  disabled?: boolean
+  helperText?: string
+  placeholder?: string
+  className?: string
   /** Lower bound for the spinner and the browser's own hint. Defaults to 0;
    *  pass `undefined` for a field that legitimately accepts negatives. */
-  min?: number;
-  max?: number;
+  min?: number
+  max?: number
   /** `false` for counts and whole units — also blocks typing a decimal point. */
-  decimais?: boolean;
+  decimais?: boolean
 }) {
-  const { setValue } = useFormContext();
+  const { setValue } = useFormContext()
   const teclasBloqueadas = [
     ...TECLAS_SEMPRE_BLOQUEADAS,
     ...(min !== undefined && min >= 0 ? ["-"] : []),
     ...(decimais ? [] : ["."]),
-  ];
+  ]
 
   return (
     <IGRPInputText
@@ -223,15 +223,15 @@ export function NumericField({
       max={max}
       step={decimais ? "0.01" : 1}
       onKeyDown={(e) => {
-        if (teclasBloqueadas.includes(e.key)) e.preventDefault();
+        if (teclasBloqueadas.includes(e.key)) e.preventDefault()
       }}
       onChange={(e) => {
-        const bruto = e.target.value.trim();
+        const bruto = e.target.value.trim()
         setValue(name, bruto === "" ? undefined : Number(bruto), {
           shouldValidate: true,
-        });
+        })
       }}
     />
-  );
+  )
 }
 ```

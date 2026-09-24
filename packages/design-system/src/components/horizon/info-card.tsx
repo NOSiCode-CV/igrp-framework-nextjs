@@ -158,7 +158,7 @@ function IGRPInfoCard({
       {title && (
         <CardHeader>
           <CardTitle
-            className={cn("text-2xl font-semibold leading-none tracking-tight", surface.accent, titleClassName)}
+            className={cn("text-2xl leading-none font-semibold tracking-tight", surface.accent, titleClassName)}
           >
             {title}
           </CardTitle>
@@ -221,7 +221,7 @@ function IGRPInfoField({ item, orientation, layout, onSolid }: IGRPInfoFieldProp
           // On a solid fill the label shares the card's foreground token; dimming
           // it keeps the label/value hierarchy without a second color.
           onSolid ? "opacity-80" : "text-muted-foreground",
-          isHorizontal && layout.horizontalLabel,
+          isHorizontal && layout.horizontalLabel
         )}
       >
         {item.label}

@@ -24,9 +24,9 @@ const tabListVariants = cva("gap-1.5", {
       default: "",
       outline: "bg-transparent",
       pills: "gap-1.5 bg-transparent",
-      underline: "text-foreground h-auto gap-2 rounded-none border-b bg-transparent",
+      underline: "h-auto gap-2 rounded-none border-b bg-transparent text-foreground",
       cards:
-        "before:bg-border relative h-auto gap-0.5 bg-transparent p-0 before:absolute before:inset-x-0 before:bottom-0 before:h-px",
+        "relative h-auto gap-0.5 bg-transparent p-0 before:absolute before:inset-x-0 before:bottom-0 before:h-px before:bg-border",
     },
     fullWidth: {
       true: "w-full",
@@ -45,11 +45,11 @@ const tabTriggerVariants = cva("px-4 py-1.5", {
       default: "",
       outline: "data-[state=active]:bg-muted data-[state=active]:shadow-none",
       pills:
-        "data-[state=active]:bg-primary data-[state=active]:text-muted-foreground rounded-full data-[state=active]:shadow-none",
+        "rounded-full data-[state=active]:bg-primary data-[state=active]:text-muted-foreground data-[state=active]:shadow-none",
       underline:
-        "hover:bg-accent hover:text-foreground data-[state=active]:after:bg-primary data-[state=active]:hover:bg-accent relative after:absolute after:inset-x-0 after:bottom-0 after:-mb-1 after:h-0.5 data-[state=active]:bg-transparent data-[state=active]:shadow-none",
+        "relative after:absolute after:inset-x-0 after:bottom-0 after:-mb-1 after:h-0.5 hover:bg-accent hover:text-foreground data-[state=active]:bg-transparent data-[state=active]:shadow-none data-[state=active]:after:bg-primary data-[state=active]:hover:bg-accent",
       cards:
-        "bg-muted overflow-hidden rounded-b-none border-x border-t py-2 data-[state=active]:z-10 data-[state=active]:shadow-none",
+        "overflow-hidden rounded-b-none border-x border-t bg-muted py-2 data-[state=active]:z-10 data-[state=active]:shadow-none",
     },
   },
   defaultVariants: {
@@ -290,7 +290,7 @@ function IGRPTabs({
       <div
         className={cn(
           "relative flex gap-1.5",
-          isHorizontal ? "items-center w-full" : "flex-col items-start self-start",
+          isHorizontal ? "w-full items-center" : "flex-col items-start self-start"
         )}
       >
         {showIndicators && canScrollLeft && (
@@ -299,7 +299,7 @@ function IGRPTabs({
             size="icon-sm"
             className={cn(
               "z-10 shrink-0 bg-background/80 shadow-md backdrop-blur-sm hover:bg-background",
-              scrollButtonClassName,
+              scrollButtonClassName
             )}
             onClick={() => scrollToTab("left")}
             aria-label={i18n.tabs.scrollLeft}
@@ -315,18 +315,18 @@ function IGRPTabs({
           onTouchEnd={handleTouchEnd}
           className={cn(
             isHorizontal &&
-              "overflow-x-auto scrollbar-hide scroll-smooth [scrollbar-width:none] [-ms-overflow-style:none] [&::-webkit-scrollbar]:hidden",
+              "scrollbar-hide [scrollbar-width:none] overflow-x-auto scroll-smooth [-ms-overflow-style:none] [&::-webkit-scrollbar]:hidden",
             isHorizontal && "flex-1",
-            !isHorizontal && "w-full",
+            !isHorizontal && "w-full"
           )}
         >
           <TabsList
             className={cn(
-              orientation === "vertical" && "flex-col h-fit",
+              orientation === "vertical" && "h-fit flex-col",
               isHorizontal && "w-max",
               tabListVariants({ variant, fullWidth }),
               fullWidth === true && orientation === "vertical" && "w-fit",
-              tabListClassName,
+              tabListClassName
             )}
           >
             {items.map((item) => (
@@ -339,9 +339,9 @@ function IGRPTabs({
                   orientation === "vertical" && "w-full justify-start",
                   orientation === "vertical" &&
                     variant === "underline" &&
-                    "relative after:absolute after:inset-y-0 after:right-0 after:-mr-1 after:w-0.5 after:h-auto",
+                    "relative after:absolute after:inset-y-0 after:right-0 after:-mr-1 after:h-auto after:w-0.5",
                   iconPlacement === "top" && "flex-col",
-                  tabTriggerClassName,
+                  tabTriggerClassName
                 )}
               >
                 {showBadge && item.badgeContent !== undefined && badgePlacement === "start" && (
@@ -381,7 +381,7 @@ function IGRPTabs({
             size="icon-sm"
             className={cn(
               "z-10 shrink-0 bg-background/80 shadow-md backdrop-blur-sm hover:bg-background",
-              scrollButtonClassName,
+              scrollButtonClassName
             )}
             onClick={() => scrollToTab("right")}
             aria-label={i18n.tabs.scrollRight}
@@ -397,9 +397,9 @@ function IGRPTabs({
           key={item.value}
           value={item.value}
           className={cn(
-            "p-4 w-full border border-transparent rounded-md",
+            "w-full rounded-md border border-transparent p-4",
             contentBorder === true && "border-border",
-            tabContentClassName,
+            tabContentClassName
           )}
         >
           {item.content}

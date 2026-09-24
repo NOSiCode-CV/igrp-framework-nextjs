@@ -47,21 +47,21 @@ Two template editors:
 
 ```ts
 interface SimpleRichTextEditorProps {
-  name?: string;          // falls back to id, then a useId()
-  id?: string;
-  label?: string;
-  helperText?: string;
-  required?: boolean;
-  labelClassName?: string;
-  error?: string;         // manual error, outside the form
-  content?: string;       // uncontrolled-mode value
-  onChange?: (content: string) => void;
-  placeholder?: string;   // default "Começe a escrever aqui..."
-  className?: string;
-  editorClassName?: string;
-  editable?: boolean;     // default true; false = read-only, toolbar hidden
-  preset?: "email" | "documento";
-  variables?: { value: string; label?: string }[];
+  name?: string // falls back to id, then a useId()
+  id?: string
+  label?: string
+  helperText?: string
+  required?: boolean
+  labelClassName?: string
+  error?: string // manual error, outside the form
+  content?: string // uncontrolled-mode value
+  onChange?: (content: string) => void
+  placeholder?: string // default "Começe a escrever aqui..."
+  className?: string
+  editorClassName?: string
+  editable?: boolean // default true; false = read-only, toolbar hidden
+  preset?: "email" | "documento"
+  variables?: { value: string; label?: string }[]
 }
 ```
 
@@ -87,20 +87,20 @@ toolbar is the easy part.
    never re-read, so a callback captured on first render sticks for the
    editor's life. Both are routed through refs.
 3. **`editable` does not propagate as a prop.** `useEditor` re-applies its
-   options with `editable` pinned to the editor's *current* value, so toggling
+   options with `editable` pinned to the editor's _current_ value, so toggling
    read-only needs an explicit `editor.setEditable(editable, false)`. The
    `false` matters: flipping read-only is not a content change, and emitting one
    pushes an identical value back and dirties the form.
 4. **Toolbar state needs an explicit subscription.** TipTap v3 does not
    re-render React on every transaction (v2 did) and only emits `update` when
-   the *document* changes. Without `useEditorState`, toggles miss every
+   the _document_ changes. Without `useEditorState`, toggles miss every
    selection-only change — clicking Bold on an empty selection applied the mark
    but left the button unpressed, and moving the caret out of bold text left it
    pressed.
 5. **The toolbar must not steal the caret.** Every popover button carries
    `onMouseDown={(e) => e.preventDefault()}`, or insert-at-cursor inserts
    nowhere. Disabled toggles are wrapped in a `<span className="inline-flex
-   cursor-not-allowed">` so their tooltip still opens — the same Radix rule as
+cursor-not-allowed">` so their tooltip still opens — the same Radix rule as
    §3 and §6, hit for the third time.
 
 Also worth encoding: the `Placeholder` extension reads its text once at schema
@@ -123,13 +123,13 @@ it echoes its input verbatim, which is what makes §10 load-bearing.
 document of ours. The measured results are reproduced in full in the
 `RICH_TEXT_BACKEND_SUPPORT` comment in §9.8, so you do not need it.)
 
-| Control group | `documento` | `email` |
-|---|---|---|
-| Undo/redo, bold, italic, underline, sub/superscript, clear formatting | yes | yes |
-| Headings 1–3, bullet/ordered list, blockquote, indent/outdent | yes | yes |
-| Link, table, special characters | yes | yes |
-| Strikethrough, highlight, horizontal rule | yes | **no** |
-| Text alignment, colour, font size | yes | **no** |
+| Control group                                                         | `documento` | `email` |
+| --------------------------------------------------------------------- | ----------- | ------- |
+| Undo/redo, bold, italic, underline, sub/superscript, clear formatting | yes         | yes     |
+| Headings 1–3, bullet/ordered list, blockquote, indent/outdent         | yes         | yes     |
+| Link, table, special characters                                       | yes         | yes     |
+| Strikethrough, highlight, horizontal rule                             | yes         | **no**  |
+| Text alignment, colour, font size                                     | yes         | **no**  |
 
 Offering a control whose output the backend discards is worse than not offering
 it, which is why this is a preset and not a `toolbar={[...]}` free-for-all. A DS
@@ -169,24 +169,24 @@ Whichever is chosen, `createRichTextExtensions()` must be **exported**, because
 
 ```ts
 export interface IGRPRichTextEditorProps {
-  name?: string;
-  id?: string;
-  label?: string;
-  helperText?: string;
-  required?: boolean;
-  error?: string;
-  value?: string;                    // rename of `content`
-  onChange?: (html: string) => void;
-  placeholder?: string;              // locale-neutral default
-  editable?: boolean;
-  preset?: "minimal" | "email" | "full";
-  controls?: IGRPRichTextControl[];  // explicit list, overrides preset
-  variables?: { value: string; label?: string }[];
-  variablesLabel?: string;           // the hint above the chips, for i18n
-  maxLength?: number;                // new: character budget on the text
-  className?: string;
-  editorClassName?: string;
-  labelClassName?: string;
+  name?: string
+  id?: string
+  label?: string
+  helperText?: string
+  required?: boolean
+  error?: string
+  value?: string // rename of `content`
+  onChange?: (html: string) => void
+  placeholder?: string // locale-neutral default
+  editable?: boolean
+  preset?: "minimal" | "email" | "full"
+  controls?: IGRPRichTextControl[] // explicit list, overrides preset
+  variables?: { value: string; label?: string }[]
+  variablesLabel?: string // the hint above the chips, for i18n
+  maxLength?: number // new: character budget on the text
+  className?: string
+  editorClassName?: string
+  labelClassName?: string
 }
 ```
 
@@ -239,15 +239,15 @@ second, drifting parser.
 
 ### `src/app/(myapp)/_lib/rich-text-extensions.ts`
 
-```ts
-import Highlight from "@tiptap/extension-highlight";
-import Placeholder from "@tiptap/extension-placeholder";
-import Subscript from "@tiptap/extension-subscript";
-import Superscript from "@tiptap/extension-superscript";
-import { TableKit } from "@tiptap/extension-table";
-import TextAlign from "@tiptap/extension-text-align";
-import { Color, FontSize, TextStyle } from "@tiptap/extension-text-style";
-import StarterKit from "@tiptap/starter-kit";
+````ts
+import Highlight from "@tiptap/extension-highlight"
+import Placeholder from "@tiptap/extension-placeholder"
+import Subscript from "@tiptap/extension-subscript"
+import Superscript from "@tiptap/extension-superscript"
+import { TableKit } from "@tiptap/extension-table"
+import TextAlign from "@tiptap/extension-text-align"
+import { Color, FontSize, TextStyle } from "@tiptap/extension-text-style"
+import StarterKit from "@tiptap/starter-kit"
 
 /**
  * Which toolbar controls a rich-text field offers.
@@ -258,7 +258,7 @@ import StarterKit from "@tiptap/starter-kit";
  * the toolbar varies, because the two backends keep different things (see
  * `RICH_TEXT_BACKEND_SUPPORT`).
  */
-export type RichTextPreset = "email" | "documento";
+export type RichTextPreset = "email" | "documento"
 
 /**
  * What each backend actually preserves, measured against the two preview
@@ -281,15 +281,8 @@ export type RichTextPreset = "email" | "documento";
  */
 export const RICH_TEXT_BACKEND_SUPPORT = {
   /** Controls whose output `notification-templates` discards on render. */
-  strippedByEmailBackend: [
-    "strike",
-    "highlight",
-    "horizontalRule",
-    "textAlign",
-    "color",
-    "fontSize",
-  ],
-} as const;
+  strippedByEmailBackend: ["strike", "highlight", "horizontalRule", "textAlign", "color", "fontSize"],
+} as const
 
 /**
  * The single TipTap schema used both by the editor (`_components/rich-text-editor`)
@@ -355,16 +348,16 @@ export function createRichTextExtensions(placeholder = "") {
     Placeholder.configure({
       placeholder,
     }),
-  ];
+  ]
 }
 
 /** Prose classes shared by the editor surface and the read-only viewer. */
 export const RICH_TEXT_PROSE_CLASS =
-  "prose prose-sm sm:prose-base dark:prose-invert prose-headings:font-semibold prose-p:my-2 prose-headings:my-3 prose-ul:my-2 prose-ol:my-2 prose-blockquote:my-2 prose-blockquote:border-l-2 prose-blockquote:border-muted-foreground/30 prose-blockquote:pl-4 prose-blockquote:italic focus:outline-none max-w-none [&_ul]:list-disc [&_ol]:list-decimal [&_ul]:ps-6 [&_ol]:ps-6 [&_ul_ul]:mt-2 [&_ol_ol]:mt-2";
+  "prose prose-sm sm:prose-base dark:prose-invert prose-headings:font-semibold prose-p:my-2 prose-headings:my-3 prose-ul:my-2 prose-ol:my-2 prose-blockquote:my-2 prose-blockquote:border-l-2 prose-blockquote:border-muted-foreground/30 prose-blockquote:pl-4 prose-blockquote:italic focus:outline-none max-w-none [&_ul]:list-disc [&_ol]:list-decimal [&_ul]:ps-6 [&_ol]:ps-6 [&_ul_ul]:mt-2 [&_ol_ol]:mt-2"
 
 /** Table styling — TipTap ships behaviour, not looks. */
 export const RICH_TEXT_TABLE_CLASS =
-  "[&_table]:w-full [&_table]:border-collapse [&_table]:my-3 [&_th]:border [&_th]:border-border [&_th]:bg-muted [&_th]:p-2 [&_th]:text-start [&_td]:border [&_td]:border-border [&_td]:p-2 [&_.selectedCell]:bg-primary/10 [&_.column-resize-handle]:bg-primary [&_.column-resize-handle]:w-0.5";
+  "[&_table]:w-full [&_table]:border-collapse [&_table]:my-3 [&_th]:border [&_th]:border-border [&_th]:bg-muted [&_th]:p-2 [&_th]:text-start [&_td]:border [&_td]:border-border [&_td]:p-2 [&_.selectedCell]:bg-primary/10 [&_.column-resize-handle]:bg-primary [&_.column-resize-handle]:w-0.5"
 
 /** Characters the "Ω" picker offers. Plain text, so every backend keeps them. */
 export const RICH_TEXT_SPECIAL_CHARS = [
@@ -437,13 +430,13 @@ export const RICH_TEXT_SPECIAL_CHARS = [
   "Õ",
   "Ú",
   "Ç",
-] as const;
-```
+] as const
+````
 
 ### `src/app/(myapp)/_components/rich-text-editor.tsx`
 
 ```tsx
-"use client";
+"use client"
 
 import {
   Button,
@@ -462,20 +455,15 @@ import {
   TooltipProvider,
   TooltipTrigger,
   useFormField,
-} from "@igrp/igrp-framework-react-design-system";
+} from "@igrp/igrp-framework-react-design-system"
 import {
   createRichTextExtensions,
   RICH_TEXT_PROSE_CLASS,
   RICH_TEXT_SPECIAL_CHARS,
   RICH_TEXT_TABLE_CLASS,
   type RichTextPreset,
-} from "@myapp/_lib/rich-text-extensions";
-import {
-  type Editor,
-  EditorContent,
-  useEditor,
-  useEditorState,
-} from "@tiptap/react";
+} from "@myapp/_lib/rich-text-extensions"
+import { type Editor, EditorContent, useEditor, useEditorState } from "@tiptap/react"
 import {
   type ComponentProps,
   type ComponentPropsWithoutRef,
@@ -486,18 +474,14 @@ import {
   useMemo,
   useRef,
   useState,
-} from "react";
-import type { ControllerRenderProps } from "react-hook-form";
-import { useFormContext } from "react-hook-form";
+} from "react"
+import type { ControllerRenderProps } from "react-hook-form"
+import { useFormContext } from "react-hook-form"
 
-import { cn } from "@/lib/utils";
+import { cn } from "@/lib/utils"
 
 /** The shared prose classes plus the editable surface's own box metrics. */
-const editorProseClass = cn(
-  RICH_TEXT_PROSE_CLASS,
-  RICH_TEXT_TABLE_CLASS,
-  "min-h-[200px] p-4",
-);
+const editorProseClass = cn(RICH_TEXT_PROSE_CLASS, RICH_TEXT_TABLE_CLASS, "min-h-[200px] p-4")
 
 /** Content colours offered by the "A" swatch. Document data, not UI chrome. */
 const TEXT_COLOURS: { label: string; value: string }[] = [
@@ -509,32 +493,32 @@ const TEXT_COLOURS: { label: string; value: string }[] = [
   { label: "Verde", value: "#15803d" },
   { label: "Azul", value: "#1d4ed8" },
   { label: "Roxo", value: "#6d28d9" },
-];
+]
 
-const FONT_SIZES = ["12px", "14px", "16px", "18px", "24px", "32px"];
+const FONT_SIZES = ["12px", "14px", "16px", "18px", "24px", "32px"]
 
 interface SimpleRichTextEditorProps {
-  name?: string;
-  id?: string;
-  label?: string;
-  helperText?: string;
-  required?: boolean;
-  labelClassName?: string;
-  error?: string;
-  content?: string;
-  onChange?: (content: string) => void;
-  placeholder?: string;
-  className?: string;
-  editorClassName?: string;
-  editable?: boolean;
+  name?: string
+  id?: string
+  label?: string
+  helperText?: string
+  required?: boolean
+  labelClassName?: string
+  error?: string
+  content?: string
+  onChange?: (content: string) => void
+  placeholder?: string
+  className?: string
+  editorClassName?: string
+  editable?: boolean
   /**
    * Which toolbar the field shows. `"email"` hides the controls the
    * notification backend strips on render (see `RICH_TEXT_BACKEND_SUPPORT`);
    * `"documento"` is the full set.
    */
-  preset?: RichTextPreset;
+  preset?: RichTextPreset
   /** Clickable tokens inserted at the caret (e.g. `{{nome_titular}}`). */
-  variables?: { value: string; label?: string }[];
+  variables?: { value: string; label?: string }[]
 }
 
 /**
@@ -545,169 +529,162 @@ interface SimpleRichTextEditorProps {
  * are never announced for the inner `role="textbox"`.
  */
 type EditorAriaProps = {
-  editorId?: string;
-  ariaLabel?: string;
-  ariaDescribedBy?: string;
-  ariaInvalid?: boolean;
-  ariaRequired?: boolean;
-};
+  editorId?: string
+  ariaLabel?: string
+  ariaDescribedBy?: string
+  ariaInvalid?: boolean
+  ariaRequired?: boolean
+}
 
 type SimpleRichTextEditorSurfaceProps = {
-  value: string;
-  onHtmlChange: (html: string) => void;
-  onBlur?: () => void;
-  placeholder: string;
-  editable: boolean;
-  className?: string;
-  hasError?: boolean;
-  preset: RichTextPreset;
-  variables?: { value: string; label?: string }[];
+  value: string
+  onHtmlChange: (html: string) => void
+  onBlur?: () => void
+  placeholder: string
+  editable: boolean
+  className?: string
+  hasError?: boolean
+  preset: RichTextPreset
+  variables?: { value: string; label?: string }[]
 } & EditorAriaProps &
   // `onBlur` is declared above as the editor's own `() => void`; keeping the
   // div's `FocusEventHandler` would intersect the two into an uncallable type.
-  Omit<ComponentPropsWithoutRef<"div">, "children" | "onBlur">;
+  Omit<ComponentPropsWithoutRef<"div">, "children" | "onBlur">
 
-const RichTextEditorSurface = forwardRef<
-  HTMLDivElement,
-  SimpleRichTextEditorSurfaceProps
->(function RichTextEditorSurface(
-  {
-    value,
-    onHtmlChange,
-    onBlur,
-    placeholder,
-    editable,
-    className,
-    hasError,
-    editorId,
-    ariaLabel,
-    ariaDescribedBy,
-    ariaInvalid,
-    ariaRequired,
-    preset,
-    variables,
-    ...divProps
-  },
-  ref,
-) {
-  // Shared with the read-only `RichTextView`, which leans on this same schema
-  // as its allow-list — keep the two on one definition.
-  const extensions = useMemo(
-    () => createRichTextExtensions(placeholder),
-    [placeholder],
-  );
-
-  /**
-   * TipTap binds the `onUpdate`/`onBlur` it was constructed with once and never
-   * re-reads them, so a callback captured on the first render would stick for
-   * the editor's whole life. Route both through refs.
-   */
-  const onHtmlChangeRef = useRef(onHtmlChange);
-  onHtmlChangeRef.current = onHtmlChange;
-  const onBlurRef = useRef(onBlur);
-  onBlurRef.current = onBlur;
-
-  const editorAttributes = useMemo(
-    () => ({
-      ...(editorId ? { id: editorId } : {}),
-      role: "textbox" as const,
-      "aria-multiline": "true" as const,
-      ...(ariaLabel ? { "aria-label": ariaLabel } : {}),
-      ...(ariaDescribedBy ? { "aria-describedby": ariaDescribedBy } : {}),
-      ...(ariaInvalid ? { "aria-invalid": "true" as const } : {}),
-      ...(ariaRequired ? { "aria-required": "true" as const } : {}),
-      class: editorProseClass,
-    }),
-    [editorId, ariaLabel, ariaDescribedBy, ariaInvalid, ariaRequired],
-  );
-
-  const editor = useEditor({
-    extensions,
-    content: value,
-    editable,
-    // Next.js would infer this anyway, but only after logging a warning on
-    // every mount. The editor is client-only by design.
-    immediatelyRender: false,
-    editorProps: {
-      attributes: editorAttributes,
+const RichTextEditorSurface = forwardRef<HTMLDivElement, SimpleRichTextEditorSurfaceProps>(
+  function RichTextEditorSurface(
+    {
+      value,
+      onHtmlChange,
+      onBlur,
+      placeholder,
+      editable,
+      className,
+      hasError,
+      editorId,
+      ariaLabel,
+      ariaDescribedBy,
+      ariaInvalid,
+      ariaRequired,
+      preset,
+      variables,
+      ...divProps
     },
-    onUpdate: ({ editor: ed }) => {
-      onHtmlChangeRef.current(ed.getHTML());
-    },
-    onBlur: () => {
-      onBlurRef.current?.();
-    },
-  });
+    ref
+  ) {
+    // Shared with the read-only `RichTextView`, which leans on this same schema
+    // as its allow-list — keep the two on one definition.
+    const extensions = useMemo(() => createRichTextExtensions(placeholder), [placeholder])
 
-  useEffect(() => {
-    if (!editor) return;
-    const next = value ?? "";
-    const current = editor.getHTML();
-    if (next !== current) {
-      editor.commands.setContent(next, { emitUpdate: false });
-    }
-  }, [value, editor]);
+    /**
+     * TipTap binds the `onUpdate`/`onBlur` it was constructed with once and never
+     * re-reads them, so a callback captured on the first render would stick for
+     * the editor's whole life. Route both through refs.
+     */
+    const onHtmlChangeRef = useRef(onHtmlChange)
+    onHtmlChangeRef.current = onHtmlChange
+    const onBlurRef = useRef(onBlur)
+    onBlurRef.current = onBlur
 
-  /**
-   * `useEditor` deliberately re-applies its options with `editable` pinned to
-   * the editor's *current* value, so the prop alone never reaches a mounted
-   * editor. `emitUpdate: false` because flipping read-only is not a content
-   * change — emitting would push an identical value back and dirty the form.
-   */
-  useEffect(() => {
-    if (!editor || editor.isEditable === editable) return;
-    editor.setEditable(editable, false);
-  }, [editor, editable]);
+    const editorAttributes = useMemo(
+      () => ({
+        ...(editorId ? { id: editorId } : {}),
+        role: "textbox" as const,
+        "aria-multiline": "true" as const,
+        ...(ariaLabel ? { "aria-label": ariaLabel } : {}),
+        ...(ariaDescribedBy ? { "aria-describedby": ariaDescribedBy } : {}),
+        ...(ariaInvalid ? { "aria-invalid": "true" as const } : {}),
+        ...(ariaRequired ? { "aria-required": "true" as const } : {}),
+        class: editorProseClass,
+      }),
+      [editorId, ariaLabel, ariaDescribedBy, ariaInvalid, ariaRequired]
+    )
 
-  const insertVariable = useCallback(
-    (token: string) => {
-      if (!editor || !editable) return;
-      editor.chain().focus().insertContent(token).run();
-    },
-    [editor, editable],
-  );
+    const editor = useEditor({
+      extensions,
+      content: value,
+      editable,
+      // Next.js would infer this anyway, but only after logging a warning on
+      // every mount. The editor is client-only by design.
+      immediatelyRender: false,
+      editorProps: {
+        attributes: editorAttributes,
+      },
+      onUpdate: ({ editor: ed }) => {
+        onHtmlChangeRef.current(ed.getHTML())
+      },
+      onBlur: () => {
+        onBlurRef.current?.()
+      },
+    })
 
-  return (
-    <div
-      ref={ref}
-      className={cn(
-        "rounded-lg border bg-background shadow-sm",
-        hasError &&
-          "border-destructive focus-within:ring-destructive/20 focus-within:ring-2",
-        className,
-      )}
-      {...divProps}
-    >
-      {/* Em leitura (mode="view" dos formulários) a barra de formatação não
+    useEffect(() => {
+      if (!editor) return
+      const next = value ?? ""
+      const current = editor.getHTML()
+      if (next !== current) {
+        editor.commands.setContent(next, { emitUpdate: false })
+      }
+    }, [value, editor])
+
+    /**
+     * `useEditor` deliberately re-applies its options with `editable` pinned to
+     * the editor's *current* value, so the prop alone never reaches a mounted
+     * editor. `emitUpdate: false` because flipping read-only is not a content
+     * change — emitting would push an identical value back and dirty the form.
+     */
+    useEffect(() => {
+      if (!editor || editor.isEditable === editable) return
+      editor.setEditable(editable, false)
+    }, [editor, editable])
+
+    const insertVariable = useCallback(
+      (token: string) => {
+        if (!editor || !editable) return
+        editor.chain().focus().insertContent(token).run()
+      },
+      [editor, editable]
+    )
+
+    return (
+      <div
+        ref={ref}
+        className={cn(
+          "rounded-lg border bg-background shadow-sm",
+          hasError && "border-destructive focus-within:ring-2 focus-within:ring-destructive/20",
+          className
+        )}
+        {...divProps}
+      >
+        {/* Em leitura (mode="view" dos formulários) a barra de formatação não
           tem sobre o que agir — esconde-se, como a paleta de variáveis. */}
-      {editable ? <EditorToolbar editor={editor} preset={preset} /> : null}
-      <EditorContent editor={editor} />
-      {editable && variables && variables.length > 0 ? (
-        <div className="flex flex-col gap-2 border-t border-border bg-muted/20 p-2">
-          <p className="text-xs text-muted-foreground">
-            Clique numa variável para a inserir na posição do cursor.
-          </p>
-          <div className="flex flex-wrap gap-1.5">
-            {variables.map((variable) => (
-              <Button
-                key={variable.value}
-                type="button"
-                size="sm"
-                variant="outline"
-                className="h-7 px-2 font-mono text-xs"
-                // Keep selection: avoid blur before insert.
-                onMouseDown={(e) => e.preventDefault()}
-                onClick={() => insertVariable(variable.value)}
-              >
-                {variable.label ?? variable.value}
-              </Button>
-            ))}
+        {editable ? <EditorToolbar editor={editor} preset={preset} /> : null}
+        <EditorContent editor={editor} />
+        {editable && variables && variables.length > 0 ? (
+          <div className="flex flex-col gap-2 border-t border-border bg-muted/20 p-2">
+            <p className="text-xs text-muted-foreground">Clique numa variável para a inserir na posição do cursor.</p>
+            <div className="flex flex-wrap gap-1.5">
+              {variables.map((variable) => (
+                <Button
+                  key={variable.value}
+                  type="button"
+                  size="sm"
+                  variant="outline"
+                  className="h-7 px-2 font-mono text-xs"
+                  // Keep selection: avoid blur before insert.
+                  onMouseDown={(e) => e.preventDefault()}
+                  onClick={() => insertVariable(variable.value)}
+                >
+                  {variable.label ?? variable.value}
+                </Button>
+              ))}
+            </div>
           </div>
-        </div>
-      ) : null}
-    </div>
-  );
-});
+        ) : null}
+      </div>
+    )
+  }
+)
 
 function ToolbarButton({
   pressed,
@@ -716,11 +693,11 @@ function ToolbarButton({
   children,
   tooltip,
 }: {
-  pressed?: boolean;
-  onPressedChange?: () => void;
-  disabled?: boolean;
-  children: React.ReactNode;
-  tooltip?: string;
+  pressed?: boolean
+  onPressedChange?: () => void
+  disabled?: boolean
+  children: React.ReactNode
+  tooltip?: string
 }) {
   const toggle = (
     <Toggle
@@ -733,19 +710,15 @@ function ToolbarButton({
     >
       {children}
     </Toggle>
-  );
+  )
 
   if (!tooltip) {
-    return toggle;
+    return toggle
   }
 
   // Disabled controls often don't receive pointer events, so the tooltip never opens.
   // A wrapping span receives hover while the inner toggle stays disabled.
-  const triggerChild = disabled ? (
-    <span className="inline-flex cursor-not-allowed">{toggle}</span>
-  ) : (
-    toggle
-  );
+  const triggerChild = disabled ? <span className="inline-flex cursor-not-allowed">{toggle}</span> : toggle
 
   return (
     <Tooltip>
@@ -754,12 +727,12 @@ function ToolbarButton({
         {tooltip}
       </TooltipContent>
     </Tooltip>
-  );
+  )
 }
 
 function LinkPopover({ editor }: { editor: Editor }) {
-  const [url, setUrl] = useState("");
-  const [open, setOpen] = useState(false);
+  const [url, setUrl] = useState("")
+  const [open, setOpen] = useState(false)
 
   const { isActive, href } = useEditorState({
     editor,
@@ -767,26 +740,26 @@ function LinkPopover({ editor }: { editor: Editor }) {
       isActive: ed.isActive("link"),
       href: (ed.getAttributes("link").href as string | undefined) ?? "",
     }),
-  });
+  })
 
   const handleOpenChange = useCallback(
     (next: boolean) => {
       // Seed from the link under the caret. Opening on an existing link used to
       // show an empty box, which made "Guardar" look like a no-op while it
       // actually deleted the link.
-      if (next) setUrl(href);
-      setOpen(next);
+      if (next) setUrl(href)
+      setOpen(next)
     },
-    [href],
-  );
+    [href]
+  )
 
   const setLink = useCallback(() => {
-    const nextHref = url.trim();
+    const nextHref = url.trim()
     // An empty field is a no-op, never a delete — removal is the explicit
     // "Remover" button below.
     if (!nextHref) {
-      setOpen(false);
-      return;
+      setOpen(false)
+      return
     }
     if (editor.state.selection.empty && !isActive) {
       // Nothing selected and no link to extend: inserting the URL as its own
@@ -799,35 +772,25 @@ function LinkPopover({ editor }: { editor: Editor }) {
           text: nextHref,
           marks: [{ type: "link", attrs: { href: nextHref } }],
         })
-        .run();
+        .run()
     } else {
-      editor
-        .chain()
-        .focus()
-        .extendMarkRange("link")
-        .setLink({ href: nextHref })
-        .run();
+      editor.chain().focus().extendMarkRange("link").setLink({ href: nextHref }).run()
     }
-    setOpen(false);
-  }, [editor, url, isActive]);
+    setOpen(false)
+  }, [editor, url, isActive])
 
   const removeLink = useCallback(() => {
-    editor.chain().focus().extendMarkRange("link").unsetLink().run();
-    setOpen(false);
-    setUrl("");
-  }, [editor]);
+    editor.chain().focus().extendMarkRange("link").unsetLink().run()
+    setOpen(false)
+    setUrl("")
+  }, [editor])
 
   return (
     <Popover open={open} onOpenChange={handleOpenChange}>
       <Tooltip>
         <TooltipTrigger asChild>
           <PopoverTrigger asChild>
-            <Toggle
-              size="sm"
-              pressed={isActive}
-              className="h-8 w-8 p-0"
-              aria-label="Inserir hiperligação"
-            >
+            <Toggle size="sm" pressed={isActive} className="h-8 w-8 p-0" aria-label="Inserir hiperligação">
               <IGRPIcon iconName="Link" />
             </Toggle>
           </PopoverTrigger>
@@ -839,10 +802,8 @@ function LinkPopover({ editor }: { editor: Editor }) {
       <PopoverContent className="w-80" align="start">
         <div className="grid gap-4">
           <div className="space-y-2">
-            <h4 className="font-medium leading-none">Inserir Enlace</h4>
-            <p className="text-sm text-muted-foreground">
-              Inserir URL do enlace
-            </p>
+            <h4 className="leading-none font-medium">Inserir Enlace</h4>
+            <p className="text-sm text-muted-foreground">Inserir URL do enlace</p>
           </div>
           <div className="grid gap-2">
             <Label htmlFor="url">URL</Label>
@@ -853,8 +814,8 @@ function LinkPopover({ editor }: { editor: Editor }) {
               onChange={(e) => setUrl(e.target.value)}
               onKeyDown={(e) => {
                 if (e.key === "Enter") {
-                  e.preventDefault();
-                  setLink();
+                  e.preventDefault()
+                  setLink()
                 }
               }}
             />
@@ -873,7 +834,7 @@ function LinkPopover({ editor }: { editor: Editor }) {
         </div>
       </PopoverContent>
     </Popover>
-  );
+  )
 }
 
 /** Shared shell for the icon-plus-popover controls in the toolbar. */
@@ -885,24 +846,19 @@ function ToolbarPopover({
   children,
   className,
 }: {
-  iconName?: string;
-  glyph?: string;
-  tooltip: string;
-  pressed?: boolean;
-  children: React.ReactNode;
-  className?: string;
+  iconName?: string
+  glyph?: string
+  tooltip: string
+  pressed?: boolean
+  children: React.ReactNode
+  className?: string
 }) {
   return (
     <Popover>
       <Tooltip>
         <TooltipTrigger asChild>
           <PopoverTrigger asChild>
-            <Toggle
-              size="sm"
-              pressed={pressed}
-              className="h-8 w-8 p-0"
-              aria-label={tooltip}
-            >
+            <Toggle size="sm" pressed={pressed} className="h-8 w-8 p-0" aria-label={tooltip}>
               {iconName ? (
                 <IGRPIcon iconName={iconName} />
               ) : (
@@ -921,70 +877,57 @@ function ToolbarPopover({
         {children}
       </PopoverContent>
     </Popover>
-  );
+  )
 }
 
-function TablePopover({
-  editor,
-  inTable,
-}: {
-  editor: Editor;
-  inTable: boolean;
-}) {
-  const run = (fn: () => void) => () => fn();
-  const actions: { label: string; onClick: () => void; disabled?: boolean }[] =
-    [
-      {
-        label: "Inserir tabela 3×3",
-        onClick: run(() =>
-          editor
-            .chain()
-            .focus()
-            .insertTable({ rows: 3, cols: 3, withHeaderRow: true })
-            .run(),
-        ),
-      },
-      {
-        label: "Coluna antes",
-        onClick: run(() => editor.chain().focus().addColumnBefore().run()),
-        disabled: !inTable,
-      },
-      {
-        label: "Coluna depois",
-        onClick: run(() => editor.chain().focus().addColumnAfter().run()),
-        disabled: !inTable,
-      },
-      {
-        label: "Eliminar coluna",
-        onClick: run(() => editor.chain().focus().deleteColumn().run()),
-        disabled: !inTable,
-      },
-      {
-        label: "Linha antes",
-        onClick: run(() => editor.chain().focus().addRowBefore().run()),
-        disabled: !inTable,
-      },
-      {
-        label: "Linha depois",
-        onClick: run(() => editor.chain().focus().addRowAfter().run()),
-        disabled: !inTable,
-      },
-      {
-        label: "Eliminar linha",
-        onClick: run(() => editor.chain().focus().deleteRow().run()),
-        disabled: !inTable,
-      },
-      {
-        label: "Unir / dividir células",
-        onClick: run(() => editor.chain().focus().mergeOrSplit().run()),
-        disabled: !inTable,
-      },
-      {
-        label: "Eliminar tabela",
-        onClick: run(() => editor.chain().focus().deleteTable().run()),
-        disabled: !inTable,
-      },
-    ];
+function TablePopover({ editor, inTable }: { editor: Editor; inTable: boolean }) {
+  const run = (fn: () => void) => () => fn()
+  const actions: { label: string; onClick: () => void; disabled?: boolean }[] = [
+    {
+      label: "Inserir tabela 3×3",
+      onClick: run(() => editor.chain().focus().insertTable({ rows: 3, cols: 3, withHeaderRow: true }).run()),
+    },
+    {
+      label: "Coluna antes",
+      onClick: run(() => editor.chain().focus().addColumnBefore().run()),
+      disabled: !inTable,
+    },
+    {
+      label: "Coluna depois",
+      onClick: run(() => editor.chain().focus().addColumnAfter().run()),
+      disabled: !inTable,
+    },
+    {
+      label: "Eliminar coluna",
+      onClick: run(() => editor.chain().focus().deleteColumn().run()),
+      disabled: !inTable,
+    },
+    {
+      label: "Linha antes",
+      onClick: run(() => editor.chain().focus().addRowBefore().run()),
+      disabled: !inTable,
+    },
+    {
+      label: "Linha depois",
+      onClick: run(() => editor.chain().focus().addRowAfter().run()),
+      disabled: !inTable,
+    },
+    {
+      label: "Eliminar linha",
+      onClick: run(() => editor.chain().focus().deleteRow().run()),
+      disabled: !inTable,
+    },
+    {
+      label: "Unir / dividir células",
+      onClick: run(() => editor.chain().focus().mergeOrSplit().run()),
+      disabled: !inTable,
+    },
+    {
+      label: "Eliminar tabela",
+      onClick: run(() => editor.chain().focus().deleteTable().run()),
+      disabled: !inTable,
+    },
+  ]
 
   return (
     <ToolbarPopover iconName="Table" tooltip="Tabela" pressed={inTable}>
@@ -1005,7 +948,7 @@ function TablePopover({
         ))}
       </div>
     </ToolbarPopover>
-  );
+  )
 }
 
 function SpecialCharPopover({ editor }: { editor: Editor }) {
@@ -1029,7 +972,7 @@ function SpecialCharPopover({ editor }: { editor: Editor }) {
         ))}
       </div>
     </ToolbarPopover>
-  );
+  )
 }
 
 function ColourPopover({ editor }: { editor: Editor }) {
@@ -1053,16 +996,14 @@ function ColourPopover({ editor }: { editor: Editor }) {
             <span
               aria-hidden
               className="size-4 rounded-sm border border-border"
-              style={
-                colour.value ? { backgroundColor: colour.value } : undefined
-              }
+              style={colour.value ? { backgroundColor: colour.value } : undefined}
             />
             {colour.label}
           </Button>
         ))}
       </div>
     </ToolbarPopover>
-  );
+  )
 }
 
 function FontSizePopover({ editor }: { editor: Editor }) {
@@ -1094,35 +1035,23 @@ function FontSizePopover({ editor }: { editor: Editor }) {
         ))}
       </div>
     </ToolbarPopover>
-  );
+  )
 }
 
-function EditorToolbar({
-  editor,
-  preset,
-}: {
-  editor: Editor | null;
-  preset: RichTextPreset;
-}) {
+function EditorToolbar({ editor, preset }: { editor: Editor | null; preset: RichTextPreset }) {
   if (!editor) {
-    return null;
+    return null
   }
 
   // Split so the state hook below only ever sees a live editor; the toolbar
   // mounts and unmounts as a unit with it.
-  return <EditorToolbarControls editor={editor} preset={preset} />;
+  return <EditorToolbarControls editor={editor} preset={preset} />
 }
 
-function EditorToolbarControls({
-  editor,
-  preset,
-}: {
-  editor: Editor;
-  preset: RichTextPreset;
-}) {
+function EditorToolbarControls({ editor, preset }: { editor: Editor; preset: RichTextPreset }) {
   // Everything the notification backend drops on render. Offering these on an
   // e-mail body would let an author format text that never reaches the reader.
-  const rich = preset === "documento";
+  const rich = preset === "documento"
   /**
    * TipTap v3 does not re-render React on every transaction (v2 did), and it
    * only emits `update` when the *document* changes. Without this subscription
@@ -1156,7 +1085,7 @@ function EditorToolbarControls({
       alignRight: ed.isActive({ textAlign: "right" }),
       alignJustify: ed.isActive({ textAlign: "justify" }),
     }),
-  });
+  })
 
   return (
     <TooltipProvider delayDuration={300}>
@@ -1213,9 +1142,7 @@ function EditorToolbarControls({
         {rich ? (
           <ToolbarButton
             pressed={state.highlight}
-            onPressedChange={() =>
-              editor.chain().focus().toggleHighlight().run()
-            }
+            onPressedChange={() => editor.chain().focus().toggleHighlight().run()}
             tooltip="Realce"
           >
             <IGRPIcon iconName="Highlighter" />
@@ -1230,17 +1157,13 @@ function EditorToolbarControls({
         </ToolbarButton>
         <ToolbarButton
           pressed={state.superscript}
-          onPressedChange={() =>
-            editor.chain().focus().toggleSuperscript().run()
-          }
+          onPressedChange={() => editor.chain().focus().toggleSuperscript().run()}
           tooltip="Sobrescrito"
         >
           <IGRPIcon iconName="Superscript" />
         </ToolbarButton>
         <ToolbarButton
-          onPressedChange={() =>
-            editor.chain().focus().unsetAllMarks().clearNodes().run()
-          }
+          onPressedChange={() => editor.chain().focus().unsetAllMarks().clearNodes().run()}
           tooltip="Remover formatação"
         >
           <IGRPIcon iconName="RemoveFormatting" />
@@ -1251,27 +1174,21 @@ function EditorToolbarControls({
         {/* Headings */}
         <ToolbarButton
           pressed={state.h1}
-          onPressedChange={() =>
-            editor.chain().focus().toggleHeading({ level: 1 }).run()
-          }
+          onPressedChange={() => editor.chain().focus().toggleHeading({ level: 1 }).run()}
           tooltip="Título 1"
         >
           <IGRPIcon iconName="Heading1" />
         </ToolbarButton>
         <ToolbarButton
           pressed={state.h2}
-          onPressedChange={() =>
-            editor.chain().focus().toggleHeading({ level: 2 }).run()
-          }
+          onPressedChange={() => editor.chain().focus().toggleHeading({ level: 2 }).run()}
           tooltip="Título 2"
         >
           <IGRPIcon iconName="Heading2" />
         </ToolbarButton>
         <ToolbarButton
           pressed={state.h3}
-          onPressedChange={() =>
-            editor.chain().focus().toggleHeading({ level: 3 }).run()
-          }
+          onPressedChange={() => editor.chain().focus().toggleHeading({ level: 3 }).run()}
           tooltip="Título 3"
         >
           <IGRPIcon iconName="Heading3" />
@@ -1282,44 +1199,34 @@ function EditorToolbarControls({
         {/* Lists */}
         <ToolbarButton
           pressed={state.bulletList}
-          onPressedChange={() =>
-            editor.chain().focus().toggleBulletList().run()
-          }
+          onPressedChange={() => editor.chain().focus().toggleBulletList().run()}
           tooltip="Lista com marcas"
         >
           <IGRPIcon iconName="List" />
         </ToolbarButton>
         <ToolbarButton
           pressed={state.orderedList}
-          onPressedChange={() =>
-            editor.chain().focus().toggleOrderedList().run()
-          }
+          onPressedChange={() => editor.chain().focus().toggleOrderedList().run()}
           tooltip="Lista numerada"
         >
           <IGRPIcon iconName="ListOrdered" />
         </ToolbarButton>
         <ToolbarButton
           pressed={state.blockquote}
-          onPressedChange={() =>
-            editor.chain().focus().toggleBlockquote().run()
-          }
+          onPressedChange={() => editor.chain().focus().toggleBlockquote().run()}
           tooltip="Citação"
         >
           <IGRPIcon iconName="Quote" />
         </ToolbarButton>
         <ToolbarButton
-          onPressedChange={() =>
-            editor.chain().focus().sinkListItem("listItem").run()
-          }
+          onPressedChange={() => editor.chain().focus().sinkListItem("listItem").run()}
           disabled={!state.canSink}
           tooltip="Aumentar avanço"
         >
           <IGRPIcon iconName="ListIndentIncrease" />
         </ToolbarButton>
         <ToolbarButton
-          onPressedChange={() =>
-            editor.chain().focus().liftListItem("listItem").run()
-          }
+          onPressedChange={() => editor.chain().focus().liftListItem("listItem").run()}
           disabled={!state.canLift}
           tooltip="Diminuir avanço"
         >
@@ -1327,9 +1234,7 @@ function EditorToolbarControls({
         </ToolbarButton>
         {rich ? (
           <ToolbarButton
-            onPressedChange={() =>
-              editor.chain().focus().setHorizontalRule().run()
-            }
+            onPressedChange={() => editor.chain().focus().setHorizontalRule().run()}
             tooltip="Linha horizontal"
           >
             <IGRPIcon iconName="Minus" />
@@ -1343,36 +1248,28 @@ function EditorToolbarControls({
           <>
             <ToolbarButton
               pressed={state.alignLeft}
-              onPressedChange={() =>
-                editor.chain().focus().setTextAlign("left").run()
-              }
+              onPressedChange={() => editor.chain().focus().setTextAlign("left").run()}
               tooltip="Alinhar à esquerda"
             >
               <IGRPIcon iconName="TextAlignStart" />
             </ToolbarButton>
             <ToolbarButton
               pressed={state.alignCenter}
-              onPressedChange={() =>
-                editor.chain().focus().setTextAlign("center").run()
-              }
+              onPressedChange={() => editor.chain().focus().setTextAlign("center").run()}
               tooltip="Alinhar ao centro"
             >
               <IGRPIcon iconName="TextAlignCenter" />
             </ToolbarButton>
             <ToolbarButton
               pressed={state.alignRight}
-              onPressedChange={() =>
-                editor.chain().focus().setTextAlign("right").run()
-              }
+              onPressedChange={() => editor.chain().focus().setTextAlign("right").run()}
               tooltip="Alinhar à direita"
             >
               <IGRPIcon iconName="TextAlignEnd" />
             </ToolbarButton>
             <ToolbarButton
               pressed={state.alignJustify}
-              onPressedChange={() =>
-                editor.chain().focus().setTextAlign("justify").run()
-              }
+              onPressedChange={() => editor.chain().focus().setTextAlign("justify").run()}
               tooltip="Justificar"
             >
               <IGRPIcon iconName="TextAlignJustify" />
@@ -1389,20 +1286,20 @@ function EditorToolbarControls({
         {rich ? <FontSizePopover editor={editor} /> : null}
       </div>
     </TooltipProvider>
-  );
+  )
 }
 
 type FormBoundSurfaceProps = {
-  field: ControllerRenderProps;
-  label?: string;
-  required?: boolean;
-  placeholder: string;
-  editable: boolean;
-  className?: string;
-  hasError: boolean;
-  preset: RichTextPreset;
-  variables?: { value: string; label?: string }[];
-} & Omit<ComponentPropsWithoutRef<"div">, "children" | "onBlur">;
+  field: ControllerRenderProps
+  label?: string
+  required?: boolean
+  placeholder: string
+  editable: boolean
+  className?: string
+  hasError: boolean
+  preset: RichTextPreset
+  variables?: { value: string; label?: string }[]
+} & Omit<ComponentPropsWithoutRef<"div">, "children" | "onBlur">
 
 /**
  * The `IGRPFormField` branch. Split into its own component so it can call
@@ -1410,54 +1307,40 @@ type FormBoundSurfaceProps = {
  * `id`/`aria-*` that `FormControl` clones onto its child still land on the
  * container `div`, which is what `IGRPFormField`'s `<label for>` targets.
  */
-const FormBoundRichTextEditorSurface = forwardRef<
-  HTMLDivElement,
-  FormBoundSurfaceProps
->(function FormBoundRichTextEditorSurface(
-  {
-    field,
-    label,
-    required,
-    placeholder,
-    editable,
-    className,
-    hasError,
-    preset,
-    variables,
-    ...divProps
-  },
-  ref,
-) {
-  const { formDescriptionId, formMessageId, error } = useFormField();
+const FormBoundRichTextEditorSurface = forwardRef<HTMLDivElement, FormBoundSurfaceProps>(
+  function FormBoundRichTextEditorSurface(
+    { field, label, required, placeholder, editable, className, hasError, preset, variables, ...divProps },
+    ref
+  ) {
+    const { formDescriptionId, formMessageId, error } = useFormField()
 
-  return (
-    <RichTextEditorSurface
-      ref={ref}
-      // The Placeholder extension reads its text once, at schema build time, so
-      // a changed placeholder only takes effect on a fresh editor.
-      key={placeholder}
-      value={field.value ?? ""}
-      onHtmlChange={field.onChange}
-      onBlur={field.onBlur}
-      placeholder={placeholder}
-      editable={editable}
-      className={className}
-      hasError={hasError}
-      // `<label for>` cannot name a contenteditable and the wrapper div's
-      // `aria-*` are not announced for the inner textbox — mirror both here or
-      // the field is an unnamed textbox with no error association.
-      ariaLabel={label}
-      ariaDescribedBy={
-        error ? `${formDescriptionId} ${formMessageId}` : formDescriptionId
-      }
-      ariaInvalid={hasError}
-      ariaRequired={required}
-      preset={preset}
-      variables={variables}
-      {...divProps}
-    />
-  );
-});
+    return (
+      <RichTextEditorSurface
+        ref={ref}
+        // The Placeholder extension reads its text once, at schema build time, so
+        // a changed placeholder only takes effect on a fresh editor.
+        key={placeholder}
+        value={field.value ?? ""}
+        onHtmlChange={field.onChange}
+        onBlur={field.onBlur}
+        placeholder={placeholder}
+        editable={editable}
+        className={className}
+        hasError={hasError}
+        // `<label for>` cannot name a contenteditable and the wrapper div's
+        // `aria-*` are not announced for the inner textbox — mirror both here or
+        // the field is an unnamed textbox with no error association.
+        ariaLabel={label}
+        ariaDescribedBy={error ? `${formDescriptionId} ${formMessageId}` : formDescriptionId}
+        ariaInvalid={hasError}
+        ariaRequired={required}
+        preset={preset}
+        variables={variables}
+        {...divProps}
+      />
+    )
+  }
+)
 
 function SimpleRichTextEditor({
   name,
@@ -1476,9 +1359,9 @@ function SimpleRichTextEditor({
   preset = "documento",
   variables,
 }: SimpleRichTextEditorProps) {
-  const _id = useId();
-  const fieldName = name ?? id ?? _id;
-  const formContext = useFormContext();
+  const _id = useId()
+  const fieldName = name ?? id ?? _id
+  const formContext = useFormContext()
 
   if (formContext) {
     return (
@@ -1488,11 +1371,7 @@ function SimpleRichTextEditor({
         helperText={helperText}
         className={className}
         required={required}
-        control={
-          formContext.control as unknown as ComponentProps<
-            typeof IGRPFormField
-          >["control"]
-        }
+        control={formContext.control as unknown as ComponentProps<typeof IGRPFormField>["control"]}
       >
         {(field, fieldState) => (
           <FormBoundRichTextEditorSurface
@@ -1508,27 +1387,16 @@ function SimpleRichTextEditor({
           />
         )}
       </IGRPFormField>
-    );
+    )
   }
 
   const ariaDescribedBy =
-    [
-      helperText ? `${fieldName}-helper` : null,
-      error ? `${fieldName}-error` : null,
-    ]
-      .filter(Boolean)
-      .join(" ") || undefined;
+    [helperText ? `${fieldName}-helper` : null, error ? `${fieldName}-error` : null].filter(Boolean).join(" ") ||
+    undefined
 
   return (
     <div className="*:not-first:mt-2">
-      {label ? (
-        <IGRPLabel
-          label={label}
-          className={labelClassName}
-          required={required}
-          id={fieldName}
-        />
-      ) : null}
+      {label ? <IGRPLabel label={label} className={labelClassName} required={required} id={fieldName} /> : null}
 
       <RichTextEditorSurface
         key={placeholder}
@@ -1548,32 +1416,19 @@ function SimpleRichTextEditor({
       />
 
       {helperText && !error ? (
-        <p
-          id={`${fieldName}-helper`}
-          className={cn("text-muted-foreground mt-2 text-xs")}
-          aria-live="polite"
-        >
+        <p id={`${fieldName}-helper`} className={cn("mt-2 text-xs text-muted-foreground")} aria-live="polite">
           {helperText}
         </p>
       ) : null}
 
       {error ? (
-        <p
-          id={`${fieldName}-error`}
-          className={cn("text-destructive mt-2 text-xs")}
-          role="alert"
-        >
+        <p id={`${fieldName}-error`} className={cn("mt-2 text-xs text-destructive")} role="alert">
           {error}
         </p>
       ) : null}
     </div>
-  );
+  )
 }
 
-export {
-  type Editor,
-  SimpleRichTextEditor,
-  type SimpleRichTextEditorProps,
-  useEditor,
-};
+export { type Editor, SimpleRichTextEditor, type SimpleRichTextEditorProps, useEditor }
 ```

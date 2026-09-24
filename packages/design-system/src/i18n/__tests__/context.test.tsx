@@ -19,7 +19,7 @@ describe("IGRPI18nProvider / useIGRPi18n", () => {
       <IGRPI18nProvider strings={{ dataTable: { notFound: "Nothing here." } }}>
         <StringsProbe keyPath="notFound" />
         <StringsProbe keyPath="clearFilters" />
-      </IGRPI18nProvider>,
+      </IGRPI18nProvider>
     )
 
     const probes = screen.getAllByTestId("probe")
@@ -41,12 +41,12 @@ describe("IGRPI18nProvider / useIGRPi18n", () => {
     render(
       <IGRPI18nProvider strings={{ inputPhone: { placeholder: "Tel #" } }}>
         <Probe />
-      </IGRPI18nProvider>,
+      </IGRPI18nProvider>
     )
 
     expect(screen.getByTestId("phone-placeholder")).toHaveTextContent("Tel #")
     expect(screen.getByTestId("number-increment")).toHaveTextContent(
-      IGRP_I18N_DEFAULTS_PT_PT.inputNumber.incrementLabel,
+      IGRP_I18N_DEFAULTS_PT_PT.inputNumber.incrementLabel
     )
   })
 })

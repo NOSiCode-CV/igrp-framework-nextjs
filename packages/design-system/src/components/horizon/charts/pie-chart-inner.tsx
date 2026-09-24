@@ -172,7 +172,7 @@ function IGRPPieChartInner({
           {formatValue(
             interactive && activeIndex >= 0 && activeIndex < data.length && pies[0]?.dataKey
               ? Number(data[activeIndex]?.[pies[0].dataKey] ?? 0)
-              : totalValue,
+              : totalValue
           )}
         </tspan>
         {centerLabel.text && (
@@ -265,7 +265,7 @@ function IGRPPieChartInner({
       </div>
 
       {footer && (
-        <div className={cn("flex-col items-start gap-2 text-sm pt-4")}>
+        <div className={cn("flex-col items-start gap-2 pt-4 text-sm")}>
           {footer.description && <div className={cn("leading-none text-muted-foreground")}>{footer.description}</div>}
         </div>
       )}

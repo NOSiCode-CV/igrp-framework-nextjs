@@ -91,7 +91,7 @@ function IGRPAlert({
         colors.alert,
         !borderColored && "border-transparent",
         !bgColored && "bg-transparent",
-        className,
+        className
       )}
       id={ref}
     >
@@ -99,12 +99,12 @@ function IGRPAlert({
         {showIcon && (
           <IGRPIcon
             iconName={alertIcon}
-            className={cn("shrink-0 size-5", textColored ? colors.text : undefined, iconClassName)}
+            className={cn("size-5 shrink-0", textColored ? colors.text : undefined, iconClassName)}
           />
         )}
 
         <div className="flex grow justify-between gap-3">
-          <div className="grow flex flex-col gap-1">{children}</div>
+          <div className="flex grow flex-col gap-1">{children}</div>
 
           {showLink && (
             <IGRPLink

@@ -45,7 +45,7 @@ function IGRPDataTablePagination<TData>({
     : table.getRowCount()
   return (
     <div className={cn("flex items-center gap-6 px-2", className)}>
-      <div className={cn("flex items-center gap-3 grow justify-end")}>
+      <div className={cn("flex grow items-center justify-end gap-3")}>
         <Label htmlFor={id} className={cn("max-sm:sr-only")}>
           Registo por página
         </Label>
@@ -60,7 +60,7 @@ function IGRPDataTablePagination<TData>({
           </SelectTrigger>
           <SelectContent
             className={cn(
-              "[&_*[role=option]]:ps-2 [&_*[role=option]]:pe-8 [&_*[role=option]>span]:start-auto [&_*[role=option]>span]:end-2",
+              "[&_*[role=option]]:ps-2 [&_*[role=option]]:pe-8 [&_*[role=option]>span]:start-auto [&_*[role=option]>span]:end-2"
             )}
           >
             <SelectGroup>
@@ -75,7 +75,7 @@ function IGRPDataTablePagination<TData>({
       </div>
 
       <div className={cn("text-sm whitespace-nowrap text-muted-foreground")}>
-        <p className={cn("whitespace-nowrap text-sm text-muted-foreground")} aria-live="polite">
+        <p className={cn("text-sm whitespace-nowrap text-muted-foreground")} aria-live="polite">
           <span className={cn("text-foreground")}>
             {start}-{end}
           </span>{" "}
@@ -162,7 +162,7 @@ function IGRPDataTablePaginationNumeric<TData>({
 
   return (
     <div id={id} className={cn("flex items-center justify-between gap-3 max-sm:flex-col", className)}>
-      <p className={cn("flex-1 whitespace-nowrap text-sm text-muted-foreground")} aria-live="polite">
+      <p className={cn("flex-1 text-sm whitespace-nowrap text-muted-foreground")} aria-live="polite">
         Page <span className={cn("text-foreground")}>{table.getState().pagination.pageIndex + 1}</span> of{" "}
         <span className={cn("text-foreground")}>{table.getPageCount()}</span>
       </p>

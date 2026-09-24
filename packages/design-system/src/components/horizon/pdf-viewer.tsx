@@ -6,7 +6,14 @@ import { useCallback, useEffect, useId, useReducer, useRef, useState } from "rea
 import { IGRPColors } from "../../lib/colors.js"
 import { cn } from "cn"
 import { Card, CardHeader, CardTitle } from "../primitives/card.js"
-import { Dialog, DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogTitle } from "../primitives/dialog.js"
+import {
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogFooter,
+  DialogHeader,
+  DialogTitle,
+} from "../primitives/dialog.js"
 import { IGRPBadge } from "./badge.js"
 import { IGRPButton } from "./button.js"
 import { IGRPIcon } from "./icon/index.js"

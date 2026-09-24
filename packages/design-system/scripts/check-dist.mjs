@@ -38,47 +38,47 @@
  * rule here, change it there too.
  */
 
-import { readdirSync, readFileSync, existsSync } from 'node:fs';
-import { dirname, join, relative, sep } from 'node:path';
-import { fileURLToPath } from 'node:url';
+import { readdirSync, readFileSync, existsSync } from "node:fs"
+import { dirname, join, relative, sep } from "node:path"
+import { fileURLToPath } from "node:url"
 
-const root = join(dirname(fileURLToPath(import.meta.url)), '..');
-const distDir = join(root, 'dist');
+const root = join(dirname(fileURLToPath(import.meta.url)), "..")
+const distDir = join(root, "dist")
 
 if (!existsSync(distDir)) {
-  console.error('\n[check-dist] dist/ does not exist — run this after the build.\n');
-  process.exit(1);
+  console.error("\n[check-dist] dist/ does not exist — run this after the build.\n")
+  process.exit(1)
 }
 
 function* declarationFiles(dir) {
   for (const entry of readdirSync(dir, { withFileTypes: true })) {
-    const full = join(dir, entry.name);
-    if (entry.isDirectory()) yield* declarationFiles(full);
-    else if (entry.name.endsWith('.d.ts')) yield full;
+    const full = join(dir, entry.name)
+    if (entry.isDirectory()) yield* declarationFiles(full)
+    else if (entry.name.endsWith(".d.ts")) yield full
   }
 }
 
 /** `from './x'` / `import('./x')` — the specifier text `tsc` emitted. */
-const SPECIFIER = /(?:from|import)\s*\(?\s*['"](\.[^'"]*)['"]/g;
+const SPECIFIER = /(?:from|import)\s*\(?\s*['"](\.[^'"]*)['"]/g
 /** Non-JS assets are legitimately spelled with their own extension. */
-const ASSET = /\.(css|json|svg|png|jpe?g|gif|webp|woff2?)$/i;
+const ASSET = /\.(css|json|svg|png|jpe?g|gif|webp|woff2?)$/i
 
-const offenders = [];
-let checked = 0;
+const offenders = []
+let checked = 0
 
 for (const file of declarationFiles(distDir)) {
-  checked += 1;
-  const source = readFileSync(file, 'utf8');
+  checked += 1
+  const source = readFileSync(file, "utf8")
   for (const [, specifier] of source.matchAll(SPECIFIER)) {
-    if (!specifier.endsWith('.js') && !ASSET.test(specifier)) {
-      offenders.push({ file: relative(root, file).split(sep).join('/'), specifier });
+    if (!specifier.endsWith(".js") && !ASSET.test(specifier)) {
+      offenders.push({ file: relative(root, file).split(sep).join("/"), specifier })
     }
   }
 }
 
 if (checked === 0) {
-  console.error('\n[check-dist] no .d.ts files found in dist/ — the build emitted nothing.\n');
-  process.exit(1);
+  console.error("\n[check-dist] no .d.ts files found in dist/ — the build emitted nothing.\n")
+  process.exit(1)
 }
 
 if (offenders.length > 0) {
@@ -87,15 +87,13 @@ if (offenders.length > 0) {
       offenders
         .slice(0, 40)
         .map(({ file, specifier }) => `  - ${file}: '${specifier}'`)
-        .join('\n') +
-      (offenders.length > 40 ? `\n  ... and ${offenders.length - 40} more` : '') +
+        .join("\n") +
+      (offenders.length > 40 ? `\n  ... and ${offenders.length - 40} more` : "") +
       "\n\n  These declarations are unresolvable under moduleResolution 'node16'/'nodenext'," +
-      '\n  and skipLibCheck hides the error while every exported type becomes `any`.' +
-      "\n  Add the extension at the SOURCE import (e.g. '../../lib/colors.js').\n",
-  );
-  process.exit(1);
+      "\n  and skipLibCheck hides the error while every exported type becomes `any`." +
+      "\n  Add the extension at the SOURCE import (e.g. '../../lib/colors.js').\n"
+  )
+  process.exit(1)
 }
 
-console.log(
-  `[check-dist] ok — ${checked} declaration file(s), every relative specifier carries a '.js' extension.`,
-);
+console.log(`[check-dist] ok — ${checked} declaration file(s), every relative specifier carries a '.js' extension.`)

@@ -131,7 +131,7 @@ function RadialChartTooltipContent({
 function RadialChartFooter({ description }: { description?: string }) {
   if (!description) return null
   return (
-    <div className={cn("flex-col items-start gap-2 text-sm pt-4")}>
+    <div className={cn("flex-col items-start gap-2 pt-4 text-sm")}>
       <div className={cn("leading-none text-muted-foreground")}>{description}</div>
     </div>
   )
@@ -247,7 +247,7 @@ function IGRPRadialBarChartInner({
       if (!props.active || !props.payload || !props.payload.length) return null
       return <RadialChartTooltipContent payload={props.payload} nameKey={nameKey} formatValue={formatValue} />
     },
-    [nameKey, formatValue],
+    [nameKey, formatValue]
   )
 
   const centerLabelContent = React.useCallback(
@@ -255,7 +255,7 @@ function IGRPRadialBarChartInner({
       props?.viewBox ? (
         <CenterLabelContent formattedTotal={formattedTotal} label={centerText.label} viewBox={props.viewBox} />
       ) : null,
-    [formattedTotal, centerText.label],
+    [formattedTotal, centerText.label]
   )
 
   return (

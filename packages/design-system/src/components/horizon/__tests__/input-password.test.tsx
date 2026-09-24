@@ -37,7 +37,7 @@ describe("IGRPInputPassword", () => {
     render(
       <IGRPI18nProvider strings={{ inputPassword: { showPasswordLabel: "Show", hidePasswordLabel: "Hide" } }}>
         <IGRPInputPassword name="pwd" label="Password" />
-      </IGRPI18nProvider>,
+      </IGRPI18nProvider>
     )
 
     expect(screen.getByRole("button", { name: "Show" })).toBeInTheDocument()

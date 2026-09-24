@@ -62,7 +62,7 @@ function IGRPInputText({
           <FormItem className={className}>
             {label && (
               <FormLabel
-                className={cn("gap-0.5", required && 'after:content-["*"] after:text-destructive', labelClassName)}
+                className={cn("gap-0.5", required && 'after:text-destructive after:content-["*"]', labelClassName)}
               >
                 {label}
               </FormLabel>
@@ -78,7 +78,7 @@ function IGRPInputText({
                     "peer bg-background py-3 text-sm outline-hidden",
                     showIcon && positionParentIcon,
                     (fieldState.error || error) && "border-destructive focus-visible:ring-destructive/20",
-                    inputClassName,
+                    inputClassName
                   )}
                   value={field.value ?? ""}
                   onChange={field.onChange}
@@ -87,14 +87,14 @@ function IGRPInputText({
                 />
               </FormControl>
               {showIcon && (
-                <div className={cn("absolute inset-y-0 flex items-center pointer-events-none", positionIcon)}>
+                <div className={cn("pointer-events-none absolute inset-y-0 flex items-center", positionIcon)}>
                   <IGRPIcon iconName={iconName} size={iconSize} className={iconClassName} />
                 </div>
               )}
             </div>
             {helperText && !fieldState.error && !error && <FormDescription>{helperText}</FormDescription>}
             {error ? (
-              <p className={cn("text-destructive text-xs")} role="alert">
+              <p className={cn("text-xs text-destructive")} role="alert">
                 {error}
               </p>
             ) : (
@@ -123,12 +123,12 @@ function IGRPInputText({
             "peer bg-background py-3 text-sm outline-hidden",
             showIcon && positionParentIcon,
             error && "border-destructive focus-visible:ring-destructive/20",
-            inputClassName,
+            inputClassName
           )}
           {...props}
         />
         {showIcon && (
-          <div className={cn("absolute inset-y-0 flex items-center pointer-events-none", positionIcon)}>
+          <div className={cn("pointer-events-none absolute inset-y-0 flex items-center", positionIcon)}>
             <IGRPIcon iconName={iconName} size={iconSize} className={iconClassName} />
           </div>
         )}

@@ -85,7 +85,7 @@ function IGRPLineChartInner({
   const formatValue = (value: number) => formatChartValue(value, valueFormatter)
   const hasNegativeDataValues = hasNegativeValues(
     data,
-    lines.map((l) => l.dataKey),
+    lines.map((l) => l.dataKey)
   )
   const chartConfig = createChartConfig(lines)
 
@@ -206,7 +206,7 @@ function IGRPLineChartInner({
                       />
                     )}
                   </Line>
-                ),
+                )
               )}
             </LineChart>
           </ChartContainer>
@@ -214,7 +214,7 @@ function IGRPLineChartInner({
       </div>
 
       {footer && (
-        <div className={cn("flex-col items-start gap-2 text-sm pt-4")}>
+        <div className={cn("flex-col items-start gap-2 pt-4 text-sm")}>
           {footer.description && <div className={cn("leading-none text-muted-foreground")}>{footer.description}</div>}
         </div>
       )}

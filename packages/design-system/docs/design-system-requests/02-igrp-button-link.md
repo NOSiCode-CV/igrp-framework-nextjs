@@ -7,7 +7,7 @@
 
 **Status — read this first.** The component is **currently unreferenced** in
 SIGOVP, and the only importer of `button-link.tsx` is its own tooltip wrapper
-(§3). It is filed as a *design request*, not as a migration that unblocks
+(§3). It is filed as a _design request_, not as a migration that unblocks
 screens. If you decline it, the correct follow-up in this app is to **delete**
 `button-link.tsx` and `button-link-tooltip.tsx`, not to start using them.
 
@@ -28,13 +28,14 @@ While checking what you already ship, we read
 `IGRPDataTableButtonLink` renders:
 
 ```jsx
-<Button variant={variant} size="icon-sm" className={cn("size-8", className)}
-        asChild disabled={disabled}>
-  <Link href={href} aria-label={labelTrigger}>…</Link>
+<Button variant={variant} size="icon-sm" className={cn("size-8", className)} asChild disabled={disabled}>
+  <Link href={href} aria-label={labelTrigger}>
+    …
+  </Link>
 </Button>
 ```
 
-`asChild` makes `Button` render *as* the `<Link>`, so `disabled` is spread onto
+`asChild` makes `Button` render _as_ the `<Link>`, so `disabled` is spread onto
 an `<a>`. That means a disabled `IGRPDataTableButtonLink` with an `href`:
 
 - **still navigates** — `disabled` is not a valid attribute on an anchor and has
@@ -92,17 +93,16 @@ is easy to get wrong (called outside a `Link`, it just always returns
 ## §2.2 Current props
 
 ```ts
-export interface SimpleButtonLinkProps
-  extends Omit<React.ComponentProps<typeof Link>, "href"> {
-  href: string;                              // cast to next `Route` internally
-  label?: string;
-  icon: IGRPIconProps["iconName"];           // required, but "" is tolerated
-  iconClassName?: string;
-  customIcon?: React.ReactNode;              // declared, currently unused
-  variant?: ButtonProps["variant"];          // default "default"
-  btnClassName?: string;
-  size?: ButtonProps["size"];
-  disable?: boolean;                         // default false
+export interface SimpleButtonLinkProps extends Omit<React.ComponentProps<typeof Link>, "href"> {
+  href: string // cast to next `Route` internally
+  label?: string
+  icon: IGRPIconProps["iconName"] // required, but "" is tolerated
+  iconClassName?: string
+  customIcon?: React.ReactNode // declared, currently unused
+  variant?: ButtonProps["variant"] // default "default"
+  btnClassName?: string
+  size?: ButtonProps["size"]
+  disable?: boolean // default false
 }
 ```
 
@@ -112,7 +112,7 @@ Known rough edges to fix while lifting, not to reproduce:
 - `icon` is typed required but the runtime treats `""` / `null` / `undefined`
   as "no icon". Make it optional and keep the runtime guard.
 - `disable` should be `disabled`, matching every other DS control.
-- `btnClassName` vs `className`: since the root *is* the button, `className`
+- `btnClassName` vs `className`: since the root _is_ the button, `className`
   should style the button and a separate `linkClassName` (if needed) the anchor.
 
 ---
@@ -136,15 +136,16 @@ Known rough edges to fix while lifting, not to reproduce:
 
 ```ts
 export interface IGRPButtonLinkProps
-  extends Omit<React.ComponentProps<typeof Link>, "href">,
+  extends
+    Omit<React.ComponentProps<typeof Link>, "href">,
     Pick<IGRPButtonProps, "variant" | "size" | "iconName" | "iconClassName" | "iconPlacement"> {
-  href: string;
-  label?: string;
-  disabled?: boolean;
+  href: string
+  label?: string
+  disabled?: boolean
   /** Spinner while the target route loads. Default true; set false for
    *  same-page anchors and external hrefs where `useLinkStatus` never fires. */
-  showPendingIndicator?: boolean;
-  className?: string;
+  showPendingIndicator?: boolean
+  className?: string
 }
 ```
 
@@ -180,30 +181,24 @@ your exports; `useLinkStatus` is `next/link` (Next 15).
 ### `src/app/(myapp)/_components/button-link.tsx`
 
 ```tsx
-"use client";
+"use client"
 
-import {
-  Button,
-  cn,
-  IGRPIcon,
-  type IGRPIconProps,
-} from "@igrp/igrp-framework-react-design-system";
-import type { Route } from "next";
-import Link, { useLinkStatus } from "next/link";
+import { Button, cn, IGRPIcon, type IGRPIconProps } from "@igrp/igrp-framework-react-design-system"
+import type { Route } from "next"
+import Link, { useLinkStatus } from "next/link"
 
-type IGRPBtnProps = React.ComponentProps<typeof Button>;
+type IGRPBtnProps = React.ComponentProps<typeof Button>
 
-export interface SimpleButtonLinkProps
-  extends Omit<React.ComponentProps<typeof Link>, "href"> {
-  href: string;
-  label?: string;
-  icon: IGRPIconProps["iconName"];
-  iconClassName?: string;
-  customIcon?: React.ReactNode;
-  variant?: IGRPBtnProps["variant"];
-  btnClassName?: string;
-  size?: IGRPBtnProps["size"];
-  disable?: boolean;
+export interface SimpleButtonLinkProps extends Omit<React.ComponentProps<typeof Link>, "href"> {
+  href: string
+  label?: string
+  icon: IGRPIconProps["iconName"]
+  iconClassName?: string
+  customIcon?: React.ReactNode
+  variant?: IGRPBtnProps["variant"]
+  btnClassName?: string
+  size?: IGRPBtnProps["size"]
+  disable?: boolean
 }
 
 export function SimpleButtonLink({
@@ -219,27 +214,18 @@ export function SimpleButtonLink({
 }: SimpleButtonLinkProps) {
   const content = (
     <>
-      <SimpleLinkLoadingIndicator
-        iconName={icon}
-        iconClassName={iconClassName}
-      />
+      <SimpleLinkLoadingIndicator iconName={icon} iconClassName={iconClassName} />
       {label}
     </>
-  );
+  )
 
   // `disabled` on <a> is not valid HTML and does not stop navigation; use a real button.
   if (disable) {
     return (
-      <Button
-        type="button"
-        variant={variant}
-        className={btnClassName}
-        size={size}
-        disabled
-      >
+      <Button type="button" variant={variant} className={btnClassName} size={size} disabled>
         {content}
       </Button>
-    );
+    )
   }
 
   return (
@@ -248,24 +234,20 @@ export function SimpleButtonLink({
         {content}
       </Link>
     </Button>
-  );
+  )
 }
 
 interface SimpleLinkLoadingIndicatorProps {
-  iconName: IGRPIconProps["iconName"];
-  iconClassName?: string;
-  showLoader?: boolean;
+  iconName: IGRPIconProps["iconName"]
+  iconClassName?: string
+  showLoader?: boolean
 }
 
-function SimpleLinkLoadingIndicator({
-  iconName,
-  iconClassName,
-  showLoader = true,
-}: SimpleLinkLoadingIndicatorProps) {
-  const { pending } = useLinkStatus();
-  const isLoading = showLoader && pending;
+function SimpleLinkLoadingIndicator({ iconName, iconClassName, showLoader = true }: SimpleLinkLoadingIndicatorProps) {
+  const { pending } = useLinkStatus()
+  const isLoading = showLoader && pending
 
-  const valid = iconName !== null && iconName !== undefined && iconName !== "";
+  const valid = iconName !== null && iconName !== undefined && iconName !== ""
 
   return (
     <>
@@ -276,15 +258,9 @@ function SimpleLinkLoadingIndicator({
           className={cn(iconClassName, isLoading && "animate-spin")}
         />
       ) : (
-        isLoading && (
-          <IGRPIcon
-            iconName="LoaderCircle"
-            strokeWidth={2}
-            className={cn(iconClassName, "animate-spin")}
-          />
-        )
+        isLoading && <IGRPIcon iconName="LoaderCircle" strokeWidth={2} className={cn(iconClassName, "animate-spin")} />
       )}
     </>
-  );
+  )
 }
 ```

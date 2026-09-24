@@ -161,17 +161,7 @@ function IGRPForm<TSchema extends AnyZod>({
       }
       setIsSubmitting(false)
     },
-    [
-      clearGlobalError,
-      onSubmit,
-      resetAfterSubmit,
-      form,
-      defaultValues,
-      setGlobalError,
-      showToastOnError,
-      onError,
-      i18n,
-    ],
+    [clearGlobalError, onSubmit, resetAfterSubmit, form, defaultValues, setGlobalError, showToastOnError, onError, i18n]
   )
 
   const submitForm = useCallback(async () => form.handleSubmit(handleSubmit)(), [form, handleSubmit])
@@ -200,7 +190,7 @@ function IGRPForm<TSchema extends AnyZod>({
       }
       form.handleSubmit(handleSubmit)(e)
     },
-    [disabled, form, handleSubmit],
+    [disabled, form, handleSubmit]
   )
 
   return (
@@ -209,12 +199,12 @@ function IGRPForm<TSchema extends AnyZod>({
         <form className={className} onSubmit={handleFormSubmit} noValidate id={ref}>
           {formError && (
             <div
-              className={cn("mb-4 p-3 border border-destructive bg-destructive/10 rounded-md text-destructive text-sm")}
+              className={cn("mb-4 rounded-md border border-destructive bg-destructive/10 p-3 text-sm text-destructive")}
             >
               {formError}
             </div>
           )}
-          <FieldSet disabled={disabled} className={cn("border-0 p-0 m-0 gap-0")}>
+          <FieldSet disabled={disabled} className={cn("m-0 gap-0 border-0 p-0")}>
             <div className={cn("grid gap-4", gridClassName)}>{children}</div>
           </FieldSet>
         </form>

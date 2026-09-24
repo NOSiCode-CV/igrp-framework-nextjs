@@ -1,4 +1,4 @@
-# §6. `IGRPLookupField` — a read-only input whose value is *picked*, not typed
+# §6. `IGRPLookupField` — a read-only input whose value is _picked_, not typed
 
 > Part of the SIGOVP design-system request bundle — see [README.md](README.md). Cite as `§6`.
 
@@ -12,14 +12,14 @@ on top: `src/app/(myapp)/_components/nif-field.tsx`,
 picker dialog, which writes the value back into the form". Three things you ship
 are nearby, and none of them is it:
 
-- **`IGRPInputSearch`** is the closest *Horizon* component and is the wrong
+- **`IGRPInputSearch`** is the closest _Horizon_ component and is the wrong
   shape: it is a search box — it owns the query, debounces it, and calls
-  `onSearch` with the typed text. Ours is a *value display* whose button opens
+  `onSearch` with the typed text. Ours is a _value display_ whose button opens
   someone else's dialog and whose input is frequently read-only. Expressing one
   as the other means fighting both the debounce and the value ownership.
 - **`IGRPInputAddOn`** pairs an input with a `<select>`, not a button.
 - **`InputGroup` / `InputGroupAddon` / `InputGroupButton`** (primitives, and
-  exported) are the right *layout* building blocks, and we should say plainly
+  exported) are the right _layout_ building blocks, and we should say plainly
   that our reference implementation predates our noticing them: it hand-rolls a
   `flex gap-2` row where `InputGroup` would do. If you take this request, build
   the Horizon component on those primitives rather than on our markup.
@@ -48,23 +48,23 @@ full — it is why `inputDisabled` and `errorText` exist.
 
 ## §6.2 Current props
 
-| Prop | Type | Notes |
-|---|---|---|
-| `id` | `string` | Also the form field name of the **visible** value. |
-| `label` | `string` | |
-| `required` | `boolean?` | |
-| `onLookupClick` | `() => void` | Fired by the button; the caller opens the dialog. |
-| `lookupAriaLabel` | `string` | Accessible name of the icon button. |
-| `disabled` | `boolean?` | Disables input **and** button. |
-| `inputDisabled` | `boolean?` | Disables only the input; defaults to `disabled`. |
-| `lookupDisabled` | `boolean?` | Disables only the button. |
-| `lookupDisabledReason` | `string?` | Tooltip explaining a disabled button. |
-| `iconName` | `IGRPIconName \| string` (default `"Search"`) | |
-| `buttonClassName` | `string?` | |
-| `labelTooltip` | `string?` | `Info` icon next to the label. |
-| `labelSuffix` | `ReactNode?` | Right-aligned slot on the label row. |
-| `helperText` | `string?` | |
-| `errorText` | `string?` | See §6.4 — this is the important one. |
+| Prop                   | Type                                          | Notes                                              |
+| ---------------------- | --------------------------------------------- | -------------------------------------------------- |
+| `id`                   | `string`                                      | Also the form field name of the **visible** value. |
+| `label`                | `string`                                      |                                                    |
+| `required`             | `boolean?`                                    |                                                    |
+| `onLookupClick`        | `() => void`                                  | Fired by the button; the caller opens the dialog.  |
+| `lookupAriaLabel`      | `string`                                      | Accessible name of the icon button.                |
+| `disabled`             | `boolean?`                                    | Disables input **and** button.                     |
+| `inputDisabled`        | `boolean?`                                    | Disables only the input; defaults to `disabled`.   |
+| `lookupDisabled`       | `boolean?`                                    | Disables only the button.                          |
+| `lookupDisabledReason` | `string?`                                     | Tooltip explaining a disabled button.              |
+| `iconName`             | `IGRPIconName \| string` (default `"Search"`) |                                                    |
+| `buttonClassName`      | `string?`                                     |                                                    |
+| `labelTooltip`         | `string?`                                     | `Info` icon next to the label.                     |
+| `labelSuffix`          | `ReactNode?`                                  | Right-aligned slot on the label row.               |
+| `helperText`           | `string?`                                     |                                                    |
+| `errorText`            | `string?`                                     | See §6.4 — this is the important one.              |
 
 ---
 
@@ -94,7 +94,7 @@ sent, and a visible display string that is neither. In
 `LicencaLookupField`, `idLicencaAnterior` (uuid, in `IGRPInputHidden`) is what
 the Zod refinement faults; `numeroLicencaAnterior` is what the user reads.
 
-A form input can only render *its own* error, so the fault on the hidden field
+A form input can only render _its own_ error, so the fault on the hidden field
 has no way to reach the screen. `errorText` is the escape hatch: the wrapper
 reads `form.formState.errors[valueField].message` itself and hands it to the
 visible field.
@@ -119,27 +119,27 @@ so apps stop hand-wiring `IGRPInputHidden` + `errors[x].message` per lookup.
 
 ```ts
 export interface IGRPLookupFieldProps {
-  name: string;
-  valueName?: string;                  // §6.4
-  displayName?: string;                // §6.4
-  label: string;
-  required?: boolean;
-  onLookup: () => void;                // rename: it is not only a click path
-  lookupLabel: string;                 // accessible name of the button
-  iconName?: IGRPIconName | string;    // default "Search"
-  disabled?: boolean;
-  inputDisabled?: boolean;
-  lookupDisabled?: boolean;
-  lookupDisabledReason?: string;
-  loading?: boolean;                   // new: the lookup is in flight
-  onClear?: () => void;                // new: see below
-  labelTooltip?: string;
-  labelSuffix?: React.ReactNode;
-  helperText?: string;
-  errorText?: string;                  // still useful as a manual override
-  className?: string;
-  inputClassName?: string;
-  buttonClassName?: string;
+  name: string
+  valueName?: string // §6.4
+  displayName?: string // §6.4
+  label: string
+  required?: boolean
+  onLookup: () => void // rename: it is not only a click path
+  lookupLabel: string // accessible name of the button
+  iconName?: IGRPIconName | string // default "Search"
+  disabled?: boolean
+  inputDisabled?: boolean
+  lookupDisabled?: boolean
+  lookupDisabledReason?: string
+  loading?: boolean // new: the lookup is in flight
+  onClear?: () => void // new: see below
+  labelTooltip?: string
+  labelSuffix?: React.ReactNode
+  helperText?: string
+  errorText?: string // still useful as a manual override
+  className?: string
+  inputClassName?: string
+  buttonClassName?: string
 }
 ```
 
@@ -190,9 +190,9 @@ import {
   TooltipContent,
   TooltipProvider,
   TooltipTrigger,
-} from "@igrp/igrp-framework-react-design-system";
-import type { ReactNode } from "react";
-import { cn } from "@/lib/utils";
+} from "@igrp/igrp-framework-react-design-system"
+import type { ReactNode } from "react"
+import { cn } from "@/lib/utils"
 
 function LookupSearchButton({
   iconName,
@@ -202,12 +202,12 @@ function LookupSearchButton({
   onLookupClick,
   buttonClassName,
 }: {
-  iconName: IGRPIconName | string;
-  lookupAriaLabel: string;
-  disabled: boolean;
-  disabledReason?: string;
-  onLookupClick: () => void;
-  buttonClassName?: string;
+  iconName: IGRPIconName | string
+  lookupAriaLabel: string
+  disabled: boolean
+  disabledReason?: string
+  onLookupClick: () => void
+  buttonClassName?: string
 }) {
   const button = (
     <IGRPButton
@@ -218,16 +218,12 @@ function LookupSearchButton({
       onClick={onLookupClick}
       aria-label={lookupAriaLabel}
       disabled={disabled}
-      className={cn(
-        "shrink-0 transition-opacity",
-        disabled && "opacity-50",
-        buttonClassName,
-      )}
+      className={cn("shrink-0 transition-opacity", disabled && "opacity-50", buttonClassName)}
     />
-  );
+  )
 
   if (!disabled || !disabledReason) {
-    return button;
+    return button
   }
 
   return (
@@ -241,7 +237,7 @@ function LookupSearchButton({
         </TooltipContent>
       </Tooltip>
     </TooltipProvider>
-  );
+  )
 }
 
 export function LookupField({
@@ -261,37 +257,37 @@ export function LookupField({
   inputDisabled,
   errorText,
 }: {
-  id: string;
-  label: string;
-  required?: boolean;
-  onLookupClick: () => void;
-  lookupAriaLabel: string;
-  disabled?: boolean;
-  lookupDisabled?: boolean;
-  iconName?: IGRPIconName | string;
-  buttonClassName?: string;
-  labelTooltip?: string;
-  labelSuffix?: ReactNode;
-  helperText?: string;
-  lookupDisabledReason?: string;
+  id: string
+  label: string
+  required?: boolean
+  onLookupClick: () => void
+  lookupAriaLabel: string
+  disabled?: boolean
+  lookupDisabled?: boolean
+  iconName?: IGRPIconName | string
+  buttonClassName?: string
+  labelTooltip?: string
+  labelSuffix?: ReactNode
+  helperText?: string
+  lookupDisabledReason?: string
   /**
    * Disables the text input on its own, leaving the search button live.
    * For lookups where the value may only be *picked* (it is an id the user
    * cannot type), not typed — see `LicencaLookupField`. Defaults to
    * `disabled`, so callers that don't pass it keep the previous behaviour.
    */
-  inputDisabled?: boolean;
+  inputDisabled?: boolean
   /**
    * Validation message to show under the field. Needed when the value being
    * validated lives on a different form field than the one rendered here (a
    * hidden id next to a visible display value), because the input can only
    * surface its own error.
    */
-  errorText?: string;
+  errorText?: string
 }) {
-  const isInputDisabled = Boolean(inputDisabled ?? disabled);
-  const isButtonDisabled = Boolean(disabled || lookupDisabled);
-  const describedById = helperText ? `${id}-lookup-hint` : undefined;
+  const isInputDisabled = Boolean(inputDisabled ?? disabled)
+  const isButtonDisabled = Boolean(disabled || lookupDisabled)
+  const describedById = helperText ? `${id}-lookup-hint` : undefined
 
   return (
     <div className="flex flex-col gap-1.5">
@@ -304,7 +300,7 @@ export function LookupField({
                 <TooltipTrigger asChild>
                   <button
                     type="button"
-                    className="inline-flex shrink-0 rounded-full text-muted-foreground hover:text-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
+                    className="inline-flex shrink-0 rounded-full text-muted-foreground hover:text-foreground focus-visible:ring-2 focus-visible:ring-ring focus-visible:outline-none"
                     aria-label="Informação"
                   >
                     <IGRPIcon iconName="Info" className="size-4" />
@@ -343,31 +339,23 @@ export function LookupField({
       {helperText && (
         <p
           id={describedById}
-          className={cn(
-            "text-xs leading-snug",
-            disabled ? "text-muted-foreground/80" : "text-muted-foreground",
-          )}
+          className={cn("text-xs leading-snug", disabled ? "text-muted-foreground/80" : "text-muted-foreground")}
         >
           {helperText}
         </p>
       )}
 
-      {errorText && (
-        <p className="text-xs leading-snug text-destructive">{errorText}</p>
-      )}
+      {errorText && <p className="text-xs leading-snug text-destructive">{errorText}</p>}
     </div>
-  );
+  )
 }
 ```
 
 ### `src/app/(myapp)/_components/licenca-field.tsx`
 
 ```tsx
-import {
-  IGRPInputHidden,
-  useIGRPFormContext,
-} from "@igrp/igrp-framework-react-design-system";
-import { LookupField } from "./lookup-field";
+import { IGRPInputHidden, useIGRPFormContext } from "@igrp/igrp-framework-react-design-system"
+import { LookupField } from "./lookup-field"
 
 /**
  * §3.2.2 Etapa 1, campo "Nº licença": *"Permite pesquisar licença. Abre a
@@ -404,20 +392,18 @@ export function LicencaLookupField({
   onLookupClick,
 }: {
   /** Form field holding the licença `id` (uuid) — hidden, validated, sent. */
-  valueField?: string;
+  valueField?: string
   /** Form field holding the licença `numero` — shown, read-only. */
-  displayField?: string;
-  label?: string;
-  disabled?: boolean;
-  onLookupClick: () => void;
+  displayField?: string
+  label?: string
+  disabled?: boolean
+  onLookupClick: () => void
 }) {
-  const { form } = useIGRPFormContext();
-  const numero = (form?.watch?.(displayField) ?? "") as string;
-  const id = (form?.watch?.(valueField) ?? "") as string;
+  const { form } = useIGRPFormContext()
+  const numero = (form?.watch?.(displayField) ?? "") as string
+  const id = (form?.watch?.(valueField) ?? "") as string
 
-  const errorText = form?.formState?.errors?.[valueField]?.message as
-    | string
-    | undefined;
+  const errorText = form?.formState?.errors?.[valueField]?.message as string | undefined
 
   // Um pedido gravado antes de o número ser resolvido (ou com a licença já
   // indisponível) mostra o campo vazio; sem esta nota, um valor gravado
@@ -426,7 +412,7 @@ export function LicencaLookupField({
     ? "Campo bloqueado."
     : id && !numero
       ? "Licença selecionada — número indisponível de momento."
-      : "Selecione a licença através da pesquisa.";
+      : "Selecione a licença através da pesquisa."
 
   return (
     <>
@@ -444,18 +430,18 @@ export function LicencaLookupField({
         iconName="FileSearch"
       />
     </>
-  );
+  )
 }
 ```
 
 ### `src/app/(myapp)/_components/nif-field.tsx`
 
 ```tsx
-import { useIGRPFormContext } from "@igrp/igrp-framework-react-design-system";
-import { countDigits, LOOKUP_MIN, minDigitsHint } from "../_lib/lookup-utils";
-import { LookupField } from "./lookup-field";
+import { useIGRPFormContext } from "@igrp/igrp-framework-react-design-system"
+import { countDigits, LOOKUP_MIN, minDigitsHint } from "../_lib/lookup-utils"
+import { LookupField } from "./lookup-field"
 
-export { countDigits } from "../_lib/lookup-utils";
+export { countDigits } from "../_lib/lookup-utils"
 
 export function NifLookupField({
   id = "nif",
@@ -463,22 +449,20 @@ export function NifLookupField({
   onLookupClick,
 }: {
   /** Form field path (e.g. "nif" or "requerentes.0.nif") */
-  id?: string;
-  isEdit?: boolean;
-  onLookupClick: (nif: string) => void;
+  id?: string
+  isEdit?: boolean
+  onLookupClick: (nif: string) => void
 }) {
-  const { form } = useIGRPFormContext();
-  const nif = (form?.watch?.(id) ?? "") as string;
-  const digitCount = countDigits(nif);
-  const min = LOOKUP_MIN.nif;
-  const lookupDisabled = isEdit || digitCount < min;
-  const digitHint = minDigitsHint(digitCount, min);
+  const { form } = useIGRPFormContext()
+  const nif = (form?.watch?.(id) ?? "") as string
+  const digitCount = countDigits(nif)
+  const min = LOOKUP_MIN.nif
+  const lookupDisabled = isEdit || digitCount < min
+  const digitHint = minDigitsHint(digitCount, min)
 
   // const helperText = isEdit ? "NIF não editável neste contexto." : digitHint;
 
-  const lookupDisabledReason = isEdit
-    ? "NIF bloqueado."
-    : (digitHint ?? "Pesquisar titular por NIF.");
+  const lookupDisabledReason = isEdit ? "NIF bloqueado." : (digitHint ?? "Pesquisar titular por NIF.")
 
   return (
     <LookupField
@@ -492,16 +476,16 @@ export function NifLookupField({
       lookupDisabledReason={lookupDisabledReason}
       iconName="UserRoundSearch"
     />
-  );
+  )
 }
 ```
 
 ### `src/app/(myapp)/_components/num-doc-field.tsx`
 
 ```tsx
-import { useIGRPFormContext } from "@igrp/igrp-framework-react-design-system";
-import { countDigits, LOOKUP_MIN } from "../_lib/lookup-utils";
-import { LookupField } from "./lookup-field";
+import { useIGRPFormContext } from "@igrp/igrp-framework-react-design-system"
+import { countDigits, LOOKUP_MIN } from "../_lib/lookup-utils"
+import { LookupField } from "./lookup-field"
 
 export function NumDocLookupField({
   id = "nr_identificacao",
@@ -511,41 +495,37 @@ export function NumDocLookupField({
   labelTooltip,
 }: {
   /** Form field path (e.g. "nr_identificacao", "requerentes.0.nr_identificacao", or "numero_documento") */
-  id?: string;
+  id?: string
   /** When set, input and search stay disabled until this field has a value (e.g. tipo de documento) */
-  tipoIdentificacaoId?: string;
-  isEdit?: boolean;
-  onLookupClick: (numDoc: string) => void;
-  labelTooltip?: string;
+  tipoIdentificacaoId?: string
+  isEdit?: boolean
+  onLookupClick: (numDoc: string) => void
+  labelTooltip?: string
 }) {
-  const { form } = useIGRPFormContext();
-  const numDoc = (form?.watch?.(id) ?? "") as string;
-  const tipoIdentificacao = tipoIdentificacaoId
-    ? ((form?.watch?.(tipoIdentificacaoId) ?? "") as string)
-    : null;
-  const tipoSelected = tipoIdentificacaoId
-    ? Boolean(tipoIdentificacao?.trim())
-    : true;
-  const digitCount = countDigits(numDoc);
-  const min = LOOKUP_MIN.numDoc;
-  const inputDisabled = isEdit || !tipoSelected;
-  const lookupDisabled = inputDisabled || digitCount < min;
+  const { form } = useIGRPFormContext()
+  const numDoc = (form?.watch?.(id) ?? "") as string
+  const tipoIdentificacao = tipoIdentificacaoId ? ((form?.watch?.(tipoIdentificacaoId) ?? "") as string) : null
+  const tipoSelected = tipoIdentificacaoId ? Boolean(tipoIdentificacao?.trim()) : true
+  const digitCount = countDigits(numDoc)
+  const min = LOOKUP_MIN.numDoc
+  const inputDisabled = isEdit || !tipoSelected
+  const lookupDisabled = inputDisabled || digitCount < min
   // const digitHint = minDigitsHint(digitCount, min);
 
-  let helperText: string | undefined;
-  let lookupDisabledReason: string | undefined;
+  let helperText: string | undefined
+  let lookupDisabledReason: string | undefined
 
   if (isEdit) {
-    helperText = "Nº documento não editável neste contexto.";
-    lookupDisabledReason = "Campo bloqueado.";
+    helperText = "Nº documento não editável neste contexto."
+    lookupDisabledReason = "Campo bloqueado."
   } else if (!tipoSelected) {
-    helperText = "Selecione primeiro o tipo de documento.";
-    lookupDisabledReason = helperText;
+    helperText = "Selecione primeiro o tipo de documento."
+    lookupDisabledReason = helperText
     // } else if (digitHint) {
     //   helperText = digitHint;
     //   lookupDisabledReason = digitHint;
   } else {
-    lookupDisabledReason = "Pesquisar por número de documento.";
+    lookupDisabledReason = "Pesquisar por número de documento."
   }
 
   return (
@@ -562,6 +542,6 @@ export function NumDocLookupField({
       iconName="FileSearch"
       labelTooltip={labelTooltip}
     />
-  );
+  )
 }
 ```

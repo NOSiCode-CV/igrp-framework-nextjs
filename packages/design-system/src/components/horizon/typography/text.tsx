@@ -29,9 +29,9 @@ function TextWithHighlight({ text, highlight }: { text: string; highlight: strin
   while ((match = regex.exec(remaining)) !== null) {
     parts.push(remaining.slice(lastIndex, match.index))
     parts.push(
-      <mark key={`h-${matchIndex}`} className={cn("bg-highlight text-highlight-foreground px-1 rounded")}>
+      <mark key={`h-${matchIndex}`} className={cn("rounded bg-highlight px-1 text-highlight-foreground")}>
         {match[0]}
-      </mark>,
+      </mark>
     )
     lastIndex = match.index + match[0].length
     matchIndex += 1
@@ -142,7 +142,7 @@ function IGRPText({
       className={cn(
         igrpTextVariants({ size, weight, align, spacing }),
         animate && "animate-[igrp-text-fade-in_0.3s_ease-in-out_0.1s_both] motion-reduce:animate-none",
-        className,
+        className
       )}
       style={truncateStyles}
       id={ref}

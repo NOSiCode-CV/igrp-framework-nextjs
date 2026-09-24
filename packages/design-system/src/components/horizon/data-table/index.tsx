@@ -228,7 +228,7 @@ function IGRPDataTable<TData, TValue>({
         type: "columnFilters",
         payload: typeof updater === "function" ? updater(state.columnFilters) : updater,
       }),
-    [state.columnFilters],
+    [state.columnFilters]
   )
   const setColumnVisibility = useCallback(
     (updater: Updater<VisibilityState>) =>
@@ -236,7 +236,7 @@ function IGRPDataTable<TData, TValue>({
         type: "columnVisibility",
         payload: typeof updater === "function" ? updater(state.columnVisibility) : updater,
       }),
-    [state.columnVisibility],
+    [state.columnVisibility]
   )
   const setPagination = useCallback(
     (updater: Updater<PaginationState>) =>
@@ -244,7 +244,7 @@ function IGRPDataTable<TData, TValue>({
         type: "pagination",
         payload: typeof updater === "function" ? updater(state.pagination) : updater,
       }),
-    [state.pagination],
+    [state.pagination]
   )
   const setSorting = useCallback(
     (updater: Updater<SortingState>) =>
@@ -252,7 +252,7 @@ function IGRPDataTable<TData, TValue>({
         type: "sorting",
         payload: typeof updater === "function" ? updater(state.sorting) : updater,
       }),
-    [state.sorting],
+    [state.sorting]
   )
   const setExpanded = useCallback(
     (updater: Updater<ExpandedState>) =>
@@ -260,7 +260,7 @@ function IGRPDataTable<TData, TValue>({
         type: "expanded",
         payload: typeof updater === "function" ? updater(state.expanded) : updater,
       }),
-    [state.expanded],
+    [state.expanded]
   )
   const setRowSelection = useCallback(
     (updater: Updater<RowSelectionState>) =>
@@ -268,7 +268,7 @@ function IGRPDataTable<TData, TValue>({
         type: "rowSelection",
         payload: typeof updater === "function" ? updater(state.rowSelection) : updater,
       }),
-    [state.rowSelection],
+    [state.rowSelection]
   )
 
   const _id = useId()
@@ -368,10 +368,10 @@ function IGRPDataTable<TData, TValue>({
             "filter" in col &&
             !!col.filter &&
             "accessorKey" in col &&
-            typeof (col as { accessorKey?: unknown }).accessorKey === "string",
+            typeof (col as { accessorKey?: unknown }).accessorKey === "string"
         )
         .map((col) => ({ columnId: col.accessorKey, descriptor: col.filter! })),
-    [columns],
+    [columns]
   )
 
   const NotFoundRowSubComponent = (
@@ -386,11 +386,11 @@ function IGRPDataTable<TData, TValue>({
       {showFilter || showToggleColumn ? (
         <div
           className={cn(
-            "flex flex-col md:flex-row md:items-center md:justify-between md:flex-1 gap-3",
-            filterClassName,
+            "flex flex-col gap-3 md:flex-1 md:flex-row md:items-center md:justify-between",
+            filterClassName
           )}
         >
-          <div className="flex md:flex-row flex-col gap-2">
+          <div className="flex flex-col gap-2 md:flex-row">
             {isServerSide ? (
               serverFilterComponent
             ) : (
@@ -402,7 +402,7 @@ function IGRPDataTable<TData, TValue>({
               />
             )}
             {filterDescriptors.length > 0 && (
-              <div className={cn("flex md:items-center gap-2 flex-col md:flex-row")}>
+              <div className={cn("flex flex-col gap-2 md:flex-row md:items-center")}>
                 {filterDescriptors.map(({ columnId, descriptor }) => {
                   const column = table.getColumn(columnId)
                   if (!column) return null
@@ -473,7 +473,7 @@ function IGRPDataTable<TData, TValue>({
                       key={header.id}
                       colSpan={header.colSpan}
                       style={{ width: `${header.getSize()}px` }}
-                      className={cn("font-semibold px-3")}
+                      className={cn("px-3 font-semibold")}
                       aria-sort={ariaSort}
                     >
                       {header.isPlaceholder ? null : flexRender(header.column.columnDef.header, header.getContext())}
@@ -503,7 +503,7 @@ function IGRPDataTable<TData, TValue>({
                         <TableCell
                           key={cell.id}
                           className={cn(
-                            "p-3 truncate h-[inherit] [&:has([aria-expanded])]:w-px [&:has([aria-expanded])]:py-0 [&:has([aria-expanded])]:pr-0",
+                            "h-[inherit] truncate p-3 [&:has([aria-expanded])]:w-px [&:has([aria-expanded])]:py-0 [&:has([aria-expanded])]:pr-0"
                           )}
                         >
                           {flexRender(cell.column.columnDef.cell, cell.getContext())}

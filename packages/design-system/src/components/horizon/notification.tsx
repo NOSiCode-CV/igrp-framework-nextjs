@@ -11,14 +11,14 @@ import { IGRPButton } from "./button.js"
 import { IGRPIcon, type IGRPIconName } from "./icon/index.js"
 import { useIGRPi18n } from "../../i18n/index.js"
 
-const IGRPNotificationVariants = cva("bg-background z-50 rounded-md p-4 shadow-lg", {
+const IGRPNotificationVariants = cva("z-50 rounded-md bg-background p-4 shadow-lg", {
   variants: {
     variant: {
       default: "text-foreground",
-      error: "text-destructive border-destructive/50",
-      info: "text-info border-info/50",
-      success: "text-success border-success/50",
-      warning: "text-warning border-warning/50",
+      error: "border-destructive/50 text-destructive",
+      info: "border-info/50 text-info",
+      success: "border-success/50 text-success",
+      warning: "border-warning/50 text-warning",
     },
     border: {
       default: "border-0",
@@ -98,7 +98,7 @@ function IGRPNotification({
       className={cn(
         IGRPNotificationVariants(),
         border === "colored" && IGRPNotificationVariants({ variant, border }),
-        className,
+        className
       )}
       id={ref}
     >
@@ -109,7 +109,7 @@ function IGRPNotification({
               iconName={icon}
               className={cn(
                 IGRPNotificationVariants({ variant, border: "default" }),
-                "me-3 inline-flex shadow-none p-0 mt-0.5",
+                "me-3 mt-0.5 inline-flex p-0 shadow-none"
               )}
             />
           )}
@@ -117,7 +117,7 @@ function IGRPNotification({
         </div>
         <div className={cn("flex items-center gap-3")}>
           {showLink && (
-            <a href={actionLink} className={cn("group text-sm font-medium whitespace-nowrap cursor-pointer")}>
+            <a href={actionLink} className={cn("group cursor-pointer text-sm font-medium whitespace-nowrap")}>
               {lableLink}
               <IGRPIcon
                 iconName="ArrowRight"

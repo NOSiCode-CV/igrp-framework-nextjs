@@ -41,10 +41,10 @@ function DatePickerMultipleTrigger({
   return (
     <div
       className={cn(
-        "flex gap-2 items-center relative",
-        "group bg-background hover:bg-background border border-input w-full justify-between px-3 font-normal outline-offset-0 outline-none focus-visible:outline-[3px] h-10 rounded-md",
+        "relative flex items-center gap-2",
+        "group h-10 w-full justify-between rounded-md border border-input bg-background px-3 font-normal outline-offset-0 outline-none hover:bg-background focus-visible:outline-[3px]",
         !value?.length && "text-muted-foreground",
-        disabledPicker && "opacity-50 cursor-not-allowed",
+        disabledPicker && "cursor-not-allowed opacity-50"
       )}
     >
       <IGRPButton
@@ -96,7 +96,7 @@ function DatePickerMultipleField({
             disabledPicker={disabledPicker}
           />
         </PopoverTrigger>
-        <PopoverContent className={cn("p-0 w-auto shadow-none")} align="start">
+        <PopoverContent className={cn("w-auto p-0 shadow-none")} align="start">
           <IGRPCalendarMultiple
             {...calendarProps}
             id={fieldName}
@@ -110,7 +110,7 @@ function DatePickerMultipleField({
         <IGRPButton
           onClick={() => onChange(undefined)}
           variant="link"
-          className={cn("absolute right-2 top-1/2 size-3 -translate-y-1/2 text-muted-foreground z-100")}
+          className={cn("absolute top-1/2 right-2 z-100 size-3 -translate-y-1/2 text-muted-foreground")}
           size="icon"
           iconName="X"
           aria-label={i18n.datePicker.clear}
@@ -177,7 +177,7 @@ function IGRPDatePickerMultiple({
         render={({ field, fieldState }) => (
           <FormItem className={className}>
             {label && (
-              <FormLabel className={cn(labelClassName, required && 'after:content-["*"] after:text-destructive')}>
+              <FormLabel className={cn(labelClassName, required && 'after:text-destructive after:content-["*"]')}>
                 {label}
               </FormLabel>
             )}
@@ -213,7 +213,7 @@ function IGRPDatePickerMultiple({
         }}
       />
 
-      {helperText && <p className={cn("text-sm text-muted-foreground mt-1")}>{helperText}</p>}
+      {helperText && <p className={cn("mt-1 text-sm text-muted-foreground")}>{helperText}</p>}
     </Field>
   )
 }

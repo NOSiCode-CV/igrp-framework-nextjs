@@ -85,7 +85,7 @@ function IGRPHorizontalBarChartInner({
   const formatValue = (value: number) => formatChartValue(value, valueFormatter)
   const hasNegativeDataValues = hasNegativeValues(
     data,
-    bars.map((b) => b.dataKey),
+    bars.map((b) => b.dataKey)
   )
   const chartConfig = createChartConfig(bars)
 
@@ -94,7 +94,7 @@ function IGRPHorizontalBarChartInner({
       ...data.map((item) => {
         const label = String(item[categoryKey])
         return label.length
-      }),
+      })
     )
 
     return Math.max(maxLabelLength * 7, 80)
@@ -190,7 +190,7 @@ function IGRPHorizontalBarChartInner({
                     fill={`var(--color-${bar.dataKey})`}
                     radius={barRadius}
                   />
-                ),
+                )
               )}
             </BarChart>
           </ChartContainer>
@@ -198,7 +198,7 @@ function IGRPHorizontalBarChartInner({
       </div>
 
       {footer && (
-        <div className={cn("flex-col items-start gap-2 text-sm pt-4")}>
+        <div className={cn("flex-col items-start gap-2 pt-4 text-sm")}>
           {footer.description && <div className={cn("leading-none text-muted-foreground")}>{footer.description}</div>}
         </div>
       )}

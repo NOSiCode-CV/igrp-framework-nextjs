@@ -67,13 +67,13 @@ const STEP_GAP = 3
 
 function getStepperItemClassName(): string {
   return cn(
-    "group/step relative flex-1 text-center overflow-visible items-center justify-center max-md:items-start",
+    "group/step relative flex-1 items-center justify-center overflow-visible text-center max-md:items-start",
     // Only text colour lives on the item; the arrow shape and its fill are painted by the
     // background layer below, so a focus ring on the trigger is never clipped by the chevron.
     "text-muted-foreground",
-    "data-[state=completed]:text-background hover:data-[state=active]:text-background",
+    "hover:data-[state=active]:text-background data-[state=completed]:text-background",
     "data-[state=active]:text-background",
-    "data-[state=inactive]:text-muted-foreground",
+    "data-[state=inactive]:text-muted-foreground"
   )
 }
 
@@ -151,7 +151,7 @@ function IGRPStepperProcess({
         onStepChange?.(step, stepData)
       }
     },
-    [steps, onStepChange],
+    [steps, onStepChange]
   )
 
   const checkScrollPosition = useCallback(() => {
@@ -207,8 +207,8 @@ function IGRPStepperProcess({
   }
 
   return (
-    <div className={cn("flex flex-col gap-8 w-full")} id={ref}>
-      <div className={cn("flex items-center justify-center gap-4 relative")}>
+    <div className={cn("flex w-full flex-col gap-8")} id={ref}>
+      <div className={cn("relative flex items-center justify-center gap-4")}>
         <div ref={scrollAreaRef} className={cn("w-[90vw]")}>
           <ScrollArea className={cn("w-full")}>
             <Stepper
@@ -241,35 +241,35 @@ function IGRPStepperProcess({
                         "group-data-[state=active]/step:bg-process-active",
                         "group-data-[state=inactive]/step:bg-muted",
                         isFirst && "rounded-l-2xl",
-                        isLast && "rounded-r-2xl",
+                        isLast && "rounded-r-2xl"
                       )}
                       style={getStepShapeStyle(isFirst, isLast)}
                     />
-                    <StepperTrigger asChild className={cn("gap-1 rounded max-md:flex-col z-10 cursor-pointer")}>
+                    <StepperTrigger asChild className={cn("z-10 cursor-pointer gap-1 rounded max-md:flex-col")}>
                       <Button
                         variant="ghost"
                         className={cn(
-                          "bg-transparent hover:bg-transparent text-center flex items-center justify-center",
-                          "shadow-none text-[10px] w-34",
-                          (isActive || isCompleted) && "text-background hover:text-background",
+                          "flex items-center justify-center bg-transparent text-center hover:bg-transparent",
+                          "w-34 text-[10px] shadow-none",
+                          (isActive || isCompleted) && "text-background hover:text-background"
                         )}
                         size="xs"
                       >
                         <Tooltip>
                           <TooltipTrigger asChild>
-                            <span className={cn("flex items-center justify-center gap-2 w-full min-w-0")}>
+                            <span className={cn("flex w-full min-w-0 items-center justify-center gap-2")}>
                               <CheckIcon
                                 className={cn(
                                   "hidden",
-                                  isCompleted && "stroke-[2.5] block opacity-70 group-hover/step:hidden shrink-0",
+                                  isCompleted && "block shrink-0 stroke-[2.5] opacity-70 group-hover/step:hidden"
                                 )}
                                 aria-hidden="true"
                               />
                               <StepperTitle
                                 className={cn(
                                   isCompleted
-                                    ? "hidden group-hover/step:block truncate min-w-0"
-                                    : "truncate w-full min-w-0",
+                                    ? "hidden min-w-0 truncate group-hover/step:block"
+                                    : "w-full min-w-0 truncate"
                                 )}
                               >
                                 {title}
@@ -291,7 +291,7 @@ function IGRPStepperProcess({
           <Button
             variant="outline"
             size="icon-sm"
-            className={cn("size-6 shrink-0 mb-3")}
+            className={cn("mb-3 size-6 shrink-0")}
             onClick={scrollLeft}
             aria-label={i18n.stepper.scrollPrevious}
             type="button"
@@ -303,7 +303,7 @@ function IGRPStepperProcess({
           <Button
             variant="outline"
             size="icon-sm"
-            className={cn("size-6 shrink-0 mb-3")}
+            className={cn("mb-3 size-6 shrink-0")}
             onClick={scrollRight}
             aria-label={i18n.stepper.scrollNext}
             type="button"

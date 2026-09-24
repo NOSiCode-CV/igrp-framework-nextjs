@@ -115,7 +115,7 @@ function IGRPAlertDialog({
       <AlertDialog open={open} onOpenChange={onOpenChange}>
         <AlertDialogContent className={className}>
           {showIcon && iconPlacement === "center" && (
-            <div className="flex justify-center -mt-2">
+            <div className="-mt-2 flex justify-center">
               <AlertIcon
                 iconName={iconName || iconDefault}
                 bgClass={softColors.bg}
@@ -124,7 +124,7 @@ function IGRPAlertDialog({
               />
             </div>
           )}
-          <div className={cn("flex", iconPlacement === "start" && showIcon ? "gap-2 items-start" : "flex-col")}>
+          <div className={cn("flex", iconPlacement === "start" && showIcon ? "items-start gap-2" : "flex-col")}>
             {showIcon && iconPlacement === "start" && (
               <AlertIcon
                 iconName={iconName || iconDefault}
@@ -173,9 +173,9 @@ function AlertIcon({ bgClass, iconPlacement, iconName, textClass }: AlertIconPro
   return (
     <div
       className={cn(
-        "flex items-center justify-center rounded-full p-1 size-10",
+        "flex size-10 items-center justify-center rounded-full p-1",
         bgClass,
-        iconPlacement === "center" && "mx-auto",
+        iconPlacement === "center" && "mx-auto"
       )}
     >
       <IGRPIcon iconName={iconName} className={cn("size-6", textClass)} />

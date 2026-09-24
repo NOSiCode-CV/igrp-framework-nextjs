@@ -14,14 +14,14 @@ import {
 } from "../primitives/dialog.js"
 import { cn } from "cn"
 
-const igrpModalDialogContentVariants = cva("w-full max-h-[90vh] overflow-auto", {
+const igrpModalDialogContentVariants = cva("max-h-[90vh] w-full overflow-auto", {
   variants: {
     size: {
       sm: "sm:max-w-md",
       md: "sm:max-w-lg",
       lg: "sm:max-w-2xl",
       xl: "sm:max-w-4xl",
-      full: "sm:max-w-[95vw] h-[95vh] max-h-[95vh]",
+      full: "h-[95vh] max-h-[95vh] sm:max-w-[95vw]",
     },
   },
   defaultVariants: {
@@ -53,14 +53,14 @@ function IGRPModalDialogContent({
     (child) =>
       isValidElement(child) &&
       child.type === IGRPModalDialogHeader &&
-      (child.props as IGRPModalDialogHeaderProps).stickyHeader === true,
+      (child.props as IGRPModalDialogHeaderProps).stickyHeader === true
   )
 
   const hasStickyFooter = Children.toArray(children).some(
     (child) =>
       isValidElement(child) &&
       child.type === IGRPModalDialogFooter &&
-      (child.props as IGRPModalDialogFooterProps).stickyFooter === true,
+      (child.props as IGRPModalDialogFooterProps).stickyFooter === true
   )
 
   return (
@@ -69,7 +69,7 @@ function IGRPModalDialogContent({
         igrpModalDialogContentVariants({ size }),
         hasStickyHeader && "pt-0",
         hasStickyFooter && "pb-0",
-        className,
+        className
       )}
       {...props}
     >
@@ -96,7 +96,7 @@ function IGRPModalDialogHeader({ className, stickyHeader, ...props }: IGRPModalD
       data-igrp-slot="modal-dialog-header"
       className={cn(
         stickyHeader && "sticky top-0 z-10 -mx-6 border-b bg-background/80 px-6 py-3 backdrop-blur-2xl",
-        className,
+        className
       )}
       {...props}
     />
@@ -114,7 +114,7 @@ function IGRPModalDialogFooter({ className, stickyFooter, ...props }: IGRPModalD
       className={cn(
         "flex-col",
         stickyFooter && "sticky bottom-0 z-10 -mx-6 bg-background/80 px-6 py-3 backdrop-blur-2xl",
-        className,
+        className
       )}
       {...props}
     />

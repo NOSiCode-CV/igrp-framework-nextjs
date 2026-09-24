@@ -6,7 +6,7 @@
 (`SimpleButtonLinkTooltip`).
 
 **Status.** Like §2, **currently unreferenced** in SIGOVP. Ask for it as a
-*prop on* §2, not as a second component — see §3.3.
+_prop on_ §2, not as a second component — see §3.3.
 
 ---
 
@@ -20,7 +20,9 @@ Thirteen lines around `SimpleButtonLink`:
     <TooltipTrigger asChild>
       <span className="inline-flex">{link}</span>
     </TooltipTrigger>
-    <TooltipContent><p>{label}</p></TooltipContent>
+    <TooltipContent>
+      <p>{label}</p>
+    </TooltipContent>
   </Tooltip>
 </TooltipProvider>
 ```
@@ -28,14 +30,14 @@ Thirteen lines around `SimpleButtonLink`:
 with one piece of real logic: when `size` is one of `"icon" | "icon-sm" |
 "icon-lg"`, the `label` is **not** passed down to the button (it would render as
 text next to the icon) and is used as the tooltip text instead. For every other
-size the label renders in the button *and* repeats in the tooltip.
+size the label renders in the button _and_ repeats in the tooltip.
 
 ---
 
 ## §3.2 The two details worth encoding in the DS
 
 1. **The wrapping `<span className="inline-flex">`.** A Radix `TooltipTrigger
-   asChild` over a disabled control never opens, because a disabled element
+asChild` over a disabled control never opens, because a disabled element
    receives no pointer events. The span is what receives hover while the inner
    control stays disabled. This app hit the same thing independently in the
    rich-text toolbar (`ToolbarButton`, §9) and in
@@ -78,8 +80,8 @@ Do not ship a second component. Add to `IGRPButtonLinkProps` (§2.4):
 and derive the icon-only behaviour from `size`:
 
 ```ts
-const iconOnly = size === "icon" || size === "icon-xs" || size === "icon-sm" || size === "icon-lg";
-const tooltipText = tooltip ?? (iconOnly ? label : undefined);
+const iconOnly = size === "icon" || size === "icon-xs" || size === "icon-sm" || size === "icon-lg"
+const tooltipText = tooltip ?? (iconOnly ? label : undefined)
 ```
 
 Note `icon-xs` — the DS `buttonVariants` has five icon sizes
@@ -113,36 +115,22 @@ Verbatim. `SimpleButtonLink` is the component in §2.6.
 ### `src/app/(myapp)/_components/button-link-tooltip.tsx`
 
 ```tsx
-import {
-  Tooltip,
-  TooltipContent,
-  TooltipProvider,
-  TooltipTrigger,
-} from "@igrp/igrp-framework-react-design-system";
+import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@igrp/igrp-framework-react-design-system"
 
-import { SimpleButtonLink } from "./button-link";
+import { SimpleButtonLink } from "./button-link"
 
-interface SimpleButtonLinkTooltipProps
-  extends React.ComponentProps<typeof SimpleButtonLink> {}
+interface SimpleButtonLinkTooltipProps extends React.ComponentProps<typeof SimpleButtonLink> {}
 
-export function SimpleButtonLinkTooltip({
-  href,
-  label,
-  size,
-  disable,
-  ...props
-}: SimpleButtonLinkTooltipProps) {
+export function SimpleButtonLinkTooltip({ href, label, size, disable, ...props }: SimpleButtonLinkTooltipProps) {
   const link = (
     <SimpleButtonLink
       href={href}
-      label={
-        size === "icon" || size === "icon-lg" || size === "icon-sm" ? "" : label
-      }
+      label={size === "icon" || size === "icon-lg" || size === "icon-sm" ? "" : label}
       size={size}
       disable={disable}
       {...props}
     />
-  );
+  )
 
   return (
     <TooltipProvider>
@@ -155,6 +143,6 @@ export function SimpleButtonLinkTooltip({
         </TooltipContent>
       </Tooltip>
     </TooltipProvider>
-  );
+  )
 }
 ```

@@ -58,7 +58,7 @@ export type IGRPAccessorColumnDef<TData, TValue = unknown> = Omit<ColumnDef<TDat
 export interface IGRPColumnHelper<TData> {
   accessor: <TValue>(
     accessor: keyof TData & string,
-    column: IGRPAccessorColumnDef<TData, TValue>,
+    column: IGRPAccessorColumnDef<TData, TValue>
   ) => IGRPAccessorColumnDef<TData, TValue>
   display: ColumnHelper<TData>["display"]
   group: ColumnHelper<TData>["group"]

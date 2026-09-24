@@ -24,7 +24,7 @@ export const formatChartValue = (value: number, valueFormatter?: (value: number)
 export const getChartHeight = (
   size: IGRPChartSize,
   data: IGRPChartDataItem[] = [],
-  height?: number | string,
+  height?: number | string
 ): number | string => {
   if (height != null) return height
 

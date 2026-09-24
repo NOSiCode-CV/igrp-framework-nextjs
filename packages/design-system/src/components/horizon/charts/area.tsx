@@ -73,7 +73,7 @@ function IGRPAreaChart({
   const formatValue = (value: number) => formatChartValue(value, valueFormatter)
   const hasNegativeDataValues = hasNegativeValues(
     data,
-    areas.map((a) => a.dataKey),
+    areas.map((a) => a.dataKey)
   )
   const chartConfig = createChartConfig(areas)
 
@@ -187,7 +187,7 @@ function IGRPAreaChart({
                     stroke={`var(--color-${area.dataKey})`}
                     type={area.type || "monotone"}
                   />
-                ),
+                )
               )}
             </AreaChart>
           </ChartContainer>
@@ -195,7 +195,7 @@ function IGRPAreaChart({
       </div>
 
       {footer && (
-        <div className={cn("flex-col items-start gap-2 text-sm pt-4")}>
+        <div className={cn("flex-col items-start gap-2 pt-4 text-sm")}>
           {footer.description && <div className={cn("leading-none text-muted-foreground")}>{footer.description}</div>}
         </div>
       )}

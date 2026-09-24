@@ -19,13 +19,13 @@ For every rename the format is **`old name` → `new name`** (same for props).
 
 ## 1. Structural / folder changes
 
-| Old                                        | New                                | Note                                                                                              |
-| ------------------------------------------ | ---------------------------------- | ------------------------------------------------------------------------------------------------- |
-| `horizon/proccess/`                        | `horizon/process/`                 | Typo fixed; junk files (`_stepper`, `stepper copy`) removed                                       |
-| `horizon/loading-spiner.tsx`               | `horizon/loading-spinner.tsx`      | Filename typo fixed (export name unchanged)                                                       |
-| `horizon/charts/radial.d.ts` (single file) | `horizon/charts/radial/` (folder)  | Split into a folder                                                                               |
-| —                                          | `horizon/charts/*-chart-inner.tsx` | New internal split files (public API unchanged)                                                   |
-| —                                          | `src/i18n/`                        | **New** internationalization folder (did not exist in beta.99)                                    |
+| Old                                        | New                                | Note                                                           |
+| ------------------------------------------ | ---------------------------------- | -------------------------------------------------------------- |
+| `horizon/proccess/`                        | `horizon/process/`                 | Typo fixed; junk files (`_stepper`, `stepper copy`) removed    |
+| `horizon/loading-spiner.tsx`               | `horizon/loading-spinner.tsx`      | Filename typo fixed (export name unchanged)                    |
+| `horizon/charts/radial.d.ts` (single file) | `horizon/charts/radial/` (folder)  | Split into a folder                                            |
+| —                                          | `horizon/charts/*-chart-inner.tsx` | New internal split files (public API unchanged)                |
+| —                                          | `src/i18n/`                        | **New** internationalization folder (did not exist in beta.99) |
 
 ---
 

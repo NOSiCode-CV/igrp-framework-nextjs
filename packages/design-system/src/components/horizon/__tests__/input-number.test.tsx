@@ -37,7 +37,7 @@ describe("IGRPInputNumber", () => {
     render(
       <IGRPI18nProvider strings={{ inputNumber: { incrementLabel: "Up", decrementLabel: "Down" } }}>
         <IGRPInputNumber name="qty" label="Quantity" />
-      </IGRPI18nProvider>,
+      </IGRPI18nProvider>
     )
     expect(screen.getByRole("button", { name: "Up" })).toBeInTheDocument()
     expect(screen.getByRole("button", { name: "Down" })).toBeInTheDocument()
@@ -115,7 +115,7 @@ describe("IGRPInputNumber", () => {
           defaultValue={12.55}
           formatOptions={formatOptions}
           onChange={onChange}
-        />,
+        />
       )
 
       const input = screen.getByRole("spinbutton")
@@ -136,7 +136,7 @@ describe("IGRPInputNumber", () => {
           defaultValue={0.25}
           formatOptions={{ style: "percent" }}
           onChange={onChange}
-        />,
+        />
       )
 
       const input = screen.getByRole("spinbutton")

@@ -105,7 +105,7 @@ function useIGRPToast<T = unknown>() {
       "promise" in props && props.promise
         ? createToast(props as IGRPPromiseToastProps<T>)
         : createToast(props as PlainToastProps),
-    [],
+    []
   )
 
   const helpers = useMemo(
@@ -119,7 +119,7 @@ function useIGRPToast<T = unknown>() {
       loading: (msg: React.ReactNode, opts?: ExternalToast) => toast.loading(msg, opts),
       dismiss: toast.dismiss,
     }),
-    [],
+    []
   )
 
   return useMemo(() => ({ igrpToast, ...helpers }), [igrpToast, helpers])

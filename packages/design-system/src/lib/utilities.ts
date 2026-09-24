@@ -34,7 +34,6 @@ export function igrpNormalizeUrl(url: string): string {
   return `/${url}`
 }
 
-
 /**
  * Remove all non-alphabetic characters from the input string.
  * This will remove all spaces, numbers, and special characters, leaving only letters.
@@ -95,7 +94,6 @@ export function igrpGetInitials(value: string): string {
   return `${first}${last}`.toUpperCase()
 }
 
-
 /** Tailwind grid span classes by layout size. */
 export const igrpGridSizeClasses = {
   default: "",
@@ -124,8 +122,3 @@ export const DEFAULT_HIDE_TIME_INDICATOR =
 
 /** date-fns format string for dd-MM-yyyy. */
 export const DD_MM_YYYY = "dd-MM-yyyy"
-
-
-
-
-

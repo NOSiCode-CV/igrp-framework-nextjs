@@ -5,7 +5,7 @@ import { type Table } from "@tanstack/react-table"
 
 function useFilterState<TData>(
   table: Table<TData>,
-  onFiltersCleared?: () => void,
+  onFiltersCleared?: () => void
 ): { isFiltered: boolean; handleClear: () => void } {
   const isFiltered = table.getState().columnFilters.length > 0
 

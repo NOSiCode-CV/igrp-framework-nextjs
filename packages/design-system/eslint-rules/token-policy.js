@@ -21,20 +21,53 @@
  */
 
 const PALETTE = [
-  "slate", "gray", "zinc", "neutral", "stone",
-  "red", "orange", "amber", "yellow", "lime", "green", "emerald", "teal",
-  "cyan", "sky", "blue", "indigo", "violet", "purple", "fuchsia", "pink", "rose",
+  "slate",
+  "gray",
+  "zinc",
+  "neutral",
+  "stone",
+  "red",
+  "orange",
+  "amber",
+  "yellow",
+  "lime",
+  "green",
+  "emerald",
+  "teal",
+  "cyan",
+  "sky",
+  "blue",
+  "indigo",
+  "violet",
+  "purple",
+  "fuchsia",
+  "pink",
+  "rose",
 ].join("|")
 
 const COLOR_UTILITIES = [
-  "bg", "text", "border", "ring", "outline", "decoration", "divide",
-  "from", "via", "to", "fill", "stroke", "accent", "caret", "placeholder", "shadow",
+  "bg",
+  "text",
+  "border",
+  "ring",
+  "outline",
+  "decoration",
+  "divide",
+  "from",
+  "via",
+  "to",
+  "fill",
+  "stroke",
+  "accent",
+  "caret",
+  "placeholder",
+  "shadow",
 ].join("|")
 
 /** e.g. `bg-emerald-500`, `dark:text-red-400`, `hover:border-blue-600/50`. */
 const RAW_PALETTE = new RegExp(
   String.raw`(?<=^|[\s:])(?:${COLOR_UTILITIES})-(?:${PALETTE})-(?:50|[1-9]00|950)(?:\/\d{1,3})?(?=\s|$)`,
-  "g",
+  "g"
 )
 
 /** Any `dark:` variant, alone or chained behind others (`md:dark:hover:`). */
@@ -44,8 +77,7 @@ export const tokenPolicy = {
   meta: {
     type: "problem",
     docs: {
-      description:
-        "Use semantic design tokens; keep `dark:` out of the Horizon and Custom layers.",
+      description: "Use semantic design tokens; keep `dark:` out of the Horizon and Custom layers.",
     },
     schema: [
       {

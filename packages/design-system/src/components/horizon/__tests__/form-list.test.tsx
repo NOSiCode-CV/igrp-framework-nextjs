@@ -60,7 +60,7 @@ describe("IGRPFormList seeding in form mode", () => {
     render(
       <StrictMode>
         <Harness />
-      </StrictMode>,
+      </StrictMode>
     )
     await settle()
     expect(rowCount()).toBe(1)
@@ -70,7 +70,7 @@ describe("IGRPFormList seeding in form mode", () => {
     render(
       <StrictMode>
         <Harness inlineDefaultItem />
-      </StrictMode>,
+      </StrictMode>
     )
     await settle()
     expect(rowCount()).toBe(1)
@@ -99,7 +99,7 @@ describe("IGRPFormList seeding in form mode", () => {
             { idTipoDocumento: 4, url: "b" },
           ],
         }}
-      />,
+      />
     )
     await settle()
     expect(rowCount()).toBe(2)
@@ -115,7 +115,7 @@ describe("IGRPFormList seeding in form mode", () => {
     render(
       <StrictMode>
         <Harness defaultValues={{ anexos: [] }} allowEmpty />
-      </StrictMode>,
+      </StrictMode>
     )
     await settle()
     expect(rowCount()).toBe(0)

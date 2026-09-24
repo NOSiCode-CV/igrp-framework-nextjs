@@ -4,7 +4,7 @@ import { IGRPColors, IGRPColorObjectRole, IGRPColorObjectVariants } from "./colo
 
 /** Every slot, flattened to `[role, color, slot]` for exhaustive assertions. */
 const everySlot = IGRPColorObjectRole.flatMap((role) =>
-  IGRPColorObjectVariants.map((color) => [role, color, IGRPColors[role][color]] as const),
+  IGRPColorObjectVariants.map((color) => [role, color, IGRPColors[role][color]] as const)
 )
 
 describe("IGRPColors", () => {

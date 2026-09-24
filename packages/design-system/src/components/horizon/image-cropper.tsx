@@ -40,7 +40,7 @@ async function getCroppedImg(
   imageSrc: string,
   pixelCrop: Area,
   outputWidth: number = pixelCrop.width,
-  outputHeight: number = pixelCrop.height,
+  outputHeight: number = pixelCrop.height
 ): Promise<Blob | null> {
   try {
     const image = await createImage(imageSrc)
@@ -147,7 +147,7 @@ export function IGRPImageCropper({
                 onValueChange={(value) => setZoom(value[0] ?? 1)}
                 aria-label={i18n.imageCropper.zoomSlider}
               />
-              <output className={cn("block w-10 shrink-0 text-right text-sm font-medium tabular-nums text-foreground")}>
+              <output className={cn("block w-10 shrink-0 text-right text-sm font-medium text-foreground tabular-nums")}>
                 {parseFloat(zoom.toFixed(1))}x
               </output>
             </div>
@@ -175,7 +175,7 @@ export function IGRPImageCropper({
               ) : (
                 <div
                   className={cn(
-                    "flex size-full items-center justify-center p-2 text-center text-xs text-muted-foreground",
+                    "flex size-full items-center justify-center p-2 text-center text-xs text-muted-foreground"
                   )}
                 >
                   Image preview

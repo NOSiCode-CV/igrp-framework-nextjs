@@ -18,7 +18,7 @@ wizard:
   `steps: { step, stepKey, title, description, isCompleted, isActive }[]`,
   `currentStep` and `children: (step) => ReactNode`. The caller still owns
   `currentStep`, every `isActive`/`isCompleted` flag, and all navigation. It is
-  a *process viewer*, not a form driver: there is no per-step field list, no
+  a _process viewer_, not a form driver: there is no per-step field list, no
   gate before advancing, and no integration with `IGRPForm`.
 
 The missing piece is the one thing a wizard actually needs: **"you may not leave
@@ -38,8 +38,10 @@ Two multi-step forms, both large and both central to the app:
   <MultiStepFormContent>
     <FormHeader variant="number" />
     <StepFields />
-    <FormFooter className="border-t pt-4 mt-4">
-      <IGRPButton variant="outline" onClick={handleCancel}>Cancelar</IGRPButton>
+    <FormFooter className="mt-4 border-t pt-4">
+      <IGRPButton variant="outline" onClick={handleCancel}>
+        Cancelar
+      </IGRPButton>
       <AnteriorButton onValidate={handleStepValidation} />
       <NextButton>Próximo</NextButton>
       <GuardarButton isSubmitting={isSubmitting} onGuardar={handleGuardarClick} />
@@ -57,25 +59,25 @@ available to the wizard parts.
 
 ```ts
 interface Stepfields {
-  fields: string[];                 // field names owned by this step
-  component: JSX.Element;
-  title?: string;
+  fields: string[] // field names owned by this step
+  component: JSX.Element
+  title?: string
   /** Why this step cannot be left yet, or null when complete. */
-  blockingMessage?: (values: Record<string, unknown>) => string | null;
+  blockingMessage?: (values: Record<string, unknown>) => string | null
 }
 
 interface UseMultiFormStepsReturn {
-  steps: Stepfields[];
-  currentStepIndex: number;         // 1-based
-  currentStepData: Stepfields;
-  progress: number;                 // percent
-  isFirstStep: boolean;
-  isLastStep: boolean;
-  goToNext: () => Promise<boolean>; // runs onStepValidation first
-  goToPrevious: () => void;
-  goToFirstStep: () => void;
-  goToStep: (n: number) => void;
-  setSteps: (next: Stepfields[]) => void;
+  steps: Stepfields[]
+  currentStepIndex: number // 1-based
+  currentStepData: Stepfields
+  progress: number // percent
+  isFirstStep: boolean
+  isLastStep: boolean
+  goToNext: () => Promise<boolean> // runs onStepValidation first
+  goToPrevious: () => void
+  goToFirstStep: () => void
+  goToStep: (n: number) => void
+  setSteps: (next: Stepfields[]) => void
 }
 ```
 
@@ -99,7 +101,7 @@ resume a RASCUNHO at the step the backend last accepted.
 
 The split matters and should be preserved: `useWatch()` requires a form
 provider, so a wizard used outside `IGRPForm` must not mount it. Equally
-deliberate is that the message is *shown* — a disabled Next button with no
+deliberate is that the message is _shown_ — a disabled Next button with no
 explanation is the standard failure mode of this pattern, and in a multi-step
 form the offending field may be off-screen.
 
@@ -138,16 +140,16 @@ Two asks, both small and both independent of the rest of this document:
 
 ## §7.5 The rest of the surface
 
-| Part | Behaviour |
-|---|---|
-| `MultiStepFormContent` | `flex flex-col gap-8 pt-3 w-full min-w-0 max-w-full`. The `min-w-0` is load-bearing — without it a wide step (a table) blows out the wizard width. |
-| `FormHeader` | `variant` (`"ring"` or `"number"`), `isLoading` (spinner on the active indicator), `navigable` (clicking a step header calls `goToStep`; **off by default**, because both wizards drive navigation through their own submit handlers). |
-| `StepFields` | Renders `steps[currentStepIndex - 1].component` inside `motion.div` with `MotionConfig reducedMotion="user"` and an `AnimatePresence mode="popLayout"` slide (`x: 15 → 0 → -15`, spring, 0.4s). |
-| `FormFooter` | `flex w-full items-center justify-end gap-3 pt-3`. |
-| `NextButton` | Hidden on the last step. `ChevronRight`, `iconPlacement="end"`. |
-| `PreviousButton` | Hidden on the first step. `variant="outline"`, `ChevronLeft`. |
-| `SubmitButton` | Rendered **only** on the last step, `type="submit"`. |
-| `ResetButton` | `size="sm" variant="ghost"`, no built-in behaviour. |
+| Part                   | Behaviour                                                                                                                                                                                                                              |
+| ---------------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `MultiStepFormContent` | `flex flex-col gap-8 pt-3 w-full min-w-0 max-w-full`. The `min-w-0` is load-bearing — without it a wide step (a table) blows out the wizard width.                                                                                     |
+| `FormHeader`           | `variant` (`"ring"` or `"number"`), `isLoading` (spinner on the active indicator), `navigable` (clicking a step header calls `goToStep`; **off by default**, because both wizards drive navigation through their own submit handlers). |
+| `StepFields`           | Renders `steps[currentStepIndex - 1].component` inside `motion.div` with `MotionConfig reducedMotion="user"` and an `AnimatePresence mode="popLayout"` slide (`x: 15 → 0 → -15`, spring, 0.4s).                                        |
+| `FormFooter`           | `flex w-full items-center justify-end gap-3 pt-3`.                                                                                                                                                                                     |
+| `NextButton`           | Hidden on the last step. `ChevronRight`, `iconPlacement="end"`.                                                                                                                                                                        |
+| `PreviousButton`       | Hidden on the first step. `variant="outline"`, `ChevronLeft`.                                                                                                                                                                          |
+| `SubmitButton`         | Rendered **only** on the last step, `type="submit"`.                                                                                                                                                                                   |
+| `ResetButton`          | `size="sm" variant="ghost"`, no built-in behaviour.                                                                                                                                                                                    |
 
 **Dependency note.** `StepFields` pulls in `motion` (v13). If the DS does not
 already depend on it, the animation should be optional — either behind an
@@ -163,10 +165,10 @@ buttons into `FormFooter`), and prefix:
 
 ```tsx
 <IGRPMultiStepForm
-  steps={steps}                    // IGRPWizardStep[]
-  initialStep={1}                  // 1-based
+  steps={steps} // IGRPWizardStep[]
+  initialStep={1} // 1-based
   onStepValidation={async (step) => true}
-  onStepChange={(next, prev) => {}}       // new
+  onStepChange={(next, prev) => {}} // new
 >
   <IGRPMultiStepForm.Header variant="number" navigable={false} isLoading={saving} />
   <IGRPMultiStepForm.Steps animate />
@@ -180,12 +182,12 @@ buttons into `FormFooter`), and prefix:
 
 ```ts
 export interface IGRPWizardStep {
-  key: string;                     // new: stable id, see below
-  title: string;
-  description?: string;
-  fields: string[];
-  component: React.ReactNode;
-  blockingMessage?: (values: Record<string, unknown>) => string | null;
+  key: string // new: stable id, see below
+  title: string
+  description?: string
+  fields: string[]
+  component: React.ReactNode
+  blockingMessage?: (values: Record<string, unknown>) => string | null
 }
 ```
 
@@ -240,33 +242,18 @@ the forked `Stepper` primitive (§7.4 — identical to yours except for
 ### `src/app/(myapp)/_components/multi-step-viewer.tsx`
 
 ```tsx
-"use client";
+"use client"
 
-import {
-  IGRPButton,
-  type IGRPButtonProps,
-} from "@igrp/igrp-framework-react-design-system";
-import { useMultiStepForm } from "@myapp/_hooks/use-multi-step-viewer";
-import {
-  AnimatePresence,
-  MotionConfig,
-  type MotionProps,
-  motion,
-} from "motion/react";
-import { useWatch } from "react-hook-form";
-import { cn } from "@/lib/utils";
-import {
-  Stepper,
-  StepperIndicator,
-  StepperItem,
-  StepperSeparator,
-  StepperTitle,
-  StepperTrigger,
-} from "./stepper";
+import { IGRPButton, type IGRPButtonProps } from "@igrp/igrp-framework-react-design-system"
+import { useMultiStepForm } from "@myapp/_hooks/use-multi-step-viewer"
+import { AnimatePresence, MotionConfig, type MotionProps, motion } from "motion/react"
+import { useWatch } from "react-hook-form"
+import { cn } from "@/lib/utils"
+import { Stepper, StepperIndicator, StepperItem, StepperSeparator, StepperTitle, StepperTrigger } from "./stepper"
 
 /** The plain button: navigation is gated by `onStepValidation` on click. */
 const PlainNextButton = (props: IGRPButtonProps) => {
-  const { goToNext } = useMultiStepForm();
+  const { goToNext } = useMultiStepForm()
   return (
     <IGRPButton
       type="button"
@@ -276,8 +263,8 @@ const PlainNextButton = (props: IGRPButtonProps) => {
       onClick={() => goToNext()}
       {...props}
     />
-  );
-};
+  )
+}
 
 /**
  * TODO.md stepper rule: disabled until the step's required fields are filled
@@ -293,11 +280,11 @@ const ValidatedNextButton = ({
   blockingMessage,
   ...props
 }: IGRPButtonProps & {
-  blockingMessage: (values: Record<string, unknown>) => string | null;
+  blockingMessage: (values: Record<string, unknown>) => string | null
 }) => {
-  const { goToNext } = useMultiStepForm();
-  const values = useWatch() as Record<string, unknown>;
-  const motivo = blockingMessage(values);
+  const { goToNext } = useMultiStepForm()
+  const values = useWatch() as Record<string, unknown>
+  const motivo = blockingMessage(values)
   return (
     <IGRPButton
       type="button"
@@ -309,22 +296,22 @@ const ValidatedNextButton = ({
       onClick={() => goToNext()}
       {...props}
     />
-  );
-};
+  )
+}
 
 const NextButton = (props: IGRPButtonProps) => {
-  const { isLastStep, currentStepData } = useMultiStepForm();
-  if (isLastStep) return null;
-  const blockingMessage = currentStepData?.blockingMessage;
+  const { isLastStep, currentStepData } = useMultiStepForm()
+  if (isLastStep) return null
+  const blockingMessage = currentStepData?.blockingMessage
   if (blockingMessage) {
-    return <ValidatedNextButton blockingMessage={blockingMessage} {...props} />;
+    return <ValidatedNextButton blockingMessage={blockingMessage} {...props} />
   }
-  return <PlainNextButton {...props} />;
-};
+  return <PlainNextButton {...props} />
+}
 
 const PreviousButton = (props: IGRPButtonProps) => {
-  const { isFirstStep, goToPrevious } = useMultiStepForm();
-  if (isFirstStep) return null;
+  const { isFirstStep, goToPrevious } = useMultiStepForm()
+  if (isFirstStep) return null
   return (
     <IGRPButton
       type="button"
@@ -334,18 +321,18 @@ const PreviousButton = (props: IGRPButtonProps) => {
       onClick={() => goToPrevious()}
       {...props}
     />
-  );
-};
+  )
+}
 
 const SubmitButton = (props: IGRPButtonProps) => {
-  const { isLastStep } = useMultiStepForm();
-  if (!isLastStep) return null;
-  return <IGRPButton type="submit" {...props} />;
-};
+  const { isLastStep } = useMultiStepForm()
+  if (!isLastStep) return null
+  return <IGRPButton type="submit" {...props} />
+}
 
 const ResetButton = (props: IGRPButtonProps) => {
-  return <IGRPButton size="sm" type="button" variant="ghost" {...props} />;
-};
+  return <IGRPButton size="sm" type="button" variant="ghost" {...props} />
+}
 
 const FormHeader = ({
   className,
@@ -354,46 +341,32 @@ const FormHeader = ({
   navigable = false,
   ...props
 }: React.ComponentProps<"div"> & {
-  variant?: "ring" | "number";
+  variant?: "ring" | "number"
   /** Shows a spinner on the active step's indicator (e.g. while a step is
    * being saved to the backend) — mirrors `StepperItem`'s own `loading` prop. */
-  isLoading?: boolean;
+  isLoading?: boolean
   /** Lets clicking a step's title/indicator jump straight to it via
    * `goToStep`. Off by default: most wizards drive navigation through
    * `NextButton`/`PreviousButton` (or their own per-step submit handlers)
    * and don't want the header itself to change steps. */
-  navigable?: boolean;
+  navigable?: boolean
 }) => {
-  const { currentStepIndex, steps, goToStep } = useMultiStepForm();
+  const { currentStepIndex, steps, goToStep } = useMultiStepForm()
 
-  const sharedSep = "-order-1 -translate-y-1/2 absolute z-0 m-0 h-[2px] w-auto";
+  const sharedSep = "-order-1 -translate-y-1/2 absolute z-0 m-0 h-[2px] w-auto"
   const separatorClass =
     variant === "number"
       ? `${sharedSep} top-4 left-[calc(50%+1rem)] right-[calc(-50%+1rem)]`
-      : `${sharedSep} top-2.5 left-[calc(50%+0.625rem)] right-[calc(-50%+0.625rem)]`;
+      : `${sharedSep} top-2.5 left-[calc(50%+0.625rem)] right-[calc(-50%+0.625rem)]`
 
   return (
-    <div
-      className={cn(
-        "w-full min-w-0 max-w-full lg:px-8 xl:px-14 2xl:px-20",
-        className,
-      )}
-      {...props}
-    >
-      <Stepper
-        value={currentStepIndex}
-        onValueChange={navigable ? goToStep : undefined}
-      >
+    <div className={cn("w-full max-w-full min-w-0 lg:px-8 xl:px-14 2xl:px-20", className)} {...props}>
+      <Stepper value={currentStepIndex} onValueChange={navigable ? goToStep : undefined}>
         {steps.map(({ title }, index) => {
-          const stepNumber = index + 1;
-          const isLast = stepNumber === steps.length;
+          const stepNumber = index + 1
+          const isLast = stepNumber === steps.length
           return (
-            <StepperItem
-              key={stepNumber}
-              step={stepNumber}
-              loading={isLoading}
-              className="relative flex-1 flex-col!"
-            >
+            <StepperItem key={stepNumber} step={stepNumber} loading={isLoading} className="relative flex-1 flex-col!">
               <StepperTrigger className="w-full max-w-full flex-col gap-2 rounded-md">
                 <StepperIndicator variant={variant} />
 
@@ -407,41 +380,26 @@ const FormHeader = ({
                   className={cn(
                     separatorClass,
                     "group-data-[state=completed]/step:bg-(--step-complete)",
-                    "group-data-[state=active]/step:bg-(--step-active)",
+                    "group-data-[state=active]/step:bg-(--step-active)"
                   )}
                 />
               )}
             </StepperItem>
-          );
+          )
         })}
       </Stepper>
     </div>
-  );
-};
+  )
+}
 const FormFooter = ({ className, ...props }: React.ComponentProps<"div">) => {
-  return (
-    <div
-      className={cn(
-        "flex w-full items-center justify-end gap-3 pt-3",
-        className,
-      )}
-      {...props}
-    />
-  );
-};
+  return <div className={cn("flex w-full items-center justify-end gap-3 pt-3", className)} {...props} />
+}
 
-const StepFields = ({
-  className,
-  ...props
-}: React.ComponentProps<typeof motion.div> & MotionProps) => {
-  const { currentStepIndex, steps } = useMultiStepForm();
-  const currentFormStep = steps[currentStepIndex - 1];
-  if (
-    !currentFormStep ||
-    currentStepIndex < 1 ||
-    currentStepIndex > steps.length
-  ) {
-    return null;
+const StepFields = ({ className, ...props }: React.ComponentProps<typeof motion.div> & MotionProps) => {
+  const { currentStepIndex, steps } = useMultiStepForm()
+  const currentFormStep = steps[currentStepIndex - 1]
+  if (!currentFormStep || currentStepIndex < 1 || currentStepIndex > steps.length) {
+    return null
   }
   return (
     <MotionConfig reducedMotion="user">
@@ -452,29 +410,18 @@ const StepFields = ({
           animate={{ opacity: 1, x: 0 }}
           exit={{ opacity: 0, x: -15 }}
           transition={{ duration: 0.4, type: "spring" }}
-          className={cn("min-w-0 w-full max-w-full", className)}
+          className={cn("w-full max-w-full min-w-0", className)}
           {...props}
         >
           {currentFormStep.component}
         </motion.div>
       </AnimatePresence>
     </MotionConfig>
-  );
-};
+  )
+}
 
-function MultiStepFormContent({
-  className,
-  ...props
-}: React.ComponentProps<"div">) {
-  return (
-    <div
-      className={cn(
-        "flex flex-col gap-8 pt-3 w-full min-w-0 max-w-full",
-        className,
-      )}
-      {...props}
-    />
-  );
+function MultiStepFormContent({ className, ...props }: React.ComponentProps<"div">) {
+  return <div className={cn("flex w-full max-w-full min-w-0 flex-col gap-8 pt-3", className)} {...props} />
 }
 
 export {
@@ -487,33 +434,27 @@ export {
   ResetButton,
   StepFields,
   SubmitButton,
-};
+}
 ```
 
 ### `src/app/(myapp)/_hooks/use-multi-step-viewer.tsx`
 
 ```tsx
-"use client";
-import type { JSX } from "react";
-import {
-  createContext,
-  type ReactNode,
-  useContext,
-  useEffect,
-  useState,
-} from "react";
+"use client"
+import type { JSX } from "react"
+import { createContext, type ReactNode, useContext, useEffect, useState } from "react"
 
 /** 1-based step index clamped to `[1, stepCount]` (or `1` when there are no steps). */
 function clampStepIndex(value: number, stepCount: number): number {
-  if (stepCount === 0) return 1;
-  if (value < 1) return 1;
-  return Math.min(value, stepCount);
+  if (stepCount === 0) return 1
+  if (value < 1) return 1
+  return Math.min(value, stepCount)
 }
 
 export interface Stepfields {
-  fields: string[];
-  component: JSX.Element;
-  title?: string;
+  fields: string[]
+  component: JSX.Element
+  title?: string
   /**
    * TODO.md stepper rule: returns why this step cannot be left yet, or `null`
    * when it is complete. `NextButton` disables itself and shows the message as
@@ -524,37 +465,35 @@ export interface Stepfields {
    * keystroke; see `FormValidityWatcher` for why `formState.isValid` cannot
    * answer this.
    */
-  blockingMessage?: (values: Record<string, unknown>) => string | null;
+  blockingMessage?: (values: Record<string, unknown>) => string | null
 }
 
 export interface UseMultiFormStepsReturn {
-  steps: Stepfields[];
-  currentStepIndex: number;
-  currentStepData: Stepfields;
-  progress: number;
-  isFirstStep: boolean;
-  isLastStep: boolean;
-  goToNext: () => Promise<boolean>;
-  goToPrevious: () => void;
-  goToFirstStep: () => void;
-  goToStep: (stepNumber: number) => void;
-  setSteps: (newSteps: Stepfields[]) => void;
+  steps: Stepfields[]
+  currentStepIndex: number
+  currentStepData: Stepfields
+  progress: number
+  isFirstStep: boolean
+  isLastStep: boolean
+  goToNext: () => Promise<boolean>
+  goToPrevious: () => void
+  goToFirstStep: () => void
+  goToStep: (stepNumber: number) => void
+  setSteps: (newSteps: Stepfields[]) => void
 }
 
 // Context type
 interface MultiStepFormContextType extends UseMultiFormStepsReturn {}
 
 // Create context
-const MultiStepFormContext = createContext<MultiStepFormContextType | null>(
-  null,
-);
+const MultiStepFormContext = createContext<MultiStepFormContextType | null>(null)
 
 // Provider props
 interface MultiStepFormProviderProps {
-  children: ReactNode;
-  stepsFields: Stepfields[];
-  onStepValidation?: (step: Stepfields) => Promise<boolean> | boolean;
-  initialStepIndex?: number;
+  children: ReactNode
+  stepsFields: Stepfields[]
+  onStepValidation?: (step: Stepfields) => Promise<boolean> | boolean
+  initialStepIndex?: number
 }
 
 // Provider component
@@ -564,57 +503,55 @@ export function MultiStepFormProvider({
   onStepValidation,
   initialStepIndex = 1,
 }: MultiStepFormProviderProps) {
-  const [steps, setStepsState] = useState<Stepfields[]>(stepsFields);
-  const [currentStepIndex, setCurrentStepIndex] = useState(() =>
-    clampStepIndex(initialStepIndex, stepsFields.length),
-  );
+  const [steps, setStepsState] = useState<Stepfields[]>(stepsFields)
+  const [currentStepIndex, setCurrentStepIndex] = useState(() => clampStepIndex(initialStepIndex, stepsFields.length))
 
   useEffect(() => {
-    setStepsState(stepsFields);
-  }, [stepsFields]);
+    setStepsState(stepsFields)
+  }, [stepsFields])
 
   useEffect(() => {
-    setCurrentStepIndex(clampStepIndex(initialStepIndex, stepsFields.length));
-  }, [initialStepIndex, stepsFields.length]);
+    setCurrentStepIndex(clampStepIndex(initialStepIndex, stepsFields.length))
+  }, [initialStepIndex, stepsFields.length])
 
   const goToNext = async () => {
-    const currentStepData = steps[currentStepIndex - 1];
+    const currentStepData = steps[currentStepIndex - 1]
 
     if (onStepValidation) {
-      const isValid = await onStepValidation(currentStepData);
-      if (!isValid) return false;
+      const isValid = await onStepValidation(currentStepData)
+      if (!isValid) return false
     }
 
     if (currentStepIndex < steps.length) {
-      setCurrentStepIndex((prev) => prev + 1);
-      return true;
+      setCurrentStepIndex((prev) => prev + 1)
+      return true
     }
-    return false;
-  };
+    return false
+  }
 
   const goToPrevious = () => {
     if (currentStepIndex > 1) {
-      setCurrentStepIndex((prev) => prev - 1);
+      setCurrentStepIndex((prev) => prev - 1)
     }
-  };
+  }
 
   const goToFirstStep = () => {
-    setCurrentStepIndex(1);
-  };
+    setCurrentStepIndex(1)
+  }
 
   const goToStep = (stepNumber: number) => {
     if (stepNumber >= 1 && stepNumber <= steps.length) {
-      setCurrentStepIndex(stepNumber);
+      setCurrentStepIndex(stepNumber)
     }
-  };
+  }
 
   const setSteps = (newSteps: Stepfields[]) => {
-    setStepsState(newSteps);
+    setStepsState(newSteps)
     // Reset to first step if current step is out of bounds
     if (currentStepIndex > newSteps.length) {
-      setCurrentStepIndex(1);
+      setCurrentStepIndex(1)
     }
-  };
+  }
 
   const value: MultiStepFormContextType = {
     steps,
@@ -628,87 +565,77 @@ export function MultiStepFormProvider({
     goToFirstStep,
     goToStep,
     setSteps,
-  };
+  }
 
-  return (
-    <MultiStepFormContext.Provider value={value}>
-      {children}
-    </MultiStepFormContext.Provider>
-  );
+  return <MultiStepFormContext.Provider value={value}>{children}</MultiStepFormContext.Provider>
 }
 
 export function useMultiStepForm(): UseMultiFormStepsReturn {
-  const context = useContext(MultiStepFormContext);
+  const context = useContext(MultiStepFormContext)
 
   if (!context) {
-    throw new Error(
-      "useMultiStepForm must be used within a MultiStepFormProvider",
-    );
+    throw new Error("useMultiStepForm must be used within a MultiStepFormProvider")
   }
 
-  return context as UseMultiFormStepsReturn;
+  return context as UseMultiFormStepsReturn
 }
 ```
 
 ### `src/app/(myapp)/_components/stepper.tsx`
 
 ```tsx
-"use client";
+"use client"
 
-import { IGRPIcon } from "@igrp/igrp-framework-react-design-system";
-import { Slot } from "@radix-ui/react-slot";
-import type React from "react";
-import { createContext, useCallback, useContext, useState } from "react";
+import { IGRPIcon } from "@igrp/igrp-framework-react-design-system"
+import { Slot } from "@radix-ui/react-slot"
+import type React from "react"
+import { createContext, useCallback, useContext, useState } from "react"
 
-import { cn } from "@/lib/utils";
+import { cn } from "@/lib/utils"
 
 // Types
 type StepperContextValue = {
-  activeStep: number;
-  setActiveStep: (step: number) => void;
-  orientation: "horizontal" | "vertical";
-};
+  activeStep: number
+  setActiveStep: (step: number) => void
+  orientation: "horizontal" | "vertical"
+}
 
 type StepItemContextValue = {
-  step: number;
-  state: StepState;
-  isDisabled: boolean;
-  isLoading: boolean;
-};
+  step: number
+  state: StepState
+  isDisabled: boolean
+  isLoading: boolean
+}
 
-type StepState = "active" | "completed" | "inactive" | "loading";
+type StepState = "active" | "completed" | "inactive" | "loading"
 
 // Contexts
-const StepperContext = createContext<StepperContextValue | undefined>(
-  undefined,
-);
+const StepperContext = createContext<StepperContextValue | undefined>(undefined)
 
-const StepItemContext = createContext<StepItemContextValue | undefined>(
-  undefined,
-);
+const StepItemContext = createContext<StepItemContextValue | undefined>(undefined)
 
 const useStepper = () => {
-  const context = useContext(StepperContext);
+  const context = useContext(StepperContext)
   if (!context) {
-    throw new Error("useStepper must be used within a Stepper");
+    throw new Error("useStepper must be used within a Stepper")
   }
-  return context;
-};
+  return context
+}
 
 const useStepItem = () => {
-  const context = useContext(StepItemContext);
+  const context = useContext(StepItemContext)
   if (!context) {
-    throw new Error("useStepItem must be used within a StepperItem");
+    throw new Error("useStepItem must be used within a StepperItem")
   }
-  return context;
-};
+  return context
+}
 
 // Components
 interface StepperProps extends React.HTMLAttributes<HTMLDivElement> {
-  defaultValue?: number;
-  value?: number;
-  onValueChange?: (value: number) => void;
-  orientation?: "horizontal" | "vertical";
+  defaultValue?: number
+  value?: number
+  onValueChange?: (value: number) => void
+  orientation?: "horizontal" | "vertical"
 }
 
 function Stepper({
@@ -719,19 +646,19 @@ function Stepper({
   className,
   ...props
 }: StepperProps) {
-  const [activeStep, setInternalStep] = useState(defaultValue);
+  const [activeStep, setInternalStep] = useState(defaultValue)
 
   const setActiveStep = useCallback(
     (step: number) => {
       if (value === undefined) {
-        setInternalStep(step);
+        setInternalStep(step)
       }
-      onValueChange?.(step);
+      onValueChange?.(step)
     },
-    [value, onValueChange],
-  );
+    [value, onValueChange]
+  )
 
-  const currentStep = value ?? activeStep;
+  const currentStep = value ?? activeStep
 
   return (
     <StepperContext.Provider
@@ -744,22 +671,22 @@ function Stepper({
       <div
         className={cn(
           "group/stepper inline-flex data-[orientation=horizontal]:w-full data-[orientation=horizontal]:flex-row data-[orientation=vertical]:flex-col",
-          className,
+          className
         )}
         data-orientation={orientation}
         data-slot="stepper"
         {...props}
       />
     </StepperContext.Provider>
-  );
+  )
 }
 
 // StepperItem
 interface StepperItemProps extends React.HTMLAttributes<HTMLDivElement> {
-  step: number;
-  completed?: boolean;
-  disabled?: boolean;
-  loading?: boolean;
+  step: number
+  completed?: boolean
+  disabled?: boolean
+  loading?: boolean
 }
 
 function StepperItem({
@@ -771,26 +698,19 @@ function StepperItem({
   children,
   ...props
 }: StepperItemProps) {
-  const { activeStep } = useStepper();
+  const { activeStep } = useStepper()
 
-  const state: StepState =
-    completed || step < activeStep
-      ? "completed"
-      : activeStep === step
-        ? "active"
-        : "inactive";
+  const state: StepState = completed || step < activeStep ? "completed" : activeStep === step ? "active" : "inactive"
 
-  const isLoading = loading && step === activeStep;
+  const isLoading = loading && step === activeStep
 
   return (
-    <StepItemContext.Provider
-      value={{ isDisabled: disabled, isLoading, state, step }}
-    >
+    <StepItemContext.Provider value={{ isDisabled: disabled, isLoading, state, step }}>
       <div
         className={cn(
           "group/step flex items-center group-data-[orientation=horizontal]/stepper:flex-row group-data-[orientation=vertical]/stepper:flex-col",
           "not-last:flex-1 max-md:items-start",
-          className,
+          className
         )}
         data-slot="stepper-item"
         data-state={state}
@@ -800,31 +720,25 @@ function StepperItem({
         {children}
       </div>
     </StepItemContext.Provider>
-  );
+  )
 }
 
 // StepperTrigger
-interface StepperTriggerProps
-  extends React.ButtonHTMLAttributes<HTMLButtonElement> {
-  asChild?: boolean;
+interface StepperTriggerProps extends React.ButtonHTMLAttributes<HTMLButtonElement> {
+  asChild?: boolean
 }
 
-function StepperTrigger({
-  asChild = false,
-  className,
-  children,
-  ...props
-}: StepperTriggerProps) {
-  const { setActiveStep } = useStepper();
-  const { step, isDisabled } = useStepItem();
+function StepperTrigger({ asChild = false, className, children, ...props }: StepperTriggerProps) {
+  const { setActiveStep } = useStepper()
+  const { step, isDisabled } = useStepItem()
 
   if (asChild) {
-    const Comp = asChild ? Slot : "span";
+    const Comp = asChild ? Slot : "span"
     return (
       <Comp className={className} data-slot="stepper-trigger">
         {children}
       </Comp>
-    );
+    )
   }
 
   return (
@@ -832,7 +746,7 @@ function StepperTrigger({
       className={cn(
         "relative z-1 inline-flex items-center gap-3 rounded-full outline-none focus-visible:z-10 focus-visible:border-ring focus-visible:ring-[3px] focus-visible:ring-ring/50 disabled:pointer-events-none disabled:opacity-50",
         "rounded max-md:flex-col",
-        className,
+        className
       )}
       data-slot="stepper-trigger"
       disabled={isDisabled}
@@ -842,13 +756,13 @@ function StepperTrigger({
     >
       {children}
     </button>
-  );
+  )
 }
 
 // StepperIndicator
 interface StepperIndicatorProps extends React.HTMLAttributes<HTMLDivElement> {
-  asChild?: boolean;
-  variant?: "number" | "ring";
+  asChild?: boolean
+  variant?: "number" | "ring"
 }
 
 function StepperIndicator({
@@ -858,20 +772,19 @@ function StepperIndicator({
   children,
   ...props
 }: StepperIndicatorProps) {
-  const { state, step, isLoading } = useStepItem();
+  const { state, step, isLoading } = useStepItem()
 
   return (
     <span
       className={cn(
         "relative z-10 flex shrink-0 items-center justify-center rounded-full border-2 transition-all duration-300",
         variant === "number"
-          ? "size-8 text-xs font-medium data-[state=inactive]:bg-background data-[state=inactive]:text-muted-foreground data-[state=inactive]:border-muted-foreground/30"
-          : "size-5 data-[state=inactive]:bg-background data-[state=inactive]:border-muted-foreground/30",
-        "data-[state=active]:bg-(--step-active) data-[state=active]:border-(--step-active) data-[state=active]:animate-stepper-pulse",
-        "data-[state=completed]:bg-(--step-complete) data-[state=completed]:border-(--step-complete)",
-        variant === "number" &&
-          "data-[state=active]:text-white data-[state=completed]:text-white",
-        className,
+          ? "size-8 text-xs font-medium data-[state=inactive]:border-muted-foreground/30 data-[state=inactive]:bg-background data-[state=inactive]:text-muted-foreground"
+          : "size-5 data-[state=inactive]:border-muted-foreground/30 data-[state=inactive]:bg-background",
+        "data-[state=active]:animate-stepper-pulse data-[state=active]:border-(--step-active) data-[state=active]:bg-(--step-active)",
+        "data-[state=completed]:border-(--step-complete) data-[state=completed]:bg-(--step-complete)",
+        variant === "number" && "data-[state=active]:text-white data-[state=completed]:text-white",
+        className
       )}
       data-slot="stepper-indicator"
       data-state={state}
@@ -881,7 +794,7 @@ function StepperIndicator({
         children
       ) : (
         <>
-          <span className="transition-all group-data-[state=completed]/step:scale-0 group-data-loading/step:scale-0 group-data-[state=completed]/step:opacity-0 group-data-loading/step:opacity-0 group-data-loading/step:transition-none">
+          <span className="transition-all group-data-loading/step:scale-0 group-data-loading/step:opacity-0 group-data-loading/step:transition-none group-data-[state=completed]/step:scale-0 group-data-[state=completed]/step:opacity-0">
             {step}
           </span>
           <IGRPIcon
@@ -890,79 +803,58 @@ function StepperIndicator({
           />
           {isLoading && (
             <span className="absolute transition-all">
-              <IGRPIcon
-                iconName="LoaderCircle"
-                className="animate-spin"
-                size={14}
-              />
+              <IGRPIcon iconName="LoaderCircle" className="animate-spin" size={14} />
             </span>
           )}
         </>
       )}
     </span>
-  );
+  )
 }
 
 // StepperTitle
-function StepperTitle({
-  className,
-  ...props
-}: React.HTMLAttributes<HTMLHeadingElement>) {
+function StepperTitle({ className, ...props }: React.HTMLAttributes<HTMLHeadingElement>) {
   return (
     <h3
       className={cn(
-        "text-center font-medium text-sm leading-tight",
+        "text-center text-sm leading-tight font-medium",
         "group-data-[state=inactive]/step:text-muted-foreground",
         "group-data-[state=active]/step:text-(--step-active-text)",
         "group-data-[state=completed]/step:text-(--step-complete-text)",
-        className,
+        className
       )}
       data-slot="stepper-title"
       {...props}
     />
-  );
+  )
 }
 
 // StepperDescription
-function StepperDescription({
-  className,
-  ...props
-}: React.HTMLAttributes<HTMLParagraphElement>) {
+function StepperDescription({ className, ...props }: React.HTMLAttributes<HTMLParagraphElement>) {
   return (
     <p
-      className={cn("text-muted-foreground text-sm max-sm:hidden", className)}
+      className={cn("text-sm text-muted-foreground max-sm:hidden", className)}
       data-slot="stepper-description"
       {...props}
     />
-  );
+  )
 }
 
 // StepperSeparator
-function StepperSeparator({
-  className,
-  ...props
-}: React.HTMLAttributes<HTMLDivElement>) {
+function StepperSeparator({ className, ...props }: React.HTMLAttributes<HTMLDivElement>) {
   return (
     <div
       className={cn(
-        "m-0.5 bg-border group-data-[orientation=horizontal]/stepper:h-px group-data-[orientation=vertical]/stepper:h-12 group-data-[orientation=horizontal]/stepper:w-full group-data-[orientation=vertical]/stepper:w-0.5 group-data-[orientation=horizontal]/stepper:flex-1",
-        className,
+        "m-0.5 bg-border group-data-[orientation=horizontal]/stepper:h-px group-data-[orientation=horizontal]/stepper:w-full group-data-[orientation=horizontal]/stepper:flex-1 group-data-[orientation=vertical]/stepper:h-12 group-data-[orientation=vertical]/stepper:w-0.5",
+        className
       )}
       data-slot="stepper-separator"
       {...props}
     />
-  );
+  )
 }
 
-export {
-  Stepper,
-  StepperDescription,
-  StepperIndicator,
-  StepperItem,
-  StepperSeparator,
-  StepperTitle,
-  StepperTrigger,
-};
+export { Stepper, StepperDescription, StepperIndicator, StepperItem, StepperSeparator, StepperTitle, StepperTrigger }
 ```
 
 ### The step tokens it consumes (`src/styles/simple.css`)
@@ -991,8 +883,13 @@ equivalent semantic pair.
 @theme inline {
   --animate-stepper-pulse: stepper-pulse 2s ease-in-out infinite;
   @keyframes stepper-pulse {
-    0%, 100% { box-shadow: 0 0 0 4px rgba(30, 58, 138, 0.22); }
-    50% { box-shadow: 0 0 0 7px rgba(30, 58, 138, 0.08); }
+    0%,
+    100% {
+      box-shadow: 0 0 0 4px rgba(30, 58, 138, 0.22);
+    }
+    50% {
+      box-shadow: 0 0 0 7px rgba(30, 58, 138, 0.08);
+    }
   }
 }
 ```

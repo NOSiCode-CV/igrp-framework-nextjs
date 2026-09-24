@@ -265,6 +265,12 @@
       "appliedAt": "2026-09-23T00:00:00.000Z",
       "cliVersion": "0.1.0-beta.141",
       "manifestHash": "41148901ea74caa7"
+    },
+    {
+      "id": "45-dev-basepath-url",
+      "appliedAt": "2026-09-24T00:00:00.000Z",
+      "cliVersion": "0.1.0-beta.141",
+      "manifestHash": "64a6e5684b5bbe35"
     }
   ]
 }

@@ -4,7 +4,7 @@
 /* Single source of truth for design tokens. Do NOT re-declare @theme inline /
    :root / .dark here — they live in tokens.css (the /tokens export). This file
    is the Storybook root stylesheet and adds only Storybook-specific extras
-   (Tailwind engine, animate utilities, base reset, keyframes) on top. */
+   (Tailwind engine, animate utilities, base reset) on top. */
 @import "./tokens.css";
 
 @layer base {
@@ -19,15 +19,4 @@
 .filter {
   filter: var(--tw-blur,) var(--tw-brightness,) var(--tw-contrast,) var(--tw-grayscale,) var(--tw-hue-rotate,)
     var(--tw-invert,) var(--tw-saturate,) var(--tw-sepia,) var(--tw-drop-shadow,);
-}
-
-@keyframes igrp-text-fade-in {
-  from {
-    opacity: 0;
-    transform: translateY(1rem);
-  }
-  to {
-    opacity: 1;
-    transform: translateY(0);
-  }
 }

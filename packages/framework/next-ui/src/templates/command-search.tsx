@@ -137,20 +137,27 @@ function IGRPTemplateCommandSearch({
             children straight into `DialogContent` — it no longer supplies the cmdk
             root. Without this `Command`, cmdk's store context is undefined and
             `CommandInput` throws on mount, taking the whole header down. */}
-        <Command>
+        {/* Palette-only spacing. The input wrapper and InputGroup take no
+            className from `CommandInput`, so they are reached through their
+            `data-slot`s; the item gap goes on cmdk's `[cmdk-group-items]` list. */}
+        <Command className="p-2 **:data-[slot=command-input-wrapper]:pb-2 **:data-[slot=input-group]:h-10!">
           <CommandInput placeholder={labels.placeholder} />
-          <CommandList>
+          <CommandList className="max-h-96 scroll-py-2">
             <CommandEmpty>{labels.empty}</CommandEmpty>
             {Array.from(grouped.entries()).map(([group, items], groupIndex) => (
               <Fragment key={group ?? 'ungrouped'}>
-                {groupIndex > 0 && <CommandSeparator />}
-                <CommandGroup heading={group}>
+                {groupIndex > 0 && <CommandSeparator className="my-2" />}
+                <CommandGroup
+                  className="**:[[cmdk-group-heading]]:px-3 **:[[cmdk-group-heading]]:pb-2 **:[[cmdk-group-items]]:flex **:[[cmdk-group-items]]:flex-col **:[[cmdk-group-items]]:gap-1"
+                  heading={group}
+                >
                   {items.map((item) => (
                     <CommandItem
                       key={item.id ?? item.label}
+                      className="cursor-pointer gap-3 px-3 py-2.5"
                       onSelect={() => runCommand(item.onSelect)}
                     >
-                      {item.icon && <IGRPIcon iconName={item.icon} className="mr-2" />}
+                      {item.icon && <IGRPIcon iconName={item.icon} />}
                       <span>{item.label}</span>
                     </CommandItem>
                   ))}

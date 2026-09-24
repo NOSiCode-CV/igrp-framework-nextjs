@@ -148,15 +148,22 @@ describe.each(["light", "dark"] as const)("tokens.css — %s", (mode) => {
     })
   })
 
+  // `--border` and `--sidebar-border` are deliberately NOT gated here. 1.4.11
+  // covers the visual information needed to identify a control, and every
+  // control draws its boundary with `--input` (input, select, checkbox, radio,
+  // textarea, toggle, OTP, SidebarInput) or `--ring` (focus). `--border` is
+  // decorative — separators, card edges, table rules, the base `* { border-color }`
+  // — and gating it at 3:1 turned every divider into a heavy dark line
+  // (restored to 0.929 on 2026-09-24). The outline Button uses `border-border`,
+  // which is fine: its text label identifies it, so the edge is not required.
+  // A control whose edge IS its only cue (no label, no fill) must use
+  // `border-input` — don't darken the token instead.
   describe("UI boundaries and focus indicators (1.4.11 — 3:1)", () => {
     it.each([
-      ["border", "background"],
-      ["border", "card"],
       ["input", "background"],
       ["input", "card"],
       ["ring", "background"],
       ["ring", "card"],
-      ["sidebar-border", "sidebar"],
       ["sidebar-ring", "sidebar"],
     ])("--%s against --%s", (token, bg) => {
       const against = surface(bg)

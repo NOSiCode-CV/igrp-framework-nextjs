@@ -77,8 +77,12 @@ function IGRPTemplateNavUser({
   // (bottom) is correct; in the sidebar footer it has to open away from the rail.
   const side = isHeader ? undefined : isMobile ? 'bottom' : 'right';
 
-  const iconClassName = 'mr-1 hover:text-primary-foreground!';
-  const itemClassName = 'cursor-pointer hover:bg-primary! hover:text-primary-foreground!';
+  const iconClassName = 'mr-1';
+  // `focus:`, not `hover:` — Radix focuses the item on pointer-over too, and the
+  // DS item recolours every descendant on focus (`focus:**:text-accent-foreground`),
+  // so the text override must also reach descendants or it renders dark on primary.
+  const itemClassName =
+    'cursor-pointer focus:bg-primary! focus:text-primary-foreground! focus:**:text-primary-foreground!';
 
   return (
     <SidebarMenu>

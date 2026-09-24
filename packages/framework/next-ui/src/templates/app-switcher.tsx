@@ -61,6 +61,12 @@ function IGRPTemplateAppSwitcher({
     return _url;
   };
 
+  // Radix focuses an item on pointer-over as well as on keyboard navigation, so
+  // keying the arrow on focus too shows it for both.
+  const itemClassName = 'cursor-pointer gap-2 p-2';
+  const arrowClassName =
+    'ml-auto size-4 shrink-0 -translate-x-1 opacity-0 transition-[opacity,translate] group-hover/dropdown-menu-item:translate-x-0 group-hover/dropdown-menu-item:opacity-100 group-focus/dropdown-menu-item:translate-x-0 group-focus/dropdown-menu-item:opacity-100 motion-reduce:transition-none';
+
   return (
     <SidebarMenu>
       <SidebarMenuItem>
@@ -101,7 +107,7 @@ function IGRPTemplateAppSwitcher({
             >
               {listApps.length > 0 &&
                 listApps.map((app) => (
-                  <DropdownMenuItem key={app.code} className={cn('gap-2 p-2')} asChild>
+                  <DropdownMenuItem key={app.code} className={cn(itemClassName)} asChild>
                     <a href={getAppUrl(app)}>
                       <div
                         className={cn('flex size-6 items-center justify-center rounded-md border')}
@@ -121,7 +127,8 @@ function IGRPTemplateAppSwitcher({
                           }
                         />
                       </div>
-                      {app.name}
+                      <span className={cn('truncate')}>{app.name}</span>
+                      <IGRPIcon iconName="ArrowRight" className={cn(arrowClassName)} />
                     </a>
                   </DropdownMenuItem>
                 ))}
@@ -132,7 +139,7 @@ function IGRPTemplateAppSwitcher({
               {appCenterUrl && (
                 <>
                   <DropdownMenuSeparator />
-                  <DropdownMenuItem className={cn('gap-2 p-2')} asChild>
+                  <DropdownMenuItem className={cn(itemClassName)} asChild>
                     <a href={appCenterUrl}>
                       <div
                         className={cn(
@@ -144,6 +151,7 @@ function IGRPTemplateAppSwitcher({
                       <div className={cn('text-muted-foreground font-medium')}>
                         {appCenterLabel}
                       </div>
+                      <IGRPIcon iconName="ArrowRight" className={cn(arrowClassName)} />
                     </a>
                   </DropdownMenuItem>
                 </>

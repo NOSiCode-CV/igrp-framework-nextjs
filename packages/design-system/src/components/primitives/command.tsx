@@ -71,7 +71,10 @@ function CommandInput({
 }: React.ComponentProps<typeof CommandPrimitive.Input>) {
   return (
     <div data-slot="command-input-wrapper" className="p-1 pb-0">
-      <InputGroup className="h-8! rounded-lg! border-input/30 bg-input/30 shadow-none! *:data-[slot=input-group-addon]:pl-2!">
+      {/* IGRP: no light-mode `bg-input/30` fill. Upstream assumes `--input` is near-white;
+          ours is 0.64 for WCAG 1.4.11, so 30% of it read as a grey slab. Dark mode keeps
+          InputGroup's own `dark:bg-input/30`. */}
+      <InputGroup className="h-8! rounded-lg! border-border shadow-none! *:data-[slot=input-group-addon]:pl-2!">
         <CommandPrimitive.Input
           data-slot="command-input"
           className={cn(
@@ -154,8 +157,12 @@ function CommandItem({
   return (
     <CommandPrimitive.Item
       data-slot="command-item"
+      // IGRP: `data-[selected=true]:`, not upstream's `data-selected:`. cmdk 1.1
+      // renders `data-selected="false"` on every other item, and Tailwind v4's
+      // bare `data-selected:` matches the attribute's presence — so every row
+      // rendered highlighted.
       className={cn(
-        "group/command-item relative flex cursor-default items-center gap-2 rounded-sm px-2 py-1.5 text-sm outline-hidden select-none in-data-[slot=dialog-content]:rounded-lg! data-[disabled=true]:pointer-events-none data-[disabled=true]:opacity-50 data-selected:bg-muted data-selected:text-foreground [&_svg]:pointer-events-none [&_svg]:shrink-0 [&_svg:not([class*='size-'])]:size-4 data-selected:**:[svg]:text-foreground",
+        "group/command-item relative flex cursor-default items-center gap-2 rounded-sm px-2 py-1.5 text-sm outline-hidden select-none in-data-[slot=dialog-content]:rounded-lg! data-[disabled=true]:pointer-events-none data-[disabled=true]:opacity-50 data-[selected=true]:bg-muted data-[selected=true]:text-foreground [&_svg]:pointer-events-none [&_svg]:shrink-0 [&_svg:not([class*='size-'])]:size-4 data-[selected=true]:**:[svg]:text-foreground",
         className
       )}
       {...props}
@@ -174,7 +181,7 @@ function CommandShortcut({
     <span
       data-slot="command-shortcut"
       className={cn(
-        "ml-auto text-xs tracking-widest text-muted-foreground group-data-selected/command-item:text-foreground",
+        "ml-auto text-xs tracking-widest text-muted-foreground group-data-[selected=true]/command-item:text-foreground",
         className
       )}
       {...props}

@@ -16,7 +16,7 @@
     "node": ">=22"
   },
   "scripts": {
-    "dev": "next dev --turbopack",
+    "dev": "node scripts/dev.mjs",
     "build": "pnpm lint && next build --turbopack",
     "start": "next start",
     "lint": "biome check --write",

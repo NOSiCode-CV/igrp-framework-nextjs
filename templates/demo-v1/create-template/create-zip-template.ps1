@@ -141,6 +141,8 @@ try {
 $skillInjected     = $false
 $skillTargetAgents = ".agents/skills/igrp-design-system"
 $skillTargetClaude = ".claude/skills/igrp-design-system"
+$excludedMoves     = [System.Collections.Generic.List[string]]::new()
+$scriptMoved       = $false
 
 try {
   Write-Host "Zipping project for version: $version"
@@ -151,16 +153,27 @@ try {
     New-Item -ItemType Directory -Path $excludeTemp | Out-Null
   }
 
+  # Each excluded path keeps its relative location under $excludeTemp and is
+  # moved back to exactly that path in the finally block. Flattening them into
+  # $excludeTemp would let a nested entry (.agents/README.md) come back as
+  # ./README.md and overwrite the template's own README.
   foreach ($folder in $excludeFolders) {
     if (Test-Path $folder) {
-      Move-Item -Path $folder -Destination $excludeTemp -Force
+      $excludeDest = Join-Path $excludeTemp $folder
+      $excludeDestParent = Split-Path $excludeDest -Parent
+      if (-not (Test-Path $excludeDestParent)) {
+        New-Item -ItemType Directory -Path $excludeDestParent -Force | Out-Null
+      }
+      Move-Item -Path $folder -Destination $excludeDest -Force
+      $excludedMoves.Add($folder)
     }
   }
 
   # Also move this script itself out of zip
   $scriptPath = "create-template/create-zip-template.ps1"
   if (Test-Path $scriptPath) {
-    Move-Item -Path $scriptPath -Destination $excludeTemp -Force
+    Move-Item -Path $scriptPath -Destination (Join-Path $excludeTemp "create-zip-template.ps1") -Force
+    $scriptMoved = $true
   }
 
   # === INJECT IGRP DESIGN-SYSTEM SKILL ===
@@ -340,11 +353,29 @@ Deep references are at ``.agents/skills/igrp-design-system/references/``. Load o
     }
   }
 
-  if (Test-Path $excludeTemp) {
-    Get-ChildItem -Path $excludeTemp -Force | ForEach-Object {
-      Move-Item -Path $_.FullName -Destination . -Force
+  foreach ($folder in $excludedMoves) {
+    $excludeSrc = Join-Path $excludeTemp $folder
+    if (Test-Path $excludeSrc) {
+      $restoreParent = Split-Path $folder -Parent
+      if ($restoreParent -and -not (Test-Path $restoreParent)) {
+        New-Item -ItemType Directory -Path $restoreParent -Force | Out-Null
+      }
+      Move-Item -Path $excludeSrc -Destination $folder -Force
     }
-    Remove-Item $excludeTemp -Recurse -Force
+  }
+
+  if ($scriptMoved) {
+    Move-Item -Path (Join-Path $excludeTemp "create-zip-template.ps1") -Destination "create-template/create-zip-template.ps1" -Force
+  }
+
+  # Only delete the temp dir once it is empty of files: anything still in it
+  # failed to move back and must not be destroyed.
+  if (Test-Path $excludeTemp) {
+    if (Get-ChildItem -Path $excludeTemp -Recurse -File -Force) {
+      Write-Host "Warning: files left in '$excludeTemp' could not be restored - move them back by hand."
+    } else {
+      Remove-Item $excludeTemp -Recurse -Force
+    }
   }
 
   if ($packageJsonSanitized -and $packageJsonRaw) {

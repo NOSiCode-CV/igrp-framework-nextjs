@@ -134,9 +134,9 @@ pnpm clean-all                      # remove dist/ + node_modules
 
 ## Versioning
 
-All packages are in pre-release mode (`beta` tag). The version pattern is `0.1.0-beta.*`.
+All packages are in pre-release mode (`beta` tag). The version pattern is `0.2.0-beta.*` (the `0.1.0-beta.*` line ended at the start of the `version/0.2.0-beta` branch).
 
-**Always use `patch` changesets** — never `major` or `minor`. In changeset pre-release mode, `major`/`minor` bump the actual semver major/minor (e.g. `major` on `0.1.0-beta.116` → `1.0.0-beta.117`), breaking the `0.1.0-beta.*` pattern.
+**Always use `patch` changesets** — never `major` or `minor`. In changeset pre-release mode, `major`/`minor` bump the actual semver major/minor (e.g. `major` on `0.2.0-beta.16` → `1.0.0-beta.17`), breaking the `0.2.0-beta.*` pattern.
 
 ---
 

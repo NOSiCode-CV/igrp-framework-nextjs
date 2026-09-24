@@ -148,6 +148,6 @@ Print a summary table:
 
 | Package | Old Version | New Version | Status |
 |---|---|---|---|
-| `@igrp/framework-next-ui` | `0.1.0-beta.X` | `0.1.0-beta.Y` | ✓ |
+| `@igrp/framework-next-ui` | `0.2.0-beta.X` | `0.2.0-beta.Y` | ✓ |
 
 Mark ✓ if the registry returns the new version, ✗ with the raw error if it does not.

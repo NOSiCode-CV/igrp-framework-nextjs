@@ -98,7 +98,7 @@ Emits `.d.ts` declaration files from `tsconfig.build.json` (no JS output, types 
    ---
    id: NN-short-slug
    date: YYYY-MM-DD
-   targetFrameworkVersion: 0.1.0-beta.XXX   # or null if not tied to a specific version
+   targetFrameworkVersion: 0.2.0-beta.XXX   # or null if not tied to a specific version
    requires: ["NN-1-previous-slug"]          # or [] if standalone
    steps:
      - type: file.write
@@ -118,7 +118,7 @@ Emits `.d.ts` declaration files from `tsconfig.build.json` (no JS output, types 
      - type: deps.bump
        manifest: package.json
        ranges:
-         "@igrp/framework-next": "0.1.0-beta.XXX"
+         "@igrp/framework-next": "0.2.0-beta.XXX"
      - type: deps.remove
        manifest: package.json
        deps: ["some-dropped-package"]
@@ -250,7 +250,7 @@ This package follows the same changeset + Sonatype flow as the other `@igrp/*` p
 pnpm changeset
 ```
 
-Select `@igrp/template-migrator` and write a summary. **Always choose `patch`** — never `minor` or `major`. This repo is in changeset pre-release mode (`beta` tag); a `minor`/`major` bump would advance the real semver minor/major and break the `0.1.0-beta.*` pattern. `patch` increments only the beta counter, which is what you want for both new migrations and CLI fixes.
+Select `@igrp/template-migrator` and write a summary. **Always choose `patch`** — never `minor` or `major`. This repo is in changeset pre-release mode (`beta` tag); a `minor`/`major` bump would advance the real semver minor/major and break the `0.2.0-beta.*` pattern. `patch` increments only the beta counter, which is what you want for both new migrations and CLI fixes.
 
 ### 2. Version
 
@@ -297,18 +297,18 @@ Should print the migration list without errors, confirming the tarball is reacha
 The version tracks the framework release it is paired with:
 
 ```
-0.1.0-beta.<framework-beta-number>
+0.2.0-beta.<framework-beta-number>
 ```
 
-Example: when `@igrp/framework-next` ships `0.1.0-beta.116`, bump `template-migrator` to `0.1.0-beta.116` in the same changeset run.
+Example: when `@igrp/framework-next` ships `0.2.0-beta.16`, bump `template-migrator` to `0.2.0-beta.16` in the same changeset run.
 
 Every change — new migration or CLI-only fix — uses a `patch` changeset, which advances only the beta counter:
 
 ```
-0.1.0-beta.115   →   0.1.0-beta.116
+0.2.0-beta.15   →   0.2.0-beta.16
 ```
 
-Never bump the `0.1.0` portion (that requires a `minor`/`major` changeset, which is disallowed here — see the hard rules and the **Releasing** section above).
+Never bump the `0.2.0` portion by changeset (that requires a `minor`/`major` changeset, which is disallowed here — see the hard rules and the **Releasing** section above).
 
 ---
 

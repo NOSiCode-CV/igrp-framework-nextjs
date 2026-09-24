@@ -1,5 +1,11 @@
 # @igrp/template-migrator
 
+## 0.2.0-beta.0
+
+### Minor Changes
+
+- Start the `0.2.0-beta` pre-release line (from `0.1.0-beta.*`). No code changes relative to the last `0.1.0-beta` build on this branch.
+
 ## 0.1.0-beta.141
 
 ### Patch Changes

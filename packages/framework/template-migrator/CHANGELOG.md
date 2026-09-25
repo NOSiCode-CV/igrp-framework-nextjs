@@ -1,5 +1,423 @@
 # @igrp/template-migrator
 
+## 0.2.0-beta.1
+
+### Patch Changes
+
+- a0e6d3d: Deep review of `@igrp/framework-next`: fix the login-redirect swallow, the
+  basePath permission denial, the Server Action credential gap, and a batch of
+  correctness and hygiene issues.
+  
+  **`@igrp/framework-next-ui`**
+  
+  - `IGRPLayoutErrorBoundary` no longer swallows Next.js control-flow signals.
+    The framework's header/sidebar data providers call `redirect('/login')` on a
+    401/403 from Access Management, and `redirect` signals by throwing. Because
+    the providers render behind a `<Suspense>` nested in this boundary, the throw
+    reached the client, where the boundary latched before Next's own
+    `RedirectBoundary` — so a user with an expired session saw a permanently
+    broken header and sidebar instead of the login page. Both
+    `getDerivedStateFromError` and `componentDidCatch` now call `unstable_rethrow`.
+  
+  **`@igrp/framework-next`**
+  
+  - **basePath permission checks no longer deny everyone.** `igrpGetClaims()`
+    recovered the access token with `getToken` but no `cookieName`, so it looked
+    for the stock NextAuth cookie while `withIGRPAuth` had written a
+    basePath-scoped one. Every permission check from a Server Action or Route
+    Handler denied a user who held the permission, in any app setting
+    `NEXT_PUBLIC_BASE_PATH`. Naming is now delegated to `sessionCookieName`.
+  - **Server Actions work, and fail closed.** The four fetch actions in
+    `@igrp/framework-next/actions` resolved credentials from an
+    `AsyncLocalStorage` store that no Server Action ever has, so they built a
+    client with no base URL and an empty bearer. They now recover the session
+    (new `igrpEnsureAccessClientConfig`) and refuse before contacting Access
+    Management when none can be recovered — these are POST endpoints taking a
+    caller-supplied `appCode`, so the two had to be fixed together.
+  - `layoutData` replaces `layoutMockData`, which was production configuration
+    wearing a preview-mode name. `layoutMockData` is still read for one release;
+    setting both is rejected. New `igrpResolveLayoutDataSource` export.
+  - `igrpBuildConfig` now validates `layout` and (when sync is on)
+    `appInformation.name`. Both are required by `IGRPConfigArgs` and neither was
+    checked; a missing `appInformation` surfaced inside `after()`, where nothing
+    but a server log ever sees it.
+  - The data hooks use `igrpGetAccessClient()` instead of four hand-rolled
+    `AccessManagementClient.create` calls, so an unconfigured client now reports
+    that clearly.
+  - `apiManagementConfig.timeout` is honoured on read paths. It was dead config:
+    nothing ever wrote it into the per-request store, which only defaults
+    `timeout` when it *creates* the store, so every read-path client sat on the
+    10s default. `IGRPLayoutFull` now threads it through to both providers.
+  - `igrpGetClaims` decides the session-cookie name by probing the cookie jar
+    rather than from `NEXT_PUBLIC_BASE_PATH` alone. `withIGRPAuth` only suffixes
+    cookie names when `cookieIsolation` is `'basePath'` (its default), and this
+    package cannot see that option — gating on the env var alone would have fixed
+    the default configuration and broken `cookieIsolation: 'none'`.
+  - `igrpSyncRoutes`: resource names replace every path separator
+    (`/admin/users` produced `svc--admin/users`), and the param-map parser is
+    brace-counted instead of a non-greedy regex that truncated on nested objects.
+  - `igrpStartupSync` waits 60s before retrying a failed sync. It is scheduled
+    via `after()` on every request, so a down Access Management server got a full
+    sync attempt per request.
+  - `useLayoutData` no longer awaits two documented no-op Server Actions before
+    `router.refresh()`.
+  - `IGRPRootLayout` accepts `lang` (defaults to `'pt'`); `IGRPLayoutFull` accepts
+    `defaultSidebarOpen` (defaults to `true`).
+  - `IGRPGlobalLoading` no longer throws or redirects out of a loading placeholder.
+  - `igrpBuildQueryString` encodes parameter names as well as values.
+  - `igrpEnsureAccessClientConfig` is exported from the package root.
+  - Server-only modules carry a real `import 'server-only'` guard —
+    `server-only` is now a declared dependency, so the existing guards resolve.
+  - Adds a `typecheck` script (the last framework package without one) and runs
+    `typecheck` + `test` in `release`. Removes the unused ESLint devDependencies
+    and the dead `safe-await` / `toUpperCaseIdentifier` / `mapperMenu` /
+    `mapperUser` exports.
+  - The header and sidebar providers wrap a layout-data transport failure as
+    `IgrpLayoutDataError` with code `IGRP_LAYOUT_DATA_FAILED` and the original
+    error as `cause`, so a boundary's `onError` reporter gets a stable code
+    instead of a bare `ApiClientError`. The code existed in `IgrpErrorCode` and
+    was never thrown. `unstable_rethrow` runs first so a 401's `redirect('/login')`
+    still reaches the router. `IGRP_APP_HOME_SLUG_INVALID`,
+    `IGRP_AUTH_CONFIG_INVALID` and `IgrpAuthConfigError` are marked
+    `@deprecated` rather than deleted — narrowing a public union is a breaking
+    change even when nothing throws the members.
+  - `parseRouteParamMap` skips string literals while brace-counting. An opening
+    brace inside a string inflated the depth, so the scan never rebalanced and
+    dropped that route **and every route after it** from the resource sync.
+  - `vitest.config.ts` includes `.tsx`, which it did not — the layout providers
+    could not be tested at all. They now have coverage (13 cases), as does
+    `IGRPLayoutFull`'s wiring (5).
+  - `showPreviewMode` is no longer written by `SidebarDataProvider` — no consumer
+    reads it and the field is `@deprecated`.
+  
+  **`@igrp/framework-next-types`**
+  
+  - Adds `IGRPLayoutDataSource` and `IGRPConfigArgs.layoutData`; deprecates
+    `IGRPMockDataAsync` (now an alias) and `layoutMockData`.
+  
+  **`@igrp/framework-next-auth`**
+  
+  - `resolveSecureCookiesFlag` moves to the shared `/cookies` entry point so
+    `@igrp/framework-next` can reuse it instead of copying cookie logic.
+  
+  **`@igrp/template-migrator`**
+  
+  - Migration `39-layout-data-source-rename` switches `templates/demo-v1` to
+    `layoutData`.
+- 147f51a: Fix the published type declarations being unusable under `node16`/`nodenext`,
+  close the contract gate's blind spot to Access Management DTO drift, and mirror
+  the four `IGRPUserDTO` fields that drift had hidden.
+  
+  ### ⚠️ The current user's full Access Management DTO was being sent to the browser
+  
+  `fetchCurrentUser` returned `result.data` — the raw `IGRPUserDTO` — and both the
+  header and sidebar data providers hand it straight to a `'use client'`
+  component. Props to a client component are serialized into the RSC payload, so
+  every authenticated page render shipped the whole DTO to the browser, including
+  `nic` (national identity number), `phoneNumber` and `metadata`, the free-form
+  `Record<string, unknown>` the authorization server owns and enriches into issued
+  JWTs.
+  
+  It type-checked because `IGRPUserDTO` is assignable to the declared
+  `IGRPUserArgs`, and a variable (unlike a fresh object literal) gets no
+  excess-property check. `mapperUser` existed precisely to narrow this and had
+  **no callers**.
+  
+  `fetchCurrentUser` now narrows at the fetch boundary via `mapUserDTO`, which
+  lists every forwarded field explicitly and withholds `metadata`, `nic`,
+  `phoneNumber` and `emailVerified` — none of which any framework component
+  renders. Consumers reading `IGRPHeaderDataArgs.user` /
+  `IGRPSidebarDataArgs.user` now receive exactly the declared `IGRPUserArgs`;
+  code relying on an undeclared DTO field being present at runtime will stop
+  seeing it. An app that needs one should read the DTO server-side and pass down
+  that field rather than widening the shape every browser receives. Ten tests pin
+  the boundary, since the type system structurally cannot.
+  
+  ### ⚠️ The published types were silently `any` for `nodenext` consumers
+  
+  `@igrp/framework-next-types` is `"type": "module"`, but `tsc` copied its
+  extensionless relative specifiers straight into `dist/*.d.ts`
+  (`from './types/header'`). Under `moduleResolution: "node16" | "nodenext"` that
+  is TS2834 — and because the error is raised *inside a `.d.ts`*, the
+  near-universal `skipLibCheck: true` swallows it. Every type in the package then
+  resolved to `any`, with no diagnostic anywhere: a consumer could write
+  `const x: IGRPMenuItemArgs = { totallyWrong: 123 }` and compile clean.
+  
+  Relative imports now carry an explicit `.js` extension, which `moduleResolution:
+  "bundler"` (what every in-repo consumer uses, and why nothing caught this)
+  accepts unchanged. No API change — but a `nodenext` consumer that was compiling
+  green may now see real type errors for the first time.
+  
+  ### The AM contract gate could not see a missing field
+  
+  
+  `contract/am-contract.ts` asserted DTO → framework *assignability*, which proves
+  the framework type is never wider than the wire. It is structurally blind to the
+  opposite drift: a DTO that **grows** a field is still assignable to the older,
+  smaller framework type. `IGRPUserDTO` had gained `nic`, `phoneNumber`,
+  `emailVerified` and `metadata` with the gate green throughout, and
+  `mapperUser` was silently dropping all four.
+  
+  The gate now also asserts **field coverage** via `MirrorsAllKeys`, for all twelve
+  mirrored DTOs. A DTO field the framework does not carry fails the build and names
+  itself (`missing: "nic"`). Deliberate omissions must be named in the assertion,
+  so an intentional gap is distinguishable from an oversight.
+  
+  ### Type changes
+  
+  - **`IGRPUserArgs` is now documented as a deliberate subset of `IGRPUserDTO`,
+    not a mirror of it** — it is the one framework shape serialized to the browser.
+    The four DTO fields it does not carry (`metadata`, `nic`, `phoneNumber`,
+    `emailVerified`) are named individually in the contract gate's exclusion list,
+    so the key-coverage check still fails on any *other* new DTO field: widening
+    the browser payload has to be a decision someone writes down.
+  - **`IGRPConfigClient` had a signature no template could use** — it read
+    `() => Promise<IGRPConfigArgs>` and its docs pointed at a *default* export,
+    while the real factory is a named `createConfig` taking the per-request layout
+    config. Now `(config: IGRPLayoutConfigArgs) => Promise<IGRPConfigArgs>`, and
+    `templates/demo-v1` applies it (see migration 38 below).
+  - **`IGRPRoleArgs.permissions`** stays optional but documents the wire truth: AM
+    always sends it.
+  - **Four fields deprecated — nothing reads them**, so setting them has never had
+    an effect: `IGRPConfigArgs.showLanguageSelector`, `.loginUrl`, `.logoutUrl` and
+    `.showSettings` (the settings link is gated by
+    `IGRPHeaderDataArgs.showSettings`, a different object with the same field
+    name), plus `IGRPSidebarDataArgs.showPreviewMode`, which `@igrp/framework-next`
+    writes and no UI consumes. Kept for one release.
+  
+  ### Tooling and docs
+  
+  - **New `check:dist` gate, run after `tsc -b`.** The `.js`-extension fix above
+    had nothing enforcing it: dropping one extension left `check:barrel`,
+    `check:contract` and `tsc -b` all green while broken declarations shipped.
+    `check:dist` asserts every relative specifier in `dist/**/*.d.ts` carries the
+    extension, and names the file and specifier when one does not.
+  - `MirrorsAllKeys`' `Ignored` parameter is constrained to `keyof From`, so a
+    deliberate omission cannot outlive the field it exempts — if the AM client
+    drops the property, the ignore stops compiling instead of persisting as a
+    claim nobody re-checked.
+  - `@igrp/framework-next-ui` pins `IGRPToasterPosition` against the position type
+    `IGRPToaster` actually accepts, in both directions. Passing the value only
+    proved one way: a member sonner *gained* would have left the framework union
+    quietly incomplete. Type-only, so Babel emits nothing.
+  - `check:barrel` now recurses into subdirectories, recognises `export declare` /
+    `export enum`, resolves `X as Y` to the exported name, and **gates the README
+    export table** — matched against the table rows rather than the whole file (a
+    name mentioned in prose used to count as documented), and checked both ways so
+    a row naming a removed type fails too — the only export list a consumer reads, and the one that had
+    quietly lost `IGRPMenuTypeSyncable` and `IGRPApplicationTypeSyncable`.
+  - Dropped the `next` peer and dev dependency: nothing in the package references a
+    Next.js type. `next-auth` (peer) and `react` (optional peer) stay — they are
+    reached transitively through `SessionProviderProps`.
+  - README no longer presents the framework **build order** as this package's
+    dependency chain; `design-system` sits in that order but does not depend on it.
+  
+  ### Template migration 38
+  
+  `@igrp/template-migrator` ships `38-config-client-annotation`, which annotates
+  the template's `createConfig` with the corrected `IGRPConfigClient` and drops the
+  `as IGRPLayoutConfigArgs` cast from both layouts — the cast was never
+  load-bearing (`getLayoutConfig()` was already assignable), and an `as` on a
+  cross-package type is what hides the next drift.
+  
+  **It requires the `@igrp/framework-next-types` from this wave**: against an older
+  pin, `igrp.template.config.ts` fails with "Expected 0 arguments, but got 1".
+  Apply it together with the dependency-resync migration.
+  
+  ### Documentation and build hardening
+  
+  - **`verbatimModuleSyntax: true`** — the direct compiler guard on this
+    package's central invariant. Imports and exports are now erased exactly as
+    written, so a value import cannot slip into a package that ships no JavaScript
+    entry point; it would have to be written as one and fails with TS1484.
+  - **`isolatedDeclarations: true`** on the build config, with `allowJs` dropped
+    (there is no JS under `src/`, and the two are mutually exclusive). For a
+    declaration-only package this is the strongest available guarantee that every
+    export stays emittable from its own declaration, and it passes today with no
+    source changes — it only gets expensive to adopt later.
+  - **`IGRPMockDataAsync` and `IGRPConfigArgs.layoutMockData` now document what
+    they actually are.** Despite the name, the framework calls both functions on
+    every render in *both* modes and keeps most of what they return in production;
+    only `user` / `showIGRPSidebarTrigger` (header) and `user` / `menuItems` /
+    `apps` / `appCode` / `showPreviewMode` (sidebar) are overridden. Returning a
+    stub "because it is only mock data" silently drops the entire header and
+    sidebar configuration, with no error and no type complaint. The JSDoc carries
+    the full override table; the rename itself is tracked in `KNOWN-ISSUES.md`.
+  - **`IGRPSidebarDataArgs.menuItems`** documents that it is discarded whenever
+    auth is real — every production app authors an array that is thrown away.
+    Making it optional needs a default in `@igrp/framework-next-ui`; that default
+    landed in the same wave, so the field **is** optional now — see the
+    `next-ui-review-fixes` changeset.
+  - Four cross-package handover notes added to the repo-root `KNOWN-ISSUES.md`
+    (the `layoutMockData` rename, `menuItems` optionality, the dead
+    `showPreviewMode` wire, and the 9-pin migration dependency drift), each with
+    the diagnosis and the ordered steps to land it in the owning package.
+  - **A `typecheck` script and `noUnusedLocals` / `noUnusedParameters`**, closing
+    this package's share of repo `KNOWN-ISSUES` #1. The root `pnpm typecheck` is
+    `pnpm -r run typecheck`, which silently skips packages that do not define the
+    script — it covered only `next-auth` before, and now covers `next-types` too.
+    Not added to `release`: unlike `next-auth`, this package's `build` already
+    type-checks.
+- 8a6ecbe: Add migration 35, and repair the drift gate's own file paths.
+  
+  **Migration 35 — `35-framework-owned-redirect-and-refetch-ceiling`**
+  
+  - Replaces `src/lib/auth.ts` to drop the template's local `callbacks.redirect` override. The framework default in `@igrp/framework-next-auth` now resolves post-auth destinations against the app base URL (and never against `NEXTAUTH_URL_INTERNAL`), which is exactly what the override existed to work around. `deriveAppBaseUrl()` and `AUTH_UI_PATH` go with it.
+  - Replaces `.env.example` and retunes `IGRP_SESSION_REFETCH_INTERVAL` from `120` to `45` in `.env`. The framework's proactive-refresh buffer is 60s, so any poll interval at or above it can never land inside the refresh window — the only refreshes that run happen in read-only RSC context and cannot persist the rotated cookie, which surfaces as a random bounce to `/login`. `withIGRPAuth` now warns about this in development.
+  - The retune is `env.remove` + `env.add`, because `env.add` deliberately never overwrites a key an app already has.
+  
+  **Drift gate paths**
+  
+  `scripts/check-drift.ts` and `scripts/sync-template-lock.ts` resolved the repo root as `<pkg>/../..`, which stopped being correct when the package moved under `packages/framework/`. `check:drift` exited 1 with "Template directory not found" on every run — so the gate that is supposed to block a release with an uncaptured template change was itself passing nothing, and `sync:template-lock` wrote to a path outside the repo. Both now use `../../..`, along with `PACKAGES_DIR` (which made the dependency-pin check silently compare against an empty workspace map).
+- 39eb67c: Add migration 36 — `36-framework-owned-origin-resolution`.
+  
+  Replaces `src/middleware.ts` so its three redirects resolve through
+  `auth.resolveAppUrl` / `auth.getLoginRedirectUrl` instead of
+  `new URL(path, request.url)`. Behind a TLS-terminating proxy `request.url`
+  carries the internal origin, so a `Location` built from it points the browser
+  somewhere it cannot follow. Single-host and local development are unaffected —
+  `NEXTAUTH_URL` and the request origin are identical there.
+- b632dee: Add migration 37 — `37-cn-package-and-utils-removal`.
+  
+  Catch-up for three template changes that were made without a migration, so the
+  drift gate had been failing on them and upgraded apps were diverging from
+  scaffolded ones.
+  
+  The template stopped defining its own `cn` helper and took the `cn` package (a
+  compiled clsx + tailwind-merge replacement) instead. `src/app/(auth)/login/page.tsx`
+  and `src/lib/fonts.ts` now import it from there, and `src/lib/utils.ts` — whose
+  last export `cn` was, the rest having moved to `src/lib/utilities.ts` in
+  migration 26 — is deleted.
+  
+  The `cn` dependency is bumped first, because the rewritten imports do not
+  resolve without it. Note that `deps.bump` only updates a dependency the app
+  already declares: an app without `cn` gets the "not declared by this app, so NOT
+  bumped" warning and must install it manually. The migration doc says so
+  prominently.
+  
+  After this, the only remaining drift is the 9 dependency pins, which cannot be
+  captured until `version:changesets` has decided the versions.
+- 23343a3: Add migration 40 — `40-review-hardening`, plus the dependency resync the drift
+  gate was failing on (9 pins had moved in the workspace with no migration
+  capturing them).
+  
+  From a full review of `templates/demo-v1`. Nine files change; the only runtime
+  behaviour that moves is the `X-XSS-Protection` value and the number of times the
+  config is built per request.
+  
+  - **`.env.example`** — `IGRP_SESSION_REFETCH_INTERVAL` removed. Migration 19
+    already removed it; migration 35 brought it back with a doc block asserting a
+    hard 60s ceiling. **Nothing reads it.** `get-session-args.ts` returns a
+    hardcoded 600s backstop, and the only reader anywhere is a warn-only check in
+    `@igrp/framework-next-auth`. So the guard inspected the documented `45`,
+    passed, and stayed silent while the value that actually reached
+    `SessionProvider` was `600` — ten times past the ceiling it existed to
+    enforce. A replacement note records that the absence of the knob is
+    deliberate. The 600s backstop itself is correct: `IGRPSessionWatcher` drives
+    the real refresh from `session.expiresAt`.
+  - **`src/lib/config/get-routes.ts`** — the silent-empty path is now loud. A
+    failed read or a failed regex parse of `.next/types/routes.d.ts` used to yield
+    `appRoutes: []`, which meant Access Management's resource/route sync silently
+    registered nothing. Read failure and parse failure now report separately and
+    name the consequence; a match that extracts zero routes is treated as a
+    failure rather than as "no routes"; and the miss is cached, so a broken parse
+    logs once instead of re-reading the file on every render.
+  - **`src/igrp.template.config.ts`** — `createConfig` is wrapped in `cache()`.
+    Both the root layout and the `(igrp)` layout call it, so `igrpBuildConfig`,
+    `getRoutes()` (a synchronous file read), `getPermissions()` and
+    `getSessionArgs()` all ran twice per request and produced two distinct config
+    objects for one render.
+  - **`src/middleware.ts`** — `X-XSS-Protection: 0` (the legacy auditor is gone
+    from current browsers and has itself been an XSS vector; explicit disable is
+    current guidance). The dotted-path branch in `isPublicPath` gains a comment
+    noting it is dead under the stock matcher and is **not** the auth boundary for
+    dotted page routes — `(igrp)/layout.tsx`'s `verifySession()` is.
+  - **`tsconfig.json`** — `noEmit: true`, `composite` dropped. The old pair meant a
+    bare `tsc -p .` scattered compiled `.js` through `src/`.
+  - **`src/app/(igrp)/page.tsx`** — states its permission decision, as
+    `.agents/rules/permissions.md` requires. (The other pages that gained the same
+    comment are demo scaffolding outside migration management and reach consumers
+    through the zip only.)
+  - **`src/app/(auth)/login/page.tsx`** — drops a duplicated `hidden` and a
+    redundant `lg:block`; rendering is unchanged.
+  - **`src/lib/header-search.ts`** — reformatted to Biome's width. It and
+    `igrp.template.config.ts` were the template's only two CRLF files, so
+    `biome check --write` (part of `pnpm build`) rewrote them on every build. A
+    repo-root `.gitattributes` now pins the tree to LF.
+  - **`cn` now comes from the design system** — the template's own `cn`
+    dependency (at `^0.3.0`, the only caret range in the manifest) is removed.
+    `src/lib/fonts.ts` drops `cn` entirely: it joins four `next/font` CSS-variable
+    class names, opaque generated identifiers with no Tailwind utility among them,
+    so there is nothing for tailwind-merge to resolve. `login/page.tsx` genuinely
+    needs merging and takes the design system's new server-safe
+    `…/cn` subpath. Both call sites are server-side, and importing `cn` from the DS
+    **root** there fails the build — the root is a `"use client"` boundary. The
+    failure is invisible to `tsc` and to Biome; only a real `next build` shows it,
+    during page-data collection, blamed on an unrelated route.
+  
+  ## New step types: `deps.remove` and `deps.restore`
+  
+  Dropping the `cn` dependency exposed a gap: the migrator could add and update
+  dependency ranges but **never remove one**. A removal therefore reached
+  scaffolded apps through the zip and never reached upgraded ones — the two
+  channels diverging, which is precisely what `check:drift` exists to catch, and it
+  did.
+  
+  - `deps.remove` takes `manifest` + `deps`, and captures each dependency's field
+    (`dependencies` vs `devDependencies`) alongside its range.
+  - `deps.restore` is the generated inverse. `deps.bump` could not serve as one: it
+    only updates a dependency that is already declared and will not re-add a
+    removed one. Carrying the original field matters — restoring a devDependency
+    into `dependencies` would change what a production install pulls down.
+  - A dep that is already absent warns rather than throwing, so a catch-up
+    migration re-applied over an already-current tree does not abort.
+  - `check:drift` now treats a later `deps.remove` as retiring an earlier
+    `deps.bump`, the same collapse-to-final-state rule its file checks already use.
+  
+  Verified end to end against a scratch copy reverted to the pre-40 state: all 9
+  writes plus `deps.bump` and `deps.remove` reproduce the live template exactly and
+  drop `cn` while leaving its neighbours intact; `rollback` then restores
+  `cn: ^0.3.0` to `dependencies`, the field and range it came from.
+- 6fc5bad: Ship migration `45-dev-basepath-url`: adds `scripts/dev.mjs`, a `next dev` wrapper that prints the app URL including `NEXT_PUBLIC_BASE_PATH` under Next's `Local:` line. Point the app's `dev` script at it by hand (`"dev": "node scripts/dev.mjs"`); `package.json` isn't migration-managed.
+- ee3f7f2: Add migration 47 (`47-lucide-dynamic-icons-alias`): Turbopack `resolveAlias` for `lucide-react/dynamicIconImports` in `next.config.ts`, `app-search.tsx` resync, and `@igrp/platform-access-management-client-ts` bump to `0.2.0-beta.17`.
+- 686a2db: Deep-review fixes across the migrator: crash recovery, rollback safety, and the release gates.
+  
+  **Correctness**
+  
+  - `apply` no longer unwinds a migration the lock already records. A crash in the window between `writeLock` and `clearJournal` left a journal for a migration that had fully succeeded; replaying its undo reverted the files while the lock kept claiming the migration was applied, so `apply` reported "nothing to apply", `check` passed, and the app silently lacked the migration forever.
+  - `apply` refuses to overwrite a managed file the consumer has edited since the migration that last wrote it, naming the paths and aborting before any step runs. `--force` overwrites. The baseline is the shipped payload of the last applied migration that wrote each path — nothing is recorded in the lock, which is what makes the check work for a freshly scaffolded app whose lock holds only baseline entries. The comparison ignores line endings, so a CRLF checkout is not mistaken for an edit.
+  - `check` and `status` now compare each applied entry's `manifestHash` against the migration's current `contentHash`, so a migration corrected in place after release no longer leaves apps holding the old result with nothing to say so.
+  - `rollback <id>` refuses (without `--force`) when a still-applied migration declares `<id>` in its `requires` — the state `apply` already refuses to create, reached from the other side.
+  - `env.remove` takes the contiguous comment block above each key with it, and recovers `doc` / `required_if` from those comments. An `env.add` undo used to leave orphaned `# …` lines behind on every apply/rollback cycle and restore a bare `# ` on re-add. Both env steps now preserve the file's existing line endings, and `env.add` no longer opens an empty file with blank lines.
+  - Undo payload restoration in `unwind` and `rollback` runs the same `assertInsideAppRoot` guard `executeStep` applies — those two branches wrote directly and could escape the app root via a hand-edited or badly merged lock.
+  - `readLock` reports the offending file and likely cause instead of leaking a raw `SyntaxError`, and rejects valid JSON that is not a lock file. `writeLock` is now atomic (temp file + rename).
+  - `convert` returns a boolean instead of calling `process.exit`; it is exported from the package root, where exiting takes the host process down.
+  - `--to` with no value now errors instead of silently applying every pending migration.
+  
+  **Gates**
+  
+  - Pack-time step validation (`src/validate-steps.ts`): a typo'd `type`, a missing `from`, a path containing `..`, or `mode: "patch"` (never implemented, throws at apply time) now fails the build instead of shipping and failing part way through a consumer's migration.
+  - The drift gate treats "a migration deletes a path the template still ships" as a hard failure rather than a warning — it is the exact mirror of a case that already failed.
+  - `release` now runs `typecheck` and `test` before `check:drift`; a new `typecheck` script covers `scripts/` as well as `src/` (its tsconfig existed but nothing invoked it). Corrupt-baseline reads report cleanly instead of throwing a parse stack trace.
+  - The workspace-version scan no longer recurses through `node_modules`.
+  
+  **Packaging**
+  
+  - No JS sourcemaps or `.d.ts.map` files are emitted: `files` publishes only `dist/`, so both pointed at `src/` paths absent from the tarball.
+- abef632: Slim the shipped template lock, and ship migration `41-query-client-comment-trim`.
+  
+  **Lock shape.** `LockEntry.undo` and `LockEntry.fileHashes` are now optional, and the template's shipped `.igrp-migrations-lock.json` omits them. Every one of its entries is a *baseline* entry — the template ships its own lock so a scaffolded app opens with every migration already applied, but nothing was executed against a file tree there, so there is no undo to record. Forty-one copies of `undo: []` and `fileHashes: {}` stated nothing the absence of the fields does not. Each entry is now:
+  
+  ```json
+  { "id": "...", "appliedAt": "...", "cliVersion": "...", "manifestHash": "..." }
+  ```
+  
+  Readers treat missing as empty (`entry.undo ?? []`). An entry that carries real undo content keeps it — that can only come from a lock a consumer actually ran against.
+  
+  `scripts/sync-template-lock.ts` now compares the serialised bytes, not just the semantics. It previously reported "already up to date" whenever the ids and hashes matched, which meant a lock left in an outdated shape was something it could not repair despite owning the file.
+  
+  **Migration 41** re-captures `src/providers/query-client.server.ts` after a comment-only trim in the template, so apps upgraded through the CLI and apps scaffolded from the zip agree byte-for-byte. No runtime change.
+
 ## 0.2.0-beta.0
 
 ### Minor Changes

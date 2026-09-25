@@ -277,6 +277,12 @@
       "appliedAt": "2026-09-24T00:00:00.000Z",
       "cliVersion": "0.1.0-beta.141",
       "manifestHash": "ecfd37fe53e3f701"
+    },
+    {
+      "id": "47-lucide-dynamic-icons-alias",
+      "appliedAt": "2026-09-25T00:00:00.000Z",
+      "cliVersion": "0.1.0-beta.141",
+      "manifestHash": "f20cabba5bd20cec"
     }
   ]
 }

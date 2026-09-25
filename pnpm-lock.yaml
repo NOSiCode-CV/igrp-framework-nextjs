@@ -730,9 +730,6 @@ importers:
       '@igrp/igrp-framework-react-design-system':
         specifier: workspace:*
         version: link:../../packages/design-system
-      '@igrp/platform-access-management-client-ts':
-        specifier: 0.2.0-beta.17
-        version: 0.2.0-beta.17
       '@tanstack/react-query':
         specifier: 5.102.8
         version: 5.102.8(react@19.2.8)
@@ -1772,9 +1769,6 @@ packages:
 
   '@igrp/platform-access-management-client-ts@0.2.0-beta.16':
     resolution: {integrity: sha512-l6ktg348XrxiLFhwB4pqveRG3w7KvrvHO9d+7xo2S2JFhAcO+CWHjdwnGyrsaJGUY53ltvWfCg7NaEfKAEGfvQ==, tarball: https://sonatype.nosi.cv/repository/igrp/@igrp/platform-access-management-client-ts/-/platform-access-management-client-ts-0.2.0-beta.16.tgz}
-
-  '@igrp/platform-access-management-client-ts@0.2.0-beta.17':
-    resolution: {integrity: sha512-EBWgxQpF316pf3DkW8Xhtkht45HtpCo5q3/iOsempK1pajJqas0okcZq4mMMmHLUFbr6bDKrwupwKVrm66dAkg==, tarball: https://sonatype.nosi.cv/repository/igrp/@igrp/platform-access-management-client-ts/-/platform-access-management-client-ts-0.2.0-beta.17.tgz}
 
   '@img/colour@1.1.0':
     resolution: {integrity: sha512-Td76q7j57o/tLVdgS746cYARfSyxk8iEfRxewL9h4OMzYhbW4TAcppl0mT4eyqXddh6L/jwoM75mo7ixa/pCeQ==}
@@ -9593,8 +9587,6 @@ snapshots:
   '@humanwhocodes/retry@0.4.3': {}
 
   '@igrp/platform-access-management-client-ts@0.2.0-beta.16': {}
-
-  '@igrp/platform-access-management-client-ts@0.2.0-beta.17': {}
 
   '@img/colour@1.1.0':
     optional: true

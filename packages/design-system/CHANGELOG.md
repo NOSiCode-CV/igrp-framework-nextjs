@@ -5,25 +5,27 @@
 ### Patch Changes
 
 - 45d1285: Close out the remaining design-system review findings.
-  
+
   - **`IGRPInputSearch` composed with `InputGroup`.** The leading icon and submit button were absolutely positioned over a `relative` wrapper, with `ps-6.5` / `pe-9` padding reserved on the control by hand. They are now `InputGroupAddon`s, and the border, focus ring and `aria-invalid` styling come from `InputGroup` instead of being re-implemented on the input.
   - **New `--ring-invalid` token.** `IGRPInputNumber` and `IGRPInputPhone` were the last two Horizon components carrying `dark:` overrides (`dark:ring-destructive/40`), which the package's own policy restricts to the Primitives layer. The light/dark alpha step now lives in `tokens.css` as `--ring-invalid` (destructive at 20% / 40%), so the components use a single `ring-ring-invalid` and the Horizon layer is free of `dark:` entirely.
   - **`space-y-*` → `gap-*`** in the three calendar time pickers, `IGRPChat` and `IGRPAlert` (16 occurrences). The remaining five are legitimate: `flex` would break list markers on `list-disc` lists, and one is an inert `space-y-0` under `display: contents`.
   - **Valid table markup.** The data table's trailing spacer was a `<tbody>` forced to `display: table-row`; it is now a `<tbody>` containing one spacer `<tr>`.
   - **`"use client"` added** to the ten Horizon/Custom components that were missing it (`dropdown-menu`, `menubar`, `sidebar`, `card`, `container`, `stats-card`, `field-description`, and the three `custom/` components). All are reached through the `"use client"` barrel today, so this changes nothing at runtime — it removes a latent break if a subpath export is ever added.
-  
+
   Snapshot baselines updated for the affected components. The visual suite is 483/483 across 78 suites, verified stable over two consecutive runs.
+
 - e84e8d6: Fix checked styling on radios, checkboxes, switches and radio-card labels.
-  
+
   The primitives style checked state with `data-checked:` / `data-unchecked:`, but
   they wrap Radix, which only emits `data-state="checked" | "unchecked"` — so the
   radio fill, the checkbox fill, the switch thumb position and the `FieldLabel`
   selected surface never applied. `tokens.css` now widens both variants to also
   match `data-state` (ADR 0002). Apps that import `/tokens` pick this up on their
   next Tailwind build; no code changes needed.
+
 - 6fc5bad: Fix `CommandItem` rendering every row as highlighted, and drop the grey fill
   from `CommandInput` in light mode.
-  
+
   - cmdk 1.1 renders `data-selected="false"` on unselected items. Tailwind v4's
     bare `data-selected:` variant matches whenever the attribute is present, so
     `data-selected:bg-muted` painted every item, and highlighted and
@@ -35,39 +37,41 @@
     near-white `--input`, but ours is 0.64 for WCAG 1.4.11, so it read as a grey
     slab. Light mode is now transparent with a `border-border` edge. Dark mode
     keeps `InputGroup`'s `dark:bg-input/30`.
+
 - 6fc5bad: Restore the light `--border` and `--sidebar-border` tokens to `oklch(0.929 …)`.
-  
+
   The WCAG pass on 2026-09-14 darkened `--border`, `--input` and `--ring` to 0.64
   together. WCAG 1.4.11 (3:1 non-text contrast) applies to the boundaries that
   identify a control, and the form controls draw theirs with `--input` / `--ring`,
   which stay at 0.64. `--border` is decorative: separators, card edges, table rules,
   and the base `* { border-color }`. At 0.64 every divider in the app became a
   heavy dark line. Dark mode is unchanged.
+
 - 1eadf0f: Fix the public type surface for `node16`/`nodenext` consumers, and gate it.
-  
+
   Every relative specifier in the emitted declarations was extensionless — all 169
   of them in `dist/index.d.ts`, 333 across the package. The package is
   `"type": "module"`, so under `moduleResolution: "node16" | "nodenext"` those
   declarations are unresolvable, and `skipLibCheck: true` (near-universal) hides
   the resulting TS2835 while **every exported type silently degrades to `any`**.
   Measured on the real build, with `skipLibCheck: true`:
-  
+
   ```ts
-  import { IGRPButton } from '@igrp/igrp-framework-react-design-system';
-  IGRPButton({ totallyMadeUpProp: 12345 });   // tsc exited 0
+  import { IGRPButton } from "@igrp/igrp-framework-react-design-system"
+  IGRPButton({ totallyMadeUpProp: 12345 }) // tsc exited 0
   ```
-  
+
   The same probe under `moduleResolution: "bundler"` correctly raised TS2353,
   which is why this survived review: `templates/demo-v1` uses `bundler`, so the
   defect was invisible in-repo and only reached external consumers.
-  
+
   The 786 source specifiers now carry `.js` (the spelling `next-ui`, `next` and
   `next-types` already used), so `tsc` emits resolvable declarations and the
   existing Babel extension plugin — idempotent for already-extensioned
   specifiers — keeps producing the same `.js` output as before.
-  
+
   Three gates close behind it:
-  
+
   - `check:dist` (new, mirroring the sibling packages) runs in `build` and fails
     on any extensionless relative specifier in `dist/*.d.ts`.
   - `build-pipeline.test.ts`'s "emits fully specified relative specifiers"
@@ -76,14 +80,15 @@
     zero specifiers and passed unconditionally. Repaired, and it now also asserts
     it inspected something, so it can no longer pass vacuously.
   - `release` now runs `lint`, `typecheck` and `test` before publishing. This was
-    the only package in the repo with a test suite *and* an ESLint config that
+    the only package in the repo with a test suite _and_ an ESLint config that
     gated on neither, and it had no `typecheck` script at all — so root
     `pnpm -r run typecheck` silently skipped it.
-  
+
   No runtime or API change: `dist/*.js` is byte-equivalent in behaviour.
+
 - e84e8d6: Fix field defects in `IGRPCombobox` and the required marker on form-bound
   fields.
-  
+
   - **`IGRPCombobox` now becomes touched.** The field is marked touched when its
     popover closes. Before, it never was, so under `validationMode="onTouched"`
     an error set on it never cleared by itself. **Behaviour change:** in
@@ -105,16 +110,18 @@
     `after:content-[\"*\"]`, and Tailwind scanning `dist/` generated a class with
     the backslashes in its name, so it never matched. They now use
     `after:content-['*']`, and a unit test rejects the double-quoted form.
+
 - 55d4edf: Stop shipping the whole design system — and every lucide icon — on every page.
-  
+
   **The root barrel no longer carries `"use client"`.** With it, `dist/index.js` was a single client module: any server component that imported anything from the package registered the entire barrel as its client reference, so every page of every app shipped every component. Measured on the demo template, `/login` and a 13-line dashboard page each referenced ~2.7 MB of minified JS (phone input, country flags, charts, data table, date pickers). The directive now lives on each leaf that needs it; seven leaves that relied on the barrel's directive gained their own (`data-table` pagination hook, column-visibility toggle and tooltip context, `form-field`, and the `input-group`, `sonner` and `cropper` primitives). `src/__tests__/client-boundaries.test.ts` fails if the barrel regains the directive or a directive-free module picks up hooks, context, handlers, or a client-only dependency.
-  
-  **`IGRPIcon` loads icons one at a time.** It indexed lucide's full `icons` object, which put all ~1,700 icons (~146 KB gzipped) in every bundle. It now resolves the name against lucide's per-icon lazy loaders, caches each loaded icon for the session, and renders it through lucide's `Icon` with the same SVG and class names as before. The first use of an icon renders a same-sized empty `<svg>` (also on the server, so hydration matches) until its chunk arrives; later renders are synchronous. Names may now be kebab-case as well as PascalCase; an unknown name still renders the destructive `AlertCircle` immediately. `IGRPIconObject` is now committed data (`src/components/horizon/icon/names.ts`, regenerated with `pnpm generate:icon-names`; a test fails when it drifts from lucide), so listing icon names loads no icon code — a Storybook story that only used it for a control fetched ~1,700 chunks before this. `IGRPIconList` (the full component map) moved to its own module. Trade-off: because each icon is now also a lazy-load target, bundlers emit one chunk per icon, so a screen that renders *every* icon (a gallery or icon picker via `IGRPIconList`) fetches ~1,700 small chunks instead of one bundle. Ordinary pages, which show a handful of icons, save the ~146 KB.
-  
+
+  **`IGRPIcon` loads icons one at a time.** It indexed lucide's full `icons` object, which put all ~1,700 icons (~146 KB gzipped) in every bundle. It now resolves the name against lucide's per-icon lazy loaders, caches each loaded icon for the session, and renders it through lucide's `Icon` with the same SVG and class names as before. The first use of an icon renders a same-sized empty `<svg>` (also on the server, so hydration matches) until its chunk arrives; later renders are synchronous. Names may now be kebab-case as well as PascalCase; an unknown name still renders the destructive `AlertCircle` immediately. `IGRPIconObject` is now committed data (`src/components/horizon/icon/names.ts`, regenerated with `pnpm generate:icon-names`; a test fails when it drifts from lucide), so listing icon names loads no icon code — a Storybook story that only used it for a control fetched ~1,700 chunks before this. `IGRPIconList` (the full component map) moved to its own module. Trade-off: because each icon is now also a lazy-load target, bundlers emit one chunk per icon, so a screen that renders _every_ icon (a gallery or icon picker via `IGRPIconList`) fetches ~1,700 small chunks instead of one bundle. Ordinary pages, which show a handful of icons, save the ~146 KB.
+
   **`IGRP_META_THEME_COLORS` is readable from server code.** It lived in a `"use client"` module, so a server import received a client-reference stub and `IGRP_META_THEME_COLORS.light` was `undefined` — a root layout's `viewport.themeColor` silently rendered no `<meta name="theme-color">`. It now lives in a directive-free module.
+
 - e84e8d6: Add `IGRPMultiSelect`, a multi-value choice field whose value is always a
   `string[]` (consumer request §11, `docs/11-igrp-multi-select.md`).
-  
+
   - **The selection survives the round trip.** An initial `["A","B"]` renders as
     two picks, and `getValues(name)` right after a click returns the new array.
     Each write starts from the form's current value, not the value at render
@@ -138,33 +145,35 @@
   - Form-bound inside `IGRPForm` by `name`, or controlled with `value` /
     `onChange`. Strings come from a new `multiSelect` i18n group with pt-PT
     defaults, and each can be overridden by a prop.
-  
+
   `IGRPCombobox variant="multiple"` is deprecated in favour of `IGRPMultiSelect`.
   It logs a one-time warning in development and will be removed at 0.1.0 stable.
   See `packages/design-system/docs/adr/0001-multi-select-separate-from-combobox.md`.
+
 - e84e8d6: Fix orientation styling on separators, sliders, tabs, toggle groups, scroll
   bars, fields and button groups.
-  
+
   The primitives style orientation with `data-vertical:` / `data-horizontal:`,
   but they wrap Radix, which only emits `data-orientation`, so none of those
   styles applied. Visible effects that are now fixed:
-  
+
   - a vertical `Separator` was 0px wide;
   - the `Slider` track was 0px tall, so the image cropper's zoom slider was
     invisible;
   - horizontal `IGRPTabs` laid their content out beside the tab list instead of
     below it.
-  
+
   `tokens.css` now widens both variants to also match `data-orientation`
   (ADR 0004). Apps that import `/tokens` pick this up on their next Tailwind
   build. `IGRPTabs` keeps its tab-list and trigger heights unchanged.
-  
+
   One consequence: a plain height passed through `tabListClassName` on
   horizontal tabs (e.g. `h-12`) now loses to the primitive's orientation-scoped
   height. Use `group-data-horizontal/tabs:h-12` instead.
+
 - e84e8d6: Add `IGRPRadioGroup variant="card"` — single choice as option cards (consumer
   request §12, `docs/12-igrp-card-radio-group.md`) — and fix the field around it.
-  
+
   - **Option cards.** Each option is a clickable card with its `icon`, `label`,
     `badge` and `description`; the selected look comes from the radio's own
     state, never from a prop. `orientation` picks a responsive 1/2/3-column grid
@@ -182,12 +191,13 @@
   - Fixed: `className` landed on both the wrapper and the group; option ids
     collided between two groups with the same `name`; a disabled option dimmed
     its whole row including the radio instead of just its text.
+
 - e84e8d6: Add `IGRPRichTextEditor` and `IGRPRichTextView`, exported from a new
   `@igrp/igrp-framework-react-design-system/rich-text` entry (consumer requests
   §9 and §10). They are not in the root entry, so an app that never imports
   `/rich-text` never bundles TipTap. See
   `packages/design-system/docs/adr/0003-rich-text-subpath-single-schema.md`.
-  
+
   - **One schema for both.** The editor writes, and the view renders, only what
     a single DS-owned TipTap schema declares, so the two cannot disagree. The
     view re-parses stored HTML through that schema instead of using
@@ -215,37 +225,38 @@
     app setup beyond the existing `@source` over the package's `dist`, and dark
     mode follows `.dark`.
   - TipTap 3.31.3 is pinned as a regular dependency.
+
 - 23343a3: Add `@igrp/igrp-framework-react-design-system/cn` — a server-safe entry point for
   `cn`.
-  
+
   `src/index.ts` opens with `"use client"`, so the entire root barrel is a client
   boundary. That is right for components, but it also captured `cn`, a pure string
   function with no React in it. Server code importing `cn` from the root failed at
   build time:
-  
+
   ```
   Error: Attempted to call cn() from the server but cn is on the client.
   > Build error occurred
   [Error: Failed to collect page data for /admin/users]
   ```
-  
+
   Until now the package had **no way at all** to hand `cn` to a server module, so
   the consuming rule ("always take `cn` from the design system") was unsatisfiable
   in exactly the place it mattered. Consumers worked around it by depending on the
   `cn` package directly, which then floated out of sync with the version pinned
   here — `templates/demo-v1` carried `^0.3.0` against this package's exact `0.3.0`.
-  
+
   `./cn` is the same function, re-exported from the same `cn` package, emitted as
   its own module with no directive. Client components can keep importing from the
   root; nothing about the existing surface changes.
-  
+
   **Why this needed a build-level guard.** The failure is invisible to every check
   short of a real `next build`: `tsc --noEmit` passes, lint passes, and the error
-  only appears during Next's page-data collection — *after* "Compiled successfully"
-  and *after* types validate. It is then attributed to whichever route pulled the
+  only appears during Next's page-data collection — _after_ "Compiled successfully"
+  and _after_ types validate. It is then attributed to whichever route pulled the
   root layout in first, never to the file at fault. A CI gate built from typecheck
   plus lint reports green.
-  
+
   So `src/server-safe-entries.test.ts` asserts on the **built output**: that
   `dist/cn.js` carries no `"use client"` directive, that it does not reach the
   client barrel, and — because a guard that can pass while reading nothing is not a
@@ -253,20 +264,22 @@
   barrel really is still a client boundary (otherwise the whole test distinguishes
   nothing). Same shape as `build-pipeline.test.ts`, which was itself a silent
   no-op until 2026-09-22.
-  
+
   Add any future server-safe entry to `SERVER_SAFE_ENTRIES` in that test.
+
 - 6fc5bad: Ship `@keyframes igrp-text-fade-in` in `/tokens` so `IGRPText`'s `animate` prop
   works in consuming apps.
-  
+
   The keyframes lived in `index.css`, which is only the Storybook root stylesheet.
   Consumers import `/tokens` alone, so Tailwind generated the
   `animate-[igrp-text-fade-in_…]` utility from the scanned `dist/` but emitted no
   keyframes for it. The animation silently did nothing outside Storybook. The
   keyframes now live in `tokens.css`. Consumers don't need to change anything.
+
 - 4b5338f: Second review pass: fix packaging, input plumbing and three broken component behaviours.
-  
+
   **Packaging — the published `dist` was not loadable by Node (all three packages)**
-  
+
   Each package declares `"type": "module"`, so Node applies ESM resolution to `dist`,
   which requires fully specified paths. Babel copied relative specifiers through
   untouched, so `./components/horizon/button` stayed extensionless and a native
@@ -276,18 +289,18 @@
   (`scripts/babel-plugin-add-import-extension.cjs`) resolves each specifier against
   the source tree and appends `.js` (or `/index.js` for a directory), and
   `build-pipeline.test.ts` now fails if any slip through.
-  
+
   **`IGRPInputSearch` — the debounce never debounced**
-  
+
   `isDebouncedCallback` was called during render, so every render produced a new
   closure with a new `timeout` binding and `clearTimeout` never had anything to
   cancel. Typing five characters fired `onSearch` five times, each delayed by
   `debounceMs` (default 2000), so a handler wired to a request issued one request
   per keystroke, all landing later and out of order. It is now a `useDebouncedCallback`
   hook holding the timer in a ref, with cleanup on unmount.
-  
+
   **`IGRPSelect` — three defects**
-  
+
   - The `value` prop only seeded a reducer, so it was write-once: changing it after
     mount did nothing despite being documented as controlled.
   - In form mode the trigger label came from `formContext.getValues()` inside a
@@ -302,9 +315,9 @@
     were all filtered out still rendered an empty heading.
   - Dropped a hand-rolled `aria-expanded` on the trigger that duplicated (and could
     contradict) the one Radix manages.
-  
+
   **Inputs — IGRP-only props leaked to the DOM, and `inputClassName` did nothing**
-  
+
   `IGRPInputProps` unions `IGRPBaseAttributes` with `React.ComponentProps<"input">`, so
   components forwarding rest props rendered `iconname`, `iconsize`, `inputclassname`
   and friends as invalid DOM attributes. Affected `IGRPTextarea`, `IGRPInputTime`,
@@ -314,9 +327,9 @@
   `IGRPInputColor` — now works in textarea, time, password, url and phone, and
   `className` no longer doubles as the label's class in textarea, time and phone.
   `IGRPTextarea` gains `labelClassName` / `inputClassName`, which its `Pick` omitted.
-  
+
   **`IGRPPdfViewer`**
-  
+
   - **Default viewer changed from `"google"` to `"native"`.** The previous default sent
     every document URL to `https://docs.google.com/viewer?url=…`, so Google received —
     and had to be able to fetch — the URL. That is the wrong default for a government
@@ -327,9 +340,9 @@
     spinner on mount regardless of whether anything was loading.
   - The `document` prop shadowed the global in four components; it is now aliased on
     destructuring. The public prop name is unchanged.
-  
+
   **Removed `src/components/theme-provider.tsx`**
-  
+
   Dead code: exported from nothing, imported by nothing. It was a second theme system
   that wrote `html.light/dark` and `localStorage["theme"]` directly — the keys
   `next-themes` owns — read `localStorage` in a `useState` initialiser (a `ReferenceError`
@@ -338,17 +351,17 @@
   `requestAnimationFrame`, so switching theme in a background tab left every CSS
   transition on the page disabled. Theming goes through `next-themes` via
   `IGRPThemeProvider`, which is unaffected.
-  
+
   **Lint**
-  
+
   `igrp/token-policy` now also runs on `src/lib/**`. It was scoped to components only,
   so a raw palette colour added to `IGRPColors` — the map every badge, alert, card and
   stats-card pulls classes from — passed `pnpm lint` and shipped to every consumer of
   that slot.
-  
+
   **`IGRPInputHidden` emitted visible layout**
-  
-  In form mode it rendered through `IGRPFormField`, which is a *layout* wrapper: an
+
+  In form mode it rendered through `IGRPFormField`, which is a _layout_ wrapper: an
   outer div, a `FormItem` (`flex flex-col gap-2`) and an inner flex row around the
   control. The input is `display:none`, but those three divs are not — inside a form
   laid out with `gap-*`, every hidden field consumed a gap and left a visible blank
@@ -357,13 +370,13 @@
   forty-odd sizing and border utilities are inert on a hidden element; `data-slot="input"`
   is preserved), and no longer forwards `required`, which is not a valid attribute on
   `type="hidden"`.
-  
+
   Note: a validation error on a hidden field no longer renders a `FormMessage`. It had
   nowhere sensible to appear and the user cannot act on it; surface such errors through
   the form's global error instead.
-  
+
   **Prop leaks: completing the round-two fix (14 more components)**
-  
+
   The earlier pass fixed the components that had been found leaking and added a
   regression test covering exactly those — which made a partial fix look complete.
   Sweeping the whole surface found fourteen more forwarding IGRP-only props to the
@@ -372,19 +385,19 @@
   `IGRPBadge`, `IGRPAvatar`, `IGRPStatsCard`, `IGRPHeadline` and `IGRPLink` — landing
   attributes such as `iconname` and `inputclassname` on `button`, `div`, `span` and
   `a` elements.
-  
+
   The regression test is now exhaustive by construction: alongside the per-component
   assertions it walks `src/components`, collects every file whose props type mentions
   `IGRPBaseAttributes` or `IGRPInputProps`, and fails if any of them is missing from
   the sweep. A new component that forgets the guard cannot pass CI.
-  
+
   Also fixed while there: `className` was reaching the label instead of the wrapper in
   `IGRPDateTimeInput` and `IGRPInputFile` (both now take `labelClassName`), and in
   `IGRPDateTimeInput` `className` was not applied to the field at all, so the
   documented prop did nothing.
-  
+
   **Date inputs only accept a value written in `dateFormat`**
-  
+
   `parseDateInput` (public API, and what `IGRPDatePickerInputSingle` parses typed text with)
   was strict about separators and year width but lenient about day and month width: with
   `dateFormat="dd-MM-yyyy"` it accepted `1-8-2026` and `26-8-2026`, which are not what that
@@ -393,115 +406,121 @@
   the format writes it. This also replaces a string-length heuristic that stood in for
   validation on formats with named months, so `dd MMM yyyy` now takes `26 Aug 2026` and
   rejects `26 aug 2026` and `26 August 2026`.
-  
+
   A format whose tokens are single letters (`d-M-yyyy`) additionally accepts the zero-padded
   spelling, because `maskDateInput` has to commit to a width while the user is still typing and
   pads to two; without that the mask would fight the parser and such a field would accept
-  nothing at all. For `dd-MM-yyyy` the padded form *is* the format, so nothing is loosened.
-  
+  nothing at all. For `dd-MM-yyyy` the padded form _is_ the format, so nothing is loosened.
+
   `maskDateInput` no longer zero-pads a four-digit year when a separator closes it early.
   Padding `26` to `0026` turned a half-typed year into a well-formed date in the year 26 — with
   `yyyy-MM-dd`, entering `26-08-2026` was silently accepted as `0026-08-20`.
-  
+
   Typing is unchanged: the mask still rewrites keystrokes into `dateFormat`, so `1-8-2026` in a
   `dd-MM-yyyy` field still becomes `01-08-2026` and commits. What now gets rejected is text the
   mask cannot bring into shape — a pasted `2026-08-26` in a day-first field, a short year, a
   named month in the wrong case.
-  
+
   **Dependency updates**
-  
+
   `cn` 0.2.6 → 0.3.0 and `react-dropzone` 20.1.1 → 20.1.2 (runtime), plus `vitest`,
   `zod`, `react-hook-form` and `eslint-plugin-react-refresh` on the dev side, aligned
   across the workspace.
-  
+
   `cn` is the class merger behind all 85 of its call sites, so it was diffed against
   0.2.6 rather than assumed: 1 624 cases built from the design system's own 712 class
   strings (single, base-plus-override and conditional forms) plus 31 Tailwind conflict
   pairs produced zero differences, and the export surface is unchanged. Its one real
   break is dropping `./package.json` from the exports map, which nothing here imports.
-  
+
   **`@babel/*` is deliberately NOT updated to 8.x.** Re-tested against the current
   releases — `@babel/core` 8.0.5 with `babel-plugin-react-compiler` 1.0.0 — and it still
   fails exactly as before: the compiler cannot lower a destructured parameter with a
   default value, and `@babel/preset-react` 8 emits `react/jsx-dev-runtime` under the env
   the build scripts run in. See the header of `scripts/react-compiler-babel-config.cjs`.
+
 - 7b437c3: Fix `IGRPButton` icon wiring and chart `className` merging.
-  
+
   **`IGRPButton`**
-  
+
   - Emit `data-icon="inline-start"` / `data-icon="inline-end"` on leading and trailing icons so the button primitive's `has-data-[icon=...]` padding compensation applies. Icon buttons previously rendered with uncompensated horizontal padding.
   - Remove the hand-maintained icon size map and let the primitive size icons via its own `[&_svg:not([class*='size-'])]` rules. The map had drifted from the primitive for `lg`, `icon-sm` and `icon-lg`, rendering those icons at the wrong size.
   - Use the `Spinner` primitive for the loading state instead of a hand-rolled spinning `IGRPIcon`.
   - `asChild` now honours `loading`: the button is disabled, marked `aria-disabled` and made inert while loading. Previously `<IGRPButton asChild loading>` stayed fully interactive.
-  
+
   **Charts**
-  
+
   - `IGRPBarChartHorizontal`, `IGRPBarChartVertical`, `IGRPLineChart`, `IGRPPieChart`, `IGRPRadarChart` and `IGRPRadialChart` now merge the consumer `className` through `cn()` instead of string interpolation, so passed utilities can override the component's own defaults.
+
 - 7b437c3: Compose `IGRPInputPassword` and `IGRPInputUrl` with `InputGroup`, and clean up assorted markup.
-  
+
   - `IGRPInputPassword` now uses `InputGroup` / `InputGroupInput` / `InputGroupAddon` / `InputGroupButton` instead of a `relative` wrapper with an absolutely-positioned toggle and a `pr-10` reservation on the input. The focus ring, invalid border and disabled state now come from `InputGroup` rather than being re-implemented.
   - `IGRPInputUrl` composes the protocol `Select` as an `inline-start` addon. This removes the hand-joined border hacks (`rounded-l-2xl rounded-none` on the trigger against `rounded-s-none` on the input — the `2xl` radius was almost certainly unintended).
-  - Both now apply `className` to the field root rather than to the label *and* the input.
+  - Both now apply `className` to the field root rather than to the label _and_ the input.
   - Chart lazy-loading fallbacks use `Skeleton` and forward `className`, so a chart with a custom height no longer flashes a fixed 200px placeholder and shifts layout.
   - `SelectItem`s are wrapped in `SelectGroup` in the data-table filter, data-table pagination and url inputs.
   - `w-N h-N` → `size-N` in the data-table filter, combobox and typography list.
   - Removed duplicated `buttonVariants({ variant: "outline" })` classes (and their `dark:` adjustments) from the date-picker triggers, and the meaningless `aria-invalid` styling from `IGRPBadge`.
   - Fixed the package's lint errors: a complex `useMemo` dependency in the data-table faceted filter, two write-then-overwrite locals in the pie chart, and four `react-refresh/only-export-components` violations (documented file-scoped disables, matching the convention already used in `primitives/button.tsx` and `i18n/context.tsx`). `eslint src` is now clean.
+
 - 913ff18: Fix typing, clearing and format handling in the single date pickers.
-  
+
   **`IGRPDatePickerInputSingle`**
-  
+
   - **Editing an existing date wiped the field.** Every keystroke was pushed into the form and read back, so the first backspace on `26-08-2026` parsed as invalid, wrote `undefined`, and the sync effect blanked the input. Typing is now held in a local draft and only committed when it parses; a half-typed date no longer touches the form value, and blurring an unfinished edit restores the committed date.
   - **The calendar became unreachable once a date was picked.** The popover trigger was rendered only while the field was empty, leaving `PopoverTrigger asChild` with no child, the popover with no anchor, and no way back into the calendar but an undiscoverable ArrowDown. The calendar button is now always rendered, alongside the clear button.
   - **Typing only worked for one exact spelling.** Input is masked to `dateFormat` as it is typed: `26082026` and `1-8-2026` both become `26-08-2026` / `01-08-2026`. Parsing tolerates the widths people actually type while still rejecting half-typed input and impossible days.
   - `onDateChange` fired **twice per keystroke** — both the handler and the callback it was given invoked it. It now fires once per committed change.
   - The input gained `autoComplete="off"`, `inputMode="numeric"` and `maxLength`, so browser form-history suggestions no longer shadow the calendar with text that cannot match the format.
   - `aria-invalid` / `aria-describedby` now land on the `input` itself rather than the wrapper, the calendar no longer duplicates the input's DOM id, and the calendar button's accessible name comes from the i18n catalog instead of a hardcoded string.
-  
+
   **`IGRPDatePickerSingle`**
-  
-  - **Clearing emptied the value but kept displaying the old date.** Clearing wrote `undefined`, which react-hook-form reads as "no value set" — `useWatch` then hands back the field's *default*, so the picker immediately re-rendered the date it had just dropped. Cleared fields now write `null`.
+
+  - **Clearing emptied the value but kept displaying the old date.** Clearing wrote `undefined`, which react-hook-form reads as "no value set" — `useWatch` then hands back the field's _default_, so the picker immediately re-rendered the date it had just dropped. Cleared fields now write `null`.
   - The popover stays open after picking a date — fixed; it now closes on select, matching `IGRPDatePickerInputSingle`.
   - The default placeholder is the pt-PT `datePicker.placeholder` string instead of the hardcoded English `"Pick a date"`, the clear button honours `disabled` as well as `disabledPicker`, and `z-100` (not a generated Tailwind utility) is now `z-[100]`.
-  
+
   **`IGRPCalendarSingle`**
-  
+
   - `date ?? ownDate` could not express a cleared selection: once an internal selection existed, a parent passing `date={undefined}` could never deselect the day. Controlled mode is now decided by whether `date` was passed, not by whether it is defined. The same conflation is fixed in both single date pickers.
-  
+
   **Utilities**
-  
+
   - `formatDateToString` uses `format` instead of `lightFormat`, which understood only numeric tokens and silently rendered the rest as digits — `dd MMM yyyy` came out as `26 08 2026` while the matching `parse` read it as a month name, so the two single pickers disagreed on the same `dateFormat`.
   - `formatDateRange` formatted `range.from` twice, so every range rendered its start date on both sides.
   - `parseStringToDate` / `parseStringToRange` no longer reject on an exact-length check; they delegate to the new tolerant `parseDateInput`.
   - New exports: `parseDateInput`, `maskDateInput`, `getDateFormatParts`, `getDateFormatMaxLength`.
-  
+
   Note for consumers: a cleared date picker now writes `null` into react-hook-form rather than `undefined`. Schemas that accept only `Date | undefined` (e.g. `z.date().optional()`) should accept `null` as well — `z.date().nullish()`.
+
 - 7b437c3: Unblock the Storybook snapshot runner and refresh the baselines.
-  
+
   `@storybook/test-runner` (0.24.5, the latest release, whose peer range claims `^10.6.0-0`) could not run against `storybook@10.6.0`: `getTestRunnerConfig()` loads `.storybook/test-runner.ts` through Storybook's `serverRequire` → `importModule`, which unconditionally calls `module.register()` to install a TypeScript loader hook. Jest 30 rejects that, so all 78 suites failed during setup and **zero** tests executed — the visual suite had been silently dead.
-  
+
   `patches/storybook@10.6.0.patch` wraps that single `register()` call in a try/catch. The dynamic import immediately below is then transformed by the host runtime (Jest's own pipeline) instead, which handles the TypeScript config fine. Pinned via `patchedDependencies` in `pnpm-workspace.yaml`. Remove the patch once the incompatibility is fixed upstream.
-  
+
   With the runner working, 483 tests now execute (481 pass) and the 402 snapshots have been regenerated against the current design system. Also removed the orphaned `NumberInput.stories.tsx.snap` (its story was renamed to `number-input.stories.tsx`, so the baseline had been stranded and its replacement never captured).
-  
+
   Two failures remain, both pre-existing and unrelated to the design system — verified by rebuilding the affected component from `HEAD` and reproducing them:
-  
+
   - `Components/Icons › IconGallery › smoke-test` — exceeds the runner's 15s per-test timeout while rendering the full lucide gallery (~23s).
   - `Components/Input/DatePicker/Single › DatePickerErrorA11y › play-test` — queries the trigger by `name: /pick a date/i`, but `FormLabel htmlFor` + `FormControl id` make the accessible name the field label ("Date of Birth"). A `<button>` is a labelable element, so the label wins over the contents in the accname algorithm. Either the query or the labelling needs to change.
+
 - 7b437c3: Migrate the Horizon input layer onto the `Field` primitives and fix helper-text accessibility.
-  
+
   Every `IGRPInput*` (and `IGRPFieldDescription`) previously rendered its own field scaffolding — a `div` with `*:not-first:mt-2` or `space-y-*`, plus raw `<p>` elements for helper text and errors. The exported `Field`, `FieldDescription` and `FieldError` primitives are now used instead, so IGRP inputs and hand-composed `Field` forms produce the same markup and spacing.
-  
+
   **Accessibility fix (behavioural):** static helper text was rendered as `<p role="region" aria-live="polite">` in 22 places (and `role="note" aria-live="polite"` in two more). `region` declared a landmark with no accessible name, and `aria-live` caused screen readers to re-announce unchanged helper text on re-render. Helper text is now a plain `FieldDescription`; error text keeps `role="alert"` via `FieldError`.
-  
+
   Affected: `IGRPInputText`, `IGRPInputPassword`, `IGRPInputNumber`, `IGRPInputTextarea`, `IGRPInputFile`, `IGRPInputTime`, `IGRPInputDateTime`, `IGRPInputUrl`, `IGRPInputPhone`, `IGRPInputColor`, `IGRPInputCheckbox`, `IGRPInputSwitch`, `IGRPInputSelect`, `IGRPInputRadioGroup`, `IGRPInputSearch`, `IGRPCombobox`, `IGRPInputWithAddons`, the date-picker inputs, `IGRPFieldDescription` and `IGRPFormField`.
-  
+
   Component props are unchanged. Consumers who targeted the old internal markup — `p[role="region"]`, the `*:not-first:mt-2` wrapper, or the `text-xs` helper/error sizing — need to retarget `[data-slot="field-description"]` / `[data-slot="field-error"]`; helper and error text now inherit the `Field` type scale (`text-sm`).
+
 - 2c09827: fix(info-card): wire up `orientation` and the color variants; drop the no-op `variantItem`
-  
+
   `IGRPInfoCard` declared several props that were never read — the destructures
   sat commented out in the component, so passing them did nothing.
-  
+
   - `orientation` now works. `vertical` (the default, unchanged) stacks the label
     above the value; `horizontal` places them side by side.
   - New `columns` prop (`1` | `2` | `3`, default `1`) flows a section's items into
@@ -516,7 +535,7 @@
     failure — while `outline` rendered as a plain card because its border and
     accent were dropped. All three variants now apply their full slot.
   - Sections render as a description list (`dl` / `dt` / `dd`), so assistive
-    technology reads each value as the value *of* its label instead of as loose
+    technology reads each value as the value _of_ its label instead of as loose
     adjacent text. **This changes the rendered markup**: each section is now a
     `dl`, and each field a `div` wrapping a `dt` and `dd` rather than nested
     `div`/`span`. Selectors or snapshots targeting the old structure need updating.
@@ -524,31 +543,33 @@
     solid fills where a second color token would not read.
   - The header is no longer rendered when no `title` is given, instead of leaving
     an empty heading block.
-  
+
   **Removed:** `variantItem` on `IGRPInfoItem`. Every role in `IGRPColors` maps to
   the same `textCard` class, so the prop could not affect rendering no matter what
   it was set to. Per-item accenting is now `colorItem` alone; drop `variantItem`
   from any call site. It is ignored under `variantSection="solid"`, where a
   per-item color cannot contrast against the filled background.
-  
+
   **Added:** a `bgStatic` slot on every `IGRPColors` entry — the background with
   interactive state variants removed, for non-interactive surfaces. The `solid`
   backgrounds carry a `hover:` class intended for buttons, which an info card
   should never apply. `colors.test.ts` asserts `bgStatic` stays in sync with `bg`.
-  
+
   `orientation` and `columns` default to the previous behaviour, so existing usage
   is unaffected apart from the markup change noted above.
+
 - 913ff18: Rework the `Carousel` primitive's can-scroll state as an external store subscription instead of an effect.
-  
+
   The previous shape (inherited from upstream shadcn) kept `canScrollPrev` / `canScrollNext` in `useState` and seeded them by calling the `select` handler synchronously inside the subscribing effect. That trips React's `set-state-in-effect` rule — a synchronous `setState` in an effect body forces a second render pass on every mount and on every embla re-init. Its cleanup also only detached `select`, leaving a stale `reInit` handler attached each time the effect re-ran.
-  
+
   Both values now come from `useSyncExternalStore`, subscribed to embla's `reInit` and `select` events, reading `api.canScrollPrev()` / `api.canScrollNext()` as the snapshot and `false` as the server snapshot. The initial value is read during render rather than patched in afterwards, there is no cascading render, and both events are detached on unsubscribe.
-  
+
   This deviates from upstream shadcn, which still has the effect-based version — `pnpm drift:shadcn` will report `carousel` as changed on the next sync. Keep the local version.
+
 - 913ff18: Fix the Babel build and a batch of design-system component defects found in review.
-  
+
   **Build pipeline (affects all three React packages)**
-  
+
   - Pin the Babel toolchain back to 7.x. `babel-plugin-react-compiler` is built against
     the Babel 7 AST; under `@babel/core` 8 its HIR lowering fails on every destructured
     parameter carrying a default value, and the compiler swallows those errors per
@@ -564,15 +585,15 @@
     the shared config deliberately never used them.
   - Add `src/build-pipeline.test.ts`, which asserts on emitted output so neither
     failure can recur unnoticed.
-  
+
   **Packaging**
-  
+
   - Move `shadcn` from `dependencies` to `devDependencies`. It is an authoring-time
     CLI that nothing under `src/` imports, and every consuming app was installing it.
   - Pin `cn` and `radix-ui` to exact versions, matching their neighbours.
-  
+
   **i18n**
-  
+
   - Add `formList`, `inputFile` and `copyTo` string groups, plus `chat.errorMessage`
     and four `dataTable` filter placeholders. `IGRPFormList`, `IGRPInputFile`,
     `IGRPCopyTo` and the data-table filters hardcoded Portuguese with no override path.
@@ -581,9 +602,9 @@
     filter and `IGRPPdfViewer` formatted with `Intl`'s runtime-default locale, which
     resolves differently on the server and in the browser and hydrated mismatched.
   - Export `igrpFormatMessage` for catalog strings with `{token}` placeholders.
-  
+
   **Components**
-  
+
   - `IGRPFormList`: the first item could not be collapsed — collapsing was
     indistinguishable from "not yet chosen", so it sprang back open. The remove button
     rendered on the last item of a list that refuses to go empty, where clicking it did
@@ -613,17 +634,18 @@
     popover via `key` to close it.
   - Add `"use client"` to `primitives/carousel`, `primitives/form`, `primitives/sidebar`
     and `theme-provider`, which upstream shadcn ships with it.
-  
+
   **Lint**
-  
+
   `pnpm lint` was failing on two upstream shadcn files. The rules they don't satisfy are
   now scoped off in `eslint.config.js` rather than the files being edited, which would
   create permanent drift on every shadcn release.
+
 - e0015f2: Close out a WCAG 2.1 AA audit of the design system.
-  
+
   **Tokens (`tokens.css`)** — every pair below was measured in OKLCH and now meets
   4.5:1 for text / 3:1 for UI boundaries in both themes:
-  
+
   - Light `--warning` was 2.15:1 as text on the page background; darkened to match the
     lightness of `--success` / `--info`, and `--warning-foreground` flipped to near-white
     so solid warning fills still pass.
@@ -636,9 +658,9 @@
   - `--muted-foreground` and light `--destructive` nudged to clear 4.5:1 on every surface.
   - `IGRPColors.soft.*` tints drop from `/10` to `/5`: a same-hue tint at 10% pulled the
     surface toward the text and held several variants just under 4.5:1.
-  
+
   **Components**
-  
+
   - `IGRPInputPassword`: the show/hide toggle was `tabIndex={-1}`, so keyboard-only users
     could never reveal what they typed.
   - `IGRPDataTable`: `aria-sort` moved from a wrapper `<div>` to the `<th>`. It is only
@@ -656,18 +678,19 @@
     DOM ids for every repeat of an icon.
   - `IGRPInputSelect`: the option thumbnail is marked decorative instead of repeating the
     option label to screen readers.
-  
+
   **Gates** — `eslint-plugin-jsx-a11y` in the package lint config (relaxed in
   `primitives/` only for rules that fire on unmodified upstream shadcn markup), and a
   `tokens-contrast.test.ts` that recomputes every token pair and fails on a regression.
+
 - 7b437c3: Build with a single Babel pass over `src/`, and fix the React Compiler gate.
-  
+
   **The bug.** The React Compiler step gated on a literal `'use client'`
   (single-quoted) substring. `design-system` formats with Prettier
   `singleQuote: false`, so its output emits `"use client"` and the gate matched
   nothing — the compiler was a silent no-op across the entire package while the
   build still exited 0. The check is now quote-agnostic.
-  
+
   **The cause.** The compiler ran as a second Babel pass over `dist/`, so it was
   analysing generated output rather than the code as written — which is both why
   the bug was invisible and why coverage was poor even where the gate did match.
@@ -676,38 +699,41 @@
   `build:types` emits declarations. Output is unchanged in shape — file-per-module
   ESM at esnext, no bundling, no minification, no `@babel/preset-env` — because
   `templates/demo-v1` consumes `dist/` directly.
-  
+
   Verified identical across all three packages: same emitted file list, same
   `use client` / `use server` boundaries (zero lost). Memoized modules rose from
   22 to 69 in `design-system` and 11 to 24 in `framework-next-ui`.
-  
+
   **Also.** The compiler's skip rule tested substrings (`context`, `provider`,
-  `index`, ...) against the whole file *path*, excluding every barrel and
+  `index`, ...) against the whole file _path_, excluding every barrel and
   everything under a `providers/` directory regardless of content; it now tests
   the contents for `createContext`. `"use no memo"` remains the per-file opt-out.
   Compiled tests and their `.d.ts` no longer ship in the published tarballs.
+
 - 913ff18: Fix `InputGroupAddon` click-to-focus.
-  
+
   - **A consumer `onClick` silently disabled click-to-focus.** The internal handler was declared before `{...props}`, so `<InputGroupAddon onClick={…}>` overwrote it wholesale. `onClick` is now destructured and composed — the consumer handler runs first, and `e.defaultPrevented` gives it an opt-out.
   - **Textarea groups never focused.** The handler looked for `querySelector("input")`, so clicking an addon in an `InputGroupTextarea` group focused nothing. It now targets `[data-slot="input-group-control"]`, which both controls render, and which cannot match an unrelated `<input>` nested in a different addon.
   - **The interactive-element guard escaped the addon.** `closest("button")` walks past `currentTarget`, so every addon click bailed out when the whole group sat inside a button (a combobox trigger, a toolbar toggle). The match must now be contained by the addon.
   - **Only `<button>` counted as interactive.** Clicking a link, checkbox, select or `[role="button"]` inside an addon stole focus to the control. The guard now covers the standard interactive set plus focusable `[tabindex]`.
-  
+
   The first and third items are deliberate divergence from upstream shadcn; `scripts/check-shadcn-drift.mjs` will report them on its next run.
+
 - 7b437c3: Route the remaining hardcoded UI strings through the i18n catalog.
-  
+
   The design system shipped a mixed-language UI: ~34 `aria-label`/`placeholder` literals and a dozen default prop values were English, while neighbouring strings in the same files were already pt-PT (`data-table/filter.tsx` had an English `notFoundText` default and a pt-PT `aria-label` in one file). `i18n/strings.ts` states the rule — never hardcode a user-visible string in a component — so this brings the components in line with it.
-  
+
   `IGRPI18nStrings` gains groups for `button`, `datePicker`, `inputSelect`, `inputUrl`, `combobox`, `alertDialog`, `banner`, `notification`, `avatar`, `chat`, `imageCropper`, `stepper`, `tabs`, `pageHeader`, `pdfViewer`, and `dataTable` is extended with sorting, selection, pagination and column-visibility strings. All are overridable through `IGRPI18nProvider`.
-  
+
   **Behavioural:** components that previously rendered English now render pt-PT by default — the data-table pagination and sorting controls, the column-visibility menu, the password/date-picker/select/url/stepper/tabs aria-labels, `IGRPButton`'s loading text, and the `IGRPAlertDialog` / `IGRPBanner` / `IGRPImageCropper` / `IGRPPdfViewer` / `IGRPCombobox` default labels. Props that previously carried an English default (`actionLabel`, `cancelLabel`, `loadingText`, `notFoundText`, `selectLabel`, `searchText`, `optionsLabel`, `ariaLabel`, `loadErrorLabel`, `notFoundLabel`, `cropLabel`, …) still exist and still win when passed; their defaults now resolve from the catalog. Wrap the app in `IGRPI18nProvider` to restore English.
+
 - 2c09827: fix(input-color): bind to the form value, and fix disabled / a11y / parsing
-  
+
   `IGRPInputColor` kept the selected color in component state and never read the
   field value, so `defaultValues`, `setValue()` and `reset()` never reached the
   swatch or the value field — an untouched field could submit a value that did not
   match what was on screen.
-  
+
   - The committed color now comes from the field value (or `value` when
     controlled); only the in-progress text edit is local state.
   - The displayed format follows the format the stored value declares, so a saved
@@ -730,13 +756,14 @@
     schema message is not doubled up.
   - Props declared by the type (`placeholder`, `readOnly`, `inputClassName`, …)
     are forwarded to the value field instead of being dropped.
+
 - 02bc0a8: fix(input-number): make decimal input actually typable
-  
+
   `IGRPInputNumber` re-parsed the field on every keystroke and wrote the parsed
   number straight back to the input, which dropped the decimal separator ("3." ->
   3, so "3.14" became 31) and, for formatted fields, stripped the locale group /
   decimal separators ("12,55" + "5" -> 12555).
-  
+
   - The text being typed is now kept as-is until the field is left; the parsed
     value is still published on every keystroke.
   - Focusing a formatted field swaps the formatted text for an editable,

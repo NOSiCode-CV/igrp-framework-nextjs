@@ -719,7 +719,11 @@ export { IGRPInputText, type IGRPInputTextProps } from "./components/horizon/inp
 export { IGRPTextarea, type IGRPTextareaProps } from "./components/horizon/input/textarea.js"
 export { IGRPInputTime, type IGRPInputTimeProps } from "./components/horizon/input/time.js"
 export { IGRPInputUrl, type IGRPInputUrlProps } from "./components/horizon/input/url.js"
-export { IGRPRadioGroup, type IGRPRadioGroupProps, type IGRPRadioOption } from "./components/horizon/input/radio-group.js"
+export {
+  IGRPRadioGroup,
+  type IGRPRadioGroupProps,
+  type IGRPRadioOption,
+} from "./components/horizon/input/radio-group.js"
 export { IGRPInputAddOn, type IGRPInputAddOnProps } from "./components/horizon/input/with-addons.js"
 
 export { IGRPLabel, type IGRPLabelProps } from "./components/horizon/label.js"

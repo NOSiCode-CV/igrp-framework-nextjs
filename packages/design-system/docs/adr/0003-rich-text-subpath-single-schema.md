@@ -4,7 +4,7 @@ status: accepted
 
 # Rich text ships as a `/rich-text` subpath with one fixed schema
 
-`IGRPRichTextEditor` and `IGRPRichTextView` (consumer requests §9 and §10) are exported only from `@igrp/igrp-framework-react-design-system/rich-text`, never from the root barrel, and TipTap is a set of exact-pinned `dependencies`, not peers. Both components share a single rich-text schema that the DS owns; a toolbar preset narrows only what the editor *offers*, and the view takes no preset at all. Our build is file-per-module with no bundler, so an app that never imports `/rich-text` never bundles TipTap — the only cost of a regular dependency is install size. Pinning matters because the editor's hard-won behaviours (callbacks bound once, `editable` not propagating, v3 not re-rendering on selection) are quirks of a specific TipTap version.
+`IGRPRichTextEditor` and `IGRPRichTextView` (consumer requests §9 and §10) are exported only from `@igrp/igrp-framework-react-design-system/rich-text`, never from the root barrel, and TipTap is a set of exact-pinned `dependencies`, not peers. Both components share a single rich-text schema that the DS owns; a toolbar preset narrows only what the editor _offers_, and the view takes no preset at all. Our build is file-per-module with no bundler, so an app that never imports `/rich-text` never bundles TipTap — the only cost of a regular dependency is install size. Pinning matters because the editor's hard-won behaviours (callbacks bound once, `editable` not propagating, v3 not re-rendering on selection) are quirks of a specific TipTap version.
 
 ## Considered Options
 

@@ -39,7 +39,9 @@ async function walk(dir) {
   return out
 }
 
-describe("package side-effect hygiene", () => {
+// Both tests read every file under src/ sequentially; under the full suite's
+// worker contention that exceeds the 5s default.
+describe("package side-effect hygiene", { timeout: 30_000 }, () => {
   it("no .ts/.tsx file imports a .css file", async () => {
     const files = await walk(SRC)
     const offenders = []

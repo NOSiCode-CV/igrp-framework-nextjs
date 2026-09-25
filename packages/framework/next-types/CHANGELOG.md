@@ -7,9 +7,9 @@
 - a0e6d3d: Deep review of `@igrp/framework-next`: fix the login-redirect swallow, the
   basePath permission denial, the Server Action credential gap, and a batch of
   correctness and hygiene issues.
-  
+
   **`@igrp/framework-next-ui`**
-  
+
   - `IGRPLayoutErrorBoundary` no longer swallows Next.js control-flow signals.
     The framework's header/sidebar data providers call `redirect('/login')` on a
     401/403 from Access Management, and `redirect` signals by throwing. Because
@@ -18,9 +18,9 @@
     `RedirectBoundary` — so a user with an expired session saw a permanently
     broken header and sidebar instead of the login page. Both
     `getDerivedStateFromError` and `componentDidCatch` now call `unstable_rethrow`.
-  
+
   **`@igrp/framework-next`**
-  
+
   - **basePath permission checks no longer deny everyone.** `igrpGetClaims()`
     recovered the access token with `getToken` but no `cookieName`, so it looked
     for the stock NextAuth cookie while `withIGRPAuth` had written a
@@ -46,7 +46,7 @@
     that clearly.
   - `apiManagementConfig.timeout` is honoured on read paths. It was dead config:
     nothing ever wrote it into the per-request store, which only defaults
-    `timeout` when it *creates* the store, so every read-path client sat on the
+    `timeout` when it _creates_ the store, so every read-path client sat on the
     10s default. `IGRPLayoutFull` now threads it through to both providers.
   - `igrpGetClaims` decides the session-cookie name by probing the cookie jar
     rather than from `NEXT_PUBLIC_BASE_PATH` alone. `withIGRPAuth` only suffixes
@@ -89,27 +89,28 @@
     `IGRPLayoutFull`'s wiring (5).
   - `showPreviewMode` is no longer written by `SidebarDataProvider` — no consumer
     reads it and the field is `@deprecated`.
-  
+
   **`@igrp/framework-next-types`**
-  
+
   - Adds `IGRPLayoutDataSource` and `IGRPConfigArgs.layoutData`; deprecates
     `IGRPMockDataAsync` (now an alias) and `layoutMockData`.
-  
+
   **`@igrp/framework-next-auth`**
-  
+
   - `resolveSecureCookiesFlag` moves to the shared `/cookies` entry point so
     `@igrp/framework-next` can reuse it instead of copying cookie logic.
-  
+
   **`@igrp/template-migrator`**
-  
+
   - Migration `39-layout-data-source-rename` switches `templates/demo-v1` to
     `layoutData`.
+
 - 147f51a: Fix the published type declarations being unusable under `node16`/`nodenext`,
   close the contract gate's blind spot to Access Management DTO drift, and mirror
   the four `IGRPUserDTO` fields that drift had hidden.
-  
+
   ### ⚠️ The current user's full Access Management DTO was being sent to the browser
-  
+
   `fetchCurrentUser` returned `result.data` — the raw `IGRPUserDTO` — and both the
   header and sidebar data providers hand it straight to a `'use client'`
   component. Props to a client component are serialized into the RSC payload, so
@@ -117,12 +118,12 @@
   `nic` (national identity number), `phoneNumber` and `metadata`, the free-form
   `Record<string, unknown>` the authorization server owns and enriches into issued
   JWTs.
-  
+
   It type-checked because `IGRPUserDTO` is assignable to the declared
   `IGRPUserArgs`, and a variable (unlike a fresh object literal) gets no
   excess-property check. `mapperUser` existed precisely to narrow this and had
   **no callers**.
-  
+
   `fetchCurrentUser` now narrows at the fetch boundary via `mapUserDTO`, which
   lists every forwarded field explicitly and withholds `metadata`, `nic`,
   `phoneNumber` and `emailVerified` — none of which any framework component
@@ -132,47 +133,45 @@
   seeing it. An app that needs one should read the DTO server-side and pass down
   that field rather than widening the shape every browser receives. Ten tests pin
   the boundary, since the type system structurally cannot.
-  
+
   ### ⚠️ The published types were silently `any` for `nodenext` consumers
-  
+
   `@igrp/framework-next-types` is `"type": "module"`, but `tsc` copied its
   extensionless relative specifiers straight into `dist/*.d.ts`
   (`from './types/header'`). Under `moduleResolution: "node16" | "nodenext"` that
-  is TS2834 — and because the error is raised *inside a `.d.ts`*, the
+  is TS2834 — and because the error is raised _inside a `.d.ts`_, the
   near-universal `skipLibCheck: true` swallows it. Every type in the package then
   resolved to `any`, with no diagnostic anywhere: a consumer could write
   `const x: IGRPMenuItemArgs = { totallyWrong: 123 }` and compile clean.
-  
+
   Relative imports now carry an explicit `.js` extension, which `moduleResolution:
-  "bundler"` (what every in-repo consumer uses, and why nothing caught this)
+"bundler"` (what every in-repo consumer uses, and why nothing caught this)
   accepts unchanged. No API change — but a `nodenext` consumer that was compiling
   green may now see real type errors for the first time.
-  
+
   ### The AM contract gate could not see a missing field
-  
-  
-  `contract/am-contract.ts` asserted DTO → framework *assignability*, which proves
+
+  `contract/am-contract.ts` asserted DTO → framework _assignability_, which proves
   the framework type is never wider than the wire. It is structurally blind to the
   opposite drift: a DTO that **grows** a field is still assignable to the older,
   smaller framework type. `IGRPUserDTO` had gained `nic`, `phoneNumber`,
   `emailVerified` and `metadata` with the gate green throughout, and
   `mapperUser` was silently dropping all four.
-  
+
   The gate now also asserts **field coverage** via `MirrorsAllKeys`, for all twelve
   mirrored DTOs. A DTO field the framework does not carry fails the build and names
   itself (`missing: "nic"`). Deliberate omissions must be named in the assertion,
   so an intentional gap is distinguishable from an oversight.
-  
+
   ### Type changes
-  
   - **`IGRPUserArgs` is now documented as a deliberate subset of `IGRPUserDTO`,
     not a mirror of it** — it is the one framework shape serialized to the browser.
     The four DTO fields it does not carry (`metadata`, `nic`, `phoneNumber`,
     `emailVerified`) are named individually in the contract gate's exclusion list,
-    so the key-coverage check still fails on any *other* new DTO field: widening
+    so the key-coverage check still fails on any _other_ new DTO field: widening
     the browser payload has to be a decision someone writes down.
   - **`IGRPConfigClient` had a signature no template could use** — it read
-    `() => Promise<IGRPConfigArgs>` and its docs pointed at a *default* export,
+    `() => Promise<IGRPConfigArgs>` and its docs pointed at a _default_ export,
     while the real factory is a named `createConfig` taking the per-request layout
     config. Now `(config: IGRPLayoutConfigArgs) => Promise<IGRPConfigArgs>`, and
     `templates/demo-v1` applies it (see migration 38 below).
@@ -184,9 +183,8 @@
     `IGRPHeaderDataArgs.showSettings`, a different object with the same field
     name), plus `IGRPSidebarDataArgs.showPreviewMode`, which `@igrp/framework-next`
     writes and no UI consumes. Kept for one release.
-  
+
   ### Tooling and docs
-  
   - **New `check:dist` gate, run after `tsc -b`.** The `.js`-extension fix above
     had nothing enforcing it: dropping one extension left `check:barrel`,
     `check:contract` and `tsc -b` all green while broken declarations shipped.
@@ -198,7 +196,7 @@
     claim nobody re-checked.
   - `@igrp/framework-next-ui` pins `IGRPToasterPosition` against the position type
     `IGRPToaster` actually accepts, in both directions. Passing the value only
-    proved one way: a member sonner *gained* would have left the framework union
+    proved one way: a member sonner _gained_ would have left the framework union
     quietly incomplete. Type-only, so Babel emits nothing.
   - `check:barrel` now recurses into subdirectories, recognises `export declare` /
     `export enum`, resolves `X as Y` to the exported name, and **gates the README
@@ -211,21 +209,20 @@
     reached transitively through `SessionProviderProps`.
   - README no longer presents the framework **build order** as this package's
     dependency chain; `design-system` sits in that order but does not depend on it.
-  
+
   ### Template migration 38
-  
+
   `@igrp/template-migrator` ships `38-config-client-annotation`, which annotates
   the template's `createConfig` with the corrected `IGRPConfigClient` and drops the
   `as IGRPLayoutConfigArgs` cast from both layouts — the cast was never
   load-bearing (`getLayoutConfig()` was already assignable), and an `as` on a
   cross-package type is what hides the next drift.
-  
+
   **It requires the `@igrp/framework-next-types` from this wave**: against an older
   pin, `igrp.template.config.ts` fails with "Expected 0 arguments, but got 1".
   Apply it together with the dependency-resync migration.
-  
+
   ### Documentation and build hardening
-  
   - **`verbatimModuleSyntax: true`** — the direct compiler guard on this
     package's central invariant. Imports and exports are now erased exactly as
     written, so a value import cannot slip into a package that ships no JavaScript
@@ -237,7 +234,7 @@
     source changes — it only gets expensive to adopt later.
   - **`IGRPMockDataAsync` and `IGRPConfigArgs.layoutMockData` now document what
     they actually are.** Despite the name, the framework calls both functions on
-    every render in *both* modes and keeps most of what they return in production;
+    every render in _both_ modes and keeps most of what they return in production;
     only `user` / `showIGRPSidebarTrigger` (header) and `user` / `menuItems` /
     `apps` / `appCode` / `showPreviewMode` (sidebar) are overridden. Returning a
     stub "because it is only mock data" silently drops the entire header and
@@ -258,47 +255,48 @@
     script — it covered only `next-auth` before, and now covers `next-types` too.
     Not added to `release`: unlike `next-auth`, this package's `build` already
     type-checks.
+
 - 147f51a: Fix a silent React Compiler bailout, three stale-state bugs in the app shell, a
   gate that failed open, and an SSR/client split on every external menu link.
-  
+
   ### ⚠️ `IGRPAuthForm` had lost React Compiler memoization, silently
-  
+
   `babel-plugin-react-compiler` (through 1.0.0) cannot lower a `TryStatement` with
   a finalizer — `Todo: (BuildHIR::lowerStatement) Handle TryStatement with a
-  finalizer ('finally') clause`. It swallows that per function and emits the
+finalizer ('finally') clause`. It swallows that per function and emits the
   module **uncompiled**, so the build stays green while memoization disappears.
   `onSubmit`'s `try/catch/finally` put the whole login form in that state, and
   nothing in source review, `tsc` or the test suite could see it.
-  
+
   The `finally` was wrong on its own terms too: on the happy path `signIn()` never
   resolves — it navigates away — so clearing the loading flag there un-spun the
   button mid-redirect. It is now cleared only on the failure path.
-  
+
   `src/__tests__/build-pipeline.test.ts` asserts on the emitted `dist/` that every
   eligible client module carries compiler output — `.ts` as well as `.tsx`, since
   a hook is exactly as memoizable as a component and a bailout in one is exactly
   as silent. A second assertion pins that the first is not passing vacuously by
   naming the three client hooks it must be covering. It skips when `dist/` is
   absent, and `release` now runs `build && typecheck && test` before publishing.
-  
+
   ### ⚠️ The published types were silently `any` for `nodenext` consumers
-  
+
   `@igrp/framework-next-ui` and `@igrp/framework-next` are both `"type": "module"`,
   and `tsc --emitDeclarationOnly` copies module specifiers into `dist/*.d.ts`
   verbatim. Every relative specifier they emitted was extensionless — 62 and 17
   respectively — which is TS2835 under `moduleResolution: "node16" | "nodenext"`.
-  Because the error is raised *inside a `.d.ts`*, the near-universal
+  Because the error is raised _inside a `.d.ts`_, the near-universal
   `skipLibCheck: true` swallows it and every exported type resolves to `any`.
-  
+
   Reproduced against the published layout: a consumer could write
-  
+
   ```ts
   export const bad: IGRPMenuLabels = { totallyMadeUpField: 12345 };
   export const alsoBad: IGRPForbiddenProps = { homeHref: { not: 'a string' } };
   ```
-  
+
   and `tsc` exited **0**. The same file now reports TS2353 and TS2322.
-  
+
   This is the identical defect already diagnosed and fixed in
   `@igrp/framework-next-types`; the fix was never carried to the two sibling
   packages with the same build shape. Note it affected only the **declarations** —
@@ -307,7 +305,7 @@
   which is exactly how it survived three source-level reviews. Nothing in-repo
   could catch it either: `templates/demo-v1` uses `moduleResolution: "bundler"`,
   which accepts both spellings.
-  
+
   Relative imports in `src/` now carry an explicit `.js` extension (174 specifiers
   across both packages, including dynamic `import()`), and both packages gained
   the `check:dist` gate `next-types` already had, wired into `build` and into the
@@ -315,9 +313,9 @@
   specifiers that already carry an extension, so one spelling in `src/` satisfies
   both emitters. **No API change** — but an external `nodenext` consumer that was
   compiling green may now see real type errors for the first time.
-  
+
   ### ⚠️ Every external menu link rendered differently on the server and the client
-  
+
   `resolveAnchorTag` was built on the design system's `igrpIsExternalUrl`, which
   compares against `window.location.origin` **inside a `try`**. Under SSR the
   `ReferenceError` is swallowed and it answers `false` for every URL. So the
@@ -325,23 +323,22 @@
   them as `<a target="_blank" rel="noopener noreferrer">` — a hydration mismatch
   on the element type itself, plus a window in which the link carried no
   `rel="noopener"`.
-  
+
   Externality is now decided from the URL's own shape (scheme or
   protocol-relative), which gives the same answer on both sides of hydration.
   `@igrp/igrp-framework-react-design-system` is unchanged; its helper is still
   correct in the browser, just not usable in code that server-renders.
-  
+
   ### ⚠️ `IGRPAuthorization` and `IGRPGuardPage` failed open on an empty list
-  
+
   `[].every(...)` is `true`, so `permission={[]}` rendered gated children to
   **everyone** under the default `mode="all"`, while the same input under
   `mode="any"` denied. An empty list now denies in both modes, through a shared
   `igrpIsAllowedBy` that both components — and consumers — can call. These remain
   client-side rendering control; the authoritative gate is still the server-side
   `igrpAssertAuthorize`.
-  
+
   ### Stale state in the persistent chrome
-  
   - **Folders no longer open on navigation.** The sidebar mounts once per session,
     so `<Collapsible defaultOpen>` was read on that one mount and never again:
     navigating from a leaf in folder A to a leaf in folder B left B collapsed
@@ -362,18 +359,17 @@
     array identity, clearing what the user was typing on every render in which the
     caller rebuilt the array — which is every render for anyone passing an inline
     literal.
-  
+
   ### Menu tree: nested folders are no longer dropped
-  
+
   A `FOLDER` inside a `FOLDER` was typed as a leaf, so its entire subtree vanished
   from both the sidebar and menu search — routes the backend advertised became
   unreachable, with no error. The sidebar still renders two levels (that is what
   `SidebarMenuSub` and the icon-mode dropdown express), but deeper descendants are
   now hoisted into the nearest folder rather than discarded, with a cycle guard on
   `parentCode`.
-  
+
   ### Accessibility
-  
   - **Carousel.** `opacity-0` + `pointer-events-none` blocks the mouse and nothing
     else, so off-screen slides stayed in the tab order and the accessibility tree —
     with four slides, a keyboard user tabbed through sixteen invisible dots and a
@@ -412,19 +408,19 @@
     flash before hydration too. `IGRP_ACTIVE_THEME_COOKIE` is exported alongside it.
   - `IGRPTemplateLoading` dropped an `aria-label` that duplicated — and would
     silently override — its own visible status text.
-  
+
   ### pt-PT defaults, exposed as overridable props
-  
+
   The chrome mixed hardcoded English (`Profile`, `Notifications`, `Settings`,
   `Log out`, `Mark all as read`, `Home`, `Toggle menu`, `(opens in new tab)`,
   `Applications Center`) into otherwise pt-PT surfaces, with no way for a consumer
   to change it. Every such string is now pt-PT by default and overridable.
-  
+
   `IGRPTemplateModeSwitcher` and `IGRPTemplateThemeSelector` were English
   end-to-end with no props at all — including the theme names themselves
   (`Default` / `Blue` / `Green` / `Amber`), which is why the selector also gained
   `themes` / `scaledThemes`. Pass `scaledThemes={[]}` to hide the scaled group.
-  
+
   New catalogs and props — all additive: `IGRP_MENU_LABELS_PT_PT`,
   `IGRP_NAV_USER_LABELS_PT_PT`, `IGRP_NOTIFICATIONS_LABELS_PT_PT`,
   `IGRP_COMMAND_SEARCH_LABELS_PT_PT`, `IGRP_MODE_SWITCHER_LABELS_PT_PT`,
@@ -434,22 +430,21 @@
   `subtitle` / `homeHref` / `homeLabel` on `IGRPTemplateNotFound`.
   `IGRPTemplateMenus`' `navAriaLabel` prop is deprecated in favour of
   `labels.navAriaLabel` and still wins for one release.
-  
+
   Substitution goes through the design system's `igrpFormatMessage`, not
   `String.prototype.replace(string, string)` — which interprets `$&`, `` $` ``,
   `$'` and `$n` **in the replacement**. Menu names come from the backend and the
   search query is typed by the user, so a `$` sequence corrupted the output and
-  leaked the surrounding template: searching `` a$`b `` rendered
+  leaked the surrounding template: searching ``a$`b`` rendered
   `Sem resultados para "aSem resultados para "b".`
-  
+
   The design system's `useIGRPi18n()` catalog is closed to this package —
   `IGRPI18nStrings` enumerates DS component groups and the provider merges a fixed
   list — so props are the seam. `useIGRPLocale()` **is** usable, and
   `IGRPTemplateNotifications` now takes its timestamp locale from there instead of
   defaulting to a hardcoded `pt-PT`.
-  
+
   ### API corrections
-  
   - **`IGRPTemplateHeader` can feed its own command palette.** `commands` is now a
     prop; without it the built-in palette opened empty on every shortcut, and the
     only way to give it contents was replacing it wholesale via `slots.search`.
@@ -470,7 +465,7 @@
     through the built-in selector), `IGRPThemeProvider`, `IGRPTemplateImage` and
     `igrpIsAllowedBy`.
   - `IGRPTemplateHeader.data` is typed optional, matching the `if (!data) return
-    null` it already had, and takes a `fallbackLogo` prop — the logo path is a
+null` it already had, and takes a `fallbackLogo` prop — the logo path is a
     contract with the consuming app's `public/`, since this package publishes
     `dist` only.
   - **The header now threads every child's label overrides**, not just
@@ -488,30 +483,29 @@
     private, and now it is exported.
   - The `toasterConfig` spread on `IGRPToaster` is replaced by explicit props: it
     passed `showToaster` (a framework flag sonner has no use for) through, and
-    re-applied raw values *after* the defaults resolved, so an explicit
+    re-applied raw values _after_ the defaults resolved, so an explicit
     `position: undefined` beat the `'bottom-right'` default.
-  
+
   ### `@igrp/framework-next-auth`: `useOptionalSession`
-  
+
   `./client` gains `useOptionalSession` (and the raw `SessionContext` it reads).
   `useSession()` throws without a provider and `useSafeSession` delegates straight
   to it, so neither can serve a component that must also render standalone —
   `IGRPSectionPermissions` does, and was reaching into `next-auth/react` directly
   for the context. It returns `null` for "no provider mounted", which means
-  *cannot tell*, not "unauthenticated"; a permission gate must keep its
+  _cannot tell_, not "unauthenticated"; a permission gate must keep its
   server-seeded answer in that case rather than denying. Additive; no existing
   export changes.
-  
+
   ### `@igrp/framework-next-types`: `menuItems` is optional
-  
+
   `IGRPSidebarDataArgs.menuItems` is now optional, closing repo `KNOWN-ISSUES` #3.
   It is discarded whenever auth is real — `SidebarDataProvider` replaces it with
   `fetchMenus(appCode)` — so requiring it only forced every production app to
   author an array that is thrown away. `IGRPTemplateSidebar` supplies the `[]`
   default that made the type change safe.
-  
+
   ### Housekeeping
-  
   - **`src/index.css` removed.** It declared `@import 'tailwindcss'` plus a
     `@theme inline` block and a base layer, was in neither the `exports` map nor
     any import, and was still copied into `dist` — so the only way it could ever
@@ -539,10 +533,11 @@
     over SWC output in `dist/` (there is no SWC step and no dist input), and four
     components carried `src/components/templates/…` paths that have not existed
     for some time.
+
 - e900763: Fix the `next-types` package boundary and gate its Access Management types against the real DTO contract.
-  
+
   **`@igrp/framework-next-types`**
-  
+
   - The manifest advertised `main` / `module` / an `import` condition pointing at `dist/index.js`, which the declaration-only build never emits. `exports` now carries a `types` condition only — no phantom runtime entry.
   - Declared the peers the public surface actually embeds: `IGRPConfigArgs.sessionArgs` is `Partial<SessionProviderProps>`, which is React-typed, so `react` and `next` are now (optional) peers alongside `next-auth`.
   - `declarationMap` was on while `files` shipped `dist` only, so every published `.d.ts.map` pointed at sources that were not in the tarball. `src` now ships too.
@@ -554,19 +549,20 @@
   - Marked the unused pure AM mirrors `@deprecated` in favour of the client's own DTOs: `IGRPResourceArgs`, `IGRPResourceItem`, `IGRPResourceType`, `IGRPGlobalConfigurationArgs`, `IGRPConfigurationType`, `IGRPFileUrlArgs`, `IGRPRoleUserArgs`.
   - `IGRPConfigArgs.layoutMockData` references `IGRPMockDataAsync` instead of re-declaring it inline; `Session` is imported from the `@igrp/framework-next-auth/session` subpath rather than the root barrel.
   - Added the missing `LICENSE`, and corrected a README that documented type names which do not exist (`IGRPConfig`, `IGRPSidebarConfig`, `IGRPHeaderConfig`), a `Session`/`JWT` re-export that does not happen, and the wrong Node/next-auth ranges.
-  
+
   **`@igrp/framework-next`**
-  
+
   - Dropped the unchecked `as IGRPStatus` / `as IGRPMenuType` / `as IGRPTargetType` casts from the application and menu mappers. TypeScript accepts a string enum where its literal union is expected, so the casts were never load-bearing — they only hid drift, and the contract gate now proves the assignment is sound.
   - `mapApplication` no longer silently drops `lastAccess`.
-  
+
   **`@igrp/framework-next-auth`**
-  
+
   - Split the type-check and emit configs. `tsconfig.json` carried `composite: true`, `noEmit: false` and `outDir: ./dist` on a package whose `dist/` is produced entirely by tsup, so any stray `tsc` or `tsc -b` in the package wrote a second, competing build over the tsup output. It is now type-check-only (`noEmit`, non-composite) with a `typecheck` script; `tsconfig.build.json` remains the composite, declaration-only emitting config. tsup's `dts` pass pins `noEmit: false` so the new config cannot silence declaration output — the `dist-contract` suite is what catches that if it regresses. No change to the published build.
-  
+
   **`@igrp/framework-next-ui`**
-  
+
   - `IGRPTemplateNotifications` called `.toLocaleString()` straight on `timestamp`, which throws when notifications come from a JSON API (a string, not a `Date`), and formatted with the ambient locale and time zone, producing a hydration mismatch on every row. It now accepts both forms, renders inside a `<time dateTime>` element, takes a `locale` prop (default `pt-PT`), and renders empty rather than `Invalid Date` for unparseable input.
+
 - Updated dependencies [a0e6d3d]
 - Updated dependencies [1eadf0f]
 - Updated dependencies [ccfaeec]

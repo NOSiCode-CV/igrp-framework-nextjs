@@ -60,7 +60,7 @@ See `references/forms.md` — heavy enough to deserve its own file. Quick list o
 
 - Container: `IGRPForm`, `IGRPFormField`, `IGRPFormList`, `IGRPFieldDescription`, `IGRPLabel`
 - Text-like: `IGRPInputText`, `IGRPInputNumber`, `IGRPInputPassword`, `IGRPInputPhone`, `IGRPInputSearch`, `IGRPInputUrl`, `IGRPTextarea`, `IGRPInputAddOn`
-- Choice: `IGRPSelect`, `IGRPCombobox`, `IGRPRadioGroup`, `IGRPCheckbox`, `IGRPSwitch`
+- Choice: `IGRPSelect`, `IGRPCombobox`, `IGRPMultiSelect`, `IGRPRadioGroup` (`variant="card"` for option cards — see `forms.md`), `IGRPCheckbox`, `IGRPSwitch`
 - Specialty: `IGRPInputColor`, `IGRPInputFile`, `IGRPInputHidden`, `IGRPInputTime`, `IGRPDateTimeInput`, `IGRPDatePicker`, `IGRPDatePickerSingle`, `IGRPDatePickerRange`
 - Calendars (not form-bound): `IGRPCalendarSingle`, `IGRPCalendarSingleTime`, `IGRPCalendarRange`, `IGRPCalendarRangeTime`, `IGRPCalendarMultiple`
 

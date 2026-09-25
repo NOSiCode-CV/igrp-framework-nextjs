@@ -52,17 +52,17 @@ function DatePickerRangeField({
           id={fieldName}
           variant="outline"
           disabled={disabledPicker}
-          className={cn("group w-full shadow-xs justify-start", !value?.from && "text-muted-foreground")}
+          className={cn("group w-full justify-start shadow-xs", !value?.from && "text-muted-foreground")}
         >
           <CalendarIcon
-            className="text-muted-foreground/80 group-hover:text-foreground shrink-0 transition-colors"
+            className="shrink-0 text-muted-foreground/80 transition-colors group-hover:text-foreground"
             aria-hidden="true"
           />
 
           <span className={cn("truncate", !value?.from && "text-muted-foreground")}>{displayText}</span>
         </Button>
       </PopoverTrigger>
-      <PopoverContent className="p-0 w-auto" align="start">
+      <PopoverContent className="w-auto p-0" align="start">
         <Calendar
           {...calendarProps}
           id={fieldName}
@@ -137,7 +137,7 @@ function IGRPDatePickerRange({
         render={({ field, fieldState }) => (
           <FormItem className={className}>
             {label && (
-              <FormLabel className={cn(labelClassName, required && 'after:content-["*"] after:text-destructive')}>
+              <FormLabel className={cn(labelClassName, required && "after:text-destructive after:content-['*']")}>
                 {label}
               </FormLabel>
             )}
@@ -173,7 +173,7 @@ function IGRPDatePickerRange({
         }}
       />
 
-      {helperText && <p className={cn("text-sm text-muted-foreground mt-1")}>{helperText}</p>}
+      {helperText && <p className={cn("mt-1 text-sm text-muted-foreground")}>{helperText}</p>}
     </Field>
   )
 }

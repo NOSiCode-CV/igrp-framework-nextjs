@@ -62,6 +62,8 @@ function IGRPI18nProvider({
       button: { ...IGRP_I18N_DEFAULTS_PT_PT.button, ...strings.button },
       datePicker: { ...IGRP_I18N_DEFAULTS_PT_PT.datePicker, ...strings.datePicker },
       combobox: { ...IGRP_I18N_DEFAULTS_PT_PT.combobox, ...strings.combobox },
+      multiSelect: { ...IGRP_I18N_DEFAULTS_PT_PT.multiSelect, ...strings.multiSelect },
+      radioGroup: { ...IGRP_I18N_DEFAULTS_PT_PT.radioGroup, ...strings.radioGroup },
       alertDialog: { ...IGRP_I18N_DEFAULTS_PT_PT.alertDialog, ...strings.alertDialog },
       banner: { ...IGRP_I18N_DEFAULTS_PT_PT.banner, ...strings.banner },
       notification: { ...IGRP_I18N_DEFAULTS_PT_PT.notification, ...strings.notification },
@@ -76,6 +78,7 @@ function IGRPI18nProvider({
       formList: { ...IGRP_I18N_DEFAULTS_PT_PT.formList, ...strings.formList },
       inputFile: { ...IGRP_I18N_DEFAULTS_PT_PT.inputFile, ...strings.inputFile },
       copyTo: { ...IGRP_I18N_DEFAULTS_PT_PT.copyTo, ...strings.copyTo },
+      richText: { ...IGRP_I18N_DEFAULTS_PT_PT.richText, ...strings.richText },
     }
   }, [strings])
 

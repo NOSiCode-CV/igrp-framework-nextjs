@@ -229,7 +229,7 @@ function IGRPInputSearch({
         render={({ field, fieldState }) => (
           <FormItem className={className}>
             {label && (
-              <FormLabel className={cn("gap-0.5", required && 'after:text-destructive after:content-["*"]')}>
+              <FormLabel className={cn("gap-0.5", required && "after:text-destructive after:content-['*']")}>
                 {label}
               </FormLabel>
             )}

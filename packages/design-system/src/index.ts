@@ -683,6 +683,7 @@ export { IGRPCheckbox, type IGRPCheckboxProps } from "./components/horizon/input
 export { IGRPInputColor, type IGRPInputColorProps } from "./components/horizon/input/color.js"
 
 export { IGRPCombobox, type IGRPComboboxProps } from "./components/horizon/input/combobox.js"
+export { IGRPMultiSelect, type IGRPMultiSelectProps } from "./components/horizon/input/multi-select.js"
 
 // export {
 //   IGRPDatePickerInputRange,
@@ -718,7 +719,7 @@ export { IGRPInputText, type IGRPInputTextProps } from "./components/horizon/inp
 export { IGRPTextarea, type IGRPTextareaProps } from "./components/horizon/input/textarea.js"
 export { IGRPInputTime, type IGRPInputTimeProps } from "./components/horizon/input/time.js"
 export { IGRPInputUrl, type IGRPInputUrlProps } from "./components/horizon/input/url.js"
-export { IGRPRadioGroup, type IGRPRadioGroupProps } from "./components/horizon/input/radio-group.js"
+export { IGRPRadioGroup, type IGRPRadioGroupProps, type IGRPRadioOption } from "./components/horizon/input/radio-group.js"
 export { IGRPInputAddOn, type IGRPInputAddOnProps } from "./components/horizon/input/with-addons.js"
 
 export { IGRPLabel, type IGRPLabelProps } from "./components/horizon/label.js"

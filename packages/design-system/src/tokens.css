@@ -1,4 +1,10 @@
 @custom-variant dark (&:is(.dark *));
+/* Radix emits data-state, not data-checked/data-unchecked like the shadcn primitives expect (ADR 0002). */
+@custom-variant data-checked (&[data-checked], &[data-state="checked"]);
+@custom-variant data-unchecked (&[data-unchecked], &[data-state="unchecked"]);
+/* Radix emits data-orientation, not data-vertical/data-horizontal like the shadcn primitives expect (ADR 0004). */
+@custom-variant data-vertical (&[data-vertical], &[data-orientation="vertical"]);
+@custom-variant data-horizontal (&[data-horizontal], &[data-orientation="horizontal"]);
 
 @theme inline {
   --radius-sm: calc(var(--radius) * 0.6);

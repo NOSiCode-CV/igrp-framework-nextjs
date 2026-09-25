@@ -34,20 +34,10 @@ const meta: Meta<typeof IGRPRadioGroup> = {
       description: 'The position of the radio button relative to the label',
     },
 
-    size: {
-      control: 'select',
-      options: ['sm', 'md', 'lg'],
-      description: 'The size of the radio buttons',
-    },
     variant: {
       control: 'select',
-      options: ['default', 'outline', 'soft'],
-      description: 'The visual style variant of the radio buttons',
-    },
-    color: {
-      control: 'select',
-      options: ['default', 'primary', 'secondary', 'success', 'error'],
-      description: 'The color of the radio buttons',
+      options: ['default', 'card'],
+      description: 'Dot-and-label options, or option cards (icon, badge, description)',
     },
     disabled: {
       control: 'boolean',
@@ -56,15 +46,6 @@ const meta: Meta<typeof IGRPRadioGroup> = {
     required: {
       control: 'boolean',
       description: 'Whether the radio group is required',
-    },
-    gridSize: {
-      control: 'select',
-      options: ['none', '1/2', '1/3', '2/3', '1/4', '3/4', 'full'],
-      description: 'The grid size of the component',
-      table: {
-        type: { summary: 'string' },
-        defaultValue: { summary: 'none' },
-      },
     },
   },
 };
@@ -172,49 +153,6 @@ export const WithPosition: Story = {
   },
 };
 
-export const WithVariant: Story = {
-  render: Template,
-  args: {
-    options: [
-      { value: 'option1', label: 'Option 1' },
-      { value: 'option2', label: 'Option 2' },
-      { value: 'option3', label: 'Option 3' },
-    ],
-    defaultValue: 'option1',
-    variant: 'outline',
-    label: 'Select an option',
-  },
-};
-
-export const WithSize: Story = {
-  render: (args: IGRPRadioGroupProps) => (
-    <div className='space-y-8'>
-      <IGRPRadioGroup
-        {...args}
-        options={[{ value: 'small', label: 'Small Size', description: 'A smaller radio button' }]}
-        defaultValue='small'
-        size='sm'
-        label='Small'
-      />
-      <IGRPRadioGroup
-        {...args}
-        options={[{ value: 'medium', label: 'Medium Size', description: 'A medium radio button' }]}
-        defaultValue='medium'
-        size='md'
-        label='Medium'
-      />
-      <IGRPRadioGroup
-        {...args}
-        options={[{ value: 'large', label: 'Large Size', description: 'A larger radio button' }]}
-        defaultValue='large'
-        size='lg'
-        label='Large'
-      />
-    </div>
-  ),
-  args: {},
-};
-
 export const Disabled: Story = {
   render: Template,
   args: {
@@ -239,46 +177,8 @@ export const WithError: Story = {
     ],
     defaultValue: 'option1',
     label: 'Select an option',
-    error: 'Please select a valid option',
+    errorText: 'Please select a valid option',
   },
-};
-
-export const IGRPGridSizes: Story = {
-  render: (args: IGRPRadioGroupProps) => (
-    <div className='grid grid-cols-12 gap-4 w-full max-w-4xl'>
-      <IGRPRadioGroup
-        {...args}
-        options={[
-          { value: 'option1', label: 'Option 1' },
-          { value: 'option2', label: 'Option 2' },
-        ]}
-        defaultValue='option1'
-        label='1/2 Width'
-        gridSize='1/2'
-      />
-      <IGRPRadioGroup
-        {...args}
-        options={[
-          { value: 'option1', label: 'Option 1' },
-          { value: 'option2', label: 'Option 2' },
-        ]}
-        defaultValue='option1'
-        label='1/3 Width'
-        gridSize='1/3'
-      />
-      <IGRPRadioGroup
-        {...args}
-        options={[
-          { value: 'option1', label: 'Option 1' },
-          { value: 'option2', label: 'Option 2' },
-        ]}
-        defaultValue='option1'
-        label='2/3 Width'
-        gridSize='2/3'
-      />
-    </div>
-  ),
-  args: {},
 };
 
 export const WithFormIntegration: Story = {
@@ -292,5 +192,59 @@ export const WithFormIntegration: Story = {
     ],
     required: true,
     label: 'Select a plan',
+  },
+};
+
+const requestTypes: IGRPRadioGroupProps['options'] = [
+  {
+    value: 'nova',
+    label: 'Nova licença',
+    description: 'Primeiro pedido para esta actividade.',
+    icon: 'FilePlus',
+  },
+  {
+    value: 'renovacao',
+    label: 'Renovação',
+    description: 'Prolonga uma licença existente pelo mesmo período.',
+    icon: 'RefreshCw',
+    badge: 'Permite renovação',
+  },
+  {
+    value: 'alteracao',
+    label: 'Alteração',
+    description: 'Muda os dados de uma licença em vigor sem alterar o prazo.',
+    icon: 'FilePen',
+    disabled: true,
+  },
+];
+
+export const OptionCards: Story = {
+  render: (args: IGRPRadioGroupProps) => (
+    <div className='w-[56rem] max-w-full'>
+      <IGRPRadioGroup {...args} />
+    </div>
+  ),
+  args: {
+    variant: 'card',
+    options: requestTypes,
+    defaultValue: 'renovacao',
+    label: 'Tipo de pedido',
+    helperText: 'Escolha o tipo que corresponde à sua situação.',
+  },
+};
+
+export const OptionCardsVertical: Story = {
+  ...OptionCards,
+  args: { ...OptionCards.args, orientation: 'vertical' },
+};
+
+export const OptionCardsInForm: Story = {
+  render: FormTemplate,
+  args: {
+    variant: 'card',
+    name: 'tipo',
+    options: requestTypes,
+    required: true,
+    label: 'Tipo de pedido',
   },
 };

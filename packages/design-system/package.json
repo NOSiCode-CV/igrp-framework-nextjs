@@ -70,6 +70,17 @@
   "dependencies": {
     "@hookform/resolvers": "5.9.1",
     "@origin-space/image-cropper": "0.1.9",
+    "@tiptap/core": "3.31.3",
+    "@tiptap/extension-highlight": "3.31.3",
+    "@tiptap/extension-placeholder": "3.31.3",
+    "@tiptap/extension-subscript": "3.31.3",
+    "@tiptap/extension-superscript": "3.31.3",
+    "@tiptap/extension-table": "3.31.3",
+    "@tiptap/extension-text-align": "3.31.3",
+    "@tiptap/extension-text-style": "3.31.3",
+    "@tiptap/pm": "3.31.3",
+    "@tiptap/react": "3.31.3",
+    "@tiptap/starter-kit": "3.31.3",
     "class-variance-authority": "0.7.1",
     "cmdk": "1.1.1",
     "cn": "0.4.0",
@@ -138,6 +149,11 @@
       "types": "./dist/cn.d.ts",
       "import": "./dist/cn.js",
       "default": "./dist/cn.js"
+    },
+    "./rich-text": {
+      "types": "./dist/rich-text.d.ts",
+      "import": "./dist/rich-text.js",
+      "default": "./dist/rich-text.js"
     },
     "./tokens": "./dist/tokens.css",
     "./package.json": "./package.json"

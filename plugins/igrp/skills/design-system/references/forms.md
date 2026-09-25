@@ -78,7 +78,8 @@ All of these read `useFormContext()` and register themselves by `name`:
 | Hidden | `IGRPInputHidden` |
 | File upload | `IGRPInputFile` |
 | Single select | `IGRPSelect` (small lists) / `IGRPCombobox` (searchable / large lists) |
-| Radio | `IGRPRadioGroup` |
+| Multi select (`string[]`) | `IGRPMultiSelect` — never `IGRPCombobox variant="multiple"` (deprecated) |
+| Radio | `IGRPRadioGroup` — `variant="card"` for option cards (see below) |
 | Checkbox | `IGRPCheckbox` |
 | Switch | `IGRPSwitch` |
 | Time | `IGRPInputTime` |
@@ -89,6 +90,56 @@ All of these read `useFormContext()` and register themselves by `name`:
 Common props on all: `name` (required, matches the Zod key), `label`, `helperText`, `required`, `inputClassName`, `className`, `error` (override the form's error message).
 
 **Icon caveat:** every Horizon input takes `iconName` + `iconPlacement`, but the icon only renders if `showIcon` is also set to `true`. Passing just `iconName="User" iconPlacement="start"` will not show the icon — add `showIcon`.
+
+## Single choice as option cards — `IGRPRadioGroup variant="card"`
+
+When each option carries consequences the user must weigh (a description, an icon) and there are only a handful, render the radios as option cards instead of a dropdown or a row of dots. Never hand-roll a `<label>` with `selected && "border-primary"` — the card's selected look comes from the radio's own state.
+
+```tsx
+<IGRPRadioGroup
+  name="tipoPedido"
+  label="Tipo de pedido"
+  variant="card"
+  required
+  options={[
+    { value: "nova", label: "Nova licença", description: "Primeiro pedido.", icon: "FilePlus" },
+    { value: "renovacao", label: "Renovação", description: "Prolonga uma licença.", icon: "RefreshCw", badge: "Permite renovação" },
+  ]}
+/>
+```
+
+- `options` are `IGRPOptionsProps` (`IGRPRadioOption` is a deprecated alias). `icon` and `badge` render only on cards; the default variant ignores them.
+- `orientation`: `"horizontal"` (default) is a responsive 1/2/3-column grid; `"vertical"` is one column. Cards in a row are equal height.
+- Per-option `disabled` dims that card's text only.
+- `emptyLabel` replaces the cards when `options` is empty (default "Sem opções disponíveis.").
+- Same field contract in both variants: picking writes with validate + dirty + touch (a required error clears on pick); the label is a `<legend>`; `errorText` overrides the message in form-bound and controlled mode (`error` is deprecated).
+
+## Rich text — `IGRPRichTextEditor` + `IGRPRichTextView`
+
+For HTML bodies (e-mail notifications, document templates). Both come from a **separate entry**, so apps that don't use rich text never bundle TipTap:
+
+```tsx
+import { IGRPRichTextEditor, IGRPRichTextView } from "@igrp/igrp-framework-react-design-system/rich-text"
+
+<IGRPRichTextEditor
+  name="corpo"
+  label="Corpo de email"
+  required
+  preset="email"
+  readOnly={isView}
+  variables={[{ value: "{{nome_titular}}", label: "Nome do titular" }]}
+/>
+
+<IGRPRichTextView html={preview} maxHeight={240} />
+```
+
+- **No setup:** typography comes from the DS's own token classes, so no Tailwind plugin is needed. Don't wrap it in `prose`.
+- **Never render stored HTML with `dangerouslySetInnerHTML`.** Use `IGRPRichTextView`: it re-parses through the editor's own schema, so `<script>`, `<iframe>`, `<img onerror>` and `javascript:` links are dropped. It protects the DOM, not the database, because the stored HTML is unchanged.
+- Form-bound by `name` inside `IGRPForm`, or controlled with `value` / `onChange`. An empty body is `""`, so `z.string().min(1)` works as "required".
+- Toolbar: `preset="full"` (default), `preset="email"` (only formatting that survives e-mail sanitisers: no strike, highlight, rule, alignment, colour or font size), **or** `controls={["bold", "italic", "link"]}`. Never both.
+- `readOnly` (a form's view mode) and `disabled` hide the toolbar and variables without dirtying the form.
+- Variables insert plain `{{…}}` text at the caret. There are no images and no HTML source view, by design.
+- The view takes no `preset`: editor and view always share one schema. `emptyLabel` (default `"—"`) replaces a blank body.
 
 ## Dynamic arrays — `IGRPFormList`
 

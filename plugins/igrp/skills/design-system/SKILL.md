@@ -77,7 +77,7 @@ Load the smallest set you need. SKILL.md alone is enough to pick a component; lo
 
 - **`references/horizon.md`** — full catalog of Horizon (`IGRP*`) components grouped by family with prop highlights. Load when you need a component you don't already know.
 - **`references/primitives.md`** — full list of unprefixed shadcn-style Primitives + when each is the right drop-down from Horizon.
-- **`references/forms.md`** — `IGRPForm`, `IGRPFormField`, `IGRPFormList`, all `IGRPInput*`/`IGRPSelect`/`IGRPCheckbox`/`IGRPRadioGroup`/`IGRPSwitch`/`IGRPTextarea`/`IGRPCombobox`/`IGRPDatePicker*`/`IGRPCalendar*` and the Zod + react-hook-form integration. **Load this whenever a form is in scope.**
+- **`references/forms.md`** — `IGRPForm`, `IGRPFormField`, `IGRPFormList`, all `IGRPInput*`/`IGRPSelect`/`IGRPCheckbox`/`IGRPRadioGroup`/`IGRPSwitch`/`IGRPTextarea`/`IGRPCombobox`/`IGRPRichTextEditor` (+ `IGRPRichTextView`, from `/rich-text`)/`IGRPDatePicker*`/`IGRPCalendar*` and the Zod + react-hook-form integration. **Load this whenever a form is in scope.**
 - **`references/data-table.md`** — `IGRPDataTable`, `createIGRPColumnHelper`, cell renderers, filters, row actions, server-side pagination.
 - **`references/charts.md`** — `IGRPAreaChart`, `IGRPBarChart` (horizontal/vertical), `IGRPLineChart`, `IGRPPieChart`, `IGRPRadarChart`, `IGRPRadialBarChart` + `IGRP_CHART_COLORS`, `formatChartValue`, `createChartConfig`.
 - **`references/utilities.md`** — `cn`, `IGRPColors`, `igrpGridSizeClasses`, `igrpGetInitials`, `parseLocalDate`, color converters, hooks (`useIsMobile`, `useIGRPMetaColor`).

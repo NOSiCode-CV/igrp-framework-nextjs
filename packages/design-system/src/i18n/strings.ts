@@ -123,6 +123,30 @@ export interface IGRPI18nStrings {
     /** Placeholder for the combobox search box. */
     searchPlaceholder: string
   }
+  multiSelect: {
+    /** Trigger text while the selection is empty. */
+    placeholder: string
+    /** Placeholder for the search box. */
+    searchPlaceholder: string
+    /** Empty-state message when no option matches the search. */
+    notFound: string
+    /** Trigger text for a selection of two or more. `{count}` is replaced with its size. */
+    selectedCount: string
+    /** Footer tally. `{count}` and `{total}` are replaced with the selection and option counts. */
+    tally: string
+    /** Appended to the tally when a cap is set. `{max}` is replaced with the cap. */
+    tallyMax: string
+    /** Bulk action that selects every enabled option. */
+    selectAll: string
+    /** Bulk action that empties the selection. */
+    clear: string
+    /** Accessible name of a chip's remove button. `{label}` is replaced with the option label. */
+    removeChip: string
+  }
+  radioGroup: {
+    /** Shown instead of the options when a radio group has none. */
+    empty: string
+  }
   alertDialog: {
     /** Default confirm-button label. */
     action: string
@@ -227,6 +251,67 @@ export interface IGRPI18nStrings {
     /** Message shown when there is nothing to copy. */
     nothingToCopy: string
   }
+  richText: {
+    /** Editor placeholder while the body is empty. */
+    placeholder: string
+    /** Hint above the template-variable chips. */
+    variablesHint: string
+    /** View: expand a body clipped by `maxHeight`. */
+    showMore: string
+    /** View: collapse an expanded body back to `maxHeight`. */
+    showLess: string
+    /** Accessible name of the formatting toolbar. */
+    toolbar: string
+    undo: string
+    redo: string
+    bold: string
+    italic: string
+    underline: string
+    strike: string
+    highlight: string
+    subscript: string
+    superscript: string
+    clearFormatting: string
+    /** `{level}` is replaced with 1–3. */
+    heading: string
+    bulletList: string
+    orderedList: string
+    blockquote: string
+    indent: string
+    outdent: string
+    horizontalRule: string
+    alignLeft: string
+    alignCenter: string
+    alignRight: string
+    alignJustify: string
+    /** Link control tooltip and popover title. */
+    link: string
+    linkUrl: string
+    linkApply: string
+    linkRemove: string
+    table: string
+    tableInsert: string
+    tableColumnBefore: string
+    tableColumnAfter: string
+    tableDeleteColumn: string
+    tableRowBefore: string
+    tableRowAfter: string
+    tableDeleteRow: string
+    tableMergeOrSplit: string
+    tableDelete: string
+    specialCharacter: string
+    textColor: string
+    fontSize: string
+    /** Resets colour or font size to the document default. */
+    defaultFormat: string
+    colorBlack: string
+    colorGray: string
+    colorRed: string
+    colorOrange: string
+    colorGreen: string
+    colorBlue: string
+    colorPurple: string
+  }
 }
 
 /**
@@ -302,6 +387,20 @@ export const IGRP_I18N_DEFAULTS_PT_PT: IGRPI18nStrings = {
     notFound: "Nenhum item encontrado.",
     searchPlaceholder: "Pesquisar...",
   },
+  multiSelect: {
+    placeholder: "Selecione as opções",
+    searchPlaceholder: "Pesquisar...",
+    notFound: "Nenhuma opção encontrada.",
+    selectedCount: "{count} opções selecionadas",
+    tally: "{count} de {total}",
+    tallyMax: " (máx. {max})",
+    selectAll: "Selecionar tudo",
+    clear: "Limpar",
+    removeChip: "Remover {label}",
+  },
+  radioGroup: {
+    empty: "Sem opções disponíveis.",
+  },
   alertDialog: {
     action: "Continuar",
     cancel: "Cancelar",
@@ -364,6 +463,59 @@ export const IGRP_I18N_DEFAULTS_PT_PT: IGRPI18nStrings = {
   },
   copyTo: {
     nothingToCopy: "Nenhum conteúdo para copiar",
+  },
+  richText: {
+    placeholder: "Comece a escrever aqui…",
+    variablesHint: "Clique numa variável para a inserir na posição do cursor.",
+    showMore: "Ver mais",
+    showLess: "Ver menos",
+    toolbar: "Formatação",
+    undo: "Desfazer",
+    redo: "Refazer",
+    bold: "Negrito",
+    italic: "Itálico",
+    underline: "Sublinhado",
+    strike: "Riscado",
+    highlight: "Realce",
+    subscript: "Subscrito",
+    superscript: "Sobrescrito",
+    clearFormatting: "Remover formatação",
+    heading: "Título {level}",
+    bulletList: "Lista com marcas",
+    orderedList: "Lista numerada",
+    blockquote: "Citação",
+    indent: "Aumentar avanço",
+    outdent: "Diminuir avanço",
+    horizontalRule: "Linha horizontal",
+    alignLeft: "Alinhar à esquerda",
+    alignCenter: "Alinhar ao centro",
+    alignRight: "Alinhar à direita",
+    alignJustify: "Justificar",
+    link: "Inserir hiperligação",
+    linkUrl: "URL",
+    linkApply: "Aplicar",
+    linkRemove: "Remover",
+    table: "Tabela",
+    tableInsert: "Inserir tabela 3×3",
+    tableColumnBefore: "Coluna antes",
+    tableColumnAfter: "Coluna depois",
+    tableDeleteColumn: "Eliminar coluna",
+    tableRowBefore: "Linha antes",
+    tableRowAfter: "Linha depois",
+    tableDeleteRow: "Eliminar linha",
+    tableMergeOrSplit: "Unir / dividir células",
+    tableDelete: "Eliminar tabela",
+    specialCharacter: "Carácter especial",
+    textColor: "Cor do texto",
+    fontSize: "Tamanho do texto",
+    defaultFormat: "Predefinido",
+    colorBlack: "Preto",
+    colorGray: "Cinzento",
+    colorRed: "Vermelho",
+    colorOrange: "Laranja",
+    colorGreen: "Verde",
+    colorBlue: "Azul",
+    colorPurple: "Roxo",
   },
 }
 

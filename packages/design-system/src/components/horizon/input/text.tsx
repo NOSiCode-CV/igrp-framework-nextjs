@@ -62,7 +62,7 @@ function IGRPInputText({
           <FormItem className={className}>
             {label && (
               <FormLabel
-                className={cn("gap-0.5", required && 'after:text-destructive after:content-["*"]', labelClassName)}
+                className={cn("gap-0.5", required && "after:text-destructive after:content-['*']", labelClassName)}
               >
                 {label}
               </FormLabel>

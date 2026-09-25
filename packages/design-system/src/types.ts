@@ -53,6 +53,10 @@ export type IGRPOptionsProps = {
   description?: string
   image?: string
   flag?: string
+  /** The option is shown but cannot be picked or unpicked. */
+  disabled?: boolean
+  /** Short tag next to the label. Rendered only by option cards (`IGRPRadioGroup variant="card"`). */
+  badge?: string
 }
 
 export type IGRPGridSize = keyof typeof igrpGridSizeClasses

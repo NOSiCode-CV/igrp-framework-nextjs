@@ -1,6 +1,6 @@
 "use client"
 
-import { useId, useMemo, useState } from "react"
+import { useEffect, useId, useMemo, useState } from "react"
 import { useFormContext } from "react-hook-form"
 
 import { igrpColorText } from "../../../lib/colors.js"
@@ -96,6 +96,7 @@ function ComboboxField({
   className,
   onOptionsChangeHandler,
   isSelected,
+  onClose,
   iconName = "CornerDownRight",
 }: {
   fieldName: string
@@ -121,12 +122,19 @@ function ComboboxField({
     onChangeHandler: (value: string | string[]) => void
   ) => void
   isSelected: (optValue: string, currentValue: string | string[]) => boolean
+  /** Called when the popover closes — form-bound fields mark themselves touched here. */
+  onClose?: () => void
   iconName?: string
 }) {
   const i18n = useIGRPi18n()
+  const onOpenChange = (next: boolean) => {
+    setOpen(next)
+    if (!next) onClose?.()
+  }
   return (
     <div className={cn("w-full max-w-full min-w-0")}>
-      <Popover open={open} onOpenChange={setOpen} modal>
+      {/* Non-modal: a field's popover must not scroll-lock the page or hide the rest of the form. */}
+      <Popover open={open} onOpenChange={onOpenChange}>
         <PopoverTrigger asChild>
           <IGRPButton
             name={fieldName}
@@ -134,6 +142,7 @@ function ComboboxField({
             role="combobox"
             aria-expanded={open}
             aria-controls={listId}
+            disabled={disabled}
             className={cn(
               "w-full max-w-full justify-between overflow-hidden text-left",
               className,
@@ -181,7 +190,11 @@ function ComboboxField({
  * @see IGRPCombobox
  */
 interface IGRPComboboxProps extends Omit<IGRPInputProps, "onChange"> {
-  /** Single or multiple selection. */
+  /**
+   * Single or multiple selection.
+   * @deprecated `"multiple"` — use `IGRPMultiSelect`, whose value is always a `string[]`.
+   * Removed at 0.1.0 stable (see `docs/adr/0001-multi-select-separate-from-combobox.md`).
+   */
   variant?: "single" | "multiple"
   /** Options to display. */
   options: IGRPOptionsProps[]
@@ -219,6 +232,8 @@ interface IGRPComboboxProps extends Omit<IGRPInputProps, "onChange"> {
   id?: string
 }
 
+let warnedMultipleDeprecated = false
+
 /**
  * Combobox with search and single/multiple selection. Integrates with react-hook-form.
  */
@@ -252,6 +267,14 @@ function IGRPCombobox({
 
   const formContext = useFormContext()
   const [open, setOpen] = useState(false)
+
+  useEffect(() => {
+    if (process.env.NODE_ENV === "production" || variant !== "multiple" || warnedMultipleDeprecated) return
+    warnedMultipleDeprecated = true
+    console.warn(
+      'IGRPCombobox: variant="multiple" is deprecated and will be removed at 0.1.0 stable. Use IGRPMultiSelect instead.'
+    )
+  }, [variant])
   const [localValue, setLocalValue] = useState<string | string[]>(() => (variant === "single" ? "" : []))
   const displayValue = value !== undefined ? value : localValue
 
@@ -377,6 +400,7 @@ function IGRPCombobox({
         name={fieldName}
         label={label}
         helperText={helperText}
+        errorText={errorText}
         className={className}
         required={required}
         control={formContext.control}
@@ -406,6 +430,7 @@ function IGRPCombobox({
               className={className}
               onOptionsChangeHandler={onOptionsChangeHandler}
               isSelected={isSelected}
+              onClose={field.onBlur}
               iconName={iconName}
             />
           </div>

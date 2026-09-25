@@ -97,6 +97,36 @@ describe("design-system client boundaries", () => {
     }
   )
 
+  describe("the /rich-text entry (ADR 0003)", () => {
+    const entry = () => modules.find((m) => m.file === "rich-text.ts")
+
+    it("exists, carries no directive and only re-exports", () => {
+      const mod = entry()
+      expect(mod, "src/rich-text.ts").toBeDefined()
+      expect(mod!.client).toBe(false)
+      const statements = stripComments(mod!.source)
+        .split(/;|\n(?=export\b)/)
+        .map((s) => s.trim())
+        .filter(Boolean)
+      expect(statements.length).toBeGreaterThan(0)
+      expect(statements.filter((s) => !/^export\s+(type\s+)?\{[\s\S]*\}\s+from\s+["'][^"']+["']$/.test(s))).toEqual([])
+    })
+
+    it("TipTap is reachable only through the rich-text modules", () => {
+      // An app that never imports `/rich-text` must never bundle TipTap.
+      const leaking = modules
+        .filter((m) => !m.file.startsWith("components/horizon/rich-text/"))
+        .filter((m) => /from\s+["']@tiptap\//.test(stripComments(m.source)))
+        .map((m) => m.file)
+      expect(leaking).toEqual([])
+    })
+
+    it("the root barrel never re-exports the rich-text modules", () => {
+      const barrel = modules.find((m) => m.file === "index.ts")!
+      expect(stripComments(barrel.source)).not.toMatch(/rich-text/)
+    })
+  })
+
   it("the theme-color constant stays server-readable", () => {
     const mod = modules.find((m) => m.file === "lib/meta-theme-colors.ts")
     expect(mod?.client).toBe(false)

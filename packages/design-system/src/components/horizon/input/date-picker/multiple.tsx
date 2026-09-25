@@ -177,7 +177,7 @@ function IGRPDatePickerMultiple({
         render={({ field, fieldState }) => (
           <FormItem className={className}>
             {label && (
-              <FormLabel className={cn(labelClassName, required && 'after:text-destructive after:content-["*"]')}>
+              <FormLabel className={cn(labelClassName, required && "after:text-destructive after:content-['*']")}>
                 {label}
               </FormLabel>
             )}

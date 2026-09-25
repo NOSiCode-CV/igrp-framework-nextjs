@@ -297,7 +297,7 @@ function IGRPSelect({
           {label && (
             <FormLabel
               id={`${fieldName}-label`}
-              className={cn(labelClassName, required && 'after:text-destructive after:content-["*"]')}
+              className={cn(labelClassName, required && "after:text-destructive after:content-['*']")}
             >
               {label}
             </FormLabel>

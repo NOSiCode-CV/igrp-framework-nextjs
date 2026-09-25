@@ -324,6 +324,10 @@ function IGRPTabs({
             className={cn(
               orientation === "vertical" && "h-fit flex-col",
               isHorizontal && "w-max",
+              // The primitive's upstream `group-data-horizontal/tabs:h-9` is sized for
+              // shadcn's `py-1` triggers; ours are `py-1.5` and the underline/cards
+              // variants rely on content height. Same modifier, so cn() drops the h-9.
+              isHorizontal && "group-data-horizontal/tabs:h-auto",
               tabListVariants({ variant, fullWidth }),
               fullWidth === true && orientation === "vertical" && "w-fit",
               tabListClassName

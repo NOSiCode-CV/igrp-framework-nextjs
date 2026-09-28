@@ -1,5 +1,11 @@
 # @igrp/framework-next
 
+## 0.2.0-beta.2
+
+### Patch Changes
+
+- @igrp/framework-next-ui@0.2.0-beta.2
+
 ## 0.2.0-beta.1
 
 ### Patch Changes

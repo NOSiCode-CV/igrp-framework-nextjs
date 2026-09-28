@@ -1,6 +1,7 @@
 "use client"
 
 import { type Row } from "@tanstack/react-table"
+import { format } from "date-fns"
 
 import { cn } from "../cn.js"
 import { Button } from "../../primitives/button.js"
@@ -10,7 +11,7 @@ import { Switch } from "../../primitives/switch.js"
 import { IGRPBadge, type IGRPBadgeProps } from "../badge.js"
 import { IGRPIcon } from "../icon/index.js"
 import { IGRPLink, type IGRPLinkProps } from "../typography/link.js"
-import { useIGRPi18n } from "../../../i18n/index.js"
+import { useIGRPi18n, useIGRPLocale } from "../../../i18n/index.js"
 
 /**
  * Props for the IGRPDataTableCellCheckbox component.
@@ -102,7 +103,7 @@ interface IGRPDataTableCellAmountProps {
   field: string
   /** Currency code. */
   currency?: string
-  /** Locale for formatting. */
+  /** Locale for formatting. Defaults to the `IGRPI18nProvider` locale (`pt-PT`). */
   language?: string
   /** Intl.format style. */
   formatStyle?: "currency" | "decimal" | "percent" | "unit"
@@ -112,11 +113,12 @@ interface IGRPDataTableCellAmountProps {
 function IGRPDataTableCellAmount({
   field,
   currency = "USD",
-  language = "en-US",
+  language,
   formatStyle = "currency",
 }: IGRPDataTableCellAmountProps) {
+  const locale = useIGRPLocale()
   const amount = Number.parseFloat(field)
-  const formatted = new Intl.NumberFormat(language, {
+  const formatted = new Intl.NumberFormat(language ?? locale, {
     style: formatStyle,
     currency: currency,
   }).format(amount)
@@ -150,17 +152,24 @@ function IGRPDataTableCellBadge({
 
 interface IGRPDataTableCellDateProps {
   date: string | Date
-  /** Locale for formatting. */
+  /** Locale for formatting. Defaults to the `IGRPI18nProvider` locale (`pt-PT`). */
   language?: string
   /** Intl.DateTimeFormat options. */
   dateOptions?: Intl.DateTimeFormatOptions
+  /**
+   * @deprecated Use `language` / `dateOptions`. A date-fns pattern (e.g. `"dd/MM/yyyy"`); when set it
+   * takes precedence and formats with date-fns as before. Will be removed in the next release.
+   */
+  dateFormat?: string
 }
 
-function IGRPDataTableCellDate({ date, language = "en-US", dateOptions }: IGRPDataTableCellDateProps) {
+function IGRPDataTableCellDate({ date, language, dateOptions, dateFormat }: IGRPDataTableCellDateProps) {
+  const locale = useIGRPLocale()
   if (!date) return null
   const d = date instanceof Date ? date : new Date(date)
   if (Number.isNaN(d.getTime())) return null
-  return <span>{new Intl.DateTimeFormat(language, dateOptions).format(d)}</span>
+  if (dateFormat) return <span>{format(d, dateFormat)}</span>
+  return <span>{new Intl.DateTimeFormat(language ?? locale, dateOptions).format(d)}</span>
 }
 
 function IGRPDataTableCellLink({

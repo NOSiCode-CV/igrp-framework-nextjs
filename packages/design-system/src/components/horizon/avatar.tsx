@@ -99,7 +99,12 @@ const badgeVariants = cva("absolute flex items-center justify-center rounded-ful
  * @see IGRPAvatar
  */
 interface IGRPAvatarProps
-  extends React.ComponentProps<typeof Avatar>, IGRPBaseAttributes, VariantProps<typeof avatarVariants> {
+  extends Omit<React.ComponentProps<typeof Avatar>, "size">, IGRPBaseAttributes, VariantProps<typeof avatarVariants> {
+  /**
+   * @deprecated Use `scale`. Used as `scale` when `scale` is unset (`"default"` reads as `"md"`).
+   * Will be removed in the next release.
+   */
+  size?: "sm" | "md" | "lg" | "xl" | "default" | null
   /** Image URL for the avatar. */
   src?: string
   /** Alt text for the image. */
@@ -145,7 +150,8 @@ interface IGRPAvatarProps
 function IGRPAvatar({
   src,
   alt = "avatar",
-  scale = "md",
+  scale: scaleProp,
+  size,
   rounded = "full",
   fallback,
   fallbackIcon = "User",
@@ -170,6 +176,7 @@ function IGRPAvatar({
   const i18n = useIGRPi18n()
   const _id = useId()
   const ref = name ?? id ?? _id
+  const scale = scaleProp ?? (size === "default" ? "md" : size) ?? "md"
 
   const colorClasses = IGRPColors["solid"][status]
   const upperFallBack = convertFallback(fallback)

@@ -900,4 +900,40 @@ function FormListStandaloneMode<TItem>({
 
 IGRPFormList.displayName = "IGRPFormList"
 
-export { IGRPFormList, type IGRPFormListProps }
+/**
+ * Props for the IGRPStandaloneList component.
+ * @deprecated Use `IGRPFormListProps`. Will be removed in the next release.
+ */
+interface IGRPStandaloneListProps<TItem> extends Omit<IGRPFormListProps<TItem>, "name" | "defaultItem" | "renderItem"> {
+  /** Default item for new entries. */
+  defaultItem: TItem
+  /** Render function for each item. */
+  renderItem: (item: TItem, index: number, onChange: (item: TItem) => void) => React.ReactNode
+}
+
+const noopItemChange = () => {}
+
+/**
+ * Standalone dynamic list — always standalone, even inside `IGRPForm`.
+ * @deprecated Use `IGRPFormList` with `value` / `onChange` (outside `IGRPForm`). Will be removed in the next release.
+ */
+function IGRPStandaloneList<TItem>({
+  id,
+  renderItem,
+  ...props
+}: IGRPStandaloneListProps<TItem> & { ref?: React.Ref<HTMLDivElement> }) {
+  const _id = useId()
+
+  return (
+    <FormListStandaloneMode
+      {...props}
+      groupId={id ?? _id}
+      iconName={props.iconName ?? ""}
+      showIcon={props.showIcon ?? true}
+      dot={props.dot ?? false}
+      renderItem={(item, index, onChange) => renderItem(item, index, onChange ?? noopItemChange)}
+    />
+  )
+}
+
+export { IGRPFormList, type IGRPFormListProps, IGRPStandaloneList, type IGRPStandaloneListProps }

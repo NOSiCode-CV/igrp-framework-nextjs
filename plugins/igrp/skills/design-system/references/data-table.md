@@ -134,7 +134,7 @@ Use these inside `cell: ({ row }) => ...` — they enforce token consistency and
 | Component | Props |
 | --- | --- |
 | `IGRPDataTableCellBadge` | `label: string` + `IGRPBadgeProps` (`variant`, `color`, `size`, `badgeClassName`). |
-| `IGRPDataTableCellDate` | `date: string \| Date`, `language?: string` (e.g. `"pt-PT"`), `dateOptions?: Intl.DateTimeFormatOptions`. |
+| `IGRPDataTableCellDate` | `date: string \| Date`, `language?: string` (defaults to the `IGRPI18nProvider` locale, `pt-PT`), `dateOptions?: Intl.DateTimeFormatOptions`. `dateFormat` (date-fns pattern) is deprecated. |
 | `IGRPDataTableCellCheckbox` | `row` + props passed through to the primitive `Checkbox`. Use as the selection cell. |
 | `IGRPDataTableCellSwitch` | Same shape with a `Switch`. |
 | `IGRPDataTableCellExpander` | `row`, `label?`. Toggle for `getRowCanExpand` rows. |

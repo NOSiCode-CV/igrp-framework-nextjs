@@ -30,6 +30,10 @@ interface IGRPButtonProps
   loading?: boolean
   /** Accessible text shown during loading state. */
   loadingText?: string
+  /**
+   * @deprecated No longer has any effect — the icon is sized by `size`. Will be removed in the next release.
+   */
+  iconSize?: string | number
 }
 
 /**

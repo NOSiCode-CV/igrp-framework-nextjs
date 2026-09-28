@@ -42,8 +42,18 @@ interface IGRPRadioGroupProps
   /**
    * `"default"` draws a dot and label per option. `"card"` draws each option as an option card —
    * reach for it when every option deserves a description or an icon and there are only a handful.
+   *
+   * `"outline"` and `"soft"` are deprecated, render as `"default"`, and will be removed in the next release.
    */
-  variant?: "default" | "card"
+  variant?: "default" | "card" | "outline" | "soft"
+  /**
+   * @deprecated No longer has any effect — the radio has a single size. Will be removed in the next release.
+   */
+  size?: "sm" | "md" | "lg"
+  /**
+   * @deprecated No longer has any effect — lay the field out with `className`. Will be removed in the next release.
+   */
+  gridSize?: "default" | "full" | "1/2" | "1/3" | "2/3" | "1/4" | "3/4"
   /** Error message that replaces the form's own message for `name`; always shown when set. */
   errorText?: string
   /** @deprecated Use `errorText`. */
@@ -335,6 +345,11 @@ function IGRPRadioGroup({
   errorText,
   error,
   emptyLabel,
+  // Deprecated no-ops — destructured so they never reach the DOM.
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  size: _size,
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  gridSize: _gridSize,
   ...props
 }: IGRPRadioGroupProps) {
   const groupId = useId()
@@ -343,7 +358,7 @@ function IGRPRadioGroup({
   const shared = {
     groupId,
     options,
-    variant,
+    variant: variant === "card" ? ("card" as const) : ("default" as const),
     orientation,
     disabled,
     required,

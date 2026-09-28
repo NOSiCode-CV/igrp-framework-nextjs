@@ -67,6 +67,7 @@ function IGRPI18nProvider({
       alertDialog: { ...IGRP_I18N_DEFAULTS_PT_PT.alertDialog, ...strings.alertDialog },
       banner: { ...IGRP_I18N_DEFAULTS_PT_PT.banner, ...strings.banner },
       notification: { ...IGRP_I18N_DEFAULTS_PT_PT.notification, ...strings.notification },
+      modalDialog: { ...IGRP_I18N_DEFAULTS_PT_PT.modalDialog, ...strings.modalDialog },
       avatar: { ...IGRP_I18N_DEFAULTS_PT_PT.avatar, ...strings.avatar },
       chat: { ...IGRP_I18N_DEFAULTS_PT_PT.chat, ...strings.chat },
       imageCropper: { ...IGRP_I18N_DEFAULTS_PT_PT.imageCropper, ...strings.imageCropper },

@@ -1,5 +1,4 @@
 import { type IGRPIconName } from "./components/horizon/icon/index.js"
-import { igrpGridSizeClasses } from "./lib/utilities.js"
 import type { IGRPColorVariants } from "./lib/colors.js"
 import { Calendar } from "./components/primitives/calendar.js"
 
@@ -58,8 +57,6 @@ export type IGRPOptionsProps = {
   /** Short tag next to the label. Rendered only by option cards (`IGRPRadioGroup variant="card"`). */
   badge?: string
 }
-
-export type IGRPGridSize = keyof typeof igrpGridSizeClasses
 
 export type IGRPCalendarProps = Omit<React.ComponentProps<typeof Calendar>, "mode"> & {
   name?: string

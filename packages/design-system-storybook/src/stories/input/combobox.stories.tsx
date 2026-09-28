@@ -48,11 +48,7 @@ export default {
     showStatus: {
       control: 'boolean',
       options: ['default', 'success', 'warning', 'error', 'pending', 'completed'],
-    },
-    gridSize: {
-      control: 'select',
-      options: ['full', '1/2', '1/3', '2/3', '1/4', '3/4'],
-    },
+    }    
   },
 } as Meta;
 

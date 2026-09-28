@@ -25,10 +25,6 @@ export default {
       options: ['start', 'end'],
     },
     placeholder: { control: 'text' },
-    IGRPGridSize: {
-      control: 'select',
-      options: ['full', '1/2', '1/3', '2/3', '1/4', '3/4'],
-    },
     error: { control: 'text' },
     className: { control: 'text' },
   },
@@ -136,7 +132,6 @@ export const DifferentSizes: StoryObj<IGRPInputTextProps> = {
     name: 'half-width',
     label: 'Campo com Metade da Largura',
     placeholder: 'Este campo ocupa metade do espaço disponível',
-    gridSize: '1/2',
   },
 };
 

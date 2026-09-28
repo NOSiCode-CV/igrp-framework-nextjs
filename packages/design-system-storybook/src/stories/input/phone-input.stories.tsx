@@ -25,11 +25,7 @@ export default {
     },
     countries: { control: 'object' },
     defaultValue: { control: 'text' },
-    dir: { control: 'radio', options: ['ltr', 'rtl'] },
-    IGRPGridSize: {
-      control: 'select',
-      options: ['full', '1/2', '1/3', '2/3', '1/4', '3/4'],
-    },
+    dir: { control: 'radio', options: ['ltr', 'rtl'] },    
     error: { control: 'text' },
   },
 } as Meta;

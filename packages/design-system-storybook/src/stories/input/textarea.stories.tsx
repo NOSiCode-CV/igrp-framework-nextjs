@@ -12,11 +12,7 @@ export default {
     className: { control: 'text' },
     disabled: { control: 'boolean' },
     rows: { control: 'number' },
-    error: { control: 'text' },
-    IGRPGridSize: {
-      control: 'select',
-      options: ['full', '1/2', '1/3', '2/3', '1/4', '3/4'],
-    },
+    error: { control: 'text' },   
   },
 } as Meta;
 
@@ -86,7 +82,6 @@ export const HalfWidth: StoryObj<IGRPTextareaProps> = {
     name: 'half-width',
     label: 'Half Width Textarea',
     placeholder: 'This textarea takes half of the available width',
-    gridSize: '1/2',
     rows: 4,
   },
 };

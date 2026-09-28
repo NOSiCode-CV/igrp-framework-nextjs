@@ -651,7 +651,12 @@ export {
 export { IGRPFormField, type IGRPFormFieldProps } from "./components/horizon/form/form-field.js"
 export { IGRPForm, type IGRPFormProps, type IGRPFormHandle } from "./components/horizon/form/index.js"
 export { convertValuesToFormData } from "./components/horizon/form/lib/utils.js"
-export { IGRPFormList, type IGRPFormListProps } from "./components/horizon/form/form-list.js"
+export {
+  IGRPFormList,
+  type IGRPFormListProps,
+  IGRPStandaloneList,
+  type IGRPStandaloneListProps,
+} from "./components/horizon/form/form-list.js"
 export {
   IGRPRepetitiveComponent,
   type IGRPRepetitiveComponentProps,
@@ -869,7 +874,6 @@ export type {
   IGRPBaseAttributes,
   IGRPInputProps,
   IGRPOptionsProps,
-  IGRPGridSize,
   IGRPCalendarProps,
   IGRPCalendarTimeProps,
   IGRPDatePickerBaseProps,
@@ -904,7 +908,6 @@ export {
   igrpColorText,
 } from "./lib/colors.js"
 export {
-  igrpGridSizeClasses,
   igrpAlertIconMappings,
   igrpGetInitials,
   igrpToPascalCase,

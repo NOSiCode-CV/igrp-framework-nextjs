@@ -18,11 +18,7 @@ export default {
     disabled: { control: 'boolean' },
     showPasswordToggle: { control: 'boolean' },
     placeholder: { control: 'text' },
-    defaultValue: { control: 'text' },
-    IGRPGridSize: {
-      control: 'select',
-      options: ['full', '1/2', '1/3', '2/3', '1/4', '3/4'],
-    },
+    defaultValue: { control: 'text' },    
     error: { control: 'text' },
   },
 } as Meta;

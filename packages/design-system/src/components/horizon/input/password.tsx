@@ -5,7 +5,7 @@ import { useFormContext, Controller } from "react-hook-form"
 
 import { useIGRPi18n } from "../../../i18n/index.js"
 import { igrpOmitNonDomProps } from "../../../lib/dom-props.js"
-import type { IGRPGridSize, IGRPInputProps } from "../../../types.js"
+import type { IGRPInputProps } from "../../../types.js"
 import { InputGroup, InputGroupAddon, InputGroupButton, InputGroupInput } from "../../primitives/input-group.js"
 import { IGRPIcon } from "../icon/index.js"
 import { IGRPLabel } from "../label.js"
@@ -27,7 +27,7 @@ interface IGRPInputPasswordProps extends Omit<IGRPInputProps, "onChange"> {
   /**
    * @deprecated This props will be deprecated in the next release.
    */
-  IGRPGridSize?: IGRPGridSize
+  IGRPGridSize?: string
 }
 
 /**

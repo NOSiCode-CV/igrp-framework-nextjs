@@ -25,11 +25,7 @@ export default {
     showSubmitButton: { control: 'boolean' },
     submitButtonLabel: { control: 'text' },
     placeholder: { control: 'text' },
-    defaultValue: { control: 'text' },
-    gridSize: {
-      control: 'select',
-      options: ['default', 'full', '1/2', '1/3', '2/3', '1/4', '3/4'],
-    },
+    defaultValue: { control: 'text' },   
     error: { control: 'text' },
   },
 } as Meta;
@@ -187,7 +183,6 @@ export const HalfWidth: StoryObj<IGRPInputSearchProps> = {
     name: 'search',
     label: 'Search',
     placeholder: 'Type to search...',
-    gridSize: '1/2',
   },
 };
 

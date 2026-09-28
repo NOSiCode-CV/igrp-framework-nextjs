@@ -167,6 +167,10 @@ export interface IGRPI18nStrings {
     /** aria-label for the close button. */
     close: string
   }
+  modalDialog: {
+    /** Screen-reader label for the close button. */
+    close: string
+  }
   avatar: {
     /** aria-label for the decorative status indicator. */
     iconIndicator: string
@@ -413,6 +417,9 @@ export const IGRP_I18N_DEFAULTS_PT_PT: IGRPI18nStrings = {
   },
   notification: {
     close: "Fechar notificação",
+  },
+  modalDialog: {
+    close: "Fechar",
   },
   avatar: {
     iconIndicator: "Indicador",

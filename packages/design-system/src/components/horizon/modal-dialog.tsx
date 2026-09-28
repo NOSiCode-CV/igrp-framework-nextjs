@@ -2,6 +2,7 @@
 
 import { Children, isValidElement } from "react"
 import { cva, type VariantProps } from "class-variance-authority"
+import { XIcon } from "lucide-react"
 import {
   Dialog as IGRPModalDialog,
   DialogClose as IGRPModalDialogClose,
@@ -13,6 +14,8 @@ import {
   DialogDescription,
 } from "../primitives/dialog.js"
 import { cn } from "cn"
+import { Button } from "../primitives/button.js"
+import { useIGRPi18n } from "../../i18n/index.js"
 
 const igrpModalDialogContentVariants = cva("max-h-[90vh] w-full overflow-auto", {
   variants: {
@@ -32,6 +35,11 @@ const igrpModalDialogContentVariants = cva("max-h-[90vh] w-full overflow-auto", 
 interface IGRPModalDialogContentProps
   extends React.ComponentProps<typeof DialogContent>, VariantProps<typeof igrpModalDialogContentVariants> {
   contentClassName?: string
+  /**
+   * @deprecated Style the close button through `className` on the content instead
+   * (e.g. `[&_[data-slot=dialog-close]]:…`). Will be removed in the next release.
+   */
+  showCloseButtonClassName?: string
 }
 
 /**
@@ -42,8 +50,11 @@ function IGRPModalDialogContent({
   size,
   children,
   contentClassName,
+  showCloseButton = true,
+  showCloseButtonClassName,
   ...props
 }: IGRPModalDialogContentProps) {
+  const i18n = useIGRPi18n()
   // A sticky header/footer must sit flush against the dialog edge. `DialogContent`'s
   // `p-6` would otherwise clamp `sticky top-0`/`bottom-0` to the padded content box
   // (sticky is constrained by its containing block), so we drop the matching padding
@@ -72,8 +83,18 @@ function IGRPModalDialogContent({
         className
       )}
       {...props}
+      // The deprecated class needs a close button we render ourselves — the primitive's takes none.
+      showCloseButton={showCloseButton && !showCloseButtonClassName}
     >
       <div className={cn("flex flex-col gap-4", contentClassName)}>{children}</div>
+      {showCloseButton && showCloseButtonClassName && (
+        <IGRPModalDialogClose data-slot="dialog-close" asChild>
+          <Button variant="ghost" className={cn("absolute top-4 right-4", showCloseButtonClassName)} size="icon-sm">
+            <XIcon />
+            <span className="sr-only">{i18n.modalDialog.close}</span>
+          </Button>
+        </IGRPModalDialogClose>
+      )}
     </DialogContent>
   )
 }
@@ -131,8 +152,20 @@ function IGRPModalDialogTitle({ className, ...props }: React.ComponentProps<type
 /**
  * Modal dialog description.
  */
-function IGRPModalDialogDescription({ className, ...props }: React.ComponentProps<typeof DialogDescription>) {
-  return <DialogDescription className={className} {...props} />
+function IGRPModalDialogDescription({
+  className,
+  name,
+  children,
+  ...props
+}: React.ComponentProps<typeof DialogDescription> & {
+  /** @deprecated Pass the text as `children`. Rendered only when there are no children. Will be removed in the next release. */
+  name?: string
+}) {
+  return (
+    <DialogDescription className={className} {...props}>
+      {children ?? name}
+    </DialogDescription>
+  )
 }
 
 export {

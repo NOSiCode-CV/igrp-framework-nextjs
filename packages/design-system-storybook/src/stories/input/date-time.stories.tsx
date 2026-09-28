@@ -16,11 +16,7 @@ export default {
     helperText: { control: 'text' },
     required: { control: 'boolean' },
     disabled: { control: 'boolean' },
-    placeholder: { control: 'text' },
-    IGRPGridSize: {
-      control: 'select',
-      options: ['full', '1/2', '1/3', '2/3', '1/4', '3/4'],
-    },
+    placeholder: { control: 'text' },    
     error: { control: 'text' },
   },
 } as Meta;

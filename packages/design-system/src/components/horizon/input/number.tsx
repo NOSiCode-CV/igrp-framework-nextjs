@@ -40,8 +40,11 @@ interface IGRPInputNumberProps extends Omit<IGRPInputProps, "onChange"> {
    * Called when the value changes. Receives `undefined` when the field is
    * cleared — clearing used to be unobservable, which made "no value" and
    * "unchanged" indistinguishable to the caller.
+   *
+   * Declared with method syntax on purpose: it checks the parameter bivariantly, so handlers
+   * written for the old `(value: number) => void` signature still compile. Guard for `undefined`.
    */
-  onChange?: (value: number | undefined) => void
+  onChange?(value: number | undefined): void
   /** Validation error message. */
   error?: string
   /** Message shown when validation fails. */

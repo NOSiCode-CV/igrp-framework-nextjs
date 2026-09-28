@@ -33,6 +33,8 @@ interface IGRPInputColorProps extends Omit<IGRPInputProps, "onChange" | "value" 
   defaultFormat?: ColorFormat
   /** Show/hide the text field + format dropdown. Default: true */
   showFormatValue?: boolean
+  /** @deprecated Use `showFormatValue`. Will be removed in the next release. */
+  showHexValue?: boolean
   /** Overrides the message shown when the typed color cannot be parsed. */
   invalidValueMessage?: string
 }
@@ -275,7 +277,8 @@ function IGRPInputColor({
   onChange,
   format: formatProp,
   defaultFormat = "oklch",
-  showFormatValue = true,
+  showFormatValue: showFormatValueProp,
+  showHexValue,
   invalidValueMessage,
   error,
   disabled,
@@ -285,6 +288,7 @@ function IGRPInputColor({
   const fieldName = name ?? id ?? _id
   const controlId = `${fieldName}-color`
   const formContext = useFormContext()
+  const showFormatValue = showFormatValueProp ?? showHexValue ?? true
 
   const shared = {
     defaultValue,

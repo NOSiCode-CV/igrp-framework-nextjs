@@ -15,3 +15,5 @@ Restore props removed since 0.1.x as `@deprecated` shims, so apps written agains
 - `IGRPStandaloneList` / `IGRPStandaloneListProps` are exported again as a wrapper over `IGRPFormList`'s standalone mode.
 
 `IGRPDataTableCellDate` and `IGRPDataTableCellAmount` now default `language` to the `IGRPI18nProvider` locale (`pt-PT`) instead of `en-US`, which restores the dd/MM/yyyy dates of 0.1.x.
+
+Removed: the `IGRPGridSize` type and `igrpGridSizeClasses` export (deprecated grid-size layout). `IGRPInputPassword`'s deprecated `IGRPGridSize` prop is now typed as `string`.

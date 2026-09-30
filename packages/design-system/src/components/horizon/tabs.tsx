@@ -349,7 +349,7 @@ function IGRPTabs({
           ref={tabsListRef}
           className={cn(
             isHorizontal &&
-              "flex-1 overflow-x-auto [-ms-overflow-style:none] [scrollbar-width:none] [&::-webkit-scrollbar]:hidden",
+              "flex-1 [scrollbar-width:none] overflow-x-auto [-ms-overflow-style:none] [&::-webkit-scrollbar]:hidden",
             !isHorizontal && "w-full"
           )}
         >

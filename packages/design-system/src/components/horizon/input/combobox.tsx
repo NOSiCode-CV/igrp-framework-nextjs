@@ -153,10 +153,11 @@ function ComboboxField({
             {setSelectValue(currentValue, onChangeHandler)}
           </IGRPButton>
         </PopoverTrigger>
-        <PopoverContent className={cn(
-            "w-auto max-w-[calc(100vw-2rem)] min-w-(--radix-popover-trigger-width) p-0",
-            selectClassName
-          )} align="start" side="bottom">
+        <PopoverContent
+          className={cn("w-auto max-w-[calc(100vw-2rem)] min-w-(--radix-popover-trigger-width) p-0", selectClassName)}
+          align="start"
+          side="bottom"
+        >
           <Command>
             {showSearch && (
               <div className={cn("relative p-2")}>

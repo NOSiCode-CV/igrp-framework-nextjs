@@ -100,7 +100,7 @@ function DatePickerSingleField({
         <IGRPButton
           onClick={onClear}
           variant="link"
-          className={cn("absolute top-1/2 right-2 z-[100] size-3 -translate-y-1/2 text-muted-foreground")}
+          className={cn("absolute top-1/2 right-2 size-3 -translate-y-1/2 text-muted-foreground")}
           size="icon"
           iconName="X"
           aria-label={i18n.datePicker.clear}

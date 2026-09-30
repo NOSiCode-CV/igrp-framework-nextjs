@@ -269,7 +269,7 @@ function IGRPDataTableFilterFaceted<TData>({
                     checked={selectedValues.has(option.value)}
                     onCheckedChange={() => handleSelect(option.value)}
                     aria-label={option.label}
-                    className={cn("border-foreground")}
+                    className={cn("border-foreground data-[state=checked]:**:[svg]:!text-primary-foreground")}
                   />
                   <label htmlFor={`${id}-${i}`} className="flex-1 cursor-pointer">
                     {option.label}

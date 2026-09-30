@@ -7,13 +7,7 @@ import { planAccessManagementSync } from '../lib/sync-plan.js';
 export type IGRPRootLayoutArgs = {
   readonly children: React.ReactNode;
   readonly config: IGRPConfigArgs;
-  /**
-   * `lang` for the `<html>` element. Defaults to `'pt'` — the previous
-   * hardcoded value, kept as the default so nothing changes for existing
-   * templates — but it is the document's language, which assistive technology
-   * and the browser's own translation prompt both read, so an app serving any
-   * other locale needs to be able to say so.
-   */
+  /** BCP-47 language of the document (`<html lang>`). Defaults to `"pt"`. */
   readonly lang?: string;
 };
 

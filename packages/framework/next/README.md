@@ -28,6 +28,16 @@ pnpm add @igrp/framework-next
 | `IGRPLayout`        | `.`   | Route-group server layout. Renders header + sidebar chrome around protected routes. |
 | `IGRPGlobalLoading` | `.`   | Full-page loading indicator for `loading.tsx` files.                                |
 
+#### `IGRPRootLayout` props
+
+| Prop       | Type                | Required | Default | Purpose                                                                 |
+| ---------- | ------------------- | -------- | ------- | ----------------------------------------------------------------------- |
+| `config`   | `IGRPConfigArgs`    | yes      | —       | Layout, session, API and sync configuration (from `igrpBuildConfig`).   |
+| `children` | `React.ReactNode`   | yes      | —       | The application tree.                                                   |
+| `lang`     | `string`            | no       | `'pt'`  | BCP-47 language written to the server-rendered `<html lang>` attribute. |
+
+`lang` is optional and defaults to `'pt'`, so apps that don't pass it render exactly as before.
+
 ### Config builder
 
 | Export            | Entry | Purpose                                                                                           |
@@ -66,6 +76,21 @@ import { IGRPRootLayout } from '@igrp/framework-next';
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return <IGRPRootLayout>{children}</IGRPRootLayout>;
+}
+```
+
+#### Localized document language
+
+`<html lang>` defaults to `'pt'`. Apps with i18n resolve the locale **server-side** (session preference, cookie, `Accept-Language`, …) and pass it down, so the attribute is correct on the first server-rendered response instead of being patched after hydration:
+
+```tsx
+// src/app/layout.tsx
+import { IGRPRootLayout } from '@igrp/framework-next';
+import { resolveLocale } from '@/i18n/resolve-locale';
+
+export default async function RootLayout({ children }: { children: React.ReactNode }) {
+  const lang = await resolveLocale();
+  return <IGRPRootLayout lang={lang}>{children}</IGRPRootLayout>;
 }
 ```
 

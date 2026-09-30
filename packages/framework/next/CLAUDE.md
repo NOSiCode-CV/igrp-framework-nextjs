@@ -14,7 +14,7 @@ You are working inside `packages/framework/next/` — `@igrp/framework-next`. **
 
 ## Public API
 
-- `IGRPRootLayout` — root-level server layout.
+- `IGRPRootLayout` — root-level server layout. Props: `config` (required), `children`, and the optional `lang` (BCP-47 string for `<html lang>`, default `'pt'` — backward compatible; consumers with i18n resolve the locale server-side and pass it).
 - `IGRPLayout` — route-group server layout (header/sidebar chrome).
 - `igrpBuildConfig` — assembles layout + API + toaster + session config.
 - `igrpGetAccessClient`, `igrpGetAccessClientConfig` — access-management API client.

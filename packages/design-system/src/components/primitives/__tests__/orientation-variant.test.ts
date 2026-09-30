@@ -57,3 +57,13 @@ describe("orientation variants (ADR 0004)", () => {
     expect(out).toContain('[data-orientation="horizontal"]')
   })
 })
+
+describe("active variant (ADR 0005)", () => {
+  it("data-active also matches Radix's data-state", async () => {
+    const declaration = /@custom-variant data-active \(([^;]*)\);/.exec(tokens)
+    expect(primitivesUsing("data-active:").length).toBeGreaterThan(0)
+    expect(declaration?.[1]).toContain("&[data-active]")
+    expect(declaration?.[1]).toContain('&[data-state="active"]')
+    expect(await css(["data-active:bg-background"])).toContain('[data-state="active"]')
+  })
+})

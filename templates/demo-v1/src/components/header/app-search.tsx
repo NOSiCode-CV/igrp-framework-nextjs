@@ -1,8 +1,5 @@
 "use client";
 
-import { useRouter } from "next/navigation";
-import { useMemo } from "react";
-
 import {
   type IGRPCommandItem,
   IGRPTemplateCommandSearch,
@@ -11,6 +8,8 @@ import {
   igrpIsExternalUrl,
   igrpNormalizeUrl,
 } from "@igrp/igrp-framework-react-design-system";
+import { useRouter } from "next/navigation";
+import { useMemo } from "react";
 
 import type { AppSearchCommand } from "@/lib/header-search";
 

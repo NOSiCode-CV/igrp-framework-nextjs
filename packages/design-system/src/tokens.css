@@ -5,6 +5,8 @@
 /* Radix emits data-orientation, not data-vertical/data-horizontal like the shadcn primitives expect (ADR 0004). */
 @custom-variant data-vertical (&[data-vertical], &[data-orientation="vertical"]);
 @custom-variant data-horizontal (&[data-horizontal], &[data-orientation="horizontal"]);
+/* Radix Tabs emits data-state="active", not data-active like the shadcn primitives expect (ADR 0005). */
+@custom-variant data-active (&[data-active], &[data-state="active"]);
 
 @theme inline {
   --radius-sm: calc(var(--radius) * 0.6);

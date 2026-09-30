@@ -230,9 +230,9 @@ const tabsWithDisabled: IGRPTabItem[] = [
 ];
 
 const iconOnlyTabs: IGRPTabItem[] = [
-  { value: 'user', label: '', content: createTabContent('User'), icon: 'User' },
-  { value: 'settings', label: '', content: createTabContent('Settings'), icon: 'Settings' },
-  { value: 'bell', label: '', content: createTabContent('Notifications'), icon: 'Bell' },
+  { value: 'user', label: '', ariaLabel: 'User', content: createTabContent('User'), icon: 'User' },
+  { value: 'settings', label: '', ariaLabel: 'Settings', content: createTabContent('Settings'), icon: 'Settings' },
+  { value: 'bell', label: '', ariaLabel: 'Notifications', content: createTabContent('Notifications'), icon: 'Bell' },
 ];
 
 const manyTabs: IGRPTabItem[] = [

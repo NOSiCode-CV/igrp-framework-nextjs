@@ -367,10 +367,16 @@ describe('withIGRPAuth — callbacks.redirect', () => {
     NEXT_PUBLIC_IGRP_APP_HOME_SLUG: '/',
   };
 
-  // What NextAuth ACTUALLY passes as `baseUrl`: the NEXTAUTH_URL string
-  // verbatim, including the `/api/auth` suffix v4 requires under a basePath.
-  // The previous tests passed the already-stripped app origin here, which is
-  // why the "post-login redirect lands on /api/auth" bug went unnoticed.
+  // What next-auth v4 ACTUALLY passes as `baseUrl`: `url.origin` — protocol +
+  // host only. `createCallbackUrl` (next-auth/core/lib/callback-url) calls
+  // `callbacks.redirect({ url, baseUrl: options.url.origin })`, so the path of
+  // NEXTAUTH_URL (the basePath, and the `/api/auth` suffix) is ALWAYS gone by
+  // the time the callback runs. Earlier fixtures here passed NEXTAUTH_URL
+  // verbatim, which is why the "post-login redirect drops the basePath" bug
+  // went unnoticed: the tests supplied the very information the real caller
+  // strips. `next-auth-callback-contract.test.ts` pins this shape against the
+  // real library.
+  const ORIGIN = 'http://localhost:3000';
   const NEXTAUTH_BASE = 'http://localhost:3000/apps/template/api/auth';
   const APP_BASE = 'http://localhost:3000/apps/template';
   const HOME = APP_BASE + '/';
@@ -383,44 +389,44 @@ describe('withIGRPAuth — callbacks.redirect', () => {
 
   it('resolves a relative callbackUrl against the app base, not the auth API base', async () => {
     const redirect = await getRedirect();
-    const result = await redirect({ url: '/some/page', baseUrl: NEXTAUTH_BASE });
+    const result = await redirect({ url: '/some/page', baseUrl: ORIGIN });
     expect(result).toBe(`${APP_BASE}/some/page`);
   });
 
   it('honors a relative callbackUrl with query string', async () => {
     const redirect = await getRedirect();
-    const result = await redirect({ url: '/list?tab=open', baseUrl: NEXTAUTH_BASE });
+    const result = await redirect({ url: '/list?tab=open', baseUrl: ORIGIN });
     expect(result).toBe(`${APP_BASE}/list?tab=open`);
   });
 
   it('honors a same-origin absolute callbackUrl', async () => {
     const redirect = await getRedirect();
     const absolute = `${APP_BASE}/deep/path`;
-    const result = await redirect({ url: absolute, baseUrl: NEXTAUTH_BASE });
+    const result = await redirect({ url: absolute, baseUrl: ORIGIN });
     expect(result).toBe(absolute);
   });
 
   it('lands on the app home — never the /api/auth root — when url equals baseUrl', async () => {
     const redirect = await getRedirect();
-    const result = await redirect({ url: NEXTAUTH_BASE, baseUrl: NEXTAUTH_BASE });
+    const result = await redirect({ url: ORIGIN, baseUrl: ORIGIN });
     expect(result).toBe(HOME);
     expect(result).not.toContain('/api/auth');
   });
 
   it('never redirects the browser to NEXTAUTH_URL_INTERNAL', async () => {
     const redirect = await getRedirect();
-    const result = await redirect({ url: '', baseUrl: NEXTAUTH_BASE });
+    const result = await redirect({ url: '', baseUrl: ORIGIN });
     expect(result).toBe(HOME);
     expect(result).not.toContain('internal-svc');
   });
 
   it('resolves home against the configured app home slug', async () => {
     const redirect = await getRedirect({ NEXT_PUBLIC_IGRP_APP_HOME_SLUG: 'home' });
-    const result = await redirect({ url: NEXTAUTH_BASE, baseUrl: NEXTAUTH_BASE });
+    const result = await redirect({ url: ORIGIN, baseUrl: ORIGIN });
     expect(result).toBe(`${APP_BASE}/home`);
   });
 
-  it('falls back to NEXTAUTH_URL when NextAuth passes an empty baseUrl', async () => {
+  it('falls back to NEXTAUTH_URL when baseUrl is empty (defensive — next-auth never does this)', async () => {
     const redirect = await getRedirect();
     const result = await redirect({ url: '/some/page', baseUrl: '' });
     expect(result).toBe(`${APP_BASE}/some/page`);
@@ -428,29 +434,99 @@ describe('withIGRPAuth — callbacks.redirect', () => {
 
   it('sends the auth chrome (/login, /logout) to home instead of bouncing back', async () => {
     const redirect = await getRedirect();
-    expect(await redirect({ url: '/login?callbackUrl=%2Fx', baseUrl: NEXTAUTH_BASE })).toBe(HOME);
-    expect(await redirect({ url: '/logout', baseUrl: NEXTAUTH_BASE })).toBe(HOME);
-    expect(await redirect({ url: `${APP_BASE}/login`, baseUrl: NEXTAUTH_BASE })).toBe(HOME);
+    expect(await redirect({ url: '/login?callbackUrl=%2Fx', baseUrl: ORIGIN })).toBe(HOME);
+    expect(await redirect({ url: '/logout', baseUrl: ORIGIN })).toBe(HOME);
+    expect(await redirect({ url: `${APP_BASE}/login`, baseUrl: ORIGIN })).toBe(HOME);
   });
 
   it('rejects protocol-relative URLs (open-redirect guard)', async () => {
     const redirect = await getRedirect();
-    expect(await redirect({ url: '//evil.com/path', baseUrl: NEXTAUTH_BASE })).toBe(HOME);
+    expect(await redirect({ url: '//evil.com/path', baseUrl: ORIGIN })).toBe(HOME);
   });
 
   it('rejects cross-origin absolute URLs', async () => {
     const redirect = await getRedirect();
-    expect(await redirect({ url: 'http://evil.com/path', baseUrl: NEXTAUTH_BASE })).toBe(HOME);
+    expect(await redirect({ url: 'http://evil.com/path', baseUrl: ORIGIN })).toBe(HOME);
   });
 
   it('rejects a backslash protocol-relative bypass (open-redirect guard)', async () => {
     const redirect = await getRedirect();
-    expect(await redirect({ url: '/\\evil.com', baseUrl: NEXTAUTH_BASE })).toBe(HOME);
+    expect(await redirect({ url: '/\\evil.com', baseUrl: ORIGIN })).toBe(HOME);
   });
 
   it('rejects a path-traversal callbackUrl', async () => {
     const redirect = await getRedirect();
-    expect(await redirect({ url: '/a/../../admin', baseUrl: NEXTAUTH_BASE })).toBe(HOME);
+    expect(await redirect({ url: '/a/../../admin', baseUrl: ORIGIN })).toBe(HOME);
+  });
+
+  it('keeps the basePath from NEXTAUTH_URL when baseUrl is origin-only (regression)', async () => {
+    const redirect = await getRedirect();
+    expect(await redirect({ url: '/dashboard', baseUrl: ORIGIN })).toBe(`${APP_BASE}/dashboard`);
+  });
+
+  it('does not double-prefix a callbackUrl that already carries the basePath', async () => {
+    const redirect = await getRedirect();
+    expect(await redirect({ url: '/apps/template/dashboard?x=1', baseUrl: ORIGIN })).toBe(
+      `${APP_BASE}/dashboard?x=1`,
+    );
+    expect(await redirect({ url: '/apps/template', baseUrl: ORIGIN })).toBe(HOME);
+  });
+
+  it('matches the basePath on a segment boundary only', async () => {
+    const redirect = await getRedirect();
+    expect(await redirect({ url: '/apps/template-other/x', baseUrl: ORIGIN })).toBe(
+      `${APP_BASE}/apps/template-other/x`,
+    );
+  });
+
+  it('sends the basePath-prefixed auth chrome to home', async () => {
+    const redirect = await getRedirect();
+    expect(await redirect({ url: '/apps/template/login', baseUrl: ORIGIN })).toBe(HOME);
+    expect(await redirect({ url: '/apps/template/logout?x=1', baseUrl: ORIGIN })).toBe(HOME);
+  });
+
+  it('resolves NEXT_PUBLIC_IGRP_APP_HOME_SLUG=/dashboard under the basePath', async () => {
+    const redirect = await getRedirect({ NEXT_PUBLIC_IGRP_APP_HOME_SLUG: '/dashboard' });
+    expect(await redirect({ url: ORIGIN, baseUrl: ORIGIN })).toBe(`${APP_BASE}/dashboard`);
+    expect(await redirect({ url: '/login', baseUrl: ORIGIN })).toBe(`${APP_BASE}/dashboard`);
+  });
+
+  it('sends a same-origin absolute URL outside the basePath to home', async () => {
+    const redirect = await getRedirect();
+    expect(await redirect({ url: `${ORIGIN}/dashboard`, baseUrl: ORIGIN })).toBe(HOME);
+    expect(await redirect({ url: `${ORIGIN}/apps/template-other/x`, baseUrl: ORIGIN })).toBe(HOME);
+  });
+
+  it('trusts a baseUrl that already carries a path (custom callers)', async () => {
+    const redirect = await getRedirect({ NEXTAUTH_URL: 'http://localhost:3000/ignored/api/auth' });
+    expect(await redirect({ url: '/some/page', baseUrl: NEXTAUTH_BASE })).toBe(
+      `${APP_BASE}/some/page`,
+    );
+  });
+
+  it('falls back to NEXT_PUBLIC_BASE_PATH when NEXTAUTH_URL has no path', async () => {
+    const redirect = await getRedirect({
+      NEXTAUTH_URL: 'http://localhost:3000',
+      NEXT_PUBLIC_BASE_PATH: '/apps/template',
+    });
+    expect(await redirect({ url: '/dashboard', baseUrl: ORIGIN })).toBe(`${APP_BASE}/dashboard`);
+  });
+
+  it('prefers NEXTAUTH_URL over a disagreeing NEXT_PUBLIC_BASE_PATH and warns once', async () => {
+    const warn = vi.spyOn(console, 'warn').mockImplementation(() => {});
+    const redirect = await getRedirect({ NEXT_PUBLIC_BASE_PATH: '/apps/other' });
+    expect(await redirect({ url: '/a', baseUrl: ORIGIN })).toBe(`${APP_BASE}/a`);
+    expect(await redirect({ url: '/b', baseUrl: ORIGIN })).toBe(`${APP_BASE}/b`);
+    const hits = warn.mock.calls.filter((c) => String(c[0]).includes('NEXT_PUBLIC_BASE_PATH'));
+    warn.mockRestore();
+    expect(hits).toHaveLength(1);
+  });
+
+  it('is unchanged for an app without a basePath', async () => {
+    const redirect = await getRedirect({ NEXTAUTH_URL: 'http://localhost:3000/api/auth' });
+    expect(await redirect({ url: '/dashboard', baseUrl: ORIGIN })).toBe(`${ORIGIN}/dashboard`);
+    expect(await redirect({ url: ORIGIN, baseUrl: ORIGIN })).toBe(`${ORIGIN}/`);
+    expect(await redirect({ url: '/login', baseUrl: ORIGIN })).toBe(`${ORIGIN}/`);
   });
 
   it('defers to callbackExtensions.redirect when provided', async () => {
@@ -462,9 +538,9 @@ describe('withIGRPAuth — callbacks.redirect', () => {
     });
     const result = await instance.authOptions.callbacks!.redirect!({
       url: '/some/page',
-      baseUrl: NEXTAUTH_BASE,
+      baseUrl: ORIGIN,
     });
-    expect(customRedirect).toHaveBeenCalledWith({ url: '/some/page', baseUrl: NEXTAUTH_BASE });
+    expect(customRedirect).toHaveBeenCalledWith({ url: '/some/page', baseUrl: ORIGIN });
     expect(result).toBe('/custom');
   });
 });

@@ -162,7 +162,7 @@ function FormListHeader({
   return (
     <CardHeader
       className={cn(
-        "flex flex-row items-center justify-between border-b p-4 px-0 [.border-b]:pb-4",
+        "flex flex-row items-center justify-between gap-2 border-b px-4 py-4 [.border-b]:pb-4",
         cardHeaderClassName
       )}
     >

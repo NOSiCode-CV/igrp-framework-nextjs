@@ -46,7 +46,7 @@ import {
   revokeOidcSession,
 } from './oidc';
 import type { IGRPTokenRecoveryStore } from './token-store';
-import { escapeHtml, sanitizeRedirectUrl, stripAuthApiSuffix } from './sanitize';
+import { escapeHtml, sanitizeRedirectUrl, stripAuthApiSuffix, stripBasePath } from './sanitize';
 import {
   buildAuthCookies,
   resolveSecureCookie,
@@ -189,6 +189,16 @@ type IGRPAuthCallbackExtensions = {
 
   /**
    * Fully replaces the IGRP redirect callback when provided.
+   *
+   * Beware of the `baseUrl` you receive: next-auth v4 passes `url.origin` —
+   * protocol + host ONLY. The `NEXTAUTH_URL` path (your basePath and
+   * `/api/auth`) is already stripped, so a custom callback that returns
+   * `${baseUrl}${url}` lands OUTSIDE the app under a basePath deployment
+   * (`https://host/dashboard` instead of `https://host/apps/core/dashboard`)
+   * and 404s at the ingress. Re-add the basePath yourself (from
+   * `NEXT_PUBLIC_BASE_PATH`), and keep the open-redirect guards the default
+   * callback applies (`sanitizeRedirectUrl`, same-origin check, auth-chrome
+   * loop guard). Prefer omitting this and using the default.
    */
   redirect?: NonNullable<NextAuthOptions['callbacks']>['redirect'];
 };
@@ -449,7 +459,6 @@ function normalizePreviewMode(env: Record<string, string | undefined>): boolean 
  * straight back through the flow they just completed.
  */
 const AUTH_CHROME_PATH = /^\/(login|logout)(\/|$|\?)/;
-
 
 /**
  * `env` is the documented environment source for the whole factory, but
@@ -783,15 +792,62 @@ export function withIGRPAuth(options: IGRPAuthOptions = {}): IGRPAuthInstance {
     warnOnRefetchIntervalMisconfiguration(env);
   }
 
+  let warnedBasePathMismatch = false;
+
   /**
-   * Browser-reachable app origin, with NextAuth's `/api/auth` suffix removed.
+   * The app's basePath (`/apps/core`, or `''`) as the BROWSER sees it.
    *
-   * Prefers the `baseUrl` NextAuth passes (derived from NEXTAUTH_URL or the
-   * request) and falls back to NEXTAUTH_URL directly. NEXTAUTH_URL_INTERNAL is
+   * Source of truth is the path of NEXTAUTH_URL minus `/api/auth`, because
+   * that is what NextAuth itself routes on. NEXT_PUBLIC_BASE_PATH is the
+   * fallback for a NEXTAUTH_URL that carries no path. When both are set and
+   * disagree, NEXTAUTH_URL wins and we warn once — a mismatch is the
+   * misconfiguration behind the login loop, and silent is the worst outcome.
+   */
+  function resolveAppBasePath(): string {
+    const normalize = (p: string) => {
+      const t = p.trim().replace(/\/+$/, '');
+      return t && !t.startsWith('/') ? `/${t}` : t;
+    };
+    let fromNextAuthUrl = '';
+    try {
+      fromNextAuthUrl = normalize(new URL(stripAuthApiSuffix(env.NEXTAUTH_URL ?? '')).pathname);
+    } catch {
+      // NEXTAUTH_URL unset or malformed — fall through to NEXT_PUBLIC_BASE_PATH.
+    }
+    const fromEnv = normalize(env.NEXT_PUBLIC_BASE_PATH ?? process.env.NEXT_PUBLIC_BASE_PATH ?? '');
+    if (fromNextAuthUrl && fromEnv && fromNextAuthUrl !== fromEnv && !warnedBasePathMismatch) {
+      warnedBasePathMismatch = true;
+      console.warn(
+        `[withIGRPAuth] NEXTAUTH_URL implies basePath "${fromNextAuthUrl}" but NEXT_PUBLIC_BASE_PATH ` +
+          `is "${fromEnv}". Using "${fromNextAuthUrl}" for post-login redirects — make them agree.`,
+      );
+    }
+    return fromNextAuthUrl || fromEnv;
+  }
+
+  /**
+   * Browser-reachable app base URL (origin + basePath, no `/api/auth`).
+   *
+   * next-auth v4 passes the redirect callback `baseUrl = url.origin`, i.e.
+   * protocol + host with NO path (see `createCallbackUrl`; pinned by
+   * `next-auth-callback-contract.test.ts`). So the origin is taken from
+   * `baseUrl` (what the browser actually used) and the basePath is re-derived
+   * from NEXTAUTH_URL / NEXT_PUBLIC_BASE_PATH. A `baseUrl` that already carries
+   * a path (a custom caller) is trusted as is. NEXTAUTH_URL_INTERNAL is
    * deliberately NOT consulted — it names a server-to-server origin.
    */
   function resolveAppBaseUrl(baseUrl?: string): string {
-    return stripAuthApiSuffix(baseUrl || env.NEXTAUTH_URL || '');
+    let origin = '';
+    let path = '';
+    try {
+      const parsed = new URL(stripAuthApiSuffix(baseUrl ?? ''));
+      origin = parsed.origin;
+      path = parsed.pathname.replace(/\/+$/, '');
+    } catch {
+      // Empty/unparseable baseUrl — next-auth never sends one; be defensive.
+    }
+    if (!origin) return stripAuthApiSuffix(env.NEXTAUTH_URL ?? '');
+    return `${origin}${path || resolveAppBasePath()}`;
   }
 
   /**
@@ -1060,13 +1116,20 @@ export function withIGRPAuth(options: IGRPAuthOptions = {}): IGRPAuthInstance {
         // NEXTAUTH_URL_INTERNAL: that variable names a server-reachable origin
         // (container DNS / cluster service) and must never become a `Location`
         // header — in the only deployments that set it, it is by definition not
-        // reachable from the browser. `baseUrl` is NextAuth's own value derived
-        // from NEXTAUTH_URL / the request, which is what the browser used.
+        // reachable from the browser. NextAuth's `baseUrl` is only the ORIGIN
+        // the browser used; the basePath is re-derived in `resolveAppBaseUrl`.
         const appBaseUrl = resolveAppBaseUrl(baseUrl);
         const home = buildHomeUrl(appBaseUrl);
+        let appBasePathname = '';
+        try {
+          appBasePathname = new URL(appBaseUrl).pathname.replace(/\/+$/, '');
+        } catch {
+          // unparseable base — treat as root
+        }
 
-        // No useful callbackUrl — land on home. Compare against both the raw
-        // baseUrl (which may still carry /api/auth) and the stripped app base.
+        // No useful callbackUrl — land on home. NextAuth passes `url === baseUrl`
+        // (the bare origin) when no callbackUrl was supplied; also accept the
+        // app base itself.
         if (
           !url ||
           url === baseUrl ||
@@ -1078,30 +1141,29 @@ export function withIGRPAuth(options: IGRPAuthOptions = {}): IGRPAuthInstance {
         }
 
         // Relative same-origin path (e.g. "/some/page") — validate through the
-        // shared sanitizer (rejects "//", "/\", %5C, and "/../" traversal), then
-        // resolve against the app base. sanitizeRedirectUrl returns the relative
-        // path for relative input, so re-prefix appBaseUrl to honor NextAuth's
-        // absolute-URL redirect contract.
+        // shared sanitizer (rejects "//", "/\", %5C, and "/../" traversal).
+        // Callers disagree on whether a relative callbackUrl already carries the
+        // basePath (middleware's nextUrl.pathname does not; a client reading
+        // location.pathname does), so strip it once — on a segment boundary —
+        // and re-prefix exactly once. Auth-chrome is judged on the stripped path.
         if (url.startsWith('/') && !url.startsWith('//')) {
           const safe = sanitizeRedirectUrl(url, appBaseUrl, '');
           if (!safe || !safe.startsWith('/')) return home;
-          if (isAuthChromePath(safe)) return home;
-          return `${appBaseUrl}${safe}`;
+          const relative = stripBasePath(safe, appBasePathname) ?? safe;
+          if (isAuthChromePath(relative)) return home;
+          return `${appBaseUrl}${relative}`;
         }
 
-        // Absolute URL — only honor when it matches the app origin.
+        // Absolute URL — only honor when it is on the app origin AND under the
+        // app's basePath. A same-origin URL outside the basePath belongs to a
+        // sibling app or an ingress route this app does not own; following it
+        // after login would land the user in someone else's page (or a 404).
         try {
           const parsed = new URL(url);
           const base = new URL(appBaseUrl);
           if (parsed.origin === base.origin) {
-            // Compare the path *relative to the app base* — under a basePath
-            // the login page is `/apps/template/login`, which would not match
-            // an anchored `^/login` check.
-            const basePathname = base.pathname.replace(/\/+$/, '');
-            const relative =
-              basePathname && parsed.pathname.startsWith(basePathname)
-                ? parsed.pathname.slice(basePathname.length) || '/'
-                : parsed.pathname;
+            const relative = stripBasePath(parsed.pathname, appBasePathname);
+            if (relative === null) return home;
             return isAuthChromePath(relative) ? home : url;
           }
         } catch {

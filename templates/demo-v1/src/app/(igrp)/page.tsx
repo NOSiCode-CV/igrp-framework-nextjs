@@ -1,7 +1,6 @@
 // Permission: open to all authenticated users — demo page with no sensitive data.
-import { redirect } from "next/navigation";
-
 import { IgrpConfigError } from "@igrp/framework-next/errors";
+import { redirect } from "next/navigation";
 
 export default function Home() {
   const root = process.env.NEXT_PUBLIC_IGRP_APP_HOME_SLUG || "/";

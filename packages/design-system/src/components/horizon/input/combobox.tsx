@@ -55,17 +55,14 @@ function ComboboxOptionsList({
               <CommandItem
                 key={`${groupName}-${value}`}
                 onSelect={() => onSelectHandler(value)}
-                className={cn("flex cursor-pointer items-center justify-between")}
+                data-checked={isSelected(value, currentValue)}
+                className={cn("flex cursor-pointer items-center justify-between gap-4")}
               >
                 <div className={cn("flex items-center gap-2")}>
                   {showStatus && status && <IGRPCircleFull className={igrpColorText(status)} />}
                   {showIcon && <IGRPIcon iconName={icon ?? iconName} />}
                   {label}
                 </div>
-                <IGRPIcon
-                  iconName="Check"
-                  className={cn("ml-auto size-4 opacity-0", isSelected(value, currentValue) && "opacity-100")}
-                />
               </CommandItem>
             ))}
           </CommandGroup>
@@ -156,7 +153,10 @@ function ComboboxField({
             {setSelectValue(currentValue, onChangeHandler)}
           </IGRPButton>
         </PopoverTrigger>
-        <PopoverContent className={cn("max-w-[calc(100vw-2rem)] p-0", selectClassName)} align="start" side="bottom">
+        <PopoverContent className={cn(
+            "w-auto max-w-[calc(100vw-2rem)] min-w-(--radix-popover-trigger-width) p-0",
+            selectClassName
+          )} align="start" side="bottom">
           <Command>
             {showSearch && (
               <div className={cn("relative p-2")}>

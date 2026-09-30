@@ -1,5 +1,5 @@
 import { describe, it, expect } from 'vitest';
-import { sanitizePath, sanitizeRedirectUrl, stripAuthApiSuffix } from '../sanitize';
+import { sanitizePath, sanitizeRedirectUrl, stripAuthApiSuffix, stripBasePath } from '../sanitize';
 
 describe('sanitizeRedirectUrl — open-redirect hardening', () => {
   const ORIGIN = 'http://localhost:3000';
@@ -120,5 +120,31 @@ describe('sanitizeRedirectUrl — fragments', () => {
 
   it('still refuses a cross-origin URL that carries a fragment', () => {
     expect(sanitizeRedirectUrl('https://evil.example/x#y', 'https://app.example')).toBe('/');
+  });
+});
+
+describe('stripBasePath', () => {
+  it('removes the basePath on a segment boundary', () => {
+    expect(stripBasePath('/apps/core/dashboard', '/apps/core')).toBe('/dashboard');
+    expect(stripBasePath('/apps/core', '/apps/core')).toBe('/');
+  });
+
+  it('keeps a query or fragment attached to a root remainder', () => {
+    expect(stripBasePath('/apps/core?a=1', '/apps/core')).toBe('/?a=1');
+    expect(stripBasePath('/apps/core#top', '/apps/core')).toBe('/#top');
+  });
+
+  it('returns null when the path is not under the basePath', () => {
+    expect(stripBasePath('/dashboard', '/apps/core')).toBeNull();
+    expect(stripBasePath('/apps/core-other/x', '/apps/core')).toBeNull();
+    expect(stripBasePath('/apps/corex', '/apps/core')).toBeNull();
+  });
+
+  it('strips only once — nesting is not unwrapped', () => {
+    expect(stripBasePath('/apps/core/apps/core/x', '/apps/core')).toBe('/apps/core/x');
+  });
+
+  it('returns the path unchanged for an empty basePath', () => {
+    expect(stripBasePath('/dashboard', '')).toBe('/dashboard');
   });
 });

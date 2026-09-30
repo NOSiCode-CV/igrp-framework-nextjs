@@ -1,22 +1,30 @@
 "use client"
 
 import { cva, type VariantProps } from "class-variance-authority"
+import { cn } from "cn"
 import { useCallback, useEffect, useId, useRef, useState } from "react"
 
+import { useIGRPi18n } from "../../i18n/index.js"
 import { type IGRPColorRole, type IGRPColorVariants } from "../../lib/colors.js"
-import { cn } from "cn"
 
-function getScrollBehavior(): ScrollBehavior {
-  if (typeof window !== "undefined" && window.matchMedia("(prefers-reduced-motion: reduce)").matches) {
-    return "auto"
-  }
-  return "smooth"
-}
 import { Button } from "../primitives/button.js"
 import { Tabs, TabsList, TabsTrigger, TabsContent } from "../primitives/tabs.js"
 import { IGRPBadge } from "./badge.js"
 import { IGRPIcon, type IGRPIconName } from "./icon/index.js"
-import { useIGRPi18n } from "../../i18n/index.js"
+
+/** Sub-pixel slack when comparing scroll offsets. */
+const SCROLL_EPSILON = 1
+/** Gap kept between the active tab and the container edge when scrolling it into view. */
+const SCROLL_PADDING = 16
+/** Fraction of the visible width moved by one scroll-button press. */
+const SCROLL_STEP = 0.7
+
+function getScrollBehavior(): ScrollBehavior {
+  if (typeof window !== "undefined" && window.matchMedia?.("(prefers-reduced-motion: reduce)").matches) {
+    return "auto"
+  }
+  return "smooth"
+}
 
 const tabListVariants = cva("gap-1.5", {
   variants: {
@@ -39,17 +47,21 @@ const tabListVariants = cva("gap-1.5", {
   },
 })
 
+// The primitive styles the selected trigger with `data-active:*` (widened to Radix's
+// `data-state="active"` in tokens.css, ADR 0005), including `dark:data-active:*` surface
+// classes. Horizon may not use `dark:`, so variants that replace the active surface use the
+// important modifier to win in both themes. `underline` needs none of this: it renders the
+// primitive's `line` variant, which already has a transparent active surface and the indicator.
 const tabTriggerVariants = cva("px-4 py-1.5", {
   variants: {
     variant: {
       default: "",
-      outline: "data-[state=active]:bg-muted data-[state=active]:shadow-none",
+      outline: "data-active:border-transparent! data-active:bg-muted! data-active:shadow-none!",
       pills:
-        "rounded-full data-[state=active]:bg-primary data-[state=active]:text-muted-foreground data-[state=active]:shadow-none",
-      underline:
-        "relative after:absolute after:inset-x-0 after:bottom-0 after:-mb-1 after:h-0.5 hover:bg-accent hover:text-foreground data-[state=active]:bg-transparent data-[state=active]:shadow-none data-[state=active]:after:bg-primary data-[state=active]:hover:bg-accent",
+        "rounded-full data-active:border-transparent! data-active:bg-primary! data-active:text-primary-foreground! data-active:shadow-none!",
+      underline: "hover:bg-accent hover:text-foreground data-active:after:bg-primary data-active:hover:bg-accent",
       cards:
-        "overflow-hidden rounded-b-none border-x border-t bg-muted py-2 data-[state=active]:z-10 data-[state=active]:shadow-none",
+        "overflow-hidden rounded-b-none border-x border-t border-b-0 border-border bg-muted py-2 data-active:z-10 data-active:border-border! data-active:bg-background! data-active:shadow-none!",
     },
   },
   defaultVariants: {
@@ -64,14 +76,18 @@ const tabTriggerVariants = cva("px-4 py-1.5", {
 interface IGRPTabItem {
   /** Tab value (unique id). */
   value: string
-  /** Tab label. */
+  /** Tab label. May be empty for icon-only tabs, which then need `ariaLabel`. */
   label: string
+  /** Accessible name for the tab. Required when `label` is empty; it replaces the visible content (icon, label, badge) in the accessible name. */
+  ariaLabel?: string
   /** Tab icon. */
   icon?: IGRPIconName
   /** Tab panel content. */
   content: React.ReactNode
   /** Whether the tab is disabled. */
   disabled?: boolean
+  /** Keep the panel mounted (hidden) while inactive, preserving form and component state across tab switches. */
+  keepMounted?: boolean
   /** Badge content. */
   badgeContent?: string | number
   /** Badge variant. */
@@ -80,7 +96,7 @@ interface IGRPTabItem {
   badgeColor?: IGRPColorVariants
   /** CSS classes for the badge. */
   badgeClassName?: string
-  /** Additional CSS classes. */
+  /** Additional CSS classes for this tab's trigger. */
   className?: string
 }
 
@@ -88,7 +104,7 @@ interface IGRPTabItem {
  * Props for the IGRPTabs component.
  * @see IGRPTabs
  */
-interface IGRPTabsProps extends React.ComponentProps<typeof Tabs> {
+interface IGRPTabsProps extends Omit<React.ComponentProps<typeof Tabs>, "children" | "asChild"> {
   /** Tab items. */
   items: IGRPTabItem[]
   /** CSS classes for the tab list. */
@@ -111,14 +127,56 @@ interface IGRPTabsProps extends React.ComponentProps<typeof Tabs> {
   variant?: VariantProps<typeof tabListVariants>["variant"]
   /** Full-width tab list. */
   fullWidth?: boolean
-  /** HTML id attribute. */
+  /** HTML id attribute of the root element. Takes precedence over `name`. */
   id?: string
-  /** HTML name attribute. */
+  /** Identifier used as the root element's id when `id` is not given. */
   name?: string
   /** Show scroll indicators when tabs overflow. */
   showScrollIndicators?: boolean
   /** CSS classes for scroll buttons. */
   scrollButtonClassName?: string
+}
+
+interface ScrollState {
+  /** Content is hidden past the start edge (left in LTR, right in RTL). */
+  start: boolean
+  /** Content is hidden past the end edge. */
+  end: boolean
+  rtl: boolean
+}
+
+const NO_SCROLL: ScrollState = { start: false, end: false, rtl: false }
+
+function TabsScrollButton({
+  label,
+  iconName,
+  disabled,
+  className,
+  onClick,
+}: {
+  label: string
+  iconName: "ChevronLeft" | "ChevronRight"
+  disabled: boolean
+  className?: string
+  onClick: () => void
+}) {
+  // aria-disabled, not `disabled`: the button that reaches the end of the list stays
+  // focusable, so a keyboard user does not lose their place when it becomes inert.
+  return (
+    <Button
+      variant="ghost"
+      size="icon-sm"
+      className={cn("shrink-0 aria-disabled:opacity-50", className)}
+      onClick={() => {
+        if (!disabled) onClick()
+      }}
+      aria-label={label}
+      aria-disabled={disabled}
+      type="button"
+    >
+      <IGRPIcon iconName={iconName} size={12} />
+    </Button>
+  )
 }
 
 /**
@@ -148,144 +206,129 @@ function IGRPTabs({
   ...restProps
 }: IGRPTabsProps) {
   const i18n = useIGRPi18n()
+  const tabItems = items ?? []
   const isControlled = controlledValue !== undefined
 
-  const initialValue = defaultValue ?? items[0]?.value ?? ""
-  const [activeTab, setActiveTab] = useState(initialValue)
-  const [canScrollLeft, setCanScrollLeft] = useState(false)
-  const [canScrollRight, setCanScrollRight] = useState(false)
+  const [uncontrolledValue, setUncontrolledValue] = useState(defaultValue)
+  const [scrollState, setScrollState] = useState<ScrollState>(NO_SCROLL)
 
   const tabsListRef = useRef<HTMLDivElement>(null)
 
-  const currentValue = isControlled ? controlledValue : activeTab
+  // Radix always receives a controlled value, so a default that arrives late, or an active tab that
+  // is removed from `items`, resolves to the first enabled tab instead of leaving none selected.
+  const fallbackValue = (tabItems.find((item) => !item.disabled) ?? tabItems[0])?.value ?? ""
+  const currentValue = isControlled
+    ? controlledValue
+    : (tabItems.find((item) => item.value === uncontrolledValue)?.value ?? fallbackValue)
+
   const handleValueChange = (newValue: string) => {
     if (!isControlled) {
-      setActiveTab(newValue)
+      setUncontrolledValue(newValue)
     }
     onValueChange?.(newValue)
   }
 
-  const _id = useId()
-  const ref = name ?? id ?? _id
+  const generatedId = useId()
+  const rootId = id ?? name ?? generatedId
+
+  const isHorizontal = orientation === "horizontal"
 
   const checkScrollability = useCallback(() => {
-    if (!tabsListRef.current || orientation === "vertical") {
-      setCanScrollLeft(false)
-      setCanScrollRight(false)
+    const container = tabsListRef.current
+    if (!container || !isHorizontal) {
+      setScrollState((prev) => (prev === NO_SCROLL ? prev : NO_SCROLL))
       return
     }
 
-    const { scrollLeft, scrollWidth, clientWidth } = tabsListRef.current
-    const epsilon = 1
-    setCanScrollLeft(scrollLeft > epsilon)
-    setCanScrollRight(scrollLeft + clientWidth < scrollWidth - epsilon)
-  }, [orientation])
-
-  const scrollToTab = useCallback((direction: "left" | "right" | "start" | "end") => {
-    if (!tabsListRef.current) return
-
-    const container = tabsListRef.current
-    const scrollAmount = container.clientWidth * 0.7
-    const behavior = getScrollBehavior()
-
-    switch (direction) {
-      case "left":
-        container.scrollBy({ left: -scrollAmount, behavior })
-        break
-      case "right":
-        container.scrollBy({ left: scrollAmount, behavior })
-        break
-      case "start":
-        container.scrollTo({ left: 0, behavior })
-        break
-      case "end":
-        container.scrollTo({ left: container.scrollWidth, behavior })
-        break
+    // scrollLeft is 0 at the start edge in both directions but goes negative in RTL, so measure
+    // the distance from the start edge with Math.abs instead of assuming LTR.
+    const rtl = getComputedStyle(container).direction === "rtl"
+    const offset = Math.abs(container.scrollLeft)
+    const next: ScrollState = {
+      rtl,
+      start: offset > SCROLL_EPSILON,
+      end: offset + container.clientWidth < container.scrollWidth - SCROLL_EPSILON,
     }
+    setScrollState((prev) =>
+      prev.start === next.start && prev.end === next.end && prev.rtl === next.rtl ? prev : next
+    )
+  }, [isHorizontal])
+
+  const scrollTabs = useCallback((edge: "start" | "end") => {
+    const container = tabsListRef.current
+    if (!container) return
+
+    const rtl = getComputedStyle(container).direction === "rtl"
+    // Logical -> physical: "end" is rightwards in LTR and leftwards in RTL.
+    const sign = (edge === "end" ? 1 : -1) * (rtl ? -1 : 1)
+    container.scrollBy({ left: sign * container.clientWidth * SCROLL_STEP, behavior: getScrollBehavior() })
   }, [])
 
   const scrollToActiveTab = useCallback(() => {
-    if (!tabsListRef.current || orientation === "vertical") return
-
     const container = tabsListRef.current
-    const activeTabElement = container.querySelector(`[data-state="active"]`) as HTMLElement
+    if (!container || !isHorizontal) return
 
+    const activeTabElement = container.querySelector<HTMLElement>('[role="tab"][data-state="active"]')
     if (!activeTabElement) return
 
     const containerRect = container.getBoundingClientRect()
     const tabRect = activeTabElement.getBoundingClientRect()
-
-    const scrollLeft = container.scrollLeft
-    const tabLeft = tabRect.left - containerRect.left + scrollLeft
-    const tabRight = tabLeft + tabRect.width
-    const containerScrollLeft = scrollLeft
-    const containerScrollRight = scrollLeft + containerRect.width
-    const padding = 16
-
     const behavior = getScrollBehavior()
 
-    if (tabLeft < containerScrollLeft) {
-      container.scrollTo({ left: tabLeft - padding, behavior })
-    } else if (tabRight > containerScrollRight) {
-      container.scrollTo({ left: tabRight - containerRect.width + padding, behavior })
+    // Rect deltas are physical and direction-agnostic; scrollBy clamps to the scrollable range.
+    if (tabRect.left < containerRect.left) {
+      container.scrollBy({ left: tabRect.left - containerRect.left - SCROLL_PADDING, behavior })
+    } else if (tabRect.right > containerRect.right) {
+      container.scrollBy({ left: tabRect.right - containerRect.right + SCROLL_PADDING, behavior })
     }
-  }, [orientation])
-
-  const handleTouchStart = useCallback(() => {}, [])
-
-  const handleTouchMove = useCallback(() => {}, [])
-
-  const handleTouchEnd = useCallback(() => {}, [])
+  }, [isHorizontal])
 
   useEffect(() => {
-    requestAnimationFrame(() => checkScrollability())
-
     const container = tabsListRef.current
     if (!container) return
 
     const scrollOptions: AddEventListenerOptions = { passive: true }
     container.addEventListener("scroll", checkScrollability, scrollOptions)
+    checkScrollability()
+    // The container's own box is fixed by the layout, so also observe the list inside it:
+    // a label, badge or font change resizes the list without resizing the container.
     const resizeObserver = new ResizeObserver(checkScrollability)
     resizeObserver.observe(container)
+    if (container.firstElementChild) resizeObserver.observe(container.firstElementChild)
 
     return () => {
       container.removeEventListener("scroll", checkScrollability, scrollOptions)
       resizeObserver.disconnect()
     }
-  }, [checkScrollability, items.length])
+  }, [checkScrollability, tabItems.length])
 
   useEffect(() => {
-    const timeoutId = setTimeout(() => {
-      scrollToActiveTab()
-    }, 100)
-
-    return () => clearTimeout(timeoutId)
+    scrollToActiveTab()
   }, [currentValue, scrollToActiveTab])
 
-  const tabsProps = isControlled
-    ? {
-        value: currentValue,
-        onValueChange: handleValueChange,
-      }
-    : {
-        defaultValue: defaultValue ?? initialValue,
-        onValueChange: handleValueChange,
-      }
-
-  const isHorizontal = orientation === "horizontal"
-  const showIndicators = showScrollIndicators && isHorizontal && (canScrollLeft || canScrollRight)
-
-  if (!items || items.length === 0) {
+  if (tabItems.length === 0) {
     return null
   }
 
+  const showIndicators = showScrollIndicators && isHorizontal && (scrollState.start || scrollState.end)
+  const startLabel = scrollState.rtl ? i18n.tabs.scrollRight : i18n.tabs.scrollLeft
+  const endLabel = scrollState.rtl ? i18n.tabs.scrollLeft : i18n.tabs.scrollRight
+
+  const renderBadge = (item: IGRPTabItem, placement: "start" | "end") =>
+    showBadge && item.badgeContent !== undefined && badgePlacement === placement ? (
+      <IGRPBadge variant={item.badgeVariant} color={item.badgeColor} badgeClassName={item.badgeClassName}>
+        {item.badgeContent}
+      </IGRPBadge>
+    ) : null
+
   return (
     <Tabs
-      {...tabsProps}
       className={cn("w-full", orientation === "vertical" && "flex-row items-start", tabClassName)}
       orientation={orientation}
-      id={ref}
       {...restProps}
+      id={rootId}
+      value={currentValue}
+      onValueChange={handleValueChange}
     >
       <div
         className={cn(
@@ -293,115 +336,84 @@ function IGRPTabs({
           isHorizontal ? "w-full items-center" : "flex-col items-start self-start"
         )}
       >
-        {showIndicators && canScrollLeft && (
-          <Button
-            variant="ghost"
-            size="icon-sm"
-            className={cn(
-              "z-10 shrink-0 bg-background/80 shadow-md backdrop-blur-sm hover:bg-background",
-              scrollButtonClassName
-            )}
-            onClick={() => scrollToTab("left")}
-            aria-label={i18n.tabs.scrollLeft}
-            type="button"
-          >
-            <IGRPIcon iconName="ChevronLeft" size={12} />
-          </Button>
+        {showIndicators && (
+          <TabsScrollButton
+            label={startLabel}
+            iconName={scrollState.rtl ? "ChevronRight" : "ChevronLeft"}
+            disabled={!scrollState.start}
+            className={scrollButtonClassName}
+            onClick={() => scrollTabs("start")}
+          />
         )}
         <div
           ref={tabsListRef}
-          onTouchStart={handleTouchStart}
-          onTouchMove={handleTouchMove}
-          onTouchEnd={handleTouchEnd}
           className={cn(
             isHorizontal &&
-              "scrollbar-hide [scrollbar-width:none] overflow-x-auto scroll-smooth [-ms-overflow-style:none] [&::-webkit-scrollbar]:hidden",
-            isHorizontal && "flex-1",
+              "flex-1 overflow-x-auto [-ms-overflow-style:none] [scrollbar-width:none] [&::-webkit-scrollbar]:hidden",
             !isHorizontal && "w-full"
           )}
         >
           <TabsList
+            variant={variant === "underline" ? "line" : "default"}
             className={cn(
-              orientation === "vertical" && "h-fit flex-col",
-              isHorizontal && "w-max",
               // The primitive's upstream `group-data-horizontal/tabs:h-9` is sized for
               // shadcn's `py-1` triggers; ours are `py-1.5` and the underline/cards
               // variants rely on content height. Same modifier, so cn() drops the h-9.
               isHorizontal && "group-data-horizontal/tabs:h-auto",
               tabListVariants({ variant, fullWidth }),
+              // `w-max`, applied after the variant's `w-fit`, lets the list grow past the container
+              // so the tabs scroll inside it; a full-width list fills the container but never
+              // shrinks below its content.
+              isHorizontal && (fullWidth === true ? "min-w-max" : "w-max"),
               fullWidth === true && orientation === "vertical" && "w-fit",
               tabListClassName
             )}
           >
-            {items.map((item) => (
+            {tabItems.map((item) => (
               <TabsTrigger
                 key={item.value}
                 value={item.value}
                 disabled={item.disabled}
+                aria-label={item.ariaLabel}
                 className={cn(
                   tabTriggerVariants({ variant }),
-                  orientation === "vertical" && "w-full justify-start",
-                  orientation === "vertical" &&
-                    variant === "underline" &&
-                    "relative after:absolute after:inset-y-0 after:right-0 after:-mr-1 after:h-auto after:w-0.5",
                   iconPlacement === "top" && "flex-col",
-                  tabTriggerClassName
+                  tabTriggerClassName,
+                  item.className
                 )}
               >
-                {showBadge && item.badgeContent !== undefined && badgePlacement === "start" && (
-                  <IGRPBadge
-                    variant={item.badgeVariant}
-                    color={item.badgeColor}
-                    badgeClassName={cn(item.badgeClassName)}
-                  >
-                    {item.badgeContent}
-                  </IGRPBadge>
-                )}
+                {renderBadge(item, "start")}
 
-                {showIcon && item.icon && iconPlacement === "start" && <IGRPIcon iconName={item.icon} />}
-
-                {showIcon && item.icon && iconPlacement === "top" && <IGRPIcon iconName={item.icon} />}
+                {showIcon && item.icon && iconPlacement !== "end" && <IGRPIcon iconName={item.icon} />}
 
                 {item.label && <span>{item.label}</span>}
 
                 {showIcon && item.icon && iconPlacement === "end" && <IGRPIcon iconName={item.icon} />}
 
-                {showBadge && item.badgeContent !== undefined && badgePlacement === "end" && (
-                  <IGRPBadge
-                    variant={item.badgeVariant}
-                    color={item.badgeColor}
-                    badgeClassName={cn(item.badgeClassName)}
-                  >
-                    {item.badgeContent}
-                  </IGRPBadge>
-                )}
+                {renderBadge(item, "end")}
               </TabsTrigger>
             ))}
           </TabsList>
         </div>
-        {showIndicators && canScrollRight && (
-          <Button
-            variant="ghost"
-            size="icon-sm"
-            className={cn(
-              "z-10 shrink-0 bg-background/80 shadow-md backdrop-blur-sm hover:bg-background",
-              scrollButtonClassName
-            )}
-            onClick={() => scrollToTab("right")}
-            aria-label={i18n.tabs.scrollRight}
-            type="button"
-          >
-            <IGRPIcon iconName="ChevronRight" size={12} />
-          </Button>
+        {showIndicators && (
+          <TabsScrollButton
+            label={endLabel}
+            iconName={scrollState.rtl ? "ChevronLeft" : "ChevronRight"}
+            disabled={!scrollState.end}
+            className={scrollButtonClassName}
+            onClick={() => scrollTabs("end")}
+          />
         )}
       </div>
 
-      {items.map((item) => (
+      {tabItems.map((item) => (
         <TabsContent
           key={item.value}
           value={item.value}
+          forceMount={item.keepMounted ? true : undefined}
           className={cn(
-            "w-full rounded-md border border-transparent p-4",
+            "w-full rounded-md border border-transparent p-4 focus-visible:ring-[3px] focus-visible:ring-ring/50",
+            item.keepMounted && "data-[state=inactive]:hidden",
             contentBorder === true && "border-border",
             tabContentClassName
           )}

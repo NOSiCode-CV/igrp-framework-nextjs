@@ -80,6 +80,20 @@ IGRP_AUTH_POST_LOGOUT_ALLOWED_ORIGINS=https://portal.example
 > harmless — `next-auth` still uses it for its own server-side calls — but it no
 > longer influences anything here.
 
+> **Post-login redirects and `basePath`.** next-auth v4 hands the `redirect`
+> callback a `baseUrl` that is the bare **origin** (`https://host`) — the path of
+> `NEXTAUTH_URL` (your basePath and `/api/auth`) is already stripped. The default
+> callback therefore re-derives the basePath from `NEXTAUTH_URL` (its path minus
+> `/api/auth`), falling back to `NEXT_PUBLIC_BASE_PATH` when `NEXTAUTH_URL` has no
+> path; if the two disagree it warns once and uses `NEXTAUTH_URL`. Keep them
+> aligned. A relative `callbackUrl` may or may not already carry the basePath — it
+> is prefixed exactly once — and a same-origin absolute URL **outside** the
+> basePath is sent to the app home instead of followed.
+>
+> If you pass your own `callbacks.redirect` it **replaces** all of this, and you
+> receive that origin-only `baseUrl`: re-add the basePath yourself and keep the
+> open-redirect guards. Prefer the default.
+
 ### There is no env var for the session-poll interval
 
 `IGRP_SESSION_REFETCH_INTERVAL` is **not read by anything**. If you have it set,

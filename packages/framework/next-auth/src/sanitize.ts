@@ -62,13 +62,39 @@ export function getLoginPath(baseUrl: string, path = '/login'): string {
  *
  * NextAuth v4 requires `NEXTAUTH_URL` to point at the auth API root, not the
  * app root, when the app uses a `basePath` — e.g.
- * `https://host/apps/template/api/auth`. That same string is what NextAuth
- * hands the `redirect` callback as `baseUrl`, so concatenating an app path
- * onto it yields a NextAuth API URL instead of an app page. Use this to get
- * back to the app origin before building any user-facing redirect.
+ * `https://host/apps/template/api/auth`. Use this on `NEXTAUTH_URL` (or any
+ * URL that may carry the suffix) to get back to the app base before building a
+ * user-facing redirect.
+ *
+ * NOTE: this is NOT what next-auth hands the `redirect` callback. Its
+ * `baseUrl` argument is `url.origin` — protocol + host only, the basePath
+ * already gone — so the basePath must be re-derived from `NEXTAUTH_URL` /
+ * `NEXT_PUBLIC_BASE_PATH`, not read from `baseUrl`.
  */
 export function stripAuthApiSuffix(baseUrl: string): string {
   return baseUrl.replace(/\/+$/, '').replace(/\/api\/auth$/, '');
+}
+
+/**
+ * Removes a leading `basePath` from a path, matching on a SEGMENT boundary.
+ *
+ * `basePath` must be normalised (leading `/`, no trailing `/`, or `''`).
+ * Returns the remainder, always starting with `/` (`/apps/core` → `/`,
+ * `/apps/core?a=1` → `/?a=1`), or `null` when `path` is not under `basePath`
+ * — so `/apps/core-other` is NOT under `/apps/core`. An empty `basePath`
+ * returns `path` unchanged.
+ *
+ * Applied once, deliberately: callers use it to make a prefixed and an
+ * unprefixed path converge before re-prefixing, not to unwrap nesting.
+ */
+export function stripBasePath(path: string, basePath: string): string | null {
+  if (!basePath) return path;
+  if (path === basePath) return '/';
+  if (!path.startsWith(basePath)) return null;
+  const next = path.charAt(basePath.length);
+  if (next === '/') return path.slice(basePath.length);
+  if (next === '?' || next === '#') return `/${path.slice(basePath.length)}`;
+  return null;
 }
 
 /**

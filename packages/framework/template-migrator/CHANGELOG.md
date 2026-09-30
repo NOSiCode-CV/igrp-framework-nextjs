@@ -1,5 +1,12 @@
 # @igrp/template-migrator
 
+## 0.2.0-beta.3
+
+### Patch Changes
+
+- 2f8e78b: - New template migration: `/login` signs the user in silently (OIDC `prompt=none`) when the IdP session is still alive, and NextAuth error redirects keep the app's basePath.
+  - New migrations pin the latest framework versions.
+
 ## 0.2.0-beta.2
 
 ### Patch Changes

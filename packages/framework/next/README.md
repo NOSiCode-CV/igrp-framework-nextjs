@@ -30,11 +30,11 @@ pnpm add @igrp/framework-next
 
 #### `IGRPRootLayout` props
 
-| Prop       | Type                | Required | Default | Purpose                                                                 |
-| ---------- | ------------------- | -------- | ------- | ----------------------------------------------------------------------- |
-| `config`   | `IGRPConfigArgs`    | yes      | —       | Layout, session, API and sync configuration (from `igrpBuildConfig`).   |
-| `children` | `React.ReactNode`   | yes      | —       | The application tree.                                                   |
-| `lang`     | `string`            | no       | `'pt'`  | BCP-47 language written to the server-rendered `<html lang>` attribute. |
+| Prop       | Type              | Required | Default | Purpose                                                                 |
+| ---------- | ----------------- | -------- | ------- | ----------------------------------------------------------------------- |
+| `config`   | `IGRPConfigArgs`  | yes      | —       | Layout, session, API and sync configuration (from `igrpBuildConfig`).   |
+| `children` | `React.ReactNode` | yes      | —       | The application tree.                                                   |
+| `lang`     | `string`          | no       | `'pt'`  | BCP-47 language written to the server-rendered `<html lang>` attribute. |
 
 `lang` is optional and defaults to `'pt'`, so apps that don't pass it render exactly as before.
 

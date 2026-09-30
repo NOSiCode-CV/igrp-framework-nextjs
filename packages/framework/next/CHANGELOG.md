@@ -6,8 +6,9 @@
 
 - f30c0df: `IGRPRootLayout` accepts an optional `lang` prop that sets the server-rendered `<html lang>`, so apps can render the document in the user's resolved locale. Defaults to `"pt"`, keeping the previous output for apps that don't pass it.
 - 8221c21: Fix co-hosted apps losing their sessions when one app on the same host has no `NEXT_PUBLIC_BASE_PATH`. That root-path app used the stock `next-auth.session-token` name, which is a prefix of every basePath app's cookie. NextAuth reads session cookies by prefix, so the root app glued the other apps' cookies onto its own and failed with `Invalid Compact JWE` (`JWT_SESSION_ERROR`). Its session route then expired all of them, so switching between any two apps sent users back to `/login`. A root-path app now writes `next-auth.session-token~`, which no other app's name starts with.
-  
+
   ⚠️ Deploy note: users of root-path apps are signed out once, and their old stock-named cookie lingers until it expires (`igrpDeleteAuthCookies()` sweeps it). Every app sharing a host must be upgraded, because one app still on the stock name keeps breaking the others.
+
 - Updated dependencies [8221c21]
   - @igrp/framework-next-auth@0.2.0-beta.3
   - @igrp/framework-next-types@0.2.0-beta.3

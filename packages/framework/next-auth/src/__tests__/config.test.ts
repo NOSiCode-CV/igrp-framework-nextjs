@@ -739,10 +739,13 @@ describe('withIGRPAuth — cookie isolation', () => {
     expect(nameB).toBe('next-auth.session-token.apps-b~');
   });
 
-  it('leaves NextAuth defaults alone for a root-path app', async () => {
+  it('terminates a root-path app’s names so they cannot prefix a basePath app’s', async () => {
+    // The stock `next-auth.session-token` is a prefix of every scoped name, so
+    // a co-hosted root app collected — and, on the decode failure, deleted —
+    // every other app's session cookie.
     const withIGRPAuth = await getFactory();
     const instance = withIGRPAuth({ env: VALID_ENV });
-    expect(instance.authOptions.cookies).toBeUndefined();
+    expect(instance.authOptions.cookies!.sessionToken!.name).toBe('next-auth.session-token~');
   });
 
   it('uses the __Secure- prefix when NEXTAUTH_URL is https', async () => {
@@ -818,10 +821,21 @@ describe('withIGRPAuth — secure-cookie derivation', () => {
     expect(instance.authOptions.cookies!.sessionToken!.name).not.toContain('__Secure-');
   });
 
-  it('leaves useSecureCookies unset for a root-path app', async () => {
+  it('pins useSecureCookies for a root-path app too, since it now overrides names', async () => {
+    const withIGRPAuth = await getFactory();
+    const https = withIGRPAuth({
+      env: { ...VALID_ENV, NEXTAUTH_URL: 'https://h/api/auth' },
+    });
+    expect(https.authOptions.useSecureCookies).toBe(true);
+    expect(https.authOptions.cookies!.sessionToken!.name).toBe(
+      '__Secure-next-auth.session-token~',
+    );
+  });
+
+  it('leaves useSecureCookies unset when isolation is opted out of', async () => {
     // No cookie override there, so next-auth keeps deriving both sides itself.
     const withIGRPAuth = await getFactory();
-    const instance = withIGRPAuth({ env: VALID_ENV });
+    const instance = withIGRPAuth({ env: VALID_ENV, cookieIsolation: 'none' });
     expect(instance.authOptions.useSecureCookies).toBeUndefined();
     expect(instance.authOptions.cookies).toBeUndefined();
   });

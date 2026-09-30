@@ -140,8 +140,16 @@ function isLosslessSlug(canonical: string): boolean {
 
 /**
  * Turns a basePath into a cookie-name-safe suffix: `/apps/template` →
- * `.apps-template~`. Returns `''` for an empty or root basePath, which is what
- * keeps single-app deployments on the stock NextAuth names.
+ * `.apps-template~`.
+ *
+ * An empty or root basePath gets the bare terminator, `~`, rather than no
+ * suffix. The stock `next-auth.session-token` is a PREFIX of every scoped
+ * name, so a root-path app sharing a host with basePath apps — one without
+ * `NEXT_PUBLIC_BASE_PATH` next to `/apps/a` and `/apps/b` — collected all of
+ * their cookies as its own chunks, failed with "Invalid Compact JWE", and then
+ * expired every one of them: NextAuth's session route calls
+ * `SessionStore#clean()` on a decode error. `next-auth.session-token~` is
+ * neither a prefix of `next-auth.session-token.apps-a~` nor prefixed by it.
  *
  * A basePath whose slug is ambiguous (see {@link isLosslessSlug}) additionally
  * carries a short hash of the original path — `/apps/a-b` → `.apps-a-b.9f2b1c04~`
@@ -152,14 +160,14 @@ function isLosslessSlug(canonical: string): boolean {
  */
 export function basePathCookieSuffix(basePath: string | undefined): string {
   const trimmed = (basePath ?? '').trim();
-  if (!trimmed || trimmed === '/') return '';
+  if (!trimmed || trimmed === '/') return SUFFIX_TERMINATOR;
   const canonical = trimmed.replace(/^\/+|\/+$/g, '');
   const slug = trimmed
     .replace(/^\/+|\/+$/g, '')
     .replace(/[^a-zA-Z0-9]+/g, '-')
     .replace(/^-+|-+$/g, '')
     .toLowerCase();
-  if (!slug) return '';
+  if (!slug) return SUFFIX_TERMINATOR;
   // Hash the ORIGINAL basePath, not the slug — the slug is exactly the lossy
   // value we are disambiguating, so hashing it would collide identically.
   const disambiguator = isLosslessSlug(canonical)
@@ -199,9 +207,9 @@ export function sessionCookieName(basePath: string | undefined, secure: boolean)
 /**
  * Full NextAuth `cookies` config with every cookie name scoped to `basePath`.
  *
- * Returns `undefined` when there is no basePath — the single-app case, where
- * the stock names are already unambiguous and overriding them would log
- * everyone out for nothing.
+ * A root-path app is scoped too (names end in a bare `~`, see
+ * {@link basePathCookieSuffix}): it cannot know whether basePath apps share its
+ * host, and when they do, the stock names are what breaks all of them.
  *
  * All six cookies are scoped, not just the session token: two apps sharing one
  * `next-auth.csrf-token` fail each other's sign-in POSTs with a CSRF mismatch,
@@ -214,10 +222,8 @@ export function sessionCookieName(basePath: string | undefined, secure: boolean)
 export function buildAuthCookies(
   basePath: string | undefined,
   secure: boolean,
-): AuthCookieSet | undefined {
+): AuthCookieSet {
   const suffix = basePathCookieSuffix(basePath);
-  if (!suffix) return undefined;
-
   const securePrefix = secure ? SECURE_COOKIE_PREFIX : '';
   const hostPrefix = secure ? HOST_COOKIE_PREFIX : '';
   const base = { httpOnly: true, sameSite: 'lax', path: '/', secure } as const;

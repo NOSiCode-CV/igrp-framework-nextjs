@@ -68,6 +68,19 @@ describe('access-token recovery under a basePath', () => {
     });
   });
 
+  it('asks for the terminated root name when there is no basePath', async () => {
+    // A root-path app co-hosted with basePath apps: the jar holds another
+    // app's cookie too, and the stock name would prefix-match it.
+    cookiesGetAll.mockReturnValue([
+      { name: 'next-auth.session-token~', value: 'opaque' },
+      { name: SCOPED_COOKIE, value: 'someone-elses' },
+    ]);
+
+    await igrpEnsureAccessClientConfig();
+
+    expect(getToken.mock.calls[0]![0]).toMatchObject({ cookieName: 'next-auth.session-token~' });
+  });
+
   it('leaves getToken to derive the stock name when there is no basePath', async () => {
     cookiesGetAll.mockReturnValue([{ name: 'next-auth.session-token', value: 'opaque' }]);
 

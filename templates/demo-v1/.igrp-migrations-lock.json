@@ -313,6 +313,12 @@
       "appliedAt": "2026-09-30T00:00:00.000Z",
       "cliVersion": "0.2.0-beta.2",
       "manifestHash": "f9b089f3e7c66966"
+    },
+    {
+      "id": "52-framework-0-2-0-beta-4",
+      "appliedAt": "2026-09-30T00:00:00.000Z",
+      "cliVersion": "0.2.0-beta.3",
+      "manifestHash": "cbec2b5b1954bb5d"
     }
   ]
 }

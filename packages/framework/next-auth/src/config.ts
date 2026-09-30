@@ -274,10 +274,12 @@ export type IGRPAuthOptions = {
    * - `"basePath"` (default) — every NextAuth cookie name is suffixed with a
    *   slug derived from `NEXT_PUBLIC_BASE_PATH`, so two IGRP apps on the same
    *   host under `/apps/a` and `/apps/b` stop overwriting each other's session.
-   * - `"none"` — keep NextAuth's stock names.
-   *
-   * Only takes effect when a basePath is actually set; a single app at the
-   * host root is unaffected either way.
+   *   An app at the host root gets a bare `~` suffix
+   *   (`next-auth.session-token~`): the stock name is a prefix of every
+   *   scoped one, and NextAuth reads session cookies by prefix.
+   * - `"none"` — keep NextAuth's stock names. Only safe when no other IGRP app
+   *   shares the host: a stock-named app reads, and on a decode error deletes,
+   *   every co-hosted app's session cookie.
    *
    * NOTE: switching an existing deployment from `"none"` to `"basePath"` (or
    * changing the basePath) renames the cookie, which signs every current
@@ -924,8 +926,8 @@ export function withIGRPAuth(options: IGRPAuthOptions = {}): IGRPAuthInstance {
     // so they are always consistent.
     providers: resolvedProvider ? [resolvedProvider] : [],
     secret,
-    // Scoped cookie names when the app runs under a basePath — see ./cookies.
-    // Absent (undefined) for a root-path app, leaving NextAuth's defaults.
+    // Scoped cookie names — see ./cookies. A root-path app is scoped too (a
+    // bare `~` suffix); absent only under `cookieIsolation: 'none'`.
     //
     // `useSecureCookies` is pinned to the SAME value used to build those names.
     // The long-standing note below says not to set it explicitly, because doing
@@ -933,7 +935,7 @@ export function withIGRPAuth(options: IGRPAuthOptions = {}): IGRPAuthInstance {
     // `getToken`. Once we override the names we are already committed to a
     // scheme decision, so stating it makes both sides agree by construction
     // rather than by both happening to derive it the same way. Only set
-    // alongside `cookies`, so the no-basePath path behaves exactly as before.
+    // alongside `cookies`, so `cookieIsolation: 'none'` behaves as before.
     ...(authCookies ? { cookies: authCookies, useSecureCookies: secureCookies } : {}),
     ...(pages ? { pages } : {}),
     ...(sessionConfig ? { session: sessionConfig } : {}),

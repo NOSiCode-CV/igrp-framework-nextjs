@@ -27,6 +27,13 @@ cosmetic".
 > This is the second rename in as many changes, which strengthens the closing
 > argument: **do the sweep before the next basePath-affecting cookie change.**
 
+> **2026-09-30 — a third rename: root-path apps.** An app without
+> `NEXT_PUBLIC_BASE_PATH` now writes `next-auth.session-token~` instead of the
+> stock name, because the stock name prefixed every co-hosted app's cookie
+> (see `basePathCookieSuffix`). Each such app orphans its stock-named cookie
+> once. The orphan is harmless to the fixed apps, none of which read it by
+> prefix any more, but it adds header weight until it expires. Same remediation.
+
 ### Symptom
 
 After upgrading an app that sets `NEXT_PUBLIC_BASE_PATH`, every existing user's

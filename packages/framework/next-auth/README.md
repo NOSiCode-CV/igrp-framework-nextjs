@@ -118,8 +118,10 @@ When `NEXT_PUBLIC_BASE_PATH` is set, every NextAuth cookie name is suffixed with
 a slug derived from it, closed by a `~`
 (`next-auth.session-token.apps-template~`). Without it, two IGRP apps on the
 same host under `/apps/a` and `/apps/b` write the _same_ cookie name at the same
-path and overwrite each other's sessions. Apps at the host root keep the stock
-names.
+path and overwrite each other's sessions. Apps at the host root get a bare `~`
+(`next-auth.session-token~`): the stock name is a prefix of every scoped name,
+so a root app sharing a host with basePath apps would read their cookies as its
+own chunks, fail with `Invalid Compact JWE`, and then delete all of them.
 
 The trailing `~` is load-bearing. NextAuth reassembles chunked cookies by
 collecting every name that _starts with_ the configured one, so without a
@@ -132,7 +134,10 @@ the suffix set prefix-free.
 > automatically (NextAuth only clears names matching the one it is configured
 > with) and lingers until it expires. To sweep it, call
 > `igrpDeleteAuthCookies()` from `@igrp/framework-next` — it matches by
-> basename, so it removes both the old and new forms.
+> basename, so it removes both the old and new forms. The same applies to a
+> root-path app when it picks up the bare `~`. Every app on a shared host must
+> be on a release with that change: one stock-named app left on the domain still
+> reads, and deletes, everyone else's session cookie.
 
 The `Secure` flag (and the `__Secure-` / `__Host-` prefixes) follows the same
 signal `next-auth` uses: `NEXTAUTH_URL`'s scheme, else https when `VERCEL` /
@@ -169,7 +174,7 @@ Beyond `provider`, `env`, `secret`, `pages`, `session` and `callbacks`:
 | `middleware.loginUrl` | `/login`              | Path `getLoginRedirectUrl()` resolves.                                                                                                                               |
 | `middleware.matcher`  | see `DEFAULT_MATCHER` | Matcher re-exported as `auth.config`. Matchers are basePath-_relative_.                                                                                              |
 | `tokenRecoveryStore`  | in-memory             | Shared store for rotated-refresh-token recovery. Supply a cross-replica implementation for multi-pod deployments without sticky routing; the default is per-process. |
-| `cookieIsolation`     | `'basePath'`          | `'none'` keeps NextAuth's stock cookie names. Only has an effect when a basePath is set.                                                                             |
+| `cookieIsolation`     | `'basePath'`          | `'none'` keeps NextAuth's stock cookie names. Only safe when no other IGRP app shares the host.                                                                      |
 | `secureCookies`       | derived               | Overrides the `Secure` flag derivation described above.                                                                                                              |
 
 ### Middleware primitives

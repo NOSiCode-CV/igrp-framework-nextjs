@@ -74,9 +74,10 @@ function scopedCookieNameOption(
   cookieNames: string[],
   secureCookie: boolean | undefined,
 ): { cookieName?: string } {
+  // No early return for an empty basePath: a root-path app's scoped name is
+  // `next-auth.session-token~`, and the stock name getToken would otherwise
+  // derive is a prefix of every co-hosted app's cookie.
   const basePath = process.env.NEXT_PUBLIC_BASE_PATH ?? '';
-  if (!basePath) return {};
-
   const scoped = sessionCookieName(basePath, secureCookie ?? resolveSecureCookiesFlag(process.env));
   return cookieNames.some((name) => name.startsWith(scoped)) ? { cookieName: scoped } : {};
 }

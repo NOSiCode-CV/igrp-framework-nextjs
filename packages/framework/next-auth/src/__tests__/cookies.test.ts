@@ -31,19 +31,24 @@ describe('basePathCookieSuffix', () => {
     }
   });
 
-  it('returns empty for the root or an absent basePath', () => {
-    expect(basePathCookieSuffix('')).toBe('');
-    expect(basePathCookieSuffix('/')).toBe('');
-    expect(basePathCookieSuffix(undefined)).toBe('');
-    expect(basePathCookieSuffix('   ')).toBe('');
+  it('returns the bare terminator for the root or an absent basePath', () => {
+    expect(basePathCookieSuffix('')).toBe('~');
+    expect(basePathCookieSuffix('/')).toBe('~');
+    expect(basePathCookieSuffix(undefined)).toBe('~');
+    expect(basePathCookieSuffix('   ')).toBe('~');
   });
 });
 
 describe('buildAuthCookies', () => {
-  it('returns undefined without a basePath, leaving NextAuth defaults in place', () => {
-    expect(buildAuthCookies('', true)).toBeUndefined();
-    expect(buildAuthCookies('/', false)).toBeUndefined();
-    expect(buildAuthCookies(undefined, true)).toBeUndefined();
+  it('terminates the names of a root-path app too', () => {
+    for (const basePath of ['', '/', undefined]) {
+      const cookies = buildAuthCookies(basePath, false);
+      expect(cookies.sessionToken.name).toBe('next-auth.session-token~');
+      expect(cookies.csrfToken.name).toBe('next-auth.csrf-token~');
+    }
+    expect(buildAuthCookies('', true).sessionToken.name).toBe(
+      '__Secure-next-auth.session-token~',
+    );
   });
 
   it('scopes EVERY cookie, not just the session token', () => {
@@ -100,9 +105,36 @@ describe('sessionCookieName', () => {
     }
   });
 
-  it('falls back to the stock name without a basePath', () => {
-    expect(sessionCookieName('', false)).toBe(SESSION_COOKIE_BASENAME);
-    expect(sessionCookieName(undefined, true)).toBe(`__Secure-${SESSION_COOKIE_BASENAME}`);
+  it('terminates the stock name without a basePath', () => {
+    expect(sessionCookieName('', false)).toBe(`${SESSION_COOKIE_BASENAME}~`);
+    expect(sessionCookieName(undefined, true)).toBe(`__Secure-${SESSION_COOKIE_BASENAME}~`);
+  });
+});
+
+describe('sessionCookieName — a root-path app co-hosted with basePath apps', () => {
+  // Regression: the root app kept the stock `next-auth.session-token`, which is
+  // a PREFIX of every basePath app's name. NextAuth's SessionStore collects by
+  // startsWith, so the root app glued every other app's cookie onto its own,
+  // failed with "Invalid Compact JWE" (JWT_SESSION_ERROR), and — because the
+  // session route calls SessionStore#clean() on that error — expired every
+  // co-hosted app's session on each poll. Switching between ANY two apps on
+  // the domain then landed on /login.
+  const basePaths = ['/apps/a', '/apps/hr', '/Apps/My_App', '/rh/v2'];
+
+  it('never prefixes, nor is prefixed by, a basePath app’s name', () => {
+    for (const secure of [true, false]) {
+      const root = sessionCookieName('', secure);
+      for (const basePath of basePaths) {
+        const scoped = sessionCookieName(basePath, secure);
+        expect(scoped.startsWith(root), `${scoped} must not start with ${root}`).toBe(false);
+        expect(root.startsWith(scoped), `${root} must not start with ${scoped}`).toBe(false);
+      }
+    }
+  });
+
+  it('still chunks cleanly', () => {
+    const root = sessionCookieName('', false);
+    expect(`${root}.0`.startsWith(root)).toBe(true);
   });
 });
 

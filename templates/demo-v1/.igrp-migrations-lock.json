@@ -301,6 +301,12 @@
       "appliedAt": "2026-09-28T00:00:00.000Z",
       "cliVersion": "0.2.0-beta.1",
       "manifestHash": "86a2da0c04a869d4"
+    },
+    {
+      "id": "50-silent-sso-login",
+      "appliedAt": "2026-09-30T00:00:00.000Z",
+      "cliVersion": "0.2.0-beta.2",
+      "manifestHash": "8ffb14a634fe9d82"
     }
   ]
 }

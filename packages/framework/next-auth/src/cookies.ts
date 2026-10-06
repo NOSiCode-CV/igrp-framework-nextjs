@@ -138,6 +138,16 @@ function isLosslessSlug(canonical: string): boolean {
   return /^[a-z0-9]+(?:\/[a-z0-9]+)*$/.test(canonical);
 }
 
+/** `/apps/My_App/` → `apps-my-app`; empty for a root or absent basePath. */
+function basePathSlug(basePath: string | undefined): string {
+  return (basePath ?? '')
+    .trim()
+    .replace(/^\/+|\/+$/g, '')
+    .replace(/[^a-zA-Z0-9]+/g, '-')
+    .replace(/^-+|-+$/g, '')
+    .toLowerCase();
+}
+
 /**
  * Turns a basePath into a cookie-name-safe suffix: `/apps/template` →
  * `.apps-template~`.
@@ -162,11 +172,7 @@ export function basePathCookieSuffix(basePath: string | undefined): string {
   const trimmed = (basePath ?? '').trim();
   if (!trimmed || trimmed === '/') return SUFFIX_TERMINATOR;
   const canonical = trimmed.replace(/^\/+|\/+$/g, '');
-  const slug = trimmed
-    .replace(/^\/+|\/+$/g, '')
-    .replace(/[^a-zA-Z0-9]+/g, '-')
-    .replace(/^-+|-+$/g, '')
-    .toLowerCase();
+  const slug = basePathSlug(basePath);
   if (!slug) return SUFFIX_TERMINATOR;
   // Hash the ORIGINAL basePath, not the slug — the slug is exactly the lossy
   // value we are disambiguating, so hashing it would collide identically.
@@ -174,6 +180,68 @@ export function basePathCookieSuffix(basePath: string | undefined): string {
     ? ''
     : `${HASH_SEPARATOR}${shortHash(canonical)}`;
   return `.${slug}${disambiguator}${SUFFIX_TERMINATOR}`;
+}
+
+/**
+ * Cookie `Path` for an app's auth cookies: its basePath (`/apps/template`), or
+ * `/` for a root-path app.
+ *
+ * ## Why the path is scoped, not just the name
+ *
+ * Scoping only the NAME keeps apps from overwriting each other, but at
+ * `Path=/` the browser still sends every co-hosted app's session cookie on
+ * every request to the host — to every other app, and to the IdP when it is
+ * served from the same host (`/auth/...`). A session cookie holding an access
+ * token, id_token and refresh token is routinely 2–4 KB, chunked above that, so
+ * a handful of apps tips the request over the proxy's header ceiling (nginx
+ * `large_client_header_buffers`, 8 KB by default). The visible symptom is the
+ * RP-initiated logout: the IdP's end-session GET carries the id_token in its
+ * URL on top of that Cookie header, and fails with `431` or, over HTTP/2,
+ * `ERR_HTTP2_PROTOCOL_ERROR`.
+ *
+ * At `Path=<basePath>` each app's cookies reach only that app's own routes —
+ * including `<basePath>/api/auth/*`, where NextAuth reads and writes them.
+ * RFC 6265 path-matching requires a `/` (or the end) after the prefix, so
+ * `/apps/hr` never matches `/apps/hr-admin`.
+ *
+ * Must equal Next's `basePath` exactly (it is case-sensitive), which is why it
+ * is derived from the same `NEXT_PUBLIC_BASE_PATH` and only normalised for
+ * stray slashes.
+ */
+export function basePathCookiePath(basePath: string | undefined): string {
+  const canonical = (basePath ?? '').trim().replace(/^\/+|\/+$/g, '');
+  return canonical ? `/${canonical}` : '/';
+}
+
+/**
+ * Marker that path-scoped cookie names carry before the terminator:
+ * `.apps-template~` → `.apps-template_p~`.
+ *
+ * WHY a rename at all: without one, an existing user's browser would hold two
+ * cookies with the SAME name — the old one at `Path=/` and the new one at
+ * `Path=<basePath>`. Both are sent, the request-cookie parser keeps only one of
+ * them per name (the `Path=/` copy, which comes last), and for a chunked token
+ * NextAuth could even reassemble `.0` from one copy with `.1` from the other.
+ * A distinct name makes the two generations invisible to each other; the old
+ * one is then expired by {@link staleAuthCookies}.
+ *
+ * `_` can occur neither in a slug (`[a-z0-9-]`) nor in the hash tail
+ * (`.` + hex), so the marker cannot collide with any other app's name, old or
+ * new, and the set stays prefix-free: every name still ends in the single
+ * {@link SUFFIX_TERMINATOR}. A replica still on the previous version reads by
+ * the prefix `.apps-template~`, which `.apps-template_p~` does not start with,
+ * so a rolling deploy cannot glue the two generations together either.
+ *
+ * Root-path apps are left as they are: their path stays `/`, so there is
+ * nothing to separate and no reason to sign their users out.
+ */
+const PATH_SCOPE_MARKER = '_p';
+
+/** Name suffix for the path-scoped auth cookies of `basePath`. */
+export function authCookieSuffix(basePath: string | undefined): string {
+  const suffix = basePathCookieSuffix(basePath);
+  if (basePathCookiePath(basePath) === '/') return suffix;
+  return `${suffix.slice(0, -SUFFIX_TERMINATOR.length)}${PATH_SCOPE_MARKER}${SUFFIX_TERMINATOR}`;
 }
 
 /** Shape of one NextAuth v4 cookie definition, restated to avoid importing `next-auth`. */
@@ -201,7 +269,7 @@ export type AuthCookieSet = {
 /** The session-cookie name for a given basePath / scheme. */
 export function sessionCookieName(basePath: string | undefined, secure: boolean): string {
   const prefix = secure ? SECURE_COOKIE_PREFIX : '';
-  return `${prefix}${SESSION_COOKIE_BASENAME}${basePathCookieSuffix(basePath)}`;
+  return `${prefix}${SESSION_COOKIE_BASENAME}${authCookieSuffix(basePath)}`;
 }
 
 /**
@@ -215,45 +283,150 @@ export function sessionCookieName(basePath: string | undefined, secure: boolean)
  * `next-auth.csrf-token` fail each other's sign-in POSTs with a CSRF mismatch,
  * and a shared `next-auth.pkce.code_verifier` breaks concurrent logins.
  *
- * Options mirror NextAuth v4's own defaults so nothing else about cookie
- * behaviour changes. `__Host-` is deliberately kept for the CSRF cookie only
- * (as upstream does) — it mandates `path: "/"` and no `Domain`.
+ * Every cookie except CSRF is also confined to the app's path
+ * ({@link basePathCookiePath}) and carries the path-scope marker
+ * ({@link authCookieSuffix}). CSRF stays at `Path=/` under its previous name:
+ * `__Host-` (as upstream uses it) mandates `path: "/"` and no `Domain`, and the
+ * cookie is a few dozen bytes, so it is not what fills the header.
+ *
+ * Other options mirror NextAuth v4's own defaults so nothing else about cookie
+ * behaviour changes.
  */
 export function buildAuthCookies(
   basePath: string | undefined,
   secure: boolean,
 ): AuthCookieSet {
-  const suffix = basePathCookieSuffix(basePath);
+  const suffix = authCookieSuffix(basePath);
+  const csrfSuffix = basePathCookieSuffix(basePath);
   const securePrefix = secure ? SECURE_COOKIE_PREFIX : '';
   const hostPrefix = secure ? HOST_COOKIE_PREFIX : '';
-  const base = { httpOnly: true, sameSite: 'lax', path: '/', secure } as const;
+  const scoped = {
+    httpOnly: true,
+    sameSite: 'lax',
+    path: basePathCookiePath(basePath),
+    secure,
+  } as const;
+  const root = { httpOnly: true, sameSite: 'lax', path: '/', secure } as const;
 
   return {
     sessionToken: {
       name: `${securePrefix}next-auth.session-token${suffix}`,
-      options: { ...base },
+      options: { ...scoped },
     },
     callbackUrl: {
       name: `${securePrefix}next-auth.callback-url${suffix}`,
-      options: { ...base },
+      options: { ...scoped },
     },
     csrfToken: {
-      name: `${hostPrefix}next-auth.csrf-token${suffix}`,
-      options: { ...base },
+      name: `${hostPrefix}next-auth.csrf-token${csrfSuffix}`,
+      options: { ...root },
     },
     pkceCodeVerifier: {
       name: `${securePrefix}next-auth.pkce.code_verifier${suffix}`,
-      options: { ...base, maxAge: 900 },
+      options: { ...scoped, maxAge: 900 },
     },
     state: {
       name: `${securePrefix}next-auth.state${suffix}`,
-      options: { ...base, maxAge: 900 },
+      options: { ...scoped, maxAge: 900 },
     },
     nonce: {
       name: `${securePrefix}next-auth.nonce${suffix}`,
-      options: { ...base },
+      options: { ...scoped },
     },
   };
+}
+
+/**
+ * Cookie basenames that {@link buildAuthCookies} confines to the app's path.
+ * CSRF is absent on purpose: it keeps its name and `Path=/`.
+ */
+const PATH_SCOPED_BASENAMES = [
+  SESSION_COOKIE_BASENAME,
+  'next-auth.callback-url',
+  'next-auth.pkce.code_verifier',
+  'next-auth.state',
+  'next-auth.nonce',
+] as const;
+
+/** One `Set-Cookie` that expires a stale auth cookie. */
+export type StaleAuthCookie = {
+  name: string;
+  options: {
+    path: '/';
+    maxAge: 0;
+    httpOnly: true;
+    sameSite: 'lax';
+    /** Required to overwrite a `__Secure-` cookie, which the browser rejects otherwise. */
+    secure: boolean;
+  };
+};
+
+/**
+ * Previous-generation auth cookies of THIS app that are present on the request
+ * and should be expired, with the `Set-Cookie` options that expire them.
+ *
+ * Covers the names this app wrote at `Path=/` before its cookies were scoped
+ * to its path: the terminated form (`.apps-template~`) and the pre-terminator
+ * form (`.apps-template`), each with NextAuth's `.N` chunks and with or without
+ * the `__Secure-` prefix. Nothing reads them any more, but the browser keeps
+ * sending them to every path on the host until they expire (30 days by
+ * default) — exactly the header weight path scoping exists to remove.
+ *
+ * Only names derived from `basePath` are returned, so a sweep can never touch
+ * another app's cookies, whatever version that app runs. A root-path app
+ * returns nothing: its cookies keep their name and `Path=/`.
+ *
+ * Pure, like the rest of this module: the caller owns the response. In the
+ * template's middleware:
+ *
+ * ```ts
+ * for (const { name, options } of staleAuthCookies(basePath, request.cookies.getAll().map((c) => c.name))) {
+ *   response.cookies.set(name, '', options);
+ * }
+ * ```
+ *
+ * Known gap: a lossy basePath (one that carries a hash, see
+ * {@link isLosslessSlug}) also wrote names WITHOUT the hash — terminated,
+ * between the terminator and hash fixes, and unterminated before that. Those
+ * are the same names a lossless sibling (`/apps/a/b` for `/apps/a-b`) may still
+ * be using, so they are deliberately not swept; they expire on their own.
+ */
+export function staleAuthCookies(
+  basePath: string | undefined,
+  presentCookieNames: Iterable<string>,
+): StaleAuthCookie[] {
+  if (basePathCookiePath(basePath) === '/') return [];
+
+  const slug = basePathSlug(basePath);
+  const canonical = basePathCookiePath(basePath).slice(1);
+  const legacySuffixes = [basePathCookieSuffix(basePath)];
+  // The pre-terminator name had no hash, so for a lossy basePath it is shared
+  // with its lossless sibling — same reasoning as the known gap above.
+  if (slug && isLosslessSlug(canonical)) legacySuffixes.push(`.${slug}`);
+
+  const legacyNames = new Set<string>();
+  for (const prefix of ['', SECURE_COOKIE_PREFIX]) {
+    for (const basename of PATH_SCOPED_BASENAMES) {
+      for (const suffix of legacySuffixes) legacyNames.add(`${prefix}${basename}${suffix}`);
+    }
+  }
+
+  const stale: StaleAuthCookie[] = [];
+  for (const name of presentCookieNames) {
+    const chunk = /^(.*)\.\d+$/.exec(name);
+    if (!legacyNames.has(name) && !(chunk && legacyNames.has(chunk[1]))) continue;
+    stale.push({
+      name,
+      options: {
+        path: '/',
+        maxAge: 0,
+        httpOnly: true,
+        sameSite: 'lax',
+        secure: name.startsWith(SECURE_COOKIE_PREFIX),
+      },
+    });
+  }
+  return stale;
 }
 
 /**

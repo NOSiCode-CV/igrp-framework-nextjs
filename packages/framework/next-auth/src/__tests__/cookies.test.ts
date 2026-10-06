@@ -1,10 +1,13 @@
 import { describe, it, expect } from 'vitest';
 import {
+  authCookieSuffix,
+  basePathCookiePath,
   basePathCookieSuffix,
   buildAuthCookies,
   resolveSecureCookie,
   sessionCookieName,
   SESSION_COOKIE_BASENAME,
+  staleAuthCookies,
 } from '../cookies';
 
 describe('basePathCookieSuffix', () => {
@@ -90,7 +93,8 @@ describe('buildAuthCookies', () => {
 
   it('drops the prefixes over http', () => {
     const cookies = buildAuthCookies('/apps/a', false)!;
-    expect(cookies.sessionToken.name).toBe('next-auth.session-token.apps-a~');
+    expect(cookies.sessionToken.name).toBe('next-auth.session-token.apps-a_p~');
+    // CSRF keeps its previous name: it stays at `Path=/` (see buildAuthCookies).
     expect(cookies.csrfToken.name).toBe('next-auth.csrf-token.apps-a~');
     expect(cookies.sessionToken.options.secure).toBe(false);
   });
@@ -253,5 +257,164 @@ describe('basePathCookieSuffix — distinct basePaths never share a suffix', () 
 
   it('is deterministic', () => {
     expect(basePathCookieSuffix('/apps/a-b')).toBe(basePathCookieSuffix('/apps/a-b'));
+  });
+});
+
+describe('basePathCookiePath', () => {
+  it('is the basePath, normalised for stray slashes', () => {
+    expect(basePathCookiePath('/apps/template')).toBe('/apps/template');
+    expect(basePathCookiePath('apps/template/')).toBe('/apps/template');
+    expect(basePathCookiePath('  /apps/a/b/  ')).toBe('/apps/a/b');
+  });
+
+  it('keeps the case, because Next matches basePath case-sensitively', () => {
+    expect(basePathCookiePath('/Apps/My_App')).toBe('/Apps/My_App');
+  });
+
+  it('is / for a root-path app', () => {
+    for (const basePath of ['', '/', undefined, '   ']) {
+      expect(basePathCookiePath(basePath)).toBe('/');
+    }
+  });
+});
+
+describe('authCookieSuffix — path-scoped names', () => {
+  it('marks a basePath app’s names, before the terminator', () => {
+    expect(authCookieSuffix('/apps/template')).toBe('.apps-template_p~');
+    expect(authCookieSuffix('/apps/a-b')).toMatch(/^\.apps-a-b\.[0-9a-f]{8}_p~$/);
+  });
+
+  it('leaves a root-path app’s names unchanged — its path is still /', () => {
+    for (const basePath of ['', '/', undefined]) {
+      expect(authCookieSuffix(basePath)).toBe(basePathCookieSuffix(basePath));
+    }
+  });
+
+  it('cannot be collected as a chunk of the previous name, nor collect it', () => {
+    // SessionStore reads by prefix: a replica on the previous version must not
+    // glue the new cookie onto its own, and the new reader must not pick up
+    // the old one.
+    for (const basePath of ['/apps/hr', '/apps/a-b', '/rh/v2']) {
+      const previous = basePathCookieSuffix(basePath);
+      const current = authCookieSuffix(basePath);
+      expect(current.startsWith(previous)).toBe(false);
+      expect(`${previous}.0`.startsWith(current)).toBe(false);
+    }
+  });
+
+  it('stays prefix-free across apps', () => {
+    const pairs = [
+      ['/apps/hr', '/apps/hr-admin'],
+      ['/apps/a', '/apps/ab'],
+      ['/rh', '/rh/v2'],
+      ['/apps/p', '/apps'],
+    ] as const;
+    for (const [x, y] of pairs) {
+      for (const [a, b] of [
+        [authCookieSuffix(x), authCookieSuffix(y)],
+        [authCookieSuffix(y), authCookieSuffix(x)],
+        [authCookieSuffix(x), basePathCookieSuffix(y)],
+        [basePathCookieSuffix(x), authCookieSuffix(y)],
+      ]) {
+        expect(b.startsWith(a), `${b} must not start with ${a}`).toBe(false);
+      }
+    }
+  });
+});
+
+describe('buildAuthCookies — cookie path', () => {
+  it('confines every cookie but CSRF to the app’s path', () => {
+    const cookies = buildAuthCookies('/apps/a', true);
+    for (const key of ['sessionToken', 'callbackUrl', 'pkceCodeVerifier', 'state', 'nonce'] as const) {
+      expect(cookies[key].options.path, key).toBe('/apps/a');
+      expect(cookies[key].name, key).toContain('.apps-a_p~');
+    }
+    expect(cookies.csrfToken.options.path).toBe('/');
+    expect(cookies.csrfToken.name).toBe('__Host-next-auth.csrf-token.apps-a~');
+  });
+
+  it('keeps a root-path app at / under its existing names', () => {
+    const cookies = buildAuthCookies('', false);
+    for (const entry of Object.values(cookies)) {
+      expect(entry.options.path).toBe('/');
+    }
+    expect(cookies.sessionToken.name).toBe('next-auth.session-token~');
+  });
+
+  it('agrees with sessionCookieName', () => {
+    for (const secure of [true, false]) {
+      for (const basePath of ['/apps/a', '/apps/a-b', '']) {
+        expect(sessionCookieName(basePath, secure)).toBe(
+          buildAuthCookies(basePath, secure).sessionToken.name,
+        );
+      }
+    }
+  });
+});
+
+describe('staleAuthCookies', () => {
+  const names = (basePath: string | undefined, present: string[]) =>
+    staleAuthCookies(basePath, present).map((cookie) => cookie.name);
+
+  it('returns the app’s previous-generation names, chunks included', () => {
+    const present = [
+      'next-auth.session-token.apps-a~',
+      'next-auth.session-token.apps-a~.0',
+      'next-auth.session-token.apps-a~.1',
+      '__Secure-next-auth.session-token.apps-a~',
+      'next-auth.callback-url.apps-a~',
+      'next-auth.pkce.code_verifier.apps-a~',
+      'next-auth.state.apps-a~',
+      'next-auth.nonce.apps-a~',
+      // pre-terminator generation
+      'next-auth.session-token.apps-a',
+      'next-auth.session-token.apps-a.0',
+    ];
+    expect(names('/apps/a', present).sort()).toEqual([...present].sort());
+  });
+
+  it('never returns the current names', () => {
+    const current = Object.values(buildAuthCookies('/apps/a', true)).map((c) => c.name);
+    const chunks = current.map((name) => `${name}.0`);
+    expect(names('/apps/a', [...current, ...chunks])).toEqual([]);
+  });
+
+  it('never touches another app’s cookies, old or new', () => {
+    const present = [
+      'next-auth.session-token.apps-ab~',
+      'next-auth.session-token.apps-a-admin~',
+      'next-auth.session-token.apps-b~',
+      'next-auth.session-token.apps-b_p~',
+      'next-auth.session-token~',
+      'next-auth.session-token',
+      'next-auth.session-token.apps-ab',
+    ];
+    expect(names('/apps/a', present)).toEqual([]);
+  });
+
+  it('leaves the CSRF cookie alone — it keeps its name and path', () => {
+    expect(names('/apps/a', ['next-auth.csrf-token.apps-a~', '__Host-next-auth.csrf-token.apps-a~'])).toEqual([]);
+  });
+
+  it('returns nothing for a root-path app', () => {
+    expect(names('', ['next-auth.session-token~', 'next-auth.session-token'])).toEqual([]);
+  });
+
+  it('does not sweep the unhashed names of a lossy basePath', () => {
+    // `/apps/a-b` and `/apps/a/b` both slug to `apps-a-b`; the unhashed names
+    // may belong to the lossless sibling.
+    const hashed = `next-auth.session-token${basePathCookieSuffix('/apps/a-b')}`;
+    expect(
+      names('/apps/a-b', [hashed, 'next-auth.session-token.apps-a-b~', 'next-auth.session-token.apps-a-b']),
+    ).toEqual([hashed]);
+  });
+
+  it('expires at Path=/, with Secure for __Secure- names', () => {
+    const [plain, secure] = staleAuthCookies('/apps/a', [
+      'next-auth.session-token.apps-a~',
+      '__Secure-next-auth.session-token.apps-a~',
+    ]);
+    expect(plain.options).toEqual({ path: '/', maxAge: 0, httpOnly: true, sameSite: 'lax', secure: false });
+    expect(secure.options.secure).toBe(true);
   });
 });

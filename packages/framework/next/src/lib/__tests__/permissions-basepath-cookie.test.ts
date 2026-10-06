@@ -4,7 +4,7 @@ import { describe, it, expect, vi, beforeEach, afterEach } from 'vitest';
  * Regression cover for KNOWN-ISSUES #1: `recoverAccessTokenFromCookies` called
  * `getToken` without a `cookieName`, so it looked for the STOCK NextAuth cookie
  * while `withIGRPAuth` had written a basePath-scoped one
- * (`next-auth.session-token.<slug>~`). No match → no token → every permission
+ * (`next-auth.session-token.<slug>_p~`). No match → no token → every permission
  * check in a Server Action / Route Handler denied a user who held the
  * permission, but only in apps that set `NEXT_PUBLIC_BASE_PATH`.
  */
@@ -27,7 +27,7 @@ const { igrpResetAccessClientConfig } = await import('../api-config.js');
 
 const BASE_PATH = '/apps/template';
 /** What `withIGRPAuth` actually writes under that basePath. */
-const SCOPED_COOKIE = 'next-auth.session-token.apps-template~';
+const SCOPED_COOKIE = 'next-auth.session-token.apps-template_p~';
 
 beforeEach(() => {
   getToken.mockReset().mockResolvedValue({ accessToken: 'AT' });

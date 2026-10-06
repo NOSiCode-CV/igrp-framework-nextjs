@@ -8,8 +8,9 @@ items live in the [repo-wide register](../../../KNOWN-ISSUES.md).
 
 ## 1. The pre-rename session cookie is orphaned, never swept
 
-**Status:** open · introduced deliberately, with eyes open, by the basePath
-cookie-terminator fix (2026-09-21) · documented rather than automated
+**Status:** mitigated for basePath apps (2026-10-06, automatic sweep — see the
+note below) · open for root-path apps · introduced deliberately, with eyes
+open, by the basePath cookie-terminator fix (2026-09-21)
 
 **Severity:** low, but it grows with cookie size — see "why it is not purely
 cosmetic".
@@ -33,6 +34,21 @@ cosmetic".
 > (see `basePathCookieSuffix`). Each such app orphans its stock-named cookie
 > once. The orphan is harmless to the fixed apps, none of which read it by
 > prefix any more, but it adds header weight until it expires. Same remediation.
+
+> **2026-10-06 — fourth rename, and the sweep now exists.** BasePath apps'
+> auth cookies moved from `Path=/` to `Path=<basePath>` (`basePathCookiePath`)
+> and were renamed `.<slug>~` → `.<slug>_p~` (`authCookieSuffix`), because at
+> `Path=/` every co-hosted app's session cookie was sent on every request to
+> the host and broke the IdP logout with `431` / `ERR_HTTP2_PROTOCOL_ERROR`.
+> This time the sweep ships with the rename, as option 2 below:
+> `staleAuthCookies(basePath, presentNames)` returns this app's previous
+> names — the terminated and pre-terminator forms, with chunks — and the
+> template middleware expires them at `Path=/`. Two gaps remain: root-path apps
+> (their stock-named orphan from the third rename is not swept, because the
+> stock name may be a live cookie of an older co-hosted app), and the unhashed
+> names of a lossy basePath (shared with its lossless sibling). Both expire on
+> their own. Existing apps get the sweep only once their `middleware.ts` picks
+> up `expireStaleAuthCookies`.
 
 ### Symptom
 

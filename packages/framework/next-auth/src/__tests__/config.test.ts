@@ -735,8 +735,8 @@ describe('withIGRPAuth — cookie isolation', () => {
 
     const nameA = a.authOptions.cookies!.sessionToken!.name;
     const nameB = b.authOptions.cookies!.sessionToken!.name;
-    expect(nameA).toBe('next-auth.session-token.apps-a~');
-    expect(nameB).toBe('next-auth.session-token.apps-b~');
+    expect(nameA).toBe('next-auth.session-token.apps-a_p~');
+    expect(nameB).toBe('next-auth.session-token.apps-b_p~');
   });
 
   it('terminates a root-path app’s names so they cannot prefix a basePath app’s', async () => {
@@ -758,7 +758,7 @@ describe('withIGRPAuth — cookie isolation', () => {
       },
     });
     expect(instance.authOptions.cookies!.sessionToken!.name).toBe(
-      '__Secure-next-auth.session-token.apps-a~',
+      '__Secure-next-auth.session-token.apps-a_p~',
     );
   });
 

@@ -1,5 +1,13 @@
 # @igrp/framework-next-ui
 
+## 0.2.0-beta.5
+
+### Patch Changes
+
+- Updated dependencies [eb909b4]
+  - @igrp/framework-next-auth@0.2.0-beta.4
+  - @igrp/framework-next-types@0.2.0-beta.4
+
 ## 0.2.0-beta.4
 
 ### Patch Changes

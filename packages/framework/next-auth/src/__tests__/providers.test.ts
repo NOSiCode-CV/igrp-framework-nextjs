@@ -301,3 +301,29 @@ describe('getAuthProviderDefinition — unknown id', () => {
     );
   });
 });
+
+describe('getAuthProviderIdFromEnv — Object.prototype keys are not provider ids', () => {
+  it('rejects an inherited property name as an unsupported provider', () => {
+    // `AUTH_PROVIDER_REGISTRY[value]` used to find `Object.prototype.constructor`
+    // and hand back "constructor" as a valid id; the TypeError surfaced three
+    // frames later in getMissingAuthProviderEnvVars. `isOidcManagedProviderId`
+    // already guards against this — the lookup that feeds it did not.
+    for (const value of ['constructor', '__proto__', 'hasOwnProperty', 'valueOf']) {
+      expect(() => getAuthProviderIdFromEnv({ AUTH_PROVIDER: value })).toThrow(
+        /Unsupported AUTH_PROVIDER/,
+      );
+      expect(() => getMissingAuthProviderEnvVars({ AUTH_PROVIDER: value })).toThrow(
+        /Unsupported AUTH_PROVIDER/,
+      );
+    }
+  });
+});
+
+describe('getAuthProviderIdFromEnv — quoted values', () => {
+  it('strips surrounding quotes, as IGRP_PREVIEW_MODE already does', () => {
+    // A Docker `--env AUTH_PROVIDER="none"` keeps the quotes; dotenv strips them.
+    expect(getAuthProviderIdFromEnv({ AUTH_PROVIDER: '"none"' })).toBe('none');
+    expect(getAuthProviderIdFromEnv({ AUTH_PROVIDER: "'igrp-auth'" })).toBe('igrp-auth');
+    expect(isAuthDisabled({ AUTH_PROVIDER: '"none"' })).toBe(true);
+  });
+});

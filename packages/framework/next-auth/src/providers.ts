@@ -56,8 +56,12 @@ type AuthProviderDefinition = {
  */
 const DEFAULT_AUTH_PROVIDER_ID: AuthProviderId = IGRP_AUTH_PROVIDER_ID;
 
-// `openid` is mandatory for OIDC — always inject it regardless of what IGRP_AUTH_SCOPES contains.
-function buildScopeString(raw: string | undefined): string {
+/**
+ * The OAuth `scope` string for `IGRP_AUTH_SCOPES`, with `openid` always first:
+ * it is mandatory for OIDC. Shared by the authorization request and the
+ * refresh grant (`./oidc`), so the two can never ask for different scopes.
+ */
+export function buildScopeString(raw: string | undefined): string {
   const scopes = new Set(['openid']);
   if (raw?.trim()) {
     for (const s of raw.trim().split(/\s+/)) scopes.add(s);
@@ -177,6 +181,13 @@ export function getAuthProviderIdFromEnv(
   fallbackProviderId: AuthProviderId = DEFAULT_AUTH_PROVIDER_ID,
 ): AuthProviderId {
   const raw = env.AUTH_PROVIDER;
+  // Surrounding quotes survive some loaders (`docker --env AUTH_PROVIDER="none"`)
+  // and are stripped by others (dotenv). `IGRP_PREVIEW_MODE` already tolerates
+  // them; a variable that decides whether auth runs at all must not be stricter.
+  const unquoted = raw
+    ?.trim()
+    .replace(/^["']|["']$/g, '')
+    .trim();
 
   // ABSENT and PRESENT-BUT-EMPTY are deliberately NOT the same thing.
   //
@@ -188,7 +199,7 @@ export function getAuthProviderIdFromEnv(
   // request through. A typo must never be able to silently switch auth off — it
   // fails loudly here instead, and `isAuthEnabled` maps that throw to "enabled"
   // so the failure is closed as well as loud.
-  if (raw !== undefined && raw.trim() === '') {
+  if (unquoted !== undefined && unquoted === '') {
     throw new Error(
       'AUTH_PROVIDER is set but empty. Remove the variable to accept the default ' +
         `("${DEFAULT_AUTH_PROVIDER_ID}"), or give it one of: ${Object.keys(AUTH_PROVIDER_REGISTRY).join(', ')}. ` +
@@ -196,8 +207,14 @@ export function getAuthProviderIdFromEnv(
     );
   }
 
-  const normalizedProviderId = raw?.trim().toLowerCase() ?? fallbackProviderId;
-  const providerDefinition = AUTH_PROVIDER_REGISTRY[normalizedProviderId as AuthProviderId];
+  const normalizedProviderId = unquoted?.toLowerCase() ?? fallbackProviderId;
+  // `Object.hasOwn`, not a plain property read: `AUTH_PROVIDER=constructor`
+  // (or `__proto__`) otherwise finds `Object.prototype.constructor`, is
+  // accepted as a provider id, and surfaces as a bare TypeError several frames
+  // later when the "definition" turns out to have no `requiredEnvKeys`.
+  const providerDefinition = Object.hasOwn(AUTH_PROVIDER_REGISTRY, normalizedProviderId)
+    ? AUTH_PROVIDER_REGISTRY[normalizedProviderId as AuthProviderId]
+    : undefined;
 
   if (!providerDefinition) {
     throw new Error(
@@ -210,12 +227,15 @@ export function getAuthProviderIdFromEnv(
 
 export function getAuthProviderDefinition(env: AuthEnvironment, providerId?: AuthProviderId) {
   const resolvedProviderId = providerId ?? getAuthProviderIdFromEnv(env);
-  const definition = AUTH_PROVIDER_REGISTRY[resolvedProviderId];
+  const definition = Object.hasOwn(AUTH_PROVIDER_REGISTRY, resolvedProviderId)
+    ? AUTH_PROVIDER_REGISTRY[resolvedProviderId]
+    : undefined;
 
   // An id that is not in the registry — a custom provider's own id arriving via
   // `token.authProviderId` — used to spread `undefined` into a half-built
   // object whose `requiredEnvKeys` was missing, so the next `.filter` threw a
-  // bare `TypeError` several frames away from the cause.
+  // bare `TypeError` several frames away from the cause. An inherited Object
+  // key (`constructor`) spread a FUNCTION in with the same result.
   if (!definition) {
     throw new Error(
       `No IGRP auth provider definition for "${resolvedProviderId}". Expected one of: ${Object.keys(

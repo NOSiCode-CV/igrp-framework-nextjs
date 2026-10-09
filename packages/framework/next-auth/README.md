@@ -6,27 +6,39 @@ route-protection middleware primitives.
 
 ## Entry points
 
-| Import path                            | Runtime               | Purpose                                                                            |
-| -------------------------------------- | --------------------- | ---------------------------------------------------------------------------------- |
-| `@igrp/framework-next-auth/config`     | Node + Edge           | `withIGRPAuth()` factory                                                           |
-| `@igrp/framework-next-auth/client`     | Browser               | `useSafeSession()`, `signIn`, `signOut`, `SessionProvider`                         |
-| `@igrp/framework-next-auth/server`     | Node                  | `getServerSession`                                                                 |
-| `@igrp/framework-next-auth/session`    | Node                  | Session types                                                                      |
-| `@igrp/framework-next-auth/jwt`        | Node                  | JWT types                                                                          |
-| `@igrp/framework-next-auth/middleware` | Edge                  | NextAuth middleware                                                                |
-| `@igrp/framework-next-auth/oidc`       | Node                  | `refreshOidcAccessToken`, `revokeOidcSession`                                      |
-| `@igrp/framework-next-auth/providers`  | Node                  | Provider registry helpers                                                          |
-| `@igrp/framework-next-auth/sanitize`   | Node + Edge           | URL/redirect sanitization                                                          |
-| `@igrp/framework-next-auth/claims`     | Node + Edge + Browser | `decodeIgrpClaims`, `claimsAllow`, `claimsExpired`                                 |
-| `@igrp/framework-next-auth/cookies`    | Node + Edge + Browser | Auth cookie naming: `sessionCookieName`, `buildAuthCookies`, `resolveSecureCookie` |
-| `@igrp/framework-next-auth/runtime`    | Node + Edge           | `isNextControlFlowError`                                                           |
-| `@igrp/framework-next-auth/types`      | types only            | Session/JWT module augmentation                                                    |
+| Import path                            | Runtime               | Purpose                                                                             |
+| -------------------------------------- | --------------------- | ----------------------------------------------------------------------------------- |
+| `@igrp/framework-next-auth/config`     | Node + Edge           | `withIGRPAuth()` factory                                                            |
+| `@igrp/framework-next-auth/client`     | Browser               | `useSafeSession()`, `signIn`, `signOut`, `SessionProvider`                          |
+| `@igrp/framework-next-auth/server`     | Node                  | `getServerSession`                                                                  |
+| `@igrp/framework-next-auth/session`    | Node + Edge + Browser | `Session` type, `hasAccessToken`                                                    |
+| `@igrp/framework-next-auth/jwt`        | Node + Edge           | `JWT` type; re-exports `getToken` / `encode` / `decode` — see the cookie note below |
+| `@igrp/framework-next-auth/middleware` | Edge                  | Re-exports NextAuth's `withAuth` — see the cookie note below                        |
+| `@igrp/framework-next-auth/oidc`       | Node                  | `refreshOidcAccessToken`, `revokeOidcSession`, `buildEndSessionUrl`                 |
+| `@igrp/framework-next-auth/providers`  | Node + Edge + Browser | Provider registry helpers                                                           |
+| `@igrp/framework-next-auth/sanitize`   | Node + Edge           | URL/redirect sanitization                                                           |
+| `@igrp/framework-next-auth/claims`     | Node + Edge + Browser | `decodeIgrpClaims`, `claimsAllow`, `claimsExpired`                                  |
+| `@igrp/framework-next-auth/cookies`    | Node + Edge + Browser | Auth cookie naming: `sessionCookieName`, `buildAuthCookies`, `resolveSecureCookie`  |
+| `@igrp/framework-next-auth/runtime`    | Node + Edge           | `isNextControlFlowError`                                                            |
+| `@igrp/framework-next-auth/types`      | types only            | Session/JWT module augmentation                                                     |
 
 The package root (`@igrp/framework-next-auth`) re-exports only the pure modules
-— `session`, `providers`, `sanitize`, plus types. `middleware`, `jwt` and `oidc`
-are **not** in the root barrel: importing them from there pulled
-`next-auth/middleware` and the server-side token machinery into whatever bundle
-touched it. Use their subpath entries.
+— `session`, `providers`, `sanitize`, `runtime`, `cookies`, plus types.
+`middleware`, `jwt` and `oidc` are **not** in the root barrel: importing them
+from there pulled `next-auth/middleware` and the server-side token machinery
+into whatever bundle touched it. Use their subpath entries.
+
+> **`/jwt` and `/middleware` do not know the scoped cookie names.** They
+> re-export NextAuth's own `getToken` and `withAuth`, which look for the stock
+> `next-auth.session-token`. With cookie isolation on (the default, see
+> "Cookies"), that name does not exist, so both report "no session". Prefer the
+> instance's `auth.getTokenFromRequest(request)`, which resolves the right name.
+> If you must use them directly, pass the names the instance built:
+>
+> ```ts
+> getToken({ req, secret, cookieName: auth.authOptions.cookies!.sessionToken.name });
+> withAuth(handler, { cookies: auth.authOptions.cookies, secret });
+> ```
 
 ## Quick start
 
@@ -60,6 +72,7 @@ NEXTAUTH_SECRET=some-random-secret
 # Optional
 IGRP_AUTH_SCOPES=openid profile email   # defaults to "openid"; "openid" is always injected automatically
 IGRP_PREVIEW_MODE=true                  # bypass auth for local dev (no OIDC needed)
+IGRP_AUTH_DEBUG=true                    # NextAuth debug logging — OFF by default everywhere, it prints token responses
 
 # Deployment shape
 NEXT_PUBLIC_BASE_PATH=/apps/template    # scopes auth cookie names (see "Cookies" below)
@@ -129,15 +142,19 @@ terminator an app under `/apps/hr` would swallow `/apps/hr-admin`'s cookie as if
 it were one of its own chunks — and clear it on sign-out. The terminator makes
 the suffix set prefix-free.
 
-> **Upgrading:** the `~` renames the cookie, so every current session under a
-> basePath is signed out once. The pre-rename cookie is not cleared
-> automatically (NextAuth only clears names matching the one it is configured
-> with) and lingers until it expires. To sweep it, call
-> `igrpDeleteAuthCookies()` from `@igrp/framework-next` — it matches by
-> basename, so it removes both the old and new forms. The same applies to a
-> root-path app when it picks up the bare `~`. Every app on a shared host must
-> be on a release with that change: one stock-named app left on the domain still
-> reads, and deletes, everyone else's session cookie.
+> **Upgrading:** each rename of the cookie signs every current session out
+> once, and NextAuth never clears the old name (it only clears the name it is
+> configured with). A basePath app sweeps its own previous names from its
+> middleware with `staleAuthCookies(basePath, presentNames)` from `/cookies` —
+> the template already does this — and `igrpDeleteAuthCookies()` from
+> `@igrp/framework-next` removes every form on the logout path. A root-path
+> app's stock-named orphan is not swept by default (it may be a live cookie of
+> an older co-hosted app) — but a root app cannot scope its cookies below
+> `Path=/`, so that orphan is sent to every co-hosted app on every request.
+> When no stock-named app shares the host, opt in:
+> `staleAuthCookies(basePath, names, { sweepStockNames: true })`. Every app on
+> a shared host must be on a release with scoped names: one stock-named app
+> left on the domain still reads, and deletes, everyone else's session cookie.
 
 The `Secure` flag (and the `__Secure-` / `__Host-` prefixes) follows the same
 signal `next-auth` uses: `NEXTAUTH_URL`'s scheme, else https when `VERCEL` /
@@ -164,18 +181,35 @@ causing the client to sign the user out. This is safe behaviour, but avoidable.
 > **Note:** Some providers (e.g. WSO2IS) issue refresh tokens by default regardless of
 > `offline_access`. Check your provider's documentation.
 
+### Client authentication at the IdP
+
+Every call this package makes with the client credentials — the refresh grant,
+revocation and introspection — authenticates with **HTTP Basic**
+(`client_secret_basic`), the one method RFC 6749 requires every authorization
+server to accept. The client registered at the IdP must allow it. Nothing is
+sent as `client_secret_post`.
+
+The lifetime of a refreshed access token is taken from the response's
+`expires_in`, else from the token's own `exp`, else a 5-minute self-correcting
+guess — the same order sign-in uses.
+
 ## `withIGRPAuth` options
 
-Beyond `provider`, `env`, `secret`, `pages`, `session` and `callbacks`:
+`provider` accepts `'igrp-auth'`, `'none'` or a full NextAuth provider object,
+and when given it **overrides** `AUTH_PROVIDER` everywhere — the handlers, the
+middleware primitives (`isAuthDisabled()`) and the id stamped on the token
+agree by construction. Beyond `provider`, `env`, `secret`, `pages`, `session`
+and `callbacks`:
 
-| Option                | Default               | Purpose                                                                                                                                                              |
-| --------------------- | --------------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| `onSessionExpired`    | —                     | Called by `getSession()` when the token is expired or refresh failed. Typically `() => redirect('/logout')`.                                                         |
-| `middleware.loginUrl` | `/login`              | Path `getLoginRedirectUrl()` resolves.                                                                                                                               |
-| `middleware.matcher`  | see `DEFAULT_MATCHER` | Matcher re-exported as `auth.config`. Matchers are basePath-_relative_.                                                                                              |
-| `tokenRecoveryStore`  | in-memory             | Shared store for rotated-refresh-token recovery. Supply a cross-replica implementation for multi-pod deployments without sticky routing; the default is per-process. |
-| `cookieIsolation`     | `'basePath'`          | `'none'` keeps NextAuth's stock cookie names. Only safe when no other IGRP app shares the host.                                                                      |
-| `secureCookies`       | derived               | Overrides the `Secure` flag derivation described above.                                                                                                              |
+| Option                | Default               | Purpose                                                                                                                                                                                                                                                                                                                      |
+| --------------------- | --------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `onSessionExpired`    | —                     | Called by `getSession()` when the token is expired or refresh failed. Typically `() => redirect('/logout')`.                                                                                                                                                                                                                 |
+| `middleware.loginUrl` | `/login`              | Path `getLoginRedirectUrl()` resolves.                                                                                                                                                                                                                                                                                       |
+| `middleware.matcher`  | see `DEFAULT_MATCHER` | Matcher re-exported as `auth.config`. Matchers are basePath-_relative_. The default skips `/apps`, `/_next`, `favicon.ico` as whole segments and static-asset extensions (`.png`, `.css`, `.woff2`, …) — not every path with a dot, so `/users/john.doe` is protected.                                                       |
+| `debug`               | `IGRP_AUTH_DEBUG`     | NextAuth debug logging. Off by default in every environment because it prints OAuth token responses.                                                                                                                                                                                                                         |
+| `tokenRecoveryStore`  | in-memory             | Shared store for rotated-refresh-token recovery. Supply a cross-replica implementation for multi-pod deployments without sticky routing; the default is per-process. Keys and values are plaintext refresh/access/id tokens — treat the backing store like the session cookie (encrypt at rest, restrict access, never log). |
+| `cookieIsolation`     | `'basePath'`          | `'none'` keeps NextAuth's stock cookie names. Only safe when no other IGRP app shares the host.                                                                                                                                                                                                                              |
+| `secureCookies`       | derived               | Overrides the `Secure` flag derivation described above.                                                                                                                                                                                                                                                                      |
 
 ### Middleware primitives
 
@@ -200,7 +234,13 @@ body stays yours:
 
 An **absent** `AUTH_PROVIDER` resolves to `igrp-auth`, so an unconfigured app
 fails closed with the configuration-error page rather than serving
-unauthenticated traffic. An **empty** `AUTH_PROVIDER=` is refused outright
+unauthenticated traffic. In production that page shows only the error code
+(the detail, which names the missing variables, goes to the server log); in
+development it shows the full message.
+
+A throwing `callbacks.jwt` / `callbacks.session` extension does **not** end the
+session: next-auth would clear the cookie on such a throw, so the IGRP value is
+used instead and the failure is logged with the extension's name. An **empty** `AUTH_PROVIDER=` is refused outright
 (`AUTH_PROVIDER_EMPTY`) instead of being treated as absent — defaulting it could
 silently switch authentication off.
 

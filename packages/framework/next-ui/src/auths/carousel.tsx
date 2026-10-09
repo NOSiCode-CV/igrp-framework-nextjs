@@ -19,6 +19,12 @@ interface IGRPAuthCarouselProps {
   regionLabel?: string;
   /** `aria-label` of a slide dot. `{index}` is substituted (1-based). */
   goToSlideLabel?: string;
+  /**
+   * `sizes` for every slide image. The default matches the stock auth layout:
+   * the carousel fills half the viewport from `md` up and is hidden below it.
+   * Override when the carousel sits in a container of a different width.
+   */
+  sizes?: string;
 }
 
 function IGRPAuthCarousel({
@@ -26,6 +32,7 @@ function IGRPAuthCarousel({
   intervalTime = 6000,
   regionLabel = 'Destaques',
   goToSlideLabel = 'Ir para o destaque {index}',
+  sizes = '(min-width: 768px) 50vw, 100vw',
 }: IGRPAuthCarouselProps) {
   const [currentIndex, setCurrentIndex] = useState(0);
 
@@ -78,9 +85,15 @@ function IGRPAuthCarousel({
                 src={withBasePath(item.image)}
                 alt={item.title}
                 fill
-                priority={index === 0}
+                // Not `priority`: that emits an unconditional preload, so
+                // viewports where the carousel is hidden (`hidden md:block` in
+                // the stock login page) still download the first slide. Lazy
+                // images inside `display: none` are never fetched; where the
+                // carousel shows, the first slide is in view and loads at once,
+                // with `fetchPriority` keeping it ahead of the rest as the LCP.
+                fetchPriority={index === 0 ? 'high' : 'auto'}
                 className={cn('object-cover')}
-                sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
+                sizes={sizes}
               />
 
               {/* Fixed light-on-dark contrast: this caption sits over an arbitrary

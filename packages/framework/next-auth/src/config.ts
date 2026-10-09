@@ -44,6 +44,7 @@ import {
   isUsableRecoveredToken,
   refreshOidcAccessToken,
   revokeOidcSession,
+  UNKNOWN_EXPIRY_FALLBACK_MS,
 } from './oidc';
 import type { IGRPTokenRecoveryStore } from './token-store';
 import { escapeHtml, sanitizeRedirectUrl, stripAuthApiSuffix, stripBasePath } from './sanitize';
@@ -54,7 +55,7 @@ import {
   sessionCookieName,
 } from './cookies';
 import { isNextControlFlowError } from './runtime';
-import { decodeIgrpClaims } from './claims';
+import { accessTokenExpiresAt } from './claims';
 import { warnOnce } from './_global-state';
 
 // ─── Config Error ─────────────────────────────────────────────────────────────
@@ -128,15 +129,6 @@ const TOKEN_EXPIRY_GRACE_MS = 10_000;
 // the individual fetches is not the same as bounding the user's wait.
 const SIGNOUT_REVOCATION_BUDGET_MS = 5000;
 
-// Access-token lifetime assumed only when the IdP told us nothing AND the
-// token itself carries no `exp`. Deliberately short: the previous one-hour
-// guess meant a token that really died in ~3 minutes was treated as healthy for
-// the rest of the hour — middleware never bounced, the jwt callback never
-// refreshed, and every access-management call 401'd with nothing in the session
-// explaining why. A short value is self-correcting: the next jwt callback
-// refreshes and the IdP's real `expires_in` takes over.
-const UNKNOWN_EXPIRY_FALLBACK_MS = 5 * 60_000;
-
 // Default middleware matcher, exposed as `auth.config` for a template to
 // re-export.
 //
@@ -147,11 +139,31 @@ const UNKNOWN_EXPIRY_FALLBACK_MS = 5 * 60_000;
 // is `/apps/template` is matched normally. It is kept only for consumers that
 // really do have an `/apps` route; it protects nothing by itself.
 //
+// The reserved names are excluded as WHOLE SEGMENTS (`apps(?:/|$)`), not as
+// string prefixes: a bare `(?!apps|_next|…)` lookahead stopped after four
+// characters, so `/appstore`, `/apps-admin` and `/_nextfoo` never woke the
+// middleware at all. The `.*\..*` alternative is the usual static-asset skip
+// and also skips any PAGE route whose path contains a dot (a dynamic segment
+// capturing `john.doe`) — those routes must be protected server-side, which
+// the template does from its authenticated layout.
+//
 // Consumers that additionally filter inside the middleware body (static
-// prefixes, extension checks) are duplicating `_next|favicon.ico|.*\..*`
-// here — harmless, but the matcher is the cheaper place to do it, since a
-// non-matching request never wakes the middleware at all.
-const DEFAULT_MATCHER = ['/', '/((?!apps|_next|favicon.ico|.*\\..*).*)', '/api/:path*'];
+// prefixes, extension checks) are duplicating this list — harmless, but the
+// matcher is the cheaper place to do it, since a non-matching request never
+// wakes the middleware at all.
+//
+// Static assets are skipped by EXTENSION, not by "contains a dot": the usual
+// `.*\..*` also skipped every page route with a dot in a dynamic segment
+// (`/users/john.doe`, `/releases/v1.2`), which never woke the middleware. The
+// list covers what `public/` and `next build` emit; an asset type outside it
+// merely wakes the middleware and must then be let through by the consumer.
+const STATIC_ASSET_EXTENSIONS =
+  'ico|png|jpe?g|gif|svg|webp|avif|bmp|css|js|mjs|map|json|txt|xml|webmanifest|woff2?|ttf|otf|eot|pdf|mp4|webm|mp3';
+const DEFAULT_MATCHER = [
+  '/',
+  `/((?!apps(?:/|$)|_next(?:/|$)|favicon.ico$|.*\\.(?:${STATIC_ASSET_EXTENSIONS})$).*)`,
+  '/api/:path*',
+];
 
 // ─── Types ────────────────────────────────────────────────────────────────────
 
@@ -297,6 +309,14 @@ export type IGRPAuthOptions = {
    * https assumption is wrong.
    */
   secureCookies?: boolean;
+
+  /**
+   * NextAuth's own debug logging. OFF by default in every environment: its
+   * debug output includes OAuth token responses and profiles, so tying it to
+   * `NODE_ENV=development` put bearer tokens in every dev console. Falls back
+   * to `IGRP_AUTH_DEBUG=true` from the env when not set here.
+   */
+  debug?: boolean;
 
   /**
    * Shared store for rotated refresh-token recovery. Defaults to an in-memory,
@@ -447,12 +467,45 @@ function resolveProvider(
   return provider;
 }
 
-function normalizePreviewMode(env: Record<string, string | undefined>): boolean {
+/** `"true"` / `'true'` / `TRUE` → true; anything else (or unset) → false. */
+function envFlag(value: string | undefined): boolean {
   return (
-    env.IGRP_PREVIEW_MODE?.trim()
+    value
+      ?.trim()
       .replace(/^["']|["']$/g, '')
       .toLowerCase() === 'true'
   );
+}
+
+function normalizePreviewMode(env: Record<string, string | undefined>): boolean {
+  return envFlag(env.IGRP_PREVIEW_MODE);
+}
+
+/**
+ * Runs a caller-supplied `callbacks.*` extension so that a bug in it cannot end
+ * the session. next-auth catches a throw from `callbacks.jwt` / `callbacks.session`,
+ * logs `JWT_SESSION_ERROR` / `SESSION_ERROR` and — for the jwt callback — CLEARS
+ * the session cookie, so a throwing extension signed the user out. The IGRP
+ * value is returned instead and the failure is logged loudly, naming the
+ * extension. Next control-flow signals (`redirect()`, `notFound()`) are not
+ * failures and pass through untouched.
+ */
+async function runCallbackExtension<T>(
+  name: 'jwt' | 'session',
+  igrpValue: T,
+  extension: () => Promise<T>,
+): Promise<T> {
+  try {
+    return await extension();
+  } catch (error) {
+    if (isNextControlFlowError(error)) throw error;
+    console.error(
+      `[withIGRPAuth] callbacks.${name} extension threw — using the IGRP ${name} value without ` +
+        'it so the session survives. Fix the extension; next-auth would otherwise clear the session cookie:',
+      error,
+    );
+    return igrpValue;
+  }
 }
 
 /**
@@ -567,14 +620,11 @@ function extractCookieNames(request: unknown): string[] {
  */
 async function createNextAuthHandler(
   authOptions: NextAuthOptions,
-  env: Record<string, string | undefined>,
+  debug: boolean,
 ): Promise<NextAuthHandler> {
   const NextAuthModule = await import('next-auth');
   const NextAuth = interopDefault(NextAuthModule as unknown as typeof NextAuthModule.default);
-  return NextAuth({
-    ...authOptions,
-    debug: resolveNodeEnv(env) === 'development',
-  }) as unknown as NextAuthHandler;
+  return NextAuth({ ...authOptions, debug }) as unknown as NextAuthHandler;
 }
 
 /**
@@ -603,14 +653,9 @@ function resolveInitialExpiry(
   if (typeof account.expires_in === 'number' && Number.isFinite(account.expires_in)) {
     return Date.now() + account.expires_in * 1000;
   }
-  if (typeof account.access_token === 'string') {
-    try {
-      const claims = decodeIgrpClaims(account.access_token);
-      if (typeof claims.expiresAt === 'number') return claims.expiresAt;
-    } catch {
-      // Opaque (non-JWT) access token, or malformed — fall through.
-    }
-  }
+  // Opaque (non-JWT) or malformed access token → undefined → fall through.
+  const fromToken = accessTokenExpiresAt(account.access_token);
+  if (fromToken !== undefined) return fromToken;
   // A provider this package does not manage has no refresh path to "correct"
   // an invented expiry: the guess would simply become the moment the session
   // dies. A GitHub token, for instance, does not expire and reports no
@@ -648,8 +693,23 @@ async function withDeadline<T>(promise: Promise<T>, ms: number, fallback: T): Pr
 const disabledAuthHandler: NextAuthHandler = async () =>
   new Response('Authentication is disabled (AUTH_PROVIDER=none)', { status: 404 });
 
-/** Stub handler used when auth configuration is invalid — returns a 500 with a diagnostic HTML page. */
-function makeConfigErrorHandler(err: IGRPAuthConfigError): NextAuthHandler {
+/**
+ * Stub handler used when auth configuration is invalid — returns a 500 with a
+ * diagnostic HTML page.
+ *
+ * The page is served unauthenticated to anyone who hits `/api/auth/*`. The
+ * message names the missing environment variables, which describes the
+ * deployment's configuration to a stranger, so in production only the error
+ * CODE is shown and the full message goes to the server log instead. In
+ * development the message stays on the page, where it is the whole point.
+ */
+function makeConfigErrorHandler(err: IGRPAuthConfigError, production: boolean): NextAuthHandler {
+  if (production) {
+    console.error(`[withIGRPAuth] auth configuration error (${err.code}): ${err.message}`);
+  }
+  const detail = production
+    ? 'Authentication is not configured correctly on this deployment. The server log has the details.'
+    : err.message;
   const html = [
     '<!DOCTYPE html><html lang="en"><head>',
     '<meta charset="utf-8">',
@@ -663,7 +723,7 @@ function makeConfigErrorHandler(err: IGRPAuthConfigError): NextAuthHandler {
     '</head><body>',
     '<h1>Authentication Configuration Error</h1>',
     `<p><strong>Code:</strong> <code>${escapeHtml(err.code)}</code></p>`,
-    `<p>${escapeHtml(err.message)}</p>`,
+    `<p>${escapeHtml(detail)}</p>`,
     '<p>Check your <code>AUTH_PROVIDER</code> environment variable and ensure all required env vars are set.</p>',
     '</body></html>',
   ].join('');
@@ -720,6 +780,7 @@ export function withIGRPAuth(options: IGRPAuthOptions = {}): IGRPAuthInstance {
     tokenRecoveryStore,
     cookieIsolation = 'basePath',
     secureCookies: secureCookiesOption,
+    debug = envFlag(env.IGRP_AUTH_DEBUG ?? process.env.IGRP_AUTH_DEBUG),
   } = options;
 
   // Resolved once, from the caller's `env` first: a caller that passes a
@@ -861,9 +922,15 @@ export function withIGRPAuth(options: IGRPAuthOptions = {}): IGRPAuthInstance {
    * session used to be stamped `"none"`, and every OIDC helper then treated it as
    * the auth-disabled bypass: discovery resolved to `''`, `fetch('')` threw, and
    * the first refresh force-logged the user out of a healthy session.
+   *
+   * The documented STRING form (`provider: 'none'`) is honoured the same way.
+   * `resolveProvider` already lets it override `AUTH_PROVIDER` for the handler;
+   * reading the env here instead stamped the env's id on the token, so the
+   * handler and the token lifecycle disagreed about which provider was in play.
    */
   function resolveTokenProviderId(): SessionAuthProviderId {
     if (provider != null && typeof provider === 'object') return provider.id;
+    if (typeof provider === 'string') return provider;
     return getAuthProviderIdFromEnv(env);
   }
 
@@ -968,11 +1035,13 @@ export function withIGRPAuth(options: IGRPAuthOptions = {}): IGRPAuthInstance {
         // and running it anyway is what used to end custom-provider sessions on
         // a schedule (first by forcing a logout, then by inventing an expiry).
         // Hand the token straight to the caller's extension instead.
+        const withJwtExtension = (value: JWT): Promise<JWT> | JWT =>
+          callbackExtensions.jwt
+            ? runCallbackExtension('jwt', value, () => callbackExtensions.jwt!(params, value))
+            : value;
+
         if (!isManagedSessionToken(igrpToken)) {
-          if (callbackExtensions.jwt) {
-            return callbackExtensions.jwt(params, igrpToken);
-          }
-          return igrpToken;
+          return withJwtExtension(igrpToken);
         }
 
         // Token still valid — return as-is (with 60s proactive refresh buffer).
@@ -989,10 +1058,7 @@ export function withIGRPAuth(options: IGRPAuthOptions = {}): IGRPAuthInstance {
           if (igrpToken.error || igrpToken.forceLogout) {
             igrpToken = { ...igrpToken, error: undefined, forceLogout: false };
           }
-          if (callbackExtensions.jwt) {
-            return callbackExtensions.jwt(params, igrpToken);
-          }
-          return igrpToken;
+          return withJwtExtension(igrpToken);
         }
 
         // Access token expired (or within its refresh buffer).
@@ -1062,10 +1128,7 @@ export function withIGRPAuth(options: IGRPAuthOptions = {}): IGRPAuthInstance {
           }
         }
 
-        if (callbackExtensions.jwt) {
-          return callbackExtensions.jwt(params, igrpToken);
-        }
-        return igrpToken;
+        return withJwtExtension(igrpToken);
       },
 
       // SECURITY: copies accessToken + idToken onto the client session by design (the browser AM client needs accessToken); never log/serialize the session client-side. See the Session type JSDoc in session.ts.
@@ -1102,7 +1165,9 @@ export function withIGRPAuth(options: IGRPAuthOptions = {}): IGRPAuthInstance {
         }
 
         if (callbackExtensions.session) {
-          return callbackExtensions.session(params, igrpSession);
+          return runCallbackExtension('session', igrpSession, () =>
+            callbackExtensions.session!(params, igrpSession),
+          );
         }
         return igrpSession;
       },
@@ -1206,8 +1271,26 @@ export function withIGRPAuth(options: IGRPAuthOptions = {}): IGRPAuthInstance {
         const signOutDeadline = Date.now() + SIGNOUT_REVOCATION_BUDGET_MS;
         const remainingBudget = () => Math.max(0, signOutDeadline - Date.now());
 
+        // Revoke the LIVE refresh token. After a rotation that ran where the
+        // cookie could not be persisted (an RSC render), the cookie still holds
+        // the consumed token and the rotated one sits in the recovery store.
+        // Revoking the cookie's copy is a no-op at the IdP, and the cleanup
+        // below then dropped the store entry — the only valid refresh token
+        // simply vanished, unrevoked, until its own expiry. Peek the store
+        // first, exactly as the jwt callback does, and revoke what it holds.
+        // Same shape-only adoption as the jwt callback: an expired recovered
+        // access token is fine, its refresh token is what revocation needs.
+        const recovered = await withDeadline(
+          getRecoveredToken(token.refreshToken),
+          remainingBudget(),
+          null,
+        );
+        const liveToken = isUsableRecoveredToken(recovered)
+          ? applyRecoveredToken(token, recovered)
+          : token;
+
         try {
-          const result = await withDeadline(revokeOidcSession(token, env), remainingBudget(), {
+          const result = await withDeadline(revokeOidcSession(liveToken, env), remainingBudget(), {
             ok: false as const,
             reason: 'timeout' as const,
           });
@@ -1240,11 +1323,17 @@ export function withIGRPAuth(options: IGRPAuthOptions = {}): IGRPAuthInstance {
   // only happens in Node runtime (the /api/auth/[...nextauth] route). This
   // keeps `next-auth` + `openid-client` out of the Edge middleware bundle.
 
-  let cachedHandler: NextAuthHandler | null = null;
-  async function ensureHandler(): Promise<NextAuthHandler> {
-    if (cachedHandler) return cachedHandler;
-    cachedHandler = await createNextAuthHandler(authOptions, env);
-    return cachedHandler;
+  // The PROMISE is memoized, not the result, so concurrent first requests share
+  // one construction (the same reason `readSessionOnce` below is a promise).
+  // A failed construction is forgotten so the next request retries it rather
+  // than serving the rejection forever.
+  let handlerOnce: Promise<NextAuthHandler> | undefined;
+  function ensureHandler(): Promise<NextAuthHandler> {
+    handlerOnce ??= createNextAuthHandler(authOptions, debug).catch((error: unknown) => {
+      handlerOnce = undefined;
+      throw error;
+    });
+    return handlerOnce;
   }
 
   const handlerGET: NextAuthHandler = async (req, ctx) => {
@@ -1258,7 +1347,15 @@ export function withIGRPAuth(options: IGRPAuthOptions = {}): IGRPAuthInstance {
 
   // ── Middleware primitives (Edge-safe) ─────────────────────────────────────
 
+  // Answers from the RESOLVED provider, like the handlers do, so the two can
+  // never disagree. Reading only the env here meant `provider: 'none'` served
+  // 404 handlers while the middleware bounced every request to /login, and the
+  // reverse — `provider: 'igrp-auth'` with `AUTH_PROVIDER=none` — let the
+  // middleware fail OPEN while the handlers ran real auth. With no `provider`
+  // option the answer is the env's, as before.
   function isAuthDisabled(): boolean {
+    if (authIsDisabled) return true;
+    if (provider != null) return false;
     return isAuthDisabledFromEnv(env);
   }
 
@@ -1401,7 +1498,9 @@ export function withIGRPAuth(options: IGRPAuthOptions = {}): IGRPAuthInstance {
 
   // ── Return ─────────────────────────────────────────────────────────────────
 
-  const configErrorHandler = configError ? makeConfigErrorHandler(configError) : null;
+  const configErrorHandler = configError
+    ? makeConfigErrorHandler(configError, resolveNodeEnv(env) === 'production')
+    : null;
 
   return {
     configError,

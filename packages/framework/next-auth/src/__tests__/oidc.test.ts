@@ -333,7 +333,13 @@ describe('refreshOidcAccessToken — rotation recovery cache', () => {
       await refreshOidcAccessToken(makeToken({ refreshToken: 'old-rt' }), VALID_ENV);
       expect(await getRecoveredToken('old-rt')).not.toBeNull();
 
-      vi.advanceTimersByTime(180_000 + 1000);
+      // Must outlive the template's 600s backstop poll: that poll is the last
+      // persist-capable read guaranteed to happen after an RSC rotation when
+      // the adaptive watcher's timer never fired (background tab, closed tab).
+      vi.advanceTimersByTime(600_000 + 60_000);
+      expect(await getRecoveredToken('old-rt')).not.toBeNull();
+
+      vi.advanceTimersByTime(15 * 60_000);
       expect(await getRecoveredToken('old-rt')).toBeNull();
     } finally {
       vi.useRealTimers();
@@ -564,24 +570,59 @@ describe('introspectOidcToken', () => {
 
 // ─── configureOidcTokenRecoveryStore ─────────────────────────────────────────
 
-describe('refreshOidcAccessToken — expires_in coercion', () => {
-  it('falls back to 3600s when the IdP returns a non-numeric expires_in', async () => {
+describe('refreshOidcAccessToken — expiry when the IdP omits or mangles expires_in', () => {
+  // Same resolution order as sign-in (`resolveInitialExpiry` in ./config):
+  // the response's expires_in, then the new access token's own `exp`, then a
+  // SHORT self-correcting fallback. This path used to invent a full hour, the
+  // exact guess sign-in had already been fixed for: a ~3-minute token looked
+  // healthy for 57 minutes of guaranteed 401s after every refresh.
+  const NOW = Date.parse('2026-01-01T00:00:00.000Z');
+
+  function jwtWithExp(expSeconds: number): string {
+    const b64 = (v: string) =>
+      Buffer.from(v, 'utf-8')
+        .toString('base64')
+        .replace(/\+/g, '-')
+        .replace(/\//g, '_')
+        .replace(/=+$/, '');
+    return [b64('{"alg":"none"}'), b64(JSON.stringify({ exp: expSeconds })), 'sig'].join('.');
+  }
+
+  async function refreshWith(body: Record<string, unknown>) {
+    mockFetch([
+      { url: DISCOVERY_URL, body: MOCK_DISCOVERY },
+      { url: MOCK_DISCOVERY.token_endpoint, body },
+    ]);
+    const { refreshOidcAccessToken } = await import('../oidc');
+    return refreshOidcAccessToken(makeToken(), VALID_ENV);
+  }
+
+  beforeEach(() => {
     vi.useFakeTimers();
-    vi.setSystemTime(new Date('2026-01-01T00:00:00.000Z'));
-    try {
-      mockFetch([
-        { url: DISCOVERY_URL, body: MOCK_DISCOVERY },
-        {
-          url: MOCK_DISCOVERY.token_endpoint,
-          body: { access_token: 'new-at', expires_in: 'not-a-number' },
-        },
-      ]);
-      const { refreshOidcAccessToken } = await import('../oidc');
-      const result = await refreshOidcAccessToken(makeToken(), VALID_ENV);
-      expect(result.expiresAt).toBe(Date.now() + 3600 * 1000);
-    } finally {
-      vi.useRealTimers();
-    }
+    vi.setSystemTime(new Date(NOW));
+  });
+
+  afterEach(() => {
+    vi.useRealTimers();
+  });
+
+  it("reads the new access token's own exp when expires_in is absent", async () => {
+    const result = await refreshWith({ access_token: jwtWithExp(NOW / 1000 + 180) });
+    expect(result.expiresAt).toBe(NOW + 180_000);
+  });
+
+  it('ignores a non-numeric expires_in and falls through to the token exp', async () => {
+    const result = await refreshWith({
+      access_token: jwtWithExp(NOW / 1000 + 180),
+      expires_in: 'not-a-number',
+    });
+    expect(result.expiresAt).toBe(NOW + 180_000);
+  });
+
+  it('uses the same short, self-correcting fallback as sign-in for an opaque token', async () => {
+    const result = await refreshWith({ access_token: 'opaque-not-a-jwt' });
+    expect(result.expiresAt).toBe(NOW + 5 * 60_000);
+    expect(result.expiresAt).toBeLessThan(NOW + 3600 * 1000);
   });
 });
 
@@ -852,5 +893,170 @@ describe('isUsableRecoveredToken', () => {
     expect(isUsableRecoveredToken(makeToken({ accessToken: undefined }))).toBe(false);
     expect(isUsableRecoveredToken(makeToken({ accessToken: '' }))).toBe(false);
     expect(isUsableRecoveredToken(makeToken({ error: 'RefreshAccessTokenError' }))).toBe(false);
+  });
+});
+
+describe('token-endpoint client authentication', () => {
+  // RFC 6749 §2.3.1: a server MUST support HTTP Basic for clients with a
+  // secret and only MAY support `client_secret_post`. Introspection already
+  // used Basic; refresh and revocation posted the secret in the body, so an
+  // authorization server registered for a single method broke one side.
+  function tokenEndpointCall(url: string): RequestInit {
+    const call = vi
+      .mocked(fetch)
+      .mock.calls.find(([calledUrl]) => calledUrl === url) as unknown as [string, RequestInit];
+    expect(call, `expected a call to ${url}`).toBeDefined();
+    return call[1];
+  }
+
+  it('authenticates the refresh grant with a Basic header, not a client_secret in the body', async () => {
+    mockFetch([
+      { url: DISCOVERY_URL, body: MOCK_DISCOVERY },
+      { url: MOCK_DISCOVERY.token_endpoint, body: { access_token: 'new-at', expires_in: 60 } },
+    ]);
+    const { refreshOidcAccessToken } = await import('../oidc');
+    await refreshOidcAccessToken(makeToken(), VALID_ENV);
+
+    const init = tokenEndpointCall(MOCK_DISCOVERY.token_endpoint);
+    expect((init.headers as Record<string, string>).Authorization).toBe(
+      `Basic ${btoa('test-client:test-secret')}`,
+    );
+    expect((init.body as URLSearchParams).has('client_secret')).toBe(false);
+  });
+
+  it('authenticates revocation with a Basic header, not a client_secret in the body', async () => {
+    mockFetch([
+      { url: DISCOVERY_URL, body: MOCK_DISCOVERY },
+      { url: MOCK_DISCOVERY.revocation_endpoint, body: {} },
+    ]);
+    const { revokeOidcSession } = await import('../oidc');
+    await revokeOidcSession(makeToken(), VALID_ENV);
+
+    const init = tokenEndpointCall(MOCK_DISCOVERY.revocation_endpoint);
+    expect((init.headers as Record<string, string>).Authorization).toBe(
+      `Basic ${btoa('test-client:test-secret')}`,
+    );
+    expect((init.body as URLSearchParams).has('client_secret')).toBe(false);
+  });
+});
+
+describe('refreshOidcAccessToken — malformed success response', () => {
+  it('treats a non-JSON 200 from the token endpoint as a failed refresh instead of throwing', async () => {
+    // A proxy answering 200 with an HTML error page made `response.json()`
+    // reject; every deduped awaiter then rejected and the jwt callback logged
+    // "threw unexpectedly". It is a failed refresh like any other.
+    vi.stubGlobal(
+      'fetch',
+      vi.fn((url: string) =>
+        Promise.resolve(
+          url === DISCOVERY_URL
+            ? { ok: true, status: 200, json: () => Promise.resolve(MOCK_DISCOVERY) }
+            : {
+                ok: true,
+                status: 200,
+                json: () => Promise.reject(new SyntaxError('Unexpected token <')),
+              },
+        ),
+      ),
+    );
+    const { refreshOidcAccessToken } = await import('../oidc');
+    const result = await refreshOidcAccessToken(makeToken(), VALID_ENV);
+    expect(result.error).toBe('RefreshAccessTokenError');
+    expect(result.forceLogout).toBe(true);
+  });
+});
+
+describe('getOpenIdConfiguration — poisoned-entry eviction', () => {
+  it('does not evict a newer discovery entry when an older failed fetch finally settles', async () => {
+    vi.useFakeTimers();
+    try {
+      let rejectFirst!: (reason: unknown) => void;
+      const fetchMock = vi
+        .fn()
+        .mockImplementationOnce(
+          () =>
+            new Promise((_resolve, reject) => {
+              rejectFirst = reject;
+            }),
+        )
+        .mockImplementation(() =>
+          Promise.resolve({
+            ok: true,
+            status: 200,
+            json: () => Promise.resolve({ ...MOCK_DISCOVERY, active: true }),
+          }),
+        );
+      vi.stubGlobal('fetch', fetchMock);
+      const { introspectOidcToken } = await import('../oidc');
+
+      // 1. First discovery fetch hangs.
+      const first = introspectOidcToken(makeToken(), VALID_ENV);
+      // 2. Its cache entry ages past the TTL; the next call fetches discovery again.
+      vi.advanceTimersByTime(5 * 60_000 + 1);
+      await introspectOidcToken(makeToken(), VALID_ENV);
+      // 3. The ORIGINAL fetch now fails. Its cleanup must not drop the entry from step 2.
+      rejectFirst(new Error('boom'));
+      await first;
+      // 4. A third call must hit the cache, not the network.
+      await introspectOidcToken(makeToken(), VALID_ENV);
+
+      const discoveryFetches = fetchMock.mock.calls.filter(([url]) => url === DISCOVERY_URL);
+      expect(discoveryFetches).toHaveLength(2);
+    } finally {
+      vi.useRealTimers();
+    }
+  });
+});
+
+describe('buildEndSessionUrl — relative post_logout_redirect_uri under a basePath', () => {
+  const ENV_WITH_URL = { ...VALID_ENV, NEXTAUTH_URL: 'http://app.example/apps/t/api/auth' };
+
+  it('resolves a path that does not carry the basePath against the app base, not the host root', async () => {
+    // `/login` for an app at `/apps/t` is `/apps/t/login`; resolving against
+    // the bare origin sent the browser to a route this app does not serve.
+    mockFetch([{ url: DISCOVERY_URL, body: MOCK_DISCOVERY }]);
+    const { buildEndSessionUrl } = await import('../oidc');
+    const url = await buildEndSessionUrl(makeToken(), ENV_WITH_URL, '/login');
+    expect(new URL(url!).searchParams.get('post_logout_redirect_uri')).toBe(
+      'http://app.example/apps/t/login',
+    );
+  });
+
+  it('falls back to process.env.NODE_ENV for its dev-only warnings when the env map has none', async () => {
+    // `withIGRPAuth` resolves NODE_ENV with a process fallback; this helper read
+    // only the map, so a validated env without NODE_ENV was always "dev".
+    vi.stubEnv('NODE_ENV', 'production');
+    const warn = vi.spyOn(console, 'warn').mockImplementation(() => {});
+    try {
+      const { buildEndSessionUrl } = await import('../oidc');
+      await buildEndSessionUrl(
+        makeToken({ authProviderId: 'none' }),
+        { AUTH_PROVIDER: 'none' },
+        '/',
+      );
+      expect(warn).not.toHaveBeenCalled();
+    } finally {
+      warn.mockRestore();
+      vi.unstubAllEnvs();
+    }
+  });
+});
+
+describe('revokeOidcSession — never throws, as its result type promises', () => {
+  it('reports missing client configuration as a tagged result', async () => {
+    mockFetch([]);
+    const { revokeOidcSession } = await import('../oidc');
+    const result = await revokeOidcSession(makeToken(), { AUTH_PROVIDER: 'igrp-auth' });
+    expect(result).toMatchObject({ ok: false, reason: 'not_configured' });
+  });
+
+  it('reports a failed discovery fetch as a network error', async () => {
+    vi.stubGlobal(
+      'fetch',
+      vi.fn(() => Promise.reject(new Error('ECONNREFUSED'))),
+    );
+    const { revokeOidcSession } = await import('../oidc');
+    const result = await revokeOidcSession(makeToken(), VALID_ENV);
+    expect(result).toMatchObject({ ok: false, reason: 'network_error' });
   });
 });

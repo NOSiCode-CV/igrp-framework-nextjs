@@ -170,6 +170,24 @@ export function decodeIgrpClaims(accessToken: string): IGRPAccessClaims {
 }
 
 /**
+ * `exp` of an access token in MILLISECONDS, or `undefined` when the token is
+ * opaque, malformed or carries no `exp`. Never throws.
+ *
+ * This is the best-effort read both the sign-in and the refresh paths fall
+ * back on when the IdP's token response said nothing about lifetime — an IdP
+ * that omits `expires_in` still stamps `exp` into the token it just issued, so
+ * "we don't know" is much rarer than a bare `expires_in` check suggests.
+ */
+export function accessTokenExpiresAt(accessToken: unknown): number | undefined {
+  if (typeof accessToken !== 'string' || accessToken.length === 0) return undefined;
+  try {
+    return decodeIgrpClaims(accessToken).expiresAt;
+  } catch {
+    return undefined;
+  }
+}
+
+/**
  * True when the claims grant `name`. Super admin bypasses; a dotted `name`
  * is matched verbatim; a bare `name` is qualified with the active `org`.
  */

@@ -319,6 +319,18 @@
       "appliedAt": "2026-09-30T00:00:00.000Z",
       "cliVersion": "0.2.0-beta.3",
       "manifestHash": "cbec2b5b1954bb5d"
+    },
+    {
+      "id": "53-review-perf-security-fixes",
+      "appliedAt": "2026-10-09T00:00:00.000Z",
+      "cliVersion": "0.2.0-beta.3",
+      "manifestHash": "364b0b414d449d3e"
+    },
+    {
+      "id": "54-home-request-path",
+      "appliedAt": "2026-10-09T00:00:00.000Z",
+      "cliVersion": "0.2.0-beta.3",
+      "manifestHash": "39811c2580594864"
     }
   ]
 }

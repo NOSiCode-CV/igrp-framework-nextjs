@@ -8,7 +8,9 @@ export interface JWT extends DefaultJWT {
   idToken?: string;
   authProviderId?: SessionAuthProviderId;
   expiresAt?: number;
-  error?: 'RefreshAccessTokenError' | string;
+  // `(string & {})` keeps the literal visible in completions; a bare `| string`
+  // collapses the union to `string` and loses it.
+  error?: 'RefreshAccessTokenError' | (string & {});
   forceLogout?: boolean;
   user?: NextAuthUser;
 }

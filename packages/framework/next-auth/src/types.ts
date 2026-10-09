@@ -58,7 +58,7 @@ declare module 'next-auth/jwt' {
     idToken?: string;
     authProviderId?: SessionAuthProviderId;
     expiresAt?: number;
-    error?: 'RefreshAccessTokenError' | string;
+    error?: 'RefreshAccessTokenError' | (string & {});
     forceLogout?: boolean;
     user?: {
       id?: string;

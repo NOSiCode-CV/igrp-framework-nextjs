@@ -19,6 +19,15 @@ import type { JWT } from './jwt';
  *
  * Implementations must be resilient: callers treat a thrown error as a cache
  * miss, but well-behaved stores should not throw on routine operations.
+ *
+ * SECURITY: both the key and the value are bearer material in PLAINTEXT — the
+ * key is a (consumed) refresh token and the value is a full JWT carrying the
+ * rotated refresh token, the access token and the id_token. A shared
+ * implementation must therefore treat its backing store like the session
+ * cookie itself: encrypt at rest, restrict network and credential access to
+ * the app replicas, never log keys or values, and let entries expire on `ttlMs`
+ * rather than keeping them around. Nothing in this package encrypts the value
+ * before handing it to `set`.
  */
 export type IGRPTokenRecoveryStore = {
   /** Returns the rotated JWT cached for a consumed refresh token, or null. */

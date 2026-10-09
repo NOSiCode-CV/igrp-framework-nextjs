@@ -8,9 +8,17 @@ items live in the [repo-wide register](../../../KNOWN-ISSUES.md).
 
 ## 1. The pre-rename session cookie is orphaned, never swept
 
-**Status:** mitigated for basePath apps (2026-10-06, automatic sweep — see the
-note below) · open for root-path apps · introduced deliberately, with eyes
-open, by the basePath cookie-terminator fix (2026-09-21)
+**Status:** mostly closed — the automatic sweep (`staleAuthCookies`, option 2
+below) shipped on 2026-10-06 and the template middleware runs it. As of
+2026-10-09: **(a)** root-path apps' stock-named orphan can now be swept with
+`staleAuthCookies(basePath, names, { sweepStockNames: true })` — opt-in,
+because the stock name could be a live cookie of an older co-hosted app; the
+application center (a root-path app whose orphan reaches every co-hosted app
+on every request) should wire it into its middleware. **(b)** the unhashed
+names of a lossy basePath remain deliberately unswept and expire on their own.
+Re-check this entry when the next basePath-affecting cookie change lands.
+Introduced deliberately, with eyes open, by the basePath cookie-terminator fix
+(2026-09-21).
 
 **Severity:** low, but it grows with cookie size — see "why it is not purely
 cosmetic".
@@ -93,22 +101,22 @@ no need for.
 
 ### Fix
 
-Two options, in increasing order of effort.
+Both options below are now in place.
 
-1. **Operational (available today, zero code).** `igrpDeleteAuthCookies()` from
-   `@igrp/framework-next` matches by basename, so it already removes both the
-   old and new forms. Call it on the logout path. Documented in this package's
+1. **Operational.** `igrpDeleteAuthCookies()` from `@igrp/framework-next`
+   matches by basename and expires each match at the path it was set at, so it
+   removes every form on the logout path. Documented in this package's
    `README.md` under "Cookies → Upgrading".
-2. **Automatic sweep.** Export a helper here, e.g.
-   `staleAuthCookieNames(basePath, presentCookieNames): string[]` — pure, in
-   `src/cookies.ts`, returning session-cookie names that share the basename but
-   are not the current name. The template's middleware then expires each one on
-   the response it already builds. Keep the naming logic in `src/cookies.ts`;
-   a second copy downstream is how cookie naming drifts, which is the whole
-   reason `./cookies` is a shared entry point.
+2. **Automatic sweep — DONE 2026-10-06.** `staleAuthCookies(basePath,
+presentCookieNames)` in `src/cookies.ts` returns this app's previous names
+   (terminated and pre-terminator forms, with chunks, with or without the
+   `__Secure-` prefix) and the options that expire them; the template's
+   `middleware.ts` applies it to every response. Naming logic stays in
+   `src/cookies.ts` only.
 
-Whichever is chosen, it is worth doing **before** the next basePath-affecting
-cookie change, so the sweep exists the next time a rename happens.
+What the sweep cannot cover, by design, is listed under **Status**. The
+sweep exists now, so the next basePath-affecting cookie change should extend
+`staleAuthCookies` with the name it retires rather than orphan another cookie.
 
 ### References
 

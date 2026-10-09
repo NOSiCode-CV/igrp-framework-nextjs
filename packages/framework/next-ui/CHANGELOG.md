@@ -1,5 +1,14 @@
 # @igrp/framework-next-ui
 
+## 0.2.0-beta.6
+
+### Patch Changes
+
+- 323ed9e: `IGRPAuthCarousel`: stop preloading the first slide on viewports where the carousel is hidden, and size slide images for the half-width auth layout. The first slide now uses `fetchPriority="high"` instead of `priority`, and a new optional `sizes` prop (default `(min-width: 768px) 50vw, 100vw`) replaces the hard-coded `33vw` value that served undersized images on wide screens.
+- Updated dependencies [323ed9e]
+  - @igrp/framework-next-auth@0.2.0-beta.5
+  - @igrp/framework-next-types@0.2.0-beta.5
+
 ## 0.2.0-beta.5
 
 ### Patch Changes

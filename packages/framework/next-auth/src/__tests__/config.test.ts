@@ -827,9 +827,7 @@ describe('withIGRPAuth — secure-cookie derivation', () => {
       env: { ...VALID_ENV, NEXTAUTH_URL: 'https://h/api/auth' },
     });
     expect(https.authOptions.useSecureCookies).toBe(true);
-    expect(https.authOptions.cookies!.sessionToken!.name).toBe(
-      '__Secure-next-auth.session-token~',
-    );
+    expect(https.authOptions.cookies!.sessionToken!.name).toBe('__Secure-next-auth.session-token~');
   });
 
   it('leaves useSecureCookies unset when isolation is opted out of', async () => {
@@ -1106,5 +1104,287 @@ describe('withIGRPAuth — recovered token freshness', () => {
       refreshToken: 'consumed-rt',
     });
     expect(result.refreshToken).toBe('consumed-rt');
+  });
+});
+
+describe('withIGRPAuth — a string `provider` option agrees with the env primitives', () => {
+  beforeEach(() => {
+    vi.clearAllMocks();
+  });
+
+  it('provider: "none" disables auth for the middleware primitives, not only the handlers', async () => {
+    // The handlers already answered 404, but `isAuthDisabled()` re-read the
+    // env (unset → igrp-auth) and said false, so a middleware following the
+    // documented pattern bounced every request to /login.
+    const withIGRPAuth = await getFactory();
+    const instance = withIGRPAuth({ provider: 'none', env: { NEXTAUTH_SECRET: 's' } });
+    expect(instance.configError).toBeNull();
+    expect(instance.isAuthDisabled()).toBe(true);
+  });
+
+  it('provider: "igrp-auth" keeps auth ON when the env says none — middleware must not fail open', async () => {
+    const withIGRPAuth = await getFactory();
+    const instance = withIGRPAuth({
+      provider: 'igrp-auth',
+      env: { ...VALID_ENV, AUTH_PROVIDER: 'none' },
+    });
+    expect(instance.configError).toBeNull();
+    expect(instance.isAuthDisabled()).toBe(false);
+  });
+
+  it('stamps the string provider on the JWT, not the env fallback', async () => {
+    const withIGRPAuth = await getFactory();
+    const instance = withIGRPAuth({
+      provider: 'igrp-auth',
+      env: { ...VALID_ENV, AUTH_PROVIDER: 'none' },
+    });
+    const token = (await instance.authOptions.callbacks!.jwt!({
+      token: {},
+      account: { access_token: 'at', refresh_token: 'rt', expires_in: 3600 },
+    } as never)) as { authProviderId?: string };
+    expect(token.authProviderId).toBe('igrp-auth');
+  });
+});
+
+describe('withIGRPAuth — events.signOut revokes the live refresh token', () => {
+  beforeEach(() => {
+    vi.clearAllMocks();
+    vi.mocked(oidcModule.revokeOidcSession).mockResolvedValue({ ok: true, status: 200 });
+  });
+
+  it('revokes the ROTATED token when the cookie still holds a consumed one', async () => {
+    // After an RSC rotation the cookie's refresh token is already spent and the
+    // live one sits in the recovery store. Revoking the cookie's copy is a
+    // no-op at the IdP, and the store entry was then deleted without ever
+    // being revoked — the only valid refresh token simply vanished.
+    vi.mocked(oidcModule.getRecoveredToken).mockResolvedValue({
+      accessToken: 'rotated-at',
+      refreshToken: 'rotated-rt',
+    } as never);
+    try {
+      const withIGRPAuth = await getFactory();
+      const instance = withIGRPAuth({ env: VALID_ENV });
+      await instance.authOptions.events!.signOut!({
+        token: { refreshToken: 'consumed-rt', accessToken: 'old-at' },
+      } as never);
+
+      expect(oidcModule.revokeOidcSession).toHaveBeenCalledWith(
+        expect.objectContaining({ refreshToken: 'rotated-rt' }),
+        VALID_ENV,
+      );
+    } finally {
+      vi.mocked(oidcModule.getRecoveredToken).mockResolvedValue(null);
+    }
+  });
+});
+
+describe('withIGRPAuth — default matcher', () => {
+  it('excludes the reserved prefixes as whole segments, not as string prefixes', async () => {
+    // `(?!apps|_next|…)` left `/appstore`, `/apps-admin` and `/_nextfoo`
+    // outside the middleware entirely — the lookahead matched the first four
+    // characters and stopped.
+    const withIGRPAuth = await getFactory();
+    const instance = withIGRPAuth({ env: VALID_ENV });
+    const re = new RegExp(`^${instance.config.matcher[1]}$`);
+
+    for (const protectedPath of ['/appstore', '/apps-admin', '/_nextfoo', '/dashboard']) {
+      expect(re.test(protectedPath), `${protectedPath} must wake the middleware`).toBe(true);
+    }
+    for (const skipped of ['/apps', '/apps/x', '/_next/static/a.js', '/favicon.ico', '/a/b.png']) {
+      expect(re.test(skipped), `${skipped} must stay excluded`).toBe(false);
+    }
+  });
+
+  it('skips static-asset extensions only, not every path that contains a dot', async () => {
+    // `.*\..*` skipped any PAGE route with a dot in it — a dynamic segment
+    // capturing `john.doe` or `v1.2` never woke the middleware.
+    const withIGRPAuth = await getFactory();
+    const instance = withIGRPAuth({ env: VALID_ENV });
+    const re = new RegExp(`^${instance.config.matcher[1]}$`);
+
+    for (const page of ['/users/john.doe', '/releases/v1.2', '/docs/node.js-guide']) {
+      expect(re.test(page), `${page} must wake the middleware`).toBe(true);
+    }
+    for (const asset of [
+      '/logo.png',
+      '/robots.txt',
+      '/sitemap.xml',
+      '/manifest.webmanifest',
+      '/fonts/inter.woff2',
+      '/static/app.css',
+      '/vendor/lib.min.js',
+    ]) {
+      expect(re.test(asset), `${asset} must stay excluded`).toBe(false);
+    }
+  });
+});
+
+describe('withIGRPAuth — route handler construction', () => {
+  it('constructs the NextAuth handler once for concurrent first requests', async () => {
+    // Same dance as the control-flow suite above: the mock only takes for a
+    // module graph that has not already resolved `next-auth`.
+    vi.resetModules();
+    const NextAuth = vi.fn(() => async () => new Response('ok'));
+    vi.doMock('next-auth', () => ({ default: NextAuth, getServerSession: vi.fn() }));
+    try {
+      // Before the fix this failed with a TypeError from the REAL next-auth
+      // rather than with the call count: two concurrent `import('next-auth')`
+      // calls let the second fall through to the real package in vitest. That
+      // second import only exists because the handler was built twice, so the
+      // failure mode is the defect itself, just wearing a different message.
+      const withIGRPAuth = await getFactory();
+      const instance = withIGRPAuth({ env: VALID_ENV });
+      await Promise.all([
+        instance.GET(new Request('http://localhost/api/auth/session')),
+        instance.GET(new Request('http://localhost/api/auth/session')),
+      ]);
+      expect(NextAuth).toHaveBeenCalledTimes(1);
+    } finally {
+      vi.doUnmock('next-auth');
+      vi.resetModules();
+    }
+  });
+});
+
+describe('withIGRPAuth — NextAuth debug logging is opt-in', () => {
+  // next-auth's debug logger prints OAuth token responses and profiles. Tying
+  // it to NODE_ENV=development put bearer tokens in every dev console by
+  // default; it is now off unless asked for.
+  async function debugFlagFor(options: Record<string, unknown>) {
+    vi.resetModules();
+    const NextAuth = vi.fn(() => async () => new Response('ok'));
+    vi.doMock('next-auth', () => ({ default: NextAuth, getServerSession: vi.fn() }));
+    try {
+      const withIGRPAuth = await getFactory();
+      const instance = withIGRPAuth(options as never);
+      await instance.GET(new Request('http://localhost/api/auth/session'));
+      return (NextAuth.mock.calls[0] as unknown as [{ debug?: boolean }])[0].debug;
+    } finally {
+      vi.doUnmock('next-auth');
+      vi.resetModules();
+    }
+  }
+
+  it('is off in development by default', async () => {
+    expect(await debugFlagFor({ env: { ...VALID_ENV, NODE_ENV: 'development' } })).toBe(false);
+  });
+
+  it('turns on with IGRP_AUTH_DEBUG=true', async () => {
+    expect(
+      await debugFlagFor({
+        env: { ...VALID_ENV, NODE_ENV: 'development', IGRP_AUTH_DEBUG: 'true' },
+      }),
+    ).toBe(true);
+  });
+
+  it('honours an explicit `debug` option over the env', async () => {
+    expect(
+      await debugFlagFor({ debug: false, env: { ...VALID_ENV, IGRP_AUTH_DEBUG: 'true' } }),
+    ).toBe(false);
+  });
+});
+
+describe('withIGRPAuth — config-error page does not describe the deployment in production', () => {
+  const BROKEN_ENV = { AUTH_PROVIDER: 'igrp-auth' }; // every IGRP_AUTH_* var missing
+
+  it('names the missing variables in development', async () => {
+    const withIGRPAuth = await getFactory();
+    const instance = withIGRPAuth({ env: { ...BROKEN_ENV, NODE_ENV: 'development' } });
+    const body = await (
+      await instance.GET(new Request('http://localhost/api/auth/session'))
+    ).text();
+    expect(body).toContain('IGRP_AUTH_CLIENT_ID');
+  });
+
+  it('shows only the error code in production and logs the detail server-side', async () => {
+    // The page is served unauthenticated to anyone who hits /api/auth/*.
+    const error = vi.spyOn(console, 'error').mockImplementation(() => {});
+    try {
+      const withIGRPAuth = await getFactory();
+      const instance = withIGRPAuth({ env: { ...BROKEN_ENV, NODE_ENV: 'production' } });
+      const response = await instance.GET(new Request('http://localhost/api/auth/session'));
+      const body = await response.text();
+      expect(response.status).toBe(500);
+      expect(body).toContain('AUTH_CONFIG_INVALID');
+      expect(body).not.toContain('IGRP_AUTH_CLIENT_ID');
+      expect(error.mock.calls.flat().join(' ')).toContain('IGRP_AUTH_CLIENT_ID');
+    } finally {
+      error.mockRestore();
+    }
+  });
+});
+
+describe('withIGRPAuth — a throwing callback extension does not end the session', () => {
+  // next-auth catches a throw from `callbacks.jwt`, logs JWT_SESSION_ERROR and
+  // CLEARS the session cookie — so a bug in an app's extension signed the user
+  // out. The IGRP value is returned instead, and the failure is logged loudly.
+  const FUTURE = Date.now() + 10 * 60_000;
+
+  beforeEach(() => {
+    vi.clearAllMocks();
+  });
+
+  it('returns the IGRP token when the jwt extension throws, and logs it', async () => {
+    const error = vi.spyOn(console, 'error').mockImplementation(() => {});
+    try {
+      const withIGRPAuth = await getFactory();
+      const instance = withIGRPAuth({
+        env: VALID_ENV,
+        callbacks: {
+          jwt: async () => {
+            throw new Error('extension boom');
+          },
+        },
+      });
+      const token = (await instance.authOptions.callbacks!.jwt!({
+        token: { accessToken: 'at', refreshToken: 'rt', expiresAt: FUTURE },
+        account: undefined,
+      } as never)) as { accessToken?: string };
+      expect(token.accessToken).toBe('at');
+      expect(error.mock.calls.flat().map(String).join(' ')).toContain('extension boom');
+    } finally {
+      error.mockRestore();
+    }
+  });
+
+  it('returns the IGRP session when the session extension throws', async () => {
+    const error = vi.spyOn(console, 'error').mockImplementation(() => {});
+    try {
+      const withIGRPAuth = await getFactory();
+      const instance = withIGRPAuth({
+        env: VALID_ENV,
+        callbacks: {
+          session: async () => {
+            throw new Error('session extension boom');
+          },
+        },
+      });
+      const session = (await instance.authOptions.callbacks!.session!({
+        session: { user: { name: 'n' } },
+        token: { accessToken: 'at', sub: 'u1' },
+      } as never)) as { accessToken?: string };
+      expect(session.accessToken).toBe('at');
+    } finally {
+      error.mockRestore();
+    }
+  });
+
+  it('still lets a Next control-flow signal thrown by an extension through', async () => {
+    const withIGRPAuth = await getFactory();
+    const signal = Object.assign(new Error('NEXT_REDIRECT'), { digest: 'NEXT_REDIRECT' });
+    const instance = withIGRPAuth({
+      env: VALID_ENV,
+      callbacks: {
+        jwt: async () => {
+          throw signal;
+        },
+      },
+    });
+    await expect(
+      instance.authOptions.callbacks!.jwt!({
+        token: { accessToken: 'at', expiresAt: FUTURE },
+        account: undefined,
+      } as never),
+    ).rejects.toBe(signal);
   });
 });

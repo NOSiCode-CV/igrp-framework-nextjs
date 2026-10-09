@@ -176,9 +176,7 @@ export function basePathCookieSuffix(basePath: string | undefined): string {
   if (!slug) return SUFFIX_TERMINATOR;
   // Hash the ORIGINAL basePath, not the slug — the slug is exactly the lossy
   // value we are disambiguating, so hashing it would collide identically.
-  const disambiguator = isLosslessSlug(canonical)
-    ? ''
-    : `${HASH_SEPARATOR}${shortHash(canonical)}`;
+  const disambiguator = isLosslessSlug(canonical) ? '' : `${HASH_SEPARATOR}${shortHash(canonical)}`;
   return `.${slug}${disambiguator}${SUFFIX_TERMINATOR}`;
 }
 
@@ -292,10 +290,7 @@ export function sessionCookieName(basePath: string | undefined, secure: boolean)
  * Other options mirror NextAuth v4's own defaults so nothing else about cookie
  * behaviour changes.
  */
-export function buildAuthCookies(
-  basePath: string | undefined,
-  secure: boolean,
-): AuthCookieSet {
+export function buildAuthCookies(basePath: string | undefined, secure: boolean): AuthCookieSet {
   const suffix = authCookieSuffix(basePath);
   const csrfSuffix = basePathCookieSuffix(basePath);
   const securePrefix = secure ? SECURE_COOKIE_PREFIX : '';
@@ -373,8 +368,18 @@ export type StaleAuthCookie = {
  * default) — exactly the header weight path scoping exists to remove.
  *
  * Only names derived from `basePath` are returned, so a sweep can never touch
- * another app's cookies, whatever version that app runs. A root-path app
- * returns nothing: its cookies keep their name and `Path=/`.
+ * another app's cookies, whatever version that app runs.
+ *
+ * A root-path app returns nothing BY DEFAULT: its cookies keep `Path=/`, and
+ * the stock names it wrote before the `~` terminator (`next-auth.session-token`
+ * and its `.N` chunks) could in principle be a live cookie of an older,
+ * stock-named app sharing the host. That caution has a cost: a root app cannot
+ * scope its cookies below `Path=/`, so every orphan it leaves is sent to EVERY
+ * co-hosted app on EVERY request — a 2–4 KB chunked session cookie that nothing
+ * ever expires, on top of the live one. On a host whose only root app is the
+ * one running this code (the usual shape: one "center" app plus basePath apps),
+ * pass `sweepStockNames: true` to expire those stock names too. The current
+ * terminated names and the CSRF cookie are never touched.
  *
  * Pure, like the rest of this module: the caller owns the response. In the
  * template's middleware:
@@ -394,15 +399,29 @@ export type StaleAuthCookie = {
 export function staleAuthCookies(
   basePath: string | undefined,
   presentCookieNames: Iterable<string>,
+  options: {
+    /**
+     * Root-path apps only: also expire the pre-terminator STOCK names
+     * (`next-auth.session-token`, chunks included). Opt in only when no
+     * stock-named app shares the host. Ignored for a basePath app, whose
+     * stock names always belong to someone else.
+     */
+    sweepStockNames?: boolean;
+  } = {},
 ): StaleAuthCookie[] {
-  if (basePathCookiePath(basePath) === '/') return [];
-
-  const slug = basePathSlug(basePath);
-  const canonical = basePathCookiePath(basePath).slice(1);
-  const legacySuffixes = [basePathCookieSuffix(basePath)];
-  // The pre-terminator name had no hash, so for a lossy basePath it is shared
-  // with its lossless sibling — same reasoning as the known gap above.
-  if (slug && isLosslessSlug(canonical)) legacySuffixes.push(`.${slug}`);
+  const legacySuffixes: string[] = [];
+  if (basePathCookiePath(basePath) === '/') {
+    if (!options.sweepStockNames) return [];
+    // The stock name is the basename with no suffix at all.
+    legacySuffixes.push('');
+  } else {
+    const slug = basePathSlug(basePath);
+    const canonical = basePathCookiePath(basePath).slice(1);
+    legacySuffixes.push(basePathCookieSuffix(basePath));
+    // The pre-terminator name had no hash, so for a lossy basePath it is shared
+    // with its lossless sibling — same reasoning as the known gap above.
+    if (slug && isLosslessSlug(canonical)) legacySuffixes.push(`.${slug}`);
+  }
 
   const legacyNames = new Set<string>();
   for (const prefix of ['', SECURE_COOKIE_PREFIX]) {

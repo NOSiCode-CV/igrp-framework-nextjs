@@ -83,6 +83,5 @@ export default defineConfig({
     'next-auth/middleware',
     'next-auth/jwt',
     'next-auth/providers/oauth',
-    'next-auth/providers/keycloak',
   ],
 });

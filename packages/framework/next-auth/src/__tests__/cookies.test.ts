@@ -49,9 +49,7 @@ describe('buildAuthCookies', () => {
       expect(cookies.sessionToken.name).toBe('next-auth.session-token~');
       expect(cookies.csrfToken.name).toBe('next-auth.csrf-token~');
     }
-    expect(buildAuthCookies('', true).sessionToken.name).toBe(
-      '__Secure-next-auth.session-token~',
-    );
+    expect(buildAuthCookies('', true).sessionToken.name).toBe('__Secure-next-auth.session-token~');
   });
 
   it('scopes EVERY cookie, not just the session token', () => {
@@ -325,7 +323,13 @@ describe('authCookieSuffix — path-scoped names', () => {
 describe('buildAuthCookies — cookie path', () => {
   it('confines every cookie but CSRF to the app’s path', () => {
     const cookies = buildAuthCookies('/apps/a', true);
-    for (const key of ['sessionToken', 'callbackUrl', 'pkceCodeVerifier', 'state', 'nonce'] as const) {
+    for (const key of [
+      'sessionToken',
+      'callbackUrl',
+      'pkceCodeVerifier',
+      'state',
+      'nonce',
+    ] as const) {
       expect(cookies[key].options.path, key).toBe('/apps/a');
       expect(cookies[key].name, key).toContain('.apps-a_p~');
     }
@@ -393,7 +397,9 @@ describe('staleAuthCookies', () => {
   });
 
   it('leaves the CSRF cookie alone — it keeps its name and path', () => {
-    expect(names('/apps/a', ['next-auth.csrf-token.apps-a~', '__Host-next-auth.csrf-token.apps-a~'])).toEqual([]);
+    expect(
+      names('/apps/a', ['next-auth.csrf-token.apps-a~', '__Host-next-auth.csrf-token.apps-a~']),
+    ).toEqual([]);
   });
 
   it('returns nothing for a root-path app', () => {
@@ -405,7 +411,11 @@ describe('staleAuthCookies', () => {
     // may belong to the lossless sibling.
     const hashed = `next-auth.session-token${basePathCookieSuffix('/apps/a-b')}`;
     expect(
-      names('/apps/a-b', [hashed, 'next-auth.session-token.apps-a-b~', 'next-auth.session-token.apps-a-b']),
+      names('/apps/a-b', [
+        hashed,
+        'next-auth.session-token.apps-a-b~',
+        'next-auth.session-token.apps-a-b',
+      ]),
     ).toEqual([hashed]);
   });
 
@@ -414,7 +424,108 @@ describe('staleAuthCookies', () => {
       'next-auth.session-token.apps-a~',
       '__Secure-next-auth.session-token.apps-a~',
     ]);
-    expect(plain.options).toEqual({ path: '/', maxAge: 0, httpOnly: true, sameSite: 'lax', secure: false });
+    expect(plain.options).toEqual({
+      path: '/',
+      maxAge: 0,
+      httpOnly: true,
+      sameSite: 'lax',
+      secure: false,
+    });
     expect(secure.options.secure).toBe(true);
+  });
+});
+
+describe('staleAuthCookies — root-path app, opt-in stock-name sweep', () => {
+  // A root-path app cannot scope its cookies below `Path=/`, so every orphan it
+  // leaves behind is sent to EVERY co-hosted app on every request. The stock
+  // names it wrote before the `~` terminator (`next-auth.session-token`, with
+  // chunks) were deliberately never swept, because they might be a live
+  // cookie of an older stock-named app on the same host. When the operator
+  // knows there is no such app — the usual case: one root "center" app plus
+  // basePath apps — they can opt in.
+  const ROOT_JAR = [
+    'next-auth.session-token',
+    'next-auth.session-token.0',
+    'next-auth.session-token.1',
+    '__Secure-next-auth.session-token',
+    'next-auth.callback-url',
+    'next-auth.state',
+    'next-auth.pkce.code_verifier',
+    'next-auth.nonce',
+    '__Host-next-auth.csrf-token',
+    // This app's CURRENT names — must survive.
+    'next-auth.session-token~',
+    'next-auth.session-token~.0',
+    '__Secure-next-auth.session-token~',
+    'next-auth.csrf-token~',
+    // Other apps' names — must survive.
+    'next-auth.session-token.apps-a_p~',
+    'next-auth.session-token.apps-a~',
+    'igrp_active_theme',
+  ];
+
+  it('returns nothing for a root-path app by default (unchanged behaviour)', () => {
+    expect(staleAuthCookies('', ROOT_JAR)).toEqual([]);
+    expect(staleAuthCookies(undefined, ROOT_JAR)).toEqual([]);
+  });
+
+  it('sweeps the stock names and their chunks when asked to', () => {
+    const swept = staleAuthCookies('', ROOT_JAR, { sweepStockNames: true }).map((c) => c.name);
+    expect(swept.sort()).toEqual(
+      [
+        'next-auth.session-token',
+        'next-auth.session-token.0',
+        'next-auth.session-token.1',
+        '__Secure-next-auth.session-token',
+        'next-auth.callback-url',
+        'next-auth.state',
+        'next-auth.pkce.code_verifier',
+        'next-auth.nonce',
+      ].sort(),
+    );
+  });
+
+  it('never touches the current terminated names, the csrf cookie, or another app', () => {
+    const swept = staleAuthCookies('', ROOT_JAR, { sweepStockNames: true }).map((c) => c.name);
+    for (const keep of [
+      'next-auth.session-token~',
+      'next-auth.session-token~.0',
+      '__Secure-next-auth.session-token~',
+      'next-auth.csrf-token~',
+      '__Host-next-auth.csrf-token',
+      'next-auth.session-token.apps-a_p~',
+      'next-auth.session-token.apps-a~',
+      'igrp_active_theme',
+    ]) {
+      expect(swept, `${keep} must not be swept`).not.toContain(keep);
+    }
+  });
+
+  it('expires them at Path=/ with Secure set only for __Secure- names', () => {
+    const swept = staleAuthCookies(
+      '',
+      ['next-auth.session-token.0', '__Secure-next-auth.session-token'],
+      {
+        sweepStockNames: true,
+      },
+    );
+    expect(swept).toEqual([
+      {
+        name: 'next-auth.session-token.0',
+        options: { path: '/', maxAge: 0, httpOnly: true, sameSite: 'lax', secure: false },
+      },
+      {
+        name: '__Secure-next-auth.session-token',
+        options: { path: '/', maxAge: 0, httpOnly: true, sameSite: 'lax', secure: true },
+      },
+    ]);
+  });
+
+  it('is ignored for a basePath app, whose stock names belong to someone else', () => {
+    const swept = staleAuthCookies('/apps/a', ROOT_JAR, { sweepStockNames: true }).map(
+      (c) => c.name,
+    );
+    expect(swept).not.toContain('next-auth.session-token');
+    expect(swept).not.toContain('next-auth.session-token.0');
   });
 });

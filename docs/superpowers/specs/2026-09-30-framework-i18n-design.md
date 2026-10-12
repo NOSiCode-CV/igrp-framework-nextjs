@@ -1,7 +1,7 @@
 # Framework i18n: `@igrp/framework-next/i18n`
 
 Date: 2026-09-30
-Status: design approved after review, pending implementation plan
+Status: superseded by `2026-10-12-framework-i18n-v2-design.md` (was: design approved after review, pending implementation plan)
 
 Vocabulary: `packages/framework/CONTEXT.md` (Locale, Format locale, Locale choice, Session locale, Catalog, Chrome, Error copy).
 Decision record: `packages/framework/docs/adr/0001-cookie-first-locale-resolution.md`.

@@ -52,7 +52,7 @@ function DatePickerRangeField({
           id={fieldName}
           variant="outline"
           disabled={disabledPicker}
-          className={cn("group w-full justify-start shadow-xs", !value?.from && "text-muted-foreground")}
+          className={cn("group w-full justify-start border-input shadow-xs", !value?.from && "text-muted-foreground")}
         >
           <CalendarIcon
             className="shrink-0 text-muted-foreground/80 transition-colors group-hover:text-foreground"

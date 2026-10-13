@@ -141,7 +141,7 @@ function ComboboxField({
             aria-controls={listId}
             disabled={disabled}
             className={cn(
-              "w-full max-w-full justify-between overflow-hidden text-left",
+              "w-full max-w-full justify-between overflow-hidden border-input text-left",
               className,
               disabled && "pointer-events-none cursor-not-allowed opacity-50"
             )}

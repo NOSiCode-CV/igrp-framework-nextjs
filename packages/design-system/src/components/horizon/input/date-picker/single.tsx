@@ -72,7 +72,7 @@ function DatePickerSingleField({
             disabled={isDisabled}
             aria-invalid={ariaInvalid || undefined}
             aria-describedby={ariaDescribedBy}
-            className={cn("group w-full justify-between font-normal shadow-xs", !value && "text-muted-foreground")}
+            className={cn("group w-full justify-between border-input font-normal shadow-xs", !value && "text-muted-foreground")}
           >
             <span className={cn("truncate", !value && "text-muted-foreground")}>{displayText}</span>
             {!value && (

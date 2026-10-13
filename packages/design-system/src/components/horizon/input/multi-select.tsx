@@ -221,7 +221,7 @@ function MultiSelectControl({
             aria-describedby={ariaDescribedBy}
             disabled={disabled}
             className={cn(
-              "w-full min-w-0 justify-between gap-2 font-normal",
+              "w-full min-w-0 justify-between gap-2 border-input font-normal",
               selection.length === 0 && "text-muted-foreground",
               isInvalid && "border-destructive"
             )}

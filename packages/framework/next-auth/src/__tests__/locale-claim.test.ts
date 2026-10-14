@@ -97,13 +97,21 @@ describe('jwt callback — locale', () => {
   });
 
   it('seeds the locale for a provider the package does not manage', async () => {
-    const { jwt } = await callbacks();
-    const token = await jwt!({
+    // A real custom provider: `authProviderId` comes from the instance's
+    // provider, not from `account.provider`, so this is the only way onto the
+    // unmanaged path (the early return before the OIDC refresh machinery).
+    const { withIGRPAuth } = await import('../config');
+    const instance = withIGRPAuth({
+      provider: { id: 'github', name: 'GitHub', type: 'oauth' } as never,
+      env: { NEXTAUTH_SECRET: 's' },
+    });
+    const token = (await instance.authOptions.callbacks!.jwt!({
       token: { sub: 'u-1' },
       account: { ...ACCOUNT, provider: 'github' },
       user: { id: 'u-1', locale: 'pt' },
       profile: { sub: 'u-1' },
-    } as never);
+    } as never)) as { authProviderId?: string; locale?: string };
+    expect(token.authProviderId).toBe('github');
     expect(token.locale).toBe('pt');
   });
 

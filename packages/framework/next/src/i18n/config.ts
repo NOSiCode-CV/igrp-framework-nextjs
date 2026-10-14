@@ -118,10 +118,7 @@ export type IGRPChromeStringsOverride = {
 };
 
 export type IGRPI18nOverrides = Partial<
-  Record<
-    IGRPLocale,
-    { designSystem?: IGRPI18nStringsOverride; chrome?: IGRPChromeStringsOverride }
-  >
+  Record<IGRPLocale, { designSystem?: IGRPI18nStringsOverride; chrome?: IGRPChromeStringsOverride }>
 >;
 
 export interface IGRPI18nConfig extends IGRPI18nConfigBase {
@@ -161,7 +158,8 @@ export function igrpDefineI18n(options: IGRPI18nOptions): IGRPI18nConfig {
     string | undefined,
   ][]) {
     if (!tag) continue;
-    if (!igrpIsLocale(locale)) throw invalid(`formatLocales key "${locale}" is not a platform locale.`);
+    if (!igrpIsLocale(locale))
+      throw invalid(`formatLocales key "${locale}" is not a platform locale.`);
     assertFormatLocale(locale, tag);
     formatLocales[locale] = tag;
   }

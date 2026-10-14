@@ -37,7 +37,10 @@ describe('igrpDeepMergeMessages', () => {
 describe('igrpMergeMessages', () => {
   const i18n = igrpDefineI18n({ defaultLocale: 'pt' });
   const app = {
-    pt: { users: { title: 'Utilizadores', hello: 'Olá' }, common: { actions: { retry: 'Repetir' } } },
+    pt: {
+      users: { title: 'Utilizadores', hello: 'Olá' },
+      common: { actions: { retry: 'Repetir' } },
+    },
     fr: { users: { title: 'Utilisateurs' } },
   };
 

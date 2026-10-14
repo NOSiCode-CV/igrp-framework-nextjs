@@ -25,6 +25,7 @@ const HeaderDataProvider = (p: unknown) => ({ __marker: 'header', p });
 const SidebarDataProvider = (p: unknown) => ({ __marker: 'sidebar', p });
 vi.mock('../providers/header-data-provider.js', () => ({ HeaderDataProvider }));
 vi.mock('../providers/sidebar-data-provider.js', () => ({ SidebarDataProvider }));
+vi.mock('../../i18n/server/resolve.js', () => ({ igrpResolveLocale: async () => 'en' }));
 
 const { IGRPLayoutFull } = await import('../igrp-layout-full.js');
 
@@ -103,5 +104,24 @@ describe('IGRPLayoutFull wiring', () => {
       defaultSidebarOpen: false,
     });
     expect(closed.props.defaultOpen).toBe(false);
+  });
+
+  it('seeds the access-client config and both providers with the resolved locale when config.i18n is set', async () => {
+    const i18n = {
+      defaultLocale: 'pt',
+      locales: ['pt', 'en'],
+      formatLocales: {},
+      resolution: 'cookie-first',
+    };
+    const el = await IGRPLayoutFull({ config: config({ i18n }), children: null });
+    expect(setConfig).toHaveBeenCalledWith(expect.objectContaining({ locale: 'en' }));
+    expect(findElement(el.props.header, HeaderDataProvider).props.locale).toBe('en');
+    expect(findElement(el.props.sidebar, SidebarDataProvider).props.locale).toBe('en');
+  });
+
+  it('leaves the locale out without config.i18n', async () => {
+    const el = await IGRPLayoutFull({ config: config(), children: null });
+    expect(setConfig).toHaveBeenCalledWith({ token: 'AT', baseUrl: 'http://am' });
+    expect(findElement(el.props.header, HeaderDataProvider).props.locale).toBeUndefined();
   });
 });

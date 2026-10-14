@@ -3,10 +3,7 @@
 import { useMemo, type ReactNode } from 'react';
 import { type AbstractIntlMessages, NextIntlClientProvider } from 'next-intl';
 import { IGRPChromeI18nProvider, type IGRPChromeStrings } from '@igrp/framework-next-ui';
-import {
-  IGRPI18nProvider,
-  type IGRPI18nStrings,
-} from '@igrp/igrp-framework-react-design-system';
+import { IGRPI18nProvider, type IGRPI18nStrings } from '@igrp/igrp-framework-react-design-system';
 
 import type { IGRPLocale } from '../config.js';
 import { igrpGetMessageFallback, igrpOnIntlError } from '../fallback.js';

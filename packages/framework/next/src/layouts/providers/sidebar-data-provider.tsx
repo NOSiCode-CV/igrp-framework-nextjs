@@ -19,6 +19,8 @@ type SidebarDataProviderProps = {
   baseUrl: string;
   /** Per-request AM client timeout; see igrp-layout-full.tsx. */
   timeout?: number;
+  /** Base locale for `Accept-Language`; see igrp-layout-full.tsx. */
+  locale?: string;
 };
 
 export async function SidebarDataProvider({
@@ -26,12 +28,18 @@ export async function SidebarDataProvider({
   token,
   baseUrl,
   timeout,
+  locale,
 }: SidebarDataProviderProps) {
   const { appCode, previewMode } = config;
   const layoutData = igrpResolveLayoutDataSource(config);
 
   if (!previewMode) {
-    igrpSetAccessClientConfig({ token, baseUrl, ...(timeout !== undefined ? { timeout } : {}) });
+    igrpSetAccessClientConfig({
+      token,
+      baseUrl,
+      ...(timeout !== undefined ? { timeout } : {}),
+      ...(locale ? { locale } : {}),
+    });
   }
 
   const sidebarData = await layoutData.getSidebarData();

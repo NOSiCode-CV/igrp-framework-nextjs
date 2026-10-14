@@ -21,6 +21,8 @@ type HeaderDataProviderProps = {
   baseUrl: string;
   /** Per-request AM client timeout; see igrp-layout-full.tsx. */
   timeout?: number;
+  /** Base locale for `Accept-Language`; see igrp-layout-full.tsx. */
+  locale?: string;
   // Whether IGRPLayoutFull is actually rendering a sidebar. `headerData` may
   // independently set `showIGRPSidebarTrigger: true` (it's app-configured,
   // unaware of the layout's `showSidebar` prop) — without this, a layout that
@@ -38,6 +40,7 @@ export async function HeaderDataProvider({
   token,
   baseUrl,
   timeout,
+  locale,
   showSidebar,
   breadcrumbs,
   breadcrumbRouteLabels,
@@ -47,7 +50,12 @@ export async function HeaderDataProvider({
   const layoutData = igrpResolveLayoutDataSource(config);
 
   if (!previewMode) {
-    igrpSetAccessClientConfig({ token, baseUrl, ...(timeout !== undefined ? { timeout } : {}) });
+    igrpSetAccessClientConfig({
+      token,
+      baseUrl,
+      ...(timeout !== undefined ? { timeout } : {}),
+      ...(locale ? { locale } : {}),
+    });
   }
 
   if (previewMode) {

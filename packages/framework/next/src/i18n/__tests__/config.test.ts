@@ -94,9 +94,9 @@ describe('igrpPickLocale', () => {
   const sessionFirst = igrpDefineI18n({ defaultLocale: 'pt', persistLocale: async () => {} });
 
   it('cookie-first: cookie → session → Accept-Language → default', () => {
-    expect(
-      igrpPickLocale({ cookie: 'fr', session: 'en', acceptLanguage: 'en' }, cookieFirst),
-    ).toBe('fr');
+    expect(igrpPickLocale({ cookie: 'fr', session: 'en', acceptLanguage: 'en' }, cookieFirst)).toBe(
+      'fr',
+    );
     expect(igrpPickLocale({ session: 'en-GB', acceptLanguage: 'fr' }, cookieFirst)).toBe('en');
     expect(igrpPickLocale({ acceptLanguage: 'fr-FR' }, cookieFirst)).toBe('fr');
     expect(igrpPickLocale({}, cookieFirst)).toBe('pt');
@@ -111,9 +111,9 @@ describe('igrpPickLocale', () => {
 
   it('skips candidates outside the enabled locales', () => {
     const ptOnly = igrpDefineI18n({ defaultLocale: 'pt', locales: ['pt'] });
-    expect(
-      igrpPickLocale({ cookie: 'en', session: 'fr', acceptLanguage: 'en' }, ptOnly),
-    ).toBe('pt');
+    expect(igrpPickLocale({ cookie: 'en', session: 'fr', acceptLanguage: 'en' }, ptOnly)).toBe(
+      'pt',
+    );
     const ptEn = igrpDefineI18n({ defaultLocale: 'pt', locales: ['pt', 'en'] });
     expect(igrpPickLocale({ cookie: 'fr', acceptLanguage: 'fr, en;q=0.5' }, ptEn)).toBe('en');
   });

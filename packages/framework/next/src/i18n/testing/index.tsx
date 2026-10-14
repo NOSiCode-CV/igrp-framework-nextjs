@@ -16,7 +16,11 @@ import { IGRP_DEFAULT_FORMAT_LOCALES, IGRP_LOCALES, type IGRPLocale } from '../c
 import { igrpMergeMessages } from '../messages/index.js';
 
 const DS = { pt: IGRP_I18N_DEFAULTS_PT, en: IGRP_I18N_DEFAULTS_EN, fr: IGRP_I18N_DEFAULTS_FR };
-const CHROME = { pt: IGRP_CHROME_STRINGS_PT, en: IGRP_CHROME_STRINGS_EN, fr: IGRP_CHROME_STRINGS_FR };
+const CHROME = {
+  pt: IGRP_CHROME_STRINGS_PT,
+  en: IGRP_CHROME_STRINGS_EN,
+  fr: IGRP_CHROME_STRINGS_FR,
+};
 
 export interface IGRPIntlTestProviderProps {
   locale?: IGRPLocale;

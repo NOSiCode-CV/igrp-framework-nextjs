@@ -11,6 +11,8 @@ import {
 } from '@igrp/framework-next-ui';
 import type { IGRPConfigArgs } from '@igrp/framework-next-types';
 
+import type { IGRPI18nConfig } from '../i18n/config.js';
+import { igrpResolveLocale } from '../i18n/server/resolve.js';
 import { igrpSetAccessClientConfig } from '../lib/api-config.js';
 import { HeaderDataProvider } from './providers/header-data-provider.js';
 import { SidebarDataProvider } from './providers/sidebar-data-provider.js';
@@ -60,12 +62,15 @@ export async function IGRPLayoutFull({
   // when it CREATES the store, so omitting it here left every read-path client
   // on the 10s default and made `apiManagementConfig.timeout` dead config.
   const accessTimeout = apiManagementConfig?.timeout;
+  // Base locale for `Accept-Language` on framework API calls (menus, user).
+  const locale = config.i18n ? await igrpResolveLocale(config.i18n as IGRPI18nConfig) : undefined;
 
   if (!previewMode && accessBaseUrl) {
     igrpSetAccessClientConfig({
       token: accessToken,
       baseUrl: accessBaseUrl,
       ...(accessTimeout !== undefined ? { timeout: accessTimeout } : {}),
+      ...(locale ? { locale } : {}),
     });
   }
 
@@ -81,6 +86,7 @@ export async function IGRPLayoutFull({
           token={accessToken}
           baseUrl={accessBaseUrl}
           timeout={accessTimeout}
+          locale={locale}
         />
       </Suspense>
     </IGRPLayoutErrorBoundary>
@@ -94,6 +100,7 @@ export async function IGRPLayoutFull({
           token={accessToken}
           baseUrl={accessBaseUrl}
           timeout={accessTimeout}
+          locale={locale}
           showSidebar={showSidebar}
           breadcrumbs={breadcrumbs}
           breadcrumbRouteLabels={breadcrumbRouteLabels}

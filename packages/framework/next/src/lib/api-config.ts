@@ -10,6 +10,8 @@ export type IGRPClientRuntimeConfig = {
   token: string;
   baseUrl: string;
   timeout?: number;
+  /** Sent as `Accept-Language` so the API translates its problem details. Base locale (`pt`, `en`, `fr`). */
+  locale?: string;
 };
 
 const DEFAULT_TIMEOUT = 10_000;

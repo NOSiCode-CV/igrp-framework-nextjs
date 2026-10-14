@@ -4,7 +4,7 @@ import { AccessManagementClient } from '@igrp/platform-access-management-client-
 import { igrpGetAccessClientConfig, igrpResetAccessClientConfig } from './api-config.js';
 
 export function igrpGetAccessClient(): AccessManagementClient {
-  const { baseUrl, token, timeout } = igrpGetAccessClientConfig();
+  const { baseUrl, token, timeout, locale } = igrpGetAccessClientConfig();
   if (!baseUrl || !token) {
     throw new Error(
       'Access Management client is not configured. Call igrpSetAccessClientConfig() first.',
@@ -13,7 +13,7 @@ export function igrpGetAccessClient(): AccessManagementClient {
   return AccessManagementClient.create({
     baseUrl,
     timeout: timeout ?? 10_000,
-    headers: { Authorization: `Bearer ${token}` },
+    headers: { Authorization: `Bearer ${token}`, ...(locale ? { 'Accept-Language': locale } : {}) },
   });
 }
 

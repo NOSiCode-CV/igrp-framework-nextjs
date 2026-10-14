@@ -1105,6 +1105,20 @@ export function withIGRPAuth(options: IGRPAuthOptions = {}): IGRPAuthInstance {
           };
         }
 
+        // Locale claim. Runs before the managed-token early return so a custom
+        // provider's `profile()` mapper gets the same treatment. Raw string,
+        // no validation: `@igrp/framework-next/i18n` normalises on read.
+        if (account) {
+          const userLocale = (params.user as { locale?: unknown } | undefined)?.locale;
+          const profileLocale = (params.profile as { locale?: unknown } | undefined)?.locale;
+          const claim = typeof userLocale === 'string' ? userLocale : profileLocale;
+          if (typeof claim === 'string') igrpToken = { ...igrpToken, locale: claim };
+        }
+        if (params.trigger === 'update') {
+          const requested = (params.session as { locale?: unknown } | undefined)?.locale;
+          if (typeof requested === 'string') igrpToken = { ...igrpToken, locale: requested };
+        }
+
         // A provider this package does not manage owns its own token lifecycle:
         // there is no discovery document, no token endpoint and no credentials
         // to refresh with. Everything below — the expiry buffer, the recovery
@@ -1237,10 +1251,17 @@ export function withIGRPAuth(options: IGRPAuthOptions = {}): IGRPAuthInstance {
           // puts the provider's subject in `token.sub`; `token.user.id` wins
           // when a `callbacks.jwt` extension has set a more specific value.
           const tokenUserId = tokenTyped.user?.id ?? tokenTyped.sub;
-          if (tokenUserId) {
+          const tokenLocale = tokenTyped.locale;
+          if (tokenUserId || tokenLocale) {
             igrpSession = {
               ...igrpSession,
-              user: { ...igrpSession.user, id: tokenUserId },
+              user: {
+                ...igrpSession.user,
+                ...(tokenUserId ? { id: tokenUserId } : {}),
+                // Only when present: apps without i18n keep an identical
+                // session shape (no `locale: undefined` key).
+                ...(tokenLocale ? { locale: tokenLocale } : {}),
+              },
             };
           }
         }

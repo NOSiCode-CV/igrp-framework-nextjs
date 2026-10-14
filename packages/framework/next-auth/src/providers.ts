@@ -147,6 +147,8 @@ const AUTH_PROVIDER_REGISTRY: Record<AuthProviderId, AuthProviderDefinition> = {
           name: profile.name ?? profile.preferred_username ?? null,
           email: profile.email ?? null,
           image: typeof profile.picture === 'string' ? profile.picture : null,
+          // OIDC `locale` claim, carried raw. The i18n layer normalises it.
+          locale: typeof profile.locale === 'string' ? profile.locale : undefined,
         };
       },
     }),

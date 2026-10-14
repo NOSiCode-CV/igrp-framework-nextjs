@@ -10,6 +10,7 @@ You are working inside `templates/demo-v1/` — the **canonical reference templa
 - **`workspace:*` consumption** — every `@igrp/*` dep is linked from `packages/**`. After any public-API change in a framework package, run `pnpm build:framework` before assuming this template still builds.
 - **Tailwind v4** — Tailwind compiles **once here** in the app, not in framework packages. `@source` must point at this app's `src/` **and** the consumed `dist/` of each `@igrp/*` package. Import tokens only (`@igrp/igrp-framework-react-design-system/tokens`) — never the prebuilt `styles.css`.
 - **Biome** — this template uses **Biome** for lint/format. Don't introduce ESLint/Prettier configs here; framework packages have their own (ESLint + Prettier) and the toolchains don't cross-apply.
+- **i18n** — next-intl without routing through `@igrp/framework-next/i18n`; cookie-first resolution; `pnpm lint:i18n`. Read `docs/I18N.md` before touching user-visible text.
 
 ## Hard rules unique to this template
 
@@ -23,6 +24,7 @@ You are working inside `templates/demo-v1/` — the **canonical reference templa
   Any new code that consumes `callbackUrl` must go through this helper.
 - **Preview mode (`IGRP_PREVIEW_MODE=true`) and `AUTH_PROVIDER=none` are the auth-bypass paths.** Both checks live behind `isAuthBypass()`. Every branch that mentions auth (middleware, root layout, `(igrp)/layout.tsx`, `igrp.template.config.ts`, the login page itself) must work with bypass **on** and **off**. The login page redirects to `/` when bypass is on, because there's no real provider to sign into.
 - **All UI comes from `@igrp/igrp-framework-react-design-system`.** Horizon (`IGRP*`) first; Primitives only as an escape hatch; `IGRPForm` + Zod for every form; semantic tokens only; `'use client'` on every file importing from the DS. The canonical statement of these rules — with the cheat sheet and the three-layer picker — is `.agents/rules/ui.md`, imported below. Edit it there, not here.
+- **User-visible text in migrated folders comes from `src/i18n/messages`**, never literals; dates and numbers go through `useIGRPFormat()` / `igrpFormatDate`. `pnpm lint:i18n` enforces both and runs in `build`. The `(demo)` pages are not migrated and stay out of the check.
 - **Don't import package internals.** Use documented subpath exports (`@igrp/framework-next-auth/client`, `/server`, `/config`, `/providers`, …) — never `…/dist/…`.
 - **Permissions have NO default-deny.** A page without a guard is fully open and deep-linkable; a hidden menu item is navigation UX, not enforcement. Every new page either calls `await igrpAssertAuthorize("<perm>")` on the first line of its server component, or carries a one-line comment saying it is open to all authenticated users. `igrpAssertAuthorize` is **pages only** — a server action has no `forbidden.tsx` boundary, so use `igrpAuthorize(name)` and return a typed `{ ok: false, code: "forbidden" }`. Gate the **action** as well as the control whenever it mutates: a disabled button is cosmetic. Client-side gating is `<IGRPAuthorization>` / `usePermissions().isAllowed()`; never add a `permission` prop to a design-system component. See `docs/PERMISSIONS.md`. The canonical statement of this rule is `.agents/rules/permissions.md` — edit it there, not here.
 
@@ -61,7 +63,7 @@ The shadcn CLI **is** appropriate inside `packages/design-system` itself, when r
 
 ### Layout composition
 
-- `src/app/layout.tsx` mounts `IGRPRootLayout` + providers (`IGRPRootProviders`, `IGRPSessionProvider`, theme provider).
+- `src/app/layout.tsx` mounts `IGRPRootLayout`, which renders `<html lang>`, `IGRPNestedProviders` (session, tooltip, theme, session watcher) and, because `igrpBuildConfig({ i18n })` is set, `IGRPIntlProvider` (next-intl + design-system + chrome catalogs for the resolved locale).
 - `src/app/(igrp)/layout.tsx` runs auth check, loads session via `serverSession()`, calls `igrpBuildConfig(...)`, renders `IGRPLayout` (header + sidebar + nav-user + breadcrumbs + command search) around `children`.
 - Route groups: `(auth)` for login/logout, `(igrp)` for the authenticated shell.
   Demo pages live in `(igrp)/(demo)`; Studio-regenerated route shells in

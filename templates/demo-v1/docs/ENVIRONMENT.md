@@ -53,6 +53,12 @@ All variables are documented inline in [`.env.example`](../.env.example). Requir
 | `NEXT_PUBLIC_IGRP_APP_HOME_SLUG` | Route to land on after login | `/` |
 | `NEXT_IGRP_APP_CENTER_URL` | Application Center URL (app switcher) | — |
 | `NEXT_PUBLIC_ALLOWED_DOMAINS` | Comma-separated image domains for `next/image` | — |
+
+## Localisation
+
+| Variable | Description | Default |
+|---|---|---|
+| `IGRP_FORMAT_LOCALES` | Region-qualified tag per language, comma-separated (`pt-PT` or `pt-AO,en-US`); drives dates, numbers, the design-system locale and `<html lang>`. Languages are fixed (pt, en, fr); a bare language or a tag for another language fails at startup. See `docs/I18N.md`. | `pt-CV,en-GB,fr-FR` |
 | `NEXT_PUBLIC_IGRP_PROFILE_URL` | External profile base URL | — |
 | `NEXT_PUBLIC_IGRP_NOTIFICATION_URL` | External notification base URL | — |
 | `NEXT_PUBLIC_IGRP_SETTINGS_URL` | External settings base URL | — |

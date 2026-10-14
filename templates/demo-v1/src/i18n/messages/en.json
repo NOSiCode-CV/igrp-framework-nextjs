@@ -1,14 +1,22 @@
 {
   "app": { "title": "IGRP | Application Template" },
   "home": {
-    "state": { "ok": "Active", "preview": "Preview", "error": "Needs attention" },
+    "state": {
+      "ok": "Active",
+      "preview": "Preview",
+      "error": "Needs attention"
+    },
     "copy": { "idle": "Copy", "copied": "Copied", "failed": "Copy manually" },
     "intro": {
       "failing": "The application is responding, but {count, plural, one {one layer needs} other {# layers need}} attention. See below what failed in this request.",
       "preview": "The application is responding in preview mode: no real sign-in and sample menus.",
       "ok": "The application is responding. This request went through every layer below."
     },
-    "status": { "failing": "Needs attention", "preview": "In preview", "ok": "Operational" },
+    "status": {
+      "failing": "Needs attention",
+      "preview": "In preview",
+      "ok": "Operational"
+    },
     "version": "Version",
     "code": "Code",
     "requestPath": {
@@ -21,10 +29,22 @@
       "title": "Build the first module",
       "subtitle": "{count} steps, from folder to menu",
       "step": "Step {index}: ",
-      "feature": { "title": "Write the feature", "body": "Each module's components, actions and logic live together, outside the routes." },
-      "route": { "title": "Give it a route", "body": "A page inside (igrp) inherits the session, the header and the sidebar." },
-      "guard": { "title": "Protect the page", "body": "Without a check, the page is open to any authenticated user." },
-      "menu": { "title": "Put it in the menu", "body": "In production the menu comes from Access Management. In preview, from the sample file." }
+      "feature": {
+        "title": "Write the feature",
+        "body": "Each module's components, actions and logic live together, outside the routes."
+      },
+      "route": {
+        "title": "Give it a route",
+        "body": "A page inside (igrp) inherits the session, the header and the sidebar."
+      },
+      "guard": {
+        "title": "Protect the page",
+        "body": "Without a check, the page is open to any authenticated user."
+      },
+      "menu": {
+        "title": "Put it in the menu",
+        "body": "In production the menu comes from Access Management. In preview, from the sample file."
+      }
     },
     "replace": {
       "title": "Replace this page",
@@ -64,7 +84,11 @@
         "valueError": "Could not read the token",
         "detailError": "Every permission check denies access."
       },
-      "page": { "name": "This page", "value": "Rendered", "detail": "Appears when no home route is set." }
+      "page": {
+        "name": "This page",
+        "value": "Rendered",
+        "detail": "Appears when no home route is set."
+      }
     }
   }
 }

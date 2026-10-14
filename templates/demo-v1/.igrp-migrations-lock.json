@@ -337,6 +337,12 @@
       "appliedAt": "2026-10-09T00:00:00.000Z",
       "cliVersion": "0.2.0-beta.4",
       "manifestHash": "a1a06ab719e8980b"
+    },
+    {
+      "id": "56-redis-session-store",
+      "appliedAt": "2026-10-14T00:00:00.000Z",
+      "cliVersion": "0.2.0-beta.4",
+      "manifestHash": "acab9b9be43f0d9c"
     }
   ]
 }

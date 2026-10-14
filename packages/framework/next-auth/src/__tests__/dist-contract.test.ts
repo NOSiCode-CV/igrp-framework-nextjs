@@ -115,12 +115,36 @@ describe.skipIf(!hasDist)('dist contract', () => {
     // `next-auth` transitively requires openid-client, which cannot execute in
     // Edge. config.js reaches it only through `await import()`, which webpack
     // puts in a lazy chunk the middleware bundle never loads.
-    for (const entry of ['config.js', 'middleware.js', 'cookies.js', 'runtime.js', 'claims.js']) {
+    for (const entry of [
+      'config.js',
+      'middleware.js',
+      'cookies.js',
+      'runtime.js',
+      'claims.js',
+      'session-store.js',
+    ]) {
       const imports = staticImports(entry);
       expect(imports, `${entry} statically imports the next-auth main package`).not.toContain(
         'next-auth',
       );
       expect(imports, `${entry} statically imports next/headers`).not.toContain('next/headers');
+    }
+  });
+
+  it("guards config.js's lazy next-auth import with NEXT_RUNTIME, so the Edge build drops it", () => {
+    // A bare `await import('next-auth')` is lazy at runtime but still compiled
+    // into the middleware bundle, where next-auth's @babel/runtime/regenerator
+    // fails `next build` ("Dynamic Code Evaluation … not allowed in Edge
+    // Runtime"). Next inlines NEXT_RUNTIME and webpack drops the dead branch —
+    // but only when the import sits INSIDE it.
+    const source = read('config.js');
+    const imports = [...source.matchAll(/import\(\s*["']next-auth["']\s*\)/g)];
+    expect(imports.length, 'config.js no longer loads next-auth at all?').toBeGreaterThan(0);
+    for (const match of imports) {
+      const before = source.slice(Math.max(0, match.index! - 120), match.index);
+      expect(before, 'unguarded import("next-auth") in config.js').toMatch(
+        /if \(process\.env\.NEXT_RUNTIME !== ["']edge["']\) \{\s*return $/,
+      );
     }
   });
 
@@ -146,7 +170,7 @@ describe.skipIf(!hasDist)('dist contract', () => {
     // splitting:false inlines _global-state into every entry that imports it.
     // The slots are only process-wide if each copy computes the same symbol.
     const namespaces = new Set<string>();
-    for (const entry of ['config.js', 'oidc.js', 'providers.js']) {
+    for (const entry of ['config.js', 'oidc.js', 'providers.js', 'session-store.js']) {
       const match = read(entry).match(/["'`](igrp\.next-auth\.)/);
       expect(match, `${entry} has no global-state namespace`).not.toBeNull();
       namespaces.add(match![1]);

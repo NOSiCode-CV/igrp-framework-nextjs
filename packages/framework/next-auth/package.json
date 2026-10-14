@@ -75,6 +75,10 @@
       "types": "./dist/runtime.d.ts",
       "import": "./dist/runtime.js"
     },
+    "./session-store": {
+      "types": "./dist/session-store.d.ts",
+      "import": "./dist/session-store.js"
+    },
     "./package.json": "./package.json"
   },
   "files": [

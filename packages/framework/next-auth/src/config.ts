@@ -47,6 +47,12 @@ import {
   UNKNOWN_EXPIRY_FALLBACK_MS,
 } from './oidc';
 import type { IGRPTokenRecoveryStore } from './token-store';
+import {
+  createSessionTokenDecoder,
+  createSessionTokenEncoder,
+  deleteStoredSession,
+  type IGRPSessionStore,
+} from './session-store';
 import { escapeHtml, sanitizeRedirectUrl, stripAuthApiSuffix, stripBasePath } from './sanitize';
 import {
   buildAuthCookies,
@@ -330,6 +336,22 @@ export type IGRPAuthOptions = {
    * withIGRPAuth({ tokenRecoveryStore: mySharedStore });
    */
   tokenRecoveryStore?: IGRPTokenRecoveryStore;
+
+  /**
+   * Server-side store for the session's tokens. With one, the session cookie
+   * holds only a random session id plus the expiry/error claims middleware
+   * reads (a few hundred bytes) instead of the access, refresh and id tokens
+   * (3–4 KB, more with many permissions) — what keeps co-hosted apps under
+   * the 8 KB request-header ceiling of nginx and friends.
+   *
+   * Prefer registering it process-wide with `configureIGRPSessionStore` from
+   * `@igrp/framework-next-auth/session-store`, called in `instrumentation.ts`:
+   * this instance is usually imported by middleware, and a store passed here
+   * drags its client library into the Edge bundle. This option wins over the
+   * registered store when both are set. Unset and unregistered, cookies are
+   * written exactly as before.
+   */
+  sessionStore?: IGRPSessionStore;
 };
 
 export type IGRPAuthInstance = {
@@ -386,6 +408,11 @@ export type IGRPAuthInstance = {
   /**
    * Extracts and decodes the JWT from an incoming Edge request.
    * Returns null when no valid session cookie is present.
+   *
+   * With a session store, the store is not reachable from Edge: the token
+   * carries the expiry and error claims (all `isTokenExpiredOrFailed` needs)
+   * but NOT `accessToken` / `refreshToken` / `idToken`. Read those server-side
+   * with `getAccessToken()`.
    * Accepts `unknown` to avoid NextRequest version mismatches across packages.
    *
    * @example
@@ -614,6 +641,35 @@ function extractCookieNames(request: unknown): string[] {
 }
 
 /**
+ * The ONE place this module loads the `next-auth` main package.
+ *
+ * `await import()` keeps it out of the Edge module graph at RUNTIME, but not at
+ * build time: webpack still compiles the lazy chunk for the middleware bundle,
+ * and Next's Edge check then rejects what it finds there —
+ * `next-auth/utils/logger.js` pulls in `@babel/runtime/regenerator`, whose
+ * `Function(...)` fallback fails `next build` with "Dynamic Code Evaluation …
+ * not allowed in Edge Runtime".
+ *
+ * Next inlines `process.env.NEXT_RUNTIME` per compilation (`'edge'` for
+ * middleware) and webpack skips a constant-false `if` branch entirely, so the
+ * import must sit INSIDE the branch: an early `return`/`throw` before it does
+ * not remove it from the Edge build. Nothing in the Edge runtime calls this —
+ * the handlers and server-session helpers are Node-only.
+ */
+function loadNextAuth(): Promise<typeof import('next-auth')> {
+  if (process.env.NEXT_RUNTIME !== 'edge') {
+    return import('next-auth');
+  }
+  return Promise.reject(
+    new Error(
+      '[withIGRPAuth] next-auth cannot run in the Edge runtime. The route handler and ' +
+        'serverSession()/getSession() are Node-only; middleware must use the Edge-safe ' +
+        'primitives (getTokenFromRequest, isTokenExpiredOrFailed, …).',
+    ),
+  );
+}
+
+/**
  * Lazily loads `next-auth` and returns a constructed handler.
  * Dynamic import so webpack doesn't pull `next-auth` (and transitively
  * `openid-client`) into any Edge bundle that imports `withIGRPAuth`.
@@ -622,7 +678,7 @@ async function createNextAuthHandler(
   authOptions: NextAuthOptions,
   debug: boolean,
 ): Promise<NextAuthHandler> {
-  const NextAuthModule = await import('next-auth');
+  const NextAuthModule = await loadNextAuth();
   const NextAuth = interopDefault(NextAuthModule as unknown as typeof NextAuthModule.default);
   return NextAuth({ ...authOptions, debug }) as unknown as NextAuthHandler;
 }
@@ -778,6 +834,7 @@ export function withIGRPAuth(options: IGRPAuthOptions = {}): IGRPAuthInstance {
     middleware: middlewareOptions = {},
     onSessionExpired,
     tokenRecoveryStore,
+    sessionStore,
     cookieIsolation = 'basePath',
     secureCookies: secureCookiesOption,
     debug = envFlag(env.IGRP_AUTH_DEBUG ?? process.env.IGRP_AUTH_DEBUG),
@@ -977,6 +1034,19 @@ export function withIGRPAuth(options: IGRPAuthOptions = {}): IGRPAuthInstance {
   // otherwise `getToken` keeps its own derivation.
   const resolvedSessionCookieName = authCookies ? authCookies.sessionToken.name : undefined;
 
+  // ── Session store codec ────────────────────────────────────────────────────
+  // Installed unconditionally: with no store (passed or registered) both are
+  // NextAuth's own encode/decode, and the store is looked up per call so one
+  // registered from instrumentation.ts after this module loaded still applies.
+  // Node reads REQUIRE the stored tokens; middleware (Edge, no store) gets the
+  // cookie's own claims, which carry the expiry and error flags it decides on.
+  const encodeSessionToken = createSessionTokenEncoder({ store: sessionStore });
+  const decodeSessionToken = createSessionTokenDecoder({ store: sessionStore });
+  const decodeSessionTokenAtEdge = createSessionTokenDecoder({
+    store: sessionStore,
+    hydrate: 'optional',
+  });
+
   // ── authOptions ────────────────────────────────────────────────────────────
   // Built synchronously. The options *object* has no Node-only deps; it only
   // becomes Node-only when passed to NextAuth() below, which we defer.
@@ -1006,6 +1076,7 @@ export function withIGRPAuth(options: IGRPAuthOptions = {}): IGRPAuthInstance {
     ...(authCookies ? { cookies: authCookies, useSecureCookies: secureCookies } : {}),
     ...(pages ? { pages } : {}),
     ...(sessionConfig ? { session: sessionConfig } : {}),
+    jwt: { encode: encodeSessionToken, decode: decodeSessionToken },
 
     callbacks: {
       async jwt(params) {
@@ -1314,6 +1385,15 @@ export function withIGRPAuth(options: IGRPAuthOptions = {}): IGRPAuthInstance {
         // leaves an entry keyed by a token this session no longer knows; that
         // one still expires by TTL. Bounded by the shared sign-out budget above.
         await withDeadline(forgetRecoveredToken(token.refreshToken), remainingBudget(), undefined);
+
+        // Drop the stored session, so its id stops resolving even if a copy of
+        // the cookie survives the clear (another tab, a stolen copy). Same
+        // shared budget: a slow store must not hold the cookie clear open.
+        await withDeadline(
+          deleteStoredSession(token, { store: sessionStore }),
+          remainingBudget(),
+          undefined,
+        );
       },
     },
   };
@@ -1368,6 +1448,7 @@ export function withIGRPAuth(options: IGRPAuthOptions = {}): IGRPAuthInstance {
     return (await getToken({
       req: request as Parameters<typeof getToken>[0]['req'],
       secret,
+      decode: decodeSessionTokenAtEdge,
       ...(secureCookie !== undefined ? { secureCookie } : {}),
       // When we renamed the cookies, `getToken`'s own derivation would look for
       // the stock name and find nothing.
@@ -1427,6 +1508,7 @@ export function withIGRPAuth(options: IGRPAuthOptions = {}): IGRPAuthInstance {
         cookies: Object.fromEntries(all.map((c) => [c.name, c.value])),
       } as NextApiRequest,
       secret,
+      decode: decodeSessionToken,
       ...(secureCookie !== undefined ? { secureCookie } : {}),
       ...(resolvedSessionCookieName
         ? { cookieName: sessionCookieName(basePath, secureCookie ?? secureCookies) }
@@ -1449,7 +1531,7 @@ export function withIGRPAuth(options: IGRPAuthOptions = {}): IGRPAuthInstance {
   async function serverSession(): Promise<Session | null> {
     if (configError) throw configError;
     if (authIsDisabled) return null;
-    readSessionOnce ??= Promise.all([import('next-auth'), import('react')]).then(
+    readSessionOnce ??= Promise.all([loadNextAuth(), import('react')]).then(
       ([{ getServerSession }, { cache }]) =>
         cache(async () => (await getServerSession(authOptions)) as Session | null),
     );

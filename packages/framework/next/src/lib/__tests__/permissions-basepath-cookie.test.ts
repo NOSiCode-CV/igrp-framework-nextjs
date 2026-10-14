@@ -21,6 +21,8 @@ vi.mock('next/headers', () => ({ cookies: async () => ({ getAll: () => cookiesGe
 vi.mock('@igrp/framework-next-auth/jwt', () => ({
   getToken: (...args: unknown[]) => getToken(...args),
 }));
+const decodeIGRPSessionToken = vi.fn();
+vi.mock('@igrp/framework-next-auth/session-store', () => ({ decodeIGRPSessionToken }));
 
 const { igrpEnsureAccessClientConfig } = await import('../permissions.js');
 const { igrpResetAccessClientConfig } = await import('../api-config.js');
@@ -54,6 +56,17 @@ describe('access-token recovery under a basePath', () => {
     expect(getToken).toHaveBeenCalledTimes(1);
     expect(getToken.mock.calls[0]![0]).toMatchObject({ cookieName: SCOPED_COOKIE });
     expect(config.token).toBe('AT');
+  });
+
+  it('decodes with the session-store-aware decoder', async () => {
+    // A store-backed cookie holds only a session id: plain decode would return
+    // a token without `accessToken`, and every permission check would deny.
+    process.env.NEXT_PUBLIC_BASE_PATH = BASE_PATH;
+    cookiesGetAll.mockReturnValue([{ name: SCOPED_COOKIE, value: 'opaque' }]);
+
+    await igrpEnsureAccessClientConfig();
+
+    expect(getToken.mock.calls[0]![0]).toMatchObject({ decode: decodeIGRPSessionToken });
   });
 
   it('uses the __Secure- prefixed scoped name when the jar has one', async () => {

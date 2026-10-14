@@ -52,6 +52,7 @@ export default defineConfig({
     claims: 'src/claims.ts',
     cookies: 'src/cookies.ts',
     runtime: 'src/runtime.ts',
+    'session-store': 'src/session-store.ts',
   },
   format: ['esm'],
   dts: {

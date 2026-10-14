@@ -6,21 +6,22 @@ route-protection middleware primitives.
 
 ## Entry points
 
-| Import path                            | Runtime               | Purpose                                                                             |
-| -------------------------------------- | --------------------- | ----------------------------------------------------------------------------------- |
-| `@igrp/framework-next-auth/config`     | Node + Edge           | `withIGRPAuth()` factory                                                            |
-| `@igrp/framework-next-auth/client`     | Browser               | `useSafeSession()`, `signIn`, `signOut`, `SessionProvider`                          |
-| `@igrp/framework-next-auth/server`     | Node                  | `getServerSession`                                                                  |
-| `@igrp/framework-next-auth/session`    | Node + Edge + Browser | `Session` type, `hasAccessToken`                                                    |
-| `@igrp/framework-next-auth/jwt`        | Node + Edge           | `JWT` type; re-exports `getToken` / `encode` / `decode` — see the cookie note below |
-| `@igrp/framework-next-auth/middleware` | Edge                  | Re-exports NextAuth's `withAuth` — see the cookie note below                        |
-| `@igrp/framework-next-auth/oidc`       | Node                  | `refreshOidcAccessToken`, `revokeOidcSession`, `buildEndSessionUrl`                 |
-| `@igrp/framework-next-auth/providers`  | Node + Edge + Browser | Provider registry helpers                                                           |
-| `@igrp/framework-next-auth/sanitize`   | Node + Edge           | URL/redirect sanitization                                                           |
-| `@igrp/framework-next-auth/claims`     | Node + Edge + Browser | `decodeIgrpClaims`, `claimsAllow`, `claimsExpired`                                  |
-| `@igrp/framework-next-auth/cookies`    | Node + Edge + Browser | Auth cookie naming: `sessionCookieName`, `buildAuthCookies`, `resolveSecureCookie`  |
-| `@igrp/framework-next-auth/runtime`    | Node + Edge           | `isNextControlFlowError`                                                            |
-| `@igrp/framework-next-auth/types`      | types only            | Session/JWT module augmentation                                                     |
+| Import path                               | Runtime               | Purpose                                                                                         |
+| ----------------------------------------- | --------------------- | ----------------------------------------------------------------------------------------------- |
+| `@igrp/framework-next-auth/config`        | Node + Edge           | `withIGRPAuth()` factory                                                                        |
+| `@igrp/framework-next-auth/client`        | Browser               | `useSafeSession()`, `signIn`, `signOut`, `SessionProvider`                                      |
+| `@igrp/framework-next-auth/server`        | Node                  | `getServerSession`                                                                              |
+| `@igrp/framework-next-auth/session`       | Node + Edge + Browser | `Session` type, `hasAccessToken`                                                                |
+| `@igrp/framework-next-auth/jwt`           | Node + Edge           | `JWT` type; re-exports `getToken` / `encode` / `decode` — see the cookie note below             |
+| `@igrp/framework-next-auth/middleware`    | Edge                  | Re-exports NextAuth's `withAuth` — see the cookie note below                                    |
+| `@igrp/framework-next-auth/oidc`          | Node                  | `refreshOidcAccessToken`, `revokeOidcSession`, `buildEndSessionUrl`                             |
+| `@igrp/framework-next-auth/providers`     | Node + Edge + Browser | Provider registry helpers                                                                       |
+| `@igrp/framework-next-auth/sanitize`      | Node + Edge           | URL/redirect sanitization                                                                       |
+| `@igrp/framework-next-auth/claims`        | Node + Edge + Browser | `decodeIgrpClaims`, `claimsAllow`, `claimsExpired`                                              |
+| `@igrp/framework-next-auth/cookies`       | Node + Edge + Browser | Auth cookie naming: `sessionCookieName`, `buildAuthCookies`, `resolveSecureCookie`              |
+| `@igrp/framework-next-auth/runtime`       | Node + Edge           | `isNextControlFlowError`                                                                        |
+| `@igrp/framework-next-auth/session-store` | Node + Edge           | `IGRPSessionStore`, `configureIGRPSessionStore`, `decodeIGRPSessionToken` — see "Session store" |
+| `@igrp/framework-next-auth/types`         | types only            | Session/JWT module augmentation                                                                 |
 
 The package root (`@igrp/framework-next-auth`) re-exports only the pure modules
 — `session`, `providers`, `sanitize`, `runtime`, `cookies`, plus types.
@@ -160,6 +161,47 @@ The `Secure` flag (and the `__Secure-` / `__Host-` prefixes) follows the same
 signal `next-auth` uses: `NEXTAUTH_URL`'s scheme, else https when `VERCEL` /
 `AUTH_TRUST_HOST` is set, else http.
 
+### Session store
+
+A NextAuth session cookie holds the access, refresh and id tokens — 3–4 KB per
+app, more for a user with many permissions. Apps on one domain share the
+browser's cookie jar, and a root-path app's cookie (`Path=/`) reaches every app,
+so an app center plus one app already reaches the 8 KB request-header ceiling of
+nginx, Apache and Tomcat (`400 Request Header Or Cookie Too Large`).
+
+Register a store and the cookie carries only a random session id plus the
+`expiresAt` / `error` / `forceLogout` claims — a few hundred bytes. The tokens
+go to the store, encrypted with `NEXTAUTH_SECRET` under a separate salt.
+
+```ts
+// src/instrumentation.ts — Node runtime only, so the store's client library
+// never enters the Edge middleware bundle.
+export async function register() {
+  if (process.env.NEXT_RUNTIME === 'nodejs') {
+    const { configureIGRPSessionStore } = await import('@igrp/framework-next-auth/session-store');
+    const { createRedisSessionStore } = await import('./lib/session-store');
+    configureIGRPSessionStore(createRedisSessionStore(process.env.IGRP_SESSION_STORE_URL!));
+  }
+}
+```
+
+An `IGRPSessionStore` is `get` / `set(key, value, ttlSeconds)` / `delete` over
+strings, shared by every replica. `createMemorySessionStore()` is for
+development and single-instance deployments only. The `sessionStore` option of
+`withIGRPAuth` takes precedence over the registered store, but drags the store
+into any bundle that imports the instance — middleware included.
+
+- **Without a store** nothing changes: the codec is NextAuth's own.
+- **Existing cookies** keep working and move to the store on their next write.
+- **Middleware** cannot reach the store: `auth.getTokenFromRequest()` returns the
+  cookie's claims, enough for `isTokenExpiredOrFailed`, with no `accessToken`.
+  Read tokens server-side with `auth.getAccessToken()`; when calling `getToken`
+  directly, pass `decode: decodeIGRPSessionToken`.
+- **Store down:** a failed write falls back to a full cookie for that response;
+  a failed read signs the user out. **Sign-out** deletes the entry.
+- A refresh that fails because a concurrent request already rotated the refresh
+  token does not overwrite that newer rotation in the store.
+
 ### Scopes and refresh tokens
 
 `IGRP_AUTH_SCOPES` controls the OAuth2 `scope` parameter sent during the authorization request.
@@ -209,6 +251,7 @@ and `callbacks`:
 | `debug`               | `IGRP_AUTH_DEBUG`     | NextAuth debug logging. Off by default in every environment because it prints OAuth token responses.                                                                                                                                                                                                                         |
 | `tokenRecoveryStore`  | in-memory             | Shared store for rotated-refresh-token recovery. Supply a cross-replica implementation for multi-pod deployments without sticky routing; the default is per-process. Keys and values are plaintext refresh/access/id tokens — treat the backing store like the session cookie (encrypt at rest, restrict access, never log). |
 | `cookieIsolation`     | `'basePath'`          | `'none'` keeps NextAuth's stock cookie names. Only safe when no other IGRP app shares the host.                                                                                                                                                                                                                              |
+| `sessionStore`        | registered / none     | Server-side token store — see "Session store". Prefer `configureIGRPSessionStore` from `instrumentation.ts`.                                                                                                                                                                                                                 |
 | `secureCookies`       | derived               | Overrides the `Secure` flag derivation described above.                                                                                                                                                                                                                                                                      |
 
 ### Middleware primitives

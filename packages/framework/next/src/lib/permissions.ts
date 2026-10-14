@@ -84,9 +84,10 @@ function scopedCookieNameOption(
 
 async function recoverAccessTokenFromCookies(): Promise<string> {
   try {
-    const [{ cookies }, { getToken }] = await Promise.all([
+    const [{ cookies }, { getToken }, { decodeIGRPSessionToken }] = await Promise.all([
       import('next/headers'),
       import('@igrp/framework-next-auth/jwt'),
+      import('@igrp/framework-next-auth/session-store'),
     ]);
     const all = (await cookies()).getAll();
     const names = all.map((c) => c.name);
@@ -96,6 +97,10 @@ async function recoverAccessTokenFromCookies(): Promise<string> {
         cookies: Object.fromEntries(all.map((c) => [c.name, c.value])),
       } as Parameters<typeof getToken>[0]['req'],
       secret: process.env.NEXTAUTH_SECRET,
+      // With a session store registered the cookie holds only a session id;
+      // plain decode would return a token with no `accessToken`. Without one
+      // this IS plain decode.
+      decode: decodeIGRPSessionToken,
       ...(secureCookie !== undefined ? { secureCookie } : {}),
       ...scopedCookieNameOption(names, secureCookie),
     });

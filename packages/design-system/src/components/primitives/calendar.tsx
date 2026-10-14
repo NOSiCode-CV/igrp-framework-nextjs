@@ -5,6 +5,8 @@ import * as React from "react"
 import { cn } from "cn"
 import { DayPicker, getDefaultClassNames, type DayButton, type Locale } from "react-day-picker"
 
+import { useIGRPLocale } from "../../i18n/context.js"
+import { igrpDateFnsLocale } from "../../i18n/date-fns-locale.js"
 import { Button, buttonVariants } from "./button.js"
 import { ChevronLeftIcon, ChevronRightIcon, ChevronDownIcon } from "lucide-react"
 
@@ -21,6 +23,10 @@ function Calendar({
 }: React.ComponentProps<typeof DayPicker> & {
   buttonVariant?: React.ComponentProps<typeof Button>["variant"]
 }) {
+  // The design-system locale (`pt-PT` unless an IGRPI18nProvider says otherwise)
+  // drives month names and weekday labels when the consumer passes no `locale`.
+  const igrpLocale = useIGRPLocale()
+  const resolvedLocale = locale ?? igrpDateFnsLocale(igrpLocale)
   const defaultClassNames = getDefaultClassNames()
 
   return (
@@ -33,9 +39,9 @@ function Calendar({
         className
       )}
       captionLayout={captionLayout}
-      locale={locale}
+      locale={resolvedLocale}
       formatters={{
-        formatMonthDropdown: (date) => date.toLocaleString(locale?.code, { month: "short" }),
+        formatMonthDropdown: (date) => date.toLocaleString(resolvedLocale?.code, { month: "short" }),
         ...formatters,
       }}
       classNames={{
@@ -119,7 +125,7 @@ function Calendar({
 
           return <ChevronDownIcon className={cn("size-4", className)} {...props} />
         },
-        DayButton: ({ ...props }) => <CalendarDayButton locale={locale} {...props} />,
+        DayButton: ({ ...props }) => <CalendarDayButton locale={resolvedLocale} {...props} />,
         WeekNumber: ({ children, ...props }) => {
           return (
             <td {...props}>

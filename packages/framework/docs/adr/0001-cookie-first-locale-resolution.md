@@ -11,3 +11,7 @@ IGRP apps localise with next-intl but carry no `[locale]` URL segment: every gen
 
 - An explicit choice outlives sign-out and applies to every IGRP app on the same host (cookie path `/`).
 - A locale changed at the identity provider only takes effect for users who never chose one in the browser.
+
+## Amendment (2026-10-12): session-first for apps that persist the choice
+
+The rejection of "session locale first" above assumed no write-back endpoint. When an app configures `persistLocale` in `igrpDefineI18n`, `igrpSetLocale` writes the profile before the cookie and the client refreshes the token with `update({ locale })`, so both objections fall: the switcher can override the session, and the token never holds a stale value. Such an app resolves `session-first` (session → cookie → `Accept-Language` → default) and may call `igrpSyncLocaleCookie` from its middleware so pages rendered without a session follow the last signed-in user. The strategy is derived from the presence of `persistLocale`, never configured directly, so `session-first` without a write-back cannot be selected. Apps without `persistLocale` keep the cookie-first order above. Design: `docs/superpowers/specs/2026-10-12-framework-i18n-v2-design.md`.

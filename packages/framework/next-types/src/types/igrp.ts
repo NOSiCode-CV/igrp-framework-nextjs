@@ -2,6 +2,7 @@ import type { Session } from '@igrp/framework-next-auth/session';
 import type { SessionProviderProps } from '@igrp/framework-next-auth/client';
 
 import type { IGRPMenuItemArgs, IGRPPermissionCatalogEntry } from './access-management.js';
+import type { IGRPI18nConfigBase } from './i18n.js';
 import type {
   IGRPLayoutDataSource,
   IGRPMockDataAsync,
@@ -180,6 +181,13 @@ export type IGRPConfigArgs = {
    */
   showSettings?: boolean;
   sessionArgs?: Partial<SessionProviderProps>;
+  /**
+   * Localisation, built with `igrpDefineI18n` from `@igrp/framework-next/i18n`.
+   * When set, `IGRPRootLayout` resolves the locale, mounts the intl providers
+   * and sets `<html lang>`; `IGRPLayoutFull` / `IGRPLayoutBlank` send
+   * `Accept-Language` on framework API calls. Apps without it change nothing.
+   */
+  i18n?: IGRPI18nConfigBase;
 };
 
 /**

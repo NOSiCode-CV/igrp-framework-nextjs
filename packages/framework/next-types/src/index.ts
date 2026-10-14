@@ -49,6 +49,8 @@ export type { IGRPHeaderDataArgs, IGRPNotificationArgs } from './types/header.js
 
 export type { IGRPConfigArgs, IGRPConfigClient, IGRPLayoutConfigArgs } from './types/igrp.js';
 
+export type { IGRPLocale, IGRPLocaleResolution, IGRPI18nConfigBase } from './types/i18n.js';
+
 export type { IGRPSidebarDataArgs } from './types/sidebar.js';
 
 export type { IGRPAccessClaims, IGRPClaimsState } from '@igrp/framework-next-auth/claims';

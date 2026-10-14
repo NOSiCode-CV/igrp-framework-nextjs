@@ -242,6 +242,11 @@ async function handleRequest(request: NextRequest): Promise<NextResponse> {
     return loginRedirect();
   }
 
+  // i18n: this app is cookie-first (no `persistLocale`), so the middleware
+  // leaves the IGRP_LOCALE cookie alone. A session-first app (one with a
+  // profile write-back) ends this branch with
+  //   return igrpSyncLocaleCookie(request, nextWithPath(), token.locale, i18n)
+  // importing from "@igrp/framework-next/i18n" (Edge-safe), never from "@/i18n".
   return nextWithPath();
 }
 

@@ -45,9 +45,7 @@ describe("IGRPI18nProvider / useIGRPi18n", () => {
     )
 
     expect(screen.getByTestId("phone-placeholder")).toHaveTextContent("Tel #")
-    expect(screen.getByTestId("number-increment")).toHaveTextContent(
-      IGRP_I18N_DEFAULTS_PT.inputNumber.incrementLabel
-    )
+    expect(screen.getByTestId("number-increment")).toHaveTextContent(IGRP_I18N_DEFAULTS_PT.inputNumber.incrementLabel)
   })
 
   it("accepts a full catalog as `strings`", async () => {

@@ -86,3 +86,12 @@ These primitives are intentionally divergent. **Audit them when refreshing from 
 1. Does the shadcn skill component table list it? → Add as a Primitive first (copy from upstream via the shadcn CLI's `--diff` flow against a scratch directory).
 2. Will every IGRP app want the same labels / icons / loading / form wiring? → Add a Horizon wrapper on top.
 3. Is it IGRP-domain-specific (stats card variant, user avatar, status banner)? → Add to `custom/`.
+
+## Strings and locale (`IGRPI18nProvider`)
+
+Every user-visible default string comes from one typed catalog, `IGRPI18nStrings`, shipped in Portuguese (`IGRP_I18N_DEFAULTS_PT`), English (`IGRP_I18N_DEFAULTS_EN`) and French (`IGRP_I18N_DEFAULTS_FR`). Mount `IGRPI18nProvider` once, near the root:
+
+- `strings`: a full catalog, or a deep-partial override merged over `base` (pt by default).
+- `locale`: the BCP-47 tag for `Intl` formatting, the calendar's date-fns locale and chart numbers. Always region-qualified (`pt-CV`, not `pt`).
+
+Component label props still win over the provider. Strings use `{token}` placeholders substituted by `igrpFormatMessage`; there are no plurals, so wording must fit any count. Adding a key means adding it to the interface and to all three catalogs; `src/i18n/__tests__/parity.test.ts` fails otherwise. `IGRP_I18N_DEFAULTS_PT_PT` is a deprecated alias of `_PT`.

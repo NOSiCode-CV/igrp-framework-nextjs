@@ -5,6 +5,9 @@ import Link from 'next/link';
 import { unstable_rethrow } from 'next/navigation';
 import { cn, IGRPButton, IGRPIcon } from '@igrp/igrp-framework-react-design-system';
 
+import { useIGRPChromeI18n } from '../i18n/context.js';
+import { igrpResolveErrorCopy, type IGRPErrorCopyResolver } from '../i18n/error-copy.js';
+
 const RESET_DELAY_MS = 400;
 
 /**
@@ -30,37 +33,27 @@ export interface IGRPSegmentErrorProps {
   children?: React.ReactNode;
 
   /**
-   * Resolves a user-facing message. Receives the error; returns a
-   * `{ title, description }` pair. Consumers typically look up a translation
-   * keyed by `error.name` (e.g. `'IgrpConfigError'`) or a framework
-   * `IgrpError.code`. Falls back to a generic Portuguese copy.
+   * Resolves user-facing copy for the error. May return a full or partial
+   * `{ title, description }`; missing keys fall back to the chrome catalog's
+   * entry for the error's platform `code`, then to its generic copy.
    */
-  resolveCopy?: (error: Error) => {
-    title: string;
-    description: string;
-  };
+  resolveCopy?: IGRPErrorCopyResolver;
 
   /** Link target for the "go home" button. Defaults to `/`. */
   homeHref?: string;
 
-  /** Label for the home button. Defaults to `'Voltar ao início'`. */
+  /** Label for the home button. Defaults to the chrome catalog. */
   homeLabel?: string;
 
-  /** Label for the reset button. Defaults to `'Tentar novamente'`. */
+  /** Label for the reset button. Defaults to the chrome catalog. */
   resetLabel?: string;
 
-  /** Label shown while the reset is in progress. Defaults to `'A tentar...'`. */
+  /** Label shown while the reset is in progress. Defaults to the chrome catalog. */
   retryingLabel?: string;
 
-  /** Label prefix for the error reference ID. Defaults to `'ID de referência:'`. */
+  /** Label prefix for the error reference ID. Defaults to the chrome catalog. */
   errorRefLabel?: string;
 }
-
-const DEFAULT_COPY = {
-  title: 'Ocorreu um erro nesta secção.',
-  description:
-    'Tente novamente ou volte ao início. Se o problema persistir, contacte a equipa de suporte.',
-};
 
 function IGRPSegmentError({
   error,
@@ -68,11 +61,18 @@ function IGRPSegmentError({
   children,
   resolveCopy,
   homeHref = '/',
-  homeLabel = 'Voltar ao início',
-  resetLabel = 'Tentar novamente',
-  retryingLabel = 'A tentar...',
-  errorRefLabel = 'ID de referência:',
+  homeLabel,
+  resetLabel,
+  retryingLabel,
+  errorRefLabel,
 }: IGRPSegmentErrorProps) {
+  const chrome = useIGRPChromeI18n();
+  const labels = {
+    home: homeLabel ?? chrome.segmentError.home,
+    reset: resetLabel ?? chrome.segmentError.reset,
+    retrying: retryingLabel ?? chrome.segmentError.retrying,
+    errorRef: errorRefLabel ?? chrome.segmentError.errorRef,
+  };
   const [isResetting, setIsResetting] = useState(false);
   const resetTimer = useRef<ReturnType<typeof setTimeout> | null>(null);
 
@@ -99,7 +99,11 @@ function IGRPSegmentError({
 
   if (children) return <>{children}</>;
 
-  const { title, description } = resolveCopy?.(error) ?? DEFAULT_COPY;
+  const { title, description } = igrpResolveErrorCopy(
+    error,
+    { byCode: chrome.errorCodes, fallback: chrome.segmentError },
+    resolveCopy,
+  );
 
   const handleReset = () => {
     setIsResetting(true);
@@ -121,7 +125,7 @@ function IGRPSegmentError({
 
           {error.digest ? (
             <p className={cn('text-xs text-muted-foreground')}>
-              {errorRefLabel}{' '}
+              {labels.errorRef}{' '}
               <code
                 className={cn('rounded bg-muted px-1 py-0.5 font-mono text-xs text-foreground')}
               >
@@ -138,12 +142,12 @@ function IGRPSegmentError({
               iconName="RefreshCw"
               iconClassName={cn('mr-2 h-4 w-4 transition-transform', isResetting && 'animate-spin')}
             >
-              <span>{isResetting ? retryingLabel : resetLabel}</span>
+              <span>{isResetting ? labels.retrying : labels.reset}</span>
             </IGRPButton>
             <IGRPButton asChild variant="outline">
               <Link href={homeHref}>
                 <IGRPIcon iconName="Home" className={cn('mr-2 h-4 w-4')} aria-hidden="true" />
-                {homeLabel}
+                {labels.home}
               </Link>
             </IGRPButton>
           </div>

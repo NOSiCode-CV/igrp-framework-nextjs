@@ -5,33 +5,28 @@ import Image from 'next/image';
 import { unstable_rethrow } from 'next/navigation';
 import { cn, IGRPButton } from '@igrp/igrp-framework-react-design-system';
 
+import { useIGRPChromeI18n } from '../i18n/context.js';
+import { igrpResolveErrorCopy, type IGRPErrorCopyResolver } from '../i18n/error-copy.js';
 import { withBasePath } from '../lib/utils.js';
 
 const ANIMATION_DELAY_MS = 300;
 const RESET_DELAY_MS = 1000;
-
-const DEFAULT_COPY = {
-  title: 'Ocorreu um erro inesperado.',
-  description:
-    'Tente novamente. Se o problema persistir, contacte a equipa de suporte e indique o ID de referência apresentado abaixo.',
-};
 
 interface IGRPGlobalErrorProps {
   error: Error & { digest?: string };
   reset: () => void;
   children?: React.ReactNode;
   /**
-   * Resolves a user-facing `{ title, description }` pair for the error.
-   * Consumers typically look up copy keyed by `error.code` (framework typed
-   * errors) and fall back to a generic message. Falls back to
-   * `DEFAULT_COPY` when omitted or when the resolver returns nothing.
+   * Resolves user-facing copy for the error. May return a full or partial
+   * `{ title, description }`; missing keys fall back to the chrome catalog's
+   * entry for the error's platform `code`, then to its generic copy.
    */
-  resolveCopy?: (error: Error) => { title: string; description: string };
-  /** Label for the retry button. Defaults to `'Tentar novamente'`. */
+  resolveCopy?: IGRPErrorCopyResolver;
+  /** Label for the retry button. Defaults to the chrome catalog. */
   resetLabel?: string;
-  /** Label shown while the reset is in progress. Defaults to `'A tentar...'`. */
+  /** Label shown while the reset is in progress. Defaults to the chrome catalog. */
   retryingLabel?: string;
-  /** Label prefix for the error reference ID. Defaults to `'ID de referência:'`. */
+  /** Label prefix for the error reference ID. Defaults to the chrome catalog. */
   errorRefLabel?: string;
 }
 
@@ -40,10 +35,16 @@ function IGRPGlobalError({
   reset,
   children,
   resolveCopy,
-  resetLabel = 'Tentar novamente',
-  retryingLabel = 'A tentar...',
-  errorRefLabel = 'ID de referência:',
+  resetLabel,
+  retryingLabel,
+  errorRefLabel,
 }: IGRPGlobalErrorProps) {
+  const chrome = useIGRPChromeI18n();
+  const labels = {
+    reset: resetLabel ?? chrome.globalError.reset,
+    retrying: retryingLabel ?? chrome.globalError.retrying,
+    errorRef: errorRefLabel ?? chrome.globalError.errorRef,
+  };
   const [isResetting, setIsResetting] = useState(false);
   const [errorVisible, setErrorVisible] = useState(false);
   const resetTimer = useRef<ReturnType<typeof setTimeout> | null>(null);
@@ -77,7 +78,11 @@ function IGRPGlobalError({
     }, RESET_DELAY_MS);
   };
 
-  const { title, description } = resolveCopy?.(error) ?? DEFAULT_COPY;
+  const { title, description } = igrpResolveErrorCopy(
+    error,
+    { byCode: chrome.errorCodes, fallback: chrome.globalError },
+    resolveCopy,
+  );
 
   return (
     <div className={cn('flex min-h-screen items-center justify-center bg-background')}>
@@ -101,7 +106,7 @@ function IGRPGlobalError({
               )}
             >
               <p className={cn('text-xs text-muted-foreground')}>
-                {errorRefLabel}{' '}
+                {labels.errorRef}{' '}
                 <code className={cn('rounded bg-muted px-1 py-0.5')}>{error.digest}</code>
               </p>
             </div>
@@ -117,7 +122,7 @@ function IGRPGlobalError({
               iconName="RefreshCw"
               iconClassName={cn('mr-2 h-4 w-4 transition-transform', isResetting && 'animate-spin')}
             >
-              <span>{isResetting ? retryingLabel : resetLabel}</span>
+              <span>{isResetting ? labels.retrying : labels.reset}</span>
             </IGRPButton>
           </div>
         </div>

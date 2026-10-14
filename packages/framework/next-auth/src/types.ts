@@ -47,7 +47,13 @@ declare module 'next-auth' {
     forceLogout?: boolean;
     user?: {
       id?: string;
+      locale?: string;
     } & DefaultSession['user'];
+  }
+
+  /** Lets a provider `profile()` mapper return the OIDC `locale` claim. */
+  interface User {
+    locale?: string;
   }
 }
 
@@ -60,11 +66,13 @@ declare module 'next-auth/jwt' {
     expiresAt?: number;
     error?: 'RefreshAccessTokenError' | (string & {});
     forceLogout?: boolean;
+    locale?: string;
     user?: {
       id?: string;
       name?: string | null;
       email?: string | null;
       image?: string | null;
+      locale?: string;
     } & NextAuthUser;
   }
 }

@@ -13,6 +13,13 @@ export interface JWT extends DefaultJWT {
   error?: 'RefreshAccessTokenError' | (string & {});
   forceLogout?: boolean;
   user?: NextAuthUser;
+  /**
+   * The identity provider's OIDC `locale` claim, carried raw (`pt-CV`, `en`,
+   * …). Seeded at sign-in from the provider profile, replaced by a client
+   * `update({ locale })`. Normalisation and validation belong to
+   * `@igrp/framework-next/i18n`, never here.
+   */
+  locale?: string;
 }
 
 export { getToken, decode, encode } from 'next-auth/jwt';

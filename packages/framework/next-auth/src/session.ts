@@ -23,6 +23,8 @@ export interface Session extends DefaultSession {
   forceLogout?: boolean;
   user?: {
     id?: string;
+    /** The OIDC `locale` claim, raw. Mirrors `JWT.locale`. */
+    locale?: string;
   } & DefaultSession['user'];
 }
 

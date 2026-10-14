@@ -26,6 +26,8 @@ export const _session: {
   forceLogout: boolean | undefined;
   userId: string | undefined;
   userName: string | null | undefined;
+  /** OIDC `locale` claim, raw. Read by `@igrp/framework-next/i18n` resolution. */
+  userLocale: string | undefined;
   // Widened to accept a custom provider's own id — `withIGRPAuth` stamps
   // whatever the resolved provider calls itself, not just the registry ids.
   authProviderId: string | undefined;
@@ -36,6 +38,7 @@ export const _session: {
   forceLogout: s.forceLogout,
   userId: s.user?.id,
   userName: s.user?.name,
+  userLocale: s.user?.locale,
   authProviderId: s.authProviderId,
 };
 
@@ -48,6 +51,8 @@ export const _jwt: {
   userId: string | undefined;
   sub: string | undefined;
   authProviderId: string | undefined;
+  /** OIDC `locale` claim, raw. */
+  locale: string | undefined;
 } = {
   accessToken: j.accessToken,
   refreshToken: j.refreshToken,
@@ -57,4 +62,5 @@ export const _jwt: {
   userId: j.user?.id,
   sub: j.sub,
   authProviderId: j.authProviderId,
+  locale: j.locale,
 };

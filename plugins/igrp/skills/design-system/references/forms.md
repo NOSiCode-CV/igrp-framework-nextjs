@@ -227,9 +227,14 @@ onSubmit={async (values) => {
 - **Date pickers (`IGRPDatePicker*`, `IGRPDateTimeInput`, `IGRPInputTime`)** — form-bound inputs. Use inside `IGRPForm`.
 - **Calendars (`IGRPCalendarSingle`, `IGRPCalendarRange`, `IGRPCalendarMultiple`, `*Time` variants)** — standalone display widgets (e.g. an availability picker on a dashboard). Not form-bound; manage state yourself.
 
-## Default strings are pt-PT
+## Default strings and locale (`IGRPI18nProvider`)
 
-Built-in messages, placeholders, and helper copy ship in pt-PT (e.g. "Selecione…", "Hoje"). Override per-component via props rather than translating in code — props like `placeholder`, `addButtonLabel`, `notFoundLabel`, etc. are exposed for that purpose.
+Built-in messages, placeholders, and helper copy come from one typed catalog, `IGRPI18nStrings`, shipped in Portuguese (`IGRP_I18N_DEFAULTS_PT`, the default), English (`IGRP_I18N_DEFAULTS_EN`) and French (`IGRP_I18N_DEFAULTS_FR`). Mount `IGRPI18nProvider` once near the root (the framework does this for you when its i18n is configured):
+
+- `strings` — a full catalog (`strings={IGRP_I18N_DEFAULTS_EN}`) or a deep-partial override (`strings={{ dataTable: { notFound: "No records found." } }}`) merged over `base` (pt by default).
+- `locale` — the BCP-47 tag for `Intl` formatting, the calendar's date-fns locale and chart numbers. Always region-qualified (`pt-CV`, not `pt`).
+
+Per-component props (`placeholder`, `addButtonLabel`, `notFoundLabel`, …) still win over the provider for one instance. Do not translate in code: pick a catalog or override keys. Strings use `{token}` placeholders; there are no plurals. `IGRP_I18N_DEFAULTS_PT_PT` is a deprecated alias of `_PT`.
 
 ## Pitfalls
 

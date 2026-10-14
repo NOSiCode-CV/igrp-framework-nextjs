@@ -93,6 +93,7 @@ Load the smallest set you need. SKILL.md alone is enough to pick a component; lo
 - **Forgetting `'use client'`** — produces a Next.js server-component error on first render because the DS is client-only.
 - **Importing `@igrp/igrp-framework-react-design-system/styles`** — that bundle was removed. Import `/tokens` only; Tailwind v4 in the app compiles utilities, the DS only ships CSS variables.
 - **Manual `dark:` classes in app code** — tokens handle dark mode; if it doesn't look right, fix the token, not the consumer.
+- **Translating DS strings by hand** — the catalog ships in pt, en and fr (`IGRP_I18N_DEFAULTS_PT` / `_EN` / `_FR`). Mount `IGRPI18nProvider` with `strings` (a full catalog or a deep-partial override) and a region-qualified `locale`; see `references/forms.md` → "Default strings and locale".
 
 ## Quick API spot-check
 

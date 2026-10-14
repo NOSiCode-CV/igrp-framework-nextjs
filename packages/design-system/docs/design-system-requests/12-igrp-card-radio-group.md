@@ -19,10 +19,10 @@
 >
 > The contract in §3 now also holds for the default variant (field set + legend, validate + dirty +
 > touch on pick, `errorText` in controlled mode, per-option disabled dims text only).
-**Design system:** `@igrp/igrp-framework-react-design-system@0.1.0-beta.145`
-**Consumer:** Next.js 15.5.25 · React 19.2.8 · Tailwind v4 · `react-hook-form` via `IGRPForm`
-**Local components:** `_components/card-radio-group.tsx` (controlled) and
-`_components/card-radio-field.tsx` (form-bound) — full source at the bottom
+> **Design system:** `@igrp/igrp-framework-react-design-system@0.1.0-beta.145`
+> **Consumer:** Next.js 15.5.25 · React 19.2.8 · Tailwind v4 · `react-hook-form` via `IGRPForm`
+> **Local components:** `_components/card-radio-group.tsx` (controlled) and
+> `_components/card-radio-field.tsx` (form-bound) — full source at the bottom
 
 ## 1. What we needed
 
@@ -45,23 +45,22 @@ carries a `description`:
 ```ts
 // dist/components/horizon/input/radio-group.d.ts
 type IGRPRadioOption = {
-    /** Option value. */
-    value: string;
-    /** Option label. */
-    label: string;
-    /** Optional description. */
-    description?: string;
-    /** Disable this option. */
-    disabled?: boolean;
-};
+  /** Option value. */
+  value: string
+  /** Option label. */
+  label: string
+  /** Optional description. */
+  description?: string
+  /** Disable this option. */
+  disabled?: boolean
+}
 
-interface IGRPRadioGroupProps extends IGRPBaseAttributes,
-    VariantProps<typeof radioItemVariants>,
-    React.ComponentProps<typeof RadioGroup> {
-    options: IGRPRadioOption[];
-    error?: string;
-    /** @deprecated This props will be deprecated in the next major release. */
-    gridSize?: IGRPGridSize;
+interface IGRPRadioGroupProps
+  extends IGRPBaseAttributes, VariantProps<typeof radioItemVariants>, React.ComponentProps<typeof RadioGroup> {
+  options: IGRPRadioOption[]
+  error?: string
+  /** @deprecated This props will be deprecated in the next major release. */
+  gridSize?: IGRPGridSize
 }
 ```
 
@@ -79,8 +78,8 @@ carries the whole card behaviour when it wraps a `Field`:
 cn(
   "group/field-label peer/field-label flex w-fit gap-2 leading-snug group-data-[disabled=true]/field:opacity-50",
   "has-[>[data-slot=field]]:w-full has-[>[data-slot=field]]:flex-col has-[>[data-slot=field]]:rounded-md has-[>[data-slot=field]]:border *:data-[slot=field]:p-4",
-  "has-data-[state=checked]:bg-primary/5 has-data-[state=checked]:border-primary dark:has-data-[state=checked]:bg-primary/10",
-  className,
+  "has-data-[state=checked]:border-primary has-data-[state=checked]:bg-primary/5 dark:has-data-[state=checked]:bg-primary/10",
+  className
 )
 ```
 
@@ -97,44 +96,44 @@ presentational piece plus a form-bound field):
 
 ```ts
 type IGRPCardRadioOption = {
-  value: string;
-  label: string;
-  description?: string;
+  value: string
+  label: string
+  description?: string
   /** Lucide icon name, as IGRPIcon takes it. */
-  icon?: IGRPIconName | string;
+  icon?: IGRPIconName | string
   /** Short tag rendered next to the label. */
-  badge?: string;
-  disabled?: boolean;
-};
+  badge?: string
+  disabled?: boolean
+}
 
 /** Controlled; no form context. */
 interface IGRPCardRadioGroupProps {
-  value: string;
-  onValueChange: (value: string) => void;
-  options: IGRPCardRadioOption[];
+  value: string
+  onValueChange: (value: string) => void
+  options: IGRPCardRadioOption[]
   /** Accessible name for the group. */
-  ariaLabel?: string;
-  invalid?: boolean;
-  disabled?: boolean;
-  className?: string;
+  ariaLabel?: string
+  invalid?: boolean
+  disabled?: boolean
+  className?: string
 }
 
 /** Form-bound: same conventions as IGRPRadioGroup. */
 interface IGRPCardRadioFieldProps {
-  name?: string;
-  label?: string;
-  options: IGRPCardRadioOption[];
-  required?: boolean;
-  disabled?: boolean;
-  helperText?: string;
-  errorText?: string;
-  emptyLabel?: string;
+  name?: string
+  label?: string
+  options: IGRPCardRadioOption[]
+  required?: boolean
+  disabled?: boolean
+  helperText?: string
+  errorText?: string
+  emptyLabel?: string
   /** Grid classes for the card row. */
-  gridClassName?: string;
-  className?: string;
-  onValueChange?: (value: string) => void;
+  gridClassName?: string
+  className?: string
+  onValueChange?: (value: string) => void
   /** Controlled mode, for use outside IGRPForm. */
-  value?: string;
+  value?: string
 }
 ```
 
@@ -185,7 +184,7 @@ onto it. Two notes for whoever ports it:
 ### 5.1 `card-radio-group.tsx` (verbatim)
 
 ```tsx
-"use client";
+"use client"
 
 import {
   Badge,
@@ -199,32 +198,32 @@ import {
   type IGRPIconName,
   RadioGroup,
   RadioGroupItem,
-} from "@igrp/igrp-framework-react-design-system";
-import { useId } from "react";
+} from "@igrp/igrp-framework-react-design-system"
+import { useId } from "react"
 
 export interface CardRadioOption<T extends string = string> {
-  value: T;
-  label: string;
-  description?: string;
-  iconName?: IGRPIconName | string;
+  value: T
+  label: string
+  description?: string
+  iconName?: IGRPIconName | string
   /** Short tag shown next to the label — e.g. "Permite renovação". */
-  badge?: string;
-  disabled?: boolean;
+  badge?: string
+  disabled?: boolean
 }
 
 interface CardRadioGroupProps<T extends string = string> {
   /** Currently selected option value. */
-  value: T;
+  value: T
   /** Fired with the newly picked value — never fired for the already-selected card. */
-  onValueChange: (value: T) => void;
-  options: CardRadioOption<T>[];
+  onValueChange: (value: T) => void
+  options: CardRadioOption<T>[]
   /** Accessible name for the group (visually hidden). */
-  ariaLabel?: string;
+  ariaLabel?: string
   /** Marks the whole group invalid, for the surrounding field to explain. */
-  invalid?: boolean;
-  disabled?: boolean;
+  invalid?: boolean
+  disabled?: boolean
   /** Overrides the responsive column grid. */
-  className?: string;
+  className?: string
 }
 
 /**
@@ -249,7 +248,7 @@ export function CardRadioGroup<T extends string = string>({
   disabled,
   className,
 }: CardRadioGroupProps<T>) {
-  const groupId = useId();
+  const groupId = useId()
 
   return (
     <RadioGroup
@@ -261,12 +260,12 @@ export function CardRadioGroup<T extends string = string>({
       className={cn(
         "grid gap-3 sm:grid-cols-2 lg:grid-cols-3",
         "aria-invalid:[&_[data-slot=field-label]]:border-destructive/50",
-        className,
+        className
       )}
     >
       {options.map((option) => {
-        const itemId = `${groupId}-${option.value}`;
-        const itemDisabled = disabled || option.disabled;
+        const itemId = `${groupId}-${option.value}`
+        const itemDisabled = disabled || option.disabled
 
         return (
           <FieldLabel
@@ -276,13 +275,10 @@ export function CardRadioGroup<T extends string = string>({
               "h-full cursor-pointer transition-colors",
               "hover:bg-accent/40 has-data-[state=checked]:hover:bg-primary/10",
               "has-[[data-slot=radio-group-item]:focus-visible]:ring-[3px] has-[[data-slot=radio-group-item]:focus-visible]:ring-ring/50",
-              itemDisabled && "cursor-not-allowed",
+              itemDisabled && "cursor-not-allowed"
             )}
           >
-            <Field
-              orientation="horizontal"
-              data-disabled={itemDisabled || undefined}
-            >
+            <Field orientation="horizontal" data-disabled={itemDisabled || undefined}>
               <FieldContent>
                 <FieldTitle className="gap-2">
                   {option.iconName ? (
@@ -293,9 +289,7 @@ export function CardRadioGroup<T extends string = string>({
                       <IGRPIcon iconName={option.iconName} className="size-4" />
                     </span>
                   ) : null}
-                  <span className="min-w-0 flex-1 text-pretty">
-                    {option.label}
-                  </span>
+                  <span className="min-w-0 flex-1 text-pretty">{option.label}</span>
                   {option.badge ? (
                     <Badge variant="secondary" className="shrink-0 font-normal">
                       {option.badge}
@@ -303,29 +297,23 @@ export function CardRadioGroup<T extends string = string>({
                   ) : null}
                 </FieldTitle>
                 {option.description ? (
-                  <FieldDescription className="text-xs">
-                    {option.description}
-                  </FieldDescription>
+                  <FieldDescription className="text-xs">{option.description}</FieldDescription>
                 ) : null}
               </FieldContent>
-              <RadioGroupItem
-                id={itemId}
-                value={option.value}
-                disabled={itemDisabled}
-              />
+              <RadioGroupItem id={itemId} value={option.value} disabled={itemDisabled} />
             </Field>
           </FieldLabel>
-        );
+        )
       })}
     </RadioGroup>
-  );
+  )
 }
 ```
 
 ### 5.2 `card-radio-field.tsx` (verbatim)
 
 ```tsx
-"use client";
+"use client"
 
 import {
   cn,
@@ -335,18 +323,15 @@ import {
   FieldSet,
   type IGRPOptionsProps,
   useIGRPFormContext,
-} from "@igrp/igrp-framework-react-design-system";
-import {
-  CardRadioGroup,
-  type CardRadioOption,
-} from "@myapp/_components/card-radio-group";
-import { useId } from "react";
+} from "@igrp/igrp-framework-react-design-system"
+import { CardRadioGroup, type CardRadioOption } from "@myapp/_components/card-radio-group"
+import { useId } from "react"
 
 export type CardRadioFieldOption = IGRPOptionsProps & {
-  disabled?: boolean;
+  disabled?: boolean
   /** Short tag shown next to the label. */
-  badge?: string;
-};
+  badge?: string
+}
 
 function toCardOptions(options: CardRadioFieldOption[]): CardRadioOption[] {
   return options.map((o) => ({
@@ -356,28 +341,28 @@ function toCardOptions(options: CardRadioFieldOption[]): CardRadioOption[] {
     iconName: o.icon,
     badge: o.badge,
     disabled: o.disabled,
-  }));
+  }))
 }
 
 export interface CardRadioFieldProps {
   /** Field name in the surrounding `IGRPForm` schema. Ignored in controlled mode. */
-  name?: string;
-  label?: string;
-  options: CardRadioFieldOption[];
-  required?: boolean;
-  disabled?: boolean;
-  helperText?: string;
+  name?: string
+  label?: string
+  options: CardRadioFieldOption[]
+  required?: boolean
+  disabled?: boolean
+  helperText?: string
   /** Error message override; by default the form's own error for `name` is shown. */
-  errorText?: string;
+  errorText?: string
   /** Shown instead of the cards when `options` is empty. */
-  emptyLabel?: string;
+  emptyLabel?: string
   /** Grid classes for the card row; defaults to 1/2/3 columns. */
-  gridClassName?: string;
-  className?: string;
+  gridClassName?: string
+  className?: string
   /** Runs after the value is written to the form — for cascade resets, etc. */
-  onValueChange?: (value: string) => void;
+  onValueChange?: (value: string) => void
   /** Controlled mode (outside `IGRPForm`): pass both. */
-  value?: string;
+  value?: string
 }
 
 /**
@@ -408,24 +393,16 @@ export function CardRadioField({
   onValueChange,
   value: valueProp,
 }: CardRadioFieldProps) {
-  const fieldId = useId();
-  const helperId = `${fieldId}-helper`;
-  const errorId = `${fieldId}-error`;
+  const fieldId = useId()
+  const helperId = `${fieldId}-helper`
+  const errorId = `${fieldId}-error`
 
-  const { form } = useIGRPFormContext();
-  const controlled = valueProp !== undefined;
-  const rawValue = controlled
-    ? valueProp
-    : name
-      ? form?.watch?.(name)
-      : undefined;
-  const value = typeof rawValue === "string" ? rawValue : "";
+  const { form } = useIGRPFormContext()
+  const controlled = valueProp !== undefined
+  const rawValue = controlled ? valueProp : name ? form?.watch?.(name) : undefined
+  const value = typeof rawValue === "string" ? rawValue : ""
 
-  const fieldError =
-    errorText ??
-    (name
-      ? (form?.formState?.errors?.[name]?.message as string | undefined)
-      : undefined);
+  const fieldError = errorText ?? (name ? (form?.formState?.errors?.[name]?.message as string | undefined) : undefined)
 
   function handleChange(next: string) {
     if (!controlled && name) {
@@ -433,9 +410,9 @@ export function CardRadioField({
         shouldValidate: true,
         shouldDirty: true,
         shouldTouch: true,
-      });
+      })
     }
-    onValueChange?.(next);
+    onValueChange?.(next)
   }
 
   return (
@@ -443,15 +420,10 @@ export function CardRadioField({
       className={cn("gap-3", className)}
       data-invalid={fieldError ? true : undefined}
       data-disabled={disabled || undefined}
-      aria-describedby={
-        cn(helperText && helperId, fieldError && errorId) || undefined
-      }
+      aria-describedby={cn(helperText && helperId, fieldError && errorId) || undefined}
     >
       {label ? (
-        <FieldLegend
-          variant="label"
-          className={cn("mb-0", fieldError && "text-destructive")}
-        >
+        <FieldLegend variant="label" className={cn("mb-0", fieldError && "text-destructive")}>
           {label}
           {required ? <span className="ml-0.5 text-destructive">*</span> : null}
         </FieldLegend>
@@ -481,7 +453,7 @@ export function CardRadioField({
         </FieldDescription>
       ) : null}
     </FieldSet>
-  );
+  )
 }
 ```
 

@@ -171,7 +171,8 @@ the suffix set prefix-free.
 > configured with). A basePath app sweeps its own previous names from its
 > middleware with `staleAuthCookies(basePath, presentNames)` from `/cookies` —
 > the template already does this — and `igrpDeleteAuthCookies()` from
-> `@igrp/framework-next` removes every form on the logout path. A root-path
+> `@igrp/framework-next` removes this app's current and previous names on the
+> logout path — never another co-hosted app's cookie. A root-path
 > app's stock-named orphan is not swept by default (it may be a live cookie of
 > an older co-hosted app) — but a root app cannot scope its cookies below
 > `Path=/`, so that orphan is sent to every co-hosted app on every request.

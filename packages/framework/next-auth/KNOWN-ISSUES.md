@@ -31,7 +31,7 @@ cosmetic".
 > are deliberately **unaffected**: the hash is conditional precisely so the
 > common case keeps the name it already has and this entry does not get worse
 > for everyone. The remediation below is unchanged and covers both renames —
-> `igrpDeleteAuthCookies()` matches by basename.
+> `igrpDeleteAuthCookies()` sweeps this app's previous names (via `staleAuthCookies`).
 >
 > This is the second rename in as many changes, which strengthens the closing
 > argument: **do the sweep before the next basePath-affecting cookie change.**
@@ -104,8 +104,9 @@ no need for.
 Both options below are now in place.
 
 1. **Operational.** `igrpDeleteAuthCookies()` from `@igrp/framework-next`
-   matches by basename and expires each match at the path it was set at, so it
-   removes every form on the logout path. Documented in this package's
+   expires this app's current cookie and, via `staleAuthCookies`, its previous
+   names, each at the path it was set at. (It used to match by basename, which
+   also deleted co-hosted apps' cookies; since 2026-10-14 it only touches its own.) Documented in this package's
    `README.md` under "Cookies → Upgrading".
 2. **Automatic sweep — DONE 2026-10-06.** `staleAuthCookies(basePath,
 presentCookieNames)` in `src/cookies.ts` returns this app's previous names

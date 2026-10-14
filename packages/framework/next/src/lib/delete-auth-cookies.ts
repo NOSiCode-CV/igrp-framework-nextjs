@@ -7,46 +7,57 @@ import {
   basePathCookiePath,
   SECURE_COOKIE_PREFIX,
   SESSION_COOKIE_BASENAME,
+  staleAuthCookies,
 } from '@igrp/framework-next-auth/cookies';
 
 /**
- * Clears every NextAuth session cookie, including chunked (`.0`, `.1`) and
- * basePath-scoped (`.apps-template`) variants.
+ * Clears THIS app's NextAuth session cookies: the current name (chunks
+ * `.0`, `.1` included, with or without `__Secure-`) and the names this app
+ * wrote before its cookies were scoped to its basePath.
  *
- * Matching is by the shared basename. The previous two-parameter form
- * (`prodCookieName`, `devCookieName`) only looked like it gave independent
- * control: it tested `name.includes(dev) || name.includes(prod)`, and the prod
- * name CONTAINS the dev name (`__Secure-next-auth.session-token` ⊃
- * `next-auth.session-token`), so the first test already matched both and the
- * second could never change the outcome.
+ * Only this app's. Several IGRP apps share one domain and one cookie jar, and
+ * a logout page sees every cookie whose path covers it — a basePath app's
+ * `/apps/demo/logout` also receives the app-center's `Path=/` session cookie.
+ * Matching by the shared basename (as this used to) deleted that cookie too:
+ * the center looked signed out while its session at the authorization server
+ * stayed active and unrevoked, and apps under other paths were not touched at
+ * all. Signing out of OTHER apps is the authorization server's job (single
+ * logout), not a cookie side effect.
  *
- * Each match is expired at the path it was SET at, which the request does not
- * carry, so it is inferred from the name: this app's current, path-scoped
- * cookies (their names end in `authCookieSuffix`, plus NextAuth's `.N` chunk)
- * live at the basePath (`basePathCookiePath`); every older or unscoped name was
- * written at `/`. Only one path per name is possible anyway — Next keeps a
- * single pending `Set-Cookie` per cookie name, so a second `delete()` of the
- * same name would replace the first. `Secure` is set for `__Secure-` names,
- * without which the browser ignores the expiring `Set-Cookie`.
+ * Current cookies are expired at the basePath (`basePathCookiePath`), where
+ * they are set; previous-generation names come from `staleAuthCookies`, which
+ * derives them from this app's basePath only and expires them at `/`. `Secure`
+ * is set for `__Secure-` names, without which the browser ignores the
+ * expiring `Set-Cookie`.
  *
  * @param cookieBasename Override for a deployment that renamed its session
- *   cookie wholesale. Defaults to NextAuth's basename, which also matches the
- *   `__Secure-` prefixed and basePath-suffixed forms.
+ *   cookie wholesale. Previous-generation names are only swept for the default
+ *   basename.
+ * @param options.sweepStockNames Root-path apps only: also expire the stock
+ *   `next-auth.session-token` this app wrote before the `~` terminator. Opt in
+ *   only when no older stock-named app shares the host (see `staleAuthCookies`).
  */
-export async function igrpDeleteAuthCookies(cookieBasename: string = SESSION_COOKIE_BASENAME) {
+export async function igrpDeleteAuthCookies(
+  cookieBasename: string = SESSION_COOKIE_BASENAME,
+  options: { sweepStockNames?: boolean } = {},
+) {
   const store = await cookies();
   const basePath = process.env.NEXT_PUBLIC_BASE_PATH;
   const scopedPath = basePathCookiePath(basePath);
-  const scopedSuffix = authCookieSuffix(basePath);
+  const ownName = `${cookieBasename}${authCookieSuffix(basePath)}`;
+  const ownNames = new Set([ownName, `${SECURE_COOKIE_PREFIX}${ownName}`]);
+  const present = store.getAll().map((cookie) => cookie.name);
 
-  for (const cookie of store.getAll()) {
-    if (cookie.name.includes(cookieBasename)) {
-      const isScoped = cookie.name.replace(/\.\d+$/, '').endsWith(scopedSuffix);
-      store.delete({
-        name: cookie.name,
-        path: isScoped ? scopedPath : '/',
-        secure: cookie.name.startsWith(SECURE_COOKIE_PREFIX),
-      });
+  for (const name of present) {
+    // Strip NextAuth's chunk index; every own name ends in `~`, so a sibling's
+    // name can never reduce to it.
+    if (!ownNames.has(name.replace(/\.\d+$/, ''))) continue;
+    store.delete({ name, path: scopedPath, secure: name.startsWith(SECURE_COOKIE_PREFIX) });
+  }
+
+  if (cookieBasename === SESSION_COOKIE_BASENAME) {
+    for (const { name, options: expire } of staleAuthCookies(basePath, present, options)) {
+      store.delete({ name, path: expire.path, secure: expire.secure });
     }
   }
 }

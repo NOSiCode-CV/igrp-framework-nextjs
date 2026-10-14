@@ -54,9 +54,9 @@ pnpm add @igrp/framework-next
 
 ### Auth helpers
 
-| Export                  | Entry | Purpose                                    |
-| ----------------------- | ----- | ------------------------------------------ |
-| `igrpDeleteAuthCookies` | `.`   | Clears NextAuth session cookies on logout. |
+| Export                  | Entry | Purpose                                                                                                            |
+| ----------------------- | ----- | ------------------------------------------------------------------------------------------------------------------ |
+| `igrpDeleteAuthCookies` | `.`   | Clears THIS app's NextAuth session cookies on logout (current + pre-scoping names); never another co-hosted app's. |
 
 ### Typed errors
 

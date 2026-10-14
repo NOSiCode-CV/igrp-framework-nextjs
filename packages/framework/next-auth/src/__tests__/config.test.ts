@@ -275,7 +275,7 @@ describe('withIGRPAuth — isTokenExpiredOrFailed (middleware grace)', () => {
   });
 });
 
-describe('withIGRPAuth — jwt callback introspect gate', () => {
+describe('withIGRPAuth — jwt callback refresh (no introspection)', () => {
   beforeEach(() => {
     vi.clearAllMocks();
     // Default: token is active, refresh succeeds
@@ -287,8 +287,10 @@ describe('withIGRPAuth — jwt callback introspect gate', () => {
     } as any);
   });
 
-  it('sets forceLogout without calling refresh when introspect returns false', async () => {
-    vi.mocked(oidcModule.introspectOidcToken).mockResolvedValue(false);
+  it('never introspects the refresh token before refreshing', async () => {
+    // Introspecting a rotated-out refresh token with token_type_hint=refresh_token
+    // trips the IdP's reuse detection and revokes the session — and the refresh
+    // itself already reports a revoked token (invalid_grant).
 
     const withIGRPAuth = await getFactory();
     const instance = withIGRPAuth({ env: VALID_ENV });
@@ -303,9 +305,32 @@ describe('withIGRPAuth — jwt callback introspect gate', () => {
 
     const result = await jwtCallback!({ token: expiredToken, account: null } as any);
 
+    expect(oidcModule.introspectOidcToken).not.toHaveBeenCalled();
+    expect(oidcModule.refreshOidcAccessToken).toHaveBeenCalledTimes(1);
+    expect((result as any).accessToken).toBe('new-at');
+  });
+
+  it('forces logout when the refresh reports a revoked refresh token', async () => {
+    vi.mocked(oidcModule.refreshOidcAccessToken).mockResolvedValue({
+      error: 'RefreshAccessTokenError',
+      forceLogout: true,
+    } as any);
+    vi.spyOn(console, 'error').mockImplementation(() => {});
+
+    const withIGRPAuth = await getFactory();
+    const jwtCallback = withIGRPAuth({ env: VALID_ENV }).authOptions.callbacks?.jwt;
+    const result = await jwtCallback!({
+      token: {
+        accessToken: 'at-old',
+        refreshToken: 'rt-revoked',
+        authProviderId: 'igrp-auth' as const,
+        expiresAt: Date.now() - 10_000,
+      },
+      account: null,
+    } as any);
+
     expect((result as any).forceLogout).toBe(true);
     expect((result as any).error).toBe('RefreshAccessTokenError');
-    expect(oidcModule.refreshOidcAccessToken).not.toHaveBeenCalled();
   });
 
   it('clears stale error/forceLogout when returning a still-valid token without refresh', async () => {
@@ -338,9 +363,7 @@ describe('withIGRPAuth — jwt callback introspect gate', () => {
     expect(oidcModule.introspectOidcToken).not.toHaveBeenCalled();
   });
 
-  it('calls refresh when introspect returns true and token is expired', async () => {
-    vi.mocked(oidcModule.introspectOidcToken).mockResolvedValue(true);
-
+  it('calls refresh with the expired token', async () => {
     const withIGRPAuth = await getFactory();
     const instance = withIGRPAuth({ env: VALID_ENV });
     const jwtCallback = instance.authOptions.callbacks?.jwt;
@@ -354,7 +377,6 @@ describe('withIGRPAuth — jwt callback introspect gate', () => {
 
     await jwtCallback!({ token: expiredToken, account: null } as any);
 
-    expect(oidcModule.introspectOidcToken).toHaveBeenCalledWith(expiredToken, VALID_ENV);
     expect(oidcModule.refreshOidcAccessToken).toHaveBeenCalledWith(expiredToken, VALID_ENV);
   });
 });
@@ -648,7 +670,7 @@ describe('withIGRPAuth — jwt callback rotation recovery', () => {
     expect(result.forceLogout).toBe(false);
   });
 
-  it('falls through to introspect + refresh when there is no recovered token', async () => {
+  it('falls through to refresh when there is no recovered token', async () => {
     const withIGRPAuth = await getFactory();
     const instance = withIGRPAuth({ env: VALID_ENV });
     const jwtCb = instance.authOptions.callbacks?.jwt;
@@ -662,7 +684,7 @@ describe('withIGRPAuth — jwt callback rotation recovery', () => {
     };
     await jwtCb!({ token: expiredToken, account: undefined } as any);
 
-    expect(oidcModule.introspectOidcToken).toHaveBeenCalled();
+    expect(oidcModule.introspectOidcToken).not.toHaveBeenCalled();
     expect(oidcModule.refreshOidcAccessToken).toHaveBeenCalled();
   });
 });

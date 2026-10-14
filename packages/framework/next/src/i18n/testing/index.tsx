@@ -24,8 +24,11 @@ const CHROME = {
 
 export interface IGRPIntlTestProviderProps {
   locale?: IGRPLocale;
+  /** The app's `i18n.defaultLocale`: missing keys fall back to its catalog, as in production. */
+  defaultLocale?: IGRPLocale;
   locales?: readonly IGRPLocale[];
   formatLocale?: string;
+  timeZone?: string;
   /** App catalogs keyed by locale; framework namespaces are merged underneath. */
   messages?: Partial<Record<IGRPLocale, AbstractIntlMessages>>;
   children: ReactNode;
@@ -37,8 +40,10 @@ export interface IGRPIntlTestProviderProps {
  */
 export function IGRPIntlTestProvider({
   locale = 'pt',
+  defaultLocale = 'pt',
   locales = IGRP_LOCALES,
   formatLocale = IGRP_DEFAULT_FORMAT_LOCALES[locale],
+  timeZone,
   messages = {},
   children,
 }: IGRPIntlTestProviderProps) {
@@ -47,7 +52,8 @@ export function IGRPIntlTestProvider({
       locale={locale}
       formatLocale={formatLocale}
       locales={locales}
-      messages={igrpMergeMessages({ defaultLocale: locale }, locale, messages)}
+      timeZone={timeZone}
+      messages={igrpMergeMessages({ defaultLocale }, locale, messages)}
       designSystemStrings={DS[locale]}
       chromeStrings={CHROME[locale]}
     >

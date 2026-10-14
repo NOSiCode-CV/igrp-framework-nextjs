@@ -8,6 +8,8 @@ export type IGRPLocaleInfo = {
   locale: IGRPLocale;
   formatLocale: string;
   locales: readonly IGRPLocale[];
+  /** `i18n.timeZone`; `undefined` formats in the runtime's zone. */
+  timeZone?: string;
 };
 
 const DEFAULT_INFO: IGRPLocaleInfo = {

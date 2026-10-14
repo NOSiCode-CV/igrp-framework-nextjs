@@ -3,7 +3,7 @@ import type { IGRPSetLocaleResult } from '../server/set-locale.js';
 
 export interface IGRPLocaleChangeHandlers {
   action: (value: string) => Promise<IGRPSetLocaleResult>;
-  onChanged?: (locale: IGRPLocale) => void | Promise<void>;
+  onChanged?: (locale: IGRPLocale, persisted: boolean) => void | Promise<void>;
   refresh: () => void;
 }
 
@@ -29,7 +29,7 @@ export async function igrpRunLocaleChange(
 
   let failed = false;
   try {
-    await onChanged?.(result.data.locale);
+    await onChanged?.(result.data.locale, result.data.persisted);
   } catch (error) {
     console.error('[igrp-i18n] onChanged failed after the locale was saved', error);
     failed = true;

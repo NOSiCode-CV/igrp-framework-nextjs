@@ -38,8 +38,8 @@ export function IGRPIntlProvider({
   children,
 }: IGRPIntlProviderProps) {
   const info = useMemo<IGRPLocaleInfo>(
-    () => ({ locale, formatLocale, locales }),
-    [locale, formatLocale, locales],
+    () => ({ locale, formatLocale, locales, timeZone }),
+    [locale, formatLocale, locales, timeZone],
   );
   return (
     <NextIntlClientProvider

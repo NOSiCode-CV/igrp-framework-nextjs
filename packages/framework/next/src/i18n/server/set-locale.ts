@@ -1,4 +1,5 @@
 import { cookies, headers } from 'next/headers';
+import { unstable_rethrow } from 'next/navigation';
 
 import {
   IGRP_LOCALE_COOKIE,
@@ -22,6 +23,13 @@ export type IGRPSetLocaleResult =
  * 'use server';
  * export async function setLocale(value: string) { return igrpSetLocale(i18n, value); }
  * ```
+ *
+ * Next control flow thrown inside `persistLocale` (`redirect()`,
+ * `notFound()`, a `forbidden()` from the app's session gate) is rethrown, so
+ * the navigation happens instead of a 500 result. `persistLocale` should
+ * no-op and resolve `false` when there is no session (an anonymous visitor
+ * may still change the language; only the cookie is written and the result
+ * carries `persisted: false`, so the client skips its session refresh).
  */
 export async function igrpSetLocale(
   i18n: IGRPI18nConfig,
@@ -35,9 +43,9 @@ export async function igrpSetLocale(
   let persisted = false;
   if (i18n.persistLocale) {
     try {
-      await i18n.persistLocale(locale);
-      persisted = true;
+      persisted = (await i18n.persistLocale(locale)) !== false;
     } catch (error) {
+      unstable_rethrow(error);
       console.error('[igrp-i18n] persistLocale failed; the locale was not changed.', error);
       return { success: false, error: 'Could not save the language preference.', status: 500 };
     }

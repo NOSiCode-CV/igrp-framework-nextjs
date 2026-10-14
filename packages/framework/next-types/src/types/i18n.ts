@@ -32,8 +32,14 @@ export interface IGRPI18nConfigBase {
   readonly resolution: IGRPLocaleResolution;
   /** The signed-in user's locale (`session.user.locale`), raw; `undefined` when unknown. */
   readonly getSessionLocale?: () => Promise<string | null | undefined>;
-  /** Persists an explicit choice for the signed-in user. Its presence selects `session-first`. */
-  readonly persistLocale?: (locale: IGRPLocale) => Promise<void>;
+  /**
+   * Persists an explicit choice for the signed-in user. Its presence selects
+   * `session-first`. Resolve `false` to report that nothing was saved (no
+   * session: an anonymous visitor may still change the language, and only the
+   * cookie is written); `igrpSetLocale` then reports `persisted: false`.
+   * Next control flow thrown here (`redirect()`, `forbidden()`) propagates.
+   */
+  readonly persistLocale?: (locale: IGRPLocale) => Promise<void | boolean>;
   /** Per-locale overrides of the design-system and chrome catalogs. */
   readonly overrides?: Partial<Record<IGRPLocale, { designSystem?: object; chrome?: object }>>;
 }

@@ -89,7 +89,7 @@ Five subpath entries, each a file-per-module leaf:
 
 - `./i18n` — Edge-safe (middleware may import it): `igrpDefineI18n`, `igrpParseFormatLocales`, `igrpPickLocale`, `igrpSyncLocaleCookie`, the format helpers (`igrpFormatDate`, `igrpFormatNumber`, `igrpCompare`, …), `IGRP_LOCALES`, `IGRP_LOCALE_COOKIE`.
 - `./i18n/server` — `server-only`: `igrpResolveLocale`, `igrpCreateRequestConfig` (for next-intl's `getRequestConfig`), `igrpSetLocale`, `igrpGetDesignSystemStrings`, `igrpGetChromeStrings`.
-- `./i18n/client` — `IGRPIntlProvider` (mounted by `IGRPRootLayout`), `IGRPLocaleSwitcher`, `useIGRPFormat`, `useIGRPLocaleInfo`.
+- `./i18n/client` — `IGRPIntlProvider` (mounted by `IGRPRootLayout`), `IGRPLocaleSwitcher` (`onChanged(locale, persisted)`), `useIGRPFormat` (`formatDate`, `formatDateTime`, `formatRelativeTime`, `formatNumber`, `compare`, all in the format locale and `i18n.timeZone`), `useIGRPLocaleInfo`.
 - `./i18n/messages` — the generic `common`, `i18n` and `errors` namespaces in pt, en and fr, and `igrpMergeMessages`.
 - `./i18n/testing` — `IGRPIntlTestProvider`, the same client context for tests.
 

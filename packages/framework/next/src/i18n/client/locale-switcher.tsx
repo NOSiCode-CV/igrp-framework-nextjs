@@ -25,11 +25,13 @@ export interface IGRPLocaleSwitcherProps {
   /** The app's `'use server'` wrapper around `igrpSetLocale`. Server actions cross to client props. */
   action: (value: string) => Promise<IGRPSetLocaleResult>;
   /**
-   * Runs after a successful change and before `router.refresh()`. An app whose
-   * session token must follow calls next-auth `update({ locale })` here. A
+   * Runs after a successful change and before `router.refresh()`. `persisted`
+   * is `true` when `persistLocale` saved the choice, so an app whose session
+   * token must follow calls next-auth `update({ locale })` only then:
+   * `onChanged={(locale, persisted) => persisted && update({ locale })}`. A
    * function prop, so pass it from a client component.
    */
-  onChanged?: (locale: IGRPLocale) => void | Promise<void>;
+  onChanged?: (locale: IGRPLocale, persisted: boolean) => void | Promise<void>;
   className?: string;
 }
 

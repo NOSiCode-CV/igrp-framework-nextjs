@@ -3,6 +3,7 @@ import { describe, expect, it, vi } from 'vitest';
 import { igrpRunLocaleChange } from '../client/locale-change.js';
 
 const ok = { success: true as const, data: { locale: 'fr' as const, persisted: false } };
+const persistedOk = { success: true as const, data: { locale: 'fr' as const, persisted: true } };
 
 describe('igrpRunLocaleChange', () => {
   it('calls action, then onChanged, then refresh on success', async () => {
@@ -19,6 +20,20 @@ describe('igrpRunLocaleChange', () => {
     });
     expect(failed).toBe(false);
     expect(calls).toEqual(['action', 'changed:fr', 'refresh']);
+  });
+
+  it('passes the persisted flag from the action result to onChanged', async () => {
+    const onChanged = vi.fn();
+    await igrpRunLocaleChange('fr', {
+      action: async () => persistedOk,
+      onChanged,
+      refresh: vi.fn(),
+    });
+    await igrpRunLocaleChange('fr', { action: async () => ok, onChanged, refresh: vi.fn() });
+    expect(onChanged.mock.calls).toEqual([
+      ['fr', true],
+      ['fr', false],
+    ]);
   });
 
   it('reports failure and skips onChanged and refresh when the action fails', async () => {

@@ -24,6 +24,7 @@ export {
   igrpFormatDate,
   igrpFormatDateTime,
   igrpFormatNumber,
+  igrpFormatRelativeTime,
   igrpCompare,
   type IGRPDateInput,
 } from './format.js';

@@ -7,6 +7,9 @@ vi.mock('next/headers', () => ({
   headers: async () => ({ get: headerGet }),
 }));
 
+// Real `next/navigation`: the redirect thrown by `persistLocale` must reach the
+// framework boundary as Next's own control-flow error, not a mocked one.
+const { redirect } = await import('next/navigation');
 const { igrpDefineI18n } = await import('../config.js');
 const { igrpSetLocale } = await import('../server/set-locale.js');
 
@@ -48,6 +51,15 @@ describe('igrpSetLocale', () => {
     expect(calls).toEqual(['persist:fr', 'cookie']);
   });
 
+  it('reports persisted: false when persistLocale resolves false (no session to write to)', async () => {
+    const i18n = igrpDefineI18n({ defaultLocale: 'pt', persistLocale: async () => false });
+    expect(await igrpSetLocale(i18n, 'en')).toEqual({
+      success: true,
+      data: { locale: 'en', persisted: false },
+    });
+    expect(cookieSet).toHaveBeenCalledWith('IGRP_LOCALE', 'en', OPTIONS);
+  });
+
   it('writes no cookie when persistLocale throws', async () => {
     const i18n = igrpDefineI18n({
       defaultLocale: 'pt',
@@ -58,6 +70,22 @@ describe('igrpSetLocale', () => {
     const error = vi.spyOn(console, 'error').mockImplementation(() => {});
     expect(await igrpSetLocale(i18n, 'fr')).toMatchObject({ success: false, status: 500 });
     expect(cookieSet).not.toHaveBeenCalled();
+    error.mockRestore();
+  });
+
+  it('lets a redirect() thrown by persistLocale propagate instead of failing with 500', async () => {
+    const i18n = igrpDefineI18n({
+      defaultLocale: 'pt',
+      persistLocale: async () => {
+        redirect('/login');
+      },
+    });
+    const error = vi.spyOn(console, 'error').mockImplementation(() => {});
+    await expect(igrpSetLocale(i18n, 'fr')).rejects.toMatchObject({
+      digest: expect.stringMatching(/^NEXT_REDIRECT/),
+    });
+    expect(cookieSet).not.toHaveBeenCalled();
+    expect(error).not.toHaveBeenCalled();
     error.mockRestore();
   });
 

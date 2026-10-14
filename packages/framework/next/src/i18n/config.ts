@@ -145,8 +145,8 @@ export interface IGRPI18nOptions {
   formatLocales?: Partial<Record<IGRPLocale, string>>;
   timeZone?: string;
   getSessionLocale?: () => Promise<string | null | undefined>;
-  /** Its presence selects `session-first` resolution. */
-  persistLocale?: (locale: IGRPLocale) => Promise<void>;
+  /** Its presence selects `session-first` resolution; resolve `false` when there is no session to write to. */
+  persistLocale?: (locale: IGRPLocale) => Promise<void | boolean>;
   overrides?: IGRPI18nOverrides;
 }
 

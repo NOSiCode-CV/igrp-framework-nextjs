@@ -81,7 +81,7 @@
       "permissions": {
         "name": "Permissões",
         "valueAll": "Acesso total",
-        "valueCount": "{count, plural, one {# permissão} other {# permissões}}",
+        "valueCount": "{count, plural, =0 {# permissões} one {# permissão} other {# permissões}}",
         "detailBypass": "Em pré-visualização todas as verificações passam.",
         "detailOrg": "Departamento ativo: {org}.",
         "detailNoOrg": "Sem departamento ativo no token.",

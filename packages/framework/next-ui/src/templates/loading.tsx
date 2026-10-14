@@ -2,17 +2,16 @@
 
 import { cn, IGRPIcon } from '@igrp/igrp-framework-react-design-system';
 
+import { useIGRPChromeI18n } from '../i18n/context.js';
+
 interface IGRPTemplateLoadingProps {
   text?: string;
   appCode?: string;
   className?: string;
 }
 
-function IGRPTemplateLoading({
-  text = 'Aguarde...',
-  appCode,
-  className,
-}: IGRPTemplateLoadingProps) {
+function IGRPTemplateLoading({ text, appCode, className }: IGRPTemplateLoadingProps) {
+  const chrome = useIGRPChromeI18n();
   return (
     <div
       className={cn(
@@ -33,7 +32,7 @@ function IGRPTemplateLoading({
             className={cn('size-16 animate-spin mx-auto mb-4 text-primary')}
             aria-hidden="true"
           />
-          <p className={cn('text-lg font-medium text-foreground')}>{text}</p>
+          <p className={cn('text-lg font-medium text-foreground')}>{text ?? chrome.loading.text}</p>
           {appCode && <span className={cn('sr-only')}>iGRP {appCode}</span>}
         </div>
       </div>

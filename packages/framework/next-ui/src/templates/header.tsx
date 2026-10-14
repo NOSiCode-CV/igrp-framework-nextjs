@@ -20,6 +20,7 @@ import { IGRPTemplateModeSwitcher, type IGRPModeSwitcherLabels } from './mode-sw
 import { IGRPTemplateNavUser, type IGRPNavUserLabels } from './nav-user.js';
 import { IGRPTemplateNotifications, type IGRPNotificationsLabels } from './notifications.js';
 import { IGRPTemplateImage } from './template-image.js';
+import { useIGRPChromeI18n } from '../i18n/context.js';
 import { withBasePath } from '../lib/utils.js';
 import Image from 'next/image';
 import Link from 'next/link';
@@ -123,7 +124,7 @@ function IGRPTemplateHeader({
   slots,
   commands,
   fallbackLogo = DEFAULT_HEADER_LOGO,
-  settingsLabel = 'Definições',
+  settingsLabel,
   navUserLabels,
   commandSearchLabels,
   notificationsLabels,
@@ -132,6 +133,7 @@ function IGRPTemplateHeader({
   breadcrumbEllipsisLabel,
 }: IGRPTemplateHeaderProps) {
   const { igrpToast } = useIGRPToast();
+  const chrome = useIGRPChromeI18n();
 
   // Warn (dev) + toast when no header data is configured. This MUST run in an
   // effect, not during render — calling igrpToast() during render updates the
@@ -260,7 +262,10 @@ function IGRPTemplateHeader({
           ) : (
             // `aria-label` IS the accessible name here — it overrides element
             // content, so an additional sr-only span would never be announced.
-            <Link href={settingsUrl || '/settings'} aria-label={settingsLabel}>
+            <Link
+              href={settingsUrl || '/settings'}
+              aria-label={settingsLabel ?? chrome.header.settings}
+            >
               <IGRPIcon iconName={settingsIcon ?? 'Settings'} aria-hidden="true" />
             </Link>
           ))}

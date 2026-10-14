@@ -4,6 +4,7 @@ import { useState, useEffect } from 'react';
 import Image from 'next/image';
 import { Button, cn, igrpFormatMessage } from '@igrp/igrp-framework-react-design-system';
 
+import { useIGRPChromeI18n } from '../i18n/context.js';
 import { withBasePath } from '../lib/utils.js';
 
 interface IGRPCarousel {
@@ -30,10 +31,11 @@ interface IGRPAuthCarouselProps {
 function IGRPAuthCarousel({
   carouselItems,
   intervalTime = 6000,
-  regionLabel = 'Destaques',
-  goToSlideLabel = 'Ir para o destaque {index}',
+  regionLabel,
+  goToSlideLabel,
   sizes = '(min-width: 768px) 50vw, 100vw',
 }: IGRPAuthCarouselProps) {
+  const chrome = useIGRPChromeI18n();
   const [currentIndex, setCurrentIndex] = useState(0);
 
   useEffect(() => {
@@ -57,7 +59,7 @@ function IGRPAuthCarousel({
       className={cn('relative h-full w-full overflow-hidden bg-muted')}
       role="region"
       aria-roledescription="carousel"
-      aria-label={regionLabel}
+      aria-label={regionLabel ?? chrome.authCarousel.region}
     >
       <div className={cn('relative h-full')}>
         {carouselItems.map((item, index) => {
@@ -122,7 +124,9 @@ function IGRPAuthCarousel({
                 'h-3 rounded-full w-3 bg-white/50 p-0 transition-[width,background-color] duration-350 delay-350',
                 idx === currentIndex ? 'w-6 bg-white' : 'hover:bg-white/80',
               )}
-              aria-label={igrpFormatMessage(goToSlideLabel, { index: idx + 1 })}
+              aria-label={igrpFormatMessage(goToSlideLabel ?? chrome.authCarousel.goToSlide, {
+                index: idx + 1,
+              })}
               aria-current={idx === currentIndex}
             />
           ))}

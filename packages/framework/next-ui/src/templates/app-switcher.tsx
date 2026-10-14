@@ -16,6 +16,7 @@ import {
 import type { IGRPApplicationArgs } from '@igrp/framework-next-types';
 import { useMemo } from 'react';
 
+import { useIGRPChromeI18n } from '../i18n/context.js';
 import { getLocationOriginURL } from '../lib/utils.js';
 import { IGRPTemplateImage } from './template-image.js';
 
@@ -33,13 +34,16 @@ function IGRPTemplateAppSwitcher({
   apps,
   appCode,
   appCenterUrl,
-  appCenterLabel = 'Centro de Aplicações',
-  unknownLabel = 'N/D',
+  appCenterLabel,
+  unknownLabel,
 }: IGRPTemplateAppSwitcherProps) {
   // The Horizon alias of the same hook the rest of this package uses. Both names
   // resolve to one context (`horizon/sidebar` re-exports `useSidebar`), so this
   // is consistency, not a fix.
   const { isMobile } = useIGRPSidebar();
+  const chrome = useIGRPChromeI18n();
+  const appCenterText = appCenterLabel ?? chrome.appSwitcher.appCenter;
+  const unknownText = unknownLabel ?? chrome.appSwitcher.unknown;
 
   const activeApp = useMemo(() => {
     if (!apps || apps.length === 0) return undefined;
@@ -148,9 +152,7 @@ function IGRPTemplateAppSwitcher({
                       >
                         <IGRPIcon iconName="CornerDownLeft" className={cn('size-3 shrink-0')} />
                       </div>
-                      <div className={cn('text-muted-foreground font-medium')}>
-                        {appCenterLabel}
-                      </div>
+                      <div className={cn('text-muted-foreground font-medium')}>{appCenterText}</div>
                       <IGRPIcon iconName="ArrowRight" className={cn(arrowClassName)} />
                     </a>
                   </DropdownMenuItem>
@@ -170,8 +172,8 @@ function IGRPTemplateAppSwitcher({
               <IGRPIcon iconName="Command" />
             </div>
             <div className={cn('grid flex-1 text-left text-sm leading-tight')}>
-              <span className={cn('truncate font-medium')}>{unknownLabel}</span>
-              <span className={cn('truncate text-xs')}>{unknownLabel}</span>
+              <span className={cn('truncate font-medium')}>{unknownText}</span>
+              <span className={cn('truncate text-xs')}>{unknownText}</span>
             </div>
             <IGRPIcon iconName="ChevronsUpDown" className={cn('ml-auto')} />
           </SidebarMenuButton>

@@ -15,6 +15,9 @@ import {
   igrpFormatMessage,
   useIGRPLocale,
 } from '@igrp/igrp-framework-react-design-system';
+
+import { useIGRPChromeI18n } from '../i18n/context.js';
+import { IGRP_CHROME_STRINGS_PT, type IGRPNotificationsLabels } from '../i18n/strings.js';
 import type { IGRPNotificationArgs } from '@igrp/framework-next-types';
 import Link from 'next/link';
 
@@ -44,27 +47,11 @@ function toIsoString(value: string | Date): string | undefined {
   return Number.isNaN(date.getTime()) ? undefined : date.toISOString();
 }
 
-/** pt-PT defaults for the notifications dropdown. Override individually. */
-export interface IGRPNotificationsLabels {
-  /** Dropdown heading and the trigger's screen-reader name. */
-  title: string;
-  /** Action that clears the unread state. */
-  markAllRead: string;
-  /** Empty state. */
-  empty: string;
-  /** Footer link to the full notifications page. */
-  viewAll: string;
-  /** Unread-count announcement. `{count}` is substituted. */
-  unreadCount: string;
-}
+export type { IGRPNotificationsLabels };
 
-export const IGRP_NOTIFICATIONS_LABELS_PT_PT: IGRPNotificationsLabels = {
-  title: 'Notificações',
-  markAllRead: 'Marcar todas como lidas',
-  empty: 'Sem notificações',
-  viewAll: 'Todas as notificações',
-  unreadCount: '{count} por ler',
-};
+/** @deprecated Use IGRP_CHROME_STRINGS_PT.notifications. */
+export const IGRP_NOTIFICATIONS_LABELS_PT_PT: IGRPNotificationsLabels =
+  IGRP_CHROME_STRINGS_PT.notifications;
 
 interface IGRPTemplateNotificationsProps {
   notifications: IGRPNotificationArgs[];
@@ -91,9 +78,10 @@ function IGRPTemplateNotifications({
 }: IGRPTemplateNotificationsProps) {
   const providerLocale = useIGRPLocale();
   const resolvedLocale = locale ?? providerLocale;
+  const chrome = useIGRPChromeI18n();
   const labels = labelOverrides
-    ? { ...IGRP_NOTIFICATIONS_LABELS_PT_PT, ...labelOverrides }
-    : IGRP_NOTIFICATIONS_LABELS_PT_PT;
+    ? { ...chrome.notifications, ...labelOverrides }
+    : chrome.notifications;
 
   const unreadCount = notifications.filter((n) => !n.isRead).length;
 

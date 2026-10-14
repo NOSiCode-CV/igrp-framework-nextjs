@@ -15,6 +15,7 @@ import {
   IGRPIcon,
 } from '@igrp/igrp-framework-react-design-system';
 import { IGRPTemplateModeSwitcher } from '../templates/mode-switcher.js';
+import { useIGRPChromeI18n } from '../i18n/context.js';
 import { withBasePath } from '../lib/utils.js';
 
 interface IGRPLoginTexts {
@@ -54,6 +55,7 @@ function IGRPAuthForm({
 }: IGRPAuthFormProps) {
   const [isLoading, setIsLoading] = useState(false);
   const [authError, setAuthError] = useState<string | null>(null);
+  const chrome = useIGRPChromeI18n();
 
   // NO `finally` CLAUSE HERE. Two independent reasons, both easy to undo by
   // accident:
@@ -77,9 +79,7 @@ function IGRPAuthForm({
     } catch (error) {
       console.error('Authentication error:', error);
       setAuthError(
-        error instanceof Error
-          ? error.message
-          : (texts.signInError ?? 'Não foi possível iniciar sessão. Tente novamente.'),
+        error instanceof Error ? error.message : (texts.signInError ?? chrome.authForm.signInError),
       );
       setIsLoading(false);
     }

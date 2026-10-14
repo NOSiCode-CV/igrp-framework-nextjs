@@ -12,6 +12,7 @@ import {
 } from '@igrp/igrp-framework-react-design-system';
 
 import { buildMenuSections } from './utils.js';
+import { useIGRPChromeI18n } from '../../i18n/context.js';
 import { resolveMenuLabels, type IGRPMenuLabels } from './labels.js';
 import { SectionGroup } from './section-group.js';
 import { SearchResults } from './search-results.js';
@@ -37,12 +38,13 @@ export function IGRPTemplateMenus({
   const pathname = usePathname();
   const [query, setQuery] = useState('');
   const sections = useMemo(() => buildMenuSections(menus), [menus]);
+  const chrome = useIGRPChromeI18n();
   const labels = useMemo(
     () => ({
-      ...resolveMenuLabels(labelOverrides),
+      ...resolveMenuLabels(labelOverrides, chrome.menus),
       ...(navAriaLabel ? { navAriaLabel } : null),
     }),
-    [labelOverrides, navAriaLabel],
+    [labelOverrides, navAriaLabel, chrome.menus],
   );
 
   // Keyed off the menu CONTENT, not the array identity. `[menus]` cleared what

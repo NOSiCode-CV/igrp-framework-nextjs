@@ -18,8 +18,7 @@ function flatten(value: unknown, prefix = ''): Map<string, string> {
   return out;
 }
 
-const tokens = (message: string) =>
-  [...message.matchAll(/\{(\w+)\}/g)].map((m) => m[1]!).sort();
+const tokens = (message: string) => [...message.matchAll(/\{(\w+)\}/g)].map((m) => m[1]!).sort();
 
 const PT = flatten(IGRP_CHROME_STRINGS_PT);
 

@@ -10,21 +10,14 @@ import {
   cn,
 } from '@igrp/igrp-framework-react-design-system';
 
-/** pt-PT defaults for the light/dark toggle. Override individually. */
-export interface IGRPModeSwitcherLabels {
-  /** Accessible name while the resolved theme is still unknown. */
-  toggle: string;
-  /** Accessible name when the current theme is dark (the action switches to light). */
-  switchToLight: string;
-  /** Accessible name when the current theme is light (the action switches to dark). */
-  switchToDark: string;
-}
+import { useIGRPChromeI18n } from '../i18n/context.js';
+import { IGRP_CHROME_STRINGS_PT, type IGRPModeSwitcherLabels } from '../i18n/strings.js';
 
-export const IGRP_MODE_SWITCHER_LABELS_PT_PT: IGRPModeSwitcherLabels = {
-  toggle: 'Alternar tema',
-  switchToLight: 'Mudar para o tema claro',
-  switchToDark: 'Mudar para o tema escuro',
-};
+export type { IGRPModeSwitcherLabels };
+
+/** @deprecated Use IGRP_CHROME_STRINGS_PT.modeSwitcher. */
+export const IGRP_MODE_SWITCHER_LABELS_PT_PT: IGRPModeSwitcherLabels =
+  IGRP_CHROME_STRINGS_PT.modeSwitcher;
 
 interface IGRPTemplateModeSwitcherProps {
   /** Partial override of the pt-PT strings. Missing keys keep their default. */
@@ -38,9 +31,10 @@ function IGRPTemplateModeSwitcher({ labels: labelOverrides }: IGRPTemplateModeSw
   const [mounted, setMounted] = useState(false);
   useEffect(() => setMounted(true), []);
 
+  const chrome = useIGRPChromeI18n();
   const labels = labelOverrides
-    ? { ...IGRP_MODE_SWITCHER_LABELS_PT_PT, ...labelOverrides }
-    : IGRP_MODE_SWITCHER_LABELS_PT_PT;
+    ? { ...chrome.modeSwitcher, ...labelOverrides }
+    : chrome.modeSwitcher;
 
   const isDark = resolvedTheme === 'dark';
 

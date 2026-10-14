@@ -110,6 +110,21 @@ export {
   type IGRPThemeOption,
 } from './templates/theme-selector.js';
 
+// i18n (chrome catalog)
+
+export { IGRPChromeI18nProvider, useIGRPChromeI18n } from './i18n/context.js';
+export { igrpChromeStringsFor } from './i18n/catalogs.js';
+export { IGRP_LOCALE_COOKIE } from './i18n/cookie.js';
+export { igrpResolveErrorCopy, type IGRPErrorCopyResolver } from './i18n/error-copy.js';
+export {
+  IGRP_CHROME_STRINGS_PT,
+  type IGRPChromeStrings,
+  type IGRPChromeErrorCode,
+  type IGRPErrorCopy,
+} from './i18n/strings.js';
+export { IGRP_CHROME_STRINGS_EN } from './i18n/strings.en.js';
+export { IGRP_CHROME_STRINGS_FR } from './i18n/strings.fr.js';
+
 // providers
 
 export {

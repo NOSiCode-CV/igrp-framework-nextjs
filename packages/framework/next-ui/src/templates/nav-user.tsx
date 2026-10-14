@@ -19,23 +19,13 @@ import {
   IGRPIcon,
 } from '@igrp/igrp-framework-react-design-system';
 
-/** pt-PT defaults for the user menu. Override individually. */
-export interface IGRPNavUserLabels {
-  profile: string;
-  notifications: string;
-  settings: string;
-  logout: string;
-  /** Shown in place of a missing user name. */
-  unknownUser: string;
-}
+import { useIGRPChromeI18n } from '../i18n/context.js';
+import { IGRP_CHROME_STRINGS_PT, type IGRPNavUserLabels } from '../i18n/strings.js';
 
-export const IGRP_NAV_USER_LABELS_PT_PT: IGRPNavUserLabels = {
-  profile: 'Perfil',
-  notifications: 'Notificações',
-  settings: 'Definições',
-  logout: 'Terminar sessão',
-  unknownUser: 'N/D',
-};
+export type { IGRPNavUserLabels };
+
+/** @deprecated Use IGRP_CHROME_STRINGS_PT.navUser. */
+export const IGRP_NAV_USER_LABELS_PT_PT: IGRPNavUserLabels = IGRP_CHROME_STRINGS_PT.navUser;
 
 interface IGRPTemplateNavUserProps {
   user?: IGRPUserArgs;
@@ -66,12 +56,11 @@ function IGRPTemplateNavUser({
   labels: labelOverrides,
 }: IGRPTemplateNavUserProps) {
   const { isMobile } = useIGRPSidebar();
+  const chrome = useIGRPChromeI18n();
 
   if (!user) return null;
 
-  const labels = labelOverrides
-    ? { ...IGRP_NAV_USER_LABELS_PT_PT, ...labelOverrides }
-    : IGRP_NAV_USER_LABELS_PT_PT;
+  const labels = labelOverrides ? { ...chrome.navUser, ...labelOverrides } : chrome.navUser;
 
   // In the header the trigger sits at the top-right, so Radix's default
   // (bottom) is correct; in the sidebar footer it has to open away from the rail.

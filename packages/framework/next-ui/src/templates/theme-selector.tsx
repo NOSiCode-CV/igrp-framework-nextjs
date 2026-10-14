@@ -13,6 +13,9 @@ import {
   SelectValue,
 } from '@igrp/igrp-framework-react-design-system';
 
+import { useIGRPChromeI18n } from '../i18n/context.js';
+import { IGRP_CHROME_STRINGS_PT, type IGRPThemeSelectorLabels } from '../i18n/strings.js';
+
 import { useIGRPThemeConfig } from '../providers/active-theme.js';
 
 /**
@@ -41,30 +44,11 @@ export const IGRP_SCALED_THEMES: IGRPThemeOption[] = [
   { name: 'Âmbar', value: 'amber-scaled' },
 ];
 
-/** pt-PT defaults for the theme selector. Override individually. */
-export interface IGRPThemeSelectorLabels {
-  /** Screen-reader label of the control. */
-  srLabel: string;
-  /** Prefix shown beside the value on wide viewports. */
-  triggerPrefix: string;
-  /** Replaces the prefix on narrow viewports. */
-  triggerShort: string;
-  /** Placeholder when no theme is selected. */
-  placeholder: string;
-  /** Heading of the standard group. */
-  defaultGroup: string;
-  /** Heading of the scaled group. */
-  scaledGroup: string;
-}
+export type { IGRPThemeSelectorLabels };
 
-export const IGRP_THEME_SELECTOR_LABELS_PT_PT: IGRPThemeSelectorLabels = {
-  srLabel: 'Tema',
-  triggerPrefix: 'Selecionar tema:',
-  triggerShort: 'Tema',
-  placeholder: 'Selecionar tema',
-  defaultGroup: 'Padrão',
-  scaledGroup: 'Escalado',
-};
+/** @deprecated Use IGRP_CHROME_STRINGS_PT.themeSelector. */
+export const IGRP_THEME_SELECTOR_LABELS_PT_PT: IGRPThemeSelectorLabels =
+  IGRP_CHROME_STRINGS_PT.themeSelector;
 
 interface IGRPTemplateThemeSelectorProps {
   /** Standard-scale options. Defaults to {@link IGRP_DEFAULT_THEMES}. */
@@ -82,9 +66,10 @@ function IGRPTemplateThemeSelector({
 }: IGRPTemplateThemeSelectorProps = {}) {
   const { activeTheme, setActiveTheme } = useIGRPThemeConfig();
 
+  const chrome = useIGRPChromeI18n();
   const labels = labelOverrides
-    ? { ...IGRP_THEME_SELECTOR_LABELS_PT_PT, ...labelOverrides }
-    : IGRP_THEME_SELECTOR_LABELS_PT_PT;
+    ? { ...chrome.themeSelector, ...labelOverrides }
+    : chrome.themeSelector;
 
   return (
     <div className={cn('flex items-center gap-2')}>

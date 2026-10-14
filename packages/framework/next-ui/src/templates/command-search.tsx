@@ -14,6 +14,9 @@ import {
   CommandSeparator,
 } from '@igrp/igrp-framework-react-design-system';
 
+import { useIGRPChromeI18n } from '../i18n/context.js';
+import { IGRP_CHROME_STRINGS_PT, type IGRPCommandSearchLabels } from '../i18n/strings.js';
+
 export interface IGRPCommandItem {
   /** Optional stable identifier for use as React key. Falls back to label. */
   id?: string;
@@ -27,32 +30,11 @@ export interface IGRPCommandItem {
   onSelect: () => void;
 }
 
-/** pt-PT defaults for the command palette. Override individually. */
-export interface IGRPCommandSearchLabels {
-  /** Text on the collapsed trigger button. */
-  trigger: string;
-  /** Placeholder of the palette's own input. */
-  placeholder: string;
-  /** Shown when nothing matches. */
-  empty: string;
-  /**
-   * Accessible name of the dialog. The design system's `CommandDialog` renders
-   * this in an `sr-only` `DialogTitle` and defaults it to the English
-   * "Command Palette" — so without this the one string only screen-reader users
-   * hear was the one string still not in pt-PT.
-   */
-  dialogTitle: string;
-  /** Accessible description of the dialog, rendered `sr-only`. */
-  dialogDescription: string;
-}
+export type { IGRPCommandSearchLabels };
 
-export const IGRP_COMMAND_SEARCH_LABELS_PT_PT: IGRPCommandSearchLabels = {
-  trigger: 'Pesquisar...',
-  placeholder: 'Digite um comando ou pesquisa...',
-  empty: 'Sem resultados.',
-  dialogTitle: 'Paleta de comandos',
-  dialogDescription: 'Pesquise e execute um comando.',
-};
+/** @deprecated Use IGRP_CHROME_STRINGS_PT.commandSearch. */
+export const IGRP_COMMAND_SEARCH_LABELS_PT_PT: IGRPCommandSearchLabels =
+  IGRP_CHROME_STRINGS_PT.commandSearch;
 
 interface IGRPTemplateCommandSearchProps {
   /** Command items to render in the palette. When omitted, the palette shows only the empty state. */
@@ -73,9 +55,10 @@ function IGRPTemplateCommandSearch({
     setIsMac(/Mac|iPhone|iPad|iPod/i.test(navigator.platform || navigator.userAgent));
   }, []);
 
+  const chrome = useIGRPChromeI18n();
   const labels = labelOverrides
-    ? { ...IGRP_COMMAND_SEARCH_LABELS_PT_PT, ...labelOverrides }
-    : IGRP_COMMAND_SEARCH_LABELS_PT_PT;
+    ? { ...chrome.commandSearch, ...labelOverrides }
+    : chrome.commandSearch;
 
   useEffect(() => {
     const controller = new AbortController();

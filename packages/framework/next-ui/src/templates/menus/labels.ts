@@ -1,56 +1,18 @@
 import { igrpFormatMessage } from '@igrp/igrp-framework-react-design-system';
 
-/**
- * User-visible strings for the sidebar menu surfaces.
- *
- * pt-PT defaults, exposed as an overridable prop — the same contract the error
- * and 403 screens use. The design system's `useIGRPi18n()` catalog is closed
- * (`IGRPI18nStrings` enumerates DS component groups and the provider merges a
- * fixed list), so a framework package cannot add a group to it without editing
- * the design system. Until that catalog opens up, props are the seam.
- */
-export interface IGRPMenuLabels {
-  /** `aria-label` on the menu `<nav>`. */
-  navAriaLabel: string;
-  /** Placeholder of the menu filter input. */
-  searchPlaceholder: string;
-  /** `aria-label` of the menu filter input. */
-  searchAriaLabel: string;
-  /** `aria-label` of the clear-filter button. */
-  clearSearch: string;
-  /** Shown when the application has no active menu items. */
-  emptyMenus: string;
-  /** Empty search result. `{query}` is substituted. */
-  noResults: string;
-  /** Result count, exactly one. `{count}` is substituted. */
-  resultCountOne: string;
-  /** Result count, zero or many. `{count}` is substituted. */
-  resultCountOther: string;
-  /** `aria-label` of a folder's expand/collapse trigger. `{name}` is substituted. */
-  toggleSubmenu: string;
-  /** `aria-label` of a folder's icon-mode dropdown trigger. `{name}` is substituted. */
-  folderMenu: string;
-  /** `aria-label` of a link that opens a new tab. `{name}` is substituted. */
-  opensInNewTab: string;
-}
+import { IGRP_CHROME_STRINGS_PT, type IGRPMenuLabels } from '../../i18n/strings.js';
 
-export const IGRP_MENU_LABELS_PT_PT: IGRPMenuLabels = {
-  navAriaLabel: 'Menu principal',
-  searchPlaceholder: 'Pesquisar menus...',
-  searchAriaLabel: 'Pesquisar menus',
-  clearSearch: 'Limpar pesquisa',
-  emptyMenus: 'Aplicação sem menus.',
-  noResults: 'Sem resultados para "{query}".',
-  resultCountOne: '{count} resultado',
-  resultCountOther: '{count} resultados',
-  toggleSubmenu: 'Abrir ou fechar o submenu {name}',
-  folderMenu: 'Menu {name}',
-  opensInNewTab: '{name} (abre num novo separador)',
-};
+export type { IGRPMenuLabels };
 
-/** Resolves a partial override against the pt-PT defaults. */
-export function resolveMenuLabels(overrides?: Partial<IGRPMenuLabels>): IGRPMenuLabels {
-  return overrides ? { ...IGRP_MENU_LABELS_PT_PT, ...overrides } : IGRP_MENU_LABELS_PT_PT;
+/** @deprecated Use IGRP_CHROME_STRINGS_PT.menus. */
+export const IGRP_MENU_LABELS_PT_PT: IGRPMenuLabels = IGRP_CHROME_STRINGS_PT.menus;
+
+/** Resolves a partial override against `base` (the chrome catalog's `menus` group; Portuguese when omitted). */
+export function resolveMenuLabels(
+  overrides?: Partial<IGRPMenuLabels>,
+  base: IGRPMenuLabels = IGRP_MENU_LABELS_PT_PT,
+): IGRPMenuLabels {
+  return overrides ? { ...base, ...overrides } : base;
 }
 
 /**

@@ -2,6 +2,7 @@
 
 import { Fragment, useMemo, useRef } from 'react';
 import { useBreadcrumbOverflow } from '../hooks/use-breadcrumb-overflow.js';
+import { useIGRPChromeI18n } from '../i18n/context.js';
 import Link from 'next/link';
 import { useSelectedLayoutSegments } from 'next/navigation';
 import {
@@ -88,12 +89,13 @@ function IGRPTemplateBreadcrumbs({
   items,
   routeLabels = EMPTY_ROUTE_LABELS,
   formatLabel,
-  homeLabel = 'Página inicial',
-  ellipsisLabel = 'Mostrar restantes níveis',
+  homeLabel,
+  ellipsisLabel,
   homeHref = '/',
   maxItems = 4,
   itemsAfterCollapse = 1,
 }: IGRPTemplateBreadcrumbsProps) {
+  const chrome = useIGRPChromeI18n();
   // Always call — hooks cannot be conditional. Ignored when items is provided.
   // Under Next `cacheComponents`/PPR this becomes a DYNAMIC read: if a consumer
   // enables it and this renders inside a statically-cached shell, wrap the
@@ -175,7 +177,7 @@ function IGRPTemplateBreadcrumbs({
               )}
             >
               <IGRPIcon iconName="House" className={cn('h-3 w-3')} strokeWidth={2} />
-              <span className={cn('sr-only')}>{homeLabel}</span>
+              <span className={cn('sr-only')}>{homeLabel ?? chrome.breadcrumbs.home}</span>
             </Link>
           </BreadcrumbLink>
         </BreadcrumbListItem>
@@ -189,7 +191,9 @@ function IGRPTemplateBreadcrumbs({
               <DropdownMenu>
                 <DropdownMenuTrigger className={cn('flex items-center gap-1 focus:outline-none')}>
                   <BreadcrumbEllipsis />
-                  <span className={cn('sr-only')}>{ellipsisLabel}</span>
+                  <span className={cn('sr-only')}>
+                    {ellipsisLabel ?? chrome.breadcrumbs.ellipsis}
+                  </span>
                 </DropdownMenuTrigger>
                 <DropdownMenuContent align="start">
                   {middleItems.map((item, index) => (

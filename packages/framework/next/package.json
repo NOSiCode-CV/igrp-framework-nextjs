@@ -48,7 +48,9 @@
     "@igrp/framework-next-auth": "workspace:*",
     "@igrp/framework-next-types": "workspace:*",
     "@igrp/framework-next-ui": "workspace:*",
+    "@igrp/igrp-framework-react-design-system": "workspace:*",
     "@igrp/platform-access-management-client-ts": "^0.2.0-beta.17",
+    "next-intl": "^4.14.0",
     "server-only": "^0.0.1"
   },
   "devDependencies": {
@@ -103,6 +105,31 @@
       "types": "./dist/client/use-layout-data.d.ts",
       "import": "./dist/client/use-layout-data.js",
       "default": "./dist/client/use-layout-data.js"
+    },
+    "./i18n": {
+      "types": "./dist/i18n/index.d.ts",
+      "import": "./dist/i18n/index.js",
+      "default": "./dist/i18n/index.js"
+    },
+    "./i18n/server": {
+      "types": "./dist/i18n/server/index.d.ts",
+      "import": "./dist/i18n/server/index.js",
+      "default": "./dist/i18n/server/index.js"
+    },
+    "./i18n/client": {
+      "types": "./dist/i18n/client/index.d.ts",
+      "import": "./dist/i18n/client/index.js",
+      "default": "./dist/i18n/client/index.js"
+    },
+    "./i18n/messages": {
+      "types": "./dist/i18n/messages/index.d.ts",
+      "import": "./dist/i18n/messages/index.js",
+      "default": "./dist/i18n/messages/index.js"
+    },
+    "./i18n/testing": {
+      "types": "./dist/i18n/testing/index.d.ts",
+      "import": "./dist/i18n/testing/index.js",
+      "default": "./dist/i18n/testing/index.js"
     },
     "./package.json": "./package.json"
   },

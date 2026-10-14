@@ -37,7 +37,8 @@ export type IgrpErrorCode =
   | 'IGRP_APP_HOME_SLUG_INVALID'
   /** @deprecated Never thrown by the framework. Removed one release from now. */
   | 'IGRP_AUTH_CONFIG_INVALID'
-  | 'IGRP_LAYOUT_DATA_FAILED';
+  | 'IGRP_LAYOUT_DATA_FAILED'
+  | 'IGRP_I18N_CONFIG_INVALID';
 
 /**
  * Minimal context bag attached to an error. Keep values serializable

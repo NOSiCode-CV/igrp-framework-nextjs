@@ -55,8 +55,16 @@ export const auth = withIGRPAuth({
 // src/app/api/auth/[...nextauth]/route.ts
 export const { GET, POST } = auth;
 
-// src/middleware.ts
-export const { config } = auth;
+// src/middleware.ts — a LITERAL: Next parses `config` at build time and ignores
+// a re-export like `export const { config } = auth` (it then matches every path).
+// Copy the values of `auth.config.matcher`.
+export const config = {
+  matcher: [
+    '/',
+    '/((?!apps(?:/|$)|_next(?:/|$)|favicon.ico$|.*\\.(?:ico|png|jpe?g|gif|svg|webp|avif|bmp|css|js|mjs|map|json|txt|xml|webmanifest|woff2?|ttf|otf|eot|pdf|mp4|webm|mp3)$).*)',
+    '/api/:path*',
+  ],
+};
 ```
 
 ## Environment variables
@@ -128,14 +136,29 @@ It is not something you configure.
 
 ### Cookies
 
-When `NEXT_PUBLIC_BASE_PATH` is set, every NextAuth cookie name is suffixed with
-a slug derived from it, closed by a `~`
-(`next-auth.session-token.apps-template~`). Without it, two IGRP apps on the
-same host under `/apps/a` and `/apps/b` write the _same_ cookie name at the same
-path and overwrite each other's sessions. Apps at the host root get a bare `~`
-(`next-auth.session-token~`): the stock name is a prefix of every scoped name,
-so a root app sharing a host with basePath apps would read their cookies as its
-own chunks, fail with `Invalid Compact JWE`, and then delete all of them.
+When `NEXT_PUBLIC_BASE_PATH` is set, every NextAuth cookie is scoped to the app
+in two ways:
+
+- **Name:** suffixed with a slug derived from the basePath, a `_p` marker and a
+  closing `~` — `next-auth.session-token.apps-template_p~`. Without it, two IGRP
+  apps on the same host under `/apps/a` and `/apps/b` write the _same_ cookie
+  name and overwrite each other's sessions.
+- **Path:** set at `Path=<basePath>` (`/apps/template`), so the browser sends
+  each app's cookies only to that app. At `Path=/` every co-hosted app's
+  session cookie travelled on every request to the host and pushed the `Cookie`
+  header past proxy limits (`431`, `400 Request Header Or Cookie Too Large`).
+
+The one exception is the CSRF cookie
+(`__Host-next-auth.csrf-token.apps-template~`): the `__Host-` prefix requires
+`Path=/`, and it is a few dozen bytes.
+
+Apps at the host root cannot scope by path; they get a bare `~`
+(`next-auth.session-token~`) at `Path=/`. The stock name is a prefix of every
+scoped name, so a root app sharing a host with basePath apps would read their
+cookies as its own chunks, fail with `Invalid Compact JWE`, and then delete all
+of them. A root app's session cookie still reaches every co-hosted app — which
+is why, on a shared domain, it should use the session store (see "Session
+store") to keep that cookie small.
 
 The trailing `~` is load-bearing. NextAuth reassembles chunked cookies by
 collecting every name that _starts with_ the configured one, so without a
@@ -201,6 +224,20 @@ into any bundle that imports the instance — middleware included.
   a failed read signs the user out. **Sign-out** deletes the entry.
 - A refresh that fails because a concurrent request already rotated the refresh
   token does not overwrite that newer rotation in the store.
+- **Refresh lock (optional):** a store that also implements `acquireLock` /
+  `releaseLock` lets only one replica refresh a session at a time; the others
+  wait and adopt its result. A waiter **never** refreshes while the lock is
+  held: if the holder dies, its lock expires (20 s) and the waiter takes it
+  over; if the holder is merely slow, the waiter returns the session unchanged
+  for that request and the next read retries. Without the lock, two replicas
+  can spend the same refresh token, and the IdP keeps a durable record of
+  every rotated-out token: presenting one again, at any time, revokes the
+  session. On Redis: `SET key owner NX PX` to acquire, a compare-and-delete
+  Lua script to release. Lock keys are `igrp:session:lock:<sid>`.
+- **Several replicas need the store.** Without it, a request that left the
+  browser before a parallel request rotated the refresh token still carries
+  the old one in its cookie, and on another replica nothing remembers the
+  rotation. That replay revokes the session.
 
 ### Scopes and refresh tokens
 
@@ -243,16 +280,16 @@ middleware primitives (`isAuthDisabled()`) and the id stamped on the token
 agree by construction. Beyond `provider`, `env`, `secret`, `pages`, `session`
 and `callbacks`:
 
-| Option                | Default               | Purpose                                                                                                                                                                                                                                                                                                                      |
-| --------------------- | --------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| `onSessionExpired`    | —                     | Called by `getSession()` when the token is expired or refresh failed. Typically `() => redirect('/logout')`.                                                                                                                                                                                                                 |
-| `middleware.loginUrl` | `/login`              | Path `getLoginRedirectUrl()` resolves.                                                                                                                                                                                                                                                                                       |
-| `middleware.matcher`  | see `DEFAULT_MATCHER` | Matcher re-exported as `auth.config`. Matchers are basePath-_relative_. The default skips `/apps`, `/_next`, `favicon.ico` as whole segments and static-asset extensions (`.png`, `.css`, `.woff2`, …) — not every path with a dot, so `/users/john.doe` is protected.                                                       |
-| `debug`               | `IGRP_AUTH_DEBUG`     | NextAuth debug logging. Off by default in every environment because it prints OAuth token responses.                                                                                                                                                                                                                         |
-| `tokenRecoveryStore`  | in-memory             | Shared store for rotated-refresh-token recovery. Supply a cross-replica implementation for multi-pod deployments without sticky routing; the default is per-process. Keys and values are plaintext refresh/access/id tokens — treat the backing store like the session cookie (encrypt at rest, restrict access, never log). |
-| `cookieIsolation`     | `'basePath'`          | `'none'` keeps NextAuth's stock cookie names. Only safe when no other IGRP app shares the host.                                                                                                                                                                                                                              |
-| `sessionStore`        | registered / none     | Server-side token store — see "Session store". Prefer `configureIGRPSessionStore` from `instrumentation.ts`.                                                                                                                                                                                                                 |
-| `secureCookies`       | derived               | Overrides the `Secure` flag derivation described above.                                                                                                                                                                                                                                                                      |
+| Option                | Default               | Purpose                                                                                                                                                                                                                                                                                                                                 |
+| --------------------- | --------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `onSessionExpired`    | —                     | Called by `getSession()` when the token is expired or refresh failed. Typically `() => redirect('/logout')`.                                                                                                                                                                                                                            |
+| `middleware.loginUrl` | `/login`              | Path `getLoginRedirectUrl()` resolves.                                                                                                                                                                                                                                                                                                  |
+| `middleware.matcher`  | see `DEFAULT_MATCHER` | Exposed as `auth.config` — copy it into a literal `config` in middleware.ts; Next ignores a re-export. Matchers are basePath-_relative_. The default skips `/apps`, `/_next`, `favicon.ico` as whole segments and static-asset extensions (`.png`, `.css`, `.woff2`, …) — not every path with a dot, so `/users/john.doe` is protected. |
+| `debug`               | `IGRP_AUTH_DEBUG`     | NextAuth debug logging. Off by default in every environment because it prints OAuth token responses.                                                                                                                                                                                                                                    |
+| `tokenRecoveryStore`  | in-memory             | Shared store for rotated-refresh-token recovery. Supply a cross-replica implementation for multi-pod deployments without sticky routing; the default is per-process. Keys and values are plaintext refresh/access/id tokens — treat the backing store like the session cookie (encrypt at rest, restrict access, never log).            |
+| `cookieIsolation`     | `'basePath'`          | `'none'` keeps NextAuth's stock cookie names. Only safe when no other IGRP app shares the host.                                                                                                                                                                                                                                         |
+| `sessionStore`        | registered / none     | Server-side token store — see "Session store". Prefer `configureIGRPSessionStore` from `instrumentation.ts`.                                                                                                                                                                                                                            |
+| `secureCookies`       | derived               | Overrides the `Secure` flag derivation described above.                                                                                                                                                                                                                                                                                 |
 
 ### Middleware primitives
 

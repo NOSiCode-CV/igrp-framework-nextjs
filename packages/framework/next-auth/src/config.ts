@@ -51,6 +51,7 @@ import {
   createSessionTokenDecoder,
   createSessionTokenEncoder,
   deleteStoredSession,
+  refreshUnderSessionLock,
   type IGRPSessionStore,
 } from './session-store';
 import { escapeHtml, sanitizeRedirectUrl, stripAuthApiSuffix, stripBasePath } from './sanitize';
@@ -135,8 +136,13 @@ const TOKEN_EXPIRY_GRACE_MS = 10_000;
 // the individual fetches is not the same as bounding the user's wait.
 const SIGNOUT_REVOCATION_BUDGET_MS = 5000;
 
-// Default middleware matcher, exposed as `auth.config` for a template to
-// re-export.
+// Default middleware matcher, exposed as `auth.config`.
+//
+// Do NOT `export const { config } = auth` from middleware.ts: Next reads the
+// middleware `config` at BUILD time by parsing the file, so it must be an
+// object literal of string literals. A re-export cannot be parsed and Next
+// silently matches EVERY path instead. Copy these values into a literal; the
+// template does.
 //
 // Matchers are basePath-RELATIVE: Next strips `basePath` before matching (the
 // same reason `request.nextUrl.pathname` arrives without it). So the `apps`
@@ -380,11 +386,12 @@ export type IGRPAuthInstance = {
   POST: NextAuthHandler;
 
   /**
-   * Matcher config for the middleware.
-   * Re-export from your middleware.ts.
+   * The default middleware matcher, for reference.
    *
-   * @example
-   * export const { config } = auth;
+   * Do not re-export it (`export const { config } = auth`): Next parses the
+   * middleware `config` at build time and needs an object literal of string
+   * literals — a re-export is silently ignored and the middleware then runs on
+   * every path. Copy the values into a literal `export const config = { matcher: [...] }`.
    */
   config: { matcher: string[] };
 
@@ -1157,46 +1164,62 @@ export function withIGRPAuth(options: IGRPAuthOptions = {}): IGRPAuthInstance {
           !igrpToken.expiresAt || Date.now() >= igrpToken.expiresAt - TOKEN_REFRESH_BUFFER_MS;
 
         if (stillNeedsRefresh) {
-          // Introspect the refresh token to catch a server-side revocation
-          // before we try to use it (fail-open: a flaky introspection must
-          // never block refresh).
-          const refreshTokenActive = await introspectOidcToken(igrpToken, env).catch(() => true);
-          if (!refreshTokenActive) {
-            console.error(
-              '[next-auth] jwt: refresh token reported inactive by introspection endpoint — ' +
-                'logging user out. Check: (1) token was not manually revoked, ' +
-                '(2) IGRP_AUTH_CLIENT_ID / IGRP_AUTH_CLIENT_SECRET are correct for the introspection endpoint, ' +
-                '(3) introspection_endpoint in the IdP discovery document is reachable.',
-            );
-            igrpToken = { ...igrpToken, error: 'RefreshAccessTokenError', forceLogout: true };
-          } else {
-            try {
-              igrpToken = await refreshOidcAccessToken(igrpToken, env);
-              if (igrpToken.error) {
-                // refreshOidcAccessToken returns an error-flagged JWT on failure
-                // rather than throwing. Surface it here so the cause is visible.
-                console.error(
-                  '[next-auth] jwt: token refresh returned error flag — user will be logged out. ' +
-                    'Check: (1) IdP token endpoint is reachable, (2) refresh token has not expired, ' +
-                    '(3) client credentials are correct, (4) token rotation — if the IdP rotates refresh ' +
-                    'tokens and this is a multi-replica deployment without a shared tokenRecoveryStore, ' +
-                    'a concurrent refresh on another pod may have consumed this refresh token.',
-                  { error: igrpToken.error },
-                );
-              } else if (typeof igrpToken.expiresAt === 'number') {
-                // Also check REFRESHED tokens, not just the one minted at
-                // sign-in: an IdP client whose access-token lifetime is
-                // shortened after deployment would otherwise never trip the
-                // warning, and that is precisely when the refresh storm starts.
-                warnOnShortTokenLifetime(igrpToken.expiresAt);
-              }
-            } catch {
-              console.error(
-                '[next-auth] jwt: refreshOidcAccessToken threw unexpectedly — user will be logged out.',
+          // Introspection AND refresh run under the session store's refresh
+          // lock (when there is one), so only one replica spends this refresh
+          // token. Introspection belongs inside too: a replica that introspects
+          // a token another replica just rotated reads it as inactive and
+          // force-logs-out a healthy session. A replica that loses the race
+          // adopts the winner's result from the store instead.
+          igrpToken = await refreshUnderSessionLock(
+            igrpToken,
+            { store: sessionStore, secret, maxAge: sessionConfig?.maxAge },
+            async (tokenToRefresh) => {
+              let igrpToken = tokenToRefresh;
+              // Introspect the refresh token to catch a server-side revocation
+              // before we try to use it (fail-open: a flaky introspection must
+              // never block refresh).
+              const refreshTokenActive = await introspectOidcToken(igrpToken, env).catch(
+                () => true,
               );
-              igrpToken = { ...igrpToken, error: 'RefreshAccessTokenError', forceLogout: true };
-            }
-          }
+              if (!refreshTokenActive) {
+                console.error(
+                  '[next-auth] jwt: refresh token reported inactive by introspection endpoint — ' +
+                    'logging user out. Check: (1) token was not manually revoked, ' +
+                    '(2) IGRP_AUTH_CLIENT_ID / IGRP_AUTH_CLIENT_SECRET are correct for the introspection endpoint, ' +
+                    '(3) introspection_endpoint in the IdP discovery document is reachable.',
+                );
+                igrpToken = { ...igrpToken, error: 'RefreshAccessTokenError', forceLogout: true };
+              } else {
+                try {
+                  igrpToken = await refreshOidcAccessToken(igrpToken, env);
+                  if (igrpToken.error) {
+                    // refreshOidcAccessToken returns an error-flagged JWT on failure
+                    // rather than throwing. Surface it here so the cause is visible.
+                    console.error(
+                      '[next-auth] jwt: token refresh returned error flag — user will be logged out. ' +
+                        'Check: (1) IdP token endpoint is reachable, (2) refresh token has not expired, ' +
+                        '(3) client credentials are correct, (4) token rotation — if the IdP rotates refresh ' +
+                        'tokens and this is a multi-replica deployment without a shared tokenRecoveryStore, ' +
+                        'a concurrent refresh on another pod may have consumed this refresh token.',
+                      { error: igrpToken.error },
+                    );
+                  } else if (typeof igrpToken.expiresAt === 'number') {
+                    // Also check REFRESHED tokens, not just the one minted at
+                    // sign-in: an IdP client whose access-token lifetime is
+                    // shortened after deployment would otherwise never trip the
+                    // warning, and that is precisely when the refresh storm starts.
+                    warnOnShortTokenLifetime(igrpToken.expiresAt);
+                  }
+                } catch {
+                  console.error(
+                    '[next-auth] jwt: refreshOidcAccessToken threw unexpectedly — user will be logged out.',
+                  );
+                  igrpToken = { ...igrpToken, error: 'RefreshAccessTokenError', forceLogout: true };
+                }
+              }
+              return igrpToken;
+            },
+          );
         }
 
         return withJwtExtension(igrpToken);

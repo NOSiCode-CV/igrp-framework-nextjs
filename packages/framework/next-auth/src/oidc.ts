@@ -36,14 +36,45 @@ const DISCOVERY_CACHE_TTL_MS = 5 * 60 * 1000;
 // falls back to /login.
 const IDP_FETCH_TIMEOUT_MS = 4000;
 
-// Bounded retry for the refresh-token grant. The access token has a short TTL
-// (~3 min against the IGRP IdP), so refreshes are frequent and a single
-// transient blip (network error, timeout, or a 5xx during an IdP deploy)
-// should not immediately log the user out. 4xx responses — notably
-// `invalid_grant` for a consumed/expired refresh token — are permanent and are
-// never retried (replaying a rotated token only earns another rejection).
+// Bounded retry for the refresh-token grant — ONLY for failures where the
+// request provably never reached the IdP (see `failedBeforeSending`) or the
+// IdP said so itself (503).
+//
+// WHY so narrow: the IdP rotates refresh tokens and remembers every rotated-out
+// one (a persisted tombstone keyed on the token hash, not a time window).
+// Presenting a spent refresh token, at ANY later time, reads as token theft and
+// revokes the session. A timeout, a reset after sending, or a 502/504 from a
+// gateway are AMBIGUOUS: the IdP may already have rotated the token and only
+// the reply was lost. Retrying those replays the spent token and turns a lost
+// reply into a revoked session — the retry used to do exactly that.
 const REFRESH_MAX_ATTEMPTS = 2;
 const REFRESH_RETRY_DELAY_MS = 300;
+
+/**
+ * Timeout for the refresh-token call itself, longer than other IdP calls: an
+ * abort is an ambiguous outcome (above), so a slow-but-successful refresh is
+ * worth waiting for. Keep `REFRESH_LOCK_TTL_MS` in ./session-store above
+ * introspection + refresh + one retry.
+ */
+const REFRESH_FETCH_TIMEOUT_MS = 8000;
+
+/**
+ * Connection-level errors raised BEFORE the request was sent: the IdP cannot
+ * have processed it, so retrying cannot replay a spent token. Node's fetch
+ * (undici) reports them as `TypeError: fetch failed` with the code on `cause`.
+ */
+const PRE_SEND_ERROR_CODES = new Set([
+  'ECONNREFUSED',
+  'ENOTFOUND',
+  'EAI_AGAIN',
+  'UND_ERR_CONNECT_TIMEOUT',
+]);
+
+function failedBeforeSending(error: unknown): boolean {
+  const failure = error as { code?: unknown; cause?: { code?: unknown } } | null;
+  const code = failure?.cause?.code ?? failure?.code;
+  return typeof code === 'string' && PRE_SEND_ERROR_CODES.has(code);
+}
 
 /**
  * Access-token lifetime assumed only when the IdP's token response carried no
@@ -456,12 +487,16 @@ async function performRefresh(
   });
   const authorization = buildBasicAuthHeader(clientId, clientSecret);
 
-  // Retry only on TRANSIENT failures (network error/timeout, or 5xx). A 4xx is
-  // a permanent decision by the IdP (`invalid_grant`, `invalid_client`, …) and
-  // breaks out immediately — retrying it is pointless and, with rotation, the
-  // refresh token is already spent.
+  // Retry ONLY when the IdP cannot have consumed the refresh token: the request
+  // never left (`failedBeforeSending`), or the IdP answered 503 (unavailable —
+  // it did not process the grant). A 4xx is a permanent decision
+  // (`invalid_grant`, `invalid_client`, …). A timeout, a reset after sending or
+  // any other 5xx is ambiguous — see REFRESH_MAX_ATTEMPTS — and is never
+  // retried: the token may already be spent, and replaying it revokes the
+  // session.
   let response: Response | undefined;
   for (let attempt = 1; attempt <= REFRESH_MAX_ATTEMPTS; attempt++) {
+    let retryable = false;
     try {
       response = await fetchWithTimeout(
         openIdConfiguration.token_endpoint,
@@ -473,20 +508,19 @@ async function performRefresh(
           },
           body,
         },
-        IDP_FETCH_TIMEOUT_MS,
+        REFRESH_FETCH_TIMEOUT_MS,
       );
-    } catch {
-      // Network error or timeout (AbortError) — transient.
+    } catch (error) {
       response = undefined;
+      retryable = failedBeforeSending(error);
     }
 
     if (response) {
       if (response.ok) break;
-      // 4xx — permanent; do not retry.
-      if (response.status < 500) break;
-      // 5xx falls through to retry.
+      retryable = response.status === 503;
     }
 
+    if (!retryable) break;
     if (attempt < REFRESH_MAX_ATTEMPTS) {
       await new Promise((resolve) => setTimeout(resolve, REFRESH_RETRY_DELAY_MS));
     }

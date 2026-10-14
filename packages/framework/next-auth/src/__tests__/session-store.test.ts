@@ -8,6 +8,7 @@ import {
   createSessionTokenEncoder,
   decodeIGRPSessionToken,
   deleteStoredSession,
+  refreshUnderSessionLock,
   SESSION_ID_CLAIM,
   SESSION_STORE_KEY_PREFIX,
   type IGRPSessionStore,
@@ -290,6 +291,154 @@ describe('session store codec — with a store', () => {
     const store: IGRPSessionStore = { get: vi.fn(), set, delete: vi.fn() };
     await createSessionTokenEncoder({ store })({ token: { name: 'x', sub: '1' }, secret: SECRET });
     expect(set).not.toHaveBeenCalled();
+  });
+});
+
+describe('refresh lock', () => {
+  /** A store-backed session about to expire, as the jwt callback sees it. */
+  async function expiringSession(store: IGRPSessionStore): Promise<JWT> {
+    const cookie = await createSessionTokenEncoder({ store })({
+      token: sessionToken({
+        accessToken: 'at-1',
+        refreshToken: 'rt-1',
+        expiresAt: Date.now() + 1000,
+      }),
+      secret: SECRET,
+    });
+    return (await createSessionTokenDecoder({ store })({ token: cookie, secret: SECRET }))!;
+  }
+
+  /** A refresh that takes `ms` and returns rotated tokens. */
+  function slowRefresh(ms: number, accessToken = 'at-2') {
+    return vi.fn(async (token: JWT): Promise<JWT> => {
+      await new Promise((resolve) => setTimeout(resolve, ms));
+      return {
+        ...token,
+        accessToken,
+        refreshToken: `${accessToken}-rt`,
+        expiresAt: Date.now() + 3_600_000,
+      };
+    });
+  }
+
+  it('lets only one of two concurrent replicas refresh; the other adopts its result', async () => {
+    const store = createMemorySessionStore();
+    const session = await expiringSession(store);
+    // Two replicas: same store, independent refresh functions.
+    const replicaA = slowRefresh(300);
+    const replicaB = slowRefresh(300, 'at-B');
+
+    const [a, b] = await Promise.all([
+      refreshUnderSessionLock(session, { store, secret: SECRET }, replicaA),
+      refreshUnderSessionLock(session, { store, secret: SECRET }, replicaB),
+    ]);
+
+    expect(replicaA.mock.calls.length + replicaB.mock.calls.length).toBe(1);
+    expect(a.accessToken).toBe(b.accessToken);
+    expect(a.refreshToken).toBe(b.refreshToken);
+  });
+
+  it('adopts a refresh that landed before the lock was taken, without refreshing', async () => {
+    const store = createMemorySessionStore();
+    const session = await expiringSession(store);
+    // Another replica already refreshed and wrote the store.
+    await createSessionTokenEncoder({ store })({
+      token: {
+        ...session,
+        accessToken: 'at-2',
+        refreshToken: 'rt-2',
+        expiresAt: Date.now() + 3_600_000,
+      },
+      secret: SECRET,
+    });
+
+    const refresh = slowRefresh(0, 'at-3');
+    const result = await refreshUnderSessionLock(session, { store, secret: SECRET }, refresh);
+
+    expect(refresh).not.toHaveBeenCalled();
+    expect(result.accessToken).toBe('at-2');
+  });
+
+  it('takes over the lock of a holder that died, then refreshes under it', async () => {
+    const store = createMemorySessionStore();
+    const session = await expiringSession(store);
+    const key = `${SESSION_STORE_KEY_PREFIX}lock:${session[SESSION_ID_CLAIM]}`;
+    // A replica took the lock and died; its lock expires after 300 ms.
+    await store.acquireLock!(key, 'dead', 300);
+
+    const refresh = slowRefresh(0, 'at-mine');
+    const result = await refreshUnderSessionLock(
+      session,
+      { store, secret: SECRET, waitMs: 2000 },
+      refresh,
+    );
+
+    expect(result.accessToken).toBe('at-mine');
+    expect(refresh).toHaveBeenCalledTimes(1);
+    expect(await store.acquireLock!(key, 'next', 1000)).toBe(true); // and released it
+  });
+
+  it('never refreshes while a live holder keeps the lock — returns the session unchanged', async () => {
+    vi.spyOn(console, 'warn').mockImplementation(() => {});
+    const store = createMemorySessionStore();
+    const session = await expiringSession(store);
+    // A replica is mid-refresh and slower than this request is willing to wait.
+    await store.acquireLock!(
+      `${SESSION_STORE_KEY_PREFIX}lock:${session[SESSION_ID_CLAIM]}`,
+      'slow',
+      60_000,
+    );
+
+    const refresh = slowRefresh(0, 'at-mine');
+    const result = await refreshUnderSessionLock(
+      session,
+      { store, secret: SECRET, waitMs: 400 },
+      refresh,
+    );
+
+    // Refreshing here would present a token the holder may already have spent.
+    expect(refresh).not.toHaveBeenCalled();
+    expect(result.accessToken).toBe(session.accessToken);
+    expect(result.error).toBeUndefined();
+  });
+
+  it('releases the lock afterwards, so the next refresh can take it', async () => {
+    const store = createMemorySessionStore();
+    const session = await expiringSession(store);
+    await refreshUnderSessionLock(session, { store, secret: SECRET }, slowRefresh(0));
+
+    const key = `${SESSION_STORE_KEY_PREFIX}lock:${session[SESSION_ID_CLAIM]}`;
+    expect(await store.acquireLock!(key, 'next', 1000)).toBe(true);
+  });
+
+  it('never releases a lock another owner holds', async () => {
+    const store = createMemorySessionStore();
+    await store.acquireLock!('k', 'owner-a', 60_000);
+    await store.releaseLock!('k', 'owner-b');
+    expect(await store.acquireLock!('k', 'owner-c', 60_000)).toBe(false);
+  });
+
+  it('refreshes directly when the store has no lock methods', async () => {
+    const memory = createMemorySessionStore();
+    const store: IGRPSessionStore = { get: memory.get, set: memory.set, delete: memory.delete };
+    const session = await expiringSession(store);
+    const refresh = slowRefresh(0);
+    await refreshUnderSessionLock(session, { store, secret: SECRET }, refresh);
+    expect(refresh).toHaveBeenCalledTimes(1);
+  });
+
+  it('refreshes directly when the lock cannot be taken (store down)', async () => {
+    vi.spyOn(console, 'error').mockImplementation(() => {});
+    const memory = createMemorySessionStore();
+    const session = await expiringSession(memory);
+    const store: IGRPSessionStore = {
+      ...memory,
+      acquireLock: vi.fn().mockRejectedValue(new Error('ECONNREFUSED')),
+    };
+    const refresh = slowRefresh(0);
+    expect(
+      (await refreshUnderSessionLock(session, { store, secret: SECRET }, refresh)).accessToken,
+    ).toBe('at-2');
   });
 });
 

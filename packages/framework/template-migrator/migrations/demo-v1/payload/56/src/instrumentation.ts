@@ -12,17 +12,22 @@
  * cookie still carries the expiry the middleware checks.
  *
  * Every replica of the app must point at the same Redis.
+ *
+ * Keep the imports INSIDE the `NEXT_RUNTIME` block: Next compiles this file for
+ * the Edge runtime too, inlines `NEXT_RUNTIME` there, and drops the block — an
+ * early `return` instead leaves the imports reachable, and the Edge build then
+ * fails on the Redis client's `node:` modules.
  */
 export async function register() {
-  if (process.env.NEXT_RUNTIME !== "nodejs") return;
+  if (process.env.NEXT_RUNTIME === "nodejs") {
+    const url = process.env.IGRP_SESSION_STORE_URL?.trim();
+    if (!url) return;
 
-  const url = process.env.IGRP_SESSION_STORE_URL?.trim();
-  if (!url) return;
-
-  const [{ configureIGRPSessionStore }, { createRedisSessionStore }] =
-    await Promise.all([
-      import("@igrp/framework-next-auth/session-store"),
-      import("./lib/session-store"),
-    ]);
-  configureIGRPSessionStore(createRedisSessionStore(url));
+    const [{ configureIGRPSessionStore }, { createRedisSessionStore }] =
+      await Promise.all([
+        import("@igrp/framework-next-auth/session-store"),
+        import("./lib/session-store"),
+      ]);
+    configureIGRPSessionStore(createRedisSessionStore(url));
+  }
 }

@@ -44,6 +44,22 @@ export type IGRPSessionStore = {
   set(key: string, value: string, ttlSeconds: number): Promise<void>;
   /** Removes `key`. Called on sign-out, so a signed-out session id stops resolving. */
   delete(key: string): Promise<void>;
+  /**
+   * OPTIONAL cross-replica mutex, used to let only one replica refresh a
+   * session at a time (see {@link refreshUnderSessionLock}). Sets `key` to
+   * `owner` only if `key` is absent, expiring after `ttlMs`; resolves `true`
+   * when this call took the lock. On Redis: `SET key owner NX PX ttlMs`.
+   *
+   * Implement both lock methods or neither. Without them refresh behaves as it
+   * always did: concurrent replicas may each spend the same refresh token.
+   */
+  acquireLock?(key: string, owner: string, ttlMs: number): Promise<boolean>;
+  /**
+   * Releases `key` ONLY if it still holds `owner` — a lock that expired and was
+   * re-taken by another replica must not be released by the late first owner.
+   * On Redis this needs an atomic compare-and-delete (a Lua script).
+   */
+  releaseLock?(key: string, owner: string): Promise<void>;
 };
 
 /**
@@ -161,6 +177,17 @@ async function readStored(
   return (await nextAuthDecode({ token: value, secret, salt: STORE_VALUE_SALT })) as StoredFields;
 }
 
+async function writeStored(
+  store: IGRPSessionStore,
+  sessionId: string,
+  stored: StoredFields,
+  secret: JWTEncodeParams['secret'],
+  maxAge: number,
+): Promise<void> {
+  const value = await nextAuthEncode({ token: stored, secret, maxAge, salt: STORE_VALUE_SALT });
+  await store.set(storeKey(sessionId), value, maxAge);
+}
+
 type CodecOptions = {
   /** Instance-level store; falls back to the registered one. */
   store?: IGRPSessionStore | null;
@@ -202,13 +229,7 @@ export function createSessionTokenEncoder(options: CodecOptions = {}) {
           stored = current;
         }
       }
-      const value = await nextAuthEncode({
-        token: stored,
-        secret: params.secret,
-        maxAge,
-        salt: STORE_VALUE_SALT,
-      });
-      await store.set(storeKey(sessionId), value, maxAge);
+      await writeStored(store, sessionId, stored, params.secret, maxAge);
     } catch (error) {
       // Keep the user signed in: a full cookie is too big for some proxies, but
       // a store outage is better answered by a large cookie than by a logout.
@@ -314,6 +335,168 @@ export async function deleteStoredSession(
   }
 }
 
+// ─── Refresh lock ────────────────────────────────────────────────────────────
+
+/**
+ * Lock keys live under the session prefix (`igrp:session:lock:<sid>`), so one
+ * ACL key pattern (`~igrp:session:*`) covers both. Session ids are base64url
+ * and never contain `:`, so a lock key cannot collide with a session key.
+ */
+const LOCK_KEY_PREFIX = `${SESSION_STORE_KEY_PREFIX}lock:`;
+
+/**
+ * Lock lifetime. Covers a refresh's remote hops with margin: discovery and
+ * introspection (4 s each) plus the token call (8 s) and its one pre-send
+ * retry. A holder that dies just lets the lock expire.
+ */
+export const REFRESH_LOCK_TTL_MS = 20_000;
+
+/**
+ * How long a replica that lost the race waits for the winner's result. Longer
+ * than the lock's TTL, so a waiter always outlives a dead holder's lock and can
+ * take it over instead of refreshing without it.
+ */
+export const REFRESH_LOCK_WAIT_MS = REFRESH_LOCK_TTL_MS + 2_000;
+
+const REFRESH_LOCK_POLL_MS = 150;
+
+const sleep = (ms: number) => new Promise<void>((resolve) => setTimeout(resolve, ms));
+
+/**
+ * The stored session was refreshed after `token` was read: its access token
+ * expires later and it carries no failure. Comparing expiries (not refresh
+ * tokens) also covers an IdP that does not rotate refresh tokens.
+ */
+function isNewerHealthy(stored: StoredFields | null, token: JWT): stored is StoredFields {
+  return Boolean(
+    stored &&
+    !stored.error &&
+    stored.accessToken &&
+    (stored.expiresAt ?? 0) > (token.expiresAt ?? 0),
+  );
+}
+
+export type SessionRefreshLockOptions = CodecOptions & {
+  /** Key material for the stored value — the instance's `NEXTAUTH_SECRET`. */
+  secret: JWTEncodeParams['secret'] | undefined;
+  /** Session lifetime in seconds, for the store entry written inside the lock. */
+  maxAge?: number;
+  /** How long a replica that lost the race waits. Defaults to {@link REFRESH_LOCK_WAIT_MS}. */
+  waitMs?: number;
+};
+
+/**
+ * Runs `refresh` so that, across every replica sharing the store, only ONE
+ * refreshes a given session at a time.
+ *
+ * WHY: with several replicas, two concurrent requests for the same session can
+ * each find the access token expiring and each spend the SAME refresh token.
+ * With rotation, the second call is a reuse of a consumed token: the IdP
+ * rejects it, and its reuse detection may revoke the whole token family —
+ * logging out a session nothing was wrong with. The in-process dedup in
+ * `./oidc` cannot see other replicas; the shared store can.
+ *
+ * - The winner re-reads the store first (a refresh may have landed between its
+ *   read and the lock), then refreshes and writes the result to the store
+ *   BEFORE releasing, so waiters find it.
+ * - A loser polls the store for up to {@link REFRESH_LOCK_WAIT_MS} and adopts
+ *   the winner's tokens. It never refreshes while the lock is held: a winner
+ *   that died lets its lock expire and the loser takes it over; a winner that
+ *   is merely slow makes the loser return the session unchanged for this
+ *   request. Refreshing anyway would present a refresh token the winner may
+ *   already have spent — which the IdP treats as reuse and revokes.
+ * - No store, a store without lock methods, a cookie that is not store-backed,
+ *   or a store error: `refresh(token)` runs directly, exactly as before.
+ *
+ * `refresh` receives the token to refresh and returns the result, failures
+ * included (an error-flagged token), as the jwt callback's refresh path does.
+ */
+export async function refreshUnderSessionLock(
+  token: JWT,
+  options: SessionRefreshLockOptions,
+  refresh: (token: JWT) => Promise<JWT>,
+): Promise<JWT> {
+  const store = options.store ?? getIGRPSessionStore();
+  const sessionId = token[SESSION_ID_CLAIM];
+  const { secret } = options;
+  if (
+    !store?.acquireLock ||
+    !store.releaseLock ||
+    typeof sessionId !== 'string' ||
+    !sessionId ||
+    // No key, no stored values to read or write (development without a secret).
+    !secret
+  ) {
+    return refresh(token);
+  }
+
+  const lockKey = `${LOCK_KEY_PREFIX}${sessionId}`;
+  const owner = newSessionId();
+  let acquired: boolean;
+  try {
+    acquired = await store.acquireLock(lockKey, owner, REFRESH_LOCK_TTL_MS);
+  } catch (error) {
+    warnOnce('sessionStore.lockFailed', () =>
+      console.error(
+        '[igrp session-store] taking the refresh lock failed — refreshing without it:',
+        error,
+      ),
+    );
+    return refresh(token);
+  }
+
+  if (!acquired) {
+    // NEVER refresh while another replica holds the lock: that is the very
+    // reuse the lock exists to prevent. Wait for its result; if the holder
+    // dies, its lock expires and this replica takes it over, then refreshes
+    // properly under it.
+    const deadline = Date.now() + (options.waitMs ?? REFRESH_LOCK_WAIT_MS);
+    while (!acquired && Date.now() < deadline) {
+      await sleep(REFRESH_LOCK_POLL_MS);
+      const current = await readStored(store, sessionId, secret).catch(() => null);
+      if (isNewerHealthy(current, token)) return { ...token, ...current };
+      acquired = await store.acquireLock(lockKey, owner, REFRESH_LOCK_TTL_MS).catch(() => false);
+    }
+    if (!acquired) {
+      // The holder is alive but slower than the whole wait. Give up on THIS
+      // request without refreshing: return the session as it is (no error
+      // flag, so it is not logged out). The next session read retries — a slow
+      // request is far cheaper than a revoked session.
+      warnOnce('sessionStore.lockWaitExceeded', () =>
+        console.warn(
+          '[igrp session-store] another replica held the refresh lock for longer than ' +
+            `${options.waitMs ?? REFRESH_LOCK_WAIT_MS}ms — not refreshing on this request.`,
+        ),
+      );
+      return token;
+    }
+  }
+
+  try {
+    const current = await readStored(store, sessionId, secret).catch(() => null);
+    if (isNewerHealthy(current, token)) return { ...token, ...current };
+
+    const result = await refresh(token);
+    if (!result.error) {
+      await writeStored(
+        store,
+        sessionId,
+        pickStored(result),
+        secret,
+        options.maxAge ?? DEFAULT_MAX_AGE_S,
+      ).catch(() => {
+        // The encode that follows the jwt callback writes it again; waiters
+        // that miss it fall back to refreshing themselves.
+      });
+    }
+    return result;
+  } finally {
+    await store.releaseLock(lockKey, owner).catch(() => {
+      // Expires on its own after REFRESH_LOCK_TTL_MS.
+    });
+  }
+}
+
 // ─── In-memory store ─────────────────────────────────────────────────────────
 
 /**
@@ -340,6 +523,15 @@ export function createMemorySessionStore(): IGRPSessionStore {
     },
     async delete(key) {
       entries.delete(key);
+    },
+    async acquireLock(key, owner, ttlMs) {
+      const entry = entries.get(key);
+      if (entry && entry.expiresAt > Date.now()) return false;
+      entries.set(key, { value: owner, expiresAt: Date.now() + ttlMs });
+      return true;
+    },
+    async releaseLock(key, owner) {
+      if (entries.get(key)?.value === owner) entries.delete(key);
     },
   };
 }

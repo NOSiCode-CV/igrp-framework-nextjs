@@ -231,7 +231,7 @@ describe('refreshOidcAccessToken — transient retry', () => {
     expect(result.error).toBe('RefreshAccessTokenError');
   });
 
-  it('retries once after a network error then succeeds', async () => {
+  it('retries once when the connection was refused (never sent) then succeeds', async () => {
     let tokenCalls = 0;
     vi.stubGlobal(
       'fetch',
@@ -240,7 +240,8 @@ describe('refreshOidcAccessToken — transient retry', () => {
           return { ok: true, status: 200, json: async () => MOCK_DISCOVERY };
         if (url === MOCK_DISCOVERY.token_endpoint) {
           tokenCalls += 1;
-          if (tokenCalls === 1) throw new Error('ECONNRESET');
+          if (tokenCalls === 1)
+            throw Object.assign(new TypeError('fetch failed'), { cause: { code: 'ECONNREFUSED' } });
           return {
             ok: true,
             status: 200,
@@ -261,13 +262,60 @@ describe('refreshOidcAccessToken — transient retry', () => {
     expect(result.accessToken).toBe('net-at');
   });
 
-  it('gives up after exhausting retries on repeated 5xx', async () => {
-    const counter = stubTokenFetch(async () => ({ ok: false, status: 502, body: {} }));
+  it('gives up after exhausting retries on repeated 503', async () => {
+    const counter = stubTokenFetch(async () => ({ ok: false, status: 503, body: {} }));
     const { refreshOidcAccessToken } = await import('../oidc');
     const result = await refreshOidcAccessToken(makeToken(), VALID_ENV);
 
     expect(counter.get()).toBe(2);
     expect(result.forceLogout).toBe(true);
+    expect(result.error).toBe('RefreshAccessTokenError');
+  });
+});
+
+describe('refreshOidcAccessToken — never replays a refresh token the IdP may have consumed', () => {
+  // The IdP keeps a durable tombstone for every rotated-out refresh token:
+  // presenting one again, at any time, revokes the session. After an ambiguous
+  // failure the token may already be spent, so a retry must not happen.
+  function stubTokenFailure(fail: () => never | { ok: boolean; status: number }) {
+    let tokenCalls = 0;
+    vi.stubGlobal(
+      'fetch',
+      vi.fn(async (url: string) => {
+        if (url === DISCOVERY_URL)
+          return { ok: true, status: 200, json: async () => MOCK_DISCOVERY };
+        if (url === MOCK_DISCOVERY.token_endpoint) {
+          tokenCalls += 1;
+          const outcome = fail();
+          return { ...outcome, json: async () => ({}) };
+        }
+        return { ok: false, status: 404, json: async () => ({}) };
+      }),
+    );
+    return () => tokenCalls;
+  }
+
+  it.each([
+    ['a 502 from the gateway', () => ({ ok: false, status: 502 })],
+    ['a 504 from the gateway', () => ({ ok: false, status: 504 })],
+    ['a 500', () => ({ ok: false, status: 500 })],
+    [
+      'a reset after sending',
+      () => {
+        throw Object.assign(new TypeError('fetch failed'), { cause: { code: 'ECONNRESET' } });
+      },
+    ],
+    [
+      'a timeout (abort)',
+      () => {
+        throw new DOMException('The operation was aborted.', 'AbortError');
+      },
+    ],
+  ])('does not retry after %s', async (_label, fail) => {
+    const calls = stubTokenFailure(fail as () => never);
+    const { refreshOidcAccessToken } = await import('../oidc');
+    const result = await refreshOidcAccessToken(makeToken(), VALID_ENV);
+    expect(calls()).toBe(1);
     expect(result.error).toBe('RefreshAccessTokenError');
   });
 });

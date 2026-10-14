@@ -90,5 +90,33 @@ export function createRedisSessionStore(url: string): IGRPSessionStore {
         "delete",
       );
     },
+    // Refresh lock: only one replica refreshes a session at a time, so two
+    // replicas never spend the same refresh token (which the IdP reads as
+    // token reuse).
+    async acquireLock(key, owner, ttlMs) {
+      const reply = await withTimeout(
+        client().then((redis) =>
+          redis.set(key, owner, {
+            condition: "NX",
+            expiration: { type: "PX", value: ttlMs },
+          }),
+        ),
+        "acquireLock",
+      );
+      return reply === "OK";
+    },
+    async releaseLock(key, owner) {
+      // Compare-and-delete in one step: a lock that expired and was taken by
+      // another replica must not be released by the late first owner.
+      await withTimeout(
+        client().then((redis) =>
+          redis.eval(RELEASE_LOCK_SCRIPT, { keys: [key], arguments: [owner] }),
+        ),
+        "releaseLock",
+      );
+    },
   };
 }
+
+const RELEASE_LOCK_SCRIPT =
+  'if redis.call("GET", KEYS[1]) == ARGV[1] then return redis.call("DEL", KEYS[1]) else return 0 end';

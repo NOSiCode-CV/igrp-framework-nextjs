@@ -245,5 +245,24 @@ async function handleRequest(request: NextRequest): Promise<NextResponse> {
   return nextWithPath();
 }
 
-// Matcher: page routes only (legacy template)
-export const { config } = auth;
+/**
+ * Which requests wake the middleware.
+ *
+ * MUST be an object literal of string literals: Next reads `config` at BUILD
+ * time by parsing this file, without running it. The previous
+ * `export const { config } = auth;` could not be parsed, so Next silently fell
+ * back to matching every path, static assets included (the build's
+ * middleware-manifest showed `/:path*`).
+ *
+ * Same values as the framework default (`auth.config.matcher`). Matchers are
+ * basePath-relative. Skips `/apps`, `/_next` and `favicon.ico` as whole
+ * segments, and static assets by extension — not every path with a dot, so a
+ * page route like `/users/john.doe` still goes through the middleware.
+ */
+export const config = {
+  matcher: [
+    "/",
+    "/((?!apps(?:/|$)|_next(?:/|$)|favicon.ico$|.*\\.(?:ico|png|jpe?g|gif|svg|webp|avif|bmp|css|js|mjs|map|json|txt|xml|webmanifest|woff2?|ttf|otf|eot|pdf|mp4|webm|mp3)$).*)",
+    "/api/:path*",
+  ],
+};

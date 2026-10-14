@@ -37,6 +37,14 @@ describe("findLiteralStrings", () => {
     expect(findLiteralStrings(src)).toEqual([]);
   });
 
+  it("accepts HTML entities that render as symbols", () => {
+    expect(
+      findLiteralStrings(
+        `export const X = () => <span>&mdash;&nbsp;&#8594;</span>;`,
+      ),
+    ).toEqual([]);
+  });
+
   it("flags next-intl formatter imports (format through the framework helpers)", () => {
     expect(
       findLiteralStrings(`import { useFormatter } from "next-intl";`),

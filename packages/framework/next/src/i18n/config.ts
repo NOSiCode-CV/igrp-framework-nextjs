@@ -52,8 +52,16 @@ export function igrpNormalizeLocale(tag: unknown): IGRPLocale | undefined {
   return igrpIsLocale(base) ? base : undefined;
 }
 
-/** First supported language of an `Accept-Language` header, by q-value then header order. */
-export function igrpParseAcceptLanguage(header: string | null | undefined): IGRPLocale | undefined {
+/**
+ * First supported language of an `Accept-Language` header, by q-value then
+ * header order. With `allowed`, only those locales count, so an app that
+ * enables fewer languages still gets the user's most-preferred enabled one
+ * (and `q=0` entries are never picked).
+ */
+export function igrpParseAcceptLanguage(
+  header: string | null | undefined,
+  allowed?: readonly IGRPLocale[],
+): IGRPLocale | undefined {
   if (!header) return undefined;
   const entries = header
     .split(',')
@@ -67,7 +75,7 @@ export function igrpParseAcceptLanguage(header: string | null | undefined): IGRP
     .sort((a, b) => b.q - a.q || a.index - b.index);
   for (const entry of entries) {
     const locale = igrpNormalizeLocale(entry.tag);
-    if (locale) return locale;
+    if (locale && (!allowed || allowed.includes(locale))) return locale;
   }
   return undefined;
 }
@@ -86,6 +94,10 @@ function assertFormatLocale(locale: IGRPLocale, tag: string): void {
   if (!canonical) throw invalid(`"${tag}" is not a valid BCP-47 tag.`);
   if (igrpNormalizeLocale(canonical) !== locale) {
     throw invalid(`format locale "${tag}" must be a region of "${locale}".`);
+  }
+  // A bare language must never reach Intl: `pt` resolves to Brazilian conventions.
+  if (!new Intl.Locale(canonical).region) {
+    throw invalid(`format locale "${tag}" must carry a region (e.g. "${locale}-XX").`);
   }
 }
 
@@ -193,18 +205,10 @@ export function igrpPickLocale(
     value && i18n.locales.includes(value) ? value : undefined;
   const cookie = enabled(igrpNormalizeLocale(candidates.cookie));
   const session = enabled(igrpNormalizeLocale(candidates.session));
-  const header = () => {
-    const picked = igrpParseAcceptLanguage(candidates.acceptLanguage);
-    if (enabled(picked)) return picked;
-    // The first supported language may be disabled for this app; re-scan with
-    // only enabled locales accepted.
-    const header = candidates.acceptLanguage ?? '';
-    for (const part of header.split(',')) {
-      const value = enabled(igrpNormalizeLocale(part.split(';')[0]));
-      if (value) return value;
-    }
-    return undefined;
-  };
   const ordered = i18n.resolution === 'session-first' ? [session, cookie] : [cookie, session];
-  return ordered.find(Boolean) ?? header() ?? i18n.defaultLocale;
+  return (
+    ordered.find(Boolean) ??
+    igrpParseAcceptLanguage(candidates.acceptLanguage, i18n.locales) ??
+    i18n.defaultLocale
+  );
 }

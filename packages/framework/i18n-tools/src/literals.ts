@@ -16,6 +16,10 @@ const USER_FACING_PROPS = new Set([
   "selectLabel",
 ]);
 const HAS_LETTER = /\p{L}/u;
+// `&mdash;`, `&nbsp;`, `&#8594;`: entity names carry letters but render as symbols.
+const HTML_ENTITY = /&(?:[a-zA-Z][a-zA-Z0-9]*|#\d+|#x[0-9a-fA-F]+);/g;
+const hasLetter = (text: string) =>
+  HAS_LETTER.test(text.replace(HTML_ENTITY, ""));
 const FORMATTER_IMPORTS = new Set(["useFormatter", "getFormatter"]);
 
 function literalText(node: ts.Node | undefined): string | undefined {
@@ -71,7 +75,7 @@ export function findLiteralStrings(
     }
     if (ts.isJsxText(node)) {
       const text = node.getText(sf).trim();
-      if (HAS_LETTER.test(text)) report(node, `JSX text "${text}"`);
+      if (hasLetter(text)) report(node, `JSX text "${text}"`);
     }
     if (
       ts.isJsxExpression(node) &&

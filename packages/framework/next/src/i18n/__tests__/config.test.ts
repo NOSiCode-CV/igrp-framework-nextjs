@@ -38,6 +38,10 @@ describe('igrpParseAcceptLanguage', () => {
   it('keeps header order on ties', () => {
     expect(igrpParseAcceptLanguage('fr, en')).toBe('fr');
   });
+  it('restricts to an allowed set while keeping q order and honouring q=0', () => {
+    expect(igrpParseAcceptLanguage('en, pt;q=0.1, fr;q=0.9', ['pt', 'fr'])).toBe('fr');
+    expect(igrpParseAcceptLanguage('en, fr;q=0', ['pt', 'fr'])).toBeUndefined();
+  });
 });
 
 describe('igrpParseFormatLocales', () => {
@@ -49,8 +53,8 @@ describe('igrpParseFormatLocales', () => {
     expect(igrpParseFormatLocales('pt-AO,en-US')).toEqual({ pt: 'pt-AO', en: 'en-US' });
     expect(igrpParseFormatLocales(' pt-PT ')).toEqual({ pt: 'pt-PT' });
   });
-  it('throws IGRP_I18N_CONFIG_INVALID for a non-platform language, a duplicate language or an invalid tag', () => {
-    for (const raw of ['de-DE', 'pt-PT,pt-BR', 'pt-', 'en-GB,xx']) {
+  it('throws IGRP_I18N_CONFIG_INVALID for a non-platform language, a duplicate language, an invalid tag or a bare language', () => {
+    for (const raw of ['de-DE', 'pt-PT,pt-BR', 'pt-', 'en-GB,xx', 'pt', 'pt-PT,en']) {
       expect(() => igrpParseFormatLocales(raw)).toThrowError(
         expect.objectContaining({ code: 'IGRP_I18N_CONFIG_INVALID' }),
       );
@@ -86,6 +90,11 @@ describe('igrpDefineI18n', () => {
     expect(() =>
       igrpDefineI18n({ defaultLocale: 'pt', formatLocales: { pt: 'en-GB' } }),
     ).toThrowError(expect.objectContaining({ code: 'IGRP_I18N_CONFIG_INVALID' }));
+  });
+  it('rejects a bare language as a format locale (Intl would resolve pt to Brazilian conventions)', () => {
+    expect(() => igrpDefineI18n({ defaultLocale: 'pt', formatLocales: { pt: 'pt' } })).toThrowError(
+      expect.objectContaining({ code: 'IGRP_I18N_CONFIG_INVALID' }),
+    );
   });
 });
 

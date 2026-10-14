@@ -30,13 +30,13 @@ pnpm add @igrp/framework-next
 
 #### `IGRPRootLayout` props
 
-| Prop       | Type              | Required | Default | Purpose                                                                 |
-| ---------- | ----------------- | -------- | ------- | ----------------------------------------------------------------------- |
-| `config`   | `IGRPConfigArgs`  | yes      | —       | Layout, session, API and sync configuration (from `igrpBuildConfig`).   |
-| `children` | `React.ReactNode` | yes      | —       | The application tree.                                                   |
-| `lang`     | `string`          | no       | `'pt'`  | BCP-47 language written to the server-rendered `<html lang>` attribute. |
+| Prop       | Type              | Required | Default   | Purpose                                                                 |
+| ---------- | ----------------- | -------- | --------- | ----------------------------------------------------------------------- |
+| `config`   | `IGRPConfigArgs`  | yes      | —         | Layout, session, API and sync configuration (from `igrpBuildConfig`).   |
+| `children` | `React.ReactNode` | yes      | —         | The application tree.                                                   |
+| `lang`     | `string`          | no       | see below | BCP-47 language written to the server-rendered `<html lang>` attribute. |
 
-`lang` is optional and defaults to `'pt'`, so apps that don't pass it render exactly as before.
+`lang` is optional. With `config.i18n` set it defaults to the resolved format locale (`pt-CV`, `en-GB`, …); without it, to `'pt'`, so apps that don't pass it render exactly as before. An explicit `lang` always wins.
 
 ### Config builder
 
@@ -81,18 +81,19 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
 
 #### Localized document language
 
-`<html lang>` defaults to `'pt'`. Apps with i18n resolve the locale **server-side** (session preference, cookie, `Accept-Language`, …) and pass it down, so the attribute is correct on the first server-rendered response instead of being patched after hydration:
+`<html lang>` is set on the first server-rendered response, never patched after hydration. With `config.i18n` (see `./i18n` below) the framework resolves the locale server-side (cookie or session preference, `Accept-Language`, default) and writes the format locale (`pt-CV`, `en-GB`, …); without i18n it defaults to `'pt'`. Pass `lang` only to override.
 
-```tsx
-// src/app/layout.tsx
-import { IGRPRootLayout } from '@igrp/framework-next';
-import { resolveLocale } from '@/i18n/resolve-locale';
+### i18n (`@igrp/framework-next/i18n`)
 
-export default async function RootLayout({ children }: { children: React.ReactNode }) {
-  const lang = await resolveLocale();
-  return <IGRPRootLayout lang={lang}>{children}</IGRPRootLayout>;
-}
-```
+Five subpath entries, each a file-per-module leaf:
+
+- `./i18n` — Edge-safe (middleware may import it): `igrpDefineI18n`, `igrpParseFormatLocales`, `igrpPickLocale`, `igrpSyncLocaleCookie`, the format helpers (`igrpFormatDate`, `igrpFormatNumber`, `igrpCompare`, …), `IGRP_LOCALES`, `IGRP_LOCALE_COOKIE`.
+- `./i18n/server` — `server-only`: `igrpResolveLocale`, `igrpCreateRequestConfig` (for next-intl's `getRequestConfig`), `igrpSetLocale`, `igrpGetDesignSystemStrings`, `igrpGetChromeStrings`.
+- `./i18n/client` — `IGRPIntlProvider` (mounted by `IGRPRootLayout`), `IGRPLocaleSwitcher`, `useIGRPFormat`, `useIGRPLocaleInfo`.
+- `./i18n/messages` — the generic `common`, `i18n` and `errors` namespaces in pt, en and fr, and `igrpMergeMessages`.
+- `./i18n/testing` — `IGRPIntlTestProvider`, the same client context for tests.
+
+Wire it with `igrpBuildConfig({ i18n: igrpDefineI18n({ defaultLocale: 'pt', … }) })`, a `src/i18n/request.ts` that passes `igrpCreateRequestConfig(i18n, catalogs)` to next-intl, and `createNextIntlPlugin` in `next.config.ts`. Apps without `i18n` are unchanged.
 
 ### IGRP layout
 

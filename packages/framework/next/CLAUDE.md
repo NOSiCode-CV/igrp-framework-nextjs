@@ -14,7 +14,8 @@ You are working inside `packages/framework/next/` — `@igrp/framework-next`. **
 
 ## Public API
 
-- `IGRPRootLayout` — root-level server layout. Props: `config` (required), `children`, and the optional `lang` (BCP-47 string for `<html lang>`, default `'pt'` — backward compatible; consumers with i18n resolve the locale server-side and pass it).
+- `IGRPRootLayout` — root-level server layout. Props: `config` (required), `children`, and the optional `lang` (BCP-47 string for `<html lang>`). With `config.i18n` it resolves the locale, mounts `IGRPIntlProvider` and defaults `lang` to the format locale; without i18n `lang` defaults to `'pt'` (backward compatible). An explicit `lang` wins.
+- `@igrp/framework-next/i18n` subpaths: `./i18n` (Edge-safe: config, resolution, cookie sync, format helpers — must import nothing from the root barrel, `next/headers`, React or `node:*`, because app middleware imports it), `./i18n/server` (`server-only`), `./i18n/client` (`'use client'` leaves: provider, switcher, hooks), `./i18n/messages`, `./i18n/testing`. `IGRP_LOCALE_COOKIE` must equal `@igrp/framework-next-ui`'s; `src/i18n/__tests__/cookie-parity.test.ts` pins it.
 - `IGRPLayout` — route-group server layout (header/sidebar chrome).
 - `igrpBuildConfig` — assembles layout + API + toaster + session config.
 - `igrpGetAccessClient`, `igrpGetAccessClientConfig` — access-management API client.
@@ -31,7 +32,7 @@ Validate breaking changes against `templates/demo-v1/src/app/layout.tsx`, `templ
 
 ## Rules unique to this package
 
-- **Server-only entry.** Client pieces belong in `@igrp/framework-next-ui`.
+- **The root entry is server-only.** Client pieces belong in `@igrp/framework-next-ui`; the one exception is `./i18n/client` (and `./i18n/testing`), whose leaves carry `'use client'` and exist here because they compose next-intl with the next-ui and design-system providers.
 - Respect `@igrp/framework-next-auth` entry points — `/server`, `/config`, `/middleware`. Never `/dist/`.
 - **Never let an error boundary latch a Next control-flow throw.** `redirect()`,
   `notFound()`, `forbidden()` and `unauthorized()` all signal by throwing, and

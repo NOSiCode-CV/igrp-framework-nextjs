@@ -18,6 +18,7 @@ import {
 
 import { IGRP_LOCALE_NATIVE_NAMES, type IGRPLocale } from '../config.js';
 import type { IGRPSetLocaleResult } from '../server/set-locale.js';
+import { igrpRunLocaleChange } from './locale-change.js';
 import { useIGRPLocaleInfo } from './locale-info.js';
 
 export interface IGRPLocaleSwitcherProps {
@@ -50,13 +51,15 @@ export function IGRPLocaleSwitcher({ action, onChanged, className }: IGRPLocaleS
     if (next === locale) return;
     setFailed(false);
     startTransition(async () => {
-      const result = await action(next);
-      if (!result.success) {
-        setFailed(true);
-        return;
-      }
-      await onChanged?.(result.data.locale);
-      router.refresh();
+      // Never let a rejected action or `onChanged` escape the transition: React
+      // would hand it to the nearest error boundary and the segment would crash
+      // instead of showing the error state.
+      const failed = await igrpRunLocaleChange(next, {
+        action,
+        onChanged,
+        refresh: () => router.refresh(),
+      });
+      setFailed(failed);
     });
   };
 

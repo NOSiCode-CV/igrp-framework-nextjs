@@ -342,7 +342,7 @@
       "id": "56-redis-session-store",
       "appliedAt": "2026-10-14T00:00:00.000Z",
       "cliVersion": "0.2.0-beta.4",
-      "manifestHash": "acab9b9be43f0d9c"
+      "manifestHash": "645d8ba92c070b73"
     },
     {
       "id": "57-middleware-literal-matcher",

@@ -1,5 +1,11 @@
 # @igrp/igrp-framework-react-design-system
 
+## 0.2.0-beta.4
+
+### Patch Changes
+
+- da195d9: Combobox, multi-select and date-picker (single/range) triggers now use the `border-input` token, matching `IGRPInputText` and `IGRPSelect`. They previously inherited the outline button's lighter decorative `border-border`.
+
 ## 0.2.0-beta.3
 
 ### Patch Changes

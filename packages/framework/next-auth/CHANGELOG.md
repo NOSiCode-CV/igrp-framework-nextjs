@@ -1,5 +1,42 @@
 # @igrp/framework-next-auth
 
+## 0.2.0-beta.6
+
+### Patch Changes
+
+- dc06bd0: Fix `next build` failing for any app whose middleware imports the `withIGRPAuth` instance: "Dynamic Code Evaluation (e. g. 'eval', 'new Function', 'WebAssembly.compile') not allowed in Edge Runtime", traced through `next-auth/utils/logger.js` to `@babel/runtime/regenerator`.
+  
+  `withIGRPAuth` loads the `next-auth` main package lazily, which kept it out of the Edge runtime but not out of the Edge build: webpack still compiled the lazy chunk into the middleware bundle. The import now sits behind `process.env.NEXT_RUNTIME !== 'edge'`, which Next inlines per compilation, so the Edge build drops it. Node behaviour is unchanged.
+- a34131c: Two fixes for apps that share a domain.
+  
+  **`igrpDeleteAuthCookies()` only deletes the calling app's cookies.** It matched every cookie whose name contained `next-auth.session-token`. A basePath app's logout page also receives the app-center's `Path=/` cookie, so it deleted that too. The center then looked signed out while its session at the authorization server stayed active and unrevoked, and apps under other paths were not touched at all. It now expires the app's current cookie at its basePath, plus the app's own pre-scoping names (through `staleAuthCookies`) at `/`. A new `{ sweepStockNames }` option lets a root-path app also clear its stock-named orphan. Signing out of other apps is the authorization server's job (single logout).
+  
+  **No introspection before refresh.** The jwt callback called `/oauth2/introspect` with the refresh token before every refresh. The refresh already reports a revoked or expired token (`invalid_grant`), so this only added an IdP round trip. It was also a second way to present a rotated-out refresh token, which Access Management treats as reuse (`token_type_hint=refresh_token`) and answers by revoking the session. `introspectOidcToken` stays exported from `./oidc`.
+- 3ad47e0: Never present a refresh token the IdP may already have consumed.
+  
+  Access Management rotates refresh tokens and keeps a durable record of every rotated-out one: presenting one again, at any time, revokes the session. Two frontend paths could do that.
+  
+  **Refresh lock (session store).** With several replicas, two concurrent requests for the same session could each spend the same refresh token.
+  
+  - `IGRPSessionStore` gains optional `acquireLock(key, owner, ttlMs)` / `releaseLock(key, owner)`. On Redis: `SET NX PX`, plus a compare-and-delete script to release. `createMemorySessionStore` implements both.
+  - New `refreshUnderSessionLock`, keyed on the session id. The jwt callback now runs introspection and refresh under it. Introspection is inside the lock because introspecting a refresh token another replica just rotated reads as inactive and force-logs-out.
+  - The winner re-reads the store, refreshes, and writes the result before releasing.
+  - A waiter never refreshes while the lock is held. A dead holder's lock expires (20 s) and the waiter takes it over. If the holder is merely slow, the waiter returns the session unchanged for that request, without an error flag, and the next read retries.
+  - Without lock methods or without a store, refresh runs as before. If taking the lock fails because the store is down, the refresh also runs without it.
+  
+  **Refresh retry.** The refresh-token call was retried on timeout and on any 5xx. Those outcomes are ambiguous: the IdP may have rotated the token and only the reply was lost, so the retry replayed a spent token and revoked the session. It now retries only when the request provably never reached the IdP (`ECONNREFUSED`, `ENOTFOUND`, `EAI_AGAIN`, connect timeout) or the IdP answered 503. The refresh call's own timeout is 8 s (was 4 s), so a slow but successful refresh is not cut off into an ambiguous failure.
+  
+  Docs: the README "Cookies" section now describes the current names and paths (`.<slug>_p~` at `Path=<basePath>`). `auth.config` is no longer documented as something to re-export from `middleware.ts`: Next parses the middleware `config` at build time, ignores a re-export, and then runs the middleware on every path.
+- dc06bd0: Add an optional server-side session store, so the session cookie stays a few hundred bytes instead of 3–4 KB.
+  
+  Apps on one domain share the browser's cookie jar, and a root-path app's cookie (`Path=/`) reaches every app. An app center plus one app pushed the `Cookie` header past nginx's default 8 KB, and the ingress answered `400 Request Header Or Cookie Too Large` for the whole domain (`demoigrp.nosi.cv`, 2026-10-13).
+  
+  - New entry `@igrp/framework-next-auth/session-store`: the `IGRPSessionStore` interface, `configureIGRPSessionStore` (register from `instrumentation.ts`, Node runtime only), `createMemorySessionStore`, and `decodeIGRPSessionToken` for direct `getToken` calls. `withIGRPAuth` also accepts a `sessionStore` option.
+  - With a store, the cookie holds a random session id plus `expiresAt` / `error` / `forceLogout`. The tokens are stored encrypted with `NEXTAUTH_SECRET`. Sign-out deletes the entry. A failed refresh does not overwrite a concurrent successful rotation.
+  - Without a store nothing changes. Existing cookies keep working and move to the store on their next write, so nobody is signed out.
+  - `auth.getTokenFromRequest()` (middleware) returns no `accessToken` once a store is in use; read tokens server-side.
+  - `@igrp/framework-next`: the access-token fallback that reads the session cookie directly now decodes through the store.
+
 ## 0.2.0-beta.5
 
 ### Patch Changes

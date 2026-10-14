@@ -1,5 +1,31 @@
 # @igrp/framework-next
 
+## 0.2.0-beta.7
+
+### Patch Changes
+
+- a34131c: Two fixes for apps that share a domain.
+  
+  **`igrpDeleteAuthCookies()` only deletes the calling app's cookies.** It matched every cookie whose name contained `next-auth.session-token`. A basePath app's logout page also receives the app-center's `Path=/` cookie, so it deleted that too. The center then looked signed out while its session at the authorization server stayed active and unrevoked, and apps under other paths were not touched at all. It now expires the app's current cookie at its basePath, plus the app's own pre-scoping names (through `staleAuthCookies`) at `/`. A new `{ sweepStockNames }` option lets a root-path app also clear its stock-named orphan. Signing out of other apps is the authorization server's job (single logout).
+  
+  **No introspection before refresh.** The jwt callback called `/oauth2/introspect` with the refresh token before every refresh. The refresh already reports a revoked or expired token (`invalid_grant`), so this only added an IdP round trip. It was also a second way to present a rotated-out refresh token, which Access Management treats as reuse (`token_type_hint=refresh_token`) and answers by revoking the session. `introspectOidcToken` stays exported from `./oidc`.
+- dc06bd0: Add an optional server-side session store, so the session cookie stays a few hundred bytes instead of 3–4 KB.
+  
+  Apps on one domain share the browser's cookie jar, and a root-path app's cookie (`Path=/`) reaches every app. An app center plus one app pushed the `Cookie` header past nginx's default 8 KB, and the ingress answered `400 Request Header Or Cookie Too Large` for the whole domain (`demoigrp.nosi.cv`, 2026-10-13).
+  
+  - New entry `@igrp/framework-next-auth/session-store`: the `IGRPSessionStore` interface, `configureIGRPSessionStore` (register from `instrumentation.ts`, Node runtime only), `createMemorySessionStore`, and `decodeIGRPSessionToken` for direct `getToken` calls. `withIGRPAuth` also accepts a `sessionStore` option.
+  - With a store, the cookie holds a random session id plus `expiresAt` / `error` / `forceLogout`. The tokens are stored encrypted with `NEXTAUTH_SECRET`. Sign-out deletes the entry. A failed refresh does not overwrite a concurrent successful rotation.
+  - Without a store nothing changes. Existing cookies keep working and move to the store on their next write, so nobody is signed out.
+  - `auth.getTokenFromRequest()` (middleware) returns no `accessToken` once a store is in use; read tokens server-side.
+  - `@igrp/framework-next`: the access-token fallback that reads the session cookie directly now decodes through the store.
+- Updated dependencies [dc06bd0]
+- Updated dependencies [a34131c]
+- Updated dependencies [3ad47e0]
+- Updated dependencies [dc06bd0]
+  - @igrp/framework-next-auth@0.2.0-beta.6
+  - @igrp/framework-next-ui@0.2.0-beta.7
+  - @igrp/framework-next-types@0.2.0-beta.6
+
 ## 0.2.0-beta.6
 
 ### Patch Changes

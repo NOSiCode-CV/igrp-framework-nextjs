@@ -27,6 +27,10 @@ function Calendar({
   // drives month names and weekday labels when the consumer passes no `locale`.
   const igrpLocale = useIGRPLocale()
   const resolvedLocale = locale ?? igrpDateFnsLocale(igrpLocale)
+  // `Intl` gets the full tag, never the date-fns `code` (a bare `pt` resolves to
+  // Brazilian conventions) and never `undefined` (the runtime locale, which
+  // differs between server and browser and would hydrate mismatched).
+  const intlLocale = locale?.code ?? igrpLocale
   const defaultClassNames = getDefaultClassNames()
 
   return (
@@ -41,7 +45,7 @@ function Calendar({
       captionLayout={captionLayout}
       locale={resolvedLocale}
       formatters={{
-        formatMonthDropdown: (date) => date.toLocaleString(resolvedLocale?.code, { month: "short" }),
+        formatMonthDropdown: (date) => date.toLocaleString(intlLocale, { month: "short" }),
         ...formatters,
       }}
       classNames={{
@@ -125,7 +129,7 @@ function Calendar({
 
           return <ChevronDownIcon className={cn("size-4", className)} {...props} />
         },
-        DayButton: ({ ...props }) => <CalendarDayButton locale={resolvedLocale} {...props} />,
+        DayButton: ({ ...props }) => <CalendarDayButton locale={resolvedLocale} intlLocale={intlLocale} {...props} />,
         WeekNumber: ({ children, ...props }) => {
           return (
             <td {...props}>
@@ -145,8 +149,13 @@ function CalendarDayButton({
   day,
   modifiers,
   locale,
+  intlLocale,
   ...props
-}: React.ComponentProps<typeof DayButton> & { locale?: Partial<Locale> }) {
+}: React.ComponentProps<typeof DayButton> & {
+  locale?: Partial<Locale>
+  /** BCP-47 tag for `Intl`; defaults to the date-fns locale's `code`. */
+  intlLocale?: string
+}) {
   const defaultClassNames = getDefaultClassNames()
 
   const ref = React.useRef<HTMLButtonElement>(null)
@@ -159,7 +168,7 @@ function CalendarDayButton({
       ref={ref}
       variant="ghost"
       size="icon"
-      data-day={day.date.toLocaleDateString(locale?.code)}
+      data-day={day.date.toLocaleDateString(intlLocale ?? locale?.code)}
       data-selected-single={
         modifiers.selected && !modifiers.range_start && !modifiers.range_end && !modifiers.range_middle
       }

@@ -3,16 +3,16 @@
 exports[`Components/Calendar/Multitple Basic smoke-test 1`] = `
 <div class="flex flex-col gap-4">
   <div data-slot="calendar"
-       class="w-fit rdp-root bg-background group/calendar p-3 [--cell-size:--spacing(8)] in-data-[slot=card-content]:bg-transparent in-data-[slot=popover-content]:bg-transparent rtl:**:[.rdp-button\\_next&gt;svg]:rotate-180 rtl:**:[.rdp-button\\_previous&gt;svg]:rotate-180 rounded-lg border shadow-sm"
+       class="w-fit rdp-root group/calendar bg-background p-3 [--cell-radius:var(--radius-md)] [--cell-size:--spacing(8)] in-data-[slot=card-content]:bg-transparent in-data-[slot=popover-content]:bg-transparent rtl:**:[.rdp-button\\_next&gt;svg]:rotate-180 rtl:**:[.rdp-button\\_previous&gt;svg]:rotate-180 rounded-lg border shadow-sm"
        id="_r_ID_"
        data-mode="multiple"
   >
-    <div class="flex gap-4 flex-col md:flex-row relative rdp-months">
-      <nav class="flex items-center gap-1 w-full absolute top-0 inset-x-0 justify-between rdp-nav"
+    <div class="relative flex flex-col gap-4 md:flex-row rdp-months">
+      <nav class="absolute inset-x-0 top-0 flex w-full items-center justify-between gap-1 rdp-nav"
            aria-label
       >
         <button type="button"
-                class="inline-flex items-center justify-center gap-1.5 whitespace-nowrap rounded-md text-sm font-medium transition-[color,box-shadow] disabled:pointer-events-none disabled:opacity-50 [&amp;_svg]:pointer-events-none [&amp;_svg:not([class*='size-'])]:size-4 shrink-0 [&amp;_svg]:shrink-0 outline-none focus-visible:border-ring focus-visible:ring-ring/50 focus-visible:ring-[3px] aria-invalid:ring-destructive/20 dark:aria-invalid:ring-destructive/40 aria-invalid:border-destructive hover:bg-accent dark:hover:bg-accent/50 hover:text-accent-foreground has-data-[icon=inline-end]:pr-2 has-data-[icon=inline-start]:pl-2 size-(--cell-size) aria-disabled:opacity-50 p-0 select-none rdp-button_previous"
+                class="group/button inline-flex shrink-0 items-center justify-center rounded-md border border-transparent bg-clip-padding text-sm font-medium whitespace-nowrap transition-all outline-none focus-visible:border-ring focus-visible:ring-3 focus-visible:ring-ring/50 active:not-aria-[haspopup]:translate-y-px disabled:pointer-events-none disabled:opacity-50 aria-invalid:border-destructive aria-invalid:ring-3 aria-invalid:ring-destructive/20 dark:aria-invalid:border-destructive/50 dark:aria-invalid:ring-destructive/40 [&amp;_svg]:pointer-events-none [&amp;_svg]:shrink-0 [&amp;_svg:not([class*='size-'])]:size-4 hover:bg-muted hover:text-foreground aria-expanded:bg-muted aria-expanded:text-foreground dark:hover:bg-muted/50 gap-1.5 in-data-[slot=button-group]:rounded-md has-data-[icon=inline-end]:pr-2 has-data-[icon=inline-start]:pl-2 size-(--cell-size) p-0 select-none aria-disabled:opacity-50 rdp-button_previous"
                 aria-label="Go to the Previous Month"
         >
           <svg xmlns="http://www.w3.org/2000/svg"
@@ -32,7 +32,7 @@ exports[`Components/Calendar/Multitple Basic smoke-test 1`] = `
           </svg>
         </button>
         <button type="button"
-                class="inline-flex items-center justify-center gap-1.5 whitespace-nowrap rounded-md text-sm font-medium transition-[color,box-shadow] disabled:pointer-events-none disabled:opacity-50 [&amp;_svg]:pointer-events-none [&amp;_svg:not([class*='size-'])]:size-4 shrink-0 [&amp;_svg]:shrink-0 outline-none focus-visible:border-ring focus-visible:ring-ring/50 focus-visible:ring-[3px] aria-invalid:ring-destructive/20 dark:aria-invalid:ring-destructive/40 aria-invalid:border-destructive hover:bg-accent dark:hover:bg-accent/50 hover:text-accent-foreground has-data-[icon=inline-end]:pr-2 has-data-[icon=inline-start]:pl-2 size-(--cell-size) aria-disabled:opacity-50 p-0 select-none rdp-button_next"
+                class="group/button inline-flex shrink-0 items-center justify-center rounded-md border border-transparent bg-clip-padding text-sm font-medium whitespace-nowrap transition-all outline-none focus-visible:border-ring focus-visible:ring-3 focus-visible:ring-ring/50 active:not-aria-[haspopup]:translate-y-px disabled:pointer-events-none disabled:opacity-50 aria-invalid:border-destructive aria-invalid:ring-3 aria-invalid:ring-destructive/20 dark:aria-invalid:border-destructive/50 dark:aria-invalid:ring-destructive/40 [&amp;_svg]:pointer-events-none [&amp;_svg]:shrink-0 [&amp;_svg:not([class*='size-'])]:size-4 hover:bg-muted hover:text-foreground aria-expanded:bg-muted aria-expanded:text-foreground dark:hover:bg-muted/50 gap-1.5 in-data-[slot=button-group]:rounded-md has-data-[icon=inline-end]:pr-2 has-data-[icon=inline-start]:pl-2 size-(--cell-size) p-0 select-none aria-disabled:opacity-50 rdp-button_next"
                 aria-label="Go to the Next Month"
         >
           <svg xmlns="http://www.w3.org/2000/svg"
@@ -52,692 +52,776 @@ exports[`Components/Calendar/Multitple Basic smoke-test 1`] = `
           </svg>
         </button>
       </nav>
-      <div class="flex flex-col w-full gap-4 rdp-month">
-        <div class="flex items-center justify-center h-(--cell-size) w-full px-(--cell-size) rdp-month_caption">
-          <span class="select-none font-medium text-sm rdp-caption_label"
+      <div class="flex w-full flex-col gap-4 rdp-month">
+        <div class="flex h-(--cell-size) w-full items-center justify-center px-(--cell-size) rdp-month_caption">
+          <span class="font-medium select-none text-sm rdp-caption_label"
                 role="status"
                 aria-live="polite"
           >
-            November 2025
+            novembro 2025
           </span>
         </div>
         <table role="grid"
                aria-multiselectable="true"
-               aria-label="November 2025"
-               class="rdp-month_grid"
+               aria-label="novembro 2025"
+               class="w-full border-collapse rdp-month_grid"
         >
           <thead aria-hidden="true">
             <tr class="flex rdp-weekdays">
-              <th aria-label="Sunday"
-                  class="text-muted-foreground rounded-md flex-1 font-normal text-[0.8rem] select-none rdp-weekday"
+              <th aria-label="domingo"
+                  class="flex-1 rounded-(--cell-radius) text-[0.8rem] font-normal text-muted-foreground select-none rdp-weekday"
                   scope="col"
               >
-                Su
+                dom
               </th>
-              <th aria-label="Monday"
-                  class="text-muted-foreground rounded-md flex-1 font-normal text-[0.8rem] select-none rdp-weekday"
+              <th aria-label="segunda-feira"
+                  class="flex-1 rounded-(--cell-radius) text-[0.8rem] font-normal text-muted-foreground select-none rdp-weekday"
                   scope="col"
               >
-                Mo
+                seg
               </th>
-              <th aria-label="Tuesday"
-                  class="text-muted-foreground rounded-md flex-1 font-normal text-[0.8rem] select-none rdp-weekday"
+              <th aria-label="terça-feira"
+                  class="flex-1 rounded-(--cell-radius) text-[0.8rem] font-normal text-muted-foreground select-none rdp-weekday"
                   scope="col"
               >
-                Tu
+                ter
               </th>
-              <th aria-label="Wednesday"
-                  class="text-muted-foreground rounded-md flex-1 font-normal text-[0.8rem] select-none rdp-weekday"
+              <th aria-label="quarta-feira"
+                  class="flex-1 rounded-(--cell-radius) text-[0.8rem] font-normal text-muted-foreground select-none rdp-weekday"
                   scope="col"
               >
-                We
+                qua
               </th>
-              <th aria-label="Thursday"
-                  class="text-muted-foreground rounded-md flex-1 font-normal text-[0.8rem] select-none rdp-weekday"
+              <th aria-label="quinta-feira"
+                  class="flex-1 rounded-(--cell-radius) text-[0.8rem] font-normal text-muted-foreground select-none rdp-weekday"
                   scope="col"
               >
-                Th
+                qui
               </th>
-              <th aria-label="Friday"
-                  class="text-muted-foreground rounded-md flex-1 font-normal text-[0.8rem] select-none rdp-weekday"
+              <th aria-label="sexta-feira"
+                  class="flex-1 rounded-(--cell-radius) text-[0.8rem] font-normal text-muted-foreground select-none rdp-weekday"
                   scope="col"
               >
-                Fr
+                sex
               </th>
-              <th aria-label="Saturday"
-                  class="text-muted-foreground rounded-md flex-1 font-normal text-[0.8rem] select-none rdp-weekday"
+              <th aria-label="sábado"
+                  class="flex-1 rounded-(--cell-radius) text-[0.8rem] font-normal text-muted-foreground select-none rdp-weekday"
                   scope="col"
               >
-                Sa
+                sáb
               </th>
             </tr>
           </thead>
           <tbody class="rdp-weeks">
-            <tr class="flex w-full mt-2 rdp-week">
-              <td class="relative w-full h-full p-0 text-center [&amp;:first-child[data-selected=true]_button]:rounded-l-md [&amp;:last-child[data-selected=true]_button]:rounded-r-md group/day aspect-square select-none rdp-day text-muted-foreground aria-selected:text-muted-foreground rdp-outside"
+            <tr class="mt-2 flex w-full rdp-week">
+              <td class="group/day relative aspect-square h-full w-full rounded-(--cell-radius) p-0 text-center select-none [&amp;:last-child[data-selected=true]_button]:rounded-r-(--cell-radius) [&amp;:first-child[data-selected=true]_button]:rounded-l-(--cell-radius) rdp-day text-muted-foreground aria-selected:text-muted-foreground rdp-outside"
                   role="gridcell"
                   data-day="2025-10-26"
                   data-month="2025-10"
                   data-outside="true"
               >
                 <button data-slot="button"
-                        class="items-center justify-center whitespace-nowrap rounded-md text-sm transition-[color,box-shadow] disabled:pointer-events-none disabled:opacity-50 [&amp;_svg]:pointer-events-none [&amp;_svg:not([class*='size-'])]:size-4 shrink-0 [&amp;_svg]:shrink-0 outline-none focus-visible:border-ring focus-visible:ring-ring/50 focus-visible:ring-[3px] aria-invalid:ring-destructive/20 dark:aria-invalid:ring-destructive/40 aria-invalid:border-destructive hover:bg-accent dark:hover:bg-accent/50 hover:text-accent-foreground data-[selected-single=true]:bg-primary data-[selected-single=true]:text-primary-foreground data-[range-middle=true]:bg-accent data-[range-middle=true]:text-accent-foreground data-[range-start=true]:bg-primary data-[range-start=true]:text-primary-foreground data-[range-end=true]:bg-primary data-[range-end=true]:text-primary-foreground group-data-[focused=true]/day:border-ring group-data-[focused=true]/day:ring-ring/50 dark:hover:text-accent-foreground flex aspect-square size-auto w-full min-w-(--cell-size) flex-col gap-1 leading-none font-normal group-data-[focused=true]/day:relative group-data-[focused=true]/day:z-10 group-data-[focused=true]/day:ring-[3px] data-[range-end=true]:rounded-md data-[range-end=true]:rounded-r-md data-[range-middle=true]:rounded-none data-[range-start=true]:rounded-md data-[range-start=true]:rounded-l-md [&amp;&gt;span]:text-xs [&amp;&gt;span]:opacity-70 rdp-day rdp-day_button"
-                        type="button"
+                        data-variant="ghost"
+                        data-size="icon"
+                        class="group/button shrink-0 items-center justify-center rounded-md border-transparent bg-clip-padding text-sm whitespace-nowrap transition-all outline-none select-none focus-visible:border-ring focus-visible:ring-3 focus-visible:ring-ring/50 active:not-aria-[haspopup]:translate-y-px disabled:pointer-events-none disabled:opacity-50 aria-invalid:border-destructive aria-invalid:ring-3 aria-invalid:ring-destructive/20 dark:aria-invalid:border-destructive/50 dark:aria-invalid:ring-destructive/40 [&amp;_svg]:pointer-events-none [&amp;_svg]:shrink-0 [&amp;_svg:not([class*='size-'])]:size-4 hover:bg-muted hover:text-foreground aria-expanded:bg-muted aria-expanded:text-foreground dark:hover:bg-muted/50 relative isolate z-10 flex aspect-square size-auto w-full min-w-(--cell-size) flex-col gap-1 border-0 leading-none font-normal group-data-[focused=true]/day:relative group-data-[focused=true]/day:z-10 group-data-[focused=true]/day:border-ring group-data-[focused=true]/day:ring-[3px] group-data-[focused=true]/day:ring-ring/50 data-[range-end=true]:rounded-(--cell-radius) data-[range-end=true]:rounded-r-(--cell-radius) data-[range-end=true]:bg-primary data-[range-end=true]:text-primary-foreground data-[range-middle=true]:rounded-none data-[range-middle=true]:bg-muted data-[range-middle=true]:text-foreground data-[range-start=true]:rounded-(--cell-radius) data-[range-start=true]:rounded-l-(--cell-radius) data-[range-start=true]:bg-primary data-[range-start=true]:text-primary-foreground data-[selected-single=true]:bg-primary data-[selected-single=true]:text-primary-foreground dark:hover:text-foreground [&amp;&gt;span]:text-xs [&amp;&gt;span]:opacity-70 rdp-day rdp-day_button"
                         data-day="26/10/2025"
+                        type="button"
                         tabindex="-1"
-                        aria-label="Sunday, October 26th, 2025"
+                        aria-label="domingo, 26 de outubro de 2025"
                 >
                   26
                 </button>
               </td>
-              <td class="relative w-full h-full p-0 text-center [&amp;:first-child[data-selected=true]_button]:rounded-l-md [&amp;:last-child[data-selected=true]_button]:rounded-r-md group/day aspect-square select-none rdp-day text-muted-foreground aria-selected:text-muted-foreground rdp-outside"
+              <td class="group/day relative aspect-square h-full w-full rounded-(--cell-radius) p-0 text-center select-none [&amp;:last-child[data-selected=true]_button]:rounded-r-(--cell-radius) [&amp;:first-child[data-selected=true]_button]:rounded-l-(--cell-radius) rdp-day text-muted-foreground aria-selected:text-muted-foreground rdp-outside"
                   role="gridcell"
                   data-day="2025-10-27"
                   data-month="2025-10"
                   data-outside="true"
               >
                 <button data-slot="button"
-                        class="items-center justify-center whitespace-nowrap rounded-md text-sm transition-[color,box-shadow] disabled:pointer-events-none disabled:opacity-50 [&amp;_svg]:pointer-events-none [&amp;_svg:not([class*='size-'])]:size-4 shrink-0 [&amp;_svg]:shrink-0 outline-none focus-visible:border-ring focus-visible:ring-ring/50 focus-visible:ring-[3px] aria-invalid:ring-destructive/20 dark:aria-invalid:ring-destructive/40 aria-invalid:border-destructive hover:bg-accent dark:hover:bg-accent/50 hover:text-accent-foreground data-[selected-single=true]:bg-primary data-[selected-single=true]:text-primary-foreground data-[range-middle=true]:bg-accent data-[range-middle=true]:text-accent-foreground data-[range-start=true]:bg-primary data-[range-start=true]:text-primary-foreground data-[range-end=true]:bg-primary data-[range-end=true]:text-primary-foreground group-data-[focused=true]/day:border-ring group-data-[focused=true]/day:ring-ring/50 dark:hover:text-accent-foreground flex aspect-square size-auto w-full min-w-(--cell-size) flex-col gap-1 leading-none font-normal group-data-[focused=true]/day:relative group-data-[focused=true]/day:z-10 group-data-[focused=true]/day:ring-[3px] data-[range-end=true]:rounded-md data-[range-end=true]:rounded-r-md data-[range-middle=true]:rounded-none data-[range-start=true]:rounded-md data-[range-start=true]:rounded-l-md [&amp;&gt;span]:text-xs [&amp;&gt;span]:opacity-70 rdp-day rdp-day_button"
-                        type="button"
+                        data-variant="ghost"
+                        data-size="icon"
+                        class="group/button shrink-0 items-center justify-center rounded-md border-transparent bg-clip-padding text-sm whitespace-nowrap transition-all outline-none select-none focus-visible:border-ring focus-visible:ring-3 focus-visible:ring-ring/50 active:not-aria-[haspopup]:translate-y-px disabled:pointer-events-none disabled:opacity-50 aria-invalid:border-destructive aria-invalid:ring-3 aria-invalid:ring-destructive/20 dark:aria-invalid:border-destructive/50 dark:aria-invalid:ring-destructive/40 [&amp;_svg]:pointer-events-none [&amp;_svg]:shrink-0 [&amp;_svg:not([class*='size-'])]:size-4 hover:bg-muted hover:text-foreground aria-expanded:bg-muted aria-expanded:text-foreground dark:hover:bg-muted/50 relative isolate z-10 flex aspect-square size-auto w-full min-w-(--cell-size) flex-col gap-1 border-0 leading-none font-normal group-data-[focused=true]/day:relative group-data-[focused=true]/day:z-10 group-data-[focused=true]/day:border-ring group-data-[focused=true]/day:ring-[3px] group-data-[focused=true]/day:ring-ring/50 data-[range-end=true]:rounded-(--cell-radius) data-[range-end=true]:rounded-r-(--cell-radius) data-[range-end=true]:bg-primary data-[range-end=true]:text-primary-foreground data-[range-middle=true]:rounded-none data-[range-middle=true]:bg-muted data-[range-middle=true]:text-foreground data-[range-start=true]:rounded-(--cell-radius) data-[range-start=true]:rounded-l-(--cell-radius) data-[range-start=true]:bg-primary data-[range-start=true]:text-primary-foreground data-[selected-single=true]:bg-primary data-[selected-single=true]:text-primary-foreground dark:hover:text-foreground [&amp;&gt;span]:text-xs [&amp;&gt;span]:opacity-70 rdp-day rdp-day_button"
                         data-day="27/10/2025"
+                        type="button"
                         tabindex="-1"
-                        aria-label="Monday, October 27th, 2025"
+                        aria-label="segunda-feira, 27 de outubro de 2025"
                 >
                   27
                 </button>
               </td>
-              <td class="relative w-full h-full p-0 text-center [&amp;:first-child[data-selected=true]_button]:rounded-l-md [&amp;:last-child[data-selected=true]_button]:rounded-r-md group/day aspect-square select-none rdp-day text-muted-foreground aria-selected:text-muted-foreground rdp-outside"
+              <td class="group/day relative aspect-square h-full w-full rounded-(--cell-radius) p-0 text-center select-none [&amp;:last-child[data-selected=true]_button]:rounded-r-(--cell-radius) [&amp;:first-child[data-selected=true]_button]:rounded-l-(--cell-radius) rdp-day text-muted-foreground aria-selected:text-muted-foreground rdp-outside"
                   role="gridcell"
                   data-day="2025-10-28"
                   data-month="2025-10"
                   data-outside="true"
               >
                 <button data-slot="button"
-                        class="items-center justify-center whitespace-nowrap rounded-md text-sm transition-[color,box-shadow] disabled:pointer-events-none disabled:opacity-50 [&amp;_svg]:pointer-events-none [&amp;_svg:not([class*='size-'])]:size-4 shrink-0 [&amp;_svg]:shrink-0 outline-none focus-visible:border-ring focus-visible:ring-ring/50 focus-visible:ring-[3px] aria-invalid:ring-destructive/20 dark:aria-invalid:ring-destructive/40 aria-invalid:border-destructive hover:bg-accent dark:hover:bg-accent/50 hover:text-accent-foreground data-[selected-single=true]:bg-primary data-[selected-single=true]:text-primary-foreground data-[range-middle=true]:bg-accent data-[range-middle=true]:text-accent-foreground data-[range-start=true]:bg-primary data-[range-start=true]:text-primary-foreground data-[range-end=true]:bg-primary data-[range-end=true]:text-primary-foreground group-data-[focused=true]/day:border-ring group-data-[focused=true]/day:ring-ring/50 dark:hover:text-accent-foreground flex aspect-square size-auto w-full min-w-(--cell-size) flex-col gap-1 leading-none font-normal group-data-[focused=true]/day:relative group-data-[focused=true]/day:z-10 group-data-[focused=true]/day:ring-[3px] data-[range-end=true]:rounded-md data-[range-end=true]:rounded-r-md data-[range-middle=true]:rounded-none data-[range-start=true]:rounded-md data-[range-start=true]:rounded-l-md [&amp;&gt;span]:text-xs [&amp;&gt;span]:opacity-70 rdp-day rdp-day_button"
-                        type="button"
+                        data-variant="ghost"
+                        data-size="icon"
+                        class="group/button shrink-0 items-center justify-center rounded-md border-transparent bg-clip-padding text-sm whitespace-nowrap transition-all outline-none select-none focus-visible:border-ring focus-visible:ring-3 focus-visible:ring-ring/50 active:not-aria-[haspopup]:translate-y-px disabled:pointer-events-none disabled:opacity-50 aria-invalid:border-destructive aria-invalid:ring-3 aria-invalid:ring-destructive/20 dark:aria-invalid:border-destructive/50 dark:aria-invalid:ring-destructive/40 [&amp;_svg]:pointer-events-none [&amp;_svg]:shrink-0 [&amp;_svg:not([class*='size-'])]:size-4 hover:bg-muted hover:text-foreground aria-expanded:bg-muted aria-expanded:text-foreground dark:hover:bg-muted/50 relative isolate z-10 flex aspect-square size-auto w-full min-w-(--cell-size) flex-col gap-1 border-0 leading-none font-normal group-data-[focused=true]/day:relative group-data-[focused=true]/day:z-10 group-data-[focused=true]/day:border-ring group-data-[focused=true]/day:ring-[3px] group-data-[focused=true]/day:ring-ring/50 data-[range-end=true]:rounded-(--cell-radius) data-[range-end=true]:rounded-r-(--cell-radius) data-[range-end=true]:bg-primary data-[range-end=true]:text-primary-foreground data-[range-middle=true]:rounded-none data-[range-middle=true]:bg-muted data-[range-middle=true]:text-foreground data-[range-start=true]:rounded-(--cell-radius) data-[range-start=true]:rounded-l-(--cell-radius) data-[range-start=true]:bg-primary data-[range-start=true]:text-primary-foreground data-[selected-single=true]:bg-primary data-[selected-single=true]:text-primary-foreground dark:hover:text-foreground [&amp;&gt;span]:text-xs [&amp;&gt;span]:opacity-70 rdp-day rdp-day_button"
                         data-day="28/10/2025"
+                        type="button"
                         tabindex="-1"
-                        aria-label="Tuesday, October 28th, 2025"
+                        aria-label="terça-feira, 28 de outubro de 2025"
                 >
                   28
                 </button>
               </td>
-              <td class="relative w-full h-full p-0 text-center [&amp;:first-child[data-selected=true]_button]:rounded-l-md [&amp;:last-child[data-selected=true]_button]:rounded-r-md group/day aspect-square select-none rdp-day text-muted-foreground aria-selected:text-muted-foreground rdp-outside"
+              <td class="group/day relative aspect-square h-full w-full rounded-(--cell-radius) p-0 text-center select-none [&amp;:last-child[data-selected=true]_button]:rounded-r-(--cell-radius) [&amp;:first-child[data-selected=true]_button]:rounded-l-(--cell-radius) rdp-day text-muted-foreground aria-selected:text-muted-foreground rdp-outside"
                   role="gridcell"
                   data-day="2025-10-29"
                   data-month="2025-10"
                   data-outside="true"
               >
                 <button data-slot="button"
-                        class="items-center justify-center whitespace-nowrap rounded-md text-sm transition-[color,box-shadow] disabled:pointer-events-none disabled:opacity-50 [&amp;_svg]:pointer-events-none [&amp;_svg:not([class*='size-'])]:size-4 shrink-0 [&amp;_svg]:shrink-0 outline-none focus-visible:border-ring focus-visible:ring-ring/50 focus-visible:ring-[3px] aria-invalid:ring-destructive/20 dark:aria-invalid:ring-destructive/40 aria-invalid:border-destructive hover:bg-accent dark:hover:bg-accent/50 hover:text-accent-foreground data-[selected-single=true]:bg-primary data-[selected-single=true]:text-primary-foreground data-[range-middle=true]:bg-accent data-[range-middle=true]:text-accent-foreground data-[range-start=true]:bg-primary data-[range-start=true]:text-primary-foreground data-[range-end=true]:bg-primary data-[range-end=true]:text-primary-foreground group-data-[focused=true]/day:border-ring group-data-[focused=true]/day:ring-ring/50 dark:hover:text-accent-foreground flex aspect-square size-auto w-full min-w-(--cell-size) flex-col gap-1 leading-none font-normal group-data-[focused=true]/day:relative group-data-[focused=true]/day:z-10 group-data-[focused=true]/day:ring-[3px] data-[range-end=true]:rounded-md data-[range-end=true]:rounded-r-md data-[range-middle=true]:rounded-none data-[range-start=true]:rounded-md data-[range-start=true]:rounded-l-md [&amp;&gt;span]:text-xs [&amp;&gt;span]:opacity-70 rdp-day rdp-day_button"
-                        type="button"
+                        data-variant="ghost"
+                        data-size="icon"
+                        class="group/button shrink-0 items-center justify-center rounded-md border-transparent bg-clip-padding text-sm whitespace-nowrap transition-all outline-none select-none focus-visible:border-ring focus-visible:ring-3 focus-visible:ring-ring/50 active:not-aria-[haspopup]:translate-y-px disabled:pointer-events-none disabled:opacity-50 aria-invalid:border-destructive aria-invalid:ring-3 aria-invalid:ring-destructive/20 dark:aria-invalid:border-destructive/50 dark:aria-invalid:ring-destructive/40 [&amp;_svg]:pointer-events-none [&amp;_svg]:shrink-0 [&amp;_svg:not([class*='size-'])]:size-4 hover:bg-muted hover:text-foreground aria-expanded:bg-muted aria-expanded:text-foreground dark:hover:bg-muted/50 relative isolate z-10 flex aspect-square size-auto w-full min-w-(--cell-size) flex-col gap-1 border-0 leading-none font-normal group-data-[focused=true]/day:relative group-data-[focused=true]/day:z-10 group-data-[focused=true]/day:border-ring group-data-[focused=true]/day:ring-[3px] group-data-[focused=true]/day:ring-ring/50 data-[range-end=true]:rounded-(--cell-radius) data-[range-end=true]:rounded-r-(--cell-radius) data-[range-end=true]:bg-primary data-[range-end=true]:text-primary-foreground data-[range-middle=true]:rounded-none data-[range-middle=true]:bg-muted data-[range-middle=true]:text-foreground data-[range-start=true]:rounded-(--cell-radius) data-[range-start=true]:rounded-l-(--cell-radius) data-[range-start=true]:bg-primary data-[range-start=true]:text-primary-foreground data-[selected-single=true]:bg-primary data-[selected-single=true]:text-primary-foreground dark:hover:text-foreground [&amp;&gt;span]:text-xs [&amp;&gt;span]:opacity-70 rdp-day rdp-day_button"
                         data-day="29/10/2025"
+                        type="button"
                         tabindex="-1"
-                        aria-label="Wednesday, October 29th, 2025"
+                        aria-label="quarta-feira, 29 de outubro de 2025"
                 >
                   29
                 </button>
               </td>
-              <td class="relative w-full h-full p-0 text-center [&amp;:first-child[data-selected=true]_button]:rounded-l-md [&amp;:last-child[data-selected=true]_button]:rounded-r-md group/day aspect-square select-none rdp-day text-muted-foreground aria-selected:text-muted-foreground rdp-outside"
+              <td class="group/day relative aspect-square h-full w-full rounded-(--cell-radius) p-0 text-center select-none [&amp;:last-child[data-selected=true]_button]:rounded-r-(--cell-radius) [&amp;:first-child[data-selected=true]_button]:rounded-l-(--cell-radius) rdp-day text-muted-foreground aria-selected:text-muted-foreground rdp-outside"
                   role="gridcell"
                   data-day="2025-10-30"
                   data-month="2025-10"
                   data-outside="true"
               >
                 <button data-slot="button"
-                        class="items-center justify-center whitespace-nowrap rounded-md text-sm transition-[color,box-shadow] disabled:pointer-events-none disabled:opacity-50 [&amp;_svg]:pointer-events-none [&amp;_svg:not([class*='size-'])]:size-4 shrink-0 [&amp;_svg]:shrink-0 outline-none focus-visible:border-ring focus-visible:ring-ring/50 focus-visible:ring-[3px] aria-invalid:ring-destructive/20 dark:aria-invalid:ring-destructive/40 aria-invalid:border-destructive hover:bg-accent dark:hover:bg-accent/50 hover:text-accent-foreground data-[selected-single=true]:bg-primary data-[selected-single=true]:text-primary-foreground data-[range-middle=true]:bg-accent data-[range-middle=true]:text-accent-foreground data-[range-start=true]:bg-primary data-[range-start=true]:text-primary-foreground data-[range-end=true]:bg-primary data-[range-end=true]:text-primary-foreground group-data-[focused=true]/day:border-ring group-data-[focused=true]/day:ring-ring/50 dark:hover:text-accent-foreground flex aspect-square size-auto w-full min-w-(--cell-size) flex-col gap-1 leading-none font-normal group-data-[focused=true]/day:relative group-data-[focused=true]/day:z-10 group-data-[focused=true]/day:ring-[3px] data-[range-end=true]:rounded-md data-[range-end=true]:rounded-r-md data-[range-middle=true]:rounded-none data-[range-start=true]:rounded-md data-[range-start=true]:rounded-l-md [&amp;&gt;span]:text-xs [&amp;&gt;span]:opacity-70 rdp-day rdp-day_button"
-                        type="button"
+                        data-variant="ghost"
+                        data-size="icon"
+                        class="group/button shrink-0 items-center justify-center rounded-md border-transparent bg-clip-padding text-sm whitespace-nowrap transition-all outline-none select-none focus-visible:border-ring focus-visible:ring-3 focus-visible:ring-ring/50 active:not-aria-[haspopup]:translate-y-px disabled:pointer-events-none disabled:opacity-50 aria-invalid:border-destructive aria-invalid:ring-3 aria-invalid:ring-destructive/20 dark:aria-invalid:border-destructive/50 dark:aria-invalid:ring-destructive/40 [&amp;_svg]:pointer-events-none [&amp;_svg]:shrink-0 [&amp;_svg:not([class*='size-'])]:size-4 hover:bg-muted hover:text-foreground aria-expanded:bg-muted aria-expanded:text-foreground dark:hover:bg-muted/50 relative isolate z-10 flex aspect-square size-auto w-full min-w-(--cell-size) flex-col gap-1 border-0 leading-none font-normal group-data-[focused=true]/day:relative group-data-[focused=true]/day:z-10 group-data-[focused=true]/day:border-ring group-data-[focused=true]/day:ring-[3px] group-data-[focused=true]/day:ring-ring/50 data-[range-end=true]:rounded-(--cell-radius) data-[range-end=true]:rounded-r-(--cell-radius) data-[range-end=true]:bg-primary data-[range-end=true]:text-primary-foreground data-[range-middle=true]:rounded-none data-[range-middle=true]:bg-muted data-[range-middle=true]:text-foreground data-[range-start=true]:rounded-(--cell-radius) data-[range-start=true]:rounded-l-(--cell-radius) data-[range-start=true]:bg-primary data-[range-start=true]:text-primary-foreground data-[selected-single=true]:bg-primary data-[selected-single=true]:text-primary-foreground dark:hover:text-foreground [&amp;&gt;span]:text-xs [&amp;&gt;span]:opacity-70 rdp-day rdp-day_button"
                         data-day="30/10/2025"
+                        type="button"
                         tabindex="-1"
-                        aria-label="Thursday, October 30th, 2025"
+                        aria-label="quinta-feira, 30 de outubro de 2025"
                 >
                   30
                 </button>
               </td>
-              <td class="relative w-full h-full p-0 text-center [&amp;:first-child[data-selected=true]_button]:rounded-l-md [&amp;:last-child[data-selected=true]_button]:rounded-r-md group/day aspect-square select-none rdp-day text-muted-foreground aria-selected:text-muted-foreground rdp-outside"
+              <td class="group/day relative aspect-square h-full w-full rounded-(--cell-radius) p-0 text-center select-none [&amp;:last-child[data-selected=true]_button]:rounded-r-(--cell-radius) [&amp;:first-child[data-selected=true]_button]:rounded-l-(--cell-radius) rdp-day text-muted-foreground aria-selected:text-muted-foreground rdp-outside"
                   role="gridcell"
                   data-day="2025-10-31"
                   data-month="2025-10"
                   data-outside="true"
               >
                 <button data-slot="button"
-                        class="items-center justify-center whitespace-nowrap rounded-md text-sm transition-[color,box-shadow] disabled:pointer-events-none disabled:opacity-50 [&amp;_svg]:pointer-events-none [&amp;_svg:not([class*='size-'])]:size-4 shrink-0 [&amp;_svg]:shrink-0 outline-none focus-visible:border-ring focus-visible:ring-ring/50 focus-visible:ring-[3px] aria-invalid:ring-destructive/20 dark:aria-invalid:ring-destructive/40 aria-invalid:border-destructive hover:bg-accent dark:hover:bg-accent/50 hover:text-accent-foreground data-[selected-single=true]:bg-primary data-[selected-single=true]:text-primary-foreground data-[range-middle=true]:bg-accent data-[range-middle=true]:text-accent-foreground data-[range-start=true]:bg-primary data-[range-start=true]:text-primary-foreground data-[range-end=true]:bg-primary data-[range-end=true]:text-primary-foreground group-data-[focused=true]/day:border-ring group-data-[focused=true]/day:ring-ring/50 dark:hover:text-accent-foreground flex aspect-square size-auto w-full min-w-(--cell-size) flex-col gap-1 leading-none font-normal group-data-[focused=true]/day:relative group-data-[focused=true]/day:z-10 group-data-[focused=true]/day:ring-[3px] data-[range-end=true]:rounded-md data-[range-end=true]:rounded-r-md data-[range-middle=true]:rounded-none data-[range-start=true]:rounded-md data-[range-start=true]:rounded-l-md [&amp;&gt;span]:text-xs [&amp;&gt;span]:opacity-70 rdp-day rdp-day_button"
-                        type="button"
+                        data-variant="ghost"
+                        data-size="icon"
+                        class="group/button shrink-0 items-center justify-center rounded-md border-transparent bg-clip-padding text-sm whitespace-nowrap transition-all outline-none select-none focus-visible:border-ring focus-visible:ring-3 focus-visible:ring-ring/50 active:not-aria-[haspopup]:translate-y-px disabled:pointer-events-none disabled:opacity-50 aria-invalid:border-destructive aria-invalid:ring-3 aria-invalid:ring-destructive/20 dark:aria-invalid:border-destructive/50 dark:aria-invalid:ring-destructive/40 [&amp;_svg]:pointer-events-none [&amp;_svg]:shrink-0 [&amp;_svg:not([class*='size-'])]:size-4 hover:bg-muted hover:text-foreground aria-expanded:bg-muted aria-expanded:text-foreground dark:hover:bg-muted/50 relative isolate z-10 flex aspect-square size-auto w-full min-w-(--cell-size) flex-col gap-1 border-0 leading-none font-normal group-data-[focused=true]/day:relative group-data-[focused=true]/day:z-10 group-data-[focused=true]/day:border-ring group-data-[focused=true]/day:ring-[3px] group-data-[focused=true]/day:ring-ring/50 data-[range-end=true]:rounded-(--cell-radius) data-[range-end=true]:rounded-r-(--cell-radius) data-[range-end=true]:bg-primary data-[range-end=true]:text-primary-foreground data-[range-middle=true]:rounded-none data-[range-middle=true]:bg-muted data-[range-middle=true]:text-foreground data-[range-start=true]:rounded-(--cell-radius) data-[range-start=true]:rounded-l-(--cell-radius) data-[range-start=true]:bg-primary data-[range-start=true]:text-primary-foreground data-[selected-single=true]:bg-primary data-[selected-single=true]:text-primary-foreground dark:hover:text-foreground [&amp;&gt;span]:text-xs [&amp;&gt;span]:opacity-70 rdp-day rdp-day_button"
                         data-day="31/10/2025"
+                        type="button"
                         tabindex="-1"
-                        aria-label="Friday, October 31st, 2025"
+                        aria-label="sexta-feira, 31 de outubro de 2025"
                 >
                   31
                 </button>
               </td>
-              <td class="relative w-full h-full p-0 text-center [&amp;:first-child[data-selected=true]_button]:rounded-l-md [&amp;:last-child[data-selected=true]_button]:rounded-r-md group/day aspect-square select-none rdp-day rdp-selected"
+              <td class="group/day relative aspect-square h-full w-full rounded-(--cell-radius) p-0 text-center select-none [&amp;:last-child[data-selected=true]_button]:rounded-r-(--cell-radius) [&amp;:first-child[data-selected=true]_button]:rounded-l-(--cell-radius) rdp-day rdp-selected"
                   role="gridcell"
                   aria-selected="true"
                   data-day="2025-11-01"
                   data-selected="true"
               >
                 <button data-slot="button"
-                        class="items-center justify-center whitespace-nowrap rounded-md text-sm transition-[color,box-shadow] disabled:pointer-events-none disabled:opacity-50 [&amp;_svg]:pointer-events-none [&amp;_svg:not([class*='size-'])]:size-4 shrink-0 [&amp;_svg]:shrink-0 outline-none focus-visible:border-ring focus-visible:ring-ring/50 focus-visible:ring-[3px] aria-invalid:ring-destructive/20 dark:aria-invalid:ring-destructive/40 aria-invalid:border-destructive hover:bg-accent dark:hover:bg-accent/50 hover:text-accent-foreground data-[selected-single=true]:bg-primary data-[selected-single=true]:text-primary-foreground data-[range-middle=true]:bg-accent data-[range-middle=true]:text-accent-foreground data-[range-start=true]:bg-primary data-[range-start=true]:text-primary-foreground data-[range-end=true]:bg-primary data-[range-end=true]:text-primary-foreground group-data-[focused=true]/day:border-ring group-data-[focused=true]/day:ring-ring/50 dark:hover:text-accent-foreground flex aspect-square size-auto w-full min-w-(--cell-size) flex-col gap-1 leading-none font-normal group-data-[focused=true]/day:relative group-data-[focused=true]/day:z-10 group-data-[focused=true]/day:ring-[3px] data-[range-end=true]:rounded-md data-[range-end=true]:rounded-r-md data-[range-middle=true]:rounded-none data-[range-start=true]:rounded-md data-[range-start=true]:rounded-l-md [&amp;&gt;span]:text-xs [&amp;&gt;span]:opacity-70 rdp-day rdp-day_button"
-                        type="button"
+                        data-variant="ghost"
+                        data-size="icon"
+                        class="group/button shrink-0 items-center justify-center rounded-md border-transparent bg-clip-padding text-sm whitespace-nowrap transition-all outline-none select-none focus-visible:border-ring focus-visible:ring-3 focus-visible:ring-ring/50 active:not-aria-[haspopup]:translate-y-px disabled:pointer-events-none disabled:opacity-50 aria-invalid:border-destructive aria-invalid:ring-3 aria-invalid:ring-destructive/20 dark:aria-invalid:border-destructive/50 dark:aria-invalid:ring-destructive/40 [&amp;_svg]:pointer-events-none [&amp;_svg]:shrink-0 [&amp;_svg:not([class*='size-'])]:size-4 hover:bg-muted hover:text-foreground aria-expanded:bg-muted aria-expanded:text-foreground dark:hover:bg-muted/50 relative isolate z-10 flex aspect-square size-auto w-full min-w-(--cell-size) flex-col gap-1 border-0 leading-none font-normal group-data-[focused=true]/day:relative group-data-[focused=true]/day:z-10 group-data-[focused=true]/day:border-ring group-data-[focused=true]/day:ring-[3px] group-data-[focused=true]/day:ring-ring/50 data-[range-end=true]:rounded-(--cell-radius) data-[range-end=true]:rounded-r-(--cell-radius) data-[range-end=true]:bg-primary data-[range-end=true]:text-primary-foreground data-[range-middle=true]:rounded-none data-[range-middle=true]:bg-muted data-[range-middle=true]:text-foreground data-[range-start=true]:rounded-(--cell-radius) data-[range-start=true]:rounded-l-(--cell-radius) data-[range-start=true]:bg-primary data-[range-start=true]:text-primary-foreground data-[selected-single=true]:bg-primary data-[selected-single=true]:text-primary-foreground dark:hover:text-foreground [&amp;&gt;span]:text-xs [&amp;&gt;span]:opacity-70 rdp-day rdp-day_button"
                         data-day="01/11/2025"
                         data-selected-single="true"
+                        type="button"
                         tabindex="0"
-                        aria-label="Saturday, November 1st, 2025, selected"
+                        aria-label="sábado, 1 de novembro de 2025, selected"
                 >
                   1
                 </button>
               </td>
             </tr>
-            <tr class="flex w-full mt-2 rdp-week">
-              <td class="relative w-full h-full p-0 text-center [&amp;:first-child[data-selected=true]_button]:rounded-l-md [&amp;:last-child[data-selected=true]_button]:rounded-r-md group/day aspect-square select-none rdp-day"
+            <tr class="mt-2 flex w-full rdp-week">
+              <td class="group/day relative aspect-square h-full w-full rounded-(--cell-radius) p-0 text-center select-none [&amp;:last-child[data-selected=true]_button]:rounded-r-(--cell-radius) [&amp;:first-child[data-selected=true]_button]:rounded-l-(--cell-radius) rdp-day"
                   role="gridcell"
                   data-day="2025-11-02"
               >
                 <button data-slot="button"
-                        class="items-center justify-center whitespace-nowrap rounded-md text-sm transition-[color,box-shadow] disabled:pointer-events-none disabled:opacity-50 [&amp;_svg]:pointer-events-none [&amp;_svg:not([class*='size-'])]:size-4 shrink-0 [&amp;_svg]:shrink-0 outline-none focus-visible:border-ring focus-visible:ring-ring/50 focus-visible:ring-[3px] aria-invalid:ring-destructive/20 dark:aria-invalid:ring-destructive/40 aria-invalid:border-destructive hover:bg-accent dark:hover:bg-accent/50 hover:text-accent-foreground data-[selected-single=true]:bg-primary data-[selected-single=true]:text-primary-foreground data-[range-middle=true]:bg-accent data-[range-middle=true]:text-accent-foreground data-[range-start=true]:bg-primary data-[range-start=true]:text-primary-foreground data-[range-end=true]:bg-primary data-[range-end=true]:text-primary-foreground group-data-[focused=true]/day:border-ring group-data-[focused=true]/day:ring-ring/50 dark:hover:text-accent-foreground flex aspect-square size-auto w-full min-w-(--cell-size) flex-col gap-1 leading-none font-normal group-data-[focused=true]/day:relative group-data-[focused=true]/day:z-10 group-data-[focused=true]/day:ring-[3px] data-[range-end=true]:rounded-md data-[range-end=true]:rounded-r-md data-[range-middle=true]:rounded-none data-[range-start=true]:rounded-md data-[range-start=true]:rounded-l-md [&amp;&gt;span]:text-xs [&amp;&gt;span]:opacity-70 rdp-day rdp-day_button"
-                        type="button"
+                        data-variant="ghost"
+                        data-size="icon"
+                        class="group/button shrink-0 items-center justify-center rounded-md border-transparent bg-clip-padding text-sm whitespace-nowrap transition-all outline-none select-none focus-visible:border-ring focus-visible:ring-3 focus-visible:ring-ring/50 active:not-aria-[haspopup]:translate-y-px disabled:pointer-events-none disabled:opacity-50 aria-invalid:border-destructive aria-invalid:ring-3 aria-invalid:ring-destructive/20 dark:aria-invalid:border-destructive/50 dark:aria-invalid:ring-destructive/40 [&amp;_svg]:pointer-events-none [&amp;_svg]:shrink-0 [&amp;_svg:not([class*='size-'])]:size-4 hover:bg-muted hover:text-foreground aria-expanded:bg-muted aria-expanded:text-foreground dark:hover:bg-muted/50 relative isolate z-10 flex aspect-square size-auto w-full min-w-(--cell-size) flex-col gap-1 border-0 leading-none font-normal group-data-[focused=true]/day:relative group-data-[focused=true]/day:z-10 group-data-[focused=true]/day:border-ring group-data-[focused=true]/day:ring-[3px] group-data-[focused=true]/day:ring-ring/50 data-[range-end=true]:rounded-(--cell-radius) data-[range-end=true]:rounded-r-(--cell-radius) data-[range-end=true]:bg-primary data-[range-end=true]:text-primary-foreground data-[range-middle=true]:rounded-none data-[range-middle=true]:bg-muted data-[range-middle=true]:text-foreground data-[range-start=true]:rounded-(--cell-radius) data-[range-start=true]:rounded-l-(--cell-radius) data-[range-start=true]:bg-primary data-[range-start=true]:text-primary-foreground data-[selected-single=true]:bg-primary data-[selected-single=true]:text-primary-foreground dark:hover:text-foreground [&amp;&gt;span]:text-xs [&amp;&gt;span]:opacity-70 rdp-day rdp-day_button"
                         data-day="02/11/2025"
+                        type="button"
                         tabindex="-1"
-                        aria-label="Sunday, November 2nd, 2025"
+                        aria-label="domingo, 2 de novembro de 2025"
                 >
                   2
                 </button>
               </td>
-              <td class="relative w-full h-full p-0 text-center [&amp;:first-child[data-selected=true]_button]:rounded-l-md [&amp;:last-child[data-selected=true]_button]:rounded-r-md group/day aspect-square select-none rdp-day"
+              <td class="group/day relative aspect-square h-full w-full rounded-(--cell-radius) p-0 text-center select-none [&amp;:last-child[data-selected=true]_button]:rounded-r-(--cell-radius) [&amp;:first-child[data-selected=true]_button]:rounded-l-(--cell-radius) rdp-day"
                   role="gridcell"
                   data-day="2025-11-03"
               >
                 <button data-slot="button"
-                        class="items-center justify-center whitespace-nowrap rounded-md text-sm transition-[color,box-shadow] disabled:pointer-events-none disabled:opacity-50 [&amp;_svg]:pointer-events-none [&amp;_svg:not([class*='size-'])]:size-4 shrink-0 [&amp;_svg]:shrink-0 outline-none focus-visible:border-ring focus-visible:ring-ring/50 focus-visible:ring-[3px] aria-invalid:ring-destructive/20 dark:aria-invalid:ring-destructive/40 aria-invalid:border-destructive hover:bg-accent dark:hover:bg-accent/50 hover:text-accent-foreground data-[selected-single=true]:bg-primary data-[selected-single=true]:text-primary-foreground data-[range-middle=true]:bg-accent data-[range-middle=true]:text-accent-foreground data-[range-start=true]:bg-primary data-[range-start=true]:text-primary-foreground data-[range-end=true]:bg-primary data-[range-end=true]:text-primary-foreground group-data-[focused=true]/day:border-ring group-data-[focused=true]/day:ring-ring/50 dark:hover:text-accent-foreground flex aspect-square size-auto w-full min-w-(--cell-size) flex-col gap-1 leading-none font-normal group-data-[focused=true]/day:relative group-data-[focused=true]/day:z-10 group-data-[focused=true]/day:ring-[3px] data-[range-end=true]:rounded-md data-[range-end=true]:rounded-r-md data-[range-middle=true]:rounded-none data-[range-start=true]:rounded-md data-[range-start=true]:rounded-l-md [&amp;&gt;span]:text-xs [&amp;&gt;span]:opacity-70 rdp-day rdp-day_button"
-                        type="button"
+                        data-variant="ghost"
+                        data-size="icon"
+                        class="group/button shrink-0 items-center justify-center rounded-md border-transparent bg-clip-padding text-sm whitespace-nowrap transition-all outline-none select-none focus-visible:border-ring focus-visible:ring-3 focus-visible:ring-ring/50 active:not-aria-[haspopup]:translate-y-px disabled:pointer-events-none disabled:opacity-50 aria-invalid:border-destructive aria-invalid:ring-3 aria-invalid:ring-destructive/20 dark:aria-invalid:border-destructive/50 dark:aria-invalid:ring-destructive/40 [&amp;_svg]:pointer-events-none [&amp;_svg]:shrink-0 [&amp;_svg:not([class*='size-'])]:size-4 hover:bg-muted hover:text-foreground aria-expanded:bg-muted aria-expanded:text-foreground dark:hover:bg-muted/50 relative isolate z-10 flex aspect-square size-auto w-full min-w-(--cell-size) flex-col gap-1 border-0 leading-none font-normal group-data-[focused=true]/day:relative group-data-[focused=true]/day:z-10 group-data-[focused=true]/day:border-ring group-data-[focused=true]/day:ring-[3px] group-data-[focused=true]/day:ring-ring/50 data-[range-end=true]:rounded-(--cell-radius) data-[range-end=true]:rounded-r-(--cell-radius) data-[range-end=true]:bg-primary data-[range-end=true]:text-primary-foreground data-[range-middle=true]:rounded-none data-[range-middle=true]:bg-muted data-[range-middle=true]:text-foreground data-[range-start=true]:rounded-(--cell-radius) data-[range-start=true]:rounded-l-(--cell-radius) data-[range-start=true]:bg-primary data-[range-start=true]:text-primary-foreground data-[selected-single=true]:bg-primary data-[selected-single=true]:text-primary-foreground dark:hover:text-foreground [&amp;&gt;span]:text-xs [&amp;&gt;span]:opacity-70 rdp-day rdp-day_button"
                         data-day="03/11/2025"
+                        type="button"
                         tabindex="-1"
-                        aria-label="Monday, November 3rd, 2025"
+                        aria-label="segunda-feira, 3 de novembro de 2025"
                 >
                   3
                 </button>
               </td>
-              <td class="relative w-full h-full p-0 text-center [&amp;:first-child[data-selected=true]_button]:rounded-l-md [&amp;:last-child[data-selected=true]_button]:rounded-r-md group/day aspect-square select-none rdp-day"
+              <td class="group/day relative aspect-square h-full w-full rounded-(--cell-radius) p-0 text-center select-none [&amp;:last-child[data-selected=true]_button]:rounded-r-(--cell-radius) [&amp;:first-child[data-selected=true]_button]:rounded-l-(--cell-radius) rdp-day"
                   role="gridcell"
                   data-day="2025-11-04"
               >
                 <button data-slot="button"
-                        class="items-center justify-center whitespace-nowrap rounded-md text-sm transition-[color,box-shadow] disabled:pointer-events-none disabled:opacity-50 [&amp;_svg]:pointer-events-none [&amp;_svg:not([class*='size-'])]:size-4 shrink-0 [&amp;_svg]:shrink-0 outline-none focus-visible:border-ring focus-visible:ring-ring/50 focus-visible:ring-[3px] aria-invalid:ring-destructive/20 dark:aria-invalid:ring-destructive/40 aria-invalid:border-destructive hover:bg-accent dark:hover:bg-accent/50 hover:text-accent-foreground data-[selected-single=true]:bg-primary data-[selected-single=true]:text-primary-foreground data-[range-middle=true]:bg-accent data-[range-middle=true]:text-accent-foreground data-[range-start=true]:bg-primary data-[range-start=true]:text-primary-foreground data-[range-end=true]:bg-primary data-[range-end=true]:text-primary-foreground group-data-[focused=true]/day:border-ring group-data-[focused=true]/day:ring-ring/50 dark:hover:text-accent-foreground flex aspect-square size-auto w-full min-w-(--cell-size) flex-col gap-1 leading-none font-normal group-data-[focused=true]/day:relative group-data-[focused=true]/day:z-10 group-data-[focused=true]/day:ring-[3px] data-[range-end=true]:rounded-md data-[range-end=true]:rounded-r-md data-[range-middle=true]:rounded-none data-[range-start=true]:rounded-md data-[range-start=true]:rounded-l-md [&amp;&gt;span]:text-xs [&amp;&gt;span]:opacity-70 rdp-day rdp-day_button"
-                        type="button"
+                        data-variant="ghost"
+                        data-size="icon"
+                        class="group/button shrink-0 items-center justify-center rounded-md border-transparent bg-clip-padding text-sm whitespace-nowrap transition-all outline-none select-none focus-visible:border-ring focus-visible:ring-3 focus-visible:ring-ring/50 active:not-aria-[haspopup]:translate-y-px disabled:pointer-events-none disabled:opacity-50 aria-invalid:border-destructive aria-invalid:ring-3 aria-invalid:ring-destructive/20 dark:aria-invalid:border-destructive/50 dark:aria-invalid:ring-destructive/40 [&amp;_svg]:pointer-events-none [&amp;_svg]:shrink-0 [&amp;_svg:not([class*='size-'])]:size-4 hover:bg-muted hover:text-foreground aria-expanded:bg-muted aria-expanded:text-foreground dark:hover:bg-muted/50 relative isolate z-10 flex aspect-square size-auto w-full min-w-(--cell-size) flex-col gap-1 border-0 leading-none font-normal group-data-[focused=true]/day:relative group-data-[focused=true]/day:z-10 group-data-[focused=true]/day:border-ring group-data-[focused=true]/day:ring-[3px] group-data-[focused=true]/day:ring-ring/50 data-[range-end=true]:rounded-(--cell-radius) data-[range-end=true]:rounded-r-(--cell-radius) data-[range-end=true]:bg-primary data-[range-end=true]:text-primary-foreground data-[range-middle=true]:rounded-none data-[range-middle=true]:bg-muted data-[range-middle=true]:text-foreground data-[range-start=true]:rounded-(--cell-radius) data-[range-start=true]:rounded-l-(--cell-radius) data-[range-start=true]:bg-primary data-[range-start=true]:text-primary-foreground data-[selected-single=true]:bg-primary data-[selected-single=true]:text-primary-foreground dark:hover:text-foreground [&amp;&gt;span]:text-xs [&amp;&gt;span]:opacity-70 rdp-day rdp-day_button"
                         data-day="04/11/2025"
+                        type="button"
                         tabindex="-1"
-                        aria-label="Tuesday, November 4th, 2025"
+                        aria-label="terça-feira, 4 de novembro de 2025"
                 >
                   4
                 </button>
               </td>
-              <td class="relative w-full h-full p-0 text-center [&amp;:first-child[data-selected=true]_button]:rounded-l-md [&amp;:last-child[data-selected=true]_button]:rounded-r-md group/day aspect-square select-none rdp-day"
+              <td class="group/day relative aspect-square h-full w-full rounded-(--cell-radius) p-0 text-center select-none [&amp;:last-child[data-selected=true]_button]:rounded-r-(--cell-radius) [&amp;:first-child[data-selected=true]_button]:rounded-l-(--cell-radius) rdp-day"
                   role="gridcell"
                   data-day="2025-11-05"
               >
                 <button data-slot="button"
-                        class="items-center justify-center whitespace-nowrap rounded-md text-sm transition-[color,box-shadow] disabled:pointer-events-none disabled:opacity-50 [&amp;_svg]:pointer-events-none [&amp;_svg:not([class*='size-'])]:size-4 shrink-0 [&amp;_svg]:shrink-0 outline-none focus-visible:border-ring focus-visible:ring-ring/50 focus-visible:ring-[3px] aria-invalid:ring-destructive/20 dark:aria-invalid:ring-destructive/40 aria-invalid:border-destructive hover:bg-accent dark:hover:bg-accent/50 hover:text-accent-foreground data-[selected-single=true]:bg-primary data-[selected-single=true]:text-primary-foreground data-[range-middle=true]:bg-accent data-[range-middle=true]:text-accent-foreground data-[range-start=true]:bg-primary data-[range-start=true]:text-primary-foreground data-[range-end=true]:bg-primary data-[range-end=true]:text-primary-foreground group-data-[focused=true]/day:border-ring group-data-[focused=true]/day:ring-ring/50 dark:hover:text-accent-foreground flex aspect-square size-auto w-full min-w-(--cell-size) flex-col gap-1 leading-none font-normal group-data-[focused=true]/day:relative group-data-[focused=true]/day:z-10 group-data-[focused=true]/day:ring-[3px] data-[range-end=true]:rounded-md data-[range-end=true]:rounded-r-md data-[range-middle=true]:rounded-none data-[range-start=true]:rounded-md data-[range-start=true]:rounded-l-md [&amp;&gt;span]:text-xs [&amp;&gt;span]:opacity-70 rdp-day rdp-day_button"
-                        type="button"
+                        data-variant="ghost"
+                        data-size="icon"
+                        class="group/button shrink-0 items-center justify-center rounded-md border-transparent bg-clip-padding text-sm whitespace-nowrap transition-all outline-none select-none focus-visible:border-ring focus-visible:ring-3 focus-visible:ring-ring/50 active:not-aria-[haspopup]:translate-y-px disabled:pointer-events-none disabled:opacity-50 aria-invalid:border-destructive aria-invalid:ring-3 aria-invalid:ring-destructive/20 dark:aria-invalid:border-destructive/50 dark:aria-invalid:ring-destructive/40 [&amp;_svg]:pointer-events-none [&amp;_svg]:shrink-0 [&amp;_svg:not([class*='size-'])]:size-4 hover:bg-muted hover:text-foreground aria-expanded:bg-muted aria-expanded:text-foreground dark:hover:bg-muted/50 relative isolate z-10 flex aspect-square size-auto w-full min-w-(--cell-size) flex-col gap-1 border-0 leading-none font-normal group-data-[focused=true]/day:relative group-data-[focused=true]/day:z-10 group-data-[focused=true]/day:border-ring group-data-[focused=true]/day:ring-[3px] group-data-[focused=true]/day:ring-ring/50 data-[range-end=true]:rounded-(--cell-radius) data-[range-end=true]:rounded-r-(--cell-radius) data-[range-end=true]:bg-primary data-[range-end=true]:text-primary-foreground data-[range-middle=true]:rounded-none data-[range-middle=true]:bg-muted data-[range-middle=true]:text-foreground data-[range-start=true]:rounded-(--cell-radius) data-[range-start=true]:rounded-l-(--cell-radius) data-[range-start=true]:bg-primary data-[range-start=true]:text-primary-foreground data-[selected-single=true]:bg-primary data-[selected-single=true]:text-primary-foreground dark:hover:text-foreground [&amp;&gt;span]:text-xs [&amp;&gt;span]:opacity-70 rdp-day rdp-day_button"
                         data-day="05/11/2025"
+                        type="button"
                         tabindex="-1"
-                        aria-label="Wednesday, November 5th, 2025"
+                        aria-label="quarta-feira, 5 de novembro de 2025"
                 >
                   5
                 </button>
               </td>
-              <td class="relative w-full h-full p-0 text-center [&amp;:first-child[data-selected=true]_button]:rounded-l-md [&amp;:last-child[data-selected=true]_button]:rounded-r-md group/day aspect-square select-none rdp-day"
+              <td class="group/day relative aspect-square h-full w-full rounded-(--cell-radius) p-0 text-center select-none [&amp;:last-child[data-selected=true]_button]:rounded-r-(--cell-radius) [&amp;:first-child[data-selected=true]_button]:rounded-l-(--cell-radius) rdp-day"
                   role="gridcell"
                   data-day="2025-11-06"
               >
                 <button data-slot="button"
-                        class="items-center justify-center whitespace-nowrap rounded-md text-sm transition-[color,box-shadow] disabled:pointer-events-none disabled:opacity-50 [&amp;_svg]:pointer-events-none [&amp;_svg:not([class*='size-'])]:size-4 shrink-0 [&amp;_svg]:shrink-0 outline-none focus-visible:border-ring focus-visible:ring-ring/50 focus-visible:ring-[3px] aria-invalid:ring-destructive/20 dark:aria-invalid:ring-destructive/40 aria-invalid:border-destructive hover:bg-accent dark:hover:bg-accent/50 hover:text-accent-foreground data-[selected-single=true]:bg-primary data-[selected-single=true]:text-primary-foreground data-[range-middle=true]:bg-accent data-[range-middle=true]:text-accent-foreground data-[range-start=true]:bg-primary data-[range-start=true]:text-primary-foreground data-[range-end=true]:bg-primary data-[range-end=true]:text-primary-foreground group-data-[focused=true]/day:border-ring group-data-[focused=true]/day:ring-ring/50 dark:hover:text-accent-foreground flex aspect-square size-auto w-full min-w-(--cell-size) flex-col gap-1 leading-none font-normal group-data-[focused=true]/day:relative group-data-[focused=true]/day:z-10 group-data-[focused=true]/day:ring-[3px] data-[range-end=true]:rounded-md data-[range-end=true]:rounded-r-md data-[range-middle=true]:rounded-none data-[range-start=true]:rounded-md data-[range-start=true]:rounded-l-md [&amp;&gt;span]:text-xs [&amp;&gt;span]:opacity-70 rdp-day rdp-day_button"
-                        type="button"
+                        data-variant="ghost"
+                        data-size="icon"
+                        class="group/button shrink-0 items-center justify-center rounded-md border-transparent bg-clip-padding text-sm whitespace-nowrap transition-all outline-none select-none focus-visible:border-ring focus-visible:ring-3 focus-visible:ring-ring/50 active:not-aria-[haspopup]:translate-y-px disabled:pointer-events-none disabled:opacity-50 aria-invalid:border-destructive aria-invalid:ring-3 aria-invalid:ring-destructive/20 dark:aria-invalid:border-destructive/50 dark:aria-invalid:ring-destructive/40 [&amp;_svg]:pointer-events-none [&amp;_svg]:shrink-0 [&amp;_svg:not([class*='size-'])]:size-4 hover:bg-muted hover:text-foreground aria-expanded:bg-muted aria-expanded:text-foreground dark:hover:bg-muted/50 relative isolate z-10 flex aspect-square size-auto w-full min-w-(--cell-size) flex-col gap-1 border-0 leading-none font-normal group-data-[focused=true]/day:relative group-data-[focused=true]/day:z-10 group-data-[focused=true]/day:border-ring group-data-[focused=true]/day:ring-[3px] group-data-[focused=true]/day:ring-ring/50 data-[range-end=true]:rounded-(--cell-radius) data-[range-end=true]:rounded-r-(--cell-radius) data-[range-end=true]:bg-primary data-[range-end=true]:text-primary-foreground data-[range-middle=true]:rounded-none data-[range-middle=true]:bg-muted data-[range-middle=true]:text-foreground data-[range-start=true]:rounded-(--cell-radius) data-[range-start=true]:rounded-l-(--cell-radius) data-[range-start=true]:bg-primary data-[range-start=true]:text-primary-foreground data-[selected-single=true]:bg-primary data-[selected-single=true]:text-primary-foreground dark:hover:text-foreground [&amp;&gt;span]:text-xs [&amp;&gt;span]:opacity-70 rdp-day rdp-day_button"
                         data-day="06/11/2025"
+                        type="button"
                         tabindex="-1"
-                        aria-label="Thursday, November 6th, 2025"
+                        aria-label="quinta-feira, 6 de novembro de 2025"
                 >
                   6
                 </button>
               </td>
-              <td class="relative w-full h-full p-0 text-center [&amp;:first-child[data-selected=true]_button]:rounded-l-md [&amp;:last-child[data-selected=true]_button]:rounded-r-md group/day aspect-square select-none rdp-day"
+              <td class="group/day relative aspect-square h-full w-full rounded-(--cell-radius) p-0 text-center select-none [&amp;:last-child[data-selected=true]_button]:rounded-r-(--cell-radius) [&amp;:first-child[data-selected=true]_button]:rounded-l-(--cell-radius) rdp-day"
                   role="gridcell"
                   data-day="2025-11-07"
               >
                 <button data-slot="button"
-                        class="items-center justify-center whitespace-nowrap rounded-md text-sm transition-[color,box-shadow] disabled:pointer-events-none disabled:opacity-50 [&amp;_svg]:pointer-events-none [&amp;_svg:not([class*='size-'])]:size-4 shrink-0 [&amp;_svg]:shrink-0 outline-none focus-visible:border-ring focus-visible:ring-ring/50 focus-visible:ring-[3px] aria-invalid:ring-destructive/20 dark:aria-invalid:ring-destructive/40 aria-invalid:border-destructive hover:bg-accent dark:hover:bg-accent/50 hover:text-accent-foreground data-[selected-single=true]:bg-primary data-[selected-single=true]:text-primary-foreground data-[range-middle=true]:bg-accent data-[range-middle=true]:text-accent-foreground data-[range-start=true]:bg-primary data-[range-start=true]:text-primary-foreground data-[range-end=true]:bg-primary data-[range-end=true]:text-primary-foreground group-data-[focused=true]/day:border-ring group-data-[focused=true]/day:ring-ring/50 dark:hover:text-accent-foreground flex aspect-square size-auto w-full min-w-(--cell-size) flex-col gap-1 leading-none font-normal group-data-[focused=true]/day:relative group-data-[focused=true]/day:z-10 group-data-[focused=true]/day:ring-[3px] data-[range-end=true]:rounded-md data-[range-end=true]:rounded-r-md data-[range-middle=true]:rounded-none data-[range-start=true]:rounded-md data-[range-start=true]:rounded-l-md [&amp;&gt;span]:text-xs [&amp;&gt;span]:opacity-70 rdp-day rdp-day_button"
-                        type="button"
+                        data-variant="ghost"
+                        data-size="icon"
+                        class="group/button shrink-0 items-center justify-center rounded-md border-transparent bg-clip-padding text-sm whitespace-nowrap transition-all outline-none select-none focus-visible:border-ring focus-visible:ring-3 focus-visible:ring-ring/50 active:not-aria-[haspopup]:translate-y-px disabled:pointer-events-none disabled:opacity-50 aria-invalid:border-destructive aria-invalid:ring-3 aria-invalid:ring-destructive/20 dark:aria-invalid:border-destructive/50 dark:aria-invalid:ring-destructive/40 [&amp;_svg]:pointer-events-none [&amp;_svg]:shrink-0 [&amp;_svg:not([class*='size-'])]:size-4 hover:bg-muted hover:text-foreground aria-expanded:bg-muted aria-expanded:text-foreground dark:hover:bg-muted/50 relative isolate z-10 flex aspect-square size-auto w-full min-w-(--cell-size) flex-col gap-1 border-0 leading-none font-normal group-data-[focused=true]/day:relative group-data-[focused=true]/day:z-10 group-data-[focused=true]/day:border-ring group-data-[focused=true]/day:ring-[3px] group-data-[focused=true]/day:ring-ring/50 data-[range-end=true]:rounded-(--cell-radius) data-[range-end=true]:rounded-r-(--cell-radius) data-[range-end=true]:bg-primary data-[range-end=true]:text-primary-foreground data-[range-middle=true]:rounded-none data-[range-middle=true]:bg-muted data-[range-middle=true]:text-foreground data-[range-start=true]:rounded-(--cell-radius) data-[range-start=true]:rounded-l-(--cell-radius) data-[range-start=true]:bg-primary data-[range-start=true]:text-primary-foreground data-[selected-single=true]:bg-primary data-[selected-single=true]:text-primary-foreground dark:hover:text-foreground [&amp;&gt;span]:text-xs [&amp;&gt;span]:opacity-70 rdp-day rdp-day_button"
                         data-day="07/11/2025"
+                        type="button"
                         tabindex="-1"
-                        aria-label="Friday, November 7th, 2025"
+                        aria-label="sexta-feira, 7 de novembro de 2025"
                 >
                   7
                 </button>
               </td>
-              <td class="relative w-full h-full p-0 text-center [&amp;:first-child[data-selected=true]_button]:rounded-l-md [&amp;:last-child[data-selected=true]_button]:rounded-r-md group/day aspect-square select-none rdp-day"
+              <td class="group/day relative aspect-square h-full w-full rounded-(--cell-radius) p-0 text-center select-none [&amp;:last-child[data-selected=true]_button]:rounded-r-(--cell-radius) [&amp;:first-child[data-selected=true]_button]:rounded-l-(--cell-radius) rdp-day"
                   role="gridcell"
                   data-day="2025-11-08"
               >
                 <button data-slot="button"
-                        class="items-center justify-center whitespace-nowrap rounded-md text-sm transition-[color,box-shadow] disabled:pointer-events-none disabled:opacity-50 [&amp;_svg]:pointer-events-none [&amp;_svg:not([class*='size-'])]:size-4 shrink-0 [&amp;_svg]:shrink-0 outline-none focus-visible:border-ring focus-visible:ring-ring/50 focus-visible:ring-[3px] aria-invalid:ring-destructive/20 dark:aria-invalid:ring-destructive/40 aria-invalid:border-destructive hover:bg-accent dark:hover:bg-accent/50 hover:text-accent-foreground data-[selected-single=true]:bg-primary data-[selected-single=true]:text-primary-foreground data-[range-middle=true]:bg-accent data-[range-middle=true]:text-accent-foreground data-[range-start=true]:bg-primary data-[range-start=true]:text-primary-foreground data-[range-end=true]:bg-primary data-[range-end=true]:text-primary-foreground group-data-[focused=true]/day:border-ring group-data-[focused=true]/day:ring-ring/50 dark:hover:text-accent-foreground flex aspect-square size-auto w-full min-w-(--cell-size) flex-col gap-1 leading-none font-normal group-data-[focused=true]/day:relative group-data-[focused=true]/day:z-10 group-data-[focused=true]/day:ring-[3px] data-[range-end=true]:rounded-md data-[range-end=true]:rounded-r-md data-[range-middle=true]:rounded-none data-[range-start=true]:rounded-md data-[range-start=true]:rounded-l-md [&amp;&gt;span]:text-xs [&amp;&gt;span]:opacity-70 rdp-day rdp-day_button"
-                        type="button"
+                        data-variant="ghost"
+                        data-size="icon"
+                        class="group/button shrink-0 items-center justify-center rounded-md border-transparent bg-clip-padding text-sm whitespace-nowrap transition-all outline-none select-none focus-visible:border-ring focus-visible:ring-3 focus-visible:ring-ring/50 active:not-aria-[haspopup]:translate-y-px disabled:pointer-events-none disabled:opacity-50 aria-invalid:border-destructive aria-invalid:ring-3 aria-invalid:ring-destructive/20 dark:aria-invalid:border-destructive/50 dark:aria-invalid:ring-destructive/40 [&amp;_svg]:pointer-events-none [&amp;_svg]:shrink-0 [&amp;_svg:not([class*='size-'])]:size-4 hover:bg-muted hover:text-foreground aria-expanded:bg-muted aria-expanded:text-foreground dark:hover:bg-muted/50 relative isolate z-10 flex aspect-square size-auto w-full min-w-(--cell-size) flex-col gap-1 border-0 leading-none font-normal group-data-[focused=true]/day:relative group-data-[focused=true]/day:z-10 group-data-[focused=true]/day:border-ring group-data-[focused=true]/day:ring-[3px] group-data-[focused=true]/day:ring-ring/50 data-[range-end=true]:rounded-(--cell-radius) data-[range-end=true]:rounded-r-(--cell-radius) data-[range-end=true]:bg-primary data-[range-end=true]:text-primary-foreground data-[range-middle=true]:rounded-none data-[range-middle=true]:bg-muted data-[range-middle=true]:text-foreground data-[range-start=true]:rounded-(--cell-radius) data-[range-start=true]:rounded-l-(--cell-radius) data-[range-start=true]:bg-primary data-[range-start=true]:text-primary-foreground data-[selected-single=true]:bg-primary data-[selected-single=true]:text-primary-foreground dark:hover:text-foreground [&amp;&gt;span]:text-xs [&amp;&gt;span]:opacity-70 rdp-day rdp-day_button"
                         data-day="08/11/2025"
+                        type="button"
                         tabindex="-1"
-                        aria-label="Saturday, November 8th, 2025"
+                        aria-label="sábado, 8 de novembro de 2025"
                 >
                   8
                 </button>
               </td>
             </tr>
-            <tr class="flex w-full mt-2 rdp-week">
-              <td class="relative w-full h-full p-0 text-center [&amp;:first-child[data-selected=true]_button]:rounded-l-md [&amp;:last-child[data-selected=true]_button]:rounded-r-md group/day aspect-square select-none rdp-day"
+            <tr class="mt-2 flex w-full rdp-week">
+              <td class="group/day relative aspect-square h-full w-full rounded-(--cell-radius) p-0 text-center select-none [&amp;:last-child[data-selected=true]_button]:rounded-r-(--cell-radius) [&amp;:first-child[data-selected=true]_button]:rounded-l-(--cell-radius) rdp-day"
                   role="gridcell"
                   data-day="2025-11-09"
               >
                 <button data-slot="button"
-                        class="items-center justify-center whitespace-nowrap rounded-md text-sm transition-[color,box-shadow] disabled:pointer-events-none disabled:opacity-50 [&amp;_svg]:pointer-events-none [&amp;_svg:not([class*='size-'])]:size-4 shrink-0 [&amp;_svg]:shrink-0 outline-none focus-visible:border-ring focus-visible:ring-ring/50 focus-visible:ring-[3px] aria-invalid:ring-destructive/20 dark:aria-invalid:ring-destructive/40 aria-invalid:border-destructive hover:bg-accent dark:hover:bg-accent/50 hover:text-accent-foreground data-[selected-single=true]:bg-primary data-[selected-single=true]:text-primary-foreground data-[range-middle=true]:bg-accent data-[range-middle=true]:text-accent-foreground data-[range-start=true]:bg-primary data-[range-start=true]:text-primary-foreground data-[range-end=true]:bg-primary data-[range-end=true]:text-primary-foreground group-data-[focused=true]/day:border-ring group-data-[focused=true]/day:ring-ring/50 dark:hover:text-accent-foreground flex aspect-square size-auto w-full min-w-(--cell-size) flex-col gap-1 leading-none font-normal group-data-[focused=true]/day:relative group-data-[focused=true]/day:z-10 group-data-[focused=true]/day:ring-[3px] data-[range-end=true]:rounded-md data-[range-end=true]:rounded-r-md data-[range-middle=true]:rounded-none data-[range-start=true]:rounded-md data-[range-start=true]:rounded-l-md [&amp;&gt;span]:text-xs [&amp;&gt;span]:opacity-70 rdp-day rdp-day_button"
-                        type="button"
+                        data-variant="ghost"
+                        data-size="icon"
+                        class="group/button shrink-0 items-center justify-center rounded-md border-transparent bg-clip-padding text-sm whitespace-nowrap transition-all outline-none select-none focus-visible:border-ring focus-visible:ring-3 focus-visible:ring-ring/50 active:not-aria-[haspopup]:translate-y-px disabled:pointer-events-none disabled:opacity-50 aria-invalid:border-destructive aria-invalid:ring-3 aria-invalid:ring-destructive/20 dark:aria-invalid:border-destructive/50 dark:aria-invalid:ring-destructive/40 [&amp;_svg]:pointer-events-none [&amp;_svg]:shrink-0 [&amp;_svg:not([class*='size-'])]:size-4 hover:bg-muted hover:text-foreground aria-expanded:bg-muted aria-expanded:text-foreground dark:hover:bg-muted/50 relative isolate z-10 flex aspect-square size-auto w-full min-w-(--cell-size) flex-col gap-1 border-0 leading-none font-normal group-data-[focused=true]/day:relative group-data-[focused=true]/day:z-10 group-data-[focused=true]/day:border-ring group-data-[focused=true]/day:ring-[3px] group-data-[focused=true]/day:ring-ring/50 data-[range-end=true]:rounded-(--cell-radius) data-[range-end=true]:rounded-r-(--cell-radius) data-[range-end=true]:bg-primary data-[range-end=true]:text-primary-foreground data-[range-middle=true]:rounded-none data-[range-middle=true]:bg-muted data-[range-middle=true]:text-foreground data-[range-start=true]:rounded-(--cell-radius) data-[range-start=true]:rounded-l-(--cell-radius) data-[range-start=true]:bg-primary data-[range-start=true]:text-primary-foreground data-[selected-single=true]:bg-primary data-[selected-single=true]:text-primary-foreground dark:hover:text-foreground [&amp;&gt;span]:text-xs [&amp;&gt;span]:opacity-70 rdp-day rdp-day_button"
                         data-day="09/11/2025"
+                        type="button"
                         tabindex="-1"
-                        aria-label="Sunday, November 9th, 2025"
+                        aria-label="domingo, 9 de novembro de 2025"
                 >
                   9
                 </button>
               </td>
-              <td class="relative w-full h-full p-0 text-center [&amp;:first-child[data-selected=true]_button]:rounded-l-md [&amp;:last-child[data-selected=true]_button]:rounded-r-md group/day aspect-square select-none rdp-day"
+              <td class="group/day relative aspect-square h-full w-full rounded-(--cell-radius) p-0 text-center select-none [&amp;:last-child[data-selected=true]_button]:rounded-r-(--cell-radius) [&amp;:first-child[data-selected=true]_button]:rounded-l-(--cell-radius) rdp-day"
                   role="gridcell"
                   data-day="2025-11-10"
               >
                 <button data-slot="button"
-                        class="items-center justify-center whitespace-nowrap rounded-md text-sm transition-[color,box-shadow] disabled:pointer-events-none disabled:opacity-50 [&amp;_svg]:pointer-events-none [&amp;_svg:not([class*='size-'])]:size-4 shrink-0 [&amp;_svg]:shrink-0 outline-none focus-visible:border-ring focus-visible:ring-ring/50 focus-visible:ring-[3px] aria-invalid:ring-destructive/20 dark:aria-invalid:ring-destructive/40 aria-invalid:border-destructive hover:bg-accent dark:hover:bg-accent/50 hover:text-accent-foreground data-[selected-single=true]:bg-primary data-[selected-single=true]:text-primary-foreground data-[range-middle=true]:bg-accent data-[range-middle=true]:text-accent-foreground data-[range-start=true]:bg-primary data-[range-start=true]:text-primary-foreground data-[range-end=true]:bg-primary data-[range-end=true]:text-primary-foreground group-data-[focused=true]/day:border-ring group-data-[focused=true]/day:ring-ring/50 dark:hover:text-accent-foreground flex aspect-square size-auto w-full min-w-(--cell-size) flex-col gap-1 leading-none font-normal group-data-[focused=true]/day:relative group-data-[focused=true]/day:z-10 group-data-[focused=true]/day:ring-[3px] data-[range-end=true]:rounded-md data-[range-end=true]:rounded-r-md data-[range-middle=true]:rounded-none data-[range-start=true]:rounded-md data-[range-start=true]:rounded-l-md [&amp;&gt;span]:text-xs [&amp;&gt;span]:opacity-70 rdp-day rdp-day_button"
-                        type="button"
+                        data-variant="ghost"
+                        data-size="icon"
+                        class="group/button shrink-0 items-center justify-center rounded-md border-transparent bg-clip-padding text-sm whitespace-nowrap transition-all outline-none select-none focus-visible:border-ring focus-visible:ring-3 focus-visible:ring-ring/50 active:not-aria-[haspopup]:translate-y-px disabled:pointer-events-none disabled:opacity-50 aria-invalid:border-destructive aria-invalid:ring-3 aria-invalid:ring-destructive/20 dark:aria-invalid:border-destructive/50 dark:aria-invalid:ring-destructive/40 [&amp;_svg]:pointer-events-none [&amp;_svg]:shrink-0 [&amp;_svg:not([class*='size-'])]:size-4 hover:bg-muted hover:text-foreground aria-expanded:bg-muted aria-expanded:text-foreground dark:hover:bg-muted/50 relative isolate z-10 flex aspect-square size-auto w-full min-w-(--cell-size) flex-col gap-1 border-0 leading-none font-normal group-data-[focused=true]/day:relative group-data-[focused=true]/day:z-10 group-data-[focused=true]/day:border-ring group-data-[focused=true]/day:ring-[3px] group-data-[focused=true]/day:ring-ring/50 data-[range-end=true]:rounded-(--cell-radius) data-[range-end=true]:rounded-r-(--cell-radius) data-[range-end=true]:bg-primary data-[range-end=true]:text-primary-foreground data-[range-middle=true]:rounded-none data-[range-middle=true]:bg-muted data-[range-middle=true]:text-foreground data-[range-start=true]:rounded-(--cell-radius) data-[range-start=true]:rounded-l-(--cell-radius) data-[range-start=true]:bg-primary data-[range-start=true]:text-primary-foreground data-[selected-single=true]:bg-primary data-[selected-single=true]:text-primary-foreground dark:hover:text-foreground [&amp;&gt;span]:text-xs [&amp;&gt;span]:opacity-70 rdp-day rdp-day_button"
                         data-day="10/11/2025"
+                        type="button"
                         tabindex="-1"
-                        aria-label="Monday, November 10th, 2025"
+                        aria-label="segunda-feira, 10 de novembro de 2025"
                 >
                   10
                 </button>
               </td>
-              <td class="relative w-full h-full p-0 text-center [&amp;:first-child[data-selected=true]_button]:rounded-l-md [&amp;:last-child[data-selected=true]_button]:rounded-r-md group/day aspect-square select-none rdp-day"
+              <td class="group/day relative aspect-square h-full w-full rounded-(--cell-radius) p-0 text-center select-none [&amp;:last-child[data-selected=true]_button]:rounded-r-(--cell-radius) [&amp;:first-child[data-selected=true]_button]:rounded-l-(--cell-radius) rdp-day"
                   role="gridcell"
                   data-day="2025-11-11"
               >
                 <button data-slot="button"
-                        class="items-center justify-center whitespace-nowrap rounded-md text-sm transition-[color,box-shadow] disabled:pointer-events-none disabled:opacity-50 [&amp;_svg]:pointer-events-none [&amp;_svg:not([class*='size-'])]:size-4 shrink-0 [&amp;_svg]:shrink-0 outline-none focus-visible:border-ring focus-visible:ring-ring/50 focus-visible:ring-[3px] aria-invalid:ring-destructive/20 dark:aria-invalid:ring-destructive/40 aria-invalid:border-destructive hover:bg-accent dark:hover:bg-accent/50 hover:text-accent-foreground data-[selected-single=true]:bg-primary data-[selected-single=true]:text-primary-foreground data-[range-middle=true]:bg-accent data-[range-middle=true]:text-accent-foreground data-[range-start=true]:bg-primary data-[range-start=true]:text-primary-foreground data-[range-end=true]:bg-primary data-[range-end=true]:text-primary-foreground group-data-[focused=true]/day:border-ring group-data-[focused=true]/day:ring-ring/50 dark:hover:text-accent-foreground flex aspect-square size-auto w-full min-w-(--cell-size) flex-col gap-1 leading-none font-normal group-data-[focused=true]/day:relative group-data-[focused=true]/day:z-10 group-data-[focused=true]/day:ring-[3px] data-[range-end=true]:rounded-md data-[range-end=true]:rounded-r-md data-[range-middle=true]:rounded-none data-[range-start=true]:rounded-md data-[range-start=true]:rounded-l-md [&amp;&gt;span]:text-xs [&amp;&gt;span]:opacity-70 rdp-day rdp-day_button"
-                        type="button"
+                        data-variant="ghost"
+                        data-size="icon"
+                        class="group/button shrink-0 items-center justify-center rounded-md border-transparent bg-clip-padding text-sm whitespace-nowrap transition-all outline-none select-none focus-visible:border-ring focus-visible:ring-3 focus-visible:ring-ring/50 active:not-aria-[haspopup]:translate-y-px disabled:pointer-events-none disabled:opacity-50 aria-invalid:border-destructive aria-invalid:ring-3 aria-invalid:ring-destructive/20 dark:aria-invalid:border-destructive/50 dark:aria-invalid:ring-destructive/40 [&amp;_svg]:pointer-events-none [&amp;_svg]:shrink-0 [&amp;_svg:not([class*='size-'])]:size-4 hover:bg-muted hover:text-foreground aria-expanded:bg-muted aria-expanded:text-foreground dark:hover:bg-muted/50 relative isolate z-10 flex aspect-square size-auto w-full min-w-(--cell-size) flex-col gap-1 border-0 leading-none font-normal group-data-[focused=true]/day:relative group-data-[focused=true]/day:z-10 group-data-[focused=true]/day:border-ring group-data-[focused=true]/day:ring-[3px] group-data-[focused=true]/day:ring-ring/50 data-[range-end=true]:rounded-(--cell-radius) data-[range-end=true]:rounded-r-(--cell-radius) data-[range-end=true]:bg-primary data-[range-end=true]:text-primary-foreground data-[range-middle=true]:rounded-none data-[range-middle=true]:bg-muted data-[range-middle=true]:text-foreground data-[range-start=true]:rounded-(--cell-radius) data-[range-start=true]:rounded-l-(--cell-radius) data-[range-start=true]:bg-primary data-[range-start=true]:text-primary-foreground data-[selected-single=true]:bg-primary data-[selected-single=true]:text-primary-foreground dark:hover:text-foreground [&amp;&gt;span]:text-xs [&amp;&gt;span]:opacity-70 rdp-day rdp-day_button"
                         data-day="11/11/2025"
+                        type="button"
                         tabindex="-1"
-                        aria-label="Tuesday, November 11th, 2025"
+                        aria-label="terça-feira, 11 de novembro de 2025"
                 >
                   11
                 </button>
               </td>
-              <td class="relative w-full h-full p-0 text-center [&amp;:first-child[data-selected=true]_button]:rounded-l-md [&amp;:last-child[data-selected=true]_button]:rounded-r-md group/day aspect-square select-none rdp-day rdp-selected"
+              <td class="group/day relative aspect-square h-full w-full rounded-(--cell-radius) p-0 text-center select-none [&amp;:last-child[data-selected=true]_button]:rounded-r-(--cell-radius) [&amp;:first-child[data-selected=true]_button]:rounded-l-(--cell-radius) rdp-day rdp-selected"
                   role="gridcell"
                   aria-selected="true"
                   data-day="2025-11-12"
                   data-selected="true"
               >
                 <button data-slot="button"
-                        class="items-center justify-center whitespace-nowrap rounded-md text-sm transition-[color,box-shadow] disabled:pointer-events-none disabled:opacity-50 [&amp;_svg]:pointer-events-none [&amp;_svg:not([class*='size-'])]:size-4 shrink-0 [&amp;_svg]:shrink-0 outline-none focus-visible:border-ring focus-visible:ring-ring/50 focus-visible:ring-[3px] aria-invalid:ring-destructive/20 dark:aria-invalid:ring-destructive/40 aria-invalid:border-destructive hover:bg-accent dark:hover:bg-accent/50 hover:text-accent-foreground data-[selected-single=true]:bg-primary data-[selected-single=true]:text-primary-foreground data-[range-middle=true]:bg-accent data-[range-middle=true]:text-accent-foreground data-[range-start=true]:bg-primary data-[range-start=true]:text-primary-foreground data-[range-end=true]:bg-primary data-[range-end=true]:text-primary-foreground group-data-[focused=true]/day:border-ring group-data-[focused=true]/day:ring-ring/50 dark:hover:text-accent-foreground flex aspect-square size-auto w-full min-w-(--cell-size) flex-col gap-1 leading-none font-normal group-data-[focused=true]/day:relative group-data-[focused=true]/day:z-10 group-data-[focused=true]/day:ring-[3px] data-[range-end=true]:rounded-md data-[range-end=true]:rounded-r-md data-[range-middle=true]:rounded-none data-[range-start=true]:rounded-md data-[range-start=true]:rounded-l-md [&amp;&gt;span]:text-xs [&amp;&gt;span]:opacity-70 rdp-day rdp-day_button"
-                        type="button"
+                        data-variant="ghost"
+                        data-size="icon"
+                        class="group/button shrink-0 items-center justify-center rounded-md border-transparent bg-clip-padding text-sm whitespace-nowrap transition-all outline-none select-none focus-visible:border-ring focus-visible:ring-3 focus-visible:ring-ring/50 active:not-aria-[haspopup]:translate-y-px disabled:pointer-events-none disabled:opacity-50 aria-invalid:border-destructive aria-invalid:ring-3 aria-invalid:ring-destructive/20 dark:aria-invalid:border-destructive/50 dark:aria-invalid:ring-destructive/40 [&amp;_svg]:pointer-events-none [&amp;_svg]:shrink-0 [&amp;_svg:not([class*='size-'])]:size-4 hover:bg-muted hover:text-foreground aria-expanded:bg-muted aria-expanded:text-foreground dark:hover:bg-muted/50 relative isolate z-10 flex aspect-square size-auto w-full min-w-(--cell-size) flex-col gap-1 border-0 leading-none font-normal group-data-[focused=true]/day:relative group-data-[focused=true]/day:z-10 group-data-[focused=true]/day:border-ring group-data-[focused=true]/day:ring-[3px] group-data-[focused=true]/day:ring-ring/50 data-[range-end=true]:rounded-(--cell-radius) data-[range-end=true]:rounded-r-(--cell-radius) data-[range-end=true]:bg-primary data-[range-end=true]:text-primary-foreground data-[range-middle=true]:rounded-none data-[range-middle=true]:bg-muted data-[range-middle=true]:text-foreground data-[range-start=true]:rounded-(--cell-radius) data-[range-start=true]:rounded-l-(--cell-radius) data-[range-start=true]:bg-primary data-[range-start=true]:text-primary-foreground data-[selected-single=true]:bg-primary data-[selected-single=true]:text-primary-foreground dark:hover:text-foreground [&amp;&gt;span]:text-xs [&amp;&gt;span]:opacity-70 rdp-day rdp-day_button"
                         data-day="12/11/2025"
                         data-selected-single="true"
+                        type="button"
                         tabindex="-1"
-                        aria-label="Wednesday, November 12th, 2025, selected"
+                        aria-label="quarta-feira, 12 de novembro de 2025, selected"
                 >
                   12
                 </button>
               </td>
-              <td class="relative w-full h-full p-0 text-center [&amp;:first-child[data-selected=true]_button]:rounded-l-md [&amp;:last-child[data-selected=true]_button]:rounded-r-md group/day aspect-square select-none rdp-day"
+              <td class="group/day relative aspect-square h-full w-full rounded-(--cell-radius) p-0 text-center select-none [&amp;:last-child[data-selected=true]_button]:rounded-r-(--cell-radius) [&amp;:first-child[data-selected=true]_button]:rounded-l-(--cell-radius) rdp-day"
                   role="gridcell"
                   data-day="2025-11-13"
               >
                 <button data-slot="button"
-                        class="items-center justify-center whitespace-nowrap rounded-md text-sm transition-[color,box-shadow] disabled:pointer-events-none disabled:opacity-50 [&amp;_svg]:pointer-events-none [&amp;_svg:not([class*='size-'])]:size-4 shrink-0 [&amp;_svg]:shrink-0 outline-none focus-visible:border-ring focus-visible:ring-ring/50 focus-visible:ring-[3px] aria-invalid:ring-destructive/20 dark:aria-invalid:ring-destructive/40 aria-invalid:border-destructive hover:bg-accent dark:hover:bg-accent/50 hover:text-accent-foreground data-[selected-single=true]:bg-primary data-[selected-single=true]:text-primary-foreground data-[range-middle=true]:bg-accent data-[range-middle=true]:text-accent-foreground data-[range-start=true]:bg-primary data-[range-start=true]:text-primary-foreground data-[range-end=true]:bg-primary data-[range-end=true]:text-primary-foreground group-data-[focused=true]/day:border-ring group-data-[focused=true]/day:ring-ring/50 dark:hover:text-accent-foreground flex aspect-square size-auto w-full min-w-(--cell-size) flex-col gap-1 leading-none font-normal group-data-[focused=true]/day:relative group-data-[focused=true]/day:z-10 group-data-[focused=true]/day:ring-[3px] data-[range-end=true]:rounded-md data-[range-end=true]:rounded-r-md data-[range-middle=true]:rounded-none data-[range-start=true]:rounded-md data-[range-start=true]:rounded-l-md [&amp;&gt;span]:text-xs [&amp;&gt;span]:opacity-70 rdp-day rdp-day_button"
-                        type="button"
+                        data-variant="ghost"
+                        data-size="icon"
+                        class="group/button shrink-0 items-center justify-center rounded-md border-transparent bg-clip-padding text-sm whitespace-nowrap transition-all outline-none select-none focus-visible:border-ring focus-visible:ring-3 focus-visible:ring-ring/50 active:not-aria-[haspopup]:translate-y-px disabled:pointer-events-none disabled:opacity-50 aria-invalid:border-destructive aria-invalid:ring-3 aria-invalid:ring-destructive/20 dark:aria-invalid:border-destructive/50 dark:aria-invalid:ring-destructive/40 [&amp;_svg]:pointer-events-none [&amp;_svg]:shrink-0 [&amp;_svg:not([class*='size-'])]:size-4 hover:bg-muted hover:text-foreground aria-expanded:bg-muted aria-expanded:text-foreground dark:hover:bg-muted/50 relative isolate z-10 flex aspect-square size-auto w-full min-w-(--cell-size) flex-col gap-1 border-0 leading-none font-normal group-data-[focused=true]/day:relative group-data-[focused=true]/day:z-10 group-data-[focused=true]/day:border-ring group-data-[focused=true]/day:ring-[3px] group-data-[focused=true]/day:ring-ring/50 data-[range-end=true]:rounded-(--cell-radius) data-[range-end=true]:rounded-r-(--cell-radius) data-[range-end=true]:bg-primary data-[range-end=true]:text-primary-foreground data-[range-middle=true]:rounded-none data-[range-middle=true]:bg-muted data-[range-middle=true]:text-foreground data-[range-start=true]:rounded-(--cell-radius) data-[range-start=true]:rounded-l-(--cell-radius) data-[range-start=true]:bg-primary data-[range-start=true]:text-primary-foreground data-[selected-single=true]:bg-primary data-[selected-single=true]:text-primary-foreground dark:hover:text-foreground [&amp;&gt;span]:text-xs [&amp;&gt;span]:opacity-70 rdp-day rdp-day_button"
                         data-day="13/11/2025"
+                        type="button"
                         tabindex="-1"
-                        aria-label="Thursday, November 13th, 2025"
+                        aria-label="quinta-feira, 13 de novembro de 2025"
                 >
                   13
                 </button>
               </td>
-              <td class="relative w-full h-full p-0 text-center [&amp;:first-child[data-selected=true]_button]:rounded-l-md [&amp;:last-child[data-selected=true]_button]:rounded-r-md group/day aspect-square select-none rdp-day"
+              <td class="group/day relative aspect-square h-full w-full rounded-(--cell-radius) p-0 text-center select-none [&amp;:last-child[data-selected=true]_button]:rounded-r-(--cell-radius) [&amp;:first-child[data-selected=true]_button]:rounded-l-(--cell-radius) rdp-day"
                   role="gridcell"
                   data-day="2025-11-14"
               >
                 <button data-slot="button"
-                        class="items-center justify-center whitespace-nowrap rounded-md text-sm transition-[color,box-shadow] disabled:pointer-events-none disabled:opacity-50 [&amp;_svg]:pointer-events-none [&amp;_svg:not([class*='size-'])]:size-4 shrink-0 [&amp;_svg]:shrink-0 outline-none focus-visible:border-ring focus-visible:ring-ring/50 focus-visible:ring-[3px] aria-invalid:ring-destructive/20 dark:aria-invalid:ring-destructive/40 aria-invalid:border-destructive hover:bg-accent dark:hover:bg-accent/50 hover:text-accent-foreground data-[selected-single=true]:bg-primary data-[selected-single=true]:text-primary-foreground data-[range-middle=true]:bg-accent data-[range-middle=true]:text-accent-foreground data-[range-start=true]:bg-primary data-[range-start=true]:text-primary-foreground data-[range-end=true]:bg-primary data-[range-end=true]:text-primary-foreground group-data-[focused=true]/day:border-ring group-data-[focused=true]/day:ring-ring/50 dark:hover:text-accent-foreground flex aspect-square size-auto w-full min-w-(--cell-size) flex-col gap-1 leading-none font-normal group-data-[focused=true]/day:relative group-data-[focused=true]/day:z-10 group-data-[focused=true]/day:ring-[3px] data-[range-end=true]:rounded-md data-[range-end=true]:rounded-r-md data-[range-middle=true]:rounded-none data-[range-start=true]:rounded-md data-[range-start=true]:rounded-l-md [&amp;&gt;span]:text-xs [&amp;&gt;span]:opacity-70 rdp-day rdp-day_button"
-                        type="button"
+                        data-variant="ghost"
+                        data-size="icon"
+                        class="group/button shrink-0 items-center justify-center rounded-md border-transparent bg-clip-padding text-sm whitespace-nowrap transition-all outline-none select-none focus-visible:border-ring focus-visible:ring-3 focus-visible:ring-ring/50 active:not-aria-[haspopup]:translate-y-px disabled:pointer-events-none disabled:opacity-50 aria-invalid:border-destructive aria-invalid:ring-3 aria-invalid:ring-destructive/20 dark:aria-invalid:border-destructive/50 dark:aria-invalid:ring-destructive/40 [&amp;_svg]:pointer-events-none [&amp;_svg]:shrink-0 [&amp;_svg:not([class*='size-'])]:size-4 hover:bg-muted hover:text-foreground aria-expanded:bg-muted aria-expanded:text-foreground dark:hover:bg-muted/50 relative isolate z-10 flex aspect-square size-auto w-full min-w-(--cell-size) flex-col gap-1 border-0 leading-none font-normal group-data-[focused=true]/day:relative group-data-[focused=true]/day:z-10 group-data-[focused=true]/day:border-ring group-data-[focused=true]/day:ring-[3px] group-data-[focused=true]/day:ring-ring/50 data-[range-end=true]:rounded-(--cell-radius) data-[range-end=true]:rounded-r-(--cell-radius) data-[range-end=true]:bg-primary data-[range-end=true]:text-primary-foreground data-[range-middle=true]:rounded-none data-[range-middle=true]:bg-muted data-[range-middle=true]:text-foreground data-[range-start=true]:rounded-(--cell-radius) data-[range-start=true]:rounded-l-(--cell-radius) data-[range-start=true]:bg-primary data-[range-start=true]:text-primary-foreground data-[selected-single=true]:bg-primary data-[selected-single=true]:text-primary-foreground dark:hover:text-foreground [&amp;&gt;span]:text-xs [&amp;&gt;span]:opacity-70 rdp-day rdp-day_button"
                         data-day="14/11/2025"
+                        type="button"
                         tabindex="-1"
-                        aria-label="Friday, November 14th, 2025"
+                        aria-label="sexta-feira, 14 de novembro de 2025"
                 >
                   14
                 </button>
               </td>
-              <td class="relative w-full h-full p-0 text-center [&amp;:first-child[data-selected=true]_button]:rounded-l-md [&amp;:last-child[data-selected=true]_button]:rounded-r-md group/day aspect-square select-none rdp-day"
+              <td class="group/day relative aspect-square h-full w-full rounded-(--cell-radius) p-0 text-center select-none [&amp;:last-child[data-selected=true]_button]:rounded-r-(--cell-radius) [&amp;:first-child[data-selected=true]_button]:rounded-l-(--cell-radius) rdp-day"
                   role="gridcell"
                   data-day="2025-11-15"
               >
                 <button data-slot="button"
-                        class="items-center justify-center whitespace-nowrap rounded-md text-sm transition-[color,box-shadow] disabled:pointer-events-none disabled:opacity-50 [&amp;_svg]:pointer-events-none [&amp;_svg:not([class*='size-'])]:size-4 shrink-0 [&amp;_svg]:shrink-0 outline-none focus-visible:border-ring focus-visible:ring-ring/50 focus-visible:ring-[3px] aria-invalid:ring-destructive/20 dark:aria-invalid:ring-destructive/40 aria-invalid:border-destructive hover:bg-accent dark:hover:bg-accent/50 hover:text-accent-foreground data-[selected-single=true]:bg-primary data-[selected-single=true]:text-primary-foreground data-[range-middle=true]:bg-accent data-[range-middle=true]:text-accent-foreground data-[range-start=true]:bg-primary data-[range-start=true]:text-primary-foreground data-[range-end=true]:bg-primary data-[range-end=true]:text-primary-foreground group-data-[focused=true]/day:border-ring group-data-[focused=true]/day:ring-ring/50 dark:hover:text-accent-foreground flex aspect-square size-auto w-full min-w-(--cell-size) flex-col gap-1 leading-none font-normal group-data-[focused=true]/day:relative group-data-[focused=true]/day:z-10 group-data-[focused=true]/day:ring-[3px] data-[range-end=true]:rounded-md data-[range-end=true]:rounded-r-md data-[range-middle=true]:rounded-none data-[range-start=true]:rounded-md data-[range-start=true]:rounded-l-md [&amp;&gt;span]:text-xs [&amp;&gt;span]:opacity-70 rdp-day rdp-day_button"
-                        type="button"
+                        data-variant="ghost"
+                        data-size="icon"
+                        class="group/button shrink-0 items-center justify-center rounded-md border-transparent bg-clip-padding text-sm whitespace-nowrap transition-all outline-none select-none focus-visible:border-ring focus-visible:ring-3 focus-visible:ring-ring/50 active:not-aria-[haspopup]:translate-y-px disabled:pointer-events-none disabled:opacity-50 aria-invalid:border-destructive aria-invalid:ring-3 aria-invalid:ring-destructive/20 dark:aria-invalid:border-destructive/50 dark:aria-invalid:ring-destructive/40 [&amp;_svg]:pointer-events-none [&amp;_svg]:shrink-0 [&amp;_svg:not([class*='size-'])]:size-4 hover:bg-muted hover:text-foreground aria-expanded:bg-muted aria-expanded:text-foreground dark:hover:bg-muted/50 relative isolate z-10 flex aspect-square size-auto w-full min-w-(--cell-size) flex-col gap-1 border-0 leading-none font-normal group-data-[focused=true]/day:relative group-data-[focused=true]/day:z-10 group-data-[focused=true]/day:border-ring group-data-[focused=true]/day:ring-[3px] group-data-[focused=true]/day:ring-ring/50 data-[range-end=true]:rounded-(--cell-radius) data-[range-end=true]:rounded-r-(--cell-radius) data-[range-end=true]:bg-primary data-[range-end=true]:text-primary-foreground data-[range-middle=true]:rounded-none data-[range-middle=true]:bg-muted data-[range-middle=true]:text-foreground data-[range-start=true]:rounded-(--cell-radius) data-[range-start=true]:rounded-l-(--cell-radius) data-[range-start=true]:bg-primary data-[range-start=true]:text-primary-foreground data-[selected-single=true]:bg-primary data-[selected-single=true]:text-primary-foreground dark:hover:text-foreground [&amp;&gt;span]:text-xs [&amp;&gt;span]:opacity-70 rdp-day rdp-day_button"
                         data-day="15/11/2025"
+                        type="button"
                         tabindex="-1"
-                        aria-label="Saturday, November 15th, 2025"
+                        aria-label="sábado, 15 de novembro de 2025"
                 >
                   15
                 </button>
               </td>
             </tr>
-            <tr class="flex w-full mt-2 rdp-week">
-              <td class="relative w-full h-full p-0 text-center [&amp;:first-child[data-selected=true]_button]:rounded-l-md [&amp;:last-child[data-selected=true]_button]:rounded-r-md group/day aspect-square select-none rdp-day"
+            <tr class="mt-2 flex w-full rdp-week">
+              <td class="group/day relative aspect-square h-full w-full rounded-(--cell-radius) p-0 text-center select-none [&amp;:last-child[data-selected=true]_button]:rounded-r-(--cell-radius) [&amp;:first-child[data-selected=true]_button]:rounded-l-(--cell-radius) rdp-day"
                   role="gridcell"
                   data-day="2025-11-16"
               >
                 <button data-slot="button"
-                        class="items-center justify-center whitespace-nowrap rounded-md text-sm transition-[color,box-shadow] disabled:pointer-events-none disabled:opacity-50 [&amp;_svg]:pointer-events-none [&amp;_svg:not([class*='size-'])]:size-4 shrink-0 [&amp;_svg]:shrink-0 outline-none focus-visible:border-ring focus-visible:ring-ring/50 focus-visible:ring-[3px] aria-invalid:ring-destructive/20 dark:aria-invalid:ring-destructive/40 aria-invalid:border-destructive hover:bg-accent dark:hover:bg-accent/50 hover:text-accent-foreground data-[selected-single=true]:bg-primary data-[selected-single=true]:text-primary-foreground data-[range-middle=true]:bg-accent data-[range-middle=true]:text-accent-foreground data-[range-start=true]:bg-primary data-[range-start=true]:text-primary-foreground data-[range-end=true]:bg-primary data-[range-end=true]:text-primary-foreground group-data-[focused=true]/day:border-ring group-data-[focused=true]/day:ring-ring/50 dark:hover:text-accent-foreground flex aspect-square size-auto w-full min-w-(--cell-size) flex-col gap-1 leading-none font-normal group-data-[focused=true]/day:relative group-data-[focused=true]/day:z-10 group-data-[focused=true]/day:ring-[3px] data-[range-end=true]:rounded-md data-[range-end=true]:rounded-r-md data-[range-middle=true]:rounded-none data-[range-start=true]:rounded-md data-[range-start=true]:rounded-l-md [&amp;&gt;span]:text-xs [&amp;&gt;span]:opacity-70 rdp-day rdp-day_button"
-                        type="button"
+                        data-variant="ghost"
+                        data-size="icon"
+                        class="group/button shrink-0 items-center justify-center rounded-md border-transparent bg-clip-padding text-sm whitespace-nowrap transition-all outline-none select-none focus-visible:border-ring focus-visible:ring-3 focus-visible:ring-ring/50 active:not-aria-[haspopup]:translate-y-px disabled:pointer-events-none disabled:opacity-50 aria-invalid:border-destructive aria-invalid:ring-3 aria-invalid:ring-destructive/20 dark:aria-invalid:border-destructive/50 dark:aria-invalid:ring-destructive/40 [&amp;_svg]:pointer-events-none [&amp;_svg]:shrink-0 [&amp;_svg:not([class*='size-'])]:size-4 hover:bg-muted hover:text-foreground aria-expanded:bg-muted aria-expanded:text-foreground dark:hover:bg-muted/50 relative isolate z-10 flex aspect-square size-auto w-full min-w-(--cell-size) flex-col gap-1 border-0 leading-none font-normal group-data-[focused=true]/day:relative group-data-[focused=true]/day:z-10 group-data-[focused=true]/day:border-ring group-data-[focused=true]/day:ring-[3px] group-data-[focused=true]/day:ring-ring/50 data-[range-end=true]:rounded-(--cell-radius) data-[range-end=true]:rounded-r-(--cell-radius) data-[range-end=true]:bg-primary data-[range-end=true]:text-primary-foreground data-[range-middle=true]:rounded-none data-[range-middle=true]:bg-muted data-[range-middle=true]:text-foreground data-[range-start=true]:rounded-(--cell-radius) data-[range-start=true]:rounded-l-(--cell-radius) data-[range-start=true]:bg-primary data-[range-start=true]:text-primary-foreground data-[selected-single=true]:bg-primary data-[selected-single=true]:text-primary-foreground dark:hover:text-foreground [&amp;&gt;span]:text-xs [&amp;&gt;span]:opacity-70 rdp-day rdp-day_button"
                         data-day="16/11/2025"
+                        type="button"
                         tabindex="-1"
-                        aria-label="Sunday, November 16th, 2025"
+                        aria-label="domingo, 16 de novembro de 2025"
                 >
                   16
                 </button>
               </td>
-              <td class="relative w-full h-full p-0 text-center [&amp;:first-child[data-selected=true]_button]:rounded-l-md [&amp;:last-child[data-selected=true]_button]:rounded-r-md group/day aspect-square select-none rdp-day"
+              <td class="group/day relative aspect-square h-full w-full rounded-(--cell-radius) p-0 text-center select-none [&amp;:last-child[data-selected=true]_button]:rounded-r-(--cell-radius) [&amp;:first-child[data-selected=true]_button]:rounded-l-(--cell-radius) rdp-day"
                   role="gridcell"
                   data-day="2025-11-17"
               >
                 <button data-slot="button"
-                        class="items-center justify-center whitespace-nowrap rounded-md text-sm transition-[color,box-shadow] disabled:pointer-events-none disabled:opacity-50 [&amp;_svg]:pointer-events-none [&amp;_svg:not([class*='size-'])]:size-4 shrink-0 [&amp;_svg]:shrink-0 outline-none focus-visible:border-ring focus-visible:ring-ring/50 focus-visible:ring-[3px] aria-invalid:ring-destructive/20 dark:aria-invalid:ring-destructive/40 aria-invalid:border-destructive hover:bg-accent dark:hover:bg-accent/50 hover:text-accent-foreground data-[selected-single=true]:bg-primary data-[selected-single=true]:text-primary-foreground data-[range-middle=true]:bg-accent data-[range-middle=true]:text-accent-foreground data-[range-start=true]:bg-primary data-[range-start=true]:text-primary-foreground data-[range-end=true]:bg-primary data-[range-end=true]:text-primary-foreground group-data-[focused=true]/day:border-ring group-data-[focused=true]/day:ring-ring/50 dark:hover:text-accent-foreground flex aspect-square size-auto w-full min-w-(--cell-size) flex-col gap-1 leading-none font-normal group-data-[focused=true]/day:relative group-data-[focused=true]/day:z-10 group-data-[focused=true]/day:ring-[3px] data-[range-end=true]:rounded-md data-[range-end=true]:rounded-r-md data-[range-middle=true]:rounded-none data-[range-start=true]:rounded-md data-[range-start=true]:rounded-l-md [&amp;&gt;span]:text-xs [&amp;&gt;span]:opacity-70 rdp-day rdp-day_button"
-                        type="button"
+                        data-variant="ghost"
+                        data-size="icon"
+                        class="group/button shrink-0 items-center justify-center rounded-md border-transparent bg-clip-padding text-sm whitespace-nowrap transition-all outline-none select-none focus-visible:border-ring focus-visible:ring-3 focus-visible:ring-ring/50 active:not-aria-[haspopup]:translate-y-px disabled:pointer-events-none disabled:opacity-50 aria-invalid:border-destructive aria-invalid:ring-3 aria-invalid:ring-destructive/20 dark:aria-invalid:border-destructive/50 dark:aria-invalid:ring-destructive/40 [&amp;_svg]:pointer-events-none [&amp;_svg]:shrink-0 [&amp;_svg:not([class*='size-'])]:size-4 hover:bg-muted hover:text-foreground aria-expanded:bg-muted aria-expanded:text-foreground dark:hover:bg-muted/50 relative isolate z-10 flex aspect-square size-auto w-full min-w-(--cell-size) flex-col gap-1 border-0 leading-none font-normal group-data-[focused=true]/day:relative group-data-[focused=true]/day:z-10 group-data-[focused=true]/day:border-ring group-data-[focused=true]/day:ring-[3px] group-data-[focused=true]/day:ring-ring/50 data-[range-end=true]:rounded-(--cell-radius) data-[range-end=true]:rounded-r-(--cell-radius) data-[range-end=true]:bg-primary data-[range-end=true]:text-primary-foreground data-[range-middle=true]:rounded-none data-[range-middle=true]:bg-muted data-[range-middle=true]:text-foreground data-[range-start=true]:rounded-(--cell-radius) data-[range-start=true]:rounded-l-(--cell-radius) data-[range-start=true]:bg-primary data-[range-start=true]:text-primary-foreground data-[selected-single=true]:bg-primary data-[selected-single=true]:text-primary-foreground dark:hover:text-foreground [&amp;&gt;span]:text-xs [&amp;&gt;span]:opacity-70 rdp-day rdp-day_button"
                         data-day="17/11/2025"
+                        type="button"
                         tabindex="-1"
-                        aria-label="Monday, November 17th, 2025"
+                        aria-label="segunda-feira, 17 de novembro de 2025"
                 >
                   17
                 </button>
               </td>
-              <td class="relative w-full h-full p-0 text-center [&amp;:first-child[data-selected=true]_button]:rounded-l-md [&amp;:last-child[data-selected=true]_button]:rounded-r-md group/day aspect-square select-none rdp-day"
+              <td class="group/day relative aspect-square h-full w-full rounded-(--cell-radius) p-0 text-center select-none [&amp;:last-child[data-selected=true]_button]:rounded-r-(--cell-radius) [&amp;:first-child[data-selected=true]_button]:rounded-l-(--cell-radius) rdp-day"
                   role="gridcell"
                   data-day="2025-11-18"
               >
                 <button data-slot="button"
-                        class="items-center justify-center whitespace-nowrap rounded-md text-sm transition-[color,box-shadow] disabled:pointer-events-none disabled:opacity-50 [&amp;_svg]:pointer-events-none [&amp;_svg:not([class*='size-'])]:size-4 shrink-0 [&amp;_svg]:shrink-0 outline-none focus-visible:border-ring focus-visible:ring-ring/50 focus-visible:ring-[3px] aria-invalid:ring-destructive/20 dark:aria-invalid:ring-destructive/40 aria-invalid:border-destructive hover:bg-accent dark:hover:bg-accent/50 hover:text-accent-foreground data-[selected-single=true]:bg-primary data-[selected-single=true]:text-primary-foreground data-[range-middle=true]:bg-accent data-[range-middle=true]:text-accent-foreground data-[range-start=true]:bg-primary data-[range-start=true]:text-primary-foreground data-[range-end=true]:bg-primary data-[range-end=true]:text-primary-foreground group-data-[focused=true]/day:border-ring group-data-[focused=true]/day:ring-ring/50 dark:hover:text-accent-foreground flex aspect-square size-auto w-full min-w-(--cell-size) flex-col gap-1 leading-none font-normal group-data-[focused=true]/day:relative group-data-[focused=true]/day:z-10 group-data-[focused=true]/day:ring-[3px] data-[range-end=true]:rounded-md data-[range-end=true]:rounded-r-md data-[range-middle=true]:rounded-none data-[range-start=true]:rounded-md data-[range-start=true]:rounded-l-md [&amp;&gt;span]:text-xs [&amp;&gt;span]:opacity-70 rdp-day rdp-day_button"
-                        type="button"
+                        data-variant="ghost"
+                        data-size="icon"
+                        class="group/button shrink-0 items-center justify-center rounded-md border-transparent bg-clip-padding text-sm whitespace-nowrap transition-all outline-none select-none focus-visible:border-ring focus-visible:ring-3 focus-visible:ring-ring/50 active:not-aria-[haspopup]:translate-y-px disabled:pointer-events-none disabled:opacity-50 aria-invalid:border-destructive aria-invalid:ring-3 aria-invalid:ring-destructive/20 dark:aria-invalid:border-destructive/50 dark:aria-invalid:ring-destructive/40 [&amp;_svg]:pointer-events-none [&amp;_svg]:shrink-0 [&amp;_svg:not([class*='size-'])]:size-4 hover:bg-muted hover:text-foreground aria-expanded:bg-muted aria-expanded:text-foreground dark:hover:bg-muted/50 relative isolate z-10 flex aspect-square size-auto w-full min-w-(--cell-size) flex-col gap-1 border-0 leading-none font-normal group-data-[focused=true]/day:relative group-data-[focused=true]/day:z-10 group-data-[focused=true]/day:border-ring group-data-[focused=true]/day:ring-[3px] group-data-[focused=true]/day:ring-ring/50 data-[range-end=true]:rounded-(--cell-radius) data-[range-end=true]:rounded-r-(--cell-radius) data-[range-end=true]:bg-primary data-[range-end=true]:text-primary-foreground data-[range-middle=true]:rounded-none data-[range-middle=true]:bg-muted data-[range-middle=true]:text-foreground data-[range-start=true]:rounded-(--cell-radius) data-[range-start=true]:rounded-l-(--cell-radius) data-[range-start=true]:bg-primary data-[range-start=true]:text-primary-foreground data-[selected-single=true]:bg-primary data-[selected-single=true]:text-primary-foreground dark:hover:text-foreground [&amp;&gt;span]:text-xs [&amp;&gt;span]:opacity-70 rdp-day rdp-day_button"
                         data-day="18/11/2025"
+                        type="button"
                         tabindex="-1"
-                        aria-label="Tuesday, November 18th, 2025"
+                        aria-label="terça-feira, 18 de novembro de 2025"
                 >
                   18
                 </button>
               </td>
-              <td class="relative w-full h-full p-0 text-center [&amp;:first-child[data-selected=true]_button]:rounded-l-md [&amp;:last-child[data-selected=true]_button]:rounded-r-md group/day aspect-square select-none rdp-day"
+              <td class="group/day relative aspect-square h-full w-full rounded-(--cell-radius) p-0 text-center select-none [&amp;:last-child[data-selected=true]_button]:rounded-r-(--cell-radius) [&amp;:first-child[data-selected=true]_button]:rounded-l-(--cell-radius) rdp-day"
                   role="gridcell"
                   data-day="2025-11-19"
               >
                 <button data-slot="button"
-                        class="items-center justify-center whitespace-nowrap rounded-md text-sm transition-[color,box-shadow] disabled:pointer-events-none disabled:opacity-50 [&amp;_svg]:pointer-events-none [&amp;_svg:not([class*='size-'])]:size-4 shrink-0 [&amp;_svg]:shrink-0 outline-none focus-visible:border-ring focus-visible:ring-ring/50 focus-visible:ring-[3px] aria-invalid:ring-destructive/20 dark:aria-invalid:ring-destructive/40 aria-invalid:border-destructive hover:bg-accent dark:hover:bg-accent/50 hover:text-accent-foreground data-[selected-single=true]:bg-primary data-[selected-single=true]:text-primary-foreground data-[range-middle=true]:bg-accent data-[range-middle=true]:text-accent-foreground data-[range-start=true]:bg-primary data-[range-start=true]:text-primary-foreground data-[range-end=true]:bg-primary data-[range-end=true]:text-primary-foreground group-data-[focused=true]/day:border-ring group-data-[focused=true]/day:ring-ring/50 dark:hover:text-accent-foreground flex aspect-square size-auto w-full min-w-(--cell-size) flex-col gap-1 leading-none font-normal group-data-[focused=true]/day:relative group-data-[focused=true]/day:z-10 group-data-[focused=true]/day:ring-[3px] data-[range-end=true]:rounded-md data-[range-end=true]:rounded-r-md data-[range-middle=true]:rounded-none data-[range-start=true]:rounded-md data-[range-start=true]:rounded-l-md [&amp;&gt;span]:text-xs [&amp;&gt;span]:opacity-70 rdp-day rdp-day_button"
-                        type="button"
+                        data-variant="ghost"
+                        data-size="icon"
+                        class="group/button shrink-0 items-center justify-center rounded-md border-transparent bg-clip-padding text-sm whitespace-nowrap transition-all outline-none select-none focus-visible:border-ring focus-visible:ring-3 focus-visible:ring-ring/50 active:not-aria-[haspopup]:translate-y-px disabled:pointer-events-none disabled:opacity-50 aria-invalid:border-destructive aria-invalid:ring-3 aria-invalid:ring-destructive/20 dark:aria-invalid:border-destructive/50 dark:aria-invalid:ring-destructive/40 [&amp;_svg]:pointer-events-none [&amp;_svg]:shrink-0 [&amp;_svg:not([class*='size-'])]:size-4 hover:bg-muted hover:text-foreground aria-expanded:bg-muted aria-expanded:text-foreground dark:hover:bg-muted/50 relative isolate z-10 flex aspect-square size-auto w-full min-w-(--cell-size) flex-col gap-1 border-0 leading-none font-normal group-data-[focused=true]/day:relative group-data-[focused=true]/day:z-10 group-data-[focused=true]/day:border-ring group-data-[focused=true]/day:ring-[3px] group-data-[focused=true]/day:ring-ring/50 data-[range-end=true]:rounded-(--cell-radius) data-[range-end=true]:rounded-r-(--cell-radius) data-[range-end=true]:bg-primary data-[range-end=true]:text-primary-foreground data-[range-middle=true]:rounded-none data-[range-middle=true]:bg-muted data-[range-middle=true]:text-foreground data-[range-start=true]:rounded-(--cell-radius) data-[range-start=true]:rounded-l-(--cell-radius) data-[range-start=true]:bg-primary data-[range-start=true]:text-primary-foreground data-[selected-single=true]:bg-primary data-[selected-single=true]:text-primary-foreground dark:hover:text-foreground [&amp;&gt;span]:text-xs [&amp;&gt;span]:opacity-70 rdp-day rdp-day_button"
                         data-day="19/11/2025"
+                        type="button"
                         tabindex="-1"
-                        aria-label="Wednesday, November 19th, 2025"
+                        aria-label="quarta-feira, 19 de novembro de 2025"
                 >
                   19
                 </button>
               </td>
-              <td class="relative w-full h-full p-0 text-center [&amp;:first-child[data-selected=true]_button]:rounded-l-md [&amp;:last-child[data-selected=true]_button]:rounded-r-md group/day aspect-square select-none rdp-day"
+              <td class="group/day relative aspect-square h-full w-full rounded-(--cell-radius) p-0 text-center select-none [&amp;:last-child[data-selected=true]_button]:rounded-r-(--cell-radius) [&amp;:first-child[data-selected=true]_button]:rounded-l-(--cell-radius) rdp-day"
                   role="gridcell"
                   data-day="2025-11-20"
               >
                 <button data-slot="button"
-                        class="items-center justify-center whitespace-nowrap rounded-md text-sm transition-[color,box-shadow] disabled:pointer-events-none disabled:opacity-50 [&amp;_svg]:pointer-events-none [&amp;_svg:not([class*='size-'])]:size-4 shrink-0 [&amp;_svg]:shrink-0 outline-none focus-visible:border-ring focus-visible:ring-ring/50 focus-visible:ring-[3px] aria-invalid:ring-destructive/20 dark:aria-invalid:ring-destructive/40 aria-invalid:border-destructive hover:bg-accent dark:hover:bg-accent/50 hover:text-accent-foreground data-[selected-single=true]:bg-primary data-[selected-single=true]:text-primary-foreground data-[range-middle=true]:bg-accent data-[range-middle=true]:text-accent-foreground data-[range-start=true]:bg-primary data-[range-start=true]:text-primary-foreground data-[range-end=true]:bg-primary data-[range-end=true]:text-primary-foreground group-data-[focused=true]/day:border-ring group-data-[focused=true]/day:ring-ring/50 dark:hover:text-accent-foreground flex aspect-square size-auto w-full min-w-(--cell-size) flex-col gap-1 leading-none font-normal group-data-[focused=true]/day:relative group-data-[focused=true]/day:z-10 group-data-[focused=true]/day:ring-[3px] data-[range-end=true]:rounded-md data-[range-end=true]:rounded-r-md data-[range-middle=true]:rounded-none data-[range-start=true]:rounded-md data-[range-start=true]:rounded-l-md [&amp;&gt;span]:text-xs [&amp;&gt;span]:opacity-70 rdp-day rdp-day_button"
-                        type="button"
+                        data-variant="ghost"
+                        data-size="icon"
+                        class="group/button shrink-0 items-center justify-center rounded-md border-transparent bg-clip-padding text-sm whitespace-nowrap transition-all outline-none select-none focus-visible:border-ring focus-visible:ring-3 focus-visible:ring-ring/50 active:not-aria-[haspopup]:translate-y-px disabled:pointer-events-none disabled:opacity-50 aria-invalid:border-destructive aria-invalid:ring-3 aria-invalid:ring-destructive/20 dark:aria-invalid:border-destructive/50 dark:aria-invalid:ring-destructive/40 [&amp;_svg]:pointer-events-none [&amp;_svg]:shrink-0 [&amp;_svg:not([class*='size-'])]:size-4 hover:bg-muted hover:text-foreground aria-expanded:bg-muted aria-expanded:text-foreground dark:hover:bg-muted/50 relative isolate z-10 flex aspect-square size-auto w-full min-w-(--cell-size) flex-col gap-1 border-0 leading-none font-normal group-data-[focused=true]/day:relative group-data-[focused=true]/day:z-10 group-data-[focused=true]/day:border-ring group-data-[focused=true]/day:ring-[3px] group-data-[focused=true]/day:ring-ring/50 data-[range-end=true]:rounded-(--cell-radius) data-[range-end=true]:rounded-r-(--cell-radius) data-[range-end=true]:bg-primary data-[range-end=true]:text-primary-foreground data-[range-middle=true]:rounded-none data-[range-middle=true]:bg-muted data-[range-middle=true]:text-foreground data-[range-start=true]:rounded-(--cell-radius) data-[range-start=true]:rounded-l-(--cell-radius) data-[range-start=true]:bg-primary data-[range-start=true]:text-primary-foreground data-[selected-single=true]:bg-primary data-[selected-single=true]:text-primary-foreground dark:hover:text-foreground [&amp;&gt;span]:text-xs [&amp;&gt;span]:opacity-70 rdp-day rdp-day_button"
                         data-day="20/11/2025"
+                        type="button"
                         tabindex="-1"
-                        aria-label="Thursday, November 20th, 2025"
+                        aria-label="quinta-feira, 20 de novembro de 2025"
                 >
                   20
                 </button>
               </td>
-              <td class="relative w-full h-full p-0 text-center [&amp;:first-child[data-selected=true]_button]:rounded-l-md [&amp;:last-child[data-selected=true]_button]:rounded-r-md group/day aspect-square select-none rdp-day"
+              <td class="group/day relative aspect-square h-full w-full rounded-(--cell-radius) p-0 text-center select-none [&amp;:last-child[data-selected=true]_button]:rounded-r-(--cell-radius) [&amp;:first-child[data-selected=true]_button]:rounded-l-(--cell-radius) rdp-day"
                   role="gridcell"
                   data-day="2025-11-21"
               >
                 <button data-slot="button"
-                        class="items-center justify-center whitespace-nowrap rounded-md text-sm transition-[color,box-shadow] disabled:pointer-events-none disabled:opacity-50 [&amp;_svg]:pointer-events-none [&amp;_svg:not([class*='size-'])]:size-4 shrink-0 [&amp;_svg]:shrink-0 outline-none focus-visible:border-ring focus-visible:ring-ring/50 focus-visible:ring-[3px] aria-invalid:ring-destructive/20 dark:aria-invalid:ring-destructive/40 aria-invalid:border-destructive hover:bg-accent dark:hover:bg-accent/50 hover:text-accent-foreground data-[selected-single=true]:bg-primary data-[selected-single=true]:text-primary-foreground data-[range-middle=true]:bg-accent data-[range-middle=true]:text-accent-foreground data-[range-start=true]:bg-primary data-[range-start=true]:text-primary-foreground data-[range-end=true]:bg-primary data-[range-end=true]:text-primary-foreground group-data-[focused=true]/day:border-ring group-data-[focused=true]/day:ring-ring/50 dark:hover:text-accent-foreground flex aspect-square size-auto w-full min-w-(--cell-size) flex-col gap-1 leading-none font-normal group-data-[focused=true]/day:relative group-data-[focused=true]/day:z-10 group-data-[focused=true]/day:ring-[3px] data-[range-end=true]:rounded-md data-[range-end=true]:rounded-r-md data-[range-middle=true]:rounded-none data-[range-start=true]:rounded-md data-[range-start=true]:rounded-l-md [&amp;&gt;span]:text-xs [&amp;&gt;span]:opacity-70 rdp-day rdp-day_button"
-                        type="button"
+                        data-variant="ghost"
+                        data-size="icon"
+                        class="group/button shrink-0 items-center justify-center rounded-md border-transparent bg-clip-padding text-sm whitespace-nowrap transition-all outline-none select-none focus-visible:border-ring focus-visible:ring-3 focus-visible:ring-ring/50 active:not-aria-[haspopup]:translate-y-px disabled:pointer-events-none disabled:opacity-50 aria-invalid:border-destructive aria-invalid:ring-3 aria-invalid:ring-destructive/20 dark:aria-invalid:border-destructive/50 dark:aria-invalid:ring-destructive/40 [&amp;_svg]:pointer-events-none [&amp;_svg]:shrink-0 [&amp;_svg:not([class*='size-'])]:size-4 hover:bg-muted hover:text-foreground aria-expanded:bg-muted aria-expanded:text-foreground dark:hover:bg-muted/50 relative isolate z-10 flex aspect-square size-auto w-full min-w-(--cell-size) flex-col gap-1 border-0 leading-none font-normal group-data-[focused=true]/day:relative group-data-[focused=true]/day:z-10 group-data-[focused=true]/day:border-ring group-data-[focused=true]/day:ring-[3px] group-data-[focused=true]/day:ring-ring/50 data-[range-end=true]:rounded-(--cell-radius) data-[range-end=true]:rounded-r-(--cell-radius) data-[range-end=true]:bg-primary data-[range-end=true]:text-primary-foreground data-[range-middle=true]:rounded-none data-[range-middle=true]:bg-muted data-[range-middle=true]:text-foreground data-[range-start=true]:rounded-(--cell-radius) data-[range-start=true]:rounded-l-(--cell-radius) data-[range-start=true]:bg-primary data-[range-start=true]:text-primary-foreground data-[selected-single=true]:bg-primary data-[selected-single=true]:text-primary-foreground dark:hover:text-foreground [&amp;&gt;span]:text-xs [&amp;&gt;span]:opacity-70 rdp-day rdp-day_button"
                         data-day="21/11/2025"
+                        type="button"
                         tabindex="-1"
-                        aria-label="Friday, November 21st, 2025"
+                        aria-label="sexta-feira, 21 de novembro de 2025"
                 >
                   21
                 </button>
               </td>
-              <td class="relative w-full h-full p-0 text-center [&amp;:first-child[data-selected=true]_button]:rounded-l-md [&amp;:last-child[data-selected=true]_button]:rounded-r-md group/day aspect-square select-none rdp-day"
+              <td class="group/day relative aspect-square h-full w-full rounded-(--cell-radius) p-0 text-center select-none [&amp;:last-child[data-selected=true]_button]:rounded-r-(--cell-radius) [&amp;:first-child[data-selected=true]_button]:rounded-l-(--cell-radius) rdp-day"
                   role="gridcell"
                   data-day="2025-11-22"
               >
                 <button data-slot="button"
-                        class="items-center justify-center whitespace-nowrap rounded-md text-sm transition-[color,box-shadow] disabled:pointer-events-none disabled:opacity-50 [&amp;_svg]:pointer-events-none [&amp;_svg:not([class*='size-'])]:size-4 shrink-0 [&amp;_svg]:shrink-0 outline-none focus-visible:border-ring focus-visible:ring-ring/50 focus-visible:ring-[3px] aria-invalid:ring-destructive/20 dark:aria-invalid:ring-destructive/40 aria-invalid:border-destructive hover:bg-accent dark:hover:bg-accent/50 hover:text-accent-foreground data-[selected-single=true]:bg-primary data-[selected-single=true]:text-primary-foreground data-[range-middle=true]:bg-accent data-[range-middle=true]:text-accent-foreground data-[range-start=true]:bg-primary data-[range-start=true]:text-primary-foreground data-[range-end=true]:bg-primary data-[range-end=true]:text-primary-foreground group-data-[focused=true]/day:border-ring group-data-[focused=true]/day:ring-ring/50 dark:hover:text-accent-foreground flex aspect-square size-auto w-full min-w-(--cell-size) flex-col gap-1 leading-none font-normal group-data-[focused=true]/day:relative group-data-[focused=true]/day:z-10 group-data-[focused=true]/day:ring-[3px] data-[range-end=true]:rounded-md data-[range-end=true]:rounded-r-md data-[range-middle=true]:rounded-none data-[range-start=true]:rounded-md data-[range-start=true]:rounded-l-md [&amp;&gt;span]:text-xs [&amp;&gt;span]:opacity-70 rdp-day rdp-day_button"
-                        type="button"
+                        data-variant="ghost"
+                        data-size="icon"
+                        class="group/button shrink-0 items-center justify-center rounded-md border-transparent bg-clip-padding text-sm whitespace-nowrap transition-all outline-none select-none focus-visible:border-ring focus-visible:ring-3 focus-visible:ring-ring/50 active:not-aria-[haspopup]:translate-y-px disabled:pointer-events-none disabled:opacity-50 aria-invalid:border-destructive aria-invalid:ring-3 aria-invalid:ring-destructive/20 dark:aria-invalid:border-destructive/50 dark:aria-invalid:ring-destructive/40 [&amp;_svg]:pointer-events-none [&amp;_svg]:shrink-0 [&amp;_svg:not([class*='size-'])]:size-4 hover:bg-muted hover:text-foreground aria-expanded:bg-muted aria-expanded:text-foreground dark:hover:bg-muted/50 relative isolate z-10 flex aspect-square size-auto w-full min-w-(--cell-size) flex-col gap-1 border-0 leading-none font-normal group-data-[focused=true]/day:relative group-data-[focused=true]/day:z-10 group-data-[focused=true]/day:border-ring group-data-[focused=true]/day:ring-[3px] group-data-[focused=true]/day:ring-ring/50 data-[range-end=true]:rounded-(--cell-radius) data-[range-end=true]:rounded-r-(--cell-radius) data-[range-end=true]:bg-primary data-[range-end=true]:text-primary-foreground data-[range-middle=true]:rounded-none data-[range-middle=true]:bg-muted data-[range-middle=true]:text-foreground data-[range-start=true]:rounded-(--cell-radius) data-[range-start=true]:rounded-l-(--cell-radius) data-[range-start=true]:bg-primary data-[range-start=true]:text-primary-foreground data-[selected-single=true]:bg-primary data-[selected-single=true]:text-primary-foreground dark:hover:text-foreground [&amp;&gt;span]:text-xs [&amp;&gt;span]:opacity-70 rdp-day rdp-day_button"
                         data-day="22/11/2025"
+                        type="button"
                         tabindex="-1"
-                        aria-label="Saturday, November 22nd, 2025"
+                        aria-label="sábado, 22 de novembro de 2025"
                 >
                   22
                 </button>
               </td>
             </tr>
-            <tr class="flex w-full mt-2 rdp-week">
-              <td class="relative w-full h-full p-0 text-center [&amp;:first-child[data-selected=true]_button]:rounded-l-md [&amp;:last-child[data-selected=true]_button]:rounded-r-md group/day aspect-square select-none rdp-day"
+            <tr class="mt-2 flex w-full rdp-week">
+              <td class="group/day relative aspect-square h-full w-full rounded-(--cell-radius) p-0 text-center select-none [&amp;:last-child[data-selected=true]_button]:rounded-r-(--cell-radius) [&amp;:first-child[data-selected=true]_button]:rounded-l-(--cell-radius) rdp-day"
                   role="gridcell"
                   data-day="2025-11-23"
               >
                 <button data-slot="button"
-                        class="items-center justify-center whitespace-nowrap rounded-md text-sm transition-[color,box-shadow] disabled:pointer-events-none disabled:opacity-50 [&amp;_svg]:pointer-events-none [&amp;_svg:not([class*='size-'])]:size-4 shrink-0 [&amp;_svg]:shrink-0 outline-none focus-visible:border-ring focus-visible:ring-ring/50 focus-visible:ring-[3px] aria-invalid:ring-destructive/20 dark:aria-invalid:ring-destructive/40 aria-invalid:border-destructive hover:bg-accent dark:hover:bg-accent/50 hover:text-accent-foreground data-[selected-single=true]:bg-primary data-[selected-single=true]:text-primary-foreground data-[range-middle=true]:bg-accent data-[range-middle=true]:text-accent-foreground data-[range-start=true]:bg-primary data-[range-start=true]:text-primary-foreground data-[range-end=true]:bg-primary data-[range-end=true]:text-primary-foreground group-data-[focused=true]/day:border-ring group-data-[focused=true]/day:ring-ring/50 dark:hover:text-accent-foreground flex aspect-square size-auto w-full min-w-(--cell-size) flex-col gap-1 leading-none font-normal group-data-[focused=true]/day:relative group-data-[focused=true]/day:z-10 group-data-[focused=true]/day:ring-[3px] data-[range-end=true]:rounded-md data-[range-end=true]:rounded-r-md data-[range-middle=true]:rounded-none data-[range-start=true]:rounded-md data-[range-start=true]:rounded-l-md [&amp;&gt;span]:text-xs [&amp;&gt;span]:opacity-70 rdp-day rdp-day_button"
-                        type="button"
+                        data-variant="ghost"
+                        data-size="icon"
+                        class="group/button shrink-0 items-center justify-center rounded-md border-transparent bg-clip-padding text-sm whitespace-nowrap transition-all outline-none select-none focus-visible:border-ring focus-visible:ring-3 focus-visible:ring-ring/50 active:not-aria-[haspopup]:translate-y-px disabled:pointer-events-none disabled:opacity-50 aria-invalid:border-destructive aria-invalid:ring-3 aria-invalid:ring-destructive/20 dark:aria-invalid:border-destructive/50 dark:aria-invalid:ring-destructive/40 [&amp;_svg]:pointer-events-none [&amp;_svg]:shrink-0 [&amp;_svg:not([class*='size-'])]:size-4 hover:bg-muted hover:text-foreground aria-expanded:bg-muted aria-expanded:text-foreground dark:hover:bg-muted/50 relative isolate z-10 flex aspect-square size-auto w-full min-w-(--cell-size) flex-col gap-1 border-0 leading-none font-normal group-data-[focused=true]/day:relative group-data-[focused=true]/day:z-10 group-data-[focused=true]/day:border-ring group-data-[focused=true]/day:ring-[3px] group-data-[focused=true]/day:ring-ring/50 data-[range-end=true]:rounded-(--cell-radius) data-[range-end=true]:rounded-r-(--cell-radius) data-[range-end=true]:bg-primary data-[range-end=true]:text-primary-foreground data-[range-middle=true]:rounded-none data-[range-middle=true]:bg-muted data-[range-middle=true]:text-foreground data-[range-start=true]:rounded-(--cell-radius) data-[range-start=true]:rounded-l-(--cell-radius) data-[range-start=true]:bg-primary data-[range-start=true]:text-primary-foreground data-[selected-single=true]:bg-primary data-[selected-single=true]:text-primary-foreground dark:hover:text-foreground [&amp;&gt;span]:text-xs [&amp;&gt;span]:opacity-70 rdp-day rdp-day_button"
                         data-day="23/11/2025"
+                        type="button"
                         tabindex="-1"
-                        aria-label="Sunday, November 23rd, 2025"
+                        aria-label="domingo, 23 de novembro de 2025"
                 >
                   23
                 </button>
               </td>
-              <td class="relative w-full h-full p-0 text-center [&amp;:first-child[data-selected=true]_button]:rounded-l-md [&amp;:last-child[data-selected=true]_button]:rounded-r-md group/day aspect-square select-none rdp-day"
+              <td class="group/day relative aspect-square h-full w-full rounded-(--cell-radius) p-0 text-center select-none [&amp;:last-child[data-selected=true]_button]:rounded-r-(--cell-radius) [&amp;:first-child[data-selected=true]_button]:rounded-l-(--cell-radius) rdp-day"
                   role="gridcell"
                   data-day="2025-11-24"
               >
                 <button data-slot="button"
-                        class="items-center justify-center whitespace-nowrap rounded-md text-sm transition-[color,box-shadow] disabled:pointer-events-none disabled:opacity-50 [&amp;_svg]:pointer-events-none [&amp;_svg:not([class*='size-'])]:size-4 shrink-0 [&amp;_svg]:shrink-0 outline-none focus-visible:border-ring focus-visible:ring-ring/50 focus-visible:ring-[3px] aria-invalid:ring-destructive/20 dark:aria-invalid:ring-destructive/40 aria-invalid:border-destructive hover:bg-accent dark:hover:bg-accent/50 hover:text-accent-foreground data-[selected-single=true]:bg-primary data-[selected-single=true]:text-primary-foreground data-[range-middle=true]:bg-accent data-[range-middle=true]:text-accent-foreground data-[range-start=true]:bg-primary data-[range-start=true]:text-primary-foreground data-[range-end=true]:bg-primary data-[range-end=true]:text-primary-foreground group-data-[focused=true]/day:border-ring group-data-[focused=true]/day:ring-ring/50 dark:hover:text-accent-foreground flex aspect-square size-auto w-full min-w-(--cell-size) flex-col gap-1 leading-none font-normal group-data-[focused=true]/day:relative group-data-[focused=true]/day:z-10 group-data-[focused=true]/day:ring-[3px] data-[range-end=true]:rounded-md data-[range-end=true]:rounded-r-md data-[range-middle=true]:rounded-none data-[range-start=true]:rounded-md data-[range-start=true]:rounded-l-md [&amp;&gt;span]:text-xs [&amp;&gt;span]:opacity-70 rdp-day rdp-day_button"
-                        type="button"
+                        data-variant="ghost"
+                        data-size="icon"
+                        class="group/button shrink-0 items-center justify-center rounded-md border-transparent bg-clip-padding text-sm whitespace-nowrap transition-all outline-none select-none focus-visible:border-ring focus-visible:ring-3 focus-visible:ring-ring/50 active:not-aria-[haspopup]:translate-y-px disabled:pointer-events-none disabled:opacity-50 aria-invalid:border-destructive aria-invalid:ring-3 aria-invalid:ring-destructive/20 dark:aria-invalid:border-destructive/50 dark:aria-invalid:ring-destructive/40 [&amp;_svg]:pointer-events-none [&amp;_svg]:shrink-0 [&amp;_svg:not([class*='size-'])]:size-4 hover:bg-muted hover:text-foreground aria-expanded:bg-muted aria-expanded:text-foreground dark:hover:bg-muted/50 relative isolate z-10 flex aspect-square size-auto w-full min-w-(--cell-size) flex-col gap-1 border-0 leading-none font-normal group-data-[focused=true]/day:relative group-data-[focused=true]/day:z-10 group-data-[focused=true]/day:border-ring group-data-[focused=true]/day:ring-[3px] group-data-[focused=true]/day:ring-ring/50 data-[range-end=true]:rounded-(--cell-radius) data-[range-end=true]:rounded-r-(--cell-radius) data-[range-end=true]:bg-primary data-[range-end=true]:text-primary-foreground data-[range-middle=true]:rounded-none data-[range-middle=true]:bg-muted data-[range-middle=true]:text-foreground data-[range-start=true]:rounded-(--cell-radius) data-[range-start=true]:rounded-l-(--cell-radius) data-[range-start=true]:bg-primary data-[range-start=true]:text-primary-foreground data-[selected-single=true]:bg-primary data-[selected-single=true]:text-primary-foreground dark:hover:text-foreground [&amp;&gt;span]:text-xs [&amp;&gt;span]:opacity-70 rdp-day rdp-day_button"
                         data-day="24/11/2025"
+                        type="button"
                         tabindex="-1"
-                        aria-label="Monday, November 24th, 2025"
+                        aria-label="segunda-feira, 24 de novembro de 2025"
                 >
                   24
                 </button>
               </td>
-              <td class="relative w-full h-full p-0 text-center [&amp;:first-child[data-selected=true]_button]:rounded-l-md [&amp;:last-child[data-selected=true]_button]:rounded-r-md group/day aspect-square select-none rdp-day"
+              <td class="group/day relative aspect-square h-full w-full rounded-(--cell-radius) p-0 text-center select-none [&amp;:last-child[data-selected=true]_button]:rounded-r-(--cell-radius) [&amp;:first-child[data-selected=true]_button]:rounded-l-(--cell-radius) rdp-day"
                   role="gridcell"
                   data-day="2025-11-25"
               >
                 <button data-slot="button"
-                        class="items-center justify-center whitespace-nowrap rounded-md text-sm transition-[color,box-shadow] disabled:pointer-events-none disabled:opacity-50 [&amp;_svg]:pointer-events-none [&amp;_svg:not([class*='size-'])]:size-4 shrink-0 [&amp;_svg]:shrink-0 outline-none focus-visible:border-ring focus-visible:ring-ring/50 focus-visible:ring-[3px] aria-invalid:ring-destructive/20 dark:aria-invalid:ring-destructive/40 aria-invalid:border-destructive hover:bg-accent dark:hover:bg-accent/50 hover:text-accent-foreground data-[selected-single=true]:bg-primary data-[selected-single=true]:text-primary-foreground data-[range-middle=true]:bg-accent data-[range-middle=true]:text-accent-foreground data-[range-start=true]:bg-primary data-[range-start=true]:text-primary-foreground data-[range-end=true]:bg-primary data-[range-end=true]:text-primary-foreground group-data-[focused=true]/day:border-ring group-data-[focused=true]/day:ring-ring/50 dark:hover:text-accent-foreground flex aspect-square size-auto w-full min-w-(--cell-size) flex-col gap-1 leading-none font-normal group-data-[focused=true]/day:relative group-data-[focused=true]/day:z-10 group-data-[focused=true]/day:ring-[3px] data-[range-end=true]:rounded-md data-[range-end=true]:rounded-r-md data-[range-middle=true]:rounded-none data-[range-start=true]:rounded-md data-[range-start=true]:rounded-l-md [&amp;&gt;span]:text-xs [&amp;&gt;span]:opacity-70 rdp-day rdp-day_button"
-                        type="button"
+                        data-variant="ghost"
+                        data-size="icon"
+                        class="group/button shrink-0 items-center justify-center rounded-md border-transparent bg-clip-padding text-sm whitespace-nowrap transition-all outline-none select-none focus-visible:border-ring focus-visible:ring-3 focus-visible:ring-ring/50 active:not-aria-[haspopup]:translate-y-px disabled:pointer-events-none disabled:opacity-50 aria-invalid:border-destructive aria-invalid:ring-3 aria-invalid:ring-destructive/20 dark:aria-invalid:border-destructive/50 dark:aria-invalid:ring-destructive/40 [&amp;_svg]:pointer-events-none [&amp;_svg]:shrink-0 [&amp;_svg:not([class*='size-'])]:size-4 hover:bg-muted hover:text-foreground aria-expanded:bg-muted aria-expanded:text-foreground dark:hover:bg-muted/50 relative isolate z-10 flex aspect-square size-auto w-full min-w-(--cell-size) flex-col gap-1 border-0 leading-none font-normal group-data-[focused=true]/day:relative group-data-[focused=true]/day:z-10 group-data-[focused=true]/day:border-ring group-data-[focused=true]/day:ring-[3px] group-data-[focused=true]/day:ring-ring/50 data-[range-end=true]:rounded-(--cell-radius) data-[range-end=true]:rounded-r-(--cell-radius) data-[range-end=true]:bg-primary data-[range-end=true]:text-primary-foreground data-[range-middle=true]:rounded-none data-[range-middle=true]:bg-muted data-[range-middle=true]:text-foreground data-[range-start=true]:rounded-(--cell-radius) data-[range-start=true]:rounded-l-(--cell-radius) data-[range-start=true]:bg-primary data-[range-start=true]:text-primary-foreground data-[selected-single=true]:bg-primary data-[selected-single=true]:text-primary-foreground dark:hover:text-foreground [&amp;&gt;span]:text-xs [&amp;&gt;span]:opacity-70 rdp-day rdp-day_button"
                         data-day="25/11/2025"
+                        type="button"
                         tabindex="-1"
-                        aria-label="Tuesday, November 25th, 2025"
+                        aria-label="terça-feira, 25 de novembro de 2025"
                 >
                   25
                 </button>
               </td>
-              <td class="relative w-full h-full p-0 text-center [&amp;:first-child[data-selected=true]_button]:rounded-l-md [&amp;:last-child[data-selected=true]_button]:rounded-r-md group/day aspect-square select-none rdp-day"
+              <td class="group/day relative aspect-square h-full w-full rounded-(--cell-radius) p-0 text-center select-none [&amp;:last-child[data-selected=true]_button]:rounded-r-(--cell-radius) [&amp;:first-child[data-selected=true]_button]:rounded-l-(--cell-radius) rdp-day"
                   role="gridcell"
                   data-day="2025-11-26"
               >
                 <button data-slot="button"
-                        class="items-center justify-center whitespace-nowrap rounded-md text-sm transition-[color,box-shadow] disabled:pointer-events-none disabled:opacity-50 [&amp;_svg]:pointer-events-none [&amp;_svg:not([class*='size-'])]:size-4 shrink-0 [&amp;_svg]:shrink-0 outline-none focus-visible:border-ring focus-visible:ring-ring/50 focus-visible:ring-[3px] aria-invalid:ring-destructive/20 dark:aria-invalid:ring-destructive/40 aria-invalid:border-destructive hover:bg-accent dark:hover:bg-accent/50 hover:text-accent-foreground data-[selected-single=true]:bg-primary data-[selected-single=true]:text-primary-foreground data-[range-middle=true]:bg-accent data-[range-middle=true]:text-accent-foreground data-[range-start=true]:bg-primary data-[range-start=true]:text-primary-foreground data-[range-end=true]:bg-primary data-[range-end=true]:text-primary-foreground group-data-[focused=true]/day:border-ring group-data-[focused=true]/day:ring-ring/50 dark:hover:text-accent-foreground flex aspect-square size-auto w-full min-w-(--cell-size) flex-col gap-1 leading-none font-normal group-data-[focused=true]/day:relative group-data-[focused=true]/day:z-10 group-data-[focused=true]/day:ring-[3px] data-[range-end=true]:rounded-md data-[range-end=true]:rounded-r-md data-[range-middle=true]:rounded-none data-[range-start=true]:rounded-md data-[range-start=true]:rounded-l-md [&amp;&gt;span]:text-xs [&amp;&gt;span]:opacity-70 rdp-day rdp-day_button"
-                        type="button"
+                        data-variant="ghost"
+                        data-size="icon"
+                        class="group/button shrink-0 items-center justify-center rounded-md border-transparent bg-clip-padding text-sm whitespace-nowrap transition-all outline-none select-none focus-visible:border-ring focus-visible:ring-3 focus-visible:ring-ring/50 active:not-aria-[haspopup]:translate-y-px disabled:pointer-events-none disabled:opacity-50 aria-invalid:border-destructive aria-invalid:ring-3 aria-invalid:ring-destructive/20 dark:aria-invalid:border-destructive/50 dark:aria-invalid:ring-destructive/40 [&amp;_svg]:pointer-events-none [&amp;_svg]:shrink-0 [&amp;_svg:not([class*='size-'])]:size-4 hover:bg-muted hover:text-foreground aria-expanded:bg-muted aria-expanded:text-foreground dark:hover:bg-muted/50 relative isolate z-10 flex aspect-square size-auto w-full min-w-(--cell-size) flex-col gap-1 border-0 leading-none font-normal group-data-[focused=true]/day:relative group-data-[focused=true]/day:z-10 group-data-[focused=true]/day:border-ring group-data-[focused=true]/day:ring-[3px] group-data-[focused=true]/day:ring-ring/50 data-[range-end=true]:rounded-(--cell-radius) data-[range-end=true]:rounded-r-(--cell-radius) data-[range-end=true]:bg-primary data-[range-end=true]:text-primary-foreground data-[range-middle=true]:rounded-none data-[range-middle=true]:bg-muted data-[range-middle=true]:text-foreground data-[range-start=true]:rounded-(--cell-radius) data-[range-start=true]:rounded-l-(--cell-radius) data-[range-start=true]:bg-primary data-[range-start=true]:text-primary-foreground data-[selected-single=true]:bg-primary data-[selected-single=true]:text-primary-foreground dark:hover:text-foreground [&amp;&gt;span]:text-xs [&amp;&gt;span]:opacity-70 rdp-day rdp-day_button"
                         data-day="26/11/2025"
+                        type="button"
                         tabindex="-1"
-                        aria-label="Wednesday, November 26th, 2025"
+                        aria-label="quarta-feira, 26 de novembro de 2025"
                 >
                   26
                 </button>
               </td>
-              <td class="relative w-full h-full p-0 text-center [&amp;:first-child[data-selected=true]_button]:rounded-l-md [&amp;:last-child[data-selected=true]_button]:rounded-r-md group/day aspect-square select-none rdp-day"
+              <td class="group/day relative aspect-square h-full w-full rounded-(--cell-radius) p-0 text-center select-none [&amp;:last-child[data-selected=true]_button]:rounded-r-(--cell-radius) [&amp;:first-child[data-selected=true]_button]:rounded-l-(--cell-radius) rdp-day"
                   role="gridcell"
                   data-day="2025-11-27"
               >
                 <button data-slot="button"
-                        class="items-center justify-center whitespace-nowrap rounded-md text-sm transition-[color,box-shadow] disabled:pointer-events-none disabled:opacity-50 [&amp;_svg]:pointer-events-none [&amp;_svg:not([class*='size-'])]:size-4 shrink-0 [&amp;_svg]:shrink-0 outline-none focus-visible:border-ring focus-visible:ring-ring/50 focus-visible:ring-[3px] aria-invalid:ring-destructive/20 dark:aria-invalid:ring-destructive/40 aria-invalid:border-destructive hover:bg-accent dark:hover:bg-accent/50 hover:text-accent-foreground data-[selected-single=true]:bg-primary data-[selected-single=true]:text-primary-foreground data-[range-middle=true]:bg-accent data-[range-middle=true]:text-accent-foreground data-[range-start=true]:bg-primary data-[range-start=true]:text-primary-foreground data-[range-end=true]:bg-primary data-[range-end=true]:text-primary-foreground group-data-[focused=true]/day:border-ring group-data-[focused=true]/day:ring-ring/50 dark:hover:text-accent-foreground flex aspect-square size-auto w-full min-w-(--cell-size) flex-col gap-1 leading-none font-normal group-data-[focused=true]/day:relative group-data-[focused=true]/day:z-10 group-data-[focused=true]/day:ring-[3px] data-[range-end=true]:rounded-md data-[range-end=true]:rounded-r-md data-[range-middle=true]:rounded-none data-[range-start=true]:rounded-md data-[range-start=true]:rounded-l-md [&amp;&gt;span]:text-xs [&amp;&gt;span]:opacity-70 rdp-day rdp-day_button"
-                        type="button"
+                        data-variant="ghost"
+                        data-size="icon"
+                        class="group/button shrink-0 items-center justify-center rounded-md border-transparent bg-clip-padding text-sm whitespace-nowrap transition-all outline-none select-none focus-visible:border-ring focus-visible:ring-3 focus-visible:ring-ring/50 active:not-aria-[haspopup]:translate-y-px disabled:pointer-events-none disabled:opacity-50 aria-invalid:border-destructive aria-invalid:ring-3 aria-invalid:ring-destructive/20 dark:aria-invalid:border-destructive/50 dark:aria-invalid:ring-destructive/40 [&amp;_svg]:pointer-events-none [&amp;_svg]:shrink-0 [&amp;_svg:not([class*='size-'])]:size-4 hover:bg-muted hover:text-foreground aria-expanded:bg-muted aria-expanded:text-foreground dark:hover:bg-muted/50 relative isolate z-10 flex aspect-square size-auto w-full min-w-(--cell-size) flex-col gap-1 border-0 leading-none font-normal group-data-[focused=true]/day:relative group-data-[focused=true]/day:z-10 group-data-[focused=true]/day:border-ring group-data-[focused=true]/day:ring-[3px] group-data-[focused=true]/day:ring-ring/50 data-[range-end=true]:rounded-(--cell-radius) data-[range-end=true]:rounded-r-(--cell-radius) data-[range-end=true]:bg-primary data-[range-end=true]:text-primary-foreground data-[range-middle=true]:rounded-none data-[range-middle=true]:bg-muted data-[range-middle=true]:text-foreground data-[range-start=true]:rounded-(--cell-radius) data-[range-start=true]:rounded-l-(--cell-radius) data-[range-start=true]:bg-primary data-[range-start=true]:text-primary-foreground data-[selected-single=true]:bg-primary data-[selected-single=true]:text-primary-foreground dark:hover:text-foreground [&amp;&gt;span]:text-xs [&amp;&gt;span]:opacity-70 rdp-day rdp-day_button"
                         data-day="27/11/2025"
+                        type="button"
                         tabindex="-1"
-                        aria-label="Thursday, November 27th, 2025"
+                        aria-label="quinta-feira, 27 de novembro de 2025"
                 >
                   27
                 </button>
               </td>
-              <td class="relative w-full h-full p-0 text-center [&amp;:first-child[data-selected=true]_button]:rounded-l-md [&amp;:last-child[data-selected=true]_button]:rounded-r-md group/day aspect-square select-none rdp-day"
+              <td class="group/day relative aspect-square h-full w-full rounded-(--cell-radius) p-0 text-center select-none [&amp;:last-child[data-selected=true]_button]:rounded-r-(--cell-radius) [&amp;:first-child[data-selected=true]_button]:rounded-l-(--cell-radius) rdp-day"
                   role="gridcell"
                   data-day="2025-11-28"
               >
                 <button data-slot="button"
-                        class="items-center justify-center whitespace-nowrap rounded-md text-sm transition-[color,box-shadow] disabled:pointer-events-none disabled:opacity-50 [&amp;_svg]:pointer-events-none [&amp;_svg:not([class*='size-'])]:size-4 shrink-0 [&amp;_svg]:shrink-0 outline-none focus-visible:border-ring focus-visible:ring-ring/50 focus-visible:ring-[3px] aria-invalid:ring-destructive/20 dark:aria-invalid:ring-destructive/40 aria-invalid:border-destructive hover:bg-accent dark:hover:bg-accent/50 hover:text-accent-foreground data-[selected-single=true]:bg-primary data-[selected-single=true]:text-primary-foreground data-[range-middle=true]:bg-accent data-[range-middle=true]:text-accent-foreground data-[range-start=true]:bg-primary data-[range-start=true]:text-primary-foreground data-[range-end=true]:bg-primary data-[range-end=true]:text-primary-foreground group-data-[focused=true]/day:border-ring group-data-[focused=true]/day:ring-ring/50 dark:hover:text-accent-foreground flex aspect-square size-auto w-full min-w-(--cell-size) flex-col gap-1 leading-none font-normal group-data-[focused=true]/day:relative group-data-[focused=true]/day:z-10 group-data-[focused=true]/day:ring-[3px] data-[range-end=true]:rounded-md data-[range-end=true]:rounded-r-md data-[range-middle=true]:rounded-none data-[range-start=true]:rounded-md data-[range-start=true]:rounded-l-md [&amp;&gt;span]:text-xs [&amp;&gt;span]:opacity-70 rdp-day rdp-day_button"
-                        type="button"
+                        data-variant="ghost"
+                        data-size="icon"
+                        class="group/button shrink-0 items-center justify-center rounded-md border-transparent bg-clip-padding text-sm whitespace-nowrap transition-all outline-none select-none focus-visible:border-ring focus-visible:ring-3 focus-visible:ring-ring/50 active:not-aria-[haspopup]:translate-y-px disabled:pointer-events-none disabled:opacity-50 aria-invalid:border-destructive aria-invalid:ring-3 aria-invalid:ring-destructive/20 dark:aria-invalid:border-destructive/50 dark:aria-invalid:ring-destructive/40 [&amp;_svg]:pointer-events-none [&amp;_svg]:shrink-0 [&amp;_svg:not([class*='size-'])]:size-4 hover:bg-muted hover:text-foreground aria-expanded:bg-muted aria-expanded:text-foreground dark:hover:bg-muted/50 relative isolate z-10 flex aspect-square size-auto w-full min-w-(--cell-size) flex-col gap-1 border-0 leading-none font-normal group-data-[focused=true]/day:relative group-data-[focused=true]/day:z-10 group-data-[focused=true]/day:border-ring group-data-[focused=true]/day:ring-[3px] group-data-[focused=true]/day:ring-ring/50 data-[range-end=true]:rounded-(--cell-radius) data-[range-end=true]:rounded-r-(--cell-radius) data-[range-end=true]:bg-primary data-[range-end=true]:text-primary-foreground data-[range-middle=true]:rounded-none data-[range-middle=true]:bg-muted data-[range-middle=true]:text-foreground data-[range-start=true]:rounded-(--cell-radius) data-[range-start=true]:rounded-l-(--cell-radius) data-[range-start=true]:bg-primary data-[range-start=true]:text-primary-foreground data-[selected-single=true]:bg-primary data-[selected-single=true]:text-primary-foreground dark:hover:text-foreground [&amp;&gt;span]:text-xs [&amp;&gt;span]:opacity-70 rdp-day rdp-day_button"
                         data-day="28/11/2025"
+                        type="button"
                         tabindex="-1"
-                        aria-label="Friday, November 28th, 2025"
+                        aria-label="sexta-feira, 28 de novembro de 2025"
                 >
                   28
                 </button>
               </td>
-              <td class="relative w-full h-full p-0 text-center [&amp;:first-child[data-selected=true]_button]:rounded-l-md [&amp;:last-child[data-selected=true]_button]:rounded-r-md group/day aspect-square select-none rdp-day"
+              <td class="group/day relative aspect-square h-full w-full rounded-(--cell-radius) p-0 text-center select-none [&amp;:last-child[data-selected=true]_button]:rounded-r-(--cell-radius) [&amp;:first-child[data-selected=true]_button]:rounded-l-(--cell-radius) rdp-day"
                   role="gridcell"
                   data-day="2025-11-29"
               >
                 <button data-slot="button"
-                        class="items-center justify-center whitespace-nowrap rounded-md text-sm transition-[color,box-shadow] disabled:pointer-events-none disabled:opacity-50 [&amp;_svg]:pointer-events-none [&amp;_svg:not([class*='size-'])]:size-4 shrink-0 [&amp;_svg]:shrink-0 outline-none focus-visible:border-ring focus-visible:ring-ring/50 focus-visible:ring-[3px] aria-invalid:ring-destructive/20 dark:aria-invalid:ring-destructive/40 aria-invalid:border-destructive hover:bg-accent dark:hover:bg-accent/50 hover:text-accent-foreground data-[selected-single=true]:bg-primary data-[selected-single=true]:text-primary-foreground data-[range-middle=true]:bg-accent data-[range-middle=true]:text-accent-foreground data-[range-start=true]:bg-primary data-[range-start=true]:text-primary-foreground data-[range-end=true]:bg-primary data-[range-end=true]:text-primary-foreground group-data-[focused=true]/day:border-ring group-data-[focused=true]/day:ring-ring/50 dark:hover:text-accent-foreground flex aspect-square size-auto w-full min-w-(--cell-size) flex-col gap-1 leading-none font-normal group-data-[focused=true]/day:relative group-data-[focused=true]/day:z-10 group-data-[focused=true]/day:ring-[3px] data-[range-end=true]:rounded-md data-[range-end=true]:rounded-r-md data-[range-middle=true]:rounded-none data-[range-start=true]:rounded-md data-[range-start=true]:rounded-l-md [&amp;&gt;span]:text-xs [&amp;&gt;span]:opacity-70 rdp-day rdp-day_button"
-                        type="button"
+                        data-variant="ghost"
+                        data-size="icon"
+                        class="group/button shrink-0 items-center justify-center rounded-md border-transparent bg-clip-padding text-sm whitespace-nowrap transition-all outline-none select-none focus-visible:border-ring focus-visible:ring-3 focus-visible:ring-ring/50 active:not-aria-[haspopup]:translate-y-px disabled:pointer-events-none disabled:opacity-50 aria-invalid:border-destructive aria-invalid:ring-3 aria-invalid:ring-destructive/20 dark:aria-invalid:border-destructive/50 dark:aria-invalid:ring-destructive/40 [&amp;_svg]:pointer-events-none [&amp;_svg]:shrink-0 [&amp;_svg:not([class*='size-'])]:size-4 hover:bg-muted hover:text-foreground aria-expanded:bg-muted aria-expanded:text-foreground dark:hover:bg-muted/50 relative isolate z-10 flex aspect-square size-auto w-full min-w-(--cell-size) flex-col gap-1 border-0 leading-none font-normal group-data-[focused=true]/day:relative group-data-[focused=true]/day:z-10 group-data-[focused=true]/day:border-ring group-data-[focused=true]/day:ring-[3px] group-data-[focused=true]/day:ring-ring/50 data-[range-end=true]:rounded-(--cell-radius) data-[range-end=true]:rounded-r-(--cell-radius) data-[range-end=true]:bg-primary data-[range-end=true]:text-primary-foreground data-[range-middle=true]:rounded-none data-[range-middle=true]:bg-muted data-[range-middle=true]:text-foreground data-[range-start=true]:rounded-(--cell-radius) data-[range-start=true]:rounded-l-(--cell-radius) data-[range-start=true]:bg-primary data-[range-start=true]:text-primary-foreground data-[selected-single=true]:bg-primary data-[selected-single=true]:text-primary-foreground dark:hover:text-foreground [&amp;&gt;span]:text-xs [&amp;&gt;span]:opacity-70 rdp-day rdp-day_button"
                         data-day="29/11/2025"
+                        type="button"
                         tabindex="-1"
-                        aria-label="Saturday, November 29th, 2025"
+                        aria-label="sábado, 29 de novembro de 2025"
                 >
                   29
                 </button>
               </td>
             </tr>
-            <tr class="flex w-full mt-2 rdp-week">
-              <td class="relative w-full h-full p-0 text-center [&amp;:first-child[data-selected=true]_button]:rounded-l-md [&amp;:last-child[data-selected=true]_button]:rounded-r-md group/day aspect-square select-none rdp-day"
+            <tr class="mt-2 flex w-full rdp-week">
+              <td class="group/day relative aspect-square h-full w-full rounded-(--cell-radius) p-0 text-center select-none [&amp;:last-child[data-selected=true]_button]:rounded-r-(--cell-radius) [&amp;:first-child[data-selected=true]_button]:rounded-l-(--cell-radius) rdp-day"
                   role="gridcell"
                   data-day="2025-11-30"
               >
                 <button data-slot="button"
-                        class="items-center justify-center whitespace-nowrap rounded-md text-sm transition-[color,box-shadow] disabled:pointer-events-none disabled:opacity-50 [&amp;_svg]:pointer-events-none [&amp;_svg:not([class*='size-'])]:size-4 shrink-0 [&amp;_svg]:shrink-0 outline-none focus-visible:border-ring focus-visible:ring-ring/50 focus-visible:ring-[3px] aria-invalid:ring-destructive/20 dark:aria-invalid:ring-destructive/40 aria-invalid:border-destructive hover:bg-accent dark:hover:bg-accent/50 hover:text-accent-foreground data-[selected-single=true]:bg-primary data-[selected-single=true]:text-primary-foreground data-[range-middle=true]:bg-accent data-[range-middle=true]:text-accent-foreground data-[range-start=true]:bg-primary data-[range-start=true]:text-primary-foreground data-[range-end=true]:bg-primary data-[range-end=true]:text-primary-foreground group-data-[focused=true]/day:border-ring group-data-[focused=true]/day:ring-ring/50 dark:hover:text-accent-foreground flex aspect-square size-auto w-full min-w-(--cell-size) flex-col gap-1 leading-none font-normal group-data-[focused=true]/day:relative group-data-[focused=true]/day:z-10 group-data-[focused=true]/day:ring-[3px] data-[range-end=true]:rounded-md data-[range-end=true]:rounded-r-md data-[range-middle=true]:rounded-none data-[range-start=true]:rounded-md data-[range-start=true]:rounded-l-md [&amp;&gt;span]:text-xs [&amp;&gt;span]:opacity-70 rdp-day rdp-day_button"
-                        type="button"
+                        data-variant="ghost"
+                        data-size="icon"
+                        class="group/button shrink-0 items-center justify-center rounded-md border-transparent bg-clip-padding text-sm whitespace-nowrap transition-all outline-none select-none focus-visible:border-ring focus-visible:ring-3 focus-visible:ring-ring/50 active:not-aria-[haspopup]:translate-y-px disabled:pointer-events-none disabled:opacity-50 aria-invalid:border-destructive aria-invalid:ring-3 aria-invalid:ring-destructive/20 dark:aria-invalid:border-destructive/50 dark:aria-invalid:ring-destructive/40 [&amp;_svg]:pointer-events-none [&amp;_svg]:shrink-0 [&amp;_svg:not([class*='size-'])]:size-4 hover:bg-muted hover:text-foreground aria-expanded:bg-muted aria-expanded:text-foreground dark:hover:bg-muted/50 relative isolate z-10 flex aspect-square size-auto w-full min-w-(--cell-size) flex-col gap-1 border-0 leading-none font-normal group-data-[focused=true]/day:relative group-data-[focused=true]/day:z-10 group-data-[focused=true]/day:border-ring group-data-[focused=true]/day:ring-[3px] group-data-[focused=true]/day:ring-ring/50 data-[range-end=true]:rounded-(--cell-radius) data-[range-end=true]:rounded-r-(--cell-radius) data-[range-end=true]:bg-primary data-[range-end=true]:text-primary-foreground data-[range-middle=true]:rounded-none data-[range-middle=true]:bg-muted data-[range-middle=true]:text-foreground data-[range-start=true]:rounded-(--cell-radius) data-[range-start=true]:rounded-l-(--cell-radius) data-[range-start=true]:bg-primary data-[range-start=true]:text-primary-foreground data-[selected-single=true]:bg-primary data-[selected-single=true]:text-primary-foreground dark:hover:text-foreground [&amp;&gt;span]:text-xs [&amp;&gt;span]:opacity-70 rdp-day rdp-day_button"
                         data-day="30/11/2025"
+                        type="button"
                         tabindex="-1"
-                        aria-label="Sunday, November 30th, 2025"
+                        aria-label="domingo, 30 de novembro de 2025"
                 >
                   30
                 </button>
               </td>
-              <td class="relative w-full h-full p-0 text-center [&amp;:first-child[data-selected=true]_button]:rounded-l-md [&amp;:last-child[data-selected=true]_button]:rounded-r-md group/day aspect-square select-none rdp-day text-muted-foreground aria-selected:text-muted-foreground rdp-outside"
+              <td class="group/day relative aspect-square h-full w-full rounded-(--cell-radius) p-0 text-center select-none [&amp;:last-child[data-selected=true]_button]:rounded-r-(--cell-radius) [&amp;:first-child[data-selected=true]_button]:rounded-l-(--cell-radius) rdp-day text-muted-foreground aria-selected:text-muted-foreground rdp-outside"
                   role="gridcell"
                   data-day="2025-12-01"
                   data-month="2025-12"
                   data-outside="true"
               >
                 <button data-slot="button"
-                        class="items-center justify-center whitespace-nowrap rounded-md text-sm transition-[color,box-shadow] disabled:pointer-events-none disabled:opacity-50 [&amp;_svg]:pointer-events-none [&amp;_svg:not([class*='size-'])]:size-4 shrink-0 [&amp;_svg]:shrink-0 outline-none focus-visible:border-ring focus-visible:ring-ring/50 focus-visible:ring-[3px] aria-invalid:ring-destructive/20 dark:aria-invalid:ring-destructive/40 aria-invalid:border-destructive hover:bg-accent dark:hover:bg-accent/50 hover:text-accent-foreground data-[selected-single=true]:bg-primary data-[selected-single=true]:text-primary-foreground data-[range-middle=true]:bg-accent data-[range-middle=true]:text-accent-foreground data-[range-start=true]:bg-primary data-[range-start=true]:text-primary-foreground data-[range-end=true]:bg-primary data-[range-end=true]:text-primary-foreground group-data-[focused=true]/day:border-ring group-data-[focused=true]/day:ring-ring/50 dark:hover:text-accent-foreground flex aspect-square size-auto w-full min-w-(--cell-size) flex-col gap-1 leading-none font-normal group-data-[focused=true]/day:relative group-data-[focused=true]/day:z-10 group-data-[focused=true]/day:ring-[3px] data-[range-end=true]:rounded-md data-[range-end=true]:rounded-r-md data-[range-middle=true]:rounded-none data-[range-start=true]:rounded-md data-[range-start=true]:rounded-l-md [&amp;&gt;span]:text-xs [&amp;&gt;span]:opacity-70 rdp-day rdp-day_button"
-                        type="button"
+                        data-variant="ghost"
+                        data-size="icon"
+                        class="group/button shrink-0 items-center justify-center rounded-md border-transparent bg-clip-padding text-sm whitespace-nowrap transition-all outline-none select-none focus-visible:border-ring focus-visible:ring-3 focus-visible:ring-ring/50 active:not-aria-[haspopup]:translate-y-px disabled:pointer-events-none disabled:opacity-50 aria-invalid:border-destructive aria-invalid:ring-3 aria-invalid:ring-destructive/20 dark:aria-invalid:border-destructive/50 dark:aria-invalid:ring-destructive/40 [&amp;_svg]:pointer-events-none [&amp;_svg]:shrink-0 [&amp;_svg:not([class*='size-'])]:size-4 hover:bg-muted hover:text-foreground aria-expanded:bg-muted aria-expanded:text-foreground dark:hover:bg-muted/50 relative isolate z-10 flex aspect-square size-auto w-full min-w-(--cell-size) flex-col gap-1 border-0 leading-none font-normal group-data-[focused=true]/day:relative group-data-[focused=true]/day:z-10 group-data-[focused=true]/day:border-ring group-data-[focused=true]/day:ring-[3px] group-data-[focused=true]/day:ring-ring/50 data-[range-end=true]:rounded-(--cell-radius) data-[range-end=true]:rounded-r-(--cell-radius) data-[range-end=true]:bg-primary data-[range-end=true]:text-primary-foreground data-[range-middle=true]:rounded-none data-[range-middle=true]:bg-muted data-[range-middle=true]:text-foreground data-[range-start=true]:rounded-(--cell-radius) data-[range-start=true]:rounded-l-(--cell-radius) data-[range-start=true]:bg-primary data-[range-start=true]:text-primary-foreground data-[selected-single=true]:bg-primary data-[selected-single=true]:text-primary-foreground dark:hover:text-foreground [&amp;&gt;span]:text-xs [&amp;&gt;span]:opacity-70 rdp-day rdp-day_button"
                         data-day="01/12/2025"
+                        type="button"
                         tabindex="-1"
-                        aria-label="Monday, December 1st, 2025"
+                        aria-label="segunda-feira, 1 de dezembro de 2025"
                 >
                   1
                 </button>
               </td>
-              <td class="relative w-full h-full p-0 text-center [&amp;:first-child[data-selected=true]_button]:rounded-l-md [&amp;:last-child[data-selected=true]_button]:rounded-r-md group/day aspect-square select-none rdp-day text-muted-foreground aria-selected:text-muted-foreground rdp-outside"
+              <td class="group/day relative aspect-square h-full w-full rounded-(--cell-radius) p-0 text-center select-none [&amp;:last-child[data-selected=true]_button]:rounded-r-(--cell-radius) [&amp;:first-child[data-selected=true]_button]:rounded-l-(--cell-radius) rdp-day text-muted-foreground aria-selected:text-muted-foreground rdp-outside"
                   role="gridcell"
                   data-day="2025-12-02"
                   data-month="2025-12"
                   data-outside="true"
               >
                 <button data-slot="button"
-                        class="items-center justify-center whitespace-nowrap rounded-md text-sm transition-[color,box-shadow] disabled:pointer-events-none disabled:opacity-50 [&amp;_svg]:pointer-events-none [&amp;_svg:not([class*='size-'])]:size-4 shrink-0 [&amp;_svg]:shrink-0 outline-none focus-visible:border-ring focus-visible:ring-ring/50 focus-visible:ring-[3px] aria-invalid:ring-destructive/20 dark:aria-invalid:ring-destructive/40 aria-invalid:border-destructive hover:bg-accent dark:hover:bg-accent/50 hover:text-accent-foreground data-[selected-single=true]:bg-primary data-[selected-single=true]:text-primary-foreground data-[range-middle=true]:bg-accent data-[range-middle=true]:text-accent-foreground data-[range-start=true]:bg-primary data-[range-start=true]:text-primary-foreground data-[range-end=true]:bg-primary data-[range-end=true]:text-primary-foreground group-data-[focused=true]/day:border-ring group-data-[focused=true]/day:ring-ring/50 dark:hover:text-accent-foreground flex aspect-square size-auto w-full min-w-(--cell-size) flex-col gap-1 leading-none font-normal group-data-[focused=true]/day:relative group-data-[focused=true]/day:z-10 group-data-[focused=true]/day:ring-[3px] data-[range-end=true]:rounded-md data-[range-end=true]:rounded-r-md data-[range-middle=true]:rounded-none data-[range-start=true]:rounded-md data-[range-start=true]:rounded-l-md [&amp;&gt;span]:text-xs [&amp;&gt;span]:opacity-70 rdp-day rdp-day_button"
-                        type="button"
+                        data-variant="ghost"
+                        data-size="icon"
+                        class="group/button shrink-0 items-center justify-center rounded-md border-transparent bg-clip-padding text-sm whitespace-nowrap transition-all outline-none select-none focus-visible:border-ring focus-visible:ring-3 focus-visible:ring-ring/50 active:not-aria-[haspopup]:translate-y-px disabled:pointer-events-none disabled:opacity-50 aria-invalid:border-destructive aria-invalid:ring-3 aria-invalid:ring-destructive/20 dark:aria-invalid:border-destructive/50 dark:aria-invalid:ring-destructive/40 [&amp;_svg]:pointer-events-none [&amp;_svg]:shrink-0 [&amp;_svg:not([class*='size-'])]:size-4 hover:bg-muted hover:text-foreground aria-expanded:bg-muted aria-expanded:text-foreground dark:hover:bg-muted/50 relative isolate z-10 flex aspect-square size-auto w-full min-w-(--cell-size) flex-col gap-1 border-0 leading-none font-normal group-data-[focused=true]/day:relative group-data-[focused=true]/day:z-10 group-data-[focused=true]/day:border-ring group-data-[focused=true]/day:ring-[3px] group-data-[focused=true]/day:ring-ring/50 data-[range-end=true]:rounded-(--cell-radius) data-[range-end=true]:rounded-r-(--cell-radius) data-[range-end=true]:bg-primary data-[range-end=true]:text-primary-foreground data-[range-middle=true]:rounded-none data-[range-middle=true]:bg-muted data-[range-middle=true]:text-foreground data-[range-start=true]:rounded-(--cell-radius) data-[range-start=true]:rounded-l-(--cell-radius) data-[range-start=true]:bg-primary data-[range-start=true]:text-primary-foreground data-[selected-single=true]:bg-primary data-[selected-single=true]:text-primary-foreground dark:hover:text-foreground [&amp;&gt;span]:text-xs [&amp;&gt;span]:opacity-70 rdp-day rdp-day_button"
                         data-day="02/12/2025"
+                        type="button"
                         tabindex="-1"
-                        aria-label="Tuesday, December 2nd, 2025"
+                        aria-label="terça-feira, 2 de dezembro de 2025"
                 >
                   2
                 </button>
               </td>
-              <td class="relative w-full h-full p-0 text-center [&amp;:first-child[data-selected=true]_button]:rounded-l-md [&amp;:last-child[data-selected=true]_button]:rounded-r-md group/day aspect-square select-none rdp-day text-muted-foreground aria-selected:text-muted-foreground rdp-outside"
+              <td class="group/day relative aspect-square h-full w-full rounded-(--cell-radius) p-0 text-center select-none [&amp;:last-child[data-selected=true]_button]:rounded-r-(--cell-radius) [&amp;:first-child[data-selected=true]_button]:rounded-l-(--cell-radius) rdp-day text-muted-foreground aria-selected:text-muted-foreground rdp-outside"
                   role="gridcell"
                   data-day="2025-12-03"
                   data-month="2025-12"
                   data-outside="true"
               >
                 <button data-slot="button"
-                        class="items-center justify-center whitespace-nowrap rounded-md text-sm transition-[color,box-shadow] disabled:pointer-events-none disabled:opacity-50 [&amp;_svg]:pointer-events-none [&amp;_svg:not([class*='size-'])]:size-4 shrink-0 [&amp;_svg]:shrink-0 outline-none focus-visible:border-ring focus-visible:ring-ring/50 focus-visible:ring-[3px] aria-invalid:ring-destructive/20 dark:aria-invalid:ring-destructive/40 aria-invalid:border-destructive hover:bg-accent dark:hover:bg-accent/50 hover:text-accent-foreground data-[selected-single=true]:bg-primary data-[selected-single=true]:text-primary-foreground data-[range-middle=true]:bg-accent data-[range-middle=true]:text-accent-foreground data-[range-start=true]:bg-primary data-[range-start=true]:text-primary-foreground data-[range-end=true]:bg-primary data-[range-end=true]:text-primary-foreground group-data-[focused=true]/day:border-ring group-data-[focused=true]/day:ring-ring/50 dark:hover:text-accent-foreground flex aspect-square size-auto w-full min-w-(--cell-size) flex-col gap-1 leading-none font-normal group-data-[focused=true]/day:relative group-data-[focused=true]/day:z-10 group-data-[focused=true]/day:ring-[3px] data-[range-end=true]:rounded-md data-[range-end=true]:rounded-r-md data-[range-middle=true]:rounded-none data-[range-start=true]:rounded-md data-[range-start=true]:rounded-l-md [&amp;&gt;span]:text-xs [&amp;&gt;span]:opacity-70 rdp-day rdp-day_button"
-                        type="button"
+                        data-variant="ghost"
+                        data-size="icon"
+                        class="group/button shrink-0 items-center justify-center rounded-md border-transparent bg-clip-padding text-sm whitespace-nowrap transition-all outline-none select-none focus-visible:border-ring focus-visible:ring-3 focus-visible:ring-ring/50 active:not-aria-[haspopup]:translate-y-px disabled:pointer-events-none disabled:opacity-50 aria-invalid:border-destructive aria-invalid:ring-3 aria-invalid:ring-destructive/20 dark:aria-invalid:border-destructive/50 dark:aria-invalid:ring-destructive/40 [&amp;_svg]:pointer-events-none [&amp;_svg]:shrink-0 [&amp;_svg:not([class*='size-'])]:size-4 hover:bg-muted hover:text-foreground aria-expanded:bg-muted aria-expanded:text-foreground dark:hover:bg-muted/50 relative isolate z-10 flex aspect-square size-auto w-full min-w-(--cell-size) flex-col gap-1 border-0 leading-none font-normal group-data-[focused=true]/day:relative group-data-[focused=true]/day:z-10 group-data-[focused=true]/day:border-ring group-data-[focused=true]/day:ring-[3px] group-data-[focused=true]/day:ring-ring/50 data-[range-end=true]:rounded-(--cell-radius) data-[range-end=true]:rounded-r-(--cell-radius) data-[range-end=true]:bg-primary data-[range-end=true]:text-primary-foreground data-[range-middle=true]:rounded-none data-[range-middle=true]:bg-muted data-[range-middle=true]:text-foreground data-[range-start=true]:rounded-(--cell-radius) data-[range-start=true]:rounded-l-(--cell-radius) data-[range-start=true]:bg-primary data-[range-start=true]:text-primary-foreground data-[selected-single=true]:bg-primary data-[selected-single=true]:text-primary-foreground dark:hover:text-foreground [&amp;&gt;span]:text-xs [&amp;&gt;span]:opacity-70 rdp-day rdp-day_button"
                         data-day="03/12/2025"
+                        type="button"
                         tabindex="-1"
-                        aria-label="Wednesday, December 3rd, 2025"
+                        aria-label="quarta-feira, 3 de dezembro de 2025"
                 >
                   3
                 </button>
               </td>
-              <td class="relative w-full h-full p-0 text-center [&amp;:first-child[data-selected=true]_button]:rounded-l-md [&amp;:last-child[data-selected=true]_button]:rounded-r-md group/day aspect-square select-none rdp-day text-muted-foreground aria-selected:text-muted-foreground rdp-outside"
+              <td class="group/day relative aspect-square h-full w-full rounded-(--cell-radius) p-0 text-center select-none [&amp;:last-child[data-selected=true]_button]:rounded-r-(--cell-radius) [&amp;:first-child[data-selected=true]_button]:rounded-l-(--cell-radius) rdp-day text-muted-foreground aria-selected:text-muted-foreground rdp-outside"
                   role="gridcell"
                   data-day="2025-12-04"
                   data-month="2025-12"
                   data-outside="true"
               >
                 <button data-slot="button"
-                        class="items-center justify-center whitespace-nowrap rounded-md text-sm transition-[color,box-shadow] disabled:pointer-events-none disabled:opacity-50 [&amp;_svg]:pointer-events-none [&amp;_svg:not([class*='size-'])]:size-4 shrink-0 [&amp;_svg]:shrink-0 outline-none focus-visible:border-ring focus-visible:ring-ring/50 focus-visible:ring-[3px] aria-invalid:ring-destructive/20 dark:aria-invalid:ring-destructive/40 aria-invalid:border-destructive hover:bg-accent dark:hover:bg-accent/50 hover:text-accent-foreground data-[selected-single=true]:bg-primary data-[selected-single=true]:text-primary-foreground data-[range-middle=true]:bg-accent data-[range-middle=true]:text-accent-foreground data-[range-start=true]:bg-primary data-[range-start=true]:text-primary-foreground data-[range-end=true]:bg-primary data-[range-end=true]:text-primary-foreground group-data-[focused=true]/day:border-ring group-data-[focused=true]/day:ring-ring/50 dark:hover:text-accent-foreground flex aspect-square size-auto w-full min-w-(--cell-size) flex-col gap-1 leading-none font-normal group-data-[focused=true]/day:relative group-data-[focused=true]/day:z-10 group-data-[focused=true]/day:ring-[3px] data-[range-end=true]:rounded-md data-[range-end=true]:rounded-r-md data-[range-middle=true]:rounded-none data-[range-start=true]:rounded-md data-[range-start=true]:rounded-l-md [&amp;&gt;span]:text-xs [&amp;&gt;span]:opacity-70 rdp-day rdp-day_button"
-                        type="button"
+                        data-variant="ghost"
+                        data-size="icon"
+                        class="group/button shrink-0 items-center justify-center rounded-md border-transparent bg-clip-padding text-sm whitespace-nowrap transition-all outline-none select-none focus-visible:border-ring focus-visible:ring-3 focus-visible:ring-ring/50 active:not-aria-[haspopup]:translate-y-px disabled:pointer-events-none disabled:opacity-50 aria-invalid:border-destructive aria-invalid:ring-3 aria-invalid:ring-destructive/20 dark:aria-invalid:border-destructive/50 dark:aria-invalid:ring-destructive/40 [&amp;_svg]:pointer-events-none [&amp;_svg]:shrink-0 [&amp;_svg:not([class*='size-'])]:size-4 hover:bg-muted hover:text-foreground aria-expanded:bg-muted aria-expanded:text-foreground dark:hover:bg-muted/50 relative isolate z-10 flex aspect-square size-auto w-full min-w-(--cell-size) flex-col gap-1 border-0 leading-none font-normal group-data-[focused=true]/day:relative group-data-[focused=true]/day:z-10 group-data-[focused=true]/day:border-ring group-data-[focused=true]/day:ring-[3px] group-data-[focused=true]/day:ring-ring/50 data-[range-end=true]:rounded-(--cell-radius) data-[range-end=true]:rounded-r-(--cell-radius) data-[range-end=true]:bg-primary data-[range-end=true]:text-primary-foreground data-[range-middle=true]:rounded-none data-[range-middle=true]:bg-muted data-[range-middle=true]:text-foreground data-[range-start=true]:rounded-(--cell-radius) data-[range-start=true]:rounded-l-(--cell-radius) data-[range-start=true]:bg-primary data-[range-start=true]:text-primary-foreground data-[selected-single=true]:bg-primary data-[selected-single=true]:text-primary-foreground dark:hover:text-foreground [&amp;&gt;span]:text-xs [&amp;&gt;span]:opacity-70 rdp-day rdp-day_button"
                         data-day="04/12/2025"
+                        type="button"
                         tabindex="-1"
-                        aria-label="Thursday, December 4th, 2025"
+                        aria-label="quinta-feira, 4 de dezembro de 2025"
                 >
                   4
                 </button>
               </td>
-              <td class="relative w-full h-full p-0 text-center [&amp;:first-child[data-selected=true]_button]:rounded-l-md [&amp;:last-child[data-selected=true]_button]:rounded-r-md group/day aspect-square select-none rdp-day text-muted-foreground aria-selected:text-muted-foreground rdp-outside"
+              <td class="group/day relative aspect-square h-full w-full rounded-(--cell-radius) p-0 text-center select-none [&amp;:last-child[data-selected=true]_button]:rounded-r-(--cell-radius) [&amp;:first-child[data-selected=true]_button]:rounded-l-(--cell-radius) rdp-day text-muted-foreground aria-selected:text-muted-foreground rdp-outside"
                   role="gridcell"
                   data-day="2025-12-05"
                   data-month="2025-12"
                   data-outside="true"
               >
                 <button data-slot="button"
-                        class="items-center justify-center whitespace-nowrap rounded-md text-sm transition-[color,box-shadow] disabled:pointer-events-none disabled:opacity-50 [&amp;_svg]:pointer-events-none [&amp;_svg:not([class*='size-'])]:size-4 shrink-0 [&amp;_svg]:shrink-0 outline-none focus-visible:border-ring focus-visible:ring-ring/50 focus-visible:ring-[3px] aria-invalid:ring-destructive/20 dark:aria-invalid:ring-destructive/40 aria-invalid:border-destructive hover:bg-accent dark:hover:bg-accent/50 hover:text-accent-foreground data-[selected-single=true]:bg-primary data-[selected-single=true]:text-primary-foreground data-[range-middle=true]:bg-accent data-[range-middle=true]:text-accent-foreground data-[range-start=true]:bg-primary data-[range-start=true]:text-primary-foreground data-[range-end=true]:bg-primary data-[range-end=true]:text-primary-foreground group-data-[focused=true]/day:border-ring group-data-[focused=true]/day:ring-ring/50 dark:hover:text-accent-foreground flex aspect-square size-auto w-full min-w-(--cell-size) flex-col gap-1 leading-none font-normal group-data-[focused=true]/day:relative group-data-[focused=true]/day:z-10 group-data-[focused=true]/day:ring-[3px] data-[range-end=true]:rounded-md data-[range-end=true]:rounded-r-md data-[range-middle=true]:rounded-none data-[range-start=true]:rounded-md data-[range-start=true]:rounded-l-md [&amp;&gt;span]:text-xs [&amp;&gt;span]:opacity-70 rdp-day rdp-day_button"
-                        type="button"
+                        data-variant="ghost"
+                        data-size="icon"
+                        class="group/button shrink-0 items-center justify-center rounded-md border-transparent bg-clip-padding text-sm whitespace-nowrap transition-all outline-none select-none focus-visible:border-ring focus-visible:ring-3 focus-visible:ring-ring/50 active:not-aria-[haspopup]:translate-y-px disabled:pointer-events-none disabled:opacity-50 aria-invalid:border-destructive aria-invalid:ring-3 aria-invalid:ring-destructive/20 dark:aria-invalid:border-destructive/50 dark:aria-invalid:ring-destructive/40 [&amp;_svg]:pointer-events-none [&amp;_svg]:shrink-0 [&amp;_svg:not([class*='size-'])]:size-4 hover:bg-muted hover:text-foreground aria-expanded:bg-muted aria-expanded:text-foreground dark:hover:bg-muted/50 relative isolate z-10 flex aspect-square size-auto w-full min-w-(--cell-size) flex-col gap-1 border-0 leading-none font-normal group-data-[focused=true]/day:relative group-data-[focused=true]/day:z-10 group-data-[focused=true]/day:border-ring group-data-[focused=true]/day:ring-[3px] group-data-[focused=true]/day:ring-ring/50 data-[range-end=true]:rounded-(--cell-radius) data-[range-end=true]:rounded-r-(--cell-radius) data-[range-end=true]:bg-primary data-[range-end=true]:text-primary-foreground data-[range-middle=true]:rounded-none data-[range-middle=true]:bg-muted data-[range-middle=true]:text-foreground data-[range-start=true]:rounded-(--cell-radius) data-[range-start=true]:rounded-l-(--cell-radius) data-[range-start=true]:bg-primary data-[range-start=true]:text-primary-foreground data-[selected-single=true]:bg-primary data-[selected-single=true]:text-primary-foreground dark:hover:text-foreground [&amp;&gt;span]:text-xs [&amp;&gt;span]:opacity-70 rdp-day rdp-day_button"
                         data-day="05/12/2025"
+                        type="button"
                         tabindex="-1"
-                        aria-label="Friday, December 5th, 2025"
+                        aria-label="sexta-feira, 5 de dezembro de 2025"
                 >
                   5
                 </button>
               </td>
-              <td class="relative w-full h-full p-0 text-center [&amp;:first-child[data-selected=true]_button]:rounded-l-md [&amp;:last-child[data-selected=true]_button]:rounded-r-md group/day aspect-square select-none rdp-day text-muted-foreground aria-selected:text-muted-foreground rdp-outside"
+              <td class="group/day relative aspect-square h-full w-full rounded-(--cell-radius) p-0 text-center select-none [&amp;:last-child[data-selected=true]_button]:rounded-r-(--cell-radius) [&amp;:first-child[data-selected=true]_button]:rounded-l-(--cell-radius) rdp-day text-muted-foreground aria-selected:text-muted-foreground rdp-outside"
                   role="gridcell"
                   data-day="2025-12-06"
                   data-month="2025-12"
                   data-outside="true"
               >
                 <button data-slot="button"
-                        class="items-center justify-center whitespace-nowrap rounded-md text-sm transition-[color,box-shadow] disabled:pointer-events-none disabled:opacity-50 [&amp;_svg]:pointer-events-none [&amp;_svg:not([class*='size-'])]:size-4 shrink-0 [&amp;_svg]:shrink-0 outline-none focus-visible:border-ring focus-visible:ring-ring/50 focus-visible:ring-[3px] aria-invalid:ring-destructive/20 dark:aria-invalid:ring-destructive/40 aria-invalid:border-destructive hover:bg-accent dark:hover:bg-accent/50 hover:text-accent-foreground data-[selected-single=true]:bg-primary data-[selected-single=true]:text-primary-foreground data-[range-middle=true]:bg-accent data-[range-middle=true]:text-accent-foreground data-[range-start=true]:bg-primary data-[range-start=true]:text-primary-foreground data-[range-end=true]:bg-primary data-[range-end=true]:text-primary-foreground group-data-[focused=true]/day:border-ring group-data-[focused=true]/day:ring-ring/50 dark:hover:text-accent-foreground flex aspect-square size-auto w-full min-w-(--cell-size) flex-col gap-1 leading-none font-normal group-data-[focused=true]/day:relative group-data-[focused=true]/day:z-10 group-data-[focused=true]/day:ring-[3px] data-[range-end=true]:rounded-md data-[range-end=true]:rounded-r-md data-[range-middle=true]:rounded-none data-[range-start=true]:rounded-md data-[range-start=true]:rounded-l-md [&amp;&gt;span]:text-xs [&amp;&gt;span]:opacity-70 rdp-day rdp-day_button"
-                        type="button"
+                        data-variant="ghost"
+                        data-size="icon"
+                        class="group/button shrink-0 items-center justify-center rounded-md border-transparent bg-clip-padding text-sm whitespace-nowrap transition-all outline-none select-none focus-visible:border-ring focus-visible:ring-3 focus-visible:ring-ring/50 active:not-aria-[haspopup]:translate-y-px disabled:pointer-events-none disabled:opacity-50 aria-invalid:border-destructive aria-invalid:ring-3 aria-invalid:ring-destructive/20 dark:aria-invalid:border-destructive/50 dark:aria-invalid:ring-destructive/40 [&amp;_svg]:pointer-events-none [&amp;_svg]:shrink-0 [&amp;_svg:not([class*='size-'])]:size-4 hover:bg-muted hover:text-foreground aria-expanded:bg-muted aria-expanded:text-foreground dark:hover:bg-muted/50 relative isolate z-10 flex aspect-square size-auto w-full min-w-(--cell-size) flex-col gap-1 border-0 leading-none font-normal group-data-[focused=true]/day:relative group-data-[focused=true]/day:z-10 group-data-[focused=true]/day:border-ring group-data-[focused=true]/day:ring-[3px] group-data-[focused=true]/day:ring-ring/50 data-[range-end=true]:rounded-(--cell-radius) data-[range-end=true]:rounded-r-(--cell-radius) data-[range-end=true]:bg-primary data-[range-end=true]:text-primary-foreground data-[range-middle=true]:rounded-none data-[range-middle=true]:bg-muted data-[range-middle=true]:text-foreground data-[range-start=true]:rounded-(--cell-radius) data-[range-start=true]:rounded-l-(--cell-radius) data-[range-start=true]:bg-primary data-[range-start=true]:text-primary-foreground data-[selected-single=true]:bg-primary data-[selected-single=true]:text-primary-foreground dark:hover:text-foreground [&amp;&gt;span]:text-xs [&amp;&gt;span]:opacity-70 rdp-day rdp-day_button"
                         data-day="06/12/2025"
+                        type="button"
                         tabindex="-1"
-                        aria-label="Saturday, December 6th, 2025"
+                        aria-label="sábado, 6 de dezembro de 2025"
                 >
                   6
                 </button>

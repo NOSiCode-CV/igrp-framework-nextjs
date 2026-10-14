@@ -5,6 +5,12 @@ import { fileURLToPath } from "node:url";
 import type { NextConfig } from "next";
 import type { RemotePattern } from "next/dist/shared/lib/image-config";
 
+import createNextIntlPlugin from "next-intl/plugin";
+
+// next-intl WITHOUT i18n routing: no [locale] segment and no locale in URLs.
+// The locale is resolved per request in src/i18n/request.ts.
+const withNextIntl = createNextIntlPlugin("./src/i18n/request.ts");
+
 const appDir = path.dirname(fileURLToPath(import.meta.url));
 const monorepoRoot = path.resolve(appDir, "../..");
 
@@ -97,9 +103,11 @@ const nextConfig: NextConfig = {
       "@igrp/igrp-framework-react-design-system",
       "@igrp/framework-next-ui",
       "@igrp/framework-next",
+      "@igrp/framework-next/i18n",
+      "@igrp/framework-next/i18n/client",
       "@tanstack/react-query",
     ],
   },
 };
 
-export default nextConfig;
+export default withNextIntl(nextConfig);

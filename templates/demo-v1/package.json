@@ -17,9 +17,10 @@
   },
   "scripts": {
     "dev": "node scripts/dev.mjs",
-    "build": "pnpm lint && next build --turbopack",
+    "build": "pnpm lint && pnpm lint:i18n && next build --turbopack",
     "start": "next start",
     "lint": "biome check --write",
+    "lint:i18n": "igrp-i18n check-catalogs src/i18n/messages --default pt && igrp-i18n check-literals src/components src/i18n \"src/app/(igrp)/page.tsx\"",
     "format": "biome format --write",
     "publish:template": "pwsh -ExecutionPolicy Bypass -File ./create-template/create-zip-template.ps1"
   },
@@ -33,6 +34,7 @@
     "class-variance-authority": "0.7.1",
     "next": "15.5.25",
     "next-auth": "4.24.15",
+    "next-intl": "^4.14.0",
     "react": "19.2.8",
     "react-dom": "19.2.8",
     "react-hook-form": "7.88.0",
@@ -43,6 +45,7 @@
   "devDependencies": {
     "@biomejs/biome": "2.5.13",
     "@igrp/framework-next-types": "workspace:*",
+    "@igrp/i18n-tools": "workspace:*",
     "@tailwindcss/postcss": "4.3.3",
     "@types/node": "25.9.1",
     "@types/react": "19.2.18",

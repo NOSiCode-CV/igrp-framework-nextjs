@@ -113,7 +113,18 @@ export interface IGRPChromeStrings {
     goToSlide: string;
   };
   authForm: {
+    /** Primary action of the login form. */
+    loginButton: string;
     signInError: string;
+    /** Word between the two footer links ("iGRP *na* NOSi"). */
+    footerJoin: string;
+  };
+  /** Fallbacks of the header and sidebar error boundaries (`IGRPHeaderError`, `IGRPSidebarError`). */
+  layoutError: {
+    header: string;
+    sidebar: string;
+    retry: string;
+    retrying: string;
   };
   forbidden: {
     title: string;
@@ -197,7 +208,17 @@ export const IGRP_CHROME_STRINGS_PT: IGRPChromeStrings = {
   },
   loading: { text: 'Aguarde...' },
   authCarousel: { region: 'Destaques', goToSlide: 'Ir para o destaque {index}' },
-  authForm: { signInError: 'Não foi possível iniciar sessão. Tente novamente.' },
+  authForm: {
+    loginButton: 'Iniciar sessão',
+    signInError: 'Não foi possível iniciar sessão. Tente novamente.',
+    footerJoin: 'na',
+  },
+  layoutError: {
+    header: 'Falha ao carregar o cabeçalho.',
+    sidebar: 'Falha ao carregar a navegação.',
+    retry: 'Tentar novamente',
+    retrying: 'A tentar…',
+  },
   forbidden: {
     title: 'Acesso negado',
     description: 'Não tem permissão para aceder a este conteúdo.',

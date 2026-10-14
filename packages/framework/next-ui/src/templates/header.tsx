@@ -93,14 +93,14 @@ interface IGRPTemplateHeaderProps {
   /** App-relative path to the logo used when `headerLogo` is absent or fails. */
   fallbackLogo?: string;
   /**
-   * Accessible name of the built-in settings link. pt-PT default.
+   * Accessible name of the built-in settings link. Defaults to the chrome catalog.
    *
    * The link renders an icon and nothing else, so without this a screen reader
    * announces only the href.
    */
   settingsLabel?: string;
   /**
-   * Partial overrides of the pt-PT strings of the header's children.
+   * Partial overrides of the chrome catalog groups of the header's children.
    *
    * Each child owns its own catalog, but the header is how apps actually mount
    * them — without these pass-throughs the override props existed and were
@@ -110,9 +110,9 @@ interface IGRPTemplateHeaderProps {
   commandSearchLabels?: Partial<IGRPCommandSearchLabels>;
   notificationsLabels?: Partial<IGRPNotificationsLabels>;
   modeSwitcherLabels?: Partial<IGRPModeSwitcherLabels>;
-  /** Screen-reader label for the breadcrumb home link. pt-PT default. */
+  /** Screen-reader label for the breadcrumb home link. Defaults to the chrome catalog. */
   breadcrumbHomeLabel?: string;
-  /** Screen-reader label for the collapsed-breadcrumbs menu. pt-PT default. */
+  /** Screen-reader label for the collapsed-breadcrumbs menu.. Defaults to the chrome catalog. */
   breadcrumbEllipsisLabel?: string;
 }
 

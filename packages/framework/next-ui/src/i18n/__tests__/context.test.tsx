@@ -59,4 +59,19 @@ describe('useIGRPChromeI18n', () => {
   it('renders Portuguese on the server regardless of cookies (no document there)', () => {
     expect(renderToString(<Probe />)).toContain('Terminar sessão');
   });
+
+  it('without a provider never throws on a malformed cookie value', () => {
+    document.cookie = 'IGRP_LOCALE=fr%E0%A4%A; path=/';
+    expect(mount(<Probe />)).toBe('Terminar sessão');
+  });
+
+  it('without a provider decodes a percent-encoded value', () => {
+    document.cookie = 'IGRP_LOCALE=fr%2DFR; path=/';
+    expect(mount(<Probe />)).toBe('Se déconnecter');
+  });
+
+  it('without a provider accepts an RFC 6265 quoted value', () => {
+    document.cookie = 'IGRP_LOCALE="fr"; path=/';
+    expect(mount(<Probe />)).toBe('Se déconnecter');
+  });
 });

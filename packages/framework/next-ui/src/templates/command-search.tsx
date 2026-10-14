@@ -39,7 +39,7 @@ export const IGRP_COMMAND_SEARCH_LABELS_PT_PT: IGRPCommandSearchLabels =
 interface IGRPTemplateCommandSearchProps {
   /** Command items to render in the palette. When omitted, the palette shows only the empty state. */
   commands?: IGRPCommandItem[];
-  /** Partial override of the pt-PT strings. Missing keys keep their default. */
+  /** Partial override of the chrome catalog group. Missing keys keep the catalog value. */
   labels?: Partial<IGRPCommandSearchLabels>;
 }
 

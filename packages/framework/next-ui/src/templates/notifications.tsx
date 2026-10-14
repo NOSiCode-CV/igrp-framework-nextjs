@@ -65,7 +65,7 @@ interface IGRPTemplateNotificationsProps {
    * server's under SSR and the browser's on the client and hydrates mismatched.
    */
   locale?: string;
-  /** Partial override of the pt-PT strings. Missing keys keep their default. */
+  /** Partial override of the chrome catalog group. Missing keys keep the catalog value. */
   labels?: Partial<IGRPNotificationsLabels>;
 }
 

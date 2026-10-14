@@ -53,7 +53,17 @@ export const IGRP_CHROME_STRINGS_FR: IGRPChromeStrings = {
   },
   loading: { text: 'Veuillez patienter...' },
   authCarousel: { region: 'À la une', goToSlide: "Aller à l'élément {index}" },
-  authForm: { signInError: 'Connexion impossible. Veuillez réessayer.' },
+  authForm: {
+    loginButton: 'Se connecter',
+    signInError: 'Connexion impossible. Veuillez réessayer.',
+    footerJoin: 'chez',
+  },
+  layoutError: {
+    header: "Impossible de charger l'en-tête.",
+    sidebar: 'Impossible de charger la navigation.',
+    retry: 'Réessayer',
+    retrying: 'Nouvelle tentative…',
+  },
   forbidden: {
     title: 'Accès refusé',
     description: "Vous n'avez pas la permission d'accéder à ce contenu.",

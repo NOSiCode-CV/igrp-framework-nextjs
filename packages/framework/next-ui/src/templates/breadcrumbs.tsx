@@ -60,9 +60,9 @@ interface IGRPTemplateBreadcrumbsProps {
    * Wrap in useCallback to avoid triggering a recompute on every parent render.
    */
   formatLabel?: (segment: string, href: string) => string | undefined;
-  /** Screen-reader label for the home icon. pt-PT default; override for other locales. */
+  /** Screen-reader label for the home icon.. Defaults to the chrome catalog. */
   homeLabel?: string;
-  /** Screen-reader label for the collapsed-items menu. pt-PT default. */
+  /** Screen-reader label for the collapsed-items menu.. Defaults to the chrome catalog. */
   ellipsisLabel?: string;
   /** Home link destination. Defaults to '/' */
   homeHref?: string;

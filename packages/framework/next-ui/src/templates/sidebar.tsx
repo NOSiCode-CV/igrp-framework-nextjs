@@ -17,9 +17,9 @@ import { IGRPSidebarError } from './sidebar-error.js';
 
 interface IGRPTemplateSidebarProps extends React.ComponentProps<typeof Sidebar> {
   data?: IGRPSidebarDataArgs;
-  /** Partial override of the pt-PT menu strings. */
+  /** Partial override of the chrome catalog's `menus` group. */
   menuLabels?: Partial<IGRPMenuLabels>;
-  /** Partial override of the pt-PT nav-user strings. */
+  /** Partial override of the chrome catalog's `navUser` group. */
   navUserLabels?: Partial<IGRPNavUserLabels>;
 }
 

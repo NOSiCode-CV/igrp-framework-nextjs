@@ -7,7 +7,7 @@ import { useIGRPChromeI18n } from '../i18n/context.js';
 
 interface IGRPTemplateNotFoundProps {
   title?: string;
-  /** Sub-heading under the 404. pt-PT default; override for other locales. */
+  /** Sub-heading under the 404. Defaults to the chrome catalog. */
   subtitle?: string;
   description?: string;
   /**
@@ -15,7 +15,7 @@ interface IGRPTemplateNotFoundProps {
    * automatically, so keep this app-relative. Pass `null` to render no action.
    */
   homeHref?: string | null;
-  /** Label of the "back home" action. pt-PT default. */
+  /** Label of the "back home" action. Defaults to the chrome catalog. */
   homeLabel?: string;
   image?: string;
   imageAlt?: string;

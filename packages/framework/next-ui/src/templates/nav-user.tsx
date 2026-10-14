@@ -39,7 +39,7 @@ interface IGRPTemplateNavUserProps {
    */
   logoutUrl?: string;
   showNotifications?: boolean;
-  /** Partial override of the pt-PT strings. Missing keys keep their default. */
+  /** Partial override of the chrome catalog group. Missing keys keep the catalog value. */
   labels?: Partial<IGRPNavUserLabels>;
 }
 

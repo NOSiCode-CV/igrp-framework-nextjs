@@ -16,7 +16,7 @@ interface IGRPCarousel {
 interface IGRPAuthCarouselProps {
   carouselItems: IGRPCarousel[];
   intervalTime?: number;
-  /** `aria-label` of the carousel region. pt-PT default. */
+  /** `aria-label` of the carousel region.. Defaults to the chrome catalog. */
   regionLabel?: string;
   /** `aria-label` of a slide dot. `{index}` is substituted (1-based). */
   goToSlideLabel?: string;

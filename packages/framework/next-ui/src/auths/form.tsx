@@ -21,14 +21,17 @@ import { withBasePath } from '../lib/utils.js';
 interface IGRPLoginTexts {
   welcome: string;
   description: string;
-  loginButton: string;
+  /** Primary action label. Defaults to the chrome catalog. */
+  loginButton?: string;
   copyright: string;
   igrpLabel: string;
   igrpUrl: string;
   nosiLabel: string;
   nosiUrl: string;
-  /** Shown when `signIn()` rejects before it can redirect. pt-PT default. */
+  /** Shown when `signIn()` rejects before it can redirect. Defaults to the chrome catalog. */
   signInError?: string;
+  /** Word between the two footer links. Defaults to the chrome catalog. */
+  footerJoin?: string;
 }
 
 interface IGRPSiteLogo {
@@ -56,6 +59,7 @@ function IGRPAuthForm({
   const [isLoading, setIsLoading] = useState(false);
   const [authError, setAuthError] = useState<string | null>(null);
   const chrome = useIGRPChromeI18n();
+  const loginButton = texts.loginButton ?? chrome.authForm.loginButton;
 
   // NO `finally` CLAUSE HERE. Two independent reasons, both easy to undo by
   // accident:
@@ -148,11 +152,11 @@ function IGRPAuthForm({
                   strokeWidth={2}
                   aria-hidden
                 />
-                {texts.loginButton}…
+                {loginButton}…
               </>
             ) : (
               <>
-                {texts.loginButton}
+                {loginButton}
                 <IGRPIcon
                   iconName="ShieldCheck"
                   className={cn('mr-2 size-6')}
@@ -177,7 +181,7 @@ function IGRPAuthForm({
           >
             {texts.igrpLabel}
           </a>
-          <span>&nbsp;na&nbsp;</span>
+          <span>&nbsp;{texts.footerJoin ?? chrome.authForm.footerJoin}&nbsp;</span>
           <a
             className={cn('font-medium underline underline-offset-4 hover:no-underline')}
             href={texts.nosiUrl}

@@ -55,7 +55,7 @@ interface IGRPTemplateThemeSelectorProps {
   themes?: IGRPThemeOption[];
   /** Larger-scale options. Pass `[]` to hide the group entirely. */
   scaledThemes?: IGRPThemeOption[];
-  /** Partial override of the pt-PT strings. Missing keys keep their default. */
+  /** Partial override of the chrome catalog group. Missing keys keep the catalog value. */
   labels?: Partial<IGRPThemeSelectorLabels>;
 }
 

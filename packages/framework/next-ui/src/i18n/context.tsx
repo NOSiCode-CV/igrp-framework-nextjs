@@ -25,10 +25,28 @@ export function IGRPChromeI18nProvider({
 
 const subscribeNever = () => () => {};
 
-/** The `IGRP_LOCALE` cookie value on the client; `''` when absent. */
+/**
+ * The `IGRP_LOCALE` cookie value on the client; `''` when absent.
+ *
+ * Never throws: the cookie is shared by every app on the domain and is not
+ * `httpOnly`, so a malformed percent-encoding is a real input, and a throw here
+ * would take down every chrome component, `IGRPGlobalError` included. A value
+ * that cannot be decoded is used raw (and then falls back to Portuguese);
+ * RFC 6265 surrounding quotes are stripped.
+ */
 function readCookieLocale(): string {
   const entry = document.cookie.split('; ').find((c) => c.startsWith(`${IGRP_LOCALE_COOKIE}=`));
-  return entry ? decodeURIComponent(entry.slice(IGRP_LOCALE_COOKIE.length + 1)) : '';
+  if (!entry) return '';
+  const raw = entry.slice(IGRP_LOCALE_COOKIE.length + 1);
+  let value = raw;
+  try {
+    value = decodeURIComponent(raw);
+  } catch {
+    value = raw;
+  }
+  return value.length >= 2 && value.startsWith('"') && value.endsWith('"')
+    ? value.slice(1, -1)
+    : value;
 }
 
 const serverSnapshot = () => '';

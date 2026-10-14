@@ -6,10 +6,10 @@ import { IGRPButton } from '@igrp/igrp-framework-react-design-system';
 import { useIGRPChromeI18n } from '../i18n/context.js';
 
 export interface IGRPForbiddenProps {
-  /** pt-PT default; override for other locales. */
+  /** Defaults to the chrome catalog (`forbidden.title`). */
   title?: string;
   description?: string;
-  /** Label of the "back home" action. pt-PT default; override for other locales. */
+  /** Label of the "back home" action. Defaults to the chrome catalog. */
   homeLabel?: string;
   /**
    * Destination of the "back home" action. `next/link` prefixes `basePath`

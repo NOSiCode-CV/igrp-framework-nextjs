@@ -24,7 +24,7 @@ interface IGRPTemplateAppSwitcherProps {
   apps?: IGRPApplicationArgs[];
   appCode?: string;
   appCenterUrl?: string;
-  /** Label of the Applications Center entry. pt-PT default. */
+  /** Label of the Applications Center entry.. Defaults to the chrome catalog. */
   appCenterLabel?: string;
   /** Shown in place of a missing application name. */
   unknownLabel?: string;

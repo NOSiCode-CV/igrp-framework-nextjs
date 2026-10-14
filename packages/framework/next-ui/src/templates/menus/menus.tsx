@@ -25,7 +25,7 @@ export type IGRPTemplateMenuArgs = {
    * still wins over `labels.navAriaLabel`, for one release.
    */
   navAriaLabel?: string;
-  /** Partial override of the pt-PT strings. Missing keys keep their default. */
+  /** Partial override of the chrome catalog group. Missing keys keep the catalog value. */
   labels?: Partial<IGRPMenuLabels>;
 };
 

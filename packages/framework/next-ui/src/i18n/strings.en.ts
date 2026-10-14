@@ -53,7 +53,17 @@ export const IGRP_CHROME_STRINGS_EN: IGRPChromeStrings = {
   },
   loading: { text: 'Please wait...' },
   authCarousel: { region: 'Highlights', goToSlide: 'Go to highlight {index}' },
-  authForm: { signInError: 'Could not sign in. Please try again.' },
+  authForm: {
+    loginButton: 'Sign in',
+    signInError: 'Could not sign in. Please try again.',
+    footerJoin: 'at',
+  },
+  layoutError: {
+    header: 'The header could not be loaded.',
+    sidebar: 'The navigation could not be loaded.',
+    retry: 'Try again',
+    retrying: 'Retrying…',
+  },
   forbidden: {
     title: 'Access denied',
     description: 'You do not have permission to access this content.',

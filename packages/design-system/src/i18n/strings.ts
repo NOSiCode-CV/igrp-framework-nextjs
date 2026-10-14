@@ -2,9 +2,10 @@
  * String catalog for IGRP design-system components. Keep keys grouped by component
  * surface so the override surface is discoverable from a single type.
  *
- * To add a string: add the key here, update `IGRP_I18N_DEFAULTS_PT_PT` with the
- * pt-PT default, and call `useIGRPi18n()` from the consuming component. Never
- * hardcode a user-visible string directly in a component.
+ * To add a string: add the key here, give it a value in `IGRP_I18N_DEFAULTS_PT`,
+ * `strings.en.ts` and `strings.fr.ts` (the parity test fails until all three have
+ * it), and call `useIGRPi18n()` from the consuming component. Never hardcode a
+ * user-visible string directly in a component.
  */
 export interface IGRPI18nStrings {
   dataTable: {
@@ -319,10 +320,12 @@ export interface IGRPI18nStrings {
 }
 
 /**
- * Default string catalog. pt-PT is the framework default — consumers wrap their
- * app tree in `IGRPI18nProvider` to override.
+ * Default string catalog (Portuguese). `IGRP_I18N_DEFAULTS_EN` and
+ * `IGRP_I18N_DEFAULTS_FR` are the other platform languages; the parity test
+ * keeps the three in step. Consumers wrap their app tree in
+ * `IGRPI18nProvider` to pick a catalog or override keys.
  */
-export const IGRP_I18N_DEFAULTS_PT_PT: IGRPI18nStrings = {
+export const IGRP_I18N_DEFAULTS_PT: IGRPI18nStrings = {
   dataTable: {
     clearFilters: "Limpar",
     notFound: "Nenhum registo encontrado.",
@@ -525,6 +528,9 @@ export const IGRP_I18N_DEFAULTS_PT_PT: IGRPI18nStrings = {
     colorPurple: "Roxo",
   },
 }
+
+/** @deprecated Renamed to {@link IGRP_I18N_DEFAULTS_PT}. Same object; removed in the next minor. */
+export const IGRP_I18N_DEFAULTS_PT_PT: IGRPI18nStrings = IGRP_I18N_DEFAULTS_PT
 
 /**
  * Locale used for `Intl` formatting inside the design system (numbers, dates).

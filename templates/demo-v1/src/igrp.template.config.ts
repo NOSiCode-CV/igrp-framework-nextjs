@@ -34,6 +34,7 @@ const buildConfig: IGRPConfigClient = (config) => {
     appCode: process.env.IGRP_APP_CODE || "",
     previewMode: bypass,
     syncAccess: process.env.IGRP_SYNC_ACCESS === "true",
+    branding: { enabled: process.env.IGRP_BRANDING_ENABLED === "true" },
     appInformation: getPackageJson(),
     i18n,
     layoutData: {

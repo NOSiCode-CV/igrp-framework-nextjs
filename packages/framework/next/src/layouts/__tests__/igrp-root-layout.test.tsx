@@ -1,7 +1,9 @@
 import { beforeEach, describe, expect, it, vi } from 'vitest';
 
 const resolveRequestBranding = vi.fn();
-vi.mock('../../branding/request.js', () => ({ igrpResolveRequestBranding: resolveRequestBranding }));
+vi.mock('../../branding/request.js', () => ({
+  igrpResolveRequestBranding: resolveRequestBranding,
+}));
 vi.mock('../../lib/sync-plan.js', () => ({ planAccessManagementSync: () => null }));
 vi.mock('next/server', () => ({ after: () => {} }));
 vi.mock('@igrp/framework-next-ui', () => ({
@@ -65,7 +67,10 @@ describe('IGRPRootLayout organization branding', () => {
   it('passes the resolved Brand to the style element and the providers', async () => {
     const brand = { version: 1, tokens: {}, logos: {} };
     resolveRequestBranding.mockResolvedValue(brand);
-    const tree = await IGRPRootLayout({ children: null, config: config({ branding: { enabled: true } }) });
+    const tree = await IGRPRootLayout({
+      children: null,
+      config: config({ branding: { enabled: true } }),
+    });
     expect(find(tree, IGRPBrandingStyle)?.props.branding).toBe(brand);
     expect(find(tree, IGRPNestedProviders)?.props.branding).toBe(brand);
   });

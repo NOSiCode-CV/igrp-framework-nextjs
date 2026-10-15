@@ -11,7 +11,12 @@ export const BRANDING_TTL_MS = 5 * 60_000;
 export const BRANDING_RETRY_COOLDOWN_MS = 60_000;
 export const BRANDING_FETCH_TIMEOUT_MS = 3_000;
 
-type Entry = { value: IGRPBranding | null; fetchedAt: number; retryAfter: number; inflight?: Promise<void> };
+type Entry = {
+  value: IGRPBranding | null;
+  fetchedAt: number;
+  retryAfter: number;
+  inflight?: Promise<void>;
+};
 const cache = new Map<string, Entry>();
 
 export interface IGRPGetBrandingArgs {
@@ -44,7 +49,9 @@ async function refresh(key: string, args: IGRPGetBrandingArgs): Promise<void> {
     );
     const parsed = igrpParseBranding(response.data.config);
     if (parsed.dropped > 0) {
-      console.warn(JSON.stringify({ event: 'igrp.branding.dropped_fields', count: parsed.dropped }));
+      console.warn(
+        JSON.stringify({ event: 'igrp.branding.dropped_fields', count: parsed.dropped }),
+      );
     }
     if (!parsed.branding) {
       console.warn(JSON.stringify({ event: 'igrp.branding.invalid_config' }));
@@ -56,7 +63,9 @@ async function refresh(key: string, args: IGRPGetBrandingArgs): Promise<void> {
       store(key, { value: null, fetchedAt: Date.now(), retryAfter: 0 });
       return;
     }
-    console.error(JSON.stringify({ event: 'igrp.branding.fetch_failed', status: status ?? 'network' }));
+    console.error(
+      JSON.stringify({ event: 'igrp.branding.fetch_failed', status: status ?? 'network' }),
+    );
     const previous = cache.get(key);
     store(key, {
       value: previous?.value ?? null,

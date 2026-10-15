@@ -9,7 +9,10 @@ describe('igrpParseBranding', () => {
     const result = igrpParseBranding(
       doc({
         version: 1,
-        tokens: { light: { '--primary': 'oklch(0.45 0.18 250)' }, dark: { '--primary': 'oklch(0.78 0.14 250)' } },
+        tokens: {
+          light: { '--primary': 'oklch(0.45 0.18 250)' },
+          dark: { '--primary': 'oklch(0.78 0.14 250)' },
+        },
         logos: { header: { light: 'https://cdn.example/mark.png' } },
       }),
     );
@@ -50,7 +53,7 @@ describe('igrpParseBranding', () => {
     const result = igrpParseBranding(
       doc({
         version: 1,
-        tokens: { light: { '--primary': 'url(https://evil.example/x)', 'primary': 'red' } },
+        tokens: { light: { '--primary': 'url(https://evil.example/x)', primary: 'red' } },
         logos: {},
       }),
     );
@@ -85,7 +88,11 @@ describe('igrpParseBranding', () => {
         },
       }),
     );
-    expect(result.branding?.logos.wide).toEqual({ light: 'https://cdn.example/w.svg', width: 320, height: 96 });
+    expect(result.branding?.logos.wide).toEqual({
+      light: 'https://cdn.example/w.svg',
+      width: 320,
+      height: 96,
+    });
     expect(result.branding?.logos.header).toEqual({ light: 'https://cdn.example/h.png' });
   });
 

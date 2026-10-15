@@ -3,7 +3,10 @@ import type { Metadata } from 'next';
 import type { IGRPBranding } from '@igrp/framework-next-types';
 
 /** Favicon from the Brand, or the app's own icon. Safe to call with `null`. */
-export function igrpBrandingMetadata(branding: IGRPBranding | null, fallbackIcon: string): Metadata['icons'] {
+export function igrpBrandingMetadata(
+  branding: IGRPBranding | null,
+  fallbackIcon: string,
+): Metadata['icons'] {
   const favicon = branding?.logos.favicon;
   if (!favicon) return { icon: fallbackIcon };
   return {

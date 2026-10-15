@@ -16,7 +16,9 @@ describe('igrpBrandingMetadata', () => {
   });
 
   it('returns the fallback icon when the Brand has no favicon', () => {
-    expect(igrpBrandingMetadata({ version: 1, tokens: {}, logos: {} }, '/f.png')).toEqual({ icon: '/f.png' });
+    expect(igrpBrandingMetadata({ version: 1, tokens: {}, logos: {} }, '/f.png')).toEqual({
+      icon: '/f.png',
+    });
   });
 
   it('uses the Brand favicon, with a dark variant behind a colour-scheme media query', () => {

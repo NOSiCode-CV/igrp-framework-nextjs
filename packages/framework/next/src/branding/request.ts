@@ -14,7 +14,9 @@ export const BRAND_FRESHNESS_COOKIE = 'igrp_brand_v';
  * mode is on, or the Brand is absent. When the flag is off this returns before
  * touching cookies or the network.
  */
-export async function igrpResolveRequestBranding(config: IGRPConfigArgs): Promise<IGRPBranding | null> {
+export async function igrpResolveRequestBranding(
+  config: IGRPConfigArgs,
+): Promise<IGRPBranding | null> {
   if (config.branding?.enabled !== true || config.previewMode) return null;
   const store = await cookies();
   const savedAt = Number(store.get(BRAND_FRESHNESS_COOKIE)?.value ?? 0);

@@ -4,7 +4,11 @@ import { describe, expect, it } from 'vitest';
 import { IGRPBrandingStyle, igrpParseBranding } from '../index.js';
 
 const brand = igrpParseBranding(
-  JSON.stringify({ version: 1, tokens: { light: { '--primary': 'oklch(0.45 0.18 250)' } }, logos: {} }),
+  JSON.stringify({
+    version: 1,
+    tokens: { light: { '--primary': 'oklch(0.45 0.18 250)' } },
+    logos: {},
+  }),
 ).branding;
 
 describe('IGRPBrandingStyle', () => {

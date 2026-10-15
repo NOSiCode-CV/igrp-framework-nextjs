@@ -17,7 +17,12 @@ export type IGRPNestedProvidersArgs = {
   sessionArgs?: Partial<SessionProviderProps>;
 };
 
-export function IGRPNestedProviders({ session, branding = null, sessionArgs, children }: IGRPNestedProvidersArgs) {
+export function IGRPNestedProviders({
+  session,
+  branding = null,
+  sessionArgs,
+  children,
+}: IGRPNestedProvidersArgs) {
   return (
     <IGRPSessionProvider {...sessionArgs} session={session}>
       <TooltipProvider>

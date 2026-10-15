@@ -2,18 +2,16 @@ import { beforeEach, describe, expect, it, vi } from 'vitest';
 
 const getGlobalConfiguration = vi.fn();
 vi.mock('@igrp/platform-access-management-client-ts', async (importOriginal) => {
-  const actual = await importOriginal<typeof import('@igrp/platform-access-management-client-ts')>();
+  const actual =
+    await importOriginal<typeof import('@igrp/platform-access-management-client-ts')>();
   return {
     ...actual,
     AccessManagementClient: { create: () => ({ globalConfiguration: { getGlobalConfiguration } }) },
   };
 });
 
-const {
-  igrpGetBranding,
-  igrpInvalidateBranding,
-  igrpResetBrandingCache,
-} = await import('../get-branding.js');
+const { igrpGetBranding, igrpInvalidateBranding, igrpResetBrandingCache } =
+  await import('../get-branding.js');
 
 const BASE = 'https://am.example';
 const doc = (color: string) =>
@@ -51,7 +49,9 @@ describe('igrpGetBranding', () => {
   });
 
   it('caches a 404 as no Brand for the TTL', async () => {
-    getGlobalConfiguration.mockRejectedValue(Object.assign(new Error('not found'), { status: 404 }));
+    getGlobalConfiguration.mockRejectedValue(
+      Object.assign(new Error('not found'), { status: 404 }),
+    );
     expect(await igrpGetBranding({ baseUrl: BASE, token: 't' })).toBeNull();
     expect(await igrpGetBranding({ baseUrl: BASE, token: 't' })).toBeNull();
     expect(getGlobalConfiguration).toHaveBeenCalledTimes(1);
@@ -62,8 +62,12 @@ describe('igrpGetBranding', () => {
     await igrpGetBranding({ baseUrl: BASE, token: 't' });
     vi.setSystemTime(new Date('2026-10-13T10:06:00Z'));
     getGlobalConfiguration.mockRejectedValue(Object.assign(new Error('down'), { status: 503 }));
-    expect((await igrpGetBranding({ baseUrl: BASE, token: 't' }))?.tokens.light).toEqual({ '--primary': 'red' });
-    expect((await igrpGetBranding({ baseUrl: BASE, token: 't' }))?.tokens.light).toEqual({ '--primary': 'red' });
+    expect((await igrpGetBranding({ baseUrl: BASE, token: 't' }))?.tokens.light).toEqual({
+      '--primary': 'red',
+    });
+    expect((await igrpGetBranding({ baseUrl: BASE, token: 't' }))?.tokens.light).toEqual({
+      '--primary': 'red',
+    });
     expect(getGlobalConfiguration).toHaveBeenCalledTimes(2);
     vi.setSystemTime(new Date('2026-10-13T10:07:01Z'));
     await igrpGetBranding({ baseUrl: BASE, token: 't' });

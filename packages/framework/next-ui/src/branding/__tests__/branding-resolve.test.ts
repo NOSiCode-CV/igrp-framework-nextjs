@@ -17,14 +17,18 @@ const fallback = { src: '/logo.png', width: 100, height: 60 };
 
 describe('resolveHeaderLogo', () => {
   it('prefers the Brand header slot, with its dark variant', () => {
-    expect(resolveHeaderLogo({ branding: brand, headerLogo: '/app.png', fallback: '/x.png' })).toEqual({
+    expect(
+      resolveHeaderLogo({ branding: brand, headerLogo: '/app.png', fallback: '/x.png' }),
+    ).toEqual({
       light: 'https://cdn.example/h.png',
       dark: 'https://cdn.example/h-dark.png',
     });
   });
 
   it('uses headerLogo when the Brand has no header slot', () => {
-    expect(resolveHeaderLogo({ branding: null, headerLogo: '/app.png', fallback: '/x.png' })).toEqual({
+    expect(
+      resolveHeaderLogo({ branding: null, headerLogo: '/app.png', fallback: '/x.png' }),
+    ).toEqual({
       light: '/app.png',
     });
   });

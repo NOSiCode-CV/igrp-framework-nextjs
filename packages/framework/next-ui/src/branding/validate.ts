@@ -23,7 +23,11 @@ export function isSafeLogoUrl(url: string): boolean {
   if (url.length > MAX_URL_LENGTH || /\s/.test(url)) return false;
   try {
     const parsed = new URL(url);
-    return (parsed.protocol === 'https:' || parsed.protocol === 'http:') && !parsed.username && !parsed.password;
+    return (
+      (parsed.protocol === 'https:' || parsed.protocol === 'http:') &&
+      !parsed.username &&
+      !parsed.password
+    );
   } catch {
     return false;
   }

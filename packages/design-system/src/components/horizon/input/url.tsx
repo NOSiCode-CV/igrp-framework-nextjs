@@ -8,6 +8,7 @@ import type { IGRPInputProps, IGRPOptionsProps } from "../../../types.js"
 import { InputGroup, InputGroupAddon, InputGroupInput } from "../../primitives/input-group.js"
 import { Select, SelectContent, SelectGroup, SelectItem, SelectTrigger, SelectValue } from "../../primitives/select.js"
 import { igrpOmitNonDomProps } from "../../../lib/dom-props.js"
+import { igrpChainHandlers, igrpMergeRefs } from "../../../lib/form-binding.js"
 import { IGRPLabel } from "../label.js"
 import { Field, FieldDescription, FieldError } from "../../primitives/field.js"
 import { useIGRPi18n } from "../../../i18n/index.js"
@@ -166,6 +167,10 @@ function IGRPInputUrl({
     )
   }
 
+  // The field owns onBlur/ref; the caller's copies run after it and never replace
+  // it (see lib/form-binding.ts).
+  const { onBlur, ref, ...callerProps } = domProps
+
   return (
     <Controller
       name={fieldName}
@@ -223,16 +228,17 @@ function IGRPInputUrl({
                 name={fieldName}
                 type="url"
                 inputMode="url"
+                ref={igrpMergeRefs(field.ref, ref)}
                 value={fieldAddress}
                 onChange={handleAddressChange}
-                onBlur={field.onBlur}
+                onBlur={igrpChainHandlers(field.onBlur, onBlur)}
                 required={required}
                 aria-required={required}
                 aria-invalid={!!fieldState.error || !!error || !!props["aria-invalid"]}
                 aria-describedby={
                   error || fieldState.error ? `${fieldName}-error` : helperText ? `${fieldName}-helper` : undefined
                 }
-                {...domProps}
+                {...callerProps}
               />
             </InputGroup>
 

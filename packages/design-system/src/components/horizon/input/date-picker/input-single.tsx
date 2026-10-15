@@ -64,6 +64,8 @@ function DatePickerInputSingleField({
   onInputBlur,
   onClear,
   onSelect,
+  inputRef,
+  onTouched,
 }: DatePickerInputHandlers & {
   inputId: string
   calendarId: string
@@ -78,6 +80,10 @@ function DatePickerInputSingleField({
   inputMode?: "numeric"
   ariaInvalid?: boolean
   ariaDescribedBy?: string
+  /** react-hook-form's `field.ref`, so the input is focused when the field is invalid. */
+  inputRef?: React.Ref<HTMLInputElement>
+  /** react-hook-form's `field.onBlur`, which marks the field touched. */
+  onTouched?: () => void
 }) {
   const i18n = useIGRPi18n()
   const [open, setOpen] = useState(false)
@@ -98,6 +104,7 @@ function DatePickerInputSingleField({
   return (
     <div className={cn("relative flex gap-2")}>
       <Input
+        ref={inputRef}
         id={inputId}
         name={inputId}
         value={displayValue}
@@ -112,7 +119,10 @@ function DatePickerInputSingleField({
         className={cn("bg-background", hasText ? "pr-14" : "pr-10")}
         disabled={disabledPicker}
         onChange={(e) => onInputChange(e.target.value)}
-        onBlur={onInputBlur}
+        onBlur={() => {
+          onInputBlur()
+          onTouched?.()
+        }}
         onKeyDown={(e) => {
           if (e.key === "ArrowDown" && !disabledPicker) {
             e.preventDefault()
@@ -321,6 +331,8 @@ function IGRPDatePickerInputSingle(allProps: IGRPDatePickerInputSingleProps) {
                       field.onChange(next)
                       onDateChange?.(next ?? undefined)
                     })}
+                    inputRef={field.ref}
+                    onTouched={field.onBlur}
                   />
                 </FormControl>
 

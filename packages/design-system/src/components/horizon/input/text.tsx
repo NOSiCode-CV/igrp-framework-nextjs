@@ -4,6 +4,7 @@ import { useId } from "react"
 import { useFormContext } from "react-hook-form"
 
 import { cn } from "../cn.js"
+import { igrpChainHandlers, igrpMergeRefs } from "../../../lib/form-binding.js"
 import type { IGRPInputProps } from "../../../types.js"
 import { Input } from "../../primitives/input.js"
 import { FormControl, FormDescription, FormField, FormItem, FormLabel, FormMessage } from "../../primitives/form.js"
@@ -54,6 +55,13 @@ function IGRPInputText({
   const positionParentIcon = iconPlacement === "start" ? "ps-9" : "pe-9"
 
   if (formContext) {
+    // The field owns value/onChange/onBlur/ref; a caller's copy must never replace
+    // the binding (see lib/form-binding.ts). Value props are dropped — the form is
+    // the source of truth — and handlers/refs run after the field's.
+    const { value: _value, defaultValue: _defaultValue, onChange, onBlur, ref, ...callerProps } = props
+    void _value
+    void _defaultValue
+
     return (
       <FormField
         control={formContext.control}
@@ -80,10 +88,11 @@ function IGRPInputText({
                     (fieldState.error || error) && "border-destructive focus-visible:ring-destructive/20",
                     inputClassName
                   )}
+                  ref={igrpMergeRefs(field.ref, ref)}
                   value={field.value ?? ""}
-                  onChange={field.onChange}
-                  onBlur={field.onBlur}
-                  {...props}
+                  onChange={igrpChainHandlers(field.onChange, onChange)}
+                  onBlur={igrpChainHandlers(field.onBlur, onBlur)}
+                  {...callerProps}
                 />
               </FormControl>
               {showIcon && (

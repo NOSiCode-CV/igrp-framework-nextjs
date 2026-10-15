@@ -109,6 +109,7 @@ function IGRPSelectField({
   triggerAriaLabelledby,
   triggerAriaInvalid,
   triggerAriaDescribedBy,
+  triggerRef,
   ...selectProps
 }: {
   value: string
@@ -131,6 +132,7 @@ function IGRPSelectField({
   triggerAriaLabelledby?: string
   triggerAriaInvalid?: boolean
   triggerAriaDescribedBy?: string
+  triggerRef?: React.Ref<HTMLButtonElement>
 } & Omit<React.ComponentProps<typeof Select>, "value" | "onValueChange" | "onOpenChange" | "children">) {
   return (
     <Select value={value} onValueChange={onChange} onOpenChange={onOpenChange} disabled={disabled} {...selectProps}>
@@ -146,6 +148,7 @@ function IGRPSelectField({
         triggerAriaLabelledby={triggerAriaLabelledby}
         triggerAriaInvalid={triggerAriaInvalid}
         triggerAriaDescribedBy={triggerAriaDescribedBy}
+        triggerRef={triggerRef}
       />
       <IGRPSelectContent
         showSearch={showSearch}
@@ -246,8 +249,15 @@ function IGRPSelect({
     [state.selected, selectedValue, onValueChange]
   )
 
+  // A caller `onOpenChange` runs after the open-state dispatch, never instead of it.
+  const { onOpenChange: callerOnOpenChange, ...selectRootProps } = props
+  const handleOpenChange = (open: boolean) => {
+    dispatch({ type: "SET_OPEN", payload: open })
+    callerOnOpenChange?.(open)
+  }
+
   const selectFieldProps = {
-    onOpenChange: (open: boolean) => dispatch({ type: "SET_OPEN", payload: open }),
+    onOpenChange: handleOpenChange,
     disabled,
     options,
     placeholder,
@@ -265,7 +275,7 @@ function IGRPSelect({
     showStatus,
     showGroup,
     className,
-    ...props,
+    ...selectRootProps,
   }
 
   if (!formContext) {
@@ -311,6 +321,13 @@ function IGRPSelect({
                 field.onChange(val)
                 handleChange(val)
               }}
+              // Closing the dropdown is this control's blur: it marks the field
+              // touched, which `mode: "onBlur"` / `"onTouched"` validate on.
+              onOpenChange={(open) => {
+                handleOpenChange(open)
+                if (!open) field.onBlur()
+              }}
+              triggerRef={field.ref}
               triggerAriaLabelledby={label ? `${fieldName}-label` : undefined}
             />
           </FormControl>
@@ -462,6 +479,7 @@ const IGRPSelectTrigger = ({
   triggerAriaLabelledby,
   triggerAriaInvalid,
   triggerAriaDescribedBy,
+  triggerRef,
 }: {
   value: string
   options: IGRPOptionsProps[]
@@ -474,8 +492,10 @@ const IGRPSelectTrigger = ({
   triggerAriaLabelledby?: string
   triggerAriaInvalid?: boolean
   triggerAriaDescribedBy?: string
+  triggerRef?: React.Ref<HTMLButtonElement>
 }) => (
   <SelectTrigger
+    ref={triggerRef}
     id={triggerId}
     aria-labelledby={triggerAriaLabelledby}
     aria-invalid={triggerAriaInvalid || undefined}

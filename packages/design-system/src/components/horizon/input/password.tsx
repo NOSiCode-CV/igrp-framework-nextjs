@@ -5,6 +5,7 @@ import { useFormContext, Controller } from "react-hook-form"
 
 import { useIGRPi18n } from "../../../i18n/index.js"
 import { igrpOmitNonDomProps } from "../../../lib/dom-props.js"
+import { igrpChainHandlers, igrpMergeRefs } from "../../../lib/form-binding.js"
 import type { IGRPInputProps } from "../../../types.js"
 import { InputGroup, InputGroupAddon, InputGroupButton, InputGroupInput } from "../../primitives/input-group.js"
 import { IGRPIcon } from "../icon/index.js"
@@ -115,6 +116,10 @@ function IGRPInputPassword({
     )
   }
 
+  // The field owns onBlur/ref; the caller's copies run after it and never replace
+  // it (see lib/form-binding.ts).
+  const { onBlur, ref, ...callerProps } = domProps
+
   return (
     <Controller
       name={fieldName}
@@ -137,13 +142,14 @@ function IGRPInputPassword({
               aria-describedby={
                 error || fieldState.error ? `${fieldName}-error` : helperText ? `${fieldName}-helper` : undefined
               }
+              ref={igrpMergeRefs(field.ref, ref)}
               value={field.value}
               onChange={(e) => {
                 field.onChange(e)
                 onChange?.(e.target.value)
               }}
-              onBlur={field.onBlur}
-              {...domProps}
+              onBlur={igrpChainHandlers(field.onBlur, onBlur)}
+              {...callerProps}
             />
 
             {showPasswordToggle && (

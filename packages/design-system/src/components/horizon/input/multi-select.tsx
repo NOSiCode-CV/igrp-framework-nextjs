@@ -107,6 +107,8 @@ type ControlProps = Omit<IGRPMultiSelectProps, "name" | "label" | "helperText" |
   readNow: () => string[]
   commit: (next: string[]) => void
   onClose?: () => void
+  /** react-hook-form's `field.ref`, so the trigger is focused when the field is invalid. */
+  triggerRef?: React.Ref<HTMLButtonElement>
   invalid?: boolean
   /** `id` and the aria props below are supplied by `FormControl` (via Slot) in form-bound mode; they go on the trigger. */
   "aria-describedby"?: string
@@ -122,6 +124,7 @@ function MultiSelectControl({
   readNow,
   commit,
   onClose,
+  triggerRef,
   invalid,
   disabled,
   placeholder,
@@ -211,6 +214,7 @@ function MultiSelectControl({
       <Popover open={open} onOpenChange={onOpenChange}>
         <PopoverTrigger asChild>
           <Button
+            ref={triggerRef}
             id={slotId ?? triggerId}
             type="button"
             variant="outline"
@@ -401,6 +405,7 @@ function IGRPMultiSelect({
             readNow={readNow}
             commit={commit}
             onClose={field.onBlur}
+            triggerRef={field.ref}
             invalid={Boolean(fieldState.error || errorText)}
           />
         )}

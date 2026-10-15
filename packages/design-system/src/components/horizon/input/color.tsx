@@ -79,6 +79,8 @@ interface ColorFieldProps {
   inputClassName?: string
   /** Rest props forwarded to the value text field. */
   inputProps?: React.ComponentProps<typeof InputGroupInput>
+  /** react-hook-form's `field.ref` — lands on the picker, which is always rendered. */
+  pickerRef?: React.Ref<HTMLInputElement>
   /** Set by `FormControl` in the form path — lands on the picker so the label targets it. */
   id?: string
   "aria-describedby"?: string
@@ -104,10 +106,13 @@ function ColorField({
   label,
   inputClassName,
   inputProps,
+  pickerRef,
   id,
   "aria-describedby": describedBy,
   "aria-invalid": ariaInvalid,
 }: ColorFieldProps) {
+  // The caller's blur/keydown run after the field's own, never instead of them.
+  const { onBlur: callerOnBlur, onKeyDown: callerOnKeyDown, ...textInputProps } = inputProps ?? {}
   const i18n = useIGRPi18n()
   const generatedId = useId()
   const controlId = id ?? generatedId
@@ -185,6 +190,7 @@ function ColorField({
         >
           <input
             type="color"
+            ref={pickerRef}
             id={controlId}
             className="absolute inset-0 size-full cursor-pointer opacity-0 disabled:cursor-not-allowed"
             value={hexValue}
@@ -201,19 +207,21 @@ function ColorField({
         {showFormatValue && (
           <InputGroup className="flex-1" data-disabled={disabled || undefined}>
             <InputGroupInput
-              {...inputProps}
+              {...textInputProps}
               className={inputClassName}
               value={text}
               onChange={(e) => setDraft(e.target.value)}
-              onBlur={() => {
+              onBlur={(e) => {
                 commitDraft()
                 onBlur?.()
+                callerOnBlur?.(e)
               }}
               onKeyDown={(e) => {
                 if (e.key === "Enter") {
                   e.preventDefault()
                   commitDraft()
                 }
+                callerOnKeyDown?.(e)
               }}
               disabled={disabled}
               aria-label={`${label ?? i18n.inputColor.valueLabel} (${formatLabel})`}
@@ -321,6 +329,7 @@ function IGRPInputColor({
               onChange?.(display)
             }}
             onBlur={field.onBlur}
+            pickerRef={field.ref}
             hasError={!!fieldState.error || !!error}
           />
         )}

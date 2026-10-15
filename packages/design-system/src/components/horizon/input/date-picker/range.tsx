@@ -28,6 +28,8 @@ function DatePickerRangeField({
   dateFormat,
   disabled,
   disabledPicker,
+  triggerRef,
+  onClose,
 }: {
   value: DateRange | undefined
   onChange: (date: DateRange | undefined) => void
@@ -37,6 +39,10 @@ function DatePickerRangeField({
   dateFormat: string
   disabled?: IGRPCalendarRangeProps["disabled"]
   disabledPicker?: boolean
+  /** react-hook-form's `field.ref`, so the trigger is focused when the field is invalid. */
+  triggerRef?: React.Ref<HTMLButtonElement>
+  /** Called when the popover closes — form-bound fields mark themselves touched here. */
+  onClose?: () => void
 }) {
   const selectionCompleteRef = React.useRef(false)
   const displayText = value?.from
@@ -46,9 +52,14 @@ function DatePickerRangeField({
     : placeholder
 
   return (
-    <Popover>
+    <Popover
+      onOpenChange={(open) => {
+        if (!open) onClose?.()
+      }}
+    >
       <PopoverTrigger asChild>
         <Button
+          ref={triggerRef}
           id={fieldName}
           variant="outline"
           disabled={disabledPicker}
@@ -149,6 +160,8 @@ function IGRPDatePickerRange({
                   field.onChange(val)
                   onDateChange?.(val)
                 }}
+                triggerRef={field.ref}
+                onClose={field.onBlur}
               />
             </FormControl>
 

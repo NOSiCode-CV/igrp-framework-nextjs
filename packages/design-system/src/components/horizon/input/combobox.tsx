@@ -94,6 +94,7 @@ function ComboboxField({
   onOptionsChangeHandler,
   isSelected,
   onClose,
+  triggerRef,
   iconName = "CornerDownRight",
 }: {
   fieldName: string
@@ -121,6 +122,8 @@ function ComboboxField({
   isSelected: (optValue: string, currentValue: string | string[]) => boolean
   /** Called when the popover closes — form-bound fields mark themselves touched here. */
   onClose?: () => void
+  /** react-hook-form's `field.ref`, so the trigger is focused when the field is invalid. */
+  triggerRef?: React.Ref<HTMLButtonElement>
   iconName?: string
 }) {
   const i18n = useIGRPi18n()
@@ -134,6 +137,7 @@ function ComboboxField({
       <Popover open={open} onOpenChange={onOpenChange}>
         <PopoverTrigger asChild>
           <IGRPButton
+            ref={triggerRef}
             name={fieldName}
             variant="outline"
             role="combobox"
@@ -432,6 +436,7 @@ function IGRPCombobox({
               onOptionsChangeHandler={onOptionsChangeHandler}
               isSelected={isSelected}
               onClose={field.onBlur}
+              triggerRef={field.ref}
               iconName={iconName}
             />
           </div>

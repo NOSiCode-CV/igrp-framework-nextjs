@@ -5,6 +5,7 @@ import { useFormContext, Controller } from "react-hook-form"
 
 import { cn } from "../cn.js"
 import { igrpOmitNonDomProps } from "../../../lib/dom-props.js"
+import { igrpMergeRefs } from "../../../lib/form-binding.js"
 import { useIGRPi18n, useIGRPLocale } from "../../../i18n/index.js"
 import type { IGRPInputProps } from "../../../types.js"
 import { Input } from "../../primitives/input.js"
@@ -155,6 +156,10 @@ type NumberInputFieldProps = {
   onIncrement: (val: NumberValue, updateFn?: (v: NumberValue) => void) => void
   onDecrement: (val: NumberValue, updateFn?: (v: NumberValue) => void) => void
   getDisplayValue: (v: NumberValue) => string
+  /** react-hook-form's `field.ref`, so the field can be focused when invalid. */
+  fieldRef?: React.Ref<HTMLInputElement>
+  /** react-hook-form's `field.onBlur`, which marks the field touched. */
+  onFieldTouched?: () => void
 } & Omit<IGRPInputNumberProps, "value" | "onChange" | "label" | "helperText" | "description" | "error" | "errorMessage">
 
 /** @internal Renders the number input field with stepper buttons. */
@@ -183,6 +188,13 @@ function NumberInputField({
   onIncrement,
   onDecrement,
   getDisplayValue,
+  fieldRef,
+  onFieldTouched,
+  // The caller's handlers run after the component's own, never instead of them.
+  onFocus,
+  onBlur,
+  onKeyDown,
+  ref,
   ...inputProps
 }: NumberInputFieldProps) {
   const i18n = useIGRPi18n()
@@ -206,6 +218,7 @@ function NumberInputField({
           id={fieldName}
           name={fieldName}
           type="text"
+          ref={igrpMergeRefs(fieldRef, ref)}
           value={displayValue}
           onChange={(e) => onInputChange(e.target.value, onValueChange)}
           onKeyDown={(e) => {
@@ -216,9 +229,17 @@ function NumberInputField({
               e.preventDefault()
               onDecrement(value, onValueChange)
             }
+            onKeyDown?.(e)
           }}
-          onFocus={() => onFieldFocus(value)}
-          onBlur={() => onFieldBlur(onValueChange)}
+          onFocus={(e) => {
+            onFieldFocus(value)
+            onFocus?.(e)
+          }}
+          onBlur={(e) => {
+            onFieldBlur(onValueChange)
+            onFieldTouched?.()
+            onBlur?.(e)
+          }}
           className={cn(
             "flex-1 rounded-none border-none bg-background px-3 py-2 text-foreground tabular-nums outline-none focus-visible:ring-0 focus-visible:ring-ring/0 focus-visible:outline-none"
           )}
@@ -266,7 +287,7 @@ function NumberInputField({
 
 /** @internal Props for form-connected number input. */
 type FormNumberInputProps = {
-  field: { value: unknown; onChange: (v: unknown) => void }
+  field: { value: unknown; onChange: (v: unknown) => void; onBlur: () => void; ref: React.Ref<HTMLInputElement> }
   fieldState: { error?: { message?: string } }
   controlledValue: number | undefined
   prevControlledValueRef: React.MutableRefObject<number | undefined>
@@ -330,6 +351,8 @@ function FormNumberInput({
         value={displayValue}
         onValueChange={formOnValueChange}
         fieldError={!!fieldState.error}
+        fieldRef={field.ref}
+        onFieldTouched={field.onBlur}
       />
       {helperOrDescription && !error && !fieldState.error && !validationError && (
         <FieldDescription>{helperOrDescription}</FieldDescription>
@@ -369,9 +392,7 @@ function IGRPInputNumber({
   const i18n = useIGRPi18n()
   const locale = useIGRPLocale()
   const resolvedErrorMessage = errorMessage ?? i18n.inputNumber.invalidValueMessage
-  const { onFocus: _onFocus, onBlur: _onBlur, ...inputProps } = props
-  void _onFocus
-  void _onBlur
+  const inputProps = props
   const _id = useId()
   const fieldName = name ?? id ?? _id
 

@@ -5,6 +5,7 @@ import { useController, useFormContext, type Control, type FieldValues } from "r
 
 import { cn } from "../cn.js"
 import { igrpOmitNonDomProps } from "../../../lib/dom-props.js"
+import { igrpMergeRefs } from "../../../lib/form-binding.js"
 import type { IGRPBaseAttributes, IGRPOptionsProps } from "../../../types.js"
 import { useIGRPi18n } from "../../../i18n/index.js"
 import { Badge } from "../../primitives/badge.js"
@@ -79,7 +80,9 @@ type OptionsProps = {
   labelledById?: string
   describedById?: string
   dir?: "ltr" | "rtl"
-  radioGroupProps: object
+  radioGroupProps: { ref?: React.Ref<HTMLDivElement> }
+  /** Ref for the radio group root, merged with any caller `ref`. */
+  groupRef?: React.Ref<HTMLDivElement>
 }
 
 /** @internal One option as a dot and label. */
@@ -177,12 +180,14 @@ function RadioGroupOptions({
   describedById,
   dir,
   radioGroupProps,
+  groupRef,
 }: OptionsProps) {
   const Option = variant === "card" ? CardOption : DefaultOption
 
   return (
     <RadioGroup
       {...igrpOmitNonDomProps(radioGroupProps)}
+      ref={igrpMergeRefs(groupRef, radioGroupProps.ref)}
       value={value}
       defaultValue={defaultValue}
       onValueChange={onValueChange}
@@ -316,6 +321,20 @@ function FormBoundRadioGroup({
         onValueChange?.(next)
       }}
       error={errorText ?? fieldState.error?.message}
+      // The group root is a plain div, so hand react-hook-form a focus target that
+      // lands on the checked radio (or the first enabled one), as arrow-key
+      // navigation would — `shouldFocusError` calls `.focus()` on it.
+      groupRef={(node) =>
+        field.ref(
+          node && {
+            focus: () =>
+              (
+                node.querySelector<HTMLElement>('[role="radio"][data-state="checked"]:not([disabled])') ??
+                node.querySelector<HTMLElement>('[role="radio"]:not([disabled])')
+              )?.focus(),
+          }
+        )
+      }
     />
   )
 }

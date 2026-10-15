@@ -11,6 +11,7 @@ import type { IGRPInputProps } from "../../../types.js"
 import { Input } from "../../primitives/input.js"
 import { IGRPIcon } from "../icon/index.js"
 import { igrpOmitNonDomProps } from "../../../lib/dom-props.js"
+import { igrpChainHandlers } from "../../../lib/form-binding.js"
 import { IGRPLabel } from "../label.js"
 import { Field, FieldError } from "../../primitives/field.js"
 
@@ -185,6 +186,10 @@ function IGRPInputPhone({
     )
   }
 
+  // The field owns onBlur/ref; the caller's onBlur runs after it and never
+  // replaces it (see lib/form-binding.ts).
+  const { onBlur, ...callerProps } = domProps
+
   return (
     <Controller
       name={fieldName}
@@ -203,12 +208,13 @@ function IGRPInputPhone({
             numberInputProps={{ className: inputClassName }}
             id={fieldName}
             placeholder={resolvedPlaceholder}
+            ref={field.ref}
             value={field.value}
             onChange={(newValue) => {
               field.onChange(newValue)
               onChange?.(newValue)
             }}
-            onBlur={field.onBlur}
+            onBlur={igrpChainHandlers(field.onBlur, onBlur)}
             disabled={disabled}
             defaultCountry={defaultCountry}
             countries={countries}
@@ -220,7 +226,7 @@ function IGRPInputPhone({
                   ? `${fieldName}-helper`
                   : undefined
             }
-            {...domProps}
+            {...callerProps}
           />
 
           {(description || helperText) && !error && !fieldState.error && (

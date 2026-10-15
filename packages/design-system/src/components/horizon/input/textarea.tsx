@@ -5,6 +5,7 @@ import { useFormContext, Controller } from "react-hook-form"
 
 import { cn } from "../cn.js"
 import { igrpOmitNonDomProps } from "../../../lib/dom-props.js"
+import { igrpChainHandlers, igrpMergeRefs } from "../../../lib/form-binding.js"
 import type { IGRPInputProps } from "../../../types.js"
 import { Textarea } from "../../primitives/textarea.js"
 import { IGRPLabel } from "../label.js"
@@ -77,6 +78,12 @@ function IGRPTextarea({
     )
   }
 
+  // The field owns value/onChange/onBlur/ref; the caller's copies run after it
+  // and never replace it (see lib/form-binding.ts).
+  const { value: _value, defaultValue: _defaultValue, onChange, onBlur, ref, ...callerProps } = domProps
+  void _value
+  void _defaultValue
+
   const fieldError = formContext.formState.errors[fieldName]
   const errorMessage = error || (fieldError?.message as string)
 
@@ -105,10 +112,11 @@ function IGRPTextarea({
                 inputClassName
               )}
               rows={rows}
+              ref={igrpMergeRefs(field.ref, ref)}
               value={field.value || ""}
-              onChange={field.onChange}
-              onBlur={field.onBlur}
-              {...domProps}
+              onChange={igrpChainHandlers(field.onChange, onChange)}
+              onBlur={igrpChainHandlers(field.onBlur, onBlur)}
+              {...callerProps}
             />
           </div>
 

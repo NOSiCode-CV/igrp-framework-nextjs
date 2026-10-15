@@ -6,6 +6,7 @@ import { useFormContext, Controller } from "react-hook-form"
 import { DD_MM_YYYY } from "../../../lib/utilities.js"
 import { cn } from "../cn.js"
 import { igrpOmitNonDomProps } from "../../../lib/dom-props.js"
+import { igrpMergeRefs } from "../../../lib/form-binding.js"
 import type { IGRPInputProps } from "../../../types.js"
 
 import { Input } from "../../primitives/input.js"
@@ -128,6 +129,9 @@ function IGRPDateTimeInput({
     )
   }
 
+  // The field owns the ref; a caller ref is merged with it (see lib/form-binding.ts).
+  const { ref, ...callerProps } = igrpOmitNonDomProps(props)
+
   return (
     <Controller
       name={fieldName}
@@ -161,6 +165,7 @@ function IGRPDateTimeInput({
 
             <Input
               id={fieldName}
+              ref={igrpMergeRefs(field.ref, ref)}
               value={field.value || ""}
               onChange={handleFormInputChange}
               onBlur={handleFormInputBlur}
@@ -176,7 +181,7 @@ function IGRPDateTimeInput({
                 (fieldState.error || error) && "border-destructive focus-visible:ring-destructive/20",
                 inputClassName
               )}
-              {...igrpOmitNonDomProps(props)}
+              {...callerProps}
             />
 
             {helperText && !error && !fieldState.error && (

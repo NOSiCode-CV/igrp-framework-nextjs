@@ -5,6 +5,7 @@ import { useFormContext } from "react-hook-form"
 
 import { cn } from "../cn.js"
 import { igrpOmitNonDomProps } from "../../../lib/dom-props.js"
+import { igrpChainHandlers, igrpMergeRefs } from "../../../lib/form-binding.js"
 import type { IGRPInputProps } from "../../../types.js"
 import { Checkbox } from "../../primitives/checkbox.js"
 import { IGRPFormField } from "../form/form-field.js"
@@ -74,6 +75,18 @@ function IGRPCheckbox({
     )
   }
 
+  // The field owns checked/onBlur/ref; the caller's copies never replace it
+  // (see lib/form-binding.ts).
+  const {
+    checked: _checked,
+    defaultChecked: _defaultChecked,
+    onBlur,
+    ref,
+    ...callerProps
+  } = igrpOmitNonDomProps(props)
+  void _checked
+  void _defaultChecked
+
   return (
     <IGRPFormField
       name={fieldName}
@@ -92,6 +105,7 @@ function IGRPCheckbox({
             (fieldState.error || error) && "border-destructive focus-visible:ring-destructive/20",
             className
           )}
+          ref={igrpMergeRefs(field.ref, ref)}
           checked={field.value === true}
           onCheckedChange={(checked) => {
             field.onChange(checked)
@@ -99,9 +113,9 @@ function IGRPCheckbox({
               onCheckedChange(checked)
             }
           }}
-          onBlur={field.onBlur}
+          onBlur={igrpChainHandlers(field.onBlur, onBlur)}
           aria-invalid={!!fieldState.error || !!error}
-          {...igrpOmitNonDomProps(props)}
+          {...callerProps}
         />
       )}
     </IGRPFormField>

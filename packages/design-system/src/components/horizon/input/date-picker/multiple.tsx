@@ -23,13 +23,17 @@ function DatePickerMultipleTrigger({
   placeholder,
   dateFormat,
   disabledPicker,
+  // `PopoverTrigger asChild` hands its handlers, aria state and ref to this
+  // component; they must reach the button. Dropping them left the popover
+  // impossible to open and the trigger unreachable for `field.ref`.
+  ...triggerProps
 }: {
   value: Date[] | undefined
   fieldName: string
   placeholder: string
   dateFormat: string
   disabledPicker?: boolean
-}) {
+} & Omit<React.ComponentProps<"button">, "value">) {
   const displayText = !value?.length
     ? placeholder
     : value.length === 1
@@ -48,6 +52,7 @@ function DatePickerMultipleTrigger({
       )}
     >
       <IGRPButton
+        {...triggerProps}
         id={fieldName}
         variant="link"
         className={cn("underline-offset-0 hover:no-underline")}
@@ -73,6 +78,8 @@ function DatePickerMultipleField({
   dateFormat,
   disabled,
   disabledPicker,
+  triggerRef,
+  onClose,
 }: {
   value: Date[] | undefined
   onChange: (date: Date[] | undefined) => void
@@ -82,13 +89,22 @@ function DatePickerMultipleField({
   dateFormat: string
   disabled?: IGRPCalendarMultipleProps["disabled"]
   disabledPicker?: boolean
+  /** react-hook-form's `field.ref`, so the trigger is focused when the field is invalid. */
+  triggerRef?: React.Ref<HTMLButtonElement>
+  /** Called when the popover closes — form-bound fields mark themselves touched here. */
+  onClose?: () => void
 }) {
   const i18n = useIGRPi18n()
   return (
     <div className={cn("relative")}>
-      <Popover>
+      <Popover
+        onOpenChange={(open) => {
+          if (!open) onClose?.()
+        }}
+      >
         <PopoverTrigger asChild>
           <DatePickerMultipleTrigger
+            ref={triggerRef}
             value={value}
             fieldName={fieldName}
             placeholder={placeholder}
@@ -189,6 +205,8 @@ function IGRPDatePickerMultiple({
                   field.onChange(val)
                   onDateChange?.(val)
                 }}
+                triggerRef={field.ref}
+                onClose={field.onBlur}
               />
             </FormControl>
 

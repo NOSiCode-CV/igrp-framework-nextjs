@@ -7,6 +7,7 @@ import { AlertCircle, UploadCloud, X } from "lucide-react"
 
 import { cn } from "../cn.js"
 import { igrpOmitNonDomProps } from "../../../lib/dom-props.js"
+import { igrpChainHandlers, igrpMergeRefs } from "../../../lib/form-binding.js"
 import { igrpFormatMessage, useIGRPi18n } from "../../../i18n/index.js"
 import type { IGRPInputProps } from "../../../types.js"
 import { Input } from "../../primitives/input.js"
@@ -511,22 +512,20 @@ function IGRPInputFile({
 
   const fieldError = formContext.formState.errors[fieldName]
   const errorMessage = error || (fieldError?.message as string)
+  // The field owns onBlur/ref; the caller's copies run after it and never replace
+  // it (see lib/form-binding.ts).
+  const { onBlur, ref, ...callerProps } = igrpOmitNonDomProps(props)
 
   return (
     <Controller
       name={fieldName}
       control={formContext.control}
       render={({ field, fieldState }) => {
-        const safeFieldProps = {
-          name: field.name,
-          onBlur: field.onBlur,
-        }
-
         return (
           <Field>
             {label && <IGRPLabel label={label} className={labelClassName} required={required} id={fieldName} />}
             <Input
-              ref={inputRef}
+              ref={igrpMergeRefs(inputRef, field.ref, ref)}
               id={fieldName}
               className={cn(
                 "cursor-pointer p-0 pe-3 file:me-3 file:border-0 file:border-e file:border-input file:px-4 file:py-2 file:transition-colors",
@@ -552,8 +551,8 @@ function IGRPInputFile({
               aria-describedby={
                 errorMessage || fieldState.error ? `${fieldName}-error` : helperText ? `${fieldName}-helper` : undefined
               }
-              {...safeFieldProps}
-              {...igrpOmitNonDomProps(props)}
+              onBlur={igrpChainHandlers(field.onBlur, onBlur)}
+              {...callerProps}
               name={fieldName}
             />
 

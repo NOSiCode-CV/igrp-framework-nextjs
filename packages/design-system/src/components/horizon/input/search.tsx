@@ -6,6 +6,7 @@ import type { VariantProps } from "class-variance-authority"
 
 import { cn } from "../cn.js"
 import { igrpOmitNonDomProps } from "../../../lib/dom-props.js"
+import { igrpChainHandlers, igrpMergeRefs } from "../../../lib/form-binding.js"
 import { type IGRPInputProps } from "../../../types.js"
 import { InputGroup, InputGroupAddon, InputGroupInput } from "../../primitives/input-group.js"
 import { FormControl, FormDescription, FormField, FormItem, FormLabel, FormMessage } from "../../primitives/form.js"
@@ -222,6 +223,16 @@ function IGRPInputSearch({
   }
 
   if (formContext) {
+    // The field owns value/onChange/onBlur/ref; the caller's copies run after it
+    // and never replace it (see lib/form-binding.ts).
+    const {
+      onChange: callerOnChange,
+      onBlur: callerOnBlur,
+      onKeyDown: callerOnKeyDown,
+      ref,
+      ...callerProps
+    } = igrpOmitNonDomProps(props)
+
     return (
       <FormField
         control={formContext.control}
@@ -244,20 +255,23 @@ function IGRPInputSearch({
                     required={required}
                     aria-required={required}
                     className={inputClassName}
+                    ref={igrpMergeRefs(field.ref, ref)}
                     value={field.value ?? ""}
                     onChange={(e) => {
                       field.onChange(e.target.value)
                       handleInputChange(e.target.value)
+                      callerOnChange?.(e)
                     }}
                     onKeyDown={(e) => {
                       if (e.key === "Enter") {
                         e.preventDefault()
                         onSearch?.(field.value ?? "")
                       }
+                      callerOnKeyDown?.(e)
                     }}
-                    onBlur={field.onBlur}
+                    onBlur={igrpChainHandlers(field.onBlur, callerOnBlur)}
                     disabled={props.disabled}
-                    {...igrpOmitNonDomProps(props)}
+                    {...callerProps}
                   />
                 </FormControl>
               }

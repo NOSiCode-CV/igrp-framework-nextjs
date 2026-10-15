@@ -5,6 +5,7 @@ import { useFormContext, Controller } from "react-hook-form"
 
 import { cn } from "../cn.js"
 import { igrpOmitNonDomProps } from "../../../lib/dom-props.js"
+import { igrpChainHandlers, igrpMergeRefs } from "../../../lib/form-binding.js"
 import type { IGRPInputProps } from "../../../types.js"
 import { Input } from "../../primitives/input.js"
 import { IGRPLabel } from "../label.js"
@@ -88,6 +89,10 @@ function IGRPInputTime({
     )
   }
 
+  // The field owns onBlur/ref; the caller's copies run after it and never replace
+  // it (see lib/form-binding.ts).
+  const { onBlur, ref, ...callerProps } = domProps
+
   return (
     <Controller
       name={fieldName}
@@ -114,13 +119,14 @@ function IGRPInputTime({
                 className,
                 inputClassName
               )}
+              ref={igrpMergeRefs(field.ref, ref)}
               value={field.value}
               onChange={(e) => {
                 field.onChange(e)
                 handleChange(e)
               }}
-              onBlur={field.onBlur}
-              {...domProps}
+              onBlur={igrpChainHandlers(field.onBlur, onBlur)}
+              {...callerProps}
             />
           </div>
 

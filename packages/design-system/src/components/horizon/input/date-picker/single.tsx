@@ -39,6 +39,8 @@ function DatePickerSingleField({
   disabledPicker,
   ariaInvalid,
   ariaDescribedBy,
+  triggerRef,
+  onClose,
 }: {
   value: Date | undefined
   onChange: (date: Date | undefined) => void
@@ -51,6 +53,10 @@ function DatePickerSingleField({
   disabledPicker?: boolean
   ariaInvalid?: boolean
   ariaDescribedBy?: string
+  /** react-hook-form's `field.ref`, so the trigger is focused when the field is invalid. */
+  triggerRef?: React.Ref<HTMLButtonElement>
+  /** Called when the popover closes — form-bound fields mark themselves touched here. */
+  onClose?: () => void
 }) {
   const i18n = useIGRPi18n()
   const [open, setOpen] = useState(false)
@@ -62,11 +68,14 @@ function DatePickerSingleField({
       <Popover
         open={isDisabled ? false : open}
         onOpenChange={(next) => {
-          if (!isDisabled) setOpen(next)
+          if (isDisabled) return
+          setOpen(next)
+          if (!next) onClose?.()
         }}
       >
         <PopoverTrigger asChild>
           <Button
+            ref={triggerRef}
             id={fieldName}
             variant="outline"
             disabled={isDisabled}
@@ -212,6 +221,8 @@ function IGRPDatePickerSingle(allProps: IGRPDatePickerSingleProps) {
                     field.onChange(null)
                     onDateChange?.(undefined)
                   }}
+                  triggerRef={field.ref}
+                  onClose={field.onBlur}
                 />
               </FormControl>
 

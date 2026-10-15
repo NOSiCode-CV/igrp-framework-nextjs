@@ -1,4 +1,4 @@
-# @igrp/i18n-tools
+# @igrp/framework-next-i18n
 
 Catalog and literal-string checks for IGRP Next.js apps, as the `igrp-i18n` CLI and as functions.
 

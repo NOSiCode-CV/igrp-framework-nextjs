@@ -20,7 +20,7 @@
     "clean": "pnpm -r run clean",
     "format": "pnpm -r run format",
     "build:next": "pnpm --filter @igrp/framework-next build",
-    "build:i18n-tools": "pnpm --filter @igrp/i18n-tools build",
+    "build:i18n-tools": "pnpm --filter @igrp/framework-next-i18n build",
     "build:auth": "pnpm --filter @igrp/framework-next-auth build",
     "build:next-types": "pnpm --filter @igrp/framework-next-types build",
     "build:next-ui": "pnpm --filter @igrp/framework-next-ui build",

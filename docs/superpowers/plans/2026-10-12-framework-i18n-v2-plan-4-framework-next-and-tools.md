@@ -1,14 +1,14 @@
-# Framework i18n v2, Plan 4 of 5: `@igrp/framework-next/i18n` and `@igrp/i18n-tools`
+# Framework i18n v2, Plan 4 of 5: `@igrp/framework-next/i18n` and `@igrp/framework-next-i18n`
 
 > **For agentic workers:** REQUIRED SUB-SKILL: Use superpowers:subagent-driven-development (recommended) or superpowers:executing-plans to implement this plan task-by-task. Steps use checkbox (`- [ ]`) syntax for tracking.
 
 **Goal:** Ship the framework i18n runtime as subpaths of `@igrp/framework-next` (config and resolution, server request config and `setLocale`, client provider and switcher, generic messages, test helper), wire it into the layouts and the access client, and ship the catalog and literal checks as the `igrp-i18n` CLI in a new dev-only package.
 
-**Architecture:** `src/i18n/` in `framework-next` is split by runtime: `config.ts`, `format.ts`, `sync-cookie.ts` (Edge-safe, exported as `./i18n`), `messages/` (pure, `./i18n/messages`), `server/` (`server-only`, `./i18n/server`), `client/` (`'use client'` leaves, `./i18n/client`), `testing/`. `igrpBuildConfig({ i18n })` carries the config; `IGRPRootLayout` resolves the locale, loads messages and catalogs and mounts `IGRPIntlProvider`; `IGRPLayoutFull` / `IGRPLayoutBlank` seed `Accept-Language`. `@igrp/i18n-tools` is built like `template-migrator` (tsup, Vitest) and ports the application center's two guard tests into `check-catalogs` and `check-literals`.
+**Architecture:** `src/i18n/` in `framework-next` is split by runtime: `config.ts`, `format.ts`, `sync-cookie.ts` (Edge-safe, exported as `./i18n`), `messages/` (pure, `./i18n/messages`), `server/` (`server-only`, `./i18n/server`), `client/` (`'use client'` leaves, `./i18n/client`), `testing/`. `igrpBuildConfig({ i18n })` carries the config; `IGRPRootLayout` resolves the locale, loads messages and catalogs and mounts `IGRPIntlProvider`; `IGRPLayoutFull` / `IGRPLayoutBlank` seed `Accept-Language`. `@igrp/framework-next-i18n` is built like `template-migrator` (tsup, Vitest) and ports the application center's two guard tests into `check-catalogs` and `check-literals`.
 
 **Tech Stack:** Next.js 15 (`next/headers`, `next/server`, React `cache`), next-intl 4.14, React 19, TypeScript 6, Vitest 5, Babel file-per-module build, tsup for the CLI, `typescript` compiler API and `@formatjs/icu-messageformat-parser` in the CLI.
 
-**Spec:** `docs/superpowers/specs/2026-10-12-framework-i18n-v2-design.md` (sections "framework-next", "@igrp/i18n-tools", "Locales and resolution").
+**Spec:** `docs/superpowers/specs/2026-10-12-framework-i18n-v2-design.md` (sections "framework-next", "@igrp/framework-next-i18n", "Locales and resolution").
 
 **Series:** Plan 1 auth/types → Plan 2 design-system → Plan 3 next-ui → **Plan 4 (this)** → Plan 5 template + migration.
 
@@ -23,7 +23,7 @@
 - `next-intl`'s `locale` is the base `IGRPLocale` (D-4). Formatting uses the format locale through the framework helpers only.
 - `IGRP_LOCALE_COOKIE` here must equal `@igrp/framework-next-ui`'s; a test asserts it.
 - New dependencies of `framework-next`: `next-intl` (`^4.14.0`), `@igrp/igrp-framework-react-design-system` (`workspace:*`, already transitive through `next-ui`; declared because `./i18n` types and the root layout import it directly).
-- Changesets `patch`: `@igrp/framework-next`, `@igrp/i18n-tools`. Root `build:framework` gains `pnpm build:i18n-tools` at the end.
+- Changesets `patch`: `@igrp/framework-next`, `@igrp/framework-next-i18n`. Root `build:framework` gains `pnpm build:i18n-tools` at the end.
 - ESLint + Prettier in framework packages.
 
 ## Review Focus
@@ -2089,7 +2089,7 @@ git commit -m "feat(next): IGRPRootLayout mounts IGRPIntlProvider and sets <html
 
 ---
 
-### Task 9: `@igrp/i18n-tools` package with `check-catalogs` and `check-literals`
+### Task 9: `@igrp/framework-next-i18n` package with `check-catalogs` and `check-literals`
 
 **Files:**
 - Create: `packages/framework/i18n-tools/package.json`, `tsconfig.json`, `tsconfig.build.json`, `tsup.config.ts`, `vitest.config.ts`, `README.md`
@@ -2106,7 +2106,7 @@ git commit -m "feat(next): IGRPRootLayout mounts IGRPIntlProvider and sets <html
 
 ```json
 {
-  "name": "@igrp/i18n-tools",
+  "name": "@igrp/framework-next-i18n",
   "version": "0.2.0-beta.0",
   "description": "Catalog and literal-string checks for IGRP Next.js apps (igrp-i18n CLI)",
   "author": "IGRP Team",
@@ -2161,7 +2161,7 @@ export default defineConfig({ test: { environment: 'node', include: ['src/**/__t
 
 `src/cli.ts` starts with `#!/usr/bin/env node` on line 1.
 
-Root `package.json`: add `"build:i18n-tools": "pnpm --filter @igrp/i18n-tools build"` and change `build:framework` to `"pnpm build:auth && pnpm build:next-types && pnpm build:ds && pnpm build:next-ui && pnpm build:next && pnpm build:i18n-tools"`. Run `pnpm install` so the workspace links the new package.
+Root `package.json`: add `"build:i18n-tools": "pnpm --filter @igrp/framework-next-i18n build"` and change `build:framework` to `"pnpm build:auth && pnpm build:next-types && pnpm build:ds && pnpm build:next-ui && pnpm build:next && pnpm build:i18n-tools"`. Run `pnpm install` so the workspace links the new package.
 
 - [ ] **Step 2: Write the failing tests**
 
@@ -2293,7 +2293,7 @@ describe('checkLiterals', () => {
 
 - [ ] **Step 3: Run them to see them fail**
 
-Run: `pnpm --filter @igrp/i18n-tools exec vitest run`
+Run: `pnpm --filter @igrp/framework-next-i18n exec vitest run`
 Expected: FAIL, modules not found.
 
 - [ ] **Step 4: Implement `catalogs.ts`**
@@ -2563,7 +2563,7 @@ process.exit(main(process.argv.slice(2)));
 
 - [ ] **Step 7: Run the tests, typecheck, build, and smoke the bin**
 
-Run: `pnpm --filter @igrp/i18n-tools test && pnpm --filter @igrp/i18n-tools typecheck && pnpm --filter @igrp/i18n-tools build && node packages/framework/i18n-tools/dist/cli.js`
+Run: `pnpm --filter @igrp/framework-next-i18n test && pnpm --filter @igrp/framework-next-i18n typecheck && pnpm --filter @igrp/framework-next-i18n build && node packages/framework/i18n-tools/dist/cli.js`
 Expected: tests PASS; the bare invocation prints the usage and exits 2.
 
 - [ ] **Step 8: Commit**
@@ -2597,13 +2597,13 @@ i18n runtime as subpath entries: `./i18n` (Edge-safe config, `igrpDefineI18n`, `
 
 ```md
 ---
-'@igrp/i18n-tools': patch
+'@igrp/framework-next-i18n': patch
 ---
 
 New dev-only package: the `igrp-i18n` CLI with `check-catalogs` (orphan keys, invalid ICU, argument parity, camelCase segments, coverage, framework-namespace shadowing as info) and `check-literals` (hardcoded user-facing strings in `.tsx`, next-intl formatter imports).
 ```
 
-If `pnpm changeset version` later complains that `@igrp/i18n-tools` is unknown to the pre-release, add `"@igrp/i18n-tools": "0.2.0-beta.0"` to `initialVersions` in `.changeset/pre.json`.
+If `pnpm changeset version` later complains that `@igrp/framework-next-i18n` is unknown to the pre-release, add `"@igrp/framework-next-i18n": "0.2.0-beta.0"` to `initialVersions` in `.changeset/pre.json`.
 
 - [ ] **Step 2: Build everything and type-check the template**
 

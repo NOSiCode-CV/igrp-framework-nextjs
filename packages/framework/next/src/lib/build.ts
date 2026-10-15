@@ -56,6 +56,7 @@ const igrpConfigSchema = z
     layoutData: layoutDataSourceSchema('layoutData').optional(),
     layoutMockData: layoutDataSourceSchema('layoutMockData').optional(),
     toasterConfig: z.object({ showToaster: z.boolean() }).catchall(z.unknown()),
+    branding: z.object({ enabled: z.boolean() }).optional(),
     apiManagementConfig: z
       .object({
         baseUrl: z.string().optional(),

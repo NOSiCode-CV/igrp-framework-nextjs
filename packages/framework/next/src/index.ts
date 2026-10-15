@@ -55,3 +55,9 @@ export {
   type IgrpErrorContext,
   type IgrpErrorShape,
 } from './errors.js';
+
+// Organization branding
+export { igrpGetBranding, igrpInvalidateBranding } from './branding/get-branding.js';
+export { igrpBrandingMetadata } from './branding/metadata.js';
+export { igrpResolveRequestBranding, BRAND_FRESHNESS_COOKIE } from './branding/request.js';
+export { resolveBrandingToken } from './branding/token.js';

@@ -32,6 +32,16 @@ describe('igrpBuildConfig validation (FN-2)', () => {
     await expect(igrpBuildConfig(cfg)).resolves.toBe(cfg);
   });
 
+  it('accepts the organization branding flag and keeps it', async () => {
+    const result = await igrpBuildConfig(baseConfig({ branding: { enabled: true } }));
+    expect(result.branding).toEqual({ enabled: true });
+  });
+
+  it('throws IGRP_CONFIG_INVALID when branding.enabled is not a boolean', async () => {
+    const cfg = baseConfig({ branding: { enabled: 'yes' } });
+    await expect(igrpBuildConfig(cfg)).rejects.toMatchObject({ code: 'IGRP_CONFIG_INVALID' });
+  });
+
   it('accepts a non-preview, sync-off config with only a baseUrl (no m2m credentials)', async () => {
     const cfg = baseConfig({
       previewMode: false,

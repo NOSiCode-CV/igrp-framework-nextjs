@@ -3,16 +3,14 @@ import type { IGRPBranding } from '@igrp/framework-next-types';
 import { igrpBrandingToCss } from './css.js';
 
 /**
- * Hoisted `<style>` carrying the Brand tokens. React 19 moves a precedence
- * stylesheet into `<head>`, so the overrides apply before first paint. No hooks
+ * `<style>` carrying the Brand tokens, rendered first in `<body>` so the
+ * overrides are in the HTML before any content (no flash). Deliberately not a
+ * hoisted `href`/`precedence` resource: React dedupes those by `href` and would
+ * keep the old tokens after `router.refresh()` delivers a new Brand. No hooks
  * and no browser APIs: this file stays server-safe and carries no directive.
  */
 export function IGRPBrandingStyle({ branding }: { branding: IGRPBranding | null }) {
   const css = igrpBrandingToCss(branding);
   if (!css) return null;
-  return (
-    <style href="igrp-branding" precedence="igrp-branding">
-      {css}
-    </style>
-  );
+  return <style data-igrp-branding="">{css}</style>;
 }

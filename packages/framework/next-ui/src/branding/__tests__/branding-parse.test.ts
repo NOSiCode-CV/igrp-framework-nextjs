@@ -103,4 +103,27 @@ describe('igrpParseBranding', () => {
     expect(result.branding).not.toBeNull();
     expect(result.dropped).toBe(0);
   });
+
+  it('drops a colour function with unbalanced parentheses, keeps the rest', () => {
+    const result = igrpParseBranding(
+      doc({
+        version: 1,
+        tokens: {
+          light: {
+            '--a': 'rgb(((0)',
+            '--b': 'rgb(0))',
+            '--c': 'rgb(0) image(red)',
+            '--d': 'oklch(0.5 0.1 200)',
+            '--e': 'color-mix(in oklch, var(--primary) 40%, white)',
+          },
+        },
+        logos: {},
+      }),
+    );
+    expect(result.branding?.tokens.light).toEqual({
+      '--d': 'oklch(0.5 0.1 200)',
+      '--e': 'color-mix(in oklch, var(--primary) 40%, white)',
+    });
+    expect(result.dropped).toBe(3);
+  });
 });

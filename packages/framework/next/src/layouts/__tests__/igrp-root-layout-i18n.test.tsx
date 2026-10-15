@@ -9,6 +9,8 @@ vi.mock('../../lib/sync-plan.js', () => ({ planAccessManagementSync: () => null 
 const Nested = (p: unknown) => ({ __marker: 'nested', p });
 vi.mock('@igrp/framework-next-ui', () => ({
   IGRPNestedProviders: Nested,
+  IGRPBrandingStyle: () => null,
+  igrpParseBranding: () => ({ branding: null, dropped: 0 }),
   IGRP_CHROME_STRINGS_PT: {},
   IGRP_CHROME_STRINGS_EN: {},
   IGRP_CHROME_STRINGS_FR: {},

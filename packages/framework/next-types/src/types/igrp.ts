@@ -182,6 +182,11 @@ export type IGRPConfigArgs = {
   showSettings?: boolean;
   sessionArgs?: Partial<SessionProviderProps>;
   /**
+   * Organization Brand. Omitted or `enabled: false` leaves every design-system
+   * Default in place and makes no request to Access Management.
+   */
+  branding?: { enabled: boolean };
+  /**
    * Localisation, built with `igrpDefineI18n` from `@igrp/framework-next/i18n`.
    * When set, `IGRPRootLayout` resolves the locale, mounts the intl providers
    * and sets `<html lang>`; `IGRPLayoutFull` / `IGRPLayoutBlank` send
@@ -209,6 +214,8 @@ export type IGRPConfigClient = (config: IGRPLayoutConfigArgs) => Promise<IGRPCon
 
 export type IGRPLayoutConfigArgs = {
   session: Session | null;
+  /** @deprecated Preset themes were removed. Read by nothing; kept for one release. */
   activeThemeValue?: string;
+  /** @deprecated Preset themes were removed. Read by nothing; kept for one release. */
   isScaled?: boolean;
 };

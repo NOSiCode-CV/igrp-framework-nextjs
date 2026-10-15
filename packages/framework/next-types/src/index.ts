@@ -54,3 +54,15 @@ export type { IGRPLocale, IGRPLocaleResolution, IGRPI18nConfigBase } from './typ
 export type { IGRPSidebarDataArgs } from './types/sidebar.js';
 
 export type { IGRPAccessClaims, IGRPClaimsState } from '@igrp/framework-next-auth/claims';
+
+export type {
+  IGRPBranding,
+  IGRPBrandingLogos,
+  IGRPBrandingLogoSlot,
+  IGRPBrandingMode,
+  IGRPBrandingParseResult,
+  IGRPBrandingTokenCatalogEntry,
+  IGRPBrandingTokenGroup,
+  IGRPBrandingTokenMap,
+  IGRPBrandingTokens,
+} from './types/branding.js';

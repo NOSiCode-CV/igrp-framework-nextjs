@@ -100,16 +100,6 @@ export {
 
 export { IGRPSessionWatcher } from './templates/session-watcher.js';
 
-export {
-  IGRPTemplateThemeSelector,
-  IGRP_THEME_SELECTOR_LABELS_PT_PT,
-  IGRP_DEFAULT_THEMES,
-  IGRP_SCALED_THEMES,
-  type IGRPTemplateThemeSelectorProps,
-  type IGRPThemeSelectorLabels,
-  type IGRPThemeOption,
-} from './templates/theme-selector.js';
-
 // i18n (chrome catalog)
 
 export { IGRPChromeI18nProvider, useIGRPChromeI18n } from './i18n/context.js';
@@ -126,14 +116,6 @@ export { IGRP_CHROME_STRINGS_EN } from './i18n/strings.en.js';
 export { IGRP_CHROME_STRINGS_FR } from './i18n/strings.fr.js';
 
 // providers
-
-export {
-  IGRPActiveThemeProvider,
-  useIGRPThemeConfig,
-  igrpActiveThemeClassName,
-  IGRP_ACTIVE_THEME_COOKIE,
-  type IGRPActiveThemeProviderArgs,
-} from './providers/active-theme.js';
 
 export { IGRPThemeProvider } from './providers/theme.js';
 

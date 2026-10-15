@@ -34,11 +34,11 @@ The names below are the real exports. `src/index.ts` is the whole public surface
 | `IGRPRootProvidersFull`   | Sidebar + header shell with `SidebarProvider` and the toaster — for the app shell |
 | `IGRPRootProvidersBlank`  | Toaster only, no sidebar — for login/logout and other chrome-less routes          |
 | `IGRPRootProviders`       | **Deprecated** alias of `IGRPRootProvidersFull`                                   |
-| `IGRPNestedProviders`     | Session, tooltip, theme, active-theme and the session watcher, correctly nested   |
+| `IGRPNestedProviders`     | Session, tooltip, theme, branding and the session watcher, correctly nested       |
 | `IGRPSessionProvider`     | NextAuth `SessionProvider` wrapper                                                |
 | `IGRPThemeProvider`       | `next-themes` wrapper                                                             |
-| `IGRPActiveThemeProvider` | Syncs the active CSS theme class (`theme-*`) and its cookie                       |
-| `useIGRPThemeConfig`      | Reads/sets the active theme; throws outside `IGRPActiveThemeProvider`             |
+| `IGRPBrandingProvider`    | Exposes the organization Brand to the chrome; `null` keeps every default          |
+| `useIGRPBranding`         | The current Brand or `null`; never throws                                         |
 
 ### Template chrome
 
@@ -52,7 +52,6 @@ The names below are the real exports. `src/index.ts` is the whole public surface
 | `IGRPTemplateBreadcrumbs`   | Route-aware breadcrumb trail, controlled or auto-derived            |
 | `IGRPTemplateCommandSearch` | Command palette, opened with Cmd+K or Ctrl+K                        |
 | `IGRPTemplateNotifications` | Notifications dropdown                                              |
-| `IGRPTemplateThemeSelector` | Named-theme selector                                                |
 | `IGRPTemplateModeSwitcher`  | Compact light/dark toggle                                           |
 | `IGRPTemplateImage`         | `next/image` that survives an un-whitelisted host and falls back    |
 | `IGRPTemplateLoading`       | Full-page loading state                                             |
@@ -107,26 +106,17 @@ import { IGRPTemplateSidebar } from '@igrp/framework-next-ui';
 />;
 ```
 
-Catalogs: `IGRP_MENU_LABELS_PT_PT`, `IGRP_NAV_USER_LABELS_PT_PT`, `IGRP_NOTIFICATIONS_LABELS_PT_PT`, `IGRP_COMMAND_SEARCH_LABELS_PT_PT`, `IGRP_MODE_SWITCHER_LABELS_PT_PT`, `IGRP_THEME_SELECTOR_LABELS_PT_PT`. The standalone screens (`IGRPForbidden`, `IGRPTemplateNotFound`, `IGRPGlobalError`, `IGRPSegmentError`) take individual label props instead.
+Catalogs: `IGRP_MENU_LABELS_PT_PT`, `IGRP_NAV_USER_LABELS_PT_PT`, `IGRP_NOTIFICATIONS_LABELS_PT_PT`, `IGRP_COMMAND_SEARCH_LABELS_PT_PT`, `IGRP_MODE_SWITCHER_LABELS_PT_PT`. The standalone screens (`IGRPForbidden`, `IGRPTemplateNotFound`, `IGRPGlobalError`, `IGRPSegmentError`) take individual label props instead.
 
 `IGRPTemplateHeader` mounts most of this chrome, so it forwards each child's overrides: `navUserLabels`, `commandSearchLabels`, `notificationsLabels`, `modeSwitcherLabels`, `breadcrumbHomeLabel`, `breadcrumbEllipsisLabel` and `settingsLabel`.
-
-`IGRPTemplateThemeSelector` also takes its option lists as props — `themes` and `scaledThemes`, defaulting to `IGRP_DEFAULT_THEMES` / `IGRP_SCALED_THEMES`. A `value` is the suffix of the `theme-*` class `IGRPActiveThemeProvider` sets on `<body>`, so it has to match a theme your CSS defines; pass `scaledThemes={[]}` to hide that group.
 
 Placeholders like `{name}` and `{count}` are substituted with the design system's `igrpFormatMessage`. Do not switch these to `String.prototype.replace(string, string)` — it interprets `$&`, `` $` ``, `$'` and `$n` in the replacement, and both menu names (from the backend) and the search query (from the user) flow through here.
 
 Timestamps are formatted with the design system's `useIGRPLocale()` — `pt-PT` unless an `IGRPI18nProvider` says otherwise — never the ambient runtime locale, which resolves to the server's under SSR and the browser's on the client and hydrates mismatched.
 
-### Avoiding the theme flash
+### Organization branding
 
-`IGRPActiveThemeProvider` applies the `theme-*` class in a layout effect, so it lands before the browser paints — but that is still after hydration. To remove the flash entirely, render the class on `<body>` from the server using the same cookie value you pass as `activeThemeValue`:
-
-```tsx
-import { igrpActiveThemeClassName, IGRP_ACTIVE_THEME_COOKIE } from '@igrp/framework-next-ui';
-
-const theme = (await cookies()).get(IGRP_ACTIVE_THEME_COOKIE)?.value;
-// <body className={igrpActiveThemeClassName(theme)}>
-```
+`IGRPBrandingStyle` renders the Brand tokens as a hoisted `<style>` (`html:root` / `html.dark`), server-safe and before first paint. `igrpParseBranding` validates a stored Brand document and never throws; `igrpBrandingToCss` turns it into CSS text with a deterministic key order; `IGRP_BRANDING_CORE_TOKENS` lists the 50 tokens a Brand may override. `IGRPTemplateHeader` and `IGRPAuthForm` read the Brand logos through `useIGRPBranding`. The root layout in `@igrp/framework-next` wires all of this when `branding.enabled` is true. Preset themes (`IGRPTemplateThemeSelector`, `IGRPActiveThemeProvider`) were removed.
 
 ---
 

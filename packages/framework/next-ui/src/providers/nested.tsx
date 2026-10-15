@@ -2,26 +2,22 @@
 
 import { type Session } from '@igrp/framework-next-auth';
 import type { SessionProviderProps } from '@igrp/framework-next-auth/client';
+import type { IGRPBranding } from '@igrp/framework-next-types';
 import { TooltipProvider } from '@igrp/igrp-framework-react-design-system';
 
-import { IGRPActiveThemeProvider } from './active-theme.js';
+import { IGRPBrandingProvider } from '../branding/provider.js';
+import { IGRPSessionWatcher } from '../templates/session-watcher.js';
 import { IGRPSessionProvider } from './session.js';
 import { IGRPThemeProvider } from './theme.js';
-import { IGRPSessionWatcher } from '../templates/session-watcher.js';
 
 export type IGRPNestedProvidersArgs = {
   session?: Session | null;
-  activeThemeValue?: string;
+  branding?: IGRPBranding | null;
   children: React.ReactNode;
   sessionArgs?: Partial<SessionProviderProps>;
 };
 
-export function IGRPNestedProviders({
-  session,
-  activeThemeValue,
-  sessionArgs,
-  children,
-}: IGRPNestedProvidersArgs) {
+export function IGRPNestedProviders({ session, branding = null, sessionArgs, children }: IGRPNestedProvidersArgs) {
   return (
     <IGRPSessionProvider {...sessionArgs} session={session}>
       <TooltipProvider>
@@ -32,9 +28,9 @@ export function IGRPNestedProviders({
           disableTransitionOnChange
           enableColorScheme
         >
-          <IGRPActiveThemeProvider initialTheme={activeThemeValue}>
+          <IGRPBrandingProvider branding={branding}>
             <IGRPSessionWatcher>{children}</IGRPSessionWatcher>
-          </IGRPActiveThemeProvider>
+          </IGRPBrandingProvider>
         </IGRPThemeProvider>
       </TooltipProvider>
     </IGRPSessionProvider>

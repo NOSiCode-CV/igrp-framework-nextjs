@@ -174,3 +174,5 @@ export {
   isSafeLogoUrl,
   isTokenName,
 } from './branding/index.js';
+export { IGRPBrandingStyle } from './branding/style.js';
+export { IGRPBrandingProvider, useIGRPBranding } from './branding/provider.js';

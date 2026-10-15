@@ -164,3 +164,13 @@ export {
   type IGRPAuthorizationProps,
 } from './permissions/authorization.js';
 export { IGRPGuardPage, type IGRPGuardPageProps } from './permissions/guard-page.js';
+
+export {
+  IGRP_BRANDING_CORE_TOKENS,
+  igrpBrandingToCss,
+  igrpParseBranding,
+  BRANDING_MAX_BYTES,
+  isSafeCssValue,
+  isSafeLogoUrl,
+  isTokenName,
+} from './branding/index.js';

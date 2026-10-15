@@ -14,6 +14,9 @@ import {
   Button,
   IGRPIcon,
 } from '@igrp/igrp-framework-react-design-system';
+import { useIGRPBranding } from '../branding/provider.js';
+import { resolveWideLogo } from '../branding/resolve.js';
+import { IGRPTemplateImage } from '../templates/template-image.js';
 import { IGRPTemplateModeSwitcher } from '../templates/mode-switcher.js';
 import { useIGRPChromeI18n } from '../i18n/context.js';
 import { withBasePath } from '../lib/utils.js';
@@ -59,6 +62,8 @@ function IGRPAuthForm({
   const [isLoading, setIsLoading] = useState(false);
   const [authError, setAuthError] = useState<string | null>(null);
   const chrome = useIGRPChromeI18n();
+  // Brand wide logo with its size, else the app's own logo.
+  const wide = resolveWideLogo({ branding: useIGRPBranding(), fallback: logo });
   const loginButton = texts.loginButton ?? chrome.authForm.loginButton;
 
   // NO `finally` CLAUSE HERE. Two independent reasons, both easy to undo by
@@ -114,20 +119,38 @@ function IGRPAuthForm({
             </Alert>
           )}
           <div className={cn('flex flex-col items-center')}>
-            <Image
-              src={withBasePath(logo.src)}
+            <IGRPTemplateImage
+              src={withBasePath(wide.src)}
               alt={name}
-              width={logo.width}
-              height={logo.height}
-              className={cn('w-auto h-auto', logo.srcDark && 'dark:hidden')}
+              width={wide.width}
+              height={wide.height}
+              className={cn('w-auto h-auto max-h-20', wide.srcDark && 'dark:hidden')}
+              fallback={
+                <Image
+                  src={withBasePath(logo.src)}
+                  alt={name}
+                  width={logo.width}
+                  height={logo.height}
+                  className={cn('w-auto h-auto max-h-20', wide.srcDark && 'dark:hidden')}
+                />
+              }
             />
-            {logo.srcDark && (
-              <Image
-                src={withBasePath(logo.srcDark)}
+            {wide.srcDark && (
+              <IGRPTemplateImage
+                src={withBasePath(wide.srcDark)}
                 alt={name}
-                width={logo.width}
-                height={logo.height}
-                className={cn('w-auto h-auto hidden dark:block')}
+                width={wide.width}
+                height={wide.height}
+                className={cn('w-auto h-auto max-h-20 hidden dark:block')}
+                fallback={
+                  <Image
+                    src={withBasePath(logo.srcDark ?? logo.src)}
+                    alt={name}
+                    width={logo.width}
+                    height={logo.height}
+                    className={cn('w-auto h-auto max-h-20 hidden dark:block')}
+                  />
+                }
               />
             )}
             <div className={cn('mt-6 text-center')}>

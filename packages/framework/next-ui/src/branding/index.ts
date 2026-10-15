@@ -4,3 +4,4 @@ export { igrpParseBranding } from './parse.js';
 export { BRANDING_MAX_BYTES, isSafeCssValue, isSafeLogoUrl, isTokenName } from './validate.js';
 export { IGRPBrandingStyle } from './style.js';
 export { IGRPBrandingProvider, useIGRPBranding } from './provider.js';
+export { resolveHeaderLogo, resolveWideLogo } from './resolve.js';

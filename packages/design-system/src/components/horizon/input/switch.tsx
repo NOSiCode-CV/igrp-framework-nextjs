@@ -76,13 +76,7 @@ function IGRPSwitch({
 
   // The field owns checked/onBlur/ref; the caller's copies never replace it
   // (see lib/form-binding.ts).
-  const {
-    checked: _checked,
-    defaultChecked: _defaultChecked,
-    onBlur,
-    ref,
-    ...callerProps
-  } = igrpOmitNonDomProps(props)
+  const { checked: _checked, defaultChecked: _defaultChecked, onBlur, ref, ...callerProps } = igrpOmitNonDomProps(props)
   void _checked
   void _defaultChecked
 

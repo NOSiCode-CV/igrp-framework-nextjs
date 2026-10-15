@@ -6,7 +6,7 @@
 
 - c9accaa: i18n: English and French string catalogs (`IGRP_I18N_DEFAULTS_EN`, `IGRP_I18N_DEFAULTS_FR`) with a parity test against `IGRP_I18N_DEFAULTS_PT` (the renamed `_PT_PT`, kept as a deprecated alias). `IGRPI18nProvider` accepts a full catalog or a partial override (`strings`) over a `base`, merged generically. The calendar's date-fns locale and the chart tooltip's number formatting follow `useIGRPLocale()`.
 - 98a54c8: Horizon inputs inside a react-hook-form no longer let caller props break the form binding.
-  
+
   - A caller `onChange` or `onBlur` now runs after the field's own handler instead of replacing it. Before, `<IGRPInputText onChange={…} />` or `<IGRPTextarea onChange={…} />` disconnected the input from the form: it showed the keystroke, the form never received it, and the value snapped back. A caller `onBlur` did the same to touched state and `mode: "onBlur"` validation in text, textarea, password, time, url, search, phone, file, checkbox and switch. `IGRPInputNumber` ignored a caller `onFocus` / `onBlur` altogether and never marked the field touched. It now does both.
   - A caller `value` / `defaultValue` (text, textarea) or `checked` / `defaultChecked` (checkbox, switch) no longer overrides the form's value. Inside a form, the form is the source of truth.
   - Every form-bound input now hands `field.ref` to a focusable element, merged with any caller `ref`, so `shouldFocusError` focuses the first invalid field on submit. Before, only `IGRPInputHidden` did. Radio groups focus the checked radio, or the first enabled one.

@@ -29,16 +29,16 @@ The names below are the real exports. `src/index.ts` is the whole public surface
 
 ### Providers
 
-| Export                    | Purpose                                                                           |
-| ------------------------- | --------------------------------------------------------------------------------- |
-| `IGRPRootProvidersFull`   | Sidebar + header shell with `SidebarProvider` and the toaster — for the app shell |
-| `IGRPRootProvidersBlank`  | Toaster only, no sidebar — for login/logout and other chrome-less routes          |
-| `IGRPRootProviders`       | **Deprecated** alias of `IGRPRootProvidersFull`                                   |
-| `IGRPNestedProviders`     | Session, tooltip, theme, branding and the session watcher, correctly nested       |
-| `IGRPSessionProvider`     | NextAuth `SessionProvider` wrapper                                                |
-| `IGRPThemeProvider`       | `next-themes` wrapper                                                             |
-| `IGRPBrandingProvider`    | Exposes the organization Brand to the chrome; `null` keeps every default          |
-| `useIGRPBranding`         | The current Brand or `null`; never throws                                         |
+| Export                   | Purpose                                                                           |
+| ------------------------ | --------------------------------------------------------------------------------- |
+| `IGRPRootProvidersFull`  | Sidebar + header shell with `SidebarProvider` and the toaster — for the app shell |
+| `IGRPRootProvidersBlank` | Toaster only, no sidebar — for login/logout and other chrome-less routes          |
+| `IGRPRootProviders`      | **Deprecated** alias of `IGRPRootProvidersFull`                                   |
+| `IGRPNestedProviders`    | Session, tooltip, theme, branding and the session watcher, correctly nested       |
+| `IGRPSessionProvider`    | NextAuth `SessionProvider` wrapper                                                |
+| `IGRPThemeProvider`      | `next-themes` wrapper                                                             |
+| `IGRPBrandingProvider`   | Exposes the organization Brand to the chrome; `null` keeps every default          |
+| `useIGRPBranding`        | The current Brand or `null`; never throws                                         |
 
 ### Template chrome
 

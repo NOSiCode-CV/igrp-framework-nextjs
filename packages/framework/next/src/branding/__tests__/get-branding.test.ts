@@ -69,6 +69,8 @@ describe('igrpGetBranding', () => {
       '--primary': 'red',
     });
     expect(getGlobalConfiguration).toHaveBeenCalledTimes(2);
+    // Let the failed background refresh settle before the cooldown ends.
+    await vi.advanceTimersByTimeAsync(0);
     vi.setSystemTime(new Date('2026-10-13T10:07:01Z'));
     await igrpGetBranding({ baseUrl: BASE, token: 't' });
     expect(getGlobalConfiguration).toHaveBeenCalledTimes(3);
@@ -105,5 +107,46 @@ describe('igrpGetBranding', () => {
     igrpInvalidateBranding(BASE);
     const brand = await igrpGetBranding({ baseUrl: BASE, token: 't' });
     expect(brand?.tokens.light).toEqual({ '--primary': 'blue' });
+  });
+
+  it('makes one fetch for concurrent first requests on a cold cache', async () => {
+    getGlobalConfiguration.mockResolvedValue(ok('red'));
+    const [a, b] = await Promise.all([
+      igrpGetBranding({ baseUrl: BASE, token: 't' }),
+      igrpGetBranding({ baseUrl: BASE, token: 't' }),
+    ]);
+    expect(a?.tokens.light).toEqual({ '--primary': 'red' });
+    expect(b?.tokens.light).toEqual({ '--primary': 'red' });
+    expect(getGlobalConfiguration).toHaveBeenCalledTimes(1);
+  });
+
+  it('gives up after the timeout when the response never completes, then cools down', async () => {
+    getGlobalConfiguration.mockImplementation(() => new Promise(() => {}));
+    const pending = igrpGetBranding({ baseUrl: BASE, token: 't' });
+    await vi.advanceTimersByTimeAsync(3_000);
+    await expect(pending).resolves.toBeNull();
+    await igrpGetBranding({ baseUrl: BASE, token: 't' });
+    expect(getGlobalConfiguration).toHaveBeenCalledTimes(1);
+  });
+
+  it('honours one freshness cookie value once, not on every request', async () => {
+    getGlobalConfiguration.mockResolvedValue(ok('red'));
+    await igrpGetBranding({ baseUrl: BASE, token: 't' });
+    const savedAt = Date.now() + 1000;
+    for (let i = 0; i < 4; i += 1) {
+      await igrpGetBranding({ baseUrl: BASE, token: 't', savedAt });
+      await vi.advanceTimersByTimeAsync(10);
+    }
+    expect(getGlobalConfiguration).toHaveBeenCalledTimes(2);
+  });
+
+  it('ignores a freshness cookie far in the future or older than its max age', async () => {
+    getGlobalConfiguration.mockResolvedValue(ok('red'));
+    await igrpGetBranding({ baseUrl: BASE, token: 't' });
+    await igrpGetBranding({ baseUrl: BASE, token: 't', savedAt: 9_999_999_999_999 });
+    vi.setSystemTime(new Date('2026-10-13T10:04:00Z'));
+    await igrpGetBranding({ baseUrl: BASE, token: 't', savedAt: Date.now() - 301_000 });
+    await vi.advanceTimersByTimeAsync(10);
+    expect(getGlobalConfiguration).toHaveBeenCalledTimes(1);
   });
 });

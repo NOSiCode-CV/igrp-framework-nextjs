@@ -442,6 +442,39 @@ describe('refresh lock', () => {
   });
 });
 
+describe('no store in production', () => {
+  afterEach(async () => {
+    vi.unstubAllEnvs();
+    (await import('../_global-state')).resetGlobalStateForTests();
+  });
+
+  it('warns once that the tokens stay in the cookie', async () => {
+    vi.stubEnv('NODE_ENV', 'production');
+    const warn = vi.spyOn(console, 'warn').mockImplementation(() => {});
+    const encode = createSessionTokenEncoder();
+    await encode({ token: sessionToken(), secret: SECRET });
+    await encode({ token: sessionToken(), secret: SECRET });
+
+    const messages = warn.mock.calls.map((c) => String(c[0]));
+    expect(messages.filter((m) => m.includes('IGRP_SESSION_STORE_URL'))).toHaveLength(1);
+  });
+
+  it('stays quiet in development, and whenever a store is registered', async () => {
+    const warn = vi.spyOn(console, 'warn').mockImplementation(() => {});
+    vi.stubEnv('NODE_ENV', 'development');
+    await createSessionTokenEncoder()({ token: sessionToken(), secret: SECRET });
+    vi.stubEnv('NODE_ENV', 'production');
+    await createSessionTokenEncoder({ store: createMemorySessionStore() })({
+      token: sessionToken(),
+      secret: SECRET,
+    });
+
+    expect(warn.mock.calls.some((c) => String(c[0]).includes('IGRP_SESSION_STORE_URL'))).toBe(
+      false,
+    );
+  });
+});
+
 describe('registered store', () => {
   it('is what decodeIGRPSessionToken and an option-less codec use', async () => {
     const store = createMemorySessionStore();

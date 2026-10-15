@@ -10,11 +10,55 @@ export function igrpGetAccessClient(): AccessManagementClient {
       'Access Management client is not configured. Call igrpSetAccessClientConfig() first.',
     );
   }
-  return AccessManagementClient.create({
+  const client = AccessManagementClient.create({
     baseUrl,
     timeout: timeout ?? 10_000,
     headers: { Authorization: `Bearer ${token}`, ...(locale ? { 'Accept-Language': locale } : {}) },
   });
+  guardSessionClient(client.sessions);
+  return client;
+}
+
+/**
+ * `sessions.rotateSession()` and `sessions.closeSession()` look like session
+ * lifecycle helpers but are traps in an IGRP app, so each warns the first time
+ * it is called in this process. They still run — nothing that calls them today
+ * breaks.
+ *
+ * - `rotateSession` (`POST /api/session/rotate`) closes the CALLER's session and
+ *   opens a replacement no token is bound to. The app's access token still
+ *   carries the old, now closed `sid`: its next Access Management call gets
+ *   `401 session_revoked` and its next refresh fails. Calling it logs the app
+ *   out, and the orphan row counts toward the user's session cap.
+ * - `closeSession` (`POST /api/session/close`) ends the session server-side but
+ *   is NOT a logout: it clears no cookie, does not end the SSO session and
+ *   revokes no token. Log out through the template's /logout flow
+ *   (`end_session` with `id_token_hint`).
+ */
+const SESSION_CLIENT_TRAPS = {
+  rotateSession:
+    'sessions.rotateSession() logs the calling app out: Access Management opens a replacement ' +
+    'session no token is bound to, while the app keeps a token for the closed one. Do not use it.',
+  closeSession:
+    'sessions.closeSession() is not a logout: it clears no cookie, keeps the SSO session and ' +
+    'revokes no token. Sign out through the /logout flow (end_session with id_token_hint).',
+} as const;
+
+const warnedSessionTraps = new Set<string>();
+
+function guardSessionClient(sessions: AccessManagementClient['sessions'] | undefined): void {
+  if (!sessions) return;
+  for (const [method, message] of Object.entries(SESSION_CLIENT_TRAPS)) {
+    const original = (sessions as unknown as Record<string, unknown>)[method];
+    if (typeof original !== 'function') continue;
+    (sessions as unknown as Record<string, unknown>)[method] = (...args: unknown[]) => {
+      if (!warnedSessionTraps.has(method)) {
+        warnedSessionTraps.add(method);
+        console.warn(`[igrpGetAccessClient] ${message}`);
+      }
+      return (original as (...a: unknown[]) => unknown).apply(sessions, args);
+    };
+  }
 }
 
 /**

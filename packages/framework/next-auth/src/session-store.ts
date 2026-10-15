@@ -210,6 +210,7 @@ export function createSessionTokenEncoder(options: CodecOptions = {}) {
     // A salted token is not a session cookie (NextAuth uses salts for other
     // JWTs); a session with no tokens (a provider without them) has nothing to
     // move. Both are written exactly as NextAuth would.
+    if (!store && !params.salt && hasTokenMaterial(token)) warnNoStoreInProduction();
     if (!store || params.salt || !hasTokenMaterial(token)) return nextAuthEncode(params);
 
     const maxAge = params.maxAge ?? DEFAULT_MAX_AGE_S;
@@ -253,6 +254,36 @@ export function createSessionTokenEncoder(options: CodecOptions = {}) {
       },
     });
   };
+}
+
+/**
+ * Once per process, in production only: a session is being written with its
+ * tokens in the cookie because no store is registered.
+ *
+ * That is correct for ONE replica on its own domain. It is not for the two
+ * deployments this module exists for, and nothing else would say so:
+ * - several replicas: a request that left the browser before a parallel one
+ *   rotated the refresh token still carries the old token in its cookie, and
+ *   on another replica nothing remembers the rotation. The IdP treats that
+ *   replay as token theft and revokes the session.
+ * - several apps on one domain: each cookie is 3–4 KB and the root app's
+ *   reaches every app, which overflows proxy header limits (8 KB on nginx).
+ *
+ * Fires only from `encode`, which runs in Node (the route handler and session
+ * reads), so Edge middleware — where no store is registered by design — never
+ * trips it.
+ */
+function warnNoStoreInProduction(): void {
+  if (process.env.NODE_ENV !== 'production') return;
+  warnOnce('sessionStore.noneInProduction', () =>
+    console.warn(
+      '[igrp session-store] no session store is registered — session tokens are kept in the ' +
+        'cookie (3–4 KB). Fine for ONE replica on its own domain. With several replicas, or ' +
+        'several apps on one domain, set IGRP_SESSION_STORE_URL (Redis): without it, concurrent ' +
+        'refreshes on different replicas replay refresh tokens (the IdP revokes the session) and ' +
+        'co-hosted cookies overflow proxy header limits.',
+    ),
+  );
 }
 
 /** The stored fields the cookie keeps a copy of (see {@link STORED_FIELDS}). */

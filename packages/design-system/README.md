@@ -19,6 +19,15 @@ IGRP Design System — React components built on Radix UI, Tailwind CSS v4, and 
 pnpm add @igrp/igrp-framework-react-design-system
 ```
 
+Install the peer dependencies too (ranges from `peerDependencies`):
+
+```bash
+pnpm add react@^19 react-dom@^19 next@^15 react-hook-form@^7 zod@^4 date-fns@^4 \
+  @tanstack/react-table@^8 recharts@^3 lucide-react@^0.577.0
+```
+
+The CSS setup below also imports `tailwindcss` (v4) and `tw-animate-css`, so the app needs those as well.
+
 ### CSS Setup
 
 The design system uses Tailwind v4 and CSS variables (tokens). Configure your app to:
@@ -59,10 +68,12 @@ import {
 
 ### Package Exports
 
-| Export                                            | Description                               |
-| ------------------------------------------------- | ----------------------------------------- |
-| `@igrp/igrp-framework-react-design-system`        | Main entry — components, hooks, utilities |
-| `@igrp/igrp-framework-react-design-system/tokens` | CSS variables (theme tokens)              |
+| Export                                               | Description                                                                                       |
+| ---------------------------------------------------- | ------------------------------------------------------------------------------------------------- |
+| `@igrp/igrp-framework-react-design-system`           | Main entry — components, hooks, utilities                                                         |
+| `@igrp/igrp-framework-react-design-system/cn`        | Server-safe `cn` — a single module, loads nothing else from the package; use it in server code    |
+| `@igrp/igrp-framework-react-design-system/rich-text` | `IGRPRichTextEditor`, `IGRPRichTextView` (+ types) — kept out of the main entry so TipTap is only bundled when imported |
+| `@igrp/igrp-framework-react-design-system/tokens`    | CSS variables (theme tokens)                                                                      |
 
 ### Component Categories
 
@@ -264,12 +275,28 @@ pnpm build
 # Watch mode — plain `tsc --watch`; output skips the Babel/React Compiler pass, so run `pnpm build` before shipping
 pnpm dev
 
+# Build without the React Compiler (escape hatch when the compiler misbehaves)
+pnpm build:without_reactcompiler
+
 # Unit tests
 pnpm test
 
+# Type-check, lint, format
+pnpm typecheck
+pnpm lint            # pnpm lint:fix to autofix
+pnpm format          # pnpm format:check to verify only
+
+# Release: format → lint → typecheck → test → build → publish (Sonatype, --tag latest)
+pnpm release
+
 # Check primitives for drift from upstream shadcn (periodic maintenance, hits network)
-node scripts/check-shadcn-drift.mjs
+pnpm drift:shadcn
+pnpm drift:shadcn:update   # accept current upstream as the new baseline, after review
 ```
+
+### Build pipeline
+
+There is no bundler. `build:js` runs Babel once over `src/` (strips TypeScript, transforms JSX, applies the React Compiler) and writes untouched ESM, one file per module, with `"use client"` directives preserved. `src/*.css` (`tokens.css`) is copied to `dist/` verbatim. `build:types` then emits declarations with `tsc --emitDeclarationOnly`, and `check:dist` validates the output. Consumers use `dist/` directly, which keeps client boundaries, `optimizePackageImports` and Tailwind `@source` scanning working.
 
 ### Shadcn drift checker
 

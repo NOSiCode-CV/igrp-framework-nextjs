@@ -2,6 +2,16 @@
 
 Catalog and literal-string checks for IGRP Next.js apps, as the `igrp-i18n` CLI and as functions.
 
+## Requirements
+
+- **Node.js** ≥ 22
+
+## Installation
+
+```bash
+pnpm add -D @igrp/framework-next-i18n
+```
+
 ```
 igrp-i18n <command>
 
@@ -13,4 +23,22 @@ igrp-i18n <command>
 
 Run from an app as `pnpm igrp-i18n check-catalogs src/i18n/messages --default pt && pnpm igrp-i18n check-literals src/components src/i18n` (`templates/demo-v1`'s `lint:i18n` also checks `src/app/(igrp)/page.tsx`); add folders as they are migrated. Framework catalogs are TypeScript modules in `@igrp/framework-next/i18n/messages` and are not checked here.
 
-Both commands are also exported for programmatic use in Vitest: `checkCatalogs(options)` returns `{ errors, info, coverage }`, `checkLiterals(paths)` returns one `file:line: finding` string per hardcoded string, and `findLiteralStrings(source)` checks a single source string.
+`<dir>` holds one `<locale>.json` per locale; `<locale>.json` for `--default` is the complete catalog the others are checked against. Keys under `--framework-namespaces` (default `common,i18n,errors`) are reported as info, not errors.
+
+| Exit code | Meaning                                           |
+| --------- | ------------------------------------------------- |
+| `0`       | No errors                                         |
+| `1`       | Errors / hardcoded strings found                  |
+| `2`       | Unknown command or missing arguments (prints usage) |
+
+Both commands are also exported for programmatic use in Vitest:
+
+| Function                                                  | Returns                                                                       |
+| --------------------------------------------------------- | ----------------------------------------------------------------------------- |
+| `checkCatalogs({ dir, defaultLocale, frameworkNamespaces? })` | `CatalogReport` — `{ errors, info, coverage }`; `coverage` is the % of default-catalog keys present per locale |
+| `checkLiterals(paths, cwd?)`                              | One `file:line: finding` string per hardcoded string                          |
+| `findLiteralStrings(source, fileName?)`                   | The same findings for a single source string                                  |
+
+## License
+
+MIT © IGRP Labs

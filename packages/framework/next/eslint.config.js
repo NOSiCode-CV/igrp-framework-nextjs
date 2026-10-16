@@ -24,8 +24,6 @@ export default defineConfig([
         'error',
         { argsIgnorePattern: '^_', varsIgnorePattern: '^_', destructuredArrayIgnorePattern: '^_' },
       ],
-      // Existing mount/prop-sync effects; tracked as warnings until each is reworked.
-      'react-hooks/set-state-in-effect': 'warn',
     },
   },
   {

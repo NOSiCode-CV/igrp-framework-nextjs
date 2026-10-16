@@ -16,8 +16,8 @@ You are working inside `packages/framework/next/` — `@igrp/framework-next`. **
 
 - `IGRPRootLayout` — root-level server layout. Props: `config` (required), `children`, and the optional `lang` (BCP-47 string for `<html lang>`). With `config.i18n` it resolves the locale, mounts `IGRPIntlProvider` and defaults `lang` to the format locale; without i18n `lang` defaults to `'pt'` (backward compatible). An explicit `lang` wins.
 - `@igrp/framework-next/i18n` subpaths: `./i18n` (Edge-safe: config, resolution, cookie sync, format helpers — must import nothing from the root barrel, `next/headers`, React or `node:*`, because app middleware imports it), `./i18n/server` (`server-only`), `./i18n/client` (`'use client'` leaves: provider, switcher, hooks), `./i18n/messages`, `./i18n/testing`. `IGRP_LOCALE_COOKIE` must equal `@igrp/framework-next-ui`'s; `src/i18n/__tests__/cookie-parity.test.ts` pins it.
-- `IGRPLayout` — route-group server layout (header/sidebar chrome).
-- `igrpBuildConfig` — assembles layout + API + toaster + session config.
+- `IGRPLayoutFull` — route-group server layout (header/sidebar chrome); `IGRPLayoutBlank` — the same without chrome (login/logout). `IGRPLayout` is a deprecated alias of `IGRPLayoutFull`.
+- `igrpBuildConfig` — validates the config (zod) and upper-cases `appCode`; it reads no env and swaps no data.
 - `igrpGetAccessClient`, `igrpGetAccessClientConfig` — access-management API client.
 - `igrpGetClaims`, `igrpAuthorize`, `igrpAssertAuthorize`, `isIgrpAuthBypass` — permission checks.
 - `igrpEnsureAccessClientConfig` — seeds the per-request access-client store from
@@ -38,12 +38,12 @@ Validate breaking changes against `templates/demo-v1/src/app/layout.tsx`, `templ
   `notFound()`, `forbidden()` and `unauthorized()` all signal by throwing, and
   the data providers redirect on a 401/403. Any boundary between them and Next's
   own must `unstable_rethrow` first — see `IGRPLayoutErrorBoundary` in `next-ui`.
-- **`igrpBuildConfig` must honor `IGRP_PREVIEW_MODE`** — swap in mock data and disable session refetch. Every config-shape change has to keep the preview branch working.
+- **Preview mode arrives as `config.previewMode`** — the template computes it with `isAuthBypass()` and supplies the mock data itself. The one env read is `isIgrpAuthBypass()` (the twin of the template's `isAuthBypass()`, for permission checks that run without a config); everything else uses `config.previewMode`. Every config-shape change has to keep the `previewMode: true` branch working.
 - Build: a single Babel pass over `src/` (`build:js`: TypeScript strip + JSX + React Compiler) → `tsc --emitDeclarationOnly`. `pnpm build:next`. Escape: `build:without_reactcompiler`.
 
 ## Design stance
 
-Mentally tag every symbol as server-only, client-safe, or shared — ensure it can't be imported from the wrong side. For new fetch paths, explicitly pick a cache/revalidate strategy — don't rely on implicit defaults. Validate both `IGRP_PREVIEW_MODE` branches on every config change.
+Mentally tag every symbol as server-only, client-safe, or shared — ensure it can't be imported from the wrong side. For new fetch paths, explicitly pick a cache/revalidate strategy — don't rely on implicit defaults. Validate both `previewMode` branches on every config change.
 
 ## Shared rules
 

@@ -1,6 +1,7 @@
 const MAX_REDIRECT_LENGTH = 2048;
 const MAX_STRING_LENGTH = 10_000;
 const DANGEROUS_PROTOCOLS = /^(javascript|data|vbscript|file):/i;
+// eslint-disable-next-line no-control-regex -- matching control characters is the point
 const CONTROL_CHARS = /[\x00-\x1f\x7f]/;
 
 /**

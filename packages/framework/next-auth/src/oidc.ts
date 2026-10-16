@@ -769,15 +769,14 @@ function allowedPostLogoutOrigins(env: AuthEnvironment): string[] {
  * `NEXTAUTH_URL` is unset or malformed.
  */
 function appBaseUrl(env: AuthEnvironment): string {
-  let origin = '';
-  let path = '';
+  let parsed: URL;
   try {
-    const parsed = new URL(stripAuthApiSuffix(env.NEXTAUTH_URL ?? ''));
-    origin = parsed.origin;
-    path = parsed.pathname.replace(/\/+$/, '');
+    parsed = new URL(stripAuthApiSuffix(env.NEXTAUTH_URL ?? ''));
   } catch {
     return '';
   }
+  const origin = parsed.origin;
+  let path = parsed.pathname.replace(/\/+$/, '');
   if (!path) {
     const fromEnv = (env.NEXT_PUBLIC_BASE_PATH ?? process.env.NEXT_PUBLIC_BASE_PATH ?? '')
       .trim()

@@ -104,7 +104,7 @@ pnpm dev:demo           # demo template (needs build:framework first)
 ### Lint / format
 
 ```bash
-pnpm lint               # workspaces with a `lint` script: ESLint in design-system(-storybook), `biome check --write` in demo-v1 (framework packages have none yet — KNOWN-ISSUES.md #1)
+pnpm lint               # every workspace: ESLint in framework packages and design-system, `biome check --write` in demo-v1
 pnpm format             # every workspace: Prettier in framework packages, `biome format --write` in demo-v1
 ```
 

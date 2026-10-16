@@ -43,9 +43,9 @@ pnpm add @igrp/framework-next
 
 ### Config builder
 
-| Export            | Entry | Purpose                                                                                           |
-| ----------------- | ----- | ------------------------------------------------------------------------------------------------- |
-| `igrpBuildConfig` | `.`   | Validates and normalizes the full IGRP config: layout, API client, toaster, session.              |
+| Export            | Entry | Purpose                                                                              |
+| ----------------- | ----- | ------------------------------------------------------------------------------------ |
+| `igrpBuildConfig` | `.`   | Validates and normalizes the full IGRP config: layout, API client, toaster, session. |
 
 ### Access-management API client
 
@@ -63,8 +63,8 @@ pnpm add @igrp/framework-next
 
 ### Typed errors
 
-| Export                                               | Entry      | Purpose                                                |
-| ---------------------------------------------------- | ---------- | ------------------------------------------------------ |
+| Export                                                                                      | Entry      | Purpose                                                |
+| ------------------------------------------------------------------------------------------- | ---------- | ------------------------------------------------------ |
 | `IgrpError`, `IgrpConfigError`, `IgrpAuthConfigError`, `IgrpLayoutDataError`, `isIgrpError` | `./errors` | Typed error hierarchy for App Router error boundaries. |
 
 ---

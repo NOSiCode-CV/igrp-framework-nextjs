@@ -6,8 +6,7 @@
     "allowSyntheticDefaultImports": true,
     "esModuleInterop": true,
     "strict": true,
-    // No ESLint in the framework packages (repo KNOWN-ISSUES #1); these are the
-    // compiler-side stand-in, mirroring what next-auth adopted.
+    // Compiler-side twin of ESLint's no-unused-vars, mirroring next-auth.
     "noUnusedLocals": true,
     "noUnusedParameters": true,
     "noEmit": false,

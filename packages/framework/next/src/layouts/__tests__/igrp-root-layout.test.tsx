@@ -33,7 +33,7 @@ const config = (overrides: Record<string, unknown> = {}) =>
   }) as never;
 
 // The layout returns React elements: match a rendered component by its `type`.
-// eslint-disable-next-line @typescript-eslint/no-explicit-any
+
 function find(node: any, component: unknown): any {
   if (!node || typeof node !== 'object') return null;
   if (Array.isArray(node)) {

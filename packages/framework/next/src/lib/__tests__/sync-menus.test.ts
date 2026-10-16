@@ -18,13 +18,9 @@ describe('igrpSyncMenus', () => {
     const info = vi.spyOn(console, 'info').mockImplementation(() => {});
 
     await igrpSyncMenus({
-      // eslint-disable-next-line @typescript-eslint/no-explicit-any
       client: client as any,
       appCode: 'APP_TEST_1',
-      menus: [
-        // eslint-disable-next-line @typescript-eslint/no-explicit-any
-        { id: 1, code: 'M1', name: 'M1', type: 'MENU_PAGE', status: 'ACTIVE' } as any,
-      ],
+      menus: [{ id: 1, code: 'M1', name: 'M1', type: 'MENU_PAGE', status: 'ACTIVE' } as any],
       syncEnabled: false,
       syncRoles: true,
     });
@@ -40,14 +36,12 @@ describe('igrpSyncMenus', () => {
     const info = vi.spyOn(console, 'info').mockImplementation(() => {});
 
     const menus = [
-      // eslint-disable-next-line @typescript-eslint/no-explicit-any
       { id: 1, code: 'M1', name: 'M1', type: 'MENU_PAGE', status: 'ACTIVE' } as any,
-      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+
       { id: 2, code: 'M2', name: 'M2', type: 'FOLDER', status: 'ACTIVE' } as any,
     ];
 
     await igrpSyncMenus({
-      // eslint-disable-next-line @typescript-eslint/no-explicit-any
       client: client as any,
       appCode: 'APP_TEST_1',
       menus,
@@ -72,13 +66,9 @@ describe('igrpSyncMenus', () => {
     vi.spyOn(console, 'info').mockImplementation(() => {});
 
     await igrpSyncMenus({
-      // eslint-disable-next-line @typescript-eslint/no-explicit-any
       client: client as any,
       appCode: 'APP_TEST_1',
-      menus: [
-        // eslint-disable-next-line @typescript-eslint/no-explicit-any
-        { id: 1, code: 'M1', name: 'M1', type: 'MENU_PAGE', status: 'ACTIVE' } as any,
-      ],
+      menus: [{ id: 1, code: 'M1', name: 'M1', type: 'MENU_PAGE', status: 'ACTIVE' } as any],
       syncEnabled: true,
       syncRoles: false,
     });

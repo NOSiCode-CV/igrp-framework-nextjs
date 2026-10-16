@@ -11,7 +11,7 @@ const baseConfig = (overrides: Record<string, unknown> = {}): IGRPConfigArgs =>
     previewMode: true,
     syncAccess: false,
     appInformation: { name: 'test', version: '0.0.0' },
-    layoutMockData: {
+    layoutData: {
       getHeaderData: async () => ({}),
       getSidebarData: async () => ({}),
     },
@@ -86,9 +86,9 @@ describe('igrpBuildConfig validation (FN-2)', () => {
     await expect(igrpBuildConfig(cfg)).rejects.toMatchObject({ code: 'IGRP_APP_CODE_MISSING' });
   });
 
-  it('throws IGRP_CONFIG_INVALID when layoutMockData getters are not functions', async () => {
+  it('throws IGRP_CONFIG_INVALID when layoutData getters are not functions', async () => {
     const cfg = baseConfig({
-      layoutMockData: { getHeaderData: 'nope', getSidebarData: async () => ({}) },
+      layoutData: { getHeaderData: 'nope', getSidebarData: async () => ({}) },
     });
     await expect(igrpBuildConfig(cfg)).rejects.toMatchObject({ code: 'IGRP_CONFIG_INVALID' });
   });
@@ -113,7 +113,7 @@ describe('igrpBuildConfig appCode canonicalization', () => {
     expect(result.appCode).toBe('APP_TEST');
     // Shallow copy: only appCode changes, every other field keeps its identity
     expect(result).not.toBe(cfg);
-    expect(result.layoutMockData).toBe(cfg.layoutMockData);
+    expect(result.layoutData).toBe(cfg.layoutData);
     expect(result.toasterConfig).toBe(cfg.toasterConfig);
     // The input config is not mutated
     expect(cfg.appCode).toBe('app_test');
@@ -178,35 +178,16 @@ describe('igrpBuildConfig validates the rest of the required contract', () => {
   });
 });
 
-/**
- * `layoutMockData` is production configuration wearing a preview-mode name —
- * both providers call it on every render in both modes and keep most of what it
- * returns. `layoutData` is the honest name; the old one stays readable for one
- * release, and setting both is a conflict rather than a merge.
- */
-describe('layoutData supersedes layoutMockData', () => {
-  it('accepts the new name on its own', async () => {
-    const cfg = baseConfig({
-      layoutData: { getHeaderData: async () => ({}), getSidebarData: async () => ({}) },
-      layoutMockData: undefined,
-    });
-    await expect(igrpBuildConfig(cfg)).resolves.toBe(cfg);
-  });
-
-  it('still accepts the deprecated name on its own', async () => {
-    const cfg = baseConfig();
-    await expect(igrpBuildConfig(cfg)).resolves.toBe(cfg);
-  });
-
-  it('rejects a config that sets neither', async () => {
-    const cfg = baseConfig({ layoutMockData: undefined });
+describe('layoutData is required', () => {
+  it('rejects a config without it', async () => {
+    const cfg = baseConfig({ layoutData: undefined });
     await expect(igrpBuildConfig(cfg)).rejects.toMatchObject({ code: 'IGRP_CONFIG_INVALID' });
   });
 
-  it('rejects a config that sets both', async () => {
-    const cfg = baseConfig({
-      layoutData: { getHeaderData: async () => ({}), getSidebarData: async () => ({}) },
-    });
-    await expect(igrpBuildConfig(cfg)).rejects.toMatchObject({ code: 'IGRP_CONFIG_INVALID' });
+  // The old name was removed, not aliased; a leftover gets a rename hint.
+  it('names a leftover layoutMockData in the error', async () => {
+    const source = { getHeaderData: async () => ({}), getSidebarData: async () => ({}) };
+    const cfg = baseConfig({ layoutData: undefined, layoutMockData: source });
+    await expect(igrpBuildConfig(cfg)).rejects.toThrowError(/layoutMockData` foi removido/);
   });
 });

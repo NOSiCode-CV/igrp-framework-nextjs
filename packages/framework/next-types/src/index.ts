@@ -19,28 +19,19 @@ export type {
   IGRPTargetType,
   IGRPApplicationType,
   IGRPApplicationTypeSyncable,
-  IGRPConfigurationType,
   IGRPApplicationArgs,
   IGRPMenuItemArgs,
   IGRPRoleDepartmentArgs,
   IGRPMenuCRUDArgs,
   IGRPRoleArgs,
-  IGRPRoleUserArgs,
   IGRPDepartmentArgs,
-  IGRPGlobalConfigurationArgs,
-  IGRPFileUrlArgs,
   IGRPPermissionArgs,
   IGRPPermissionCatalogEntry,
-  IGRPResourceType,
-  IGRPResourceItem,
-  IGRPResourceArgs,
   IGRPUserArgs,
 } from './types/access-management.js';
 
 export type {
   IGRPLayoutDataSource,
-  IGRPMockDataAsync,
-  IGRPMockData,
   IGRPToasterPosition,
   IGRPPackageJson,
 } from './types/globals.js';

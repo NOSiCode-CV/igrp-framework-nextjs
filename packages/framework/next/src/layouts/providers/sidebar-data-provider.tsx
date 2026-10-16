@@ -11,7 +11,7 @@ import { fetchMenus } from '../../hooks/use-menus.js';
 import { fetchCurrentUser } from '../../hooks/use-user.js';
 
 type SidebarDataProviderProps = {
-  config: Pick<IGRPConfigArgs, 'appCode' | 'layoutData' | 'layoutMockData' | 'previewMode'>;
+  config: Pick<IGRPConfigArgs, 'appCode' | 'layoutData' | 'previewMode'>;
   // See header-data-provider.tsx: re-applied here rather than relied on from
   // the caller's AsyncLocalStorage context, since this component also renders
   // inside its own <Suspense> boundary in IGRPLayoutFull.
@@ -85,11 +85,9 @@ export async function SidebarDataProvider({
         menuItems,
         apps,
         appCode,
-        // `showPreviewMode` is deliberately NOT written: the field is
-        // @deprecated in `next-types`, no component in `next-ui` or the design
-        // system reads it, and the team's decision (repo KNOWN-ISSUES #3) is to
-        // delete both ends rather than implement a reader. A preview-mode badge,
-        // if wanted, belongs on an explicit `IGRPTemplateSidebar` prop.
+        // No `showPreviewMode`: the field was removed from `next-types` because
+        // nothing read it. A preview-mode badge, if wanted, belongs on an
+        // explicit `IGRPTemplateSidebar` prop.
       }}
     />
   );

@@ -54,7 +54,7 @@ Two gating styles, and the difference matters:
 - `start` and `actions` have no flag. Passing the node is the whole contract.
 
 The `show*` flags live in `src/igrp.template.config.ts` under
-`layoutMockData.getHeaderData()`.
+`layoutData.getHeaderData()`.
 
 ## Quick start
 

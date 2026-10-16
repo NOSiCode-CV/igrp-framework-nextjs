@@ -16,7 +16,7 @@ export { IGRPRootLayout, type IGRPRootLayoutArgs } from './layouts/igrp-root-lay
 
 export { igrpBuildConfig } from './lib/build.js';
 
-// Resolves `layoutData` / the deprecated `layoutMockData` for consumers that
+// Resolves `layoutData` (with a framework error when missing) for consumers that
 // read the layout data source themselves (e.g. a template's header search).
 export { igrpResolveLayoutDataSource } from './lib/layout-data-source.js';
 

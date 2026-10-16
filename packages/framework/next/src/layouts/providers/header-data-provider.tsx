@@ -10,7 +10,7 @@ import { igrpResolveLayoutDataSource } from '../../lib/layout-data-source.js';
 import { fetchCurrentUser } from '../../hooks/use-user.js';
 
 type HeaderDataProviderProps = {
-  config: Pick<IGRPConfigArgs, 'layoutData' | 'layoutMockData' | 'previewMode'>;
+  config: Pick<IGRPConfigArgs, 'layoutData' | 'previewMode'>;
   // Access-client credentials, re-applied at the top of this component rather
   // than relied on from the caller's AsyncLocalStorage context: this component
   // renders inside a <Suspense> boundary in IGRPLayoutFull, and Next.js resumes

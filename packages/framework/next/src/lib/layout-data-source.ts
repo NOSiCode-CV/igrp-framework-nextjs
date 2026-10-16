@@ -5,32 +5,13 @@ import type { IGRPConfigArgs, IGRPLayoutDataSource } from '@igrp/framework-next-
 import { IgrpConfigError } from '../errors.js';
 
 /**
- * Resolve the config's header/sidebar data source across the rename.
- *
- * `layoutMockData` is production configuration wearing a preview-mode name: the
- * providers call it on every render in both modes and keep most of what it
- * returns, so an app author who read the name and stubbed it in production lost
- * the entire header and sidebar configuration with no error and no type
- * complaint. `layoutData` is the honest name; `layoutMockData` stays readable
- * for one release.
- *
- * Both set is a conflict, not a merge — the two could disagree and there is no
- * principled winner — so it throws rather than silently picking one.
+ * Return the config's header/sidebar data source, throwing a framework error
+ * when it is missing (runtime configs can be looser than the declared type).
  */
 export function igrpResolveLayoutDataSource(
-  config: Pick<IGRPConfigArgs, 'layoutData' | 'layoutMockData'>,
+  config: Pick<IGRPConfigArgs, 'layoutData'>,
 ): IGRPLayoutDataSource {
-  const { layoutData, layoutMockData } = config;
-
-  if (layoutData && layoutMockData) {
-    throw new IgrpConfigError(
-      'IGRP_CONFIG_INVALID',
-      '[igrp-template-config]: defina `layoutData` OU `layoutMockData` (descontinuado), não ambos.',
-      { field: 'layoutData' },
-    );
-  }
-
-  const source = layoutData ?? layoutMockData;
+  const source = config.layoutData;
   if (!source) {
     throw new IgrpConfigError(
       'IGRP_CONFIG_INVALID',

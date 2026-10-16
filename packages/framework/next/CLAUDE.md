@@ -25,8 +25,8 @@ You are working inside `packages/framework/next/` — `@igrp/framework-next`. **
   must call it first**: those run in a fresh async context where the store the
   layout seeds does not exist. See `src/actions/index.ts` for the gate that
   pairs with it (no recoverable session ⇒ refuse before any AM call).
-- `igrpResolveLayoutDataSource` — reads `layoutData`, falling back to the
-  deprecated `layoutMockData`; rejects a config that sets both.
+- `igrpResolveLayoutDataSource` — returns `layoutData`, throwing a framework
+  error when it is missing (`layoutMockData` was removed).
 
 Validate breaking changes against `templates/demo-v1/src/app/layout.tsx`, `templates/demo-v1/src/app/(igrp)/layout.tsx`, `templates/demo-v1/src/igrp.template.config.ts`.
 

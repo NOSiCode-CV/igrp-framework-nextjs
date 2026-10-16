@@ -1,5 +1,3 @@
-/* eslint-disable perfectionist/sort-exports */
-
 // IMPORTANT: this barrel must NOT carry 'use client'. With it, the whole barrel is
 // ONE client module: any server component importing anything from this package
 // (framework-next's layouts, a template page) registered all of next-ui as its

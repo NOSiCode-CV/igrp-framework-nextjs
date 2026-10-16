@@ -25,20 +25,11 @@ You are working inside `packages/framework/next-types/` — `@igrp/framework-nex
 
 ## Open items
 
-The repo-root `../../../KNOWN-ISSUES.md` carries the cross-package entries that
-touch this package's types — entry 2 (the deprecated `layoutMockData` /
-`IGRPMockDataAsync` / `showPreviewMode`, now due for deletion; it lists the
-matching change in `next`). Land both together and delete the entry then.
-
-`menuItems` is **done** (2026-09-21): it is now optional here and defaulted in
-`IGRPTemplateSidebar`, and the entry has been removed.
-
-Also scheduled: the fields deprecated in this release
-(`IGRPConfigArgs.showLanguageSelector` / `.loginUrl` / `.logoutUrl` /
-`.showSettings`, `IGRPSidebarDataArgs.showPreviewMode`, `IGRPMockData`,
-`IGRPConfigurationType`, `IGRPRoleUserArgs`, `IGRPGlobalConfigurationArgs`,
-`IGRPFileUrlArgs`, `IGRPResourceType`, `IGRPResourceItem`, `IGRPResourceArgs`)
-come out one release after they landed.
+The repo-root `../../../KNOWN-ISSUES.md` carries cross-package entries; none
+currently touches this package. The fields deprecated in the `0.1.0-beta` line
+(`layoutMockData`, `showPreviewMode`, the AM mirror types and the rest) were
+removed in `0.2.0-beta`. Still deprecated: `IGRPLayoutConfigArgs.activeThemeValue`
+/ `.isScaled` and `IGRPSidebarDataArgs.footerItems`.
 
 ## Design stance
 

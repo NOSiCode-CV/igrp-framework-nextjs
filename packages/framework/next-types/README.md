@@ -83,10 +83,10 @@ pnpm build
 Plain **`tsc -b`** — no Babel, no tsup. Emits only `.d.ts` and `.d.ts.map`.
 Before it, `build` runs `format`, then two gates:
 
-| Script           | Fails when                                                                                                                        |
-| ---------------- | --------------------------------------------------------------------------------------------------------------------------------- |
+| Script           | Fails when                                                                                                                                                                                              |
+| ---------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
 | `check:barrel`   | A type exported under `src/types/` is missing from `src/index.ts`, or the "What's exported" table above lists a type the barrel lacks — or omits one it has (checked against the table rows, both ways) |
-| `check:contract` | The AM DTOs and the framework mirrors drift (see above)                                                                           |
+| `check:contract` | The AM DTOs and the framework mirrors drift (see above)                                                                                                                                                 |
 
 `check:dist` then verifies the emitted declarations: relative specifiers must
 carry a `.js` extension, or the package is unresolvable under `node16` /

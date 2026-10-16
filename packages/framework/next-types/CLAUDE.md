@@ -26,11 +26,9 @@ You are working inside `packages/framework/next-types/` — `@igrp/framework-nex
 ## Open items
 
 The repo-root `../../../KNOWN-ISSUES.md` carries the cross-package entries that
-touch this package's types — entry 2 (`layoutMockData` is a misnomer) and entry
-3 (`showPreviewMode` written, never read; the decision is now **delete**, and
-only the `next` write plus this package's field removal are left). Each needs a
-change in `next` as well, so land them when reviewing that package and delete
-the entry then.
+touch this package's types — entry 2 (the deprecated `layoutMockData` /
+`IGRPMockDataAsync` / `showPreviewMode`, now due for deletion; it lists the
+matching change in `next`). Land both together and delete the entry then.
 
 `menuItems` is **done** (2026-09-21): it is now optional here and defaulted in
 `IGRPTemplateSidebar`, and the entry has been removed.

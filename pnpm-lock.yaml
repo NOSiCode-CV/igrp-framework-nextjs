@@ -481,7 +481,7 @@ importers:
         specifier: workspace:*
         version: link:../../design-system
       '@igrp/platform-access-management-client-ts':
-        specifier: ^0.2.0-beta.18
+        specifier: ^0.2.0-beta.19
         version: 0.2.0-beta.18
       next-intl:
         specifier: ^4.14.0
@@ -604,7 +604,7 @@ importers:
         version: link:../next-auth
     devDependencies:
       '@igrp/platform-access-management-client-ts':
-        specifier: ^0.2.0-beta.18
+        specifier: ^0.2.0-beta.19
         version: 0.2.0-beta.18
       '@types/node':
         specifier: ^24

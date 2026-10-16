@@ -125,7 +125,7 @@ describe('SidebarDataProvider', () => {
     });
   });
 
-  // Repo KNOWN-ISSUES #3 — written by this provider, read by nobody.
+  // The field was written by this provider and read by nobody; it is now removed.
   it('no longer writes the dead showPreviewMode field', async () => {
     const el = await SidebarDataProvider(base as never);
     expect(props(el).data).not.toHaveProperty('showPreviewMode');

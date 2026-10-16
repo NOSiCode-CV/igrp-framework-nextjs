@@ -132,7 +132,7 @@ function shortHash(value: string): string {
  * `/apps/hr` and every other ordinary single-segment-per-level basePath is
  * lossless, so it keeps the cookie name it has today — an unconditional hash
  * would rename every deployment's auth cookies, signing every user out and
- * orphaning a second cookie in each jar (see KNOWN-ISSUES.md #1).
+ * orphaning a second cookie in each jar (see `staleAuthCookies`).
  */
 function isLosslessSlug(canonical: string): boolean {
   return /^[a-z0-9]+(?:\/[a-z0-9]+)*$/.test(canonical);

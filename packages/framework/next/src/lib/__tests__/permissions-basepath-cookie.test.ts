@@ -1,7 +1,7 @@
 import { describe, it, expect, vi, beforeEach, afterEach } from 'vitest';
 
 /**
- * Regression cover for KNOWN-ISSUES #1: `recoverAccessTokenFromCookies` called
+ * Regression cover for a fixed defect: `recoverAccessTokenFromCookies` called
  * `getToken` without a `cookieName`, so it looked for the STOCK NextAuth cookie
  * while `withIGRPAuth` had written a basePath-scoped one
  * (`next-auth.session-token.<slug>_p~`). No match → no token → every permission

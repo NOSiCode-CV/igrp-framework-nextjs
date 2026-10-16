@@ -25,8 +25,7 @@ You are working inside `packages/framework/next-types/` — `@igrp/framework-nex
 
 ## Open items
 
-The repo-root `../../../KNOWN-ISSUES.md` carries cross-package entries; none
-currently touches this package. The fields deprecated in the `0.1.0-beta` line
+No open defects. The fields deprecated in the `0.1.0-beta` line
 (`layoutMockData`, `showPreviewMode`, the AM mirror types and the rest) were
 removed in `0.2.0-beta`. Still deprecated: `IGRPLayoutConfigArgs.activeThemeValue`
 / `.isScaled` and `IGRPSidebarDataArgs.footerItems`.

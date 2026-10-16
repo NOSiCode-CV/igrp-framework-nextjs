@@ -10,11 +10,12 @@ For release/publish tasks specifically: always query the registry to verify actu
 
 ## Open items
 
-Before reviewing or making non-trivial changes to a package, read
-`KNOWN-ISSUES.md` at the repo root (cross-package defects) and the one in that
-package's directory, if present. They are handover notes for defects that are
-diagnosed but deliberately not yet fixed — fix the entry that names the package
-you are in, and delete it when it lands.
+There are currently no open known issues. To hand over a defect that is
+diagnosed but deliberately not yet fixed, create a `KNOWN-ISSUES.md` in the
+package's directory (for one that spans packages, the package where the fix
+starts, naming the others). Before reviewing or making non-trivial changes to a
+package, read that file if present; delete the entry when its fix lands, and
+the file when it is empty.
 
 ## Release workflow — when the user says "bump and release"
 

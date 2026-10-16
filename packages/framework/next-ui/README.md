@@ -92,15 +92,15 @@ The names below are the real exports. `src/index.ts` is the whole public surface
 
 ### i18n (chrome catalog)
 
-| Export                                                               | Purpose                                                                                                                            |
-| -------------------------------------------------------------------- | ---------------------------------------------------------------------------------------------------------------------------------- |
-| `IGRPChromeI18nProvider`                                             | `{ strings, children }` — supplies the chrome catalog. Mounted by `IGRPIntlProvider` (`@igrp/framework-next/i18n/client`)          |
-| `useIGRPChromeI18n`                                                  | The catalog in effect; without a provider, the one for the `IGRP_LOCALE` cookie on the client, Portuguese on the server            |
-| `igrpChromeStringsFor(tag)`                                          | Catalog for a locale or language tag (`fr`, `fr-FR`); anything unsupported → Portuguese. Never throws                              |
-| `IGRP_CHROME_STRINGS_PT` / `_EN` / `_FR`                             | The catalogs (`IGRPChromeStrings`)                                                                                                 |
-| `IGRP_LOCALE_COOKIE`                                                 | `'IGRP_LOCALE'`                                                                                                                    |
-| `igrpResolveErrorCopy(error, { byCode, fallback }, custom?)`         | Error-screen `{ title, description }`: `custom` resolver (merged), then the catalog entry for the error's `IGRP_*` `code`, then `fallback` |
-| `resolveMenuLabels(overrides?, base?)`                               | Merges partial menu labels over `base` (default `IGRP_MENU_LABELS_PT_PT`)                                                           |
+| Export                                                       | Purpose                                                                                                                                    |
+| ------------------------------------------------------------ | ------------------------------------------------------------------------------------------------------------------------------------------ |
+| `IGRPChromeI18nProvider`                                     | `{ strings, children }` — supplies the chrome catalog. Mounted by `IGRPIntlProvider` (`@igrp/framework-next/i18n/client`)                  |
+| `useIGRPChromeI18n`                                          | The catalog in effect; without a provider, the one for the `IGRP_LOCALE` cookie on the client, Portuguese on the server                    |
+| `igrpChromeStringsFor(tag)`                                  | Catalog for a locale or language tag (`fr`, `fr-FR`); anything unsupported → Portuguese. Never throws                                      |
+| `IGRP_CHROME_STRINGS_PT` / `_EN` / `_FR`                     | The catalogs (`IGRPChromeStrings`)                                                                                                         |
+| `IGRP_LOCALE_COOKIE`                                         | `'IGRP_LOCALE'`                                                                                                                            |
+| `igrpResolveErrorCopy(error, { byCode, fallback }, custom?)` | Error-screen `{ title, description }`: `custom` resolver (merged), then the catalog entry for the error's `IGRP_*` `code`, then `fallback` |
+| `resolveMenuLabels(overrides?, base?)`                       | Merges partial menu labels over `base` (default `IGRP_MENU_LABELS_PT_PT`)                                                                  |
 
 ---
 
@@ -130,15 +130,15 @@ Timestamps are formatted with the design system's `useIGRPLocale()` — `pt-PT` 
 
 `IGRPBrandingStyle` renders the Brand tokens as a hoisted `<style>` (`html:root` / `html.dark`), server-safe and before first paint. `igrpParseBranding` validates a stored Brand document and never throws; `igrpBrandingToCss` turns it into CSS text with a deterministic key order; `IGRP_BRANDING_CORE_TOKENS` lists the 50 tokens a Brand may override. `IGRPTemplateHeader` and `IGRPAuthForm` read the Brand logos through `useIGRPBranding`. The root layout in `@igrp/framework-next` wires all of this when `branding.enabled` is true. Preset themes (`IGRPTemplateThemeSelector`, `IGRPActiveThemeProvider`) were removed.
 
-| Export                              | Purpose                                                                 |
-| ----------------------------------- | ----------------------------------------------------------------------- |
-| `igrpParseBranding(raw)`            | `string` → `IGRPBrandingParseResult`; never throws                      |
-| `igrpBrandingToCss(branding)`       | `IGRPBranding \| null` → CSS text                                       |
-| `IGRP_BRANDING_CORE_TOKENS`         | `IGRPBrandingTokenCatalogEntry[]` — `{ name, group }` per overridable token |
-| `BRANDING_MAX_BYTES`                | Size cap for a Brand document (64 KiB)                                  |
-| `isTokenName(name)`                 | `--lowercase-name` custom-property check                                |
-| `isSafeCssValue(value)`             | One color (hex, keyword or color function), ≤128 chars, no `;{}<>@\`, `url(`, `expression(` |
-| `isSafeLogoUrl(url)`                | `http(s)` URL without credentials or whitespace                         |
+| Export                        | Purpose                                                                                     |
+| ----------------------------- | ------------------------------------------------------------------------------------------- |
+| `igrpParseBranding(raw)`      | `string` → `IGRPBrandingParseResult`; never throws                                          |
+| `igrpBrandingToCss(branding)` | `IGRPBranding \| null` → CSS text                                                           |
+| `IGRP_BRANDING_CORE_TOKENS`   | `IGRPBrandingTokenCatalogEntry[]` — `{ name, group }` per overridable token                 |
+| `BRANDING_MAX_BYTES`          | Size cap for a Brand document (64 KiB)                                                      |
+| `isTokenName(name)`           | `--lowercase-name` custom-property check                                                    |
+| `isSafeCssValue(value)`       | One color (hex, keyword or color function), ≤128 chars, no `;{}<>@\`, `url(`, `expression(` |
+| `isSafeLogoUrl(url)`          | `http(s)` URL without credentials or whitespace                                             |
 
 ---
 

@@ -5,7 +5,7 @@
 ### Patch Changes
 
 - 9da2fa9: Fixes from a source audit of the consumer skill.
-  
+
   - **Data table:** `createIGRPColumnHelper().accessor()` now returns a real `ColumnDef`, so helper-built columns go straight into `columns` without a cast. `modal` and `custom` row actions now work when actions collapse into the dropdown (more than 2): a modal opens with a working `close`, and a custom element becomes the menu item and runs its `onClick`. Before, both were silently discarded. Row-action dialogs take their Cancel/Confirm text from the i18n catalog (`alertDialog.cancel` / `alertDialog.action`). The modal row action no longer shows a Confirm button with no handler. `pagination.defaultPageSize` is now honoured.
   - **Forms:** changing `resetKey` on `IGRPForm` now resets values, dirty state and the global error to the current `defaultValues`, as its JSDoc always said. `convertValuesToFormData` appends each file of a `FileList` or `File[]` as binary and serialises nested objects as JSON (it used to write `"[object …]"`). `IGRPSelect` no longer defaults its `label` to "Select an option". Its placeholder, the combobox placeholder and the range/multiple date-picker placeholders now come from the i18n catalog. `IGRPCheckbox`, `IGRPSwitch` and `IGRPInputColor` now show the `error` prop as the message in form mode.
   - **Charts:** `valueFormatter` now reaches the tooltip, through a new optional `valueFormatter` on `ChartTooltipContent`. Bar and area charts honour each series' `stackId`, and bar charts each series' `radius`. Radar `gridFilled` now fills. `categoryKey` is optional on pie, radar and radial-bar charts.

@@ -68,12 +68,12 @@ import {
 
 ### Package Exports
 
-| Export                                               | Description                                                                                       |
-| ---------------------------------------------------- | ------------------------------------------------------------------------------------------------- |
-| `@igrp/igrp-framework-react-design-system`           | Main entry — components, hooks, utilities                                                         |
-| `@igrp/igrp-framework-react-design-system/cn`        | Server-safe `cn` — a single module, loads nothing else from the package; use it in server code    |
+| Export                                               | Description                                                                                                             |
+| ---------------------------------------------------- | ----------------------------------------------------------------------------------------------------------------------- |
+| `@igrp/igrp-framework-react-design-system`           | Main entry — components, hooks, utilities                                                                               |
+| `@igrp/igrp-framework-react-design-system/cn`        | Server-safe `cn` — a single module, loads nothing else from the package; use it in server code                          |
 | `@igrp/igrp-framework-react-design-system/rich-text` | `IGRPRichTextEditor`, `IGRPRichTextView` (+ types) — kept out of the main entry so TipTap is only bundled when imported |
-| `@igrp/igrp-framework-react-design-system/tokens`    | CSS variables (theme tokens)                                                                      |
+| `@igrp/igrp-framework-react-design-system/tokens`    | CSS variables (theme tokens)                                                                                            |
 
 ### Component Categories
 
@@ -88,7 +88,7 @@ import {
 | **Purpose**          | Low-level building blocks; minimal styling, maximum flexibility              | High-level, opinionated components for common IGRP patterns                          |
 | **Built on**         | Radix UI primitives, CVA variants                                            | Primitives (they wrap primitives)                                                    |
 | **Props**            | Standard HTML/React props + variant props (`variant`, `size`, `asChild`)     | IGRP-specific props (`label`, `helperText`, `showIcon`, `iconName`, `loading`, etc.) |
-| **Form integration** | Manual — shadcn-style `Form`/`FormField`/`FormControl` wiring you compose     | Integrates with `IGRPFormField` and `react-hook-form`                                |
+| **Form integration** | Manual — shadcn-style `Form`/`FormField`/`FormControl` wiring you compose    | Integrates with `IGRPFormField` and `react-hook-form`                                |
 | **Use when**         | You need full control, custom composition, or are building your own patterns | You want ready-made forms, buttons with icons/loading, labeled inputs, etc.          |
 
 **Primitives** are thin wrappers: they handle accessibility (Radix), apply base styles via Tailwind, and expose variants. Use them when you want to compose your own UI or need behavior without IGRP conventions.

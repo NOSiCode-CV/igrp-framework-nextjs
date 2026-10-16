@@ -373,6 +373,12 @@
       "appliedAt": "2026-10-15T00:00:00.000Z",
       "cliVersion": "0.2.0-beta.5",
       "manifestHash": "8090fe7047506bc8"
+    },
+    {
+      "id": "62-i18n-time-zone",
+      "appliedAt": "2026-10-16T00:00:00.000Z",
+      "cliVersion": "0.2.0-beta.6",
+      "manifestHash": "27025a8b3ba10884"
     }
   ]
 }

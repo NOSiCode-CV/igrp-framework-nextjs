@@ -83,3 +83,4 @@ For the auth flow itself, see [AUTHENTICATION.md](AUTHENTICATION.md).
 | Variable | Description | Default |
 | --- | --- | --- |
 | `IGRP_FORMAT_LOCALES` | Region-qualified tag per language, comma-separated (`pt-PT` or `pt-AO,en-US`); drives dates, numbers, the design-system locale and `<html lang>`. Languages are fixed (pt, en, fr); a bare language or a tag for another language fails at startup. See `docs/I18N.md`. | `pt-CV,en-GB,fr-FR` |
+| `IGRP_TIME_ZONE` | IANA time zone (`Europe/Lisbon`, `Africa/Luanda`) used to format dates and times on the server and in the browser. Keeping both on one zone avoids hydration mismatches. | `Atlantic/Cape_Verde` |

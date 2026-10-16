@@ -1,5 +1,18 @@
 # @igrp/framework-next-ui
 
+## 0.2.0-beta.9
+
+### Patch Changes
+
+- ea9709b: - Framework packages now have ESLint (`pnpm lint`), and `release` runs it. Internal cleanups from the first run, no behaviour change.
+  - next-ui: the mode switcher, command search, menus and layout retry no longer call `setState` inside effects (`useSyncExternalStore` for hydration-only values, render-time state adjustment for prop changes), saving a render on mount and on navigation.
+- Updated dependencies [9da2fa9]
+- Updated dependencies [ea9709b]
+- Updated dependencies [ea9709b]
+  - @igrp/igrp-framework-react-design-system@0.2.0-beta.6
+  - @igrp/framework-next-auth@0.2.0-beta.8
+  - @igrp/framework-next-types@0.2.0-beta.8
+
 ## 0.2.0-beta.8
 
 ### Patch Changes

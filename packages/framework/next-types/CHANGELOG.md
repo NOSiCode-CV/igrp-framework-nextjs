@@ -1,5 +1,14 @@
 # @igrp/framework-next-types
 
+## 0.2.0-beta.8
+
+### Patch Changes
+
+- ea9709b: - **Breaking (types):** remove the fields deprecated one release ago — `IGRPConfigArgs.layoutMockData`, `.showLanguageSelector`, `.loginUrl`, `.logoutUrl`, `.showSettings`; `IGRPSidebarDataArgs.showPreviewMode`; and the types `IGRPMockDataAsync`, `IGRPMockData`, `IGRPConfigurationType`, `IGRPRoleUserArgs`, `IGRPGlobalConfigurationArgs`, `IGRPFileUrlArgs`, `IGRPResourceType`, `IGRPResourceItem`, `IGRPResourceArgs` (import the AM ones from `@igrp/platform-access-management-client-ts`). `IGRPConfigArgs.layoutData` is now required.
+  - `igrpBuildConfig` / `igrpResolveLayoutDataSource` no longer fall back to `layoutMockData`; a config that still sets it fails validation with a hint to rename it to `layoutData`.
+- Updated dependencies [ea9709b]
+  - @igrp/framework-next-auth@0.2.0-beta.8
+
 ## 0.2.0-beta.7
 
 ### Patch Changes

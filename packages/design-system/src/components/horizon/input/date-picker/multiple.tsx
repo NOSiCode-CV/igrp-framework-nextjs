@@ -160,9 +160,11 @@ function IGRPDatePickerMultiple({
   disabledPicker = false,
   disabled,
   dateFormat = DD_MM_YYYY,
-  placeholder = "Pick a date",
+  placeholder: placeholderProp,
   ...props
 }: IGRPDatePickerMultipleProps) {
+  const i18n = useIGRPi18n()
+  const placeholder = placeholderProp ?? i18n.datePicker.placeholder
   const _id = useId()
   const fieldName = name ?? id ?? _id
 

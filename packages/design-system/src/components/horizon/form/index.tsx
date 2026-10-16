@@ -74,7 +74,11 @@ export interface IGRPFormProps<TSchema extends AnyZod> {
   id?: string
   /** Disable all form inputs. */
   disabled?: boolean
-  /** Key to reset form when changed (e.g. record id when loading new data). When provided, form remounts instead of syncing via effect. */
+  /**
+   * Key that resets the form when it changes (e.g. the record id when loading new data): values, dirty and
+   * touched state and the global error all reset to the current `defaultValues`, even if the user had typed.
+   * While set, `defaultValues` no longer re-sync on their own.
+   */
   resetKey?: React.Key
 }
 
@@ -113,7 +117,7 @@ function IGRPForm<TSchema extends AnyZod>({
   })
 
   // Sync defaultValues to form when they change. Three safety rails to avoid clobbering state:
-  //   1. If the consumer opts into `resetKey`, prop sync is disabled (they reset explicitly via remount).
+  //   1. If the consumer opts into `resetKey`, prop sync is disabled (the resetKey effect below owns resets).
   //   2. Defaults already applied are never re-applied. `useForm` consumes `defaultValues` on the
   //      first render, so a mount-time `reset()` is redundant — and destructive: it runs *after*
   //      child effects and wipes rows that a child seeded (e.g. IGRPFormList with allowEmpty={false}),
@@ -132,6 +136,16 @@ function IGRPForm<TSchema extends AnyZod>({
     syncedDefaultsRef.current = defaultValues
     form.reset(defaultValues)
   }, [form, defaultValues, resetKey, isDirty])
+
+  // A changed `resetKey` overwrites everything, dirty or not — that's its whole point.
+  const appliedResetKeyRef = useRef(resetKey)
+  useEffect(() => {
+    if (appliedResetKeyRef.current === resetKey) return
+    appliedResetKeyRef.current = resetKey
+    syncedDefaultsRef.current = defaultValues
+    form.reset(defaultValues)
+    setFormError(undefined)
+  }, [form, resetKey, defaultValues])
 
   const clearGlobalError = useCallback(() => setFormError(undefined), [])
   const setGlobalError = useCallback((message: string) => setFormError(message), [])

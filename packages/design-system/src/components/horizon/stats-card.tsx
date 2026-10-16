@@ -378,7 +378,7 @@ function IGRPStatsCard({
             {title}
           </p>
         )}
-        {value && (
+        {value !== undefined && value !== null && value !== "" && (
           <div
             className={cn(
               igrpStatsCardValueVariants({ size: valueSize }),

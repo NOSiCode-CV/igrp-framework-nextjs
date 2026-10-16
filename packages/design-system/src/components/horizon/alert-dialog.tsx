@@ -73,7 +73,7 @@ function IGRPAlertDialog({
   variant = "primary",
   className,
   showIcon = true,
-  iconName = "AirVent",
+  iconName,
   iconPlacement = "start",
   title,
   titleClassName,

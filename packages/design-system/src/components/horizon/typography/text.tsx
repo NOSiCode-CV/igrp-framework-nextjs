@@ -117,8 +117,10 @@ function IGRPText({
   className,
   name,
   id,
+  variant: _deprecatedVariant,
   ...props
 }: IGRPTextProps) {
+  void _deprecatedVariant // deprecated and unused; destructured only to keep it off the DOM
   const _id = useId()
   const ref = name ?? id ?? _id
 

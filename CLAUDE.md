@@ -10,7 +10,7 @@ For release/publish tasks specifically: always query the registry to verify actu
 
 ## Open items
 
-There are currently no open known issues. To hand over a defect that is
+Open known issues: `packages/design-system/KNOWN-ISSUES.md`. To hand over a defect that is
 diagnosed but deliberately not yet fixed, create a `KNOWN-ISSUES.md` in the
 package's directory (for one that spans packages, the package where the fix
 starts, naming the others). Before reviewing or making non-trivial changes to a

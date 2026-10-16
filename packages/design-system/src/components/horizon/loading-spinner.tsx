@@ -4,6 +4,7 @@ import { useId } from "react"
 
 import { cn } from "cn"
 import { Spinner } from "../primitives/spinner.js"
+import { useIGRPi18n } from "../../i18n/index.js"
 
 /**
  * Props for the IGRPLoadingSpinner component.
@@ -24,7 +25,9 @@ interface IGRPLoadingSpinnerProps {
  * Centered loading spinner for async states.
  * Announces its busy state via role="status" + aria-live.
  */
-function IGRPLoadingSpinner({ parentClassName, className, id, label = "Loading…" }: IGRPLoadingSpinnerProps) {
+function IGRPLoadingSpinner({ parentClassName, className, id, label: labelProp }: IGRPLoadingSpinnerProps) {
+  const i18n = useIGRPi18n()
+  const label = labelProp ?? i18n.loadingSpinner.label
   const _id = useId()
   const ref = id ?? _id
 

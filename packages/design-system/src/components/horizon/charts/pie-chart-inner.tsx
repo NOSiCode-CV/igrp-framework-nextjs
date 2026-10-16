@@ -23,7 +23,9 @@ import {
  * Props for the IGRPPieChart component.
  * @see IGRPPieChart
  */
-export interface IGRPPieChartProps extends IGRPChartProps {
+export interface IGRPPieChartProps extends Omit<IGRPChartProps, "categoryKey"> {
+  /** Unused by polar charts; kept optional for call sites that already pass it. */
+  categoryKey?: string
   pies: PieConfig[]
   nameKey: string
   centerLabel?: {
@@ -206,7 +208,10 @@ function IGRPPieChartInner({
               }}
             >
               {showTooltip && (
-                <ChartTooltip cursor={false} content={<ChartTooltipContent indicator={tooltipIndicator} />} />
+                <ChartTooltip
+                  cursor={false}
+                  content={<ChartTooltipContent indicator={tooltipIndicator} valueFormatter={valueFormatter} />}
+                />
               )}
 
               {legendPosition !== "none" && (

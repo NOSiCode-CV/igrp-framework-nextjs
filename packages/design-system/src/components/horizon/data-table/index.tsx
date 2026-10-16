@@ -215,7 +215,7 @@ function IGRPDataTable<TData, TValue>({
     columnVisibility: {},
     pagination: {
       pageIndex: 0,
-      pageSize: pageSizePagination?.[0] || 50,
+      pageSize: pagination?.defaultPageSize ?? pagination?.pageSizeOptions?.[0] ?? pageSizePagination?.[0] ?? 50,
     },
     sorting: [],
     expanded: {},

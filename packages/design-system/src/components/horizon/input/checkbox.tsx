@@ -83,6 +83,7 @@ function IGRPCheckbox({
 
   return (
     <IGRPFormField
+      errorText={error}
       name={fieldName}
       label={label}
       helperText={helperText}

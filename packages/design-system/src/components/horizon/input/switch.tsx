@@ -82,6 +82,7 @@ function IGRPSwitch({
 
   return (
     <IGRPFormField
+      errorText={error}
       name={fielName}
       label={label}
       helperText={helperText}

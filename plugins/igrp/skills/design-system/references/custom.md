@@ -1,49 +1,73 @@
-# Custom layer (domain-specific `IGRP*`)
+# Custom layer
 
-A small set of pre-built domain pieces composed from Horizon. Reach for these **before** rolling your own — they encapsulate conventions used across IGRP apps.
+Four IGRP-specific compositions built on Horizon. **The prop names below are the real ones. They differ from what the component names suggest**, so don't guess.
+
+`IGRPColorVariants` = `"primary" | "secondary" | "success" | "destructive" | "warning" | "info" | "indigo"`. `IGRPColorRole` = `"solid" | "outline" | "soft"`.
 
 ## `IGRPUserAvatar`
 
-```tsx
-import { IGRPUserAvatar } from "@igrp/igrp-framework-react-design-system"
+| Prop | Type | Notes |
+| --- | --- | --- |
+| `fallbackContent` | `ReactNode` | **Required.** It does not compute initials. Pass `igrpGetInitials(user.name)`. |
+| `image` | `string \| null` | |
+| `alt` | `string` | Default `"Current User"`. Pass the user's name. |
+| `className`, `fallbackClass` | `string` | Size it with `className` (`size-8`). There is no `size` prop. |
+| `name`, `id` | `string` | `name` becomes the DOM id. **It is not the person's name.** |
 
-<IGRPUserAvatar name="Fidel da Luz" imageUrl={user.avatar} size="md" />
+```tsx
+<IGRPUserAvatar image={user.avatarUrl} alt={user.name} fallbackContent={igrpGetInitials(user.name)} className="size-8" />
 ```
 
-- Falls back to `igrpGetInitials(name)` when no image.
-- Token-based background; consistent across the app.
-- Use everywhere a user identity is shown (header, nav-user, comments, tables).
+For status dots, badges or rounded variants, use Horizon `IGRPAvatar` (`src`, `alt`, `fallback`, `scale`, `rounded`, `hasStatus`/`status`, `showBadge`/`badgeNumber`). Unlike this component, `IGRPAvatar` does derive initials from `fallback`.
 
 ## `IGRPStatsCardMini`
 
-Compact KPI card — number + label + optional delta. Use for at-a-glance dashboard grids where vertical space is at a premium.
+A compact KPI tile: a title, a coloured value and an icon.
+
+| Prop | Type | Notes |
+| --- | --- | --- |
+| `title` | `string` | |
+| `value` | `string \| number` | |
+| `variant` | `IGRPColorVariants` = `"primary"` | Colours the value and the icon border. |
+| `iconName`, `showIcon`, `iconSize` | | Pass-through from `IGRPStatsCard`. |
+| `titleSize`, `valueSize`, `titleColored`, `valueColored`, `itemPlacement`, `image`, `imageAlt`, `onClick`, `*ClassName` | | Pass-through. |
+
+The icon-background, icon-border and `iconPlacement` props type-check but **are overridden internally**, so setting them does nothing. There are no `label`, `delta` or `trend` props. Render a trend yourself next to the card.
 
 ```tsx
-<IGRPStatsCardMini label="Utilizadores ativos" value={1284} delta="+12%" deltaTone="success" />
+<IGRPStatsCardMini title="Utilizadores ativos" value={1284} variant="success" iconName="Users" />
 ```
 
 ## `IGRPStatsCardTopBorderColored`
 
-Same KPI shape with a colored top border. Use when you want to call out the status / category of the metric (e.g. red border for incidents, green for healthy services).
+A KPI card with a coloured top border. Use it when the metric's category or status should stand out.
+
+Props: `title`, `value`, `cardVariant?: IGRPColorVariants` (default `"primary"`; colours the border and the icon), `iconName`, `className`, `iconClassName`, `name`, `id`. That's the full list: there's no `onClick` or `image`.
 
 ```tsx
-<IGRPStatsCardTopBorderColored label="Incidentes" value={3} role="destructive" />
+<IGRPStatsCardTopBorderColored title="Incidentes" value={3} cardVariant="destructive" iconName="TriangleAlert" />
 ```
 
-`role` accepts the same set as `IGRPColors` (`primary | success | destructive | warning | info`).
+For anything more configurable (border position, image, click, icon background), use Horizon `IGRPStatsCard`. See `horizon.md`.
 
 ## `IGRPStatusBanner`
 
-Page-top banner for system-wide status (maintenance window, degraded service, announcement). Different from `IGRPAlert` (inline) and `IGRPBanner` (marketing/announcement) — `IGRPStatusBanner` is for *operational* status with role-based color and an optional dismiss.
+A one-line status strip: a dot, some text and a trailing badge, built on `IGRPAlert` + `IGRPBadge`. It has no title/description pair and can't be dismissed.
+
+| Prop | Type / default |
+| --- | --- |
+| `text` | `string`. The status line. |
+| `badgeText` | `string`. The badge renders only when set. |
+| `variant` / `color` | `IGRPColorRole` = `"soft"` / `IGRPColorVariants` = `"success"` |
+| `badgeVariant` / `badgeColor` | `"outline"` / `"primary"` |
+| `className`, `name`, `id` | |
 
 ```tsx
-<IGRPStatusBanner role="warning" title="Manutenção programada" description="Sábado, 02:00–04:00." />
+<IGRPStatusBanner color="warning" text="Manutenção programada sábado, 02:00–04:00" badgeText="Agendado" badgeColor="warning" />
 ```
 
-## When to extend the Custom layer vs. inline composition
+To show a titled, dismissible, page-level notice, use `IGRPAlert` for inline messages, or `IGRPBanner variant="announcement"` for a top bar.
 
-Add a new Custom component when:
-1. The composition appears in 3+ places, and
-2. It's domain-specific to IGRP apps (not generic enough for Horizon).
+## Extending this layer
 
-Otherwise, compose Horizon + Primitives inline at the feature site. Don't preemptively abstract.
+Add a Custom component (in the DS, not the app) only when the composition shows up on 3 or more screens and is IGRP-domain-specific. Otherwise compose Horizon inline at the feature.

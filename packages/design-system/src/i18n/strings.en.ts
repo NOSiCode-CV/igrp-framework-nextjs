@@ -3,6 +3,8 @@ import type { IGRPI18nStrings } from "./strings.js"
 /** English catalog. Keys and `{token}` arguments are pinned to `IGRP_I18N_DEFAULTS_PT` by the parity test. */
 export const IGRP_I18N_DEFAULTS_EN: IGRPI18nStrings = {
   dataTable: {
+    expandRow: "Expand for details",
+    collapseRow: "Collapse details",
     clearFilters: "Clear",
     notFound: "No records found.",
     filterLabel: "Filter",
@@ -59,6 +61,7 @@ export const IGRP_I18N_DEFAULTS_EN: IGRPI18nStrings = {
     placeholder: "Select date",
   },
   inputSelect: {
+    placeholder: "Select an option",
     searchPlaceholder: "Search...",
     searchLabel: "Search options",
     clearSearch: "Clear search",
@@ -67,6 +70,7 @@ export const IGRP_I18N_DEFAULTS_EN: IGRPI18nStrings = {
     protocolLabel: "Protocol",
   },
   combobox: {
+    placeholder: "Select…",
     notFound: "No item found.",
     searchPlaceholder: "Search...",
   },
@@ -104,6 +108,8 @@ export const IGRP_I18N_DEFAULTS_EN: IGRPI18nStrings = {
     iconIndicator: "Indicator",
   },
   chat: {
+    description: "Ask me anything!",
+    you: "You",
     messagePlaceholder: "Write your message…",
     sendMessage: "Send message",
     errorMessage: "Something went wrong. Please try again.",
@@ -125,8 +131,28 @@ export const IGRP_I18N_DEFAULTS_EN: IGRPI18nStrings = {
     back: "Back",
   },
   pdfViewer: {
+    close: "Close",
+    openInNewTab: "Open in new tab",
     loadError: "The PDF could not be loaded",
     notFound: "No file found",
+  },
+  loadingSpinner: {
+    label: "Loading…",
+  },
+  menuNavigation: {
+    title: "Navigation",
+  },
+  toast: {
+    title: "Notification",
+    loading: "Processing…",
+    success: "Operation successful!",
+    error: "Something went wrong!",
+  },
+  videoEmbed: {
+    invalidUrl: "Invalid video URL",
+  },
+  table: {
+    actions: "Actions",
   },
   form: {
     submissionErrorTitle: "Error submitting the form",

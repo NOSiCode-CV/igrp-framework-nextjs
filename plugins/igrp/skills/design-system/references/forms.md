@@ -1,8 +1,12 @@
-# Forms — IGRPForm + Zod
+# Forms: `IGRPForm` + Zod
 
-**Every form in IGRP code uses `IGRPForm` + a Zod schema.** Not raw `<form>`. Not bare `react-hook-form`. The Horizon `IGRPInput*` components read form context via `useFormContext()` and auto-wire — using them outside `IGRPForm` is supported (they fall back to standalone-input mode), but inside one they validate, display errors, and bind to the schema by their `name` prop.
+Every form is `IGRPForm` with a Zod schema (zod 4). Horizon fields bind by `name`: there's no `register`, no `Controller` and no `useForm`.
 
-## Minimum viable form
+Vocabulary (from the DS's `CONTEXT.md`):
+- A field is **form-bound** inside `IGRPForm`, where its value lives in the form under `name`.
+- It is **controlled** outside a form, where you own `value` / `onChange`.
+
+## Minimum form
 
 ```tsx
 "use client"
@@ -10,90 +14,120 @@
 import { useRef } from "react"
 import { z } from "zod"
 import {
+  IGRPButton,
   IGRPForm,
   type IGRPFormHandle,
   IGRPInputText,
-  IGRPButton,
+  IGRPSelect,
+  IGRPSwitch,
+  useIGRPFormContext,
 } from "@igrp/igrp-framework-react-design-system"
 
 const schema = z.object({
-  email: z.string().email("Endereço inválido"),
   name: z.string().min(2, "Nome obrigatório"),
+  email: z.email("Endereço inválido"),
+  role: z.enum(["admin", "editor", "viewer"]),
+  active: z.boolean(),
 })
 
-export function ContactForm() {
-  const formRef = useRef<IGRPFormHandle<typeof schema> | null>(null)
+function SubmitButton() {
+  const { isSubmitting } = useIGRPFormContext() // reactive; the button doesn't read form state itself
+  return <IGRPButton type="submit" loading={isSubmitting}>Guardar</IGRPButton>
+}
 
+export function UserForm({ onSave }: { onSave: (v: z.output<typeof schema>) => Promise<void> }) {
+  const formRef = useRef<IGRPFormHandle<typeof schema> | null>(null)
   return (
     <IGRPForm
       schema={schema}
       formRef={formRef}
-      defaultValues={{ email: "", name: "" }}
-      onSubmit={async (values) => {
-        // values is fully typed as z.infer<typeof schema>
-        await saveContact(values)
-      }}
-      gridClassName="grid gap-4 sm:grid-cols-2"
+      defaultValues={{ name: "", email: "", role: "viewer", active: true }}
+      onSubmit={onSave}
+      gridClassName="sm:grid-cols-2"
     >
-      <IGRPInputText name="name" label="Nome" showIcon iconName="User" />
-      <IGRPInputText name="email" label="Email" type="email" />
-      <IGRPButton type="submit" loadingText="A guardar…">Guardar</IGRPButton>
+      <IGRPInputText name="name" label="Nome" required />
+      <IGRPInputText name="email" label="Email" type="email" required />
+      <IGRPSelect
+        name="role"
+        label="Perfil"
+        placeholder="Escolha um perfil"
+        options={[{ value: "admin", label: "Administrador" }, { value: "editor", label: "Editor" }, { value: "viewer", label: "Leitor" }]}
+      />
+      <IGRPSwitch name="active" label="Ativo" />
+      <div className="sm:col-span-2"><SubmitButton /></div>
     </IGRPForm>
   )
 }
 ```
 
-The `name` prop on each input is what binds it to the schema. No `register()`, no `Controller`, no `<FormField>` boilerplate.
-
 ## `IGRPForm` props
 
-- `schema` — Zod schema (`AnyZod`). Drives validation + the type of `values` in `onSubmit`.
-- `formRef` — **required** by the current API. `RefObject<IGRPFormHandle<TSchema> | null>`. The handle extends RHF's `UseFormReturn` and adds `submit()`, `reset()`, `setGlobalError(msg)`, `clearGlobalError()`, `isSubmitting`. Even if you don't need imperative control, you still need to declare a ref and pass it.
-- `defaultValues` — `z.input<TSchema>`. The form's `useEffect` syncs new `defaultValues` into the form *only if it's not dirty*; pass a `resetKey` to force a reset.
-- `validationMode` — RHF mode: `"onSubmit"` (default) / `"onChange"` / `"onBlur"` / `"onTouched"` / `"all"`.
-- `onSubmit(values)` — receives the *parsed/output* type. Async is fine. The form catches thrown errors, surfaces them via `setGlobalError`, and optionally shows a toast.
-- `onError(err)` — receives the thrown error after `setGlobalError` runs.
-- `showToastOnError` — boolean; when `onSubmit` throws, show a Sonner toast.
-- `resetAfterSubmit` — boolean; resets to `defaultValues` after a successful submit.
-- `resetKey: React.Key` — change this prop to force a remount-style reset (cleaner than effectful `setValue` loops). Use it when reusing the same form for a new record.
-- `disabled` — disables every field via a wrapping `<FieldSet>`.
-- `gridClassName` — applied to the inner `<div className="grid gap-4 ...">`. Default is single-column. Pass `grid gap-4 sm:grid-cols-2` for two columns; use `sm:col-span-2` on individual children to break out.
-- `className`, `id`, `children`.
-
-## Inputs that auto-wire
-
-All of these read `useFormContext()` and register themselves by `name`:
-
-| Field type | Component |
+| Prop | Notes |
 | --- | --- |
-| Text | `IGRPInputText` (`type` accepts `text` / `email` / `number`) |
-| Number | `IGRPInputNumber` |
-| Password | `IGRPInputPassword` |
-| Phone | `IGRPInputPhone` |
-| Search | `IGRPInputSearch` |
-| URL | `IGRPInputUrl` |
-| Multiline | `IGRPTextarea` |
-| With prefix/suffix | `IGRPInputAddOn` |
-| Color | `IGRPInputColor` |
-| Hidden | `IGRPInputHidden` |
-| File upload | `IGRPInputFile` |
-| Single select | `IGRPSelect` (small lists) / `IGRPCombobox` (searchable / large lists) |
-| Multi select (`string[]`) | `IGRPMultiSelect` — never `IGRPCombobox variant="multiple"` (deprecated) |
-| Radio | `IGRPRadioGroup` — `variant="card"` for option cards (see below) |
-| Checkbox | `IGRPCheckbox` |
-| Switch | `IGRPSwitch` |
-| Time | `IGRPInputTime` |
-| Date | `IGRPDatePickerSingle` |
-| Date range | `IGRPDatePickerRange` |
-| Datetime | `IGRPDateTimeInput` |
+| `schema` | The Zod schema. `onSubmit` receives `z.output<typeof schema>`. |
+| `formRef` | **Required by the type.** It's `RefObject<IGRPFormHandle<S> \| null>`, which is `null` until mounted. |
+| `defaultValues` | `z.input<S>`. Give every field a default, including `""` for text and `null` for dates. |
+| `onSubmit(values)` | May be async. **Throw to report failure.** The form logs it, shows `err.message` (or an i18n fallback) in a red banner above the fields, optionally toasts it, then calls `onError`. The banner clears on the next submit. |
+| `onError(err)`, `showToastOnError` | The toast needs a mounted toaster (the template already mounts one). |
+| `validationMode` | RHF mode, default `"onSubmit"`. |
+| `resetAfterSubmit` | Resets to the defaults after a successful submit. |
+| `disabled` | Disables every field (fieldset) and blocks native submit. `formRef.current.submit()` still submits. |
+| `gridClassName` | Merged into `grid gap-4` (one column by default). Use `sm:grid-cols-2`, plus `sm:col-span-2` on a child, to make a field span both columns. |
+| `resetKey` | Changing it resets values, dirty/touched state and the global error to the current `defaultValues`, even mid-edit. While set, `defaultValues` don't re-sync on their own. |
+| `className`, `id`, `children` | Use `id` with `<IGRPButton type="submit" form={id}>` for a button outside the form (e.g. in a modal footer). |
 
-Common props on all: `name` (required, matches the Zod key), `label`, `helperText`, `required`, `inputClassName`, `className`, `error` (override the form's error message).
+**`defaultValues` re-sync:** a *new object identity* is applied only while the form is not dirty. A changed value under the same identity, or new defaults arriving after the user has typed, are ignored.
 
-**Icon caveat:** every Horizon input takes `iconName` + `iconPlacement`, but the icon only renders if `showIcon` is also set to `true`. Passing just `iconName="User" iconPlacement="start"` will not show the icon — add `showIcon`.
+**Loading a different record:** pass `resetKey={record.id}` together with that record's `defaultValues`, or call `formRef.current?.reset(values)`. Don't run a `useEffect` + `setValue` loop.
 
-## Single choice as option cards — `IGRPRadioGroup variant="card"`
+**Handle (`formRef.current`):** every RHF `UseFormReturn` method (`setValue`, `getValues`, `reset`, `trigger`, `watch`, …), plus `submit()`, `setGlobalError(msg)`, `clearGlobalError()` and `isSubmitting`. That `isSubmitting` is a non-reactive snapshot; for UI, use `useIGRPFormContext().isSubmitting` in a child component.
 
-When each option carries consequences the user must weigh (a description, an icon) and there are only a handful, render the radios as option cards instead of a dropdown or a row of dots. Never hand-roll a `<label>` with `selected && "border-primary"` — the card's selected look comes from the radio's own state.
+**`useIGRPFormContext()`** returns `{ form, isSubmitting, formError?, disabled? }` and throws outside `IGRPForm`.
+
+## Fields and the value each one writes
+
+Shared props: `name`, `label`, `helperText`, `required` and `className`. Write your Zod schema to match the **Writes** column.
+
+| Field | Writes | Notes |
+| --- | --- | --- |
+| `IGRPInputText` | `string` | `type="number"` still writes a string, so use `IGRPInputNumber`. |
+| `IGRPInputNumber` | `number \| undefined` | Clearing writes `undefined` (`z.number().optional()`). Props: `min` / `max` (clamped on blur) and `formatOptions: Intl.NumberFormatOptions`. |
+| `IGRPInputPassword` | `string` | `showPasswordToggle` (default true). |
+| `IGRPInputPhone` | E.164 `string \| undefined` | `defaultCountry` (e.g. `"CV"`), `countries`, `international` (default true). |
+| `IGRPInputUrl` | `protocol + address` | `name` is required. `protocols`, `defaultProtocol` (default `"https://"`). An emptied field still holds `"https://"`, so validate with `z.url()`, not `.min(1)`. |
+| `IGRPInputSearch` | `string` | `onSearch`, `isDebounce` + `debounceMs` (2000). Enter runs `onSearch` and **does not submit the form**. |
+| `IGRPTextarea` | `string` | `rows` (3). |
+| `IGRPInputTime` | `"HH:mm"` | |
+| `IGRPDateTimeInput` | masked `string` `"dd/MM/yyyy, HH:mm"` | Not a `Date`. Pass a matching `placeholder`, because the default uses dashes. |
+| `IGRPDatePickerSingle`, `IGRPDatePickerInputSingle` (typed and masked) | `Date \| null` | **Clearing writes `null`**, so use `z.date().nullable()`. They read a Date, a number, ISO or `"yyyy-MM-dd"`. Props: `dateFormat` (`"dd-MM-yyyy"`), `disableBefore`, `disableAfter`, `disableDayOfWeek`. |
+| `IGRPDatePickerRange` | `DateRange { from, to? }` | |
+| `IGRPDatePickerMultiple` | `Date[]` | |
+| `IGRPSelect` | `string` | `placeholder` defaults to the catalog ("Selecionar uma opção"). Also `showSearch`. |
+| `IGRPCombobox` | `string` | Searchable single choice for long lists. Re-clicking the selected option clears it to `""`. |
+| `IGRPMultiSelect` | `string[]` | Kept in **option order**, not click order. Props: `maxSelected`, `hideChips`, `hideBulkActions`, `showSearch` (auto from 8 options). Codes with no matching option stay selected. Never use `IGRPCombobox variant="multiple"` (deprecated). |
+| `IGRPRadioGroup` | `string` | `variant="card"` gives option cards (see below). |
+| `IGRPCheckbox`, `IGRPSwitch` | `boolean` | Checked only when the value is `=== true`, so the string `"true"` won't check it. |
+| `IGRPInputColor` | `string` | Writes **`oklch(...)` by default**. Pass `format="hex"` for hex. |
+| `IGRPInputFile` | See notes | Default variant: `File \| null`, or a **`FileList`** with `multiple`, plus `accept`. `variant="dropzone"`: `File \| null`, or `File[]` with `multiple`, plus `acceptTypes`, `maxSize` (10 MB), `maxFiles`, `onFilesChange`. |
+| `IGRPInputHidden` | as set | |
+
+Options for every choice field are `IGRPOptionsProps`: `{ value, label, description?, icon?, group?, status?, color?, image?, flag?, disabled?, badge? }`.
+
+## Binding rules
+
+- **Binding follows the context, not `name`.** A field inside a form binds to `name`. If `name` is missing, it falls back to `id` and then to a generated key, so it **still binds**, just under a key your schema doesn't know. Always pass `name`, matching the schema key (`contacts.0.email` for nested paths).
+  - `IGRPMultiSelect` and `IGRPRadioGroup` bind only when `name` is set and `value` isn't.
+- **Error message prop:** most fields show the schema error automatically.
+  - To override the text, use `errorText` on `IGRPCombobox`, `IGRPMultiSelect`, `IGRPRadioGroup` and `IGRPFormField`, and `error` on text-like inputs, `IGRPCheckbox`, `IGRPSwitch`, `IGRPInputColor` and the rich-text editor.
+  - `IGRPSelect` ignores both in form mode.
+- **Icons:** only `IGRPInputText` (`showIcon` + `iconName` + `iconPlacement`), `IGRPInputSearch` (icon shown by default) and `IGRPCombobox` (per-option `icon`) render an icon. Other fields accept the props and drop them.
+- **Grid spans:** `IGRPTextarea`, `IGRPInputTime`, `IGRPInputFile`, `IGRPCheckbox` and `IGRPSwitch` put `className` on the control, not on the grid cell. Wrap them in a `<div className="sm:col-span-2">` to span columns.
+- **`IGRPInputAddOn` is not form-bound.** It's a controlled prefix/suffix input (`options`, `selectValue`, `onSelectValueChange`). Inside a form, use an `IGRPInputText` plus a separate `IGRPSelect`, or wrap it in `IGRPFormField`.
+- Your own `onChange` / `onBlur` on a field runs after the binding and can't replace it.
+
+## Option cards: `IGRPRadioGroup variant="card"`
+
+Use it for a handful of choices that each need a description or icon. Don't hand-roll a `<label>` with `selected && "border-primary"`; the card's selected look comes from the radio's own state.
 
 ```tsx
 <IGRPRadioGroup
@@ -108,50 +142,46 @@ When each option carries consequences the user must weigh (a description, an ico
 />
 ```
 
-- `options` are `IGRPOptionsProps` (`IGRPRadioOption` is a deprecated alias). `icon` and `badge` render only on cards; the default variant ignores them.
-- `orientation`: `"horizontal"` (default) is a responsive 1/2/3-column grid; `"vertical"` is one column. Cards in a row are equal height.
-- Per-option `disabled` dims that card's text only.
-- `emptyLabel` replaces the cards when `options` is empty (default "Sem opções disponíveis.").
-- Same field contract in both variants: picking writes with validate + dirty + touch (a required error clears on pick); the label is a `<legend>`; `errorText` overrides the message in form-bound and controlled mode (`error` is deprecated).
+- `orientation: "horizontal"` (the default) is a responsive 1/2/3-column grid of equal-height cards; `"vertical"` is a single column.
+- `icon` and `badge` render only on cards.
+- `emptyLabel` replaces the cards when there are no options.
+- Picking an option validates, dirties and touches the field. Override the message with `errorText`.
+- Deprecated: `variant="outline" | "soft"` (they render as default), `size`, `gridSize` and `error`.
 
-## Rich text — `IGRPRichTextEditor` + `IGRPRichTextView`
+## Rich text: `IGRPRichTextEditor` / `IGRPRichTextView`
 
-For HTML bodies (e-mail notifications, document templates). Both come from a **separate entry**, so apps that don't use rich text never bundle TipTap:
+These live in a **separate entry**, so apps that don't import it never bundle TipTap:
 
 ```tsx
 import { IGRPRichTextEditor, IGRPRichTextView } from "@igrp/igrp-framework-react-design-system/rich-text"
 
-<IGRPRichTextEditor
-  name="corpo"
-  label="Corpo de email"
-  required
-  preset="email"
-  readOnly={isView}
-  variables={[{ value: "{{nome_titular}}", label: "Nome do titular" }]}
-/>
+<IGRPRichTextEditor name="corpo" label="Corpo do email" required preset="email" readOnly={isView}
+  variables={[{ value: "{{nome_titular}}", label: "Nome do titular" }]} />
 
 <IGRPRichTextView html={preview} maxHeight={240} />
 ```
 
-- **No setup:** typography comes from the DS's own token classes, so no Tailwind plugin is needed. Don't wrap it in `prose`.
-- **Never render stored HTML with `dangerouslySetInnerHTML`.** Use `IGRPRichTextView`: it re-parses through the editor's own schema, so `<script>`, `<iframe>`, `<img onerror>` and `javascript:` links are dropped. It protects the DOM, not the database, because the stored HTML is unchanged.
-- Form-bound by `name` inside `IGRPForm`, or controlled with `value` / `onChange`. An empty body is `""`, so `z.string().min(1)` works as "required".
-- Toolbar: `preset="full"` (default), `preset="email"` (only formatting that survives e-mail sanitisers: no strike, highlight, rule, alignment, colour or font size), **or** `controls={["bold", "italic", "link"]}`. Never both.
-- `readOnly` (a form's view mode) and `disabled` hide the toolbar and variables without dirtying the form.
-- Variables insert plain `{{…}}` text at the caret. There are no images and no HTML source view, by design.
-- The view takes no `preset`: editor and view always share one schema. `emptyLabel` (default `"—"`) replaces a blank body.
+- **Value:** it writes an HTML `string`, and an empty body is `""`, so `z.string().min(1)` works as "required". It binds by `name`, or runs controlled with `value` / `onChange`. `value` is ignored inside a form.
+- **Toolbar:** pass either `preset` or `controls`, never both.
+  - `preset="full"` is the default.
+  - `preset="email"` offers only email-safe formatting.
+  - `controls={["bold", "italic", "link"]}` sets an explicit control list.
+- **Read-only:** `readOnly` and `disabled` hide the toolbar without dirtying the form.
+- **Variables:** they insert plain `{{…}}` text. There are no images and no source view.
+- **Rendering stored HTML:** render it only through `IGRPRichTextView` (`html`, `emptyLabel` (default `"—"`), `maxHeight`). It re-parses the HTML through the same schema, so scripts, iframes, event handlers and `javascript:` links are dropped. **Never use `dangerouslySetInnerHTML`.** The view protects the DOM, not the stored data.
+- **Styling:** typography comes from DS tokens. Don't wrap it in `prose`.
 
-## Dynamic arrays — `IGRPFormList`
-
-For repeating sub-records (line items, contacts), use `IGRPFormList`. Inside an `IGRPForm` it wires to RHF's `useFieldArray` using its **`id` prop as the field name** (counter-intuitive but that's the API). It also has a controlled "standalone" mode via `value` / `onChange`.
+## Repeating rows: `IGRPFormList`
 
 ```tsx
 <IGRPFormList<{ name: string; email: string }>
+  name="contacts"
   id="contacts"
-  defaultItem={{ name: "", email: "" }}
   label="Contactos"
+  defaultItem={{ name: "", email: "" }}
   addButtonLabel="Adicionar contacto"
-  renderItem={(item, index, onChange) => (
+  computeLabel={(item, i) => item.name || `Contacto ${i + 1}`}
+  renderItem={(_item, index) => (
     <>
       <IGRPInputText name={`contacts.${index}.name`} label="Nome" />
       <IGRPInputText name={`contacts.${index}.email`} label="Email" />
@@ -160,89 +190,53 @@ For repeating sub-records (line items, contacts), use `IGRPFormList`. Inside an 
 />
 ```
 
-Key props:
-- `id: string` — **required**; used as both the DOM id and the field-array name in form mode.
-- `defaultItem?: TItem` — shape of a new item when the user adds.
-- `renderItem(item, index, onChange?) => ReactNode` — **required**, positional args. The third arg is the per-item `onChange` (used in standalone mode).
-- `label`, `description`, `addButtonLabel`, `addButtonIconName`, `addButtonClassName`.
-- `computeLabel(item, index) => string` — per-item label for the accordion trigger.
-- `badgeValue`, `variant`, `color`, `dot`, `badgeClassName` — show a count/status badge in the list header.
-- `allowEmpty`, `allowMultipleOpen`.
-- `renderRemoveAction({ index, ariaLabel, onRemove, onTriggerClick }) => ReactNode` — custom remove button.
-- `onItemRemove(item, index)` — callback on removal.
-- Standalone mode: `value?: TItem[]`, `defaultValue?: TItem[]`, `onChange?(items)` — when present and there's no `IGRPFormContext`, the list manages its own state.
+- **Field-array name:** it's `name ?? id`. Child names must be `` `${name}.${index}.field` ``.
+- **`renderItem(item, index, onChange?)`:** the third argument is `undefined` in form mode.
+- **`defaultItem`:** required in practice, because the add button is disabled without it.
+- **Empty lists:** `allowEmpty` defaults to `false`, so the list seeds one row and won't remove the last one. Set `allowEmpty` to allow an empty list.
+- **Other props:**
+  - Accordion: `allowMultipleOpen`.
+  - Item handling: `onItemRemove(item, index)` and `renderRemoveAction(...)`.
+  - Header badge: `badgeValue`, `variant`, `color`, `dot`.
+  - Appearance: `description`, `addButtonIconName`, `showIcon` (default true) and `iconName`.
+- **Controlled mode:** `value` / `defaultValue` / `onChange` work only outside `IGRPForm`. `IGRPStandaloneList` is a deprecated alias for that.
 
-## Composing with `IGRPFormField`
+## Custom widgets: `IGRPFormField`
 
-If you need a custom field that the Horizon catalog doesn't cover (wrapping a third-party widget, a custom signature pad, etc.), use `IGRPFormField`. Unlike the `IGRPInput*` components, **it does not autowire** — you pass `control` explicitly from `useFormContext` (or from your own `useForm`).
+For a widget that isn't form-aware (a signature pad, a third-party picker). Unlike the `IGRP*` fields, **it takes `control` explicitly**:
 
 ```tsx
-import { useFormContext } from "react-hook-form"
-import { IGRPFormField } from "@igrp/igrp-framework-react-design-system"
-
 function SignatureField() {
-  const { control } = useFormContext()
+  const { form } = useIGRPFormContext()
   return (
-    <IGRPFormField name="signature" label="Assinatura" control={control}>
-      {(field, fieldState) => (
-        <SignaturePad value={field.value} onChange={field.onChange} invalid={!!fieldState.error} />
-      )}
+    <IGRPFormField name="signature" label="Assinatura" control={form.control} required>
+      {(field, fieldState) => <SignaturePad value={field.value} onChange={field.onChange} invalid={!!fieldState.error} />}
     </IGRPFormField>
   )
 }
 ```
 
-The children render-prop receives `(field, fieldState)` **positionally** (not as a destructured object). `field` is `ControllerRenderProps`, `fieldState` is `ControllerFieldState`. Other props: `helperText`, `required`, `labelPlacement` (`"start" | "end" | "center"`), `isToggle` (horizontal layout for switches), `className`.
+- **`children`:** `(field, fieldState) => ReactNode` (positional arguments) or a plain node.
+- **Other props:** `helperText`, `errorText`, `required`, `isToggle` (horizontal layout for toggles), `labelPlacement` (only `"end"` has an effect) and `className`.
+- **Don't wrap an `IGRP*` field in it.** Doing so duplicates the label and the message.
 
-Don't wrap an `IGRPInput*` in an `IGRPFormField` — they already do their own field/label/message wiring. Double-wrapping produces duplicate labels and disconnected validation messages.
+To build a reusable form-aware widget, read `useIGRPFormContext().form` and bind it yourself. `IGRPLabel` and `IGRPFieldDescription` (`helperText`, `error`) supply matching chrome.
 
-## Imperative control
+## Server actions and `FormData`
 
-```tsx
-const formRef = useRef<IGRPFormHandle<typeof schema> | null>(null)
-
-// later:
-formRef.current?.submit()
-formRef.current?.reset()
-formRef.current?.setGlobalError("Falha de rede — tente novamente")
-formRef.current?.setValue("email", "novo@example.com") // any UseFormReturn method
-formRef.current?.isSubmitting // boolean
-```
-
-## Submitting as FormData (server actions)
-
-If the server action expects multipart/`FormData` (e.g. file uploads), convert before sending:
-
-```ts
-import { convertValuesToFormData } from "@igrp/igrp-framework-react-design-system"
-
-onSubmit={async (values) => {
-  const fd = convertValuesToFormData(values)
-  await uploadAction(fd)
-}}
-```
+The cleanest way is to pass the typed values object to a server action that validates it again with the same schema. For multipart (uploads), `convertValuesToFormData(values)` flattens the top level:
+- `File` values, `FileList`s and `File[]` append one binary entry per file under the key.
+- Arrays of primitives append one entry each.
+- Nested objects and list rows become JSON strings.
+- Booleans become `"true"` / `"false"`.
+- `null` / `undefined` are skipped.
+- **Dates go through `toISOString()`, which is an instant in UTC.** A date-only value at local midnight reads as the previous day in UTC+ zones, so format it yourself (`"yyyy-MM-dd"`) when the backend wants a calendar day.
 
 ## Calendars vs date pickers
 
-- **Date pickers (`IGRPDatePicker*`, `IGRPDateTimeInput`, `IGRPInputTime`)** — form-bound inputs. Use inside `IGRPForm`.
-- **Calendars (`IGRPCalendarSingle`, `IGRPCalendarRange`, `IGRPCalendarMultiple`, `*Time` variants)** — standalone display widgets (e.g. an availability picker on a dashboard). Not form-bound; manage state yourself.
+- **Date pickers are form fields.** That's `IGRPDatePicker*`, `IGRPDateTimeInput` and `IGRPInputTime`.
+- **Calendars are display widgets with caller-owned state, not form fields.** That's `IGRPCalendarSingle`, `IGRPCalendarRange`, `IGRPCalendarMultiple` and their `*Time` variants. Use them for things like an availability view.
 
-## Default strings and locale (`IGRPI18nProvider`)
+## Default strings
 
-Built-in messages, placeholders, and helper copy come from one typed catalog, `IGRPI18nStrings`, shipped in Portuguese (`IGRP_I18N_DEFAULTS_PT`, the default), English (`IGRP_I18N_DEFAULTS_EN`) and French (`IGRP_I18N_DEFAULTS_FR`). Mount `IGRPI18nProvider` once near the root (the framework does this for you when its i18n is configured):
-
-- `strings` — a full catalog (`strings={IGRP_I18N_DEFAULTS_EN}`) or a deep-partial override (`strings={{ dataTable: { notFound: "No records found." } }}`) merged over `base` (pt by default).
-- `locale` — the BCP-47 tag for `Intl` formatting, the calendar's date-fns locale and chart numbers. Always region-qualified (`pt-CV`, not `pt`).
-
-Per-component props (`placeholder`, `addButtonLabel`, `notFoundLabel`, …) still win over the provider for one instance. Do not translate in code: pick a catalog or override keys. Strings use `{token}` placeholders; there are no plurals. `IGRP_I18N_DEFAULTS_PT_PT` is a deprecated alias of `_PT`.
-
-## Pitfalls
-
-- **Omitting `formRef`** — it's required in the current typings. Even if you don't use it, declare a `useRef<IGRPFormHandle<typeof schema> | null>(null)` and pass it.
-- **Putting a primitive `<Input>` inside `IGRPForm`** — it won't register. Use `IGRPInputText`.
-- **Wrapping an `IGRPInput*` in `IGRPFormField`** — produces duplicate labels/errors. Use `IGRPFormField` only for custom widgets that aren't already form-aware.
-- **Setting `iconName` without `showIcon`** — the icon won't render. Both are needed.
-- **Missing `name` on an `IGRPInput*`** — it'll render in standalone mode (no form binding). Always provide `name` matching the schema.
-- **Numeric fields with `IGRPInputText type="number"`** — Zod will receive a *string* unless the schema coerces (`z.coerce.number()`) or you use `IGRPInputNumber`. Prefer `IGRPInputNumber`.
-- **Async `onSubmit` swallowing errors** — `IGRPForm` already catches and surfaces them (`setGlobalError`, optional toast). Throw or `setGlobalError` — don't `try/catch` and return silently.
-- **Resetting via `useEffect` + `setValue`** — change `resetKey` instead. Cleaner and avoids the dirty-state-skip pitfall (the form's effect won't sync new `defaultValues` if it's dirty).
+Built-in placeholders and messages come from `IGRPI18nProvider` (pt by default; see `utilities.md`). Per-instance props (`placeholder`, `addButtonLabel`, …) override the provider. Pass the per-instance prop only when the copy is specific to that screen.

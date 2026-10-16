@@ -17,6 +17,7 @@ import { IGRPLabel } from "../../label.js"
 import { type IGRPCalendarRangeProps } from "../../calendar/range.js"
 import { DD_MM_YYYY } from "../../../../lib/utilities.js"
 import { Field } from "../../../primitives/field.js"
+import { useIGRPi18n } from "../../../../i18n/index.js"
 
 /** @internal Popover + calendar + clear button for date range. */
 function DatePickerRangeField({
@@ -115,9 +116,11 @@ function IGRPDatePickerRange({
   disabledPicker = false,
   disabled,
   dateFormat = DD_MM_YYYY,
-  placeholder = "Pick a date",
+  placeholder: placeholderProp,
   ...props
 }: IGRPDatePickerRangeProps) {
+  const i18n = useIGRPi18n()
+  const placeholder = placeholderProp ?? i18n.datePicker.placeholder
   const _id = React.useId()
   const fieldName = name ?? id ?? _id
 

@@ -32,7 +32,9 @@ import { type IGRPChartProps, type RadialBarConfig } from "../types.js"
  * Props for the IGRPRadialBarChart component.
  * @see IGRPRadialBarChart
  */
-export interface IGRPRadialBarChartProps extends IGRPChartProps {
+export interface IGRPRadialBarChartProps extends Omit<IGRPChartProps, "categoryKey"> {
+  /** Unused by polar charts; kept optional for call sites that already pass it. */
+  categoryKey?: string
   /** Radial bar series configurations. */
   bars: RadialBarConfig[]
   /** Key in data for bar labels. */

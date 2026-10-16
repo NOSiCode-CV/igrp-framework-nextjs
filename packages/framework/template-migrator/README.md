@@ -200,13 +200,13 @@ It **fails** (exit 1) when:
 
 It **warns** (exit 0) for `@igrp/*` template deps no migration ever pins, and baseline entries the template no longer has.
 
-The gate runs at the start of `release`, and per-MR in `.gitlab-ci.yml` (`check_template_drift`, which also runs `typecheck` and `test`). Catching drift only at release time means it is already committed and has to be reconciled retroactively — the several `*-resync` / `*-catchup` migrations in the history are what that looks like.
+The gate runs in `release` (after `typecheck` and `test`, before `build`), and per-MR in `.gitlab-ci.yml` (`check_template_drift`, which also runs `typecheck` and `test`). Catching drift only at release time means it is already committed and has to be reconciled retroactively — the several `*-resync` / `*-catchup` migrations in the history are what that looks like.
 
 ### New-file check (baseline)
 
 Every template file must be **migration-managed**, **exempt**, or listed in `migrations/demo-v1/template-baseline.json` (the grandfathered set that predates this check). Anything else is an *orphan*: scaffolded apps would get it, upgraded apps never would — so the gate fails.
 
-Exempt paths (see `scripts/drift-orphans.ts`) are zip-excluded content (`create-template/`, `CHANGELOG.md`, `CLAUDE.md`, …) and docs/AI-tooling content that ships in the zip but isn't runtime code (`docs/`, `specs/`, `.github/`, `.cursor/`, `.trae/`, `AGENTS.md`).
+Exempt paths (see `scripts/drift-orphans.ts`) are zip-excluded content (`create-template/`, `CHANGELOG.md`, `CLAUDE.md`, …), docs/AI-tooling content that ships in the zip but isn't runtime code (`docs/`, `specs/`, `.agents/`, `.github/`, `.cursor/`, `.trae/`, `AGENTS.md`), and the CLI's own state files (`.igrp-migrations-lock.json`, `.igrp-migration-journal.json`).
 
 When the gate flags a new file:
 
@@ -235,13 +235,13 @@ Add `--check` for a dry run that reports what's stale and exits 1 without writin
 
 Regeneration is **append-and-refresh, not rewrite**: existing entries keep their recorded `appliedAt` and `cliVersion` (that's history, and churning it every release would lose the record of which CLI stamped each migration). Only `manifestHash` is refreshed, missing entries are appended in migration order, and entries for deleted migrations are dropped.
 
-New entries carry **no** `undo`/`fileHashes` at all, which is the honest representation: nothing was executed against a file tree here — the template simply *is* the post-migration state, so rolling a scaffolded app back past its baseline isn't a supported operation. Omitting the fields says that more plainly than forty copies of `[]` and `{}`. A prior entry that does carry real content keeps it: that can only come from a lock some consumer actually ran against, which isn't ours to discard.
+New entries carry **no** `undo`/`fileHashes` at all, which is the honest representation: nothing was executed against a file tree here — the template simply *is* the post-migration state, so rolling a scaffolded app back past its baseline isn't a supported operation. Omitting the fields says that more plainly than one copy per migration of `[]` and `{}`. A prior entry that does carry real content keeps it: that can only come from a lock some consumer actually ran against, which isn't ours to discard.
 
 ---
 
 ## Releasing
 
-This package follows the same changeset + Sonatype flow as the other `@igrp/*` packages. The `release` script runs `check:drift` first, so the publish aborts if the payloads have drifted from the template.
+This package follows the same changeset + Sonatype flow as the other `@igrp/*` packages. The `release` script runs `check:drift` (after `typecheck` and `test`) before building, so the publish aborts if the payloads have drifted from the template.
 
 ### 1. Record a changeset
 
@@ -269,7 +269,7 @@ pnpm --filter @igrp/template-migrator build
 Verify the output:
 
 - `dist/manifest.json` contains all expected migrations.
-- `dist/payload/` has one subdirectory per migration (`01/`, `02/`, …) with no nested `payload/` folder.
+- `dist/payload/` has one subdirectory per migration that ships payload files (`01/`, `02/`, …; migrations with only env/deps/delete steps have none) with no nested `payload/` folder.
 - `dist/cli.js` is executable and imports correctly.
 
 ### 4. Publish
@@ -294,13 +294,7 @@ Should print the migration list without errors, confirming the tarball is reacha
 
 ## Versioning convention
 
-The version tracks the framework release it is paired with:
-
-```
-0.2.0-beta.<framework-beta-number>
-```
-
-Example: when `@igrp/framework-next` ships `0.2.0-beta.16`, bump `template-migrator` to `0.2.0-beta.16` in the same changeset run.
+The version follows the repo-wide `0.2.0-beta.<n>` line, but its beta counter is **independent** — it advances only when this package gets a changeset, so it does not track the `@igrp/framework-next` beta number.
 
 Every change — new migration or CLI-only fix — uses a `patch` changeset, which advances only the beta counter:
 

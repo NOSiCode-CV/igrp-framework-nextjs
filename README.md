@@ -20,9 +20,9 @@ packages/
     next-types/               → @igrp/framework-next-types
     next-ui/                  → @igrp/framework-next-ui
     next/                     → @igrp/framework-next
-  template-migrator/          → @igrp/template-migrator
+    template-migrator/        → @igrp/template-migrator
 templates/
-  demo-v1/                → older reference template (maintenance mode)
+  demo-v1/                    → reference template (the only one)
 ```
 
 ### What each package does
@@ -74,7 +74,7 @@ Set `IGRP_PREVIEW_MODE=true` in `.env.local` to skip auth and use mock data.
 Packages must be built in this order — `pnpm build:framework` handles it automatically:
 
 ```
-framework-next-auth → framework-next-types → design-system → framework-next-ui → framework-next
+framework-next-auth → framework-next-types → design-system → framework-next-ui → framework-next → framework-next-i18n
 ```
 
 After any public-API change to a framework package, rebuild before consuming downstream.
@@ -104,9 +104,8 @@ pnpm dev:demo           # demo template (needs build:framework first)
 ### Lint / format
 
 ```bash
-pnpm lint               # ESLint (framework packages)
-pnpm format             # Prettier (framework packages)
-# templates/demo-v1 uses Biome — run from that directory
+pnpm lint               # every workspace: ESLint in framework packages, `biome check --write` in demo-v1
+pnpm format             # every workspace: Prettier in framework packages, `biome format --write` in demo-v1
 ```
 
 ### Storybook
@@ -126,7 +125,7 @@ pnpm version:changesets             # apply versions + regenerate CHANGELOGs
 ### Cleanup
 
 ```bash
-pnpm clean                          # remove all dist/ folders
+pnpm clean                          # remove dist/ (design-system, next-ui, next also remove node_modules)
 pnpm clean-all                      # remove dist/ + node_modules
 ```
 

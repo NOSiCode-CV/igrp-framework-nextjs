@@ -24,7 +24,7 @@ pnpm storybook
 pnpm test-storybook
 ```
 
-**CI mode** (fails on snapshot mismatch):
+**CI mode** (also fails when a story has no stored snapshot, instead of writing a new one):
 
 ```bash
 pnpm test-storybook:ci

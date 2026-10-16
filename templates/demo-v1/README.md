@@ -71,8 +71,8 @@ pnpm start
 
 | Script | Command | Purpose |
 | --- | --- | --- |
-| `pnpm dev` | `next dev --turbopack` | Development server |
-| `pnpm build` | `pnpm format && next build --turbopack` | Production build (Biome format first) |
+| `pnpm dev` | `node scripts/dev.mjs` | Development server (wraps `next dev --turbopack`, prints the basePath URL) |
+| `pnpm build` | `pnpm lint && pnpm lint:i18n && next build --turbopack` | Production build (Biome check + i18n checks first) |
 | `pnpm start` | `next start` | Serve the production build |
 | `pnpm lint` | `biome check --write` | Lint and auto-fix |
 | `pnpm format` | `biome format --write` | Format |
@@ -95,7 +95,7 @@ templates/demo-v1/
 │   │   │   ├── page.tsx                   # Home
 │   │   │   ├── loading.tsx
 │   │   │   ├── error.tsx
-│   │   │   ├── system-settings/page.tsx
+│   │   │   ├── (demo)/                    # Demo pages (e.g. system/settings/page.tsx)
 │   │   │   └── (generated)/               # Code-generated route group
 │   │   ├── api/
 │   │   │   ├── auth/[...nextauth]/route.ts # NextAuth handler (from lib/auth.ts)
@@ -105,19 +105,20 @@ templates/demo-v1/
 │   │   ├── error.tsx
 │   │   └── global-error.tsx               # Renders typed IgrpError
 │   ├── actions/igrp/
-│   │   ├── layout.ts                      # configLayout(), getTheme()
+│   │   ├── layout.ts                      # configLayout()
 │   │   └── auth.ts
-│   ├── config/                            # site, login, error-messages
+│   ├── config/                            # site, login
 │   ├── lib/
-│   │   ├── auth.ts                        # withIGRPAuth instance, serverSession, getSession
+│   │   ├── auth-instance.ts               # withIGRPAuth instance
+│   │   ├── auth.ts                        # re-exports auth; serverSession, getSession
 │   │   ├── dal.ts                         # verifySession() data-access gate
-│   │   ├── utils.ts                       # cn, isPreviewMode, isAuthDisabled, isAuthBypass, sanitizeCallbackUrl
+│   │   ├── utilities.ts                   # isPreviewMode, isAuthDisabled, isAuthBypass, sanitizeCallbackUrl
 │   │   ├── errors.ts, report-error.ts
 │   │   ├── fonts.ts
 │   │   └── config/                        # get-base-path, get-pkj, get-routes, get-session-args
-│   ├── providers/query-client.tsx        # React Query provider
+│   ├── providers/                         # React Query: query-provider.tsx, query-client(.server).ts
 │   ├── temp/                              # Mock users / menus / applications (preview mode)
-│   ├── styles/                            # globals.css + theme variants
+│   ├── styles/                            # globals.css
 │   ├── middleware.ts                      # Auth gate + security headers
 │   └── igrp.template.config.ts           # createConfig() → igrpBuildConfig
 ├── public/
@@ -152,7 +153,7 @@ Tailwind compiles **once here in the app**, not in the framework packages. Impor
 
 ### Header slots — quick note
 
-Render your own components in the header by passing `headerSlots` to `IGRPLayoutFull`: `start` (left, after the logo), and `search`, `settings`, `notifications` and `actions` in the right cluster. The framework still fetches and owns all header data (user, logo, breadcrumbs) — a slot only replaces what renders in its position. Slots must be **elements**, not component references, since they cross the Server→Client boundary. This template's command palette is the worked example: [`src/lib/header-search.ts`](src/lib/header-search.ts) (server data) + [`src/components/header/app-search.tsx`](src/components/header/app-search.tsx) (client handlers), wired in [`src/app/(igrp)/layout.tsx`](src/app/(igrp)/layout.tsx). Full guide in [Header Slots](docs/HEADER_SLOTS.md).
+Render your own components in the header by passing `headerSlots` to `IGRPLayoutFull`: `start` (left, after the logo), and `search`, `settings`, `notifications` and `actions` in the right cluster. The framework still fetches and owns all header data (user, logo, breadcrumbs) — a slot only replaces what renders in its position. Slots must be **elements**, not component references, since they cross the Server→Client boundary. This template's command palette is the worked example: [`src/lib/header-search.ts`](src/lib/header-search.ts) (server data) + [`src/components/app-search.tsx`](src/components/app-search.tsx) (client handlers), wired in [`src/app/(igrp)/layout.tsx`](src/app/(igrp)/layout.tsx). Full guide in [Header Slots](docs/HEADER_SLOTS.md).
 
 ### Permissions — quick note
 

@@ -4,9 +4,10 @@ Server-side entry point for the IGRP Framework — root and route-group layouts,
 
 ## Requirements
 
-- **Node.js** ≥ 20.x
-- **Next.js** ^15.5.15
-- **React** ^19.2.5 + **react-dom** ^19.2.5
+- **Node.js** ≥ 22
+- **Next.js** ^15.5.0
+- **React** ^19.0.0 + **react-dom** ^19.0.0
+- **zod** ^4.5.0 (peer)
 
 ---
 
@@ -25,7 +26,9 @@ pnpm add @igrp/framework-next
 | Export              | Entry | Purpose                                                                             |
 | ------------------- | ----- | ----------------------------------------------------------------------------------- |
 | `IGRPRootLayout`    | `.`   | Root-level server layout. Wraps `<html>` with theme + global providers.             |
-| `IGRPLayout`        | `.`   | Route-group server layout. Renders header + sidebar chrome around protected routes. |
+| `IGRPLayoutFull`    | `.`   | Route-group server layout. Renders header + sidebar chrome around protected routes. |
+| `IGRPLayoutBlank`   | `.`   | Route-group server layout without chrome (toaster only) — login/logout routes.      |
+| `IGRPLayout`        | `.`   | **Deprecated** alias of `IGRPLayoutFull`; will be removed.                          |
 | `IGRPGlobalLoading` | `.`   | Full-page loading indicator for `loading.tsx` files.                                |
 
 #### `IGRPRootLayout` props
@@ -42,7 +45,7 @@ pnpm add @igrp/framework-next
 
 | Export            | Entry | Purpose                                                                                           |
 | ----------------- | ----- | ------------------------------------------------------------------------------------------------- |
-| `igrpBuildConfig` | `.`   | Assembles the full IGRP config: layout, API client, toaster, session. Honors `IGRP_PREVIEW_MODE`. |
+| `igrpBuildConfig` | `.`   | Validates and normalizes the full IGRP config: layout, API client, toaster, session.              |
 
 ### Access-management API client
 
@@ -62,7 +65,7 @@ pnpm add @igrp/framework-next
 
 | Export                                               | Entry      | Purpose                                                |
 | ---------------------------------------------------- | ---------- | ------------------------------------------------------ |
-| `IGRPError`, `IGRPAuthError`, `IGRPNotFoundError`, … | `./errors` | Typed error hierarchy for App Router error boundaries. |
+| `IgrpError`, `IgrpConfigError`, `IgrpAuthConfigError`, `IgrpLayoutDataError`, `isIgrpError` | `./errors` | Typed error hierarchy for App Router error boundaries. |
 
 ---
 
@@ -73,9 +76,12 @@ pnpm add @igrp/framework-next
 ```tsx
 // src/app/layout.tsx
 import { IGRPRootLayout } from '@igrp/framework-next';
+import { createConfig } from '@/igrp.template.config';
+import { getLayoutConfig } from '@/lib/dal';
 
-export default function RootLayout({ children }: { children: React.ReactNode }) {
-  return <IGRPRootLayout>{children}</IGRPRootLayout>;
+export default async function RootLayout({ children }: { children: React.ReactNode }) {
+  const config = await createConfig(await getLayoutConfig());
+  return <IGRPRootLayout config={config}>{children}</IGRPRootLayout>;
 }
 ```
 
@@ -99,43 +105,54 @@ Wire it with `igrpBuildConfig({ i18n: igrpDefineI18n({ defaultLocale: 'pt', … 
 
 ```tsx
 // src/app/(igrp)/layout.tsx
-import { IGRPLayout } from '@igrp/framework-next';
-import { getConfig } from '@/igrp.template.config';
+import { IGRPLayoutFull } from '@igrp/framework-next';
+import { createConfig } from '@/igrp.template.config';
+import { getLayoutConfig } from '@/lib/dal';
 
 export default async function Layout({ children }: { children: React.ReactNode }) {
-  const config = await getConfig();
-  return <IGRPLayout config={config}>{children}</IGRPLayout>;
+  const config = await createConfig(await getLayoutConfig());
+  return <IGRPLayoutFull config={config}>{children}</IGRPLayoutFull>;
 }
 ```
+
+`IGRPLayout` still works but is a deprecated alias of `IGRPLayoutFull`.
 
 ### Config builder
 
 ```ts
 // src/igrp.template.config.ts
 import { igrpBuildConfig } from '@igrp/framework-next';
+import type { IGRPConfigClient } from '@igrp/framework-next-types';
 import { cache } from 'react';
+import { isAuthBypass } from '@/lib/utilities';
+import { getPackageJson } from './lib/config/get-pkj';
 
-export const getConfig = cache(async () => {
-  return igrpBuildConfig({
-    appCode: process.env.IGRP_APP_CODE!,
-    previewMode: process.env.IGRP_PREVIEW_MODE === 'true',
-    // layoutData, apiManagementConfig, toasterConfig, sessionArgs ...
-  });
-});
+export const createConfig: IGRPConfigClient = cache(async (layout) =>
+  igrpBuildConfig({
+    appCode: process.env.IGRP_APP_CODE || '',
+    previewMode: isAuthBypass(),
+    syncAccess: process.env.IGRP_SYNC_ACCESS === 'true',
+    appInformation: getPackageJson(),
+    layout,
+    // Required: async getters for header and sidebar data (yours; demo-v1 returns mocks under isAuthBypass()).
+    layoutData: { getHeaderData, getSidebarData },
+    toasterConfig: { showToaster: true, position: 'bottom-right' },
+    // apiManagementConfig (required unless previewMode), sessionArgs, i18n, branding ...
+  }),
+);
 ```
 
-When `previewMode` is `true`, `igrpBuildConfig` swaps in mock layout data and disables session refetch — no auth or API backend needed.
+`igrpBuildConfig` validates the config (with `previewMode` it no longer requires the Access Management settings) and upper-cases `appCode`; it does not read the environment or swap any data. Preview mode is the template's job: `demo-v1` passes `previewMode: isAuthBypass()` and, under the same check, supplies mock user, menus and apps through `layoutData` — no auth or API backend needed.
 
 ### Typed errors
 
 ```ts
-// src/app/(igrp)/error.tsx
-import { IGRPAuthError } from '@igrp/framework-next/errors';
+import { IgrpAuthConfigError, isIgrpError } from '@igrp/framework-next/errors';
 
-export function onError(error: unknown) {
-  if (error instanceof IGRPAuthError) {
-    // redirect to login
-  }
+export function describeError(error: unknown) {
+  if (error instanceof IgrpAuthConfigError) return 'auth misconfigured';
+  if (isIgrpError(error)) return error.code;
+  return 'unexpected';
 }
 ```
 

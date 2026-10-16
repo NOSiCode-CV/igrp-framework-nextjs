@@ -2,7 +2,7 @@
 
 Client-side UI shell for the IGRP Framework — the header, sidebar, navigation, auth chrome, providers and error surfaces that wrap every IGRP application.
 
-Every export is a Client Component or a client hook. The package declares `'use client'` on its barrel, so a Server Component may render these, but a module that imports one is itself a client module.
+The components and hooks are client code, but the barrel (`src/index.ts`) deliberately carries **no** `'use client'`: the directive sits on each leaf module, so a Server Component importing one export does not pull the whole package into its client bundle. Leaves without the directive — `IGRPBrandingStyle`, the branding helpers and the `IGRP_CHROME_STRINGS_*` catalogs — are server-safe. `src/__tests__/client-boundaries.test.ts` enforces both.
 
 ## Requirements
 
@@ -106,7 +106,7 @@ import { IGRPTemplateSidebar } from '@igrp/framework-next-ui';
 />;
 ```
 
-Catalogs: `IGRP_MENU_LABELS_PT_PT`, `IGRP_NAV_USER_LABELS_PT_PT`, `IGRP_NOTIFICATIONS_LABELS_PT_PT`, `IGRP_COMMAND_SEARCH_LABELS_PT_PT`, `IGRP_MODE_SWITCHER_LABELS_PT_PT`. The standalone screens (`IGRPForbidden`, `IGRPTemplateNotFound`, `IGRPGlobalError`, `IGRPSegmentError`) take individual label props instead.
+Catalogs: `IGRP_MENU_LABELS_PT_PT`, `IGRP_NAV_USER_LABELS_PT_PT`, `IGRP_NOTIFICATIONS_LABELS_PT_PT`, `IGRP_COMMAND_SEARCH_LABELS_PT_PT`, `IGRP_MODE_SWITCHER_LABELS_PT_PT` — deprecated views into the pt chrome catalog `IGRP_CHROME_STRINGS_PT`, which ships alongside `IGRP_CHROME_STRINGS_EN` / `_FR` and is selected by `IGRPChromeI18nProvider` (mounted for you by `@igrp/framework-next`'s i18n). Props still win over the catalog. The standalone screens (`IGRPForbidden`, `IGRPTemplateNotFound`, `IGRPGlobalError`, `IGRPSegmentError`) take individual label props instead.
 
 `IGRPTemplateHeader` mounts most of this chrome, so it forwards each child's overrides: `navUserLabels`, `commandSearchLabels`, `notificationsLabels`, `modeSwitcherLabels`, `breadcrumbHomeLabel`, `breadcrumbEllipsisLabel` and `settingsLabel`.
 
@@ -135,10 +135,10 @@ The package publishes `dist` only, so these are a contract with your app's `publ
 
 ## Usage
 
-`templates/demo-v1` is the canonical wiring: read its `src/app/layout.tsx` and `src/app/(igrp)/layout.tsx` rather than copying a snippet from here, because the provider nesting and the server/client split both matter.
+Apps don't usually compose these providers themselves: the server layouts in `@igrp/framework-next` do it, and `templates/demo-v1` (`src/app/layout.tsx`, `src/app/(igrp)/layout.tsx`) only renders those layouts. Read them rather than copying a snippet from here, because the provider nesting and the server/client split both matter.
 
-- Root layout composes `IGRPRootProvidersFull` (or `IGRPRootProvidersBlank` for chrome-less routes).
-- The `(igrp)` group layout composes `IGRPNestedProviders` around `IGRPTemplateSidebar` + `IGRPTemplateHeader`.
+- `IGRPRootLayout` (root layout) composes `IGRPNestedProviders` — session, tooltip, theme, branding, session watcher.
+- `IGRPLayoutFull` (the `(igrp)` group layout) composes `IGRPRootProvidersFull`, filling its `sidebar` / `header` slots with `IGRPTemplateSidebar` + `IGRPTemplateHeader`; `IGRPLayoutBlank` composes `IGRPRootProvidersBlank` for chrome-less routes.
 
 ---
 

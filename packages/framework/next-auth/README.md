@@ -75,7 +75,7 @@ AUTH_PROVIDER=igrp-auth          # "igrp-auth" or "none" (disables auth)
 IGRP_AUTH_CLIENT_ID=my-client
 IGRP_AUTH_CLIENT_SECRET=my-secret
 IGRP_AUTH_ISSUER=https://your-oidc-provider.example.com/realms/my-realm
-NEXTAUTH_URL=http://localhost:3000
+NEXTAUTH_URL=http://localhost:3000/apps/template/api/auth   # basePath + /api/auth when NEXT_PUBLIC_BASE_PATH is set
 NEXTAUTH_SECRET=some-random-secret
 
 # Optional
@@ -335,7 +335,7 @@ on the session. Its lifetime is the NextAuth session cookie, and its token
 lifecycle is the application's responsibility.
 
 The OIDC callback URL to register on your provider is:
-`{NEXTAUTH_URL}/api/auth/callback/igrp-auth`
+`{NEXTAUTH_URL}/callback/igrp-auth` — with `NEXTAUTH_URL` ending in `/api/auth` as above (e.g. `http://localhost:3000/apps/template/api/auth/callback/igrp-auth`)
 
 ## Session shape
 

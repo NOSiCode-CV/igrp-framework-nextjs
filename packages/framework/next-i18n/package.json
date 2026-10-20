@@ -1,6 +1,6 @@
 {
   "name": "@igrp/framework-next-i18n",
-  "version": "0.2.0-beta.1",
+  "version": "0.2.0-beta.2",
   "description": "Catalog and literal-string checks for IGRP Next.js apps (igrp-i18n CLI)",
   "author": "IGRP Team",
   "license": "MIT",

@@ -1,5 +1,19 @@
 # @igrp/igrp-framework-react-design-system
 
+## 0.2.0-beta.7
+
+### Patch Changes
+
+- 4f76619: Fix mouse-wheel scrolling in IGRPCombobox option lists inside modal dialogs without disabling the dialog's background scroll lock.
+- 6cfc2ec: Read the remaining hardcoded labels from the i18n catalog (pt-PT, en, fr): data-table pagination, range-filter labels and not-available text, user-avatar and status labels, chat image alt, image-cropper alt and placeholder, PDF viewer frame title, dialog footer close and spinner label. Props that already override a label still win.
+- 729823c: The combobox's heading for ungrouped options (`combobox.otherGroup`) and `CommandDialog`'s default screen-reader title and description (`commandDialog.title` / `commandDialog.description`) come from the i18n catalog instead of English literals. `command.tsx` is now a `"use client"` leaf.
+- 9b77c9c: Dates, file sizes, chart values and phone country names now follow the `IGRPI18nProvider` locale: date pickers and the data-table date cell pass the matching date-fns locale, `IGRPInputFile` formats sizes with `Intl` units, chart axis and tooltip values use compact `Intl` notation (`formatChartValue` takes an optional `locale` third argument), and `IGRPInputPhone` lists country names in the locale. `formatDateToString`, `formatDateRange`, `parseStringToDate`, `parseStringToRange` and `parseDateInput` take an optional date-fns `locale`. The calendar only trusts a consumer locale's code for `Intl` when it carries a region. `formatChartValue`'s default output is now localised (pt-PT by default, e.g. "2,5 mil" instead of "2.5K"), and values under 1000 keep up to two decimals. `IGRPDataTableCellAmount` no longer defaults to USD: without `currency`, a `currency` cell renders as a plain number.
+- 5f4709e: Phone country names localize only after hydration; pagination and breadcrumb ellipsis sr-only text comes from the i18n catalog (`pagination.morePages`, `breadcrumb.more`).
+  
+  The breadcrumb `<nav>` takes its accessible name from the new `breadcrumb.label` catalog key instead of the English "breadcrumb".
+- 2e48ad1: Add `timeZone` to `IGRPI18nProvider` with a `useIGRPTimeZone` hook and an `igrpIsDateOnly` helper. Data-table date cells and the PDF viewer format timestamps in the provider zone, and date-only strings keep their calendar day.
+- 18dfab2: Primitive and Horizon default strings (dialog/sheet close, sidebar, carousel, pagination, stepper, copy-to, calendar time labels, data-table filter placeholder, input add-on, pagination nav label) now come from the i18n catalog in pt, en and fr. Props still override.
+
 ## 0.2.0-beta.6
 
 ### Patch Changes

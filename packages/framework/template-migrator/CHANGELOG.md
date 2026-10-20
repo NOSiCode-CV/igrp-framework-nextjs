@@ -1,5 +1,14 @@
 # @igrp/template-migrator
 
+## 0.2.0-beta.8
+
+### Patch Changes
+
+- e3a83ab: Migration 63: the demo-v1 login page, carousel, 404 and page titles and the sign-in/sign-out loading screens follow the selected language. Migration 58 now names the release versions that ship the i18n runtime.
+- c5a6bdf: Migration 64: `global-error.tsx` sets `<html lang>` from `igrpLastFormatLocale()`, so the global error page carries the deployment's region instead of the default one.
+- accf831: Migration 65: pins the template's framework dependencies to the published 0.2.0-beta.9 line (`@igrp/framework-next`, `-ui` beta.9; `-auth`, `-types` beta.8; design system beta.6) and `@igrp/framework-next-i18n` 0.2.0-beta.1, so `check:drift` passes again.
+- a8351fa: Migration 66: bumps the template's `next` to 15.5.28, matching the framework packages, so `check:drift` passes.
+
 ## 0.2.0-beta.7
 
 ### Patch Changes

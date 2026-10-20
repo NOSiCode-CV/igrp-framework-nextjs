@@ -1,5 +1,36 @@
 # @igrp/framework-next
 
+## 0.2.0-beta.10
+
+### Patch Changes
+
+- 69b8875: Fix i18n format helpers: date-only strings keep their calendar day in any zone, `igrpFormatDateTime` accepts `dateStyle`/`timeStyle`, and relative time promotes a rounded value that fills the next unit.
+- c5a6bdf: i18n follow-ups:
+  
+  - `IGRPRootLayout` without `config.i18n` now reads the `IGRP_LOCALE` cookie on the server. When it names a platform locale, the layout mounts that language's built-in design-system and chrome catalogs and sets `<html lang>` to its default region. Design-system strings no longer stay Portuguese while the chrome switches, and the chrome no longer flashes Portuguese before hydration. The root layout now calls `cookies()` on that path, so the route renders dynamically.
+  - New `igrpLastFormatLocale()` in `@igrp/framework-next/i18n/client` returns the format locale `IGRPIntlProvider` last rendered with. `global-error.tsx` uses it to give `<html lang>` the deployment's region (`IGRP_FORMAT_LOCALES`), which it can't read itself.
+- 63fb4c0: i18n: ignore `undefined` chrome overrides (object-valued ones such as `errorCodes` apply again), render impossible date-only strings like `2026-02-31` as empty, mark the locale cookie Secure on https origins without a proxy header, key the message-merge cache by default locale, and announce a failed language change in a status region.
+- 36e4760: Server Actions and Route Handlers now send `Accept-Language`. `igrpEnsureAccessClientConfig` seeds the access-client locale from the `IGRP_LOCALE` cookie, then the request's `Accept-Language` header.
+- 5e3ebdb: i18n of the remaining server-side user text:
+  
+  - `ActionResult` failures from `@igrp/framework-next/actions` carry a machine-stable `code` (`IGRPActionErrorCode`: `SESSION_INVALID`, `MENUS_LOAD_FAILED`, `USER_LOAD_FAILED`, `APPS_LOAD_FAILED`, `APP_LOAD_FAILED`). Show users the next-intl message `errors.actions.<code>`, which the framework messages translate in pt, en and fr; `error` keeps its pt-PT text for logs.
+  - `AppError` without a `publicMessage` no longer encodes a Portuguese default into `digest`, so the error boundary shows its own translated generic copy.
+  - `getDisplayableErrorMessage(error, fallback?)` takes the copy to fall back to; the default stays pt-PT.
+- 6cfc2ec: `IGRPGlobalLoading` reads its text from the framework message catalog (`common.actions.loading`, new `common.actions.loadingApp`), so it follows the active locale. In an app without `config.i18n` it uses the built-in copy for the `IGRP_LOCALE` cookie's language instead of throwing.
+- 2e48ad1: `IGRPIntlProvider` passes the resolved time zone to the design-system i18n provider.
+- 0eba839: README: note that without `config.i18n` the chrome follows the locale cookie while design-system strings stay pt.
+- Updated dependencies [4f76619]
+- Updated dependencies [6cfc2ec]
+- Updated dependencies [729823c]
+- Updated dependencies [9b77c9c]
+- Updated dependencies [5f4709e]
+- Updated dependencies [2e48ad1]
+- Updated dependencies [18dfab2]
+- Updated dependencies [6cfc2ec]
+- Updated dependencies [0eba839]
+  - @igrp/igrp-framework-react-design-system@0.2.0-beta.7
+  - @igrp/framework-next-ui@0.2.0-beta.10
+
 ## 0.2.0-beta.9
 
 ### Patch Changes

@@ -1,5 +1,20 @@
 # @igrp/framework-next-ui
 
+## 0.2.0-beta.10
+
+### Patch Changes
+
+- 6cfc2ec: Mark the brand names and the keyboard shortcut in the header, loading screen and command search as non-translatable for the literal-string checker.
+- 0eba839: Sign-in failures always show the localised catalog message instead of the thrown error text. The error-page image is decorative (`alt=""`). The missing-header-data toast only shows outside production. Removed the unused `themeSelector` group from `IGRPChromeStrings` and `IGRPChromeStringsOverride`: apps that set `chrome.themeSelector` overrides now get a TypeScript excess-property error and should drop the key.
+- Updated dependencies [4f76619]
+- Updated dependencies [6cfc2ec]
+- Updated dependencies [729823c]
+- Updated dependencies [9b77c9c]
+- Updated dependencies [5f4709e]
+- Updated dependencies [2e48ad1]
+- Updated dependencies [18dfab2]
+  - @igrp/igrp-framework-react-design-system@0.2.0-beta.7
+
 ## 0.2.0-beta.9
 
 ### Patch Changes

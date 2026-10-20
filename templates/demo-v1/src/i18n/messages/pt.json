@@ -1,5 +1,31 @@
 {
   "app": { "title": "IGRP | Template Aplicações" },
+  "login": {
+    "welcome": "Bem-vindo ao IGRP",
+    "description": "Introduza as suas credenciais para aceder.",
+    "copyright": "Desenvolvido por",
+    "carousel": {
+      "workflow": {
+        "title": "Fluxo de trabalho simplificado",
+        "description": "Aumente a sua produtividade com uma interface intuitiva e ferramentas poderosas."
+      },
+      "security": {
+        "title": "Seguro desde a conceção",
+        "description": "Os seus dados são protegidos com segurança e encriptação de nível empresarial."
+      },
+      "collaboration": {
+        "title": "Plataforma colaborativa",
+        "description": "Trabalhe com a sua equipa em tempo real, sem complicações."
+      }
+    }
+  },
+  "notFound": {
+    "description": "A página que procura não existe ou foi movida."
+  },
+  "auth": {
+    "signingOut": "A terminar sessão...",
+    "pleaseWait": "Aguarde..."
+  },
   "home": {
     "state": {
       "ok": "Ativo",

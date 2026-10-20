@@ -35,6 +35,7 @@ function readCookieFormatLocale(): string {
     .find((c) => c.startsWith(`${IGRP_LOCALE_COOKIE}=`));
   const locale =
     igrpNormalizeLocale(entry?.slice(IGRP_LOCALE_COOKIE.length + 1)) ?? "pt";
+  // Default format locales, not IGRP_FORMAT_LOCALES: env isn't readable in this client-only boundary (accepted limit).
   return IGRP_DEFAULT_FORMAT_LOCALES[locale];
 }
 

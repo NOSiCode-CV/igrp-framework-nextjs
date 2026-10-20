@@ -8,6 +8,7 @@ import {
   igrpResolveRequestBranding,
 } from "@igrp/framework-next";
 import { IGRP_META_THEME_COLORS } from "@igrp/igrp-framework-react-design-system";
+import { getTranslations } from "next-intl/server";
 
 import { createConfig } from "@/igrp.template.config";
 import { getLayoutConfig } from "@/lib/dal";
@@ -19,9 +20,10 @@ const basePath = process.env.NEXT_PUBLIC_BASE_PATH ?? "";
 export async function generateMetadata(): Promise<Metadata> {
   const config = await createConfig(await getLayoutConfig());
   const branding = await igrpResolveRequestBranding(config);
+  const title = (await getTranslations("app"))("title");
   return {
-    title: "IGRP | Template Aplicações",
-    description: "IGRP | Template Aplicações",
+    title,
+    description: title,
     icons: igrpBrandingMetadata(branding, `${basePath}/logo-no-text.png`),
   };
 }

@@ -34,9 +34,10 @@ COPY ./docker/development/.env.development .env.production
 
 ENV NEXT_TELEMETRY_DISABLED=1
 
-# `next build` directly, not `pnpm build` — the latter is `biome check --write &&
-# next build`, and an image build must not rewrite sources or fail on lint.
-# Run `pnpm lint` in CI / locally instead.
+# `next build` directly, not `pnpm build` — the latter is `pnpm lint &&
+# pnpm lint:i18n && next build` (Biome `check --write`, then the i18n checks),
+# and an image build must not rewrite sources or fail on lint. Run `pnpm lint`
+# and `pnpm lint:i18n` in CI / locally instead.
 RUN pnpm exec next build --turbopack
 
 FROM base AS runner

@@ -17,6 +17,12 @@ import {
 import { isNextControlFlowError } from '@igrp/framework-next-auth/runtime';
 
 import {
+  IGRP_LOCALE_COOKIE,
+  igrpNormalizeLocale,
+  igrpParseAcceptLanguage,
+  type IGRPLocale,
+} from '../i18n/config.js';
+import {
   igrpGetAccessClientConfig,
   igrpSetAccessClientConfig,
   type IGRPClientRuntimeConfig,
@@ -112,6 +118,24 @@ async function recoverAccessTokenFromCookies(): Promise<string> {
 }
 
 /**
+ * Locale for `Accept-Language` in a Server Action / Route Handler, where the
+ * layout that seeds `config.locale` never ran: the locale cookie first, then the
+ * request's `Accept-Language`. Any platform locale is accepted (no i18n config
+ * here). `undefined` on any failure — a missing locale is never worth failing for.
+ */
+async function recoverLocaleFromRequest(): Promise<IGRPLocale | undefined> {
+  try {
+    const { cookies, headers } = await import('next/headers');
+    return (
+      igrpNormalizeLocale((await cookies()).get(IGRP_LOCALE_COOKIE)?.value) ??
+      igrpParseAcceptLanguage((await headers()).get('accept-language'))
+    );
+  } catch {
+    return undefined;
+  }
+}
+
+/**
  * Dev-only diagnostic: a token with no active department (`org`) denies every
  * *bare* permission name (`claimsAllow` qualifies bare names with `org` and
  * fail-closes without it), which is indistinguishable from a genuine denial.
@@ -176,11 +200,14 @@ export async function igrpEnsureAccessClientConfig(): Promise<IGRPClientRuntimeC
   igrpSetAccessClientConfig({ token: '', baseUrl });
 
   const token = await recoverAccessTokenFromCookies();
+  // Sequential, not Promise.all: vitest's mock registry falls through to the real
+  // `next/headers` when two dynamic imports of it overlap.
+  const locale = current.locale ? undefined : await recoverLocaleFromRequest();
   if (token) {
     // Seed the token too: a caller that needs claims almost always needs the
     // Access Management client next, and that fails in exactly the same
     // contexts for the same reason.
-    igrpSetAccessClientConfig({ token, baseUrl });
+    igrpSetAccessClientConfig({ token, baseUrl, ...(locale ? { locale } : {}) });
   }
 
   return igrpGetAccessClientConfig();

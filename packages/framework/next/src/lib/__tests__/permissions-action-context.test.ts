@@ -15,6 +15,7 @@ import { describe, it, expect, vi, beforeEach, afterEach } from 'vitest';
 
 const getToken = vi.fn();
 const cookiesGetAll = vi.fn<() => Array<{ name: string; value: string }>>();
+const acceptLanguage = vi.fn<() => string | null>();
 
 vi.mock('next/navigation', () => ({
   forbidden: () => {
@@ -22,13 +23,20 @@ vi.mock('next/navigation', () => ({
   },
 }));
 vi.mock('next/headers', () => ({
-  cookies: async () => ({ getAll: () => cookiesGetAll() }),
+  cookies: async () => ({
+    getAll: () => cookiesGetAll(),
+    get: (name: string) => cookiesGetAll().find((c) => c.name === name),
+  }),
+  headers: async () => ({
+    get: (name: string) => (name === 'accept-language' ? acceptLanguage() : null),
+  }),
 }));
 vi.mock('@igrp/framework-next-auth/jwt', () => ({
   getToken: (...args: unknown[]) => getToken(...args),
 }));
 
-const { igrpGetClaims, igrpAuthorize } = await import('../permissions.js');
+const { igrpGetClaims, igrpAuthorize, igrpEnsureAccessClientConfig } =
+  await import('../permissions.js');
 const { igrpGetAccessClientConfig, igrpSetAccessClientConfig, igrpResetAccessClientConfig } =
   await import('../api-config.js');
 
@@ -53,6 +61,7 @@ const SESSION_COOKIE = { name: 'next-auth.session-token', value: 'opaque' };
 beforeEach(() => {
   getToken.mockReset();
   cookiesGetAll.mockReset().mockReturnValue([SESSION_COOKIE]);
+  acceptLanguage.mockReset().mockReturnValue(null);
   igrpResetAccessClientConfig();
   delete process.env.IGRP_PREVIEW_MODE;
   delete process.env.AUTH_PROVIDER;
@@ -137,6 +146,28 @@ describe('T3 — the recovery also seeds the ALS store', () => {
     getToken.mockResolvedValue({ accessToken: PERMITTED_TOKEN });
     await igrpGetClaims();
     expect(igrpGetAccessClientConfig().baseUrl).toBe('https://seeded.example.test');
+  });
+});
+
+describe('T3b — locale is seeded for Accept-Language', () => {
+  it('seeds locale from the IGRP_LOCALE cookie in an action context', async () => {
+    getToken.mockResolvedValue({ accessToken: PERMITTED_TOKEN });
+    cookiesGetAll.mockReturnValue([{ name: 'IGRP_LOCALE', value: 'en' }, SESSION_COOKIE]);
+    acceptLanguage.mockReturnValue('fr');
+    expect((await igrpEnsureAccessClientConfig()).locale).toBe('en');
+  });
+
+  it('falls back to Accept-Language when there is no locale cookie', async () => {
+    getToken.mockResolvedValue({ accessToken: PERMITTED_TOKEN });
+    acceptLanguage.mockReturnValue('fr-FR,fr;q=0.9');
+    expect((await igrpEnsureAccessClientConfig()).locale).toBe('fr');
+  });
+
+  it('keeps a locale already set in the store', async () => {
+    igrpSetAccessClientConfig({ token: '', baseUrl: 'https://am.example.test', locale: 'pt' });
+    getToken.mockResolvedValue({ accessToken: PERMITTED_TOKEN });
+    cookiesGetAll.mockReturnValue([{ name: 'IGRP_LOCALE', value: 'en' }, SESSION_COOKIE]);
+    expect((await igrpEnsureAccessClientConfig()).locale).toBe('pt');
   });
 });
 

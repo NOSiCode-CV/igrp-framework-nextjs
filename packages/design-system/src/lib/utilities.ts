@@ -2,6 +2,11 @@ import { cva } from "class-variance-authority"
 import type { IGRPIconName } from "../components/horizon/icon/index.js"
 import type { IGRPColorVariants } from "./colors.js"
 
+/** True for a calendar-day string ("yyyy-mm-dd") with no time or zone. */
+export function igrpIsDateOnly(value: unknown): value is string {
+  return typeof value === "string" && /^\d{4}-\d{2}-\d{2}$/.test(value)
+}
+
 /** Parses "yyyy-mm-dd" or "y-m-d" string to local Date. Throws on invalid input. */
 export function parseLocalDate(dateStr: string): Date {
   const [yStr, mStr, dStr] = dateStr.split("-")

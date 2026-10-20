@@ -1,7 +1,7 @@
 import { describe, expect, it } from "vitest"
-import { render, screen } from "@testing-library/react"
+import { render, renderHook, screen } from "@testing-library/react"
 
-import { IGRPI18nProvider, useIGRPi18n, IGRP_I18N_DEFAULTS_PT } from "../index.js"
+import { IGRPI18nProvider, useIGRPi18n, useIGRPTimeZone, IGRP_I18N_DEFAULTS_PT } from "../index.js"
 
 function StringsProbe({ keyPath }: { keyPath: keyof typeof IGRP_I18N_DEFAULTS_PT.dataTable }) {
   const strings = useIGRPi18n()
@@ -69,5 +69,13 @@ describe("IGRPI18nProvider / useIGRPi18n", () => {
     const probes = screen.getAllByTestId("probe")
     expect(probes[0]).toHaveTextContent("Rien.")
     expect(probes[1]).toHaveTextContent("Effacer")
+  })
+
+  it("useIGRPTimeZone is undefined without a provider and reads the provider value", () => {
+    expect(renderHook(() => useIGRPTimeZone()).result.current).toBeUndefined()
+    const wrapper = ({ children }: { children: React.ReactNode }) => (
+      <IGRPI18nProvider timeZone="Asia/Tokyo">{children}</IGRPI18nProvider>
+    )
+    expect(renderHook(() => useIGRPTimeZone(), { wrapper }).result.current).toBe("Asia/Tokyo")
   })
 })

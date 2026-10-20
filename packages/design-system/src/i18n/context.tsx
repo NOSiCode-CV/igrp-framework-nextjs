@@ -17,6 +17,7 @@ import {
 
 const IGRPI18nContext = createContext<IGRPI18nStrings>(IGRP_I18N_DEFAULTS_PT)
 const IGRPLocaleContext = createContext<string>(IGRP_DEFAULT_LOCALE)
+const IGRPTimeZoneContext = createContext<string | undefined>(undefined)
 
 /**
  * Provider for IGRP design-system user-facing strings. Wrap your app tree (typically
@@ -40,6 +41,7 @@ function IGRPI18nProvider({
   strings,
   base = IGRP_I18N_DEFAULTS_PT,
   locale = IGRP_DEFAULT_LOCALE,
+  timeZone,
   children,
 }: {
   /** Full catalog or partial override. Missing keys fall back to `base`. */
@@ -52,13 +54,17 @@ function IGRPI18nProvider({
    * across server and client — see {@link IGRP_DEFAULT_LOCALE}.
    */
   locale?: string
+  /** IANA time zone for `Intl` date formatting. Defaults to the runtime zone when omitted. */
+  timeZone?: string
   children: ReactNode
 }) {
   const merged = useMemo(() => igrpMergeI18nStrings(base, strings), [base, strings])
 
   return (
     <IGRPLocaleContext.Provider value={locale}>
-      <IGRPI18nContext.Provider value={merged}>{children}</IGRPI18nContext.Provider>
+      <IGRPTimeZoneContext.Provider value={timeZone}>
+        <IGRPI18nContext.Provider value={merged}>{children}</IGRPI18nContext.Provider>
+      </IGRPTimeZoneContext.Provider>
     </IGRPLocaleContext.Provider>
   )
 }
@@ -76,6 +82,11 @@ function useIGRPLocale(): string {
   return useContext(IGRPLocaleContext)
 }
 
+/** Read the IANA time zone for `Intl` date formatting. `undefined` means the runtime zone. */
+function useIGRPTimeZone(): string | undefined {
+  return useContext(IGRPTimeZoneContext)
+}
+
 /** Substitutes `{token}` placeholders in a catalog string. */
 function igrpFormatMessage(template: string, values: Record<string, string | number>): string {
   return template.replace(/\{(\w+)\}/g, (match, key) => {
@@ -84,4 +95,4 @@ function igrpFormatMessage(template: string, values: Record<string, string | num
   })
 }
 
-export { IGRPI18nProvider, useIGRPi18n, useIGRPLocale, igrpFormatMessage }
+export { IGRPI18nProvider, useIGRPi18n, useIGRPLocale, useIGRPTimeZone, igrpFormatMessage }

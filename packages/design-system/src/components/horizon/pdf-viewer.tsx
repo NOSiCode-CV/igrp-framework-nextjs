@@ -20,7 +20,8 @@ import { IGRPIcon } from "./icon/index.js"
 import { IGRPLoadingSpinner } from "./loading-spinner.js"
 import { IGRPHeadline } from "./typography/headline.js"
 import { IGRPText } from "./typography/text.js"
-import { useIGRPi18n, useIGRPLocale } from "../../i18n/index.js"
+import { useIGRPi18n, useIGRPLocale, useIGRPTimeZone } from "../../i18n/index.js"
+import { igrpIsDateOnly } from "../../lib/utilities.js"
 
 /**
  * Document item shape for PDF viewer.
@@ -105,9 +106,10 @@ function getInitialPdfViewerState(viewerPreference: string): PdfViewerState {
   }
 }
 
-const safeFormatDate = (date: string | Date | undefined, locale: string) => {
+const safeFormatDate = (date: string | Date | undefined, locale: string, timeZone?: string) => {
   if (!date) return "—"
 
+  const dateOnly = igrpIsDateOnly(date)
   const parsed = date instanceof Date ? date : new Date(date)
 
   if (Number.isNaN(parsed.getTime())) return "—"
@@ -116,6 +118,7 @@ const safeFormatDate = (date: string | Date | undefined, locale: string) => {
     day: "2-digit",
     month: "2-digit",
     year: "numeric",
+    timeZone: dateOnly ? "UTC" : timeZone,
   }).format(parsed)
 }
 
@@ -293,6 +296,7 @@ function IGRPPdfViewerInline({
   const i18n = useIGRPi18n()
   const labelButtonNewTab = labelButtonNewTabProp ?? i18n.pdfViewer.openInNewTab
   const locale = useIGRPLocale()
+  const timeZone = useIGRPTimeZone()
   const { fileUrl, title, author, date } = pdfDocument
   const [state, dispatch] = useReducer(pdfViewerReducer, viewerPreference, getInitialPdfViewerState)
   const { frameStatus, viewerEngine } = state
@@ -334,7 +338,7 @@ function IGRPPdfViewerInline({
               </div>
               <div className={cn("flex items-center gap-1 text-xs")}>
                 <IGRPIcon iconName="Calendar" className={cn("text-primary")} />
-                {safeFormatDate(date, locale)}
+                {safeFormatDate(date, locale, timeZone)}
               </div>
             </div>
           </div>
@@ -423,6 +427,7 @@ function IGRPPdfViewerModal({
 }: IGRPPdfViewerModalProps) {
   const i18n = useIGRPi18n()
   const locale = useIGRPLocale()
+  const timeZone = useIGRPTimeZone()
   const [state, dispatch] = useReducer(pdfViewerReducer, viewerPreference, getInitialPdfViewerState)
   const { frameStatus, viewerEngine } = state
 
@@ -475,7 +480,7 @@ function IGRPPdfViewerModal({
             </div>
             <div className={cn("flex items-center gap-1")}>
               <IGRPIcon iconName="Calendar" className={cn("text-primary")} />
-              {safeFormatDate(date, locale)}
+              {safeFormatDate(date, locale, timeZone)}
             </div>
           </DialogDescription>
         </DialogHeader>

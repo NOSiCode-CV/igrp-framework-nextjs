@@ -50,7 +50,7 @@ export function IGRPIntlProvider({
       getMessageFallback={igrpGetMessageFallback}
     >
       <IGRPLocaleInfoContext.Provider value={info}>
-        <IGRPI18nProvider strings={designSystemStrings} locale={formatLocale}>
+        <IGRPI18nProvider strings={designSystemStrings} locale={formatLocale} timeZone={timeZone}>
           <IGRPChromeI18nProvider strings={chromeStrings}>{children}</IGRPChromeI18nProvider>
         </IGRPI18nProvider>
       </IGRPLocaleInfoContext.Provider>

@@ -1,4 +1,4 @@
-export { IGRPI18nProvider, useIGRPi18n, useIGRPLocale, igrpFormatMessage } from "./context.js"
+export { IGRPI18nProvider, useIGRPi18n, useIGRPLocale, useIGRPTimeZone, igrpFormatMessage } from "./context.js"
 export { igrpMergeI18nStrings } from "./merge.js"
 export { igrpDateFnsLocale } from "./date-fns-locale.js"
 export {

@@ -914,6 +914,7 @@ export {
   igrpIsExternalUrl,
   igrpNormalizeUrl,
   parseLocalDate,
+  igrpIsDateOnly,
 } from "./lib/utilities.js"
 export { cn } from "cn"
 export { colorToOklch, detectFormat, type ColorFormat } from "./lib/color-utils.js"
@@ -924,6 +925,7 @@ export {
   IGRPI18nProvider,
   useIGRPi18n,
   useIGRPLocale,
+  useIGRPTimeZone,
   igrpFormatMessage,
   igrpMergeI18nStrings,
   igrpDateFnsLocale,

@@ -72,6 +72,8 @@ check_i18n:
   script:
     - pnpm --filter @igrp/framework-next-i18n test
     - pnpm --filter @igrp/framework-next-i18n build
+    # Re-link: the `igrp-i18n` bin target (dist/cli.js) didn't exist at the first install, so pnpm skipped the template's shim.
+    - pnpm install --frozen-lockfile --ignore-scripts --prefer-offline --filter @igrp/framework-next-i18n --filter @igrp/framework-next-template
     - pnpm --filter @igrp/framework-next-template lint:i18n
 
 # The Storybook visual suite is the design system's only UI regression gate — there

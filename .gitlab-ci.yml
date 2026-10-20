@@ -52,6 +52,28 @@ check_template_drift:
     - pnpm --filter @igrp/template-migrator test
     - pnpm --filter @igrp/template-migrator check:drift
 
+# `lint:i18n` (catalog parity + hardcoded-literal scan) otherwise only ran inside
+# the template's local `pnpm build`, and the Dockerfile skips it, so an untranslated
+# string or a missing catalog key could reach main without any pipeline noticing.
+# The i18n package's own tests and build run first: the check CLI is its build output.
+check_i18n:
+  stage: verify
+  image: node:22
+  services: []
+  rules:
+    - changes:
+        - templates/demo-v1/src/**/*
+        - templates/demo-v1/package.json
+        - packages/framework/next-i18n/**/*
+      when: always
+  before_script:
+    - corepack enable
+    - pnpm install --frozen-lockfile --ignore-scripts --filter @igrp/framework-next-i18n --filter @igrp/framework-next-template
+  script:
+    - pnpm --filter @igrp/framework-next-i18n test
+    - pnpm --filter @igrp/framework-next-i18n build
+    - pnpm --filter @igrp/framework-next-template lint:i18n
+
 # The Storybook visual suite is the design system's only UI regression gate — there
 # is no root-level unit test suite. It silently died on 2026-06-25 when Storybook
 # went to 10.x (`@storybook/test-runner` crashed during setup, so *zero* tests ran

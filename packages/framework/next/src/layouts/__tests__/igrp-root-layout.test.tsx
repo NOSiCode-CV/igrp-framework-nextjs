@@ -6,6 +6,7 @@ vi.mock('../../branding/request.js', () => ({
 }));
 vi.mock('../../lib/sync-plan.js', () => ({ planAccessManagementSync: () => null }));
 vi.mock('next/server', () => ({ after: () => {} }));
+vi.mock('next/headers', () => ({ cookies: async () => ({ get: () => undefined }) }));
 vi.mock('@igrp/framework-next-ui', () => ({
   IGRPNestedProviders: (p: unknown) => ({ __marker: 'providers', p }),
   IGRPBrandingStyle: (p: unknown) => ({ __marker: 'style', p }),

@@ -1,13 +1,17 @@
 'use client';
 
-import { useMemo, type ReactNode } from 'react';
+import { useEffect, useMemo, type ReactNode } from 'react';
 import { type AbstractIntlMessages, NextIntlClientProvider } from 'next-intl';
 import { IGRPChromeI18nProvider, type IGRPChromeStrings } from '@igrp/framework-next-ui';
 import { IGRPI18nProvider, type IGRPI18nStrings } from '@igrp/igrp-framework-react-design-system';
 
 import type { IGRPLocale } from '../config.js';
 import { igrpGetMessageFallback, igrpOnIntlError } from '../fallback.js';
-import { IGRPLocaleInfoContext, type IGRPLocaleInfo } from './locale-info.js';
+import {
+  IGRPLocaleInfoContext,
+  type IGRPLocaleInfo,
+  igrpRecordFormatLocale,
+} from './locale-info.js';
 
 export interface IGRPIntlProviderProps {
   locale: IGRPLocale;
@@ -41,6 +45,7 @@ export function IGRPIntlProvider({
     () => ({ locale, formatLocale, locales, timeZone }),
     [locale, formatLocale, locales, timeZone],
   );
+  useEffect(() => igrpRecordFormatLocale(formatLocale), [formatLocale]);
   return (
     <NextIntlClientProvider
       locale={locale}

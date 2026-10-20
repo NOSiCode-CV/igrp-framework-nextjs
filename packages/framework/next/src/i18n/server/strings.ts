@@ -14,12 +14,13 @@ import {
 
 import type { IGRPChromeStringsOverride, IGRPI18nConfig, IGRPLocale } from '../config.js';
 
-const DS: Record<IGRPLocale, IGRPI18nStrings> = {
+/** Built-in catalogs per locale, before app overrides. */
+export const DS: Record<IGRPLocale, IGRPI18nStrings> = {
   pt: IGRP_I18N_DEFAULTS_PT,
   en: IGRP_I18N_DEFAULTS_EN,
   fr: IGRP_I18N_DEFAULTS_FR,
 };
-const CHROME: Record<IGRPLocale, IGRPChromeStrings> = {
+export const CHROME: Record<IGRPLocale, IGRPChromeStrings> = {
   pt: IGRP_CHROME_STRINGS_PT,
   en: IGRP_CHROME_STRINGS_EN,
   fr: IGRP_CHROME_STRINGS_FR,

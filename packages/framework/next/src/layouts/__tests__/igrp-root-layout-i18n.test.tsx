@@ -1,6 +1,16 @@
 import { beforeEach, describe, expect, it, vi } from 'vitest';
 
 vi.mock('next/server', () => ({ after: vi.fn() }));
+let cookieValue: string | undefined;
+vi.mock('next/headers', () => ({
+  cookies: async () => ({
+    get: (name: string) =>
+      name === 'IGRP_LOCALE' && cookieValue ? { value: cookieValue } : undefined,
+  }),
+}));
+const DsProvider = (p: unknown) => ({ __marker: 'ds', p });
+vi.mock('@igrp/igrp-framework-react-design-system', () => ({ IGRPI18nProvider: DsProvider }));
+const ChromeProvider = (p: unknown) => ({ __marker: 'chrome', p });
 vi.mock('next-intl/server', () => ({
   getMessages: vi.fn(async () => ({ app: { hi: 'Salut' } })),
 }));
@@ -9,6 +19,7 @@ vi.mock('../../lib/sync-plan.js', () => ({ planAccessManagementSync: () => null 
 const Nested = (p: unknown) => ({ __marker: 'nested', p });
 vi.mock('@igrp/framework-next-ui', () => ({
   IGRPNestedProviders: Nested,
+  IGRPChromeI18nProvider: ChromeProvider,
   IGRPBrandingStyle: () => null,
   igrpParseBranding: () => ({ branding: null, dropped: 0 }),
   IGRP_CHROME_STRINGS_PT: {},
@@ -22,6 +33,8 @@ vi.mock('../../i18n/server/resolve.js', () => ({ igrpResolveLocale: resolveLocal
 vi.mock('../../i18n/server/strings.js', () => ({
   igrpGetDesignSystemStrings: () => ({ ds: true }),
   igrpGetChromeStrings: () => ({ chrome: true }),
+  DS: { pt: { ds: 'pt' }, en: { ds: 'en' }, fr: { ds: 'fr' } },
+  CHROME: { pt: { chrome: 'pt' }, en: { chrome: 'en' }, fr: { chrome: 'fr' } },
 }));
 
 const { IGRPRootLayout } = await import('../igrp-root-layout.js');
@@ -45,7 +58,10 @@ const base = () =>
     layoutData: { getHeaderData: async () => ({}), getSidebarData: async () => ({}) },
   }) as never;
 
-beforeEach(() => resolveLocale.mockClear());
+beforeEach(() => {
+  resolveLocale.mockClear();
+  cookieValue = undefined;
+});
 
 describe('IGRPRootLayout i18n', () => {
   it('without config.i18n keeps lang="pt" and mounts no intl provider', async () => {
@@ -53,6 +69,26 @@ describe('IGRPRootLayout i18n', () => {
     expect(tree.props.lang).toBe('pt');
     expect(find(tree, Intl)).toBeNull();
     expect(resolveLocale).not.toHaveBeenCalled();
+  });
+
+  it('without config.i18n follows the IGRP_LOCALE cookie for the DS and chrome catalogs', async () => {
+    cookieValue = 'en';
+    const tree = await IGRPRootLayout({ config: base(), children: 'kids' });
+    expect(tree.props.lang).toBe('en-GB');
+    const ds = find(tree, DsProvider);
+    expect(ds.props).toMatchObject({ strings: { ds: 'en' }, locale: 'en-GB' });
+    expect(find(ds, ChromeProvider).props).toMatchObject({
+      strings: { chrome: 'en' },
+      children: 'kids',
+    });
+    expect(find(tree, Intl)).toBeNull();
+  });
+
+  it('without config.i18n ignores an unsupported cookie value', async () => {
+    cookieValue = 'de';
+    const tree = await IGRPRootLayout({ config: base(), children: 'kids' });
+    expect(tree.props.lang).toBe('pt');
+    expect(find(tree, DsProvider)).toBeNull();
   });
 
   it('with config.i18n sets <html lang> to the format locale and mounts IGRPIntlProvider inside the nested providers', async () => {

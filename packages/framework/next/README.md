@@ -39,7 +39,7 @@ pnpm add @igrp/framework-next
 | `children` | `React.ReactNode` | yes      | —         | The application tree.                                                   |
 | `lang`     | `string`          | no       | see below | BCP-47 language written to the server-rendered `<html lang>` attribute. |
 
-`lang` is optional. With `config.i18n` set it defaults to the resolved format locale (`pt-CV`, `en-GB`, …); without it, to `'pt'`, so apps that don't pass it render exactly as before. An explicit `lang` always wins.
+`lang` is optional. With `config.i18n` set it defaults to the resolved format locale (`pt-CV`, `en-GB`, …); without it, to the region of the `IGRP_LOCALE` cookie's language, else `'pt'`. An explicit `lang` always wins.
 
 ### Config builder
 
@@ -140,7 +140,7 @@ export default async function RootLayout({ children }: { children: React.ReactNo
 
 #### Localized document language
 
-`<html lang>` is set on the first server-rendered response, never patched after hydration. With `config.i18n` (see `./i18n` below) the framework resolves the locale server-side (cookie or session preference, `Accept-Language`, default) and writes the format locale (`pt-CV`, `en-GB`, …); without i18n it defaults to `'pt'`. Pass `lang` only to override.
+`<html lang>` is set on the first server-rendered response, never patched after hydration. With `config.i18n` (see `./i18n` below) the framework resolves the locale server-side (cookie or session preference, `Accept-Language`, default) and writes the format locale (`pt-CV`, `en-GB`, …); without i18n it follows the `IGRP_LOCALE` cookie, else `'pt'`. Pass `lang` only to override.
 
 ### i18n (`@igrp/framework-next/i18n`)
 
@@ -152,7 +152,7 @@ Five subpath entries, each a file-per-module leaf:
 - `./i18n/messages` — the generic `common`, `i18n` and `errors` namespaces in pt, en and fr, and `igrpMergeMessages`.
 - `./i18n/testing` — `IGRPIntlTestProvider`, the same client context for tests.
 
-Wire it with `igrpBuildConfig({ i18n: igrpDefineI18n({ defaultLocale: 'pt', … }) })`, a `src/i18n/request.ts` that passes `igrpCreateRequestConfig(i18n, catalogs)` to next-intl, and `createNextIntlPlugin` in `next.config.ts`. Apps without `i18n` are unchanged. Without `config.i18n`, chrome follows the `IGRP_LOCALE` cookie but design-system strings stay pt; set `config.i18n` to localise both.
+Wire it with `igrpBuildConfig({ i18n: igrpDefineI18n({ defaultLocale: 'pt', … }) })`, a `src/i18n/request.ts` that passes `igrpCreateRequestConfig(i18n, catalogs)` to next-intl, and `createNextIntlPlugin` in `next.config.ts`. Without `config.i18n`, the root layout reads the `IGRP_LOCALE` cookie on the server and mounts the matching design-system and chrome catalogs (built-in strings, no app messages, no overrides); set `config.i18n` for the full setup.
 
 ### IGRP layout
 

@@ -24,3 +24,20 @@ export const IGRPLocaleInfoContext = createContext<IGRPLocaleInfo>(DEFAULT_INFO)
 export function useIGRPLocaleInfo(): IGRPLocaleInfo {
   return useContext(IGRPLocaleInfoContext);
 }
+
+let lastFormatLocale: string | undefined;
+
+/** Records the provider's format locale; called by `IGRPIntlProvider` after it mounts. */
+export function igrpRecordFormatLocale(formatLocale: string): void {
+  lastFormatLocale = formatLocale;
+}
+
+/**
+ * The format locale the intl provider last rendered with, or `undefined` before
+ * it mounts (e.g. the root layout failed on the server). For `global-error.tsx`,
+ * which renders outside every provider and cannot read the deployment's
+ * `IGRP_FORMAT_LOCALES`; client module state outlives the root layout it replaces.
+ */
+export function igrpLastFormatLocale(): string | undefined {
+  return lastFormatLocale;
+}

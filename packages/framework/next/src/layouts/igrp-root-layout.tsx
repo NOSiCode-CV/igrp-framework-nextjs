@@ -1,13 +1,29 @@
+import { cookies } from 'next/headers';
 import { after } from 'next/server';
 import { getMessages } from 'next-intl/server';
-import { IGRPBrandingStyle, IGRPNestedProviders } from '@igrp/framework-next-ui';
+import {
+  IGRPBrandingStyle,
+  IGRPChromeI18nProvider,
+  IGRPNestedProviders,
+} from '@igrp/framework-next-ui';
 import type { IGRPConfigArgs } from '@igrp/framework-next-types';
+import { IGRPI18nProvider } from '@igrp/igrp-framework-react-design-system';
 
 import { igrpResolveRequestBranding } from '../branding/request.js';
 import { IGRPIntlProvider } from '../i18n/client/index.js';
-import type { IGRPI18nConfig } from '../i18n/config.js';
+import {
+  IGRP_DEFAULT_FORMAT_LOCALES,
+  IGRP_LOCALE_COOKIE,
+  type IGRPI18nConfig,
+  igrpNormalizeLocale,
+} from '../i18n/config.js';
 import { igrpResolveLocale } from '../i18n/server/resolve.js';
-import { igrpGetChromeStrings, igrpGetDesignSystemStrings } from '../i18n/server/strings.js';
+import {
+  CHROME,
+  DS,
+  igrpGetChromeStrings,
+  igrpGetDesignSystemStrings,
+} from '../i18n/server/strings.js';
 import { igrpStartupSync } from '../lib/startup-sync.js';
 import { planAccessManagementSync } from '../lib/sync-plan.js';
 
@@ -79,7 +95,22 @@ export async function IGRPRootLayout({ children, config, lang }: IGRPRootLayoutA
         };
       })()
     : undefined;
-  const htmlLang = lang ?? intl?.formatLocale ?? 'pt';
+  // Without config.i18n, follow the locale choice cookie on the server so the
+  // design system and chrome agree with each other and never flash pt first.
+  const cookieLocale = intl
+    ? undefined
+    : igrpNormalizeLocale((await cookies()).get(IGRP_LOCALE_COOKIE)?.value);
+  const htmlLang =
+    lang ?? intl?.formatLocale ?? (cookieLocale ? IGRP_DEFAULT_FORMAT_LOCALES[cookieLocale] : 'pt');
+  const content = intl ? (
+    <IGRPIntlProvider {...intl}>{children}</IGRPIntlProvider>
+  ) : cookieLocale ? (
+    <IGRPI18nProvider strings={DS[cookieLocale]} locale={IGRP_DEFAULT_FORMAT_LOCALES[cookieLocale]}>
+      <IGRPChromeI18nProvider strings={CHROME[cookieLocale]}>{children}</IGRPChromeI18nProvider>
+    </IGRPI18nProvider>
+  ) : (
+    children
+  );
 
   // Organization Brand. Off by default: with `branding.enabled` not true the
   // resolver returns `null` before reading a cookie or making a request, and
@@ -91,7 +122,7 @@ export async function IGRPRootLayout({ children, config, lang }: IGRPRootLayoutA
       <body className="bg-background overscroll-none h-screen font-sans antialiased">
         <IGRPBrandingStyle branding={branding} />
         <IGRPNestedProviders session={session} branding={branding} sessionArgs={sessionArgs}>
-          {intl ? <IGRPIntlProvider {...intl}>{children}</IGRPIntlProvider> : children}
+          {content}
         </IGRPNestedProviders>
       </body>
     </html>

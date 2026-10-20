@@ -14,7 +14,7 @@ You are working inside `packages/framework/next/` — `@igrp/framework-next`. **
 
 ## Public API
 
-- `IGRPRootLayout` — root-level server layout. Props: `config` (required), `children`, and the optional `lang` (BCP-47 string for `<html lang>`). With `config.i18n` it resolves the locale, mounts `IGRPIntlProvider` and defaults `lang` to the format locale; without i18n `lang` defaults to `'pt'` (backward compatible). An explicit `lang` wins.
+- `IGRPRootLayout` — root-level server layout. Props: `config` (required), `children`, and the optional `lang` (BCP-47 string for `<html lang>`). With `config.i18n` it resolves the locale, mounts `IGRPIntlProvider` and defaults `lang` to the format locale; without i18n it reads the `IGRP_LOCALE` cookie on the server, mounts the matching DS and chrome catalogs and defaults `lang` to that language's region, else `'pt'`. An explicit `lang` wins.
 - `@igrp/framework-next/i18n` subpaths: `./i18n` (Edge-safe: config, resolution, cookie sync, format helpers — must import nothing from the root barrel, `next/headers`, React or `node:*`, because app middleware imports it), `./i18n/server` (`server-only`), `./i18n/client` (`'use client'` leaves: provider, switcher, hooks), `./i18n/messages`, `./i18n/testing`. `IGRP_LOCALE_COOKIE` must equal `@igrp/framework-next-ui`'s; `src/i18n/__tests__/cookie-parity.test.ts` pins it.
 - `IGRPLayoutFull` — route-group server layout (header/sidebar chrome); `IGRPLayoutBlank` — the same without chrome (login/logout). `IGRPLayout` is a deprecated alias of `IGRPLayoutFull`.
 - `igrpBuildConfig` — validates the config (zod) and upper-cases `appCode`; it reads no env and swaps no data.

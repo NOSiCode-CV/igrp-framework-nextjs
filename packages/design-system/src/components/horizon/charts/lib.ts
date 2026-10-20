@@ -16,7 +16,10 @@ export const formatChartValue = (
     return valueFormatter(value)
   }
 
-  return new Intl.NumberFormat(locale, { notation: "compact", maximumFractionDigits: 1 }).format(value)
+  // Compact only from 1000 up: ratios and percents (0.04, 12.5) keep their precision.
+  const options: Intl.NumberFormatOptions =
+    Math.abs(value) >= 1000 ? { notation: "compact", maximumFractionDigits: 1 } : { maximumFractionDigits: 2 }
+  return new Intl.NumberFormat(locale, options).format(value)
 }
 
 export const getChartHeight = (

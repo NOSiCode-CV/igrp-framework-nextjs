@@ -74,11 +74,15 @@ function icuArguments(message: string): string[] | undefined {
 
 /** Plural options (other than `=N`) the locale's CLDR rules never select. */
 function unselectedPluralCategories(locale: string, message: string): string[] {
-  let categories: Set<string>;
-  try {
-    categories = new Set(
-      new Intl.PluralRules(locale).resolvedOptions().pluralCategories,
+  const categoriesFor = (type: "cardinal" | "ordinal") =>
+    new Set(
+      new Intl.PluralRules(locale, { type }).resolvedOptions().pluralCategories,
     );
+  let cardinal: Set<string>;
+  let ordinal: Set<string>;
+  try {
+    cardinal = categoriesFor("cardinal");
+    ordinal = categoriesFor("ordinal");
   } catch {
     return []; // locale tag Intl rejects; nothing to compare against
   }
@@ -86,6 +90,7 @@ function unselectedPluralCategories(locale: string, message: string): string[] {
   const visit = (elements: MessageFormatElement[]) => {
     for (const el of elements) {
       if (el.type === TYPE.plural) {
+        const categories = el.pluralType === "ordinal" ? ordinal : cardinal;
         for (const key of Object.keys(el.options)) {
           if (!key.startsWith("=") && !categories.has(key)) bad.add(key);
         }
@@ -119,14 +124,18 @@ export function checkCatalogs(options: CheckCatalogsOptions): CatalogReport {
   const catalogs = new Map<string, Map<string, unknown>>();
   for (const file of files) {
     const locale = basename(file, ".json");
+    let tree: unknown;
     try {
-      const tree = JSON.parse(
-        readFileSync(join(options.dir, file), "utf8"),
-      ) as Tree;
-      catalogs.set(locale, flatten(tree));
+      tree = JSON.parse(readFileSync(join(options.dir, file), "utf8"));
     } catch (e) {
       errors.push(`${locale}: invalid JSON (${(e as Error).message})`);
+      continue;
     }
+    if (!tree || typeof tree !== "object" || Array.isArray(tree)) {
+      errors.push(`${locale}: catalog root is not an object`);
+      continue;
+    }
+    catalogs.set(locale, flatten(tree as Tree));
   }
   const base = catalogs.get(options.defaultLocale);
   if (!base) return { errors, info, coverage };

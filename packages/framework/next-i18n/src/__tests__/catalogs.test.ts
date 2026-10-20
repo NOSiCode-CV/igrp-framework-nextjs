@@ -105,4 +105,25 @@ describe("checkCatalogs: robustness", () => {
       'fr: "n" uses plural category "few" that fr never selects',
     ]);
   });
+
+  it("accepts en selectordinal categories", () => {
+    const { errors } = checkCatalogs({
+      dir: dir({
+        "pt.json": { n: "{n, selectordinal, other {#º}}" },
+        "en.json": {
+          n: "{n, selectordinal, one {#st} two {#nd} few {#rd} other {#th}}",
+        },
+      }),
+      defaultLocale: "pt",
+    });
+    expect(errors).toEqual([]);
+  });
+
+  it("reports a non-object catalog root", () => {
+    const { errors } = checkCatalogs({
+      dir: dir({ "pt.json": { a: "x" }, "en.json": [] }),
+      defaultLocale: "pt",
+    });
+    expect(errors).toEqual(["en: catalog root is not an object"]);
+  });
 });

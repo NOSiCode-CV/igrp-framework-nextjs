@@ -109,3 +109,5 @@ a bridge. See `.agents/README.md`.
 ## Shared rules
 
 @../../.claude/shared/hard-rules.md
+
+@../../.claude/shared/skills.md

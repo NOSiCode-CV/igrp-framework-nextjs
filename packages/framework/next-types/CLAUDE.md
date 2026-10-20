@@ -51,3 +51,5 @@ Prefer **narrow, closed unions** over open `string`; **generics with sensible de
 @../../../.claude/shared/hard-rules.md
 
 @../../../.claude/shared/dependency-order.md
+
+@../../../.claude/shared/skills.md

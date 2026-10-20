@@ -84,3 +84,5 @@ There is **no root `test` script** — tests live in two packages and use **Vite
 - `packages/design-system-storybook` — `test:vitest` (component) and `test-storybook` (Playwright snapshots; Storybook must be running).
 
 Run a **single test**: `pnpm --filter @igrp/template-migrator exec vitest run path/to/file.test.ts -t "test name"` (drop `run` for watch mode). The `-t` flag filters by test/describe name.
+
+@.claude/shared/skills.md

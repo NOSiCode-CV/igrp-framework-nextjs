@@ -58,3 +58,5 @@ Mentally tag every symbol as server-only, client-safe, or shared — ensure it c
 @../../../.claude/shared/dependency-order.md
 
 @../../../.claude/shared/preview-mode.md
+
+@../../../.claude/shared/skills.md

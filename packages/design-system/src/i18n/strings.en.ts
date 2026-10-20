@@ -252,6 +252,7 @@ export const IGRP_I18N_DEFAULTS_EN: IGRPI18nStrings = {
     next: "Next slide",
   },
   pagination: {
+    label: "Pagination",
     previous: "Previous",
     next: "Next",
     goToPrevious: "Go to previous page",

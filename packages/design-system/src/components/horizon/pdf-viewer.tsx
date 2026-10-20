@@ -113,6 +113,7 @@ const safeFormatDate = (date: string | Date | undefined, locale: string, timeZon
   const parsed = date instanceof Date ? date : new Date(date)
 
   if (Number.isNaN(parsed.getTime())) return "—"
+  if (dateOnly && parsed.toISOString().slice(0, 10) !== date) return "—"
 
   return new Intl.DateTimeFormat(locale, {
     day: "2-digit",

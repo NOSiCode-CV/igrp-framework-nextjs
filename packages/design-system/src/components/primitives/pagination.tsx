@@ -10,10 +10,11 @@ import { Button } from "./button.js"
 import { ChevronLeftIcon, ChevronRightIcon, MoreHorizontalIcon } from "lucide-react"
 
 function Pagination({ className, ...props }: React.ComponentProps<"nav">) {
+  const i18n = useIGRPi18n()
   return (
     <nav
       role="navigation"
-      aria-label="pagination"
+      aria-label={i18n.pagination.label}
       data-slot="pagination"
       className={cn("mx-auto flex w-full justify-center", className)}
       {...props}

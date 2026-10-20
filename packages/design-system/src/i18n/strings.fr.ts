@@ -252,6 +252,7 @@ export const IGRP_I18N_DEFAULTS_FR: IGRPI18nStrings = {
     next: "Diapositive suivante",
   },
   pagination: {
+    label: "Pagination",
     previous: "Précédent",
     next: "Suivant",
     goToPrevious: "Aller à la page précédente",

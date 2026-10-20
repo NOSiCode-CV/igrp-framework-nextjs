@@ -37,6 +37,8 @@ export function igrpFormatDate(
 ): string {
   const date = toDate(value);
   if (!date) return '';
+  // Rolled-over day (Feb 31 -> Mar 3): reject, like the DS cell.
+  if (isDateOnly(value) && date.toISOString().slice(0, 10) !== value) return '';
   // `new Date('YYYY-MM-DD')` is UTC midnight: format in UTC to keep that calendar day.
   const resolved = isDateOnly(value)
     ? { ...options, timeZone: 'UTC' }

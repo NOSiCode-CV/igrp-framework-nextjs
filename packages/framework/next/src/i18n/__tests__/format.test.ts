@@ -11,6 +11,10 @@ import {
 const date = new Date(Date.UTC(2026, 9, 12, 14, 5));
 
 describe('format helpers', () => {
+  it('renders an impossible date-only string as empty', () => {
+    expect(igrpFormatDate('2026-02-31', 'pt-CV')).toBe('');
+  });
+
   it('format dates as dd/mm/yyyy in the three default regions', () => {
     expect(igrpFormatDate(date, 'pt-CV')).toBe('12/10/2026');
     expect(igrpFormatDate(date, 'en-GB')).toBe('12/10/2026');

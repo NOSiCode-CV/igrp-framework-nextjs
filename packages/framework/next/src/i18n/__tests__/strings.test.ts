@@ -39,4 +39,12 @@ describe('chrome overrides', () => {
       IGRP_CHROME_STRINGS_PT.navUser.logout,
     );
   });
+  it('applies object-valued errorCodes overrides', () => {
+    const copy = { title: 'Sem codigo', description: 'Defina o codigo.' };
+    const i18n = igrpDefineI18n({
+      defaultLocale: 'pt',
+      overrides: { pt: { chrome: { errorCodes: { IGRP_APP_CODE_MISSING: copy } } } },
+    });
+    expect(igrpGetChromeStrings(i18n, 'pt').errorCodes.IGRP_APP_CODE_MISSING).toEqual(copy);
+  });
 });

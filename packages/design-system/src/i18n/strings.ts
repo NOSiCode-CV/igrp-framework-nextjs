@@ -396,6 +396,8 @@ export interface IGRPI18nStrings {
     next: string
   }
   pagination: {
+    /** aria-label of the pagination nav. */
+    label: string
     /** Label for the previous control. */
     previous: string
     /** Label for the next control. */
@@ -668,6 +670,7 @@ export const IGRP_I18N_DEFAULTS_PT: IGRPI18nStrings = {
     next: "Diapositivo seguinte",
   },
   pagination: {
+    label: "Paginação",
     previous: "Anterior",
     next: "Seguinte",
     goToPrevious: "Ir para a página anterior",

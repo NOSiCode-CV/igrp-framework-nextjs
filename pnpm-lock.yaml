@@ -482,7 +482,7 @@ importers:
         version: link:../../design-system
       '@igrp/platform-access-management-client-ts':
         specifier: ^0.2.0-beta.19
-        version: 0.2.0-beta.18
+        version: 0.2.0-beta.19
       next-intl:
         specifier: ^4.14.0
         version: 4.14.9(@types/react@19.2.18)(next@15.5.28(@babel/core@7.29.7(supports-color@8.1.1))(@types/node@24.19.2)(babel-plugin-react-compiler@1.0.0)(react-dom@19.2.8(react@19.2.8))(react@19.2.8))(react@19.2.8)
@@ -650,7 +650,7 @@ importers:
         version: 10.0.1(eslint@10.12.0(jiti@2.7.0)(supports-color@8.1.1))
       '@igrp/platform-access-management-client-ts':
         specifier: ^0.2.0-beta.19
-        version: 0.2.0-beta.18
+        version: 0.2.0-beta.19
       '@types/node':
         specifier: ^24
         version: 24.19.2
@@ -1898,8 +1898,8 @@ packages:
     resolution: {integrity: sha512-bV0Tgo9K4hfPCek+aMAn81RppFKv2ySDQeMoSZuvTASywNTnVJCArCZE2FWqpvIatKu7VMRLWlR1EazvVhDyhQ==}
     engines: {node: '>=18.18'}
 
-  '@igrp/platform-access-management-client-ts@0.2.0-beta.18':
-    resolution: {integrity: sha512-gPVwbs321PMGWgrKS22yQ7jhxiuf9RxSbrThYIuYyPtVxdFPXA0kGCM2vJN3DA+fQ23NaLC+OEl40lVTGHEaqA==, tarball: https://sonatype.nosi.cv/repository/igrp/@igrp/platform-access-management-client-ts/-/platform-access-management-client-ts-0.2.0-beta.18.tgz}
+  '@igrp/platform-access-management-client-ts@0.2.0-beta.19':
+    resolution: {integrity: sha512-hP29rTxCOr8I6KT/9BqlropzqA+FAHEao1XDkRdwHvIes4OmqpDgLuCQVRmM6w82/5XJW+kfWPjq5whAy7Cezw==, tarball: https://sonatype.nosi.cv/repository/igrp/@igrp/platform-access-management-client-ts/-/platform-access-management-client-ts-0.2.0-beta.19.tgz}
 
   '@img/colour@1.1.0':
     resolution: {integrity: sha512-Td76q7j57o/tLVdgS746cYARfSyxk8iEfRxewL9h4OMzYhbW4TAcppl0mT4eyqXddh6L/jwoM75mo7ixa/pCeQ==}
@@ -9852,7 +9852,7 @@ snapshots:
 
   '@humanwhocodes/retry@0.4.3': {}
 
-  '@igrp/platform-access-management-client-ts@0.2.0-beta.18': {}
+  '@igrp/platform-access-management-client-ts@0.2.0-beta.19': {}
 
   '@img/colour@1.1.0':
     optional: true
@@ -11771,7 +11771,7 @@ snapshots:
       '@alloc/quick-lru': 5.3.0
       '@tailwindcss/node': 4.3.3
       '@tailwindcss/oxide': 4.3.3
-      postcss: 8.5.28
+      postcss: 8.5.30
       tailwindcss: 4.3.3
 
   '@tailwindcss/vite@4.3.3(vite@8.3.0(@types/node@24.19.2)(esbuild@0.28.2)(jiti@2.7.0)(tsx@4.23.15)(yaml@2.9.1))':
@@ -15704,6 +15704,7 @@ snapshots:
       nanoid: 3.3.20
       picocolors: 1.1.1
       source-map-js: 1.2.2
+    optional: true
 
   postcss@8.5.30:
     dependencies:
@@ -17126,7 +17127,7 @@ snapshots:
     dependencies:
       lightningcss: 1.33.0
       picomatch: 4.0.7
-      postcss: 8.5.28
+      postcss: 8.5.30
       rolldown: 1.2.14
       tinyglobby: 0.2.17
     optionalDependencies:
@@ -17141,7 +17142,7 @@ snapshots:
     dependencies:
       lightningcss: 1.33.0
       picomatch: 4.0.7
-      postcss: 8.5.28
+      postcss: 8.5.30
       rolldown: 1.2.14
       tinyglobby: 0.2.17
     optionalDependencies:

@@ -65,6 +65,9 @@ check_i18n:
         - templates/demo-v1/src/**/*
         - templates/demo-v1/package.json
         - packages/framework/next-i18n/**/*
+        # The CLI's own deps (typescript, the ICU parser) move in the lockfile alone.
+        - pnpm-lock.yaml
+        - package.json
       when: always
   before_script:
     - corepack enable

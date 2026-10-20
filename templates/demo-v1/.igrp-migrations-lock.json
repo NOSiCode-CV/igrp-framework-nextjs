@@ -397,6 +397,12 @@
       "appliedAt": "2026-10-20T00:00:00.000Z",
       "cliVersion": "0.2.0-beta.7",
       "manifestHash": "0d35f5910efa1612"
+    },
+    {
+      "id": "66-next-15-5-28",
+      "appliedAt": "2026-10-20T00:00:00.000Z",
+      "cliVersion": "0.2.0-beta.7",
+      "manifestHash": "4635e099a04f3031"
     }
   ]
 }

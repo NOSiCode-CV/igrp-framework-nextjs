@@ -1,5 +1,6 @@
 import { describe, expect, it } from "vitest"
 
+import { igrpDateFnsLocale } from "../i18n/date-fns-locale.js"
 import { getDateFormatMaxLength, getDateFormatParts, maskDateInput, parseDateInput } from "./date-input-format.js"
 
 const FMT = "dd-MM-yyyy"
@@ -82,9 +83,12 @@ describe("parseDateInput", () => {
   })
 
   it("applies the same rule to named-month formats", () => {
-    expect(iso(parseDateInput("26 Aug 2026", "dd MMM yyyy"))).toEqual([2026, 8, 26])
-    expect(parseDateInput("26 aug 2026", "dd MMM yyyy")).toBeUndefined()
-    expect(parseDateInput("26 August 2026", "dd MMM yyyy")).toBeUndefined()
+    const pt = igrpDateFnsLocale("pt-PT")
+    expect(iso(parseDateInput("26 ago 2026", "dd MMM yyyy", pt))).toEqual([2026, 8, 26])
+    expect(parseDateInput("26 Ago 2026", "dd MMM yyyy", pt)).toBeUndefined()
+    expect(parseDateInput("26 agosto 2026", "dd MMM yyyy", pt)).toBeUndefined()
+    // The month name is the locale's, not English.
+    expect(parseDateInput("26 Aug 2026", "dd MMM yyyy", pt)).toBeUndefined()
   })
 
   it("does not read a two-digit year as a four-digit one", () => {

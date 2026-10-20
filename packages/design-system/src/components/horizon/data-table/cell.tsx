@@ -12,6 +12,7 @@ import { IGRPBadge, type IGRPBadgeProps } from "../badge.js"
 import { IGRPIcon } from "../icon/index.js"
 import { IGRPLink, type IGRPLinkProps } from "../typography/link.js"
 import { useIGRPi18n, useIGRPLocale, useIGRPTimeZone } from "../../../i18n/index.js"
+import { igrpDateFnsLocale } from "../../../i18n/date-fns-locale.js"
 import { igrpIsDateOnly, parseLocalDate } from "../../../lib/utilities.js"
 
 /**
@@ -114,15 +115,16 @@ interface IGRPDataTableCellAmountProps {
 /** Formatted amount/number cell. */
 function IGRPDataTableCellAmount({
   field,
-  currency = "USD",
+  currency,
   language,
   formatStyle = "currency",
 }: IGRPDataTableCellAmountProps) {
   const locale = useIGRPLocale()
   const amount = Number.parseFloat(field)
   const formatted = new Intl.NumberFormat(language ?? locale, {
-    style: formatStyle,
-    currency: currency,
+    // Intl throws on style "currency" without a currency; no currency means a plain number.
+    style: formatStyle === "currency" && !currency ? "decimal" : formatStyle,
+    currency,
   }).format(amount)
   return formatted
 }
@@ -176,7 +178,8 @@ function IGRPDataTableCellDate({ date, language, dateOptions, dateFormat }: IGRP
   // V8 rolls "2026-02-31" over to March instead of rejecting it.
   if (dateOnly && d.toISOString().slice(0, 10) !== date) return null
   // shortcut: date-fns formats timestamps in the runtime zone, upgrade to @date-fns/tz if a dateFormat cell must show times across zones
-  if (dateFormat) return <span>{format(dateOnly ? parseLocalDate(date) : d, dateFormat)}</span>
+  if (dateFormat)
+    return <span>{format(dateOnly ? parseLocalDate(date) : d, dateFormat, { locale: igrpDateFnsLocale(locale) })}</span>
   const timeZone = dateOnly ? "UTC" : (dateOptions?.timeZone ?? tz)
   return <span>{new Intl.DateTimeFormat(language ?? locale, { ...dateOptions, timeZone }).format(d)}</span>
 }

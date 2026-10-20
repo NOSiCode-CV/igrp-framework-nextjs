@@ -26,6 +26,7 @@ import {
   getLegendLayout,
   getLegendVerticalAlign,
 } from "../lib.js"
+import { useIGRPLocale } from "../../../../i18n/index.js"
 import { type IGRPChartProps, type RadialBarConfig } from "../types.js"
 
 /**
@@ -172,7 +173,11 @@ function IGRPRadialBarChartInner({
 }: IGRPRadialBarChartProps) {
   const chartHeight = getChartHeight(size, data, height)
   const chartWidth = getChartWidth(width)
-  const formatValue = React.useCallback((value: number) => formatChartValue(value, valueFormatter), [valueFormatter])
+  const locale = useIGRPLocale()
+  const formatValue = React.useCallback(
+    (value: number) => formatChartValue(value, valueFormatter, locale),
+    [valueFormatter, locale]
+  )
   const chartConfig = createChartConfig(bars)
 
   const calculateTotal = () => {

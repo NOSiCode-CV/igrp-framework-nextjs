@@ -1,4 +1,4 @@
-import { format, isValid, parse } from "date-fns"
+import { format, isValid, parse, type Locale } from "date-fns"
 
 /**
  * Numeric date tokens a typed date input can mask and parse on its own.
@@ -146,15 +146,15 @@ function padNumericTokens(dateFormat: string): string {
  * field can produce — the mask would fight the parser and the field would never accept input.
  * For `dd-MM-yyyy` and friends the padded form *is* the format, so nothing is loosened.
  */
-export function parseDateInput(value: string, dateFormat: string): Date | undefined {
+export function parseDateInput(value: string, dateFormat: string, locale?: Locale): Date | undefined {
   const trimmed = value.trim()
   if (!trimmed) return undefined
 
-  const parsed = parse(trimmed, dateFormat, new Date())
+  const parsed = parse(trimmed, dateFormat, new Date(), { locale })
   if (!isValid(parsed)) return undefined
 
-  if (format(parsed, dateFormat) === trimmed) return parsed
+  if (format(parsed, dateFormat, { locale }) === trimmed) return parsed
 
   const padded = padNumericTokens(dateFormat)
-  return padded !== dateFormat && format(parsed, padded) === trimmed ? parsed : undefined
+  return padded !== dateFormat && format(parsed, padded, { locale }) === trimmed ? parsed : undefined
 }

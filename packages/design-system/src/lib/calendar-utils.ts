@@ -1,4 +1,4 @@
-import { addYears, format, subYears } from "date-fns"
+import { addYears, format, subYears, type Locale } from "date-fns"
 import type { DateAfter, DateBefore, DateRange, DayOfWeek } from "react-day-picker"
 import { parseDateInput } from "./date-input-format.js"
 import type { IGRPCalendarProps } from "../types.js"
@@ -15,18 +15,18 @@ export function getDefaultCalendarMonthBounds(from: Date = new Date()) {
 }
 
 /** Formats a date range to string. */
-export function formatDateRange(range: DateRange | undefined, dateFormat: string) {
+export function formatDateRange(range: DateRange | undefined, dateFormat: string, locale?: Locale) {
   if (!range?.from) {
     return ""
   }
 
-  const fromDate = formatDateToString(range.from, dateFormat)
+  const fromDate = formatDateToString(range.from, dateFormat, locale)
 
   if (!range.to) {
     return fromDate
   }
 
-  const toDate = formatDateToString(range.to, dateFormat)
+  const toDate = formatDateToString(range.to, dateFormat, locale)
 
   return `${fromDate} / ${toDate}`
 }
@@ -38,8 +38,8 @@ export function formatDateRange(range: DateRange | undefined, dateFormat: string
  * silently renders the rest as digits, so `dd MMM yyyy` came out as `26 08 2026` while the
  * matching `parse` read it as a month name. One engine formats and parses, or the two disagree.
  */
-export function formatDateToString(date: Date | undefined, dateFormat: string) {
-  return date ? format(date, dateFormat) : ""
+export function formatDateToString(date: Date | undefined, dateFormat: string, locale?: Locale) {
+  return date ? format(date, dateFormat, { locale }) : ""
 }
 
 /**
@@ -76,17 +76,17 @@ export function isValidDate(date: Date | undefined) {
  * Widths are tolerated the way a person types them — `1-8-2026` parses as readily as
  * `01-08-2026` — while half-typed input is still rejected. See {@link parseDateInput}.
  */
-export function parseStringToDate(dateString: string, dateFormat: string) {
-  return parseDateInput(dateString, dateFormat)
+export function parseStringToDate(dateString: string, dateFormat: string, locale?: Locale) {
+  return parseDateInput(dateString, dateFormat, locale)
 }
 
 /** Parses a "from / to" range string to DateRange. Ends that are incomplete come back undefined. */
-export function parseStringToRange(rangeString: string, dateFormat: string) {
+export function parseStringToRange(rangeString: string, dateFormat: string, locale?: Locale) {
   const [from, to] = rangeString.trim().split("/")
 
   return {
-    from: from ? parseDateInput(from, dateFormat) : undefined,
-    to: to ? parseDateInput(to, dateFormat) : undefined,
+    from: from ? parseDateInput(from, dateFormat, locale) : undefined,
+    to: to ? parseDateInput(to, dateFormat, locale) : undefined,
   }
 }
 

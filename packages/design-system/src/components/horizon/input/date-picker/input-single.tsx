@@ -25,7 +25,8 @@ import { Popover, PopoverContent, PopoverTrigger } from "../../../primitives/pop
 import { type IGRPCalendarSingleProps } from "../../calendar/single.js"
 import { IGRPLabel } from "../../label.js"
 import { Field, FieldDescription } from "../../../primitives/field.js"
-import { useIGRPi18n } from "../../../../i18n/index.js"
+import { useIGRPi18n, useIGRPLocale } from "../../../../i18n/index.js"
+import { igrpDateFnsLocale } from "../../../../i18n/date-fns-locale.js"
 
 /**
  * Props for the IGRPDatePickerInputSingle component.
@@ -238,6 +239,7 @@ function IGRPDatePickerInputSingle(allProps: IGRPDatePickerInputSingleProps) {
   const fieldName = name ?? id ?? _id
 
   const formContext = useFormContext()
+  const locale = igrpDateFnsLocale(useIGRPLocale())
 
   /**
    * Raw text while the field is being edited; `null` once it settles, so the display falls
@@ -277,7 +279,7 @@ function IGRPDatePickerInputSingle(allProps: IGRPDatePickerInputSingleProps) {
 
         // Half-typed text is not a new value. Committing `undefined` on every keystroke
         // dropped the stored date and fired validation for something nobody finished typing.
-        const parsed = parseDateInput(masked, dateFormat)
+        const parsed = parseDateInput(masked, dateFormat, locale)
         if (parsed) commit(parsed)
       },
       onInputBlur: () => setDraft(null),
@@ -290,7 +292,7 @@ function IGRPDatePickerInputSingle(allProps: IGRPDatePickerInputSingleProps) {
         commit(next ?? null)
       },
     }),
-    [dateFormat]
+    [dateFormat, locale]
   )
 
   const sharedProps = {
@@ -323,7 +325,7 @@ function IGRPDatePickerInputSingle(allProps: IGRPDatePickerInputSingleProps) {
                   <DatePickerInputSingleFieldWithA11y
                     {...sharedProps}
                     value={selected}
-                    displayValue={draft ?? formatDateToString(selected, dateFormat)}
+                    displayValue={draft ?? formatDateToString(selected, dateFormat, locale)}
                     {...buildHandlers((next) => {
                       // `null`, not `undefined`: react-hook-form reads an `undefined` field as
                       // "no value set" and `useWatch` hands back the *default*, so a cleared
@@ -356,7 +358,7 @@ function IGRPDatePickerInputSingle(allProps: IGRPDatePickerInputSingleProps) {
         {...sharedProps}
         inputId={fieldName}
         value={selected}
-        displayValue={draft ?? formatDateToString(selected, dateFormat)}
+        displayValue={draft ?? formatDateToString(selected, dateFormat, locale)}
         ariaDescribedBy={helperText ? `${fieldName}-helper` : undefined}
         {...buildHandlers((next) => {
           setLocalDate(next ?? undefined)

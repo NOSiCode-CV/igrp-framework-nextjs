@@ -20,6 +20,7 @@ import {
   getLegendVerticalAlign,
   hasNegativeValues,
 } from "./lib.js"
+import { useIGRPLocale } from "../../../i18n/index.js"
 import type { IGRPAreaConfig, IGRPChartProps } from "./types.js"
 
 const defaultLabelFormatter = (value: unknown) => (typeof value === "string" ? value : String(value))
@@ -70,7 +71,8 @@ function IGRPAreaChart({
 }: IGRPAreaChartProps) {
   const chartHeight = getChartHeight(size, data, height)
   const chartWidth = getChartWidth(width)
-  const formatValue = (value: number) => formatChartValue(value, valueFormatter)
+  const locale = useIGRPLocale()
+  const formatValue = (value: number) => formatChartValue(value, valueFormatter, locale)
   const hasNegativeDataValues = hasNegativeValues(
     data,
     areas.map((a) => a.dataKey)

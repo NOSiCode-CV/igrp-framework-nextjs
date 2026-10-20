@@ -68,8 +68,8 @@ describe("IGRPDatePickerInputSingle honours dateFormat", () => {
   })
 
   it("applies the rule to named-month formats, where there is no mask to help", async () => {
-    expect(await type("dd MMM yyyy", "26 Aug 2026", "paste")).toMatchObject({ committed: "2026-08-26" })
-    expect(await type("dd MMM yyyy", "26 aug 2026", "paste")).toMatchObject({ committed: undefined })
+    expect(await type("dd MMM yyyy", "26 ago 2026", "paste")).toMatchObject({ committed: "2026-08-26" })
+    expect(await type("dd MMM yyyy", "26 Ago 2026", "paste")).toMatchObject({ committed: undefined })
     expect(await type("dd MMM yyyy", "26-08-2026", "paste")).toMatchObject({ committed: undefined })
   })
 })

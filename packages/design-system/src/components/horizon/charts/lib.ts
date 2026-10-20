@@ -1,3 +1,4 @@
+import { IGRP_DEFAULT_LOCALE } from "../../../i18n/strings.js"
 import type { ChartConfig as ShadCNChartConfig } from "../../primitives/chart.js"
 import {
   type IGRPChartDataItem,
@@ -6,19 +7,16 @@ import {
   type IGRPSeriesConfig,
 } from "./types.js"
 
-export const formatChartValue = (value: number, valueFormatter?: (value: number) => string): string => {
+export const formatChartValue = (
+  value: number,
+  valueFormatter?: (value: number) => string,
+  locale: string = IGRP_DEFAULT_LOCALE
+): string => {
   if (valueFormatter) {
     return valueFormatter(value)
   }
 
-  const abs = Math.abs(value)
-  const sign = value < 0 ? "-" : ""
-  if (abs >= 1000000) {
-    return `${sign}${(abs / 1000000).toFixed(1)}M`
-  } else if (abs >= 1000) {
-    return `${sign}${(abs / 1000).toFixed(1)}K`
-  }
-  return value.toString()
+  return new Intl.NumberFormat(locale, { notation: "compact", maximumFractionDigits: 1 }).format(value)
 }
 
 export const getChartHeight = (

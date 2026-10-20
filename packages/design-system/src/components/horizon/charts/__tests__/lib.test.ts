@@ -3,12 +3,12 @@ import { formatChartValue, getChartHeight, getChartWidth } from "../lib.js"
 
 describe("formatChartValue", () => {
   it("abbreviates positive magnitudes", () => {
-    expect(formatChartValue(2500000)).toBe("2.5M")
-    expect(formatChartValue(2500)).toBe("2.5K")
+    expect(formatChartValue(2500000)).toBe("2,5 M")
+    expect(formatChartValue(2500)).toBe("2,5 mil")
   })
   it("abbreviates negative magnitudes with sign", () => {
-    expect(formatChartValue(-2500000)).toBe("-2.5M")
-    expect(formatChartValue(-2500)).toBe("-2.5K")
+    expect(formatChartValue(-2500000)).toBe("-2,5 M")
+    expect(formatChartValue(-2500)).toBe("-2,5 mil")
   })
 })
 

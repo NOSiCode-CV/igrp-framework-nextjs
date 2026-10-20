@@ -1,12 +1,12 @@
 "use client"
 
-import { useId, useState } from "react"
+import { useId, useMemo, useState } from "react"
 import { useFormContext, Controller } from "react-hook-form"
 import * as RPNInput from "react-phone-number-input"
 import flags from "react-phone-number-input/flags"
 
 import { cn } from "../cn.js"
-import { useIGRPi18n } from "../../../i18n/index.js"
+import { useIGRPi18n, useIGRPLocale } from "../../../i18n/index.js"
 import type { IGRPInputProps } from "../../../types.js"
 import { Input } from "../../primitives/input.js"
 import { IGRPIcon } from "../icon/index.js"
@@ -38,6 +38,16 @@ interface IGRPInputPhoneProps extends Omit<IGRPInputProps, "onChange" | "ref"> {
   onChange?: (value: string | undefined) => void
   /** Text direction. */
   dir?: "ltr" | "rtl"
+}
+
+/** @internal Country names in `locale`, in the shape react-phone-number-input expects for `labels`. */
+function useCountryLabels(locale: string) {
+  return useMemo(() => {
+    const names = new Intl.DisplayNames([locale], { type: "region" })
+    const labels: Record<string, string> = { ext: "ext." }
+    for (const code of RPNInput.getCountries()) labels[code] = names.of(code) ?? code
+    return labels
+  }, [locale])
 }
 
 /** @internal Wrapper for phone input styling. */
@@ -141,6 +151,7 @@ function IGRPInputPhone({
   const domProps = igrpOmitNonDomProps(props)
   const formContext = useFormContext()
   const i18n = useIGRPi18n()
+  const labels = useCountryLabels(useIGRPLocale())
   const resolvedPlaceholder = placeholder ?? i18n.inputPhone.placeholder
   const [localValue, setLocalValue] = useState(value ?? defaultValue ?? "")
 
@@ -158,6 +169,7 @@ function IGRPInputPhone({
           className={cn("flex rounded-md shadow-xs")}
           international={international}
           flagComponent={FlagComponent}
+          labels={labels}
           countrySelectComponent={CountrySelect}
           inputComponent={PhoneInput}
           numberInputProps={{ className: inputClassName }}
@@ -203,6 +215,7 @@ function IGRPInputPhone({
             className={cn("flex rounded-md shadow-xs")}
             international={international}
             flagComponent={FlagComponent}
+            labels={labels}
             countrySelectComponent={CountrySelect}
             inputComponent={PhoneInput}
             numberInputProps={{ className: inputClassName }}

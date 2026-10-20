@@ -18,6 +18,7 @@ import {
   getLegendLayout,
   getLegendVerticalAlign,
 } from "./lib.js"
+import { useIGRPLocale } from "../../../i18n/index.js"
 
 /**
  * Props for the IGRPPieChart component.
@@ -62,7 +63,8 @@ function IGRPPieChartInner({
 
   const chartHeight = getChartHeight(size, data, height)
   const chartWidth = getChartWidth(width)
-  const formatValue = (value: number) => formatChartValue(value, valueFormatter)
+  const locale = useIGRPLocale()
+  const formatValue = (value: number) => formatChartValue(value, valueFormatter, locale)
   const chartConfig = createChartConfig(pies)
 
   const totalValue = React.useMemo(() => {

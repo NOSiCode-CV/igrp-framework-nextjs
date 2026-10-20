@@ -17,7 +17,8 @@ import { IGRPLabel } from "../../label.js"
 import { type IGRPCalendarRangeProps } from "../../calendar/range.js"
 import { DD_MM_YYYY } from "../../../../lib/utilities.js"
 import { Field } from "../../../primitives/field.js"
-import { useIGRPi18n } from "../../../../i18n/index.js"
+import { useIGRPi18n, useIGRPLocale } from "../../../../i18n/index.js"
+import { igrpDateFnsLocale } from "../../../../i18n/date-fns-locale.js"
 
 /** @internal Popover + calendar + clear button for date range. */
 function DatePickerRangeField({
@@ -46,10 +47,11 @@ function DatePickerRangeField({
   onClose?: () => void
 }) {
   const selectionCompleteRef = React.useRef(false)
+  const locale = igrpDateFnsLocale(useIGRPLocale())
   const displayText = value?.from
     ? value.to
-      ? `${format(value.from, dateFormat)} - ${format(value.to, dateFormat)}`
-      : format(value.from, dateFormat)
+      ? `${format(value.from, dateFormat, { locale })} - ${format(value.to, dateFormat, { locale })}`
+      : format(value.from, dateFormat, { locale })
     : placeholder
 
   return (

@@ -10,6 +10,14 @@ import { igrpDateFnsLocale } from "../../i18n/date-fns-locale.js"
 import { Button, buttonVariants } from "./button.js"
 import { ChevronLeftIcon, ChevronRightIcon, ChevronDownIcon } from "lucide-react"
 
+function hasRegion(tag: string) {
+  try {
+    return Boolean(new Intl.Locale(tag).region)
+  } catch {
+    return false
+  }
+}
+
 function Calendar({
   className,
   classNames,
@@ -27,10 +35,11 @@ function Calendar({
   // drives month names and weekday labels when the consumer passes no `locale`.
   const igrpLocale = useIGRPLocale()
   const resolvedLocale = locale ?? igrpDateFnsLocale(igrpLocale)
-  // `Intl` gets the full tag, never the date-fns `code` (a bare `pt` resolves to
-  // Brazilian conventions) and never `undefined` (the runtime locale, which
-  // differs between server and browser and would hydrate mismatched).
-  const intlLocale = locale?.code ?? igrpLocale
+  // `Intl` gets a full tag, never a bare date-fns `code` (`pt` resolves to Brazilian
+  // conventions) and never `undefined` (the runtime locale, which differs between
+  // server and browser and would hydrate mismatched). A consumer locale's code is
+  // trusted only when it carries a region, as `pt-BR` does.
+  const intlLocale = locale?.code && hasRegion(locale.code) ? locale.code : igrpLocale
   const defaultClassNames = getDefaultClassNames()
 
   return (

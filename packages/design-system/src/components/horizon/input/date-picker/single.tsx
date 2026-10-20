@@ -24,7 +24,8 @@ import { IGRPButton } from "../../button.js"
 import { IGRPCalendarSingle, type IGRPCalendarSingleProps } from "../../calendar/single.js"
 import { IGRPLabel } from "../../label.js"
 import { Field, FieldDescription } from "../../../primitives/field.js"
-import { useIGRPi18n } from "../../../../i18n/index.js"
+import { useIGRPi18n, useIGRPLocale } from "../../../../i18n/index.js"
+import { igrpDateFnsLocale } from "../../../../i18n/date-fns-locale.js"
 
 /** @internal Popover + calendar + clear button. */
 function DatePickerSingleField({
@@ -59,9 +60,10 @@ function DatePickerSingleField({
   onClose?: () => void
 }) {
   const i18n = useIGRPi18n()
+  const locale = igrpDateFnsLocale(useIGRPLocale())
   const [open, setOpen] = useState(false)
   const isDisabled = disabledPicker || disabled
-  const displayText = value ? format(value, dateFormat) : placeholder
+  const displayText = value ? format(value, dateFormat, { locale }) : placeholder
 
   return (
     <div className={cn("relative")}>

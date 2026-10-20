@@ -19,6 +19,7 @@ import {
   getLegendLayout,
   getLegendVerticalAlign,
 } from "./lib.js"
+import { useIGRPLocale } from "../../../i18n/index.js"
 import { type IGRPChartProps, type IGRPRadarConfig } from "./types.js"
 
 /**
@@ -88,7 +89,8 @@ function IGRPRadarChartInner({
 }: IGRPRadarChartProps) {
   const chartHeight = getChartHeight(size, data, height)
   const chartWidth = getChartWidth(width)
-  const formatValue = (value: number) => formatChartValue(value, valueFormatter)
+  const locale = useIGRPLocale()
+  const formatValue = (value: number) => formatChartValue(value, valueFormatter, locale)
   const chartConfig = createChartConfig(radars)
 
   return (

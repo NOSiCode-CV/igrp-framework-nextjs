@@ -14,7 +14,8 @@ import { IGRPLabel } from "../../label.js"
 import { IGRPCalendarMultiple, type IGRPCalendarMultipleProps } from "../../calendar/multiple.js"
 import { DD_MM_YYYY } from "../../../../lib/utilities.js"
 import { Field } from "../../../primitives/field.js"
-import { useIGRPi18n } from "../../../../i18n/index.js"
+import { useIGRPi18n, useIGRPLocale } from "../../../../i18n/index.js"
+import { igrpDateFnsLocale } from "../../../../i18n/date-fns-locale.js"
 
 /** @internal Trigger button showing the selected date(s). */
 function DatePickerMultipleTrigger({
@@ -34,13 +35,14 @@ function DatePickerMultipleTrigger({
   dateFormat: string
   disabledPicker?: boolean
 } & Omit<React.ComponentProps<"button">, "value">) {
+  const locale = igrpDateFnsLocale(useIGRPLocale())
   const displayText = !value?.length
     ? placeholder
     : value.length === 1
-      ? format(value[0]!, dateFormat)
+      ? format(value[0]!, dateFormat, { locale })
       : value.length === 2
-        ? `${format(value[0]!, dateFormat)} - ${format(value[1]!, dateFormat)}`
-        : `${format(value[0]!, dateFormat)} - ${format(value[value.length - 1]!, dateFormat)}`
+        ? `${format(value[0]!, dateFormat, { locale })} - ${format(value[1]!, dateFormat, { locale })}`
+        : `${format(value[0]!, dateFormat, { locale })} - ${format(value[value.length - 1]!, dateFormat, { locale })}`
 
   return (
     <div

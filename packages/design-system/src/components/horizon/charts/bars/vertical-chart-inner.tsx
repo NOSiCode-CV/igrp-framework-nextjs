@@ -20,6 +20,7 @@ import {
   hasNegativeValues,
   createChartConfig,
 } from "../lib.js"
+import { useIGRPLocale } from "../../../../i18n/index.js"
 import type { IGRPBarConfig, IGRPChartProps } from "../types.js"
 
 function defaultLabelFormatter(value: unknown): string {
@@ -79,7 +80,8 @@ function IGRPVerticalBarChartInner({
 }: IGRPVerticalBarChartProps) {
   const chartHeight = getChartHeight(size, [], height)
   const chartWidth = getChartWidth(width)
-  const formatValue = (value: number) => formatChartValue(value, valueFormatter)
+  const locale = useIGRPLocale()
+  const formatValue = (value: number) => formatChartValue(value, valueFormatter, locale)
   const hasNegativeDataValues = hasNegativeValues(
     data,
     bars.map((b) => b.dataKey)

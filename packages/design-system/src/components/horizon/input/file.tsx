@@ -8,7 +8,7 @@ import { AlertCircle, UploadCloud, X } from "lucide-react"
 import { cn } from "../cn.js"
 import { igrpOmitNonDomProps } from "../../../lib/dom-props.js"
 import { igrpChainHandlers, igrpMergeRefs } from "../../../lib/form-binding.js"
-import { igrpFormatMessage, useIGRPi18n } from "../../../i18n/index.js"
+import { igrpFormatMessage, useIGRPLocale, useIGRPi18n } from "../../../i18n/index.js"
 import type { IGRPInputProps } from "../../../types.js"
 import { Input } from "../../primitives/input.js"
 import { Card } from "../../primitives/card.js"
@@ -225,10 +225,15 @@ function IGRPDropzoneInternal({
     setRejectedFiles((prev) => prev.filter((_, i) => i !== index))
   }, [])
 
+  const locale = useIGRPLocale()
   const formatFileSize = (bytes: number) => {
-    if (bytes < 1024) return `${bytes} bytes`
-    if (bytes < 1024 * 1024) return `${(bytes / 1024).toFixed(1)} KB`
-    return `${(bytes / (1024 * 1024)).toFixed(1)} MB`
+    const [value, unit] =
+      bytes < 1024
+        ? [bytes, "byte"]
+        : bytes < 1024 * 1024
+          ? [bytes / 1024, "kilobyte"]
+          : [bytes / (1024 * 1024), "megabyte"]
+    return new Intl.NumberFormat(locale, { style: "unit", unit, maximumFractionDigits: 1 }).format(value)
   }
 
   const formatAcceptedTypes = () => {

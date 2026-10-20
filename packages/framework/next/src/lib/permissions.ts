@@ -203,11 +203,11 @@ export async function igrpEnsureAccessClientConfig(): Promise<IGRPClientRuntimeC
   // Sequential, not Promise.all: vitest's mock registry falls through to the real
   // `next/headers` when two dynamic imports of it overlap.
   const locale = current.locale ? undefined : await recoverLocaleFromRequest();
-  if (token) {
+  if (token || locale) {
     // Seed the token too: a caller that needs claims almost always needs the
     // Access Management client next, and that fails in exactly the same
     // contexts for the same reason.
-    igrpSetAccessClientConfig({ token, baseUrl, ...(locale ? { locale } : {}) });
+    igrpSetAccessClientConfig({ token: token || '', baseUrl, ...(locale ? { locale } : {}) });
   }
 
   return igrpGetAccessClientConfig();

@@ -163,6 +163,13 @@ describe('T3b — locale is seeded for Accept-Language', () => {
     expect((await igrpEnsureAccessClientConfig()).locale).toBe('fr');
   });
 
+  it('seeds locale even when no token is recovered', async () => {
+    getToken.mockResolvedValue(null);
+    cookiesGetAll.mockReturnValue([{ name: 'IGRP_LOCALE', value: 'en' }]);
+    await igrpEnsureAccessClientConfig();
+    expect(igrpGetAccessClientConfig().locale).toBe('en');
+  });
+
   it('keeps a locale already set in the store', async () => {
     igrpSetAccessClientConfig({ token: '', baseUrl: 'https://am.example.test', locale: 'pt' });
     getToken.mockResolvedValue({ accessToken: PERMITTED_TOKEN });

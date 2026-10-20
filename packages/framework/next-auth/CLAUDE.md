@@ -36,3 +36,5 @@ Treat every change as a potential security boundary. For session/JWT changes, me
 @../../../.claude/shared/hard-rules.md
 
 @../../../.claude/shared/dependency-order.md
+
+@../../../.claude/shared/skills.md

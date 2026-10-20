@@ -80,3 +80,5 @@ To add a new primitive, init a throwaway project in a scratch directory, `add` t
 ## Shared rules
 
 @../../.claude/shared/hard-rules.md
+
+@../../.claude/shared/skills.md

@@ -86,3 +86,5 @@ There is **no root `test` script** — each package runs **Vitest** on its own:
 - `packages/design-system-storybook` — `test:vitest` (component) and `test-storybook` (Playwright snapshots; Storybook must be running).
 
 Run a **single test**: `pnpm --filter <package> exec vitest run path/to/file.test.ts -t "test name"` (drop `run` for watch mode). The `-t` flag filters by test/describe name.
+
+@.claude/shared/skills.md

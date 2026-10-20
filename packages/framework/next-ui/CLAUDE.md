@@ -54,3 +54,5 @@ Failure modes this package has actually shipped, worth checking for by name:
 ## Consuming the design system
 
 This package builds on `@igrp/igrp-framework-react-design-system`, so the consumer rules apply here: Horizon (`IGRP*`) first, Primitives only when Horizon is too opinionated; semantic tokens only (`bg-background`, `text-muted-foreground`) and never raw palette colours; no manual `dark:` overrides — tokens handle dark mode; `cn()` from the design system for class merging; `size-N` when width equals height; `flex gap-N` over `space-x-N`/`space-y-N`. Everything exported by the design system is client-side.
+
+@../../../.claude/shared/skills.md

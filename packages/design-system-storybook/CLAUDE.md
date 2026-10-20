@@ -31,3 +31,5 @@ animation timing → font loading → async data → reduced-motion → viewport
 ## Shared rules
 
 @../../.claude/shared/hard-rules.md
+
+@../../.claude/shared/skills.md

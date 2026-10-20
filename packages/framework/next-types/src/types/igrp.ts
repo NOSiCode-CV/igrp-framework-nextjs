@@ -3,12 +3,7 @@ import type { SessionProviderProps } from '@igrp/framework-next-auth/client';
 
 import type { IGRPMenuItemArgs, IGRPPermissionCatalogEntry } from './access-management.js';
 import type { IGRPI18nConfigBase } from './i18n.js';
-import type {
-  IGRPLayoutDataSource,
-  IGRPMockDataAsync,
-  IGRPPackageJson,
-  IGRPToasterPosition,
-} from './globals.js';
+import type { IGRPLayoutDataSource, IGRPPackageJson, IGRPToasterPosition } from './globals.js';
 
 export type IGRPConfigArgs = {
   appCode: string;
@@ -21,25 +16,12 @@ export type IGRPConfigArgs = {
    * what it returns; see {@link IGRPLayoutDataSource} for exactly which fields
    * production overrides and which stay live.
    *
-   * Supersedes {@link IGRPConfigArgs.layoutMockData}, whose name said "mock"
-   * and led app authors to stub it in production, silently dropping the whole
-   * header/sidebar configuration. Set either one — the framework prefers
-   * `layoutData` and falls back to `layoutMockData` — but not both.
+   * Replaces the removed `layoutMockData`, whose name said "mock" and led app
+   * authors to stub it in production, silently dropping the whole
+   * header/sidebar configuration.
    */
-  layoutData?: IGRPLayoutDataSource;
-  /**
-   * @deprecated Renamed to {@link IGRPConfigArgs.layoutData}. Still read (as a
-   * fallback) for one release, then removed. Optional only so the two can
-   * coexist during the window; **exactly one of the two must be set.**
-   */
-  layoutMockData?: IGRPMockDataAsync;
+  layoutData: IGRPLayoutDataSource;
   font?: string;
-  /**
-   * @deprecated Read by nothing in `@igrp/framework-next` or
-   * `@igrp/framework-next-ui` — there is no language selector to show. Setting
-   * it has never had an effect. Kept for one release, then removed.
-   */
-  showLanguageSelector?: boolean;
   layout: IGRPLayoutConfigArgs;
   apiManagementConfig?: {
     baseUrl: string;
@@ -160,27 +142,12 @@ export type IGRPConfigArgs = {
     duration?: number;
     closeButton?: boolean;
   };
-  /**
-   * @deprecated Read by nothing in `@igrp/framework-next` or
-   * `@igrp/framework-next-ui`. Login/logout redirects are driven by NextAuth
-   * and the template's `middleware.ts`, not by this field. Kept for one
-   * release, then removed.
-   */
-  loginUrl?: string;
-  /**
-   * @deprecated Read by nothing — see {@link IGRPConfigArgs.loginUrl}. Kept
-   * for one release, then removed.
-   */
-  logoutUrl?: string;
-  /**
-   * @deprecated Read by nothing at this level, and easily mistaken for the one
-   * that works: the settings link is gated by
-   * {@link IGRPHeaderDataArgs.showSettings}, set inside
-   * `layoutMockData.getHeaderData()`. Move the flag there. Kept for one
-   * release, then removed.
-   */
-  showSettings?: boolean;
   sessionArgs?: Partial<SessionProviderProps>;
+  /**
+   * Organization Brand. Omitted or `enabled: false` leaves every design-system
+   * Default in place and makes no request to Access Management.
+   */
+  branding?: { enabled: boolean };
   /**
    * Localisation, built with `igrpDefineI18n` from `@igrp/framework-next/i18n`.
    * When set, `IGRPRootLayout` resolves the locale, mounts the intl providers
@@ -209,6 +176,8 @@ export type IGRPConfigClient = (config: IGRPLayoutConfigArgs) => Promise<IGRPCon
 
 export type IGRPLayoutConfigArgs = {
   session: Session | null;
+  /** @deprecated Preset themes were removed. Read by nothing; kept for one release. */
   activeThemeValue?: string;
+  /** @deprecated Preset themes were removed. Read by nothing; kept for one release. */
   isScaled?: boolean;
 };

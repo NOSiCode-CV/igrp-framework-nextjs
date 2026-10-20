@@ -4,6 +4,32 @@ CLI that automates IGRP template upgrades. Bundles all migration guides for `tem
 
 ---
 
+## Usage (consumer apps)
+
+The package is published only to the internal Sonatype registry, so `pnpm dlx` needs the `@igrp` scope pointed there (plus credentials in your user npmrc — see `.env.npmrc.example` at the repo root):
+
+```ini
+# .npmrc
+@igrp:registry=https://sonatype.nosi.cv/repository/igrp/
+```
+
+From the app root:
+
+```bash
+pnpm dlx @igrp/template-migrator status        # applied / pending
+pnpm dlx @igrp/template-migrator plan          # preview steps, writes nothing
+pnpm dlx @igrp/template-migrator apply         # prompts per migration; --yes for CI
+pnpm dlx @igrp/template-migrator check         # CI gate: exit 1 if pending or changed
+```
+
+Commit the resulting `.igrp-migrations-lock.json`.
+
+### Programmatic API
+
+`src/index.ts` re-exports the commands as functions: `status(appRoot)`, `list()`, `plan(appRoot, toId?)`, `apply(appRoot, { toId?, yes?, force? })` (async), `rollback(appRoot, id, { force? })` (async), `check(appRoot)` and `convert(appRoot)` (both return `boolean`). It also exports `getManifest()`, `readLock(appRoot)`, `writeLock(appRoot, lock)`, the `LegacyLockError` class, and the types `Manifest`, `MigrationEntry`, `MigrationStep`, `LockFile`, `LockEntry`.
+
+---
+
 ## Package structure
 
 ```
@@ -34,17 +60,20 @@ packages/framework/template-migrator/
 │       ├── apply.ts         # igrp-migrate apply [--to <id>] [--yes] [--force]
 │       ├── list.ts          # igrp-migrate list
 │       ├── rollback.ts      # igrp-migrate rollback <id> [--force]
-│       └── check.ts         # igrp-migrate check  (CI gate)
+│       ├── check.ts         # igrp-migrate check  (CI gate)
+│       └── convert.ts       # igrp-migrate convert  (legacy lock upgrade)
 ```
 
 Flags worth knowing:
 
 | Flag | Effect |
 |---|---|
-| `apply --yes` | Skip the per-migration confirmation prompt (the CI path) |
+| `plan --to <id>` / `apply --to <id>` | Stop after this migration. A missing id (or a flag in its place) is an error, not "apply everything" |
+| `apply --yes` (`-y`) | Skip the per-migration confirmation prompt (the CI path) |
 | `apply --force` | Overwrite managed files the consumer has modified locally. Without it, `apply` names them and aborts before running any step |
 | `rollback --force` | Proceed despite missing undo content, a scaffold baseline entry, or still-applied migrations that `require` this one |
 | `check` | Exits 1 on pending migrations **and** on an applied migration whose steps have changed since |
+| `convert` | Moves a legacy `.igrpmigrations/lock.json` to `.igrp-migrations-lock.json` (and heals an interrupted convert). Until you run it, every command that reads the lock (`status`, `plan`, `apply`, `rollback`, `check`) stops with a `LegacyLockError` telling you to. `list` and `convert` never read the lock |
 
 The **source of truth for migrations lives in this package at `migrations/demo-v1/`**. `scripts/pack.ts` reads those files at build time and embeds everything into `dist/`.
 
@@ -196,17 +225,18 @@ It **fails** (exit 1) when:
 - a migration bumps a dependency the template doesn't declare **and no later migration removes it** (a `deps.remove` retires an earlier `deps.bump`, the same collapse-to-final-state rule the file checks use),
 - a **new template file** exists (tracked or untracked-but-not-gitignored) that no migration ships, is not exempt, and is not grandfathered in the baseline (see below),
 - a migration **deletes** a path the live template still ships — the exact mirror of "a migration ships a file the template no longer has": scaffolded apps keep the file, upgraded apps lose it,
-- the template's shipped **`.igrp-migrations-lock.json`** doesn't record every migration as applied, records one that no longer exists, has a stale `manifestHash`, or lists entries out of migration order (see below).
+- the template's shipped **`.igrp-migrations-lock.json`** doesn't record every migration as applied, records one that no longer exists, has a stale `manifestHash`, or lists entries out of migration order (see below),
+- `migrations/demo-v1/template-baseline.json` is missing.
 
-It **warns** (exit 0) for `@igrp/*` template deps no migration ever pins, and baseline entries the template no longer has.
+It **warns** (exit 0) for `@igrp/*` template deps no migration ever pins, baseline entries the template no longer has, patch-mode paths it cannot content-verify (no full-file payload), and when it cannot enumerate template files (`git ls-files` failed) — the new-file check is then skipped.
 
-The gate runs at the start of `release`, and per-MR in `.gitlab-ci.yml` (`check_template_drift`, which also runs `typecheck` and `test`). Catching drift only at release time means it is already committed and has to be reconciled retroactively — the several `*-resync` / `*-catchup` migrations in the history are what that looks like.
+The gate runs in `release` (after `typecheck` and `test`, before `build`), and per-MR in `.gitlab-ci.yml` (`check_template_drift`, which also runs `typecheck` and `test`). Catching drift only at release time means it is already committed and has to be reconciled retroactively — the several `*-resync` / `*-catchup` migrations in the history are what that looks like.
 
 ### New-file check (baseline)
 
 Every template file must be **migration-managed**, **exempt**, or listed in `migrations/demo-v1/template-baseline.json` (the grandfathered set that predates this check). Anything else is an *orphan*: scaffolded apps would get it, upgraded apps never would — so the gate fails.
 
-Exempt paths (see `scripts/drift-orphans.ts`) are zip-excluded content (`create-template/`, `CHANGELOG.md`, `CLAUDE.md`, …) and docs/AI-tooling content that ships in the zip but isn't runtime code (`docs/`, `specs/`, `.github/`, `.cursor/`, `.trae/`, `AGENTS.md`).
+Exempt paths (see `scripts/drift-orphans.ts`) are zip-excluded content (`create-template/`, `CHANGELOG.md`, `CLAUDE.md`, …), docs/AI-tooling content that ships in the zip but isn't runtime code (`docs/`, `specs/`, `.agents/`, `.github/`, `.cursor/`, `.trae/`, `AGENTS.md`), and the CLI's own state files (`.igrp-migrations-lock.json`, `.igrp-migration-journal.json`).
 
 When the gate flags a new file:
 
@@ -235,13 +265,13 @@ Add `--check` for a dry run that reports what's stale and exits 1 without writin
 
 Regeneration is **append-and-refresh, not rewrite**: existing entries keep their recorded `appliedAt` and `cliVersion` (that's history, and churning it every release would lose the record of which CLI stamped each migration). Only `manifestHash` is refreshed, missing entries are appended in migration order, and entries for deleted migrations are dropped.
 
-New entries carry **no** `undo`/`fileHashes` at all, which is the honest representation: nothing was executed against a file tree here — the template simply *is* the post-migration state, so rolling a scaffolded app back past its baseline isn't a supported operation. Omitting the fields says that more plainly than forty copies of `[]` and `{}`. A prior entry that does carry real content keeps it: that can only come from a lock some consumer actually ran against, which isn't ours to discard.
+New entries carry **no** `undo`/`fileHashes` at all, which is the honest representation: nothing was executed against a file tree here — the template simply *is* the post-migration state, so rolling a scaffolded app back past its baseline isn't a supported operation. Omitting the fields says that more plainly than one copy per migration of `[]` and `{}`. A prior entry that does carry real content keeps it: that can only come from a lock some consumer actually ran against, which isn't ours to discard.
 
 ---
 
 ## Releasing
 
-This package follows the same changeset + Sonatype flow as the other `@igrp/*` packages. The `release` script runs `check:drift` first, so the publish aborts if the payloads have drifted from the template.
+This package follows the same changeset + Sonatype flow as the other `@igrp/*` packages. The `release` script runs `check:drift` (after `typecheck` and `test`) before building, so the publish aborts if the payloads have drifted from the template.
 
 ### 1. Record a changeset
 
@@ -269,7 +299,7 @@ pnpm --filter @igrp/template-migrator build
 Verify the output:
 
 - `dist/manifest.json` contains all expected migrations.
-- `dist/payload/` has one subdirectory per migration (`01/`, `02/`, …) with no nested `payload/` folder.
+- `dist/payload/` has one subdirectory per migration that ships payload files (`01/`, `02/`, …; migrations with only env/deps/delete steps have none) with no nested `payload/` folder.
 - `dist/cli.js` is executable and imports correctly.
 
 ### 4. Publish
@@ -294,13 +324,7 @@ Should print the migration list without errors, confirming the tarball is reacha
 
 ## Versioning convention
 
-The version tracks the framework release it is paired with:
-
-```
-0.2.0-beta.<framework-beta-number>
-```
-
-Example: when `@igrp/framework-next` ships `0.2.0-beta.16`, bump `template-migrator` to `0.2.0-beta.16` in the same changeset run.
+The version follows the repo-wide `0.2.0-beta.<n>` line, but its beta counter is **independent** — it advances only when this package gets a changeset, so it does not track the `@igrp/framework-next` beta number.
 
 Every change — new migration or CLI-only fix — uses a `patch` changeset, which advances only the beta counter:
 

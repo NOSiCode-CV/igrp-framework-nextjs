@@ -3,6 +3,7 @@
 import { useId } from "react"
 import { cva, type VariantProps } from "class-variance-authority"
 import { cn } from "cn"
+import { useIGRPi18n } from "../../i18n/index.js"
 
 type IGRPVideoEmbedAllowFeature =
   | "autoplay"
@@ -81,6 +82,7 @@ function IGRPVideoEmbed({
   start = 0,
   aspectRatio = "16/9",
 }: IGRPVideoEmbedProps) {
+  const i18n = useIGRPi18n()
   const _id = useId()
   const ref = name ?? id ?? _id
 
@@ -98,7 +100,7 @@ function IGRPVideoEmbed({
         )}
         id={ref}
       >
-        <p className={cn("text-sm text-muted-foreground")}>Invalid video URL</p>
+        <p className={cn("text-sm text-muted-foreground")}>{i18n.videoEmbed.invalidUrl}</p>
       </div>
     )
   }

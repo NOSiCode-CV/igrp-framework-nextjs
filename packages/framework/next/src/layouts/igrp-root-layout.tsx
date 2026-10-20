@@ -1,8 +1,9 @@
 import { after } from 'next/server';
 import { getMessages } from 'next-intl/server';
-import { IGRPNestedProviders } from '@igrp/framework-next-ui';
+import { IGRPBrandingStyle, IGRPNestedProviders } from '@igrp/framework-next-ui';
 import type { IGRPConfigArgs } from '@igrp/framework-next-types';
 
+import { igrpResolveRequestBranding } from '../branding/request.js';
 import { IGRPIntlProvider } from '../i18n/client/index.js';
 import type { IGRPI18nConfig } from '../i18n/config.js';
 import { igrpResolveLocale } from '../i18n/server/resolve.js';
@@ -32,7 +33,7 @@ export async function IGRPRootLayout({ children, config, lang }: IGRPRootLayoutA
     appCode,
   } = config;
 
-  const { session, activeThemeValue, isScaled } = layout;
+  const { session } = layout;
 
   // Validate Access Management config synchronously during render. Any
   // misconfiguration throws `IgrpConfigError('IGRP_ACCESS_MANAGEMENT_CONFIG_MISSING')`,
@@ -80,24 +81,16 @@ export async function IGRPRootLayout({ children, config, lang }: IGRPRootLayoutA
     : undefined;
   const htmlLang = lang ?? intl?.formatLocale ?? 'pt';
 
-  // Built by join rather than a multi-line template literal: the literal
-  // embedded its own newlines and indentation into the class attribute.
-  const bodyClassName = [
-    'bg-background overscroll-none h-screen font-sans antialiased',
-    activeThemeValue ? `theme-${activeThemeValue}` : '',
-    isScaled ? 'theme-scaled' : '',
-  ]
-    .filter(Boolean)
-    .join(' ');
+  // Organization Brand. Off by default: with `branding.enabled` not true the
+  // resolver returns `null` before reading a cookie or making a request, and
+  // `IGRPBrandingStyle` renders nothing.
+  const branding = await igrpResolveRequestBranding(config);
 
   return (
     <html lang={htmlLang} suppressHydrationWarning className={font}>
-      <body className={bodyClassName}>
-        <IGRPNestedProviders
-          session={session}
-          activeThemeValue={activeThemeValue}
-          sessionArgs={sessionArgs}
-        >
+      <body className="bg-background overscroll-none h-screen font-sans antialiased">
+        <IGRPBrandingStyle branding={branding} />
+        <IGRPNestedProviders session={session} branding={branding} sessionArgs={sessionArgs}>
           {intl ? <IGRPIntlProvider {...intl}>{children}</IGRPIntlProvider> : children}
         </IGRPNestedProviders>
       </body>

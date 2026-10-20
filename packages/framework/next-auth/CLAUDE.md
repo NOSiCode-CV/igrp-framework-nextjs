@@ -20,17 +20,12 @@ You are working inside `packages/framework/next-auth/` — `@igrp/framework-next
 - `./client` also owns **`useOptionalSession`** (and the raw `SessionContext` it reads). `useSession()` *throws* without a provider and `useSafeSession` delegates straight to it, so neither can serve a component that must also render standalone — `IGRPSectionPermissions` in `@igrp/framework-next-ui` does. It returns `null` for "no provider mounted", which means **cannot tell**, not "unauthenticated"; a permission gate must keep its server-seeded answer in that case rather than denying. It lives here so downstream packages stop importing `next-auth/react` directly, for the same reason `./cookies` exists.
 - `./session-store` owns the session-cookie codec. `withIGRPAuth` always installs it as `jwt.encode`/`jwt.decode`; with no store it is NextAuth's own codec. Anything that decodes the session cookie outside the instance must pass `decode: decodeIGRPSessionToken`, or a store-backed cookie decodes without `accessToken`. The store is registered from Node-only code (`instrumentation.ts`), never from a module middleware imports.
 - Auth cookie names are scoped by `NEXT_PUBLIC_BASE_PATH` (see `src/cookies.ts`). Anything that reads the session cookie must go through `sessionCookieName()` / `resolveSecureCookie()`, never a hardcoded `next-auth.session-token`.
+- **Any change that renames auth cookies or changes their path must extend `staleAuthCookies` with the names it retires.** Otherwise every user keeps an orphaned 2–4 KB cookie that nothing expires, which is what pushed co-hosted apps into `431` header limits.
 - `src/__tests__/dist-contract.test.ts` asserts properties that exist only in the BUILD: the `"use client"` directive, the root barrel's purity, the Edge-safety contract (what `dist/config.js` _statically_ imports), and one `Symbol.for` namespace across chunks. Source review cannot see any of them — two regressions reached a green build before it existed. It skips when `dist/` is absent, and `release` runs `build && typecheck && test && publish` so it gates every publish.
-- `typecheck` is in `release` because `src/__tests__/types-augmentation.type-check.ts` — the only guard against the `next-auth` module augmentation drifting — is run by **nothing else**: vitest's include matches `.test.ts`, and it is not a tsup dts entry. The package also sets `noUnusedLocals` / `noUnusedParameters`, since it has no ESLint config and `pnpm lint` silently skips packages without a `lint` script.
+- `typecheck` is in `release` because `src/__tests__/types-augmentation.type-check.ts` — the only guard against the `next-auth` module augmentation drifting — is run by **nothing else**: vitest's include matches `.test.ts`, and it is not a tsup dts entry. The package also sets `noUnusedLocals` / `noUnusedParameters`, and `release` runs `lint` (ESLint, `eslint.config.js`) first.
 - Builds with **tsup**, not Babel. **No React Compiler step.**
 - `@igrp/framework-next-types` re-exports types from here — run `pnpm build:framework` after type changes.
 - `pnpm build:auth` from repo root.
-
-## Open items
-
-`KNOWN-ISSUES.md` in this directory lists diagnosed-but-unfixed defects for this
-package, and `../../../KNOWN-ISSUES.md` the cross-package ones. Read both before
-a review; close the entries you fix.
 
 ## Security stance
 

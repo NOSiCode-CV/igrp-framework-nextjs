@@ -313,6 +313,7 @@ function IGRPInputColor({
   if (formContext) {
     return (
       <IGRPFormField
+        errorText={error}
         name={fieldName}
         label={label}
         helperText={helperText}

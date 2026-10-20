@@ -1,5 +1,3 @@
-/* eslint-disable perfectionist/sort-exports */
-
 // IMPORTANT: this barrel must NOT carry 'use client'. With it, the whole barrel is
 // ONE client module: any server component importing anything from this package
 // (framework-next's layouts, a template page) registered all of next-ui as its
@@ -100,16 +98,6 @@ export {
 
 export { IGRPSessionWatcher } from './templates/session-watcher.js';
 
-export {
-  IGRPTemplateThemeSelector,
-  IGRP_THEME_SELECTOR_LABELS_PT_PT,
-  IGRP_DEFAULT_THEMES,
-  IGRP_SCALED_THEMES,
-  type IGRPTemplateThemeSelectorProps,
-  type IGRPThemeSelectorLabels,
-  type IGRPThemeOption,
-} from './templates/theme-selector.js';
-
 // i18n (chrome catalog)
 
 export { IGRPChromeI18nProvider, useIGRPChromeI18n } from './i18n/context.js';
@@ -126,14 +114,6 @@ export { IGRP_CHROME_STRINGS_EN } from './i18n/strings.en.js';
 export { IGRP_CHROME_STRINGS_FR } from './i18n/strings.fr.js';
 
 // providers
-
-export {
-  IGRPActiveThemeProvider,
-  useIGRPThemeConfig,
-  igrpActiveThemeClassName,
-  IGRP_ACTIVE_THEME_COOKIE,
-  type IGRPActiveThemeProviderArgs,
-} from './providers/active-theme.js';
 
 export { IGRPThemeProvider } from './providers/theme.js';
 
@@ -164,3 +144,15 @@ export {
   type IGRPAuthorizationProps,
 } from './permissions/authorization.js';
 export { IGRPGuardPage, type IGRPGuardPageProps } from './permissions/guard-page.js';
+
+export {
+  IGRP_BRANDING_CORE_TOKENS,
+  igrpBrandingToCss,
+  igrpParseBranding,
+  BRANDING_MAX_BYTES,
+  isSafeCssValue,
+  isSafeLogoUrl,
+  isTokenName,
+} from './branding/index.js';
+export { IGRPBrandingStyle } from './branding/style.js';
+export { IGRPBrandingProvider, useIGRPBranding } from './branding/provider.js';

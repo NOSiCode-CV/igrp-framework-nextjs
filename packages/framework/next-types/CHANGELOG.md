@@ -1,5 +1,25 @@
 # @igrp/framework-next-types
 
+## 0.2.0-beta.8
+
+### Patch Changes
+
+- ea9709b: - **Breaking (types):** remove the fields deprecated one release ago — `IGRPConfigArgs.layoutMockData`, `.showLanguageSelector`, `.loginUrl`, `.logoutUrl`, `.showSettings`; `IGRPSidebarDataArgs.showPreviewMode`; and the types `IGRPMockDataAsync`, `IGRPMockData`, `IGRPConfigurationType`, `IGRPRoleUserArgs`, `IGRPGlobalConfigurationArgs`, `IGRPFileUrlArgs`, `IGRPResourceType`, `IGRPResourceItem`, `IGRPResourceArgs` (import the AM ones from `@igrp/platform-access-management-client-ts`). `IGRPConfigArgs.layoutData` is now required.
+  - `igrpBuildConfig` / `igrpResolveLayoutDataSource` no longer fall back to `layoutMockData`; a config that still sets it fails validation with a hint to rename it to `layoutData`.
+- Updated dependencies [ea9709b]
+  - @igrp/framework-next-auth@0.2.0-beta.8
+
+## 0.2.0-beta.7
+
+### Patch Changes
+
+- 8727ccf: Add organization branding types (`IGRPBranding` and its parts) and the `branding` flag on `IGRPConfigArgs`. Deprecate `activeThemeValue` and `isScaled` on `IGRPLayoutConfigArgs`.
+- 7ea73f6: `IGRPI18nConfigBase.persistLocale` may resolve `boolean`: `false` reports that nothing was saved (no session), so `igrpSetLocale` answers `persisted: false`.
+- 8368794: i18n groundwork: the default provider maps the OIDC `locale` claim, the `jwt` callback carries it as `token.locale` (seeded at sign-in, replaced by `update({ locale })`) and the `session` callback exposes `session.user.locale`. `framework-next-types` declares `IGRPI18nConfigBase` and the optional `IGRPConfigArgs.i18n`. No behaviour change for apps that do not use i18n.
+- Updated dependencies [8368794]
+- Updated dependencies [40bcb17]
+  - @igrp/framework-next-auth@0.2.0-beta.7
+
 ## 0.2.0-beta.6
 
 ### Patch Changes

@@ -1,6 +1,6 @@
 'use client';
 
-import { useCallback, useEffect, useState } from 'react';
+import { useCallback, useSyncExternalStore } from 'react';
 import { useTheme } from 'next-themes';
 import {
   Button,
@@ -24,12 +24,18 @@ interface IGRPTemplateModeSwitcherProps {
   labels?: Partial<IGRPModeSwitcherLabels>;
 }
 
+const subscribeNever = () => () => {};
+
 function IGRPTemplateModeSwitcher({ labels: labelOverrides }: IGRPTemplateModeSwitcherProps = {}) {
   const { setTheme, resolvedTheme } = useTheme();
   const { setMetaColor } = useIGRPMetaColor();
 
-  const [mounted, setMounted] = useState(false);
-  useEffect(() => setMounted(true), []);
+  // `false` on the server and during hydration, `true` after — without an effect.
+  const mounted = useSyncExternalStore(
+    subscribeNever,
+    () => true,
+    () => false,
+  );
 
   const chrome = useIGRPChromeI18n();
   const labels = labelOverrides

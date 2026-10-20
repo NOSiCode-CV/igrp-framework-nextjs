@@ -32,7 +32,7 @@ const { IGRPLayoutFull } = await import('../igrp-layout-full.js');
 const layoutData = { getHeaderData: async () => ({}), getSidebarData: async () => ({}) };
 
 /** Depth-first search for the element rendering `type`. */
-// eslint-disable-next-line @typescript-eslint/no-explicit-any
+
 function findElement(node: any, type: unknown): any {
   if (!node || typeof node !== 'object') return null;
   if (Array.isArray(node)) {

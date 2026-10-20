@@ -25,7 +25,9 @@ import { type IGRPChartProps, type IGRPRadarConfig } from "./types.js"
  * Props for the IGRPRadarChart component.
  * @see IGRPRadarChart
  */
-export interface IGRPRadarChartProps extends IGRPChartProps {
+export interface IGRPRadarChartProps extends Omit<IGRPChartProps, "categoryKey"> {
+  /** Unused by polar charts; kept optional for call sites that already pass it. */
+  categoryKey?: string
   /** Radar series configurations. */
   radars: IGRPRadarConfig[]
   /** Key for angle axis labels. */
@@ -111,7 +113,10 @@ function IGRPRadarChartInner({
               }}
             >
               {showTooltip && (
-                <ChartTooltip cursor={false} content={<ChartTooltipContent indicator={tooltipIndicator} />} />
+                <ChartTooltip
+                  cursor={false}
+                  content={<ChartTooltipContent indicator={tooltipIndicator} valueFormatter={valueFormatter} />}
+                />
               )}
 
               {showPolarGrid && (
@@ -122,7 +127,8 @@ function IGRPRadarChartInner({
                   }
                   stroke={gridColor}
                   radialLines={showRadiusLines}
-                  fill={gridFilled ? `var(--chart-1-20)` : undefined}
+                  fill={gridFilled ? "var(--chart-1)" : undefined}
+                  fillOpacity={gridFilled ? 0.2 : undefined}
                 />
               )}
 

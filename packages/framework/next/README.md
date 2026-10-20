@@ -4,9 +4,10 @@ Server-side entry point for the IGRP Framework — root and route-group layouts,
 
 ## Requirements
 
-- **Node.js** ≥ 20.x
-- **Next.js** ^15.5.15
-- **React** ^19.2.5 + **react-dom** ^19.2.5
+- **Node.js** ≥ 22
+- **Next.js** ^15.5.0
+- **React** ^19.0.0 + **react-dom** ^19.0.0
+- **zod** ^4.5.0 (peer)
 
 ---
 
@@ -25,7 +26,9 @@ pnpm add @igrp/framework-next
 | Export              | Entry | Purpose                                                                             |
 | ------------------- | ----- | ----------------------------------------------------------------------------------- |
 | `IGRPRootLayout`    | `.`   | Root-level server layout. Wraps `<html>` with theme + global providers.             |
-| `IGRPLayout`        | `.`   | Route-group server layout. Renders header + sidebar chrome around protected routes. |
+| `IGRPLayoutFull`    | `.`   | Route-group server layout. Renders header + sidebar chrome around protected routes. |
+| `IGRPLayoutBlank`   | `.`   | Route-group server layout without chrome (toaster only) — login/logout routes.      |
+| `IGRPLayout`        | `.`   | **Deprecated** alias of `IGRPLayoutFull`; will be removed.                          |
 | `IGRPGlobalLoading` | `.`   | Full-page loading indicator for `loading.tsx` files.                                |
 
 #### `IGRPRootLayout` props
@@ -40,17 +43,34 @@ pnpm add @igrp/framework-next
 
 ### Config builder
 
-| Export            | Entry | Purpose                                                                                           |
-| ----------------- | ----- | ------------------------------------------------------------------------------------------------- |
-| `igrpBuildConfig` | `.`   | Assembles the full IGRP config: layout, API client, toaster, session. Honors `IGRP_PREVIEW_MODE`. |
+| Export                                | Entry | Purpose                                                                                          |
+| ------------------------------------- | ----- | ------------------------------------------------------------------------------------------------ |
+| `igrpBuildConfig`                     | `.`   | Validates and normalizes the full IGRP config: layout, API client, toaster, session.             |
+| `igrpResolveLayoutDataSource(config)` | `.`   | Returns `config.layoutData`; throws `IgrpConfigError('IGRP_CONFIG_INVALID')` when it is missing. |
 
 ### Access-management API client
 
-| Export                      | Entry | Purpose                                                                           |
-| --------------------------- | ----- | --------------------------------------------------------------------------------- |
-| `igrpGetAccessClient`       | `.`   | Returns a pre-configured typed API client for the IGRP Access Management service. |
-| `igrpGetAccessClientConfig` | `.`   | Returns the raw config object used to construct the client.                       |
-| `igrpBuildQueryString`      | `.`   | Type-safe query-string builder for access-management requests.                    |
+| Export                                                                | Entry | Purpose                                                                                                                                     |
+| --------------------------------------------------------------------- | ----- | ------------------------------------------------------------------------------------------------------------------------------------------- |
+| `igrpGetAccessClient`                                                 | `.`   | Returns a pre-configured typed API client for the IGRP Access Management service.                                                           |
+| `igrpGetAccessClientConfig`                                           | `.`   | Returns the raw config object used to construct the client.                                                                                 |
+| `igrpBuildQueryString`                                                | `.`   | Type-safe query-string builder for access-management requests.                                                                              |
+| `igrpResetAccessClient`                                               | `.`   | **Deprecated** — clears the per-request config only; use `igrpResetAccessClientConfig`.                                                     |
+| `igrpSetAccessClientConfig(config)` / `igrpResetAccessClientConfig()` | `.`   | Write / clear the per-request (`AsyncLocalStorage`) store: `{ token, baseUrl, timeout?, locale? }` (`IGRPClientRuntimeConfig`).             |
+| `igrpWithAccessClientConfig(partial, fn)`                             | `.`   | Runs `fn` with a copy of the store overridden by `partial`.                                                                                 |
+| `igrpResolveDefaultTimeout(env?)`                                     | `.`   | Client timeout in ms: `IGRP_ACCESS_MANAGEMENT_TIMEOUT`, else 10000.                                                                         |
+| `igrpEnsureAccessClientConfig()`                                      | `.`   | Seeds the store from the session cookie when empty — **call first in any Server Action or Route Handler**; `token === ''` means no session. |
+
+### Permissions
+
+Token-claims checks (server side). `@igrp/framework-next-ui`'s permission components are client-side rendering control only.
+
+| Export                      | Entry | Purpose                                                                                                                    |
+| --------------------------- | ----- | -------------------------------------------------------------------------------------------------------------------------- |
+| `igrpGetClaims()`           | `.`   | The request's `IGRPClaimsState` (`status: 'ok' \| 'error'`); a super-admin mock under auth bypass. Per-request `cache()`d. |
+| `igrpAuthorize(name)`       | `.`   | `Promise<boolean>`, fail-closed. Use this in **Server Actions**.                                                           |
+| `igrpAssertAuthorize(name)` | `.`   | **Pages only.** Missing permission → `forbidden()`; a claims decode error throws (5xx, not 403).                           |
+| `isIgrpAuthBypass(env?)`    | `.`   | True when `IGRP_PREVIEW_MODE=true` or `AUTH_PROVIDER=none`.                                                                |
 
 ### Auth helpers
 
@@ -58,11 +78,47 @@ pnpm add @igrp/framework-next
 | ----------------------- | ----- | ------------------------------------------------------------------------------------------------------------------ |
 | `igrpDeleteAuthCookies` | `.`   | Clears THIS app's NextAuth session cookies on logout (current + pre-scoping names); never another co-hosted app's. |
 
+### Organization branding
+
+| Export                                                     | Entry | Purpose                                                                                                |
+| ---------------------------------------------------------- | ----- | ------------------------------------------------------------------------------------------------------ |
+| `igrpResolveRequestBranding(config)`                       | `.`   | The request's Brand, or `null` when `branding.enabled` is off, preview mode is on, or no Brand exists. |
+| `igrpGetBranding({ baseUrl, token?, savedAt?, timeout? })` | `.`   | Cached Brand fetch (5 min TTL, stale-while-refresh); never fetches without `token`.                    |
+| `igrpInvalidateBranding(baseUrl?)`                         | `.`   | Drops the cached Brand for `baseUrl`, or all of them.                                                  |
+| `igrpBrandingMetadata(branding, fallbackIcon)`             | `.`   | `Metadata['icons']` from the Brand favicon, else `fallbackIcon`.                                       |
+| `resolveBrandingToken(config)`                             | `.`   | The credential that reads the Brand (today: the session access token).                                 |
+| `BRAND_FRESHNESS_COOKIE`                                   | `.`   | `'igrp_brand_v'` — a newer value forces a refetch.                                                     |
+
 ### Typed errors
 
-| Export                                               | Entry      | Purpose                                                |
-| ---------------------------------------------------- | ---------- | ------------------------------------------------------ |
-| `IGRPError`, `IGRPAuthError`, `IGRPNotFoundError`, … | `./errors` | Typed error hierarchy for App Router error boundaries. |
+| Export                                                                                      | Entry      | Purpose                                                |
+| ------------------------------------------------------------------------------------------- | ---------- | ------------------------------------------------------ |
+| `IgrpError`, `IgrpConfigError`, `IgrpAuthConfigError`, `IgrpLayoutDataError`, `isIgrpError` | `./errors` | Typed error hierarchy for App Router error boundaries. |
+
+### Other subpaths
+
+| Entry         | Exports                                                                                                                                | Purpose                                                                                                                                                                                                                    |
+| ------------- | -------------------------------------------------------------------------------------------------------------------------------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `./actions`   | `fetchMenusAction(appCode)`, `fetchCurrentUserAction()`, `fetchAppsByUserAction()`, `fetchAppByCodeAction(appCode)`, `ActionResult<T>` | `'use server'` actions returning `{ ok: true, data } \| { ok: false, error }`; refuse before any AM call when no session can be recovered. `revalidateMenusAction` / `revalidateAppsAction` are deprecated no-ops.         |
+| `./client`    | `useLayoutData(appCode)`                                                                                                               | Client hook: `{ refreshMenus, refreshApps, refreshUser }`, each a `router.refresh()` in a transition.                                                                                                                      |
+| `./logger`    | `logger.error(message, error?, meta?)`, `logger.warn(message, meta?)`, `logger.info(message, meta?)`                                   | Prefixed server-side console logger; stack traces in development only.                                                                                                                                                     |
+| `./app-error` | `AppError`, `parsePublicDigest`, `getDisplayableErrorMessage`, `PUBLIC_ERROR_DELIMITER`, `PublicErrorId`, `PublicErrorMessage`         | `new AppError({ error?, internalMessage?, publicMessage? })` carries a user-facing message through `error.digest`, which Next does not redact in production; `parsePublicDigest(error.digest)` recovers it in `error.tsx`. |
+
+---
+
+## Environment variables
+
+Read directly by this package (everything else arrives through `igrpBuildConfig`):
+
+| Variable                         | Read by                                                 | Purpose                                                               |
+| -------------------------------- | ------------------------------------------------------- | --------------------------------------------------------------------- |
+| `IGRP_PREVIEW_MODE`              | `isIgrpAuthBypass`                                      | `true` → auth bypass.                                                 |
+| `AUTH_PROVIDER`                  | `isIgrpAuthBypass`                                      | `none` → auth bypass.                                                 |
+| `IGRP_ACCESS_MANAGEMENT_API`     | `igrpEnsureAccessClientConfig`, AM sync                 | AM base URL when the store has none (Server Actions, Route Handlers). |
+| `IGRP_ACCESS_MANAGEMENT_TIMEOUT` | `igrpResolveDefaultTimeout`                             | AM client timeout in ms (default 10000).                              |
+| `NEXTAUTH_SECRET`                | `igrpEnsureAccessClientConfig`                          | Decodes the session cookie to recover the access token.               |
+| `NEXT_PUBLIC_BASE_PATH`          | `igrpEnsureAccessClientConfig`, `igrpDeleteAuthCookies` | Resolves the basePath-scoped auth cookie names.                       |
+| `NODE_ENV`                       | `logger`, i18n fallback, AM sync                        | Development-only diagnostics.                                         |
 
 ---
 
@@ -73,9 +129,12 @@ pnpm add @igrp/framework-next
 ```tsx
 // src/app/layout.tsx
 import { IGRPRootLayout } from '@igrp/framework-next';
+import { createConfig } from '@/igrp.template.config';
+import { getLayoutConfig } from '@/lib/dal';
 
-export default function RootLayout({ children }: { children: React.ReactNode }) {
-  return <IGRPRootLayout>{children}</IGRPRootLayout>;
+export default async function RootLayout({ children }: { children: React.ReactNode }) {
+  const config = await createConfig(await getLayoutConfig());
+  return <IGRPRootLayout config={config}>{children}</IGRPRootLayout>;
 }
 ```
 
@@ -99,43 +158,54 @@ Wire it with `igrpBuildConfig({ i18n: igrpDefineI18n({ defaultLocale: 'pt', … 
 
 ```tsx
 // src/app/(igrp)/layout.tsx
-import { IGRPLayout } from '@igrp/framework-next';
-import { getConfig } from '@/igrp.template.config';
+import { IGRPLayoutFull } from '@igrp/framework-next';
+import { createConfig } from '@/igrp.template.config';
+import { getLayoutConfig } from '@/lib/dal';
 
 export default async function Layout({ children }: { children: React.ReactNode }) {
-  const config = await getConfig();
-  return <IGRPLayout config={config}>{children}</IGRPLayout>;
+  const config = await createConfig(await getLayoutConfig());
+  return <IGRPLayoutFull config={config}>{children}</IGRPLayoutFull>;
 }
 ```
+
+`IGRPLayout` still works but is a deprecated alias of `IGRPLayoutFull`.
 
 ### Config builder
 
 ```ts
 // src/igrp.template.config.ts
 import { igrpBuildConfig } from '@igrp/framework-next';
+import type { IGRPConfigClient } from '@igrp/framework-next-types';
 import { cache } from 'react';
+import { isAuthBypass } from '@/lib/utilities';
+import { getPackageJson } from './lib/config/get-pkj';
 
-export const getConfig = cache(async () => {
-  return igrpBuildConfig({
-    appCode: process.env.IGRP_APP_CODE!,
-    previewMode: process.env.IGRP_PREVIEW_MODE === 'true',
-    // layoutData, apiManagementConfig, toasterConfig, sessionArgs ...
-  });
-});
+export const createConfig: IGRPConfigClient = cache(async (layout) =>
+  igrpBuildConfig({
+    appCode: process.env.IGRP_APP_CODE || '',
+    previewMode: isAuthBypass(),
+    syncAccess: process.env.IGRP_SYNC_ACCESS === 'true',
+    appInformation: getPackageJson(),
+    layout,
+    // Required: async getters for header and sidebar data (yours; demo-v1 returns mocks under isAuthBypass()).
+    layoutData: { getHeaderData, getSidebarData },
+    toasterConfig: { showToaster: true, position: 'bottom-right' },
+    // apiManagementConfig (required unless previewMode), sessionArgs, i18n, branding ...
+  }),
+);
 ```
 
-When `previewMode` is `true`, `igrpBuildConfig` swaps in mock layout data and disables session refetch — no auth or API backend needed.
+`igrpBuildConfig` validates the config (with `previewMode` it no longer requires the Access Management settings) and upper-cases `appCode`; it does not read the environment or swap any data. Preview mode is the template's job: `demo-v1` passes `previewMode: isAuthBypass()` and, under the same check, supplies mock user, menus and apps through `layoutData` — no auth or API backend needed.
 
 ### Typed errors
 
 ```ts
-// src/app/(igrp)/error.tsx
-import { IGRPAuthError } from '@igrp/framework-next/errors';
+import { IgrpAuthConfigError, isIgrpError } from '@igrp/framework-next/errors';
 
-export function onError(error: unknown) {
-  if (error instanceof IGRPAuthError) {
-    // redirect to login
-  }
+export function describeError(error: unknown) {
+  if (error instanceof IgrpAuthConfigError) return 'auth misconfigured';
+  if (isIgrpError(error)) return error.code;
+  return 'unexpected';
 }
 ```
 

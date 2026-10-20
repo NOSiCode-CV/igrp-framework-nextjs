@@ -140,7 +140,10 @@ function IGRPLineChartInner({
               {showReferenceZero && hasNegativeDataValues && <ReferenceLine y={0} stroke={referenceLineColor} />}
 
               {showTooltip && (
-                <ChartTooltip cursor={false} content={<ChartTooltipContent indicator={tooltipIndicator} />} />
+                <ChartTooltip
+                  cursor={false}
+                  content={<ChartTooltipContent indicator={tooltipIndicator} valueFormatter={valueFormatter} />}
+                />
               )}
 
               {legendPosition !== "none" && customLegend && (

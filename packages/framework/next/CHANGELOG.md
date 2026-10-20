@@ -1,5 +1,42 @@
 # @igrp/framework-next
 
+## 0.2.0-beta.9
+
+### Patch Changes
+
+- ea9709b: - **Breaking (types):** remove the fields deprecated one release ago — `IGRPConfigArgs.layoutMockData`, `.showLanguageSelector`, `.loginUrl`, `.logoutUrl`, `.showSettings`; `IGRPSidebarDataArgs.showPreviewMode`; and the types `IGRPMockDataAsync`, `IGRPMockData`, `IGRPConfigurationType`, `IGRPRoleUserArgs`, `IGRPGlobalConfigurationArgs`, `IGRPFileUrlArgs`, `IGRPResourceType`, `IGRPResourceItem`, `IGRPResourceArgs` (import the AM ones from `@igrp/platform-access-management-client-ts`). `IGRPConfigArgs.layoutData` is now required.
+  - `igrpBuildConfig` / `igrpResolveLayoutDataSource` no longer fall back to `layoutMockData`; a config that still sets it fails validation with a hint to rename it to `layoutData`.
+- Updated dependencies [9da2fa9]
+- Updated dependencies [ea9709b]
+- Updated dependencies [ea9709b]
+  - @igrp/igrp-framework-react-design-system@0.2.0-beta.6
+  - @igrp/framework-next-auth@0.2.0-beta.8
+  - @igrp/framework-next-ui@0.2.0-beta.9
+  - @igrp/framework-next-types@0.2.0-beta.8
+
+## 0.2.0-beta.8
+
+### Patch Changes
+
+- 8727ccf: Add the organization branding loader with a per-process cache, `igrpBrandingMetadata`, `igrpResolveRequestBranding` and `igrpInvalidateBranding`. The root layout applies the Brand only when `branding.enabled` is true.
+- 7ea73f6: i18n: the format helpers take the platform time zone — `igrpFormatDate` / `igrpFormatDateTime` gain a `timeZone` parameter and `useIGRPFormat()` applies `i18n.timeZone` (carried by `IGRPIntlProvider` and `useIGRPLocaleInfo().timeZone`; `IGRPIntlTestProvider` takes `timeZone`), so server and client render the same markup. New `igrpFormatRelativeTime(value, now, formatLocale)` and `useIGRPFormat().formatRelativeTime` (Intl.RelativeTimeFormat, largest fitting unit) replace next-intl's banned `useFormatter`. `igrpSetLocale` rethrows Next control flow (`redirect()`, `forbidden()`) thrown by `persistLocale` instead of answering 500, and `persistLocale` may resolve `false` to report that nothing was saved (no session), which surfaces as `persisted: false`. `IGRPLocaleSwitcher`'s `onChanged` receives `(locale, persisted)` so an app calls next-auth `update({ locale })` only when the profile was written. `IGRPIntlTestProvider` merges messages over a `defaultLocale` (default `pt`), giving tests the production fallback.
+- 7b5f04d: i18n runtime as subpath entries: `./i18n` (Edge-safe config, `igrpDefineI18n`, `igrpPickLocale`, `igrpSyncLocaleCookie`, format helpers), `./i18n/server` (`igrpResolveLocale`, `igrpCreateRequestConfig`, `igrpSetLocale`, catalog selection), `./i18n/client` (`IGRPIntlProvider`, `IGRPLocaleSwitcher`, `useIGRPFormat`, `useIGRPLocaleInfo`), `./i18n/messages` (generic `common`, `i18n`, `errors` namespaces and the layered merge) and `./i18n/testing` (`IGRPIntlTestProvider`). `igrpBuildConfig({ i18n })` makes `IGRPRootLayout` resolve the locale, mount the providers and set `<html lang>` to the format locale; `IGRPLayoutFull` seeds `Accept-Language` on framework API calls. Apps without `i18n` are unchanged. New dependencies: `next-intl`, the design system (already transitive).
+- 40bcb17: - `@igrp/framework-next-auth`: in production, warn once when a session is written without a session store. That is fine for one replica on its own domain. With several replicas, concurrent refreshes replay refresh tokens and Access Management revokes the session. With several apps on one domain, the cookies overflow proxy header limits. Never fires in development or at the Edge.
+  - `@igrp/framework-next`: `igrpGetAccessClient().sessions.rotateSession()` and `.closeSession()` warn on first use. `/api/session/rotate` closes the calling app's session and opens a replacement no token is bound to, so it logs the app out. `/api/session/close` is not a logout: it clears no cookie, keeps the SSO session and revokes no token. Both still call through.
+  - Migration 59: `.env.example` documents `IGRP_SESSION_STORE_URL` as required with more than one replica or on a shared domain, and recommends `IGRP_SESSION_MAX_AGE=28800`, Access Management's absolute session lifetime.
+- Updated dependencies [8727ccf]
+- Updated dependencies [8727ccf]
+- Updated dependencies [c9accaa]
+- Updated dependencies [98a54c8]
+- Updated dependencies [7ea73f6]
+- Updated dependencies [8368794]
+- Updated dependencies [8a7a3f6]
+- Updated dependencies [40bcb17]
+  - @igrp/framework-next-types@0.2.0-beta.7
+  - @igrp/framework-next-ui@0.2.0-beta.8
+  - @igrp/igrp-framework-react-design-system@0.2.0-beta.5
+  - @igrp/framework-next-auth@0.2.0-beta.7
+
 ## 0.2.0-beta.7
 
 ### Patch Changes

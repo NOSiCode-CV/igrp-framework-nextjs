@@ -247,7 +247,7 @@ function IGRPCombobox({
   options,
   value,
   onChange,
-  placeholder = "Select items...",
+  placeholder: placeholderProp,
   className,
   disabled = false,
   label,
@@ -266,6 +266,8 @@ function IGRPCombobox({
   showIcon = false,
   iconName = "CornerDownRight",
 }: IGRPComboboxProps) {
+  const i18n = useIGRPi18n()
+  const placeholder = placeholderProp ?? i18n.combobox.placeholder
   const _id = useId()
   const fieldName = name ?? id ?? _id
   const listId = useId()

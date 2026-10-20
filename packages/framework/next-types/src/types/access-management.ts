@@ -69,13 +69,6 @@ export type IGRPApplicationType = 'INTERNAL' | 'EXTERNAL' | 'SYSTEM';
  */
 export type IGRPApplicationTypeSyncable = Exclude<IGRPApplicationType, 'SYSTEM'>;
 
-/**
- * @deprecated Unused by the framework and a pure mirror of the AM client's
- * `GlobalConfigurationType`. Import that enum directly from
- * `@igrp/platform-access-management-client-ts`. Kept for one release.
- */
-export type IGRPConfigurationType = 'CLUSTER' | 'ORGANIZATION';
-
 export interface IGRPApplicationArgs {
   id: number;
   code: string;
@@ -154,16 +147,6 @@ export interface IGRPRoleArgs {
   permissions?: string[];
 }
 
-/**
- * @deprecated Unused by the framework and a pure mirror of the AM client's
- * `RoleUserDTO`. Import that type directly from
- * `@igrp/platform-access-management-client-ts`. Kept for one release.
- */
-export interface IGRPRoleUserArgs {
-  userName: string;
-  roleName: string;
-}
-
 export interface IGRPDepartmentArgs {
   id: number;
   code: string;
@@ -173,27 +156,6 @@ export interface IGRPDepartmentArgs {
   /** Optional on the wire — `DepartmentDTO.status` may be absent. */
   status?: IGRPStatus;
   parentCode?: string;
-}
-
-/**
- * @deprecated Unused by the framework and a pure mirror of the AM client's
- * `GlobalConfigurationDTO`. Import that type directly from
- * `@igrp/platform-access-management-client-ts`. Kept for one release.
- */
-export interface IGRPGlobalConfigurationArgs {
-  config: string;
-  type: IGRPConfigurationType;
-}
-
-/**
- * @deprecated Unused by the framework and a pure mirror of the AM client's
- * `FileUrlDTO` — which types `expiration` as a `Date`, not a `string`. Import
- * that type directly from `@igrp/platform-access-management-client-ts`. Kept
- * for one release.
- */
-export interface IGRPFileUrlArgs {
-  url: string;
-  expiration: string | Date;
 }
 
 export interface IGRPPermissionArgs {
@@ -230,54 +192,6 @@ export interface IGRPPermissionCatalogEntry {
   description?: string;
   /** `true` → `ACTIVE`, `false` → `INACTIVE`. Disabled entries still exist in AM. */
   enabled: boolean;
-}
-
-/**
- * @deprecated Unused by the framework and a pure mirror of the AM client's
- * `ResourceType`. Import that enum directly from
- * `@igrp/platform-access-management-client-ts`. Kept for one release.
- */
-export type IGRPResourceType = 'API' | 'UI';
-
-/**
- * @deprecated Unused by the framework and a pure mirror of the AM client's
- * `ResourceItemDTO`. Import that type directly from
- * `@igrp/platform-access-management-client-ts`. Kept for one release.
- */
-export interface IGRPResourceItem {
-  id?: number;
-  name: string;
-  url?: string;
-  permissionName?: string;
-  resourceName: string;
-  /** Permission **names**, not permission objects — matches `ResourceItemDTO`. */
-  permissions?: string[];
-  createdBy?: string;
-  createdDate?: string;
-  lastModifiedBy?: string;
-  lastModifiedDate?: string;
-}
-
-/**
- * @deprecated Unused by the framework and a pure mirror of the AM client's
- * `ResourceDTO`. Import that type directly from
- * `@igrp/platform-access-management-client-ts`. Kept for one release.
- */
-export interface IGRPResourceArgs {
-  id?: number;
-  name: string;
-  description?: string;
-  type: IGRPResourceType;
-  status?: IGRPStatus;
-  applications: string[];
-  /** Permission **names**, not permission objects — matches `ResourceDTO`. */
-  permissions?: string[];
-  items?: IGRPResourceItem[];
-  externalId?: string;
-  createdBy?: string;
-  createdDate?: string;
-  lastModifiedBy?: string;
-  lastModifiedDate?: string;
 }
 
 /**

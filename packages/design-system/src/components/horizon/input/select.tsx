@@ -184,7 +184,7 @@ function IGRPSelectFieldWithA11y(props: React.ComponentProps<typeof IGRPSelectFi
  */
 function IGRPSelect({
   options,
-  placeholder = "Select an option",
+  placeholder: placeholderProp,
   className,
   showSearch = false,
   name,
@@ -196,11 +196,13 @@ function IGRPSelect({
   showStatus = false,
   value,
   onValueChange,
-  label = "Select an option",
+  label,
   labelClassName,
   showGroup = false,
   ...props
 }: IGRPSelectProps) {
+  const i18nDefaults = useIGRPi18n()
+  const placeholder = placeholderProp ?? i18nDefaults.inputSelect.placeholder
   const _id = useId()
   const fieldName = name ?? id ?? _id
 

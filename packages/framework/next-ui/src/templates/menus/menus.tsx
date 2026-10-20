@@ -1,6 +1,6 @@
 'use client';
 
-import { useCallback, useEffect, useMemo, useState } from 'react';
+import { useCallback, useMemo, useState } from 'react';
 import { usePathname } from 'next/navigation';
 import type { IGRPMenuItemArgs } from '@igrp/framework-next-types';
 import {
@@ -52,9 +52,11 @@ export function IGRPTemplateMenus({
   // — which is every render for anyone passing an inline literal, the shape the
   // default parameter itself produces.
   const menuKey = useMemo(() => menus.map((m) => m.code).join('|'), [menus]);
-  useEffect(() => {
+  const [queryMenuKey, setQueryMenuKey] = useState(menuKey);
+  if (menuKey !== queryMenuKey) {
+    setQueryMenuKey(menuKey);
     setQuery('');
-  }, [menuKey]);
+  }
 
   const handleQueryChange = useCallback(
     (e: React.ChangeEvent<HTMLInputElement>) => setQuery(e.target.value),

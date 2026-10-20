@@ -41,4 +41,12 @@ describe("ChartTooltipContent number formatting", () => {
     )
     expect(screen.getByText((1234.5).toLocaleString("pt-PT"))).toBeInTheDocument()
   })
+  it("uses valueFormatter over the locale default when given", () => {
+    render(
+      <ChartContainer config={config}>
+        <ChartTooltipContent active payload={payload} valueFormatter={(v) => `${v} CVE`} />
+      </ChartContainer>
+    )
+    expect(screen.getByText("1234.5 CVE")).toBeInTheDocument()
+  })
 })

@@ -1,5 +1,34 @@
 # @igrp/framework-next-ui
 
+## 0.2.0-beta.9
+
+### Patch Changes
+
+- ea9709b: - Framework packages now have ESLint (`pnpm lint`), and `release` runs it. Internal cleanups from the first run, no behaviour change.
+  - next-ui: the mode switcher, command search, menus and layout retry no longer call `setState` inside effects (`useSyncExternalStore` for hydration-only values, render-time state adjustment for prop changes), saving a render on mount and on navigation.
+- Updated dependencies [9da2fa9]
+- Updated dependencies [ea9709b]
+- Updated dependencies [ea9709b]
+  - @igrp/igrp-framework-react-design-system@0.2.0-beta.6
+  - @igrp/framework-next-auth@0.2.0-beta.8
+  - @igrp/framework-next-types@0.2.0-beta.8
+
+## 0.2.0-beta.8
+
+### Patch Changes
+
+- 8727ccf: Add organization branding: pure parsing and validation, the hoisted `IGRPBrandingStyle`, `IGRPBrandingProvider` and `useIGRPBranding`, and logo precedence in the header and login form. Remove the preset theme selector and the active-theme provider.
+- 8a7a3f6: i18n: one typed chrome catalog (`IGRPChromeStrings`) in Portuguese, English and French, covering the header, user menu, notifications, mode and theme switchers, command palette, breadcrumbs, app switcher, sidebar menus, auth screens (including the login button and footer join), loading, forbidden, not-found, the error screens, the header and sidebar error-boundary fallbacks, and the platform error codes. `IGRPChromeI18nProvider` supplies it; `useIGRPChromeI18n()` reads it, or, with no provider, the `IGRP_LOCALE` cookie on the client and Portuguese on the server. Every existing label prop still wins; `IGRPLoginTexts.loginButton` is now optional. The cookie fallback never throws on a malformed cookie value. `IGRPGlobalError` / `IGRPSegmentError` resolve copy by platform code by default and accept a partial `resolveCopy`. The `IGRP_*_LABELS_PT_PT` constants are deprecated aliases into `IGRP_CHROME_STRINGS_PT`.
+- Updated dependencies [8727ccf]
+- Updated dependencies [c9accaa]
+- Updated dependencies [98a54c8]
+- Updated dependencies [7ea73f6]
+- Updated dependencies [8368794]
+- Updated dependencies [40bcb17]
+  - @igrp/framework-next-types@0.2.0-beta.7
+  - @igrp/igrp-framework-react-design-system@0.2.0-beta.5
+  - @igrp/framework-next-auth@0.2.0-beta.7
+
 ## 0.2.0-beta.7
 
 ### Patch Changes

@@ -9,6 +9,10 @@
  */
 export interface IGRPI18nStrings {
   dataTable: {
+    /** aria-label of the row expander while collapsed. */
+    expandRow: string
+    /** aria-label of the row expander while expanded. */
+    collapseRow: string
     /** Button label for clearing all filters. */
     clearFilters: string
     /** Empty-state message shown when no rows match. */
@@ -107,6 +111,8 @@ export interface IGRPI18nStrings {
     placeholder: string
   }
   inputSelect: {
+    /** Trigger text shown with no value and no `placeholder` prop. */
+    placeholder: string
     /** Placeholder for the in-dropdown search box. */
     searchPlaceholder: string
     /** aria-label for the in-dropdown search box. */
@@ -119,6 +125,8 @@ export interface IGRPI18nStrings {
     protocolLabel: string
   }
   combobox: {
+    /** Trigger text shown with no value and no `placeholder` prop. */
+    placeholder: string
     /** Empty-state message when no option matches. */
     notFound: string
     /** Placeholder for the combobox search box. */
@@ -177,6 +185,10 @@ export interface IGRPI18nStrings {
     iconIndicator: string
   }
   chat: {
+    /** Heading text above the transcript (`labelDescription` default). */
+    description: string
+    /** Sender name shown on the user's own messages. */
+    you: string
     /** Placeholder for the message composer. */
     messagePlaceholder: string
     /** aria-label for the send button. */
@@ -209,10 +221,40 @@ export interface IGRPI18nStrings {
     back: string
   }
   pdfViewer: {
+    /** Default label of the modal's close button. */
+    close: string
+    /** Default label of the open-in-new-tab button. */
+    openInNewTab: string
     /** Message shown when the document fails to load. */
     loadError: string
     /** Message shown when no file is supplied. */
     notFound: string
+  }
+  loadingSpinner: {
+    /** Default accessible label. */
+    label: string
+  }
+  menuNavigation: {
+    /** Default heading of the section nav. */
+    title: string
+  }
+  toast: {
+    /** Title of a plain toast with no `title`. */
+    title: string
+    /** Promise toast: pending message. */
+    loading: string
+    /** Promise toast: success message when the result isn't a string. */
+    success: string
+    /** Promise toast: error message when the rejection isn't an Error. */
+    error: string
+  }
+  videoEmbed: {
+    /** Shown when `src` is not a valid URL. */
+    invalidUrl: string
+  }
+  table: {
+    /** Screen-reader header of the actions column. */
+    actions: string
   }
   form: {
     /** Toast title shown when an onSubmit handler throws (when showToastOnError). */
@@ -327,6 +369,8 @@ export interface IGRPI18nStrings {
  */
 export const IGRP_I18N_DEFAULTS_PT: IGRPI18nStrings = {
   dataTable: {
+    expandRow: "Expandir detalhes",
+    collapseRow: "Recolher detalhes",
     clearFilters: "Limpar",
     notFound: "Nenhum registo encontrado.",
     filterLabel: "Filtrar",
@@ -383,6 +427,7 @@ export const IGRP_I18N_DEFAULTS_PT: IGRPI18nStrings = {
     placeholder: "Selecionar data",
   },
   inputSelect: {
+    placeholder: "Selecionar uma opção",
     searchPlaceholder: "Pesquisar...",
     searchLabel: "Pesquisar opções",
     clearSearch: "Limpar pesquisa",
@@ -391,6 +436,7 @@ export const IGRP_I18N_DEFAULTS_PT: IGRPI18nStrings = {
     protocolLabel: "Protocolo",
   },
   combobox: {
+    placeholder: "Selecionar…",
     notFound: "Nenhum item encontrado.",
     searchPlaceholder: "Pesquisar...",
   },
@@ -428,6 +474,8 @@ export const IGRP_I18N_DEFAULTS_PT: IGRPI18nStrings = {
     iconIndicator: "Indicador",
   },
   chat: {
+    description: "Pergunte-me o que quiser!",
+    you: "Você",
     messagePlaceholder: "Escreva a sua mensagem…",
     sendMessage: "Enviar mensagem",
     errorMessage: "Ocorreu um erro. Por favor tente novamente.",
@@ -449,8 +497,28 @@ export const IGRP_I18N_DEFAULTS_PT: IGRPI18nStrings = {
     back: "Voltar",
   },
   pdfViewer: {
+    close: "Fechar",
+    openInNewTab: "Abrir num novo separador",
     loadError: "Não foi possível carregar o PDF",
     notFound: "Nenhum ficheiro encontrado",
+  },
+  loadingSpinner: {
+    label: "A carregar…",
+  },
+  menuNavigation: {
+    title: "Navegação",
+  },
+  toast: {
+    title: "Notificação",
+    loading: "A processar…",
+    success: "Operação concluída com sucesso!",
+    error: "Ocorreu um erro.",
+  },
+  videoEmbed: {
+    invalidUrl: "URL de vídeo inválido",
+  },
+  table: {
+    actions: "Ações",
   },
   form: {
     submissionErrorTitle: "Erro ao submeter formulário",

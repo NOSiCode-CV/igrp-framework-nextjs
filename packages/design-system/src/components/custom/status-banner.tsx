@@ -40,10 +40,10 @@ interface IGRPStatusBannerProps {
 function IGRPStatusBanner({
   variant = "soft",
   color = "success",
-  text = "Insert our Text here",
+  text,
   badgeVariant = "outline",
   badgeColor = "primary",
-  badgeText = "Badge Text",
+  badgeText,
   name,
   id,
   className,
@@ -62,9 +62,11 @@ function IGRPStatusBanner({
       name={ref}
     >
       <span className={cn("font-medium")}>{text}</span>
-      <IGRPBadge variant={badgeVariant} color={badgeColor} badgeClassName="ml-4 font-normal">
-        {badgeText}
-      </IGRPBadge>
+      {badgeText && (
+        <IGRPBadge variant={badgeVariant} color={badgeColor} badgeClassName="ml-4 font-normal">
+          {badgeText}
+        </IGRPBadge>
+      )}
     </IGRPAlert>
   )
 }

@@ -121,6 +121,7 @@ function ChartTooltipContent({
   color,
   nameKey,
   labelKey,
+  valueFormatter,
 }: React.ComponentProps<typeof RechartsPrimitive.Tooltip> &
   React.ComponentProps<"div"> & {
     hideLabel?: boolean
@@ -128,6 +129,8 @@ function ChartTooltipContent({
     indicator?: "line" | "dot" | "dashed"
     nameKey?: string
     labelKey?: string
+    /** IGRP: formats numeric values (defaults to `toLocaleString` at the IGRP locale). */
+    valueFormatter?: (value: number) => string
   } & Omit<RechartsPrimitive.DefaultTooltipContentProps<TooltipValueType, TooltipNameType>, "accessibilityLayer">) {
   const { config } = useChart()
   const locale = useIGRPLocale()
@@ -219,7 +222,9 @@ function ChartTooltipContent({
                       </div>
                       {item.value != null && (
                         <span className="font-mono font-medium text-foreground tabular-nums">
-                          {typeof item.value === "number" ? item.value.toLocaleString(locale) : String(item.value)}
+                          {typeof item.value === "number"
+                            ? (valueFormatter?.(item.value) ?? item.value.toLocaleString(locale))
+                            : String(item.value)}
                         </span>
                       )}
                     </div>

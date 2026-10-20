@@ -1,5 +1,20 @@
 # @igrp/template-migrator
 
+## 0.2.0-beta.7
+
+### Patch Changes
+
+- 3f6840c: - Add migration 62: apps pass a time zone to i18n (`IGRP_TIME_ZONE`, default `Atlantic/Cape_Verde`), fixing next-intl's `ENVIRONMENT_FALLBACK` warning and server/browser date mismatches.
+
+## 0.2.0-beta.6
+
+### Patch Changes
+
+- 40bcb17: - `@igrp/framework-next-auth`: in production, warn once when a session is written without a session store. That is fine for one replica on its own domain. With several replicas, concurrent refreshes replay refresh tokens and Access Management revokes the session. With several apps on one domain, the cookies overflow proxy header limits. Never fires in development or at the Edge.
+  - `@igrp/framework-next`: `igrpGetAccessClient().sessions.rotateSession()` and `.closeSession()` warn on first use. `/api/session/rotate` closes the calling app's session and opens a replacement no token is bound to, so it logs the app out. `/api/session/close` is not a logout: it clears no cookie, keeps the SSO session and revokes no token. Both still call through.
+  - Migration 59: `.env.example` documents `IGRP_SESSION_STORE_URL` as required with more than one replica or on a shared domain, and recommends `IGRP_SESSION_MAX_AGE=28800`, Access Management's absolute session lifetime.
+- 4bbed3c: - Migration 61: pins the framework release (`framework-next` and `framework-next-ui` `0.2.0-beta.8`, `framework-next-auth` and `framework-next-types` `0.2.0-beta.7`, design system `0.2.0-beta.5`) and bumps `@tanstack/react-query` to `5.104.2`, `react-hook-form` to `7.90.0` and `zod` to `4.6.7`, matching the template.
+
 ## 0.2.0-beta.5
 
 ### Patch Changes

@@ -20,6 +20,8 @@ import { IGRPTemplateModeSwitcher, type IGRPModeSwitcherLabels } from './mode-sw
 import { IGRPTemplateNavUser, type IGRPNavUserLabels } from './nav-user.js';
 import { IGRPTemplateNotifications, type IGRPNotificationsLabels } from './notifications.js';
 import { IGRPTemplateImage } from './template-image.js';
+import { useIGRPBranding } from '../branding/provider.js';
+import { resolveHeaderLogo } from '../branding/resolve.js';
 import { useIGRPChromeI18n } from '../i18n/context.js';
 import { withBasePath } from '../lib/utils.js';
 import Image from 'next/image';
@@ -116,6 +118,38 @@ interface IGRPTemplateHeaderProps {
   breadcrumbEllipsisLabel?: string;
 }
 
+/** One header mark; the fallback carries the same visibility class so a failed dark image never shows in light mode. */
+function HeaderLogoImage({
+  src,
+  fallbackSrc,
+  className,
+}: {
+  src: string;
+  fallbackSrc: string;
+  className?: string;
+}) {
+  return (
+    <IGRPTemplateImage
+      src={src}
+      alt="IGRP"
+      width={40}
+      height={40}
+      className={cn('object-contain size-10', className)}
+      priority
+      fallback={
+        <Image
+          src={fallbackSrc}
+          alt="IGRP"
+          width={40}
+          height={40}
+          className={cn('object-contain size-10', className)}
+          priority
+        />
+      }
+    />
+  );
+}
+
 function IGRPTemplateHeader({
   data,
   className,
@@ -134,6 +168,7 @@ function IGRPTemplateHeader({
 }: IGRPTemplateHeaderProps) {
   const { igrpToast } = useIGRPToast();
   const chrome = useIGRPChromeI18n();
+  const branding = useIGRPBranding();
 
   // Warn (dev) + toast when no header data is configured. This MUST run in an
   // effect, not during render — calling igrpToast() during render updates the
@@ -173,6 +208,13 @@ function IGRPTemplateHeader({
     notifications,
   } = data;
 
+  // Brand header mark first, then the app's `headerLogo`, then the fallback.
+  const logo = resolveHeaderLogo({
+    branding,
+    headerLogo,
+    fallback: withBasePath(fallbackLogo),
+  });
+
   // Whether anything renders before the `start` slot. Without this, a header
   // configured with no trigger, logo and title would open with a stray separator.
   const hasLeadingBrand = Boolean(
@@ -197,24 +239,18 @@ function IGRPTemplateHeader({
           <div className="flex items-center gap-2">
             {showIGRPHeaderLogo && (
               <div className="size-10 rounded-lg overflow-hidden flex items-center justify-center">
-                <IGRPTemplateImage
-                  src={headerLogo || withBasePath(fallbackLogo)}
-                  alt="IGRP"
-                  width={40}
-                  height={40}
-                  className="object-contain size-10"
-                  priority
-                  fallback={
-                    <Image
-                      src={withBasePath(fallbackLogo)}
-                      alt="IGRP"
-                      width={40}
-                      height={40}
-                      className="object-contain size-10"
-                      priority
-                    />
-                  }
+                <HeaderLogoImage
+                  src={logo.light}
+                  fallbackSrc={withBasePath(fallbackLogo)}
+                  className={logo.dark ? 'dark:hidden' : undefined}
                 />
+                {logo.dark && (
+                  <HeaderLogoImage
+                    src={logo.dark}
+                    fallbackSrc={withBasePath(fallbackLogo)}
+                    className="hidden dark:block"
+                  />
+                )}
               </div>
             )}
             {showIGRPHeaderTitle && <span className="text-base font-semibold">iGRP</span>}

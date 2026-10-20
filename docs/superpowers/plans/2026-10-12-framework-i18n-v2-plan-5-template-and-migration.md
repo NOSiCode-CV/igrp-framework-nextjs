@@ -6,7 +6,7 @@
 
 **Architecture:** The template adds `src/i18n/` (config, request config, server action, catalogs, type augmentation), passes `i18n` to `igrpBuildConfig`, mounts `IGRPLocaleSwitcher` in the header `actions` slot and on the login page, drops its hand-written error copy in favour of the chrome catalog (keeping only the public-digest description), and migrates the home page to `useTranslations` / `getTranslations`. Migration 56 ships every new and changed file plus the env key; the dependencies and the script that `deps.bump` cannot add are documented as manual steps.
 
-**Tech Stack:** Next.js 15, next-intl 4 (`createNextIntlPlugin`), Biome (template only), `@igrp/i18n-tools`, template-migrator.
+**Tech Stack:** Next.js 15, next-intl 4 (`createNextIntlPlugin`), Biome (template only), `@igrp/framework-next-i18n`, template-migrator.
 
 **Spec:** `docs/superpowers/specs/2026-10-12-framework-i18n-v2-design.md` (sections "templates/demo-v1", "Decisions resolved", appendix).
 
@@ -40,7 +40,7 @@
 
 - [ ] **Step 1: Declare the dependencies and the script**
 
-In `templates/demo-v1/package.json` add `"next-intl": "^4.14.0"` to `dependencies` (the app imports `next-intl` and `next-intl/plugin` directly; pnpm strict resolution needs the declaration) and `"@igrp/i18n-tools": "workspace:*"` to `devDependencies`. Scripts:
+In `templates/demo-v1/package.json` add `"next-intl": "^4.14.0"` to `dependencies` (the app imports `next-intl` and `next-intl/plugin` directly; pnpm strict resolution needs the declaration) and `"@igrp/framework-next-i18n": "workspace:*"` to `devDependencies`. Scripts:
 
 ```json
 "build": "pnpm lint && pnpm lint:i18n && next build --turbopack",
@@ -69,7 +69,7 @@ IGRP_FORMAT_LOCALES=
 
 ```bash
 git add templates/demo-v1/package.json templates/demo-v1/.env.example pnpm-lock.yaml
-git commit -m "chore(demo-v1): next-intl and @igrp/i18n-tools dependencies, lint:i18n script, IGRP_FORMAT_LOCALES"
+git commit -m "chore(demo-v1): next-intl and @igrp/framework-next-i18n dependencies, lint:i18n script, IGRP_FORMAT_LOCALES"
 ```
 
 ---
@@ -961,7 +961,7 @@ Set `IGRP_FORMAT_LOCALES=de-DE`, reload: the global error screen shows the gener
 - [ ] **Step 1: Materialise the package versions**
 
 Run: `pnpm release:version`
-Expected: the five changesets from Plans 1 to 4 bump `@igrp/framework-next-auth`, `@igrp/framework-next-types`, `@igrp/igrp-framework-react-design-system`, `@igrp/framework-next-ui`, `@igrp/framework-next` and `@igrp/i18n-tools` by one beta each and update their CHANGELOGs. Note each new version from its `package.json` (`node -e "console.log(require('./packages/framework/next/package.json').version)"` etc.). If `@igrp/i18n-tools` is rejected, add it to `.changeset/pre.json` `initialVersions` as `"0.2.0-beta.0"` and rerun.
+Expected: the five changesets from Plans 1 to 4 bump `@igrp/framework-next-auth`, `@igrp/framework-next-types`, `@igrp/igrp-framework-react-design-system`, `@igrp/framework-next-ui`, `@igrp/framework-next` and `@igrp/framework-next-i18n` by one beta each and update their CHANGELOGs. Note each new version from its `package.json` (`node -e "console.log(require('./packages/framework/next/package.json').version)"` etc.). If `@igrp/framework-next-i18n` is rejected, add it to `.changeset/pre.json` `initialVersions` as `"0.2.0-beta.0"` and rerun.
 
 Commit: `git add -A .changeset packages/*/package.json packages/framework/*/package.json packages/*/CHANGELOG.md packages/framework/*/CHANGELOG.md && git commit -m "chore: version packages"`.
 
@@ -1118,7 +1118,7 @@ steps:
 
 ## Manual steps (deps.bump cannot add what the app did not declare)
 
-1. `package.json`: add `"next-intl": "^4.14.0"` to `dependencies` and `"@igrp/i18n-tools": "<i18n-tools version>"` to `devDependencies`.
+1. `package.json`: add `"next-intl": "^4.14.0"` to `dependencies` and `"@igrp/framework-next-i18n": "<i18n-tools version>"` to `devDependencies`.
 2. `package.json` scripts: add `"lint:i18n": "igrp-i18n check-catalogs src/i18n/messages --default pt && igrp-i18n check-literals src/components src/i18n \"src/app/(igrp)/page.tsx\""` and prepend `pnpm lint:i18n &&` to `next build` in `build` (after `pnpm lint`).
 3. `pnpm install`.
 
@@ -1162,6 +1162,6 @@ The application-center migration is a separate plan; its deltas are the appendix
 
 ## Self-review
 
-- Spec coverage ("templates/demo-v1"): `next-intl` dependency and `@igrp/i18n-tools` dev dependency; `lint:i18n` in `build`; `src/i18n/index.ts` with env-parsed format locales and `getSessionLocale` reading `session.user.locale` through the cached layout config; `request.ts`; `actions.ts`; `global.d.ts`; catalogs; plugin and `optimizePackageImports`; `igrpBuildConfig({ i18n })`; root layout untouched; switcher in `actions` and on login; middleware unchanged with the session-first note; `error-messages.ts` deleted and the error screens on the catalog; `global-error` cookie-driven `lang`; preview mode without session locale; `.env.example`; `docs/I18N.md`; `CLAUDE.md` fix; migration with every file, `env.add`, `deps.bump`, manual deps and script; `sync:template-lock`; `check:drift`. D-5 verification is Task 7.
+- Spec coverage ("templates/demo-v1"): `next-intl` dependency and `@igrp/framework-next-i18n` dev dependency; `lint:i18n` in `build`; `src/i18n/index.ts` with env-parsed format locales and `getSessionLocale` reading `session.user.locale` through the cached layout config; `request.ts`; `actions.ts`; `global.d.ts`; catalogs; plugin and `optimizePackageImports`; `igrpBuildConfig({ i18n })`; root layout untouched; switcher in `actions` and on login; middleware unchanged with the session-first note; `error-messages.ts` deleted and the error screens on the catalog; `global-error` cookie-driven `lang`; preview mode without session locale; `.env.example`; `docs/I18N.md`; `CLAUDE.md` fix; migration with every file, `env.add`, `deps.bump`, manual deps and script; `sync:template-lock`; `check:drift`. D-5 verification is Task 7.
 - Type consistency: `setLocale(value: string): Promise<IGRPSetLocaleResult>` matches `IGRPLocaleSwitcher.action`; `resolvePublicErrorCopy: IGRPErrorCopyResolver` matches Plan 3; `igrpCreateRequestConfig(i18n, { pt, en, fr })` matches Plan 4; the `home` keys used in Task 5 exist in all three catalogs (plural arguments `count`, `failing`, `total`, `index`, `provider`, `org`).
 - Review Focus 1 to 4 are exercised in Task 8's smoke steps; 5 in Task 5 Step 5.

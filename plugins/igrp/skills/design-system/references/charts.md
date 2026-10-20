@@ -1,153 +1,136 @@
 # Charts
 
-Recharts-based, token-themed, lazy-loaded (recharts is heavy — each `IGRP*Chart` wraps a `Suspense` + `React.lazy`). Always use the `IGRP*Chart` components — never instantiate Recharts directly in app code.
+Recharts-based and themed from tokens. Use the `IGRP*Chart` components; drop to the `Chart*` primitives (`ChartContainer`, `ChartTooltip`, `ChartTooltipContent` (takes an IGRP `valueFormatter`), `ChartLegend`, `ChartLegendContent`, `ChartStyle`) plus raw Recharts only for a chart type the kit lacks.
 
-## Components
+Six charts lazy-load Recharts behind a `Skeleton` fallback (`aspect-video min-h-[200px]`). `IGRPAreaChart` is the exception: it renders eagerly.
 
-| Component | Use when |
-| --- | --- |
-| `IGRPAreaChart` | Stacked or single-series area over time. |
-| `IGRPLineChart` | Time series or comparison lines; `LineConfig[]` for multi-series. |
-| `IGRPHorizontalBarChart` | Bars when category labels are long. |
-| `IGRPVerticalBarChart` | Standard column chart. |
-| `IGRPPieChart` | Part-of-whole when ≤6 slices. Avoid for >6 — use a bar chart. |
-| `IGRPRadarChart` | Multi-axis comparison (skills, scores). |
-| `IGRPRadialBarChart` | Goal/progress in a circular gauge form. |
+| Component | Series prop | Keyed by | Use when |
+| --- | --- | --- | --- |
+| `IGRPAreaChart` | `areas: IGRPAreaConfig[]` | `categoryKey` | Volume over time, stacked or single. `expanded` = 100% stacked. |
+| `IGRPLineChart` | `lines: LineConfig[]` | `categoryKey` | Time series / comparing trends. |
+| `IGRPVerticalBarChart` | `bars: IGRPBarConfig[]` | `categoryKey` | Standard column chart. |
+| `IGRPHorizontalBarChart` | `bars: IGRPBarConfig[]` | `categoryKey` | Long category labels, rankings. |
+| `IGRPPieChart` | `pies: PieConfig[]` | **`nameKey`** (required) | Part-of-whole, ≤6 slices. Otherwise use a bar chart. |
+| `IGRPRadarChart` | `radars: IGRPRadarConfig[]` | **`angleAxisKey`** (required) | Multi-axis scores. |
+| `IGRPRadialBarChart` | `bars: RadialBarConfig[]` | **`nameKey`** (required) | Progress / goal gauge. |
+
+`categoryKey` is required on the cartesian charts (area, line, bars). It's optional on Pie, Radar and RadialBar, which key off `nameKey` / `angleAxisKey`.
+
+Prop types are exported as `IGRP<Name>ChartProps` (e.g. `IGRPVerticalBarChartProps`), along with `IGRPChartSize`, `IGRPChartLegendPosition`, `IGRPTooltipIndicator`, `IGRPChartFooter` and `LineConfig`.
 
 ## Shared props (`IGRPChartProps`)
 
-Every chart extends this base. The series-specific props (`bars`, `areas`, `lines`, etc.) are per-chart.
-
-| Prop | Type | Notes |
+| Prop | Type / default | Notes |
 | --- | --- | --- |
-| `data` | `IGRPChartDataItem[]` (`Record<string, string \| number>`) | Series points. |
-| `categoryKey` | `string` | The key in `data` that names the X-axis category (e.g. `"month"`). |
-| `title`, `description` | `string` | Optional in-chart title/description. |
-| `showGrid` | `boolean` | Default `false`. |
-| `showTooltip` | `boolean` | Default `true`. |
-| `legendPosition` | `"top" \| "right" \| "bottom" \| "left" \| "none"` | Default `"none"`. |
-| `customLegend` | `ReactElement \| ((props) => ReactNode)` | Override the legend. |
-| `hideAxis` / `hideXAxis` / `hideYAxis` | `boolean` | |
-| `showReferenceZero` | `boolean` | Reference line at y=0 for charts with negative values. |
-| `valueDomain` | `[number, number]` | Force y-axis range. |
-| `size` | `"sm" \| "md" \| "lg" \| "xl" \| "auto"` | Default `"md"`. |
-| `height`, `width` | `number \| string` | Override responsive defaults. |
-| `stacked` | `boolean` | Stack series instead of grouping. |
-| `valueFormatter` | `(value: number) => string` | **A function**, not a preset string. Use `formatChartValue` as a helper. |
-| `labelFormatter` | `(value: string) => string` | Customize category labels (e.g. truncate month names). |
-| `tooltipIndicator` | `"line" \| "dot"` | Default `"line"`. |
-| `footer` | `{ description?: string }` | Footer slot. |
+| `data` | `IGRPChartDataItem[]` (`Record<string, string \| number>`) | |
+| `categoryKey` | `string` | The X-axis category. Required on cartesian charts. |
+| `title`, `description`, `footer` | `string`, `string`, `{ description?: string }` | |
+| `size` | `"sm" \| "md" \| "lg" \| "xl" \| "auto"` = `"md"` | Sets a minimum height (sm 200, md 280, lg 400, xl 500; `auto` is the same as `md`). Height grows by 40px per row, except the vertical bar chart, which stays at the minimum. |
+| `height`, `width` | `number \| string` | `height` overrides the size logic. `width` defaults to `"100%"`. |
+| `showGrid` | `false` | |
+| `showTooltip` | `true` | |
+| `tooltipIndicator` | `"line" \| "dot"` = `"line"` | RadialBar ignores it. |
+| `legendPosition` | `"top" \| "right" \| "bottom" \| "left" \| "none"` = `"none"` | |
+| `customLegend` | `ReactElement \| (props) => ReactNode` | Rendered only when `legendPosition` isn't `"none"`. Pie and RadialBar ignore it. |
+| `hideAxis` / `hideXAxis` / `hideYAxis` | `boolean` | Cartesian charts only. |
+| `showReferenceZero` | `boolean` | Draws a line at 0 only when the data has negatives. |
+| `valueDomain` | `[number, number]` | Default is `[0, "auto"]`, or `["auto", "auto"]` when the data has negatives. |
+| `stacked` | `boolean` | Area and the bar charts only. Line ignores it. |
+| `valueFormatter` | `(value: number) => string` | **A function, not a preset string.** See "Number formatting". |
+| `labelFormatter` | `(value: string) => string` | Formats category ticks. **The vertical bar chart truncates labels to 3 chars by default.** Pass `labelFormatter={(v) => v}` to keep them whole. |
+| `gridColor`, `referenceLineColor`, `axisColor`, `backgroundColor` | CSS colour; defaults are `var(--border)`, `var(--border)`, `var(--muted-foreground)` | Pass a token `var(...)` only. |
 | `className` | `string` | |
 
 ## Series configs
 
-Each chart takes an array of series under its own prop name:
+All series extend `IGRPSeriesConfig`: `dataKey` (required), `name?` (legend/tooltip label), `color?`, `stackId?`, `render?`.
 
-- `IGRPVerticalBarChart` / `IGRPHorizontalBarChart`: `bars: IGRPBarConfig[]`
-- `IGRPAreaChart`: `areas: IGRPAreaConfig[]`
-- `IGRPLineChart`: `lines: LineConfig[]`
-- `IGRPRadarChart`: `radars: IGRPRadarConfig[]`
-- `IGRPRadialBarChart`: `bars: RadialBarConfig[]`
-- `IGRPPieChart`: see component for its `PieConfig` (single-series).
+- **Colour:** leave `color` out. Series get `IGRP_CHART_COLORS[i % 8]` by position, and those colours are themed for light and dark. When you do pass one, use `IGRP_CHART_COLORS[n]` or a `var(--chart-n)` token, never a hex.
+- **Pie / RadialBar:** a `color` on the series paints **every slice** that colour. Leave it out to get per-slice colours.
+- **Stacking:** with `stacked` (or Area's `expanded`), series share one stack unless they set `stackId`. Give series different `stackId`s to get side-by-side stacks.
+- **Bar radius:** a series' `radius` overrides the chart-level `barRadius`.
+- **Keep `dataKey` a plain identifier** (`revenue`, not `"total revenue"` or `a.b`). Area and bar colours resolve through `var(--color-<dataKey>)`.
 
-Every series config extends `IGRPSeriesConfig`:
+Per-chart extras:
 
-```ts
-interface IGRPSeriesConfig {
-  dataKey: string        // key in data for this series
-  name?: string          // display label (defaults to dataKey)
-  color?: string         // hex or CSS var; default picks from IGRP_CHART_COLORS
-  stackId?: string       // for stacked charts
-  render?: (props) => ReactNode  // custom render
+- **Area:** `expanded?: boolean`. `IGRPAreaConfig` adds `type?: "linear" | "monotone" | "step" | "basis" | "natural"`, `fillOpacity?` (0.4) and `gradient?`.
+- **Vertical / horizontal bar:** `barRadius = 5`, `barGap = 8`, `barCategoryGap = "30%"`. The horizontal chart also has `showXAxis = false`, so its value axis is hidden by default.
+- **Line:** `LineConfig` adds `type?`, `strokeWidth?` (2), `strokeDasharray?`, `dot?`, `activeDot?` (`{ r: 6 }`), `showLabels?`, `labelPosition?`, `labelOffset?` (12).
+- **Pie:** `centerLabel?: { show: boolean; text?: string }` (the centre total sums `pies[0].dataKey` over all rows) and `interactive?`. `PieConfig` adds `innerRadius`, `outerRadius`, `paddingAngle`, `cornerRadius`, `startAngle`, `endAngle`, `cx`, `cy`, `showLabels`, `labelType: "value" | "name" | "percent"`, `labelPosition`, `labelLine` and `activeShape`. Set `innerRadius` for a donut.
+- **Radar:** `polarGridType?: "polygon" | "circle"`, `polarGridLineType?`, `showPolarGrid = true`, `showRadiusAxis = false`, `radiusAxisDomain?`, `radiusAxisAngle = 30`, `showRadiusLines = true` and `gridFilled` (tints the grid with `--chart-1`). `IGRPRadarConfig` adds `fill`, `fillOpacity` (0.6), `strokeWidth`, `dot`, `activeDot` and `isAnimationActive`.
+- **RadialBar:** `startAngle = 0`, `endAngle = 360`, `innerRadius = "30%"`, `outerRadius = "100%"`, `barSize?`, `gridType = "circle"`, `showBackground?`, `showRadiusAxis?` and `centerText?: { show; value?; label?; formatter? }`. Without `centerText.value`, the centre shows the **first row's** value, not a sum. Pass `value` explicitly. `showGrid` draws the polar grid. `RadialBarConfig` adds `cornerRadius`, `showLabels`, `labelType`, `labelPosition` and `labelStyle`.
+
+Pie, Radar and RadialBar ignore `hideAxis*`, `showReferenceZero`, `valueDomain` and `labelFormatter`.
+
+## Number formatting
+
+- **`valueFormatter` formats everything:** axis ticks, the tooltip, pie/radial labels and centre labels.
+- **Without `valueFormatter`:**
+  - The tooltip uses `toLocaleString` at the `IGRPI18nProvider` locale (default `pt-PT`).
+  - Axis ticks and labels fall back to `formatChartValue`, which is locale-free: `12500 → "12.5K"`, `1_200_000 → "1.2M"`, `1000 → "1.0K"`, below 1000 → `String(value)`.
+- So for currency or locale-aware axes, pass a `valueFormatter` built on `Intl.NumberFormat` with an explicit locale. Don't rely on the runtime default locale, because it hydrates mismatched under SSR.
+
+`formatChartValue(value, valueFormatter?)` is exported for reuse. The other exported helpers (`getChartHeight`, `getChartWidth`, `getLegend*`, `hasNegativeValues`, `createChartConfig`) are internals you rarely need.
+
+## Example: dashboard card with a bar chart
+
+The card sub-components are **separate named exports** (`IGRPCardHeader`, `IGRPCardTitle`, `IGRPCardDescription`, `IGRPCardAction`, `IGRPCardContent`, `IGRPCardFooter`). There is no `IGRPCard.Header`.
+
+```tsx
+"use client"
+
+import {
+  IGRPCard,
+  IGRPCardContent,
+  IGRPCardDescription,
+  IGRPCardHeader,
+  IGRPCardTitle,
+  IGRPVerticalBarChart,
+} from "@igrp/igrp-framework-react-design-system"
+
+const currency = new Intl.NumberFormat("pt-CV", { style: "currency", currency: "CVE", maximumFractionDigits: 0 })
+
+const data = [
+  { month: "Janeiro", revenue: 12000, cost: 8000 },
+  { month: "Fevereiro", revenue: 18000, cost: 9000 },
+]
+
+export function RevenueCard() {
+  return (
+    <IGRPCard>
+      <IGRPCardHeader>
+        <IGRPCardTitle>Receita mensal</IGRPCardTitle>
+        <IGRPCardDescription>Últimos 6 meses</IGRPCardDescription>
+      </IGRPCardHeader>
+      <IGRPCardContent>
+        <IGRPVerticalBarChart
+          data={data}
+          categoryKey="month"
+          bars={[
+            { dataKey: "revenue", name: "Receita" },
+            { dataKey: "cost", name: "Custo" },
+          ]}
+          showGrid
+          legendPosition="top"
+          valueFormatter={(v) => currency.format(v)}
+        />
+      </IGRPCardContent>
+    </IGRPCard>
+  )
 }
 ```
 
-`IGRPBarConfig` adds `radius?: number`. `IGRPAreaConfig` adds curve `type`, `fillOpacity`, `gradient`. See `packages/design-system/src/components/horizon/charts/types.ts` for the rest.
+The labels show as `Jan` / `Fev` because of the default 3-char truncation. The colours come from `IGRP_CHART_COLORS` by position.
 
-## Colors — `IGRP_CHART_COLORS`
-
-An array of CSS-variable strings (`var(--chart-1)` … `var(--chart-8)`), themed for light + dark.
-
-```ts
-import { IGRP_CHART_COLORS } from "@igrp/igrp-framework-react-design-system"
-
-bars={[
-  { dataKey: "revenue", name: "Receita", color: IGRP_CHART_COLORS[0] },
-  { dataKey: "cost",    name: "Custo",   color: IGRP_CHART_COLORS[1] },
-]}
-```
-
-**Never hand-pick hex codes** — the colors are themed for both light and dark mode.
-
-You can also omit `color` entirely; `createChartConfig` (called internally) will assign `IGRP_CHART_COLORS[i]` by position. Only pass `color` when you want a non-default assignment.
-
-## Helpers
-
-- `formatChartValue(value, valueFormatter?)` — fallback formatter. If `valueFormatter` is provided it's called; otherwise compacts thousands/millions (`12500 → "12.5K"`, `1_200_000 → "1.2M"`). Use this *inside* a custom `valueFormatter` if you want to layer formatting.
-- `getChartHeight(size, data?, height?)` / `getChartWidth(width?)` — height defaults per `size` preset, with override.
-- `getLegendLayout(position)` / `getLegendVerticalAlign(position)` / `getLegendHorizontalAlign(position)` — legend layout helpers (used internally; rarely needed in app code).
-- `createChartConfig(series)` — produces a shadcn `ChartConfig` from an `IGRPSeriesConfig[]` (called internally; rarely needed in app code).
-- `hasNegativeValues(data, dataKeys)` — utility for axis logic.
-
-## Example: vertical bar chart
+## Example: donut
 
 ```tsx
-"use client"
-import {
-  IGRPVerticalBarChart,
-  IGRP_CHART_COLORS,
-} from "@igrp/igrp-framework-react-design-system"
-
-const data = [
-  { month: "Jan", revenue: 12000, cost: 8000 },
-  { month: "Fev", revenue: 18000, cost: 9000 },
-  // …
-]
-
-<IGRPVerticalBarChart
-  data={data}
-  categoryKey="month"
-  bars={[
-    { dataKey: "revenue", name: "Receita", color: IGRP_CHART_COLORS[0] },
-    { dataKey: "cost",    name: "Custo",   color: IGRP_CHART_COLORS[1] },
-  ]}
-  showGrid
-  legendPosition="top"
-  valueFormatter={(v) =>
-    new Intl.NumberFormat("pt-PT", { style: "currency", currency: "CVE", maximumFractionDigits: 0 }).format(v)
-  }
+<IGRPPieChart
+  data={[{ estado: "Aprovado", total: 42 }, { estado: "Pendente", total: 12 }, { estado: "Rejeitado", total: 5 }]}
+  categoryKey="estado"
+  nameKey="estado"
+  pies={[{ dataKey: "total", innerRadius: 60 }]}
+  centerLabel={{ show: true, text: "Pedidos" }}
+  legendPosition="bottom"
 />
 ```
-
-## Charts inside an `IGRPCard`
-
-Standard pattern for dashboards. **Card sub-components are separate exports, not dot-notation properties:**
-
-```tsx
-"use client"
-import {
-  IGRPCard,
-  IGRPCardHeader,
-  IGRPCardTitle,
-  IGRPCardDescription,
-  IGRPCardContent,
-  IGRPVerticalBarChart,
-  IGRP_CHART_COLORS,
-} from "@igrp/igrp-framework-react-design-system"
-
-<IGRPCard>
-  <IGRPCardHeader>
-    <IGRPCardTitle>Receita mensal</IGRPCardTitle>
-    <IGRPCardDescription>Últimos 12 meses</IGRPCardDescription>
-  </IGRPCardHeader>
-  <IGRPCardContent>
-    <IGRPVerticalBarChart
-      data={data}
-      categoryKey="month"
-      bars={[{ dataKey: "revenue", name: "Receita", color: IGRP_CHART_COLORS[0] }]}
-    />
-  </IGRPCardContent>
-</IGRPCard>
-```
-
-> `IGRPCard.Header`, `IGRPCard.Content` etc. **do not exist** — the card sub-components are top-level exports. Always import them by name.

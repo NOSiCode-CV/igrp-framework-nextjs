@@ -1,13 +1,13 @@
 {
-  "name": "@igrp/i18n-tools",
-  "version": "0.2.0-beta.0",
+  "name": "@igrp/framework-next-i18n",
+  "version": "0.2.0-beta.1",
   "description": "Catalog and literal-string checks for IGRP Next.js apps (igrp-i18n CLI)",
   "author": "IGRP Team",
   "license": "MIT",
   "repository": {
     "type": "git",
     "url": "git+http://git.nosi.cv/igrp-3_0/igrp-framework-frontend/igrp-framework-nextjs.git",
-    "directory": "packages/framework/i18n-tools"
+    "directory": "packages/framework/next-i18n"
   },
   "type": "module",
   "bin": {
@@ -31,9 +31,10 @@
     "build:types": "tsc -p tsconfig.build.json --emitDeclarationOnly",
     "build": "rimraf dist && pnpm build:js && pnpm build:types",
     "typecheck": "tsc -p tsconfig.json --noEmit",
+    "lint": "eslint .",
     "test": "vitest run",
     "format": "prettier --write .",
-    "release": "pnpm typecheck && pnpm test && pnpm build && pnpm publish --registry=https://sonatype.nosi.cv/repository/igrp/ --tag latest --no-git-checks",
+    "release": "pnpm lint && pnpm typecheck && pnpm test && pnpm build && pnpm publish --registry=https://sonatype.nosi.cv/repository/igrp/ --tag latest --no-git-checks",
     "clean": "rimraf dist",
     "clean-all": "rimraf node_modules && rimraf dist"
   },
@@ -42,10 +43,14 @@
     "typescript": "~6.0.3"
   },
   "devDependencies": {
+    "@eslint/js": "10.0.1",
     "@types/node": "^24",
+    "eslint": "^10.11.0",
+    "globals": "17.13.0",
     "prettier": "^3.9.9",
     "rimraf": "^6.1.3",
     "tsup": "^8.5.1",
+    "typescript-eslint": "^8.71.2",
     "vitest": "^5.0.1"
   },
   "engines": {

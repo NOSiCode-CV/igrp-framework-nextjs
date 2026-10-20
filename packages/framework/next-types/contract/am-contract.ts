@@ -55,20 +55,13 @@ import type {
   ApplicationDTO,
   ApplicationType,
   DepartmentDTO,
-  FileUrlDTO,
-  GlobalConfigurationDTO,
-  GlobalConfigurationType,
   IGRPUserDTO,
   MenuEntryDTO,
   MenuTargetType,
   MenuType,
   PermissionDTO,
-  ResourceDTO,
-  ResourceItemDTO,
-  ResourceType,
   RoleDepartmentDTO,
   RoleDTO,
-  RoleUserDTO,
   Status,
 } from '@igrp/platform-access-management-client-ts';
 
@@ -76,20 +69,13 @@ import type {
   IGRPApplicationArgs,
   IGRPApplicationType,
   IGRPApplicationTypeSyncable,
-  IGRPConfigurationType,
   IGRPDepartmentArgs,
-  IGRPFileUrlArgs,
-  IGRPGlobalConfigurationArgs,
   IGRPMenuItemArgs,
   IGRPMenuType,
   IGRPMenuTypeSyncable,
   IGRPPermissionArgs,
-  IGRPResourceArgs,
-  IGRPResourceItem,
-  IGRPResourceType,
   IGRPRoleArgs,
   IGRPRoleDepartmentArgs,
-  IGRPRoleUserArgs,
   IGRPStatus,
   IGRPTargetType,
   IGRPUserArgs,
@@ -147,8 +133,6 @@ type MirrorsAllKeys<From, To, Ignored extends keyof From = never> = [
 export type _Status = AssignableTo<Status, IGRPStatus>;
 export type _MenuType = AssignableTo<MenuType, IGRPMenuType>;
 export type _ApplicationType = AssignableTo<ApplicationType, IGRPApplicationType>;
-export type _ResourceType = AssignableTo<ResourceType, IGRPResourceType>;
-export type _ConfigurationType = AssignableTo<GlobalConfigurationType, IGRPConfigurationType>;
 export type _TargetType = Equivalent<MenuTargetType, IGRPTargetType>;
 
 /* -- Outbound: narrowed unions must equal the client enums ---------------- */
@@ -173,14 +157,6 @@ export type _Permission = AssignableTo<PermissionDTO, IGRPPermissionArgs>;
 export type _Role = AssignableTo<RoleDTO, IGRPRoleArgs>;
 export type _Department = AssignableTo<DepartmentDTO, IGRPDepartmentArgs>;
 export type _User = AssignableTo<IGRPUserDTO, IGRPUserArgs>;
-export type _RoleUser = AssignableTo<RoleUserDTO, IGRPRoleUserArgs>;
-export type _GlobalConfiguration = AssignableTo<
-  GlobalConfigurationDTO,
-  IGRPGlobalConfigurationArgs
->;
-export type _FileUrl = AssignableTo<FileUrlDTO, IGRPFileUrlArgs>;
-export type _ResourceItem = AssignableTo<ResourceItemDTO, IGRPResourceItem>;
-export type _Resource = AssignableTo<ResourceDTO, IGRPResourceArgs>;
 
 /*
  * `ApplicationDTO` is asserted field-by-field rather than whole-object: the
@@ -202,14 +178,6 @@ export type _MenuEntryKeys = MirrorsAllKeys<MenuEntryDTO, IGRPMenuItemArgs>;
 export type _PermissionKeys = MirrorsAllKeys<PermissionDTO, IGRPPermissionArgs>;
 export type _RoleKeys = MirrorsAllKeys<RoleDTO, IGRPRoleArgs>;
 export type _DepartmentKeys = MirrorsAllKeys<DepartmentDTO, IGRPDepartmentArgs>;
-export type _RoleUserKeys = MirrorsAllKeys<RoleUserDTO, IGRPRoleUserArgs>;
-export type _GlobalConfigurationKeys = MirrorsAllKeys<
-  GlobalConfigurationDTO,
-  IGRPGlobalConfigurationArgs
->;
-export type _FileUrlKeys = MirrorsAllKeys<FileUrlDTO, IGRPFileUrlArgs>;
-export type _ResourceItemKeys = MirrorsAllKeys<ResourceItemDTO, IGRPResourceItem>;
-export type _ResourceKeys = MirrorsAllKeys<ResourceDTO, IGRPResourceArgs>;
 export type _ApplicationKeys = MirrorsAllKeys<ApplicationDTO, IGRPApplicationArgs>;
 
 /*
@@ -243,8 +211,6 @@ const assertions: [
   _Status,
   _MenuType,
   _ApplicationType,
-  _ResourceType,
-  _ConfigurationType,
   _TargetType,
   _MenuTypeSyncable,
   _ApplicationTypeSyncable,
@@ -255,11 +221,6 @@ const assertions: [
   _Role,
   _Department,
   _User,
-  _RoleUser,
-  _GlobalConfiguration,
-  _FileUrl,
-  _ResourceItem,
-  _Resource,
   _Application,
   _ApplicationSlug,
   _RoleDepartmentKeys,
@@ -267,26 +228,9 @@ const assertions: [
   _PermissionKeys,
   _RoleKeys,
   _DepartmentKeys,
-  _RoleUserKeys,
-  _GlobalConfigurationKeys,
-  _FileUrlKeys,
-  _ResourceItemKeys,
-  _ResourceKeys,
   _ApplicationKeys,
   _UserKeys,
 ] = [
-  true,
-  true,
-  true,
-  true,
-  true,
-  true,
-  true,
-  true,
-  true,
-  true,
-  true,
-  true,
   true,
   true,
   true,

@@ -48,8 +48,9 @@ interface IGRPChatProps {
  * Chat interface with message list, input, and API integration.
  * Sends user messages to the endpoint and displays responses.
  */
-function IGRPChat({ apiEndpoint, labelDescription = "Ask me anything!", name, id }: IGRPChatProps) {
+function IGRPChat({ apiEndpoint, labelDescription: labelDescriptionProp, name, id }: IGRPChatProps) {
   const i18n = useIGRPi18n()
+  const labelDescription = labelDescriptionProp ?? i18n.chat.description
   const [messages, setMessages] = useState<IGRPChatMessage[]>([])
   const [input, setInput] = useState("")
   const [isLoading, setIsLoading] = useState(false)
@@ -72,7 +73,7 @@ function IGRPChat({ apiEndpoint, labelDescription = "Ask me anything!", name, id
       role: "user",
       content: input,
       timestamp: new Date().toISOString(),
-      sender: "You",
+      sender: i18n.chat.you,
       type: "text",
     }
 

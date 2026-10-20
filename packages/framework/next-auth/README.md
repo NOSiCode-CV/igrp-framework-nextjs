@@ -4,23 +4,34 @@ NextAuth.js wrapper for the IGRP Framework. Provides a single `withIGRPAuth()` f
 that configures OIDC authentication, JWT session management, token refresh, and
 route-protection middleware primitives.
 
+## Requirements
+
+- **Node.js** ≥ 22
+- Peers: **next** ^15.5.0, **next-auth** ^4.24.0, **react** ^19.0.0
+
+## Installation
+
+```bash
+pnpm add @igrp/framework-next-auth next-auth
+```
+
 ## Entry points
 
 | Import path                               | Runtime               | Purpose                                                                                         |
 | ----------------------------------------- | --------------------- | ----------------------------------------------------------------------------------------------- |
 | `@igrp/framework-next-auth/config`        | Node + Edge           | `withIGRPAuth()` factory                                                                        |
-| `@igrp/framework-next-auth/client`        | Browser               | `useSafeSession()`, `signIn`, `signOut`, `SessionProvider`                                      |
-| `@igrp/framework-next-auth/server`        | Node                  | `getServerSession`                                                                              |
+| `@igrp/framework-next-auth/client`        | Browser               | `useSafeSession()`, `useOptionalSession()`, `SessionContext`, `signIn`, `signOut`, `SessionProvider` — see "Client hooks" |
+| `@igrp/framework-next-auth/server`        | Node                  | `getServerSession`, `getServerSessionStrict(opts)` (throws `Unauthorized` without a session), `NextAuth` (CJS-interop-normalized factory) |
 | `@igrp/framework-next-auth/session`       | Node + Edge + Browser | `Session` type, `hasAccessToken`                                                                |
 | `@igrp/framework-next-auth/jwt`           | Node + Edge           | `JWT` type; re-exports `getToken` / `encode` / `decode` — see the cookie note below             |
 | `@igrp/framework-next-auth/middleware`    | Edge                  | Re-exports NextAuth's `withAuth` — see the cookie note below                                    |
-| `@igrp/framework-next-auth/oidc`          | Node                  | `refreshOidcAccessToken`, `revokeOidcSession`, `buildEndSessionUrl`                             |
+| `@igrp/framework-next-auth/oidc`          | Node                  | `refreshOidcAccessToken`, `revokeOidcSession`, `buildEndSessionUrl`, `introspectOidcToken` (refresh-token introspection; fails open), `configureOidcTokenRecoveryStore` (what the `tokenRecoveryStore` option calls) |
 | `@igrp/framework-next-auth/providers`     | Node + Edge + Browser | Provider registry helpers                                                                       |
 | `@igrp/framework-next-auth/sanitize`      | Node + Edge           | URL/redirect sanitization                                                                       |
 | `@igrp/framework-next-auth/claims`        | Node + Edge + Browser | `decodeIgrpClaims`, `claimsAllow`, `claimsExpired`                                              |
 | `@igrp/framework-next-auth/cookies`       | Node + Edge + Browser | Auth cookie naming: `sessionCookieName`, `buildAuthCookies`, `resolveSecureCookie`              |
 | `@igrp/framework-next-auth/runtime`       | Node + Edge           | `isNextControlFlowError`                                                                        |
-| `@igrp/framework-next-auth/session-store` | Node + Edge           | `IGRPSessionStore`, `configureIGRPSessionStore`, `decodeIGRPSessionToken` — see "Session store" |
+| `@igrp/framework-next-auth/session-store` | Node + Edge           | `IGRPSessionStore`, `configureIGRPSessionStore`, `decodeIGRPSessionToken`, `createMemorySessionStore` — see "Session store" |
 | `@igrp/framework-next-auth/types`         | types only            | Session/JWT module augmentation                                                                 |
 
 The package root (`@igrp/framework-next-auth`) re-exports only the pure modules
@@ -40,6 +51,14 @@ into whatever bundle touched it. Use their subpath entries.
 > getToken({ req, secret, cookieName: auth.authOptions.cookies!.sessionToken.name });
 > withAuth(handler, { cookies: auth.authOptions.cookies, secret });
 > ```
+
+### Client hooks
+
+| Export                 | Returns                                                     | Notes                                                                                                                                  |
+| ---------------------- | ----------------------------------------------------------- | -------------------------------------------------------------------------------------------------------------------------------------- |
+| `useSafeSession()`     | `{ session, status, update }`                               | `useSession()` typed as the IGRP `Session`. Throws outside a `SessionProvider`. Its `forceLogoutCallbackUrl` option is a no-op.        |
+| `useOptionalSession()` | `{ status, data } \| null`                                  | Safe outside a provider: `null` means **cannot tell**, not "unauthenticated" — a permission gate must keep its server-seeded answer.  |
+| `SessionContext`       | NextAuth's raw context (possibly `undefined`)               | Prefer `useOptionalSession`; exported so downstream packages don't import `next-auth/react` directly.                                  |
 
 ## Quick start
 
@@ -75,7 +94,7 @@ AUTH_PROVIDER=igrp-auth          # "igrp-auth" or "none" (disables auth)
 IGRP_AUTH_CLIENT_ID=my-client
 IGRP_AUTH_CLIENT_SECRET=my-secret
 IGRP_AUTH_ISSUER=https://your-oidc-provider.example.com/realms/my-realm
-NEXTAUTH_URL=http://localhost:3000
+NEXTAUTH_URL=http://localhost:3000/apps/template/api/auth   # basePath + /api/auth when NEXT_PUBLIC_BASE_PATH is set
 NEXTAUTH_SECRET=some-random-secret
 
 # Optional
@@ -210,7 +229,8 @@ export async function register() {
 ```
 
 An `IGRPSessionStore` is `get` / `set(key, value, ttlSeconds)` / `delete` over
-strings, shared by every replica. `createMemorySessionStore()` is for
+strings, shared by every replica. `createMemorySessionStore()` (also from
+`/session-store`) is for
 development and single-instance deployments only. The `sessionStore` option of
 `withIGRPAuth` takes precedence over the registered store, but drags the store
 into any bundle that imports the instance — middleware included.
@@ -335,7 +355,7 @@ on the session. Its lifetime is the NextAuth session cookie, and its token
 lifecycle is the application's responsibility.
 
 The OIDC callback URL to register on your provider is:
-`{NEXTAUTH_URL}/api/auth/callback/igrp-auth`
+`{NEXTAUTH_URL}/callback/igrp-auth` — with `NEXTAUTH_URL` ending in `/api/auth` as above (e.g. `http://localhost:3000/apps/template/api/auth/callback/igrp-auth`)
 
 ## Session shape
 

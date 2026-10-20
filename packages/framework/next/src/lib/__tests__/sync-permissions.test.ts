@@ -22,7 +22,6 @@ describe('igrpSyncPermissions', () => {
     const client = makeClient();
     const info = vi.spyOn(console, 'info').mockImplementation(() => {});
 
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     await igrpSyncPermissions({ client: client as any, permissions: CATALOG, syncEnabled: false });
 
     expect(client.m2m.syncPermissions).not.toHaveBeenCalled();
@@ -33,7 +32,6 @@ describe('igrpSyncPermissions', () => {
     const client = makeClient();
     const info = vi.spyOn(console, 'info').mockImplementation(() => {});
 
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     await igrpSyncPermissions({ client: client as any, permissions: [], syncEnabled: true });
 
     expect(client.m2m.syncPermissions).not.toHaveBeenCalled();
@@ -44,7 +42,6 @@ describe('igrpSyncPermissions', () => {
     const client = makeClient();
     vi.spyOn(console, 'info').mockImplementation(() => {});
 
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     await igrpSyncPermissions({ client: client as any, permissions: CATALOG, syncEnabled: true });
 
     expect(client.m2m.syncPermissions).toHaveBeenCalledTimes(1);
@@ -63,7 +60,6 @@ describe('igrpSyncPermissions', () => {
     const client = makeClient();
     vi.spyOn(console, 'info').mockImplementation(() => {});
 
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     await igrpSyncPermissions({ client: client as any, permissions: CATALOG, syncEnabled: true });
 
     const sent = client.m2m.syncPermissions.mock.calls[0]?.[0] ?? [];
@@ -79,7 +75,6 @@ describe('igrpSyncPermissions', () => {
     vi.spyOn(console, 'info').mockImplementation(() => {});
 
     await igrpSyncPermissions({
-      // eslint-disable-next-line @typescript-eslint/no-explicit-any
       client: client as any,
       permissions: [{ name: 'no_description', enabled: true }],
       syncEnabled: true,

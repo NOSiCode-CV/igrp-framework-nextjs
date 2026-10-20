@@ -19,28 +19,19 @@ export type {
   IGRPTargetType,
   IGRPApplicationType,
   IGRPApplicationTypeSyncable,
-  IGRPConfigurationType,
   IGRPApplicationArgs,
   IGRPMenuItemArgs,
   IGRPRoleDepartmentArgs,
   IGRPMenuCRUDArgs,
   IGRPRoleArgs,
-  IGRPRoleUserArgs,
   IGRPDepartmentArgs,
-  IGRPGlobalConfigurationArgs,
-  IGRPFileUrlArgs,
   IGRPPermissionArgs,
   IGRPPermissionCatalogEntry,
-  IGRPResourceType,
-  IGRPResourceItem,
-  IGRPResourceArgs,
   IGRPUserArgs,
 } from './types/access-management.js';
 
 export type {
   IGRPLayoutDataSource,
-  IGRPMockDataAsync,
-  IGRPMockData,
   IGRPToasterPosition,
   IGRPPackageJson,
 } from './types/globals.js';
@@ -54,3 +45,15 @@ export type { IGRPLocale, IGRPLocaleResolution, IGRPI18nConfigBase } from './typ
 export type { IGRPSidebarDataArgs } from './types/sidebar.js';
 
 export type { IGRPAccessClaims, IGRPClaimsState } from '@igrp/framework-next-auth/claims';
+
+export type {
+  IGRPBranding,
+  IGRPBrandingLogos,
+  IGRPBrandingLogoSlot,
+  IGRPBrandingMode,
+  IGRPBrandingParseResult,
+  IGRPBrandingTokenCatalogEntry,
+  IGRPBrandingTokenGroup,
+  IGRPBrandingTokenMap,
+  IGRPBrandingTokens,
+} from './types/branding.js';

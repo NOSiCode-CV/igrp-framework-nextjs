@@ -3,6 +3,8 @@ import type { IGRPI18nStrings } from "./strings.js"
 /** French catalog. Keys and `{token}` arguments are pinned to `IGRP_I18N_DEFAULTS_PT` by the parity test. */
 export const IGRP_I18N_DEFAULTS_FR: IGRPI18nStrings = {
   dataTable: {
+    expandRow: "Afficher les détails",
+    collapseRow: "Masquer les détails",
     clearFilters: "Effacer",
     notFound: "Aucun enregistrement trouvé.",
     filterLabel: "Filtrer",
@@ -59,6 +61,7 @@ export const IGRP_I18N_DEFAULTS_FR: IGRPI18nStrings = {
     placeholder: "Sélectionner une date",
   },
   inputSelect: {
+    placeholder: "Sélectionner une option",
     searchPlaceholder: "Rechercher...",
     searchLabel: "Rechercher des options",
     clearSearch: "Effacer la recherche",
@@ -67,6 +70,7 @@ export const IGRP_I18N_DEFAULTS_FR: IGRPI18nStrings = {
     protocolLabel: "Protocole",
   },
   combobox: {
+    placeholder: "Sélectionner…",
     notFound: "Aucun élément trouvé.",
     searchPlaceholder: "Rechercher...",
   },
@@ -104,6 +108,8 @@ export const IGRP_I18N_DEFAULTS_FR: IGRPI18nStrings = {
     iconIndicator: "Indicateur",
   },
   chat: {
+    description: "Demandez-moi ce que vous voulez !",
+    you: "Vous",
     messagePlaceholder: "Écrivez votre message…",
     sendMessage: "Envoyer le message",
     errorMessage: "Une erreur s'est produite. Veuillez réessayer.",
@@ -125,8 +131,28 @@ export const IGRP_I18N_DEFAULTS_FR: IGRPI18nStrings = {
     back: "Retour",
   },
   pdfViewer: {
+    close: "Fermer",
+    openInNewTab: "Ouvrir dans un nouvel onglet",
     loadError: "Impossible de charger le PDF",
     notFound: "Aucun fichier trouvé",
+  },
+  loadingSpinner: {
+    label: "Chargement…",
+  },
+  menuNavigation: {
+    title: "Navigation",
+  },
+  toast: {
+    title: "Notification",
+    loading: "Traitement…",
+    success: "Opération réussie !",
+    error: "Une erreur s'est produite.",
+  },
+  videoEmbed: {
+    invalidUrl: "URL de vidéo invalide",
+  },
+  table: {
+    actions: "Actions",
   },
   form: {
     submissionErrorTitle: "Erreur lors de l'envoi du formulaire",

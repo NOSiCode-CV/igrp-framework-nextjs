@@ -17,11 +17,12 @@ Package name: `@igrp/framework-next-template`.
 
 The template integrates:
 
-- **Next.js 15** — App Router + Turbopack (dev *and* build)
+- **Next.js 15** + **React 19** — App Router + Turbopack (dev *and* build)
 - **IGRP Framework** — `@igrp/framework-next`, `-next-ui`, `-next-auth`, `-next-types`
 - **IGRP Design System** — `@igrp/igrp-framework-react-design-system` (Horizon components first)
 - **NextAuth v4** — OIDC via the `igrp-auth` provider (PKCE + nonce), with an `AUTH_PROVIDER=none` bypass
 - **TypeScript**, **Tailwind CSS v4**, **React Query**, **React Hook Form + Zod**
+- **next-intl** i18n (pt / en / fr) via `@igrp/framework-next/i18n`, checked by `pnpm lint:i18n`
 - **Biome** for formatting and linting
 - **[Lucide](https://lucide.dev/icons/)** icons
 
@@ -37,9 +38,14 @@ The framework dependencies are linked from the monorepo via `workspace:*`. In a 
 
 ### 1. Install dependencies
 
+Inside this monorepo, run these from the **repo root** (see the root README for registry credentials):
+
 ```bash
-pnpm install
+pnpm install:deps      # install with registry credentials from the root .env
+pnpm build:framework   # build the workspace:* framework packages — required before pnpm dev
 ```
+
+In a standalone copy of the template, `pnpm install` is enough.
 
 ### 2. Configure environment
 
@@ -58,7 +64,7 @@ For a real auth flow, see [Environment Variables](docs/ENVIRONMENT.md) and [Auth
 pnpm dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000). If `NEXT_PUBLIC_BASE_PATH` is set (e.g. `/apps/template`), browse to that path.
+Open [http://localhost:3000](http://localhost:3000). If `NEXT_PUBLIC_BASE_PATH` is set (e.g. `/apps/template`), browse to that path — and `NEXTAUTH_URL` must then include the basePath **and** `/api/auth` (e.g. `http://localhost:3000/apps/template/api/auth`); see [Environment Variables](docs/ENVIRONMENT.md#nextauth).
 
 ### 4. Build for production
 
@@ -71,10 +77,11 @@ pnpm start
 
 | Script | Command | Purpose |
 | --- | --- | --- |
-| `pnpm dev` | `next dev --turbopack` | Development server |
-| `pnpm build` | `pnpm format && next build --turbopack` | Production build (Biome format first) |
+| `pnpm dev` | `node scripts/dev.mjs` | Development server (wraps `next dev --turbopack`, prints the basePath URL) |
+| `pnpm build` | `pnpm lint && pnpm lint:i18n && next build --turbopack` | Production build (Biome check + i18n checks first) |
 | `pnpm start` | `next start` | Serve the production build |
 | `pnpm lint` | `biome check --write` | Lint and auto-fix |
+| `pnpm lint:i18n` | `igrp-i18n check-catalogs …` + `check-literals …` | Check message catalogs and flag hard-coded UI text (runs in `build`) |
 | `pnpm format` | `biome format --write` | Format |
 | `pnpm publish:template` | PowerShell zip script | Package the publishable template |
 
@@ -88,6 +95,7 @@ templates/demo-v1/
 │   ├── app/
 │   │   ├── (auth)/                       # Login / logout route group
 │   │   │   ├── login/page.tsx            # IGRPAuthForm + carousel launcher
+│   │   │   ├── login/silent-sign-in.tsx, logout-completion.tsx
 │   │   │   ├── logout/page.tsx
 │   │   │   └── error.tsx
 │   │   ├── (igrp)/                        # Authenticated shell (verifySession gate)
@@ -95,8 +103,10 @@ templates/demo-v1/
 │   │   │   ├── page.tsx                   # Home
 │   │   │   ├── loading.tsx
 │   │   │   ├── error.tsx
-│   │   │   ├── system-settings/page.tsx
+│   │   │   ├── forbidden.tsx              # 403 boundary for igrpAssertAuthorize
+│   │   │   ├── (demo)/                    # Demo pages (e.g. system/settings/page.tsx)
 │   │   │   └── (generated)/               # Code-generated route group
+│   │   ├── (myapp)/                       # Feature code only (_features, _lib, _components) — no page.tsx here
 │   │   ├── api/
 │   │   │   ├── auth/[...nextauth]/route.ts # NextAuth handler (from lib/auth.ts)
 │   │   │   └── health/route.ts            # Health check
@@ -105,20 +115,26 @@ templates/demo-v1/
 │   │   ├── error.tsx
 │   │   └── global-error.tsx               # Renders typed IgrpError
 │   ├── actions/igrp/
-│   │   ├── layout.ts                      # configLayout(), getTheme()
+│   │   ├── layout.ts                      # configLayout()
 │   │   └── auth.ts
-│   ├── config/                            # site, login, error-messages
+│   ├── components/                        # app-search.tsx, home-overview.tsx
+│   ├── config/                            # site, login
+│   ├── i18n/                              # next-intl setup, server actions, messages/ catalogs
 │   ├── lib/
-│   │   ├── auth.ts                        # withIGRPAuth instance, serverSession, getSession
+│   │   ├── auth-instance.ts               # withIGRPAuth instance
+│   │   ├── auth.ts                        # re-exports auth; serverSession, getSession
 │   │   ├── dal.ts                         # verifySession() data-access gate
-│   │   ├── utils.ts                       # cn, isPreviewMode, isAuthDisabled, isAuthBypass, sanitizeCallbackUrl
+│   │   ├── utilities.ts                   # isPreviewMode, isAuthDisabled, isAuthBypass, sanitizeCallbackUrl
 │   │   ├── errors.ts, report-error.ts
 │   │   ├── fonts.ts
-│   │   └── config/                        # get-base-path, get-pkj, get-routes, get-session-args
-│   ├── providers/query-client.tsx        # React Query provider
+│   │   ├── header-search.ts               # Command-palette data (server)
+│   │   ├── session-store.ts, silent-sso.ts, logout-pending.ts, error-copy.ts
+│   │   └── config/                        # get-base-path, get-permissions, get-pkj, get-routes, get-session-args
+│   ├── providers/                         # React Query: query-provider.tsx, query-client(.server).ts
 │   ├── temp/                              # Mock users / menus / applications (preview mode)
-│   ├── styles/                            # globals.css + theme variants
+│   ├── styles/                            # globals.css
 │   ├── middleware.ts                      # Auth gate + security headers
+│   ├── instrumentation.ts
 │   └── igrp.template.config.ts           # createConfig() → igrpBuildConfig
 ├── public/
 ├── create-template/                      # Template publishing scripts
@@ -139,6 +155,7 @@ Detailed topics live in [`docs/`](docs/):
 | [Authentication](docs/AUTHENTICATION.md) | Centralized `withIGRPAuth` instance, `callbackUrl` sanitization, the OIDC flow, and the preview-mode / `AUTH_PROVIDER=none` bypass |
 | [Permissions](docs/PERMISSIONS.md) | Token-claims gating for pages, components, and menus — `igrpAssertAuthorize`, `<IGRPAuthorization>`, `usePermissions` |
 | [Access Management Sync](docs/ACCESS_MANAGEMENT.md) | OAuth2 `client_credentials` sync of application/resources/menus to the Access Management API |
+| [Internationalisation](docs/I18N.md) | next-intl setup, message catalogs, format locales / time zone, `pnpm lint:i18n` |
 | [Design System](docs/DESIGN_SYSTEM.md) | The `@igrp/igrp-framework-react-design-system` component layers and usage |
 | [Design Tokens](docs/TOKENS.md) | CSS-variable tokens and how to theme the template |
 | [Upgrading](docs/MIGRATION_GUIDE.md) | Applying framework migrations with `@igrp/template-migrator` |
@@ -152,7 +169,7 @@ Tailwind compiles **once here in the app**, not in the framework packages. Impor
 
 ### Header slots — quick note
 
-Render your own components in the header by passing `headerSlots` to `IGRPLayoutFull`: `start` (left, after the logo), and `search`, `settings`, `notifications` and `actions` in the right cluster. The framework still fetches and owns all header data (user, logo, breadcrumbs) — a slot only replaces what renders in its position. Slots must be **elements**, not component references, since they cross the Server→Client boundary. This template's command palette is the worked example: [`src/lib/header-search.ts`](src/lib/header-search.ts) (server data) + [`src/components/header/app-search.tsx`](src/components/header/app-search.tsx) (client handlers), wired in [`src/app/(igrp)/layout.tsx`](src/app/(igrp)/layout.tsx). Full guide in [Header Slots](docs/HEADER_SLOTS.md).
+Render your own components in the header by passing `headerSlots` to `IGRPLayoutFull`: `start` (left, after the logo), and `search`, `settings`, `notifications` and `actions` in the right cluster. The framework still fetches and owns all header data (user, logo, breadcrumbs) — a slot only replaces what renders in its position. Slots must be **elements**, not component references, since they cross the Server→Client boundary. This template's command palette is the worked example: [`src/lib/header-search.ts`](src/lib/header-search.ts) (server data) + [`src/components/app-search.tsx`](src/components/app-search.tsx) (client handlers), wired in [`src/app/(igrp)/layout.tsx`](src/app/(igrp)/layout.tsx). Full guide in [Header Slots](docs/HEADER_SLOTS.md).
 
 ### Permissions — quick note
 

@@ -27,16 +27,20 @@ export interface IGRPDataTableActionAlert<TData> extends IGRPDataTableActionBase
 }
 
 /**
- * Renders a modal dialog triggered by a button.
- * Note: When >2 actions collapse into a dropdown, the `close` callback
- * passed to `render` is a no-op. Use alert or link types if dropdown-compatible
- * close behavior is required.
+ * Renders a modal dialog, triggered by an icon button inline (≤2 actions) or a menu item
+ * in the dropdown (>2). In both, `close` closes the dialog. The dialog shows a cancel
+ * button; put your own submit/confirm controls in `render`.
  */
 export interface IGRPDataTableActionModal<TData> extends IGRPDataTableActionBase<TData> {
   type: "modal"
   render: (row: Row<TData>, close: () => void) => ReactNode
 }
 
+/**
+ * Renders `render(row)` as-is inline (≤2 actions). In the dropdown (>2) the returned element
+ * becomes the menu item itself (its `onClick` runs on select), so return one element such as
+ * an `IGRPButton`, and keep any overlay it opens outside the menu.
+ */
 export interface IGRPDataTableActionCustom<TData> extends IGRPDataTableActionBase<TData> {
   type: "custom"
   render: (row: Row<TData>) => ReactNode

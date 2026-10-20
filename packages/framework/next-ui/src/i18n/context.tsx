@@ -38,7 +38,7 @@ function readCookieLocale(): string {
   const entry = document.cookie.split('; ').find((c) => c.startsWith(`${IGRP_LOCALE_COOKIE}=`));
   if (!entry) return '';
   const raw = entry.slice(IGRP_LOCALE_COOKIE.length + 1);
-  let value = raw;
+  let value: string;
   try {
     value = decodeURIComponent(raw);
   } catch {

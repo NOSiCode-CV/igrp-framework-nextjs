@@ -7,7 +7,8 @@ import {
   IGRPDataTableDropdownMenu,
   IGRPDataTableDropdownMenuAlert,
   IGRPDataTableDropdownMenuLink,
-  IGRPDataTableDropdownMenuCustom,
+  IGRPDataTableDropdownMenuModal,
+  IGRPDataTableDropdownMenuNode,
   type IGRPDataTableActionDropdown,
 } from "./action-dropdown-menu.js"
 import type { IGRPDataTableAction } from "./types.js"
@@ -65,6 +66,7 @@ function IGRPDataTableRowActionsCell<TData>({ row, actions }: IGRPDataTableRowAc
                 labelTrigger={action.label}
                 disabled={action.disabled?.(row)}
                 render={(close) => action.render(row, close)}
+                showConfirm={false}
               />
             )
           }
@@ -98,24 +100,18 @@ function IGRPDataTableRowActionsCell<TData>({ row, actions }: IGRPDataTableRowAc
     } else if (action.type === "modal") {
       const capturedRender = action.render
       dropdownItems.push({
-        component: IGRPDataTableDropdownMenuCustom,
+        component: IGRPDataTableDropdownMenuModal,
         props: {
           labelTrigger: action.label,
-          action: () => {
-            capturedRender(row, () => undefined)
-          },
+          icon: action.icon,
+          render: (close) => capturedRender(row, close),
+          showConfirm: false,
         },
       })
     } else if (action.type === "custom") {
-      const capturedRender = action.render
       dropdownItems.push({
-        component: IGRPDataTableDropdownMenuCustom,
-        props: {
-          labelTrigger: action.label,
-          action: () => {
-            capturedRender(row)
-          },
-        },
+        component: IGRPDataTableDropdownMenuNode,
+        props: { labelTrigger: action.label, node: action.render(row) },
       })
     }
   }

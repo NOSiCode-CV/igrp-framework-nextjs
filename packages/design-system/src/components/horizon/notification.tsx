@@ -4,7 +4,7 @@
 /* eslint-disable react-refresh/only-export-components */
 
 import { cva, type VariantProps } from "class-variance-authority"
-import { useId } from "react"
+import { useId, useState } from "react"
 
 import { cn } from "cn"
 import { IGRPButton } from "./button.js"
@@ -62,6 +62,8 @@ type IGRPNotificationProps = {
   actionLink?: string
   /** Custom action elements. */
   customActions?: React.ReactNode
+  /** Called after the close button hides the notification. */
+  onClose?: () => void
   /** HTML id attribute. */
   id?: string
 } & VariantProps<typeof IGRPNotificationVariants>
@@ -72,7 +74,7 @@ type IGRPNotificationProps = {
 function IGRPNotification({
   className,
   showIcon = true,
-  content = "We use cookies to improve your experience, and show personalized content.",
+  content,
   showClose = false,
   iconName,
   showLink = false,
@@ -81,15 +83,19 @@ function IGRPNotification({
   border = "default",
   variant = "default",
   customActions,
+  onClose,
   id,
 }: IGRPNotificationProps) {
   const i18n = useIGRPi18n()
+  const [dismissed, setDismissed] = useState(false)
   const _id = useId()
   const ref = id ?? _id
 
   const icon = iconName ?? typeIconMap[variant ?? "default"]
 
   const isAssertive = variant === "error" || variant === "warning"
+
+  if (dismissed) return null
 
   return (
     <div
@@ -133,6 +139,10 @@ function IGRPNotification({
               variant="ghost"
               className={cn("group -my-1.5 -me-2 size-8 shrink-0 p-0 hover:bg-transparent")}
               aria-label={i18n.notification.close}
+              onClick={() => {
+                setDismissed(true)
+                onClose?.()
+              }}
               iconName="X"
               showIcon={true}
               size="icon"

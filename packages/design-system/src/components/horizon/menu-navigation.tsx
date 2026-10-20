@@ -7,6 +7,7 @@ import { cn } from "cn"
 import { Card, CardContent, CardHeader, CardTitle } from "../primitives/card.js"
 import { IGRPBadge } from "./badge.js"
 import { IGRPIcon } from "./icon/index.js"
+import { useIGRPi18n } from "../../i18n/index.js"
 
 function getScrollBehavior(): ScrollBehavior {
   if (typeof window !== "undefined" && window.matchMedia("(prefers-reduced-motion: reduce)").matches) {
@@ -106,7 +107,7 @@ function IGRPMenuNavigation({
   sections,
   activeSection: controlledActiveSection,
   onSectionChange,
-  title = "Navigation",
+  title: titleProp,
   badgeContent,
   badgeVariant,
   badgeColor,
@@ -116,6 +117,8 @@ function IGRPMenuNavigation({
   isStickyTop = false,
   id,
 }: IGRPMenuNavigationProps) {
+  const i18n = useIGRPi18n()
+  const title = titleProp ?? i18n.menuNavigation.title
   const [internalActiveSection, setInternalActiveSection] = useState(sections[0]?.id || "")
   const navigationContext = useContext(NavigationContext)
 

@@ -15,7 +15,7 @@ const makeArgs = (
   syncAccess: true,
   previewMode: false,
   appCode: 'APP_TEST_1',
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+
   appInformation: { name: 'test', version: '0.0.0' } as any,
   menus: [],
   apiManagementConfig: {
@@ -34,9 +34,8 @@ describe('planAccessManagementSync', () => {
 
   it('passes args.menus through verbatim into the plan', () => {
     const menus = [
-      // eslint-disable-next-line @typescript-eslint/no-explicit-any
       { id: 1, code: 'A', name: 'A', type: 'MENU_PAGE', status: 'ACTIVE' } as any,
-      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+
       { id: 2, code: 'B', name: 'B', type: 'FOLDER', status: 'ACTIVE' } as any,
     ];
 
@@ -144,7 +143,6 @@ describe('planAccessManagementSync', () => {
       planAccessManagementSync(
         makeArgs({
           apiManagementConfig: {
-            // eslint-disable-next-line @typescript-eslint/no-explicit-any
             baseUrl: '' as any,
             serviceId: 'test-service',
             m2mClientId: 'cid',
@@ -158,7 +156,6 @@ describe('planAccessManagementSync', () => {
       planAccessManagementSync(
         makeArgs({
           apiManagementConfig: {
-            // eslint-disable-next-line @typescript-eslint/no-explicit-any
             baseUrl: '' as any,
             serviceId: 'test-service',
             m2mClientId: 'cid',

@@ -132,7 +132,10 @@ function IGRPAreaChart({
               {showReferenceZero && hasNegativeDataValues && <ReferenceLine y={0} stroke={referenceLineColor} />}
 
               {showTooltip && (
-                <ChartTooltip cursor={false} content={<ChartTooltipContent indicator={tooltipIndicator} />} />
+                <ChartTooltip
+                  cursor={false}
+                  content={<ChartTooltipContent indicator={tooltipIndicator} valueFormatter={valueFormatter} />}
+                />
               )}
 
               {legendPosition !== "none" && customLegend && (
@@ -170,7 +173,7 @@ function IGRPAreaChart({
                     key: area.dataKey,
                     dataKey: area.dataKey,
                     name: area.name || area.dataKey,
-                    stackId: stacked || expanded ? "stack1" : undefined,
+                    stackId: stacked || expanded ? (area.stackId ?? "stack1") : undefined,
                     fill: area.gradient === true ? `url(#fill${area.dataKey})` : `var(--color-${area.dataKey})`,
                     fillOpacity: area.fillOpacity || 0.6,
                     stroke: `var(--color-${area.dataKey})`,
@@ -181,7 +184,7 @@ function IGRPAreaChart({
                     key={area.dataKey}
                     dataKey={area.dataKey}
                     name={area.name || area.dataKey}
-                    stackId={stacked || expanded ? "stack1" : undefined}
+                    stackId={stacked || expanded ? (area.stackId ?? "stack1") : undefined}
                     fill={area.gradient === true ? `url(#fill${area.dataKey})` : `var(--color-${area.dataKey})`}
                     fillOpacity={area.fillOpacity || 0.4}
                     stroke={`var(--color-${area.dataKey})`}

@@ -1,5 +1,29 @@
 # @igrp/igrp-framework-react-design-system
 
+## 0.2.0-beta.6
+
+### Patch Changes
+
+- 9da2fa9: Fixes from a source audit of the consumer skill.
+
+  - **Data table:** `createIGRPColumnHelper().accessor()` now returns a real `ColumnDef`, so helper-built columns go straight into `columns` without a cast. `modal` and `custom` row actions now work when actions collapse into the dropdown (more than 2): a modal opens with a working `close`, and a custom element becomes the menu item and runs its `onClick`. Before, both were silently discarded. Row-action dialogs take their Cancel/Confirm text from the i18n catalog (`alertDialog.cancel` / `alertDialog.action`). The modal row action no longer shows a Confirm button with no handler. `pagination.defaultPageSize` is now honoured.
+  - **Forms:** changing `resetKey` on `IGRPForm` now resets values, dirty state and the global error to the current `defaultValues`, as its JSDoc always said. `convertValuesToFormData` appends each file of a `FileList` or `File[]` as binary and serialises nested objects as JSON (it used to write `"[object …]"`). `IGRPSelect` no longer defaults its `label` to "Select an option". Its placeholder, the combobox placeholder and the range/multiple date-picker placeholders now come from the i18n catalog. `IGRPCheckbox`, `IGRPSwitch` and `IGRPInputColor` now show the `error` prop as the message in form mode.
+  - **Charts:** `valueFormatter` now reaches the tooltip, through a new optional `valueFormatter` on `ChartTooltipContent`. Bar and area charts honour each series' `stackId`, and bar charts each series' `radius`. Radar `gridFilled` now fills. `categoryKey` is optional on pie, radar and radial-bar charts.
+  - **Horizon:** `IGRPAlertDialog` defaults to the variant's icon. `IGRPNotification`'s close button dismisses it and calls a new `onClose`. `IGRPStatsCard` renders `value={0}`. `IGRPPageHeader` without `name` no longer renders `id="h-undefined"`. The deprecated `IGRPText` `variant` no longer leaks to the DOM. Several hard-coded English strings now come from the catalog, through new keys `chat.description`, `chat.you`, `pdfViewer.close`, `pdfViewer.openInNewTab`, `loadingSpinner.label`, `menuNavigation.title`, `toast.*`, `videoEmbed.invalidUrl`, `table.actions`, `dataTable.expandRow`/`collapseRow`, `inputSelect.placeholder` and `combobox.placeholder`. They cover the chat, PDF viewer, spinner, section nav, promise toasts, video embed, `IGRPTable` and the row expander. `IGRPNotification` and `IGRPStatusBanner` no longer render placeholder copy.
+
+## 0.2.0-beta.5
+
+### Patch Changes
+
+- c9accaa: i18n: English and French string catalogs (`IGRP_I18N_DEFAULTS_EN`, `IGRP_I18N_DEFAULTS_FR`) with a parity test against `IGRP_I18N_DEFAULTS_PT` (the renamed `_PT_PT`, kept as a deprecated alias). `IGRPI18nProvider` accepts a full catalog or a partial override (`strings`) over a `base`, merged generically. The calendar's date-fns locale and the chart tooltip's number formatting follow `useIGRPLocale()`.
+- 98a54c8: Horizon inputs inside a react-hook-form no longer let caller props break the form binding.
+
+  - A caller `onChange` or `onBlur` now runs after the field's own handler instead of replacing it. Before, `<IGRPInputText onChange={…} />` or `<IGRPTextarea onChange={…} />` disconnected the input from the form: it showed the keystroke, the form never received it, and the value snapped back. A caller `onBlur` did the same to touched state and `mode: "onBlur"` validation in text, textarea, password, time, url, search, phone, file, checkbox and switch. `IGRPInputNumber` ignored a caller `onFocus` / `onBlur` altogether and never marked the field touched. It now does both.
+  - A caller `value` / `defaultValue` (text, textarea) or `checked` / `defaultChecked` (checkbox, switch) no longer overrides the form's value. Inside a form, the form is the source of truth.
+  - Every form-bound input now hands `field.ref` to a focusable element, merged with any caller `ref`, so `shouldFocusError` focuses the first invalid field on submit. Before, only `IGRPInputHidden` did. Radio groups focus the checked radio, or the first enabled one.
+  - `IGRPSelect` and the date pickers mark the field touched when their dropdown closes, as `IGRPCombobox` and `IGRPMultiSelect` already did. A caller `onOpenChange` on `IGRPSelect` no longer replaces its internal open state.
+  - `IGRPDatePickerMultiple` opens again. Its trigger dropped the props `PopoverTrigger` passes it, so clicking it did nothing.
+
 ## 0.2.0-beta.4
 
 ### Patch Changes

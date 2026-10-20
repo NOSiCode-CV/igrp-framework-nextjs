@@ -1,6 +1,6 @@
 'use client';
 
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 import {
   cn,
   IGRPIcon,
@@ -38,9 +38,11 @@ export function FolderMenuItem({ node, pathname, labels }: FolderMenuItemProps) 
   // `open` to it outright) auto-reveals the route the user just landed on
   // without fighting a manual collapse of some other folder.
   const [open, setOpen] = useState(hasActiveChild);
-  useEffect(() => {
+  const [prevHasActiveChild, setPrevHasActiveChild] = useState(hasActiveChild);
+  if (hasActiveChild !== prevHasActiveChild) {
+    setPrevHasActiveChild(hasActiveChild);
     if (hasActiveChild) setOpen(true);
-  }, [hasActiveChild]);
+  }
 
   return (
     // ONE list item for both surfaces. They were two, and the icon-mode one hid

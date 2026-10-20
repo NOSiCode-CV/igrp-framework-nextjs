@@ -361,6 +361,24 @@
       "appliedAt": "2026-10-15T00:00:00.000Z",
       "cliVersion": "0.2.0-beta.5",
       "manifestHash": "8625b6148e8580a7"
+    },
+    {
+      "id": "60-organization-branding",
+      "appliedAt": "2026-10-15T00:00:00.000Z",
+      "cliVersion": "0.2.0-beta.5",
+      "manifestHash": "c88ba4cdf51ced4f"
+    },
+    {
+      "id": "61-resync-app-deps",
+      "appliedAt": "2026-10-15T00:00:00.000Z",
+      "cliVersion": "0.2.0-beta.5",
+      "manifestHash": "8090fe7047506bc8"
+    },
+    {
+      "id": "62-i18n-time-zone",
+      "appliedAt": "2026-10-16T00:00:00.000Z",
+      "cliVersion": "0.2.0-beta.6",
+      "manifestHash": "27025a8b3ba10884"
     }
   ]
 }

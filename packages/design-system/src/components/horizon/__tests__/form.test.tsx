@@ -180,3 +180,36 @@ describe("IGRPForm", () => {
     })
   })
 })
+
+describe("IGRPForm resetKey", () => {
+  function Harness() {
+    const [record, setRecord] = useState({ id: 1, name: "Alice" })
+    return (
+      <>
+        <button type="button" onClick={() => setRecord({ id: 2, name: "Bob" })}>
+          next
+        </button>
+        <IGRPForm
+          schema={schema}
+          formRef={createRef<IGRPFormHandle<Schema>>()}
+          onSubmit={vi.fn()}
+          defaultValues={{ name: record.name }}
+          resetKey={record.id}
+        >
+          <IGRPInputText name="name" label="Name" />
+        </IGRPForm>
+      </>
+    )
+  }
+
+  it("replaces dirty values with the new defaults when resetKey changes", async () => {
+    render(<Harness />)
+    const input = screen.getByRole("textbox", { name: "Name" })
+    await userEvent.clear(input)
+    await userEvent.type(input, "typed")
+
+    await userEvent.click(screen.getByRole("button", { name: "next" }))
+
+    await waitFor(() => expect(input).toHaveValue("Bob"))
+  })
+})

@@ -16,7 +16,7 @@ export { IGRPRootLayout, type IGRPRootLayoutArgs } from './layouts/igrp-root-lay
 
 export { igrpBuildConfig } from './lib/build.js';
 
-// Resolves `layoutData` / the deprecated `layoutMockData` for consumers that
+// Resolves `layoutData` (with a framework error when missing) for consumers that
 // read the layout data source themselves (e.g. a template's header search).
 export { igrpResolveLayoutDataSource } from './lib/layout-data-source.js';
 
@@ -55,3 +55,9 @@ export {
   type IgrpErrorContext,
   type IgrpErrorShape,
 } from './errors.js';
+
+// Organization branding
+export { igrpGetBranding, igrpInvalidateBranding } from './branding/get-branding.js';
+export { igrpBrandingMetadata } from './branding/metadata.js';
+export { igrpResolveRequestBranding, BRAND_FRESHNESS_COOKIE } from './branding/request.js';
+export { resolveBrandingToken } from './branding/token.js';

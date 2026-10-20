@@ -47,7 +47,7 @@ Rows marked **Δ** differ from 09-30.
 |---|---|
 | Library | next-intl 4, regular dependency of `@igrp/framework-next`. The template adds `createNextIntlPlugin` to `next.config.ts`. |
 | Placement | Subpath exports of `@igrp/framework-next`: `./i18n`, `./i18n/server`, `./i18n/client`, `./i18n/messages`, `./i18n/testing`. Build order unchanged. |
-| Checks **Δ** | New dev-only package `@igrp/i18n-tools` (bin `igrp-i18n`), built like `template-migrator`. Not inside `framework-next`, which would otherwise ship `typescript` as a runtime dependency (D-3). |
+| Checks **Δ** | New dev-only package `@igrp/framework-next-i18n` (bin `igrp-i18n`), built like `template-migrator`. Not inside `framework-next`, which would otherwise ship `typescript` as a runtime dependency (D-3). |
 | Locales | Platform locales fixed: `pt`, `en`, `fr`. Each app sets `defaultLocale` and may enable a subset, in code. |
 | Format locale | Per deployment via `IGRP_FORMAT_LOCALES`, read by the template, defaults `pt-CV`, `en-GB`, `fr-FR`. |
 | next-intl locale **Δ** | next-intl's `locale` is the base `IGRPLocale`, typed. Formatting goes through the framework helpers with the format locale; `useFormatter`/`getFormatter` from next-intl are flagged by `igrp-i18n` (D-4). |
@@ -212,7 +212,7 @@ Missing keys render `namespace.key` and warn in development only. Keys an app sh
 - `IGRPLayoutFull` / `IGRPLayoutBlank`: seed `igrpSetAccessClientConfig({ ..., locale })` from `igrpResolveLocale(config.i18n)` when configured.
 - `IGRPClientRuntimeConfig.locale?: string` → the api client sends `Accept-Language`. `igrpEnsureAccessClientConfig` (actions path) leaves it undefined; apps that need the header in their own actions pass it, as the application center does today.
 
-### `@igrp/i18n-tools` (new, dev-only; D-3)
+### `@igrp/framework-next-i18n` (new, dev-only; D-3)
 
 `packages/framework/i18n-tools`, bin `igrp-i18n`, tsup build and Vitest like `template-migrator`, dependencies `typescript` and `@formatjs/icu-messageformat-parser`. Published to the internal registry with the same `release` script shape.
 
@@ -222,7 +222,7 @@ Missing keys render `namespace.key` and warn in development only. Keys an app sh
 
 ### `templates/demo-v1`
 
-- Dependencies: `next-intl` (via `@igrp/framework-next`); `@igrp/i18n-tools` as a devDependency; script `"lint:i18n": "igrp-i18n check-catalogs src/i18n/messages --default pt && igrp-i18n check-literals src/components src/i18n src/app/(igrp)/page.tsx"`, added to `build` after `lint`. The folder list is the template's equivalent of the application center's `MIGRATED_FOLDERS`: the `(demo)` pages keep their Portuguese literals and are added to the list only when migrated.
+- Dependencies: `next-intl` (via `@igrp/framework-next`); `@igrp/framework-next-i18n` as a devDependency; script `"lint:i18n": "igrp-i18n check-catalogs src/i18n/messages --default pt && igrp-i18n check-literals src/components src/i18n src/app/(igrp)/page.tsx"`, added to `build` after `lint`. The folder list is the template's equivalent of the application center's `MIGRATED_FOLDERS`: the `(demo)` pages keep their Portuguese literals and are added to the list only when migrated.
 - `src/i18n/index.ts`: `igrpDefineI18n({ defaultLocale: 'pt', formatLocales: igrpParseFormatLocales(process.env.IGRP_FORMAT_LOCALES), getSessionLocale })` with `getSessionLocale` reading `session.user.locale` through the cached `getLayoutConfig()`. No `persistLocale`, so the template is `cookie-first`.
 - `src/i18n/request.ts`: `export default getRequestConfig(igrpCreateRequestConfig(i18n, { pt, en, fr }))`.
 - `src/i18n/actions.ts` (`'use server'`): `export async function setLocale(value: string) { return igrpSetLocale(i18n, value); }`.
@@ -257,7 +257,7 @@ Follows `.claude/shared/dependency-order.md`; each step is a patch changeset.
 3. `design-system`: catalogs, generic merge, calendar and chart locale.
 4. `framework-next-ui`: chrome catalog, provider, hook, error-copy defaults.
 5. `framework-next`: `i18n` subpaths, config field, layouts, `Accept-Language`.
-6. `@igrp/i18n-tools`.
+6. `@igrp/framework-next-i18n`.
 7. Template wiring, migration 56, `sync:template-lock`.
 8. `pnpm build:framework`, template build with `lint:i18n`, release per package.
 
@@ -273,7 +273,7 @@ Follows `.claude/shared/dependency-order.md`; each step is a patch changeset.
 
 - **D-1 Resolution strategy derived from `persistLocale`.** Accepted. ADR 0001 gets an amendment recording `session-first` and its precondition. The alternative (always `cookie-first`) would have cost the application center FR-6/FR-27.
 - **D-2 `igrpBuildConfig({ i18n })` instead of an `IGRPRootLayout` prop.** Accepted. The field reaches `IGRPLayoutFull`/`IGRPLayoutBlank`, which need the locale for `Accept-Language`, and the root layout call stays unchanged.
-- **D-3 Checks as the separate dev-only package `@igrp/i18n-tools`.** Accepted. A bin inside `framework-next` would have made `typescript` and the ICU parser runtime dependencies of a server package.
+- **D-3 Checks as the separate dev-only package `@igrp/framework-next-i18n`.** Accepted. A bin inside `framework-next` would have made `typescript` and the ICU parser runtime dependencies of a server package.
 - **D-4 next-intl `locale` stays the base `IGRPLocale`.** Accepted. Formatting goes through `useIGRPFormat()`; the `igrp-i18n` check flags `useFormatter`/`getFormatter`.
 - **D-5 The IdP `locale` claim.** Treated as emitted, as the application center already relies on it (`auth-instance.ts` seeds `token.locale` from `profile.locale`). The framework maps the claim unconditionally and falls through when absent. The implementation plan carries a verification task against the IGRP Authorization Server's claim set; it is not a blocker.
 

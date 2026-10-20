@@ -13,8 +13,8 @@ const isBlank = (v: unknown): boolean => typeof v !== 'string' || v.trim() === '
  * gates in `planAccessManagementSync` so a config that boots also syncs:
  *
  *   • `previewMode` / `syncAccess` must be real booleans.
- *   • exactly one of `layoutData` / `layoutMockData` (deprecated) is set,
- *     and its `getHeaderData` / `getSidebarData` are functions.
+ *   • `layoutData` is set and its `getHeaderData` / `getSidebarData` are
+ *     functions. A leftover `layoutMockData` (removed) gets a rename hint.
  *   • `layout` must be present — `IGRPRootLayout` destructures it on the first
  *     line of its render, so a missing one is a bare `TypeError` in the root
  *     layout with no framework error code attached.
@@ -50,12 +50,11 @@ const igrpConfigSchema = z
     // null, the rest are optional) — the point is that the object exists.
     layout: z.object({}).catchall(z.unknown()),
     appInformation: z.object({ name: z.string().optional() }).catchall(z.unknown()).optional(),
-    // `layoutData` supersedes `layoutMockData`; both are optional at the field
-    // level and the "exactly one" rule lives in `superRefine` below, so the
-    // error names the conflict rather than a missing key.
+    // Optional at the field level so `superRefine` below can name a leftover
+    // `layoutMockData` instead of reporting a bare missing key.
     layoutData: layoutDataSourceSchema('layoutData').optional(),
-    layoutMockData: layoutDataSourceSchema('layoutMockData').optional(),
     toasterConfig: z.object({ showToaster: z.boolean() }).catchall(z.unknown()),
+    branding: z.object({ enabled: z.boolean() }).optional(),
     apiManagementConfig: z
       .object({
         baseUrl: z.string().optional(),
@@ -68,19 +67,14 @@ const igrpConfigSchema = z
   })
   .catchall(z.unknown())
   .superRefine((cfg, ctx) => {
-    if (!cfg.layoutData && !cfg.layoutMockData) {
+    if (!cfg.layoutData) {
       ctx.addIssue({
         code: 'custom',
         path: ['layoutData'],
         message:
-          'É necessária a fonte de dados do layout: defina `layoutData` (ou o descontinuado `layoutMockData`).',
-      });
-    }
-    if (cfg.layoutData && cfg.layoutMockData) {
-      ctx.addIssue({
-        code: 'custom',
-        path: ['layoutData'],
-        message: 'Defina `layoutData` OU `layoutMockData` (descontinuado), não ambos.',
+          'layoutMockData' in cfg
+            ? '`layoutMockData` foi removido: renomeie-o para `layoutData`.'
+            : 'É necessária a fonte de dados do layout: defina `layoutData`.',
       });
     }
     if (!cfg.previewMode && isBlank(cfg.apiManagementConfig?.baseUrl)) {

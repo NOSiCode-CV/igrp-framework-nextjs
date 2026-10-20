@@ -1,6 +1,6 @@
 'use client';
 
-import { Fragment, useCallback, useEffect, useMemo, useState } from 'react';
+import { Fragment, useCallback, useEffect, useMemo, useState, useSyncExternalStore } from 'react';
 import {
   IGRPIcon,
   Button,
@@ -43,17 +43,18 @@ interface IGRPTemplateCommandSearchProps {
   labels?: Partial<IGRPCommandSearchLabels>;
 }
 
+const subscribeNever = () => () => {};
+const readIsMac = () => /Mac|iPhone|iPad|iPod/i.test(navigator.platform || navigator.userAgent);
+
 function IGRPTemplateCommandSearch({
   commands = [],
   labels: labelOverrides,
 }: IGRPTemplateCommandSearchProps) {
   const [open, setOpen] = useState(false);
   // The shortcut accepts Cmd OR Ctrl, but the hint used to read the Cmd glyph
-  // everywhere. Resolved after mount so the server and client markup agree.
-  const [isMac, setIsMac] = useState(false);
-  useEffect(() => {
-    setIsMac(/Mac|iPhone|iPad|iPod/i.test(navigator.platform || navigator.userAgent));
-  }, []);
+  // everywhere. The server snapshot is `false`, so hydration matches the server
+  // markup and the client re-renders with the real platform.
+  const isMac = useSyncExternalStore(subscribeNever, readIsMac, () => false);
 
   const chrome = useIGRPChromeI18n();
   const labels = labelOverrides

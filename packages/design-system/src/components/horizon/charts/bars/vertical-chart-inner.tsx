@@ -135,7 +135,10 @@ function IGRPVerticalBarChartInner({
               {showReferenceZero && hasNegativeDataValues && <ReferenceLine y={0} stroke={referenceLineColor} />}
 
               {showTooltip && (
-                <ChartTooltip cursor={false} content={<ChartTooltipContent indicator={tooltipIndicator} />} />
+                <ChartTooltip
+                  cursor={false}
+                  content={<ChartTooltipContent indicator={tooltipIndicator} valueFormatter={valueFormatter} />}
+                />
               )}
 
               {legendPosition !== "none" && customLegend && (
@@ -162,18 +165,18 @@ function IGRPVerticalBarChartInner({
                     key: bar.dataKey,
                     dataKey: bar.dataKey,
                     name: bar.name || bar.dataKey,
-                    stackId: stacked ? "stack1" : undefined,
+                    stackId: stacked ? (bar.stackId ?? "stack1") : undefined,
                     fill: `var(--color-${bar.dataKey})`,
-                    radius: barRadius,
+                    radius: bar.radius ?? barRadius,
                   })
                 ) : (
                   <Bar
                     key={bar.dataKey}
                     dataKey={bar.dataKey}
                     name={bar.name || bar.dataKey}
-                    stackId={stacked ? "stack1" : undefined}
+                    stackId={stacked ? (bar.stackId ?? "stack1") : undefined}
                     fill={`var(--color-${bar.dataKey})`}
-                    radius={barRadius}
+                    radius={bar.radius ?? barRadius}
                   />
                 )
               )}

@@ -2,7 +2,7 @@
 
 Client-side UI shell for the IGRP Framework — the header, sidebar, navigation, auth chrome, providers and error surfaces that wrap every IGRP application.
 
-Every export is a Client Component or a client hook. The package declares `'use client'` on its barrel, so a Server Component may render these, but a module that imports one is itself a client module.
+The components and hooks are client code, but the barrel (`src/index.ts`) deliberately carries **no** `'use client'`: the directive sits on each leaf module, so a Server Component importing one export does not pull the whole package into its client bundle. Leaves without the directive — `IGRPBrandingStyle`, the branding helpers and the `IGRP_CHROME_STRINGS_*` catalogs — are server-safe. `src/__tests__/client-boundaries.test.ts` enforces both.
 
 ## Requirements
 
@@ -29,16 +29,16 @@ The names below are the real exports. `src/index.ts` is the whole public surface
 
 ### Providers
 
-| Export                    | Purpose                                                                           |
-| ------------------------- | --------------------------------------------------------------------------------- |
-| `IGRPRootProvidersFull`   | Sidebar + header shell with `SidebarProvider` and the toaster — for the app shell |
-| `IGRPRootProvidersBlank`  | Toaster only, no sidebar — for login/logout and other chrome-less routes          |
-| `IGRPRootProviders`       | **Deprecated** alias of `IGRPRootProvidersFull`                                   |
-| `IGRPNestedProviders`     | Session, tooltip, theme, active-theme and the session watcher, correctly nested   |
-| `IGRPSessionProvider`     | NextAuth `SessionProvider` wrapper                                                |
-| `IGRPThemeProvider`       | `next-themes` wrapper                                                             |
-| `IGRPActiveThemeProvider` | Syncs the active CSS theme class (`theme-*`) and its cookie                       |
-| `useIGRPThemeConfig`      | Reads/sets the active theme; throws outside `IGRPActiveThemeProvider`             |
+| Export                   | Purpose                                                                           |
+| ------------------------ | --------------------------------------------------------------------------------- |
+| `IGRPRootProvidersFull`  | Sidebar + header shell with `SidebarProvider` and the toaster — for the app shell |
+| `IGRPRootProvidersBlank` | Toaster only, no sidebar — for login/logout and other chrome-less routes          |
+| `IGRPRootProviders`      | **Deprecated** alias of `IGRPRootProvidersFull`                                   |
+| `IGRPNestedProviders`    | Session, tooltip, theme, branding and the session watcher, correctly nested       |
+| `IGRPSessionProvider`    | NextAuth `SessionProvider` wrapper                                                |
+| `IGRPThemeProvider`      | `next-themes` wrapper                                                             |
+| `IGRPBrandingProvider`   | Exposes the organization Brand to the chrome; `null` keeps every default          |
+| `useIGRPBranding`        | The current Brand or `null`; never throws                                         |
 
 ### Template chrome
 
@@ -52,7 +52,6 @@ The names below are the real exports. `src/index.ts` is the whole public surface
 | `IGRPTemplateBreadcrumbs`   | Route-aware breadcrumb trail, controlled or auto-derived            |
 | `IGRPTemplateCommandSearch` | Command palette, opened with Cmd+K or Ctrl+K                        |
 | `IGRPTemplateNotifications` | Notifications dropdown                                              |
-| `IGRPTemplateThemeSelector` | Named-theme selector                                                |
 | `IGRPTemplateModeSwitcher`  | Compact light/dark toggle                                           |
 | `IGRPTemplateImage`         | `next/image` that survives an un-whitelisted host and falls back    |
 | `IGRPTemplateLoading`       | Full-page loading state                                             |
@@ -91,6 +90,18 @@ The names below are the real exports. `src/index.ts` is the whole public surface
 
 > The authoritative page gate is the server-side `igrpAssertAuthorize` in `@igrp/framework-next`. Everything here is client-side rendering control, not a security boundary.
 
+### i18n (chrome catalog)
+
+| Export                                                       | Purpose                                                                                                                                    |
+| ------------------------------------------------------------ | ------------------------------------------------------------------------------------------------------------------------------------------ |
+| `IGRPChromeI18nProvider`                                     | `{ strings, children }` — supplies the chrome catalog. Mounted by `IGRPIntlProvider` (`@igrp/framework-next/i18n/client`)                  |
+| `useIGRPChromeI18n`                                          | The catalog in effect; without a provider, the one for the `IGRP_LOCALE` cookie on the client, Portuguese on the server                    |
+| `igrpChromeStringsFor(tag)`                                  | Catalog for a locale or language tag (`fr`, `fr-FR`); anything unsupported → Portuguese. Never throws                                      |
+| `IGRP_CHROME_STRINGS_PT` / `_EN` / `_FR`                     | The catalogs (`IGRPChromeStrings`)                                                                                                         |
+| `IGRP_LOCALE_COOKIE`                                         | `'IGRP_LOCALE'`                                                                                                                            |
+| `igrpResolveErrorCopy(error, { byCode, fallback }, custom?)` | Error-screen `{ title, description }`: `custom` resolver (merged), then the catalog entry for the error's `IGRP_*` `code`, then `fallback` |
+| `resolveMenuLabels(overrides?, base?)`                       | Merges partial menu labels over `base` (default `IGRP_MENU_LABELS_PT_PT`)                                                                  |
+
 ---
 
 ## Strings and locale
@@ -107,26 +118,27 @@ import { IGRPTemplateSidebar } from '@igrp/framework-next-ui';
 />;
 ```
 
-Catalogs: `IGRP_MENU_LABELS_PT_PT`, `IGRP_NAV_USER_LABELS_PT_PT`, `IGRP_NOTIFICATIONS_LABELS_PT_PT`, `IGRP_COMMAND_SEARCH_LABELS_PT_PT`, `IGRP_MODE_SWITCHER_LABELS_PT_PT`, `IGRP_THEME_SELECTOR_LABELS_PT_PT`. The standalone screens (`IGRPForbidden`, `IGRPTemplateNotFound`, `IGRPGlobalError`, `IGRPSegmentError`) take individual label props instead.
+Catalogs: `IGRP_MENU_LABELS_PT_PT`, `IGRP_NAV_USER_LABELS_PT_PT`, `IGRP_NOTIFICATIONS_LABELS_PT_PT`, `IGRP_COMMAND_SEARCH_LABELS_PT_PT`, `IGRP_MODE_SWITCHER_LABELS_PT_PT` — deprecated views into the pt chrome catalog `IGRP_CHROME_STRINGS_PT`, which ships alongside `IGRP_CHROME_STRINGS_EN` / `_FR` and is selected by `IGRPChromeI18nProvider` (mounted for you by `@igrp/framework-next`'s i18n). Props still win over the catalog. The standalone screens (`IGRPForbidden`, `IGRPTemplateNotFound`, `IGRPGlobalError`, `IGRPSegmentError`) take individual label props instead.
 
 `IGRPTemplateHeader` mounts most of this chrome, so it forwards each child's overrides: `navUserLabels`, `commandSearchLabels`, `notificationsLabels`, `modeSwitcherLabels`, `breadcrumbHomeLabel`, `breadcrumbEllipsisLabel` and `settingsLabel`.
-
-`IGRPTemplateThemeSelector` also takes its option lists as props — `themes` and `scaledThemes`, defaulting to `IGRP_DEFAULT_THEMES` / `IGRP_SCALED_THEMES`. A `value` is the suffix of the `theme-*` class `IGRPActiveThemeProvider` sets on `<body>`, so it has to match a theme your CSS defines; pass `scaledThemes={[]}` to hide that group.
 
 Placeholders like `{name}` and `{count}` are substituted with the design system's `igrpFormatMessage`. Do not switch these to `String.prototype.replace(string, string)` — it interprets `$&`, `` $` ``, `$'` and `$n` in the replacement, and both menu names (from the backend) and the search query (from the user) flow through here.
 
 Timestamps are formatted with the design system's `useIGRPLocale()` — `pt-PT` unless an `IGRPI18nProvider` says otherwise — never the ambient runtime locale, which resolves to the server's under SSR and the browser's on the client and hydrates mismatched.
 
-### Avoiding the theme flash
+### Organization branding
 
-`IGRPActiveThemeProvider` applies the `theme-*` class in a layout effect, so it lands before the browser paints — but that is still after hydration. To remove the flash entirely, render the class on `<body>` from the server using the same cookie value you pass as `activeThemeValue`:
+`IGRPBrandingStyle` renders the Brand tokens as a hoisted `<style>` (`html:root` / `html.dark`), server-safe and before first paint. `igrpParseBranding` validates a stored Brand document and never throws; `igrpBrandingToCss` turns it into CSS text with a deterministic key order; `IGRP_BRANDING_CORE_TOKENS` lists the 50 tokens a Brand may override. `IGRPTemplateHeader` and `IGRPAuthForm` read the Brand logos through `useIGRPBranding`. The root layout in `@igrp/framework-next` wires all of this when `branding.enabled` is true. Preset themes (`IGRPTemplateThemeSelector`, `IGRPActiveThemeProvider`) were removed.
 
-```tsx
-import { igrpActiveThemeClassName, IGRP_ACTIVE_THEME_COOKIE } from '@igrp/framework-next-ui';
-
-const theme = (await cookies()).get(IGRP_ACTIVE_THEME_COOKIE)?.value;
-// <body className={igrpActiveThemeClassName(theme)}>
-```
+| Export                        | Purpose                                                                                     |
+| ----------------------------- | ------------------------------------------------------------------------------------------- |
+| `igrpParseBranding(raw)`      | `string` → `IGRPBrandingParseResult`; never throws                                          |
+| `igrpBrandingToCss(branding)` | `IGRPBranding \| null` → CSS text                                                           |
+| `IGRP_BRANDING_CORE_TOKENS`   | `IGRPBrandingTokenCatalogEntry[]` — `{ name, group }` per overridable token                 |
+| `BRANDING_MAX_BYTES`          | Size cap for a Brand document (64 KiB)                                                      |
+| `isTokenName(name)`           | `--lowercase-name` custom-property check                                                    |
+| `isSafeCssValue(value)`       | One color (hex, keyword or color function), ≤128 chars, no `;{}<>@\`, `url(`, `expression(` |
+| `isSafeLogoUrl(url)`          | `http(s)` URL without credentials or whitespace                                             |
 
 ---
 
@@ -145,10 +157,10 @@ The package publishes `dist` only, so these are a contract with your app's `publ
 
 ## Usage
 
-`templates/demo-v1` is the canonical wiring: read its `src/app/layout.tsx` and `src/app/(igrp)/layout.tsx` rather than copying a snippet from here, because the provider nesting and the server/client split both matter.
+Apps don't usually compose these providers themselves: the server layouts in `@igrp/framework-next` do it, and `templates/demo-v1` (`src/app/layout.tsx`, `src/app/(igrp)/layout.tsx`) only renders those layouts. Read them rather than copying a snippet from here, because the provider nesting and the server/client split both matter.
 
-- Root layout composes `IGRPRootProvidersFull` (or `IGRPRootProvidersBlank` for chrome-less routes).
-- The `(igrp)` group layout composes `IGRPNestedProviders` around `IGRPTemplateSidebar` + `IGRPTemplateHeader`.
+- `IGRPRootLayout` (root layout) composes `IGRPNestedProviders` — session, tooltip, theme, branding, session watcher.
+- `IGRPLayoutFull` (the `(igrp)` group layout) composes `IGRPRootProvidersFull`, filling its `sidebar` / `header` slots with `IGRPTemplateSidebar` + `IGRPTemplateHeader`; `IGRPLayoutBlank` composes `IGRPRootProvidersBlank` for chrome-less routes.
 
 ---
 

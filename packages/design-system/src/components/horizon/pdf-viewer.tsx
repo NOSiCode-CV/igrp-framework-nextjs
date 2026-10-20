@@ -132,8 +132,8 @@ const openDocNewTab = (fileUrl: string) => {
 function IGRPPdfViewer({
   document: pdfDocument,
   displayMode = "modal",
-  labelButtonCancel = "Close",
-  labelButtonNewTab = "Open in new tab",
+  labelButtonCancel: labelButtonCancelProp,
+  labelButtonNewTab: labelButtonNewTabProp,
   inlineHeight = "50vh",
   loadErrorLabel,
   loadTimeoutMs = 8000,
@@ -144,6 +144,8 @@ function IGRPPdfViewer({
   className,
 }: IGRPPdfViewerProps) {
   const i18n = useIGRPi18n()
+  const labelButtonCancel = labelButtonCancelProp ?? i18n.pdfViewer.close
+  const labelButtonNewTab = labelButtonNewTabProp ?? i18n.pdfViewer.openInNewTab
   const [selectedDocument, setSelectedDocument] = useState<IGRPDocumentItem>()
   const [isModalOpen, setIsModalOpen] = useState(false)
 
@@ -282,13 +284,14 @@ type IGRPPdfViewerInlineProps = {
 /** Inline PDF viewer with embedded iframe. */
 function IGRPPdfViewerInline({
   document: pdfDocument,
-  labelButtonNewTab = "Open in new tab",
+  labelButtonNewTab: labelButtonNewTabProp,
   height = "50vh",
   loadErrorLabel,
   loadTimeoutMs = 8000,
   viewerPreference = "auto",
 }: IGRPPdfViewerInlineProps) {
   const i18n = useIGRPi18n()
+  const labelButtonNewTab = labelButtonNewTabProp ?? i18n.pdfViewer.openInNewTab
   const locale = useIGRPLocale()
   const { fileUrl, title, author, date } = pdfDocument
   const [state, dispatch] = useReducer(pdfViewerReducer, viewerPreference, getInitialPdfViewerState)

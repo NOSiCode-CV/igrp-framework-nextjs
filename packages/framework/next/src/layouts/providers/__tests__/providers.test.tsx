@@ -44,7 +44,6 @@ const getHeaderData = vi.fn();
 const getSidebarData = vi.fn();
 const layoutData = { getHeaderData, getSidebarData };
 
-// eslint-disable-next-line @typescript-eslint/no-explicit-any
 const props = (el: any) => el.props;
 
 beforeEach(() => {
@@ -62,7 +61,7 @@ describe('HeaderDataProvider', () => {
   it('keeps non-overridden header config in production', async () => {
     const el = await HeaderDataProvider({ ...base, showSidebar: true } as never);
     // The fields production does NOT override must survive — this is the trap
-    // the `layoutMockData` rename exists to stop people walking into.
+    // the `layoutMockData` -> `layoutData` rename existed to stop people walking into.
     expect(props(el).data).toMatchObject({ settingsUrl: '/s', user: { id: 1 } });
   });
 
@@ -126,7 +125,7 @@ describe('SidebarDataProvider', () => {
     });
   });
 
-  // Repo KNOWN-ISSUES #3 — written by this provider, read by nobody.
+  // The field was written by this provider and read by nobody; it is now removed.
   it('no longer writes the dead showPreviewMode field', async () => {
     const el = await SidebarDataProvider(base as never);
     expect(props(el).data).not.toHaveProperty('showPreviewMode');

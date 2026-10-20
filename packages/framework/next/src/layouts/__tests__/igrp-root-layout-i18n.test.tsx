@@ -9,6 +9,8 @@ vi.mock('../../lib/sync-plan.js', () => ({ planAccessManagementSync: () => null 
 const Nested = (p: unknown) => ({ __marker: 'nested', p });
 vi.mock('@igrp/framework-next-ui', () => ({
   IGRPNestedProviders: Nested,
+  IGRPBrandingStyle: () => null,
+  igrpParseBranding: () => ({ branding: null, dropped: 0 }),
   IGRP_CHROME_STRINGS_PT: {},
   IGRP_CHROME_STRINGS_EN: {},
   IGRP_CHROME_STRINGS_FR: {},
@@ -25,7 +27,6 @@ vi.mock('../../i18n/server/strings.js', () => ({
 const { IGRPRootLayout } = await import('../igrp-root-layout.js');
 const { igrpDefineI18n } = await import('../../i18n/config.js');
 
-// eslint-disable-next-line @typescript-eslint/no-explicit-any
 function find(node: any, type: unknown): any {
   if (!node || typeof node !== 'object') return null;
   if (Array.isArray(node)) return node.map((n) => find(n, type)).find(Boolean) ?? null;

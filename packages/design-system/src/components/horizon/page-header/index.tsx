@@ -165,7 +165,7 @@ function IGRPPageHeader({
           description={description}
           className={headlineClassName}
           variant={variant}
-          name={`h-${name}`}
+          name={`h-${ref}`}
           headlineContentClassName={headlineContentClassName}
         />
       </div>

@@ -1,75 +1,41 @@
 # Primitives layer (unprefixed)
 
-Thin Radix UI + CVA wrappers. **Escape hatch only** — reach for these when a Horizon `IGRP*` component is too opinionated. The price you pay: no built-in label, no form-context binding, no icon scaffolding. You handle all of that yourself.
+shadcn-style Radix + CVA wrappers, exported from the package root. They're the **escape hatch**: no label, no helper text, no form binding, no i18n defaults. You wire all of that yourself.
 
-All exports are at the root of `@igrp/igrp-framework-react-design-system`. Every consuming file needs `'use client'`.
+## When to drop down
 
-Each primitive carries a `// shadcn: YYYY-MM-DD` sync stamp in source; a quarterly `scripts/check-shadcn-drift.mjs` job flags drift.
+Use a primitive only when all three hold:
 
-## Catalog (grouped)
+1. No Horizon or Custom component covers the need. Check `COMPONENTS.md`'s layer map / `horizon.md` first. Common primitive-only needs: `Sheet`, `Drawer`, `Tooltip`, `HoverCard`, `Popover`, `ContextMenu`, `Breadcrumb`, `Pagination`, `Skeleton`, `Progress`, `Empty`, `Carousel`, `ScrollArea`, `Resizable*`, `Stepper`, `Kbd`, `Item`.
+2. It's not a form field inside `IGRPForm`. A bare `Input` / `Select` / `Checkbox` there **won't bind and won't validate**. Use the `IGRP*` field, or `IGRPFormField` for a custom widget (see `forms.md`).
+3. You're composing a one-off piece (chrome, a custom composite), not a pattern repeated across screens.
 
-**Buttons & actions**
-`Button` + `buttonVariants`, `ButtonGroup`, `ButtonGroupSeparator`, `ButtonGroupText`, `buttonGroupVariants`, `Toggle` + `toggleVariants`, `ToggleGroup`, `ToggleGroupItem`
+Never run `npx shadcn add` in an IGRP app. If something is missing, use the DS primitive or request it in the DS.
 
-**Form atoms** (use ONLY outside `IGRPForm`, or inside one wrapped manually via primitive `<Form>`/`<FormField>`)
-`Input`, `Textarea`, `Checkbox`, `Switch`, `Slider`, `Label`, `RadioGroup`, `RadioGroupItem` + `radioItemVariants`, `Select` (+ `SelectTrigger`/`SelectContent`/`SelectItem`/...), `InputOTP` + `InputOTPGroup`/`InputOTPSlot`/`InputOTPSeparator`, `Field`, `Form`, the form primitives (`FormControl`, `FormField`, `FormLabel`, `FormMessage`, `FormDescription`, `FormItem`)
+## Catalog
 
-**Surfaces & layout**
-`Card` (+ `CardHeader`/`CardTitle`/`CardDescription`/`CardContent`/`CardFooter`/`CardAction`), `Separator`, `AspectRatio`, `ScrollArea` + `ScrollBar`, `ResizablePanelGroup` + `ResizablePanel` + `ResizableHandle`, `Skeleton`, `Spinner`
+| Family | Exports |
+| --- | --- |
+| Buttons | `Button` + `buttonVariants` (variants `default \| destructive \| outline \| secondary \| ghost \| link`; sizes `xs \| sm \| default \| lg \| icon \| icon-xs \| icon-sm \| icon-lg`), `ButtonGroup`, `ButtonGroupSeparator`, `ButtonGroupText`, `buttonGroupVariants`, `Toggle` + `toggleVariants`, `ToggleGroup`, `ToggleGroupItem` |
+| Form atoms | `Input`, `Textarea`, `Checkbox`, `Switch`, `Slider`, `Label`, `RadioGroup`, `RadioGroupItem` (`variant`, `size`), `Select` + `SelectTrigger`/`SelectValue`/`SelectContent`/`SelectGroup`/`SelectLabel`/`SelectItem`/`SelectSeparator`/`SelectScrollUpButton`/`SelectScrollDownButton`, `NativeSelect` + `NativeSelectOption`/`NativeSelectOptGroup`, `InputOTP` + `InputOTPGroup`/`InputOTPSlot`/`InputOTPSeparator`, `InputGroup` + `InputGroupAddon`/`InputGroupButton`/`InputGroupText`/`InputGroupInput`/`InputGroupTextarea` |
+| Field layout | `Field`, `FieldLabel`, `FieldDescription`, `FieldError`, `FieldGroup`, `FieldLegend`, `FieldSeparator`, `FieldSet`, `FieldContent`, `FieldTitle` |
+| RHF glue | `Form`, `FormField`, `FormItem`, `FormLabel`, `FormControl`, `FormDescription`, `FormMessage`, `useFormField`. These are for building a form-aware widget, not for app forms (use `IGRPForm`). |
+| Surfaces | `Card` + `CardHeader`/`CardTitle`/`CardDescription`/`CardAction`/`CardContent`/`CardFooter`, `Separator`, `AspectRatio`, `ScrollArea` + `ScrollBar`, `ResizablePanelGroup`/`ResizablePanel`/`ResizableHandle`, `Skeleton`, `Spinner`, `Item` + `ItemMedia`/`ItemContent`/`ItemTitle`/`ItemDescription`/`ItemActions`/`ItemHeader`/`ItemFooter`/`ItemGroup`/`ItemSeparator`, `Empty` + `EmptyHeader`/`EmptyMedia`/`EmptyTitle`/`EmptyDescription`/`EmptyContent` |
+| Status | `Alert` + `AlertTitle`/`AlertDescription`/`AlertAction`, `Badge` + `badgeVariants`, `Progress`, `Kbd`, `KbdGroup` |
+| Avatar | `Avatar`, `AvatarImage`, `AvatarFallback` (always render a fallback), `AvatarBadge`, `AvatarGroup`, `AvatarGroupCount` |
+| Navigation | `Breadcrumb*`, `NavigationMenu*` + `navigationMenuTriggerStyle`, `Pagination*`, `Tabs`/`TabsList`/`TabsTrigger`/`TabsContent` + `tabsListVariants`, `Sidebar*` + `SidebarProvider` + `useSidebar`, `Accordion`/`AccordionItem`/`AccordionTrigger` (`iconName`, `showIcon`, `iconPlacement`)/`AccordionContent` |
+| Overlays | `Dialog*`, `AlertDialog*` (incl. `AlertDialogMedia`, `AlertDialogAction`, `AlertDialogCancel`), `Sheet*`, `Drawer*`, `Popover` + `PopoverTrigger`/`PopoverContent` (`container` prop)/`PopoverAnchor`/`PopoverHeader`/`PopoverTitle`/`PopoverDescription`, `HoverCard*`, `Tooltip*`, `ContextMenu*`, `DropdownMenu*`, `Menubar*`, `Collapsible*`, `Command` + `CommandDialog`/`CommandInput`/`CommandList`/`CommandEmpty`/`CommandGroup`/`CommandItem`/`CommandShortcut`/`CommandSeparator` |
+| Date | `Calendar`, `CalendarDayButton` |
+| Media | `Carousel` + `CarouselContent`/`CarouselItem`/`CarouselPrevious`/`CarouselNext`, `useCarousel`, type `CarouselApi`; `Cropper` + `CropperImage`/`CropperCropArea`/`CropperDescription` |
+| Table | `Table`, `TableHeader`, `TableBody`, `TableFooter`, `TableRow`, `TableHead`, `TableCell`, `TableCaption` |
+| Charts | `ChartContainer`, `ChartTooltip`, `ChartTooltipContent`, `ChartLegend`, `ChartLegendContent`, `ChartStyle`. The `ChartConfig` type isn't exported. |
+| Stepper | `Stepper`, `StepperItem`, `StepperTrigger`, `StepperIndicator`, `StepperTitle`, `StepperDescription`, `StepperSeparator` |
+| Toast | `Toaster` (sonner). The template root mounts the toaster. In feature code use `useIGRPToast` (no `toast` function is exported). |
 
-**Status & inline**
-`Alert` + `AlertTitle` + `AlertDescription`, `Badge` + `badgeVariants`, `Progress`, `Kbd`, `KbdGroup`
+## Rules at this layer
 
-**Avatar**
-`Avatar`, `AvatarImage`, `AvatarFallback`
-
-**Navigation**
-`Breadcrumb` (+ `BreadcrumbList`/`BreadcrumbItem`/`BreadcrumbLink`/`BreadcrumbPage`/`BreadcrumbSeparator`/`BreadcrumbEllipsis`), `NavigationMenu*`, `Pagination*`, `Tabs` + `TabsList` + `TabsTrigger` + `TabsContent`, `Sidebar*`
-
-**Overlays**
-`Dialog*` (+ Portal/Overlay/Header/Footer/Title/Description/Trigger/Close), `AlertDialog*` (matching surface), `Drawer*`, `Popover` + `PopoverTrigger`/`PopoverContent`/`PopoverAnchor`, `Sheet*`, `HoverCard` + `HoverCardTrigger`/`HoverCardContent`, `Tooltip` + `TooltipTrigger`/`TooltipContent`/`TooltipProvider`, `ContextMenu*`, `DropdownMenu*`, `Menubar*`, `Collapsible` + `CollapsibleTrigger`/`CollapsibleContent`
-
-**Calendar**
-`Calendar`, `CalendarDayButton`
-
-**Media / interactive**
-`Carousel` + `CarouselContent`/`CarouselItem`/`CarouselPrevious`/`CarouselNext`, `Cropper` + `CropperDescription`/`CropperImage`/`CropperCropArea`
-
-**Table** (low-level — prefer `IGRPDataTable` or `IGRPTable`)
-`Table`, `TableHeader`, `TableBody`, `TableFooter`, `TableRow`, `TableHead`, `TableCell`, `TableCaption`
-
-**Charts** (used internally by `IGRP*Chart`; rarely needed directly)
-`Chart*` (config, container, tooltip primitives)
-
-**Stepper / wizards**
-`Stepper`, `StepperItem`, `StepperTrigger`, ...
-
-**Toast**
-`Toaster` (sonner-based) — usually mounted by the template root, not by feature code.
-
-## Decision: Horizon → Primitive
-
-Drop down when ALL of the following apply:
-
-1. You've checked `references/horizon.md` and there is no `IGRP*` component that matches.
-2. You don't need form-context binding (or you're explicitly building a non-form interaction).
-3. You're inside an isolated UI piece — not a screen that will be templated/repeated.
-
-For everything else, prefer Horizon. Pre-existing Primitives usage in templates is a deliberate exception, usually for chrome (sidebars, command bars) or for one-off composition.
-
-## Variants & CVA
-
-Most primitives export a `<name>Variants` CVA function alongside the component:
-
-```ts
-import { Button, buttonVariants, Badge, badgeVariants } from "@igrp/igrp-framework-react-design-system"
-
-// Used by the component, but you can also call it directly:
-<a className={buttonVariants({ variant: "outline", size: "sm" })}>Read more</a>
-```
-
-This is the right way to style a non-button element with Button-equivalent appearance — *not* manually re-implementing the classes.
-
-## Tokens, not raw colors
-
-Even at the Primitive layer, only semantic tokens. The CVA `variants` definitions in the source all reference token classes (`bg-primary`, `border-input`, `text-destructive`, `bg-muted/30`). When extending, do the same.
+- **Accessible names are required:** `Dialog` needs `DialogTitle`, `Sheet` needs `SheetTitle`, `Drawer` needs `DrawerTitle` and `AlertDialog` needs `AlertDialogTitle`. Hide one visually if the design has no title, but render it.
+- **Style other elements with the CVA function** rather than copying the class list: `<Link className={buttonVariants({ variant: "outline", size: "sm" })}>`.
+- **Popovers inside a `Dialog` / `Drawer`** should pass `container` on `PopoverContent`, so focus management keeps working.
+- **Icons inside a `Button`:** a lucide icon with `data-icon="inline-start"` / `"inline-end"` gets the right padding.
+- **Tokens only** here as well. Any `dark:` you see inside DS primitives is the DS's own opacity tuning. It doesn't license `dark:` in app code.

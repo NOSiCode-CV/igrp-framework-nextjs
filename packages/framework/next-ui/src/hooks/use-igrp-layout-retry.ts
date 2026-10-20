@@ -1,6 +1,6 @@
 'use client';
 
-import { useCallback, useEffect, useState, useTransition } from 'react';
+import { useCallback, useEffect, useRef, useTransition } from 'react';
 import { useRouter } from 'next/navigation';
 
 import { useIGRPLayoutErrorReset } from '../templates/layout-error-boundary.js';
@@ -20,23 +20,24 @@ import { useIGRPLayoutErrorReset } from '../templates/layout-error-boundary.js';
 function useIGRPLayoutRetry() {
   const router = useRouter();
   const resetBoundary = useIGRPLayoutErrorReset();
-  const [isPending, startTransition] = useTransition();
-  const [isRetrying, setIsRetrying] = useState(false);
+  const [isRetrying, startTransition] = useTransition();
+  // Set by `retry`, consumed when the transition settles — a ref, so the
+  // settle resets the boundary without a second render.
+  const resetPending = useRef(false);
 
   const retry = useCallback(() => {
-    setIsRetrying(true);
+    resetPending.current = true;
     startTransition(() => {
       router.refresh();
     });
   }, [router]);
 
   useEffect(() => {
-    if (!isRetrying || isPending) return;
+    if (isRetrying || !resetPending.current) return;
 
-    setIsRetrying(false);
-
+    resetPending.current = false;
     resetBoundary?.();
-  }, [isRetrying, isPending, resetBoundary]);
+  }, [isRetrying, resetBoundary]);
 
   return { retry, isRetrying };
 }

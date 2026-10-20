@@ -1,4 +1,5 @@
 import { beforeEach, describe, expect, it, vi } from 'vitest';
+import type { IGRPConfigArgs } from '@igrp/framework-next-types';
 
 vi.mock('next/server', () => ({ after: vi.fn() }));
 let cookieValue: string | undefined;
@@ -56,7 +57,7 @@ const base = () =>
     layout: { session: null },
     toasterConfig: { showToaster: false },
     layoutData: { getHeaderData: async () => ({}), getSidebarData: async () => ({}) },
-  }) as never;
+  }) as unknown as IGRPConfigArgs;
 
 beforeEach(() => {
   resolveLocale.mockClear();

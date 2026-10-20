@@ -56,7 +56,7 @@ describe('IGRPRootLayout organization branding', () => {
   it('does not read the Brand when the flag is omitted', async () => {
     await IGRPRootLayout({ children: null, config: config() });
     expect(resolveRequestBranding).toHaveBeenCalledTimes(1);
-    expect(resolveRequestBranding.mock.calls[0][0].branding).toBeUndefined();
+    expect(resolveRequestBranding.mock.calls[0]?.[0].branding).toBeUndefined();
   });
 
   it('calls the resolver once with the config when the flag is on', async () => {

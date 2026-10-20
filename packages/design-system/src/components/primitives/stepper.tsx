@@ -6,6 +6,8 @@ import { CheckIcon, LoaderCircleIcon } from "lucide-react"
 import { Slot } from "radix-ui"
 import { cn } from "cn"
 
+import { useIGRPi18n } from "../../i18n/context.js"
+
 type StepperContextValue = {
   activeStep: number
   setActiveStep: (step: number) => void
@@ -220,9 +222,10 @@ function StepperIndicator({ asChild = false, className, children, ...props }: St
 }
 
 function StepperTitle({ className, children, ...props }: React.HTMLAttributes<HTMLHeadingElement>) {
+  const i18n = useIGRPi18n()
   return (
     <h3 data-slot="stepper-title" className={cn("text-sm font-medium", className)} {...props}>
-      {children ?? <span className="sr-only">Step</span>}
+      {children ?? <span className="sr-only">{i18n.stepper.step}</span>}
     </h3>
   )
 }

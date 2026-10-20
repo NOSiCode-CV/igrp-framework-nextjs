@@ -109,6 +109,10 @@ export interface IGRPI18nStrings {
     open: string
     /** Placeholder shown by a date picker with no value and no `placeholder` prop. */
     placeholder: string
+    /** Default label of the start time field. */
+    startDate: string
+    /** Default label of the end time field. */
+    endDate: string
   }
   inputSelect: {
     /** Trigger text shown with no value and no `placeholder` prop. */
@@ -179,6 +183,8 @@ export interface IGRPI18nStrings {
   modalDialog: {
     /** Screen-reader label for the close button. */
     close: string
+    /** Screen-reader description when the dialog has no title. */
+    contentDescription: string
   }
   avatar: {
     /** aria-label for the decorative status indicator. */
@@ -209,6 +215,8 @@ export interface IGRPI18nStrings {
     scrollPrevious: string
     /** aria-label for the scroll-to-next-steps button. */
     scrollNext: string
+    /** Default text of the visually hidden step title. */
+    step: string
   }
   tabs: {
     /** aria-label for the scroll-tabs-left button. */
@@ -297,6 +305,12 @@ export interface IGRPI18nStrings {
   copyTo: {
     /** Message shown when there is nothing to copy. */
     nothingToCopy: string
+    /** Message shown on a successful copy. */
+    copied: string
+    /** Message shown when copying fails. */
+    copyFailed: string
+    /** Tooltip text before copying. */
+    clickToCopy: string
   }
   richText: {
     /** Editor placeholder while the body is empty. */
@@ -358,6 +372,42 @@ export interface IGRPI18nStrings {
     colorGreen: string
     colorBlue: string
     colorPurple: string
+  }
+  dialog: {
+    /** Screen-reader label for the close button. */
+    close: string
+  }
+  sheet: {
+    /** Screen-reader label for the close button. */
+    close: string
+  }
+  sidebar: {
+    /** Accessible name for the sidebar toggle. */
+    toggle: string
+    /** Screen-reader title of the mobile sidebar sheet. */
+    title: string
+    /** Screen-reader description of the mobile sidebar sheet. */
+    description: string
+  }
+  carousel: {
+    /** Label for the previous control. */
+    previous: string
+    /** Label for the next control. */
+    next: string
+  }
+  pagination: {
+    /** Label for the previous control. */
+    previous: string
+    /** Label for the next control. */
+    next: string
+    /** aria-label for the previous-page link. */
+    goToPrevious: string
+    /** aria-label for the next-page link. */
+    goToNext: string
+  }
+  inputAddons: {
+    /** aria-label for the addon select with no `optionLabel`. */
+    selectOption: string
   }
 }
 
@@ -425,6 +475,8 @@ export const IGRP_I18N_DEFAULTS_PT: IGRPI18nStrings = {
     clear: "Limpar data",
     open: "Selecionar data",
     placeholder: "Selecionar data",
+    startDate: "Data Início",
+    endDate: "Data Fim",
   },
   inputSelect: {
     placeholder: "Selecionar uma opção",
@@ -469,6 +521,7 @@ export const IGRP_I18N_DEFAULTS_PT: IGRPI18nStrings = {
   },
   modalDialog: {
     close: "Fechar",
+    contentDescription: "Conteúdo do diálogo",
   },
   avatar: {
     iconIndicator: "Indicador",
@@ -488,6 +541,7 @@ export const IGRP_I18N_DEFAULTS_PT: IGRPI18nStrings = {
     processSteps: "Etapas do processo",
     scrollPrevious: "Ver etapas anteriores",
     scrollNext: "Ver etapas seguintes",
+    step: "Passo",
   },
   tabs: {
     scrollLeft: "Deslocar separadores para a esquerda",
@@ -541,6 +595,9 @@ export const IGRP_I18N_DEFAULTS_PT: IGRPI18nStrings = {
   },
   copyTo: {
     nothingToCopy: "Nenhum conteúdo para copiar",
+    copied: "Copiado para a área de transferência",
+    copyFailed: "Não foi possível copiar para a área de transferência",
+    clickToCopy: "Clique para copiar",
   },
   richText: {
     placeholder: "Comece a escrever aqui…",
@@ -594,6 +651,30 @@ export const IGRP_I18N_DEFAULTS_PT: IGRPI18nStrings = {
     colorGreen: "Verde",
     colorBlue: "Azul",
     colorPurple: "Roxo",
+  },
+  dialog: {
+    close: "Fechar",
+  },
+  sheet: {
+    close: "Fechar",
+  },
+  sidebar: {
+    toggle: "Alternar barra lateral",
+    title: "Barra lateral",
+    description: "Mostra a barra lateral em dispositivos móveis.",
+  },
+  carousel: {
+    previous: "Diapositivo anterior",
+    next: "Diapositivo seguinte",
+  },
+  pagination: {
+    previous: "Anterior",
+    next: "Seguinte",
+    goToPrevious: "Ir para a página anterior",
+    goToNext: "Ir para a página seguinte",
+  },
+  inputAddons: {
+    selectOption: "Selecionar opção",
   },
 }
 

@@ -4,6 +4,7 @@ import { useId, useState } from "react"
 
 import { DEFAULT_HIDE_TIME_INDICATOR } from "../../../lib/utilities.js"
 import type { IGRPCalendarTimeProps } from "../../../types.js"
+import { useIGRPi18n } from "../../../i18n/index.js"
 import { Input } from "../../primitives/input.js"
 import { Label } from "../../primitives/label.js"
 import { IGRPCalendarSingle, type IGRPCalendarSingleProps } from "./single.js"
@@ -25,13 +26,16 @@ function IGRPCalendarSingleTime({
   hideEndTimePicker = false,
   startTimePlaceholder,
   endTimePlaceholder,
-  startTimeLabel = "Data Início",
-  endTimeLabel = "Data Fim",
+  startTimeLabel: startTimeLabelProp,
+  endTimeLabel: endTimeLabelProp,
   showTimeIndicator = false,
   name,
   id,
   ...props
 }: IGRPCalendarSingleTimeProps) {
+  const i18n = useIGRPi18n()
+  const startTimeLabel = startTimeLabelProp ?? i18n.datePicker.startDate
+  const endTimeLabel = endTimeLabelProp ?? i18n.datePicker.endDate
   const _id = useId()
   const ref = name ?? id ?? _id
 

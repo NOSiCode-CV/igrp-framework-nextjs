@@ -15,6 +15,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from "../../primitives/select.js"
+import { useIGRPi18n } from "../../../i18n/index.js"
 import { IGRPLabel } from "../label.js"
 import { Field } from "../../primitives/field.js"
 
@@ -53,6 +54,7 @@ function IGRPInputAddOn({
   id,
   ...props
 }: IGRPInputAddOnProps) {
+  const i18n = useIGRPi18n()
   const _id = useId()
   const ref = name ?? id ?? _id
 
@@ -71,7 +73,7 @@ function IGRPInputAddOn({
       <div className={cn("flex overflow-hidden rounded-md border")}>
         <Select value={selectValue} onValueChange={onSelectValueChange}>
           <SelectTrigger
-            aria-label={optionLabel ?? "Select option"}
+            aria-label={optionLabel ?? i18n.inputAddons.selectOption}
             className={cn(
               "min-w-20 rounded-none border-0 border-r px-3 py-2 shadow-none focus:ring-0 focus-visible:ring-0 focus-visible:ring-offset-0"
             )}

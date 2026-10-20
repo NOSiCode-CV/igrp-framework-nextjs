@@ -1,8 +1,11 @@
 /* shadcn: 2026-09-15 */
 
+"use client"
+
 import * as React from "react"
 import { cn } from "cn"
 
+import { useIGRPi18n } from "../../i18n/context.js"
 import { Button } from "./button.js"
 import { ChevronLeftIcon, ChevronRightIcon, MoreHorizontalIcon } from "lucide-react"
 
@@ -41,25 +44,32 @@ function PaginationLink({ className, isActive, size = "icon", ...props }: Pagina
 
 function PaginationPrevious({
   className,
-  text = "Previous",
+  text,
   ...props
 }: React.ComponentProps<typeof PaginationLink> & { text?: string }) {
+  const i18n = useIGRPi18n()
   return (
-    <PaginationLink aria-label="Go to previous page" size="default" className={cn("pl-2!", className)} {...props}>
+    <PaginationLink
+      aria-label={i18n.pagination.goToPrevious}
+      size="default"
+      className={cn("pl-2!", className)}
+      {...props}
+    >
       <ChevronLeftIcon data-icon="inline-start" />
-      <span className="hidden sm:block">{text}</span>
+      <span className="hidden sm:block">{text ?? i18n.pagination.previous}</span>
     </PaginationLink>
   )
 }
 
 function PaginationNext({
   className,
-  text = "Next",
+  text,
   ...props
 }: React.ComponentProps<typeof PaginationLink> & { text?: string }) {
+  const i18n = useIGRPi18n()
   return (
-    <PaginationLink aria-label="Go to next page" size="default" className={cn("pr-2!", className)} {...props}>
-      <span className="hidden sm:block">{text}</span>
+    <PaginationLink aria-label={i18n.pagination.goToNext} size="default" className={cn("pr-2!", className)} {...props}>
+      <span className="hidden sm:block">{text ?? i18n.pagination.next}</span>
       <ChevronRightIcon data-icon="inline-end" />
     </PaginationLink>
   )

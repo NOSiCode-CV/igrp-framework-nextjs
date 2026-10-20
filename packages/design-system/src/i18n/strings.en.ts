@@ -59,6 +59,8 @@ export const IGRP_I18N_DEFAULTS_EN: IGRPI18nStrings = {
     clear: "Clear date",
     open: "Select date",
     placeholder: "Select date",
+    startDate: "Start date",
+    endDate: "End date",
   },
   inputSelect: {
     placeholder: "Select an option",
@@ -103,6 +105,7 @@ export const IGRP_I18N_DEFAULTS_EN: IGRPI18nStrings = {
   },
   modalDialog: {
     close: "Close",
+    contentDescription: "Dialog content",
   },
   avatar: {
     iconIndicator: "Indicator",
@@ -122,6 +125,7 @@ export const IGRP_I18N_DEFAULTS_EN: IGRPI18nStrings = {
     processSteps: "Process steps",
     scrollPrevious: "Show previous steps",
     scrollNext: "Show next steps",
+    step: "Step",
   },
   tabs: {
     scrollLeft: "Scroll tabs left",
@@ -175,6 +179,9 @@ export const IGRP_I18N_DEFAULTS_EN: IGRPI18nStrings = {
   },
   copyTo: {
     nothingToCopy: "Nothing to copy",
+    copied: "Copied to clipboard",
+    copyFailed: "Could not copy to clipboard",
+    clickToCopy: "Click to copy",
   },
   richText: {
     placeholder: "Start writing here…",
@@ -228,5 +235,29 @@ export const IGRP_I18N_DEFAULTS_EN: IGRPI18nStrings = {
     colorGreen: "Green",
     colorBlue: "Blue",
     colorPurple: "Purple",
+  },
+  dialog: {
+    close: "Close",
+  },
+  sheet: {
+    close: "Close",
+  },
+  sidebar: {
+    toggle: "Toggle sidebar",
+    title: "Sidebar",
+    description: "Shows the sidebar on mobile devices.",
+  },
+  carousel: {
+    previous: "Previous slide",
+    next: "Next slide",
+  },
+  pagination: {
+    previous: "Previous",
+    next: "Next",
+    goToPrevious: "Go to previous page",
+    goToNext: "Go to next page",
+  },
+  inputAddons: {
+    selectOption: "Select option",
   },
 }

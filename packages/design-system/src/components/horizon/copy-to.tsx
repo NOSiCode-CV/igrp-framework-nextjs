@@ -41,9 +41,9 @@ function IGRPCopyTo({
   value,
   tooltipDelayDuration = 700,
   toastDuration = 3500,
-  successMessage = "Copiado para a área de transferência",
-  errorMessage = "Não foi possível copiar para a área de transferência",
-  tooltipMessage = "Clique para copiar",
+  successMessage: successMessageProp,
+  errorMessage: errorMessageProp,
+  tooltipMessage: tooltipMessageProp,
   triggerClassName,
   onCopySuccess,
   onCopyError,
@@ -51,6 +51,9 @@ function IGRPCopyTo({
   const [copied, setCopied] = useState(false)
   const { igrpToast } = useIGRPToast()
   const i18n = useIGRPi18n()
+  const successMessage = successMessageProp ?? i18n.copyTo.copied
+  const errorMessage = errorMessageProp ?? i18n.copyTo.copyFailed
+  const tooltipMessage = tooltipMessageProp ?? i18n.copyTo.clickToCopy
   const timeoutRef = useRef<NodeJS.Timeout | null>(null)
 
   useEffect(() => {

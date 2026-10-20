@@ -116,7 +116,7 @@ interface IGRPDataTableFilterDropdownProps<TData> extends Omit<
 
 function IGRPDataTableFilterDropdown<TData>({
   column,
-  placeholder = "Filtrar...",
+  placeholder,
   options,
   className,
   disabled,
@@ -124,13 +124,14 @@ function IGRPDataTableFilterDropdown<TData>({
   notFoundText,
 }: IGRPDataTableFilterDropdownProps<TData>) {
   const i18n = useIGRPi18n()
+  const resolvedPlaceholder = placeholder ?? i18n.dataTable.filterSelectPlaceholder
   const id = useId()
   const listId = useId()
   const [open, setOpen] = useState(false)
   const selectedValue = column?.getFilterValue() as string | undefined
   const selectedLabel = useMemo(
-    () => options?.find((opt) => opt.value === selectedValue)?.label || placeholder,
-    [selectedValue, options, placeholder]
+    () => options?.find((opt) => opt.value === selectedValue)?.label || resolvedPlaceholder,
+    [selectedValue, options, resolvedPlaceholder]
   )
 
   const handleSelect = useCallback(
@@ -160,7 +161,7 @@ function IGRPDataTableFilterDropdown<TData>({
         </PopoverTrigger>
         <PopoverContent align="start" className={cn("p-0", className)}>
           <Command>
-            {showFilter && <CommandInput placeholder={placeholder} className={cn("h-8")} />}
+            {showFilter && <CommandInput placeholder={resolvedPlaceholder} className={cn("h-8")} />}
             <CommandList id={listId}>
               <CommandEmpty>{notFoundText ?? i18n.combobox.notFound}</CommandEmpty>
               <CommandGroup>

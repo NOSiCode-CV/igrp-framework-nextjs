@@ -322,7 +322,9 @@ function IGRPDataTableModalContent({
         Slot.React.Children.only, which (a) announced the entire form as the
         dialog description and (b) threw for any multi-root render().
       */}
-        <DialogDescription className={cn("sr-only")}>{modalTitle || "Conteúdo do diálogo"}</DialogDescription>
+        <DialogDescription className={cn("sr-only")}>
+          {modalTitle || i18n.modalDialog.contentDescription}
+        </DialogDescription>
 
         <div data-slot="dialog-body" className={cn("overflow-y-auto", !modalTitle && "mt-4")}>
           {render ? render(close) : children}

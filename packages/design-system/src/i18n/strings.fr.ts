@@ -59,6 +59,8 @@ export const IGRP_I18N_DEFAULTS_FR: IGRPI18nStrings = {
     clear: "Effacer la date",
     open: "Sélectionner une date",
     placeholder: "Sélectionner une date",
+    startDate: "Date de début",
+    endDate: "Date de fin",
   },
   inputSelect: {
     placeholder: "Sélectionner une option",
@@ -103,6 +105,7 @@ export const IGRP_I18N_DEFAULTS_FR: IGRPI18nStrings = {
   },
   modalDialog: {
     close: "Fermer",
+    contentDescription: "Contenu de la boîte de dialogue",
   },
   avatar: {
     iconIndicator: "Indicateur",
@@ -122,6 +125,7 @@ export const IGRP_I18N_DEFAULTS_FR: IGRPI18nStrings = {
     processSteps: "Étapes du processus",
     scrollPrevious: "Voir les étapes précédentes",
     scrollNext: "Voir les étapes suivantes",
+    step: "Étape",
   },
   tabs: {
     scrollLeft: "Faire défiler les onglets vers la gauche",
@@ -175,6 +179,9 @@ export const IGRP_I18N_DEFAULTS_FR: IGRPI18nStrings = {
   },
   copyTo: {
     nothingToCopy: "Rien à copier",
+    copied: "Copié dans le presse-papiers",
+    copyFailed: "Impossible de copier dans le presse-papiers",
+    clickToCopy: "Cliquer pour copier",
   },
   richText: {
     placeholder: "Commencez à écrire ici…",
@@ -228,5 +235,29 @@ export const IGRP_I18N_DEFAULTS_FR: IGRPI18nStrings = {
     colorGreen: "Vert",
     colorBlue: "Bleu",
     colorPurple: "Violet",
+  },
+  dialog: {
+    close: "Fermer",
+  },
+  sheet: {
+    close: "Fermer",
+  },
+  sidebar: {
+    toggle: "Basculer la barre latérale",
+    title: "Barre latérale",
+    description: "Affiche la barre latérale sur les appareils mobiles.",
+  },
+  carousel: {
+    previous: "Diapositive précédente",
+    next: "Diapositive suivante",
+  },
+  pagination: {
+    previous: "Précédent",
+    next: "Suivant",
+    goToPrevious: "Aller à la page précédente",
+    goToNext: "Aller à la page suivante",
+  },
+  inputAddons: {
+    selectOption: "Sélectionner une option",
   },
 }
